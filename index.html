@@ -1,0 +1,320 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Numa Koudsie - Physics Innovator</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/particles.js/2.0.0/particles.min.js"></script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;700&family=Orbitron:wght@400;700&display=swap');
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Roboto', sans-serif;
+            line-height: 1.5;
+            color: #E0E0E0;
+            background-color: #0a0a0a;
+            overflow-x: hidden;
+        }
+        
+        #particles-js {
+            position: fixed;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+        }
+        
+        .container {
+            max-width: 1000px;
+            margin: 0 auto;
+            padding: 1rem;
+        }
+        
+        header {
+            text-align: center;
+            padding: 3rem 0;
+            background: linear-gradient(45deg, #00356B, #0066cc);
+            clip-path: polygon(0 0, 100% 0, 100% 85%, 0 100%);
+            margin-bottom: 2rem;
+        }
+        
+        h1 {
+            font-size: 3.5rem;
+            margin-bottom: 0.5rem;
+            font-family: 'Orbitron', sans-serif;
+            text-shadow: 0 0 10px rgba(0,255,255,0.7);
+            animation: glow 2s ease-in-out infinite alternate;
+        }
+        
+        @keyframes glow {
+            from {
+                text-shadow: 0 0 10px rgba(0,255,255,0.7);
+            }
+            to {
+                text-shadow: 0 0 20px rgba(0,255,255,0.9), 0 0 30px rgba(0,255,255,0.7);
+            }
+        }
+        
+        .subtitle {
+            font-size: 1.2rem;
+            opacity: 0.8;
+            font-family: 'Orbitron', sans-serif;
+        }
+        
+        .section {
+            margin: 2rem 0;
+            padding: 1.5rem;
+            background-color: rgba(255, 255, 255, 0.05);
+            border-radius: 10px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1), 0 1px 3px rgba(0, 0, 0, 0.08);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            overflow: hidden;
+            position: relative;
+        }
+        
+        .section::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: linear-gradient(
+                to bottom right,
+                rgba(255, 255, 255, 0.1) 0%,
+                rgba(255, 255, 255, 0.05) 50%,
+                transparent 50%,
+                transparent 100%
+            );
+            transform: rotate(-45deg);
+            z-index: -1;
+        }
+        
+        .section:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 6px 12px rgba(0, 255, 255, 0.1), 0 3px 6px rgba(0, 255, 255, 0.08);
+        }
+        
+        h2 {
+            color: #00FFFF;
+            border-bottom: 2px solid #00FFFF;
+            padding-bottom: 0.3rem;
+            margin-bottom: 1rem;
+            font-family: 'Orbitron', sans-serif;
+            font-size: 2rem;
+            text-transform: uppercase;
+        }
+        
+        .grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 1.5rem;
+        }
+        
+        .card {
+            background-color: rgba(0, 51, 102, 0.3);
+            padding: 1.2rem;
+            border-radius: 8px;
+            transition: all 0.3s ease;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            border: 1px solid rgba(0, 255, 255, 0.1);
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .card::after {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: linear-gradient(
+                to bottom right,
+                rgba(0, 255, 255, 0.1) 0%,
+                rgba(0, 255, 255, 0.05) 50%,
+                transparent 50%,
+                transparent 100%
+            );
+            transform: rotate(-45deg);
+            transition: transform 0.5s ease;
+        }
+        
+        .card:hover::after {
+            transform: rotate(-45deg) translate(50%, 50%);
+        }
+        
+        .card:hover {
+            transform: translateY(-5px) rotate(1deg);
+            box-shadow: 0 4px 8px rgba(0, 255, 255, 0.2);
+        }
+        
+        .card h3 {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 1.5rem;
+            color: #00FFFF;
+            margin-bottom: 0.5rem;
+        }
+        
+        ul {
+            list-style-type: none;
+        }
+        
+        li {
+            margin-bottom: 0.5rem;
+            position: relative;
+            padding-left: 20px;
+        }
+        
+        li::before {
+            content: '▶';
+            position: absolute;
+            left: 0;
+            color: #00FFFF;
+        }
+        
+        .highlight {
+            color: #00FFFF;
+            font-weight: bold;
+            font-size: 1rem;
+        }
+        
+        @media (max-width: 768px) {
+            .grid {
+                grid-template-columns: 1fr;
+            }
+            h1 {
+                font-size: 2.5rem;
+            }
+            .subtitle {
+                font-size: 1rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div id="particles-js"></div>
+    <header>
+        <h1>Numa Koudsie</h1>
+        <p class="subtitle">Physics Innovator | Complex Systems Explorer</p>
+    </header>
+    <div class="container">
+        <section class="section">
+            <h2>Education</h2>
+            <div class="grid">
+                <div class="card">
+                    <h3>M.Sc. Physics</h3>
+                    <p>Complex Systems and Theory</p>
+                    <p>Universität Göttingen, 04.2024 - Present</p>
+                </div>
+                <div class="card">
+                    <h3>B.Sc. Physics</h3>
+                    <p>Universität Leipzig, 10.2020 - 12.2022</p>
+                </div>
+                <div class="card">
+                    <h3>Engineering Physics</h3>
+                    <p>117 CPs</p>
+                    <p>Universität Oldenburg, 10.2017 - 07.2020</p>
+                </div>
+            </div>
+        </section>
+        
+        <section class="section">
+            <h2>Skills and Experience</h2>
+            <ul>
+                <li><span class="highlight">Technical:</span> Python, Julia, MATLAB, OriginLab, Sofie LIBS, Autodesk Inventor, DIAdem</li>
+                <li><span class="highlight">Languages:</span> Arabic (Native), English (Fluent), German (Competent)</li>
+                <li><span class="highlight">Teaching:</span> Private Tutor (Lernbud, 2021), Teaching Assistant (Uni Oldenburg, 2018-2019)</li>
+            </ul>
+        </section>
+        
+        <section class="section">
+            <h2>Work Experience</h2>
+            <div class="grid">
+                <div class="card">
+                    <h3>Model Developer</h3>
+                    <p>Universität Leipzig & TROPOS, 07.2022 - 12.2022</p>
+                    <ul>
+                        <li>Implemented Python model for Gravitational Collection Equation</li>
+                        <li>Utilized FTCS method for numerical solutions</li>
+                    </ul>
+                </div>
+                <div class="card">
+                    <h3>Systems Analyst</h3>
+                    <p>Faiveley Transport, 02.2021 - 04.2022</p>
+                    <ul>
+                        <li>Analyzed R134a and R290 refrigeration systems</li>
+                        <li>Employed AND/OR gate calculations for energy usage determination</li>
+                    </ul>
+                </div>
+                <div class="card">
+                    <h3>Research Assistant</h3>
+                    <p>Universität Oldenburg, 10.2018 - 04.2019</p>
+                    <ul>
+                        <li>Studied atomic structures of Al-Sn lake sediments using laser-induced breakdown spectroscopy (LIBS)</li>
+                        <li>Analyzed light intensity profiles using Sofie LIBS software</li>
+                    </ul>
+                </div>
+            </div>
+        </section>
+        
+        <section class="section">
+            <h2>Current Projects</h2>
+            <div class="grid">
+                <div class="card">
+                    <h3>Drop Population Dynamics</h3>
+                    <ul>
+                        <li>Mathematical framework: VI* = Cij Vj</li>
+                        <li>System energy optimization for equilibrium modeling</li>
+                    </ul>
+                </div>
+                <div class="card">
+                    <h3>Lemur Behavior Prediction</h3>
+                    <ul>
+                        <li>Synthetic data generation for lemur interactions</li>
+                        <li>GRU neural networks for behavioral sequences</li>
+                    </ul>
+                </div>
+                <div class="card">
+                    <h3>Cellular Mechanics Simulation</h3>
+                    <ul>
+                        <li>Stochastic differential equations for viscoelastic properties</li>
+                        <li>Step-strain protocols for complex modulus estimation</li>
+                    </ul>
+                </div>
+                <div class="card">
+                    <h3>Creeping Flow in Bent Pipes</h3>
+                    <ul>
+                        <li>Flow analysis in 180° bent pipe with square cross-section</li>
+                        <li>System symmetry uncovering and solution comparison</li>
+                    </ul>
+                </div>
+            </div>
+        </section>
+    </div>
+    <script>
+        particlesJS("particles-js", {
+            particles: {
+                number: { value: 80, density: { enable: true, value_area: 800 } },
+                color: { value: "#00FFFF" },
+                shape: { type: "circle" },
+                opacity: { value: 0.5, random: false, anim: { enable: false } },
+                size: { value: 3, random: true, anim: { enable: false } },
+                line_linked: { enable: true, distance: 150, color: "#00FFFF", opacity: 0.4, width: 1 },
+                move: { enable: true, speed: 6, direction: "none", random: false, straight: false, out_mode: "out", bounce: false, attract: { enable: false, rotateX: 600, rotateY: 1200 } }
+            },
+            interactivity: {
+                detect_on: "canvas",
+                events: { onhover: { enable: true, mode: "repulse" }, onclick: { enable: true, mode: "push" }, resize: true },
+                modes: { grab: { distance: 400, line_linked: { opacity: 1 } }, bubble: { distance: 400, size: 40, duration: 2, opacity: 8, speed: 3 }, repulse: { distance: 200, duration: 0.4 }, push: { particles_nb: 4 }, remove: { particles_nb: 2 } }
+            },
+            retina_detect: true
+        });
+    </script>
+</body>
+</html>
