@@ -1,315 +1,551 @@
 <!DOCTYPE html>
-<html>
+<html lang="de">
 <head>
-    <title>Wellenanimation</title>
+    <title>Wave Interference Simulator</title>
+    <meta charset="UTF-8">
     <style>
         body {
             font-family: Arial, sans-serif;
-            max-width: 800px;
-            margin: 20px auto;
+            margin: 0;
             padding: 20px;
+            background-color: #f5f5f5;
+            height: 100vh;
+            box-sizing: border-box;
         }
-        .card {
-            border: 1px solid #ccc;
-            border-radius: 8px;
+
+        * {
+            box-sizing: border-box;
+        }
+
+        .container {
+            max-width: 1600px;
+            height: calc(100vh - 40px);
+            margin: 0 auto;
+            background-color: white;
             padding: 20px;
-            background: white;
-            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
-        }
-        .controls {
-            margin-top: 20px;
-            display: grid;
-            gap: 10px;
-        }
-        .button-group {
+            border-radius: 12px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
             display: flex;
-            gap: 10px;
-            margin-bottom: 15px;
+            flex-direction: column;
         }
-        button {
-            padding: 8px 16px;
-            background: #3b82f6;
-            color: white;
-            border: none;
-            border-radius: 4px;
+
+        .top-bar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding-bottom: 15px;
+            border-bottom: 2px solid #eee;
+            flex-shrink: 0;
+        }
+
+        .controls-header {
+            display: flex;
+            gap: 12px;
+        }
+
+        .main-content {
+            display: flex;
+            gap: 20px;
+            flex-grow: 1;
+            min-height: 0; /* Important for Firefox */
+            padding-top: 20px;
+        }
+
+        .waves-container {
+            width: 320px;
+            flex-shrink: 0;
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+            overflow-y: auto;
+            padding: 15px;
+            background: #f8f9fa;
+            border-radius: 8px;
+            border: 1px solid #e0e0e0;
+        }
+
+        .plots-container {
+            flex-grow: 1;
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+            min-width: 0; /* Important for Firefox */
+        }
+
+        .wave-controls {
+            background-color: white;
+            padding: 15px;
+            border-radius: 8px;
+            border: 1px solid #e0e0e0;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+        }
+
+        .wave-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 12px;
+        }
+
+        .wave-header h3 {
+            margin: 0;
+            font-size: 1.1em;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .color-indicator {
+            width: 14px;
+            height: 14px;
+            border-radius: 50%;
+        }
+
+        .control-row {
+            display: grid;
+            gap: 12px;
+        }
+
+        .control-group {
+            display: flex;
+            flex-direction: column;
+            gap: 4px;
+        }
+
+        .control-group label {
+            color: #444;
+            font-size: 0.9em;
+            font-weight: 500;
+        }
+
+        .control-group input[type="range"] {
+            width: 100%;
+            height: 6px;
+            -webkit-appearance: none;
+            background: #ddd;
+            border-radius: 3px;
+            outline: none;
+        }
+
+        .control-group input[type="range"]::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            width: 16px;
+            height: 16px;
+            background: #4CAF50;
+            border-radius: 50%;
             cursor: pointer;
         }
-        button:hover {
-            background: #2563eb;
-        }
-        .slider-container {
-            margin: 10px 0;
-        }
-        .slider-label {
-            display: block;
-            margin-bottom: 5px;
-            font-size: 14px;
-        }
-        input[type="range"] {
-            width: 100%;
-        }
+
         .value-display {
-            display: inline-block;
-            margin-left: 10px;
-            font-size: 14px;
+            font-size: 0.85em;
             color: #666;
+            text-align: right;
         }
+
+        .plot-window {
+            flex: 1;
+            min-height: 0;
+            background: white;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            padding: 15px;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .plot-title {
+            text-align: center;
+            margin: 0 0 15px 0;
+            font-weight: 600;
+            font-size: 1.1em;
+            color: #333;
+        }
+
+        .plot-area {
+            position: relative;
+            flex-grow: 1;
+            min-height: 0;
+        }
+
+        .y-axis {
+            position: absolute;
+            left: 0;
+            top: 0;
+            bottom: 0;
+            width: 40px;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            padding: 5px;
+            font-size: 0.8em;
+            color: #666;
+            pointer-events: none;
+            background: rgba(255,255,255,0.8);
+        }
+
+        button {
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            padding: 8px 16px;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 0.95em;
+            transition: all 0.2s ease;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        button.remove {
+            background-color: #dc3545;
+            padding: 6px 10px;
+            font-size: 0.9em;
+        }
+
+        button:hover {
+            transform: translateY(-1px);
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+
+        h1 {
+            font-size: 1.5em;
+            margin: 0;
+            color: #2c3e50;
+        }
+
+        /* Scrollbar styling */
+        .waves-container::-webkit-scrollbar {
+            width: 8px;
+        }
+
+        .waves-container::-webkit-scrollbar-track {
+            background: #f1f1f1;
+            border-radius: 4px;
+        }
+
+        .waves-container::-webkit-scrollbar-thumb {
+            background: #888;
+            border-radius: 4px;
+        }
+
+        .waves-container::-webkit-scrollbar-thumb:hover {
+            background: #666;
+        }
+
+        /* SVG specific styles */
         svg {
-            margin-left: 40px;
+            width: 100%;
+            height: 100%;
+            margin-left: 40px; /* Account for y-axis */
+        }
+
+        .grid-line {
+            stroke: #f0f0f0;
+            stroke-width: 1;
+        }
+
+        .x-axis {
+            stroke: #ccc;
+            stroke-width: 1;
         }
     </style>
 </head>
 <body>
-    <div class="card">
-        <h2>Wellenanimation</h2>
-        <svg id="waveCanvas" width="640" height="200" style="background: #f8fafc; border-radius: 8px;"></svg>
+    <div class="container">
+        <div class="top-bar">
+            <h1>Wave Interference Simulator</h1>
+            <div class="controls-header">
+                <button id="addWave">Add Wave +</button>
+                <button id="playPause">Pause</button>
+            </div>
+        </div>
         
-        <div class="controls">
-            <div class="button-group">
-                <button id="playPauseBtn">Pause</button>
-                <button id="waveTypeBtn">Wellentyp wechseln</button>
-                <button id="equilibriumBtn">Gleichgewichtslinie</button>
+        <div class="main-content">
+            <div id="wavesContainer" class="waves-container">
+                <!-- Wave controls will be added here dynamically -->
             </div>
             
-            <div class="slider-container">
-                <label class="slider-label">Amplitude</label>
-                <input type="range" id="amplitudeSlider" min="5" max="50" value="30" step="1">
-                <span class="value-display" id="amplitudeValue">30</span>
-            </div>
-            
-            <div class="slider-container">
-                <label class="slider-label">Frequenz (Hz)</label>
-                <input type="range" id="frequencySlider" min="0.1" max="2" value="0.3" step="0.1">
-                <span class="value-display" id="frequencyValue">0.3 Hz</span>
-            </div>
-            
-            <div class="slider-container">
-                <label class="slider-label">Wellenlänge</label>
-                <input type="range" id="wavelengthSlider" min="100" max="400" value="200" step="10">
-                <span class="value-display" id="wavelengthValue">200</span>
-            </div>
-            
-            <div class="slider-container">
-                <label class="slider-label">Anzahl der Punkte</label>
-                <input type="range" id="pointsSlider" min="10" max="40" value="20" step="1">
-                <span class="value-display" id="pointsValue">20</span>
+            <div class="plots-container">
+                <div class="plot-window">
+                    <div class="plot-title">Combined Waves</div>
+                    <div class="plot-area">
+                        <div class="y-axis" id="combinedYAxis">
+                            <div>50</div>
+                            <div>25</div>
+                            <div>0</div>
+                            <div>-25</div>
+                            <div>-50</div>
+                        </div>
+                        <svg id="combinedPlot" preserveAspectRatio="xMidYMid meet"></svg>
+                    </div>
+                </div>
+                <div class="plot-window">
+                    <div class="plot-title">Individual Waves</div>
+                    <div class="plot-area">
+                        <div class="y-axis" id="individualYAxis">
+                            <div>50</div>
+                            <div>25</div>
+                            <div>0</div>
+                            <div>-25</div>
+                            <div>-50</div>
+                        </div>
+                        <svg id="individualPlot" preserveAspectRatio="xMidYMid meet"></svg>
+                    </div>
+                </div>
             </div>
         </div>
     </div>
+</body>
+</html>
 
-    <script>
-        class WaveAnimation {
-            constructor() {
-                this.svg = document.getElementById('waveCanvas');
-                this.width = 600;
-                this.height = 200;
-                this.centerY = this.height / 2;
-                this.time = 0;
-                this.isPlaying = true;
-                this.yAxisOffset = 40;
-                
-                // State
-                this.amplitude = 30;
-                this.frequency = 0.3;
-                this.wavelength = 200;
-                this.numPoints = 20;
-                this.waveType = 'transverse';
-                this.showEquilibrium = true;
-                
-                // Animation speed scaling factor - Changed from 50 to 5
-                this.animationSpeed = 5;
-                
-                this.setupControls();
-                this.animate();
-                
-                // Initial value displays
-                this.updateValueDisplays();
-            }
+<!DOCTYPE html>
+<html>
+<head><title>Wave Simulator Script</title></head>
+<body>
+<script>
+class WaveSimulator {
+    constructor() {
+        this.waves = [];
+        this.isPlaying = true;
+        this.time = 0;
+        this.colors = [
+            '#2196F3', '#FF5722', '#4CAF50', '#9C27B0', '#FF9800',
+            '#E91E63', '#00BCD4', '#8BC34A', '#3F51B5', '#FFC107'
+        ];
+        // Reduced max amplitude for better visualization
+        this.FIXED_MAX_AMPLITUDE = 80;
+        
+        this.setupControls();
+        this.setupPlots();
+        this.addWave(); // Add initial wave
+        
+        // Initial resize and animation setup
+        requestAnimationFrame(() => {
+            this.handleResize();
+            this.animate();
+        });
+        
+        // Debounced resize handler
+        let resizeTimeout;
+        window.addEventListener('resize', () => {
+            clearTimeout(resizeTimeout);
+            resizeTimeout = setTimeout(() => this.handleResize(), 250);
+        });
+    }
+    
+    handleResize() {
+        const updatePlotDimensions = (plot) => {
+            const plotArea = plot.parentElement;
+            // Account for the y-axis width (40px) and some padding
+            const width = plotArea.clientWidth - 45;
+            const height = plotArea.clientHeight;
             
-            updateValueDisplays() {
-                document.getElementById('amplitudeValue').textContent = this.amplitude;
-                document.getElementById('frequencyValue').textContent = this.frequency + ' Hz';
-                document.getElementById('wavelengthValue').textContent = this.wavelength;
-                document.getElementById('pointsValue').textContent = this.numPoints;
-            }
+            // Update SVG dimensions
+            plot.style.width = `${width}px`;
+            plot.style.height = `${height}px`;
+            plot.setAttribute('viewBox', `0 0 ${width} ${height}`);
             
-            drawYAxis() {
-                const yAxis = document.createElementNS('http://www.w3.org/2000/svg', 'line');
-                yAxis.setAttribute('x1', this.yAxisOffset);
-                yAxis.setAttribute('y1', 20);
-                yAxis.setAttribute('x2', this.yAxisOffset);
-                yAxis.setAttribute('y2', this.height - 20);
-                yAxis.setAttribute('stroke', 'black');
-                yAxis.setAttribute('stroke-width', '1');
-                this.svg.appendChild(yAxis);
-
-                const tickLength = 5;
-                const positions = [
-                    { y: this.centerY - this.amplitude, label: `+${this.amplitude}` },
-                    { y: this.centerY, label: '0' },
-                    { y: this.centerY + this.amplitude, label: `-${this.amplitude}` }
-                ];
-
-                positions.forEach(pos => {
-                    const tick = document.createElementNS('http://www.w3.org/2000/svg', 'line');
-                    tick.setAttribute('x1', this.yAxisOffset - tickLength);
-                    tick.setAttribute('y1', pos.y);
-                    tick.setAttribute('x2', this.yAxisOffset);
-                    tick.setAttribute('y2', pos.y);
-                    tick.setAttribute('stroke', 'black');
-                    tick.setAttribute('stroke-width', '1');
-                    this.svg.appendChild(tick);
-
-                    const label = document.createElementNS('http://www.w3.org/2000/svg', 'text');
-                    label.setAttribute('x', this.yAxisOffset - 8);
-                    label.setAttribute('y', pos.y);
-                    label.setAttribute('text-anchor', 'end');
-                    label.setAttribute('dominant-baseline', 'middle');
-                    label.setAttribute('font-size', '12px');
-                    label.textContent = pos.label;
-                    this.svg.appendChild(label);
-
-                    const gridLine = document.createElementNS('http://www.w3.org/2000/svg', 'line');
-                    gridLine.setAttribute('x1', this.yAxisOffset);
-                    gridLine.setAttribute('y1', pos.y);
-                    gridLine.setAttribute('x2', this.width + this.yAxisOffset);
-                    gridLine.setAttribute('y2', pos.y);
-                    gridLine.setAttribute('stroke', '#ddd');
-                    gridLine.setAttribute('stroke-width', '1');
-                    gridLine.setAttribute('stroke-dasharray', '4');
-                    this.svg.appendChild(gridLine);
-                });
-            }
+            // Store dimensions for wave calculations
+            this.plotWidth = width;
+            this.plotHeight = height;
             
-            calculatePoints() {
-                const points = [];
-                const spacing = this.width / (this.numPoints - 1);
-                const k = 2 * Math.PI / this.wavelength;
-                const omega = 2 * Math.PI * this.frequency * this.animationSpeed;
-                
-                for (let i = 0; i < this.numPoints; i++) {
-                    const equilibriumX = i * spacing + this.yAxisOffset;
-                    const phase = k * (equilibriumX - this.yAxisOffset) - omega * this.time;
-                    
-                    if (this.waveType === 'transverse') {
-                        points.push({
-                            x: equilibriumX,
-                            y: this.centerY + this.amplitude * Math.sin(phase),
-                            equilibriumX,
-                            equilibriumY: this.centerY
-                        });
-                    } else {
-                        const displacement = this.amplitude * Math.sin(phase);
-                        points.push({
-                            x: equilibriumX + displacement,
-                            y: this.centerY,
-                            equilibriumX,
-                            equilibriumY: this.centerY
-                        });
-                    }
-                }
-                return points;
-            }
+            // Update grid lines
+            this.updateGridLines(plot);
+        };
+        
+        updatePlotDimensions(document.getElementById('combinedPlot'));
+        updatePlotDimensions(document.getElementById('individualPlot'));
+    }
+    
+    updateGridLines(plot) {
+        // Remove old grid lines
+        plot.querySelectorAll('.grid-line').forEach(line => line.remove());
+        
+        // Add new grid lines
+        for (let i = -2; i <= 2; i++) {
+            const line = document.createElementNS('http://www.w3.org/2000/svg', 'line');
+            line.setAttribute('class', 'grid-line');
+            line.setAttribute('x1', '0');
+            line.setAttribute('x2', this.plotWidth);
+            line.setAttribute('y1', this.plotHeight / 2 + (i * this.plotHeight / 4));
+            line.setAttribute('y2', this.plotHeight / 2 + (i * this.plotHeight / 4));
+            plot.insertBefore(line, plot.firstChild);
+        }
+    }
+    
+    setupControls() {
+        document.getElementById('addWave').addEventListener('click', () => this.addWave());
+        document.getElementById('playPause').addEventListener('click', () => {
+            this.isPlaying = !this.isPlaying;
+            document.getElementById('playPause').textContent = 
+                this.isPlaying ? 'Pause' : 'Resume';
+        });
+    }
+    
+    setupPlots() {
+        this.individualPlot = document.getElementById('individualPlot');
+        this.combinedPlot = document.getElementById('combinedPlot');
+        
+        ['individualPlot', 'combinedPlot'].forEach(plotId => {
+            const plot = document.getElementById(plotId);
+            const xAxis = document.createElementNS('http://www.w3.org/2000/svg', 'line');
+            xAxis.setAttribute('class', 'x-axis');
+            plot.appendChild(xAxis);
+        });
+    }
+    
+    addWave() {
+        const waveId = this.waves.length;
+        const wave = {
+            id: waveId,
+            amplitude: 25,
+            frequency: 1,
+            phase: 0,
+            speed: 1,
+            color: this.colors[waveId % this.colors.length]
+        };
+        
+        const waveControls = document.createElement('div');
+        waveControls.className = 'wave-controls';
+        waveControls.innerHTML = `
+            <div class="wave-header">
+                <h3>
+                    <span class="color-indicator" style="background-color: ${wave.color}"></span>
+                    Wave ${waveId + 1}
+                </h3>
+                <button class="remove" onclick="simulator.removeWave(${waveId})">×</button>
+            </div>
+            <div class="control-row">
+                <div class="control-group">
+                    <label for="amplitude${waveId}">Amplitude</label>
+                    <input type="range" id="amplitude${waveId}" min="0" max="80" value="15">
+                    <div class="value-display"><span id="amplitudeValue${waveId}">25</span></div>
+                </div>
+                <div class="control-group">
+                    <label for="frequency${waveId}">Frequency (Hz)</label>
+                    <input type="range" id="frequency${waveId}" min="0.1" max="2" step="0.1" value="1">
+                    <div class="value-display"><span id="frequencyValue${waveId}">1.0</span> Hz</div>
+                </div>
+                <div class="control-group">
+                    <label for="phase${waveId}">Phase (rad)</label>
+                    <input type="range" id="phase${waveId}" min="0" max="6.28" step="0.1" value="0">
+                    <div class="value-display"><span id="phaseValue${waveId}">0.0</span></div>
+                </div>
+                <div class="control-group">
+                    <label for="speed${waveId}">Speed</label>
+                    <input type="range" id="speed${waveId}" min="0.1" max="2" step="0.1" value="1">
+                    <div class="value-display"><span id="speedValue${waveId}">1.0</span>x</div>
+                </div>
+            </div>
+        `;
+        
+        document.getElementById('wavesContainer').appendChild(waveControls);
+        
+        ['amplitude', 'frequency', 'phase', 'speed'].forEach(param => {
+            const input = document.getElementById(`${param}${waveId}`);
+            const display = document.getElementById(`${param}Value${waveId}`);
             
-            draw() {
-                const points = this.calculatePoints();
-                this.svg.innerHTML = '';
-                this.drawYAxis();
-                
-                if (this.waveType === 'transverse') {
-                    points.forEach(point => {
-                        const line = document.createElementNS('http://www.w3.org/2000/svg', 'line');
-                        line.setAttribute('x1', point.x);
-                        line.setAttribute('y1', this.centerY);
-                        line.setAttribute('x2', point.x);
-                        line.setAttribute('y2', point.y);
-                        line.setAttribute('stroke', 'red');
-                        line.setAttribute('stroke-width', '1');
-                        line.setAttribute('stroke-dasharray', '4');
-                        this.svg.appendChild(line);
-                    });
-                }
-                
-                if (this.showEquilibrium) {
-                    const equilibriumPath = document.createElementNS('http://www.w3.org/2000/svg', 'path');
-                    const pathData = points.reduce((path, point, i) => 
-                        path + (i === 0 ? 'M' : 'L') + ` ${point.equilibriumX} ${point.equilibriumY}`, 
-                    '');
-                    equilibriumPath.setAttribute('d', pathData);
-                    equilibriumPath.setAttribute('stroke', 'gray');
-                    equilibriumPath.setAttribute('stroke-width', '1');
-                    equilibriumPath.setAttribute('stroke-dasharray', '4');
-                    equilibriumPath.setAttribute('fill', 'none');
-                    this.svg.appendChild(equilibriumPath);
-                }
-                
-                const linePath = document.createElementNS('http://www.w3.org/2000/svg', 'path');
-                const pathData = points.reduce((path, point, i) => 
-                    path + (i === 0 ? 'M' : 'L') + ` ${point.x} ${point.y}`, 
-                '');
-                linePath.setAttribute('d', pathData);
-                linePath.setAttribute('stroke', 'blue');
-                linePath.setAttribute('stroke-width', '1');
-                linePath.setAttribute('fill', 'none');
-                this.svg.appendChild(linePath);
-                
-                points.forEach(point => {
-                    const circle = document.createElementNS('http://www.w3.org/2000/svg', 'circle');
-                    circle.setAttribute('cx', point.x);
-                    circle.setAttribute('cy', point.y);
-                    circle.setAttribute('r', '4');
-                    circle.setAttribute('fill', 'blue');
-                    this.svg.appendChild(circle);
-                });
-            }
+            input.addEventListener('input', (e) => {
+                wave[param] = parseFloat(e.target.value);
+                display.textContent = wave[param].toFixed(1);
+            });
+        });
+        
+        const individualPath = document.createElementNS('http://www.w3.org/2000/svg', 'path');
+        individualPath.setAttribute('stroke', wave.color);
+        individualPath.setAttribute('stroke-width', '2');
+        individualPath.setAttribute('fill', 'none');
+        this.individualPlot.appendChild(individualPath);
+        
+        wave.path = individualPath;
+        this.waves.push(wave);
+        
+        if (!this.combinedPath) {
+            this.combinedPath = document.createElementNS('http://www.w3.org/2000/svg', 'path');
+            this.combinedPath.setAttribute('stroke', '#000');
+            this.combinedPath.setAttribute('stroke-width', '2');
+            this.combinedPath.setAttribute('fill', 'none');
+            this.combinedPlot.appendChild(this.combinedPath);
+        }
+    }
+    
+    removeWave(id) {
+        const index = this.waves.findIndex(w => w.id === id);
+        if (index !== -1) {
+            this.waves[index].path.remove();
+            this.waves.splice(index, 1);
             
-            animate() {
-                if (this.isPlaying) {
-                    this.time = (this.time + 0.01) % (2 * Math.PI);
-                }
-                this.draw();
-                requestAnimationFrame(() => this.animate());
-            }
+            const controls = document.querySelectorAll('.wave-controls');
+            controls[index].remove();
             
-            setupControls() {
-                document.getElementById('playPauseBtn').onclick = () => {
-                    this.isPlaying = !this.isPlaying;
-                    document.getElementById('playPauseBtn').textContent = 
-                        this.isPlaying ? 'Pause' : 'Abspielen';
-                };
-                
-                document.getElementById('waveTypeBtn').onclick = () => {
-                    this.waveType = this.waveType === 'transverse' ? 'longitudinal' : 'transverse';
-                };
-                
-                document.getElementById('equilibriumBtn').onclick = () => {
-                    this.showEquilibrium = !this.showEquilibrium;
-                };
-                
-                document.getElementById('amplitudeSlider').oninput = (e) => {
-                    this.amplitude = Number(e.target.value);
-                    this.updateValueDisplays();
-                };
-                
-                document.getElementById('frequencySlider').oninput = (e) => {
-                    this.frequency = Number(e.target.value);
-                    this.updateValueDisplays();
-                };
-                
-                document.getElementById('wavelengthSlider').oninput = (e) => {
-                    this.wavelength = Number(e.target.value);
-                    this.updateValueDisplays();
-                };
-                
-                document.getElementById('pointsSlider').oninput = (e) => {
-                    this.numPoints = Number(e.target.value);
-                    this.updateValueDisplays();
-                };
+            // Update remaining wave numbers
+            for (let i = index; i < controls.length - 1; i++) {
+                const header = controls[i + 1].querySelector('h3');
+                header.innerHTML = header.innerHTML.replace(
+                    /Wave \d+/, 
+                    `Wave ${i + 1}`
+                );
             }
         }
+    }
+    
+    calculateWave(wave, x) {
+        return wave.amplitude * Math.sin(
+            2 * Math.PI * wave.frequency * (x/200 + this.time * wave.speed) + wave.phase
+        );
+    }
+    
+    updatePaths() {
+        if (!this.plotWidth || !this.plotHeight) return;
+        
+        const centerY = this.plotHeight / 2;
+        const scale = this.plotHeight / (2 * this.FIXED_MAX_AMPLITUDE);
+        
+        // Update axes
+        ['individualPlot', 'combinedPlot'].forEach(plotId => {
+            const plot = document.getElementById(plotId);
+            const xAxis = plot.querySelector('.x-axis');
+            xAxis.setAttribute('x1', '0');
+            xAxis.setAttribute('x2', this.plotWidth);
+            xAxis.setAttribute('y1', centerY);
+            xAxis.setAttribute('y2', centerY);
+        });
+        
+        const points = new Array(this.plotWidth).fill(0);
+        
+        // Update individual waves
+        this.waves.forEach(wave => {
+            const wavePoints = [];
+            for (let x = 0; x < this.plotWidth; x++) {
+                const y = this.calculateWave(wave, x);
+                wavePoints.push(`${x},${centerY - y * scale}`);
+                points[x] += y;
+            }
+            wave.path.setAttribute('d', `M ${wavePoints.join(' L ')}`);
+        });
+        
+        // Update combined wave
+        if (this.waves.length > 0) {
+            const combinedPoints = points.map((y, x) => 
+                `${x},${centerY - y * scale}`);
+            this.combinedPath.setAttribute('d', `M ${combinedPoints.join(' L ')}`);
+        }
+    }
+    
+    animate() {
+        if (this.isPlaying) {
+            this.time += 0.016;
+            this.updatePaths();
+        }
+        requestAnimationFrame(() => this.animate());
+    }
+}
 
-        // Start animation when page loads
-        window.onload = () => new WaveAnimation();
-    </script>
+let simulator;
+window.addEventListener('load', () => {
+    simulator = new WaveSimulator();
+});
+</script>
 </body>
 </html>
