@@ -3,10 +3,10 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Numa Koudsie - Physics Innovator</title>
+    <title>Numa Koudsie - Physics Educator & Researcher</title>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/particles.js/2.0.0/particles.min.js"></script>
     <style>
-        @import url('https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;700&family=Orbitron:wght@400;700&display=swap');
+        @import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700&family=Source+Sans+Pro:wght@300;400;600&display=swap');
         
         * {
             margin: 0;
@@ -15,10 +15,10 @@
         }
         
         body {
-            font-family: 'Roboto', sans-serif;
-            line-height: 1.5;
-            color: #E0E0E0;
-            background-color: #0a0a0a;
+            font-family: 'Source Sans Pro', sans-serif;
+            line-height: 1.6;
+            color: #4A4036;
+            background-color: #F5F1EA;
             overflow-x: hidden;
         }
         
@@ -30,135 +30,80 @@
         }
         
         .container {
-            max-width: 1000px;
+            max-width: 1200px;
             margin: 0 auto;
-            padding: 1rem;
+            padding: 2rem;
         }
         
         header {
             text-align: center;
-            padding: 3rem 0;
-            background: linear-gradient(45deg, #00356B, #0066cc);
-            clip-path: polygon(0 0, 100% 0, 100% 85%, 0 100%);
-            margin-bottom: 2rem;
+            padding: 4rem 0;
+            background: linear-gradient(135deg, #E8D5C4, #DEC4B0);
+            margin-bottom: 3rem;
+            border-bottom: 2px solid #B4A397;
         }
         
         h1 {
+            font-family: 'Playfair Display', serif;
             font-size: 3.5rem;
-            margin-bottom: 0.5rem;
-            font-family: 'Orbitron', sans-serif;
-            text-shadow: 0 0 10px rgba(0,255,255,0.7);
-            animation: glow 2s ease-in-out infinite alternate;
-        }
-        
-        @keyframes glow {
-            from {
-                text-shadow: 0 0 10px rgba(0,255,255,0.7);
-            }
-            to {
-                text-shadow: 0 0 20px rgba(0,255,255,0.9), 0 0 30px rgba(0,255,255,0.7);
-            }
+            color: #4A4036;
+            margin-bottom: 1rem;
+            letter-spacing: 1px;
         }
         
         .subtitle {
             font-size: 1.2rem;
-            opacity: 0.8;
-            font-family: 'Orbitron', sans-serif;
+            color: #6B5744;
+            font-weight: 300;
         }
         
         .section {
-            margin: 2rem 0;
-            padding: 1.5rem;
-            background-color: rgba(255, 255, 255, 0.05);
-            border-radius: 10px;
-            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1), 0 1px 3px rgba(0, 0, 0, 0.08);
-            transition: transform 0.3s ease, box-shadow 0.3s ease;
-            overflow: hidden;
-            position: relative;
-        }
-        
-        .section::before {
-            content: '';
-            position: absolute;
-            top: -50%;
-            left: -50%;
-            width: 200%;
-            height: 200%;
-            background: linear-gradient(
-                to bottom right,
-                rgba(255, 255, 255, 0.1) 0%,
-                rgba(255, 255, 255, 0.05) 50%,
-                transparent 50%,
-                transparent 100%
-            );
-            transform: rotate(-45deg);
-            z-index: -1;
+            margin: 3rem 0;
+            padding: 2rem;
+            background-color: rgba(255, 255, 255, 0.7);
+            border-radius: 12px;
+            box-shadow: 0 4px 12px rgba(74, 64, 54, 0.08);
+            transition: transform 0.3s ease;
+            border: 1px solid #DEC4B0;
         }
         
         .section:hover {
             transform: translateY(-5px);
-            box-shadow: 0 6px 12px rgba(0, 255, 255, 0.1), 0 3px 6px rgba(0, 255, 255, 0.08);
         }
         
         h2 {
-            color: #00FFFF;
-            border-bottom: 2px solid #00FFFF;
-            padding-bottom: 0.3rem;
-            margin-bottom: 1rem;
-            font-family: 'Orbitron', sans-serif;
+            font-family: 'Playfair Display', serif;
+            color: #4A4036;
+            border-bottom: 2px solid #DEC4B0;
+            padding-bottom: 0.5rem;
+            margin-bottom: 1.5rem;
             font-size: 2rem;
-            text-transform: uppercase;
         }
         
         .grid {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-            gap: 1.5rem;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 2rem;
         }
         
         .card {
-            background-color: rgba(0, 51, 102, 0.3);
-            padding: 1.2rem;
+            background-color: rgba(255, 255, 255, 0.9);
+            padding: 1.5rem;
             border-radius: 8px;
+            border: 1px solid #DEC4B0;
             transition: all 0.3s ease;
-            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-            border: 1px solid rgba(0, 255, 255, 0.1);
-            position: relative;
-            overflow: hidden;
-        }
-        
-        .card::after {
-            content: '';
-            position: absolute;
-            top: -50%;
-            left: -50%;
-            width: 200%;
-            height: 200%;
-            background: linear-gradient(
-                to bottom right,
-                rgba(0, 255, 255, 0.1) 0%,
-                rgba(0, 255, 255, 0.05) 50%,
-                transparent 50%,
-                transparent 100%
-            );
-            transform: rotate(-45deg);
-            transition: transform 0.5s ease;
-        }
-        
-        .card:hover::after {
-            transform: rotate(-45deg) translate(50%, 50%);
         }
         
         .card:hover {
-            transform: translateY(-5px) rotate(1deg);
-            box-shadow: 0 4px 8px rgba(0, 255, 255, 0.2);
+            transform: translateY(-3px);
+            box-shadow: 0 6px 12px rgba(74, 64, 54, 0.12);
         }
         
         .card h3 {
-            font-family: 'Orbitron', sans-serif;
+            font-family: 'Playfair Display', serif;
             font-size: 1.5rem;
-            color: #00FFFF;
-            margin-bottom: 0.5rem;
+            color: #4A4036;
+            margin-bottom: 1rem;
         }
         
         ul {
@@ -166,22 +111,91 @@
         }
         
         li {
-            margin-bottom: 0.5rem;
+            margin-bottom: 0.8rem;
             position: relative;
-            padding-left: 20px;
+            padding-left: 1.5rem;
+            color: #6B5744;
         }
         
         li::before {
-            content: '▶';
+            content: '•';
             position: absolute;
             left: 0;
-            color: #00FFFF;
+            color: #B4A397;
+            font-size: 1.2em;
         }
         
         .highlight {
-            color: #00FFFF;
-            font-weight: bold;
-            font-size: 1rem;
+            color: #8B7355;
+            font-weight: 600;
+        }
+        
+        .current {
+            border-left: 3px solid #DEC4B0;
+            padding-left: 1rem;
+            margin-left: -1rem;
+        }
+
+        .position-card {
+            position: relative;
+        }
+
+        .simulations-panel {
+            position: absolute;
+            right: -300px;
+            top: 0;
+            width: 280px;
+            background: rgba(245, 241, 234, 0.95);
+            border: 1px solid #DEC4B0;
+            border-radius: 8px;
+            padding: 1rem;
+            transition: transform 0.3s ease-in-out;
+            box-shadow: -2px 0 10px rgba(74, 64, 54, 0.1);
+            opacity: 0;
+            pointer-events: none;
+            z-index: 100;
+        }
+
+        .card:hover .simulations-panel {
+            transform: translateX(-310px);
+            opacity: 1;
+            pointer-events: auto;
+        }
+
+        .sim-link {
+            display: block;
+            padding: 0.8rem;
+            margin: 0.5rem 0;
+            background: rgba(255, 255, 255, 0.8);
+            border: 1px solid #DEC4B0;
+            border-radius: 6px;
+            text-decoration: none;
+            color: #4A4036;
+            transition: all 0.2s ease;
+        }
+
+        .sim-link:hover {
+            background: #DEC4B0;
+            transform: translateX(5px);
+        }
+
+        .sim-title {
+            font-family: 'Playfair Display', serif;
+            font-size: 1.1rem;
+            margin-bottom: 0.3rem;
+        }
+
+        .sim-desc {
+            font-size: 0.9rem;
+            color: #6B5744;
+        }
+
+        .panel-title {
+            font-family: 'Playfair Display', serif;
+            color: #4A4036;
+            margin-bottom: 1rem;
+            padding-bottom: 0.5rem;
+            border-bottom: 1px solid #DEC4B0;
         }
         
         @media (max-width: 768px) {
@@ -191,23 +205,61 @@
             h1 {
                 font-size: 2.5rem;
             }
-            .subtitle {
-                font-size: 1rem;
+            .container {
+                padding: 1rem;
             }
         }
     </style>
 </head>
-<body>
+
+    <body>
     <div id="particles-js"></div>
     <header>
         <h1>Numa Koudsie</h1>
-        <p class="subtitle">Physics Innovator | Complex Systems Explorer</p>
+        <p class="subtitle">Physics Educator & Complex Systems Researcher</p>
     </header>
+    
     <div class="container">
+        <section class="section">
+            <h2>Current Positions</h2>
+            <div class="grid">
+                <div class="card current position-card">
+                    <h3>Bilingual Teaching Assistant</h3>
+                    <p>Pädagogische Assistenz für Physik, Mathematik und Informatik bilingual</p>
+                    <p>Saxony International School – Carl Hahn gGmbH · Full-time</p>
+                    
+                    <!-- Simulations Panel -->
+                    <div class="simulations-panel">
+                        <h4 class="panel-title">Interactive Simulations</h4>
+                        
+                        <a href="simulations/wave-interference.html" class="sim-link">
+                            <div class="sim-title">Wave Interference</div>
+                            <div class="sim-desc">Multiple wave simulation with interference patterns</div>
+                        </a>
+                        
+                        <a href="simulations/water-wave.html" class="sim-link">
+                            <div class="sim-title">Water Wave Simulation</div>
+                            <div class="sim-desc">Visualize water wave properties and particle motion</div>
+                        </a>
+                        
+                        <a href="simulations/Quer und Laengswellen.html" class="sim-link">
+                            <div class="sim-title">Wave Types Explorer</div>
+                            <div class="sim-desc">Compare longitudinal and transverse waves</div>
+                        </a>
+                    </div>
+                </div>
+                <div class="card current">
+                    <h3>Research Assistant</h3>
+                    <p>Lemur Behavior Analysis Project</p>
+                    <p>Göttingen University, 04.2024 - Present</p>
+                </div>
+            </div>
+        </section>
+
         <section class="section">
             <h2>Education</h2>
             <div class="grid">
-                <div class="card">
+                <div class="card current">
                     <h3>M.Sc. Physics</h3>
                     <p>Complex Systems and Theory</p>
                     <p>Universität Göttingen, 04.2024 - Present</p>
@@ -225,16 +277,35 @@
         </section>
         
         <section class="section">
-            <h2>Skills and Experience</h2>
-            <ul>
-                <li><span class="highlight">Technical:</span> Python, Julia, MATLAB, OriginLab, Sofie LIBS, Autodesk Inventor, DIAdem</li>
-                <li><span class="highlight">Languages:</span> Arabic (Native), English (Fluent), German (Competent)</li>
-                <li><span class="highlight">Teaching:</span> Private Tutor (Lernbud, 2021), Teaching Assistant (Uni Oldenburg, 2018-2019)</li>
-            </ul>
+            <h2>Research Projects</h2>
+            <div class="grid">
+                <div class="card">
+                    <h3>Lemur Behavior Analysis</h3>
+                    <ul>
+                        <li>Synthetic data generation for lemur interactions</li>
+                        <li>GRU neural networks for behavioral sequences</li>
+                        <li>Current focus: Pattern recognition in social behaviors</li>
+                    </ul>
+                </div>
+                <div class="card">
+                    <h3>Drop Population Dynamics</h3>
+                    <ul>
+                        <li>Mathematical framework: VI* = Cij Vj</li>
+                        <li>System energy optimization for equilibrium modeling</li>
+                    </ul>
+                </div>
+                <div class="card">
+                    <h3>Cellular Mechanics</h3>
+                    <ul>
+                        <li>Stochastic differential equations for viscoelastic properties</li>
+                        <li>Step-strain protocols for complex modulus estimation</li>
+                    </ul>
+                </div>
+            </div>
         </section>
-        
+
         <section class="section">
-            <h2>Work Experience</h2>
+            <h2>Past Experience</h2>
             <div class="grid">
                 <div class="card">
                     <h3>Model Developer</h3>
@@ -249,69 +320,59 @@
                     <p>Faiveley Transport, 02.2021 - 04.2022</p>
                     <ul>
                         <li>Analyzed R134a and R290 refrigeration systems</li>
-                        <li>Employed AND/OR gate calculations for energy usage determination</li>
-                    </ul>
-                </div>
-                <div class="card">
-                    <h3>Research Assistant</h3>
-                    <p>Universität Oldenburg, 10.2018 - 04.2019</p>
-                    <ul>
-                        <li>Studied atomic structures of Al-Sn lake sediments using laser-induced breakdown spectroscopy (LIBS)</li>
-                        <li>Analyzed light intensity profiles using Sofie LIBS software</li>
+                        <li>Employed AND/OR gate calculations</li>
                     </ul>
                 </div>
             </div>
         </section>
-        
+
         <section class="section">
-            <h2>Current Projects</h2>
-            <div class="grid">
-                <div class="card">
-                    <h3>Drop Population Dynamics</h3>
-                    <ul>
-                        <li>Mathematical framework: VI* = Cij Vj</li>
-                        <li>System energy optimization for equilibrium modeling</li>
-                    </ul>
-                </div>
-                <div class="card">
-                    <h3>Lemur Behavior Prediction</h3>
-                    <ul>
-                        <li>Synthetic data generation for lemur interactions</li>
-                        <li>GRU neural networks for behavioral sequences</li>
-                    </ul>
-                </div>
-                <div class="card">
-                    <h3>Cellular Mechanics Simulation</h3>
-                    <ul>
-                        <li>Stochastic differential equations for viscoelastic properties</li>
-                        <li>Step-strain protocols for complex modulus estimation</li>
-                    </ul>
-                </div>
-                <div class="card">
-                    <h3>Creeping Flow in Bent Pipes</h3>
-                    <ul>
-                        <li>Flow analysis in 180° bent pipe with square cross-section</li>
-                        <li>System symmetry uncovering and solution comparison</li>
-                    </ul>
-                </div>
-            </div>
+            <h2>Skills</h2>
+            <ul>
+                <li><span class="highlight">Technical:</span> Python, Julia, MATLAB, OriginLab, Sofie LIBS, Autodesk Inventor, DIAdem</li>
+                <li><span class="highlight">Languages:</span> Arabic (Native), English (Fluent), German (Competent)</li>
+                <li><span class="highlight">Teaching:</span> Physics, Mathematics, and Computer Science in both German and English</li>
+            </ul>
         </section>
     </div>
+
     <script>
         particlesJS("particles-js", {
             particles: {
-                number: { value: 80, density: { enable: true, value_area: 800 } },
-                color: { value: "#00FFFF" },
+                number: { value: 60, density: { enable: true, value_area: 800 } },
+                color: { value: "#B4A397" },
                 shape: { type: "circle" },
-                opacity: { value: 0.5, random: false, anim: { enable: false } },
+                opacity: { value: 0.3, random: false, anim: { enable: false } },
                 size: { value: 3, random: true, anim: { enable: false } },
-                line_linked: { enable: true, distance: 150, color: "#00FFFF", opacity: 0.4, width: 1 },
-                move: { enable: true, speed: 6, direction: "none", random: false, straight: false, out_mode: "out", bounce: false, attract: { enable: false, rotateX: 600, rotateY: 1200 } }
+                line_linked: { 
+                    enable: true, 
+                    distance: 150, 
+                    color: "#DEC4B0", 
+                    opacity: 0.2, 
+                    width: 1 
+                },
+                move: { 
+                    enable: true, 
+                    speed: 2, 
+                    direction: "none", 
+                    random: true, 
+                    straight: false, 
+                    out_mode: "out", 
+                    bounce: false, 
+                    attract: { enable: false } 
+                }
             },
             interactivity: {
                 detect_on: "canvas",
-                events: { onhover: { enable: true, mode: "repulse" }, onclick: { enable: true, mode: "push" }, resize: true },
-                modes: { grab: { distance: 400, line_linked: { opacity: 1 } }, bubble: { distance: 400, size: 40, duration: 2, opacity: 8, speed: 3 }, repulse: { distance: 200, duration: 0.4 }, push: { particles_nb: 4 }, remove: { particles_nb: 2 } }
+                events: { 
+                    onhover: { enable: true, mode: "grab" }, 
+                    onclick: { enable: true, mode: "push" }, 
+                    resize: true 
+                },
+                modes: {
+                    grab: { distance: 140, line_linked: { opacity: 0.4 } },
+                    push: { particles_nb: 2 }
+                }
             },
             retina_detect: true
         });
