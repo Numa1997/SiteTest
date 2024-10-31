@@ -2,11 +2,20 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=0.86, maximum-scale=5.0, minimum-scale=0.86">
+    <meta name="viewport" content="width=device-width, initial-scale=0.75, maximum-scale=5.0, minimum-scale=0.75">
     <title>Numa Koudsie - Physicist</title>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/particles.js/2.0.0/particles.min.js"></script>
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700&family=Source+Sans+Pro:wght@300;400;600&display=swap');
+        
+        :root {
+            --scale-factor: 0.85;
+            --base-spacing: calc(1rem * var(--scale-factor));
+            --primary-color: #4A4036;
+            --bg-color: #F5F1EA;
+            --border-color: #DEC4B0;
+            --hover-shadow: rgba(74, 64, 54, 0.12);
+        }
         
         * {
             margin: 0;
@@ -17,10 +26,10 @@
         body {
             font-family: 'Source Sans Pro', sans-serif;
             line-height: 1.4;
-            color: #4A4036;
-            background-color: #F5F1EA;
+            color: var(--primary-color);
+            background-color: var(--bg-color);
             overflow-x: hidden;
-            font-size: 0.9rem;
+            font-size: calc(0.875rem * var(--scale-factor));
         }
         
         #particles-js {
@@ -33,78 +42,78 @@
         .container {
             max-width: 1200px;
             margin: 0 auto;
-            padding: 1rem;
+            padding: var(--base-spacing);
         }
         
         header {
             text-align: center;
-            padding: 2rem 0;
-            background: linear-gradient(135deg, #E8D5C4, #DEC4B0);
-            margin-bottom: 1.5rem;
-            border-bottom: 2px solid #B4A397;
+            padding: calc(1.5rem * var(--scale-factor)) 0;
+            background: linear-gradient(135deg, #E8D5C4, var(--border-color));
+            margin-bottom: calc(1.5rem * var(--scale-factor));
+            border-bottom: 1px solid var(--border-color);
         }
         
         h1 {
             font-family: 'Playfair Display', serif;
-            font-size: 2.5rem;
-            color: #4A4036;
-            margin-bottom: 0.5rem;
-            letter-spacing: 1px;
+            font-size: calc(2rem * var(--scale-factor));
+            color: var(--primary-color);
+            margin-bottom: calc(0.5rem * var(--scale-factor));
+            letter-spacing: 0.5px;
         }
         
         .subtitle {
-            font-size: 1rem;
+            font-size: calc(1rem * var(--scale-factor));
             color: #6B5744;
             font-weight: 300;
         }
         
         .section {
-            margin: 1.5rem 0;
-            padding: 1rem;
+            margin: calc(1rem * var(--scale-factor)) 0;
+            padding: calc(1rem * var(--scale-factor));
             background-color: rgba(255, 255, 255, 0.7);
             border-radius: 8px;
-            box-shadow: 0 2px 6px rgba(74, 64, 54, 0.08);
-            transition: transform 0.3s ease;
-            border: 1px solid #DEC4B0;
+            box-shadow: 0 2px 6px var(--hover-shadow);
+            transition: transform 0.2s ease;
+            border: 1px solid var(--border-color);
         }
         
         .section:hover {
-            transform: translateY(-3px);
+            transform: translateY(-2px);
         }
         
         h2 {
             font-family: 'Playfair Display', serif;
-            color: #4A4036;
-            border-bottom: 2px solid #DEC4B0;
-            padding-bottom: 0.3rem;
-            margin-bottom: 1rem;
-            font-size: 1.5rem;
+            color: var(--primary-color);
+            border-bottom: 1px solid var(--border-color);
+            padding-bottom: calc(0.3rem * var(--scale-factor));
+            margin-bottom: calc(0.75rem * var(--scale-factor));
+            font-size: calc(1.25rem * var(--scale-factor));
         }
         
         .grid {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-            gap: 1rem;
+            grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+            gap: calc(0.75rem * var(--scale-factor));
         }
         
         .card {
             background-color: rgba(255, 255, 255, 0.9);
-            padding: 1rem;
-            border-radius: 8px;
-            border: 1px solid #DEC4B0;
-            transition: all 0.3s ease;
+            padding: calc(0.75rem * var(--scale-factor));
+            border-radius: 6px;
+            border: 1px solid var(--border-color);
+            transition: all 0.2s ease;
         }
         
         .card:hover {
-            transform: translateY(-3px);
-            box-shadow: 0 4px 8px rgba(74, 64, 54, 0.12);
+            transform: translateY(-2px);
+            box-shadow: 0 3px 6px var(--hover-shadow);
         }
         
         .card h3 {
             font-family: 'Playfair Display', serif;
-            font-size: 1.2rem;
-            color: #4A4036;
-            margin-bottom: 0.5rem;
+            font-size: calc(1.1rem * var(--scale-factor));
+            color: var(--primary-color);
+            margin-bottom: calc(0.5rem * var(--scale-factor));
         }
         
         ul {
@@ -112,11 +121,11 @@
         }
         
         li {
-            margin-bottom: 0.5rem;
+            margin-bottom: calc(0.4rem * var(--scale-factor));
             position: relative;
-            padding-left: 1.2rem;
+            padding-left: calc(1rem * var(--scale-factor));
             color: #6B5744;
-            font-size: 0.9rem;
+            font-size: calc(0.85rem * var(--scale-factor));
         }
         
         li::before {
@@ -124,7 +133,6 @@
             position: absolute;
             left: 0;
             color: #B4A397;
-            font-size: 1em;
         }
         
         .highlight {
@@ -133,86 +141,83 @@
         }
         
         .current {
-            border-left: 2px solid #DEC4B0;
-            padding-left: 0.8rem;
-            margin-left: -0.8rem;
+            border-left: 2px solid var(--border-color);
+            padding-left: calc(0.75rem * var(--scale-factor));
+            margin-left: calc(-0.75rem * var(--scale-factor));
         }
-        
+
         .position-card {
             position: relative;
         }
-        
+
         .simulations-panel {
             position: absolute;
-            right: -280px;
+            right: -250px;
             top: 0;
-            width: 260px;
+            width: 240px;
             background: rgba(245, 241, 234, 0.95);
-            border: 1px solid #DEC4B0;
-            border-radius: 8px;
-            padding: 0.8rem;
-            transition: transform 0.3s ease-in-out;
-            box-shadow: -2px 0 10px rgba(74, 64, 54, 0.1);
+            border: 1px solid var(--border-color);
+            border-radius: 6px;
+            padding: calc(0.75rem * var(--scale-factor));
+            transition: transform 0.2s ease-in-out;
+            box-shadow: -1px 0 8px var(--hover-shadow);
             opacity: 0;
             pointer-events: none;
             z-index: 100;
         }
-        
+
         .card:hover .simulations-panel {
-            transform: translateX(-290px);
+            transform: translateX(-260px);
             opacity: 1;
             pointer-events: auto;
         }
-        
+
         .sim-link {
             display: block;
-            padding: 0.6rem;
-            margin: 0.3rem 0;
+            padding: calc(0.5rem * var(--scale-factor));
+            margin: calc(0.3rem * var(--scale-factor)) 0;
             background: rgba(255, 255, 255, 0.8);
-            border: 1px solid #DEC4B0;
-            border-radius: 6px;
+            border: 1px solid var(--border-color);
+            border-radius: 4px;
             text-decoration: none;
-            color: #4A4036;
+            color: var(--primary-color);
             transition: all 0.2s ease;
         }
-        
+
         .sim-link:hover {
-            background: #DEC4B0;
-            transform: translateX(5px);
+            background: var(--border-color);
+            transform: translateX(3px);
         }
-        
+
         .sim-title {
             font-family: 'Playfair Display', serif;
-            font-size: 1rem;
-            margin-bottom: 0.2rem;
+            font-size: calc(0.9rem * var(--scale-factor));
+            margin-bottom: calc(0.2rem * var(--scale-factor));
         }
-        
+
         .sim-desc {
-            font-size: 0.8rem;
+            font-size: calc(0.8rem * var(--scale-factor));
             color: #6B5744;
         }
-        
+
         .panel-title {
             font-family: 'Playfair Display', serif;
-            color: #4A4036;
-            margin-bottom: 0.8rem;
-            padding-bottom: 0.3rem;
-            border-bottom: 1px solid #DEC4B0;
-            font-size: 1.1rem;
+            color: var(--primary-color);
+            margin-bottom: calc(0.75rem * var(--scale-factor));
+            padding-bottom: calc(0.3rem * var(--scale-factor));
+            border-bottom: 1px solid var(--border-color);
+            font-size: calc(1rem * var(--scale-factor));
         }
         
         @media (max-width: 768px) {
+            :root {
+                --scale-factor: 0.8;
+            }
             .grid {
                 grid-template-columns: 1fr;
             }
-            h1 {
-                font-size: 2rem;
-            }
             .container {
-                padding: 0.8rem;
-            }
-            .card {
-                padding: 0.8rem;
+                padding: calc(0.5rem * var(--scale-factor));
             }
         }
     </style>
@@ -261,30 +266,105 @@
             </div>
         </section>
 
-        <!-- Rest of your sections remain the same but with reduced spacing -->
-        <!-- Education, Research Projects, Past Experience, Skills sections -->
-        <!-- Keeping content identical but with new compact styling -->
+        <section class="section">
+            <h2>Education</h2>
+            <div class="grid">
+                <div class="card current">
+                    <h3>M.Sc. Physics</h3>
+                    <p>Complex Systems and Theory</p>
+                    <p>Universität Göttingen, 04.2024 - Present</p>
+                </div>
+                <div class="card">
+                    <h3>B.Sc. Physics</h3>
+                    <p>Universität Leipzig, 10.2020 - 12.2022</p>
+                </div>
+                <div class="card">
+                    <h3>Engineering Physics</h3>
+                    <p>117 CPs</p>
+                    <p>Universität Oldenburg, 10.2017 - 07.2020</p>
+                </div>
+            </div>
+        </section>
         
+        <section class="section">
+            <h2>Research Projects</h2>
+            <div class="grid">
+                <div class="card">
+                    <h3>Lemur Behavior Analysis</h3>
+                    <ul>
+                        <li>Synthetic data generation for lemur interactions</li>
+                        <li>GRU neural networks for behavioral sequences</li>
+                        <li>Current focus: Pattern recognition in social behaviors</li>
+                    </ul>
+                </div>
+
+                <div class="card">
+                    <h3>Drop Population Dynamics</h3>
+                    <ul>
+                        <li>Mathematical framework: VI* = Cij Vj</li>
+                        <li>System energy optimization for equilibrium modeling</li>
+                    </ul>
+                </div>
+                <div class="card">
+                    <h3>Cellular Mechanics</h3>
+                    <ul>
+                        <li>Stochastic differential equations for viscoelastic properties</li>
+                        <li>Step-strain protocols for complex modulus estimation</li>
+                    </ul>
+                </div>
+            </div>
+        </section>
+
+        <section class="section">
+            <h2>Past Experience</h2>
+            <div class="grid">
+                <div class="card">
+                    <h3>Model Developer</h3>
+                    <p>Universität Leipzig & TROPOS, 07.2022 - 12.2022</p>
+                    <ul>
+                        <li>Implemented Python model for Gravitational Collection Equation</li>
+                        <li>Utilized FTCS method for numerical solutions</li>
+                    </ul>
+                </div>
+                <div class="card">
+                    <h3>Systems Analyst</h3>
+                    <p>Faiveley Transport, 02.2021 - 04.2022</p>
+                    <ul>
+                        <li>Analyzed R134a and R290 refrigeration systems</li>
+                        <li>Employed AND/OR gate calculations</li>
+                    </ul>
+                </div>
+            </div>
+        </section>
+
+        <section class="section">
+            <h2>Skills</h2>
+            <ul>
+                <li><span class="highlight">Technical:</span> Python, Julia, MATLAB, OriginLab, Sofie LIBS, Autodesk Inventor, DIAdem</li>
+                <li><span class="highlight">Languages:</span> Arabic (Native), English (Fluent), German (Competent)</li>
+                <li><span class="highlight">Teaching:</span> Physics, Mathematics, and Computer Science in both German and English</li>
+            </ul>
+        </section>
     </div>
 
     <script>
         particlesJS("particles-js", {
             particles: {
-                number: { value: 40, density: { enable: true, value_area: 800 } }, // Reduced from 60
+                number: { value: 40, density: { enable: true, value_area: 1000 } },
                 color: { value: "#B4A397" },
                 shape: { type: "circle" },
-                opacity: { value: 0.2, random: false, anim: { enable: false } }, // Reduced from 0.3
-                size: { value: 2, random: true, anim: { enable: false } }, // Reduced from 3
+                opacity: { value: 0.2, random: false, anim: { enable: false } },
+                size: { value: 2, random: true, anim: { enable: false } },
                 line_linked: { 
                     enable: true, 
                     distance: 150, 
                     color: "#DEC4B0", 
-                    opacity: 0.15, // Reduced from 0.2
+                    opacity: 0.1, 
                     width: 1 
                 },
                 move: { 
                     enable: true, 
-                    speed: 1.5, // Reduced from 2
+                    speed: 1.5, 
                     direction: "none", 
                     random: true, 
                     straight: false, 
@@ -301,7 +381,7 @@
                     resize: true 
                 },
                 modes: {
-                    grab: { distance: 140, line_linked: { opacity: 0.3 } }, // Reduced from 0.4
+                    grab: { distance: 140, line_linked: { opacity: 0.3 } },
                     push: { particles_nb: 2 }
                 }
             },
