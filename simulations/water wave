@@ -1,0 +1,244 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <title>Kreisförmige Wellenbewegung</title>
+    <meta charset="UTF-8">
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 15px;
+            background-color: #f0f0f0;
+        }
+        .container {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+            background-color: white;
+            padding: 15px;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            height: calc(100vh - 50px);
+        }
+        .controls {
+            display: flex;
+            gap: 20px;
+            padding: 15px;
+            background-color: #f8f8f8;
+            border-radius: 4px;
+            align-items: center;
+            flex-wrap: wrap;
+        }
+        .control-group {
+            display: flex;
+            flex-direction: column;
+            gap: 5px;
+            min-width: 200px;
+        }
+        .control-group label {
+            font-size: 0.9em;
+            color: #333;
+        }
+        .value-display {
+            font-size: 0.8em;
+            color: #666;
+        }
+        .plot-container {
+            flex-grow: 1;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            padding: 10px;
+            min-height: 0;
+            position: relative;
+        }
+        button {
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            padding: 8px 16px;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 0.9em;
+            height: fit-content;
+            align-self: flex-end;
+        }
+        button:hover {
+            filter: brightness(90%);
+        }
+        canvas {
+            width: 100%;
+            height: 100%;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="controls">
+            <div class="control-group">
+                <label for="amplitude">Amplitude (Kreisradius)</label>
+                <input type="range" id="amplitude" min="10" max="50" value="30">
+                <div class="value-display">Wert: <span id="amplitudeValue">30</span></div>
+            </div>
+            <div class="control-group">
+                <label for="frequency">Frequenz (Hz)</label>
+                <input type="range" id="frequency" min="0.1" max="2" step="0.1" value="0.5">
+                <div class="value-display">Wert: <span id="frequencyValue">0.5</span> Hz</div>
+            </div>
+            <div class="control-group">
+                <label for="wavelength">Wellenlänge (Abstand)</label>
+                <input type="range" id="wavelength" min="30" max="150" value="80">
+                <div class="value-display">Wert: <span id="wavelengthValue">80</span></div>
+            </div>
+            <div class="control-group">
+                <label for="particles">Anzahl der Punkte</label>
+                <input type="range" id="particles" min="5" max="50" value="20">
+                <div class="value-display">Wert: <span id="particlesValue">20</span></div>
+            </div>
+            <button id="playPause">Pause</button>
+        </div>
+        <div class="plot-container">
+            <canvas id="waveCanvas"></canvas>
+        </div>
+    </div>
+
+    <script>
+        class CircularWaveSimulator {
+            constructor() {
+                this.canvas = document.getElementById('waveCanvas');
+                this.ctx = this.canvas.getContext('2d');
+                this.isPlaying = true;
+                this.time = 0;
+                
+                // Parameters
+                this.amplitude = 30;
+                this.frequency = 0.5;
+                this.wavelength = 80;
+                this.particles = 20;
+                
+                this.setupControls();
+                this.handleResize();
+                window.addEventListener('resize', () => this.handleResize());
+                this.animate();
+            }
+            
+            handleResize() {
+                const container = this.canvas.parentElement;
+                this.canvas.width = container.clientWidth;
+                this.canvas.height = container.clientHeight;
+            }
+            
+            setupControls() {
+                const controls = {
+                    amplitude: document.getElementById('amplitude'),
+                    frequency: document.getElementById('frequency'),
+                    wavelength: document.getElementById('wavelength'),
+                    particles: document.getElementById('particles')
+                };
+                
+                Object.entries(controls).forEach(([param, control]) => {
+                    const display = document.getElementById(`${param}Value`);
+                    control.addEventListener('input', (e) => {
+                        this[param] = parseFloat(e.target.value);
+                        display.textContent = this[param];
+                    });
+                });
+                
+                document.getElementById('playPause').addEventListener('click', (e) => {
+                    this.isPlaying = !this.isPlaying;
+                    e.target.textContent = this.isPlaying ? 'Pause' : 'Fortsetzen';
+                });
+            }
+            
+            drawParticle(x, y, isHighlighted = false) {
+                this.ctx.beginPath();
+                this.ctx.arc(x, y, isHighlighted ? 5 : 3, 0, Math.PI * 2);
+                this.ctx.fillStyle = isHighlighted ? '#FF6384' : '#4BC0C0';
+                this.ctx.fill();
+            }
+            
+            drawCircle(centerX, centerY, radius) {
+                this.ctx.beginPath();
+                this.ctx.arc(centerX, centerY, radius, 0, Math.PI * 2);
+                this.ctx.strokeStyle = 'rgba(0,0,0,0.1)';
+                this.ctx.stroke();
+            }
+            
+            drawWave() {
+                const centerY = this.canvas.height / 2;
+                const startX = 50;
+                const spacing = this.wavelength;
+                const omega = 2 * Math.PI * this.frequency;
+                
+                // Calculate and store particle positions
+                const particles = [];
+                const pathPoints = [];
+                
+                for (let i = 0; i < this.particles; i++) {
+                    const baseX = startX + i * spacing;
+                    const phaseShift = (2 * Math.PI * i * spacing) / (this.wavelength * 5);
+                    
+                    // Calculate circular motion
+                    const angle = omega * this.time - phaseShift;
+                    const dx = this.amplitude * Math.cos(angle);
+                    const dy = this.amplitude * Math.sin(angle);
+                    
+                    particles.push({
+                        x: baseX + dx,
+                        y: centerY + dy,
+                        centerX: baseX,
+                        centerY: centerY,
+                        angle: angle
+                    });
+                    
+                    // Store points for the wave path
+                    pathPoints.push({x: baseX + dx, y: centerY + dy});
+                }
+                
+                // Draw paths between particles
+                this.ctx.beginPath();
+                this.ctx.moveTo(pathPoints[0].x, pathPoints[0].y);
+                for (let i = 1; i < pathPoints.length; i++) {
+                    this.ctx.lineTo(pathPoints[i].x, pathPoints[i].y);
+                }
+                this.ctx.strokeStyle = '#36A2EB';
+                this.ctx.lineWidth = 2;
+                this.ctx.stroke();
+                
+                // Draw rotation circles and particles
+                particles.forEach((p, i) => {
+                    // Draw the circle path
+                    this.drawCircle(p.centerX, p.centerY, this.amplitude);
+                    
+                    // Draw radius line to show rotation
+                    this.ctx.beginPath();
+                    this.ctx.moveTo(p.centerX, p.centerY);
+                    this.ctx.lineTo(p.x, p.y);
+                    this.ctx.strokeStyle = 'rgba(0,0,0,0.1)';
+                    this.ctx.stroke();
+                    
+                    // Draw the particle
+                    this.drawParticle(p.x, p.y, i === 0);
+                });
+            }
+            
+            animate() {
+                if (this.isPlaying) {
+                    this.time += 0.016;
+                    
+                    // Clear canvas
+                    this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
+                    
+                    // Draw wave
+                    this.drawWave();
+                }
+                
+                requestAnimationFrame(() => this.animate());
+            }
+        }
+
+        window.addEventListener('load', () => {
+            new CircularWaveSimulator();
+        });
+    </script>
+</body>
+</html>
