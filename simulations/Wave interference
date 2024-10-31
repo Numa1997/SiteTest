@@ -1,0 +1,413 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <title>Mehrfach-Wellensimulator</title>
+    <meta charset="UTF-8">
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 15px;
+            background-color: #f0f0f0;
+        }
+        .container {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+            background-color: white;
+            padding: 15px;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            min-height: 100vh;
+        }
+        .top-bar {
+            display: flex;
+            gap: 15px;
+            align-items: center;
+            padding-bottom: 10px;
+            border-bottom: 1px solid #eee;
+        }
+        .controls-header {
+            display: flex;
+            gap: 10px;
+            align-items: center;
+        }
+        .waves-container {
+            display: flex;
+            gap: 15px;
+            overflow-x: auto;
+            padding: 10px 0;
+            min-height: 140px;
+        }
+        .wave-controls {
+            background-color: #f8f8f8;
+            padding: 10px;
+            border-radius: 4px;
+            border: 1px solid #ddd;
+            font-size: 0.9em;
+            flex: 0 0 auto;
+            width: 280px;
+        }
+        .wave-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 8px;
+        }
+        .wave-header h3 {
+            margin: 0;
+            font-size: 1em;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        .color-indicator {
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+        }
+        .control-row {
+            display: grid;
+            gap: 8px;
+        }
+        .control-group {
+            display: flex;
+            flex-direction: column;
+            gap: 3px;
+        }
+        .control-group label {
+            color: #333;
+            font-size: 0.85em;
+        }
+        .control-group input[type="range"] {
+            width: 100%;
+        }
+        .value-display {
+            font-size: 0.8em;
+            color: #666;
+        }
+	
+	.plots-container {
+   	 display: grid;
+   	 grid-template-rows: 600px 600px;
+   	 gap: 30px;
+   	 flex-grow: 1;
+   	 margin-bottom: 30px;
+	}
+
+        .plot-window {
+            background: white;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            padding: 10px;
+            display: flex;
+            flex-direction: column;
+        }
+        .plot-title {
+            text-align: center;
+            margin: 0 0 10px 0;
+            font-weight: bold;
+            font-size: 1em;
+        }
+        .plot-area {
+            position: relative;
+            flex-grow: 1;
+            min-height: 0;
+        }
+        .y-axis {
+            position: absolute;
+            left: 0;
+            top: 0;
+            bottom: 0;
+            width: 50px;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            padding: 5px;
+            font-size: 0.8em;
+            color: #666;
+            pointer-events: none;
+        }
+        button {
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            padding: 8px 16px;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 0.9em;
+            transition: background-color 0.3s;
+        }
+        button.remove {
+            background-color: #f44336;
+            padding: 4px 8px;
+            font-size: 0.8em;
+        }
+        button:hover {
+            filter: brightness(90%);
+        }
+        h1 {
+            font-size: 1.3em;
+            margin: 0;
+        }
+        .waves-container::-webkit-scrollbar {
+            height: 8px;
+        }
+        .waves-container::-webkit-scrollbar-track {
+            background: #f1f1f1;
+            border-radius: 4px;
+        }
+        .waves-container::-webkit-scrollbar-thumb {
+            background: #888;
+            border-radius: 4px;
+        }
+        .waves-container::-webkit-scrollbar-thumb:hover {
+            background: #666;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="top-bar">
+            <h1>Mehrfach-Wellensimulator</h1>
+            <div class="controls-header">
+                <button id="addWave">Neue Welle +</button>
+                <button id="playPause">Pause</button>
+            </div>
+        </div>
+        
+        <div id="wavesContainer" class="waves-container">
+            <!-- Wave controls will be added here dynamically -->
+        </div>
+        
+        <div class="plots-container">
+            <div class="plot-window">
+                <div class="plot-title">Überlagerung aller Wellen</div>
+                <div class="plot-area">
+                    <div class="y-axis" id="combinedYAxis">
+                        <div>100</div>
+                        <div>50</div>
+                        <div>0</div>
+                        <div>-50</div>
+                        <div>-100</div>
+                    </div>
+                    <svg id="combinedPlot" width="100%" height="100%" preserveAspectRatio="xMidYMid meet"></svg>
+                </div>
+            </div>
+            <div class="plot-window">
+                <div class="plot-title">Einzelne Wellen</div>
+                <div class="plot-area">
+                    <div class="y-axis" id="individualYAxis">
+                        <div>100</div>
+                        <div>50</div>
+                        <div>0</div>
+                        <div>-50</div>
+                        <div>-100</div>
+                    </div>
+                    <svg id="individualPlot" width="100%" height="100%" preserveAspectRatio="xMidYMid meet"></svg>
+                </div>
+            </div>
+        </div>
+    </div>
+
+<script>
+        class WaveSimulator {
+            constructor() {
+                this.waves = [];
+                this.isPlaying = true;
+                this.time = 0;
+                this.colors = [
+                    '#FF6384', '#36A2EB', '#FFCE56', '#4BC0C0', '#9966FF',
+                    '#FF9F40', '#33CC99', '#FF99CC', '#9933CC', '#FF9966'
+                ];
+                this.FIXED_MAX_AMPLITUDE = 100; // Fixed scale value
+                
+                this.setupControls();
+                this.setupPlots();
+                this.addWave(); // Add initial wave
+                
+                this.animate();
+                this.handleResize();
+                window.addEventListener('resize', () => this.handleResize());
+            }
+            
+            handleResize() {
+                const updatePlotDimensions = (plot) => {
+                    const width = plot.parentElement.clientWidth - 60; // Account for y-axis
+                    const height = plot.parentElement.clientHeight;
+                    plot.setAttribute('viewBox', `0 0 ${width} ${height}`);
+                    this.plotWidth = width;
+                    this.plotHeight = height;
+                };
+                
+                updatePlotDimensions(document.getElementById('combinedPlot'));
+                updatePlotDimensions(document.getElementById('individualPlot'));
+            }
+            
+            setupControls() {
+                document.getElementById('addWave').addEventListener('click', () => this.addWave());
+                document.getElementById('playPause').addEventListener('click', () => {
+                    this.isPlaying = !this.isPlaying;
+                    document.getElementById('playPause').textContent = 
+                        this.isPlaying ? 'Pause' : 'Fortsetzen';
+                });
+            }
+            
+            setupPlots() {
+                this.individualPlot = document.getElementById('individualPlot');
+                this.combinedPlot = document.getElementById('combinedPlot');
+                
+                const setupAxes = (plot) => {
+                    plot.innerHTML = `
+                        <line class="x-axis" stroke="black" stroke-width="1"/>
+                    `;
+                };
+                
+                setupAxes(this.individualPlot);
+                setupAxes(this.combinedPlot);
+            }
+            
+            addWave() {
+                const waveId = this.waves.length;
+                const wave = {
+                    id: waveId,
+                    amplitude: 50,
+                    frequency: 1,
+                    phase: 0,
+                    speed: 1,
+                    color: this.colors[waveId % this.colors.length]
+                };
+                
+                const waveControls = document.createElement('div');
+                waveControls.className = 'wave-controls';
+                waveControls.innerHTML = `
+                    <div class="wave-header">
+                        <h3>
+                            <span class="color-indicator" style="background-color: ${wave.color}"></span>
+                            Welle ${waveId + 1}
+                        </h3>
+                        <button class="remove" onclick="simulator.removeWave(${waveId})">×</button>
+                    </div>
+                    <div class="control-row">
+                        <div class="control-group">
+                            <label for="amplitude${waveId}">Amplitude</label>
+                            <input type="range" id="amplitude${waveId}" min="0" max="200" value="50">
+                            <div class="value-display"><span id="amplitudeValue${waveId}">50</span></div>
+                        </div>
+                        <div class="control-group">
+                            <label for="frequency${waveId}">Frequenz (Hz)</label>
+                            <input type="range" id="frequency${waveId}" min="0.1" max="2" step="0.1" value="1">
+                            <div class="value-display"><span id="frequencyValue${waveId}">1</span> Hz</div>
+                        </div>
+                        <div class="control-group">
+                            <label for="phase${waveId}">Phase (rad)</label>
+                            <input type="range" id="phase${waveId}" min="0" max="6.28" step="0.1" value="0">
+                            <div class="value-display"><span id="phaseValue${waveId}">0</span></div>
+                        </div>
+                        <div class="control-group">
+                            <label for="speed${waveId}">Geschwindigkeit</label>
+                            <input type="range" id="speed${waveId}" min="0.1" max="2" step="0.1" value="1">
+                            <div class="value-display"><span id="speedValue${waveId}">1</span>x</div>
+                        </div>
+                    </div>
+                `;
+                
+                document.getElementById('wavesContainer').appendChild(waveControls);
+                
+                ['amplitude', 'frequency', 'phase', 'speed'].forEach(param => {
+                    const input = document.getElementById(`${param}${waveId}`);
+                    const display = document.getElementById(`${param}Value${waveId}`);
+                    
+                    input.addEventListener('input', (e) => {
+                        wave[param] = parseFloat(e.target.value);
+                        display.textContent = wave[param];
+                    });
+                });
+                
+                const individualPath = document.createElementNS('http://www.w3.org/2000/svg', 'path');
+                individualPath.setAttribute('stroke', wave.color);
+                individualPath.setAttribute('stroke-width', '2');
+                individualPath.setAttribute('fill', 'none');
+                this.individualPlot.appendChild(individualPath);
+                
+                wave.path = individualPath;
+                this.waves.push(wave);
+                
+                if (!this.combinedPath) {
+                    this.combinedPath = document.createElementNS('http://www.w3.org/2000/svg', 'path');
+                    this.combinedPath.setAttribute('stroke', '#000');
+                    this.combinedPath.setAttribute('stroke-width', '2');
+                    this.combinedPath.setAttribute('fill', 'none');
+                    this.combinedPlot.appendChild(this.combinedPath);
+                }
+            }
+            
+            removeWave(id) {
+                const index = this.waves.findIndex(w => w.id === id);
+                if (index !== -1) {
+                    this.waves[index].path.remove();
+                    this.waves.splice(index, 1);
+                    document.querySelector(`.wave-controls:nth-child(${index + 1})`).remove();
+                }
+            }
+            
+            calculateWave(wave, x) {
+                return wave.amplitude * Math.sin(
+                    2 * Math.PI * wave.frequency * (x/200 + this.time * wave.speed) + wave.phase
+                );
+            }
+            
+            updatePaths() {
+                if (!this.plotWidth || !this.plotHeight) return;
+                
+                const centerY = this.plotHeight / 2;
+                const scale = this.plotHeight / (2 * this.FIXED_MAX_AMPLITUDE);
+                
+                // Update x-axis position for both plots
+                this.individualPlot.querySelector('.x-axis').setAttribute('x1', '0');
+                this.individualPlot.querySelector('.x-axis').setAttribute('x2', this.plotWidth);
+                this.individualPlot.querySelector('.x-axis').setAttribute('y1', centerY);
+                this.individualPlot.querySelector('.x-axis').setAttribute('y2', centerY);
+                
+                this.combinedPlot.querySelector('.x-axis').setAttribute('x1', '0');
+                this.combinedPlot.querySelector('.x-axis').setAttribute('x2', this.plotWidth);
+                this.combinedPlot.querySelector('.x-axis').setAttribute('y1', centerY);
+                this.combinedPlot.querySelector('.x-axis').setAttribute('y2', centerY);
+                
+                const points = new Array(this.plotWidth).fill(0);
+                
+                // Update individual waves
+                this.waves.forEach(wave => {
+                    const wavePoints = [];
+                    for (let x = 0; x < this.plotWidth; x++) {
+                        const y = this.calculateWave(wave, x);
+                        wavePoints.push(`${x},${centerY - y * scale}`);
+                        points[x] += y;
+                    }
+                    wave.path.setAttribute('d', `M ${wavePoints.join(' L ')}`);
+                });
+                
+                // Update combined wave
+                if (this.waves.length > 0) {
+                    const combinedPoints = points.map((y, x) => 
+                        `${x},${centerY - y * scale}`);
+                    this.combinedPath.setAttribute('d', `M ${combinedPoints.join(' L ')}`);
+                }
+            }
+            
+            animate() {
+                if (this.isPlaying) {
+                    this.time += 0.016;
+                    this.updatePaths();
+                }
+                requestAnimationFrame(() => this.animate());
+            }
+        }
+
+        let simulator;
+        window.addEventListener('load', () => {
+            simulator = new WaveSimulator();
+        });
+    </script>
+</body>
+</html>
