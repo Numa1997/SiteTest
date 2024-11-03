@@ -206,7 +206,6 @@
         .sim-title {
             font-family: 'Playfair Display', serif;
             font-size: 1rem;
-            margin-bottom: 0.4rem;
             color: var(--primary-color);
             font-weight: 600;
         }
@@ -278,7 +277,6 @@
                         </div>
                     </div>
                 </div>
-                <!-- Rest of your current positions -->
                 <div class="card current">
                     <h3>Research Assistant</h3>
                     <p>Lemur Behavior Analysis Project</p>
@@ -318,7 +316,6 @@
                         <li>Current focus: Pattern recognition in social behaviors</li>
                     </ul>
                 </div>
-
                 <div class="card">
                     <h3>Drop Population Dynamics</h3>
                     <ul>
@@ -369,6 +366,7 @@
     </div>
 
     <script>
+        // Particles.js configuration
         particlesJS("particles-js", {
             particles: {
                 number: { value: 40, density: { enable: true, value_area: 1000 } },
@@ -408,6 +406,24 @@
             },
             retina_detect: true
         });
+
+        // Load simulations directly from GitHub
+        fetch('https://api.github.com/repos/Numa1997/SiteTest/contents/simulations')
+            .then(response => response.json())
+            .then(files => {
+                const simulationsList = document.getElementById('simulations-list');
+                files.forEach(file => {
+                    // Only process HTML files
+                    if (file.name.endsWith('.html')) {
+                        simulationsList.innerHTML += `
+                            <a href="simulations/${file.name}" class="sim-link">
+                                <div class="sim-title">${file.name.replace('.html', '')}</div>
+                            </a>
+                        `;
+                    }
+                });
+            })
+            .catch(error => console.error('Error loading simulations:', error));
     </script>
 </body>
 </html>
