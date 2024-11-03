@@ -150,65 +150,81 @@
             position: relative;
         }
 
+        /* Updated panel styles */
         .simulations-panel {
             position: absolute;
-            right: -250px;
+            right: -320px;
             top: 0;
-            width: 240px;
-            background: rgba(245, 241, 234, 0.95);
+            width: 300px;
+            background: rgba(255, 255, 255, 0.97);
             border: 1px solid var(--border-color);
-            border-radius: 6px;
-            padding: calc(0.75rem * var(--scale-factor));
-            transition: transform 0.2s ease-in-out;
-            box-shadow: -1px 0 8px var(--hover-shadow);
+            border-radius: 8px;
+            padding: 1rem;
+            transition: all 0.3s ease-in-out;
             opacity: 0;
             pointer-events: none;
             z-index: 100;
+            max-height: 500px;
+            overflow-y: auto;
+            box-shadow: 0 4px 12px rgba(74, 64, 54, 0.15);
         }
 
         .card:hover .simulations-panel {
-            transform: translateX(-260px);
+            transform: translateX(-330px);
             opacity: 1;
             pointer-events: auto;
         }
 
+        .panel-title {
+            font-family: 'Playfair Display', serif;
+            color: var(--primary-color);
+            margin-bottom: 1rem;
+            padding-bottom: 0.5rem;
+            border-bottom: 2px solid var(--border-color);
+            font-size: 1.1rem;
+            text-align: center;
+        }
+
         .sim-link {
             display: block;
-            padding: calc(0.5rem * var(--scale-factor));
-            margin: calc(0.3rem * var(--scale-factor)) 0;
-            background: rgba(255, 255, 255, 0.8);
+            padding: 0.75rem;
+            margin: 0.5rem 0;
+            background: var(--bg-color);
             border: 1px solid var(--border-color);
-            border-radius: 4px;
+            border-radius: 6px;
             text-decoration: none;
             color: var(--primary-color);
             transition: all 0.2s ease;
         }
 
         .sim-link:hover {
-            background: var(--border-color);
-            transform: translateX(3px);
+            background: white;
+            transform: translateX(5px);
+            box-shadow: 0 2px 8px var(--hover-shadow);
         }
 
         .sim-title {
             font-family: 'Playfair Display', serif;
-            font-size: calc(0.9rem * var(--scale-factor));
-            margin-bottom: calc(0.2rem * var(--scale-factor));
-        }
-
-        .sim-desc {
-            font-size: calc(0.8rem * var(--scale-factor));
-            color: #6B5744;
-        }
-
-        .panel-title {
-            font-family: 'Playfair Display', serif;
+            font-size: 1rem;
+            margin-bottom: 0.4rem;
             color: var(--primary-color);
-            margin-bottom: calc(0.75rem * var(--scale-factor));
-            padding-bottom: calc(0.3rem * var(--scale-factor));
-            border-bottom: 1px solid var(--border-color);
-            font-size: calc(1rem * var(--scale-factor));
+            font-weight: 600;
         }
-        
+
+        .simulations-panel::-webkit-scrollbar {
+            width: 6px;
+        }
+
+        .simulations-panel::-webkit-scrollbar-track {
+            background: var(--bg-color);
+            border-radius: 3px;
+        }
+
+        .simulations-panel::-webkit-scrollbar-thumb {
+            background: var(--border-color);
+            border-radius: 3px;
+        }
+
         @media (max-width: 768px) {
             :root {
                 --scale-factor: 0.8;
@@ -219,11 +235,27 @@
             .container {
                 padding: calc(0.5rem * var(--scale-factor));
             }
+            .simulations-panel {
+                position: static;
+                width: 100%;
+                max-height: 0;
+                padding: 0;
+                margin-top: 1rem;
+                opacity: 0;
+                transform: none;
+            }
+
+            .card:hover .simulations-panel {
+                max-height: 500px;
+                padding: 1rem;
+                opacity: 1;
+                transform: none;
+            }
         }
     </style>
 </head>
 
-    <body>
+<body>
     <div id="particles-js"></div>
     <header>
         <h1>Numa Koudsie</h1>
@@ -240,35 +272,13 @@
                     <p>Saxony International School – Carl Hahn gGmbH · Full-time</p>
                     
                     <div class="simulations-panel">
-                        <h4 class="panel-title">Interactive Simulations</h4>
-                        
-                        <a href="simulations/wave-interference.html" class="sim-link">
-                            <div class="sim-title">Wave Interference</div>
-                            <div class="sim-desc">Multiple wave simulation with interference patterns</div>
-                        </a>
-                        
-                        <a href="simulations/water-wave.html" class="sim-link">
-                            <div class="sim-title">Water Wave Simulation</div>
-                            <div class="sim-desc">Visualize water wave properties and particle motion</div>
-                        </a>
-                        
-                        <a href="simulations/Quer und Laengswellen.html" class="sim-link">
-                            <div class="sim-title">Wave Types Explorer</div>
-                            <div class="sim-desc">Compare longitudinal and transverse waves</div>
-                        </a>
-
-                        <a href="Interactive Double-Slit Experiment Visualization.html" class="sim-link">
-                            <div class="sim-title">Double Slit Illustartion</div>
-                            <div class="sim-desc">See Alpha</div>
-                        </a>
-
-                         <a href="Circular Wave Interference Visualization.html" class="sim-link">
-                            <div class="sim-title"> Huygens' Principle</div>
-                            <div class="sim-desc">See Alpha</div>
-                        </a>
-                        
+                        <h4 class="panel-title">Interactive Physics Simulations</h4>
+                        <div id="simulations-list">
+                            <!-- Simulations will be loaded here -->
+                        </div>
                     </div>
                 </div>
+                <!-- Rest of your current positions -->
                 <div class="card current">
                     <h3>Research Assistant</h3>
                     <p>Lemur Behavior Analysis Project</p>
