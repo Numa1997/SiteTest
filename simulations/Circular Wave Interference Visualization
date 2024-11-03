@@ -1,0 +1,191 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Wave Interference - Multiple Sources</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+            background-color: #f5f5f5;
+        }
+        .container {
+            max-width: 1000px;
+            margin: 0 auto;
+            background-color: white;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        canvas {
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            margin: 20px 0;
+            cursor: pointer;
+        }
+        .controls {
+            margin: 20px 0;
+            padding: 15px;
+            background-color: #f8f9fa;
+            border-radius: 4px;
+        }
+        button {
+            padding: 8px 16px;
+            margin: 0 8px;
+            border: none;
+            border-radius: 4px;
+            background-color: #007bff;
+            color: white;
+            cursor: pointer;
+        }
+        button:hover {
+            background-color: #0056b3;
+        }
+        .info {
+            color: #666;
+            font-style: italic;
+            margin: 10px 0;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Wave Interference and Straight Wavefront Formation</h1>
+        
+        <div class="controls">
+            <button onclick="toggleAnimation()">Play/Pause</button>
+            <button onclick="resetAnimation()">Reset</button>
+            <button onclick="clearSources()">Clear Sources</button>
+            <button onclick="addRandomSources()">Add 5 Random Sources</button>
+        </div>
+
+        <p class="info">Click anywhere along the bottom of the canvas to add wave sources. Add multiple sources to see how they form a straight wavefront!</p>
+        <canvas id="waveCanvas" width="800" height="300"></canvas>
+    </div>
+
+    <script>
+        const canvas = document.getElementById('waveCanvas');
+        const ctx = canvas.getContext('2d');
+        
+        let animationId;
+        let isPlaying = true;
+        let time = 0;
+        
+        // Wave parameters
+        let sources = [
+            { x: 200, y: canvas.height },
+            { x: 600, y: canvas.height }
+        ];
+        
+        const wavelength = 30;  // Shorter wavelength for clearer pattern
+        const frequency = 0.3;  // Faster waves
+        const damping = 0.15;   // Adjusted damping for better visibility
+        const maxRadius = canvas.height;
+
+        function getWaveAmplitude(x, y, sourceX, sourceY, time) {
+            const distance = Math.sqrt((x - sourceX) * (x - sourceX) + (y - sourceY) * (y - sourceY));
+            const phase = (distance / wavelength) * 2 * Math.PI - time * frequency;
+            return Math.cos(phase) * Math.exp(-distance * damping / maxRadius);
+        }
+
+        function getCombinedAmplitude(x, y, time) {
+            return sources.reduce((sum, source) => {
+                return sum + getWaveAmplitude(x, y, source.x, source.y, time);
+            }, 0) / Math.max(1, sources.length);
+        }
+
+        function amplitudeToColor(amplitude) {
+            // Enhanced color mapping for better contrast
+            const r = Math.floor((amplitude + 1) * 127.5);
+            const b = Math.floor((1 - amplitude) * 127.5);
+            const g = Math.floor(Math.abs(amplitude) * 20); // Slight green tint for better visualization
+            return `rgb(${r},${g},${b})`;
+        }
+
+        function draw() {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+            // Draw wave field
+            const resolution = 3;  // Higher resolution for clearer pattern
+            for (let x = 0; x < canvas.width; x += resolution) {
+                for (let y = 0; y < canvas.height; y += resolution) {
+                    const amplitude = getCombinedAmplitude(x, y, time);
+                    ctx.fillStyle = amplitudeToColor(amplitude);
+                    ctx.fillRect(x, y, resolution, resolution);
+                }
+            }
+
+            // Draw sources with a glowing effect
+            sources.forEach(source => {
+                // Glow effect
+                const gradient = ctx.createRadialGradient(
+                    source.x, source.y, 0,
+                    source.x, source.y, 10
+                );
+                gradient.addColorStop(0, 'rgba(255, 255, 0, 0.8)');
+                gradient.addColorStop(1, 'rgba(255, 255, 0, 0)');
+                
+                ctx.beginPath();
+                ctx.arc(source.x, source.y, 10, 0, Math.PI * 2);
+                ctx.fillStyle = gradient;
+                ctx.fill();
+
+                // Source point
+                ctx.beginPath();
+                ctx.arc(source.x, source.y, 4, 0, Math.PI * 2);
+                ctx.fillStyle = 'yellow';
+                ctx.strokeStyle = 'black';
+                ctx.fill();
+                ctx.stroke();
+            });
+
+            if (isPlaying) {
+                time += 0.4;  // Faster animation
+                animationId = requestAnimationFrame(draw);
+            }
+        }
+
+        function toggleAnimation() {
+            isPlaying = !isPlaying;
+            if (isPlaying) {
+                draw();
+            } else {
+                cancelAnimationFrame(animationId);
+            }
+        }
+
+        function resetAnimation() {
+            time = 0;
+            if (!isPlaying) {
+                isPlaying = true;
+                draw();
+            }
+        }
+
+        function clearSources() {
+            sources = [];
+            if (!isPlaying) {
+                draw();
+            }
+        }
+
+        function addRandomSources() {
+            const spacing = canvas.width / 6;
+            for (let i = 0; i < 5; i++) {
+                const x = spacing + Math.random() * (canvas.width - 2 * spacing);
+                sources.push({ x, y: canvas.height });
+            }
+        }
+
+        // Add click handler for adding new sources
+        canvas.addEventListener('click', (event) => {
+            const rect = canvas.getBoundingClientRect();
+            const x = event.clientX - rect.left;
+            const y = canvas.height; // Always at bottom
+            sources.push({ x, y });
+        });
+
+        // Start animation
+        draw();
+    </script>
+</body>
+</html>
