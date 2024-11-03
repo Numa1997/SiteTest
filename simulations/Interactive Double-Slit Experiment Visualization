@@ -1,0 +1,319 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Double-Slit Experiment</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/react/18.2.0/umd/react.production.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/react-dom/18.2.0/umd/react-dom.production.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/babel-standalone/7.23.5/babel.min.js"></script>
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+    <style>
+        .slider {
+            -webkit-appearance: none;
+            width: 100%;
+            height: 4px;
+            border-radius: 2px;
+            background: #e2e8f0;
+            outline: none;
+        }
+        
+        .slider::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            appearance: none;
+            width: 16px;
+            height: 16px;
+            border-radius: 50%;
+            background: #3b82f6;
+            cursor: pointer;
+        }
+        
+        .slider::-moz-range-thumb {
+            width: 16px;
+            height: 16px;
+            border-radius: 50%;
+            background: #3b82f6;
+            cursor: pointer;
+        }
+
+        .card {
+            background: white;
+            border-radius: 0.5rem;
+            box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.1);
+            padding: 1.5rem;
+        }
+    </style>
+</head>
+<body class="bg-gray-100 p-8">
+    <div id="root"></div>
+
+    <script type="text/babel">
+        class DoubleSiltGeometry {
+            constructor(d, alpha, b) {
+                this.d = d;
+                this.alpha = alpha * Math.PI / 180;
+                this.slitSeparation = b;
+            }
+
+            calculate(baseX, baseY) {
+                this.midPoint = {
+                    x: baseX,
+                    y: baseY
+                };
+
+                this.leftSlit = {
+                    x: baseX - this.slitSeparation/2,
+                    y: baseY
+                };
+                this.rightSlit = {
+                    x: baseX + this.slitSeparation/2,
+                    y: baseY
+                };
+
+                this.upperPoint = {
+                    x: baseX - this.d * Math.tan(this.alpha),
+                    y: baseY - this.d
+                };
+
+                const dx = this.upperPoint.x - this.rightSlit.x;
+                const dy = this.upperPoint.y - this.rightSlit.y;
+                const length = Math.sqrt(dx*dx + dy*dy);
+                
+                // Calculate normal direction
+                const nx = -dy/length;
+                const ny = dx/length;
+
+                // Calculate normal endpoint
+                this.normalEnd = {
+                    x: this.leftSlit.x + this.slitSeparation * nx,
+                    y: this.leftSlit.y + this.slitSeparation * ny
+                };
+
+                this.rightPath = length;
+                this.leftPath = Math.sqrt(
+                    Math.pow(this.upperPoint.x - this.leftSlit.x, 2) +
+                    Math.pow(this.upperPoint.y - this.leftSlit.y, 2)
+                );
+                this.pathDifference = Math.abs(this.leftPath - this.rightPath);
+            }
+
+            createAnglePath(radius = 75) {
+                const startAngle = -Math.PI/2;
+                const endAngle = -Math.PI/2 - this.alpha;
+                
+                const start = {
+                    x: this.midPoint.x + radius * Math.cos(startAngle),
+                    y: this.midPoint.y + radius * Math.sin(startAngle)
+                };
+                
+                const end = {
+                    x: this.midPoint.x + radius * Math.cos(endAngle),
+                    y: this.midPoint.y + radius * Math.sin(endAngle)
+                };
+
+                return `M ${start.x} ${start.y} A ${radius} ${radius} 0 0 0 ${end.x} ${end.y}`;
+            }
+        }
+
+        const MathLabel = ({ x, y, children }) => (
+            <text 
+                x={x} y={y} 
+                className="text-sm fill-current font-serif italic"
+                style={{ fontStyle: 'italic' }}
+            >
+                {children}
+            </text>
+        );
+
+        const Point = ({ x, y, color = "black" }) => (
+            <circle 
+                cx={x} cy={y} r={2.5}
+                fill={color}
+                className="stroke-2"
+            />
+        );
+
+        function DoubleSlit() {
+            const [d, setD] = React.useState(200);
+            const [alpha, setAlpha] = React.useState(30);
+            const [b, setB] = React.useState(40);
+            
+            const width = 600;
+            const height = 400;
+            const margin = 50;
+            
+            const geo = new DoubleSiltGeometry(d, alpha, b);
+            geo.calculate(width/2, height - margin);
+
+            const handleAngleChange = (event) => {
+                const newAngle = parseFloat(event.target.value);
+                if (newAngle > 5) {
+                    setAlpha(Math.round(newAngle / 5) * 5);
+                } else {
+                    setAlpha(Math.round(newAngle * 5) / 5);
+                }
+            };
+
+            return (
+                <div className="max-w-4xl mx-auto">
+                    <div className="card">
+                        <h2 className="text-2xl font-bold mb-6">Double-Slit Interference Pattern</h2>
+                        <div className="grid grid-cols-3 gap-4 mb-8">
+                            <div>
+                                <label className="block text-sm font-medium mb-2">
+                                    Distance d: {d}px
+                                </label>
+                                <input
+                                    type="range"
+                                    value={d}
+                                    onChange={(e) => setD(parseInt(e.target.value))}
+                                    min="100"
+                                    max="300"
+                                    step="1"
+                                    className="slider"
+                                />
+                            </div>
+                            <div>
+                                <label className="block text-sm font-medium mb-2">
+                                    Angle α: {alpha}°
+                                </label>
+                                <input
+                                    type="range"
+                                    value={alpha}
+                                    onChange={handleAngleChange}
+                                    min="0"
+                                    max="30"
+                                    step="0.2"
+                                    className="slider"
+                                />
+                            </div>
+                            <div>
+                                <label className="block text-sm font-medium mb-2">
+                                    Slit separation b: {b}px
+                                </label>
+                                <input
+                                    type="range"
+                                    value={b}
+                                    onChange={(e) => setB(parseInt(e.target.value))}
+                                    min="20"
+                                    max="80"
+                                    step="1"
+                                    className="slider"
+                                />
+                            </div>
+                        </div>
+                        
+                        <svg width={width} height={height} className="bg-white rounded-lg shadow-inner">
+                            {/* Base lines */}
+                            <line 
+                                x1={margin} y1={geo.upperPoint.y} 
+                                x2={width - margin} y2={geo.upperPoint.y}
+                                stroke="#CBD5E0"
+                                strokeWidth="2"
+                            />
+                            <line 
+                                x1={margin} y1={geo.midPoint.y} 
+                                x2={width - margin} y2={geo.midPoint.y}
+                                stroke="#CBD5E0"
+                                strokeWidth="2"
+                            />
+                            
+                            {/* Slits */}
+                            <g stroke="#3B82F6">
+                                <line 
+                                    x1={geo.leftSlit.x} y1={geo.leftSlit.y - 10} 
+                                    x2={geo.leftSlit.x} y2={geo.leftSlit.y + 10}
+                                    strokeWidth="3"
+                                    strokeLinecap="round"
+                                />
+                                <line 
+                                    x1={geo.rightSlit.x} y1={geo.rightSlit.y - 10} 
+                                    x2={geo.rightSlit.x} y2={geo.rightSlit.y + 10}
+                                    strokeWidth="3"
+                                    strokeLinecap="round"
+                                />
+                                <Point x={geo.leftSlit.x} y={geo.leftSlit.y} color="#3B82F6" />
+                                <Point x={geo.rightSlit.x} y={geo.rightSlit.y} color="#3B82F6" />
+                            </g>
+                            
+                            {/* Slit separation indicator */}
+                            <line 
+                                x1={geo.leftSlit.x} y1={geo.leftSlit.y + 20} 
+                                x2={geo.rightSlit.x} y2={geo.rightSlit.y + 20}
+                                stroke="#60A5FA"
+                                strokeWidth="1"
+                                strokeDasharray="4 2"
+                            />
+                            <MathLabel x={geo.midPoint.x - 10} y={geo.midPoint.y + 35}>b</MathLabel>
+                            
+                            {/* Middle line */}
+                            <line 
+                                x1={geo.midPoint.x} y1={geo.midPoint.y} 
+                                x2={geo.midPoint.x} y2={geo.upperPoint.y}
+                                stroke="#94A3B8"
+                                strokeWidth="1"
+                                strokeDasharray="4 2"
+                            />
+                            <Point x={geo.midPoint.x} y={geo.midPoint.y} />
+                            
+                            {/* Angular line */}
+                            <line 
+                                x1={geo.midPoint.x} y1={geo.midPoint.y} 
+                                x2={geo.upperPoint.x} y2={geo.upperPoint.y}
+                                stroke="#EF4444"
+                                strokeWidth="2"
+                            />
+                            <Point x={geo.upperPoint.x} y={geo.upperPoint.y} color="#EF4444" />
+                            
+                            {/* Path lines */}
+                            <g stroke="#10B981">
+                                <line 
+                                    x1={geo.leftSlit.x} y1={geo.leftSlit.y} 
+                                    x2={geo.upperPoint.x} y2={geo.upperPoint.y}
+                                    strokeWidth="1.5"
+                                />
+                                <line 
+                                    x1={geo.rightSlit.x} y1={geo.rightSlit.y} 
+                                    x2={geo.upperPoint.x} y2={geo.upperPoint.y}
+                                    strokeWidth="1.5"
+                                />
+                            </g>
+                            
+                            {/* Normal */}
+                            <line 
+                                x1={geo.leftSlit.x} y1={geo.leftSlit.y} 
+                                x2={geo.normalEnd.x} y2={geo.normalEnd.y}
+                                stroke="#8B5CF6"
+                                strokeWidth="1"
+                                strokeDasharray="3 3"
+                            />
+                            
+                            {/* Angle marker */}
+                            <path 
+                                d={geo.createAnglePath()} 
+                                fill="none"
+                                stroke="#EF4444"
+                                strokeWidth="1.5"
+                            />
+                            <MathLabel x={geo.midPoint.x - 25} y={geo.midPoint.y - 20}>α</MathLabel>
+                            
+                            {/* Path difference */}
+                            <text 
+                                x={margin} y={margin} 
+                                className="text-sm font-medium"
+                                fill="#374151"
+                            >
+                                Path difference (δs): {geo.pathDifference.toFixed(1)}px
+                            </text>
+                        </svg>
+                        
+                        <div className="mt-4 text-sm text-gray-600">
+                            <p>Observe how path difference changes with angle and slit separation.</p>
+                        </div>
+                    </div>
+                </div>
+            );
+        }
+
+        ReactDOM.render(<DoubleSlit />, document.getElementById('root'));
+    </script>
+</body>
+</html>
