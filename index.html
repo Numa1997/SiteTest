@@ -407,23 +407,47 @@
             retina_detect: true
         });
 
-        // Load simulations directly from GitHub
-        fetch('https://api.github.com/repos/Numa1997/SiteTest/contents/simulations')
-            .then(response => response.json())
-            .then(files => {
+        // Improved simulation loading with cache busting and error handling
+        async function loadSimulations() {
+            try {
+                const timestamp = new Date().getTime(); // Add timestamp for cache busting
+                const response = await fetch(`https://api.github.com/repos/Numa1997/SiteTest/contents/simulations?${timestamp}`);
+                
+                if (!response.ok) {
+                    throw new Error(`HTTP error! status: ${response.status}`);
+                }
+                
+                const files = await response.json();
                 const simulationsList = document.getElementById('simulations-list');
-                files.forEach(file => {
-                    // Only process HTML files
-                    if (file.name.endsWith('.html')) {
+                simulationsList.innerHTML = ''; // Clear existing content
+                
+                files
+                    .filter(file => file.name.endsWith('.html'))
+                    .sort((a, b) => a.name.localeCompare(b.name))
+                    .forEach(file => {
                         simulationsList.innerHTML += `
-                            <a href="simulations/${file.name}" class="sim-link">
-                                <div class="sim-title">${file.name.replace('.html', '')}</div>
+                            <a href="simulations/${file.name}" class="sim-link" target="_blank">
+                                <div class="sim-title">${file.name.replace('.html', '').replace(/-/g, ' ')}</div>
                             </a>
                         `;
-                    }
-                });
-            })
-            .catch(error => console.error('Error loading simulations:', error));
+                    });
+            } catch (error) {
+                console.error('Error loading simulations:', error);
+                document.getElementById('simulations-list').innerHTML = `
+                    <div style="color: var(--primary-color); padding: 1rem; text-align: center;">
+                        <p>Error loading simulations.</p>
+                        <button onclick="loadSimulations()" 
+                                style="margin-top: 0.5rem; padding: 0.5rem 1rem; 
+                                       background: var(--bg-color); border: 1px solid var(--border-color); 
+                                       border-radius: 4px; cursor: pointer;">
+                            Retry
+                        </button>
+                    </div>`;
+            }
+        }
+
+        // Initial load
+        loadSimulations();
     </script>
 </body>
 </html>
