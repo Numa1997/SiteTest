@@ -1,0 +1,53 @@
+/* ============================================
+   BACKGROUND.CSS - Physics Particle Canvas
+   Futuristic Black/Red Particle Background
+   ============================================ */
+
+/* Canvas positioning as fixed background layer */
+#physics-background {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  z-index: -1;
+  pointer-events: auto;
+  background-color: var(--bg-primary, #0a0a0a);
+  display: block;
+}
+
+/* Ensure canvas doesn't interfere with page scroll */
+body {
+  position: relative;
+  overflow-x: hidden;
+}
+
+/* Accessibility: Hide canvas for screen readers */
+#physics-background {
+  speak: none;
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+}
+
+/* Reduced motion: Hide canvas entirely */
+@media (prefers-reduced-motion: reduce) {
+  #physics-background {
+    display: none;
+  }
+}
+
+/* Mobile optimization: Lower opacity for less distraction */
+@media (max-width: 768px) {
+  #physics-background {
+    opacity: 0.7;
+  }
+}
+
+/* High contrast mode: Disable background effects */
+@media (prefers-contrast: high) {
+  #physics-background {
+    display: none;
+  }
+}
