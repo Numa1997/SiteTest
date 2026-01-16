@@ -1,0 +1,205 @@
+/**
+ * Physics-Based Particle Background Styling
+ *
+ * Ensures the canvas stays behind all content and integrates smoothly
+ * with the page design while maintaining high performance
+ */
+
+#physics-background {
+  /* Positioning: Fixed behind all content */
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  z-index: -1;
+
+  /* Interaction: Canvas doesn't block clicks */
+  pointer-events: none;
+
+  /* Background color: Deep black for contrast with red particles */
+  background-color: #0a0a0a;
+
+  /* Performance: Use GPU acceleration */
+  transform: translateZ(0);
+  will-change: transform;
+
+  /* Anti-aliasing for smoother rendering */
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+/* Subtle radial gradient overlay for depth */
+#physics-background::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: radial-gradient(
+    circle at center,
+    rgba(220, 38, 38, 0.03) 0%,
+    rgba(220, 38, 38, 0.01) 30%,
+    transparent 60%
+  );
+  pointer-events: none;
+  opacity: 0.8;
+}
+
+/* Fade-in animation on page load */
+@keyframes background-fade-in {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+#physics-background {
+  animation: background-fade-in 1.5s ease-out;
+}
+
+/* Accessibility: Respect user motion preferences */
+@media (prefers-reduced-motion: reduce) {
+  #physics-background {
+    /* Hide completely if user prefers reduced motion */
+    display: none;
+  }
+
+  /* Show static background instead */
+  body::before {
+    content: '';
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    z-index: -1;
+    background: linear-gradient(
+      135deg,
+      #0a0a0a 0%,
+      #1a1a1a 50%,
+      #0a0a0a 100%
+    );
+  }
+}
+
+/* Mobile optimization: Hide on very small screens */
+@media (max-width: 480px) {
+  #physics-background {
+    /* Canvas still renders but with reduced particle count (handled in JS) */
+    /* Keep visible on mobile for full experience */
+  }
+}
+
+/* Tablet optimization */
+@media (min-width: 481px) and (max-width: 1024px) {
+  #physics-background::before {
+    /* Slightly reduce gradient opacity on tablets */
+    opacity: 0.6;
+  }
+}
+
+/* High-resolution displays */
+@media (-webkit-min-device-pixel-ratio: 2), (min-resolution: 192dpi) {
+  #physics-background {
+    /* Ensure crisp rendering on retina displays */
+    image-rendering: -webkit-optimize-contrast;
+    image-rendering: crisp-edges;
+  }
+}
+
+/* Print: Hide background to save ink */
+@media print {
+  #physics-background {
+    display: none !important;
+  }
+}
+
+/* Dark mode support (future-proofing) */
+@media (prefers-color-scheme: dark) {
+  #physics-background {
+    /* Already dark, but ensure consistency */
+    background-color: #000000;
+  }
+}
+
+/* Loading state optimization */
+#physics-background.loading {
+  opacity: 0;
+}
+
+#physics-background.ready {
+  opacity: 1;
+  transition: opacity 0.8s ease-in;
+}
+
+/* Performance optimization: Use contain for better rendering */
+#physics-background {
+  contain: layout style paint;
+}
+
+/* Ensure background doesn't cause scrollbars */
+body {
+  overflow-x: hidden;
+}
+
+/* Optional: Vignette effect for more dramatic look */
+#physics-background::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: radial-gradient(
+    ellipse at center,
+    transparent 0%,
+    transparent 50%,
+    rgba(0, 0, 0, 0.3) 100%
+  );
+  pointer-events: none;
+  opacity: 0.5;
+}
+
+/* Debug mode styling */
+#physics-debug-panel {
+  /* Styled in JS for consistency */
+  user-select: text;
+  cursor: default;
+}
+
+/* Ensure all content is above background */
+body > *:not(#physics-background) {
+  position: relative;
+  z-index: 1;
+}
+
+/* Optional: Subtle scanline effect for futuristic look (can be removed if too much) */
+@keyframes scanline {
+  0% {
+    transform: translateY(-100%);
+  }
+  100% {
+    transform: translateY(100%);
+  }
+}
+
+/* Commented out by default - uncomment for scanline effect
+#physics-background::before {
+  content: '';
+  position: absolute;
+  width: 100%;
+  height: 2px;
+  background: linear-gradient(
+    to bottom,
+    transparent,
+    rgba(255, 255, 255, 0.05),
+    transparent
+  );
+  animation: scanline 8s linear infinite;
+  pointer-events: none;
+}
+*/

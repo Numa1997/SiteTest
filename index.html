@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=0.75, maximum-scale=5.0, minimum-scale=0.75">
     <title>Numa Koudsie - Physicist</title>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/particles.js/2.0.0/particles.min.js"></script>
+    <link rel="stylesheet" href="components/background.css">
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700&family=Source+Sans+Pro:wght@300;400;600&display=swap');
         
@@ -32,12 +32,6 @@
             font-size: calc(0.875rem * var(--scale-factor));
         }
         
-        #particles-js {
-            position: fixed;
-            width: 100%;
-            height: 100%;
-            z-index: -1;
-        }
         
         .container {
             max-width: 1200px;
@@ -255,7 +249,7 @@
 </head>
 
 <body>
-    <div id="particles-js"></div>
+    <canvas id="physics-background"></canvas>
     <header>
         <h1>Numa Koudsie</h1>
         <p class="subtitle">Physicist</p>
@@ -365,47 +359,55 @@
         </section>
     </div>
 
+    <!-- Physics-Based Particle Background System -->
+    <script src="components/background.js"></script>
     <script>
-        // Particles.js configuration
-        particlesJS("particles-js", {
-            particles: {
-                number: { value: 40, density: { enable: true, value_area: 1000 } },
-                color: { value: "#B4A397" },
-                shape: { type: "circle" },
-                opacity: { value: 0.2, random: false, anim: { enable: false } },
-                size: { value: 2, random: true, anim: { enable: false } },
-                line_linked: { 
-                    enable: true, 
-                    distance: 150, 
-                    color: "#DEC4B0", 
-                    opacity: 0.1, 
-                    width: 1 
+        // Initialize physics particle background when DOM is ready
+        let backgroundSystem = null;
+
+        function initPhysicsBackground() {
+            const canvas = document.getElementById('physics-background');
+            if (!canvas) {
+                console.error('Physics background canvas not found');
+                return;
+            }
+
+            // Configuration options - easily adjustable
+            const config = {
+                particleCount: 250,          // Number of particles
+                connectionDistance: 120,     // Distance for drawing connections
+                maxSpeed: 0.8,              // Maximum particle velocity
+                bounceEnergy: 0.95,         // Energy retained on wall bounce (0-1)
+                mouseRepulsion: true,       // true = repel, false = attract
+                mouseForce: 0.5,            // Strength of mouse interaction
+                particleRadius: 2,          // Particle size in pixels
+                colors: {
+                    slow: '#737373',        // Gray for slow particles
+                    medium: '#ef4444',      // Red for medium speed
+                    fast: '#dc2626',        // Deep red for fast particles
+                    connection: 'rgba(220, 38, 38, 0.15)'  // Connection line color
                 },
-                move: { 
-                    enable: true, 
-                    speed: 1.5, 
-                    direction: "none", 
-                    random: true, 
-                    straight: false, 
-                    out_mode: "out", 
-                    bounce: false, 
-                    attract: { enable: false } 
-                }
-            },
-            interactivity: {
-                detect_on: "canvas",
-                events: { 
-                    onhover: { enable: true, mode: "grab" }, 
-                    onclick: { enable: true, mode: "push" }, 
-                    resize: true 
-                },
-                modes: {
-                    grab: { distance: 140, line_linked: { opacity: 0.3 } },
-                    push: { particles_nb: 2 }
-                }
-            },
-            retina_detect: true
-        });
+                debug: false                // Set to true to see performance stats
+            };
+
+            // Create and start the background system
+            backgroundSystem = new PhysicsParticleBackground(canvas, config);
+            backgroundSystem.start();
+
+            // Store reference globally for debugging in console
+            window.backgroundSystem = backgroundSystem;
+
+            console.log('Physics particle background initialized');
+            console.log('Access via window.backgroundSystem');
+            console.log('Try: backgroundSystem.getStats()');
+        }
+
+        // Initialize when DOM is ready
+        if (document.readyState === 'loading') {
+            document.addEventListener('DOMContentLoaded', initPhysicsBackground);
+        } else {
+            initPhysicsBackground();
+        }
 
         // Improved simulation loading with cache busting and error handling
         async function loadSimulations() {
