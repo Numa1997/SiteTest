@@ -8,11 +8,17 @@
     <meta name="keywords" content="computational physics, data analysis, numerical modeling, Python, physics simulations, Numa Koudsie">
     <meta name="author" content="Numa Koudsie">
 
-    <!-- Styling will be handled by Session 2 -->
-    <!-- Background animations will be handled by Session 3 -->
+    <!-- Styling from Session 2 -->
+    <link rel="stylesheet" href="styles/theme.css">
+    <link rel="stylesheet" href="styles/layout.css">
+    <link rel="stylesheet" href="styles/components.css">
+    <link rel="stylesheet" href="styles/animations.css">
 </head>
 
 <body>
+    <!-- Background Canvas from Session 3 -->
+    <canvas id="physics-background"></canvas>
+
     <!-- Header Section -->
     <header>
         <h1>Numa Koudsie</h1>
@@ -119,13 +125,13 @@
                         Visualize constructive and destructive interference patterns from multiple wave sources.
                         Click to add sources and observe how circular waves combine to form straight wavefronts.
                     </p>
-                    <ul class="simulation-tech">
-                        <li>HTML5 Canvas</li>
-                        <li>Vanilla JavaScript</li>
-                    </ul>
+                    <div class="sim-tech">
+                        <span class="tech-tag">HTML5 Canvas</span>
+                        <span class="tech-tag">Vanilla JavaScript</span>
+                    </div>
                     <p class="simulation-topics"><strong>Topics:</strong> Wave mechanics, Huygens principle, Superposition</p>
                     <a href="simulations/Circular Wave Interference Visualization.html"
-                       class="simulation-link"
+                       class="launch-button"
                        target="_blank"
                        rel="noopener noreferrer"
                        aria-label="Launch Wave Interference - Multiple Sources simulation">
@@ -143,14 +149,14 @@
                         Explore chaotic dynamics with adjustable mass ratios, lengths, and initial conditions.
                         Watch how tiny changes create vastly different trajectories.
                     </p>
-                    <ul class="simulation-tech">
-                        <li>RK4 Integration</li>
-                        <li>SVG Animation</li>
-                        <li>Vanilla JavaScript</li>
-                    </ul>
+                    <div class="sim-tech">
+                        <span class="tech-tag">RK4 Integration</span>
+                        <span class="tech-tag">SVG Animation</span>
+                        <span class="tech-tag">Vanilla JavaScript</span>
+                    </div>
                     <p class="simulation-topics"><strong>Topics:</strong> Chaos theory, Classical mechanics, Numerical methods</p>
                     <a href="simulations/Double Pendulum.html"
-                       class="simulation-link"
+                       class="launch-button"
                        target="_blank"
                        rel="noopener noreferrer"
                        aria-label="Launch Double Pendulum Chaos simulation">
@@ -168,14 +174,14 @@
                         Interactive demonstration of quantum mechanics' most famous experiment.
                         Adjust slit separation and angle to see how path difference creates interference patterns.
                     </p>
-                    <ul class="simulation-tech">
-                        <li>React</li>
-                        <li>SVG</li>
-                        <li>TailwindCSS</li>
-                    </ul>
+                    <div class="sim-tech">
+                        <span class="tech-tag">React</span>
+                        <span class="tech-tag">SVG</span>
+                        <span class="tech-tag">TailwindCSS</span>
+                    </div>
                     <p class="simulation-topics"><strong>Topics:</strong> Quantum mechanics, Wave-particle duality, Interference</p>
                     <a href="simulations/Interactive Double-Slit Experiment Visualization.html"
-                       class="simulation-link"
+                       class="launch-button"
                        target="_blank"
                        rel="noopener noreferrer"
                        aria-label="Launch Double-Slit Interference simulation">
@@ -193,13 +199,13 @@
                         Compare transverse and longitudinal wave propagation.
                         Adjust amplitude, frequency, and wavelength to understand wave properties.
                     </p>
-                    <ul class="simulation-tech">
-                        <li>SVG Animation</li>
-                        <li>Vanilla JavaScript</li>
-                    </ul>
+                    <div class="sim-tech">
+                        <span class="tech-tag">SVG Animation</span>
+                        <span class="tech-tag">Vanilla JavaScript</span>
+                    </div>
                     <p class="simulation-topics"><strong>Topics:</strong> Wave mechanics, Oscillations, Wave types</p>
                     <a href="simulations/Transverse and longitudinal waves.html"
-                       class="simulation-link"
+                       class="launch-button"
                        target="_blank"
                        rel="noopener noreferrer"
                        aria-label="Launch Transverse & Longitudinal Waves simulation">
@@ -217,13 +223,13 @@
                         Simulate circular wave propagation from a point source.
                         Watch how particles move in circular orbits as waves pass through.
                     </p>
-                    <ul class="simulation-tech">
-                        <li>HTML5 Canvas</li>
-                        <li>Vanilla JavaScript</li>
-                    </ul>
+                    <div class="sim-tech">
+                        <span class="tech-tag">HTML5 Canvas</span>
+                        <span class="tech-tag">Vanilla JavaScript</span>
+                    </div>
                     <p class="simulation-topics"><strong>Topics:</strong> Wave mechanics, Particle motion, Circular orbits</p>
                     <a href="simulations/water-wave.html"
-                       class="simulation-link"
+                       class="launch-button"
                        target="_blank"
                        rel="noopener noreferrer"
                        aria-label="Launch Circular Water Waves simulation">
@@ -241,14 +247,14 @@
                         Advanced multi-wave interference tool. Add multiple waves with different frequencies,
                         amplitudes, and phases to see complex interference patterns.
                     </p>
-                    <ul class="simulation-tech">
-                        <li>SVG</li>
-                        <li>Real-time plotting</li>
-                        <li>Vanilla JavaScript</li>
-                    </ul>
+                    <div class="sim-tech">
+                        <span class="tech-tag">SVG</span>
+                        <span class="tech-tag">Real-time plotting</span>
+                        <span class="tech-tag">Vanilla JavaScript</span>
+                    </div>
                     <p class="simulation-topics"><strong>Topics:</strong> Superposition, Fourier analysis, Wave synthesis</p>
                     <a href="simulations/wave-interference.html"
-                       class="simulation-link"
+                       class="launch-button"
                        target="_blank"
                        rel="noopener noreferrer"
                        aria-label="Launch Wave Interference Simulator">
@@ -367,5 +373,20 @@
         <p>&copy; 2025 Numa Koudsie. All rights reserved.</p>
         <p>Contact: <a href="mailto:numakoudsie@gmail.com">numakoudsie@gmail.com</a></p>
     </footer>
+
+    <!-- Background System from Session 3 -->
+    <link rel="stylesheet" href="components/background.css">
+    <script src="components/background.js"></script>
+    <script>
+        // Initialize background when DOM is ready
+        document.addEventListener('DOMContentLoaded', () => {
+            const canvas = document.getElementById('physics-background');
+            const background = new PhysicsParticleBackground(canvas);
+            background.start();
+
+            // Store reference for debugging
+            window.backgroundSystem = background;
+        });
+    </script>
 </body>
 </html>
