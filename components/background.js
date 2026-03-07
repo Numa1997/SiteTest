@@ -37,9 +37,9 @@ class PhysicsParticleBackground {
     // Theme colors
     this.colors = {
       background: '#0a0a0a',
-      particle: '#dc2626',
-      glow: 'rgba(220, 38, 38, 0.4)',
-      connection: 'rgba(220, 38, 38, 0.15)'
+      particle: '#22c55e',
+      glow: 'rgba(34, 197, 94, 0.4)',
+      connection: 'rgba(34, 197, 94, 0.15)'
     };
 
     // Physics constants
