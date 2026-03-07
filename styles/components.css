@@ -3,6 +3,23 @@
    Futuristic Black/Red Theme for Physics Portfolio
    ============================================ */
 
+/* === BAQER BANNER === */
+#baqer-banner {
+  text-align: center;
+  padding: 1.25rem 2rem;
+  background: linear-gradient(270deg, #1d4ed8, #16a34a, #0ea5e9, #22c55e, #1d4ed8);
+  background-size: 300% 300%;
+  font-family: var(--font-heading);
+  font-size: 1.75rem;
+  font-weight: 900;
+  letter-spacing: 0.12em;
+  color: #fff;
+  text-transform: uppercase;
+  position: relative;
+  z-index: 10;
+  animation: banner-gradient 5s ease infinite, banner-glow 2s ease-in-out infinite;
+}
+
 /* === HEADER COMPONENT === */
 header {
   text-align: center;
@@ -169,7 +186,7 @@ header p {
   background: linear-gradient(
     to bottom,
     transparent 0%,
-    rgba(220, 38, 38, 0.1) 50%,
+    rgba(37, 99, 235, 0.08) 50%,
     transparent 100%
   );
   animation: scan-line 8s linear infinite;

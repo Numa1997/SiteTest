@@ -20,19 +20,17 @@
     <canvas id="physics-background"></canvas>
 
     <!-- Top Banner -->
-    <div style="text-align:center;padding:1rem;background:linear-gradient(135deg,#1d4ed8,#16a34a);font-family:'Orbitron',sans-serif;font-size:1.5rem;font-weight:900;letter-spacing:0.1em;color:#fff;text-transform:uppercase;text-shadow:0 0 15px rgba(34,197,94,0.7);">
-        Baqer is the fucking man
-    </div>
+    <div id="baqer-banner">⚡ BAQER IS THE FUCKING MAN ⚡</div>
 
     <!-- Header Section -->
     <header>
-        <h1>Numa Koudsie</h1>
+        <h1 class="gradient-text">Numa Koudsie</h1>
         <p class="subtitle">Computational Physicist & Data Analyst</p>
     </header>
 
     <main class="container">
         <!-- Current Positions Section -->
-        <section id="current-positions" class="section">
+        <section id="current-positions" class="section scroll-animate">
             <h2>Current Positions</h2>
             <div class="grid">
                 <!-- Card 1: Team Coordinator at Skeleton Technologies -->
@@ -62,7 +60,7 @@
         </section>
 
         <!-- Previous Positions Section (NEW) -->
-        <section id="previous-positions" class="section">
+        <section id="previous-positions" class="section scroll-animate">
             <h2>Previous Positions</h2>
             <div class="grid">
                 <!-- Card 1: Research Assistant at Göttingen (ongoing but categorized as previous per CV structure) -->
@@ -121,7 +119,7 @@
         </section>
 
         <!-- Interactive Physics Simulations Section (NEW - DEDICATED) -->
-        <section id="simulations" class="section simulations-section">
+        <section id="simulations" class="section simulations-section scroll-animate">
             <h2>Interactive Physics Simulations</h2>
             <p class="section-description">
                 A collection of interactive physics visualizations and simulations
@@ -281,7 +279,7 @@
         </section>
 
         <!-- Education Section -->
-        <section id="education" class="section">
+        <section id="education" class="section scroll-animate">
             <h2>Education</h2>
             <div class="grid">
                 <!-- Card 1: Bachelor of Science in Physics -->
@@ -310,7 +308,7 @@
         </section>
 
         <!-- Research Projects Section -->
-        <section id="research-projects" class="section">
+        <section id="research-projects" class="section scroll-animate">
             <h2>Research Projects</h2>
             <div class="grid">
                 <!-- Project 1: Lemur Behavior Analysis -->
@@ -344,7 +342,7 @@
         </section>
 
         <!-- Skills & Expertise Section -->
-        <section id="skills" class="section skills-section">
+        <section id="skills" class="section skills-section scroll-animate">
             <h2>Skills & Expertise</h2>
             <div class="skills-grid">
                 <!-- Technical Skills -->
@@ -402,6 +400,17 @@
 
             // Store reference for debugging
             window.backgroundSystem = background;
+
+            // Scroll-triggered section animations
+            const observer = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        entry.target.classList.add('in-view');
+                        observer.unobserve(entry.target);
+                    }
+                });
+            }, { threshold: 0.1 });
+            document.querySelectorAll('.scroll-animate').forEach(el => observer.observe(el));
         });
     </script>
 </body>
