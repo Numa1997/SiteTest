@@ -70,6 +70,7 @@
             height: 100%;
         }
     </style>
+    <link rel="stylesheet" href="../styles/simulation.css">
 </head>
 <body>
     <div class="container">
@@ -95,6 +96,7 @@
                 <div class="value-display">Wert: <span id="particlesValue">20</span></div>
             </div>
             <button id="playPause">Pause</button>
+            <a class="back-home" href="../index.html">&larr; Numa Koudsie &middot; portfolio</a>
         </div>
         <div class="plot-container">
             <canvas id="waveCanvas"></canvas>
@@ -152,7 +154,7 @@
             drawParticle(x, y, isHighlighted = false) {
                 this.ctx.beginPath();
                 this.ctx.arc(x, y, isHighlighted ? 5 : 3, 0, Math.PI * 2);
-                this.ctx.fillStyle = isHighlighted ? '#FF6384' : '#4BC0C0';
+                this.ctx.fillStyle = isHighlighted ? '#b00020' : '#8b8079';
                 this.ctx.fill();
             }
             
@@ -200,7 +202,7 @@
                 for (let i = 1; i < pathPoints.length; i++) {
                     this.ctx.lineTo(pathPoints[i].x, pathPoints[i].y);
                 }
-                this.ctx.strokeStyle = '#36A2EB';
+                this.ctx.strokeStyle = '#7a1f2b';
                 this.ctx.lineWidth = 2;
                 this.ctx.stroke();
                 

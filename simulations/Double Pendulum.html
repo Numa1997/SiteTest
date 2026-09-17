@@ -70,7 +70,7 @@
         }
 
         .button {
-            background: #4a90e2;
+            background: #7a1f2b;
             color: white;
             border: none;
             padding: 10px 20px;
@@ -80,15 +80,15 @@
         }
 
         .button:hover {
-            background: #357abd;
+            background: #4d0f18;
         }
 
         .button.pause {
-            background: #e24a4a;
+            background: #5a504b;
         }
 
         .button.pause:hover {
-            background: #bd3535;
+            background: #3a322e;
         }
 
         .bottom-controls {
@@ -103,8 +103,10 @@
             color: #666;
         }
     </style>
+    <link rel="stylesheet" href="../styles/simulation.css">
 </head>
 <body>
+    <a class="back-home" href="../index.html">&larr; Numa Koudsie &middot; portfolio</a>
     <div class="controls-container">
         <div class="card">
             <div class="card-title">Coupling Parameters</div>
@@ -349,7 +351,7 @@ function draw() {
     ctx.beginPath();
     trail.forEach((pos, i) => {
         const alpha = i / trail.length;
-        ctx.strokeStyle = `rgba(74, 144, 226, ${alpha * 0.3})`;
+        ctx.strokeStyle = `rgba(122, 31, 43, ${alpha * 0.3})`;
         ctx.beginPath();
         ctx.arc(pos.x, pos.y, 2, 0, 2*Math.PI);
         ctx.stroke();
@@ -372,7 +374,7 @@ function draw() {
     
     // Draw masses
     const baseRadius = 8;
-    ctx.fillStyle = '#4a90e2';
+    ctx.fillStyle = '#7a1f2b';
     ctx.beginPath();
     ctx.arc(x1, y1, baseRadius, 0, 2*Math.PI);
     ctx.fill();
