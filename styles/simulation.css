@@ -1,0 +1,116 @@
+/* ============================================================
+   simulation.css — shared skin for the standalone simulations
+   Loaded last in each simulation page so it overrides the
+   page's own inline styles: same paper / ink / burgundy palette
+   and Plex + Instrument Serif type as the portfolio itself.
+   ============================================================ */
+
+@import url('https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&family=IBM+Plex+Sans:wght@400;500;600&family=Instrument+Serif&display=swap');
+
+:root {
+  --paper: #f5f1ea;
+  --card: #fffaf3;
+  --card-soft: #f0eae0;
+  --ink: #1c1518;
+  --ink-2: #3a322e;
+  --ink-3: #5a504b;
+  --muted: #8b8079;
+  --rule: #d9d0c2;
+  --accent: #7a1f2b;
+  --accent-dark: #4d0f18;
+  --serif: 'Instrument Serif', Georgia, serif;
+  --sans: 'IBM Plex Sans', system-ui, sans-serif;
+  --mono: 'IBM Plex Mono', ui-monospace, monospace;
+}
+
+html { background: var(--paper); }
+
+body {
+  font-family: var(--sans);
+  color: var(--ink);
+  background: var(--paper);
+  -webkit-font-smoothing: antialiased;
+}
+
+h1, h2, h1.text-2xl, .card-title, .plot-title {
+  font-family: var(--serif);
+  font-weight: 400;
+  color: var(--ink);
+  letter-spacing: -.01em;
+}
+h1, h1.text-2xl { font-size: 2rem; line-height: 1.1; }
+h2 { font-size: 1.6rem; }
+.card-title, .plot-title { font-size: 1.35rem; }
+
+/* panels */
+.container,
+.card,
+.wave-controls,
+.plot-window,
+.plot-container {
+  background: var(--card);
+  border: 1px solid var(--rule);
+  box-shadow: none;
+}
+.controls,
+.waves-container {
+  background: var(--card-soft);
+  border: 1px solid var(--rule);
+}
+canvas { border-color: var(--rule); background: var(--card); }
+
+/* text */
+.label, .slider-label, .control-group label, .info, #energyDisplay,
+.mt-4.text-sm.text-gray-600 { color: var(--ink-3); }
+.value-display {
+  font-family: var(--mono);
+  color: var(--ink-2);
+}
+
+/* buttons */
+button, .button {
+  font-family: var(--sans);
+  font-weight: 500;
+  background: var(--accent);
+  background-color: var(--accent);
+  color: #fff;
+  border: none;
+  border-radius: 4px;
+}
+button:hover, .button:hover {
+  background: var(--accent-dark);
+  background-color: var(--accent-dark);
+  filter: none;
+  transform: none;
+  box-shadow: none;
+}
+.button.pause, button.remove { background: var(--ink-3); background-color: var(--ink-3); }
+.button.pause:hover, button.remove:hover { background: var(--ink-2); background-color: var(--ink-2); }
+
+/* sliders */
+input[type="range"] { accent-color: var(--accent); }
+input[type="range"]::-webkit-slider-thumb,
+.control-group input[type="range"]::-webkit-slider-thumb,
+.slider::-webkit-slider-thumb { background: var(--accent); }
+input[type="range"]::-moz-range-thumb,
+.slider::-moz-range-thumb { background: var(--accent); border: none; }
+.control-group input[type="range"], .slider { background: var(--rule); }
+
+/* misc */
+.top-bar { border-bottom-color: var(--rule); }
+.grid-line { stroke: #ece5d8; }
+.waves-container::-webkit-scrollbar-thumb { background: var(--rule); }
+.waves-container::-webkit-scrollbar-track { background: transparent; }
+
+/* small link back to the portfolio (injected into each page) */
+.back-home {
+  display: inline-block;
+  font-family: var(--mono);
+  font-size: 11px;
+  letter-spacing: .12em;
+  text-transform: uppercase;
+  color: var(--accent);
+  text-decoration: none;
+  margin: 0 0 12px;
+}
+.back-home:hover { color: var(--accent-dark); text-decoration: underline; }
