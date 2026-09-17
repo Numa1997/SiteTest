@@ -17,9 +17,32 @@
 <body>
     <a class="skip-link" href="#main">Skip to content</a>
 
-    <nav class="topbar" aria-label="Sections">
-        <div class="topbar__inner">
-            <a class="brand" href="#top">Numa Koudsie</a>
+    <header class="hero" id="top">
+        <div class="hero__text">
+            <h1 class="hero__name"><span>Numa</span><span>Koudsie<span class="dot">.</span></span></h1>
+            <p class="hero__tag">Physics graduate with expertise in data analysis, modeling, and software development.</p>
+            <div class="hero__meta">
+                <span>Leipzig, Germany</span>
+                <a href="mailto:numakoudsie@gmail.com">numakoudsie@gmail.com</a>
+                <a href="https://github.com/Numa1997" target="_blank" rel="noopener">github.com/Numa1997</a>
+            </div>
+            <div class="hero__cta">
+                <a class="btn" href="#positions">See positions</a>
+                <a class="btn btn--ghost" href="#simulations">Open the simulations</a>
+            </div>
+        </div>
+        <figure class="figure" aria-label="Live double pendulum drawing">
+            <div class="figure__stage"><canvas id="pendulum"></canvas></div>
+            <figcaption class="figure__cap">
+                <span><b>Fig. 0</b> · double pendulum · RK4 · live</span>
+                <button type="button" id="pendulum-reset">reset ↻</button>
+            </figcaption>
+        </figure>
+    </header>
+
+    <div class="layout">
+        <nav class="index" aria-label="Sections">
+            <p class="index__label">Index</p>
             <ul>
                 <li><a href="#positions">Positions</a></li>
                 <li><a href="#education">Education</a></li>
@@ -28,295 +51,357 @@
                 <li><a href="#skills">Skills</a></li>
                 <li><a href="#contact">Contact</a></li>
             </ul>
-        </div>
-    </nav>
+        </nav>
 
-    <header class="masthead" id="top">
-        <h1>Numa Koudsie</h1>
-        <p class="subtitle">Computational physicist &amp; data analyst</p>
-        <div class="wave" aria-hidden="true">
-            <svg viewBox="0 0 560 56" preserveAspectRatio="none"><g class="wave-b"><path d=""/></g><g class="wave-a"><path d=""/></g></svg>
-        </div>
-        <p class="lede">Physics graduate with expertise in data analysis, modeling, and software development.</p>
-        <div class="masthead__meta">
-            <span>Leipzig, Germany</span>
-            <a href="mailto:numakoudsie@gmail.com">numakoudsie@gmail.com</a>
-            <a href="https://github.com/Numa1997" target="_blank" rel="noopener">github.com/Numa1997</a>
-        </div>
-    </header>
+        <main class="content" id="main">
 
-    <main id="main">
+            <section id="positions" class="section">
+                <h2>Positions</h2>
+                <div class="timeline">
+                    <div class="timeline__line"></div>
 
-        <section id="positions" class="section">
-            <div class="section__head"><h2>Positions</h2></div>
+                    <article class="entry entry--current reveal">
+                        <p class="entry__when">10.2024 – present <span class="tag">current</span></p>
+                        <h3>Research Assistant</h3>
+                        <p class="entry__org">Georg-August-Universität Göttingen</p>
+                        <ul class="bullets">
+                            <li>GRU networks for behavior prediction (lemurs); tensor-based data organization</li>
+                            <li>Analysis and report generation based on several different datasets</li>
+                        </ul>
+                    </article>
 
-            <p class="group-label">Current</p>
-            <div class="grid grid--2">
-                <article class="card reveal">
-                    <span class="tag card__tag">Current</span>
-                    <h3>Data &amp; Web Management</h3>
-                    <p class="card__org">Dhillons Irish Pub and Grill <span class="mono-label">· minijob</span></p>
-                    <p class="card__when">02.2023 – present</p>
-                    <ul class="bullets">
-                        <li>Automated inventory tracking, website development</li>
-                        <li>Data-driven sales analysis</li>
-                        <li>Serving and waiting customers and tables respectively</li>
-                    </ul>
-                </article>
-                <article class="card reveal">
-                    <span class="tag card__tag">Current</span>
-                    <h3>Research Assistant</h3>
-                    <p class="card__org">Georg-August-Universität Göttingen</p>
-                    <p class="card__when">10.2024 – present</p>
-                    <ul class="bullets">
-                        <li>GRU networks for behavior prediction (lemurs); tensor-based data organization</li>
-                        <li>Analysis and report generation based on several different datasets</li>
-                    </ul>
-                </article>
-            </div>
+                    <article class="entry entry--current reveal">
+                        <p class="entry__when">02.2023 – present <span class="tag">current</span> <span class="tag tag--soft">minijob</span></p>
+                        <h3>Data &amp; Web Management</h3>
+                        <p class="entry__org">Dhillons Irish Pub and Grill</p>
+                        <ul class="bullets">
+                            <li>Automated inventory tracking, website development</li>
+                            <li>Data-driven sales analysis</li>
+                            <li>Serving and waiting customers and tables respectively</li>
+                        </ul>
+                    </article>
 
-            <p class="group-label">Previous</p>
-            <div class="grid grid--2">
-                <article class="card card--plain reveal">
-                    <h3>Team Coordinator</h3>
-                    <p class="card__org">Skeleton Technologies Superfactory, Markranstädt</p>
-                    <p class="card__when">10.2024 – 08.2026</p>
-                    <ul class="bullets">
-                        <li>Production line coordination, personnel and machinery supervision</li>
-                        <li>Quality tests for cross checking the physical tolerances imposed on products coming out of the line</li>
-                        <li>Database, dashboard, and report development, building, and generation respectively for test results</li>
-                    </ul>
-                </article>
-                <article class="card card--plain reveal">
-                    <h3>Teaching Assistant</h3>
-                    <p class="card__org">Saxony International School Reinsdorf</p>
-                    <p class="card__when">10.2024 – 01.2025</p>
-                    <ul class="bullets">
-                        <li>Bilingual instruction of classes 6, 8, 9, 10, and 12 in Physics and natural sciences</li>
-                        <li>Development of web react elements and simulations of basic physical phenomena</li>
-                    </ul>
-                </article>
-                <article class="card card--plain reveal">
-                    <h3>Model Developer</h3>
-                    <p class="card__org">University of Leipzig &amp; TROPOS</p>
-                    <p class="card__when">07.2022 – 12.2022</p>
-                    <ul class="bullets">
-                        <li>Python simulations for water/ice particle coalescence; synthetic data analysis</li>
-                    </ul>
-                </article>
-                <article class="card card--plain reveal">
-                    <h3>Systems Analyst</h3>
-                    <p class="card__org">Faiveley Transport</p>
-                    <p class="card__when">02.2021 – 04.2022</p>
-                    <ul class="bullets">
-                        <li>Cooling system analysis (R134a, R290); DIAdem integration for automated data processing</li>
-                        <li>Building AND/OR gates operations to specify component-wise power consumption of the system</li>
-                    </ul>
-                </article>
-                <article class="card card--plain reveal">
-                    <h3>Research Assistant</h3>
-                    <p class="card__org">Carl von Ossietzky University of Oldenburg</p>
-                    <p class="card__when">10.2018 – 09.2019</p>
-                    <ul class="bullets">
-                        <li>Laser-Induced Breakdown Spectroscopy (LIBS) on lake sediments; atomic emission spectra analysis</li>
-                    </ul>
-                </article>
-            </div>
-        </section>
+                    <article class="entry reveal">
+                        <p class="entry__when">10.2024 – 08.2026</p>
+                        <h3>Team Coordinator</h3>
+                        <p class="entry__org">Skeleton Technologies Superfactory, Markranstädt</p>
+                        <ul class="bullets">
+                            <li>Production line coordination, personnel and machinery supervision</li>
+                            <li>Quality tests for cross checking the physical tolerances imposed on products coming out of the line</li>
+                            <li>Database, dashboard, and report development, building, and generation respectively for test results</li>
+                        </ul>
+                    </article>
 
-        <section id="education" class="section">
-            <div class="section__head"><h2>Education</h2></div>
-            <div class="grid grid--3">
-                <article class="card card--plain reveal">
-                    <h3>B.Sc. Physics</h3>
-                    <p class="card__org">University of Leipzig</p>
-                    <p class="card__when">10.2020 – 12.2022</p>
-                    <p class="card__note">Focus: computational physics</p>
-                </article>
-                <article class="card card--plain reveal">
-                    <h3>Erasmus+ Program</h3>
-                    <p class="card__org">University of Groningen</p>
-                    <p class="card__when">09.2019 – 07.2020</p>
-                </article>
-                <article class="card card--plain reveal">
-                    <h3>Engineering Physics</h3>
-                    <p class="card__org">Carl von Ossietzky University of Oldenburg</p>
-                    <p class="card__when">10.2017 – 10.2019</p>
-                    <p class="card__note">117 CP</p>
-                </article>
-            </div>
-        </section>
+                    <article class="entry reveal">
+                        <p class="entry__when">10.2024 – 01.2025</p>
+                        <h3>Teaching Assistant</h3>
+                        <p class="entry__org">Saxony International School Reinsdorf</p>
+                        <ul class="bullets">
+                            <li>Bilingual instruction of classes 6, 8, 9, 10, and 12 in Physics and natural sciences</li>
+                            <li>Development of web react elements and simulations of basic physical phenomena</li>
+                        </ul>
+                    </article>
 
-        <section id="research" class="section">
-            <div class="section__head"><h2>Research projects</h2></div>
-            <div class="grid grid--3">
-                <article class="card reveal">
-                    <span class="tag card__tag">Ongoing</span>
-                    <h3>Lemur Behavior Analysis</h3>
-                    <p class="card__when">Computational</p>
-                    <ul class="bullets">
-                        <li>Synthetic data generation for lemur interactions</li>
-                        <li>GRU neural networks for behavioral sequences</li>
-                        <li>Current focus: pattern recognition in social behaviors</li>
-                    </ul>
-                </article>
-                <article class="card card--plain reveal">
-                    <h3>Drop Population Dynamics</h3>
-                    <p class="card__when">Computational · completed</p>
-                    <ul class="bullets">
-                        <li>Mathematical framework: V<sub>i</sub>* = C<sub>ij</sub> V<sub>j</sub></li>
-                        <li>System energy optimization for equilibrium modeling</li>
-                    </ul>
-                </article>
-                <article class="card card--plain reveal">
-                    <h3>Cellular Mechanics</h3>
-                    <p class="card__when">Computational · completed</p>
-                    <ul class="bullets">
-                        <li>Stochastic differential equations for viscoelastic properties</li>
-                        <li>Step-strain protocols for complex modulus estimation</li>
-                    </ul>
-                </article>
-            </div>
-        </section>
+                    <article class="entry reveal">
+                        <p class="entry__when">07.2022 – 12.2022 <span class="tag tag--soft">during studies</span></p>
+                        <h3>Model Developer</h3>
+                        <p class="entry__org">University of Leipzig &amp; TROPOS</p>
+                        <ul class="bullets">
+                            <li>Python simulations for water/ice particle coalescence; synthetic data analysis</li>
+                        </ul>
+                    </article>
 
-        <section id="simulations" class="section">
-            <div class="section__head">
+                    <article class="entry reveal">
+                        <p class="entry__when">02.2021 – 04.2022 <span class="tag tag--soft">during studies</span></p>
+                        <h3>Systems Analyst</h3>
+                        <p class="entry__org">Faiveley Transport</p>
+                        <ul class="bullets">
+                            <li>Cooling system analysis (R134a, R290); DIAdem integration for automated data processing</li>
+                            <li>Building AND/OR gates operations to specify component-wise power consumption of the system</li>
+                        </ul>
+                    </article>
+
+                    <article class="entry reveal">
+                        <p class="entry__when">10.2018 – 09.2019 <span class="tag tag--soft">during studies</span></p>
+                        <h3>Research Assistant</h3>
+                        <p class="entry__org">Carl von Ossietzky University of Oldenburg</p>
+                        <ul class="bullets">
+                            <li>Laser-Induced Breakdown Spectroscopy (LIBS) on lake sediments; atomic emission spectra analysis</li>
+                        </ul>
+                    </article>
+                </div>
+            </section>
+
+            <section id="education" class="section">
+                <h2>Education</h2>
+                <div class="ledger">
+                    <div class="row reveal">
+                        <div class="row__when">10.2020 – 12.2022</div>
+                        <div>
+                            <h3>B.Sc. Physics</h3>
+                            <p class="row__org">University of Leipzig</p>
+                            <p class="row__note">Focus: computational physics</p>
+                        </div>
+                    </div>
+                    <div class="row reveal">
+                        <div class="row__when">09.2019 – 07.2020</div>
+                        <div>
+                            <h3>Erasmus+ Program</h3>
+                            <p class="row__org">University of Groningen</p>
+                        </div>
+                    </div>
+                    <div class="row reveal">
+                        <div class="row__when">10.2017 – 10.2019</div>
+                        <div>
+                            <h3>Engineering Physics</h3>
+                            <p class="row__org">Carl von Ossietzky University of Oldenburg</p>
+                            <p class="row__note">117 CP</p>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <section id="research" class="section">
+                <h2>Research projects</h2>
+                <div class="projects">
+                    <article class="project reveal">
+                        <p class="project__status"><b>Ongoing</b> · computational</p>
+                        <h3>Lemur Behavior Analysis</h3>
+                        <ul class="bullets">
+                            <li>Synthetic data generation for lemur interactions</li>
+                            <li>GRU neural networks for behavioral sequences</li>
+                            <li>Current focus: pattern recognition in social behaviors</li>
+                        </ul>
+                    </article>
+                    <article class="project reveal">
+                        <p class="project__status">Completed · computational</p>
+                        <h3>Drop Population Dynamics</h3>
+                        <ul class="bullets">
+                            <li>Mathematical framework: V<sub>i</sub>* = C<sub>ij</sub> V<sub>j</sub></li>
+                            <li>System energy optimization for equilibrium modeling</li>
+                        </ul>
+                    </article>
+                    <article class="project reveal">
+                        <p class="project__status">Completed · computational</p>
+                        <h3>Cellular Mechanics</h3>
+                        <ul class="bullets">
+                            <li>Stochastic differential equations for viscoelastic properties</li>
+                            <li>Step-strain protocols for complex modulus estimation</li>
+                        </ul>
+                    </article>
+                </div>
+            </section>
+
+            <section id="simulations" class="section">
                 <h2>Interactive physics simulations</h2>
-                <p class="section__intro">Visualizations of wave mechanics, classical mechanics, and interference, written in vanilla JavaScript, React, and HTML5 Canvas. Each one opens in a new tab.</p>
-            </div>
-            <div class="grid grid--2">
-                <article class="card card--plain card--sim reveal">
-                    <div class="sketch" data-sketch="interference" aria-hidden="true"></div>
-                    <h3><a href="simulations/Circular Wave Interference Visualization.html" target="_blank" rel="noopener">Wave Interference – Multiple Sources</a></h3>
-                    <p class="card__desc">Constructive and destructive interference from several point sources. Click to add sources and watch circular waves combine into straight wavefronts.</p>
-                    <div class="card__tags"><span class="tag tag--mono">HTML5 Canvas</span><span class="tag tag--mono">Vanilla JavaScript</span></div>
-                    <p class="card__topics"><b>Topics</b>Wave mechanics · Huygens' principle · Superposition</p>
-                    <a class="card__cta" href="simulations/Circular Wave Interference Visualization.html" target="_blank" rel="noopener">Launch simulation</a>
-                </article>
-                <article class="card card--plain card--sim reveal">
-                    <div class="sketch" data-sketch="pendulum" aria-hidden="true"></div>
-                    <h3><a href="simulations/Double Pendulum.html" target="_blank" rel="noopener">Double Pendulum Chaos</a></h3>
-                    <p class="card__desc">Chaotic dynamics with adjustable mass ratios, lengths, and initial conditions. Tiny changes in the starting angles produce completely different trajectories.</p>
-                    <div class="card__tags"><span class="tag tag--mono">RK4 integration</span><span class="tag tag--mono">Canvas</span><span class="tag tag--mono">Vanilla JavaScript</span></div>
-                    <p class="card__topics"><b>Topics</b>Chaos theory · Classical mechanics · Numerical methods</p>
-                    <a class="card__cta" href="simulations/Double Pendulum.html" target="_blank" rel="noopener">Launch simulation</a>
-                </article>
-                <article class="card card--plain card--sim reveal">
-                    <div class="sketch" data-sketch="doubleslit" aria-hidden="true"></div>
-                    <h3><a href="simulations/Interactive Double-Slit Experiment Visualization.html" target="_blank" rel="noopener">Double-Slit Interference</a></h3>
-                    <p class="card__desc">The classic experiment, step by step. Adjust slit separation and viewing angle to see how the path difference builds the interference pattern.</p>
-                    <div class="card__tags"><span class="tag tag--mono">React</span><span class="tag tag--mono">SVG</span><span class="tag tag--mono">TailwindCSS</span></div>
-                    <p class="card__topics"><b>Topics</b>Quantum mechanics · Wave–particle duality · Interference</p>
-                    <a class="card__cta" href="simulations/Interactive Double-Slit Experiment Visualization.html" target="_blank" rel="noopener">Launch simulation</a>
-                </article>
-                <article class="card card--plain card--sim reveal">
-                    <div class="sketch" data-sketch="wavetypes" aria-hidden="true"></div>
-                    <h3><a href="simulations/Transverse and longitudinal waves.html" target="_blank" rel="noopener">Transverse &amp; Longitudinal Waves</a></h3>
-                    <p class="card__desc">Compare the two kinds of wave propagation side by side. Adjust amplitude, frequency, and wavelength to see how each property shapes the motion.</p>
-                    <div class="card__tags"><span class="tag tag--mono">SVG animation</span><span class="tag tag--mono">Vanilla JavaScript</span></div>
-                    <p class="card__topics"><b>Topics</b>Wave mechanics · Oscillations · Wave types</p>
-                    <a class="card__cta" href="simulations/Transverse and longitudinal waves.html" target="_blank" rel="noopener">Launch simulation</a>
-                </article>
-                <article class="card card--plain card--sim reveal">
-                    <div class="sketch" data-sketch="waterwave" aria-hidden="true"></div>
-                    <h3><a href="simulations/water-wave.html" target="_blank" rel="noopener">Circular Water Waves</a></h3>
-                    <p class="card__desc">A circular wave spreading from a point source, with the water particles tracing their orbits as the crest passes through.</p>
-                    <div class="card__tags"><span class="tag tag--mono">HTML5 Canvas</span><span class="tag tag--mono">Vanilla JavaScript</span></div>
-                    <p class="card__topics"><b>Topics</b>Wave mechanics · Particle motion · Circular orbits</p>
-                    <a class="card__cta" href="simulations/water-wave.html" target="_blank" rel="noopener">Launch simulation</a>
-                </article>
-                <article class="card card--plain card--sim reveal">
-                    <div class="sketch" data-sketch="simulator" aria-hidden="true"></div>
-                    <h3><a href="simulations/wave-interference.html" target="_blank" rel="noopener">Wave Interference Simulator</a></h3>
-                    <p class="card__desc">A multi-wave workbench. Add waves with different frequencies, amplitudes, and phases and watch the resulting sum in real time.</p>
-                    <div class="card__tags"><span class="tag tag--mono">SVG</span><span class="tag tag--mono">Real-time plotting</span><span class="tag tag--mono">Vanilla JavaScript</span></div>
-                    <p class="card__topics"><b>Topics</b>Superposition · Fourier analysis · Wave synthesis</p>
-                    <a class="card__cta" href="simulations/wave-interference.html" target="_blank" rel="noopener">Launch simulation</a>
-                </article>
-            </div>
-        </section>
+                <p class="section__intro">Visualizations of wave mechanics, classical mechanics, and interference, written in vanilla JavaScript, React, and HTML5 Canvas. Each plate opens the live simulation in a new tab.</p>
+                <div class="plates">
+                    <article class="plate reveal">
+                        <div class="plate__fig" data-sketch="interference" aria-hidden="true"></div>
+                        <div class="plate__body">
+                            <p class="plate__num">Fig. 1</p>
+                            <h3><a href="simulations/Circular Wave Interference Visualization.html" target="_blank" rel="noopener">Wave Interference – Multiple Sources</a></h3>
+                            <p>Constructive and destructive interference from several point sources. Click to add sources and watch circular waves combine into straight wavefronts.</p>
+                            <div class="plate__tags"><span class="tag tag--soft">HTML5 Canvas</span><span class="tag tag--soft">Vanilla JavaScript</span><span class="tag tag--soft">Huygens' principle</span></div>
+                            <a class="plate__launch" href="simulations/Circular Wave Interference Visualization.html" target="_blank" rel="noopener">Launch</a>
+                        </div>
+                    </article>
+                    <article class="plate reveal">
+                        <div class="plate__fig" data-sketch="pendulum" aria-hidden="true"></div>
+                        <div class="plate__body">
+                            <p class="plate__num">Fig. 2</p>
+                            <h3><a href="simulations/Double Pendulum.html" target="_blank" rel="noopener">Double Pendulum Chaos</a></h3>
+                            <p>Chaotic dynamics with adjustable mass ratios, lengths, and initial conditions. Tiny changes in the starting angles produce completely different trajectories.</p>
+                            <div class="plate__tags"><span class="tag tag--soft">RK4 integration</span><span class="tag tag--soft">Canvas</span><span class="tag tag--soft">Chaos theory</span></div>
+                            <a class="plate__launch" href="simulations/Double Pendulum.html" target="_blank" rel="noopener">Launch</a>
+                        </div>
+                    </article>
+                    <article class="plate reveal">
+                        <div class="plate__fig" data-sketch="doubleslit" aria-hidden="true"></div>
+                        <div class="plate__body">
+                            <p class="plate__num">Fig. 3</p>
+                            <h3><a href="simulations/Interactive Double-Slit Experiment Visualization.html" target="_blank" rel="noopener">Double-Slit Interference</a></h3>
+                            <p>The classic experiment, step by step. Adjust slit separation and viewing angle to see how the path difference builds the interference pattern.</p>
+                            <div class="plate__tags"><span class="tag tag--soft">React</span><span class="tag tag--soft">SVG</span><span class="tag tag--soft">Wave–particle duality</span></div>
+                            <a class="plate__launch" href="simulations/Interactive Double-Slit Experiment Visualization.html" target="_blank" rel="noopener">Launch</a>
+                        </div>
+                    </article>
+                    <article class="plate reveal">
+                        <div class="plate__fig" data-sketch="wavetypes" aria-hidden="true"></div>
+                        <div class="plate__body">
+                            <p class="plate__num">Fig. 4</p>
+                            <h3><a href="simulations/Transverse and longitudinal waves.html" target="_blank" rel="noopener">Transverse &amp; Longitudinal Waves</a></h3>
+                            <p>Compare the two kinds of wave propagation side by side. Adjust amplitude, frequency, and wavelength to see how each property shapes the motion.</p>
+                            <div class="plate__tags"><span class="tag tag--soft">SVG animation</span><span class="tag tag--soft">Vanilla JavaScript</span><span class="tag tag--soft">Oscillations</span></div>
+                            <a class="plate__launch" href="simulations/Transverse and longitudinal waves.html" target="_blank" rel="noopener">Launch</a>
+                        </div>
+                    </article>
+                    <article class="plate reveal">
+                        <div class="plate__fig" data-sketch="waterwave" aria-hidden="true"></div>
+                        <div class="plate__body">
+                            <p class="plate__num">Fig. 5</p>
+                            <h3><a href="simulations/water-wave.html" target="_blank" rel="noopener">Circular Water Waves</a></h3>
+                            <p>A circular wave spreading from a point source, with the water particles tracing their orbits as the crest passes through.</p>
+                            <div class="plate__tags"><span class="tag tag--soft">HTML5 Canvas</span><span class="tag tag--soft">Vanilla JavaScript</span><span class="tag tag--soft">Particle motion</span></div>
+                            <a class="plate__launch" href="simulations/water-wave.html" target="_blank" rel="noopener">Launch</a>
+                        </div>
+                    </article>
+                    <article class="plate reveal">
+                        <div class="plate__fig" data-sketch="simulator" aria-hidden="true"></div>
+                        <div class="plate__body">
+                            <p class="plate__num">Fig. 6</p>
+                            <h3><a href="simulations/wave-interference.html" target="_blank" rel="noopener">Wave Interference Simulator</a></h3>
+                            <p>A multi-wave workbench. Add waves with different frequencies, amplitudes, and phases and watch the resulting sum in real time.</p>
+                            <div class="plate__tags"><span class="tag tag--soft">SVG</span><span class="tag tag--soft">Real-time plotting</span><span class="tag tag--soft">Fourier analysis</span></div>
+                            <a class="plate__launch" href="simulations/wave-interference.html" target="_blank" rel="noopener">Launch</a>
+                        </div>
+                    </article>
+                </div>
+            </section>
 
-        <section id="skills" class="section">
-            <div class="section__head"><h2>Skills &amp; languages</h2></div>
-            <div class="skills">
-                <div class="skills__col reveal">
-                    <h3>Technical</h3>
-                    <ul>
-                        <li><b>Programming</b>Python, SQL, MATLAB, Julia, HTML/CSS/JS</li>
-                        <li><b>Data analysis</b>Pandas, NumPy, SciPy, TensorFlow, PyTorch</li>
-                        <li><b>Visualization</b>Plotly, Matplotlib, D3.js, HTML5 Canvas</li>
-                        <li><b>CAD &amp; analysis</b>Autodesk Inventor, SolidWorks, AutoCAD, DIAdem</li>
-                        <li><b>Tools</b>Git, Jupyter, VS Code, Linux</li>
-                    </ul>
-                </div>
-                <div class="skills__col reveal">
-                    <h3>Domain expertise</h3>
-                    <ul>
-                        <li>Computational physics &amp; numerical modeling</li>
-                        <li>Data analysis &amp; dashboard development</li>
-                        <li>Quality control &amp; testing of physical tolerances</li>
-                        <li>Database architecture &amp; report generation</li>
-                        <li>Interactive physics visualizations</li>
-                    </ul>
-                </div>
-                <div class="skills__col reveal">
-                    <h3>Languages</h3>
-                    <ul>
-                        <li>Arabic <span class="lang-level">native</span></li>
-                        <li>English <span class="lang-level">C1</span></li>
-                        <li>German <span class="lang-level">B2</span></li>
-                    </ul>
-                </div>
-            </div>
-        </section>
+            <section id="skills" class="section">
+                <h2>Skills &amp; languages</h2>
+                <dl class="skills">
+                    <div class="reveal"><dt>Programming</dt><dd>Python, SQL, MATLAB, Julia, HTML/CSS/JS</dd></div>
+                    <div class="reveal"><dt>Data analysis</dt><dd>Pandas, NumPy, SciPy, TensorFlow, PyTorch</dd></div>
+                    <div class="reveal"><dt>Visualization</dt><dd>Plotly, Matplotlib, D3.js, HTML5 Canvas</dd></div>
+                    <div class="reveal"><dt>CAD &amp; analysis</dt><dd>Autodesk Inventor, SolidWorks, AutoCAD, DIAdem</dd></div>
+                    <div class="reveal"><dt>Tools</dt><dd>Git, Jupyter, VS Code, Linux</dd></div>
+                    <div class="reveal"><dt>Domains</dt><dd>Computational physics, numerical modeling, dashboards, quality control, database architecture</dd></div>
+                    <div class="reveal"><dt>Languages</dt><dd>Arabic <span class="lvl">native</span> · English <span class="lvl">C1</span> · German <span class="lvl">B2</span></dd></div>
+                </dl>
+            </section>
 
-        <section id="contact" class="contact">
-            <div class="contact__card reveal">
-                <div>
-                    <h2>Get in touch</h2>
-                    <p>For roles in computational physics, data analysis, simulation, or production engineering, or to talk about the simulations, write to me.</p>
+            <section id="contact" class="contact">
+                <div class="contact__card reveal">
+                    <div>
+                        <h2>Let's talk<span class="dot">.</span></h2>
+                        <p>For roles in computational physics, data analysis, simulation, or production engineering, or to talk about the simulations, write to me.</p>
+                    </div>
+                    <a class="btn" href="mailto:numakoudsie@gmail.com">numakoudsie@gmail.com</a>
                 </div>
-                <a class="btn" href="mailto:numakoudsie@gmail.com">numakoudsie@gmail.com</a>
-            </div>
-        </section>
-    </main>
+            </section>
+        </main>
+    </div>
 
     <footer>
         <span>© 2026 Numa Koudsie</span>
-        <span><a href="https://github.com/Numa1997" target="_blank" rel="noopener">github.com/Numa1997</a></span>
+        <span><a href="#top">Back to top ↑</a></span>
     </footer>
-    <a class="to-top" href="#top" aria-label="Back to top">↑</a>
 
     <script>
     (function () {
-        // ---- helpers ----
-        var sine = function (x0, x1, y, amp, wl, ph, step) {
+        var reduced = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+        /* ---------- live double pendulum (RK4) in the hero figure ---------- */
+        var canvas = document.getElementById('pendulum');
+        if (canvas && canvas.getContext) {
+            var ctx = canvas.getContext('2d');
+            var trace = document.createElement('canvas');
+            var tctx = trace.getContext('2d');
+            var g = 9.81, m1 = 1, m2 = 1, l1 = 1, l2 = 1;
+            var state, prev, W, H, ox, oy, scale, running = false, raf = null, visible = true, inView = true;
+
+            function deriv(s) {
+                var t1 = s[0], t2 = s[1], w1 = s[2], w2 = s[3], d = t1 - t2;
+                var den = 2 * m1 + m2 - m2 * Math.cos(2 * d);
+                var a1 = (-g * (2 * m1 + m2) * Math.sin(t1) - m2 * g * Math.sin(t1 - 2 * t2) - 2 * Math.sin(d) * m2 * (w2 * w2 * l2 + w1 * w1 * l1 * Math.cos(d))) / (l1 * den);
+                var a2 = (2 * Math.sin(d) * (w1 * w1 * l1 * (m1 + m2) + g * (m1 + m2) * Math.cos(t1) + w2 * w2 * l2 * m2 * Math.cos(d))) / (l2 * den);
+                return [w1, w2, a1, a2];
+            }
+            function rk4(s, h) {
+                var k1 = deriv(s), i;
+                var s2 = [], s3 = [], s4 = [];
+                for (i = 0; i < 4; i++) s2[i] = s[i] + h / 2 * k1[i];
+                var k2 = deriv(s2);
+                for (i = 0; i < 4; i++) s3[i] = s[i] + h / 2 * k2[i];
+                var k3 = deriv(s3);
+                for (i = 0; i < 4; i++) s4[i] = s[i] + h * k3[i];
+                var k4 = deriv(s4), out = [];
+                for (i = 0; i < 4; i++) out[i] = s[i] + h / 6 * (k1[i] + 2 * k2[i] + 2 * k3[i] + k4[i]);
+                return out;
+            }
+            function pos(s) {
+                var x1 = ox + l1 * scale * Math.sin(s[0]), y1 = oy + l1 * scale * Math.cos(s[0]);
+                return [x1, y1, x1 + l2 * scale * Math.sin(s[1]), y1 + l2 * scale * Math.cos(s[1])];
+            }
+            function resize() {
+                var r = canvas.getBoundingClientRect(), dpr = Math.min(window.devicePixelRatio || 1, 2);
+                W = Math.max(1, Math.round(r.width)); H = Math.max(1, Math.round(r.height));
+                canvas.width = W * dpr; canvas.height = H * dpr; ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+                trace.width = W * dpr; trace.height = H * dpr; tctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+                ox = W / 2; oy = H * 0.36; scale = Math.min(W, H) * 0.24;
+                prev = null;
+            }
+            function reset() {
+                state = [Math.PI * (0.62 + Math.random() * 0.25), Math.PI * (0.75 + Math.random() * 0.4), 0, 0];
+                tctx.clearRect(0, 0, W, H); prev = null;
+            }
+            function step(n, h) {
+                for (var i = 0; i < n; i++) {
+                    state = rk4(state, h);
+                    var p = pos(state);
+                    if (prev) {
+                        tctx.strokeStyle = 'rgba(122, 31, 43, 0.85)'; tctx.lineWidth = 1.4; tctx.lineCap = 'round';
+                        tctx.beginPath(); tctx.moveTo(prev[2], prev[3]); tctx.lineTo(p[2], p[3]); tctx.stroke();
+                    }
+                    prev = p;
+                }
+            }
+            function fadeTrace(a) {
+                tctx.save(); tctx.globalCompositeOperation = 'destination-out';
+                tctx.fillStyle = 'rgba(0,0,0,' + a + ')'; tctx.fillRect(0, 0, W, H); tctx.restore();
+            }
+            function draw() {
+                ctx.clearRect(0, 0, W, H);
+                ctx.drawImage(trace, 0, 0, W, H);
+                var p = pos(state);
+                ctx.strokeStyle = '#1c1518'; ctx.lineWidth = 2.2; ctx.lineCap = 'round';
+                ctx.beginPath(); ctx.moveTo(ox, oy); ctx.lineTo(p[0], p[1]); ctx.lineTo(p[2], p[3]); ctx.stroke();
+                ctx.fillStyle = '#8b8079'; ctx.beginPath(); ctx.arc(ox, oy, 3.5, 0, Math.PI * 2); ctx.fill();
+                ctx.fillStyle = '#7a1f2b';
+                ctx.beginPath(); ctx.arc(p[0], p[1], 7, 0, Math.PI * 2); ctx.fill();
+                ctx.beginPath(); ctx.arc(p[2], p[3], 9, 0, Math.PI * 2); ctx.fill();
+            }
+            function frame() {
+                if (!running) return;
+                if (visible && inView) { step(6, 0.0035); fadeTrace(0.012); draw(); }
+                raf = requestAnimationFrame(frame);
+            }
+            function start() { if (!running) { running = true; raf = requestAnimationFrame(frame); } }
+            function stop() { running = false; if (raf) cancelAnimationFrame(raf); raf = null; }
+
+            resize(); reset();
+            if (reduced) { step(2600, 0.0035); draw(); }
+            else {
+                step(400, 0.0035); draw(); start();
+                document.addEventListener('visibilitychange', function () { visible = !document.hidden; });
+                if ('IntersectionObserver' in window) {
+                    new IntersectionObserver(function (es) { inView = es[0].isIntersecting; }).observe(canvas);
+                }
+            }
+            var rt; window.addEventListener('resize', function () {
+                clearTimeout(rt); rt = setTimeout(function () { resize(); tctx.clearRect(0, 0, W, H); draw(); }, 120);
+            });
+            var rb = document.getElementById('pendulum-reset');
+            if (rb) rb.addEventListener('click', function () { reset(); if (reduced) { step(2600, 0.0035); } draw(); });
+        }
+
+        /* ---------- sketches for the plates ---------- */
+        var sine = function (x0, x1, y, amp, wl, ph, st) {
             var d = '';
-            for (var x = x0; x <= x1; x += step) {
+            for (var x = x0; x <= x1; x += st) {
                 var yy = y + amp * Math.sin(2 * Math.PI * (x - x0) / wl + ph);
                 d += (x === x0 ? 'M' : 'L') + x.toFixed(1) + ' ' + yy.toFixed(1);
             }
             return d;
         };
-        var svg = function (inner) {
-            return '<svg viewBox="0 0 200 110" preserveAspectRatio="xMidYMid meet" aria-hidden="true">' + inner + '</svg>';
-        };
-
-        // ---- travelling wave under the name ----
-        var wave = document.querySelector('.wave svg');
-        if (wave) {
-            wave.querySelector('.wave-a path').setAttribute('d', sine(0, 560 + 140, 28, 12, 140, 0, 4));
-            wave.querySelector('.wave-b path').setAttribute('d', sine(0, 560 + 70, 28, 6, 70, 1.2, 4));
-        }
-
-        // ---- sketches for the simulation cards ----
+        var svg = function (inner) { return '<svg viewBox="0 0 200 110" preserveAspectRatio="xMidYMid meet" aria-hidden="true">' + inner + '</svg>'; };
         var sketches = {
             interference: function () {
                 var s = '';
                 [[62, 104], [138, 104]].forEach(function (p) {
-                    for (var r = 14; r <= 140; r += 14) {
-                        s += '<circle cx="' + p[0] + '" cy="' + p[1] + '" r="' + r + '" class="acc" fill="none" stroke-width="1.2" opacity="' + (0.9 * (1 - r / 150)).toFixed(2) + '"/>';
-                    }
+                    for (var r = 14; r <= 140; r += 14) s += '<circle cx="' + p[0] + '" cy="' + p[1] + '" r="' + r + '" class="acc" fill="none" stroke-width="1.2" opacity="' + (0.9 * (1 - r / 150)).toFixed(2) + '"/>';
                     s += '<circle cx="' + p[0] + '" cy="' + p[1] + '" r="3.5" class="acc-fill"/>';
                 });
                 return svg(s);
@@ -333,9 +418,7 @@
                 for (var x = 12; x <= 52; x += 8) s += '<line x1="' + x + '" y1="12" x2="' + x + '" y2="98" class="soft" stroke-width="1.2"/>';
                 s += '<line x1="66" y1="8" x2="66" y2="40" class="ink" stroke-width="3"/><line x1="66" y1="47" x2="66" y2="63" class="ink" stroke-width="3"/><line x1="66" y1="70" x2="66" y2="102" class="ink" stroke-width="3"/>';
                 [43.5, 66.5].forEach(function (cy) {
-                    for (var r = 8; r <= 56; r += 8) {
-                        s += '<path d="M 66 ' + (cy - r) + ' A ' + r + ' ' + r + ' 0 0 1 66 ' + (cy + r) + '" class="acc" fill="none" stroke-width="1" opacity="' + (1 - r / 70).toFixed(2) + '"/>';
-                    }
+                    for (var r = 8; r <= 56; r += 8) s += '<path d="M 66 ' + (cy - r) + ' A ' + r + ' ' + r + ' 0 0 1 66 ' + (cy + r) + '" class="acc" fill="none" stroke-width="1" opacity="' + (1 - r / 70).toFixed(2) + '"/>';
                 });
                 s += '<line x1="150" y1="8" x2="150" y2="102" class="grey" stroke-width="1.5"/>';
                 for (var i = -6; i <= 6; i++) {
@@ -348,10 +431,7 @@
                 var s = '<line x1="10" y1="32" x2="190" y2="32" class="grey" stroke-width="1" stroke-dasharray="2 3"/>';
                 s += '<path d="' + sine(10, 190, 32, 14, 60, 0, 3) + '" class="acc" fill="none" stroke-width="2"/>';
                 s += '<line x1="10" y1="82" x2="190" y2="82" class="grey" stroke-width="1" stroke-dasharray="2 3"/>';
-                for (var i = 0; i < 22; i++) {
-                    var x = 12 + i * 8.2 + 4.5 * Math.sin(2 * Math.PI * i / 7.3);
-                    s += '<circle cx="' + x.toFixed(1) + '" cy="82" r="3" class="acc-fill" opacity="0.85"/>';
-                }
+                for (var i = 0; i < 22; i++) s += '<circle cx="' + (12 + i * 8.2 + 4.5 * Math.sin(2 * Math.PI * i / 7.3)).toFixed(1) + '" cy="82" r="3" class="acc-fill" opacity="0.85"/>';
                 return svg(s);
             },
             waterwave: function () {
@@ -367,11 +447,7 @@
             simulator: function () {
                 var a = function (x) { return 10 * Math.sin(2 * Math.PI * x / 70); };
                 var b = function (x) { return 6 * Math.sin(2 * Math.PI * x / 29 + 1); };
-                var path = function (f, y0) {
-                    var d = '';
-                    for (var x = 10; x <= 190; x += 2) d += (x === 10 ? 'M' : 'L') + x + ' ' + (y0 + f(x)).toFixed(1);
-                    return d;
-                };
+                var path = function (f, y0) { var d = ''; for (var x = 10; x <= 190; x += 2) d += (x === 10 ? 'M' : 'L') + x + ' ' + (y0 + f(x)).toFixed(1); return d; };
                 var s = '<line x1="10" y1="30" x2="190" y2="30" class="grey" stroke-width="0.8" stroke-dasharray="2 3"/>';
                 s += '<path d="' + path(a, 30) + '" class="grey" fill="none" stroke-width="1.5"/><path d="' + path(b, 30) + '" class="soft" fill="none" stroke-width="1.5"/>';
                 s += '<line x1="10" y1="80" x2="190" y2="80" class="grey" stroke-width="0.8" stroke-dasharray="2 3"/>';
@@ -379,50 +455,32 @@
                 return svg(s);
             }
         };
-        Array.prototype.forEach.call(document.querySelectorAll('.sketch[data-sketch]'), function (el) {
+        Array.prototype.forEach.call(document.querySelectorAll('.plate__fig[data-sketch]'), function (el) {
             var f = sketches[el.getAttribute('data-sketch')];
             if (f) el.innerHTML = f();
         });
 
-        // ---- reveal on scroll ----
+        /* ---------- reveal on scroll, timeline, active index ---------- */
         var reveals = document.querySelectorAll('.reveal');
-        var sections = document.querySelectorAll('.section');
+        var blocks = document.querySelectorAll('.section, .timeline');
         if ('IntersectionObserver' in window) {
             var io = new IntersectionObserver(function (entries) {
-                entries.forEach(function (e) {
-                    if (e.isIntersecting) { e.target.classList.add('is-visible'); io.unobserve(e.target); }
-                });
-            }, { threshold: 0.12 });
-            Array.prototype.forEach.call(reveals, function (el, i) {
-                el.style.setProperty('--d', (i % 6) * 70 + 'ms');
-                io.observe(el);
-            });
-            Array.prototype.forEach.call(sections, function (el) { io.observe(el); });
-        } else {
-            Array.prototype.forEach.call(reveals, function (el) { el.classList.add('is-visible'); });
-        }
+                entries.forEach(function (e) { if (e.isIntersecting) { e.target.classList.add('is-visible'); io.unobserve(e.target); } });
+            }, { threshold: 0.1 });
+            Array.prototype.forEach.call(reveals, function (el, i) { el.style.setProperty('--d', (i % 5) * 80 + 'ms'); io.observe(el); });
+            Array.prototype.forEach.call(blocks, function (el) { io.observe(el); });
 
-        // ---- active section in the top bar ----
-        var links = Array.prototype.slice.call(document.querySelectorAll('.topbar a[href^="#"]'));
-        if ('IntersectionObserver' in window) {
+            var links = Array.prototype.slice.call(document.querySelectorAll('.index a[href^="#"]'));
             var nav = new IntersectionObserver(function (entries) {
                 entries.forEach(function (e) {
-                    if (e.isIntersecting) {
-                        links.forEach(function (l) { l.classList.toggle('active', l.getAttribute('href') === '#' + e.target.id); });
-                    }
+                    if (e.isIntersecting) links.forEach(function (l) { l.classList.toggle('active', l.getAttribute('href') === '#' + e.target.id); });
                 });
-            }, { rootMargin: '-35% 0px -55% 0px' });
-            links.forEach(function (l) {
-                var t = document.querySelector(l.getAttribute('href'));
-                if (t && t.id) nav.observe(t);
-            });
+            }, { rootMargin: '-30% 0px -60% 0px' });
+            links.forEach(function (l) { var t = document.querySelector(l.getAttribute('href')); if (t) nav.observe(t); });
+        } else {
+            Array.prototype.forEach.call(reveals, function (el) { el.classList.add('is-visible'); });
+            Array.prototype.forEach.call(blocks, function (el) { el.classList.add('is-visible'); });
         }
-
-        // ---- back to top ----
-        var top = document.querySelector('.to-top');
-        var onScroll = function () { top.classList.toggle('show', window.scrollY > 600); };
-        window.addEventListener('scroll', onScroll, { passive: true });
-        onScroll();
     })();
     </script>
 </body>
