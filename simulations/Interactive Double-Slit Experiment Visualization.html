@@ -12,7 +12,7 @@
             width: 100%;
             height: 4px;
             border-radius: 2px;
-            background: #d9d0c2;
+            background: #e2e8f0;
             outline: none;
         }
         
@@ -22,7 +22,7 @@
             width: 16px;
             height: 16px;
             border-radius: 50%;
-            background: #7a1f2b;
+            background: #3b82f6;
             cursor: pointer;
         }
         
@@ -30,7 +30,7 @@
             width: 16px;
             height: 16px;
             border-radius: 50%;
-            background: #7a1f2b;
+            background: #3b82f6;
             cursor: pointer;
         }
 
@@ -41,10 +41,8 @@
             padding: 1.5rem;
         }
     </style>
-    <link rel="stylesheet" href="../styles/simulation.css">
 </head>
 <body class="bg-gray-100 p-8">
-    <a class="back-home" href="../index.html">&larr; Numa Koudsie &middot; portfolio</a>
     <div id="root"></div>
 
     <script type="text/babel">
@@ -208,18 +206,18 @@
                             <line 
                                 x1={margin} y1={geo.upperPoint.y} 
                                 x2={width - margin} y2={geo.upperPoint.y}
-                                stroke="#d9d0c2"
+                                stroke="#CBD5E0"
                                 strokeWidth="2"
                             />
                             <line 
                                 x1={margin} y1={geo.midPoint.y} 
                                 x2={width - margin} y2={geo.midPoint.y}
-                                stroke="#d9d0c2"
+                                stroke="#CBD5E0"
                                 strokeWidth="2"
                             />
                             
                             {/* Slits */}
-                            <g stroke="#7a1f2b">
+                            <g stroke="#3B82F6">
                                 <line 
                                     x1={geo.leftSlit.x} y1={geo.leftSlit.y - 10} 
                                     x2={geo.leftSlit.x} y2={geo.leftSlit.y + 10}
@@ -232,15 +230,15 @@
                                     strokeWidth="3"
                                     strokeLinecap="round"
                                 />
-                                <Point x={geo.leftSlit.x} y={geo.leftSlit.y} color="#7a1f2b" />
-                                <Point x={geo.rightSlit.x} y={geo.rightSlit.y} color="#7a1f2b" />
+                                <Point x={geo.leftSlit.x} y={geo.leftSlit.y} color="#3B82F6" />
+                                <Point x={geo.rightSlit.x} y={geo.rightSlit.y} color="#3B82F6" />
                             </g>
                             
                             {/* Slit separation indicator */}
                             <line 
                                 x1={geo.leftSlit.x} y1={geo.leftSlit.y + 20} 
                                 x2={geo.rightSlit.x} y2={geo.rightSlit.y + 20}
-                                stroke="#c9848c"
+                                stroke="#60A5FA"
                                 strokeWidth="1"
                                 strokeDasharray="4 2"
                             />
@@ -250,7 +248,7 @@
                             <line 
                                 x1={geo.midPoint.x} y1={geo.midPoint.y} 
                                 x2={geo.midPoint.x} y2={geo.upperPoint.y}
-                                stroke="#8b8079"
+                                stroke="#94A3B8"
                                 strokeWidth="1"
                                 strokeDasharray="4 2"
                             />
@@ -260,13 +258,13 @@
                             <line 
                                 x1={geo.midPoint.x} y1={geo.midPoint.y} 
                                 x2={geo.upperPoint.x} y2={geo.upperPoint.y}
-                                stroke="#b00020"
+                                stroke="#EF4444"
                                 strokeWidth="2"
                             />
-                            <Point x={geo.upperPoint.x} y={geo.upperPoint.y} color="#b00020" />
+                            <Point x={geo.upperPoint.x} y={geo.upperPoint.y} color="#EF4444" />
                             
                             {/* Path lines */}
-                            <g stroke="#7a4b12">
+                            <g stroke="#10B981">
                                 <line 
                                     x1={geo.leftSlit.x} y1={geo.leftSlit.y} 
                                     x2={geo.upperPoint.x} y2={geo.upperPoint.y}
@@ -283,7 +281,7 @@
                             <line 
                                 x1={geo.leftSlit.x} y1={geo.leftSlit.y} 
                                 x2={geo.normalEnd.x} y2={geo.normalEnd.y}
-                                stroke="#5a504b"
+                                stroke="#8B5CF6"
                                 strokeWidth="1"
                                 strokeDasharray="3 3"
                             />
@@ -292,7 +290,7 @@
                             <path 
                                 d={geo.createAnglePath()} 
                                 fill="none"
-                                stroke="#b00020"
+                                stroke="#EF4444"
                                 strokeWidth="1.5"
                             />
                             <MathLabel x={geo.midPoint.x - 25} y={geo.midPoint.y - 20}>α</MathLabel>
@@ -301,7 +299,7 @@
                             <text 
                                 x={margin} y={margin} 
                                 className="text-sm font-medium"
-                                fill="#3a322e"
+                                fill="#374151"
                             >
                                 Path difference (δs): {geo.pathDifference.toFixed(1)}px
                             </text>

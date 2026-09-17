@@ -58,13 +58,11 @@
             margin-left: 40px;
         }
     </style>
-    <link rel="stylesheet" href="../styles/simulation.css">
 </head>
 <body>
-    <a class="back-home" href="../index.html">&larr; Numa Koudsie &middot; portfolio</a>
     <div class="card">
         <h2>Wellenanimation</h2>
-        <svg id="waveCanvas" width="640" height="200" style="background: #fffaf3; border-radius: 8px;"></svg>
+        <svg id="waveCanvas" width="640" height="200" style="background: #f8fafc; border-radius: 8px;"></svg>
         
         <div class="controls">
             <div class="button-group">
@@ -176,7 +174,7 @@
                     gridLine.setAttribute('y1', pos.y);
                     gridLine.setAttribute('x2', this.width + this.yAxisOffset);
                     gridLine.setAttribute('y2', pos.y);
-                    gridLine.setAttribute('stroke', '#e3dccf');
+                    gridLine.setAttribute('stroke', '#ddd');
                     gridLine.setAttribute('stroke-width', '1');
                     gridLine.setAttribute('stroke-dasharray', '4');
                     this.svg.appendChild(gridLine);
@@ -225,7 +223,7 @@
                         line.setAttribute('y1', this.centerY);
                         line.setAttribute('x2', point.x);
                         line.setAttribute('y2', point.y);
-                        line.setAttribute('stroke', '#b00020');
+                        line.setAttribute('stroke', 'red');
                         line.setAttribute('stroke-width', '1');
                         line.setAttribute('stroke-dasharray', '4');
                         this.svg.appendChild(line);
@@ -238,7 +236,7 @@
                         path + (i === 0 ? 'M' : 'L') + ` ${point.equilibriumX} ${point.equilibriumY}`, 
                     '');
                     equilibriumPath.setAttribute('d', pathData);
-                    equilibriumPath.setAttribute('stroke', '#8b8079');
+                    equilibriumPath.setAttribute('stroke', 'gray');
                     equilibriumPath.setAttribute('stroke-width', '1');
                     equilibriumPath.setAttribute('stroke-dasharray', '4');
                     equilibriumPath.setAttribute('fill', 'none');
@@ -250,7 +248,7 @@
                     path + (i === 0 ? 'M' : 'L') + ` ${point.x} ${point.y}`, 
                 '');
                 linePath.setAttribute('d', pathData);
-                linePath.setAttribute('stroke', '#7a1f2b');
+                linePath.setAttribute('stroke', 'blue');
                 linePath.setAttribute('stroke-width', '1');
                 linePath.setAttribute('fill', 'none');
                 this.svg.appendChild(linePath);
@@ -260,7 +258,7 @@
                     circle.setAttribute('cx', point.x);
                     circle.setAttribute('cy', point.y);
                     circle.setAttribute('r', '4');
-                    circle.setAttribute('fill', '#7a1f2b');
+                    circle.setAttribute('fill', 'blue');
                     this.svg.appendChild(circle);
                 });
             }

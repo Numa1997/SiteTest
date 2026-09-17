@@ -250,15 +250,11 @@
             stroke-width: 1;
         }
     </style>
-    <link rel="stylesheet" href="../styles/simulation.css">
 </head>
 <body>
     <div class="container">
         <div class="top-bar">
-            <div>
-                <a class="back-home" href="../index.html">&larr; Numa Koudsie &middot; portfolio</a>
-                <h1>Wave Interference Simulator</h1>
-            </div>
+            <h1>Wave Interference Simulator</h1>
             <div class="controls-header">
                 <button id="addWave">Add Wave +</button>
                 <button id="playPause">Pause</button>
@@ -300,6 +296,13 @@
             </div>
         </div>
     </div>
+</body>
+</html>
+
+<!DOCTYPE html>
+<html>
+<head><title>Wave Simulator Script</title></head>
+<body>
 <script>
 class WaveSimulator {
     constructor() {
@@ -307,8 +310,8 @@ class WaveSimulator {
         this.isPlaying = true;
         this.time = 0;
         this.colors = [
-            '#7a1f2b', '#c07020', '#2e6f73', '#5a504b', '#4d6a8a',
-            '#b00020', '#7a4b12', '#8b8079', '#3b4551', '#a0522d'
+            '#2196F3', '#FF5722', '#4CAF50', '#9C27B0', '#FF9800',
+            '#E91E63', '#00BCD4', '#8BC34A', '#3F51B5', '#FFC107'
         ];
         // Reduced max amplitude for better visualization
         this.FIXED_MAX_AMPLITUDE = 80;

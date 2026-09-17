@@ -46,11 +46,9 @@
             margin: 10px 0;
         }
     </style>
-    <link rel="stylesheet" href="../styles/simulation.css">
 </head>
 <body>
     <div class="container">
-        <a class="back-home" href="../index.html">&larr; Numa Koudsie &middot; portfolio</a>
         <h1>Wave Interference and Straight Wavefront Formation</h1>
         
         <div class="controls">
@@ -96,14 +94,10 @@
         }
 
         function amplitudeToColor(amplitude) {
-            // Crest -> burgundy, still water -> paper, trough -> slate ink
-            const a = Math.max(-1, Math.min(1, amplitude));
-            const paper = [255, 250, 243];
-            const target = a >= 0 ? [122, 31, 43] : [59, 69, 81];
-            const t = Math.abs(a);
-            const r = Math.round(paper[0] + (target[0] - paper[0]) * t);
-            const g = Math.round(paper[1] + (target[1] - paper[1]) * t);
-            const b = Math.round(paper[2] + (target[2] - paper[2]) * t);
+            // Enhanced color mapping for better contrast
+            const r = Math.floor((amplitude + 1) * 127.5);
+            const b = Math.floor((1 - amplitude) * 127.5);
+            const g = Math.floor(Math.abs(amplitude) * 20); // Slight green tint for better visualization
             return `rgb(${r},${g},${b})`;
         }
 
@@ -127,8 +121,8 @@
                     source.x, source.y, 0,
                     source.x, source.y, 10
                 );
-                gradient.addColorStop(0, 'rgba(122, 31, 43, 0.85)');
-                gradient.addColorStop(1, 'rgba(122, 31, 43, 0)');
+                gradient.addColorStop(0, 'rgba(255, 255, 0, 0.8)');
+                gradient.addColorStop(1, 'rgba(255, 255, 0, 0)');
                 
                 ctx.beginPath();
                 ctx.arc(source.x, source.y, 10, 0, Math.PI * 2);
@@ -138,8 +132,8 @@
                 // Source point
                 ctx.beginPath();
                 ctx.arc(source.x, source.y, 4, 0, Math.PI * 2);
-                ctx.fillStyle = '#f5f1ea';
-                ctx.strokeStyle = '#1c1518';
+                ctx.fillStyle = 'yellow';
+                ctx.strokeStyle = 'black';
                 ctx.fill();
                 ctx.stroke();
             });
