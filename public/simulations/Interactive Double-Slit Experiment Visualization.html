@@ -1,0 +1,409 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Double-Slit Interference · Numa Koudsie</title>
+    <meta name="description" content="Interactive double-slit geometry: the path difference from two slits to a point, its far-field approximation b sin α, and the resulting interference pattern.">
+    <meta name="theme-color" content="#f5f1ea">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link rel="stylesheet" href="../styles/sim.css">
+    <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='12' fill='%237a1f2b'/%3E%3Ctext x='32' y='45' text-anchor='middle' font-family='Georgia,serif' font-size='38' fill='%23f5f1ea'%3EN%3C/text%3E%3C/svg%3E">
+    <style>
+        .svg-lbl { font-family: var(--serif); font-style: italic; font-size: 19px; fill: var(--ink); }
+        .svg-lbl--acc { fill: var(--accent); }
+        .svg-mono { font-family: var(--mono); font-size: 12px; letter-spacing: .06em; fill: var(--muted); }
+        @media (max-width: 560px) {
+            .svg-lbl { font-size: 27px; }
+            .svg-mono { font-size: 19px; }
+        }
+        .verdict { font-family: var(--serif); font-style: italic; font-size: 17px; color: var(--accent); margin: 0; }
+    </style>
+</head>
+<body>
+    <header class="sim-top">
+        <a href="../index.html#simulations">← Numa Koudsie</a>
+        <nav class="sim-nav" aria-label="Simulations">
+            <span>Fig.</span>
+            <a href="Circular Wave Interference Visualization.html">1</a>
+            <a href="Double Pendulum.html">2</a>
+            <a href="Interactive Double-Slit Experiment Visualization.html" aria-current="page">3</a>
+            <a href="Transverse and longitudinal waves.html">4</a>
+            <a href="water-wave.html">5</a>
+            <a href="wave-interference.html">6</a>
+            <a href="phasor-sums.html">7</a>
+            <a href="draw-decompose.html">8</a>
+        </nav>
+    </header>
+
+    <main class="sim">
+        <noscript><p class="sim-error"><b>This simulation needs JavaScript.</b> <a href="../index.html#simulations">Back to the simulations</a></p></noscript>
+        <div class="sim__head">
+            <p class="sim__num">Fig. 3 · wave optics · wave–particle duality</p>
+            <h1>Double-Slit Interference<span class="dot">.</span></h1>
+            <p class="sim__lede">Two slits, one point P. The two paths to P differ by δs, and that small difference decides whether P is bright or dark.</p>
+        </div>
+
+        <div class="sim__grid">
+            <div class="stack">
+                <figure class="stage">
+                    <div class="stage__canvas" id="stage" style="--ar: 600 / 440;">
+                        <svg id="geo" viewBox="0 0 600 440" preserveAspectRatio="xMidYMid meet" role="img" aria-label="Geometry of the double slit and the path difference to the point P">
+                            <defs>
+                                <clipPath id="above"><rect x="0" y="0" width="600" height="370"></rect></clipPath>
+                            </defs>
+                            <g id="waves"></g>
+                            <g id="shapes"></g>
+                        </svg>
+                    </div>
+                    <figcaption class="stage__cap">
+                        <span><b>Fig. 3</b> · slits S₁, S₂ · point P at distance d, angle α</span>
+                        <span id="cap-ds">δs = —</span>
+                    </figcaption>
+                </figure>
+                <figure class="stage">
+                    <div class="stage__canvas" style="--ar: 600 / 180;">
+                        <svg id="pattern" viewBox="0 0 600 180" preserveAspectRatio="xMidYMid meet" role="img" aria-label="Far-field intensity as a function of angle"></svg>
+                    </div>
+                    <figcaption class="stage__cap">
+                        <span><b>Fig. 3b</b> · far-field intensity I(θ)/I₀ = cos²(π b sin θ / λ)</span>
+                        <span>burgundy: far field · dashed: exact at d</span>
+                    </figcaption>
+                </figure>
+            </div>
+
+            <aside class="panel" aria-label="Controls">
+                <div class="panel__group">
+                    <p class="panel__label">Geometry</p>
+                    <label class="ctl">
+                        <span class="ctl__row"><span>Distance d</span><output id="d-out" for="d"></output></span>
+                        <input type="range" id="d" min="100" max="300" step="1" value="200">
+                    </label>
+                    <label class="ctl">
+                        <span class="ctl__row"><span>Angle α</span><output id="alpha-out" for="alpha"></output></span>
+                        <input type="range" id="alpha" min="0" max="30" step="0.5" value="20">
+                    </label>
+                    <label class="ctl">
+                        <span class="ctl__row"><span>Slit separation b</span><output id="b-out" for="b"></output></span>
+                        <input type="range" id="b" min="20" max="80" step="1" value="40">
+                    </label>
+                </div>
+
+                <div class="panel__group">
+                    <p class="panel__label">Light</p>
+                    <label class="ctl">
+                        <span class="ctl__row"><span>Wavelength λ</span><output id="lambda-out" for="lambda"></output></span>
+                        <input type="range" id="lambda" min="8" max="40" step="0.5" value="13.5">
+                    </label>
+                    <label class="switch"><span>Animate wavelets</span><input type="checkbox" id="anim" checked></label>
+                </div>
+
+                <dl class="readouts">
+                    <div><dt>Path S₁P</dt><dd id="r-l1">—</dd></div>
+                    <div><dt>Path S₂P</dt><dd id="r-l2">—</dd></div>
+                    <div><dt>δs exact</dt><dd id="r-ds" class="is-accent">—</dd></div>
+                    <div><dt>b sin α</dt><dd id="r-ff">—</dd></div>
+                    <div><dt>δs / λ</dt><dd id="r-m">—</dd></div>
+                    <div><dt>Phase Δφ</dt><dd id="r-phi">—</dd></div>
+                </dl>
+                <p class="verdict" id="verdict">—</p>
+
+                <ul class="legend">
+                    <li><span class="sw sw--ink"></span>paths</li>
+                    <li><span class="sw"></span>path difference δs</li>
+                    <li><span class="sw sw--rose"></span>wavelets</li>
+                    <li><span class="sw sw--dash"></span>construction</li>
+                </ul>
+            </aside>
+        </div>
+
+        <section class="deriv" aria-labelledby="deriv-title">
+            <div class="deriv__head">
+                <h2 id="deriv-title">From physics to pixels</h2>
+                <p>How two openings turn one light wave into a pattern of bright and dark, derived exactly, then approximated, then drawn.</p>
+            </div>
+            <div class="deriv__grid">
+                <nav class="deriv__toc" aria-label="Steps">
+                    <ol>
+                        <li><a href="#s-picture">Physical picture</a></li>
+                        <li><a href="#s-model">Model</a></li>
+                        <li><a href="#s-derivation">Derivation</a></li>
+                        <li><a href="#s-numerics">Numerical method</a></li>
+                        <li><a href="#s-screen">On screen</a></li>
+                        <li><a href="#s-limits">Limits</a></li>
+                    </ol>
+                </nav>
+                <div class="deriv__body">
+                    <article class="step" id="s-picture">
+                        <p class="step__num">01 · Physical picture</p>
+                        <h3>One wave, two doors</h3>
+                        <p>A flat wave of light arrives from below and meets a wall with two narrow slits. Each slit lets a little of the wave through and becomes a new source of circular wavelets, and the two sources are perfectly in step because the same incoming crest reaches both at once. At any point P beyond the wall, one wavelet has travelled a little further than the other. If the extra distance is a whole number of wavelengths, crest meets crest and P is bright; if it is a half-number, crest meets trough and P is dark. The rose arcs in the figure are those wavelets; the burgundy bar is the extra distance.</p>
+                    </article>
+
+                    <article class="step" id="s-model">
+                        <p class="step__num">02 · Model</p>
+                        <h3>Two coherent point sources</h3>
+                        <p>Put the origin midway between the slits, x along the wall and y away from it. Then</p>
+                        <p class="eq"><span class="eq__line">S₁ = (−b/2, 0), &nbsp; S₂ = (+b/2, 0), &nbsp; P = (−d tan α, d)</span><span class="eq__note">b: slit separation · d: distance of P from the wall · α: angle of P from the normal</span></p>
+                        <p>The distance from the midpoint to P is r = d / cos α. Each slit is treated as a point source of the same amplitude and phase; the field is a scalar with wavenumber k = 2π/λ.</p>
+                        <ul class="facts">
+                            <li>Monochromatic, coherent illumination: one λ, one fixed phase relation.</li>
+                            <li>Point slits: no single-slit diffraction envelope (see Limits).</li>
+                            <li>Only ratios matter: b/λ, d/b and α. The lengths are shown in px of the drawing.</li>
+                        </ul>
+                    </article>
+
+                    <article class="step" id="s-derivation">
+                        <p class="step__num">03 · Derivation</p>
+                        <h3>Path difference, exactly and approximately</h3>
+                        <h4>The exact lengths</h4>
+                        <p class="eq"><span class="eq__line">L₁ = |S₁P| = √((d tan α − b/2)² + d²)</span><span class="eq__line">L₂ = |S₂P| = √((d tan α + b/2)² + d²)</span><span class="eq__line">δs = L₂ − L₁</span></p>
+                        <p>Geometrically, the dashed arc is a circle around P through S₁. It cuts the longer path S₂P at Q with |PQ| = L₁, so the remaining piece S₂Q, the burgundy bar, is exactly δs.</p>
+                        <h4>A useful exact identity</h4>
+                        <p>Subtract the squares: L₂² − L₁² = (d tan α + b/2)² − (d tan α − b/2)² = 2 b d tan α. Since L₂² − L₁² = (L₂ − L₁)(L₂ + L₁),</p>
+                        <p class="eq"><span class="eq__line">δs = 2 b d tan α / (L₁ + L₂) &nbsp; (exact)</span></p>
+                        <p>The simulation computes δs from this form, not as L₂ − L₁. Near the axis the two lengths are almost equal, and subtracting two nearly equal floating-point numbers throws away significant digits; the rationalized form has an exact zero at α = 0 and keeps full relative precision for tiny path differences. At these sizes the gain is only about 10⁻¹³ px, but it is the right numerical habit.</p>
+                        <h4>The far-field (Fraunhofer) limit</h4>
+                        <p>Far away, both paths have length ≈ r = d/cos α, so L₁ + L₂ ≈ 2d/cos α and</p>
+                        <p class="eq"><span class="eq__line">δs ≈ 2 b d tan α · cos α / (2d) = b sin α</span></p>
+                        <p>To see how good this is, write L²₁,₂ = r² ∓ b r sin α + b²/4 and expand √(1 + u) = 1 + u/2 − u²/8 + u³/16 − … with ε = b sin α / r and β = b²/(4r²). The terms that survive in L₂ − L₁ are r(ε − εβ/2 + ε³/8), that is</p>
+                        <p class="eq"><span class="eq__line">δs = b sin α · [ 1 − b² cos² α / (8 r²) + O(b⁴/r⁴) ]</span></p>
+                        <p>At the default b = 40 px, d = 200 px, α = 20°, this gives 13.6275 px against the exact 13.6277 px, while plain b sin α gives 13.681 px, 0.4 % too long. The approximation fails when r is not much larger than b: at b = 80 px, d = 100 px, α = 30° it is off by 4.5 %.</p>
+                        <h4>From path difference to brightness</h4>
+                        <p>Write each wavelet at P as a complex amplitude E₀ e<sup>i(kL − ωt)</sup>. Their sum is</p>
+                        <p class="eq"><span class="eq__line">E = E₀ e<sup>−iωt</sup> (e<sup>ikL₁</sup> + e<sup>ikL₂</sup>) = E₀ e<sup>i(kL₁ − ωt)</sup> (1 + e<sup>iΔφ</sup>), &nbsp; Δφ = k δs = 2π δs/λ</span><span class="eq__line">I ∝ |E|² = E₀² |1 + e<sup>iΔφ</sup>|² = 2E₀² (1 + cos Δφ) = 4E₀² cos²(Δφ/2)</span></p>
+                        <p class="eq"><span class="eq__line">I / I<sub>max</sub> = cos²(π δs / λ)</span></p>
+                        <p>Bright fringes (I = I<sub>max</sub>) where δs = mλ; dark fringes (I = 0) where δs = (m + ½)λ. In the far field this reads sin θ<sub>m</sub> = mλ/b: the fringe order m is the number of extra wavelengths. On a flat screen at distance D, small angles give bright lines spaced Δy = λD/b apart. Two approximations are made here, in this order: first the far field (b ≪ r) turns δs into b sin θ; only then do small angles allow sin θ ≈ tan θ ≈ θ. And the rule is always fields first: add the two amplitudes, then square. Adding the two intensities instead would give 2E₀² everywhere and no fringes at all.</p>
+                        <p class="try"><b>Try</b>With b = 40 px and λ = 13.5 px, the first bright fringe sits at sin θ₁ = 13.5/40, θ₁ ≈ 19.7°. Set α to 19.5° or 20°: the verdict reads <em>Constructive</em>. At α ≈ 9.7° it reads <em>Destructive</em>.</p>
+                        <h4>Photons and electrons</h4>
+                        <p>Send the light one photon at a time and each photon arrives at a single point. Yet the points pile up in exactly this cos² pattern: the formula gives the probability of detection, |amplitude|². The same holds for electrons, atoms and molecules, with λ = h/p, the de Broglie wavelength. This is the sense in which the experiment shows wave–particle duality.</p>
+                    </article>
+
+                    <article class="step" id="s-numerics">
+                        <p class="step__num">04 · Numerical method</p>
+                        <h3>Closed-form geometry, sampled curves</h3>
+                        <p>Nothing here needs to be integrated in time; every quantity has a closed form and is recomputed whenever a slider moves. The readouts show L₁, L₂, the exact δs, the approximation b sin α, the order δs/λ and the phase Δφ in units of π. The verdict is <em>constructive</em> when δs/λ is within 0.08 of a whole number, <em>destructive</em> within 0.08 of a half-number, and otherwise reports I/I<sub>max</sub>.</p>
+                        <p>Fig. 3b samples the intensity at 301 angles between 0° and 30°. The burgundy curve is the far-field law cos²(π b sin θ / λ); the dashed ink curve uses the exact path difference for a point at the chosen distance d. Where the two separate, the Fraunhofer approximation is breaking down.</p>
+                    </article>
+
+                    <article class="step" id="s-screen">
+                        <p class="step__num">05 · On screen</p>
+                        <h3>An SVG construction</h3>
+                        <p>The figure is drawn in SVG on a 600 × 440 px canvas that scales with the page, so lines stay sharp at any size. The wall lies at y = 370 px with gaps of 8 px for the slits; P is drawn at its computed position. The wavelets are semicircles of radius r<sub>n</sub> = (n + φ)λ around each slit, where the phase φ advances by 0.8 of a wavelength per second: a slowed-down stand-in for light's 10¹⁴ oscillations per second. Their opacity falls as 0.55(1 − r/430) to suggest the weakening of each wavelet. Below the wall, straight rose lines one wavelength apart are the incoming plane wave, moving in step with the wavelets.</p>
+                    </article>
+
+                    <article class="step" id="s-limits">
+                        <p class="step__num">06 · Limits</p>
+                        <h3>What the model leaves out</h3>
+                        <ul class="facts">
+                            <li>Real slits have a width w; each then diffracts on its own, and the fringes are modulated by the envelope [sin(πw sin θ/λ) / (πw sin θ/λ)]².</li>
+                            <li>The two amplitudes are taken as equal; really each falls as 1/√L, which slightly reduces the contrast close to the slits.</li>
+                            <li>Polarisation and the vector nature of light are ignored; for small angles this does not matter.</li>
+                            <li>The animation speed of the wavelets is illustrative only.</li>
+                        </ul>
+                    </article>
+                </div>
+            </div>
+        </section>
+
+        <section class="walk" id="walk" data-walk="slit" aria-label="From symbols to code"></section>
+    </main>
+
+    <footer class="sim-foot">
+        <span>© 2026 Numa Koudsie · Claude version</span>
+        <span><a href="../index.html#simulations">All simulations ↑</a></span>
+    </footer>
+
+    <script src="../scripts/sim.js"></script>
+    <script>
+    (function () {
+        'use strict';
+        var T = Sim.theme;
+        var X0 = 300, Y0 = 370, LEFT = 40, RIGHT = 560, DEG = Math.PI / 180;
+        var gWaves = document.getElementById('waves');
+        var gShapes = document.getElementById('shapes');
+        var pattern = document.getElementById('pattern');
+        var anim = document.getElementById('anim');
+        var geo = null, phase = 0;
+
+        var dS = Sim.slider('d', { format: function (v) { return v + ' px'; }, onInput: update });
+        var aS = Sim.slider('alpha', { format: function (v) { return v.toFixed(1) + '°'; }, onInput: update });
+        var bS = Sim.slider('b', { format: function (v) { return v + ' px'; }, onInput: update });
+        var lS = Sim.slider('lambda', { format: function (v) { return v.toFixed(1) + ' px'; }, onInput: update });
+
+        function n(v) { return v.toFixed(2); }
+        function dist(p, q) { return Math.hypot(p.x - q.x, p.y - q.y); }
+        function line(a, b, attrs) { return '<line x1="' + n(a.x) + '" y1="' + n(a.y) + '" x2="' + n(b.x) + '" y2="' + n(b.y) + '" ' + attrs + '/>'; }
+        function dot(p, r, fill, stroke) { return '<circle cx="' + n(p.x) + '" cy="' + n(p.y) + '" r="' + r + '" fill="' + fill + '"' + (stroke ? ' stroke="' + stroke + '" stroke-width="2"' : '') + '/>'; }
+        function text(x, y, s, cls, anchor) { return '<text x="' + n(x) + '" y="' + n(y) + '" class="' + cls + '" text-anchor="' + (anchor || 'middle') + '">' + s + '</text>'; }
+
+        function compute() {
+            var d = dS.value, a = aS.value * DEG, b = bS.value;
+            var S1 = { x: X0 - b / 2, y: Y0 }, S2 = { x: X0 + b / 2, y: Y0 };
+            var P = { x: X0 - d * Math.tan(a), y: Y0 - d };
+            var L1 = dist(S1, P), L2 = dist(S2, P);
+            var ux = (S2.x - P.x) / L2, uy = (S2.y - P.y) / L2;
+            var Q = { x: P.x + ux * L1, y: P.y + uy * L1 };
+            return { d: d, a: a, b: b, lambda: lS.value, S1: S1, S2: S2, P: P, L1: L1, L2: L2, Q: Q, ds: 2 * b * d * Math.tan(a) / (L1 + L2) };
+        }
+
+        function drawShapes() {
+            var G = geo, s = '', M = { x: X0, y: Y0 };
+            // observation line through P and the centre normal
+            s += line({ x: LEFT, y: G.P.y }, { x: RIGHT, y: G.P.y }, 'stroke="' + T.rule + '" stroke-width="1.5" stroke-dasharray="6 5"');
+            s += line(M, { x: X0, y: G.P.y }, 'stroke="' + T.muted + '" stroke-width="1" stroke-dasharray="4 4"');
+            // barrier with two slits
+            var gap = 4;
+            [[LEFT, G.S1.x - gap], [G.S1.x + gap, G.S2.x - gap], [G.S2.x + gap, RIGHT]].forEach(function (seg) {
+                s += line({ x: seg[0], y: Y0 }, { x: seg[1], y: Y0 }, 'stroke="' + T.ink + '" stroke-width="5"');
+            });
+            // the two paths
+            s += line(G.S1, G.P, 'stroke="' + T.ink2 + '" stroke-width="1.6"');
+            s += line(G.S2, G.P, 'stroke="' + T.ink2 + '" stroke-width="1.6"');
+            // construction arc: circle around P through S1, meeting S2P at Q
+            var cross = (G.S1.x - G.P.x) * (G.Q.y - G.P.y) - (G.S1.y - G.P.y) * (G.Q.x - G.P.x);
+            if (G.ds > 0.05) {
+                s += '<path d="M ' + n(G.S1.x) + ' ' + n(G.S1.y) + ' A ' + n(G.L1) + ' ' + n(G.L1) + ' 0 0 ' + (cross > 0 ? 1 : 0) + ' ' + n(G.Q.x) + ' ' + n(G.Q.y) + '" fill="none" stroke="' + T.muted + '" stroke-width="1.2" stroke-dasharray="3 4"/>';
+                s += line(G.S2, G.Q, 'stroke="' + T.accent + '" stroke-width="5" stroke-linecap="round"');
+                s += text(Math.max(G.S2.x, G.Q.x) + 22, Math.min(G.S2.y, G.Q.y) - 4, 'δs', 'svg-lbl svg-lbl--acc', 'start');
+            }
+            // angle α at the midpoint
+            if (G.a > 0.2 * DEG) {
+                var r = 64, dir = { x: (G.P.x - X0) / dist(G.P, M), y: (G.P.y - Y0) / dist(G.P, M) };
+                var E = { x: X0 + dir.x * r, y: Y0 + dir.y * r };
+                s += '<path d="M ' + X0 + ' ' + (Y0 - r) + ' A ' + r + ' ' + r + ' 0 0 0 ' + n(E.x) + ' ' + n(E.y) + '" fill="none" stroke="' + T.accent + '" stroke-width="1.5"/>';
+                var mid = -Math.PI / 2 - G.a / 2;
+                s += text(X0 + 84 * Math.cos(mid), Y0 + 84 * Math.sin(mid) + 6, 'α', 'svg-lbl svg-lbl--acc');
+            }
+            s += line(M, G.P, 'stroke="' + T.accent + '" stroke-width="1.2" stroke-dasharray="2 3" opacity="0.7"');
+            // dimension b under the barrier
+            s += line({ x: G.S1.x, y: Y0 + 22 }, { x: G.S2.x, y: Y0 + 22 }, 'stroke="' + T.ink3 + '" stroke-width="1"');
+            s += line({ x: G.S1.x, y: Y0 + 16 }, { x: G.S1.x, y: Y0 + 28 }, 'stroke="' + T.ink3 + '" stroke-width="1"');
+            s += line({ x: G.S2.x, y: Y0 + 16 }, { x: G.S2.x, y: Y0 + 28 }, 'stroke="' + T.ink3 + '" stroke-width="1"');
+            s += text(X0, Y0 + 50, 'b', 'svg-lbl');
+            // dimension d at the left
+            s += line({ x: LEFT + 10, y: Y0 }, { x: LEFT + 10, y: G.P.y }, 'stroke="' + T.ink3 + '" stroke-width="1"');
+            s += line({ x: LEFT + 4, y: G.P.y }, { x: LEFT + 16, y: G.P.y }, 'stroke="' + T.ink3 + '" stroke-width="1"');
+            s += line({ x: LEFT + 4, y: Y0 }, { x: LEFT + 16, y: Y0 }, 'stroke="' + T.ink3 + '" stroke-width="1"');
+            s += text(LEFT + 26, (Y0 + G.P.y) / 2 + 6, 'd', 'svg-lbl', 'start');
+            // points and labels
+            s += dot(G.S1, 4, T.accent, T.card) + dot(G.S2, 4, T.accent, T.card) + dot(M, 3, T.ink3);
+            if (G.ds > 0.05) s += dot(G.Q, 3, T.accent);
+            s += dot(G.P, 6, T.accent, T.card);
+            s += text(G.P.x, G.P.y - 16, 'P', 'svg-lbl');
+            s += text(G.S1.x - 20, Y0 + 30, 'S₁', 'svg-lbl');
+            s += text(G.S2.x + 20, Y0 + 30, 'S₂', 'svg-lbl');
+            s += text(RIGHT, G.P.y - 10, 'observation line', 'svg-mono', 'end');
+            gShapes.innerHTML = s;
+        }
+
+        function drawWaves() {
+            var G = geo, lam = G.lambda, s = '<g clip-path="url(#above)">', maxR = 430;
+            [G.S1, G.S2].forEach(function (S) {
+                for (var r = phase * lam; r < maxR; r += lam) {
+                    if (r < 1) continue;
+                    var op = (0.55 * (1 - r / maxR)).toFixed(3);
+                    s += '<path d="M ' + n(S.x - r) + ' ' + Y0 + ' A ' + n(r) + ' ' + n(r) + ' 0 0 1 ' + n(S.x + r) + ' ' + Y0 + '" fill="none" stroke="' + T.rose + '" stroke-width="1.3" opacity="' + op + '"/>';
+                }
+            });
+            s += '</g>';
+            // incoming plane wave below the barrier
+            for (var y = Y0 + (1 - phase) * lam; y < 440; y += lam) {
+                s += line({ x: LEFT, y: y }, { x: RIGHT, y: y }, 'stroke="' + T.rose + '" stroke-width="1.3" opacity="0.5"');
+            }
+            gWaves.innerHTML = s;
+        }
+
+        function drawPattern() {
+            var G = geo, x0 = 56, x1 = 572, yb = 142, yt = 24, amax = 30 * DEG;
+            var X = function (th) { return x0 + (th / amax) * (x1 - x0); };
+            var Y = function (I) { return yb - I * (yb - yt); };
+            var I = function (th) { var c = Math.cos(Math.PI * G.b * Math.sin(th) / G.lambda); return c * c; };
+            /* exact path difference for a point at distance d in direction th */
+            var Iexact = function (th) {
+                var x = G.d * Math.tan(th), l1 = Math.hypot(x - G.b / 2, G.d), l2 = Math.hypot(x + G.b / 2, G.d);
+                var c = Math.cos(Math.PI * (2 * G.b * x / (l1 + l2)) / G.lambda);
+                return c * c;
+            };
+            var s = '', pts = [], ex = [];
+            for (var i = 0; i <= 300; i++) {
+                var th = amax * i / 300;
+                pts.push(n(X(th)) + ' ' + n(Y(I(th))));
+                ex.push(n(X(th)) + ' ' + n(Y(Iexact(th))));
+            }
+            s += line({ x: x0, y: yt }, { x: x1, y: yt }, 'stroke="' + T.ruleSoft + '" stroke-width="1"');
+            s += '<path d="M ' + x0 + ' ' + yb + ' L ' + pts.join(' L ') + ' L ' + x1 + ' ' + yb + ' Z" fill="' + T.rose + '" opacity="0.28"/>';
+            s += '<path d="M ' + pts.join(' L ') + '" fill="none" stroke="' + T.accent + '" stroke-width="2"/>';
+            s += '<path d="M ' + ex.join(' L ') + '" fill="none" stroke="' + T.ink + '" stroke-width="1.3" stroke-dasharray="5 4"/>';
+            s += line({ x: x0, y: yb }, { x: x1, y: yb }, 'stroke="' + T.ink3 + '" stroke-width="1"');
+            for (var dgr = 0; dgr <= 30; dgr += 10) {
+                s += line({ x: X(dgr * DEG), y: yb }, { x: X(dgr * DEG), y: yb + 5 }, 'stroke="' + T.ink3 + '" stroke-width="1"');
+                s += text(X(dgr * DEG), yb + 22, dgr + '°', 'svg-mono');
+            }
+            for (var m = 0; m * G.lambda / G.b <= Math.sin(amax); m++) {
+                var tm = Math.asin(m * G.lambda / G.b);
+                s += text(X(tm), yt - 8, 'm=' + m, 'svg-mono');
+            }
+            s += text(x0 - 10, yt + 5, '1', 'svg-mono', 'end') + text(x0 - 10, yb + 4, '0', 'svg-mono', 'end');
+            var xa = X(G.a);
+            s += line({ x: xa, y: yt }, { x: xa, y: yb }, 'stroke="' + T.ink + '" stroke-width="1.2" stroke-dasharray="4 3"');
+            s += dot({ x: xa, y: Y(Iexact(G.a)) }, 5.5, T.accent, T.card);
+            s += text(xa + (xa > 480 ? -8 : 8), yb - 8, 'α', 'svg-lbl', xa > 480 ? 'end' : 'start');
+            pattern.innerHTML = s;
+        }
+
+        function readouts() {
+            var G = geo, ratio = G.ds / G.lambda, phi = 2 * Math.PI * ratio;
+            document.getElementById('r-l1').textContent = G.L1.toFixed(1) + ' px';
+            document.getElementById('r-l2').textContent = G.L2.toFixed(1) + ' px';
+            document.getElementById('r-ds').textContent = G.ds.toFixed(2) + ' px';
+            document.getElementById('r-ff').textContent = (G.b * Math.sin(G.a)).toFixed(2) + ' px';
+            document.getElementById('r-m').textContent = ratio.toFixed(2);
+            document.getElementById('r-phi').textContent = (phi / Math.PI).toFixed(2) + ' π';
+            document.getElementById('cap-ds').textContent = 'δs = ' + G.ds.toFixed(2) + ' px';
+            var f = ratio - Math.floor(ratio), verdict;
+            if (f < 0.08 || f > 0.92) verdict = 'Constructive · bright fringe, m = ' + Math.round(ratio);
+            else if (Math.abs(f - 0.5) < 0.08) verdict = 'Destructive · dark fringe between m = ' + Math.floor(ratio) + ' and ' + (Math.floor(ratio) + 1);
+            else verdict = 'Partial · I/I₀ = ' + Math.pow(Math.cos(phi / 2), 2).toFixed(2);
+            document.getElementById('verdict').textContent = verdict;
+        }
+
+        function update() {
+            geo = compute();
+            drawShapes();
+            drawWaves();
+            drawPattern();
+            readouts();
+        }
+
+        Sim.live = function () {
+            var G = geo, ratio = G.ds / G.lambda, phi = 2 * Math.PI * ratio, f = ratio - Math.floor(ratio);
+            var ce = Math.cos(Math.PI * G.ds / G.lambda), cf = Math.cos(Math.PI * G.b * Math.sin(G.a) / G.lambda);
+            var ux = (G.S2.x - G.P.x) / G.L2, uy = (G.S2.y - G.P.y) / G.L2, sl = G.lambda / G.b;
+            function pt(q) { return '(' + q.x.toFixed(1) + ', ' + q.y.toFixed(1) + ')'; }
+            return {
+                d: G.d + ' px', a: (G.a / DEG).toFixed(1) + '°', b: G.b + ' px', P: pt(G.P), S1: pt(G.S1),
+                L1: G.L1.toFixed(3) + ' px', L2: G.L2.toFixed(3) + ' px', ds: G.ds.toFixed(4) + ' px',
+                dsid: (G.L2 - G.L1).toFixed(4) + ' px',
+                u: '(' + ux.toFixed(4) + ', ' + uy.toFixed(4) + ')', Q: pt(G.Q), S2Q: dist(G.S2, G.Q).toFixed(4) + ' px',
+                lam: G.lambda.toFixed(1) + ' px', m: ratio.toFixed(4), phi: (phi / Math.PI).toFixed(3) + ' π',
+                I: (ce * ce).toFixed(4), ff: (G.b * Math.sin(G.a)).toFixed(4) + ' px', Iff: (cf * cf).toFixed(4),
+                sinm: sl.toFixed(4), t1: sl <= 1 ? (Math.asin(sl) / DEG).toFixed(2) + '°' : 'none (λ > b)',
+                fr: f.toFixed(3), verdict: document.getElementById('verdict').textContent
+            };
+        };
+
+        var clk = Sim.clock(function (dt) {
+            if (dt > 0) {
+                phase = (phase + dt * 0.8) % 1;
+                drawWaves();
+            }
+        });
+        anim.addEventListener('change', function () { clk.set(anim.checked); });
+
+        update();
+    })();
+    </script>
+</body>
+</html>

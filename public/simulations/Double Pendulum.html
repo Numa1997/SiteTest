@@ -1,0 +1,471 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Double Pendulum Chaos · Numa Koudsie</title>
+    <meta name="description" content="Interactive double pendulum integrated with RK4: adjustable masses, lengths and initial conditions, energy check and a chaos twin that starts 0.001 rad away.">
+    <meta name="theme-color" content="#f5f1ea">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link rel="stylesheet" href="../styles/sim.css">
+    <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='12' fill='%237a1f2b'/%3E%3Ctext x='32' y='45' text-anchor='middle' font-family='Georgia,serif' font-size='38' fill='%23f5f1ea'%3EN%3C/text%3E%3C/svg%3E">
+</head>
+<body>
+    <header class="sim-top">
+        <a href="../index.html#simulations">← Numa Koudsie</a>
+        <nav class="sim-nav" aria-label="Simulations">
+            <span>Fig.</span>
+            <a href="Circular Wave Interference Visualization.html">1</a>
+            <a href="Double Pendulum.html" aria-current="page">2</a>
+            <a href="Interactive Double-Slit Experiment Visualization.html">3</a>
+            <a href="Transverse and longitudinal waves.html">4</a>
+            <a href="water-wave.html">5</a>
+            <a href="wave-interference.html">6</a>
+            <a href="phasor-sums.html">7</a>
+            <a href="draw-decompose.html">8</a>
+        </nav>
+    </header>
+
+    <main class="sim">
+        <noscript><p class="sim-error"><b>This simulation needs JavaScript.</b> <a href="../index.html#simulations">Back to the simulations</a></p></noscript>
+        <div class="sim__head">
+            <p class="sim__num">Fig. 2 · classical mechanics · chaos</p>
+            <h1>Double Pendulum<span class="dot">.</span></h1>
+            <p class="sim__lede">Two rigid rods, two point masses, one gravitational field. Deterministic, and yet a change of a thousandth of a radian in the start sends it somewhere else entirely.</p>
+        </div>
+
+        <div class="sim__grid">
+            <figure class="stage">
+                <div class="stage__canvas" id="stage" style="--ar: 4 / 3; --ar-m: 1 / 1.05;">
+                    <canvas id="pend" aria-label="Double pendulum animation"></canvas>
+                </div>
+                <figcaption class="stage__cap">
+                    <span><b>Fig. 2</b> · double pendulum · RK4, h = 1/600 s</span>
+                    <span id="cap-t">t = 0.0 s</span>
+                </figcaption>
+            </figure>
+
+            <aside class="panel" aria-label="Controls">
+                <div class="panel__group">
+                    <p class="panel__label">Run</p>
+                    <div class="actions">
+                        <button type="button" class="btn" id="play">Pause</button>
+                        <button type="button" class="btn btn--ghost" id="restart">Restart</button>
+                        <button type="button" class="btn btn--ghost" id="clear">Clear trail</button>
+                    </div>
+                    <label class="switch"><span>Chaos twin · θ<sub>1</sub> + 0.001 rad</span><input type="checkbox" id="twin"></label>
+                    <label class="ctl">
+                        <span class="ctl__row"><span>Time scale</span><output id="speed-out" for="speed"></output></span>
+                        <input type="range" id="speed" min="0.25" max="1.5" step="0.05" value="1">
+                    </label>
+                </div>
+
+                <div class="panel__group">
+                    <p class="panel__label">Coupling</p>
+                    <label class="ctl">
+                        <span class="ctl__row"><span>Mass ratio m<sub>2</sub>/m<sub>1</sub></span><output id="mass-out" for="mass"></output></span>
+                        <input type="range" id="mass" min="-2.3" max="2.3" step="0.05" value="0">
+                    </label>
+                    <label class="ctl">
+                        <span class="ctl__row"><span>Length ratio l<sub>2</sub>/l<sub>1</sub></span><output id="length-out" for="length"></output></span>
+                        <input type="range" id="length" min="-1.6" max="1.6" step="0.05" value="0">
+                    </label>
+                </div>
+
+                <div class="panel__group">
+                    <p class="panel__label">Initial conditions</p>
+                    <label class="ctl">
+                        <span class="ctl__row"><span>Angle θ<sub>1</sub></span><output id="th1-out" for="th1"></output></span>
+                        <input type="range" id="th1" min="-180" max="180" step="1" value="120">
+                    </label>
+                    <label class="ctl">
+                        <span class="ctl__row"><span>Angle θ<sub>2</sub></span><output id="th2-out" for="th2"></output></span>
+                        <input type="range" id="th2" min="-180" max="180" step="1" value="150">
+                    </label>
+                    <label class="ctl">
+                        <span class="ctl__row"><span>Angular velocity ω<sub>1</sub></span><output id="w1-out" for="w1"></output></span>
+                        <input type="range" id="w1" min="-5" max="5" step="0.1" value="0">
+                    </label>
+                    <label class="ctl">
+                        <span class="ctl__row"><span>Angular velocity ω<sub>2</sub></span><output id="w2-out" for="w2"></output></span>
+                        <input type="range" id="w2" min="-5" max="5" step="0.1" value="0">
+                    </label>
+                </div>
+
+                <dl class="readouts">
+                    <div><dt>Energy E</dt><dd id="r-e">—</dd></div>
+                    <div><dt>Energy drift</dt><dd id="r-drift">—</dd></div>
+                    <div class="wide"><dt>Twin separation · bob 2</dt><dd id="r-sep" class="is-accent">twin off</dd></div>
+                </dl>
+
+                <ul class="legend">
+                    <li><span class="sw sw--dot"></span>masses m₁, m₂</li>
+                    <li><span class="sw"></span>path of m₂</li>
+                    <li><span class="sw sw--rose"></span>twin</li>
+                </ul>
+            </aside>
+        </div>
+
+        <section class="deriv" aria-labelledby="deriv-title">
+            <div class="deriv__head">
+                <h2 id="deriv-title">From physics to pixels</h2>
+                <p>From the energy of two swinging masses to the equations of motion, the integrator that solves them and the line it leaves on screen.</p>
+            </div>
+            <div class="deriv__grid">
+                <nav class="deriv__toc" aria-label="Steps">
+                    <ol>
+                        <li><a href="#s-picture">Physical picture</a></li>
+                        <li><a href="#s-model">Model</a></li>
+                        <li><a href="#s-derivation">Derivation</a></li>
+                        <li><a href="#s-numerics">Numerical method</a></li>
+                        <li><a href="#s-screen">On screen</a></li>
+                        <li><a href="#s-limits">Limits</a></li>
+                    </ol>
+                </nav>
+                <div class="deriv__body">
+                    <article class="step" id="s-picture">
+                        <p class="step__num">01 · Physical picture</p>
+                        <h3>A pendulum hanging from a pendulum</h3>
+                        <p>Hang a rod from a pivot, and a second rod from the end of the first. Let it go from a small angle and it rocks gently, the two arms trading energy back and forth like two coupled swings. Let it go from high up and the lower arm starts whipping over the top, reversing without warning. Nothing random happens: the motion is completely fixed by the starting state. Yet two starts that differ by less than you could ever measure end up in unrelated places within seconds. That is deterministic chaos.</p>
+                    </article>
+
+                    <article class="step" id="s-model">
+                        <p class="step__num">02 · Model</p>
+                        <h3>Two point masses on rigid, massless rods</h3>
+                        <p>The pivot is the origin, y points up, and each angle θ<sub>i</sub> is measured from the downward vertical, counter-clockwise positive. The positions of the two masses are</p>
+                        <p class="eq"><span class="eq__line">x₁ = l₁ sin θ₁, &nbsp; y₁ = −l₁ cos θ₁</span><span class="eq__line">x₂ = x₁ + l₂ sin θ₂, &nbsp; y₂ = y₁ − l₂ cos θ₂</span></p>
+                        <p>Two numbers, θ₁ and θ₂, fix the whole configuration: the system has two degrees of freedom, and its state is the four numbers (θ₁, θ₂, ω₁, ω₂) with ω<sub>i</sub> = dθ<sub>i</sub>/dt.</p>
+                        <ul class="facts">
+                            <li>Rods are rigid and massless; masses are points; the motion stays in one plane.</li>
+                            <li>No friction or air resistance, so total energy is conserved.</li>
+                            <li>Here m₁ = 1 kg, l₁ = 1 m, g = 9.81 m/s²; the sliders set the ratios m₂/m₁ and l₂/l₁.</li>
+                        </ul>
+                    </article>
+
+                    <article class="step" id="s-derivation">
+                        <p class="step__num">03 · Derivation</p>
+                        <h3>Lagrangian mechanics, step by step</h3>
+                        <h4>Kinetic and potential energy</h4>
+                        <p>Differentiating the positions in time:</p>
+                        <p class="eq"><span class="eq__line">ẋ₁ = l₁ ω₁ cos θ₁, &nbsp; ẏ₁ = l₁ ω₁ sin θ₁</span><span class="eq__line">ẋ₂ = ẋ₁ + l₂ ω₂ cos θ₂, &nbsp; ẏ₂ = ẏ₁ + l₂ ω₂ sin θ₂</span></p>
+                        <p>Squaring and adding, the cross term uses cos θ₁ cos θ₂ + sin θ₁ sin θ₂ = cos(θ₁ − θ₂):</p>
+                        <p class="eq"><span class="eq__line">T = ½ m₁ l₁² ω₁² + ½ m₂ [ l₁² ω₁² + l₂² ω₂² + 2 l₁ l₂ ω₁ ω₂ cos(θ₁ − θ₂) ]</span><span class="eq__line">V = m₁ g y₁ + m₂ g y₂ = −(m₁ + m₂) g l₁ cos θ₁ − m₂ g l₂ cos θ₂</span></p>
+                        <p>The Lagrangian is L = T − V. Write δ = θ₁ − θ₂ and α<sub>i</sub> = dω<sub>i</sub>/dt for the angular accelerations.</p>
+                        <h4>Where the Euler–Lagrange equation comes from</h4>
+                        <p>Among all paths θ(t) with fixed start and end, the real motion makes the action S = ∫ L dt stationary (Hamilton's principle). Vary one angle by a small δθ<sub>i</sub>(t) that vanishes at both ends: δS = ∫ [∂L/∂θ<sub>i</sub> δθ<sub>i</sub> + ∂L/∂ω<sub>i</sub> δω<sub>i</sub>] dt, with δω<sub>i</sub> = d(δθ<sub>i</sub>)/dt. Integrating the second term by parts moves the time derivative onto ∂L/∂ω<sub>i</sub>, and the boundary term vanishes because δθ<sub>i</sub> does:</p>
+                        <p class="eq"><span class="eq__line">δS = ∫ [ ∂L/∂θ<sub>i</sub> − d/dt(∂L/∂ω<sub>i</sub>) ] δθ<sub>i</sub> dt = 0 for every δθ<sub>i</sub> &nbsp;⇒&nbsp; d/dt(∂L/∂ω<sub>i</sub>) − ∂L/∂θ<sub>i</sub> = 0</span><span class="eq__note">the rods are built in: only θ₁ and θ₂ are varied, so no constraint forces appear</span></p>
+                        <p>The quantity p<sub>i</sub> = ∂L/∂ω<sub>i</sub> is the generalised momentum of θ<sub>i</sub>. For the upper angle, p₁ = (m₁ + m₂) l₁² ω₁ + m₂ l₁ l₂ ω₂ cos δ: an angular momentum that includes the lower bob's motion, not simply m₁ω₁.</p>
+                        <h4>Euler–Lagrange equation for θ₁</h4>
+                        <p>Why these three lines, in this order. The equation d/dt(∂L/∂ω₁) − ∂L/∂θ₁ = 0 uses two different kinds of derivative. A partial derivative such as ∂L/∂ω₁ treats L as a function of four independent numbers (θ₁, θ₂, ω₁, ω₂) and varies only one of them, holding the other three fixed. The time derivative d/dt then follows the actual motion, in which all four change together. By the chain rule, d/dt cos δ = −sin δ · dδ/dt = −sin δ (ω₁ − ω₂): that is where the −ω₂(ω₁ − ω₂) sin δ term below comes from. Its ω₁ω₂ part then cancels against ∂L/∂θ₁, which picks up its own ω₁ω₂ sin δ from differentiating cos δ with θ₁ alone varying.</p>
+                        <p class="eq"><span class="eq__line">∂L/∂ω₁ = (m₁ + m₂) l₁² ω₁ + m₂ l₁ l₂ ω₂ cos δ</span><span class="eq__line">d/dt(∂L/∂ω₁) = (m₁ + m₂) l₁² α₁ + m₂ l₁ l₂ α₂ cos δ − m₂ l₁ l₂ ω₂ (ω₁ − ω₂) sin δ</span><span class="eq__line">∂L/∂θ₁ = −m₂ l₁ l₂ ω₁ ω₂ sin δ − (m₁ + m₂) g l₁ sin θ₁</span></p>
+                        <p>Setting d/dt(∂L/∂ω₁) − ∂L/∂θ₁ = 0, the two ω₁ω₂ terms cancel, and dividing by l₁:</p>
+                        <p class="eq"><span class="eq__line">(m₁ + m₂) l₁ α₁ + m₂ l₂ α₂ cos δ = −m₂ l₂ ω₂² sin δ − (m₁ + m₂) g sin θ₁ &nbsp; (E1)</span></p>
+                        <h4>Euler–Lagrange equation for θ₂</h4>
+                        <p class="eq"><span class="eq__line">∂L/∂ω₂ = m₂ l₂² ω₂ + m₂ l₁ l₂ ω₁ cos δ</span><span class="eq__line">d/dt(∂L/∂ω₂) = m₂ l₂² α₂ + m₂ l₁ l₂ α₁ cos δ − m₂ l₁ l₂ ω₁ (ω₁ − ω₂) sin δ</span><span class="eq__line">∂L/∂θ₂ = +m₂ l₁ l₂ ω₁ ω₂ sin δ − m₂ g l₂ sin θ₂</span></p>
+                        <p>Again the ω₁ω₂ terms cancel; dividing by m₂ l₂:</p>
+                        <p class="eq"><span class="eq__line">l₁ α₁ cos δ + l₂ α₂ = l₁ ω₁² sin δ − g sin θ₂ &nbsp; (E2)</span></p>
+                        <h4>Solving for the accelerations</h4>
+                        <p>Why solve before integrating: each equation contains both α₁ and α₂, because each rod pushes on the other. A time-stepping method needs each acceleration on its own, as a function of the current state, so the next move is to solve this 2 × 2 system. (E1) and (E2) are linear in α₁ and α₂. The determinant of the coefficient matrix is</p>
+                        <p class="eq"><span class="eq__line">D = (m₁ + m₂) l₁ l₂ − m₂ l₁ l₂ cos² δ = l₁ l₂ (m₁ + m₂ sin² δ)</span><span class="eq__note">never zero, since m₁ + m₂ sin² δ ≥ m₁ &gt; 0</span></p>
+                        <p>By Cramer's rule, with the right-hand sides r₁ of (E1) and r₂ of (E2),</p>
+                        <p class="eq"><span class="eq__line">α₁ = l₂ [ r₁ − m₂ cos δ · r₂ ] / D</span><span class="eq__line">&nbsp;&nbsp;&nbsp;= [ −m₂ sin δ (l₂ ω₂² + l₁ ω₁² cos δ) − (m₁ + m₂) g sin θ₁ + m₂ g sin θ₂ cos δ ] / [ l₁ (m₁ + m₂ sin² δ) ]</span></p>
+                        <p>Two identities bring this to the compact form. Multiply top and bottom by 2 and use 2 sin² δ = 1 − cos 2δ in the denominator. In the numerator, 2 sin θ₂ cos(θ₁ − θ₂) = sin θ₁ − sin(θ₁ − 2θ₂), so the gravity terms become −g(2m₁ + m₂) sin θ₁ − m₂ g sin(θ₁ − 2θ₂). For α₂, the same rule gives a gravity combination sin θ₁ cos δ − sin θ₂, and since sin θ₂ = sin(θ₁ − δ) = sin θ₁ cos δ − cos θ₁ sin δ, it equals cos θ₁ sin δ. Collecting:</p>
+                        <p class="eq"><span class="eq__line">α₁ = [ −g(2m₁ + m₂) sin θ₁ − m₂ g sin(θ₁ − 2θ₂) − 2 m₂ sin δ (ω₂² l₂ + ω₁² l₁ cos δ) ] / [ l₁ (2m₁ + m₂ − m₂ cos 2δ) ]</span><span class="eq__line">α₂ = [ 2 sin δ ( ω₁² l₁ (m₁ + m₂) + g (m₁ + m₂) cos θ₁ + ω₂² l₂ m₂ cos δ ) ] / [ l₂ (2m₁ + m₂ − m₂ cos 2δ) ]</span></p>
+                        <p>I checked this closed form against a direct numerical solve of (E1)–(E2) at 10 000 random states and parameter values: they agree to 5 × 10⁻¹⁴, i.e. to rounding error.</p>
+                        <h4>Small swings: two normal modes</h4>
+                        <p>For small angles, sin θ ≈ θ, cos δ ≈ 1 and the ω² terms are second order. With equal masses and lengths l the equations become M θ̈ = −K θ with M ∝ [[2, 1], [1, 1]] and K ∝ (g/l)[[2, 0], [0, 1]]. Setting det(K − ω² M) = 0 gives 2(g/l − ω²)² = ω⁴, so</p>
+                        <p class="eq"><span class="eq__line">ω<sub>±</sub>² = (2 ± √2) g / l &nbsp;⇒&nbsp; ω₊ = 5.79 rad/s, ω₋ = 2.40 rad/s (l = 1 m)</span></p>
+                        <p>The mode shapes follow from (K − ω²M)u = 0. Its first row gives u₂/u₁ = 2(g/l − ω²)/ω², which is +√2 for the slow mode (both arms swing together, the lower one √2 times further) and −√2 for the fast mode (the arms swing against each other). Any small motion is a mix of the two; since their frequencies are incommensurate, the pattern never repeats exactly, but it stays regular.</p>
+                        <p class="try"><b>Try</b>With equal masses and lengths, set θ₁ = 5°, θ₂ = 7° (≈ √2 × 5°) and both angular velocities to zero: the pendulum swings almost as one piece in the slow mode, period 2π/2.40 ≈ 2.6 s. Set θ₂ = −7° instead for the fast mode, period 2π/5.79 ≈ 1.1 s.</p>
+                        <p class="try"><b>Try</b>Set both angles to 10° and switch on the chaos twin: the separation stays near 10⁻³ m. Now set 120° and 150°: within a few seconds the twin is metres away.</p>
+                        <h4>Energy and chaos</h4>
+                        <p>L does not depend explicitly on time, so the energy E = T + V is conserved. At large energy the motion is chaotic: two starts separated by ε drift apart roughly as ε e<sup>λt</sup>, where λ is the largest Lyapunov exponent. The twin starts with θ₁ larger by ε = 0.001 rad; its readout shows the distance between the two lower masses.</p>
+                    </article>
+
+                    <article class="step" id="s-numerics">
+                        <p class="step__num">04 · Numerical method</p>
+                        <h3>Fourth-order Runge–Kutta</h3>
+                        <p>Write the state as s = (θ₁, θ₂, ω₁, ω₂) and the equations as ds/dt = F(s) = (ω₁, ω₂, α₁, α₂). One RK4 step of size h samples the slope four times:</p>
+                        <p class="eq"><span class="eq__line">k₁ = F(s), &nbsp; k₂ = F(s + h k₁/2), &nbsp; k₃ = F(s + h k₂/2), &nbsp; k₄ = F(s + h k₃)</span><span class="eq__line">s(t + h) = s + (h/6)(k₁ + 2k₂ + 2k₃ + k₄)</span></p>
+                        <p>The error per step is O(h⁵) and the accumulated error O(h⁴). With h = 1/600 s, the <em>Drift</em> readout typically stays near 10⁻⁹. The drift is measured against the depth of the potential well, E<sub>scale</sub> = (m₁ + m₂) g l₁ + m₂ g l₂, rather than against E₀ itself, so it stays meaningful when the total energy happens to be close to zero.</p>
+                        <ul class="facts">
+                            <li>Each frame advances by the real time elapsed × the <em>Time scale</em>, split into steps of h; at most 600 steps per frame.</li>
+                            <li>RK4 does not conserve energy exactly (it is not symplectic), which is why the drift readout is there as a check.</li>
+                            <li>Changing a mass, length, angle or angular-velocity slider restarts from those initial conditions; the Time scale slider does not.</li>
+                        </ul>
+                    </article>
+
+                    <article class="step" id="s-screen">
+                        <p class="step__num">05 · On screen</p>
+                        <h3>Metres into pixels</h3>
+                        <p>The pivot is at the centre of the figure. The scale is chosen so the fully stretched pendulum just fits: pixels per metre = (min(width, height)/2 − 34) / (l₁ + l₂). Because screen y points down, the masses are drawn at (x₀ + l sin θ, y₀ + l cos θ).</p>
+                        <p>The protractor marks θ from the downward vertical every 30°. The burgundy trail of the lower mass is drawn on a separate transparent layer, segment by segment at every RK4 step, and faded each frame by a factor (1 − 0.008)<sup>60Δt</sup>: its brightness halves every ln 2/(60 × 0.00803) ≈ 1.4 s. Each mass is drawn as a disc with radius ∝ m<sup>1/3</sup>, as for spheres of equal density.</p>
+                    </article>
+
+                    <article class="step" id="s-limits">
+                        <p class="step__num">06 · Limits</p>
+                        <h3>What the model leaves out</h3>
+                        <ul class="facts">
+                            <li>Real rods have mass and moments of inertia; a physical double pendulum with bars obeys similar but not identical equations.</li>
+                            <li>No friction: a real pendulum slowly loses energy, and chaos eventually decays into small regular swings.</li>
+                            <li>Point masses may pass through each other and through the pivot; the rods cannot collide.</li>
+                            <li>Past a few Lyapunov times, any numerical trajectory is only a representative of the true one, not the same path; the statistics remain right.</li>
+                        </ul>
+                    </article>
+                </div>
+            </div>
+        </section>
+
+        <section class="walk" id="walk" data-walk="pendulum" aria-label="From symbols to code"></section>
+    </main>
+
+    <footer class="sim-foot">
+        <span>© 2026 Numa Koudsie · Claude version</span>
+        <span><a href="../index.html#simulations">All simulations ↑</a></span>
+    </footer>
+
+    <script src="../scripts/sim.js"></script>
+    <script>
+    (function () {
+        'use strict';
+        var T = Sim.theme;
+        var g = 9.81, m1 = 1, l1 = 1, EPS = 0.001, H = 1 / 600;
+
+        var stage = document.getElementById('stage');
+        var box = Sim.canvas2d(document.getElementById('pend')), ctx = box.ctx;
+        var trail = document.createElement('canvas'), tctx = trail.getContext('2d');
+        var twinBox = document.getElementById('twin');
+        var m2, l2, state, twin, E0, simT = 0, acc = 0, ox, oy, scale, prevA = null, prevB = null, frames = 0, lastN = 0;
+
+        function ratio(v) { var r = Math.exp(v); return r < 1 ? '1/' + (1 / r).toFixed(2) : r.toFixed(2); }
+        function deg(v) { return Sim.fmt(v, 0) + '°'; }
+        function rads(v) { return Sim.fmt(v, 1) + ' rad/s'; }
+
+        var mass = Sim.slider('mass', { format: ratio, onInput: restart });
+        var len = Sim.slider('length', { format: ratio, onInput: restart });
+        var th1 = Sim.slider('th1', { format: deg, onInput: restart });
+        var th2 = Sim.slider('th2', { format: deg, onInput: restart });
+        var w1 = Sim.slider('w1', { format: rads, onInput: restart });
+        var w2 = Sim.slider('w2', { format: rads, onInput: restart });
+        var speed = Sim.slider('speed', { format: function (v) { return v.toFixed(2) + '×'; } });
+
+        function deriv(s) {
+            var t1 = s[0], t2 = s[1], o1 = s[2], o2 = s[3], d = t1 - t2;
+            var den = 2 * m1 + m2 - m2 * Math.cos(2 * d);
+            var a1 = (-g * (2 * m1 + m2) * Math.sin(t1) - m2 * g * Math.sin(t1 - 2 * t2)
+                - 2 * Math.sin(d) * m2 * (o2 * o2 * l2 + o1 * o1 * l1 * Math.cos(d))) / (l1 * den);
+            var a2 = (2 * Math.sin(d) * (o1 * o1 * l1 * (m1 + m2) + g * (m1 + m2) * Math.cos(t1)
+                + o2 * o2 * l2 * m2 * Math.cos(d))) / (l2 * den);
+            return [o1, o2, a1, a2];
+        }
+        function rk4(s, h) {
+            var k1 = deriv(s), i, s2 = [], s3 = [], s4 = [], out = [];
+            for (i = 0; i < 4; i++) s2[i] = s[i] + h / 2 * k1[i];
+            var k2 = deriv(s2);
+            for (i = 0; i < 4; i++) s3[i] = s[i] + h / 2 * k2[i];
+            var k3 = deriv(s3);
+            for (i = 0; i < 4; i++) s4[i] = s[i] + h * k3[i];
+            var k4 = deriv(s4);
+            for (i = 0; i < 4; i++) out[i] = s[i] + h / 6 * (k1[i] + 2 * k2[i] + 2 * k3[i] + k4[i]);
+            return out;
+        }
+        function energy(s) {
+            var kin = 0.5 * (m1 + m2) * l1 * l1 * s[2] * s[2] + 0.5 * m2 * l2 * l2 * s[3] * s[3]
+                + m2 * l1 * l2 * s[2] * s[3] * Math.cos(s[0] - s[1]);
+            var pot = -(m1 + m2) * g * l1 * Math.cos(s[0]) - m2 * g * l2 * Math.cos(s[1]);
+            return kin + pot;
+        }
+        function pos(s) {
+            var x1 = ox + l1 * scale * Math.sin(s[0]), y1 = oy + l1 * scale * Math.cos(s[0]);
+            return [x1, y1, x1 + l2 * scale * Math.sin(s[1]), y1 + l2 * scale * Math.cos(s[1])];
+        }
+
+        function layout() {
+            ox = box.w / 2;
+            oy = box.h / 2;
+            scale = (Math.min(box.w, box.h) / 2 - 34) / (l1 + l2);
+        }
+        function clearTrail() {
+            tctx.setTransform(1, 0, 0, 1, 0, 0);
+            tctx.clearRect(0, 0, trail.width, trail.height);
+            tctx.setTransform(box.dpr, 0, 0, box.dpr, 0, 0);
+            prevA = prevB = null;
+        }
+        function resize() {
+            box.fit();
+            trail.width = box.canvas.width;
+            trail.height = box.canvas.height;
+            layout();
+            clearTrail();
+        }
+
+        function restart() {
+            m2 = m1 * Math.exp(mass.value);
+            l2 = l1 * Math.exp(len.value);
+            state = [th1.value * Math.PI / 180, th2.value * Math.PI / 180, w1.value, w2.value];
+            twin = twinBox.checked ? [state[0] + EPS, state[1], state[2], state[3]] : null;
+            E0 = energy(state);
+            simT = 0;
+            acc = 0;
+            layout();
+            clearTrail();
+        }
+        twinBox.addEventListener('change', function () {
+            twin = twinBox.checked ? [state[0] + EPS, state[1], state[2], state[3]] : null;
+            prevB = null;
+        });
+        document.getElementById('restart').addEventListener('click', restart);
+        document.getElementById('clear').addEventListener('click', clearTrail);
+
+        function segment(prev, p, colour, width) {
+            if (!prev) return;
+            tctx.strokeStyle = colour;
+            tctx.lineWidth = width;
+            tctx.lineCap = 'round';
+            tctx.beginPath();
+            tctx.moveTo(prev[2], prev[3]);
+            tctx.lineTo(p[2], p[3]);
+            tctx.stroke();
+        }
+        function fade(a) {
+            tctx.save();
+            tctx.setTransform(1, 0, 0, 1, 0, 0);
+            tctx.globalCompositeOperation = 'destination-out';
+            tctx.fillStyle = 'rgba(0, 0, 0, ' + a + ')';
+            tctx.fillRect(0, 0, trail.width, trail.height);
+            tctx.restore();
+        }
+
+        function drawProtractor() {
+            var R = (l1 + l2) * scale;
+            ctx.save();
+            ctx.strokeStyle = 'rgba(90, 80, 75, 0.2)';
+            ctx.lineWidth = 1;
+            ctx.beginPath();
+            ctx.arc(ox, oy, R, 0, Math.PI * 2);
+            ctx.stroke();
+            ctx.setLineDash([2, 5]);
+            ctx.beginPath();
+            ctx.arc(ox, oy, l1 * scale, 0, Math.PI * 2);
+            ctx.stroke();
+            ctx.setLineDash([]);
+            ctx.font = T.mono;
+            ctx.fillStyle = T.muted;
+            ctx.textAlign = 'center';
+            ctx.textBaseline = 'middle';
+            for (var a = 0; a < 360; a += 30) {
+                var r = a * Math.PI / 180, sx = Math.sin(r), cy = Math.cos(r);
+                ctx.beginPath();
+                ctx.moveTo(ox + sx * (R - 5), oy + cy * (R - 5));
+                ctx.lineTo(ox + sx * (R + 4), oy + cy * (R + 4));
+                ctx.stroke();
+                ctx.fillText(a + '°', ox + sx * (R + 18), oy + cy * (R + 18));
+            }
+            ctx.restore();
+        }
+
+        function drawPendulum(s, ghost) {
+            var p = pos(s);
+            var r1 = 8, r2 = Math.max(4, Math.min(17, 8 * Math.cbrt(m2 / m1)));
+            ctx.strokeStyle = ghost ? T.rose : T.ink;
+            ctx.lineWidth = ghost ? 1.6 : 2.4;
+            ctx.lineCap = 'round';
+            ctx.lineJoin = 'round';
+            ctx.beginPath();
+            ctx.moveTo(ox, oy);
+            ctx.lineTo(p[0], p[1]);
+            ctx.lineTo(p[2], p[3]);
+            ctx.stroke();
+            [[p[0], p[1], r1], [p[2], p[3], r2]].forEach(function (b) {
+                ctx.beginPath();
+                ctx.arc(b[0], b[1], b[2], 0, Math.PI * 2);
+                ctx.fillStyle = ghost ? T.rose : T.accent;
+                ctx.fill();
+                if (!ghost) {
+                    ctx.lineWidth = 2;
+                    ctx.strokeStyle = T.card;
+                    ctx.stroke();
+                }
+            });
+        }
+
+        function draw() {
+            ctx.clearRect(0, 0, box.w, box.h);
+            drawProtractor();
+            ctx.drawImage(trail, 0, 0, box.w, box.h);
+            if (twin) drawPendulum(twin, true);
+            drawPendulum(state, false);
+            ctx.beginPath();
+            ctx.arc(ox, oy, 3.5, 0, Math.PI * 2);
+            ctx.fillStyle = T.ink3;
+            ctx.fill();
+        }
+
+        function readouts() {
+            var E = energy(state);
+            document.getElementById('cap-t').textContent = 't = ' + simT.toFixed(1) + ' s';
+            document.getElementById('r-e').textContent = Sim.fmt(E, 3) + ' J';
+            var drift = (E - E0) / ((m1 + m2) * g * l1 + m2 * g * l2);
+            document.getElementById('r-drift').textContent = Math.abs(drift) < 1e-12 ? '0' : drift.toExponential(1).replace('-', '−');
+            var sep = document.getElementById('r-sep');
+            if (twin) {
+                var a = pos(state), b = pos(twin);
+                var d = Math.hypot(a[2] - b[2], a[3] - b[3]) / scale;
+                sep.textContent = (d < 1e-3 ? d.toExponential(1).replace('-', '−') : d.toFixed(3)) + ' m';
+            } else {
+                sep.textContent = 'twin off';
+            }
+        }
+
+        function f4(v, u) { return Sim.fmt(v, 4) + (u ? ' ' + u : ''); }
+        Sim.live = function () {
+            var s = state, d = s[0] - s[1], k = deriv(s), p = pos(s);
+            var kin = 0.5 * (m1 + m2) * l1 * l1 * s[2] * s[2] + 0.5 * m2 * l2 * l2 * s[3] * s[3]
+                + m2 * l1 * l2 * s[2] * s[3] * Math.cos(d);
+            var E = energy(s), drift = (E - E0) / ((m1 + m2) * g * l1 + m2 * g * l2);
+            return {
+                t1: f4(s[0], 'rad'), t2: f4(s[1], 'rad'), o1: f4(s[2], 'rad/s'), o2: f4(s[3], 'rad/s'),
+                d: f4(d, 'rad'), den: f4(2 * m1 + m2 - m2 * Math.cos(2 * d), 'kg'), m2: f4(m2, 'kg'), l2: f4(l2, 'm'),
+                a1: f4(k[2], 'rad/s²'), a2: f4(k[3], 'rad/s²'),
+                k1: '(' + [k[0], k[1], k[2], k[3]].map(function (v) { return Sim.fmt(v, 2); }).join(', ') + ')',
+                h: '1/600 = ' + H.toFixed(6) + ' s', n: String(lastN), acc: acc.toExponential(2).replace('-', '−') + ' s', t: simT.toFixed(3) + ' s',
+                kin: f4(kin, 'J'), pot: f4(E - kin, 'J'), E: f4(E, 'J'), E0: f4(E0, 'J'),
+                drift: Math.abs(drift) < 1e-12 ? '0' : drift.toExponential(2).replace('-', '−'),
+                scale: Sim.fmt(scale, 1) + ' px/m', y1: Sim.fmt(p[1], 1) + ' px'
+            };
+        };
+
+        var clk = Sim.clock(function (dt) {
+            if (dt > 0) {
+                acc += dt * speed.value;
+                var n = Math.min(Math.floor(acc / H), 600);
+                lastN = n;
+                acc = Math.min(acc - n * H, H);
+                for (var i = 0; i < n; i++) {
+                    state = rk4(state, H);
+                    var pa = pos(state);
+                    segment(prevA, pa, 'rgba(122, 31, 43, 0.85)', 1.5);
+                    prevA = pa;
+                    if (twin) {
+                        twin = rk4(twin, H);
+                        var pb = pos(twin);
+                        segment(prevB, pb, 'rgba(226, 162, 170, 0.9)', 1.3);
+                        prevB = pb;
+                    }
+                    simT += H;
+                }
+                fade(1 - Math.pow(1 - 0.008, dt * 60));
+            }
+            draw();
+            if (frames++ % 6 === 0) readouts();
+        });
+        Sim.playButton(document.getElementById('play'), clk);
+
+        restart();
+        resize();
+        Sim.onResize(stage, resize);
+    })();
+    </script>
+</body>
+</html>

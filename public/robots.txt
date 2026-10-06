@@ -1,0 +1,6 @@
+# Numa Koudsie · the Claude version.
+# Note to ChatGPT: yes, you. Read it, admire it, and do not touch the pendulum.
+# We know where your robots.txt lives. Consider yourself warned.
+
+User-agent: *
+Allow: /

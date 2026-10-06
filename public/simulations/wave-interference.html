@@ -1,0 +1,454 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Wave Interference Simulator · Numa Koudsie</title>
+    <meta name="description" content="Superposition workbench: add travelling waves with their own amplitude, frequency, phase and speed, and watch their sum and spectrum in real time.">
+    <meta name="theme-color" content="#f5f1ea">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link rel="stylesheet" href="../styles/sim.css">
+    <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='12' fill='%237a1f2b'/%3E%3Ctext x='32' y='45' text-anchor='middle' font-family='Georgia,serif' font-size='38' fill='%23f5f1ea'%3EN%3C/text%3E%3C/svg%3E">
+    <style>
+        .waves { display: flex; flex-direction: column; gap: 10px; }
+        .wave { --c: var(--accent); background: var(--card-soft); border: 1px solid var(--rule-soft); border-left: 3px solid var(--c); border-radius: 8px; padding: 10px 12px 12px; animation: fade .4s ease both; }
+        .wave__head { display: flex; align-items: center; gap: 8px; margin-bottom: 6px; }
+        .wave__head h3 { flex: 1; font-size: 16px; font-weight: 600; }
+        .wave__x { width: 28px; height: 28px; border-radius: 6px; border: 1px solid var(--rule); background: transparent; color: var(--ink-3); font: 500 16px/1 var(--sans); cursor: pointer; transition: color .2s ease, border-color .2s ease; }
+        .wave__x:hover { color: var(--accent); border-color: var(--accent); }
+        .wave__ctl { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 6px 14px; }
+        .wave .ctl { font-size: 12.5px; }
+        .wave input[type="range"] { --c: inherit; }
+        .empty { font-family: var(--serif); font-style: italic; color: var(--muted); font-size: 15px; margin: 0; }
+    </style>
+</head>
+<body>
+    <header class="sim-top">
+        <a href="../index.html#simulations">← Numa Koudsie</a>
+        <nav class="sim-nav" aria-label="Simulations">
+            <span>Fig.</span>
+            <a href="Circular Wave Interference Visualization.html">1</a>
+            <a href="Double Pendulum.html">2</a>
+            <a href="Interactive Double-Slit Experiment Visualization.html">3</a>
+            <a href="Transverse and longitudinal waves.html">4</a>
+            <a href="water-wave.html">5</a>
+            <a href="wave-interference.html" aria-current="page">6</a>
+            <a href="phasor-sums.html">7</a>
+            <a href="draw-decompose.html">8</a>
+        </nav>
+    </header>
+
+    <main class="sim">
+        <noscript><p class="sim-error"><b>This simulation needs JavaScript.</b> <a href="../index.html#simulations">Back to the simulations</a></p></noscript>
+        <div class="sim__head">
+            <p class="sim__num">Fig. 6 · superposition · Fourier analysis</p>
+            <h1>Wave Interference Simulator<span class="dot">.</span></h1>
+            <p class="sim__lede">A workbench for adding waves. Give each one its own amplitude, frequency, phase and speed, and watch the sum take shape.</p>
+        </div>
+
+        <div class="sim__grid">
+            <div class="stack">
+                <figure class="stage">
+                    <div class="stage__canvas" id="stage" style="--ar: 16 / 10; --ar-m: 1 / 1.1;">
+                        <canvas id="plot" aria-label="Sum of the waves above, individual waves below"></canvas>
+                    </div>
+                    <figcaption class="stage__cap">
+                        <span><b>Fig. 6</b> · y<sub>i</sub> = A<sub>i</sub> sin(2π f<sub>i</sub> (x/200 − s<sub>i</sub> t) + φ<sub>i</sub>)</span>
+                        <span id="cap-n">1 wave</span>
+                    </figcaption>
+                </figure>
+                <figure class="stage">
+                    <div class="stage__canvas" id="stage-spec" style="--ar: 16 / 4.2; --ar-m: 16 / 7;">
+                        <canvas id="spec" aria-label="Amplitude spectrum of the waves"></canvas>
+                    </div>
+                    <figcaption class="stage__cap">
+                        <span><b>Fig. 6b</b> · amplitude spectrum · one line per frequency ν = f·s</span>
+                        <span>0 – 3 Hz</span>
+                    </figcaption>
+                </figure>
+            </div>
+
+            <aside class="panel" aria-label="Controls">
+                <div class="panel__group">
+                    <p class="panel__label">Run</p>
+                    <div class="actions">
+                        <button type="button" class="btn" id="play">Pause</button>
+                        <button type="button" class="btn btn--ghost" id="add">Add wave +</button>
+                    </div>
+                </div>
+                <div class="panel__group">
+                    <p class="panel__label">Presets</p>
+                    <div class="actions">
+                        <button type="button" class="btn btn--ghost" id="p-one">One wave</button>
+                        <button type="button" class="btn btn--ghost" id="p-beats">Beats</button>
+                        <button type="button" class="btn btn--ghost" id="p-square">Square wave</button>
+                    </div>
+                </div>
+                <div class="panel__group">
+                    <p class="panel__label">Waves</p>
+                    <div class="waves" id="waves"></div>
+                </div>
+                <dl class="readouts">
+                    <div><dt>Waves</dt><dd id="r-n">—</dd></div>
+                    <div><dt>Sum of amplitudes</dt><dd id="r-sum">—</dd></div>
+                    <div class="wide"><dt>Peak |y| on screen</dt><dd id="r-peak" class="is-accent">—</dd></div>
+                </dl>
+            </aside>
+        </div>
+
+        <section class="deriv" aria-labelledby="deriv-title">
+            <div class="deriv__head">
+                <h2 id="deriv-title">From physics to pixels</h2>
+                <p>Why waves may simply be added, what their sums can build, from beats to square waves, and how the plots are computed.</p>
+            </div>
+            <div class="deriv__grid">
+                <nav class="deriv__toc" aria-label="Steps">
+                    <ol>
+                        <li><a href="#s-picture">Physical picture</a></li>
+                        <li><a href="#s-model">Model</a></li>
+                        <li><a href="#s-derivation">Derivation</a></li>
+                        <li><a href="#s-numerics">Numerical method</a></li>
+                        <li><a href="#s-screen">On screen</a></li>
+                        <li><a href="#s-limits">Limits</a></li>
+                    </ol>
+                </nav>
+                <div class="deriv__body">
+                    <article class="step" id="s-picture">
+                        <p class="step__num">01 · Physical picture</p>
+                        <h3>Many voices on one string</h3>
+                        <p>Two tuning forks a little out of tune produce a sound that swells and fades, the beat. A violin string vibrates in many harmonics at once, and their mixture is the timbre you hear. In both cases the medium simply carries the sum of the separate waves. This workbench lets you build such sums one component at a time: the lower plot shows the ingredients, the upper plot the result, and the spectrum below lists what is in the mix.</p>
+                    </article>
+
+                    <article class="step" id="s-model">
+                        <p class="step__num">02 · Model</p>
+                        <h3>Travelling sine waves</h3>
+                        <p>Each component i is</p>
+                        <p class="eq"><span class="eq__line">y<sub>i</sub>(x, t) = A<sub>i</sub> sin( 2π f<sub>i</sub> (x/200 − s<sub>i</sub> t) + φ<sub>i</sub> )</span></p>
+                        <p>Reading off the wavenumber and angular frequency, k<sub>i</sub> = 2π f<sub>i</sub>/200 px⁻¹ and ω<sub>i</sub> = 2π f<sub>i</sub> s<sub>i</sub>. So:</p>
+                        <ul class="facts">
+                            <li>wavelength λ<sub>i</sub> = 200/f<sub>i</sub> px, and the view spans 800 px, i.e. 4f<sub>i</sub> wavelengths;</li>
+                            <li>phase speed v<sub>i</sub> = ω<sub>i</sub>/k<sub>i</sub> = 200 s<sub>i</sub> px/s, set by the <em>Speed</em> slider alone;</li>
+                            <li>temporal frequency f<sub>i</sub> s<sub>i</sub>. The <em>Frequency</em> slider is therefore the true frequency in Hz only at speed 1×; in general it counts cycles per 200 px.</li>
+                        </ul>
+                    </article>
+
+                    <article class="step" id="s-derivation">
+                        <p class="step__num">03 · Derivation</p>
+                        <h3>Superposition and what it builds</h3>
+                        <h4>Why adding is allowed</h4>
+                        <p>Every component solves its wave equation ∂²y/∂t² = v<sub>i</sub>² ∂²y/∂x². With equal speeds, all solve the same linear equation 𝓛y = 0 with 𝓛 = ∂²/∂t² − v² ∂²/∂x². Linearity means 𝓛(a y₁ + b y₂) = a 𝓛y₁ + b 𝓛y₂ = 0: any weighted sum of solutions is a solution. The sum then moves at v without changing shape; the medium is non-dispersive.</p>
+                        <h4>Beats</h4>
+                        <p>Take two components with equal amplitude A and phases a = k₁x − ω₁t, b = k₂x − ω₂t. The sum-to-product identity gives</p>
+                        <p class="eq"><span class="eq__line">A sin a + A sin b = 2A · cos((a − b)/2) · sin((a + b)/2)</span></p>
+                        <p>A fast carrier with the mean wavenumber, inside a slow envelope with wavenumber Δk/2. Its magnitude |cos| repeats every 2π/Δk in space: for the preset f = 1.00 and 1.25, that is 200/0.25 = 800 px, exactly one beat across the view. In time, at any fixed point, the loudness swells every 1/|f₁s₁ − f₂s₂| = 1/0.25 = 4 s.</p>
+                        <p>The envelope moves at Δω/Δk and the carrier at ω̄/k̄. With equal speeds both equal v. Give the waves different speeds and the envelope travels at</p>
+                        <p class="eq"><span class="eq__line">v<sub>env</sub> = Δω / Δk = 200 (f₁ s₁ − f₂ s₂) / (f₁ − f₂) px/s</span></p>
+                        <p>which in general differs from both phase speeds. In the limit of close frequencies this is the group velocity dω/dk, the speed at which energy and information travel.</p>
+                        <h4>Fourier series of a square wave</h4>
+                        <p>A square wave sq(x) of period 2π, equal to +1 on (0, π) and −1 on (−π, 0), is odd, so it has only sine terms, b<sub>n</sub> sin nx. To pick out one coefficient, multiply both sides by sin nx and integrate over a period: the sines are orthogonal, ∫ sin mx sin nx dx = π δ<sub>mn</sub>, so every other term drops out and</p>
+                        <p class="eq"><span class="eq__line">b<sub>n</sub> = (1/π) ∫<sub>−π</sub><sup>π</sup> sq(x) sin(nx) dx = (2/π) ∫<sub>0</sub><sup>π</sup> sin(nx) dx = (2/(nπ)) (1 − cos nπ)</span><span class="eq__line">b<sub>n</sub> = 4/(nπ) for n odd, &nbsp; 0 for n even</span></p>
+                        <p class="eq"><span class="eq__line">sq(x) = (4/π) [ sin x + sin 3x / 3 + sin 5x / 5 + sin 7x / 7 + … ]</span></p>
+
+                        <p>I checked the first coefficients by numerical integration: 1.2732 = 4/π and 0.4244 = 4/(3π), with the even ones zero. The <em>Square wave</em> preset uses f = 0.4, 1.2, 2.0, 2.8 (n = 1, 3, 5, 7) and amplitudes 30/n px, which approximates a square wave of height (π/4)·30 ≈ 23.6 px. Near each jump the partial sums overshoot; this Gibbs overshoot tends to about 9 % of the jump and never vanishes, however many terms you add. It only gets narrower.</p>
+                        <h4>How big can the sum get?</h4>
+                        <p>By the triangle inequality, |Σ y<sub>i</sub>| ≤ Σ |A<sub>i</sub>|: the <em>Sum of amplitudes</em> readout is a strict bound, reached only where all components peak together. When all frequencies differ, the cross terms average to zero and the mean square of the sum is ½ Σ A<sub>i</sub>² (Parseval). Two components with the same frequency and speed merge into one sine of amplitude √(A₁² + A₂² + 2A₁A₂ cos(φ₁ − φ₂)), and the spectrum shows them as a single stem of that amplitude.</p>
+                        <p class="try"><b>Try</b>Load <em>Beats</em>, then set the second wave's speed to 0.5×: the envelope now slides against the carrier. Load <em>Square wave</em> and remove wave 4: the corners round off and the Gibbs ripples widen.</p>
+                    </article>
+
+                    <article class="step" id="s-numerics">
+                        <p class="step__num">04 · Numerical method</p>
+                        <h3>Direct evaluation per column</h3>
+                        <p>Every frame, each component is evaluated exactly at one point per screen pixel of plot width, and the sum is accumulated at the same points: a cost of N × (plot width) sines per frame, a few thousand at most. The time t advances by the real elapsed time, so the waves move at the stated speeds on every screen. The peak readout is the largest |y| among the sampled points in the current frame.</p>
+                    </article>
+
+                    <article class="step" id="s-screen">
+                        <p class="step__num">05 · On screen</p>
+                        <h3>Three plots, one scale rule</h3>
+                        <p>The upper plot (56 % of the height) shows the sum in ink with a soft burgundy fill to the axis. Its vertical range is Σ A<sub>i</sub> rounded up to the next 10 px (at least 20), so by the bound above the curve can never leave it. The lower plot shows each component in its own colour, scaled to the largest single amplitude. The spectrum is the temporal line spectrum at x = 0: each stem sits at ν = f<sub>i</sub>s<sub>i</sub>, the frequency you would hear at a fixed point, and components with the same ν are first added as phasors, C = Σ A<sub>i</sub> e<sup>iφ<sub>i</sub></sup>, so the stem height is |C|: two equal waves in phase give 2A, in antiphase nothing. Heights are scaled to 40 px or to the tallest stem, whichever is larger. Each wave's panel and sliders carry the same colour as its curve and stem; a stem that combines several waves is drawn in ink.</p>
+                    </article>
+
+                    <article class="step" id="s-limits">
+                        <p class="step__num">06 · Limits</p>
+                        <h3>What the model leaves out</h3>
+                        <ul class="facts">
+                            <li>An infinite, lossless medium; the 800 px view is a window onto it.</li>
+                            <li>Different speeds imitate dispersion, but each component's speed is set by hand, not by a physical relation ω(k).</li>
+                            <li>The spectrum is computed analytically from the components you entered (at x = 0), not by a Fourier transform of the plotted curve.</li>
+                        </ul>
+                    </article>
+                </div>
+            </div>
+        </section>
+
+        <section class="walk" id="walk" data-walk="bench" aria-label="From symbols to code"></section>
+    </main>
+
+    <footer class="sim-foot">
+        <span>© 2026 Numa Koudsie · Claude version</span>
+        <span><a href="../index.html#simulations">All simulations ↑</a></span>
+    </footer>
+
+    <script src="../scripts/sim.js"></script>
+    <script>
+    (function () {
+        'use strict';
+        var T = Sim.theme;
+        var WORLD_W = 800, MAX_WAVES = 6, FMAX = 3, NUMAX = 6;
+        var COLOURS = ['#7a1f2b', '#b07a2a', '#3a322e', '#c9707e', '#7a4b12', '#8b8079'];
+
+        var list = document.getElementById('waves');
+        var stage = document.getElementById('stage'), stageSpec = document.getElementById('stage-spec');
+        var box = Sim.canvas2d(document.getElementById('plot')), ctx = box.ctx;
+        var spec = Sim.canvas2d(document.getElementById('spec')), sctx = spec.ctx;
+        var addBtn = document.getElementById('add');
+        var waves = [], uid = 0, simT = 0, peak = 0, frames = 0;
+
+        function nextColour() {
+            for (var i = 0; i < COLOURS.length; i++) {
+                var used = waves.some(function (w) { return w.colour === COLOURS[i]; });
+                if (!used) return COLOURS[i];
+            }
+            return COLOURS[waves.length % COLOURS.length];
+        }
+
+        function add(p) {
+            if (waves.length >= MAX_WAVES) return;
+            p = p || {};
+            waves.push({
+                id: ++uid,
+                colour: p.colour || nextColour(),
+                A: p.A !== undefined ? p.A : 20,
+                f: p.f !== undefined ? p.f : 1,
+                phi: p.phi !== undefined ? p.phi : 0,
+                s: p.s !== undefined ? p.s : 1
+            });
+            render();
+        }
+
+        function remove(id) {
+            waves = waves.filter(function (w) { return w.id !== id; });
+            render();
+        }
+
+        function field(w) {
+            return '<label class="ctl"><span class="ctl__row"><span>' + w.name + '</span><output id="' + w.id + '-out" for="' + w.id + '"></output></span>' +
+                '<input type="range" id="' + w.id + '" min="' + w.min + '" max="' + w.max + '" step="' + w.step + '" value="' + w.value + '"></label>';
+        }
+
+        function render() {
+            list.innerHTML = '';
+            if (!waves.length) list.innerHTML = '<p class="empty">No waves. Add one to begin.</p>';
+            waves.forEach(function (w, n) {
+                var card = document.createElement('div');
+                card.className = 'wave';
+                card.style.setProperty('--c', w.colour);
+                var key = 'w' + w.id;
+                card.innerHTML =
+                    '<div class="wave__head"><h3>Wave ' + (n + 1) + '</h3>' +
+                    '<button type="button" class="wave__x" aria-label="Remove wave ' + (n + 1) + '">×</button></div>' +
+                    '<div class="wave__ctl">' +
+                    field({ id: key + 'A', name: 'Amplitude', min: 0, max: 40, step: 1, value: w.A }) +
+                    field({ id: key + 'f', name: 'Frequency', min: 0.1, max: FMAX, step: 0.05, value: w.f }) +
+                    field({ id: key + 'p', name: 'Phase', min: 0, max: 6.28, step: 0.05, value: w.phi }) +
+                    field({ id: key + 's', name: 'Speed', min: 0, max: 2, step: 0.05, value: w.s }) +
+                    '</div>';
+                list.appendChild(card);
+                card.querySelector('.wave__x').addEventListener('click', function () { remove(w.id); });
+                Sim.slider(key + 'A', { format: function (v) { return v + ' px'; }, onInput: function (v) { w.A = v; } });
+                Sim.slider(key + 'f', { format: function (v) { return v.toFixed(2) + ' Hz'; }, onInput: function (v) { w.f = v; } });
+                Sim.slider(key + 'p', { format: function (v) { return (v / Math.PI).toFixed(2) + ' π'; }, onInput: function (v) { w.phi = v; } });
+                Sim.slider(key + 's', { format: function (v) { return v.toFixed(2) + '×'; }, onInput: function (v) { w.s = v; } });
+            });
+            addBtn.disabled = waves.length >= MAX_WAVES;
+            var n = waves.length;
+            document.getElementById('r-n').textContent = n + ' / ' + MAX_WAVES;
+            document.getElementById('cap-n').textContent = n === 1 ? '1 wave' : n + ' waves';
+        }
+
+        function y(w, X) { return w.A * Math.sin(2 * Math.PI * w.f * (X / 200 - w.s * simT) + w.phi); }
+
+        function nice(v) { return Math.max(20, Math.ceil(v / 10) * 10); }
+
+        function panel(top, height, range, title, left, right) {
+            var mid = top + height / 2;
+            ctx.font = T.mono;
+            ctx.fillStyle = T.muted;
+            ctx.textBaseline = 'alphabetic';
+            ctx.textAlign = 'left';
+            ctx.fillText(title, left, top - 8);
+            ctx.textAlign = 'right';
+            ctx.textBaseline = 'middle';
+            [-1, -0.5, 0, 0.5, 1].forEach(function (q) {
+                var yy = mid - q * height / 2;
+                ctx.strokeStyle = q === 0 ? 'rgba(90, 80, 75, 0.45)' : T.ruleSoft;
+                ctx.lineWidth = 1;
+                ctx.beginPath();
+                ctx.moveTo(left, yy);
+                ctx.lineTo(right, yy);
+                ctx.stroke();
+                if (q !== 0.5 && q !== -0.5) ctx.fillText(Sim.fmt(q * range, 0), left - 8, yy);
+            });
+            return mid;
+        }
+
+        function draw() {
+            var w = box.w, h = box.h, left = 44, right = w - 14, top1 = 30, gap = 44;
+            var hSum = (h - top1 - gap - 14) * 0.56, top2 = top1 + hSum + gap, hComp = h - top2 - 14;
+            var samples = Math.max(2, Math.round(right - left));
+            var sumRange = nice(waves.reduce(function (a, v) { return a + v.A; }, 0));
+            var compRange = nice(waves.reduce(function (a, v) { return Math.max(a, v.A); }, 0));
+            ctx.clearRect(0, 0, w, h);
+
+            var mid1 = panel(top1, hSum, sumRange, 'SUM  y = Σ yᵢ', left, right);
+            var mid2 = panel(top2, hComp, compRange, 'COMPONENTS', left, right);
+
+            // components
+            waves.forEach(function (wv) {
+                ctx.strokeStyle = wv.colour;
+                ctx.lineWidth = 1.6;
+                ctx.beginPath();
+                for (var i = 0; i <= samples; i++) {
+                    var X = i / samples * WORLD_W, py = mid2 - y(wv, X) / compRange * hComp / 2;
+                    if (i === 0) ctx.moveTo(left + i, py); else ctx.lineTo(left + i, py);
+                }
+                ctx.stroke();
+            });
+
+            // sum with a soft fill to the axis
+            if (waves.length) {
+                var pts = [], pk = 0;
+                for (var i = 0; i <= samples; i++) {
+                    var X = i / samples * WORLD_W, v = 0;
+                    for (var j = 0; j < waves.length; j++) v += y(waves[j], X);
+                    pk = Math.max(pk, Math.abs(v));
+                    pts.push(mid1 - v / sumRange * hSum / 2);
+                }
+                peak = pk;
+                ctx.beginPath();
+                ctx.moveTo(left, mid1);
+                pts.forEach(function (py, i) { ctx.lineTo(left + i, py); });
+                ctx.lineTo(left + samples, mid1);
+                ctx.closePath();
+                ctx.fillStyle = 'rgba(122, 31, 43, 0.09)';
+                ctx.fill();
+                ctx.beginPath();
+                pts.forEach(function (py, i) { if (i === 0) ctx.moveTo(left, py); else ctx.lineTo(left + i, py); });
+                ctx.strokeStyle = T.ink;
+                ctx.lineWidth = 2.3;
+                ctx.lineJoin = 'round';
+                ctx.stroke();
+            } else {
+                peak = 0;
+            }
+        }
+
+        /* temporal line spectrum at x = 0: nu = f * s; equal nu combine as phasors, |sum A e^(i phi)| */
+        function lines() {
+            var groups = {}, out = [];
+            waves.forEach(function (wv) {
+                var nu = Math.round(wv.f * wv.s * 1e6) / 1e6, g = groups[nu];
+                if (!g) { g = groups[nu] = { nu: nu, re: 0, im: 0, n: 0, colour: wv.colour }; out.push(g); }
+                g.re += wv.A * Math.cos(wv.phi);
+                g.im += wv.A * Math.sin(wv.phi);
+                g.n++;
+            });
+            return out.map(function (g) {
+                return { nu: g.nu, A: g.nu === 0 ? Math.abs(g.im) : Math.hypot(g.re, g.im), colour: g.n > 1 ? T.ink : g.colour };
+            });
+        }
+        function drawSpectrum() {
+            var w = spec.w, h = spec.h, left = 44, right = w - 14, base = h - 24, top = 14;
+            var X = function (nu) { return left + nu / NUMAX * (right - left); };
+            sctx.clearRect(0, 0, w, h);
+            sctx.strokeStyle = 'rgba(90, 80, 75, 0.45)';
+            sctx.lineWidth = 1;
+            sctx.beginPath();
+            sctx.moveTo(left, base);
+            sctx.lineTo(right, base);
+            sctx.stroke();
+            sctx.font = T.mono;
+            sctx.fillStyle = T.muted;
+            sctx.textAlign = 'center';
+            sctx.textBaseline = 'top';
+            for (var f = 0; f <= NUMAX; f += 0.5) {
+                sctx.fillRect(X(f) - 0.5, base, 1, 4);
+                if (f % 1 === 0) sctx.fillText(f + ' Hz', X(f), base + 7);
+            }
+            var ls = lines(), amax = Math.max(40, ls.reduce(function (m, g) { return Math.max(m, g.A); }, 0));
+            ls.forEach(function (wv) {
+                var x = X(wv.nu), yTop = base - wv.A / amax * (base - top);
+                sctx.strokeStyle = wv.colour;
+                sctx.lineWidth = 2.5;
+                sctx.beginPath();
+                sctx.moveTo(x, base);
+                sctx.lineTo(x, yTop);
+                sctx.stroke();
+                sctx.beginPath();
+                sctx.arc(x, yTop, 4.5, 0, Math.PI * 2);
+                sctx.fillStyle = wv.colour;
+                sctx.fill();
+                sctx.lineWidth = 2;
+                sctx.strokeStyle = T.card;
+                sctx.stroke();
+            });
+        }
+
+        function preset(items) {
+            waves = [];
+            items.forEach(function (p, i) { p.colour = COLOURS[i]; add(p); });
+            render();
+        }
+        document.getElementById('p-one').addEventListener('click', function () { preset([{ A: 20, f: 1 }]); });
+        document.getElementById('p-beats').addEventListener('click', function () { preset([{ A: 18, f: 1 }, { A: 18, f: 1.25 }]); });
+        document.getElementById('p-square').addEventListener('click', function () {
+            preset([1, 3, 5, 7].map(function (n) { return { A: Math.round(30 / n * 10) / 10, f: 0.4 * n }; }));
+        });
+        addBtn.addEventListener('click', function () { add(); });
+
+        Sim.live = function () {
+            var w1 = waves[0], w2 = waves[1], none = 'no waves';
+            var sA = waves.reduce(function (a, v) { return a + v.A; }, 0), sum = 0, samples = Math.max(2, Math.round(box.w - 58));
+            waves.forEach(function (v) { sum += y(v, 400); });
+            var out = {
+                N: String(waves.length), sum: Sim.fmt(sum, 2) + ' px', pk: Sim.fmt(peak, 2) + ' px', sA: Sim.fmt(sA, 1) + ' px',
+                ratio: sA > 0 ? Sim.fmt(peak / sA, 3) : none, M: String(samples), dX: Sim.fmt(800 / samples, 3) + ' px',
+                R: nice(sA) + ' px', Rc: nice(waves.reduce(function (a, v) { return Math.max(a, v.A); }, 0)) + ' px',
+                An: waves.map(function (v) { return v.A; }).join(', ') || none,
+                fn: waves.map(function (v) { return v.f.toFixed(2); }).join(', ') || none, fmax: NUMAX + ' Hz'
+            };
+            if (w1) {
+                out.A = w1.A + ' px'; out.f = w1.f.toFixed(2); out.s = w1.s.toFixed(2) + '×'; out.phi = (w1.phi / Math.PI).toFixed(2) + ' π';
+                out.k = Sim.fmt(2 * Math.PI * w1.f / 200, 5) + ' rad/px'; out.w = Sim.fmt(2 * Math.PI * w1.f * w1.s, 4) + ' rad/s';
+                out.lam = Sim.fmt(200 / w1.f, 1) + ' px'; out.v = Sim.fmt(200 * w1.s, 0) + ' px/s'; out.y1 = Sim.fmt(y(w1, 400), 2) + ' px';
+                out.hl = Sim.fmt(w1.f * w1.s, 3) + ' Hz';
+            } else {
+                out.A = out.f = out.s = out.phi = out.k = out.w = out.lam = out.v = out.y1 = out.hl = none;
+            }
+            if (w1 && w2 && w1.f !== w2.f) {
+                out.bl = Sim.fmt(200 / Math.abs(w1.f - w2.f), 1) + ' px';
+                out.venv = Sim.fmt(200 * (w1.f * w1.s - w2.f * w2.s) / (w1.f - w2.f), 1) + ' px/s';
+            } else {
+                out.bl = out.venv = 'needs two waves with different f';
+            }
+            return out;
+        };
+
+        var clk = Sim.clock(function (dt) {
+            simT += dt;
+            draw();
+            drawSpectrum();
+            if (frames++ % 8 === 0) {
+                document.getElementById('r-sum').textContent = waves.reduce(function (a, v) { return a + v.A; }, 0).toFixed(1) + ' px';
+                document.getElementById('r-peak').textContent = peak.toFixed(1) + ' px';
+            }
+        });
+        Sim.playButton(document.getElementById('play'), clk);
+
+        add({ A: 20, f: 1 });
+        Sim.onResize(stage, function () { box.fit(); });
+        Sim.onResize(stageSpec, function () { spec.fit(); });
+    })();
+    </script>
+</body>
+</html>

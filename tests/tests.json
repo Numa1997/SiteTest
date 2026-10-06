@@ -1,0 +1,67 @@
+[
+  {
+    "name": "Home page renders and index navigation reaches the simulations",
+    "sanity": true,
+    "viewport": "desktop",
+    "covers": [
+      "home page content",
+      "section index navigation",
+      "Claude version footer"
+    ],
+    "description": "Verifies the personal page loads with all sections, the Claude version footer, and working in-page index links.",
+    "steps": [
+      "Open the home page",
+      "Confirm the large heading reads Numa Koudsie and the footer contains the words Claude version",
+      "Click the Simulations link in the Index navigation"
+    ],
+    "expected": "The section headed Interactive physics simulations is visible, showing six simulation cards labelled Fig. 1 to Fig. 6, each with a Launch button."
+  },
+  {
+    "name": "Double pendulum runs, pauses and shows the chaos twin",
+    "viewport": "desktop",
+    "covers": [
+      "simulation deep link with spaces in file name",
+      "double pendulum controls",
+      "chaos twin readout"
+    ],
+    "description": "Verifies the double pendulum page loads in the site style and responds to its controls.",
+    "steps": [
+      "Open the home page",
+      "In the simulations section, click the Launch button on the Double Pendulum Chaos card",
+      "On the opened page, switch on the Chaos twin toggle",
+      "Click the Pause button"
+    ],
+    "expected": "The page shows the heading Double Pendulum, the Twin separation readout shows a value in metres instead of twin off, and the button now reads Play."
+  },
+  {
+    "name": "Double-slit page renders Greek letters and path difference",
+    "viewport": "desktop",
+    "covers": [
+      "UTF-8 characters",
+      "double-slit geometry and readouts"
+    ],
+    "description": "Verifies the double-slit page shows correct Greek symbols and a computed path difference.",
+    "steps": [
+      "Open the home page",
+      "In the simulations section, click the Launch button on the Double-Slit Interference card"
+    ],
+    "expected": "The opened page shows the heading Double-Slit Interference, a control labelled Angle with the Greek letter alpha and a degree value such as 20.0°, and a readout labelled δs exact with a value in px; no garbled characters such as Î± appear."
+  },
+  {
+    "name": "Wave workbench builds a square wave and removes a wave on mobile",
+    "viewport": "mobile",
+    "covers": [
+      "mobile layout",
+      "wave interference preset",
+      "wave removal"
+    ],
+    "description": "Verifies the mobile layout of the superposition workbench, its square-wave preset and wave removal.",
+    "steps": [
+      "Open the home page",
+      "Tap the Launch button on the Wave Interference Simulator card",
+      "On the opened page, tap the Square wave button",
+      "Tap the remove button in the Wave 4 panel"
+    ],
+    "expected": "After the preset, panels Wave 1 to Wave 4 were shown; after removal only Wave 1, Wave 2 and Wave 3 remain and the Waves readout shows 3 / 6."
+  }
+]

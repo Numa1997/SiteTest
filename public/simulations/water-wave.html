@@ -1,0 +1,364 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Circular Water Waves · Numa Koudsie</title>
+    <meta name="description" content="Interactive deep-water wave: water particles trace circular orbits that shrink with depth, and the surface takes a trochoidal shape.">
+    <meta name="theme-color" content="#f5f1ea">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link rel="stylesheet" href="../styles/sim.css">
+    <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='12' fill='%237a1f2b'/%3E%3Ctext x='32' y='45' text-anchor='middle' font-family='Georgia,serif' font-size='38' fill='%23f5f1ea'%3EN%3C/text%3E%3C/svg%3E">
+</head>
+<body>
+    <header class="sim-top">
+        <a href="../index.html#simulations">← Numa Koudsie</a>
+        <nav class="sim-nav" aria-label="Simulations">
+            <span>Fig.</span>
+            <a href="Circular Wave Interference Visualization.html">1</a>
+            <a href="Double Pendulum.html">2</a>
+            <a href="Interactive Double-Slit Experiment Visualization.html">3</a>
+            <a href="Transverse and longitudinal waves.html">4</a>
+            <a href="water-wave.html" aria-current="page">5</a>
+            <a href="wave-interference.html">6</a>
+            <a href="phasor-sums.html">7</a>
+            <a href="draw-decompose.html">8</a>
+        </nav>
+    </header>
+
+    <main class="sim">
+        <noscript><p class="sim-error"><b>This simulation needs JavaScript.</b> <a href="../index.html#simulations">Back to the simulations</a></p></noscript>
+        <div class="sim__head">
+            <p class="sim__num">Fig. 5 · fluid dynamics · particle motion</p>
+            <h1>Circular Water Waves<span class="dot">.</span></h1>
+            <p class="sim__lede">As a crest passes, each parcel of water traces a small circle and comes back where it started. The circles shrink quickly with depth.</p>
+        </div>
+
+        <div class="sim__grid">
+            <figure class="stage">
+                <div class="stage__canvas" id="stage" style="--ar: 16 / 9.5; --ar-m: 1 / 1.15;">
+                    <canvas id="water" aria-label="Water particles on circular orbits under a travelling surface wave"></canvas>
+                </div>
+                <figcaption class="stage__cap">
+                    <span><b>Fig. 5</b> · linear deep-water wave · orbits of radius a e<sup>kz</sup></span>
+                    <span id="cap-c">c = —</span>
+                </figcaption>
+            </figure>
+
+            <aside class="panel" aria-label="Controls">
+                <div class="panel__group">
+                    <p class="panel__label">Run</p>
+                    <div class="actions">
+                        <button type="button" class="btn" id="play">Pause</button>
+                    </div>
+                    <label class="switch"><span>Show orbits</span><input type="checkbox" id="orbits" checked></label>
+                    <label class="switch"><span>Deep-water dispersion ω² = gk</span><input type="checkbox" id="disp" checked></label>
+                </div>
+
+                <div class="panel__group">
+                    <p class="panel__label">Wave</p>
+                    <label class="ctl">
+                        <span class="ctl__row"><span>Amplitude a (orbit radius)</span><output id="amp-out" for="amp"></output></span>
+                        <input type="range" id="amp" min="5" max="50" step="1" value="24">
+                    </label>
+                    <label class="ctl">
+                        <span class="ctl__row"><span>Wavelength λ</span><output id="lambda-out" for="lambda"></output></span>
+                        <input type="range" id="lambda" min="120" max="400" step="5" value="260">
+                    </label>
+                    <label class="ctl">
+                        <span class="ctl__row"><span>Frequency f</span><output id="freq-out" for="freq"></output></span>
+                        <input type="range" id="freq" min="0.1" max="1.5" step="0.01" value="0.5">
+                    </label>
+                </div>
+
+                <div class="panel__group">
+                    <p class="panel__label">Water</p>
+                    <label class="ctl">
+                        <span class="ctl__row"><span>Particles per layer</span><output id="count-out" for="count"></output></span>
+                        <input type="range" id="count" min="8" max="36" step="1" value="18">
+                    </label>
+                    <label class="ctl">
+                        <span class="ctl__row"><span>Depth layers</span><output id="layers-out" for="layers"></output></span>
+                        <input type="range" id="layers" min="1" max="5" step="1" value="5">
+                    </label>
+                </div>
+
+                <dl class="readouts">
+                    <div><dt>Phase speed c</dt><dd id="r-c">—</dd></div>
+                    <div><dt>Period T</dt><dd id="r-t">—</dd></div>
+                    <div><dt>Steepness ak</dt><dd id="r-ak">—</dd></div>
+                    <div><dt>Deepest orbit</dt><dd id="r-deep">—</dd></div>
+                </dl>
+
+                <ul class="legend">
+                    <li><span class="sw"></span>surface</li>
+                    <li><span class="sw sw--dot sw--ink"></span>water parcel</li>
+                    <li><span class="sw sw--dot"></span>followed column</li>
+                    <li><span class="sw sw--dash"></span>orbit</li>
+                </ul>
+            </aside>
+        </div>
+
+        <section class="deriv" aria-labelledby="deriv-title">
+            <div class="deriv__head">
+                <h2 id="deriv-title">From physics to pixels</h2>
+                <p>From Laplace's equation under a water surface to circular orbits, the dispersion relation and the trochoidal crest on screen.</p>
+            </div>
+            <div class="deriv__grid">
+                <nav class="deriv__toc" aria-label="Steps">
+                    <ol>
+                        <li><a href="#s-picture">Physical picture</a></li>
+                        <li><a href="#s-model">Model</a></li>
+                        <li><a href="#s-derivation">Derivation</a></li>
+                        <li><a href="#s-numerics">Numerical method</a></li>
+                        <li><a href="#s-screen">On screen</a></li>
+                        <li><a href="#s-limits">Limits</a></li>
+                    </ol>
+                </nav>
+                <div class="deriv__body">
+                    <article class="step" id="s-picture">
+                        <p class="step__num">01 · Physical picture</p>
+                        <h3>A cork on the sea</h3>
+                        <p>Watch a cork on a swell: it rises with the crest, drifts forward, sinks into the trough, drifts back, and ends where it began. The water under the surface does the same on smaller circles, and a few metres down it barely moves at all. The wave you see racing to the shore is a pattern of motion, not a current. In the figure every dot is a parcel of water; the burgundy column follows one vertical line of parcels from the surface down.</p>
+                    </article>
+
+                    <article class="step" id="s-model">
+                        <p class="step__num">02 · Model</p>
+                        <h3>Linear waves on deep water</h3>
+                        <p>Let x run along the surface and z upward, with z = 0 the calm surface. Assume the water is inviscid, incompressible and its flow irrotational. Then the velocity is the gradient of a potential, <b>u</b> = ∇φ, and incompressibility ∇·<b>u</b> = 0 becomes Laplace's equation:</p>
+                        <p class="eq"><span class="eq__line">∂²φ/∂x² + ∂²φ/∂z² = 0 &nbsp; for z &lt; η(x, t)</span></p>
+                        <p>For small waves the surface conditions can be applied at z = 0:</p>
+                        <p class="eq"><span class="eq__line">kinematic: ∂η/∂t = ∂φ/∂z &nbsp; (the surface moves with the water)</span><span class="eq__line">dynamic: ∂φ/∂t + g η = 0 &nbsp; (Bernoulli, with air pressure constant)</span><span class="eq__line">deep water: ∇φ → 0 as z → −∞</span></p>
+                        <ul class="facts">
+                            <li>Amplitude small compared with wavelength (linear theory, also called Airy theory).</li>
+                            <li>Depth greater than about half a wavelength.</li>
+                            <li>No surface tension, wind, viscosity or currents.</li>
+                        </ul>
+                    </article>
+
+                    <article class="step" id="s-derivation">
+                        <p class="step__num">03 · Derivation</p>
+                        <h3>From Laplace to circles</h3>
+                        <h4>A travelling solution</h4>
+                        <p>Try a surface η = a cos(kx − ωt) and a potential that decays with depth:</p>
+                        <p class="eq"><span class="eq__line">φ = (a ω / k) e<sup>k z</sup> sin(k x − ω t)</span></p>
+                        <p>Laplace: ∂²φ/∂x² = −k²φ and ∂²φ/∂z² = +k²φ, so their sum is zero. The factor e<sup>kz</sup> is forced: the other solution, e<sup>−kz</sup>, would grow without bound with depth. Kinematic condition at z = 0: ∂φ/∂z = aω sin(kx − ωt) = ∂η/∂t. ✓</p>
+                        <h4>The dispersion relation</h4>
+                        <p>The dynamic condition at z = 0 gives −(aω²/k) cos(kx − ωt) + g a cos(kx − ωt) = 0, hence</p>
+                        <p class="eq"><span class="eq__line">ω² = g k</span><span class="eq__line">c = ω / k = √(g / k) = √(g λ / 2π), &nbsp; c<sub>g</sub> = dω / dk = ½ √(g / k) = c / 2</span></p>
+                        <p>Long waves are fast: a 2.6 m swell moves at 2.01 m/s with period 1.29 s; a 100 m ocean swell at 12.5 m/s. The energy travels at the group velocity c<sub>g</sub>, half the crest speed, which is why crests in a group appear at the back, run through it and vanish at the front. The figure draws a single wave, so c<sub>g</sub> is a prediction here rather than something you can watch; and with dispersion switched off, c<sub>g</sub> = c/2 no longer applies.</p>
+                        <h4>Velocity and particle paths</h4>
+                        <p class="eq"><span class="eq__line">u = ∂φ/∂x = a ω e<sup>kz</sup> cos(k x − ω t), &nbsp; w = ∂φ/∂z = a ω e<sup>kz</sup> sin(k x − ω t)</span></p>
+                        <p>In linear theory we evaluate this at the parcel's rest position (x₀, z₀) and integrate in time. That is the step that defines linear theory: the parcel moves only a small distance compared with λ, so the velocity where it actually is differs from the velocity at its rest position only at second order in ak, and dropping that difference is what closes the orbits (the Stokes-drift card below keeps it). Using d/dt sin(kx₀ − ωt) = −ω cos(kx₀ − ωt) and d/dt cos(kx₀ − ωt) = ω sin(kx₀ − ωt):</p>
+                        <p class="eq"><span class="eq__line">x = x₀ − a e<sup>k z₀</sup> sin(k x₀ − ω t)</span><span class="eq__line">z = z₀ + a e<sup>k z₀</sup> cos(k x₀ − ω t)</span></p>
+                        <p>(x − x₀)² + (z − z₀)² = a² e<sup>2kz₀</sup>: each parcel moves on a circle of radius a e<sup>kz₀</sup>. At a crest (phase 0) it is at the top, moving forward at speed aω; in a trough, at the bottom, moving backward. The circulation is clockwise when the wave moves to the right.</p>
+                        <h4>Stokes drift: why the orbits do not quite close</h4>
+                        <p>The circles above use the velocity at the rest position (x₀, z₀). A real parcel feels the velocity where it actually is, displaced by ξ = −A sin θ horizontally and ζ = A cos θ vertically, with A = a e<sup>kz₀</sup> and θ = kx₀ − ωt. Expanding the horizontal velocity to first order in the displacement:</p>
+                        <p class="eq"><span class="eq__line">u(x₀ + ξ, z₀ + ζ) ≈ u + ξ ∂u/∂x + ζ ∂u/∂z</span><span class="eq__line">ξ ∂u/∂x = (−A sin θ)(−aωk e<sup>kz₀</sup> sin θ) = a²ωk e<sup>2kz₀</sup> sin²θ</span><span class="eq__line">ζ ∂u/∂z = (A cos θ)(aωk e<sup>kz₀</sup> cos θ) = a²ωk e<sup>2kz₀</sup> cos²θ</span></p>
+                        <p>The first term, u itself, averages to zero over a period. The two corrections add to a constant, because sin²θ + cos²θ = 1:</p>
+                        <p class="eq"><span class="eq__line">U<sub>S</sub> = a²ωk e<sup>2kz₀</sup> = c (ak)² e<sup>2kz₀</sup></span><span class="eq__note">c = ω/k · second order in the steepness ak</span></p>
+                        <p>The picture: under a crest the parcel is at the top of its circle, where the forward flow is stronger (e<sup>kz</sup> is larger); under a trough it is at the bottom, where the backward flow is weaker. Forward wins, so each orbit ends slightly ahead of where it began. Per period the parcel advances U<sub>S</sub>T = (ak)² e<sup>2kz₀</sup> λ, since cT = λ. At ak = 0.2 and λ = 2.6 m (c ≈ 2.0 m/s) that is 4 % of a wavelength, about 10 cm per wave at the surface, and it fades twice as fast with depth as the orbits do.</p>
+                        <p>The simulation draws the first-order circles and leaves this drift out on purpose. The exact Gerstner wave mentioned below has closed orbits and no drift; the drift belongs to irrotational waves like the ones derived here.</p>
+                        <h4>Decay with depth</h4>
+                        <p>At z₀ = −λ/2 the radius is e<sup>−π</sup> ≈ 4.3 % of the surface value, at z₀ = −λ only 0.19 %. The <em>Deepest orbit</em> readout gives this fraction for the lowest layer shown.</p>
+                        <h4>The shape of the surface</h4>
+                        <p>The surface parcels (z₀ = 0) trace the curve (x₀ − a sin θ, a cos θ) with θ = kx₀ − ωt. This is a trochoid: crests sharper and troughs flatter than a sine. The steepness ak controls the sharpening; at ak = 1 the crest would become a cusp, so the simulation caps ak at 0.9. Real waves break well before that, near the Stokes limit H/λ ≈ 0.142 (H = 2a), i.e. ak ≈ 0.45. This trochoidal form is also the exact nonlinear Gerstner wave, although that solution carries vorticity.</p>
+                        <p class="try"><b>Try</b>Raise the amplitude to 50 px at λ = 260 px: ak reaches 1.2, the cap applies and the readout shows (cap). Look at how the crests narrow and the troughs flatten.</p>
+                    </article>
+
+                    <article class="step" id="s-numerics">
+                        <p class="step__num">04 · Numerical method</p>
+                        <h3>Closed form at every frame</h3>
+                        <p>The particle positions are known analytically, so each frame evaluates them exactly, with no time stepping; only the phase ωt accumulates, by 2πf Δt, so a change of f is smooth. With <em>dispersion</em> on, the frequency is computed exactly from the wavelength, f = √(g k)/(2π) with 100 px = 1 m. The slider then displays that value, but the simulation uses the unrounded number rather than the slider's 0.01 Hz steps.</p>
+                    </article>
+
+                    <article class="step" id="s-screen">
+                        <p class="step__num">05 · On screen</p>
+                        <h3>Parcels, orbits and a tinted sea</h3>
+                        <p>The world is 800 px wide (8 m). The calm surface sits at 28 % of the figure height, and the depth layers are 56 px = 0.56 m apart. The surface is drawn as a polyline through parcels every 3 px of rest position, and the region under it is filled with a rose tint fading with depth. For every parcel, a dashed circle shows its orbit and a dot shows its present position; the followed column is burgundy, with a radius drawn from each orbit's centre.</p>
+                    </article>
+
+                    <article class="step" id="s-limits">
+                        <p class="step__num">06 · Limits</p>
+                        <h3>What the model leaves out</h3>
+                        <ul class="facts">
+                            <li>Stokes drift, derived in step 03, is not drawn: the circles on screen close exactly.</li>
+                            <li>Shallow water (depth &lt; λ/2): orbits become flattened ellipses and ω² = gk tanh(kh).</li>
+                            <li>Surface tension matters for λ below about 1.7 cm (capillary waves).</li>
+                            <li>No wind forcing, viscosity or breaking.</li>
+                        </ul>
+                    </article>
+                </div>
+            </div>
+        </section>
+
+        <section class="walk" id="walk" data-walk="water" aria-label="From symbols to code"></section>
+    </main>
+
+    <footer class="sim-foot">
+        <span>© 2026 Numa Koudsie · Claude version</span>
+        <span><a href="../index.html#simulations">All simulations ↑</a></span>
+    </footer>
+
+    <script src="../scripts/sim.js"></script>
+    <script>
+    (function () {
+        'use strict';
+        var T = Sim.theme;
+        var WORLD_W = 800, DZ = 56, PX_PER_M = 100, G = 9.81;
+
+        var stage = document.getElementById('stage');
+        var box = Sim.canvas2d(document.getElementById('water')), ctx = box.ctx;
+        var orbitsBox = document.getElementById('orbits'), dispBox = document.getElementById('disp');
+        var omegaT = 0;
+
+        var amp = Sim.slider('amp', { format: function (v) { return v + ' px'; }, onInput: readouts });
+        var lambda = Sim.slider('lambda', { format: function (v) { return v + ' px'; }, onInput: couple });
+        var freq = Sim.slider('freq', { format: function (v) { return v.toFixed(2) + ' Hz'; }, onInput: readouts });
+        var count = Sim.slider('count', { format: String });
+        var layers = Sim.slider('layers', { format: String, onInput: readouts });
+
+        function k() { return 2 * Math.PI / lambda.value; }
+        /* exact deep-water frequency; the slider only displays it in 0.01 Hz steps */
+        function f() {
+            return dispBox.checked ? Math.sqrt(G * k() * PX_PER_M) / (2 * Math.PI) : freq.value;
+        }
+        function a() { return Math.min(amp.value, 0.9 / k()); }
+
+        function couple() {
+            if (dispBox.checked) {
+                var km = 2 * Math.PI / (lambda.value / PX_PER_M);
+                freq.set(Math.sqrt(G * km) / (2 * Math.PI));
+            }
+            freq.el.disabled = dispBox.checked;
+            readouts();
+        }
+        dispBox.addEventListener('change', couple);
+
+        function readouts() {
+            var c = f() * lambda.value / PX_PER_M;
+            document.getElementById('r-c').textContent = c.toFixed(2) + ' m/s';
+            document.getElementById('cap-c').textContent = 'c = ' + c.toFixed(2) + ' m/s';
+            document.getElementById('r-t').textContent = (1 / f()).toFixed(2) + ' s';
+            document.getElementById('r-ak').textContent = (a() * k()).toFixed(2) + (a() < amp.value ? ' (cap)' : '');
+            var deep = Math.exp(-k() * DZ * (layers.value - 1));
+            document.getElementById('r-deep').textContent = (deep * 100).toFixed(deep < 0.1 ? 1 : 0) + ' % of a';
+        }
+
+        function draw() {
+            var w = box.w, h = box.h, s = w / WORLD_W, kk = k(), A = a();
+            var ys = Math.max(A * s + 34, h * 0.28), X, th;
+            ctx.clearRect(0, 0, w, h);
+
+            // water body under the trochoidal surface
+            ctx.beginPath();
+            for (X = -60; X <= WORLD_W + 60; X += 3) {
+                th = kk * X - omegaT;
+                var sx = (X - A * Math.sin(th)) * s, sy = ys - A * Math.cos(th) * s;
+                if (X === -60) ctx.moveTo(sx, sy); else ctx.lineTo(sx, sy);
+            }
+            ctx.save();
+            var fill = ctx.createLinearGradient(0, ys - A * s, 0, h);
+            fill.addColorStop(0, 'rgba(226, 162, 170, 0.36)');
+            fill.addColorStop(1, 'rgba(226, 162, 170, 0.05)');
+            ctx.lineTo(w + 60, h);
+            ctx.lineTo(-60, h);
+            ctx.closePath();
+            ctx.fillStyle = fill;
+            ctx.fill();
+            ctx.restore();
+
+            ctx.beginPath();
+            for (X = -60; X <= WORLD_W + 60; X += 3) {
+                th = kk * X - omegaT;
+                var ux = (X - A * Math.sin(th)) * s, uy = ys - A * Math.cos(th) * s;
+                if (X === -60) ctx.moveTo(ux, uy); else ctx.lineTo(ux, uy);
+            }
+            ctx.strokeStyle = T.accent;
+            ctx.lineWidth = 2.2;
+            ctx.lineJoin = 'round';
+            ctx.stroke();
+
+            // rest level
+            ctx.setLineDash([5, 6]);
+            ctx.strokeStyle = 'rgba(90, 80, 75, 0.35)';
+            ctx.lineWidth = 1;
+            ctx.beginPath();
+            ctx.moveTo(0, ys);
+            ctx.lineTo(w, ys);
+            ctx.stroke();
+            ctx.setLineDash([]);
+
+            // parcels on their orbits, layer by layer
+            var N = count.value, L = layers.value, follow = Math.floor((N - 1) / 2);
+            ctx.font = T.mono;
+            ctx.textAlign = 'right';
+            ctx.textBaseline = 'middle';
+            for (var j = 0; j < L; j++) {
+                var z0 = -j * DZ, r = A * Math.exp(kk * z0), cy = ys - z0 * s;
+                if (cy > h - 8) break;
+                for (var i = 0; i < N; i++) {
+                    var X0 = 30 + i * (WORLD_W - 60) / (N - 1), cx = X0 * s;
+                    th = kk * X0 - omegaT;
+                    var px = (X0 - r * Math.sin(th)) * s, py = cy - r * Math.cos(th) * s;
+                    var isF = i === follow;
+                    if (orbitsBox.checked && r * s > 1.2) {
+                        ctx.strokeStyle = isF ? 'rgba(122, 31, 43, 0.45)' : 'rgba(90, 80, 75, 0.24)';
+                        ctx.lineWidth = 1;
+                        ctx.setLineDash(isF ? [] : [2, 3]);
+                        ctx.beginPath();
+                        ctx.arc(cx, cy, r * s, 0, Math.PI * 2);
+                        ctx.stroke();
+                        ctx.setLineDash([]);
+                    }
+                    if (isF) {
+                        ctx.strokeStyle = T.accent;
+                        ctx.lineWidth = 1.4;
+                        ctx.beginPath();
+                        ctx.moveTo(cx, cy);
+                        ctx.lineTo(px, py);
+                        ctx.stroke();
+                    }
+                    ctx.beginPath();
+                    ctx.arc(px, py, isF ? (j === 0 ? 6 : 5) : (j === 0 ? 3.8 : 3.1), 0, Math.PI * 2);
+                    ctx.fillStyle = isF ? T.accent : T.ink2;
+                    ctx.fill();
+                    if (isF) { ctx.lineWidth = 2; ctx.strokeStyle = T.card; ctx.stroke(); }
+                }
+                if (j > 0) {
+                    ctx.textAlign = 'left';
+                    ctx.fillStyle = T.muted;
+                    ctx.fillText('z = −' + (j * DZ / PX_PER_M).toFixed(2) + ' m', 8, cy - Math.max(14, r * s + 10));
+                }
+            }
+        }
+
+        Sim.live = function () {
+            var kk = k(), A = a(), N = count.value, i = Math.floor((N - 1) / 2), X0 = 30 + i * (WORLD_W - 60) / (N - 1);
+            var th = kk * X0 - omegaT, red = Math.atan2(Math.sin(th), Math.cos(th)), c = f() * lambda.value / PX_PER_M;
+            var sc = box.w / WORLD_W, deep = Math.exp(-kk * DZ * (layers.value - 1));
+            return {
+                lam: lambda.value + ' px = ' + (lambda.value / PX_PER_M).toFixed(2) + ' m', k: Sim.fmt(kk, 5) + ' rad/px',
+                km: Sim.fmt(kk * PX_PER_M, 4) + ' rad/m', f: f().toFixed(4) + ' Hz', c: c.toFixed(4) + ' m/s',
+                T: (1 / f()).toFixed(4) + ' s', cg: (c / 2).toFixed(4) + ' m/s',
+                X0: Sim.fmt(X0, 1) + ' px', th: Sim.fmt(red, 3) + ' rad', px: Sim.fmt(-A * Math.sin(th), 2) + ' px', pz: Sim.fmt(A * Math.cos(th), 2) + ' px',
+                r: Sim.fmt(A, 2) + ' px', r1: Sim.fmt(A * Math.exp(-kk * DZ), 2) + ' px', z0: '−' + DZ * (layers.value - 1) + ' px',
+                deep: (deep * 100).toFixed(deep < 0.1 ? 2 : 1) + ' %', eta: Sim.fmt(A * Math.cos(th), 2) + ' px',
+                a: Sim.fmt(A, 2) + ' px', A: amp.value + ' px', ak: Sim.fmt(A * kk, 4),
+                wt: Sim.fmt(omegaT, 2) + ' rad', s: Sim.fmt(sc, 4), ys: Sim.fmt(Math.max(A * sc + 34, box.h * 0.28), 1) + ' px'
+            };
+        };
+
+        var clk = Sim.clock(function (dt) {
+            omegaT += 2 * Math.PI * f() * dt;
+            draw();
+        });
+        Sim.playButton(document.getElementById('play'), clk);
+
+        couple();
+        Sim.onResize(stage, function () { box.fit(); });
+    })();
+    </script>
+</body>
+</html>
