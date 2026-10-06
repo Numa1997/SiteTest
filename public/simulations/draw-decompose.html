@@ -1,0 +1,768 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Draw &amp; Decompose · Numa Koudsie</title>
+    <meta name="description" content="Interactive simulation: draw any closed shape, take its discrete Fourier transform and redraw it with a chain of spinning circles.">
+    <meta name="theme-color" content="#f5f1ea">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link rel="stylesheet" href="../styles/sim.css">
+    <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='12' fill='%237a1f2b'/%3E%3Ctext x='32' y='45' text-anchor='middle' font-family='Georgia,serif' font-size='38' fill='%23f5f1ea'%3EN%3C/text%3E%3C/svg%3E">
+    <style>
+        #field { cursor: crosshair; touch-action: none; }
+        #stage { -webkit-user-select: none; user-select: none; }
+        .grid2 { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 6px; }
+        .grid2 .btn { font-size: 12.5px; padding: 7px 8px; }
+        .hint { font-size: 12.5px; color: var(--muted); line-height: 1.5; margin: 0; }
+        [hidden] { display: none !important; }
+    </style>
+</head>
+<body>
+    <header class="sim-top">
+        <a href="../index.html#simulations">← Numa Koudsie</a>
+        <nav class="sim-nav" aria-label="Simulations">
+            <span>Fig.</span>
+            <a href="Circular Wave Interference Visualization.html">1</a>
+            <a href="Double Pendulum.html">2</a>
+            <a href="Interactive Double-Slit Experiment Visualization.html">3</a>
+            <a href="Transverse and longitudinal waves.html">4</a>
+            <a href="water-wave.html">5</a>
+            <a href="wave-interference.html">6</a>
+            <a href="phasor-sums.html">7</a>
+            <a href="draw-decompose.html" aria-current="page">8</a>
+        </nav>
+    </header>
+
+    <main class="sim">
+        <noscript><p class="sim-error"><b>This simulation needs JavaScript.</b> <a href="../index.html#simulations">Back to the simulations</a></p></noscript>
+        <div class="sim__head">
+            <p class="sim__num">Fig. 8 · Fourier analysis · discrete Fourier transform</p>
+            <h1>Draw &amp; Decompose<span class="dot">.</span></h1>
+            <p class="sim__lede">Draw any closed shape with one stroke. Its Fourier transform turns it into a list of spinning circles, and the circles, chained tip to tail, draw it back.</p>
+        </div>
+
+        <div class="sim__grid">
+            <div class="stack">
+                <figure class="stage">
+                    <div class="stage__canvas" id="stage" style="--ar: 1 / 0.78; --ar-m: 1 / 1;">
+                        <canvas id="field" aria-label="Figure. In drawing mode, press and drag to draw a stroke; while playing, drag to pan and scroll or pinch to zoom."></canvas>
+                    </div>
+                    <figcaption class="stage__cap">
+                        <span><b>Fig. 8a</b> · z(t) = Σ<sub>k</sub> c<sub>k</sub> e<sup>ikt</sup> · <span id="cap-mode">draw a shape</span></span>
+                        <span id="cap-src">—</span>
+                    </figcaption>
+                </figure>
+                <figure class="stage">
+                    <div class="stage__canvas" id="spec-stage" style="--ar: 16 / 4; --ar-m: 16 / 6;">
+                        <canvas id="spec" aria-label="Amplitude spectrum |c_k| against k. Terms in use are burgundy."></canvas>
+                    </div>
+                    <figcaption class="stage__cap">
+                        <span><b>Fig. 8b</b> · amplitude spectrum |c<sub>k</sub>|, −60 ≤ k ≤ 60 · burgundy = terms in use</span>
+                        <span id="cap-k">—</span>
+                    </figcaption>
+                </figure>
+            </div>
+
+            <aside class="panel" aria-label="Controls">
+                <div class="panel__group">
+                    <p class="panel__label">Shape</p>
+                    <p class="hint" id="hint">Press New drawing, draw one stroke on the figure, then press Decompose &amp; play.</p>
+                    <div class="actions" id="run-tools">
+                        <button type="button" class="btn" id="play">Pause</button>
+                        <button type="button" class="btn btn--ghost" id="reset-t">Restart loop</button>
+                        <button type="button" class="btn btn--ghost" id="redraw">New drawing</button>
+                    </div>
+                    <div class="actions" id="draw-tools" hidden>
+                        <button type="button" class="btn" id="go" disabled>Decompose &amp; play</button>
+                        <button type="button" class="btn btn--ghost" id="clear-draft">Clear</button>
+                        <button type="button" class="btn btn--ghost" id="cancel">Cancel</button>
+                    </div>
+                    <div class="grid2" id="presets">
+                        <button type="button" class="btn btn--ghost" data-shape="heart">Heart</button>
+                        <button type="button" class="btn btn--ghost" data-shape="star">Star</button>
+                        <button type="button" class="btn btn--ghost" data-shape="square">Square</button>
+                        <button type="button" class="btn btn--ghost" data-shape="eight">Figure eight</button>
+                        <button type="button" class="btn btn--ghost" data-shape="trefoil">Trefoil</button>
+                        <button type="button" class="btn btn--ghost" data-shape="wave">Open wave</button>
+                    </div>
+                </div>
+
+                <div class="panel__group">
+                    <p class="panel__label">Reconstruction</p>
+                    <label class="ctl">
+                        <span class="ctl__row"><span>Circles K</span><output id="K-out" for="K"></output></span>
+                        <input type="range" id="K" min="1" max="120" step="1" value="24">
+                    </label>
+                    <label class="ctl">
+                        <span class="ctl__row"><span>Time per loop</span><output id="loop-out" for="loop"></output></span>
+                        <input type="range" id="loop" min="4" max="30" step="1" value="12">
+                    </label>
+                    <label class="ctl">
+                        <span class="ctl__row"><span>Zoom</span><output id="zoom-out" for="zoom"></output></span>
+                        <input type="range" id="zoom" min="0" max="1.8" step="0.01" value="0">
+                    </label>
+                    <label class="switch"><span>Follow the pen</span><input type="checkbox" id="sw-follow"></label>
+                    <div class="actions">
+                        <button type="button" class="btn btn--ghost" id="reset-view">Reset view</button>
+                    </div>
+                    <label class="switch"><span>Component circles</span><input type="checkbox" id="sw-circles" checked></label>
+                    <label class="switch"><span>Tip-to-tail vectors</span><input type="checkbox" id="sw-vectors" checked></label>
+                    <label class="switch"><span>Your drawing</span><input type="checkbox" id="sw-orig" checked></label>
+                    <label class="switch"><span>Full K-term curve</span><input type="checkbox" id="sw-full"></label>
+                </div>
+
+                <dl class="readouts">
+                    <div><dt>Samples N</dt><dd id="r-N">256</dd></div>
+                    <div><dt>Terms K</dt><dd id="r-K">—</dd></div>
+                    <div><dt>⟨|z|²⟩ kept</dt><dd id="r-cap" class="is-accent">—</dd></div>
+                    <div><dt>Largest k</dt><dd id="r-k1">—</dd></div>
+                    <div><dt>RMS error</dt><dd id="r-err">—</dd></div>
+                    <div><dt>… by Parseval</dt><dd id="r-errp">—</dd></div>
+                </dl>
+                <ul class="legend">
+                    <li><span class="sw"></span>reconstruction</li>
+                    <li><span class="sw sw--dash"></span>your drawing</li>
+                    <li><span class="sw sw--rose"></span>circle of one term</li>
+                </ul>
+            </aside>
+        </div>
+
+        <section class="deriv" aria-labelledby="deriv-title">
+            <div class="deriv__head">
+                <h2 id="deriv-title">From physics to pixels</h2>
+                <p>How a pen stroke becomes 256 complex numbers, how those become a spectrum, and why a handful of circles already draws the shape.</p>
+            </div>
+            <div class="deriv__grid">
+                <nav class="deriv__toc" aria-label="Steps">
+                    <ol>
+                        <li><a href="#s-picture">Physical picture</a></li>
+                        <li><a href="#s-model">Model</a></li>
+                        <li><a href="#s-derivation">Derivation</a></li>
+                        <li><a href="#s-numerics">Numerical method</a></li>
+                        <li><a href="#s-screen">On screen</a></li>
+                        <li><a href="#s-limits">Limits</a></li>
+                    </ol>
+                </nav>
+                <div class="deriv__body">
+                    <article class="step" id="s-picture">
+                        <p class="step__num">01 · Physical picture</p>
+                        <h3>A bead on a bent wire</h3>
+                        <p>Bend a thin wire of uniform density into the shape you drew and slide a bead around it at constant speed, once per loop. The bead’s motion is periodic, and any periodic motion is a sum of harmonics, like the overtones of a plucked string. In the plane each harmonic is a uniform circular motion that turns a whole number of times k per loop, clockwise or anticlockwise. The figure finds those circles and chains them tip to tail, so the last tip rides the wire again.</p>
+                        <p>Most of the shape lives in a few slow, large circles: the k = ±1 pair alone draws an ellipse of the right size and tilt. Faster, smaller circles add corners and wiggles. Fig. 8b lists the circle radii; the slider K decides how many you keep. This is Fig. 7 run backwards: there the circles are given and the shape follows; here the shape is given and the circles follow.</p>
+                        <p>It is kinematics, not dynamics. No force makes the bead move this way; the circles are a complete description of the motion, not an explanation of it. That is also why Ptolemy’s epicycles fitted the planets so well without being the right physics.</p>
+                    </article>
+
+                    <article class="step" id="s-model">
+                        <p class="step__num">02 · Model</p>
+                        <h3>A closed curve as a periodic complex function</h3>
+                        <p>Put the drawing in the complex plane, z = x + iy, and parametrise it by a time t that runs once from 0 to 2π around the curve. A closed curve is then a 2π-periodic function z(t), and any such function with finite energy has a Fourier series</p>
+                        <p class="eq"><span class="eq__line">z(t) = Σ<sub>k=−∞</sub><sup>∞</sup> c<sub>k</sub> e<sup>ikt</sup>, &nbsp; c<sub>k</sub> = (1/2π) ∫<sub>0</sub><sup>2π</sup> z(t) e<sup>−ikt</sup> dt</span><span class="eq__note">k: whole turns per loop · k &gt; 0 anticlockwise, k &lt; 0 clockwise</span></p>
+                        <p>Here t is the bead’s loop parameter (one loop = 2π), not a physical clock; the animation simply plays it at one loop per T<sub>loop</sub> seconds. Each term c<sub>k</sub> e<sup>ikt</sup> is a phasor exactly as in Fig. 7: radius |c<sub>k</sub>|, angular frequency k, starting angle arg c<sub>k</sub>. Unlike a real signal, a curve in the plane is complex, so c<sub>−k</sub> is <em>not</em> the conjugate of c<sub>k</sub>: clockwise and anticlockwise circles are independent, and both are needed.</p>
+                        <h4>Why the exponentials pick out one circle each</h4>
+                        <p>The functions e<sup>ikt</sup> are orthonormal on a loop:</p>
+                        <p class="eq"><span class="eq__line">(1/2π) ∫<sub>0</sub><sup>2π</sup> e<sup>ijt</sup> e<sup>−ikt</sup> dt = δ<sub>jk</sub></span></p>
+                        <p>Multiply the series by e<sup>−ikt</sup> and average over a loop: every circle with j ≠ k spins a whole number of times relative to the probe and averages to zero, and only c<sub>k</sub> survives. That is the formula for c<sub>k</sub> above, and it is the reason each coefficient can be computed on its own.</p>
+                    </article>
+
+                    <article class="step" id="s-derivation">
+                        <p class="step__num">03 · Derivation</p>
+                        <h3>From integral to sum, and what truncation costs</h3>
+                        <h4>The discrete transform</h4>
+                        <p>The page samples the curve at N = 256 equally spaced parameter values t<sub>n</sub> = 2πn/N. The integral becomes a Riemann sum:</p>
+                        <p class="eq"><span class="eq__line">c<sub>k</sub> ≈ (1/N) Σ<sub>n=0</sub><sup>N−1</sup> z<sub>n</sub> e<sup>−2πikn/N</sup></span><span class="eq__note">the discrete Fourier transform, normalised by 1/N</span></p>
+                        <p>On the sample points the orthogonality is exact, (1/N) Σ<sub>n</sub> e<sup>2πi(j−k)n/N</sup> = δ<sub>jk</sub> for j and k distinct modulo N, a finite geometric series that sums to zero. So keeping every coefficient reproduces all N samples exactly.</p>
+                        <h4>Parseval: the wire’s moment of inertia, circle by circle</h4>
+                        <p>Square and average the discrete series. Cross terms vanish by the same orthogonality, leaving</p>
+                        <p class="eq"><span class="eq__line">(1/N) Σ<sub>n</sub> |z<sub>n</sub>|² = Σ<sub>k</sub> |c<sub>k</sub>|²</span><span class="eq__note">mean squared distance from the centre = sum of squared radii</span></p>
+                        <p>Because the samples are equally spaced along the wire and the mean has been removed, the left side is the wire’s moment of inertia about its centre of mass divided by its mass, I/m. Each circle carries the share |c<sub>k</sub>|² of it, with no cross terms. Now keep only a set S of K coefficients. The error at the samples is the sum of the dropped circles, and by the same identity its mean square is the share of I/m you dropped:</p>
+                        <p class="eq"><span class="eq__line">e<sub>RMS</sub>² = (1/N) Σ<sub>n</sub> |z<sub>n</sub> − z<sub>S</sub>(t<sub>n</sub>)|² = ⟨|z|²⟩ − Σ<sub>k∈S</sub> |c<sub>k</sub>|²</span></p>
+                        <p>So the best K-term approximation, in the least-squares sense, keeps the K largest |c<sub>k</sub>|. That is why the page sorts by amplitude. The panel shows the error twice: once computed point by point, once from this formula. They agree to rounding, which is a check on the whole pipeline.</p>
+                        <p class="try"><b>Try</b>Pick <em>Square</em> and set K = 4. For a square traced at constant speed only k = 1 − 4m survive (k = 1, −3, 5, −7, …), because of its four-fold symmetry. Watch the spectrum: every fourth bar is lit, the rest are near zero.</p>
+                        <h4>How fast the radii fall</h4>
+                        <p>Integrate the coefficient formula by parts: c<sub>k</sub> = (1/ik) · (1/2π) ∫ ż(t) e<sup>−ikt</sup> dt. Each time the curve can be differentiated once more without a jump, another factor 1/k appears. A smooth heart has radii that drop off very fast; a square, whose velocity jumps at the corners, only falls as 1/k²; an open stroke, which the series must close with a jump, falls as 1/k and rings near the jump (Gibbs phenomenon).</p>
+                    </article>
+
+                    <article class="step" id="s-numerics">
+                        <p class="step__num">04 · Numerical method</p>
+                        <h3>Resample, centre, transform, sort</h3>
+                        <ul class="facts">
+                            <li>Resampling: the raw stroke has uneven spacing (you draw faster in some places). The page walks along the polyline and places N = 256 points at equal arc length, by linear interpolation. Equal arc length means the pen moves at constant speed, so t is proportional to distance travelled.</li>
+                            <li>Centring: the mean of the samples is subtracted, so c<sub>0</sub> = 0 and the shape is drawn about the centre of the figure.</li>
+                            <li>Transform: a direct sum over n for each k from −60 to 60 (k = 0 omitted), 120 × 256 ≈ 31 000 complex products, done once per shape. A fast Fourier transform is not needed at this size.</li>
+                            <li>Sorting: coefficients are sorted by |c<sub>k</sub>| in descending order; the first K are used, and the largest circle sits at the centre of the chain.</li>
+                        </ul>
+                        <p>Every frame, the parameter advances as t ← t + 2π Δt / T<sub>loop</sub>, with Δt the real time between frames, and the chain of K phasors is evaluated in closed form. There is no integration and no accumulated error.</p>
+                    </article>
+
+                    <article class="step" id="s-screen">
+                        <p class="step__num">05 · On screen</p>
+                        <h3>Units and colours</h3>
+                        <p>The drawing is stored in scale-free units: one unit is 0.46 of the shorter side of the figure, the origin at its centre and y pointing up. Resizing the window therefore never distorts a shape. Points closer than 0.006 units to the previous one are skipped while drawing.</p>
+                        <p>After decomposition the page finds the outermost point drawn over a whole loop: the largest |joint| + radius over all circles at 256 instants, and the farthest point of your centred drawing. If that exceeds one unit, the view zooms out so it lands at 46 % of the shorter side; it zooms out at once and back in with a 0.4 s time constant when you lower K. At zoom 1× nothing leaves the figure. The Zoom slider, the mouse wheel or a pinch magnify this fitted view up to about 63×, and dragging pans it; Follow the pen keeps the tip of the chain at the centre, so the smallest circles stay in sight while they turn. Zoom and pan change only the view, never the coefficients.</p>
+                        <p>The traced reconstruction is burgundy and fades over one loop; your centred drawing is a dashed ink line; each circle is rose. In Fig. 8b each stem is |c<sub>k</sub>| scaled to the largest one, burgundy if the term is among the K in use.</p>
+                    </article>
+
+                    <article class="step" id="s-limits">
+                        <p class="step__num">06 · Limits</p>
+                        <h3>What the numbers do not tell you</h3>
+                        <ul class="facts">
+                            <li>Only |k| ≤ 60 are computed, so even K = 120 is not exact: the ⟨|z|²⟩ readout tells you how much is missing.</li>
+                            <li>The error is measured at the 256 sample points. Between them a truncated series can overshoot, most visibly next to corners and jumps.</li>
+                            <li>An open stroke is closed by the series with a straight jump from end to start; the ringing there does not shrink as K grows, it only gets narrower (about 9 % overshoot, Gibbs).</li>
+                            <li>Arc-length resampling cuts corners by at most one sample spacing: for a long stroke that spacing is the total length divided by 255.</li>
+                        </ul>
+                    </article>
+                </div>
+            </div>
+        </section>
+
+        <section class="walk" id="walk" data-walk="dft" aria-label="From symbols to code"></section>
+    </main>
+
+    <footer class="sim-foot">
+        <span>© 2026 Numa Koudsie · Claude version</span>
+        <span><a href="../index.html#simulations">All simulations ↑</a></span>
+    </footer>
+
+    <script src="../scripts/sim.js"></script>
+    <script>
+    (function () {
+        'use strict';
+        var T = Sim.theme, TAU = 2 * Math.PI, NS = 256, KMAX = 60;
+        var $ = function (id) { return document.getElementById(id); };
+        var stage = $('stage'), canvas = $('field');
+        var box = Sim.canvas2d(canvas), ctx = box.ctx;
+        var specStage = $('spec-stage'), sbox = Sim.canvas2d($('spec')), sctx = sbox.ctx;
+
+        var mode = 'draw', drawing = false, source = '—';
+        var stroke = [], samples = [], coefs = [], full = [];
+        var arcLen = 0, meanX = 0, meanY = 0, meanZ2 = 0, err = 0, errP = 0, kept = 0;
+        var t = 0, trail = [];
+        var extR = 1, viewR = 1; /* outermost drawn radius over a loop, and the radius the view is fitted to */
+        var draft = [], zoom = 1, panX = 0, panY = 0, ptrs = {}, pinch = null; /* stroke being drawn; view magnification and centre in scale-free units */
+
+        var K = Sim.slider('K', { format: function (v) { return String(v); }, onInput: rebuild });
+        var loop = Sim.slider('loop', { format: function (v) { return v + ' s'; } });
+        var swCircles = $('sw-circles'), swVectors = $('sw-vectors'), swOrig = $('sw-orig'), swFull = $('sw-full');
+        var swFollow = $('sw-follow');
+        var zoomS = Sim.slider('zoom', { format: function (v) { return Sim.fmt(Math.pow(10, v), 1) + '×'; }, onInput: function (v) { zoom = Math.pow(10, v); } });
+
+        function S() { return Math.min(box.w, box.h) * 0.46; }
+
+        /* tip-to-tail arrow colours, cycled so neighbouring arrows read apart */
+        var VEC = [T.accent, T.ink2, T.tanInk, '#a54f60'];
+
+        /* equal arc-length resampling of a polyline to N points */
+        function resamp(pts, N) {
+            var ds = [0], tot = 0;
+            for (var i = 1; i < pts.length; i++) {
+                tot += Math.hypot(pts[i].x - pts[i - 1].x, pts[i].y - pts[i - 1].y);
+                ds.push(tot);
+            }
+            if (tot < 1e-6) return null;
+            var step = tot / (N - 1), res = [{ x: pts[0].x, y: pts[0].y }], j = 0;
+            for (i = 1; i < N; i++) {
+                var tgt = i * step;
+                while (j < ds.length - 2 && ds[j + 1] < tgt) j++;
+                var f = ds[j + 1] > ds[j] ? Math.min(1, (tgt - ds[j]) / (ds[j + 1] - ds[j])) : 0;
+                res.push({ x: pts[j].x + f * (pts[j + 1].x - pts[j].x), y: pts[j].y + f * (pts[j + 1].y - pts[j].y) });
+            }
+            arcLen = tot;
+            return res;
+        }
+
+        /* c_k = (1/N) Σ z_n e^{−2πikn/N}, sorted by |c_k| */
+        function dft(z) {
+            var N = z.length, out = [];
+            for (var k = -KMAX; k <= KMAX; k++) {
+                if (k === 0) continue;
+                var re = 0, im = 0;
+                for (var n = 0; n < N; n++) {
+                    var a = TAU * k * n / N, c = Math.cos(a), s = Math.sin(a);
+                    re += z[n].x * c + z[n].y * s;
+                    im += z[n].y * c - z[n].x * s;
+                }
+                re /= N;
+                im /= N;
+                out.push({ k: k, re: re, im: im, amp: Math.hypot(re, im), phase: Math.atan2(im, re) });
+            }
+            return out.sort(function (a, b) { return b.amp - a.amp; });
+        }
+
+        function chainAt(time, n) {
+            var x = 0, y = 0, parts = [];
+            for (var i = 0; i < n; i++) {
+                var c = coefs[i], ang = c.k * time + c.phase;
+                var vx = c.amp * Math.cos(ang), vy = c.amp * Math.sin(ang);
+                x += vx;
+                y += vy;
+                parts.push({ vx: vx, vy: vy, amp: c.amp });
+            }
+            return { x: x, y: y, parts: parts };
+        }
+
+        function decompose(pts, name) {
+            var r = resamp(pts, NS);
+            if (!r) { $('cap-mode').textContent = 'stroke too short · draw again'; return; }
+            meanX = 0; meanY = 0;
+            r.forEach(function (p) { meanX += p.x; meanY += p.y; });
+            meanX /= NS; meanY /= NS;
+            samples = r.map(function (p) { return { x: p.x - meanX, y: p.y - meanY }; });
+            meanZ2 = 0;
+            samples.forEach(function (p) { meanZ2 += p.x * p.x + p.y * p.y; });
+            meanZ2 /= NS;
+            coefs = dft(samples);
+            source = name;
+            K.el.max = coefs.length;
+            K.set(Math.min(K.value, coefs.length));
+            t = 0;
+            trail = [];
+            mode = 'play';
+            rebuild();
+        }
+
+        /* truncated series: full curve, point-wise error and the Parseval prediction */
+        function rebuild() {
+            if (!coefs.length) return;
+            var n = K.value, i;
+            kept = 0;
+            for (i = 0; i < n; i++) kept += coefs[i].amp * coefs[i].amp;
+            errP = Math.sqrt(Math.max(0, meanZ2 - kept));
+            var e2 = 0;
+            for (i = 0; i < NS; i++) {
+                var z = chainAt(TAU * i / NS, n);
+                e2 += Math.pow(z.x - samples[i].x, 2) + Math.pow(z.y - samples[i].y, 2);
+            }
+            err = Math.sqrt(e2 / NS);
+            full = [];
+            for (i = 0; i <= 600; i++) {
+                var q = chainAt(TAU * i / 600, n);
+                full.push({ x: q.x, y: q.y });
+            }
+            /* outermost point drawn over a whole loop: every circle edge |joint| + radius, and the drawing itself */
+            extR = 0;
+            samples.forEach(function (p) { extR = Math.max(extR, Math.hypot(p.x, p.y)); });
+            for (i = 0; i < 256; i++) {
+                var jx = 0, jy = 0, tt = TAU * i / 256;
+                for (var m = 0; m < n; m++) {
+                    var cm = coefs[m], an = cm.k * tt + cm.phase;
+                    extR = Math.max(extR, Math.hypot(jx, jy) + cm.amp);
+                    jx += cm.amp * Math.cos(an);
+                    jy += cm.amp * Math.sin(an);
+                }
+            }
+            trail = [];
+            readouts();
+            spectrum();
+        }
+
+        /* ---------- preset shapes (parametric, then the same pipeline as a drawing) ---------- */
+        function param(fx, fy, closed) {
+            var pts = [], M = 1200;
+            for (var i = 0; i <= M; i++) {
+                var u = (closed ? TAU : 1) * i / M;
+                pts.push({ x: fx(u), y: fy(u) });
+            }
+            return pts;
+        }
+        function poly(v) {
+            var pts = [];
+            for (var i = 0; i < v.length; i++) {
+                var a = v[i], b = v[(i + 1) % v.length];
+                for (var j = 0; j < 100; j++) pts.push({ x: a[0] + (b[0] - a[0]) * j / 100, y: a[1] + (b[1] - a[1]) * j / 100 });
+            }
+            pts.push({ x: v[0][0], y: v[0][1] });
+            return pts;
+        }
+        var SHAPES = {
+            heart: function () {
+                return param(function (u) { return 0.85 * Math.pow(Math.sin(u), 3); },
+                    function (u) { return 0.85 * (13 * Math.cos(u) - 5 * Math.cos(2 * u) - 2 * Math.cos(3 * u) - Math.cos(4 * u)) / 16; }, true);
+            },
+            star: function () {
+                var v = [];
+                for (var i = 0; i < 10; i++) {
+                    var r = i % 2 ? 0.36 : 0.9, a = Math.PI / 2 + i * Math.PI / 5;
+                    v.push([r * Math.cos(a), r * Math.sin(a)]);
+                }
+                return poly(v);
+            },
+            square: function () { return poly([[0.7, 0.7], [-0.7, 0.7], [-0.7, -0.7], [0.7, -0.7]]); },
+            eight: function () { return param(function (u) { return 0.85 * Math.sin(u); }, function (u) { return 0.85 * Math.sin(u) * Math.cos(u); }, true); },
+            trefoil: function () {
+                return param(function (u) { return 0.3 * (Math.sin(u) + 2 * Math.sin(2 * u)); },
+                    function (u) { return 0.3 * (Math.cos(u) - 2 * Math.cos(2 * u)); }, true);
+            },
+            wave: function () { return param(function (u) { return -0.85 + 1.7 * u; }, function (u) { return 0.3 * Math.sin(3 * TAU * u); }, false); }
+        };
+        var NAMES = { heart: 'heart', star: 'five-point star', square: 'square', eight: 'figure eight', trefoil: 'trefoil', wave: 'open wave' };
+        $('presets').addEventListener('click', function (e) {
+            var b = e.target.closest('[data-shape]');
+            if (!b) return;
+            var s = b.getAttribute('data-shape');
+            stroke = SHAPES[s]();
+            play(stroke, NAMES[s]);
+        });
+
+        /* ---------- the pointer: draws in drawing mode; pans and zooms the view while playing ---------- */
+        function world(e) {
+            var r = canvas.getBoundingClientRect(), s = S();
+            return { x: (e.clientX - r.left - box.w / 2) / s, y: -(e.clientY - r.top - box.h / 2) / s };
+        }
+        function viewScale() { return S() / Math.max(1, viewR) * zoom; }
+        function setZoom(z) {
+            zoom = Math.max(1, Math.min(Math.pow(10, 1.8), z));
+            zoomS.set(Math.log(zoom) / Math.LN10);
+        }
+        function setMode(m) {
+            mode = m;
+            drawing = false;
+            ptrs = {};
+            pinch = null;
+            $('run-tools').hidden = m === 'draw';
+            $('draw-tools').hidden = m !== 'draw';
+            $('go').disabled = draft.length < 12;
+            $('cancel').disabled = !coefs.length;
+            canvas.style.cursor = m === 'draw' ? 'crosshair' : 'grab';
+            $('hint').textContent = m === 'draw'
+                ? 'Press and drag on the figure to draw one stroke; a new stroke replaces it. Then press Decompose & play. Cancel returns to the previous shape.'
+                : 'While it plays, touching the figure never erases it: drag to pan, scroll or pinch to zoom. New drawing starts a stroke; the current shape stays until you decompose the new one.';
+            readouts();
+        }
+        function startDraw() {
+            draft = [];
+            setMode('draw');
+        }
+        function play(pts, name) {
+            panX = panY = 0;
+            decompose(pts, name);
+            if (mode === 'play') setMode('play');
+        }
+        canvas.addEventListener('mousedown', function (e) { e.preventDefault(); });
+        canvas.addEventListener('pointerdown', function (e) {
+            e.preventDefault();
+            if (canvas.setPointerCapture) canvas.setPointerCapture(e.pointerId);
+            if (mode === 'draw') {
+                drawing = true;
+                draft = [world(e)];
+                $('go').disabled = true;
+                return;
+            }
+            ptrs[e.pointerId] = { x: e.clientX, y: e.clientY };
+            var ids = Object.keys(ptrs);
+            if (ids.length === 2) {
+                var a = ptrs[ids[0]], b = ptrs[ids[1]];
+                pinch = { d: Math.hypot(a.x - b.x, a.y - b.y) || 1, z: zoom };
+            }
+        });
+        canvas.addEventListener('pointermove', function (e) {
+            if (mode === 'draw') {
+                if (!drawing) return;
+                var p = world(e), l = draft[draft.length - 1];
+                if (Math.hypot(p.x - l.x, p.y - l.y) > 0.006) draft.push(p);
+                return;
+            }
+            var q = ptrs[e.pointerId];
+            if (!q) return;
+            var ids = Object.keys(ptrs);
+            if (ids.length >= 2 && pinch) {
+                q.x = e.clientX;
+                q.y = e.clientY;
+                var a = ptrs[ids[0]], b = ptrs[ids[1]];
+                setZoom(pinch.z * Math.hypot(a.x - b.x, a.y - b.y) / pinch.d);
+                return;
+            }
+            if (swFollow.checked) {
+                var tip = chainAt(t, K.value);
+                panX = tip.x;
+                panY = tip.y;
+                swFollow.checked = false;
+            }
+            var s = viewScale();
+            panX -= (e.clientX - q.x) / s;
+            panY += (e.clientY - q.y) / s;
+            q.x = e.clientX;
+            q.y = e.clientY;
+        });
+        function endPointer(e) {
+            if (mode === 'draw') {
+                if (!drawing) return;
+                drawing = false;
+                $('go').disabled = draft.length < 12;
+                if (draft.length < 12) $('cap-mode').textContent = 'stroke too short · draw again';
+                return;
+            }
+            delete ptrs[e.pointerId];
+            if (Object.keys(ptrs).length < 2) pinch = null;
+        }
+        canvas.addEventListener('pointerup', endPointer);
+        canvas.addEventListener('pointercancel', endPointer);
+        canvas.addEventListener('wheel', function (e) {
+            if (mode === 'draw') return;
+            e.preventDefault();
+            var r = canvas.getBoundingClientRect(), mx = e.clientX - r.left - box.w / 2, my = e.clientY - r.top - box.h / 2;
+            var s0 = viewScale();
+            setZoom(zoom * Math.exp(-e.deltaY * (e.deltaMode === 1 ? 16 : 1) * 0.0015));
+            if (!swFollow.checked) {
+                var s1 = viewScale();
+                panX += mx / s0 - mx / s1;
+                panY -= my / s0 - my / s1;
+            }
+        }, { passive: false });
+        $('redraw').addEventListener('click', startDraw);
+        $('clear-draft').addEventListener('click', function () { draft = []; $('go').disabled = true; });
+        $('cancel').addEventListener('click', function () { if (coefs.length) { draft = []; setMode('play'); } });
+        $('go').addEventListener('click', function () {
+            if (draft.length < 12) return;
+            stroke = draft;
+            draft = [];
+            play(stroke, 'your drawing');
+            if (!clk.playing) clk.set(true);
+        });
+        $('reset-t').addEventListener('click', function () { t = 0; trail = []; });
+        $('reset-view').addEventListener('click', function () { panX = panY = 0; setZoom(1); swFollow.checked = false; });
+        swFollow.addEventListener('change', function () {
+            if (swFollow.checked) return;
+            var tip = chainAt(t, K.value);
+            panX = tip.x;
+            panY = tip.y;
+        });
+
+        /* ---------- rendering ---------- */
+        function line(pts, cx, cy, s, closed) {
+            ctx.beginPath();
+            for (var i = 0; i < pts.length; i++) {
+                var px = cx + pts[i].x * s, py = cy - pts[i].y * s;
+                if (i) ctx.lineTo(px, py); else ctx.moveTo(px, py);
+            }
+            if (closed) ctx.closePath();
+            ctx.stroke();
+        }
+        function draw() {
+            var w = box.w, h = box.h, cx = w / 2, cy = h / 2, s = mode === 'draw' ? S() : viewScale();
+            var cur = mode === 'draw' ? null : chainAt(t, K.value);
+            if (cur) {
+                /* view centre: the pen tip when following, else the panned point */
+                cx = w / 2 - (swFollow.checked ? cur.x : panX) * s;
+                cy = h / 2 + (swFollow.checked ? cur.y : panY) * s;
+            }
+            ctx.clearRect(0, 0, w, h);
+            ctx.strokeStyle = T.rule;
+            ctx.lineWidth = 1;
+            ctx.beginPath();
+            ctx.moveTo(0, cy); ctx.lineTo(w, cy);
+            ctx.moveTo(cx, 0); ctx.lineTo(cx, h);
+            ctx.stroke();
+            ctx.fillStyle = T.ink3;
+            ctx.font = T.mono;
+            ctx.textAlign = 'left';
+            ctx.fillText('Im z ↑', 12, 22);
+            ctx.fillText('Re z →', w - 62, cy - 10);
+            ctx.fillText(Sim.fmt(s, 1) + ' px / unit', 12, h - 14);
+            ctx.lineJoin = 'round';
+            ctx.lineCap = 'round';
+
+            if (mode === 'draw') {
+                if (draft.length > 1) {
+                    var sp = draft[0], ep = draft[draft.length - 1];
+                    ctx.strokeStyle = T.accent;
+                    ctx.lineWidth = 2.5;
+                    line(draft, cx, cy, s, false);
+                    ctx.setLineDash([5, 5]);
+                    ctx.strokeStyle = T.ink3;
+                    ctx.lineWidth = 1.5;
+                    line([ep, sp], cx, cy, s, false);
+                    ctx.setLineDash([]);
+                    ctx.strokeStyle = T.accent;
+                    ctx.lineWidth = 2;
+                    ctx.beginPath();
+                    ctx.arc(cx + sp.x * s, cy - sp.y * s, 5, 0, TAU);
+                    ctx.stroke();
+                    ctx.fillStyle = T.accent;
+                    ctx.beginPath();
+                    ctx.arc(cx + ep.x * s, cy - ep.y * s, 3, 0, TAU);
+                    ctx.fill();
+                } else {
+                    ctx.fillStyle = T.muted;
+                    ctx.font = T.mono;
+                    ctx.textAlign = 'center';
+                    ctx.fillText('PRESS AND DRAG TO DRAW ONE STROKE', cx, cy - 12);
+                    ctx.fillText('THEN PRESS DECOMPOSE & PLAY', cx, cy + 8);
+                }
+                return;
+            }
+
+            if (swOrig.checked) {
+                ctx.setLineDash([5, 5]);
+                ctx.strokeStyle = T.ink3;
+                ctx.lineWidth = 1.4;
+                line(samples, cx, cy, s, true);
+                ctx.setLineDash([]);
+            }
+            if (swFull.checked) {
+                ctx.strokeStyle = '#c9707e';
+                ctx.lineWidth = 1.3;
+                line(full, cx, cy, s, false);
+            }
+            /* trail over the last loop, fading with age */
+            var len = trail.length, nseg = 24;
+            ctx.strokeStyle = T.accent;
+            ctx.lineWidth = 2.3;
+            ctx.lineCap = 'butt';
+            for (var c = 0; c < nseg && len > 1; c++) {
+                var a = Math.floor(c * (len - 1) / nseg), b = Math.min(len, Math.floor((c + 1) * (len - 1) / nseg) + 2);
+                ctx.globalAlpha = 0.12 + 0.88 * (c + 1) / nseg;
+                line(trail.slice(a, b), cx, cy, s, false);
+            }
+            ctx.globalAlpha = 1;
+            ctx.lineCap = 'round';
+
+            var ox = cx, oy = cy;
+            cur.parts.forEach(function (p, i) {
+                var nx = ox + p.vx * s, ny = oy - p.vy * s;
+                if (swCircles.checked && p.amp * s > 1.5) {
+                    ctx.strokeStyle = T.rose;
+                    ctx.lineWidth = 1;
+                    ctx.beginPath();
+                    ctx.arc(ox, oy, p.amp * s, 0, TAU);
+                    ctx.stroke();
+                }
+                if (swVectors.checked) {
+                    var vl = Math.hypot(nx - ox, ny - oy), col = VEC[i % 4];
+                    ctx.strokeStyle = col;
+                    ctx.lineWidth = i < 12 ? 1.7 : 1.1;
+                    ctx.setLineDash(i % 2 && i < 12 ? [5, 3] : []);
+                    ctx.beginPath();
+                    ctx.moveTo(ox, oy);
+                    ctx.lineTo(nx, ny);
+                    ctx.stroke();
+                    ctx.setLineDash([]);
+                    if (vl > 8) {
+                        var ah = Math.min(7, vl * 0.4), dir = Math.atan2(ny - oy, nx - ox);
+                        ctx.beginPath();
+                        ctx.moveTo(nx - ah * Math.cos(dir - 0.4), ny - ah * Math.sin(dir - 0.4));
+                        ctx.lineTo(nx, ny);
+                        ctx.lineTo(nx - ah * Math.cos(dir + 0.4), ny - ah * Math.sin(dir + 0.4));
+                        ctx.stroke();
+                        if (i < 12) {
+                            ctx.fillStyle = col;
+                            ctx.fillText(String(i + 1), nx + 5, ny - 5);
+                        }
+                    }
+                }
+                ox = nx;
+                oy = ny;
+            });
+            ctx.setLineDash([3, 4]);
+            ctx.strokeStyle = T.ink3;
+            ctx.lineWidth = 1;
+            ctx.beginPath();
+            ctx.moveTo(ox, cy);
+            ctx.lineTo(ox, oy);
+            ctx.lineTo(cx, oy);
+            ctx.stroke();
+            ctx.setLineDash([]);
+            ctx.beginPath();
+            ctx.arc(ox, oy, 5, 0, TAU);
+            ctx.fillStyle = T.accent;
+            ctx.fill();
+            ctx.lineWidth = 2;
+            ctx.strokeStyle = T.card;
+            ctx.stroke();
+        }
+
+        function spectrum() {
+            var w = sbox.w, h = sbox.h, pad = 18, base = h - 22;
+            sctx.clearRect(0, 0, w, h);
+            sctx.strokeStyle = T.rule;
+            sctx.lineWidth = 1;
+            sctx.beginPath();
+            sctx.moveTo(pad, base); sctx.lineTo(w - pad, base);
+            sctx.stroke();
+            sctx.fillStyle = T.ink3;
+            sctx.font = T.mono;
+            sctx.textAlign = 'center';
+            [-60, -30, 0, 30, 60].forEach(function (k) {
+                var x = pad + (k + KMAX) / (2 * KMAX) * (w - 2 * pad);
+                sctx.beginPath();
+                sctx.moveTo(x, base);
+                sctx.lineTo(x, base + 4);
+                sctx.stroke();
+                sctx.fillText(String(k).replace('-', '−'), x, h - 6);
+            });
+            sctx.textAlign = 'left';
+            sctx.fillText('|c_k| / largest', 12, 14);
+            sctx.textAlign = 'right';
+            sctx.fillText('k = turns per loop', w - 12, 14);
+            sctx.textAlign = 'center';
+            if (!coefs.length) return;
+            var max = coefs[0].amp || 1, n = K.value;
+            coefs.forEach(function (c, rank) {
+                var x = pad + (c.k + KMAX) / (2 * KMAX) * (w - 2 * pad), y = base - c.amp / max * (base - 10);
+                sctx.strokeStyle = rank < n ? T.accent : T.tanInk;
+                sctx.fillStyle = sctx.strokeStyle;
+                sctx.lineWidth = rank < n ? 3 : 2;
+                sctx.beginPath();
+                sctx.moveTo(x, base);
+                sctx.lineTo(x, y);
+                sctx.stroke();
+                sctx.beginPath();
+                sctx.arc(x, y, rank < n ? 2.5 : 1.8, 0, TAU);
+                sctx.fill();
+            });
+        }
+
+        function readouts() {
+            var has = coefs.length > 0;
+            $('r-K').textContent = has ? K.value + ' of ' + coefs.length : '—';
+            $('r-cap').textContent = has ? Sim.fmt(100 * kept / meanZ2, 2) + ' %' : '—';
+            $('r-k1').textContent = has ? (coefs[0].k > 0 ? '+' : '') + Sim.fmt(coefs[0].k, 0) : '—';
+            $('r-err').textContent = has ? Sim.fmt(err, 5) : '—';
+            $('r-errp').textContent = has ? Sim.fmt(errP, 5) : '—';
+            $('cap-mode').textContent = mode === 'draw' ? 'new drawing · not yet decomposed' : has ? K.value + ' circles' : 'draw a shape';
+            $('cap-src').textContent = source;
+            $('cap-k').textContent = has ? 'K = ' + K.value : '—';
+        }
+
+        Sim.live = function () {
+            var out = { N: String(NS), L: Sim.fmt(arcLen, 4), ds: Sim.fmt(arcLen / (NS - 1), 5), mx: Sim.fmt(meanX, 4), my: Sim.fmt(meanY, 4),
+                K: String(K.value), tot: String(coefs.length), E: Sim.fmt(meanZ2, 5), kept: Sim.fmt(kept, 5),
+                cap: meanZ2 ? Sim.fmt(100 * kept / meanZ2, 3) + ' %' : '—', err: Sim.fmt(err, 6), errP: Sim.fmt(errP, 6),
+                t: Sim.fmt(t, 3) + ' rad', tl: loop.value + ' s', src: source };
+            if (coefs.length) {
+                var c = coefs[0], z = chainAt(t, K.value);
+                out.k1 = Sim.fmt(c.k, 0); out.re = Sim.fmt(c.re, 5); out.im = Sim.fmt(c.im, 5); out.A = Sim.fmt(c.amp, 5);
+                out.ph = Sim.fmt(c.phase, 4) + ' rad'; out.x = Sim.fmt(z.x, 4); out.y = Sim.fmt(z.y, 4);
+                out.z0 = Sim.fmt(samples[0].x, 4) + ' + ' + Sim.fmt(samples[0].y, 4) + 'i';
+            } else {
+                out.k1 = out.re = out.im = out.A = out.ph = out.x = out.y = out.z0 = 'no shape yet';
+            }
+            return out;
+        };
+
+        var lastNow = performance.now();
+        var clk = Sim.clock(function (dt) {
+            var now = performance.now(), real = Math.min((now - lastNow) / 1000, 0.05);
+            lastNow = now;
+            if (extR > viewR) viewR = extR;
+            else viewR += (extR - viewR) * (1 - Math.exp(-real / 0.4));
+            if (mode === 'play' && dt > 0) {
+                t += TAU * dt / loop.value;
+                var z = chainAt(t, K.value);
+                trail.push({ x: z.x, y: z.y, t: t });
+                while (trail.length && trail[0].t < t - TAU * 0.98) trail.shift();
+            }
+            draw();
+        });
+        Sim.playButton($('play'), clk);
+        Sim.onResize(stage, function () { box.fit(); });
+        Sim.onResize(specStage, function () { sbox.fit(); spectrum(); });
+
+        stroke = SHAPES.heart();
+        play(stroke, 'heart');
+    })();
+    </script>
+</body>
+</html>

@@ -1,0 +1,914 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Phasor Sums · Numa Koudsie</title>
+    <meta name="description" content="Interactive simulation: rotating complex phasors added tip to tail trace roses, beats and epicycles. An audio file can drive the radii.">
+    <meta name="theme-color" content="#f5f1ea">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link rel="stylesheet" href="../styles/sim.css">
+    <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='12' fill='%237a1f2b'/%3E%3Ctext x='32' y='45' text-anchor='middle' font-family='Georgia,serif' font-size='38' fill='%23f5f1ea'%3EN%3C/text%3E%3C/svg%3E">
+    <style>
+        .plist { display: grid; grid-template-columns: repeat(auto-fill, minmax(230px, 1fr)); gap: 10px; }
+        .ph { min-width: 0; border: 1px solid var(--rule-soft); border-radius: 8px; background: var(--card-soft); padding: 10px 12px 12px; display: flex; flex-direction: column; gap: 8px; }
+        .ph__head { display: flex; justify-content: space-between; align-items: center; font-family: var(--mono); font-size: 11px; letter-spacing: .08em; text-transform: uppercase; color: var(--ink-3); }
+        .ph__sw { display: inline-block; width: 10px; height: 10px; border-radius: 50%; margin-right: 7px; vertical-align: -1px; }
+        .ph__x { background: none; border: 0; color: var(--muted); font-size: 16px; line-height: 1; cursor: pointer; padding: 0 4px; }
+        .ph__x:hover { color: var(--accent); }
+        .sel { width: 100%; font-family: var(--mono); font-size: 12px; color: var(--ink); background: var(--card); border: 1px solid var(--rule); border-radius: 6px; padding: 5px 8px; }
+        .sel:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+        .grid2 { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 6px; }
+        .grid3 { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 6px; }
+        .grid2 .btn, .grid3 .btn { font-size: 12.5px; padding: 7px 8px; }
+        .drop { position: relative; display: block; border: 1.5px dashed var(--rule); border-radius: 8px; padding: 12px; text-align: center; font-size: 13px; color: var(--ink-3); cursor: pointer; background: var(--card-soft); transition: border-color .2s ease, color .2s ease; overflow-wrap: anywhere; }
+        .drop:hover, .drop.is-drag { border-color: var(--accent); color: var(--accent); }
+        .drop input { position: absolute; inset: 0; width: 100%; height: 100%; opacity: 0; cursor: pointer; }
+        .meters { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 6px; }
+        .meter { height: 26px; background: var(--rule-soft); border-radius: 4px; display: flex; align-items: flex-end; overflow: hidden; }
+        .meter i { display: block; width: 100%; height: 0; }
+        .meter-labels { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 6px; font-family: var(--mono); font-size: 10px; letter-spacing: .06em; color: var(--muted); text-align: center; }
+        .beatline { display: flex; align-items: center; gap: 8px; font-family: var(--mono); font-size: 12px; color: var(--ink-2); }
+        .beat { width: 9px; height: 9px; border-radius: 50%; background: var(--accent); opacity: .2; transition: opacity .08s ease, transform .08s ease; }
+        .beat.on { opacity: 1; transform: scale(1.35); }
+        .hint { font-size: 12.5px; color: var(--muted); line-height: 1.5; margin: 0; }
+        .formula { font-family: var(--mono); font-size: 11.5px; line-height: 1.65; color: var(--ink-2); background: var(--card-soft); border: 1px solid var(--rule-soft); border-radius: 8px; padding: 8px 10px; margin: 0; overflow-wrap: anywhere; white-space: pre-wrap; }
+    </style>
+</head>
+<body>
+    <header class="sim-top">
+        <a href="../index.html#simulations">← Numa Koudsie</a>
+        <nav class="sim-nav" aria-label="Simulations">
+            <span>Fig.</span>
+            <a href="Circular Wave Interference Visualization.html">1</a>
+            <a href="Double Pendulum.html">2</a>
+            <a href="Interactive Double-Slit Experiment Visualization.html">3</a>
+            <a href="Transverse and longitudinal waves.html">4</a>
+            <a href="water-wave.html">5</a>
+            <a href="wave-interference.html">6</a>
+            <a href="phasor-sums.html" aria-current="page">7</a>
+            <a href="draw-decompose.html">8</a>
+        </nav>
+    </header>
+
+    <main class="sim">
+        <noscript><p class="sim-error"><b>This simulation needs JavaScript.</b> <a href="../index.html#simulations">Back to the simulations</a></p></noscript>
+        <div class="sim__head">
+            <p class="sim__num">Fig. 7 · complex analysis · epicycles</p>
+            <h1>Phasor Sums<span class="dot">.</span></h1>
+            <p class="sim__lede">Arms spinning on the tips of other arms. Add rotating complex numbers tip to tail and the last tip draws roses, beats and flowers; play a song and the bass makes the arms breathe.</p>
+        </div>
+
+        <div class="sim__grid">
+            <div class="stack">
+                <figure class="stage">
+                    <div class="stage__canvas" id="stage" style="--ar: 1 / 0.78; --ar-m: 1 / 1;">
+                        <canvas id="field" aria-label="Chain of rotating phasors and the curve traced by the last tip."></canvas>
+                    </div>
+                    <figcaption class="stage__cap">
+                        <span><b>Fig. 7</b> · z(t) = Σ A<sub>k</sub> e<sup>i(ω<sub>k</sub>t + φ<sub>k</sub>)</sup> · <span id="cap-mode">live construction</span></span>
+                        <span id="cap-t">t = 0.00 s</span>
+                    </figcaption>
+                </figure>
+
+                <section class="panel" aria-label="Circles">
+                    <div class="panel__group">
+                        <div class="ctl__row">
+                            <p class="panel__label">Circles · one card per phasor</p>
+                            <div class="actions">
+                                <button type="button" class="btn btn--ghost" id="add">Add circle</button>
+                                <button type="button" class="btn btn--ghost" id="random">Randomise</button>
+                            </div>
+                        </div>
+                        <div class="plist" id="plist"></div>
+                    </div>
+                    <div class="panel__group">
+                        <p class="panel__label">Current formula</p>
+                        <p class="formula" id="formula">z(t) = 0</p>
+                    </div>
+                </section>
+            </div>
+
+            <aside class="panel" aria-label="Controls">
+                <div class="panel__group">
+                    <p class="panel__label">View</p>
+                    <div class="grid2">
+                        <button type="button" class="btn" id="m-live" aria-pressed="true">Live</button>
+                        <button type="button" class="btn btn--ghost" id="m-final" aria-pressed="false">Final shape</button>
+                    </div>
+                    <div class="actions">
+                        <button type="button" class="btn" id="play">Pause</button>
+                        <button type="button" class="btn btn--ghost" id="clear">Clear trail</button>
+                    </div>
+                    <label class="ctl">
+                        <span class="ctl__row"><span>Speed</span><output id="speed-out" for="speed"></output></span>
+                        <input type="range" id="speed" min="0" max="4" step="0.01" value="1">
+                    </label>
+                    <label class="ctl">
+                        <span class="ctl__row"><span>Zoom</span><output id="zoom-out" for="zoom"></output></span>
+                        <input type="range" id="zoom" min="0.3" max="1" step="0.01" value="1">
+                    </label>
+                    <label class="ctl">
+                        <span class="ctl__row"><span>Trail length</span><output id="trail-out" for="trail"></output></span>
+                        <input type="range" id="trail" min="100" max="6000" step="100" value="2400">
+                    </label>
+                    <label class="switch"><span>Component circles</span><input type="checkbox" id="sw-circles" checked></label>
+                    <label class="switch"><span>Tip-to-tail vectors</span><input type="checkbox" id="sw-vectors" checked></label>
+                </div>
+
+                <div class="panel__group">
+                    <p class="panel__label">Final shape</p>
+                    <label class="switch"><span>Draw one full period</span><input type="checkbox" id="sw-auto" checked></label>
+                    <label class="ctl">
+                        <span class="ctl__row"><span>Span (if not one period)</span><output id="span-out" for="span"></output></span>
+                        <input type="range" id="span" min="1" max="24" step="1" value="4" disabled>
+                    </label>
+                    <label class="switch"><span>Smooth morphing</span><input type="checkbox" id="sw-morph" checked></label>
+                    <label class="ctl">
+                        <span class="ctl__row"><span>Morph rate α</span><output id="morph-out" for="morph"></output></span>
+                        <input type="range" id="morph" min="0.02" max="0.35" step="0.01" value="0.08">
+                    </label>
+                </div>
+
+                <div class="panel__group">
+                    <p class="panel__label">Presets</p>
+                    <div class="grid2" id="presets">
+                        <button type="button" class="btn btn--ghost" data-preset="rose3">3-petal rose</button>
+                        <button type="button" class="btn btn--ghost" data-preset="rose4">4-petal rose</button>
+                        <button type="button" class="btn btn--ghost" data-preset="rose8">8-petal rose</button>
+                        <button type="button" class="btn btn--ghost" data-preset="beat">Beating pair</button>
+                        <button type="button" class="btn btn--ghost" data-preset="trefoil">Trefoil</button>
+                        <button type="button" class="btn btn--ghost" data-preset="star">Star</button>
+                        <button type="button" class="btn btn--ghost" data-preset="epicycle">Epicycle</button>
+                        <button type="button" class="btn btn--ghost" data-preset="spirograph">Spirograph</button>
+                        <button type="button" class="btn btn--ghost" data-preset="galaxy">Galaxy</button>
+                        <button type="button" class="btn btn--ghost" data-preset="flower">Flower</button>
+                    </div>
+                </div>
+
+                <div class="panel__group">
+                    <p class="panel__label">Audio · Auto Dance</p>
+                    <label class="drop" id="drop"><input type="file" id="afile" accept="audio/*" aria-label="Choose an audio file"><span id="drop-txt">Drop an audio file here, or click to choose</span></label>
+                    <div class="grid3">
+                        <button type="button" class="btn btn--ghost" id="a-play">Play</button>
+                        <button type="button" class="btn btn--ghost" id="a-pause">Pause</button>
+                        <button type="button" class="btn btn--ghost" id="a-stop">Stop</button>
+                    </div>
+                    <div class="beatline"><span class="beat" id="beat"></span><span id="bpm">— BPM</span></div>
+                    <div class="meters" aria-hidden="true">
+                        <div class="meter"><i id="m-bass" style="background: var(--accent);"></i></div>
+                        <div class="meter"><i id="m-mid" style="background: var(--tan-ink);"></i></div>
+                        <div class="meter"><i id="m-high" style="background: var(--accent-rose);"></i></div>
+                    </div>
+                    <div class="meter-labels"><span>bass</span><span>mid</span><span>high</span></div>
+                    <label class="switch"><span>Auto Dance</span><input type="checkbox" id="dance"></label>
+                    <label class="ctl">
+                        <span class="ctl__row"><span>Bass drive</span><output id="d-bass-out" for="d-bass"></output></span>
+                        <input type="range" id="d-bass" min="0" max="3" step="0.05" value="1.5">
+                    </label>
+                    <label class="ctl">
+                        <span class="ctl__row"><span>Speed drive</span><output id="d-speed-out" for="d-speed"></output></span>
+                        <input type="range" id="d-speed" min="0" max="3" step="0.05" value="1">
+                    </label>
+                    <label class="ctl">
+                        <span class="ctl__row"><span>Beat burst</span><output id="d-burst-out" for="d-burst"></output></span>
+                        <input type="range" id="d-burst" min="0" max="3" step="0.05" value="0.6">
+                    </label>
+                    <label class="ctl">
+                        <span class="ctl__row"><span>High drive</span><output id="d-high-out" for="d-high"></output></span>
+                        <input type="range" id="d-high" min="0" max="3" step="0.05" value="0.6">
+                    </label>
+                    <p class="hint">The file stays in your browser; nothing is uploaded. The music only rescales the radii on screen: the stored A, ω and φ are never overwritten.</p>
+                </div>
+
+                <div class="panel__group">
+                    <p class="panel__label">Performance</p>
+                    <div class="grid3">
+                        <button type="button" class="btn btn--ghost" id="rec">Record</button>
+                        <button type="button" class="btn btn--ghost" id="rec-stop">Stop</button>
+                        <button type="button" class="btn btn--ghost" id="rec-play">Replay</button>
+                    </div>
+                    <div class="grid2">
+                        <button type="button" class="btn btn--ghost" id="rec-export">Export JSON</button>
+                        <button type="button" class="btn btn--ghost" id="rec-import">Import JSON</button>
+                    </div>
+                    <input type="file" id="rec-file" accept="application/json,.json" hidden>
+                    <p class="hint" id="rec-status">Nothing recorded. Snapshots every 50 ms while recording.</p>
+                </div>
+
+                <dl class="readouts">
+                    <div><dt>Circles N</dt><dd id="r-n">—</dd></div>
+                    <div><dt>|z(t)|</dt><dd id="r-z">—</dd></div>
+                    <div><dt>Period 2π/g</dt><dd id="r-period">—</dd></div>
+                    <div><dt>Symmetry</dt><dd id="r-fold">—</dd></div>
+                    <div class="wide"><dt>⟨|z|²⟩ = Σ A²</dt><dd id="r-energy" class="is-accent">—</dd></div>
+                </dl>
+                <ul class="legend">
+                    <li><span class="sw"></span>traced curve</li>
+                    <li><span class="sw sw--ink"></span>phasor arm</li>
+                    <li><span class="sw sw--rose"></span>circle of one arm</li>
+                </ul>
+            </aside>
+        </div>
+
+        <section class="deriv" aria-labelledby="deriv-title">
+            <div class="deriv__head">
+                <h2 id="deriv-title">From physics to pixels</h2>
+                <p>What the arms are, why two of them draw a rose, when the curve closes, and how every point on the screen is computed.</p>
+            </div>
+            <div class="deriv__grid">
+                <nav class="deriv__toc" aria-label="Steps">
+                    <ol>
+                        <li><a href="#s-picture">Physical picture</a></li>
+                        <li><a href="#s-model">Model</a></li>
+                        <li><a href="#s-derivation">Derivation</a></li>
+                        <li><a href="#s-numerics">Numerical method</a></li>
+                        <li><a href="#s-screen">On screen</a></li>
+                        <li><a href="#s-limits">Limits</a></li>
+                    </ol>
+                </nav>
+                <div class="deriv__body">
+                    <article class="step" id="s-picture">
+                        <p class="step__num">01 · Physical picture</p>
+                        <h3>A small hand bolted to a big hand</h3>
+                        <p>Take a clock and bolt a small, fast hand to the very tip of the minute hand. The tip of the small hand no longer draws a circle: it loops around the big circle like a bead on a spinning ring. Bolt a third hand to the tip of the second and the loops grow loops. This is the machine Ptolemy used for the planets, and it is exactly the chain of arms in the figure.</p>
+                        <p>You know the motion from a fairground: the arm of a carousel turns slowly, the cup at its end spins fast, and your head traces a flower on the ground. If the cup spins against the arm, the flower closes into petals; if it spins with the arm, you get wide lazy loops. Two equal hands spinning in opposite directions swing the tip back and forth through the centre: that is the rose.</p>
+                    </article>
+
+                    <article class="step" id="s-model">
+                        <p class="step__num">02 · Model</p>
+                        <h3>A sum of uniform circular motions</h3>
+                        <p>A point in the plane is a complex number z = x + iy. One arm of length A rotating uniformly at angular frequency ω, starting at angle φ, is a <em>phasor</em>:</p>
+                        <p class="eq"><span class="eq__line">z<sub>k</sub>(t) = A<sub>k</sub> e<sup>i(ω<sub>k</sub> t + φ<sub>k</sub>)</sup> = A<sub>k</sub> [cos(ω<sub>k</sub>t + φ<sub>k</sub>) + i sin(ω<sub>k</sub>t + φ<sub>k</sub>)]</span><span class="eq__note">A ≥ 0: radius · ω: rad/s, sign = sense of rotation · φ: starting angle</span></p>
+                        <p>Mounting arm k + 1 on the tip of arm k means adding vectors, so the last tip is</p>
+                        <p class="eq"><span class="eq__line">z(t) = Σ<sub>k=1</sub><sup>N</sup> A<sub>k</sub> e<sup>i(ω<sub>k</sub> t + φ<sub>k</sub>)</sup></span></p>
+                        <p>The order of the arms changes the picture of the chain but not the tip, because addition commutes. Each arm is a free rigid rotor, L = ½ I θ̇², whose equation of motion θ̈ = 0 gives θ = ωt + φ; there are no forces between the arms. Everything you see is kinematics: the shape is fixed by the list (A<sub>k</sub>, ω<sub>k</sub>, φ<sub>k</sub>).</p>
+                        <h4>Velocity and cusps</h4>
+                        <p>Differentiating term by term, each arm contributes a velocity perpendicular to itself:</p>
+                        <p class="eq"><span class="eq__line">ż(t) = Σ<sub>k</sub> i ω<sub>k</sub> A<sub>k</sub> e<sup>i(ω<sub>k</sub> t + φ<sub>k</sub>)</sup></span><span class="eq__note">multiplying by i rotates by 90°</span></p>
+                        <p>The pen stops (ż = 0) only where these rotated vectors cancel. That is where the curve has a cusp, the sharp tip of a star.</p>
+                    </article>
+
+                    <article class="step" id="s-derivation">
+                        <p class="step__num">03 · Derivation</p>
+                        <h3>Roses, beats, closure and symmetry</h3>
+                        <h4>Two equal arms: the rose</h4>
+                        <p>Take A<sub>1</sub> = A<sub>2</sub> = A and factor out the mean rotation. With Σ = ω<sub>1</sub> + ω<sub>2</sub>, Δ = ω<sub>1</sub> − ω<sub>2</sub> and zero phases,</p>
+                        <p class="eq"><span class="eq__line">z = A (e<sup>iω₁t</sup> + e<sup>iω₂t</sup>) = A e<sup>iΣt/2</sup> (e<sup>iΔt/2</sup> + e<sup>−iΔt/2</sup>)</span><span class="eq__line">&nbsp;&nbsp;= 2A cos(Δt/2) · e<sup>iΣt/2</sup></span></p>
+                        <p>In polar coordinates the angle is θ = Σt/2 and the radius is r = 2A cos(Δt/2). Eliminating t gives</p>
+                        <p class="eq"><span class="eq__line">r = 2A cos(n θ), &nbsp; n = Δ / Σ</span><span class="eq__note">rhodonea: n petals if n is odd, 2n if n is even</span></p>
+                        <p>The presets are built this way (the phases −π/2 and +π/2 only rotate the rose). 3-petal: ω = 4 and −2, so Σ = 2, Δ = 6, n = 3. 4-petal: ω = 3 and −1, n = 2, four petals. 8-petal: ω = 5 and −3, n = 4, eight petals.</p>
+                        <h4>Same direction: beats</h4>
+                        <p>If both arms turn the same way at nearly the same rate, Σ is large and Δ small. The same factorisation now reads as a fast rotation e<sup>iΣt/2</sup> inside a slow envelope |z| = 2A|cos(Δt/2)|. The distance from the centre swells and collapses with period 2π/|Δ|, exactly like two tuning forks slightly out of tune. <em>Beating pair</em> uses ω = 5 and 6.</p>
+                        <h4>When does the curve close?</h4>
+                        <p>z(t + T) = z(t) for all t requires e<sup>iω<sub>k</sub>T</sup> = 1 for every k, so ω<sub>k</sub>T must be a multiple of 2π for all k at once. If all ω<sub>k</sub> are integer multiples of a largest common frequency g, the smallest such T is</p>
+                        <p class="eq"><span class="eq__line">T = 2π / g, &nbsp; g = gcd(ω<sub>1</sub>, …, ω<sub>N</sub>)</span></p>
+                        <p>If two frequencies have an irrational ratio, no T exists and the curve never closes: it fills an annulus densely. The sliders move in steps of 0.01 rad/s, so the page computes g on the integers 100ω<sub>k</sub>; the period readout can then be very long.</p>
+                        <h4>Rotational symmetry</h4>
+                        <p>Shift time by τ: z(t + τ) = Σ A<sub>k</sub> e<sup>i(ω<sub>k</sub>t + φ<sub>k</sub>)</sup> e<sup>iω<sub>k</sub>τ</sup>. If the extra factors e<sup>iω<sub>k</sub>τ</sup> are all equal, the whole curve is just rotated by that common angle. They are equal when every difference (ω<sub>j</sub> − ω<sub>k</sub>)τ is a multiple of 2π, so τ = 2π/M with M = gcd of the differences, and the rotation angle is ω<sub>1</sub>τ = 2π ω<sub>1</sub>/M. Reduce ω<sub>1</sub>/M = p/q: the curve maps onto itself under a rotation by 2π p/q, so it has q-fold symmetry.</p>
+                        <p class="try"><b>Try</b><em>Star</em> has ω = 1, −4, 6. Differences −5 and 5, M = 5, ω<sub>1</sub>/M = 1/5: five-fold. <em>3-petal rose</em>: M = 6, ω<sub>1</sub>/M = 4/6 = 2/3: three-fold. Change one ω by 1 and watch the symmetry readout jump.</p>
+                        <h4>Average distance: Parseval</h4>
+                        <p>Expand |z|² = z z̄. The diagonal terms give Σ A<sub>k</sub>²; the cross terms oscillate as cos((ω<sub>j</sub> − ω<sub>k</sub>)t + φ<sub>j</sub> − φ<sub>k</sub>) and average to zero whenever the frequencies differ:</p>
+                        <p class="eq"><span class="eq__line">⟨|z|²⟩<sub>t</sub> = Σ<sub>k</sub> A<sub>k</sub>² + 2 Σ<sub>j&lt;k</sub> A<sub>j</sub>A<sub>k</sub> ⟨cos(…)⟩ = Σ<sub>k</sub> A<sub>k</sub>²</span><span class="eq__note">valid when all ω<sub>k</sub> are distinct</span></p>
+                        <p>This is the energy readout. It is the same bookkeeping as Parseval's theorem in Fig. 8, seen from the other side.</p>
+                    </article>
+
+                    <article class="step" id="s-numerics">
+                        <p class="step__num">04 · Numerical method</p>
+                        <h3>Exact evaluation, no integration</h3>
+                        <p>Because the motion is known in closed form, nothing is integrated. Every frame the clock advances t by Δt · speed · (dance factor), with Δt the real time between frames (capped at 50 ms), and the page evaluates N cosines and N sines. There is no accumulated error: t = 100 s is as accurate as t = 1 s.</p>
+                        <ul class="facts">
+                            <li>Live trail: the last up to 6000 tip positions, one per frame.</li>
+                            <li>Final shape: the curve sampled at n equally spaced times over one period (or over the chosen span), 700 samples per 2π of time, clamped between 1500 and 12 000.</li>
+                            <li>Period and symmetry: integer gcd (Euclid's algorithm) on 100ω<sub>k</sub>. Arms with A = 0 are ignored.</li>
+                        </ul>
+                        <h4>Morphing is a low-pass filter</h4>
+                        <p>When you move a slider in Final shape mode, each sampled point p relaxes toward its new target q once per frame:</p>
+                        <p class="eq"><span class="eq__line">p ← p + α (q − p) &nbsp; ⇒ &nbsp; p<sub>m</sub> − q = (1 − α)<sup>m</sup> (p<sub>0</sub> − q)</span><span class="eq__note">m frames later the gap has shrunk by (1 − α)<sup>m</sup> ≈ e<sup>−αm</sup></span></p>
+                        <p>That is a first-order linear filter with a time constant of about 1/α frames: α = 0.08 settles to 1/e in about 12 frames, 0.2 s at 60 frames per second. The in-between curves are straight-line blends of sample points, not curves any real set of phasors would draw.</p>
+                    </article>
+
+                    <article class="step" id="s-screen">
+                        <p class="step__num">05 · On screen</p>
+                        <h3>Complex plane to pixels, sound to radii</h3>
+                        <p>The origin sits at the centre of the figure and the imaginary axis points up, so a point z becomes pixel (c<sub>x</sub> + s·x, c<sub>y</sub> − s·y). The scale is s = 0.44 · min(width, height) / R, where R is the farthest anything is drawn from the origin: the larger of Σ A′<sub>k</sub> (the radii as drawn, Auto Dance included), which bounds every joint and every circle edge by the triangle inequality, and the farthest point still on the trail. R jumps up at once when something would leave the figure and relaxes down with a time constant of 0.6 s, so the picture never spills over and does not jitter. In Final shape mode R is the largest |z| on the curve. Zoom only zooms out (0.3× to 1×).</p>
+                        <h4>Auto Dance</h4>
+                        <p>An audio file you choose is played through the browser's Web Audio analyser: a fast Fourier transform of 2048 samples gives 1024 frequency bins, each about 21.5 Hz wide at 44.1 kHz. Three bands are averaged and normalised to [0, 1]: bass 20–150 Hz, mid 150–4000 Hz, high 4–16 kHz, each smoothed as e ← e + 0.15 (raw − e) per frame.</p>
+                        <ul class="facts">
+                            <li>Arms with |ω| at or below the median get radius A · (1 + ease(bass) · drive · (1 − 0.7|ω|/|ω|<sub>max</sub>)); the slow arms breathe with the bass. The per-circle bounce curve is the easing function applied to the bass level.</li>
+                            <li>Faster arms get A · (1 + high · drive).</li>
+                            <li>Mid energy speeds up time: Δt is multiplied by 1 + mid · speed drive.</li>
+                            <li>A beat is declared when the raw bass jumps by more than 35 % above the previous frame, exceeds 0.22, and at least 280 ms have passed. All radii are then multiplied by 1 + burst, decaying linearly to 1 over 10 frames. BPM is 60 000 divided by the median of the last 8 beat intervals in ms.</li>
+                        </ul>
+                        <p>Colours: traced curve in burgundy, arms in ink tones, each arm's circle in rose. The recorder stores the list (A, ω, φ, curve) every 50 ms against the audio time; replay eases toward each snapshot over 50 ms.</p>
+                    </article>
+
+                    <article class="step" id="s-limits">
+                        <p class="step__num">06 · Limits</p>
+                        <h3>What this leaves out</h3>
+                        <ul class="facts">
+                            <li>Pure kinematics: the arms carry no mass and exert no forces. For dynamics see the double pendulum, Fig. 2.</li>
+                            <li>The period readout assumes ω is exactly a multiple of 0.01 rad/s. Truly incommensurate frequencies never close, but a screen can only ever show finitely many.</li>
+                            <li>The beat detector is a heuristic threshold, not a tempo tracker; it misses soft beats and can double-count busy bass lines.</li>
+                            <li>Band smoothing is per frame, so on a 120 Hz screen the meters respond twice as fast as on a 60 Hz screen.</li>
+                            <li>While Auto Dance is on, radii change during the drawing, so the live trail is no longer a single closed curve.</li>
+                        </ul>
+                    </article>
+                </div>
+            </div>
+        </section>
+
+        <section class="walk" id="walk" data-walk="phasors" aria-label="From symbols to code"></section>
+    </main>
+
+    <footer class="sim-foot">
+        <span>© 2026 Numa Koudsie · Claude version</span>
+        <span><a href="../index.html#simulations">All simulations ↑</a></span>
+    </footer>
+
+    <script src="../scripts/sim.js"></script>
+    <script>
+    (function () {
+        'use strict';
+        var T = Sim.theme, PI = Math.PI, TAU = 2 * Math.PI;
+        var COLS = ['#7a1f2b', '#3a322e', '#7a4b12', '#b0485a', '#5a504b', '#4d0f18', '#a0763a', '#8b8079'];
+        var CURVES = ['Linear', 'Bounce', 'Elastic', 'Back', 'Sine', 'Expo'];
+        var PRESETS = {
+            rose3: [[1, 4, -PI / 2], [1, -2, PI / 2]],
+            rose4: [[1, 3, -PI / 2], [1, -1, PI / 2]],
+            rose8: [[1, 5, -PI / 2], [1, -3, PI / 2]],
+            beat: [[1.1, 5, 0], [1.1, 6, 0.1]],
+            trefoil: [[1, 1, 0], [0.5, -2, PI / 2]],
+            star: [[1, 1, 0], [0.5, -4, 0], [0.18, 6, 0]],
+            epicycle: [[1.3, 1, 0], [0.55, 5, 0], [0.22, -9, 0.4]],
+            spirograph: [[1, 1, 0], [0.62, 7, 0], [0.34, -13, 0.5]],
+            galaxy: [[1.1, 1, 0], [0.5, 5, 0], [0.26, -9, 0.4], [0.12, 17, 1.1]],
+            flower: [[1, 1, 0], [0.8, -6, 0], [0.35, 11, 1.1], [0.18, -17, 0.4]]
+        };
+
+        /* easing curves for the bass response, written inline (no library) */
+        var EASE = {
+            Linear: function (x) { return x; },
+            Bounce: function (x) {
+                var n = 7.5625, d = 2.75;
+                if (x < 1 / d) return n * x * x;
+                if (x < 2 / d) { x -= 1.5 / d; return n * x * x + 0.75; }
+                if (x < 2.5 / d) { x -= 2.25 / d; return n * x * x + 0.9375; }
+                x -= 2.625 / d;
+                return n * x * x + 0.984375;
+            },
+            Elastic: function (x) { return x === 0 ? 0 : x === 1 ? 1 : Math.pow(2, -10 * x) * Math.sin((x * 10 - 0.75) * (TAU / 3)) + 1; },
+            Back: function (x) { var c1 = 1.70158, c3 = c1 + 1; return 1 + c3 * Math.pow(x - 1, 3) + c1 * Math.pow(x - 1, 2); },
+            Sine: function (x) { return -(Math.cos(PI * x) - 1) / 2; },
+            Expo: function (x) { return x === 1 ? 1 : 1 - Math.pow(2, -10 * x); }
+        };
+
+        var $ = function (id) { return document.getElementById(id); };
+        var stage = $('stage');
+        var canvas = $('field');
+        var box = Sim.canvas2d(canvas), ctx = box.ctx;
+
+        var phasors = [], live = [], mode = 'live', t = 0, lastDt = 0, lastSpeed = 1;
+        var trail = [], finalPath = [], morphPath = [], finalN = 0, finalSpan = 0;
+        var danceOn = false;
+        var fitR = 0; /* radius the view is fitted to: grows at once, relaxes slowly */
+
+        var speed = Sim.slider('speed', { format: function (v) { return v.toFixed(2) + '×'; } });
+        var zoom = Sim.slider('zoom', { format: function (v) { return v.toFixed(2) + '×'; } });
+        var trailS = Sim.slider('trail', { format: function (v) { return String(v); } });
+        var spanS = Sim.slider('span', { format: function (v) { return v + ' × 2π s'; }, onInput: function () { refinal(false); readouts(); } });
+        var morph = Sim.slider('morph', { format: function (v) { return v.toFixed(2); } });
+        var dBass = Sim.slider('d-bass', { format: function (v) { return v.toFixed(2); } });
+        var dSpeed = Sim.slider('d-speed', { format: function (v) { return v.toFixed(2); } });
+        var dBurst = Sim.slider('d-burst', { format: function (v) { return v.toFixed(2); } });
+        var dHigh = Sim.slider('d-high', { format: function (v) { return v.toFixed(2); } });
+        var swCircles = $('sw-circles'), swVectors = $('sw-vectors'), swAuto = $('sw-auto'), swMorph = $('sw-morph');
+
+        function wrap(v) { return ((v % TAU) + TAU) % TAU; }
+        function clamp01(v) { return v < 0 ? 0 : v > 1 ? 1 : v; }
+        function median(a) {
+            if (!a.length) return 0;
+            var s = a.slice().sort(function (x, y) { return x - y; }), m = s.length >> 1;
+            return s.length % 2 ? s[m] : (s[m - 1] + s[m]) / 2;
+        }
+        function gcd(a, b) {
+            a = Math.abs(a); b = Math.abs(b);
+            while (b) { var r = a % b; a = b; b = r; }
+            return a;
+        }
+
+        /* the phasor sum and its parts at one time */
+        function sumAt(time, list) {
+            var x = 0, y = 0, parts = [];
+            for (var k = 0; k < list.length; k++) {
+                var p = list[k];
+                var ang = p.freq * time + p.phase;
+                var vx = p.amp * Math.cos(ang), vy = p.amp * Math.sin(ang);
+                x += vx;
+                y += vy;
+                parts.push({ vx: vx, vy: vy, amp: p.amp, color: p.color });
+            }
+            return { x: x, y: y, parts: parts };
+        }
+
+        /* period 2π/g and q-fold symmetry, from integer gcds on 100·ω */
+        function structure(list) {
+            var w = [];
+            list.forEach(function (p) { if (p.amp > 0) w.push(Math.round(p.freq * 100)); });
+            var G = 0, M = 0;
+            w.forEach(function (x) { G = gcd(G, x); });
+            for (var i = 1; i < w.length; i++) M = gcd(M, w[i] - w[0]);
+            var q = M ? M / gcd(w[0], M) : 0;
+            return { n: w.length, G: G, g: G / 100, M: M, q: q };
+        }
+
+        function spanNow() {
+            var s = structure(phasors);
+            if (swAuto.checked && s.g > 0) return Math.min(TAU / s.g, 60 * TAU);
+            return spanS.value * TAU;
+        }
+
+        function refinal(snap) {
+            var sp = spanNow();
+            var n = Math.max(1500, Math.min(12000, Math.round(sp / TAU * 700)));
+            finalPath = new Array(n + 1);
+            for (var i = 0; i <= n; i++) {
+                var z = sumAt(i / n * sp, phasors);
+                finalPath[i] = { x: z.x, y: z.y };
+            }
+            finalN = n;
+            finalSpan = sp;
+            if (snap || !swMorph.checked || morphPath.length !== finalPath.length) {
+                morphPath = finalPath.map(function (p) { return { x: p.x, y: p.y }; });
+            }
+        }
+
+        function morphStep() {
+            var a = swMorph.checked ? morph.value : 1;
+            for (var i = 0; i < finalPath.length; i++) {
+                morphPath[i].x += (finalPath[i].x - morphPath[i].x) * a;
+                morphPath[i].y += (finalPath[i].y - morphPath[i].y) * a;
+            }
+        }
+
+        /* ---------- audio: analyser, bands, beats ---------- */
+        var audio = { ctx: null, an: null, el: null, src: null, data: null };
+        var energy = { bass: 0, mid: 0, high: 0 };
+        var prevBass = 0, lastBeat = 0, bpm = 0, beatPulse = 0, burst = 1, burstFrames = 0, beats = [];
+
+        function ensureAudio() {
+            if (audio.ctx) return;
+            audio.ctx = new (window.AudioContext || window.webkitAudioContext)();
+            audio.an = audio.ctx.createAnalyser();
+            audio.an.fftSize = 2048;
+            audio.an.smoothingTimeConstant = 0.8;
+            audio.data = new Uint8Array(audio.an.frequencyBinCount);
+        }
+        function loadAudio(file) {
+            ensureAudio();
+            if (!audio.el) audio.el = new Audio();
+            audio.el.pause();
+            audio.el.src = URL.createObjectURL(file);
+            if (!audio.src) {
+                audio.src = audio.ctx.createMediaElementSource(audio.el);
+                audio.src.connect(audio.an);
+                audio.an.connect(audio.ctx.destination);
+            }
+            $('drop-txt').textContent = file.name;
+            audio.ctx.resume().then(function () { return audio.el.play(); }).catch(function () {});
+        }
+        function audioControl(action) {
+            if (!audio.el) { $('drop-txt').textContent = 'Choose an audio file first.'; return; }
+            if (action === 'play') { audio.ctx.resume(); audio.el.play().catch(function () {}); }
+            else if (action === 'pause') audio.el.pause();
+            else { audio.el.pause(); audio.el.currentTime = 0; }
+        }
+        function analyse(dt) {
+            if (audio.an) {
+                audio.an.getByteFrequencyData(audio.data);
+                var bin = audio.ctx.sampleRate / audio.an.fftSize, data = audio.data;
+                var band = function (lo, hi) {
+                    var a = Math.max(1, Math.floor(lo / bin)), b = Math.min(data.length - 1, Math.ceil(hi / bin)), s = 0, c = 0;
+                    for (var i = a; i <= b; i++) { s += data[i]; c++; }
+                    return c ? s / c / 255 : 0;
+                };
+                var rb = band(20, 150), rm = band(150, 4000), rh = band(4000, 16000);
+                energy.bass += (rb - energy.bass) * 0.15;
+                energy.mid += (rm - energy.mid) * 0.15;
+                energy.high += (rh - energy.high) * 0.15;
+                var now = performance.now();
+                if (rb > prevBass * 1.35 && rb > 0.22 && now - lastBeat > 280) {
+                    if (lastBeat) {
+                        beats.push(now - lastBeat);
+                        if (beats.length > 8) beats.shift();
+                        var mi = median(beats);
+                        if (mi) bpm = Math.round(60000 / mi);
+                    }
+                    lastBeat = now;
+                    beatPulse = 1;
+                    burstFrames = 10;
+                    burst = 1 + dBurst.value;
+                }
+                prevBass = rb;
+            }
+            if (beatPulse > 0) beatPulse = Math.max(0, beatPulse - dt * 4);
+            if (burstFrames > 0) {
+                burstFrames--;
+                burst = burstFrames > 0 ? 1 + dBurst.value * burstFrames / 10 : 1;
+            }
+        }
+
+        /* non-destructive dance: stored A, ω, φ are copied, never overwritten */
+        function buildLive() {
+            var absF = phasors.map(function (p) { return Math.abs(p.freq); });
+            var maxAbs = Math.max.apply(null, [1e-6].concat(absF)), med = median(absF);
+            live = phasors.map(function (p, i) {
+                var mul = 1;
+                if (danceOn) {
+                    if (absF[i] <= med) mul = 1 + EASE[p.curve](clamp01(energy.bass)) * dBass.value * (1 - 0.7 * absF[i] / maxAbs);
+                    else mul = 1 + clamp01(energy.high) * dHigh.value;
+                    mul *= burst;
+                }
+                return { amp: p.amp * mul, freq: p.freq, phase: p.phase, color: p.color, mul: mul };
+            });
+        }
+        function speedFactor() { return danceOn ? 1 + clamp01(energy.mid) * dSpeed.value : 1; }
+
+        /* ---------- phasor list ---------- */
+        var FMT = {
+            amp: function (v) { return v.toFixed(2); },
+            freq: function (v) { return Sim.fmt(v, 2) + ' rad/s'; },
+            phase: function (v) { return v.toFixed(2) + ' rad'; }
+        };
+        function paintRange(el) {
+            var min = parseFloat(el.min), max = parseFloat(el.max), v = parseFloat(el.value);
+            el.style.setProperty('--p', ((v - min) / (max - min)) * 100 + '%');
+        }
+        function ctl(f, label, min, max, v, i) {
+            return '<label class="ctl"><span class="ctl__row"><span>' + label + '</span><output>' + FMT[f](v) + '</output></span>' +
+                '<input type="range" min="' + min + '" max="' + max + '" step="0.01" value="' + v + '" data-f="' + f + '" data-i="' + i + '"></label>';
+        }
+        function renderList() {
+            var host = $('plist');
+            host.innerHTML = phasors.map(function (p, i) {
+                return '<div class="ph"><div class="ph__head"><span><span class="ph__sw" style="background:' + p.color + '"></span>Circle ' + (i + 1) + '</span>' +
+                    '<button type="button" class="ph__x" data-rm="' + i + '" aria-label="Remove circle ' + (i + 1) + '">×</button></div>' +
+                    ctl('amp', 'Radius A', 0, 2, p.amp, i) +
+                    ctl('freq', 'Angular frequency ω', -32, 32, p.freq, i) +
+                    ctl('phase', 'Phase φ', 0, 6.28, p.phase, i) +
+                    '<label class="ctl"><span class="ctl__row"><span>Bounce curve</span></span><select class="sel" data-curve="' + i + '">' +
+                    CURVES.map(function (c) { return '<option' + (c === p.curve ? ' selected' : '') + '>' + c + '</option>'; }).join('') +
+                    '</select></label></div>';
+            }).join('') || '<p class="hint">No circles. Add one or pick a preset.</p>';
+            Array.prototype.forEach.call(host.querySelectorAll('input[type="range"]'), paintRange);
+        }
+        function syncList() {
+            Array.prototype.forEach.call($('plist').querySelectorAll('input[type="range"]'), function (el) {
+                var p = phasors[+el.dataset.i];
+                if (!p) return;
+                var v = p[el.dataset.f];
+                el.value = v;
+                paintRange(el);
+                el.parentNode.querySelector('output').textContent = FMT[el.dataset.f](v);
+            });
+        }
+        $('plist').addEventListener('input', function (e) {
+            var el = e.target;
+            if (!el.dataset || el.dataset.f === undefined) return;
+            var p = phasors[+el.dataset.i];
+            p[el.dataset.f] = parseFloat(el.value);
+            paintRange(el);
+            el.parentNode.querySelector('output').textContent = FMT[el.dataset.f](p[el.dataset.f]);
+            edited(false);
+        });
+        $('plist').addEventListener('change', function (e) {
+            if (e.target.dataset && e.target.dataset.curve !== undefined) phasors[+e.target.dataset.curve].curve = e.target.value;
+        });
+        $('plist').addEventListener('click', function (e) {
+            var b = e.target.closest('[data-rm]');
+            if (!b) return;
+            phasors.splice(+b.getAttribute('data-rm'), 1);
+            recolour();
+            renderList();
+            edited(false);
+        });
+
+        function recolour() { phasors.forEach(function (p, i) { p.color = COLS[i % COLS.length]; }); }
+        function formula() {
+            $('formula').textContent = phasors.length ? 'z(t) = ' + phasors.map(function (p) {
+                return p.amp.toFixed(2) + '·e^{i(' + Sim.fmt(p.freq, 2) + 't + ' + p.phase.toFixed(2) + ')}';
+            }).join('\n     + ') : 'z(t) = 0';
+        }
+        function edited(snap) {
+            trail = [];
+            t = 0;
+            refinal(snap);
+            formula();
+            readouts();
+        }
+        function load(list) {
+            phasors = list.map(function (p, i) {
+                return { amp: p[0], freq: p[1], phase: wrap(p[2] || 0), color: COLS[i % COLS.length], curve: p[3] || 'Linear' };
+            });
+            renderList();
+            edited(true);
+        }
+
+        /* ---------- drawing ---------- */
+        /* the outermost point actually drawn: every joint and circle edge lies within Σ A′ of the origin,
+           and old trail points were drawn with older radii, so both are measured */
+        function reach() {
+            var r = 0, i;
+            for (i = 0; i < live.length; i++) r += Math.abs(live[i].amp);
+            for (i = 0; i < trail.length; i++) r = Math.max(r, Math.hypot(trail[i].x, trail[i].y));
+            return r;
+        }
+        function fit(dt) {
+            var target = Math.max(reach(), 0.05);
+            if (target > fitR || !fitR) fitR = target;
+            else fitR += (target - fitR) * (1 - Math.exp(-dt / 0.6));
+        }
+        function baseScale() { return Math.min(box.w, box.h) * 0.44 / Math.max(fitR, 0.05); }
+        function finalScale() {
+            var m = 0;
+            for (var i = 0; i < morphPath.length; i++) m = Math.max(m, Math.hypot(morphPath[i].x, morphPath[i].y));
+            return Math.min(box.w, box.h) * 0.44 / Math.max(m, 0.05) * zoom.value;
+        }
+        function axes(cx, cy) {
+            ctx.strokeStyle = T.rule;
+            ctx.lineWidth = 1;
+            ctx.beginPath();
+            ctx.moveTo(0, cy); ctx.lineTo(box.w, cy);
+            ctx.moveTo(cx, 0); ctx.lineTo(cx, box.h);
+            ctx.stroke();
+        }
+        function polyline(pts, cx, cy, s, from, to) {
+            ctx.beginPath();
+            for (var i = from; i < to; i++) {
+                var px = cx + pts[i].x * s, py = cy - pts[i].y * s;
+                if (i === from) ctx.moveTo(px, py); else ctx.lineTo(px, py);
+            }
+            ctx.stroke();
+        }
+        function draw() {
+            var w = box.w, h = box.h, cx = w / 2, cy = h / 2;
+            ctx.clearRect(0, 0, w, h);
+            axes(cx, cy);
+            ctx.lineJoin = 'round';
+            ctx.lineCap = 'round';
+            if (mode === 'final') {
+                var sf = finalScale();
+                ctx.strokeStyle = 'rgba(226, 162, 170, 0.45)';
+                ctx.lineWidth = 6;
+                polyline(morphPath, cx, cy, sf, 0, morphPath.length);
+                ctx.strokeStyle = T.accent;
+                ctx.lineWidth = 1.8;
+                polyline(morphPath, cx, cy, sf, 0, morphPath.length);
+                return;
+            }
+            var s = baseScale() * zoom.value;
+            /* trail: older segments fainter */
+            var chunks = 12, len = trail.length;
+            ctx.strokeStyle = T.accent;
+            ctx.lineWidth = 1.8;
+            for (var c = 0; c < chunks && len > 1; c++) {
+                var a = Math.floor(c * (len - 1) / chunks), b = Math.floor((c + 1) * (len - 1) / chunks) + 1;
+                ctx.globalAlpha = 0.18 + 0.82 * (c + 1) / chunks;
+                polyline(trail, cx, cy, s, a, Math.min(len, b + 1));
+            }
+            ctx.globalAlpha = 1;
+            var cur = sumAt(t, live), ox = cx, oy = cy;
+            cur.parts.forEach(function (p) {
+                var nx = ox + p.vx * s, ny = oy - p.vy * s;
+                if (swCircles.checked) {
+                    ctx.strokeStyle = T.rose;
+                    ctx.lineWidth = 1;
+                    ctx.beginPath();
+                    ctx.arc(ox, oy, Math.abs(p.amp * s), 0, TAU);
+                    ctx.stroke();
+                }
+                if (swVectors.checked) {
+                    ctx.strokeStyle = p.color;
+                    ctx.lineWidth = 2;
+                    ctx.beginPath();
+                    ctx.moveTo(ox, oy);
+                    ctx.lineTo(nx, ny);
+                    ctx.stroke();
+                    ctx.fillStyle = p.color;
+                    ctx.beginPath();
+                    ctx.arc(nx, ny, 3, 0, TAU);
+                    ctx.fill();
+                }
+                ox = nx;
+                oy = ny;
+            });
+            ctx.beginPath();
+            ctx.arc(cx + cur.x * s, cy - cur.y * s, 5.5, 0, TAU);
+            ctx.fillStyle = T.accent;
+            ctx.fill();
+            ctx.lineWidth = 2;
+            ctx.strokeStyle = T.card;
+            ctx.stroke();
+        }
+
+        /* ---------- readouts ---------- */
+        function readouts() {
+            var st = structure(phasors), z = sumAt(t, live.length === phasors.length ? live : phasors);
+            var e = 0;
+            phasors.forEach(function (p) { e += p.amp * p.amp; });
+            $('r-n').textContent = String(phasors.length);
+            $('r-z').textContent = Sim.fmt(Math.hypot(z.x, z.y), 3);
+            $('r-period').textContent = st.n === 0 ? '—' : st.g > 0 ? Sim.fmt(TAU / st.g, 2) + ' s' : 'point';
+            $('r-fold').textContent = st.n <= 1 ? (st.n ? '∞ (circle)' : '—') : st.q + '-fold';
+            $('r-energy').textContent = Sim.fmt(e, 3);
+            $('cap-t').textContent = 't = ' + Sim.fmt(t, 2) + ' s';
+            $('cap-mode').textContent = mode === 'final' ? 'final shape · ' + finalN + ' samples' : 'live construction';
+        }
+        function hud() {
+            $('beat').classList.toggle('on', beatPulse > 0.4);
+            $('bpm').textContent = bpm ? bpm + ' BPM' : '— BPM';
+            $('m-bass').style.height = Math.round(clamp01(energy.bass) * 100) + '%';
+            $('m-mid').style.height = Math.round(clamp01(energy.mid) * 100) + '%';
+            $('m-high').style.height = Math.round(clamp01(energy.high) * 100) + '%';
+        }
+
+        /* ---------- record and replay ---------- */
+        var tl = [], recording = false, replaying = false, recAcc = 0, wall = 0;
+        function recTime() { return audio.el && audio.el.src && !audio.el.paused ? audio.el.currentTime : wall; }
+        function snapshot() {
+            return { t: recTime(), d: danceOn, p: phasors.map(function (p) { return { a: p.amp, f: p.freq, h: p.phase, c: p.curve }; }) };
+        }
+        function status(msg) { $('rec-status').textContent = msg; }
+        function perform(dt) {
+            wall += dt;
+            if (recording) {
+                recAcc += dt;
+                if (recAcc >= 0.05) {
+                    recAcc = 0;
+                    tl.push(snapshot());
+                    status('Recording · ' + tl.length + ' snapshots');
+                }
+            }
+            if (!replaying || !tl.length) return;
+            var rt = recTime(), i = 0;
+            while (i < tl.length - 1 && tl[i + 1].t <= rt) i++;
+            var s = tl[i];
+            if (s.p.length !== phasors.length) {
+                load(s.p.map(function (o) { return [o.a, o.f, o.h, o.c]; }));
+            } else {
+                var al = Math.min(1, dt / 0.05);
+                s.p.forEach(function (o, k) {
+                    phasors[k].amp += (o.a - phasors[k].amp) * al;
+                    phasors[k].freq += (o.f - phasors[k].freq) * al;
+                    phasors[k].phase += (o.h - phasors[k].phase) * al;
+                    phasors[k].curve = o.c || 'Linear';
+                });
+                if (mode === 'final') refinal(false);
+            }
+            if (s.d !== danceOn) { danceOn = s.d; $('dance').checked = danceOn; }
+            var end = tl[tl.length - 1].t;
+            status('Replaying · ' + Sim.fmt(rt, 1) + ' s of ' + Sim.fmt(end, 1) + ' s');
+            if (rt > end + 0.25) { replaying = false; status('Replay finished · ' + tl.length + ' snapshots.'); }
+        }
+        $('rec').addEventListener('click', function () {
+            tl = []; recording = true; replaying = false; recAcc = 0; wall = 0;
+            tl.push(snapshot());
+            status('Recording · 1 snapshot');
+        });
+        $('rec-stop').addEventListener('click', function () {
+            recording = false; replaying = false;
+            status(tl.length ? 'Recorded ' + tl.length + ' snapshots.' : 'Nothing recorded.');
+        });
+        $('rec-play').addEventListener('click', function () {
+            if (!tl.length) { status('Nothing recorded yet.'); return; }
+            recording = false; replaying = true; wall = 0;
+            if (audio.el && audio.el.src) { audio.el.currentTime = 0; audio.ctx.resume(); audio.el.play().catch(function () {}); }
+        });
+        $('rec-export').addEventListener('click', function () {
+            if (!tl.length) { status('Nothing to export.'); return; }
+            var a = document.createElement('a');
+            a.href = URL.createObjectURL(new Blob([JSON.stringify({ v: 1, timeline: tl })], { type: 'application/json' }));
+            a.download = 'phasor-performance.json';
+            a.click();
+            setTimeout(function () { URL.revokeObjectURL(a.href); }, 4000);
+            status('Exported ' + tl.length + ' snapshots.');
+        });
+        $('rec-import').addEventListener('click', function () { $('rec-file').click(); });
+        $('rec-file').addEventListener('change', function (e) {
+            var f = e.target.files[0];
+            if (!f) return;
+            var fr = new FileReader();
+            fr.onload = function () {
+                try {
+                    var j = JSON.parse(fr.result);
+                    tl = Array.isArray(j) ? j : (j.timeline || []);
+                    status('Imported ' + tl.length + ' snapshots. Press Replay.');
+                } catch (err) { status('Import failed: not valid JSON.'); }
+            };
+            fr.readAsText(f);
+        });
+
+        /* ---------- controls ---------- */
+        function setMode(m) {
+            mode = m;
+            $('m-live').classList.toggle('btn--ghost', m !== 'live');
+            $('m-final').classList.toggle('btn--ghost', m !== 'final');
+            $('m-live').setAttribute('aria-pressed', String(m === 'live'));
+            $('m-final').setAttribute('aria-pressed', String(m === 'final'));
+            if (m === 'final') refinal(true);
+            readouts();
+        }
+        $('m-live').addEventListener('click', function () { setMode('live'); });
+        $('m-final').addEventListener('click', function () { setMode('final'); });
+        $('clear').addEventListener('click', function () { trail = []; });
+        $('add').addEventListener('click', function () {
+            phasors.push({ amp: 0.5, freq: phasors.length + 1, phase: 0, color: COLS[phasors.length % COLS.length], curve: 'Linear' });
+            renderList();
+            edited(false);
+        });
+        $('random').addEventListener('click', function () {
+            var F = [-13, -11, -9, -7, -5, -4, -3, -2, -1, 1, 2, 3, 4, 5, 6, 7, 9, 11, 13, 17];
+            var n = 2 + Math.floor(Math.random() * 5), list = [];
+            for (var i = 0; i < n; i++) list.push([+(0.15 + Math.random() * 1.1).toFixed(2), F[Math.floor(Math.random() * F.length)], +(Math.random() * TAU).toFixed(2)]);
+            load(list);
+        });
+        $('presets').addEventListener('click', function (e) {
+            var b = e.target.closest('[data-preset]');
+            if (b) load(PRESETS[b.getAttribute('data-preset')]);
+        });
+        swAuto.addEventListener('change', function () { spanS.el.disabled = swAuto.checked; refinal(false); readouts(); });
+        swMorph.addEventListener('change', function () { refinal(true); });
+        $('dance').addEventListener('change', function (e) { danceOn = e.target.checked; });
+        $('afile').addEventListener('change', function (e) { if (e.target.files[0]) loadAudio(e.target.files[0]); });
+        var drop = $('drop');
+        ['dragenter', 'dragover'].forEach(function (ev) { drop.addEventListener(ev, function (e) { e.preventDefault(); drop.classList.add('is-drag'); }); });
+        ['dragleave', 'drop'].forEach(function (ev) { drop.addEventListener(ev, function (e) { e.preventDefault(); drop.classList.remove('is-drag'); }); });
+        drop.addEventListener('drop', function (e) { var f = e.dataTransfer.files[0]; if (f) loadAudio(f); });
+        $('a-play').addEventListener('click', function () { audioControl('play'); });
+        $('a-pause').addEventListener('click', function () { audioControl('pause'); });
+        $('a-stop').addEventListener('click', function () { audioControl('stop'); });
+
+        /* live values for the walkthrough below */
+        Sim.live = function () {
+            var p = phasors[0], l = live[0], st = structure(phasors), z = sumAt(t, live), e = 0, dev = 0;
+            phasors.forEach(function (q) { e += q.amp * q.amp; });
+            for (var i = 0; i < morphPath.length && i < finalPath.length; i += 7) dev = Math.max(dev, Math.hypot(morphPath[i].x - finalPath[i].x, morphPath[i].y - finalPath[i].y));
+            var out = {
+                t: Sim.fmt(t, 3) + ' s', N: String(phasors.length), x: Sim.fmt(z.x, 4), y: Sim.fmt(z.y, 4),
+                absz: Sim.fmt(Math.hypot(z.x, z.y), 4), absz2: Sim.fmt(z.x * z.x + z.y * z.y, 4), E: Sim.fmt(e, 4),
+                G: String(st.G), g: Sim.fmt(st.g, 2) + ' rad/s', Tc: st.g > 0 ? Sim.fmt(TAU / st.g, 3) + ' s' : '—',
+                M: String(st.M), q: st.n > 1 ? String(st.q) : '—',
+                dt: Sim.fmt(lastDt * 1000, 1) + ' ms', spd: speed.value.toFixed(2), sf: Sim.fmt(lastSpeed, 3),
+                n: String(finalN), span: Sim.fmt(finalSpan, 3) + ' s', alpha: morph.value.toFixed(2), dev: Sim.fmt(dev, 5),
+                bass: Sim.fmt(energy.bass, 3), mid: Sim.fmt(energy.mid, 3), high: Sim.fmt(energy.high, 3),
+                burst: Sim.fmt(burst, 3), dance: danceOn ? 'on' : 'off'
+            };
+            if (p) {
+                var ang = p.freq * t + p.phase;
+                out.A = Sim.fmt(p.amp, 3); out.w = Sim.fmt(p.freq, 2) + ' rad/s'; out.ph = Sim.fmt(p.phase, 3) + ' rad';
+                out.ang = Sim.fmt(ang, 3) + ' rad'; out.x1 = Sim.fmt(p.amp * Math.cos(ang), 4); out.y1 = Sim.fmt(p.amp * Math.sin(ang), 4);
+                out.mul = l ? Sim.fmt(l.mul, 3) : '—'; out.Ar = l ? Sim.fmt(l.amp, 3) : '—';
+            } else {
+                out.A = out.w = out.ph = out.ang = out.x1 = out.y1 = out.mul = out.Ar = 'no circles';
+            }
+            return out;
+        };
+
+        var hudAcc = 0, lastNow = performance.now();
+        var clk = Sim.clock(function (dt) {
+            var now = performance.now(), real = Math.min((now - lastNow) / 1000, 0.05);
+            lastNow = now;
+            analyse(real);
+            perform(real);
+            buildLive();
+            lastDt = dt;
+            lastSpeed = speed.value * speedFactor();
+            if (mode === 'live' && dt > 0) {
+                t += dt * lastSpeed;
+                var z = sumAt(t, live);
+                trail.push({ x: z.x, y: z.y });
+                var max = trailS.value;
+                if (trail.length > max) trail.splice(0, trail.length - max);
+            }
+            if (mode === 'final') morphStep();
+            fit(real);
+            draw();
+            hudAcc += real;
+            if (hudAcc > 0.1) {
+                hudAcc = 0;
+                readouts();
+                if (replaying) { syncList(); formula(); }
+            }
+            hud();
+        });
+        Sim.playButton($('play'), clk);
+
+        Sim.onResize(stage, function () { box.fit(); });
+        load(PRESETS.rose3);
+        buildLive();
+        readouts();
+    })();
+    </script>
+</body>
+</html>

@@ -1,0 +1,380 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Wave Interference · Numa Koudsie</title>
+    <meta name="description" content="Interactive simulation: circular waves from several point sources superpose and form a straight wavefront (Huygens' principle).">
+    <meta name="theme-color" content="#f5f1ea">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link rel="stylesheet" href="../styles/sim.css">
+    <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='12' fill='%237a1f2b'/%3E%3Ctext x='32' y='45' text-anchor='middle' font-family='Georgia,serif' font-size='38' fill='%23f5f1ea'%3EN%3C/text%3E%3C/svg%3E">
+    <style>
+        #field { cursor: crosshair; }
+    </style>
+</head>
+<body>
+    <header class="sim-top">
+        <a href="../index.html#simulations">← Numa Koudsie</a>
+        <nav class="sim-nav" aria-label="Simulations">
+            <span>Fig.</span>
+            <a href="Circular Wave Interference Visualization.html" aria-current="page">1</a>
+            <a href="Double Pendulum.html">2</a>
+            <a href="Interactive Double-Slit Experiment Visualization.html">3</a>
+            <a href="Transverse and longitudinal waves.html">4</a>
+            <a href="water-wave.html">5</a>
+            <a href="wave-interference.html">6</a>
+            <a href="phasor-sums.html">7</a>
+            <a href="draw-decompose.html">8</a>
+        </nav>
+    </header>
+
+    <main class="sim">
+        <noscript><p class="sim-error"><b>This simulation needs JavaScript.</b> <a href="../index.html#simulations">Back to the simulations</a></p></noscript>
+        <div class="sim__head">
+            <p class="sim__num">Fig. 1 · wave optics · Huygens' principle</p>
+            <h1>Wave Interference<span class="dot">.</span></h1>
+            <p class="sim__lede">Circular waves from point sources on one line add up crest by crest. With enough sources, the ripples merge into a straight wavefront.</p>
+        </div>
+
+        <div class="sim__grid">
+            <figure class="stage">
+                <div class="stage__canvas" id="stage" style="--ar: 8 / 3.6; --ar-m: 1 / 1;">
+                    <canvas id="field" aria-label="Interference field of the wave sources. Click to add a source."></canvas>
+                </div>
+                <figcaption class="stage__cap">
+                    <span><b>Fig. 1</b> · superposition of circular waves · click the field to add a source</span>
+                    <span id="cap-count">2 sources</span>
+                </figcaption>
+            </figure>
+
+            <aside class="panel" aria-label="Controls">
+                <div class="panel__group">
+                    <p class="panel__label">Sources</p>
+                    <div class="actions">
+                        <button type="button" class="btn" id="play">Pause</button>
+                        <button type="button" class="btn btn--ghost" id="line">Line of 16</button>
+                        <button type="button" class="btn btn--ghost" id="random">Add 5 random</button>
+                        <button type="button" class="btn btn--ghost" id="reset">Reset</button>
+                        <button type="button" class="btn btn--ghost" id="clear">Clear</button>
+                    </div>
+                </div>
+
+                <div class="panel__group">
+                    <p class="panel__label">Waves</p>
+                    <label class="ctl">
+                        <span class="ctl__row"><span>Wavelength λ</span><output id="lambda-out" for="lambda"></output></span>
+                        <input type="range" id="lambda" min="16" max="64" step="1" value="30">
+                    </label>
+                    <label class="ctl">
+                        <span class="ctl__row"><span>Frequency f</span><output id="freq-out" for="freq"></output></span>
+                        <input type="range" id="freq" min="0.2" max="2" step="0.05" value="1.1">
+                    </label>
+                    <label class="ctl">
+                        <span class="ctl__row"><span>Damping γ</span><output id="damp-out" for="damp"></output></span>
+                        <input type="range" id="damp" min="0" max="0.6" step="0.01" value="0.15">
+                    </label>
+                </div>
+
+                <div class="panel__group">
+                    <p class="panel__label">Legend · field ψ</p>
+                    <div class="colorbar" aria-hidden="true"></div>
+                    <div class="colorbar-labels"><span>trough −1</span><span>0</span><span>crest +1</span></div>
+                    <ul class="legend"><li><span class="sw sw--dot"></span>point source</li></ul>
+                </div>
+
+                <dl class="readouts">
+                    <div><dt>Sources</dt><dd id="r-n">2</dd></div>
+                    <div><dt>Speed v = fλ</dt><dd id="r-v">—</dd></div>
+                </dl>
+            </aside>
+        </div>
+
+        <section class="deriv" aria-labelledby="deriv-title">
+            <div class="deriv__head">
+                <h2 id="deriv-title">From physics to pixels</h2>
+                <p>What the picture above shows, why it looks the way it does, and exactly how each coloured pixel is computed.</p>
+            </div>
+            <div class="deriv__grid">
+                <nav class="deriv__toc" aria-label="Steps">
+                    <ol>
+                        <li><a href="#s-picture">Physical picture</a></li>
+                        <li><a href="#s-model">Model</a></li>
+                        <li><a href="#s-derivation">Derivation</a></li>
+                        <li><a href="#s-numerics">Numerical method</a></li>
+                        <li><a href="#s-screen">On screen</a></li>
+                        <li><a href="#s-limits">Limits</a></li>
+                    </ol>
+                </nav>
+                <div class="deriv__body">
+                    <article class="step" id="s-picture">
+                        <p class="step__num">01 · Physical picture</p>
+                        <h3>Dippers in a ripple tank</h3>
+                        <p>Imagine a shallow tank of water and a row of small rods along one edge, all dipping up and down together at the same rate. Each rod sends out rings. Where a crest of one ring meets a crest of another, the water rises twice as high; where a crest meets a trough, the surface stays almost flat. The pattern of bright and dark bands in the figure is that map of reinforcement and cancellation, frozen at one instant and then replayed in time.</p>
+                        <p>With two dippers you see curved bands fanning out between them. With many dippers close together, the rings merge into one straight front moving away from the row: a plane wave built from circular ones.</p>
+                    </article>
+
+                    <article class="step" id="s-model">
+                        <p class="step__num">02 · Model</p>
+                        <h3>A linear scalar wave field</h3>
+                        <p>The height of the surface is a scalar field ψ(x, y, t). For small amplitudes it obeys the two-dimensional wave equation</p>
+                        <p class="eq"><span class="eq__line">∂²ψ/∂t² = v² (∂²ψ/∂x² + ∂²ψ/∂y²)</span><span class="eq__note">v: phase speed · linear in ψ</span></p>
+                        <p>Because the equation is linear, if ψ₁ and ψ₂ are solutions then so is ψ₁ + ψ₂. That single fact, the <em>superposition principle</em>, is the whole engine of this simulation.</p>
+                        <p>A point source oscillating at angular frequency ω = 2πf sends out an outgoing circular wave. Far from the source (kr ≫ 1) the exact solution, a Hankel function, behaves as</p>
+                        <p class="eq"><span class="eq__line">ψ(r, t) ≈ √(2/(π k r)) · cos(k r − ω t − π/4)</span><span class="eq__note">k = 2π/λ · r: distance to the source</span></p>
+                        <p>This simulation keeps the essential part, the travelling phase cos(kr − ωt), and makes two deliberate simplifications. The slow geometric decay 1/√r is replaced by an exponential damping e<sup>−γr/R</sup> that stays finite at the source and imitates energy loss in the water. The constant phase −π/4 is dropped because it is the same for every source and only shifts the origin of time.</p>
+                        <ul class="facts">
+                            <li>All sources have the same frequency, amplitude and phase (they are driven together).</li>
+                            <li>The medium is non-dispersive: v = fλ is the same for every wave.</li>
+                            <li>The tank is open: waves leave the picture without reflecting.</li>
+                        </ul>
+                        <h4>Where the 1/√r law comes from</h4>
+                        <p>Write the field of a single source as ψ = R(r) e<sup>−iωt</sup> (the physical field is the real part). With no angular dependence the two-dimensional Laplacian in polar coordinates is ∂²/∂r² + (1/r) ∂/∂r, so the wave equation becomes Bessel's equation of order zero:</p>
+                        <p class="eq"><span class="eq__line">R″ + R′/r + k² R = 0, &nbsp; k = ω/v</span><span class="eq__note">the term R′/r is what a plane wave does not have</span></p>
+                        <p>Its outgoing solution is the Hankel function H<sub>0</sub><sup>(1)</sup>(kr) = J<sub>0</sub>(kr) + i Y<sub>0</sub>(kr), which for kr ≫ 1 behaves as √(2/(πkr)) e<sup>i(kr − π/4)</sup>: the formula above. The 1/√r has a simple physical reason. The time-averaged energy crossing a circle of radius r must be the same for every r, and the circle's length grows as 2πr, so ⟨ψ²⟩ ∝ 1/r and the amplitude ∝ 1/√r.</p>
+                        <p>The damping slider is therefore a deliberate stand-in, not physics derived from the water: at γ = 0 the amplitude here stays constant with distance, whereas a real ripple would still fall off as 1/√r.</p>
+                    </article>
+
+                    <article class="step" id="s-derivation">
+                        <p class="step__num">03 · Derivation</p>
+                        <h3>From one source to a wavefront</h3>
+                        <h4>The field of N sources</h4>
+                        <p>Source i sits at position <b>r</b><sub>i</sub>; a point <b>r</b> in the tank is at distance r<sub>i</sub> = |<b>r</b> − <b>r</b><sub>i</sub>| from it. By superposition, and normalised by the number of sources so that the colour scale stays the same,</p>
+                        <p class="eq"><span class="eq__line">ψ(<b>r</b>, t) = (1/N) Σ<sub>i</sub> a<sub>i</sub> cos(k r<sub>i</sub> − ω t), &nbsp; a<sub>i</sub> = e<sup>−γ r<sub>i</sub>/R</sup></span></p>
+                        <p>The phase speed follows from requiring constant phase, k r − ω t = const, which moves at dr/dt = ω/k = fλ. That is the <em>Speed v = fλ</em> readout.</p>
+                        <h4>Two sources: hyperbolic nodal lines</h4>
+                        <p>Take two sources of equal amplitude a and write r̄ = (r₁ + r₂)/2 and Δr = r₂ − r₁. The sum-to-product identity cos A + cos B = 2 cos((A − B)/2) cos((A + B)/2) gives</p>
+                        <p class="eq"><span class="eq__line">ψ = a cos(k r₁ − ω t) + a cos(k r₂ − ω t)</span><span class="eq__line">&nbsp;&nbsp;= 2a · cos(k Δr / 2) · cos(k r̄ − ω t)</span></p>
+                        <p>The second factor oscillates; the first is a fixed envelope. The surface never moves where cos(kΔr/2) = 0, that is where</p>
+                        <p class="eq"><span class="eq__line">Δr = (m + ½) λ, &nbsp; m = 0, ±1, ±2, …</span></p>
+                        <p>A curve on which the difference of distances to two fixed points is constant is a hyperbola with those points as foci. So the calm bands are hyperbolae, and the loud bands, Δr = mλ, lie between them. Since |Δr| can never exceed the source spacing s, there are about 2s/λ calm lines between two sources. With damping switched on, the two waves reach a point with slightly different amplitudes, e<sup>−γr₁/R</sup> ≠ e<sup>−γr₂/R</sup>, so a calm band keeps a small residual motion instead of being perfectly still.</p>
+                        <h4>A row of sources: the plane front</h4>
+                        <p>Now put N sources on a line with spacing s and look far away at angle θ from the normal. Neighbouring sources differ in path by s sin θ, so in complex notation the far field is a geometric series:</p>
+                        <p class="eq"><span class="eq__line">Σ<sub>n=0</sub><sup>N−1</sup> e<sup>i n k s sin θ</sup> = (1 − e<sup>i N k s sin θ</sup>) / (1 − e<sup>i k s sin θ</sup>)</span><span class="eq__line">|…| = |sin(N k s sin θ / 2) / sin(k s sin θ / 2)|</span></p>
+                        <p>This array factor has a tall main lobe at θ = 0, straight out from the row, of angular width about λ/(Ns). The longer the row, the narrower the beam and the straighter the front: Huygens' principle in formulas. Every point of a wavefront acts as a source of wavelets, and the wavelets' envelope is the next wavefront.</p>
+                        <p>There is a catch that the simulation shows honestly. The denominator vanishes again whenever k s sin θ = 2πm, giving extra <em>grating lobes</em> at sin θ = mλ/s. They exist only if the spacing exceeds the wavelength, s ≥ λ.</p>
+                        <p class="try"><b>Try</b>Press <em>Line of 16</em>. The sources are spaced by s = 0.84 × 800/15 = 44.8 px. At λ = 30 px, s &gt; λ and side beams appear, heading out near sin θ = 30/44.8, θ ≈ 42° (the next card explains why only roughly). Raise λ above 44.8 px and they disappear, leaving one clean plane wave.</p>
+                        <h4>Near field or far field?</h4>
+                        <p>The array factor assumes the observer is so far away that the lines to all sources are parallel. The standard (Fraunhofer) condition is r ≫ D²/λ, with D the length of the row. For <em>Line of 16</em>, D = 15 × 44.8 = 672 px, and at λ = 30 px that gives D²/λ ≈ 15 000 px, about twenty times the width of the tank. Everything on screen is therefore near field: the side beams are still forming, and θ ≈ 42° is the direction they are heading rather than a line you can read off the picture. The simulation always uses the exact distances, so it shows this near field correctly.</p>
+                        <p>With the 1/N normalisation used here the factor is |F| = |sin(Nβ/2) / (N sin(β/2))|, β = k s sin θ. On every lobe maximum (β = 2πm) the apparent 0/0 is removable: all N terms equal 1, so |F| = 1 exactly.</p>
+                    </article>
+
+                    <article class="step" id="s-numerics">
+                        <p class="step__num">04 · Numerical method</p>
+                        <h3>Separating space from time</h3>
+                        <p>Evaluating a cosine for every source at every pixel sixty times a second would cost N × (number of pixels) cosines per frame. Instead, expand the phase with cos(A − B) = cos A cos B + sin A sin B:</p>
+                        <p class="eq"><span class="eq__line">ψ(<b>r</b>, t) = C(<b>r</b>) cos ω t + S(<b>r</b>) sin ω t</span><span class="eq__line">C = (1/N) Σ<sub>i</sub> a<sub>i</sub> cos k r<sub>i</sub>, &nbsp; S = (1/N) Σ<sub>i</sub> a<sub>i</sub> sin k r<sub>i</sub></span></p>
+                        <p>The two maps C and S depend only on the geometry, λ and γ. They are recomputed only when you add or remove a source or move a slider. Every frame then needs just two multiplications and one addition per pixel, independent of N. This is exact, not an approximation: it works because all sources share the same ω.</p>
+                        <ul class="facts">
+                            <li>Grid: about one field sample per 2.2 screen pixels (at most 360 across), stored in two Float32 arrays.</li>
+                            <li>Time: ωt advances by 2πf·Δt, with Δt the real time between frames, so the waves run at the chosen frequency on every screen.</li>
+                            <li>Cost: O(N · P) after a change, O(P) per frame, for P grid points.</li>
+                        </ul>
+                    </article>
+
+                    <article class="step" id="s-screen">
+                        <p class="step__num">05 · On screen</p>
+                        <h3>Numbers into colour</h3>
+                        <p>The field is defined on a fixed world 800 px wide, whatever the size of your screen, so λ = 30 px means the same pattern on a phone and on a monitor. Sources sit 10 px above the bottom edge; a click anywhere adds a source at that horizontal position.</p>
+                        <p>Each value ψ ∈ [−1, 1] is mapped through a 256-entry colour table: trough → ink (58, 50, 46), rest → cream (255, 250, 243), crest → burgundy (122, 31, 43). Between the ends the colour moves as |ψ|<sup>0.8</sup>, which lifts small amplitudes a little so the far field stays visible. The small image is then scaled up by the browser with smoothing, which is why the bands look continuous rather than pixelated. The colours show the signed displacement at this instant, not a time-averaged energy: a calm band stays cream in every frame, while a loud band flickers between ink and burgundy.</p>
+                    </article>
+
+                    <article class="step" id="s-limits">
+                        <p class="step__num">06 · Limits</p>
+                        <h3>What the model leaves out</h3>
+                        <ul class="facts">
+                            <li>Exponential damping replaces the true 1/√r spreading; near a source the real field is larger than shown.</li>
+                            <li>No reflections from the walls of the tank and no dispersion (real water waves are dispersive, see Fig. 5).</li>
+                            <li>The average over N keeps the colours comparable, but it also means adding sources makes each one weaker on screen.</li>
+                            <li>Values beyond ±1 are clipped to the ends of the colour scale.</li>
+                        </ul>
+                    </article>
+                </div>
+            </div>
+        </section>
+
+        <section class="walk" id="walk" data-walk="circles" aria-label="From symbols to code"></section>
+    </main>
+
+    <footer class="sim-foot">
+        <span>© 2026 Numa Koudsie · Claude version</span>
+        <span><a href="../index.html#simulations">All simulations ↑</a></span>
+    </footer>
+
+    <script src="../scripts/sim.js"></script>
+    <script>
+    (function () {
+        'use strict';
+        var T = Sim.theme;
+        var WORLD_W = 800, R = 300, MAX_SOURCES = 24, SOURCE_LIFT = 10;
+        var DEFAULT = [0.25, 0.75];
+
+        var stage = document.getElementById('stage');
+        var canvas = document.getElementById('field');
+        var box = Sim.canvas2d(canvas), ctx = box.ctx;
+        var off = document.createElement('canvas'), octx = off.getContext('2d');
+        var img, cols, rows, worldH, sumC, sumS;
+        var sources = DEFAULT.slice();
+        var omegaT = 0, dirty = true, redraw = true;
+
+        /* colour map: trough (ink) → rest (card) → crest (burgundy) */
+        var LUT = new Uint8ClampedArray(256 * 3);
+        (function () {
+            var neg = [58, 50, 46], mid = [255, 250, 243], pos = [122, 31, 43];
+            for (var i = 0; i < 256; i++) {
+                var a = i / 127.5 - 1, s = Math.pow(Math.abs(a), 0.8), end = a < 0 ? neg : pos;
+                for (var c = 0; c < 3; c++) LUT[i * 3 + c] = Math.round(mid[c] + (end[c] - mid[c]) * s);
+            }
+        })();
+
+        var lambda = Sim.slider('lambda', { format: function (v) { return v + ' px'; }, onInput: changed });
+        var freq = Sim.slider('freq', { format: function (v) { return v.toFixed(2) + ' Hz'; }, onInput: readouts });
+        var damp = Sim.slider('damp', { format: function (v) { return v.toFixed(2); }, onInput: changed });
+
+        function changed() { dirty = true; readouts(); }
+
+        function resize() {
+            box.fit();
+            cols = Math.max(60, Math.min(360, Math.round(box.w / 2.2)));
+            rows = Math.max(30, Math.round(cols * box.h / box.w));
+            worldH = WORLD_W * box.h / box.w;
+            off.width = cols;
+            off.height = rows;
+            img = octx.createImageData(cols, rows);
+            for (var p = 3; p < img.data.length; p += 4) img.data[p] = 255;
+            sumC = new Float32Array(cols * rows);
+            sumS = new Float32Array(cols * rows);
+            dirty = true;
+        }
+
+        function precompute() {
+            var k = 2 * Math.PI / lambda.value, g = damp.value / R;
+            var n = sources.length, norm = 1 / Math.max(1, n);
+            var dx = WORLD_W / cols, dy = worldH / rows, sy = worldH - SOURCE_LIFT;
+            sumC.fill(0);
+            sumS.fill(0);
+            for (var s = 0; s < n; s++) {
+                var sx = sources[s] * WORLD_W, p = 0;
+                for (var j = 0; j < rows; j++) {
+                    var y = (j + 0.5) * dy - sy, y2 = y * y;
+                    for (var i = 0; i < cols; i++, p++) {
+                        var x = (i + 0.5) * dx - sx;
+                        var r = Math.sqrt(x * x + y2);
+                        var a = Math.exp(-g * r) * norm, ph = k * r;
+                        sumC[p] += a * Math.cos(ph);
+                        sumS[p] += a * Math.sin(ph);
+                    }
+                }
+            }
+            dirty = false;
+        }
+
+        function render() {
+            var c = Math.cos(omegaT), s = Math.sin(omegaT), d = img.data;
+            for (var p = 0, q = 0; p < sumC.length; p++, q += 4) {
+                var v = sumC[p] * c + sumS[p] * s;
+                if (v > 1) v = 1; else if (v < -1) v = -1;
+                var idx = Math.round(v * 127.5 + 127.5) * 3;
+                d[q] = LUT[idx];
+                d[q + 1] = LUT[idx + 1];
+                d[q + 2] = LUT[idx + 2];
+            }
+            octx.putImageData(img, 0, 0);
+            ctx.imageSmoothingEnabled = true;
+            ctx.imageSmoothingQuality = 'high';
+            ctx.drawImage(off, 0, 0, box.w, box.h);
+
+            var y = box.h - SOURCE_LIFT * box.w / WORLD_W;
+            sources.forEach(function (u) {
+                var x = u * box.w;
+                var glow = ctx.createRadialGradient(x, y, 0, x, y, 20);
+                glow.addColorStop(0, 'rgba(255, 250, 243, 0.95)');
+                glow.addColorStop(1, 'rgba(255, 250, 243, 0)');
+                ctx.fillStyle = glow;
+                ctx.beginPath();
+                ctx.arc(x, y, 20, 0, Math.PI * 2);
+                ctx.fill();
+                ctx.beginPath();
+                ctx.arc(x, y, 5.5, 0, Math.PI * 2);
+                ctx.fillStyle = T.accent;
+                ctx.fill();
+                ctx.lineWidth = 2;
+                ctx.strokeStyle = T.card;
+                ctx.stroke();
+            });
+        }
+
+        function setSources(list) {
+            sources = list.slice(-MAX_SOURCES);
+            changed();
+        }
+
+        function readouts() {
+            var n = sources.length;
+            document.getElementById('r-n').textContent = n + (n === MAX_SOURCES ? ' (max)' : '');
+            document.getElementById('cap-count').textContent = n === 0 ? 'no sources · click the field' : n + (n === 1 ? ' source' : ' sources');
+            document.getElementById('r-v').textContent = Math.round(freq.value * lambda.value) + ' px/s';
+            redraw = true;
+        }
+
+        canvas.addEventListener('click', function (e) {
+            var r = canvas.getBoundingClientRect();
+            setSources(sources.concat([(e.clientX - r.left) / r.width]));
+        });
+        document.getElementById('line').addEventListener('click', function () {
+            var list = [];
+            for (var i = 0; i < 16; i++) list.push(0.08 + i * 0.84 / 15);
+            setSources(list);
+        });
+        document.getElementById('random').addEventListener('click', function () {
+            var list = sources.slice();
+            for (var i = 0; i < 5; i++) list.push(1 / 6 + Math.random() * 4 / 6);
+            setSources(list);
+        });
+        document.getElementById('reset').addEventListener('click', function () {
+            omegaT = 0;
+            setSources(DEFAULT);
+        });
+        document.getElementById('clear').addEventListener('click', function () { setSources([]); });
+
+        Sim.live = function () {
+            var k = 2 * Math.PI / lambda.value, g = damp.value / R, n = sources.length, norm = 1 / Math.max(1, n);
+            var dx = WORLD_W / cols, dy = worldH / rows, i0 = Math.floor(cols / 2), j0 = Math.floor(rows / 2), p0 = j0 * cols + i0;
+            var c = Math.cos(omegaT), s = Math.sin(omegaT), v = sumC[p0] * c + sumS[p0] * s;
+            v = Math.max(-1, Math.min(1, v));
+            var idx = Math.round(v * 127.5 + 127.5), out = {
+                lam: lambda.value + ' px', k: Sim.fmt(k, 4) + ' rad/px', g: Sim.fmt(g, 5) + ' /px', N: String(n), norm: Sim.fmt(norm, 4),
+                dx: Sim.fmt(dx, 3) + ' px', grid: cols + ' × ' + rows, C: Sim.fmt(sumC[p0], 4), S: Sim.fmt(sumS[p0], 4),
+                c: Sim.fmt(c, 4), s: Sim.fmt(s, 4), psi: Sim.fmt(v, 4), f: freq.value.toFixed(2) + ' Hz',
+                wt: Sim.fmt(omegaT, 2) + ' rad', v: Math.round(freq.value * lambda.value) + ' px/s',
+                idx: String(idx), rgb: 'rgb(' + LUT[idx * 3] + ', ' + LUT[idx * 3 + 1] + ', ' + LUT[idx * 3 + 2] + ')'
+            };
+            if (n) {
+                var x = (i0 + 0.5) * dx - sources[0] * WORLD_W, y = (j0 + 0.5) * dy - (worldH - SOURCE_LIFT), r = Math.sqrt(x * x + y * y);
+                out.r = Sim.fmt(r, 2) + ' px';
+                out.a = Sim.fmt(Math.exp(-g * r) * norm, 4);
+                out.ph = Sim.fmt(k * r, 3) + ' rad';
+            } else {
+                out.r = out.a = out.ph = 'no sources';
+            }
+            return out;
+        };
+
+        var clk = Sim.clock(function (dt) {
+            if (dirty) { precompute(); redraw = true; }
+            if (dt > 0 || redraw) {
+                omegaT += 2 * Math.PI * freq.value * dt;
+                render();
+                redraw = false;
+            }
+        });
+        Sim.playButton(document.getElementById('play'), clk);
+
+        resize();
+        readouts();
+        Sim.onResize(stage, function () { resize(); redraw = true; });
+    })();
+    </script>
+</body>
+</html>

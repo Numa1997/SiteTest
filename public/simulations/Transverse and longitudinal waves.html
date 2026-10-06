@@ -1,0 +1,376 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Transverse &amp; Longitudinal Waves · Numa Koudsie</title>
+    <meta name="description" content="Interactive comparison of a transverse and a longitudinal wave with the same amplitude, frequency and wavelength.">
+    <meta name="theme-color" content="#f5f1ea">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link rel="stylesheet" href="../styles/sim.css">
+    <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='12' fill='%237a1f2b'/%3E%3Ctext x='32' y='45' text-anchor='middle' font-family='Georgia,serif' font-size='38' fill='%23f5f1ea'%3EN%3C/text%3E%3C/svg%3E">
+</head>
+<body>
+    <header class="sim-top">
+        <a href="../index.html#simulations">← Numa Koudsie</a>
+        <nav class="sim-nav" aria-label="Simulations">
+            <span>Fig.</span>
+            <a href="Circular Wave Interference Visualization.html">1</a>
+            <a href="Double Pendulum.html">2</a>
+            <a href="Interactive Double-Slit Experiment Visualization.html">3</a>
+            <a href="Transverse and longitudinal waves.html" aria-current="page">4</a>
+            <a href="water-wave.html">5</a>
+            <a href="wave-interference.html">6</a>
+            <a href="phasor-sums.html">7</a>
+            <a href="draw-decompose.html">8</a>
+        </nav>
+    </header>
+
+    <main class="sim">
+        <noscript><p class="sim-error"><b>This simulation needs JavaScript.</b> <a href="../index.html#simulations">Back to the simulations</a></p></noscript>
+        <div class="sim__head">
+            <p class="sim__num">Fig. 4 · oscillations · wave kinematics</p>
+            <h1>Transverse &amp; Longitudinal<span class="dot">.</span></h1>
+            <p class="sim__lede">The same wave, twice. Above, the particles move across the direction of travel; below, along it. In both, each particle only oscillates in place while the pattern moves on.</p>
+        </div>
+
+        <div class="sim__grid">
+            <figure class="stage">
+                <div class="stage__canvas" id="stage" style="--ar: 16 / 10; --ar-m: 1 / 1.05;">
+                    <canvas id="waves" aria-label="Transverse wave above, longitudinal wave below"></canvas>
+                </div>
+                <figcaption class="stage__cap">
+                    <span><b>Fig. 4</b> · ξ(x, t) = A sin(kx − ωt) · both waves travel to the right</span>
+                    <span id="cap-v">v = —</span>
+                </figcaption>
+            </figure>
+
+            <aside class="panel" aria-label="Controls">
+                <div class="panel__group">
+                    <p class="panel__label">Run</p>
+                    <div class="actions">
+                        <button type="button" class="btn" id="play">Pause</button>
+                    </div>
+                    <label class="switch"><span>Equilibrium positions</span><input type="checkbox" id="eq" checked></label>
+                    <label class="switch"><span>Follow one particle</span><input type="checkbox" id="follow" checked></label>
+                </div>
+
+                <div class="panel__group">
+                    <p class="panel__label">Wave</p>
+                    <label class="ctl">
+                        <span class="ctl__row"><span>Amplitude A</span><output id="amp-out" for="amp"></output></span>
+                        <input type="range" id="amp" min="5" max="40" step="1" value="26">
+                    </label>
+                    <label class="ctl">
+                        <span class="ctl__row"><span>Frequency f</span><output id="freq-out" for="freq"></output></span>
+                        <input type="range" id="freq" min="0.1" max="2" step="0.05" value="0.5">
+                    </label>
+                    <label class="ctl">
+                        <span class="ctl__row"><span>Wavelength λ</span><output id="lambda-out" for="lambda"></output></span>
+                        <input type="range" id="lambda" min="100" max="400" step="10" value="220">
+                    </label>
+                    <label class="ctl">
+                        <span class="ctl__row"><span>Particles</span><output id="count-out" for="count"></output></span>
+                        <input type="range" id="count" min="10" max="40" step="1" value="26">
+                    </label>
+                </div>
+
+                <dl class="readouts">
+                    <div><dt>Speed v = fλ</dt><dd id="r-v">—</dd></div>
+                    <div><dt>Period T</dt><dd id="r-t">—</dd></div>
+                    <div><dt>Wavenumber k</dt><dd id="r-k">—</dd></div>
+                    <div><dt>Longit. A</dt><dd id="r-al">—</dd></div>
+                </dl>
+
+                <ul class="legend">
+                    <li><span class="sw sw--dot sw--ink"></span>particle</li>
+                    <li><span class="sw sw--dot"></span>followed particle</li>
+                    <li><span class="sw sw--rose"></span>displacement</li>
+                    <li><span class="sw sw--tan"></span>crest · compression</li>
+                </ul>
+            </aside>
+        </div>
+
+        <section class="deriv" aria-labelledby="deriv-title">
+            <div class="deriv__head">
+                <h2 id="deriv-title">From physics to pixels</h2>
+                <p>Why a rope and a spring carry the same mathematics, where that mathematics comes from, and how it becomes two rows of dots.</p>
+            </div>
+            <div class="deriv__grid">
+                <nav class="deriv__toc" aria-label="Steps">
+                    <ol>
+                        <li><a href="#s-picture">Physical picture</a></li>
+                        <li><a href="#s-model">Model</a></li>
+                        <li><a href="#s-derivation">Derivation</a></li>
+                        <li><a href="#s-numerics">Numerical method</a></li>
+                        <li><a href="#s-screen">On screen</a></li>
+                        <li><a href="#s-limits">Limits</a></li>
+                    </ol>
+                </nav>
+                <div class="deriv__body">
+                    <article class="step" id="s-picture">
+                        <p class="step__num">01 · Physical picture</p>
+                        <h3>A rope and a slinky</h3>
+                        <p>Shake the end of a stretched rope up and down: a hump runs along it, but every bit of rope only moves up and down. That is a transverse wave. Push and pull the end of a slinky along its length: bunched and stretched regions run along it, but every coil only moves back and forth. That is a longitudinal wave, the way sound travels through air. The two rows in the figure are the same wave shown both ways; the burgundy particle in each row makes the difference visible.</p>
+                    </article>
+
+                    <article class="step" id="s-model">
+                        <p class="step__num">02 · Model</p>
+                        <h3>A displacement field on a line</h3>
+                        <p>Label every particle by its rest position x. The displacement ξ(x, t) says how far it has moved: sideways in the transverse row, along the line in the longitudinal row. The simulation uses the harmonic travelling wave</p>
+                        <p class="eq"><span class="eq__line">ξ(x, t) = A sin(k x − ω t), &nbsp; k = 2π/λ, &nbsp; ω = 2π f</span></p>
+                        <ul class="facts">
+                            <li>Small amplitudes, so the medium responds linearly.</li>
+                            <li>No damping and no dispersion: every wavelength travels at the same speed.</li>
+                            <li>An infinite medium: nothing reflects from the ends of the picture.</li>
+                        </ul>
+                    </article>
+
+                    <article class="step" id="s-derivation">
+                        <p class="step__num">03 · Derivation</p>
+                        <h3>One wave equation for both</h3>
+                        <h4>The transverse wave on a string</h4>
+                        <p>Take a string under tension F with mass per length μ. A short piece between x and x + dx is pulled by the tension at both ends; for small slopes the vertical components are F ∂ξ/∂x. The net vertical force is the difference between the two ends, and Newton's second law for the piece reads</p>
+                        <p class="eq"><span class="eq__line">μ dx · ∂²ξ/∂t² = F [ ∂ξ/∂x |<sub>x+dx</sub> − ∂ξ/∂x |<sub>x</sub> ] = F ∂²ξ/∂x² dx</span><span class="eq__line">⇒ &nbsp; ∂²ξ/∂t² = v² ∂²ξ/∂x², &nbsp; v = √(F/μ)</span></p>
+                        <h4>The longitudinal wave in a rod or a gas</h4>
+                        <p>Now let the particles move along x. A piece of rest length dx is stretched to dx(1 + ∂ξ/∂x), so the strain is ∂ξ/∂x and, by Hooke's law, the stress is σ = E ∂ξ/∂x with E the elastic modulus. The net force on the piece is the difference of stress across it, times the area; per unit volume, with density ρ,</p>
+                        <p class="eq"><span class="eq__line">ρ ∂²ξ/∂t² = ∂σ/∂x = E ∂²ξ/∂x² &nbsp;⇒&nbsp; v = √(E/ρ)</span><span class="eq__note">for a gas, E is replaced by γp: v = √(γp/ρ) ≈ 343 m/s in air at 20 °C</span></p>
+                        <p>Different physics, the same equation. That is why one ξ(x, t) can drive both rows.</p>
+                        <h4>Solutions and the speed</h4>
+                        <p>Any function f(x − vt) + g(x + vt) solves the wave equation (d'Alembert): a shape moving right plus one moving left. Inserting the harmonic wave, ∂²ξ/∂t² = −ω² ξ and ∂²ξ/∂x² = −k² ξ, so −ω² = −v²k², and</p>
+                        <p class="eq"><span class="eq__line">v = ω / k = f λ</span></p>
+                        <p>A crest, kx − ωt = π/2, therefore sits at x = (π/2 + ωt)/k and moves at v. The small ochre triangles above the upper row ride exactly on these crests.</p>
+                        <h4>Particle motion is not wave motion</h4>
+                        <p>Each particle's velocity is ∂ξ/∂t = −Aω cos(kx − ωt), at most Aω. Compared with the wave speed, Aω/v = Ak: for the defaults (A = 26 px, λ = 220 px) that is 0.74, so the particles move slower than the pattern and never go anywhere on average.</p>
+                        <h4>Compressions in the longitudinal row</h4>
+                        <p>A piece of rest length dx now occupies dx(1 + ∂ξ/∂x), so mass conservation gives the local density</p>
+                        <p class="eq"><span class="eq__line">ρ / ρ₀ = 1 / (1 + ∂ξ/∂x) ≈ 1 − A k cos(k x − ω t)</span></p>
+                        <p>The medium is compressed where ∂ξ/∂x &lt; 0, that is around kx − ωt = π. There the displacement is zero and the particles move forward at full speed. Since kx − ωt grows with x, the compressions sit a quarter wavelength ahead of the transverse crests, in the direction of travel: a detail that is easy to get wrong and easy to see in the figure. The shading shows max(0, −cos(kx − ωt)); the triangles above the lower row mark the compression centres.</p>
+                        <p>If Ak ≥ 1 somewhere, 1 + ∂ξ/∂x ≤ 0: a particle would overtake its neighbour, which is impossible. So the longitudinal amplitude is capped at 0.8/k, and the <em>Longit. A</em> readout says when the cap is active.</p>
+                        <h4>Energy carried</h4>
+                        <p>For the string, the energy per length is ½μ(∂ξ/∂t)² + ½F(∂ξ/∂x)². Averaged over a period, both terms are equal, giving ½μω²A², and the average power carried along the string is ⟨P⟩ = ½ μ v ω² A²: it grows with the square of amplitude and of frequency.</p>
+                        <p>Where this comes from: multiply the wave equation μ ∂²ξ/∂t² = F ∂²ξ/∂x² by ∂ξ/∂t and use the product rule. The result is a local conservation law, the same shape as the continuity equation for charge:</p>
+                        <p class="eq"><span class="eq__line">∂e/∂t + ∂P/∂x = 0, &nbsp; e = ½μ(∂ξ/∂t)² + ½F(∂ξ/∂x)², &nbsp; P = −F (∂ξ/∂x)(∂ξ/∂t)</span></p>
+                        <p>For a wave moving right, ∂ξ/∂x = −(1/v) ∂ξ/∂t, so P = (F/v)(∂ξ/∂t)² ≥ 0: the energy flux points along the direction of travel at every instant, and since F/v = μv its average is the ⟨P⟩ = ½μvω²A² above.</p>
+                    </article>
+
+                    <article class="step" id="s-numerics">
+                        <p class="step__num">04 · Numerical method</p>
+                        <h3>Exact evaluation, continuous phase</h3>
+                        <p>Because the solution is known in closed form, there is no time-stepping error at all: every frame evaluates ξ exactly at every particle. Only the phase ωt is accumulated, by 2πf Δt per frame with Δt the real elapsed time. Accumulating the phase rather than computing 2πf·t means a change of f changes the speed smoothly, instead of making the wave jump.</p>
+                    </article>
+
+                    <article class="step" id="s-screen">
+                        <p class="step__num">05 · On screen</p>
+                        <h3>Two rows on one canvas</h3>
+                        <p>Both rows use a world line 640 px long, scaled to the width of the figure. The transverse row sits at 30 % of the height: particles at (x, y₀ − ξ), with rose lines showing each displacement, a thin burgundy line tracing the full sine curve, and tick marks at the rest positions. The longitudinal row sits at 77 %: particles at (x + ξ, y₀), each drawn as a short vertical bar so that crowding reads as density, above a band whose burgundy tint follows the compression, sampled at 65 points along the line. One particle in the middle is followed in both rows, with a rose line from its rest position in the lower row.</p>
+                    </article>
+
+                    <article class="step" id="s-limits">
+                        <p class="step__num">06 · Limits</p>
+                        <h3>What the model leaves out</h3>
+                        <ul class="facts">
+                            <li>Large amplitudes make both media nonlinear: string tension changes with stretch, sound waves steepen into shocks.</li>
+                            <li>No damping, no reflections at the ends, no dispersion.</li>
+                            <li>The lengths are in px of the drawing; only the ratio A/λ matters for the shape.</li>
+                        </ul>
+                    </article>
+                </div>
+            </div>
+        </section>
+
+        <section class="walk" id="walk" data-walk="tl" aria-label="From symbols to code"></section>
+    </main>
+
+    <footer class="sim-foot">
+        <span>© 2026 Numa Koudsie · Claude version</span>
+        <span><a href="../index.html#simulations">All simulations ↑</a></span>
+    </footer>
+
+    <script src="../scripts/sim.js"></script>
+    <script>
+    (function () {
+        'use strict';
+        var T = Sim.theme;
+        var LENGTH = 640;
+
+        var stage = document.getElementById('stage');
+        var box = Sim.canvas2d(document.getElementById('waves')), ctx = box.ctx;
+        var eqBox = document.getElementById('eq'), followBox = document.getElementById('follow');
+        var omegaT = 0;
+
+        var amp = Sim.slider('amp', { format: function (v) { return v + ' px'; }, onInput: readouts });
+        var freq = Sim.slider('freq', { format: function (v) { return v.toFixed(2) + ' Hz'; }, onInput: readouts });
+        var lambda = Sim.slider('lambda', { format: function (v) { return v + ' px'; }, onInput: readouts });
+        var count = Sim.slider('count', { format: function (v) { return String(v); } });
+
+        function longAmp() { return Math.min(amp.value, 0.8 * lambda.value / (2 * Math.PI)); }
+
+        function readouts() {
+            var v = freq.value * lambda.value;
+            document.getElementById('r-v').textContent = Math.round(v) + ' px/s';
+            document.getElementById('cap-v').textContent = 'v = ' + Math.round(v) + ' px/s';
+            document.getElementById('r-t').textContent = (1 / freq.value).toFixed(2) + ' s';
+            document.getElementById('r-k').textContent = (2 * Math.PI / lambda.value).toFixed(4) + ' /px';
+            var al = longAmp();
+            document.getElementById('r-al').textContent = al.toFixed(0) + ' px' + (al < amp.value ? ' (cap)' : '');
+        }
+
+        function label(textValue, x, y) {
+            ctx.font = T.mono;
+            ctx.fillStyle = T.muted;
+            ctx.textAlign = 'left';
+            ctx.textBaseline = 'alphabetic';
+            ctx.fillText(textValue, x, y);
+        }
+
+        function marker(x, y) {
+            ctx.beginPath();
+            ctx.moveTo(x - 5, y - 7);
+            ctx.lineTo(x + 5, y - 7);
+            ctx.lineTo(x, y);
+            ctx.closePath();
+            ctx.fillStyle = T.tanInk;
+            ctx.fill();
+        }
+
+        function draw() {
+            var w = box.w, h = box.h, left = 22, right = w - 22, s = (right - left) / LENGTH;
+            var k = 2 * Math.PI / lambda.value, N = count.value, A = amp.value, AL = longAmp();
+            var yT = h * 0.3, yL = h * 0.77, follow = Math.floor((N - 1) / 2);
+            var i, X, px, xi;
+            ctx.clearRect(0, 0, w, h);
+
+            // separators and titles
+            label('TRANSVERSE · motion ⊥ travel', left, 22);
+            label('LONGITUDINAL · motion ∥ travel', left, h * 0.54);
+            ctx.strokeStyle = T.ruleSoft;
+            ctx.lineWidth = 1;
+            ctx.beginPath();
+            ctx.moveTo(left, h * 0.5);
+            ctx.lineTo(right, h * 0.5);
+            ctx.stroke();
+
+            // ---------- transverse ----------
+            if (eqBox.checked) {
+                ctx.setLineDash([5, 5]);
+                ctx.strokeStyle = T.rule;
+                ctx.beginPath();
+                ctx.moveTo(left, yT);
+                ctx.lineTo(right, yT);
+                ctx.stroke();
+                ctx.setLineDash([]);
+            }
+            ctx.strokeStyle = 'rgba(122, 31, 43, 0.45)';
+            ctx.lineWidth = 1.6;
+            ctx.beginPath();
+            for (X = 0; X <= LENGTH; X += 3) {
+                var y = yT - A * s * Math.sin(k * X - omegaT);
+                if (X === 0) ctx.moveTo(left + X * s, y); else ctx.lineTo(left + X * s, y);
+            }
+            ctx.stroke();
+            var crest = (((Math.PI / 2 + omegaT) / k) % lambda.value + lambda.value) % lambda.value;
+            for (X = crest; X <= LENGTH; X += lambda.value) marker(left + X * s, yT - A * s - 8);
+
+            for (i = 0; i < N; i++) {
+                X = i * LENGTH / (N - 1);
+                px = left + X * s;
+                xi = A * s * Math.sin(k * X - omegaT);
+                ctx.strokeStyle = T.rose;
+                ctx.lineWidth = 1.5;
+                ctx.beginPath();
+                ctx.moveTo(px, yT);
+                ctx.lineTo(px, yT - xi);
+                ctx.stroke();
+                if (eqBox.checked) {
+                    ctx.fillStyle = T.rule;
+                    ctx.fillRect(px - 0.5, yT - 3, 1, 6);
+                }
+            }
+            for (i = 0; i < N; i++) {
+                X = i * LENGTH / (N - 1);
+                var isF = followBox.checked && i === follow;
+                ctx.beginPath();
+                ctx.arc(left + X * s, yT - A * s * Math.sin(k * X - omegaT), isF ? 6.5 : 4.5, 0, Math.PI * 2);
+                ctx.fillStyle = isF ? T.accent : T.ink2;
+                ctx.fill();
+                if (isF) { ctx.lineWidth = 2; ctx.strokeStyle = T.card; ctx.stroke(); }
+            }
+
+            // ---------- longitudinal ----------
+            var band = 34;
+            var grad = ctx.createLinearGradient(left, 0, right, 0);
+            for (X = 0; X <= LENGTH; X += LENGTH / 64) {
+                var comp = Math.max(0, -Math.cos(k * X - omegaT));
+                grad.addColorStop(X / LENGTH, 'rgba(122, 31, 43, ' + (0.03 + 0.2 * comp).toFixed(3) + ')');
+            }
+            ctx.fillStyle = grad;
+            ctx.fillRect(left, yL - band, right - left, band * 2);
+            var comp0 = (((Math.PI + omegaT) / k) % lambda.value + lambda.value) % lambda.value;
+            for (X = comp0; X <= LENGTH; X += lambda.value) marker(left + X * s, yL - band - 6);
+
+            for (i = 0; i < N; i++) {
+                X = i * LENGTH / (N - 1);
+                px = left + (X + AL * Math.sin(k * X - omegaT)) * s;
+                var isFollowed = followBox.checked && i === follow;
+                if (eqBox.checked) {
+                    ctx.fillStyle = T.rule;
+                    ctx.fillRect(left + X * s - 0.5, yL + band + 4, 1, 7);
+                }
+                ctx.strokeStyle = isFollowed ? T.accent : 'rgba(58, 50, 46, 0.7)';
+                ctx.lineWidth = isFollowed ? 2.6 : 1.6;
+                ctx.beginPath();
+                ctx.moveTo(px, yL - band + 6);
+                ctx.lineTo(px, yL + band - 6);
+                ctx.stroke();
+                ctx.beginPath();
+                ctx.arc(px, yL, isFollowed ? 6.5 : 4, 0, Math.PI * 2);
+                ctx.fillStyle = isFollowed ? T.accent : T.ink2;
+                ctx.fill();
+                if (isFollowed) {
+                    ctx.lineWidth = 2;
+                    ctx.strokeStyle = T.card;
+                    ctx.stroke();
+                    if (eqBox.checked) {
+                        ctx.strokeStyle = T.rose;
+                        ctx.lineWidth = 1.5;
+                        ctx.beginPath();
+                        ctx.moveTo(left + X * s, yL + band + 2);
+                        ctx.lineTo(px, yL + band + 2);
+                        ctx.stroke();
+                    }
+                }
+            }
+        }
+
+        Sim.live = function () {
+            var lam = lambda.value, k = 2 * Math.PI / lam, A = amp.value, AL = longAmp(), N = count.value;
+            var sc = (box.w - 44) / LENGTH, i = Math.floor((N - 1) / 2), X = i * LENGTH / (N - 1);
+            var ph = k * X - omegaT, sn = Math.sin(ph), cs = Math.cos(ph);
+            var red = Math.atan2(sn, cs);
+            function md(v) { return ((v % lam) + lam) % lam; }
+            return {
+                f: freq.value.toFixed(2) + ' Hz', k: Sim.fmt(k, 5) + ' rad/px', wt: Sim.fmt(omegaT, 2) + ' rad',
+                v: Math.round(freq.value * lam) + ' px/s', T: (1 / freq.value).toFixed(3) + ' s',
+                X: Sim.fmt(X, 1) + ' px', phase: Sim.fmt(red, 3) + ' rad', xi: Sim.fmt(A * sn, 2) + ' px',
+                yi: Sim.fmt(box.h * 0.3 - A * sc * sn, 1) + ' px',
+                xc: Sim.fmt(md((Math.PI / 2 + omegaT) / k), 1) + ' px', xp: Sim.fmt(md((Math.PI + omegaT) / k), 1) + ' px',
+                AL: Sim.fmt(AL, 2) + ' px' + (AL < A ? ' (capped)' : ''), A: A + ' px', xl: Sim.fmt(X + AL * sn, 2) + ' px',
+                AkL: Sim.fmt(AL * k, 4), rho: Sim.fmt(1 / (1 + AL * k * cs), 3), comp: Sim.fmt(Math.max(0, -cs), 3),
+                s: Sim.fmt(sc, 4), yT: Sim.fmt(box.h * 0.3, 1) + ' px'
+            };
+        };
+
+        var clk = Sim.clock(function (dt) {
+            omegaT += 2 * Math.PI * freq.value * dt;
+            draw();
+        });
+        Sim.playButton(document.getElementById('play'), clk);
+
+        readouts();
+        Sim.onResize(stage, function () { box.fit(); });
+    })();
+    </script>
+</body>
+</html>
