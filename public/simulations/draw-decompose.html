@@ -16,6 +16,7 @@
         .grid2 { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 6px; }
         .grid2 .btn { font-size: 12.5px; padding: 7px 8px; }
         .hint { font-size: 12.5px; color: var(--muted); line-height: 1.5; margin: 0; }
+        [hidden] { display: none !important; }
     </style>
 </head>
 <body>
@@ -46,7 +47,7 @@
             <div class="stack">
                 <figure class="stage">
                     <div class="stage__canvas" id="stage" style="--ar: 1 / 0.78; --ar-m: 1 / 1;">
-                        <canvas id="field" aria-label="Drawing area. Press and drag to draw a shape; release to decompose it into circles."></canvas>
+                        <canvas id="field" aria-label="Figure. In drawing mode, press and drag to draw a stroke; while playing, drag to pan and scroll or pinch to zoom."></canvas>
                     </div>
                     <figcaption class="stage__cap">
                         <span><b>Fig. 8a</b> · z(t) = Σ<sub>k</sub> c<sub>k</sub> e<sup>ikt</sup> · <span id="cap-mode">draw a shape</span></span>
@@ -67,10 +68,16 @@
             <aside class="panel" aria-label="Controls">
                 <div class="panel__group">
                     <p class="panel__label">Shape</p>
-                    <p class="hint">Press and drag on the figure to draw. Release to decompose.</p>
-                    <div class="actions">
+                    <p class="hint" id="hint">Press New drawing, draw one stroke on the figure, then press Decompose &amp; play.</p>
+                    <div class="actions" id="run-tools">
                         <button type="button" class="btn" id="play">Pause</button>
-                        <button type="button" class="btn btn--ghost" id="redraw">Draw new</button>
+                        <button type="button" class="btn btn--ghost" id="reset-t">Restart loop</button>
+                        <button type="button" class="btn btn--ghost" id="redraw">New drawing</button>
+                    </div>
+                    <div class="actions" id="draw-tools" hidden>
+                        <button type="button" class="btn" id="go" disabled>Decompose &amp; play</button>
+                        <button type="button" class="btn btn--ghost" id="clear-draft">Clear</button>
+                        <button type="button" class="btn btn--ghost" id="cancel">Cancel</button>
                     </div>
                     <div class="grid2" id="presets">
                         <button type="button" class="btn btn--ghost" data-shape="heart">Heart</button>
@@ -92,6 +99,14 @@
                         <span class="ctl__row"><span>Time per loop</span><output id="loop-out" for="loop"></output></span>
                         <input type="range" id="loop" min="4" max="30" step="1" value="12">
                     </label>
+                    <label class="ctl">
+                        <span class="ctl__row"><span>Zoom</span><output id="zoom-out" for="zoom"></output></span>
+                        <input type="range" id="zoom" min="0" max="1.8" step="0.01" value="0">
+                    </label>
+                    <label class="switch"><span>Follow the pen</span><input type="checkbox" id="sw-follow"></label>
+                    <div class="actions">
+                        <button type="button" class="btn btn--ghost" id="reset-view">Reset view</button>
+                    </div>
                     <label class="switch"><span>Component circles</span><input type="checkbox" id="sw-circles" checked></label>
                     <label class="switch"><span>Tip-to-tail vectors</span><input type="checkbox" id="sw-vectors" checked></label>
                     <label class="switch"><span>Your drawing</span><input type="checkbox" id="sw-orig" checked></label>
@@ -185,7 +200,7 @@
                         <p class="step__num">05 · On screen</p>
                         <h3>Units and colours</h3>
                         <p>The drawing is stored in scale-free units: one unit is 0.46 of the shorter side of the figure, the origin at its centre and y pointing up. Resizing the window therefore never distorts a shape. Points closer than 0.006 units to the previous one are skipped while drawing.</p>
-                        <p>After decomposition the page finds the outermost point drawn over a whole loop: the largest |joint| + radius over all circles at 256 instants, and the farthest point of your centred drawing. If that exceeds one unit, the view zooms out so it lands at 46 % of the shorter side; it zooms out at once and back in with a 0.4 s time constant when you lower K. Nothing leaves the figure.</p>
+                        <p>After decomposition the page finds the outermost point drawn over a whole loop: the largest |joint| + radius over all circles at 256 instants, and the farthest point of your centred drawing. If that exceeds one unit, the view zooms out so it lands at 46 % of the shorter side; it zooms out at once and back in with a 0.4 s time constant when you lower K. At zoom 1× nothing leaves the figure. The Zoom slider, the mouse wheel or a pinch magnify this fitted view up to about 63×, and dragging pans it; Follow the pen keeps the tip of the chain at the centre, so the smallest circles stay in sight while they turn. Zoom and pan change only the view, never the coefficients.</p>
                         <p>The traced reconstruction is burgundy and fades over one loop; your centred drawing is a dashed ink line; each circle is rose. In Fig. 8b each stem is |c<sub>k</sub>| scaled to the largest one, burgundy if the term is among the K in use.</p>
                     </article>
 
@@ -226,10 +241,13 @@
         var arcLen = 0, meanX = 0, meanY = 0, meanZ2 = 0, err = 0, errP = 0, kept = 0;
         var t = 0, trail = [];
         var extR = 1, viewR = 1; /* outermost drawn radius over a loop, and the radius the view is fitted to */
+        var draft = [], zoom = 1, panX = 0, panY = 0, ptrs = {}, pinch = null; /* stroke being drawn; view magnification and centre in scale-free units */
 
         var K = Sim.slider('K', { format: function (v) { return String(v); }, onInput: rebuild });
         var loop = Sim.slider('loop', { format: function (v) { return v + ' s'; } });
         var swCircles = $('sw-circles'), swVectors = $('sw-vectors'), swOrig = $('sw-orig'), swFull = $('sw-full');
+        var swFollow = $('sw-follow');
+        var zoomS = Sim.slider('zoom', { format: function (v) { return Sim.fmt(Math.pow(10, v), 1) + '×'; }, onInput: function (v) { zoom = Math.pow(10, v); } });
 
         function S() { return Math.min(box.w, box.h) * 0.46; }
 
@@ -385,46 +403,132 @@
             if (!b) return;
             var s = b.getAttribute('data-shape');
             stroke = SHAPES[s]();
-            decompose(stroke, NAMES[s]);
+            play(stroke, NAMES[s]);
         });
 
-        /* ---------- drawing with the pointer ---------- */
+        /* ---------- the pointer: draws in drawing mode; pans and zooms the view while playing ---------- */
         function world(e) {
             var r = canvas.getBoundingClientRect(), s = S();
             return { x: (e.clientX - r.left - box.w / 2) / s, y: -(e.clientY - r.top - box.h / 2) / s };
         }
-        function startDraw() {
-            mode = 'draw';
-            coefs = [];
-            samples = [];
-            full = [];
-            trail = [];
-            source = '—';
+        function viewScale() { return S() / Math.max(1, viewR) * zoom; }
+        function setZoom(z) {
+            zoom = Math.max(1, Math.min(Math.pow(10, 1.8), z));
+            zoomS.set(Math.log(zoom) / Math.LN10);
+        }
+        function setMode(m) {
+            mode = m;
+            drawing = false;
+            ptrs = {};
+            pinch = null;
+            $('run-tools').hidden = m === 'draw';
+            $('draw-tools').hidden = m !== 'draw';
+            $('go').disabled = draft.length < 12;
+            $('cancel').disabled = !coefs.length;
+            canvas.style.cursor = m === 'draw' ? 'crosshair' : 'grab';
+            $('hint').textContent = m === 'draw'
+                ? 'Press and drag on the figure to draw one stroke; a new stroke replaces it. Then press Decompose & play. Cancel returns to the previous shape.'
+                : 'While it plays, touching the figure never erases it: drag to pan, scroll or pinch to zoom. New drawing starts a stroke; the current shape stays until you decompose the new one.';
             readouts();
-            spectrum();
+        }
+        function startDraw() {
+            draft = [];
+            setMode('draw');
+        }
+        function play(pts, name) {
+            panX = panY = 0;
+            decompose(pts, name);
+            if (mode === 'play') setMode('play');
         }
         canvas.addEventListener('mousedown', function (e) { e.preventDefault(); });
         canvas.addEventListener('pointerdown', function (e) {
             e.preventDefault();
-            startDraw();
-            drawing = true;
-            stroke = [world(e)];
             if (canvas.setPointerCapture) canvas.setPointerCapture(e.pointerId);
+            if (mode === 'draw') {
+                drawing = true;
+                draft = [world(e)];
+                $('go').disabled = true;
+                return;
+            }
+            ptrs[e.pointerId] = { x: e.clientX, y: e.clientY };
+            var ids = Object.keys(ptrs);
+            if (ids.length === 2) {
+                var a = ptrs[ids[0]], b = ptrs[ids[1]];
+                pinch = { d: Math.hypot(a.x - b.x, a.y - b.y) || 1, z: zoom };
+            }
         });
         canvas.addEventListener('pointermove', function (e) {
-            if (!drawing) return;
-            var p = world(e), l = stroke[stroke.length - 1];
-            if (Math.hypot(p.x - l.x, p.y - l.y) > 0.006) stroke.push(p);
+            if (mode === 'draw') {
+                if (!drawing) return;
+                var p = world(e), l = draft[draft.length - 1];
+                if (Math.hypot(p.x - l.x, p.y - l.y) > 0.006) draft.push(p);
+                return;
+            }
+            var q = ptrs[e.pointerId];
+            if (!q) return;
+            var ids = Object.keys(ptrs);
+            if (ids.length >= 2 && pinch) {
+                q.x = e.clientX;
+                q.y = e.clientY;
+                var a = ptrs[ids[0]], b = ptrs[ids[1]];
+                setZoom(pinch.z * Math.hypot(a.x - b.x, a.y - b.y) / pinch.d);
+                return;
+            }
+            if (swFollow.checked) {
+                var tip = chainAt(t, K.value);
+                panX = tip.x;
+                panY = tip.y;
+                swFollow.checked = false;
+            }
+            var s = viewScale();
+            panX -= (e.clientX - q.x) / s;
+            panY += (e.clientY - q.y) / s;
+            q.x = e.clientX;
+            q.y = e.clientY;
         });
-        function endDraw() {
-            if (!drawing) return;
-            drawing = false;
-            if (stroke.length >= 12) decompose(stroke, 'your drawing');
-            else $('cap-mode').textContent = 'stroke too short · draw again';
+        function endPointer(e) {
+            if (mode === 'draw') {
+                if (!drawing) return;
+                drawing = false;
+                $('go').disabled = draft.length < 12;
+                if (draft.length < 12) $('cap-mode').textContent = 'stroke too short · draw again';
+                return;
+            }
+            delete ptrs[e.pointerId];
+            if (Object.keys(ptrs).length < 2) pinch = null;
         }
-        canvas.addEventListener('pointerup', endDraw);
-        canvas.addEventListener('pointercancel', endDraw);
-        $('redraw').addEventListener('click', function () { stroke = []; startDraw(); });
+        canvas.addEventListener('pointerup', endPointer);
+        canvas.addEventListener('pointercancel', endPointer);
+        canvas.addEventListener('wheel', function (e) {
+            if (mode === 'draw') return;
+            e.preventDefault();
+            var r = canvas.getBoundingClientRect(), mx = e.clientX - r.left - box.w / 2, my = e.clientY - r.top - box.h / 2;
+            var s0 = viewScale();
+            setZoom(zoom * Math.exp(-e.deltaY * (e.deltaMode === 1 ? 16 : 1) * 0.0015));
+            if (!swFollow.checked) {
+                var s1 = viewScale();
+                panX += mx / s0 - mx / s1;
+                panY -= my / s0 - my / s1;
+            }
+        }, { passive: false });
+        $('redraw').addEventListener('click', startDraw);
+        $('clear-draft').addEventListener('click', function () { draft = []; $('go').disabled = true; });
+        $('cancel').addEventListener('click', function () { if (coefs.length) { draft = []; setMode('play'); } });
+        $('go').addEventListener('click', function () {
+            if (draft.length < 12) return;
+            stroke = draft;
+            draft = [];
+            play(stroke, 'your drawing');
+            if (!clk.playing) clk.set(true);
+        });
+        $('reset-t').addEventListener('click', function () { t = 0; trail = []; });
+        $('reset-view').addEventListener('click', function () { panX = panY = 0; setZoom(1); swFollow.checked = false; });
+        swFollow.addEventListener('change', function () {
+            if (swFollow.checked) return;
+            var tip = chainAt(t, K.value);
+            panX = tip.x;
+            panY = tip.y;
+        });
 
         /* ---------- rendering ---------- */
         function line(pts, cx, cy, s, closed) {
@@ -437,7 +541,13 @@
             ctx.stroke();
         }
         function draw() {
-            var w = box.w, h = box.h, cx = w / 2, cy = h / 2, s = mode === 'draw' ? S() : S() / Math.max(1, viewR);
+            var w = box.w, h = box.h, cx = w / 2, cy = h / 2, s = mode === 'draw' ? S() : viewScale();
+            var cur = mode === 'draw' ? null : chainAt(t, K.value);
+            if (cur) {
+                /* view centre: the pen tip when following, else the panned point */
+                cx = w / 2 - (swFollow.checked ? cur.x : panX) * s;
+                cy = h / 2 + (swFollow.checked ? cur.y : panY) * s;
+            }
             ctx.clearRect(0, 0, w, h);
             ctx.strokeStyle = T.rule;
             ctx.lineWidth = 1;
@@ -455,11 +565,11 @@
             ctx.lineCap = 'round';
 
             if (mode === 'draw') {
-                if (stroke.length > 1) {
-                    var sp = stroke[0], ep = stroke[stroke.length - 1];
+                if (draft.length > 1) {
+                    var sp = draft[0], ep = draft[draft.length - 1];
                     ctx.strokeStyle = T.accent;
                     ctx.lineWidth = 2.5;
-                    line(stroke, cx, cy, s, false);
+                    line(draft, cx, cy, s, false);
                     ctx.setLineDash([5, 5]);
                     ctx.strokeStyle = T.ink3;
                     ctx.lineWidth = 1.5;
@@ -478,8 +588,8 @@
                     ctx.fillStyle = T.muted;
                     ctx.font = T.mono;
                     ctx.textAlign = 'center';
-                    ctx.fillText('PRESS AND DRAG TO DRAW ONE CLOSED SHAPE', cx, cy - 12);
-                    ctx.fillText('OR PICK A PRESET', cx, cy + 8);
+                    ctx.fillText('PRESS AND DRAG TO DRAW ONE STROKE', cx, cy - 12);
+                    ctx.fillText('THEN PRESS DECOMPOSE & PLAY', cx, cy + 8);
                 }
                 return;
             }
@@ -509,7 +619,7 @@
             ctx.globalAlpha = 1;
             ctx.lineCap = 'round';
 
-            var cur = chainAt(t, K.value), ox = cx, oy = cy;
+            var ox = cx, oy = cy;
             cur.parts.forEach(function (p, i) {
                 var nx = ox + p.vx * s, ny = oy - p.vy * s;
                 if (swCircles.checked && p.amp * s > 1.5) {
@@ -611,7 +721,7 @@
             $('r-k1').textContent = has ? (coefs[0].k > 0 ? '+' : '') + Sim.fmt(coefs[0].k, 0) : '—';
             $('r-err').textContent = has ? Sim.fmt(err, 5) : '—';
             $('r-errp').textContent = has ? Sim.fmt(errP, 5) : '—';
-            $('cap-mode').textContent = has ? K.value + ' circles' : 'draw a shape';
+            $('cap-mode').textContent = mode === 'draw' ? 'new drawing · not yet decomposed' : has ? K.value + ' circles' : 'draw a shape';
             $('cap-src').textContent = source;
             $('cap-k').textContent = has ? 'K = ' + K.value : '—';
         }
@@ -651,7 +761,7 @@
         Sim.onResize(specStage, function () { sbox.fit(); spectrum(); });
 
         stroke = SHAPES.heart();
-        decompose(stroke, 'heart');
+        play(stroke, 'heart');
     })();
     </script>
 </body>
