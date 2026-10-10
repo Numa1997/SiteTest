@@ -3,6 +3,13 @@
 (function () {
     'use strict';
 
+    /* light / dark theme for the page chrome; the figures stay on the paper palette below */
+    if (!window.Theme) {
+        var themeScript = document.createElement('script');
+        themeScript.src = '../scripts/theme.js';
+        (document.head || document.documentElement).appendChild(themeScript);
+    }
+
     var theme = {
         paper: '#f5f1ea',
         card: '#fffaf3',
