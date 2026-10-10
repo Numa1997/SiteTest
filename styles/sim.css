@@ -25,6 +25,17 @@
   --grid: linear-gradient(rgba(122, 31, 43, .075) 1px, transparent 1px), linear-gradient(90deg, rgba(122, 31, 43, .075) 1px, transparent 1px);
   --shadow: 0 14px 40px rgba(60, 40, 20, .12);
   --shadow-sm: 0 1px 2px rgba(60, 40, 20, .05);
+  --tan-line: #e0cf9f;
+  --on-accent: #fff;
+  --tag-soft: #f0eae0;
+  --plate: #fffdf9;
+  --sketch-grey: #cdc1ae;
+  --bar-bg: rgba(245, 241, 234, 0.94);
+  --accent-glow: rgba(122, 31, 43, 0.25);
+  --accent-line: rgba(122, 31, 43, 0.4);
+  --pend-trace: rgba(122, 31, 43, 0.85);
+  --code-bg: #1c1518;
+  color-scheme: light;
 }
 
 *, *::before, *::after { box-sizing: border-box; }
@@ -88,8 +99,8 @@ input[type="range"]:active::-webkit-slider-thumb { transform: scale(1.18); }
 input[type="range"]:disabled { opacity: .45; cursor: not-allowed; }
 
 /* buttons: same shapes as the front page */
-.btn { display: inline-flex; align-items: center; justify-content: center; gap: 8px; font-family: var(--sans); font-size: 13.5px; font-weight: 500; line-height: 1.2; color: #fff; background: var(--accent); padding: 9px 16px; border-radius: 6px; border: 1px solid var(--accent); white-space: nowrap; cursor: pointer; transition: background .2s ease, box-shadow .2s ease, transform .2s ease, color .2s ease, border-color .2s ease; }
-.btn:hover { background: var(--accent-dark); border-color: var(--accent-dark); color: #fff; box-shadow: 0 8px 20px rgba(122, 31, 43, .25); transform: translateY(-1px); }
+.btn { display: inline-flex; align-items: center; justify-content: center; gap: 8px; font-family: var(--sans); font-size: 13.5px; font-weight: 500; line-height: 1.2; color: var(--on-accent); background: var(--accent); padding: 9px 16px; border-radius: 6px; border: 1px solid var(--accent); white-space: nowrap; cursor: pointer; transition: background .2s ease, box-shadow .2s ease, transform .2s ease, color .2s ease, border-color .2s ease; }
+.btn:hover { background: var(--accent-dark); border-color: var(--accent-dark); color: var(--on-accent); box-shadow: 0 8px 20px var(--accent-glow); transform: translateY(-1px); }
 .btn--ghost { background: transparent; color: var(--accent); border-color: var(--rule); }
 .btn--ghost:hover { background: var(--card-soft); color: var(--accent-dark); border-color: var(--accent); box-shadow: none; }
 .btn[disabled] { opacity: .45; cursor: not-allowed; transform: none; box-shadow: none; }
@@ -162,7 +173,7 @@ input[type="range"]:disabled { opacity: .45; cursor: not-allowed; }
 .facts li::before { content: ''; position: absolute; left: 0; top: .72em; width: 6px; height: 6px; background: var(--accent); opacity: .75; }
 .try { background: var(--tan); color: var(--tan-ink); border-radius: 8px; padding: 12px 16px; margin: 6px 0 18px; font-size: 14.5px; line-height: 1.6; }
 .try b { font-family: var(--mono); font-size: 10.5px; letter-spacing: .12em; text-transform: uppercase; margin-right: 8px; }
-.sim-error { background: var(--tan); color: var(--tan-ink); border: 1px solid #e0cf9f; border-left: 3px solid var(--accent); border-radius: 8px; padding: 12px 16px; margin: 0 0 20px; font-size: 14.5px; }
+.sim-error { background: var(--tan); color: var(--tan-ink); border: 1px solid var(--tan-line); border-left: 3px solid var(--accent); border-radius: 8px; padding: 12px 16px; margin: 0 0 20px; font-size: 14.5px; }
 .sim-error b { color: var(--accent); }
 @media (max-width: 900px) {
   .deriv__grid { grid-template-columns: 1fr; gap: 0; }
@@ -217,13 +228,13 @@ details.sub[open] { border-left-color: var(--accent); }
 .walk__label { font-family: var(--mono); font-size: 10px; letter-spacing: .14em; text-transform: uppercase; color: var(--muted); margin: 0 0 6px; }
 .walk__eq { margin: 0 0 10px; font-size: 17px; }
 .walk__note { font-size: 14.5px; line-height: 1.65; color: var(--ink-2); margin: 0; }
-.walk__code pre { margin: 0; background: var(--ink); color: #efe6da; border-radius: 8px; padding: 14px 16px; overflow-x: auto; font-family: var(--mono); font-size: 12.5px; line-height: 1.65; tab-size: 4; }
+.walk__code pre { margin: 0; background: var(--code-bg); color: #efe6da; border-radius: 8px; padding: 14px 16px; overflow-x: auto; font-family: var(--mono); font-size: 12.5px; line-height: 1.65; tab-size: 4; }
 .walk__code code { font-family: inherit; white-space: pre; }
 .k { border-radius: 3px; padding: 0 1px; cursor: help; transition: background .15s ease, color .15s ease, box-shadow .15s ease; }
 .walk__eq .k { color: var(--accent); }
 .walk__code .k { color: #f2b8bf; }
 .k.is-lit, .walk__table tr.is-lit td { background: var(--tan); color: var(--accent-dark); box-shadow: 0 0 0 2px var(--tan); }
-.walk__code .k.is-lit { background: var(--accent); color: #fff; box-shadow: 0 0 0 2px var(--accent); }
+.walk__code .k.is-lit { background: var(--accent); color: var(--on-accent); box-shadow: 0 0 0 2px var(--accent); }
 .walk__tablewrap { margin-top: 16px; overflow-x: auto; }
 .walk__table { width: 100%; border-collapse: collapse; font-size: 13.5px; }
 .walk__table th { text-align: left; font-family: var(--mono); font-size: 10px; letter-spacing: .12em; text-transform: uppercase; color: var(--muted); font-weight: 500; padding: 6px 10px; border-bottom: 1px solid var(--rule); }
@@ -255,8 +266,8 @@ details.sub[open] { border-left-color: var(--accent); }
 }
 
 /* ================= skip link and print ================= */
-.skip-link { position: absolute; left: -9999px; top: 8px; background: var(--accent); color: #fff; padding: 8px 12px; border-radius: 4px; z-index: 100; }
-.skip-link:focus { left: 8px; color: #fff; }
+.skip-link { position: absolute; left: -9999px; top: 8px; background: var(--accent); color: var(--on-accent); padding: 8px 12px; border-radius: 4px; z-index: 100; }
+.skip-link:focus { left: 8px; color: var(--on-accent); }
 @media print {
   body { background: #fff; }
   .skip-link, .sim-nav, .panel, .deriv__tools, .deriv__toc, .walk__hold, .walk__nav, .stage__cap { display: none !important; }
@@ -290,4 +301,137 @@ details.sub[open] { border-left-color: var(--accent); }
 }
 @media (prefers-reduced-motion: reduce) {
   .sim__head, .stage, .panel { animation: none; }
+}
+
+/* theme toggle (mounted by scripts/theme.js) */
+.sim-nav .theme-toggle { margin-left: 10px; }
+.theme-toggle {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-family: var(--mono);
+  font-size: 11px;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--ink-3);
+  background: transparent;
+  border: 1px solid var(--rule);
+  border-radius: 999px;
+  padding: 4px 10px 4px 8px;
+  line-height: 1.2;
+  cursor: pointer;
+  transition: color 0.2s ease, border-color 0.2s ease, background 0.2s ease;
+}
+.theme-toggle:hover { color: var(--accent); border-color: var(--accent); }
+.theme-toggle:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+.theme-toggle[aria-pressed="true"] { color: var(--accent); border-color: var(--accent-line); }
+.theme-toggle svg { display: block; flex-shrink: 0; }
+
+/* ================= dark theme =================
+   data-theme is set on <html> by scripts/theme.js (stored choice, else the system setting);
+   the media query covers the moment before that script runs. */
+:root[data-theme="dark"] {
+  --paper: #16110f;
+  --card: #1f1916;
+  --card-soft: #251e1a;
+  --ink: #f2eae0;
+  --ink-2: #d9cec2;
+  --ink-3: #b5a89c;
+  --muted: #8f8277;
+  --rule: #3b312b;
+  --rule-soft: #2d2521;
+  --accent: #e07c8a;
+  --accent-dark: #f2a7b1;
+  --accent-rose: #7c3341;
+  --tan: #3a2d1c;
+  --tan-ink: #e8c88f;
+  --tan-line: #5c4728;
+  --on-accent: #1a1110;
+  --tag-soft: #2a221e;
+  --plate: #1c1714;
+  --sketch-grey: #5a4d44;
+  --bar-bg: rgba(22, 17, 15, 0.92);
+  --accent-glow: rgba(224, 124, 138, 0.22);
+  --accent-line: rgba(224, 124, 138, 0.45);
+  --pend-trace: rgba(224, 124, 138, 0.85);
+  --code-bg: #0e0a09;
+  --grid:
+    linear-gradient(rgba(224, 124, 138, 0.07) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(224, 124, 138, 0.07) 1px, transparent 1px);
+  --shadow: 0 14px 40px rgba(0, 0, 0, 0.5);
+  --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.4);
+  color-scheme: dark;
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --paper: #16110f;
+    --card: #1f1916;
+    --card-soft: #251e1a;
+    --ink: #f2eae0;
+    --ink-2: #d9cec2;
+    --ink-3: #b5a89c;
+    --muted: #8f8277;
+    --rule: #3b312b;
+    --rule-soft: #2d2521;
+    --accent: #e07c8a;
+    --accent-dark: #f2a7b1;
+    --accent-rose: #7c3341;
+    --tan: #3a2d1c;
+    --tan-ink: #e8c88f;
+    --tan-line: #5c4728;
+    --on-accent: #1a1110;
+    --tag-soft: #2a221e;
+    --plate: #1c1714;
+    --sketch-grey: #5a4d44;
+    --bar-bg: rgba(22, 17, 15, 0.92);
+    --accent-glow: rgba(224, 124, 138, 0.22);
+    --accent-line: rgba(224, 124, 138, 0.45);
+    --pend-trace: rgba(224, 124, 138, 0.85);
+    --code-bg: #0e0a09;
+    --grid:
+      linear-gradient(rgba(224, 124, 138, 0.07) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(224, 124, 138, 0.07) 1px, transparent 1px);
+    --shadow: 0 14px 40px rgba(0, 0, 0, 0.5);
+    --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.4);
+    color-scheme: dark;
+  }
+}
+
+/* In the dark theme each figure stays a light paper plate: the simulation canvases draw
+   with the fixed paper palette in scripts/sim.js, so the plate keeps the colours they assume. */
+:root[data-theme="dark"] .stage {
+  --paper: #f5f1ea;
+  --card: #fffaf3;
+  --card-soft: #fbf6ee;
+  --ink: #1c1518;
+  --ink-2: #3a322e;
+  --ink-3: #5a504b;
+  --muted: #8b8079;
+  --rule: #d9d0c2;
+  --rule-soft: #e6dfd2;
+  --accent: #7a1f2b;
+  --accent-dark: #4d0f18;
+  --accent-rose: #e2a2aa;
+  --grid: linear-gradient(rgba(122, 31, 43, .075) 1px, transparent 1px), linear-gradient(90deg, rgba(122, 31, 43, .075) 1px, transparent 1px);
+  color-scheme: light;
+  border-color: #3b312b;
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) .stage {
+    --paper: #f5f1ea;
+    --card: #fffaf3;
+    --card-soft: #fbf6ee;
+    --ink: #1c1518;
+    --ink-2: #3a322e;
+    --ink-3: #5a504b;
+    --muted: #8b8079;
+    --rule: #d9d0c2;
+    --rule-soft: #e6dfd2;
+    --accent: #7a1f2b;
+    --accent-dark: #4d0f18;
+    --accent-rose: #e2a2aa;
+    --grid: linear-gradient(rgba(122, 31, 43, .075) 1px, transparent 1px), linear-gradient(90deg, rgba(122, 31, 43, .075) 1px, transparent 1px);
+    color-scheme: light;
+    border-color: #3b312b;
+  }
 }

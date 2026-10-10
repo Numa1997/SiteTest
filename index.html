@@ -26,6 +26,7 @@
     <script>
       document.documentElement.className = 'js';
     </script>
+    <script src="scripts/theme.js"></script>
   </head>
 
   <body>
@@ -47,6 +48,7 @@
           <a href="https://github.com/Numa1997" target="_blank" rel="noopener"
             >github.com/Numa1997</a
           >
+          <span data-theme-toggle></span>
         </div>
         <div class="hero__cta">
           <a class="btn" href="#positions">See positions</a>
@@ -603,6 +605,7 @@
 
     <footer>
       <span>© 2026 Numa Koudsie · Claude version</span>
+      <span data-theme-toggle></span>
       <span><a href="#top">Back to top ↑</a></span>
     </footer>
 
@@ -722,7 +725,7 @@
               state = rk4(state, h);
               var p = pos(state);
               if (prev) {
-                tctx.strokeStyle = 'rgba(122, 31, 43, 0.85)';
+                tctx.strokeStyle = COL.trace;
                 tctx.lineWidth = 1.4;
                 tctx.lineCap = 'round';
                 tctx.beginPath();
@@ -744,7 +747,7 @@
             ctx.clearRect(0, 0, W, H);
             ctx.drawImage(trace, 0, 0, W, H);
             var p = pos(state);
-            ctx.strokeStyle = '#1c1518';
+            ctx.strokeStyle = COL.rod;
             ctx.lineWidth = 2.2;
             ctx.lineCap = 'round';
             ctx.beginPath();
@@ -752,11 +755,11 @@
             ctx.lineTo(p[0], p[1]);
             ctx.lineTo(p[2], p[3]);
             ctx.stroke();
-            ctx.fillStyle = '#8b8079';
+            ctx.fillStyle = COL.pivot;
             ctx.beginPath();
             ctx.arc(ox, oy, 3.5, 0, Math.PI * 2);
             ctx.fill();
-            ctx.fillStyle = '#7a1f2b';
+            ctx.fillStyle = COL.bob;
             ctx.beginPath();
             ctx.arc(p[0], p[1], 7, 0, Math.PI * 2);
             ctx.fill();
@@ -789,6 +792,26 @@
             if (raf) cancelAnimationFrame(raf);
             raf = null;
           }
+
+          var COL = {};
+          function palette() {
+            var cs = getComputedStyle(document.documentElement);
+            function v(name, fallback) {
+              return (cs.getPropertyValue(name) || '').trim() || fallback;
+            }
+            COL.trace = v('--pend-trace', 'rgba(122, 31, 43, 0.85)');
+            COL.rod = v('--ink', '#1c1518');
+            COL.pivot = v('--muted', '#8b8079');
+            COL.bob = v('--accent', '#7a1f2b');
+          }
+          palette();
+          document.addEventListener('themechange', function () {
+            palette();
+            tctx.clearRect(0, 0, W, H);
+            prev = null;
+            if (reduced) step(2600, 0.0035);
+            draw();
+          });
 
           resize();
           reset();
