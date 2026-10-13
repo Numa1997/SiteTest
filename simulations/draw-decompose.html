@@ -991,7 +991,11 @@
                 trail_x: function (i) { if (!playing()) return { what: 'trail point ' + i, drawn: 'nothing', expected: 'nothing', ok: true, note: 'The trail is drawn only while playing.' }; var p = toScreen(ds.get('trail_x')[i], ds.get('trail_y')[i]), px = pixelAt(ctx, box, p.x, p.y); return { what: 'screen pixel at trail point ' + i + ', (' + Sim.fmt(p.x, 1) + ', ' + Sim.fmt(p.y, 1) + ') css px', drawn: rgbText(px), expected: 'burgundy, fainter for older points', ok: px[3] > 0, note: 'A 2.3 px stroke whose older segments are drawn with lower opacity.' }; },
                 spec_y: function (r) { var px = pixelAt(sctx, sbox, ds.get('spec_x')[r], ds.get('spec_y')[r]); return { what: 'screen pixel at the top of spectrum bar ' + r + ' (k = ' + ds.get('c_k')[r] + ')', drawn: rgbText(px), expected: r < ds.get('K') ? 'the burgundy dot of a kept circle' : 'the tan dot of a dropped one', ok: px[3] > 0 && lum(px) < 170, note: 'Each bar ends in a filled dot of radius 2.5 px (kept) or 1.8 px (dropped).' }; }
             },
-            log: { every: 0.1, max: 1000, time: 't', columns: ['t', 'x', 'y', 'K', 'err', 'errP', 'viewR'] },
+            round: { time: 't', label: function () { return 'one loop of the circles, ' + ds.get('loop_s') + ' s'; }, length: function () { return 2 * Math.PI; },
+                columns: ['x', 'y'], point: function () { return { tip: true }; },
+                blocked: function () { return ds.get('mode') !== 'play' ? 'Decompose a shape first: time only runs while it plays.' : null; } },
+            play: function () { clk.set(true); },
+            touchProbe: function () { return ds.get('mode') === 'play'; },
             about: 'The pen, arms and joints are drawn from the stored chain each frame. The dashed original is the 256 resampled, centred points zₙ joined by straight segments; the full curve is the stored 601-point reconstruction. The trail is the pen position at the end of each past frame over the last loop. The spectrum bars are drawn once per rebuild, from |c_k| sorted by size. The view scale relaxes toward the outer radius over about 0.4 s, so the stored scale is a smoothed quantity, not a formula of the current frame.'
         };
         ds.set('loop_s', loop.value); ds.set('t', 0); ds.set('mode', mode);

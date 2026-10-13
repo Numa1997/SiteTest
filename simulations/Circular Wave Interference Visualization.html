@@ -589,7 +589,9 @@
                     return { what: 'screen pixel at the source dot, (' + Math.round(sources[q] * box.w) + ', ' + Math.round(box.h - SOURCE_LIFT * box.w / WORLD_W) + ') css px', drawn: 'rgb(' + px[0] + ', ' + px[1] + ', ' + px[2] + ')', expected: 'the burgundy dot, rgb(122, 31, 43)', ok: ok };
                 }
             },
-            log: { every: 0.1, max: 1000, time: 't', columns: ['t', 'omegaT', 'cos_wt', 'sin_wt', 'psi_c', 'lambda', 'f', 'damp', 'N'] },
+            round: { time: 't', label: function () { return 'one period of the sources, T = ' + Sim.fmt(ds.get('T'), 3) + ' s'; }, length: function () { return ds.get('T'); },
+                columns: ['omegaT', 'cos_wt', 'sin_wt', 'psi_c'], point: function () { return { j: Math.floor(ds.dims.j / 2), i: Math.floor(ds.dims.i * 0.72) }; } },
+            play: function () { clk.set(true); },
             about: 'Here ψ reaches the screen through a colour table of 256 steps, so the picture carries ψ to one part in 128 while the store keeps float32, about seven significant figures. The image has one pixel per grid cell and the browser scales it up with smoothing, so a screen pixel between two cells shows a blend of both.'
         };
 

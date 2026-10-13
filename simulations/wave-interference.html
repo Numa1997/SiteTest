@@ -552,6 +552,12 @@
             }
             return out.map(function (g) { return { nu: g.nu, A: g.nu === 0 ? Math.abs(g.im) : Math.hypot(g.re, g.im), n: g.n }; });
         }
+        /* one round: the pattern repeats after 1 / gcd of the frequencies νᵢ = fᵢ sᵢ (to 0.01 Hz), at most 20 s */
+        function benchRound() {
+            var nu = ds.get('nu'), G = 0, i, a, b, r;
+            for (i = 0; i < nu.length; i++) { a = G; b = Math.round(Math.abs(nu[i]) * 100); while (b) { r = a % b; a = b; b = r; } G = a; }
+            return G ? Math.min(100 / G, 20) : 5;
+        }
         Sim.data = {
             ds: ds, kicker: 'Fig. 6 · data', file: 'fig6-wave-bench',
             playing: function () { return clk.playing; },
@@ -635,7 +641,9 @@
                 py_comp: function (q) { var wi = waveOf(q), i = sampleOf(q), pt = onStroke(ds.get('py_comp'), i, wi * (ds.get('M') + 1)), px = pixelAt(ctx, box, pt.x, pt.y); return { what: 'screen pixel on wave ' + (wi + 1) + ' at sample ' + i + ', (' + Sim.fmt(pt.x, 1) + ', ' + Sim.fmt(pt.y, 1) + ') css px', drawn: rgbText(px), expected: 'the colour of wave ' + (wi + 1) + ' (' + waves[wi].colour + '), or another wave crossing here', ok: px[3] > 0, note: (pt.end ? 'The stroke starts and ends with a flat cap, so at the first and last sample the midpoint of the end segment is read. ' : '') + 'A 1.6 px stroke covers most of the pixel; where two waves cross, the one drawn last wins.' }; },
                 y_line: function (li) { var px = pixelAt(sctx, spec, ds.get('x_line')[li], ds.get('y_line')[li]); return { what: 'screen pixel at the top of spectrum line ' + li + ' (the dot)', drawn: rgbText(px), expected: 'a filled dot in the line colour', ok: px[3] > 0 && lum(px) < 200, note: 'The dot has radius 4.5 px, so the pixel at the stored top is the fill colour.' }; }
             },
-            log: { every: 0.1, max: 1000, time: 't', columns: ['t', 'sum_A', 'peak', 'ratio', 'y_sum_400', 'y1_400'] },
+            round: { time: 't', length: benchRound, label: function () { var L = benchRound(); return (L < 20 ? 'one repeat of the pattern, ' : 'twenty seconds of the pattern, ') + Sim.fmt(L, 2) + ' s'; },
+                columns: ['sum_A', 'peak', 'ratio', 'y_sum_400', 'y1_400'], point: function () { return { kind: 'sum', i: Math.round(ds.get('M') / 2) }; } },
+            play: function () { clk.set(true); },
             about: 'The curves are drawn with one sample per screen pixel column, M + 1 points, so what you see is exactly the stored arrays joined by straight segments; the canvas then smooths each stroke to fractions of a pixel. The spectrum groups waves with the same ν = f·s into one line whose height is the magnitude of their phasor sum, as stored in A_line. The readouts under the figure refresh every 8th frame; the store refreshes every frame.'
         };
 

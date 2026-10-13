@@ -578,7 +578,8 @@
                     return { what: 'the burgundy bar S₂Q: its length in the SVG', drawn: isFinite(len) ? len.toFixed(3) + ' px' : 'no bar (δs ≤ 0.05 px)', expected: ds.get('ds').toFixed(3) + ' px', ok: ok };
                 }
             },
-            log: { mode: 'change', max: 1000, time: 'wall', columns: ['wall', 'd', 'alpha_deg', 'b', 'lambda', 'L1', 'L2', 'ds', 'ratio', 'I'] },
+            round: { time: 'wall', mode: 'change', label: function () { return 'ten seconds of slider changes: move a slider while it records'; }, length: function () { return 10; },
+                columns: ['d', 'alpha_deg', 'b', 'lambda', 'L1', 'L2', 'ds', 'ratio', 'I'], point: function () { return { pt: 3 }; } },
             about: 'Here nothing is sampled on a grid: the figure is drawn as SVG shapes from the stored points, with coordinates written to two decimals. The intensity plot samples 301 directions; the pattern is drawn as a smooth line through them. The wavelets are decoration: their radii are stored, but they carry no physics beyond λ.'
         };
         update();

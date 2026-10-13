@@ -13,14 +13,17 @@ Layout (GitHub Pages serves the repository root as-is, so every asset lives at t
 each equation paired with the page's own code lines; keep the excerpts identical to the page code when either
 changes; live values come from `Sim.live()` in each page); `simulations/*.html` (eight pages).
 Data panel, a pipeline in three files. `scripts/dataset.js`: `Sim.dataset()` gives a page one named store (dims, typed-array variables,
-scalars, attrs; the shape of an xarray/NetCDF dataset) and the page writes every number into it at the line that computes it, every frame;
-nothing is recomputed for display. `scripts/datalog.js` + `styles/data.css`: the panel, which only reads the store (Variables: name, type,
-shape, value, live; any array opens as a table; Probe: point at the figure to read the stored values there, with a marker; Check: for any
-value, the stored number, the formula recomputed from the stored inputs, and the pixel or SVG element read back from the picture, with the
-agreement stated; Log: one row per 0.1 s; Save: NumPy .npz + dataset.json + log.csv + README). A page opts in by defining `Sim.data`
-(the contract is documented at the top of datalog.js: groups, probe/inspect/locate, check, drawn, log, about) next to its own state and loading
-dataset.js after sim.js and datalog.js after its own script (all eight figures). `Sim.live()` reads the store too. Keep the taps where the
-page computes a value; keep the walkthrough excerpts untouched (insert after a quoted line, never inside a quoted pair).
+scalars, attrs; the shape of an xarray/NetCDF dataset) and the page writes every number into it at the line that computes it, every frame,
+overwriting the last frame; nothing is recomputed for display. `scripts/datalog.js` + `styles/data.css`: the panel, which only reads the
+store and does no work unless asked (no loop while closed, while open with Live off, or when nothing is pointed at). Variables: a ledger of
+every quantity at one caught instant (Catch now; Live repaints every frame, opt-in); arrays open as tables copied at one instant. Probe:
+hover with a mouse, press and hold 0.38 s with a finger (readout above the finger; `touchProbe` can switch it off, Fig. 8 draws). Check: stored
+value, the formula recomputed from the stored inputs, the pixel or SVG element read back from the picture, at one frame. Record one round:
+`Sim.data.round` says what a round is (one period, one loop, ten seconds); every frame of it is copied (all scalars and the held point,
+at most 600 samples), then shown as charts and a table and saved as .npz + CSV; at most five rounds are kept. Save: the store as .npz +
+dataset.json + the rounds as CSV + README. The contract is at the top of datalog.js. A page loads dataset.js after sim.js and datalog.js
+after its own script (all eight figures). `Sim.live()` reads the store too. Keep the taps where the page computes a value; keep the
+walkthrough excerpts untouched (insert after a quoted line, never inside a quoted pair).
 How Numa expects Claude to work (persistence, plain language, build when clear) is in CLAUDE.md.
 AppDeploy reformats stored source with Prettier; base any diff on the stored snapshot (`src_read`).
 Static site only: no backend, database, login, AI or scheduled jobs.

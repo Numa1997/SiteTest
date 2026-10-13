@@ -665,8 +665,10 @@
                 th2: function () { return bobPixel('bob 2, placed from θ₂', ds.get('x2_px'), ds.get('y2_px')); },
                 th1: function () { return bobPixel('bob 1, placed from θ₁', ds.get('x1_px'), ds.get('y1_px')); }
             },
-            log: { every: 0.1, max: 1000, label: 'simulated time', time: 't', columns: ['t', 'th1', 'th2', 'w1', 'w2', 'E', 'drift', 'sep'] },
-            about: 'Here the rods and bobs are drawn at the stored pixel positions, so the picture and the store agree to the pixel. The trail is painted segment by segment at every RK4 step and fades away; it is not kept as an array, the Log keeps the trajectory at ten rows per second instead. The energy drift is the integrator’s own error, shown rather than hidden.'
+            round: { time: 't', label: function () { return 'ten seconds of simulated motion'; }, length: function () { return 10; },
+                columns: ['th1', 'th2', 'w1', 'w2', 'E', 'drift', 'sep'], point: function () { return { what: 'bob 2' }; } },
+            play: function () { clk.set(true); },
+            about: 'Here the rods and bobs are drawn at the stored pixel positions, so the picture and the store agree to the pixel. The trail is painted segment by segment at every RK4 step and fades away; it is not kept as an array; to keep the trajectory, record a round, which copies every frame of ten simulated seconds. The energy drift is the integrator’s own error, shown rather than hidden.'
         };
 
         restart();

@@ -528,7 +528,9 @@
                 xl_px: function (i) { return beadPixel('longitudinal bead ' + i, lPos(i)); },
                 xL: function (i) { return beadPixel('longitudinal bead ' + i, lPos(i)); }
             },
-            log: { every: 0.1, max: 1000, time: 't', columns: ['t', 'omegaT', 'xi', 'vxi', 'sL', 'rho', 'lambda', 'f'] },
+            round: { time: 't', label: function () { return 'one period, T = ' + Sim.fmt(ds.get('T'), 3) + ' s'; }, length: function () { return ds.get('T'); },
+                columns: ['omegaT'], point: function () { return { row: 'T', i: ds.get('follow') }; } },
+            play: function () { clk.set(true); },
             about: 'Here every bead is drawn at its stored screen position, rounded to the pixel by the canvas. The smooth transverse curve and the compression shading are drawn through extra sample points, every 3 px and every 10 px, that are not particles and are not stored.'
         };
         readouts();

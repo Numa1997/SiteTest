@@ -65,23 +65,23 @@
     "expected": "After the preset, panels Wave 1 to Wave 4 were shown; after removal only Wave 1, Wave 2 and Wave 3 remain and the Waves readout shows 3 / 6."
   },
   {
-    "name": "Fig. 1 data panel lists live variables and opens the field as a table",
+    "name": "Fig. 1 data panel lists the variables, opens the field as a table and records one round",
     "viewport": "desktop",
     "covers": [
       "Fig. 1 data panel",
-      "live variables table",
+      "variables ledger",
       "array table view",
-      "data log"
+      "round recorder"
     ],
-    "description": "Verifies the side panel on the wave interference page shows the simulation's numbers, opens an array as a table and logs rows while the simulation runs.",
+    "description": "Verifies the side panel on the wave interference page shows the simulation's numbers at one caught instant, opens an array as a table, and records one round of the running simulation as charts.",
     "steps": [
       "Open the home page",
       "In the simulations section, click the Launch button on the Wave Interference – Multiple Sources card",
       "On the opened page, if the data panel is not open, click the Data tab on the right edge of the window",
-      "In the data panel's Variables table, click the row for the array C",
-      "Click the Log tab and wait two seconds"
+      "In the data panel's Variables list, click the entry for the array C",
+      "Click the button labelled All variables, then click the Record button near the top of the panel and wait three seconds"
     ],
-    "expected": "The data panel shows a Variables table with Name, Type, Size and Value columns, including the wavelength λ with the value 30 px; the array C opens as a table of numbers with a shape shown as rows × columns; the Log tab lists numbered rows whose time t increases."
+    "expected": "The Variables list shows numbered sections such as Physical parameters, with the wavelength λ at 30 px and a line that starts with Values at t =; the array C opens as a table of numbers with its shape shown as rows × columns; after Record, a progress bar fills and the Rounds tab opens with the heading Round 1, a summary naming one period of the sources, and one small chart per quantity."
   },
   {
     "name": "Double pendulum data panel shows the state vector and conserved energy",
@@ -119,6 +119,23 @@
       "In the data panel, under the heading Under the pointer, click the check-mark button on the row Σ yᵢ",
       "Click the Back button, then click the download button in the panel header"
     ],
-    "expected": "Under the pointer lists rows X, Σ yᵢ and y px with numeric values and a small marker appears on the curve; the check view shows the sections 1 · Stored in the dataset, 2 · Recomputed now, from the stored inputs and 3 · Read back from the picture, with the line Stored and recomputed identical; the download button saves a zip file whose name starts with fig6-wave-bench."
+    "expected": "Under the pointer lists rows X, Σ yᵢ and y px with numeric values and a small marker appears on the curve; the check view shows three numbered sections, Stored in the dataset, Recomputed now from the stored inputs, and Read back from the picture, with the line Stored and recomputed identical; the download button saves a zip file whose name starts with fig6-wave-bench."
+  },
+  {
+    "name": "Phone: the data sheet records one round of the water waves",
+    "viewport": "mobile",
+    "covers": [
+      "mobile data sheet",
+      "round recorder",
+      "round charts"
+    ],
+    "description": "Verifies that on a phone the data panel opens as a bottom sheet, records one period of the water-wave simulation and shows it as charts.",
+    "steps": [
+      "Open the home page",
+      "Tap the Launch button on the Circular Water Waves card",
+      "On the opened page, tap the Data button at the bottom right",
+      "Tap the Record button in the sheet and wait three seconds"
+    ],
+    "expected": "The sheet slides up with the title Water waves and a box headed Record one round that names one period, T = … s; after Record the Rounds tab shows Round 1 with a line counting the samples and frames, and charts for quantities such as ξ and ζ at the point."
   }
 ]

@@ -1,33 +1,39 @@
 /* Numa Koudsie · data panel
-   A live variable explorer in the manner of Spyder's, fed by one store: the page's dataset (scripts/dataset.js).
+   A variable explorer in the manner of Spyder's, fed by one store: the page's dataset (scripts/dataset.js).
    The simulation writes every number into that dataset at the moment it computes it; this panel only reads.
-   A page opts in by defining Sim.data next to its own state and loading this file after its own script, with
-   styles/data.css in its head.
+   Nothing is recorded unless the reader asks: the panel catches one instant when it opens, records one
+   round on request, and repaints every frame only while Live is switched on. When nobody is looking, this
+   file does no work at all.
+
+   A page opts in by defining Sim.data next to its own state and loading this file after its own script,
+   with styles/data.css in its head.
 
    Sim.data = {
-     ds:       the dataset,
-     playing:  function () → bool,
-     groups:   [{ title, note, vars: ['lambda', 'k', ...] }]        names of dataset variables, in display order
-     colour:   { psi: function (value, j, i) → [r, g, b] | null }  shading for array cells (presentation only)
-     probe:    function (xCss, yCss) → ref | null                   what lies under the pointer on the figure
-     inspect:  function (ref) → { title, at: {x, y}, rows: [[symbol, value, units, varName, index]] }
-     locate:   function (varName, index) → {x, y} | null            where an array element is drawn, css px
-     check:    { name: function (index) → { formula, inputs: [[symbol, value, units]], value } }
-                                                                    an independent recomputation, the self-test
-     drawn:    { name: function (index) → { what, drawn, expected, ok, note } }   read-back from the picture
-     log:      { every, max, label, time: varName, columns: [varName, ...] }
-     about:    html                                                  what still differs between data and picture
-     file:     'fig1-wave-interference'                              base name of the saved archive
+     ds:         the dataset,
+     playing:    function () → bool;  play: function ()           the page's clock
+     groups:     [{ title, note, vars: ['lambda', 'k', ...] }]    names of dataset variables, in display order
+     colour:     { psi: function (value, j, i) → [r, g, b] | null } shading for array cells (presentation only)
+     probe:      function (xCss, yCss) → ref | null               what lies under the pointer on the figure
+     inspect:    function (ref) → { title, at: {x, y}, rows: [[symbol, value, units, varName, index]] }
+     locate:     function (varName, index) → {x, y} | null        where an array element is drawn, css px
+     check:      { name: function (index) → { formula, inputs: [[symbol, value, units, digits]], value } }
+     drawn:      { name: function (index) → { what, drawn, expected, ok, note } }   read-back from the picture
+     round:      { label: fn → text, time: varName, length: fn → span of the time variable,
+                   columns: [scalar names], point: fn → probe ref, mode: 'change' (optional),
+                   blocked: fn → reason | null (optional) }       what one recorded round is
+     touchProbe: function () → bool (optional)                    whether press-and-hold may read the figure now
+     about:      html                                             what still differs between data and picture
+     file:       'fig1-wave-interference'                         base name of the saved archive
    }
 
-   Variables   name, type, shape and value of every dataset variable, repainted every frame while open.
-   Tables      any array opens as a table; only the cells in view are drawn.
-   Probe       the pointer over the figure reads the values there; a marker shows the point; the last point
-               is held in the panel so its values can be checked.
+   Record      one round of the running simulation, every frame of it caught (at most 600 samples), then
+               shown as charts and a table, and saved on request.
+   Variables   name, type, shape and value of every dataset variable at one caught instant; Live repaints
+               them every frame.
+   Probe       the pointer over the figure (or a finger held on it) reads the values there.
    Check       for any value: stored value, the formula recomputed from the stored inputs, and the read-back
                from the picture, with the agreement stated.
-   Log         one row per step of time (or per change), newest at the bottom, bounded.
-   Save        a zip of NumPy .npy files, dataset.json, log.csv and a README with the Python lines to open it. */
+   Save        a zip of NumPy .npy files, dataset.json, the recorded rounds as CSV and a README. */
 (function () {
     'use strict';
     var Sim = window.Sim, spec = Sim && Sim.data, ds = spec && spec.ds;
@@ -38,6 +44,7 @@
     function load(k) { try { return localStorage.getItem(KEY + k); } catch (e) { return null; } }
     function store(k, v) { try { localStorage.setItem(KEY + k, v); } catch (e) { /* storage blocked: the choice lasts for this page */ } }
     function esc(s) { return String(s).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;'); }
+    function plain(html) { return String(html).replace(/<sub>(.*?)<\/sub>/g, '_$1').replace(/<sup>(.*?)<\/sup>/g, '^$1').replace(/<[^>]+>/g, '').replace(/&amp;/g, '&').replace(/&lt;/g, '<').replace(/&gt;/g, '>'); }
     function grouped(n) {
         var s = String(Math.round(Math.abs(n)));
         if (s.length > 4) s = s.replace(/\B(?=(\d{3})+(?!\d))/g, ' ');
@@ -54,6 +61,7 @@
     function sci(v) { return v === 0 ? '0' : v.toExponential(2).replace(/-/g, '−'); }
     function textOn(rgb) { return 0.2126 * rgb[0] + 0.7152 * rgb[1] + 0.0722 * rgb[2] > 150 ? '#1c1518' : '#fffaf3'; }
     function safe(fn, fallback) { try { return fn(); } catch (e) { return fallback; } }
+    function clock() { var d = new Date(); return [d.getHours(), d.getMinutes(), d.getSeconds()].map(function (x) { return (x < 10 ? '0' : '') + x; }).join(':'); }
 
     var NEG = [58, 50, 46], MID = [255, 250, 243], POS = [122, 31, 43];
     Sim.colourMap = function (v, lim) {
@@ -63,8 +71,7 @@
         var s = Math.pow(Math.abs(a), 0.8), end = a < 0 ? NEG : POS;
         return [0, 1, 2].map(function (c) { return Math.round(MID[c] + (end[c] - MID[c]) * s); });
     };
-    var stats0 = { dt: 0, fps: 0, frames: 0, play: 0, wall: 0 };
-    Sim.frameStats = stats0;
+    var TOUCH = !!(window.matchMedia && window.matchMedia('(hover: none)').matches);
 
     /* ---------- reading the dataset ---------- */
     function V(n) { return ds.vars[n]; }
@@ -73,22 +80,37 @@
     function digitsOf(n) { var d = A(n).digits; return d === undefined ? 4 : d; }
     function unitOf(n) { return A(n).units || ''; }
     function kindOf(n) { var k = V(n).dims.length; return k === 0 ? 'scalar' : k === 1 ? 'vector' : 'matrix'; }
-    function typeLabel(n) { return V(n).dims.length ? 'Array of ' + ds.dtype(n) : V(n).type; }
+    function typeLabel(n) { return V(n).dims.length ? 'array of ' + ds.dtype(n) : V(n).type; }
     function shapeLabel(n) {
         var v = V(n);
-        if (!v.dims.length) return A(n).size || '1';
-        return '(' + v.dims.map(function (d) { return d + ': ' + (ds.dims[d] || 0); }).join(', ') + ')';
+        if (!v.dims.length) return 'scalar';
+        return v.dims.map(function (d) { return d + ' ' + (ds.dims[d] || 0); }).join(' × ');
     }
     function rows2(n) { return ds.dims[V(n).dims[0]] || 0; }
     function cols2(n) { return ds.dims[V(n).dims[1]] || 0; }
     function colourFn(n) { return spec.colour && spec.colour[n]; }
+    function isNumScalar(n) { var v = V(n); return !!v && !v.dims.length && (v.type === 'float' || v.type === 'int' || v.type === 'bool'); }
     var vars = [];
     spec.groups.forEach(function (g) { g.vars.forEach(function (n) { if (V(n)) vars.push(n); }); });
 
+    /* ---------- what one round is (a page without a round spec gets ten seconds of its log columns) ---------- */
+    var R = spec.round || (function () {
+        var L = spec.log || {};
+        return { time: L.time, mode: L.mode, columns: L.columns || [], label: function () { return 'ten seconds of play'; }, length: function () { return 10; } };
+    })();
+    var TV = R.time && V(R.time) ? R.time : null;
+    function timeNow() { var t = TV ? ds.get(TV) : NaN; return typeof t === 'number' && isFinite(t) ? t : performance.now() / 1000; }
+    function timeSym() { return TV ? sym(TV) : 't'; }
+    function timeUnit() { return TV ? unitOf(TV) : 's'; }
+    function timeText(t) { return timeSym() + ' = ' + num(t, 2) + (timeUnit() ? ' ' + timeUnit() : ''); }
+    var roundCols = (R.columns || []).filter(function (n) { return n !== TV && isNumScalar(n); });
+
     /* ---------- the panel ---------- */
-    var ICON = '<svg width="14" height="14" viewBox="0 0 14 14" aria-hidden="true"><rect x="1" y="1.5" width="12" height="11" rx="1.5" fill="none" stroke="currentColor" stroke-width="1.3"/>' +
+    var ICON = '<svg width="16" height="16" viewBox="0 0 14 14" aria-hidden="true"><rect x="1" y="1.5" width="12" height="11" rx="1.5" fill="none" stroke="currentColor" stroke-width="1.3"/>' +
         '<path d="M1 5.2h12M1 8.8h12M5.2 1.5v11" fill="none" stroke="currentColor" stroke-width="1.3"/></svg>';
-    var CHK = '<svg width="11" height="11" viewBox="0 0 12 12" aria-hidden="true"><path d="M1.5 6.5l3 3 6-7" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>';
+    var CHK = '<svg width="13" height="13" viewBox="0 0 12 12" aria-hidden="true"><path d="M1.5 6.5l3 3 6-7" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/></svg>';
+    var SAVE = '<svg width="16" height="16" viewBox="0 0 14 14" aria-hidden="true"><path d="M7 1.5v8M3.8 6.3L7 9.5l3.2-3.2M2 12.5h10" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>';
+    var REDO = '<svg width="14" height="14" viewBox="0 0 14 14" aria-hidden="true"><path d="M11.5 4.5A5 5 0 1 0 12 8.2" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/><path d="M12 1.8v3.2H8.8" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>';
 
     var tab = document.createElement('button');
     tab.type = 'button';
@@ -101,113 +123,193 @@
     panel.id = 'data-panel';
     panel.setAttribute('aria-label', 'Simulation data');
     panel.innerHTML =
-        '<header class="dp__head"><div class="dp__intro"><p class="dp__kicker">' + esc(spec.kicker || ds.title) + '</p>' +
-        '<h2 class="dp__title">' + esc(ds.title) + '</h2><p class="dp__sub">One store. The simulation writes every number here as it computes it; the picture and this table read the same store.</p></div>' +
-        '<span class="dp__live">live</span>' +
-        '<div class="dp__tools"><button type="button" class="dp__icon" data-save title="Save the data: NumPy .npy files in a zip" aria-label="Save the data">' +
-        '<svg width="14" height="14" viewBox="0 0 14 14" aria-hidden="true"><path d="M7 1.5v8M3.8 6.3L7 9.5l3.2-3.2M2 12.5h10" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></button>' +
+        '<header class="dp__head"><div class="dp__bar"><p class="dp__kicker">' + esc(spec.kicker || ds.title) + '</p>' +
+        '<div class="dp__tools"><span class="dp__state" data-state></span>' +
+        '<button type="button" class="dp__icon" data-save title="Save the data: NumPy .npy files in a zip" aria-label="Save the data">' + SAVE + '</button>' +
         '<button type="button" class="dp__icon dp__close" aria-label="Close the data panel">' +
-        '<svg width="12" height="12" viewBox="0 0 12 12" aria-hidden="true"><path d="M1.5 1.5l9 9M10.5 1.5l-9 9" stroke="currentColor" stroke-width="1.5"/></svg></button></div></header>' +
+        '<svg width="13" height="13" viewBox="0 0 12 12" aria-hidden="true"><path d="M1.5 1.5l9 9M10.5 1.5l-9 9" stroke="currentColor" stroke-width="1.5"/></svg></button></div></div>' +
+        '<h2 class="dp__title">' + esc(ds.title) + '<span class="dp__dot">.</span></h2>' +
+        '<p class="dp__sub">Every number the simulation computes lands in one store. Nothing is recorded until you ask.</p></header>' +
+        '<section class="dp-rec" aria-live="polite"><div class="dp-rec__txt"><p class="dp-rec__k">Record one round</p><p class="dp-rec__what"></p>' +
+        '<div class="dp-rec__prog" hidden><div class="dp-rec__bar"><i></i></div><p class="dp-rec__st"></p></div></div>' +
+        '<button type="button" class="dp-rec__go" data-rec><span class="dp-rec__dot" aria-hidden="true"></span><span data-rec-label>Record</span></button></section>' +
         '<div class="dp__tabs" role="tablist" aria-label="Data views">' +
         '<button type="button" role="tab" data-tab="vars">Variables <span class="dp__count">' + vars.length + '</span></button>' +
-        '<button type="button" role="tab" data-tab="log">Log <span class="dp__count" data-log-count>0</span></button></div>' +
+        '<button type="button" role="tab" data-tab="rounds">Rounds <span class="dp__count" data-round-count>0</span></button></div>' +
         '<div class="dp__body">' +
-        '<section class="dp__pane" data-pane="vars"><div class="dp-probe"><p class="dp-probe__label">Under the pointer</p>' +
-        '<p class="dp-probe__hint">Move the pointer over the figure to read the values at that point. The last point stays here.</p>' +
+        '<section class="dp__pane" data-pane="vars">' +
+        '<div class="dp-instant"><p class="dp-instant__t"></p><div class="dp-instant__tools">' +
+        '<button type="button" class="dp-btn" data-catch>' + REDO + ' Catch now</button>' +
+        '<label class="dp-live"><input type="checkbox" data-live><span>Live</span></label></div></div>' +
+        '<div class="dp-probe"><p class="dp-probe__label">' + (TOUCH ? 'Under your finger' : 'Under the pointer') + '</p>' +
+        '<p class="dp-probe__hint">' + (TOUCH ? 'Press and hold on the figure to read the values there; slide to move. The last point stays here.' : 'Point at the figure to read the values there. The last point stays here.') + '</p>' +
         '<div class="dp-probe__body" hidden><p class="dp-probe__title"></p><table class="dp-probe__table"><tbody></tbody></table></div></div>' +
         '<div class="dp-vars"></div></section>' +
         '<section class="dp__pane dp-arr" data-pane="array" hidden></section>' +
         '<section class="dp__pane dp-check" data-pane="check" hidden></section>' +
-        '<section class="dp__pane dp-log" data-pane="log" hidden></section></div>' +
+        '<section class="dp__pane dp-rounds" data-pane="rounds" hidden></section></div>' +
         '<details class="dp-about"><summary>How the numbers and the picture are tied</summary><div class="dp-about__body">' +
-        '<p>The simulation keeps its numbers in one named store, a dataset with dimensions, coordinates, variables and units, the same shape of record as a NetCDF or HDF5 file. It writes a value into the store at the moment it computes it. The picture is drawn from the arrays in the store, and this table is repainted from the store after every frame, so both show the same instant.</p>' +
+        '<p>The simulation keeps its numbers in one named store, a dataset with dimensions, coordinates, variables and units, the same shape of record as a NetCDF or HDF5 file. It writes a value into the store at the moment it computes it, every frame, overwriting the previous frame: the store holds one instant, so it never grows. The picture is drawn from the same numbers.</p>' +
+        '<p>This panel reads the store only when you ask. Opening it catches one instant; Catch now catches another; Live repaints every frame, which costs the most. Recording a round copies the scalars and the point you hold at every frame of that round, at most 600 samples, then stops.</p>' +
         '<p>What can still differ, and why: the table rounds to a few decimals, the store keeps the full number. ' + (spec.about || '') + ' Press the check mark beside any value to see the stored number, the formula recomputed from the stored inputs, and the read-back from the picture.</p>' +
         '</div></details>';
 
     document.body.appendChild(tab);
     document.body.appendChild(panel);
 
-    var live = panel.querySelector('.dp__live');
+    var stateEl = panel.querySelector('[data-state]');
     var panes = {};
     Array.prototype.forEach.call(panel.querySelectorAll('[data-pane]'), function (p) { panes[p.getAttribute('data-pane')] = p; });
     var tabs = panel.querySelectorAll('[data-tab]');
     var varsHost = panes.vars.querySelector('.dp-vars');
+    var instantEl = panes.vars.querySelector('.dp-instant__t');
+    var liveBox = panes.vars.querySelector('[data-live]');
+    var PAL = null;
+    function palette() {
+        if (PAL) return PAL;
+        var cs = getComputedStyle(panel);
+        function tok(n, f) { var v = cs.getPropertyValue(n).trim(); return v || f; }
+        PAL = { accent: tok('--accent', '#7a1f2b'), ink: tok('--ink', '#1c1518'), ink3: tok('--ink-3', '#5a504b'), rule: tok('--rule', '#d9d0c2'), muted: tok('--muted', '#8b8079'), soft: tok('--card-soft', '#f7f1e8') };
+        return PAL;
+    }
 
-    /* ---------- Variables ---------- */
-    var rowsHtml = '<table class="dp-table"><thead><tr><th scope="col">Name</th><th scope="col">Type</th><th scope="col">Shape</th><th scope="col">Value</th></tr></thead><tbody>';
-    spec.groups.forEach(function (g) {
-        rowsHtml += '<tr class="dp-group"><th colspan="4" scope="rowgroup">' + esc(g.title) + (g.note ? '<span>' + g.note + '</span>' : '') + '</th></tr>';
-        g.vars.forEach(function (n) {
-            if (!V(n)) return;
-            var k = kindOf(n), opens = k !== 'scalar', a = A(n);
-            rowsHtml += '<tr class="dp-row' + (opens ? ' dp-row--open' : '') + '" data-v="' + esc(n) + '"' + (opens ? ' tabindex="0" title="Open as a table"' : '') + '>' +
-                '<td class="dp-name"><span class="dp-sym">' + sym(n) + '</span>' + (a.computed_in ? '<code>' + esc(a.computed_in) + '</code>' : '') +
-                (a.long_name ? '<small>' + a.long_name + '</small>' : '') + '</td>' +
-                '<td><span class="dp-type dp-type--' + (opens ? 'array' : (V(n).type || 'float').replace(/[^a-z]/gi, '')) + '">' + esc(typeLabel(n)) + '</span></td>' +
-                '<td class="dp-size"></td><td class="dp-val"><span class="dp-val__t"></span>' +
-                (opens ? '<span class="dp-more" aria-hidden="true">›</span>' : '<button type="button" class="dp-chk" data-check="' + esc(n) + '" title="Check this value">' + CHK + '</button>') + '</td></tr>';
+    /* ---------- Variables: one caught instant, or live ---------- */
+    var html = '';
+    spec.groups.forEach(function (g, gi) {
+        var items = g.vars.filter(function (n) { return V(n); });
+        if (!items.length) return;
+        html += '<section class="dp-sec"><header class="dp-sec__hd"><span class="dp-sec__n">' + (gi + 1 < 10 ? '0' : '') + (gi + 1) + '</span><div><h3>' + esc(g.title) + '</h3>' + (g.note ? '<p>' + g.note + '</p>' : '') + '</div></header>';
+        items.forEach(function (n) {
+            var opens = kindOf(n) !== 'scalar', a = A(n), t = opens ? 'array' : (V(n).type || 'float').replace(/[^a-z]/gi, '');
+            html += '<div class="dp-item' + (opens ? ' dp-item--arr' : '') + '" data-v="' + esc(n) + '"' + (opens ? ' tabindex="0" role="button" aria-label="Open ' + esc(plain(sym(n))) + ' as a table"' : '') + '>' +
+                '<div class="dp-item__id"><span class="dp-sym">' + sym(n) + '</span>' + (a.long_name ? '<span class="dp-item__name">' + a.long_name + '</span>' : '') + '</div>' +
+                '<div class="dp-item__val">' + (opens ? '<canvas class="dp-thumb" aria-hidden="true"></canvas>' : '') + '<span class="dp-item__v"></span></div>' +
+                '<div class="dp-item__act">' + (opens ? '<span class="dp-more" aria-hidden="true">›</span>' : '<button type="button" class="dp-chk" data-check="' + esc(n) + '" aria-label="Check ' + esc(plain(sym(n))) + '" title="Check this value">' + CHK + '</button>') + '</div>' +
+                '<div class="dp-item__meta"><span class="dp-type dp-type--' + t + '">' + esc(typeLabel(n)) + '</span><span class="dp-item__shape"></span>' +
+                '<code>' + esc(n) + (a.computed_in ? ' · ' + esc(a.computed_in) : '') + '</code></div></div>';
         });
+        html += '</section>';
     });
-    varsHost.innerHTML = rowsHtml + '</tbody></table>';
+    varsHost.innerHTML = html;
 
     var cells = {};
     vars.forEach(function (n) {
-        var tr = varsHost.querySelector('tr[data-v="' + n + '"]');
-        cells[n] = { size: tr.querySelector('.dp-size'), val: tr.querySelector('.dp-val__t'), s: null, h: null };
+        var el = varsHost.querySelector('.dp-item[data-v="' + n + '"]');
+        cells[n] = { v: el.querySelector('.dp-item__v'), shape: el.querySelector('.dp-item__shape'), thumb: el.querySelector('.dp-thumb'), h: null, s: null, tver: -1, tAt: 0 };
     });
 
     var statCache = {};
     function stats(n) {
         var v = V(n), c = statCache[n];
-        if (c && c.ver === v.version) return c;
-        var d = v.data, lo = Infinity, hi = -Infinity, sum = 0, m = d.length;
-        for (var p = 0; p < m; p++) { var x = d[p]; if (x < lo) lo = x; if (x > hi) hi = x; sum += x; }
-        c = statCache[n] = { ver: v.version, min: m ? lo : NaN, max: m ? hi : NaN, mean: m ? sum / m : NaN };
+        if (c && c.ver === v.version && c.len === (v.data ? v.data.length : 0)) return c;
+        var d = v.data || [], lo = Infinity, hi = -Infinity, sum = 0, m = d.length, k = 0;
+        for (var p = 0; p < m; p++) { var x = d[p]; if (x === x && isFinite(x)) { if (x < lo) lo = x; if (x > hi) hi = x; sum += x; k++; } }
+        c = statCache[n] = { ver: v.version, len: m, min: k ? lo : NaN, max: k ? hi : NaN, mean: k ? sum / k : NaN };
         return c;
     }
     function describe(n) {
-        var k = kindOf(n), d = digitsOf(n), html, x;
-        if (k === 'matrix') {
+        var k = kindOf(n), d = digitsOf(n), x;
+        if (k !== 'scalar') {
             var st = stats(n);
-            html = '<span class="dp-range">' + num(st.min, Math.min(d, 3)) + ' … ' + num(st.max, Math.min(d, 3)) + '</span><small>mean ' + num(st.mean, d) + '</small>';
-        } else if (k === 'vector') {
-            var arr = V(n).data, parts = [];
-            for (var i = 0; i < Math.min(arr.length, 3); i++) parts.push(num(arr[i], d));
-            html = '<span class="dp-range">[' + parts.join(', ') + (arr.length > 3 ? ', …' : '') + ']</span>';
-        } else if (A(n).colour === true) {
-            x = ds.get(n);
-            html = x ? '<i class="dp-sw" style="background:rgb(' + x.join(',') + ')"></i>' + x.join(', ') : '—';
-        } else {
-            x = ds.get(n);
-            html = esc(num(x, d)) + (unitOf(n) && x !== undefined && x !== null ? ' <span class="dp-u">' + unitOf(n) + '</span>' : '');
+            return { shape: shapeLabel(n), html: st.min === st.min ? num(st.min, Math.min(d, 3)) + ' … ' + num(st.max, Math.min(d, 3)) + (unitOf(n) ? ' <span class="dp-u">' + unitOf(n) + '</span>' : '') : 'empty' };
         }
-        return { size: shapeLabel(n), html: html };
+        if (A(n).colour === true) {
+            x = ds.get(n);
+            return { shape: 'scalar', html: x ? '<i class="dp-sw" style="background:rgb(' + x.join(',') + ')"></i>' + x.join(', ') : '—' };
+        }
+        x = ds.get(n);
+        return { shape: 'scalar', html: esc(num(x, d)) + (unitOf(n) && x !== undefined && x !== null && typeof x !== 'boolean' ? ' <span class="dp-u">' + unitOf(n) + '</span>' : '') };
     }
-    function paintVars() {
+    /* a small picture of an array: a line for one dimension, a heat map for two; drawn from the same instant as the numbers */
+    function drawThumb(n, cv) {
+        var v = V(n), d = v.data, dpr = Math.min(window.devicePixelRatio || 1, 2), W = 128, H = 34, P = palette();
+        if (cv.width !== W * dpr) { cv.width = W * dpr; cv.height = H * dpr; }
+        var c = cv.getContext('2d');
+        c.setTransform(dpr, 0, 0, dpr, 0, 0);
+        c.clearRect(0, 0, W, H);
+        if (!d || !d.length) return;
+        var st = stats(n);
+        if (v.dims.length === 2) {
+            var R2 = rows2(n), C2 = cols2(n);
+            if (!R2 || !C2) return;
+            var w = Math.min(C2, W * dpr), h = Math.min(R2, H * dpr), img = c.createImageData(w, h), f = colourFn(n), lim = Math.max(Math.abs(st.min), Math.abs(st.max)) || 1;
+            for (var y = 0; y < h; y++) {
+                var j = Math.min(R2 - 1, Math.floor(y * R2 / h));
+                for (var x = 0; x < w; x++) {
+                    var i = Math.min(C2 - 1, Math.floor(x * C2 / w)), val = d[j * C2 + i], rgb = (f && safe(function () { return f(val, j, i); }, null)) || Sim.colourMap(val, lim), q = (y * w + x) * 4;
+                    img.data[q] = rgb[0]; img.data[q + 1] = rgb[1]; img.data[q + 2] = rgb[2]; img.data[q + 3] = 255;
+                }
+            }
+            var off = document.createElement('canvas');
+            off.width = w; off.height = h;
+            off.getContext('2d').putImageData(img, 0, 0);
+            c.imageSmoothingEnabled = w < W;
+            c.drawImage(off, 0, 0, W, H);
+            c.strokeStyle = P.rule; c.lineWidth = 1; c.strokeRect(0.5, 0.5, W - 1, H - 1);
+            return;
+        }
+        var lo = st.min, hi = st.max, m = d.length;
+        if (!(lo === lo)) return;
+        if (hi - lo < 1e-12) { lo -= 1; hi += 1; }
+        var pad = 3, sy = function (val) { return H - pad - (val - lo) / (hi - lo) * (H - 2 * pad); };
+        if (lo < 0 && hi > 0) { c.strokeStyle = P.rule; c.lineWidth = 1; c.beginPath(); c.moveTo(0, Math.round(sy(0)) + 0.5); c.lineTo(W, Math.round(sy(0)) + 0.5); c.stroke(); }
+        c.strokeStyle = P.accent; c.fillStyle = P.accent; c.lineWidth = 1.5; c.lineJoin = 'round';
+        if (m === 1) { c.beginPath(); c.arc(W / 2, sy(d[0]), 2.5, 0, Math.PI * 2); c.fill(); return; }
+        c.beginPath();
+        var started = false;
+        for (var p = 0; p < m; p++) {
+            var xv = d[p];
+            if (!(xv === xv) || !isFinite(xv)) { started = false; continue; }
+            var px = p / (m - 1) * (W - 2) + 1, py = sy(xv);
+            if (started) c.lineTo(px, py); else { c.moveTo(px, py); started = true; }
+        }
+        c.stroke();
+        if (m <= 24) for (p = 0; p < m; p++) { if (d[p] === d[p]) { c.beginPath(); c.arc(p / (m - 1) * (W - 2) + 1, sy(d[p]), 1.8, 0, Math.PI * 2); c.fill(); } }
+    }
+    function paintVars(throttle) {
+        var now = performance.now();
         vars.forEach(function (n) {
-            var d = safe(function () { return describe(n); }, { size: '—', html: '—' }), c = cells[n];
-            if (d.size !== c.s) { c.size.textContent = d.size; c.s = d.size; }
-            if (d.html !== c.h) { c.val.innerHTML = d.html; c.h = d.html; }
+            var d = safe(function () { return describe(n); }, { shape: '—', html: '—' }), c = cells[n];
+            if (d.shape !== c.s) { c.shape.textContent = d.shape; c.s = d.shape; }
+            if (d.html !== c.h) { c.v.innerHTML = d.html; c.h = d.html; }
+            if (c.thumb && V(n).version !== c.tver && (!throttle || now - c.tAt > 250)) {
+                safe(function () { drawThumb(n, c.thumb); });
+                c.tver = V(n).version;
+                c.tAt = now;
+            }
         });
     }
+    var caught = { t: NaN, why: '' };
+    function paintInstant() {
+        var t = liveOn ? timeNow() : caught.t, txt;
+        if (liveOn) txt = '<b>Live</b> · ' + esc(timeText(t)) + ' · repainted every frame';
+        else txt = '<b>Values at ' + esc(timeText(t)) + '</b> · caught ' + esc(caught.why);
+        if (txt !== instantEl._h) { instantEl.innerHTML = txt; instantEl._h = txt; }
+    }
+    function catchNow(why) {
+        caught = { t: timeNow(), why: why || 'now, ' + clock() };
+        if (view === 'array' && current) { snap = takeSnap(current); paintArray(); }
+        if (view === 'check' && checking) runCheck();
+        paint(true);
+    }
 
-    /* ---------- grid: a table that draws only the cells in view ---------- */
+    /* ---------- an array as a table: drawn from a copy taken at one instant, so every cell shows the same frame ---------- */
     function makeGrid(host, src, probeEl, onHot) {
-        var CW = src.cw || 66, CH = 22, RH = src.rh || 48, HH = 26;
+        var CW = src.cw || 74, CH = 28, RH = src.rh || 56, HH = 32;
         host.innerHTML = '<div class="dg__top" style="height:' + HH + 'px"><div class="dg__corner" style="flex-basis:' + RH + 'px">' + esc(src.corner) + '</div><div class="dg__cols"></div></div>' +
             '<div class="dg__main"><div class="dg__rows" style="flex-basis:' + RH + 'px"></div><div class="dg__cells"></div></div>';
         var colsEl = host.querySelector('.dg__cols'), rowsEl = host.querySelector('.dg__rows'), cellsEl = host.querySelector('.dg__cells');
-        var R = -1, C = -1, win = '', items = [], hot = null;
+        var Rn = -1, Cn = -1, win = '', items = [], hot = null;
         function sizeTo(r, c) {
-            R = r; C = c;
-            colsEl.style.width = cellsEl.style.width = C * CW + 'px';
-            rowsEl.style.height = cellsEl.style.height = R * CH + 'px';
+            Rn = r; Cn = c;
+            colsEl.style.width = cellsEl.style.width = Cn * CW + 'px';
+            rowsEl.style.height = cellsEl.style.height = Rn * CH + 'px';
         }
         function layout() {
             var sl = host.scrollLeft, st = host.scrollTop;
-            var i0 = Math.max(0, Math.floor(sl / CW)), i1 = Math.min(C, Math.ceil((sl + host.clientWidth - RH) / CW) + 1);
-            var j0 = Math.max(0, Math.floor(st / CH)), j1 = Math.min(R, Math.ceil((st + host.clientHeight - HH) / CH) + 1);
-            var key = [i0, i1, j0, j1, R, C].join();
+            var i0 = Math.max(0, Math.floor(sl / CW)), i1 = Math.min(Cn, Math.ceil((sl + host.clientWidth - RH) / CW) + 1);
+            var j0 = Math.max(0, Math.floor(st / CH)), j1 = Math.min(Rn, Math.ceil((st + host.clientHeight - HH) / CH) + 1);
+            var key = [i0, i1, j0, j1, Rn, Cn].join();
             if (key === win) return;
             win = key;
             var h = '', i, j;
@@ -217,31 +319,26 @@
             for (j = j0; j < j1; j++) h += '<div class="dg__h dg__h--row" style="top:' + j * CH + 'px;height:' + CH + 'px">' + esc(src.rowLabel(j)) + '</div>';
             rowsEl.innerHTML = h;
             h = '';
-            for (j = j0; j < j1; j++) {
-                for (i = i0; i < i1; i++) {
-                    h += '<div class="dg__c" data-j="' + j + '" data-i="' + i + '" style="left:' + i * CW + 'px;top:' + j * CH + 'px;width:' + CW + 'px;height:' + CH + 'px"></div>';
-                }
-            }
+            for (j = j0; j < j1; j++) for (i = i0; i < i1; i++) h += '<div class="dg__c" data-j="' + j + '" data-i="' + i + '" style="left:' + i * CW + 'px;top:' + j * CH + 'px;width:' + CW + 'px;height:' + CH + 'px"></div>';
             cellsEl.innerHTML = h;
-            items = Array.prototype.map.call(cellsEl.children, function (el) {
-                return { el: el, j: +el.getAttribute('data-j'), i: +el.getAttribute('data-i'), t: null, bg: null };
-            });
+            items = Array.prototype.map.call(cellsEl.children, function (el) { return { el: el, j: +el.getAttribute('data-j'), i: +el.getAttribute('data-i'), t: null, bg: null }; });
+            fill();
             if (hot) mark(hot.j, hot.i);
         }
-        function paint() {
-            var r = src.rows(), c = src.cols();
-            if (r !== R || c !== C) {
-                sizeTo(r, c);
-                win = '';
-                if (hot && (hot.j >= R || hot.i >= C)) hot = null;
-            }
-            layout();
+        function fill() {
             items.forEach(function (it) {
                 var v = src.get(it.j, it.i), t = num(v, src.digits(it.i));
                 if (t !== it.t) { it.el.textContent = t; it.t = t; }
                 var rgb = src.colour ? src.colour(v, it.j, it.i) : null, bg = rgb ? 'rgb(' + rgb[0] + ',' + rgb[1] + ',' + rgb[2] + ')' : '';
                 if (bg !== it.bg) { it.el.style.background = bg; it.el.style.color = rgb ? textOn(rgb) : ''; it.bg = bg; }
             });
+        }
+        function paintGrid() {
+            var r = src.rows(), c = src.cols();
+            if (r !== Rn || c !== Cn) { sizeTo(r, c); win = ''; if (hot && (hot.j >= Rn || hot.i >= Cn)) hot = null; }
+            var before = win;
+            layout();
+            if (win === before) fill();
             if (hot) probeEl.innerHTML = src.probe(hot.j, hot.i, src.get(hot.j, hot.i));
         }
         function mark(j, i) { items.forEach(function (it) { it.el.classList.toggle('is-hot', it.j === j && it.i === i); }); }
@@ -251,7 +348,7 @@
             hot = { j: +c.getAttribute('data-j'), i: +c.getAttribute('data-i') };
             mark(hot.j, hot.i);
             probeEl.innerHTML = src.probe(hot.j, hot.i, src.get(hot.j, hot.i));
-            if (onHot) onHot(hot.j, hot.i);
+            if (onHot) onHot(hot.j, hot.i, e.type === 'click');
         }
         cellsEl.addEventListener('mouseover', onPoint);
         cellsEl.addEventListener('click', onPoint);
@@ -259,109 +356,124 @@
         host.addEventListener('scroll', layout, { passive: true });
         var ro = 'ResizeObserver' in window ? new ResizeObserver(function () { win = ''; layout(); }) : null;
         if (ro) ro.observe(host);
-        paint();
-        return { paint: paint, destroy: function () { if (ro) ro.disconnect(); } };
+        paintGrid();
+        return { paint: paintGrid, destroy: function () { if (ro) ro.disconnect(); } };
     }
 
-    var grid = null, current = null, statsEl = null;
+    var grid = null, current = null, statsEl = null, snap = null, snapEl = null;
+    function takeSnap(n) {
+        var names = kindOf(n) === 'matrix' ? [n] : ds.along(V(n).dims[0]), s = { data: {}, t: timeNow(), R: 0, C: 0 };
+        names.forEach(function (m) { var d = V(m).data; s.data[m] = d && d.slice ? d.slice() : d; });
+        if (kindOf(n) === 'matrix') { s.R = rows2(n); s.C = cols2(n); } else { s.R = ds.dims[V(n).dims[0]] || 0; s.names = names; }
+        return s;
+    }
+    function snapStats(n) {
+        var d = snap.data[n] || [], lo = Infinity, hi = -Infinity, sum = 0, k = 0;
+        for (var p = 0; p < d.length; p++) { var x = d[p]; if (x === x && isFinite(x)) { if (x < lo) lo = x; if (x > hi) hi = x; sum += x; k++; } }
+        return { min: k ? lo : NaN, max: k ? hi : NaN, mean: k ? sum / k : NaN };
+    }
     function checkButton(n, idx) {
         return '<button type="button" class="dp-chk dp-chk--text" data-check="' + esc(n) + '" data-idx="' + idx + '">' + CHK + ' Check</button>';
     }
     function gridSource(n) {
         var v = V(n), d = digitsOf(n);
         if (v.dims.length === 1) {
-            var dim = v.dims[0], cols = ds.along(dim);
+            var dim = v.dims[0];
             return {
-                cw: 100, corner: dim, rh: 56,
-                rows: function () { return ds.dims[dim] || 0; }, cols: function () { return cols.length; },
-                get: function (j, i) { var c = V(cols[i]); return c.data ? c.data[j] : undefined; },
-                digits: function (i) { return digitsOf(cols[i]); },
-                colour: function (x, j, i) { var f = colourFn(cols[i]); return f && typeof x === 'number' ? f(x, j, 0) : null; },
-                colLabel: function (i) { return sym(cols[i]) + (unitOf(cols[i]) ? ' · ' + unitOf(cols[i]) : ''); },
+                cw: 108, corner: dim, rh: 64,
+                rows: function () { return snap.R; }, cols: function () { return snap.names.length; },
+                get: function (j, i) { var c = snap.data[snap.names[i]]; return c ? c[j] : undefined; },
+                digits: function (i) { return digitsOf(snap.names[i]); },
+                colour: function (x, j, i) { var f = colourFn(snap.names[i]); return f && typeof x === 'number' ? f(x, j, 0) : null; },
+                colLabel: function (i) { var c = snap.names[i]; return sym(c) + (unitOf(c) ? ' · ' + unitOf(c) : ''); },
                 rowLabel: function (j) { var lab = spec.rowLabel && spec.rowLabel[dim]; return lab ? lab(j) : String(j); },
-                varAt: function (i) { return cols[i]; },
+                varAt: function (i) { return snap.names[i]; },
                 probe: function (j, i, x) {
-                    var c = cols[i], at = spec.at && spec.at[c];
-                    return '<b>' + sym(c) + '[' + j + ']</b> = ' + esc(num(x, digitsOf(c))) + (unitOf(c) ? ' ' + unitOf(c) : '') +
-                        checkButton(c, j) + (at ? '<span>' + at(j) + '</span>' : '');
+                    var c = snap.names[i], at = spec.at && spec.at[c];
+                    return '<b>' + sym(c) + '[' + j + ']</b> = ' + esc(num(x, digitsOf(c))) + (unitOf(c) ? ' ' + unitOf(c) : '') + checkButton(c, j) + (at ? '<span>' + at(j) + '</span>' : '');
                 }
             };
         }
         return {
-            cw: A(n).cw, corner: v.dims[0] + ' \\ ' + v.dims[1],
-            rows: function () { return rows2(n); }, cols: function () { return cols2(n); },
-            get: function (j, i) { return v.data[j * cols2(n) + i]; },
+            cw: A(n).cw ? Math.round(A(n).cw * 1.12) : 74, corner: v.dims[0] + ' \\ ' + v.dims[1],
+            rows: function () { return snap.R; }, cols: function () { return snap.C; },
+            get: function (j, i) { return snap.data[n][j * snap.C + i]; },
             digits: function () { return d; }, colour: colourFn(n),
             colLabel: function (i) { var lab = spec.colLabel && spec.colLabel[n]; return lab ? lab(i) : String(i); },
             rowLabel: function (j) { var lab = spec.rowLabel && spec.rowLabel[v.dims[0]]; return lab ? lab(j) : String(j); },
             varAt: function () { return n; },
             probe: function (j, i, x) {
                 var at = spec.at && spec.at[n];
-                return '<b>' + sym(n) + '[' + j + ', ' + i + ']</b> = ' + esc(num(x, d)) + (unitOf(n) ? ' ' + unitOf(n) : '') +
-                    checkButton(n, j * cols2(n) + i) + (at ? '<span>' + at(j, i) + '</span>' : '');
+                return '<b>' + sym(n) + '[' + j + ', ' + i + ']</b> = ' + esc(num(x, d)) + (unitOf(n) ? ' ' + unitOf(n) : '') + checkButton(n, j * snap.C + i) + (at ? '<span>' + at(j, i) + '</span>' : '');
             }
         };
     }
-    function paintArrStats() {
-        if (!current || !statsEl) return;
+    function paintArray() {
+        if (!current || !snap) return;
         var n = current, h, d = digitsOf(n);
         if (kindOf(n) === 'matrix') {
-            var st = stats(n);
-            h = '<div><dt>shape</dt><dd>' + esc(shapeLabel(n)) + '</dd></div><div><dt>min</dt><dd>' + num(st.min, d) + '</dd></div>' +
+            var st = snapStats(n);
+            h = '<div><dt>shape</dt><dd>' + snap.R + ' × ' + snap.C + '</dd></div><div><dt>min</dt><dd>' + num(st.min, d) + '</dd></div>' +
                 '<div><dt>max</dt><dd>' + num(st.max, d) + '</dd></div><div><dt>mean</dt><dd>' + num(st.mean, d) + '</dd></div>';
         } else {
-            var dim = V(n).dims[0];
-            h = '<div><dt>length</dt><dd>' + (ds.dims[dim] || 0) + '</dd></div><div class="wide"><dt>variables along ' + esc(dim) + '</dt><dd>' +
-                ds.along(dim).map(sym).join(', ') + '</dd></div>';
+            h = '<div><dt>length</dt><dd>' + snap.R + '</dd></div><div class="wide"><dt>variables along ' + esc(V(n).dims[0]) + '</dt><dd>' + snap.names.map(sym).join(', ') + '</dd></div>';
         }
         if (h !== statsEl._h) { statsEl.innerHTML = h; statsEl._h = h; }
+        var st2 = liveOn ? '<b>Live</b> · ' + esc(timeText(snap.t)) : '<b>Copied at ' + esc(timeText(snap.t)) + '</b> · every cell shows this one frame';
+        if (st2 !== snapEl._h) { snapEl.innerHTML = st2; snapEl._h = st2; }
+        if (grid) safe(grid.paint);
     }
     function openArray(n) {
         if (grid) grid.destroy();
         current = n;
+        snap = takeSnap(n);
         var a = A(n);
         panes.array.innerHTML =
             '<div class="dp-arr__top"><button type="button" class="dp-back">← All variables</button>' +
-            '<div class="dp-arr__title"><span class="dp-sym">' + sym(n) + '</span>' + (a.computed_in ? '<code>' + esc(a.computed_in) + '</code>' : '') +
-            '<span class="dp-type dp-type--array">' + esc(typeLabel(n)) + '</span></div>' +
-            (a.long_name ? '<p class="dp-arr__mean">' + a.long_name + (a.formula ? ' · <em>' + a.formula + '</em>' : '') + (a.updates ? ' · <em>updates ' + a.updates + '</em>' : '') + '</p>' : '') +
-            '<dl class="dp-arr__stats"></dl></div>' +
+            '<div class="dp-arr__title"><span class="dp-sym">' + sym(n) + '</span><span class="dp-type dp-type--array">' + esc(typeLabel(n)) + '</span></div>' +
+            (a.long_name ? '<p class="dp-arr__mean">' + a.long_name + (a.formula ? ' · <em>' + a.formula + '</em>' : '') + '</p>' : '') +
+            '<dl class="dp-arr__stats"></dl><div class="dp-arr__snap"><p class="dp-arr__when"></p><button type="button" class="dp-btn" data-catch>' + REDO + ' Copy again</button></div></div>' +
             '<div class="dg" tabindex="0" aria-label="' + esc(n) + ' as a table"></div>' +
-            '<p class="dp-arr__probe">Point at a cell to read its index and value, and to find it in the figure.</p>';
+            '<p class="dp-arr__probe">' + (TOUCH ? 'Tap a cell to read its index and value, and to find it in the figure.' : 'Point at a cell to read its index and value, and to find it in the figure.') + '</p>';
         statsEl = panes.array.querySelector('.dp-arr__stats');
+        snapEl = panes.array.querySelector('.dp-arr__when');
         panes.array.querySelector('.dp-back').addEventListener('click', function () { show('vars'); });
         show('array');
         var src = gridSource(n);
-        grid = makeGrid(panes.array.querySelector('.dg'), src, panes.array.querySelector('.dp-arr__probe'), function (j, i) {
-            if (j === null) { held.cell = null; return; }
-            var name = src.varAt(i), idx = kindOf(n) === 'matrix' ? j * cols2(n) + i : j;
-            held.cell = { name: name, idx: idx };
+        grid = makeGrid(panes.array.querySelector('.dg'), src, panes.array.querySelector('.dp-arr__probe'), function (j, i, tapped) {
+            if (j === null) { held.cell = null; probe.cellUntil = 0; return; }
+            held.cell = { name: src.varAt(i), idx: kindOf(n) === 'matrix' ? j * snap.C + i : j };
+            probe.cellUntil = performance.now() + (tapped ? 3000 : 600);
+            kick();
         });
-        paintArrStats();
+        paintArray();
     }
     varsHost.addEventListener('click', function (e) {
         var b = e.target.closest('[data-check]');
         if (b) { openCheck(b.getAttribute('data-check'), 0); return; }
-        var tr = e.target.closest('.dp-row--open');
-        if (tr) openArray(tr.getAttribute('data-v'));
+        var it = e.target.closest('.dp-item--arr');
+        if (it) openArray(it.getAttribute('data-v'));
     });
     varsHost.addEventListener('keydown', function (e) {
-        var tr = e.target.closest && e.target.closest('.dp-row--open');
-        if (tr && (e.key === 'Enter' || e.key === ' ')) { e.preventDefault(); openArray(tr.getAttribute('data-v')); }
+        var it = e.target.closest && e.target.closest('.dp-item--arr');
+        if (it && (e.key === 'Enter' || e.key === ' ')) { e.preventDefault(); openArray(it.getAttribute('data-v')); }
     });
     panes.array.addEventListener('click', function (e) {
         var b = e.target.closest('[data-check]');
-        if (b) openCheck(b.getAttribute('data-check'), +b.getAttribute('data-idx'));
+        if (b) { openCheck(b.getAttribute('data-check'), +b.getAttribute('data-idx')); return; }
+        if (e.target.closest('[data-catch]')) { snap = takeSnap(current); paintArray(); }
     });
 
-    /* ---------- Check: stored value, recomputed value, read-back from the picture ---------- */
+    /* ---------- Check: stored value, recomputed value, read-back from the picture, all at one instant ---------- */
     var checking = null;
     function openCheck(n, idx) {
         checking = { name: n, idx: idx || 0 };
-        panes.check.innerHTML = '<div class="dp-arr__top"><button type="button" class="dp-back">← Back</button></div><div class="dp-check__body"></div>';
+        panes.check.innerHTML = '<div class="dp-arr__top dp-check__top"><button type="button" class="dp-back">← Back</button>' +
+            '<button type="button" class="dp-btn" data-recheck>' + REDO + ' Check again</button></div><div class="dp-check__body"></div>';
         panes.check.querySelector('.dp-back').addEventListener('click', function () { show(kindOf(n) === 'scalar' ? 'vars' : (current ? 'array' : 'vars')); });
+        panes.check.querySelector('[data-recheck]').addEventListener('click', runCheck);
         show('check');
-        paintCheck(true);
+        runCheck();
     }
     function agreement(stored, value, dtype) {
         if (typeof stored !== 'number' || typeof value !== 'number') return { ok: String(stored) === String(value), text: String(stored) === String(value) ? 'identical' : 'differ' };
@@ -371,21 +483,21 @@
         var ok = diff <= tol, figs = diff === 0 ? '∞' : String(Math.max(0, Math.floor(-Math.log10(diff / scale))));
         return { ok: ok, diff: diff, text: ok ? (diff === 0 ? 'identical' : 'agree to ' + figs + ' significant figures; the rest is ' + (dtype === 'float32' ? 'float32 storage' : 'rounding') + ', difference ' + sci(diff)) : 'DIFFER by ' + sci(diff) };
     }
-    function paintCheck(force) {
+    function runCheck() {
         if (!checking) return;
         var n = checking.name, idx = checking.idx, v = V(n), a = A(n), d = digitsOf(n), body = panes.check.querySelector('.dp-check__body');
-        var stored = v.dims.length ? v.data[idx] : v.data, where = '';
+        var stored = v.dims.length ? v.data[idx] : v.data, where = '', t = timeNow();
         if (v.dims.length === 2) { var c = cols2(n); where = '[' + Math.floor(idx / c) + ', ' + (idx % c) + ']'; }
         else if (v.dims.length === 1) where = '[' + idx + ']';
-        var h = '<div class="dp-check__hd"><span class="dp-sym">' + sym(n) + esc(where) + '</span>' +
-            (a.long_name ? '<p>' + a.long_name + '</p>' : '') + '</div>';
-        h += '<section class="dp-check__sec"><h4>1 · Stored in the dataset</h4><p class="dp-check__big">' + esc(num(stored, d)) + (unitOf(n) ? ' <span class="dp-u">' + unitOf(n) + '</span>' : '') + '</p>' +
+        var h = '<div class="dp-check__hd"><span class="dp-sym">' + sym(n) + esc(where) + '</span>' + (a.long_name ? '<p>' + a.long_name + '</p>' : '') +
+            '<p class="dp-check__when">Checked at ' + esc(timeText(t)) + ', ' + clock() + '. All three answers below come from this one frame.</p></div>';
+        h += '<section class="dp-check__sec"><h4><span>1</span>Stored in the dataset</h4><p class="dp-check__big">' + esc(num(stored, d)) + (unitOf(n) ? ' <span class="dp-u">' + unitOf(n) + '</span>' : '') + '</p>' +
             '<dl class="dp-check__meta"><div><dt>variable</dt><dd>' + esc(n) + ' ' + esc(where) + '</dd></div><div><dt>type</dt><dd>' + esc(typeLabel(n)) + '</dd></div>' +
             (a.computed_in ? '<div><dt>computed in</dt><dd>' + esc(a.computed_in) + '</dd></div>' : '') +
-            (a.formula ? '<div class="wide"><dt>formula</dt><dd>' + a.formula + '</dd></div>' : '') +
-            (a.updates ? '<div class="wide"><dt>updates</dt><dd>' + esc(a.updates) + '</dd></div>' : '') + '</dl></section>';
+            (a.updates ? '<div><dt>updates</dt><dd>' + esc(a.updates) + '</dd></div>' : '') +
+            (a.formula ? '<div class="wide"><dt>formula</dt><dd>' + a.formula + '</dd></div>' : '') + '</dl></section>';
         var chk = spec.check && spec.check[n], r = chk ? safe(function () { return chk(idx); }, null) : null;
-        h += '<section class="dp-check__sec"><h4>2 · Recomputed now, from the stored inputs</h4>';
+        h += '<section class="dp-check__sec"><h4><span>2</span>Recomputed now, from the stored inputs</h4>';
         if (r) {
             var ag = agreement(stored, r.value, ds.dtype(n));
             h += (r.formula ? '<p class="dp-check__formula">' + r.formula + '</p>' : '') +
@@ -399,7 +511,7 @@
         }
         h += '</section>';
         var dr = spec.drawn && spec.drawn[n], rd = dr ? safe(function () { return dr(idx); }, null) : null;
-        h += '<section class="dp-check__sec"><h4>3 · Read back from the picture</h4>';
+        h += '<section class="dp-check__sec"><h4><span>3</span>Read back from the picture</h4>';
         if (rd) {
             h += '<dl class="dp-check__meta"><div class="wide"><dt>' + esc(rd.what) + '</dt><dd>' + esc(rd.drawn) + '</dd></div>' +
                 '<div class="wide"><dt>expected from the store</dt><dd>' + esc(rd.expected) + '</dd></div></dl>' +
@@ -409,14 +521,18 @@
             h += '<p class="dp-check__note">' + (a.drawn_note ? a.drawn_note : 'This value is not drawn directly; it enters the picture through the arrays computed from it.') + '</p>';
         }
         h += '</section>';
-        if (h !== body._h || force) { body.innerHTML = h; body._h = h; }
+        body.innerHTML = h;
     }
 
-    /* ---------- the probe on the figure ---------- */
-    var stage = document.getElementById('stage'), held = { ref: null, cell: null }, overlay = null, octx = null, tip = null, pointerIn = false, pointerAt = null;
+    /* ---------- the probe on the figure: hover with a mouse, press and hold with a finger ---------- */
+    var stage = document.getElementById('stage'), held = { ref: null, cell: null }, overlay = null, octx = null, tip = null, tipT = null, chip = null;
+    var probe = { active: false, touch: false, at: null, until: 0, cellUntil: 0, marked: false, lastEnd: 0 }, hold = null;
     var probeBody = panes.vars.querySelector('.dp-probe__body'), probeHint = panes.vars.querySelector('.dp-probe__hint');
     var probeTitle = panes.vars.querySelector('.dp-probe__title'), probeRows = panes.vars.querySelector('.dp-probe__table tbody');
+    function stageXY(e) { var r = stage.getBoundingClientRect(); return { x: e.clientX - r.left, y: e.clientY - r.top }; }
+    function touchAllowed() { return !spec.touchProbe || safe(spec.touchProbe, true); }
     if (stage && spec.probe && spec.inspect) {
+        stage.classList.add('dp-stage');
         overlay = document.createElement('canvas');
         overlay.className = 'dp-overlay';
         overlay.setAttribute('aria-hidden', 'true');
@@ -426,76 +542,177 @@
         tip.className = 'dp-tip';
         tip.hidden = true;
         stage.appendChild(tip);
-        function fitOverlay() {
+        tipT = document.createElement('div');
+        tipT.className = 'dp-tip dp-tip--touch';
+        tipT.hidden = true;
+        document.body.appendChild(tipT);
+        window.addEventListener('scroll', function () { if (probe.touch && !(hold && hold.engaged)) { probe.until = 0; tipT.hidden = true; } }, { passive: true });
+        if (TOUCH && load('held') !== '1') {
+            chip = document.createElement('p');
+            chip.className = 'dp-hint-chip';
+            chip.textContent = 'Press and hold to read the values';
+            stage.appendChild(chip);
+        }
+        var fitOverlay = function () {
             var r = stage.getBoundingClientRect(), dpr = Math.min(window.devicePixelRatio || 1, 2);
             overlay.width = Math.max(1, Math.round(r.width * dpr));
             overlay.height = Math.max(1, Math.round(r.height * dpr));
             octx.setTransform(dpr, 0, 0, dpr, 0, 0);
-        }
+        };
         fitOverlay();
         if ('ResizeObserver' in window) new ResizeObserver(fitOverlay).observe(stage);
-        stage.addEventListener('pointermove', function (e) {
-            var r = stage.getBoundingClientRect();
-            pointerAt = { x: e.clientX - r.left, y: e.clientY - r.top };
-            pointerIn = true;
-            var ref = safe(function () { return spec.probe(pointerAt.x, pointerAt.y); }, null);
+        /* a finger is wider than a pointer: when nothing lies exactly under it, look on two rings around it, 12 and 22 px out */
+        var readAt = function (at, finger) {
+            var ref = safe(function () { return spec.probe(at.x, at.y); }, null);
+            for (var r = 12; !ref && finger && r <= 22; r += 10) {
+                for (var k = 0; k < 8 && !ref; k++) { var a = k * Math.PI / 4; ref = safe(function () { return spec.probe(at.x + r * Math.cos(a), at.y + r * Math.sin(a)); }, null); }
+            }
+            probe.empty = !ref;
             if (ref) held.ref = ref;
-        });
-        stage.addEventListener('pointerleave', function () { pointerIn = false; tip.hidden = true; });
+        };
+        var cancelHold = function () { if (hold) { clearTimeout(hold.timer); hold = null; } };
+        var engage = function () {
+            if (!hold) return;
+            hold.engaged = true;
+            probe.active = true; probe.touch = true; probe.until = 0;
+            probe.at = hold.at;
+            held.ref = null;
+            readAt(probe.at, true);
+            stage.classList.add('dp-probing');
+            if (navigator.vibrate) safe(function () { navigator.vibrate(12); });
+            if (chip) { chip.remove(); chip = null; store('held', '1'); }
+            kick();
+        };
+        /* capture phase: the panel sees the gesture before the page does, and keeps it from the page while reading */
+        stage.addEventListener('pointerdown', function (e) {
+            if (e.pointerType === 'mouse' || !touchAllowed()) return;
+            cancelHold();
+            var at = stageXY(e);
+            hold = { id: e.pointerId, x0: e.clientX, y0: e.clientY, at: at, engaged: false };
+            probe.client = { x: e.clientX, y: e.clientY };
+            hold.timer = setTimeout(engage, 380);
+        }, true);
+        stage.addEventListener('pointermove', function (e) {
+            if (e.pointerType === 'mouse') {
+                probe.at = stageXY(e);
+                probe.active = true; probe.touch = false;
+                readAt(probe.at);
+                kick();
+                return;
+            }
+            if (!hold || e.pointerId !== hold.id) return;
+            probe.client = { x: e.clientX, y: e.clientY };
+            if (!hold.engaged) {
+                hold.at = stageXY(e);
+                if (Math.hypot(e.clientX - hold.x0, e.clientY - hold.y0) > 10) cancelHold();
+                return;
+            }
+            e.stopPropagation();
+            probe.at = stageXY(e);
+            readAt(probe.at, true);
+        }, true);
+        var release = function (e) {
+            if (!hold || e.pointerId !== hold.id) return;
+            var was = hold.engaged;
+            cancelHold();
+            if (!was) return;
+            stage.classList.remove('dp-probing');
+            probe.until = performance.now() + 2600;
+            probe.lastEnd = performance.now();
+        };
+        stage.addEventListener('pointerup', release, true);
+        stage.addEventListener('pointercancel', release, true);
+        stage.addEventListener('touchmove', function (e) { if (hold && hold.engaged && e.cancelable) e.preventDefault(); }, { capture: true, passive: false });
+        stage.addEventListener('contextmenu', function (e) { if (hold || performance.now() - probe.lastEnd < 600) e.preventDefault(); }, true);
+        stage.addEventListener('click', function (e) { if (performance.now() - probe.lastEnd < 600) { e.stopPropagation(); e.preventDefault(); } }, true);
+        stage.addEventListener('pointerleave', function (e) { if (e.pointerType === 'mouse') { probe.active = false; tip.hidden = true; } });
     }
     function drawMark(x, y, strong) {
         octx.beginPath();
-        octx.arc(x, y, strong ? 9 : 7, 0, Math.PI * 2);
+        octx.arc(x, y, strong ? 10 : 8, 0, Math.PI * 2);
         octx.strokeStyle = strong ? '#1c1518' : 'rgba(28, 21, 24, 0.55)';
-        octx.lineWidth = strong ? 1.8 : 1.2;
+        octx.lineWidth = strong ? 2 : 1.3;
         octx.stroke();
         octx.beginPath();
-        octx.moveTo(x - 14, y); octx.lineTo(x - 11, y); octx.moveTo(x + 11, y); octx.lineTo(x + 14, y);
-        octx.moveTo(x, y - 14); octx.lineTo(x, y - 11); octx.moveTo(x, y + 11); octx.lineTo(x, y + 14);
+        octx.moveTo(x - 16, y); octx.lineTo(x - 12, y); octx.moveTo(x + 12, y); octx.lineTo(x + 16, y);
+        octx.moveTo(x, y - 16); octx.lineTo(x, y - 12); octx.moveTo(x, y + 12); octx.lineTo(x, y + 16);
         octx.stroke();
     }
+    function clearOverlay() {
+        if (!overlay || !probe.marked) return;
+        var dpr = Math.min(window.devicePixelRatio || 1, 2);
+        octx.clearRect(0, 0, overlay.width / dpr, overlay.height / dpr);
+        probe.marked = false;
+        if (tip) tip.hidden = true;
+        if (tipT) tipT.hidden = true;
+    }
+    function probeShown() { return probe.active && (!probe.touch || (hold && hold.engaged) || performance.now() < probe.until); }
     function paintProbe() {
         if (!overlay) return;
-        var w = overlay.width / Math.min(window.devicePixelRatio || 1, 2), hgt = overlay.height / Math.min(window.devicePixelRatio || 1, 2);
+        var dpr = Math.min(window.devicePixelRatio || 1, 2), w = overlay.width / dpr, hgt = overlay.height / dpr;
         octx.clearRect(0, 0, w, hgt);
+        probe.marked = false;
+        var shown = probeShown();
+        if (probe.touch && !shown) probe.active = false;
         var info = held.ref ? safe(function () { return spec.inspect(held.ref); }, null) : null;
-        if (info && info.at) drawMark(info.at.x, info.at.y, pointerIn);
-        if (held.cell && spec.locate) {
+        if (info && info.at && shown) { drawMark(info.at.x, info.at.y, true); probe.marked = true; }
+        if (held.cell && spec.locate && performance.now() < probe.cellUntil) {
             var at = safe(function () { return spec.locate(held.cell.name, held.cell.idx); }, null);
             if (at) {
                 octx.beginPath();
-                octx.arc(at.x, at.y, 6, 0, Math.PI * 2);
+                octx.arc(at.x, at.y, 7, 0, Math.PI * 2);
                 octx.fillStyle = 'rgba(122, 31, 43, 0.25)';
                 octx.fill();
                 octx.strokeStyle = '#7a1f2b';
-                octx.lineWidth = 1.6;
+                octx.lineWidth = 1.8;
                 octx.stroke();
+                probe.marked = true;
             }
         }
-        if (info && pointerIn && pointerAt) {
+        if (shown && probe.touch && probe.empty && !held.ref && tipT) {
+            var hE = '<b>Nothing to read here</b><span>Slide onto something drawn in the figure.</span>';
+            if (hE !== tipT._h) { tipT.innerHTML = hE; tipT._h = hE; }
+            tipT.hidden = false;
+            tipT.style.left = Math.max(8, Math.min(window.innerWidth - tipT.offsetWidth - 8, probe.client.x - tipT.offsetWidth / 2)) + 'px';
+            tipT.style.top = Math.max(8, probe.client.y - tipT.offsetHeight - 52) + 'px';
+            probe.marked = true;
+        } else if (info && shown && probe.at) {
             var h = '<b>' + info.title + '</b>' + info.rows.slice(0, 8).map(function (row) {
-                return '<span><i>' + row[0] + '</i>' + esc(num(row[1], row[4] !== undefined && V(row[3]) ? digitsOf(row[3]) : 4)) + (row[2] ? ' <u>' + row[2] + '</u>' : '') + '</span>';
-            }).join('');
-            if (h !== tip._h) { tip.innerHTML = h; tip._h = h; }
-            tip.hidden = false;
-            var tw = tip.offsetWidth, th = tip.offsetHeight, x = pointerAt.x + 16, y = pointerAt.y + 16;
-            if (x + tw > w - 6) x = pointerAt.x - tw - 12;
-            if (y + th > hgt - 6) y = pointerAt.y - th - 12;
-            tip.style.left = Math.max(4, x) + 'px';
-            tip.style.top = Math.max(4, y) + 'px';
-        }
-        if (info) {
+                return '<span><i>' + row[0] + '</i>' + esc(num(row[1], row[3] && V(row[3]) ? digitsOf(row[3]) : 4)) + (row[2] ? ' <u>' + row[2] + '</u>' : '') + '</span>';
+            }).join('') + (probe.touch && !(hold && hold.engaged) ? '<em>released · still following it</em>' : '');
+            var el = probe.touch ? tipT : tip, other = probe.touch ? tip : tipT;
+            other.hidden = true;
+            if (h !== el._h) { el.innerHTML = h; el._h = h; }
+            el.hidden = false;
+            var tw = el.offsetWidth, th = el.offsetHeight, x, y;
+            if (probe.touch) {
+                /* above the finger, where the hand does not cover it; beside the finger when there is no room above */
+                var cx = probe.client.x, cy = probe.client.y, W = window.innerWidth, Hh = window.innerHeight;
+                x = cx - tw / 2; y = cy - th - 52;
+                if (y < 8) { y = cy - th / 2; x = cx + 52 + tw <= W - 8 ? cx + 52 : cx - tw - 52; }
+                el.style.left = Math.max(8, Math.min(W - tw - 8, x)) + 'px';
+                el.style.top = Math.max(8, Math.min(Hh - th - 8, y)) + 'px';
+            } else {
+                x = probe.at.x + 18; y = probe.at.y + 18;
+                if (x + tw > w - 6) x = probe.at.x - tw - 14;
+                if (y + th > hgt - 6) y = probe.at.y - th - 14;
+                el.style.left = Math.max(4, Math.min(w - tw - 4, x)) + 'px';
+                el.style.top = Math.max(4, Math.min(hgt - th - 4, y)) + 'px';
+            }
+            probe.marked = true;
+        } else { if (tip) tip.hidden = true; if (tipT) tipT.hidden = true; }
+        if (info && isOpen) {
             probeHint.hidden = true;
             probeBody.hidden = false;
-            var ph = esc(info.title);
-            if (ph !== probeTitle._h) { probeTitle.innerHTML = ph; probeTitle._h = ph; }
-            /* the rows are rebuilt only when the set of quantities changes; values are updated in place, so the Check buttons stay clickable */
+            var ph = esc(info.title) + ' <span>· ' + esc(timeText(timeNow())) + '</span>';
+            if (ph !== probeTitle._h) { probeTitle.innerHTML = info.title + ' <span>· ' + esc(timeText(timeNow())) + '</span>'; probeTitle._h = ph; }
+            /* rows are rebuilt only when the set of quantities changes; values update in place, so the Check buttons stay clickable */
             var key = info.rows.map(function (row) { return row[0] + '|' + row[3] + '|' + row[4] + '|' + (row[2] || ''); }).join(';');
             if (key !== probeRows._k) {
                 probeRows.innerHTML = info.rows.map(function (row) {
                     var n = row[3], idx = row[4];
                     return '<tr><th>' + row[0] + '</th><td><span class="dp-probe__v"></span>' + (row[2] ? ' <span class="dp-u">' + row[2] + '</span>' : '') + '</td><td>' +
-                        (n && V(n) ? '<button type="button" class="dp-chk" data-check="' + esc(n) + '" data-idx="' + (idx || 0) + '" title="Check this value">' + CHK + '</button>' : '') + '</td></tr>';
+                        (n && V(n) ? '<button type="button" class="dp-chk" data-check="' + esc(n) + '" data-idx="' + (idx || 0) + '" aria-label="Check" title="Check this value">' + CHK + '</button>' : '') + '</td></tr>';
                 }).join('');
                 probeRows._k = key;
                 probeRows._v = Array.prototype.slice.call(probeRows.querySelectorAll('.dp-probe__v'));
@@ -511,72 +728,242 @@
         if (b) openCheck(b.getAttribute('data-check'), +b.getAttribute('data-idx'));
     });
 
-    /* ---------- Log ---------- */
-    var L = spec.log, logBody = null, logWrap = null, logInfo = null, logCount = panel.querySelector('[data-log-count]');
-    var total = 0, nextT = 0, lastKey = null, logRows = [];
-    if (L) {
-        panes.log.innerHTML =
-            '<div class="dp-log__bar"><span class="dp-log__info"></span><button type="button" class="dp-btn" data-log-clear>Clear</button></div>' +
-            '<div class="dp-log__wrap" tabindex="0" aria-label="Log table"><table class="dp-log__table"><thead><tr><th scope="col">#</th>' +
-            L.columns.map(function (n) { return '<th scope="col">' + sym(n) + (unitOf(n) ? '<small>' + unitOf(n) + '</small>' : '') + '</th>'; }).join('') +
-            '</tr></thead><tbody></tbody></table></div>';
-        logBody = panes.log.querySelector('tbody');
-        logWrap = panes.log.querySelector('.dp-log__wrap');
-        logInfo = panes.log.querySelector('.dp-log__info');
-        panes.log.querySelector('[data-log-clear]').addEventListener('click', function () {
-            logBody.innerHTML = '';
-            logRows = [];
-            total = 0;
-            lastKey = null;
-            infoLog();
-        });
-        infoLog();
+    /* ---------- Rounds: record one round of the running simulation, every frame, then stop ---------- */
+    var MAXS = 600, rounds = [], roundNo = 0, rec = null, sel = -1;
+    var recBox = panel.querySelector('.dp-rec'), recWhat = recBox.querySelector('.dp-rec__what'), recProg = recBox.querySelector('.dp-rec__prog');
+    var recBar = recBox.querySelector('.dp-rec__bar i'), recSt = recBox.querySelector('.dp-rec__st'), recBtn = recBox.querySelector('[data-rec]'), recLab = recBox.querySelector('[data-rec-label]');
+    var roundCount = panel.querySelector('[data-round-count]');
+    function roundLength() { var len = +safe(R.length, 10); return len > 0 && isFinite(len) ? len : 10; }
+    function describeRound() {
+        if (rec) return;
+        var lab = safe(R.label, '') || 'ten seconds of play';
+        var txt = 'One round here is <b>' + lab + '</b>. Every frame of it is caught' + (spec.inspect ? ', with the point you last ' + (TOUCH ? 'held' : 'pointed at') : '') + '; then the recording stops by itself.';
+        if (txt !== recWhat._h) { recWhat.innerHTML = txt; recWhat._h = txt; }
     }
-    function infoLog() {
-        var n = logBody ? logBody.rows.length : 0;
-        logCount.textContent = n;
-        logInfo.textContent = (L.mode === 'change' ? 'one row each time a value changes' : 'one row every ' + L.every + ' s of ' + (L.label || 'play time')) +
-            ' · ' + n + ' of ' + grouped(L.max) + ' rows kept';
+    function scalarNames() { return ds.order.filter(isNumScalar); }
+    function startRound() {
+        if (rec) { finishRound('stopped early'); return; }
+        var why = R.blocked ? safe(R.blocked, null) : null;
+        if (why) { recWhat.innerHTML = '<b>Not now.</b> ' + esc(why); recWhat._h = null; return; }
+        if (spec.play && spec.playing && !safe(spec.playing, true)) safe(spec.play);
+        var ref = held.ref || (R.point ? safe(R.point, null) : null), info = ref ? safe(function () { return spec.inspect(ref); }, null) : null;
+        var names = scalarNames();
+        rec = {
+            no: roundNo + 1, len: roundLength(), label: safe(R.label, '') || 'ten seconds of play', mode: R.mode, ref: info ? ref : null,
+            pointTitle: info ? info.title : '', pointRows: info ? info.rows.map(function (row) { return { label: row[0], units: row[2] || '', name: row[3], idx: row[4], key: row[0] + '|' + row[3] + '|' + row[4] }; }) : [],
+            names: names, t0: null, lastEl: -Infinity, key: null, n: 0, frames: 0, wall0: performance.now(),
+            buf: { __t: [], __el: [] }, params: (spec.groups[0] ? spec.groups[0].vars : []).filter(isNumScalar).map(function (n) { return [n, ds.get(n)]; })
+        };
+        names.forEach(function (n) { rec.buf[n] = []; });
+        rec.pointRows.forEach(function (pr, k) { rec.buf['__p' + k] = []; });
+        rec.interval = rec.mode === 'change' ? 0 : rec.len / MAXS;
+        recBox.classList.add('is-rec');
+        recLab.textContent = 'Stop';
+        recProg.hidden = false;
+        recWhat.innerHTML = 'Recording <b>round ' + rec.no + '</b>: ' + esc(rec.label) + (rec.pointTitle ? ', following ' + rec.pointTitle : '') + '.';
+        recWhat._h = null;
+        progress(0, 0);
+        kick();
     }
-    function sample() {
-        if (!L) return;
-        var values = L.columns.map(function (n) { return ds.get(n); });
-        var texts = values.map(function (x, i) { return num(x, digitsOf(L.columns[i])); });
-        if (L.mode === 'change') {
-            var key = texts.filter(function (x, i) { return L.columns[i] !== L.time; }).join('|');
-            if (key === lastKey) return;
-            lastKey = key;
-        } else {
-            var every = L.every || 0.1, t = L.time ? ds.get(L.time) : stats0.play;
-            if (t < nextT - every) nextT = t;
-            if (t < nextT) return;
-            nextT = (Math.floor(t / every + 1e-9) + 1) * every;
+    function progress(frac, el) {
+        recBar.style.width = (100 * Math.max(0, Math.min(1, frac))) + '%';
+        var paused = spec.playing && !safe(spec.playing, true) && rec && rec.mode !== 'change';
+        recSt.innerHTML = paused ? '<b>Paused.</b> Press Play: the round goes on when the simulation does.' :
+            rec.mode === 'change' ? num(el, 1) + ' of ' + num(rec.len, 0) + ' s · ' + rec.n + ' changes caught · move a slider' :
+            num(el, 2) + ' of ' + num(rec.len, 2) + (timeUnit() ? ' ' + timeUnit() : '') + ' · ' + rec.n + ' samples';
+    }
+    function recordFrame() {
+        if (!rec) return;
+        var t = timeNow();
+        if (rec.t0 === null) rec.t0 = t;
+        var el = t - rec.t0, take;
+        if (el < -1e-9) { finishRound('the clock was reset'); return; }
+        rec.frames++;
+        if (rec.mode === 'change') {
+            var key = roundCols.map(function (n) { return String(ds.get(n)); }).join('|');
+            take = key !== rec.key;
+            rec.key = key;
+        } else take = rec.n === 0 || el - rec.lastEl >= rec.interval * 0.999 || el >= rec.len;
+        if (take && rec.n < MAXS) {
+            rec.buf.__t.push(t); rec.buf.__el.push(el);
+            rec.names.forEach(function (n) { var x = ds.get(n); rec.buf[n].push(typeof x === 'boolean' ? (x ? 1 : 0) : typeof x === 'number' ? x : NaN); });
+            if (rec.pointRows.length) {
+                var info = safe(function () { return spec.inspect(rec.ref); }, null), rows = info ? info.rows : [];
+                rec.pointRows.forEach(function (pr, k) {
+                    var row = rows[k], ok = row && (row[0] + '|' + row[3] + '|' + row[4]) === pr.key;
+                    rec.buf['__p' + k].push(ok && typeof row[1] === 'number' ? row[1] : NaN);
+                });
+            }
+            rec.lastEl = el;
+            rec.n++;
         }
-        total++;
-        var stick = logWrap.scrollTop + logWrap.clientHeight >= logWrap.scrollHeight - 24;
-        var tr = document.createElement('tr');
-        tr.innerHTML = '<th scope="row">' + total + '</th>' + texts.map(function (x) { return '<td>' + esc(x) + '</td>'; }).join('');
-        logBody.appendChild(tr);
-        logRows.push([total].concat(values.map(function (x) { return typeof x === 'number' ? x : (x === true ? 1 : x === false ? 0 : x); })));
-        while (logBody.rows.length > L.max) { logBody.removeChild(logBody.firstChild); logRows.shift(); }
-        if (stick) logWrap.scrollTop = logWrap.scrollHeight;
-        infoLog();
+        /* the progress bar is repainted eight times a second, not every frame: the samples are what matter */
+        var nowMs = performance.now();
+        if (!rec.shownAt || nowMs - rec.shownAt > 125) { progress(el / rec.len, el); rec.shownAt = nowMs; }
+        if (el >= rec.len - 1e-9 || rec.n >= MAXS && rec.mode === 'change') finishRound(null);
     }
+    function finishRound(why) {
+        var r = rec;
+        rec = null;
+        recBox.classList.remove('is-rec');
+        recLab.textContent = 'Record';
+        recProg.hidden = true;
+        recWhat._h = null;
+        if (!r || r.n < 2) { describeRound(); if (r) recWhat.innerHTML += ' <b>The last round caught fewer than two samples' + (why ? ' (' + esc(why) + ')' : '') + '.</b>'; return; }
+        roundNo = r.no;
+        var F = function (a) { return Float64Array.from(a); };
+        var series = [{ key: TV || 't', label: timeSym(), units: timeUnit(), digits: TV ? Math.max(2, digitsOf(TV)) : 3, data: F(r.buf.__t), time: true }];
+        roundCols.forEach(function (n) { series.push({ key: n, label: sym(n), units: unitOf(n), digits: digitsOf(n), data: F(r.buf[n]) }); });
+        r.pointRows.forEach(function (pr, k) {
+            series.push({ key: (pr.name || 'point_' + k) + (pr.idx !== undefined ? '_' + pr.idx : '') + '_at_point', label: pr.label, units: pr.units, digits: pr.name && V(pr.name) ? digitsOf(pr.name) : 4, data: F(r.buf['__p' + k]), point: true });
+        });
+        var all = {};
+        r.names.forEach(function (n) { all[n] = F(r.buf[n]); });
+        rounds.push({ no: r.no, label: r.label, len: r.len, n: r.n, frames: r.frames, el: r.buf.__el[r.buf.__el.length - 1], why: why, at: clock(), pointTitle: r.pointTitle, params: r.params, series: series, all: all, elapsed: F(r.buf.__el) });
+        if (rounds.length > 5) rounds.shift();
+        sel = rounds.length - 1;
+        roundCount.textContent = rounds.length;
+        describeRound();
+        catchNow('at the end of round ' + r.no);
+        if (!isOpen) setOpen(true, false);
+        show('rounds');
+    }
+    recBtn.addEventListener('click', startRound);
+
+    function seriesRange(s) {
+        var lo = Infinity, hi = -Infinity;
+        for (var i = 0; i < s.data.length; i++) { var x = s.data[i]; if (x === x && isFinite(x)) { if (x < lo) lo = x; if (x > hi) hi = x; } }
+        return lo <= hi ? [lo, hi] : [NaN, NaN];
+    }
+    function drawChart(cv, s, x, cursor) {
+        var P = palette(), dpr = Math.min(window.devicePixelRatio || 1, 2), W = cv.clientWidth || 300, H = 64;
+        if (cv.width !== Math.round(W * dpr)) { cv.width = Math.round(W * dpr); cv.height = Math.round(H * dpr); }
+        var c = cv.getContext('2d');
+        c.setTransform(dpr, 0, 0, dpr, 0, 0);
+        c.clearRect(0, 0, W, H);
+        var rg = seriesRange(s), lo = rg[0], hi = rg[1], n = s.data.length;
+        if (!(lo === lo)) { c.fillStyle = P.muted; c.font = '12px ' + getComputedStyle(cv).fontFamily; c.fillText('not defined during this round', 8, H / 2 + 4); return; }
+        var span = Math.max(hi - lo, 0.02 * Math.max(Math.abs(hi), Math.abs(lo)), 1e-12), mid = (hi + lo) / 2;
+        lo = mid - span / 2; hi = mid + span / 2;
+        var x0 = x[0], x1 = x[n - 1] > x0 ? x[n - 1] : x0 + 1, pad = 6;
+        var sx = function (v) { return 1 + (v - x0) / (x1 - x0) * (W - 2); }, sy = function (v) { return H - pad - (v - lo) / (hi - lo) * (H - 2 * pad); };
+        c.strokeStyle = P.rule; c.lineWidth = 1;
+        c.beginPath(); c.moveTo(0, H - 0.5); c.lineTo(W, H - 0.5); c.stroke();
+        if (lo < 0 && hi > 0) { c.setLineDash([3, 4]); c.beginPath(); c.moveTo(0, Math.round(sy(0)) + 0.5); c.lineTo(W, Math.round(sy(0)) + 0.5); c.stroke(); c.setLineDash([]); }
+        c.strokeStyle = s.point ? P.ink : P.accent; c.lineWidth = 1.7; c.lineJoin = 'round';
+        c.beginPath();
+        var on = false;
+        for (var i = 0; i < n; i++) {
+            var v = s.data[i];
+            if (!(v === v) || !isFinite(v)) { on = false; continue; }
+            if (on) c.lineTo(sx(x[i]), sy(v)); else { c.moveTo(sx(x[i]), sy(v)); on = true; }
+        }
+        c.stroke();
+        if (cursor !== null && cursor >= 0 && cursor < n) {
+            var cx = Math.round(sx(x[cursor])) + 0.5;
+            c.strokeStyle = P.ink3; c.lineWidth = 1; c.beginPath(); c.moveTo(cx, 0); c.lineTo(cx, H); c.stroke();
+            var cv2 = s.data[cursor];
+            if (cv2 === cv2 && isFinite(cv2)) { c.fillStyle = s.point ? P.ink : P.accent; c.beginPath(); c.arc(cx, sy(cv2), 3.5, 0, Math.PI * 2); c.fill(); }
+        }
+    }
+    function renderRounds() {
+        var host = panes.rounds;
+        if (!rounds.length) {
+            host.innerHTML = '<div class="dp-empty"><p class="dp-empty__k">No round yet</p><h3>Record one round of the simulation.</h3>' +
+                '<p>Press <b>Record</b> above. The simulation keeps running exactly as before; for one round (' + esc(safe(R.label, '') || 'ten seconds') + ') every frame’s numbers are copied here, then the recording stops by itself.</p>' +
+                '<p>You get one chart per quantity, a table of every sample, and a file you can open in Python. ' + (TOUCH ? 'Hold a point on the figure first' : 'Point at something in the figure first') + ' and its values are recorded too.</p></div>';
+            return;
+        }
+        var r = rounds[sel], x = r.elapsed;
+        var chips = rounds.map(function (q, k) { return '<button type="button" class="dp-chip' + (k === sel ? ' is-on' : '') + '" data-round="' + k + '">Round ' + q.no + '</button>'; }).join('');
+        var params = r.params.map(function (p) { return '<span><i>' + sym(p[0]) + '</i> ' + esc(num(p[1], digitsOf(p[0]))) + (unitOf(p[0]) ? ' ' + unitOf(p[0]) : '') + '</span>'; }).join('');
+        var h = '<div class="dp-rd"><div class="dp-rd__chips">' + chips + '</div>' +
+            '<header class="dp-rd__hd"><h3>Round ' + r.no + '<span class="dp__dot">.</span></h3>' +
+            '<p class="dp-rd__sum">' + esc(r.label) + ' · ' + r.n + ' samples from ' + r.frames + ' frames · caught at ' + esc(r.at) + (r.why ? ' · ' + esc(r.why) : '') + '</p>' +
+            (params ? '<p class="dp-rd__par">' + params + '</p>' : '') +
+            '<div class="dp-rd__tools"><button type="button" class="dp-btn dp-btn--solid" data-round-save>' + SAVE + ' Save this round</button>' +
+            '<button type="button" class="dp-btn" data-round-csv>CSV</button></div></header>' +
+            '<p class="dp-rd__read" aria-live="polite"></p><div class="dp-rd__charts">';
+        r.series.forEach(function (s, k) {
+            if (s.time) return;
+            var rg = seriesRange(s);
+            h += '<figure class="dp-ch' + (s.point ? ' dp-ch--pt' : '') + '"><figcaption><span class="dp-sym">' + s.label + '</span>' + (s.units ? '<span class="dp-u">' + s.units + '</span>' : '') +
+                (s.point ? '<em>at the point</em>' : '') + '<b>' + esc(num(rg[0], s.digits)) + ' … ' + esc(num(rg[1], s.digits)) + '</b></figcaption><canvas data-series="' + k + '"></canvas></figure>';
+        });
+        h += '</div>' + (r.pointTitle ? '<p class="dp-rd__note">Black lines follow ' + r.pointTitle + ', the point held when the round began.</p>' : '') +
+            '<details class="dp-rd__tbl"><summary>Every sample · ' + r.n + ' rows × ' + r.series.length + ' columns</summary><div class="dp-rd__wrap"><table><thead><tr><th>#</th>' +
+            r.series.map(function (s) { return '<th><span class="dp-sym">' + s.label + '</span>' + (s.units ? '<small>' + s.units + '</small>' : '') + '</th>'; }).join('') + '</tr></thead><tbody>';
+        for (var i = 0; i < r.n; i++) h += '<tr><th>' + (i + 1) + '</th>' + r.series.map(function (s) { return '<td>' + esc(num(s.data[i], s.digits)) + '</td>'; }).join('') + '</tr>';
+        h += '</tbody></table></div></details></div>';
+        host.innerHTML = h;
+        var canv = Array.prototype.slice.call(host.querySelectorAll('canvas[data-series]'));
+        var readEl = host.querySelector('.dp-rd__read');
+        function readout(i) {
+            var head = i === null ? (TOUCH ? 'Touch a chart to read every quantity at one sample.' : 'Point at a chart to read every quantity at one sample.') : '<b>Sample ' + (i + 1) + ' of ' + r.n + '</b> · ' + esc(timeSym()) + ' = ' + esc(num(r.series[0].data[i], r.series[0].digits)) + (timeUnit() ? ' ' + timeUnit() : '') + ' · ' + esc(num(x[i], 3)) + (timeUnit() ? ' ' + esc(timeUnit()) : '') + ' into the round';
+            readEl.innerHTML = head;
+        }
+        function drawAll(cur) { canv.forEach(function (cv) { drawChart(cv, r.series[+cv.getAttribute('data-series')], x, cur); }); }
+        drawAll(null);
+        readout(null);
+        var chartsEl = host.querySelector('.dp-rd__charts');
+        function pick(e) {
+            var cv = e.target.closest && e.target.closest('canvas[data-series]');
+            if (!cv) return;
+            var rc = cv.getBoundingClientRect(), f = Math.max(0, Math.min(1, (e.clientX - rc.left) / rc.width)), target = x[0] + f * (x[r.n - 1] - x[0]), best = 0;
+            for (var i = 1; i < r.n; i++) if (Math.abs(x[i] - target) < Math.abs(x[best] - target)) best = i;
+            drawAll(best);
+            readout(best);
+            var vals = r.series.slice(1).map(function (s) { return '<span><i>' + s.label + '</i> ' + esc(num(s.data[best], s.digits)) + (s.units ? ' ' + s.units : '') + '</span>'; }).join('');
+            readEl.innerHTML += '<span class="dp-rd__vals">' + vals + '</span>';
+        }
+        chartsEl.addEventListener('pointermove', pick);
+        chartsEl.addEventListener('pointerdown', pick);
+        chartsEl.addEventListener('pointerleave', function (e) { if (e.pointerType === 'mouse') { drawAll(null); readout(null); } });
+    }
+    function roundCsv(r) {
+        var cols = r.series.map(function (s) { return s.key; }), extra = Object.keys(r.all).filter(function (n) { return cols.indexOf(n) < 0; });
+        var head = ['sample', 'time_into_round'].concat(cols, extra).join(',');
+        var lines = [head];
+        for (var i = 0; i < r.n; i++) lines.push([i + 1, r.elapsed[i]].concat(r.series.map(function (s) { return s.data[i]; }), extra.map(function (n) { return r.all[n][i]; })).map(function (v) { return v === v ? String(v) : ''; }).join(','));
+        return lines.join('\n') + '\n';
+    }
+    function download(blob, name) {
+        var a = document.createElement('a');
+        a.href = URL.createObjectURL(blob);
+        a.download = name;
+        document.body.appendChild(a);
+        a.click();
+        a.remove();
+        setTimeout(function () { URL.revokeObjectURL(a.href); }, 4000);
+    }
+    function stamp() { return new Date().toISOString().replace(/[:.]/g, '-').slice(0, 19); }
+    panes.rounds.addEventListener('click', function (e) {
+        var b = e.target.closest('[data-round]');
+        if (b) { sel = +b.getAttribute('data-round'); renderRounds(); return; }
+        var r = rounds[sel];
+        if (!r) return;
+        if (e.target.closest('[data-round-csv]')) { download(new Blob([roundCsv(r)], { type: 'text/csv' }), (spec.file || 'dataset') + '-round-' + r.no + '-' + stamp() + '.csv'); return; }
+        if (e.target.closest('[data-round-save]')) {
+            var rd = Sim.dataset({ title: ds.title + ' · round ' + r.no, attrs: { page: location.pathname.split('/').pop(), round: r.label, samples: r.n, frames: r.frames, caught_at: r.at, time_variable: TV || 'wall clock', point: plain(r.pointTitle || '') } });
+            r.params.forEach(function (p) { rd.attrs['start_' + p[0]] = p[1]; });
+            rd.dim('sample', r.n);
+            rd.coord('time_into_round', 'sample', Float64Array, { units: timeUnit(), long_name: 'time since the round began' });
+            rd.set('time_into_round', r.elapsed);
+            r.series.forEach(function (s) { if (!rd.has(s.key)) { rd.var(s.key, ['sample'], Float64Array, { symbol: plain(s.label), units: s.units, long_name: s.point ? plain(s.label) + ' at ' + plain(r.pointTitle) : (V(s.key) ? plain(A(s.key).long_name || '') : '') }); rd.set(s.key, s.data); } });
+            Object.keys(r.all).forEach(function (n) { if (!rd.has(n)) { rd.var(n, ['sample'], Float64Array, { symbol: plain(sym(n)), units: unitOf(n), long_name: plain(A(n).long_name || '') }); rd.set(n, r.all[n]); } });
+            download(rd.npz([{ name: 'round.csv', bytes: roundCsv(r) }, { name: 'README.txt', bytes: readme('round ' + r.no) }]), (spec.file || 'dataset') + '-round-' + r.no + '-' + stamp() + '.zip');
+        }
+    });
 
     /* ---------- Save ---------- */
-    function csv() {
-        if (!L) return '';
-        var head = ['row'].concat(L.columns).join(',');
-        return head + '\n' + logRows.map(function (r) { return r.map(function (x) { return typeof x === 'number' ? String(x) : JSON.stringify(x); }).join(','); }).join('\n') + '\n';
-    }
-    function readme() {
+    function readme(what) {
         var base = (spec.file || 'dataset');
         return [
-            ds.title + ' · data saved from ' + location.href.replace(/[#?].*$/, ''),
+            ds.title + ' · ' + what + ' saved from ' + location.href.replace(/[#?].*$/, ''),
             'Saved ' + new Date().toISOString(),
             '',
             'Each array variable is a NumPy .npy file; dataset.json lists every variable with its dimensions, dtype,',
-            'units and attributes, and holds the scalars. log.csv is the Log tab at the time of saving.',
+            'units and attributes, and holds the scalars. Recorded rounds, if any, are CSV files with one row per sample.',
             '',
             'Python:',
             '    import json, zipfile, numpy as np',
@@ -592,29 +979,23 @@
         ].join('\n');
     }
     panel.querySelector('[data-save]').addEventListener('click', function () {
-        var base = spec.file || 'dataset', stamp = new Date().toISOString().replace(/[:.]/g, '-').slice(0, 19);
-        var blob = ds.npz([{ name: 'log.csv', bytes: csv() }, { name: 'README.txt', bytes: readme() }]);
-        var a = document.createElement('a');
-        a.href = URL.createObjectURL(blob);
-        a.download = base + '-' + stamp + '.zip';
-        document.body.appendChild(a);
-        a.click();
-        a.remove();
-        setTimeout(function () { URL.revokeObjectURL(a.href); }, 4000);
+        var extra = rounds.map(function (r) { return { name: 'round-' + r.no + '.csv', bytes: roundCsv(r) }; });
+        extra.push({ name: 'README.txt', bytes: readme('the store at ' + timeText(timeNow())) });
+        download(ds.npz(extra), (spec.file || 'dataset') + '-' + stamp() + '.zip');
     });
 
     /* ---------- open, close, tabs ---------- */
-    var isOpen = false, view = 'vars';
+    var isOpen = false, view = 'vars', liveOn = false;
     function show(name) {
         view = name;
         Object.keys(panes).forEach(function (k) { panes[k].hidden = k !== name; });
         Array.prototype.forEach.call(tabs, function (b) {
-            var on = b.getAttribute('data-tab') === (name === 'log' ? 'log' : 'vars');
+            var on = b.getAttribute('data-tab') === (name === 'rounds' ? 'rounds' : 'vars');
             b.setAttribute('aria-selected', on ? 'true' : 'false');
         });
-        if (name === 'vars' || name === 'log') store('tab', name);
-        if (name === 'log' && logWrap) logWrap.scrollTop = logWrap.scrollHeight;
-        paint();
+        if (name === 'vars' || name === 'rounds') store('tab', name);
+        if (name === 'rounds') renderRounds();
+        paint(true);
     }
     function setOpen(open, save) {
         isOpen = open;
@@ -623,7 +1004,8 @@
         panel.setAttribute('aria-hidden', open ? 'false' : 'true');
         if (open) panel.removeAttribute('inert'); else panel.setAttribute('inert', '');
         if (save) store('open', open ? '1' : '0');
-        if (open) paint();
+        if (open) { describeRound(); catchNow('when the panel opened'); }
+        kick();
     }
     tab.addEventListener('click', function () { setOpen(true, true); panel.querySelector('.dp__close').focus(); });
     panel.querySelector('.dp__close').addEventListener('click', function () { setOpen(false, true); tab.focus(); });
@@ -634,38 +1016,51 @@
             show(t === 'vars' && (view === 'array' || view === 'check') ? view : t);
         });
     });
+    panes.vars.querySelector('[data-catch]').addEventListener('click', function () { catchNow(); });
+    liveBox.addEventListener('change', function () {
+        liveOn = liveBox.checked;
+        store('live', liveOn ? '1' : '0');
+        if (!liveOn) catchNow('when Live was switched off');
+        paint(true);
+        kick();
+    });
 
-    function paint() {
+    function paintState() {
+        var st = rec ? 'recording' : liveOn && isOpen ? 'live' : 'still', txt = rec ? 'recording' : st === 'live' ? 'live' : 'one instant';
+        if (stateEl._s !== st) { stateEl.className = 'dp__state is-' + st; stateEl.textContent = txt; stateEl._s = st; }
+    }
+    function paint(force) {
+        paintState();
         if (!isOpen) return;
-        var playing = spec.playing ? safe(spec.playing, false) : true;
-        live.classList.toggle('is-live', playing);
-        live.textContent = playing ? 'live' : 'paused';
-        if (view === 'vars') { paintVars(); }
-        else if (view === 'array' && grid) { safe(grid.paint); paintArrStats(); }
-        else if (view === 'check') paintCheck(false);
+        if (view === 'vars') { if (force || liveOn) { paintVars(liveOn && !force); paintInstant(); } }
+        else if (view === 'array') { if (liveOn) snap = takeSnap(current); if (force || liveOn) paintArray(); }
     }
 
-    /* runs after the simulation's own frame callback, so every number is read from the same instant */
-    var lastTs = 0, born = 0;
-    function frame(ts) {
-        var dt = lastTs ? (ts - lastTs) / 1000 : 0;
-        if (!born) born = ts;
-        lastTs = ts;
-        stats0.wall = (ts - born) / 1000;
-        if (dt > 0) {
-            stats0.frames++;
-            stats0.dt = dt;
-            stats0.fps = stats0.fps ? stats0.fps + (1 / dt - stats0.fps) * 0.1 : 1 / dt;
-            if (safe(spec.playing, true)) stats0.play += Math.min(dt, 0.05);
-        }
-        safe(sample);
-        safe(paintProbe);
-        paint();
-        requestAnimationFrame(frame);
+    /* ---------- the loop: it runs only while something needs it, and after the simulation's own frame ---------- */
+    var running = false;
+    function wanted() { return !!rec || probe.active || performance.now() < probe.cellUntil || (isOpen && liveOn) || probe.marked; }
+    function kick() { if (!running && wanted()) { running = true; requestAnimationFrame(frame); } }
+    function frame() {
+        if (rec) safe(recordFrame);
+        if (overlay && (probe.active || probe.marked || performance.now() < probe.cellUntil)) safe(paintProbe);
+        if (isOpen && liveOn) paint(false); else paintState();
+        if (wanted()) requestAnimationFrame(frame);
+        else { running = false; safe(clearOverlay); }
     }
+    document.addEventListener('visibilitychange', function () { if (!document.hidden) kick(); });
 
     var saved = load('open');
+    liveOn = load('live') === '1';
+    liveBox.checked = liveOn;
     setOpen(saved === null ? window.innerWidth >= 1500 : saved === '1', false);
-    show(load('tab') === 'log' && L ? 'log' : 'vars');
-    requestAnimationFrame(frame);
+    show(load('tab') === 'rounds' ? 'rounds' : 'vars');
+    describeRound();
+    /* the first instant is caught after the simulation has drawn twice, so it is a real frame, not the empty start */
+    requestAnimationFrame(function () { requestAnimationFrame(function () { if (isOpen && !liveOn) catchNow('when the page opened'); }); });
+    /* the length of a round can depend on any control: refresh its description after any input, never on a timer */
+    var pend = false;
+    function soon() { if (pend) return; pend = true; requestAnimationFrame(function () { pend = false; describeRound(); }); }
+    document.addEventListener('input', soon, true);
+    document.addEventListener('click', soon, true);
+    window.__dataPanel = { running: function () { return running; }, rounds: function () { return rounds; }, recording: function () { return !!rec; } };
 })();
