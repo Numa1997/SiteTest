@@ -737,7 +737,7 @@
     function describeRound() {
         if (rec) return;
         var lab = safe(R.label, '') || 'ten seconds of play';
-        var txt = 'One round here is <b>' + lab + '</b>. Every frame of it is caught' + (spec.inspect ? ', with the point you last ' + (TOUCH ? 'held' : 'pointed at') : '') + '; then the recording stops by itself.';
+        var txt = 'One round = <b>' + lab + '</b>.<span class="dp-more-txt"> Every frame of it is caught' + (spec.inspect ? ', with the point you last ' + (TOUCH ? 'held' : 'pointed at') : '') + '; then the recording stops by itself.</span>';
         if (txt !== recWhat._h) { recWhat.innerHTML = txt; recWhat._h = txt; }
     }
     function scalarNames() { return ds.order.filter(isNumScalar); }
@@ -760,7 +760,7 @@
         recBox.classList.add('is-rec');
         recLab.textContent = 'Stop';
         recProg.hidden = false;
-        recWhat.innerHTML = 'Recording <b>round ' + rec.no + '</b>: ' + esc(rec.label) + (rec.pointTitle ? ', following ' + rec.pointTitle : '') + '.';
+        recWhat.innerHTML = 'Recording <b>round ' + rec.no + '</b>: ' + esc(rec.label) + (rec.pointTitle ? '<span class="dp-more-txt">, following ' + rec.pointTitle + '</span>' : '') + '.';
         recWhat._h = null;
         progress(0, 0);
         kick();
@@ -827,6 +827,7 @@
         catchNow('at the end of round ' + r.no);
         if (!isOpen) setOpen(true, false);
         show('rounds');
+        panes.rounds.scrollTop = 0;
     }
     recBtn.addEventListener('click', startRound);
 
@@ -836,8 +837,8 @@
         return lo <= hi ? [lo, hi] : [NaN, NaN];
     }
     function drawChart(cv, s, x, cursor) {
-        var P = palette(), dpr = Math.min(window.devicePixelRatio || 1, 2), W = cv.clientWidth || 300, H = 64;
-        if (cv.width !== Math.round(W * dpr)) { cv.width = Math.round(W * dpr); cv.height = Math.round(H * dpr); }
+        var P = palette(), dpr = Math.min(window.devicePixelRatio || 1, 2), W = cv.clientWidth || 300, H = cv.clientHeight || 64;
+        if (cv.width !== Math.round(W * dpr) || cv.height !== Math.round(H * dpr)) { cv.width = Math.round(W * dpr); cv.height = Math.round(H * dpr); }
         var c = cv.getContext('2d');
         c.setTransform(dpr, 0, 0, dpr, 0, 0);
         c.clearRect(0, 0, W, H);
@@ -877,20 +878,26 @@
         var r = rounds[sel], x = r.elapsed;
         var chips = rounds.map(function (q, k) { return '<button type="button" class="dp-chip' + (k === sel ? ' is-on' : '') + '" data-round="' + k + '">Round ' + q.no + '</button>'; }).join('');
         var params = r.params.map(function (p) { return '<span><i>' + sym(p[0]) + '</i> ' + esc(num(p[1], digitsOf(p[0]))) + (unitOf(p[0]) ? ' ' + unitOf(p[0]) : '') + '</span>'; }).join('');
-        var h = '<div class="dp-rd"><div class="dp-rd__chips">' + chips + '</div>' +
-            '<header class="dp-rd__hd"><h3>Round ' + r.no + '<span class="dp__dot">.</span></h3>' +
+        var h = '<div class="dp-rd">' + (rounds.length > 1 ? '<div class="dp-rd__chips">' + chips + '</div>' : '') +
+            '<header class="dp-rd__hd"><div class="dp-rd__top"><h3>Round ' + r.no + '<span class="dp__dot">.</span></h3>' +
+            '<div class="dp-rd__tools"><button type="button" class="dp-btn dp-btn--solid" data-round-save>' + SAVE + ' Save<span class="dp-more-txt"> this round</span></button>' +
+            '<button type="button" class="dp-btn" data-round-csv>CSV</button></div></div>' +
             '<p class="dp-rd__sum">' + esc(r.label) + ' · ' + r.n + ' samples from ' + r.frames + ' frames · caught at ' + esc(r.at) + (r.why ? ' · ' + esc(r.why) : '') + '</p>' +
-            (params ? '<p class="dp-rd__par">' + params + '</p>' : '') +
-            '<div class="dp-rd__tools"><button type="button" class="dp-btn dp-btn--solid" data-round-save>' + SAVE + ' Save this round</button>' +
-            '<button type="button" class="dp-btn" data-round-csv>CSV</button></div></header>' +
+            (params ? '<p class="dp-rd__par">' + params + '</p>' : '') + '</header>' +
             '<p class="dp-rd__read" aria-live="polite"></p><div class="dp-rd__charts">';
+        /* a quantity that does not change during the round, or is not defined in it, gets one line, not a flat chart */
+        var still = [], undef = [];
         r.series.forEach(function (s, k) {
             if (s.time) return;
             var rg = seriesRange(s);
+            if (!(rg[0] === rg[0])) { undef.push(s); return; }
+            if (rg[1] - rg[0] <= 1e-12 * Math.max(1, Math.abs(rg[1]))) { still.push([s, rg[0]]); return; }
             h += '<figure class="dp-ch' + (s.point ? ' dp-ch--pt' : '') + '"><figcaption><span class="dp-sym">' + s.label + '</span>' + (s.units ? '<span class="dp-u">' + s.units + '</span>' : '') +
                 (s.point ? '<em>at the point</em>' : '') + '<b>' + esc(num(rg[0], s.digits)) + ' … ' + esc(num(rg[1], s.digits)) + '</b></figcaption><canvas data-series="' + k + '"></canvas></figure>';
         });
-        h += '</div>' + (r.pointTitle ? '<p class="dp-rd__note">Black lines follow ' + r.pointTitle + ', the point held when the round began.</p>' : '') +
+        h += '</div>' + (still.length ? '<p class="dp-rd__still"><b>Constant during the round</b>' + still.map(function (q) { return '<span><i>' + q[0].label + '</i> ' + esc(num(q[1], q[0].digits)) + (q[0].units ? ' ' + q[0].units : '') + (q[0].point ? ' <em>at the point</em>' : '') + '</span>'; }).join('') + '</p>' : '') +
+            (undef.length ? '<p class="dp-rd__still"><b>Not defined during the round</b>' + undef.map(function (q) { return '<span><i>' + q.label + '</i></span>'; }).join('') + '</p>' : '') +
+            (r.pointTitle ? '<p class="dp-rd__note">Black lines follow ' + r.pointTitle + ', the point held when the round began.</p>' : '') +
             '<details class="dp-rd__tbl"><summary>Every sample · ' + r.n + ' rows × ' + r.series.length + ' columns</summary><div class="dp-rd__wrap"><table><thead><tr><th>#</th>' +
             r.series.map(function (s) { return '<th><span class="dp-sym">' + s.label + '</span>' + (s.units ? '<small>' + s.units + '</small>' : '') + '</th>'; }).join('') + '</tr></thead><tbody>';
         for (var i = 0; i < r.n; i++) h += '<tr><th>' + (i + 1) + '</th>' + r.series.map(function (s) { return '<td>' + esc(num(s.data[i], s.digits)) + '</td>'; }).join('') + '</tr>';
@@ -899,7 +906,7 @@
         var canv = Array.prototype.slice.call(host.querySelectorAll('canvas[data-series]'));
         var readEl = host.querySelector('.dp-rd__read');
         function readout(i) {
-            var head = i === null ? (TOUCH ? 'Touch a chart to read every quantity at one sample.' : 'Point at a chart to read every quantity at one sample.') : '<b>Sample ' + (i + 1) + ' of ' + r.n + '</b> · ' + esc(timeSym()) + ' = ' + esc(num(r.series[0].data[i], r.series[0].digits)) + (timeUnit() ? ' ' + timeUnit() : '') + ' · ' + esc(num(x[i], 3)) + (timeUnit() ? ' ' + esc(timeUnit()) : '') + ' into the round';
+            var head = i === null ? (TOUCH ? 'Touch a chart to read one sample.' : 'Point at a chart to read every quantity at one sample.') : '<b>Sample ' + (i + 1) + ' of ' + r.n + '</b> · ' + esc(timeSym()) + ' = ' + esc(num(r.series[0].data[i], r.series[0].digits)) + (timeUnit() ? ' ' + timeUnit() : '') + ' · ' + esc(num(x[i], 3)) + (timeUnit() ? ' ' + esc(timeUnit()) : '') + ' into the round';
             readEl.innerHTML = head;
         }
         function drawAll(cur) { canv.forEach(function (cv) { drawChart(cv, r.series[+cv.getAttribute('data-series')], x, cur); }); }
