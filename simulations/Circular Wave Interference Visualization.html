@@ -9,6 +9,7 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link rel="stylesheet" href="../styles/sim.css">
+    <link rel="stylesheet" href="../styles/data.css">
     <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='12' fill='%237a1f2b'/%3E%3Ctext x='32' y='45' text-anchor='middle' font-family='Georgia,serif' font-size='38' fill='%23f5f1ea'%3EN%3C/text%3E%3C/svg%3E">
     <style>
         #field { cursor: crosshair; }
@@ -217,6 +218,7 @@
         var img, cols, rows, worldH, sumC, sumS;
         var sources = DEFAULT.slice();
         var omegaT = 0, dirty = true, redraw = true;
+        var simT = 0, lastDt = 0, frames = 0, fps = 0, fieldVersion = 0, renders = 0, prepMs = 0, drawMs = 0;
 
         /* colour map: trough (ink) → rest (card) → crest (burgundy) */
         var LUT = new Uint8ClampedArray(256 * 3);
@@ -267,6 +269,7 @@
                     }
                 }
             }
+            fieldVersion++;
             dirty = false;
         }
 
@@ -361,20 +364,157 @@
             return out;
         };
 
-        var clk = Sim.clock(function (dt) {
-            if (dirty) { precompute(); redraw = true; }
+        var clk = Sim.clock(function (dt, t) {
+            simT = t;
+            if (dt > 0) { frames++; lastDt = dt; fps = fps ? fps + (1 / dt - fps) * 0.1 : 1 / dt; }
+            if (dirty) { var t0 = performance.now(); precompute(); prepMs = performance.now() - t0; redraw = true; }
             if (dt > 0 || redraw) {
                 omegaT += 2 * Math.PI * freq.value * dt;
+                var t1 = performance.now();
                 render();
+                drawMs = performance.now() - t1;
+                renders++;
                 redraw = false;
             }
         });
         Sim.playButton(document.getElementById('play'), clk);
+
+        /* ---------- every number above, as data for the side panel (scripts/datalog.js) ---------- */
+        var cNow = 1, sNow = 0;
+        function phase() { cNow = Math.cos(omegaT); sNow = Math.sin(omegaT); }
+        function psiAt(p) { var v = sumC[p] * cNow + sumS[p] * sNow; return v > 1 ? 1 : v < -1 ? -1 : v; }
+        function colourOf(v) {
+            var n = Math.round(Math.max(-1, Math.min(1, v)) * 127.5 + 127.5) * 3;
+            return [LUT[n], LUT[n + 1], LUT[n + 2]];
+        }
+        function xAt(i) { return (i + 0.5) * WORLD_W / cols; }
+        function yAt(j) { return (j + 0.5) * worldH / rows; }
+        /* the grid point that Sim.live and the walkthrough read: the centre of the field */
+        function centre() {
+            var i = Math.floor(cols / 2), j = Math.floor(rows / 2), o = { i: i, j: j, p: j * cols + i, x: xAt(i), y: yAt(j) };
+            if (sources.length) {
+                var dx = o.x - sources[0] * WORLD_W, dy = o.y - (worldH - SOURCE_LIFT);
+                o.r = Math.sqrt(dx * dx + dy * dy);
+                o.a = Math.exp(-damp.value / R * o.r) / sources.length;
+                o.ph = 2 * Math.PI / lambda.value * o.r;
+            }
+            return o;
+        }
+        function at(j, i) { return 'x = ' + Sim.fmt(xAt(i), 1) + ' px, y = ' + Sim.fmt(yAt(j), 1) + ' px from the top left of the field'; }
+        function fieldMap(name, code, meaning, get, extra) {
+            var m = {
+                name: name, kind: 'matrix', code: code, type: 'Array of float32', meaning: meaning, digits: 4,
+                updates: 'when a slider or the sources change',
+                rows: function () { return rows; }, cols: function () { return cols; },
+                get: get, version: function () { return fieldVersion; }, colour: colourOf, at: at
+            };
+            for (var key in extra) m[key] = extra[key];
+            return m;
+        }
+
+        Sim.data = {
+            kicker: 'Fig. 1 · data',
+            title: 'Wave interference',
+            subtitle: 'Every number this simulation is computing, read live from its own variables.',
+            foot: 'Repainted every frame while open. Arrays open as tables, coloured like the figure; only the cells in view are drawn.',
+            playing: function () { return clk.playing; },
+            groups: [
+                { title: 'Physical parameters', note: 'what you set with the sliders, buttons and clicks', vars: [
+                    { name: 'λ', code: 'lambda.value', type: 'float', unit: 'px', meaning: 'wavelength', digits: 0, get: function () { return lambda.value; } },
+                    { name: 'f', code: 'freq.value', type: 'float', unit: 'Hz', meaning: 'frequency of every source', digits: 2, get: function () { return freq.value; } },
+                    { name: 'γ', code: 'damp.value', type: 'float', meaning: 'damping: e-foldings of amplitude over R = 300 px', digits: 2, get: function () { return damp.value; } },
+                    { name: 'N', code: 'sources.length', type: 'int', meaning: 'number of sources, at most 24', digits: 0, get: function () { return sources.length; } },
+                    { name: 'u<sub>s</sub>', kind: 'vector', code: 'sources', type: 'list of float', meaning: 'source positions as fractions of the width', updates: 'when you add, clear or reset sources',
+                        length: function () { return sources.length; },
+                        columns: [
+                            { name: 'u', digits: 4, get: function (s) { return sources[s]; } },
+                            { name: 'x', unit: 'px', digits: 1, get: function (s) { return sources[s] * WORLD_W; } },
+                            { name: 'y', unit: 'px', digits: 1, get: function () { return worldH - SOURCE_LIFT; } }
+                        ] }
+                ] },
+                { title: 'Derived physics', note: 'computed from the parameters', vars: [
+                    { name: 'k = 2π/λ', code: 'k', type: 'float', unit: 'rad/px', meaning: 'wave number', digits: 4, get: function () { return 2 * Math.PI / lambda.value; } },
+                    { name: 'ω = 2πf', code: '2 * Math.PI * freq.value', type: 'float', unit: 'rad/s', meaning: 'angular frequency', digits: 3, get: function () { return 2 * Math.PI * freq.value; } },
+                    { name: 'T = 1/f', type: 'float', unit: 's', meaning: 'period', digits: 3, get: function () { return 1 / freq.value; } },
+                    { name: 'v = fλ', code: 'freq.value * lambda.value', type: 'float', unit: 'px/s', meaning: 'phase speed', digits: 1, get: function () { return freq.value * lambda.value; } },
+                    { name: 'γ/R', code: 'g', type: 'float', unit: '1/px', meaning: 'attenuation per pixel', digits: 5, get: function () { return damp.value / R; } },
+                    { name: '1/N', code: 'norm', type: 'float', meaning: 'normalisation that keeps |ψ| ≤ 1', digits: 4, get: function () { return 1 / Math.max(1, sources.length); } }
+                ] },
+                { title: 'Time', note: 'advances only while it plays', vars: [
+                    { name: 't', code: 'Sim.clock t', type: 'float', unit: 's', meaning: 'play time since the page opened', digits: 2, get: function () { return simT; } },
+                    { name: 'ωt', code: 'omegaT', type: 'float', unit: 'rad', meaning: 'phase shared by all sources', digits: 3, get: function () { return omegaT; } },
+                    { name: 'ωt / 2π', type: 'float', meaning: 'periods completed', digits: 2, get: function () { return omegaT / (2 * Math.PI); } },
+                    { name: 'cos ωt', code: 'c', type: 'float', digits: 4, get: function () { return Math.cos(omegaT); } },
+                    { name: 'sin ωt', code: 's', type: 'float', digits: 4, get: function () { return Math.sin(omegaT); } }
+                ] },
+                { title: 'Probe at the centre of the field', note: 'one grid point, followed live', vars: [
+                    { name: '(j, i)', code: 'rows / 2, cols / 2', type: 'int', size: '2', meaning: 'row and column of the point', get: function () { var o = centre(); return o.j + ', ' + o.i; } },
+                    { name: '(x, y)', type: 'float', size: '2', unit: 'px', meaning: 'its position in the 800 px wide field', get: function () { var o = centre(); return Sim.fmt(o.x, 1) + ', ' + Sim.fmt(o.y, 1); } },
+                    { name: 'r<sub>1</sub>', code: 'r', type: 'float', unit: 'px', meaning: 'distance to source 1', digits: 2, get: function () { return centre().r; } },
+                    { name: 'a<sub>1</sub>', code: 'a', type: 'float', meaning: 'amplitude from source 1, e<sup>−γr/R</sup>/N', digits: 4, get: function () { return centre().a; } },
+                    { name: 'φ<sub>1</sub> = kr<sub>1</sub>', code: 'ph', type: 'float', unit: 'rad', meaning: 'phase lag from source 1', digits: 3, get: function () { return centre().ph; } },
+                    { name: 'C', code: 'sumC[p]', type: 'float32', meaning: 'Σ a cos kr over all sources', digits: 4, get: function () { return sumC[centre().p]; } },
+                    { name: 'S', code: 'sumS[p]', type: 'float32', meaning: 'Σ a sin kr over all sources', digits: 4, get: function () { return sumS[centre().p]; } },
+                    { name: 'ψ', code: 'v', type: 'float', meaning: 'field now: C cos ωt + S sin ωt', digits: 4, get: function () { phase(); return psiAt(centre().p); } },
+                    { name: 'n', code: 'idx / 3', type: 'int', meaning: 'colour-table row, round(127.5 ψ + 127.5)', digits: 0, get: function () { phase(); return Math.round(psiAt(centre().p) * 127.5 + 127.5); } },
+                    { name: 'colour', code: 'LUT[n]', type: 'uint8', kind: 'colour', meaning: 'the pixel colour drawn there', get: function () { phase(); return colourOf(psiAt(centre().p)); } }
+                ] },
+                { title: 'Arrays: the whole field', note: 'click a row to open it as a table', vars: [
+                    fieldMap('C', 'sumC', 'cosine map, Σ<sub>s</sub> a<sub>s</sub> cos kr<sub>s</sub>', function (j, i) { return sumC[j * cols + i]; }),
+                    fieldMap('S', 'sumS', 'sine map, Σ<sub>s</sub> a<sub>s</sub> sin kr<sub>s</sub>', function (j, i) { return sumS[j * cols + i]; }),
+                    fieldMap('ψ', 'sumC[p] * c + sumS[p] * s', 'the field at this instant, as drawn', function (j, i) { return psiAt(j * cols + i); },
+                        { type: 'Array of float64', updates: 'every frame', prepare: phase, version: function () { return renders; } }),
+                    fieldMap('A', 'sqrt(sumC² + sumS²)', 'amplitude: the largest |ψ| each point reaches in one period; zero on the calm lines', function (j, i) {
+                        var p = j * cols + i;
+                        return Math.sqrt(sumC[p] * sumC[p] + sumS[p] * sumS[p]);
+                    }, { type: 'Array of float64' }),
+                    { name: 'LUT', kind: 'matrix', code: 'LUT', type: 'Array of uint8', meaning: 'colour table: row n is the colour for ψ = n/127.5 − 1', updates: 'never; built once at start-up',
+                        digits: 0, cw: 58, rows: function () { return 256; }, cols: function () { return 3; },
+                        get: function (j, i) { return LUT[j * 3 + i]; }, version: function () { return 1; },
+                        colLabel: function (i) { return ['R', 'G', 'B'][i]; },
+                        colour: function (v, j) { return [LUT[j * 3], LUT[j * 3 + 1], LUT[j * 3 + 2]]; },
+                        at: function (j) { return 'for ψ = ' + Sim.fmt(j / 127.5 - 1, 4); } }
+                ] },
+                { title: 'Animation and numerics', note: 'how the picture is computed and drawn', vars: [
+                    { name: 'grid', code: 'cols × rows', type: 'int', size: '2', meaning: 'field samples across and down', get: function () { return cols + ' × ' + rows; } },
+                    { name: 'P', code: 'cols * rows', type: 'int', meaning: 'grid points in each array', digits: 0, get: function () { return cols * rows; } },
+                    { name: 'Δx', code: 'dx', type: 'float', unit: 'px', meaning: 'field pixels per grid cell, across', digits: 3, get: function () { return WORLD_W / cols; } },
+                    { name: 'Δy', code: 'dy', type: 'float', unit: 'px', meaning: 'field pixels per grid cell, down', digits: 3, get: function () { return worldH / rows; } },
+                    { name: 'field size', code: 'WORLD_W × worldH', type: 'float', size: '2', unit: 'px', get: function () { return WORLD_W + ' × ' + Sim.fmt(worldH, 1); } },
+                    { name: 'canvas', code: 'box.w × box.h', type: 'int', size: '2', unit: 'css px', meaning: 'size on your screen', get: function () { return box.w + ' × ' + box.h; } },
+                    { name: 'dpr', code: 'box.dpr', type: 'float', meaning: 'device pixels per css pixel', digits: 2, get: function () { return box.dpr; } },
+                    { name: 'Δt', code: 'dt', type: 'float', unit: 's', meaning: 'time between the last two frames', digits: 4, get: function () { return lastDt; } },
+                    { name: 'frame rate', code: '1 / dt', type: 'float', unit: 'Hz', meaning: 'smoothed over about ten frames', digits: 1, get: function () { return fps; } },
+                    { name: 'frames', type: 'int', meaning: 'frames played so far', digits: 0, get: function () { return frames; } },
+                    { name: 'playing', code: 'clk.playing', type: 'bool', get: function () { return clk.playing; } },
+                    { name: 'builds', code: 'precompute()', type: 'int', meaning: 'times C and S were recomputed', digits: 0, get: function () { return fieldVersion; } },
+                    { name: 'build time', code: 'precompute()', type: 'float', unit: 'ms', meaning: 'last recomputation of C and S', digits: 2, get: function () { return prepMs; } },
+                    { name: 'cos + sin calls', code: '2 · N · P', type: 'int', meaning: 'in one recomputation of C and S', digits: 0, get: function () { return 2 * sources.length * cols * rows; } },
+                    { name: 'draw time', code: 'render()', type: 'float', unit: 'ms', meaning: 'last frame, all pixels', digits: 2, get: function () { return drawMs; } }
+                ] }
+            ],
+            log: {
+                every: 0.1, max: 1000,
+                time: function () { return simT; },
+                columns: [
+                    { name: 't', unit: 's', digits: 2, get: function () { return simT; } },
+                    { name: 'ωt', unit: 'rad', digits: 3, get: function () { return omegaT; } },
+                    { name: 'cos ωt', digits: 4, get: function () { return Math.cos(omegaT); } },
+                    { name: 'sin ωt', digits: 4, get: function () { return Math.sin(omegaT); } },
+                    { name: 'ψ centre', digits: 4, get: function () { phase(); return psiAt(centre().p); } },
+                    { name: 'λ', unit: 'px', digits: 0, get: function () { return lambda.value; } },
+                    { name: 'f', unit: 'Hz', digits: 2, get: function () { return freq.value; } },
+                    { name: 'γ', digits: 2, get: function () { return damp.value; } },
+                    { name: 'N', digits: 0, get: function () { return sources.length; } }
+                ]
+            }
+        };
 
         resize();
         readouts();
         Sim.onResize(stage, function () { resize(); redraw = true; });
     })();
     </script>
+    <script src="../scripts/datalog.js"></script>
 </body>
 </html>

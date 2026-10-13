@@ -12,5 +12,9 @@ Layout (GitHub Pages serves the repository root as-is, so every asset lives at t
 `scripts/walk/<key>.js` ("From symbols to code", one file per page, chosen by the page's `data-walk` key:
 each equation paired with the page's own code lines; keep the excerpts identical to the page code when either
 changes; live values come from `Sim.live()` in each page); `simulations/*.html` (eight pages).
+Data panel: `scripts/datalog.js` + `styles/data.css` give a page a Spyder-style side panel (Variables: name, type, size, value of every
+quantity, live; any array opens as a table that draws only the cells in view; Log: one row per 0.1 s of play time, capped).
+A page opts in by defining `Sim.data` next to its own state and loading both files (Fig. 1 so far).
+How Numa expects Claude to work (persistence, plain language, build when clear) is in CLAUDE.md.
 AppDeploy reformats stored source with Prettier; base any diff on the stored snapshot (`src_read`).
 Static site only: no backend, database, login, AI or scheduled jobs.
