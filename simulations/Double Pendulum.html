@@ -559,10 +559,14 @@
         var QN = ['θ₁', 'θ₂', 'ω₁', 'ω₂'], QU = ['rad', 'rad', 'rad/s', 'rad/s'];
         function sliderCheck(input, label, scale) { return { formula: 'read from the ' + label + ' slider now' + (scale ? ', times π/180' : ''), inputs: [['slider', input.value, '']], value: parseFloat(input.value) * (scale || 1) }; }
         function bobPixel(name, x, y) {
-            var px = ctx.getImageData(Math.round(x * box.dpr), Math.round(y * box.dpr), 1, 1).data;
-            var ok = Math.abs(px[0] - 122) < 40 && Math.abs(px[1] - 31) < 40 && Math.abs(px[2] - 43) < 40;
-            return { what: 'screen pixel at ' + name + ', (' + Sim.fmt(x, 1) + ', ' + Sim.fmt(y, 1) + ') css px', drawn: 'rgb(' + px[0] + ', ' + px[1] + ', ' + px[2] + ')', expected: 'the burgundy bob, rgb(122, 31, 43)', ok: ok,
-                note: 'The bob is a filled disc of radius 8 px, so the pixel at its stored centre is its fill colour.' };
+            var px = ctx.getImageData(Math.floor(x * box.dpr), Math.floor(y * box.dpr), 1, 1).data, near = function (r, g, b) { return px[3] > 0 && Math.abs(px[0] - r) < 40 && Math.abs(px[1] - g) < 40 && Math.abs(px[2] - b) < 40; };
+            var r2 = Math.max(4, Math.min(17, 8 * Math.cbrt(m2 / m1))), dPivot = Math.hypot(x - ds.get('ox'), y - ds.get('oy'));
+            var dBob2 = name.indexOf('bob 1') === 0 ? Math.hypot(x - ds.get('x2_px'), y - ds.get('y2_px')) : Infinity;
+            var burgundy = near(122, 31, 43), pivot = dPivot < 4.5 && near(90, 80, 75), rim = dBob2 < r2 + 2 && (burgundy || near(255, 250, 243));
+            var expected = 'the burgundy bob, rgb(122, 31, 43)', note = 'The bob is a filled disc, radius 8 px for bob 1 and ' + Sim.fmt(r2, 1) + ' px for bob 2, so the pixel at its stored centre is its fill colour.';
+            if (dPivot < 4.5) { expected += ', or the pivot dot rgb(90, 80, 75) painted over it'; note = 'The bob centre is ' + Sim.fmt(dPivot, 1) + ' px from the pivot; the pivot dot (radius 3.5 px) is painted last, over the bobs.'; }
+            else if (dBob2 < r2 + 2) { expected += ', or bob 2 and its cream rim painted over it'; note = 'Bob 1 lies under bob 2 here (' + Sim.fmt(dBob2, 1) + ' px apart); bob 2 is painted after bob 1, with a 2 px cream rim.'; }
+            return { what: 'screen pixel at ' + name + ', (' + Sim.fmt(x, 1) + ', ' + Sim.fmt(y, 1) + ') css px', drawn: px[3] === 0 ? 'nothing (transparent)' : 'rgb(' + px[0] + ', ' + px[1] + ', ' + px[2] + ')', expected: expected, ok: burgundy || pivot || rim, note: note };
         }
         function alphaCheck(which) {
             var t1 = ds.get('th1'), t2 = ds.get('th2'), o1 = ds.get('w1'), o2 = ds.get('w2'), m = ds.get('m2'), l = ds.get('l2'), d = t1 - t2;
