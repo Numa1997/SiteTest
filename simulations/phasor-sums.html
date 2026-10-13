@@ -9,6 +9,7 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link rel="stylesheet" href="../styles/sim.css">
+    <link rel="stylesheet" href="../styles/data.css">
     <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='12' fill='%237a1f2b'/%3E%3Ctext x='32' y='45' text-anchor='middle' font-family='Georgia,serif' font-size='38' fill='%23f5f1ea'%3EN%3C/text%3E%3C/svg%3E">
     <style>
         .plist { display: grid; grid-template-columns: repeat(auto-fill, minmax(230px, 1fr)); gap: 10px; }
@@ -904,11 +905,133 @@
         });
         Sim.playButton($('play'), clk);
 
+        /* ---------- every number above, as data for the side panel (scripts/datalog.js) ---------- */
+        function liveList() { return live.length === phasors.length ? live : phasors; }
+        function zNow() { return sumAt(t, liveList()); }
+        function joints() {
+            var x = 0, yy = 0;
+            return zNow().parts.map(function (p) { x += p.vx; yy += p.vy; return { x: x, y: yy, vx: p.vx, vy: p.vy }; });
+        }
+        function pcol(name, unit, digits, fn) {
+            return { name: name, unit: unit, digits: digits, get: function (j) { return phasors[j] ? fn(phasors[j], j) : undefined; } };
+        }
+        function xyVector(name, code, meaning, list, updates, extra) {
+            var cols = [
+                { name: 'Re', digits: 4, get: function (j) { var p = list()[j]; return p && p.x; } },
+                { name: 'Im', digits: 4, get: function (j) { var p = list()[j]; return p && p.y; } }
+            ];
+            return { name: name, kind: 'vector', code: code, type: 'list of point', meaning: meaning, updates: updates,
+                length: function () { return list().length; }, columns: extra ? cols.concat(extra) : cols };
+        }
+        function audioOn() { return !!(audio.el && audio.el.src); }
+        function sumSquares() { return phasors.reduce(function (s, p) { return s + p.amp * p.amp; }, 0); }
+
+        Sim.data = {
+            kicker: 'Fig. 7 · data',
+            title: 'Phasor sums',
+            subtitle: 'Every number this simulation is computing, read live from its own variables.',
+            foot: 'Repainted every frame while open. The circle table works like a data frame; trails and paths open as tables of points.',
+            playing: function () { return clk.playing; },
+            groups: [
+                { title: 'Circles', note: 'z(t) = Σ A<sub>k</sub> e<sup>i(ω<sub>k</sub>t + φ<sub>k</sub>)</sup>', vars: [
+                    { name: 'N', code: 'phasors.length', type: 'int', meaning: 'circles in the sum', digits: 0, get: function () { return phasors.length; } },
+                    { name: 'phasors', kind: 'vector', code: 'phasors', type: 'list of dict', meaning: 'your settings per circle, and the radius actually drawn while dancing', updates: 'when you edit a circle', cw: 90,
+                        length: function () { return phasors.length; }, rowLabel: function (j) { return 'circle ' + (j + 1); },
+                        columns: [
+                            pcol('A', '', 3, function (p) { return p.amp; }),
+                            pcol('ω', 'rad/s', 2, function (p) { return p.freq; }),
+                            pcol('φ', 'rad', 3, function (p) { return p.phase; }),
+                            pcol('curve', '', 0, function (p) { return p.curve; }),
+                            pcol('A′', '', 3, function (p, j) { return live[j] ? live[j].amp : undefined; }),
+                            pcol('×', '', 3, function (p, j) { return live[j] ? live[j].mul : undefined; })
+                        ] },
+                    { name: 'mode', code: 'mode', type: 'str', meaning: 'live construction or final shape', get: function () { return mode; } },
+                    { name: 'speed', code: 'speed.value', type: 'float', unit: '×', digits: 2, get: function () { return speed.value; } },
+                    { name: 'zoom', code: 'zoom.value', type: 'float', unit: '×', digits: 2, get: function () { return zoom.value; } },
+                    { name: 'trail length', code: 'trailS.value', type: 'int', meaning: 'most points kept in the trail', digits: 0, get: function () { return trailS.value; } }
+                ] },
+                { title: 'The sum now', note: 'the tip of the chain', vars: [
+                    { name: 't', code: 't', type: 'float', unit: 's', meaning: 'phasor time; restarts when you edit', digits: 3, get: function () { return t; } },
+                    { name: 'Re z', code: 'z.x', type: 'float', digits: 4, get: function () { return zNow().x; } },
+                    { name: 'Im z', code: 'z.y', type: 'float', digits: 4, get: function () { return zNow().y; } },
+                    { name: '|z|', type: 'float', digits: 4, get: function () { var z = zNow(); return Math.hypot(z.x, z.y); } },
+                    { name: 'arg z', type: 'float', unit: 'rad', digits: 4, get: function () { var z = zNow(); return Math.atan2(z.y, z.x); } },
+                    { name: '|z|²', type: 'float', meaning: 'swings around its mean', digits: 4, get: function () { var z = zNow(); return z.x * z.x + z.y * z.y; } },
+                    { name: '⟨|z|²⟩ = Σ A²', type: 'float', meaning: 'its average over time, Parseval', digits: 4, get: sumSquares },
+                    { name: 'joints', kind: 'vector', code: 'sumAt(t, live).parts', type: 'list of point', meaning: 'tip-to-tail chain: where each arrow ends, and the arrow itself', updates: 'every frame', cw: 92,
+                        length: function () { return liveList().length; }, rowLabel: function (j) { return 'circle ' + (j + 1); },
+                        columns: [
+                            { name: 'x', digits: 4, get: function (j) { var q = joints()[j]; return q && q.x; } },
+                            { name: 'y', digits: 4, get: function (j) { var q = joints()[j]; return q && q.y; } },
+                            { name: 'arrow x', digits: 4, get: function (j) { var q = joints()[j]; return q && q.vx; } },
+                            { name: 'arrow y', digits: 4, get: function (j) { var q = joints()[j]; return q && q.vy; } },
+                            { name: 'ωt + φ', unit: 'rad', digits: 3, get: function (j) { var p = liveList()[j]; return p && p.freq * t + p.phase; } }
+                        ] }
+                ] },
+                { title: 'Period and symmetry', note: 'from integer greatest common divisors of 100 ω', vars: [
+                    { name: 'G', code: 'structure().G', type: 'int', meaning: 'gcd of all 100 ω<sub>k</sub>', digits: 0, get: function () { return structure(phasors).G; } },
+                    { name: 'g = G/100', type: 'float', unit: 'rad/s', meaning: 'the common angular frequency', digits: 2, get: function () { return structure(phasors).g; } },
+                    { name: '2π/g', type: 'float', unit: 's', meaning: 'period of the whole figure', digits: 3, get: function () { var s = structure(phasors); return s.g > 0 ? TAU / s.g : undefined; } },
+                    { name: 'M', code: 'structure().M', type: 'int', meaning: 'gcd of the differences 100(ω<sub>k</sub> − ω<sub>1</sub>)', digits: 0, get: function () { return structure(phasors).M; } },
+                    { name: 'q', code: 'structure().q', type: 'int', meaning: 'rotational symmetry: the figure repeats every 2π/q', digits: 0, get: function () { var s = structure(phasors); return s.n > 1 ? s.q : undefined; } },
+                    { name: 'span', code: 'spanNow()', type: 'float', unit: 's', meaning: 'time drawn by the final shape', digits: 3, get: spanNow }
+                ] },
+                { title: 'Arrays: the curves', note: 'click a row to open it as a table', vars: [
+                    xyVector('trail', 'trail', 'the live trail, oldest first', function () { return trail; }, 'every frame'),
+                    xyVector('final path', 'finalPath', 'the closed figure sampled over one span', function () { return finalPath; }, 'when you edit',
+                        [{ name: 'morph Re', digits: 4, get: function (j) { var p = morphPath[j]; return p && p.x; } },
+                         { name: 'morph Im', digits: 4, get: function (j) { var p = morphPath[j]; return p && p.y; } }]),
+                    { name: 'samples', code: 'finalN', type: 'int', meaning: 'points in the final path', digits: 0, get: function () { return finalN; } },
+                    { name: 'morphing', code: 'swMorph.checked', type: 'bool', get: function () { return swMorph.checked; } },
+                    { name: 'α', code: 'morph.value', type: 'float', meaning: 'morph rate: each frame moves this fraction of the way', digits: 2, get: function () { return morph.value; } }
+                ] },
+                { title: 'Audio and dance', note: 'live only when you load a sound file', vars: [
+                    { name: 'audio loaded', type: 'bool', get: audioOn },
+                    { name: 'dance', code: 'danceOn', type: 'bool', get: function () { return danceOn; } },
+                    { name: 'bass', code: 'energy.bass', type: 'float', meaning: '20–150 Hz band level, 0 to 1', digits: 3, get: function () { return energy.bass; } },
+                    { name: 'mid', code: 'energy.mid', type: 'float', meaning: '150–4000 Hz band level', digits: 3, get: function () { return energy.mid; } },
+                    { name: 'high', code: 'energy.high', type: 'float', meaning: '4–16 kHz band level', digits: 3, get: function () { return energy.high; } },
+                    { name: 'BPM', code: 'bpm', type: 'int', meaning: 'beats per minute, median of the last eight beats', digits: 0, get: function () { return bpm || undefined; } },
+                    { name: 'burst', code: 'burst', type: 'float', meaning: 'radius multiplier after a beat', digits: 3, get: function () { return burst; } },
+                    { name: 'spectrum', kind: 'vector', code: 'audio.data', type: 'Array of uint8', meaning: 'the analyser\'s frequency bins, 0 to 255', updates: 'every frame while sound plays', cw: 86,
+                        length: function () { return audio.data ? audio.data.length : 0; },
+                        columns: [
+                            { name: 'f', unit: 'Hz', digits: 1, get: function (j) { return audio.ctx ? j * audio.ctx.sampleRate / audio.an.fftSize : undefined; } },
+                            { name: 'level', digits: 0, get: function (j) { return audio.data[j]; }, colour: function (v) { return Sim.colourMap(v, 255); } }
+                        ] },
+                    { name: 'recording', code: 'recording', type: 'bool', get: function () { return recording; } },
+                    { name: 'snapshots', code: 'tl.length', type: 'int', meaning: 'recorded performance frames', digits: 0, get: function () { return tl.length; } }
+                ] },
+                { title: 'Drawing', note: 'how the picture is laid out', vars: [
+                    { name: 'R<sub>fit</sub>', code: 'fitR', type: 'float', meaning: 'radius the view is fitted to', digits: 4, get: function () { return fitR; } },
+                    { name: 'scale', type: 'float', unit: 'px/unit', meaning: 'screen pixels per unit of z', digits: 2, get: function () { return mode === 'final' ? finalScale() : baseScale() * zoom.value; } },
+                    { name: 'Δt', code: 'lastDt', type: 'float', unit: 's', meaning: 'last frame', digits: 4, get: function () { return lastDt; } },
+                    { name: 'speed used', code: 'lastSpeed', type: 'float', unit: '×', meaning: 'speed slider times the dance factor', digits: 3, get: function () { return lastSpeed; } },
+                    { name: 'canvas', code: 'box.w × box.h', type: 'int', size: '2', unit: 'css px', get: function () { return box.w + ' × ' + box.h; } },
+                    { name: 'frame rate', type: 'float', unit: 'Hz', meaning: 'measured by the panel', digits: 1, get: function () { return Sim.frameStats.fps; } },
+                    { name: 'playing', code: 'clk.playing', type: 'bool', get: function () { return clk.playing; } }
+                ] }
+            ],
+            log: {
+                every: 0.1, max: 1000,
+                columns: [
+                    { name: 'clock', unit: 's', digits: 2, get: function () { return Sim.frameStats.play; } },
+                    { name: 't', unit: 's', digits: 3, get: function () { return t; } },
+                    { name: 'Re z', digits: 4, get: function () { return zNow().x; } },
+                    { name: 'Im z', digits: 4, get: function () { return zNow().y; } },
+                    { name: '|z|', digits: 4, get: function () { var z = zNow(); return Math.hypot(z.x, z.y); } },
+                    { name: 'N', digits: 0, get: function () { return phasors.length; } },
+                    { name: 'bass', digits: 3, get: function () { return energy.bass; } }
+                ]
+            }
+        };
+
         Sim.onResize(stage, function () { box.fit(); });
         load(PRESETS.rose3);
         buildLive();
         readouts();
     })();
     </script>
+    <script src="../scripts/datalog.js"></script>
 </body>
 </html>

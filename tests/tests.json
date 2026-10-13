@@ -82,5 +82,23 @@
       "Click the Log tab and wait two seconds"
     ],
     "expected": "The data panel shows a Variables table with Name, Type, Size and Value columns, including the wavelength λ with the value 30 px; the array C opens as a table of numbers with a shape shown as rows × columns; the Log tab lists numbered rows whose time t increases."
+  },
+  {
+    "name": "Double pendulum data panel shows the state vector and conserved energy",
+    "viewport": "desktop",
+    "covers": [
+      "Fig. 2 data panel",
+      "state vector table",
+      "mass matrix",
+      "energy drift readout"
+    ],
+    "description": "Verifies the data panel on the double pendulum page lists the integrator's state and energy and opens the state vector as a table.",
+    "steps": [
+      "Open the home page",
+      "In the simulations section, click the Launch button on the Double Pendulum Chaos card",
+      "On the opened page, if the data panel is not open, click the Data tab on the right edge of the window",
+      "In the Variables table, click the row for the state vector y"
+    ],
+    "expected": "The data panel lists a group headed Energy with rows T, V, E and ε, and the state vector y opens as a table with four rows named θ₁, θ₂, ω₁ and ω₂ and columns value, unit and d/dt."
   }
 ]

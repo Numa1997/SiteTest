@@ -9,6 +9,7 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link rel="stylesheet" href="../styles/sim.css">
+    <link rel="stylesheet" href="../styles/data.css">
     <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='12' fill='%237a1f2b'/%3E%3Ctext x='32' y='45' text-anchor='middle' font-family='Georgia,serif' font-size='38' fill='%23f5f1ea'%3EN%3C/text%3E%3C/svg%3E">
     <style>
         .svg-lbl { font-family: var(--serif); font-style: italic; font-size: 19px; fill: var(--ink); }
@@ -400,10 +401,116 @@
                 drawWaves();
             }
         });
+        /* ---------- every number above, as data for the side panel (scripts/datalog.js) ---------- */
+        var AMAX = 30 * DEG, POINT_NAMES = ['S₁', 'S₂', 'M', 'P', 'Q'];
+        function pointList() { return [geo.S1, geo.S2, { x: X0, y: Y0 }, geo.P, geo.Q]; }
+        function farI(th) { var c = Math.cos(Math.PI * geo.b * Math.sin(th) / geo.lambda); return c * c; }
+        function exactI(th) {
+            var x = geo.d * Math.tan(th), l1 = Math.hypot(x - geo.b / 2, geo.d), l2 = Math.hypot(x + geo.b / 2, geo.d);
+            var c = Math.cos(Math.PI * (2 * geo.b * x / (l1 + l2)) / geo.lambda);
+            return c * c;
+        }
+        function thetaAt(i) { return AMAX * i / 300; }
+        function orderCount() { return Math.floor(geo.b / geo.lambda) + 1; }
+        function thetaM(m) { var s = m * geo.lambda / geo.b; return s <= 1 ? Math.asin(s) : NaN; }
+        function rings() {
+            var out = [];
+            for (var r = phase * geo.lambda; r < 430; r += geo.lambda) if (r >= 1) out.push(r);
+            return out;
+        }
+        function ratio() { return geo.ds / geo.lambda; }
+        function intensity(v) { return Sim.colourMap(v, 1); }
+
+        Sim.data = {
+            kicker: 'Fig. 3 · data',
+            title: 'Double-slit interference',
+            subtitle: 'Every number this figure is computing, read live from its own variables.',
+            foot: 'Repainted every frame while open. The points, the fringe orders and the intensity curve open as tables.',
+            playing: function () { return clk.playing; },
+            groups: [
+                { title: 'Physical parameters', note: 'what you set with the sliders', vars: [
+                    { name: 'd', code: 'dS.value', type: 'float', unit: 'px', meaning: 'distance from the barrier to the observation line', digits: 0, get: function () { return geo.d; } },
+                    { name: 'α', code: 'aS.value', type: 'float', unit: '°', meaning: 'direction of the point P from the slit midpoint', digits: 1, get: function () { return geo.a / DEG; } },
+                    { name: 'b', code: 'bS.value', type: 'float', unit: 'px', meaning: 'distance between the slits', digits: 0, get: function () { return geo.b; } },
+                    { name: 'λ', code: 'lS.value', type: 'float', unit: 'px', meaning: 'wavelength', digits: 1, get: function () { return geo.lambda; } }
+                ] },
+                { title: 'Geometry', note: 'points in figure coordinates: x to the right, y downwards', vars: [
+                    { name: 'points', kind: 'vector', code: 'geo', type: 'list of point', meaning: 'slits S₁ and S₂, midpoint M, observed point P, and Q on S₂P with |PQ| = |PS₁|', updates: 'when a slider moves',
+                        length: function () { return 5; }, rowLabel: function (j) { return POINT_NAMES[j]; },
+                        columns: [
+                            { name: 'x', unit: 'px', digits: 2, get: function (j) { return pointList()[j].x; } },
+                            { name: 'y', unit: 'px', digits: 2, get: function (j) { return pointList()[j].y; } }
+                        ] },
+                    { name: 'L₁', code: 'L1', type: 'float', unit: 'px', meaning: 'path length S₁ → P', digits: 3, get: function () { return geo.L1; } },
+                    { name: 'L₂', code: 'L2', type: 'float', unit: 'px', meaning: 'path length S₂ → P', digits: 3, get: function () { return geo.L2; } },
+                    { name: 'u', code: '(S2 − P) / L2', type: 'float', size: '2', meaning: 'unit vector from P towards S₂', get: function () { return Sim.fmt((geo.S2.x - geo.P.x) / geo.L2, 4) + ', ' + Sim.fmt((geo.S2.y - geo.P.y) / geo.L2, 4); } }
+                ] },
+                { title: 'Path difference and phase', note: 'what decides bright or dark', vars: [
+                    { name: 'δs', code: 'ds', type: 'float', unit: 'px', meaning: 'exact: 2bd tan α / (L₁ + L₂)', digits: 4, get: function () { return geo.ds; } },
+                    { name: 'L₂ − L₁', type: 'float', unit: 'px', meaning: 'the same number by direct subtraction', digits: 4, get: function () { return geo.L2 - geo.L1; } },
+                    { name: '|S₂Q|', type: 'float', unit: 'px', meaning: 'the same number read off the construction', digits: 4, get: function () { return Math.hypot(geo.S2.x - geo.Q.x, geo.S2.y - geo.Q.y); } },
+                    { name: 'b sin α', type: 'float', unit: 'px', meaning: 'far-field approximation of δs', digits: 4, get: function () { return geo.b * Math.sin(geo.a); } },
+                    { name: 'δs − b sin α', type: 'float', unit: 'px', meaning: 'error of the far-field approximation at this distance', digits: 4, get: function () { return geo.ds - geo.b * Math.sin(geo.a); } },
+                    { name: 'δs / λ', code: 'ratio', type: 'float', meaning: 'path difference in wavelengths', digits: 4, get: ratio },
+                    { name: 'fractional part', code: 'f', type: 'float', meaning: 'near 0: bright; near ½: dark', digits: 3, get: function () { var r = ratio(); return r - Math.floor(r); } },
+                    { name: 'Δφ', code: 'phi', type: 'float', unit: 'rad', meaning: 'phase difference 2π δs / λ', digits: 4, get: function () { return 2 * Math.PI * ratio(); } }
+                ] },
+                { title: 'Intensity', note: 'two equal waves: I/I₀ = cos²(Δφ/2)', vars: [
+                    { name: 'I/I₀', type: 'float', meaning: 'exact, at P', digits: 4, get: function () { var c = Math.cos(Math.PI * ratio()); return c * c; } },
+                    { name: 'I/I₀ far field', type: 'float', meaning: 'with b sin α instead of δs', digits: 4, get: function () { return farI(geo.a); } },
+                    { name: 'verdict', code: '#verdict', type: 'str', get: function () { return document.getElementById('verdict').textContent; } },
+                    { name: 'I(θ)', kind: 'vector', code: 'drawPattern()', type: 'list of float', meaning: 'the plotted curve: 301 directions from 0° to 30°', updates: 'when a slider moves',
+                        length: function () { return 301; }, cw: 96,
+                        columns: [
+                            { name: 'θ', unit: '°', digits: 2, get: function (j) { return thetaAt(j) / DEG; } },
+                            { name: 'I far', digits: 4, colour: intensity, get: function (j) { return farI(thetaAt(j)); } },
+                            { name: 'I exact', digits: 4, colour: intensity, get: function (j) { return exactI(thetaAt(j)); } },
+                            { name: 'difference', digits: 4, get: function (j) { return exactI(thetaAt(j)) - farI(thetaAt(j)); } }
+                        ] }
+                ] },
+                { title: 'Bright fringes', note: 'far field: b sin θ<sub>m</sub> = mλ', vars: [
+                    { name: 'm<sub>max</sub>', code: 'floor(b / λ)', type: 'int', meaning: 'highest order on each side', digits: 0, get: function () { return orderCount() - 1; } },
+                    { name: 'λd/b', type: 'float', unit: 'px', meaning: 'fringe spacing near the centre, small angles', digits: 2, get: function () { return geo.lambda * geo.d / geo.b; } },
+                    { name: 'orders', kind: 'vector', code: 'm', type: 'list of float', meaning: 'every bright fringe on one side of the centre', updates: 'when b or λ moves',
+                        length: orderCount, rowLabel: function (j) { return 'm = ' + j; }, cw: 96,
+                        columns: [
+                            { name: 'sin θ', digits: 4, get: function (j) { return j * geo.lambda / geo.b; } },
+                            { name: 'θ', unit: '°', digits: 2, get: function (j) { return thetaM(j) / DEG; } },
+                            { name: 'x on line', unit: 'px', digits: 1, get: function (j) { return geo.d * Math.tan(thetaM(j)); } }
+                        ] }
+                ] },
+                { title: 'Animation', note: 'the wavelets only; the geometry does not move', vars: [
+                    { name: 'phase', code: 'phase', type: 'float', meaning: 'fraction of a period, 0 to 1', digits: 3, get: function () { return phase; } },
+                    { name: 'ring speed', code: '0.8 λ per s', type: 'float', unit: 'px/s', digits: 1, get: function () { return 0.8 * geo.lambda; } },
+                    { name: 'rings', kind: 'vector', code: 'drawWaves()', type: 'list of float', meaning: 'radii of the wavelet arcs drawn around each slit', updates: 'every frame',
+                        length: function () { return rings().length; },
+                        columns: [{ name: 'r', unit: 'px', digits: 2, get: function (j) { return rings()[j]; } }] },
+                    { name: 'animate', code: 'anim.checked', type: 'bool', get: function () { return clk.playing; } },
+                    { name: 'frame rate', type: 'float', unit: 'Hz', meaning: 'measured by the panel', digits: 1, get: function () { return Sim.frameStats.fps; } }
+                ] }
+            ],
+            log: {
+                mode: 'change', max: 1000,
+                columns: [
+                    { name: 'time', unit: 's', digits: 1, stamp: true, get: function () { return Sim.frameStats.wall; } },
+                    { name: 'd', unit: 'px', digits: 0, get: function () { return geo.d; } },
+                    { name: 'α', unit: '°', digits: 1, get: function () { return geo.a / DEG; } },
+                    { name: 'b', unit: 'px', digits: 0, get: function () { return geo.b; } },
+                    { name: 'λ', unit: 'px', digits: 1, get: function () { return geo.lambda; } },
+                    { name: 'L₁', unit: 'px', digits: 2, get: function () { return geo.L1; } },
+                    { name: 'L₂', unit: 'px', digits: 2, get: function () { return geo.L2; } },
+                    { name: 'δs', unit: 'px', digits: 3, get: function () { return geo.ds; } },
+                    { name: 'δs/λ', digits: 3, get: ratio },
+                    { name: 'I/I₀', digits: 3, get: function () { var c = Math.cos(Math.PI * ratio()); return c * c; } }
+                ]
+            }
+        };
+
         anim.addEventListener('change', function () { clk.set(anim.checked); });
 
         update();
     })();
     </script>
+    <script src="../scripts/datalog.js"></script>
 </body>
 </html>

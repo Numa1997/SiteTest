@@ -6,8 +6,13 @@
    Variables tab  name, type, size and value of every quantity, repainted every frame while the panel is open.
    Array view     any vector or matrix opens as a table; only the cells in view are drawn, so a
                   360 × 360 field costs no more than a 10 × 20 one.
-   Log tab        one row per fixed step of play time, the newest at the bottom; the oldest rows drop off
-                  after spec.log.max, so memory stays bounded however long the page runs. */
+   Log tab        one row per fixed step of time (or one row per change, for pages without a clock), the newest
+                  at the bottom; the oldest rows drop off after spec.log.max, so memory stays bounded.
+
+   Shared helpers for page specs:
+   Sim.frameStats { dt, fps, frames, play, wall }  measured by this panel: last frame interval, smoothed frame rate,
+                  frames seen, play time (advances only while spec.playing() is true) and seconds since load.
+   Sim.colourMap(v, lim)  the site's ink → cream → burgundy map for a signed value, as [r, g, b]. */
 (function () {
     'use strict';
     var Sim = window.Sim, spec = Sim && Sim.data;
@@ -35,6 +40,19 @@
     /* readable text on a coloured cell */
     function textOn(rgb) { return 0.2126 * rgb[0] + 0.7152 * rgb[1] + 0.0722 * rgb[2] > 150 ? '#1c1518' : '#fffaf3'; }
     function kindOf(v) { return v.kind || 'scalar'; }
+    function columnsOf(v) { return typeof v.columns === 'function' ? v.columns() : v.columns; }
+
+    /* trough (ink) → rest (cream) → crest (burgundy), the colour table of Fig. 1 */
+    var NEG = [58, 50, 46], MID = [255, 250, 243], POS = [122, 31, 43];
+    Sim.colourMap = function (v, lim) {
+        var a = lim > 0 ? v / lim : 0;
+        if (!(a === a)) a = 0;
+        a = a > 1 ? 1 : a < -1 ? -1 : a;
+        var s = Math.pow(Math.abs(a), 0.8), end = a < 0 ? NEG : POS;
+        return [0, 1, 2].map(function (c) { return Math.round(MID[c] + (end[c] - MID[c]) * s); });
+    };
+    var stats0 = { dt: 0, fps: 0, frames: 0, play: 0, wall: 0 };
+    Sim.frameStats = stats0;
     function safe(fn, fallback) { try { return fn(); } catch (e) { return fallback; } }
 
     var vars = [];
@@ -80,7 +98,7 @@
     /* ---------- Variables: Spyder's four columns ---------- */
     var rowsHtml = '<table class="dp-table"><thead><tr><th scope="col">Name</th><th scope="col">Type</th><th scope="col">Size</th><th scope="col">Value</th></tr></thead><tbody>';
     spec.groups.forEach(function (g) {
-        rowsHtml += '<tr class="dp-group"><th colspan="4" scope="rowgroup">' + esc(g.title) + (g.note ? '<span>' + esc(g.note) + '</span>' : '') + '</th></tr>';
+        rowsHtml += '<tr class="dp-group"><th colspan="4" scope="rowgroup">' + esc(g.title) + (g.note ? '<span>' + g.note + '</span>' : '') + '</th></tr>';
         g.vars.forEach(function (v) {
             var k = kindOf(v), opens = k === 'vector' || k === 'matrix';
             rowsHtml += '<tr class="dp-row' + (opens ? ' dp-row--open' : '') + '" data-v="' + vars.indexOf(v) + '"' +
@@ -125,7 +143,7 @@
             html = '<span class="dp-range">' + num(st.min, Math.min(d, 3)) + ' … ' + num(st.max, Math.min(d, 3)) + '</span>' +
                 '<small>mean ' + num(st.mean, d) + '</small><span class="dp-more" aria-hidden="true">›</span>';
         } else if (k === 'vector') {
-            var n = v.length(), col = v.columns[0], parts = [];
+            var n = v.length(), col = columnsOf(v)[0], parts = [];
             for (var i = 0; i < Math.min(n, 3); i++) parts.push(num(col.get(i), col.digits));
             size = String(n);
             html = '<span class="dp-range">[' + parts.join(', ') + (n > 3 ? ', …' : '') + ']</span><span class="dp-more" aria-hidden="true">›</span>';
@@ -200,8 +218,8 @@
                 var v = src.get(it.j, it.i), t = num(v, src.digits(it.i));
                 if (t !== it.t) { it.el.textContent = t; it.t = t; }
                 if (src.colour) {
-                    var rgb = src.colour(v, it.j, it.i), bg = 'rgb(' + rgb[0] + ',' + rgb[1] + ',' + rgb[2] + ')';
-                    if (bg !== it.bg) { it.el.style.background = bg; it.el.style.color = textOn(rgb); it.bg = bg; }
+                    var rgb = src.colour(v, it.j, it.i), bg = rgb ? 'rgb(' + rgb[0] + ',' + rgb[1] + ',' + rgb[2] + ')' : '';
+                    if (bg !== it.bg) { it.el.style.background = bg; it.el.style.color = rgb ? textOn(rgb) : ''; it.bg = bg; }
                 }
             });
             if (hot) probeEl.innerHTML = src.probe(hot.j, hot.i, src.get(hot.j, hot.i));
@@ -230,15 +248,17 @@
     function gridSource(v) {
         if (kindOf(v) === 'vector') {
             return {
-                cw: 104, corner: 'index',
-                rows: v.length, cols: function () { return v.columns.length; },
-                get: function (j, i) { return v.columns[i].get(j); },
-                digits: function (i) { return v.columns[i].digits; },
-                colLabel: function (i) { var c = v.columns[i]; return c.name + (c.unit ? ' · ' + c.unit : ''); },
-                rowLabel: String,
+                cw: v.cw || 104, corner: v.corner || 'index',
+                rows: v.length, cols: function () { return columnsOf(v).length; },
+                get: function (j, i) { var c = columnsOf(v)[i]; return c ? c.get(j) : undefined; },
+                digits: function (i) { var c = columnsOf(v)[i]; return c ? c.digits : 4; },
+                colour: function (x, j, i) { var c = columnsOf(v)[i]; return c && c.colour && typeof x === 'number' ? c.colour(x, j) : null; },
+                colLabel: function (i) { var c = columnsOf(v)[i]; return c ? c.name + (c.unit ? ' · ' + c.unit : '') : ''; },
+                rowLabel: v.rowLabel || String,
                 probe: function (j, i, x) {
-                    var c = v.columns[i];
-                    return '<b>' + esc(c.name) + '[' + j + ']</b> = ' + esc(num(x, c.digits)) + (c.unit ? ' ' + c.unit : '');
+                    var c = columnsOf(v)[i] || {}, row = v.rowLabel ? v.rowLabel(j) : j;
+                    return '<b>' + esc(c.name) + '[' + esc(row) + ']</b> = ' + esc(num(x, c.digits)) + (c.unit ? ' ' + c.unit : '') +
+                        (v.at ? '<span>' + v.at(j) + '</span>' : '');
                 }
             };
         }
@@ -263,7 +283,7 @@
                 '<div><dt>max</dt><dd>' + num(st.max, d) + '</dd></div><div><dt>mean</dt><dd>' + num(st.mean, d) + '</dd></div>';
         } else {
             h = '<div><dt>length</dt><dd>' + v.length() + '</dd></div><div class="wide"><dt>columns</dt><dd>' +
-                esc(v.columns.map(function (c) { return c.name; }).join(', ')) + '</dd></div>';
+                esc(columnsOf(v).map(function (c) { return c.name; }).join(', ')) + '</dd></div>';
         }
         if (h !== statsEl._h) { statsEl.innerHTML = h; statsEl._h = h; }
     }
@@ -297,7 +317,7 @@
 
     /* ---------- Log: one row per step of play time ---------- */
     var L = spec.log, logBody = null, logWrap = null, logInfo = null, logCount = panel.querySelector('[data-log-count]');
-    var total = 0, nextT = 0;
+    var total = 0, nextT = 0, lastKey = null;
     if (L) {
         panes.log.innerHTML =
             '<div class="dp-log__bar"><span class="dp-log__info"></span><button type="button" class="dp-btn" data-log-clear>Clear</button></div>' +
@@ -310,6 +330,7 @@
         panes.log.querySelector('[data-log-clear]').addEventListener('click', function () {
             logBody.innerHTML = '';
             total = 0;
+            lastKey = null;
             infoLog();
         });
         infoLog();
@@ -317,20 +338,29 @@
     function infoLog() {
         var n = logBody ? logBody.rows.length : 0;
         logCount.textContent = n;
-        logInfo.textContent = 'one row every ' + L.every + ' s of play time · ' + n + ' of ' + grouped(L.max) + ' rows kept';
+        logInfo.textContent = (L.mode === 'change' ? 'one row each time a value changes' : 'one row every ' + L.every + ' s of ' + (L.label || 'play time')) +
+            ' · ' + n + ' of ' + grouped(L.max) + ' rows kept';
     }
     function sample() {
         if (!L) return;
-        var t = L.time();
-        if (t < nextT - L.every) nextT = t;
-        if (t < nextT) return;
-        nextT = (Math.floor(t / L.every + 1e-9) + 1) * L.every;
+        var cellsText = null;
+        if (L.mode === 'change') {
+            /* a new row only when a non-stamp column changed */
+            cellsText = L.columns.map(function (c) { return num(safe(c.get), c.digits); });
+            var key = cellsText.filter(function (x, i) { return !L.columns[i].stamp; }).join('|');
+            if (key === lastKey) return;
+            lastKey = key;
+        } else {
+            var every = L.every || 0.1, t = L.time ? L.time() : stats0.play;
+            if (t < nextT - every) nextT = t;
+            if (t < nextT) return;
+            nextT = (Math.floor(t / every + 1e-9) + 1) * every;
+            cellsText = L.columns.map(function (c) { return num(safe(c.get), c.digits); });
+        }
         total++;
         var stick = logWrap.scrollTop + logWrap.clientHeight >= logWrap.scrollHeight - 24;
         var tr = document.createElement('tr');
-        tr.innerHTML = '<th scope="row">' + total + '</th>' + L.columns.map(function (c) {
-            return '<td>' + esc(num(safe(c.get), c.digits)) + '</td>';
-        }).join('');
+        tr.innerHTML = '<th scope="row">' + total + '</th>' + cellsText.map(function (x) { return '<td>' + esc(x) + '</td>'; }).join('');
         logBody.appendChild(tr);
         while (logBody.rows.length > L.max) logBody.removeChild(logBody.firstChild);
         if (stick) logWrap.scrollTop = logWrap.scrollHeight;
@@ -371,7 +401,7 @@
 
     function paint() {
         if (!isOpen) return;
-        var playing = safe(spec.playing, false);
+        var playing = spec.playing ? safe(spec.playing, false) : true;
         live.classList.toggle('is-live', playing);
         live.textContent = playing ? 'live' : 'paused';
         if (view === 'vars') paintVars();
@@ -379,7 +409,18 @@
     }
 
     /* runs after the simulation's own frame callback, so every number is read from the same instant */
-    function frame() {
+    var lastTs = 0, born = 0;
+    function frame(ts) {
+        var dt = lastTs ? (ts - lastTs) / 1000 : 0;
+        if (!born) born = ts;
+        lastTs = ts;
+        stats0.wall = (ts - born) / 1000;
+        if (dt > 0) {
+            stats0.frames++;
+            stats0.dt = dt;
+            stats0.fps = stats0.fps ? stats0.fps + (1 / dt - stats0.fps) * 0.1 : 1 / dt;
+            if (safe(spec.playing, true)) stats0.play += Math.min(dt, 0.05);
+        }
         safe(sample);
         paint();
         requestAnimationFrame(frame);

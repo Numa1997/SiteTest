@@ -9,6 +9,7 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link rel="stylesheet" href="../styles/sim.css">
+    <link rel="stylesheet" href="../styles/data.css">
     <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='12' fill='%237a1f2b'/%3E%3Ctext x='32' y='45' text-anchor='middle' font-family='Georgia,serif' font-size='38' fill='%23f5f1ea'%3EN%3C/text%3E%3C/svg%3E">
     <style>
         #field { cursor: crosshair; touch-action: none; }
@@ -760,9 +761,121 @@
         Sim.onResize(stage, function () { box.fit(); });
         Sim.onResize(specStage, function () { sbox.fit(); spectrum(); });
 
+        /* ---------- every number above, as data for the side panel (scripts/datalog.js) ---------- */
+        function has() { return coefs.length > 0; }
+        function tip() { return has() ? chainAt(t, K.value) : null; }
+        function chainJoints() {
+            if (!has()) return [];
+            var x = 0, yy = 0;
+            return chainAt(t, K.value).parts.map(function (p) { x += p.vx; yy += p.vy; return { x: x, y: yy }; });
+        }
+        /* cumulative share of ⟨|z|²⟩ held by the first j + 1 terms, in rank order */
+        var cumCache = { key: null, list: [] };
+        function cumulative() {
+            if (cumCache.key !== coefs) {
+                var s = 0;
+                cumCache.list = coefs.map(function (c) { s += c.amp * c.amp; return meanZ2 ? 100 * s / meanZ2 : 0; });
+                cumCache.key = coefs;
+            }
+            return cumCache.list;
+        }
+        function points(name, code, meaning, list, updates) {
+            return { name: name, kind: 'vector', code: code, type: 'list of point', meaning: meaning, updates: updates,
+                length: function () { return list().length; },
+                columns: [
+                    { name: 'Re', digits: 5, get: function (j) { var p = list()[j]; return p && p.x; } },
+                    { name: 'Im', digits: 5, get: function (j) { var p = list()[j]; return p && p.y; } }
+                ] };
+        }
+
+        Sim.data = {
+            kicker: 'Fig. 8 · data',
+            title: 'Draw and decompose',
+            subtitle: 'Every number this simulation is computing, read live from its own variables.',
+            foot: 'Repainted every frame while open. The coefficient table is the whole Fourier transform, ranked by size.',
+            playing: function () { return clk.playing; },
+            groups: [
+                { title: 'Your shape', note: 'the stroke, resampled and centred', vars: [
+                    { name: 'source', code: 'source', type: 'str', get: function () { return source; } },
+                    { name: 'mode', code: 'mode', type: 'str', meaning: 'draw or play', get: function () { return mode; } },
+                    { name: 'stroke', kind: 'vector', code: 'stroke', type: 'list of point', meaning: 'the raw points of the shape, as drawn or as generated', updates: 'when you decompose a new shape',
+                        length: function () { return stroke.length; },
+                        columns: [
+                            { name: 'x', digits: 5, get: function (j) { return stroke[j] && stroke[j].x; } },
+                            { name: 'y', digits: 5, get: function (j) { return stroke[j] && stroke[j].y; } }
+                        ] },
+                    { name: 'N', code: 'NS', type: 'int', meaning: 'samples after equal arc-length resampling', digits: 0, get: function () { return NS; } },
+                    { name: 'L', code: 'arcLen', type: 'float', meaning: 'arc length of the stroke, in units of the figure', digits: 4, get: function () { return arcLen; } },
+                    { name: 'Δs = L/(N − 1)', type: 'float', meaning: 'spacing between samples', digits: 5, get: function () { return arcLen / (NS - 1); } },
+                    { name: 'centroid', code: 'meanX, meanY', type: 'float', size: '2', meaning: 'removed before the transform, so c₀ = 0', get: function () { return Sim.fmt(meanX, 4) + ', ' + Sim.fmt(meanY, 4); } },
+                    points('z<sub>n</sub>', 'samples', 'the 256 centred samples the transform reads', function () { return samples; }, 'when you decompose a new shape'),
+                    { name: '⟨|z|²⟩', code: 'meanZ2', type: 'float', meaning: 'mean squared distance from the centroid', digits: 5, get: function () { return meanZ2; } }
+                ] },
+                { title: 'Fourier coefficients', note: 'c<sub>k</sub> = (1/N) Σ z<sub>n</sub> e<sup>−2πikn/N</sup>, sorted by |c<sub>k</sub>|', vars: [
+                    { name: 'c<sub>k</sub>', kind: 'vector', code: 'coefs', type: 'list of dict', meaning: 'every coefficient from k = −60 to 60, largest first; "used" marks the K circles drawn', updates: 'when you decompose a new shape', cw: 86,
+                        length: function () { return coefs.length; }, rowLabel: function (j) { return 'rank ' + (j + 1); },
+                        columns: [
+                            { name: 'k', digits: 0, get: function (j) { return coefs[j].k; } },
+                            { name: 'Re c', digits: 5, get: function (j) { return coefs[j].re; } },
+                            { name: 'Im c', digits: 5, get: function (j) { return coefs[j].im; } },
+                            { name: '|c|', digits: 5, get: function (j) { return coefs[j].amp; }, colour: function (v) { return Sim.colourMap(v, coefs[0] ? coefs[0].amp : 1); } },
+                            { name: 'arg c', unit: 'rad', digits: 4, get: function (j) { return coefs[j].phase; } },
+                            { name: 'used', get: function (j) { return j < K.value ? 'yes' : 'no'; } },
+                            { name: 'Σ |c|²', unit: '%', digits: 3, get: function (j) { return cumulative()[j]; } }
+                        ] },
+                    { name: 'K', code: 'K.value', type: 'int', meaning: 'circles drawn, the K largest coefficients', digits: 0, get: function () { return K.value; } },
+                    { name: 'k<sub>max</sub>', code: 'KMAX', type: 'int', meaning: 'highest frequency computed', digits: 0, get: function () { return KMAX; } },
+                    { name: 'largest k', code: 'coefs[0].k', type: 'int', meaning: 'the biggest circle turns this many times per loop', digits: 0, get: function () { return has() ? coefs[0].k : undefined; } },
+                    { name: 'DFT cost', code: '2 · 120 · N', type: 'int', meaning: 'cos and sin calls for one transform', digits: 0, get: function () { return 2 * 2 * KMAX * NS; } }
+                ] },
+                { title: 'Accuracy', note: 'how much of the shape K circles keep', vars: [
+                    { name: 'Σ<sub>K</sub> |c|²', code: 'kept', type: 'float', meaning: 'energy kept by the K circles', digits: 5, get: function () { return kept; } },
+                    { name: 'kept share', type: 'float', unit: '%', meaning: 'Σ<sub>K</sub> |c|² / ⟨|z|²⟩', digits: 3, get: function () { return meanZ2 ? 100 * kept / meanZ2 : undefined; } },
+                    { name: 'RMS error', code: 'err', type: 'float', meaning: 'measured: √(mean |z(t<sub>n</sub>) − z<sub>n</sub>|²)', digits: 6, get: function () { return err; } },
+                    { name: '… by Parseval', code: 'errP', type: 'float', meaning: 'predicted: √(⟨|z|²⟩ − Σ<sub>K</sub> |c|²)', digits: 6, get: function () { return errP; } },
+                    { name: 'difference', type: 'float', meaning: 'measured minus predicted; tiny when Parseval holds', digits: 6, get: function () { return err - errP; } },
+                    points('K-term curve', 'full', 'the truncated series over one loop, 601 points', function () { return full; }, 'when K changes')
+                ] },
+                { title: 'The pen now', note: 'the tip of the chain of K circles', vars: [
+                    { name: 't', code: 't', type: 'float', unit: 'rad', meaning: 'loop phase; one loop is 2π', digits: 3, get: function () { return t; } },
+                    { name: 'loops', type: 'float', meaning: 't / 2π', digits: 3, get: function () { return t / TAU; } },
+                    { name: 'time per loop', code: 'loop.value', type: 'int', unit: 's', digits: 0, get: function () { return loop.value; } },
+                    { name: 'Re z(t)', code: 'chainAt(t, K).x', type: 'float', digits: 5, get: function () { var z = tip(); return z && z.x; } },
+                    { name: 'Im z(t)', code: 'chainAt(t, K).y', type: 'float', digits: 5, get: function () { var z = tip(); return z && z.y; } },
+                    { name: '|z(t)|', type: 'float', digits: 5, get: function () { var z = tip(); return z ? Math.hypot(z.x, z.y) : undefined; } },
+                    points('joints', 'chainAt(t, K).parts', 'where each of the K arrows ends, in rank order', chainJoints, 'every frame'),
+                    points('trail', 'trail', 'the pen\'s path over the last loop', function () { return trail; }, 'every frame')
+                ] },
+                { title: 'View and drawing', note: 'how the picture is laid out', vars: [
+                    { name: 'scale', code: 'viewScale()', type: 'float', unit: 'px/unit', digits: 2, get: function () { return mode === 'draw' ? S() : viewScale(); } },
+                    { name: 'zoom', code: 'zoom', type: 'float', unit: '×', digits: 2, get: function () { return zoom; } },
+                    { name: 'pan', code: 'panX, panY', type: 'float', size: '2', get: function () { return Sim.fmt(panX, 4) + ', ' + Sim.fmt(panY, 4); } },
+                    { name: 'follow the pen', code: 'swFollow.checked', type: 'bool', get: function () { return swFollow.checked; } },
+                    { name: 'R<sub>ext</sub>', code: 'extR', type: 'float', meaning: 'outermost point drawn over a loop', digits: 4, get: function () { return extR; } },
+                    { name: 'R<sub>view</sub>', code: 'viewR', type: 'float', meaning: 'radius the view is fitted to', digits: 4, get: function () { return viewR; } },
+                    { name: 'canvas', code: 'box.w × box.h', type: 'int', size: '2', unit: 'css px', get: function () { return box.w + ' × ' + box.h; } },
+                    { name: 'frame rate', type: 'float', unit: 'Hz', meaning: 'measured by the panel', digits: 1, get: function () { return Sim.frameStats.fps; } },
+                    { name: 'playing', code: 'clk.playing', type: 'bool', get: function () { return clk.playing; } }
+                ] }
+            ],
+            log: {
+                every: 0.1, max: 1000,
+                columns: [
+                    { name: 'clock', unit: 's', digits: 2, get: function () { return Sim.frameStats.play; } },
+                    { name: 't', unit: 'rad', digits: 3, get: function () { return t; } },
+                    { name: 'Re z', digits: 4, get: function () { var z = tip(); return z && z.x; } },
+                    { name: 'Im z', digits: 4, get: function () { var z = tip(); return z && z.y; } },
+                    { name: '|z|', digits: 4, get: function () { var z = tip(); return z ? Math.hypot(z.x, z.y) : undefined; } },
+                    { name: 'K', digits: 0, get: function () { return K.value; } },
+                    { name: 'RMS error', digits: 5, get: function () { return err; } }
+                ]
+            }
+        };
+
         stroke = SHAPES.heart();
         play(stroke, 'heart');
     })();
     </script>
+    <script src="../scripts/datalog.js"></script>
 </body>
 </html>

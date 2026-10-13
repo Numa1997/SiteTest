@@ -9,6 +9,7 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link rel="stylesheet" href="../styles/sim.css">
+    <link rel="stylesheet" href="../styles/data.css">
     <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='12' fill='%237a1f2b'/%3E%3Ctext x='32' y='45' text-anchor='middle' font-family='Georgia,serif' font-size='38' fill='%23f5f1ea'%3EN%3C/text%3E%3C/svg%3E">
 </head>
 <body>
@@ -368,9 +369,118 @@
         });
         Sim.playButton(document.getElementById('play'), clk);
 
+        /* ---------- every number above, as data for the side panel (scripts/datalog.js) ---------- */
+        function kk() { return 2 * Math.PI / lambda.value; }
+        function om() { return 2 * Math.PI * freq.value; }
+        function Xi(i) { return i * LENGTH / (count.value - 1); }
+        function phaseAt(i) { return kk() * Xi(i) - omegaT; }
+        function followed() { return Math.floor((count.value - 1) / 2); }
+        function wrapPi(a) { return Math.atan2(Math.sin(a), Math.cos(a)); }
+        /* crest (step π/2) or compression (step π) positions along the line, as drawn by the markers */
+        function marks(step) {
+            var lam = lambda.value, x0 = (((step + omegaT) / kk()) % lam + lam) % lam, out = [];
+            for (var X = x0; X <= LENGTH; X += lam) out.push(X);
+            return out;
+        }
+        var P = {
+            xi: function (i) { return amp.value * Math.sin(phaseAt(i)); },
+            vxi: function (i) { return -amp.value * om() * Math.cos(phaseAt(i)); },
+            s: function (i) { return longAmp() * Math.sin(phaseAt(i)); },
+            vs: function (i) { return -longAmp() * om() * Math.cos(phaseAt(i)); },
+            rho: function (i) { return 1 / (1 + longAmp() * kk() * Math.cos(phaseAt(i))); }
+        };
+        function markVector(name, step, meaning) {
+            return {
+                name: name, kind: 'vector', code: step === Math.PI ? 'comp0 + n λ' : 'crest + n λ', type: 'list of float', meaning: meaning, updates: 'every frame',
+                length: function () { return marks(step).length; },
+                columns: [{ name: 'X', unit: 'px', digits: 1, get: function (j) { return marks(step)[j]; } }]
+            };
+        }
+
+        Sim.data = {
+            kicker: 'Fig. 4 · data',
+            title: 'Transverse and longitudinal waves',
+            subtitle: 'Every number this simulation is computing, read live from its own variables.',
+            foot: 'Repainted every frame while open. The particle table holds every particle on both rows.',
+            playing: function () { return clk.playing; },
+            groups: [
+                { title: 'Physical parameters', note: 'what you set with the sliders', vars: [
+                    { name: 'A', code: 'amp.value', type: 'float', unit: 'px', meaning: 'transverse amplitude', digits: 0, get: function () { return amp.value; } },
+                    { name: 'f', code: 'freq.value', type: 'float', unit: 'Hz', meaning: 'frequency', digits: 2, get: function () { return freq.value; } },
+                    { name: 'λ', code: 'lambda.value', type: 'float', unit: 'px', meaning: 'wavelength', digits: 0, get: function () { return lambda.value; } },
+                    { name: 'N', code: 'count.value', type: 'int', meaning: 'particles in each row', digits: 0, get: function () { return count.value; } },
+                    { name: 'L', code: 'LENGTH', type: 'int', unit: 'px', meaning: 'length of the medium, fixed', digits: 0, get: function () { return LENGTH; } }
+                ] },
+                { title: 'Derived physics', note: 'computed from the parameters', vars: [
+                    { name: 'k = 2π/λ', code: '2 * Math.PI / lambda.value', type: 'float', unit: 'rad/px', meaning: 'wave number', digits: 5, get: kk },
+                    { name: 'ω = 2πf', type: 'float', unit: 'rad/s', meaning: 'angular frequency', digits: 4, get: om },
+                    { name: 'T = 1/f', type: 'float', unit: 's', meaning: 'period', digits: 3, get: function () { return 1 / freq.value; } },
+                    { name: 'v = fλ', type: 'float', unit: 'px/s', meaning: 'wave speed, the same for both rows', digits: 1, get: function () { return freq.value * lambda.value; } },
+                    { name: 'L/λ', type: 'float', meaning: 'wavelengths along the medium', digits: 3, get: function () { return LENGTH / lambda.value; } },
+                    { name: 'A<sub>L</sub>', code: 'longAmp()', type: 'float', unit: 'px', meaning: 'longitudinal amplitude, capped at 0.8/k so particles never pass each other', digits: 2, get: longAmp },
+                    { name: 'cap active', code: 'longAmp() < amp.value', type: 'bool', get: function () { return longAmp() < amp.value; } },
+                    { name: 'Ak', type: 'float', meaning: 'largest slope of the transverse string', digits: 4, get: function () { return amp.value * kk(); } },
+                    { name: 'A<sub>L</sub>k', type: 'float', meaning: 'largest strain of the longitudinal row, below 1', digits: 4, get: function () { return longAmp() * kk(); } },
+                    { name: 'Aω', type: 'float', unit: 'px/s', meaning: 'largest particle speed, transverse row', digits: 2, get: function () { return amp.value * om(); } }
+                ] },
+                { title: 'Time', note: 'advances only while it plays', vars: [
+                    { name: 't', type: 'float', unit: 's', meaning: 'play time, measured by the panel', digits: 2, get: function () { return Sim.frameStats.play; } },
+                    { name: 'ωt', code: 'omegaT', type: 'float', unit: 'rad', meaning: 'phase of the source', digits: 3, get: function () { return omegaT; } },
+                    { name: 'ωt / 2π', type: 'float', meaning: 'periods completed', digits: 2, get: function () { return omegaT / (2 * Math.PI); } }
+                ] },
+                { title: 'The followed particle', note: 'the middle particle, marked in burgundy', vars: [
+                    { name: 'i', code: 'follow', type: 'int', meaning: 'its index', digits: 0, get: followed },
+                    { name: 'X', type: 'float', unit: 'px', meaning: 'its rest position', digits: 1, get: function () { return Xi(followed()); } },
+                    { name: 'kX − ωt', type: 'float', unit: 'rad', meaning: 'its phase, wrapped to (−π, π]', digits: 3, get: function () { return wrapPi(phaseAt(followed())); } },
+                    { name: 'ξ', type: 'float', unit: 'px', meaning: 'transverse displacement, A sin(kX − ωt)', digits: 2, get: function () { return P.xi(followed()); } },
+                    { name: '∂ξ/∂t', type: 'float', unit: 'px/s', meaning: 'transverse velocity', digits: 2, get: function () { return P.vxi(followed()); } },
+                    { name: 's', type: 'float', unit: 'px', meaning: 'longitudinal displacement, A<sub>L</sub> sin(kX − ωt)', digits: 2, get: function () { return P.s(followed()); } },
+                    { name: '∂s/∂t', type: 'float', unit: 'px/s', meaning: 'longitudinal velocity', digits: 2, get: function () { return P.vs(followed()); } },
+                    { name: 'ρ/ρ₀', type: 'float', meaning: 'local density, 1 / (1 + A<sub>L</sub>k cos(kX − ωt))', digits: 3, get: function () { return P.rho(followed()); } }
+                ] },
+                { title: 'Arrays: every particle', note: 'click a row to open it as a table', vars: [
+                    { name: 'particles', kind: 'vector', code: 'i = 0 … N − 1', type: 'list of float', meaning: 'both rows at this instant; ξ and s shaded like a trough-to-crest scale', updates: 'every frame', cw: 88,
+                        length: function () { return count.value; },
+                        columns: [
+                            { name: 'X', unit: 'px', digits: 1, get: Xi },
+                            { name: 'phase', unit: 'rad', digits: 3, get: function (i) { return wrapPi(phaseAt(i)); } },
+                            { name: 'ξ', unit: 'px', digits: 2, get: P.xi, colour: function (v) { return Sim.colourMap(v, amp.value); } },
+                            { name: '∂ξ/∂t', unit: 'px/s', digits: 1, get: P.vxi },
+                            { name: 's', unit: 'px', digits: 2, get: P.s, colour: function (v) { return Sim.colourMap(v, longAmp()); } },
+                            { name: 'x = X + s', unit: 'px', digits: 1, get: function (i) { return Xi(i) + P.s(i); } },
+                            { name: 'ρ/ρ₀', digits: 3, get: P.rho }
+                        ] },
+                    markVector('crests', Math.PI / 2, 'positions of the transverse crests, the small triangles'),
+                    markVector('compressions', Math.PI, 'centres of the longitudinal compressions')
+                ] },
+                { title: 'Drawing', note: 'how the picture is laid out', vars: [
+                    { name: 's<sub>px</sub>', code: '(box.w − 44) / LENGTH', type: 'float', meaning: 'screen pixels per medium pixel', digits: 4, get: function () { return (box.w - 44) / LENGTH; } },
+                    { name: 'canvas', code: 'box.w × box.h', type: 'int', size: '2', unit: 'css px', get: function () { return box.w + ' × ' + box.h; } },
+                    { name: 'equilibrium marks', code: 'eqBox.checked', type: 'bool', get: function () { return eqBox.checked; } },
+                    { name: 'follow one', code: 'followBox.checked', type: 'bool', get: function () { return followBox.checked; } },
+                    { name: 'frame rate', type: 'float', unit: 'Hz', meaning: 'measured by the panel', digits: 1, get: function () { return Sim.frameStats.fps; } },
+                    { name: 'playing', code: 'clk.playing', type: 'bool', get: function () { return clk.playing; } }
+                ] }
+            ],
+            log: {
+                every: 0.1, max: 1000,
+                columns: [
+                    { name: 't', unit: 's', digits: 2, get: function () { return Sim.frameStats.play; } },
+                    { name: 'ωt', unit: 'rad', digits: 3, get: function () { return omegaT; } },
+                    { name: 'ξ', unit: 'px', digits: 2, get: function () { return P.xi(followed()); } },
+                    { name: '∂ξ/∂t', unit: 'px/s', digits: 1, get: function () { return P.vxi(followed()); } },
+                    { name: 's', unit: 'px', digits: 2, get: function () { return P.s(followed()); } },
+                    { name: 'ρ/ρ₀', digits: 3, get: function () { return P.rho(followed()); } },
+                    { name: 'λ', unit: 'px', digits: 0, get: function () { return lambda.value; } },
+                    { name: 'f', unit: 'Hz', digits: 2, get: function () { return freq.value; } }
+                ]
+            }
+        };
+
         readouts();
         Sim.onResize(stage, function () { box.fit(); });
     })();
     </script>
+    <script src="../scripts/datalog.js"></script>
 </body>
 </html>

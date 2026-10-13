@@ -9,6 +9,7 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link rel="stylesheet" href="../styles/sim.css">
+    <link rel="stylesheet" href="../styles/data.css">
     <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='12' fill='%237a1f2b'/%3E%3Ctext x='32' y='45' text-anchor='middle' font-family='Georgia,serif' font-size='38' fill='%23f5f1ea'%3EN%3C/text%3E%3C/svg%3E">
 </head>
 <body>
@@ -462,10 +463,145 @@
         });
         Sim.playButton(document.getElementById('play'), clk);
 
+        /* ---------- every number above, as data for the side panel (scripts/datalog.js) ---------- */
+        var STATE_NAMES = ['θ₁', 'θ₂', 'ω₁', 'ω₂'], STATE_UNITS = ['rad', 'rad', 'rad/s', 'rad/s'];
+        function kinetic(s) {
+            return 0.5 * (m1 + m2) * l1 * l1 * s[2] * s[2] + 0.5 * m2 * l2 * l2 * s[3] * s[3]
+                + m2 * l1 * l2 * s[2] * s[3] * Math.cos(s[0] - s[1]);
+        }
+        /* T = ½ ωᵀ M ω: the mass matrix of the Lagrangian */
+        function massMatrix(s) {
+            var c = m2 * l1 * l2 * Math.cos(s[0] - s[1]);
+            return [[(m1 + m2) * l1 * l1, c], [c, m2 * l2 * l2]];
+        }
+        function momenta(s) {
+            var M = massMatrix(s);
+            return [M[0][0] * s[2] + M[0][1] * s[3], M[1][0] * s[2] + M[1][1] * s[3]];
+        }
+        /* bob positions in metres, pivot at the origin, y upwards */
+        function bobs(s) {
+            var x1 = l1 * Math.sin(s[0]), y1 = -l1 * Math.cos(s[0]);
+            return [x1, y1, x1 + l2 * Math.sin(s[1]), y1 - l2 * Math.cos(s[1])];
+        }
+        function velocities(s) {
+            var u1 = l1 * s[2] * Math.cos(s[0]), v1 = l1 * s[2] * Math.sin(s[0]);
+            return [u1, v1, u1 + l2 * s[3] * Math.cos(s[1]), v1 + l2 * s[3] * Math.sin(s[1])];
+        }
+        function separation() {
+            if (!twin) return undefined;
+            var a = bobs(state), b = bobs(twin);
+            return Math.hypot(a[2] - b[2], a[3] - b[3]);
+        }
+        function pair(a, b, d) { return Sim.fmt(a, d) + ', ' + Sim.fmt(b, d); }
+        function expo(v) { return v === undefined ? undefined : Math.abs(v) < 1e-15 ? '0' : v.toExponential(2).replace(/-/g, '−'); }
+        function relDrift() { return (energy(state) - E0) / ((m1 + m2) * g * l1 + m2 * g * l2); }
+        function stateVector(name, code, meaning, get) {
+            return {
+                name: name, kind: 'vector', code: code, type: 'list of float', meaning: meaning, updates: 'every RK4 step', cw: 112,
+                length: function () { return get() ? 4 : 0; }, rowLabel: function (j) { return STATE_NAMES[j]; },
+                columns: [
+                    { name: 'value', digits: 5, get: function (j) { return get()[j]; } },
+                    { name: 'unit', get: function (j) { return STATE_UNITS[j]; } },
+                    { name: 'd/dt', digits: 4, get: function (j) { return deriv(get())[j]; } }
+                ]
+            };
+        }
+
+        Sim.data = {
+            kicker: 'Fig. 2 · data',
+            title: 'Double pendulum',
+            subtitle: 'Every number this simulation is computing, read live from its own variables.',
+            foot: 'Repainted every frame while open. The state vector, the mass matrix and the twin open as tables.',
+            playing: function () { return clk.playing; },
+            groups: [
+                { title: 'Physical parameters', note: 'fixed constants and what you set with the sliders', vars: [
+                    { name: 'g', code: 'g', type: 'float', unit: 'm/s²', meaning: 'gravitational acceleration, fixed', digits: 2, get: function () { return g; } },
+                    { name: 'm₁', code: 'm1', type: 'float', unit: 'kg', meaning: 'upper bob mass, fixed', digits: 2, get: function () { return m1; } },
+                    { name: 'l₁', code: 'l1', type: 'float', unit: 'm', meaning: 'upper rod length, fixed', digits: 2, get: function () { return l1; } },
+                    { name: 'm₂', code: 'm2', type: 'float', unit: 'kg', meaning: 'lower bob mass, m₁ · e<sup>slider</sup>', digits: 4, get: function () { return m2; } },
+                    { name: 'l₂', code: 'l2', type: 'float', unit: 'm', meaning: 'lower rod length, l₁ · e<sup>slider</sup>', digits: 4, get: function () { return l2; } },
+                    { name: 'm₂/m₁', code: 'Math.exp(mass.value)', type: 'float', meaning: 'mass ratio', digits: 3, get: function () { return m2 / m1; } },
+                    { name: 'l₂/l₁', code: 'Math.exp(len.value)', type: 'float', meaning: 'length ratio', digits: 3, get: function () { return l2 / l1; } },
+                    { name: 'θ₁(0), θ₂(0)', code: 'th1.value, th2.value', type: 'float', size: '2', unit: '°', meaning: 'starting angles from the downward vertical', get: function () { return pair(th1.value, th2.value, 0); } },
+                    { name: 'ω₁(0), ω₂(0)', code: 'w1.value, w2.value', type: 'float', size: '2', unit: 'rad/s', meaning: 'starting angular velocities', get: function () { return pair(w1.value, w2.value, 1); } },
+                    { name: 'time scale', code: 'speed.value', type: 'float', unit: '×', meaning: 'simulated seconds per real second', digits: 2, get: function () { return speed.value; } }
+                ] },
+                { title: 'State', note: 'the four numbers the integrator advances', vars: [
+                    stateVector('y', 'state', 'state vector (θ₁, θ₂, ω₁, ω₂) and its time derivative', function () { return state; }),
+                    { name: 'θ₁', code: 'state[0]', type: 'float', unit: 'rad', meaning: 'upper rod angle', digits: 4, get: function () { return state[0]; } },
+                    { name: 'θ₂', code: 'state[1]', type: 'float', unit: 'rad', meaning: 'lower rod angle', digits: 4, get: function () { return state[1]; } },
+                    { name: 'ω₁', code: 'state[2]', type: 'float', unit: 'rad/s', meaning: 'upper angular velocity', digits: 4, get: function () { return state[2]; } },
+                    { name: 'ω₂', code: 'state[3]', type: 'float', unit: 'rad/s', meaning: 'lower angular velocity', digits: 4, get: function () { return state[3]; } }
+                ] },
+                { title: 'Equations of motion', note: 'what deriv() computes from the state', vars: [
+                    { name: 'δ = θ₁ − θ₂', code: 'd', type: 'float', unit: 'rad', meaning: 'angle between the rods', digits: 4, get: function () { return state[0] - state[1]; } },
+                    { name: 'D′', code: 'den', type: 'float', unit: 'kg', meaning: 'shared denominator, 2m₁ + m₂ − m₂ cos 2δ', digits: 4, get: function () { var d = state[0] - state[1]; return 2 * m1 + m2 - m2 * Math.cos(2 * d); } },
+                    { name: 'α₁', code: 'a1', type: 'float', unit: 'rad/s²', meaning: 'upper angular acceleration', digits: 4, get: function () { return deriv(state)[2]; } },
+                    { name: 'α₂', code: 'a2', type: 'float', unit: 'rad/s²', meaning: 'lower angular acceleration', digits: 4, get: function () { return deriv(state)[3]; } },
+                    { name: 'M', kind: 'matrix', code: 'massMatrix(state)', type: 'Array of float64', meaning: 'mass matrix of the Lagrangian: T = ½ ω<sup>T</sup> M ω', updates: 'every step, through cos δ',
+                        digits: 4, cw: 96, rows: function () { return 2; }, cols: function () { return 2; },
+                        rowLabel: function (j) { return STATE_NAMES[j]; }, colLabel: function (i) { return STATE_NAMES[i]; },
+                        get: function (j, i) { return massMatrix(state)[j][i]; }, version: function () { return Sim.frameStats.frames; },
+                        at: function (j, i) { return j === i ? 'diagonal: inertia of rod ' + (j + 1) : 'off-diagonal: coupling m₂ l₁ l₂ cos δ'; } },
+                    { name: 'det M', type: 'float', unit: 'kg² m⁴', meaning: 'm₂ l₁² l₂² (m₁ + m₂ sin²δ), never zero', digits: 4, get: function () { var M = massMatrix(state); return M[0][0] * M[1][1] - M[0][1] * M[1][0]; } },
+                    { name: 'p<sub>θ₁</sub>, p<sub>θ₂</sub>', code: 'M · ω', type: 'float', size: '2', unit: 'kg m²/s', meaning: 'generalised momenta ∂L/∂ω', get: function () { var p = momenta(state); return pair(p[0], p[1], 4); } }
+                ] },
+                { title: 'Bobs', note: 'positions in metres, pivot at the origin, y upwards', vars: [
+                    { name: 'bob 1 (x, y)', type: 'float', size: '2', unit: 'm', get: function () { var b = bobs(state); return pair(b[0], b[1], 4); } },
+                    { name: 'bob 2 (x, y)', type: 'float', size: '2', unit: 'm', get: function () { var b = bobs(state); return pair(b[2], b[3], 4); } },
+                    { name: '|v₁|', type: 'float', unit: 'm/s', meaning: 'speed of bob 1', digits: 4, get: function () { var v = velocities(state); return Math.hypot(v[0], v[1]); } },
+                    { name: '|v₂|', type: 'float', unit: 'm/s', meaning: 'speed of bob 2', digits: 4, get: function () { var v = velocities(state); return Math.hypot(v[2], v[3]); } }
+                ] },
+                { title: 'Energy', note: 'conserved by the physics, so its drift measures the integrator', vars: [
+                    { name: 'T', code: 'kin', type: 'float', unit: 'J', meaning: 'kinetic energy', digits: 4, get: function () { return kinetic(state); } },
+                    { name: 'V', code: 'pot', type: 'float', unit: 'J', meaning: 'potential energy, zero at the pivot', digits: 4, get: function () { return energy(state) - kinetic(state); } },
+                    { name: 'L = T − V', type: 'float', unit: 'J', meaning: 'Lagrangian', digits: 4, get: function () { return 2 * kinetic(state) - energy(state); } },
+                    { name: 'E', code: 'energy(state)', type: 'float', unit: 'J', meaning: 'total energy now', digits: 6, get: function () { return energy(state); } },
+                    { name: 'E₀', code: 'E0', type: 'float', unit: 'J', meaning: 'total energy at restart', digits: 6, get: function () { return E0; } },
+                    { name: 'ε', code: 'drift', type: 'float', meaning: '(E − E₀) / energy scale; RK4 keeps it tiny', get: function () { return expo(relDrift()); } }
+                ] },
+                { title: 'Chaos twin', note: 'a copy started 0.001 rad away', vars: [
+                    { name: 'twin on', code: 'twinBox.checked', type: 'bool', get: function () { return !!twin; } },
+                    { name: 'Δθ₁(0)', code: 'EPS', type: 'float', unit: 'rad', meaning: 'starting offset of the twin', digits: 3, get: function () { return EPS; } },
+                    stateVector('y′', 'twin', 'the twin\'s state vector; empty while the twin is off', function () { return twin; }),
+                    { name: 'd', type: 'float', unit: 'm', meaning: 'distance between the two lower bobs', get: function () { return expo(separation()); } },
+                    { name: 'log₁₀ d', type: 'float', meaning: 'grows roughly linearly in time while the motion is chaotic', digits: 3, get: function () { var d = separation(); return d > 0 ? Math.log(d) / Math.LN10 : undefined; } }
+                ] },
+                { title: 'Integrator and drawing', note: 'fourth-order Runge–Kutta at a fixed step', vars: [
+                    { name: 'h', code: 'H', type: 'float', unit: 's', meaning: 'time step, 1/600 s', digits: 6, get: function () { return H; } },
+                    { name: 'n', code: 'lastN', type: 'int', meaning: 'RK4 steps in the last frame', digits: 0, get: function () { return lastN; } },
+                    { name: 'steps', code: 'simT / H', type: 'int', meaning: 'RK4 steps since restart', digits: 0, get: function () { return Math.round(simT / H); } },
+                    { name: 'deriv() calls', code: '4 · n', type: 'int', meaning: 'slope evaluations in the last frame, twin included', digits: 0, get: function () { return 4 * lastN * (twin ? 2 : 1); } },
+                    { name: 'τ', code: 'acc', type: 'float', unit: 's', meaning: 'unspent time carried to the next frame', get: function () { return expo(acc); } },
+                    { name: 't', code: 'simT', type: 'float', unit: 's', meaning: 'simulated time since restart', digits: 3, get: function () { return simT; } },
+                    { name: 'σ', code: 'scale', type: 'float', unit: 'px/m', meaning: 'pixels per metre on screen', digits: 1, get: function () { return scale; } },
+                    { name: 'pivot', code: 'ox, oy', type: 'float', size: '2', unit: 'px', get: function () { return pair(ox, oy, 1); } },
+                    { name: 'canvas', code: 'box.w × box.h', type: 'int', size: '2', unit: 'css px', get: function () { return box.w + ' × ' + box.h; } },
+                    { name: 'frame rate', type: 'float', unit: 'Hz', meaning: 'measured by the panel', digits: 1, get: function () { return Sim.frameStats.fps; } },
+                    { name: 'playing', code: 'clk.playing', type: 'bool', get: function () { return clk.playing; } }
+                ] }
+            ],
+            log: {
+                every: 0.1, max: 1000, label: 'simulated time',
+                time: function () { return simT; },
+                columns: [
+                    { name: 't', unit: 's', digits: 2, get: function () { return simT; } },
+                    { name: 'θ₁', unit: 'rad', digits: 4, get: function () { return state[0]; } },
+                    { name: 'θ₂', unit: 'rad', digits: 4, get: function () { return state[1]; } },
+                    { name: 'ω₁', unit: 'rad/s', digits: 3, get: function () { return state[2]; } },
+                    { name: 'ω₂', unit: 'rad/s', digits: 3, get: function () { return state[3]; } },
+                    { name: 'E', unit: 'J', digits: 5, get: function () { return energy(state); } },
+                    { name: 'ε', get: function () { return expo(relDrift()); } },
+                    { name: 'd twin', unit: 'm', get: function () { return expo(separation()); } }
+                ]
+            }
+        };
+
         restart();
         resize();
         Sim.onResize(stage, resize);
     })();
     </script>
+    <script src="../scripts/datalog.js"></script>
 </body>
 </html>
