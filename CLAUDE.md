@@ -24,6 +24,11 @@ Project facts (layout, AppDeploy app, boundaries) are in AGENTS.md.
 - Short sentences, everyday words. Physics pictures where they help; formulas only when asked.
 - When wrong, say so in one line and fix it. No grovelling, no excuses, no walls of text.
 
+## The application comes first, the repository second
+- The thing Numa looks at is the AppDeploy app. Work on it first: read its stored source (`src_read`), build and test against
+  that, deploy, verify the live site. Only then migrate the same change into the GitHub repository, commit and push.
+- Never start with the repository, and never report the repository first. The live app is the deliverable; the repo is its copy.
+
 ## A data table is a pipeline, not a second simulation
 - The simulation writes each number into the store at the line that computes it; the display only reads. Never recompute for display.
 - Prove the pipeline three ways and show the proof to the reader: the stored value, the formula recomputed from the stored inputs, the pixel
