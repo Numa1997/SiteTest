@@ -529,10 +529,13 @@
 
         /* ---------- the data panel (scripts/datalog.js) reads the store; these hooks only say where things are drawn and how to test a value ---------- */
         var LEFT = 44;
-        function pixelAt(c, bx, x, y) { return c.getImageData(Math.round(x * bx.dpr), Math.round(y * bx.dpr), 1, 1).data; }
+        /* the device pixel that contains the point (floor, not round: a point at 635.5 lies in column 635) */
+        function pixelAt(c, bx, x, y) { return c.getImageData(Math.floor(x * bx.dpr), Math.floor(y * bx.dpr), 1, 1).data; }
         function rgbText(px) { return px[3] === 0 ? 'nothing (transparent)' : 'rgb(' + px[0] + ', ' + px[1] + ', ' + px[2] + ')' + (px[3] < 255 ? ' at alpha ' + (px[3] / 255).toFixed(2) : ''); }
         function lum(px) { return 0.2126 * px[0] + 0.7152 * px[1] + 0.0722 * px[2]; }
         function waveOf(q) { return Math.floor(q / (ds.get('M') + 1)); }
+        /* where to read a stroke back: on the stored point, except at the two ends, where the flat cap leaves the end pixel half empty */
+        function onStroke(arr, i, off) { var M = ds.get('M'); if (i === 0) return { x: LEFT + 0.5, y: (arr[off] + arr[off + 1]) / 2, end: true }; if (i === M) return { x: LEFT + M - 0.5, y: (arr[off + M - 1] + arr[off + M]) / 2, end: true }; return { x: LEFT + i, y: arr[off + i], end: false }; }
         function sampleOf(q) { return q % (ds.get('M') + 1); }
         function waveInputs(wi) { return [['A', ds.get('A')[wi], 'px', 1], ['f', ds.get('f')[wi], 'Hz', 2], ['s', ds.get('s')[wi], '×', 2], ['φ', ds.get('phi')[wi], 'rad', 3], ['t', ds.get('t'), 's', 4]]; }
         function yAt(wi, X) { var A = ds.get('A')[wi], f = ds.get('f')[wi], sp = ds.get('s')[wi], phi = ds.get('phi')[wi], t = ds.get('t'); return A * Math.sin(2 * Math.PI * f * (X / 200 - sp * t) + phi); }
@@ -628,8 +631,8 @@
                 mid2: function () { return { formula: 'top₂ + h_comp / 2', inputs: [['top₂', ds.get('top2'), 'css px', 2], ['h_comp', ds.get('hComp'), 'css px', 2]], value: ds.get('top2') + ds.get('hComp') / 2 }; }
             },
             drawn: {
-                py_sum: function (i) { var px = pixelAt(ctx, box, LEFT + i, ds.get('py_sum')[i]); return { what: 'screen pixel on the sum curve at sample ' + i + ', (' + (LEFT + i) + ', ' + Sim.fmt(ds.get('py_sum')[i], 1) + ') css px', drawn: rgbText(px), expected: 'the dark ink of the 2.3 px sum stroke', ok: px[3] > 0 && lum(px) < 150, note: 'The stroke is centred on the stored point, so the pixel there carries its colour.' }; },
-                py_comp: function (q) { var wi = waveOf(q), i = sampleOf(q), px = pixelAt(ctx, box, LEFT + i, ds.get('py_comp')[q]); return { what: 'screen pixel on wave ' + (wi + 1) + ' at sample ' + i, drawn: rgbText(px), expected: 'the colour of wave ' + (wi + 1) + ' (' + waves[wi].colour + '), or another wave crossing here', ok: px[3] > 0, note: 'A 1.6 px stroke covers most of the pixel; where two waves cross, the one drawn last wins.' }; },
+                py_sum: function (i) { var pt = onStroke(ds.get('py_sum'), i, 0), px = pixelAt(ctx, box, pt.x, pt.y); return { what: 'screen pixel on the sum curve at sample ' + i + ', (' + Sim.fmt(pt.x, 1) + ', ' + Sim.fmt(pt.y, 1) + ') css px', drawn: rgbText(px), expected: 'the dark ink of the 2.3 px sum stroke', ok: px[3] > 0 && lum(px) < 150, note: pt.end ? 'The stroke starts and ends with a flat cap, so at the first and last sample the midpoint of the end segment is read.' : 'The stroke is centred on the stored point, so the pixel there carries its colour.' }; },
+                py_comp: function (q) { var wi = waveOf(q), i = sampleOf(q), pt = onStroke(ds.get('py_comp'), i, wi * (ds.get('M') + 1)), px = pixelAt(ctx, box, pt.x, pt.y); return { what: 'screen pixel on wave ' + (wi + 1) + ' at sample ' + i + ', (' + Sim.fmt(pt.x, 1) + ', ' + Sim.fmt(pt.y, 1) + ') css px', drawn: rgbText(px), expected: 'the colour of wave ' + (wi + 1) + ' (' + waves[wi].colour + '), or another wave crossing here', ok: px[3] > 0, note: (pt.end ? 'The stroke starts and ends with a flat cap, so at the first and last sample the midpoint of the end segment is read. ' : '') + 'A 1.6 px stroke covers most of the pixel; where two waves cross, the one drawn last wins.' }; },
                 y_line: function (li) { var px = pixelAt(sctx, spec, ds.get('x_line')[li], ds.get('y_line')[li]); return { what: 'screen pixel at the top of spectrum line ' + li + ' (the dot)', drawn: rgbText(px), expected: 'a filled dot in the line colour', ok: px[3] > 0 && lum(px) < 200, note: 'The dot has radius 4.5 px, so the pixel at the stored top is the fill colour.' }; }
             },
             log: { every: 0.1, max: 1000, time: 't', columns: ['t', 'sum_A', 'peak', 'ratio', 'y_sum_400', 'y1_400'] },
