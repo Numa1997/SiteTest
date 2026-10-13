@@ -101,7 +101,7 @@ for (var i = 0; i < n; i++) {
         },
         {
             title: 'Energy as the accuracy check',
-            where: 'energy(s) and readouts()',
+            where: 'energy(s) and diagnostics()',
             math: '⟦kin|T⟧ = ½(m<sub>1</sub>+m<sub>2</sub>)l<sub>1</sub>²ω<sub>1</sub>² + ½m<sub>2</sub>l<sub>2</sub>²ω<sub>2</sub>² + m<sub>2</sub>l<sub>1</sub>l<sub>2</sub>ω<sub>1</sub>ω<sub>2</sub> cos δ<br>⟦pot|V⟧ = −(m<sub>1</sub>+m<sub>2</sub>)g l<sub>1</sub> cos θ<sub>1</sub> − m<sub>2</sub>g l<sub>2</sub> cos θ<sub>2</sub><br>⟦drift|ε⟧ = (⟦E|E⟧ − E<sub>0</sub>) / [(m<sub>1</sub>+m<sub>2</sub>)g l<sub>1</sub> + m<sub>2</sub>g l<sub>2</sub>]',
             note: 'The exact motion conserves E = T + V, so any change is pure numerical error. It is divided by the depth of the potential well, not by E₀, because E₀ can be zero and the ratio would blow up.',
             code: `var ⟦kin|kin⟧ = 0.5 * (m1 + m2) * l1 * l1 * s[2] * s[2] + 0.5 * m2 * l2 * l2 * s[3] * s[3]

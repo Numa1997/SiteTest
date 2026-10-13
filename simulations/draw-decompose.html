@@ -228,6 +228,7 @@
     </footer>
 
     <script src="../scripts/sim.js"></script>
+    <script src="../scripts/dataset.js"></script>
     <script>
     (function () {
         'use strict';
@@ -243,6 +244,91 @@
         var t = 0, trail = [];
         var extR = 1, viewR = 1; /* outermost drawn radius over a loop, and the radius the view is fitted to */
         var draft = [], zoom = 1, panX = 0, panY = 0, ptrs = {}, pinch = null; /* stroke being drawn; view magnification and centre in scale-free units */
+
+        /* ---------- the store: every number this page computes is written here, where it is computed (scripts/dataset.js) ---------- */
+        var ds = Sim.dataset({ title: 'Draw and decompose', attrs: { figure: 8, page: 'draw-decompose.html', NS: NS, KMAX: KMAX, length_unit: 'scale-free: the figure is fitted to the view; 1 unit = 0.46 × the smaller canvas side before zoom' } });
+        ds.var('source', [], 'str', { symbol: 'shape', long_name: 'where the stroke came from', computed_in: 'decompose()', source: 'The preset name, or your drawing.' });
+        ds.var('mode', [], 'str', { symbol: 'mode', long_name: 'drawing a new stroke, or playing the decomposition', computed_in: 'setMode()', source: 'The state of the page.' });
+        ds.var('drawing', [], 'bool', { symbol: 'pen down', long_name: 'a stroke is being drawn now', computed_in: 'the pointer handlers', source: 'The state of the pointer.' });
+        ds.dim('stroke', 0);
+        ds.var('stroke_x', ['stroke'], Float64Array, { symbol: 'stroke x', long_name: 'the stroke as drawn or generated, before resampling', computed_in: 'decompose()', digits: 5, source: 'Your pointer positions in scale-free units, or the preset’s parametric points.', updates: 'when a shape is decomposed' });
+        ds.var('stroke_y', ['stroke'], Float64Array, { symbol: 'stroke y', long_name: 'the stroke as drawn or generated', computed_in: 'decompose()', digits: 5, source: 'Your pointer positions in scale-free units, or the preset’s parametric points.', updates: 'when a shape is decomposed' });
+        ds.dim('draft', 0);
+        ds.var('draft_x', ['draft'], Float64Array, { symbol: 'draft x', long_name: 'the stroke being drawn now', computed_in: 'the pointer handlers', digits: 5, source: 'Your pointer positions, kept when they move more than 0.006 units.', updates: 'every frame while drawing' });
+        ds.var('draft_y', ['draft'], Float64Array, { symbol: 'draft y', long_name: 'the stroke being drawn now', computed_in: 'the pointer handlers', digits: 5, source: 'Your pointer positions, kept when they move more than 0.006 units.', updates: 'every frame while drawing' });
+        ds.var('N', [], 'int', { symbol: 'N', long_name: 'samples the stroke is resampled to', computed_in: 'a constant of the page', digits: 0, source: 'NS = 256.' });
+        ds.var('L', [], 'float', { symbol: 'L', long_name: 'length of the stroke', computed_in: 'resamp()', formula: 'Σ |pᵢ − pᵢ₋₁|', digits: 5 });
+        ds.var('step', [], 'float', { symbol: 'Δs', long_name: 'arc length between samples', computed_in: 'resamp()', formula: 'L / (N − 1)', digits: 6 });
+        ds.dim('n', 0);
+        ds.var('r_x', ['n'], Float64Array, { symbol: 'rₙ x', long_name: 'the stroke resampled at equal arc length', computed_in: 'resamp()', digits: 5, source: 'Linear interpolation of the stroke at arc lengths n · Δs.', updates: 'when a shape is decomposed' });
+        ds.var('r_y', ['n'], Float64Array, { symbol: 'rₙ y', long_name: 'the stroke resampled at equal arc length', computed_in: 'resamp()', digits: 5, source: 'Linear interpolation of the stroke at arc lengths n · Δs.', updates: 'when a shape is decomposed' });
+        ds.var('mx', [], 'float', { symbol: 'x̄', long_name: 'centroid of the samples', computed_in: 'decompose()', formula: 'Σ rₙ x / N', digits: 6 });
+        ds.var('my', [], 'float', { symbol: 'ȳ', long_name: 'centroid of the samples', computed_in: 'decompose()', formula: 'Σ rₙ y / N', digits: 6 });
+        ds.var('z_x', ['n'], Float64Array, { symbol: 'Re zₙ', long_name: 'the centred samples, the input of the DFT', computed_in: 'decompose()', formula: 'rₙ x − x̄', digits: 5, updates: 'when a shape is decomposed' });
+        ds.var('z_y', ['n'], Float64Array, { symbol: 'Im zₙ', long_name: 'the centred samples', computed_in: 'decompose()', formula: 'rₙ y − ȳ', digits: 5, updates: 'when a shape is decomposed' });
+        ds.var('E', [], 'float', { symbol: '⟨|z|²⟩', long_name: 'mean squared radius of the samples; Parseval’s left side', computed_in: 'decompose()', formula: 'Σ (x² + y²) / N', digits: 6 });
+        ds.dim('k', 0);
+        ds.var('c_k', ['k'], Int32Array, { symbol: 'k', long_name: 'frequency of each coefficient, turns per loop; rows are sorted by |c_k|', computed_in: 'dft()', digits: 0, source: 'The integers −60 … 60 without 0, in the order the sort put them.', updates: 'when a shape is decomposed' });
+        ds.var('c_re', ['k'], Float64Array, { symbol: 'Re c_k', long_name: 'DFT coefficient', computed_in: 'dft()', formula: 'Σₙ (xₙ cos a + yₙ sin a) / N, a = 2π k n / N', digits: 6, updates: 'when a shape is decomposed' });
+        ds.var('c_im', ['k'], Float64Array, { symbol: 'Im c_k', long_name: 'DFT coefficient', computed_in: 'dft()', formula: 'Σₙ (yₙ cos a − xₙ sin a) / N', digits: 6, updates: 'when a shape is decomposed' });
+        ds.var('c_amp', ['k'], Float64Array, { symbol: '|c_k|', long_name: 'radius of each circle', computed_in: 'dft()', formula: '√(Re² + Im²)', digits: 6, updates: 'when a shape is decomposed' });
+        ds.var('c_phase', ['k'], Float64Array, { symbol: 'arg c_k', units: 'rad', long_name: 'starting angle of each circle', computed_in: 'dft()', formula: 'atan2(Im, Re)', digits: 5, updates: 'when a shape is decomposed' });
+        ds.var('K', [], 'int', { symbol: 'K', long_name: 'circles kept', computed_in: 'K slider, read in rebuild()', digits: 0, source: 'Read from the slider.' });
+        ds.var('kept', [], 'float', { symbol: 'Σ_{K} |c_k|²', long_name: 'energy of the kept circles', computed_in: 'rebuild()', formula: 'Σ_{rank < K} |c_k|²', digits: 6 });
+        ds.var('cap', [], 'float', { symbol: 'captured', units: '%', long_name: 'share of ⟨|z|²⟩ the kept circles carry', computed_in: 'rebuild()', formula: '100 · kept / ⟨|z|²⟩', digits: 3 });
+        ds.var('errP', [], 'float', { symbol: 'rms error (Parseval)', long_name: 'predicted from the dropped energy', computed_in: 'rebuild()', formula: '√(max(0, ⟨|z|²⟩ − kept))', digits: 6 });
+        ds.var('err', [], 'float', { symbol: 'rms error (measured)', long_name: 'measured between the truncated series and the samples', computed_in: 'rebuild()', formula: '√(Σₙ |z̃ₙ − zₙ|² / N)', digits: 6 });
+        ds.var('zr_x', ['n'], Float64Array, { symbol: 'Re z̃ₙ', long_name: 'the truncated series at the sample times', computed_in: 'rebuild()', formula: 'Σ_{rank < K} |c_k| cos(k · 2π n / N + arg c_k)', digits: 5, updates: 'when K or the shape changes' });
+        ds.var('zr_y', ['n'], Float64Array, { symbol: 'Im z̃ₙ', long_name: 'the truncated series at the sample times', computed_in: 'rebuild()', formula: 'Σ_{rank < K} |c_k| sin(k · 2π n / N + arg c_k)', digits: 5, updates: 'when K or the shape changes' });
+        ds.var('e_i', ['n'], Float64Array, { symbol: '|z̃ₙ − zₙ|', long_name: 'pointwise error', computed_in: 'rebuild()', formula: '√((Re z̃ₙ − Re zₙ)² + (Im z̃ₙ − Im zₙ)²)', digits: 6, updates: 'when K or the shape changes' });
+        ds.dim('full', 0);
+        ds.var('full_x', ['full'], Float64Array, { symbol: 'full x', long_name: 'the truncated series over one loop, 601 points', computed_in: 'rebuild()', formula: 'Σ_{rank < K} |c_k| cos(k · 2π i / 600 + arg c_k)', digits: 5, updates: 'when K or the shape changes' });
+        ds.var('full_y', ['full'], Float64Array, { symbol: 'full y', long_name: 'the truncated series over one loop', computed_in: 'rebuild()', formula: 'Σ_{rank < K} |c_k| sin(k · 2π i / 600 + arg c_k)', digits: 5, updates: 'when K or the shape changes' });
+        ds.var('extR', [], 'float', { symbol: 'outer radius', long_name: 'outermost point drawn over a loop: every circle edge and the drawing itself', computed_in: 'rebuild()', formula: 'max(max |zₙ|, max over 256 phases of |joint| + |c_k|)', digits: 5 });
+        ds.var('t', [], 'float', { symbol: 't', units: 'rad', long_name: 'phase of the loop, 2π per loop', computed_in: 'Sim.clock callback', formula: 't ← t + 2π Δt / loop', digits: 5, source: 'Accumulated frame by frame.' });
+        ds.var('loop_s', [], 'float', { symbol: 'loop', units: 's', long_name: 'seconds per loop', computed_in: 'loop slider', digits: 0, source: 'Read from the slider.' });
+        ds.dim('arm', 0);
+        ds.var('A_arm', ['arm'], Float64Array, { symbol: '|c_k| drawn', long_name: 'radius of each arm, rank order', computed_in: 'chainAt(), read in draw()', formula: '|c_k|', digits: 6, updates: 'every frame while playing' });
+        ds.var('ang', ['arm'], Float64Array, { symbol: 'θ_k', units: 'rad', long_name: 'angle of each arm', computed_in: 'chainAt(), read in draw()', formula: 'k t + arg c_k', digits: 5, updates: 'every frame while playing' });
+        ds.var('vx', ['arm'], Float64Array, { symbol: 'Δx_k', long_name: 'each arm, real part', computed_in: 'chainAt(), read in draw()', formula: '|c_k| cos θ_k', digits: 6, updates: 'every frame while playing' });
+        ds.var('vy', ['arm'], Float64Array, { symbol: 'Δy_k', long_name: 'each arm, imaginary part', computed_in: 'chainAt(), read in draw()', formula: '|c_k| sin θ_k', digits: 6, updates: 'every frame while playing' });
+        ds.var('jx', ['arm'], Float64Array, { symbol: 'joint x', long_name: 'partial sum after each arm', computed_in: 'draw(), the arm loop', formula: 'Σ_{m ≤ k} Δx_m', digits: 6, updates: 'every frame while playing' });
+        ds.var('jy', ['arm'], Float64Array, { symbol: 'joint y', long_name: 'partial sum after each arm', computed_in: 'draw(), the arm loop', formula: 'Σ_{m ≤ k} Δy_m', digits: 6, updates: 'every frame while playing' });
+        ds.var('px', ['arm'], Float64Array, { symbol: 'joint x px', units: 'css px', long_name: 'screen position of each joint', computed_in: 'draw(), the arm loop', formula: 'previous joint + Δx · scale', digits: 2, updates: 'every frame while playing' });
+        ds.var('py', ['arm'], Float64Array, { symbol: 'joint y px', units: 'css px', long_name: 'screen position of each joint', computed_in: 'draw(), the arm loop', formula: 'previous joint − Δy · scale', digits: 2, updates: 'every frame while playing' });
+        ds.var('x', [], 'float', { symbol: 'Re z(t)', long_name: 'the pen, real part', computed_in: 'chainAt(), read in draw()', formula: 'the last joint', digits: 6 });
+        ds.var('y', [], 'float', { symbol: 'Im z(t)', long_name: 'the pen, imaginary part', computed_in: 'chainAt(), read in draw()', formula: 'the last joint', digits: 6 });
+        ds.var('tip_px', [], 'float', { symbol: 'pen x px', units: 'css px', long_name: 'screen position of the pen', computed_in: 'draw()', formula: 'the last joint on screen', digits: 2 });
+        ds.var('tip_py', [], 'float', { symbol: 'pen y px', units: 'css px', long_name: 'screen position of the pen', computed_in: 'draw()', formula: 'the last joint on screen', digits: 2 });
+        ds.dim('trail', 0);
+        ds.var('trail_t', ['trail'], Float64Array, { symbol: 'trail t', units: 'rad', long_name: 'phase at each past frame over the last loop', computed_in: 'Sim.clock callback', digits: 5, source: 'History: t at the end of each frame.', updates: 'every frame while playing' });
+        ds.var('trail_x', ['trail'], Float64Array, { symbol: 'trail x', long_name: 'pen position at each past frame', computed_in: 'Sim.clock callback', digits: 5, source: 'History: chainAt(t, K) at each frame.', updates: 'every frame while playing' });
+        ds.var('trail_y', ['trail'], Float64Array, { symbol: 'trail y', long_name: 'pen position at each past frame', computed_in: 'Sim.clock callback', digits: 5, source: 'History: chainAt(t, K) at each frame.', updates: 'every frame while playing' });
+        ds.var('c_max', [], 'float', { symbol: '|c|_max', long_name: 'scale of the spectrum panel: the largest coefficient', computed_in: 'spectrum()', formula: '|c_0| or 1', digits: 6 });
+        ds.var('spec_x', ['k'], Float64Array, { symbol: 'bar x px', units: 'css px', long_name: 'position of each bar in the spectrum panel', computed_in: 'spectrum()', formula: '18 + (k + 60) / 120 · (w − 36)', digits: 2, updates: 'when K or the shape changes' });
+        ds.var('spec_y', ['k'], Float64Array, { symbol: 'bar top px', units: 'css px', long_name: 'top of each bar', computed_in: 'spectrum()', formula: 'base − |c_k| / |c|_max · (base − 10), base = h − 22', digits: 2, updates: 'when K or the shape changes' });
+        ds.var('sbox_w', [], 'int', { symbol: 'spectrum w', units: 'css px', long_name: 'spectrum panel width', computed_in: 'spectrum()', digits: 0, source: 'Measured from the page layout.' });
+        ds.var('sbox_h', [], 'int', { symbol: 'spectrum h', units: 'css px', long_name: 'spectrum panel height', computed_in: 'spectrum()', digits: 0, source: 'Measured from the page layout.' });
+        ds.var('viewR', [], 'float', { symbol: 'view radius', long_name: 'radius the view is fitted to; jumps up, relaxes down over 0.4 s', computed_in: 'Sim.clock callback', digits: 5, source: 'Relaxation toward the outer radius; history, not a formula.' });
+        ds.var('zoom', [], 'float', { symbol: 'zoom', units: '×', long_name: 'magnification', computed_in: 'zoom slider, wheel or pinch', digits: 3, source: 'Read from the slider or the pointer.' });
+        ds.var('panX', [], 'float', { symbol: 'pan x', long_name: 'view centre when not following the pen', computed_in: 'the pointer handlers', digits: 5, source: 'Dragged with the pointer.' });
+        ds.var('panY', [], 'float', { symbol: 'pan y', long_name: 'view centre when not following the pen', computed_in: 'the pointer handlers', digits: 5, source: 'Dragged with the pointer.' });
+        ds.var('follow', [], 'bool', { symbol: 'follow pen', long_name: 'the view is centred on the pen', computed_in: 'the switch', source: 'The state of the switch.' });
+        ds.var('S_fit', [], 'float', { symbol: 'S', units: 'px per unit', long_name: 'base scale', computed_in: 'S()', formula: 'min(w, h) · 0.46', digits: 3 });
+        ds.var('scale', [], 'float', { symbol: 'scale', units: 'px per unit', long_name: 'pixels per unit in the view', computed_in: 'draw()', formula: 'drawing: S; playing: S / max(1, view radius) · zoom', digits: 3 });
+        ds.var('cx', [], 'float', { symbol: 'c_x', units: 'css px', long_name: 'origin on screen', computed_in: 'draw()', formula: 'w / 2 − (follow ? x : pan x) · scale', digits: 2 });
+        ds.var('cy', [], 'float', { symbol: 'c_y', units: 'css px', long_name: 'origin on screen', computed_in: 'draw()', formula: 'h / 2 + (follow ? y : pan y) · scale', digits: 2 });
+        ds.var('box_w', [], 'int', { symbol: 'box.w', units: 'css px', long_name: 'canvas width on your screen', computed_in: 'draw()', digits: 0, source: 'Measured from the page layout.' });
+        ds.var('box_h', [], 'int', { symbol: 'box.h', units: 'css px', long_name: 'canvas height on your screen', computed_in: 'draw()', digits: 0, source: 'Measured from the page layout.' });
+        ds.var('circles', [], 'bool', { symbol: 'circles shown', long_name: 'the circle outlines', computed_in: 'the switch', source: 'The state of the switch.' });
+        ds.var('vectors', [], 'bool', { symbol: 'arms shown', long_name: 'the arrows', computed_in: 'the switch', source: 'The state of the switch.' });
+        ds.var('orig', [], 'bool', { symbol: 'original shown', long_name: 'the dashed samples', computed_in: 'the switch', source: 'The state of the switch.' });
+        ds.var('full', [], 'bool', { symbol: 'full curve shown', long_name: 'the whole truncated series', computed_in: 'the switch', source: 'The state of the switch.' });
+        ds.var('dt', [], 'float', { symbol: 'Δt', units: 's', long_name: 'time between the last two frames, 0 while paused', computed_in: 'Sim.clock', digits: 4, source: 'Measured by the clock.' });
+        ds.var('fps', [], 'float', { symbol: 'frame rate', units: 'Hz', long_name: 'smoothed over about ten frames', computed_in: 'Sim.clock callback', digits: 1, source: 'A running average of 1/Δt.' });
+        ds.var('frames', [], 'int', { symbol: 'frames', long_name: 'frames drawn so far', computed_in: 'Sim.clock callback', digits: 0, source: 'Counted frame by frame.' });
+        ds.var('playing', [], 'bool', { symbol: 'playing', long_name: 'the clock runs', computed_in: 'Sim.clock', source: 'The state of the Play button.' });
+        ds.set('N', NS);
 
         var K = Sim.slider('K', { format: function (v) { return String(v); }, onInput: rebuild });
         var loop = Sim.slider('loop', { format: function (v) { return v + ' s'; } });
@@ -314,8 +400,17 @@
             meanZ2 = 0;
             samples.forEach(function (p) { meanZ2 += p.x * p.x + p.y * p.y; });
             meanZ2 /= NS;
+            ds.dim('stroke', pts.length); ds.dim('n', NS);
+            var SX = ds.alloc('stroke_x'), SY = ds.alloc('stroke_y'), RX = ds.alloc('r_x'), RY = ds.alloc('r_y'), ZX = ds.alloc('z_x'), ZY = ds.alloc('z_y'), di;
+            for (di = 0; di < pts.length; di++) { SX[di] = pts[di].x; SY[di] = pts[di].y; }
+            for (di = 0; di < NS; di++) { RX[di] = r[di].x; RY[di] = r[di].y; ZX[di] = samples[di].x; ZY[di] = samples[di].y; }
+            ds.set('L', arcLen); ds.set('step', arcLen / (NS - 1)); ds.set('mx', meanX); ds.set('my', meanY); ds.set('E', meanZ2);
             coefs = dft(samples);
+            ds.dim('k', coefs.length);
+            var CK = ds.alloc('c_k'), CR = ds.alloc('c_re'), CI = ds.alloc('c_im'), CA = ds.alloc('c_amp'), CP = ds.alloc('c_phase');
+            for (di = 0; di < coefs.length; di++) { CK[di] = coefs[di].k; CR[di] = coefs[di].re; CI[di] = coefs[di].im; CA[di] = coefs[di].amp; CP[di] = coefs[di].phase; }
             source = name;
+            ds.set('source', name);
             K.el.max = coefs.length;
             K.set(Math.min(K.value, coefs.length));
             t = 0;
@@ -332,15 +427,21 @@
             for (i = 0; i < n; i++) kept += coefs[i].amp * coefs[i].amp;
             errP = Math.sqrt(Math.max(0, meanZ2 - kept));
             var e2 = 0;
+            var ZRX = ds.alloc('zr_x'), ZRY = ds.alloc('zr_y'), EI = ds.alloc('e_i');
             for (i = 0; i < NS; i++) {
                 var z = chainAt(TAU * i / NS, n);
                 e2 += Math.pow(z.x - samples[i].x, 2) + Math.pow(z.y - samples[i].y, 2);
+                ZRX[i] = z.x; ZRY[i] = z.y; EI[i] = Math.hypot(z.x - samples[i].x, z.y - samples[i].y);
             }
             err = Math.sqrt(e2 / NS);
+            ds.set('K', n); ds.set('kept', kept); ds.set('errP', errP); ds.set('err', err); ds.set('cap', 100 * kept / meanZ2);
             full = [];
+            ds.dim('full', 601);
+            var FX = ds.alloc('full_x'), FY = ds.alloc('full_y');
             for (i = 0; i <= 600; i++) {
                 var q = chainAt(TAU * i / 600, n);
                 full.push({ x: q.x, y: q.y });
+                FX[i] = q.x; FY[i] = q.y;
             }
             /* outermost point drawn over a whole loop: every circle edge |joint| + radius, and the drawing itself */
             extR = 0;
@@ -354,6 +455,7 @@
                     jy += cm.amp * Math.sin(an);
                 }
             }
+            ds.set('extR', extR);
             trail = [];
             readouts();
             spectrum();
@@ -549,6 +651,13 @@
                 cx = w / 2 - (swFollow.checked ? cur.x : panX) * s;
                 cy = h / 2 + (swFollow.checked ? cur.y : panY) * s;
             }
+            ds.set('mode', mode); ds.set('drawing', drawing); ds.set('scale', s); ds.set('cx', cx); ds.set('cy', cy); ds.set('box_w', w); ds.set('box_h', h); ds.set('S_fit', S()); ds.set('zoom', zoom); ds.set('panX', panX); ds.set('panY', panY); ds.set('follow', swFollow.checked);
+            ds.set('circles', swCircles.checked); ds.set('vectors', swVectors.checked); ds.set('orig', swOrig.checked); ds.set('full', swFull.checked);
+            if (cur) { ds.set('x', cur.x); ds.set('y', cur.y); }
+            var DL = mode === 'draw' ? draft.length : 0;
+            if (ds.dims.draft !== DL) ds.dim('draft', DL);
+            var DX = ds.alloc('draft_x'), DY = ds.alloc('draft_y');
+            for (var qi = 0; qi < DL; qi++) { DX[qi] = draft[qi].x; DY[qi] = draft[qi].y; }
             ctx.clearRect(0, 0, w, h);
             ctx.strokeStyle = T.rule;
             ctx.lineWidth = 1;
@@ -621,8 +730,12 @@
             ctx.lineCap = 'round';
 
             var ox = cx, oy = cy;
+            var NA = cur.parts.length, jx = 0, jy = 0;
+            if (ds.dims.arm !== NA) ds.dim('arm', NA);
+            var ANG = ds.alloc('ang'), VX = ds.alloc('vx'), VY = ds.alloc('vy'), JX = ds.alloc('jx'), JY = ds.alloc('jy'), PXa = ds.alloc('px'), PYa = ds.alloc('py'), AA = ds.alloc('A_arm');
             cur.parts.forEach(function (p, i) {
                 var nx = ox + p.vx * s, ny = oy - p.vy * s;
+                ANG[i] = coefs[i].k * t + coefs[i].phase; VX[i] = p.vx; VY[i] = p.vy; jx += p.vx; jy += p.vy; JX[i] = jx; JY[i] = jy; PXa[i] = nx; PYa[i] = ny; AA[i] = p.amp;
                 if (swCircles.checked && p.amp * s > 1.5) {
                     ctx.strokeStyle = T.rose;
                     ctx.lineWidth = 1;
@@ -665,6 +778,7 @@
             ctx.lineTo(cx, oy);
             ctx.stroke();
             ctx.setLineDash([]);
+            ds.set('tip_px', ox); ds.set('tip_py', oy);
             ctx.beginPath();
             ctx.arc(ox, oy, 5, 0, TAU);
             ctx.fillStyle = T.accent;
@@ -676,6 +790,7 @@
 
         function spectrum() {
             var w = sbox.w, h = sbox.h, pad = 18, base = h - 22;
+            ds.set('sbox_w', w); ds.set('sbox_h', h);
             sctx.clearRect(0, 0, w, h);
             sctx.strokeStyle = T.rule;
             sctx.lineWidth = 1;
@@ -700,8 +815,11 @@
             sctx.textAlign = 'center';
             if (!coefs.length) return;
             var max = coefs[0].amp || 1, n = K.value;
+            var SPX = ds.alloc('spec_x'), SPY = ds.alloc('spec_y');
+            ds.set('c_max', max);
             coefs.forEach(function (c, rank) {
                 var x = pad + (c.k + KMAX) / (2 * KMAX) * (w - 2 * pad), y = base - c.amp / max * (base - 10);
+                SPX[rank] = x; SPY[rank] = y;
                 sctx.strokeStyle = rank < n ? T.accent : T.tanInk;
                 sctx.fillStyle = sctx.strokeStyle;
                 sctx.lineWidth = rank < n ? 3 : 2;
@@ -727,23 +845,23 @@
             $('cap-k').textContent = has ? 'K = ' + K.value : '—';
         }
 
+        /* live values for the walkthrough: read from the store, nothing recomputed */
         Sim.live = function () {
-            var out = { N: String(NS), L: Sim.fmt(arcLen, 4), ds: Sim.fmt(arcLen / (NS - 1), 5), mx: Sim.fmt(meanX, 4), my: Sim.fmt(meanY, 4),
-                K: String(K.value), tot: String(coefs.length), E: Sim.fmt(meanZ2, 5), kept: Sim.fmt(kept, 5),
-                cap: meanZ2 ? Sim.fmt(100 * kept / meanZ2, 3) + ' %' : '—', err: Sim.fmt(err, 6), errP: Sim.fmt(errP, 6),
-                t: Sim.fmt(t, 3) + ' rad', tl: loop.value + ' s', src: source };
-            if (coefs.length) {
-                var c = coefs[0], z = chainAt(t, K.value);
-                out.k1 = Sim.fmt(c.k, 0); out.re = Sim.fmt(c.re, 5); out.im = Sim.fmt(c.im, 5); out.A = Sim.fmt(c.amp, 5);
-                out.ph = Sim.fmt(c.phase, 4) + ' rad'; out.x = Sim.fmt(z.x, 4); out.y = Sim.fmt(z.y, 4);
-                out.z0 = Sim.fmt(samples[0].x, 4) + ' + ' + Sim.fmt(samples[0].y, 4) + 'i';
+            var has = (ds.dims.k || 0) > 0, out = { N: String(NS), L: Sim.fmt(ds.get('L') || 0, 4), ds: Sim.fmt(ds.get('step') || 0, 5), mx: Sim.fmt(ds.get('mx') || 0, 4), my: Sim.fmt(ds.get('my') || 0, 4),
+                K: String(ds.get('K')), tot: String(ds.dims.k || 0), E: Sim.fmt(ds.get('E') || 0, 5), kept: Sim.fmt(ds.get('kept') || 0, 5),
+                cap: ds.get('E') ? Sim.fmt(ds.get('cap'), 3) + ' %' : '—', err: Sim.fmt(ds.get('err') || 0, 6), errP: Sim.fmt(ds.get('errP') || 0, 6),
+                t: Sim.fmt(ds.get('t') || 0, 3) + ' rad', tl: ds.get('loop_s') + ' s', src: ds.get('source') };
+            if (has) {
+                out.k1 = Sim.fmt(ds.get('c_k')[0], 0); out.re = Sim.fmt(ds.get('c_re')[0], 5); out.im = Sim.fmt(ds.get('c_im')[0], 5); out.A = Sim.fmt(ds.get('c_amp')[0], 5);
+                out.ph = Sim.fmt(ds.get('c_phase')[0], 4) + ' rad'; out.x = Sim.fmt(ds.get('x') || 0, 4); out.y = Sim.fmt(ds.get('y') || 0, 4);
+                out.z0 = Sim.fmt(ds.get('z_x')[0], 4) + ' + ' + Sim.fmt(ds.get('z_y')[0], 4) + 'i';
             } else {
                 out.k1 = out.re = out.im = out.A = out.ph = out.x = out.y = out.z0 = 'no shape yet';
             }
             return out;
         };
 
-        var lastNow = performance.now();
+        var lastNow = performance.now(), fps = 0, frames = 0;
         var clk = Sim.clock(function (dt) {
             var now = performance.now(), real = Math.min((now - lastNow) / 1000, 0.05);
             lastNow = now;
@@ -755,122 +873,130 @@
                 trail.push({ x: z.x, y: z.y, t: t });
                 while (trail.length && trail[0].t < t - TAU * 0.98) trail.shift();
             }
+            var TL = trail.length;
+            if (ds.dims.trail !== TL) ds.dim('trail', TL);
+            var TXa = ds.alloc('trail_x'), TYa = ds.alloc('trail_y'), TTa = ds.alloc('trail_t');
+            for (var ti = 0; ti < TL; ti++) { TXa[ti] = trail[ti].x; TYa[ti] = trail[ti].y; TTa[ti] = trail[ti].t; }
+            if (real > 0) { frames++; fps = fps ? fps + (1 / real - fps) * 0.1 : 1 / real; }
+            ds.set('t', t); ds.set('viewR', viewR); ds.set('loop_s', loop.value); ds.set('dt', dt); ds.set('fps', fps); ds.set('frames', frames); ds.set('playing', clk ? clk.playing : true);
             draw();
         });
         Sim.playButton($('play'), clk);
-        Sim.onResize(stage, function () { box.fit(); });
-        Sim.onResize(specStage, function () { sbox.fit(); spectrum(); });
 
-        /* ---------- every number above, as data for the side panel (scripts/datalog.js) ---------- */
-        function has() { return coefs.length > 0; }
-        function tip() { return has() ? chainAt(t, K.value) : null; }
-        function chainJoints() {
-            if (!has()) return [];
-            var x = 0, yy = 0;
-            return chainAt(t, K.value).parts.map(function (p) { x += p.vx; yy += p.vy; return { x: x, y: yy }; });
-        }
-        /* cumulative share of ⟨|z|²⟩ held by the first j + 1 terms, in rank order */
-        var cumCache = { key: null, list: [] };
-        function cumulative() {
-            if (cumCache.key !== coefs) {
-                var s = 0;
-                cumCache.list = coefs.map(function (c) { s += c.amp * c.amp; return meanZ2 ? 100 * s / meanZ2 : 0; });
-                cumCache.key = coefs;
-            }
-            return cumCache.list;
-        }
-        function points(name, code, meaning, list, updates) {
-            return { name: name, kind: 'vector', code: code, type: 'list of point', meaning: meaning, updates: updates,
-                length: function () { return list().length; },
-                columns: [
-                    { name: 'Re', digits: 5, get: function (j) { var p = list()[j]; return p && p.x; } },
-                    { name: 'Im', digits: 5, get: function (j) { var p = list()[j]; return p && p.y; } }
-                ] };
-        }
-
+        /* ---------- the data panel (scripts/datalog.js) reads the store; these hooks only say where things are drawn and how to test a value ---------- */
+        function pixelAt(c, bx, x, y) { return c.getImageData(Math.round(x * bx.dpr), Math.round(y * bx.dpr), 1, 1).data; }
+        function rgbText(px) { return px[3] === 0 ? 'nothing (transparent)' : 'rgb(' + px[0] + ', ' + px[1] + ', ' + px[2] + ')' + (px[3] < 255 ? ' at alpha ' + (px[3] / 255).toFixed(2) : ''); }
+        function lum(px) { return 0.2126 * px[0] + 0.7152 * px[1] + 0.0722 * px[2]; }
+        function playing() { return ds.get('mode') === 'play'; }
+        function toScreen(x, y) { return { x: ds.get('cx') + x * ds.get('scale'), y: ds.get('cy') - y * ds.get('scale') }; }
+        function chainNow(time, n) { var CK = ds.get('c_k'), CA = ds.get('c_amp'), CP = ds.get('c_phase'), x = 0, y = 0; for (var i = 0; i < n; i++) { var ang = CK[i] * time + CP[i]; x += CA[i] * Math.cos(ang); y += CA[i] * Math.sin(ang); } return { x: x, y: y }; }
+        function dftOne(k) { var X = ds.get('z_x'), Y = ds.get('z_y'), N = X.length, re = 0, im = 0; for (var n = 0; n < N; n++) { var a = TAU * k * n / N, c = Math.cos(a), sn = Math.sin(a); re += X[n] * c + Y[n] * sn; im += Y[n] * c - X[n] * sn; } re /= N; im /= N; return { re: re, im: im }; }
+        function nearest(x, y, xs, ys, bd, map) { var best = -1; for (var i = 0; i < xs.length; i++) { var p = map ? map(xs[i], ys[i]) : { x: xs[i], y: ys[i] }, d = Math.hypot(x - p.x, y - p.y); if (d < bd) { bd = d; best = i; } } return { i: best, d: bd }; }
+        function armInputs(i) { return [['rank', i, '', 0], ['|c_k|', ds.get('A_arm')[i], '', 6], ['θ', ds.get('ang')[i], 'rad', 5]]; }
         Sim.data = {
-            kicker: 'Fig. 8 · data',
-            title: 'Draw and decompose',
-            subtitle: 'Every number this simulation is computing, read live from its own variables.',
-            foot: 'Repainted every frame while open. The coefficient table is the whole Fourier transform, ranked by size.',
+            ds: ds, kicker: 'Fig. 8 · data', file: 'fig8-draw-decompose',
             playing: function () { return clk.playing; },
             groups: [
-                { title: 'Your shape', note: 'the stroke, resampled and centred', vars: [
-                    { name: 'source', code: 'source', type: 'str', get: function () { return source; } },
-                    { name: 'mode', code: 'mode', type: 'str', meaning: 'draw or play', get: function () { return mode; } },
-                    { name: 'stroke', kind: 'vector', code: 'stroke', type: 'list of point', meaning: 'the raw points of the shape, as drawn or as generated', updates: 'when you decompose a new shape',
-                        length: function () { return stroke.length; },
-                        columns: [
-                            { name: 'x', digits: 5, get: function (j) { return stroke[j] && stroke[j].x; } },
-                            { name: 'y', digits: 5, get: function (j) { return stroke[j] && stroke[j].y; } }
-                        ] },
-                    { name: 'N', code: 'NS', type: 'int', meaning: 'samples after equal arc-length resampling', digits: 0, get: function () { return NS; } },
-                    { name: 'L', code: 'arcLen', type: 'float', meaning: 'arc length of the stroke, in units of the figure', digits: 4, get: function () { return arcLen; } },
-                    { name: 'Δs = L/(N − 1)', type: 'float', meaning: 'spacing between samples', digits: 5, get: function () { return arcLen / (NS - 1); } },
-                    { name: 'centroid', code: 'meanX, meanY', type: 'float', size: '2', meaning: 'removed before the transform, so c₀ = 0', get: function () { return Sim.fmt(meanX, 4) + ', ' + Sim.fmt(meanY, 4); } },
-                    points('z<sub>n</sub>', 'samples', 'the 256 centred samples the transform reads', function () { return samples; }, 'when you decompose a new shape'),
-                    { name: '⟨|z|²⟩', code: 'meanZ2', type: 'float', meaning: 'mean squared distance from the centroid', digits: 5, get: function () { return meanZ2; } }
-                ] },
-                { title: 'Fourier coefficients', note: 'c<sub>k</sub> = (1/N) Σ z<sub>n</sub> e<sup>−2πikn/N</sup>, sorted by |c<sub>k</sub>|', vars: [
-                    { name: 'c<sub>k</sub>', kind: 'vector', code: 'coefs', type: 'list of dict', meaning: 'every coefficient from k = −60 to 60, largest first; "used" marks the K circles drawn', updates: 'when you decompose a new shape', cw: 86,
-                        length: function () { return coefs.length; }, rowLabel: function (j) { return 'rank ' + (j + 1); },
-                        columns: [
-                            { name: 'k', digits: 0, get: function (j) { return coefs[j].k; } },
-                            { name: 'Re c', digits: 5, get: function (j) { return coefs[j].re; } },
-                            { name: 'Im c', digits: 5, get: function (j) { return coefs[j].im; } },
-                            { name: '|c|', digits: 5, get: function (j) { return coefs[j].amp; }, colour: function (v) { return Sim.colourMap(v, coefs[0] ? coefs[0].amp : 1); } },
-                            { name: 'arg c', unit: 'rad', digits: 4, get: function (j) { return coefs[j].phase; } },
-                            { name: 'used', get: function (j) { return j < K.value ? 'yes' : 'no'; } },
-                            { name: 'Σ |c|²', unit: '%', digits: 3, get: function (j) { return cumulative()[j]; } }
-                        ] },
-                    { name: 'K', code: 'K.value', type: 'int', meaning: 'circles drawn, the K largest coefficients', digits: 0, get: function () { return K.value; } },
-                    { name: 'k<sub>max</sub>', code: 'KMAX', type: 'int', meaning: 'highest frequency computed', digits: 0, get: function () { return KMAX; } },
-                    { name: 'largest k', code: 'coefs[0].k', type: 'int', meaning: 'the biggest circle turns this many times per loop', digits: 0, get: function () { return has() ? coefs[0].k : undefined; } },
-                    { name: 'DFT cost', code: '2 · 120 · N', type: 'int', meaning: 'cos and sin calls for one transform', digits: 0, get: function () { return 2 * 2 * KMAX * NS; } }
-                ] },
-                { title: 'Accuracy', note: 'how much of the shape K circles keep', vars: [
-                    { name: 'Σ<sub>K</sub> |c|²', code: 'kept', type: 'float', meaning: 'energy kept by the K circles', digits: 5, get: function () { return kept; } },
-                    { name: 'kept share', type: 'float', unit: '%', meaning: 'Σ<sub>K</sub> |c|² / ⟨|z|²⟩', digits: 3, get: function () { return meanZ2 ? 100 * kept / meanZ2 : undefined; } },
-                    { name: 'RMS error', code: 'err', type: 'float', meaning: 'measured: √(mean |z(t<sub>n</sub>) − z<sub>n</sub>|²)', digits: 6, get: function () { return err; } },
-                    { name: '… by Parseval', code: 'errP', type: 'float', meaning: 'predicted: √(⟨|z|²⟩ − Σ<sub>K</sub> |c|²)', digits: 6, get: function () { return errP; } },
-                    { name: 'difference', type: 'float', meaning: 'measured minus predicted; tiny when Parseval holds', digits: 6, get: function () { return err - errP; } },
-                    points('K-term curve', 'full', 'the truncated series over one loop, 601 points', function () { return full; }, 'when K changes')
-                ] },
-                { title: 'The pen now', note: 'the tip of the chain of K circles', vars: [
-                    { name: 't', code: 't', type: 'float', unit: 'rad', meaning: 'loop phase; one loop is 2π', digits: 3, get: function () { return t; } },
-                    { name: 'loops', type: 'float', meaning: 't / 2π', digits: 3, get: function () { return t / TAU; } },
-                    { name: 'time per loop', code: 'loop.value', type: 'int', unit: 's', digits: 0, get: function () { return loop.value; } },
-                    { name: 'Re z(t)', code: 'chainAt(t, K).x', type: 'float', digits: 5, get: function () { var z = tip(); return z && z.x; } },
-                    { name: 'Im z(t)', code: 'chainAt(t, K).y', type: 'float', digits: 5, get: function () { var z = tip(); return z && z.y; } },
-                    { name: '|z(t)|', type: 'float', digits: 5, get: function () { var z = tip(); return z ? Math.hypot(z.x, z.y) : undefined; } },
-                    points('joints', 'chainAt(t, K).parts', 'where each of the K arrows ends, in rank order', chainJoints, 'every frame'),
-                    points('trail', 'trail', 'the pen\'s path over the last loop', function () { return trail; }, 'every frame')
-                ] },
-                { title: 'View and drawing', note: 'how the picture is laid out', vars: [
-                    { name: 'scale', code: 'viewScale()', type: 'float', unit: 'px/unit', digits: 2, get: function () { return mode === 'draw' ? S() : viewScale(); } },
-                    { name: 'zoom', code: 'zoom', type: 'float', unit: '×', digits: 2, get: function () { return zoom; } },
-                    { name: 'pan', code: 'panX, panY', type: 'float', size: '2', get: function () { return Sim.fmt(panX, 4) + ', ' + Sim.fmt(panY, 4); } },
-                    { name: 'follow the pen', code: 'swFollow.checked', type: 'bool', get: function () { return swFollow.checked; } },
-                    { name: 'R<sub>ext</sub>', code: 'extR', type: 'float', meaning: 'outermost point drawn over a loop', digits: 4, get: function () { return extR; } },
-                    { name: 'R<sub>view</sub>', code: 'viewR', type: 'float', meaning: 'radius the view is fitted to', digits: 4, get: function () { return viewR; } },
-                    { name: 'canvas', code: 'box.w × box.h', type: 'int', size: '2', unit: 'css px', get: function () { return box.w + ' × ' + box.h; } },
-                    { name: 'frame rate', type: 'float', unit: 'Hz', meaning: 'measured by the panel', digits: 1, get: function () { return Sim.frameStats.fps; } },
-                    { name: 'playing', code: 'clk.playing', type: 'bool', get: function () { return clk.playing; } }
-                ] }
+                { title: 'The stroke', note: 'what you drew or the preset, then resampled and centred', vars: ['source', 'mode', 'drawing', 'stroke_x', 'stroke_y', 'draft_x', 'draft_y', 'N', 'L', 'step', 'r_x', 'r_y', 'mx', 'my', 'z_x', 'z_y', 'E'] },
+                { title: 'Coefficients', note: 'one row per frequency, sorted by |c_k|; the first K are drawn', vars: ['c_k', 'c_re', 'c_im', 'c_amp', 'c_phase', 'K', 'kept', 'cap', 'errP', 'err', 'e_i', 'zr_x', 'zr_y', 'full_x', 'full_y', 'extR'] },
+                { title: 'The chain now', note: 'tip to tail, as drawn; point at a cell to find the joint', vars: ['t', 'loop_s', 'A_arm', 'ang', 'vx', 'vy', 'jx', 'jy', 'px', 'py', 'x', 'y', 'tip_px', 'tip_py'] },
+                { title: 'Trail', note: 'the pen over the last loop', vars: ['trail_t', 'trail_x', 'trail_y'] },
+                { title: 'Spectrum panel', note: 'the bars below the figure', vars: ['c_max', 'spec_x', 'spec_y', 'sbox_w', 'sbox_h'] },
+                { title: 'View and drawing', note: 'how the picture is laid out', vars: ['viewR', 'zoom', 'panX', 'panY', 'follow', 'S_fit', 'scale', 'cx', 'cy', 'box_w', 'box_h', 'circles', 'vectors', 'orig', 'full', 'dt', 'fps', 'frames', 'playing'] }
             ],
-            log: {
-                every: 0.1, max: 1000,
-                columns: [
-                    { name: 'clock', unit: 's', digits: 2, get: function () { return Sim.frameStats.play; } },
-                    { name: 't', unit: 'rad', digits: 3, get: function () { return t; } },
-                    { name: 'Re z', digits: 4, get: function () { var z = tip(); return z && z.x; } },
-                    { name: 'Im z', digits: 4, get: function () { var z = tip(); return z && z.y; } },
-                    { name: '|z|', digits: 4, get: function () { var z = tip(); return z ? Math.hypot(z.x, z.y) : undefined; } },
-                    { name: 'K', digits: 0, get: function () { return K.value; } },
-                    { name: 'RMS error', digits: 5, get: function () { return err; } }
-                ]
-            }
+            rowLabel: { k: function (j) { return 'rank ' + j; }, n: function (j) { return 'n' + j; } },
+            colour: (function () { function byR(v) { return Sim.colourMap(v, Math.max(ds.get('extR') || 0, 1e-6)); } return { z_x: byR, z_y: byR, zr_x: byR, zr_y: byR, full_x: byR, full_y: byR, trail_x: byR, trail_y: byR, jx: byR, jy: byR, vx: byR, vy: byR, c_re: byR, c_im: byR, c_amp: byR, e_i: function (v) { return Sim.colourMap(v, Math.max(ds.get('err') || 0, 1e-9) * 3); } }; })(),
+            probe: function (x, y) {
+                var r, best = null, bd = 10;
+                if (!playing()) { r = nearest(x, y, ds.get('draft_x'), ds.get('draft_y'), bd, toScreen); return r.i < 0 ? null : { draft: r.i }; }
+                r = nearest(x, y, ds.get('px'), ds.get('py'), bd); if (r.i >= 0) { bd = r.d; best = { arm: r.i }; }
+                var d = Math.hypot(x - ds.get('tip_px'), y - ds.get('tip_py')); if (d < bd) { bd = d; best = { tip: true }; }
+                if (best) return best;
+                if (ds.get('orig')) { r = nearest(x, y, ds.get('z_x'), ds.get('z_y'), 8, toScreen); if (r.i >= 0) return { sample: r.i }; }
+                if (ds.get('full')) { r = nearest(x, y, ds.get('full_x'), ds.get('full_y'), 8, toScreen); if (r.i >= 0) return { full: r.i }; }
+                r = nearest(x, y, ds.get('trail_x'), ds.get('trail_y'), 8, toScreen); if (r.i >= 0) return { trail: r.i };
+                return null;
+            },
+            inspect: function (ref) {
+                var i;
+                if (ref.tip) return { title: 'the pen z(t)', at: { x: ds.get('tip_px'), y: ds.get('tip_py') }, rows: [['t', ds.get('t'), 'rad', 't'], ['Re z', ds.get('x'), '', 'x'], ['Im z', ds.get('y'), '', 'y']] };
+                if (ref.arm !== undefined) { i = ref.arm; return { title: 'circle ' + (i + 1) + ' · k = ' + ds.get('c_k')[i] + ' · its joint', at: { x: ds.get('px')[i], y: ds.get('py')[i] }, rows: [['k', ds.get('c_k')[i], '', 'c_k', i], ['|c_k|', ds.get('A_arm')[i], '', 'A_arm', i], ['arg c_k', ds.get('c_phase')[i], 'rad', 'c_phase', i], ['θ = k t + arg c_k', ds.get('ang')[i], 'rad', 'ang', i], ['Δx', ds.get('vx')[i], '', 'vx', i], ['Δy', ds.get('vy')[i], '', 'vy', i], ['joint x', ds.get('jx')[i], '', 'jx', i], ['joint y', ds.get('jy')[i], '', 'jy', i]] }; }
+                if (ref.sample !== undefined) { i = ref.sample; return { title: 'sample n = ' + i + ' of the original', at: toScreen(ds.get('z_x')[i], ds.get('z_y')[i]), rows: [['Re zₙ', ds.get('z_x')[i], '', 'z_x', i], ['Im zₙ', ds.get('z_y')[i], '', 'z_y', i], ['Re z̃ₙ', ds.get('zr_x')[i], '', 'zr_x', i], ['Im z̃ₙ', ds.get('zr_y')[i], '', 'zr_y', i], ['error', ds.get('e_i')[i], '', 'e_i', i]] }; }
+                if (ref.full !== undefined) { i = ref.full; return { title: 'full curve point ' + i + ' · t = ' + Sim.fmt(TAU * i / 600, 4) + ' rad', at: toScreen(ds.get('full_x')[i], ds.get('full_y')[i]), rows: [['x', ds.get('full_x')[i], '', 'full_x', i], ['y', ds.get('full_y')[i], '', 'full_y', i]] }; }
+                if (ref.trail !== undefined) { i = ref.trail; return { title: 'trail point ' + i + ' · t = ' + Sim.fmt(ds.get('trail_t')[i], 4) + ' rad', at: toScreen(ds.get('trail_x')[i], ds.get('trail_y')[i]), rows: [['t', ds.get('trail_t')[i], 'rad', 'trail_t', i], ['x', ds.get('trail_x')[i], '', 'trail_x', i], ['y', ds.get('trail_y')[i], '', 'trail_y', i]] }; }
+                i = ref.draft;
+                return { title: 'draft point ' + i, at: toScreen(ds.get('draft_x')[i], ds.get('draft_y')[i]), rows: [['x', ds.get('draft_x')[i], '', 'draft_x', i], ['y', ds.get('draft_y')[i], '', 'draft_y', i]] };
+            },
+            locate: function (name, idx) {
+                var v = ds.vars[name], d = v.dims[0];
+                if (!d) return null;
+                if (d === 'arm') return playing() && idx < ds.get('px').length ? { x: ds.get('px')[idx], y: ds.get('py')[idx] } : null;
+                if (d === 'n') return playing() ? (name.indexOf('zr') === 0 ? toScreen(ds.get('zr_x')[idx], ds.get('zr_y')[idx]) : toScreen(ds.get('z_x')[idx], ds.get('z_y')[idx])) : null;
+                if (d === 'full') return playing() ? toScreen(ds.get('full_x')[idx], ds.get('full_y')[idx]) : null;
+                if (d === 'trail') return playing() ? toScreen(ds.get('trail_x')[idx], ds.get('trail_y')[idx]) : null;
+                if (d === 'draft') return !playing() ? toScreen(ds.get('draft_x')[idx], ds.get('draft_y')[idx]) : null;
+                return null;
+            },
+            check: {
+                L: function () { var X = ds.get('stroke_x'), Y = ds.get('stroke_y'), tot = 0; for (var i = 1; i < X.length; i++) tot += Math.hypot(X[i] - X[i - 1], Y[i] - Y[i - 1]); return { formula: 'Σ |pᵢ − pᵢ₋₁| over the stroke points', inputs: [['points', X.length, '', 0]], value: tot }; },
+                step: function () { return { formula: 'L / (N − 1)', inputs: [['L', ds.get('L'), '', 6], ['N', NS, '', 0]], value: ds.get('L') / (NS - 1) }; },
+                mx: function () { var X = ds.get('r_x'), m = 0; for (var i = 0; i < X.length; i++) m += X[i]; return { formula: 'Σ rₙ x / N', inputs: [['N', X.length, '', 0]], value: m / NS }; },
+                my: function () { var Y = ds.get('r_y'), m = 0; for (var i = 0; i < Y.length; i++) m += Y[i]; return { formula: 'Σ rₙ y / N', inputs: [['N', Y.length, '', 0]], value: m / NS }; },
+                z_x: function (i) { return { formula: 'rₙ x − x̄', inputs: [['rₙ x', ds.get('r_x')[i], '', 6], ['x̄', ds.get('mx'), '', 6]], value: ds.get('r_x')[i] - ds.get('mx') }; },
+                z_y: function (i) { return { formula: 'rₙ y − ȳ', inputs: [['rₙ y', ds.get('r_y')[i], '', 6], ['ȳ', ds.get('my'), '', 6]], value: ds.get('r_y')[i] - ds.get('my') }; },
+                E: function () { var X = ds.get('z_x'), Y = ds.get('z_y'), m = 0; for (var i = 0; i < X.length; i++) m += X[i] * X[i] + Y[i] * Y[i]; return { formula: 'Σ (xₙ² + yₙ²) / N', inputs: [['N', X.length, '', 0]], value: m / NS }; },
+                c_re: function (r) { return { formula: 'Σₙ (xₙ cos a + yₙ sin a) / N, a = 2π k n / N', inputs: [['k', ds.get('c_k')[r], '', 0], ['N', NS, '', 0]], value: dftOne(ds.get('c_k')[r]).re }; },
+                c_im: function (r) { return { formula: 'Σₙ (yₙ cos a − xₙ sin a) / N', inputs: [['k', ds.get('c_k')[r], '', 0], ['N', NS, '', 0]], value: dftOne(ds.get('c_k')[r]).im }; },
+                c_amp: function (r) { return { formula: '√(Re² + Im²)', inputs: [['Re', ds.get('c_re')[r], '', 6], ['Im', ds.get('c_im')[r], '', 6]], value: Math.hypot(ds.get('c_re')[r], ds.get('c_im')[r]) }; },
+                c_phase: function (r) { return { formula: 'atan2(Im, Re)', inputs: [['Re', ds.get('c_re')[r], '', 6], ['Im', ds.get('c_im')[r], '', 6]], value: Math.atan2(ds.get('c_im')[r], ds.get('c_re')[r]) }; },
+                kept: function () { var A = ds.get('c_amp'), n = ds.get('K'), k = 0; for (var i = 0; i < n; i++) k += A[i] * A[i]; return { formula: 'Σ_{rank < K} |c_k|²', inputs: [['K', n, '', 0]], value: k }; },
+                cap: function () { return { formula: '100 · kept / ⟨|z|²⟩', inputs: [['kept', ds.get('kept'), '', 6], ['⟨|z|²⟩', ds.get('E'), '', 6]], value: 100 * ds.get('kept') / ds.get('E') }; },
+                errP: function () { return { formula: '√(max(0, ⟨|z|²⟩ − kept))', inputs: [['⟨|z|²⟩', ds.get('E'), '', 6], ['kept', ds.get('kept'), '', 6]], value: Math.sqrt(Math.max(0, ds.get('E') - ds.get('kept'))) }; },
+                err: function () { var X = ds.get('zr_x'), Y = ds.get('zr_y'), ZX = ds.get('z_x'), ZY = ds.get('z_y'), e2 = 0; for (var i = 0; i < NS; i++) e2 += Math.pow(X[i] - ZX[i], 2) + Math.pow(Y[i] - ZY[i], 2); return { formula: '√(Σₙ |z̃ₙ − zₙ|² / N)', inputs: [['N', NS, '', 0], ['K', ds.get('K'), '', 0]], value: Math.sqrt(e2 / NS) }; },
+                zr_x: function (i) { return { formula: 'Σ_{rank < K} |c_k| cos(k · 2π n / N + arg c_k)', inputs: [['n', i, '', 0], ['K', ds.get('K'), '', 0]], value: chainNow(TAU * i / NS, ds.get('K')).x }; },
+                zr_y: function (i) { return { formula: 'Σ_{rank < K} |c_k| sin(k · 2π n / N + arg c_k)', inputs: [['n', i, '', 0], ['K', ds.get('K'), '', 0]], value: chainNow(TAU * i / NS, ds.get('K')).y }; },
+                e_i: function (i) { return { formula: '√((Re z̃ₙ − Re zₙ)² + (Im z̃ₙ − Im zₙ)²)', inputs: [['Re z̃ₙ', ds.get('zr_x')[i], '', 6], ['Re zₙ', ds.get('z_x')[i], '', 6], ['Im z̃ₙ', ds.get('zr_y')[i], '', 6], ['Im zₙ', ds.get('z_y')[i], '', 6]], value: Math.hypot(ds.get('zr_x')[i] - ds.get('z_x')[i], ds.get('zr_y')[i] - ds.get('z_y')[i]) }; },
+                full_x: function (i) { return { formula: 'Σ_{rank < K} |c_k| cos(k · 2π i / 600 + arg c_k)', inputs: [['i', i, '', 0], ['K', ds.get('K'), '', 0]], value: chainNow(TAU * i / 600, ds.get('K')).x }; },
+                full_y: function (i) { return { formula: 'Σ_{rank < K} |c_k| sin(k · 2π i / 600 + arg c_k)', inputs: [['i', i, '', 0], ['K', ds.get('K'), '', 0]], value: chainNow(TAU * i / 600, ds.get('K')).y }; },
+                extR: function () {
+                    var X = ds.get('z_x'), Y = ds.get('z_y'), CK = ds.get('c_k'), CA = ds.get('c_amp'), CP = ds.get('c_phase'), n = ds.get('K'), r = 0, i, m;
+                    for (i = 0; i < X.length; i++) r = Math.max(r, Math.hypot(X[i], Y[i]));
+                    for (i = 0; i < 256; i++) { var jx = 0, jy = 0, tt = TAU * i / 256; for (m = 0; m < n; m++) { var an = CK[m] * tt + CP[m]; r = Math.max(r, Math.hypot(jx, jy) + CA[m]); jx += CA[m] * Math.cos(an); jy += CA[m] * Math.sin(an); } }
+                    return { formula: 'max(max |zₙ|, max over 256 phases of |joint| + |c_k|)', inputs: [['K', n, '', 0]], value: r };
+                },
+                A_arm: function (i) { return { formula: '|c_k| at this rank', inputs: [['rank', i, '', 0]], value: ds.get('c_amp')[i] }; },
+                ang: function (i) { return { formula: 'k t + arg c_k', inputs: [['k', ds.get('c_k')[i], '', 0], ['t', ds.get('t'), 'rad', 6], ['arg c_k', ds.get('c_phase')[i], 'rad', 6]], value: ds.get('c_k')[i] * ds.get('t') + ds.get('c_phase')[i] }; },
+                vx: function (i) { return { formula: '|c_k| cos θ', inputs: armInputs(i), value: ds.get('A_arm')[i] * Math.cos(ds.get('ang')[i]) }; },
+                vy: function (i) { return { formula: '|c_k| sin θ', inputs: armInputs(i), value: ds.get('A_arm')[i] * Math.sin(ds.get('ang')[i]) }; },
+                jx: function (i) { return { formula: 'previous joint + Δx', inputs: [['previous', i ? ds.get('jx')[i - 1] : 0, '', 6], ['Δx', ds.get('vx')[i], '', 6]], value: (i ? ds.get('jx')[i - 1] : 0) + ds.get('vx')[i] }; },
+                jy: function (i) { return { formula: 'previous joint + Δy', inputs: [['previous', i ? ds.get('jy')[i - 1] : 0, '', 6], ['Δy', ds.get('vy')[i], '', 6]], value: (i ? ds.get('jy')[i - 1] : 0) + ds.get('vy')[i] }; },
+                px: function (i) { var o = i ? ds.get('px')[i - 1] : ds.get('cx'); return { formula: 'previous joint x + Δx · scale', inputs: [['previous', o, 'css px', 3], ['Δx', ds.get('vx')[i], '', 6], ['scale', ds.get('scale'), 'px per unit', 3]], value: o + ds.get('vx')[i] * ds.get('scale') }; },
+                py: function (i) { var o = i ? ds.get('py')[i - 1] : ds.get('cy'); return { formula: 'previous joint y − Δy · scale', inputs: [['previous', o, 'css px', 3], ['Δy', ds.get('vy')[i], '', 6], ['scale', ds.get('scale'), 'px per unit', 3]], value: o - ds.get('vy')[i] * ds.get('scale') }; },
+                x: function () { var J = ds.get('jx'); return { formula: 'the last joint', inputs: [['K', J.length, '', 0]], value: J.length ? J[J.length - 1] : 0 }; },
+                y: function () { var J = ds.get('jy'); return { formula: 'the last joint', inputs: [['K', J.length, '', 0]], value: J.length ? J[J.length - 1] : 0 }; },
+                tip_px: function () { var P = ds.get('px'); return { formula: 'the last joint on screen', inputs: [['K', P.length, '', 0]], value: P.length ? P[P.length - 1] : ds.get('cx') }; },
+                tip_py: function () { var P = ds.get('py'); return { formula: 'the last joint on screen', inputs: [['K', P.length, '', 0]], value: P.length ? P[P.length - 1] : ds.get('cy') }; },
+                c_max: function () { return { formula: '|c_0| or 1', inputs: [['|c_0|', ds.get('c_amp')[0], '', 6]], value: ds.get('c_amp')[0] || 1 }; },
+                spec_x: function (r) { return { formula: '18 + (k + 60) / 120 · (w − 36)', inputs: [['k', ds.get('c_k')[r], '', 0], ['w', ds.get('sbox_w'), 'css px', 0]], value: 18 + (ds.get('c_k')[r] + KMAX) / (2 * KMAX) * (ds.get('sbox_w') - 36) }; },
+                spec_y: function (r) { var base = ds.get('sbox_h') - 22; return { formula: 'base − |c_k| / |c|_max · (base − 10), base = h − 22', inputs: [['base', base, 'css px', 0], ['|c_k|', ds.get('c_amp')[r], '', 6], ['|c|_max', ds.get('c_max'), '', 6]], value: base - ds.get('c_amp')[r] / ds.get('c_max') * (base - 10) }; },
+                S_fit: function () { return { formula: 'min(w, h) · 0.46', inputs: [['min(w, h)', Math.min(ds.get('box_w'), ds.get('box_h')), 'css px', 0]], value: Math.min(ds.get('box_w'), ds.get('box_h')) * 0.46 }; },
+                scale: function () { return { formula: 'drawing: S; playing: S / max(1, view radius) · zoom', inputs: [['mode', ds.get('mode'), ''], ['S', ds.get('S_fit'), 'px per unit', 3], ['view radius', ds.get('viewR'), '', 5], ['zoom', ds.get('zoom'), '×', 3]], value: playing() ? ds.get('S_fit') / Math.max(1, ds.get('viewR')) * ds.get('zoom') : ds.get('S_fit') }; },
+                cx: function () { return { formula: 'w / 2 − (follow ? x : pan x) · scale', inputs: [['w', ds.get('box_w'), 'css px', 0], ['follow', ds.get('follow') ? 'on' : 'off', ''], ['x', ds.get('x'), '', 6], ['pan x', ds.get('panX'), '', 6], ['scale', ds.get('scale'), 'px per unit', 3]], value: playing() ? ds.get('box_w') / 2 - (ds.get('follow') ? ds.get('x') : ds.get('panX')) * ds.get('scale') : ds.get('box_w') / 2 }; },
+                cy: function () { return { formula: 'h / 2 + (follow ? y : pan y) · scale', inputs: [['h', ds.get('box_h'), 'css px', 0], ['follow', ds.get('follow') ? 'on' : 'off', ''], ['y', ds.get('y'), '', 6], ['pan y', ds.get('panY'), '', 6], ['scale', ds.get('scale'), 'px per unit', 3]], value: playing() ? ds.get('box_h') / 2 + (ds.get('follow') ? ds.get('y') : ds.get('panY')) * ds.get('scale') : ds.get('box_h') / 2 }; }
+            },
+            drawn: {
+                tip_px: function () { if (!playing()) return { what: 'the pen', drawn: 'nothing', expected: 'nothing', ok: true, note: 'The pen is drawn only while playing.' }; var px = pixelAt(ctx, box, ds.get('tip_px'), ds.get('tip_py')); return { what: 'screen pixel at the pen, (' + Sim.fmt(ds.get('tip_px'), 1) + ', ' + Sim.fmt(ds.get('tip_py'), 1) + ') css px', drawn: rgbText(px), expected: 'the burgundy pen dot, rgb(122, 31, 43)', ok: px[3] > 0 && lum(px) < 130, note: 'The dot has radius 5 px, so the pixel at the stored centre is its fill.' }; },
+                px: function (i) { if (!playing() || !ds.get('vectors')) return { what: 'joint ' + (i + 1), drawn: 'nothing', expected: 'nothing', ok: true, note: 'Joints are drawn only while playing with the arms switched on.' }; var px = pixelAt(ctx, box, ds.get('px')[i], ds.get('py')[i]); return { what: 'screen pixel at joint ' + (i + 1), drawn: rgbText(px), expected: 'the arrow’s colour at its head', ok: px[3] > 0, note: 'The arrow ends exactly at the joint; its head is drawn there when the arm is longer than 8 px.' }; },
+                full_x: function (i) { if (!playing() || !ds.get('full')) return { what: 'full curve point ' + i, drawn: 'nothing', expected: 'nothing', ok: true, note: 'The full curve is drawn only while playing with its switch on.' }; var p = toScreen(ds.get('full_x')[i], ds.get('full_y')[i]), px = pixelAt(ctx, box, p.x, p.y); return { what: 'screen pixel at full curve point ' + i + ', (' + Sim.fmt(p.x, 1) + ', ' + Sim.fmt(p.y, 1) + ') css px', drawn: rgbText(px), expected: 'the pink stroke, rgb(201, 112, 126), or anything drawn over it', ok: px[3] > 0, note: 'A 1.3 px stroke through the stored points.' }; },
+                trail_x: function (i) { if (!playing()) return { what: 'trail point ' + i, drawn: 'nothing', expected: 'nothing', ok: true, note: 'The trail is drawn only while playing.' }; var p = toScreen(ds.get('trail_x')[i], ds.get('trail_y')[i]), px = pixelAt(ctx, box, p.x, p.y); return { what: 'screen pixel at trail point ' + i + ', (' + Sim.fmt(p.x, 1) + ', ' + Sim.fmt(p.y, 1) + ') css px', drawn: rgbText(px), expected: 'burgundy, fainter for older points', ok: px[3] > 0, note: 'A 2.3 px stroke whose older segments are drawn with lower opacity.' }; },
+                spec_y: function (r) { var px = pixelAt(sctx, sbox, ds.get('spec_x')[r], ds.get('spec_y')[r]); return { what: 'screen pixel at the top of spectrum bar ' + r + ' (k = ' + ds.get('c_k')[r] + ')', drawn: rgbText(px), expected: r < ds.get('K') ? 'the burgundy dot of a kept circle' : 'the tan dot of a dropped one', ok: px[3] > 0 && lum(px) < 170, note: 'Each bar ends in a filled dot of radius 2.5 px (kept) or 1.8 px (dropped).' }; }
+            },
+            log: { every: 0.1, max: 1000, time: 't', columns: ['t', 'x', 'y', 'K', 'err', 'errP', 'viewR'] },
+            about: 'The pen, arms and joints are drawn from the stored chain each frame. The dashed original is the 256 resampled, centred points zₙ joined by straight segments; the full curve is the stored 601-point reconstruction. The trail is the pen position at the end of each past frame over the last loop. The spectrum bars are drawn once per rebuild, from |c_k| sorted by size. The view scale relaxes toward the outer radius over about 0.4 s, so the stored scale is a smoothed quantity, not a formula of the current frame.'
         };
+        ds.set('loop_s', loop.value); ds.set('t', 0); ds.set('mode', mode);
+        Sim.onResize(stage, function () { box.fit(); });
+        Sim.onResize(specStage, function () { sbox.fit(); spectrum(); });
 
         stroke = SHAPES.heart();
         play(stroke, 'heart');

@@ -329,6 +329,7 @@
     </footer>
 
     <script src="../scripts/sim.js"></script>
+    <script src="../scripts/dataset.js"></script>
     <script>
     (function () {
         'use strict';
@@ -374,6 +375,85 @@
         var trail = [], finalPath = [], morphPath = [], finalN = 0, finalSpan = 0;
         var danceOn = false;
         var fitR = 0; /* radius the view is fitted to: grows at once, relaxes slowly */
+
+        /* ---------- the store: every number this page computes is written here, where it is computed (scripts/dataset.js) ---------- */
+        var ds = Sim.dataset({ title: 'Phasor sums', attrs: { figure: 7, page: 'phasor-sums.html', curves: CURVES.join(', '), length_unit: 'the unit circle of the plot (scale-free); times in seconds' } });
+        ds.var('N', [], 'int', { symbol: 'N', long_name: 'circles in the list', computed_in: 'buildLive()', digits: 0, source: 'The length of the list.' });
+        ds.dim('arm', 0);
+        ds.var('A', ['arm'], Float64Array, { symbol: 'Aₖ', long_name: 'radius of each circle, as stored in the list', computed_in: 'the list', digits: 3, source: 'Set by the sliders of each circle, a preset, Random or a replay.', updates: 'every frame' });
+        ds.var('omega', ['arm'], Float64Array, { symbol: 'ωₖ', units: 'rad/s', long_name: 'angular frequency of each circle', computed_in: 'the list', digits: 2, source: 'Set by the sliders of each circle, a preset, Random or a replay.', updates: 'every frame' });
+        ds.var('phi', ['arm'], Float64Array, { symbol: 'φₖ', units: 'rad', long_name: 'phase of each circle', computed_in: 'the list', digits: 3, source: 'Set by the sliders of each circle, a preset, Random or a replay.', updates: 'every frame' });
+        ds.var('curve', ['arm'], Int32Array, { symbol: 'curve', long_name: 'bounce curve of each circle, as an index into ' + CURVES.join(', '), computed_in: 'the list', digits: 0, source: 'Chosen in the list.', updates: 'every frame' });
+        ds.var('mul', ['arm'], Float64Array, { symbol: 'mulₖ', long_name: 'dance multiplier of each circle; 1 while the dance is off', computed_in: 'buildLive()', formula: 'dance on: low |ω|: (1 + ease(bass) · d_bass · (1 − 0.7 |ω| / max|ω|)) · burst; high |ω|: (1 + high · d_high) · burst', digits: 4, updates: 'every frame' });
+        ds.var('A_live', ['arm'], Float64Array, { symbol: 'A′ₖ', long_name: 'radius used this frame', computed_in: 'buildLive()', formula: 'A′ = A · mul', digits: 4, updates: 'every frame' });
+        ds.var('n_active', [], 'int', { symbol: 'n', long_name: 'circles with A > 0, the ones that count for the structure', computed_in: 'structure()', formula: 'count of A > 0', digits: 0 });
+        ds.var('t', [], 'float', { symbol: 't', units: 's', long_name: 'phasor time; advances by Δt · speed in the live view', computed_in: 'Sim.clock callback', digits: 4, source: 'Accumulated frame by frame.' });
+        ds.var('x', [], 'float', { symbol: 'Re z', long_name: 'the sum, real part', computed_in: 'sumAt(), called in draw()', formula: 'Σ A′ₖ cos(ωₖ t + φₖ)', digits: 5, updates: 'every frame in the live view' });
+        ds.var('y', [], 'float', { symbol: 'Im z', long_name: 'the sum, imaginary part', computed_in: 'sumAt(), called in draw()', formula: 'Σ A′ₖ sin(ωₖ t + φₖ)', digits: 5, updates: 'every frame in the live view' });
+        ds.var('absz', [], 'float', { symbol: '|z|', long_name: 'distance of the pen from the origin', computed_in: 'draw()', formula: '√(x² + y²)', digits: 5 });
+        ds.var('absz2', [], 'float', { symbol: '|z|²', long_name: 'squared', computed_in: 'draw()', formula: 'x² + y²', digits: 5 });
+        ds.var('E', [], 'float', { symbol: 'Σ Aₖ²', long_name: 'the time average of |z|² when no two frequencies coincide', computed_in: 'readouts()', formula: 'Σ Aₖ²', digits: 5 });
+        ds.var('A_arm', ['arm'], Float64Array, { symbol: 'A′ₖ drawn', long_name: 'radius of each arm as drawn', computed_in: 'draw(), the arm loop', formula: 'A′ₖ', digits: 4, updates: 'every frame in the live view' });
+        ds.var('ang', ['arm'], Float64Array, { symbol: 'θₖ', units: 'rad', long_name: 'angle of each arm', computed_in: 'sumAt(), read in draw()', formula: 'θ = ω t + φ', digits: 4, updates: 'every frame in the live view' });
+        ds.var('vx', ['arm'], Float64Array, { symbol: 'Δxₖ', long_name: 'each arm, real part', computed_in: 'sumAt(), read in draw()', formula: 'A′ cos θ', digits: 5, updates: 'every frame in the live view' });
+        ds.var('vy', ['arm'], Float64Array, { symbol: 'Δyₖ', long_name: 'each arm, imaginary part', computed_in: 'sumAt(), read in draw()', formula: 'A′ sin θ', digits: 5, updates: 'every frame in the live view' });
+        ds.var('jx', ['arm'], Float64Array, { symbol: 'Re zₖ', long_name: 'joint after each arm, the partial sum', computed_in: 'draw(), the arm loop', formula: 'Σ_{m ≤ k} Δx_m', digits: 5, updates: 'every frame in the live view' });
+        ds.var('jy', ['arm'], Float64Array, { symbol: 'Im zₖ', long_name: 'joint after each arm, the partial sum', computed_in: 'draw(), the arm loop', formula: 'Σ_{m ≤ k} Δy_m', digits: 5, updates: 'every frame in the live view' });
+        ds.var('px', ['arm'], Float64Array, { symbol: 'joint x px', units: 'css px', long_name: 'screen position of each joint', computed_in: 'draw(), the arm loop', formula: 'previous joint + Δx · scale', digits: 2, updates: 'every frame in the live view' });
+        ds.var('py', ['arm'], Float64Array, { symbol: 'joint y px', units: 'css px', long_name: 'screen position of each joint', computed_in: 'draw(), the arm loop', formula: 'previous joint − Δy · scale', digits: 2, updates: 'every frame in the live view' });
+        ds.var('tip_px', [], 'float', { symbol: 'pen x px', units: 'css px', long_name: 'screen position of the pen', computed_in: 'draw()', formula: 'c_x + x · scale', digits: 2 });
+        ds.var('tip_py', [], 'float', { symbol: 'pen y px', units: 'css px', long_name: 'screen position of the pen', computed_in: 'draw()', formula: 'c_y − y · scale', digits: 2 });
+        ds.var('G', [], 'int', { symbol: 'G', long_name: 'gcd of 100·ω over the active circles', computed_in: 'structure()', formula: 'gcd(round(100 ωₖ))', digits: 0 });
+        ds.var('g', [], 'float', { symbol: 'g', units: 'rad/s', long_name: 'the fundamental: the figure repeats after 2π/g', computed_in: 'structure()', formula: 'G / 100', digits: 2 });
+        ds.var('period', [], 'float', { symbol: 'T', units: 's', long_name: 'period of the figure; undefined when g = 0', computed_in: 'readouts()', formula: '2π / g', digits: 3 });
+        ds.var('M', [], 'int', { symbol: 'M', long_name: 'gcd of the frequency differences, ×100', computed_in: 'structure()', formula: 'gcd(round(100 ωₖ) − round(100 ω₁))', digits: 0 });
+        ds.var('q', [], 'int', { symbol: 'q', long_name: 'the figure has q-fold rotational symmetry', computed_in: 'structure()', formula: 'M / gcd(round(100 ω₁), M), or 0', digits: 0 });
+        ds.var('dt', [], 'float', { symbol: 'Δt', units: 's', long_name: 'time between the last two frames, 0 while paused', computed_in: 'Sim.clock', digits: 4, source: 'Measured by the clock.' });
+        ds.var('spd', [], 'float', { symbol: 'speed', units: '×', long_name: 'the speed slider', computed_in: 'speed slider', digits: 2, source: 'Read from the slider.' });
+        ds.var('sf', [], 'float', { symbol: 'speed used', units: '×', long_name: 'speed after the dance: mid band pushes it', computed_in: 'Sim.clock callback', formula: 'speed · (dance ? 1 + mid · d_speed : 1)', digits: 4 });
+        ds.var('n_path', [], 'int', { symbol: 'n', long_name: 'samples of the final path', computed_in: 'refinal()', formula: 'max(1500, min(12000, round(span / 2π · 700)))', digits: 0 });
+        ds.var('span', [], 'float', { symbol: 'span', units: 's', long_name: 'time covered by the final path', computed_in: 'spanNow()', formula: 'auto and g > 0: min(2π / g, 60 · 2π); else slider · 2π', digits: 4 });
+        ds.var('span_slider', [], 'float', { symbol: 'span slider', units: '× 2π s', long_name: 'the span slider', computed_in: 'span slider', digits: 0, source: 'Read from the slider.' });
+        ds.var('auto', [], 'bool', { symbol: 'auto span', long_name: 'the span follows the period', computed_in: 'the switch', source: 'The state of the switch.' });
+        ds.dim('path', 0);
+        ds.var('final_x', ['path'], Float64Array, { symbol: 'Re z(tᵢ)', long_name: 'the exact final path, sampled at tᵢ = i / n · span', computed_in: 'refinal()', formula: 'Σ Aₖ cos(ωₖ tᵢ + φₖ)', digits: 5, updates: 'when the list, the span or the view changes' });
+        ds.var('final_y', ['path'], Float64Array, { symbol: 'Im z(tᵢ)', long_name: 'the exact final path', computed_in: 'refinal()', formula: 'Σ Aₖ sin(ωₖ tᵢ + φₖ)', digits: 5, updates: 'when the list, the span or the view changes' });
+        ds.var('path_x', ['path'], Float64Array, { symbol: 'morph x', long_name: 'the path as drawn in the final view; relaxes toward the exact one', computed_in: 'morphStep(), read in draw()', digits: 5, source: 'Each frame it moves the fraction α of the way to final_x; history, not a formula.', updates: 'every frame in the final view' });
+        ds.var('path_y', ['path'], Float64Array, { symbol: 'morph y', long_name: 'the path as drawn in the final view', computed_in: 'morphStep(), read in draw()', digits: 5, source: 'Each frame it moves the fraction α of the way to final_y; history, not a formula.', updates: 'every frame in the final view' });
+        ds.var('morph_on', [], 'bool', { symbol: 'morph', long_name: 'the final path morphs instead of snapping', computed_in: 'the switch', source: 'The state of the switch.' });
+        ds.var('morph_slider', [], 'float', { symbol: 'morph slider', long_name: 'the morph slider', computed_in: 'morph slider', digits: 2, source: 'Read from the slider.' });
+        ds.var('alpha', [], 'float', { symbol: 'α', long_name: 'fraction of the remaining distance covered per frame', computed_in: 'morphStep()', formula: 'morph on: the slider; off: 1', digits: 2 });
+        ds.var('dev', [], 'float', { symbol: 'deviation', long_name: 'largest distance between the drawn path and the exact one', computed_in: 'draw(), final view', formula: 'max |morph − final|', digits: 5 });
+        ds.var('scale_final', [], 'float', { symbol: 'scale (final)', units: 'px per unit', long_name: 'scale of the final view', computed_in: 'finalScale()', formula: 'min(w, h) · 0.44 / max(max |morph|, 0.05) · zoom', digits: 3 });
+        ds.dim('trail', 0);
+        ds.var('trail_x', ['trail'], Float64Array, { symbol: 'trail x', long_name: 'pen position at the end of each past frame', computed_in: 'Sim.clock callback', digits: 5, source: 'History: z(t) at each frame, kept up to the trail length.', updates: 'every frame in the live view' });
+        ds.var('trail_y', ['trail'], Float64Array, { symbol: 'trail y', long_name: 'pen position at the end of each past frame', computed_in: 'Sim.clock callback', digits: 5, source: 'History: z(t) at each frame, kept up to the trail length.', updates: 'every frame in the live view' });
+        ds.var('trail_max', [], 'int', { symbol: 'trail length', long_name: 'the trail slider', computed_in: 'trail slider', digits: 0, source: 'Read from the slider.' });
+        ds.var('trail_len', [], 'int', { symbol: 'trail points', long_name: 'points in the trail now', computed_in: 'Sim.clock callback', digits: 0, source: 'The length of the trail array.' });
+        ds.var('dance', [], 'bool', { symbol: 'dance', long_name: 'the audio drives the circles', computed_in: 'the Dance switch', source: 'The state of the switch.' });
+        ds.var('bass', [], 'float', { symbol: 'bass', long_name: 'energy 20–150 Hz, 0 to 1, smoothed', computed_in: 'analyse()', digits: 4, source: 'Measured from the audio analyser, smoothed by 15 % per frame.' });
+        ds.var('mid', [], 'float', { symbol: 'mid', long_name: 'energy 150–4000 Hz', computed_in: 'analyse()', digits: 4, source: 'Measured from the audio analyser, smoothed by 15 % per frame.' });
+        ds.var('high', [], 'float', { symbol: 'high', long_name: 'energy 4–16 kHz', computed_in: 'analyse()', digits: 4, source: 'Measured from the audio analyser, smoothed by 15 % per frame.' });
+        ds.var('burst', [], 'float', { symbol: 'burst', long_name: 'beat burst multiplier, decays over 10 frames', computed_in: 'analyse()', digits: 4, source: 'Set to 1 + d_burst on a detected beat, then decays.' });
+        ds.var('bpm', [], 'float', { symbol: 'BPM', long_name: 'tempo from the median beat interval', computed_in: 'analyse()', digits: 0, source: 'Measured from detected beats.' });
+        ds.var('beat', [], 'float', { symbol: 'beat pulse', long_name: '1 on a beat, decaying', computed_in: 'analyse()', digits: 3, source: 'Set to 1 on a detected beat, then decays by 4 per second.' });
+        ds.var('d_bass', [], 'float', { symbol: 'd_bass', long_name: 'bass response slider', computed_in: 'slider', digits: 2, source: 'Read from the slider.' });
+        ds.var('d_speed', [], 'float', { symbol: 'd_speed', long_name: 'speed response slider', computed_in: 'slider', digits: 2, source: 'Read from the slider.' });
+        ds.var('d_burst', [], 'float', { symbol: 'd_burst', long_name: 'beat burst slider', computed_in: 'slider', digits: 2, source: 'Read from the slider.' });
+        ds.var('d_high', [], 'float', { symbol: 'd_high', long_name: 'high response slider', computed_in: 'slider', digits: 2, source: 'Read from the slider.' });
+        ds.var('mode', [], 'str', { symbol: 'view', long_name: 'live construction or final shape', computed_in: 'setMode()', source: 'The pressed view button.' });
+        ds.var('zoom', [], 'float', { symbol: 'zoom', units: '×', long_name: 'the zoom slider', computed_in: 'zoom slider', digits: 2, source: 'Read from the slider.' });
+        ds.var('fitR', [], 'float', { symbol: 'fit radius', long_name: 'radius the live view is fitted to; grows at once, relaxes over 0.6 s', computed_in: 'fit()', digits: 4, source: 'Relaxation toward the reach Σ |A′| and the trail; history, not a formula.' });
+        ds.var('scale', [], 'float', { symbol: 'scale', units: 'px per unit', long_name: 'scale of the live view', computed_in: 'draw()', formula: 'min(w, h) · 0.44 / max(fit radius, 0.05) · zoom', digits: 3 });
+        ds.var('cx', [], 'float', { symbol: 'c_x', units: 'css px', long_name: 'origin on screen', computed_in: 'draw()', formula: 'box.w / 2', digits: 1 });
+        ds.var('cy', [], 'float', { symbol: 'c_y', units: 'css px', long_name: 'origin on screen', computed_in: 'draw()', formula: 'box.h / 2', digits: 1 });
+        ds.var('box_w', [], 'int', { symbol: 'box.w', units: 'css px', long_name: 'canvas width on your screen', computed_in: 'draw()', digits: 0, source: 'Measured from the page layout.' });
+        ds.var('box_h', [], 'int', { symbol: 'box.h', units: 'css px', long_name: 'canvas height on your screen', computed_in: 'draw()', digits: 0, source: 'Measured from the page layout.' });
+        ds.var('circles', [], 'bool', { symbol: 'circles shown', long_name: 'the circle outlines', computed_in: 'the switch', source: 'The state of the switch.' });
+        ds.var('vectors', [], 'bool', { symbol: 'arms shown', long_name: 'the arms and joints', computed_in: 'the switch', source: 'The state of the switch.' });
+        ds.var('fps', [], 'float', { symbol: 'frame rate', units: 'Hz', long_name: 'smoothed over about ten frames', computed_in: 'Sim.clock callback', digits: 1, source: 'A running average of 1/Δt.' });
+        ds.var('frames', [], 'int', { symbol: 'frames', long_name: 'frames drawn so far', computed_in: 'Sim.clock callback', digits: 0, source: 'Counted frame by frame.' });
+        ds.var('playing', [], 'bool', { symbol: 'playing', long_name: 'the clock runs', computed_in: 'Sim.clock', source: 'The state of the Play button.' });
 
         var speed = Sim.slider('speed', { format: function (v) { return v.toFixed(2) + '×'; } });
         var zoom = Sim.slider('zoom', { format: function (v) { return v.toFixed(2) + '×'; } });
@@ -443,6 +523,10 @@
             if (snap || !swMorph.checked || morphPath.length !== finalPath.length) {
                 morphPath = finalPath.map(function (p) { return { x: p.x, y: p.y }; });
             }
+            ds.dim('path', n + 1);
+            var FX = ds.alloc('final_x'), FY = ds.alloc('final_y'), MXr = ds.alloc('path_x'), MYr = ds.alloc('path_y'), devr = 0;
+            for (var fi = 0; fi <= n; fi++) { FX[fi] = finalPath[fi].x; FY[fi] = finalPath[fi].y; MXr[fi] = morphPath[fi].x; MYr[fi] = morphPath[fi].y; devr = Math.max(devr, Math.hypot(morphPath[fi].x - finalPath[fi].x, morphPath[fi].y - finalPath[fi].y)); }
+            ds.set('n_path', n); ds.set('span', sp); ds.set('dev', devr); ds.set('scale_final', finalScale());
         }
 
         function morphStep() {
@@ -533,6 +617,11 @@
                 }
                 return { amp: p.amp * mul, freq: p.freq, phase: p.phase, color: p.color, mul: mul };
             });
+            var NA = phasors.length;
+            if (ds.dims.arm !== NA) ds.dim('arm', NA);
+            var Aa = ds.alloc('A'), Wa = ds.alloc('omega'), Pa = ds.alloc('phi'), Ca = ds.alloc('curve'), Ma = ds.alloc('mul'), La = ds.alloc('A_live');
+            for (var ai = 0; ai < NA; ai++) { Aa[ai] = phasors[ai].amp; Wa[ai] = phasors[ai].freq; Pa[ai] = phasors[ai].phase; Ca[ai] = CURVES.indexOf(phasors[ai].curve); Ma[ai] = live[ai].mul; La[ai] = live[ai].amp; }
+            ds.set('N', NA); ds.set('dance', danceOn); ds.set('burst', burst);
         }
         function speedFactor() { return danceOn ? 1 + clamp01(energy.mid) * dSpeed.value : 1; }
 
@@ -654,12 +743,18 @@
         }
         function draw() {
             var w = box.w, h = box.h, cx = w / 2, cy = h / 2;
+            ds.set('cx', cx); ds.set('cy', cy); ds.set('box_w', w); ds.set('box_h', h); ds.set('mode', mode); ds.set('scale_final', finalScale());
             ctx.clearRect(0, 0, w, h);
             axes(cx, cy);
             ctx.lineJoin = 'round';
             ctx.lineCap = 'round';
             if (mode === 'final') {
                 var sf = finalScale();
+                var MPn = morphPath.length, dev = 0, FXp = ds.get('final_x'), FYp = ds.get('final_y');
+                if (ds.dims.path !== MPn) ds.dim('path', MPn);
+                var MXa = ds.alloc('path_x'), MYa = ds.alloc('path_y');
+                for (var mi = 0; mi < MPn; mi++) { MXa[mi] = morphPath[mi].x; MYa[mi] = morphPath[mi].y; if (mi < FXp.length) dev = Math.max(dev, Math.hypot(morphPath[mi].x - FXp[mi], morphPath[mi].y - FYp[mi])); }
+                ds.set('scale_final', sf); ds.set('dev', dev);
                 ctx.strokeStyle = 'rgba(226, 162, 170, 0.45)';
                 ctx.lineWidth = 6;
                 polyline(morphPath, cx, cy, sf, 0, morphPath.length);
@@ -669,6 +764,7 @@
                 return;
             }
             var s = baseScale() * zoom.value;
+            ds.set('scale', s); ds.set('fitR', fitR);
             /* trail: older segments fainter */
             var chunks = 12, len = trail.length;
             ctx.strokeStyle = T.accent;
@@ -680,8 +776,13 @@
             }
             ctx.globalAlpha = 1;
             var cur = sumAt(t, live), ox = cx, oy = cy;
-            cur.parts.forEach(function (p) {
+            var NA = cur.parts.length, jx = 0, jy = 0;
+            if (ds.dims.arm !== NA) ds.dim('arm', NA);
+            var ANG = ds.alloc('ang'), VX = ds.alloc('vx'), VY = ds.alloc('vy'), JX = ds.alloc('jx'), JY = ds.alloc('jy'), PXa = ds.alloc('px'), PYa = ds.alloc('py'), AA = ds.alloc('A_arm');
+            ds.set('x', cur.x); ds.set('y', cur.y); ds.set('absz', Math.hypot(cur.x, cur.y)); ds.set('absz2', cur.x * cur.x + cur.y * cur.y); ds.set('tip_px', cx + cur.x * s); ds.set('tip_py', cy - cur.y * s);
+            cur.parts.forEach(function (p, i) {
                 var nx = ox + p.vx * s, ny = oy - p.vy * s;
+                ANG[i] = live[i].freq * t + live[i].phase; VX[i] = p.vx; VY[i] = p.vy; jx += p.vx; jy += p.vy; JX[i] = jx; JY[i] = jy; PXa[i] = nx; PYa[i] = ny; AA[i] = p.amp;
                 if (swCircles.checked) {
                     ctx.strokeStyle = T.rose;
                     ctx.lineWidth = 1;
@@ -718,6 +819,7 @@
             var st = structure(phasors), z = sumAt(t, live.length === phasors.length ? live : phasors);
             var e = 0;
             phasors.forEach(function (p) { e += p.amp * p.amp; });
+            ds.set('E', e); ds.set('G', st.G); ds.set('g', st.g); ds.set('M', st.M); ds.set('q', st.q); ds.set('n_active', st.n); ds.set('period', st.g > 0 ? TAU / st.g : NaN);
             $('r-n').textContent = String(phasors.length);
             $('r-z').textContent = Sim.fmt(Math.hypot(z.x, z.y), 3);
             $('r-period').textContent = st.n === 0 ? '—' : st.g > 0 ? Sim.fmt(TAU / st.g, 2) + ' s' : 'point';
@@ -850,37 +952,34 @@
         $('a-pause').addEventListener('click', function () { audioControl('pause'); });
         $('a-stop').addEventListener('click', function () { audioControl('stop'); });
 
-        /* live values for the walkthrough below */
+        /* live values for the walkthrough: read from the store, nothing recomputed */
         Sim.live = function () {
-            var p = phasors[0], l = live[0], st = structure(phasors), z = sumAt(t, live), e = 0, dev = 0;
-            phasors.forEach(function (q) { e += q.amp * q.amp; });
-            for (var i = 0; i < morphPath.length && i < finalPath.length; i += 7) dev = Math.max(dev, Math.hypot(morphPath[i].x - finalPath[i].x, morphPath[i].y - finalPath[i].y));
-            var out = {
-                t: Sim.fmt(t, 3) + ' s', N: String(phasors.length), x: Sim.fmt(z.x, 4), y: Sim.fmt(z.y, 4),
-                absz: Sim.fmt(Math.hypot(z.x, z.y), 4), absz2: Sim.fmt(z.x * z.x + z.y * z.y, 4), E: Sim.fmt(e, 4),
-                G: String(st.G), g: Sim.fmt(st.g, 2) + ' rad/s', Tc: st.g > 0 ? Sim.fmt(TAU / st.g, 3) + ' s' : '—',
-                M: String(st.M), q: st.n > 1 ? String(st.q) : '—',
-                dt: Sim.fmt(lastDt * 1000, 1) + ' ms', spd: speed.value.toFixed(2), sf: Sim.fmt(lastSpeed, 3),
-                n: String(finalN), span: Sim.fmt(finalSpan, 3) + ' s', alpha: morph.value.toFixed(2), dev: Sim.fmt(dev, 5),
-                bass: Sim.fmt(energy.bass, 3), mid: Sim.fmt(energy.mid, 3), high: Sim.fmt(energy.high, 3),
-                burst: Sim.fmt(burst, 3), dance: danceOn ? 'on' : 'off'
+            var N = ds.get('N') || 0, g = ds.get('g') || 0, out = {
+                t: Sim.fmt(ds.get('t') || 0, 3) + ' s', N: String(N), x: Sim.fmt(ds.get('x') || 0, 4), y: Sim.fmt(ds.get('y') || 0, 4),
+                absz: Sim.fmt(ds.get('absz') || 0, 4), absz2: Sim.fmt(ds.get('absz2') || 0, 4), E: Sim.fmt(ds.get('E') || 0, 4),
+                G: String(ds.get('G')), g: Sim.fmt(g, 2) + ' rad/s', Tc: g > 0 ? Sim.fmt(ds.get('period'), 3) + ' s' : '—',
+                M: String(ds.get('M')), q: ds.get('n_active') > 1 ? String(ds.get('q')) : '—',
+                dt: Sim.fmt((ds.get('dt') || 0) * 1000, 1) + ' ms', spd: (ds.get('spd') || 0).toFixed(2), sf: Sim.fmt(ds.get('sf') || 0, 3),
+                n: String(ds.get('n_path')), span: Sim.fmt(ds.get('span') || 0, 3) + ' s', alpha: (ds.get('morph_slider') || 0).toFixed(2), dev: Sim.fmt(ds.get('dev') || 0, 5),
+                bass: Sim.fmt(ds.get('bass') || 0, 3), mid: Sim.fmt(ds.get('mid') || 0, 3), high: Sim.fmt(ds.get('high') || 0, 3),
+                burst: Sim.fmt(ds.get('burst') || 1, 3), dance: ds.get('dance') ? 'on' : 'off'
             };
-            if (p) {
-                var ang = p.freq * t + p.phase;
-                out.A = Sim.fmt(p.amp, 3); out.w = Sim.fmt(p.freq, 2) + ' rad/s'; out.ph = Sim.fmt(p.phase, 3) + ' rad';
-                out.ang = Sim.fmt(ang, 3) + ' rad'; out.x1 = Sim.fmt(p.amp * Math.cos(ang), 4); out.y1 = Sim.fmt(p.amp * Math.sin(ang), 4);
-                out.mul = l ? Sim.fmt(l.mul, 3) : '—'; out.Ar = l ? Sim.fmt(l.amp, 3) : '—';
+            if (N && ds.get('ang').length) {
+                out.A = Sim.fmt(ds.get('A')[0], 3); out.w = Sim.fmt(ds.get('omega')[0], 2) + ' rad/s'; out.ph = Sim.fmt(ds.get('phi')[0], 3) + ' rad';
+                out.ang = Sim.fmt(ds.get('ang')[0], 3) + ' rad'; out.x1 = Sim.fmt(ds.get('vx')[0], 4); out.y1 = Sim.fmt(ds.get('vy')[0], 4);
+                out.mul = Sim.fmt(ds.get('mul')[0], 3); out.Ar = Sim.fmt(ds.get('A_live')[0], 3);
             } else {
                 out.A = out.w = out.ph = out.ang = out.x1 = out.y1 = out.mul = out.Ar = 'no circles';
             }
             return out;
         };
 
-        var hudAcc = 0, lastNow = performance.now();
+        var hudAcc = 0, lastNow = performance.now(), fps = 0, frames = 0;
         var clk = Sim.clock(function (dt) {
             var now = performance.now(), real = Math.min((now - lastNow) / 1000, 0.05);
             lastNow = now;
             analyse(real);
+            ds.set('bass', energy.bass); ds.set('mid', energy.mid); ds.set('high', energy.high); ds.set('bpm', bpm); ds.set('beat', beatPulse);
             perform(real);
             buildLive();
             lastDt = dt;
@@ -892,8 +991,17 @@
                 var max = trailS.value;
                 if (trail.length > max) trail.splice(0, trail.length - max);
             }
+            var TL = trail.length;
+            if (ds.dims.trail !== TL) ds.dim('trail', TL);
+            var TXa = ds.alloc('trail_x'), TYa = ds.alloc('trail_y');
+            for (var ti = 0; ti < TL; ti++) { TXa[ti] = trail[ti].x; TYa[ti] = trail[ti].y; }
             if (mode === 'final') morphStep();
             fit(real);
+            if (real > 0) { frames++; fps = fps ? fps + (1 / real - fps) * 0.1 : 1 / real; }
+            ds.set('t', t); ds.set('dt', lastDt); ds.set('spd', speed.value); ds.set('sf', lastSpeed); ds.set('zoom', zoom.value); ds.set('trail_max', trailS.value); ds.set('trail_len', TL);
+            ds.set('auto', swAuto.checked); ds.set('morph_on', swMorph.checked); ds.set('span_slider', spanS.value); ds.set('morph_slider', morph.value); ds.set('alpha', swMorph.checked ? morph.value : 1);
+            ds.set('d_bass', dBass.value); ds.set('d_speed', dSpeed.value); ds.set('d_burst', dBurst.value); ds.set('d_high', dHigh.value); ds.set('circles', swCircles.checked); ds.set('vectors', swVectors.checked);
+            ds.set('fps', fps); ds.set('frames', frames); ds.set('playing', clk ? clk.playing : true);
             draw();
             hudAcc += real;
             if (hudAcc > 0.1) {
@@ -905,125 +1013,113 @@
         });
         Sim.playButton($('play'), clk);
 
-        /* ---------- every number above, as data for the side panel (scripts/datalog.js) ---------- */
-        function liveList() { return live.length === phasors.length ? live : phasors; }
-        function zNow() { return sumAt(t, liveList()); }
-        function joints() {
-            var x = 0, yy = 0;
-            return zNow().parts.map(function (p) { x += p.vx; yy += p.vy; return { x: x, y: yy, vx: p.vx, vy: p.vy }; });
-        }
-        function pcol(name, unit, digits, fn) {
-            return { name: name, unit: unit, digits: digits, get: function (j) { return phasors[j] ? fn(phasors[j], j) : undefined; } };
-        }
-        function xyVector(name, code, meaning, list, updates, extra) {
-            var cols = [
-                { name: 'Re', digits: 4, get: function (j) { var p = list()[j]; return p && p.x; } },
-                { name: 'Im', digits: 4, get: function (j) { var p = list()[j]; return p && p.y; } }
-            ];
-            return { name: name, kind: 'vector', code: code, type: 'list of point', meaning: meaning, updates: updates,
-                length: function () { return list().length; }, columns: extra ? cols.concat(extra) : cols };
-        }
-        function audioOn() { return !!(audio.el && audio.el.src); }
-        function sumSquares() { return phasors.reduce(function (s, p) { return s + p.amp * p.amp; }, 0); }
-
+        /* ---------- the data panel (scripts/datalog.js) reads the store; these hooks only say where things are drawn and how to test a value ---------- */
+        function pixelAt(x, y) { return ctx.getImageData(Math.round(x * box.dpr), Math.round(y * box.dpr), 1, 1).data; }
+        function rgbText(px) { return px[3] === 0 ? 'nothing (transparent)' : 'rgb(' + px[0] + ', ' + px[1] + ', ' + px[2] + ')' + (px[3] < 255 ? ' at alpha ' + (px[3] / 255).toFixed(2) : ''); }
+        function lum(px) { return 0.2126 * px[0] + 0.7152 * px[1] + 0.0722 * px[2]; }
+        function isLive() { return ds.get('mode') === 'live'; }
+        function trailAt(i) { return { x: ds.get('cx') + ds.get('trail_x')[i] * ds.get('scale'), y: ds.get('cy') - ds.get('trail_y')[i] * ds.get('scale') }; }
+        function pathAt(i) { return { x: ds.get('cx') + ds.get('path_x')[i] * ds.get('scale_final'), y: ds.get('cy') - ds.get('path_y')[i] * ds.get('scale_final') }; }
+        function activeW() { var A = ds.get('A'), W = ds.get('omega'), w = []; for (var i = 0; i < A.length; i++) if (A[i] > 0) w.push(Math.round(W[i] * 100)); return w; }
+        function structureNow() { var w = activeW(), G = 0, M = 0; w.forEach(function (x) { G = gcd(G, x); }); for (var i = 1; i < w.length; i++) M = gcd(M, w[i] - w[0]); return { n: w.length, G: G, g: G / 100, M: M, q: M ? M / gcd(w[0], M) : 0 }; }
+        function sumNow(time) { var A = ds.get('A'), W = ds.get('omega'), P = ds.get('phi'), x = 0, y = 0; for (var k = 0; k < A.length; k++) { var ang = W[k] * time + P[k]; x += A[k] * Math.cos(ang); y += A[k] * Math.sin(ang); } return { x: x, y: y }; }
+        function armInputs(i) { return [['k', i + 1, '', 0], ['A′', ds.get('A_arm')[i], '', 5], ['θ', ds.get('ang')[i], 'rad', 5]]; }
+        function nz(v) { return v === undefined ? 0 : v; }
         Sim.data = {
-            kicker: 'Fig. 7 · data',
-            title: 'Phasor sums',
-            subtitle: 'Every number this simulation is computing, read live from its own variables.',
-            foot: 'Repainted every frame while open. The circle table works like a data frame; trails and paths open as tables of points.',
+            ds: ds, kicker: 'Fig. 7 · data', file: 'fig7-phasor-sums',
             playing: function () { return clk.playing; },
             groups: [
-                { title: 'Circles', note: 'z(t) = Σ A<sub>k</sub> e<sup>i(ω<sub>k</sub>t + φ<sub>k</sub>)</sup>', vars: [
-                    { name: 'N', code: 'phasors.length', type: 'int', meaning: 'circles in the sum', digits: 0, get: function () { return phasors.length; } },
-                    { name: 'phasors', kind: 'vector', code: 'phasors', type: 'list of dict', meaning: 'your settings per circle, and the radius actually drawn while dancing', updates: 'when you edit a circle', cw: 90,
-                        length: function () { return phasors.length; }, rowLabel: function (j) { return 'circle ' + (j + 1); },
-                        columns: [
-                            pcol('A', '', 3, function (p) { return p.amp; }),
-                            pcol('ω', 'rad/s', 2, function (p) { return p.freq; }),
-                            pcol('φ', 'rad', 3, function (p) { return p.phase; }),
-                            pcol('curve', '', 0, function (p) { return p.curve; }),
-                            pcol('A′', '', 3, function (p, j) { return live[j] ? live[j].amp : undefined; }),
-                            pcol('×', '', 3, function (p, j) { return live[j] ? live[j].mul : undefined; })
-                        ] },
-                    { name: 'mode', code: 'mode', type: 'str', meaning: 'live construction or final shape', get: function () { return mode; } },
-                    { name: 'speed', code: 'speed.value', type: 'float', unit: '×', digits: 2, get: function () { return speed.value; } },
-                    { name: 'zoom', code: 'zoom.value', type: 'float', unit: '×', digits: 2, get: function () { return zoom.value; } },
-                    { name: 'trail length', code: 'trailS.value', type: 'int', meaning: 'most points kept in the trail', digits: 0, get: function () { return trailS.value; } }
-                ] },
-                { title: 'The sum now', note: 'the tip of the chain', vars: [
-                    { name: 't', code: 't', type: 'float', unit: 's', meaning: 'phasor time; restarts when you edit', digits: 3, get: function () { return t; } },
-                    { name: 'Re z', code: 'z.x', type: 'float', digits: 4, get: function () { return zNow().x; } },
-                    { name: 'Im z', code: 'z.y', type: 'float', digits: 4, get: function () { return zNow().y; } },
-                    { name: '|z|', type: 'float', digits: 4, get: function () { var z = zNow(); return Math.hypot(z.x, z.y); } },
-                    { name: 'arg z', type: 'float', unit: 'rad', digits: 4, get: function () { var z = zNow(); return Math.atan2(z.y, z.x); } },
-                    { name: '|z|²', type: 'float', meaning: 'swings around its mean', digits: 4, get: function () { var z = zNow(); return z.x * z.x + z.y * z.y; } },
-                    { name: '⟨|z|²⟩ = Σ A²', type: 'float', meaning: 'its average over time, Parseval', digits: 4, get: sumSquares },
-                    { name: 'joints', kind: 'vector', code: 'sumAt(t, live).parts', type: 'list of point', meaning: 'tip-to-tail chain: where each arrow ends, and the arrow itself', updates: 'every frame', cw: 92,
-                        length: function () { return liveList().length; }, rowLabel: function (j) { return 'circle ' + (j + 1); },
-                        columns: [
-                            { name: 'x', digits: 4, get: function (j) { var q = joints()[j]; return q && q.x; } },
-                            { name: 'y', digits: 4, get: function (j) { var q = joints()[j]; return q && q.y; } },
-                            { name: 'arrow x', digits: 4, get: function (j) { var q = joints()[j]; return q && q.vx; } },
-                            { name: 'arrow y', digits: 4, get: function (j) { var q = joints()[j]; return q && q.vy; } },
-                            { name: 'ωt + φ', unit: 'rad', digits: 3, get: function (j) { var p = liveList()[j]; return p && p.freq * t + p.phase; } }
-                        ] }
-                ] },
-                { title: 'Period and symmetry', note: 'from integer greatest common divisors of 100 ω', vars: [
-                    { name: 'G', code: 'structure().G', type: 'int', meaning: 'gcd of all 100 ω<sub>k</sub>', digits: 0, get: function () { return structure(phasors).G; } },
-                    { name: 'g = G/100', type: 'float', unit: 'rad/s', meaning: 'the common angular frequency', digits: 2, get: function () { return structure(phasors).g; } },
-                    { name: '2π/g', type: 'float', unit: 's', meaning: 'period of the whole figure', digits: 3, get: function () { var s = structure(phasors); return s.g > 0 ? TAU / s.g : undefined; } },
-                    { name: 'M', code: 'structure().M', type: 'int', meaning: 'gcd of the differences 100(ω<sub>k</sub> − ω<sub>1</sub>)', digits: 0, get: function () { return structure(phasors).M; } },
-                    { name: 'q', code: 'structure().q', type: 'int', meaning: 'rotational symmetry: the figure repeats every 2π/q', digits: 0, get: function () { var s = structure(phasors); return s.n > 1 ? s.q : undefined; } },
-                    { name: 'span', code: 'spanNow()', type: 'float', unit: 's', meaning: 'time drawn by the final shape', digits: 3, get: spanNow }
-                ] },
-                { title: 'Arrays: the curves', note: 'click a row to open it as a table', vars: [
-                    xyVector('trail', 'trail', 'the live trail, oldest first', function () { return trail; }, 'every frame'),
-                    xyVector('final path', 'finalPath', 'the closed figure sampled over one span', function () { return finalPath; }, 'when you edit',
-                        [{ name: 'morph Re', digits: 4, get: function (j) { var p = morphPath[j]; return p && p.x; } },
-                         { name: 'morph Im', digits: 4, get: function (j) { var p = morphPath[j]; return p && p.y; } }]),
-                    { name: 'samples', code: 'finalN', type: 'int', meaning: 'points in the final path', digits: 0, get: function () { return finalN; } },
-                    { name: 'morphing', code: 'swMorph.checked', type: 'bool', get: function () { return swMorph.checked; } },
-                    { name: 'α', code: 'morph.value', type: 'float', meaning: 'morph rate: each frame moves this fraction of the way', digits: 2, get: function () { return morph.value; } }
-                ] },
-                { title: 'Audio and dance', note: 'live only when you load a sound file', vars: [
-                    { name: 'audio loaded', type: 'bool', get: audioOn },
-                    { name: 'dance', code: 'danceOn', type: 'bool', get: function () { return danceOn; } },
-                    { name: 'bass', code: 'energy.bass', type: 'float', meaning: '20–150 Hz band level, 0 to 1', digits: 3, get: function () { return energy.bass; } },
-                    { name: 'mid', code: 'energy.mid', type: 'float', meaning: '150–4000 Hz band level', digits: 3, get: function () { return energy.mid; } },
-                    { name: 'high', code: 'energy.high', type: 'float', meaning: '4–16 kHz band level', digits: 3, get: function () { return energy.high; } },
-                    { name: 'BPM', code: 'bpm', type: 'int', meaning: 'beats per minute, median of the last eight beats', digits: 0, get: function () { return bpm || undefined; } },
-                    { name: 'burst', code: 'burst', type: 'float', meaning: 'radius multiplier after a beat', digits: 3, get: function () { return burst; } },
-                    { name: 'spectrum', kind: 'vector', code: 'audio.data', type: 'Array of uint8', meaning: 'the analyser\'s frequency bins, 0 to 255', updates: 'every frame while sound plays', cw: 86,
-                        length: function () { return audio.data ? audio.data.length : 0; },
-                        columns: [
-                            { name: 'f', unit: 'Hz', digits: 1, get: function (j) { return audio.ctx ? j * audio.ctx.sampleRate / audio.an.fftSize : undefined; } },
-                            { name: 'level', digits: 0, get: function (j) { return audio.data[j]; }, colour: function (v) { return Sim.colourMap(v, 255); } }
-                        ] },
-                    { name: 'recording', code: 'recording', type: 'bool', get: function () { return recording; } },
-                    { name: 'snapshots', code: 'tl.length', type: 'int', meaning: 'recorded performance frames', digits: 0, get: function () { return tl.length; } }
-                ] },
-                { title: 'Drawing', note: 'how the picture is laid out', vars: [
-                    { name: 'R<sub>fit</sub>', code: 'fitR', type: 'float', meaning: 'radius the view is fitted to', digits: 4, get: function () { return fitR; } },
-                    { name: 'scale', type: 'float', unit: 'px/unit', meaning: 'screen pixels per unit of z', digits: 2, get: function () { return mode === 'final' ? finalScale() : baseScale() * zoom.value; } },
-                    { name: 'Δt', code: 'lastDt', type: 'float', unit: 's', meaning: 'last frame', digits: 4, get: function () { return lastDt; } },
-                    { name: 'speed used', code: 'lastSpeed', type: 'float', unit: '×', meaning: 'speed slider times the dance factor', digits: 3, get: function () { return lastSpeed; } },
-                    { name: 'canvas', code: 'box.w × box.h', type: 'int', size: '2', unit: 'css px', get: function () { return box.w + ' × ' + box.h; } },
-                    { name: 'frame rate', type: 'float', unit: 'Hz', meaning: 'measured by the panel', digits: 1, get: function () { return Sim.frameStats.fps; } },
-                    { name: 'playing', code: 'clk.playing', type: 'bool', get: function () { return clk.playing; } }
-                ] }
+                { title: 'Circles', note: 'one row per circle: the list as stored, and the copy the dance scales', vars: ['N', 'A', 'omega', 'phi', 'curve', 'mul', 'A_live', 'n_active'] },
+                { title: 'The sum z(t)', note: 'the pen', vars: ['t', 'x', 'y', 'absz', 'absz2', 'E'] },
+                { title: 'Arms and joints', note: 'tip to tail, as drawn in the live view; point at a cell to find the joint', vars: ['A_arm', 'ang', 'vx', 'vy', 'jx', 'jy', 'px', 'py', 'tip_px', 'tip_py'] },
+                { title: 'Structure', note: 'period and symmetry from integer gcds on 100·ω', vars: ['G', 'g', 'period', 'M', 'q'] },
+                { title: 'Final shape', note: 'the exact path, and the drawn path that morphs toward it', vars: ['n_path', 'span', 'span_slider', 'auto', 'final_x', 'final_y', 'path_x', 'path_y', 'morph_on', 'morph_slider', 'alpha', 'dev', 'scale_final'] },
+                { title: 'Trail', note: 'history of the pen', vars: ['trail_max', 'trail_len', 'trail_x', 'trail_y'] },
+                { title: 'Dance and audio', note: 'measured from the sound, smoothed; all 0 without audio', vars: ['dance', 'bass', 'mid', 'high', 'burst', 'bpm', 'beat', 'd_bass', 'd_speed', 'd_burst', 'd_high'] },
+                { title: 'Time and drawing', note: 'how the picture is laid out', vars: ['dt', 'spd', 'sf', 'mode', 'zoom', 'fitR', 'scale', 'cx', 'cy', 'box_w', 'box_h', 'circles', 'vectors', 'fps', 'frames', 'playing'] }
             ],
-            log: {
-                every: 0.1, max: 1000,
-                columns: [
-                    { name: 'clock', unit: 's', digits: 2, get: function () { return Sim.frameStats.play; } },
-                    { name: 't', unit: 's', digits: 3, get: function () { return t; } },
-                    { name: 'Re z', digits: 4, get: function () { return zNow().x; } },
-                    { name: 'Im z', digits: 4, get: function () { return zNow().y; } },
-                    { name: '|z|', digits: 4, get: function () { var z = zNow(); return Math.hypot(z.x, z.y); } },
-                    { name: 'N', digits: 0, get: function () { return phasors.length; } },
-                    { name: 'bass', digits: 3, get: function () { return energy.bass; } }
-                ]
-            }
+            rowLabel: { arm: function (j) { return 'c' + (j + 1); } },
+            colour: (function () { function byReach(v) { return Sim.colourMap(v, Math.max(ds.get('fitR') || 0, 0.05)); } return { vx: byReach, vy: byReach, jx: byReach, jy: byReach, final_x: byReach, final_y: byReach, path_x: byReach, path_y: byReach, trail_x: byReach, trail_y: byReach }; })(),
+            probe: function (x, y) {
+                var best = null, bd = 12, i, d, n;
+                if (!isLive()) {
+                    var PX = ds.get('path_x'), n2 = PX.length;
+                    for (i = 0; i < n2; i++) { var pp = pathAt(i); d = Math.hypot(x - pp.x, y - pp.y); if (d < bd) { bd = d; best = { path: i }; } }
+                    return best;
+                }
+                var px = ds.get('px'), py = ds.get('py');
+                for (i = 0; i < px.length; i++) { d = Math.hypot(x - px[i], y - py[i]); if (d < bd) { bd = d; best = { arm: i }; } }
+                d = Math.hypot(x - ds.get('tip_px'), y - ds.get('tip_py'));
+                if (d < bd) { bd = d; best = { tip: true }; }
+                if (!best) { n = ds.get('trail_x').length; for (i = 0; i < n; i++) { var tp = trailAt(i); d = Math.hypot(x - tp.x, y - tp.y); if (d < bd) { bd = d; best = { trail: i }; } } }
+                return best;
+            },
+            inspect: function (ref) {
+                var i;
+                if (ref.tip) return { title: 'the pen z(t)', at: { x: ds.get('tip_px'), y: ds.get('tip_py') }, rows: [['t', ds.get('t'), 's', 't'], ['Re z', ds.get('x'), '', 'x'], ['Im z', ds.get('y'), '', 'y'], ['|z|', ds.get('absz'), '', 'absz']] };
+                if (ref.arm !== undefined) { i = ref.arm; return { title: 'circle ' + (i + 1) + ' · its joint', at: { x: ds.get('px')[i], y: ds.get('py')[i] }, rows: [['A′', ds.get('A_arm')[i], '', 'A_arm', i], ['ω', ds.get('omega')[i], 'rad/s', 'omega', i], ['φ', ds.get('phi')[i], 'rad', 'phi', i], ['θ = ωt + φ', ds.get('ang')[i], 'rad', 'ang', i], ['Δx', ds.get('vx')[i], '', 'vx', i], ['Δy', ds.get('vy')[i], '', 'vy', i], ['Re z_k', ds.get('jx')[i], '', 'jx', i], ['Im z_k', ds.get('jy')[i], '', 'jy', i], ['mul', ds.get('mul')[i], '', 'mul', i]] }; }
+                if (ref.trail !== undefined) { i = ref.trail; return { title: 'trail point ' + i + ' of ' + ds.get('trail_len') + ' · ' + (ds.get('trail_len') - 1 - i) + ' frames ago', at: trailAt(i), rows: [['x', ds.get('trail_x')[i], '', 'trail_x', i], ['y', ds.get('trail_y')[i], '', 'trail_y', i]] }; }
+                i = ref.path;
+                return { title: 'final path point ' + i + ' · t = ' + Sim.fmt(i / ds.get('n_path') * ds.get('span'), 3) + ' s', at: pathAt(i), rows: [['exact Re z', ds.get('final_x')[i], '', 'final_x', i], ['exact Im z', ds.get('final_y')[i], '', 'final_y', i], ['drawn x', ds.get('path_x')[i], '', 'path_x', i], ['drawn y', ds.get('path_y')[i], '', 'path_y', i]] };
+            },
+            locate: function (name, idx) {
+                var v = ds.vars[name];
+                if (!v.dims.length) return null;
+                if (v.dims[0] === 'arm') return isLive() && idx < ds.get('px').length ? { x: ds.get('px')[idx], y: ds.get('py')[idx] } : null;
+                if (v.dims[0] === 'trail') return isLive() ? trailAt(idx) : null;
+                if (v.dims[0] === 'path') return !isLive() && idx < ds.get('path_x').length ? pathAt(idx) : null;
+                return null;
+            },
+            check: {
+                mul: function (i) {
+                    if (!ds.get('dance')) return { formula: 'dance off: 1', inputs: [['dance', 'off', '']], value: 1 };
+                    var W = ds.get('omega'), absF = Array.prototype.map.call(W, Math.abs), maxAbs = Math.max.apply(null, [1e-6].concat(Array.prototype.slice.call(absF))), med = median(Array.prototype.slice.call(absF)), m, cv = CURVES[ds.get('curve')[i]];
+                    if (absF[i] <= med) m = 1 + EASE[cv](clamp01(ds.get('bass'))) * ds.get('d_bass') * (1 - 0.7 * absF[i] / maxAbs); else m = 1 + clamp01(ds.get('high')) * ds.get('d_high');
+                    m *= ds.get('burst');
+                    return { formula: absF[i] <= med ? '(1 + ' + cv + '(bass) · d_bass · (1 − 0.7 |ω| / max|ω|)) · burst' : '(1 + high · d_high) · burst', inputs: [['|ω|', absF[i], 'rad/s', 2], ['median |ω|', med, 'rad/s', 2], ['max |ω|', maxAbs, 'rad/s', 2], ['bass', ds.get('bass'), '', 4], ['high', ds.get('high'), '', 4], ['burst', ds.get('burst'), '', 4], ['d_bass', ds.get('d_bass'), '', 2], ['d_high', ds.get('d_high'), '', 2]], value: m };
+                },
+                A_live: function (i) { return { formula: 'A · mul', inputs: [['A', ds.get('A')[i], '', 4], ['mul', ds.get('mul')[i], '', 4]], value: ds.get('A')[i] * ds.get('mul')[i] }; },
+                n_active: function () { return { formula: 'count of A > 0', inputs: [['A', Array.prototype.join.call(ds.get('A'), ', '), '']], value: activeW().length }; },
+                x: function () { var J = ds.get('jx'); return { formula: 'the last joint, Re z_N', inputs: [['N', J.length, '', 0]], value: J.length ? J[J.length - 1] : 0 }; },
+                y: function () { var J = ds.get('jy'); return { formula: 'the last joint, Im z_N', inputs: [['N', J.length, '', 0]], value: J.length ? J[J.length - 1] : 0 }; },
+                absz: function () { return { formula: '√(x² + y²)', inputs: [['x', ds.get('x'), '', 5], ['y', ds.get('y'), '', 5]], value: Math.hypot(ds.get('x'), ds.get('y')) }; },
+                absz2: function () { return { formula: 'x² + y²', inputs: [['x', ds.get('x'), '', 5], ['y', ds.get('y'), '', 5]], value: ds.get('x') * ds.get('x') + ds.get('y') * ds.get('y') }; },
+                E: function () { var A = ds.get('A'), e = 0; for (var i = 0; i < A.length; i++) e += A[i] * A[i]; return { formula: 'Σ Aₖ²', inputs: [['A', Array.prototype.join.call(A, ', '), '']], value: e }; },
+                A_arm: function (i) { return { formula: 'A′ₖ, the live radius', inputs: [['A′', ds.get('A_live')[i], '', 5]], value: ds.get('A_live')[i] }; },
+                ang: function (i) { return { formula: 'θ = ω t + φ', inputs: [['ω', ds.get('omega')[i], 'rad/s', 2], ['t', ds.get('t'), 's', 5], ['φ', ds.get('phi')[i], 'rad', 3]], value: ds.get('omega')[i] * ds.get('t') + ds.get('phi')[i] }; },
+                vx: function (i) { return { formula: 'A′ cos θ', inputs: armInputs(i), value: ds.get('A_arm')[i] * Math.cos(ds.get('ang')[i]) }; },
+                vy: function (i) { return { formula: 'A′ sin θ', inputs: armInputs(i), value: ds.get('A_arm')[i] * Math.sin(ds.get('ang')[i]) }; },
+                jx: function (i) { return { formula: 'Re z_{k−1} + Δxₖ', inputs: [['Re z_{k−1}', i ? ds.get('jx')[i - 1] : 0, '', 5], ['Δx', ds.get('vx')[i], '', 5]], value: (i ? ds.get('jx')[i - 1] : 0) + ds.get('vx')[i] }; },
+                jy: function (i) { return { formula: 'Im z_{k−1} + Δyₖ', inputs: [['Im z_{k−1}', i ? ds.get('jy')[i - 1] : 0, '', 5], ['Δy', ds.get('vy')[i], '', 5]], value: (i ? ds.get('jy')[i - 1] : 0) + ds.get('vy')[i] }; },
+                px: function (i) { var o = i ? ds.get('px')[i - 1] : ds.get('cx'); return { formula: 'previous joint x + Δx · scale', inputs: [['previous', o, 'css px', 3], ['Δx', ds.get('vx')[i], '', 5], ['scale', ds.get('scale'), 'px per unit', 3]], value: o + ds.get('vx')[i] * ds.get('scale') }; },
+                py: function (i) { var o = i ? ds.get('py')[i - 1] : ds.get('cy'); return { formula: 'previous joint y − Δy · scale', inputs: [['previous', o, 'css px', 3], ['Δy', ds.get('vy')[i], '', 5], ['scale', ds.get('scale'), 'px per unit', 3]], value: o - ds.get('vy')[i] * ds.get('scale') }; },
+                tip_px: function () { return { formula: 'c_x + x · scale', inputs: [['c_x', ds.get('cx'), 'css px', 1], ['x', ds.get('x'), '', 5], ['scale', ds.get('scale'), 'px per unit', 3]], value: ds.get('cx') + ds.get('x') * ds.get('scale') }; },
+                tip_py: function () { return { formula: 'c_y − y · scale', inputs: [['c_y', ds.get('cy'), 'css px', 1], ['y', ds.get('y'), '', 5], ['scale', ds.get('scale'), 'px per unit', 3]], value: ds.get('cy') - ds.get('y') * ds.get('scale') }; },
+                G: function () { return { formula: 'gcd of round(100 ωₖ) over A > 0', inputs: [['100 ω', activeW().join(', '), '']], value: structureNow().G }; },
+                g: function () { return { formula: 'G / 100', inputs: [['G', ds.get('G'), '', 0]], value: ds.get('G') / 100 }; },
+                period: function () { return { formula: '2π / g', inputs: [['g', ds.get('g'), 'rad/s', 2]], value: ds.get('g') > 0 ? TAU / ds.get('g') : NaN }; },
+                M: function () { return { formula: 'gcd of the differences round(100 ωₖ) − round(100 ω₁)', inputs: [['100 ω', activeW().join(', '), '']], value: structureNow().M }; },
+                q: function () { return { formula: 'M / gcd(round(100 ω₁), M), or 0 when M = 0', inputs: [['100 ω', activeW().join(', '), ''], ['M', ds.get('M'), '', 0]], value: structureNow().q }; },
+                sf: function () { return { formula: 'speed · (dance ? 1 + mid · d_speed : 1)', inputs: [['speed', ds.get('spd'), '×', 2], ['dance', ds.get('dance') ? 'on' : 'off', ''], ['mid', ds.get('mid'), '', 4], ['d_speed', ds.get('d_speed'), '', 2]], value: ds.get('spd') * (ds.get('dance') ? 1 + clamp01(ds.get('mid')) * ds.get('d_speed') : 1) }; },
+                n_path: function () { return { formula: 'max(1500, min(12000, round(span / 2π · 700)))', inputs: [['span', ds.get('span'), 's', 4]], value: Math.max(1500, Math.min(12000, Math.round(ds.get('span') / TAU * 700))) }; },
+                span: function () { var g = ds.get('g'); return { formula: 'auto and g > 0: min(2π / g, 60 · 2π); else slider · 2π', inputs: [['auto', ds.get('auto') ? 'on' : 'off', ''], ['g', g, 'rad/s', 2], ['slider', ds.get('span_slider'), '× 2π s', 0]], value: ds.get('auto') && g > 0 ? Math.min(TAU / g, 60 * TAU) : ds.get('span_slider') * TAU }; },
+                final_x: function (i) { var n = ds.get('n_path'), time = i / n * ds.get('span'); return { formula: 'Σ Aₖ cos(ωₖ tᵢ + φₖ), tᵢ = i / n · span', inputs: [['i', i, '', 0], ['n', n, '', 0], ['tᵢ', time, 's', 5]], value: sumNow(time).x }; },
+                final_y: function (i) { var n = ds.get('n_path'), time = i / n * ds.get('span'); return { formula: 'Σ Aₖ sin(ωₖ tᵢ + φₖ), tᵢ = i / n · span', inputs: [['i', i, '', 0], ['n', n, '', 0], ['tᵢ', time, 's', 5]], value: sumNow(time).y }; },
+                alpha: function () { return { formula: 'morph on: the slider; off: 1', inputs: [['morph', ds.get('morph_on') ? 'on' : 'off', ''], ['slider', ds.get('morph_slider'), '', 2]], value: ds.get('morph_on') ? ds.get('morph_slider') : 1 }; },
+                dev: function () { var X = ds.get('path_x'), Y = ds.get('path_y'), FX = ds.get('final_x'), FY = ds.get('final_y'), d = 0; for (var i = 0; i < X.length && i < FX.length; i++) d = Math.max(d, Math.hypot(X[i] - FX[i], Y[i] - FY[i])); return { formula: 'max over the path of |morph − final|', inputs: [['points', X.length, '', 0]], value: d }; },
+                scale_final: function () { var X = ds.get('path_x'), Y = ds.get('path_y'), m = 0; for (var i = 0; i < X.length; i++) m = Math.max(m, Math.hypot(X[i], Y[i])); return { formula: 'min(w, h) · 0.44 / max(max |morph|, 0.05) · zoom', inputs: [['min(w, h)', Math.min(ds.get('box_w'), ds.get('box_h')), 'css px', 0], ['max |morph|', m, '', 5], ['zoom', ds.get('zoom'), '×', 2]], value: Math.min(ds.get('box_w'), ds.get('box_h')) * 0.44 / Math.max(m, 0.05) * ds.get('zoom') }; },
+                scale: function () { return { formula: 'min(w, h) · 0.44 / max(fit radius, 0.05) · zoom', inputs: [['min(w, h)', Math.min(ds.get('box_w'), ds.get('box_h')), 'css px', 0], ['fit radius', ds.get('fitR'), '', 5], ['zoom', ds.get('zoom'), '×', 2]], value: Math.min(ds.get('box_w'), ds.get('box_h')) * 0.44 / Math.max(ds.get('fitR'), 0.05) * ds.get('zoom') }; },
+                cx: function () { return { formula: 'box.w / 2', inputs: [['box.w', ds.get('box_w'), 'css px', 0]], value: ds.get('box_w') / 2 }; },
+                cy: function () { return { formula: 'box.h / 2', inputs: [['box.h', ds.get('box_h'), 'css px', 0]], value: ds.get('box_h') / 2 }; }
+            },
+            drawn: {
+                tip_px: function () { if (!isLive()) return { what: 'the pen', drawn: 'nothing', expected: 'nothing', ok: true, note: 'The pen is drawn only in the live view.' }; var px = pixelAt(ds.get('tip_px'), ds.get('tip_py')); return { what: 'screen pixel at the pen, (' + Sim.fmt(ds.get('tip_px'), 1) + ', ' + Sim.fmt(ds.get('tip_py'), 1) + ') css px', drawn: rgbText(px), expected: 'the burgundy pen dot, rgb(122, 31, 43)', ok: px[3] > 0 && lum(px) < 130, note: 'The dot has radius 5.5 px, so the pixel at the stored centre is its fill.' }; },
+                px: function (i) { if (!isLive() || !ds.get('vectors')) return { what: 'joint ' + (i + 1), drawn: 'nothing', expected: 'nothing', ok: true, note: 'Joints are drawn only in the live view with the arms switched on.' }; var px = pixelAt(ds.get('px')[i], ds.get('py')[i]); return { what: 'screen pixel at joint ' + (i + 1), drawn: rgbText(px), expected: 'the dot in the circle’s colour, ' + phasors[i].color, ok: px[3] > 0 && lum(px) < 200, note: 'Each joint carries a filled dot of radius 3 px.' }; },
+                path_x: function (i) { if (isLive()) return { what: 'final path point ' + i, drawn: 'nothing', expected: 'nothing', ok: true, note: 'The final path is drawn only in the final view.' }; var p = pathAt(i), px = pixelAt(p.x, p.y); return { what: 'screen pixel at path point ' + i + ', (' + Sim.fmt(p.x, 1) + ', ' + Sim.fmt(p.y, 1) + ') css px', drawn: rgbText(px), expected: 'the rose halo or the burgundy line', ok: px[3] > 0, note: 'The path is a 6 px rose stroke under a 1.8 px burgundy one, centred on the stored points.' }; },
+                trail_x: function (i) { if (!isLive()) return { what: 'trail point ' + i, drawn: 'nothing', expected: 'nothing', ok: true, note: 'The trail is drawn only in the live view.' }; var p = trailAt(i), px = pixelAt(p.x, p.y); return { what: 'screen pixel at trail point ' + i + ', (' + Sim.fmt(p.x, 1) + ', ' + Sim.fmt(p.y, 1) + ') css px', drawn: rgbText(px), expected: 'burgundy, fainter for older points', ok: px[3] > 0, note: 'The trail is a 1.8 px stroke; older chunks are drawn with lower opacity, and circles or arms may be drawn over it.' }; }
+            },
+            log: { every: 0.1, max: 1000, time: 't', columns: ['t', 'x', 'y', 'absz', 'E', 'sf', 'bass'] },
+            about: 'The arms, joints and pen are drawn from the numbers stored here, every frame. The trail is the pen position at the end of each past frame, so its point spacing is the frame time times the speed: history, not a formula. In the final view the drawn path moves the fraction α of the way to the exact path each frame, so path_x, path_y lag final_x, final_y until the deviation reaches zero. The readouts under the figure refresh ten times a second; the store refreshes every frame. The audio numbers are measurements of the sound, smoothed over frames.'
         };
 
         Sim.onResize(stage, function () { box.fit(); });

@@ -191,6 +191,7 @@
     </footer>
 
     <script src="../scripts/sim.js"></script>
+    <script src="../scripts/dataset.js"></script>
     <script>
     (function () {
         'use strict';
@@ -203,7 +204,60 @@
         var box = Sim.canvas2d(document.getElementById('plot')), ctx = box.ctx;
         var spec = Sim.canvas2d(document.getElementById('spec')), sctx = spec.ctx;
         var addBtn = document.getElementById('add');
-        var waves = [], uid = 0, simT = 0, peak = 0, frames = 0;
+        var waves = [], uid = 0, simT = 0, peak = 0, frames = 0, fps = 0;
+
+        /* ---------- the store: every number this page computes is written here, where it is computed (scripts/dataset.js) ---------- */
+        var ds = Sim.dataset({ title: 'Wave interference bench', attrs: { figure: 6, page: 'wave-interference.html', WORLD_W: WORLD_W, MAX_WAVES: MAX_WAVES, FMAX: FMAX, NUMAX: NUMAX, px_per_wavelength_unit: 200, left: 44, top1: 30, gap: 44, length_unit: 'px of the 800 px wide medium; X / 200 is the position in units where f is the spatial frequency' } });
+        ds.var('N', [], 'int', { symbol: 'N', long_name: 'waves on the bench', computed_in: 'render()', digits: 0, source: 'The number of wave cards.' });
+        ds.var('t', [], 'float', { symbol: 't', units: 's', long_name: 'simulation time', computed_in: 'Sim.clock callback', digits: 3, source: 'The clock adds each frame’s Δt while playing.' });
+        ds.dim('wave', 0);
+        ds.var('A', ['wave'], Float64Array, { symbol: 'Aᵢ', units: 'px', long_name: 'amplitude of each wave', computed_in: 'the wave cards', digits: 1, source: 'Set by the sliders on each wave card.', updates: 'every frame' });
+        ds.var('f', ['wave'], Float64Array, { symbol: 'fᵢ', units: 'Hz', long_name: 'frequency of each wave; also its spatial frequency per 200 px', computed_in: 'the wave cards', digits: 2, source: 'Set by the sliders on each wave card.', updates: 'every frame' });
+        ds.var('phi', ['wave'], Float64Array, { symbol: 'φᵢ', units: 'rad', long_name: 'phase of each wave', computed_in: 'the wave cards', digits: 3, source: 'Set by the sliders on each wave card.', updates: 'every frame' });
+        ds.var('s', ['wave'], Float64Array, { symbol: 'sᵢ', units: '×', long_name: 'speed factor of each wave', computed_in: 'the wave cards', digits: 2, source: 'Set by the sliders on each wave card.', updates: 'every frame' });
+        ds.var('k', ['wave'], Float64Array, { symbol: 'kᵢ', units: 'rad/px', long_name: 'wave number', computed_in: 'draw()', formula: 'k = 2π f / 200', digits: 5, updates: 'every frame' });
+        ds.var('omega', ['wave'], Float64Array, { symbol: 'ωᵢ', units: 'rad/s', long_name: 'angular frequency at a fixed point', computed_in: 'draw()', formula: 'ω = 2π f s', digits: 4, updates: 'every frame' });
+        ds.var('lam', ['wave'], Float64Array, { symbol: 'λᵢ', units: 'px', long_name: 'wavelength', computed_in: 'draw()', formula: 'λ = 200 / f', digits: 1, updates: 'every frame' });
+        ds.var('v', ['wave'], Float64Array, { symbol: 'vᵢ', units: 'px/s', long_name: 'phase speed', computed_in: 'draw()', formula: 'v = 200 s', digits: 1, updates: 'every frame' });
+        ds.var('nu', ['wave'], Float64Array, { symbol: 'νᵢ', units: 'Hz', long_name: 'temporal frequency at a fixed point', computed_in: 'draw()', formula: 'ν = f s, rounded to 1 µHz', digits: 3, updates: 'every frame' });
+        ds.var('y_400', ['wave'], Float64Array, { symbol: 'yᵢ(400)', units: 'px', long_name: 'each wave at X = 400 px', computed_in: 'draw()', formula: 'A sin(2π f (400/200 − s t) + φ)', digits: 3, updates: 'every frame' });
+        ds.var('sum_A', [], 'float', { symbol: 'Σ Aᵢ', units: 'px', long_name: 'largest possible sum', computed_in: 'draw()', formula: 'Σ Aᵢ', digits: 1 });
+        ds.var('peak', [], 'float', { symbol: 'peak', units: 'px', long_name: 'largest |Σ yᵢ| over the drawn samples', computed_in: 'draw(), the sum loop', formula: 'max |Σ yᵢ(X)|', digits: 3 });
+        ds.var('ratio', [], 'float', { symbol: 'peak / Σ A', long_name: 'reaches 1 only where all crests coincide', computed_in: 'draw()', formula: 'peak / Σ Aᵢ', digits: 4 });
+        ds.var('y_sum_400', [], 'float', { symbol: 'Σ yᵢ(400)', units: 'px', long_name: 'the sum at X = 400 px', computed_in: 'draw()', formula: 'Σ yᵢ(400)', digits: 3 });
+        ds.var('y1_400', [], 'float', { symbol: 'y₁(400)', units: 'px', long_name: 'wave 1 at X = 400 px', computed_in: 'draw()', formula: 'y_400[0]', digits: 3 });
+        ds.var('bl', [], 'float', { symbol: 'λ_beat', units: 'px', long_name: 'beat length of waves 1 and 2; undefined unless f₁ ≠ f₂', computed_in: 'draw()', formula: '200 / |f₁ − f₂|', digits: 1 });
+        ds.var('venv', [], 'float', { symbol: 'v_env', units: 'px/s', long_name: 'envelope speed of waves 1 and 2; undefined unless f₁ ≠ f₂', computed_in: 'draw()', formula: '200 (f₁ s₁ − f₂ s₂) / (f₁ − f₂)', digits: 1 });
+        ds.var('M', [], 'int', { symbol: 'M', long_name: 'sample steps across the plot, one per screen pixel', computed_in: 'draw()', formula: 'max(2, round(right − left))', digits: 0 });
+        ds.var('dX', [], 'float', { symbol: 'ΔX', units: 'px', long_name: 'medium step between samples', computed_in: 'draw()', formula: '800 / M', digits: 4 });
+        ds.dim('x', 0);
+        ds.coord('X', 'x', Float64Array, { symbol: 'X', units: 'px', long_name: 'position of each sample in the medium', computed_in: 'draw()', formula: 'X = i · 800 / M', digits: 2, updates: 'every frame' });
+        ds.var('y_comp', ['wave', 'x'], Float64Array, { symbol: 'yᵢ(X)', units: 'px', long_name: 'each wave at each sample', computed_in: 'draw(), the component loop', formula: 'A sin(2π f (X/200 − s t) + φ)', digits: 3, updates: 'every frame' });
+        ds.var('y_sum', ['x'], Float64Array, { symbol: 'Σ yᵢ(X)', units: 'px', long_name: 'the sum at each sample', computed_in: 'draw(), the sum loop', formula: 'Σ yᵢ(X)', digits: 3, updates: 'every frame' });
+        ds.var('py_comp', ['wave', 'x'], Float64Array, { symbol: 'y px (component)', units: 'css px', long_name: 'screen height of each component point', computed_in: 'draw(), the component loop', formula: 'mid₂ − yᵢ / R_c · h_comp / 2', digits: 2, updates: 'every frame' });
+        ds.var('py_sum', ['x'], Float64Array, { symbol: 'y px (sum)', units: 'css px', long_name: 'screen height of each sum point', computed_in: 'draw(), the sum loop', formula: 'mid₁ − Σ yᵢ / R · h_sum / 2', digits: 2, updates: 'every frame' });
+        ds.dim('line', 0);
+        ds.var('nu_line', ['line'], Float64Array, { symbol: 'ν', units: 'Hz', long_name: 'frequency of each spectrum line, one per distinct ν', computed_in: 'lines()', formula: 'the distinct νᵢ, in order of first appearance', digits: 3, updates: 'every frame' });
+        ds.var('A_line', ['line'], Float64Array, { symbol: '|Σ A e^{iφ}|', units: 'px', long_name: 'height of each line: the phasor sum of the waves sharing that ν', computed_in: 'lines()', formula: 'ν = 0: |Σ A sin φ|; else |Σ A e^{iφ}|', digits: 3, updates: 'every frame' });
+        ds.var('amax', [], 'float', { symbol: 'A_max', units: 'px', long_name: 'scale of the spectrum panel', computed_in: 'drawSpectrum()', formula: 'max(40, tallest line)', digits: 1 });
+        ds.var('x_line', ['line'], Float64Array, { symbol: 'x px', units: 'css px', long_name: 'screen position of each line', computed_in: 'drawSpectrum()', formula: '44 + ν / 6 · (w_spec − 58)', digits: 2, updates: 'every frame' });
+        ds.var('y_line', ['line'], Float64Array, { symbol: 'y px', units: 'css px', long_name: 'screen height of each line top', computed_in: 'drawSpectrum()', formula: 'base − A / A_max · (base − 14), base = h_spec − 24', digits: 2, updates: 'every frame' });
+        ds.var('R', [], 'float', { symbol: 'R', units: 'px', long_name: 'range of the sum panel', computed_in: 'draw()', formula: 'nice(Σ Aᵢ) = max(20, ⌈Σ A / 10⌉ · 10)', digits: 0 });
+        ds.var('Rc', [], 'float', { symbol: 'R_c', units: 'px', long_name: 'range of the component panel', computed_in: 'draw()', formula: 'nice(max Aᵢ)', digits: 0 });
+        ds.var('box_w', [], 'int', { symbol: 'box.w', units: 'css px', long_name: 'plot width on your screen', computed_in: 'draw()', digits: 0, source: 'Measured from the page layout.' });
+        ds.var('box_h', [], 'int', { symbol: 'box.h', units: 'css px', long_name: 'plot height on your screen', computed_in: 'draw()', digits: 0, source: 'Measured from the page layout.' });
+        ds.var('spec_w', [], 'int', { symbol: 'w_spec', units: 'css px', long_name: 'spectrum panel width', computed_in: 'drawSpectrum()', digits: 0, source: 'Measured from the page layout.' });
+        ds.var('spec_h', [], 'int', { symbol: 'h_spec', units: 'css px', long_name: 'spectrum panel height', computed_in: 'drawSpectrum()', digits: 0, source: 'Measured from the page layout.' });
+        ds.var('right', [], 'float', { symbol: 'right', units: 'css px', long_name: 'right edge of the plots', computed_in: 'draw()', formula: 'box.w − 14', digits: 0 });
+        ds.var('hSum', [], 'float', { symbol: 'h_sum', units: 'css px', long_name: 'height of the sum panel', computed_in: 'draw()', formula: '(box.h − 30 − 44 − 14) · 0.56', digits: 2 });
+        ds.var('top2', [], 'float', { symbol: 'top₂', units: 'css px', long_name: 'top of the component panel', computed_in: 'draw()', formula: '30 + h_sum + 44', digits: 2 });
+        ds.var('hComp', [], 'float', { symbol: 'h_comp', units: 'css px', long_name: 'height of the component panel', computed_in: 'draw()', formula: 'box.h − top₂ − 14', digits: 2 });
+        ds.var('mid1', [], 'float', { symbol: 'mid₁', units: 'css px', long_name: 'axis of the sum panel', computed_in: 'panel()', formula: '30 + h_sum / 2', digits: 2 });
+        ds.var('mid2', [], 'float', { symbol: 'mid₂', units: 'css px', long_name: 'axis of the component panel', computed_in: 'panel()', formula: 'top₂ + h_comp / 2', digits: 2 });
+        ds.var('dt', [], 'float', { symbol: 'Δt', units: 's', long_name: 'time between the last two frames', computed_in: 'Sim.clock', digits: 4, source: 'Measured by the clock.' });
+        ds.var('fps', [], 'float', { symbol: 'frame rate', units: 'Hz', long_name: 'smoothed over about ten frames', computed_in: 'Sim.clock callback', digits: 1, source: 'A running average of 1/Δt.' });
+        ds.var('frames', [], 'int', { symbol: 'frames', long_name: 'frames drawn so far', computed_in: 'Sim.clock callback', digits: 0, source: 'Counted frame by frame.' });
+        ds.var('playing', [], 'bool', { symbol: 'playing', long_name: 'the clock runs', computed_in: 'Sim.clock', source: 'The state of the Play button.' });
 
         function nextColour() {
             for (var i = 0; i < COLOURS.length; i++) {
@@ -263,6 +317,7 @@
             });
             addBtn.disabled = waves.length >= MAX_WAVES;
             var n = waves.length;
+            ds.set('N', n);
             document.getElementById('r-n').textContent = n + ' / ' + MAX_WAVES;
             document.getElementById('cap-n').textContent = n === 1 ? '1 wave' : n + ' waves';
         }
@@ -299,18 +354,35 @@
             var samples = Math.max(2, Math.round(right - left));
             var sumRange = nice(waves.reduce(function (a, v) { return a + v.A; }, 0));
             var compRange = nice(waves.reduce(function (a, v) { return Math.max(a, v.A); }, 0));
+            var NW = waves.length, MP = samples + 1, wi, wv0, s400 = 0;
+            ds.dim('wave', NW); ds.dim('x', MP);
+            var Aw = ds.alloc('A'), fw = ds.alloc('f'), phw = ds.alloc('phi'), sw = ds.alloc('s'), kw = ds.alloc('k'), omw = ds.alloc('omega'), lamw = ds.alloc('lam'), vw = ds.alloc('v'), nuw = ds.alloc('nu'), y4 = ds.alloc('y_400');
+            var Xs = ds.alloc('X'), Ys = ds.alloc('y_sum'), PYs = ds.alloc('py_sum'), Yc = ds.alloc('y_comp'), PYc = ds.alloc('py_comp');
+            for (wi = 0; wi < NW; wi++) {
+                wv0 = waves[wi];
+                Aw[wi] = wv0.A; fw[wi] = wv0.f; phw[wi] = wv0.phi; sw[wi] = wv0.s;
+                kw[wi] = 2 * Math.PI * wv0.f / 200; omw[wi] = 2 * Math.PI * wv0.f * wv0.s; lamw[wi] = 200 / wv0.f; vw[wi] = 200 * wv0.s; nuw[wi] = Math.round(wv0.f * wv0.s * 1e6) / 1e6;
+                y4[wi] = y(wv0, 400); s400 += y4[wi];
+            }
+            ds.set('M', samples); ds.set('dX', WORLD_W / samples); ds.set('R', sumRange); ds.set('Rc', compRange); ds.set('sum_A', waves.reduce(function (a, v) { return a + v.A; }, 0));
+            ds.set('y_sum_400', s400); ds.set('y1_400', NW ? y4[0] : NaN);
+            ds.set('bl', NW > 1 && waves[0].f !== waves[1].f ? 200 / Math.abs(waves[0].f - waves[1].f) : NaN);
+            ds.set('venv', NW > 1 && waves[0].f !== waves[1].f ? 200 * (waves[0].f * waves[0].s - waves[1].f * waves[1].s) / (waves[0].f - waves[1].f) : NaN);
+            ds.set('box_w', w); ds.set('box_h', h); ds.set('right', right); ds.set('hSum', hSum); ds.set('top2', top2); ds.set('hComp', hComp);
             ctx.clearRect(0, 0, w, h);
 
             var mid1 = panel(top1, hSum, sumRange, 'SUM  y = Σ yᵢ', left, right);
             var mid2 = panel(top2, hComp, compRange, 'COMPONENTS', left, right);
+            ds.set('mid1', mid1); ds.set('mid2', mid2);
 
             // components
-            waves.forEach(function (wv) {
+            waves.forEach(function (wv, wi) {
                 ctx.strokeStyle = wv.colour;
                 ctx.lineWidth = 1.6;
                 ctx.beginPath();
                 for (var i = 0; i <= samples; i++) {
                     var X = i / samples * WORLD_W, py = mid2 - y(wv, X) / compRange * hComp / 2;
+                    Yc[wi * MP + i] = y(wv, X); PYc[wi * MP + i] = py;
                     if (i === 0) ctx.moveTo(left + i, py); else ctx.lineTo(left + i, py);
                 }
                 ctx.stroke();
@@ -324,6 +396,7 @@
                     for (var j = 0; j < waves.length; j++) v += y(waves[j], X);
                     pk = Math.max(pk, Math.abs(v));
                     pts.push(mid1 - v / sumRange * hSum / 2);
+                    Xs[i] = X; Ys[i] = v; PYs[i] = pts[i];
                 }
                 peak = pk;
                 ctx.beginPath();
@@ -342,6 +415,9 @@
             } else {
                 peak = 0;
             }
+            ds.set('peak', peak); ds.set('ratio', ds.get('sum_A') > 0 ? peak / ds.get('sum_A') : NaN);
+            ds.touch('A'); ds.touch('f'); ds.touch('phi'); ds.touch('s'); ds.touch('k'); ds.touch('omega'); ds.touch('lam'); ds.touch('v'); ds.touch('nu'); ds.touch('y_400');
+            ds.touch('X'); ds.touch('y_sum'); ds.touch('py_sum'); ds.touch('y_comp'); ds.touch('py_comp');
         }
 
         /* temporal line spectrum at x = 0: nu = f * s; equal nu combine as phasors, |sum A e^(i phi)| */
@@ -377,8 +453,12 @@
                 if (f % 1 === 0) sctx.fillText(f + ' Hz', X(f), base + 7);
             }
             var ls = lines(), amax = Math.max(40, ls.reduce(function (m, g) { return Math.max(m, g.A); }, 0));
-            ls.forEach(function (wv) {
+            ds.dim('line', ls.length);
+            var nuL = ds.alloc('nu_line'), AL = ds.alloc('A_line'), xL = ds.alloc('x_line'), yL = ds.alloc('y_line');
+            ds.set('amax', amax); ds.set('spec_w', w); ds.set('spec_h', h);
+            ls.forEach(function (wv, li) {
                 var x = X(wv.nu), yTop = base - wv.A / amax * (base - top);
+                nuL[li] = wv.nu; AL[li] = wv.A; xL[li] = x; yL[li] = yTop;
                 sctx.strokeStyle = wv.colour;
                 sctx.lineWidth = 2.5;
                 sctx.beginPath();
@@ -407,28 +487,27 @@
         });
         addBtn.addEventListener('click', function () { add(); });
 
+        /* live values for the walkthrough: read from the store, nothing recomputed */
         Sim.live = function () {
-            var w1 = waves[0], w2 = waves[1], none = 'no waves';
-            var sA = waves.reduce(function (a, v) { return a + v.A; }, 0), sum = 0, samples = Math.max(2, Math.round(box.w - 58));
-            waves.forEach(function (v) { sum += y(v, 400); });
+            var n = ds.get('N') || 0, none = 'no waves', A = ds.get('A'), f = ds.get('f'), sA = ds.get('sum_A') || 0, bl = ds.get('bl');
             var out = {
-                N: String(waves.length), sum: Sim.fmt(sum, 2) + ' px', pk: Sim.fmt(peak, 2) + ' px', sA: Sim.fmt(sA, 1) + ' px',
-                ratio: sA > 0 ? Sim.fmt(peak / sA, 3) : none, M: String(samples), dX: Sim.fmt(800 / samples, 3) + ' px',
-                R: nice(sA) + ' px', Rc: nice(waves.reduce(function (a, v) { return Math.max(a, v.A); }, 0)) + ' px',
-                An: waves.map(function (v) { return v.A; }).join(', ') || none,
-                fn: waves.map(function (v) { return v.f.toFixed(2); }).join(', ') || none, fmax: NUMAX + ' Hz'
+                N: String(n), sum: Sim.fmt(ds.get('y_sum_400') || 0, 2) + ' px', pk: Sim.fmt(ds.get('peak') || 0, 2) + ' px', sA: Sim.fmt(sA, 1) + ' px',
+                ratio: sA > 0 ? Sim.fmt(ds.get('ratio'), 3) : none, M: String(ds.get('M')), dX: Sim.fmt(ds.get('dX') || 0, 3) + ' px',
+                R: ds.get('R') + ' px', Rc: ds.get('Rc') + ' px',
+                An: Array.prototype.join.call(A, ', ') || none,
+                fn: Array.prototype.map.call(f, function (v) { return v.toFixed(2); }).join(', ') || none, fmax: NUMAX + ' Hz'
             };
-            if (w1) {
-                out.A = w1.A + ' px'; out.f = w1.f.toFixed(2); out.s = w1.s.toFixed(2) + '×'; out.phi = (w1.phi / Math.PI).toFixed(2) + ' π';
-                out.k = Sim.fmt(2 * Math.PI * w1.f / 200, 5) + ' rad/px'; out.w = Sim.fmt(2 * Math.PI * w1.f * w1.s, 4) + ' rad/s';
-                out.lam = Sim.fmt(200 / w1.f, 1) + ' px'; out.v = Sim.fmt(200 * w1.s, 0) + ' px/s'; out.y1 = Sim.fmt(y(w1, 400), 2) + ' px';
-                out.hl = Sim.fmt(w1.f * w1.s, 3) + ' Hz';
+            if (n && A.length) {
+                out.A = A[0] + ' px'; out.f = f[0].toFixed(2); out.s = ds.get('s')[0].toFixed(2) + '×'; out.phi = (ds.get('phi')[0] / Math.PI).toFixed(2) + ' π';
+                out.k = Sim.fmt(ds.get('k')[0], 5) + ' rad/px'; out.w = Sim.fmt(ds.get('omega')[0], 4) + ' rad/s';
+                out.lam = Sim.fmt(ds.get('lam')[0], 1) + ' px'; out.v = Sim.fmt(ds.get('v')[0], 0) + ' px/s'; out.y1 = Sim.fmt(ds.get('y1_400'), 2) + ' px';
+                out.hl = Sim.fmt(ds.get('nu')[0], 3) + ' Hz';
             } else {
                 out.A = out.f = out.s = out.phi = out.k = out.w = out.lam = out.v = out.y1 = out.hl = none;
             }
-            if (w1 && w2 && w1.f !== w2.f) {
-                out.bl = Sim.fmt(200 / Math.abs(w1.f - w2.f), 1) + ' px';
-                out.venv = Sim.fmt(200 * (w1.f * w1.s - w2.f * w2.s) / (w1.f - w2.f), 1) + ' px/s';
+            if (isFinite(bl)) {
+                out.bl = Sim.fmt(bl, 1) + ' px';
+                out.venv = Sim.fmt(ds.get('venv'), 1) + ' px/s';
             } else {
                 out.bl = out.venv = 'needs two waves with different f';
             }
@@ -437,6 +516,8 @@
 
         var clk = Sim.clock(function (dt) {
             simT += dt;
+            if (dt > 0) fps = fps ? fps + (1 / dt - fps) * 0.1 : 1 / dt;
+            ds.set('t', simT); ds.set('dt', dt); ds.set('fps', fps); ds.set('frames', frames); ds.set('playing', clk ? clk.playing : true);
             draw();
             drawSpectrum();
             if (frames++ % 8 === 0) {
@@ -446,91 +527,118 @@
         });
         Sim.playButton(document.getElementById('play'), clk);
 
-        /* ---------- every number above, as data for the side panel (scripts/datalog.js) ---------- */
-        function sumY(X) { var v = 0; for (var j = 0; j < waves.length; j++) v += y(waves[j], X); return v; }
-        function sumA() { return waves.reduce(function (a, v) { return a + v.A; }, 0); }
-        function waveCol(name, unit, digits, fn) {
-            return { name: name, unit: unit, digits: digits, get: function (j) { return waves[j] ? fn(waves[j]) : undefined; } };
+        /* ---------- the data panel (scripts/datalog.js) reads the store; these hooks only say where things are drawn and how to test a value ---------- */
+        var LEFT = 44;
+        function pixelAt(c, bx, x, y) { return c.getImageData(Math.round(x * bx.dpr), Math.round(y * bx.dpr), 1, 1).data; }
+        function rgbText(px) { return px[3] === 0 ? 'nothing (transparent)' : 'rgb(' + px[0] + ', ' + px[1] + ', ' + px[2] + ')' + (px[3] < 255 ? ' at alpha ' + (px[3] / 255).toFixed(2) : ''); }
+        function lum(px) { return 0.2126 * px[0] + 0.7152 * px[1] + 0.0722 * px[2]; }
+        function waveOf(q) { return Math.floor(q / (ds.get('M') + 1)); }
+        function sampleOf(q) { return q % (ds.get('M') + 1); }
+        function waveInputs(wi) { return [['A', ds.get('A')[wi], 'px', 1], ['f', ds.get('f')[wi], 'Hz', 2], ['s', ds.get('s')[wi], '×', 2], ['φ', ds.get('phi')[wi], 'rad', 3], ['t', ds.get('t'), 's', 4]]; }
+        function yAt(wi, X) { var A = ds.get('A')[wi], f = ds.get('f')[wi], sp = ds.get('s')[wi], phi = ds.get('phi')[wi], t = ds.get('t'); return A * Math.sin(2 * Math.PI * f * (X / 200 - sp * t) + phi); }
+        function niceOf(v) { return Math.max(20, Math.ceil(v / 10) * 10); }
+        function sumA() { var A = ds.get('A'), v = 0; for (var i = 0; i < A.length; i++) v += A[i]; return v; }
+        function linesNow() {
+            var nu = ds.get('nu'), A = ds.get('A'), phi = ds.get('phi'), groups = {}, out = [];
+            for (var i = 0; i < nu.length; i++) {
+                var g = groups[nu[i]];
+                if (!g) { g = groups[nu[i]] = { nu: nu[i], re: 0, im: 0, n: 0 }; out.push(g); }
+                g.re += A[i] * Math.cos(phi[i]);
+                g.im += A[i] * Math.sin(phi[i]);
+                g.n++;
+            }
+            return out.map(function (g) { return { nu: g.nu, A: g.nu === 0 ? Math.abs(g.im) : Math.hypot(g.re, g.im), n: g.n }; });
         }
-        function beatPair() { var a = waves[0], b = waves[1]; return a && b && a.f !== b.f ? [a, b] : null; }
-        function signalColumns() {
-            var cols = [{ name: 'X', unit: 'px', digits: 0, get: function (j) { return j; } }];
-            waves.forEach(function (w, n) {
-                cols.push({ name: 'y' + (n + 1), unit: 'px', digits: 2, get: function (j) { return y(w, j); }, colour: function (v) { return Sim.colourMap(v, w.A); } });
-            });
-            cols.push({ name: 'Σ y', unit: 'px', digits: 2, get: sumY, colour: function (v) { return Sim.colourMap(v, sumA()); } });
-            return cols;
-        }
-
         Sim.data = {
-            kicker: 'Fig. 6 · data',
-            title: 'Superposition workbench',
-            subtitle: 'Every number this simulation is computing, read live from its own variables.',
-            foot: 'Repainted every frame while open. The wave table works like a data frame; the signal table holds the whole curve.',
+            ds: ds, kicker: 'Fig. 6 · data', file: 'fig6-wave-bench',
             playing: function () { return clk.playing; },
             groups: [
-                { title: 'Waves', note: 'y<sub>i</sub> = A sin(2πf (X/200 − s t) + φ)', vars: [
-                    { name: 'N', code: 'waves.length', type: 'int', meaning: 'waves in the sum, at most 6', digits: 0, get: function () { return waves.length; } },
-                    { name: 'waves', kind: 'vector', code: 'waves', type: 'list of dict', meaning: 'one row per wave: your settings, then what follows from them', updates: 'when a slider moves', cw: 86,
-                        length: function () { return waves.length; }, rowLabel: function (j) { return 'wave ' + (j + 1); },
-                        columns: [
-                            waveCol('A', 'px', 1, function (w) { return w.A; }),
-                            waveCol('f', 'Hz', 2, function (w) { return w.f; }),
-                            waveCol('φ', 'rad', 2, function (w) { return w.phi; }),
-                            waveCol('s', '×', 2, function (w) { return w.s; }),
-                            waveCol('k', 'rad/px', 5, function (w) { return 2 * Math.PI * w.f / 200; }),
-                            waveCol('λ', 'px', 1, function (w) { return 200 / w.f; }),
-                            waveCol('ν = fs', 'Hz', 3, function (w) { return w.f * w.s; }),
-                            waveCol('ω', 'rad/s', 3, function (w) { return 2 * Math.PI * w.f * w.s; }),
-                            waveCol('v', 'px/s', 1, function (w) { return 200 * w.s; }),
-                            waveCol('y(400)', 'px', 2, function (w) { return y(w, 400); })
-                        ] }
-                ] },
-                { title: 'The sum', note: 'y = Σ y<sub>i</sub>', vars: [
-                    { name: 'Σ A', type: 'float', unit: 'px', meaning: 'largest possible |y|', digits: 1, get: sumA },
-                    { name: 'y(400)', code: 'Σ y(w, 400)', type: 'float', unit: 'px', meaning: 'the sum at the middle of the screen', digits: 2, get: function () { return sumY(400); } },
-                    { name: 'peak |y|', code: 'peak', type: 'float', unit: 'px', meaning: 'largest |y| on screen this frame', digits: 2, get: function () { return peak; } },
-                    { name: 'peak / Σ A', type: 'float', meaning: '1 when every crest lines up somewhere on screen', digits: 3, get: function () { var s = sumA(); return s > 0 ? peak / s : undefined; } },
-                    { name: 'beat length', type: 'float', unit: 'px', meaning: '200 / |f₁ − f₂| for the first two waves', digits: 1, get: function () { var p = beatPair(); return p ? 200 / Math.abs(p[0].f - p[1].f) : 'needs two waves with different f'; } },
-                    { name: 'envelope speed', type: 'float', unit: 'px/s', meaning: 'group speed of the beat pattern', digits: 1, get: function () { var p = beatPair(); return p ? 200 * (p[0].f * p[0].s - p[1].f * p[1].s) / (p[0].f - p[1].f) : 'needs two waves with different f'; } },
-                    { name: 'y(X)', kind: 'vector', code: 'draw()', type: 'list of float', meaning: 'the whole curve at this instant: every component and the sum, 801 points', updates: 'every frame', cw: 84,
-                        length: function () { return WORLD_W + 1; }, columns: signalColumns }
-                ] },
-                { title: 'Spectrum', note: 'temporal lines at X = 0; equal ν add as phasors', vars: [
-                    { name: 'lines', kind: 'vector', code: 'lines()', type: 'list of dict', meaning: 'the bars of the spectrum plot', updates: 'when a slider moves',
-                        length: function () { return lines().length; }, rowLabel: function (j) { return 'line ' + (j + 1); },
-                        columns: [
-                            { name: 'ν', unit: 'Hz', digits: 3, get: function (j) { return lines()[j].nu; } },
-                            { name: 'A', unit: 'px', digits: 2, get: function (j) { return lines()[j].A; } }
-                        ] },
-                    { name: 'ν<sub>max</sub>', code: 'NUMAX', type: 'float', unit: 'Hz', meaning: 'right edge of the spectrum plot', digits: 0, get: function () { return NUMAX; } }
-                ] },
-                { title: 'Time and drawing', note: 'the clock and the plot', vars: [
-                    { name: 't', code: 'simT', type: 'float', unit: 's', meaning: 'time since the page opened, paused when stopped', digits: 2, get: function () { return simT; } },
-                    { name: 'M', code: 'samples', type: 'int', meaning: 'points drawn across the screen per curve', digits: 0, get: function () { return Math.max(2, Math.round(box.w - 58)); } },
-                    { name: 'ΔX', type: 'float', unit: 'px', meaning: 'field pixels between drawn points', digits: 3, get: function () { return WORLD_W / Math.max(2, Math.round(box.w - 58)); } },
-                    { name: 'sum range', code: 'nice(Σ A)', type: 'int', unit: 'px', meaning: 'half-height of the upper panel', digits: 0, get: function () { return nice(sumA()); } },
-                    { name: 'canvas', code: 'box.w × box.h', type: 'int', size: '2', unit: 'css px', get: function () { return box.w + ' × ' + box.h; } },
-                    { name: 'frame rate', type: 'float', unit: 'Hz', meaning: 'measured by the panel', digits: 1, get: function () { return Sim.frameStats.fps; } },
-                    { name: 'playing', code: 'clk.playing', type: 'bool', get: function () { return clk.playing; } }
-                ] }
+                { title: 'Waves', note: 'one row per wave; A, f, φ, s come from the cards', vars: ['N', 'A', 'f', 'phi', 's', 'k', 'omega', 'lam', 'v', 'nu', 'y_400'] },
+                { title: 'The sum', note: 'what the top panel shows', vars: ['sum_A', 'peak', 'ratio', 'y_sum_400', 'y1_400', 'bl', 'venv'] },
+                { title: 'Time', note: 'advances only while it plays', vars: ['t'] },
+                { title: 'Sampled curves', note: 'one column per screen pixel; point at a cell to find it in the plot', vars: ['M', 'dX', 'X', 'y_comp', 'y_sum', 'py_comp', 'py_sum'] },
+                { title: 'Spectrum', note: 'one row per line in the lower panel', vars: ['nu_line', 'A_line', 'amax', 'x_line', 'y_line'] },
+                { title: 'Drawing', note: 'how the picture is laid out', vars: ['R', 'Rc', 'box_w', 'box_h', 'right', 'hSum', 'top2', 'hComp', 'mid1', 'mid2', 'spec_w', 'spec_h', 'dt', 'fps', 'frames', 'playing'] }
             ],
-            log: {
-                every: 0.1, max: 1000,
-                time: function () { return simT; },
-                columns: [
-                    { name: 't', unit: 's', digits: 2, get: function () { return simT; } },
-                    { name: 'y(400)', unit: 'px', digits: 2, get: function () { return sumY(400); } },
-                    { name: 'y₁(400)', unit: 'px', digits: 2, get: function () { return waves[0] ? y(waves[0], 400) : undefined; } },
-                    { name: 'y₂(400)', unit: 'px', digits: 2, get: function () { return waves[1] ? y(waves[1], 400) : undefined; } },
-                    { name: 'peak', unit: 'px', digits: 2, get: function () { return peak; } },
-                    { name: 'Σ A', unit: 'px', digits: 1, get: sumA },
-                    { name: 'N', digits: 0, get: function () { return waves.length; } }
-                ]
-            }
+            rowLabel: { wave: function (j) { return 'w' + (j + 1); } },
+            colour: {
+                y_comp: function (v, j) { return Sim.colourMap(v, ds.get('A')[j] || 1); },
+                y_sum: function (v) { return Sim.colourMap(v, ds.get('sum_A') || 1); },
+                y_400: function (v, j) { return Sim.colourMap(v, ds.get('A')[j] || 1); }
+            },
+            probe: function (x, y) {
+                var M = ds.get('M'), N = ds.get('N') || 0;
+                if (!M || !N) return null;
+                var i = Math.round(x - LEFT);
+                if (i < 0 || i > M) return null;
+                var MP = M + 1, best = null, bd = 14, d = Math.abs(y - ds.get('py_sum')[i]);
+                if (d < bd) { bd = d; best = { kind: 'sum', i: i }; }
+                for (var wi = 0; wi < N; wi++) { d = Math.abs(y - ds.get('py_comp')[wi * MP + i]); if (d < bd) { bd = d; best = { kind: 'comp', i: i, wi: wi }; } }
+                return best;
+            },
+            inspect: function (ref) {
+                var i = ref.i, MP = ds.get('M') + 1, X = ds.get('X')[i];
+                if (ref.kind === 'sum') return { title: 'the sum at X = ' + Sim.fmt(X, 1) + ' px', at: { x: LEFT + i, y: ds.get('py_sum')[i] }, rows: [['X', X, 'px', 'X', i], ['Σ yᵢ', ds.get('y_sum')[i], 'px', 'y_sum', i], ['y px', ds.get('py_sum')[i], 'css px', 'py_sum', i]] };
+                var wi = ref.wi, q = wi * MP + i;
+                return { title: 'wave ' + (wi + 1) + ' at X = ' + Sim.fmt(X, 1) + ' px', at: { x: LEFT + i, y: ds.get('py_comp')[q] },
+                    rows: [['X', X, 'px', 'X', i], ['yᵢ', ds.get('y_comp')[q], 'px', 'y_comp', q], ['A', ds.get('A')[wi], 'px', 'A', wi], ['f', ds.get('f')[wi], 'Hz', 'f', wi], ['φ', ds.get('phi')[wi], 'rad', 'phi', wi], ['s', ds.get('s')[wi], '×', 's', wi], ['y px', ds.get('py_comp')[q], 'css px', 'py_comp', q]] };
+            },
+            locate: function (name, idx) {
+                var v = ds.vars[name], M = ds.get('M');
+                if (!M) return null;
+                var MP = M + 1;
+                if (v.dims.length === 2) return { x: LEFT + idx % MP, y: ds.get('py_comp')[idx] };
+                if (v.dims[0] === 'x') return { x: LEFT + idx, y: name === 'X' ? ds.get('mid1') : ds.get('py_sum')[idx] };
+                if (v.dims[0] === 'wave') { var i = Math.round(M / 2); return { x: LEFT + i, y: ds.get('py_comp')[idx * MP + i] }; }
+                return null;
+            },
+            check: {
+                k: function (i) { return { formula: 'k = 2π f / 200', inputs: [['f', ds.get('f')[i], 'Hz', 2]], value: 2 * Math.PI * ds.get('f')[i] / 200 }; },
+                omega: function (i) { return { formula: 'ω = 2π f s', inputs: [['f', ds.get('f')[i], 'Hz', 2], ['s', ds.get('s')[i], '×', 2]], value: 2 * Math.PI * ds.get('f')[i] * ds.get('s')[i] }; },
+                lam: function (i) { return { formula: 'λ = 200 / f', inputs: [['f', ds.get('f')[i], 'Hz', 2]], value: 200 / ds.get('f')[i] }; },
+                v: function (i) { return { formula: 'v = 200 s', inputs: [['s', ds.get('s')[i], '×', 2]], value: 200 * ds.get('s')[i] }; },
+                nu: function (i) { return { formula: 'round(f s · 10⁶) / 10⁶', inputs: [['f', ds.get('f')[i], 'Hz', 2], ['s', ds.get('s')[i], '×', 2]], value: Math.round(ds.get('f')[i] * ds.get('s')[i] * 1e6) / 1e6 }; },
+                y_400: function (i) { return { formula: 'A sin(2π f (400/200 − s t) + φ)', inputs: waveInputs(i), value: yAt(i, 400) }; },
+                sum_A: function () { return { formula: 'Σ Aᵢ', inputs: [['A', Array.prototype.join.call(ds.get('A'), ', '), 'px']], value: sumA() }; },
+                peak: function () { var Y = ds.get('y_sum'), pk = 0; for (var i = 0; i < Y.length; i++) pk = Math.max(pk, Math.abs(Y[i])); return { formula: 'max |Σ yᵢ(X)| over the M + 1 samples', inputs: [['M', ds.get('M'), '', 0]], value: ds.get('N') ? pk : 0 }; },
+                ratio: function () { var sA = sumA(); return { formula: 'peak / Σ Aᵢ', inputs: [['peak', ds.get('peak'), 'px', 4], ['Σ A', sA, 'px', 1]], value: sA > 0 ? ds.get('peak') / sA : NaN }; },
+                y_sum_400: function () { var Y = ds.get('y_400'), v = 0; for (var i = 0; i < Y.length; i++) v += Y[i]; return { formula: 'Σ yᵢ(400)', inputs: [['yᵢ(400)', Array.prototype.map.call(Y, function (q) { return Sim.fmt(q, 3); }).join(', '), 'px']], value: v }; },
+                y1_400: function () { return { formula: 'y_400[0]', inputs: [['N', ds.get('N'), '', 0]], value: ds.get('N') ? ds.get('y_400')[0] : NaN }; },
+                bl: function () { var f = ds.get('f'), ok = f.length > 1 && f[0] !== f[1]; return { formula: '200 / |f₁ − f₂|', inputs: [['f₁', f[0], 'Hz', 2], ['f₂', f[1], 'Hz', 2]], value: ok ? 200 / Math.abs(f[0] - f[1]) : NaN }; },
+                venv: function () { var f = ds.get('f'), sp = ds.get('s'), ok = f.length > 1 && f[0] !== f[1]; return { formula: '200 (f₁ s₁ − f₂ s₂) / (f₁ − f₂)', inputs: [['f₁', f[0], 'Hz', 2], ['s₁', sp[0], '×', 2], ['f₂', f[1], 'Hz', 2], ['s₂', sp[1], '×', 2]], value: ok ? 200 * (f[0] * sp[0] - f[1] * sp[1]) / (f[0] - f[1]) : NaN }; },
+                M: function () { return { formula: 'max(2, round(right − 44))', inputs: [['right', ds.get('right'), 'css px', 0]], value: Math.max(2, Math.round(ds.get('right') - LEFT)) }; },
+                dX: function () { return { formula: '800 / M', inputs: [['M', ds.get('M'), '', 0]], value: WORLD_W / ds.get('M') }; },
+                X: function (i) { return { formula: 'X = i · 800 / M', inputs: [['i', i, '', 0], ['M', ds.get('M'), '', 0]], value: i / ds.get('M') * WORLD_W }; },
+                y_comp: function (q) { var wi = waveOf(q), i = sampleOf(q); return { formula: 'A sin(2π f (X/200 − s t) + φ)', inputs: waveInputs(wi).concat([['X', ds.get('X')[i], 'px', 3]]), value: yAt(wi, ds.get('X')[i]) }; },
+                y_sum: function (i) { var MP = ds.get('M') + 1, Yc = ds.get('y_comp'), v = 0, N = ds.get('N'); for (var wi = 0; wi < N; wi++) v += Yc[wi * MP + i]; return { formula: 'Σ yᵢ(X), wave by wave', inputs: [['X', ds.get('X')[i], 'px', 3], ['N', N, '', 0]], value: v }; },
+                py_comp: function (q) { return { formula: 'mid₂ − yᵢ / R_c · h_comp / 2', inputs: [['mid₂', ds.get('mid2'), 'css px', 2], ['yᵢ', ds.get('y_comp')[q], 'px', 4], ['R_c', ds.get('Rc'), 'px', 0], ['h_comp', ds.get('hComp'), 'css px', 2]], value: ds.get('mid2') - ds.get('y_comp')[q] / ds.get('Rc') * ds.get('hComp') / 2 }; },
+                py_sum: function (i) { return { formula: 'mid₁ − Σ yᵢ / R · h_sum / 2', inputs: [['mid₁', ds.get('mid1'), 'css px', 2], ['Σ yᵢ', ds.get('y_sum')[i], 'px', 4], ['R', ds.get('R'), 'px', 0], ['h_sum', ds.get('hSum'), 'css px', 2]], value: ds.get('mid1') - ds.get('y_sum')[i] / ds.get('R') * ds.get('hSum') / 2 }; },
+                nu_line: function (li) { var L = linesNow(); return { formula: 'the distinct νᵢ, in order of first appearance', inputs: [['νᵢ', Array.prototype.join.call(ds.get('nu'), ', '), 'Hz']], value: L[li] ? L[li].nu : NaN }; },
+                A_line: function (li) { var L = linesNow(); return { formula: 'ν = 0: |Σ A sin φ|; else |Σ A e^{iφ}| over the waves with this ν', inputs: [['ν', L[li] ? L[li].nu : NaN, 'Hz', 3], ['waves in the group', L[li] ? L[li].n : 0, '', 0]], value: L[li] ? L[li].A : NaN }; },
+                amax: function () { var A = ds.get('A_line'), m = 0; for (var i = 0; i < A.length; i++) m = Math.max(m, A[i]); return { formula: 'max(40, tallest line)', inputs: [['tallest line', m, 'px', 3]], value: Math.max(40, m) }; },
+                x_line: function (li) { return { formula: '44 + ν / 6 · (w_spec − 58)', inputs: [['ν', ds.get('nu_line')[li], 'Hz', 3], ['w_spec', ds.get('spec_w'), 'css px', 0]], value: LEFT + ds.get('nu_line')[li] / NUMAX * (ds.get('spec_w') - 14 - LEFT) }; },
+                y_line: function (li) { var base = ds.get('spec_h') - 24; return { formula: 'base − A / A_max · (base − 14)', inputs: [['base', base, 'css px', 0], ['A', ds.get('A_line')[li], 'px', 3], ['A_max', ds.get('amax'), 'px', 1]], value: base - ds.get('A_line')[li] / ds.get('amax') * (base - 14) }; },
+                R: function () { return { formula: 'max(20, ⌈Σ A / 10⌉ · 10)', inputs: [['Σ A', sumA(), 'px', 1]], value: niceOf(sumA()) }; },
+                Rc: function () { var A = ds.get('A'), m = 0; for (var i = 0; i < A.length; i++) m = Math.max(m, A[i]); return { formula: 'max(20, ⌈max A / 10⌉ · 10)', inputs: [['max A', m, 'px', 1]], value: niceOf(m) }; },
+                right: function () { return { formula: 'box.w − 14', inputs: [['box.w', ds.get('box_w'), 'css px', 0]], value: ds.get('box_w') - 14 }; },
+                hSum: function () { return { formula: '(box.h − 30 − 44 − 14) · 0.56', inputs: [['box.h', ds.get('box_h'), 'css px', 0]], value: (ds.get('box_h') - 30 - 44 - 14) * 0.56 }; },
+                top2: function () { return { formula: '30 + h_sum + 44', inputs: [['h_sum', ds.get('hSum'), 'css px', 2]], value: 30 + ds.get('hSum') + 44 }; },
+                hComp: function () { return { formula: 'box.h − top₂ − 14', inputs: [['box.h', ds.get('box_h'), 'css px', 0], ['top₂', ds.get('top2'), 'css px', 2]], value: ds.get('box_h') - ds.get('top2') - 14 }; },
+                mid1: function () { return { formula: '30 + h_sum / 2', inputs: [['h_sum', ds.get('hSum'), 'css px', 2]], value: 30 + ds.get('hSum') / 2 }; },
+                mid2: function () { return { formula: 'top₂ + h_comp / 2', inputs: [['top₂', ds.get('top2'), 'css px', 2], ['h_comp', ds.get('hComp'), 'css px', 2]], value: ds.get('top2') + ds.get('hComp') / 2 }; }
+            },
+            drawn: {
+                py_sum: function (i) { var px = pixelAt(ctx, box, LEFT + i, ds.get('py_sum')[i]); return { what: 'screen pixel on the sum curve at sample ' + i + ', (' + (LEFT + i) + ', ' + Sim.fmt(ds.get('py_sum')[i], 1) + ') css px', drawn: rgbText(px), expected: 'the dark ink of the 2.3 px sum stroke', ok: px[3] > 0 && lum(px) < 150, note: 'The stroke is centred on the stored point, so the pixel there carries its colour.' }; },
+                py_comp: function (q) { var wi = waveOf(q), i = sampleOf(q), px = pixelAt(ctx, box, LEFT + i, ds.get('py_comp')[q]); return { what: 'screen pixel on wave ' + (wi + 1) + ' at sample ' + i, drawn: rgbText(px), expected: 'the colour of wave ' + (wi + 1) + ' (' + waves[wi].colour + '), or another wave crossing here', ok: px[3] > 0, note: 'A 1.6 px stroke covers most of the pixel; where two waves cross, the one drawn last wins.' }; },
+                y_line: function (li) { var px = pixelAt(sctx, spec, ds.get('x_line')[li], ds.get('y_line')[li]); return { what: 'screen pixel at the top of spectrum line ' + li + ' (the dot)', drawn: rgbText(px), expected: 'a filled dot in the line colour', ok: px[3] > 0 && lum(px) < 200, note: 'The dot has radius 4.5 px, so the pixel at the stored top is the fill colour.' }; }
+            },
+            log: { every: 0.1, max: 1000, time: 't', columns: ['t', 'sum_A', 'peak', 'ratio', 'y_sum_400', 'y1_400'] },
+            about: 'The curves are drawn with one sample per screen pixel column, M + 1 points, so what you see is exactly the stored arrays joined by straight segments; the canvas then smooths each stroke to fractions of a pixel. The spectrum groups waves with the same ν = f·s into one line whose height is the magnitude of their phasor sum, as stored in A_line. The readouts under the figure refresh every 8th frame; the store refreshes every frame.'
         };
 
         add({ A: 20, f: 1 });
+        draw();
+        drawSpectrum();
         Sim.onResize(stage, function () { box.fit(); });
         Sim.onResize(stageSpec, function () { spec.fit(); });
     })();

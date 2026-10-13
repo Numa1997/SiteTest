@@ -203,6 +203,7 @@
     </footer>
 
     <script src="../scripts/sim.js"></script>
+    <script src="../scripts/dataset.js"></script>
     <script>
     (function () {
         'use strict';
@@ -212,7 +213,58 @@
         var stage = document.getElementById('stage');
         var box = Sim.canvas2d(document.getElementById('water')), ctx = box.ctx;
         var orbitsBox = document.getElementById('orbits'), dispBox = document.getElementById('disp');
-        var omegaT = 0;
+        var omegaT = 0, fps = 0, frames = 0;
+
+        /* ---------- the store: every number this page computes is written here, where it is computed (scripts/dataset.js) ---------- */
+        var ds = Sim.dataset({ title: 'Water waves', attrs: { figure: 5, page: 'water-wave.html', WORLD_W: WORLD_W, DZ: DZ, PX_PER_M: PX_PER_M, g: G, length_unit: 'px of the 800 px wide field; 100 px = 1 m' } });
+        ds.var('amp', [], 'float', { symbol: 'A', units: 'px', long_name: 'requested amplitude', computed_in: 'amp slider', digits: 0 });
+        ds.var('lambda', [], 'float', { symbol: 'λ', units: 'px', long_name: 'wavelength; 100 px = 1 m', computed_in: 'lambda slider', digits: 0 });
+        ds.var('lambda_m', [], 'float', { symbol: 'λ', units: 'm', long_name: 'the same wavelength in metres', computed_in: 'readouts()', formula: 'λ / 100', digits: 2 });
+        ds.var('f', [], 'float', { symbol: 'f', units: 'Hz', long_name: 'frequency; set by ω² = gk while dispersion is on', computed_in: 'f(), in readouts()', formula: 'dispersion on: √(g k) / 2π; off: the slider', digits: 4 });
+        ds.var('dispersion', [], 'bool', { symbol: 'dispersion', long_name: 'the deep-water law ω² = gk ties f to λ', computed_in: 'the dispersion switch', source: 'The state of the switch.' });
+        ds.var('N', [], 'int', { symbol: 'N', long_name: 'parcels per layer', computed_in: 'count slider', digits: 0 });
+        ds.var('layers', [], 'int', { symbol: 'layers', long_name: 'rows of parcels', computed_in: 'layers slider', digits: 0 });
+        ds.var('layers_drawn', [], 'int', { symbol: 'layers drawn', long_name: 'rows that fit on the canvas', computed_in: 'draw()', digits: 0, source: 'The loop stops at the first row below the canvas.' });
+        ds.var('k', [], 'float', { symbol: 'k', units: 'rad/px', long_name: 'wave number', computed_in: 'k(), in readouts()', formula: 'k = 2π / λ', digits: 5 });
+        ds.var('k_m', [], 'float', { symbol: 'k', units: 'rad/m', long_name: 'the same in metres', computed_in: 'readouts()', formula: 'k · 100', digits: 4 });
+        ds.var('omega', [], 'float', { symbol: 'ω', units: 'rad/s', long_name: 'angular frequency', computed_in: 'readouts()', formula: 'ω = 2π f', digits: 4 });
+        ds.var('T', [], 'float', { symbol: 'T', units: 's', long_name: 'period', computed_in: 'readouts()', formula: 'T = 1 / f', digits: 3 });
+        ds.var('c', [], 'float', { symbol: 'c', units: 'm/s', long_name: 'phase speed', computed_in: 'readouts()', formula: 'c = f λ / 100', digits: 4 });
+        ds.var('c_deep', [], 'float', { symbol: '√(g/k)', units: 'm/s', long_name: 'deep-water phase speed; equals c while dispersion is on', computed_in: 'readouts()', formula: '√(g / k)', digits: 4 });
+        ds.var('cg', [], 'float', { symbol: 'c<sub>g</sub>', units: 'm/s', long_name: 'group speed in deep water', computed_in: 'readouts()', formula: 'c / 2', digits: 4 });
+        ds.var('a', [], 'float', { symbol: 'a', units: 'px', long_name: 'amplitude used, capped so the surface never folds', computed_in: 'a(), in readouts()', formula: 'min(A, 0.9 / k)', digits: 2 });
+        ds.var('cap', [], 'bool', { symbol: 'cap active', long_name: 'the amplitude is capped', computed_in: 'readouts()', formula: 'a < A' });
+        ds.var('ak', [], 'float', { symbol: 'ak', long_name: 'steepness', computed_in: 'readouts()', formula: 'a k', digits: 4 });
+        ds.var('stokes', [], 'float', { symbol: 'u<sub>S</sub>', units: 'm/s', long_name: 'Stokes drift at the surface: theory, not drawn, the orbits here are closed', computed_in: 'readouts()', formula: 'ω k a² in metres', digits: 4 });
+        ds.var('deep', [], 'float', { symbol: 'e<sup>−k|z|</sup> deepest', long_name: 'orbit radius of the deepest layer as a fraction of a', computed_in: 'readouts()', formula: 'exp(−k · 56 px · (layers − 1))', digits: 4 });
+        ds.var('r1', [], 'float', { symbol: 'r<sub>1</sub>', units: 'px', long_name: 'orbit radius one layer down', computed_in: 'readouts()', formula: 'a e<sup>−k · 56 px</sup>', digits: 2 });
+        ds.var('z_deep_px', [], 'float', { symbol: 'z<sub>deep</sub>', units: 'px', long_name: 'depth of the deepest layer', computed_in: 'readouts()', formula: '56 (layers − 1)', digits: 0 });
+        ds.var('t', [], 'float', { symbol: 't', units: 's', long_name: 'play time since the page opened', computed_in: 'Sim.clock', digits: 2, source: 'The clock adds each frame’s Δt while playing.' });
+        ds.var('omegaT', [], 'float', { symbol: 'ωt', units: 'rad', long_name: 'phase', computed_in: 'Sim.clock callback', formula: 'ωt ← ωt + 2π f Δt', digits: 3, source: 'Accumulated frame by frame.' });
+        ds.var('periods', [], 'float', { symbol: 'ωt / 2π', long_name: 'periods completed', computed_in: 'Sim.clock callback', formula: 'ωt / 2π', digits: 2 });
+        ds.var('follow', [], 'int', { symbol: 'i<sub>follow</sub>', long_name: 'index of the followed parcel, the middle one', computed_in: 'draw()', formula: 'floor((N − 1) / 2)', digits: 0 });
+        ds.dim('p', 0);
+        ds.coord('X0', 'p', Float64Array, { symbol: 'X<sub>0</sub>', units: 'px', long_name: 'orbit centre of each parcel column', computed_in: 'draw()', formula: '30 + i · 740 / (N − 1)', digits: 1, updates: 'every frame' });
+        ds.dim('z', 0);
+        ds.coord('depth', 'z', Float64Array, { symbol: 'depth', units: 'm', long_name: 'depth of each layer', computed_in: 'draw()', formula: 'j · 56 px / 100', digits: 2, updates: 'every frame' });
+        ds.var('r_z', ['z'], Float64Array, { symbol: 'r', units: 'px', long_name: 'orbit radius of each layer', computed_in: 'draw()', formula: 'a e<sup>k z</sup>, z = −j · 56 px', digits: 3, updates: 'every frame' });
+        ds.var('cy_px', ['z'], Float64Array, { symbol: 'y<sub>centre</sub> px', units: 'css px', long_name: 'screen height of each layer’s orbit centres', computed_in: 'draw()', formula: 'y<sub>s</sub> + j · 56 · s', digits: 1, updates: 'every frame' });
+        ds.var('theta', ['z', 'p'], Float64Array, { symbol: 'θ', units: 'rad', long_name: 'phase of each parcel', computed_in: 'draw(), parcel loop', formula: 'θ = k X<sub>0</sub> − ωt', digits: 3, updates: 'every frame' });
+        ds.var('xi', ['z', 'p'], Float64Array, { symbol: 'ξ', units: 'px', long_name: 'horizontal displacement of each parcel from its orbit centre', computed_in: 'draw(), parcel loop', formula: 'ξ = −r sin θ', digits: 2, updates: 'every frame' });
+        ds.var('zeta', ['z', 'p'], Float64Array, { symbol: 'ζ', units: 'px', long_name: 'vertical displacement, upwards; on the top row this is the surface height η', computed_in: 'draw(), parcel loop', formula: 'ζ = r cos θ', digits: 2, updates: 'every frame' });
+        ds.var('u', ['z', 'p'], Float64Array, { symbol: 'u', units: 'px/s', long_name: 'horizontal velocity of each parcel', computed_in: 'draw(), parcel loop', formula: 'u = r ω cos θ', digits: 2, updates: 'every frame' });
+        ds.var('w', ['z', 'p'], Float64Array, { symbol: 'w', units: 'px/s', long_name: 'vertical velocity of each parcel', computed_in: 'draw(), parcel loop', formula: 'w = r ω sin θ', digits: 2, updates: 'every frame' });
+        ds.var('px', ['z', 'p'], Float64Array, { symbol: 'x px', units: 'css px', long_name: 'screen position of each parcel, from the left', computed_in: 'draw(), parcel loop', formula: '(X<sub>0</sub> + ξ) s', digits: 1, updates: 'every frame' });
+        ds.var('py', ['z', 'p'], Float64Array, { symbol: 'y px', units: 'css px', long_name: 'screen position of each parcel, from the top', computed_in: 'draw(), parcel loop', formula: 'y<sub>centre</sub> − ζ s', digits: 1, updates: 'every frame' });
+        ds.var('s_px', [], 'float', { symbol: 's', long_name: 'screen pixels per field pixel', computed_in: 'draw()', formula: 'box.w / 800', digits: 4 });
+        ds.var('ys', [], 'float', { symbol: 'y<sub>s</sub>', units: 'css px', long_name: 'the still-water line on screen', computed_in: 'draw()', formula: 'max(a s + 34, 0.28 box.h)', digits: 1 });
+        ds.var('box_w', [], 'int', { symbol: 'box.w', units: 'css px', long_name: 'canvas width on your screen', computed_in: 'draw()', digits: 0, source: 'Measured from the page layout.' });
+        ds.var('box_h', [], 'int', { symbol: 'box.h', units: 'css px', long_name: 'canvas height on your screen', computed_in: 'draw()', digits: 0, source: 'Measured from the page layout.' });
+        ds.var('orbits', [], 'bool', { symbol: 'orbits drawn', long_name: 'the dotted circles', computed_in: 'the Show orbits switch', source: 'The state of the switch.' });
+        ds.var('dt', [], 'float', { symbol: 'Δt', units: 's', long_name: 'time between the last two frames', computed_in: 'Sim.clock', digits: 4, source: 'Measured by the clock.' });
+        ds.var('fps', [], 'float', { symbol: 'frame rate', units: 'Hz', long_name: 'smoothed over about ten frames', computed_in: 'Sim.clock callback', digits: 1, source: 'A running average of 1/Δt.' });
+        ds.var('frames', [], 'int', { symbol: 'frames', long_name: 'frames drawn so far', computed_in: 'Sim.clock callback', digits: 0, source: 'Counted frame by frame.' });
+        ds.var('playing', [], 'bool', { symbol: 'playing', long_name: 'the clock runs', computed_in: 'Sim.clock', source: 'The state of the Play button.' });
 
         var amp = Sim.slider('amp', { format: function (v) { return v + ' px'; }, onInput: readouts });
         var lambda = Sim.slider('lambda', { format: function (v) { return v + ' px'; }, onInput: couple });
@@ -245,11 +297,22 @@
             document.getElementById('r-ak').textContent = (a() * k()).toFixed(2) + (a() < amp.value ? ' (cap)' : '');
             var deep = Math.exp(-k() * DZ * (layers.value - 1));
             document.getElementById('r-deep').textContent = (deep * 100).toFixed(deep < 0.1 ? 1 : 0) + ' % of a';
+            var kk = k(), ff = f(), aa = a(), om = 2 * Math.PI * ff, am = aa / PX_PER_M;
+            ds.set('amp', amp.value); ds.set('lambda', lambda.value); ds.set('lambda_m', lambda.value / PX_PER_M); ds.set('f', ff); ds.set('dispersion', dispBox.checked);
+            ds.set('N', count.value); ds.set('layers', layers.value);
+            ds.set('k', kk); ds.set('k_m', kk * PX_PER_M); ds.set('omega', om); ds.set('T', 1 / ff); ds.set('c', c); ds.set('c_deep', Math.sqrt(G / (kk * PX_PER_M))); ds.set('cg', c / 2);
+            ds.set('a', aa); ds.set('cap', aa < amp.value); ds.set('ak', aa * kk); ds.set('stokes', om * kk * PX_PER_M * am * am);
+            ds.set('deep', deep); ds.set('r1', aa * Math.exp(-kk * DZ)); ds.set('z_deep_px', DZ * (layers.value - 1));
         }
 
         function draw() {
             var w = box.w, h = box.h, s = w / WORLD_W, kk = k(), A = a();
             var ys = Math.max(A * s + 34, h * 0.28), X, th;
+            var NP = count.value, NL = layers.value, om = 2 * Math.PI * f(), q;
+            ds.dim('z', NL); ds.dim('p', NP);
+            var X0A = ds.alloc('X0'), rL = ds.alloc('r_z'), zL = ds.alloc('depth'), cyL = ds.alloc('cy_px');
+            var thM = ds.alloc('theta'), xiM = ds.alloc('xi'), zeM = ds.alloc('zeta'), uM = ds.alloc('u'), wM = ds.alloc('w'), pxM = ds.alloc('px'), pyM = ds.alloc('py');
+            ds.set('N', NP); ds.set('layers', NL); ds.set('s_px', s); ds.set('ys', ys); ds.set('box_w', w); ds.set('box_h', h); ds.set('orbits', orbitsBox.checked); ds.set('follow', Math.floor((NP - 1) / 2));
             ctx.clearRect(0, 0, w, h);
 
             // water body under the trochoidal surface
@@ -298,11 +361,14 @@
             ctx.textBaseline = 'middle';
             for (var j = 0; j < L; j++) {
                 var z0 = -j * DZ, r = A * Math.exp(kk * z0), cy = ys - z0 * s;
+                rL[j] = r; zL[j] = -z0 / PX_PER_M; cyL[j] = cy;
                 if (cy > h - 8) break;
                 for (var i = 0; i < N; i++) {
                     var X0 = 30 + i * (WORLD_W - 60) / (N - 1), cx = X0 * s;
                     th = kk * X0 - omegaT;
                     var px = (X0 - r * Math.sin(th)) * s, py = cy - r * Math.cos(th) * s;
+                    q = j * N + i;
+                    X0A[i] = X0; thM[q] = th; xiM[q] = -r * Math.sin(th); zeM[q] = r * Math.cos(th); uM[q] = r * om * Math.cos(th); wM[q] = r * om * Math.sin(th); pxM[q] = px; pyM[q] = py;
                     var isF = i === follow;
                     if (orbitsBox.checked && r * s > 1.2) {
                         ctx.strokeStyle = isF ? 'rgba(122, 31, 43, 0.45)' : 'rgba(90, 80, 75, 0.24)';
@@ -333,132 +399,116 @@
                     ctx.fillText('z = −' + (j * DZ / PX_PER_M).toFixed(2) + ' m', 8, cy - Math.max(14, r * s + 10));
                 }
             }
+            ds.set('layers_drawn', j);
+            ds.touch('X0'); ds.touch('r_z'); ds.touch('depth'); ds.touch('cy_px');
+            ds.touch('theta'); ds.touch('xi'); ds.touch('zeta'); ds.touch('u'); ds.touch('w'); ds.touch('px'); ds.touch('py');
         }
 
+        /* live values for the walkthrough: read from the store, nothing recomputed */
         Sim.live = function () {
-            var kk = k(), A = a(), N = count.value, i = Math.floor((N - 1) / 2), X0 = 30 + i * (WORLD_W - 60) / (N - 1);
-            var th = kk * X0 - omegaT, red = Math.atan2(Math.sin(th), Math.cos(th)), c = f() * lambda.value / PX_PER_M;
-            var sc = box.w / WORLD_W, deep = Math.exp(-kk * DZ * (layers.value - 1));
+            var i = ds.get('follow'), th = ds.get('theta')[i], red = Math.atan2(Math.sin(th), Math.cos(th)), dp = ds.get('deep');
             return {
-                lam: lambda.value + ' px = ' + (lambda.value / PX_PER_M).toFixed(2) + ' m', k: Sim.fmt(kk, 5) + ' rad/px',
-                km: Sim.fmt(kk * PX_PER_M, 4) + ' rad/m', f: f().toFixed(4) + ' Hz', c: c.toFixed(4) + ' m/s',
-                T: (1 / f()).toFixed(4) + ' s', cg: (c / 2).toFixed(4) + ' m/s',
-                X0: Sim.fmt(X0, 1) + ' px', th: Sim.fmt(red, 3) + ' rad', px: Sim.fmt(-A * Math.sin(th), 2) + ' px', pz: Sim.fmt(A * Math.cos(th), 2) + ' px',
-                r: Sim.fmt(A, 2) + ' px', r1: Sim.fmt(A * Math.exp(-kk * DZ), 2) + ' px', z0: '−' + DZ * (layers.value - 1) + ' px',
-                deep: (deep * 100).toFixed(deep < 0.1 ? 2 : 1) + ' %', eta: Sim.fmt(A * Math.cos(th), 2) + ' px',
-                a: Sim.fmt(A, 2) + ' px', A: amp.value + ' px', ak: Sim.fmt(A * kk, 4),
-                wt: Sim.fmt(omegaT, 2) + ' rad', s: Sim.fmt(sc, 4), ys: Sim.fmt(Math.max(A * sc + 34, box.h * 0.28), 1) + ' px'
+                lam: ds.get('lambda') + ' px = ' + ds.get('lambda_m').toFixed(2) + ' m', k: Sim.fmt(ds.get('k'), 5) + ' rad/px',
+                km: Sim.fmt(ds.get('k_m'), 4) + ' rad/m', f: ds.get('f').toFixed(4) + ' Hz', c: ds.get('c').toFixed(4) + ' m/s',
+                T: ds.get('T').toFixed(4) + ' s', cg: ds.get('cg').toFixed(4) + ' m/s',
+                X0: Sim.fmt(ds.get('X0')[i], 1) + ' px', th: Sim.fmt(red, 3) + ' rad', px: Sim.fmt(ds.get('xi')[i], 2) + ' px', pz: Sim.fmt(ds.get('zeta')[i], 2) + ' px',
+                r: Sim.fmt(ds.get('r_z')[0], 2) + ' px', r1: Sim.fmt(ds.get('r1'), 2) + ' px', z0: '−' + ds.get('z_deep_px') + ' px',
+                deep: (dp * 100).toFixed(dp < 0.1 ? 2 : 1) + ' %', eta: Sim.fmt(ds.get('zeta')[i], 2) + ' px',
+                a: Sim.fmt(ds.get('a'), 2) + ' px', A: ds.get('amp') + ' px', ak: Sim.fmt(ds.get('ak'), 4),
+                wt: Sim.fmt(ds.get('omegaT'), 2) + ' rad', s: Sim.fmt(ds.get('s_px'), 4), ys: Sim.fmt(ds.get('ys'), 1) + ' px'
             };
         };
-
-        var clk = Sim.clock(function (dt) {
+        var clk = Sim.clock(function (dt, t) {
             omegaT += 2 * Math.PI * f() * dt;
+            if (dt > 0) { frames++; fps = fps ? fps + (1 / dt - fps) * 0.1 : 1 / dt; }
+            ds.set('omegaT', omegaT); ds.set('periods', omegaT / (2 * Math.PI)); ds.set('t', t); ds.set('dt', dt); ds.set('fps', fps); ds.set('frames', frames); ds.set('playing', clk ? clk.playing : true);
             draw();
         });
         Sim.playButton(document.getElementById('play'), clk);
 
-        /* ---------- every number above, as data for the side panel (scripts/datalog.js) ---------- */
-        function om() { return 2 * Math.PI * f(); }
-        function X0At(i) { return 30 + i * (WORLD_W - 60) / (count.value - 1); }
-        function followed() { return Math.floor((count.value - 1) / 2); }
-        function radius(j) { return a() * Math.exp(-k() * j * DZ); }
-        function theta(i) { return k() * X0At(i) - omegaT; }
-        function wrapPi(v) { return Math.atan2(Math.sin(v), Math.cos(v)); }
-        /* parcel displacement from its orbit centre: ξ along the travel, ζ upwards */
-        function xi(j, i) { return -radius(j) * Math.sin(theta(i)); }
-        function zeta(j, i) { return radius(j) * Math.cos(theta(i)); }
-        function parcelMap(name, code, meaning, get) {
-            return {
-                name: name, kind: 'matrix', code: code, type: 'Array of float64', meaning: meaning, updates: 'every frame', digits: 2,
-                rows: function () { return layers.value; }, cols: function () { return count.value; },
-                rowLabel: function (j) { return 'z' + j; }, get: get, version: function () { return Sim.frameStats.frames; },
-                colour: function (v) { return Sim.colourMap(v, a()); },
-                at: function (j, i) { return 'layer ' + j + ' at depth ' + Sim.fmt(j * DZ / PX_PER_M, 2) + ' m, parcel ' + i + ' with rest position X₀ = ' + Sim.fmt(X0At(i), 1) + ' px'; }
-            };
+        /* ---------- the data panel (scripts/datalog.js) reads the store; these hooks only say where things are drawn and how to test a value ---------- */
+        function sliderCheck(input, label) { return { formula: 'read from the ' + label + ' slider now', inputs: [['slider', input.value, '']], value: parseFloat(input.value) }; }
+        function at(q) { return { x: ds.get('px')[q], y: ds.get('py')[q] }; }
+        function parcelPixel(q) {
+            var p = at(q), px = ctx.getImageData(Math.round(p.x * box.dpr), Math.round(p.y * box.dpr), 1, 1).data, lum = 0.2126 * px[0] + 0.7152 * px[1] + 0.0722 * px[2];
+            var N = ds.get('N'), j = Math.floor(q / N), i = q % N;
+            if (j >= ds.get('layers_drawn')) return { what: 'parcel (layer ' + j + ', column ' + i + ')', drawn: 'nothing', expected: 'nothing', ok: true, note: 'This layer lies below the bottom of the canvas, so the page does not draw it; its numbers are still computed and stored.' };
+            return { what: 'screen pixel at parcel (layer ' + j + ', column ' + i + '), (' + Sim.fmt(p.x, 1) + ', ' + Sim.fmt(p.y, 1) + ') css px', drawn: px[3] === 0 ? 'nothing (transparent)' : 'rgb(' + px[0] + ', ' + px[1] + ', ' + px[2] + ')', expected: 'a dark parcel: ink rgb(58, 50, 46) or burgundy rgb(122, 31, 43) on the pink water', ok: px[3] > 0 && lum < 130,
+                note: 'The parcels are filled discs of radius 3 to 6 px, so the pixel at the stored centre is the fill colour.' };
         }
-
+        function qInputs(q) { var N = ds.get('N'), j = Math.floor(q / N), i = q % N; return [['layer j', j, '', 0], ['column i', i, '', 0], ['r', ds.get('r_z')[j], 'px', 4], ['θ', ds.get('theta')[q], 'rad', 4]]; }
         Sim.data = {
-            kicker: 'Fig. 5 · data',
-            title: 'Water waves',
-            subtitle: 'Every number this simulation is computing, read live from its own variables.',
-            foot: 'Repainted every frame while open. The parcel maps show every parcel of every layer at this instant.',
+            ds: ds, kicker: 'Fig. 5 · data', file: 'fig5-water-waves',
             playing: function () { return clk.playing; },
             groups: [
-                { title: 'Physical parameters', note: 'fixed constants and what you set', vars: [
-                    { name: 'g', code: 'G', type: 'float', unit: 'm/s²', meaning: 'gravitational acceleration, fixed', digits: 2, get: function () { return G; } },
-                    { name: 'A', code: 'amp.value', type: 'float', unit: 'px', meaning: 'requested amplitude', digits: 0, get: function () { return amp.value; } },
-                    { name: 'λ', code: 'lambda.value', type: 'float', unit: 'px', meaning: 'wavelength; 100 px = 1 m', digits: 0, get: function () { return lambda.value; } },
-                    { name: 'λ', code: 'lambda.value / PX_PER_M', type: 'float', unit: 'm', meaning: 'the same wavelength in metres', digits: 2, get: function () { return lambda.value / PX_PER_M; } },
-                    { name: 'f', code: 'f()', type: 'float', unit: 'Hz', meaning: 'frequency; set by ω² = gk while dispersion is on', digits: 4, get: f },
-                    { name: 'dispersion', code: 'dispBox.checked', type: 'bool', meaning: 'deep-water law ω² = gk ties f to λ', get: function () { return dispBox.checked; } },
-                    { name: 'N', code: 'count.value', type: 'int', meaning: 'parcels per layer', digits: 0, get: function () { return count.value; } },
-                    { name: 'layers', code: 'layers.value', type: 'int', meaning: 'rows of parcels', digits: 0, get: function () { return layers.value; } },
-                    { name: 'Δz', code: 'DZ', type: 'int', unit: 'px', meaning: 'depth between layers, 0.56 m', digits: 0, get: function () { return DZ; } }
-                ] },
-                { title: 'Derived physics', note: 'computed from the parameters', vars: [
-                    { name: 'k = 2π/λ', code: 'k()', type: 'float', unit: 'rad/px', meaning: 'wave number', digits: 5, get: k },
-                    { name: 'k', code: 'k() * PX_PER_M', type: 'float', unit: 'rad/m', meaning: 'the same in metres', digits: 4, get: function () { return k() * PX_PER_M; } },
-                    { name: 'ω = 2πf', type: 'float', unit: 'rad/s', meaning: 'angular frequency', digits: 4, get: om },
-                    { name: 'T = 1/f', type: 'float', unit: 's', meaning: 'period', digits: 3, get: function () { return 1 / f(); } },
-                    { name: 'c = fλ', type: 'float', unit: 'm/s', meaning: 'phase speed', digits: 4, get: function () { return f() * lambda.value / PX_PER_M; } },
-                    { name: '√(g/k)', type: 'float', unit: 'm/s', meaning: 'deep-water phase speed; equals c while dispersion is on', digits: 4, get: function () { return Math.sqrt(G / (k() * PX_PER_M)); } },
-                    { name: 'c<sub>g</sub> = c/2', type: 'float', unit: 'm/s', meaning: 'group speed in deep water', digits: 4, get: function () { return f() * lambda.value / PX_PER_M / 2; } },
-                    { name: 'a', code: 'a()', type: 'float', unit: 'px', meaning: 'amplitude used, capped at 0.9/k so the surface never folds', digits: 2, get: a },
-                    { name: 'cap active', code: 'a() < amp.value', type: 'bool', get: function () { return a() < amp.value; } },
-                    { name: 'ak', type: 'float', meaning: 'steepness', digits: 4, get: function () { return a() * k(); } },
-                    { name: 'u<sub>S</sub> = ωka²', type: 'float', unit: 'm/s', meaning: 'Stokes drift at the surface (theory, not drawn: the orbits here are closed)', digits: 4, get: function () { var am = a() / PX_PER_M; return om() * k() * PX_PER_M * am * am; } },
-                    { name: 'e<sup>−kz</sup> deepest', type: 'float', meaning: 'orbit radius of the deepest layer as a fraction of a', digits: 4, get: function () { return Math.exp(-k() * DZ * (layers.value - 1)); } }
-                ] },
-                { title: 'Time', note: 'advances only while it plays', vars: [
-                    { name: 't', type: 'float', unit: 's', meaning: 'play time, measured by the panel', digits: 2, get: function () { return Sim.frameStats.play; } },
-                    { name: 'ωt', code: 'omegaT', type: 'float', unit: 'rad', meaning: 'phase', digits: 3, get: function () { return omegaT; } },
-                    { name: 'ωt / 2π', type: 'float', meaning: 'periods completed', digits: 2, get: function () { return omegaT / (2 * Math.PI); } }
-                ] },
-                { title: 'The followed parcel', note: 'the surface parcel marked in burgundy', vars: [
-                    { name: 'X₀', type: 'float', unit: 'px', meaning: 'centre of its orbit', digits: 1, get: function () { return X0At(followed()); } },
-                    { name: 'θ = kX₀ − ωt', code: 'th', type: 'float', unit: 'rad', meaning: 'its phase, wrapped to (−π, π]', digits: 3, get: function () { return wrapPi(theta(followed())); } },
-                    { name: 'ξ', type: 'float', unit: 'px', meaning: 'horizontal displacement, −a sin θ', digits: 2, get: function () { return xi(0, followed()); } },
-                    { name: 'ζ', type: 'float', unit: 'px', meaning: 'vertical displacement, a cos θ; also the surface height η', digits: 2, get: function () { return zeta(0, followed()); } },
-                    { name: 'u', type: 'float', unit: 'px/s', meaning: 'horizontal velocity, aω cos θ', digits: 2, get: function () { return a() * om() * Math.cos(theta(followed())); } },
-                    { name: 'w', type: 'float', unit: 'px/s', meaning: 'vertical velocity, aω sin θ', digits: 2, get: function () { return a() * om() * Math.sin(theta(followed())); } },
-                    { name: 'aω', type: 'float', unit: 'm/s', meaning: 'its orbital speed, constant', digits: 4, get: function () { return a() * om() / PX_PER_M; } }
-                ] },
-                { title: 'Arrays: every parcel', note: 'click a row to open it as a table', vars: [
-                    { name: 'layers', kind: 'vector', code: 'j = 0 … layers − 1', type: 'list of float', meaning: 'orbit radius shrinks as e<sup>−k|z|</sup> with depth', updates: 'when a slider moves',
-                        length: function () { return layers.value; }, rowLabel: function (j) { return 'z' + j; },
-                        columns: [
-                            { name: 'depth', unit: 'm', digits: 2, get: function (j) { return j * DZ / PX_PER_M; } },
-                            { name: 'r', unit: 'px', digits: 3, get: radius },
-                            { name: 'r / a', digits: 4, get: function (j) { return Math.exp(-k() * j * DZ); } }
-                        ] },
-                    parcelMap('ξ', '−r sin θ', 'horizontal displacement of every parcel: rows are layers, columns are parcels', xi),
-                    parcelMap('ζ', 'r cos θ', 'vertical displacement of every parcel', zeta)
-                ] },
-                { title: 'Drawing', note: 'how the picture is laid out', vars: [
-                    { name: 's', code: 'box.w / WORLD_W', type: 'float', meaning: 'screen pixels per field pixel', digits: 4, get: function () { return box.w / WORLD_W; } },
-                    { name: 'rest level', code: 'ys', type: 'float', unit: 'px', meaning: 'height of the still-water line on screen', digits: 1, get: function () { var sc = box.w / WORLD_W; return Math.max(a() * sc + 34, box.h * 0.28); } },
-                    { name: 'canvas', code: 'box.w × box.h', type: 'int', size: '2', unit: 'css px', get: function () { return box.w + ' × ' + box.h; } },
-                    { name: 'orbits drawn', code: 'orbitsBox.checked', type: 'bool', get: function () { return orbitsBox.checked; } },
-                    { name: 'frame rate', type: 'float', unit: 'Hz', meaning: 'measured by the panel', digits: 1, get: function () { return Sim.frameStats.fps; } },
-                    { name: 'playing', code: 'clk.playing', type: 'bool', get: function () { return clk.playing; } }
-                ] }
+                { title: 'Physical parameters', note: 'fixed constants are in the dataset attributes; these you set', vars: ['amp', 'lambda', 'lambda_m', 'f', 'dispersion', 'N', 'layers', 'layers_drawn'] },
+                { title: 'Derived physics', note: 'computed by the page from the parameters', vars: ['k', 'k_m', 'omega', 'T', 'c', 'c_deep', 'cg', 'a', 'cap', 'ak', 'stokes', 'deep', 'r1', 'z_deep_px'] },
+                { title: 'Time', note: 'advances only while it plays', vars: ['t', 'omegaT', 'periods'] },
+                { title: 'Layers and parcels', note: 'rows are layers, columns are parcels; point at a cell to find it in the figure', vars: ['follow', 'X0', 'depth', 'r_z', 'cy_px', 'theta', 'xi', 'zeta', 'u', 'w', 'px', 'py'] },
+                { title: 'Drawing', note: 'how the picture is laid out', vars: ['s_px', 'ys', 'box_w', 'box_h', 'orbits', 'dt', 'fps', 'frames', 'playing'] }
             ],
-            log: {
-                every: 0.1, max: 1000,
-                columns: [
-                    { name: 't', unit: 's', digits: 2, get: function () { return Sim.frameStats.play; } },
-                    { name: 'ωt', unit: 'rad', digits: 3, get: function () { return omegaT; } },
-                    { name: 'ξ', unit: 'px', digits: 2, get: function () { return xi(0, followed()); } },
-                    { name: 'ζ', unit: 'px', digits: 2, get: function () { return zeta(0, followed()); } },
-                    { name: 'u', unit: 'px/s', digits: 1, get: function () { return a() * om() * Math.cos(theta(followed())); } },
-                    { name: 'w', unit: 'px/s', digits: 1, get: function () { return a() * om() * Math.sin(theta(followed())); } },
-                    { name: 'λ', unit: 'px', digits: 0, get: function () { return lambda.value; } },
-                    { name: 'f', unit: 'Hz', digits: 3, get: f }
-                ]
-            }
+            rowLabel: { z: function (j) { return 'z' + j; } },
+            colour: { xi: function (v) { return Sim.colourMap(v, ds.get('a')); }, zeta: function (v) { return Sim.colourMap(v, ds.get('a')); }, u: function (v) { return Sim.colourMap(v, ds.get('a') * ds.get('omega')); }, w: function (v) { return Sim.colourMap(v, ds.get('a') * ds.get('omega')); } },
+            probe: function (x, y) {
+                var N = ds.get('N') || 0, L = ds.get('layers_drawn') || 0, px = ds.get('px'), py = ds.get('py'), best = -1, bd = 14;
+                for (var q = 0; q < N * L; q++) { var d = Math.hypot(x - px[q], y - py[q]); if (d < bd) { bd = d; best = q; } }
+                return best < 0 ? null : { q: best };
+            },
+            inspect: function (ref) {
+                var q = ref.q, N = ds.get('N'), j = Math.floor(q / N), i = q % N;
+                return { title: 'parcel · layer ' + j + ', column ' + i + (j === 0 && i === ds.get('follow') ? ' · the followed one' : ''), at: at(q),
+                    rows: [['X<sub>0</sub>', ds.get('X0')[i], 'px', 'X0', i], ['depth', ds.get('depth')[j], 'm', 'depth', j], ['r', ds.get('r_z')[j], 'px', 'r_z', j], ['θ', ds.get('theta')[q], 'rad', 'theta', q], ['ξ', ds.get('xi')[q], 'px', 'xi', q], ['ζ', ds.get('zeta')[q], 'px', 'zeta', q], ['u', ds.get('u')[q], 'px/s', 'u', q], ['w', ds.get('w')[q], 'px/s', 'w', q]] };
+            },
+            locate: function (name, idx) {
+                var v = ds.vars[name], N = ds.get('N');
+                if (v.dims.length === 2) return at(idx);
+                if (v.dims[0] === 'p') return at(idx);
+                if (v.dims[0] === 'z') return idx < ds.get('layers_drawn') ? at(idx * N + ds.get('follow')) : null;
+                return null;
+            },
+            check: {
+                amp: function () { return sliderCheck(amp.el, 'amplitude'); },
+                lambda: function () { return sliderCheck(lambda.el, 'wavelength'); },
+                lambda_m: function () { return { formula: 'λ / 100', inputs: [['λ', ds.get('lambda'), 'px', 0]], value: ds.get('lambda') / PX_PER_M }; },
+                f: function () { return ds.get('dispersion') ? { formula: '√(g k) / 2π with k in rad/m', inputs: [['g', G, 'm/s²', 2], ['k', ds.get('k_m'), 'rad/m', 4]], value: Math.sqrt(G * ds.get('k_m')) / (2 * Math.PI) } : sliderCheck(freq.el, 'frequency'); },
+                N: function () { return sliderCheck(count.el, 'parcel count'); },
+                layers: function () { return sliderCheck(layers.el, 'layer count'); },
+                k: function () { return { formula: 'k = 2π / λ', inputs: [['λ', ds.get('lambda'), 'px', 0]], value: 2 * Math.PI / ds.get('lambda') }; },
+                k_m: function () { return { formula: 'k · 100', inputs: [['k', ds.get('k'), 'rad/px', 5]], value: ds.get('k') * PX_PER_M }; },
+                omega: function () { return { formula: 'ω = 2π f', inputs: [['f', ds.get('f'), 'Hz', 4]], value: 2 * Math.PI * ds.get('f') }; },
+                T: function () { return { formula: 'T = 1 / f', inputs: [['f', ds.get('f'), 'Hz', 4]], value: 1 / ds.get('f') }; },
+                c: function () { return { formula: 'c = f λ / 100', inputs: [['f', ds.get('f'), 'Hz', 4], ['λ', ds.get('lambda'), 'px', 0]], value: ds.get('f') * ds.get('lambda') / PX_PER_M }; },
+                c_deep: function () { return { formula: '√(g / k)', inputs: [['g', G, 'm/s²', 2], ['k', ds.get('k_m'), 'rad/m', 4]], value: Math.sqrt(G / ds.get('k_m')) }; },
+                cg: function () { return { formula: 'c / 2', inputs: [['c', ds.get('c'), 'm/s', 4]], value: ds.get('c') / 2 }; },
+                a: function () { return { formula: 'min(A, 0.9 / k)', inputs: [['A', ds.get('amp'), 'px', 0], ['k', ds.get('k'), 'rad/px', 5]], value: Math.min(ds.get('amp'), 0.9 / ds.get('k')) }; },
+                cap: function () { return { formula: 'a < A', inputs: [['a', ds.get('a'), 'px', 2], ['A', ds.get('amp'), 'px', 0]], value: ds.get('a') < ds.get('amp') }; },
+                ak: function () { return { formula: 'a k', inputs: [['a', ds.get('a'), 'px', 2], ['k', ds.get('k'), 'rad/px', 5]], value: ds.get('a') * ds.get('k') }; },
+                stokes: function () { var am = ds.get('a') / PX_PER_M; return { formula: 'ω k a² with k in rad/m and a in m', inputs: [['ω', ds.get('omega'), 'rad/s', 4], ['k', ds.get('k_m'), 'rad/m', 4], ['a', am, 'm', 4]], value: ds.get('omega') * ds.get('k_m') * am * am }; },
+                deep: function () { return { formula: 'exp(−k · 56 · (layers − 1))', inputs: [['k', ds.get('k'), 'rad/px', 5], ['layers', ds.get('layers'), '', 0]], value: Math.exp(-ds.get('k') * DZ * (ds.get('layers') - 1)) }; },
+                r1: function () { return { formula: 'a e<sup>−k · 56</sup>', inputs: [['a', ds.get('a'), 'px', 2], ['k', ds.get('k'), 'rad/px', 5]], value: ds.get('a') * Math.exp(-ds.get('k') * DZ) }; },
+                z_deep_px: function () { return { formula: '56 (layers − 1)', inputs: [['layers', ds.get('layers'), '', 0]], value: DZ * (ds.get('layers') - 1) }; },
+                periods: function () { return { formula: 'ωt / 2π', inputs: [['ωt', ds.get('omegaT'), 'rad', 4]], value: ds.get('omegaT') / (2 * Math.PI) }; },
+                follow: function () { return { formula: 'floor((N − 1) / 2)', inputs: [['N', ds.get('N'), '', 0]], value: Math.floor((ds.get('N') - 1) / 2) }; },
+                X0: function (i) { return { formula: '30 + i · 740 / (N − 1)', inputs: [['i', i, '', 0], ['N', ds.get('N'), '', 0]], value: 30 + i * (WORLD_W - 60) / (ds.get('N') - 1) }; },
+                depth: function (j) { return { formula: 'j · 56 / 100', inputs: [['j', j, '', 0]], value: j * DZ / PX_PER_M }; },
+                r_z: function (j) { return { formula: 'a e<sup>−k j · 56</sup>', inputs: [['a', ds.get('a'), 'px', 2], ['k', ds.get('k'), 'rad/px', 5], ['j', j, '', 0]], value: ds.get('a') * Math.exp(-ds.get('k') * j * DZ) }; },
+                cy_px: function (j) { return { formula: 'y<sub>s</sub> + j · 56 · s', inputs: [['y<sub>s</sub>', ds.get('ys'), 'css px', 1], ['j', j, '', 0], ['s', ds.get('s_px'), '', 4]], value: ds.get('ys') + j * DZ * ds.get('s_px') }; },
+                theta: function (q) { var i = q % ds.get('N'); return { formula: 'θ = k X<sub>0</sub> − ωt', inputs: [['X<sub>0</sub>', ds.get('X0')[i], 'px', 2], ['k', ds.get('k'), 'rad/px', 5], ['ωt', ds.get('omegaT'), 'rad', 4]], value: ds.get('k') * ds.get('X0')[i] - ds.get('omegaT') }; },
+                xi: function (q) { var j = Math.floor(q / ds.get('N')); return { formula: 'ξ = −r sin θ', inputs: qInputs(q), value: -ds.get('r_z')[j] * Math.sin(ds.get('theta')[q]) }; },
+                zeta: function (q) { var j = Math.floor(q / ds.get('N')); return { formula: 'ζ = r cos θ', inputs: qInputs(q), value: ds.get('r_z')[j] * Math.cos(ds.get('theta')[q]) }; },
+                u: function (q) { var j = Math.floor(q / ds.get('N')); return { formula: 'u = r ω cos θ', inputs: qInputs(q).concat([['ω', ds.get('omega'), 'rad/s', 4]]), value: ds.get('r_z')[j] * ds.get('omega') * Math.cos(ds.get('theta')[q]) }; },
+                w: function (q) { var j = Math.floor(q / ds.get('N')); return { formula: 'w = r ω sin θ', inputs: qInputs(q).concat([['ω', ds.get('omega'), 'rad/s', 4]]), value: ds.get('r_z')[j] * ds.get('omega') * Math.sin(ds.get('theta')[q]) }; },
+                px: function (q) { var i = q % ds.get('N'); return { formula: '(X<sub>0</sub> + ξ) s', inputs: [['X<sub>0</sub>', ds.get('X0')[i], 'px', 2], ['ξ', ds.get('xi')[q], 'px', 3], ['s', ds.get('s_px'), '', 4]], value: (ds.get('X0')[i] + ds.get('xi')[q]) * ds.get('s_px') }; },
+                py: function (q) { var j = Math.floor(q / ds.get('N')); return { formula: 'y<sub>centre</sub> − ζ s', inputs: [['y<sub>centre</sub>', ds.get('cy_px')[j], 'css px', 2], ['ζ', ds.get('zeta')[q], 'px', 3], ['s', ds.get('s_px'), '', 4]], value: ds.get('cy_px')[j] - ds.get('zeta')[q] * ds.get('s_px') }; },
+                s_px: function () { return { formula: 'box.w / 800', inputs: [['box.w', box.w, 'css px', 0]], value: box.w / WORLD_W }; },
+                ys: function () { return { formula: 'max(a s + 34, 0.28 box.h)', inputs: [['a', ds.get('a'), 'px', 2], ['s', ds.get('s_px'), '', 4], ['box.h', box.h, 'css px', 0]], value: Math.max(ds.get('a') * ds.get('s_px') + 34, box.h * 0.28) }; }
+            },
+            drawn: { px: parcelPixel, py: parcelPixel, xi: parcelPixel, zeta: parcelPixel },
+            log: { every: 0.1, max: 1000, time: 't', columns: ['t', 'omegaT', 'xi', 'zeta', 'u', 'w', 'lambda', 'f'] },
+            about: 'Here every parcel is drawn at its stored screen position, rounded to the pixel by the canvas. The surface line is drawn through extra points every 3 px that are not parcels and are not stored; at a top-row parcel the stored ζ is that surface height.'
         };
-
         couple();
+        draw();
         Sim.onResize(stage, function () { box.fit(); });
     })();
     </script>

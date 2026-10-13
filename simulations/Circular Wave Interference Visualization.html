@@ -204,6 +204,7 @@
     </footer>
 
     <script src="../scripts/sim.js"></script>
+    <script src="../scripts/dataset.js"></script>
     <script>
     (function () {
         'use strict';
@@ -218,10 +219,69 @@
         var img, cols, rows, worldH, sumC, sumS;
         var sources = DEFAULT.slice();
         var omegaT = 0, dirty = true, redraw = true;
-        var simT = 0, lastDt = 0, frames = 0, fps = 0, fieldVersion = 0, renders = 0, prepMs = 0, drawMs = 0;
+        var simT = 0, lastDt = 0, frames = 0, fps = 0, builds = 0, renders = 0;
+        var psi, ampl, r1, a1, ph1, idxC = 0;
+
+        /* ---------- the store: every number this page computes is written here, at the place it is computed (scripts/dataset.js) ---------- */
+        var ds = Sim.dataset({ title: 'Wave interference', attrs: { figure: 1, page: 'Circular Wave Interference Visualization.html', WORLD_W: WORLD_W, R: R, MAX_SOURCES: MAX_SOURCES, SOURCE_LIFT: SOURCE_LIFT, length_unit: 'px of the 800 px wide field' } });
+        ds.var('lambda', [], 'float', { symbol: 'λ', units: 'px', long_name: 'wavelength', computed_in: 'lambda slider', digits: 0 });
+        ds.var('f', [], 'float', { symbol: 'f', units: 'Hz', long_name: 'frequency of every source', computed_in: 'freq slider', digits: 2 });
+        ds.var('damp', [], 'float', { symbol: 'γ', long_name: 'damping: e-foldings of amplitude over R = 300 px', computed_in: 'damp slider', digits: 2 });
+        ds.var('N', [], 'int', { symbol: 'N', long_name: 'number of sources, at most 24', computed_in: 'precompute()', digits: 0 });
+        ds.dim('s', 0);
+        ds.coord('u', 's', Float64Array, { symbol: 'u<sub>s</sub>', long_name: 'source positions as fractions of the width', computed_in: 'precompute()', digits: 4, updates: 'when you add, clear or reset sources' });
+        ds.var('x_s', ['s'], Float64Array, { symbol: 'x<sub>s</sub>', units: 'px', long_name: 'source positions in the field', computed_in: 'precompute()', formula: 'x<sub>s</sub> = u<sub>s</sub> · 800', digits: 1, updates: 'when you add, clear or reset sources' });
+        ds.var('y_s', [], 'float', { symbol: 'y<sub>s</sub>', units: 'px', long_name: 'height of every source: 10 px above the bottom edge', computed_in: 'precompute()', formula: 'y<sub>s</sub> = worldH − 10', digits: 2 });
+        ds.var('k', [], 'float', { symbol: 'k', units: 'rad/px', long_name: 'wave number', computed_in: 'precompute()', formula: 'k = 2π / λ', digits: 4 });
+        ds.var('g', [], 'float', { symbol: 'γ/R', units: '1/px', long_name: 'attenuation per pixel', computed_in: 'precompute()', formula: 'g = γ / R', digits: 5 });
+        ds.var('norm', [], 'float', { symbol: '1/N', long_name: 'normalisation that keeps |ψ| ≤ 1', computed_in: 'precompute()', formula: '1 / max(1, N)', digits: 4 });
+        ds.var('omega', [], 'float', { symbol: 'ω', units: 'rad/s', long_name: 'angular frequency', computed_in: 'readouts()', formula: 'ω = 2π f', digits: 3 });
+        ds.var('T', [], 'float', { symbol: 'T', units: 's', long_name: 'period', computed_in: 'readouts()', formula: 'T = 1 / f', digits: 3 });
+        ds.var('v', [], 'float', { symbol: 'v', units: 'px/s', long_name: 'phase speed', computed_in: 'readouts()', formula: 'v = f λ', digits: 1 });
+        ds.var('t', [], 'float', { symbol: 't', units: 's', long_name: 'play time since the page opened', computed_in: 'Sim.clock', digits: 2, source: 'The clock adds each frame’s Δt while playing; there is no formula to recompute.' });
+        ds.var('omegaT', [], 'float', { symbol: 'ωt', units: 'rad', long_name: 'phase shared by all sources', computed_in: 'Sim.clock callback', formula: 'ωt ← ωt + 2π f Δt', digits: 3, source: 'Accumulated frame by frame, so there is no closed formula to recompute.' });
+        ds.var('cos_wt', [], 'float', { symbol: 'cos ωt', long_name: 'the rotating pair, cosine', computed_in: 'render()', formula: 'cos(ωt)', digits: 4 });
+        ds.var('sin_wt', [], 'float', { symbol: 'sin ωt', long_name: 'the rotating pair, sine', computed_in: 'render()', formula: 'sin(ωt)', digits: 4 });
+        ds.dim('j', 0);
+        ds.dim('i', 0);
+        ds.coord('x', 'i', Float64Array, { symbol: 'x', units: 'px', long_name: 'centre of column i, from the left', computed_in: 'resize()', formula: 'x = (i + ½) Δx', digits: 2 });
+        ds.coord('y', 'j', Float64Array, { symbol: 'y', units: 'px', long_name: 'centre of row j, from the top', computed_in: 'resize()', formula: 'y = (j + ½) Δy', digits: 2 });
+        ds.var('C', ['j', 'i'], Float32Array, { symbol: 'C', long_name: 'cosine map', computed_in: 'precompute()', formula: 'C = Σ<sub>s</sub> a<sub>s</sub> cos(k r<sub>s</sub>)', digits: 4, updates: 'when a slider or the sources change' });
+        ds.var('S', ['j', 'i'], Float32Array, { symbol: 'S', long_name: 'sine map', computed_in: 'precompute()', formula: 'S = Σ<sub>s</sub> a<sub>s</sub> sin(k r<sub>s</sub>)', digits: 4, updates: 'when a slider or the sources change' });
+        ds.var('psi', ['j', 'i'], Float32Array, { symbol: 'ψ', long_name: 'the field at this instant, as drawn', computed_in: 'render()', formula: 'ψ = C cos ωt + S sin ωt, clipped to [−1, 1]', digits: 4, updates: 'every frame' });
+        ds.var('A', ['j', 'i'], Float32Array, { symbol: 'A', long_name: 'amplitude: the largest |ψ| each point reaches in a period; zero on the calm lines', computed_in: 'precompute()', formula: 'A = √(C² + S²)', digits: 4, updates: 'when a slider or the sources change' });
+        ds.var('r1', ['j', 'i'], Float32Array, { symbol: 'r<sub>1</sub>', units: 'px', long_name: 'distance from each cell to source 1', computed_in: 'precompute()', formula: 'r = √((x − x<sub>1</sub>)² + (y − y<sub>s</sub>)²)', digits: 2, updates: 'when a slider or the sources change' });
+        ds.var('a1', ['j', 'i'], Float32Array, { symbol: 'a<sub>1</sub>', long_name: 'amplitude from source 1 at each cell', computed_in: 'precompute()', formula: 'a = e<sup>−g r</sup> / N', digits: 4, updates: 'when a slider or the sources change' });
+        ds.var('ph1', ['j', 'i'], Float32Array, { symbol: 'φ<sub>1</sub>', units: 'rad', long_name: 'phase lag from source 1 at each cell', computed_in: 'precompute()', formula: 'φ = k r', digits: 3, updates: 'when a slider or the sources change' });
+        ds.dim('n', 256);
+        ds.dim('c', 3);
+        ds.var('LUT', ['n', 'c'], Uint8ClampedArray, { symbol: 'LUT', long_name: 'colour table: row n is the colour for ψ = n/127.5 − 1', computed_in: 'the LUT builder', formula: 'mid + (end − mid) · |n/127.5 − 1|<sup>0.8</sup>', digits: 0, updates: 'never; built once at start-up', cw: 58 });
+        ds.var('cols', [], 'int', { symbol: 'cols', long_name: 'grid cells across', computed_in: 'resize()', formula: 'clamp(round(box.w / 2.2), 60, 360)', digits: 0 });
+        ds.var('rows', [], 'int', { symbol: 'rows', long_name: 'grid cells down', computed_in: 'resize()', formula: 'max(30, round(cols · box.h / box.w))', digits: 0 });
+        ds.var('P', [], 'int', { symbol: 'P', long_name: 'grid points in each map', computed_in: 'resize()', formula: 'cols · rows', digits: 0 });
+        ds.var('dx', [], 'float', { symbol: 'Δx', units: 'px', long_name: 'field pixels per cell, across', computed_in: 'precompute()', formula: 'Δx = 800 / cols', digits: 3 });
+        ds.var('dy', [], 'float', { symbol: 'Δy', units: 'px', long_name: 'field pixels per cell, down', computed_in: 'precompute()', formula: 'Δy = worldH / rows', digits: 3 });
+        ds.var('worldH', [], 'float', { symbol: 'worldH', units: 'px', long_name: 'height of the field', computed_in: 'resize()', formula: '800 · box.h / box.w', digits: 1 });
+        ds.var('box_w', [], 'int', { symbol: 'box.w', units: 'css px', long_name: 'canvas width on your screen', computed_in: 'resize()', digits: 0, source: 'Measured from the page layout.' });
+        ds.var('box_h', [], 'int', { symbol: 'box.h', units: 'css px', long_name: 'canvas height on your screen', computed_in: 'resize()', digits: 0, source: 'Measured from the page layout.' });
+        ds.var('dpr', [], 'float', { symbol: 'dpr', long_name: 'device pixels per css pixel', computed_in: 'resize()', digits: 2, source: 'Reported by the browser.' });
+        ds.var('j_c', [], 'int', { symbol: 'j<sub>c</sub>', long_name: 'row of the centre cell', computed_in: 'resize()', formula: 'floor(rows / 2)', digits: 0 });
+        ds.var('i_c', [], 'int', { symbol: 'i<sub>c</sub>', long_name: 'column of the centre cell', computed_in: 'resize()', formula: 'floor(cols / 2)', digits: 0 });
+        ds.var('psi_c', [], 'float', { symbol: 'ψ<sub>c</sub>', long_name: 'ψ at the centre cell', computed_in: 'render()', formula: 'psi[j<sub>c</sub> · cols + i<sub>c</sub>]', digits: 4 });
+        ds.var('n_c', [], 'int', { symbol: 'n<sub>c</sub>', long_name: 'colour-table row at the centre cell', computed_in: 'render()', formula: 'round(127.5 ψ<sub>c</sub> + 127.5)', digits: 0 });
+        ds.var('rgb_c', [], 'uint8', { symbol: 'colour<sub>c</sub>', long_name: 'the pixel colour drawn at the centre', computed_in: 'render()', formula: 'LUT[n<sub>c</sub>]', size: '3', colour: true });
+        ds.var('dt', [], 'float', { symbol: 'Δt', units: 's', long_name: 'time between the last two frames, capped at 0.05 s', computed_in: 'Sim.clock', digits: 4, source: 'Measured by the clock.' });
+        ds.var('fps', [], 'float', { symbol: 'frame rate', units: 'Hz', long_name: 'smoothed over about ten frames', computed_in: 'Sim.clock callback', formula: 'fps ← fps + (1/Δt − fps) / 10', digits: 1, source: 'A running average of 1/Δt.' });
+        ds.var('frames', [], 'int', { symbol: 'frames', long_name: 'frames played so far', computed_in: 'Sim.clock callback', digits: 0, source: 'Counted frame by frame.' });
+        ds.var('playing', [], 'bool', { symbol: 'playing', long_name: 'the clock runs', computed_in: 'Sim.clock', source: 'The state of the Play button.' });
+        ds.var('builds', [], 'int', { symbol: 'builds', long_name: 'times C and S were recomputed', computed_in: 'precompute()', digits: 0, source: 'Counted at each recomputation.' });
+        ds.var('build_ms', [], 'float', { symbol: 'build time', units: 'ms', long_name: 'last recomputation of C and S', computed_in: 'precompute()', digits: 2, source: 'Measured with performance.now().' });
+        ds.var('trig_calls', [], 'int', { symbol: 'cos + sin calls', long_name: 'in one recomputation of C and S', computed_in: 'precompute()', formula: '2 · N · P', digits: 0 });
+        ds.var('draw_ms', [], 'float', { symbol: 'draw time', units: 'ms', long_name: 'last frame, every pixel', computed_in: 'render()', digits: 2, source: 'Measured with performance.now().' });
+        ds.var('renders', [], 'int', { symbol: 'renders', long_name: 'frames drawn so far', computed_in: 'render()', digits: 0, source: 'Counted at each render.' });
 
         /* colour map: trough (ink) → rest (card) → crest (burgundy) */
-        var LUT = new Uint8ClampedArray(256 * 3);
+        var LUT = ds.alloc('LUT');
         (function () {
             var neg = [58, 50, 46], mid = [255, 250, 243], pos = [122, 31, 43];
             for (var i = 0; i < 256; i++) {
@@ -229,6 +289,7 @@
                 for (var c = 0; c < 3; c++) LUT[i * 3 + c] = Math.round(mid[c] + (end[c] - mid[c]) * s);
             }
         })();
+        ds.touch('LUT');
 
         var lambda = Sim.slider('lambda', { format: function (v) { return v + ' px'; }, onInput: changed });
         var freq = Sim.slider('freq', { format: function (v) { return v.toFixed(2) + ' Hz'; }, onInput: readouts });
@@ -245,8 +306,21 @@
             off.height = rows;
             img = octx.createImageData(cols, rows);
             for (var p = 3; p < img.data.length; p += 4) img.data[p] = 255;
-            sumC = new Float32Array(cols * rows);
-            sumS = new Float32Array(cols * rows);
+            ds.dim('i', cols);
+            ds.dim('j', rows);
+            sumC = ds.alloc('C');
+            sumS = ds.alloc('S');
+            psi = ds.alloc('psi');
+            ampl = ds.alloc('A');
+            r1 = ds.alloc('r1');
+            a1 = ds.alloc('a1');
+            ph1 = ds.alloc('ph1');
+            var xs = ds.alloc('x'), ys = ds.alloc('y'), q;
+            for (q = 0; q < cols; q++) xs[q] = (q + 0.5) * WORLD_W / cols;
+            for (q = 0; q < rows; q++) ys[q] = (q + 0.5) * worldH / rows;
+            ds.set('cols', cols); ds.set('rows', rows); ds.set('P', cols * rows); ds.set('worldH', worldH);
+            ds.set('box_w', box.w); ds.set('box_h', box.h); ds.set('dpr', box.dpr);
+            ds.set('j_c', Math.floor(rows / 2)); ds.set('i_c', Math.floor(cols / 2));
             dirty = true;
         }
 
@@ -254,31 +328,44 @@
             var k = 2 * Math.PI / lambda.value, g = damp.value / R;
             var n = sources.length, norm = 1 / Math.max(1, n);
             var dx = WORLD_W / cols, dy = worldH / rows, sy = worldH - SOURCE_LIFT;
+            ds.set('k', k); ds.set('g', g); ds.set('N', n); ds.set('norm', norm); ds.set('dx', dx); ds.set('dy', dy); ds.set('y_s', sy);
+            ds.dim('s', n);
+            var us = ds.alloc('u'), xss = ds.alloc('x_s'), t0 = performance.now();
             sumC.fill(0);
             sumS.fill(0);
             for (var s = 0; s < n; s++) {
                 var sx = sources[s] * WORLD_W, p = 0;
+                us[s] = sources[s];
+                xss[s] = sx;
                 for (var j = 0; j < rows; j++) {
                     var y = (j + 0.5) * dy - sy, y2 = y * y;
                     for (var i = 0; i < cols; i++, p++) {
                         var x = (i + 0.5) * dx - sx;
                         var r = Math.sqrt(x * x + y2);
                         var a = Math.exp(-g * r) * norm, ph = k * r;
+                        if (s === 0) { r1[p] = r; a1[p] = a; ph1[p] = ph; }
                         sumC[p] += a * Math.cos(ph);
                         sumS[p] += a * Math.sin(ph);
                     }
                 }
             }
-            fieldVersion++;
+            for (p = 0; p < sumC.length; p++) ampl[p] = Math.sqrt(sumC[p] * sumC[p] + sumS[p] * sumS[p]);
+            if (n === 0) { r1.fill(0); a1.fill(0); ph1.fill(0); }
+            ds.touch('C'); ds.touch('S'); ds.touch('A'); ds.touch('r1'); ds.touch('a1'); ds.touch('ph1'); ds.touch('u'); ds.touch('x_s');
+            ds.set('builds', ++builds); ds.set('build_ms', performance.now() - t0); ds.set('trig_calls', 2 * n * cols * rows);
             dirty = false;
         }
 
         function render() {
             var c = Math.cos(omegaT), s = Math.sin(omegaT), d = img.data;
+            var pc = ds.get('j_c') * cols + ds.get('i_c'), t1 = performance.now();
+            ds.set('cos_wt', c); ds.set('sin_wt', s);
             for (var p = 0, q = 0; p < sumC.length; p++, q += 4) {
                 var v = sumC[p] * c + sumS[p] * s;
                 if (v > 1) v = 1; else if (v < -1) v = -1;
+                psi[p] = v;
                 var idx = Math.round(v * 127.5 + 127.5) * 3;
+                if (p === pc) idxC = idx / 3;
                 d[q] = LUT[idx];
                 d[q + 1] = LUT[idx + 1];
                 d[q + 2] = LUT[idx + 2];
@@ -306,6 +393,9 @@
                 ctx.strokeStyle = T.card;
                 ctx.stroke();
             });
+            ds.touch('psi');
+            ds.set('psi_c', psi[pc]); ds.set('n_c', idxC); ds.set('rgb_c', [LUT[idxC * 3], LUT[idxC * 3 + 1], LUT[idxC * 3 + 2]]);
+            ds.set('renders', ++renders); ds.set('draw_ms', performance.now() - t1);
         }
 
         function setSources(list) {
@@ -318,6 +408,8 @@
             document.getElementById('r-n').textContent = n + (n === MAX_SOURCES ? ' (max)' : '');
             document.getElementById('cap-count').textContent = n === 0 ? 'no sources · click the field' : n + (n === 1 ? ' source' : ' sources');
             document.getElementById('r-v').textContent = Math.round(freq.value * lambda.value) + ' px/s';
+            ds.set('lambda', lambda.value); ds.set('f', freq.value); ds.set('damp', damp.value);
+            ds.set('v', freq.value * lambda.value); ds.set('omega', 2 * Math.PI * freq.value); ds.set('T', 1 / freq.value);
             redraw = true;
         }
 
@@ -341,23 +433,20 @@
         });
         document.getElementById('clear').addEventListener('click', function () { setSources([]); });
 
+        /* live values for the walkthrough: read from the store at the centre cell, nothing recomputed */
         Sim.live = function () {
-            var k = 2 * Math.PI / lambda.value, g = damp.value / R, n = sources.length, norm = 1 / Math.max(1, n);
-            var dx = WORLD_W / cols, dy = worldH / rows, i0 = Math.floor(cols / 2), j0 = Math.floor(rows / 2), p0 = j0 * cols + i0;
-            var c = Math.cos(omegaT), s = Math.sin(omegaT), v = sumC[p0] * c + sumS[p0] * s;
-            v = Math.max(-1, Math.min(1, v));
-            var idx = Math.round(v * 127.5 + 127.5), out = {
-                lam: lambda.value + ' px', k: Sim.fmt(k, 4) + ' rad/px', g: Sim.fmt(g, 5) + ' /px', N: String(n), norm: Sim.fmt(norm, 4),
-                dx: Sim.fmt(dx, 3) + ' px', grid: cols + ' × ' + rows, C: Sim.fmt(sumC[p0], 4), S: Sim.fmt(sumS[p0], 4),
-                c: Sim.fmt(c, 4), s: Sim.fmt(s, 4), psi: Sim.fmt(v, 4), f: freq.value.toFixed(2) + ' Hz',
-                wt: Sim.fmt(omegaT, 2) + ' rad', v: Math.round(freq.value * lambda.value) + ' px/s',
-                idx: String(idx), rgb: 'rgb(' + LUT[idx * 3] + ', ' + LUT[idx * 3 + 1] + ', ' + LUT[idx * 3 + 2] + ')'
+            var pc = ds.get('j_c') * cols + ds.get('i_c'), rgb = ds.get('rgb_c');
+            var out = {
+                lam: ds.get('lambda') + ' px', k: Sim.fmt(ds.get('k'), 4) + ' rad/px', g: Sim.fmt(ds.get('g'), 5) + ' /px', N: String(ds.get('N')), norm: Sim.fmt(ds.get('norm'), 4),
+                dx: Sim.fmt(ds.get('dx'), 3) + ' px', grid: cols + ' × ' + rows, C: Sim.fmt(sumC[pc], 4), S: Sim.fmt(sumS[pc], 4),
+                c: Sim.fmt(ds.get('cos_wt'), 4), s: Sim.fmt(ds.get('sin_wt'), 4), psi: Sim.fmt(ds.get('psi_c'), 4), f: ds.get('f').toFixed(2) + ' Hz',
+                wt: Sim.fmt(ds.get('omegaT'), 2) + ' rad', v: Math.round(ds.get('v')) + ' px/s',
+                idx: String(ds.get('n_c')), rgb: rgb ? 'rgb(' + rgb[0] + ', ' + rgb[1] + ', ' + rgb[2] + ')' : '—'
             };
-            if (n) {
-                var x = (i0 + 0.5) * dx - sources[0] * WORLD_W, y = (j0 + 0.5) * dy - (worldH - SOURCE_LIFT), r = Math.sqrt(x * x + y * y);
-                out.r = Sim.fmt(r, 2) + ' px';
-                out.a = Sim.fmt(Math.exp(-g * r) * norm, 4);
-                out.ph = Sim.fmt(k * r, 3) + ' rad';
+            if (ds.get('N')) {
+                out.r = Sim.fmt(r1[pc], 2) + ' px';
+                out.a = Sim.fmt(a1[pc], 4);
+                out.ph = Sim.fmt(ph1[pc], 3) + ' rad';
             } else {
                 out.r = out.a = out.ph = 'no sources';
             }
@@ -367,147 +456,141 @@
         var clk = Sim.clock(function (dt, t) {
             simT = t;
             if (dt > 0) { frames++; lastDt = dt; fps = fps ? fps + (1 / dt - fps) * 0.1 : 1 / dt; }
-            if (dirty) { var t0 = performance.now(); precompute(); prepMs = performance.now() - t0; redraw = true; }
+            ds.set('t', simT); ds.set('dt', lastDt); ds.set('fps', fps); ds.set('frames', frames); ds.set('playing', clk.playing);
+            if (dirty) { precompute(); redraw = true; }
             if (dt > 0 || redraw) {
                 omegaT += 2 * Math.PI * freq.value * dt;
-                var t1 = performance.now();
+                ds.set('omegaT', omegaT);
                 render();
-                drawMs = performance.now() - t1;
-                renders++;
                 redraw = false;
             }
         });
         Sim.playButton(document.getElementById('play'), clk);
 
-        /* ---------- every number above, as data for the side panel (scripts/datalog.js) ---------- */
-        var cNow = 1, sNow = 0;
-        function phase() { cNow = Math.cos(omegaT); sNow = Math.sin(omegaT); }
-        function psiAt(p) { var v = sumC[p] * cNow + sumS[p] * sNow; return v > 1 ? 1 : v < -1 ? -1 : v; }
-        function colourOf(v) {
-            var n = Math.round(Math.max(-1, Math.min(1, v)) * 127.5 + 127.5) * 3;
-            return [LUT[n], LUT[n + 1], LUT[n + 2]];
-        }
-        function xAt(i) { return (i + 0.5) * WORLD_W / cols; }
-        function yAt(j) { return (j + 0.5) * worldH / rows; }
-        /* the grid point that Sim.live and the walkthrough read: the centre of the field */
-        function centre() {
-            var i = Math.floor(cols / 2), j = Math.floor(rows / 2), o = { i: i, j: j, p: j * cols + i, x: xAt(i), y: yAt(j) };
-            if (sources.length) {
-                var dx = o.x - sources[0] * WORLD_W, dy = o.y - (worldH - SOURCE_LIFT);
-                o.r = Math.sqrt(dx * dx + dy * dy);
-                o.a = Math.exp(-damp.value / R * o.r) / sources.length;
-                o.ph = 2 * Math.PI / lambda.value * o.r;
+        /* ---------- the data panel (scripts/datalog.js) reads the store; these hooks only say where things are drawn and how to test a value ---------- */
+        function cellIndex(j, i) { return j * cols + i; }
+        function cellCentre(j, i) { return { x: (i + 0.5) / cols * box.w, y: (j + 0.5) / rows * box.h }; }
+        function lut(v) { var n = Math.round(Math.max(-1, Math.min(1, v)) * 127.5 + 127.5) * 3; return [LUT[n], LUT[n + 1], LUT[n + 2]]; }
+        function sliderCheck(input, label) { return { formula: 'read from the ' + label + ' slider now', inputs: [['slider', input.value, '']], value: parseFloat(input.value) }; }
+        /* self-test: the sum over sources at one cell, written out again from the stored inputs */
+        function sumAt(p, trig) {
+            var j = Math.floor(p / cols), i = p % cols, k = ds.get('k'), g = ds.get('g'), norm = ds.get('norm'), xs = ds.get('x_s'), ys = ds.get('y_s');
+            var x0 = ds.get('x')[i], y0 = ds.get('y')[j], total = 0;
+            var inputs = [['x', x0, 'px', 2], ['y', y0, 'px', 2], ['k', k, 'rad/px', 4], ['g', g, '1/px', 5], ['1/N', norm, '', 4]];
+            for (var q = 0; q < xs.length; q++) {
+                var r = Math.sqrt((x0 - xs[q]) * (x0 - xs[q]) + (y0 - ys) * (y0 - ys));
+                total += Math.exp(-g * r) * norm * trig(k * r);
+                if (q < 3) inputs.push(['r<sub>' + (q + 1) + '</sub>', r, 'px', 2]);
             }
-            return o;
+            if (xs.length > 3) inputs.push(['…', xs.length + ' sources in all', '']);
+            return { inputs: inputs, value: total };
         }
-        function at(j, i) { return 'x = ' + Sim.fmt(xAt(i), 1) + ' px, y = ' + Sim.fmt(yAt(j), 1) + ' px from the top left of the field'; }
-        function fieldMap(name, code, meaning, get, extra) {
-            var m = {
-                name: name, kind: 'matrix', code: code, type: 'Array of float32', meaning: meaning, digits: 4,
-                updates: 'when a slider or the sources change',
-                rows: function () { return rows; }, cols: function () { return cols; },
-                get: get, version: function () { return fieldVersion; }, colour: colourOf, at: at
-            };
-            for (var key in extra) m[key] = extra[key];
-            return m;
+        /* self-test: the pixel of the drawn image at a cell against the colour table row for the stored ψ */
+        function pixelCheck(p) {
+            var j = Math.floor(p / cols), i = p % cols, v = psi[p], n = Math.round(v * 127.5 + 127.5);
+            var px = octx.getImageData(i, j, 1, 1).data, exp = [LUT[n * 3], LUT[n * 3 + 1], LUT[n * 3 + 2]];
+            var ok = px[0] === exp[0] && px[1] === exp[1] && px[2] === exp[2];
+            var cc = cellCentre(j, i), sp = ctx.getImageData(Math.round(cc.x * box.dpr), Math.round(cc.y * box.dpr), 1, 1).data;
+            return { what: 'pixel (i = ' + i + ', j = ' + j + ') of the drawn image', drawn: 'rgb(' + px[0] + ', ' + px[1] + ', ' + px[2] + ')',
+                expected: 'LUT row ' + n + ' = rgb(' + exp.join(', ') + ') for ψ = ' + Sim.fmt(v, 4), ok: ok,
+                note: 'The image has one pixel per cell and is scaled to the canvas with smoothing. The screen pixel at this cell’s centre is rgb(' + sp[0] + ', ' + sp[1] + ', ' + sp[2] + '): the same colour away from cell edges, a blend of neighbours near them. One colour step is Δψ = 2/255 ≈ 0.008.' };
         }
-
         Sim.data = {
-            kicker: 'Fig. 1 · data',
-            title: 'Wave interference',
-            subtitle: 'Every number this simulation is computing, read live from its own variables.',
-            foot: 'Repainted every frame while open. Arrays open as tables, coloured like the figure; only the cells in view are drawn.',
+            ds: ds, kicker: 'Fig. 1 · data', file: 'fig1-wave-interference',
             playing: function () { return clk.playing; },
             groups: [
-                { title: 'Physical parameters', note: 'what you set with the sliders, buttons and clicks', vars: [
-                    { name: 'λ', code: 'lambda.value', type: 'float', unit: 'px', meaning: 'wavelength', digits: 0, get: function () { return lambda.value; } },
-                    { name: 'f', code: 'freq.value', type: 'float', unit: 'Hz', meaning: 'frequency of every source', digits: 2, get: function () { return freq.value; } },
-                    { name: 'γ', code: 'damp.value', type: 'float', meaning: 'damping: e-foldings of amplitude over R = 300 px', digits: 2, get: function () { return damp.value; } },
-                    { name: 'N', code: 'sources.length', type: 'int', meaning: 'number of sources, at most 24', digits: 0, get: function () { return sources.length; } },
-                    { name: 'u<sub>s</sub>', kind: 'vector', code: 'sources', type: 'list of float', meaning: 'source positions as fractions of the width', updates: 'when you add, clear or reset sources',
-                        length: function () { return sources.length; },
-                        columns: [
-                            { name: 'u', digits: 4, get: function (s) { return sources[s]; } },
-                            { name: 'x', unit: 'px', digits: 1, get: function (s) { return sources[s] * WORLD_W; } },
-                            { name: 'y', unit: 'px', digits: 1, get: function () { return worldH - SOURCE_LIFT; } }
-                        ] }
-                ] },
-                { title: 'Derived physics', note: 'computed from the parameters', vars: [
-                    { name: 'k = 2π/λ', code: 'k', type: 'float', unit: 'rad/px', meaning: 'wave number', digits: 4, get: function () { return 2 * Math.PI / lambda.value; } },
-                    { name: 'ω = 2πf', code: '2 * Math.PI * freq.value', type: 'float', unit: 'rad/s', meaning: 'angular frequency', digits: 3, get: function () { return 2 * Math.PI * freq.value; } },
-                    { name: 'T = 1/f', type: 'float', unit: 's', meaning: 'period', digits: 3, get: function () { return 1 / freq.value; } },
-                    { name: 'v = fλ', code: 'freq.value * lambda.value', type: 'float', unit: 'px/s', meaning: 'phase speed', digits: 1, get: function () { return freq.value * lambda.value; } },
-                    { name: 'γ/R', code: 'g', type: 'float', unit: '1/px', meaning: 'attenuation per pixel', digits: 5, get: function () { return damp.value / R; } },
-                    { name: '1/N', code: 'norm', type: 'float', meaning: 'normalisation that keeps |ψ| ≤ 1', digits: 4, get: function () { return 1 / Math.max(1, sources.length); } }
-                ] },
-                { title: 'Time', note: 'advances only while it plays', vars: [
-                    { name: 't', code: 'Sim.clock t', type: 'float', unit: 's', meaning: 'play time since the page opened', digits: 2, get: function () { return simT; } },
-                    { name: 'ωt', code: 'omegaT', type: 'float', unit: 'rad', meaning: 'phase shared by all sources', digits: 3, get: function () { return omegaT; } },
-                    { name: 'ωt / 2π', type: 'float', meaning: 'periods completed', digits: 2, get: function () { return omegaT / (2 * Math.PI); } },
-                    { name: 'cos ωt', code: 'c', type: 'float', digits: 4, get: function () { return Math.cos(omegaT); } },
-                    { name: 'sin ωt', code: 's', type: 'float', digits: 4, get: function () { return Math.sin(omegaT); } }
-                ] },
-                { title: 'Probe at the centre of the field', note: 'one grid point, followed live', vars: [
-                    { name: '(j, i)', code: 'rows / 2, cols / 2', type: 'int', size: '2', meaning: 'row and column of the point', get: function () { var o = centre(); return o.j + ', ' + o.i; } },
-                    { name: '(x, y)', type: 'float', size: '2', unit: 'px', meaning: 'its position in the 800 px wide field', get: function () { var o = centre(); return Sim.fmt(o.x, 1) + ', ' + Sim.fmt(o.y, 1); } },
-                    { name: 'r<sub>1</sub>', code: 'r', type: 'float', unit: 'px', meaning: 'distance to source 1', digits: 2, get: function () { return centre().r; } },
-                    { name: 'a<sub>1</sub>', code: 'a', type: 'float', meaning: 'amplitude from source 1, e<sup>−γr/R</sup>/N', digits: 4, get: function () { return centre().a; } },
-                    { name: 'φ<sub>1</sub> = kr<sub>1</sub>', code: 'ph', type: 'float', unit: 'rad', meaning: 'phase lag from source 1', digits: 3, get: function () { return centre().ph; } },
-                    { name: 'C', code: 'sumC[p]', type: 'float32', meaning: 'Σ a cos kr over all sources', digits: 4, get: function () { return sumC[centre().p]; } },
-                    { name: 'S', code: 'sumS[p]', type: 'float32', meaning: 'Σ a sin kr over all sources', digits: 4, get: function () { return sumS[centre().p]; } },
-                    { name: 'ψ', code: 'v', type: 'float', meaning: 'field now: C cos ωt + S sin ωt', digits: 4, get: function () { phase(); return psiAt(centre().p); } },
-                    { name: 'n', code: 'idx / 3', type: 'int', meaning: 'colour-table row, round(127.5 ψ + 127.5)', digits: 0, get: function () { phase(); return Math.round(psiAt(centre().p) * 127.5 + 127.5); } },
-                    { name: 'colour', code: 'LUT[n]', type: 'uint8', kind: 'colour', meaning: 'the pixel colour drawn there', get: function () { phase(); return colourOf(psiAt(centre().p)); } }
-                ] },
-                { title: 'Arrays: the whole field', note: 'click a row to open it as a table', vars: [
-                    fieldMap('C', 'sumC', 'cosine map, Σ<sub>s</sub> a<sub>s</sub> cos kr<sub>s</sub>', function (j, i) { return sumC[j * cols + i]; }),
-                    fieldMap('S', 'sumS', 'sine map, Σ<sub>s</sub> a<sub>s</sub> sin kr<sub>s</sub>', function (j, i) { return sumS[j * cols + i]; }),
-                    fieldMap('ψ', 'sumC[p] * c + sumS[p] * s', 'the field at this instant, as drawn', function (j, i) { return psiAt(j * cols + i); },
-                        { type: 'Array of float64', updates: 'every frame', prepare: phase, version: function () { return renders; } }),
-                    fieldMap('A', 'sqrt(sumC² + sumS²)', 'amplitude: the largest |ψ| each point reaches in one period; zero on the calm lines', function (j, i) {
-                        var p = j * cols + i;
-                        return Math.sqrt(sumC[p] * sumC[p] + sumS[p] * sumS[p]);
-                    }, { type: 'Array of float64' }),
-                    { name: 'LUT', kind: 'matrix', code: 'LUT', type: 'Array of uint8', meaning: 'colour table: row n is the colour for ψ = n/127.5 − 1', updates: 'never; built once at start-up',
-                        digits: 0, cw: 58, rows: function () { return 256; }, cols: function () { return 3; },
-                        get: function (j, i) { return LUT[j * 3 + i]; }, version: function () { return 1; },
-                        colLabel: function (i) { return ['R', 'G', 'B'][i]; },
-                        colour: function (v, j) { return [LUT[j * 3], LUT[j * 3 + 1], LUT[j * 3 + 2]]; },
-                        at: function (j) { return 'for ψ = ' + Sim.fmt(j / 127.5 - 1, 4); } }
-                ] },
-                { title: 'Animation and numerics', note: 'how the picture is computed and drawn', vars: [
-                    { name: 'grid', code: 'cols × rows', type: 'int', size: '2', meaning: 'field samples across and down', get: function () { return cols + ' × ' + rows; } },
-                    { name: 'P', code: 'cols * rows', type: 'int', meaning: 'grid points in each array', digits: 0, get: function () { return cols * rows; } },
-                    { name: 'Δx', code: 'dx', type: 'float', unit: 'px', meaning: 'field pixels per grid cell, across', digits: 3, get: function () { return WORLD_W / cols; } },
-                    { name: 'Δy', code: 'dy', type: 'float', unit: 'px', meaning: 'field pixels per grid cell, down', digits: 3, get: function () { return worldH / rows; } },
-                    { name: 'field size', code: 'WORLD_W × worldH', type: 'float', size: '2', unit: 'px', get: function () { return WORLD_W + ' × ' + Sim.fmt(worldH, 1); } },
-                    { name: 'canvas', code: 'box.w × box.h', type: 'int', size: '2', unit: 'css px', meaning: 'size on your screen', get: function () { return box.w + ' × ' + box.h; } },
-                    { name: 'dpr', code: 'box.dpr', type: 'float', meaning: 'device pixels per css pixel', digits: 2, get: function () { return box.dpr; } },
-                    { name: 'Δt', code: 'dt', type: 'float', unit: 's', meaning: 'time between the last two frames', digits: 4, get: function () { return lastDt; } },
-                    { name: 'frame rate', code: '1 / dt', type: 'float', unit: 'Hz', meaning: 'smoothed over about ten frames', digits: 1, get: function () { return fps; } },
-                    { name: 'frames', type: 'int', meaning: 'frames played so far', digits: 0, get: function () { return frames; } },
-                    { name: 'playing', code: 'clk.playing', type: 'bool', get: function () { return clk.playing; } },
-                    { name: 'builds', code: 'precompute()', type: 'int', meaning: 'times C and S were recomputed', digits: 0, get: function () { return fieldVersion; } },
-                    { name: 'build time', code: 'precompute()', type: 'float', unit: 'ms', meaning: 'last recomputation of C and S', digits: 2, get: function () { return prepMs; } },
-                    { name: 'cos + sin calls', code: '2 · N · P', type: 'int', meaning: 'in one recomputation of C and S', digits: 0, get: function () { return 2 * sources.length * cols * rows; } },
-                    { name: 'draw time', code: 'render()', type: 'float', unit: 'ms', meaning: 'last frame, all pixels', digits: 2, get: function () { return drawMs; } }
-                ] }
+                { title: 'Physical parameters', note: 'what you set with the sliders, buttons and clicks', vars: ['lambda', 'f', 'damp', 'N', 'u', 'x_s', 'y_s'] },
+                { title: 'Derived physics', note: 'computed by the page from the parameters', vars: ['k', 'omega', 'T', 'v', 'g', 'norm'] },
+                { title: 'Time', note: 'advances only while it plays', vars: ['t', 'omegaT', 'cos_wt', 'sin_wt'] },
+                { title: 'Centre of the field', note: 'the cell the walkthrough below reads', vars: ['j_c', 'i_c', 'psi_c', 'n_c', 'rgb_c'] },
+                { title: 'Arrays: the whole field', note: 'click a row to open it as a table; point at a cell to find it in the figure', vars: ['C', 'S', 'psi', 'A', 'r1', 'a1', 'ph1', 'x', 'y', 'LUT'] },
+                { title: 'Grid and drawing', note: 'how the picture is computed and drawn', vars: ['cols', 'rows', 'P', 'dx', 'dy', 'worldH', 'box_w', 'box_h', 'dpr', 'dt', 'fps', 'frames', 'playing', 'builds', 'build_ms', 'trig_calls', 'renders', 'draw_ms'] }
             ],
-            log: {
-                every: 0.1, max: 1000,
-                time: function () { return simT; },
-                columns: [
-                    { name: 't', unit: 's', digits: 2, get: function () { return simT; } },
-                    { name: 'ωt', unit: 'rad', digits: 3, get: function () { return omegaT; } },
-                    { name: 'cos ωt', digits: 4, get: function () { return Math.cos(omegaT); } },
-                    { name: 'sin ωt', digits: 4, get: function () { return Math.sin(omegaT); } },
-                    { name: 'ψ centre', digits: 4, get: function () { phase(); return psiAt(centre().p); } },
-                    { name: 'λ', unit: 'px', digits: 0, get: function () { return lambda.value; } },
-                    { name: 'f', unit: 'Hz', digits: 2, get: function () { return freq.value; } },
-                    { name: 'γ', digits: 2, get: function () { return damp.value; } },
-                    { name: 'N', digits: 0, get: function () { return sources.length; } }
-                ]
-            }
+            colour: {
+                psi: lut, C: lut, S: lut,
+                A: function (v) { return Sim.colourMap(v, 1); },
+                a1: function (v) { return Sim.colourMap(v, ds.get('norm') || 1); },
+                LUT: function (v, j) { return [LUT[j * 3], LUT[j * 3 + 1], LUT[j * 3 + 2]]; }
+            },
+            colLabel: { LUT: function (i) { return ['R', 'G', 'B'][i]; } },
+            at: { LUT: function (j) { return 'for ψ = ' + Sim.fmt(j / 127.5 - 1, 4); } },
+            probe: function (x, y) {
+                var i = Math.floor(x / box.w * cols), j = Math.floor(y / box.h * rows);
+                if (i < 0 || j < 0 || i >= cols || j >= rows) return null;
+                return { j: j, i: i };
+            },
+            inspect: function (ref) {
+                var p = cellIndex(ref.j, ref.i);
+                var list = [['ψ', psi[p], '', 'psi', p], ['C', sumC[p], '', 'C', p], ['S', sumS[p], '', 'S', p], ['A', ampl[p], '', 'A', p]];
+                if (ds.get('N')) list.push(['r<sub>1</sub>', r1[p], 'px', 'r1', p], ['a<sub>1</sub>', a1[p], '', 'a1', p], ['φ<sub>1</sub>', ph1[p], 'rad', 'ph1', p]);
+                return { title: 'cell (j = ' + ref.j + ', i = ' + ref.i + ') · x = ' + Sim.fmt(ds.get('x')[ref.i], 1) + ' px, y = ' + Sim.fmt(ds.get('y')[ref.j], 1) + ' px', at: cellCentre(ref.j, ref.i), rows: list };
+            },
+            locate: function (name, idx) {
+                var v = ds.vars[name];
+                if (v.dims.length === 2 && v.dims[0] === 'j') return cellCentre(Math.floor(idx / cols), idx % cols);
+                if (v.dims[0] === 's') return { x: sources[idx] * box.w, y: box.h - SOURCE_LIFT * box.w / WORLD_W };
+                if (v.dims[0] === 'i') return { x: (idx + 0.5) / cols * box.w, y: box.h / 2 };
+                if (v.dims[0] === 'j') return { x: box.w / 2, y: (idx + 0.5) / rows * box.h };
+                return null;
+            },
+            check: {
+                lambda: function () { return sliderCheck(lambda.el, 'wavelength'); },
+                f: function () { return sliderCheck(freq.el, 'frequency'); },
+                damp: function () { return sliderCheck(damp.el, 'damping'); },
+                N: function () { return { formula: 'the length of the source list', inputs: [['sources', sources.length, '', 0]], value: sources.length }; },
+                u: function (q) { return { formula: 'the source list, as clicked or preset', inputs: [['sources[' + q + ']', sources[q], '', 4]], value: sources[q] }; },
+                x_s: function (q) { return { formula: 'x<sub>s</sub> = u<sub>s</sub> · 800', inputs: [['u<sub>s</sub>', ds.get('u')[q], '', 4]], value: ds.get('u')[q] * WORLD_W }; },
+                y_s: function () { return { formula: 'y<sub>s</sub> = worldH − 10', inputs: [['worldH', ds.get('worldH'), 'px', 1]], value: ds.get('worldH') - SOURCE_LIFT }; },
+                k: function () { return { formula: 'k = 2π / λ', inputs: [['λ', ds.get('lambda'), 'px', 0]], value: 2 * Math.PI / ds.get('lambda') }; },
+                g: function () { return { formula: 'g = γ / R', inputs: [['γ', ds.get('damp'), '', 2], ['R', R, 'px', 0]], value: ds.get('damp') / R }; },
+                norm: function () { return { formula: '1 / max(1, N)', inputs: [['N', ds.get('N'), '', 0]], value: 1 / Math.max(1, ds.get('N')) }; },
+                omega: function () { return { formula: 'ω = 2π f', inputs: [['f', ds.get('f'), 'Hz', 2]], value: 2 * Math.PI * ds.get('f') }; },
+                T: function () { return { formula: 'T = 1 / f', inputs: [['f', ds.get('f'), 'Hz', 2]], value: 1 / ds.get('f') }; },
+                v: function () { return { formula: 'v = f λ', inputs: [['f', ds.get('f'), 'Hz', 2], ['λ', ds.get('lambda'), 'px', 0]], value: ds.get('f') * ds.get('lambda') }; },
+                cos_wt: function () { return { formula: 'cos(ωt)', inputs: [['ωt', ds.get('omegaT'), 'rad', 4]], value: Math.cos(ds.get('omegaT')) }; },
+                sin_wt: function () { return { formula: 'sin(ωt)', inputs: [['ωt', ds.get('omegaT'), 'rad', 4]], value: Math.sin(ds.get('omegaT')) }; },
+                x: function (i) { return { formula: 'x = (i + ½) Δx', inputs: [['i', i, '', 0], ['Δx', ds.get('dx'), 'px', 3]], value: (i + 0.5) * ds.get('dx') }; },
+                y: function (j) { return { formula: 'y = (j + ½) Δy', inputs: [['j', j, '', 0], ['Δy', ds.get('dy'), 'px', 3]], value: (j + 0.5) * ds.get('dy') }; },
+                C: function (p) { var r = sumAt(p, Math.cos); r.formula = 'C = Σ<sub>s</sub> e<sup>−g r<sub>s</sub></sup> / N · cos(k r<sub>s</sub>)'; return r; },
+                S: function (p) { var r = sumAt(p, Math.sin); r.formula = 'S = Σ<sub>s</sub> e<sup>−g r<sub>s</sub></sup> / N · sin(k r<sub>s</sub>)'; return r; },
+                A: function (p) { return { formula: 'A = √(C² + S²)', inputs: [['C', sumC[p], '', 4], ['S', sumS[p], '', 4]], value: Math.sqrt(sumC[p] * sumC[p] + sumS[p] * sumS[p]) }; },
+                r1: function (p) {
+                    var j = Math.floor(p / cols), i = p % cols, ex = ds.get('x')[i] - ds.get('x_s')[0], ey = ds.get('y')[j] - ds.get('y_s');
+                    return { formula: 'r = √((x − x<sub>1</sub>)² + (y − y<sub>s</sub>)²)', inputs: [['x', ds.get('x')[i], 'px', 2], ['y', ds.get('y')[j], 'px', 2], ['x<sub>1</sub>', ds.get('x_s')[0], 'px', 2], ['y<sub>s</sub>', ds.get('y_s'), 'px', 2]], value: Math.sqrt(ex * ex + ey * ey) };
+                },
+                a1: function (p) { return { formula: 'a = e<sup>−g r</sup> / N', inputs: [['r<sub>1</sub>', r1[p], 'px', 2], ['g', ds.get('g'), '1/px', 5], ['1/N', ds.get('norm'), '', 4]], value: Math.exp(-ds.get('g') * r1[p]) * ds.get('norm') }; },
+                ph1: function (p) { return { formula: 'φ = k r', inputs: [['k', ds.get('k'), 'rad/px', 4], ['r<sub>1</sub>', r1[p], 'px', 2]], value: ds.get('k') * r1[p] }; },
+                psi: function (p) {
+                    var w = sumC[p] * ds.get('cos_wt') + sumS[p] * ds.get('sin_wt');
+                    return { formula: 'ψ = C cos ωt + S sin ωt, clipped to [−1, 1]', inputs: [['C', sumC[p], '', 4], ['S', sumS[p], '', 4], ['cos ωt', ds.get('cos_wt'), '', 4], ['sin ωt', ds.get('sin_wt'), '', 4]], value: Math.max(-1, Math.min(1, w)) };
+                },
+                psi_c: function () { var p = cellIndex(ds.get('j_c'), ds.get('i_c')); return { formula: 'psi[j<sub>c</sub> · cols + i<sub>c</sub>]', inputs: [['j<sub>c</sub>', ds.get('j_c'), '', 0], ['i<sub>c</sub>', ds.get('i_c'), '', 0], ['index', p, '', 0]], value: psi[p] }; },
+                n_c: function () { return { formula: 'round(127.5 ψ<sub>c</sub> + 127.5)', inputs: [['ψ<sub>c</sub>', ds.get('psi_c'), '', 4]], value: Math.round(ds.get('psi_c') * 127.5 + 127.5) }; },
+                LUT: function (q) {
+                    var n = Math.floor(q / 3), c = q % 3, a = n / 127.5 - 1, sc = Math.pow(Math.abs(a), 0.8), neg = [58, 50, 46], mid = [255, 250, 243], pos = [122, 31, 43], end = a < 0 ? neg : pos;
+                    return { formula: 'mid + (end − mid) · |n/127.5 − 1|<sup>0.8</sup>', inputs: [['n', n, '', 0], ['channel', ['R', 'G', 'B'][c], ''], ['a = n/127.5 − 1', a, '', 4]], value: Math.round(mid[c] + (end[c] - mid[c]) * sc) };
+                },
+                dx: function () { return { formula: 'Δx = 800 / cols', inputs: [['cols', cols, '', 0]], value: WORLD_W / cols }; },
+                dy: function () { return { formula: 'Δy = worldH / rows', inputs: [['worldH', ds.get('worldH'), 'px', 1], ['rows', rows, '', 0]], value: ds.get('worldH') / rows }; },
+                P: function () { return { formula: 'cols · rows', inputs: [['cols', cols, '', 0], ['rows', rows, '', 0]], value: cols * rows }; },
+                worldH: function () { return { formula: '800 · box.h / box.w', inputs: [['box.w', box.w, 'css px', 0], ['box.h', box.h, 'css px', 0]], value: WORLD_W * box.h / box.w }; },
+                cols: function () { return { formula: 'clamp(round(box.w / 2.2), 60, 360)', inputs: [['box.w', box.w, 'css px', 0]], value: Math.max(60, Math.min(360, Math.round(box.w / 2.2))) }; },
+                rows: function () { return { formula: 'max(30, round(cols · box.h / box.w))', inputs: [['cols', cols, '', 0], ['box.h', box.h, 'css px', 0], ['box.w', box.w, 'css px', 0]], value: Math.max(30, Math.round(cols * box.h / box.w)) }; },
+                trig_calls: function () { return { formula: '2 · N · P', inputs: [['N', ds.get('N'), '', 0], ['P', ds.get('P'), '', 0]], value: 2 * ds.get('N') * ds.get('P') }; },
+                j_c: function () { return { formula: 'floor(rows / 2)', inputs: [['rows', rows, '', 0]], value: Math.floor(rows / 2) }; },
+                i_c: function () { return { formula: 'floor(cols / 2)', inputs: [['cols', cols, '', 0]], value: Math.floor(cols / 2) }; }
+            },
+            drawn: {
+                psi: pixelCheck,
+                psi_c: function () { return pixelCheck(cellIndex(ds.get('j_c'), ds.get('i_c'))); },
+                u: function (q) {
+                    var x = Math.round(sources[q] * box.w * box.dpr), y = Math.round((box.h - SOURCE_LIFT * box.w / WORLD_W) * box.dpr), px = ctx.getImageData(x, y, 1, 1).data;
+                    var ok = Math.abs(px[0] - 122) < 30 && Math.abs(px[1] - 31) < 30 && Math.abs(px[2] - 43) < 30;
+                    return { what: 'screen pixel at the source dot, (' + Math.round(sources[q] * box.w) + ', ' + Math.round(box.h - SOURCE_LIFT * box.w / WORLD_W) + ') css px', drawn: 'rgb(' + px[0] + ', ' + px[1] + ', ' + px[2] + ')', expected: 'the burgundy dot, rgb(122, 31, 43)', ok: ok };
+                }
+            },
+            log: { every: 0.1, max: 1000, time: 't', columns: ['t', 'omegaT', 'cos_wt', 'sin_wt', 'psi_c', 'lambda', 'f', 'damp', 'N'] },
+            about: 'Here ψ reaches the screen through a colour table of 256 steps, so the picture carries ψ to one part in 128 while the store keeps float32, about seven significant figures. The image has one pixel per grid cell and the browser scales it up with smoothing, so a screen pixel between two cells shows a blend of both.'
         };
 
         resize();

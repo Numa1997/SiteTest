@@ -73,7 +73,8 @@ var c = Math.cos(Math.PI * (2 * G.b * x / (l1 + l2)) / G.lambda);
             note: 'When the screen is far away the two paths are nearly parallel and δs → b sin α. The solid curve uses this; the dashed ink curve uses the exact δs at the actual d. Shrink d and watch the two peel apart at large angles.',
             code: `var ⟦Iff|I = function (th) { var c = Math.cos(Math.PI * G.b * Math.sin(th) / G.lambda); return c * c; }⟧;
 ...
-document.getElementById('r-ff').textContent = (⟦ff|G.b * Math.sin(G.a)⟧).toFixed(2) + ' px';`,
+var ⟦ff|ff = G.b * Math.sin(G.a)⟧;
+document.getElementById('r-ff').textContent = ff.toFixed(2) + ' px';`,
             syms: [
                 ['ff', 'b sin α', 'G.b * Math.sin(G.a)', 'far-field δs, px'],
                 ['ds', 'δs', 'G.ds', 'exact, px'],
@@ -88,6 +89,7 @@ document.getElementById('r-ff').textContent = (⟦ff|G.b * Math.sin(G.a)⟧).toF
             note: 'Setting δs = mλ in the far-field form gives the bright directions. The loop stops at the edge of the plotted range, 30°.',
             code: `for (var m = 0; ⟦sinm|m * G.lambda / G.b⟧ <= Math.sin(amax); m++) {
     var tm = Math.asin(m * G.lambda / G.b);
+    if (m < nm) { mS[m] = m * G.lambda / G.b; mT[m] = tm / DEG; mX[m] = G.d * Math.tan(tm); }
     s += text(X(tm), yt - 8, 'm=' + m, 'svg-mono');
 }`,
             syms: [

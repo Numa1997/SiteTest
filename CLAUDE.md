@@ -23,3 +23,10 @@ Project facts (layout, AppDeploy app, boundaries) are in AGENTS.md.
 ## Talk plainly
 - Short sentences, everyday words. Physics pictures where they help; formulas only when asked.
 - When wrong, say so in one line and fix it. No grovelling, no excuses, no walls of text.
+
+## A data table is a pipeline, not a second simulation
+- The simulation writes each number into the store at the line that computes it; the display only reads. Never recompute for display.
+- Prove the pipeline three ways and show the proof to the reader: the stored value, the formula recomputed from the stored inputs, the pixel
+  read back from the picture. Aim for "identical"; name a float32 or rounding gap as what it is.
+- A read-back test must first check that something was drawn: a transparent pixel passes a "dark" test. Check alpha before colour.
+- Where the drawing and the store differ (colour steps, smoothing, trails, relaxation), say so on the page, in one paragraph the reader can open.

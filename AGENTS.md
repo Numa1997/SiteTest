@@ -12,9 +12,15 @@ Layout (GitHub Pages serves the repository root as-is, so every asset lives at t
 `scripts/walk/<key>.js` ("From symbols to code", one file per page, chosen by the page's `data-walk` key:
 each equation paired with the page's own code lines; keep the excerpts identical to the page code when either
 changes; live values come from `Sim.live()` in each page); `simulations/*.html` (eight pages).
-Data panel: `scripts/datalog.js` + `styles/data.css` give a page a Spyder-style side panel (Variables: name, type, size, value of every
-quantity, live; any array opens as a table that draws only the cells in view; Log: one row per 0.1 s of play time, capped).
-A page opts in by defining `Sim.data` next to its own state and loading both files (all eight figures).
+Data panel, a pipeline in three files. `scripts/dataset.js`: `Sim.dataset()` gives a page one named store (dims, typed-array variables,
+scalars, attrs; the shape of an xarray/NetCDF dataset) and the page writes every number into it at the line that computes it, every frame;
+nothing is recomputed for display. `scripts/datalog.js` + `styles/data.css`: the panel, which only reads the store (Variables: name, type,
+shape, value, live; any array opens as a table; Probe: point at the figure to read the stored values there, with a marker; Check: for any
+value, the stored number, the formula recomputed from the stored inputs, and the pixel or SVG element read back from the picture, with the
+agreement stated; Log: one row per 0.1 s; Save: NumPy .npz + dataset.json + log.csv + README). A page opts in by defining `Sim.data`
+(the contract is documented at the top of datalog.js: groups, probe/inspect/locate, check, drawn, log, about) next to its own state and loading
+dataset.js after sim.js and datalog.js after its own script (all eight figures). `Sim.live()` reads the store too. Keep the taps where the
+page computes a value; keep the walkthrough excerpts untouched (insert after a quoted line, never inside a quoted pair).
 How Numa expects Claude to work (persistence, plain language, build when clear) is in CLAUDE.md.
 AppDeploy reformats stored source with Prettier; base any diff on the stored snapshot (`src_read`).
 Static site only: no backend, database, login, AI or scheduled jobs.

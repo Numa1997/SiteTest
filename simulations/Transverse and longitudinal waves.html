@@ -190,6 +190,7 @@
     </footer>
 
     <script src="../scripts/sim.js"></script>
+    <script src="../scripts/dataset.js"></script>
     <script>
     (function () {
         'use strict';
@@ -199,7 +200,55 @@
         var stage = document.getElementById('stage');
         var box = Sim.canvas2d(document.getElementById('waves')), ctx = box.ctx;
         var eqBox = document.getElementById('eq'), followBox = document.getElementById('follow');
-        var omegaT = 0;
+        var omegaT = 0, fps = 0, frames = 0;
+
+        /* ---------- the store: every number this page computes is written here, where it is computed (scripts/dataset.js) ---------- */
+        var ds = Sim.dataset({ title: 'Transverse and longitudinal waves', attrs: { figure: 4, page: 'Transverse and longitudinal waves.html', LENGTH: LENGTH, length_unit: 'px of the 640 px long medium', left_margin_px: 22 } });
+        ds.var('A', [], 'float', { symbol: 'A', units: 'px', long_name: 'transverse amplitude', computed_in: 'amp slider', digits: 0 });
+        ds.var('f', [], 'float', { symbol: 'f', units: 'Hz', long_name: 'frequency', computed_in: 'freq slider', digits: 2 });
+        ds.var('lambda', [], 'float', { symbol: 'λ', units: 'px', long_name: 'wavelength', computed_in: 'lambda slider', digits: 0 });
+        ds.var('N', [], 'int', { symbol: 'N', long_name: 'particles in each row', computed_in: 'count slider', digits: 0 });
+        ds.var('k', [], 'float', { symbol: 'k', units: 'rad/px', long_name: 'wave number', computed_in: 'readouts()', formula: 'k = 2π / λ', digits: 5 });
+        ds.var('omega', [], 'float', { symbol: 'ω', units: 'rad/s', long_name: 'angular frequency', computed_in: 'readouts()', formula: 'ω = 2π f', digits: 4 });
+        ds.var('T', [], 'float', { symbol: 'T', units: 's', long_name: 'period', computed_in: 'readouts()', formula: 'T = 1 / f', digits: 3 });
+        ds.var('v', [], 'float', { symbol: 'v', units: 'px/s', long_name: 'wave speed, the same for both rows', computed_in: 'readouts()', formula: 'v = f λ', digits: 1 });
+        ds.var('L_over_lam', [], 'float', { symbol: 'L/λ', long_name: 'wavelengths along the medium', computed_in: 'readouts()', formula: '640 / λ', digits: 3 });
+        ds.var('AL', [], 'float', { symbol: 'A<sub>L</sub>', units: 'px', long_name: 'longitudinal amplitude, capped so particles never pass each other', computed_in: 'longAmp(), in readouts()', formula: 'min(A, 0.8 λ / 2π)', digits: 2 });
+        ds.var('cap', [], 'bool', { symbol: 'cap active', long_name: 'the longitudinal amplitude is capped', computed_in: 'readouts()', formula: 'A<sub>L</sub> < A' });
+        ds.var('Ak', [], 'float', { symbol: 'Ak', long_name: 'largest slope of the transverse string', computed_in: 'readouts()', formula: 'A k', digits: 4 });
+        ds.var('ALk', [], 'float', { symbol: 'A<sub>L</sub>k', long_name: 'largest strain of the longitudinal row, below 1', computed_in: 'readouts()', formula: 'A<sub>L</sub> k', digits: 4 });
+        ds.var('Aomega', [], 'float', { symbol: 'Aω', units: 'px/s', long_name: 'largest particle speed, transverse row', computed_in: 'readouts()', formula: 'A ω', digits: 2 });
+        ds.var('t', [], 'float', { symbol: 't', units: 's', long_name: 'play time since the page opened', computed_in: 'Sim.clock', digits: 2, source: 'The clock adds each frame’s Δt while playing.' });
+        ds.var('omegaT', [], 'float', { symbol: 'ωt', units: 'rad', long_name: 'phase of the source', computed_in: 'Sim.clock callback', formula: 'ωt ← ωt + 2π f Δt', digits: 3, source: 'Accumulated frame by frame.' });
+        ds.var('periods', [], 'float', { symbol: 'ωt / 2π', long_name: 'periods completed', computed_in: 'Sim.clock callback', formula: 'ωt / 2π', digits: 2 });
+        ds.var('follow', [], 'int', { symbol: 'i<sub>follow</sub>', long_name: 'index of the followed particle, the middle one', computed_in: 'draw()', formula: 'floor((N − 1) / 2)', digits: 0 });
+        ds.dim('p', 0);
+        ds.coord('X', 'p', Float64Array, { symbol: 'X', units: 'px', long_name: 'rest position of each particle', computed_in: 'draw()', formula: 'X = i · 640 / (N − 1)', digits: 1, updates: 'every frame' });
+        ds.var('phase', ['p'], Float64Array, { symbol: 'kX − ωt', units: 'rad', long_name: 'phase of each particle', computed_in: 'draw()', formula: 'k X − ωt', digits: 3, updates: 'every frame' });
+        ds.var('xi', ['p'], Float64Array, { symbol: 'ξ', units: 'px', long_name: 'transverse displacement', computed_in: 'draw(), transverse loop', formula: 'ξ = A sin(kX − ωt)', digits: 2, updates: 'every frame' });
+        ds.var('vxi', ['p'], Float64Array, { symbol: '∂ξ/∂t', units: 'px/s', long_name: 'transverse velocity', computed_in: 'draw(), transverse loop', formula: '−A ω cos(kX − ωt)', digits: 1, updates: 'every frame' });
+        ds.var('yi_px', ['p'], Float64Array, { symbol: 'y<sub>T</sub> px', units: 'css px', long_name: 'screen height of each transverse bead', computed_in: 'draw(), transverse loop', formula: 'y<sub>T</sub> − ξ s', digits: 1, updates: 'every frame' });
+        ds.var('sL', ['p'], Float64Array, { symbol: 's', units: 'px', long_name: 'longitudinal displacement', computed_in: 'draw(), longitudinal loop', formula: 's = A<sub>L</sub> sin(kX − ωt)', digits: 2, updates: 'every frame' });
+        ds.var('xL', ['p'], Float64Array, { symbol: 'x = X + s', units: 'px', long_name: 'actual position of each longitudinal particle', computed_in: 'draw(), longitudinal loop', formula: 'X + s', digits: 2, updates: 'every frame' });
+        ds.var('vs', ['p'], Float64Array, { symbol: '∂s/∂t', units: 'px/s', long_name: 'longitudinal velocity', computed_in: 'draw(), longitudinal loop', formula: '−A<sub>L</sub> ω cos(kX − ωt)', digits: 1, updates: 'every frame' });
+        ds.var('rho', ['p'], Float64Array, { symbol: 'ρ/ρ₀', long_name: 'local density of the longitudinal row', computed_in: 'draw(), longitudinal loop', formula: '1 / (1 + A<sub>L</sub> k cos(kX − ωt))', digits: 3, updates: 'every frame' });
+        ds.var('comp', ['p'], Float64Array, { symbol: 'comp', long_name: 'compression shade, 0 to 1', computed_in: 'draw(), longitudinal loop', formula: 'max(0, −cos(kX − ωt))', digits: 3, updates: 'every frame' });
+        ds.var('xl_px', ['p'], Float64Array, { symbol: 'x<sub>L</sub> px', units: 'css px', long_name: 'screen position of each longitudinal bead', computed_in: 'draw(), longitudinal loop', formula: '22 + (X + s) s<sub>px</sub>', digits: 1, updates: 'every frame' });
+        ds.var('crest', [], 'float', { symbol: 'X<sub>crest</sub>', units: 'px', long_name: 'first transverse crest', computed_in: 'draw()', formula: '((π/2 + ωt) / k) mod λ', digits: 1 });
+        ds.var('comp0', [], 'float', { symbol: 'X<sub>comp</sub>', units: 'px', long_name: 'first compression centre', computed_in: 'draw()', formula: '((π + ωt) / k) mod λ', digits: 1 });
+        ds.dim('c', 0);
+        ds.var('crests', ['c'], Float64Array, { symbol: 'crests', units: 'px', long_name: 'positions of the transverse crests, the small triangles', computed_in: 'draw()', formula: 'X<sub>crest</sub> + q λ', digits: 1, updates: 'every frame' });
+        ds.dim('cc', 0);
+        ds.var('compressions', ['cc'], Float64Array, { symbol: 'compressions', units: 'px', long_name: 'centres of the longitudinal compressions', computed_in: 'draw()', formula: 'X<sub>comp</sub> + q λ', digits: 1, updates: 'every frame' });
+        ds.var('s_px', [], 'float', { symbol: 's<sub>px</sub>', long_name: 'screen pixels per medium pixel', computed_in: 'draw()', formula: '(box.w − 44) / 640', digits: 4 });
+        ds.var('yT', [], 'float', { symbol: 'y<sub>T</sub>', units: 'css px', long_name: 'rest line of the transverse row', computed_in: 'draw()', formula: '0.3 box.h', digits: 1 });
+        ds.var('yL', [], 'float', { symbol: 'y<sub>L</sub>', units: 'css px', long_name: 'line of the longitudinal row', computed_in: 'draw()', formula: '0.77 box.h', digits: 1 });
+        ds.var('box_w', [], 'int', { symbol: 'box.w', units: 'css px', long_name: 'canvas width on your screen', computed_in: 'draw()', digits: 0, source: 'Measured from the page layout.' });
+        ds.var('box_h', [], 'int', { symbol: 'box.h', units: 'css px', long_name: 'canvas height on your screen', computed_in: 'draw()', digits: 0, source: 'Measured from the page layout.' });
+        ds.var('dt', [], 'float', { symbol: 'Δt', units: 's', long_name: 'time between the last two frames', computed_in: 'Sim.clock', digits: 4, source: 'Measured by the clock.' });
+        ds.var('fps', [], 'float', { symbol: 'frame rate', units: 'Hz', long_name: 'smoothed over about ten frames', computed_in: 'Sim.clock callback', digits: 1, source: 'A running average of 1/Δt.' });
+        ds.var('frames', [], 'int', { symbol: 'frames', long_name: 'frames drawn so far', computed_in: 'Sim.clock callback', digits: 0, source: 'Counted frame by frame.' });
+        ds.var('playing', [], 'bool', { symbol: 'playing', long_name: 'the clock runs', computed_in: 'Sim.clock', source: 'The state of the Play button.' });
 
         var amp = Sim.slider('amp', { format: function (v) { return v + ' px'; }, onInput: readouts });
         var freq = Sim.slider('freq', { format: function (v) { return v.toFixed(2) + ' Hz'; }, onInput: readouts });
@@ -216,6 +265,10 @@
             document.getElementById('r-k').textContent = (2 * Math.PI / lambda.value).toFixed(4) + ' /px';
             var al = longAmp();
             document.getElementById('r-al').textContent = al.toFixed(0) + ' px' + (al < amp.value ? ' (cap)' : '');
+            var kk = 2 * Math.PI / lambda.value, om = 2 * Math.PI * freq.value;
+            ds.set('f', freq.value); ds.set('lambda', lambda.value); ds.set('A', amp.value); ds.set('v', v); ds.set('T', 1 / freq.value);
+            ds.set('k', kk); ds.set('omega', om); ds.set('AL', al); ds.set('cap', al < amp.value); ds.set('L_over_lam', LENGTH / lambda.value);
+            ds.set('Ak', amp.value * kk); ds.set('ALk', al * kk); ds.set('Aomega', amp.value * om);
         }
 
         function label(textValue, x, y) {
@@ -241,6 +294,10 @@
             var k = 2 * Math.PI / lambda.value, N = count.value, A = amp.value, AL = longAmp();
             var yT = h * 0.3, yL = h * 0.77, follow = Math.floor((N - 1) / 2);
             var i, X, px, xi;
+            ds.set('N', N); ds.set('s_px', s); ds.set('yT', yT); ds.set('yL', yL); ds.set('follow', follow); ds.set('box_w', w); ds.set('box_h', h);
+            ds.dim('p', N);
+            var Xa = ds.alloc('X'), phA = ds.alloc('phase'), xiA = ds.alloc('xi'), vxA = ds.alloc('vxi'), yiA = ds.alloc('yi_px');
+            var sA = ds.alloc('sL'), xA = ds.alloc('xL'), vsA = ds.alloc('vs'), rhoA = ds.alloc('rho'), compA = ds.alloc('comp'), xlA = ds.alloc('xl_px'), om = 2 * Math.PI * freq.value;
             ctx.clearRect(0, 0, w, h);
 
             // separators and titles
@@ -273,11 +330,17 @@
             ctx.stroke();
             var crest = (((Math.PI / 2 + omegaT) / k) % lambda.value + lambda.value) % lambda.value;
             for (X = crest; X <= LENGTH; X += lambda.value) marker(left + X * s, yT - A * s - 8);
+            var nC = Math.floor((LENGTH - crest) / lambda.value + 1e-9) + 1, q;
+            ds.dim('c', nC);
+            var cA = ds.alloc('crests');
+            for (q = 0; q < nC; q++) cA[q] = crest + q * lambda.value;
+            ds.set('crest', crest); ds.touch('crests');
 
             for (i = 0; i < N; i++) {
                 X = i * LENGTH / (N - 1);
                 px = left + X * s;
                 xi = A * s * Math.sin(k * X - omegaT);
+                Xa[i] = X; phA[i] = k * X - omegaT; xiA[i] = A * Math.sin(k * X - omegaT); vxA[i] = -A * om * Math.cos(k * X - omegaT); yiA[i] = yT - xi;
                 ctx.strokeStyle = T.rose;
                 ctx.lineWidth = 1.5;
                 ctx.beginPath();
@@ -310,10 +373,17 @@
             ctx.fillRect(left, yL - band, right - left, band * 2);
             var comp0 = (((Math.PI + omegaT) / k) % lambda.value + lambda.value) % lambda.value;
             for (X = comp0; X <= LENGTH; X += lambda.value) marker(left + X * s, yL - band - 6);
+            var nP = Math.floor((LENGTH - comp0) / lambda.value + 1e-9) + 1;
+            ds.dim('cc', nP);
+            var pA = ds.alloc('compressions');
+            for (q = 0; q < nP; q++) pA[q] = comp0 + q * lambda.value;
+            ds.set('comp0', comp0); ds.touch('compressions');
 
             for (i = 0; i < N; i++) {
                 X = i * LENGTH / (N - 1);
                 px = left + (X + AL * Math.sin(k * X - omegaT)) * s;
+                sA[i] = AL * Math.sin(k * X - omegaT); xA[i] = X + sA[i]; vsA[i] = -AL * om * Math.cos(k * X - omegaT);
+                rhoA[i] = 1 / (1 + AL * k * Math.cos(k * X - omegaT)); compA[i] = Math.max(0, -Math.cos(k * X - omegaT)); xlA[i] = px;
                 var isFollowed = followBox.checked && i === follow;
                 if (eqBox.checked) {
                     ctx.fillStyle = T.rule;
@@ -343,141 +413,126 @@
                     }
                 }
             }
+            ds.touch('X'); ds.touch('phase'); ds.touch('xi'); ds.touch('vxi'); ds.touch('yi_px');
+            ds.touch('sL'); ds.touch('xL'); ds.touch('vs'); ds.touch('rho'); ds.touch('comp'); ds.touch('xl_px');
         }
 
+        /* live values for the walkthrough: read from the store, nothing recomputed */
         Sim.live = function () {
-            var lam = lambda.value, k = 2 * Math.PI / lam, A = amp.value, AL = longAmp(), N = count.value;
-            var sc = (box.w - 44) / LENGTH, i = Math.floor((N - 1) / 2), X = i * LENGTH / (N - 1);
-            var ph = k * X - omegaT, sn = Math.sin(ph), cs = Math.cos(ph);
-            var red = Math.atan2(sn, cs);
-            function md(v) { return ((v % lam) + lam) % lam; }
+            var i = ds.get('follow'), ph = ds.get('phase')[i];
             return {
-                f: freq.value.toFixed(2) + ' Hz', k: Sim.fmt(k, 5) + ' rad/px', wt: Sim.fmt(omegaT, 2) + ' rad',
-                v: Math.round(freq.value * lam) + ' px/s', T: (1 / freq.value).toFixed(3) + ' s',
-                X: Sim.fmt(X, 1) + ' px', phase: Sim.fmt(red, 3) + ' rad', xi: Sim.fmt(A * sn, 2) + ' px',
-                yi: Sim.fmt(box.h * 0.3 - A * sc * sn, 1) + ' px',
-                xc: Sim.fmt(md((Math.PI / 2 + omegaT) / k), 1) + ' px', xp: Sim.fmt(md((Math.PI + omegaT) / k), 1) + ' px',
-                AL: Sim.fmt(AL, 2) + ' px' + (AL < A ? ' (capped)' : ''), A: A + ' px', xl: Sim.fmt(X + AL * sn, 2) + ' px',
-                AkL: Sim.fmt(AL * k, 4), rho: Sim.fmt(1 / (1 + AL * k * cs), 3), comp: Sim.fmt(Math.max(0, -cs), 3),
-                s: Sim.fmt(sc, 4), yT: Sim.fmt(box.h * 0.3, 1) + ' px'
+                f: ds.get('f').toFixed(2) + ' Hz', k: Sim.fmt(ds.get('k'), 5) + ' rad/px', wt: Sim.fmt(ds.get('omegaT'), 2) + ' rad',
+                v: Math.round(ds.get('v')) + ' px/s', T: ds.get('T').toFixed(3) + ' s',
+                X: Sim.fmt(ds.get('X')[i], 1) + ' px', phase: Sim.fmt(Math.atan2(Math.sin(ph), Math.cos(ph)), 3) + ' rad', xi: Sim.fmt(ds.get('xi')[i], 2) + ' px',
+                yi: Sim.fmt(ds.get('yi_px')[i], 1) + ' px',
+                xc: Sim.fmt(ds.get('crest'), 1) + ' px', xp: Sim.fmt(ds.get('comp0'), 1) + ' px',
+                AL: Sim.fmt(ds.get('AL'), 2) + ' px' + (ds.get('cap') ? ' (capped)' : ''), A: ds.get('A') + ' px', xl: Sim.fmt(ds.get('xL')[i], 2) + ' px',
+                AkL: Sim.fmt(ds.get('ALk'), 4), rho: Sim.fmt(ds.get('rho')[i], 3), comp: Sim.fmt(ds.get('comp')[i], 3),
+                s: Sim.fmt(ds.get('s_px'), 4), yT: Sim.fmt(ds.get('yT'), 1) + ' px'
             };
         };
-
-        var clk = Sim.clock(function (dt) {
+        var clk = Sim.clock(function (dt, t) {
             omegaT += 2 * Math.PI * freq.value * dt;
+            if (dt > 0) { frames++; fps = fps ? fps + (1 / dt - fps) * 0.1 : 1 / dt; }
+            ds.set('omegaT', omegaT); ds.set('periods', omegaT / (2 * Math.PI)); ds.set('t', t); ds.set('dt', dt); ds.set('fps', fps); ds.set('frames', frames); ds.set('playing', clk ? clk.playing : true);
             draw();
         });
         Sim.playButton(document.getElementById('play'), clk);
 
-        /* ---------- every number above, as data for the side panel (scripts/datalog.js) ---------- */
-        function kk() { return 2 * Math.PI / lambda.value; }
-        function om() { return 2 * Math.PI * freq.value; }
-        function Xi(i) { return i * LENGTH / (count.value - 1); }
-        function phaseAt(i) { return kk() * Xi(i) - omegaT; }
-        function followed() { return Math.floor((count.value - 1) / 2); }
-        function wrapPi(a) { return Math.atan2(Math.sin(a), Math.cos(a)); }
-        /* crest (step π/2) or compression (step π) positions along the line, as drawn by the markers */
-        function marks(step) {
-            var lam = lambda.value, x0 = (((step + omegaT) / kk()) % lam + lam) % lam, out = [];
-            for (var X = x0; X <= LENGTH; X += lam) out.push(X);
-            return out;
+        /* ---------- the data panel (scripts/datalog.js) reads the store; these hooks only say where things are drawn and how to test a value ---------- */
+        var LEFT = 22;
+        function sliderCheck(input, label) { return { formula: 'read from the ' + label + ' slider now', inputs: [['slider', input.value, '']], value: parseFloat(input.value) }; }
+        function tPos(i) { return { x: LEFT + ds.get('X')[i] * ds.get('s_px'), y: ds.get('yi_px')[i] }; }
+        function lPos(i) { return { x: ds.get('xl_px')[i], y: ds.get('yL') }; }
+        function beadPixel(what, pt) {
+            var px = ctx.getImageData(Math.round(pt.x * box.dpr), Math.round(pt.y * box.dpr), 1, 1).data, lum = 0.2126 * px[0] + 0.7152 * px[1] + 0.0722 * px[2];
+            return { what: 'screen pixel at ' + what + ', (' + Sim.fmt(pt.x, 1) + ', ' + Sim.fmt(pt.y, 1) + ') css px', drawn: px[3] === 0 ? 'nothing (transparent)' : 'rgb(' + px[0] + ', ' + px[1] + ', ' + px[2] + ')', expected: 'a dark bead: ink rgb(58, 50, 46) or burgundy rgb(122, 31, 43)', ok: px[3] > 0 && lum < 130,
+                note: 'The beads are filled discs of radius 4 to 6.5 px, so the pixel at the stored centre is the fill colour.' };
         }
-        var P = {
-            xi: function (i) { return amp.value * Math.sin(phaseAt(i)); },
-            vxi: function (i) { return -amp.value * om() * Math.cos(phaseAt(i)); },
-            s: function (i) { return longAmp() * Math.sin(phaseAt(i)); },
-            vs: function (i) { return -longAmp() * om() * Math.cos(phaseAt(i)); },
-            rho: function (i) { return 1 / (1 + longAmp() * kk() * Math.cos(phaseAt(i))); }
-        };
-        function markVector(name, step, meaning) {
-            return {
-                name: name, kind: 'vector', code: step === Math.PI ? 'comp0 + n λ' : 'crest + n λ', type: 'list of float', meaning: meaning, updates: 'every frame',
-                length: function () { return marks(step).length; },
-                columns: [{ name: 'X', unit: 'px', digits: 1, get: function (j) { return marks(step)[j]; } }]
-            };
-        }
-
+        var LONG = { sL: 1, xL: 1, vs: 1, rho: 1, comp: 1, xl_px: 1 };
+        function inputsAt(i) { return [['i', i, '', 0], ['X', ds.get('X')[i], 'px', 1], ['k', ds.get('k'), 'rad/px', 5], ['ωt', ds.get('omegaT'), 'rad', 4]]; }
         Sim.data = {
-            kicker: 'Fig. 4 · data',
-            title: 'Transverse and longitudinal waves',
-            subtitle: 'Every number this simulation is computing, read live from its own variables.',
-            foot: 'Repainted every frame while open. The particle table holds every particle on both rows.',
+            ds: ds, kicker: 'Fig. 4 · data', file: 'fig4-transverse-longitudinal',
             playing: function () { return clk.playing; },
             groups: [
-                { title: 'Physical parameters', note: 'what you set with the sliders', vars: [
-                    { name: 'A', code: 'amp.value', type: 'float', unit: 'px', meaning: 'transverse amplitude', digits: 0, get: function () { return amp.value; } },
-                    { name: 'f', code: 'freq.value', type: 'float', unit: 'Hz', meaning: 'frequency', digits: 2, get: function () { return freq.value; } },
-                    { name: 'λ', code: 'lambda.value', type: 'float', unit: 'px', meaning: 'wavelength', digits: 0, get: function () { return lambda.value; } },
-                    { name: 'N', code: 'count.value', type: 'int', meaning: 'particles in each row', digits: 0, get: function () { return count.value; } },
-                    { name: 'L', code: 'LENGTH', type: 'int', unit: 'px', meaning: 'length of the medium, fixed', digits: 0, get: function () { return LENGTH; } }
-                ] },
-                { title: 'Derived physics', note: 'computed from the parameters', vars: [
-                    { name: 'k = 2π/λ', code: '2 * Math.PI / lambda.value', type: 'float', unit: 'rad/px', meaning: 'wave number', digits: 5, get: kk },
-                    { name: 'ω = 2πf', type: 'float', unit: 'rad/s', meaning: 'angular frequency', digits: 4, get: om },
-                    { name: 'T = 1/f', type: 'float', unit: 's', meaning: 'period', digits: 3, get: function () { return 1 / freq.value; } },
-                    { name: 'v = fλ', type: 'float', unit: 'px/s', meaning: 'wave speed, the same for both rows', digits: 1, get: function () { return freq.value * lambda.value; } },
-                    { name: 'L/λ', type: 'float', meaning: 'wavelengths along the medium', digits: 3, get: function () { return LENGTH / lambda.value; } },
-                    { name: 'A<sub>L</sub>', code: 'longAmp()', type: 'float', unit: 'px', meaning: 'longitudinal amplitude, capped at 0.8/k so particles never pass each other', digits: 2, get: longAmp },
-                    { name: 'cap active', code: 'longAmp() < amp.value', type: 'bool', get: function () { return longAmp() < amp.value; } },
-                    { name: 'Ak', type: 'float', meaning: 'largest slope of the transverse string', digits: 4, get: function () { return amp.value * kk(); } },
-                    { name: 'A<sub>L</sub>k', type: 'float', meaning: 'largest strain of the longitudinal row, below 1', digits: 4, get: function () { return longAmp() * kk(); } },
-                    { name: 'Aω', type: 'float', unit: 'px/s', meaning: 'largest particle speed, transverse row', digits: 2, get: function () { return amp.value * om(); } }
-                ] },
-                { title: 'Time', note: 'advances only while it plays', vars: [
-                    { name: 't', type: 'float', unit: 's', meaning: 'play time, measured by the panel', digits: 2, get: function () { return Sim.frameStats.play; } },
-                    { name: 'ωt', code: 'omegaT', type: 'float', unit: 'rad', meaning: 'phase of the source', digits: 3, get: function () { return omegaT; } },
-                    { name: 'ωt / 2π', type: 'float', meaning: 'periods completed', digits: 2, get: function () { return omegaT / (2 * Math.PI); } }
-                ] },
-                { title: 'The followed particle', note: 'the middle particle, marked in burgundy', vars: [
-                    { name: 'i', code: 'follow', type: 'int', meaning: 'its index', digits: 0, get: followed },
-                    { name: 'X', type: 'float', unit: 'px', meaning: 'its rest position', digits: 1, get: function () { return Xi(followed()); } },
-                    { name: 'kX − ωt', type: 'float', unit: 'rad', meaning: 'its phase, wrapped to (−π, π]', digits: 3, get: function () { return wrapPi(phaseAt(followed())); } },
-                    { name: 'ξ', type: 'float', unit: 'px', meaning: 'transverse displacement, A sin(kX − ωt)', digits: 2, get: function () { return P.xi(followed()); } },
-                    { name: '∂ξ/∂t', type: 'float', unit: 'px/s', meaning: 'transverse velocity', digits: 2, get: function () { return P.vxi(followed()); } },
-                    { name: 's', type: 'float', unit: 'px', meaning: 'longitudinal displacement, A<sub>L</sub> sin(kX − ωt)', digits: 2, get: function () { return P.s(followed()); } },
-                    { name: '∂s/∂t', type: 'float', unit: 'px/s', meaning: 'longitudinal velocity', digits: 2, get: function () { return P.vs(followed()); } },
-                    { name: 'ρ/ρ₀', type: 'float', meaning: 'local density, 1 / (1 + A<sub>L</sub>k cos(kX − ωt))', digits: 3, get: function () { return P.rho(followed()); } }
-                ] },
-                { title: 'Arrays: every particle', note: 'click a row to open it as a table', vars: [
-                    { name: 'particles', kind: 'vector', code: 'i = 0 … N − 1', type: 'list of float', meaning: 'both rows at this instant; ξ and s shaded like a trough-to-crest scale', updates: 'every frame', cw: 88,
-                        length: function () { return count.value; },
-                        columns: [
-                            { name: 'X', unit: 'px', digits: 1, get: Xi },
-                            { name: 'phase', unit: 'rad', digits: 3, get: function (i) { return wrapPi(phaseAt(i)); } },
-                            { name: 'ξ', unit: 'px', digits: 2, get: P.xi, colour: function (v) { return Sim.colourMap(v, amp.value); } },
-                            { name: '∂ξ/∂t', unit: 'px/s', digits: 1, get: P.vxi },
-                            { name: 's', unit: 'px', digits: 2, get: P.s, colour: function (v) { return Sim.colourMap(v, longAmp()); } },
-                            { name: 'x = X + s', unit: 'px', digits: 1, get: function (i) { return Xi(i) + P.s(i); } },
-                            { name: 'ρ/ρ₀', digits: 3, get: P.rho }
-                        ] },
-                    markVector('crests', Math.PI / 2, 'positions of the transverse crests, the small triangles'),
-                    markVector('compressions', Math.PI, 'centres of the longitudinal compressions')
-                ] },
-                { title: 'Drawing', note: 'how the picture is laid out', vars: [
-                    { name: 's<sub>px</sub>', code: '(box.w − 44) / LENGTH', type: 'float', meaning: 'screen pixels per medium pixel', digits: 4, get: function () { return (box.w - 44) / LENGTH; } },
-                    { name: 'canvas', code: 'box.w × box.h', type: 'int', size: '2', unit: 'css px', get: function () { return box.w + ' × ' + box.h; } },
-                    { name: 'equilibrium marks', code: 'eqBox.checked', type: 'bool', get: function () { return eqBox.checked; } },
-                    { name: 'follow one', code: 'followBox.checked', type: 'bool', get: function () { return followBox.checked; } },
-                    { name: 'frame rate', type: 'float', unit: 'Hz', meaning: 'measured by the panel', digits: 1, get: function () { return Sim.frameStats.fps; } },
-                    { name: 'playing', code: 'clk.playing', type: 'bool', get: function () { return clk.playing; } }
-                ] }
+                { title: 'Physical parameters', note: 'what you set with the sliders', vars: ['A', 'f', 'lambda', 'N'] },
+                { title: 'Derived physics', note: 'computed by the page from the parameters', vars: ['k', 'omega', 'T', 'v', 'L_over_lam', 'AL', 'cap', 'Ak', 'ALk', 'Aomega'] },
+                { title: 'Time', note: 'advances only while it plays', vars: ['t', 'omegaT', 'periods'] },
+                { title: 'Particles', note: 'one row per particle; click to open, point at a cell to find the bead', vars: ['follow', 'X', 'phase', 'xi', 'vxi', 'sL', 'xL', 'vs', 'rho', 'comp', 'yi_px', 'xl_px'] },
+                { title: 'Crests and compressions', note: 'the small triangles', vars: ['crest', 'crests', 'comp0', 'compressions'] },
+                { title: 'Drawing', note: 'how the picture is laid out', vars: ['s_px', 'yT', 'yL', 'box_w', 'box_h', 'dt', 'fps', 'frames', 'playing'] }
             ],
-            log: {
-                every: 0.1, max: 1000,
-                columns: [
-                    { name: 't', unit: 's', digits: 2, get: function () { return Sim.frameStats.play; } },
-                    { name: 'ωt', unit: 'rad', digits: 3, get: function () { return omegaT; } },
-                    { name: 'ξ', unit: 'px', digits: 2, get: function () { return P.xi(followed()); } },
-                    { name: '∂ξ/∂t', unit: 'px/s', digits: 1, get: function () { return P.vxi(followed()); } },
-                    { name: 's', unit: 'px', digits: 2, get: function () { return P.s(followed()); } },
-                    { name: 'ρ/ρ₀', digits: 3, get: function () { return P.rho(followed()); } },
-                    { name: 'λ', unit: 'px', digits: 0, get: function () { return lambda.value; } },
-                    { name: 'f', unit: 'Hz', digits: 2, get: function () { return freq.value; } }
-                ]
-            }
+            colour: { xi: function (v) { return Sim.colourMap(v, ds.get('A')); }, sL: function (v) { return Sim.colourMap(v, ds.get('AL')); }, rho: function (v) { return Sim.colourMap(v - 1, Math.max(1e-9, ds.get('ALk'))); } },
+            probe: function (x, y) {
+                var N = ds.get('N') || 0, best = null, bd = 16;
+                for (var i = 0; i < N; i++) {
+                    var a = tPos(i), b = lPos(i), da = Math.hypot(x - a.x, y - a.y), db = Math.hypot(x - b.x, y - b.y);
+                    if (da < bd) { bd = da; best = { row: 'T', i: i }; }
+                    if (db < bd) { bd = db; best = { row: 'L', i: i }; }
+                }
+                return best;
+            },
+            inspect: function (ref) {
+                var i = ref.i, rows;
+                if (ref.row === 'T') rows = [['X', ds.get('X')[i], 'px', 'X', i], ['kX − ωt', ds.get('phase')[i], 'rad', 'phase', i], ['ξ', ds.get('xi')[i], 'px', 'xi', i], ['∂ξ/∂t', ds.get('vxi')[i], 'px/s', 'vxi', i], ['y px', ds.get('yi_px')[i], 'css px', 'yi_px', i]];
+                else rows = [['X', ds.get('X')[i], 'px', 'X', i], ['kX − ωt', ds.get('phase')[i], 'rad', 'phase', i], ['s', ds.get('sL')[i], 'px', 'sL', i], ['x = X + s', ds.get('xL')[i], 'px', 'xL', i], ['∂s/∂t', ds.get('vs')[i], 'px/s', 'vs', i], ['ρ/ρ₀', ds.get('rho')[i], '', 'rho', i], ['comp', ds.get('comp')[i], '', 'comp', i]];
+                return { title: (ref.row === 'T' ? 'transverse' : 'longitudinal') + ' particle ' + i + (i === ds.get('follow') ? ' · the followed one' : ''), at: ref.row === 'T' ? tPos(i) : lPos(i), rows: rows };
+            },
+            locate: function (name, idx) {
+                var v = ds.vars[name];
+                if (v.dims[0] === 'p') return LONG[name] ? lPos(idx) : tPos(idx);
+                if (name === 'crests') return { x: LEFT + ds.get('crests')[idx] * ds.get('s_px'), y: ds.get('yT') - ds.get('A') * ds.get('s_px') - 8 };
+                if (name === 'compressions') return { x: LEFT + ds.get('compressions')[idx] * ds.get('s_px'), y: ds.get('yL') - 40 };
+                return null;
+            },
+            check: {
+                A: function () { return sliderCheck(amp.el, 'amplitude'); },
+                f: function () { return sliderCheck(freq.el, 'frequency'); },
+                lambda: function () { return sliderCheck(lambda.el, 'wavelength'); },
+                N: function () { return sliderCheck(count.el, 'particle count'); },
+                k: function () { return { formula: 'k = 2π / λ', inputs: [['λ', ds.get('lambda'), 'px', 0]], value: 2 * Math.PI / ds.get('lambda') }; },
+                omega: function () { return { formula: 'ω = 2π f', inputs: [['f', ds.get('f'), 'Hz', 2]], value: 2 * Math.PI * ds.get('f') }; },
+                T: function () { return { formula: 'T = 1 / f', inputs: [['f', ds.get('f'), 'Hz', 2]], value: 1 / ds.get('f') }; },
+                v: function () { return { formula: 'v = f λ', inputs: [['f', ds.get('f'), 'Hz', 2], ['λ', ds.get('lambda'), 'px', 0]], value: ds.get('f') * ds.get('lambda') }; },
+                L_over_lam: function () { return { formula: '640 / λ', inputs: [['λ', ds.get('lambda'), 'px', 0]], value: LENGTH / ds.get('lambda') }; },
+                AL: function () { return { formula: 'min(A, 0.8 λ / 2π)', inputs: [['A', ds.get('A'), 'px', 0], ['λ', ds.get('lambda'), 'px', 0]], value: Math.min(ds.get('A'), 0.8 * ds.get('lambda') / (2 * Math.PI)) }; },
+                cap: function () { return { formula: 'A<sub>L</sub> < A', inputs: [['A<sub>L</sub>', ds.get('AL'), 'px', 2], ['A', ds.get('A'), 'px', 0]], value: ds.get('AL') < ds.get('A') }; },
+                Ak: function () { return { formula: 'A k', inputs: [['A', ds.get('A'), 'px', 0], ['k', ds.get('k'), 'rad/px', 5]], value: ds.get('A') * ds.get('k') }; },
+                ALk: function () { return { formula: 'A<sub>L</sub> k', inputs: [['A<sub>L</sub>', ds.get('AL'), 'px', 2], ['k', ds.get('k'), 'rad/px', 5]], value: ds.get('AL') * ds.get('k') }; },
+                Aomega: function () { return { formula: 'A ω', inputs: [['A', ds.get('A'), 'px', 0], ['ω', ds.get('omega'), 'rad/s', 4]], value: ds.get('A') * ds.get('omega') }; },
+                periods: function () { return { formula: 'ωt / 2π', inputs: [['ωt', ds.get('omegaT'), 'rad', 4]], value: ds.get('omegaT') / (2 * Math.PI) }; },
+                follow: function () { return { formula: 'floor((N − 1) / 2)', inputs: [['N', ds.get('N'), '', 0]], value: Math.floor((ds.get('N') - 1) / 2) }; },
+                X: function (i) { return { formula: 'X = i · 640 / (N − 1)', inputs: [['i', i, '', 0], ['N', ds.get('N'), '', 0]], value: i * LENGTH / (ds.get('N') - 1) }; },
+                phase: function (i) { return { formula: 'k X − ωt', inputs: inputsAt(i), value: ds.get('k') * ds.get('X')[i] - ds.get('omegaT') }; },
+                xi: function (i) { return { formula: 'ξ = A sin(kX − ωt)', inputs: inputsAt(i).concat([['A', ds.get('A'), 'px', 0]]), value: ds.get('A') * Math.sin(ds.get('k') * ds.get('X')[i] - ds.get('omegaT')) }; },
+                vxi: function (i) { return { formula: '−A ω cos(kX − ωt)', inputs: inputsAt(i).concat([['A', ds.get('A'), 'px', 0], ['ω', ds.get('omega'), 'rad/s', 4]]), value: -ds.get('A') * ds.get('omega') * Math.cos(ds.get('k') * ds.get('X')[i] - ds.get('omegaT')) }; },
+                yi_px: function (i) { return { formula: 'y<sub>T</sub> − A s<sub>px</sub> sin(kX − ωt)', inputs: inputsAt(i).concat([['y<sub>T</sub>', ds.get('yT'), 'css px', 1], ['A', ds.get('A'), 'px', 0], ['s<sub>px</sub>', ds.get('s_px'), '', 4]]), value: ds.get('yT') - ds.get('A') * ds.get('s_px') * Math.sin(ds.get('k') * ds.get('X')[i] - ds.get('omegaT')) }; },
+                sL: function (i) { return { formula: 's = A<sub>L</sub> sin(kX − ωt)', inputs: inputsAt(i).concat([['A<sub>L</sub>', ds.get('AL'), 'px', 2]]), value: ds.get('AL') * Math.sin(ds.get('k') * ds.get('X')[i] - ds.get('omegaT')) }; },
+                xL: function (i) { return { formula: 'X + s', inputs: [['X', ds.get('X')[i], 'px', 1], ['s', ds.get('sL')[i], 'px', 3]], value: ds.get('X')[i] + ds.get('sL')[i] }; },
+                vs: function (i) { return { formula: '−A<sub>L</sub> ω cos(kX − ωt)', inputs: inputsAt(i).concat([['A<sub>L</sub>', ds.get('AL'), 'px', 2], ['ω', ds.get('omega'), 'rad/s', 4]]), value: -ds.get('AL') * ds.get('omega') * Math.cos(ds.get('k') * ds.get('X')[i] - ds.get('omegaT')) }; },
+                rho: function (i) { return { formula: '1 / (1 + A<sub>L</sub> k cos(kX − ωt))', inputs: inputsAt(i).concat([['A<sub>L</sub>k', ds.get('ALk'), '', 4]]), value: 1 / (1 + ds.get('ALk') * Math.cos(ds.get('k') * ds.get('X')[i] - ds.get('omegaT'))) }; },
+                comp: function (i) { return { formula: 'max(0, −cos(kX − ωt))', inputs: inputsAt(i), value: Math.max(0, -Math.cos(ds.get('k') * ds.get('X')[i] - ds.get('omegaT'))) }; },
+                xl_px: function (i) { return { formula: '22 + (X + s) s<sub>px</sub>', inputs: [['X + s', ds.get('xL')[i], 'px', 3], ['s<sub>px</sub>', ds.get('s_px'), '', 4]], value: LEFT + ds.get('xL')[i] * ds.get('s_px') }; },
+                crest: function () { var lam = ds.get('lambda'); return { formula: '((π/2 + ωt) / k) mod λ', inputs: [['ωt', ds.get('omegaT'), 'rad', 4], ['k', ds.get('k'), 'rad/px', 5], ['λ', lam, 'px', 0]], value: (((Math.PI / 2 + ds.get('omegaT')) / ds.get('k')) % lam + lam) % lam }; },
+                crests: function (q) { return { formula: 'X<sub>crest</sub> + q λ', inputs: [['X<sub>crest</sub>', ds.get('crest'), 'px', 3], ['q', q, '', 0], ['λ', ds.get('lambda'), 'px', 0]], value: ds.get('crest') + q * ds.get('lambda') }; },
+                comp0: function () { var lam = ds.get('lambda'); return { formula: '((π + ωt) / k) mod λ', inputs: [['ωt', ds.get('omegaT'), 'rad', 4], ['k', ds.get('k'), 'rad/px', 5], ['λ', lam, 'px', 0]], value: (((Math.PI + ds.get('omegaT')) / ds.get('k')) % lam + lam) % lam }; },
+                compressions: function (q) { return { formula: 'X<sub>comp</sub> + q λ', inputs: [['X<sub>comp</sub>', ds.get('comp0'), 'px', 3], ['q', q, '', 0], ['λ', ds.get('lambda'), 'px', 0]], value: ds.get('comp0') + q * ds.get('lambda') }; },
+                s_px: function () { return { formula: '(box.w − 44) / 640', inputs: [['box.w', box.w, 'css px', 0]], value: (box.w - 44) / LENGTH }; },
+                yT: function () { return { formula: '0.3 box.h', inputs: [['box.h', box.h, 'css px', 0]], value: box.h * 0.3 }; },
+                yL: function () { return { formula: '0.77 box.h', inputs: [['box.h', box.h, 'css px', 0]], value: box.h * 0.77 }; }
+            },
+            drawn: {
+                xi: function (i) { return beadPixel('transverse bead ' + i, tPos(i)); },
+                yi_px: function (i) { return beadPixel('transverse bead ' + i, tPos(i)); },
+                sL: function (i) { return beadPixel('longitudinal bead ' + i, lPos(i)); },
+                xl_px: function (i) { return beadPixel('longitudinal bead ' + i, lPos(i)); },
+                xL: function (i) { return beadPixel('longitudinal bead ' + i, lPos(i)); }
+            },
+            log: { every: 0.1, max: 1000, time: 't', columns: ['t', 'omegaT', 'xi', 'vxi', 'sL', 'rho', 'lambda', 'f'] },
+            about: 'Here every bead is drawn at its stored screen position, rounded to the pixel by the canvas. The smooth transverse curve and the compression shading are drawn through extra sample points, every 3 px and every 10 px, that are not particles and are not stored.'
         };
-
         readouts();
+        draw();
         Sim.onResize(stage, function () { box.fit(); });
     })();
     </script>
