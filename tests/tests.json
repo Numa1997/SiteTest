@@ -63,5 +63,24 @@
       "Tap the remove button in the Wave 4 panel"
     ],
     "expected": "After the preset, panels Wave 1 to Wave 4 were shown; after removal only Wave 1, Wave 2 and Wave 3 remain and the Waves readout shows 3 / 6."
+  },
+  {
+    "name": "Fig. 1 data panel lists live variables and opens the field as a table",
+    "viewport": "desktop",
+    "covers": [
+      "Fig. 1 data panel",
+      "live variables table",
+      "array table view",
+      "data log"
+    ],
+    "description": "Verifies the side panel on the wave interference page shows the simulation's numbers, opens an array as a table and logs rows while the simulation runs.",
+    "steps": [
+      "Open the home page",
+      "In the simulations section, click the Launch button on the Wave Interference – Multiple Sources card",
+      "On the opened page, if the data panel is not open, click the Data tab on the right edge of the window",
+      "In the data panel's Variables table, click the row for the array C",
+      "Click the Log tab and wait two seconds"
+    ],
+    "expected": "The data panel shows a Variables table with Name, Type, Size and Value columns, including the wavelength λ with the value 30 px; the array C opens as a table of numbers with a shape shown as rows × columns; the Log tab lists numbered rows whose time t increases."
   }
 ]
