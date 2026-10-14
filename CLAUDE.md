@@ -35,3 +35,6 @@ Project facts (layout, AppDeploy app, boundaries) are in AGENTS.md.
   read back from the picture. Aim for "identical"; name a float32 or rounding gap as what it is.
 - A read-back test must first check that something was drawn: a transparent pixel passes a "dark" test. Check alpha before colour.
 - Where the drawing and the store differ (colour steps, smoothing, trails, relaxation), say so on the page, in one paragraph the reader can open.
+- Nothing on a running figure may react to the pointer merely crossing it. Reading a point is a tool the reader switches on, as in
+  MATLAB's data cursor or PhET's probes: click to pin, the values in a fixed place outside the figure, words rewritten at a readable
+  rate (about 4 per second), the marker every frame. Measure it: what shows during a sweep, how much it covers, how often text changes.

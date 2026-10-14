@@ -13,7 +13,7 @@
      playing:    function () → bool;  play: function ()           the page's clock
      groups:     [{ title, note, vars: ['lambda', 'k', ...] }]    names of dataset variables, in display order
      colour:     { psi: function (value, j, i) → [r, g, b] | null } shading for array cells (presentation only)
-     probe:      function (xCss, yCss) → ref | null               what lies under the pointer on the figure
+     probe:      function (xCss, yCss) → ref | null               what lies at a point of the figure (Read values pins it)
      inspect:    function (ref) → { title, at: {x, y}, rows: [[symbol, value, units, varName, index]] }
      locate:     function (varName, index) → {x, y} | null        where an array element is drawn, css px
      check:      { name: function (index) → { formula, inputs: [[symbol, value, units, digits]], value } }
@@ -21,7 +21,6 @@
      round:      { label: fn → text, time: varName, length: fn → span of the time variable,
                    columns: [scalar names], point: fn → probe ref, mode: 'change' (optional),
                    blocked: fn → reason | null (optional) }       what one recorded round is
-     touchProbe: function () → bool (optional)                    whether press-and-hold may read the figure now
      about:      html                                             what still differs between data and picture
      file:       'fig1-wave-interference'                         base name of the saved archive
    }
@@ -30,7 +29,8 @@
                shown as charts and a table, and saved on request.
    Variables   name, type, shape and value of every dataset variable at one caught instant; Live repaints
                them every frame.
-   Probe       the pointer over the figure (or a finger held on it) reads the values there.
+   Read values a switch under the figure: a click or tap pins a point, a drag moves the pin, the marker follows the object,
+               and its values sit in a strip under the figure. Off, the figure behaves as if this file were absent.
    Check       for any value: stored value, the formula recomputed from the stored inputs, and the read-back
                from the picture, with the agreement stated.
    Save        a zip of NumPy .npy files, dataset.json, the recorded rounds as CSV and a README. */
@@ -141,8 +141,8 @@
         '<div class="dp-instant"><p class="dp-instant__t"></p><div class="dp-instant__tools">' +
         '<button type="button" class="dp-btn" data-catch>' + REDO + ' Catch now</button>' +
         '<label class="dp-live"><input type="checkbox" data-live><span>Live</span></label></div></div>' +
-        '<div class="dp-probe"><p class="dp-probe__label">' + (TOUCH ? 'Under your finger' : 'Under the pointer') + '</p>' +
-        '<p class="dp-probe__hint">' + (TOUCH ? 'Press and hold on the figure to read the values there; slide to move. The last point stays here.' : 'Point at the figure to read the values there. The last point stays here.') + '</p>' +
+        '<div class="dp-probe"><p class="dp-probe__label">Pinned point</p>' +
+        '<p class="dp-probe__hint">Switch on <b>Read values</b> under the figure, then ' + (TOUCH ? 'tap' : 'click') + ' a point to pin it. Its values appear here and under the figure.</p>' +
         '<div class="dp-probe__body" hidden><p class="dp-probe__title"></p><table class="dp-probe__table"><tbody></tbody></table></div></div>' +
         '<div class="dp-vars"></div></section>' +
         '<section class="dp__pane dp-arr" data-pane="array" hidden></section>' +
@@ -150,7 +150,7 @@
         '<section class="dp__pane dp-rounds" data-pane="rounds" hidden></section></div>' +
         '<details class="dp-about"><summary>How the numbers and the picture are tied</summary><div class="dp-about__body">' +
         '<p>The simulation keeps its numbers in one named store, a dataset with dimensions, coordinates, variables and units, the same shape of record as a NetCDF or HDF5 file. It writes a value into the store at the moment it computes it, every frame, overwriting the previous frame: the store holds one instant, so it never grows. The picture is drawn from the same numbers.</p>' +
-        '<p>This panel reads the store only when you ask. Opening it catches one instant; Catch now catches another; Live repaints every frame, which costs the most. Recording a round copies the scalars and the point you hold at every frame of that round, at most 600 samples, then stops.</p>' +
+        '<p>This panel reads the store only when you ask. Opening it catches one instant; Catch now catches another; Live repaints every frame, which costs the most. Read values pins one point of the figure and shows its values in a strip under the figure, four times a second. Recording a round copies the scalars and the pinned point at every frame of that round, at most 600 samples, then stops.</p>' +
         '<p>What can still differ, and why: the table rounds to a few decimals, the store keeps the full number. ' + (spec.about || '') + ' Press the check mark beside any value to see the stored number, the formula recomputed from the stored inputs, and the read-back from the picture.</p>' +
         '</div></details>';
 
@@ -524,138 +524,144 @@
         body.innerHTML = h;
     }
 
-    /* ---------- the probe on the figure: hover with a mouse, press and hold with a finger ---------- */
-    var stage = document.getElementById('stage'), held = { ref: null, cell: null }, overlay = null, octx = null, tip = null, tipT = null, chip = null;
-    var probe = { active: false, touch: false, at: null, until: 0, cellUntil: 0, marked: false, lastEnd: 0 }, hold = null;
+    /* ---------- Read values: a tool the reader switches on, as in MATLAB's data cursor and PhET's probes.
+       Off, the figure behaves exactly as without this file. On, a click or tap pins the object under it, a drag moves the pin,
+       the marker follows the object every frame, and its values sit in a strip under the figure, rewritten four times a second.
+       Crossing the figure with the pointer shows nothing; a pause of 0.3 s while Read is on outlines what a click would pin. ---------- */
+    var stage = document.getElementById('stage'), held = { ref: null, cell: null }, overlay = null, octx = null, strip = null, readBtn = null;
+    var probe = { on: false, pinned: false, dragging: false, hover: null, preview: null, dwell: 0, cellUntil: 0, marked: false, shownAt: 0, lastEnd: 0, empty: false };
     var probeBody = panes.vars.querySelector('.dp-probe__body'), probeHint = panes.vars.querySelector('.dp-probe__hint');
     var probeTitle = panes.vars.querySelector('.dp-probe__title'), probeRows = panes.vars.querySelector('.dp-probe__table tbody');
+    var stripHint = null, stripPin = null, stripTitle = null, stripVals = null;
+    var CROSS = '<svg width="15" height="15" viewBox="0 0 16 16" aria-hidden="true"><circle cx="8" cy="8" r="4.2" fill="none" stroke="currentColor" stroke-width="1.5"/><path d="M8 0.8v3.2M8 12v3.2M0.8 8h3.2M12 8h3.2" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg>';
     function stageXY(e) { var r = stage.getBoundingClientRect(); return { x: e.clientX - r.left, y: e.clientY - r.top }; }
-    function touchAllowed() { return !spec.touchProbe || safe(spec.touchProbe, true); }
+    /* a finger is wide and many objects move: when nothing lies exactly at the point, look on two rings around it, 12 and 22 px out */
+    function refAt(at, finger) {
+        var ref = safe(function () { return spec.probe(at.x, at.y); }, null);
+        for (var r = 12; !ref && finger && r <= 22; r += 10) {
+            for (var k = 0; k < 8 && !ref; k++) { var a = k * Math.PI / 4; ref = safe(function () { return spec.probe(at.x + r * Math.cos(a), at.y + r * Math.sin(a)); }, null); }
+        }
+        return ref;
+    }
+    function setRead(on) {
+        probe.on = on;
+        probe.pinned = false; probe.dragging = false; probe.preview = null; probe.empty = false;
+        clearTimeout(probe.dwell);
+        if (readBtn) { readBtn.setAttribute('aria-pressed', on ? 'true' : 'false'); readBtn.lastChild.textContent = on ? ' Reading · stop' : ' Read values'; }
+        if (stage) stage.classList.toggle('dp-reading', on);
+        if (strip) strip.hidden = !on;
+        paintStrip(true);
+        kick();
+    }
     if (stage && spec.probe && spec.inspect) {
-        stage.classList.add('dp-stage');
         overlay = document.createElement('canvas');
         overlay.className = 'dp-overlay';
         overlay.setAttribute('aria-hidden', 'true');
         stage.appendChild(overlay);
         octx = overlay.getContext('2d');
-        tip = document.createElement('div');
-        tip.className = 'dp-tip';
-        tip.hidden = true;
-        stage.appendChild(tip);
-        tipT = document.createElement('div');
-        tipT.className = 'dp-tip dp-tip--touch';
-        tipT.hidden = true;
-        document.body.appendChild(tipT);
-        window.addEventListener('scroll', function () { if (probe.touch && !(hold && hold.engaged)) { probe.until = 0; tipT.hidden = true; } }, { passive: true });
-        if (TOUCH && load('held') !== '1') {
-            chip = document.createElement('p');
-            chip.className = 'dp-hint-chip';
-            chip.textContent = 'Press and hold to read the values';
-            stage.appendChild(chip);
-        }
+        /* the strip lives under the figure, between it and its caption, so it never covers what it describes */
+        strip = document.createElement('div');
+        strip.className = 'dp-read';
+        strip.hidden = true;
+        strip.setAttribute('aria-live', 'polite');
+        strip.innerHTML = '<p class="dp-read__hint">' + (TOUCH ? 'Tap a point in the figure to pin it; drag to move the pin.' : 'Click a point in the figure to pin it; drag to move the pin. Esc stops reading.') + '</p>' +
+            '<div class="dp-read__pin" hidden><p class="dp-read__title"></p><div class="dp-read__vals"></div></div>';
+        stage.insertAdjacentElement('afterend', strip);
+        stripHint = strip.querySelector('.dp-read__hint'); stripPin = strip.querySelector('.dp-read__pin');
+        stripTitle = strip.querySelector('.dp-read__title'); stripVals = strip.querySelector('.dp-read__vals');
+        readBtn = document.createElement('button');
+        readBtn.type = 'button';
+        readBtn.className = 'dp-readbtn';
+        readBtn.setAttribute('aria-pressed', 'false');
+        readBtn.title = 'Pin a point of the figure and read its values';
+        readBtn.innerHTML = CROSS + '<span> Read values</span>';
+        var cap = stage.parentNode && stage.parentNode.querySelector('.stage__cap');
+        if (cap) cap.appendChild(readBtn); else strip.insertAdjacentElement('beforebegin', readBtn);
+        readBtn.addEventListener('click', function () { setRead(!probe.on); });
+        strip.addEventListener('click', function (e) {
+            var b = e.target.closest('[data-check]');
+            if (b) { if (!isOpen) setOpen(true, true); openCheck(b.getAttribute('data-check'), +b.getAttribute('data-idx')); }
+        });
         var fitOverlay = function () {
             var r = stage.getBoundingClientRect(), dpr = Math.min(window.devicePixelRatio || 1, 2);
             overlay.width = Math.max(1, Math.round(r.width * dpr));
             overlay.height = Math.max(1, Math.round(r.height * dpr));
             octx.setTransform(dpr, 0, 0, dpr, 0, 0);
+            dirty = [];
+            if (probe.marked || probe.pinned) kick();
         };
         fitOverlay();
         if ('ResizeObserver' in window) new ResizeObserver(fitOverlay).observe(stage);
-        /* a finger is wider than a pointer: when nothing lies exactly under it, look on two rings around it, 12 and 22 px out */
-        var readAt = function (at, finger) {
-            var ref = safe(function () { return spec.probe(at.x, at.y); }, null);
-            for (var r = 12; !ref && finger && r <= 22; r += 10) {
-                for (var k = 0; k < 8 && !ref; k++) { var a = k * Math.PI / 4; ref = safe(function () { return spec.probe(at.x + r * Math.cos(a), at.y + r * Math.sin(a)); }, null); }
-            }
+        var pinAt = function (at, finger) {
+            var ref = refAt(at, finger);
             probe.empty = !ref;
-            if (ref) held.ref = ref;
-        };
-        var cancelHold = function () { if (hold) { clearTimeout(hold.timer); hold = null; } };
-        var engage = function () {
-            if (!hold) return;
-            hold.engaged = true;
-            probe.active = true; probe.touch = true; probe.until = 0;
-            probe.at = hold.at;
-            held.ref = null;
-            readAt(probe.at, true);
-            stage.classList.add('dp-probing');
-            if (navigator.vibrate) safe(function () { navigator.vibrate(12); });
-            if (chip) { chip.remove(); chip = null; store('held', '1'); }
+            if (ref) { held.ref = ref; probe.pinned = true; }
+            else if (!probe.dragging || !probe.pinned) probe.pinned = false;
+            probe.preview = null;
+            paintStrip(true);
             kick();
         };
-        /* capture phase: the panel sees the gesture before the page does, and keeps it from the page while reading */
+        /* capture phase: while Read is on, the gesture belongs to the reading, and the page's own click, draw or pan does not run */
+        var own = function (e) { if (probe.on) { e.stopPropagation(); return true; } return false; };
         stage.addEventListener('pointerdown', function (e) {
-            if (e.pointerType === 'mouse' || !touchAllowed()) return;
-            cancelHold();
-            var at = stageXY(e);
-            hold = { id: e.pointerId, x0: e.clientX, y0: e.clientY, at: at, engaged: false };
-            probe.client = { x: e.clientX, y: e.clientY };
-            hold.timer = setTimeout(engage, 380);
+            if (!own(e)) return;
+            if (e.button > 0) return;
+            probe.dragging = true;
+            if (stage.setPointerCapture) safe(function () { stage.setPointerCapture(e.pointerId); });
+            pinAt(stageXY(e), true);
         }, true);
         stage.addEventListener('pointermove', function (e) {
-            if (e.pointerType === 'mouse') {
-                probe.at = stageXY(e);
-                probe.active = true; probe.touch = false;
-                readAt(probe.at);
-                kick();
-                return;
-            }
-            if (!hold || e.pointerId !== hold.id) return;
-            probe.client = { x: e.clientX, y: e.clientY };
-            if (!hold.engaged) {
-                hold.at = stageXY(e);
-                if (Math.hypot(e.clientX - hold.x0, e.clientY - hold.y0) > 10) cancelHold();
-                return;
-            }
-            e.stopPropagation();
-            probe.at = stageXY(e);
-            readAt(probe.at, true);
+            if (!own(e)) return;
+            if (probe.dragging) { pinAt(stageXY(e), true); return; }
+            if (e.pointerType !== 'mouse') return;
+            /* moving: no outline; resting 0.3 s: outline what a click would pin */
+            probe.hover = stageXY(e);
+            if (probe.preview) { probe.preview = null; kick(); }
+            clearTimeout(probe.dwell);
+            probe.dwell = setTimeout(function () { if (probe.on && probe.hover) { probe.preview = refAt(probe.hover, true); kick(); } }, 300);
         }, true);
-        var release = function (e) {
-            if (!hold || e.pointerId !== hold.id) return;
-            var was = hold.engaged;
-            cancelHold();
-            if (!was) return;
-            stage.classList.remove('dp-probing');
-            probe.until = performance.now() + 2600;
-            probe.lastEnd = performance.now();
-        };
-        stage.addEventListener('pointerup', release, true);
-        stage.addEventListener('pointercancel', release, true);
-        stage.addEventListener('touchmove', function (e) { if (hold && hold.engaged && e.cancelable) e.preventDefault(); }, { capture: true, passive: false });
-        stage.addEventListener('contextmenu', function (e) { if (hold || performance.now() - probe.lastEnd < 600) e.preventDefault(); }, true);
-        stage.addEventListener('click', function (e) { if (performance.now() - probe.lastEnd < 600) { e.stopPropagation(); e.preventDefault(); } }, true);
-        stage.addEventListener('pointerleave', function (e) { if (e.pointerType === 'mouse') { probe.active = false; tip.hidden = true; } });
+        var up = function (e) { if (!own(e)) return; probe.dragging = false; probe.lastEnd = performance.now(); };
+        stage.addEventListener('pointerup', up, true);
+        stage.addEventListener('pointercancel', up, true);
+        stage.addEventListener('pointerleave', function () { probe.hover = null; clearTimeout(probe.dwell); if (probe.preview) { probe.preview = null; kick(); } });
+        ['click', 'mousedown', 'mouseup', 'dblclick', 'contextmenu'].forEach(function (t) { stage.addEventListener(t, function (e) { if (probe.on) { e.stopPropagation(); if (t !== 'mousedown') e.preventDefault(); } }, true); });
+        document.addEventListener('keydown', function (e) { if (e.key === 'Escape' && probe.on) setRead(false); });
     }
-    function drawMark(x, y, strong) {
+    var dirty = [];
+    function touched(x, y, r) { dirty.push([x - r - 3, y - r - 3, 2 * r + 6]); }
+    function wipe() {
+        if (dirty.length > 6) { var dpr = Math.min(window.devicePixelRatio || 1, 2); octx.clearRect(0, 0, overlay.width / dpr, overlay.height / dpr); }
+        else dirty.forEach(function (d) { octx.clearRect(d[0], d[1], d[2], d[2]); });
+        dirty = [];
+    }
+    function drawRing(x, y, r, colour, width) { octx.beginPath(); octx.arc(x, y, r, 0, Math.PI * 2); octx.strokeStyle = colour; octx.lineWidth = width; octx.stroke(); touched(x, y, r + width); }
+    function drawPin(x, y) {
+        drawRing(x, y, 11, 'rgba(255, 250, 243, 0.9)', 4);
+        drawRing(x, y, 11, '#7a1f2b', 2);
         octx.beginPath();
-        octx.arc(x, y, strong ? 10 : 8, 0, Math.PI * 2);
-        octx.strokeStyle = strong ? '#1c1518' : 'rgba(28, 21, 24, 0.55)';
-        octx.lineWidth = strong ? 2 : 1.3;
-        octx.stroke();
-        octx.beginPath();
-        octx.moveTo(x - 16, y); octx.lineTo(x - 12, y); octx.moveTo(x + 12, y); octx.lineTo(x + 16, y);
-        octx.moveTo(x, y - 16); octx.lineTo(x, y - 12); octx.moveTo(x, y + 12); octx.lineTo(x, y + 16);
-        octx.stroke();
+        octx.moveTo(x - 18, y); octx.lineTo(x - 13, y); octx.moveTo(x + 13, y); octx.lineTo(x + 18, y);
+        octx.moveTo(x, y - 18); octx.lineTo(x, y - 13); octx.moveTo(x, y + 13); octx.lineTo(x, y + 18);
+        octx.strokeStyle = '#7a1f2b'; octx.lineWidth = 2; octx.stroke();
+        touched(x, y, 19);
     }
     function clearOverlay() {
         if (!overlay || !probe.marked) return;
-        var dpr = Math.min(window.devicePixelRatio || 1, 2);
-        octx.clearRect(0, 0, overlay.width / dpr, overlay.height / dpr);
+        wipe();
         probe.marked = false;
-        if (tip) tip.hidden = true;
-        if (tipT) tipT.hidden = true;
     }
-    function probeShown() { return probe.active && (!probe.touch || (hold && hold.engaged) || performance.now() < probe.until); }
+    /* the marker is drawn every frame so it stays on the moving object; the words are rewritten at most four times a second */
     function paintProbe() {
         if (!overlay) return;
-        var dpr = Math.min(window.devicePixelRatio || 1, 2), w = overlay.width / dpr, hgt = overlay.height / dpr;
-        octx.clearRect(0, 0, w, hgt);
+        wipe();
         probe.marked = false;
-        var shown = probeShown();
-        if (probe.touch && !shown) probe.active = false;
-        var info = held.ref ? safe(function () { return spec.inspect(held.ref); }, null) : null;
-        if (info && info.at && shown) { drawMark(info.at.x, info.at.y, true); probe.marked = true; }
+        if (probe.on && probe.preview) {
+            var pv = safe(function () { return spec.inspect(probe.preview); }, null);
+            if (pv && pv.at) { drawRing(pv.at.x, pv.at.y, 9, 'rgba(28, 21, 24, 0.55)', 1.4); probe.marked = true; }
+        }
+        if (probe.on && probe.pinned && held.ref) {
+            var info = safe(function () { return spec.inspect(held.ref); }, null);
+            if (info && info.at) { drawPin(info.at.x, info.at.y); probe.marked = true; }
+        }
         if (held.cell && spec.locate && performance.now() < probe.cellUntil) {
             var at = safe(function () { return spec.locate(held.cell.name, held.cell.idx); }, null);
             if (at) {
@@ -663,63 +669,58 @@
                 octx.arc(at.x, at.y, 7, 0, Math.PI * 2);
                 octx.fillStyle = 'rgba(122, 31, 43, 0.25)';
                 octx.fill();
-                octx.strokeStyle = '#7a1f2b';
-                octx.lineWidth = 1.8;
-                octx.stroke();
+                drawRing(at.x, at.y, 7, '#7a1f2b', 1.8);
                 probe.marked = true;
             }
         }
-        if (shown && probe.touch && probe.empty && !held.ref && tipT) {
-            var hE = '<b>Nothing to read here</b><span>Slide onto something drawn in the figure.</span>';
-            if (hE !== tipT._h) { tipT.innerHTML = hE; tipT._h = hE; }
-            tipT.hidden = false;
-            tipT.style.left = Math.max(8, Math.min(window.innerWidth - tipT.offsetWidth - 8, probe.client.x - tipT.offsetWidth / 2)) + 'px';
-            tipT.style.top = Math.max(8, probe.client.y - tipT.offsetHeight - 52) + 'px';
-            probe.marked = true;
-        } else if (info && shown && probe.at) {
-            var h = '<b>' + info.title + '</b>' + info.rows.slice(0, 8).map(function (row) {
-                return '<span><i>' + row[0] + '</i>' + esc(num(row[1], row[3] && V(row[3]) ? digitsOf(row[3]) : 4)) + (row[2] ? ' <u>' + row[2] + '</u>' : '') + '</span>';
-            }).join('') + (probe.touch && !(hold && hold.engaged) ? '<em>released · still following it</em>' : '');
-            var el = probe.touch ? tipT : tip, other = probe.touch ? tip : tipT;
-            other.hidden = true;
-            if (h !== el._h) { el.innerHTML = h; el._h = h; }
-            el.hidden = false;
-            var tw = el.offsetWidth, th = el.offsetHeight, x, y;
-            if (probe.touch) {
-                /* above the finger, where the hand does not cover it; beside the finger when there is no room above */
-                var cx = probe.client.x, cy = probe.client.y, W = window.innerWidth, Hh = window.innerHeight;
-                x = cx - tw / 2; y = cy - th - 52;
-                if (y < 8) { y = cy - th / 2; x = cx + 52 + tw <= W - 8 ? cx + 52 : cx - tw - 52; }
-                el.style.left = Math.max(8, Math.min(W - tw - 8, x)) + 'px';
-                el.style.top = Math.max(8, Math.min(Hh - th - 8, y)) + 'px';
-            } else {
-                x = probe.at.x + 18; y = probe.at.y + 18;
-                if (x + tw > w - 6) x = probe.at.x - tw - 14;
-                if (y + th > hgt - 6) y = probe.at.y - th - 14;
-                el.style.left = Math.max(4, Math.min(w - tw - 4, x)) + 'px';
-                el.style.top = Math.max(4, Math.min(hgt - th - 4, y)) + 'px';
+        if (performance.now() - probe.shownAt > 250) paintStrip(false);
+    }
+    function rowsKey(rows) { return rows.map(function (row) { return row[0] + '|' + row[3] + '|' + row[4] + '|' + (row[2] || ''); }).join(';'); }
+    function paintStrip(force) {
+        probe.shownAt = performance.now();
+        var info = held.ref ? safe(function () { return spec.inspect(held.ref); }, null) : null, t = timeText(timeNow());
+        if (strip && probe.on) {
+            var showPin = probe.pinned && info;
+            stripPin.hidden = !showPin;
+            stripHint.hidden = !!showPin;
+            if (!showPin && probe.empty) stripHint.textContent = 'Nothing to pin there. ' + (TOUCH ? 'Tap' : 'Click') + ' on something drawn in the figure.';
+            else if (!showPin) stripHint.textContent = TOUCH ? 'Tap a point in the figure to pin it; drag to move the pin.' : 'Click a point in the figure to pin it; drag to move the pin. Esc stops reading.';
+            if (showPin) {
+                var th = info.title + ' <span>· ' + esc(t) + '</span>';
+                if (th !== stripTitle._h) { stripTitle.innerHTML = th; stripTitle._h = th; }
+                var key = rowsKey(info.rows);
+                if (key !== stripVals._k) {
+                    stripVals.innerHTML = info.rows.map(function (row) {
+                        var n = row[3], ok = n && V(n);
+                        return '<' + (ok ? 'button type="button" data-check="' + esc(n) + '" data-idx="' + (row[4] || 0) + '" title="Check this value"' : 'span') + ' class="dp-read__v"><i>' + row[0] + '</i><b></b>' + (row[2] ? '<u>' + row[2] + '</u>' : '') + '</' + (ok ? 'button' : 'span') + '>';
+                    }).join('');
+                    stripVals._k = key;
+                    stripVals._v = Array.prototype.slice.call(stripVals.querySelectorAll('b'));
+                }
+                info.rows.forEach(function (row, q) {
+                    var n = row[3], txt = num(row[1], n && V(n) ? digitsOf(n) : 4), el = stripVals._v[q];
+                    if (el && el.textContent !== txt) el.textContent = txt;
+                });
             }
-            probe.marked = true;
-        } else { if (tip) tip.hidden = true; if (tipT) tipT.hidden = true; }
+        }
         if (info && isOpen) {
             probeHint.hidden = true;
             probeBody.hidden = false;
-            var ph = esc(info.title) + ' <span>· ' + esc(timeText(timeNow())) + '</span>';
-            if (ph !== probeTitle._h) { probeTitle.innerHTML = info.title + ' <span>· ' + esc(timeText(timeNow())) + '</span>'; probeTitle._h = ph; }
-            /* rows are rebuilt only when the set of quantities changes; values update in place, so the Check buttons stay clickable */
-            var key = info.rows.map(function (row) { return row[0] + '|' + row[3] + '|' + row[4] + '|' + (row[2] || ''); }).join(';');
-            if (key !== probeRows._k) {
+            var ph = info.title + ' <span>· ' + esc(t) + (probe.on && probe.pinned ? '' : ' · last pinned') + '</span>';
+            if (ph !== probeTitle._h) { probeTitle.innerHTML = ph; probeTitle._h = ph; }
+            var k2 = rowsKey(info.rows);
+            if (k2 !== probeRows._k) {
                 probeRows.innerHTML = info.rows.map(function (row) {
                     var n = row[3], idx = row[4];
                     return '<tr><th>' + row[0] + '</th><td><span class="dp-probe__v"></span>' + (row[2] ? ' <span class="dp-u">' + row[2] + '</span>' : '') + '</td><td>' +
                         (n && V(n) ? '<button type="button" class="dp-chk" data-check="' + esc(n) + '" data-idx="' + (idx || 0) + '" aria-label="Check" title="Check this value">' + CHK + '</button>' : '') + '</td></tr>';
                 }).join('');
-                probeRows._k = key;
+                probeRows._k = k2;
                 probeRows._v = Array.prototype.slice.call(probeRows.querySelectorAll('.dp-probe__v'));
             }
             info.rows.forEach(function (row, q) {
-                var n = row[3], t = num(row[1], n && V(n) ? digitsOf(n) : 4), el = probeRows._v[q];
-                if (el && el.textContent !== t) el.textContent = t;
+                var n = row[3], txt = num(row[1], n && V(n) ? digitsOf(n) : 4), el = probeRows._v[q];
+                if (el && el.textContent !== txt) el.textContent = txt;
             });
         }
     }
@@ -737,7 +738,7 @@
     function describeRound() {
         if (rec) return;
         var lab = safe(R.label, '') || 'ten seconds of play';
-        var txt = 'One round = <b>' + lab + '</b>.<span class="dp-more-txt"> Every frame of it is caught' + (spec.inspect ? ', with the point you last ' + (TOUCH ? 'held' : 'pointed at') : '') + '; then the recording stops by itself.</span>';
+        var txt = 'One round = <b>' + lab + '</b>.<span class="dp-more-txt"> Every frame of it is caught' + (spec.inspect ? ', with ' + (held.ref ? 'the point you pinned' : 'a point the page chooses; pin another with Read values') : '') + '; then the recording stops by itself.</span>';
         if (txt !== recWhat._h) { recWhat.innerHTML = txt; recWhat._h = txt; }
     }
     function scalarNames() { return ds.order.filter(isNumScalar); }
@@ -872,7 +873,7 @@
         if (!rounds.length) {
             host.innerHTML = '<div class="dp-empty"><p class="dp-empty__k">No round yet</p><h3>Record one round of the simulation.</h3>' +
                 '<p>Press <b>Record</b> above. The simulation keeps running exactly as before; for one round (' + esc(safe(R.label, '') || 'ten seconds') + ') every frame’s numbers are copied here, then the recording stops by itself.</p>' +
-                '<p>You get one chart per quantity, a table of every sample, and a file you can open in Python. ' + (TOUCH ? 'Hold a point on the figure first' : 'Point at something in the figure first') + ' and its values are recorded too.</p></div>';
+                '<p>You get one chart per quantity, a table of every sample, and a file you can open in Python. ' + 'Pin a point with <b>Read values</b> under the figure first, and its values are recorded too.</p></div>';
             return;
         }
         var r = rounds[sel], x = r.elapsed;
@@ -897,7 +898,7 @@
         });
         h += '</div>' + (still.length ? '<p class="dp-rd__still"><b>Constant during the round</b>' + still.map(function (q) { return '<span><i>' + q[0].label + '</i> ' + esc(num(q[1], q[0].digits)) + (q[0].units ? ' ' + q[0].units : '') + (q[0].point ? ' <em>at the point</em>' : '') + '</span>'; }).join('') + '</p>' : '') +
             (undef.length ? '<p class="dp-rd__still"><b>Not defined during the round</b>' + undef.map(function (q) { return '<span><i>' + q.label + '</i></span>'; }).join('') + '</p>' : '') +
-            (r.pointTitle ? '<p class="dp-rd__note">Black lines follow ' + r.pointTitle + ', the point held when the round began.</p>' : '') +
+            (r.pointTitle ? '<p class="dp-rd__note">Black lines follow ' + r.pointTitle + ', the point followed when the round began.</p>' : '') +
             '<details class="dp-rd__tbl"><summary>Every sample · ' + r.n + ' rows × ' + r.series.length + ' columns</summary><div class="dp-rd__wrap"><table><thead><tr><th>#</th>' +
             r.series.map(function (s) { return '<th><span class="dp-sym">' + s.label + '</span>' + (s.units ? '<small>' + s.units + '</small>' : '') + '</th>'; }).join('') + '</tr></thead><tbody>';
         for (var i = 0; i < r.n; i++) h += '<tr><th>' + (i + 1) + '</th>' + r.series.map(function (s) { return '<td>' + esc(num(s.data[i], s.digits)) + '</td>'; }).join('') + '</tr>';
@@ -1045,11 +1046,11 @@
 
     /* ---------- the loop: it runs only while something needs it, and after the simulation's own frame ---------- */
     var running = false;
-    function wanted() { return !!rec || probe.active || performance.now() < probe.cellUntil || (isOpen && liveOn) || probe.marked; }
+    function wanted() { return !!rec || (probe.on && (probe.pinned || !!probe.preview)) || performance.now() < probe.cellUntil || (isOpen && liveOn) || probe.marked; }
     function kick() { if (!running && wanted()) { running = true; requestAnimationFrame(frame); } }
     function frame() {
         if (rec) safe(recordFrame);
-        if (overlay && (probe.active || probe.marked || performance.now() < probe.cellUntil)) safe(paintProbe);
+        if (overlay && (probe.on || probe.marked || performance.now() < probe.cellUntil)) safe(paintProbe);
         if (isOpen && liveOn) paint(false); else paintState();
         if (wanted()) requestAnimationFrame(frame);
         else { running = false; safe(clearOverlay); }

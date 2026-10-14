@@ -102,24 +102,24 @@
     "expected": "The data panel lists a group headed Energy with rows T, V, E and ε, and the state vector y opens as a table with four rows named θ₁, θ₂, ω₁ and ω₂ and columns value, unit and d/dt."
   },
   {
-    "name": "Fig. 6 data panel reads the figure under the pointer and checks a value three ways",
+    "name": "Fig. 6 Read values pins a point of the figure and checks a value three ways",
     "viewport": "desktop",
     "covers": [
-      "Fig. 6 data panel",
-      "pointer probe",
+      "Read values tool",
+      "pinned readout strip",
       "check view",
       "dataset save"
     ],
-    "description": "Verifies the side panel on the wave workbench reads the stored values at the pointer, opens the three-way check of one value and offers the dataset as a download.",
+    "description": "Verifies that the Read values switch under the wave workbench pins a point of the figure, shows its stored values in a strip under the figure, opens the three-way check of one value, and offers the dataset as a download.",
     "steps": [
       "Open the home page",
       "In the simulations section, click the Launch button on the Wave Interference Simulator card",
-      "On the opened page, if the data panel is not open, click the Data tab on the right edge of the window",
-      "Move the pointer onto the black sum curve in the upper half of the figure and hold it there",
-      "In the data panel, under the heading Under the pointer, click the check-mark button on the row Σ yᵢ",
-      "Click the Back button, then click the download button in the panel header"
+      "Click the Read values button at the right end of the caption under the figure",
+      "Click on the black sum curve in the upper half of the figure",
+      "In the strip under the figure, click the value labelled Σ yᵢ",
+      "In the data panel that opens, click Back, then click the download button in the panel header"
     ],
-    "expected": "Under the pointer lists rows X, Σ yᵢ and y px with numeric values and a small marker appears on the curve; the check view shows three numbered sections, Stored in the dataset, Recomputed now from the stored inputs, and Read back from the picture, with the line Stored and recomputed identical; the download button saves a zip file whose name starts with fig6-wave-bench."
+    "expected": "Moving the pointer across the figure before pressing Read values shows nothing over the figure; after Read values and the click, a ring marker sits on the curve and the strip under the figure lists X, Σ yᵢ and y px with numeric values; clicking Σ yᵢ opens the data panel at a check with three numbered sections, Stored in the dataset, Recomputed now from the stored inputs, and Read back from the picture, with the line Stored and recomputed identical; the download button saves a zip file whose name starts with fig6-wave-bench."
   },
   {
     "name": "Phone: the data sheet records one round of the water waves",
