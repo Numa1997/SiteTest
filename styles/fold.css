@@ -150,18 +150,19 @@
 .paper .psec > .fs-head .psec__n { display: inline-block; position: relative; margin-right: 12px; vertical-align: .2em; top: 0; }
 .paper .psec > .fs-head .star { margin-left: 8px; }
 
-/* the simulations list, sorted like Physik Radar's board: fields, and course years inside them */
+/* the simulations list: one card per simulation, titled and numbered by its figure */
 .cat__list.cat__list--sorted { display: flex; flex-direction: column; gap: 12px; }
-.simcat.fsec { scroll-margin-top: calc(var(--fold-top) + 12px); }
-.simcat > .fs-head h2.fs-title { margin: 0; font: 400 clamp(26px, 2.6vw, 32px)/1.1 var(--serif); letter-spacing: -.01em; color: var(--ink); }
-.simcat__blurb { margin: 0 0 4px; font: italic 17px/1.55 var(--tex); color: var(--ink-2); }
-.simyear.fsub { margin-top: 14px; }
-.simyear > .fs-head .fs-main { display: flex; flex-wrap: wrap; align-items: baseline; gap: 4px 14px; }
-.simyear__name { margin: 0; font: 600 12.5px/1.2 var(--mono); letter-spacing: .12em; text-transform: uppercase; color: var(--fold-accent); }
-.simyear__count { margin: 0; font: 12px var(--mono); color: var(--muted); }
-.cat__grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 18px; }
-@media (max-width: 860px) { .cat__grid { grid-template-columns: minmax(0, 1fr); } }
-/* the home page's simulations, one part per field */
-.hsimfield > .fs-head .fs-main { display: flex; flex-wrap: wrap; align-items: baseline; gap: 4px 14px; }
-.hsimfield.fsub { margin-top: 14px; }
-.hsimfield .plates { margin: 0; }
+.simfold.fsec { scroll-margin-top: calc(var(--fold-top) + 12px); }
+.simfold > .fs-head h2.fs-title { margin: 0; font: 400 clamp(26px, 2.6vw, 32px)/1.1 var(--serif); letter-spacing: -.01em; color: var(--ink); }
+.simfold .entry { display: grid; grid-template-columns: minmax(0, .95fr) minmax(0, 1.05fr); grid-template-rows: auto 1fr; column-gap: 26px;
+  border: 0; border-radius: 0; background: transparent; overflow: visible; }
+.simfold .entry__fig { grid-column: 1; grid-row: 1; padding: 0; }
+.simfold .entry__cap { grid-column: 1; grid-row: 2; padding: 8px 0 0; align-self: start; }
+.simfold .entry__body { grid-column: 2; grid-row: 1 / span 2; padding: 0; }
+.simfold .entry h3 { display: none; }   /* the title is already the card's header */
+@media (max-width: 860px) {
+  .simfold .entry { grid-template-columns: minmax(0, 1fr); grid-template-rows: none; }
+  .simfold .entry__fig, .simfold .entry__cap, .simfold .entry__body { grid-column: 1; grid-row: auto; }
+  .simfold .entry__body { padding-top: 14px; }
+}
+.simfold .entry::before, .simfold .entry::after { content: none; display: none; }

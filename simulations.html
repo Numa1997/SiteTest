@@ -229,40 +229,19 @@
           );
         }
 
-        /* The list is sorted like Physik Radar's board: one card per field (numbered in the fixed field order), and inside it
-           one part per course year, holding that year's simulations in figure order. It opens as a column of closed fields;
-           a search or a chip opens what it finds, without changing what the reader opened or closed. */
-        var YEARS = { 1: 'First year', 2: 'Second year' };
-        var USED = FIELDS.filter(function (f) { return SIMS.some(function (s) { return s.field === f.id; }); });
-        function many(n, one, more) { return n + ' ' + (n === 1 ? one : more); }
-        function figs(list) { var f = list.map(function (s) { return s.fig; }); return (f.length === 1 ? 'Fig. ' : 'Figs. ') + f.join(', '); }
-        function sorted(shown) {
-          return USED.map(function (f, i) {
-            var inF = shown.filter(function (s) { return s.field === f.id; });
-            if (!inF.length) return '';
-            var all = SIMS.filter(function (s) { return s.field === f.id; });
-            var years = Object.keys(YEARS).filter(function (y) { return inF.some(function (s) { return String(s.stage) === y; }); });
-            var allYears = Object.keys(YEARS).filter(function (y) { return all.some(function (s) { return String(s.stage) === y; }); });
-            var counts = (inF.length === all.length ? many(all.length, 'simulation', 'simulations') : inF.length + ' of ' + all.length + ' shown') +
-              ' · ' + figs(inF) + ' · ' + allYears.map(function (y) { return YEARS[y].toLowerCase(); }).join(' and ');
-            return '<section class="simcat" id="field-' + f.id + '" data-counts="' + esc(counts) + '" data-label="' + esc(f.name) + '">' +
-              '<h2 class="fs-title"><span class="fs-num">' + String(i + 1).padStart(2, '0') + '</span>' + esc(f.name) + '</h2>' +
-              '<p class="simcat__blurb">' + esc(f.blurb) + '</p>' +
-              years.map(function (y) {
-                var inY = inF.filter(function (s) { return String(s.stage) === y; });
-                return '<section class="simyear" id="field-' + f.id + '-y' + y + '" data-label="' + esc(YEARS[y] + ', ' + f.name) + '">' +
-                  '<h3 class="simyear__name">' + YEARS[y] + '</h3><p class="simyear__count">' + many(inY.length, 'simulation', 'simulations') + ' · ' + figs(inY) + '</p>' +
-                  '<div class="cat__grid">' + inY.map(entry).join('') + '</div></section>';
-              }).join('') +
-              '</section>';
+        /* One card per simulation, titled with its name and numbered by its figure, in figure order: the page opens as a column
+           of titles, and each opens to show its figure, abstract and links. A search or a chip opens what it finds, without
+           changing what the reader opened or closed. (Sorting into fields and years can come back once the library is large.) */
+        function cards(shown) {
+          return shown.map(function (s) {
+            return '<section class="simfold" id="simulation-' + esc(s.id) + '" data-counts="' + esc(s.subject) + '" data-label="' + esc(s.title) + '">' +
+              '<h2 class="fs-title"><span class="fs-num">' + String(s.fig).padStart(2, '0') + '</span>' + esc(s.title) + '</h2>' +
+              entry(s) + '</section>';
           }).join('');
         }
         function folds(filtering) {
           if (!window.Fold) return;
-          Array.prototype.forEach.call(list.querySelectorAll('.simyear'), function (y) {
-            Fold.make(y, { level: 2, head: [y.querySelector('.simyear__name'), y.querySelector('.simyear__count')], label: y.getAttribute('data-label'), defaultOpen: false, forceOpen: filtering });
-          });
-          Array.prototype.forEach.call(list.querySelectorAll('.simcat'), function (c) {
+          Array.prototype.forEach.call(list.querySelectorAll('.simfold'), function (c) {
             Fold.make(c, { level: 1, head: [c.querySelector('.fs-title')], counts: c.getAttribute('data-counts'), label: c.getAttribute('data-label'), defaultOpen: false, forceOpen: filtering });
           });
         }
@@ -282,7 +261,7 @@
         function render(fromUser) {
           var t = terms();
           var shown = SIMS.filter(function (s) { return matches(s, t); });
-          list.innerHTML = sorted(shown);
+          list.innerHTML = cards(shown);
           folds(!!(state.q || state.field || state.stage));
           typeset();
           Array.prototype.forEach.call(list.querySelectorAll('.entry__plate img'), function (img) {

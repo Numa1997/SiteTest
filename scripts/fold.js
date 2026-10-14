@@ -360,32 +360,6 @@
             simulations: function (s) { return plural(count(s, 'article'), 'figure', 'figures'); },
             skills: function (s) { return plural(count(s, 'dt'), 'area', 'areas'); }
         };
-        /* the simulations section is sorted like the simulations page: one part per field, its plates inside */
-        var simSec = doc.getElementById('simulations'), plates = simSec && simSec.querySelector('.plates');
-        if (plates && window.SIMULATIONS && window.SIM_FIELDS) {
-            var byFile = {};
-            window.SIMULATIONS.forEach(function (s) { byFile[s.file] = s; });
-            var groups = {};
-            Array.prototype.forEach.call(plates.querySelectorAll(':scope > .plate'), function (pl) {
-                var a = pl.querySelector('a[href^="simulations/"]'), s = a && byFile[decodeURI(a.getAttribute('href'))];
-                var key = s ? s.field : 'other';
-                (groups[key] = groups[key] || []).push([pl, s]);
-            });
-            window.SIM_FIELDS.concat([{ id: 'other', name: 'More' }]).forEach(function (f) {
-                var list = groups[f.id];
-                if (!list) return;
-                var part = el('section', 'hsimfield'), name = el('h3', 'simyear__name', f.name);
-                var figs = list.map(function (x) { return x[1] ? x[1].fig : null; }).filter(function (n) { return n !== null; });
-                var cnt = el('p', 'simyear__count', plural(list.length, 'figure', 'figures') + (figs.length ? ' · ' + (figs.length === 1 ? 'Fig. ' : 'Figs. ') + figs.join(', ') : ''));
-                var grid = el('div', 'plates');
-                list.forEach(function (x) { grid.appendChild(x[0]); });
-                part.id = 'simulations-' + f.id;
-                part.appendChild(name); part.appendChild(cnt); part.appendChild(grid);
-                plates.parentNode.insertBefore(part, plates);
-                make(part, { level: 2, head: [name, cnt], label: f.name + ' simulations' });
-            });
-            plates.remove();
-        }
         Array.prototype.forEach.call(secs, function (sec, i) {
             var h2 = sec.querySelector(':scope > h2');
             if (!h2) return;
