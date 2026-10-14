@@ -399,6 +399,7 @@
         }
         setInterval(update, 200);
         show(0);
+        if (window.Fold) window.Fold.walk(host);
     }
 
     /* ---------- lecture notes: KaTeX typesets \( … \) and \[ … \] in every .paper ---------- */

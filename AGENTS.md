@@ -13,6 +13,14 @@ Layout (GitHub Pages serves the repository root as-is, so every asset lives at t
 `scripts/walk/<key>.js` ("From symbols to code", one file per page, chosen by the page's `data-walk` key:
 each equation paired with the page's own code lines; keep the excerpts identical to the page code when either
 changes; live values come from `Sim.live()` in each page); `simulations/*.html` (ten pages).
+Folds: `scripts/fold.js` + `styles/fold.css`, the fold-out mechanism of Physik Radar and the project apps, in one colour (no colour
+coding). Level 1 is a section card with a header band (number, title, a line of counts, round toggle) that pins to the top of the window
+while open; level 2 is a part inside it, pinned under its section's band; cards keep details behind More / Less. It turns, at load:
+each lecture-note section `.psec` (and each `h4` part in it), the walkthrough `#walk` (called by `sim.js` once drawn), the home page
+sections, each Portfolios project and its numbered parts; the simulations list builds its cards with the fold markup itself. Everything
+starts open; what a reader closes is remembered per page in localStorage; Expand all / Collapse all act without animation; a link into a
+closed fold opens it first and lands below the pinned headers; printing opens everything. A page bar that sticks across the whole width
+(the home index on phones) carries `data-fold-bar`, so the headers pin below it. Without JavaScript every page reads fully open.
 Simulations page: `simulations.html` lists every simulation as a paper abstract (thumbnail with a numbered caption, field and year,
 summary, the key equation typeset by KaTeX, model, method, what the reader sets, concepts, links to the figure and to its lecture note) in
 one grid in figure order, with a search and field and year chips; the view lives in the address (`?q=&field=&stage=`). It draws itself from

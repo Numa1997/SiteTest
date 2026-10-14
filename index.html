@@ -13,6 +13,7 @@
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link rel="stylesheet" href="styles/site.css" />
+    <link rel="stylesheet" href="styles/fold.css" />
     <link
       rel="icon"
       href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='12' fill='%237a1f2b'/%3E%3Ctext x='32' y='45' text-anchor='middle' font-family='Georgia,serif' font-size='38' fill='%23f5f1ea'%3EN%3C/text%3E%3C/svg%3E"
@@ -58,7 +59,7 @@
     </header>
 
     <div class="layout">
-      <nav class="index" aria-label="Sections">
+      <nav class="index" aria-label="Sections" data-fold-bar>
         <p class="index__label">Index</p>
         <ul>
           <li><a href="#positions">Positions</a></li>
@@ -618,6 +619,7 @@
       <span><a href="#top">Back to top ↑</a></span>
     </footer>
 
+    <script src="scripts/fold.js"></script>
     <script>
       (function () {
         var reduced =

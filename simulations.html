@@ -16,6 +16,7 @@
     <link rel="stylesheet" href="vendor/katex/katex.min.css" />
     <link rel="stylesheet" href="styles/paper.css" />
     <link rel="stylesheet" href="styles/catalog.css" />
+    <link rel="stylesheet" href="styles/fold.css" />
     <link
       rel="icon"
       href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='12' fill='%237a1f2b'/%3E%3Ctext x='32' y='45' text-anchor='middle' font-family='Georgia,serif' font-size='34' font-weight='700' fill='%23fff'%3ENK%3C/text%3E%3C/svg%3E"
@@ -120,6 +121,7 @@
       <span><a href="index.html">Home page</a> · <a href="portfolios.html">Portfolios</a> · <a href="#top" id="to-top">Back to top ↑</a></span>
     </footer>
 
+    <script src="scripts/fold.js"></script>
     <script src="scripts/catalog.js"></script>
     <script src="vendor/katex/katex.min.js"></script>
     <script>
@@ -135,6 +137,8 @@
         var $ = function (id) { return document.getElementById(id); };
         var q = $('q'), list = $('catalog'), count = $('count'), empty = $('empty');
         var state = { q: '', field: '', stage: '' };
+        // which cards show their details (model, method, what you set, concepts); kept while the list redraws
+        var openCards = {};
 
         function esc(s) {
           return String(s).replace(/[&<>"']/g, function (c) {
@@ -198,7 +202,7 @@
           var href = encodeURI(s.file);
           var stage = s.stage === 1 ? 'first year' : s.stage === 2 ? 'second year' : s.stage ? 'year ' + s.stage : '';
           return (
-            '<article class="entry" id="sim-' + esc(s.id) + '">' +
+            '<article class="entry" id="sim-' + esc(s.id) + '" data-card data-sim="' + esc(s.id) + '" data-collapsed="' + (openCards[s.id] ? '0' : '1') + '">' +
             '<a class="entry__fig" href="' + href + '" tabindex="-1" aria-hidden="true"><span class="entry__plate">' +
             '<span class="entry__ph">Fig. ' + s.fig + '</span>' +
             '<img src="images/sims/' + esc(s.id) + '.webp" width="800" height="500" loading="lazy" decoding="async" alt=""></span></a>' +
@@ -208,6 +212,7 @@
             '<h3><a href="' + href + '">' + esc(s.title) + '</a></h3>' +
             '<p class="entry__abs">' + esc(s.summary) + '</p>' +
             '<div class="entry__eq" data-tex="' + esc(s.equation) + '"></div>' +
+            '<div class="fold" data-open="' + (openCards[s.id] ? '1' : '0') + '"' + (openCards[s.id] ? '' : ' inert') + '><div class="fold-i"><div class="entry__more">' +
             '<dl class="entry__facts">' +
             '<dt>model</dt><dd>' + esc(s.model) + '</dd>' +
             '<dt>method</dt><dd>' + esc(s.method) + '</dd>' +
@@ -215,10 +220,11 @@
             '</dl>' +
             '<ul class="entry__tags" aria-label="Concepts">' +
             (s.concepts || []).slice(0, 6).map(function (c) { return '<li>' + esc(c) + '</li>'; }).join('') +
-            '</ul>' +
+            '</ul></div></div></div>' +
             '<div class="entry__foot">' +
             '<a class="entry__open" href="' + href + '">Open Fig. ' + s.fig + '</a>' +
             '<a class="entry__note" href="' + href + '#paper">Read the lecture note</a>' +
+            '<button type="button" class="fs-more" aria-expanded="' + (openCards[s.id] ? 'true' : 'false') + '" aria-label="' + (openCards[s.id] ? 'Hide details' : 'Show details') + '">' + (openCards[s.id] ? 'Less' : 'More') + '<svg class=\"chev\" viewBox=\"0 0 14 14\" width=\"12\" height=\"12\" aria-hidden=\"true\"><path d=\"M3 5l4 4 4-4\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"1.8\" stroke-linecap=\"round\" stroke-linejoin=\"round\"/></svg></button>' +
             '</div></div></article>'
           );
         }
@@ -318,6 +324,11 @@
         SIMS.forEach(function (s) { used[s.field] = 1; usedStage[s.stage] = 1; });
         chips($('fields'), FIELDS.filter(function (f) { return used[f.id]; }), 'field', 'All fields');
         chips($('stages'), STAGES.filter(function (s) { return usedStage[s.id]; }), 'stage', 'Any year');
+        if (window.Fold) {
+          Fold.onCard = function (card) { openCards[card.getAttribute('data-sim')] = card.getAttribute('data-collapsed') === '0'; };
+          Fold.onAll = function (open) { SIMS.forEach(function (s) { openCards[s.id] = open; }); };
+          Fold.tools(list, 'before');
+        }
         stats();
         load();
         render(false);
