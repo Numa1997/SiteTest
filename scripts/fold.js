@@ -57,14 +57,18 @@
         })(performance.now());
     }
 
-    /* which folds this reader closed, per page */
+    /* what this reader opened or closed, per page: id -> 1 open, 0 closed; anything else keeps its default */
     var KEY = 'fold:' + location.pathname.replace(/\/index\.html$/, '/');
-    var closed = {};
-    try { (JSON.parse(localStorage.getItem(KEY) || '[]') || []).forEach(function (id) { closed[id] = 1; }); } catch (e) { /* private mode */ }
+    var chosen = {};
+    try {
+        var saved = JSON.parse(localStorage.getItem(KEY) || '{}');
+        if (Array.isArray(saved)) saved.forEach(function (id) { chosen[id] = 0; });   /* the first format: a list of closed ids */
+        else if (saved && typeof saved === 'object') chosen = saved;
+    } catch (e) { /* private mode */ }
     function remember(id, open) {
         if (!id) return;
-        if (open) delete closed[id]; else closed[id] = 1;
-        try { localStorage.setItem(KEY, JSON.stringify(Object.keys(closed))); } catch (e) { /* private mode */ }
+        chosen[id] = open ? 1 : 0;
+        try { localStorage.setItem(KEY, JSON.stringify(chosen)); } catch (e) { /* private mode */ }
     }
 
     function el(tag, cls, text) {
@@ -166,7 +170,8 @@
         if (!node || node.hasAttribute('data-fold-level')) return node;
         var level = opt.level || 1, id = node.id || opt.id;
         if (!node.id && id) node.id = id;
-        var open = !closed[id];
+        /* a filter can show a fold open without changing what the reader chose */
+        var open = opt.forceOpen ? true : id in chosen ? chosen[id] === 1 : opt.defaultOpen !== false;
         var head = el('div', 'fs-head'), main = el('div', 'fs-main'), side = el('div', 'fs-side');
         (opt.head || []).forEach(function (h) { if (h) main.appendChild(h); });
         if (opt.counts) { var c = el('p', 'fs-counts'); c.textContent = opt.counts; main.appendChild(c); }
@@ -292,6 +297,11 @@
         root.style.setProperty('--fold-top', h + 'px');
     }
     window.addEventListener('resize', measureTop, { passive: true });
+    if (window.ResizeObserver) {
+        var barObserver = new ResizeObserver(measureTop);
+        var watchBars = function () { Array.prototype.forEach.call(doc.querySelectorAll('[data-fold-bar]'), function (b) { barObserver.observe(b); }); };
+        if (doc.readyState === 'loading') doc.addEventListener('DOMContentLoaded', watchBars); else watchBars();
+    }
 
     var plural = function (n, one, many) { return n + ' ' + (n === 1 ? one : many); };
     var count = function (scope, sel) { return scope.querySelectorAll(sel).length; };
@@ -350,6 +360,32 @@
             simulations: function (s) { return plural(count(s, 'article'), 'figure', 'figures'); },
             skills: function (s) { return plural(count(s, 'dt'), 'area', 'areas'); }
         };
+        /* the simulations section is sorted like the simulations page: one part per field, its plates inside */
+        var simSec = doc.getElementById('simulations'), plates = simSec && simSec.querySelector('.plates');
+        if (plates && window.SIMULATIONS && window.SIM_FIELDS) {
+            var byFile = {};
+            window.SIMULATIONS.forEach(function (s) { byFile[s.file] = s; });
+            var groups = {};
+            Array.prototype.forEach.call(plates.querySelectorAll(':scope > .plate'), function (pl) {
+                var a = pl.querySelector('a[href^="simulations/"]'), s = a && byFile[decodeURI(a.getAttribute('href'))];
+                var key = s ? s.field : 'other';
+                (groups[key] = groups[key] || []).push([pl, s]);
+            });
+            window.SIM_FIELDS.concat([{ id: 'other', name: 'More' }]).forEach(function (f) {
+                var list = groups[f.id];
+                if (!list) return;
+                var part = el('section', 'hsimfield'), name = el('h3', 'simyear__name', f.name);
+                var figs = list.map(function (x) { return x[1] ? x[1].fig : null; }).filter(function (n) { return n !== null; });
+                var cnt = el('p', 'simyear__count', plural(list.length, 'figure', 'figures') + (figs.length ? ' · ' + (figs.length === 1 ? 'Fig. ' : 'Figs. ') + figs.join(', ') : ''));
+                var grid = el('div', 'plates');
+                list.forEach(function (x) { grid.appendChild(x[0]); });
+                part.id = 'simulations-' + f.id;
+                part.appendChild(name); part.appendChild(cnt); part.appendChild(grid);
+                plates.parentNode.insertBefore(part, plates);
+                make(part, { level: 2, head: [name, cnt], label: f.name + ' simulations' });
+            });
+            plates.remove();
+        }
         Array.prototype.forEach.call(secs, function (sec, i) {
             var h2 = sec.querySelector(':scope > h2');
             if (!h2) return;

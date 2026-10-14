@@ -149,3 +149,19 @@
 .paper .psec > .fs-head h3 { display: block; }
 .paper .psec > .fs-head .psec__n { display: inline-block; position: relative; margin-right: 12px; vertical-align: .2em; top: 0; }
 .paper .psec > .fs-head .star { margin-left: 8px; }
+
+/* the simulations list, sorted like Physik Radar's board: fields, and course years inside them */
+.cat__list.cat__list--sorted { display: flex; flex-direction: column; gap: 12px; }
+.simcat.fsec { scroll-margin-top: calc(var(--fold-top) + 12px); }
+.simcat > .fs-head h2.fs-title { margin: 0; font: 400 clamp(26px, 2.6vw, 32px)/1.1 var(--serif); letter-spacing: -.01em; color: var(--ink); }
+.simcat__blurb { margin: 0 0 4px; font: italic 17px/1.55 var(--tex); color: var(--ink-2); }
+.simyear.fsub { margin-top: 14px; }
+.simyear > .fs-head .fs-main { display: flex; flex-wrap: wrap; align-items: baseline; gap: 4px 14px; }
+.simyear__name { margin: 0; font: 600 12.5px/1.2 var(--mono); letter-spacing: .12em; text-transform: uppercase; color: var(--fold-accent); }
+.simyear__count { margin: 0; font: 12px var(--mono); color: var(--muted); }
+.cat__grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 18px; }
+@media (max-width: 860px) { .cat__grid { grid-template-columns: minmax(0, 1fr); } }
+/* the home page's simulations, one part per field */
+.hsimfield > .fs-head .fs-main { display: flex; flex-wrap: wrap; align-items: baseline; gap: 4px 14px; }
+.hsimfield.fsub { margin-top: 14px; }
+.hsimfield .plates { margin: 0; }
