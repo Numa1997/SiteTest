@@ -3,9 +3,9 @@
 | | |
 |---|---|
 | Page | [public/simulations/driven-oscillator.html](../../public/simulations/driven-oscillator.html) (1 108 lines, 178 kB) |
-| Walkthrough | [public/scripts/walk/driven.js](../../public/scripts/walk/driven.js) (121 lines, 7 steps) |
-| Thumbnail | [public/images/sims/driven-oscillator.webp](../../public/images/sims/driven-oscillator.webp) (800 × 500 px) |
-| Catalog entry | [public/scripts/catalog.js#L183](../../public/scripts/catalog.js#L183-L199) (`id: 'driven-oscillator'`, `fig: 9`) |
+| Walkthrough | [public/scripts/walk/driven.js](../../public/scripts/walk/driven.js) (121 lines, 7 steps, key `driven`) |
+| Thumbnail | [public/images/sims/driven-oscillator.webp](../../public/images/sims/driven-oscillator.webp) (WebP, 800 × 500 px, 23.7 kB) |
+| Catalog entry | [public/scripts/catalog.js#L183](../../public/scripts/catalog.js#L183-L199) (`id: 'driven-oscillator'`, `fig: 9`, `field: 'control'`, `stage: 1`, lines 183–199) |
 
 A block of mass 1 kg sits on a spring and a damper and is pushed by a force $F_0\cos\Omega t$ that does not care where the
 block is. The reader sets the natural frequency, the damping ratio, the force amplitude and the drive frequency, presses
