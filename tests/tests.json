@@ -26,14 +26,14 @@
       "search",
       "links between catalog and simulation pages"
     ],
-    "description": "The dedicated simulations page draws one entry per simulation from the registry, in figure order, each with a picture, an abstract and its key equation typeset as in LaTeX; it filters by field, searches the text, and links to and from the simulation pages.",
+    "description": "The dedicated simulations page draws one card per simulation from the registry, in figure order, titled with its name; the cards open as closed titles, and a field chip or a search opens what it finds, each with a picture, an abstract and its key equation typeset as in LaTeX; the cards link to and from the simulation pages.",
     "steps": [
       "Open the home page and click the button Open the simulations near the top",
-      "Confirm the page heading reads Simulations and that ten entries are shown in order from Figure 1 to Figure 10, each with a picture, a typeset equation and a button starting with Open Fig.",
+      "Confirm the page heading reads Simulations, that ten closed cards are listed in order, numbered 01 to 10 and titled Wave Interference to Wind Turbine Control, and that the text 10 shown appears",
       "Click the chip Wave optics",
-      "Confirm only the entries Wave Interference (Figure 1) and Double-Slit Interference (Figure 3) are shown and the text 2 of 10 shown appears",
+      "Confirm only the cards Wave Interference (01) and Double-Slit Interference (03) are shown, each opened with a picture, a typeset equation and a button starting with Open Fig., and the text 2 of 10 shown appears",
       "Click the chip All fields, type runge in the search box",
-      "Confirm only the entry Double Pendulum is shown",
+      "Confirm only the card Double Pendulum is shown, opened, and the text 1 of 10 shown appears",
       "Click its button Open Fig. 2, then click the link All simulations at the top left of the simulation page"
     ],
     "expected": "The simulation page opens with the heading Double Pendulum, and the top-left link returns to the simulations page with the heading Simulations."

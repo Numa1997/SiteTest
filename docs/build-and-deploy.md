@@ -74,10 +74,13 @@ workbench on a phone; the Fig. 1 data panel (variables, an array as a table, one
 (Fig. 5); Fig. 9 solving before playing and its lecture note; Fig. 10 re-solving after a controller change; the Portfolios
 page and the droplet copy.
 
-**Difference with the app (14 October 2026).** The app's stored `tests/tests.json` is an older version: its first scenario
-looks for a footer reading "Claude version", while the site's footer now reads "© 2026 Numa Koudsie"
-([index.html:618](../index.html#L618)). The version in this repository matches the current site. It is to be deployed to the
-app, so that the two agree again.
+**Brought up to date on 14 October 2026.** The app's stored `tests/tests.json` was an older version: its first scenario
+looked for a footer reading "Claude version", while the footer reads "© 2026 Numa Koudsie"
+([index.html:618](../index.html#L618)); and the second scenario expected the catalog to open with ten full entries, while its
+cards now open as closed titles that a chip or a search opens. Both scenarios now describe the site as it is; the second was
+followed step by step in headless Chromium before it was written down (ten closed titles and "10 shown"; the chip Wave optics
+opens Figs. 1 and 3 with picture, equation and button, "2 of 10 shown"; the search "runge" opens Fig. 2 alone; the links go
+there and back). The same file was deployed to the app.
 
 ## `AGENTS.md` and `CLAUDE.md`
 

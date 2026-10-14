@@ -24,9 +24,10 @@ numbered by its figure, in figure order; it opens as a column of closed titles, 
 what the reader chose. Numa's choice: no sorting into fields or course years until the library is large. Elsewhere everything starts open. What a reader opens or closes is remembered per page in localStorage; Expand all / Collapse all act without animation; a link into a
 closed fold opens it first and lands below the pinned headers; printing opens everything. A page bar that sticks across the whole width
 (the home index on phones) carries `data-fold-bar`, so the headers pin below it. Without JavaScript every page reads fully open.
-Simulations page: `simulations.html` lists every simulation as a paper abstract (thumbnail with a numbered caption, field and year,
-summary, the key equation typeset by KaTeX, model, method, what the reader sets, concepts, links to the figure and to its lecture note) in
-one grid in figure order, with a search and field and year chips; the view lives in the address (`?q=&field=&stage=`). It draws itself from
+Simulations page: `simulations.html` lists every simulation as one fold card, in one column in figure order (see Folds above); an open card
+shows its paper abstract (thumbnail with a numbered caption, field and year, summary, the key equation typeset by KaTeX, model, method,
+what the reader sets, concepts, links to the figure and to its lecture note). A search and field and year chips filter the list; the view
+lives in the address (`?q=&field=&stage=`). It draws itself from
 the registry `scripts/catalog.js` (`SIMULATIONS`, `SIM_FIELDS`, `SIM_TOOLS`) with `styles/catalog.css`; thumbnails are
 `images/sims/<id>.webp`, 800 × 500 px stills of each page's main figure. To add a simulation: its page in `simulations/`, one entry in
 `SIMULATIONS` (and its field in `SIM_FIELDS` if new), its thumbnail (a missing one shows the Fig. number instead), and its number in the
