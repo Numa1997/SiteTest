@@ -127,9 +127,9 @@ $\tfrac h6(k_1+2k_2+2k_3+k_4)$. Time is set from the step count, `t = (step + 1)
 stage ([L677](../../public/simulations/wind-turbine.html#L677)), so `optimum()` must have run first.
 
 Why RK4 with $h = 10$ ms: the code does not state the reason. What can be measured is the margin. When holding speed the
-linearised error equation has natural frequency $\omega_n = 0.6$ rad/s and decay rate $2\zeta_c\omega_n = 0.96$ s⁻¹; when
-following the wind the relaxation rate at the optimum is 0.11–0.30 s⁻¹ for winds of 4–11 m/s (computed with the page's own
-functions). So $|\lambda| h \le 0.01$, far inside RK4's stable region, and the fastest wind component (0.5 Hz) gets 200 steps
+linearised error equation (equation (10) of the note) has eigenvalues of modulus $\omega_n = 0.6$ s⁻¹ with damping ratio
+0.8; when following the wind the relaxation rate at the optimum is 0.11–0.30 s⁻¹ for winds of 4–11 m/s (computed with the
+page's own functions). So $|\lambda| h \le 0.01$, far inside RK4's stable region, and the fastest wind component (0.5 Hz) gets 200 steps
 per period. The torque clipping and the anti-windup switch make the right-hand side non-smooth at the limits; the code does
 nothing special there. With the defaults the energy balance $E_\text{aero} = E_\text{gen} + \Delta(\tfrac12 J\omega^2)$ holds
 to $8.2\times10^{-13}$ (measured; between 0 and $8.2\times10^{-13}$ for all eight combinations of controller and wind).
