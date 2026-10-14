@@ -103,6 +103,8 @@
     function timeSym() { return TV ? sym(TV) : 't'; }
     function timeUnit() { return TV ? unitOf(TV) : 's'; }
     function timeText(t) { return timeSym() + ' = ' + num(t, 2) + (timeUnit() ? ' ' + timeUnit() : ''); }
+    /* the same as HTML: the symbol is already HTML (t<sub>play</sub>), the number and unit are text */
+    function timeHTML(t) { return timeSym() + ' = ' + esc(num(t, 2)) + (timeUnit() ? ' ' + esc(timeUnit()) : ''); }
     var roundCols = (R.columns || []).filter(function (n) { return n !== TV && isNumScalar(n); });
 
     /* ---------- the panel ---------- */
@@ -117,6 +119,14 @@
     tab.className = 'dp-tab';
     tab.setAttribute('aria-controls', 'data-panel');
     tab.innerHTML = ICON + '<span>Data</span>';
+    /* on a phone the pill floats over the page: it steps aside while the reader scrolls down, and comes back on any scroll up */
+    var lastY = window.scrollY;
+    window.addEventListener('scroll', function () {
+        var y = window.scrollY;
+        if (Math.abs(y - lastY) < 6) return;
+        tab.classList.toggle('dp-tab--away', y > lastY && y > 80);
+        lastY = y;
+    }, { passive: true });
 
     var panel = document.createElement('aside');
     panel.className = 'dp';
@@ -282,8 +292,8 @@
     var caught = { t: NaN, why: '' };
     function paintInstant() {
         var t = liveOn ? timeNow() : caught.t, txt;
-        if (liveOn) txt = '<b>Live</b> · ' + esc(timeText(t)) + ' · repainted every frame';
-        else txt = '<b>Values at ' + esc(timeText(t)) + '</b> · caught ' + esc(caught.why);
+        if (liveOn) txt = '<b>Live</b> · ' + timeHTML(t) + ' · repainted every frame';
+        else txt = '<b>Values at ' + timeHTML(t) + '</b> · caught ' + esc(caught.why);
         if (txt !== instantEl._h) { instantEl.innerHTML = txt; instantEl._h = txt; }
     }
     function catchNow(why) {
@@ -419,7 +429,7 @@
             h = '<div><dt>length</dt><dd>' + snap.R + '</dd></div><div class="wide"><dt>variables along ' + esc(V(n).dims[0]) + '</dt><dd>' + snap.names.map(sym).join(', ') + '</dd></div>';
         }
         if (h !== statsEl._h) { statsEl.innerHTML = h; statsEl._h = h; }
-        var st2 = liveOn ? '<b>Live</b> · ' + esc(timeText(snap.t)) : '<b>Copied at ' + esc(timeText(snap.t)) + '</b> · every cell shows this one frame';
+        var st2 = liveOn ? '<b>Live</b> · ' + timeHTML(snap.t) : '<b>Copied at ' + timeHTML(snap.t) + '</b> · every cell shows this one frame';
         if (st2 !== snapEl._h) { snapEl.innerHTML = st2; snapEl._h = st2; }
         if (grid) safe(grid.paint);
     }
@@ -490,7 +500,7 @@
         if (v.dims.length === 2) { var c = cols2(n); where = '[' + Math.floor(idx / c) + ', ' + (idx % c) + ']'; }
         else if (v.dims.length === 1) where = '[' + idx + ']';
         var h = '<div class="dp-check__hd"><span class="dp-sym">' + sym(n) + esc(where) + '</span>' + (a.long_name ? '<p>' + a.long_name + '</p>' : '') +
-            '<p class="dp-check__when">Checked at ' + esc(timeText(t)) + ', ' + clock() + '. All three answers below come from this one frame.</p></div>';
+            '<p class="dp-check__when">Checked at ' + timeHTML(t) + ', ' + clock() + '. All three answers below come from this one frame.</p></div>';
         h += '<section class="dp-check__sec"><h4><span>1</span>Stored in the dataset</h4><p class="dp-check__big">' + esc(num(stored, d)) + (unitOf(n) ? ' <span class="dp-u">' + unitOf(n) + '</span>' : '') + '</p>' +
             '<dl class="dp-check__meta"><div><dt>variable</dt><dd>' + esc(n) + ' ' + esc(where) + '</dd></div><div><dt>type</dt><dd>' + esc(typeLabel(n)) + '</dd></div>' +
             (a.computed_in ? '<div><dt>computed in</dt><dd>' + esc(a.computed_in) + '</dd></div>' : '') +
@@ -678,7 +688,7 @@
     function rowsKey(rows) { return rows.map(function (row) { return row[0] + '|' + row[3] + '|' + row[4] + '|' + (row[2] || ''); }).join(';'); }
     function paintStrip(force) {
         probe.shownAt = performance.now();
-        var info = held.ref ? safe(function () { return spec.inspect(held.ref); }, null) : null, t = timeText(timeNow());
+        var info = held.ref ? safe(function () { return spec.inspect(held.ref); }, null) : null, t = timeHTML(timeNow());
         if (strip && probe.on) {
             var showPin = probe.pinned && info;
             stripPin.hidden = !showPin;
@@ -686,7 +696,7 @@
             if (!showPin && probe.empty) stripHint.textContent = 'Nothing to pin there. ' + (TOUCH ? 'Tap' : 'Click') + ' on something drawn in the figure.';
             else if (!showPin) stripHint.textContent = TOUCH ? 'Tap a point in the figure to pin it; drag to move the pin.' : 'Click a point in the figure to pin it; drag to move the pin. Esc stops reading.';
             if (showPin) {
-                var th = info.title + ' <span>· ' + esc(t) + '</span>';
+                var th = info.title + ' <span>· ' + t + '</span>';
                 if (th !== stripTitle._h) { stripTitle.innerHTML = th; stripTitle._h = th; }
                 var key = rowsKey(info.rows);
                 if (key !== stripVals._k) {
@@ -706,7 +716,7 @@
         if (info && isOpen) {
             probeHint.hidden = true;
             probeBody.hidden = false;
-            var ph = info.title + ' <span>· ' + esc(t) + (probe.on && probe.pinned ? '' : ' · last pinned') + '</span>';
+            var ph = info.title + ' <span>· ' + t + (probe.on && probe.pinned ? '' : ' · last pinned') + '</span>';
             if (ph !== probeTitle._h) { probeTitle.innerHTML = ph; probeTitle._h = ph; }
             var k2 = rowsKey(info.rows);
             if (k2 !== probeRows._k) {
@@ -907,7 +917,7 @@
         var canv = Array.prototype.slice.call(host.querySelectorAll('canvas[data-series]'));
         var readEl = host.querySelector('.dp-rd__read');
         function readout(i) {
-            var head = i === null ? (TOUCH ? 'Touch a chart to read one sample.' : 'Point at a chart to read every quantity at one sample.') : '<b>Sample ' + (i + 1) + ' of ' + r.n + '</b> · ' + esc(timeSym()) + ' = ' + esc(num(r.series[0].data[i], r.series[0].digits)) + (timeUnit() ? ' ' + timeUnit() : '') + ' · ' + esc(num(x[i], 3)) + (timeUnit() ? ' ' + esc(timeUnit()) : '') + ' into the round';
+            var head = i === null ? (TOUCH ? 'Touch a chart to read one sample.' : 'Point at a chart to read every quantity at one sample.') : '<b>Sample ' + (i + 1) + ' of ' + r.n + '</b> · ' + timeSym() + ' = ' + esc(num(r.series[0].data[i], r.series[0].digits)) + (timeUnit() ? ' ' + timeUnit() : '') + ' · ' + esc(num(x[i], 3)) + (timeUnit() ? ' ' + esc(timeUnit()) : '') + ' into the round';
             readEl.innerHTML = head;
         }
         function drawAll(cur) { canv.forEach(function (cv) { drawChart(cv, r.series[+cv.getAttribute('data-series')], x, cur); }); }
@@ -988,7 +998,7 @@
     }
     panel.querySelector('[data-save]').addEventListener('click', function () {
         var extra = rounds.map(function (r) { return { name: 'round-' + r.no + '.csv', bytes: roundCsv(r) }; });
-        extra.push({ name: 'README.txt', bytes: readme('the store at ' + timeText(timeNow())) });
+        extra.push({ name: 'README.txt', bytes: readme('the store at ' + timeText(timeNow()).replace(/<[^>]+>/g, '')) });
         download(ds.npz(extra), (spec.file || 'dataset') + '-' + stamp() + '.zip');
     });
 

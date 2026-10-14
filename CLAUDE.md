@@ -38,3 +38,12 @@ Project facts (layout, AppDeploy app, boundaries) are in AGENTS.md.
 - Nothing on a running figure may react to the pointer merely crossing it. Reading a point is a tool the reader switches on, as in
   MATLAB's data cursor or PhET's probes: click to pin, the values in a fixed place outside the figure, words rewritten at a readable
   rate (about 4 per second), the marker every frame. Measure it: what shows during a sweep, how much it covers, how often text changes.
+
+## Design and explanations
+- The design is the house design in `DESIGN.md` of the app `droplet-collection-yl7l26`. Read it before touching fonts, colours or layout,
+  and generalise it; never introduce another font. Titles in Instrument Serif at weight 400, text in IBM Plex Sans, labels in IBM Plex Mono.
+- Explanations are lecture notes set like a LaTeX document (Latin Modern text, KaTeX maths, numbered equations and figures), written as a
+  professor for undergraduates and school students: motivate from everyday experience first, then the model, then the mathematics, with
+  pictures. No question-and-answer format anywhere.
+- Lists of figures run in figure order.
+

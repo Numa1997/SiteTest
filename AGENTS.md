@@ -1,24 +1,45 @@
-# Claude version — ownership and update notes
+# Numa Koudsie website — ownership and update notes
 
-This is the Claude copy of Numa Koudsie's physics portfolio: AppDeploy app `numa-koudsie-website-0cyj78`.
+This is Numa Koudsie's physics website: AppDeploy app `numa-koudsie-website-0cyj78`, display name "Numa Koudsie website".
 Owner: Numa. Changes need Numa's explicit request.
 
-Out of bounds for writes: the GitHub source `Numa1997/SiteTest`, the ChatGPT version `numa-physics-lab-chatgpt-k0ixwk`
-(its earlier copy `sitetest-chatgpt-r14hvr` was deleted), and the unrelated app `physik-radar-xvy59b`. This is a project instruction, not a technical access control.
+The GitHub repository `Numa1997/SiteTest` is this app's copy: its root holds everything under `public/` plus `index.html`, and GitHub
+Pages serves it as-is. Change the app first, then copy the change there, only when Numa asks.
+Out of bounds for writes: the ChatGPT version `numa-physics-lab-chatgpt-k0ixwk` (its earlier copy `sitetest-chatgpt-r14hvr` was deleted)
+and the unrelated app `physik-radar-xvy59b`. This is a project instruction, not a technical access control.
 
 Layout (GitHub Pages serves the repository root as-is, so every asset lives at the root): `index.html`; `styles/site.css` and `styles/sim.css`;
-`scripts/theme.js` (light/dark theme: stored choice else system setting, toggle buttons, `themechange` event; loaded in the home page head and by `sim.js`; in dark mode the simulation figures stay light paper plates);
-`scripts/sim.js` (shared helpers, openable derivation cards, walkthrough engine);
+`scripts/sim.js` (shared helpers, lecture-note typesetting, walkthrough engine);
 `scripts/walk/<key>.js` ("From symbols to code", one file per page, chosen by the page's `data-walk` key:
 each equation paired with the page's own code lines; keep the excerpts identical to the page code when either
-changes; live values come from `Sim.live()` in each page); `simulations/*.html` (eight pages).
-Simulations page: `simulations.html` lists every simulation as a card (thumbnail, the question it answers, model, method, what the reader
-sets, concepts) in one grid ordered by field, with a search and field and year chips; the view lives in the address (`?q=&field=&stage=`).
-It draws itself from the registry `scripts/catalog.js` (`SIMULATIONS`, `SIM_FIELDS`, `SIM_TOOLS`) with `styles/catalog.css`; thumbnails are
+changes; live values come from `Sim.live()` in each page); `simulations/*.html` (ten pages).
+Simulations page: `simulations.html` lists every simulation as a paper abstract (thumbnail with a numbered caption, field and year,
+summary, the key equation typeset by KaTeX, model, method, what the reader sets, concepts, links to the figure and to its lecture note) in
+one grid in figure order, with a search and field and year chips; the view lives in the address (`?q=&field=&stage=`). It draws itself from
+the registry `scripts/catalog.js` (`SIMULATIONS`, `SIM_FIELDS`, `SIM_TOOLS`) with `styles/catalog.css`; thumbnails are
 `images/sims/<id>.webp`, 800 × 500 px stills of each page's main figure. To add a simulation: its page in `simulations/`, one entry in
 `SIMULATIONS` (and its field in `SIM_FIELDS` if new), its thumbnail (a missing one shows the Fig. number instead), and its number in the
 hand-written Fig. links at the top of every simulation page. Simulation pages link back to `simulations.html`; the home page keeps its plates
 and links to the catalog from the hero button, the section intro and a button under the plates.
+Design: the house design of `DESIGN.md` in the app `droplet-collection-yl7l26` (the reference; read it before changing styles): Instrument
+Serif titles at weight 400 only, IBM Plex Sans text, IBM Plex Mono labels, every box outlined, no card shadows. Explanations are lecture
+notes set like the house LaTeX write-up: `styles/paper.css` (prose and symbols in Latin Modern Roman, self-hosted in `fonts/lm/`, token
+`--tex`; mathematics by KaTeX 0.16.11, self-hosted in `vendor/katex/`, woff2 only; abstract box, wine section badges, numbered display
+equations on the quote ground, figures on white plates with "Figure n" captions, exercise boxes). Each simulation page ends with
+`<article class="paper" id="paper">`: motivation, model, derivation (★ marks the heavier parts), numerical method, what is on screen,
+limits and further reading; `sim.js` loads KaTeX and typesets `\( … \)` and `\[ … \]` in every `.paper`. No question-and-answer format.
+Plotted figures in the notes are inline SVG made with the house chart style (white plate, clipped plot, Plex Mono ticks) from the page's own
+formulas; every number in a note comes from a computation or the page code.
+Figs. 9 (driven oscillator) and 10 (wind turbine control) solve the whole run first (RK4), store every sample in the dataset, then play the
+stored samples back; nothing is integrated while the reader watches.
+Portfolios: `portfolios.html` introduces long research projects; each lives as a static copy under `portfolios/<name>/`:
+`portfolios/droplet-collection/` (app `droplet-collection-yl7l26`) and `portfolios/rotor-pendula/` (app `rotor-pendula-gafw0f`). Each is
+the Vite build of its app without saved runs and backend (hash routes; link to `portfolios/<name>/index.html#/…`, since folder addresses
+return 403), with a back link to `../../portfolios.html`. Their build folder is `static/`, not `assets/`. AppDeploy rewrites a relative
+stylesheet link in a deployed HTML file to the site root (seen for `./assets/…` and, since October 2026, `./static/…`: both give 403), so
+after building, replace the `<link rel="stylesheet" href="./static/….css">` in the copy's `index.html` with a short script that adds
+the same link at run time (the platform leaves scripts alone); without it the copy shows unstyled. Their source stays in their apps;
+rebuild there, copy the build folder here, then patch the stylesheet link.
 Data panel, a pipeline in three files. `scripts/dataset.js`: `Sim.dataset()` gives a page one named store (dims, typed-array variables,
 scalars, attrs; the shape of an xarray/NetCDF dataset) and the page writes every number into it at the line that computes it, every frame,
 overwriting the last frame; nothing is recomputed for display. `scripts/datalog.js` + `styles/data.css`: the panel, which only reads the

@@ -6,15 +6,15 @@
     "covers": [
       "home page content",
       "section index navigation",
-      "Claude version footer"
+      "copyright footer"
     ],
-    "description": "Verifies the personal page loads with all sections, the Claude version footer, and working in-page index links.",
+    "description": "Verifies the personal page loads with all sections, the copyright footer, and working in-page index links.",
     "steps": [
       "Open the home page",
-      "Confirm the large heading reads Numa Koudsie and the footer contains the words Claude version",
+      "Confirm the large heading reads Numa Koudsie and the footer contains the words © 2026 Numa Koudsie",
       "Click the Simulations link in the Index navigation"
     ],
-    "expected": "The section headed Interactive physics simulations is visible, showing eight simulation cards labelled Fig. 1 to Fig. 8, each with a Launch button, followed by a button reading All simulations, by field."
+    "expected": "The section headed Interactive physics simulations is visible, showing eight simulation cards labelled Fig. 1 to Fig. 8, each with a Launch button, followed by a button reading All simulations."
   },
   {
     "name": "Simulations page lists every figure, filters by field and searches",
@@ -26,14 +26,14 @@
       "search",
       "links between catalog and simulation pages"
     ],
-    "description": "The dedicated simulations page draws one card per simulation from the registry, filters them by field, searches their text, and links to and from the simulation pages.",
+    "description": "The dedicated simulations page draws one entry per simulation from the registry, in figure order, each with a picture, an abstract and its key equation typeset as in LaTeX; it filters by field, searches the text, and links to and from the simulation pages.",
     "steps": [
       "Open the home page and click the button Open the simulations near the top",
-      "Confirm the page heading reads Simulations and that eight cards are shown, each with a picture, a question in italics and a button starting with Open Fig.",
+      "Confirm the page heading reads Simulations and that ten entries are shown in order from Figure 1 to Figure 10, each with a picture, a typeset equation and a button starting with Open Fig.",
       "Click the chip Wave optics",
-      "Confirm only the cards Fig. 1 Wave Interference and Fig. 3 Double-Slit Interference are shown and the text 2 of 8 shown appears",
+      "Confirm only the entries Wave Interference (Figure 1) and Double-Slit Interference (Figure 3) are shown and the text 2 of 10 shown appears",
       "Click the chip All fields, type runge in the search box",
-      "Confirm only the card Fig. 2 Double Pendulum is shown",
+      "Confirm only the entry Double Pendulum is shown",
       "Click its button Open Fig. 2, then click the link All simulations at the top left of the simulation page"
     ],
     "expected": "The simulation page opens with the heading Double Pendulum, and the top-left link returns to the simulations page with the heading Simulations."
@@ -159,5 +159,61 @@
       "Tap the Record button in the sheet and wait three seconds"
     ],
     "expected": "The sheet slides up with the title Water waves and a box headed Record one round that names one period, T = … s; after Record the Rounds tab shows Round 1 with a line counting the samples and frames, and charts for quantities such as ξ and ζ at the point."
+  },
+  {
+    "name": "Driven oscillator solves the run first and plays it back",
+    "sanity": false,
+    "viewport": "desktop",
+    "covers": [
+      "Fig. 9 driven oscillator",
+      "solve then play",
+      "lecture note"
+    ],
+    "description": "The driven oscillator computes its whole 60 s run before drawing, stores it, plays the stored samples back, and carries a lecture note with typeset equations.",
+    "steps": [
+      "Open simulations/driven-oscillator.html",
+      "Confirm the status under the Solve button begins with Solved 60000 RK4 steps and mentions 6001 samples",
+      "Click Pause and confirm the button now reads Play",
+      "Scroll down to the lecture note headed Driven oscillations: how a system answers a push it does not control"
+    ],
+    "expected": "The lecture note shows an Abstract box, numbered sections and typeset equations, and the figure above shows a block on a spring with the stored curve x(t) beneath it."
+  },
+  {
+    "name": "Wind turbine re-solves when the controller changes",
+    "sanity": false,
+    "viewport": "desktop",
+    "covers": [
+      "Fig. 10 wind turbine",
+      "controller choice",
+      "stale run notice"
+    ],
+    "description": "Changing the controller marks the stored run as out of date until Solve is pressed again.",
+    "steps": [
+      "Open simulations/wind-turbine.html",
+      "Confirm the status begins with Solved 12000 RK4 steps",
+      "Click the button Follow the wind",
+      "Confirm the status now begins with A control changed",
+      "Click Solve"
+    ],
+    "expected": "The status again begins with Solved 12000 RK4 steps, and the readout Rotor speed shows a range in rpm."
+  },
+  {
+    "name": "Portfolios page opens the droplet project",
+    "sanity": true,
+    "viewport": "desktop",
+    "covers": [
+      "portfolios page",
+      "droplet collection copy",
+      "back link"
+    ],
+    "description": "The Portfolios page introduces the Droplet Collection project, whose static copy opens in a sub-folder and links back.",
+    "steps": [
+      "Open portfolios.html",
+      "Confirm the heading reads Portfolios and a project titled Droplet Collection with four figures is shown",
+      "Click Open the project",
+      "Confirm a page titled How cloud droplets become rain appears, with the pages Overview, Theory, Results, Simulate and Checks in its top bar",
+      "Click the link Numa Koudsie · Portfolios at the top left"
+    ],
+    "expected": "The Portfolios page with the heading Portfolios is shown again."
   }
 ]

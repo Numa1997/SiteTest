@@ -25,6 +25,8 @@
             <a href="wave-interference.html">6</a>
             <a href="phasor-sums.html">7</a>
             <a href="draw-decompose.html">8</a>
+            <a href="driven-oscillator.html">9</a>
+            <a href="wind-turbine.html">10</a>
         </nav>
     </header>
 
@@ -42,8 +44,8 @@
                     <canvas id="pend" aria-label="Double pendulum animation"></canvas>
                 </div>
                 <figcaption class="stage__cap">
-                    <span><b>Fig. 2</b> · double pendulum · RK4, h = 1/600 s</span>
-                    <span id="cap-t">t = 0.0 s</span>
+                    <span><b>Fig. 2</b> · double pendulum · RK4, <span class="tx">\(h = 1/600\ \mathrm{s}\)</span></span>
+                    <span id="cap-t"><i>t</i> = 0.0 s</span>
                 </figcaption>
             </figure>
 
@@ -108,121 +110,278 @@
             </aside>
         </div>
 
-        <section class="deriv" aria-labelledby="deriv-title">
-            <div class="deriv__head">
-                <h2 id="deriv-title">From physics to pixels</h2>
-                <p>From the energy of two swinging masses to the equations of motion, the integrator that solves them and the line it leaves on screen.</p>
-            </div>
-            <div class="deriv__grid">
-                <nav class="deriv__toc" aria-label="Steps">
+        <article class="paper" id="paper" aria-labelledby="paper-title">
+            <header class="paper__head">
+                <p class="paper__kicker">Lecture note · Fig. 2 · classical mechanics</p>
+                <h2 class="paper__title" id="paper-title">The double pendulum: exact laws, unpredictable motion</h2>
+                <p class="paper__by">Numa Koudsie · for school students and first- and second-year undergraduates</p>
+                <div class="paper__abstract"><b>Abstract.</b> A pendulum hung from the end of another pendulum is the simplest machine whose future we can write down exactly and still cannot predict. This note builds its equations of motion from energy alone, with Lagrange’s method; finds the two gentle ways it can swing when the angles are small; shows, with numbers from the simulation above, how two almost identical starts part ways; and explains how the page solves the equations, step by step, sixty times a second. Sections marked ★ carry the heavier mathematics and can be skipped on a first reading without losing the thread.</div>
+            </header>
+            <div class="paper__grid">
+                <nav class="paper__toc" aria-label="Contents">
+                    <p>Contents</p>
                     <ol>
-                        <li><a href="#s-picture">Physical picture</a></li>
-                        <li><a href="#s-model">Model</a></li>
-                        <li><a href="#s-derivation">Derivation</a></li>
-                        <li><a href="#s-numerics">Numerical method</a></li>
-                        <li><a href="#s-screen">On screen</a></li>
-                        <li><a href="#s-limits">Limits</a></li>
+                        <li><a href="#p-swing"><span>1</span>A pendulum on a pendulum</a></li>
+                        <li><a href="#p-model"><span>2</span>The model</a></li>
+                        <li><a href="#p-energy"><span>3</span>Energy</a></li>
+                        <li><a href="#p-lagrange"><span>4</span>From energy to motion&nbsp;★</a></li>
+                        <li><a href="#p-modes"><span>5</span>Small swings</a></li>
+                        <li><a href="#p-chaos"><span>6</span>Chaos</a></li>
+                        <li><a href="#p-rk4"><span>7</span>Solving it step by step</a></li>
+                        <li><a href="#p-screen"><span>8</span>From metres to pixels</a></li>
+                        <li><a href="#p-limits"><span>9</span>What the model leaves out</a></li>
                     </ol>
                 </nav>
-                <div class="deriv__body">
-                    <article class="step" id="s-picture">
-                        <p class="step__num">01 · Physical picture</p>
-                        <h3>A pendulum hanging from a pendulum</h3>
-                        <p>Hang a rod from a pivot, and a second rod from the end of the first. Let it go from a small angle and it rocks gently, the two arms trading energy back and forth like two coupled swings. Let it go from high up and the lower arm starts whipping over the top, reversing without warning. Nothing random happens: the motion is completely fixed by the starting state. Yet two starts that differ by less than you could ever measure end up in unrelated places within seconds. That is deterministic chaos.</p>
-                    </article>
+                <div class="paper__body">
+                    <section class="psec" id="p-swing">
+                        <h3><span class="psec__n">01</span>A pendulum on a pendulum</h3>
+                        <p class="psec__lead">Let a pen swing loosely between two fingers: that is a pendulum, and since Galileo we have known how to predict it. Now hang a second pen from the tip of the first.</p>
+                        <p>You carry a double pendulum with you every day. Let your arm hang and swing it from the shoulder: the upper arm swings about the shoulder, the forearm about the elbow, and the hand follows a path that neither joint alone would draw. A gymnast turning on the high bar, a nunchaku, a crane hook hanging from its cable are all the same machine: two masses, two rods, one gravitational field.</p>
+                        <p>Released from a small angle, the double pendulum rocks gently and regularly, the two arms passing energy back and forth like two children on linked swings. Released from high up, the lower arm whips over the top, stops, reverses, and never settles into a pattern. Nothing random is involved. The equations we are about to derive fix the entire future from the starting state, and the computer solves them so accurately that the energy stays fixed to better than one part in ten million. Yet two starts that differ by a thousandth of a radian, one millimetre at the end of a one-metre rod, end up in unrelated places within five seconds.</p>
+                        <p>This pairing of exact laws with practically unpredictable outcomes is called <em>deterministic chaos</em>. It is the same mechanism that limits weather forecasts to about two weeks: the atmosphere obeys known equations, but we can never measure today’s state precisely enough.</p>
+                        <figure class="pfig">
+                            <div class="pfig__plate">
+                                <svg viewBox="0 0 720 330" role="img" aria-label="Geometry of the double pendulum: pivot, two rods of lengths l1 and l2 at angles theta1 and theta2 from the vertical, masses m1 and m2, gravity pointing down.">
+                                    <rect x="0" y="0" width="720" height="330" fill="#fff"/>
+                                    <line x1="200" y1="56" x2="360" y2="56" stroke="#1c1518" stroke-width="2"/>
+                                    <g stroke="#cdc1ae" stroke-width="1"><line x1="215" y1="56" x2="207" y2="46"/><line x1="235" y1="56" x2="227" y2="46"/><line x1="255" y1="56" x2="247" y2="46"/><line x1="275" y1="56" x2="267" y2="46"/><line x1="295" y1="56" x2="287" y2="46"/><line x1="315" y1="56" x2="307" y2="46"/><line x1="335" y1="56" x2="327" y2="46"/><line x1="355" y1="56" x2="347" y2="46"/></g>
+                                    <line x1="280" y1="56" x2="280" y2="230" stroke="#8b8079" stroke-width="1.2" stroke-dasharray="4 4"/>
+                                    <line x1="366.0" y1="178.9" x2="366.0" y2="300" stroke="#8b8079" stroke-width="1.2" stroke-dasharray="4 4"/>
+                                    <path d="M280 111 A55 55 0 0 0 311.5 101.1" fill="none" stroke="#7a1f2b" stroke-width="1.6"/>
+                                    <path d="M366 228.9 A50 50 0 0 0 413.0 196.0" fill="none" stroke="#7a1f2b" stroke-width="1.6"/>
+                                    <line x1="280" y1="56" x2="366.0" y2="178.9" stroke="#1c1518" stroke-width="3" stroke-linecap="round"/>
+                                    <line x1="366.0" y1="178.9" x2="507.0" y2="230.2" stroke="#1c1518" stroke-width="3" stroke-linecap="round"/>
+                                    <circle cx="280" cy="56" r="5" fill="#fff" stroke="#1c1518" stroke-width="2"/>
+                                    <circle cx="366.0" cy="178.9" r="13" fill="#7a1f2b"/>
+                                    <circle cx="507.0" cy="230.2" r="13" fill="#7a1f2b"/>
+                                    <text class="m" x="300" y="128">θ<tspan class="mu" font-size="12" dy="4">1</tspan></text>
+                                    <text class="m" x="410" y="226">θ<tspan class="mu" font-size="12" dy="4">2</tspan></text>
+                                    <text class="m" x="330" y="108">l<tspan class="mu" font-size="12" dy="4">1</tspan></text>
+                                    <text class="m" x="438" y="190">l<tspan class="mu" font-size="12" dy="4">2</tspan></text>
+                                    <text class="m" x="336" y="208">m<tspan class="mu" font-size="12" dy="4">1</tspan></text>
+                                    <text class="m" x="525" y="236">m<tspan class="mu" font-size="12" dy="4">2</tspan></text>
+                                    <line x1="620" y1="70" x2="620" y2="140" stroke="#1c1518" stroke-width="2"/>
+                                    <path d="M613 128 L620 142 L627 128 Z" fill="#1c1518"/>
+                                    <text class="m" x="632" y="112">g</text>
+                                    <line x1="70" y1="280" x2="130" y2="280" stroke="#8b8079" stroke-width="1.4"/>
+                                    <path d="M126 276 L134 280 L126 284 Z" fill="#8b8079"/>
+                                    <line x1="70" y1="280" x2="70" y2="220" stroke="#8b8079" stroke-width="1.4"/>
+                                    <path d="M66 224 L70 216 L74 224 Z" fill="#8b8079"/>
+                                    <text class="m" x="138" y="285">x</text>
+                                    <text class="m" x="64" y="210">y</text>
+                                    <text class="lbl" x="200" y="38">pivot</text>
+                                </svg>
+                            </div>
+                            <figcaption><span class="pfig__n">Figure 1</span>The model. Two point masses \(m_1, m_2\) on rigid, massless rods of lengths \(l_1, l_2\). Each angle is measured from the downward vertical (dashed), counter-clockwise positive. Two numbers, \(\theta_1\) and \(\theta_2\), fix where everything is.</figcaption>
+                        </figure>
+                    </section>
 
-                    <article class="step" id="s-model">
-                        <p class="step__num">02 · Model</p>
-                        <h3>Two point masses on rigid, massless rods</h3>
-                        <p>The pivot is the origin, y points up, and each angle θ<sub>i</sub> is measured from the downward vertical, counter-clockwise positive. The positions of the two masses are</p>
-                        <p class="eq"><span class="eq__line">x₁ = l₁ sin θ₁, &nbsp; y₁ = −l₁ cos θ₁</span><span class="eq__line">x₂ = x₁ + l₂ sin θ₂, &nbsp; y₂ = y₁ − l₂ cos θ₂</span></p>
-                        <p>Two numbers, θ₁ and θ₂, fix the whole configuration: the system has two degrees of freedom, and its state is the four numbers (θ₁, θ₂, ω₁, ω₂) with ω<sub>i</sub> = dθ<sub>i</sub>/dt.</p>
-                        <ul class="facts">
-                            <li>Rods are rigid and massless; masses are points; the motion stays in one plane.</li>
-                            <li>No friction or air resistance, so total energy is conserved.</li>
-                            <li>Here m₁ = 1 kg, l₁ = 1 m, g = 9.81 m/s²; the sliders set the ratios m₂/m₁ and l₂/l₁.</li>
+                    <section class="psec" id="p-model">
+                        <h3><span class="psec__n">02</span>The model</h3>
+                        <p>Physics begins by deciding what to leave out. We keep two point masses on rigid rods that weigh nothing, swinging in one vertical plane, with no friction and no air. Put the pivot at the origin with \(y\) pointing up. Reading the positions off Figure 1 with a little trigonometry,</p>
+                        \[ \begin{aligned} x_1 &= l_1\sin\theta_1, & y_1 &= -l_1\cos\theta_1, \\ x_2 &= x_1 + l_2\sin\theta_2, & y_2 &= y_1 - l_2\cos\theta_2 . \end{aligned} \tag{1} \]
+                        <p>Two angles fix the shape completely, so the system has two <em>degrees of freedom</em>. To know where it goes next we also need how fast each angle is changing, \(\omega_i = \mathrm{d}\theta_i/\mathrm{d}t\). The four numbers \((\theta_1, \theta_2, \omega_1, \omega_2)\) are the <em>state</em>: give them to the equations and the whole future follows. On the page the upper mass and rod are fixed at \(m_1 = 1\ \mathrm{kg}\), \(l_1 = 1\ \mathrm{m}\), with \(g = 9.81\ \mathrm{m/s^2}\); the sliders set the ratios \(m_2/m_1\) and \(l_2/l_1\).</p>
+                    </section>
+
+                    <section class="psec" id="p-energy">
+                        <h3><span class="psec__n">03</span>Energy</h3>
+                        <p>Instead of chasing forces, we will describe the pendulum by its energy. Differentiate the positions (1) with respect to time, remembering that \(\theta_i\) changes and \(l_i\) does not:</p>
+                        \[ \begin{aligned} \dot x_1 &= l_1\omega_1\cos\theta_1, & \dot y_1 &= l_1\omega_1\sin\theta_1, \\ \dot x_2 &= \dot x_1 + l_2\omega_2\cos\theta_2, & \dot y_2 &= \dot y_1 + l_2\omega_2\sin\theta_2 . \end{aligned} \tag{2} \]
+                        <p>The kinetic energy is \(\tfrac12 m v^2\) for each mass. Squaring and adding the components, the mixed products combine through \(\cos\theta_1\cos\theta_2 + \sin\theta_1\sin\theta_2 = \cos(\theta_1-\theta_2)\), and the potential energy is \(mgy\) for each mass:</p>
+                        \[ T = \tfrac12 m_1 l_1^2\omega_1^2 + \tfrac12 m_2\left[\, l_1^2\omega_1^2 + l_2^2\omega_2^2 + 2\,l_1 l_2\,\omega_1\omega_2\cos(\theta_1-\theta_2) \right], \tag{3} \]
+                        \[ V = -(m_1+m_2)\,g\,l_1\cos\theta_1 - m_2\,g\,l_2\cos\theta_2 . \tag{4} \]
+                        <p>The last term in (3) carries the whole story. The lower mass rides on the upper one, the way a passenger walking down the aisle rides on a train. When the two rods point the same way and turn the same way, \(\cos(\theta_1-\theta_2) = 1\) and the speeds simply add, \(v_2 = l_1\omega_1 + l_2\omega_2\). When the rods are at right angles, the cosine vanishes and the two speeds add like the sides of a right triangle. Because the rods' directions keep changing, the way the two motions combine keeps changing too: each rod is forever pushing and pulling on the other.</p>
+                        <div class="pbox">
+                            <span class="pbox__t">Energy is conserved</span>
+                            <p>Nothing in \(T\) or \(V\) depends on the clock time itself, and there is no friction, so the total \(E = T + V\) never changes. The pendulum can only trade height for speed and back. This gives the simulation a built-in check: the <em>Drift</em> readout above shows how far the computed energy wanders from its starting value.</p>
+                        </div>
+                    </section>
+
+                    <section class="psec" id="p-lagrange">
+                        <h3><span class="psec__n">04</span>From energy to motion<span class="star" title="heavier mathematics">★</span></h3>
+                        <p>With Newton’s laws we would need the tension in each rod, two unknown forces that change direction and size at every instant. Lagrange found a way around them. Form the <em>Lagrangian</em> \(L = T - V\). Among all the ways the angles could get from a given start to a given end, the real motion is the one that makes the <em>action</em> \(S = \int L\,\mathrm{d}t\) stationary (Hamilton’s principle). The rod forces never appear, because they act along the rods and do no work on any motion the rods allow.</p>
+                        <h4><span class="psub__n">4.1</span>The Euler–Lagrange equation</h4>
+                        <p>Change one angle by a small amount \(\delta\theta_i(t)\) that vanishes at the start and at the end. The action changes by \(\delta S = \int \left[ \partial_{\theta_i}L\,\delta\theta_i + \partial_{\omega_i}L\,\delta\omega_i \right]\mathrm{d}t\), with \(\delta\omega_i = \mathrm{d}(\delta\theta_i)/\mathrm{d}t\). Integrating the second term by parts moves the time derivative across; the boundary term vanishes because \(\delta\theta_i\) does:</p>
+                        \[ \delta S = \int \left[ \frac{\partial L}{\partial\theta_i} - \frac{\mathrm{d}}{\mathrm{d}t}\frac{\partial L}{\partial\omega_i} \right] \delta\theta_i\,\mathrm{d}t = 0 \quad\text{for every } \delta\theta_i \quad\Longrightarrow\quad \frac{\mathrm{d}}{\mathrm{d}t}\frac{\partial L}{\partial\omega_i} - \frac{\partial L}{\partial\theta_i} = 0 . \tag{5} \]
+                        <p>The quantity \(p_i = \partial L/\partial\omega_i\) is the <em>generalised momentum</em> belonging to \(\theta_i\). For the upper angle it is \(p_1 = (m_1+m_2)\,l_1^2\,\omega_1 + m_2 l_1 l_2\,\omega_2\cos\delta\), with \(\delta = \theta_1 - \theta_2\): an angular momentum that already contains the lower mass, not simply \(m_1 l_1^2\omega_1\).</p>
+                        <h4><span class="psub__n">4.2</span>The upper angle</h4>
+                        <p>Two kinds of derivative meet in (5). A partial derivative such as \(\partial L/\partial\omega_1\) treats \(L\) as a function of four independent numbers and varies one of them alone. The time derivative then follows the actual motion, in which all four change together; by the chain rule \(\tfrac{\mathrm{d}}{\mathrm{d}t}\cos\delta = -\sin\delta\,(\omega_1-\omega_2)\). Writing \(\alpha_i = \mathrm{d}\omega_i/\mathrm{d}t\) for the angular accelerations,</p>
+                        \[ \begin{aligned} \frac{\partial L}{\partial\omega_1} &= (m_1+m_2)\,l_1^2\,\omega_1 + m_2 l_1 l_2\,\omega_2\cos\delta, \\ \frac{\mathrm{d}}{\mathrm{d}t}\frac{\partial L}{\partial\omega_1} &= (m_1+m_2)\,l_1^2\,\alpha_1 + m_2 l_1 l_2\,\alpha_2\cos\delta - m_2 l_1 l_2\,\omega_2(\omega_1-\omega_2)\sin\delta, \\ \frac{\partial L}{\partial\theta_1} &= -m_2 l_1 l_2\,\omega_1\omega_2\sin\delta - (m_1+m_2)\,g\,l_1\sin\theta_1 . \end{aligned} \]
+                        <p>In the difference the two \(\omega_1\omega_2\) terms cancel. Dividing by \(l_1\):</p>
+                        \[ (m_1+m_2)\,l_1\,\alpha_1 + m_2 l_2\,\alpha_2\cos\delta = -m_2 l_2\,\omega_2^2\sin\delta - (m_1+m_2)\,g\sin\theta_1 . \tag{6} \]
+                        <h4><span class="psub__n">4.3</span>The lower angle</h4>
+                        <p>The same three steps for \(\theta_2\), with \(\partial L/\partial\omega_2 = m_2 l_2^2\,\omega_2 + m_2 l_1 l_2\,\omega_1\cos\delta\), again cancel the \(\omega_1\omega_2\) terms; dividing by \(m_2 l_2\):</p>
+                        \[ l_1\,\alpha_1\cos\delta + l_2\,\alpha_2 = l_1\,\omega_1^2\sin\delta - g\sin\theta_2 . \tag{7} \]
+                        <h4><span class="psub__n">4.4</span>Solving for the accelerations</h4>
+                        <p>Each equation contains both accelerations, because each rod pushes on the other. A computer stepping forward in time needs each acceleration on its own, so we solve the linear system</p>
+                        \[ \begin{pmatrix} (m_1+m_2)\,l_1 & m_2 l_2\cos\delta \\ l_1\cos\delta & l_2 \end{pmatrix} \begin{pmatrix} \alpha_1 \\ \alpha_2 \end{pmatrix} = \begin{pmatrix} -m_2 l_2\,\omega_2^2\sin\delta - (m_1+m_2)\,g\sin\theta_1 \\ l_1\,\omega_1^2\sin\delta - g\sin\theta_2 \end{pmatrix}, \qquad \det = l_1 l_2\,(m_1 + m_2\sin^2\delta) > 0 . \tag{8} \]
+                        <p>The determinant can never vanish, so there is always exactly one answer. Cramer’s rule, then \(2\sin^2\delta = 1-\cos 2\delta\) and \(2\sin\theta_2\cos\delta = \sin\theta_1 - \sin(\theta_1 - 2\theta_2)\), bring it to the form the page computes:</p>
+                        \[ \begin{aligned} \alpha_1 &= \frac{-g\,(2m_1+m_2)\sin\theta_1 - m_2\,g\sin(\theta_1-2\theta_2) - 2\,m_2\sin\delta\,\left(\omega_2^2\,l_2 + \omega_1^2\,l_1\cos\delta\right)}{l_1\,(2m_1+m_2-m_2\cos 2\delta)}, \\[4pt] \alpha_2 &= \frac{2\sin\delta\,\left(\omega_1^2\,l_1\,(m_1+m_2) + g\,(m_1+m_2)\cos\theta_1 + \omega_2^2\,l_2\,m_2\cos\delta\right)}{l_2\,(2m_1+m_2-m_2\cos 2\delta)} . \end{aligned} \tag{9} \]
+                        <p class="eqnote">Checked against a direct numerical solve of (8) at 10 000 random states and parameter values: worst relative difference 8 × 10⁻¹⁴, which is rounding error.</p>
+                    </section>
+
+                    <section class="psec" id="p-modes">
+                        <h3><span class="psec__n">05</span>Small swings: two normal modes</h3>
+                        <p>Before facing the full equations, look at the gentle case. For small angles, \(\sin\theta\approx\theta\), \(\cos\delta\approx 1\), and the \(\omega^2\) terms are too small to matter. With equal masses and equal lengths \(l\), equations (6) and (7) become linear:</p>
+                        \[ \begin{pmatrix} 2 & 1 \\ 1 & 1 \end{pmatrix} \begin{pmatrix} \ddot\theta_1 \\ \ddot\theta_2 \end{pmatrix} = -\frac{g}{l} \begin{pmatrix} 2 & 0 \\ 0 & 1 \end{pmatrix} \begin{pmatrix} \theta_1 \\ \theta_2 \end{pmatrix} . \tag{10} \]
+                        <p>Linear equations like these have special solutions in which both angles swing at one common frequency \(\omega\), \(\theta_i = u_i\cos\omega t\). Substituting gives a solution only if the determinant of the combined matrix vanishes, \(2\,(g/l - \omega^2)^2 = \omega^4\), so</p>
+                        \[ \omega_\mp^2 = \left(2\mp\sqrt2\right)\frac{g}{l}, \qquad \omega_- = 2.40\ \mathrm{rad/s},\quad \omega_+ = 5.79\ \mathrm{rad/s} \quad (l = 1\ \mathrm{m}). \tag{11} \]
+                        <p>The first row of (10) then fixes the shape of each motion, \(u_2/u_1 = 2\,(g/l-\omega^2)/\omega^2\). For the slow mode this is \(+\sqrt2\): both arms swing together, the lower one about 1.4 times as far. For the fast mode it is \(-\sqrt2\): the arms swing against each other (Figure 2). These are the <em>normal modes</em>, and any small motion is a mixture of the two. Because \(\omega_+/\omega_-\) is irrational, the mixture never repeats exactly, but it stays perfectly regular.</p>
+                        <figure class="pfig">
+                            <div class="pfig__plate">
+                                <svg viewBox="0 0 720 300" role="img" aria-label="The two normal modes: on the left both rods lean the same way, the lower one further; on the right they lean opposite ways.">
+                                    <rect x="0" y="0" width="720" height="300" fill="#fff"/>
+                                    <g>
+                                        <line x1="110" y1="40" x2="250" y2="40" stroke="#1c1518" stroke-width="2"/>
+                                        <line x1="180" y1="40" x2="180" y2="270" stroke="#cdc1ae" stroke-width="1" stroke-dasharray="4 4"/>
+                                        <line x1="180" y1="40" x2="155.5" y2="155.3" stroke="#cdc1ae" stroke-width="2.4" stroke-linecap="round"/>
+                                        <line x1="155.5" y1="155.3" x2="121.0" y2="268.0" stroke="#cdc1ae" stroke-width="2.4" stroke-linecap="round"/>
+                                        <line x1="180" y1="40" x2="204.5" y2="155.3" stroke="#1c1518" stroke-width="2.6" stroke-linecap="round"/>
+                                        <line x1="204.5" y1="155.3" x2="239.0" y2="268.0" stroke="#1c1518" stroke-width="2.6" stroke-linecap="round"/>
+                                        <circle cx="155.5" cy="155.3" r="9" fill="#e2a2aa"/><circle cx="121.0" cy="268.0" r="9" fill="#e2a2aa"/>
+                                        <circle cx="204.5" cy="155.3" r="9" fill="#7a1f2b"/><circle cx="239.0" cy="268.0" r="9" fill="#7a1f2b"/>
+                                        <circle cx="180" cy="40" r="4" fill="#fff" stroke="#1c1518" stroke-width="2"/>
+                                        <text class="lbl" x="270" y="70">slow mode</text>
+                                        <text class="m" x="270" y="98">ω<tspan class="mu" font-size="12" dy="4">−</tspan><tspan class="mu" dy="-4"> = 2.40 rad/s</tspan></text>
+                                        <text class="lbl" x="270" y="124">period 2.62 s</text>
+                                        <text class="lbl" x="270" y="150">arms together,</text>
+                                        <text class="m" x="270" y="174">u<tspan class="mu" font-size="12" dy="4">2</tspan><tspan class="mu" dy="-4"> / </tspan>u<tspan class="mu" font-size="12" dy="4">1</tspan><tspan class="mu" dy="-4"> = +√2</tspan></text>
+                                    </g>
+                                    <g>
+                                        <line x1="430" y1="40" x2="570" y2="40" stroke="#1c1518" stroke-width="2"/>
+                                        <line x1="500" y1="40" x2="500" y2="270" stroke="#cdc1ae" stroke-width="1" stroke-dasharray="4 4"/>
+                                        <line x1="500" y1="40" x2="475.5" y2="155.3" stroke="#cdc1ae" stroke-width="2.4" stroke-linecap="round"/>
+                                        <line x1="475.5" y1="155.3" x2="510.0" y2="268.0" stroke="#cdc1ae" stroke-width="2.4" stroke-linecap="round"/>
+                                        <line x1="500" y1="40" x2="524.5" y2="155.3" stroke="#1c1518" stroke-width="2.6" stroke-linecap="round"/>
+                                        <line x1="524.5" y1="155.3" x2="490.0" y2="268.0" stroke="#1c1518" stroke-width="2.6" stroke-linecap="round"/>
+                                        <circle cx="475.5" cy="155.3" r="9" fill="#e2a2aa"/><circle cx="510.0" cy="268.0" r="9" fill="#e2a2aa"/>
+                                        <circle cx="524.5" cy="155.3" r="9" fill="#7a1f2b"/><circle cx="490.0" cy="268.0" r="9" fill="#7a1f2b"/>
+                                        <circle cx="500" cy="40" r="4" fill="#fff" stroke="#1c1518" stroke-width="2"/>
+                                        <text class="lbl" x="590" y="70">fast mode</text>
+                                        <text class="m" x="590" y="98">ω<tspan class="mu" font-size="12" dy="4">+</tspan><tspan class="mu" dy="-4"> = 5.79 rad/s</tspan></text>
+                                        <text class="lbl" x="590" y="124">period 1.09 s</text>
+                                        <text class="lbl" x="590" y="150">arms opposed,</text>
+                                        <text class="m" x="590" y="174">u<tspan class="mu" font-size="12" dy="4">2</tspan><tspan class="mu" dy="-4"> / </tspan>u<tspan class="mu" font-size="12" dy="4">1</tspan><tspan class="mu" dy="-4"> = −√2</tspan></text>
+                                    </g>
+                                </svg>
+                            </div>
+                            <figcaption><span class="pfig__n">Figure 2</span>The two normal modes for equal masses and \(l = 1\ \mathrm{m}\), with the angles exaggerated so they can be seen. Dark: one turning point; pale: the opposite turning point half a period later.</figcaption>
+                        </figure>
+                        <div class="pbox pbox--ex">
+                            <span class="pbox__t">Exercise 5.1 · on the figure above</span>
+                            <p>Keep both ratio sliders at 1 and both angular velocities at 0. Set \(\theta_1 = 5^\circ\) and \(\theta_2 = 7^\circ\), close to \(\sqrt2\times 5^\circ\): the pendulum swings almost as one piece, with a period near 2.6 s. Now set \(\theta_2 = -7^\circ\): the arms swing against each other, twice as fast as before and a little more. Time ten swings of each and compare with (11).</p>
+                        </div>
+                    </section>
+
+                    <section class="psec" id="p-chaos">
+                        <h3><span class="psec__n">06</span>Chaos</h3>
+                        <p>Raise the energy and the small-angle picture breaks down: the \(\sin\) and \(\omega^2\) terms we dropped now dominate, and the motion becomes chaotic. The clearest sign is <em>sensitive dependence on the starting state</em>. Start two pendulums whose upper angles differ by \(0.001\ \mathrm{rad}\) and follow the distance \(d(t)\) between their lower masses. Figure 3 shows it for two starts, computed with the same equations and the same time step as the page.</p>
+                        <figure class="pfig">
+                            <div class="pfig__plate">
+                                <svg viewBox="0 0 720 346" role="img" xmlns="http://www.w3.org/2000/svg">
+                                <defs><clipPath id="clip1"><rect x="64.0" y="18.0" width="634.0" height="256.0"/></clipPath></defs>
+                                <line x1="64.0" x2="698.0" y1="274.0" y2="274.0" stroke="#eee6d9" stroke-width="1"/>
+                                <text class="tick" x="56.0" y="278.0" text-anchor="end">10⁻⁴</text>
+                                <line x1="64.0" x2="698.0" y1="222.8" y2="222.8" stroke="#eee6d9" stroke-width="1"/>
+                                <text class="tick" x="56.0" y="226.8" text-anchor="end">10⁻³</text>
+                                <line x1="64.0" x2="698.0" y1="171.6" y2="171.6" stroke="#eee6d9" stroke-width="1"/>
+                                <text class="tick" x="56.0" y="175.6" text-anchor="end">10⁻²</text>
+                                <line x1="64.0" x2="698.0" y1="120.4" y2="120.4" stroke="#eee6d9" stroke-width="1"/>
+                                <text class="tick" x="56.0" y="124.4" text-anchor="end">10⁻¹</text>
+                                <line x1="64.0" x2="698.0" y1="69.2" y2="69.2" stroke="#eee6d9" stroke-width="1"/>
+                                <text class="tick" x="56.0" y="73.2" text-anchor="end">10⁰</text>
+                                <line x1="64.0" x2="698.0" y1="18.0" y2="18.0" stroke="#eee6d9" stroke-width="1"/>
+                                <text class="tick" x="56.0" y="22.0" text-anchor="end">10¹</text>
+                                <line x1="64.0" x2="64.0" y1="274.0" y2="279.0" stroke="#8b8079"/>
+                                <text class="tick" x="64.0" y="293.0" text-anchor="middle">0</text>
+                                <line x1="127.4" x2="127.4" y1="274.0" y2="279.0" stroke="#8b8079"/>
+                                <text class="tick" x="127.4" y="293.0" text-anchor="middle">2</text>
+                                <line x1="190.8" x2="190.8" y1="274.0" y2="279.0" stroke="#8b8079"/>
+                                <text class="tick" x="190.8" y="293.0" text-anchor="middle">4</text>
+                                <line x1="254.2" x2="254.2" y1="274.0" y2="279.0" stroke="#8b8079"/>
+                                <text class="tick" x="254.2" y="293.0" text-anchor="middle">6</text>
+                                <line x1="317.6" x2="317.6" y1="274.0" y2="279.0" stroke="#8b8079"/>
+                                <text class="tick" x="317.6" y="293.0" text-anchor="middle">8</text>
+                                <line x1="381.0" x2="381.0" y1="274.0" y2="279.0" stroke="#8b8079"/>
+                                <text class="tick" x="381.0" y="293.0" text-anchor="middle">10</text>
+                                <line x1="444.4" x2="444.4" y1="274.0" y2="279.0" stroke="#8b8079"/>
+                                <text class="tick" x="444.4" y="293.0" text-anchor="middle">12</text>
+                                <line x1="507.8" x2="507.8" y1="274.0" y2="279.0" stroke="#8b8079"/>
+                                <text class="tick" x="507.8" y="293.0" text-anchor="middle">14</text>
+                                <line x1="571.2" x2="571.2" y1="274.0" y2="279.0" stroke="#8b8079"/>
+                                <text class="tick" x="571.2" y="293.0" text-anchor="middle">16</text>
+                                <line x1="634.6" x2="634.6" y1="274.0" y2="279.0" stroke="#8b8079"/>
+                                <text class="tick" x="634.6" y="293.0" text-anchor="middle">18</text>
+                                <line x1="698.0" x2="698.0" y1="274.0" y2="279.0" stroke="#8b8079"/>
+                                <text class="tick" x="698.0" y="293.0" text-anchor="middle">20</text>
+                                <line x1="64.0" x2="698.0" y1="274.0" y2="274.0" stroke="#8b8079"/>
+                                <line x1="64.0" x2="64.0" y1="18.0" y2="274.0" stroke="#8b8079"/>
+                                <text class="lbl" x="698.0" y="312.0" text-anchor="end">time t (s)</text>
+                                <text class="lbl" x="70.0" y="31.0">distance between the two lower masses (m)</text>
+                                <g clip-path="url(#clip1)">
+                                <path d="M64.0 222.8 L65.6 222.8 L67.2 222.8 L68.8 222.9 L70.3 223.1 L71.9 223.4 L73.5 224.1 L75.1 225.2 L76.7 226.8 L78.3 229.2 L79.8 232.6 L81.4 237.7 L83.0 245.7 L84.6 260.4 L86.2 323.2 L87.8 258.9 L89.4 243.5 L90.9 234.7 L92.5 228.7 L94.1 224.4 L95.7 221.3 L97.3 219.1 L98.9 217.6 L100.5 216.7 L102.0 216.4 L103.6 216.6 L105.2 217.2 L106.8 218.3 L108.4 219.7 L110.0 221.6 L111.5 223.8 L113.1 226.3 L114.7 229.2 L116.3 232.4 L117.9 235.9 L119.5 239.8 L121.1 244.4 L122.6 249.9 L124.2 257.1 L125.8 268.5 L127.4 296.0 L129.0 283.4 L130.6 261.5 L132.2 249.9 L133.7 241.8 L135.3 235.5 L136.9 230.5 L138.5 226.4 L140.1 223.1 L141.7 220.4 L143.2 218.3 L144.8 216.8 L146.4 215.7 L148.0 215.2 L149.6 215.2 L151.2 215.7 L152.8 216.8 L154.3 218.4 L155.9 220.8 L157.5 224.0 L159.1 228.1 L160.7 233.7 L162.3 241.3 L163.9 252.8 L165.4 275.7 L167.0 280.4 L168.6 257.2 L170.2 247.0 L171.8 240.9 L173.4 236.7 L175.0 233.8 L176.5 231.6 L178.1 229.8 L179.7 228.3 L181.3 227.0 L182.9 225.8 L184.5 224.5 L186.0 223.4 L187.6 222.3 L189.2 221.3 L190.8 220.4 L192.4 219.8 L194.0 219.5 L195.6 219.5 L197.1 219.9 L198.7 220.9 L200.3 222.5 L201.9 224.8 L203.5 228.3 L205.1 233.2 L206.7 240.6 L208.2 253.0 L209.8 287.1 L211.4 265.2 L213.0 246.3 L214.6 236.7 L216.2 230.5 L217.7 226.2 L219.3 223.3 L220.9 221.2 L222.5 219.9 L224.1 219.1 L225.7 218.9 L227.3 219.1 L228.8 219.6 L230.4 220.4 L232.0 221.4 L233.6 222.6 L235.2 223.9 L236.8 225.3 L238.4 226.7 L239.9 228.2 L241.5 229.8 L243.1 231.6 L244.7 233.7 L246.3 236.4 L247.9 239.9 L249.4 245.0 L251.0 252.9 L252.6 267.8 L254.2 300.8 L255.8 261.7 L257.4 246.7 L259.0 237.6 L260.5 231.1 L262.1 226.3 L263.7 222.6 L265.3 219.7 L266.9 217.7 L268.5 216.2 L270.1 215.3 L271.6 215.0 L273.2 215.2 L274.8 215.9 L276.4 217.1 L278.0 218.9 L279.6 221.3 L281.1 224.3 L282.7 228.0 L284.3 232.6 L285.9 238.4 L287.5 245.9 L289.1 256.4 L290.7 274.1 L292.2 309.2 L293.8 271.3 L295.4 258.2 L297.0 250.6 L298.6 245.1 L300.2 240.7 L301.8 236.9 L303.3 233.6 L304.9 230.5 L306.5 227.8 L308.1 225.2 L309.7 223.0 L311.3 221.0 L312.8 219.4 L314.4 218.1 L316.0 217.2 L317.6 216.7 L319.2 216.7 L320.8 217.3 L322.4 218.3 L323.9 220.1 L325.5 222.6 L327.1 226.2 L328.7 231.1 L330.3 238.1 L331.9 249.1 L333.4 272.5 L335.0 276.4 L336.6 251.5 L338.2 240.8 L339.8 234.4 L341.4 230.1 L343.0 227.2 L344.5 225.1 L346.1 223.8 L347.7 223.0 L349.3 222.5 L350.9 222.3 L352.5 222.4 L354.1 222.5 L355.6 222.6 L357.2 222.8 L358.8 223.0 L360.4 223.2 L362.0 223.4 L363.6 223.8 L365.1 224.4 L366.7 225.2 L368.3 226.6 L369.9 228.5 L371.5 231.3 L373.1 235.4 L374.7 241.6 L376.2 251.8 L377.8 274.9 L379.4 275.6 L381.0 250.6 L382.6 239.0 L384.2 231.7 L385.8 226.6 L387.3 222.8 L388.9 220.0 L390.5 218.1 L392.1 216.8 L393.7 216.2 L395.3 216.0 L396.9 216.4 L398.4 217.2 L400.0 218.4 L401.6 220.1 L403.2 222.2 L404.8 224.6 L406.4 227.5 L407.9 230.7 L409.5 234.4 L411.1 238.5 L412.7 243.2 L414.3 248.8 L415.9 256.0 L417.5 266.6 L419.0 288.2 L420.6 294.1 L422.2 266.4 L423.8 253.6 L425.4 245.0 L427.0 238.4 L428.5 233.0 L430.1 228.6 L431.7 225.0 L433.3 222.0 L434.9 219.6 L436.5 217.7 L438.1 216.4 L439.6 215.5 L441.2 215.1 L442.8 215.3 L444.4 216.0 L446.0 217.3 L447.6 219.2 L449.2 221.9 L450.7 225.5 L452.3 230.2 L453.9 236.6 L455.5 245.9 L457.1 261.5 L458.7 300.4 L460.2 263.7 L461.8 249.7 L463.4 242.1 L465.0 237.3 L466.6 233.9 L468.2 231.4 L469.8 229.6 L471.3 228.2 L472.9 227.0 L474.5 225.9 L476.1 224.9 L477.7 223.9 L479.3 222.9 L480.9 222.0 L482.4 221.2 L484.0 220.5 L485.6 220.0 L487.2 219.9 L488.8 220.0 L490.4 220.7 L492.0 221.9 L493.5 223.7 L495.1 226.5 L496.7 230.5 L498.3 236.3 L499.9 245.4 L501.5 262.8 L503.0 295.5 L504.6 254.3 L506.2 241.0 L507.8 233.2 L509.4 228.0 L511.0 224.3 L512.6 221.7 L514.1 220.0 L515.7 218.9 L517.3 218.4 L518.9 218.3 L520.5 218.6 L522.1 219.3 L523.7 220.3 L525.2 221.5 L526.8 222.9 L528.4 224.4 L530.0 226.1 L531.6 227.7 L533.2 229.5 L534.7 231.4 L536.3 233.5 L537.9 236.1 L539.5 239.3 L541.1 243.6 L542.7 250.1 L544.3 261.0 L545.8 287.7 L547.4 274.0 L549.0 253.1 L550.6 242.0 L552.2 234.4 L553.8 228.8 L555.4 224.5 L556.9 221.2 L558.5 218.7 L560.1 216.9 L561.7 215.6 L563.3 214.9 L564.9 214.8 L566.4 215.1 L568.0 216.0 L569.6 217.5 L571.2 219.5 L572.8 222.1 L574.4 225.5 L576.0 229.7 L577.5 235.1 L579.1 241.9 L580.7 251.3 L582.3 265.9 L583.9 301.4 L585.5 275.3 L587.0 259.5 L588.6 251.1 L590.2 245.4 L591.8 241.1 L593.4 237.5 L595.0 234.4 L596.6 231.5 L598.1 228.9 L599.7 226.4 L601.3 224.2 L602.9 222.2 L604.5 220.4 L606.1 219.0 L607.7 217.9 L609.2 217.2 L610.8 216.9 L612.4 217.1 L614.0 217.8 L615.6 219.1 L617.2 221.1 L618.8 224.0 L620.3 228.1 L621.9 233.8 L623.5 242.2 L625.1 256.9 L626.7 313.6 L628.3 260.4 L629.8 245.0 L631.4 236.7 L633.0 231.3 L634.6 227.7 L636.2 225.2 L637.8 223.5 L639.4 222.5 L640.9 221.9 L642.5 221.6 L644.1 221.6 L645.7 221.8 L647.3 222.1 L648.9 222.5 L650.5 222.8 L652.0 223.2 L653.6 223.6 L655.2 224.0 L656.8 224.5 L658.4 225.3 L660.0 226.4 L661.5 228.0 L663.1 230.4 L664.7 233.7 L666.3 238.6 L667.9 246.3 L669.5 260.3 L671.1 323.7 L672.6 260.5 L674.2 244.4 L675.8 235.3 L677.4 229.0 L679.0 224.5 L680.6 221.2 L682.1 218.8 L683.7 217.1 L685.3 216.1 L686.9 215.6 L688.5 215.6 L690.1 216.2 L691.7 217.2 L693.2 218.6 L694.8 220.5 L696.4 222.8 L698.0 225.6" fill="none" stroke="#4a413d" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/>
+                                <path d="M64.0 222.8 L65.6 222.7 L67.2 222.2 L68.8 221.5 L70.3 220.6 L71.9 219.5 L73.5 218.4 L75.1 217.3 L76.7 216.2 L78.3 215.2 L79.8 214.1 L81.4 212.8 L83.0 211.2 L84.6 209.7 L86.2 208.5 L87.8 208.0 L89.4 208.8 L90.9 209.4 L92.5 210.7 L94.1 213.6 L95.7 217.4 L97.3 221.5 L98.9 225.4 L100.5 229.5 L102.0 234.9 L103.6 245.7 L105.2 260.5 L106.8 246.2 L108.4 242.4 L110.0 241.7 L111.5 240.8 L113.1 239.2 L114.7 237.0 L116.3 234.8 L117.9 233.1 L119.5 232.2 L121.1 232.5 L122.6 234.6 L124.2 238.3 L125.8 237.0 L127.4 225.8 L129.0 213.7 L130.6 203.7 L132.2 195.7 L133.7 189.1 L135.3 183.6 L136.9 178.9 L138.5 174.8 L140.1 171.2 L141.7 167.9 L143.2 164.9 L144.8 162.0 L146.4 159.2 L148.0 156.5 L149.6 153.7 L151.2 150.9 L152.8 147.9 L154.3 145.0 L155.9 142.1 L157.5 139.5 L159.1 137.4 L160.7 136.5 L162.3 139.0 L163.9 154.5 L165.4 147.5 L167.0 143.9 L168.6 141.4 L170.2 135.7 L171.8 130.0 L173.4 126.3 L175.0 125.4 L176.5 130.5 L178.1 130.4 L179.7 124.2 L181.3 123.9 L182.9 125.9 L184.5 129.3 L186.0 133.4 L187.6 135.8 L189.2 133.3 L190.8 127.3 L192.4 121.0 L194.0 115.6 L195.6 110.9 L197.1 106.8 L198.7 103.1 L200.3 99.8 L201.9 97.2 L203.5 95.3 L205.1 93.5 L206.7 91.4 L208.2 89.0 L209.8 86.6 L211.4 84.7 L213.0 84.6 L214.6 89.1 L216.2 93.2 L217.7 84.1 L219.3 75.7 L220.9 71.3 L222.5 69.2 L224.1 68.0 L225.7 66.9 L227.3 65.3 L228.8 63.2 L230.4 61.3 L232.0 59.9 L233.6 60.2 L235.2 61.8 L236.8 62.9 L238.4 64.9 L239.9 67.1 L241.5 68.5 L243.1 68.7 L244.7 67.7 L246.3 65.6 L247.9 63.0 L249.4 60.1 L251.0 57.0 L252.6 53.9 L254.2 50.9 L255.8 48.4 L257.4 47.5 L259.0 49.2 L260.5 51.7 L262.1 54.5 L263.7 57.4 L265.3 60.4 L266.9 63.7 L268.5 67.3 L270.1 70.4 L271.6 70.8 L273.2 68.0 L274.8 63.8 L276.4 59.9 L278.0 57.1 L279.6 55.4 L281.1 55.1 L282.7 56.2 L284.3 58.0 L285.9 59.6 L287.5 60.7 L289.1 64.8 L290.7 72.7 L292.2 80.0 L293.8 76.2 L295.4 66.9 L297.0 59.0 L298.6 53.2 L300.2 50.0 L301.8 49.2 L303.3 48.9 L304.9 48.1 L306.5 46.8 L308.1 45.1 L309.7 43.2 L311.3 41.3 L312.8 39.7 L314.4 38.7 L316.0 38.7 L317.6 39.8 L319.2 41.5 L320.8 43.4 L322.4 45.3 L323.9 47.0 L325.5 48.4 L327.1 50.0 L328.7 52.9 L330.3 56.9 L331.9 60.1 L333.4 60.0 L335.0 56.5 L336.6 51.8 L338.2 47.9 L339.8 46.9 L341.4 47.9 L343.0 50.1 L344.5 53.3 L346.1 57.2 L347.7 61.4 L349.3 64.8 L350.9 66.4 L352.5 66.4 L354.1 65.0 L355.6 62.4 L357.2 58.7 L358.8 54.7 L360.4 51.4 L362.0 49.7 L363.6 49.4 L365.1 49.6 L366.7 50.7 L368.3 54.8 L369.9 61.4 L371.5 67.5 L373.1 67.1 L374.7 60.9 L376.2 55.3 L377.8 52.6 L379.4 51.8 L381.0 51.3 L382.6 50.7 L384.2 50.0 L385.8 49.3 L387.3 48.5 L388.9 47.8 L390.5 47.1 L392.1 46.4 L393.7 45.8 L395.3 45.1 L396.9 44.4 L398.4 43.7 L400.0 43.2 L401.6 42.8 L403.2 42.6 L404.8 42.5 L406.4 42.6 L407.9 42.9 L409.5 43.3 L411.1 44.2 L412.7 45.8 L414.3 48.5 L415.9 52.4 L417.5 57.7 L419.0 65.1 L420.6 73.2 L422.2 70.3 L423.8 60.1 L425.4 51.9 L427.0 47.1 L428.5 45.4 L430.1 45.0 L431.7 45.4 L433.3 46.8 L434.9 49.1 L436.5 52.0 L438.1 54.5 L439.6 54.7 L441.2 52.7 L442.8 50.0 L444.4 47.7 L446.0 45.9 L447.6 44.9 L449.2 45.6 L450.7 49.7 L452.3 56.5 L453.9 66.7 L455.5 84.0 L457.1 89.1 L458.7 70.3 L460.2 59.6 L461.8 52.9 L463.4 48.8 L465.0 48.8 L466.6 50.7 L468.2 52.6 L469.8 54.5 L471.3 57.3 L472.9 59.2 L474.5 59.0 L476.1 57.7 L477.7 56.3 L479.3 55.2 L480.9 54.3 L482.4 53.7 L484.0 53.3 L485.6 53.3 L487.2 53.4 L488.8 54.1 L490.4 56.5 L492.0 61.1 L493.5 66.6 L495.1 70.6 L496.7 70.2 L498.3 66.3 L499.9 61.7 L501.5 57.7 L503.0 54.6 L504.6 52.8 L506.2 52.5 L507.8 52.8 L509.4 53.5 L511.0 54.5 L512.6 56.0 L514.1 58.4 L515.7 62.9 L517.3 70.4 L518.9 82.7 L520.5 96.5 L522.1 83.1 L523.7 70.6 L525.2 62.6 L526.8 57.1 L528.4 53.8 L530.0 52.2 L531.6 51.4 L533.2 50.9 L534.7 50.7 L536.3 50.7 L537.9 51.0 L539.5 51.7 L541.1 52.7 L542.7 54.4 L544.3 55.5 L545.8 54.4 L547.4 52.0 L549.0 49.3 L550.6 46.8 L552.2 44.7 L553.8 43.0 L555.4 43.0 L556.9 44.6 L558.5 46.8 L560.1 48.9 L561.7 50.9 L563.3 52.5 L564.9 53.7 L566.4 54.4 L568.0 54.8 L569.6 55.1 L571.2 55.1 L572.8 54.7 L574.4 54.0 L576.0 53.1 L577.5 53.1 L579.1 55.4 L580.7 59.3 L582.3 63.1 L583.9 64.5 L585.5 62.3 L587.0 58.0 L588.6 54.2 L590.2 53.8 L591.8 55.2 L593.4 56.4 L595.0 57.0 L596.6 56.7 L598.1 55.4 L599.7 54.2 L601.3 54.9 L602.9 56.4 L604.5 58.2 L606.1 60.0 L607.7 62.2 L609.2 64.9 L610.8 68.0 L612.4 71.3 L614.0 74.9 L615.6 80.0 L617.2 88.0 L618.8 97.1 L620.3 92.4 L621.9 81.7 L623.5 74.2 L625.1 70.4 L626.7 70.7 L628.3 71.2 L629.8 69.2 L631.4 66.7 L633.0 67.1 L634.6 68.5 L636.2 69.1 L637.8 68.0 L639.4 65.4 L640.9 61.9 L642.5 58.1 L644.1 54.4 L645.7 51.2 L647.3 49.4 L648.9 49.5 L650.5 50.3 L652.0 50.7 L653.6 50.4 L655.2 49.5 L656.8 50.0 L658.4 54.3 L660.0 61.3 L661.5 71.5 L663.1 79.5 L664.7 72.2 L666.3 62.9 L667.9 56.6 L669.5 53.4 L671.1 55.4 L672.6 61.8 L674.2 73.5 L675.8 104.3 L677.4 88.2 L679.0 68.4 L680.6 58.4 L682.1 51.7 L683.7 47.0 L685.3 44.1 L686.9 43.2 L688.5 43.4 L690.1 44.0 L691.7 45.1 L693.2 46.9 L694.8 49.9 L696.4 53.6 L698.0 57.1" fill="none" stroke="#7a1f2b" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/>
+                                </g>
+                                <line x1="64" x2="698" y1="318.0" y2="318.0" stroke="#eee6d9"/>
+                                <line x1="64.0" x2="86.0" y1="334.0" y2="334.0" stroke="#4a413d" stroke-width="2.2" stroke-linecap="round"/>
+                                <text class="lbl" x="94.0" y="338.0">start 10°, 10° (low energy)</text>
+                                <line x1="298.4" x2="320.4" y1="334.0" y2="334.0" stroke="#7a1f2b" stroke-width="2.2" stroke-linecap="round"/>
+                                <text class="lbl" x="328.4" y="338.0">start 120°, 150° (high energy)</text>
+                                </svg>
+                            </div>
+                            <figcaption><span class="pfig__n">Figure 3</span>Distance between the lower masses of two pendulums whose upper angles start \(0.001\ \mathrm{rad}\) apart, on a logarithmic scale. Equal masses and lengths, both at rest at the start, RK4 with \(h = 1/600\ \mathrm{s}\). At low energy the distance stays below about 1.5 mm for the whole 20 s. At high energy it grows like a straight line on this scale, which means exponentially, until it is as large as the pendulum itself.</figcaption>
+                        </figure>
+                        <p>A straight line on a logarithmic scale means \(d(t) \approx d_0\,e^{\lambda t}\). For the high-energy start of Figure 3 the line rises at about \(1.7\) per second, so the distance doubles roughly every \(0.4\ \mathrm{s}\) and reaches \(0.1\ \mathrm{m}\) after \(4.1\ \mathrm{s}\). The long-time average of this growth rate is the <em>largest Lyapunov exponent</em>,</p>
+                        \[ \lambda = \lim_{t\to\infty}\ \lim_{d_0\to 0}\ \frac{1}{t}\,\ln\frac{d(t)}{d_0} , \tag{12} \]
+                        <p>and the 1.7 per second read off one pair of runs is only an estimate of it. Its meaning is practical. Every extra second we want to predict costs a factor \(e^{1.7}\approx 5.5\) in the precision of the starting angles: to see ten seconds further, we would need to know the start about \(5.5^{10}\approx 2\times10^{7}\) times more precisely. Note what chaos is not: it is not noise, and it is not a failure of energy conservation. The energy stays fixed while the trajectory wanders unpredictably over everything that energy allows.</p>
+                        <div class="pbox pbox--ex">
+                            <span class="pbox__t">Exercise 6.1 · on the figure above</span>
+                            <p>Switch on the <em>Chaos twin</em>, a second pendulum started with \(\theta_1\) larger by \(0.001\ \mathrm{rad}\). From \(10^\circ, 10^\circ\) its separation readout stays near \(10^{-3}\ \mathrm{m}\). From \(120^\circ, 150^\circ\) the pale twin peels away within a few seconds. Find the smallest starting angles at which you can see the two pendulums separate within 20 s.</p>
+                        </div>
+                    </section>
+
+                    <section class="psec" id="p-rk4">
+                        <h3><span class="psec__n">07</span>Solving it step by step</h3>
+                        <p>Equations (9) give the accelerations for any state, but no formula gives the angles at a later time. The computer therefore walks forward in small steps. Write the state as \(s = (\theta_1,\theta_2,\omega_1,\omega_2)\) and the equations as \(\mathrm{d}s/\mathrm{d}t = F(s) = (\omega_1,\omega_2,\alpha_1,\alpha_2)\). The fourth-order Runge–Kutta method looks at the slope four times per step, at the start, twice in the middle and once at the end, and takes a weighted average:</p>
+                        \[ \begin{aligned} k_1 &= F(s), & k_2 &= F\!\left(s + \tfrac{h}{2}k_1\right), & k_3 &= F\!\left(s + \tfrac{h}{2}k_2\right), & k_4 &= F(s + h\,k_3), \\ & & s(t+h) &= s + \tfrac{h}{6}\left(k_1 + 2k_2 + 2k_3 + k_4\right). \end{aligned} \tag{13} \]
+                        <p>The error made in one step shrinks like \(h^5\) and the error accumulated over a fixed time like \(h^4\): halving the step makes the result sixteen times more accurate. The page uses \(h = 1/600\ \mathrm{s}\), ten steps per frame at sixty frames a second.</p>
+                        <ul>
+                            <li>Each frame advances by the real time elapsed multiplied by the <em>Time scale</em>, in steps of \(h\), at most 600 steps per frame.</li>
+                            <li>RK4 does not conserve energy exactly, which is why the <em>Drift</em> readout is there. It measures \(|E - E_0|\) against the depth of the potential well, \(E_\text{scale} = (m_1+m_2)\,g\,l_1 + m_2\,g\,l_2\), rather than against \(E_0\), which can be close to zero. Over the first 20 s of the default start it stays below \(3\times10^{-8}\).</li>
+                            <li>Moving a mass, length, angle or angular-velocity slider restarts the motion from those values; the Time scale slider does not.</li>
                         </ul>
-                    </article>
+                    </section>
 
-                    <article class="step" id="s-derivation">
-                        <p class="step__num">03 · Derivation</p>
-                        <h3>Lagrangian mechanics, step by step</h3>
-                        <h4>Kinetic and potential energy</h4>
-                        <p>Differentiating the positions in time:</p>
-                        <p class="eq"><span class="eq__line">ẋ₁ = l₁ ω₁ cos θ₁, &nbsp; ẏ₁ = l₁ ω₁ sin θ₁</span><span class="eq__line">ẋ₂ = ẋ₁ + l₂ ω₂ cos θ₂, &nbsp; ẏ₂ = ẏ₁ + l₂ ω₂ sin θ₂</span></p>
-                        <p>Squaring and adding, the cross term uses cos θ₁ cos θ₂ + sin θ₁ sin θ₂ = cos(θ₁ − θ₂):</p>
-                        <p class="eq"><span class="eq__line">T = ½ m₁ l₁² ω₁² + ½ m₂ [ l₁² ω₁² + l₂² ω₂² + 2 l₁ l₂ ω₁ ω₂ cos(θ₁ − θ₂) ]</span><span class="eq__line">V = m₁ g y₁ + m₂ g y₂ = −(m₁ + m₂) g l₁ cos θ₁ − m₂ g l₂ cos θ₂</span></p>
-                        <p>The Lagrangian is L = T − V. Write δ = θ₁ − θ₂ and α<sub>i</sub> = dω<sub>i</sub>/dt for the angular accelerations.</p>
-                        <h4>Where the Euler–Lagrange equation comes from</h4>
-                        <p>Among all paths θ(t) with fixed start and end, the real motion makes the action S = ∫ L dt stationary (Hamilton's principle). Vary one angle by a small δθ<sub>i</sub>(t) that vanishes at both ends: δS = ∫ [∂L/∂θ<sub>i</sub> δθ<sub>i</sub> + ∂L/∂ω<sub>i</sub> δω<sub>i</sub>] dt, with δω<sub>i</sub> = d(δθ<sub>i</sub>)/dt. Integrating the second term by parts moves the time derivative onto ∂L/∂ω<sub>i</sub>, and the boundary term vanishes because δθ<sub>i</sub> does:</p>
-                        <p class="eq"><span class="eq__line">δS = ∫ [ ∂L/∂θ<sub>i</sub> − d/dt(∂L/∂ω<sub>i</sub>) ] δθ<sub>i</sub> dt = 0 for every δθ<sub>i</sub> &nbsp;⇒&nbsp; d/dt(∂L/∂ω<sub>i</sub>) − ∂L/∂θ<sub>i</sub> = 0</span><span class="eq__note">the rods are built in: only θ₁ and θ₂ are varied, so no constraint forces appear</span></p>
-                        <p>The quantity p<sub>i</sub> = ∂L/∂ω<sub>i</sub> is the generalised momentum of θ<sub>i</sub>. For the upper angle, p₁ = (m₁ + m₂) l₁² ω₁ + m₂ l₁ l₂ ω₂ cos δ: an angular momentum that includes the lower bob's motion, not simply m₁ω₁.</p>
-                        <h4>Euler–Lagrange equation for θ₁</h4>
-                        <p>Why these three lines, in this order. The equation d/dt(∂L/∂ω₁) − ∂L/∂θ₁ = 0 uses two different kinds of derivative. A partial derivative such as ∂L/∂ω₁ treats L as a function of four independent numbers (θ₁, θ₂, ω₁, ω₂) and varies only one of them, holding the other three fixed. The time derivative d/dt then follows the actual motion, in which all four change together. By the chain rule, d/dt cos δ = −sin δ · dδ/dt = −sin δ (ω₁ − ω₂): that is where the −ω₂(ω₁ − ω₂) sin δ term below comes from. Its ω₁ω₂ part then cancels against ∂L/∂θ₁, which picks up its own ω₁ω₂ sin δ from differentiating cos δ with θ₁ alone varying.</p>
-                        <p class="eq"><span class="eq__line">∂L/∂ω₁ = (m₁ + m₂) l₁² ω₁ + m₂ l₁ l₂ ω₂ cos δ</span><span class="eq__line">d/dt(∂L/∂ω₁) = (m₁ + m₂) l₁² α₁ + m₂ l₁ l₂ α₂ cos δ − m₂ l₁ l₂ ω₂ (ω₁ − ω₂) sin δ</span><span class="eq__line">∂L/∂θ₁ = −m₂ l₁ l₂ ω₁ ω₂ sin δ − (m₁ + m₂) g l₁ sin θ₁</span></p>
-                        <p>Setting d/dt(∂L/∂ω₁) − ∂L/∂θ₁ = 0, the two ω₁ω₂ terms cancel, and dividing by l₁:</p>
-                        <p class="eq"><span class="eq__line">(m₁ + m₂) l₁ α₁ + m₂ l₂ α₂ cos δ = −m₂ l₂ ω₂² sin δ − (m₁ + m₂) g sin θ₁ &nbsp; (E1)</span></p>
-                        <h4>Euler–Lagrange equation for θ₂</h4>
-                        <p class="eq"><span class="eq__line">∂L/∂ω₂ = m₂ l₂² ω₂ + m₂ l₁ l₂ ω₁ cos δ</span><span class="eq__line">d/dt(∂L/∂ω₂) = m₂ l₂² α₂ + m₂ l₁ l₂ α₁ cos δ − m₂ l₁ l₂ ω₁ (ω₁ − ω₂) sin δ</span><span class="eq__line">∂L/∂θ₂ = +m₂ l₁ l₂ ω₁ ω₂ sin δ − m₂ g l₂ sin θ₂</span></p>
-                        <p>Again the ω₁ω₂ terms cancel; dividing by m₂ l₂:</p>
-                        <p class="eq"><span class="eq__line">l₁ α₁ cos δ + l₂ α₂ = l₁ ω₁² sin δ − g sin θ₂ &nbsp; (E2)</span></p>
-                        <h4>Solving for the accelerations</h4>
-                        <p>Why solve before integrating: each equation contains both α₁ and α₂, because each rod pushes on the other. A time-stepping method needs each acceleration on its own, as a function of the current state, so the next move is to solve this 2 × 2 system. (E1) and (E2) are linear in α₁ and α₂. The determinant of the coefficient matrix is</p>
-                        <p class="eq"><span class="eq__line">D = (m₁ + m₂) l₁ l₂ − m₂ l₁ l₂ cos² δ = l₁ l₂ (m₁ + m₂ sin² δ)</span><span class="eq__note">never zero, since m₁ + m₂ sin² δ ≥ m₁ &gt; 0</span></p>
-                        <p>By Cramer's rule, with the right-hand sides r₁ of (E1) and r₂ of (E2),</p>
-                        <p class="eq"><span class="eq__line">α₁ = l₂ [ r₁ − m₂ cos δ · r₂ ] / D</span><span class="eq__line">&nbsp;&nbsp;&nbsp;= [ −m₂ sin δ (l₂ ω₂² + l₁ ω₁² cos δ) − (m₁ + m₂) g sin θ₁ + m₂ g sin θ₂ cos δ ] / [ l₁ (m₁ + m₂ sin² δ) ]</span></p>
-                        <p>Two identities bring this to the compact form. Multiply top and bottom by 2 and use 2 sin² δ = 1 − cos 2δ in the denominator. In the numerator, 2 sin θ₂ cos(θ₁ − θ₂) = sin θ₁ − sin(θ₁ − 2θ₂), so the gravity terms become −g(2m₁ + m₂) sin θ₁ − m₂ g sin(θ₁ − 2θ₂). For α₂, the same rule gives a gravity combination sin θ₁ cos δ − sin θ₂, and since sin θ₂ = sin(θ₁ − δ) = sin θ₁ cos δ − cos θ₁ sin δ, it equals cos θ₁ sin δ. Collecting:</p>
-                        <p class="eq"><span class="eq__line">α₁ = [ −g(2m₁ + m₂) sin θ₁ − m₂ g sin(θ₁ − 2θ₂) − 2 m₂ sin δ (ω₂² l₂ + ω₁² l₁ cos δ) ] / [ l₁ (2m₁ + m₂ − m₂ cos 2δ) ]</span><span class="eq__line">α₂ = [ 2 sin δ ( ω₁² l₁ (m₁ + m₂) + g (m₁ + m₂) cos θ₁ + ω₂² l₂ m₂ cos δ ) ] / [ l₂ (2m₁ + m₂ − m₂ cos 2δ) ]</span></p>
-                        <p>I checked this closed form against a direct numerical solve of (E1)–(E2) at 10 000 random states and parameter values: they agree to 5 × 10⁻¹⁴, i.e. to rounding error.</p>
-                        <h4>Small swings: two normal modes</h4>
-                        <p>For small angles, sin θ ≈ θ, cos δ ≈ 1 and the ω² terms are second order. With equal masses and lengths l the equations become M θ̈ = −K θ with M ∝ [[2, 1], [1, 1]] and K ∝ (g/l)[[2, 0], [0, 1]]. Setting det(K − ω² M) = 0 gives 2(g/l − ω²)² = ω⁴, so</p>
-                        <p class="eq"><span class="eq__line">ω<sub>±</sub>² = (2 ± √2) g / l &nbsp;⇒&nbsp; ω₊ = 5.79 rad/s, ω₋ = 2.40 rad/s (l = 1 m)</span></p>
-                        <p>The mode shapes follow from (K − ω²M)u = 0. Its first row gives u₂/u₁ = 2(g/l − ω²)/ω², which is +√2 for the slow mode (both arms swing together, the lower one √2 times further) and −√2 for the fast mode (the arms swing against each other). Any small motion is a mix of the two; since their frequencies are incommensurate, the pattern never repeats exactly, but it stays regular.</p>
-                        <p class="try"><b>Try</b>With equal masses and lengths, set θ₁ = 5°, θ₂ = 7° (≈ √2 × 5°) and both angular velocities to zero: the pendulum swings almost as one piece in the slow mode, period 2π/2.40 ≈ 2.6 s. Set θ₂ = −7° instead for the fast mode, period 2π/5.79 ≈ 1.1 s.</p>
-                        <p class="try"><b>Try</b>Set both angles to 10° and switch on the chaos twin: the separation stays near 10⁻³ m. Now set 120° and 150°: within a few seconds the twin is metres away.</p>
-                        <h4>Energy and chaos</h4>
-                        <p>L does not depend explicitly on time, so the energy E = T + V is conserved. At large energy the motion is chaotic: two starts separated by ε drift apart roughly as ε e<sup>λt</sup>, where λ is the largest Lyapunov exponent. The twin starts with θ₁ larger by ε = 0.001 rad; its readout shows the distance between the two lower masses.</p>
-                    </article>
+                    <section class="psec" id="p-screen">
+                        <h3><span class="psec__n">08</span>From metres to pixels</h3>
+                        <p>The pivot sits at the centre of the figure, and the scale is chosen so that the fully stretched pendulum just fits: \(\text{pixels per metre} = (\min(W, H)/2 - 34)/(l_1 + l_2)\). Screen \(y\) points down, so the masses are drawn at \((x_0 + l\sin\theta,\ y_0 + l\cos\theta)\). The protractor marks \(\theta\) every \(30^\circ\) from the downward vertical.</p>
+                        <p>The burgundy trail of the lower mass is drawn on its own transparent layer, one segment per RK4 step, and dimmed every frame by a factor \((1-0.008)^{60\,\Delta t}\). Its brightness therefore halves every \(\ln 2/(60\times 0.00803)\approx 1.4\ \mathrm{s}\). Each mass is a disc with radius proportional to \(m^{1/3}\), as for balls of the same material.</p>
+                    </section>
 
-                    <article class="step" id="s-numerics">
-                        <p class="step__num">04 · Numerical method</p>
-                        <h3>Fourth-order Runge–Kutta</h3>
-                        <p>Write the state as s = (θ₁, θ₂, ω₁, ω₂) and the equations as ds/dt = F(s) = (ω₁, ω₂, α₁, α₂). One RK4 step of size h samples the slope four times:</p>
-                        <p class="eq"><span class="eq__line">k₁ = F(s), &nbsp; k₂ = F(s + h k₁/2), &nbsp; k₃ = F(s + h k₂/2), &nbsp; k₄ = F(s + h k₃)</span><span class="eq__line">s(t + h) = s + (h/6)(k₁ + 2k₂ + 2k₃ + k₄)</span></p>
-                        <p>The error per step is O(h⁵) and the accumulated error O(h⁴). With h = 1/600 s, the <em>Drift</em> readout typically stays near 10⁻⁹. The drift is measured against the depth of the potential well, E<sub>scale</sub> = (m₁ + m₂) g l₁ + m₂ g l₂, rather than against E₀ itself, so it stays meaningful when the total energy happens to be close to zero.</p>
-                        <ul class="facts">
-                            <li>Each frame advances by the real time elapsed × the <em>Time scale</em>, split into steps of h; at most 600 steps per frame.</li>
-                            <li>RK4 does not conserve energy exactly (it is not symplectic), which is why the drift readout is there as a check.</li>
-                            <li>Changing a mass, length, angle or angular-velocity slider restarts from those initial conditions; the Time scale slider does not.</li>
+                    <section class="psec" id="p-limits">
+                        <h3><span class="psec__n">09</span>What the model leaves out</h3>
+                        <ul>
+                            <li>Real rods have mass and a moment of inertia. A double pendulum made of two bars obeys equations of the same kind, with different coefficients.</li>
+                            <li>There is no friction. A real pendulum slowly loses energy, and its chaos eventually calms into small, regular swings.</li>
+                            <li>The masses may pass through each other and through the pivot; real rods would collide.</li>
+                            <li>After a few Lyapunov times any computed trajectory is a faithful example of how the pendulum can move, not the exact path from that start. Averages over many swings remain correct.</li>
                         </ul>
-                    </article>
-
-                    <article class="step" id="s-screen">
-                        <p class="step__num">05 · On screen</p>
-                        <h3>Metres into pixels</h3>
-                        <p>The pivot is at the centre of the figure. The scale is chosen so the fully stretched pendulum just fits: pixels per metre = (min(width, height)/2 − 34) / (l₁ + l₂). Because screen y points down, the masses are drawn at (x₀ + l sin θ, y₀ + l cos θ).</p>
-                        <p>The protractor marks θ from the downward vertical every 30°. The burgundy trail of the lower mass is drawn on a separate transparent layer, segment by segment at every RK4 step, and faded each frame by a factor (1 − 0.008)<sup>60Δt</sup>: its brightness halves every ln 2/(60 × 0.00803) ≈ 1.4 s. Each mass is drawn as a disc with radius ∝ m<sup>1/3</sup>, as for spheres of equal density.</p>
-                    </article>
-
-                    <article class="step" id="s-limits">
-                        <p class="step__num">06 · Limits</p>
-                        <h3>What the model leaves out</h3>
-                        <ul class="facts">
-                            <li>Real rods have mass and moments of inertia; a physical double pendulum with bars obeys similar but not identical equations.</li>
-                            <li>No friction: a real pendulum slowly loses energy, and chaos eventually decays into small regular swings.</li>
-                            <li>Point masses may pass through each other and through the pivot; the rods cannot collide.</li>
-                            <li>Past a few Lyapunov times, any numerical trajectory is only a representative of the true one, not the same path; the statistics remain right.</li>
-                        </ul>
-                    </article>
+                        <h4><span class="psub__n">9.1</span>Further reading</h4>
+                        <ol class="prefs">
+                            <li>J. R. Taylor, <em>Classical Mechanics</em>, University Science Books, 2005: chapters 7 (Lagrange’s equations), 11 (coupled oscillators and normal modes) and 12 (nonlinear mechanics and chaos).</li>
+                            <li>L. D. Landau and E. M. Lifshitz, <em>Mechanics</em>, 3rd edition, Pergamon, 1976: §5, problem 1, the plane double pendulum.</li>
+                            <li>S. H. Strogatz, <em>Nonlinear Dynamics and Chaos</em>, 2nd edition, Westview Press, 2015.</li>
+                        </ol>
+                    </section>
                 </div>
             </div>
-        </section>
+        </article>
 
         <section class="walk" id="walk" data-walk="pendulum" aria-label="From symbols to code"></section>
     </main>
 
     <footer class="sim-foot">
-        <span>© 2026 Numa Koudsie · Claude version</span>
+        <span>© 2026 Numa Koudsie</span>
         <span><a href="../simulations.html">All simulations ↑</a> · <a href="../index.html">Home page</a></span>
     </footer>
 
@@ -469,7 +628,7 @@
         /* the readouts show numbers from the store; diagnostics() below is where they are computed */
         function readouts() {
             var E = ds.get('E'), drift = ds.get('drift'), d = ds.get('sep');
-            document.getElementById('cap-t').textContent = 't = ' + simT.toFixed(1) + ' s';
+            document.getElementById('cap-t').innerHTML = '<i>t</i> = ' + simT.toFixed(1) + ' s';
             document.getElementById('r-e').textContent = Sim.fmt(E, 3) + ' J';
             document.getElementById('r-drift').textContent = Math.abs(drift) < 1e-12 ? '0' : drift.toExponential(1).replace('-', '−');
             var sep = document.getElementById('r-sep');

@@ -99,7 +99,7 @@ document.getElementById('r-ak').textContent = (⟦ak|a() * k()⟧).toFixed(2) + 
         {
             title: 'The clock and the picture',
             where: 'Sim.clock and draw() — line 1',
-            math: '⟦wt|ωt⟧ ← ωt + 2π f Δt<br>⟦s|s⟧ = W / 800, &nbsp; ⟦ys|y<sub>s</sub>⟧ = max(a s + 34, 0.28 H)',
+            math: '⟦wt|ωt⟧ ← ωt + 2π f Δt<br>⟦s|s⟧ = W<sub>screen</sub> / W, with W = 800 px (400 px on a phone), &nbsp; ⟦ys|y<sub>s</sub>⟧ = max(a s + 34, 0.28 H)',
             note: 'ωt uses the exact f(), not the rounded slider value, so c and the motion stay consistent to machine precision. The rest level y<sub>s</sub> sits low enough that the tallest crest still clears the top by 34 px.',
             code: `⟦wt|omegaT += 2 * Math.PI * f() * dt⟧;
 ...

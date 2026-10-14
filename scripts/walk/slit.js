@@ -90,7 +90,8 @@ document.getElementById('r-ff').textContent = ff.toFixed(2) + ' px';`,
             code: `for (var m = 0; ⟦sinm|m * G.lambda / G.b⟧ <= Math.sin(amax); m++) {
     var tm = Math.asin(m * G.lambda / G.b);
     if (m < nm) { mS[m] = m * G.lambda / G.b; mT[m] = tm / DEG; mX[m] = G.d * Math.tan(tm); }
-    s += text(X(tm), yt - 8, 'm=' + m, 'svg-mono');
+    /* the order m in maths italic; m = 0 sits on the axis, so its label starts right of it, clear of the tick label 1 */
+    s += text(X(tm) + (m === 0 ? 6 : 0), yt - 9, '<tspan class="svg-m">m</tspan> = ' + m, 'svg-num', m === 0 ? 'start' : 'middle');
 }`,
             syms: [
                 ['sinm', 'λ/b', 'G.lambda / G.b', 'sin θ₁, spacing of the orders'],

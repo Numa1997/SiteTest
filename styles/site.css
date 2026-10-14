@@ -27,17 +27,6 @@
     linear-gradient(90deg, rgba(122, 31, 43, 0.075) 1px, transparent 1px);
   --shadow: 0 14px 40px rgba(60, 40, 20, 0.12);
   --shadow-sm: 0 1px 2px rgba(60, 40, 20, 0.05);
-  --tan-line: #e0cf9f;
-  --on-accent: #fff;
-  --tag-soft: #f0eae0;
-  --plate: #fffdf9;
-  --sketch-grey: #cdc1ae;
-  --bar-bg: rgba(245, 241, 234, 0.94);
-  --accent-glow: rgba(122, 31, 43, 0.25);
-  --accent-line: rgba(122, 31, 43, 0.4);
-  --pend-trace: rgba(122, 31, 43, 0.85);
-  --code-bg: #1c1518;
-  color-scheme: light;
 }
 
 *,
@@ -99,7 +88,7 @@ ul {
   left: -9999px;
   top: 8px;
   background: var(--accent);
-  color: var(--on-accent);
+  color: #fff;
   padding: 8px 12px;
   border-radius: 4px;
   z-index: 100;
@@ -125,7 +114,7 @@ ul {
   white-space: nowrap;
 }
 .tag--soft {
-  background: var(--tag-soft);
+  background: #f0eae0;
   color: var(--ink-3);
   border: 1px solid var(--rule-soft);
   text-transform: none;
@@ -195,7 +184,7 @@ ul {
   gap: 8px;
   font-size: 14px;
   font-weight: 500;
-  color: var(--on-accent);
+  color: #fff;
   background: var(--accent);
   padding: 11px 20px;
   border-radius: 6px;
@@ -209,9 +198,9 @@ ul {
 .btn:hover {
   background: var(--accent-dark);
   border-color: var(--accent-dark);
-  color: var(--on-accent);
+  color: #fff;
   text-decoration: none;
-  box-shadow: 0 8px 20px var(--accent-glow);
+  box-shadow: 0 8px 20px rgba(122, 31, 43, 0.25);
   transform: translateY(-1px);
 }
 .btn--ghost {
@@ -546,7 +535,7 @@ ul {
 .project:hover {
   transform: translateY(-4px);
   box-shadow: var(--shadow);
-  border-color: var(--accent-line);
+  border-color: rgba(122, 31, 43, 0.4);
 }
 .project:hover::before {
   transform: scaleX(1);
@@ -592,12 +581,12 @@ ul {
 .plate:hover {
   transform: translateY(-5px);
   box-shadow: var(--shadow);
-  border-color: var(--accent-line);
+  border-color: rgba(122, 31, 43, 0.4);
 }
 .plate__fig {
   height: 156px;
   padding: 12px 16px 6px;
-  background-color: var(--plate);
+  background-color: #fffdf9;
   background-image: var(--grid);
   background-size: 20px 20px;
   border-bottom: 1px solid var(--rule-soft);
@@ -621,7 +610,7 @@ ul {
   stroke: var(--accent-rose);
 }
 .plate__fig .grey {
-  stroke: var(--sketch-grey);
+  stroke: #cdc1ae;
 }
 .plate__fig .acc-fill {
   fill: var(--accent);
@@ -674,7 +663,7 @@ ul {
   gap: 8px;
   font-size: 14px;
   font-weight: 500;
-  color: var(--on-accent);
+  color: #fff;
   background: var(--accent);
   padding: 8px 16px;
   border-radius: 6px;
@@ -689,10 +678,10 @@ ul {
 }
 .plate__launch:hover {
   background: var(--accent-dark);
-  color: var(--on-accent);
+  color: #fff;
   text-decoration: none;
   transform: translateX(3px);
-  box-shadow: 0 8px 20px var(--accent-glow);
+  box-shadow: 0 8px 20px rgba(122, 31, 43, 0.25);
 }
 .plate__launch:hover::after {
   transform: translateX(3px);
@@ -817,7 +806,7 @@ footer a {
     z-index: 30;
     padding: 0;
     margin: 0 -20px;
-    background: var(--bar-bg);
+    background: rgba(245, 241, 234, 0.94);
     backdrop-filter: blur(6px);
     -webkit-backdrop-filter: blur(6px);
     border-bottom: 1px solid var(--rule);
@@ -910,98 +899,5 @@ footer a {
   }
   .hero {
     min-height: 0;
-  }
-}
-
-/* theme toggle (mounted by scripts/theme.js) */
-.theme-toggle {
-  display: inline-flex;
-  align-items: center;
-  gap: 6px;
-  font-family: var(--mono);
-  font-size: 11px;
-  letter-spacing: 0.08em;
-  text-transform: uppercase;
-  color: var(--ink-3);
-  background: transparent;
-  border: 1px solid var(--rule);
-  border-radius: 999px;
-  padding: 4px 10px 4px 8px;
-  line-height: 1.2;
-  cursor: pointer;
-  transition: color 0.2s ease, border-color 0.2s ease, background 0.2s ease;
-}
-.theme-toggle:hover { color: var(--accent); border-color: var(--accent); }
-.theme-toggle:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
-.theme-toggle[aria-pressed="true"] { color: var(--accent); border-color: var(--accent-line); }
-.theme-toggle svg { display: block; flex-shrink: 0; }
-
-/* ================= dark theme =================
-   data-theme is set on <html> by scripts/theme.js (stored choice, else the system setting);
-   the media query covers the moment before that script runs. */
-:root[data-theme="dark"] {
-  --paper: #16110f;
-  --card: #1f1916;
-  --card-soft: #251e1a;
-  --ink: #f2eae0;
-  --ink-2: #d9cec2;
-  --ink-3: #b5a89c;
-  --muted: #8f8277;
-  --rule: #3b312b;
-  --rule-soft: #2d2521;
-  --accent: #e07c8a;
-  --accent-dark: #f2a7b1;
-  --accent-rose: #7c3341;
-  --tan: #3a2d1c;
-  --tan-ink: #e8c88f;
-  --tan-line: #5c4728;
-  --on-accent: #1a1110;
-  --tag-soft: #2a221e;
-  --plate: #1c1714;
-  --sketch-grey: #5a4d44;
-  --bar-bg: rgba(22, 17, 15, 0.92);
-  --accent-glow: rgba(224, 124, 138, 0.22);
-  --accent-line: rgba(224, 124, 138, 0.45);
-  --pend-trace: rgba(224, 124, 138, 0.85);
-  --code-bg: #0e0a09;
-  --grid:
-    linear-gradient(rgba(224, 124, 138, 0.07) 1px, transparent 1px),
-    linear-gradient(90deg, rgba(224, 124, 138, 0.07) 1px, transparent 1px);
-  --shadow: 0 14px 40px rgba(0, 0, 0, 0.5);
-  --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.4);
-  color-scheme: dark;
-}
-@media (prefers-color-scheme: dark) {
-  :root:not([data-theme="light"]) {
-    --paper: #16110f;
-    --card: #1f1916;
-    --card-soft: #251e1a;
-    --ink: #f2eae0;
-    --ink-2: #d9cec2;
-    --ink-3: #b5a89c;
-    --muted: #8f8277;
-    --rule: #3b312b;
-    --rule-soft: #2d2521;
-    --accent: #e07c8a;
-    --accent-dark: #f2a7b1;
-    --accent-rose: #7c3341;
-    --tan: #3a2d1c;
-    --tan-ink: #e8c88f;
-    --tan-line: #5c4728;
-    --on-accent: #1a1110;
-    --tag-soft: #2a221e;
-    --plate: #1c1714;
-    --sketch-grey: #5a4d44;
-    --bar-bg: rgba(22, 17, 15, 0.92);
-    --accent-glow: rgba(224, 124, 138, 0.22);
-    --accent-line: rgba(224, 124, 138, 0.45);
-    --pend-trace: rgba(224, 124, 138, 0.85);
-    --code-bg: #0e0a09;
-    --grid:
-      linear-gradient(rgba(224, 124, 138, 0.07) 1px, transparent 1px),
-      linear-gradient(90deg, rgba(224, 124, 138, 0.07) 1px, transparent 1px);
-    --shadow: 0 14px 40px rgba(0, 0, 0, 0.5);
-    --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.4);
-    color-scheme: dark;
   }
 }

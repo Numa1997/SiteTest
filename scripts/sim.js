@@ -3,13 +3,6 @@
 (function () {
     'use strict';
 
-    /* light / dark theme for the page chrome; the figures stay on the paper palette below */
-    if (!window.Theme) {
-        var themeScript = document.createElement('script');
-        themeScript.src = '../scripts/theme.js';
-        (document.head || document.documentElement).appendChild(themeScript);
-    }
-
     var theme = {
         paper: '#f5f1ea',
         card: '#fffaf3',
@@ -26,8 +19,14 @@
         tan: '#efe4c8',
         tanInk: '#7a4b12',
         mono: "500 11px 'IBM Plex Mono', ui-monospace, Menlo, monospace",
-        serif: "italic 17px 'IBM Plex Serif', Georgia, serif"
+        serif: "italic 17px 'Latin Modern Roman', KaTeX_Math, 'Times New Roman', serif"
     };
+
+    /* the site root, from this script's own address (scripts/sim.js) */
+    var ROOT = (function () {
+        var s = document.currentScript && document.currentScript.src;
+        return s ? s.replace(/scripts\/sim\.js(\?.*)?$/, '') : '../';
+    })();
 
     /* canvas sized to its CSS box, drawn in CSS pixels */
     function canvas2d(canvas) {
@@ -45,6 +44,100 @@
         };
         return box.fit();
     }
+
+    /* a canvas label set like the lecture notes: 'c_{p}', 'τ_{aero}', 'F_{0}/k', 'x^{2}'.
+       Symbols in Latin Modern italic; a subscript of more than one letter is a word, so it stands upright.
+       Returns the width drawn, in css px. */
+    var TEX_FAMILY = "'Latin Modern Roman', KaTeX_Math, 'Times New Roman', serif";
+    var TEX_UPRIGHT = "'Latin Modern Roman', KaTeX_Main, 'Times New Roman', serif";
+    function texRuns(s) {
+        var out = [], buf = '', i = 0;
+        while (i < s.length) {
+            var ch = s.charAt(i);
+            if (s.substr(i, 8) === '\\mathrm{') {
+                // \mathrm{…}: words and units, set upright as in TeX
+                if (buf) { out.push({ t: buf, lv: 0 }); buf = ''; }
+                var e = s.indexOf('}', i + 8);
+                if (e < 0) e = s.length;
+                out.push({ t: s.slice(i + 8, e), lv: 0, rm: true });
+                i = e + 1;
+                continue;
+            }
+            if ((ch === '_' || ch === '^') && s.charAt(i + 1) === '{') {
+                if (buf) { out.push({ t: buf, lv: 0 }); buf = ''; }
+                var j = s.indexOf('}', i + 2);
+                if (j < 0) j = s.length;
+                out.push({ t: s.slice(i + 2, j), lv: ch === '_' ? -1 : 1 });
+                i = j + 1;
+                continue;
+            }
+            buf += ch;
+            i++;
+        }
+        if (buf) out.push({ t: buf, lv: 0 });
+        // letters are italic, everything else upright, as in typeset mathematics; a subscript word stays upright
+        var split = [];
+        out.forEach(function (r) {
+            if (r.rm || (r.lv !== 0 && /^[A-Za-z]{2,}$/.test(r.t))) { split.push({ t: r.t, lv: r.lv, up: true }); return; }
+            // Latin and lower-case Greek letters are italic; capital Greek (Σ, Δ, Ω) stays upright, as TeX and KaTeX set it
+            (r.t.match(/[A-Za-zα-ωϐ-ϵ]+|[^A-Za-zα-ωϐ-ϵ]+/g) || []).forEach(function (piece) {
+                split.push({ t: piece, lv: r.lv, up: !/[A-Za-zα-ωϐ-ϵ]/.test(piece) });
+            });
+        });
+        return split;
+    }
+    function tex(ctx, s, x, y, o) {
+        o = o || {};
+        var size = o.size || 15, runs = texRuns(String(s)), widths = [], total = 0;
+        function font(r) {
+            // upright runs fall back to KaTeX_Main, whose Greek is upright; KaTeX_Math has italic glyphs only
+            return (o.upright || r.up ? '' : 'italic ') + (r.lv ? Math.round(size * 0.7) : size) + 'px ' + (o.upright || r.up ? TEX_UPRIGHT : TEX_FAMILY);
+        }
+        ctx.save();   // the caller's font, alignment and colour come back unchanged
+        runs.forEach(function (r) { ctx.font = font(r); var wd = ctx.measureText(r.t).width; widths.push(wd); total += wd; });
+        if (o.measure) { ctx.restore(); return total; }
+        var x0 = o.align === 'right' ? x - total : o.align === 'center' ? x - total / 2 : x;
+        ctx.textAlign = 'left';
+        ctx.textBaseline = o.baseline || 'alphabetic';
+        if (o.color) ctx.fillStyle = o.color;
+        runs.forEach(function (r, k) {
+            ctx.font = font(r);
+            ctx.fillText(r.t, x0, y + (r.lv < 0 ? size * 0.28 : r.lv > 0 ? -size * 0.4 : 0));
+            x0 += widths[k];
+        });
+        ctx.restore();
+        return total;
+    }
+
+    /* tick values for an axis: about n steps of 1, 2 or 5 × 10^k */
+    function ticks(lo, hi, n) {
+        var raw = (hi - lo) / Math.max(1, n || 4), p = Math.pow(10, Math.floor(Math.log(raw) / Math.LN10)), f = raw / p;
+        var step = (f < 1.5 ? 1 : f < 3 ? 2 : f < 7 ? 5 : 10) * p, out = [];
+        for (var v = Math.ceil(lo / step - 1e-9) * step; v <= hi + step * 1e-9; v += step) out.push(Math.abs(v) < step * 1e-9 ? 0 : v);
+        return { step: step, values: out, digits: Math.max(0, -Math.floor(Math.log(step) / Math.LN10 + 1e-9)) };
+    }
+
+    /* the colour of the canvas at (x, y) css px, searched within r px for a pixel that passes test(rgba).
+       A transparent pixel never passes: the read-back first asks whether anything was drawn there at all. */
+    function readPixel(box, x, y, r, test) {
+        var d = Math.max(0, Math.round((r || 0) * box.dpr)), cx = Math.round(x * box.dpr), cy = Math.round(y * box.dpr), best = null;
+        var x0 = Math.max(0, cx - d), y0 = Math.max(0, cy - d), wd = Math.min(box.canvas.width - x0, 2 * d + 1), ht = Math.min(box.canvas.height - y0, 2 * d + 1);
+        if (wd <= 0 || ht <= 0) return { found: false, rgba: [0, 0, 0, 0], text: 'outside the canvas' };
+        var px = box.ctx.getImageData(x0, y0, wd, ht).data, centre = null;
+        for (var j = 0; j < ht; j++) for (var i = 0; i < wd; i++) {
+            var k = 4 * (j * wd + i), c = [px[k], px[k + 1], px[k + 2], px[k + 3]];
+            if (x0 + i === cx && y0 + j === cy) centre = c;
+            if (c[3] > 0 && (!test || test(c))) {
+                var dist = Math.hypot(x0 + i - cx, y0 + j - cy);
+                if (!best || dist < best.dist) best = { c: c, dist: dist };
+            }
+        }
+        var c = best ? best.c : (centre || [0, 0, 0, 0]);
+        return { found: !!best, rgba: c, dist: best ? best.dist / box.dpr : null,
+            text: c[3] === 0 ? 'nothing (transparent)' : 'rgb(' + c[0] + ', ' + c[1] + ', ' + c[2] + ')' + (best && best.dist > 0 ? ', ' + (best.dist / box.dpr).toFixed(1) + ' px away' : '') };
+    }
+    function isBurgundy(c) { return c[3] > 0 && c[0] > c[1] + 40 && c[0] > c[2] + 30 && c[0] < 215; }
+    function isInk(c) { return c[3] > 140 && 0.2126 * c[0] + 0.7152 * c[1] + 0.0722 * c[2] < 110; }
 
     function onResize(el, fn) {
         var t = null;
@@ -308,8 +401,80 @@
         show(0);
     }
 
+    /* ---------- lecture notes: KaTeX typesets \( … \) and \[ … \] in every .paper ---------- */
+    function load(src, done) {
+        var s = document.createElement('script');
+        s.src = src;
+        s.onload = done;
+        s.onerror = done;
+        document.head.appendChild(s);
+    }
+    function typeset() {
+        var papers = document.querySelectorAll('.paper'), caps = document.querySelectorAll('.stage__cap, .formula');
+        if (!papers.length && !caps.length) return;
+        if (!papers.length) { mathIn(caps); return; }
+        var skip = document.createElement('a');
+        skip.className = 'skip-link';
+        skip.href = '#' + (papers[0].id || 'paper');
+        skip.textContent = 'Skip to the lecture note';
+        document.body.insertBefore(skip, document.body.firstChild);
+        function show() {
+            Array.prototype.forEach.call(papers, function (p) { p.classList.add('is-typeset'); });
+        }
+        var fallback = setTimeout(show, 4000);
+        load(ROOT + 'vendor/katex/katex.min.js', function () {
+            load(ROOT + 'vendor/katex/contrib/auto-render.min.js', function () {
+                clearTimeout(fallback);
+                if (window.renderMathInElement) {
+                    Array.prototype.forEach.call(papers, function (p) {
+                        window.renderMathInElement(p, {
+                            delimiters: [{ left: '\\[', right: '\\]', display: true }, { left: '\\(', right: '\\)', display: false }],
+                            ignoredClasses: ['notex'],
+                            throwOnError: false
+                        });
+                    });
+                    renderCaps(caps);
+                }
+                show();
+                document.dispatchEvent(new CustomEvent('typeset'));
+            });
+        });
+        /* the contents list marks the section being read */
+        var links = document.querySelectorAll('.paper__toc a[href^="#"]');
+        if (!links.length || !('IntersectionObserver' in window)) return;
+        var byId = {};
+        Array.prototype.forEach.call(links, function (a) { byId[a.getAttribute('href').slice(1)] = a; });
+        var io = new IntersectionObserver(function (entries) {
+            entries.forEach(function (en) {
+                if (!en.isIntersecting || !byId[en.target.id]) return;
+                Array.prototype.forEach.call(links, function (a) { a.classList.remove('is-here'); });
+                byId[en.target.id].classList.add('is-here');
+            });
+        }, { rootMargin: '-20% 0px -70% 0px' });
+        Object.keys(byId).forEach(function (id) { var el = document.getElementById(id); if (el) io.observe(el); });
+    }
+
+    /* the figure captions carry their equations in \\( … \\) too, set in the same mathematics as the lecture note */
+    function renderCaps(caps) {
+        Array.prototype.forEach.call(caps, function (c) {
+            window.renderMathInElement(c, { delimiters: [{ left: '\\(', right: '\\)', display: false }], throwOnError: false });
+        });
+        document.documentElement.classList.add('tex-ready');
+    }
+    function mathIn(caps) {
+        var fallback = setTimeout(function () { document.documentElement.classList.add('tex-ready'); }, 4000);
+        load(ROOT + 'vendor/katex/katex.min.js', function () {
+            load(ROOT + 'vendor/katex/contrib/auto-render.min.js', function () {
+                clearTimeout(fallback);
+                if (window.renderMathInElement) renderCaps(caps);
+                document.dispatchEvent(new CustomEvent('typeset'));
+            });
+        });
+    }
+
     function boot() {
         cards();
+        typeset();
         var host = document.getElementById('walk');
         if (!host) return;
         var s = document.createElement('script');
@@ -324,6 +489,11 @@
     window.Sim = {
         theme: theme,
         canvas2d: canvas2d,
+        tex: tex,
+        ticks: ticks,
+        readPixel: readPixel,
+        isBurgundy: isBurgundy,
+        isInk: isInk,
         onResize: onResize,
         slider: slider,
         clock: clock,

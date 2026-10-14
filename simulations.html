@@ -6,13 +6,15 @@
     <title>Simulations · Numa Koudsie</title>
     <meta
       name="description"
-      content="Interactive physics simulations for students: mechanics, waves, fluids, wave optics and mathematical methods. Each figure poses a question, shows the model and its derivation, and stores every number it draws."
+      content="Interactive physics simulations with lecture notes: mechanics, waves, fluids, wave optics, mathematical methods and control systems. Each figure comes with its model, derivation, numerical method and every number it draws."
     />
     <meta name="author" content="Numa Koudsie" />
     <meta name="theme-color" content="#f5f1ea" />
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link rel="stylesheet" href="styles/site.css" />
+    <link rel="stylesheet" href="vendor/katex/katex.min.css" />
+    <link rel="stylesheet" href="styles/paper.css" />
     <link rel="stylesheet" href="styles/catalog.css" />
     <link
       rel="icon"
@@ -21,7 +23,6 @@
     <script>
       document.documentElement.className = 'js';
     </script>
-    <script src="scripts/theme.js"></script>
   </head>
 
   <body>
@@ -32,20 +33,20 @@
       <nav aria-label="Site">
         <a href="index.html#positions">Positions</a>
         <a href="index.html#research">Research</a>
+        <a href="portfolios.html">Portfolios</a>
         <a href="index.html#skills">Skills</a>
-        <span data-theme-toggle></span>
       </nav>
     </header>
 
     <main class="cat">
       <div class="cat__head">
         <div>
-          <p class="cat__kicker">Interactive physics</p>
+          <p class="cat__kicker">Interactive physics · simulations and lecture notes</p>
           <h1>Simulations<span class="dot">.</span></h1>
           <p class="cat__lede">
-            Figures to think with. Each one starts from a question, lets you
-            change the physics and watch the answer take shape, and writes out
-            the model, the derivation and the code behind every pixel.
+            Each figure is a small laboratory with its lecture note beneath it:
+            the physical picture, the model, the derivation, the numerical
+            method, and every number the picture is drawn from.
           </p>
         </div>
         <ul class="cat__stats" id="stats" aria-label="Catalog in numbers"></ul>
@@ -58,13 +59,7 @@
             <circle cx="7" cy="7" r="5" fill="none" stroke="currentColor" stroke-width="1.6" />
             <path d="M11 11l3.5 3.5" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" />
           </svg>
-          <input
-            id="q"
-            type="search"
-            placeholder="Search: chaos, Fourier, slits…"
-            autocomplete="off"
-            spellcheck="false"
-          />
+          <input id="q" type="search" placeholder="Search: chaos, Fourier, resonance…" autocomplete="off" spellcheck="false" />
           <kbd aria-hidden="true">/</kbd>
         </div>
         <div class="cat__filters">
@@ -82,7 +77,7 @@
       </noscript>
 
       <p class="cat__intro" id="intro" hidden></p>
-      <div class="cat__grid" id="catalog"></div>
+      <div class="cat__list" id="catalog"></div>
 
       <p class="cat__empty" id="empty" hidden>
         No simulation matches <b id="empty-q"></b>.
@@ -99,58 +94,43 @@
           <li>
             <b>01 · Figure</b>
             <h3>Change it and watch</h3>
-            <p>
-              Sliders and clicks set the physics: lengths, frequencies, masses,
-              start conditions. The picture answers at once.
-            </p>
+            <p>Sliders and clicks set the physics: lengths, frequencies, masses, start conditions, the wind. The picture answers at once, or, where the whole run is solved first, as soon as you press Solve.</p>
           </li>
           <li>
-            <b>02 · From physics to pixels</b>
-            <h3>The derivation</h3>
-            <p>
-              Six steps: the physical picture, the model, the derivation, the
-              numerical method, what is on screen, and what the model leaves
-              out.
-            </p>
+            <b>02 · Lecture note</b>
+            <h3>The physics, written out</h3>
+            <p>A motivating picture, the model, the derivation, the numerical method, what is on screen and what the model leaves out, with numbered equations, figures and exercises.</p>
           </li>
           <li>
             <b>03 · From symbols to code</b>
             <h3>The walkthrough</h3>
-            <p>
-              Each formula next to the line of the page's own code that
-              computes it, step by step.
-            </p>
+            <p>Each formula next to the line of the page’s own code that computes it, with the live value beside it.</p>
           </li>
           <li>
             <b>04 · Data panel</b>
             <h3>The numbers</h3>
-            <p>
-              Every variable the figure draws, with units. Pin a point with
-              Read values, record one round as a table, check a value three
-              ways, save it as .npz or CSV.
-            </p>
+            <p>Every variable the figure draws, with units. Pin a point with Read values, record one round as a table, check a value three ways, save it as .npz or CSV.</p>
           </li>
         </ol>
       </section>
     </main>
 
     <footer>
-      <span>© 2026 Numa Koudsie · Claude version</span>
-      <span><a href="index.html">Home page</a> · <a href="#top" id="to-top">Back to top ↑</a></span>
+      <span>© 2026 Numa Koudsie</span>
+      <span><a href="index.html">Home page</a> · <a href="portfolios.html">Portfolios</a> · <a href="#top" id="to-top">Back to top ↑</a></span>
     </footer>
 
     <script src="scripts/catalog.js"></script>
+    <script src="vendor/katex/katex.min.js"></script>
     <script>
       (function () {
         'use strict';
         var SIMS = (window.SIMULATIONS || []).slice();
         var FIELDS = window.SIM_FIELDS || [];
-        var TOOLS = window.SIM_TOOLS || {};
         var STAGES = [
           { id: '1', name: 'First year' },
           { id: '2', name: 'Second year' }
         ];
-        var TOOL_NAMES = { derivation: 'derivation', walkthrough: 'code walkthrough', data: 'data panel' };
 
         var $ = function (id) { return document.getElementById(id); };
         var q = $('q'), list = $('catalog'), count = $('count'), empty = $('empty');
@@ -161,10 +141,10 @@
             return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c];
           });
         }
-        // Lower case, accents and Greek-letter look-alikes folded, so "Huygens" finds "Huygens'" and "lambda" finds "λ".
-        var GREEK = { 'λ': ' lambda ', 'θ': ' theta ', 'ω': ' omega ', 'φ': ' phi ', 'ψ': ' psi ', 'α': ' alpha ', 'γ': ' gamma ', 'δ': ' delta ', '∇': ' nabla ' };
+        // Lower case, accents and Greek letters folded, so "Huygens" finds "Huygens’" and "lambda" finds "λ".
+        var GREEK = { 'λ': ' lambda ', 'θ': ' theta ', 'ω': ' omega ', 'φ': ' phi ', 'ψ': ' psi ', 'α': ' alpha ', 'γ': ' gamma ', 'δ': ' delta ', 'ζ': ' zeta ', 'σ': ' sigma ', 'τ': ' tau ', '∇': ' nabla ' };
         function fold(s) {
-          s = String(s).toLowerCase().replace(/[λθωφψαγδ∇]/g, function (c) { return GREEK[c]; });
+          s = String(s).toLowerCase().replace(/[λθωφψαγδζστ∇]/g, function (c) { return GREEK[c]; });
           if (s.normalize) s = s.normalize('NFD').replace(/[̀-ͯ]/g, '');
           return s.replace(/[’']/g, '').replace(/[–—]/g, '-');
         }
@@ -173,15 +153,11 @@
           return { id: id, name: id, blurb: '' };
         }
         SIMS.forEach(function (s) {
-          s._hay = fold([s.title, 'fig ' + s.fig, 'fig. ' + s.fig, s.subject, s.question, s.summary, s.model, s.method,
+          s._hay = fold([s.title, 'fig ' + s.fig, 'fig. ' + s.fig, s.subject, s.summary, s.model, s.method,
             s.controls, (s.concepts || []).join(' '), fieldOf(s.field).name].join(' \n '));
         });
-        // One grid, ordered by field (in the order of SIM_FIELDS), then by figure number.
-        function rank(s) {
-          for (var i = 0; i < FIELDS.length; i++) if (FIELDS[i].id === s.field) return i;
-          return FIELDS.length;
-        }
-        SIMS.sort(function (a, b) { return rank(a) - rank(b) || a.fig - b.fig; });
+        // The catalog runs in figure order; the field chips do the grouping.
+        SIMS.sort(function (a, b) { return a.fig - b.fig; });
 
         function matches(s, terms, ignore) {
           if (ignore !== 'field' && state.field && s.field !== state.field) return false;
@@ -193,7 +169,6 @@
           return fold(state.q).split(/\s+/).filter(Boolean);
         }
 
-        /* ---------- static parts ---------- */
         function stats() {
           var fields = {}, stages = {};
           SIMS.forEach(function (s) { fields[s.field] = 1; stages[s.stage] = 1; });
@@ -219,60 +194,64 @@
           });
         }
 
-        /* ---------- cards ---------- */
-        function card(s) {
+        function entry(s) {
           var href = encodeURI(s.file);
-          var tools = (s.has || []).filter(function (t) { return TOOL_NAMES[t]; })
-            .map(function (t) { return '<span title="' + esc(TOOLS[t] || '') + '">' + TOOL_NAMES[t] + '</span>'; })
-            .join(' · ');
-          var stage = s.stage ? (s.stage === 1 ? 'first year' : s.stage === 2 ? 'second year' : 'year ' + s.stage) : '';
-          var concepts = (s.concepts || []).slice(0, 5);
+          var stage = s.stage === 1 ? 'first year' : s.stage === 2 ? 'second year' : s.stage ? 'year ' + s.stage : '';
           return (
-            '<article class="card" id="sim-' + esc(s.id) + '">' +
-            '<a class="card__thumb" href="' + href + '" tabindex="-1" aria-hidden="true">' +
-            '<span class="card__ph">Fig. ' + s.fig + '</span>' +
-            '<img src="images/sims/' + esc(s.id) + '.webp" width="800" height="500" loading="lazy" decoding="async" alt="">' +
-            '<span class="card__fig">Fig. ' + s.fig + '</span></a>' +
-            '<div class="card__body">' +
-            '<p class="card__kicker">' + esc(fieldOf(s.field).name) + (stage ? ' · ' + stage : '') + '</p>' +
+            '<article class="entry" id="sim-' + esc(s.id) + '">' +
+            '<a class="entry__fig" href="' + href + '" tabindex="-1" aria-hidden="true"><span class="entry__plate">' +
+            '<span class="entry__ph">Fig. ' + s.fig + '</span>' +
+            '<img src="images/sims/' + esc(s.id) + '.webp" width="800" height="500" loading="lazy" decoding="async" alt=""></span></a>' +
+            '<p class="entry__cap"><b>Figure ' + s.fig + '</b>' + esc(s.subject.charAt(0).toUpperCase() + s.subject.slice(1)) + '.</p>' +
+            '<div class="entry__body">' +
+            '<p class="entry__kicker">' + esc(fieldOf(s.field).name) + (stage ? ' · ' + stage : '') + '</p>' +
             '<h3><a href="' + href + '">' + esc(s.title) + '</a></h3>' +
-            '<p class="card__q">' + esc(s.question) + '</p>' +
-            '<p class="card__sum">' + esc(s.summary) + '</p>' +
-            '<dl class="card__facts">' +
-            '<dt>Model</dt><dd>' + esc(s.model) + '</dd>' +
-            '<dt>Method</dt><dd>' + esc(s.method) + '</dd>' +
-            '<dt>You set</dt><dd>' + esc(s.controls) + '</dd>' +
+            '<p class="entry__abs">' + esc(s.summary) + '</p>' +
+            '<div class="entry__eq" data-tex="' + esc(s.equation) + '"></div>' +
+            '<dl class="entry__facts">' +
+            '<dt>model</dt><dd>' + esc(s.model) + '</dd>' +
+            '<dt>method</dt><dd>' + esc(s.method) + '</dd>' +
+            '<dt>you set</dt><dd>' + esc(s.controls) + '</dd>' +
             '</dl>' +
-            '<ul class="card__tags" aria-label="Concepts">' +
-            concepts.map(function (c) { return '<li>' + esc(c) + '</li>'; }).join('') +
+            '<ul class="entry__tags" aria-label="Concepts">' +
+            (s.concepts || []).slice(0, 6).map(function (c) { return '<li>' + esc(c) + '</li>'; }).join('') +
             '</ul>' +
-            '<div class="card__foot">' +
-            '<a class="card__open" href="' + href + '">Open Fig. ' + s.fig + '</a>' +
-            (tools ? '<span class="card__has">' + tools + '</span>' : '') +
+            '<div class="entry__foot">' +
+            '<a class="entry__open" href="' + href + '">Open Fig. ' + s.fig + '</a>' +
+            '<a class="entry__note" href="' + href + '#paper">Read the lecture note</a>' +
             '</div></div></article>'
           );
+        }
+
+        function typeset() {
+          Array.prototype.forEach.call(list.querySelectorAll('.entry__eq'), function (el) {
+            if (window.katex) {
+              try { window.katex.render(el.getAttribute('data-tex'), el, { displayMode: true, throwOnError: false }); }
+              catch (e) { el.textContent = el.getAttribute('data-tex'); }
+            } else {
+              el.textContent = el.getAttribute('data-tex');
+            }
+            el.classList.add('is-typeset');
+          });
         }
 
         function render(fromUser) {
           var t = terms();
           var shown = SIMS.filter(function (s) { return matches(s, t); });
-          list.innerHTML = shown.map(card).join('');
+          list.innerHTML = shown.map(entry).join('');
+          typeset();
+          Array.prototype.forEach.call(list.querySelectorAll('.entry__plate img'), function (img) {
+            img.addEventListener('error', function () { img.remove(); });
+          });
           var intro = $('intro');
           intro.hidden = !state.field || !shown.length;
           if (state.field) intro.innerHTML = '<b>' + esc(fieldOf(state.field).name) + '.</b> ' + esc(fieldOf(state.field).blurb);
-          Array.prototype.forEach.call(list.querySelectorAll('.card__thumb img'), function (img) {
-            function done() { if (img.naturalWidth) img.previousSibling.style.visibility = 'hidden'; }
-            if (img.complete) done(); else img.addEventListener('load', done);
-            img.addEventListener('error', function () { img.remove(); });
-          });
 
-          // chip states and counts: each count says how many a click on that chip would show
           Array.prototype.forEach.call(document.querySelectorAll('#fields .chip'), function (b) {
             var id = b.getAttribute('data-field');
             var n = SIMS.filter(function (s) { return matches(s, t, 'field') && (!id || s.field === id); }).length;
             b.setAttribute('aria-pressed', state.field === id ? 'true' : 'false');
             b.querySelector('small').textContent = n;
-            b.disabled = false;
           });
           Array.prototype.forEach.call(document.querySelectorAll('#stages .chip'), function (b) {
             var id = b.getAttribute('data-stage');
@@ -335,7 +314,6 @@
           window.scrollTo(0, 0);
         });
 
-        // Only fields and stages that have a simulation get a chip.
         var used = {}, usedStage = {};
         SIMS.forEach(function (s) { used[s.field] = 1; usedStage[s.stage] = 1; });
         chips($('fields'), FIELDS.filter(function (f) { return used[f.id]; }), 'field', 'All fields');
