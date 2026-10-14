@@ -367,7 +367,7 @@ Each part's `h3` carries an `id` (`dc-cloud`, `dc-changes`, … `rp-pages`) and 
 
 **Links into the copies.** Every link goes to `portfolios/<name>/index.html` or `portfolios/<name>/index.html#/<route>`,
 never to the folder: the copies are single-page apps with hash routes, and a folder address answers 403 on AppDeploy
-([AGENTS.md:46–49](../AGENTS.md#L46-L49)). The routes used here exist in the copies' bundles: `/`, `/theory`, `/results`,
+([AGENTS.md:47–50](../AGENTS.md#L47-L50)). The routes used here exist in the copies' bundles: `/`, `/theory`, `/results`,
 `/simulate`, `/checks` in both, and `/report` in Rotor Pendula only (each bundle's route table, e.g. `path:"/report"` in
 `public/portfolios/rotor-pendula/static/index-CRh2Uwlk.js`). Both copies link back with `href="../../portfolios.html"`.
 The figure images come from each copy's `fig/` folder (for example
@@ -424,7 +424,7 @@ file. To keep a path out of search engines, add a `Disallow: /path` line under `
 
 ## Notes for maintainers
 
-1. **Home page fonts and shadows depart from the house design.** AGENTS.md ([35–36](../AGENTS.md#L35-L36)) and CLAUDE.md ask
+1. **Home page fonts and shadows depart from the house design.** AGENTS.md ([36–37](../AGENTS.md#L36-L37)) and CLAUDE.md ask
    for Instrument Serif titles at weight 400 only and no card shadows. The home page loads only `site.css`, whose `--serif` is
    IBM Plex Serif ([site.css:22](../public/styles/site.css#L22)) and whose titles are weight 600
    ([site.css:138](../public/styles/site.css#L138), [336](../public/styles/site.css#L336),
@@ -445,12 +445,13 @@ file. To keep a path out of search engines, add a `Disallow: /path` line under `
    ([simulations.html:329](../public/simulations.html#L329)) while `__catalog` keeps the first one
    ([351](../public/simulations.html#L351)). Measured: after clearing `?q=zzzz`, `__catalog.state.q` still reads "zzzz". Nothing
    in the repository reads `__catalog`.
-7. **The catalog QA scenario no longer matches the page.** [tests.json:32](../tests/tests.json#L32) expects ten entries "each
-   with a picture, a typeset equation and a button starting with Open Fig." on arrival; the cards now open as closed titles
-   ([simulations.html:245](../public/simulations.html#L245), `defaultOpen: false`), and the home page scenario
+7. **The catalog QA scenario did not match the page.** It expected ten open entries on arrival; the cards open as closed
+   titles ([simulations.html:245](../public/simulations.html#L245), `defaultOpen: false`). Rewritten on 14 October 2026
+   ([tests.json:32](../tests/tests.json#L32)) and deployed to the app. Still open: the home page scenario
    ([tests.json:17](../tests/tests.json#L17)) depends on there being exactly eight plates.
-8. **AGENTS.md contradicts itself on the catalog layout.** [AGENTS.md:27–29](../AGENTS.md#L27-L29) says "in one grid"; lines
-   [22–24](../AGENTS.md#L22-L24) and the code ([fold.css:154](../public/styles/fold.css#L154)) give one column of fold cards.
+8. **AGENTS.md contradicted itself on the catalog layout:** its Simulations-page paragraph said "in one grid", while the Folds
+   paragraph ([22–24](../AGENTS.md#L22-L24)) and the code ([fold.css:154](../public/styles/fold.css#L154)) give one column of
+   fold cards. Corrected on 14 October 2026 ([AGENTS.md:27–30](../AGENTS.md#L27-L30)).
 9. **Wrong image proportions for the four Droplet Collection figures.** Their `width`/`height` attributes
    ([portfolios.html:128](../public/portfolios.html#L128), [132](../public/portfolios.html#L132),
    [136](../public/portfolios.html#L136), [140](../public/portfolios.html#L140)) give 1.78, 1.31, 1.81 and 1.38; the SVGs are

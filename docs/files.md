@@ -4,15 +4,12 @@ Written by [`tools/inventory.py`](../tools/inventory.py) from the files in the r
 Run `python3 tools/inventory.py` after adding, removing or changing files, and `python3 tools/inventory.py --check`
 to confirm that every file is described. Sizes are those of the files when the list was written.
 
-242 files, 10.1 MB in all. Runs of more than 12 similar files are folded; open them to see each file.
+264 files, 10.8 MB in all. Runs of more than 12 similar files are folded; open them to see each file.
 
 | Folder | Files |
 |---|---|
-| [Repository root](#repository-root) | 8 |
-| [Documentation](#documentation) | 3 |
-| [Tools](#tools) | 1 |
-| [Template sources](#template-sources) | 2 |
-| [Platform tests](#platform-tests) | 1 |
+| [Repository root](#repository-root) | 10 |
+| [Pages under public/](#pages-under-public) | 3 |
 | [Simulation pages](#simulation-pages) | 10 |
 | [Walkthroughs](#walkthroughs) | 10 |
 | [Shared scripts](#shared-scripts) | 5 |
@@ -22,14 +19,19 @@ to confirm that every file is described. Sizes are those of the files when the l
 | [Thumbnails](#thumbnails) | 10 |
 | [Project copy: Droplet Collection](#project-copy-droplet-collection) | 69 |
 | [Project copy: Rotor Pendula](#project-copy-rotor-pendula) | 84 |
-| [Pages under public/](#pages-under-public) | 3 |
+| [Template sources](#template-sources) | 2 |
+| [Platform tests](#platform-tests) | 1 |
+| [Documentation](#documentation) | 23 |
+| [Tools](#tools) | 1 |
 
 ## Repository root
 
 | File | Size | What it is | Explained in |
 |---|---|---|---|
-| [`AGENTS.md`](../AGENTS.md) | 8.2 kB | The maintainer's summary: ownership, layout, design rules, folds, the data pipeline, platform quirks. | [build-and-deploy.md](build-and-deploy.md) |
-| [`CLAUDE.md`](../CLAUDE.md) | 4.0 kB | How Numa expects an AI assistant to work on the project. | [build-and-deploy.md](build-and-deploy.md) |
+| [`.gitignore`](../.gitignore) | 39 B | Files git leaves out: Python caches, node_modules, build output. | [files.md](files.md) |
+| [`AGENTS.md`](../AGENTS.md) | 8.5 kB | The maintainer's summary: ownership, layout, design rules, folds, the data pipeline, platform quirks. | [build-and-deploy.md](build-and-deploy.md) |
+| [`CLAUDE.md`](../CLAUDE.md) | 4.2 kB | How Numa expects an AI assistant to work on the project. | [build-and-deploy.md](build-and-deploy.md) |
+| [`README.md`](../README.md) | 6.1 kB | Start here: what the project is, how the files fit together, where each one is explained. | [README.md](../README.md) |
 | [`index.html`](../index.html) | 46.4 kB | The home page: CV, research, simulation plates, index; also the build entry page. | [pages.md](pages.md) |
 | [`package.json`](../package.json) | 479 B | Build declaration: vite build; template dependencies. | [build-and-deploy.md](build-and-deploy.md) |
 | [`postcss.config.js`](../postcss.config.js) | 81 B | PostCSS settings (template; unused by the site). | [build-and-deploy.md](build-and-deploy.md) |
@@ -37,38 +39,19 @@ to confirm that every file is described. Sizes are those of the files when the l
 | [`tsconfig.json`](../tsconfig.json) | 485 B | TypeScript settings for src/ (template; unused by the site). | [build-and-deploy.md](build-and-deploy.md) |
 | [`vite.config.ts`](../vite.config.ts) | 310 B | Vite settings: relative base, output folder from the platform. | [build-and-deploy.md](build-and-deploy.md) |
 
-## Documentation
+## Pages under public/
 
 | File | Size | What it is | Explained in |
 |---|---|---|---|
-| [`docs/assets.md`](assets.md) | 6.0 kB | Documentation: Fonts, maths and pictures: `public/vendor/`, `public/fonts/`, `public/images/`. | [assets.md](assets.md) |
-| [`docs/build-and-deploy.md`](build-and-deploy.md) | 7.6 kB | Documentation: Build files, tests and deployment. | [build-and-deploy.md](build-and-deploy.md) |
-| [`docs/portfolios.md`](portfolios.md) | 10.5 kB | Documentation: The two research projects: `public/portfolios/`. | [portfolios.md](portfolios.md) |
-
-## Tools
-
-| File | Size | What it is | Explained in |
-|---|---|---|---|
-| [`tools/inventory.py`](../tools/inventory.py) | 15.9 kB | Writes docs/files.md and checks that every file in the repository is described. | [files.md](files.md) |
-
-## Template sources
-
-| File | Size | What it is | Explained in |
-|---|---|---|---|
-| [`src/main.ts`](../src/main.ts) | 23 B | Template script entry; index.html does not load it. | [build-and-deploy.md](build-and-deploy.md) |
-| [`src/styles.css`](../src/styles.css) | 73 B | Template Tailwind directives; unused. | [build-and-deploy.md](build-and-deploy.md) |
-
-## Platform tests
-
-| File | Size | What it is | Explained in |
-|---|---|---|---|
-| [`tests/tests.json`](../tests/tests.json) | 11.7 kB | Twelve plain-language test scenarios run by the platform's QA after each deploy. | [build-and-deploy.md](build-and-deploy.md) |
+| [`public/portfolios.html`](../public/portfolios.html) | 22.0 kB | The Portfolios page: the two research projects. | [pages.md](pages.md) |
+| [`public/robots.txt`](../public/robots.txt) | 58 B | Instructions for search-engine crawlers. | [pages.md](pages.md) |
+| [`public/simulations.html`](../public/simulations.html) | 18.4 kB | The simulations catalog: one titled fold card per simulation, search and chips. | [pages.md](pages.md) |
 
 ## Simulation pages
 
 | File | Size | What it is | Explained in |
 |---|---|---|---|
-| [`public/simulations/Circular Wave Interference Visualization.html`](../public/simulations/Circular%20Wave%20Interference%20Visualization.html) | 188.8 kB | Fig. 1 · Wave Interference: the simulation, its data panel, walkthrough and lecture note. | [fig01-mechanics.md](simulations/fig01-mechanics.md) |
+| [`public/simulations/Circular Wave Interference Visualization.html`](../public/simulations/Circular%20Wave%20Interference%20Visualization.html) | 188.8 kB | Fig. 1 · Wave Interference: the simulation, its data panel, walkthrough and lecture note. | [fig01-wave-sources.md](simulations/fig01-wave-sources.md) |
 | [`public/simulations/Double Pendulum.html`](../public/simulations/Double%20Pendulum.html) | 96.9 kB | Fig. 2 · Double Pendulum: the simulation, its data panel, walkthrough and lecture note. | [fig02-double-pendulum.md](simulations/fig02-double-pendulum.md) |
 | [`public/simulations/Interactive Double-Slit Experiment Visualization.html`](../public/simulations/Interactive%20Double-Slit%20Experiment%20Visualization.html) | 166.6 kB | Fig. 3 · Double-Slit Interference: the simulation, its data panel, walkthrough and lecture note. | [fig03-double-slit.md](simulations/fig03-double-slit.md) |
 | [`public/simulations/Transverse and longitudinal waves.html`](../public/simulations/Transverse%20and%20longitudinal%20waves.html) | 197.8 kB | Fig. 4 · Transverse & Longitudinal: the simulation, its data panel, walkthrough and lecture note. | [fig04-transverse-longitudinal.md](simulations/fig04-transverse-longitudinal.md) |
@@ -177,7 +160,7 @@ to confirm that every file is described. Sizes are those of the files when the l
 | [`public/images/sims/transverse-longitudinal.webp`](../public/images/sims/transverse-longitudinal.webp) | 11.8 kB | Thumbnail of Fig. 4 · Transverse & Longitudinal, 800 × 500 px. | [assets.md](assets.md) |
 | [`public/images/sims/water-wave.webp`](../public/images/sims/water-wave.webp) | 15.0 kB | Thumbnail of Fig. 5 · Circular Water Waves, 800 × 500 px. | [assets.md](assets.md) |
 | [`public/images/sims/wave-bench.webp`](../public/images/sims/wave-bench.webp) | 18.0 kB | Thumbnail of Fig. 6 · Wave Interference Simulator, 800 × 500 px. | [assets.md](assets.md) |
-| [`public/images/sims/wave-sources.webp`](../public/images/sims/wave-sources.webp) | 36.5 kB | Thumbnail with no simulation of that id. | [assets.md](assets.md) |
+| [`public/images/sims/wave-sources.webp`](../public/images/sims/wave-sources.webp) | 36.5 kB | Thumbnail of Fig. 1 · Wave Interference, 800 × 500 px. | [assets.md](assets.md) |
 | [`public/images/sims/wind-turbine.webp`](../public/images/sims/wind-turbine.webp) | 15.4 kB | Thumbnail of Fig. 10 · Wind Turbine Control, 800 × 500 px. | [assets.md](assets.md) |
 
 ## Project copy: Droplet Collection
@@ -363,10 +346,49 @@ to confirm that every file is described. Sizes are those of the files when the l
 | [`public/portfolios/rotor-pendula/study/sources/access.json`](../public/portfolios/rotor-pendula/study/sources/access.json) | 484 B | The same two sources as data. | [portfolios.md](portfolios.md) |
 | [`public/portfolios/rotor-pendula/study/wind_pendulum.zip`](../public/portfolios/rotor-pendula/study/wind_pendulum.zip) | 1.40 MB | The complete delivery: code, data, figures, fonts, sources. | [portfolios.md](portfolios.md) |
 
-## Pages under public/
+## Template sources
 
 | File | Size | What it is | Explained in |
 |---|---|---|---|
-| [`public/portfolios.html`](../public/portfolios.html) | 22.0 kB | The Portfolios page: the two research projects. | [pages.md](pages.md) |
-| [`public/robots.txt`](../public/robots.txt) | 58 B | Instructions for search-engine crawlers. | [pages.md](pages.md) |
-| [`public/simulations.html`](../public/simulations.html) | 18.4 kB | The simulations catalog: one titled fold card per simulation, search and chips. | [pages.md](pages.md) |
+| [`src/main.ts`](../src/main.ts) | 23 B | Template script entry; index.html does not load it. | [build-and-deploy.md](build-and-deploy.md) |
+| [`src/styles.css`](../src/styles.css) | 73 B | Template Tailwind directives; unused. | [build-and-deploy.md](build-and-deploy.md) |
+
+## Platform tests
+
+| File | Size | What it is | Explained in |
+|---|---|---|---|
+| [`tests/tests.json`](../tests/tests.json) | 11.9 kB | Twelve plain-language test scenarios run by the platform's QA after each deploy. | [build-and-deploy.md](build-and-deploy.md) |
+
+## Documentation
+
+| File | Size | What it is | Explained in |
+|---|---|---|---|
+| [`docs/architecture.md`](architecture.md) | 7.2 kB | Documentation: How the site fits together. | [architecture.md](architecture.md) |
+| [`docs/assets.md`](assets.md) | 6.0 kB | Documentation: Fonts, maths and pictures: `public/vendor/`, `public/fonts/`, `public/images/`. | [assets.md](assets.md) |
+| [`docs/build-and-deploy.md`](build-and-deploy.md) | 8.0 kB | Documentation: Build files, tests and deployment. | [build-and-deploy.md](build-and-deploy.md) |
+| [`docs/files.md`](files.md) | this file | This list. Written by tools/inventory.py; do not edit by hand. | [files.md](files.md) |
+| [`docs/pages.md`](pages.md) | 43.0 kB | Documentation: The site's own pages: home, simulations catalog, Portfolios, robots.txt. | [pages.md](pages.md) |
+| [`docs/portfolios.md`](portfolios.md) | 10.5 kB | Documentation: The two research projects: `public/portfolios/`. | [portfolios.md](portfolios.md) |
+| [`docs/scripts/catalog.md`](scripts/catalog.md) | 15.2 kB | Documentation: public/scripts/catalog.js. | [catalog.md](scripts/catalog.md) |
+| [`docs/scripts/datalog.md`](scripts/datalog.md) | 44.3 kB | Documentation: public/scripts/datalog.js. | [datalog.md](scripts/datalog.md) |
+| [`docs/scripts/dataset.md`](scripts/dataset.md) | 17.7 kB | Documentation: public/scripts/dataset.js. | [dataset.md](scripts/dataset.md) |
+| [`docs/scripts/fold.md`](scripts/fold.md) | 21.8 kB | Documentation: public/scripts/fold.js. | [fold.md](scripts/fold.md) |
+| [`docs/scripts/sim.md`](scripts/sim.md) | 25.8 kB | Documentation: public/scripts/sim.js. | [sim.md](scripts/sim.md) |
+| [`docs/scripts/walk.md`](scripts/walk.md) | 19.4 kB | Documentation: public/scripts/walk/*.js. | [walk.md](scripts/walk.md) |
+| [`docs/simulations/fig01-wave-sources.md`](simulations/fig01-wave-sources.md) | 48.4 kB | Documentation: Fig. 1 · Wave Interference. | [fig01-wave-sources.md](simulations/fig01-wave-sources.md) |
+| [`docs/simulations/fig02-double-pendulum.md`](simulations/fig02-double-pendulum.md) | 43.7 kB | Documentation: Fig. 2 · Double Pendulum. | [fig02-double-pendulum.md](simulations/fig02-double-pendulum.md) |
+| [`docs/simulations/fig03-double-slit.md`](simulations/fig03-double-slit.md) | 37.5 kB | Documentation: Fig. 3 · Double-Slit Interference. | [fig03-double-slit.md](simulations/fig03-double-slit.md) |
+| [`docs/simulations/fig04-transverse-longitudinal.md`](simulations/fig04-transverse-longitudinal.md) | 33.6 kB | Documentation: Fig. 4 · Transverse and Longitudinal Waves. | [fig04-transverse-longitudinal.md](simulations/fig04-transverse-longitudinal.md) |
+| [`docs/simulations/fig05-water-wave.md`](simulations/fig05-water-wave.md) | 34.3 kB | Documentation: Fig. 5 · Circular Water Waves. | [fig05-water-wave.md](simulations/fig05-water-wave.md) |
+| [`docs/simulations/fig06-wave-bench.md`](simulations/fig06-wave-bench.md) | 38.9 kB | Documentation: Fig. 6 · Wave Interference Simulator. | [fig06-wave-bench.md](simulations/fig06-wave-bench.md) |
+| [`docs/simulations/fig07-phasor-sums.md`](simulations/fig07-phasor-sums.md) | 37.5 kB | Documentation: Fig. 7 · Phasor Sums. | [fig07-phasor-sums.md](simulations/fig07-phasor-sums.md) |
+| [`docs/simulations/fig08-draw-decompose.md`](simulations/fig08-draw-decompose.md) | 33.1 kB | Documentation: Fig. 8 · Draw & Decompose. | [fig08-draw-decompose.md](simulations/fig08-draw-decompose.md) |
+| [`docs/simulations/fig09-driven-oscillator.md`](simulations/fig09-driven-oscillator.md) | 38.6 kB | Documentation: Fig. 9 · Driven Oscillator. | [fig09-driven-oscillator.md](simulations/fig09-driven-oscillator.md) |
+| [`docs/simulations/fig10-wind-turbine.md`](simulations/fig10-wind-turbine.md) | 42.8 kB | Documentation: Fig. 10 · Wind Turbine Control. | [fig10-wind-turbine.md](simulations/fig10-wind-turbine.md) |
+| [`docs/styles.md`](styles.md) | 40.8 kB | Documentation: Stylesheets: `public/styles/`. | [styles.md](styles.md) |
+
+## Tools
+
+| File | Size | What it is | Explained in |
+|---|---|---|---|
+| [`tools/inventory.py`](../tools/inventory.py) | 16.1 kB | Writes docs/files.md and checks that every file in the repository is described. | [files.md](files.md) |

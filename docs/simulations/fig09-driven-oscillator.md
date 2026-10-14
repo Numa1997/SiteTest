@@ -401,5 +401,5 @@ the data panel prints. In detail:
    (about 1.5 ms per frame measured) and rewrites `#cap-t` each time ([L906](../../public/simulations/driven-oscillator.html#L906)).
 7. **Solve time.** Section 8 says solving "takes a few tens of milliseconds"
    ([L423](../../public/simulations/driven-oscillator.html#L423)); measured here 6–17 ms (machine dependent).
-8. **AGENTS.md** says the load order dataset.js → page → datalog.js holds for "all eight figures" (AGENTS.md line 64);
-   this page (Fig. 9) follows it too, so the count is out of date.
+8. **AGENTS.md** said the load order dataset.js → page → datalog.js holds for "all eight figures"; this page (Fig. 9)
+   follows it too. Corrected to "all ten figures" on 14 October 2026.

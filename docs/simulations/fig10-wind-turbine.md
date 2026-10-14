@@ -439,5 +439,5 @@ The page states this in `Sim.data.about` ([L1142](../../public/simulations/wind-
    ([L959](../../public/simulations/wind-turbine.html#L959)), so both canvases are redrawn about 60 times a second while
    paused (about 1.4 ms per frame measured), and `#cap-op` and `#cap-t` are rewritten each frame
    ([L926](../../public/simulations/wind-turbine.html#L926), [L948](../../public/simulations/wind-turbine.html#L948)).
-8. **AGENTS.md** says the load order dataset.js → page → datalog.js holds for "all eight figures" (AGENTS.md line 64); this
-   page (Fig. 10) follows it too, so the count is out of date.
+8. **AGENTS.md** said the load order dataset.js → page → datalog.js holds for "all eight figures"; this page (Fig. 10)
+   follows it too. Corrected to "all ten figures" on 14 October 2026.

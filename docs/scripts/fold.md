@@ -74,8 +74,8 @@ So any distance up to 533 px closes in 240 ms, and 933 px or more in 420 ms. The
   fold away. Then, if the page will become too short for the current scroll position (the scroll is beyond the page end minus
   the body height), the window glides up to the new end while the body closes, over `closeMs` of that distance.
 - **Opening.** The attributes flip and CSS animates; then `reveal()` ([fold.js:117-123](../../public/scripts/fold.js#L117-L123))
-  leaves the window alone if the header sits between its pin line and $\max(\text{pin} + 48\ \text{px},\ 0.4 \times \text{window
-  height})$; otherwise it glides so the header lands 12 px below its pin line, no further than the page end will be once the
+  leaves the window alone if the header sits between its pin line and the larger of (pin line + 48 px) and
+  40 % of the window height; otherwise it glides so the header lands 12 px below its pin line, no further than the page end will be once the
   body has grown.
 
 `pinLine(node)` is where a fold's header pins: `--fold-top` for a section, plus the height of each enclosing section header for

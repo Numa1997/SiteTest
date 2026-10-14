@@ -17,7 +17,7 @@ The pages that use them are described in [pages.md](pages.md); the fonts and KaT
 
 ## Design rules
 
-The house design is `DESIGN.md` of the app `droplet-collection-yl7l26` ([AGENTS.md:35–43](../AGENTS.md#L35-L43)):
+The house design is `DESIGN.md` of the app `droplet-collection-yl7l26` ([AGENTS.md:36–44](../AGENTS.md#L36-L44)):
 
 - **Titles** in Instrument Serif, at weight 400 only (the font request asks for no other weight, [catalog.css:7](../public/styles/catalog.css#L7);
   a bold title would be a synthetic one).
@@ -368,7 +368,7 @@ site `/src/main.ts` answers 403 (measured). The file comes from the app template
    [635](../public/styles/site.css#L635)). Its cards carry shadows ([222](../public/styles/site.css#L222),
    [512](../public/styles/site.css#L512), [575](../public/styles/site.css#L575); hover shadows at
    [203](../public/styles/site.css#L203), [537](../public/styles/site.css#L537), [583](../public/styles/site.css#L583)).
-   AGENTS.md ([35–36](../AGENTS.md#L35-L36)) asks for Instrument Serif at 400 only and no card shadows.
+   AGENTS.md ([36–37](../AGENTS.md#L36-L37)) asks for Instrument Serif at 400 only and no card shadows.
 2. **Shadows elsewhere, against the "no card shadows" comments** in [paper.css:7](../public/styles/paper.css#L7),
    [catalog.css:5](../public/styles/catalog.css#L5) and [portfolio.css:5](../public/styles/portfolio.css#L5): every open fold card
    ([fold.css:25](../public/styles/fold.css#L25)), the simulation figure and panel ([sim.css:67](../public/styles/sim.css#L67),

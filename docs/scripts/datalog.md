@@ -473,5 +473,5 @@ capture phase for `soon()`; `ResizeObserver` on `#stage` and on the table.
    crossing; whether this case is meant to be covered is not determined from the code.
 8. Pressing Esc while focus is inside the panel and Read values is on does two things at once: it closes the panel
    ([datalog.js:1030](../../public/scripts/datalog.js#L1030)) and stops reading ([datalog.js:638](../../public/scripts/datalog.js#L638)).
-9. AGENTS.md says the load order holds for "all eight figures"; it now holds for all ten pages (load-order table in
-   [sim.md](sim.md#load-order-on-the-pages)).
+9. AGENTS.md said the load order holds for "all eight figures"; it holds for all ten pages (load-order table in
+   [sim.md](sim.md#load-order-on-the-pages)). Corrected to "all ten figures" on 14 October 2026.
