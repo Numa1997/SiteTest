@@ -77,6 +77,7 @@ RULES = [
     (r'README\.md', 'Start here: what the project is, how the files fit together, where each one is explained.', 'README.md'),
     (r'docs/files\.md', 'This list. Written by tools/inventory.py; do not edit by hand.', 'docs/files.md'),
     (r'docs/.+\.md', lambda m: 'Documentation: ' + heading(m.group(0)) + '.', None),
+    (r'\.gitignore', 'Files git leaves out: Python caches, node_modules, build output.', 'docs/files.md'),
     (r'tools/inventory\.py', 'Writes docs/files.md and checks that every file in the repository is described.', 'docs/files.md'),
     # root of the app
     (r'AGENTS\.md', "The maintainer's summary: ownership, layout, design rules, folds, the data pipeline, platform quirks.", 'docs/build-and-deploy.md'),
