@@ -12,6 +12,13 @@ Layout (GitHub Pages serves the repository root as-is, so every asset lives at t
 `scripts/walk/<key>.js` ("From symbols to code", one file per page, chosen by the page's `data-walk` key:
 each equation paired with the page's own code lines; keep the excerpts identical to the page code when either
 changes; live values come from `Sim.live()` in each page); `simulations/*.html` (eight pages).
+Simulations page: `simulations.html` lists every simulation as a card (thumbnail, the question it answers, model, method, what the reader
+sets, concepts) in one grid ordered by field, with a search and field and year chips; the view lives in the address (`?q=&field=&stage=`).
+It draws itself from the registry `scripts/catalog.js` (`SIMULATIONS`, `SIM_FIELDS`, `SIM_TOOLS`) with `styles/catalog.css`; thumbnails are
+`images/sims/<id>.webp`, 800 × 500 px stills of each page's main figure. To add a simulation: its page in `simulations/`, one entry in
+`SIMULATIONS` (and its field in `SIM_FIELDS` if new), its thumbnail (a missing one shows the Fig. number instead), and its number in the
+hand-written Fig. links at the top of every simulation page. Simulation pages link back to `simulations.html`; the home page keeps its plates
+and links to the catalog from the hero button, the section intro and a button under the plates.
 Data panel, a pipeline in three files. `scripts/dataset.js`: `Sim.dataset()` gives a page one named store (dims, typed-array variables,
 scalars, attrs; the shape of an xarray/NetCDF dataset) and the page writes every number into it at the line that computes it, every frame,
 overwriting the last frame; nothing is recomputed for display. `scripts/datalog.js` + `styles/data.css`: the panel, which only reads the

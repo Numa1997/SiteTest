@@ -14,7 +14,29 @@
       "Confirm the large heading reads Numa Koudsie and the footer contains the words Claude version",
       "Click the Simulations link in the Index navigation"
     ],
-    "expected": "The section headed Interactive physics simulations is visible, showing six simulation cards labelled Fig. 1 to Fig. 6, each with a Launch button."
+    "expected": "The section headed Interactive physics simulations is visible, showing eight simulation cards labelled Fig. 1 to Fig. 8, each with a Launch button, followed by a button reading All simulations, by field."
+  },
+  {
+    "name": "Simulations page lists every figure, filters by field and searches",
+    "sanity": true,
+    "viewport": "desktop",
+    "covers": [
+      "simulations catalog page",
+      "field filter",
+      "search",
+      "links between catalog and simulation pages"
+    ],
+    "description": "The dedicated simulations page draws one card per simulation from the registry, filters them by field, searches their text, and links to and from the simulation pages.",
+    "steps": [
+      "Open the home page and click the button Open the simulations near the top",
+      "Confirm the page heading reads Simulations and that eight cards are shown, each with a picture, a question in italics and a button starting with Open Fig.",
+      "Click the chip Wave optics",
+      "Confirm only the cards Fig. 1 Wave Interference and Fig. 3 Double-Slit Interference are shown and the text 2 of 8 shown appears",
+      "Click the chip All fields, type runge in the search box",
+      "Confirm only the card Fig. 2 Double Pendulum is shown",
+      "Click its button Open Fig. 2, then click the link All simulations at the top left of the simulation page"
+    ],
+    "expected": "The simulation page opens with the heading Double Pendulum, and the top-left link returns to the simulations page with the heading Simulations."
   },
   {
     "name": "Double pendulum runs, pauses and shows the chaos twin",
