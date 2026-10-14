@@ -28,6 +28,8 @@ Project facts (layout, AppDeploy app, boundaries) are in AGENTS.md.
 - The thing Numa looks at is the AppDeploy app. Work on it first: read its stored source (`src_read`), build and test against
   that, deploy, verify the live site. Only then migrate the same change into the GitHub repository, commit and push.
 - Never start with the repository, and never report the repository first. The live app is the deliverable; the repo is its copy.
+- The repository is documentation, not a website: the app's files at the same paths, and `docs/` explaining every file and
+  script. A change is not migrated until the docs pages that describe the changed files say what the code now does.
 
 ## A data table is a pipeline, not a second simulation
 - The simulation writes each number into the store at the line that computes it; the display only reads. Never recompute for display.

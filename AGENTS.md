@@ -3,12 +3,14 @@
 This is Numa Koudsie's physics website: AppDeploy app `numa-koudsie-website-0cyj78`, display name "Numa Koudsie website".
 Owner: Numa. Changes need Numa's explicit request.
 
-The GitHub repository `Numa1997/SiteTest` is this app's copy: its root holds everything under `public/` plus `index.html`, and GitHub
-Pages serves it as-is. Change the app first, then copy the change there, only when Numa asks.
+The GitHub repository `Numa1997/SiteTest` is this app's documented copy: the same files at the same paths, plus `README.md`, `docs/`
+(what every file and script is and how it works) and `tools/`. It is not published as a website (no GitHub Pages: Numa's decision,
+14 October 2026). Change the app first; then copy the change to the same paths there, update the `docs/` pages that describe it, and
+run `python3 tools/inventory.py` (it rewrites `docs/files.md` and fails if a file is undescribed).
 Out of bounds for writes: the ChatGPT version `numa-physics-lab-chatgpt-k0ixwk` (its earlier copy `sitetest-chatgpt-r14hvr` was deleted)
 and the unrelated app `physik-radar-xvy59b`. This is a project instruction, not a technical access control.
 
-Layout (GitHub Pages serves the repository root as-is, so every asset lives at the root): `index.html`; `styles/site.css` and `styles/sim.css`;
+Layout (paths below are under `public/`, which the build serves at the site root; `index.html` and the build files sit at the root): `index.html`; `styles/site.css` and `styles/sim.css`;
 `scripts/sim.js` (shared helpers, lecture-note typesetting, walkthrough engine);
 `scripts/walk/<key>.js` ("From symbols to code", one file per page, chosen by the page's `data-walk` key:
 each equation paired with the page's own code lines; keep the excerpts identical to the page code when either
@@ -61,7 +63,7 @@ value, the formula recomputed from the stored inputs, the pixel or SVG element r
 `Sim.data.round` says what a round is (one period, one loop, ten seconds); every frame of it is copied (all scalars and the pinned point,
 at most 600 samples), then shown as charts and a table and saved as .npz + CSV; at most five rounds are kept. Save: the store as .npz +
 dataset.json + the rounds as CSV + README. The contract is at the top of datalog.js. A page loads dataset.js after sim.js and datalog.js
-after its own script (all eight figures). `Sim.live()` reads the store too. Keep the taps where the page computes a value; keep the
+after its own script (all ten figures). `Sim.live()` reads the store too. Keep the taps where the page computes a value; keep the
 walkthrough excerpts untouched (insert after a quoted line, never inside a quoted pair).
 How Numa expects Claude to work (persistence, plain language, build when clear) is in CLAUDE.md.
 AppDeploy reformats stored source with Prettier; base any diff on the stored snapshot (`src_read`).
