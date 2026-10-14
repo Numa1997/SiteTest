@@ -111,7 +111,7 @@ Clicking an index link opens its section first and scrolls it below the pinned h
 One function expression wraps everything ([624–1259](../index.html#L624-L1259)). It has three independent parts.
 
 **Fig. 0, the live double pendulum** ([629–844](../index.html#L629-L844)). The everyday picture: a pendulum hanging from the
-bob of another pendulum; let it go from high up and it swings wildly and never repeats. The model: two point masses on
+bob of another pendulum; let it go from high up and it swings wildly, never retracing its path. The model: two point masses on
 massless rigid rods, no friction, angles $\theta_1, \theta_2$ measured from the downward vertical. The code uses
 $g = 9.81\ \mathrm{m/s^2}$, $m_1 = m_2 = 1\ \mathrm{kg}$, $l_1 = l_2 = 1\ \mathrm{m}$ ([635–639](../index.html#L635-L639)) and
 evaluates, with $\Delta = \theta_1 - \theta_2$ and $D = 2m_1 + m_2 - m_2\cos 2\Delta$,
@@ -174,7 +174,7 @@ fades by `1 − 0.99^(dt·60)`, which removes 1 % per 1/60 s whatever the frame 
 |---|---|---|
 | `io` observer | [1211–1221](../index.html#L1211-L1221) | When 10 % of an observed element is visible, adds `is-visible` once and stops watching it. |
 | stagger | [1222–1225](../index.html#L1222-L1225) | Each `.reveal` gets `--d = (i mod 5) × 80 ms`, the delay its fade uses ([site.css:773–774](../public/styles/site.css#L773-L774)). |
-| blocks | [1226–1228](../index.html#L1226-L1228) | `.section` and `.timeline` also get `is-visible`: the timeline line grows to full height in 1.8 s ([site.css:385–389](../public/styles/site.css#L385-L389)). |
+| blocks | [1226–1228](../index.html#L1226-L1228) | `.section` and `.timeline` also get `is-visible`: the timeline line grows to full height in 1.8 s ([site.css:378–389](../public/styles/site.css#L378-L389)). |
 | `nav` observer | [1230–1250](../index.html#L1230-L1250) | `rootMargin: '-30% 0px -60% 0px'` watches a band 30–40 % down the window; the section crossing it marks its `.index` link `active`. Only links starting with `#` take part. |
 | fallback | [1251–1258](../index.html#L1251-L1258) | Without `IntersectionObserver`, everything is made visible at once. |
 
@@ -367,7 +367,7 @@ Each part's `h3` carries an `id` (`dc-cloud`, `dc-changes`, … `rp-pages`) and 
 
 **Links into the copies.** Every link goes to `portfolios/<name>/index.html` or `portfolios/<name>/index.html#/<route>`,
 never to the folder: the copies are single-page apps with hash routes, and a folder address answers 403 on AppDeploy
-([AGENTS.md:44–47](../AGENTS.md#L44-L47)). The routes used here exist in the copies' bundles: `/`, `/theory`, `/results`,
+([AGENTS.md:46–49](../AGENTS.md#L46-L49)). The routes used here exist in the copies' bundles: `/`, `/theory`, `/results`,
 `/simulate`, `/checks` in both, and `/report` in Rotor Pendula only (each bundle's route table, e.g. `path:"/report"` in
 `public/portfolios/rotor-pendula/static/index-CRh2Uwlk.js`). Both copies link back with `href="../../portfolios.html"`.
 The figure images come from each copy's `fig/` folder (for example
@@ -424,7 +424,7 @@ file. To keep a path out of search engines, add a `Disallow: /path` line under `
 
 ## Notes for maintainers
 
-1. **Home page fonts and shadows depart from the house design.** AGENTS.md ([33–34](../AGENTS.md#L33-L34)) and CLAUDE.md ask
+1. **Home page fonts and shadows depart from the house design.** AGENTS.md ([35–36](../AGENTS.md#L35-L36)) and CLAUDE.md ask
    for Instrument Serif titles at weight 400 only and no card shadows. The home page loads only `site.css`, whose `--serif` is
    IBM Plex Serif ([site.css:22](../public/styles/site.css#L22)) and whose titles are weight 600
    ([site.css:138](../public/styles/site.css#L138), [336](../public/styles/site.css#L336),
@@ -449,8 +449,8 @@ file. To keep a path out of search engines, add a `Disallow: /path` line under `
    with a picture, a typeset equation and a button starting with Open Fig." on arrival; the cards now open as closed titles
    ([simulations.html:245](../public/simulations.html#L245), `defaultOpen: false`), and the home page scenario
    ([tests.json:17](../tests/tests.json#L17)) depends on there being exactly eight plates.
-8. **AGENTS.md contradicts itself on the catalog layout.** [AGENTS.md:25–27](../AGENTS.md#L25-L27) says "in one grid"; lines
-   [20–21](../AGENTS.md#L20-L21) and the code ([fold.css:154](../public/styles/fold.css#L154)) give one column of fold cards.
+8. **AGENTS.md contradicts itself on the catalog layout.** [AGENTS.md:27–29](../AGENTS.md#L27-L29) says "in one grid"; lines
+   [22–24](../AGENTS.md#L22-L24) and the code ([fold.css:154](../public/styles/fold.css#L154)) give one column of fold cards.
 9. **Wrong image proportions for the four Droplet Collection figures.** Their `width`/`height` attributes
    ([portfolios.html:128](../public/portfolios.html#L128), [132](../public/portfolios.html#L132),
    [136](../public/portfolios.html#L136), [140](../public/portfolios.html#L140)) give 1.78, 1.31, 1.81 and 1.38; the SVGs are
