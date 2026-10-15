@@ -83,3 +83,5 @@ to this repository. If a thumbnail is missing, the catalog shows the figure numb
 
 **To renew one:** run the page, take a screenshot of `.stage__canvas` at a moment that shows what the simulation is about,
 scale it to 800 × 500 px, save it as WebP under the same name.
+
+Fig. 8 was renewed on 15 October 2026 from the current stage, including the TeX Re z / Im z labels and scale.

@@ -83,7 +83,7 @@ for (i = 0; i < 4; i++) out[i] = s[i] + ⟦h|h / 6⟧ * (k1[i] + 2 * k2[i] + 2 *
             title: 'How many steps per frame',
             where: 'Sim.clock callback',
             math: '⟦acc|τ⟧ ← τ + Δt · speed<br>⟦n|n⟧ = min(⌊τ / h⌋, 600), τ ← τ − n h',
-            note: 'The screen refreshes at an uneven Δt (about 1/60 s); physics advances in equal steps h = 1/600 s. The leftover τ carries into the next frame, so on an ordinary screen simulated time keeps pace with wall time × speed. Two safety caps make it fall behind rather than freeze on a slow device: one frame counts at most 0.05 s, and at most 600 steps run per frame, after which the leftover is cut to one step. A fixed h keeps the integrator’s accuracy the same on every device.',
+            note: 'The screen refreshes at an uneven Δt (about 1/60 s); physics advances in equal steps h = 1/600 s. The leftover τ carries into the next frame, so on an ordinary screen simulated time keeps pace with wall time × speed. The clock caps one frame at 0.05 s, so slow devices can fall behind. With speed at most 1.5 and at most one carried step, no more than 46 steps can be requested. The 600-step guard therefore cannot act with the current controls. A fixed h keeps the integrator’s accuracy the same on every device.',
             code: `⟦acc|acc += dt * speed.value⟧;
 var ⟦n|n = Math.min(Math.floor(acc / H), 600)⟧;
 acc = Math.min(acc - n * H, H);

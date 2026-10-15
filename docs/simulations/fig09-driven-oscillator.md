@@ -2,7 +2,7 @@
 
 | | |
 |---|---|
-| Page | [public/simulations/driven-oscillator.html](../../public/simulations/driven-oscillator.html) (1 108 lines, 178 kB) |
+| Page | [public/simulations/driven-oscillator.html](../../public/simulations/driven-oscillator.html) (1 108 lines, 178 652 bytes) |
 | Walkthrough | [public/scripts/walk/driven.js](../../public/scripts/walk/driven.js) (121 lines, 7 steps, key `driven`) |
 | Thumbnail | [public/images/sims/driven-oscillator.webp](../../public/images/sims/driven-oscillator.webp) (WebP, 800 × 500 px, 23.7 kB) |
 | Catalog entry | [public/scripts/catalog.js#L183](../../public/scripts/catalog.js#L183-L199) (`id: 'driven-oscillator'`, `fig: 9`, `field: 'control'`, `stage: 1`, lines 183–199) |
@@ -376,19 +376,9 @@ the data panel prints. In detail:
 
 ## Notes for maintainers
 
-1. **Figure 2 of the lecture note has wrong axis labels.** The horizontal axis of both SVGs runs from $f/f_0 = 0.1$ to 10
-   on a log scale (the drawn curves give $X/(F_0/k) = 1.01$ at the left edge and 0.0101 at the right edge, as equation (4)
-   does for $\zeta = 0.05$ at $f/f_0 = 0.1$ and 10), but the tick labels read "−1.00, −0.50, 1, 0.50, 1.00"
-   ([L241–L249](../../public/simulations/driven-oscillator.html#L241-L249),
-   [L285–L293](../../public/simulations/driven-oscillator.html#L285-L293)). They should read 0.1, 0.32, 1, 3.2, 10.
-2. **Phase lag rounded wrongly in the note.** Sections 3 and 6 give $\varphi = 25.4°$
-   ([L222](../../public/simulations/driven-oscillator.html#L222), [L404](../../public/simulations/driven-oscillator.html#L404));
-   the store holds 25.346° and the readout shows 25.3°.
-3. **Section 9 does not match the drawing code.** It says the rest position is at 40 % of the width and the largest
-   displacement spans 27 % ([L432](../../public/simulations/driven-oscillator.html#L432)). The code puts rest at
-   `wallX + 0.42 W0 + bw/2` and allows `0.11 W0` either side ([L669–L671](../../public/simulations/driven-oscillator.html#L669-L671));
-   measured: rest at 47.8 % and span 20.1 % of a 770 px canvas, 50.0 % and 19.4 % of a 356 px canvas. The store's own
-   description of `amp_px` ([L527](../../public/simulations/driven-oscillator.html#L527)) matches the code.
+1. Fixed on 2026-10-15: both log axes read 0.1, 0.32, 1, 3.2, 10; their endpoints agree with gains 1.01005 and 0.0101005 (commit `:/^Batch B: correct notes and layout; verify measured figures in Chromium$`).
+2. Fixed on 2026-10-15: both phase-lag references round the stored 25.34617594° to 25.3° (commit `:/^Batch B: correct notes and layout; verify measured figures in Chromium$`).
+3. Fixed on 2026-10-15: the note gives the actual geometry and measured desktop/phone fractions (commit `:/^Batch B: correct notes and layout; verify measured figures in Chromium$`).
 4. **Small recomputations for display.** `readouts()` and `Sim.live()` convert `phi` to degrees
    ([L649](../../public/simulations/driven-oscillator.html#L649), [L893](../../public/simulations/driven-oscillator.html#L893))
    although `phi_deg` is stored ([L609](../../public/simulations/driven-oscillator.html#L609)). The values agree; the house
@@ -399,7 +389,6 @@ the data panel prints. In detail:
    ([sim.js:179–186](../../public/scripts/sim.js#L179-L186)), and the tick always calls `frame()`
    ([L916](../../public/simulations/driven-oscillator.html#L916)), so a paused page still redraws about 60 times a second
    (about 1.5 ms per frame measured) and rewrites `#cap-t` each time ([L906](../../public/simulations/driven-oscillator.html#L906)).
-7. **Solve time.** Section 8 says solving "takes a few tens of milliseconds"
-   ([L423](../../public/simulations/driven-oscillator.html#L423)); measured here 6–17 ms (machine dependent).
+7. Fixed on 2026-10-15: the note gives the measured default solve time of 9.5–12.4 ms and states that timing depends on the machine (commit `:/^Batch B: correct notes and layout; verify measured figures in Chromium$`).
 8. **AGENTS.md** said the load order dataset.js → page → datalog.js holds for "all eight figures"; this page (Fig. 9)
    follows it too. Corrected to "all ten figures" on 14 October 2026.

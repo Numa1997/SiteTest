@@ -24,7 +24,8 @@
       "simulations catalog page",
       "field filter",
       "search",
-      "links between catalog and simulation pages"
+      "links between catalog and simulation pages",
+      "empty catalog spacing"
     ],
     "description": "The dedicated simulations page draws one card per simulation from the registry, in figure order, titled with its name; the cards open as closed titles, and a field chip or a search opens what it finds, each with a picture, an abstract and its key equation typeset as in LaTeX; the cards link to and from the simulation pages.",
     "steps": [
@@ -34,7 +35,8 @@
       "Confirm only the cards Wave Interference (01) and Double-Slit Interference (03) are shown, each opened with a picture, a typeset equation and a button starting with Open Fig., and the text 2 of 10 shown appears",
       "Click the chip All fields, type runge in the search box",
       "Confirm only the card Double Pendulum is shown, opened, and the text 1 of 10 shown appears",
-      "Click its button Open Fig. 2, then click the link All simulations at the top left of the simulation page"
+      "Click its button Open Fig. 2, then click the link All simulations at the top left of the simulation page",
+      "Search for zzzzzzzz and confirm the empty catalog is hidden without a blank list margin; clear the search and confirm all ten cards return."
     ],
     "expected": "The simulation page opens with the heading Double Pendulum, and the top-left link returns to the simulations page with the heading Simulations."
   },
@@ -170,14 +172,16 @@
     "covers": [
       "Fig. 9 driven oscillator",
       "solve then play",
-      "lecture note"
+      "lecture note",
+      "correct log-axis ratios"
     ],
     "description": "The driven oscillator computes its whole 60 s run before drawing, stores it, plays the stored samples back, and carries a lecture note with typeset equations.",
     "steps": [
       "Open simulations/driven-oscillator.html",
       "Confirm the status under the Solve button begins with Solved 60000 RK4 steps and mentions 6001 samples",
       "Click Pause and confirm the button now reads Play",
-      "Scroll down to the lecture note headed Driven oscillations: how a system answers a push it does not control"
+      "Scroll down to the lecture note headed Driven oscillations: how a system answers a push it does not control",
+      "In lecture-note Figure 2, confirm both frequency-ratio axes read 0.1, 0.32, 1, 3.2, 10; the amplitude peak is near ratio 1."
     ],
     "expected": "The lecture note shows an Abstract box, numbered sections and typeset equations, and the figure above shows a block on a spring with the stored curve x(t) beneath it."
   },
@@ -188,7 +192,8 @@
     "covers": [
       "Fig. 10 wind turbine",
       "controller choice",
-      "stale run notice"
+      "stale run notice",
+      "subscripted plot labels"
     ],
     "description": "Changing the controller marks the stored run as out of date until Solve is pressed again.",
     "steps": [
@@ -196,7 +201,8 @@
       "Confirm the status begins with Solved 12000 RK4 steps",
       "Click the button Follow the wind",
       "Confirm the status now begins with A control changed",
-      "Click Solve"
+      "Click Solve",
+      "In lecture-note Figure 2, confirm p in c_p and opt in lambda_opt appear as subscripts without literal underscores."
     ],
     "expected": "The status again begins with Solved 12000 RK4 steps, and the readout Rotor speed shows a range in rpm."
   },
@@ -207,7 +213,8 @@
     "covers": [
       "portfolios page",
       "droplet collection copy",
-      "back link"
+      "back link",
+      "image aspect ratios"
     ],
     "description": "The Portfolios page introduces the Droplet Collection project, whose static copy opens in a sub-folder and links back.",
     "steps": [
@@ -215,7 +222,8 @@
       "Confirm the heading reads Portfolios and a project titled Droplet Collection with four figures is shown",
       "Click Open the project",
       "Confirm a page titled How cloud droplets become rain appears, with the pages Overview, Theory, Results, Simulate and Checks in its top bar",
-      "Click the link Numa Koudsie · Portfolios at the top left"
+      "Click the link Numa Koudsie · Portfolios at the top left",
+      "Scroll through the four Droplet Collection figures and confirm their reserved proportions agree with the loaded pictures."
     ],
     "expected": "The Portfolios page with the heading Portfolios is shown again."
   },
@@ -254,5 +262,22 @@
       "Wait five seconds"
     ],
     "expected": "At Speed 0 the panel explains why recording cannot start. At Speed 1 one full figure finishes and the Rounds tab displays Round 1."
+  },
+  {
+    "name": "Home fold tools align at the intermediate breakpoint",
+    "viewport": "desktop",
+    "covers": [
+      "home breakpoint alignment",
+      "fold tools margin",
+      "home fold controls"
+    ],
+    "description": "Checks the former 970 px gap without changing the protected home scenario.",
+    "steps": [
+      "Open the home page at a 970 px viewport.",
+      "Confirm the index is a full-width bar and the Expand all and Collapse all tools have a 48 px top margin.",
+      "Check there is no sideways page scroll.",
+      "Use Collapse all, then Expand all, and confirm the five home sections close and reopen."
+    ],
+    "expected": "The tools align below the index with a 48 px margin and the page has no sideways scroll."
   }
 ]

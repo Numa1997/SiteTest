@@ -2,7 +2,7 @@
 
 | | |
 |---|---|
-| Page | [public/simulations/Circular Wave Interference Visualization.html](../../public/simulations/Circular%20Wave%20Interference%20Visualization.html) (905 lines, 189 kB) |
+| Page | [public/simulations/Circular Wave Interference Visualization.html](../../public/simulations/Circular%20Wave%20Interference%20Visualization.html) (905 lines, 188 869 bytes) |
 | Walkthrough | [public/scripts/walk/circles.js](../../public/scripts/walk/circles.js) (110 lines, key `circles`) |
 | Thumbnail | [public/images/sims/wave-sources.webp](../../public/images/sims/wave-sources.webp) (WebP, 800 × 500 px, 36.5 kB; a still of the two-source field) |
 | Catalog entry | [public/scripts/catalog.js#L48](../../public/scripts/catalog.js#L48) (`id: 'wave-sources'`, `fig: 1`, `field: 'optics'`, `stage: 1`, lines 47–63) |
@@ -316,12 +316,7 @@ The plotted curves of Figures 3 and 4 are single SVG paths of 10–23 kB each on
 
 ## Notes for maintainers
 
-1. **Stale measurements in the note, §8.** [L458–459](../../public/simulations/Circular%20Wave%20Interference%20Visualization.html#L458-L459) give the formula `round(w/1.1)` but quote numbers measured with the earlier
-   divisor 2.2 (the code had `box.w / 2.2` at commit be76965 and has `box.w / 1.1` since aa17ed8): "350 × 158 = 55 300 points in a
-   window 1280 or 1440 px wide", "162 × 162 = 26 244 on a phone 390 px wide", "7.0 points per wavelength … 3.2 on the phone", and
-   "2 × 16 × 55 300 = 1 769 600 cosines and sines". Measured now: 360 × 162 = 58 320 at 1280–1600 px, 324 × 324 = 104 976 at
-   390 px, 7.2 and 6.5 points per wavelength, 1 866 240 calls. "360 × 360 = 129 600 at 880 px" still holds. CLAUDE.md repeats the
-   old "350 × 158 = 55 300" figure.
+1. Fixed on 2026-10-15: §8 now gives the measured 360 × 162 desktop and 324 × 324 phone grids, 7.2 and 6.48 samples per shortest wavelength, and 1 866 240 trigonometric calls for 16 sources (commit `:/^Batch B: correct notes and layout; verify measured figures in Chromium$`).
 2. **γ means two things.** `circles.js` writes "γ = (damping slider) / R" and "a = e^−γr / N" and labels `g` as γ
    ([circles.js:13](../../public/scripts/walk/circles.js#L13), [circles.js:20](../../public/scripts/walk/circles.js#L20), [circles.js:44](../../public/scripts/walk/circles.js#L44)). The note's eq. (5) ([L274](../../public/simulations/Circular%20Wave%20Interference%20Visualization.html#L274)) and the store (`damp` has symbol γ,
    `g` has symbol γ/R, [L529](../../public/simulations/Circular%20Wave%20Interference%20Visualization.html#L529), [L536](../../public/simulations/Circular%20Wave%20Interference%20Visualization.html#L536)) use γ for the slider value and γ/R for the per-pixel attenuation.

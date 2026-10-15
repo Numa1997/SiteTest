@@ -2,7 +2,7 @@
 
 | | |
 |---|---|
-| Page | [public/simulations/phasor-sums.html](../../public/simulations/phasor-sums.html) (1477 lines, 259 864 bytes) |
+| Page | [public/simulations/phasor-sums.html](../../public/simulations/phasor-sums.html) (1 477 lines, 259 831 bytes) |
 | Walkthrough | [public/scripts/walk/phasors.js](../../public/scripts/walk/phasors.js) (key `phasors`, 8 steps) |
 | Thumbnail | [public/images/sims/phasor-sums.webp](../../public/images/sims/phasor-sums.webp) (800 × 500 px: the 3-petal rose with its two arms and circles) |
 | Catalog entry | [public/scripts/catalog.js#L150](../../public/scripts/catalog.js#L150) (`id: 'phasor-sums'`, `fig: 7`, field `methods`, stage 2) |
@@ -344,15 +344,7 @@ The page states this in its `about` paragraph, shown in the data panel
 
 ## Notes for maintainers
 
-1. **Clip paths in the lecture-note figures do nothing.** The `<clipPath>` elements and `clip-path` attributes were
-   renamed: `<f7clipPath>` / `f7clip-path` ([L397](../../public/simulations/phasor-sums.html#L397),
-   [L422](../../public/simulations/phasor-sums.html#L422)), `f7clipaPath` / `f7clipa-path`
-   ([L463](../../public/simulations/phasor-sums.html#L463), [L488](../../public/simulations/phasor-sums.html#L488)),
-   `f7clipbPath` ([L500](../../public/simulations/phasor-sums.html#L500), [L517](../../public/simulations/phasor-sums.html#L517)),
-   `f7clipcPath` ([L546](../../public/simulations/phasor-sums.html#L546), [L573](../../public/simulations/phasor-sums.html#L573)).
-   Chromium computes `clip-path: none` for these groups. Measured: the plotted content stays inside the plot rectangles
-   today, so nothing visible is wrong, but the "clipped plot" of the house chart style is not in force. Fig. 8 uses real
-   `<clipPath>` elements.
+1. Fixed on 2026-10-15: all four real SVG clip paths have unique ids; computed clip-path is active, with identical phone pixels and only 28 edge pixels changed on desktop (commit `:/^Batch B: correct notes and layout; verify measured figures in Chromium$`).
 2. **Walkthrough says "every 7th sample"** for `dev` ([phasors.js:109](../../public/scripts/walk/phasors.js#L109)); the
    code measures every sample ([L857](../../public/simulations/phasor-sums.html#L857),
    [L1092](../../public/simulations/phasor-sums.html#L1092)).

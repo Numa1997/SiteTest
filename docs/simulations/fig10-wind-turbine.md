@@ -2,7 +2,7 @@
 
 | | |
 |---|---|
-| Page | [public/simulations/wind-turbine.html](../../public/simulations/wind-turbine.html) (1154 lines, 174 334 bytes) |
+| Page | [public/simulations/wind-turbine.html](../../public/simulations/wind-turbine.html) (1 154 lines, 174 597 bytes) |
 | Walkthrough | [public/scripts/walk/turbine.js](../../public/scripts/walk/turbine.js) (121 lines, 7 steps, key `turbine`) |
 | Thumbnail | [public/images/sims/wind-turbine.webp](../../public/images/sims/wind-turbine.webp) (WebP, 800 × 500 px, 15.4 kB) |
 | Catalog entry | [public/scripts/catalog.js#L200](../../public/scripts/catalog.js#L200-L216) (`id: 'wind-turbine'`, `fig: 10`, `field: 'control'`, `stage: 2`, lines 200–216) |
@@ -411,21 +411,12 @@ The page states this in `Sim.data.about` ([L1142](../../public/simulations/wind-
 
 ## Notes for maintainers
 
-1. **Section 9 of the note does not match the drawing code** ([L515](../../public/simulations/wind-turbine.html#L515)):
-   - it says the disc is "foreshortened to 55 % across"; the code uses `K = 0.5` ([L760](../../public/simulations/wind-turbine.html#L760)),
-     and `about` says "shortened to half" ([L1142](../../public/simulations/wind-turbine.html#L1142));
-   - it says the streaks move "at 6 px per metre of air"; the code uses `AIRPX = 5` ([L563](../../public/simulations/wind-turbine.html#L563)),
-     as do `about` and walkthrough step 7 ([turbine.js:111](../../public/scripts/walk/turbine.js#L111));
-   - it says the streaks' "length grows with the wind speed"; the dash pattern is the constant `DASH = [16, 22]`
-     ([L760](../../public/simulations/wind-turbine.html#L760), [L800](../../public/simulations/wind-turbine.html#L800)). Only
-     the wind arrow grows with $v$ ([L829](../../public/simulations/wind-turbine.html#L829)).
+1. Fixed on 2026-10-15: the note gives K = 0.5, 5 px/m airflow and the fixed 16 px / 22 px dash pattern (commit `:/^Batch B: correct notes and layout; verify measured figures in Chromium$`).
 2. **Walkthrough step 6 quotes only part of a line.** [turbine.js:99](../../public/scripts/walk/turbine.js#L99) ends at
    `sw[n] = y[3];`, but page [L702](../../public/simulations/wind-turbine.html#L702) continues `Ic[n] = I; vt[n] = w * R;`.
    AGENTS.md asks for excerpts identical to the page code.
 3. Fixed on 2026-10-15: w_ref is checked against the saved rpm input, including Follow the wind; all target steps recompute identically after live controls change (commit `:/^Batch A: fix simulation and recording faults; verify in Chromium$`).
-4. **Figure 2 of the note** labels its SVG with plain text "c_p" and "λ_opt" ([L276](../../public/simulations/wind-turbine.html#L276),
-   [L283](../../public/simulations/wind-turbine.html#L283), [L286](../../public/simulations/wind-turbine.html#L286)); the
-   underscores show literally.
+4. Fixed on 2026-10-15: the Figure 2 labels render p and opt as SVG subscripts (commit `:/^Batch B: correct notes and layout; verify measured figures in Chromium$`).
 5. **Numbers computed for display, not stored.** The "Rotor speed" range is a min/max loop in `readouts()`
    ([L748–L752](../../public/simulations/wind-turbine.html#L748-L752)); "Captured / in wind" is $100\,E_\text{aero}/E_\text{wind}$
    computed there ([L753](../../public/simulations/wind-turbine.html#L753)); the status line uses `TEND / H`

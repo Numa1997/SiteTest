@@ -67,7 +67,7 @@ browser and follows them, the way a person would. Each scenario has:
 | `steps` | What to click or type, in order. |
 | `expected` | What must be on screen at the end. |
 
-The fourteen scenarios cover: the home page and its index; the simulations catalog (order, field chip, search, links both
+The fifteen scenarios cover: the home page and its index; the simulations catalog (order, field chip, search, links both
 ways); the double pendulum's controls and chaos twin; the double slit's Greek letters and path difference; the wave
 workbench on a phone; the Fig. 1 data panel (variables, an array as a table, one recorded round); the Fig. 2 data panel
 (state vector, energy); Fig. 6 Read values with the three-way check and the dataset download; the data sheet on a phone
@@ -92,4 +92,6 @@ the house design and the lecture-note style.
 
 ## Minor-fix batch A · 15 October 2026
 
-Deployed stored version `1792048596599`, then copied the same eleven files here. All ten Batch A faults were reproduced before editing. The live site passed the numerical and pixel checks at 1440 × 900 and 390 × 844, including the 960 × 900 hidden-layer case. The 600-sample test retains the end frame; archive READMEs name their own downloads and arrays and CRCs load correctly. The first QA scenario is unchanged; fourteen scenarios use only the home workflow as sanity. Evidence: [minor-issues-report.md](minor-issues-report.md).
+Deployed stored version `1792048596599`, then copied the same eleven files here. All ten Batch A faults were reproduced before editing. The live site passed the numerical and pixel checks at 1440 × 900 and 390 × 844, including the 960 × 900 hidden-layer case. The 600-sample test retains the end frame; archive READMEs name their own downloads and arrays and CRCs load correctly. The first QA scenario is unchanged; fifteen scenarios use only the home workflow as sanity. Evidence: [minor-issues-report.md](minor-issues-report.md).
+
+Batch B, 15 October 2026: deployed snapshot 1792051419526. Targeted local and live Chromium checks and all 26 page/viewport checks passed; platform frontend/network error lists were empty. The suite has 15 scenarios with the original home scenario unchanged.

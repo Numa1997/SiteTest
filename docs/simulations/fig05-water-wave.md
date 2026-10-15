@@ -2,7 +2,7 @@
 
 | | |
 |---|---|
-| Page | [public/simulations/water-wave.html](../../public/simulations/water-wave.html) (890 lines, 159 479 bytes) |
+| Page | [public/simulations/water-wave.html](../../public/simulations/water-wave.html) (890 lines, 159 733 bytes) |
 | Walkthrough | [public/scripts/walk/water.js](../../public/scripts/walk/water.js) (115 lines, key `water`) |
 | Thumbnail | [public/images/sims/water-wave.webp](../../public/images/sims/water-wave.webp) (800 × 500 px, 15 kB) |
 | Catalog entry | [public/scripts/catalog.js#L115](../../public/scripts/catalog.js#L115) (lines 115–131, `id: 'water-wave'`, `fig: 5`) |
@@ -340,12 +340,7 @@ stylesheets `../styles/sim.css` (which imports the Google fonts, KaTeX's CSS and
 ## Notes for maintainers
 
 1. Fixed on 2026-10-15: all requested layers are computed and stored; at 960 × 900, 3 of 5 are drawn and the fifth stored depth is 2.24 m (commit `:/^Batch A: fix simulation and recording faults; verify in Chromium$`).
-2. **The 400 px field is missing from the note.** The code uses a 400 px field when the canvas is narrower than 560 css px
-   ([:679](../../public/simulations/water-wave.html#L679)). This happens on phones and, measured, on desktop windows 901–980 px
-   wide. Note Section 08 gives $X_0 = 30 + 740\,i/(N-1)$ ([:512](../../public/simulations/water-wave.html#L512)) and Section 09
-   a field 800 px wide with $s = W/800$ ([:521-522](../../public/simulations/water-wave.html#L521-L522)); walkthrough step 5
-   gives $X \in [-60, 860]$ ([water.js:73](../../public/scripts/walk/water.js#L73)). The store attributes and step 7 do
-   mention the 400 px field ([:578](../../public/simulations/water-wave.html#L578), [water.js:102](../../public/scripts/walk/water.js#L102)).
+2. Fixed on 2026-10-15: the note and walkthrough cover both the 800 px field and the 400 px field below a 560 css-px canvas width (commit `:/^Batch B: correct notes and layout; verify measured figures in Chromium$`).
 3. **Walkthrough step 2 hides a skipped line.** Its excerpt shows lines 653, 654 and 656 as adjacent
    ([water.js:31-33](../../public/scripts/walk/water.js#L31-L33)); line 655 (the caption speed `cap-c`) is left out without
    the `...` used elsewhere.

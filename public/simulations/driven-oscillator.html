@@ -219,7 +219,7 @@
                         <h4><span class="psub__n">3.2</span>The transient</h4>
                         <p>The free equation has solutions that ring at the damped frequency \(\omega_d = \omega_0\sqrt{1-\zeta^2}\) and die away with the time constant \(\tau = 1/(\zeta\omega_0)\). Adding one to the steady state and demanding \(x(0) = \dot x(0) = 0\) fixes its two constants:</p>
                         \[ \begin{aligned} x(t) &= X\cos(\Omega t-\varphi) + e^{-t/\tau}\left(C_1\cos\omega_d t + C_2\sin\omega_d t\right), \\ C_1 &= -X\cos\varphi, \qquad C_2 = \frac{\zeta\omega_0\,C_1 - X\Omega\sin\varphi}{\omega_d} . \end{aligned} \tag{5} \]
-                        <p>Read (5) as a story in two acts. At first the block rings at its own frequency, because a sudden push excites its own rhythm. That ringing dies within a few \(\tau\), and afterwards only the driver’s rhythm remains. With the defaults, \(\tau = 6.37\ \mathrm{s}\), \(X = 0.482\ \mathrm{m}\) and \(\varphi = 25.4^\circ\).</p>
+                        <p>Read (5) as a story in two acts. At first the block rings at its own frequency, because a sudden push excites its own rhythm. That ringing dies within a few \(\tau\), and afterwards only the driver’s rhythm remains. With the defaults, \(\tau = 6.37\ \mathrm{s}\), \(X = 0.482\ \mathrm{m}\) and \(\varphi = 25.3^\circ\).</p>
                     </section>
 
                     <section class="psec" id="p-resonance">
@@ -238,15 +238,15 @@
                                 <line x1="64.0" x2="698.0" y1="39.5" y2="39.5" stroke="#eee6d9" stroke-width="1"/>
                                 <text class="tick" x="56.0" y="43.5" text-anchor="end">10¹</text>
                                 <line x1="64.0" x2="64.0" y1="254.0" y2="259.0" stroke="#8b8079"/>
-                                <text class="tick" x="64.0" y="273.0" text-anchor="middle">−1.00</text>
+                                <text class="tick" x="64.0" y="273.0" text-anchor="middle">0.1</text>
                                 <line x1="222.5" x2="222.5" y1="254.0" y2="259.0" stroke="#8b8079"/>
-                                <text class="tick" x="222.5" y="273.0" text-anchor="middle">−0.50</text>
+                                <text class="tick" x="222.5" y="273.0" text-anchor="middle">0.32</text>
                                 <line x1="381.0" x2="381.0" y1="254.0" y2="259.0" stroke="#8b8079"/>
                                 <text class="tick" x="381.0" y="273.0" text-anchor="middle">1</text>
                                 <line x1="539.5" x2="539.5" y1="254.0" y2="259.0" stroke="#8b8079"/>
-                                <text class="tick" x="539.5" y="273.0" text-anchor="middle">0.50</text>
+                                <text class="tick" x="539.5" y="273.0" text-anchor="middle">3.2</text>
                                 <line x1="698.0" x2="698.0" y1="254.0" y2="259.0" stroke="#8b8079"/>
-                                <text class="tick" x="698.0" y="273.0" text-anchor="middle">1.00</text>
+                                <text class="tick" x="698.0" y="273.0" text-anchor="middle">10</text>
                                 <line x1="64.0" x2="698.0" y1="254.0" y2="254.0" stroke="#8b8079"/>
                                 <line x1="64.0" x2="64.0" y1="18.0" y2="254.0" stroke="#8b8079"/>
                                 <text class="lbl" x="698.0" y="292.0" text-anchor="end">drive frequency f / f₀ (log scale)</text>
@@ -282,15 +282,15 @@
                                 <line x1="64.0" x2="698.0" y1="18.0" y2="18.0" stroke="#eee6d9" stroke-width="1"/>
                                 <text class="tick" x="56.0" y="22.0" text-anchor="end">180</text>
                                 <line x1="64.0" x2="64.0" y1="214.0" y2="219.0" stroke="#8b8079"/>
-                                <text class="tick" x="64.0" y="233.0" text-anchor="middle">−1.00</text>
+                                <text class="tick" x="64.0" y="233.0" text-anchor="middle">0.1</text>
                                 <line x1="222.5" x2="222.5" y1="214.0" y2="219.0" stroke="#8b8079"/>
-                                <text class="tick" x="222.5" y="233.0" text-anchor="middle">−0.50</text>
+                                <text class="tick" x="222.5" y="233.0" text-anchor="middle">0.32</text>
                                 <line x1="381.0" x2="381.0" y1="214.0" y2="219.0" stroke="#8b8079"/>
                                 <text class="tick" x="381.0" y="233.0" text-anchor="middle">1</text>
                                 <line x1="539.5" x2="539.5" y1="214.0" y2="219.0" stroke="#8b8079"/>
-                                <text class="tick" x="539.5" y="233.0" text-anchor="middle">0.50</text>
+                                <text class="tick" x="539.5" y="233.0" text-anchor="middle">3.2</text>
                                 <line x1="698.0" x2="698.0" y1="214.0" y2="219.0" stroke="#8b8079"/>
-                                <text class="tick" x="698.0" y="233.0" text-anchor="middle">1.00</text>
+                                <text class="tick" x="698.0" y="233.0" text-anchor="middle">10</text>
                                 <line x1="64.0" x2="698.0" y1="214.0" y2="214.0" stroke="#8b8079"/>
                                 <line x1="64.0" x2="64.0" y1="18.0" y2="214.0" stroke="#8b8079"/>
                                 <text class="lbl" x="698.0" y="252.0" text-anchor="end">drive frequency f / f₀ (log scale)</text>
@@ -401,7 +401,7 @@
                                 <text class="lbl" x="354.0" y="318.0">F(t)/k</text>
                                 </svg>
                             </div>
-                            <figcaption><span class="pfig__n">Figure 4</span>The default run, \(f_0 = 0.5\ \mathrm{Hz}\), \(\zeta = 0.05\), \(F_0 = 1\ \mathrm{N}\), \(f = 0.45\ \mathrm{Hz}\), computed with the page’s own RK4 (\(h = 1\ \mathrm{ms}\)) and plotted every 50 ms. The dashed burgundy curve is \(F(t)/k\), the stretch the force would cause if applied slowly; the motion lags it by \(\varphi = 25.4^\circ\) and is \(4.76\) times larger.</figcaption>
+                            <figcaption><span class="pfig__n">Figure 4</span>The default run, \(f_0 = 0.5\ \mathrm{Hz}\), \(\zeta = 0.05\), \(F_0 = 1\ \mathrm{N}\), \(f = 0.45\ \mathrm{Hz}\), computed with the page’s own RK4 (\(h = 1\ \mathrm{ms}\)) and plotted every 50 ms. The dashed burgundy curve is \(F(t)/k\), the stretch the force would cause if applied slowly; the motion lags it by \(\varphi = 25.3^\circ\) and is \(4.76\) times larger.</figcaption>
                         </figure>
                         <div class="pbox pbox--ex">
                             <span class="pbox__t">Exercise 6.1 · on the figure above</span>
@@ -420,7 +420,7 @@
                         <h3><span class="psec__n">08</span>Solve first, then play</h3>
                         <p>Unlike the earlier figures, this page does not integrate while you watch. Because the driver’s force is known for all time in advance, the whole future is fixed the moment you press <em>Solve</em>. The page uses that.</p>
                         <ol>
-                            <li><strong>Solve.</strong> The fourth-order Runge–Kutta method advances \((x, \dot x)\) from \(t = 0\) to \(60\ \mathrm{s}\) in 60 000 steps of \(h = 1\ \mathrm{ms}\), carrying \(W_\text{in}\) and \(W_\text{loss}\) along in the same steps. This takes a few tens of milliseconds.</li>
+                            <li><strong>Solve.</strong> The fourth-order Runge–Kutta method advances \((x, \dot x)\) from \(t = 0\) to \(60\ \mathrm{s}\) in 60 000 steps of \(h = 1\ \mathrm{ms}\), carrying \(W_\text{in}\) and \(W_\text{loss}\) along in the same steps. Measured in headless Chromium, the default solve took 9.5–12.4 ms; the time depends on the machine.</li>
                             <li><strong>Store.</strong> Every tenth state is written into the page’s dataset, together with \(F\), \(E\), \(P_\text{in}\) and \(P_\text{loss}\): 6 001 rows, one every \(10\ \mathrm{ms}\). The exact solution (5) is stored next to it only to measure the error. With the defaults the largest difference over the run is \(5\times10^{-12}\ \mathrm{m}\), the <em>RK4 vs exact</em> readout.</li>
                             <li><strong>Play.</strong> Each frame converts the playback time into the nearest stored row, \(n = \operatorname{round}(t_\text{play}/10\,\mathrm{ms})\), and draws that row as it is. Nothing is interpolated or recomputed, so the picture and the data panel always show the same numbers, and the <em>Stored run</em> slider can jump to any instant.</li>
                         </ol>
@@ -429,7 +429,7 @@
 
                     <section class="psec" id="p-screen">
                         <h3><span class="psec__n">09</span>On screen</h3>
-                        <p>The block’s rest position is at 40 % of the figure’s width, and the drawing scale is chosen so that the largest displacement of the run spans 27 % of the width. The burgundy arrow on the block has a length proportional to \(F/F_0\). The dial at the top right is the driver: its arm turns at \(\Omega\), and its horizontal shadow is proportional to the force. Below, the stored run is drawn over its full 60 s, dark up to the present sample and pale after it, with \(F(t)/k\) dashed in burgundy and the steady amplitude \(\pm X\) dashed in rose. The Bode plot marks the present drive frequency with a filled dot (equation (4)) and the amplitude measured from the last 10 s of the run with a ring around it: when the run has settled, the two coincide.</p>
+                        <p>The block’s rest position is at \(x_\mathrm{wall}+0.42W_0+b_\mathrm{block}/2\), where \(W_0\) is the width between the wall and the right margin. The largest displacement is drawn as \(0.11W_0\) either side of rest. Measured on 770 px and 356 px canvases, rest lies at 47.8 % and 50.0 % of the width, and the full displacement span is 20.1 % and 19.4 %. The burgundy arrow on the block has a length proportional to \(F/F_0\). The dial at the top right is the driver: its arm turns at \(\Omega\), and its horizontal shadow is proportional to the force. Below, the stored run is drawn over its full 60 s, dark up to the present sample and pale after it, with \(F(t)/k\) dashed in burgundy and the steady amplitude \(\pm X\) dashed in rose. The Bode plot marks the present drive frequency with a filled dot (equation (4)) and the amplitude measured from the last 10 s of the run with a ring around it: when the run has settled, the two coincide.</p>
                     </section>
 
                     <section class="psec" id="p-limits">

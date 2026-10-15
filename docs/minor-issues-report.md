@@ -19,3 +19,17 @@ This is Git’s unique-subject revision syntax; it avoids putting a commit’s o
 | A10 · transverse endpoint | fixed | The drawing path has 215 points and ends at X = 640 with zero horizontal gap. |
 
 The remaining batches are in progress. Numa’s decision items remain unchanged.
+
+
+| Issue | Status | Proof |
+|---|---|---|
+| B1: oscillator log-axis labels | fixed | Ratios 0.1, 0.32, 1, 3.2, 10; endpoint gains 1.01005 and 0.0101005. |
+| B2: turbine subscripts | fixed | Four SVG subscript spans render p / opt without underscores. |
+| B3: wave-source grid counts | fixed | 1280, 1440, 1600 px: 360 × 162 = 58 320; 390 px: 324 × 324 = 104 976. |
+| B4: inaccurate note numbers | fixed | Signed drift −2.416 × 10⁻⁸; 46-step upper bound; 4–17 px bob clamp; slit gap ≤1.4 × 10⁻¹³ px and plot width 500; water widths 800/400; spectrum 0–6 Hz; phase 25.346°; solver 9.5–12.4 ms; measured layout fractions; turbine K 0.5, airflow 5 px/m, dashes 16/22 px. |
+| B5: phasor SVG clipping | fixed | Four unique active clip paths; phone image identical, desktop changes only 28 edge pixels. |
+| B6: obsolete thumbnail | fixed | New 800 × 500 WebP from the current stage at device scale 2; current TeX axes and scale visible. |
+| B7: portfolio image ratios | fixed | Attribute ratios exactly match all four SVG viewBoxes. |
+| B8: layout gaps | fixed | 970 px home margin 104 → 48 px; empty catalog margin 28 → 0 px and display none. |
+
+Proposed replacement for the stale CLAUDE.md sentence (file unchanged): “In a 1280–1600 px desktop window, Fig. 1 computes a 360 × 162 = 58 320-point grid; on a 390 px phone it computes 324 × 324 = 104 976 points. At λ = 16 field px these give 7.2 and 6.48 samples per wavelength. Rebuilding Line of 16 on desktop uses 1 866 240 sine and cosine calls.”

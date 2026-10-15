@@ -2,7 +2,7 @@
 
 | | |
 |---|---|
-| Page | [public/simulations/draw-decompose.html](../../public/simulations/draw-decompose.html) (1415 lines, 213 105 bytes) |
+| Page | [public/simulations/draw-decompose.html](../../public/simulations/draw-decompose.html) (1 415 lines, 213 105 bytes) |
 | Walkthrough | [public/scripts/walk/dft.js](../../public/scripts/walk/dft.js) (key `dft`, 6 steps) |
 | Thumbnail | [public/images/sims/draw-decompose.webp](../../public/images/sims/draw-decompose.webp) (800 × 500 px: the heart, its dashed samples and the chain of circles) |
 | Catalog entry | [public/scripts/catalog.js#L167](../../public/scripts/catalog.js#L167) (`id: 'draw-decompose'`, `fig: 8`, field `methods`, stage 2) |
@@ -338,7 +338,4 @@ The page's `about` paragraph ([L1403](../../public/simulations/draw-decompose.ht
 4. **Metadata says `L` and `step` are computed in `resamp()`** ([L648–649](../../public/simulations/draw-decompose.html#L648-L649)),
    but they are written in `decompose()` from `arcLen` ([L795](../../public/simulations/draw-decompose.html#L795)), and
    `resamp()` shadows the dataset name `ds` ([L734](../../public/simulations/draw-decompose.html#L734)).
-5. **The thumbnail looks older than the code.** It shows the axis label "Re z →" in the mono label face; the current
-   `draw()` sets "Re z" and "Im z" in TeX on a pale ground and adds a "px per unit of z" line
-   ([L1074–1076](../../public/simulations/draw-decompose.html#L1074-L1076)). Seen by comparing the image with a
-   screenshot of the page; when the thumbnail was made is not determined from the code.
+5. Fixed on 2026-10-15: the thumbnail was retaken from .stage__canvas in Chromium at 1440 × 900, device scale 2, and saved as 800 × 500 WebP (commit `:/^Batch B: correct notes and layout; verify measured figures in Chromium$`).

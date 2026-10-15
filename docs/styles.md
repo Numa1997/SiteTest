@@ -74,7 +74,7 @@ Three consequences:
 - On the catalog and Portfolios pages `catalog.css` comes after `site.css` and redefines `--serif` as Instrument Serif
   ([catalog.css:9–11](../public/styles/catalog.css#L9-L11)), so every rule of `site.css` and `paper.css` that uses
   `var(--serif)` switches font there. The home page does not load `catalog.css` and keeps IBM Plex Serif.
-- `fold.css` is always last. Its rules for the site's own structures ([fold.css:105–168](../public/styles/fold.css#L105-L168))
+- `fold.css` is always last. Its rules for the site's own structures ([fold.css:105–169](../public/styles/fold.css#L105-L169))
   override the page stylesheet once fold.js has turned a block into a fold.
 - `paper.css`, `catalog.css`, `portfolio.css`, `data.css` and `fold.css` define almost no colours of their own: they read the
   tokens of `site.css` or `sim.css`.
@@ -253,7 +253,7 @@ after `site.css` and `paper.css` ([catalog.css:3](../public/styles/catalog.css#L
 
 No print rules.
 
-**After fold.js.** On the catalog the list is a column of fold cards, and [fold.css:153–168](../public/styles/fold.css#L153-L168)
+**After fold.js.** On the catalog the list is a column of fold cards, and [fold.css:153–169](../public/styles/fold.css#L153-L169)
 takes over: `.cat__list--sorted` becomes a flex column, the entry loses its own frame and lays out figure and caption left,
 text right (one column at 860 px and below), its `h3` is hidden, and the timeline dot that `site.css` gives every `.entry`
 is removed.
@@ -310,11 +310,11 @@ Its tokens fall back to fixed colours, so it works on the home page, which has n
 | Walkthrough | `.walk.fsec` and its `h2` | [118–121](../public/styles/fold.css#L118-L121) |
 | Home page | `.section.fsec`, `.content > .fold-tools`, the section `h2` | [124–128](../public/styles/fold.css#L124-L128), [140–142](../public/styles/fold.css#L140-L142) |
 | Portfolios | `.proj.fsec` (`overflow: clip` instead of `hidden`, so the header can stick), `h2.fs-title`, `.proj__part.fsub`, the part's paragraphs and note | [131–138](../public/styles/fold.css#L131-L138) |
-| Catalog | `.entry__foot .fs-more`, `.fold-tools:has(+ #catalog)`, `.cat__list--sorted`, `.simfold` and its entry layout | [145–148](../public/styles/fold.css#L145-L148), [153–168](../public/styles/fold.css#L153-L168) |
+| Catalog | `.entry__foot .fs-more`, `.fold-tools:has(+ #catalog)`, `.cat__list--sorted`, `.simfold` and its entry layout | [145–148](../public/styles/fold.css#L145-L148), [153–169](../public/styles/fold.css#L153-L169) |
 
-**Breakpoints.** ≤ 720 px: smaller header, toggle and body padding ([88–94](../public/styles/fold.css#L88-L94)). ≤ 960 px: the
+**Breakpoints.** ≤ 720 px: smaller header, toggle and body padding ([88–94](../public/styles/fold.css#L88-L94)). ≤ 980 px: the
 home page's tools get a 48 px top margin instead of 104 px ([140–142](../public/styles/fold.css#L140-L142)). ≤ 860 px: catalog
-entries one column ([163–167](../public/styles/fold.css#L163-L167)). Reduced motion: transitions of 0.01 ms
+entries one column ([164–168](../public/styles/fold.css#L164-L168)). Reduced motion: transitions of 0.01 ms
 ([95–97](../public/styles/fold.css#L95-L97)).
 
 **Print** ([98–103](../public/styles/fold.css#L98-L103)): toggles, tools and More buttons hidden, every body open, headers
@@ -385,7 +385,7 @@ site `/src/main.ts` answers 403 (measured). The file comes from the app template
    `.cat__intro` ([230–239](../public/styles/catalog.css#L230-L239)) styles an element that is always hidden, and the list grid,
    the entry frame and `.entry h3` ([242–247](../public/styles/catalog.css#L242-L247), [251–258](../public/styles/catalog.css#L251-L258),
    [314–325](../public/styles/catalog.css#L314-L325), [503–505](../public/styles/catalog.css#L503-L505)) are overridden or hidden
-   by [fold.css:154–162](../public/styles/fold.css#L154-L162). In `site.css` the wine bar's widening on `.section.is-visible`
+   by [fold.css:154–163](../public/styles/fold.css#L154-L163). In `site.css` the wine bar's widening on `.section.is-visible`
    ([354–356](../public/styles/site.css#L354-L356)) is never seen: with JavaScript fold.css hides the bar
    ([fold.css:127](../public/styles/fold.css#L127)); without it nothing adds `is-visible`.
 5. **Rules overridden later in the same file.** [fold.css:110–111](../public/styles/fold.css#L110-L111) are replaced by
@@ -394,16 +394,11 @@ site `/src/main.ts` answers 403 (measured). The file comes from the app template
    [319](../public/styles/data.css#L319)).
 6. **Tokens used only through fallbacks**: `--on-accent`, `--tag-soft`, `--tan-line`, `--bar-bg`, `--accent-glow` are defined in
    no file.
-7. **An empty catalog list keeps its margin.** `.cat__list:empty { display: none }` ([catalog.css:248–250](../public/styles/catalog.css#L248-L250))
-   has the same specificity as `.cat__list.cat__list--sorted { display: flex }` ([fold.css:154](../public/styles/fold.css#L154)),
-   which comes later and wins. Measured: with no match the empty list is `display: flex` with a 28 px top margin.
-8. **Two breakpoints that should agree do not.** `site.css` turns the home layout into one column at 980 px
-   ([788](../public/styles/site.css#L788)); fold.css reduces the top margin of Expand / Collapse at 960 px
-   ([140](../public/styles/fold.css#L140)). Measured: at 970 px wide there is a 104 px gap between the index bar and the
-   buttons, at 950 px 48 px.
+7. Fixed on 2026-10-15: an empty sorted catalog has display none and zero top margin (commit `:/^Batch B: correct notes and layout; verify measured figures in Chromium$`).
+8. Fixed on 2026-10-15: the fold-tools breakpoint matches the 980 px home breakpoint; at 970 px the margin is 48 px (commit `:/^Batch B: correct notes and layout; verify measured figures in Chromium$`).
 9. **One class name, two meanings.** `.entry` is a timeline entry in `site.css` ([390–437](../public/styles/site.css#L390-L437))
    and a catalog entry in `catalog.css` ([251](../public/styles/catalog.css#L251)); on the catalog page the timeline dot and
-   hover colour apply to catalog entries until [fold.css:168](../public/styles/fold.css#L168) removes the dot. Likewise `site.css`'s
+   hover colour apply to catalog entries until [fold.css:169](../public/styles/fold.css#L169) removes the dot. Likewise `site.css`'s
    `.tag` ([103–115](../public/styles/site.css#L103-L115)) would also style KaTeX's equation numbers (class `tag`) on a page that
    loads both; no such page has a numbered equation today.
 10. **Google Fonts is fetched twice** on the catalog and Portfolios pages: `site.css` and `catalog.css` both `@import` IBM Plex

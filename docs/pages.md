@@ -222,7 +222,7 @@ view is kept in the address. Everything is drawn from the registry [`scripts/cat
 | [16](../public/simulations.html#L16) | `vendor/katex/katex.min.css` (KaTeX 0.16.11, woff2 fonts only) |
 | [17](../public/simulations.html#L17) | `styles/paper.css`: Latin Modern `@font-face`, `--tex`, `--line-strong`, `--quote` |
 | [18](../public/simulations.html#L18) | `styles/catalog.css`: the page itself; switches `--serif` to Instrument Serif |
-| [19](../public/simulations.html#L19) | `styles/fold.css`: folds, and the one-column card layout ([fold.css:153–168](../public/styles/fold.css#L153-L168)) |
+| [19](../public/simulations.html#L19) | `styles/fold.css`: folds, and the one-column card layout ([fold.css:153–169](../public/styles/fold.css#L153-L169)) |
 
 Scripts at the end of `<body>`, in order: `scripts/fold.js` ([124](../public/simulations.html#L124)), `scripts/catalog.js`
 ([125](../public/simulations.html#L125)), `vendor/katex/katex.min.js` ([126](../public/simulations.html#L126)), the inline
@@ -447,15 +447,11 @@ file. To keep a path out of search engines, add a `Disallow: /path` line under `
    in the repository reads `__catalog`.
 7. **The catalog QA scenario did not match the page.** It expected ten open entries on arrival; the cards open as closed
    titles ([simulations.html:245](../public/simulations.html#L245), `defaultOpen: false`). Rewritten on 14 October 2026
-   ([tests.json:32](../tests/tests.json#L32)) and deployed to the app. Still open: the home page scenario
+   ([tests.json:33](../tests/tests.json#L33)) and deployed to the app. Still open: the home page scenario
    ([tests.json:17](../tests/tests.json#L17)) depends on there being exactly eight plates.
 8. **AGENTS.md contradicted itself on the catalog layout:** its Simulations-page paragraph said "in one grid", while the Folds
    paragraph ([22–24](../AGENTS.md#L22-L24)) and the code ([fold.css:154](../public/styles/fold.css#L154)) give one column of
    fold cards. Corrected on 14 October 2026 ([AGENTS.md:27–30](../AGENTS.md#L27-L30)).
-9. **Wrong image proportions for the four Droplet Collection figures.** Their `width`/`height` attributes
-   ([portfolios.html:128](../public/portfolios.html#L128), [132](../public/portfolios.html#L132),
-   [136](../public/portfolios.html#L136), [140](../public/portfolios.html#L140)) give 1.78, 1.31, 1.81 and 1.38; the SVGs are
-   2.12, 1.40, 1.93 and 1.56 wide per unit height (measured, natural size). The browser reserves the wrong height until each lazy
-   image loads, then the box jumps. The four Rotor Pendula figures match.
+9. Fixed on 2026-10-15: the four Droplet Collection image attributes use integer ratios exactly equal to their SVG viewBoxes (commit `:/^Batch B: correct notes and layout; verify measured figures in Chromium$`).
 10. **Two favicons.** The home page draws "N" ([index.html:19](../index.html#L19)), the other two pages a bold "NK"
     ([simulations.html:22](../public/simulations.html#L22), [portfolios.html:23](../public/portfolios.html#L23)).

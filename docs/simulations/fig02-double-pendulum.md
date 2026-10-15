@@ -2,7 +2,7 @@
 
 | | |
 |---|---|
-| Page | [public/simulations/Double Pendulum.html](../../public/simulations/Double%20Pendulum.html) (869 lines, 100 369 bytes) |
+| Page | [public/simulations/Double Pendulum.html](../../public/simulations/Double%20Pendulum.html) (869 lines, 100 674 bytes) |
 | Walkthrough | [public/scripts/walk/pendulum.js](../../public/scripts/walk/pendulum.js) (137 lines, 8 steps, key `pendulum`) |
 | Thumbnail | [public/images/sims/double-pendulum.webp](../../public/images/sims/double-pendulum.webp) (WebP, 800 × 500 px, 12.5 kB; the pendulum, its fading trail and the protractor) |
 | Catalog entry | [public/scripts/catalog.js#L65](../../public/scripts/catalog.js#L65) (`id: 'double-pendulum'`, `fig: 2`, `field: 'mechanics'`, `stage: 2`, lines 64–80) |
@@ -328,17 +328,12 @@ agree to the pixel; the trail is not stored.
 
 ## Notes for maintainers
 
-1. **The 600-step cap cannot act.** `n = Math.min(Math.floor(acc / H), 600)` and `acc = Math.min(acc - n * H, H)`
-   ([L701](../../public/simulations/Double%20Pendulum.html#L701), [L703](../../public/simulations/Double%20Pendulum.html#L703)). Δt is capped at 0.05 s by `Sim.clock` ([sim.js:180](../../public/scripts/sim.js#L180)) and the time scale at 1.5 ([L64](../../public/simulations/Double%20Pendulum.html#L64)), so τ never
-   exceeds 0.075 + h and n never exceeds 46. The note ([L350](../../public/simulations/Double%20Pendulum.html#L350)), the walkthrough step 6 note ([pendulum.js:86](../../public/scripts/walk/pendulum.js#L86)) and the store
-   attribute of `n` ([L459](../../public/simulations/Double%20Pendulum.html#L459)) describe the cap as a working safety limit. Harmless dead guard.
-2. **Drift sign.** The note says the Drift readout "measures |E − E₀|" ([L351](../../public/simulations/Double%20Pendulum.html#L351)); the code stores and shows the signed
-   ε = (E − E₀)/E_scale ([L660](../../public/simulations/Double%20Pendulum.html#L660), [L639](../../public/simulations/Double%20Pendulum.html#L639)). Measured: −2.4 × 10⁻⁸ at 21 s, shown with its minus sign.
+1. Fixed on 2026-10-15: the note, walkthrough and n metadata explain why the 600-step guard cannot act under the current 46-step upper bound (commit `:/^Batch B: correct notes and layout; verify measured figures in Chromium$`).
+2. Fixed on 2026-10-15: the note describes signed energy drift; Chromium gives −2.416 × 10⁻⁸ near 21 s (commit `:/^Batch B: correct notes and layout; verify measured figures in Chromium$`).
 3. **"Every RK4 step" in the store attributes.** `y` and `y_twin` say `updates: 'every RK4 step'` and `th1`…`w2` say
    `computed_in: 'rk4()'` ([L415](../../public/simulations/Double%20Pendulum.html#L415), [L417](../../public/simulations/Double%20Pendulum.html#L417), [L418–421](../../public/simulations/Double%20Pendulum.html#L418-L421)); the store is written once per frame in `diagnostics()` ([L652](../../public/simulations/Double%20Pendulum.html#L652),
    [L654](../../public/simulations/Double%20Pendulum.html#L654)), and the intermediate steps are not stored.
 4. **Equation labels in the walkthrough.** Step 3 says "Cramer's rule on (E1)–(E2) in the derivation" ([pendulum.js:40](../../public/scripts/walk/pendulum.js#L40)); the
    note numbers these equations (6) and (7) and the system (8) ([L212](../../public/simulations/Double%20Pendulum.html#L212), [L215](../../public/simulations/Double%20Pendulum.html#L215), [L218](../../public/simulations/Double%20Pendulum.html#L218)).
 5. Fixed on 2026-10-15: y_twin locates the twin’s four stored screen coordinates; stored and recomputed coordinates are identical and the pixels are rose (commit `:/^Batch A: fix simulation and recording faults; verify in Chromium$`).
-6. **Bob size.** Note §8 says each mass has radius proportional to m^(1/3) ([L359](../../public/simulations/Double%20Pendulum.html#L359)); the code clamps bob 2 to 4–17 px
-   ([L599](../../public/simulations/Double%20Pendulum.html#L599)), which departs from the rule at both ends of the mass slider.
+6. Fixed on 2026-10-15: the note states the 4–17 px bob-2 radius clamp (commit `:/^Batch B: correct notes and layout; verify measured figures in Chromium$`).

@@ -70,7 +70,7 @@ var ⟦deep|deep = Math.exp(-k() * DZ * (layers.value - 1))⟧;`,
         {
             title: 'The surface is the top layer of parcels',
             where: 'draw() — the surface path',
-            math: 'x = X − a sin(kX − ωt), &nbsp; ⟦eta|η⟧ = a cos(kX − ωt), &nbsp; X ∈ [−60, 860]',
+            math: 'x = X − a sin(kX − ωt), &nbsp; ⟦eta|η⟧ = a cos(kX − ωt), &nbsp; X ∈ [−60, WORLD_W + 60] (WORLD_W = 800, or 400 on a canvas narrower than 560 px)',
             note: 'Tracing every surface parcel at once gives a trochoid: sharper crests, flatter troughs than a sine, and it becomes a sine when ak → 0. Starting 60 px outside the frame hides the ends of the curve.',
             code: `for (X = -60; X <= WORLD_W + 60; X += 3) {
     th = kk * X - omegaT;

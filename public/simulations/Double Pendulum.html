@@ -347,8 +347,8 @@
                         \[ \begin{aligned} k_1 &= F(s), & k_2 &= F\!\left(s + \tfrac{h}{2}k_1\right), & k_3 &= F\!\left(s + \tfrac{h}{2}k_2\right), & k_4 &= F(s + h\,k_3), \\ & & s(t+h) &= s + \tfrac{h}{6}\left(k_1 + 2k_2 + 2k_3 + k_4\right). \end{aligned} \tag{13} \]
                         <p>The error made in one step shrinks like \(h^5\) and the error accumulated over a fixed time like \(h^4\): halving the step makes the result sixteen times more accurate. The page uses \(h = 1/600\ \mathrm{s}\), ten steps per frame at sixty frames a second.</p>
                         <ul>
-                            <li>Each frame advances by the real time elapsed multiplied by the <em>Time scale</em>, in steps of \(h\), at most 600 steps per frame.</li>
-                            <li>RK4 does not conserve energy exactly, which is why the <em>Drift</em> readout is there. It measures \(|E - E_0|\) against the depth of the potential well, \(E_\text{scale} = (m_1+m_2)\,g\,l_1 + m_2\,g\,l_2\), rather than against \(E_0\), which can be close to zero. Over the first 20 s of the default start it stays below \(3\times10^{-8}\).</li>
+                            <li>Each frame advances by the real time elapsed multiplied by the <em>Time scale</em>, in steps of \(h\), with a 600-step guard. The clock caps a frame at 0.05 s and the Time scale at 1.5, so even including the carried remainder no more than 46 steps can be requested; the 600-step guard cannot act.</li>
+                            <li>RK4 does not conserve energy exactly, which is why the <em>Drift</em> readout is there. It measures the signed difference \(E - E_0\) against the depth of the potential well, \(E_\text{scale} = (m_1+m_2)\,g\,l_1 + m_2\,g\,l_2\), rather than against \(E_0\), which can be close to zero. Over the first 20 s of the default start it stays below \(3\times10^{-8}\).</li>
                             <li>Moving a mass, length, angle or angular-velocity slider restarts the motion from those values; the Time scale slider does not.</li>
                         </ul>
                     </section>
@@ -356,7 +356,7 @@
                     <section class="psec" id="p-screen">
                         <h3><span class="psec__n">08</span>From metres to pixels</h3>
                         <p>The pivot sits at the centre of the figure, and the scale is chosen so that the fully stretched pendulum just fits: \(\text{pixels per metre} = (\min(W, H)/2 - 34)/(l_1 + l_2)\). Screen \(y\) points down, so the masses are drawn at \((x_0 + l\sin\theta,\ y_0 + l\cos\theta)\). The protractor marks \(\theta\) every \(30^\circ\) from the downward vertical.</p>
-                        <p>The burgundy trail of the lower mass is drawn on its own transparent layer, one segment per RK4 step, and dimmed every frame by a factor \((1-0.008)^{60\,\Delta t}\). Its brightness therefore halves every \(\ln 2/(60\times 0.00803)\approx 1.4\ \mathrm{s}\). Each mass is a disc with radius proportional to \(m^{1/3}\), as for balls of the same material.</p>
+                        <p>The burgundy trail of the lower mass is drawn on its own transparent layer, one segment per RK4 step, and dimmed every frame by a factor \((1-0.008)^{60\,\Delta t}\). Its brightness therefore halves every \(\ln 2/(60\times 0.00803)\approx 1.4\ \mathrm{s}\). Bob 1 has radius 8 screen pixels. Bob 2 has radius \(8(m_2/m_1)^{1/3}\) screen pixels, as for balls of the same material, clamped to 4–17 screen pixels.</p>
                     </section>
 
                     <section class="psec" id="p-limits">
@@ -456,7 +456,7 @@
         ds.var('sep', [], 'float', { symbol: 'd', units: 'm', long_name: 'distance between the two lower bobs', computed_in: 'diagnostics()', formula: '|(x₂ − x₂′, y₂ − y₂′)|', digits: 6 });
         ds.var('log10sep', [], 'float', { symbol: 'log<sub>10</sub> d', long_name: 'grows roughly linearly in time while the motion is chaotic', computed_in: 'diagnostics()', formula: 'log₁₀ d', digits: 3 });
         ds.var('t', [], 'float', { symbol: 't', units: 's', long_name: 'simulated time since restart', computed_in: 'Sim.clock callback', formula: 't ← t + h per step', digits: 3, source: 'Accumulated step by step.' });
-        ds.var('n', [], 'int', { symbol: 'n', long_name: 'RK4 steps taken in the last frame', computed_in: 'Sim.clock callback', formula: 'min(floor(τ / h), 600)', digits: 0 });
+        ds.var('n', [], 'int', { symbol: 'n', long_name: 'RK4 steps taken in the last frame', computed_in: 'Sim.clock callback', formula: 'min(floor(τ / h), 600); the current clock and speed limits request at most 46 steps', digits: 0 });
         ds.var('steps', [], 'int', { symbol: 'steps', long_name: 'RK4 steps since restart', computed_in: 'diagnostics()', formula: 'round(t / h)', digits: 0 });
         ds.var('acc', [], 'float', { symbol: 'τ', units: 's', long_name: 'unspent time carried to the next frame', computed_in: 'Sim.clock callback', digits: 6, source: 'What is left after whole steps are taken.' });
         ds.var('dt', [], 'float', { symbol: 'Δt', units: 's', long_name: 'real time between the last two frames', computed_in: 'Sim.clock', digits: 4, source: 'Measured by the clock.' });

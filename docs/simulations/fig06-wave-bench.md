@@ -2,7 +2,7 @@
 
 | | |
 |---|---|
-| Page | [public/simulations/wave-interference.html](../../public/simulations/wave-interference.html) (966 lines, 166 398 bytes) |
+| Page | [public/simulations/wave-interference.html](../../public/simulations/wave-interference.html) (966 lines, 166 361 bytes) |
 | Walkthrough | [public/scripts/walk/bench.js](../../public/scripts/walk/bench.js) (127 lines, key `bench`) |
 | Thumbnail | [public/images/sims/wave-bench.webp](../../public/images/sims/wave-bench.webp) (800 × 500 px, 18 kB) |
 | Catalog entry | [public/scripts/catalog.js#L132](../../public/scripts/catalog.js#L132) (lines 132–148, `id: 'wave-bench'`, `fig: 6`) |
@@ -367,9 +367,7 @@ Google Fonts; `../styles/sim.css`, `../styles/data.css`, `../styles/fold.css`; a
 
 1. Fixed on 2026-10-15: an empty bench rewrites X, y_sum = 0 and py_sum = mid1 instead of retaining the preceding curve (commit `:/^Batch A: fix simulation and recording faults; verify in Chromium$`).
 2. Fixed on 2026-10-15: the repeat uses every stored ν digit; ν = (1, 0.9975) Hz gives the 20 s cap (commit `:/^Batch A: fix simulation and recording faults; verify in Chromium$`).
-3. **The note mentions a label that is gone.** Section 08 says "the label 0 – 3 Hz under the panel gives the range of the
-   Frequency slider" ([:456](../../public/simulations/wave-interference.html#L456)); the caption now reads "ν from 0 to 6 Hz"
-   ([:71](../../public/simulations/wave-interference.html#L71)).
+3. Fixed on 2026-10-15: the note describes the current 0–6 Hz caption (commit `:/^Batch B: correct notes and layout; verify measured figures in Chromium$`).
 4. **Two walkthrough excerpts are reflowed.** Steps 5 and 6 spread the single page lines 787 and 789 over three lines each
    ([bench.js:75-77](../../public/scripts/walk/bench.js#L75-L77), [bench.js:88-90](../../public/scripts/walk/bench.js#L88-L90)).
    The tokens match; the layout does not, while AGENTS.md asks for identical excerpts.

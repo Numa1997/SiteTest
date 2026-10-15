@@ -51,16 +51,16 @@ to confirm that every file is described. Sizes are those of the files when the l
 
 | File | Size | What it is | Explained in |
 |---|---|---|---|
-| [`public/simulations/Circular Wave Interference Visualization.html`](../public/simulations/Circular%20Wave%20Interference%20Visualization.html) | 188.8 kB | Fig. 1 · Wave Interference: the simulation, its data panel, walkthrough and lecture note. | [fig01-wave-sources.md](simulations/fig01-wave-sources.md) |
-| [`public/simulations/Double Pendulum.html`](../public/simulations/Double%20Pendulum.html) | 100.4 kB | Fig. 2 · Double Pendulum: the simulation, its data panel, walkthrough and lecture note. | [fig02-double-pendulum.md](simulations/fig02-double-pendulum.md) |
+| [`public/simulations/Circular Wave Interference Visualization.html`](../public/simulations/Circular%20Wave%20Interference%20Visualization.html) | 188.9 kB | Fig. 1 · Wave Interference: the simulation, its data panel, walkthrough and lecture note. | [fig01-wave-sources.md](simulations/fig01-wave-sources.md) |
+| [`public/simulations/Double Pendulum.html`](../public/simulations/Double%20Pendulum.html) | 100.7 kB | Fig. 2 · Double Pendulum: the simulation, its data panel, walkthrough and lecture note. | [fig02-double-pendulum.md](simulations/fig02-double-pendulum.md) |
 | [`public/simulations/Interactive Double-Slit Experiment Visualization.html`](../public/simulations/Interactive%20Double-Slit%20Experiment%20Visualization.html) | 166.6 kB | Fig. 3 · Double-Slit Interference: the simulation, its data panel, walkthrough and lecture note. | [fig03-double-slit.md](simulations/fig03-double-slit.md) |
 | [`public/simulations/Transverse and longitudinal waves.html`](../public/simulations/Transverse%20and%20longitudinal%20waves.html) | 197.9 kB | Fig. 4 · Transverse & Longitudinal: the simulation, its data panel, walkthrough and lecture note. | [fig04-transverse-longitudinal.md](simulations/fig04-transverse-longitudinal.md) |
 | [`public/simulations/draw-decompose.html`](../public/simulations/draw-decompose.html) | 213.1 kB | Fig. 8 · Draw & Decompose: the simulation, its data panel, walkthrough and lecture note. | [fig08-draw-decompose.md](simulations/fig08-draw-decompose.md) |
-| [`public/simulations/driven-oscillator.html`](../public/simulations/driven-oscillator.html) | 178.4 kB | Fig. 9 · Driven Oscillator: the simulation, its data panel, walkthrough and lecture note. | [fig09-driven-oscillator.md](simulations/fig09-driven-oscillator.md) |
-| [`public/simulations/phasor-sums.html`](../public/simulations/phasor-sums.html) | 259.9 kB | Fig. 7 · Phasor Sums: the simulation, its data panel, walkthrough and lecture note. | [fig07-phasor-sums.md](simulations/fig07-phasor-sums.md) |
-| [`public/simulations/water-wave.html`](../public/simulations/water-wave.html) | 159.5 kB | Fig. 5 · Circular Water Waves: the simulation, its data panel, walkthrough and lecture note. | [fig05-water-wave.md](simulations/fig05-water-wave.md) |
+| [`public/simulations/driven-oscillator.html`](../public/simulations/driven-oscillator.html) | 178.7 kB | Fig. 9 · Driven Oscillator: the simulation, its data panel, walkthrough and lecture note. | [fig09-driven-oscillator.md](simulations/fig09-driven-oscillator.md) |
+| [`public/simulations/phasor-sums.html`](../public/simulations/phasor-sums.html) | 259.8 kB | Fig. 7 · Phasor Sums: the simulation, its data panel, walkthrough and lecture note. | [fig07-phasor-sums.md](simulations/fig07-phasor-sums.md) |
+| [`public/simulations/water-wave.html`](../public/simulations/water-wave.html) | 159.7 kB | Fig. 5 · Circular Water Waves: the simulation, its data panel, walkthrough and lecture note. | [fig05-water-wave.md](simulations/fig05-water-wave.md) |
 | [`public/simulations/wave-interference.html`](../public/simulations/wave-interference.html) | 166.4 kB | Fig. 6 · Wave Interference Simulator: the simulation, its data panel, walkthrough and lecture note. | [fig06-wave-bench.md](simulations/fig06-wave-bench.md) |
-| [`public/simulations/wind-turbine.html`](../public/simulations/wind-turbine.html) | 174.3 kB | Fig. 10 · Wind Turbine Control: the simulation, its data panel, walkthrough and lecture note. | [fig10-wind-turbine.md](simulations/fig10-wind-turbine.md) |
+| [`public/simulations/wind-turbine.html`](../public/simulations/wind-turbine.html) | 174.6 kB | Fig. 10 · Wind Turbine Control: the simulation, its data panel, walkthrough and lecture note. | [fig10-wind-turbine.md](simulations/fig10-wind-turbine.md) |
 
 ## Walkthroughs
 
@@ -75,7 +75,7 @@ to confirm that every file is described. Sizes are those of the files when the l
 | [`public/scripts/walk/slit.js`](../public/scripts/walk/slit.js) | 8.1 kB | "From symbols to code" for Fig. 3 · Double-Slit Interference. | [walk.md](scripts/walk.md) |
 | [`public/scripts/walk/tl.js`](../public/scripts/walk/tl.js) | 7.5 kB | "From symbols to code" for Fig. 4 · Transverse & Longitudinal. | [walk.md](scripts/walk.md) |
 | [`public/scripts/walk/turbine.js`](../public/scripts/walk/turbine.js) | 8.3 kB | "From symbols to code" for Fig. 10 · Wind Turbine Control. | [walk.md](scripts/walk.md) |
-| [`public/scripts/walk/water.js`](../public/scripts/walk/water.js) | 7.4 kB | "From symbols to code" for Fig. 5 · Circular Water Waves. | [walk.md](scripts/walk.md) |
+| [`public/scripts/walk/water.js`](../public/scripts/walk/water.js) | 7.5 kB | "From symbols to code" for Fig. 5 · Circular Water Waves. | [walk.md](scripts/walk.md) |
 
 ## Shared scripts
 
@@ -93,7 +93,7 @@ to confirm that every file is described. Sizes are those of the files when the l
 |---|---|---|---|
 | [`public/styles/catalog.css`](../public/styles/catalog.css) | 11.9 kB | The catalog entries (paper abstracts) on the simulations page. | [styles.md](styles.md) |
 | [`public/styles/data.css`](../public/styles/data.css) | 31.3 kB | The data panel and the Read values strip. | [styles.md](styles.md) |
-| [`public/styles/fold.css`](../public/styles/fold.css) | 10.6 kB | The fold-out sections: cards, header bands, toggles, Expand/Collapse all. | [styles.md](styles.md) |
+| [`public/styles/fold.css`](../public/styles/fold.css) | 10.7 kB | The fold-out sections: cards, header bands, toggles, Expand/Collapse all. | [styles.md](styles.md) |
 | [`public/styles/paper.css`](../public/styles/paper.css) | 8.9 kB | Lecture notes set like LaTeX: Latin Modern, numbered equations, figures, abstract box. | [styles.md](styles.md) |
 | [`public/styles/portfolio.css`](../public/styles/portfolio.css) | 6.0 kB | The project cards and figure plates of the Portfolios page. | [styles.md](styles.md) |
 | [`public/styles/sim.css`](../public/styles/sim.css) | 25.0 kB | Design of the simulation pages: stage, controls, readouts, walkthrough; imports paper.css and KaTeX. | [styles.md](styles.md) |
@@ -154,7 +154,7 @@ to confirm that every file is described. Sizes are those of the files when the l
 |---|---|---|---|
 | [`public/images/sims/double-pendulum.webp`](../public/images/sims/double-pendulum.webp) | 12.5 kB | Thumbnail of Fig. 2 · Double Pendulum, 800 × 500 px. | [assets.md](assets.md) |
 | [`public/images/sims/double-slit.webp`](../public/images/sims/double-slit.webp) | 33.4 kB | Thumbnail of Fig. 3 · Double-Slit Interference, 800 × 500 px. | [assets.md](assets.md) |
-| [`public/images/sims/draw-decompose.webp`](../public/images/sims/draw-decompose.webp) | 12.3 kB | Thumbnail of Fig. 8 · Draw & Decompose, 800 × 500 px. | [assets.md](assets.md) |
+| [`public/images/sims/draw-decompose.webp`](../public/images/sims/draw-decompose.webp) | 16.2 kB | Thumbnail of Fig. 8 · Draw & Decompose, 800 × 500 px. | [assets.md](assets.md) |
 | [`public/images/sims/driven-oscillator.webp`](../public/images/sims/driven-oscillator.webp) | 23.7 kB | Thumbnail of Fig. 9 · Driven Oscillator, 800 × 500 px. | [assets.md](assets.md) |
 | [`public/images/sims/phasor-sums.webp`](../public/images/sims/phasor-sums.webp) | 12.2 kB | Thumbnail of Fig. 7 · Phasor Sums, 800 × 500 px. | [assets.md](assets.md) |
 | [`public/images/sims/transverse-longitudinal.webp`](../public/images/sims/transverse-longitudinal.webp) | 11.8 kB | Thumbnail of Fig. 4 · Transverse & Longitudinal, 800 × 500 px. | [assets.md](assets.md) |
@@ -357,18 +357,18 @@ to confirm that every file is described. Sizes are those of the files when the l
 
 | File | Size | What it is | Explained in |
 |---|---|---|---|
-| [`tests/tests.json`](../tests/tests.json) | 13.9 kB | Plain-language test scenarios run by the platform's QA after each deploy. | [build-and-deploy.md](build-and-deploy.md) |
+| [`tests/tests.json`](../tests/tests.json) | 15.3 kB | Plain-language test scenarios run by the platform's QA after each deploy. | [build-and-deploy.md](build-and-deploy.md) |
 
 ## Documentation
 
 | File | Size | What it is | Explained in |
 |---|---|---|---|
 | [`docs/architecture.md`](architecture.md) | 7.2 kB | Documentation: How the site fits together. | [architecture.md](architecture.md) |
-| [`docs/assets.md`](assets.md) | 6.0 kB | Documentation: Fonts, maths and pictures: `public/vendor/`, `public/fonts/`, `public/images/`. | [assets.md](assets.md) |
-| [`docs/build-and-deploy.md`](build-and-deploy.md) | 8.7 kB | Documentation: Build files, tests and deployment. | [build-and-deploy.md](build-and-deploy.md) |
+| [`docs/assets.md`](assets.md) | 6.1 kB | Documentation: Fonts, maths and pictures: `public/vendor/`, `public/fonts/`, `public/images/`. | [assets.md](assets.md) |
+| [`docs/build-and-deploy.md`](build-and-deploy.md) | 8.9 kB | Documentation: Build files, tests and deployment. | [build-and-deploy.md](build-and-deploy.md) |
 | [`docs/files.md`](files.md) | this file | This list. Written by tools/inventory.py; do not edit by hand. | [files.md](files.md) |
-| [`docs/minor-issues-report.md`](minor-issues-report.md) | 1.8 kB | Documentation: Minor issues · verification report. | [minor-issues-report.md](minor-issues-report.md) |
-| [`docs/pages.md`](pages.md) | 43.0 kB | Documentation: The site's own pages: home, simulations catalog, Portfolios, robots.txt. | [pages.md](pages.md) |
+| [`docs/minor-issues-report.md`](minor-issues-report.md) | 3.3 kB | Documentation: Minor issues · verification report. | [minor-issues-report.md](minor-issues-report.md) |
+| [`docs/pages.md`](pages.md) | 42.7 kB | Documentation: The site's own pages: home, simulations catalog, Portfolios, robots.txt. | [pages.md](pages.md) |
 | [`docs/portfolios.md`](portfolios.md) | 10.5 kB | Documentation: The two research projects: `public/portfolios/`. | [portfolios.md](portfolios.md) |
 | [`docs/scripts/catalog.md`](scripts/catalog.md) | 15.2 kB | Documentation: public/scripts/catalog.js. | [catalog.md](scripts/catalog.md) |
 | [`docs/scripts/datalog.md`](scripts/datalog.md) | 44.6 kB | Documentation: public/scripts/datalog.js. | [datalog.md](scripts/datalog.md) |
@@ -376,17 +376,17 @@ to confirm that every file is described. Sizes are those of the files when the l
 | [`docs/scripts/fold.md`](scripts/fold.md) | 21.8 kB | Documentation: public/scripts/fold.js. | [fold.md](scripts/fold.md) |
 | [`docs/scripts/sim.md`](scripts/sim.md) | 25.8 kB | Documentation: public/scripts/sim.js. | [sim.md](scripts/sim.md) |
 | [`docs/scripts/walk.md`](scripts/walk.md) | 19.4 kB | Documentation: public/scripts/walk/*.js. | [walk.md](scripts/walk.md) |
-| [`docs/simulations/fig01-wave-sources.md`](simulations/fig01-wave-sources.md) | 48.4 kB | Documentation: Fig. 1 · Wave Interference. | [fig01-wave-sources.md](simulations/fig01-wave-sources.md) |
-| [`docs/simulations/fig02-double-pendulum.md`](simulations/fig02-double-pendulum.md) | 44.8 kB | Documentation: Fig. 2 · Double Pendulum. | [fig02-double-pendulum.md](simulations/fig02-double-pendulum.md) |
-| [`docs/simulations/fig03-double-slit.md`](simulations/fig03-double-slit.md) | 36.8 kB | Documentation: Fig. 3 · Double-Slit Interference. | [fig03-double-slit.md](simulations/fig03-double-slit.md) |
+| [`docs/simulations/fig01-wave-sources.md`](simulations/fig01-wave-sources.md) | 47.9 kB | Documentation: Fig. 1 · Wave Interference. | [fig01-wave-sources.md](simulations/fig01-wave-sources.md) |
+| [`docs/simulations/fig02-double-pendulum.md`](simulations/fig02-double-pendulum.md) | 43.9 kB | Documentation: Fig. 2 · Double Pendulum. | [fig02-double-pendulum.md](simulations/fig02-double-pendulum.md) |
+| [`docs/simulations/fig03-double-slit.md`](simulations/fig03-double-slit.md) | 36.4 kB | Documentation: Fig. 3 · Double-Slit Interference. | [fig03-double-slit.md](simulations/fig03-double-slit.md) |
 | [`docs/simulations/fig04-transverse-longitudinal.md`](simulations/fig04-transverse-longitudinal.md) | 33.5 kB | Documentation: Fig. 4 · Transverse and Longitudinal Waves. | [fig04-transverse-longitudinal.md](simulations/fig04-transverse-longitudinal.md) |
-| [`docs/simulations/fig05-water-wave.md`](simulations/fig05-water-wave.md) | 33.5 kB | Documentation: Fig. 5 · Circular Water Waves. | [fig05-water-wave.md](simulations/fig05-water-wave.md) |
-| [`docs/simulations/fig06-wave-bench.md`](simulations/fig06-wave-bench.md) | 38.5 kB | Documentation: Fig. 6 · Wave Interference Simulator. | [fig06-wave-bench.md](simulations/fig06-wave-bench.md) |
-| [`docs/simulations/fig07-phasor-sums.md`](simulations/fig07-phasor-sums.md) | 37.4 kB | Documentation: Fig. 7 · Phasor Sums. | [fig07-phasor-sums.md](simulations/fig07-phasor-sums.md) |
-| [`docs/simulations/fig08-draw-decompose.md`](simulations/fig08-draw-decompose.md) | 33.1 kB | Documentation: Fig. 8 · Draw & Decompose. | [fig08-draw-decompose.md](simulations/fig08-draw-decompose.md) |
-| [`docs/simulations/fig09-driven-oscillator.md`](simulations/fig09-driven-oscillator.md) | 38.6 kB | Documentation: Fig. 9 · Driven Oscillator. | [fig09-driven-oscillator.md](simulations/fig09-driven-oscillator.md) |
-| [`docs/simulations/fig10-wind-turbine.md`](simulations/fig10-wind-turbine.md) | 42.8 kB | Documentation: Fig. 10 · Wind Turbine Control. | [fig10-wind-turbine.md](simulations/fig10-wind-turbine.md) |
-| [`docs/styles.md`](styles.md) | 40.8 kB | Documentation: Stylesheets: `public/styles/`. | [styles.md](styles.md) |
+| [`docs/simulations/fig05-water-wave.md`](simulations/fig05-water-wave.md) | 32.9 kB | Documentation: Fig. 5 · Circular Water Waves. | [fig05-water-wave.md](simulations/fig05-water-wave.md) |
+| [`docs/simulations/fig06-wave-bench.md`](simulations/fig06-wave-bench.md) | 38.4 kB | Documentation: Fig. 6 · Wave Interference Simulator. | [fig06-wave-bench.md](simulations/fig06-wave-bench.md) |
+| [`docs/simulations/fig07-phasor-sums.md`](simulations/fig07-phasor-sums.md) | 36.7 kB | Documentation: Fig. 7 · Phasor Sums. | [fig07-phasor-sums.md](simulations/fig07-phasor-sums.md) |
+| [`docs/simulations/fig08-draw-decompose.md`](simulations/fig08-draw-decompose.md) | 32.9 kB | Documentation: Fig. 8 · Draw & Decompose. | [fig08-draw-decompose.md](simulations/fig08-draw-decompose.md) |
+| [`docs/simulations/fig09-driven-oscillator.md`](simulations/fig09-driven-oscillator.md) | 37.8 kB | Documentation: Fig. 9 · Driven Oscillator. | [fig09-driven-oscillator.md](simulations/fig09-driven-oscillator.md) |
+| [`docs/simulations/fig10-wind-turbine.md`](simulations/fig10-wind-turbine.md) | 41.9 kB | Documentation: Fig. 10 · Wind Turbine Control. | [fig10-wind-turbine.md](simulations/fig10-wind-turbine.md) |
+| [`docs/styles.md`](styles.md) | 40.4 kB | Documentation: Stylesheets: `public/styles/`. | [styles.md](styles.md) |
 
 ## Tools
 

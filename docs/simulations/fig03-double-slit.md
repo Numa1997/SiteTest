@@ -314,12 +314,8 @@ middle of line 625 (step 2) and the end of line 758 (step 7).
 3. **Dead variable.** `frames` is declared ([page:558](../../public/simulations/Interactive%20Double-Slit%20Experiment%20Visualization.html#L558))
    and incremented ([page:801](../../public/simulations/Interactive%20Double-Slit%20Experiment%20Visualization.html#L801)) but never
    read or stored.
-4. **Note text vs code, plot width.** Section 9 says "θ runs from 0° to 30° over 516 units"
-   ([page:514](../../public/simulations/Interactive%20Double-Slit%20Experiment%20Visualization.html#L514)); the code maps 0°–30° from
-   `x0 = 56` to `x1 = 556`, which is 500 units ([page:701–702](../../public/simulations/Interactive%20Double-Slit%20Experiment%20Visualization.html#L701-L702)).
-5. **Note text vs measurement, rounding gap.** Section 3 says the formula and the direct difference differ by at most
-   $6.4\times10^{-14}$ px over all slider values ([page:263](../../public/simulations/Interactive%20Double-Slit%20Experiment%20Visualization.html#L263));
-   a Node sweep of the page's own formulas over every slider step gives $1.35\times10^{-13}$ px. Both are far below anything visible.
+4. Fixed on 2026-10-15: the note gives the measured 500-unit intensity plot width (commit `:/^Batch B: correct notes and layout; verify measured figures in Chromium$`).
+5. Fixed on 2026-10-15: a complete Chromium slider sweep gives 1.3500311979441904 × 10⁻¹³ px; the note rounds the upper bound to 1.4 × 10⁻¹³ px (commit `:/^Batch B: correct notes and layout; verify measured figures in Chromium$`).
 6. **`Sim.live` recomputes a little.** Its comment says "nothing recomputed" ([page:779](../../public/simulations/Interactive%20Double-Slit%20Experiment%20Visualization.html#L779)),
    but it computes `λ/b` ([page:783](../../public/simulations/Interactive%20Double-Slit%20Experiment%20Visualization.html#L783)) and,
    when `m_theta[1]` is missing, `Math.asin(λ/b)` ([page:791](../../public/simulations/Interactive%20Double-Slit%20Experiment%20Visualization.html#L791)).
