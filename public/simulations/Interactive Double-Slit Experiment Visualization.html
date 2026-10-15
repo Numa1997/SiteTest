@@ -555,7 +555,7 @@
         var gShapes = document.getElementById('shapes');
         var pattern = document.getElementById('pattern');
         var anim = document.getElementById('anim');
-        var geo = null, phase = 0, fps = 0, frames = 0;
+        var geo = null, phase = 0, fps = 0;
 
         /* ---------- the store: every number this page computes is written here, where it is computed (scripts/dataset.js) ---------- */
         var ds = Sim.dataset({ title: 'Double-slit interference', attrs: { figure: 3, page: 'Interactive Double-Slit Experiment Visualization.html', X0: X0, Y0: Y0, length_unit: 'px of the 600 × 440 figure; y runs downwards', pattern_axes: 'x0 = 56, x1 = 556, yb = 142, yt = 24, 0° to 30°' } });
@@ -812,7 +812,6 @@
                 drawWaves();
                 fps = fps ? fps + (1 / dt - fps) * 0.1 : 1 / dt;
             }
-            frames++;
             ds.set('clock_t', t); ds.set('wall', performance.now() / 1000); ds.set('fps', fps); ds.set('animate', clk ? clk.playing : true);
         });
         anim.addEventListener('change', function () { clk.set(anim.checked); });

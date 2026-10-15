@@ -15,7 +15,7 @@ chain of rotating arms whose last tip redraws the shape. The *Circles K* slider 
 are used. A second panel, Fig. 8b, shows the amplitude spectrum, with the circles in use in burgundy. While it plays,
 the reader can pan, zoom (slider, wheel or pinch) and follow the pen. Readouts compare the error measured at the
 samples with the error predicted by Parseval's theorem. The page opens on the heart
-([L1409–1410](../../public/simulations/draw-decompose.html#L1409-L1410)).
+([L1408–1409](../../public/simulations/draw-decompose.html#L1408-L1409)).
 
 ## The physics in one picture
 
@@ -166,7 +166,7 @@ Zoom is clamped to $[1, 10^{1.8}]$ ([L906–909](../../public/simulations/draw-d
 | `pixelAt`, `rgbText`, `lum` | [1291–1293](../../public/simulations/draw-decompose.html#L1291-L1293) | Read a pixel of either canvas; describe it; luminance. |
 | `playing`, `toScreen` | [1294–1295](../../public/simulations/draw-decompose.html#L1294-L1295) | Data-panel helpers from stored values. |
 | `chainNow`, `dftOne`, `nearest`, `armInputs` | [1296–1299](../../public/simulations/draw-decompose.html#L1296-L1299) | Recompute from stored inputs (Check); nearest stored point. |
-| `Sim.data` hooks | [1300–1404](../../public/simulations/draw-decompose.html#L1300-L1404) | `probe`, `inspect`, `locate`, `check`, `drawn`, `round`, `play`, `touchProbe`, `about`. |
+| `Sim.data` hooks | [1300–1403](../../public/simulations/draw-decompose.html#L1300-L1403) | `probe`, `inspect`, `locate`, `check`, `drawn`, `round`, `play`, `about`. |
 
 ## Controls
 
@@ -176,7 +176,7 @@ Zoom is clamped to $[1, 10^{1.8}]$ ([L906–909](../../public/simulations/draw-d
 | Decompose & play | `go` | needs ≥ 12 draft points | `play(draft, 'your drawing')`, starts the clock ([L1008–1014](../../public/simulations/draw-decompose.html#L1008-L1014)) |
 | Clear | `clear-draft` | — | empties the draft ([L1006](../../public/simulations/draw-decompose.html#L1006)) |
 | Cancel | `cancel` | disabled with no shape | back to the current shape ([L1007](../../public/simulations/draw-decompose.html#L1007)) |
-| Play / Pause | `play` | playing (paused under reduced motion) | `Sim.playButton` ([L1288](../../public/simulations/draw-decompose.html#L1288), [sim.js:178](../../public/scripts/sim.js#L178)) |
+| Play / Pause | `play` | playing (paused under reduced motion) | `Sim.playButton` ([L1288](../../public/simulations/draw-decompose.html#L1288), [sim.js:177](../../public/scripts/sim.js#L177)) |
 | Restart loop | `reset-t` | — | `t = 0`, trail cleared ([L1015](../../public/simulations/draw-decompose.html#L1015)) |
 | Presets | `presets`, `data-shape` | heart (at load) | `SHAPES[s]()` then `play()` ([L892–898](../../public/simulations/draw-decompose.html#L892-L898)) |
 | Circles K | `K` | 1–120, step 1, default 24 | `rebuild()` on input ([L100](../../public/simulations/draw-decompose.html#L100), [L721](../../public/simulations/draw-decompose.html#L721)) |
@@ -209,7 +209,7 @@ sign), `r-err`, `r-errp` ([L1240–1250](../../public/simulations/draw-decompose
 | Spectrum panel | `c_max`; `spec_x`, `spec_y` [k]; `sbox_w`, `sbox_h` | [1223](../../public/simulations/draw-decompose.html#L1223); [1226](../../public/simulations/draw-decompose.html#L1226); [1197](../../public/simulations/draw-decompose.html#L1197) |
 | View and drawing | `viewR`, `dt`, `fps`, `frames`, `playing`; `zoom`, `panX`, `panY`, `follow`, `S_fit`, `scale`, `cx`, `cy`, `box_w`, `box_h`; `circles`, `vectors`, `orig`, `full` | [1285](../../public/simulations/draw-decompose.html#L1285); [1056](../../public/simulations/draw-decompose.html#L1056); [1057](../../public/simulations/draw-decompose.html#L1057) |
 
-`mode`, `t` and `loop_s` are also written once at start-up ([L1405](../../public/simulations/draw-decompose.html#L1405)).
+`mode`, `t` and `loop_s` are also written once at start-up ([L1404](../../public/simulations/draw-decompose.html#L1404)).
 Measured at load on a 1440 px window for the heart: `L` = 5.42763, `E` = 0.515045, and at K = 24 `err` =
 0.005405966670666 and `errP` = 0.005405966670687; `extR` = 0.9435, so the scale is $S$ itself, 276.46 px per unit
 on a 770 × 601 canvas.
@@ -225,9 +225,9 @@ variables from stored inputs only, including a fresh one-frequency DFT `dftOne()
 ([L1344–1390](../../public/simulations/draw-decompose.html#L1344-L1390)). `drawn` reads pixels back for `tip_px`, `px`,
 `full_x`, `trail_x` on the figure and `spec_y` on the spectrum canvas, alpha first
 ([L1391–1397](../../public/simulations/draw-decompose.html#L1391-L1397)). Read values works on `#stage` only, so the
-spectrum panel is not pinnable ([datalog.js:545](../../public/scripts/datalog.js#L545)). While Read values is on,
+spectrum panel is not pinnable ([datalog.js:542](../../public/scripts/datalog.js#L542)). While Read values is on,
 `datalog.js` stops the canvas's own pointer handlers in the capture phase, so a click pins instead of drawing or panning
-([datalog.js:618–641](../../public/scripts/datalog.js#L618-L641)); the wheel is not intercepted. File base name:
+([datalog.js:615–638](../../public/scripts/datalog.js#L615-L638)); the wheel is not intercepted. File base name:
 `fig8-draw-decompose` ([L1301](../../public/simulations/draw-decompose.html#L1301)).
 
 **`Sim.live()`** ([L1253–1266](../../public/simulations/draw-decompose.html#L1253-L1266)) returns, from the store:
@@ -252,9 +252,9 @@ controls aside: Shape group with hint, `#run-tools`, `#draw-tools` and presets, 
 [L609](../../public/simulations/draw-decompose.html#L609)); the footer.
 
 Scripts, in load order: `fold.js`, `sim.js`, `dataset.js`, the page script
-([L620–1412](../../public/simulations/draw-decompose.html#L620-L1412)), `datalog.js`
-([L617–1413](../../public/simulations/draw-decompose.html#L617-L1413)). `sim.js` fetches `walk/dft.js` from `data-walk`
-and typesets the note ([sim.js:413–441](../../public/scripts/sim.js#L413-L441), [sim.js:476–486](../../public/scripts/sim.js#L476-L486));
+([L620–1411](../../public/simulations/draw-decompose.html#L620-L1411)), `datalog.js`
+([L617–1412](../../public/simulations/draw-decompose.html#L617-L1412)). `sim.js` fetches `walk/dft.js` from `data-walk`
+and typesets the note ([sim.js:339–367](../../public/scripts/sim.js#L339-L367), [sim.js:402–411](../../public/scripts/sim.js#L402-L411));
 the canvas labels use `Sim.tex` from `sim.js`. See [sim.md](../scripts/sim.md), [walk.md](../scripts/walk.md),
 [fold.md](../scripts/fold.md), [pages.md](../pages.md).
 
@@ -271,8 +271,8 @@ Figure 5 $|c_k|$ against $|k|$ for four presets ([L493–551](../../public/simul
 
 ## Where the drawing and the store differ
 
-The page's `about` paragraph ([L1403](../../public/simulations/draw-decompose.html#L1403)), shown in the data panel
-([datalog.js:168](../../public/scripts/datalog.js#L168)), says this; the code adds detail:
+The page's `about` paragraph ([L1402](../../public/simulations/draw-decompose.html#L1402)), shown in the data panel
+([datalog.js:165](../../public/scripts/datalog.js#L165)), says this; the code adds detail:
 
 - **Dashed original** is the 256 stored samples $z_n$ joined by straight segments and closed
   ([L1114](../../public/simulations/draw-decompose.html#L1114)); the raw stroke `stroke_x/y` is stored but not drawn
@@ -322,8 +322,7 @@ The page's `about` paragraph ([L1403](../../public/simulations/draw-decompose.ht
 
 ## Notes for maintainers
 
-1. **`touchProbe` is dead.** `Sim.data.touchProbe` ([L1402](../../public/simulations/draw-decompose.html#L1402)) is not
-   read anywhere in `datalog.js` (no match for `touchProbe`).
+1. Fixed on 2026-10-15: the unread touchProbe hook was removed (commit `:/^Batch E: remove proven unused code; verify styles, arrays and exports$`).
 2. Fixed on 2026-10-15: c_max identifies the largest coefficient at rank 0 rather than the omitted zero-frequency coefficient (commit `:/^Batch C: align walkthroughs and metadata; verify excerpts and stored values$`).
 3. Fixed on 2026-10-15: the walkthrough distinguishes the 120 computed frequencies from a full 256-coefficient DFT; the K = 120 heart residual is 0.000491411444 (commit `:/^Batch C: align walkthroughs and metadata; verify excerpts and stored values$`).
 4. Fixed on 2026-10-15: L and step metadata describe calculation and storage; arcDistances replaces the local name that hid the dataset (commit `:/^Batch C: align walkthroughs and metadata; verify excerpts and stored values$`).

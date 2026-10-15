@@ -107,8 +107,7 @@
 /* lecture notes */
 .paper .psec.fsec { margin-top: 14px; padding-top: 0; border-top: 1px solid var(--fold-line); scroll-margin-top: calc(var(--fold-top) + 12px); }
 .paper .psec.fsec:first-child { margin-top: 0; }
-.paper .psec > .fs-head h3 { display: flex; align-items: baseline; gap: 14px; margin: 0; font: 400 clamp(26px, 2.6vw, 34px)/1.1 var(--serif); letter-spacing: -.01em; color: var(--ink); }
-.paper .psec > .fs-head .psec__n { top: -.28em; }
+.paper .psec > .fs-head h3 { margin: 0; font: 400 clamp(26px, 2.6vw, 34px)/1.1 var(--serif); letter-spacing: -.01em; color: var(--ink); }
 .paper .ppart h4 { margin: 0; font-size: 21px; }
 .paper .ppart.fsub { margin-top: 18px; }
 .paper .fs-body > p:first-child { margin-top: 0; }

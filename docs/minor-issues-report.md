@@ -1,9 +1,15 @@
-# Minor issues · verification report
+# Minor issues · final verification report
 
-Batch A was reproduced locally, deployed once, then checked live. Stored version: `1792048596599`.
-Viewport checks: 1440 × 900 and 390 × 844; the hidden-layer case also uses 960 × 900.
-Commit: `:/^Batch A: fix simulation and recording faults; verify in Chromium$`.
-This is Git’s unique-subject revision syntax; it avoids putting a commit’s own hash inside its contents.
+All five batches are complete. Each batch was deployed once, verified live, then committed and pushed to `codex/minor-issues-20261015`. No pull request was opened. No package was installed.
+
+Live site: https://numa-koudsie-website-0cyj78.v2.appdeploy.ai
+Final stored version: `1792053833126`.
+
+Commits: [A — 9d3175f](https://github.com/Numa1997/SiteTest/commit/9d3175f2cf50d0ad3f8792f1ee173e8ce56bab53), [B — 74ef7d9](https://github.com/Numa1997/SiteTest/commit/74ef7d94571f467f31d2289be6c9668b6809a09f), [C — 43d8238](https://github.com/Numa1997/SiteTest/commit/43d82383f4294428a1cf027f2727644ccf7dc8a5), [D — ce3bfc4](https://github.com/Numa1997/SiteTest/commit/ce3bfc439ce40b3e8b6bd7f59af2af9404bd4997). E is this report’s commit, uniquely selected by `:/^Batch E: remove proven unused code; verify styles, arrays and exports$`.
+
+Chromium checks passed locally and live at 1440 × 900 and 390 × 844: all 13 pages, no console errors, no KaTeX errors, no sideways scroll and no broken images. Final cleanup also preserved all typed-array hashes and 11 compared style properties on visible elements in all 26 page/viewport cases. One live shadow comparison sampled a fold transition; a targeted check after it settled matched exactly. Four final store/round exports pass ZIP CRC and NumPy loading; their READMEs use the actual filenames. Platform deployment checks reported no frontend, backend or network errors. A platform end-to-end test result was not exposed; the browser results here are the checks run directly.
+
+Readbacks respect the picture’s precision: stored/recomputed numbers match exactly where stated; DOM text rounds to its displayed digits, SVG coordinates to their source precision, and canvas checks use alpha before colour. A quantity that is not drawn has no independent picture readback; the first fringe explicitly reports this when it lies outside the plot. Frame counters are checked against actual callbacks.
 
 | Issue | Status | Proof |
 |---|---|---|
@@ -17,12 +23,6 @@ This is Git’s unique-subject revision syntax; it avoids putting a commit’s o
 | A8 · archive README filenames | fixed | Both READMEs name the actual downloads; CRC and NumPy shape checks pass. |
 | A9 · final sample | fixed | At 60 Hz: 600 samples from 601 frames, ending at 10.000000000000776 s; previously 9.983333333334107 s. |
 | A10 · transverse endpoint | fixed | The drawing path has 215 points and ends at X = 640 with zero horizontal gap. |
-
-The remaining batches are in progress. Numa’s decision items remain unchanged.
-
-
-| Issue | Status | Proof |
-|---|---|---|
 | B1: oscillator log-axis labels | fixed | Ratios 0.1, 0.32, 1, 3.2, 10; endpoint gains 1.01005 and 0.0101005. |
 | B2: turbine subscripts | fixed | Four SVG subscript spans render p / opt without underscores. |
 | B3: wave-source grid counts | fixed | 1280, 1440, 1600 px: 360 × 162 = 58 320; 390 px: 324 × 324 = 104 976. |
@@ -31,12 +31,6 @@ The remaining batches are in progress. Numa’s decision items remain unchanged.
 | B6: obsolete thumbnail | fixed | New 800 × 500 WebP from the current stage at device scale 2; current TeX axes and scale visible. |
 | B7: portfolio image ratios | fixed | Attribute ratios exactly match all four SVG viewBoxes. |
 | B8: layout gaps | fixed | 970 px home margin 104 → 48 px; empty catalog margin 28 → 0 px and display none. |
-
-Proposed replacement for the stale CLAUDE.md sentence (file unchanged): “In a 1280–1600 px desktop window, Fig. 1 computes a 360 × 162 = 58 320-point grid; on a 390 px phone it computes 324 × 324 = 104 976 points. At λ = 16 field px these give 7.2 and 6.48 samples per wavelength. Rebuilding Line of 16 on desktop uses 1 866 240 sine and cosine calls.”
-
-
-| Issue | Status | Proof |
-|---|---|---|
 | C: transverse, water, bench and turbine excerpts | fixed | Complete quoted lines match source; omitted water caption is marked with an ellipsis. |
 | C: pendulum equation references | fixed | References now point to equations (6)–(8). |
 | C: phasor sampling and multiplier names | fixed | Every-sample scan documented; multiplier named live[i].mul. |
@@ -44,13 +38,9 @@ Proposed replacement for the stale CLAUDE.md sentence (file unchanged): “In a 
 | C: DFT completeness | fixed | 120 coefficients of 256; K = 120 heart error 0.000491411444. |
 | C: damping notation | fixed | γ is the slider; g = γ/R is attenuation per pixel. |
 | C: Fourier c_max, L, step and local ds | fixed | Rank-0 maximum labelled correctly; storage site documented; renamed arcDistances leaves all sample/coefficient arrays byte-identical. |
-| C: pendulum updates, phasor ang and water frames metadata | fixed | Once-per-frame diagnostics, current draw-loop angle calculation, and playing-only frame count documented. |
+| C: pendulum updates, phasor ang and water frames metadata | fixed | Once-per-frame diagnostics, sumAt angle storage, and playing-only frame count documented. |
 | C: scalar types and panel contract | fixed | uint8 and all four omitted contract keys documented. |
 | C: catalog extension comment | fixed | New course years explicitly require STAGES, validation and wording updates. |
-
-
-| Issue | Status | Proof |
-|---|---|---|
 | D: Fig. 1 speed and alpha-first pixel check | fixed | Speed reads stored 33 px/s; source-dot check now tests alpha first. |
 | D: Fig. 3 computation and walkthrough | fixed | Stored geometry agrees exactly with checks; first-order SVG label reads back 30° and sine 0.5. |
 | D: Fig. 4 stored layout and shared constants | fixed | Stored-width/height recomputation is identical at both sizes. |
@@ -60,3 +50,74 @@ Proposed replacement for the stale CLAUDE.md sentence (file unchanged): “In a 
 | D: Fig. 7 angles | fixed | Angle is stored by sumAt, recomputes identically, and its joint pixel passes. |
 | D: Fig. 9 phase | fixed | Both displays read stored phi_deg = 25.346175941946683°. |
 | D: Fig. 10 display results | fixed | h = 0.01 s and steps = 12000; range and captured share agree with checks and visible text. |
+| E: unread frame counters | fixed | Removed only Figs. 3, 9 and 10 counters; all stored arrays match before cleanup. |
+| E: nz and touchProbe | fixed | Global search finds no callers; removed the Fig. 7 helper and Fig. 8 hook. |
+| E: home stop and request id | fixed | The private stop function had no callers; its request id had only writes after removal. |
+| E: catalog intro | fixed | Removed the empty, permanently hidden element, hiding statement and CSS. |
+| E: legacy cards and unused CSS | fixed | Removed the unused builder and selectors, plus unused sc and pbox--star rules; retained sim-error. |
+| E: claim that .eq is unused | not reproduced | sim.js creates class="eq walk__eq"; rotor project also uses eq. The rule remains. |
+| E: Sim.isInk and dataset helpers | fixed | No callers for isInk, index, at, size or Sim.Dataset. Retained shape; exports load in NumPy. |
+| E: log fallback and paintStrip argument | fixed | All ten pages supply round; force had no reads. Actual recording and exports still pass. |
+| E: overridden declarations | fixed | Removed earlier fold display/top and 26 px phone title rules; computed styles match. |
+| E: five undefined tokens | fixed | Replaced only with their existing fallback values; compared colours remain identical. |
+| E: overwritten label initializer | fixed | Removed sw = 0 before its unconditional assignment; drawing arrays remain identical. |
+| Home title font and weight | left for Numa | Preserved as requested. |
+| Home card shadows | left for Numa | Preserved as requested. |
+| Fold, simulation and data shadows | left for Numa | Preserved as requested. |
+| Home eight-of-ten selection | left for Numa | Preserved as requested. |
+| Home intro text | left for Numa | Preserved as requested. |
+| Home “8 figures” count | left for Numa | Preserved as requested. |
+| Protected tests.json scenario 1 | left for Numa | Preserved as requested. |
+| Fig. 3 reduced-motion start | left for Numa | Preserved as requested. |
+| Paused redraws: Figs. 4, 9 and 10 | left for Numa | Preserved as requested. |
+| Fig. 7 replay phase wrap | left for Numa | Preserved as requested. |
+| Esc also stopping Read values | left for Numa | Preserved as requested. |
+| Array-table hover ring | left for Numa | Preserved as requested. |
+| Play aria-pressed | left for Numa | Preserved as requested. |
+| “This simulation stopped” error message | left for Numa | Preserved as requested. |
+| Walkthrough Now at 5 Hz | left for Numa | Preserved as requested. |
+| Two favicons | left for Numa | Preserved as requested. |
+| Duplicated Google Fonts import | left for Numa | Preserved as requested. |
+| Repeated sim.css tokens | left for Numa | Preserved as requested. |
+| CLAUDE.md | left for Numa | Preserved as requested. |
+| House fonts and colours | left for Numa | Preserved as requested. |
+| Two embedded project copies | left for Numa | Preserved as requested. |
+| droplet-collection-yl7l26 | left for Numa | Preserved as requested. |
+| rotor-pendula-gafw0f | left for Numa | Preserved as requested. |
+| physik-radar-xvy59b | left for Numa | Preserved as requested. |
+| numa-physics-lab-chatgpt-k0ixwk | left for Numa | Preserved as requested. |
+| GitHub Pages | left for Numa | Preserved as requested. |
+| Other maintainer notes outside the requested batches | left for Numa | Apostrophe consistency, xi naming, walkthrough path/header, unused catalog metadata, drawn_note, undeclared-value behavior, noscript listing, catalog debug state and cross-file CSS overrides remain. |
+
+Proposals for Numa (none applied):
+
+- **Home title font and weight:** Choose explicitly whether IBM Plex Serif 600 should remain or change to the documented house title face.
+- **Home card shadows:** Decide whether to keep the current shadows or adopt the no-shadow rule.
+- **Fold, simulation and data shadows:** Make one explicit shadow policy for the visible fold, figure, walkthrough and data panels.
+- **Home eight-of-ten selection:** Decide whether the home page remains a selection or adds Figs. 9 and 10.
+- **Home intro text:** Update the description only after choosing whether the catalog should group by field.
+- **Home “8 figures” count:** Keep the count tied to the approved home selection.
+- **Protected tests.json scenario 1:** Change its eight-plate expectation only with the home selection decision.
+- **Fig. 3 reduced-motion start:** Synchronize the Animate checkbox with the clock’s initial paused state.
+- **Paused redraws: Figs. 4, 9 and 10:** Consider drawing on control changes while paused, after confirming every control still responds.
+- **Fig. 7 replay phase wrap:** Choose shortest-path phase interpolation for transitions across 2π.
+- **Esc also stopping Read values:** Decide whether Esc should close only the panel or also end Read mode.
+- **Array-table hover ring:** Consider requiring a click before marking the running figure.
+- **Play aria-pressed:** Confirm whether pressed means paused or running, then align the accessible state.
+- **“This simulation stopped” error message:** Use a general page-error message unless the clock has actually stopped.
+- **Walkthrough Now at 5 Hz:** Choose 4 or 5 updates per second and whether folded walkthroughs should refresh.
+- **Two favicons:** Choose one N or NK mark for the three top-level pages.
+- **Duplicated Google Fonts import:** Consolidate font loading in a separate approved change.
+- **Repeated sim.css tokens:** Centralize the shared tokens in a separate approved change.
+- **CLAUDE.md:** Approve the measured replacement sentence below before editing this binding file.
+- **House fonts and colours:** Keep the existing palette and type system; approve any future design change explicitly.
+- **Two embedded project copies:** Handle changes inside either project as separate work; neither copy was edited.
+- **droplet-collection-yl7l26:** Keep this app unchanged; its design document was read only.
+- **rotor-pendula-gafw0f:** Keep this app outside this website-maintenance change.
+- **physik-radar-xvy59b:** Keep this app outside this website-maintenance change.
+- **numa-physics-lab-chatgpt-k0ixwk:** Keep this app outside this website-maintenance change.
+- **GitHub Pages:** Choose a separate publishing task if this branch should later be served there.
+
+- **Other untriaged notes:** consider consistent apostrophes and displacement names; document the walkthrough’s required path; decide whether to expose catalog metadata; decide the dataset’s missing-value contract; make the no-JavaScript catalog complete; refresh the debug-state reference; review cross-file CSS overrides separately.
+
+Proposed CLAUDE.md sentence, with the file unchanged: “In a 1280–1600 px desktop window, Fig. 1 computes a 360 × 162 = 58 320-point grid; on a 390 px phone it computes 324 × 324 = 104 976 points. At λ = 16 field px these give 7.2 and 6.48 samples per wavelength. Rebuilding Line of 16 on desktop uses 1 866 240 sine and cosine calls.”

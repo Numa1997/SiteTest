@@ -101,7 +101,7 @@ the 120 s run the default wind measures 1.30 m/s for $\sigma = 1.5$ m/s, as the 
 [L554–L557](../../public/simulations/wind-turbine.html#L554-L557) hold the turbine, the controller design and the run:
 `H = 0.01` s, `TEND = 120` s, `EVERY = 2`, `NS = TEND / H / EVERY + 1`, `NL = 271`. In JavaScript `120 / 0.01` is exactly
 12 000, so `NS` is exactly 6 001 (checked in Node). The page's own state is
-[L563](../../public/simulations/wind-turbine.html#L563): `playT`, `iNow`, `frames`, `fps`, `solved`, the controller
+[L563](../../public/simulations/wind-turbine.html#L563): `playT`, `iNow`, `fps`, `solved`, the controller
 `ctrl = 'pi'`, the wind profile `prof = 'turb'` and `AIRPX = 5` (pixels per metre of air in the drawing).
 
 ### 1 Solve: RK4 on a seven-component state
@@ -167,7 +167,7 @@ when holding speed, the target with `solved`, sets `stale` and rewrites the stat
 
 ### 3 Play: the frame loop, in order
 
-`Sim.clock` ([sim.js:177–198](../../public/scripts/sim.js#L177-L198)) calls the tick on every `requestAnimationFrame`, with
+`Sim.clock` ([sim.js:176–197](../../public/scripts/sim.js#L176-L197)) calls the tick on every `requestAnimationFrame`, with
 $\Delta t \le 0.05$ s, and $\Delta t = 0$ while paused. Each tick:
 
 1. returns if nothing is solved; smooths the frame rate; advances `playT += speed · Δt`; at 120 s clamps and pauses; stores
@@ -246,7 +246,7 @@ ticks every animation frame, the figure is redrawn at the display rate even whil
 | Wind | `prof` (buttons `steady`, `gust`, `step`, `turb`) | Turbulent (default, [L120](../../public/simulations/wind-turbine.html#L120), [L563](../../public/simulations/wind-turbine.html#L563)) | `prof` ([L987](../../public/simulations/wind-turbine.html#L987)), read by `wind()`; marks stale. |
 | Mean wind speed $v_0$ | `v0` | 4–11 m/s, step 0.1, default 8 ([L124](../../public/simulations/wind-turbine.html#L124)) | `c.v0`; marks stale. |
 | Turbulence σ / Gust size / Step size | `dv` | 0–4 m/s, step 0.1, default 1.5 ([L128](../../public/simulations/wind-turbine.html#L128)) | `c.dv`; label set by `controls()`; unused for steady wind; marks stale. |
-| Read values | added by datalog.js | switch, off | Appended to the first figure caption ([datalog.js:591–593](../../public/scripts/datalog.js#L591-L593)); see [datalog.md](../scripts/datalog.md). |
+| Read values | added by datalog.js | switch, off | Appended to the first figure caption ([datalog.js:588–590](../../public/scripts/datalog.js#L588-L590)); see [datalog.md](../scripts/datalog.md). |
 
 ## What the page writes into the data store
 
@@ -279,12 +279,12 @@ $\partial\tau_\text{aero}/\partial\omega = -2.480\times10^5$ N m s, $K_i = 1.44\
 rotor at the present speed, $60/n_\text{rot}$ seconds of the stored run (4.0 s at 15 rpm), timed by `t_play`. Columns:
 `v_now`, `rpm_now`, `P_now`, `lam_now`, `cp_now`, `th_now`; the default point is the rotor. Recording is refused when the run
 ends before one more turn. The panel samples every frame of the round, at most 600 samples
-([datalog.js:747](../../public/scripts/datalog.js#L747)).
+([datalog.js:744](../../public/scripts/datalog.js#L744)).
 
 **`Sim.live()`** ([L936–L945](../../public/simulations/wind-turbine.html#L936-L945)) returns formatted strings read from the
 store for the walkthrough keys `lam`, `cp`, `lopt`, `cpmax`, `Kopt`, `v`, `w`, `ta`, `tg`, `Pg`, `wref`, `Kp`, `Ki`, `dtd`,
 `n`, `t`, `th`, `Eg`, `bal`; row-valued keys use `i_now`. The walkthrough polls it every 200 ms
-([sim.js:400](../../public/scripts/sim.js#L400)).
+([sim.js:326](../../public/scripts/sim.js#L326)).
 
 `rpm_ref` is the raw rpm input captured by `solve()`, rather than a round-trip conversion of `w_ref`. Check of `w_ref` converts this stored input; changing the live target cannot change the check of an already solved run. All 27 target values from 8 to 21 turns per minute were checked and were bit-identical.
 
@@ -326,7 +326,7 @@ the seek slider, the segmented buttons `.seg` and the greyed control `.ctl.is-of
   ([L227–L230](../../public/simulations/wind-turbine.html#L227-L230)), a table of all eight controller–wind combinations
   ([L483–L495](../../public/simulations/wind-turbine.html#L483-L495)) and exercise 7.1;
 - `section#walk` with `data-walk="turbine"` ([L539](../../public/simulations/wind-turbine.html#L539)), filled from
-  `walk/turbine.js` by `sim.js` ([sim.js:476–486](../../public/scripts/sim.js#L476-L486)); see [walk.md](../scripts/walk.md);
+  `walk/turbine.js` by `sim.js` ([sim.js:402–411](../../public/scripts/sim.js#L402-L411)); see [walk.md](../scripts/walk.md);
 - footer; scripts in load order: `fold.js`, `sim.js`, `dataset.js`, the inline page script, `datalog.js`
   ([L547–L1168](../../public/simulations/wind-turbine.html#L547-L1168)). See [sim.md](../scripts/sim.md) and
   [fold.md](../scripts/fold.md).
@@ -416,9 +416,9 @@ The page states this in `Sim.data.about` ([L1158](../../public/simulations/wind-
 3. Fixed on 2026-10-15: w_ref is checked against the saved rpm input, including Follow the wind; all target steps recompute identically after live controls change (commit `:/^Batch A: fix simulation and recording faults; verify in Chromium$`).
 4. Fixed on 2026-10-15: the Figure 2 labels render p and opt as SVG subscripts (commit `:/^Batch B: correct notes and layout; verify measured figures in Chromium$`).
 5. Fixed on 2026-10-15: solve stores h, steps, rpm_min, rpm_max and captured_pct; displays only read them (commit `:/^Batch D: store computed results once; verify values and pixel readbacks$`).
-6. **Dead code.** `frames` is counted ([L960](../../public/simulations/wind-turbine.html#L960)) but never read.
+6. Fixed on 2026-10-15: the unread frame counter was removed (commit `:/^Batch E: remove proven unused code; verify styles, arrays and exports$`).
 7. **Redraw while paused.** The clock ticks every animation frame with $\Delta t = 0$ while paused
-   ([sim.js:179–186](../../public/scripts/sim.js#L179-L186)) and the tick always calls `frame()`
+   ([sim.js:178–185](../../public/scripts/sim.js#L178-L185)) and the tick always calls `frame()`
    ([L965](../../public/simulations/wind-turbine.html#L965)), so both canvases are redrawn about 60 times a second while
    paused (about 1.4 ms per frame measured), and `#cap-op` and `#cap-t` are rewritten each frame
    ([L932](../../public/simulations/wind-turbine.html#L932), [L954](../../public/simulations/wind-turbine.html#L954)).

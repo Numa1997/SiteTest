@@ -83,15 +83,6 @@
         var ds = this;
         return this.vars[name].dims.map(function (d) { return ds.dims[d] || 0; });
     };
-    Dataset.prototype.size = function (name) {
-        return this.shape(name).reduce(function (a, b) { return a * b; }, 1);
-    };
-    /* row-major flat index of a 2-D element */
-    Dataset.prototype.index = function (name, j, i) { return j * (this.dims[this.vars[name].dims[1]] || 0) + i; };
-    Dataset.prototype.at = function (name, idx) {
-        var v = this.vars[name];
-        return v.dims.length ? v.data[idx] : v.data;
-    };
     Dataset.prototype.dtype = function (name) {
         var v = this.vars[name];
         if (!v.dims.length) return v.type;
@@ -181,5 +172,4 @@
     };
 
     Sim.dataset = function (meta) { return new Dataset(meta); };
-    Sim.Dataset = Dataset;
 })();

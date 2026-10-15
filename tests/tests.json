@@ -298,5 +298,22 @@
       "Open Data and verify steps is 12000; rpm_min, rpm_max and captured_pct match the readouts."
     ],
     "expected": "Square frequencies have no spurious decimal tails. Turbine results agree with their stored values."
+  },
+  {
+    "name": "Shared simulation tools survive unused-code cleanup",
+    "viewport": "mobile",
+    "covers": [
+      "data panel after cleanup",
+      "walkthrough equation styling",
+      "dataset export"
+    ],
+    "description": "Exercises the shared paths retained during the final cleanup.",
+    "steps": [
+      "Open simulations/water-wave.html at phone width.",
+      "Open the walkthrough and confirm the equation and Now values render.",
+      "Open Data, inspect a stored value and its Check, then save the dataset.",
+      "Confirm the download is a ZIP containing metadata and NumPy data, and close Data."
+    ],
+    "expected": "Walkthrough, Check, data download and close controls remain functional with no page errors."
   }
 ]

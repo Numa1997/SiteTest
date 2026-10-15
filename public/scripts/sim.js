@@ -137,7 +137,6 @@
             text: c[3] === 0 ? 'nothing (transparent)' : 'rgb(' + c[0] + ', ' + c[1] + ', ' + c[2] + ')' + (best && best.dist > 0 ? ', ' + (best.dist / box.dpr).toFixed(1) + ' px away' : '') };
     }
     function isBurgundy(c) { return c[3] > 0 && c[0] > c[1] + 40 && c[0] > c[2] + 30 && c[0] < 215; }
-    function isInk(c) { return c[3] > 140 && 0.2126 * c[0] + 0.7152 * c[1] + 0.0722 * c[2] < 110; }
 
     function onResize(el, fn) {
         var t = null;
@@ -229,79 +228,6 @@
         host.insertBefore(el, host.firstChild);
     }
     window.addEventListener('error', function (e) { showError(e.message); });
-
-    /* ---------- derivation cards: every step and sub-step opens and closes ---------- */
-    function cards() {
-        var deriv = document.querySelector('.deriv');
-        if (!deriv) return;
-        var skip = document.createElement('a');
-        skip.className = 'skip-link';
-        skip.href = '#deriv-title';
-        skip.textContent = 'Skip to the physics and code';
-        document.body.insertBefore(skip, document.body.firstChild);
-        window.addEventListener('beforeprint', function () {
-            Array.prototype.forEach.call(deriv.querySelectorAll('details'), function (d) { d.open = true; });
-        });
-        Array.prototype.forEach.call(deriv.querySelectorAll('article.step'), function (step, i) {
-            var card = document.createElement('details');
-            card.className = 'card step';
-            card.id = step.id;
-            if (i === 0) card.open = true;
-            var sum = document.createElement('summary');
-            sum.className = 'card__sum';
-            var num = step.querySelector('.step__num'), h3 = step.querySelector('h3');
-            if (num) sum.appendChild(num);
-            if (h3) sum.appendChild(h3);
-            var body = document.createElement('div');
-            body.className = 'card__body';
-            var subBody = null, subs = 0;
-            while (step.firstChild) {
-                var node = step.firstChild;
-                if (node.nodeType === 1 && node.tagName === 'H4') {
-                    var sub = document.createElement('details');
-                    sub.className = 'sub';
-                    if (subs++ === 0) sub.open = true;
-                    var ss = document.createElement('summary');
-                    ss.className = 'sub__sum';
-                    ss.appendChild(node);
-                    subBody = document.createElement('div');
-                    subBody.className = 'sub__body';
-                    sub.appendChild(ss);
-                    sub.appendChild(subBody);
-                    body.appendChild(sub);
-                    continue;
-                }
-                (subBody || body).appendChild(node);
-            }
-            card.appendChild(sum);
-            card.appendChild(body);
-            step.parentNode.replaceChild(card, step);
-        });
-        var head = deriv.querySelector('.deriv__head');
-        if (head) {
-            var tools = document.createElement('div');
-            tools.className = 'deriv__tools';
-            tools.innerHTML = '<button type="button" class="btn btn--ghost" data-all="1">Expand all</button>' +
-                '<button type="button" class="btn btn--ghost" data-all="0">Collapse all</button>';
-            tools.addEventListener('click', function (e) {
-                var b = e.target.closest('[data-all]');
-                if (!b) return;
-                var open = b.getAttribute('data-all') === '1';
-                Array.prototype.forEach.call(deriv.querySelectorAll('details'), function (d) { d.open = open; });
-            });
-            head.appendChild(tools);
-        }
-        /* the step index opens the card it points to */
-        function openTarget(hash) {
-            var t = hash && document.getElementById(hash.slice(1));
-            if (t && t.tagName === 'DETAILS') t.open = true;
-        }
-        deriv.addEventListener('click', function (e) {
-            var a = e.target.closest('a[href^="#"]');
-            if (a) openTarget(a.getAttribute('href'));
-        });
-        openTarget(location.hash);
-    }
 
     /* ---------- walkthrough: algebra, code and live numbers side by side ---------- */
     function esc(s) { return String(s).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;'); }
@@ -474,7 +400,6 @@
     }
 
     function boot() {
-        cards();
         typeset();
         var host = document.getElementById('walk');
         if (!host) return;
@@ -494,7 +419,6 @@
         ticks: ticks,
         readPixel: readPixel,
         isBurgundy: isBurgundy,
-        isInk: isInk,
         onResize: onResize,
         slider: slider,
         clock: clock,

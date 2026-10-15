@@ -6,10 +6,10 @@ are byte-identical on the live site).
 | File | Lines | Loaded by | Job |
 |---|---|---|---|
 | [`site.css`](../public/styles/site.css) | 903 | home, catalog, Portfolios | Tokens, base type, the home page (hero, timeline, plates), footer. |
-| [`sim.css`](../public/styles/sim.css) | 304 | the ten simulation pages | Tokens again, the figure, controls, readouts, walkthrough; imports KaTeX's CSS and `paper.css`. |
-| [`paper.css`](../public/styles/paper.css) | 120 | simulation pages (through `sim.css`), catalog, Portfolios | Lecture notes set like LaTeX: Latin Modern, numbered equations, figures, boxes. |
-| [`catalog.css`](../public/styles/catalog.css) | 582 | catalog, Portfolios | Top bar, masthead, search bar, chips, catalog entries; switches titles to Instrument Serif. |
-| [`data.css`](../public/styles/data.css) | 358 | the ten simulation pages | The data panel and the Read values strip ([scripts/datalog.md](scripts/datalog.md)). |
+| [`sim.css`](../public/styles/sim.css) | 229 | the ten simulation pages | Tokens again, the figure, controls, readouts, walkthrough; imports KaTeX's CSS and `paper.css`. |
+| [`paper.css`](../public/styles/paper.css) | 118 | simulation pages (through `sim.css`), catalog, Portfolios | Lecture notes set like LaTeX: Latin Modern, numbered equations, figures, boxes. |
+| [`catalog.css`](../public/styles/catalog.css) | 572 | catalog, Portfolios | Top bar, masthead, search bar, chips, catalog entries; switches titles to Instrument Serif. |
+| [`data.css`](../public/styles/data.css) | 357 | the ten simulation pages | The data panel and the Read values strip ([scripts/datalog.md](scripts/datalog.md)). |
 | [`fold.css`](../public/styles/fold.css) | 168 | every page | Fold cards, header bands, toggles, Expand / Collapse all ([scripts/fold.md](scripts/fold.md)). |
 | [`portfolio.css`](../public/styles/portfolio.css) | 288 | Portfolios | The project cards. |
 
@@ -74,7 +74,7 @@ Three consequences:
 - On the catalog and Portfolios pages `catalog.css` comes after `site.css` and redefines `--serif` as Instrument Serif
   ([catalog.css:9–11](../public/styles/catalog.css#L9-L11)), so every rule of `site.css` and `paper.css` that uses
   `var(--serif)` switches font there. The home page does not load `catalog.css` and keeps IBM Plex Serif.
-- `fold.css` is always last. Its rules for the site's own structures ([fold.css:105–169](../public/styles/fold.css#L105-L169))
+- `fold.css` is always last. Its rules for the site's own structures ([fold.css:105–168](../public/styles/fold.css#L105-L168))
   override the page stylesheet once fold.js has turned a block into a fold.
 - `paper.css`, `catalog.css`, `portfolio.css`, `data.css` and `fold.css` define almost no colours of their own: they read the
   tokens of `site.css` or `sim.css`.
@@ -108,11 +108,11 @@ CSS custom properties, all on `:root` unless noted.
 | `--fold-open`, `--fold-close`, `--fold-ease` | `320ms`, `240ms`, `cubic-bezier(0.4,0,0.2,1)` | set by [fold.js:21–23](../public/scripts/fold.js#L21-L23) | One clock for fold, chevron and scroll. |
 | `--head-h` | a section header's height, set per section | [fold.js:204–206](../public/scripts/fold.js#L204-L206) | Where level-2 headers pin. |
 | `--dp-w` | `520px`; `560px` from 1500 px | [data.css:6–7](../public/styles/data.css#L6-L7) | Data panel width. |
-| `--p`, `--c` | `50%`, `var(--accent)` on each range input | [sim.css:88](../public/styles/sim.css#L88); `--p` set by [sim.js:160](../public/scripts/sim.js#L160) | Slider fill up to the thumb. |
+| `--p`, `--c` | `50%`, `var(--accent)` on each range input | [sim.css:88](../public/styles/sim.css#L88); `--p` set by [sim.js:159](../public/scripts/sim.js#L159) | Slider fill up to the thumb. |
 | `--ar`, `--ar-m` | per figure, inline `style` | e.g. [water-wave.html:44](../public/simulations/water-wave.html#L44) | Figure aspect ratio, wide and at 900 px or less. |
-| `--d` | `(i mod 5) × 80 ms` per `.reveal` | [index.html:1223](../index.html#L1223) | Fade-in delay on the home page. |
+| `--d` | `(i mod 5) × 80 ms` per `.reveal` | [index.html:1217](../index.html#L1217) | Fade-in delay on the home page. |
 
-Five tokens are read but defined nowhere, so only their fallbacks ever apply: `--on-accent` (`#fff`, in catalog.css and
+Five formerly undefined tokens were replaced with their unchanged fallback colours: `--on-accent` (`#fff`, in catalog.css and
 data.css), `--tag-soft` (`#f0eae0`, data.css), `--tan-line` (`#e3cfa3`, [data.css:218](../public/styles/data.css#L218)),
 `--bar-bg` ([catalog.css:114](../public/styles/catalog.css#L114)) and `--accent-glow`
 ([catalog.css:155](../public/styles/catalog.css#L155)).
@@ -154,9 +154,9 @@ the tokens, base type, links and the `footer`; `catalog.css` changes `--serif` a
 **Print** ([890–903](../public/styles/site.css#L890-L903)): hides `.index`, `.skip-link`, `.btn` and the hero `.figure`;
 white page; no minimum hero height.
 
-**After fold.js.** On the home page every `.section` becomes a fold, and [fold.css:124–128](../public/styles/fold.css#L124-L128)
+**After fold.js.** On the home page every `.section` becomes a fold, and [fold.css:123–127](../public/styles/fold.css#L123-L127)
 removes its 104 px top padding, sets the `h2` to 26–34 px and hides the wine bar. The `.index` keeps `padding-top: 104px`; the
-Expand / Collapse pair gets a 104 px top margin to match it ([fold.css:125](../public/styles/fold.css#L125)).
+Expand / Collapse pair gets a 104 px top margin to match it ([fold.css:124](../public/styles/fold.css#L124)).
 
 ## `sim.css` · the simulation pages
 
@@ -178,22 +178,20 @@ Expand / Collapse pair gets a 104 px top margin to match it ([fold.css:125](../p
 | Buttons | `.btn`, `.btn--ghost`, `.btn[disabled]` | [98–102](../public/styles/sim.css#L98-L102) |
 | Switches | `.switch` (34 × 20 px toggle drawn from a checkbox) | [105–109](../public/styles/sim.css#L105-L109) |
 | Readouts and legend | `.readouts` (two-column `dl`), `.legend`, swatches `.sw`, `.sw--dot/ink/rose/tan/dash`, `.colorbar`, `.colorbar-labels` | [112–129](../public/styles/sim.css#L112-L129) |
-| Older note and derivation blocks | `.notes`, `.note`, `.eq`, `.deriv*`, `.step*`, `.facts`, `.try`, `.sim-error` | [132–179](../public/styles/sim.css#L132-L179) |
-| Openable cards | `details.card`, `.card__sum`, `.card__body`, `details.sub`, `.sub__sum` (built by sim.js from `article.step` inside `.deriv`) | [182–203](../public/styles/sim.css#L182-L203) |
-| Walkthrough | `.walk`, `.walk__head`, `.walk__frame` (220 px step list + card), `.walk__steps` buttons, `.walk__card`, `.walk__code pre` (ink ground), highlighted symbols `.k` / `.k.is-lit`, `.walk__table` with a pulsing "now" dot, `.walk__val`, `.walk__nav` ([scripts/walk.md](scripts/walk.md)) | [206–245](../public/styles/sim.css#L206-L245) |
-| Skip link, footer, keyframes | `.skip-link`, `.sim-foot`, `rise`, `fade` | [265–266](../public/styles/sim.css#L265-L266), [279–284](../public/styles/sim.css#L279-L284) |
-| Caption maths | `html:not(.tex-ready) .stage__cap .tx` hidden until KaTeX has set it (sim.js adds `tex-ready`, at the latest after 4 s, [sim.js:463–466](../public/scripts/sim.js#L463-L466)) | [303–304](../public/styles/sim.css#L303-L304) |
+| Equation and error blocks | `.eq` is used by the walkthrough; `.sim-error` remains for errors. | Retained. |
+| Walkthrough | `.walk`, `.walk__head`, `.walk__frame` (220 px step list + card), `.walk__steps` buttons, `.walk__card`, `.walk__code pre` (ink ground), highlighted symbols `.k` / `.k.is-lit`, `.walk__table` with a pulsing "now" dot, `.walk__val`, `.walk__nav` ([scripts/walk.md](scripts/walk.md)) | [137–176](../public/styles/sim.css#L137-L176) |
+| Skip link, footer, keyframes | `.skip-link`, `.sim-foot`, `rise`, `fade` | [191–192](../public/styles/sim.css#L191-L192), [205–210](../public/styles/sim.css#L205-L210) |
+| Caption maths | `html:not(.tex-ready) .stage__cap .tx` hidden until KaTeX has set it (sim.js adds `tex-ready`, at the latest after 4 s, [sim.js:389–392](../public/scripts/sim.js#L389-L392)) | [228–229](../public/styles/sim.css#L228-L229) |
 
 **Breakpoints.**
 
 | Width | What changes | Lines |
 |---|---|---|
-| ≤ 900 px | Figure and panel stack; figures switch to `--ar-m`; derivation table of contents in a row; walkthrough steps become a sideways-scrolling row above the card. | [174–179](../public/styles/sim.css#L174-L179), [246–251](../public/styles/sim.css#L246-L251), [287–290](../public/styles/sim.css#L287-L290) |
-| ≤ 560 px | 16 px side padding; tighter cards and panel. | [252–259](../public/styles/sim.css#L252-L259), [291–297](../public/styles/sim.css#L291-L297) |
-| reduced motion | No card, walkthrough or head animations. | [260–262](../public/styles/sim.css#L260-L262), [298–300](../public/styles/sim.css#L298-L300) |
+| ≤ 900 px | Figure and panel stack; figures switch to `--ar-m`; walkthrough steps become a sideways-scrolling row above the card. | [177–182](../public/styles/sim.css#L177-L182), [213–216](../public/styles/sim.css#L213-L216) |
+| ≤ 560 px | 16 px side padding; tighter cards and panel. | [183–185](../public/styles/sim.css#L183-L185), [217–222](../public/styles/sim.css#L217-L222) |
+| reduced motion | No card, walkthrough or head animations. | [186–188](../public/styles/sim.css#L186-L188), [223–225](../public/styles/sim.css#L223-L225) |
 
-**Print** ([267–276](../public/styles/sim.css#L267-L276)): hides the figure navigation, panel, derivation tools and table of
-contents, walkthrough controls and the figure caption; one column; no shadows; boxes not split across pages; code on a light
+**Print** ([193–202](../public/styles/sim.css#L193-L202)): hides the figure navigation, panel, walkthrough controls and the figure caption; one column; no shadows; boxes not split across pages; code on a light
 ground.
 
 ## `paper.css` · the lecture notes
@@ -209,18 +207,18 @@ catalog and Portfolios pages use its fonts and tokens (`--tex`, `--line-strong`,
 | Fonts and tokens | four `@font-face`, `--tex`, `--line-strong`, `--quote`, `--plate` | [9–20](../public/styles/paper.css#L9-L20) |
 | The note's frame | `.paper` (its body hidden until `.is-typeset`, so raw TeX never flashes), `.paper__head`, `.paper__kicker`, `.paper__title`, `.paper__by`, `.paper__abstract` (4 px wine edge) | [23–30](../public/styles/paper.css#L23-L30) |
 | Contents column | `.paper__grid` (210 px + 760 px), `.paper__toc` (sticky; `.is-here` marks the current section) | [32–38](../public/styles/paper.css#L32-L38) |
-| Running text | `.paper__body` (Latin Modern 18 px / 1.72, hyphenation), lists, `.sc` | [41–50](../public/styles/paper.css#L41-L50) |
-| Sections | `.psec`, `.psec > h3`, `.psec__n` (filled wine badge), `.psec h4`, `.psub__n`, `.psec__lead` | [52–58](../public/styles/paper.css#L52-L58) |
-| Mathematics | `.paper .katex` at 1.06 em, `.katex-display` (quote ground, 2 px wine edge, scrolls sideways; room for the equation number), `.eqnote` | [61–68](../public/styles/paper.css#L61-L68) |
-| Figures | `.pfig`, `.pfig__plate` (white, outlined, 12 px padding), `.pfig__row`, `figcaption`, `.pfig__n`; text classes inside inline SVG: `.m` (maths italic), `.mu` (upright), `.tick`, `.lbl`, `.acc` | [71–84](../public/styles/paper.css#L71-L84) |
-| Boxes | `.pbox`, `.pbox__t`, `.pbox--ex` (exercise: tan edge), `.pbox--star`, `.star` | [87–93](../public/styles/paper.css#L87-L93) |
-| Tables and references | `.ptab`, `.prefs` | [96–100](../public/styles/paper.css#L96-L100) |
+| Running text | `.paper__body` (Latin Modern 18 px / 1.72, hyphenation), lists | [41–50](../public/styles/paper.css#L41-L50) |
+| Sections | `.psec`, `.psec > h3`, `.psec__n` (filled wine badge), `.psec h4`, `.psub__n`, `.psec__lead` | [51–57](../public/styles/paper.css#L51-L57) |
+| Mathematics | `.paper .katex` at 1.06 em, `.katex-display` (quote ground, 2 px wine edge, scrolls sideways; room for the equation number), `.eqnote` | [60–67](../public/styles/paper.css#L60-L67) |
+| Figures | `.pfig`, `.pfig__plate` (white, outlined, 12 px padding), `.pfig__row`, `figcaption`, `.pfig__n`; text classes inside inline SVG: `.m` (maths italic), `.mu` (upright), `.tick`, `.lbl`, `.acc` | [70–83](../public/styles/paper.css#L70-L83) |
+| Boxes | `.pbox`, `.pbox__t`, `.pbox--ex` (exercise: tan edge), `.star` | [86–91](../public/styles/paper.css#L86-L91) |
+| Tables and references | `.ptab`, `.prefs` | [94–98](../public/styles/paper.css#L94-L98) |
 
 **Breakpoints.** ≤ 960 px: contents above the text, laid out in columns of at least 220 px
-([102–106](../public/styles/paper.css#L102-L106)). ≤ 640 px: smaller abstract, body (17 px) and headings, two-figure rows stack
-([107–115](../public/styles/paper.css#L107-L115)).
+([100–104](../public/styles/paper.css#L100-L104)). ≤ 640 px: smaller abstract, body (17 px) and headings, two-figure rows stack
+([105–113](../public/styles/paper.css#L105-L113)).
 
-**Print** ([116–120](../public/styles/paper.css#L116-L120)): no contents column, one column, and the body is shown even if
+**Print** ([114–118](../public/styles/paper.css#L114-L118)): no contents column, one column, and the body is shown even if
 KaTeX never ran.
 
 ## `catalog.css` · the catalog and the shared masthead
@@ -236,24 +234,24 @@ after `site.css` and `paper.css` ([catalog.css:3](../public/styles/catalog.css#L
 | Accessibility | `.visually-hidden` (the search label) | [13–20](../public/styles/catalog.css#L13-L20) |
 | Top bar | `.cat-top`, its `nav` | [23–46](../public/styles/catalog.css#L23-L46) |
 | Masthead | `.cat`, `.cat__head` (text + stats), `.cat__kicker`, `h1` (56–104 px, weight 400), `.cat__lede`, `.cat__stats` | [49–105](../public/styles/catalog.css#L49-L105) |
-| Search bar | `.cat__bar` (sticky, translucent, a grid with areas `search stage count` / `field field field`), `.cat__search` (icon, input, `kbd` hint hidden while typing), `.cat__filters` (`display: contents`), `.cat__chips`, `#fields`, `#stages`, `.chip` (pill; `aria-pressed="true"` turns it ink), `.chip small` (count), `.cat__count`, `.cat__intro` | [108–239](../public/styles/catalog.css#L108-L239) |
-| Entries | `.cat__list` (two-column grid), `.entry` (outlined card), `.entry__fig`, `.entry__plate` (8 : 5, white, outlined), `.entry__ph` (the "Fig. n" stand-in under the image), `.entry__cap`, `.entry__body`, `.entry__kicker`, `.entry h3`, `.entry__abs`, `.entry__eq` (hidden until `.is-typeset`), `.entry__facts`, `.entry__tags`, `.entry__foot`, `.entry__open`, `.entry__note` | [242–418](../public/styles/catalog.css#L242-L418) |
-| Empty state | `.cat__empty` (dashed outline), its button | [421–439](../public/styles/catalog.css#L421-L439) |
-| The four parts | `.cat__anatomy`, `.cat__parts` (four columns, 3 px wine top edge) | [442–485](../public/styles/catalog.css#L442-L485) |
-| No-JS notice | `.cat-error` | [486–490](../public/styles/catalog.css#L486-L490) |
+| Search bar | `.cat__bar` (sticky, translucent, a grid with areas `search stage count` / `field field field`), `.cat__search` (icon, input, `kbd` hint hidden while typing), `.cat__filters` (`display: contents`), `.cat__chips`, `#fields`, `#stages`, `.chip` (pill; `aria-pressed="true"` turns it ink), `.chip small` (count), `.cat__count` | [108–229](../public/styles/catalog.css#L108-L229) |
+| Entries | `.cat__list` (two-column grid), `.entry` (outlined card), `.entry__fig`, `.entry__plate` (8 : 5, white, outlined), `.entry__ph` (the "Fig. n" stand-in under the image), `.entry__cap`, `.entry__body`, `.entry__kicker`, `.entry h3`, `.entry__abs`, `.entry__eq` (hidden until `.is-typeset`), `.entry__facts`, `.entry__tags`, `.entry__foot`, `.entry__open`, `.entry__note` | [232–408](../public/styles/catalog.css#L232-L408) |
+| Empty state | `.cat__empty` (dashed outline), its button | [411–429](../public/styles/catalog.css#L411-L429) |
+| The four parts | `.cat__anatomy`, `.cat__parts` (four columns, 3 px wine top edge) | [432–475](../public/styles/catalog.css#L432-L475) |
+| No-JS notice | `.cat-error` | [476–480](../public/styles/catalog.css#L476-L480) |
 
 **Breakpoints.**
 
 | Width | What changes | Lines |
 |---|---|---|
-| ≤ 1100 px | The four parts in two columns. | [493–497](../public/styles/catalog.css#L493-L497) |
-| ≤ 860 px | Masthead one column; list one column. | [498–506](../public/styles/catalog.css#L498-L506) |
-| ≤ 640 px | 16 px side padding; the bar becomes `search count` over one sideways-scrolling row of all chips, the year chips after a thin line; smaller stats, lede and entry text; facts stack; parts one column; footer padding. | [507–574](../public/styles/catalog.css#L507-L574) |
-| no hover (touch) | The `/` hint is hidden. | [575–582](../public/styles/catalog.css#L575-L582) |
+| ≤ 1100 px | The four parts in two columns. | [483–487](../public/styles/catalog.css#L483-L487) |
+| ≤ 860 px | Masthead one column; list one column. | [488–496](../public/styles/catalog.css#L488-L496) |
+| ≤ 640 px | 16 px side padding; the bar becomes `search count` over one sideways-scrolling row of all chips, the year chips after a thin line; smaller stats, lede and entry text; facts stack; parts one column; footer padding. | [497–564](../public/styles/catalog.css#L497-L564) |
+| no hover (touch) | The `/` hint is hidden. | [565–572](../public/styles/catalog.css#L565-L572) |
 
 No print rules.
 
-**After fold.js.** On the catalog the list is a column of fold cards, and [fold.css:153–169](../public/styles/fold.css#L153-L169)
+**After fold.js.** On the catalog the list is a column of fold cards, and [fold.css:152–168](../public/styles/fold.css#L152-L168)
 takes over: `.cat__list--sorted` becomes a flex column, the entry loses its own frame and lays out figure and caption left,
 text right (one column at 860 px and below), its `h3` is hidden, and the timeline dot that `site.css` gives every `.entry`
 is removed.
@@ -261,7 +259,7 @@ is removed.
 ## `data.css` · the data panel
 
 **Loaded by** the ten simulation pages, line 12 of each, after `sim.css`. It uses the tokens of `sim.css`, `--tex` from
-`paper.css`, and fallbacks for three tokens no file defines ([data.css:4](../public/styles/data.css#L4)). What the panel does
+`paper.css`, and literal colours formerly supplied by three undefined-token fallbacks ([data.css:4](../public/styles/data.css#L4)). What the panel does
 is in [scripts/datalog.md](scripts/datalog.md).
 
 | Purpose | Selectors | Lines |
@@ -285,10 +283,10 @@ is in [scripts/datalog.md](scripts/datalog.md).
 |---|---|---|
 | ≥ 1500 px | Panel 560 px wide. | [7](../public/styles/data.css#L7) |
 | ≥ 1360 px | While open, the page gets right padding of the panel's width instead of being covered. | [305–307](../public/styles/data.css#L305-L307) |
-| ≤ 640 px | The panel becomes a bottom sheet 84 % of the screen high; the tab a pill at the bottom right that slides away (`.dp-tab--away`); tighter head, recorder, tabs, items and charts. The Read values strip gets tighter too. | [288–291](../public/styles/data.css#L288-L291), [309–349](../public/styles/data.css#L309-L349) |
-| reduced motion | No slide, no pulsing, no progress animation. | [350–354](../public/styles/data.css#L350-L354) |
+| ≤ 640 px | The panel becomes a bottom sheet 84 % of the screen high; the tab a pill at the bottom right that slides away (`.dp-tab--away`); tighter head, recorder, tabs, items and charts. The Read values strip gets tighter too. | [288–291](../public/styles/data.css#L288-L291), [309–348](../public/styles/data.css#L309-L348) |
+| reduced motion | No slide, no pulsing, no progress animation. | [349–353](../public/styles/data.css#L349-L353) |
 
-**Print** ([355–358](../public/styles/data.css#L355-L358)): panel and tab hidden, no padding for them.
+**Print** ([354–357](../public/styles/data.css#L354-L357)): panel and tab hidden, no padding for them.
 
 ## `fold.css` · fold-out sections
 
@@ -306,15 +304,15 @@ Its tokens fall back to fixed colours, so it works on the home page, which has n
 | Level 2, a part | `.fsub` (8 px corners; header pins at `--fold-top + --head-h`) | [66–71](../public/styles/fold.css#L66-L71) |
 | Expand all / Collapse all | `.fold-tools`, `.fold-tool` (pills) | [74–79](../public/styles/fold.css#L74-L79) |
 | Card details | `.fs-more` (More / Less) | [82–86](../public/styles/fold.css#L82-L86) |
-| Lecture notes | `.paper .psec.fsec`, its `h3` (26–34 px), `.psec__n`, `.ppart` | [108–115](../public/styles/fold.css#L108-L115), [149–151](../public/styles/fold.css#L149-L151) |
-| Walkthrough | `.walk.fsec` and its `h2` | [118–121](../public/styles/fold.css#L118-L121) |
-| Home page | `.section.fsec`, `.content > .fold-tools`, the section `h2` | [124–128](../public/styles/fold.css#L124-L128), [140–142](../public/styles/fold.css#L140-L142) |
-| Portfolios | `.proj.fsec` (`overflow: clip` instead of `hidden`, so the header can stick), `h2.fs-title`, `.proj__part.fsub`, the part's paragraphs and note | [131–138](../public/styles/fold.css#L131-L138) |
-| Catalog | `.entry__foot .fs-more`, `.fold-tools:has(+ #catalog)`, `.cat__list--sorted`, `.simfold` and its entry layout | [145–148](../public/styles/fold.css#L145-L148), [153–169](../public/styles/fold.css#L153-L169) |
+| Lecture notes | `.paper .psec.fsec`, its `h3` (26–34 px), `.psec__n`, `.ppart` | [108–114](../public/styles/fold.css#L108-L114), [148–150](../public/styles/fold.css#L148-L150) |
+| Walkthrough | `.walk.fsec` and its `h2` | [117–120](../public/styles/fold.css#L117-L120) |
+| Home page | `.section.fsec`, `.content > .fold-tools`, the section `h2` | [123–127](../public/styles/fold.css#L123-L127), [139–141](../public/styles/fold.css#L139-L141) |
+| Portfolios | `.proj.fsec` (`overflow: clip` instead of `hidden`, so the header can stick), `h2.fs-title`, `.proj__part.fsub`, the part's paragraphs and note | [130–137](../public/styles/fold.css#L130-L137) |
+| Catalog | `.entry__foot .fs-more`, `.fold-tools:has(+ #catalog)`, `.cat__list--sorted`, `.simfold` and its entry layout | [144–147](../public/styles/fold.css#L144-L147), [152–168](../public/styles/fold.css#L152-L168) |
 
 **Breakpoints.** ≤ 720 px: smaller header, toggle and body padding ([88–94](../public/styles/fold.css#L88-L94)). ≤ 980 px: the
-home page's tools get a 48 px top margin instead of 104 px ([140–142](../public/styles/fold.css#L140-L142)). ≤ 860 px: catalog
-entries one column ([164–168](../public/styles/fold.css#L164-L168)). Reduced motion: transitions of 0.01 ms
+home page's tools get a 48 px top margin instead of 104 px ([139–141](../public/styles/fold.css#L139-L141)). ≤ 860 px: catalog
+entries one column ([163–167](../public/styles/fold.css#L163-L167)). Reduced motion: transitions of 0.01 ms
 ([95–97](../public/styles/fold.css#L95-L97)).
 
 **Print** ([98–103](../public/styles/fold.css#L98-L103)): toggles, tools and More buttons hidden, every body open, headers
@@ -343,7 +341,7 @@ and text, page links one column ([269–288](../public/styles/portfolio.css#L269
 
 **After fold.js.** fold.js removes `.proj__band` and the `h2` and builds a fold header in their place (measured: no band left
 with JavaScript on). So the band rules and `.proj h2` apply only without JavaScript. The paragraphs and note of a part move into
-`.fs-body`, where `.proj__part > p` and `.proj__part > .proj__note` no longer match; [fold.css:137–138](../public/styles/fold.css#L137-L138)
+`.fs-body`, where `.proj__part > p` and `.proj__part > .proj__note` no longer match; [fold.css:136–137](../public/styles/fold.css#L136-L137)
 repeats those two rules for the folded layout. Keep each pair in step.
 
 ---
@@ -353,7 +351,7 @@ repeats those two rules for the folded layout. Keep each pair in step.
 [`src/styles.css`](../src/styles.css) holds the three Tailwind directives and a placeholder comment. Its only importer is
 [`src/main.ts:1`](../src/main.ts#L1), and no page loads `src/main.ts`: `index.html` has no module script
 (its only scripts are [index.html:21–23](../index.html#L21-L23), [622](../index.html#L622) and
-[623–1260](../index.html#L623-L1260)), and a search of the repository for `main.ts` finds only that file's own line. On the live
+[623–1254](../index.html#L623-L1254)), and a search of the repository for `main.ts` finds only that file's own line. On the live
 site `/src/main.ts` answers 403 (measured). The file comes from the app template; see
 [build-and-deploy.md](build-and-deploy.md#build-files-at-the-root).
 
@@ -372,33 +370,19 @@ site `/src/main.ts` answers 403 (measured). The file comes from the app template
 2. **Shadows elsewhere, against the "no card shadows" comments** in [paper.css:7](../public/styles/paper.css#L7),
    [catalog.css:5](../public/styles/catalog.css#L5) and [portfolio.css:5](../public/styles/portfolio.css#L5): every open fold card
    ([fold.css:25](../public/styles/fold.css#L25)), the simulation figure and panel ([sim.css:67](../public/styles/sim.css#L67),
-   [77](../public/styles/sim.css#L77)), open derivation cards ([sim.css:187](../public/styles/sim.css#L187)), the walkthrough card
-   ([sim.css:218](../public/styles/sim.css#L218)), the data tab and panel ([data.css:16](../public/styles/data.css#L16),
+   [77](../public/styles/sim.css#L77)), the walkthrough card
+   ([sim.css:149](../public/styles/sim.css#L149)), the data tab and panel ([data.css:16](../public/styles/data.css#L16),
    [30](../public/styles/data.css#L30)). Measured on the Portfolios page and on Fig. 5.
 3. **`sim.css` repeats the tokens of `site.css`** ([sim.css:11–32](../public/styles/sim.css#L11-L32) against
    [site.css:7–30](../public/styles/site.css#L7-L30)); a colour change must be made in both.
-4. **Rules no current page uses.** No simulation page contains `.notes`, `.note`, `.eq`, `.eq__line`, `.eq__note`, `.deriv`,
-   `.step`, `.facts` or `.try` (grep of `public/simulations/*.html` and `public/scripts/`), and sim.js builds
-   `details.card` only inside a `.deriv` section ([sim.js:235–236](../public/scripts/sim.js#L235-L236)), which no page has; so
-   [sim.css:132–203](../public/styles/sim.css#L132-L203) (except `.sim-error`) is unused. In `paper.css`, `.pbox--star` and
-   `.sc` ([paper.css:92](../public/styles/paper.css#L92), [50](../public/styles/paper.css#L50)) are unused. In `catalog.css`,
-   `.cat__intro` ([230–239](../public/styles/catalog.css#L230-L239)) styles an element that is always hidden, and the list grid,
-   the entry frame and `.entry h3` ([242–247](../public/styles/catalog.css#L242-L247), [251–258](../public/styles/catalog.css#L251-L258),
-   [314–325](../public/styles/catalog.css#L314-L325), [503–505](../public/styles/catalog.css#L503-L505)) are overridden or hidden
-   by [fold.css:154–163](../public/styles/fold.css#L154-L163). In `site.css` the wine bar's widening on `.section.is-visible`
-   ([354–356](../public/styles/site.css#L354-L356)) is never seen: with JavaScript fold.css hides the bar
-   ([fold.css:127](../public/styles/fold.css#L127)); without it nothing adds `is-visible`.
-5. **Rules overridden later in the same file.** [fold.css:110–111](../public/styles/fold.css#L110-L111) are replaced by
-   [fold.css:149–150](../public/styles/fold.css#L149-L150) (`display: flex` → `block`, `top: -.28em` → `0`);
-   `.dp__title` is set to 26 px and then 22 px in the same media query ([data.css:316](../public/styles/data.css#L316),
-   [319](../public/styles/data.css#L319)).
-6. **Tokens used only through fallbacks**: `--on-accent`, `--tag-soft`, `--tan-line`, `--bar-bg`, `--accent-glow` are defined in
-   no file.
+4. Fixed on 2026-10-15: globally unused note/derivation selectors, `.sc`, `.pbox--star` and `.cat__intro` were removed (commit `:/^Batch E: remove proven unused code; verify styles, arrays and exports$`). The claim that `.eq` is unused was not reproduced: sim.js generates `class="eq walk__eq"`, and the embedded rotor project also uses it. `.eq` and the walkthrough’s `open` animation remain. Cross-file catalog overrides and the protected home wine-bar rule remain.
+5. Fixed on 2026-10-15: the overridden fold display/top and phone title font-size declarations were removed (commit `:/^Batch E: remove proven unused code; verify styles, arrays and exports$`).
+6. Fixed on 2026-10-15: the five undefined tokens were replaced with their existing fallback values; compared colours are unchanged (commit `:/^Batch E: remove proven unused code; verify styles, arrays and exports$`).
 7. Fixed on 2026-10-15: an empty sorted catalog has display none and zero top margin (commit `:/^Batch B: correct notes and layout; verify measured figures in Chromium$`).
 8. Fixed on 2026-10-15: the fold-tools breakpoint matches the 980 px home breakpoint; at 970 px the margin is 48 px (commit `:/^Batch B: correct notes and layout; verify measured figures in Chromium$`).
 9. **One class name, two meanings.** `.entry` is a timeline entry in `site.css` ([390–437](../public/styles/site.css#L390-L437))
-   and a catalog entry in `catalog.css` ([251](../public/styles/catalog.css#L251)); on the catalog page the timeline dot and
-   hover colour apply to catalog entries until [fold.css:169](../public/styles/fold.css#L169) removes the dot. Likewise `site.css`'s
+   and a catalog entry in `catalog.css` ([241](../public/styles/catalog.css#L241)); on the catalog page the timeline dot and
+   hover colour apply to catalog entries until [fold.css:168](../public/styles/fold.css#L168) removes the dot. Likewise `site.css`'s
    `.tag` ([103–115](../public/styles/site.css#L103-L115)) would also style KaTeX's equation numbers (class `tag`) on a page that
    loads both; no such page has a numbered equation today.
 10. **Google Fonts is fetched twice** on the catalog and Portfolios pages: `site.css` and `catalog.css` both `@import` IBM Plex

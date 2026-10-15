@@ -77,7 +77,6 @@
         </p>
       </noscript>
 
-      <p class="cat__intro" id="intro" hidden></p>
       <div class="cat__list cat__list--sorted" id="catalog"></div>
 
       <p class="cat__empty" id="empty" hidden>
@@ -267,7 +266,6 @@
           Array.prototype.forEach.call(list.querySelectorAll('.entry__plate img'), function (img) {
             img.addEventListener('error', function () { img.remove(); });
           });
-          $('intro').hidden = true;   // each field's description now opens its own card
 
           Array.prototype.forEach.call(document.querySelectorAll('#fields .chip'), function (b) {
             var id = b.getAttribute('data-field');

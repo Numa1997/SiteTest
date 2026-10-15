@@ -28,8 +28,8 @@ Related pages: the fold mechanism is in [scripts/fold.md](scripts/fold.md), the 
 | `preconnect` to Google Fonts (the fonts themselves come from `@import` in the CSS, [styles.md](styles.md#design-rules)) | [13–14](../index.html#L13-L14) | [13–14](../public/simulations.html#L13-L14) | [13–14](../public/portfolios.html#L13-L14) |
 | Favicon: an inline SVG, a wine square with a letter | "N" [17–20](../index.html#L17-L20) | "NK" [20–23](../public/simulations.html#L20-L23) | "NK" [21–24](../public/portfolios.html#L21-L24) |
 | Skip link (`.skip-link`) | to `#main` [27](../index.html#L27) | to `#catalog` [30](../public/simulations.html#L30) | to `#projects` [31](../public/portfolios.html#L31) |
-| `scripts/fold.js` at the end of `<body>` | [622](../index.html#L622) | [124](../public/simulations.html#L124) | [267](../public/portfolios.html#L267) |
-| Footer: © line and "Back to top" | [617–620](../index.html#L617-L620) | [119–122](../public/simulations.html#L119-L122) | [262–265](../public/portfolios.html#L262-L265) |
+| `scripts/fold.js` at the end of `<body>` | [622](../index.html#L622) | [123](../public/simulations.html#L123) | [267](../public/portfolios.html#L267) |
+| Footer: © line and "Back to top" | [617–620](../index.html#L617-L620) | [118–121](../public/simulations.html#L118-L121) | [262–265](../public/portfolios.html#L262-L265) |
 
 The `js` class matters for one thing: [site.css:769–779](../public/styles/site.css#L769-L779) hides `.reveal` blocks
 only under `.js`, so without JavaScript nothing waits for a fade-in.
@@ -57,7 +57,7 @@ education, research projects, eight simulation plates and skills. It is the entr
 | [21–23](../index.html#L21-L23) | `className = 'js'` |
 
 Scripts, in load order, at the end of `<body>`: `scripts/fold.js` ([622](../index.html#L622)), then the inline script
-([623–1260](../index.html#L623-L1260)). No KaTeX, no `paper.css`: the home page has no mathematics typeset.
+([623–1254](../index.html#L623-L1254)). No KaTeX, no `paper.css`: the home page has no mathematics typeset.
 
 Fonts as measured in Chromium: IBM Plex Sans 400/500, IBM Plex Mono 400/500, IBM Plex Serif 600 (titles) and 400 italic (the
 tagline). All come through the `@import` in [site.css:5](../public/styles/site.css#L5).
@@ -108,9 +108,9 @@ Clicking an index link opens its section first and scrolls it below the pinned h
 
 ### The inline script
 
-One function expression wraps everything ([624–1259](../index.html#L624-L1259)). It has three independent parts.
+One function expression wraps everything ([624–1253](../index.html#L624-L1253)). It has three independent parts.
 
-**Fig. 0, the live double pendulum** ([629–844](../index.html#L629-L844)). The everyday picture: a pendulum hanging from the
+**Fig. 0, the live double pendulum** ([629–838](../index.html#L629-L838)). The everyday picture: a pendulum hanging from the
 bob of another pendulum; let it go from high up and it swings wildly, never retracing its path. The model: two point masses on
 massless rigid rods, no friction, angles $\theta_1, \theta_2$ measured from the downward vertical. The code uses
 $g = 9.81\ \mathrm{m/s^2}$, $m_1 = m_2 = 1\ \mathrm{kg}$, $l_1 = l_2 = 1\ \mathrm{m}$ ([635–639](../index.html#L635-L639)) and
@@ -130,53 +130,53 @@ the reader sees is the motion of the model, not an artefact of the step.
 | Function | Lines | What it does |
 |---|---|---|
 | `reduced` (value) | [625–627](../index.html#L625-L627) | True when the reader asks for reduced motion (`prefers-reduced-motion`). |
-| `deriv(s)` | [657–680](../index.html#L657-L680) | The right-hand side above: returns $(\dot\theta_1, \dot\theta_2, \ddot\theta_1, \ddot\theta_2)$. |
-| `rk4(s, h)` | [681–697](../index.html#L681-L697) | One RK4 step of size `h` seconds: four slopes, weighted 1, 2, 2, 1. |
-| `pos(s)` | [698–707](../index.html#L698-L707) | Pixel positions of both bobs: pivot `(ox, oy)`, `scale` pixels per metre, $x = \sin\theta$, $y = \cos\theta$ (screen y points down). |
-| `resize()` | [708–723](../index.html#L708-L723) | Sizes the canvas and the off-screen trail canvas to the CSS size times the device pixel ratio (capped at 2). Pivot at the centre, 36 % down; `scale` = 0.24 × the smaller side. |
-| `reset()` | [724–733](../index.html#L724-L733) | New random start at rest: $\theta_1 \in [112°, 157°]$, $\theta_2 \in [135°, 207°]$ (from `Math.PI * (0.62 + 0.25 r)` and `Math.PI * (0.75 + 0.4 r)`); clears the trail. |
-| `step(n, h)` | [734–749](../index.html#L734-L749) | Takes `n` RK4 steps and draws each move of the lower bob as a short wine segment (`rgba(122, 31, 43, 0.85)`, 1.4 px) on the trail canvas. |
-| `fadeTrace(a)` | [750–756](../index.html#L750-L756) | Erases a fraction `a` of the trail with `destination-out`, so old trail fades. |
-| `draw()` | [757–780](../index.html#L757-L780) | Clears, copies the trail, draws the rods (ink, 2.2 px), the grey pivot (3.5 px) and the wine bobs (7 and 9 px radius). |
-| `frame(ts)` | [781–794](../index.html#L781-L794) | The animation loop, below. |
-| `start()` / `stop()` | [795–805](../index.html#L795-L805) | Start or stop the `requestAnimationFrame` loop. `stop()` is never called. |
-| start-up | [807–825](../index.html#L807-L825) | `resize()`, `reset()`. With reduced motion: 2600 steps of 3.5 ms (9.1 s) and one still picture, no loop. Otherwise 560 steps of 2.5 ms (1.4 s) so the trail is not empty, then `start()`; pauses while the tab is hidden (`visibilitychange`) or the canvas is off screen (`IntersectionObserver`). |
-| resize handler | [826–834](../index.html#L826-L834) | 120 ms after the last resize: `resize()`, clear the trail, `draw()`. |
-| reset button | [835–843](../index.html#L835-L843) | `reset()`, then the 9.1 s pre-run if motion is reduced, then `draw()`. |
+| `deriv(s)` | [656–679](../index.html#L656-L679) | The right-hand side above: returns $(\dot\theta_1, \dot\theta_2, \ddot\theta_1, \ddot\theta_2)$. |
+| `rk4(s, h)` | [680–696](../index.html#L680-L696) | One RK4 step of size `h` seconds: four slopes, weighted 1, 2, 2, 1. |
+| `pos(s)` | [697–706](../index.html#L697-L706) | Pixel positions of both bobs: pivot `(ox, oy)`, `scale` pixels per metre, $x = \sin\theta$, $y = \cos\theta$ (screen y points down). |
+| `resize()` | [707–722](../index.html#L707-L722) | Sizes the canvas and the off-screen trail canvas to the CSS size times the device pixel ratio (capped at 2). Pivot at the centre, 36 % down; `scale` = 0.24 × the smaller side. |
+| `reset()` | [723–732](../index.html#L723-L732) | New random start at rest: $\theta_1 \in [112°, 157°]$, $\theta_2 \in [135°, 207°]$ (from `Math.PI * (0.62 + 0.25 r)` and `Math.PI * (0.75 + 0.4 r)`); clears the trail. |
+| `step(n, h)` | [733–748](../index.html#L733-L748) | Takes `n` RK4 steps and draws each move of the lower bob as a short wine segment (`rgba(122, 31, 43, 0.85)`, 1.4 px) on the trail canvas. |
+| `fadeTrace(a)` | [749–755](../index.html#L749-L755) | Erases a fraction `a` of the trail with `destination-out`, so old trail fades. |
+| `draw()` | [756–779](../index.html#L756-L779) | Clears, copies the trail, draws the rods (ink, 2.2 px), the grey pivot (3.5 px) and the wine bobs (7 and 9 px radius). |
+| `frame(ts)` | [780–793](../index.html#L780-L793) | The animation loop, below. |
+| `start()` | [794–799](../index.html#L794-L799) | Start the `requestAnimationFrame` loop; visibility gates the work. |
+| start-up | [801–819](../index.html#L801-L819) | `resize()`, `reset()`. With reduced motion: 2600 steps of 3.5 ms (9.1 s) and one still picture, no loop. Otherwise 560 steps of 2.5 ms (1.4 s) so the trail is not empty, then `start()`; pauses while the tab is hidden (`visibilitychange`) or the canvas is off screen (`IntersectionObserver`). |
+| resize handler | [820–828](../index.html#L820-L828) | 120 ms after the last resize: `resize()`, clear the trail, `draw()`. |
+| reset button | [829–837](../index.html#L829-L837) | `reset()`, then the 9.1 s pre-run if motion is reduced, then `draw()`. |
 
-The frame loop in order ([781–794](../index.html#L781-L794)): the real time since the last frame `dt` is capped at 50 ms (so
+The frame loop in order ([780–793](../index.html#L780-L793)): the real time since the last frame `dt` is capped at 50 ms (so
 a stalled tab does not jump); simulated time `dt × SPEED` with `SPEED = 0.8` (the pendulum runs at 80 % of real speed) is added
 to an accumulator; the whole number of 2.5 ms steps it holds is taken (at 60 frames per second that is 5 or 6 steps); the trail
 fades by `1 − 0.99^(dt·60)`, which removes 1 % per 1/60 s whatever the frame rate (the trail halves in 69 frames, 1.15 s); then
 `draw()`.
 
-**Plate sketches** ([846–1205](../index.html#L846-L1205)). Each `div.plate__fig[data-sketch]` gets a small static SVG
+**Plate sketches** ([840–1199](../index.html#L840-L1199)). Each `div.plate__fig[data-sketch]` gets a small static SVG
 (`viewBox="0 0 200 110"`). Colours come from classes styled in [site.css:603–620](../public/styles/site.css#L603-L620):
 `ink`, `acc` (wine), `soft` (rose), `grey`, `acc-fill`, `grey-fill`.
 
 | Function | Lines | What it draws |
 |---|---|---|
-| `sine(x0, x1, y, amp, wl, ph, st)` | [847–854](../index.html#L847-L854) | SVG path of a sine curve sampled every `st` units. |
-| `svg(inner)` | [855–861](../index.html#L855-L861) | Wraps the markup in the 200 × 110 `<svg>`. |
-| `sketches.interference` | [863–888](../index.html#L863-L888) | Two sources at (62, 104) and (138, 104), ten rings each, fading outward. |
-| `sketches.pendulum` | [889–899](../index.html#L889-L899) | A drawn double pendulum with a dashed rose trail. |
-| `sketches.doubleslit` | [900–941](../index.html#L900-L941) | Plane wavefronts, a barrier with two slits at x = 66, half-circle wavelets, and 13 screen bars of height $\propto \cos^2(0.9 i)\,e^{-\lvert i\rvert/6}$. |
-| `sketches.wavetypes` | [942–961](../index.html#L942-L961) | A transverse sine (top) and 22 dots bunched by a sine (bottom): compressions. |
-| `sketches.waterwave` | [962–985](../index.html#L962-L985) | Seven rings round the centre and seven small orbits with a particle on each. |
-| `sketches.simulator` | [986–1016](../index.html#L986-L1016) | Two sines of wavelength 70 and 29 (top) and their sum (bottom). |
-| `sketches.phasors` | [1017–1098](../index.html#L1017-L1098) | The rose $z(t) = A e^{i(4t - \pi/2)} + A e^{i(-2t + \pi/2)}$, $A = 21$, with its two arms at $t = 0.3$. |
-| `sketches.fourier` | [1099–1197](../index.html#L1099-L1197) | The heart $x = 16\sin^3 u$, $y = 13\cos u - 5\cos 2u - 2\cos 3u - \cos 4u$ from its exact Fourier coefficients (the comment at 1100–1101 is correct: summing the eight terms gives back both formulas), three epicycles, and the spectrum $\lvert c_k\rvert$ for $k = -4 \dots 4$. |
-| fill loop | [1199–1205](../index.html#L1199-L1205) | For each `.plate__fig[data-sketch]`, looks up the function by name and sets `innerHTML`; an unknown name leaves the plate blank. |
+| `sine(x0, x1, y, amp, wl, ph, st)` | [841–848](../index.html#L841-L848) | SVG path of a sine curve sampled every `st` units. |
+| `svg(inner)` | [849–855](../index.html#L849-L855) | Wraps the markup in the 200 × 110 `<svg>`. |
+| `sketches.interference` | [857–882](../index.html#L857-L882) | Two sources at (62, 104) and (138, 104), ten rings each, fading outward. |
+| `sketches.pendulum` | [883–893](../index.html#L883-L893) | A drawn double pendulum with a dashed rose trail. |
+| `sketches.doubleslit` | [894–935](../index.html#L894-L935) | Plane wavefronts, a barrier with two slits at x = 66, half-circle wavelets, and 13 screen bars of height $\propto \cos^2(0.9 i)\,e^{-\lvert i\rvert/6}$. |
+| `sketches.wavetypes` | [936–955](../index.html#L936-L955) | A transverse sine (top) and 22 dots bunched by a sine (bottom): compressions. |
+| `sketches.waterwave` | [956–979](../index.html#L956-L979) | Seven rings round the centre and seven small orbits with a particle on each. |
+| `sketches.simulator` | [980–1010](../index.html#L980-L1010) | Two sines of wavelength 70 and 29 (top) and their sum (bottom). |
+| `sketches.phasors` | [1011–1092](../index.html#L1011-L1092) | The rose $z(t) = A e^{i(4t - \pi/2)} + A e^{i(-2t + \pi/2)}$, $A = 21$, with its two arms at $t = 0.3$. |
+| `sketches.fourier` | [1093–1191](../index.html#L1093-L1191) | The heart $x = 16\sin^3 u$, $y = 13\cos u - 5\cos 2u - 2\cos 3u - \cos 4u$ from its exact Fourier coefficients (the comment at 1100–1101 is correct: summing the eight terms gives back both formulas), three epicycles, and the spectrum $\lvert c_k\rvert$ for $k = -4 \dots 4$. |
+| fill loop | [1193–1199](../index.html#L1193-L1199) | For each `.plate__fig[data-sketch]`, looks up the function by name and sets `innerHTML`; an unknown name leaves the plate blank. |
 
-**Reveal on scroll and the active index link** ([1207–1258](../index.html#L1207-L1258)).
+**Reveal on scroll and the active index link** ([1201–1252](../index.html#L1201-L1252)).
 
 | Part | Lines | What it does |
 |---|---|---|
-| `io` observer | [1211–1221](../index.html#L1211-L1221) | When 10 % of an observed element is visible, adds `is-visible` once and stops watching it. |
-| stagger | [1222–1225](../index.html#L1222-L1225) | Each `.reveal` gets `--d = (i mod 5) × 80 ms`, the delay its fade uses ([site.css:773–774](../public/styles/site.css#L773-L774)). |
-| blocks | [1226–1228](../index.html#L1226-L1228) | `.section` and `.timeline` also get `is-visible`: the timeline line grows to full height in 1.8 s ([site.css:378–389](../public/styles/site.css#L378-L389)). |
-| `nav` observer | [1230–1250](../index.html#L1230-L1250) | `rootMargin: '-30% 0px -60% 0px'` watches a band 30–40 % down the window; the section crossing it marks its `.index` link `active`. Only links starting with `#` take part. |
-| fallback | [1251–1258](../index.html#L1251-L1258) | Without `IntersectionObserver`, everything is made visible at once. |
+| `io` observer | [1205–1215](../index.html#L1205-L1215) | When 10 % of an observed element is visible, adds `is-visible` once and stops watching it. |
+| stagger | [1216–1219](../index.html#L1216-L1219) | Each `.reveal` gets `--d = (i mod 5) × 80 ms`, the delay its fade uses ([site.css:773–774](../public/styles/site.css#L773-L774)). |
+| blocks | [1220–1222](../index.html#L1220-L1222) | `.section` and `.timeline` also get `is-visible`: the timeline line grows to full height in 1.8 s ([site.css:378–389](../public/styles/site.css#L378-L389)). |
+| `nav` observer | [1224–1244](../index.html#L1224-L1244) | `rootMargin: '-30% 0px -60% 0px'` watches a band 30–40 % down the window; the section crossing it marks its `.index` link `active`. Only links starting with `#` take part. |
+| fallback | [1245–1252](../index.html#L1245-L1252) | Without `IntersectionObserver`, everything is made visible at once. |
 
 ### Without JavaScript
 
@@ -196,7 +196,7 @@ the eight plate figures stay empty (only the grid background shows), and everyth
   project belongs on the Portfolios page; also update the intro sentence at [234–239](../index.html#L234-L239).
 - **Add a plate.** Copy an `article.plate.reveal` in `.plates` ([288–566](../index.html#L288-L566)), set `p.plate__num`, both
   hrefs and the three tags, and give `.plate__fig` a `data-sketch` name. Add a function of that name to `sketches`
-  ([862–1198](../index.html#L862-L1198)) returning `svg(…)`; use the classes `ink`, `acc`, `soft`, `grey`, `acc-fill`,
+  ([856–1192](../index.html#L856-L1192)) returning `svg(…)`; use the classes `ink`, `acc`, `soft`, `grey`, `acc-fill`,
   `grey-fill`. Plates are written by hand: they do not read [catalog.js](../public/scripts/catalog.js), and their titles
   differ from the catalog titles (for example "Wave Interference – Multiple Sources" against "Wave Interference").
 - **Add a skill row.** Copy a `div.reveal` in `dl.skills` ([578–611](../index.html#L578-L611)).
@@ -222,11 +222,11 @@ view is kept in the address. Everything is drawn from the registry [`scripts/cat
 | [16](../public/simulations.html#L16) | `vendor/katex/katex.min.css` (KaTeX 0.16.11, woff2 fonts only) |
 | [17](../public/simulations.html#L17) | `styles/paper.css`: Latin Modern `@font-face`, `--tex`, `--line-strong`, `--quote` |
 | [18](../public/simulations.html#L18) | `styles/catalog.css`: the page itself; switches `--serif` to Instrument Serif |
-| [19](../public/simulations.html#L19) | `styles/fold.css`: folds, and the one-column card layout ([fold.css:153–169](../public/styles/fold.css#L153-L169)) |
+| [19](../public/simulations.html#L19) | `styles/fold.css`: folds, and the one-column card layout ([fold.css:152–168](../public/styles/fold.css#L152-L168)) |
 
-Scripts at the end of `<body>`, in order: `scripts/fold.js` ([124](../public/simulations.html#L124)), `scripts/catalog.js`
-([125](../public/simulations.html#L125)), `vendor/katex/katex.min.js` ([126](../public/simulations.html#L126)), the inline
-script ([127–353](../public/simulations.html#L127-L353)). Fonts loaded, measured: Instrument Serif 400, IBM Plex Sans 400/500,
+Scripts at the end of `<body>`, in order: `scripts/fold.js` ([123](../public/simulations.html#L123)), `scripts/catalog.js`
+([124](../public/simulations.html#L124)), `vendor/katex/katex.min.js` ([125](../public/simulations.html#L125)), the inline
+script ([126–351](../public/simulations.html#L126-L351)). Fonts loaded, measured: Instrument Serif 400, IBM Plex Sans 400/500,
 IBM Plex Mono 400/500, Latin Modern Roman 400 and 400 italic, and the KaTeX faces the ten equations need.
 
 ### Body
@@ -234,15 +234,14 @@ IBM Plex Mono 400/500, Latin Modern Roman 400 and 400 italic, and the KaTeX face
 | Lines | Element | Role |
 |---|---|---|
 | [32–40](../public/simulations.html#L32-L40) | `header.cat-top` | "← Numa Koudsie" and links to home sections and Portfolios. |
-| [42–117](../public/simulations.html#L42-L117) | `main.cat` | The page column (max 1240 px). |
+| [42–116](../public/simulations.html#L42-L116) | `main.cat` | The page column (max 1240 px). |
 | [43–54](../public/simulations.html#L43-L54) | `.cat__head` | `.cat__kicker`, `h1` "Simulations.", `.cat__lede`, and `ul#stats` (filled by `stats()`). |
 | [56–71](../public/simulations.html#L56-L71) | `.cat__bar[role=search][data-fold-bar]` | Sticky search bar: `input#q` (with a visually hidden label and a `/` key hint), `#fields` and `#stages` chip groups, `p#count` (`aria-live="polite"`). Measured height 104 px at 1280 px, 140 px at 900 px, 102 px at 390 px; fold.js uses it as `--fold-top`, so open titles pin below it. |
 | [73–78](../public/simulations.html#L73-L78) | `noscript` | "This catalog needs JavaScript", with a link to the home page plates. |
-| [80](../public/simulations.html#L80) | `p#intro` (hidden) | Never filled; `render()` keeps it hidden ([270](../public/simulations.html#L270)). |
-| [81](../public/simulations.html#L81) | `div#catalog.cat__list.cat__list--sorted` | The list; filled by `render()`. |
-| [83–86](../public/simulations.html#L83-L86) | `p#empty` (hidden) | "No simulation matches `b#empty-q`" and `button#clear` "Show all simulations". |
-| [88–116](../public/simulations.html#L88-L116) | `section.cat__anatomy` | Static: "Every simulation, the same four parts" (figure, lecture note, walkthrough, data panel) in `ol.cat__parts`. |
-| [119–122](../public/simulations.html#L119-L122) | `footer` | Links home and to Portfolios; `a#to-top`. |
+| [80](../public/simulations.html#L80) | `div#catalog.cat__list.cat__list--sorted` | The list; filled by `render()`. |
+| [82–85](../public/simulations.html#L82-L85) | `p#empty` (hidden) | "No simulation matches `b#empty-q`" and `button#clear` "Show all simulations". |
+| [87–115](../public/simulations.html#L87-L115) | `section.cat__anatomy` | Static: "Every simulation, the same four parts" (figure, lecture note, walkthrough, data panel) in `ol.cat__parts`. |
+| [118–121](../public/simulations.html#L118-L121) | `footer` | Links home and to Portfolios; `a#to-top`. |
 
 **The markup one simulation becomes.** `cards()` and `entry()` build, for a registry entry `s`:
 
@@ -264,42 +263,42 @@ section.simfold#simulation-<id>  [data-counts = subject, data-label = title]    
 ```
 
 There are two levels of opening. The **title fold** (the `section`) is a level-1 fold made by `Fold.make`
-([245](../public/simulations.html#L245)); it starts closed, and fold.js remembers each reader's choice in `localStorage`
+([244](../public/simulations.html#L244)); it starts closed, and fold.js remembers each reader's choice in `localStorage`
 (measured: `fold:/simulations.html` → `{"simulation-double-pendulum":1}` after opening Fig. 2). The **card details** (the
 `article`, a `[data-card]`) open with More / Less ([fold.js:209–224](../public/scripts/fold.js#L209-L224)); the page keeps
-that choice in `openCards` while the reader stays ([141](../public/simulations.html#L141)), across redraws, but not across a
+that choice in `openCards` while the reader stays ([140](../public/simulations.html#L140)), across redraws, but not across a
 reload (measured).
 
 A search or a chip opens every title it finds without touching the stored choices: `folds()` passes `forceOpen` while any
-filter is set ([265](../public/simulations.html#L265)). Clearing the filters shows the reader's own choices again.
+filter is set ([264](../public/simulations.html#L264)). Clearing the filters shows the reader's own choices again.
 
 ### The inline script
 
 | Function | Lines | What it does |
 |---|---|---|
-| set-up | [130–141](../public/simulations.html#L130-L141) | Copies `window.SIMULATIONS` to `SIMS`, reads `SIM_FIELDS` into `FIELDS`, defines `STAGES` ('1' first year, '2' second year), the shortcut `$`, the elements `q`, `list`, `count`, `empty`, `state = { q, field, stage }` and `openCards`. |
-| `esc(s)` | [143–147](../public/simulations.html#L143-L147) | Escapes `& < > " '` for HTML. |
-| `fold(s)` (text) | [149–154](../public/simulations.html#L149-L154) | Folds text for search (not related to `window.Fold`): lower case; Greek letters to their names (`λ` → "lambda", 12 symbols in `GREEK`); accents removed (Unicode NFD, then the combining marks U+0300–U+036F stripped); apostrophes removed; en and em dashes to `-`. So "huygens" finds "Huygens’" and "lambda" finds "λ". |
-| `fieldOf(id)` | [155–158](../public/simulations.html#L155-L158) | The `SIM_FIELDS` entry for an id, or a stand-in named by the id. |
-| haystack | [159–162](../public/simulations.html#L159-L162) | Builds `s._hay` once per entry: title, "fig n", "fig. n", subject, summary, model, method, controls, concepts and the field's name, folded. The TeX equation is not searched. |
-| sort | [164](../public/simulations.html#L164) | Figure order (`a.fig - b.fig`). |
-| `matches(s, terms, ignore)` | [166–171](../public/simulations.html#L166-L171) | True if `s` passes the field and stage filters (one of them can be ignored, for the chip counts) and every search term occurs in `_hay` as a substring (all terms must match). |
-| `terms()` | [172–174](../public/simulations.html#L172-L174) | The folded search text split on white space. |
-| `stats()` | [176–184](../public/simulations.html#L176-L184) | Fills `#stats`: number of simulations, of distinct fields, of course years (measured: 10, 6, 2). |
-| `chips(el, items, key, all)` | [185–199](../public/simulations.html#L185-L199) | Builds one `button.chip[data-<key>]` per item plus an "All…" chip with an empty id, each with an empty `small` for its count. A click sets the filter, or clears it if that chip was already on, then `render(true)`. |
-| `entry(s)` | [201–230](../public/simulations.html#L201-L230) | The `article` markup above; `encodeURI(s.file)` for the links. |
-| `cards(shown)` | [235–241](../public/simulations.html#L235-L241) | Wraps each entry in its `section.simfold` with the numbered title. |
-| `folds(filtering)` | [242–247](../public/simulations.html#L242-L247) | `Fold.make(section, { level: 1, head: [h2], counts: subject, label: title, defaultOpen: false, forceOpen: filtering })` for each card. Does nothing if fold.js is missing. |
-| `typeset()` | [249–259](../public/simulations.html#L249-L259) | Renders each `.entry__eq` with `katex.render` in display mode (`throwOnError: false`); without KaTeX, or on an error, shows the TeX source. Adds `is-typeset`, which makes the box visible ([catalog.css:352–354](../public/styles/catalog.css#L352-L354)). |
-| `render(fromUser)` | [261–291](../public/simulations.html#L261-L291) | The one redraw, in this order: filter `SIMS`; replace the list's HTML; `folds()`; `typeset()`; remove any thumbnail that fails to load, so the "Fig. n" placeholder under it shows; hide `#intro`; set each chip's `aria-pressed` and its count (how many would show if that chip were chosen, with the other filter and the search kept); write "10 shown" or "n of 10 shown"; show or hide `#empty` and word its message; save the view to the address if the reader caused the redraw. Measured: about 10 ms per redraw of all ten cards in headless Chromium. |
-| `load()` | [294–303](../public/simulations.html#L294-L303) | Reads `?q=&field=&stage=` from the address. A field that is not in `SIM_FIELDS`, or a stage other than '1' or '2', is dropped. Puts `q` into the search box. |
-| `save()` | [304–311](../public/simulations.html#L304-L311) | Writes the view back with `history.replaceState` (no new history entry), keeping the `#hash`. Only `q` is URI-encoded; field and stage are known ids. An empty view gives a clean address. |
-| search input | [313–317](../public/simulations.html#L313-L317) | Waits 120 ms after the last key, then sets `state.q` (trimmed) and redraws. |
-| Escape in the box | [318–320](../public/simulations.html#L318-L320) | Clears a non-empty search. |
-| `/` anywhere | [321–327](../public/simulations.html#L321-L327) | Focuses the search, unless a modifier is held or the focus is already in a text field. |
-| `#clear` | [328–333](../public/simulations.html#L328-L333) | Resets all three filters and focuses the search. |
-| `#to-top` | [334–337](../public/simulations.html#L334-L337) | Scrolls to the top (the page has no element `#top`). |
-| start-up | [339–351](../public/simulations.html#L339-L351) | Chips only for fields and stages that occur in `SIMS`; hooks `Fold.onCard` (record More / Less in `openCards`) and `Fold.onAll` (Expand all / Collapse all also opens or closes every card's details); `Fold.tools(list, 'before')` puts Expand all / Collapse all just above the list; then `stats()`, `load()`, `render(false)`. Last, `window.__catalog = { count, state, render }`, a handle for checking the page from the console; no file in the repository reads it. |
+| set-up | [129–140](../public/simulations.html#L129-L140) | Copies `window.SIMULATIONS` to `SIMS`, reads `SIM_FIELDS` into `FIELDS`, defines `STAGES` ('1' first year, '2' second year), the shortcut `$`, the elements `q`, `list`, `count`, `empty`, `state = { q, field, stage }` and `openCards`. |
+| `esc(s)` | [142–146](../public/simulations.html#L142-L146) | Escapes `& < > " '` for HTML. |
+| `fold(s)` (text) | [148–153](../public/simulations.html#L148-L153) | Folds text for search (not related to `window.Fold`): lower case; Greek letters to their names (`λ` → "lambda", 12 symbols in `GREEK`); accents removed (Unicode NFD, then the combining marks U+0300–U+036F stripped); apostrophes removed; en and em dashes to `-`. So "huygens" finds "Huygens’" and "lambda" finds "λ". |
+| `fieldOf(id)` | [154–157](../public/simulations.html#L154-L157) | The `SIM_FIELDS` entry for an id, or a stand-in named by the id. |
+| haystack | [158–161](../public/simulations.html#L158-L161) | Builds `s._hay` once per entry: title, "fig n", "fig. n", subject, summary, model, method, controls, concepts and the field's name, folded. The TeX equation is not searched. |
+| sort | [163](../public/simulations.html#L163) | Figure order (`a.fig - b.fig`). |
+| `matches(s, terms, ignore)` | [165–170](../public/simulations.html#L165-L170) | True if `s` passes the field and stage filters (one of them can be ignored, for the chip counts) and every search term occurs in `_hay` as a substring (all terms must match). |
+| `terms()` | [171–173](../public/simulations.html#L171-L173) | The folded search text split on white space. |
+| `stats()` | [175–183](../public/simulations.html#L175-L183) | Fills `#stats`: number of simulations, of distinct fields, of course years (measured: 10, 6, 2). |
+| `chips(el, items, key, all)` | [184–198](../public/simulations.html#L184-L198) | Builds one `button.chip[data-<key>]` per item plus an "All…" chip with an empty id, each with an empty `small` for its count. A click sets the filter, or clears it if that chip was already on, then `render(true)`. |
+| `entry(s)` | [200–229](../public/simulations.html#L200-L229) | The `article` markup above; `encodeURI(s.file)` for the links. |
+| `cards(shown)` | [234–240](../public/simulations.html#L234-L240) | Wraps each entry in its `section.simfold` with the numbered title. |
+| `folds(filtering)` | [241–246](../public/simulations.html#L241-L246) | `Fold.make(section, { level: 1, head: [h2], counts: subject, label: title, defaultOpen: false, forceOpen: filtering })` for each card. Does nothing if fold.js is missing. |
+| `typeset()` | [248–258](../public/simulations.html#L248-L258) | Renders each `.entry__eq` with `katex.render` in display mode (`throwOnError: false`); without KaTeX, or on an error, shows the TeX source. Adds `is-typeset`, which makes the box visible ([catalog.css:342–344](../public/styles/catalog.css#L342-L344)). |
+| `render(fromUser)` | [260–289](../public/simulations.html#L260-L289) | The one redraw, in this order: filter `SIMS`; replace the list's HTML; `folds()`; `typeset()`; remove any thumbnail that fails to load, so the "Fig. n" placeholder under it shows; set each chip's `aria-pressed` and its count (how many would show if that chip were chosen, with the other filter and the search kept); write "10 shown" or "n of 10 shown"; show or hide `#empty` and word its message; save the view to the address if the reader caused the redraw. Measured: about 10 ms per redraw of all ten cards in headless Chromium. |
+| `load()` | [292–301](../public/simulations.html#L292-L301) | Reads `?q=&field=&stage=` from the address. A field that is not in `SIM_FIELDS`, or a stage other than '1' or '2', is dropped. Puts `q` into the search box. |
+| `save()` | [302–309](../public/simulations.html#L302-L309) | Writes the view back with `history.replaceState` (no new history entry), keeping the `#hash`. Only `q` is URI-encoded; field and stage are known ids. An empty view gives a clean address. |
+| search input | [311–315](../public/simulations.html#L311-L315) | Waits 120 ms after the last key, then sets `state.q` (trimmed) and redraws. |
+| Escape in the box | [316–318](../public/simulations.html#L316-L318) | Clears a non-empty search. |
+| `/` anywhere | [319–325](../public/simulations.html#L319-L325) | Focuses the search, unless a modifier is held or the focus is already in a text field. |
+| `#clear` | [326–331](../public/simulations.html#L326-L331) | Resets all three filters and focuses the search. |
+| `#to-top` | [332–335](../public/simulations.html#L332-L335) | Scrolls to the top (the page has no element `#top`). |
+| start-up | [337–349](../public/simulations.html#L337-L349) | Chips only for fields and stages that occur in `SIMS`; hooks `Fold.onCard` (record More / Less in `openCards`) and `Fold.onAll` (Expand all / Collapse all also opens or closes every card's details); `Fold.tools(list, 'before')` puts Expand all / Collapse all just above the list; then `stats()`, `load()`, `render(false)`. Last, `window.__catalog = { count, state, render }`, a handle for checking the page from the console; no file in the repository reads it. |
 
 **The address.** Measured: opening `simulations.html?q=chaos&field=mechanics&stage=2` fills the box with "chaos", presses the
 Mechanics chip, shows "1 of 10 shown" and opens the Double Pendulum title; typing "fourier" and pressing Mathematical methods
@@ -320,13 +319,13 @@ fallback list.
 
 - **Add a simulation**: one entry in `SIMULATIONS` and a thumbnail; nothing in this page changes. The steps are in
   [scripts/catalog.md](scripts/catalog.md).
-- **Add a field**: an entry in `SIM_FIELDS`; its chip appears once a simulation uses it ([341](../public/simulations.html#L341)).
-- **Add a course year**: extend `STAGES` ([132–135](../public/simulations.html#L132-L135)) and the wording in `entry()`
-  ([203](../public/simulations.html#L203)) and in the empty message ([289](../public/simulations.html#L289)), which know only
+- **Add a field**: an entry in `SIM_FIELDS`; its chip appears once a simulation uses it ([339](../public/simulations.html#L339)).
+- **Add a course year**: extend `STAGES` ([131–134](../public/simulations.html#L131-L134)) and the wording in `entry()`
+  ([202](../public/simulations.html#L202)) and in the empty message ([287](../public/simulations.html#L287)), which know only
   years 1 and 2.
 - **Change what a card shows**: edit `entry()`; keep `data-card`, the inner `.fold` and `button.fs-more`, which fold.js
   needs for More / Less, and keep the section's `id` (`simulation-<id>`), under which a reader's choice is stored.
-- **Change the anatomy text**: plain HTML at [88–116](../public/simulations.html#L88-L116).
+- **Change the anatomy text**: plain HTML at [87–115](../public/simulations.html#L87-L115).
 
 ---
 
@@ -434,23 +433,21 @@ file. To keep a path out of search engines, add a `Disallow: /path` line under `
    Figs. 9 and 10 are only in the catalog ([catalog.js:183–216](../public/scripts/catalog.js#L183-L216)). The section intro says
    the simulations page "lists them all by field, with the question each one answers"
    ([index.html:284–285](../index.html#L284-L285)); the catalog now lists them in figure order without grouping
-   ([simulations.html:232–234](../public/simulations.html#L232-L234)), and catalog entries have no question field.
-3. **`stop()` is never called** ([index.html:801–805](../index.html#L801-L805)); the loop pauses through `visible` and
-   `inView` instead.
+   ([simulations.html:231–233](../public/simulations.html#L231-L233)), and catalog entries have no question field.
+3. Fixed on 2026-10-15: the unused home stop function and its write-only request id were removed (commit `:/^Batch E: remove proven unused code; verify styles, arrays and exports$`).
 4. **The catalog's `noscript` points to the home page for the list** ([simulations.html:75–76](../public/simulations.html#L75-L76)),
    which has only Figs. 1–8.
-5. **`p#intro` is dead.** It is never filled and `render()` hides it on every redraw
-   ([simulations.html:80](../public/simulations.html#L80), [270](../public/simulations.html#L270)).
+5. Fixed on 2026-10-15: the permanently hidden catalog intro and its CSS were removed (commit `:/^Batch E: remove proven unused code; verify styles, arrays and exports$`).
 6. **`window.__catalog.state` goes stale** after "Show all simulations": the `#clear` handler assigns a new object to `state`
-   ([simulations.html:329](../public/simulations.html#L329)) while `__catalog` keeps the first one
-   ([351](../public/simulations.html#L351)). Measured: after clearing `?q=zzzz`, `__catalog.state.q` still reads "zzzz". Nothing
+   ([simulations.html:327](../public/simulations.html#L327)) while `__catalog` keeps the first one
+   ([349](../public/simulations.html#L349)). Measured: after clearing `?q=zzzz`, `__catalog.state.q` still reads "zzzz". Nothing
    in the repository reads `__catalog`.
 7. **The catalog QA scenario did not match the page.** It expected ten open entries on arrival; the cards open as closed
-   titles ([simulations.html:245](../public/simulations.html#L245), `defaultOpen: false`). Rewritten on 14 October 2026
+   titles ([simulations.html:244](../public/simulations.html#L244), `defaultOpen: false`). Rewritten on 14 October 2026
    ([tests.json:33](../tests/tests.json#L33)) and deployed to the app. Still open: the home page scenario
    ([tests.json:17](../tests/tests.json#L17)) depends on there being exactly eight plates.
 8. **AGENTS.md contradicted itself on the catalog layout:** its Simulations-page paragraph said "in one grid", while the Folds
-   paragraph ([22–24](../AGENTS.md#L22-L24)) and the code ([fold.css:154](../public/styles/fold.css#L154)) give one column of
+   paragraph ([22–24](../AGENTS.md#L22-L24)) and the code ([fold.css:153](../public/styles/fold.css#L153)) give one column of
    fold cards. Corrected on 14 October 2026 ([AGENTS.md:27–30](../AGENTS.md#L27-L30)).
 9. Fixed on 2026-10-15: the four Droplet Collection image attributes use integer ratios exactly equal to their SVG viewBoxes (commit `:/^Batch B: correct notes and layout; verify measured figures in Chromium$`).
 10. **Two favicons.** The home page draws "N" ([index.html:19](../index.html#L19)), the other two pages a bold "NK"

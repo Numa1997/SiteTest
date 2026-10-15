@@ -1399,7 +1399,6 @@
                 columns: ['x', 'y'], point: function () { return { tip: true }; },
                 blocked: function () { return ds.get('mode') !== 'play' ? 'Decompose a shape first: time only runs while it plays.' : null; } },
             play: function () { clk.set(true); },
-            touchProbe: function () { return ds.get('mode') === 'play'; },
             about: 'The pen, arms and joints are drawn from the stored chain each frame. The dashed original is the 256 resampled, centred points zₙ joined by straight segments; the full curve is the stored 601-point reconstruction. The trail is the pen position at the end of each past frame over the last loop. The spectrum bars are drawn once per rebuild, from |c_k| sorted by size. The view scale relaxes toward the outer radius over about 0.4 s, so the stored scale is a smoothed quantity, not a formula of the current frame.'
         };
         ds.set('loop_s', loop.value); ds.set('t', 0); ds.set('mode', mode);

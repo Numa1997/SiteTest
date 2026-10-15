@@ -64,7 +64,7 @@ whose channels are $c = c_0 + (c_\pm - c_0)\,|\psi|^{0.8}$ ([L588–589](../../p
 | $N$ | `n`, `norm = 1/max(1, n)` | 1 | number of sources, at most 24 ([L629](../../public/simulations/Circular%20Wave%20Interference%20Visualization.html#L629), [L512](../../public/simulations/Circular%20Wave%20Interference%20Visualization.html#L512)) |
 | $f$, $\omega$ | `freq.value`, `2π f` | Hz, rad/s | frequency (slider) and angular frequency ([L711](../../public/simulations/Circular%20Wave%20Interference%20Visualization.html#L711)) |
 | $\omega t$ | `omegaT` | rad | shared phase, accumulated, never wrapped ([L762](../../public/simulations/Circular%20Wave%20Interference%20Visualization.html#L762)) |
-| $\Delta t$ | `dt` | s | real time between frames, capped at 0.05 s ([sim.js:180](../../public/scripts/sim.js#L180)) |
+| $\Delta t$ | `dt` | s | real time between frames, capped at 0.05 s ([sim.js:179](../../public/scripts/sim.js#L179)) |
 | $C, S, A, \psi$ | `sumC`, `sumS`, `ampl`, `psi` | 1 | the maps and the field, $\lvert\psi\rvert \le 1$ |
 
 ## How the code computes it
@@ -78,7 +78,7 @@ ImageData with alpha preset to 255 ([L518](../../public/simulations/Circular%20W
 **Method.** A closed form, not a time integration. Space and time separate exactly, so the expensive part (one `sqrt`, `exp`,
 `cos` and `sin` per source per cell) runs only when the geometry changes, and a frame costs two multiplications and one addition
 per cell whatever N is ([L664](../../public/simulations/Circular%20Wave%20Interference%20Visualization.html#L664)). There is no stability question. The only time error is the 0.05 s cap on Δt
-([sim.js:180](../../public/scripts/sim.js#L180)): on a slow device the pattern runs slower, it is not distorted.
+([sim.js:179](../../public/scripts/sim.js#L179)): on a slow device the pattern runs slower, it is not distorted.
 
 **Frame loop** (`Sim.clock` callback, [L756–767](../../public/simulations/Circular%20Wave%20Interference%20Visualization.html#L756-L767)), in order:
 1. Keep the play time, count frames, smooth the frame rate as fps ← fps + (1/Δt − fps)/10 ([L757–758](../../public/simulations/Circular%20Wave%20Interference%20Visualization.html#L757-L758)); store `t`, `dt`,
@@ -86,7 +86,7 @@ per cell whatever N is ([L664](../../public/simulations/Circular%20Wave%20Interf
 2. If `dirty`, run `precompute()` and ask for a redraw ([L760](../../public/simulations/Circular%20Wave%20Interference%20Visualization.html#L760)).
 3. If playing (Δt > 0) or a redraw is pending: advance `omegaT` by 2πfΔt ([L762](../../public/simulations/Circular%20Wave%20Interference%20Visualization.html#L762)), store it ([L763](../../public/simulations/Circular%20Wave%20Interference%20Visualization.html#L763)), `render()` ([L764](../../public/simulations/Circular%20Wave%20Interference%20Visualization.html#L764)).
 
-`Sim.clock` calls the callback on every animation frame, with Δt = 0 while paused ([sim.js:176–186](../../public/scripts/sim.js#L176-L186)); a paused page therefore
+`Sim.clock` calls the callback on every animation frame, with Δt = 0 while paused ([sim.js:175–185](../../public/scripts/sim.js#L175-L185)); a paused page therefore
 draws nothing unless a slider or button asked for a redraw.
 
 **`precompute()`** ([L627–657](../../public/simulations/Circular%20Wave%20Interference%20Visualization.html#L627-L657)): computes `k`, `g`, `n`, `norm`, `dx`, `dy`, `sy` and stores them ([L628–631](../../public/simulations/Circular%20Wave%20Interference%20Visualization.html#L628-L631)); resizes
@@ -108,7 +108,7 @@ colour row and writes RGB into `img` ([L663–672](../../public/simulations/Circ
   within one frame cost one rebuild. The frequency slider calls `readouts()` only ([L595](../../public/simulations/Circular%20Wave%20Interference%20Visualization.html#L595)): f changes the speed of the
   pattern, never its shape.
 - Grid size: cols = clamp(round(box.w/1.1), 60, 360), rows = max(30, round(cols · box.h/box.w)), worldH = 800 · box.h/box.w
-  ([L602–604](../../public/simulations/Circular%20Wave%20Interference%20Visualization.html#L602-L604)). Resizes are debounced by 80 ms ([sim.js:142–150](../../public/scripts/sim.js#L142-L150), [L901](../../public/simulations/Circular%20Wave%20Interference%20Visualization.html#L901)).
+  ([L602–604](../../public/simulations/Circular%20Wave%20Interference%20Visualization.html#L602-L604)). Resizes are debounced by 80 ms ([sim.js:141–149](../../public/scripts/sim.js#L141-L149), [L901](../../public/simulations/Circular%20Wave%20Interference%20Visualization.html#L901)).
 
 Measured in headless Chromium in this session (viewport height 900 px):
 
@@ -162,12 +162,12 @@ All functions live in the one inline script ([L508–903](../../public/simulatio
 
 | Control | Element id | Range / default | What it changes in the code |
 |---|---|---|---|
-| Pause / Play | `play` | starts playing unless the reader prefers reduced motion ([sim.js:178](../../public/scripts/sim.js#L178)) | `Sim.playButton` toggles the clock and relabels the button ([L768](../../public/simulations/Circular%20Wave%20Interference%20Visualization.html#L768), [sim.js:200–208](../../public/scripts/sim.js#L200-L208)). |
+| Pause / Play | `play` | starts playing unless the reader prefers reduced motion ([sim.js:177](../../public/scripts/sim.js#L177)) | `Sim.playButton` toggles the clock and relabels the button ([L768](../../public/simulations/Circular%20Wave%20Interference%20Visualization.html#L768), [sim.js:199–207](../../public/scripts/sim.js#L199-L207)). |
 | Line of 16 | `line` | — | Replaces the sources by 16 at x = 64 + 44.8 n px ([L720–724](../../public/simulations/Circular%20Wave%20Interference%20Visualization.html#L720-L724)). |
 | Add 5 random | `random` | — | Appends 5 sources between 133.3 and 666.7 px; the list keeps the newest 24 ([L725–729](../../public/simulations/Circular%20Wave%20Interference%20Visualization.html#L725-L729), [L702](../../public/simulations/Circular%20Wave%20Interference%20Visualization.html#L702)). |
 | Reset | `reset` | — | ωt = 0 and two sources at 200 and 600 px ([L730–733](../../public/simulations/Circular%20Wave%20Interference%20Visualization.html#L730-L733), [L513](../../public/simulations/Circular%20Wave%20Interference%20Visualization.html#L513)). |
 | Clear | `clear` | — | No sources ([L734](../../public/simulations/Circular%20Wave%20Interference%20Visualization.html#L734)); the caption then reads "no sources · click the field" ([L709](../../public/simulations/Circular%20Wave%20Interference%20Visualization.html#L709)). |
-| Click on the field | `field` (canvas) | — | Adds a source at the clicked x ([L716–719](../../public/simulations/Circular%20Wave%20Interference%20Visualization.html#L716-L719)). While Read values is on, `datalog.js` stops the click in the capture phase ([datalog.js:618–641](../../public/scripts/datalog.js#L618-L641)). Measured: with Read values on a click left N = 16; off, the same click made N = 17. |
+| Click on the field | `field` (canvas) | — | Adds a source at the clicked x ([L716–719](../../public/simulations/Circular%20Wave%20Interference%20Visualization.html#L716-L719)). While Read values is on, `datalog.js` stops the click in the capture phase ([datalog.js:615–638](../../public/scripts/datalog.js#L615-L638)). Measured: with Read values on a click left N = 16; off, the same click made N = 17. |
 | Wavelength λ | `lambda` | 16–64 px, step 1, default 30 ([L72](../../public/simulations/Circular%20Wave%20Interference%20Visualization.html#L72)) | `changed()`: k and the maps are rebuilt ([L594](../../public/simulations/Circular%20Wave%20Interference%20Visualization.html#L594), [L628](../../public/simulations/Circular%20Wave%20Interference%20Visualization.html#L628)). |
 | Frequency f | `freq` | 0.2–2 Hz, step 0.05, default 1.1 ([L76](../../public/simulations/Circular%20Wave%20Interference%20Visualization.html#L76)) | `readouts()` only; enters through ωt ([L595](../../public/simulations/Circular%20Wave%20Interference%20Visualization.html#L595), [L762](../../public/simulations/Circular%20Wave%20Interference%20Visualization.html#L762)). |
 | Damping γ | `damp` | 0–0.6, step 0.01, default 0.15 ([L80](../../public/simulations/Circular%20Wave%20Interference%20Visualization.html#L80)) | `changed()`: g = γ/300 px and the maps are rebuilt ([L596](../../public/simulations/Circular%20Wave%20Interference%20Visualization.html#L596), [L628](../../public/simulations/Circular%20Wave%20Interference%20Visualization.html#L628)). |
@@ -206,12 +206,12 @@ saves as `fig1-wave-interference` ([L799](../../public/simulations/Circular%20Wa
 
 **One round** (`Sim.data.round`, [L893–894](../../public/simulations/Circular%20Wave%20Interference%20Visualization.html#L893-L894)) is one period of the sources, T = 1/f, measured on the play time `t`. Columns
 charted: `omegaT`, `cos_wt`, `sin_wt`, `psi_c`; the recorder also copies every numeric scalar. Unless the reader has pinned a
-point, the round follows the cell j = ⌊rows/2⌋, i = ⌊0.72 cols⌋ ([L894](../../public/simulations/Circular%20Wave%20Interference%20Visualization.html#L894), [datalog.js:766](../../public/scripts/datalog.js#L766)). The recorder keeps at most 600
-samples, one every T/600 ([datalog.js:747](../../public/scripts/datalog.js#L747), [datalog.js:776](../../public/scripts/datalog.js#L776)). *Reset* sets ωt to 0 but not `t`, so it does not end a round.
+point, the round follows the cell j = ⌊rows/2⌋, i = ⌊0.72 cols⌋ ([L894](../../public/simulations/Circular%20Wave%20Interference%20Visualization.html#L894), [datalog.js:763](../../public/scripts/datalog.js#L763)). The recorder keeps at most 600
+samples, one every T/600 ([datalog.js:744](../../public/scripts/datalog.js#L744), [datalog.js:773](../../public/scripts/datalog.js#L773)). *Reset* sets ωt to 0 but not `t`, so it does not end a round.
 
 **`Sim.live()`** ([L737–754](../../public/simulations/Circular%20Wave%20Interference%20Visualization.html#L737-L754)) returns formatted strings under the keys `lam`, `k`, `g`, `N`, `norm`, `dx`, `grid`, `C`, `S`,
 `c`, `s`, `psi`, `f`, `wt`, `v`, `idx`, `rgb`, `r`, `a`, `ph`, all read at the centre cell pc = j_c · cols + i_c. The walkthrough
-polls it every 200 ms unless "Hold the numbers" is on ([sim.js:388–400](../../public/scripts/sim.js#L388-L400)).
+polls it every 200 ms unless "Hold the numbers" is on ([sim.js:314–326](../../public/scripts/sim.js#L314-L326)).
 
 **Proof, measured in this session** (1280 px window, paused, two default sources, centre cell; stored value against the
 page's own `check` function, which recomputes in float64 from stored inputs):
@@ -238,16 +238,16 @@ imports the fonts, KaTeX's CSS and `paper.css`; an inline SVG favicon ([L14](../
 **Body**, top to bottom:
 - Top bar with "← All simulations" and the hand-written Fig. 1–10 links ([L20–35](../../public/simulations/Circular%20Wave%20Interference%20Visualization.html#L20-L35)); a `<noscript>` message ([L38](../../public/simulations/Circular%20Wave%20Interference%20Visualization.html#L38)).
 - Heading: "Fig. 1 · wave optics · Huygens' principle", the title, the lede ([L39–43](../../public/simulations/Circular%20Wave%20Interference%20Visualization.html#L39-L43)).
-- The figure: `#stage` with aspect ratio 8 : 3.6, square below 900 px ([L47](../../public/simulations/Circular%20Wave%20Interference%20Visualization.html#L47), [sim.css:68](../../public/styles/sim.css#L68), [sim.css:287–289](../../public/styles/sim.css#L287-L289)); the canvas
+- The figure: `#stage` with aspect ratio 8 : 3.6, square below 900 px ([L47](../../public/simulations/Circular%20Wave%20Interference%20Visualization.html#L47), [sim.css:68](../../public/styles/sim.css#L68), [sim.css:213–215](../../public/styles/sim.css#L213-L215)); the canvas
   `#field` ([L48](../../public/simulations/Circular%20Wave%20Interference%20Visualization.html#L48)); the caption with `cap-count` ([L50–53](../../public/simulations/Circular%20Wave%20Interference%20Visualization.html#L50-L53)). `datalog.js` adds the Read values switch to this caption and the
-  reading strip under the stage ([datalog.js:570–594](../../public/scripts/datalog.js#L570-L594)).
+  reading strip under the stage ([datalog.js:567–591](../../public/scripts/datalog.js#L567-L591)).
 - The control panel ([L56–95](../../public/simulations/Circular%20Wave%20Interference%20Visualization.html#L56-L95)): Sources buttons, Waves sliders, the legend with colour bar, the readouts.
 - The lecture note `<article class="paper" id="paper">` ([L98–495](../../public/simulations/Circular%20Wave%20Interference%20Visualization.html#L98-L495)), summarised below.
 - The walkthrough host `<section class="walk" id="walk" data-walk="circles">` ([L497](../../public/simulations/Circular%20Wave%20Interference%20Visualization.html#L497)).
 - Footer ([L500–503](../../public/simulations/Circular%20Wave%20Interference%20Visualization.html#L500-L503)).
 - Scripts in load order: `../scripts/fold.js`, `../scripts/sim.js`, `../scripts/dataset.js` ([L505–507](../../public/simulations/Circular%20Wave%20Interference%20Visualization.html#L505-L507)), the page's own script
   ([L508–903](../../public/simulations/Circular%20Wave%20Interference%20Visualization.html#L508-L903)), then `../scripts/datalog.js` ([L904](../../public/simulations/Circular%20Wave%20Interference%20Visualization.html#L904)). `sim.js` loads `../scripts/walk/circles.js` from the `data-walk` key once
-  the DOM is ready ([sim.js:476–486](../../public/scripts/sim.js#L476-L486)) and KaTeX for the note ([sim.js:413–442](../../public/scripts/sim.js#L413-L442)). See [sim.md](../scripts/sim.md),
+  the DOM is ready ([sim.js:402–411](../../public/scripts/sim.js#L402-L411)) and KaTeX for the note ([sim.js:339–368](../../public/scripts/sim.js#L339-L368)). See [sim.md](../scripts/sim.md),
   [fold.md](../scripts/fold.md), [walk.md](../scripts/walk.md), [pages.md](../pages.md).
 
 **Walkthrough** ([circles.js](../../public/scripts/walk/circles.js), 7 steps). Each step quotes page lines; a script run in

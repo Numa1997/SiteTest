@@ -93,7 +93,7 @@ step use their own input state ([L489–496](../../public/simulations/Double%20P
 $$\tau \leftarrow \tau + \Delta t \cdot \text{speed}, \qquad n = \min\left(\lfloor \tau / h \rfloor, 600\right), \qquad \tau \leftarrow \min(\tau - n h,\ h).$$
 
 The leftover τ carries into the next frame, so simulated time keeps pace with wall time × speed. Because `Sim.clock` caps Δt at
-0.05 s ([sim.js:180](../../public/scripts/sim.js#L180)) and the time scale is at most 1.5 ([L64](../../public/simulations/Double%20Pendulum.html#L64)), n is at most 46; the 600 cap never acts (see Notes).
+0.05 s ([sim.js:179](../../public/scripts/sim.js#L179)) and the time scale is at most 1.5 ([L64](../../public/simulations/Double%20Pendulum.html#L64)), n is at most 46; the 600 cap never acts (see Notes).
 
 **Frame loop** (`Sim.clock` callback, [L698–722](../../public/simulations/Double%20Pendulum.html#L698-L722)), in order:
 1. If playing (Δt > 0): accumulate τ and choose n ([L700–703](../../public/simulations/Double%20Pendulum.html#L700-L703)). For each of the n steps: advance `state` by one RK4 step, compute
@@ -103,7 +103,7 @@ The leftover τ carries into the next frame, so simulated time keeps pace with w
 3. `draw()`: clear, protractor, trail image, twin, pendulum, pivot dot ([L720](../../public/simulations/Double%20Pendulum.html#L720), [L622–632](../../public/simulations/Double%20Pendulum.html#L622-L632)).
 4. Every sixth frame, `readouts()` copies E, ε, the separation and the time from the store into the DOM ([L721](../../public/simulations/Double%20Pendulum.html#L721), [L635–646](../../public/simulations/Double%20Pendulum.html#L635-L646)).
 
-While paused `Sim.clock` passes Δt = 0 ([sim.js:182](../../public/scripts/sim.js#L182)): no steps and no fading, but `diagnostics()` and `draw()` still run every
+While paused `Sim.clock` passes Δt = 0 ([sim.js:181](../../public/scripts/sim.js#L181)): no steps and no fading, but `diagnostics()` and `draw()` still run every
 frame.
 
 **`diagnostics(dt)`** ([L650–680](../../public/simulations/Double%20Pendulum.html#L650-L680)) evaluates `deriv` once more at the final state for the stored slopes and accelerations
@@ -174,7 +174,7 @@ The twin screen scalars `x1_twin_px`, `y1_twin_px`, `x2_twin_px`, `y2_twin_px` a
 
 | Control | Element id | Range / default | What it changes in the code |
 |---|---|---|---|
-| Pause / Play | `play` | starts playing unless the reader prefers reduced motion ([sim.js:178](../../public/scripts/sim.js#L178)) | `Sim.playButton` toggles the clock ([L723](../../public/simulations/Double%20Pendulum.html#L723)). |
+| Pause / Play | `play` | starts playing unless the reader prefers reduced motion ([sim.js:177](../../public/scripts/sim.js#L177)) | `Sim.playButton` toggles the clock ([L723](../../public/simulations/Double%20Pendulum.html#L723)). |
 | Restart | `restart` | — | `restart()` from the current slider values ([L547](../../public/simulations/Double%20Pendulum.html#L547), [L530–542](../../public/simulations/Double%20Pendulum.html#L530-L542)). |
 | Clear trail | `clear` | — | `clearTrail()` ([L548](../../public/simulations/Double%20Pendulum.html#L548)). |
 | Chaos twin | `twin` (checkbox) | off ([L61](../../public/simulations/Double%20Pendulum.html#L61)) | On: twin = current state with θ₁ + 0.001 rad, so mid-run it starts from where the pendulum is now; off: no twin ([L543–546](../../public/simulations/Double%20Pendulum.html#L543-L546)). Restart re-creates it from the starting state ([L534](../../public/simulations/Double%20Pendulum.html#L534)). |
@@ -188,7 +188,7 @@ The twin screen scalars `x1_twin_px`, `y1_twin_px`, `x2_twin_px`, `y2_twin_px` a
 
 Readouts: `r-e` shows E to three decimals in J ([L638](../../public/simulations/Double%20Pendulum.html#L638)); `r-drift` shows ε with one decimal in exponent form, or "0" below
 10⁻¹² ([L639](../../public/simulations/Double%20Pendulum.html#L639)); `r-sep` shows the separation in m, or "twin off" ([L640–645](../../public/simulations/Double%20Pendulum.html#L640-L645)); `cap-t` in the caption shows t to 0.1 s
-([L637](../../public/simulations/Double%20Pendulum.html#L637)). The caption also carries "RK4, h = 1/600 s" typeset by KaTeX ([L48](../../public/simulations/Double%20Pendulum.html#L48), [sim.js:458–464](../../public/scripts/sim.js#L458-L464)). Measured with the twin
+([L637](../../public/simulations/Double%20Pendulum.html#L637)). The caption also carries "RK4, h = 1/600 s" typeset by KaTeX ([L48](../../public/simulations/Double%20Pendulum.html#L48), [sim.js:384–390](../../public/scripts/sim.js#L384-L390)). Measured with the twin
 on from the default start: separation 2.456 m after t = 6.03 s.
 
 ## What the page writes into the data store
@@ -224,13 +224,13 @@ paragraph says what differs between store and picture ([L854](../../public/simul
 
 **One round** (`Sim.data.round`, [L851–852](../../public/simulations/Double%20Pendulum.html#L851-L852)) is ten seconds of simulated time `t`. Columns charted: `th1`, `th2`, `w1`, `w2`,
 `E`, `drift`, `sep`; the recorder also copies every numeric scalar, and follows bob 2 unless another point is pinned. With at most
-600 samples the interval is 10/600 s ([datalog.js:747](../../public/scripts/datalog.js#L747), [datalog.js:776](../../public/scripts/datalog.js#L776)). Every restart sets t back to 0, so moving a
+600 samples the interval is 10/600 s ([datalog.js:744](../../public/scripts/datalog.js#L744), [datalog.js:773](../../public/scripts/datalog.js#L773)). Every restart sets t back to 0, so moving a
 restarting slider during a round puts t below the round's start and the recorder ends it ("the clock was reset",
-[datalog.js:798](../../public/scripts/datalog.js#L798)).
+[datalog.js:795](../../public/scripts/datalog.js#L795)).
 
 **`Sim.live()`** ([L684–696](../../public/simulations/Double%20Pendulum.html#L684-L696)) returns formatted strings under the keys `t1`, `t2`, `o1`, `o2`, `d`, `den`, `m2`, `l2`, `a1`,
 `a2`, `k1`, `h`, `n`, `acc`, `t`, `kin`, `pot`, `E`, `E0`, `drift`, `scale`, `y1`; all read from the store except `h`, the constant
-`H`. The walkthrough polls it every 200 ms unless "Hold the numbers" is on ([sim.js:388–400](../../public/scripts/sim.js#L388-L400)).
+`H`. The walkthrough polls it every 200 ms unless "Hold the numbers" is on ([sim.js:314–326](../../public/scripts/sim.js#L314-L326)).
 
 **Proof, measured in this session** (1280 px window, default start, paused after about 3 s; stored value against the page's own
 `check` functions): α₁, α₂, T, V, E, ε, x₂, y₂, x₂ px, y₂ px, det M and p_θ₁ were identical, difference 0, because store and
@@ -246,10 +246,10 @@ favicon ([L14](../../public/simulations/Double%20Pendulum.html#L14)). No inline 
 **Body**, top to bottom:
 - Top bar with "← All simulations" and the hand-written Fig. 1–10 links ([L17–32](../../public/simulations/Double%20Pendulum.html#L17-L32)); a `<noscript>` message ([L35](../../public/simulations/Double%20Pendulum.html#L35)).
 - Heading: "Fig. 2 · classical mechanics · chaos", the title, the lede ([L36–40](../../public/simulations/Double%20Pendulum.html#L36-L40)).
-- The figure: `#stage` with aspect ratio 4 : 3, and 1 : 1.05 below 900 px ([L44](../../public/simulations/Double%20Pendulum.html#L44), [sim.css:287–289](../../public/styles/sim.css#L287-L289)); the canvas `#pend`
+- The figure: `#stage` with aspect ratio 4 : 3, and 1 : 1.05 below 900 px ([L44](../../public/simulations/Double%20Pendulum.html#L44), [sim.css:213–215](../../public/styles/sim.css#L213-L215)); the canvas `#pend`
   ([L45](../../public/simulations/Double%20Pendulum.html#L45)); the caption with `cap-t` ([L47–50](../../public/simulations/Double%20Pendulum.html#L47-L50)). The canvas is transparent where nothing is drawn, so the stage's grid
   background shows through ([L623](../../public/simulations/Double%20Pendulum.html#L623), [sim.css:68](../../public/styles/sim.css#L68)). `datalog.js` adds the Read values switch to the caption and the reading
-  strip under the stage ([datalog.js:570–594](../../public/scripts/datalog.js#L570-L594)).
+  strip under the stage ([datalog.js:567–591](../../public/scripts/datalog.js#L567-L591)).
 - The control panel ([L53–111](../../public/simulations/Double%20Pendulum.html#L53-L111)): Run (buttons, twin switch, time scale), Coupling (two ratios), Initial conditions (four
   sliders), readouts, legend.
 - The lecture note `<article class="paper" id="paper">` ([L114–379](../../public/simulations/Double%20Pendulum.html#L114-L379)).
@@ -257,7 +257,7 @@ favicon ([L14](../../public/simulations/Double%20Pendulum.html#L14)). No inline 
 - Footer ([L384–387](../../public/simulations/Double%20Pendulum.html#L384-L387)).
 - Scripts in load order: `../scripts/fold.js`, `../scripts/sim.js`, `../scripts/dataset.js` ([L389–391](../../public/simulations/Double%20Pendulum.html#L389-L391)), the page's own script
   ([L392–866](../../public/simulations/Double%20Pendulum.html#L392-L866)), then `../scripts/datalog.js` ([L867](../../public/simulations/Double%20Pendulum.html#L867)). `sim.js` loads `../scripts/walk/pendulum.js` from the `data-walk` key
-  ([sim.js:476–486](../../public/scripts/sim.js#L476-L486)). See [sim.md](../scripts/sim.md), [fold.md](../scripts/fold.md), [walk.md](../scripts/walk.md),
+  ([sim.js:402–411](../../public/scripts/sim.js#L402-L411)). See [sim.md](../scripts/sim.md), [fold.md](../scripts/fold.md), [walk.md](../scripts/walk.md),
   [pages.md](../pages.md).
 
 The script ends by calling `restart()`, `resize()`, `diagnostics(0)` and registering the resize observer ([L861–864](../../public/simulations/Double%20Pendulum.html#L861-L864)).

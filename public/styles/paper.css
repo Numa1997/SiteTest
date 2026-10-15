@@ -47,7 +47,6 @@
 .paper__body li { margin-bottom: .35em; }
 .paper__body li::marker { color: var(--accent); }
 .paper__body sub, .paper__body sup { font-size: 72%; line-height: 0; }
-.paper__body .sc { font-variant: small-caps; letter-spacing: .02em; }
 
 .psec { padding-top: 34px; margin-top: 38px; border-top: 1px solid var(--line-strong); scroll-margin-top: 16px; }
 .psec:first-child { margin-top: 0; padding-top: 0; border-top: 0; }
@@ -89,7 +88,6 @@
 .pbox__t { display: block; margin-bottom: 6px; font: 500 11px var(--mono); letter-spacing: .12em; text-transform: uppercase; color: var(--accent); }
 .pbox--ex { border-left-color: var(--tan-ink); background: var(--quote); }
 .pbox--ex .pbox__t { color: var(--tan-ink); }
-.pbox--star .pbox__t::after { content: ' ★'; }
 .paper__body .star { color: var(--accent); font-size: .8em; vertical-align: .25em; margin-left: 4px; }
 
 /* ================= tables and references ================= */

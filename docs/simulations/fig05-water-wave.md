@@ -89,7 +89,7 @@ Constants `WORLD_W = 800`, `DZ = 56` (px between layers), `PX_PER_M = 100`, `G =
 ([:573](../../public/simulations/water-wave.html#L573), [sim.js:32-46](../../public/scripts/sim.js#L32-L46)) carries the size
 in css px (`box.w`, `box.h`) and the device pixel ratio (capped at 2). The only time-dependent state is `omegaT` (rad), with
 `fps` and `frames` for the data panel ([:575](../../public/simulations/water-wave.html#L575)). The five sliders are wrapped by
-`Sim.slider` ([:629-633](../../public/simulations/water-wave.html#L629-L633), [sim.js:153-174](../../public/scripts/sim.js#L153-L174)).
+`Sim.slider` ([:629-633](../../public/simulations/water-wave.html#L629-L633), [sim.js:152-173](../../public/scripts/sim.js#L152-L173)).
 All per-parcel numbers live in the data store, in typed arrays that `draw()` fills.
 
 **Numerical method.** None in the sense of an integrator: positions and velocities are closed-form expressions, evaluated afresh
@@ -99,10 +99,10 @@ $\omega t$ from a clock, keeps the motion continuous when $f$ changes (note Sect
 [:510](../../public/simulations/water-wave.html#L510)). `f()` returns the exact deep-water frequency, not the slider value
 rounded to 0.01 Hz ([:636-639](../../public/simulations/water-wave.html#L636-L639)), so $c$ and the motion agree to machine
 precision. Nothing is integrated, so no error builds up; the clock caps $\Delta t$ at 0.05 s and gives $\Delta t = 0$ while
-paused ([sim.js:180-182](../../public/scripts/sim.js#L180-L182)).
+paused ([sim.js:179-181](../../public/scripts/sim.js#L179-L181)).
 
 **The frame loop, in order.** `Sim.clock` calls its callback on every animation frame, playing or paused
-([sim.js:177-187](../../public/scripts/sim.js#L177-L187)).
+([sim.js:176-186](../../public/scripts/sim.js#L176-L186)).
 
 1. Advance the phase, update the frame-rate average, write `omegaT`, `periods`, `t`, `dt`, `fps`, `frames`, `playing` into the
    store ([:792-794](../../public/simulations/water-wave.html#L792-L794)).
@@ -180,7 +180,7 @@ Line numbers link into `water-wave.html`.
 
 | Control | Element id | Range / default | What it changes in the code |
 |---|---|---|---|
-| Pause / Play | `play` | playing at load, unless the reader prefers reduced motion ([sim.js:178](../../public/scripts/sim.js#L178)) | `clk.toggle` via `Sim.playButton` ([:797](../../public/simulations/water-wave.html#L797)); paused frames get $\Delta t = 0$. |
+| Pause / Play | `play` | playing at load, unless the reader prefers reduced motion ([sim.js:177](../../public/scripts/sim.js#L177)) | `clk.toggle` via `Sim.playButton` ([:797](../../public/simulations/water-wave.html#L797)); paused frames get $\Delta t = 0$. |
 | Show orbits | `orbits` | on ([:59](../../public/simulations/water-wave.html#L59)) | Orbit circles drawn when on and $r s > 1.2$ ([:747](../../public/simulations/water-wave.html#L747)); stored as `orbits`. |
 | Deep-water dispersion ω² = gk | `disp` | on ([:60](../../public/simulations/water-wave.html#L60)) | `f()` uses the dispersion relation; `couple()` sets and disables the frequency slider ([:642-650](../../public/simulations/water-wave.html#L642-L650)). |
 | Amplitude a (orbit radius) | `amp` | 5–50 px, step 1, default 24 ([:67](../../public/simulations/water-wave.html#L67)) | $A$; $a = \min(A, 0.9/k)$; calls `readouts()`. |
@@ -231,7 +231,7 @@ written only when a control changes; the panel groups them as "Physical paramete
 **One round** (`Sim.data.round`, [:878-879](../../public/simulations/water-wave.html#L878-L879)): one period, length
 `ds.get('T')` seconds of the time variable `t`, labelled "one period, T = … s". The chart column is `omegaT`, and the point
 followed is the burgundy surface parcel, `{ q: follow }`. The panel samples every numeric scalar at most 600 times in the
-round ([datalog.js:747](../../public/scripts/datalog.js#L747), [datalog.js:776](../../public/scripts/datalog.js#L776)).
+round ([datalog.js:744](../../public/scripts/datalog.js#L744), [datalog.js:773](../../public/scripts/datalog.js#L773)).
 
 **The panel hooks.** `Sim.data` ([:810-882](../../public/simulations/water-wave.html#L810-L882)) also sets `kicker: 'Fig. 5 ·
 data'` and `file: 'fig5-water-waves'` (the base name of the saved archive), the five groups, the `check` and `drawn` tests,
@@ -241,7 +241,7 @@ and the `about` paragraph. The contract is at [datalog.js:8-30](../../public/scr
 strings for the walkthrough's "Now" column: `lam`, `k`, `km`, `f`, `c`, `T`, `cg`; for the followed surface parcel `X0`, `th`
 (θ reduced to (−π, π] with `atan2`), `px` (ξ), `pz` and `eta` (both ζ); `r` (surface radius), `r1`, `z0` (depth of the
 deepest layer, from `z_deep_px`), `deep`; `a`, `A`, `ak`; `wt` (ωt), `s`, `ys`. The walkthrough polls it every 200 ms
-([sim.js:388-400](../../public/scripts/sim.js#L388-L400)).
+([sim.js:314-326](../../public/scripts/sim.js#L314-L326)).
 
 **Three-way check, measured.** Paused at 1440 × 900 (canvas 770 × 366 css px), for the followed surface parcel: stored
 `xi` = 23.985449954109615 px and the value recomputed by `check.xi` from the stored `r_z` and `theta` are identical; the same
@@ -260,10 +260,10 @@ stylesheets `../styles/sim.css` (which imports the Google fonts, KaTeX's CSS and
   ([:17-32](../../public/simulations/water-wave.html#L17-L32)).
 - Heading: "Fig. 5 · fluid dynamics · particle motion", the h1 and the lede ([:36-40](../../public/simulations/water-wave.html#L36-L40)).
 - The figure: `#stage` with aspect ratio 16 / 7.6, or 1 / 0.95 below 900 px viewport width
-  ([:44](../../public/simulations/water-wave.html#L44), [sim.css:289](../../public/styles/sim.css#L289)), the canvas `#water`, and
+  ([:44](../../public/simulations/water-wave.html#L44), [sim.css:215](../../public/styles/sim.css#L215)), the canvas `#water`, and
   the caption with the speed `#cap-c` ([:47-50](../../public/simulations/water-wave.html#L47-L50)). datalog.js adds the
   Read values switch to this caption and the reading strip under the figure
-  ([datalog.js:570-593](../../public/scripts/datalog.js#L570-L593)).
+  ([datalog.js:567-590](../../public/scripts/datalog.js#L567-L590)).
 - The control panel: Run, Wave and Water groups, readouts, legend ([:53-104](../../public/simulations/water-wave.html#L53-L104)).
 - The lecture note `<article class="paper" id="paper">` ([:107-553](../../public/simulations/water-wave.html#L107-L553)), "Deep-water
   waves: the sea moves in circles", with an abstract and a contents list. Ten sections, 23 numbered equations (1)–(23), four
@@ -284,13 +284,13 @@ stylesheets `../styles/sim.css` (which imports the Google fonts, KaTeX's CSS and
 
 - The walkthrough host `<section class="walk" id="walk" data-walk="water">`
   ([:555](../../public/simulations/water-wave.html#L555)). `sim.js` loads `../scripts/walk/water.js` from the `data-walk` key
-  and builds the stepper ([sim.js:476-486](../../public/scripts/sim.js#L476-L486)); see [walk.md](../scripts/walk.md). The
+  and builds the stepper ([sim.js:402-411](../../public/scripts/sim.js#L402-L411)); see [walk.md](../scripts/walk.md). The
   file has seven steps: pixels into metres and ω² = gk; phase speed and period; one parcel, one circle; orbits shrink with
   depth; the surface; the steepness limit; the clock and the picture ([water.js:7-116](../../public/scripts/walk/water.js#L7-L116)).
 - Footer, then the scripts in load order: `fold.js`, `sim.js`, `dataset.js`, the page's inline script, `datalog.js`
   ([:563-566](../../public/simulations/water-wave.html#L563-L566), [:888](../../public/simulations/water-wave.html#L888)).
   `fold.js` turns each `.psec` and the walkthrough into fold cards ([fold.md](../scripts/fold.md)); `sim.js` typesets the note
-  with KaTeX ([sim.js:413-456](../../public/scripts/sim.js#L413-L456)).
+  with KaTeX ([sim.js:339-382](../../public/scripts/sim.js#L339-L382)).
 
 ## Where the drawing and the store differ
 

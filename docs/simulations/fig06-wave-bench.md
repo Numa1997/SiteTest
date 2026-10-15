@@ -76,7 +76,7 @@ last `peak`, and `frames`, `fps` ([:504](../../public/simulations/wave-interfere
 **Numerical method.** None in the sense of an integrator: the formula above gives every wave at every place and time, so the
 page evaluates it directly. Only the time accumulates, `simT += dt`
 ([:824](../../public/simulations/wave-interference.html#L824)), with $\Delta t$ from `Sim.clock`: real time between frames,
-capped at 0.05 s, zero while paused ([sim.js:180-182](../../public/scripts/sim.js#L180-L182)). The values are exact to double
+capped at 0.05 s, zero while paused ([sim.js:179-181](../../public/scripts/sim.js#L179-L181)). The values are exact to double
 precision; the only approximation is drawing the curve as straight segments between samples (note Section 07,
 [:448](../../public/simulations/wave-interference.html#L448)).
 
@@ -178,7 +178,7 @@ Line numbers link into `wave-interference.html`.
 
 | Control | Element id | Range / default | What it changes in the code |
 |---|---|---|---|
-| Pause / Play | `play` | playing at load, unless the reader prefers reduced motion ([sim.js:178](../../public/scripts/sim.js#L178)) | `clk.toggle` via `Sim.playButton` ([:834](../../public/simulations/wave-interference.html#L834)). |
+| Pause / Play | `play` | playing at load, unless the reader prefers reduced motion ([sim.js:177](../../public/scripts/sim.js#L177)) | `clk.toggle` via `Sim.playButton` ([:834](../../public/simulations/wave-interference.html#L834)). |
 | Add wave + | `add` | up to 6 waves | `add()` with defaults A = 20 px, f = 1, φ = 0, s = 1; disabled at six ([:615](../../public/simulations/wave-interference.html#L615)). |
 | One wave | `p-one` | — | `preset([{ A: 20, f: 1 }])` ([:789](../../public/simulations/wave-interference.html#L789)). |
 | Beats | `p-beats` | — | Two waves, A = 18 px, f = 1 and 1.25 ([:790](../../public/simulations/wave-interference.html#L790)). |
@@ -243,20 +243,20 @@ with $f_1 \ne f_2$.
 retained at their stored 10⁻⁶ Hz precision, capped at 20 s ([:862-867](../../public/simulations/wave-interference.html#L862-L867)). For the Square
 wave preset it is 2.50 s (measured). The chart columns are `sum_A`, `peak`, `ratio`, `y_sum_400`, `y1_400`; the point followed
 is the sum at the middle sample, unless the reader pinned another. The panel samples every numeric scalar at most 600 times
-in the round ([datalog.js:747](../../public/scripts/datalog.js#L747), [datalog.js:776](../../public/scripts/datalog.js#L776)).
+in the round ([datalog.js:744](../../public/scripts/datalog.js#L744), [datalog.js:773](../../public/scripts/datalog.js#L773)).
 
 **The panel hooks.** `Sim.data` ([:868-965](../../public/simulations/wave-interference.html#L868-L965)) sets
 `kicker: 'Fig. 6 · data'`, `file: 'fig6-wave-bench'`, six groups (Waves, The sum, Time, Sampled curves, Spectrum, Drawing),
 the checks, the read-backs and the `about` paragraph. The contract is at
 [datalog.js:8-30](../../public/scripts/datalog.js#L8-L30). Read values works on the plot only: datalog.js attaches it to the
-element `#stage` ([datalog.js:545](../../public/scripts/datalog.js#L545)), which is the plot; the spectrum's stems are checked
+element `#stage` ([datalog.js:542](../../public/scripts/datalog.js#L542)), which is the plot; the spectrum's stems are checked
 from the table, with the `y_line` read-back.
 
 **`Sim.live()`** ([:797-821](../../public/simulations/wave-interference.html#L797-L821)) reads only the store and returns, for
 the walkthrough's "Now" column: `N`, `sum` (y at X = 400), `pk`, `sA`, `ratio`, `M`, `dX`, `R`, `Rc`, `An` and `fn` (all
 amplitudes and frequencies), `fmax`; for wave 1 `A`, `f`, `s`, `phi` (in units of π), `k`, `w` (ω), `lam`, `v`, `y1`, `hl`
 (ν₁); and `bl`, `venv`, or "needs two waves with different f". With no waves the per-wave keys read "no waves". The walkthrough
-polls it every 200 ms ([sim.js:388-400](../../public/scripts/sim.js#L388-L400)).
+polls it every 200 ms ([sim.js:314-326](../../public/scripts/sim.js#L314-L326)).
 
 **Three-way check, measured.** Square wave preset, paused, 1440 × 900 window, sample 356 (X = 400.0 px): stored `y_sum` =
 23.816154399757014 px and the value recomputed by `check.y_sum` from the stored `y_comp` are identical; stored `py_sum` =
@@ -281,7 +281,7 @@ Google Fonts; `../styles/sim.css`, `../styles/data.css`, `../styles/fold.css`; a
 - Two figures stacked in `.stack` ([:55-74](../../public/simulations/wave-interference.html#L55-L74)): the plot `#stage`
   (aspect 16 / 10, or 1 / 1.1 below 900 px viewport width), canvas `#plot`, caption with the formula and the wave count
   `#cap-n`; the spectrum `#stage-spec` (16 / 4.2, or 16 / 7), canvas `#spec`, caption "ν from 0 to 6 Hz". The narrow-screen
-  ratio is applied by [sim.css:289](../../public/styles/sim.css#L289).
+  ratio is applied by [sim.css:215](../../public/styles/sim.css#L215).
 - The control panel: Run, Presets, the cards container `#waves`, readouts `#r-n`, `#r-sum`, `#r-peak`
   ([:76-101](../../public/simulations/wave-interference.html#L76-L101)).
 - The lecture note `<article class="paper" id="paper">` ([:104-479](../../public/simulations/wave-interference.html#L104-L479)),
@@ -302,7 +302,7 @@ Google Fonts; `../styles/sim.css`, `../styles/data.css`, `../styles/fold.css`; a
 
 - The walkthrough host `<section class="walk" id="walk" data-walk="bench">`
   ([:481](../../public/simulations/wave-interference.html#L481)), filled by `sim.js` from `../scripts/walk/bench.js`
-  ([sim.js:476-486](../../public/scripts/sim.js#L476-L486)); see [walk.md](../scripts/walk.md). Eight steps: one component and
+  ([sim.js:402-411](../../public/scripts/sim.js#L402-L411)); see [walk.md](../scripts/walk.md). Eight steps: one component and
   its sliders; sampling the view; superposition as a plain sum; fitting the curves into their panels; the Beats preset; the
   Square wave preset; the spectrum; the bound $|\sum y_i| \le \sum A_i$ ([bench.js:7-123](../../public/scripts/walk/bench.js#L7-L123)).
 - Footer, then the scripts in load order: `fold.js`, `sim.js`, `dataset.js`, the inline script, `datalog.js`

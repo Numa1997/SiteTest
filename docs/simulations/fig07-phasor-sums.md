@@ -15,7 +15,7 @@ phase and "bounce curve" ([L972–985](../../public/simulations/phasor-sums.html
 beats, a trefoil, a star and Spirograph-like curves ([L668–679](../../public/simulations/phasor-sums.html#L668-L679)).
 A *Final shape* view draws the whole closed curve at once and morphs it when a slider moves. An audio file can drive
 the radii ("Auto Dance"), and a performance of slider changes can be recorded, replayed and saved as JSON. The page
-opens on the 3-petal rose ([L1471](../../public/simulations/phasor-sums.html#L1471)).
+opens on the 3-petal rose ([L1470](../../public/simulations/phasor-sums.html#L1470)).
 
 ## The physics in one picture
 
@@ -71,7 +71,7 @@ Period and symmetry are found exactly because the sliders move in steps of 0.01 
 **Frame loop**, the `Sim.clock` callback ([L1315–1350](../../public/simulations/phasor-sums.html#L1315-L1350)), in order:
 
 1. `real` = wall time since the last frame, capped at 0.05 s ([L1316](../../public/simulations/phasor-sums.html#L1316)).
-   The clock's own `dt` is the same cap but 0 while paused ([sim.js:180–182](../../public/scripts/sim.js#L180-L182)).
+   The clock's own `dt` is the same cap but 0 while paused ([sim.js:179–181](../../public/scripts/sim.js#L179-L181)).
 2. `analyse(real)`: audio bands, beat detection, burst decay ([L902–935](../../public/simulations/phasor-sums.html#L902-L935)).
 3. `perform(real)`: record a snapshot every 50 ms, or replay ([L1183–1213](../../public/simulations/phasor-sums.html#L1183-L1213)).
 4. `buildLive()`: copy the list with the dance multipliers ([L938–955](../../public/simulations/phasor-sums.html#L938-L955)).
@@ -185,8 +185,8 @@ outright. Export writes `phasor-performance.json` as `{ v: 1, timeline }`
 | `isLive`, `trailAt`, `pathAt` | [1357–1359](../../public/simulations/phasor-sums.html#L1357-L1359) | Data-panel helpers from stored values. |
 | `activeW`, `structureNow`, `sumNow`, `armInputs` | [1360–1363](../../public/simulations/phasor-sums.html#L1360-L1363) | Recompute from stored inputs, for Check only. |
 | `nz` | [1364](../../public/simulations/phasor-sums.html#L1364) | Unused (see notes). |
-| `phasorRound` | [1366–1369](../../public/simulations/phasor-sums.html#L1366-L1369) | Length of one recorded round. |
-| `Sim.data` hooks | [1370–1468](../../public/simulations/phasor-sums.html#L1370-L1468) | `probe`, `inspect`, `locate`, `check`, `drawn`, `round`, `play`, `about`. |
+| `phasorRound` | [1365–1368](../../public/simulations/phasor-sums.html#L1365-L1368) | Length of one recorded round. |
+| `Sim.data` hooks | [1369–1467](../../public/simulations/phasor-sums.html#L1369-L1467) | `probe`, `inspect`, `locate`, `check`, `drawn`, `round`, `play`, `about`. |
 
 ## Controls
 
@@ -200,7 +200,7 @@ outright. Export writes `phasor-performance.json` as `{ v: 1, timeline }`
 | Add circle | `add` | A = 0.5, ω = old N + 1, φ = 0 | [L1265–1269](../../public/simulations/phasor-sums.html#L1265-L1269) |
 | Randomise | `random` | 2–6 arms, A 0.15–1.25, ω from a fixed list, φ 0–2π | [L1270–1275](../../public/simulations/phasor-sums.html#L1270-L1275) |
 | Live / Final shape | `m-live`, `m-final` | Live | `setMode()` ([L1253–1263](../../public/simulations/phasor-sums.html#L1253-L1263)) |
-| Play / Pause | `play` | playing (paused under reduced motion) | `Sim.playButton` ([L1351](../../public/simulations/phasor-sums.html#L1351), [sim.js:178](../../public/scripts/sim.js#L178)) |
+| Play / Pause | `play` | playing (paused under reduced motion) | `Sim.playButton` ([L1351](../../public/simulations/phasor-sums.html#L1351), [sim.js:177](../../public/scripts/sim.js#L177)) |
 | Clear trail | `clear` | — | `trail = []` ([L1264](../../public/simulations/phasor-sums.html#L1264)) |
 | Speed | `speed` | 0–4, step 0.01, default 1 | read each frame into `lastSpeed` ([L112](../../public/simulations/phasor-sums.html#L112), [L1323](../../public/simulations/phasor-sums.html#L1323)) |
 | Zoom | `zoom` | 0.3–1, default 1 | multiplies both scales ([L116](../../public/simulations/phasor-sums.html#L116), [L1103](../../public/simulations/phasor-sums.html#L1103)) |
@@ -246,19 +246,19 @@ How `dim`, `var`, `alloc` and `set` work is in [dataset.md](../scripts/dataset.m
 Measured at load on a 1440 px wide window: `box_w × box_h` = 770 × 601, `scale` = 132.22 px per unit for the 3-petal
 rose (`fitR` = 2), `n_path` = 1500, `period` = π s, `q` = 3; on a 390 px window 356 × 356 and 78.32 px per unit.
 
-**One round** (`Sim.data.round`, [L1463–1465](../../public/simulations/phasor-sums.html#L1463-L1465)): the time variable
+**One round** (`Sim.data.round`, [L1462–1464](../../public/simulations/phasor-sums.html#L1462-L1464)): the time variable
 is `t`; the length is `phasorRound()` = $\min(T, 20\cdot s_f)$ of phasor time, with $T = 2\pi/g$ (or $2\pi$ s when
 $g = 0$) and $s_f$ the stored speed `sf` floored at 0.05
-([L1366–1369](../../public/simulations/phasor-sums.html#L1366-L1369)), so at most about 20 s of real time. Columns:
+([L1365–1368](../../public/simulations/phasor-sums.html#L1365-L1368)), so at most about 20 s of real time. Columns:
 `x`, `y`, `absz`, `sf`; the point followed is the pen. Recording is blocked in the Final view and at Speed 0, where phasor time does not run. If Speed becomes 0 during a round, the panel says why it is waiting; raising Speed resumes the same round.
 How rounds are recorded and saved: [datalog.md](../scripts/datalog.md).
 
 **Data-panel hooks.** `probe` pins the nearest joint, the pen or a trail point within 12 px in the Live view, or a
-path point in the Final view ([L1385–1398](../../public/simulations/phasor-sums.html#L1385-L1398)). `check` recomputes
-34 variables from stored inputs only ([L1415–1456](../../public/simulations/phasor-sums.html#L1415-L1456)). `drawn`
+path point in the Final view ([L1384–1397](../../public/simulations/phasor-sums.html#L1384-L1397)). `check` recomputes
+34 variables from stored inputs only ([L1414–1455](../../public/simulations/phasor-sums.html#L1414-L1455)). `drawn`
 reads pixels back for `tip_px`, `px`, `path_x`, `trail_x`; each test first requires alpha > 0, then a dark colour
-where it expects one ([L1457–1462](../../public/simulations/phasor-sums.html#L1457-L1462)). The file base name is
-`fig7-phasor-sums` ([L1371](../../public/simulations/phasor-sums.html#L1371)).
+where it expects one ([L1456–1461](../../public/simulations/phasor-sums.html#L1456-L1461)). The file base name is
+`fig7-phasor-sums` ([L1370](../../public/simulations/phasor-sums.html#L1370)).
 
 **`Sim.live()`** ([L1293–1312](../../public/simulations/phasor-sums.html#L1293-L1312)) returns formatted strings read
 from the store: `t, N, x, y, absz, absz2, E, G, g, Tc, M, q, dt, spd, sf, n, span, alpha, dev, bass, mid, high,
@@ -280,13 +280,13 @@ its caption ([L71–79](../../public/simulations/phasor-sums.html#L71-L79)); the
 ([L221–649](../../public/simulations/phasor-sums.html#L221-L649)); the walkthrough host `#walk`
 (`data-walk="phasors"`, [L651](../../public/simulations/phasor-sums.html#L651)); the footer. `datalog.js` adds the data
 tab, the *Read values* switch in the caption and the reading strip under `#stage`
-([datalog.js:570–593](../../public/scripts/datalog.js#L570-L593)).
+([datalog.js:567–590](../../public/scripts/datalog.js#L567-L590)).
 
 Scripts, in load order: `fold.js`, `sim.js`, `dataset.js`, the page script
-([L662–1475](../../public/simulations/phasor-sums.html#L662-L1475)), `datalog.js`
-([L659–1476](../../public/simulations/phasor-sums.html#L659-L1476)). `sim.js` loads the walkthrough file named by
-`data-walk` ([sim.js:479–485](../../public/scripts/sim.js#L479-L485)) and typesets the note with KaTeX
-([sim.js:413–441](../../public/scripts/sim.js#L413-L441)); see [sim.md](../scripts/sim.md), [walk.md](../scripts/walk.md),
+([L662–1474](../../public/simulations/phasor-sums.html#L662-L1474)), `datalog.js`
+([L659–1475](../../public/simulations/phasor-sums.html#L659-L1475)). `sim.js` loads the walkthrough file named by
+`data-walk` ([sim.js:404–410](../../public/scripts/sim.js#L404-L410)) and typesets the note with KaTeX
+([sim.js:339–367](../../public/scripts/sim.js#L339-L367)); see [sim.md](../scripts/sim.md), [walk.md](../scripts/walk.md),
 [fold.md](../scripts/fold.md).
 
 Lecture note "Phasor sums: circles riding on circles": 9 sections (`.psec`): 1 Circles riding on circles; 2 A turning
@@ -303,7 +303,7 @@ Spirograph preset as a chain ([L321–370](../../public/simulations/phasor-sums.
 ## Where the drawing and the store differ
 
 The page states this in its `about` paragraph, shown in the data panel
-([L1467](../../public/simulations/phasor-sums.html#L1467), [datalog.js:168](../../public/scripts/datalog.js#L168)):
+([L1466](../../public/simulations/phasor-sums.html#L1466), [datalog.js:165](../../public/scripts/datalog.js#L165)):
 
 - **Trail.** `trail_x`, `trail_y` are history: the pen at the end of each past frame, spaced by $\Delta t$ times the
   speed, joined by straight segments and faded in 12 chunks. With Auto Dance on, old points were made with old radii.
@@ -327,9 +327,9 @@ The page states this in its `about` paragraph, shown in the data panel
 - **Formulas live three times.** In the code, in the `formula` string of each `ds.var` declaration, and in `check`.
   `structure()` is repeated as `structureNow()` ([L1361](../../public/simulations/phasor-sums.html#L1361)), `sumAt()` as
   `sumNow()` ([L1362](../../public/simulations/phasor-sums.html#L1362)), the dance multiplier in `check.mul`
-  ([L1416–1422](../../public/simulations/phasor-sums.html#L1416-L1422)), the sample count and span in `check.n_path` and
-  `check.span` ([L1446–1447](../../public/simulations/phasor-sums.html#L1446-L1447)), the 0.44 scale in
-  `check.scale_final` and `check.scale` ([L1452–1453](../../public/simulations/phasor-sums.html#L1452-L1453)).
+  ([L1415–1421](../../public/simulations/phasor-sums.html#L1415-L1421)), the sample count and span in `check.n_path` and
+  `check.span` ([L1445–1446](../../public/simulations/phasor-sums.html#L1445-L1446)), the 0.44 scale in
+  `check.scale_final` and `check.scale` ([L1451–1452](../../public/simulations/phasor-sums.html#L1451-L1452)).
 - **The 0.01 step is load-bearing.** `round(100 ω)` in `structure()` and `activeW()` assumes the ω slider step of 0.01
   ([L970](../../public/simulations/phasor-sums.html#L970)). Changing the step needs a new integer scale in both places
   and in lecture note section 5.
@@ -350,7 +350,7 @@ The page states this in its `about` paragraph, shown in the data panel
 4. Fixed on 2026-10-15: the walkthrough reads stored effective alpha; Smooth morphing off shows 1.00 even with the slider at 0.08 (commit `:/^Batch C: align walkthroughs and metadata; verify excerpts and stored values$`).
 5. Fixed on 2026-10-15: sumAt writes each live angle into the allocated ang array; draw does not recompute it (commit `:/^Batch D: store computed results once; verify values and pixel readbacks$`).
 6. Fixed on 2026-10-15: Speed 0 has an explicit recording guard and waiting reason; a running round resumes after Speed is raised (commit `:/^Batch A: fix simulation and recording faults; verify in Chromium$`).
-7. **`nz()` is never called** ([L1364](../../public/simulations/phasor-sums.html#L1364)).
+7. Fixed on 2026-10-15: the uncalled nz helper was removed (commit `:/^Batch E: remove proven unused code; verify styles, arrays and exports$`).
 8. **Replay does not wrap phases.** `perform()` moves each phase linearly toward the snapshot
    ([L1204](../../public/simulations/phasor-sums.html#L1204)), so a recorded change from 6.2 to 0.1 rad sweeps the arm
    backwards through almost a full turn over about 50 ms.

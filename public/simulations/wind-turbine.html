@@ -560,7 +560,7 @@
         var box = Sim.canvas2d(document.getElementById('wt')), ctx = box.ctx;
         var cbox = Sim.canvas2d(document.getElementById('cp')), cctx = cbox.ctx;
         var statusEl = document.getElementById('status');
-        var playT = 0, iNow = 0, frames = 0, fps = 0, solved = null, ctrl = 'pi', prof = 'turb', AIRPX = 5;
+        var playT = 0, iNow = 0, fps = 0, solved = null, ctrl = 'pi', prof = 'turb', AIRPX = 5;
 
         /* ---------- the store: every number this page computes is written here, where it is computed (scripts/dataset.js) ---------- */
         var ds = Sim.dataset({ title: 'Wind turbine control', attrs: { figure: 10, page: 'wind-turbine.html', equation: 'J dω/dt = τ_aero(ω, v) − τ_gen', cp_model: 'Heier: c1 (c2/λi − c4) e^(−c5/λi) + c6 λ, 1/λi = 1/λ − 0.035, β = 0' } });
@@ -957,7 +957,7 @@
         }
         var clk = Sim.clock(function (dt) {
             if (!solved) return;
-            if (dt > 0) { frames++; fps = fps ? fps + (1 / dt - fps) * 0.1 : 1 / dt; }
+            if (dt > 0) { fps = fps ? fps + (1 / dt - fps) * 0.1 : 1 / dt; }
             playT += speed.value * dt;
             if (playT > TEND) { playT = TEND; clk.set(false); }
             ds.set('fps', fps); ds.set('playing', clk.playing);

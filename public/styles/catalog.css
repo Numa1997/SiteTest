@@ -111,7 +111,7 @@
   z-index: 20;
   margin: 0 -32px;
   padding: 12px 32px;
-  background: var(--bar-bg, rgba(245, 241, 234, 0.95));
+  background: rgba(245, 241, 234, 0.95);
   -webkit-backdrop-filter: blur(8px);
   backdrop-filter: blur(8px);
   border-bottom: 1px solid var(--line-strong);
@@ -152,7 +152,7 @@
 .cat__search input:focus {
   outline: none;
   border-color: var(--accent);
-  box-shadow: 0 0 0 3px var(--accent-glow, rgba(122, 31, 43, 0.14));
+  box-shadow: 0 0 0 3px rgba(122, 31, 43, 0.14);
 }
 .cat__search input::-webkit-search-cancel-button {
   display: none;
@@ -226,16 +226,6 @@
   font: 12px var(--mono);
   color: var(--ink-3);
   white-space: nowrap;
-}
-.cat__intro {
-  margin: 26px 0 0;
-  font: 17px/1.6 var(--tex);
-  color: var(--ink-2);
-}
-.cat__intro b {
-  font: 400 24px var(--serif);
-  color: var(--ink);
-  margin-right: 6px;
 }
 
 /* ================= entries: one paper abstract per simulation ================= */
@@ -399,7 +389,7 @@
   border: 1px solid var(--accent);
   border-radius: 4px;
   background: var(--accent);
-  color: var(--on-accent, #fff);
+  color: #fff;
   font: 500 14px var(--sans);
   transition: background-color 0.15s ease, border-color 0.15s ease;
 }
@@ -409,7 +399,7 @@
 .entry__open:hover {
   background: var(--accent-dark);
   border-color: var(--accent-dark);
-  color: var(--on-accent, #fff);
+  color: #fff;
   text-decoration: none;
 }
 .entry__note {

@@ -1361,7 +1361,6 @@
         function structureNow() { var w = activeW(), G = 0, M = 0; w.forEach(function (x) { G = gcd(G, x); }); for (var i = 1; i < w.length; i++) M = gcd(M, w[i] - w[0]); return { n: w.length, G: G, g: G / 100, M: M, q: M ? M / gcd(w[0], M) : 0 }; }
         function sumNow(time) { var A = ds.get('A'), W = ds.get('omega'), P = ds.get('phi'), x = 0, y = 0; for (var k = 0; k < A.length; k++) { var ang = W[k] * time + P[k]; x += A[k] * Math.cos(ang); y += A[k] * Math.sin(ang); } return { x: x, y: y }; }
         function armInputs(i) { return [['k', i + 1, '', 0], ['A′', ds.get('A_arm')[i], '', 5], ['θ', ds.get('ang')[i], 'rad', 5]]; }
-        function nz(v) { return v === undefined ? 0 : v; }
         /* one round: the figure closes after 2π / g of phasor time; at most 20 s of real time */
         function phasorRound() {
             var g = ds.get('g'), storedSpeed = ds.get('sf'), sf = Math.max(typeof storedSpeed === 'number' ? storedSpeed : 1, 0.05), T = g > 0 ? 2 * Math.PI / g : 2 * Math.PI;

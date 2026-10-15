@@ -76,9 +76,9 @@ The phase is accumulated, `omegaT += 2 * Math.PI * freq.value * dt` ([page:977](
 rather than computed as $2\pi f t$: when the reader moves the Frequency slider only the rate of growth changes, so the wave stays
 continuous. With $2\pi f t$ every bead's phase would jump by $2\pi\,\Delta f\,t$ ([page:681](../../public/simulations/Transverse%20and%20longitudinal%20waves.html#L681)).
 Changing $\lambda$ changes $k$ at once, so the pattern stretches about $X = 0$. `Sim.clock` passes $\Delta t = 0$ while paused and
-caps $\Delta t$ at 0.05 s, so after a stall the wave resumes instead of jumping ([sim.js:177–186](../../public/scripts/sim.js#L177-L186)).
-On a device set to reduce motion the clock starts paused ([sim.js:178](../../public/scripts/sim.js#L178)), and the Play button
-shows "Play" from the start ([sim.js:200–208](../../public/scripts/sim.js#L200-L208)).
+caps $\Delta t$ at 0.05 s, so after a stall the wave resumes instead of jumping ([sim.js:176–185](../../public/scripts/sim.js#L176-L185)).
+On a device set to reduce motion the clock starts paused ([sim.js:177](../../public/scripts/sim.js#L177)), and the Play button
+shows "Play" from the start ([sim.js:199–207](../../public/scripts/sim.js#L199-L207)).
 
 **Each animation frame**, the clock callback ([page:976–981](../../public/simulations/Transverse%20and%20longitudinal%20waves.html#L976-L981)):
 
@@ -118,13 +118,13 @@ Cost per frame is linear in $N$ (at most 40 beads per row) plus 215 curve points
 **On slider input** for amplitude, frequency and wavelength, `readouts()` fills the four readouts and the caption and stores the
 derived scalars ([page:800–812](../../public/simulations/Transverse%20and%20longitudinal%20waves.html#L800-L812)). The page calls
 `readouts()` and `draw()` once at start, and refits the canvas 80 ms after the stage changes size
-([page:1077–1079](../../public/simulations/Transverse%20and%20longitudinal%20waves.html#L1077-L1079), [sim.js:142–150](../../public/scripts/sim.js#L142-L150)).
+([page:1077–1079](../../public/simulations/Transverse%20and%20longitudinal%20waves.html#L1077-L1079), [sim.js:141–149](../../public/scripts/sim.js#L141-L149)).
 
 **Precomputation and caching.** None. Measured in Chromium: the canvas is 770 × 481 CSS px in a 1440 × 900 window ($s$ =
 1.134375) and 356 × 374 in a 390 px wide window ($s$ = 0.4875), as Section 8 of the note says
 ([page:693](../../public/simulations/Transverse%20and%20longitudinal%20waves.html#L693)). The aspect ratios come from
 `--ar: 16 / 10` and, below 900 px, `--ar-m: 1 / 1.05` ([page:44](../../public/simulations/Transverse%20and%20longitudinal%20waves.html#L44),
-[sim.css:68](../../public/styles/sim.css#L68), [sim.css:289](../../public/styles/sim.css#L289)).
+[sim.css:68](../../public/styles/sim.css#L68), [sim.css:215](../../public/styles/sim.css#L215)).
 
 ## Function map
 
@@ -169,8 +169,8 @@ All functions live in one IIFE ([page:735–1080](../../public/simulations/Trans
 Readouts ([page:83–88](../../public/simulations/Transverse%20and%20longitudinal%20waves.html#L83-L88)): `r-v` ($v$ rounded to
 1 px/s), `r-t` ($T$, 2 decimals), `r-k` ($k$, 4 decimals, "/px"), `r-al` ($A_\mathrm{L}$ rounded, with " (cap)" when
 $A_\mathrm{L} < A$); the caption span `cap-v` repeats $v$ ([page:801–807](../../public/simulations/Transverse%20and%20longitudinal%20waves.html#L801-L807)).
-The data panel adds a "Data" tab and a "Read values" button in the figure caption ([datalog.js:592–593](../../public/scripts/datalog.js#L592-L593));
-the walkthrough adds "Hold the numbers" ([sim.js:326](../../public/scripts/sim.js#L326)).
+The data panel adds a "Data" tab and a "Read values" button in the figure caption ([datalog.js:589–590](../../public/scripts/datalog.js#L589-L590));
+the walkthrough adds "Hold the numbers" ([sim.js:252](../../public/scripts/sim.js#L252)).
 
 ## What the page writes into the data store
 
@@ -217,14 +217,14 @@ In Chromium at both window widths, the followed upper bead read `rgb(122, 31, 43
 
 **One round** (`Sim.data.round`, [page:1072–1073](../../public/simulations/Transverse%20and%20longitudinal%20waves.html#L1072-L1073)):
 one period $T$ of the play time `t`, which advances only while playing. The panel samples it evenly, at most 600 samples
-([datalog.js:747](../../public/scripts/datalog.js#L747), [776](../../public/scripts/datalog.js#L776)); the charted column is
+([datalog.js:744](../../public/scripts/datalog.js#L744), [773](../../public/scripts/datalog.js#L773)); the charted column is
 `omegaT`; the recorded point is the followed bead of the upper row. If the clock is paused when recording starts, the panel calls
-`Sim.data.play` ([datalog.js:765](../../public/scripts/datalog.js#L765)).
+`Sim.data.play` ([datalog.js:762](../../public/scripts/datalog.js#L762)).
 
 **`Sim.live()`** ([page:963–975](../../public/simulations/Transverse%20and%20longitudinal%20waves.html#L963-L975)) returns
 strings for the walkthrough keys `f`, `k`, `wt`, `v`, `T`, `X`, `phase`, `xi`, `yi`, `xc`, `xp`, `AL`, `A`, `xl`, `AkL`, `rho`,
 `comp`, `s`, `yT`, all read from the store at index `follow`. The phase is shown reduced to $(-\pi, \pi]$ with `Math.atan2`. The
-walkthrough polls it every 200 ms ([sim.js:400](../../public/scripts/sim.js#L400)).
+walkthrough polls it every 200 ms ([sim.js:326](../../public/scripts/sim.js#L326)).
 
 ## Page structure
 
@@ -242,7 +242,7 @@ the footer.
 
 **Scripts, in load order** ([page:731–1082](../../public/simulations/Transverse%20and%20longitudinal%20waves.html#L731-L1082)):
 `fold.js`, `sim.js`, `dataset.js`, the page's inline script, `datalog.js`. At boot `sim.js` loads `walk/tl.js`
-([sim.js:476–486](../../public/scripts/sim.js#L476-L486)) and KaTeX ([sim.js:426–427](../../public/scripts/sim.js#L426-L427)).
+([sim.js:402–411](../../public/scripts/sim.js#L402-L411)) and KaTeX ([sim.js:352–353](../../public/scripts/sim.js#L352-L353)).
 See [sim.md](../scripts/sim.md), [walk.md](../scripts/walk.md), [fold.md](../scripts/fold.md), [pages.md](../pages.md).
 
 **Lecture note.** Nine sections, each a `.psec` fold ([fold.js:314](../../public/scripts/fold.js#L314)), 17 numbered equations,
@@ -270,7 +270,7 @@ The walkthrough calls the medium's pixels "world px".
 
 The page says this twice: in Section 8 of the note ([page:699](../../public/simulations/Transverse%20and%20longitudinal%20waves.html#L699))
 and in the panel's About text ([page:1075](../../public/simulations/Transverse%20and%20longitudinal%20waves.html#L1075),
-shown by [datalog.js:168](../../public/scripts/datalog.js#L168)).
+shown by [datalog.js:165](../../public/scripts/datalog.js#L165)).
 
 - **The tint is not the density.** It follows $\max(0, -\cos(kX - \omega t))$, symmetric and capped at opacity 0.23, while the
   stored $\rho/\rho_0$ is lopsided: 3.88 at the compression centres and 0.574 in the rarefactions at the defaults. The tint is laid
@@ -314,5 +314,5 @@ shown by [datalog.js:168](../../public/scripts/datalog.js#L168)).
 4. Fixed on 2026-10-15: layout checks read stored box_w and box_h (commit `:/^Batch D: store computed results once; verify values and pixel readbacks$`).
 5. Fixed on 2026-10-15: the transverse curve includes X = 640; the drawing path ends at the final bead with zero horizontal gap (commit `:/^Batch A: fix simulation and recording faults; verify in Chromium$`).
 6. **Redraw while paused.** `draw()` runs every animation frame even when paused ([page:980](../../public/simulations/Transverse%20and%20longitudinal%20waves.html#L980),
-   [sim.js:182–185](../../public/scripts/sim.js#L182-L185)). This is what makes the checkboxes and Particles work while paused,
+   [sim.js:181–184](../../public/scripts/sim.js#L181-L184)). This is what makes the checkboxes and Particles work while paused,
    at the cost of about 60 identical redraws a second.

@@ -645,7 +645,6 @@
             oy,
             scale,
             running = false,
-            raf = null,
             visible = true,
             inView = true;
           /* SPEED: simulated seconds per real second; STEP: RK4 substep in seconds */
@@ -790,18 +789,13 @@
               fadeTrace(1 - Math.pow(1 - 0.01, dt * 60));
               draw();
             }
-            raf = requestAnimationFrame(frame);
+            requestAnimationFrame(frame);
           }
           function start() {
             if (!running) {
               running = true;
-              raf = requestAnimationFrame(frame);
+              requestAnimationFrame(frame);
             }
-          }
-          function stop() {
-            running = false;
-            if (raf) cancelAnimationFrame(raf);
-            raf = null;
           }
 
           resize();

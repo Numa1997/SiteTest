@@ -83,7 +83,7 @@ energy balance $1.27\times10^{-12}$.
 One line fixes the run ([L469](../../public/simulations/driven-oscillator.html#L469)):
 `M = 1` kg, `H = 0.001` s, `TEND = 60` s, `EVERY = 10`, and `NS = TEND / H / EVERY + 1`. In JavaScript `60 / 0.001` is
 exactly 60 000, so `NS` is exactly 6 001 (checked in Node). The page keeps five pieces of its own state
-([L475](../../public/simulations/driven-oscillator.html#L475)): `playT` (playback time, s), `iNow` (row on screen), `frames`,
+([L475](../../public/simulations/driven-oscillator.html#L475)): `playT` (playback time, s), `iNow` (row on screen),
 `fps` and `solved` (the slider values of the last solve, or `null`).
 
 ### 1 Solve: classical RK4 over the whole run
@@ -147,7 +147,7 @@ status text ([L638–L645](../../public/simulations/driven-oscillator.html#L638-
 
 ### 3 Play: the frame loop, in order
 
-`Sim.clock` ([sim.js:177–198](../../public/scripts/sim.js#L177-L198)) calls the page's tick on every
+`Sim.clock` ([sim.js:176–197](../../public/scripts/sim.js#L176-L197)) calls the page's tick on every
 `requestAnimationFrame`, with $\Delta t$ capped at 0.05 s and $\Delta t = 0$ while paused. Each tick:
 
 1. returns if nothing has been solved; updates the smoothed frame rate; advances `playT += speed · Δt`; at 60 s clamps and
@@ -213,7 +213,7 @@ states; one `frame()` took about 1.5 ms (measured over 200 seek events at a 1 44
 | Control | Element id | Range / default | What it changes in the code |
 |---|---|---|---|
 | Solve | `solve` | button | Calls `solve()` ([L919](../../public/simulations/driven-oscillator.html#L919)). |
-| Pause / Play | `play` | button | Toggles the clock via `Sim.playButton` ([L918](../../public/simulations/driven-oscillator.html#L918), [sim.js:200](../../public/scripts/sim.js#L200)). |
+| Pause / Play | `play` | button | Toggles the clock via `Sim.playButton` ([L918](../../public/simulations/driven-oscillator.html#L918), [sim.js:199](../../public/scripts/sim.js#L199)). |
 | From t = 0 | `restart` | button | `playT = 0` and play ([L920](../../public/simulations/driven-oscillator.html#L920)). |
 | Stored run | `seek` | 0–6000, step 1, default 0 ([L90](../../public/simulations/driven-oscillator.html#L90)) | Sets `playT = n · 10 ms` and draws ([L549](../../public/simulations/driven-oscillator.html#L549)); follows the playback ([L905](../../public/simulations/driven-oscillator.html#L905)). |
 | Playback speed | `speed` | 0.25–4, step 0.25, default 1 ([L94](../../public/simulations/driven-oscillator.html#L94)) | Multiplies $\Delta t$ ([L912](../../public/simulations/driven-oscillator.html#L912)). Does not mark the run stale. |
@@ -221,7 +221,7 @@ states; one `frame()` took about 1.5 ms (measured over 200 seek events at a 1 44
 | Damping ratio $\zeta$ | `zeta` | 0.01–0.9, step 0.01, default 0.05 ([L106](../../public/simulations/driven-oscillator.html#L106)) | $c$ at the next solve; marks stale. The maximum 0.9 keeps $\omega_d$ real in `exact()`. |
 | Force amplitude $F_0$ | `F0` | 0–5 N, step 0.1, default 1 ([L114](../../public/simulations/driven-oscillator.html#L114)) | `p.F0`; marks stale. At 0 the arrow is hidden and `Gm_drive` is NaN ([L609](../../public/simulations/driven-oscillator.html#L609)). |
 | Drive frequency $f$ | `fd` | 0.05–1.5 Hz, step 0.01, default 0.45 ([L118](../../public/simulations/driven-oscillator.html#L118)) | $\Omega$ at the next solve; marks stale. |
-| Read values | added by datalog.js | switch, off | Appended to the first figure caption ([datalog.js:591–593](../../public/scripts/datalog.js#L591-L593)); see [datalog.md](../scripts/datalog.md). |
+| Read values | added by datalog.js | switch, off | Appended to the first figure caption ([datalog.js:588–590](../../public/scripts/datalog.js#L588-L590)); see [datalog.md](../scripts/datalog.md). |
 
 ## What the page writes into the data store
 
@@ -254,12 +254,12 @@ The `*_now` scalars are copies of row `i_now`, so a recorded round has scalar co
 **One round** (`Sim.data.round`, [L1093–L1095](../../public/simulations/driven-oscillator.html#L1093-L1095)) is one drive
 period, $1/f$ seconds of the stored run, timed by `t_play`. Its columns are `x_now`, `v_now`, `F_now`, `E_now`, `Pin_now`;
 the default point is the block. Recording is refused when fewer than $1/f$ seconds of the run remain ("press From t = 0").
-The panel samples every frame of the round, at most 600 samples ([datalog.js:747](../../public/scripts/datalog.js#L747)).
+The panel samples every frame of the round, at most 600 samples ([datalog.js:744](../../public/scripts/datalog.js#L744)).
 
 **`Sim.live()`** ([L888–L897](../../public/simulations/driven-oscillator.html#L888-L897)) returns formatted strings read from
 the store, for the keys the walkthrough uses: `k`, `c`, `W`, `w0`, `h`, `steps`, `n`, `t`, `x`, `v`, `F`, `E`, `X`, `phi`,
 `err`, `Win`, `Wloss`, `bal`, `bx`, `sc`. The walkthrough polls it every 200 ms
-([sim.js:400](../../public/scripts/sim.js#L400)).
+([sim.js:326](../../public/scripts/sim.js#L326)).
 
 **Check and read-back.** `Sim.data.check` ([L1004–L1051](../../public/simulations/driven-oscillator.html#L1004-L1051))
 recomputes every stored value from its stored inputs; for the ODE solution (`xs`, `vs`) and the run integrals (`Win`,
@@ -298,7 +298,7 @@ small inline style for the solve box (`.solve`, `.solve__steps`, `.solve__status
   diagram ([L333–L351](../../public/simulations/driven-oscillator.html#L333-L351)), Figure 4 the default run
   ([L357–L405](../../public/simulations/driven-oscillator.html#L357-L405)). Two exercise boxes, 4.1 and 6.1;
 - `section#walk` with `data-walk="driven"` ([L454](../../public/simulations/driven-oscillator.html#L454)), filled by
-  `sim.js` from `walk/driven.js` ([sim.js:476–486](../../public/scripts/sim.js#L476-L486)); see [walk.md](../scripts/walk.md);
+  `sim.js` from `walk/driven.js` ([sim.js:402–411](../../public/scripts/sim.js#L402-L411)); see [walk.md](../scripts/walk.md);
 - footer; then the scripts in load order: `fold.js`, `sim.js`, `dataset.js`, the page's inline script, `datalog.js`
   ([L462–L1106](../../public/simulations/driven-oscillator.html#L462-L1106)). Folds are described in
   [fold.md](../scripts/fold.md), the shared helpers in [sim.md](../scripts/sim.md).
@@ -380,10 +380,9 @@ the data panel prints. In detail:
 2. Fixed on 2026-10-15: both phase-lag references round the stored 25.34617594° to 25.3° (commit `:/^Batch B: correct notes and layout; verify measured figures in Chromium$`).
 3. Fixed on 2026-10-15: the note gives the actual geometry and measured desktop/phone fractions (commit `:/^Batch B: correct notes and layout; verify measured figures in Chromium$`).
 4. Fixed on 2026-10-15: the readout and walkthrough read stored phi_deg (commit `:/^Batch D: store computed results once; verify values and pixel readbacks$`).
-5. **Dead code.** `frames` is counted ([L911](../../public/simulations/driven-oscillator.html#L911)) but never read.
-   In `label()`, `sw = 0;` is overwritten on the next statement ([L703–L704](../../public/simulations/driven-oscillator.html#L703-L704)).
+5. Fixed on 2026-10-15: the unread frame counter and overwritten sw initializer were removed (commit `:/^Batch E: remove proven unused code; verify styles, arrays and exports$`).
 6. **Redraw while paused.** The clock calls the tick on every animation frame with $\Delta t = 0$ while paused
-   ([sim.js:179–186](../../public/scripts/sim.js#L179-L186)), and the tick always calls `frame()`
+   ([sim.js:178–185](../../public/scripts/sim.js#L178-L185)), and the tick always calls `frame()`
    ([L916](../../public/simulations/driven-oscillator.html#L916)), so a paused page still redraws about 60 times a second
    (about 1.5 ms per frame measured) and rewrites `#cap-t` each time ([L906](../../public/simulations/driven-oscillator.html#L906)).
 7. Fixed on 2026-10-15: the note gives the measured default solve time of 9.5–12.4 ms and states that timing depends on the machine (commit `:/^Batch B: correct notes and layout; verify measured figures in Chromium$`).

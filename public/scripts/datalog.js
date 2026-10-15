@@ -97,11 +97,8 @@
     var vars = [];
     spec.groups.forEach(function (g) { g.vars.forEach(function (n) { if (V(n)) vars.push(n); }); });
 
-    /* ---------- what one round is (a page without a round spec gets ten seconds of its log columns) ---------- */
-    var R = spec.round || (function () {
-        var L = spec.log || {};
-        return { time: L.time, mode: L.mode, columns: L.columns || [], label: function () { return 'ten seconds of play'; }, length: function () { return 10; } };
-    })();
+    /* ---------- what one round is: every simulation supplies its round specification ---------- */
+    var R = spec.round;
     var TV = R.time && V(R.time) ? R.time : null;
     function timeNow() { var t = TV ? ds.get(TV) : NaN; return typeof t === 'number' && isFinite(t) ? t : performance.now() / 1000; }
     function timeSym() { return TV ? sym(TV) : 't'; }
@@ -564,7 +561,7 @@
         if (readBtn) { readBtn.setAttribute('aria-pressed', on ? 'true' : 'false'); readBtn.lastChild.textContent = on ? ' Reading · stop' : ' Read values'; }
         if (stage) stage.classList.toggle('dp-reading', on);
         if (strip) strip.hidden = !on;
-        paintStrip(true);
+        paintStrip();
         kick();
     }
     if (stage && spec.probe && spec.inspect) {
@@ -612,7 +609,7 @@
             if (ref) { held.ref = ref; probe.pinned = true; }
             else if (!probe.dragging || !probe.pinned) probe.pinned = false;
             probe.preview = null;
-            paintStrip(true);
+            paintStrip();
             kick();
         };
         /* capture phase: while Read is on, the gesture belongs to the reading, and the page's own click, draw or pan does not run */
@@ -687,10 +684,10 @@
                 probe.marked = true;
             }
         }
-        if (performance.now() - probe.shownAt > 250) paintStrip(false);
+        if (performance.now() - probe.shownAt > 250) paintStrip();
     }
     function rowsKey(rows) { return rows.map(function (row) { return row[0] + '|' + row[3] + '|' + row[4] + '|' + (row[2] || ''); }).join(';'); }
-    function paintStrip(force) {
+    function paintStrip() {
         probe.shownAt = performance.now();
         var info = held.ref ? safe(function () { return spec.inspect(held.ref); }, null) : null, t = timeHTML(timeNow());
         if (strip && probe.on) {

@@ -3,9 +3,9 @@
 | | |
 |---|---|
 | Files | ten files in [public/scripts/walk/](../../public/scripts/walk/), 109 to 137 lines and 6.3 to 10.8 kB each, 1 199 lines and 80.0 kB in all (table at the end) |
-| Loaded by | `sim.js`, not by a `<script>` tag: once the page has loaded, `boot()` appends `../scripts/walk/<key>.js`, where `<key>` is the `data-walk` attribute of `#walk` ([sim.js:479-485](../../public/scripts/sim.js#L479-L485)) |
+| Loaded by | `sim.js`, not by a `<script>` tag: once the page has loaded, `boot()` appends `../scripts/walk/<key>.js`, where `<key>` is the `data-walk` attribute of `#walk` ([sim.js:404-410](../../public/scripts/sim.js#L404-L410)) |
 | Defines | `window.WALK` (created if missing) and one entry `window.WALK.<key>` per file |
-| Rendered by | `walkthrough()` in [sim.js:320-403](../../public/scripts/sim.js#L320-L403), described in [sim.md](sim.md) |
+| Rendered by | `walkthrough()` in [sim.js:246-329](../../public/scripts/sim.js#L246-L329), described in [sim.md](sim.md) |
 
 Each file holds the "From symbols to code" walkthrough of one simulation page: a short introduction and six to eight steps,
 each pairing an equation with the exact lines of the page's own code that compute it, plus a table of the symbols with their
@@ -40,26 +40,26 @@ window.WALK.pendulum = {
 
 | Field | Type | Shown as | Escaped? |
 |---|---|---|---|
-| `intro` | string | the paragraph under the heading "From symbols to code" ([sim.js:325](../../public/scripts/sim.js#L325)) | no, HTML |
-| `steps[].title` | string | the step's button in the list ("01 …") and the card heading ([sim.js:338](../../public/scripts/sim.js#L338), [sim.js:369](../../public/scripts/sim.js#L369)) | no, HTML |
-| `steps[].where` | string | where in the page's code the lines are, under the heading ([sim.js:369](../../public/scripts/sim.js#L369)) | yes, plain text |
-| `steps[].math` | string with marks | the "Algebra" column ([sim.js:371](../../public/scripts/sim.js#L371)) | no, HTML (`<sub>`, `<sup>`, `<b>`, `<br>`) |
-| `steps[].note` | string | the paragraph under the formula ([sim.js:371](../../public/scripts/sim.js#L371)) | no, HTML |
-| `steps[].code` | template literal with marks | the "Code · as written in this page" column, in `<pre><code>` ([sim.js:372](../../public/scripts/sim.js#L372)) | yes, plain text; line breaks kept |
-| `steps[].syms` | array of `[key, symbol, inCode, meaning]` | one table row each: Symbol, In code, Now, Meaning ([sim.js:363-366](../../public/scripts/sim.js#L363-L366)) | `inCode` escaped; `symbol` and `meaning` HTML |
+| `intro` | string | the paragraph under the heading "From symbols to code" ([sim.js:251](../../public/scripts/sim.js#L251)) | no, HTML |
+| `steps[].title` | string | the step's button in the list ("01 …") and the card heading ([sim.js:264](../../public/scripts/sim.js#L264), [sim.js:295](../../public/scripts/sim.js#L295)) | no, HTML |
+| `steps[].where` | string | where in the page's code the lines are, under the heading ([sim.js:295](../../public/scripts/sim.js#L295)) | yes, plain text |
+| `steps[].math` | string with marks | the "Algebra" column ([sim.js:297](../../public/scripts/sim.js#L297)) | no, HTML (`<sub>`, `<sup>`, `<b>`, `<br>`) |
+| `steps[].note` | string | the paragraph under the formula ([sim.js:297](../../public/scripts/sim.js#L297)) | no, HTML |
+| `steps[].code` | template literal with marks | the "Code · as written in this page" column, in `<pre><code>` ([sim.js:298](../../public/scripts/sim.js#L298)) | yes, plain text; line breaks kept |
+| `steps[].syms` | array of `[key, symbol, inCode, meaning]` | one table row each: Symbol, In code, Now, Meaning ([sim.js:289-292](../../public/scripts/sim.js#L289-L292)) | `inCode` escaped; `symbol` and `meaning` HTML |
 
 ### The marks `⟦key|text⟧`
 
 A mark ties one quantity together across the three places it appears. `markup()` finds every `⟦key|text⟧` with the regular
 expression `/⟦([A-Za-z0-9_]+)\|([^⟧]*)⟧/g` and replaces it by `<span class="k" data-k="key" tabindex="0">text</span>`
-([sim.js:308-318](../../public/scripts/sim.js#L308-L318)). The key is letters, digits and underscores; the text may be anything
+([sim.js:234-244](../../public/scripts/sim.js#L234-L244)). The key is letters, digits and underscores; the text may be anything
 except `⟧`. In `code` the text inside and between the marks is escaped; in `math` it is not, so a formula can carry HTML. Each
-table row carries the same `data-k` as its key ([sim.js:364](../../public/scripts/sim.js#L364)).
+table row carries the same `data-k` as its key ([sim.js:290](../../public/scripts/sim.js#L290)).
 
 When the pointer is over, or the keyboard focus is on, anything with a `data-k` in the card, every element of the card with the
 same key gets the class `is-lit`: the symbol in the formula, the expression in the code and the table row light up together
-([sim.js:352-356](../../public/scripts/sim.js#L352-L356), [sim.js:382-387](../../public/scripts/sim.js#L382-L387);
-styles at [sim.css:229-233](../../public/styles/sim.css#L229-L233)). A mark whose key has no table row in that step lights only
+([sim.js:278-282](../../public/scripts/sim.js#L278-L282), [sim.js:308-313](../../public/scripts/sim.js#L308-L313);
+styles at [sim.css:160-164](../../public/styles/sim.css#L160-L164)). A mark whose key has no table row in that step lights only
 the formula and the code; this happens in five steps (for example `X` in [bench.js:29](../../public/scripts/walk/bench.js#L29),
 `k2`, `k3`, `k4` in [pendulum.js:65](../../public/scripts/walk/pendulum.js#L65), `S1` in [slit.js:11](../../public/scripts/walk/slit.js#L11)).
 Across the ten files there are 326 marks.
@@ -73,26 +73,26 @@ else is copied from the page character for character, without the page's indenta
 
 1. **Load.** At `DOMContentLoaded`, `boot()` reads `#walk[data-walk]`, appends a `<script charset="utf-8">` for
    `../scripts/walk/<key>.js` to the body, and on its `load` event calls `walkthrough(window.WALK[key])`
-   ([sim.js:479-485](../../public/scripts/sim.js#L479-L485)). If the entry is missing, nothing is drawn
-   ([sim.js:322](../../public/scripts/sim.js#L322)).
+   ([sim.js:404-410](../../public/scripts/sim.js#L404-L410)). If the entry is missing, nothing is drawn
+   ([sim.js:248](../../public/scripts/sim.js#L248)).
 2. **Frame.** It writes the heading, the intro, the "Hold the numbers" switch, the step list (`role="tablist"`) and an empty card
-   (`role="tabpanel"`) into `#walk` ([sim.js:324-328](../../public/scripts/sim.js#L324-L328)). Each step becomes a button
-   numbered `01`, `02`, … ([sim.js:336-350](../../public/scripts/sim.js#L336-L350)). Arrow keys move to the previous or next
-   step, Home and End to the first and last ([sim.js:340-348](../../public/scripts/sim.js#L340-L348)).
+   (`role="tabpanel"`) into `#walk` ([sim.js:250-254](../../public/scripts/sim.js#L250-L254)). Each step becomes a button
+   numbered `01`, `02`, … ([sim.js:262-276](../../public/scripts/sim.js#L262-L276)). Arrow keys move to the previous or next
+   step, Home and End to the first and last ([sim.js:266-274](../../public/scripts/sim.js#L266-L274)).
 3. **One step.** `show(i)` marks the selected button, writes the card ("Step i of n", title, `where`, Algebra column with the
    formula and note, Code column, the symbol table, Previous and Next) and fills the "Now" column at once
-   ([sim.js:357-381](../../public/scripts/sim.js#L357-L381)). It starts at step 1 ([sim.js:401](../../public/scripts/sim.js#L401)).
+   ([sim.js:283-307](../../public/scripts/sim.js#L283-L307)). It starts at step 1 ([sim.js:327](../../public/scripts/sim.js#L327)).
 4. **The "Now" column.** Every 200 ms, `update()` calls `Sim.live()` and writes, into each cell `td[data-v="<key>"]`, the value
    for that key; a key the page does not return shows `—`, and an error in `Sim.live()` is caught and shows `—` everywhere
-   ([sim.js:388-400](../../public/scripts/sim.js#L388-L400)). `Sim.live()` is defined by each page next to its own state and
+   ([sim.js:314-326](../../public/scripts/sim.js#L314-L326)). `Sim.live()` is defined by each page next to its own state and
    returns ready-formatted strings with units, read from the page's dataset; for example
    `t1: f4(ds.get('th1'), 'rad')` in [Double Pendulum.html:684-696](../../public/simulations/Double%20Pendulum.html#L684-L696)
    (dataset: [dataset.md](dataset.md)).
 5. **Hold the numbers.** Switching it on takes one snapshot of `Sim.live()` and stops the updates; every step then shows that
    same frozen instant, so the reader can compare steps at one moment. Switching it off resumes the updates
-   ([sim.js:331-335](../../public/scripts/sim.js#L331-L335), [sim.js:392-394](../../public/scripts/sim.js#L392-L394)).
+   ([sim.js:257-261](../../public/scripts/sim.js#L257-L261), [sim.js:318-320](../../public/scripts/sim.js#L318-L320)).
 6. **Fold.** Finally `Fold.walk(#walk)` makes the section a level-1 fold whose counts line reads "N steps · each formula beside
-   the code that computes it and its value now" ([sim.js:402](../../public/scripts/sim.js#L402),
+   the code that computes it and its value now" ([sim.js:328](../../public/scripts/sim.js#L328),
    [fold.js:342-350](../../public/scripts/fold.js#L342-L350); [fold.md](fold.md)).
 
 Measured in headless Chromium, 1.5 s after load, on all ten pages: the walkthrough drew the expected number of steps, became a
@@ -101,7 +101,7 @@ fold, and `Sim.live()` returned a value for every symbol key used in any step of
 
 ## The rule: excerpts stay identical to the page code
 
-The Code column promises "as written in this page" ([sim.js:372](../../public/scripts/sim.js#L372)). AGENTS.md states the rule:
+The Code column promises "as written in this page" ([sim.js:298](../../public/scripts/sim.js#L298)). AGENTS.md states the rule:
 keep the excerpts identical to the page code when either changes. In practice:
 
 - When you edit a page line that a walkthrough quotes, edit the excerpt in the same change, and the reverse.
@@ -139,7 +139,7 @@ the page whose `data-walk` names the file.
 - **The page**: the `#walk[data-walk]` section, `Sim.live()`, and the code the excerpts quote. Each page's documentation lists
   what its `Sim.live()` returns ([../simulations/](../simulations/)).
 - **`fold.js`**: folds the section ([fold.md](fold.md)).
-- **`sim.css`**: the classes `walk__*`, `k`, `is-lit`, `is-held` ([sim.css:206-241](../../public/styles/sim.css#L206-L241);
+- **`sim.css`**: the classes `walk__*`, `k`, `is-lit`, `is-held` ([sim.css:137-172](../../public/styles/sim.css#L137-L172);
   [../styles.md](../styles.md)).
 
 ## The ten files
@@ -166,7 +166,7 @@ In all: 72 steps. The header comments of [dft.js:1-3](../../public/scripts/walk/
 ## Notes for maintainers
 
 1. Fixed on 2026-10-15: the transverse excerpt quotes the complete source line, without the invented comment (commit `:/^Batch C: align walkthroughs and metadata; verify excerpts and stored values$`).
-2. Because the file is loaded from the relative path `../scripts/walk/` ([sim.js:483](../../public/scripts/sim.js#L483)), a page
+2. Because the file is loaded from the relative path `../scripts/walk/` ([sim.js:408](../../public/scripts/sim.js#L408)), a page
    that is not one folder below `public/` could not use a walkthrough without changing `sim.js` (see [sim.md](sim.md)).
 3. The "Now" column is refreshed every 200 ms, 5 times a second, as long as the page is open, also while the walkthrough is
-   folded away ([sim.js:400](../../public/scripts/sim.js#L400)).
+   folded away ([sim.js:326](../../public/scripts/sim.js#L326)).

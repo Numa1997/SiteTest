@@ -472,7 +472,7 @@
         var box = Sim.canvas2d(document.getElementById('osc')), ctx = box.ctx;
         var bbox = Sim.canvas2d(document.getElementById('bode')), bctx = bbox.ctx;
         var statusEl = document.getElementById('status');
-        var playT = 0, iNow = 0, frames = 0, fps = 0, solved = null;
+        var playT = 0, iNow = 0, fps = 0, solved = null;
 
         /* ---------- the store: every number this page computes is written here, where it is computed (scripts/dataset.js) ---------- */
         var ds = Sim.dataset({ title: 'Driven oscillator', attrs: { figure: 9, page: 'driven-oscillator.html', equation: 'm x″ + c x′ + k x = F0 cos(Ω t)', start: 'x(0) = 0, v(0) = 0' } });
@@ -700,8 +700,8 @@
             // a symbol set like the lecture note, then its value in the mono face of the page
             value = value.replace(/-/g, '−');
             c.font = T.mono;
-            var vw = c.measureText(value).width, sw = 0;
-            sw = Sim.tex(c, sym, 0, 0, { size: 15, measure: true });
+            var vw = c.measureText(value).width;
+            var sw = Sim.tex(c, sym, 0, 0, { size: 15, measure: true });
             var x0 = align === 'right' ? x - sw - vw : align === 'center' ? x - (sw + vw) / 2 : x;
             Sim.tex(c, sym, x0, y, { size: 15, color: colour || T.ink });
             c.font = T.mono; c.fillStyle = colour || T.ink; c.textAlign = 'left'; c.textBaseline = 'alphabetic';
@@ -908,7 +908,7 @@
         }
         var clk = Sim.clock(function (dt) {
             if (!solved) return;
-            if (dt > 0) { frames++; fps = fps ? fps + (1 / dt - fps) * 0.1 : 1 / dt; }
+            if (dt > 0) { fps = fps ? fps + (1 / dt - fps) * 0.1 : 1 / dt; }
             playT += speed.value * dt;
             if (playT > TEND) { playT = TEND; clk.set(false); }
             ds.set('fps', fps); ds.set('playing', clk.playing);
