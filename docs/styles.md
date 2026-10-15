@@ -390,4 +390,4 @@ site `/src/main.ts` answers 403 (measured). The file comes from the app template
     of those faces appears twice in `document.fonts`.
 11. Fixed on 2026-10-15: the check view has a third verdict, `.dp-check__verdict.is-na`
     ([data.css:220](../public/styles/data.css#L220)): muted ink on the soft card colour inside a dashed outline, for a read-back
-    that finds nothing drawn at the moment. Before, such a case fell to the red `.is-bad` (audit repair).
+    that finds nothing drawn at the moment. Before, such a case fell to the burgundy `.is-bad` (audit repair, commit [32c240c](https://github.com/Numa1997/SiteTest/commit/32c240c52fd0535d39a0cef608dc404cf4219484)).

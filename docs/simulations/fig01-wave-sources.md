@@ -172,7 +172,7 @@ All functions live in the one inline script ([L508–903](../../public/simulatio
 | Frequency f | `freq` | 0.2–2 Hz, step 0.05, default 1.1 ([L76](../../public/simulations/Circular%20Wave%20Interference%20Visualization.html#L76)) | `readouts()` only; enters through ωt ([L595](../../public/simulations/Circular%20Wave%20Interference%20Visualization.html#L595), [L762](../../public/simulations/Circular%20Wave%20Interference%20Visualization.html#L762)). |
 | Damping γ | `damp` | 0–0.6, step 0.01, default 0.15 ([L80](../../public/simulations/Circular%20Wave%20Interference%20Visualization.html#L80)) | `changed()`: g = γ/300 px and the maps are rebuilt ([L596](../../public/simulations/Circular%20Wave%20Interference%20Visualization.html#L596), [L628](../../public/simulations/Circular%20Wave%20Interference%20Visualization.html#L628)). |
 
-Readouts: `r-n` shows the number of sources, with "(max)" at 24 ([L708](../../public/simulations/Circular%20Wave%20Interference%20Visualization.html#L708)); `r-v` shows round(fλ) px/s ([L712](../../public/simulations/Circular%20Wave%20Interference%20Visualization.html#L712)); `cap-count`
+Readouts: `r-n` shows the number of sources, with "(max)" at 24 ([L708](../../public/simulations/Circular%20Wave%20Interference%20Visualization.html#L708)); `r-v` shows the stored `v` rounded, in px/s ([L712](../../public/simulations/Circular%20Wave%20Interference%20Visualization.html#L712)); `cap-count`
 in the caption shows "2 sources" ([L709](../../public/simulations/Circular%20Wave%20Interference%20Visualization.html#L709)). The legend's colour bar is the CSS gradient of [sim.css:128](../../public/styles/sim.css#L128).
 
 ## What the page writes into the data store
@@ -194,7 +194,7 @@ set in `resize()`, [L609–610](../../public/simulations/Circular%20Wave%20Inter
 | `LUT` | (n, c), Uint8Clamped | [L589](../../public/simulations/Circular%20Wave%20Interference%20Visualization.html#L589), once |
 
 Scalars, by the place that writes them:
-- `readouts()`: `lambda`, `f`, `damp`, `v`, `omega`, `T` ([L712–711](../../public/simulations/Circular%20Wave%20Interference%20Visualization.html#L712-L712)).
+- `readouts()`: `lambda`, `f`, `damp`, `v`, `omega`, `T` ([L710–711](../../public/simulations/Circular%20Wave%20Interference%20Visualization.html#L710-L711)). `v` = f λ, the phase speed in px/s, is declared at [L540](../../public/simulations/Circular%20Wave%20Interference%20Visualization.html#L540) and written at [L711](../../public/simulations/Circular%20Wave%20Interference%20Visualization.html#L711); the `r-v` readout shows it rounded, read back from the store ([L712](../../public/simulations/Circular%20Wave%20Interference%20Visualization.html#L712)), and the walkthrough quotes that line.
 - `precompute()`: `k`, `g`, `N`, `norm`, `dx`, `dy`, `y_s` ([L631](../../public/simulations/Circular%20Wave%20Interference%20Visualization.html#L631)); `builds`, `build_ms`, `trig_calls` ([L655](../../public/simulations/Circular%20Wave%20Interference%20Visualization.html#L655)).
 - `resize()`: `cols`, `rows`, `P`, `worldH`, `box_w`, `box_h`, `dpr`, `j_c`, `i_c` ([L621–623](../../public/simulations/Circular%20Wave%20Interference%20Visualization.html#L621-L623)).
 - `render()`: `cos_wt`, `sin_wt` ([L662](../../public/simulations/Circular%20Wave%20Interference%20Visualization.html#L662)); `psi_c`, `n_c`, `rgb_c` ([L697](../../public/simulations/Circular%20Wave%20Interference%20Visualization.html#L697)); `renders`, `draw_ms` ([L698](../../public/simulations/Circular%20Wave%20Interference%20Visualization.html#L698)).

@@ -86,7 +86,9 @@ unspent time carried between frames ([L536–537](../../public/simulations/Doubl
 keeps the accuracy the same on every device ([pendulum.js:86](../../public/scripts/walk/pendulum.js#L86)). RK4 does not conserve energy exactly, so the page shows the
 drift ε rather than hiding it ([L351](../../public/simulations/Double%20Pendulum.html#L351), [L639](../../public/simulations/Double%20Pendulum.html#L639)). `rk4()` builds separate trial arrays `s2`, `s3`, `s4`, so all four slopes of a
 step use their own input state ([L489–496](../../public/simulations/Double%20Pendulum.html#L489-L496)). Measured in this session (1280 px window, default start, headless Chromium):
-ε = −2.4 × 10⁻⁸ at t = 21.2 s, n = 10 steps per frame at 60 frames per second, energy E = 18.3057 J.
+ε = −2.4 × 10⁻⁸ at t = 21.2 s, n = 10 steps per frame at 60 frames per second, energy E = 18.3057 J. Over the first 20 s
+of the default start ε stays within ±5 × 10⁻⁸: its largest value is +4.710 × 10⁻⁸ at t = 8.665 s, its most negative
+−3.185 × 10⁻⁸ at t = 19.13 s. The step is fixed, so every run gives these same numbers. The note says so ([L351](../../public/simulations/Double%20Pendulum.html#L351)).
 
 **Sub-stepping.** Real frame times are uneven; the physics advances in equal steps. Each frame ([L700–703](../../public/simulations/Double%20Pendulum.html#L700-L703)):
 
@@ -322,8 +324,8 @@ agree to the pixel; the trail is not stored.
 - **Constants quoted in text.** h = 1/600 s appears in the caption ([L48](../../public/simulations/Double%20Pendulum.html#L48)), the note (§7, Figure 3) and the panel group note
   ([L778](../../public/simulations/Double%20Pendulum.html#L778)); 0.001 rad appears on the twin switch ([L61](../../public/simulations/Double%20Pendulum.html#L61)) and in the note. Change them together with `H` and `EPS` ([L396](../../public/simulations/Double%20Pendulum.html#L396)).
 - **The catalog** entry's `equation`, `model`, `method` and `controls` ([catalog.js:73–76](../../public/scripts/catalog.js#L73-L76)) describe this page.
-- **Re-test** after any change: Check α₁, α₂, E, ε and x₂ px in the Data panel (stored, recomputed, pixel); watch ε stay near
-  10⁻⁸ for 20 s from the default start; switch the twin on and see the separation grow; record one round; pin bob 2 with Read
+- **Re-test** after any change: Check α₁, α₂, E, ε and x₂ px in the Data panel (stored, recomputed, pixel); watch ε stay within
+  ±5 × 10⁻⁸ for 20 s from the default start; switch the twin on and see the separation grow; record one round; pin bob 2 with Read
   values; resize between 390 px and 1440 px.
 
 ## Notes for maintainers
@@ -334,3 +336,6 @@ agree to the pixel; the trail is not stored.
 4. Fixed on 2026-10-15: the walkthrough cites lecture-note equations (6)–(8) (commit [43d8238](https://github.com/Numa1997/SiteTest/commit/43d82383f4294428a1cf027f2727644ccf7dc8a5)).
 5. Fixed on 2026-10-15: y_twin locates the twin’s four stored screen coordinates; stored and recomputed coordinates are identical and the pixels are rose (commit [9d3175f](https://github.com/Numa1997/SiteTest/commit/9d3175f2cf50d0ad3f8792f1ee173e8ce56bab53)).
 6. Fixed on 2026-10-15: the note states the 4–17 px bob-2 radius clamp (commit [74ef7d9](https://github.com/Numa1997/SiteTest/commit/74ef7d94571f467f31d2289be6c9668b6809a09f)).
+7. Fixed on 2026-10-15: the note's drift sentence said ε stays below 3 × 10⁻⁸ over the first 20 s; measured, it reaches
+   +4.710 × 10⁻⁸ at t = 8.665 s (and −3.185 × 10⁻⁸ at 19.13 s). It now reads "stays within ±5 × 10⁻⁸: its largest value is
+   +4.7 × 10⁻⁸, at t ≈ 8.7 s" ([L351](../../public/simulations/Double%20Pendulum.html#L351)) (audit repair, commit [32c240c](https://github.com/Numa1997/SiteTest/commit/32c240c52fd0535d39a0cef608dc404cf4219484)).

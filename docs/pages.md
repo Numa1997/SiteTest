@@ -475,4 +475,4 @@ file. To keep a path out of search engines, add a `Disallow: /path` line under `
 11. Fixed on 2026-10-15: the four Droplet Collection images carry `width` × `height` of 636 × 300, 419 × 300, 580 × 300 and
     470 × 300 css px, the SVGs' proportions ([portfolios.html:128–140](../public/portfolios.html#L128-L140); table under
     **Image sizes**). Before, they were the `viewBox` numbers times 1000 (400520 × 188969 and the like), which made the pictures
-    295 522 to 405 740 px wide when no stylesheet loads (audit repair).
+    295 522 to 405 740 px wide when no stylesheet loads (audit repair, commit [32c240c](https://github.com/Numa1997/SiteTest/commit/32c240c52fd0535d39a0cef608dc404cf4219484)).

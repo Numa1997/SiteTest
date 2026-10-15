@@ -91,7 +91,7 @@ difference `L2 - L1` differ by at most $1.35\times10^{-13}$ px (at $d = 298$, $\
 5. `readouts()` fills the six readouts and the caption from stored values; `compute()` and its `storeDerived(G)` helper have already stored the geometry, derived scalars and verdict
    ([page:774–783](../../public/simulations/Interactive%20Double-Slit%20Experiment%20Visualization.html#L774-L783)). Verdict rule:
    `f < 0.08 || f > 0.92` gives "Constructive · bright fringe, m = round(δs/λ)", `|f − 0.5| < 0.08` gives "Destructive · dark
-   fringe between m = … and …", otherwise "Partial · I/I₀ = …" ([page:757–761](../../public/simulations/Interactive%20Double-Slit%20Experiment%20Visualization.html#L757-L761)).
+   fringe between m = … and …", otherwise "Partial · I/I₀ = …" ([page:757–760](../../public/simulations/Interactive%20Double-Slit%20Experiment%20Visualization.html#L757-L760)).
    A tolerance of 0.08 wavelengths means $\cos^2(0.08\pi) = 0.94$ at the edge of "bright".
 
 **Each animation frame.** `Sim.clock` calls its callback every `requestAnimationFrame`, with `dt = 0` while paused and `dt` capped
@@ -126,7 +126,8 @@ All functions live in one IIFE ([page:550–943](../../public/simulations/Intera
 | `drawShapes()` | [636–684](../../public/simulations/Interactive%20Double-Slit%20Experiment%20Visualization.html#L636-L684) | The static construction in `#shapes`. |
 | `drawWaves()` | [686–706](../../public/simulations/Interactive%20Double-Slit%20Experiment%20Visualization.html#L686-L706) | Wavelet arcs and incoming wave in `#waves`; stores `ring_r`, `n_rings`, `phase`. |
 | `drawPattern()` with inner `X`, `Y`, `I`, `Iexact` | [708–752](../../public/simulations/Interactive%20Double-Slit%20Experiment%20Visualization.html#L708-L752) | Fig. 3b; stores `theta`, `I_far`, `I_exact`, `I_diff`, `m_sin`, `m_theta`, `m_x`, `m_max`. |
-| `readouts()` | [774–783](../../public/simulations/Interactive%20Double-Slit%20Experiment%20Visualization.html#L774-L783) | `storeDerived(G)` stores the derived scalars and points during compute; `readouts()` only fills the DOM. |
+| `storeDerived(G)` | [754–772](../../public/simulations/Interactive%20Double-Slit%20Experiment%20Visualization.html#L754-L772) | Called at the end of `compute()` ([632](../../public/simulations/Interactive%20Double-Slit%20Experiment%20Visualization.html#L632)). Stores the five points, the slider values, `ds_direct`, `S2Q`, $b\sin\alpha$ and its error `ds_err`, the ratio, its fraction, $\Delta\varphi$, $I$, $I_\mathrm{far}(\alpha)$, the verdict, `phi_pi`, `sin_theta1`, `theta1`, `fringe_px`, `ring_speed`. |
+| `readouts()` | [774–783](../../public/simulations/Interactive%20Double-Slit%20Experiment%20Visualization.html#L774-L783) | Fills the six readouts, the caption and the verdict from stored values; computes nothing. |
 | `update()` | [785–791](../../public/simulations/Interactive%20Double-Slit%20Experiment%20Visualization.html#L785-L791) | The five steps above, in order. |
 | `Sim.live` with inner `pt` | [794–808](../../public/simulations/Interactive%20Double-Slit%20Experiment%20Visualization.html#L794-L808) | Formatted strings for the walkthrough's "Now" column, read from the store. |
 | clock callback | [809–816](../../public/simulations/Interactive%20Double-Slit%20Experiment%20Visualization.html#L809-L816) | Advances `phase`, redraws wavelets, stores clock values. |
@@ -137,12 +138,13 @@ All functions live in one IIFE ([page:550–943](../../public/simulations/Intera
 | `P()`, `S(q)` | [829–830](../../public/simulations/Interactive%20Double-Slit%20Experiment%20Visualization.html#L829-L830) | Stored point $P$ or point `q` from `pt_x`, `pt_y`. |
 | `exactAt(th)` | [831–834](../../public/simulations/Interactive%20Double-Slit%20Experiment%20Visualization.html#L831-L834) | Recomputes $I_\mathrm{exact}(\theta)$ from stored inputs for the Check. |
 | `circleCheck(q)` | [835–841](../../public/simulations/Interactive%20Double-Slit%20Experiment%20Visualization.html#L835-L841) | Read-back: nearest `<circle>` in `#shapes` to the stored point; passes within 0.02 units. |
+| `firstFringeReadback(sine)` | [842–848](../../public/simulations/Interactive%20Double-Slit%20Experiment%20Visualization.html#L842-L848) | Read-back for `sin_theta1` and `theta1`: finds the "m = 1" label in `#pattern`, turns its `x` back into an angle, compares within 0.001. With no such label it returns `ok: null`. |
 | `Sim.data.playing` | [851](../../public/simulations/Interactive%20Double-Slit%20Experiment%20Visualization.html#L851) | `clk.playing`. |
 | `Sim.data.probe(x, y)` | [862–866](../../public/simulations/Interactive%20Double-Slit%20Experiment%20Visualization.html#L862-L866) | Nearest of the five points within 22 SVG units; returns `{ pt }`. |
 | `Sim.data.inspect(ref)` | [867–875](../../public/simulations/Interactive%20Double-Slit%20Experiment%20Visualization.html#L867-L875) | Rows shown for a pinned point; $P$ gets $L_1$, $L_2$, $\delta s$, $\delta s/\lambda$, $\Delta\varphi$, $I/I_0$. |
 | `Sim.data.locate(name, idx)` | [876–880](../../public/simulations/Interactive%20Double-Slit%20Experiment%20Visualization.html#L876-L880) | Where `pt_x`/`pt_y` elements and `ring_r` radii are drawn, in CSS px. |
 | `Sim.data.check.*` | [881–917](../../public/simulations/Interactive%20Double-Slit%20Experiment%20Visualization.html#L881-L917) | One recomputation per stored variable from stored inputs; the four slider entries read the input element now. |
-| `Sim.data.drawn.I`, `.ds`, `.pt_x`/`.pt_y` | [918–937](../../public/simulations/Interactive%20Double-Slit%20Experiment%20Visualization.html#L918-L937) | Read-backs from the SVG: dot height, bar length, circle centres. |
+| `Sim.data.drawn.*` | [918–937](../../public/simulations/Interactive%20Double-Slit%20Experiment%20Visualization.html#L918-L937) | Read-backs: `sin_theta1`, `theta1` (the m = 1 label), `L1`, `L2`, `phi_pi` (the visible readouts), `pt_x`/`pt_y` (circle centres), `I` (dot height), `ds` (bar length). |
 | `Sim.data.round` callbacks | [938–939](../../public/simulations/Interactive%20Double-Slit%20Experiment%20Visualization.html#L938-L939) | Label, length 10, recorded point $P$. |
 
 ## Controls
@@ -157,8 +159,8 @@ All functions live in one IIFE ([page:550–943](../../public/simulations/Intera
 
 Readouts ([page:110–118](../../public/simulations/Interactive%20Double-Slit%20Experiment%20Visualization.html#L110-L118)): `r-l1` and
 `r-l2` ($L_1$, $L_2$, 1 decimal), `r-ds` ($\delta s$, 2 decimals), `r-ff` ($b\sin\alpha$), `r-m` ($\delta s/\lambda$), `r-phi`
-($\Delta\varphi$ in units of $\pi$), `verdict`; the caption span `cap-ds` repeats $\delta s$
-([page:775–784](../../public/simulations/Interactive%20Double-Slit%20Experiment%20Visualization.html#L775-L784)). The data panel adds
+($\Delta\varphi$ in units of $\pi$, read from the stored `phi_pi`), `verdict`; the caption span `cap-ds` repeats $\delta s$
+([page:775–782](../../public/simulations/Interactive%20Double-Slit%20Experiment%20Visualization.html#L775-L782)). The data panel adds
 a "Data" tab and a "Read values" button in the caption of the first figure (the one whose stage has `id="stage"`)
 ([datalog.js:589–590](../../public/scripts/datalog.js#L589-L590)); the walkthrough adds "Hold the numbers"
 ([sim.js:252](../../public/scripts/sim.js#L252)).
@@ -180,9 +182,13 @@ the number of orders on each `drawPattern()` ([page:737](../../public/simulation
 | `d`, `alpha_deg`, `alpha`, `b`, `lambda` | scalar float | [page:764](../../public/simulations/Interactive%20Double-Slit%20Experiment%20Visualization.html#L764) |
 | `ux`, `uy` | scalar float | [page:630](../../public/simulations/Interactive%20Double-Slit%20Experiment%20Visualization.html#L630), in `compute()` |
 | `pt_x`, `pt_y` | `pt` · Float64Array | [page:761–763](../../public/simulations/Interactive%20Double-Slit%20Experiment%20Visualization.html#L761-L763) |
-| `L1`, `L2`, `ds` (stored in `compute()` beside their calculations), `ds_direct` (= `L2 − L1`), `S2Q` (= `dist(S2, Q)`) | scalar float | [page:765](../../public/simulations/Interactive%20Double-Slit%20Experiment%20Visualization.html#L765) |
+| `L1`, `L2` | scalar float | [page:625](../../public/simulations/Interactive%20Double-Slit%20Experiment%20Visualization.html#L625), in `compute()`, on the line after `dist()` |
+| `ds` | scalar float | [page:627](../../public/simulations/Interactive%20Double-Slit%20Experiment%20Visualization.html#L627), in `compute()`, on the line after the formula |
+| `ds_direct` (= `L2 − L1`), `S2Q` (= `dist(S2, Q)`) | scalar float | [page:765](../../public/simulations/Interactive%20Double-Slit%20Experiment%20Visualization.html#L765) |
 | `b_sin_a`, `ds_err`, `ratio`, `frac`, `phi` | scalar float | [page:766](../../public/simulations/Interactive%20Double-Slit%20Experiment%20Visualization.html#L766) |
 | `I`, `I_far_P`, `verdict` (str) | scalar | [page:767](../../public/simulations/Interactive%20Double-Slit%20Experiment%20Visualization.html#L767) |
+| `phi_pi` ($\Delta\varphi/\pi$; the `r-phi` readout and the walkthrough read it) | scalar float | [page:768](../../public/simulations/Interactive%20Double-Slit%20Experiment%20Visualization.html#L768) |
+| `sin_theta1` ($\lambda/b$), `theta1` ($\arcsin(\lambda/b)$ in degrees, NaN when $\lambda > b$) | scalar float | [page:769–770](../../public/simulations/Interactive%20Double-Slit%20Experiment%20Visualization.html#L769-L770) |
 | `fringe_px` ($\lambda d/b$), `ring_speed` ($0.8\lambda$) | scalar float | [page:771](../../public/simulations/Interactive%20Double-Slit%20Experiment%20Visualization.html#L771) |
 | `theta` (coordinate), `I_far`, `I_exact`, `I_diff` | `th` · Float64Array | [page:722](../../public/simulations/Interactive%20Double-Slit%20Experiment%20Visualization.html#L722), touched at 718 |
 | `m_sin` (coordinate), `m_theta`, `m_x` | `m` · Float64Array | [page:741](../../public/simulations/Interactive%20Double-Slit%20Experiment%20Visualization.html#L741), touched at 737 |
@@ -205,7 +211,15 @@ through `Sim.colourMap` (defined in [datalog.js:71](../../public/scripts/datalog
 $\delta s \le 0.05$ px. `I`: the `cy` of the only `circle[r="5.5"]` in `#pattern`, converted back with `(142 − cy)/(142 − 24)`,
 tolerance $2\times10^{-3}$. `ds`: the length of the only `<line>` with `stroke-width="5"` whose stroke is not ink, tolerance 0.03 px
 ([page:918–937](../../public/simulations/Interactive%20Double-Slit%20Experiment%20Visualization.html#L918-L937)). All three pass at the
-defaults in Chromium (dot 0.9992 against 0.9991; bar 13.628 px; $P$ at (227.21, 170.00)).
+defaults in Chromium (dot 0.9992 against 0.9991; bar 13.628 px; $P$ at (227.21, 170.00)). `L1`, `L2` and `phi_pi` are read back
+from the visible readouts `r-l1`, `r-l2`, `r-phi`, which must show the stored value rounded as the readout rounds it
+([page:921–923](../../public/simulations/Interactive%20Double-Slit%20Experiment%20Visualization.html#L921-L923)). `sin_theta1` and `theta1` are read back by `firstFringeReadback()`
+([page:842–848](../../public/simulations/Interactive%20Double-Slit%20Experiment%20Visualization.html#L842-L848)): it finds the "m = 1" label in `#pattern`, turns its `x` back into an angle with
+$\theta = 30^\circ\,(x - 56)/500$, and passes within 0.001. The label exists only while the first bright fringe lies inside
+the 0°–30° plot, that is while $\lambda/b \le \sin 30^\circ = 0.5$. Otherwise the function returns `ok: null` with "outside
+the 0°–30° plot" ([page:844](../../public/simulations/Interactive%20Double-Slit%20Experiment%20Visualization.html#L844)), and the panel shows a neutral "Not in the picture at the moment, so there is nothing to
+read back.", not a failure ([datalog.js:529](../../public/scripts/datalog.js#L529)). At the defaults ($\lambda/b = 0.3375$) the
+label sits at $\theta_1 = 19.72^\circ$.
 
 **One round** (`Sim.data.round`, [page:938–939](../../public/simulations/Interactive%20Double-Slit%20Experiment%20Visualization.html#L938-L939)):
 ten seconds of `wall` time, `mode: 'change'`. In this mode the panel takes a sample only when one of the round columns
@@ -259,9 +273,11 @@ See [sim.md](../scripts/sim.md), [walk.md](../scripts/walk.md), [fold.md](../scr
 
 **Walkthrough** `walk/slit.js`, seven steps: where everything sits; two paths and their exact difference; the burgundy bar,
 point Q; phase difference and brightness; far field; fringe orders on the pattern; the verdict line
-([slit.js:9–117](../../public/scripts/walk/slit.js#L9-L117)). Its code excerpts quote page lines 618–623, 625, 704, 708–709, 731–736,
-747, 751–752 and 756–759. Checked line by line, they match the page text; a `...` stands for omitted lines, or for the omitted
-middle of line 625 (step 2) and the end of line 758 (step 7).
+([slit.js:9–117](../../public/scripts/walk/slit.js#L9-L117)). Its code excerpts quote these page lines (step 1: [621–623](../../public/simulations/Interactive%20Double-Slit%20Experiment%20Visualization.html#L621-L623);
+step 2: [624](../../public/simulations/Interactive%20Double-Slit%20Experiment%20Visualization.html#L624), [626–627](../../public/simulations/Interactive%20Double-Slit%20Experiment%20Visualization.html#L626-L627); step 3: [628–629](../../public/simulations/Interactive%20Double-Slit%20Experiment%20Visualization.html#L628-L629); step 4: [755](../../public/simulations/Interactive%20Double-Slit%20Experiment%20Visualization.html#L755), [716–717](../../public/simulations/Interactive%20Double-Slit%20Experiment%20Visualization.html#L716-L717); step 5: [712](../../public/simulations/Interactive%20Double-Slit%20Experiment%20Visualization.html#L712), [756](../../public/simulations/Interactive%20Double-Slit%20Experiment%20Visualization.html#L756), [778](../../public/simulations/Interactive%20Double-Slit%20Experiment%20Visualization.html#L778); step 6: [739–744](../../public/simulations/Interactive%20Double-Slit%20Experiment%20Visualization.html#L739-L744); step 7: [757–760](../../public/simulations/Interactive%20Double-Slit%20Experiment%20Visualization.html#L757-L760)). Checked line by line on
+15 October 2026, they match the page text. A `...` on a line of its own stands for omitted lines. Once it stands inside a line:
+in step 7 ([slit.js:110](../../public/scripts/walk/slit.js#L110)) it replaces the end of page line [759](../../public/simulations/Interactive%20Double-Slit%20Experiment%20Visualization.html#L759), the two `m` values,
+before the closing semicolon.
 
 ## Where the drawing and the store differ
 
@@ -290,8 +306,8 @@ middle of line 625 (step 2) and the end of line 758 (step 7).
   and `drawn.I` ([page:926](../../public/simulations/Interactive%20Double-Slit%20Experiment%20Visualization.html#L926)).
   The rate 0.8 is in the clock ([811](../../public/simulations/Interactive%20Double-Slit%20Experiment%20Visualization.html#L811)),
   `ring_speed` ([771](../../public/simulations/Interactive%20Double-Slit%20Experiment%20Visualization.html#L771),
-  [916](../../public/simulations/Interactive%20Double-Slit%20Experiment%20Visualization.html#L916)), the attrs (599–600) and
-  the note (507, 513). The verdict thresholds 0.08/0.92 are in `storeDerived()`, the attrs (584), the note (503) and walkthrough
+  [916](../../public/simulations/Interactive%20Double-Slit%20Experiment%20Visualization.html#L916)), the store's attributes ([602–603](../../public/simulations/Interactive%20Double-Slit%20Experiment%20Visualization.html#L602-L603)) and
+  the note ([507](../../public/simulations/Interactive%20Double-Slit%20Experiment%20Visualization.html#L507), [513](../../public/simulations/Interactive%20Double-Slit%20Experiment%20Visualization.html#L513)). The verdict thresholds 0.08/0.92 are in `storeDerived()` ([758–759](../../public/simulations/Interactive%20Double-Slit%20Experiment%20Visualization.html#L758-L759)), the attrs ([584](../../public/simulations/Interactive%20Double-Slit%20Experiment%20Visualization.html#L584)), the note ([503](../../public/simulations/Interactive%20Double-Slit%20Experiment%20Visualization.html#L503)) and walkthrough
   step 7 ([slit.js:106–111](../../public/scripts/walk/slit.js#L106-L111)).
 - **Walkthrough excerpts.** If you edit any line that `slit.js` quotes (listed above), change the excerpt in the same way.
   Insert new store writes after a quoted line, never inside a quoted block.
@@ -316,7 +332,7 @@ middle of line 625 (step 2) and the end of line 758 (step 7).
 5. Fixed on 2026-10-15: a complete Chromium slider sweep gives 1.3500311979441904 × 10⁻¹³ px; the note rounds the upper bound to 1.4 × 10⁻¹³ px (commit [74ef7d9](https://github.com/Numa1997/SiteTest/commit/74ef7d94571f467f31d2289be6c9668b6809a09f)).
 6. Fixed on 2026-10-15: the walkthrough reads stored sin_theta1, theta1 and phi_pi (commit [ce3bfc4](https://github.com/Numa1997/SiteTest/commit/ce3bfc439ce40b3e8b6bd7f59af2af9404bd4997)).
 7. Fixed on 2026-10-15: compute stores L1, L2 and ds beside their calculation and stores derived values before drawing (commit [ce3bfc4](https://github.com/Numa1997/SiteTest/commit/ce3bfc439ce40b3e8b6bd7f59af2af9404bd4997)).
-
-Batch D store additions: `sin_theta1 = λ/b`, `theta1 = asin(λ/b)` in degrees (NaN when λ > b), and `phi_pi = phi/π`. All three are scalars stored in `storeDerived(G)`, called by `compute()`. `firstFringeReadback()` reads the first-order label’s SVG x coordinate; outside the 0°–30° plot it reports that no label is drawn. L1, L2 and phase also have DOM readbacks.
-
-Function map addition: `storeDerived(G)` at [754–772](../../public/simulations/Interactive%20Double-Slit%20Experiment%20Visualization.html#L754-L772) stores points, phase, intensity and fringe scalars; `firstFringeReadback(sine)` reads the SVG label.
+8. Fixed on 2026-10-15: when the first bright fringe lies outside the 0°–30° plot ($\lambda/b > 0.5$), the Check of
+   `sin_theta1` and `theta1` shows a neutral "Not in the picture at the moment, so there is nothing to read back." instead
+   of a burgundy ✕. `firstFringeReadback()` returns `ok: null` there by design ([page:844](../../public/simulations/Interactive%20Double-Slit%20Experiment%20Visualization.html#L844)); the panel now
+   honours it ([datalog.js:529](../../public/scripts/datalog.js#L529)) (audit repair, commit [32c240c](https://github.com/Numa1997/SiteTest/commit/32c240c52fd0535d39a0cef608dc404cf4219484)).

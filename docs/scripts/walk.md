@@ -110,13 +110,14 @@ keep the excerpts identical to the page code when either changes. In practice:
 - `where` names the function and place; keep it true when code moves.
 - The keys in `syms` must be keys that the page's `Sim.live()` returns. A renamed key in either file shows `—`.
 
-Measured on the current files: with the marks removed, the 267 non-empty code lines of the ten files contain 39 lines that are
-only `...` and 228 lines of code, 3 of them with an inline `...`. Searching each of the 228 in its page (each fragment between
-elisions in order, on one page line), 227 are found verbatim. The one that is not is
-[tl.js:75](../../public/scripts/walk/tl.js#L75): the excerpt shows
-`return Math.min(amp.value, 0.8 * lambda.value / (2 * Math.PI));   // 0.8 / k`, while the page has
-`function longAmp() { return Math.min(amp.value, 0.8 * lambda.value / (2 * Math.PI)); }` without the comment
-([Transverse and longitudinal waves.html:798](../../public/simulations/Transverse%20and%20longitudinal%20waves.html#L798)).
+Measured on 15 October 2026: with the marks removed, the 267 non-empty code lines of the ten files contain 41 lines that are
+only `...` and 226 lines of code. Two of these have an inline `...` that stands between fragments of one page line:
+[bench.js:101](../../public/scripts/walk/bench.js#L101) leaves out the last field, `colour: …`, of the `return { … }` in `lines()`
+([wave-interference.html:737](../../public/simulations/wave-interference.html#L737)), and
+[slit.js:110](../../public/scripts/walk/slit.js#L110) the end of the "Destructive" verdict line, before its semicolon
+([Interactive Double-Slit Experiment Visualization.html:759](../../public/simulations/Interactive%20Double-Slit%20Experiment%20Visualization.html#L759)).
+Searching each of the 226 in its page (each fragment between elisions in order, on one page line), all 226 are found
+verbatim.
 
 A check like this one can be re-run with a few lines of Node: evaluate each walk file with a stub `window`, strip the marks
 with `/⟦[A-Za-z0-9_]+\|([^⟧]*)⟧/g → '$1'`, split each code line on `...`, and look for the fragments in order on one line of

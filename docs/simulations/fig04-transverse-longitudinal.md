@@ -140,7 +140,7 @@ All functions live in one IIFE ([page:735–1080](../../public/simulations/Trans
 | `draw()` | [833–960](../../public/simulations/Transverse%20and%20longitudinal%20waves.html#L833-L960) | The whole frame, eight steps above. |
 | `Sim.live` | [963–975](../../public/simulations/Transverse%20and%20longitudinal%20waves.html#L963-L975) | Strings for the walkthrough, read from the store at the followed bead. |
 | clock callback | [976–981](../../public/simulations/Transverse%20and%20longitudinal%20waves.html#L976-L981) | Phase step, frame count, store, `draw()`. |
-| `sliderCheck` | [832](../../public/simulations/Transverse%20and%20longitudinal%20waves.html#L832) | Check entry for a slider: read the input now. |
+| `sliderCheck` | [985](../../public/simulations/Transverse%20and%20longitudinal%20waves.html#L985) | Check entry for a slider: read the input now. |
 | `tPos(i)`, `lPos(i)` | [986–987](../../public/simulations/Transverse%20and%20longitudinal%20waves.html#L986-L987) | Screen position of bead `i` in the upper and lower row, from stored values. |
 | `beadPixel(what, pt)` | [988–992](../../public/simulations/Transverse%20and%20longitudinal%20waves.html#L988-L992) | Read-back: one canvas pixel at the stored centre; passes if not transparent and luminance < 130. |
 | `inputsAt(i)` | [994](../../public/simulations/Transverse%20and%20longitudinal%20waves.html#L994) | Common Check inputs $i$, $X$, $k$, $\omega t$. |
@@ -262,8 +262,10 @@ four figures drawn as five inline SVG plates (Figure 2 has two), two exercises, 
 
 **Walkthrough** `walk/tl.js`, seven steps: one wave function for both rows; the transverse row; where the crests are; the
 longitudinal row; why the amplitude is capped; compressions and their shading; world pixels into screen pixels
-([tl.js:9–109](../../public/scripts/walk/tl.js#L9-L109)). Its excerpts quote page lines 975, 801, 804–805, 880, 899, 871–872,
-798 (twice), 924, 909–910, 914, 833 and 835. Checked line by line, they match the page text, except one added comment (Note 1).
+([tl.js:9–109](../../public/scripts/walk/tl.js#L9-L109)). Its excerpts quote these page lines (step 1: [977](../../public/simulations/Transverse%20and%20longitudinal%20waves.html#L977), [801](../../public/simulations/Transverse%20and%20longitudinal%20waves.html#L801),
+[804–805](../../public/simulations/Transverse%20and%20longitudinal%20waves.html#L804-L805); step 2: [898](../../public/simulations/Transverse%20and%20longitudinal%20waves.html#L898), [901](../../public/simulations/Transverse%20and%20longitudinal%20waves.html#L901); step 3: [873–874](../../public/simulations/Transverse%20and%20longitudinal%20waves.html#L873-L874); step 4: [798](../../public/simulations/Transverse%20and%20longitudinal%20waves.html#L798), [926](../../public/simulations/Transverse%20and%20longitudinal%20waves.html#L926); step 5: [798](../../public/simulations/Transverse%20and%20longitudinal%20waves.html#L798) again; step 6: [911–912](../../public/simulations/Transverse%20and%20longitudinal%20waves.html#L911-L912), [916](../../public/simulations/Transverse%20and%20longitudinal%20waves.html#L916); step 7: [834](../../public/simulations/Transverse%20and%20longitudinal%20waves.html#L834), [836](../../public/simulations/Transverse%20and%20longitudinal%20waves.html#L836)). Step 2's line
+`X = i * LENGTH / (N - 1);` stands word for word also at [882](../../public/simulations/Transverse%20and%20longitudinal%20waves.html#L882) and [925](../../public/simulations/Transverse%20and%20longitudinal%20waves.html#L925); the one meant is [898](../../public/simulations/Transverse%20and%20longitudinal%20waves.html#L898), in the same loop as the bead it
+places. Checked line by line on 15 October 2026, every excerpt matches the page text; a `...` stands for omitted lines.
 The walkthrough calls the medium's pixels "world px".
 
 ## Where the drawing and the store differ

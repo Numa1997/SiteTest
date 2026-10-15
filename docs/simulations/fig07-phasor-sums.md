@@ -172,7 +172,7 @@ outright. Export writes `phasor-performance.json` as `{ v: 1, timeline }`
 | `fit` | [1054–1058](../../public/simulations/phasor-sums.html#L1054-L1058) | Grow-at-once, relax-over-0.6-s fit radius. |
 | `baseScale`, `finalScale` | [1059–1064](../../public/simulations/phasor-sums.html#L1059-L1064) | Pixels per unit for the two views. |
 | `axes`, `polyline` | [1065–1080](../../public/simulations/phasor-sums.html#L1065-L1080) | Axis lines; a stroked run of points. |
-| `draw` | [1081–1152](../../public/simulations/phasor-sums.html#L1081-L1152) | Paints one frame and writes the drawing variables. |
+| `draw` | [1081–1152](../../public/simulations/phasor-sums.html#L1081-L1152) | Paints one frame and writes the drawing variables; in the Live view its arm loop ([1120–1122](../../public/simulations/phasor-sums.html#L1120-L1122)) stores each arm's radius, step, partial sum and joint position. |
 | `readouts` | [1155–1167](../../public/simulations/phasor-sums.html#L1155-L1167) | Writes `E`, `G`, `g`, `M`, `q`, `n_active`, `period`; fills the readouts and caption. |
 | `hud` | [1168–1174](../../public/simulations/phasor-sums.html#L1168-L1174) | Beat dot, BPM, three level meters. |
 | `recTime`, `snapshot`, `status`, `perform` | [1178–1213](../../public/simulations/phasor-sums.html#L1178-L1213) | Recording clock, one snapshot, status line, record/replay step. |
@@ -184,8 +184,7 @@ outright. Export writes `phasor-performance.json` as `{ v: 1, timeline }`
 | `pixelAt`, `rgbText`, `lum` | [1354–1356](../../public/simulations/phasor-sums.html#L1354-L1356) | Read one canvas pixel; describe it; its luminance. |
 | `isLive`, `trailAt`, `pathAt` | [1357–1359](../../public/simulations/phasor-sums.html#L1357-L1359) | Data-panel helpers from stored values. |
 | `activeW`, `structureNow`, `sumNow`, `armInputs` | [1360–1363](../../public/simulations/phasor-sums.html#L1360-L1363) | Recompute from stored inputs, for Check only. |
-| `nz` | [1364](../../public/simulations/phasor-sums.html#L1364) | Unused (see notes). |
-| `phasorRound` | [1365–1368](../../public/simulations/phasor-sums.html#L1365-L1368) | Length of one recorded round. |
+| `phasorRound` | [1365–1368](../../public/simulations/phasor-sums.html#L1365-L1368) | Length of one recorded round: $T$ at Speed 0, else $\min(T, 20\cdot s_f)$. |
 | `Sim.data` hooks | [1369–1467](../../public/simulations/phasor-sums.html#L1369-L1467) | `probe`, `inspect`, `locate`, `check`, `drawn`, `round`, `play`, `about`. |
 
 ## Controls
@@ -236,21 +235,29 @@ How `dim`, `var`, `alloc` and `set` work is in [dataset.md](../scripts/dataset.m
 |---|---|---|
 | Circles | `N`; `A`, `omega`, `phi`, `curve`, `mul`, `A_live` [arm]; `n_active` | [954](../../public/simulations/phasor-sums.html#L954); [953](../../public/simulations/phasor-sums.html#L953); [1159](../../public/simulations/phasor-sums.html#L1159) |
 | The sum z(t) | `t`; `x`, `y`, `absz`, `absz2`; `E` | [1338](../../public/simulations/phasor-sums.html#L1338); [1119](../../public/simulations/phasor-sums.html#L1119) (Live view only); [1159](../../public/simulations/phasor-sums.html#L1159) |
-| Arms and joints | `A_arm`, `ang`, `vx`, `vy`, `jx`, `jy`, `px`, `py` [arm]; `tip_px`, `tip_py` | [1122](../../public/simulations/phasor-sums.html#L1122); [1119](../../public/simulations/phasor-sums.html#L1119) (Live view only) |
+| Arms and joints | `ang` [arm]; `A_arm`, `vx`, `vy`, `jx`, `jy`, `px`, `py` [arm]; `tip_px`, `tip_py` | [817](../../public/simulations/phasor-sums.html#L817), inside `sumAt()`, into the array that `draw()` passes at [1118](../../public/simulations/phasor-sums.html#L1118); [1122](../../public/simulations/phasor-sums.html#L1122), the arm loop of `draw()`; [1119](../../public/simulations/phasor-sums.html#L1119) (Live view only) |
 | Structure | `G`, `g`, `period`, `M`, `q` | [1159](../../public/simulations/phasor-sums.html#L1159) |
 | Final shape | `n_path`, `span`; `final_x`, `final_y` [path]; `path_x`, `path_y` [path]; `dev`, `scale_final`; `span_slider`, `auto`, `morph_on`, `morph_slider`, `alpha` | [859](../../public/simulations/phasor-sums.html#L859); [858](../../public/simulations/phasor-sums.html#L858); [858](../../public/simulations/phasor-sums.html#L858), [1093](../../public/simulations/phasor-sums.html#L1093); [859](../../public/simulations/phasor-sums.html#L859), [1083](../../public/simulations/phasor-sums.html#L1083), [1094](../../public/simulations/phasor-sums.html#L1094); [1339](../../public/simulations/phasor-sums.html#L1339) |
 | Trail | `trail_max`, `trail_len`; `trail_x`, `trail_y` [trail] | [1338](../../public/simulations/phasor-sums.html#L1338); [1334](../../public/simulations/phasor-sums.html#L1334) |
 | Dance and audio | `dance`, `burst`; `bass`, `mid`, `high`, `bpm`, `beat`; `d_bass`, `d_speed`, `d_burst`, `d_high` | [954](../../public/simulations/phasor-sums.html#L954); [1319](../../public/simulations/phasor-sums.html#L1319); [1340](../../public/simulations/phasor-sums.html#L1340) |
 | Time and drawing | `dt`, `spd`, `sf`, `zoom`; `mode`, `cx`, `cy`, `box_w`, `box_h`; `fitR`, `scale`; `circles`, `vectors`; `fps`, `frames`, `playing` | [1338](../../public/simulations/phasor-sums.html#L1338); [1083](../../public/simulations/phasor-sums.html#L1083); [1104](../../public/simulations/phasor-sums.html#L1104) (Live view only); [1340](../../public/simulations/phasor-sums.html#L1340); [1341](../../public/simulations/phasor-sums.html#L1341) |
 
+Each variable's `computed_in` attribute names that place ([L725–732](../../public/simulations/phasor-sums.html#L725-L732)): `ang` "sumAt(), with the
+live-view output array"; `vx`, `vy` "sumAt(), read in draw()", since `sumAt()` computes them and the arm loop stores them;
+`A_arm`, `jx`, `jy`, `px`, `py` "draw(), the arm loop", where they are computed.
+
 Measured at load on a 1440 px wide window: `box_w × box_h` = 770 × 601, `scale` = 132.22 px per unit for the 3-petal
 rose (`fitR` = 2), `n_path` = 1500, `period` = π s, `q` = 3; on a 390 px window 356 × 356 and 78.32 px per unit.
 
 **One round** (`Sim.data.round`, [L1462–1464](../../public/simulations/phasor-sums.html#L1462-L1464)): the time variable
-is `t`; the length is `phasorRound()` = $\min(T, 20\cdot s_f)$ of phasor time, with $T = 2\pi/g$ (or $2\pi$ s when
-$g = 0$) and $s_f$ the stored speed `sf` floored at 0.05
-([L1365–1368](../../public/simulations/phasor-sums.html#L1365-L1368)), so at most about 20 s of real time. Columns:
-`x`, `y`, `absz`, `sf`; the point followed is the pen. Recording is blocked in the Final view and at Speed 0, where phasor time does not run. If Speed becomes 0 during a round, the panel says why it is waiting; raising Speed resumes the same round.
+is `t`; the length is `phasorRound()` ([L1365–1368](../../public/simulations/phasor-sums.html#L1365-L1368)). Let $T = 2\pi/g$ be the time after which the
+figure closes ($2\pi$ s when $g = 0$) and $s_f$ the stored speed `sf`. Phasor time runs $s_f$ times as fast as real time, so
+for $s_f > 0$ a round is $\min(T, 20\,s_f)$ of phasor time, which never takes more than 20 s of real time. At $s_f = 0$ the
+length is the full figure, $T$; phasor time does not run then, so recording is blocked and the Record box says why: "Set
+Speed above 0: phasor time does not advance at Speed 0." ([L1464](../../public/simulations/phasor-sums.html#L1464)). It is also blocked in the Final view. The label
+says "one full figure" or "part of the figure", with the length ([L1463](../../public/simulations/phasor-sums.html#L1463)). Columns: `x`, `y`, `absz`, `sf`; the
+point followed is the pen. If Speed becomes 0 during a round, the panel says why it is waiting; raising Speed resumes the
+same round.
 How rounds are recorded and saved: [datalog.md](../scripts/datalog.md).
 
 **Data-panel hooks.** `probe` pins the nearest joint, the pen or a trail point within 12 px in the Live view, or a
@@ -298,7 +305,9 @@ all inline SVG: Figure 1 Euler's formula ([L264–305](../../public/simulations/
 Spirograph preset as a chain ([L321–370](../../public/simulations/phasor-sums.html#L321-L370)); Figure 3 beats
 ([L394–438](../../public/simulations/phasor-sums.html#L394-L438)); Figure 4 two plates, 3-petal rose and Star
 ([L459–529](../../public/simulations/phasor-sums.html#L459-L529)); Figure 5 $|z|^2$ for the Star
-([L543–593](../../public/simulations/phasor-sums.html#L543-L593)).
+([L543–593](../../public/simulations/phasor-sums.html#L543-L593)). Its curves sit in a group ([L573–582](../../public/simulations/phasor-sums.html#L573-L582)) clipped by `f7clipc4`, a rectangle
+from x = 64 to 699 ([L546](../../public/simulations/phasor-sums.html#L546)), so the dashed marker of the full period at x = 698, 1.4 units wide
+([L578](../../public/simulations/phasor-sums.html#L578)), shows whole.
 
 ## Where the drawing and the store differ
 
@@ -354,3 +363,11 @@ The page states this in its `about` paragraph, shown in the data panel
 8. **Replay does not wrap phases.** `perform()` moves each phase linearly toward the snapshot
    ([L1204](../../public/simulations/phasor-sums.html#L1204)), so a recorded change from 6.2 to 0.1 rad sweeps the arm
    backwards through almost a full turn over about 50 ms.
+9. Fixed on 2026-10-15: `computed_in` of `A_arm`, `jx`, `jy`, `px`, `py` reads "draw(), the arm loop" again
+   ([L725](../../public/simulations/phasor-sums.html#L725), [L729–732](../../public/simulations/phasor-sums.html#L729-L732)); Batch D ([ce3bfc4](https://github.com/Numa1997/SiteTest/commit/ce3bfc439ce40b3e8b6bd7f59af2af9404bd4997)) had labelled them `sumAt()`, which computes only the angles and
+   the steps (audit repair, commit [32c240c](https://github.com/Numa1997/SiteTest/commit/32c240c52fd0535d39a0cef608dc404cf4219484)).
+10. Fixed on 2026-10-15: `phasorRound()` no longer raises Speed to 0.05. At Speed 0 a round is the full figure and recording
+    is blocked with its reason in view; for Speed above 0 the round is $\min(T, 20\cdot s_f)$, never more than 20 s of real
+    time ([L1365–1368](../../public/simulations/phasor-sums.html#L1365-L1368)) (audit repair, commit [32c240c](https://github.com/Numa1997/SiteTest/commit/32c240c52fd0535d39a0cef608dc404cf4219484)).
+11. Fixed on 2026-10-15: the clip rectangle `f7clipc4` of note Figure 5 is 1 unit wider (x 64 + 635), so the dashed marker at
+    x = 698 is no longer cut in half ([L546](../../public/simulations/phasor-sums.html#L546), [L578](../../public/simulations/phasor-sums.html#L578)) (audit repair, commit [32c240c](https://github.com/Numa1997/SiteTest/commit/32c240c52fd0535d39a0cef608dc404cf4219484)).

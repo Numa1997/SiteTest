@@ -116,7 +116,7 @@ on every animation frame, playing or paused:
    every 0.5 Hz and labels every 1 Hz, the axis name "ν / Hz"; `lines()` groups the waves; each stem is drawn from the base to
    `base - C / amax * (base - 14)` with a dot of radius 4.5 css px, where `amax = max(40, tallest stem)`; a stem shared by
    several waves is drawn in ink ([:737](../../public/simulations/wave-interference.html#L737)).
-4. Every eighth frame, rewrite the "Sum of amplitudes" and "Peak |y|" readouts
+4. Every eighth frame, rewrite the "Sum of amplitudes" readout from the stored `sum_A` and the "Peak |y|" readout
    ([:829-832](../../public/simulations/wave-interference.html#L829-L832)).
 
 Adding, removing and presets are events, not frame work: `add()`, `remove()` and `preset()` change `waves` and call `render()`,
@@ -150,7 +150,7 @@ Line numbers link into `wave-interference.html`.
 | `preset(items)` | [784-788](../../public/simulations/wave-interference.html#L784-L788) | Replaces all waves with the given list, colours in order. |
 | button handlers | [789-794](../../public/simulations/wave-interference.html#L789-L794) | One wave, Beats, Square wave, Add wave +. |
 | `Sim.live` | [797-821](../../public/simulations/wave-interference.html#L797-L821) | Live values for the walkthrough, read from the store. |
-| clock callback `(dt)` | [823-833](../../public/simulations/wave-interference.html#L823-L833) | Advances `simT`; calls `draw()`, `drawSpectrum()`; readouts every 8th frame. `Sim.playButton` binds Pause at [834](../../public/simulations/wave-interference.html#L834). |
+| clock callback `(dt)` | [823-833](../../public/simulations/wave-interference.html#L823-L833) | Advances `simT`; calls `draw()`, `drawSpectrum()`; readouts every 8th frame, `r-sum` from the stored `sum_A`. `Sim.playButton` binds Pause at [834](../../public/simulations/wave-interference.html#L834). |
 | `pixelAt(c, bx, x, y)` | [839](../../public/simulations/wave-interference.html#L839) | The device pixel containing a css point (floor, not round). |
 | `rgbText(px)` | [840](../../public/simulations/wave-interference.html#L840) | Pixel as text; "nothing (transparent)" at alpha 0. |
 | `lum(px)` | [841](../../public/simulations/wave-interference.html#L841) | Luminance of a pixel. |
@@ -169,7 +169,7 @@ Line numbers link into `wave-interference.html`.
 | `Sim.data.inspect(ref)` | [895-901](../../public/simulations/wave-interference.html#L895-L901) | Rows for a pinned point of the sum (X, Σ y, y px) or of a wave (X, $y_i$, A, f, φ, s, y px). |
 | `Sim.data.locate(name, idx)` | [902-910](../../public/simulations/wave-interference.html#L902-L910) | Where a cell is drawn: a sample of a curve, or the middle sample of a wave; `null` for spectrum rows. |
 | `Sim.data.check.*` | [911-945](../../public/simulations/wave-interference.html#L911-L945) | For 33 variables: formula, stored inputs, recomputed value. |
-| `Sim.data.drawn.*` | [946-960](../../public/simulations/wave-interference.html#L946-L960) | Read-backs for `py_sum` (ink, luminance < 150), `py_comp` (alpha first, then the wave RGB or a stored crossing within 2 css px) and `y_line` (the stem's dot). |
+| `Sim.data.drawn.*` | [946-960](../../public/simulations/wave-interference.html#L946-L960) | Read-backs for `sum_A` (the visible `r-sum` readout), `py_sum` (ink, luminance < 150; `ok: null` when there are no waves, [948](../../public/simulations/wave-interference.html#L948)), `py_comp` (alpha first, then the wave RGB or a stored crossing within 2 css px) and `y_line` (the stem's dot). |
 | `Sim.data.round.label` | [961](../../public/simulations/wave-interference.html#L961) | "one repeat of the pattern, … s" or "twenty seconds of the pattern, 20.00 s". |
 | `Sim.data.round.point` | [962](../../public/simulations/wave-interference.html#L962) | The sum at the middle sample. |
 | start-up | [967-971](../../public/simulations/wave-interference.html#L967-L971) | One default wave, a first draw of both canvases, resize observers for both. |
@@ -228,7 +228,8 @@ px_per_wavelength_unit: 200, left: 44, top1: 30, gap: 44, length_unit } })`. How
 | Written in | Line | Variables |
 |---|---|---|
 | `render()` (on add, remove, preset) | [617](../../public/simulations/wave-interference.html#L617) | `N` |
-| `draw()` | [667-671](../../public/simulations/wave-interference.html#L667-L671) | `M`, `dX`, `R`, `Rc`, `sum_A`, `y_sum_400`, `y1_400`, `bl`, `venv`, `box_w`, `box_h`, `right`, `hSum`, `top2`, `hComp` |
+| `draw()` | [667](../../public/simulations/wave-interference.html#L667) | `sum_A` = Σ Aᵢ in px, the largest possible sum (declared at [521](../../public/simulations/wave-interference.html#L521)). The `r-sum` readout shows it ([830](../../public/simulations/wave-interference.html#L830)) and `ratio` divides by it ([721](../../public/simulations/wave-interference.html#L721)); neither adds the amplitudes again. |
+| `draw()` | [667-671](../../public/simulations/wave-interference.html#L667-L671) | `M`, `dX`, `R`, `Rc`, `y_sum_400`, `y1_400`, `bl`, `venv`, `box_w`, `box_h`, `right`, `hSum`, `top2`, `hComp` |
 | `draw()` | [676](../../public/simulations/wave-interference.html#L676), [721](../../public/simulations/wave-interference.html#L721) | `mid1`, `mid2`; `peak`, `ratio` |
 | `drawSpectrum()` | [764](../../public/simulations/wave-interference.html#L764) | `amax`, `spec_w`, `spec_h` |
 | clock callback | [826](../../public/simulations/wave-interference.html#L826) | `t`, `dt`, `fps`, `frames`, `playing` |
@@ -263,6 +264,13 @@ polls it every 200 ms ([sim.js:314-326](../../public/scripts/sim.js#L314-L326)).
 96.36117283084565 css px equals its recomputation from `mid1`, `R`, `hSum`; the pixel read back at (400.0, 96.4) css px is
 rgb(28, 21, 24), the ink `#1c1518` of the sum stroke ([sim.js:10](../../public/scripts/sim.js#L10)). `y_comp` of wave 1 at the
 same sample is identical to `yAt`.
+
+**Read-back with no waves.** With an empty bench nothing is drawn in the top panel but its grid and the faint zero line, and
+`py_sum` holds the height of that line (`mid1`). The read-back then returns `ok: null` with "no sum curve: the bench has no
+waves" ([:948](../../public/simulations/wave-interference.html#L948)), and the panel shows the neutral verdict "Not in the picture at the moment, so there is nothing to
+read back." ([datalog.js:529](../../public/scripts/datalog.js#L529)). Before, it read the pixel on the zero line, drawn in
+rgba(90, 80, 75, 0.45) ([:640](../../public/simulations/wave-interference.html#L640)); that pixel is dark enough for the luminance test, so the check passed on a line that
+is not the sum curve.
 
 ## Page structure
 
@@ -373,3 +381,5 @@ Google Fonts; `../styles/sim.css`, `../styles/data.css`, `../styles/fold.css`; a
 6. Fixed on 2026-10-15: component readback checks alpha and the wave colour, accepting other colours only at stored crossings; white now fails (commit [ce3bfc4](https://github.com/Numa1997/SiteTest/commit/ce3bfc439ce40b3e8b6bd7f59af2af9404bd4997)).
 7. Fixed on 2026-10-15: frames is incremented before storage (commit [ce3bfc4](https://github.com/Numa1997/SiteTest/commit/ce3bfc439ce40b3e8b6bd7f59af2af9404bd4997)).
 8. Fixed on 2026-10-15: the Square preset stores 0.4, 1.2, 2 and 2.8 without extra decimal tails (commit [ce3bfc4](https://github.com/Numa1997/SiteTest/commit/ce3bfc439ce40b3e8b6bd7f59af2af9404bd4997)).
+9. Fixed on 2026-10-15: with no waves, `drawn.py_sum` returns `ok: null` ("no sum curve: the bench has no waves",
+   [:948](../../public/simulations/wave-interference.html#L948)) and the panel shows "not in the picture" instead of passing on the faint zero line (audit repair, commit [32c240c](https://github.com/Numa1997/SiteTest/commit/32c240c52fd0535d39a0cef608dc404cf4219484)).

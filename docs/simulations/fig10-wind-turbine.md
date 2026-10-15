@@ -205,10 +205,10 @@ ticks every animation frame, the figure is redrawn at the display rate even whil
 | `wind(t, w)` | [666–678](../../public/simulations/wind-turbine.html#L666-L678) | The four wind profiles. |
 | `tauGen(w, I, c)` | [681–684](../../public/simulations/wind-turbine.html#L681-L684) | Generator torque of the chosen controller, clipped to 0 … $\tau_\max$. |
 | `rates(t, w, I, c)` | [685–690](../../public/simulations/wind-turbine.html#L685-L690) | The seven slopes, with anti-windup. |
-| `solve()` | [693–739](../../public/simulations/wind-turbine.html#L693-L739) | Solve and store the two minutes (see above). |
+| `solve()` | [693–739](../../public/simulations/wind-turbine.html#L693-L739) | Solve and store the two minutes (see above); also stores `h`, `steps` ([694](../../public/simulations/wind-turbine.html#L694)), `rpm_min`, `rpm_max`, `captured_pct` ([730–731](../../public/simulations/wind-turbine.html#L730-L731)). |
 | `markStale()` | [741–745](../../public/simulations/wind-turbine.html#L741-L745) | Sets `stale` when a control differs from the last solve. |
-| `status()` | [747–754](../../public/simulations/wind-turbine.html#L747-L754) | Status line and "1 solve / 2 store" marks; names from `NAMES` ([L746](../../public/simulations/wind-turbine.html#L746)). |
-| `readouts()` | [755–763](../../public/simulations/wind-turbine.html#L755-L763) | Mean power, energy in kWh, rotor-speed range, captured share, balance, solve time. |
+| `status()` | [747–754](../../public/simulations/wind-turbine.html#L747-L754) | Status line, from the stored `steps` and `solve_ms`, and "1 solve / 2 store" marks; names from `NAMES` ([L746](../../public/simulations/wind-turbine.html#L746)). |
+| `readouts()` | [755–763](../../public/simulations/wind-turbine.html#L755-L763) | Mean power, energy in kWh, rotor-speed range (`rpm_min`–`rpm_max`), captured share (`captured_pct`), balance, solve time, all read from the store; computes nothing. |
 | `geom()` | [767–782](../../public/simulations/wind-turbine.html#L767-L782) | Layout: scene height, rotor radius and hub, six air lines, three strips, ranges, maps `sx`, `sy`. |
 | `label(c, sym, value, …)` | [783–793](../../public/simulations/wind-turbine.html#L783-L793) | A symbol via `Sim.tex`, then its value in IBM Plex Mono. |
 | `bladePath(c, g, a)` | [794–801](../../public/simulations/wind-turbine.html#L794-L801) | Outline of one blade at angle `a`, horizontal shortened by `K`. |
@@ -263,7 +263,10 @@ The store is made at [L566](../../public/simulations/wind-turbine.html#L566):
 | Settings | `ctrl`, `profile`, `v0`, `dv`, `w_ref`; `rpm_ref` | [L728](../../public/simulations/wind-turbine.html#L728); [L725](../../public/simulations/wind-turbine.html#L725) |
 | Controller | `dtau_dw`, `Kp`, `Ki`, `tau0` | [L729](../../public/simulations/wind-turbine.html#L729) |
 | Stored run (dim `n`) | `ts` (coordinate), `vw`, `om`, `rpm`, `th`, `lam`, `cpv`; `ta`, `tg`, `Pg`, `Pa`, `Eg`, `sw`, `Ictl`, `vtip` | [L707](../../public/simulations/wind-turbine.html#L707); [L708](../../public/simulations/wind-turbine.html#L708) |
-| Energy | `Ea`, `Ew`, `Eg_end`, `P_mean`; `balance`; `solve_ms`, `stale` | [L732](../../public/simulations/wind-turbine.html#L732); [L733](../../public/simulations/wind-turbine.html#L733); [L734](../../public/simulations/wind-turbine.html#L734), `stale` also [L743](../../public/simulations/wind-turbine.html#L743) |
+| Energy | `h`, `steps` | `solve()`, [L694](../../public/simulations/wind-turbine.html#L694), before the loop: the RK4 step $H$ = 0.01 s and $T_\text{end}/H$ = 12 000 steps |
+| | `rpm_min`, `rpm_max` | `solve()`, [L730](../../public/simulations/wind-turbine.html#L730): the smallest and largest stored `rpm` (`minOf`, `maxOf`, [L1019–L1020](../../public/simulations/wind-turbine.html#L1019-L1020)) |
+| | `captured_pct` | `solve()`, [L731](../../public/simulations/wind-turbine.html#L731): $100\,E_\text{aero}/E_\text{wind}$ |
+| | `Ea`, `Ew`, `Eg_end`, `P_mean`; `balance`; `solve_ms`, `stale` | [L732](../../public/simulations/wind-turbine.html#L732); [L733](../../public/simulations/wind-turbine.html#L733); [L734](../../public/simulations/wind-turbine.html#L734), `stale` also [L743](../../public/simulations/wind-turbine.html#L743) |
 | Playback | `i_now`, `t_play`, `v_now`, `rpm_now`, `P_now`, `lam_now`, `cp_now`, `th_now` | `frame()`, [L950–L952](../../public/simulations/wind-turbine.html#L950-L952) |
 | Power curve (dim `L`) | `lamL` (coordinate), `cpL` | `optimum()`, [L658](../../public/simulations/wind-turbine.html#L658) |
 | Drawing | `v_hi`, `rpm_lo`, `rpm_hi`; `P_hi`, `px_per_m_air` | [L725](../../public/simulations/wind-turbine.html#L725); [L726](../../public/simulations/wind-turbine.html#L726) |
@@ -292,7 +295,13 @@ store for the walkthrough keys `lam`, `cp`, `lopt`, `cpmax`, `Kopt`, `v`, `w`, `
 each value from stored inputs; the integrated quantities (`om`, `Ictl`, `th`, `sw`, `Eg`) are checked by rerunning the same
 RK4 to row $n$, the totals by `fullReplay()`, and `lam_opt` by repeating the scan. `Sim.data.drawn`
 ([L1135–L1153](../../public/simulations/wind-turbine.html#L1135-L1153)) reads back the burgundy blade, the dots and curves
-of the strips ($P_\text{aero}$ with a rose-colour test), a dash of the air, the operating point and the $c_p$ curve. `probe`
+of the strips ($P_\text{aero}$ with a rose-colour test), a dash of the air, the operating point and the $c_p$ curve.
+It also reads the text on screen: `rpm_min`, `rpm_max` and `captured_pct` against the readouts `r-rpm` and `r-eff`
+([L1138–L1140](../../public/simulations/wind-turbine.html#L1138-L1140)), `steps` against the status line, and `h` from the sampling interval the status line states, "one every 20 ms",
+divided by `EVERY` = 2 ([L1136–L1137](../../public/simulations/wind-turbine.html#L1136-L1137)). While a control has changed and the run is not solved again, the status line asks for a
+new solve and shows neither number. `drawn.h` and `drawn.steps` then return `ok: null` by design, and the panel shows the
+neutral "Not in the picture at the moment, so there is nothing to read back." rather than a failure
+([datalog.js:529](../../public/scripts/datalog.js#L529)). `probe`
 ([L1067–L1074](../../public/simulations/wind-turbine.html#L1067-L1074)) pins the rotor when the click falls inside the drawn
 disc ellipse, otherwise the nearest stored sample within 14 px on the three strips (every second row is tried). `locate`
 maps quantities that have no chart of their own to a strip that does (`STRIP_OF`: $\omega$, $\lambda$, $c_p$, $\theta$ to the
@@ -320,7 +329,8 @@ the seek slider, the segmented buttons `.seg` and the greyed control `.ctl.is-of
   answers, 08 Solve first, then play, 09 On screen, 10 What the model leaves out (10.1 Further reading). Ten numbered
   equations, `\tag{1}`–`\tag{10}`. Four figures with six inline SVGs: Figure 1 the stream tube
   ([L179–L208](../../public/simulations/wind-turbine.html#L179-L208)), Figure 2 the $c_p$ curve
-  ([L239–L290](../../public/simulations/wind-turbine.html#L239-L290)), Figure 3 the control loop
+  ([L239–L290](../../public/simulations/wind-turbine.html#L239-L290)), whose axis title "power coefficient c<sub>p</sub>" stands at y = 27 ([L276](../../public/simulations/wind-turbine.html#L276)); measured,
+  its box spans y = 14.4 to 36.1, so the subscript p clears the dashed Betz line at y = 38.8 ([L278](../../public/simulations/wind-turbine.html#L278)), Figure 3 the control loop
   ([L301–L332](../../public/simulations/wind-turbine.html#L301-L332)), Figure 4 wind, rotor speed and power for both
   controllers (three SVGs, [L352–L481](../../public/simulations/wind-turbine.html#L352-L481)). A Betz-limit box
   ([L227–L230](../../public/simulations/wind-turbine.html#L227-L230)), a table of all eight controller–wind combinations
@@ -424,5 +434,8 @@ The page states this in `Sim.data.about` ([L1158](../../public/simulations/wind-
    ([L932](../../public/simulations/wind-turbine.html#L932), [L954](../../public/simulations/wind-turbine.html#L954)).
 8. **AGENTS.md** said the load order dataset.js → page → datalog.js holds for "all eight figures"; this page (Fig. 10)
    follows it too. Corrected to "all ten figures" on 14 October 2026.
-
-Batch D store additions in `solve()`: `h` (s), `steps` (count), `rpm_min` and `rpm_max` (turns per minute), and `captured_pct` (%). They appear in the Energy group, have recomputation checks and DOM readbacks. The step readback infers h from the visible sampling interval and EVERY = 2. The speed range is the sampled run range, independent of the wider chart bounds. `readouts()` no longer computes these results.
+9. Fixed on 2026-10-15: in note Figure 2 the axis title "power coefficient c<sub>p</sub>" moved from y = 31 to y = 27, so its
+   subscript p clears the Betz line at y = 38.8; the title box now spans y = 14.4 to 36.1 ([L276](../../public/simulations/wind-turbine.html#L276)) (audit repair, commit [32c240c](https://github.com/Numa1997/SiteTest/commit/32c240c52fd0535d39a0cef608dc404cf4219484)).
+10. Fixed on 2026-10-15: while the run is stale, the Checks of `h` and `steps` show "not in the picture" instead of a burgundy ✕:
+    `drawn.h` and `drawn.steps` return `ok: null` there by design ([L1136–L1137](../../public/simulations/wind-turbine.html#L1136-L1137)), and the panel now honours it
+    ([datalog.js:529](../../public/scripts/datalog.js#L529)) (audit repair, commit [32c240c](https://github.com/Numa1997/SiteTest/commit/32c240c52fd0535d39a0cef608dc404cf4219484)).

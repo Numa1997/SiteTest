@@ -161,8 +161,9 @@ within the 4 per second the code allows.
    attribute `source` or says the value is an input read from a control.
 3. **Read back from the picture**: the page's `drawn[name](idx)` returns what it read (a pixel colour, an SVG attribute),
    what the store predicts, `ok` and a note. `ok` has three values ([datalog.js:529](../../public/scripts/datalog.js#L529)):
-   `true` gives "✓ The picture shows this value." on tan (`is-ok`); `false` gives "✕ The picture does not match." in red
-   (`is-bad`); `null` means the value is not in the picture at the moment, for example a curve that is not drawn because there
+   `true` gives a drawn tick (`CHK`, an inline SVG, [datalog.js:114](../../public/scripts/datalog.js#L114)) and "The picture shows
+   this value." on tan (`is-ok`); `false` gives "✕ The picture does not match." in white on the
+   burgundy accent (`is-bad`); `null` means the value is not in the picture at the moment, for example a curve that is not drawn because there
    is nothing to draw. Then the verdict is neutral, without a mark: "Not in the picture at the moment, so there is nothing to
    read back.", in muted ink inside a dashed outline (`is-na`, [data.css:220](../../public/styles/data.css#L220)). Only `null`
    itself counts; a missing `ok` is falsy and reads as a mismatch. Without a `drawn` entry, the section shows `drawn_note` or
@@ -330,15 +331,15 @@ which pages set them (from the ten `Sim.data = {` blocks).
 | `about` | HTML paragraph: what still differs between store and picture | [165](../../public/scripts/datalog.js#L165) | all |
 
 The ten blocks: [Fig. 1 L798](../../public/simulations/Circular%20Wave%20Interference%20Visualization.html#L798),
-[Fig. 2 L747](../../public/simulations/Double%20Pendulum.html#L768),
-[Fig. 3 L829](../../public/simulations/Interactive%20Double-Slit%20Experiment%20Visualization.html#L849),
-[Fig. 4 L994](../../public/simulations/Transverse%20and%20longitudinal%20waves.html#L995),
-[Fig. 5 L807](../../public/simulations/water-wave.html#L810),
-[Fig. 6 L864](../../public/simulations/wave-interference.html#L868),
+[Fig. 2 L768](../../public/simulations/Double%20Pendulum.html#L768),
+[Fig. 3 L849](../../public/simulations/Interactive%20Double-Slit%20Experiment%20Visualization.html#L849),
+[Fig. 4 L995](../../public/simulations/Transverse%20and%20longitudinal%20waves.html#L995),
+[Fig. 5 L810](../../public/simulations/water-wave.html#L810),
+[Fig. 6 L868](../../public/simulations/wave-interference.html#L868),
 [Fig. 7 L1369](../../public/simulations/phasor-sums.html#L1369),
 [Fig. 8 L1300](../../public/simulations/draw-decompose.html#L1300),
 [Fig. 9 L969](../../public/simulations/driven-oscillator.html#L969),
-[Fig. 10 L1048](../../public/simulations/wind-turbine.html#L1054).
+[Fig. 10 L1054](../../public/simulations/wind-turbine.html#L1054).
 
 ## Public interface
 
@@ -480,8 +481,8 @@ capture phase for `soon()`; `ResizeObserver` on `#stage` and on the table.
 9. AGENTS.md said the load order holds for "all eight figures"; it holds for all ten pages (load-order table in
    [sim.md](sim.md#load-order-on-the-pages)). Corrected to "all ten figures" on 14 October 2026.
 10. Fixed on 2026-10-15: a read-back that returns `ok: null` gets a neutral verdict, "Not in the picture at the moment, so
-    there is nothing to read back." (class `is-na`), instead of a red ✕ ([datalog.js:529](../../public/scripts/datalog.js#L529)).
-    Figs. 3, 6 and 10 return `null` when the value has nothing drawn (audit repair).
+    there is nothing to read back." (class `is-na`), instead of a burgundy ✕ ([datalog.js:529](../../public/scripts/datalog.js#L529)).
+    Figs. 3, 6 and 10 return `null` when the value has nothing drawn (audit repair, commit [32c240c](https://github.com/Numa1997/SiteTest/commit/32c240c52fd0535d39a0cef608dc404cf4219484)).
 11. Fixed on 2026-10-15: the reason a round cannot start (`Sim.data.round.blocked`) sits in `span.dp-rec__why`, after a space,
     and shows on phones too; it used to sit inside `.dp-more-txt`, which is hidden at 640 px and below
-    ([datalog.js:754](../../public/scripts/datalog.js#L754)) (audit repair).
+    ([datalog.js:754](../../public/scripts/datalog.js#L754)) (audit repair, commit [32c240c](https://github.com/Numa1997/SiteTest/commit/32c240c52fd0535d39a0cef608dc404cf4219484)).
