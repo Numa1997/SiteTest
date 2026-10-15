@@ -251,7 +251,8 @@
     "covers": [
       "zero-speed recording guard",
       "recording recovery after setting speed",
-      "phasor round completion"
+      "phasor round completion",
+      "walkthrough effective morph rate"
     ],
     "description": "Verifies Speed 0 cannot silently start a round that never advances, and positive speed permits a complete round.",
     "steps": [
@@ -259,7 +260,8 @@
       "Set Speed to 0, open Data, and press Record",
       "Confirm the message says Set Speed above 0 because phasor time does not advance",
       "Close Data, set Speed to 1, reopen Data, and press Record",
-      "Wait five seconds"
+      "Wait five seconds",
+      "Switch Smooth morphing off, open walkthrough step 7, and confirm its alpha Now value is 1.00 even when the Morph rate slider is below 1."
     ],
     "expected": "At Speed 0 the panel explains why recording cannot start. At Speed 1 one full figure finishes and the Rounds tab displays Round 1."
   },

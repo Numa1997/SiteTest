@@ -41,7 +41,7 @@
         this.dims[name] = size;
         return size;
     };
-    /* type: a typed-array constructor for arrays; 'float', 'int', 'bool' or 'str' for scalars */
+    /* type: a typed-array constructor for arrays; 'float', 'int', 'uint8', 'bool' or 'str' for scalars */
     Dataset.prototype.var = function (name, dims, type, attrs) {
         var v = this.vars[name];
         if (!v) {

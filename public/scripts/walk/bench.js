@@ -72,9 +72,7 @@ pts.push(mid1 - v / sumRange * hSum / 2);`,
             where: 'the Beats button',
             math: 'A sin a + A sin b = 2A cos((a − b)/2) sin((a + b)/2)<br>⟦bl|beat length⟧ = 2π/Δk = 200/|f<sub>1</sub> − f<sub>2</sub>|',
             note: 'With f = 1.00 and 1.25 the envelope repeats every 200/0.25 = 800 px: exactly one beat across the view. With equal speeds the envelope and the carrier both move at 200 px/s; give one wave another speed and the envelope moves at 200(f₁s₁ − f₂s₂)/(f₁ − f₂).',
-            code: `document.getElementById('p-beats').addEventListener('click', function () {
-    preset([{ A: 18, f: 1 }, { A: 18, f: 1.25 }]);
-});`,
+            code: `document.getElementById('p-beats').addEventListener('click', function () { preset([{ A: 18, f: 1 }, { A: 18, f: 1.25 }]); });`,
             syms: [
                 ['bl', 'beat length', '200 / |f₁ − f₂|', 'for Waves 1 and 2, px'],
                 ['venv', 'v<sub>env</sub>', '200 (f₁s₁ − f₂s₂)/(f₁ − f₂)', 'envelope speed, px/s']
@@ -85,9 +83,7 @@ pts.push(mid1 - v / sumRange * hSum / 2);`,
             where: 'the Square wave button',
             math: 'sq(x) = (4/π) Σ<sub>n odd</sub> sin(nx)/n<br>⟦An|A<sub>n</sub>⟧ = 30/n, &nbsp; f<sub>n</sub> = 0.4 n, &nbsp; n = 1, 3, 5, 7 &nbsp;⇒&nbsp; height ≈ (π/4) · 30 ≈ 23.6 px',
             note: 'Only odd harmonics, with amplitudes falling as 1/n. Rounding 30/n to 0.1 px (30/7 = 4.2857 → 4.3) changes the shape by less than a pixel. Four terms already show the flat tops and the Gibbs overshoot near the jumps.',
-            code: `preset([1, 3, 5, 7].map(function (n) {
-    return { ⟦An|A: Math.round(30 / n * 10) / 10⟧, f: 0.4 * n };
-}));`,
+            code: `preset([1, 3, 5, 7].map(function (n) { return { ⟦An|A: Math.round(30 / n * 10) / 10⟧, f: 0.4 * n }; }));`,
             syms: [
                 ['An', 'A<sub>n</sub>', 'waves[i].A', 'amplitudes now loaded'],
                 ['fn', 'f<sub>n</sub>', 'waves[i].f', 'frequencies now loaded']

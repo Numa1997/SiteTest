@@ -623,7 +623,7 @@
         ds.var('orbits', [], 'bool', { symbol: 'orbits drawn', long_name: 'the dotted circles', computed_in: 'the Show orbits switch', source: 'The state of the switch.' });
         ds.var('dt', [], 'float', { symbol: 'Δt', units: 's', long_name: 'time between the last two frames', computed_in: 'Sim.clock', digits: 4, source: 'Measured by the clock.' });
         ds.var('fps', [], 'float', { symbol: 'frame rate', units: 'Hz', long_name: 'smoothed over about ten frames', computed_in: 'Sim.clock callback', digits: 1, source: 'A running average of 1/Δt.' });
-        ds.var('frames', [], 'int', { symbol: 'frames', long_name: 'frames drawn so far', computed_in: 'Sim.clock callback', digits: 0, source: 'Counted frame by frame.' });
+        ds.var('frames', [], 'int', { symbol: 'frames', long_name: 'playing frames so far; paused draws are not counted', computed_in: 'Sim.clock callback', digits: 0, source: 'Counted frame by frame.' });
         ds.var('playing', [], 'bool', { symbol: 'playing', long_name: 'the clock runs', computed_in: 'Sim.clock', source: 'The state of the Play button.' });
 
         var amp = Sim.slider('amp', { format: function (v) { return v + ' px'; }, onInput: readouts });

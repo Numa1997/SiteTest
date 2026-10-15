@@ -280,7 +280,7 @@ its caption ([L71–79](../../public/simulations/phasor-sums.html#L71-L79)); the
 ([L221–649](../../public/simulations/phasor-sums.html#L221-L649)); the walkthrough host `#walk`
 (`data-walk="phasors"`, [L651](../../public/simulations/phasor-sums.html#L651)); the footer. `datalog.js` adds the data
 tab, the *Read values* switch in the caption and the reading strip under `#stage`
-([datalog.js:566–589](../../public/scripts/datalog.js#L566-L589)).
+([datalog.js:570–593](../../public/scripts/datalog.js#L570-L593)).
 
 Scripts, in load order: `fold.js`, `sim.js`, `dataset.js`, the page script
 ([L662–1474](../../public/simulations/phasor-sums.html#L662-L1474)), `datalog.js`
@@ -303,7 +303,7 @@ Spirograph preset as a chain ([L321–370](../../public/simulations/phasor-sums.
 ## Where the drawing and the store differ
 
 The page states this in its `about` paragraph, shown in the data panel
-([L1466](../../public/simulations/phasor-sums.html#L1466), [datalog.js:164](../../public/scripts/datalog.js#L164)):
+([L1466](../../public/simulations/phasor-sums.html#L1466), [datalog.js:168](../../public/scripts/datalog.js#L168)):
 
 - **Trail.** `trail_x`, `trail_y` are history: the pen at the end of each past frame, spaced by $\Delta t$ times the
   speed, joined by straight segments and faded in 12 chunks. With Auto Dance on, old points were made with old radii.
@@ -345,15 +345,10 @@ The page states this in its `about` paragraph, shown in the data panel
 ## Notes for maintainers
 
 1. Fixed on 2026-10-15: all four real SVG clip paths have unique ids; computed clip-path is active, with identical phone pixels and only 28 edge pixels changed on desktop (commit `:/^Batch B: correct notes and layout; verify measured figures in Chromium$`).
-2. **Walkthrough says "every 7th sample"** for `dev` ([phasors.js:109](../../public/scripts/walk/phasors.js#L109)); the
-   code measures every sample ([L857](../../public/simulations/phasor-sums.html#L857),
-   [L1092](../../public/simulations/phasor-sums.html#L1092)).
-3. **Walkthrough names `l.mul`** ([phasors.js:127](../../public/scripts/walk/phasors.js#L127)); no `l` exists in the
-   page. The value is `live[i].mul` ([L947](../../public/simulations/phasor-sums.html#L947)), stored as `mul`.
-4. **`Sim.live().alpha` reads `morph_slider`** ([L1299](../../public/simulations/phasor-sums.html#L1299)), not `alpha`
-   ([L1338](../../public/simulations/phasor-sums.html#L1338)). With Smooth morphing off the walkthrough shows the slider
-   value while the code uses α = 1 ([L862](../../public/simulations/phasor-sums.html#L862)).
-5. **`ang` is not tapped where it is computed.** Its metadata says "sumAt(), read in draw()"
+2. Fixed on 2026-10-15: the morph gap description says every sample (commit `:/^Batch C: align walkthroughs and metadata; verify excerpts and stored values$`).
+3. Fixed on 2026-10-15: the multiplier is named live[i].mul (commit `:/^Batch C: align walkthroughs and metadata; verify excerpts and stored values$`).
+4. Fixed on 2026-10-15: the walkthrough reads stored effective alpha; Smooth morphing off shows 1.00 even with the slider at 0.08 (commit `:/^Batch C: align walkthroughs and metadata; verify excerpts and stored values$`).
+5. **`ang` is not tapped where it is computed.** Its metadata now correctly says "draw(), the arm loop"
    ([L726](../../public/simulations/phasor-sums.html#L726)), but `sumAt()` keeps its angle local
    ([L816](../../public/simulations/phasor-sums.html#L816)) and `draw()` evaluates `live[i].freq * t + live[i].phase`
    a second time ([L1121](../../public/simulations/phasor-sums.html#L1121)). Same inputs, same value; it is a second

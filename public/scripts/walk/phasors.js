@@ -105,8 +105,8 @@ morphPath[i].y += (finalPath[i].y - morphPath[i].y) * a;`,
             syms: [
                 ['n', 'n', 'finalN', 'samples on the final curve'],
                 ['span', 'span', 'finalSpan', 'time span drawn'],
-                ['alpha', 'α', 'morph.value', 'morph rate per frame'],
-                ['dev', 'max |p − q|', '—', 'remaining morph gap (every 7th sample)']
+                ['alpha', 'α', 'a', 'rate used this frame; 1 with Smooth morphing off'],
+                ['dev', 'max |p − q|', '—', 'remaining morph gap (every sample)']
             ]
         },
         {
@@ -124,7 +124,7 @@ return { ⟦Ar|amp: p.amp * mul⟧, freq: p.freq, phase: p.phase, color: p.color
                 ['dance', 'on/off', 'danceOn', 'Auto Dance switch'],
                 ['bass', 'bass', 'energy.bass', 'smoothed bass level, 0–1'],
                 ['burst', 'burst', 'burst', 'beat multiplier, decays to 1'],
-                ['mul', 'm', 'l.mul', 'multiplier of arm 1'],
+                ['mul', 'm', 'live[i].mul', 'multiplier of arm 1'],
                 ['A', 'A', 'p.amp', 'stored radius of arm 1'],
                 ['Ar', 'A′', 'live[0].amp', 'drawn radius of arm 1']
             ]

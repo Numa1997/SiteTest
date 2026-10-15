@@ -72,7 +72,7 @@ for (X = crest; X <= LENGTH; X += lambda.value) marker(left + X * s, yT - A * s 
             where: 'longAmp() — the 0.8',
             math: 'dx/dX = 1 + ⟦AkL|A<sub>L</sub>k⟧ cos(kX − ωt) ≥ 1 − A<sub>L</sub>k<br>⟦rho|ρ/ρ<sub>0</sub>⟧ = 1 / (1 + A<sub>L</sub>k cos(kX − ωt))',
             note: 'dx/dX is the local spacing of neighbours relative to rest. If A<sub>L</sub>k reached 1 the spacing would drop to zero and beads would pass through each other, which a real medium cannot do. With A<sub>L</sub>k ≤ 0.8 the tightest spacing is 20 % of rest and the densest point is 5 × the rest density.',
-            code: `return Math.min(amp.value, ⟦AkL|0.8 * lambda.value / (2 * Math.PI)⟧);   // 0.8 / k`,
+            code: `function longAmp() { return Math.min(amp.value, ⟦AkL|0.8 * lambda.value / (2 * Math.PI)⟧); }`,
             syms: [
                 ['AkL', 'A<sub>L</sub>k', 'longAmp() · k', 'must stay below 1'],
                 ['rho', 'ρ/ρ<sub>0</sub>', '', 'density at the followed bead']

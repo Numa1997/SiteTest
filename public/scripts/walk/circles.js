@@ -10,14 +10,14 @@ window.WALK.circles = {
         {
             title: 'Wave number and damping',
             where: 'precompute() — line 1',
-            math: '⟦k|k⟧ = 2π / ⟦lam|λ⟧, &nbsp; ⟦g|γ⟧ = (damping slider) / R, &nbsp; R = 300 px',
-            note: 'k turns a distance into a phase angle: one wavelength of travel adds 2π. γ is an attenuation per pixel; dividing the slider by R = 300 px means the slider value is the number of e-foldings the amplitude loses over 300 px.',
+            math: '⟦k|k⟧ = 2π / ⟦lam|λ⟧, &nbsp; ⟦g|g⟧ = γ / R, &nbsp; R = 300 px',
+            note: 'k turns a distance into a phase angle: one wavelength of travel adds 2π. γ is the damping slider, the number of e-foldings the amplitude loses over R = 300 px. The attenuation per pixel is g = γ/R.',
             code: `var ⟦k|k = 2 * Math.PI / lambda.value⟧, ⟦g|g = damp.value / R⟧;
 var ⟦N|n = sources.length⟧, ⟦norm|norm = 1 / Math.max(1, n)⟧;`,
             syms: [
                 ['lam', 'λ', 'lambda.value', 'wavelength, px'],
                 ['k', 'k', 'k', 'wave number, rad/px'],
-                ['g', 'γ', 'g', 'attenuation, 1/px'],
+                ['g', 'g = γ/R', 'g', 'attenuation, 1/px'],
                 ['N', 'N', 'n', 'number of sources'],
                 ['norm', '1/N', 'norm', 'keeps |ψ| ≤ 1']
             ]
@@ -41,7 +41,7 @@ var ⟦r|r = Math.sqrt(x * x + y2)⟧;`,
         {
             title: 'Amplitude and phase from one source',
             where: 'precompute() — innermost loop',
-            math: '⟦a|a⟧ = e<sup>−γr</sup> / N, &nbsp; ⟦ph|φ⟧ = k r',
+            math: '⟦a|a⟧ = e<sup>−gr</sup> / N, &nbsp; ⟦ph|φ⟧ = k r',
             note: 'The ring from source s at distance r has amplitude a and a phase lag kr behind the source: the crest you see at r left the source r/v seconds ago. The factor 1/N keeps the sum between −1 and 1 however many sources you add.',
             code: `var ⟦a|a = Math.exp(-g * r) * norm⟧, ⟦ph|ph = k * r⟧;`,
             syms: [
@@ -66,7 +66,7 @@ var ⟦r|r = Math.sqrt(x * x + y2)⟧;`,
             title: 'The field at this instant',
             where: 'render() — per pixel, every frame',
             math: '⟦psi|ψ⟧ = C · ⟦c|cos ωt⟧ + S · ⟦s|sin ωt⟧, &nbsp; clipped to [−1, 1]',
-            note: 'Two multiplications and one addition per grid point, whatever N is. The clip only matters by rounding: with 1/N normalisation and e<sup>−γr</sup> ≤ 1, |ψ| never exceeds 1.',
+            note: 'Two multiplications and one addition per grid point, whatever N is. The clip only matters by rounding: with 1/N normalisation and e<sup>−gr</sup> ≤ 1, |ψ| never exceeds 1.',
             code: `var ⟦c|c = Math.cos(omegaT)⟧, ⟦s|s = Math.sin(omegaT)⟧, d = img.data;
 ...
 var ⟦psi|v = sumC[p] * c + sumS[p] * s⟧;

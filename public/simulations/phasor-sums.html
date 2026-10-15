@@ -723,7 +723,7 @@
         ds.var('absz2', [], 'float', { symbol: '|z|²', long_name: 'squared', computed_in: 'draw()', formula: 'x² + y²', digits: 5 });
         ds.var('E', [], 'float', { symbol: 'Σ Aₖ²', long_name: 'the time average of |z|² when no two frequencies coincide', computed_in: 'readouts()', formula: 'Σ Aₖ²', digits: 5 });
         ds.var('A_arm', ['arm'], Float64Array, { symbol: 'A′ₖ drawn', long_name: 'radius of each arm as drawn', computed_in: 'draw(), the arm loop', formula: 'A′ₖ', digits: 4, updates: 'every frame in the live view' });
-        ds.var('ang', ['arm'], Float64Array, { symbol: 'θₖ', units: 'rad', long_name: 'angle of each arm', computed_in: 'sumAt(), read in draw()', formula: 'θ = ω t + φ', digits: 4, updates: 'every frame in the live view' });
+        ds.var('ang', ['arm'], Float64Array, { symbol: 'θₖ', units: 'rad', long_name: 'angle of each arm', computed_in: 'draw(), the arm loop', formula: 'θ = ω t + φ', digits: 4, updates: 'every frame in the live view' });
         ds.var('vx', ['arm'], Float64Array, { symbol: 'Δxₖ', long_name: 'each arm, real part', computed_in: 'sumAt(), read in draw()', formula: 'A′ cos θ', digits: 5, updates: 'every frame in the live view' });
         ds.var('vy', ['arm'], Float64Array, { symbol: 'Δyₖ', long_name: 'each arm, imaginary part', computed_in: 'sumAt(), read in draw()', formula: 'A′ sin θ', digits: 5, updates: 'every frame in the live view' });
         ds.var('jx', ['arm'], Float64Array, { symbol: 'Re zₖ', long_name: 'joint after each arm, the partial sum', computed_in: 'draw(), the arm loop', formula: 'Σ<sub>m ≤ k</sub> Δx_m', digits: 5, updates: 'every frame in the live view' });
@@ -1296,7 +1296,7 @@
                 G: String(ds.get('G')), g: Sim.fmt(g, 2) + ' rad/s', Tc: g > 0 ? Sim.fmt(ds.get('period'), 3) + ' s' : '—',
                 M: String(ds.get('M')), q: ds.get('n_active') > 1 ? String(ds.get('q')) : '—',
                 dt: Sim.fmt((ds.get('dt') || 0) * 1000, 1) + ' ms', spd: (ds.get('spd') || 0).toFixed(2), sf: Sim.fmt(ds.get('sf') || 0, 3),
-                n: String(ds.get('n_path')), span: Sim.fmt(ds.get('span') || 0, 3) + ' s', alpha: (ds.get('morph_slider') || 0).toFixed(2), dev: Sim.fmt(ds.get('dev') || 0, 5),
+                n: String(ds.get('n_path')), span: Sim.fmt(ds.get('span') || 0, 3) + ' s', alpha: (ds.get('alpha') || 0).toFixed(2), dev: Sim.fmt(ds.get('dev') || 0, 5),
                 bass: Sim.fmt(ds.get('bass') || 0, 3), mid: Sim.fmt(ds.get('mid') || 0, 3), high: Sim.fmt(ds.get('high') || 0, 3),
                 burst: Sim.fmt(ds.get('burst') || 1, 3), dance: ds.get('dance') ? 'on' : 'off'
             };

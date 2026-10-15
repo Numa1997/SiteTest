@@ -163,9 +163,6 @@ A `stage` other than 1 or 2 needs a change in `simulations.html` too: see note 3
    by any file. The header says `has` refers to `SIM_TOOLS` ([catalog.js:21](../../public/scripts/catalog.js#L21)); nothing
    displays either.
 2. `SIM_FIELDS[].blurb` is not shown: `#intro` is always hidden ([simulations.html:270](../../public/simulations.html#L270)).
-3. The header says nothing else on the catalog page needs editing ([catalog.js:5](../../public/scripts/catalog.js#L5)). That holds
-   for stages 1 and 2 only: `STAGES` in the page lists only those ([simulations.html:132-135](../../public/simulations.html#L132-L135)),
-   so a stage-3 entry would get no chip, `?stage=3` would be dropped by `load()`, and the empty message would call any stage
-   other than 1 "second" year ([simulations.html:289](../../public/simulations.html#L289)).
+3. Fixed on 2026-10-15: the header identifies the catalog-page changes needed for a new course year (commit `:/^Batch C: align walkthroughs and metadata; verify excerpts and stored values$`).
 4. The page's search index `_hay` is written onto the shared `SIMULATIONS` objects ([simulations.html:159-162](../../public/simulations.html#L159-L162)),
    because `slice()` copies only the array. Harmless today, since nothing else reads the registry.

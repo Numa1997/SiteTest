@@ -12,7 +12,7 @@ window.WALK.dft = {
             math: 's<sub>i</sub> = Σ<sub>j≤i</sub> |p<sub>j</sub> − p<sub>j−1</sub>|, &nbsp; ⟦L|L⟧ = s<sub>last</sub>, &nbsp; ⟦ds|Δs⟧ = L / (⟦N|N⟧ − 1)',
             note: 'Your hand does not move at constant speed, so raw points bunch up where you slowed down. Placing N points at equal distance along the stroke makes the parameter t proportional to distance travelled: the pen of the reconstruction moves at constant speed.',
             code: `tot += Math.hypot(pts[i].x - pts[i - 1].x, pts[i].y - pts[i - 1].y);
-ds.push(tot);
+arcDistances.push(tot);
 ...
 var ⟦ds|step = tot / (N - 1)⟧, res = [{ x: pts[0].x, y: pts[0].y }], j = 0;`,
             syms: [
@@ -73,7 +73,7 @@ return out.sort(function (a, b) { return b.amp - a.amp; });`,
             title: 'Circles redraw the shape',
             where: 'chainAt() and the clock',
             math: 'z<sub>K</sub>(⟦t|t⟧) = Σ<sub>top K</sub> |c<sub>k</sub>| e<sup>i(kt + arg c<sub>k</sub>)</sup> = ⟦x|x⟧ + i⟦y|y⟧, &nbsp; t ← t + 2π Δt / ⟦tl|T<sub>loop</sub>⟧',
-            note: 'This is Fig. 7 again, with the arms chosen by the transform instead of by hand. At t = 2πn/N the sum hits sample n of your drawing exactly when K includes every coefficient.',
+            note: 'This is Fig. 7 again, with the arms chosen by the transform instead of by hand. An inverse DFT with all 256 coefficients would reproduce the 256 samples up to rounding. This page computes only the 120 nonzero frequencies −60 to 60, so even K = 120 leaves a small residual.',
             code: `var c = coefs[i], ang = c.k * time + c.phase;
 var vx = c.amp * Math.cos(ang), vy = c.amp * Math.sin(ang);
 x += vx;

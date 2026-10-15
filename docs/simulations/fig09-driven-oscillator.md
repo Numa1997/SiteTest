@@ -221,7 +221,7 @@ states; one `frame()` took about 1.5 ms (measured over 200 seek events at a 1 44
 | Damping ratio $\zeta$ | `zeta` | 0.01–0.9, step 0.01, default 0.05 ([L106](../../public/simulations/driven-oscillator.html#L106)) | $c$ at the next solve; marks stale. The maximum 0.9 keeps $\omega_d$ real in `exact()`. |
 | Force amplitude $F_0$ | `F0` | 0–5 N, step 0.1, default 1 ([L114](../../public/simulations/driven-oscillator.html#L114)) | `p.F0`; marks stale. At 0 the arrow is hidden and `Gm_drive` is NaN ([L609](../../public/simulations/driven-oscillator.html#L609)). |
 | Drive frequency $f$ | `fd` | 0.05–1.5 Hz, step 0.01, default 0.45 ([L118](../../public/simulations/driven-oscillator.html#L118)) | $\Omega$ at the next solve; marks stale. |
-| Read values | added by datalog.js | switch, off | Appended to the first figure caption ([datalog.js:587–589](../../public/scripts/datalog.js#L587-L589)); see [datalog.md](../scripts/datalog.md). |
+| Read values | added by datalog.js | switch, off | Appended to the first figure caption ([datalog.js:591–593](../../public/scripts/datalog.js#L591-L593)); see [datalog.md](../scripts/datalog.md). |
 
 ## What the page writes into the data store
 
@@ -249,12 +249,12 @@ store itself is described in [dataset.md](../scripts/dataset.md). Each variable 
 The `*_now` scalars are copies of row `i_now`, so a recorded round has scalar columns to follow.
 `Sim.data.colour` shades the `xs` and `Fs` table cells with `Sim.colourMap`
 ([L981](../../public/simulations/driven-oscillator.html#L981), defined in
-[datalog.js:67](../../public/scripts/datalog.js#L67)); this is presentation only.
+[datalog.js:71](../../public/scripts/datalog.js#L71)); this is presentation only.
 
 **One round** (`Sim.data.round`, [L1093–L1095](../../public/simulations/driven-oscillator.html#L1093-L1095)) is one drive
 period, $1/f$ seconds of the stored run, timed by `t_play`. Its columns are `x_now`, `v_now`, `F_now`, `E_now`, `Pin_now`;
 the default point is the block. Recording is refused when fewer than $1/f$ seconds of the run remain ("press From t = 0").
-The panel samples every frame of the round, at most 600 samples ([datalog.js:743](../../public/scripts/datalog.js#L743)).
+The panel samples every frame of the round, at most 600 samples ([datalog.js:747](../../public/scripts/datalog.js#L747)).
 
 **`Sim.live()`** ([L888–L897](../../public/simulations/driven-oscillator.html#L888-L897)) returns formatted strings read from
 the store, for the keys the walkthrough uses: `k`, `c`, `W`, `w0`, `h`, `steps`, `n`, `t`, `x`, `v`, `F`, `E`, `X`, `phi`,

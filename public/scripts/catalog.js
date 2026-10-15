@@ -2,7 +2,7 @@
    The list every simulation page is known by. simulations.html draws itself from it, in figure order:
    cards, search and filters. To add a simulation, add one entry to SIMULATIONS (and its field to
    SIM_FIELDS if the field is new) and one thumbnail in images/sims/<id>.webp, 800 × 500 px.
-   Nothing else on the catalog page needs editing.
+   For a new course year, also extend STAGES, load() validation and the year wording in simulations.html. Existing years 1 and 2 need no catalog-page edit.
 
    Entry fields
      id        short name, also the thumbnail file name

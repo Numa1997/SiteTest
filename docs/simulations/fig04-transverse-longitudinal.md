@@ -169,7 +169,7 @@ All functions live in one IIFE ([page:735–1080](../../public/simulations/Trans
 Readouts ([page:83–88](../../public/simulations/Transverse%20and%20longitudinal%20waves.html#L83-L88)): `r-v` ($v$ rounded to
 1 px/s), `r-t` ($T$, 2 decimals), `r-k` ($k$, 4 decimals, "/px"), `r-al` ($A_\mathrm{L}$ rounded, with " (cap)" when
 $A_\mathrm{L} < A$); the caption span `cap-v` repeats $v$ ([page:801–807](../../public/simulations/Transverse%20and%20longitudinal%20waves.html#L801-L807)).
-The data panel adds a "Data" tab and a "Read values" button in the figure caption ([datalog.js:588–589](../../public/scripts/datalog.js#L588-L589));
+The data panel adds a "Data" tab and a "Read values" button in the figure caption ([datalog.js:592–593](../../public/scripts/datalog.js#L592-L593));
 the walkthrough adds "Hold the numbers" ([sim.js:326](../../public/scripts/sim.js#L326)).
 
 ## What the page writes into the data store
@@ -203,10 +203,10 @@ Values at the defaults, read from the store in Chromium: $k$ = 0.02856 rad/px, $
 (the cap $0.8\lambda/2\pi$ is 28.01 px at $\lambda = 220$), `ALk` = 0.7426, followed bead 12 at $X$ = 307.2 px.
 
 **The panel spec** `Sim.data` ([page:995–1076](../../public/simulations/Transverse%20and%20longitudinal%20waves.html#L995-L1076);
-contract at [datalog.js:8–25](../../public/scripts/datalog.js#L8-L25), explained in [datalog.md](../scripts/datalog.md)):
+contract at [datalog.js:8–29](../../public/scripts/datalog.js#L8-L29), explained in [datalog.md](../scripts/datalog.md)):
 `kicker: 'Fig. 4 · data'`, `file: 'fig4-transverse-longitudinal'`, six groups (Physical parameters, Derived physics, Time,
 Particles, Crests and compressions, Drawing), and `colour` maps through `Sim.colourMap`
-([datalog.js:67](../../public/scripts/datalog.js#L67)) for `xi` (scaled by $A$), `sL` (by $A_\mathrm{L}$) and `rho` ($\rho/\rho_0 - 1$
+([datalog.js:71](../../public/scripts/datalog.js#L71)) for `xi` (scaled by $A$), `sL` (by $A_\mathrm{L}$) and `rho` ($\rho/\rho_0 - 1$
 scaled by $A_\mathrm{L}k$). Every `check` recomputes its value from stored inputs, with two exceptions: the four slider entries
 read the input element now, and `s_px`, `yT`, `yL` use the live `box.w`, `box.h` (Note 4).
 
@@ -217,9 +217,9 @@ In Chromium at both window widths, the followed upper bead read `rgb(122, 31, 43
 
 **One round** (`Sim.data.round`, [page:1072–1073](../../public/simulations/Transverse%20and%20longitudinal%20waves.html#L1072-L1073)):
 one period $T$ of the play time `t`, which advances only while playing. The panel samples it evenly, at most 600 samples
-([datalog.js:743](../../public/scripts/datalog.js#L743), [772](../../public/scripts/datalog.js#L772)); the charted column is
+([datalog.js:747](../../public/scripts/datalog.js#L747), [776](../../public/scripts/datalog.js#L776)); the charted column is
 `omegaT`; the recorded point is the followed bead of the upper row. If the clock is paused when recording starts, the panel calls
-`Sim.data.play` ([datalog.js:761](../../public/scripts/datalog.js#L761)).
+`Sim.data.play` ([datalog.js:765](../../public/scripts/datalog.js#L765)).
 
 **`Sim.live()`** ([page:962–974](../../public/simulations/Transverse%20and%20longitudinal%20waves.html#L962-L974)) returns
 strings for the walkthrough keys `f`, `k`, `wt`, `v`, `T`, `X`, `phase`, `xi`, `yi`, `xc`, `xp`, `AL`, `A`, `xl`, `AkL`, `rho`,
@@ -270,7 +270,7 @@ The walkthrough calls the medium's pixels "world px".
 
 The page says this twice: in Section 8 of the note ([page:699](../../public/simulations/Transverse%20and%20longitudinal%20waves.html#L699))
 and in the panel's About text ([page:1075](../../public/simulations/Transverse%20and%20longitudinal%20waves.html#L1075),
-shown by [datalog.js:164](../../public/scripts/datalog.js#L164)).
+shown by [datalog.js:168](../../public/scripts/datalog.js#L168)).
 
 - **The tint is not the density.** It follows $\max(0, -\cos(kX - \omega t))$, symmetric and capped at opacity 0.23, while the
   stored $\rho/\rho_0$ is lopsided: 3.88 at the compression centres and 0.574 in the rarefactions at the defaults. The tint is laid
@@ -305,10 +305,7 @@ shown by [datalog.js:164](../../public/scripts/datalog.js#L164)).
 
 ## Notes for maintainers
 
-1. **Walkthrough excerpt has a comment the page lacks.** Step 5 quotes
-   `return Math.min(amp.value, 0.8 * lambda.value / (2 * Math.PI));   // 0.8 / k` ([tl.js:75](../../public/scripts/walk/tl.js#L75)),
-   but the page line has no `// 0.8 / k` ([page:798](../../public/simulations/Transverse%20and%20longitudinal%20waves.html#L798)).
-   The walkthrough labels its code "as written in this page".
+1. Fixed on 2026-10-15: the complete longAmp source line is quoted verbatim (commit `:/^Batch C: align walkthroughs and metadata; verify excerpts and stored values$`).
 2. **One name, two units.** In `draw()` the local `xi` is the screen displacement `A * s * Math.sin(...)`
    ([page:883](../../public/simulations/Transverse%20and%20longitudinal%20waves.html#L883)), while the stored `xi` on the next
    line is in medium px ([page:884](../../public/simulations/Transverse%20and%20longitudinal%20waves.html#L884)). Not a bug, but a

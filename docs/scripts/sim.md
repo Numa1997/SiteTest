@@ -225,9 +225,9 @@ Listeners: `window` `error` ([sim.js:231](../../public/scripts/sim.js#L231)); `D
   ([sim.js:402](../../public/scripts/sim.js#L402), [fold.js:342](../../public/scripts/fold.js#L342)); it listens for
   `typeset` ([fold.js:402](../../public/scripts/fold.js#L402)). See [fold.md](fold.md).
 - **`dataset.js`** adds `Sim.dataset` and **`datalog.js`** adds `Sim.colourMap` to the object made here
-  ([dataset.js:17](../../public/scripts/dataset.js#L17), [datalog.js:67](../../public/scripts/datalog.js#L67)); both must
+  ([dataset.js:17](../../public/scripts/dataset.js#L17), [datalog.js:71](../../public/scripts/datalog.js#L71)); both must
   load after `sim.js`. `datalog.js` uses `Sim.fmt` for every number it prints
-  ([datalog.js:59](../../public/scripts/datalog.js#L59)). See [dataset.md](dataset.md) and [datalog.md](datalog.md).
+  ([datalog.js:63](../../public/scripts/datalog.js#L63)). See [dataset.md](dataset.md) and [datalog.md](datalog.md).
 - **KaTeX** files are self-hosted: [vendor/katex/katex.min.js](../../public/vendor/katex/katex.min.js) and
   [vendor/katex/contrib/auto-render.min.js](../../public/vendor/katex/contrib/auto-render.min.js). The KaTeX stylesheet comes
   through `sim.css` ([sim.css:8](../../public/styles/sim.css#L8)).

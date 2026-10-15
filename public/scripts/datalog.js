@@ -10,6 +10,10 @@
 
    Sim.data = {
      ds:         the dataset,
+     kicker:     optional heading text; defaults to the dataset title
+     rowLabel:   { dimension: function (row) → text }             optional array row headings
+     colLabel:   { variable: function (column) → html }            optional 2-D array column headings
+     at:         { variable: function (row, column?) → html }     optional array-cell explanation
      playing:    function () → bool;  play: function ()           the page's clock
      groups:     [{ title, note, vars: ['lambda', 'k', ...] }]    names of dataset variables, in display order
      colour:     { psi: function (value, j, i) → [r, g, b] | null } shading for array cells (presentation only)

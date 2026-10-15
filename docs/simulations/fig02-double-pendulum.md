@@ -224,9 +224,9 @@ paragraph says what differs between store and picture ([L854](../../public/simul
 
 **One round** (`Sim.data.round`, [L851–852](../../public/simulations/Double%20Pendulum.html#L851-L852)) is ten seconds of simulated time `t`. Columns charted: `th1`, `th2`, `w1`, `w2`,
 `E`, `drift`, `sep`; the recorder also copies every numeric scalar, and follows bob 2 unless another point is pinned. With at most
-600 samples the interval is 10/600 s ([datalog.js:743](../../public/scripts/datalog.js#L743), [datalog.js:772](../../public/scripts/datalog.js#L772)). Every restart sets t back to 0, so moving a
+600 samples the interval is 10/600 s ([datalog.js:747](../../public/scripts/datalog.js#L747), [datalog.js:776](../../public/scripts/datalog.js#L776)). Every restart sets t back to 0, so moving a
 restarting slider during a round puts t below the round's start and the recorder ends it ("the clock was reset",
-[datalog.js:794](../../public/scripts/datalog.js#L794)).
+[datalog.js:798](../../public/scripts/datalog.js#L798)).
 
 **`Sim.live()`** ([L684–696](../../public/simulations/Double%20Pendulum.html#L684-L696)) returns formatted strings under the keys `t1`, `t2`, `o1`, `o2`, `d`, `den`, `m2`, `l2`, `a1`,
 `a2`, `k1`, `h`, `n`, `acc`, `t`, `kin`, `pot`, `E`, `E0`, `drift`, `scale`, `y1`; all read from the store except `h`, the constant
@@ -249,7 +249,7 @@ favicon ([L14](../../public/simulations/Double%20Pendulum.html#L14)). No inline 
 - The figure: `#stage` with aspect ratio 4 : 3, and 1 : 1.05 below 900 px ([L44](../../public/simulations/Double%20Pendulum.html#L44), [sim.css:287–289](../../public/styles/sim.css#L287-L289)); the canvas `#pend`
   ([L45](../../public/simulations/Double%20Pendulum.html#L45)); the caption with `cap-t` ([L47–50](../../public/simulations/Double%20Pendulum.html#L47-L50)). The canvas is transparent where nothing is drawn, so the stage's grid
   background shows through ([L623](../../public/simulations/Double%20Pendulum.html#L623), [sim.css:68](../../public/styles/sim.css#L68)). `datalog.js` adds the Read values switch to the caption and the reading
-  strip under the stage ([datalog.js:566–590](../../public/scripts/datalog.js#L566-L590)).
+  strip under the stage ([datalog.js:570–594](../../public/scripts/datalog.js#L570-L594)).
 - The control panel ([L53–111](../../public/simulations/Double%20Pendulum.html#L53-L111)): Run (buttons, twin switch, time scale), Coupling (two ratios), Initial conditions (four
   sliders), readouts, legend.
 - The lecture note `<article class="paper" id="paper">` ([L114–379](../../public/simulations/Double%20Pendulum.html#L114-L379)).
@@ -330,10 +330,7 @@ agree to the pixel; the trail is not stored.
 
 1. Fixed on 2026-10-15: the note, walkthrough and n metadata explain why the 600-step guard cannot act under the current 46-step upper bound (commit `:/^Batch B: correct notes and layout; verify measured figures in Chromium$`).
 2. Fixed on 2026-10-15: the note describes signed energy drift; Chromium gives −2.416 × 10⁻⁸ near 21 s (commit `:/^Batch B: correct notes and layout; verify measured figures in Chromium$`).
-3. **"Every RK4 step" in the store attributes.** `y` and `y_twin` say `updates: 'every RK4 step'` and `th1`…`w2` say
-   `computed_in: 'rk4()'` ([L415](../../public/simulations/Double%20Pendulum.html#L415), [L417](../../public/simulations/Double%20Pendulum.html#L417), [L418–421](../../public/simulations/Double%20Pendulum.html#L418-L421)); the store is written once per frame in `diagnostics()` ([L652](../../public/simulations/Double%20Pendulum.html#L652),
-   [L654](../../public/simulations/Double%20Pendulum.html#L654)), and the intermediate steps are not stored.
-4. **Equation labels in the walkthrough.** Step 3 says "Cramer's rule on (E1)–(E2) in the derivation" ([pendulum.js:40](../../public/scripts/walk/pendulum.js#L40)); the
-   note numbers these equations (6) and (7) and the system (8) ([L212](../../public/simulations/Double%20Pendulum.html#L212), [L215](../../public/simulations/Double%20Pendulum.html#L215), [L218](../../public/simulations/Double%20Pendulum.html#L218)).
+3. Fixed on 2026-10-15: the state-vector and angle/velocity metadata state that diagnostics stores once per frame (commit `:/^Batch C: align walkthroughs and metadata; verify excerpts and stored values$`).
+4. Fixed on 2026-10-15: the walkthrough cites lecture-note equations (6)–(8) (commit `:/^Batch C: align walkthroughs and metadata; verify excerpts and stored values$`).
 5. Fixed on 2026-10-15: y_twin locates the twin’s four stored screen coordinates; stored and recomputed coordinates are identical and the pixels are rose (commit `:/^Batch A: fix simulation and recording faults; verify in Chromium$`).
 6. Fixed on 2026-10-15: the note states the 4–17 px bob-2 radius clamp (commit `:/^Batch B: correct notes and layout; verify measured figures in Chromium$`).

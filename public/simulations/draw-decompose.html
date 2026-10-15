@@ -645,8 +645,8 @@
         ds.var('draft_x', ['draft'], Float64Array, { symbol: 'draft x', long_name: 'the stroke being drawn now', computed_in: 'the pointer handlers', digits: 5, source: 'Your pointer positions, kept when they move more than 0.006 units.', updates: 'every frame while drawing' });
         ds.var('draft_y', ['draft'], Float64Array, { symbol: 'draft y', long_name: 'the stroke being drawn now', computed_in: 'the pointer handlers', digits: 5, source: 'Your pointer positions, kept when they move more than 0.006 units.', updates: 'every frame while drawing' });
         ds.var('N', [], 'int', { symbol: 'N', long_name: 'samples the stroke is resampled to', computed_in: 'a constant of the page', digits: 0, source: 'NS = 256.' });
-        ds.var('L', [], 'float', { symbol: 'L', long_name: 'length of the stroke', computed_in: 'resamp()', formula: 'Σ |pᵢ − pᵢ₋₁|', digits: 5 });
-        ds.var('step', [], 'float', { symbol: 'Δs', long_name: 'arc length between samples', computed_in: 'resamp()', formula: 'L / (N − 1)', digits: 6 });
+        ds.var('L', [], 'float', { symbol: 'L', long_name: 'length of the stroke', computed_in: 'resamp() computes arcLen; decompose() stores L and step', formula: 'Σ |pᵢ − pᵢ₋₁|', digits: 5 });
+        ds.var('step', [], 'float', { symbol: 'Δs', long_name: 'arc length between samples', computed_in: 'resamp() computes arcLen; decompose() stores L and step', formula: 'L / (N − 1)', digits: 6 });
         ds.dim('n', 0);
         ds.var('r_x', ['n'], Float64Array, { symbol: 'rₙ x', long_name: 'the stroke resampled at equal arc length', computed_in: 'resamp()', digits: 5, source: 'Linear interpolation of the stroke at arc lengths n · Δs.', updates: 'when a shape is decomposed' });
         ds.var('r_y', ['n'], Float64Array, { symbol: 'rₙ y', long_name: 'the stroke resampled at equal arc length', computed_in: 'resamp()', digits: 5, source: 'Linear interpolation of the stroke at arc lengths n · Δs.', updates: 'when a shape is decomposed' });
@@ -692,7 +692,7 @@
         ds.var('trail_t', ['trail'], Float64Array, { symbol: 'trail t', units: 'rad', long_name: 'phase at each past frame over the last loop', computed_in: 'Sim.clock callback', digits: 5, source: 'History: t at the end of each frame.', updates: 'every frame while playing' });
         ds.var('trail_x', ['trail'], Float64Array, { symbol: 'trail x', long_name: 'pen position at each past frame', computed_in: 'Sim.clock callback', digits: 5, source: 'History: chainAt(t, K) at each frame.', updates: 'every frame while playing' });
         ds.var('trail_y', ['trail'], Float64Array, { symbol: 'trail y', long_name: 'pen position at each past frame', computed_in: 'Sim.clock callback', digits: 5, source: 'History: chainAt(t, K) at each frame.', updates: 'every frame while playing' });
-        ds.var('c_max', [], 'float', { symbol: '|c|_max', long_name: 'scale of the spectrum panel: the largest coefficient', computed_in: 'spectrum()', formula: '|c_0| or 1', digits: 6 });
+        ds.var('c_max', [], 'float', { symbol: '|c|_max', long_name: 'scale of the spectrum panel: the largest coefficient', computed_in: 'spectrum()', formula: 'largest stored |c_k| (rank 0), or 1 when zero', digits: 6 });
         ds.var('spec_x', ['k'], Float64Array, { symbol: 'bar x px', units: 'css px', long_name: 'position of each bar in the spectrum panel', computed_in: 'spectrum()', formula: '18 + (k + 60) / 120 · (w − 36)', digits: 2, updates: 'when K or the shape changes' });
         ds.var('spec_y', ['k'], Float64Array, { symbol: 'bar top px', units: 'css px', long_name: 'top of each bar', computed_in: 'spectrum()', formula: 'base − |c<sub>k</sub>| / |c|_max · (base − 10), base = h − 22', digits: 2, updates: 'when K or the shape changes' });
         ds.var('sbox_w', [], 'int', { symbol: 'spectrum w', units: 'css px', long_name: 'spectrum panel width', computed_in: 'spectrum()', digits: 0, source: 'Measured from the page layout.' });
@@ -731,17 +731,17 @@
 
         /* equal arc-length resampling of a polyline to N points */
         function resamp(pts, N) {
-            var ds = [0], tot = 0;
+            var arcDistances = [0], tot = 0;
             for (var i = 1; i < pts.length; i++) {
                 tot += Math.hypot(pts[i].x - pts[i - 1].x, pts[i].y - pts[i - 1].y);
-                ds.push(tot);
+                arcDistances.push(tot);
             }
             if (tot < 1e-6) return null;
             var step = tot / (N - 1), res = [{ x: pts[0].x, y: pts[0].y }], j = 0;
             for (i = 1; i < N; i++) {
                 var tgt = i * step;
-                while (j < ds.length - 2 && ds[j + 1] < tgt) j++;
-                var f = ds[j + 1] > ds[j] ? Math.min(1, (tgt - ds[j]) / (ds[j + 1] - ds[j])) : 0;
+                while (j < arcDistances.length - 2 && arcDistances[j + 1] < tgt) j++;
+                var f = arcDistances[j + 1] > arcDistances[j] ? Math.min(1, (tgt - arcDistances[j]) / (arcDistances[j + 1] - arcDistances[j])) : 0;
                 res.push({ x: pts[j].x + f * (pts[j + 1].x - pts[j].x), y: pts[j].y + f * (pts[j + 1].y - pts[j].y) });
             }
             arcLen = tot;
@@ -1380,7 +1380,7 @@
                 y: function () { var J = ds.get('jy'); return { formula: 'the last joint', inputs: [['K', J.length, '', 0]], value: J.length ? J[J.length - 1] : 0 }; },
                 tip_px: function () { var P = ds.get('px'); return { formula: 'the last joint on screen', inputs: [['K', P.length, '', 0]], value: P.length ? P[P.length - 1] : ds.get('cx') }; },
                 tip_py: function () { var P = ds.get('py'); return { formula: 'the last joint on screen', inputs: [['K', P.length, '', 0]], value: P.length ? P[P.length - 1] : ds.get('cy') }; },
-                c_max: function () { return { formula: '|c_0| or 1', inputs: [['|c_0|', ds.get('c_amp')[0], '', 6]], value: ds.get('c_amp')[0] || 1 }; },
+                c_max: function () { return { formula: 'largest stored |c_k| (rank 0), or 1 when zero', inputs: [['largest |c_k|', ds.get('c_amp')[0], '', 6]], value: ds.get('c_amp')[0] || 1 }; },
                 spec_x: function (r) { return { formula: '18 + (k + 60) / 120 · (w − 36)', inputs: [['k', ds.get('c_k')[r], '', 0], ['w', ds.get('sbox_w'), 'css px', 0]], value: 18 + (ds.get('c_k')[r] + KMAX) / (2 * KMAX) * (ds.get('sbox_w') - 36) }; },
                 spec_y: function (r) { var base = ds.get('sbox_h') - 22; return { formula: 'base − |c<sub>k</sub>| / |c|_max · (base − 10), base = h − 22', inputs: [['base', base, 'css px', 0], ['|c<sub>k</sub>|', ds.get('c_amp')[r], '', 6], ['|c|_max', ds.get('c_max'), '', 6]], value: base - ds.get('c_amp')[r] / ds.get('c_max') * (base - 10) }; },
                 S_fit: function () { return { formula: 'min(w, h) · 0.46', inputs: [['min(w, h)', Math.min(ds.get('box_w'), ds.get('box_h')), 'css px', 0]], value: Math.min(ds.get('box_w'), ds.get('box_h')) * 0.46 }; },

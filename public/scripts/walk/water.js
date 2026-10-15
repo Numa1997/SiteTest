@@ -30,6 +30,7 @@ function ⟦f|f()⟧ {
             note: 'Longer waves are faster: c ∝ √λ. That is dispersion, and it is why swell from a distant storm arrives long waves first. The group speed, at which energy travels, is half the phase speed in deep water.',
             code: `var ⟦c|c = f() * lambda.value / PX_PER_M⟧;
 document.getElementById('r-c').textContent = c.toFixed(2) + ' m/s';
+...
 document.getElementById('r-t').textContent = (⟦T|1 / f()⟧).toFixed(2) + ' s';`,
             syms: [
                 ['c', 'c', 'c', 'phase speed, m/s'],

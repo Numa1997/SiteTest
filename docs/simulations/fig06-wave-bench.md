@@ -243,13 +243,13 @@ with $f_1 \ne f_2$.
 retained at their stored 10⁻⁶ Hz precision, capped at 20 s ([:862-867](../../public/simulations/wave-interference.html#L862-L867)). For the Square
 wave preset it is 2.50 s (measured). The chart columns are `sum_A`, `peak`, `ratio`, `y_sum_400`, `y1_400`; the point followed
 is the sum at the middle sample, unless the reader pinned another. The panel samples every numeric scalar at most 600 times
-in the round ([datalog.js:743](../../public/scripts/datalog.js#L743), [datalog.js:772](../../public/scripts/datalog.js#L772)).
+in the round ([datalog.js:747](../../public/scripts/datalog.js#L747), [datalog.js:776](../../public/scripts/datalog.js#L776)).
 
 **The panel hooks.** `Sim.data` ([:868-955](../../public/simulations/wave-interference.html#L868-L955)) sets
 `kicker: 'Fig. 6 · data'`, `file: 'fig6-wave-bench'`, six groups (Waves, The sum, Time, Sampled curves, Spectrum, Drawing),
 the checks, the read-backs and the `about` paragraph. The contract is at
-[datalog.js:8-26](../../public/scripts/datalog.js#L8-L26). Read values works on the plot only: datalog.js attaches it to the
-element `#stage` ([datalog.js:541](../../public/scripts/datalog.js#L541)), which is the plot; the spectrum's stems are checked
+[datalog.js:8-30](../../public/scripts/datalog.js#L8-L30). Read values works on the plot only: datalog.js attaches it to the
+element `#stage` ([datalog.js:545](../../public/scripts/datalog.js#L545)), which is the plot; the spectrum's stems are checked
 from the table, with the `y_line` read-back.
 
 **`Sim.live()`** ([:797-821](../../public/simulations/wave-interference.html#L797-L821)) reads only the store and returns, for
@@ -304,7 +304,7 @@ Google Fonts; `../styles/sim.css`, `../styles/data.css`, `../styles/fold.css`; a
   ([:481](../../public/simulations/wave-interference.html#L481)), filled by `sim.js` from `../scripts/walk/bench.js`
   ([sim.js:476-486](../../public/scripts/sim.js#L476-L486)); see [walk.md](../scripts/walk.md). Eight steps: one component and
   its sliders; sampling the view; superposition as a plain sum; fitting the curves into their panels; the Beats preset; the
-  Square wave preset; the spectrum; the bound $|\sum y_i| \le \sum A_i$ ([bench.js:7-127](../../public/scripts/walk/bench.js#L7-L127)).
+  Square wave preset; the spectrum; the bound $|\sum y_i| \le \sum A_i$ ([bench.js:7-123](../../public/scripts/walk/bench.js#L7-L123)).
 - Footer, then the scripts in load order: `fold.js`, `sim.js`, `dataset.js`, the inline script, `datalog.js`
   ([:489-492](../../public/simulations/wave-interference.html#L489-L492), [:964](../../public/simulations/wave-interference.html#L964)).
   See [fold.md](../scripts/fold.md) and [sim.md](../scripts/sim.md).
@@ -368,12 +368,10 @@ Google Fonts; `../styles/sim.css`, `../styles/data.css`, `../styles/fold.css`; a
 1. Fixed on 2026-10-15: an empty bench rewrites X, y_sum = 0 and py_sum = mid1 instead of retaining the preceding curve (commit `:/^Batch A: fix simulation and recording faults; verify in Chromium$`).
 2. Fixed on 2026-10-15: the repeat uses every stored ν digit; ν = (1, 0.9975) Hz gives the 20 s cap (commit `:/^Batch A: fix simulation and recording faults; verify in Chromium$`).
 3. Fixed on 2026-10-15: the note describes the current 0–6 Hz caption (commit `:/^Batch B: correct notes and layout; verify measured figures in Chromium$`).
-4. **Two walkthrough excerpts are reflowed.** Steps 5 and 6 spread the single page lines 787 and 789 over three lines each
-   ([bench.js:75-77](../../public/scripts/walk/bench.js#L75-L77), [bench.js:88-90](../../public/scripts/walk/bench.js#L88-L90)).
-   The tokens match; the layout does not, while AGENTS.md asks for identical excerpts.
+4. Fixed on 2026-10-15: the Beats and Square excerpts preserve their source line layout (commit `:/^Batch C: align walkthroughs and metadata; verify excerpts and stored values$`).
 5. **One readout recomputes.** "Sum of amplitudes" sums `waves` again
    ([:830](../../public/simulations/wave-interference.html#L830)) instead of reading `sum_A` from the store (CLAUDE.md: the
-   display only reads). Same value. Walkthrough step 8 quotes this line ([bench.js:118](../../public/scripts/walk/bench.js#L118)).
+   display only reads). Same value. Walkthrough step 8 quotes this line ([bench.js:114](../../public/scripts/walk/bench.js#L114)).
 6. **A weak read-back.** `drawn.py_comp` passes on any opaque pixel ([:948](../../public/simulations/wave-interference.html#L948)),
    so a grid line or another wave at that point also passes; `py_sum` tests for dark ink.
 7. **`frames` lags by one.** It is stored ([:826](../../public/simulations/wave-interference.html#L826)) before it is

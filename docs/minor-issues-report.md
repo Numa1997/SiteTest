@@ -33,3 +33,17 @@ The remaining batches are in progress. Numa’s decision items remain unchanged.
 | B8: layout gaps | fixed | 970 px home margin 104 → 48 px; empty catalog margin 28 → 0 px and display none. |
 
 Proposed replacement for the stale CLAUDE.md sentence (file unchanged): “In a 1280–1600 px desktop window, Fig. 1 computes a 360 × 162 = 58 320-point grid; on a 390 px phone it computes 324 × 324 = 104 976 points. At λ = 16 field px these give 7.2 and 6.48 samples per wavelength. Rebuilding Line of 16 on desktop uses 1 866 240 sine and cosine calls.”
+
+
+| Issue | Status | Proof |
+|---|---|---|
+| C: transverse, water, bench and turbine excerpts | fixed | Complete quoted lines match source; omitted water caption is marked with an ellipsis. |
+| C: pendulum equation references | fixed | References now point to equations (6)–(8). |
+| C: phasor sampling and multiplier names | fixed | Every-sample scan documented; multiplier named live[i].mul. |
+| C: effective morph alpha | fixed | Smoothing off: stored alpha 1, Now 0.08 → 1.00 at both sizes. |
+| C: DFT completeness | fixed | 120 coefficients of 256; K = 120 heart error 0.000491411444. |
+| C: damping notation | fixed | γ is the slider; g = γ/R is attenuation per pixel. |
+| C: Fourier c_max, L, step and local ds | fixed | Rank-0 maximum labelled correctly; storage site documented; renamed arcDistances leaves all sample/coefficient arrays byte-identical. |
+| C: pendulum updates, phasor ang and water frames metadata | fixed | Once-per-frame diagnostics, current draw-loop angle calculation, and playing-only frame count documented. |
+| C: scalar types and panel contract | fixed | uint8 and all four omitted contract keys documented. |
+| C: catalog extension comment | fixed | New course years explicitly require STAGES, validation and wording updates. |

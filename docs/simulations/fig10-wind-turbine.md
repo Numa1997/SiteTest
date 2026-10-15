@@ -246,7 +246,7 @@ ticks every animation frame, the figure is redrawn at the display rate even whil
 | Wind | `prof` (buttons `steady`, `gust`, `step`, `turb`) | Turbulent (default, [L120](../../public/simulations/wind-turbine.html#L120), [L563](../../public/simulations/wind-turbine.html#L563)) | `prof` ([L981](../../public/simulations/wind-turbine.html#L981)), read by `wind()`; marks stale. |
 | Mean wind speed $v_0$ | `v0` | 4–11 m/s, step 0.1, default 8 ([L124](../../public/simulations/wind-turbine.html#L124)) | `c.v0`; marks stale. |
 | Turbulence σ / Gust size / Step size | `dv` | 0–4 m/s, step 0.1, default 1.5 ([L128](../../public/simulations/wind-turbine.html#L128)) | `c.dv`; label set by `controls()`; unused for steady wind; marks stale. |
-| Read values | added by datalog.js | switch, off | Appended to the first figure caption ([datalog.js:587–589](../../public/scripts/datalog.js#L587-L589)); see [datalog.md](../scripts/datalog.md). |
+| Read values | added by datalog.js | switch, off | Appended to the first figure caption ([datalog.js:591–593](../../public/scripts/datalog.js#L591-L593)); see [datalog.md](../scripts/datalog.md). |
 
 ## What the page writes into the data store
 
@@ -279,7 +279,7 @@ $\partial\tau_\text{aero}/\partial\omega = -2.480\times10^5$ N m s, $K_i = 1.44\
 rotor at the present speed, $60/n_\text{rot}$ seconds of the stored run (4.0 s at 15 rpm), timed by `t_play`. Columns:
 `v_now`, `rpm_now`, `P_now`, `lam_now`, `cp_now`, `th_now`; the default point is the rotor. Recording is refused when the run
 ends before one more turn. The panel samples every frame of the round, at most 600 samples
-([datalog.js:743](../../public/scripts/datalog.js#L743)).
+([datalog.js:747](../../public/scripts/datalog.js#L747)).
 
 **`Sim.live()`** ([L930–L939](../../public/simulations/wind-turbine.html#L930-L939)) returns formatted strings read from the
 store for the walkthrough keys `lam`, `cp`, `lopt`, `cpmax`, `Kopt`, `v`, `w`, `ta`, `tg`, `Pg`, `wref`, `Kp`, `Ki`, `dtd`,
@@ -412,9 +412,7 @@ The page states this in `Sim.data.about` ([L1142](../../public/simulations/wind-
 ## Notes for maintainers
 
 1. Fixed on 2026-10-15: the note gives K = 0.5, 5 px/m airflow and the fixed 16 px / 22 px dash pattern (commit `:/^Batch B: correct notes and layout; verify measured figures in Chromium$`).
-2. **Walkthrough step 6 quotes only part of a line.** [turbine.js:99](../../public/scripts/walk/turbine.js#L99) ends at
-   `sw[n] = y[3];`, but page [L702](../../public/simulations/wind-turbine.html#L702) continues `Ic[n] = I; vt[n] = w * R;`.
-   AGENTS.md asks for excerpts identical to the page code.
+2. Fixed on 2026-10-15: the quoted storage line includes Ic[n] and vt[n] (commit `:/^Batch C: align walkthroughs and metadata; verify excerpts and stored values$`).
 3. Fixed on 2026-10-15: w_ref is checked against the saved rpm input, including Follow the wind; all target steps recompute identically after live controls change (commit `:/^Batch A: fix simulation and recording faults; verify in Chromium$`).
 4. Fixed on 2026-10-15: the Figure 2 labels render p and opt as SVG subscripts (commit `:/^Batch B: correct notes and layout; verify measured figures in Chromium$`).
 5. **Numbers computed for display, not stored.** The "Rotor speed" range is a min/max loop in `readouts()`

@@ -160,7 +160,7 @@ Readouts ([page:110–118](../../public/simulations/Interactive%20Double-Slit%20
 ($\Delta\varphi$ in units of $\pi$), `verdict`; the caption span `cap-ds` repeats $\delta s$
 ([page:748–760](../../public/simulations/Interactive%20Double-Slit%20Experiment%20Visualization.html#L748-L760)). The data panel adds
 a "Data" tab and a "Read values" button in the caption of the first figure (the one whose stage has `id="stage"`)
-([datalog.js:588–589](../../public/scripts/datalog.js#L588-L589)); the walkthrough adds "Hold the numbers"
+([datalog.js:592–593](../../public/scripts/datalog.js#L592-L593)); the walkthrough adds "Hold the numbers"
 ([sim.js:326](../../public/scripts/sim.js#L326)).
 
 ## What the page writes into the data store
@@ -195,10 +195,10 @@ subtraction, the drawn bar), as the note says ([page:507](../../public/simulatio
 Measured in Chromium at the defaults: `ds` = 13.627724988366344, `ds_direct` = 13.627724988366339, `S2Q` = 13.627724988366323 px.
 
 **The panel spec** `Sim.data` ([page:829–913](../../public/simulations/Interactive%20Double-Slit%20Experiment%20Visualization.html#L829-L913);
-contract at [datalog.js:8–25](../../public/scripts/datalog.js#L8-L25), explained in [datalog.md](../scripts/datalog.md)):
+contract at [datalog.js:8–29](../../public/scripts/datalog.js#L8-L29), explained in [datalog.md](../scripts/datalog.md)):
 `kicker: 'Fig. 3 · data'`, `file: 'fig3-double-slit'`, six groups (Physical parameters, Geometry, Path difference and phase,
 Intensity, Bright fringes, Animation), `rowLabel` for `pt` (S₁ … Q) and `m` ("m = j"), `colour` maps for `I_far` and `I_exact`
-through `Sim.colourMap` (defined in [datalog.js:67](../../public/scripts/datalog.js#L67)). The probe works in SVG units, so its
+through `Sim.colourMap` (defined in [datalog.js:71](../../public/scripts/datalog.js#L71)). The probe works in SVG units, so its
 22-unit catch radius is 22 × (stage width / 600) CSS px: 28 px on the 770 px stage measured at a 1440 px window.
 
 **Read-backs (`drawn`).** `pt_x`/`pt_y`: the nearest `<circle>` to the stored point, within 0.02 units; $Q$ is not drawn when
@@ -209,7 +209,7 @@ defaults in Chromium (dot 0.9992 against 0.9991; bar 13.628 px; $P$ at (227.21, 
 
 **One round** (`Sim.data.round`, [page:910–911](../../public/simulations/Interactive%20Double-Slit%20Experiment%20Visualization.html#L910-L911)):
 ten seconds of `wall` time, `mode: 'change'`. In this mode the panel takes a sample only when one of the round columns
-`d, alpha_deg, b, lambda, L1, L2, ds, ratio, I` changes ([datalog.js:796–800](../../public/scripts/datalog.js#L796-L800)), so the reader
+`d, alpha_deg, b, lambda, L1, L2, ds, ratio, I` changes ([datalog.js:800–804](../../public/scripts/datalog.js#L800-L804)), so the reader
 records by moving sliders; the recorded point is $P$ (`{ pt: 3 }`). The page has no `play` hook, and none is needed: `wall` runs
 whether or not the wavelets move.
 
@@ -269,7 +269,7 @@ middle of line 625 (step 2) and the end of line 758 (step 7).
   so the picture carries positions to 0.01 SVG units while the store keeps full doubles. The note says so in Section 9
   ([page:512](../../public/simulations/Interactive%20Double-Slit%20Experiment%20Visualization.html#L512)) and the panel's About
   paragraph says it in the page's `about` text ([page:912](../../public/simulations/Interactive%20Double-Slit%20Experiment%20Visualization.html#L912),
-  shown by [datalog.js:164](../../public/scripts/datalog.js#L164)).
+  shown by [datalog.js:168](../../public/scripts/datalog.js#L168)).
 - Fig. 3b is a polyline through the 301 stored samples; between samples the line is straight.
 - The construction arc, the bar $S_2Q$ and the point $Q$ are hidden when $\delta s \le 0.05$ px; the $\alpha$ arc is hidden when
   $\alpha \le 0.2^\circ$ ([page:643](../../public/simulations/Interactive%20Double-Slit%20Experiment%20Visualization.html#L643),

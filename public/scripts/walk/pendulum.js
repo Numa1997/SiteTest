@@ -37,7 +37,7 @@ var ⟦den|den = 2 * m1 + m2 - m2 * Math.cos(2 * d)⟧;`,
             title: 'Upper angular acceleration α₁',
             where: 'deriv(s) — the a1 line',
             math: '⟦a1|α<sub>1</sub>⟧ = [ −g(2m<sub>1</sub>+m<sub>2</sub>) sin θ<sub>1</sub> − m<sub>2</sub>g sin(θ<sub>1</sub>−2θ<sub>2</sub>) − 2 sin δ · m<sub>2</sub>(⟦o2|ω<sub>2</sub>⟧²l<sub>2</sub> + ⟦o1|ω<sub>1</sub>⟧²l<sub>1</sub> cos δ) ] / (l<sub>1</sub>⟦den|D′⟧)',
-            note: 'This is Cramer’s rule on (E1)–(E2) in the derivation, after the two trigonometric identities. The terms in order: the gravity torque on the whole chain, the gravity pull the lower bob passes through the joint, and the centrifugal coupling through ω². Each term in the formula is one term in the code, in the same order.',
+            note: 'This is Cramer’s rule on equations (6)–(7), written as the system (8) in the lecture note, after the two trigonometric identities. The terms in order: the gravity torque on the whole chain, the gravity pull the lower bob passes through the joint, and the centrifugal coupling through ω². Each term in the formula is one term in the code, in the same order.',
             code: `var ⟦a1|a1⟧ = (-g * (2 * m1 + m2) * Math.sin(t1) - m2 * g * Math.sin(t1 - 2 * t2)
     - 2 * Math.sin(d) * m2 * (⟦o2|o2 * o2⟧ * l2 + ⟦o1|o1 * o1⟧ * l1 * Math.cos(d))) / (l1 * ⟦den|den⟧);`,
             syms: [

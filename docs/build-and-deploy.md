@@ -95,3 +95,5 @@ the house design and the lecture-note style.
 Deployed stored version `1792048596599`, then copied the same eleven files here. All ten Batch A faults were reproduced before editing. The live site passed the numerical and pixel checks at 1440 × 900 and 390 × 844, including the 960 × 900 hidden-layer case. The 600-sample test retains the end frame; archive READMEs name their own downloads and arrays and CRCs load correctly. The first QA scenario is unchanged; fifteen scenarios use only the home workflow as sanity. Evidence: [minor-issues-report.md](minor-issues-report.md).
 
 Batch B, 15 October 2026: deployed snapshot 1792051419526. Targeted local and live Chromium checks and all 26 page/viewport checks passed; platform frontend/network error lists were empty. The suite has 15 scenarios with the original home scenario unchanged.
+
+Batch C, 15 October 2026: all targeted excerpts match complete source lines or explicitly mark omissions. Local and live Chromium checks pass at both requested sizes. The Fourier sample/coefficient array hashes are unchanged; effective morph alpha now reads 1.00 when smoothing is off.

@@ -231,11 +231,11 @@ written only when a control changes; the panel groups them as "Physical paramete
 **One round** (`Sim.data.round`, [:878-879](../../public/simulations/water-wave.html#L878-L879)): one period, length
 `ds.get('T')` seconds of the time variable `t`, labelled "one period, T = … s". The chart column is `omegaT`, and the point
 followed is the burgundy surface parcel, `{ q: follow }`. The panel samples every numeric scalar at most 600 times in the
-round ([datalog.js:743](../../public/scripts/datalog.js#L743), [datalog.js:772](../../public/scripts/datalog.js#L772)).
+round ([datalog.js:747](../../public/scripts/datalog.js#L747), [datalog.js:776](../../public/scripts/datalog.js#L776)).
 
 **The panel hooks.** `Sim.data` ([:810-882](../../public/simulations/water-wave.html#L810-L882)) also sets `kicker: 'Fig. 5 ·
 data'` and `file: 'fig5-water-waves'` (the base name of the saved archive), the five groups, the `check` and `drawn` tests,
-and the `about` paragraph. The contract is at [datalog.js:8-26](../../public/scripts/datalog.js#L8-L26).
+and the `about` paragraph. The contract is at [datalog.js:8-30](../../public/scripts/datalog.js#L8-L30).
 
 **`Sim.live()`** ([:778-790](../../public/simulations/water-wave.html#L778-L790)) reads only the store and returns formatted
 strings for the walkthrough's "Now" column: `lam`, `k`, `km`, `f`, `c`, `T`, `cg`; for the followed surface parcel `X0`, `th`
@@ -263,7 +263,7 @@ stylesheets `../styles/sim.css` (which imports the Google fonts, KaTeX's CSS and
   ([:44](../../public/simulations/water-wave.html#L44), [sim.css:289](../../public/styles/sim.css#L289)), the canvas `#water`, and
   the caption with the speed `#cap-c` ([:47-50](../../public/simulations/water-wave.html#L47-L50)). datalog.js adds the
   Read values switch to this caption and the reading strip under the figure
-  ([datalog.js:566-589](../../public/scripts/datalog.js#L566-L589)).
+  ([datalog.js:570-593](../../public/scripts/datalog.js#L570-L593)).
 - The control panel: Run, Wave and Water groups, readouts, legend ([:53-104](../../public/simulations/water-wave.html#L53-L104)).
 - The lecture note `<article class="paper" id="paper">` ([:107-553](../../public/simulations/water-wave.html#L107-L553)), "Deep-water
   waves: the sea moves in circles", with an abstract and a contents list. Ten sections, 23 numbered equations (1)–(23), four
@@ -286,7 +286,7 @@ stylesheets `../styles/sim.css` (which imports the Google fonts, KaTeX's CSS and
   ([:555](../../public/simulations/water-wave.html#L555)). `sim.js` loads `../scripts/walk/water.js` from the `data-walk` key
   and builds the stepper ([sim.js:476-486](../../public/scripts/sim.js#L476-L486)); see [walk.md](../scripts/walk.md). The
   file has seven steps: pixels into metres and ω² = gk; phase speed and period; one parcel, one circle; orbits shrink with
-  depth; the surface; the steepness limit; the clock and the picture ([water.js:7-115](../../public/scripts/walk/water.js#L7-L115)).
+  depth; the surface; the steepness limit; the clock and the picture ([water.js:7-116](../../public/scripts/walk/water.js#L7-L116)).
 - Footer, then the scripts in load order: `fold.js`, `sim.js`, `dataset.js`, the page's inline script, `datalog.js`
   ([:563-566](../../public/simulations/water-wave.html#L563-L566), [:888](../../public/simulations/water-wave.html#L888)).
   `fold.js` turns each `.psec` and the walkthrough into fold cards ([fold.md](../scripts/fold.md)); `sim.js` typesets the note
@@ -341,9 +341,5 @@ stylesheets `../styles/sim.css` (which imports the Google fonts, KaTeX's CSS and
 
 1. Fixed on 2026-10-15: all requested layers are computed and stored; at 960 × 900, 3 of 5 are drawn and the fifth stored depth is 2.24 m (commit `:/^Batch A: fix simulation and recording faults; verify in Chromium$`).
 2. Fixed on 2026-10-15: the note and walkthrough cover both the 800 px field and the 400 px field below a 560 css-px canvas width (commit `:/^Batch B: correct notes and layout; verify measured figures in Chromium$`).
-3. **Walkthrough step 2 hides a skipped line.** Its excerpt shows lines 653, 654 and 656 as adjacent
-   ([water.js:31-33](../../public/scripts/walk/water.js#L31-L33)); line 655 (the caption speed `cap-c`) is left out without
-   the `...` used elsewhere.
-4. **`frames` counts only playing frames.** It is described as "frames drawn so far"
-   ([:626](../../public/simulations/water-wave.html#L626)) but increases only when $\Delta t > 0$
-   ([:793](../../public/simulations/water-wave.html#L793)), while `draw()` runs on paused frames too. Fig. 6 counts every frame.
+3. Fixed on 2026-10-15: the skipped caption line is marked with an ellipsis (commit `:/^Batch C: align walkthroughs and metadata; verify excerpts and stored values$`).
+4. Fixed on 2026-10-15: frames is described as playing frames; it stays constant during paused drawing (commit `:/^Batch C: align walkthroughs and metadata; verify excerpts and stored values$`).

@@ -96,7 +96,7 @@ w += H / 6 * (k1[0] + 2 * k2[0] + 2 * k3[0] + k4[0]);`,
             math: '⟦n|n⟧ = step / 2, &nbsp; ⟦t|t<sub>n</sub>⟧ = n · 2h, &nbsp; ⟦Pg|P<sub>gen</sub>⟧ = τ<sub>gen</sub> ω',
             note: 'The integrator takes 12 000 steps of 10 ms; every second state is written into the dataset, 6 001 rows that hold everything the picture needs, including the rotor angle θ and the air travel s<sub>air</sub>.',
             code: `ts[n] = t; vw[n] = v; om[n] = w; rp[n] = w * 60 / (2 * Math.PI); th[n] = y[4]; lam[n] = w * R / v; cpv[n] = cp(lam[n]);
-ta[n] = tauAero(w, v); tg[n] = tauGen(w, I, c); Pg[n] = tg[n] * w; Pa[n] = ta[n] * w; Eg[n] = y[0]; sw[n] = y[3];`,
+ta[n] = tauAero(w, v); tg[n] = tauGen(w, I, c); Pg[n] = tg[n] * w; Pa[n] = ta[n] * w; Eg[n] = y[0]; sw[n] = y[3]; Ic[n] = I; vt[n] = w * R;`,
             syms: [
                 ['n', 'n', 'n', 'sample on screen'],
                 ['t', 't<sub>n</sub>', 'ts[n]', 's'],

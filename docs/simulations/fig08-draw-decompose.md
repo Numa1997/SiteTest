@@ -225,9 +225,9 @@ variables from stored inputs only, including a fresh one-frequency DFT `dftOne()
 ([L1344–1390](../../public/simulations/draw-decompose.html#L1344-L1390)). `drawn` reads pixels back for `tip_px`, `px`,
 `full_x`, `trail_x` on the figure and `spec_y` on the spectrum canvas, alpha first
 ([L1391–1397](../../public/simulations/draw-decompose.html#L1391-L1397)). Read values works on `#stage` only, so the
-spectrum panel is not pinnable ([datalog.js:541](../../public/scripts/datalog.js#L541)). While Read values is on,
+spectrum panel is not pinnable ([datalog.js:545](../../public/scripts/datalog.js#L545)). While Read values is on,
 `datalog.js` stops the canvas's own pointer handlers in the capture phase, so a click pins instead of drawing or panning
-([datalog.js:614–637](../../public/scripts/datalog.js#L614-L637)); the wheel is not intercepted. File base name:
+([datalog.js:618–641](../../public/scripts/datalog.js#L618-L641)); the wheel is not intercepted. File base name:
 `fig8-draw-decompose` ([L1301](../../public/simulations/draw-decompose.html#L1301)).
 
 **`Sim.live()`** ([L1253–1266](../../public/simulations/draw-decompose.html#L1253-L1266)) returns, from the store:
@@ -272,7 +272,7 @@ Figure 5 $|c_k|$ against $|k|$ for four presets ([L493–551](../../public/simul
 ## Where the drawing and the store differ
 
 The page's `about` paragraph ([L1403](../../public/simulations/draw-decompose.html#L1403)), shown in the data panel
-([datalog.js:164](../../public/scripts/datalog.js#L164)), says this; the code adds detail:
+([datalog.js:168](../../public/scripts/datalog.js#L168)), says this; the code adds detail:
 
 - **Dashed original** is the 256 stored samples $z_n$ joined by straight segments and closed
   ([L1114](../../public/simulations/draw-decompose.html#L1114)); the raw stroke `stroke_x/y` is stored but not drawn
@@ -312,8 +312,7 @@ The page's `about` paragraph ([L1403](../../public/simulations/draw-decompose.ht
 - **Formulas live twice** for Check: `chainAt()` as `chainNow()`, `dft()` as `dftOne()`, the `extR` scan as
   `check.extR` ([L1296–1297](../../public/simulations/draw-decompose.html#L1296-L1297),
   [L1365–1370](../../public/simulations/draw-decompose.html#L1365-L1370)).
-- **`resamp()` has a local `ds`** ([L734](../../public/simulations/draw-decompose.html#L734)) that hides the dataset;
-  a store write added inside `resamp()` would call the local array. Write in `decompose()` instead.
+- **Resampling distances** use the local array `arcDistances`; `ds` remains the dataset. The length is calculated in `resamp()` and stored by `decompose()`.
 - **Numbers quoted in the note** come from the presets and defaults: square side 1.4, heart $L = 5.428$, default K = 24
   and $T_\text{loop} = 12$ s, the 0.006 drawing threshold, the error values in sections 5–7 and Figures 3–5. Changing a
   preset, NS or KMAX means recomputing them.
@@ -325,17 +324,7 @@ The page's `about` paragraph ([L1403](../../public/simulations/draw-decompose.ht
 
 1. **`touchProbe` is dead.** `Sim.data.touchProbe` ([L1402](../../public/simulations/draw-decompose.html#L1402)) is not
    read anywhere in `datalog.js` (no match for `touchProbe`).
-2. **`c_max` is mislabelled.** Its metadata and check say "|c_0| or 1"
-   ([L695](../../public/simulations/draw-decompose.html#L695), [L1383](../../public/simulations/draw-decompose.html#L1383)),
-   but the value is `coefs[0].amp`, the radius of rank 0, the largest circle
-   ([L1221](../../public/simulations/draw-decompose.html#L1221)). The $k = 0$ coefficient is never computed
-   ([L755](../../public/simulations/draw-decompose.html#L755)).
-3. **Walkthrough step 5 overstates exactness.** It says the sum "hits sample n of your drawing exactly when K includes
-   every coefficient" ([dft.js:76](../../public/scripts/walk/dft.js#L76)). The page computes only 120 of the 256
-   frequencies ([L754](../../public/simulations/draw-decompose.html#L754)). Measured for the heart at K = 120: `err` =
-   4.91 × 10⁻⁴, a relative error of 0.068 %, as the lecture note itself states
-   ([L590](../../public/simulations/draw-decompose.html#L590)).
-4. **Metadata says `L` and `step` are computed in `resamp()`** ([L648–649](../../public/simulations/draw-decompose.html#L648-L649)),
-   but they are written in `decompose()` from `arcLen` ([L795](../../public/simulations/draw-decompose.html#L795)), and
-   `resamp()` shadows the dataset name `ds` ([L734](../../public/simulations/draw-decompose.html#L734)).
+2. Fixed on 2026-10-15: c_max identifies the largest coefficient at rank 0 rather than the omitted zero-frequency coefficient (commit `:/^Batch C: align walkthroughs and metadata; verify excerpts and stored values$`).
+3. Fixed on 2026-10-15: the walkthrough distinguishes the 120 computed frequencies from a full 256-coefficient DFT; the K = 120 heart residual is 0.000491411444 (commit `:/^Batch C: align walkthroughs and metadata; verify excerpts and stored values$`).
+4. Fixed on 2026-10-15: L and step metadata describe calculation and storage; arcDistances replaces the local name that hid the dataset (commit `:/^Batch C: align walkthroughs and metadata; verify excerpts and stored values$`).
 5. Fixed on 2026-10-15: the thumbnail was retaken from .stage__canvas in Chromium at 1440 × 900, device scale 2, and saved as 800 × 500 WebP (commit `:/^Batch B: correct notes and layout; verify measured figures in Chromium$`).
