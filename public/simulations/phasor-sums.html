@@ -722,14 +722,14 @@
         ds.var('absz', [], 'float', { symbol: '|z|', long_name: 'distance of the pen from the origin', computed_in: 'draw()', formula: '√(x² + y²)', digits: 5 });
         ds.var('absz2', [], 'float', { symbol: '|z|²', long_name: 'squared', computed_in: 'draw()', formula: 'x² + y²', digits: 5 });
         ds.var('E', [], 'float', { symbol: 'Σ Aₖ²', long_name: 'the time average of |z|² when no two frequencies coincide', computed_in: 'readouts()', formula: 'Σ Aₖ²', digits: 5 });
-        ds.var('A_arm', ['arm'], Float64Array, { symbol: 'A′ₖ drawn', long_name: 'radius of each arm as drawn', computed_in: 'draw(), the arm loop', formula: 'A′ₖ', digits: 4, updates: 'every frame in the live view' });
-        ds.var('ang', ['arm'], Float64Array, { symbol: 'θₖ', units: 'rad', long_name: 'angle of each arm', computed_in: 'draw(), the arm loop', formula: 'θ = ω t + φ', digits: 4, updates: 'every frame in the live view' });
+        ds.var('A_arm', ['arm'], Float64Array, { symbol: 'A′ₖ drawn', long_name: 'radius of each arm as drawn', computed_in: 'sumAt(), with the live-view output array', formula: 'A′ₖ', digits: 4, updates: 'every frame in the live view' });
+        ds.var('ang', ['arm'], Float64Array, { symbol: 'θₖ', units: 'rad', long_name: 'angle of each arm', computed_in: 'sumAt(), with the live-view output array', formula: 'θ = ω t + φ', digits: 4, updates: 'every frame in the live view' });
         ds.var('vx', ['arm'], Float64Array, { symbol: 'Δxₖ', long_name: 'each arm, real part', computed_in: 'sumAt(), read in draw()', formula: 'A′ cos θ', digits: 5, updates: 'every frame in the live view' });
         ds.var('vy', ['arm'], Float64Array, { symbol: 'Δyₖ', long_name: 'each arm, imaginary part', computed_in: 'sumAt(), read in draw()', formula: 'A′ sin θ', digits: 5, updates: 'every frame in the live view' });
-        ds.var('jx', ['arm'], Float64Array, { symbol: 'Re zₖ', long_name: 'joint after each arm, the partial sum', computed_in: 'draw(), the arm loop', formula: 'Σ<sub>m ≤ k</sub> Δx_m', digits: 5, updates: 'every frame in the live view' });
-        ds.var('jy', ['arm'], Float64Array, { symbol: 'Im zₖ', long_name: 'joint after each arm, the partial sum', computed_in: 'draw(), the arm loop', formula: 'Σ<sub>m ≤ k</sub> Δy_m', digits: 5, updates: 'every frame in the live view' });
-        ds.var('px', ['arm'], Float64Array, { symbol: 'joint x px', units: 'css px', long_name: 'screen position of each joint', computed_in: 'draw(), the arm loop', formula: 'previous joint + Δx · scale', digits: 2, updates: 'every frame in the live view' });
-        ds.var('py', ['arm'], Float64Array, { symbol: 'joint y px', units: 'css px', long_name: 'screen position of each joint', computed_in: 'draw(), the arm loop', formula: 'previous joint − Δy · scale', digits: 2, updates: 'every frame in the live view' });
+        ds.var('jx', ['arm'], Float64Array, { symbol: 'Re zₖ', long_name: 'joint after each arm, the partial sum', computed_in: 'sumAt(), with the live-view output array', formula: 'Σ<sub>m ≤ k</sub> Δx_m', digits: 5, updates: 'every frame in the live view' });
+        ds.var('jy', ['arm'], Float64Array, { symbol: 'Im zₖ', long_name: 'joint after each arm, the partial sum', computed_in: 'sumAt(), with the live-view output array', formula: 'Σ<sub>m ≤ k</sub> Δy_m', digits: 5, updates: 'every frame in the live view' });
+        ds.var('px', ['arm'], Float64Array, { symbol: 'joint x px', units: 'css px', long_name: 'screen position of each joint', computed_in: 'sumAt(), with the live-view output array', formula: 'previous joint + Δx · scale', digits: 2, updates: 'every frame in the live view' });
+        ds.var('py', ['arm'], Float64Array, { symbol: 'joint y px', units: 'css px', long_name: 'screen position of each joint', computed_in: 'sumAt(), with the live-view output array', formula: 'previous joint − Δy · scale', digits: 2, updates: 'every frame in the live view' });
         ds.var('tip_px', [], 'float', { symbol: 'pen x px', units: 'css px', long_name: 'screen position of the pen', computed_in: 'draw()', formula: 'c_x + x · scale', digits: 2 });
         ds.var('tip_py', [], 'float', { symbol: 'pen y px', units: 'css px', long_name: 'screen position of the pen', computed_in: 'draw()', formula: 'c_y − y · scale', digits: 2 });
         ds.var('G', [], 'int', { symbol: 'G', long_name: 'gcd of 100·ω over the active circles', computed_in: 'structure()', formula: 'gcd(round(100 ωₖ))', digits: 0 });
@@ -809,11 +809,12 @@
         }
 
         /* the phasor sum and its parts at one time */
-        function sumAt(time, list) {
+        function sumAt(time, list, angles) {
             var x = 0, y = 0, parts = [];
             for (var k = 0; k < list.length; k++) {
                 var p = list[k];
                 var ang = p.freq * time + p.phase;
+                if (angles) angles[k] = ang;
                 var vx = p.amp * Math.cos(ang), vy = p.amp * Math.sin(ang);
                 x += vx;
                 y += vy;
@@ -1111,14 +1112,14 @@
                 polyline(trail, cx, cy, s, a, Math.min(len, b + 1));
             }
             ctx.globalAlpha = 1;
-            var cur = sumAt(t, live), ox = cx, oy = cy;
-            var NA = cur.parts.length, jx = 0, jy = 0;
+            var ox = cx, oy = cy, NA = live.length, jx = 0, jy = 0;
             if (ds.dims.arm !== NA) ds.dim('arm', NA);
             var ANG = ds.alloc('ang'), VX = ds.alloc('vx'), VY = ds.alloc('vy'), JX = ds.alloc('jx'), JY = ds.alloc('jy'), PXa = ds.alloc('px'), PYa = ds.alloc('py'), AA = ds.alloc('A_arm');
+            var cur = sumAt(t, live, ANG);
             ds.set('x', cur.x); ds.set('y', cur.y); ds.set('absz', Math.hypot(cur.x, cur.y)); ds.set('absz2', cur.x * cur.x + cur.y * cur.y); ds.set('tip_px', cx + cur.x * s); ds.set('tip_py', cy - cur.y * s);
             cur.parts.forEach(function (p, i) {
                 var nx = ox + p.vx * s, ny = oy - p.vy * s;
-                ANG[i] = live[i].freq * t + live[i].phase; VX[i] = p.vx; VY[i] = p.vy; jx += p.vx; jy += p.vy; JX[i] = jx; JY[i] = jy; PXa[i] = nx; PYa[i] = ny; AA[i] = p.amp;
+                VX[i] = p.vx; VY[i] = p.vy; jx += p.vx; jy += p.vy; JX[i] = jx; JY[i] = jy; PXa[i] = nx; PYa[i] = ny; AA[i] = p.amp;
                 if (swCircles.checked) {
                     ctx.strokeStyle = T.rose;
                     ctx.lineWidth = 1;

@@ -646,7 +646,7 @@
         function readouts() {
             document.getElementById('r-X').textContent = Sim.fmt(ds.get('X'), 3) + ' m';
             document.getElementById('r-Xm').textContent = Sim.fmt(ds.get('Xm'), 3) + ' m';
-            document.getElementById('r-phi').textContent = Sim.fmt(ds.get('phi') * 180 / Math.PI, 1) + '°';
+            document.getElementById('r-phi').textContent = Sim.fmt(ds.get('phi_deg'), 1) + '°';
             document.getElementById('r-Q').textContent = Sim.fmt(ds.get('Q'), 1);
             document.getElementById('r-err').textContent = ds.get('err_max').toExponential(1).replace('-', '−') + ' m';
             document.getElementById('r-bal').textContent = ds.get('balance').toExponential(1).replace('-', '−');
@@ -890,7 +890,7 @@
                 k: Sim.fmt(ds.get('k'), 3) + ' N/m', c: Sim.fmt(ds.get('c'), 4) + ' kg/s', W: Sim.fmt(ds.get('Omega'), 4) + ' rad/s', w0: Sim.fmt(ds.get('omega0'), 4) + ' rad/s',
                 h: ds.get('h') + ' s', steps: Sim.fmt(ds.get('steps'), 0), n: String(ds.get('i_now')), t: Sim.fmt(ds.get('t_play'), 2) + ' s',
                 x: Sim.fmt(ds.get('x_now'), 5) + ' m', v: Sim.fmt(ds.get('v_now'), 5) + ' m/s', F: Sim.fmt(ds.get('F_now'), 4) + ' N', E: Sim.fmt(ds.get('E_now'), 5) + ' J',
-                X: Sim.fmt(ds.get('X'), 5) + ' m', phi: Sim.fmt(ds.get('phi') * 180 / Math.PI, 2) + '°', err: ds.get('err_max').toExponential(2) + ' m',
+                X: Sim.fmt(ds.get('X'), 5) + ' m', phi: Sim.fmt(ds.get('phi_deg'), 2) + '°', err: ds.get('err_max').toExponential(2) + ' m',
                 Win: Sim.fmt(ds.get('Win'), 4) + ' J', Wloss: Sim.fmt(ds.get('Wloss'), 4) + ' J', bal: ds.get('balance').toExponential(2),
                 bx: Sim.fmt(ds.get('block_px'), 1) + ' px', sc: Sim.fmt(ds.get('px_per_m'), 2) + ' px/m'
             };

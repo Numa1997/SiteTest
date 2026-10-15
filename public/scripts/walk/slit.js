@@ -29,7 +29,8 @@ var ⟦P|P = { x: X0 - d * Math.tan(a), y: Y0 - d }⟧;`,
             note: 'No approximation here: with x = d tan α, L₂² − L₁² = (x + b/2)² − (x − b/2)² = 2bx, and dividing by L₁ + L₂ gives the right-hand form. The code uses the right-hand form: near the axis L₁ ≈ L₂, and subtracting them directly would lose significant digits. The table checks it against the direct difference.',
             code: `var ⟦L1|L1 = dist(S1, P)⟧, ⟦L2|L2 = dist(S2, P)⟧;
 ...
-return { ..., L1: L1, L2: L2, Q: Q, ⟦ds|ds: 2 * b * d * Math.tan(a) / (L1 + L2)⟧ };`,
+var ⟦ds|deltaS = 2 * b * d * Math.tan(a) / (L1 + L2)⟧;
+ds.set('ds', deltaS);`,
             syms: [
                 ['L1', 'L<sub>1</sub>', 'L1', 'px'],
                 ['L2', 'L<sub>2</sub>', 'L2', 'px'],
@@ -52,10 +53,10 @@ var ⟦Q|Q = { x: P.x + ux * L1, y: P.y + uy * L1 }⟧;`,
         },
         {
             title: 'Phase difference and brightness',
-            where: 'readouts() and Iexact(th)',
+            where: 'storeDerived() and Iexact(th)',
             math: '⟦phi|φ⟧ = 2π δs / ⟦lam|λ⟧<br>⟦I|I/I<sub>0</sub>⟧ = cos²(φ/2) = cos²(π δs / λ)',
             note: 'Two equal waves shifted by φ add to an amplitude 2A cos(φ/2); intensity goes as amplitude squared, and dividing by the peak (2A)² gives cos²(φ/2). The dot on the lower curve sits at this value.',
-            code: `var G = geo, ⟦m|ratio = G.ds / G.lambda⟧, ⟦phi|phi = 2 * Math.PI * ratio⟧;
+            code: `var ⟦m|ratio = G.ds / G.lambda⟧, ⟦phi|phi = 2 * Math.PI * ratio⟧;
 ...
 var c = Math.cos(Math.PI * (2 * G.b * x / (l1 + l2)) / G.lambda);
 ⟦I|return c * c⟧;`,
@@ -74,7 +75,8 @@ var c = Math.cos(Math.PI * (2 * G.b * x / (l1 + l2)) / G.lambda);
             code: `var ⟦Iff|I = function (th) { var c = Math.cos(Math.PI * G.b * Math.sin(th) / G.lambda); return c * c; }⟧;
 ...
 var ⟦ff|ff = G.b * Math.sin(G.a)⟧;
-document.getElementById('r-ff').textContent = ff.toFixed(2) + ' px';`,
+...
+document.getElementById('r-ff').textContent = ds.get('b_sin_a').toFixed(2) + ' px';`,
             syms: [
                 ['ff', 'b sin α', 'G.b * Math.sin(G.a)', 'far-field δs, px'],
                 ['ds', 'δs', 'G.ds', 'exact, px'],
@@ -100,7 +102,7 @@ document.getElementById('r-ff').textContent = ff.toFixed(2) + ' px';`,
         },
         {
             title: 'The verdict line',
-            where: 'readouts() — the three-way test',
+            where: 'storeDerived() — the three-way test',
             math: '⟦fr|f⟧ = δs/λ − ⌊δs/λ⌋<br>bright if f < 0.08 or f > 0.92; &nbsp; dark if |f − ½| < 0.08; &nbsp; otherwise partial',
             note: 'f is how far P is through the current fringe cycle. A tolerance of 0.08 wavelengths corresponds to cos²(0.08π) ≈ 0.94 at the edge of “bright” and ≈ 0.06 at the edge of “dark”, so the label is honest to within 6 % of the full brightness.',
             code: `var ⟦fr|f = ratio - Math.floor(ratio)⟧, verdict;

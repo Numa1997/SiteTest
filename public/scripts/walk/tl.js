@@ -98,7 +98,7 @@ var ⟦xp|comp0 = (((Math.PI + omegaT) / k) % lambda.value + lambda.value) % lam
             where: 'draw() — line 1',
             math: '⟦s|s⟧ = (W − 44)/640, &nbsp; x<sub>screen</sub> = 22 + X s<br>⟦yT|y<sub>T</sub>⟧ = 0.3 H, &nbsp; y<sub>L</sub> = 0.77 H',
             note: 'The row is always 640 world pixels long, so λ = 160 px shows four wavelengths on every screen. 22 px margins on each side give the 44.',
-            code: `var w = box.w, h = box.h, left = 22, right = w - 22, ⟦s|s = (right - left) / LENGTH⟧;
+            code: `var w = box.w, h = box.h, left = LEFT, right = w - LEFT, ⟦s|s = (right - left) / LENGTH⟧;
 ...
 var ⟦yT|yT = h * 0.3⟧, yL = h * 0.77, follow = Math.floor((N - 1) / 2);`,
             syms: [

@@ -11,7 +11,7 @@
     "description": "Verifies the personal page loads with all sections, the copyright footer, and working in-page index links.",
     "steps": [
       "Open the home page",
-      "Confirm the large heading reads Numa Koudsie and the footer contains the words © 2026 Numa Koudsie",
+      "Confirm the large heading reads Numa Koudsie and the footer contains the words \u00a9 2026 Numa Koudsie",
       "Click the Simulations link in the Index navigation"
     ],
     "expected": "The section headed Interactive physics simulations is visible, showing eight simulation cards labelled Fig. 1 to Fig. 8, each with a Launch button, followed by a button reading All simulations."
@@ -72,7 +72,7 @@
       "Set Slit separation b to 40 px and Wavelength lambda to 20 px",
       "Confirm Fig. 3b includes the bright-fringe label m = 1 at its thirty-degree edge"
     ],
-    "expected": "The opened page shows the heading Double-Slit Interference, a control labelled Angle with the Greek letter alpha and a degree value such as 20.0°, and a readout labelled δs exact with a value in px; no garbled characters such as Î± appear. At b = 40 px and lambda = 20 px the pattern also labels m = 1 at thirty degrees."
+    "expected": "The opened page shows the heading Double-Slit Interference, a control labelled Angle with the Greek letter alpha and a degree value such as 20.0\u00b0, and a readout labelled \u03b4s exact with a value in px; no garbled characters such as \u00ce\u00b1 appear. At b = 40 px and lambda = 20 px the pattern also labels m = 1 at thirty degrees."
   },
   {
     "name": "Wave workbench builds a square wave and removes a wave on mobile",
@@ -103,12 +103,12 @@
     "description": "Verifies the side panel on the wave interference page shows the simulation's numbers at one caught instant, opens an array as a table, and records one round of the running simulation as charts.",
     "steps": [
       "Open the home page",
-      "In the simulations section, click the Launch button on the Wave Interference – Multiple Sources card",
+      "In the simulations section, click the Launch button on the Wave Interference \u2013 Multiple Sources card",
       "On the opened page, if the data panel is not open, click the Data tab on the right edge of the window",
       "In the data panel's Variables list, click the entry for the array C",
       "Click the button labelled All variables, then click the Record button near the top of the panel and wait three seconds"
     ],
-    "expected": "The Variables list shows numbered sections such as Physical parameters, with the wavelength λ at 30 px and a line that starts with Values at t =; the array C opens as a table of numbers with its shape shown as rows × columns; after Record, a progress bar fills and the Rounds tab opens with the heading Round 1, a summary naming one period of the sources, and one small chart per quantity."
+    "expected": "The Variables list shows numbered sections such as Physical parameters, with the wavelength \u03bb at 30 px and a line that starts with Values at t =; the array C opens as a table of numbers with its shape shown as rows \u00d7 columns; after Record, a progress bar fills and the Rounds tab opens with the heading Round 1, a summary naming one period of the sources, and one small chart per quantity."
   },
   {
     "name": "Double pendulum data panel shows the state vector and conserved energy",
@@ -126,7 +126,7 @@
       "On the opened page, if the data panel is not open, click the Data tab on the right edge of the window",
       "In the Variables table, click the row for the state vector y"
     ],
-    "expected": "The data panel lists a group headed Energy with rows T, V, E and ε, and the state vector y opens as a table with four rows named θ₁, θ₂, ω₁ and ω₂ and columns value, unit and d/dt."
+    "expected": "The data panel lists a group headed Energy with rows T, V, E and \u03b5, and the state vector y opens as a table with four rows named \u03b8\u2081, \u03b8\u2082, \u03c9\u2081 and \u03c9\u2082 and columns value, unit and d/dt."
   },
   {
     "name": "Fig. 6 Read values pins a point of the figure and checks a value three ways",
@@ -143,10 +143,10 @@
       "In the simulations section, click the Launch button on the Wave Interference Simulator card",
       "Click the Read values button at the right end of the caption under the figure",
       "Click on the black sum curve in the upper half of the figure",
-      "In the strip under the figure, click the value labelled Σ yᵢ",
+      "In the strip under the figure, click the value labelled \u03a3 y\u1d62",
       "In the data panel that opens, click Back, then click the download button in the panel header"
     ],
-    "expected": "Moving the pointer across the figure before pressing Read values shows nothing over the figure; after Read values and the click, a ring marker sits on the curve and the strip under the figure lists X, Σ yᵢ and y px with numeric values; clicking Σ yᵢ opens the data panel at a check with three numbered sections, Stored in the dataset, Recomputed now from the stored inputs, and Read back from the picture, with the line Stored and recomputed identical; the download button saves a zip file whose name starts with fig6-wave-bench."
+    "expected": "Moving the pointer across the figure before pressing Read values shows nothing over the figure; after Read values and the click, a ring marker sits on the curve and the strip under the figure lists X, \u03a3 y\u1d62 and y px with numeric values; clicking \u03a3 y\u1d62 opens the data panel at a check with three numbered sections, Stored in the dataset, Recomputed now from the stored inputs, and Read back from the picture, with the line Stored and recomputed identical; the download button saves a zip file whose name starts with fig6-wave-bench."
   },
   {
     "name": "Phone: the data sheet records one round of the water waves",
@@ -163,7 +163,7 @@
       "On the opened page, tap the Data button at the bottom right",
       "Tap the Record button in the sheet and wait three seconds"
     ],
-    "expected": "The sheet slides up with the title Water waves and a box headed Record one round that names one period, T = … s; after Record the Rounds tab shows Round 1 with a line counting the samples and frames, and charts for quantities such as ξ and ζ at the point."
+    "expected": "The sheet slides up with the title Water waves and a box headed Record one round that names one period, T = \u2026 s; after Record the Rounds tab shows Round 1 with a line counting the samples and frames, and charts for quantities such as \u03be and \u03b6 at the point."
   },
   {
     "name": "Driven oscillator solves the run first and plays it back",
@@ -222,7 +222,7 @@
       "Confirm the heading reads Portfolios and a project titled Droplet Collection with four figures is shown",
       "Click Open the project",
       "Confirm a page titled How cloud droplets become rain appears, with the pages Overview, Theory, Results, Simulate and Checks in its top bar",
-      "Click the link Numa Koudsie · Portfolios at the top left",
+      "Click the link Numa Koudsie \u00b7 Portfolios at the top left",
       "Scroll through the four Droplet Collection figures and confirm their reserved proportions agree with the loaded pictures."
     ],
     "expected": "The Portfolios page with the heading Portfolios is shown again."
@@ -281,5 +281,22 @@
       "Use Collapse all, then Expand all, and confirm the five home sections close and reopen."
     ],
     "expected": "The tools align below the index with a 48 px margin and the page has no sideways scroll."
+  },
+  {
+    "name": "Stored results drive the visible values",
+    "viewport": "desktop",
+    "covers": [
+      "stored wave speed",
+      "Square preset decimal frequencies",
+      "stored turbine range and captured share"
+    ],
+    "description": "Checks the pipeline fixes through visible controls and data.",
+    "steps": [
+      "Open simulations/wave-interference.html and choose Square.",
+      "Open Data and inspect f: the first four frequencies are 0.4, 1.2, 2, 2.8.",
+      "Open simulations/wind-turbine.html and wait for Solve.",
+      "Open Data and verify steps is 12000; rpm_min, rpm_max and captured_pct match the readouts."
+    ],
+    "expected": "Square frequencies have no spurious decimal tails. Turbine results agree with their stored values."
   }
 ]

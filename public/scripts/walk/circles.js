@@ -84,7 +84,7 @@ if (v > 1) v = 1; else if (v < -1) v = -1;`,
             note: 'Δt is the real time between frames, so a 1 Hz setting completes one full cycle per second on any screen. The phase speed readout is just f λ in px/s.',
             code: `⟦wt|omegaT += 2 * Math.PI * freq.value * dt⟧;
 ...
-document.getElementById('r-v').textContent = Math.round(⟦f|freq.value⟧ * lambda.value) + ' px/s';`,
+document.getElementById('r-v').textContent = Math.round(⟦f|ds.get('v')⟧) + ' px/s';`,
             syms: [
                 ['f', 'f', 'freq.value', 'frequency, Hz'],
                 ['wt', 'ωt', 'omegaT', 'phase, rad (grows without bound)'],

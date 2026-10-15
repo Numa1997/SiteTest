@@ -379,10 +379,7 @@ the data panel prints. In detail:
 1. Fixed on 2026-10-15: both log axes read 0.1, 0.32, 1, 3.2, 10; their endpoints agree with gains 1.01005 and 0.0101005 (commit `:/^Batch B: correct notes and layout; verify measured figures in Chromium$`).
 2. Fixed on 2026-10-15: both phase-lag references round the stored 25.34617594° to 25.3° (commit `:/^Batch B: correct notes and layout; verify measured figures in Chromium$`).
 3. Fixed on 2026-10-15: the note gives the actual geometry and measured desktop/phone fractions (commit `:/^Batch B: correct notes and layout; verify measured figures in Chromium$`).
-4. **Small recomputations for display.** `readouts()` and `Sim.live()` convert `phi` to degrees
-   ([L649](../../public/simulations/driven-oscillator.html#L649), [L893](../../public/simulations/driven-oscillator.html#L893))
-   although `phi_deg` is stored ([L609](../../public/simulations/driven-oscillator.html#L609)). The values agree; the house
-   rule is that the display only reads.
+4. Fixed on 2026-10-15: the readout and walkthrough read stored phi_deg (commit `:/^Batch D: store computed results once; verify values and pixel readbacks$`).
 5. **Dead code.** `frames` is counted ([L911](../../public/simulations/driven-oscillator.html#L911)) but never read.
    In `label()`, `sw = 0;` is overwritten on the next statement ([L703–L704](../../public/simulations/driven-oscillator.html#L703-L704)).
 6. **Redraw while paused.** The clock calls the tick on every animation frame with $\Delta t = 0$ while paused

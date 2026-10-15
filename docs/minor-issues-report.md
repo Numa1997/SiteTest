@@ -47,3 +47,16 @@ Proposed replacement for the stale CLAUDE.md sentence (file unchanged): “In a 
 | C: pendulum updates, phasor ang and water frames metadata | fixed | Once-per-frame diagnostics, current draw-loop angle calculation, and playing-only frame count documented. |
 | C: scalar types and panel contract | fixed | uint8 and all four omitted contract keys documented. |
 | C: catalog extension comment | fixed | New course years explicitly require STAGES, validation and wording updates. |
+
+
+| Issue | Status | Proof |
+|---|---|---|
+| D: Fig. 1 speed and alpha-first pixel check | fixed | Speed reads stored 33 px/s; source-dot check now tests alpha first. |
+| D: Fig. 3 computation and walkthrough | fixed | Stored geometry agrees exactly with checks; first-order SVG label reads back 30° and sine 0.5. |
+| D: Fig. 4 stored layout and shared constants | fixed | Stored-width/height recomputation is identical at both sizes. |
+| D: Fig. 6 amplitude and frame count | fixed | Sum reads stored 50.3 px; after 65 callbacks frames is 65. |
+| D: Fig. 6 Square preset | fixed | Frequencies are 0.4, 1.2, 2, 2.8. |
+| D: Fig. 6 component pixel check | fixed | Actual wave passes; solid white and transparent canvas fail at both sizes. |
+| D: Fig. 7 angles | fixed | Angle is stored by sumAt, recomputes identically, and its joint pixel passes. |
+| D: Fig. 9 phase | fixed | Both displays read stored phi_deg = 25.346175941946683°. |
+| D: Fig. 10 display results | fixed | h = 0.01 s and steps = 12000; range and captured share agree with checks and visible text. |

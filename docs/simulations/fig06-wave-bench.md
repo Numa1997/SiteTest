@@ -63,7 +63,7 @@ $$C_\nu = \left|\sum_{i:\ \nu_i = \nu} A_i\,e^{\mathrm{i}\varphi_i}\right| \ (\n
 ## How the code computes it
 
 **State.** One inline script, an immediately invoked function
-([:492-963](../../public/simulations/wave-interference.html#L492-L963)). Constants `WORLD_W = 800`, `MAX_WAVES = 6`, `FMAX = 3`
+([:492-973](../../public/simulations/wave-interference.html#L492-L973)). Constants `WORLD_W = 800`, `MAX_WAVES = 6`, `FMAX = 3`
 (top of the Frequency slider), `NUMAX = 6` (right end of the spectrum axis, $3 \times$ the top Speed of 2)
 ([:496](../../public/simulations/wave-interference.html#L496)), and six wave colours `COLOURS`
 ([:497](../../public/simulations/wave-interference.html#L497)). Two canvas wrappers, `box` for the plot and `spec` for the
@@ -90,7 +90,7 @@ $M$ = 298 and $\Delta X$ = 2.685 px.
 **The frame loop, in order.** The clock callback ([:823-833](../../public/simulations/wave-interference.html#L823-L833)) runs
 on every animation frame, playing or paused:
 
-1. `simT += dt`, update the frame-rate average, write `t`, `dt`, `fps`, `frames`, `playing` into the store
+1. `simT += dt`, update the frame-rate average, increment frames, write `t`, `dt`, `fps`, `frames`, `playing` into the store
    ([:824-826](../../public/simulations/wave-interference.html#L824-L826)).
 2. `draw()` ([:651-724](../../public/simulations/wave-interference.html#L651-L724)):
    1. Layout: margins 44 (left), 14 (right and bottom), 30 (top), a 44 css px gap between panels; the sum panel takes 56 % of
@@ -162,17 +162,17 @@ Line numbers link into `wave-interference.html`.
 | `sumA()` | [849](../../public/simulations/wave-interference.html#L849) | Σ A from the stored `A`. |
 | `linesNow()` | [850-860](../../public/simulations/wave-interference.html#L850-L860) | `lines()` again, from the stored `nu`, `A`, `phi`. |
 | `benchRound()` | [862-867](../../public/simulations/wave-interference.html#L862-L867) | Length of one round: 1 000 000 / gcd of the stored ν in units of 10⁻⁶ Hz, at most 20 s; 5 s if all ν are 0. |
-| `Sim.data.playing`, `.play` | [870](../../public/simulations/wave-interference.html#L870), [953](../../public/simulations/wave-interference.html#L953) | Clock state; start the clock before a round. |
+| `Sim.data.playing`, `.play` | [870](../../public/simulations/wave-interference.html#L870), [963](../../public/simulations/wave-interference.html#L963) | Clock state; start the clock before a round. |
 | `Sim.data.rowLabel.wave` | [879](../../public/simulations/wave-interference.html#L879) | Row names "w1", "w2", … |
 | `Sim.data.colour.*` | [880-884](../../public/simulations/wave-interference.html#L880-L884) | Shading of `y_comp`, `y_400` (scale $A_i$) and `y_sum` (scale Σ A) with `Sim.colourMap`. |
 | `Sim.data.probe(x, y)` | [885-894](../../public/simulations/wave-interference.html#L885-L894) | Sample column under the point; nearest curve (sum or a component) within 14 css px vertically. |
 | `Sim.data.inspect(ref)` | [895-901](../../public/simulations/wave-interference.html#L895-L901) | Rows for a pinned point of the sum (X, Σ y, y px) or of a wave (X, $y_i$, A, f, φ, s, y px). |
 | `Sim.data.locate(name, idx)` | [902-910](../../public/simulations/wave-interference.html#L902-L910) | Where a cell is drawn: a sample of a curve, or the middle sample of a wave; `null` for spectrum rows. |
 | `Sim.data.check.*` | [911-945](../../public/simulations/wave-interference.html#L911-L945) | For 33 variables: formula, stored inputs, recomputed value. |
-| `Sim.data.drawn.*` | [946-950](../../public/simulations/wave-interference.html#L946-L950) | Read-backs for `py_sum` (ink, luminance < 150), `py_comp` (any opaque pixel) and `y_line` (the stem's dot). |
-| `Sim.data.round.label` | [951](../../public/simulations/wave-interference.html#L951) | "one repeat of the pattern, … s" or "twenty seconds of the pattern, 20.00 s". |
-| `Sim.data.round.point` | [952](../../public/simulations/wave-interference.html#L952) | The sum at the middle sample. |
-| start-up | [957-961](../../public/simulations/wave-interference.html#L957-L961) | One default wave, a first draw of both canvases, resize observers for both. |
+| `Sim.data.drawn.*` | [946-960](../../public/simulations/wave-interference.html#L946-L960) | Read-backs for `py_sum` (ink, luminance < 150), `py_comp` (alpha first, then the wave RGB or a stored crossing within 2 css px) and `y_line` (the stem's dot). |
+| `Sim.data.round.label` | [961](../../public/simulations/wave-interference.html#L961) | "one repeat of the pattern, … s" or "twenty seconds of the pattern, 20.00 s". |
+| `Sim.data.round.point` | [962](../../public/simulations/wave-interference.html#L962) | The sum at the middle sample. |
+| start-up | [967-971](../../public/simulations/wave-interference.html#L967-L971) | One default wave, a first draw of both canvases, resize observers for both. |
 
 ## Controls
 
@@ -238,14 +238,14 @@ Declarations are at [:508-509](../../public/simulations/wave-interference.html#L
 [:539-557](../../public/simulations/wave-interference.html#L539-L557). `bl` and `venv` are `NaN` unless there are two waves
 with $f_1 \ne f_2$.
 
-**One round** (`Sim.data.round`, [:951-952](../../public/simulations/wave-interference.html#L951-L952)): the time variable is
+**One round** (`Sim.data.round`, [:961-962](../../public/simulations/wave-interference.html#L961-L962)): the time variable is
 `t`; the length is `benchRound()`, the time after which the pattern at a fixed point repeats, $1/\gcd(\nu_i)$ with the $\nu_i$
 retained at their stored 10⁻⁶ Hz precision, capped at 20 s ([:862-867](../../public/simulations/wave-interference.html#L862-L867)). For the Square
 wave preset it is 2.50 s (measured). The chart columns are `sum_A`, `peak`, `ratio`, `y_sum_400`, `y1_400`; the point followed
 is the sum at the middle sample, unless the reader pinned another. The panel samples every numeric scalar at most 600 times
 in the round ([datalog.js:747](../../public/scripts/datalog.js#L747), [datalog.js:776](../../public/scripts/datalog.js#L776)).
 
-**The panel hooks.** `Sim.data` ([:868-955](../../public/simulations/wave-interference.html#L868-L955)) sets
+**The panel hooks.** `Sim.data` ([:868-965](../../public/simulations/wave-interference.html#L868-L965)) sets
 `kicker: 'Fig. 6 · data'`, `file: 'fig6-wave-bench'`, six groups (Waves, The sum, Time, Sampled curves, Spectrum, Drawing),
 the checks, the read-backs and the `about` paragraph. The contract is at
 [datalog.js:8-30](../../public/scripts/datalog.js#L8-L30). Read values works on the plot only: datalog.js attaches it to the
@@ -306,19 +306,19 @@ Google Fonts; `../styles/sim.css`, `../styles/data.css`, `../styles/fold.css`; a
   its sliders; sampling the view; superposition as a plain sum; fitting the curves into their panels; the Beats preset; the
   Square wave preset; the spectrum; the bound $|\sum y_i| \le \sum A_i$ ([bench.js:7-123](../../public/scripts/walk/bench.js#L7-L123)).
 - Footer, then the scripts in load order: `fold.js`, `sim.js`, `dataset.js`, the inline script, `datalog.js`
-  ([:489-492](../../public/simulations/wave-interference.html#L489-L492), [:964](../../public/simulations/wave-interference.html#L964)).
+  ([:489-492](../../public/simulations/wave-interference.html#L489-L492), [:974](../../public/simulations/wave-interference.html#L974)).
   See [fold.md](../scripts/fold.md) and [sim.md](../scripts/sim.md).
 
 ## Where the drawing and the store differ
 
 - **Straight segments.** The curves join the $M + 1$ stored points with straight lines, one per css px column, and the canvas
-  smooths the strokes (the page's `about`, [:954](../../public/simulations/wave-interference.html#L954)). A chord cuts under a
+  smooths the strokes (the page's `about`, [:964](../../public/simulations/wave-interference.html#L964)). A chord cuts under a
   crest by about $A k^2 \Delta X^2 / 8$: 0.06 px in a wide window and 0.32 px on a phone for the shortest wave at full
   amplitude, so the peak readout can fall slightly short of the true crest (note Section 07,
   [:448](../../public/simulations/wave-interference.html#L448)).
 - **Readouts lag and round.** The readouts are rewritten every 8th frame and show one decimal; the store is rewritten every
   frame at full precision ([:829-832](../../public/simulations/wave-interference.html#L829-L832),
-  [:954](../../public/simulations/wave-interference.html#L954)).
+  [:964](../../public/simulations/wave-interference.html#L964)).
 - **Amplitude slider rounds.** The Amplitude slider moves in whole px, so the Square preset's 4.3 px shows as 4 px on its card,
   while the wave, Σ A = 50.3 px and the store keep 4.3 px (note Section 08,
   [:457](../../public/simulations/wave-interference.html#L457); measured: the card's slider reads 4).
@@ -329,7 +329,7 @@ Google Fonts; `../styles/sim.css`, `../styles/data.css`, `../styles/fold.css`; a
   in a wide window 1 px of displacement is drawn 1.83 css px tall, 1 px along the medium 0.89 css px wide (note Section 08,
   [:455](../../public/simulations/wave-interference.html#L455)).
 - **Overlapping curves.** Where two component curves cross, the one drawn last covers the other
-  ([:948](../../public/simulations/wave-interference.html#L948)).
+  ([:949](../../public/simulations/wave-interference.html#L949)).
 
 ## How to change it safely
 
@@ -369,13 +369,7 @@ Google Fonts; `../styles/sim.css`, `../styles/data.css`, `../styles/fold.css`; a
 2. Fixed on 2026-10-15: the repeat uses every stored ν digit; ν = (1, 0.9975) Hz gives the 20 s cap (commit `:/^Batch A: fix simulation and recording faults; verify in Chromium$`).
 3. Fixed on 2026-10-15: the note describes the current 0–6 Hz caption (commit `:/^Batch B: correct notes and layout; verify measured figures in Chromium$`).
 4. Fixed on 2026-10-15: the Beats and Square excerpts preserve their source line layout (commit `:/^Batch C: align walkthroughs and metadata; verify excerpts and stored values$`).
-5. **One readout recomputes.** "Sum of amplitudes" sums `waves` again
-   ([:830](../../public/simulations/wave-interference.html#L830)) instead of reading `sum_A` from the store (CLAUDE.md: the
-   display only reads). Same value. Walkthrough step 8 quotes this line ([bench.js:114](../../public/scripts/walk/bench.js#L114)).
-6. **A weak read-back.** `drawn.py_comp` passes on any opaque pixel ([:948](../../public/simulations/wave-interference.html#L948)),
-   so a grid line or another wave at that point also passes; `py_sum` tests for dark ink.
-7. **`frames` lags by one.** It is stored ([:826](../../public/simulations/wave-interference.html#L826)) before it is
-   incremented ([:829](../../public/simulations/wave-interference.html#L829)).
-8. **Float noise in the Square preset.** `f: 0.4 * n` ([:792](../../public/simulations/wave-interference.html#L792)) stores
-   f = 1.2000000000000002 and 2.8000000000000003 (measured). Harmless (ν is rounded), but visible at full precision in the panel
-   and in the saved `.npz`.
+5. Fixed on 2026-10-15: the amplitude readout reads sum_A (commit `:/^Batch D: store computed results once; verify values and pixel readbacks$`).
+6. Fixed on 2026-10-15: component readback checks alpha and the wave colour, accepting other colours only at stored crossings; white now fails (commit `:/^Batch D: store computed results once; verify values and pixel readbacks$`).
+7. Fixed on 2026-10-15: frames is incremented before storage (commit `:/^Batch D: store computed results once; verify values and pixel readbacks$`).
+8. Fixed on 2026-10-15: the Square preset stores 0.4, 1.2, 2 and 2.8 without extra decimal tails (commit `:/^Batch D: store computed results once; verify values and pixel readbacks$`).

@@ -12,6 +12,7 @@ window.WALK.phasors = {
             math: 'z<sub>1</sub>(t) = ⟦A|A⟧ e<sup>i ⟦ang|(ωt + φ)⟧</sup> = ⟦x1|A cos(ωt + φ)⟧ + i ⟦y1|A sin(ωt + φ)⟧',
             note: 'Euler’s formula e<sup>iθ</sup> = cos θ + i sin θ turns one complex number into two real ones: the x and y of the arm’s tip relative to its pivot. The angle grows linearly in time; that is all “uniform circular motion” means.',
             code: `var ⟦ang|ang = p.freq * time + p.phase⟧;
+if (angles) angles[k] = ang;
 var ⟦x1|vx = p.amp * Math.cos(ang)⟧, ⟦y1|vy = p.amp * Math.sin(ang)⟧;`,
             syms: [
                 ['A', 'A', 'p.amp', 'radius of arm 1'],

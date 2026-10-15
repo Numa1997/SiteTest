@@ -83,7 +83,7 @@ pts.push(mid1 - v / sumRange * hSum / 2);`,
             where: 'the Square wave button',
             math: 'sq(x) = (4/π) Σ<sub>n odd</sub> sin(nx)/n<br>⟦An|A<sub>n</sub>⟧ = 30/n, &nbsp; f<sub>n</sub> = 0.4 n, &nbsp; n = 1, 3, 5, 7 &nbsp;⇒&nbsp; height ≈ (π/4) · 30 ≈ 23.6 px',
             note: 'Only odd harmonics, with amplitudes falling as 1/n. Rounding 30/n to 0.1 px (30/7 = 4.2857 → 4.3) changes the shape by less than a pixel. Four terms already show the flat tops and the Gibbs overshoot near the jumps.',
-            code: `preset([1, 3, 5, 7].map(function (n) { return { ⟦An|A: Math.round(30 / n * 10) / 10⟧, f: 0.4 * n }; }));`,
+            code: `preset([1, 3, 5, 7].map(function (n) { return { ⟦An|A: Math.round(30 / n * 10) / 10⟧, f: n * 2 / 5 }; }));`,
             syms: [
                 ['An', 'A<sub>n</sub>', 'waves[i].A', 'amplitudes now loaded'],
                 ['fn', 'f<sub>n</sub>', 'waves[i].f', 'frequencies now loaded']
@@ -111,7 +111,7 @@ var X = function (nu) { return left + nu / NUMAX * (right - left); };`,
             where: 'the readouts',
             math: '|Σ y<sub>i</sub>| ≤ Σ |y<sub>i</sub>| ≤ ⟦sA|Σ A<sub>i</sub>⟧',
             note: 'The triangle inequality: the peak can reach the sum of amplitudes only where every component is at a crest at once. Compare the two readouts under the plot: the sampled peak is always the smaller one.',
-            code: `document.getElementById('r-sum').textContent = ⟦sA|waves.reduce(function (a, v) { return a + v.A; }, 0)⟧.toFixed(1) + ' px';
+            code: `document.getElementById('r-sum').textContent = ⟦sA|ds.get('sum_A')⟧.toFixed(1) + ' px';
 document.getElementById('r-peak').textContent = ⟦pk|peak⟧.toFixed(1) + ' px';`,
             syms: [
                 ['sA', 'Σ A<sub>i</sub>', 'sum of amplitudes', 'px'],

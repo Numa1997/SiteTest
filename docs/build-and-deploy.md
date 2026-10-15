@@ -97,3 +97,5 @@ Deployed stored version `1792048596599`, then copied the same eleven files here.
 Batch B, 15 October 2026: deployed snapshot 1792051419526. Targeted local and live Chromium checks and all 26 page/viewport checks passed; platform frontend/network error lists were empty. The suite has 15 scenarios with the original home scenario unchanged.
 
 Batch C, 15 October 2026: all targeted excerpts match complete source lines or explicitly mark omissions. Local and live Chromium checks pass at both requested sizes. The Fourier sample/coefficient array hashes are unchanged; effective morph alpha now reads 1.00 when smoothing is off.
+
+Batch D, 15 October 2026: stored-value and actual DOM/SVG/pixel checks pass locally and live at both requested viewports. The Square preset is exact at its intended decimal values, and an opaque white canvas no longer passes a component-wave readback.

@@ -572,16 +572,19 @@
         ds.var('ux', [], 'float', { symbol: 'u<sub>x</sub>', long_name: 'unit vector from P towards S₂, x', computed_in: 'compute()', formula: '(S₂ − P)<sub>x</sub> / L₂', digits: 5 });
         ds.var('uy', [], 'float', { symbol: 'u<sub>y</sub>', long_name: 'unit vector from P towards S₂, y', computed_in: 'compute()', formula: '(S₂ − P)<sub>y</sub> / L₂', digits: 5 });
         ds.var('ds', [], 'float', { symbol: 'δs', units: 'px', long_name: 'exact path difference', computed_in: 'compute()', formula: 'δs = 2 b d tan α / (L₁ + L₂)', digits: 4 });
-        ds.var('ds_direct', [], 'float', { symbol: 'L<sub>2</sub> − L<sub>1</sub>', units: 'px', long_name: 'the same number by direct subtraction', computed_in: 'readouts()', formula: 'L₂ − L₁', digits: 4 });
-        ds.var('S2Q', [], 'float', { symbol: '|S<sub>2</sub>Q|', units: 'px', long_name: 'the same number read off the construction', computed_in: 'readouts()', formula: '|Q − S₂|', digits: 4 });
-        ds.var('b_sin_a', [], 'float', { symbol: 'b sin α', units: 'px', long_name: 'far-field approximation of δs', computed_in: 'readouts()', formula: 'b sin α', digits: 4 });
-        ds.var('ds_err', [], 'float', { symbol: 'δs − b sin α', units: 'px', long_name: 'error of the far-field approximation at this distance', computed_in: 'readouts()', formula: 'δs − b sin α', digits: 4 });
-        ds.var('ratio', [], 'float', { symbol: 'δs / λ', long_name: 'path difference in wavelengths', computed_in: 'readouts()', formula: 'δs / λ', digits: 4 });
-        ds.var('frac', [], 'float', { symbol: 'fractional part', long_name: 'near 0: bright; near ½: dark', computed_in: 'readouts()', formula: 'δs/λ − floor(δs/λ)', digits: 3 });
-        ds.var('phi', [], 'float', { symbol: 'Δφ', units: 'rad', long_name: 'phase difference', computed_in: 'readouts()', formula: '2π δs / λ', digits: 4 });
-        ds.var('I', [], 'float', { symbol: 'I/I₀', long_name: 'intensity at P, two equal waves', computed_in: 'readouts()', formula: 'cos²(Δφ / 2)', digits: 4 });
-        ds.var('I_far_P', [], 'float', { symbol: 'I/I₀ far field', long_name: 'with b sin α in place of δs', computed_in: 'readouts()', formula: 'cos²(π b sin α / λ)', digits: 4 });
-        ds.var('verdict', [], 'str', { symbol: 'verdict', long_name: 'the sentence under the readouts', computed_in: 'readouts()', source: 'Chosen from the fractional part: within 0.08 of 0 bright, of ½ dark, else partial.' });
+        ds.var('ds_direct', [], 'float', { symbol: 'L<sub>2</sub> − L<sub>1</sub>', units: 'px', long_name: 'the same number by direct subtraction', computed_in: 'storeDerived(), in compute()', formula: 'L₂ − L₁', digits: 4 });
+        ds.var('S2Q', [], 'float', { symbol: '|S<sub>2</sub>Q|', units: 'px', long_name: 'the same number read off the construction', computed_in: 'storeDerived(), in compute()', formula: '|Q − S₂|', digits: 4 });
+        ds.var('b_sin_a', [], 'float', { symbol: 'b sin α', units: 'px', long_name: 'far-field approximation of δs', computed_in: 'storeDerived(), in compute()', formula: 'b sin α', digits: 4 });
+        ds.var('ds_err', [], 'float', { symbol: 'δs − b sin α', units: 'px', long_name: 'error of the far-field approximation at this distance', computed_in: 'storeDerived(), in compute()', formula: 'δs − b sin α', digits: 4 });
+        ds.var('ratio', [], 'float', { symbol: 'δs / λ', long_name: 'path difference in wavelengths', computed_in: 'storeDerived(), in compute()', formula: 'δs / λ', digits: 4 });
+        ds.var('frac', [], 'float', { symbol: 'fractional part', long_name: 'near 0: bright; near ½: dark', computed_in: 'storeDerived(), in compute()', formula: 'δs/λ − floor(δs/λ)', digits: 3 });
+        ds.var('phi', [], 'float', { symbol: 'Δφ', units: 'rad', long_name: 'phase difference', computed_in: 'storeDerived(), in compute()', formula: '2π δs / λ', digits: 4 });
+        ds.var('I', [], 'float', { symbol: 'I/I₀', long_name: 'intensity at P, two equal waves', computed_in: 'storeDerived(), in compute()', formula: 'cos²(Δφ / 2)', digits: 4 });
+        ds.var('I_far_P', [], 'float', { symbol: 'I/I₀ far field', long_name: 'with b sin α in place of δs', computed_in: 'storeDerived(), in compute()', formula: 'cos²(π b sin α / λ)', digits: 4 });
+        ds.var('verdict', [], 'str', { symbol: 'verdict', long_name: 'the sentence under the readouts', computed_in: 'storeDerived(), in compute()', source: 'Chosen from the fractional part: within 0.08 of 0 bright, of ½ dark, else partial.' });
+        ds.var('sin_theta1', [], 'float', { symbol: 'sin θ₁', units: '', long_name: 'λ / b', computed_in: 'storeDerived(), in compute()', formula: 'λ / b', digits: 4 });
+        ds.var('theta1', [], 'float', { symbol: 'θ₁', units: '°', long_name: 'asin(λ / b); NaN if λ > b', computed_in: 'storeDerived(), in compute()', formula: 'asin(λ / b); NaN if λ > b', digits: 4 });
+        ds.var('phi_pi', [], 'float', { symbol: 'Δφ / π', units: '', long_name: 'Δφ / π', computed_in: 'storeDerived(), in compute()', formula: 'Δφ / π', digits: 4 });
         ds.dim('th', 301);
         ds.coord('theta', 'th', Float64Array, { symbol: 'θ', units: '°', long_name: 'direction, 301 steps from 0° to 30°', computed_in: 'drawPattern()', formula: 'θ = 30° · i / 300', digits: 2 });
         ds.var('I_far', ['th'], Float64Array, { symbol: 'I far', long_name: 'the solid curve: far-field intensity', computed_in: 'drawPattern()', formula: 'cos²(π b sin θ / λ)', digits: 4, updates: 'when a slider moves' });
@@ -592,12 +595,12 @@
         ds.var('m_theta', ['m'], Float64Array, { symbol: 'θ<sub>m</sub>', units: '°', long_name: 'direction of order m', computed_in: 'drawPattern()', formula: 'asin(m λ / b)', digits: 2, updates: 'when b or λ moves' });
         ds.var('m_x', ['m'], Float64Array, { symbol: 'x<sub>m</sub>', units: 'px', long_name: 'where order m meets the observation line', computed_in: 'drawPattern()', formula: 'd tan θ<sub>m</sub>', digits: 1, updates: 'when b or λ moves' });
         ds.var('m_max', [], 'int', { symbol: 'm<sub>max</sub>', long_name: 'highest order within 30°', computed_in: 'drawPattern()', formula: 'floor(b sin 30° / λ)', digits: 0 });
-        ds.var('fringe_px', [], 'float', { symbol: 'λd/b', units: 'px', long_name: 'fringe spacing near the centre, small angles', computed_in: 'readouts()', formula: 'λ d / b', digits: 2 });
+        ds.var('fringe_px', [], 'float', { symbol: 'λd/b', units: 'px', long_name: 'fringe spacing near the centre, small angles', computed_in: 'storeDerived(), in compute()', formula: 'λ d / b', digits: 2 });
         ds.dim('ring', 0);
         ds.var('ring_r', ['ring'], Float64Array, { symbol: 'r', units: 'px', long_name: 'radii of the wavelet arcs drawn around each slit', computed_in: 'drawWaves()', formula: 'r = (phase + q) λ, skipping r < 1', digits: 2, updates: 'every frame while animating' });
         ds.var('n_rings', [], 'int', { symbol: 'rings', long_name: 'arcs per slit', computed_in: 'drawWaves()', digits: 0, source: 'Counted while drawing.' });
         ds.var('phase', [], 'float', { symbol: 'phase', long_name: 'fraction of a period, 0 to 1', computed_in: 'Sim.clock callback', formula: 'phase ← (phase + 0.8 Δt) mod 1', digits: 3, source: 'Accumulated frame by frame.' });
-        ds.var('ring_speed', [], 'float', { symbol: 'ring speed', units: 'px/s', long_name: 'how fast the arcs grow', computed_in: 'readouts()', formula: '0.8 λ', digits: 1 });
+        ds.var('ring_speed', [], 'float', { symbol: 'ring speed', units: 'px/s', long_name: 'how fast the arcs grow', computed_in: 'storeDerived(), in compute()', formula: '0.8 λ', digits: 1 });
         ds.var('animate', [], 'bool', { symbol: 'animate', long_name: 'the wavelets move', computed_in: 'the Animate switch', source: 'The state of the switch.' });
         ds.var('clock_t', [], 'float', { symbol: 't', units: 's', long_name: 'animation time', computed_in: 'Sim.clock', digits: 2, source: 'The clock adds each frame’s Δt while animating.' });
         ds.var('wall', [], 'float', { symbol: 'wall', units: 's', long_name: 'seconds since the page opened', computed_in: 'Sim.clock callback', digits: 1, source: 'performance.now() / 1000.' });
@@ -619,10 +622,15 @@
             var S1 = { x: X0 - b / 2, y: Y0 }, S2 = { x: X0 + b / 2, y: Y0 };
             var P = { x: X0 - d * Math.tan(a), y: Y0 - d };
             var L1 = dist(S1, P), L2 = dist(S2, P);
+            ds.set('L1', L1); ds.set('L2', L2);
+            var deltaS = 2 * b * d * Math.tan(a) / (L1 + L2);
+            ds.set('ds', deltaS);
             var ux = (S2.x - P.x) / L2, uy = (S2.y - P.y) / L2;
             var Q = { x: P.x + ux * L1, y: P.y + uy * L1 };
             ds.set('ux', ux); ds.set('uy', uy);
-            return { d: d, a: a, b: b, lambda: lS.value, S1: S1, S2: S2, P: P, L1: L1, L2: L2, Q: Q, ds: 2 * b * d * Math.tan(a) / (L1 + L2) };
+            var G = { d: d, a: a, b: b, lambda: lS.value, S1: S1, S2: S2, P: P, L1: L1, L2: L2, Q: Q, ds: deltaS };
+            storeDerived(G);
+            return G;
         }
 
         function drawShapes() {
@@ -743,29 +751,35 @@
             pattern.innerHTML = s;
         }
 
-        function readouts() {
-            var G = geo, ratio = G.ds / G.lambda, phi = 2 * Math.PI * ratio;
-            document.getElementById('r-l1').textContent = G.L1.toFixed(1) + ' px';
-            document.getElementById('r-l2').textContent = G.L2.toFixed(1) + ' px';
-            document.getElementById('r-ds').textContent = G.ds.toFixed(2) + ' px';
+        function storeDerived(G) {
+            var ratio = G.ds / G.lambda, phi = 2 * Math.PI * ratio;
             var ff = G.b * Math.sin(G.a);
-            document.getElementById('r-ff').textContent = ff.toFixed(2) + ' px';
-            document.getElementById('r-m').textContent = ratio.toFixed(2);
-            document.getElementById('r-phi').textContent = (phi / Math.PI).toFixed(2) + ' π';
-            document.getElementById('cap-ds').innerHTML = '<i>δs</i> = ' + G.ds.toFixed(2) + ' px';
             var f = ratio - Math.floor(ratio), verdict;
             if (f < 0.08 || f > 0.92) verdict = 'Constructive · bright fringe, m = ' + Math.round(ratio);
             else if (Math.abs(f - 0.5) < 0.08) verdict = 'Destructive · dark fringe between m = ' + Math.floor(ratio) + ' and ' + (Math.floor(ratio) + 1);
             else verdict = 'Partial · I/I₀ = ' + Math.pow(Math.cos(phi / 2), 2).toFixed(2);
-            document.getElementById('verdict').textContent = verdict;
             var px = ds.alloc('pt_x'), py = ds.alloc('pt_y'), P5 = [G.S1, G.S2, { x: X0, y: Y0 }, G.P, G.Q];
             for (var q = 0; q < 5; q++) { px[q] = P5[q].x; py[q] = P5[q].y; }
             ds.touch('pt_x'); ds.touch('pt_y');
             ds.set('d', G.d); ds.set('alpha_deg', aS.value); ds.set('alpha', G.a); ds.set('b', G.b); ds.set('lambda', G.lambda);
-            ds.set('L1', G.L1); ds.set('L2', G.L2); ds.set('ds', G.ds); ds.set('ds_direct', G.L2 - G.L1); ds.set('S2Q', dist(G.S2, G.Q));
+            ds.set('ds_direct', G.L2 - G.L1); ds.set('S2Q', dist(G.S2, G.Q));
             ds.set('b_sin_a', ff); ds.set('ds_err', G.ds - ff); ds.set('ratio', ratio); ds.set('frac', f); ds.set('phi', phi);
             ds.set('I', Math.pow(Math.cos(phi / 2), 2)); ds.set('I_far_P', Math.pow(Math.cos(Math.PI * ff / G.lambda), 2)); ds.set('verdict', verdict);
+            ds.set('phi_pi', phi / Math.PI);
+            var sl = G.lambda / G.b;
+            ds.set('sin_theta1', sl); ds.set('theta1', sl <= 1 ? Math.asin(sl) / DEG : NaN);
             ds.set('fringe_px', G.lambda * G.d / G.b); ds.set('ring_speed', 0.8 * G.lambda);
+        }
+
+        function readouts() {
+            document.getElementById('r-l1').textContent = ds.get('L1').toFixed(1) + ' px';
+            document.getElementById('r-l2').textContent = ds.get('L2').toFixed(1) + ' px';
+            document.getElementById('r-ds').textContent = ds.get('ds').toFixed(2) + ' px';
+            document.getElementById('r-ff').textContent = ds.get('b_sin_a').toFixed(2) + ' px';
+            document.getElementById('r-m').textContent = ds.get('ratio').toFixed(2) + '';
+            document.getElementById('r-phi').textContent = ds.get('phi_pi').toFixed(2) + ' π';
+            document.getElementById('cap-ds').innerHTML = '<i>δs</i> = ' + ds.get('ds').toFixed(2) + ' px';
+            document.getElementById('verdict').textContent = ds.get('verdict');
         }
 
         function update() {
@@ -780,15 +794,15 @@
         Sim.live = function () {
             var px = ds.get('pt_x'), py = ds.get('pt_y'), f = ds.get('frac');
             function pt(q) { return '(' + px[q].toFixed(1) + ', ' + py[q].toFixed(1) + ')'; }
-            var sl = ds.get('lambda') / ds.get('b');
+            var sl = ds.get('sin_theta1');
             return {
                 d: ds.get('d') + ' px', a: ds.get('alpha_deg').toFixed(1) + '°', b: ds.get('b') + ' px', P: pt(3), S1: pt(0),
                 L1: ds.get('L1').toFixed(3) + ' px', L2: ds.get('L2').toFixed(3) + ' px', ds: ds.get('ds').toFixed(4) + ' px',
                 dsid: ds.get('ds_direct').toFixed(4) + ' px',
                 u: '(' + ds.get('ux').toFixed(4) + ', ' + ds.get('uy').toFixed(4) + ')', Q: pt(4), S2Q: ds.get('S2Q').toFixed(4) + ' px',
-                lam: ds.get('lambda').toFixed(1) + ' px', m: ds.get('ratio').toFixed(4), phi: (ds.get('phi') / Math.PI).toFixed(3) + ' π',
+                lam: ds.get('lambda').toFixed(1) + ' px', m: ds.get('ratio').toFixed(4), phi: ds.get('phi_pi').toFixed(3) + ' π',
                 I: ds.get('I').toFixed(4), ff: ds.get('b_sin_a').toFixed(4) + ' px', Iff: ds.get('I_far_P').toFixed(4),
-                sinm: sl.toFixed(4), t1: sl <= 1 ? ds.get('m_theta')[1] !== undefined ? ds.get('m_theta')[1].toFixed(2) + '°' : (Math.asin(sl) / DEG).toFixed(2) + '°' : 'none (λ > b)',
+                sinm: sl.toFixed(4), t1: sl <= 1 ? ds.get('theta1').toFixed(2) + '°' : 'none (λ > b)',
                 fr: f.toFixed(3), verdict: ds.get('verdict')
             };
         };
@@ -826,13 +840,20 @@
             return { what: PN[q] + ' as drawn: the nearest circle in the SVG', drawn: best ? '(' + best.getAttribute('cx') + ', ' + best.getAttribute('cy') + '), r = ' + best.getAttribute('r') : 'no circle', expected: '(' + px[q].toFixed(2) + ', ' + py[q].toFixed(2) + ')', ok: !!ok,
                 note: q === 4 && !ok ? 'Q is only drawn when δs > 0.05 px.' : 'SVG coordinates are written with two decimals, so the picture carries positions to 0.01 px.' };
         }
+        function firstFringeReadback(sine) {
+            var label = Array.prototype.find.call(pattern.querySelectorAll('text'), function (el) { return el.textContent === 'm = 1'; });
+            if (!label) return { what: 'the first bright-fringe label', drawn: 'outside the 0°–30° plot', expected: 'not drawn', ok: null };
+            var angle = (Number(label.getAttribute('x')) - 56) / 500 * 30;
+            var actual = sine ? Math.sin(angle * DEG) : angle, expected = ds.get(sine ? 'sin_theta1' : 'theta1');
+            return { what: 'first bright fringe, read from its SVG x coordinate', drawn: actual.toFixed(4), expected: expected.toFixed(4), ok: Math.abs(actual - expected) < 0.001 };
+        }
         Sim.data = {
             ds: ds, kicker: 'Fig. 3 · data', file: 'fig3-double-slit',
             playing: function () { return clk.playing; },
             groups: [
                 { title: 'Physical parameters', note: 'what you set with the sliders', vars: ['d', 'alpha_deg', 'alpha', 'b', 'lambda'] },
                 { title: 'Geometry', note: 'points in figure coordinates: x to the right, y downwards', vars: ['pt_x', 'pt_y', 'L1', 'L2', 'ux', 'uy'] },
-                { title: 'Path difference and phase', note: 'what decides bright or dark', vars: ['ds', 'ds_direct', 'S2Q', 'b_sin_a', 'ds_err', 'ratio', 'frac', 'phi'] },
+                { title: 'Path difference and phase', note: 'what decides bright or dark', vars: ['ds', 'ds_direct', 'S2Q', 'b_sin_a', 'ds_err', 'ratio', 'frac', 'phi', 'phi_pi', 'sin_theta1', 'theta1'] },
                 { title: 'Intensity', note: 'two equal waves: I/I₀ = cos²(Δφ/2)', vars: ['I', 'I_far_P', 'verdict', 'theta', 'I_far', 'I_exact', 'I_diff'] },
                 { title: 'Bright fringes', note: 'far field: b sin θ<sub>m</sub> = mλ', vars: ['m_max', 'fringe_px', 'm_sin', 'm_theta', 'm_x'] },
                 { title: 'Animation', note: 'the wavelets only; the geometry does not move', vars: ['phase', 'ring_speed', 'ring_r', 'n_rings', 'animate', 'clock_t', 'wall', 'fps'] }
@@ -859,6 +880,9 @@
                 return null;
             },
             check: {
+                sin_theta1: function () { return { formula: 'λ / b', inputs: [['λ', ds.get('lambda'), 'px'], ['b', ds.get('b'), 'px']], value: ds.get('lambda') / ds.get('b') }; },
+                theta1: function () { var sl = ds.get('sin_theta1'); return { formula: 'asin(sin θ₁) / DEG', inputs: [['sin θ₁', sl, '']], value: sl <= 1 ? Math.asin(sl) / DEG : NaN }; },
+                phi_pi: function () { return { formula: 'Δφ / π', inputs: [['Δφ', ds.get('phi'), 'rad']], value: ds.get('phi') / Math.PI }; },
                 d: function () { return sliderCheck(dS.el, 'distance'); },
                 alpha_deg: function () { return sliderCheck(aS.el, 'angle'); },
                 alpha: function () { return { formula: 'α = slider · π / 180', inputs: [['α', ds.get('alpha_deg'), '°', 1]], value: ds.get('alpha_deg') * DEG }; },
@@ -893,6 +917,11 @@
                 ring_speed: function () { return { formula: '0.8 λ', inputs: [['λ', ds.get('lambda'), 'px', 1]], value: 0.8 * ds.get('lambda') }; }
             },
             drawn: {
+                sin_theta1: function () { return firstFringeReadback(true); },
+                theta1: function () { return firstFringeReadback(false); },
+                L1: function () { var actual = document.getElementById('r-l1').textContent, expected = ds.get('L1').toFixed(1) + ' px'; return { what: 'the visible r-l1 readout', drawn: actual, expected: expected, ok: actual === expected }; },
+                L2: function () { var actual = document.getElementById('r-l2').textContent, expected = ds.get('L2').toFixed(1) + ' px'; return { what: 'the visible r-l2 readout', drawn: actual, expected: expected, ok: actual === expected }; },
+                phi_pi: function () { var actual = document.getElementById('r-phi').textContent, expected = ds.get('phi_pi').toFixed(2) + ' π'; return { what: 'the visible r-phi readout', drawn: actual, expected: expected, ok: actual === expected }; },
                 pt_x: circleCheck, pt_y: circleCheck,
                 I: function () {
                     var c = pattern.querySelector('circle[r="5.5"]'), cy = c ? +c.getAttribute('cy') : NaN, val = (142 - cy) / (142 - 24);

@@ -829,8 +829,9 @@
             ctx.fill();
         }
 
+        var LEFT = 22, BAND = 34, COMPRESSION_GAP = 6;
         function draw() {
-            var w = box.w, h = box.h, left = 22, right = w - 22, s = (right - left) / LENGTH;
+            var w = box.w, h = box.h, left = LEFT, right = w - LEFT, s = (right - left) / LENGTH;
             var k = 2 * Math.PI / lambda.value, N = count.value, A = amp.value, AL = longAmp();
             var yT = h * 0.3, yL = h * 0.77, follow = Math.floor((N - 1) / 2);
             var i, X, px, xi;
@@ -904,7 +905,7 @@
             }
 
             // ---------- longitudinal ----------
-            var band = 34;
+            var band = BAND;
             var grad = ctx.createLinearGradient(left, 0, right, 0);
             for (X = 0; X <= LENGTH; X += LENGTH / 64) {
                 var comp = Math.max(0, -Math.cos(k * X - omegaT));
@@ -913,7 +914,7 @@
             ctx.fillStyle = grad;
             ctx.fillRect(left, yL - band, right - left, band * 2);
             var comp0 = (((Math.PI + omegaT) / k) % lambda.value + lambda.value) % lambda.value;
-            for (X = comp0; X <= LENGTH; X += lambda.value) marker(left + X * s, yL - band - 6);
+            for (X = comp0; X <= LENGTH; X += lambda.value) marker(left + X * s, yL - band - COMPRESSION_GAP);
             var nP = Math.floor((LENGTH - comp0) / lambda.value + 1e-9) + 1;
             ds.dim('cc', nP);
             var pA = ds.alloc('compressions');
@@ -981,7 +982,6 @@
         Sim.playButton(document.getElementById('play'), clk);
 
         /* ---------- the data panel (scripts/datalog.js) reads the store; these hooks only say where things are drawn and how to test a value ---------- */
-        var LEFT = 22;
         function sliderCheck(input, label) { return { formula: 'read from the ' + label + ' slider now', inputs: [['slider', input.value, '']], value: parseFloat(input.value) }; }
         function tPos(i) { return { x: LEFT + ds.get('X')[i] * ds.get('s_px'), y: ds.get('yi_px')[i] }; }
         function lPos(i) { return { x: ds.get('xl_px')[i], y: ds.get('yL') }; }
@@ -1023,7 +1023,7 @@
                 var v = ds.vars[name];
                 if (v.dims[0] === 'p') return LONG[name] ? lPos(idx) : tPos(idx);
                 if (name === 'crests') return { x: LEFT + ds.get('crests')[idx] * ds.get('s_px'), y: ds.get('yT') - ds.get('A') * ds.get('s_px') - 8 };
-                if (name === 'compressions') return { x: LEFT + ds.get('compressions')[idx] * ds.get('s_px'), y: ds.get('yL') - 40 };
+                if (name === 'compressions') return { x: LEFT + ds.get('compressions')[idx] * ds.get('s_px'), y: ds.get('yL') - BAND - COMPRESSION_GAP };
                 return null;
             },
             check: {
@@ -1058,9 +1058,9 @@
                 crests: function (q) { return { formula: 'X<sub>crest</sub> + q λ', inputs: [['X<sub>crest</sub>', ds.get('crest'), 'px', 3], ['q', q, '', 0], ['λ', ds.get('lambda'), 'px', 0]], value: ds.get('crest') + q * ds.get('lambda') }; },
                 comp0: function () { var lam = ds.get('lambda'); return { formula: '((π + ωt) / k) mod λ', inputs: [['ωt', ds.get('omegaT'), 'rad', 4], ['k', ds.get('k'), 'rad/px', 5], ['λ', lam, 'px', 0]], value: (((Math.PI + ds.get('omegaT')) / ds.get('k')) % lam + lam) % lam }; },
                 compressions: function (q) { return { formula: 'X<sub>comp</sub> + q λ', inputs: [['X<sub>comp</sub>', ds.get('comp0'), 'px', 3], ['q', q, '', 0], ['λ', ds.get('lambda'), 'px', 0]], value: ds.get('comp0') + q * ds.get('lambda') }; },
-                s_px: function () { return { formula: '(box.w − 44) / 640', inputs: [['box.w', box.w, 'css px', 0]], value: (box.w - 44) / LENGTH }; },
-                yT: function () { return { formula: '0.3 box.h', inputs: [['box.h', box.h, 'css px', 0]], value: box.h * 0.3 }; },
-                yL: function () { return { formula: '0.77 box.h', inputs: [['box.h', box.h, 'css px', 0]], value: box.h * 0.77 }; }
+                s_px: function () { return { formula: '(stored box.w − 2 LEFT) / 640', inputs: [['box.w', ds.get('box_w'), 'css px', 0]], value: (ds.get('box_w') - 2 * LEFT) / LENGTH }; },
+                yT: function () { return { formula: '0.3 stored box.h', inputs: [['box.h', ds.get('box_h'), 'css px', 0]], value: ds.get('box_h') * 0.3 }; },
+                yL: function () { return { formula: '0.77 stored box.h', inputs: [['box.h', ds.get('box_h'), 'css px', 0]], value: ds.get('box_h') * 0.77 }; }
             },
             drawn: {
                 xi: function (i) { return beadPixel('transverse bead ' + i, tPos(i)); },
