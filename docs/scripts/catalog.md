@@ -162,7 +162,7 @@ A `stage` other than 1 or 2 needs a change in `simulations.html` too: see note 3
 1. `SIM_TOOLS` ([catalog.js:26-33](../../public/scripts/catalog.js#L26-L33)) and the entry fields `has` and `added` are not read
    by any file. The header says `has` refers to `SIM_TOOLS` ([catalog.js:21](../../public/scripts/catalog.js#L21)); nothing
    displays either.
-2. Fixed on 2026-10-15: the unused hidden intro was removed; blurb metadata remains available for a future content decision (commit `:/^Batch E: remove proven unused code; verify styles, arrays and exports$`).
-3. Fixed on 2026-10-15: the header identifies the catalog-page changes needed for a new course year (commit `:/^Batch C: align walkthroughs and metadata; verify excerpts and stored values$`).
+2. Fixed on 2026-10-15: the unused hidden intro was removed; blurb metadata remains available for a future content decision (commit [8982ed3](https://github.com/Numa1997/SiteTest/commit/8982ed35e78161ea7cdd82ae1794f44ccfe39f3c)).
+3. Fixed on 2026-10-15: the header identifies the catalog-page changes needed for a new course year (commit [43d8238](https://github.com/Numa1997/SiteTest/commit/43d82383f4294428a1cf027f2727644ccf7dc8a5)).
 4. The page's search index `_hay` is written onto the shared `SIMULATIONS` objects ([simulations.html:158-161](../../public/simulations.html#L158-L161)),
    because `slice()` copies only the array. Harmless today, since nothing else reads the registry.

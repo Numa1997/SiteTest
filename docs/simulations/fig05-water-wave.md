@@ -339,7 +339,7 @@ stylesheets `../styles/sim.css` (which imports the Google fonts, KaTeX's CSS and
 
 ## Notes for maintainers
 
-1. Fixed on 2026-10-15: all requested layers are computed and stored; at 960 × 900, 3 of 5 are drawn and the fifth stored depth is 2.24 m (commit `:/^Batch A: fix simulation and recording faults; verify in Chromium$`).
-2. Fixed on 2026-10-15: the note and walkthrough cover both the 800 px field and the 400 px field below a 560 css-px canvas width (commit `:/^Batch B: correct notes and layout; verify measured figures in Chromium$`).
-3. Fixed on 2026-10-15: the skipped caption line is marked with an ellipsis (commit `:/^Batch C: align walkthroughs and metadata; verify excerpts and stored values$`).
-4. Fixed on 2026-10-15: frames is described as playing frames; it stays constant during paused drawing (commit `:/^Batch C: align walkthroughs and metadata; verify excerpts and stored values$`).
+1. Fixed on 2026-10-15: all requested layers are computed and stored; at 960 × 900, 3 of 5 are drawn and the fifth stored depth is 2.24 m (commit [9d3175f](https://github.com/Numa1997/SiteTest/commit/9d3175f2cf50d0ad3f8792f1ee173e8ce56bab53)).
+2. Fixed on 2026-10-15: the note and walkthrough cover both the 800 px field and the 400 px field below a 560 css-px canvas width (commit [74ef7d9](https://github.com/Numa1997/SiteTest/commit/74ef7d94571f467f31d2289be6c9668b6809a09f)).
+3. Fixed on 2026-10-15: the skipped caption line is marked with an ellipsis (commit [43d8238](https://github.com/Numa1997/SiteTest/commit/43d82383f4294428a1cf027f2727644ccf7dc8a5)).
+4. Fixed on 2026-10-15: frames is described as playing frames; it stays constant during paused drawing (commit [43d8238](https://github.com/Numa1997/SiteTest/commit/43d82383f4294428a1cf027f2727644ccf7dc8a5)).

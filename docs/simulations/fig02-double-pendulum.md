@@ -328,9 +328,9 @@ agree to the pixel; the trail is not stored.
 
 ## Notes for maintainers
 
-1. Fixed on 2026-10-15: the note, walkthrough and n metadata explain why the 600-step guard cannot act under the current 46-step upper bound (commit `:/^Batch B: correct notes and layout; verify measured figures in Chromium$`).
-2. Fixed on 2026-10-15: the note describes signed energy drift; Chromium gives −2.416 × 10⁻⁸ near 21 s (commit `:/^Batch B: correct notes and layout; verify measured figures in Chromium$`).
-3. Fixed on 2026-10-15: the state-vector and angle/velocity metadata state that diagnostics stores once per frame (commit `:/^Batch C: align walkthroughs and metadata; verify excerpts and stored values$`).
-4. Fixed on 2026-10-15: the walkthrough cites lecture-note equations (6)–(8) (commit `:/^Batch C: align walkthroughs and metadata; verify excerpts and stored values$`).
-5. Fixed on 2026-10-15: y_twin locates the twin’s four stored screen coordinates; stored and recomputed coordinates are identical and the pixels are rose (commit `:/^Batch A: fix simulation and recording faults; verify in Chromium$`).
-6. Fixed on 2026-10-15: the note states the 4–17 px bob-2 radius clamp (commit `:/^Batch B: correct notes and layout; verify measured figures in Chromium$`).
+1. Fixed on 2026-10-15: the note, walkthrough and n metadata explain why the 600-step guard cannot act under the current 46-step upper bound (commit [74ef7d9](https://github.com/Numa1997/SiteTest/commit/74ef7d94571f467f31d2289be6c9668b6809a09f)).
+2. Fixed on 2026-10-15: the note describes signed energy drift; Chromium gives −2.416 × 10⁻⁸ near 21 s (commit [74ef7d9](https://github.com/Numa1997/SiteTest/commit/74ef7d94571f467f31d2289be6c9668b6809a09f)).
+3. Fixed on 2026-10-15: the state-vector and angle/velocity metadata state that diagnostics stores once per frame (commit [43d8238](https://github.com/Numa1997/SiteTest/commit/43d82383f4294428a1cf027f2727644ccf7dc8a5)).
+4. Fixed on 2026-10-15: the walkthrough cites lecture-note equations (6)–(8) (commit [43d8238](https://github.com/Numa1997/SiteTest/commit/43d82383f4294428a1cf027f2727644ccf7dc8a5)).
+5. Fixed on 2026-10-15: y_twin locates the twin’s four stored screen coordinates; stored and recomputed coordinates are identical and the pixels are rose (commit [9d3175f](https://github.com/Numa1997/SiteTest/commit/9d3175f2cf50d0ad3f8792f1ee173e8ce56bab53)).
+6. Fixed on 2026-10-15: the note states the 4–17 px bob-2 radius clamp (commit [74ef7d9](https://github.com/Numa1997/SiteTest/commit/74ef7d94571f467f31d2289be6c9668b6809a09f)).

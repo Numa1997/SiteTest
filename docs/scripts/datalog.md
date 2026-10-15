@@ -160,8 +160,13 @@ within the 4 per second the code allows.
    booleans are compared as text; two non-finite values are "both undefined now". Without a `check` entry the section shows the
    attribute `source` or says the value is an input read from a control.
 3. **Read back from the picture**: the page's `drawn[name](idx)` returns what it read (a pixel colour, an SVG attribute),
-   what the store predicts, `ok` and a note. Without one, the section shows `drawn_note` or says the value enters the picture
-   only through arrays computed from it.
+   what the store predicts, `ok` and a note. `ok` has three values ([datalog.js:529](../../public/scripts/datalog.js#L529)):
+   `true` gives "✓ The picture shows this value." on tan (`is-ok`); `false` gives "✕ The picture does not match." in red
+   (`is-bad`); `null` means the value is not in the picture at the moment, for example a curve that is not drawn because there
+   is nothing to draw. Then the verdict is neutral, without a mark: "Not in the picture at the moment, so there is nothing to
+   read back.", in muted ink inside a dashed outline (`is-na`, [data.css:220](../../public/styles/data.css#L220)). Only `null`
+   itself counts; a missing `ok` is falsy and reads as a mismatch. Without a `drawn` entry, the section shows `drawn_note` or
+   says the value enters the picture only through arrays computed from it.
 
 Measured on Fig. 2: the denominator `den` (stored 3.3590 kg, recomputed 3.358995) and the energy `E` (18.305709 J) are
 "identical"; the bob position `x2_px` (332.6 css px) is "identical" and "The picture shows this value."
@@ -183,9 +188,16 @@ A round is what the page says it is, in `Sim.data.round` ([datalog.js:25-27](../
 | 9 | one drive period $1/f$ of the stored run | `t_play` | sampled | yes, near the end of the run | [L1093](../../public/simulations/driven-oscillator.html#L1093) |
 | 10 | one rotor turn of the stored run | `t_play` | sampled | yes, near the end of the run | [L1154](../../public/simulations/wind-turbine.html#L1154) |
 
+While no round is running, `describeRound()` ([datalog.js:749-756](../../public/scripts/datalog.js#L749-L756)) writes the Record
+box text: "One round = …", then a longer sentence in `span.dp-more-txt`, which phones hide
+([data.css:326](../../public/styles/data.css#L326)). When the page's `blocked()` gives a reason, it follows, after a space, in its
+own `span.dp-rec__why` ("**Not now.** …", [datalog.js:754](../../public/scripts/datalog.js#L754)). That span has no CSS rule, so
+the reason shows on phones too.
+
 `startRound()` ([datalog.js:758-781](../../public/scripts/datalog.js#L758-L781)) refuses with the page's reason if `blocked`
-returns one; the idle description keeps the reason visible and progress shows it if a round later becomes blocked, presses Play if the simulation is paused, chooses the point to follow (the pinned point, else `round.point()`),
-and prepares one buffer per numeric scalar of the whole store (`scalarNames()`, every scalar of type `float`, `int` or
+returns one ([761](../../public/scripts/datalog.js#L761)). If a round becomes blocked while it records, the progress line shows
+the reason ("**Waiting.**", [785-786](../../public/scripts/datalog.js#L785-L786)). Otherwise it presses Play if the simulation
+is paused, chooses the point to follow (the pinned point, else `round.point()`), and prepares one buffer per numeric scalar of the whole store (`scalarNames()`, every scalar of type `float`, `int` or
 `bool`), one per row of the followed point, and two for time. It also notes the first group's scalars as the round's
 parameters. In sampled mode the target spacing is the round length over 600; the final slot is reserved for the ending frame. In change mode it is zero and the 600-change cap is unchanged.
 
@@ -313,7 +325,7 @@ which pages set them (from the ten `Sim.data = {` blocks).
 | `inspect` | `(ref) → { title, at: {x, y}, rows: [[symbol, value, units, varName, index]] }` | [669](../../public/scripts/datalog.js#L669), [692](../../public/scripts/datalog.js#L692), [807](../../public/scripts/datalog.js#L807) | all |
 | `locate` | `(varName, index) → {x, y} \| null` | [677](../../public/scripts/datalog.js#L677) | all |
 | `check` | `{ name: (index) → { formula, inputs: [[symbol, value, units, digits]], value } }` | [510](../../public/scripts/datalog.js#L510) | all |
-| `drawn` | `{ name: (index) → { what, drawn, expected, ok, note } }` | [524](../../public/scripts/datalog.js#L524) | all |
+| `drawn` | `{ name: (index) → { what, drawn, expected, ok, note } }`; `ok` is `true`, `false` or `null` (nothing drawn to read back now) | [524](../../public/scripts/datalog.js#L524), [529](../../public/scripts/datalog.js#L529) | all |
 | `round` | `{ label, time, length, columns, point, mode?, blocked? }` | [101](../../public/scripts/datalog.js#L101) | all (table above) |
 | `about` | HTML paragraph: what still differs between store and picture | [165](../../public/scripts/datalog.js#L165) | all |
 
@@ -445,7 +457,7 @@ capture phase for `soon()`; `ResizeObserver` on `#stage` and on the table.
   check with `__dataPanel.running()` that the loop is off when the panel is idle.
 - Keep the Read values listeners in the capture phase and keep the `if (probe.on)` guard first, or the figure stops behaving as
   if the file were absent.
-- Text that changes while a figure runs: at most 4 rewrites per second (the 250 ms at line 686). Measure after a change: what
+- Text that changes while a figure runs: at most 4 rewrites per second (the 250 ms at [line 687](../../public/scripts/datalog.js#L687)). Measure after a change: what
   shows during a pointer sweep, how much of the figure the marker covers, how often the strip text changes.
 - If you add a key to `Sim.data`, add it to the contract comment at the top of the file, which pages and maintainers read first.
 - After changing the archive, re-run the Python check: `zipfile.ZipFile(f).testzip()` returns `None`, `numpy.load(f)` lists the
@@ -453,12 +465,12 @@ capture phase for `soon()`; `ResizeObserver` on `#stage` and on the table.
 
 ## Notes for maintainers
 
-1. Fixed on 2026-10-15: the contract documents kicker, rowLabel, colLabel and at (commit `:/^Batch C: align walkthroughs and metadata; verify excerpts and stored values$`).
-2. Fixed on 2026-10-15: the unused touchProbe hook was removed (commit `:/^Batch E: remove proven unused code; verify styles, arrays and exports$`).
-3. Fixed on 2026-10-15: every page supplies round; the unused log fallback was removed (commit `:/^Batch E: remove proven unused code; verify styles, arrays and exports$`).
-4. Fixed on 2026-10-15: store and round READMEs open the exact timestamped download filename; CRC and NumPy array shapes validate (commit `:/^Batch A: fix simulation and recording faults; verify in Chromium$`).
-5. Fixed on 2026-10-15: paintStrip no longer takes an unused argument (commit `:/^Batch E: remove proven unused code; verify styles, arrays and exports$`).
-6. Fixed on 2026-10-15: sampled rounds reserve the final slot; the 600-sample, 10 s test retains its ending frame instead of stopping at 9.983 s (commit `:/^Batch A: fix simulation and recording faults; verify in Chromium$`).
+1. Fixed on 2026-10-15: the contract documents kicker, rowLabel, colLabel and at (commit [43d8238](https://github.com/Numa1997/SiteTest/commit/43d82383f4294428a1cf027f2727644ccf7dc8a5)).
+2. Fixed on 2026-10-15: the unused touchProbe hook was removed (commit [8982ed3](https://github.com/Numa1997/SiteTest/commit/8982ed35e78161ea7cdd82ae1794f44ccfe39f3c)).
+3. Fixed on 2026-10-15: every page supplies round; the unused log fallback was removed (commit [8982ed3](https://github.com/Numa1997/SiteTest/commit/8982ed35e78161ea7cdd82ae1794f44ccfe39f3c)).
+4. Fixed on 2026-10-15: store and round READMEs open the exact timestamped download filename; CRC and NumPy array shapes validate (commit [9d3175f](https://github.com/Numa1997/SiteTest/commit/9d3175f2cf50d0ad3f8792f1ee173e8ce56bab53)).
+5. Fixed on 2026-10-15: paintStrip no longer takes an unused argument (commit [8982ed3](https://github.com/Numa1997/SiteTest/commit/8982ed35e78161ea7cdd82ae1794f44ccfe39f3c)).
+6. Fixed on 2026-10-15: sampled rounds reserve the final slot; the 600-sample, 10 s test retains its ending frame instead of stopping at 9.983 s (commit [9d3175f](https://github.com/Numa1997/SiteTest/commit/9d3175f2cf50d0ad3f8792f1ee173e8ce56bab53)).
 7. Hovering a cell of an array table, without a click, draws a ring on the running figure for 0.6 s
    ([datalog.js:364](../../public/scripts/datalog.js#L364), [457](../../public/scripts/datalog.js#L457)). The pointer crosses the
    table, not the figure, but the figure changes. CLAUDE.md asks that nothing on a running figure react to the pointer merely
@@ -467,3 +479,9 @@ capture phase for `soon()`; `ResizeObserver` on `#stage` and on the table.
    ([datalog.js:1036](../../public/scripts/datalog.js#L1036)) and stops reading ([datalog.js:639](../../public/scripts/datalog.js#L639)).
 9. AGENTS.md said the load order holds for "all eight figures"; it holds for all ten pages (load-order table in
    [sim.md](sim.md#load-order-on-the-pages)). Corrected to "all ten figures" on 14 October 2026.
+10. Fixed on 2026-10-15: a read-back that returns `ok: null` gets a neutral verdict, "Not in the picture at the moment, so
+    there is nothing to read back." (class `is-na`), instead of a red ✕ ([datalog.js:529](../../public/scripts/datalog.js#L529)).
+    Figs. 3, 6 and 10 return `null` when the value has nothing drawn (audit repair).
+11. Fixed on 2026-10-15: the reason a round cannot start (`Sim.data.round.blocked`) sits in `span.dp-rec__why`, after a space,
+    and shows on phones too; it used to sit inside `.dp-more-txt`, which is hidden at 640 px and below
+    ([datalog.js:754](../../public/scripts/datalog.js#L754)) (audit repair).

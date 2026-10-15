@@ -322,8 +322,8 @@ The page's `about` paragraph ([L1402](../../public/simulations/draw-decompose.ht
 
 ## Notes for maintainers
 
-1. Fixed on 2026-10-15: the unread touchProbe hook was removed (commit `:/^Batch E: remove proven unused code; verify styles, arrays and exports$`).
-2. Fixed on 2026-10-15: c_max identifies the largest coefficient at rank 0 rather than the omitted zero-frequency coefficient (commit `:/^Batch C: align walkthroughs and metadata; verify excerpts and stored values$`).
-3. Fixed on 2026-10-15: the walkthrough distinguishes the 120 computed frequencies from a full 256-coefficient DFT; the K = 120 heart residual is 0.000491411444 (commit `:/^Batch C: align walkthroughs and metadata; verify excerpts and stored values$`).
-4. Fixed on 2026-10-15: L and step metadata describe calculation and storage; arcDistances replaces the local name that hid the dataset (commit `:/^Batch C: align walkthroughs and metadata; verify excerpts and stored values$`).
-5. Fixed on 2026-10-15: the thumbnail was retaken from .stage__canvas in Chromium at 1440 × 900, device scale 2, and saved as 800 × 500 WebP (commit `:/^Batch B: correct notes and layout; verify measured figures in Chromium$`).
+1. Fixed on 2026-10-15: the unread touchProbe hook was removed (commit [8982ed3](https://github.com/Numa1997/SiteTest/commit/8982ed35e78161ea7cdd82ae1794f44ccfe39f3c)).
+2. Fixed on 2026-10-15: c_max identifies the largest coefficient at rank 0 rather than the omitted zero-frequency coefficient (commit [43d8238](https://github.com/Numa1997/SiteTest/commit/43d82383f4294428a1cf027f2727644ccf7dc8a5)).
+3. Fixed on 2026-10-15: the walkthrough distinguishes the 120 computed frequencies from a full 256-coefficient DFT; the K = 120 heart residual is 0.000491411444 (commit [43d8238](https://github.com/Numa1997/SiteTest/commit/43d82383f4294428a1cf027f2727644ccf7dc8a5)).
+4. Fixed on 2026-10-15: L and step metadata describe calculation and storage; arcDistances replaces the local name that hid the dataset (commit [43d8238](https://github.com/Numa1997/SiteTest/commit/43d82383f4294428a1cf027f2727644ccf7dc8a5)).
+5. Fixed on 2026-10-15: the thumbnail was retaken from .stage__canvas in Chromium at 1440 × 900, device scale 2, and saved as 800 × 500 WebP (commit [74ef7d9](https://github.com/Numa1997/SiteTest/commit/74ef7d94571f467f31d2289be6c9668b6809a09f)).

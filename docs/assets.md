@@ -19,7 +19,7 @@ page to finish loading. Version **0.16.11** (the string `version:"0.16.11"` in `
 
 **Who uses it.** The simulation pages do not list the KaTeX scripts in their HTML. `public/scripts/sim.js` loads them on
 demand: first `katex.min.js`, then `auto-render.min.js`, then typesets every lecture note `.paper` on the page
-([sim.js:352–427](../public/scripts/sim.js#L352), and again at [sim.js:393–468](../public/scripts/sim.js#L393); see
+([sim.js:352–353](../public/scripts/sim.js#L352-L353), and again at [sim.js:393–394](../public/scripts/sim.js#L393-L394); see
 [scripts/sim.md](scripts/sim.md)). Their KaTeX stylesheet arrives through `public/styles/sim.css`, which imports it
 ([sim.css:8](../public/styles/sim.css#L8)). `public/simulations.html` links the stylesheet in its `<head>`
 ([simulations.html:16](../public/simulations.html#L16)) and loads `katex.min.js` at the end of the body

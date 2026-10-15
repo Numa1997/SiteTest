@@ -121,3 +121,42 @@ Proposals for Numa (none applied):
 - **Other untriaged notes:** consider consistent apostrophes and displacement names; document the walkthrough’s required path; decide whether to expose catalog metadata; decide the dataset’s missing-value contract; make the no-JavaScript catalog complete; refresh the debug-state reference; review cross-file CSS overrides separately.
 
 Proposed CLAUDE.md sentence, with the file unchanged: “In a 1280–1600 px desktop window, Fig. 1 computes a 360 × 162 = 58 320-point grid; on a 390 px phone it computes 324 × 324 = 104 976 points. At λ = 16 field px these give 7.2 and 6.48 samples per wavelength. Rebuilding Line of 16 on desktop uses 1 866 240 sine and cosine calls.”
+
+## Independent audit, 15 October 2026
+
+The five batches above were checked by a second agent (Claude) after they were deployed: each claimed fix reproduced
+against the old commit `bad6513` and measured on the new one, in headless Chromium at 1440 × 900 and 390 × 844, locally and on
+the live site. The shortfalls found were repaired in the app first (stored version `1792069058101`), then here in commit
+[32c240c](https://github.com/Numa1997/SiteTest/commit/32c240c).
+
+**What held.**
+- The live app equalled the branch: 73 of 75 served files equal (61 byte for byte, 12 HTML pages apart from the platform's
+  injected lines); the other two differ only by platform behaviour (an extensionless file answered with the HTML fallback, and a
+  `−` escape written out as "−").
+- Nothing protected changed: `CLAUDE.md`, `AGENTS.md`, `site.css`, the build files, the project copies and QA scenario 1 are
+  identical; the home page is pixel-identical to `bad6513` at both sizes, and 497 elements keep identical computed styles.
+- Batch A: all ten fixes verified, each with the old fault reproduced first (for A1, all 3 965 slider combinations: 103 stale
+  entries before, 0 after). No regression: every page clean; Record one round still finishes on Figs. 2, 5, 6 and 7.
+- Batch B: B1, B3, B5, B6 and B8 verified by measurement; Batch C: 224 of 226 quoted code lines verbatim, the other two quote
+  real code with an inline "..."; Batches D and E: no removed name is referenced anywhere, no display reads a value a frame late,
+  and a three-way sweep of every page agrees between stored and recomputed values.
+
+**What did not hold, and was repaired** (commit 32c240c, verified live):
+
+| Item | Problem found | Repair |
+|---|---|---|
+| D, new read-backs | Fig. 3 `firstFringeReadback` and Fig. 10 `drawn.h` / `drawn.steps` return `ok: null` for "not drawn"; the panel showed that as a red "✕ The picture does not match". | `datalog.js` shows `ok: null` as a neutral line: "Not in the picture at the moment, so there is nothing to read back." (`data.css`: `.dp-check__verdict.is-na`). |
+| D, Fig. 7 metadata | `computed_in` of `A_arm`, `jx`, `jy`, `px`, `py` was changed to "sumAt()"; they are written in `draw()`'s arm loop. | Restored to "draw(), the arm loop". |
+| A5, on phones | The refusal to record at Speed 0 sat in text hidden at ≤ 640 px, and was overwritten on the next frame; on desktop it ran into the previous sentence. | The reason shows in its own `span.dp-rec__why`, at every width. |
+| A5, Fig. 7 round | At Speed 0 the round read "part of the figure, 1.00 s" (Speed clamped to 0.05); below 0.05 a round took up to about 100 s of real time. | At Speed 0 a round is the full figure; no clamp, so a round never exceeds 20 s of real time. |
+| D, Fig. 6 read-back | With no waves, the sum read-back passed on the faint zero-axis line (alpha 0.24). | Reports "not drawn" when the bench is empty. |
+| B4, Fig. 2 drift | The note kept "stays below 3 × 10⁻⁸"; measured every frame, ε reaches +4.71 × 10⁻⁸ at t = 8.665 s (the run is deterministic). | "stays within ± 5 × 10⁻⁸: its largest value is + 4.7 × 10⁻⁸, at t ≈ 8.7 s". |
+| B2, Fig. 10 figure | The new subscript p touched the Betz line at y = 38.8. | Title moved up 4 px; its box ends at y = 36.1. |
+| B5, Fig. 7 figure | The new clip cut the dashed t = 6.28 s marker at x = 698 in half. | Clip rectangle 1 px wider (ends at x = 699). |
+| B7, Portfolios | Width and height were the SVG viewBox numbers (400 520 × 188 969 …): right ratio, but 400 520 px images whenever no stylesheet loads. | 636 × 300, 419 × 300, 580 × 300, 470 × 300. With CSS the images are unchanged (506 px wide); without, 636 × 300 etc. |
+| Docs | Five line links landed on the wrong code, several plain-text line numbers were stale, new store variables were described only in paragraphs after the notes, and "Fixed on" lines cited commits by message search. | Corrected in the docs pages; commits cited by hash. |
+
+**Still open, newly noticed** (left for Numa): Fig. 4's longitudinal bead 11 fails its pixel read-back at 390 px (already so at
+`bad6513`); the lecture-note SVG labels render at about 5.7 px on a 390 px phone; Fig. 7's `Sim.live()` recomputes the effective
+α (`swMorph.checked ? morph.value : 1`) instead of reading the stored value; after A9 the last two samples of a round are two
+frames apart instead of one.

@@ -316,9 +316,9 @@ The plotted curves of Figures 3 and 4 are single SVG paths of 10–23 kB each on
 
 ## Notes for maintainers
 
-1. Fixed on 2026-10-15: §8 now gives the measured 360 × 162 desktop and 324 × 324 phone grids, 7.2 and 6.48 samples per shortest wavelength, and 1 866 240 trigonometric calls for 16 sources (commit `:/^Batch B: correct notes and layout; verify measured figures in Chromium$`).
-2. Fixed on 2026-10-15: the walkthrough consistently uses γ for the slider and g = γ/R for attenuation per pixel (commit `:/^Batch C: align walkthroughs and metadata; verify excerpts and stored values$`).
-3. Fixed on 2026-10-15: the speed readout reads stored v and its walkthrough quotes that line (commit `:/^Batch D: store computed results once; verify values and pixel readbacks$`).
-4. Fixed on 2026-10-15: the source-dot readback checks alpha before RGB (commit `:/^Batch D: store computed results once; verify values and pixel readbacks$`).
+1. Fixed on 2026-10-15: §8 now gives the measured 360 × 162 desktop and 324 × 324 phone grids, 7.2 and 6.48 samples per shortest wavelength, and 1 866 240 trigonometric calls for 16 sources (commit [74ef7d9](https://github.com/Numa1997/SiteTest/commit/74ef7d94571f467f31d2289be6c9668b6809a09f)).
+2. Fixed on 2026-10-15: the walkthrough consistently uses γ for the slider and g = γ/R for attenuation per pixel (commit [43d8238](https://github.com/Numa1997/SiteTest/commit/43d82383f4294428a1cf027f2727644ccf7dc8a5)).
+3. Fixed on 2026-10-15: the speed readout reads stored v and its walkthrough quotes that line (commit [ce3bfc4](https://github.com/Numa1997/SiteTest/commit/ce3bfc439ce40b3e8b6bd7f59af2af9404bd4997)).
+4. Fixed on 2026-10-15: the source-dot readback checks alpha before RGB (commit [ce3bfc4](https://github.com/Numa1997/SiteTest/commit/ce3bfc439ce40b3e8b6bd7f59af2af9404bd4997)).
 5. **Apostrophe.** The catalog `subject` uses "Huygens’" ([catalog.js:54](../../public/scripts/catalog.js#L54)); the page's subject line uses a straight
    apostrophe ([L40](../../public/simulations/Circular%20Wave%20Interference%20Visualization.html#L40)).

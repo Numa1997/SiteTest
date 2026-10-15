@@ -305,14 +305,14 @@ shown by [datalog.js:165](../../public/scripts/datalog.js#L165)).
 
 ## Notes for maintainers
 
-1. Fixed on 2026-10-15: the complete longAmp source line is quoted verbatim (commit `:/^Batch C: align walkthroughs and metadata; verify excerpts and stored values$`).
+1. Fixed on 2026-10-15: the complete longAmp source line is quoted verbatim (commit [43d8238](https://github.com/Numa1997/SiteTest/commit/43d82383f4294428a1cf027f2727644ccf7dc8a5)).
 2. **One name, two units.** In `draw()` the local `xi` is the screen displacement `A * s * Math.sin(...)`
    ([page:884](../../public/simulations/Transverse%20and%20longitudinal%20waves.html#L884)), while the stored `xi` on the next
    line is in medium px ([page:885](../../public/simulations/Transverse%20and%20longitudinal%20waves.html#L885)). Not a bug, but a
    trap when editing.
-3. Fixed on 2026-10-15: drawing and locators share LEFT, BAND and COMPRESSION_GAP (commit `:/^Batch D: store computed results once; verify values and pixel readbacks$`).
-4. Fixed on 2026-10-15: layout checks read stored box_w and box_h (commit `:/^Batch D: store computed results once; verify values and pixel readbacks$`).
-5. Fixed on 2026-10-15: the transverse curve includes X = 640; the drawing path ends at the final bead with zero horizontal gap (commit `:/^Batch A: fix simulation and recording faults; verify in Chromium$`).
+3. Fixed on 2026-10-15: drawing and locators share LEFT, BAND and COMPRESSION_GAP (commit [ce3bfc4](https://github.com/Numa1997/SiteTest/commit/ce3bfc439ce40b3e8b6bd7f59af2af9404bd4997)).
+4. Fixed on 2026-10-15: layout checks read stored box_w and box_h (commit [ce3bfc4](https://github.com/Numa1997/SiteTest/commit/ce3bfc439ce40b3e8b6bd7f59af2af9404bd4997)).
+5. Fixed on 2026-10-15: the transverse curve includes X = 640; the drawing path ends at the final bead with zero horizontal gap (commit [9d3175f](https://github.com/Numa1997/SiteTest/commit/9d3175f2cf50d0ad3f8792f1ee173e8ce56bab53)).
 6. **Redraw while paused.** `draw()` runs every animation frame even when paused ([page:980](../../public/simulations/Transverse%20and%20longitudinal%20waves.html#L980),
    [sim.js:181–184](../../public/scripts/sim.js#L181-L184)). This is what makes the checkboxes and Particles work while paused,
    at the cost of about 60 identical redraws a second.

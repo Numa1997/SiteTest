@@ -411,12 +411,12 @@ The page states this in `Sim.data.about` ([L1158](../../public/simulations/wind-
 
 ## Notes for maintainers
 
-1. Fixed on 2026-10-15: the note gives K = 0.5, 5 px/m airflow and the fixed 16 px / 22 px dash pattern (commit `:/^Batch B: correct notes and layout; verify measured figures in Chromium$`).
-2. Fixed on 2026-10-15: the quoted storage line includes Ic[n] and vt[n] (commit `:/^Batch C: align walkthroughs and metadata; verify excerpts and stored values$`).
-3. Fixed on 2026-10-15: w_ref is checked against the saved rpm input, including Follow the wind; all target steps recompute identically after live controls change (commit `:/^Batch A: fix simulation and recording faults; verify in Chromium$`).
-4. Fixed on 2026-10-15: the Figure 2 labels render p and opt as SVG subscripts (commit `:/^Batch B: correct notes and layout; verify measured figures in Chromium$`).
-5. Fixed on 2026-10-15: solve stores h, steps, rpm_min, rpm_max and captured_pct; displays only read them (commit `:/^Batch D: store computed results once; verify values and pixel readbacks$`).
-6. Fixed on 2026-10-15: the unread frame counter was removed (commit `:/^Batch E: remove proven unused code; verify styles, arrays and exports$`).
+1. Fixed on 2026-10-15: the note gives K = 0.5, 5 px/m airflow and the fixed 16 px / 22 px dash pattern (commit [74ef7d9](https://github.com/Numa1997/SiteTest/commit/74ef7d94571f467f31d2289be6c9668b6809a09f)).
+2. Fixed on 2026-10-15: the quoted storage line includes Ic[n] and vt[n] (commit [43d8238](https://github.com/Numa1997/SiteTest/commit/43d82383f4294428a1cf027f2727644ccf7dc8a5)).
+3. Fixed on 2026-10-15: w_ref is checked against the saved rpm input, including Follow the wind; all target steps recompute identically after live controls change (commit [9d3175f](https://github.com/Numa1997/SiteTest/commit/9d3175f2cf50d0ad3f8792f1ee173e8ce56bab53)).
+4. Fixed on 2026-10-15: the Figure 2 labels render p and opt as SVG subscripts (commit [74ef7d9](https://github.com/Numa1997/SiteTest/commit/74ef7d94571f467f31d2289be6c9668b6809a09f)).
+5. Fixed on 2026-10-15: solve stores h, steps, rpm_min, rpm_max and captured_pct; displays only read them (commit [ce3bfc4](https://github.com/Numa1997/SiteTest/commit/ce3bfc439ce40b3e8b6bd7f59af2af9404bd4997)).
+6. Fixed on 2026-10-15: the unread frame counter was removed (commit [8982ed3](https://github.com/Numa1997/SiteTest/commit/8982ed35e78161ea7cdd82ae1794f44ccfe39f3c)).
 7. **Redraw while paused.** The clock ticks every animation frame with $\Delta t = 0$ while paused
    ([sim.js:178–185](../../public/scripts/sim.js#L178-L185)) and the tick always calls `frame()`
    ([L965](../../public/simulations/wind-turbine.html#L965)), so both canvases are redrawn about 60 times a second while

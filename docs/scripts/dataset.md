@@ -195,8 +195,8 @@ None. The file reacts to nothing; it runs only when a page or the data panel cal
 
 ## Notes for maintainers
 
-1. Fixed on 2026-10-15: unused index, at, size and the Dataset constructor export were removed; shape remains for NPZ export (commit `:/^Batch E: remove proven unused code; verify styles, arrays and exports$`).
-2. Fixed on 2026-10-15: the scalar type comment includes uint8 (commit `:/^Batch C: align walkthroughs and metadata; verify excerpts and stored values$`).
+1. Fixed on 2026-10-15: unused index, at, size and the Dataset constructor export were removed; shape remains for NPZ export (commit [8982ed3](https://github.com/Numa1997/SiteTest/commit/8982ed35e78161ea7cdd82ae1794f44ccfe39f3c)).
+2. Fixed on 2026-10-15: the scalar type comment includes uint8 (commit [43d8238](https://github.com/Numa1997/SiteTest/commit/43d82383f4294428a1cf027f2727644ccf7dc8a5)).
 3. The attribute `drawn_note`, read at [datalog.js:532](../../public/scripts/datalog.js#L532), is set by no page.
 4. `ds.set` on an undeclared name throws a `TypeError` ([dataset.js:73](../../public/scripts/dataset.js#L73)) while
    `ds.get` returns `undefined`. Whether this difference is intended is not determined from the code.

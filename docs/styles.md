@@ -9,7 +9,7 @@ are byte-identical on the live site).
 | [`sim.css`](../public/styles/sim.css) | 229 | the ten simulation pages | Tokens again, the figure, controls, readouts, walkthrough; imports KaTeX's CSS and `paper.css`. |
 | [`paper.css`](../public/styles/paper.css) | 118 | simulation pages (through `sim.css`), catalog, Portfolios | Lecture notes set like LaTeX: Latin Modern, numbered equations, figures, boxes. |
 | [`catalog.css`](../public/styles/catalog.css) | 572 | catalog, Portfolios | Top bar, masthead, search bar, chips, catalog entries; switches titles to Instrument Serif. |
-| [`data.css`](../public/styles/data.css) | 357 | the ten simulation pages | The data panel and the Read values strip ([scripts/datalog.md](scripts/datalog.md)). |
+| [`data.css`](../public/styles/data.css) | 358 | the ten simulation pages | The data panel and the Read values strip ([scripts/datalog.md](scripts/datalog.md)). |
 | [`fold.css`](../public/styles/fold.css) | 168 | every page | Fold cards, header bands, toggles, Expand / Collapse all ([scripts/fold.md](scripts/fold.md)). |
 | [`portfolio.css`](../public/styles/portfolio.css) | 288 | Portfolios | The project cards. |
 
@@ -272,21 +272,21 @@ is in [scripts/datalog.md](scripts/datalog.md).
 | Buttons | `.dp-btn`, `.dp-back`, `.dp-chk`, `.dp-live` (switch) | [91–107](../public/styles/data.css#L91-L107) |
 | Variables | `.dp-instant`, `.dp-probe`, `.dp-sec` (numbered sections), `.dp-item` (symbol, dotted leader, value, unit, type badge `.dp-type--int/bool/str/array`), `.dp-thumb` | [110–159](../public/styles/data.css#L110-L159) |
 | Array view | `.dp-arr` (stats, snapshot), `.dg` grid with sticky row and column headers, `.dg__c.is-hot` | [162–192](../public/styles/data.css#L162-L192) |
-| Check view | `.dp-check` (stored value, formula with inputs, pixel), `.dp-check__verdict.is-ok/.is-bad` | [195–220](../public/styles/data.css#L195-L220) |
-| Rounds | `.dp-empty`, `.dp-rd` (chips, charts `.dp-ch`, still values, table `.dp-rd__tbl`) | [223–263](../public/styles/data.css#L223-L263) |
-| Read values | `canvas.dp-overlay` (marker layer, no pointer events), `.dp-reading` (crosshair, no text selection), `.dp-readbtn` (the caption switch), `.dp-read` (the strip under the figure) | [266–291](../public/styles/data.css#L266-L291) |
-| Explanation | `.dp-about` (`details` at the foot) | [294–301](../public/styles/data.css#L294-L301) |
+| Check view | `.dp-check` (stored value, formula with inputs, pixel), `.dp-check__verdict.is-ok/.is-bad/.is-na` (match, mismatch, nothing drawn to read back) | [195–221](../public/styles/data.css#L195-L221) |
+| Rounds | `.dp-empty`, `.dp-rd` (chips, charts `.dp-ch`, still values, table `.dp-rd__tbl`) | [224–264](../public/styles/data.css#L224-L264) |
+| Read values | `canvas.dp-overlay` (marker layer, no pointer events), `.dp-reading` (crosshair, no text selection), `.dp-readbtn` (the caption switch), `.dp-read` (the strip under the figure) | [267–292](../public/styles/data.css#L267-L292) |
+| Explanation | `.dp-about` (`details` at the foot) | [295–302](../public/styles/data.css#L295-L302) |
 
 **Breakpoints.**
 
 | Width | What changes | Lines |
 |---|---|---|
 | ≥ 1500 px | Panel 560 px wide. | [7](../public/styles/data.css#L7) |
-| ≥ 1360 px | While open, the page gets right padding of the panel's width instead of being covered. | [305–307](../public/styles/data.css#L305-L307) |
-| ≤ 640 px | The panel becomes a bottom sheet 84 % of the screen high; the tab a pill at the bottom right that slides away (`.dp-tab--away`); tighter head, recorder, tabs, items and charts. The Read values strip gets tighter too. | [288–291](../public/styles/data.css#L288-L291), [309–348](../public/styles/data.css#L309-L348) |
-| reduced motion | No slide, no pulsing, no progress animation. | [349–353](../public/styles/data.css#L349-L353) |
+| ≥ 1360 px | While open, the page gets right padding of the panel's width instead of being covered. | [306–308](../public/styles/data.css#L306-L308) |
+| ≤ 640 px | The panel becomes a bottom sheet 84 % of the screen high; the tab a pill at the bottom right that slides away (`.dp-tab--away`); tighter head, recorder, tabs, items and charts; the recorder's second sentence (`.dp-more-txt`) is hidden ([326](../public/styles/data.css#L326)). The reason a round cannot start, `.dp-rec__why`, has no rule of its own and so stays visible. The Read values strip gets tighter too. | [289–292](../public/styles/data.css#L289-L292), [310–349](../public/styles/data.css#L310-L349) |
+| reduced motion | No slide, no pulsing, no progress animation. | [350–354](../public/styles/data.css#L350-L354) |
 
-**Print** ([354–357](../public/styles/data.css#L354-L357)): panel and tab hidden, no padding for them.
+**Print** ([355–358](../public/styles/data.css#L355-L358)): panel and tab hidden, no padding for them.
 
 ## `fold.css` · fold-out sections
 
@@ -375,11 +375,11 @@ site `/src/main.ts` answers 403 (measured). The file comes from the app template
    [30](../public/styles/data.css#L30)). Measured on the Portfolios page and on Fig. 5.
 3. **`sim.css` repeats the tokens of `site.css`** ([sim.css:11–32](../public/styles/sim.css#L11-L32) against
    [site.css:7–30](../public/styles/site.css#L7-L30)); a colour change must be made in both.
-4. Fixed on 2026-10-15: globally unused note/derivation selectors, `.sc`, `.pbox--star` and `.cat__intro` were removed (commit `:/^Batch E: remove proven unused code; verify styles, arrays and exports$`). The claim that `.eq` is unused was not reproduced: sim.js generates `class="eq walk__eq"`, and the embedded rotor project also uses it. `.eq` and the walkthrough’s `open` animation remain. Cross-file catalog overrides and the protected home wine-bar rule remain.
-5. Fixed on 2026-10-15: the overridden fold display/top and phone title font-size declarations were removed (commit `:/^Batch E: remove proven unused code; verify styles, arrays and exports$`).
-6. Fixed on 2026-10-15: the five undefined tokens were replaced with their existing fallback values; compared colours are unchanged (commit `:/^Batch E: remove proven unused code; verify styles, arrays and exports$`).
-7. Fixed on 2026-10-15: an empty sorted catalog has display none and zero top margin (commit `:/^Batch B: correct notes and layout; verify measured figures in Chromium$`).
-8. Fixed on 2026-10-15: the fold-tools breakpoint matches the 980 px home breakpoint; at 970 px the margin is 48 px (commit `:/^Batch B: correct notes and layout; verify measured figures in Chromium$`).
+4. Fixed on 2026-10-15: globally unused note/derivation selectors, `.sc`, `.pbox--star` and `.cat__intro` were removed (commit [8982ed3](https://github.com/Numa1997/SiteTest/commit/8982ed35e78161ea7cdd82ae1794f44ccfe39f3c)). The claim that `.eq` is unused was not reproduced: sim.js generates `class="eq walk__eq"`, and the embedded rotor project also uses it. `.eq` and the walkthrough’s `open` animation remain. Cross-file catalog overrides and the protected home wine-bar rule remain.
+5. Fixed on 2026-10-15: the overridden fold display/top and phone title font-size declarations were removed (commit [8982ed3](https://github.com/Numa1997/SiteTest/commit/8982ed35e78161ea7cdd82ae1794f44ccfe39f3c)).
+6. Fixed on 2026-10-15: the five undefined tokens were replaced with their existing fallback values; compared colours are unchanged (commit [8982ed3](https://github.com/Numa1997/SiteTest/commit/8982ed35e78161ea7cdd82ae1794f44ccfe39f3c)).
+7. Fixed on 2026-10-15: an empty sorted catalog has display none and zero top margin (commit [74ef7d9](https://github.com/Numa1997/SiteTest/commit/74ef7d94571f467f31d2289be6c9668b6809a09f)).
+8. Fixed on 2026-10-15: the fold-tools breakpoint matches the 980 px home breakpoint; at 970 px the margin is 48 px (commit [74ef7d9](https://github.com/Numa1997/SiteTest/commit/74ef7d94571f467f31d2289be6c9668b6809a09f)).
 9. **One class name, two meanings.** `.entry` is a timeline entry in `site.css` ([390–437](../public/styles/site.css#L390-L437))
    and a catalog entry in `catalog.css` ([241](../public/styles/catalog.css#L241)); on the catalog page the timeline dot and
    hover colour apply to catalog entries until [fold.css:168](../public/styles/fold.css#L168) removes the dot. Likewise `site.css`'s
@@ -388,3 +388,6 @@ site `/src/main.ts` answers 403 (measured). The file comes from the app template
 10. **Google Fonts is fetched twice** on the catalog and Portfolios pages: `site.css` and `catalog.css` both `@import` IBM Plex
     Sans and Mono ([site.css:5](../public/styles/site.css#L5), [catalog.css:7](../public/styles/catalog.css#L7)); measured: each
     of those faces appears twice in `document.fonts`.
+11. Fixed on 2026-10-15: the check view has a third verdict, `.dp-check__verdict.is-na`
+    ([data.css:220](../public/styles/data.css#L220)): muted ink on the soft card colour inside a dashed outline, for a read-back
+    that finds nothing drawn at the moment. Before, such a case fell to the red `.is-bad` (audit repair).

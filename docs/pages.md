@@ -372,6 +372,23 @@ never to the folder: the copies are single-page apps with hash routes, and a fol
 The figure images come from each copy's `fig/` folder (for example
 [`portfolios/droplet-collection/fig/fallspeed_gk.svg`](../public/portfolios/droplet-collection/fig/fallspeed_gk.svg)).
 
+**Image sizes.** Every one of the eight `img` tags carries `width` and `height` in CSS px: the picture's own proportions at a
+height of 300 px, rounded to whole pixels. The browser uses them to reserve the right box before the picture arrives; the
+stylesheet then sets `width: 100%; height: auto` ([portfolio.css:210–214](../public/styles/portfolio.css#L210-L214)). Without
+the stylesheet the picture shows at exactly these sizes. Droplet Collection
+([portfolios.html:128](../public/portfolios.html#L128), [132](../public/portfolios.html#L132),
+[136](../public/portfolios.html#L136), [140](../public/portfolios.html#L140)):
+
+| Picture | SVG `viewBox` (pt) | `width` × `height` (css px) | Ratio error from rounding |
+|---|---|---|---|
+| `fallspeed_gk.svg` | 400.52 × 188.969 | 636 × 300 | +0.02 % |
+| `ecoll_map.svg` | 295.522 × 211.745 | 419 × 300 | +0.07 % |
+| `w2_spectra.svg` | 405.74 × 209.972 | 580 × 300 | +0.05 % |
+| `golovin.svg` | 309.8 × 197.732 | 470 × 300 | −0.01 % |
+
+Rotor Pendula's four use the same rule: 648, 660, 715 and 655 × 300 ([228](../public/portfolios.html#L228),
+[232](../public/portfolios.html#L232), [236](../public/portfolios.html#L236), [240](../public/portfolios.html#L240)).
+
 **What fold.js does here.** `portfolios()` ([fold.js:375–396](../public/scripts/fold.js#L375-L396)): every `.proj__part`
 becomes a level-2 fold with its `h3` as header and gets the id `<project id>-part-<n>` when it has none (measured:
 `droplet-collection-part-1` … `-4`, `rotor-pendula-part-1` … `-4`). Then the band and the `h2` are removed and replaced by a
@@ -399,7 +416,8 @@ shows as TeX source between `\(` and `\)` (eight such formulas in part 1.1 alone
    `p` and last `span` (they become the counts line), the abstract, the four `dt`/`dd` pairs and the buttons.
 3. Number the parts `3.1`, `3.2`, … in `span.psub__n`; give each `h3` an `id` and the `section` an `aria-labelledby`.
 4. Link only to `portfolios/<name>/index.html#/<route>` and take figures from `portfolios/<name>/fig/`; give each `img` the
-   `width` and `height` of the picture's own proportions.
+   `width` and `height` of the picture's own proportions in CSS px, at a height of 300, never the raw `viewBox` numbers
+   (see **Image sizes** above).
 5. Update the page `description` ([9](../public/portfolios.html#L9)) and the home page's research intro
    ([index.html:234–239](../index.html#L234-L239)), which name the projects.
 
@@ -434,10 +452,10 @@ file. To keep a path out of search engines, add a `Disallow: /path` line under `
    the simulations page "lists them all by field, with the question each one answers"
    ([index.html:284–285](../index.html#L284-L285)); the catalog now lists them in figure order without grouping
    ([simulations.html:231–233](../public/simulations.html#L231-L233)), and catalog entries have no question field.
-3. Fixed on 2026-10-15: the unused home stop function and its write-only request id were removed (commit `:/^Batch E: remove proven unused code; verify styles, arrays and exports$`).
+3. Fixed on 2026-10-15: the unused home stop function and its write-only request id were removed (commit [8982ed3](https://github.com/Numa1997/SiteTest/commit/8982ed35e78161ea7cdd82ae1794f44ccfe39f3c)).
 4. **The catalog's `noscript` points to the home page for the list** ([simulations.html:75–76](../public/simulations.html#L75-L76)),
    which has only Figs. 1–8.
-5. Fixed on 2026-10-15: the permanently hidden catalog intro and its CSS were removed (commit `:/^Batch E: remove proven unused code; verify styles, arrays and exports$`).
+5. Fixed on 2026-10-15: the permanently hidden catalog intro and its CSS were removed (commit [8982ed3](https://github.com/Numa1997/SiteTest/commit/8982ed35e78161ea7cdd82ae1794f44ccfe39f3c)).
 6. **`window.__catalog.state` goes stale** after "Show all simulations": the `#clear` handler assigns a new object to `state`
    ([simulations.html:327](../public/simulations.html#L327)) while `__catalog` keeps the first one
    ([349](../public/simulations.html#L349)). Measured: after clearing `?q=zzzz`, `__catalog.state.q` still reads "zzzz". Nothing
@@ -449,6 +467,12 @@ file. To keep a path out of search engines, add a `Disallow: /path` line under `
 8. **AGENTS.md contradicted itself on the catalog layout:** its Simulations-page paragraph said "in one grid", while the Folds
    paragraph ([22–24](../AGENTS.md#L22-L24)) and the code ([fold.css:153](../public/styles/fold.css#L153)) give one column of
    fold cards. Corrected on 14 October 2026 ([AGENTS.md:27–30](../AGENTS.md#L27-L30)).
-9. Fixed on 2026-10-15: the four Droplet Collection image attributes use integer ratios exactly equal to their SVG viewBoxes (commit `:/^Batch B: correct notes and layout; verify measured figures in Chromium$`).
+9. Fixed on 2026-10-15: the four Droplet Collection image attributes use integer ratios exactly equal to their SVG viewBoxes (commit [74ef7d9](https://github.com/Numa1997/SiteTest/commit/74ef7d94571f467f31d2289be6c9668b6809a09f)).
+   That fix copied the viewBox numbers times 1000 (for example 400520 × 188969), so with no stylesheet the pictures came out
+   295 522 to 405 740 px wide. Replaced by note 11.
 10. **Two favicons.** The home page draws "N" ([index.html:19](../index.html#L19)), the other two pages a bold "NK"
     ([simulations.html:22](../public/simulations.html#L22), [portfolios.html:23](../public/portfolios.html#L23)).
+11. Fixed on 2026-10-15: the four Droplet Collection images carry `width` × `height` of 636 × 300, 419 × 300, 580 × 300 and
+    470 × 300 css px, the SVGs' proportions ([portfolios.html:128–140](../public/portfolios.html#L128-L140); table under
+    **Image sizes**). Before, they were the `viewBox` numbers times 1000 (400520 × 188969 and the like), which made the pictures
+    295 522 to 405 740 px wide when no stylesheet loads (audit repair).

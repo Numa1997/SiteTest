@@ -165,7 +165,7 @@ In all: 72 steps. The header comments of [dft.js:1-3](../../public/scripts/walk/
 
 ## Notes for maintainers
 
-1. Fixed on 2026-10-15: the transverse excerpt quotes the complete source line, without the invented comment (commit `:/^Batch C: align walkthroughs and metadata; verify excerpts and stored values$`).
+1. Fixed on 2026-10-15: the transverse excerpt quotes the complete source line, without the invented comment (commit [43d8238](https://github.com/Numa1997/SiteTest/commit/43d82383f4294428a1cf027f2727644ccf7dc8a5)).
 2. Because the file is loaded from the relative path `../scripts/walk/` ([sim.js:408](../../public/scripts/sim.js#L408)), a page
    that is not one folder below `public/` could not use a walkthrough without changing `sim.js` (see [sim.md](sim.md)).
 3. The "Now" column is refreshed every 200 ms, 5 times a second, as long as the page is open, also while the walkthrough is

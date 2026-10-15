@@ -376,15 +376,15 @@ the data panel prints. In detail:
 
 ## Notes for maintainers
 
-1. Fixed on 2026-10-15: both log axes read 0.1, 0.32, 1, 3.2, 10; their endpoints agree with gains 1.01005 and 0.0101005 (commit `:/^Batch B: correct notes and layout; verify measured figures in Chromium$`).
-2. Fixed on 2026-10-15: both phase-lag references round the stored 25.34617594° to 25.3° (commit `:/^Batch B: correct notes and layout; verify measured figures in Chromium$`).
-3. Fixed on 2026-10-15: the note gives the actual geometry and measured desktop/phone fractions (commit `:/^Batch B: correct notes and layout; verify measured figures in Chromium$`).
-4. Fixed on 2026-10-15: the readout and walkthrough read stored phi_deg (commit `:/^Batch D: store computed results once; verify values and pixel readbacks$`).
-5. Fixed on 2026-10-15: the unread frame counter and overwritten sw initializer were removed (commit `:/^Batch E: remove proven unused code; verify styles, arrays and exports$`).
+1. Fixed on 2026-10-15: both log axes read 0.1, 0.32, 1, 3.2, 10; their endpoints agree with gains 1.01005 and 0.0101005 (commit [74ef7d9](https://github.com/Numa1997/SiteTest/commit/74ef7d94571f467f31d2289be6c9668b6809a09f)).
+2. Fixed on 2026-10-15: both phase-lag references round the stored 25.34617594° to 25.3° (commit [74ef7d9](https://github.com/Numa1997/SiteTest/commit/74ef7d94571f467f31d2289be6c9668b6809a09f)).
+3. Fixed on 2026-10-15: the note gives the actual geometry and measured desktop/phone fractions (commit [74ef7d9](https://github.com/Numa1997/SiteTest/commit/74ef7d94571f467f31d2289be6c9668b6809a09f)).
+4. Fixed on 2026-10-15: the readout and walkthrough read stored phi_deg (commit [ce3bfc4](https://github.com/Numa1997/SiteTest/commit/ce3bfc439ce40b3e8b6bd7f59af2af9404bd4997)).
+5. Fixed on 2026-10-15: the unread frame counter and overwritten sw initializer were removed (commit [8982ed3](https://github.com/Numa1997/SiteTest/commit/8982ed35e78161ea7cdd82ae1794f44ccfe39f3c)).
 6. **Redraw while paused.** The clock calls the tick on every animation frame with $\Delta t = 0$ while paused
    ([sim.js:178–185](../../public/scripts/sim.js#L178-L185)), and the tick always calls `frame()`
    ([L916](../../public/simulations/driven-oscillator.html#L916)), so a paused page still redraws about 60 times a second
    (about 1.5 ms per frame measured) and rewrites `#cap-t` each time ([L906](../../public/simulations/driven-oscillator.html#L906)).
-7. Fixed on 2026-10-15: the note gives the measured default solve time of 9.5–12.4 ms and states that timing depends on the machine (commit `:/^Batch B: correct notes and layout; verify measured figures in Chromium$`).
+7. Fixed on 2026-10-15: the note gives the measured default solve time of 9.5–12.4 ms and states that timing depends on the machine (commit [74ef7d9](https://github.com/Numa1997/SiteTest/commit/74ef7d94571f467f31d2289be6c9668b6809a09f)).
 8. **AGENTS.md** said the load order dataset.js → page → datalog.js holds for "all eight figures"; this page (Fig. 9)
    follows it too. Corrected to "all ten figures" on 14 October 2026.

@@ -344,13 +344,13 @@ The page states this in its `about` paragraph, shown in the data panel
 
 ## Notes for maintainers
 
-1. Fixed on 2026-10-15: all four real SVG clip paths have unique ids; computed clip-path is active, with identical phone pixels and only 28 edge pixels changed on desktop (commit `:/^Batch B: correct notes and layout; verify measured figures in Chromium$`).
-2. Fixed on 2026-10-15: the morph gap description says every sample (commit `:/^Batch C: align walkthroughs and metadata; verify excerpts and stored values$`).
-3. Fixed on 2026-10-15: the multiplier is named live[i].mul (commit `:/^Batch C: align walkthroughs and metadata; verify excerpts and stored values$`).
-4. Fixed on 2026-10-15: the walkthrough reads stored effective alpha; Smooth morphing off shows 1.00 even with the slider at 0.08 (commit `:/^Batch C: align walkthroughs and metadata; verify excerpts and stored values$`).
-5. Fixed on 2026-10-15: sumAt writes each live angle into the allocated ang array; draw does not recompute it (commit `:/^Batch D: store computed results once; verify values and pixel readbacks$`).
-6. Fixed on 2026-10-15: Speed 0 has an explicit recording guard and waiting reason; a running round resumes after Speed is raised (commit `:/^Batch A: fix simulation and recording faults; verify in Chromium$`).
-7. Fixed on 2026-10-15: the uncalled nz helper was removed (commit `:/^Batch E: remove proven unused code; verify styles, arrays and exports$`).
+1. Fixed on 2026-10-15: all four real SVG clip paths have unique ids; computed clip-path is active, with identical phone pixels and only 28 edge pixels changed on desktop (commit [74ef7d9](https://github.com/Numa1997/SiteTest/commit/74ef7d94571f467f31d2289be6c9668b6809a09f)).
+2. Fixed on 2026-10-15: the morph gap description says every sample (commit [43d8238](https://github.com/Numa1997/SiteTest/commit/43d82383f4294428a1cf027f2727644ccf7dc8a5)).
+3. Fixed on 2026-10-15: the multiplier is named live[i].mul (commit [43d8238](https://github.com/Numa1997/SiteTest/commit/43d82383f4294428a1cf027f2727644ccf7dc8a5)).
+4. Fixed on 2026-10-15: the walkthrough reads stored effective alpha; Smooth morphing off shows 1.00 even with the slider at 0.08 (commit [43d8238](https://github.com/Numa1997/SiteTest/commit/43d82383f4294428a1cf027f2727644ccf7dc8a5)).
+5. Fixed on 2026-10-15: sumAt writes each live angle into the allocated ang array; draw does not recompute it (commit [ce3bfc4](https://github.com/Numa1997/SiteTest/commit/ce3bfc439ce40b3e8b6bd7f59af2af9404bd4997)).
+6. Fixed on 2026-10-15: Speed 0 has an explicit recording guard and waiting reason; a running round resumes after Speed is raised (commit [9d3175f](https://github.com/Numa1997/SiteTest/commit/9d3175f2cf50d0ad3f8792f1ee173e8ce56bab53)).
+7. Fixed on 2026-10-15: the uncalled nz helper was removed (commit [8982ed3](https://github.com/Numa1997/SiteTest/commit/8982ed35e78161ea7cdd82ae1794f44ccfe39f3c)).
 8. **Replay does not wrap phases.** `perform()` moves each phase linearly toward the snapshot
    ([L1204](../../public/simulations/phasor-sums.html#L1204)), so a recorded change from 6.2 to 0.1 rad sweeps the arm
    backwards through almost a full turn over about 50 ms.

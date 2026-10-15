@@ -365,11 +365,11 @@ Google Fonts; `../styles/sim.css`, `../styles/data.css`, `../styles/fold.css`; a
 
 ## Notes for maintainers
 
-1. Fixed on 2026-10-15: an empty bench rewrites X, y_sum = 0 and py_sum = mid1 instead of retaining the preceding curve (commit `:/^Batch A: fix simulation and recording faults; verify in Chromium$`).
-2. Fixed on 2026-10-15: the repeat uses every stored ν digit; ν = (1, 0.9975) Hz gives the 20 s cap (commit `:/^Batch A: fix simulation and recording faults; verify in Chromium$`).
-3. Fixed on 2026-10-15: the note describes the current 0–6 Hz caption (commit `:/^Batch B: correct notes and layout; verify measured figures in Chromium$`).
-4. Fixed on 2026-10-15: the Beats and Square excerpts preserve their source line layout (commit `:/^Batch C: align walkthroughs and metadata; verify excerpts and stored values$`).
-5. Fixed on 2026-10-15: the amplitude readout reads sum_A (commit `:/^Batch D: store computed results once; verify values and pixel readbacks$`).
-6. Fixed on 2026-10-15: component readback checks alpha and the wave colour, accepting other colours only at stored crossings; white now fails (commit `:/^Batch D: store computed results once; verify values and pixel readbacks$`).
-7. Fixed on 2026-10-15: frames is incremented before storage (commit `:/^Batch D: store computed results once; verify values and pixel readbacks$`).
-8. Fixed on 2026-10-15: the Square preset stores 0.4, 1.2, 2 and 2.8 without extra decimal tails (commit `:/^Batch D: store computed results once; verify values and pixel readbacks$`).
+1. Fixed on 2026-10-15: an empty bench rewrites X, y_sum = 0 and py_sum = mid1 instead of retaining the preceding curve (commit [9d3175f](https://github.com/Numa1997/SiteTest/commit/9d3175f2cf50d0ad3f8792f1ee173e8ce56bab53)).
+2. Fixed on 2026-10-15: the repeat uses every stored ν digit; ν = (1, 0.9975) Hz gives the 20 s cap (commit [9d3175f](https://github.com/Numa1997/SiteTest/commit/9d3175f2cf50d0ad3f8792f1ee173e8ce56bab53)).
+3. Fixed on 2026-10-15: the note describes the current 0–6 Hz caption (commit [74ef7d9](https://github.com/Numa1997/SiteTest/commit/74ef7d94571f467f31d2289be6c9668b6809a09f)).
+4. Fixed on 2026-10-15: the Beats and Square excerpts preserve their source line layout (commit [43d8238](https://github.com/Numa1997/SiteTest/commit/43d82383f4294428a1cf027f2727644ccf7dc8a5)).
+5. Fixed on 2026-10-15: the amplitude readout reads sum_A (commit [ce3bfc4](https://github.com/Numa1997/SiteTest/commit/ce3bfc439ce40b3e8b6bd7f59af2af9404bd4997)).
+6. Fixed on 2026-10-15: component readback checks alpha and the wave colour, accepting other colours only at stored crossings; white now fails (commit [ce3bfc4](https://github.com/Numa1997/SiteTest/commit/ce3bfc439ce40b3e8b6bd7f59af2af9404bd4997)).
+7. Fixed on 2026-10-15: frames is incremented before storage (commit [ce3bfc4](https://github.com/Numa1997/SiteTest/commit/ce3bfc439ce40b3e8b6bd7f59af2af9404bd4997)).
+8. Fixed on 2026-10-15: the Square preset stores 0.4, 1.2, 2 and 2.8 without extra decimal tails (commit [ce3bfc4](https://github.com/Numa1997/SiteTest/commit/ce3bfc439ce40b3e8b6bd7f59af2af9404bd4997)).

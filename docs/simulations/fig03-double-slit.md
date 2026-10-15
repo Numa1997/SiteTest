@@ -306,16 +306,16 @@ middle of line 625 (step 2) and the end of line 758 (step 7).
 
 ## Notes for maintainers
 
-1. Fixed on 2026-10-15: the fringe loop fills the tolerance-counted array length; b = 40 px, λ = 20 px gives sin θ₁ = 0.5 and θ₁ = 30° (commit `:/^Batch A: fix simulation and recording faults; verify in Chromium$`).
+1. Fixed on 2026-10-15: the fringe loop fills the tolerance-counted array length; b = 40 px, λ = 20 px gives sin θ₁ = 0.5 and θ₁ = 30° (commit [9d3175f](https://github.com/Numa1997/SiteTest/commit/9d3175f2cf50d0ad3f8792f1ee173e8ce56bab53)).
 2. **Reduced motion.** `Sim.clock` starts paused when the system asks for reduced motion ([sim.js:177](../../public/scripts/sim.js#L177)),
    but the "Animate wavelets" checkbox is `checked` in the HTML ([page:107](../../public/simulations/Interactive%20Double-Slit%20Experiment%20Visualization.html#L107))
    and nothing syncs it to the clock. Seen in Chromium with `reducedMotion: 'reduce'`: the box is ticked, `Sim.data.playing()`
    is false. The first click on the switch does nothing visible (it sets the clock to paused again).
-3. Fixed on 2026-10-15: the unread frame counter was removed (commit `:/^Batch E: remove proven unused code; verify styles, arrays and exports$`).
-4. Fixed on 2026-10-15: the note gives the measured 500-unit intensity plot width (commit `:/^Batch B: correct notes and layout; verify measured figures in Chromium$`).
-5. Fixed on 2026-10-15: a complete Chromium slider sweep gives 1.3500311979441904 × 10⁻¹³ px; the note rounds the upper bound to 1.4 × 10⁻¹³ px (commit `:/^Batch B: correct notes and layout; verify measured figures in Chromium$`).
-6. Fixed on 2026-10-15: the walkthrough reads stored sin_theta1, theta1 and phi_pi (commit `:/^Batch D: store computed results once; verify values and pixel readbacks$`).
-7. Fixed on 2026-10-15: compute stores L1, L2 and ds beside their calculation and stores derived values before drawing (commit `:/^Batch D: store computed results once; verify values and pixel readbacks$`).
+3. Fixed on 2026-10-15: the unread frame counter was removed (commit [8982ed3](https://github.com/Numa1997/SiteTest/commit/8982ed35e78161ea7cdd82ae1794f44ccfe39f3c)).
+4. Fixed on 2026-10-15: the note gives the measured 500-unit intensity plot width (commit [74ef7d9](https://github.com/Numa1997/SiteTest/commit/74ef7d94571f467f31d2289be6c9668b6809a09f)).
+5. Fixed on 2026-10-15: a complete Chromium slider sweep gives 1.3500311979441904 × 10⁻¹³ px; the note rounds the upper bound to 1.4 × 10⁻¹³ px (commit [74ef7d9](https://github.com/Numa1997/SiteTest/commit/74ef7d94571f467f31d2289be6c9668b6809a09f)).
+6. Fixed on 2026-10-15: the walkthrough reads stored sin_theta1, theta1 and phi_pi (commit [ce3bfc4](https://github.com/Numa1997/SiteTest/commit/ce3bfc439ce40b3e8b6bd7f59af2af9404bd4997)).
+7. Fixed on 2026-10-15: compute stores L1, L2 and ds beside their calculation and stores derived values before drawing (commit [ce3bfc4](https://github.com/Numa1997/SiteTest/commit/ce3bfc439ce40b3e8b6bd7f59af2af9404bd4997)).
 
 Batch D store additions: `sin_theta1 = λ/b`, `theta1 = asin(λ/b)` in degrees (NaN when λ > b), and `phi_pi = phi/π`. All three are scalars stored in `storeDerived(G)`, called by `compute()`. `firstFringeReadback()` reads the first-order label’s SVG x coordinate; outside the 0°–30° plot it reports that no label is drawn. L1, L2 and phase also have DOM readbacks.
 

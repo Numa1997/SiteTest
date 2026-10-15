@@ -230,15 +230,15 @@ Listeners: `window` `error` ([sim.js:230](../../public/scripts/sim.js#L230)); `D
 
 ## How to change it safely
 
-- Keep the load order `fold.js` → `sim.js` → `dataset.js` → page script → `datalog.js`. Line 490 creates `Sim` afresh, so
+- Keep the load order `fold.js` → `sim.js` → `dataset.js` → page script → `datalog.js`. [Line 415](../../public/scripts/sim.js#L415) creates `Sim` afresh, so
   anything attached to `Sim` before it is lost.
-- Adding a helper: define it inside the IIFE and add it to the object at lines 490-504. Removing or renaming one: grep the
+- Adding a helper: define it inside the IIFE and add it to the object at [lines 415-428](../../public/scripts/sim.js#L415-L428). Removing or renaming one: grep the
   ten pages first (the counts above).
-- `readPixel` must keep refusing transparent pixels (line 130); the Check of Figs. 9 and 10 relies on it to tell "drawn" from
+- `readPixel` must keep refusing transparent pixels ([line 130](../../public/scripts/sim.js#L130)); the Check of Figs. 9 and 10 relies on it to tell "drawn" from
   "not drawn".
 - `tex()` understands only `_{…}`, `^{…}` and `\mathrm{…}` without nested braces. A label with nesting needs a parser
   change, not a different string.
-- The walkthrough HTML (lines 324-376) is styled by `sim.css`; class names are a contract with the stylesheet. The step and
+- The walkthrough HTML ([lines 250-302](../../public/scripts/sim.js#L250-L302)) is styled by `sim.css`; class names are a contract with the stylesheet. The step and
   symbol fields are inserted as HTML except `where` and the code column of `syms`, which are escaped
   ([sim.js:290](../../public/scripts/sim.js#L290), [sim.js:295](../../public/scripts/sim.js#L295)).
 - After a change, open all ten pages and check: no banner, the lecture note typeset, every "Now" cell filled (a missing key
@@ -247,8 +247,8 @@ Listeners: `window` `error` ([sim.js:230](../../public/scripts/sim.js#L230)); `D
 
 ## Notes for maintainers
 
-1. Fixed on 2026-10-15: the unused derivation-card builder, boot call and unused selectors were removed; active equation and walkthrough styles remain (commit `:/^Batch E: remove proven unused code; verify styles, arrays and exports$`).
-2. Fixed on 2026-10-15: the unused isInk helper and export were removed (commit `:/^Batch E: remove proven unused code; verify styles, arrays and exports$`).
+1. Fixed on 2026-10-15: the unused derivation-card builder, boot call and unused selectors were removed; active equation and walkthrough styles remain (commit [8982ed3](https://github.com/Numa1997/SiteTest/commit/8982ed35e78161ea7cdd82ae1794f44ccfe39f3c)).
+2. Fixed on 2026-10-15: the unused isInk helper and export were removed (commit [8982ed3](https://github.com/Numa1997/SiteTest/commit/8982ed35e78161ea7cdd82ae1794f44ccfe39f3c)).
 3. The walkthrough file is loaded from the relative path `'../scripts/walk/'` ([sim.js:408](../../public/scripts/sim.js#L408)),
    while KaTeX uses `ROOT` ([sim.js:352](../../public/scripts/sim.js#L352)). A page that is not exactly one folder below
    `public/` would fail to load its walkthrough.
