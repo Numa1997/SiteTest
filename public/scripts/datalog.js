@@ -526,7 +526,7 @@
         if (rd) {
             h += '<dl class="dp-check__meta"><div class="wide"><dt>' + esc(rd.what) + '</dt><dd>' + esc(rd.drawn) + '</dd></div>' +
                 '<div class="wide"><dt>expected from the store</dt><dd>' + esc(rd.expected) + '</dd></div></dl>' +
-                '<p class="dp-check__verdict ' + (rd.ok ? 'is-ok' : 'is-bad') + '">' + (rd.ok ? CHK + ' ' : '✕ ') + esc(rd.ok ? 'The picture shows this value.' : 'The picture does not match.') + '</p>' +
+                '<p class="dp-check__verdict ' + (rd.ok === null ? 'is-na' : rd.ok ? 'is-ok' : 'is-bad') + '">' + (rd.ok === null ? '' : rd.ok ? CHK + ' ' : '✕ ') + esc(rd.ok === null ? 'Not in the picture at the moment, so there is nothing to read back.' : rd.ok ? 'The picture shows this value.' : 'The picture does not match.') + '</p>' +
                 (rd.note ? '<p class="dp-check__note">' + rd.note + '</p>' : '');
         } else {
             h += '<p class="dp-check__note">' + (a.drawn_note ? a.drawn_note : 'This value is not drawn directly; it enters the picture through the arrays computed from it.') + '</p>';
@@ -751,7 +751,7 @@
         var lab = safe(R.label, '') || 'ten seconds of play';
         var txt = 'One round = <b>' + lab + '</b>.<span class="dp-more-txt"> Every frame of it is caught' + (spec.inspect ? ', with ' + (held.ref ? 'the point you pinned' : 'a point the page chooses; pin another with Read values') : '') + '; then the recording stops by itself.</span>';
         var why = R.blocked ? safe(R.blocked, null) : null;
-        if (why) txt += '<span class="dp-more-txt"><b>Not now.</b> ' + esc(why) + '</span>';
+        if (why) txt += ' <span class="dp-rec__why"><b>Not now.</b> ' + esc(why) + '</span>';
         if (txt !== recWhat._h) { recWhat.innerHTML = txt; recWhat._h = txt; }
     }
     function scalarNames() { return ds.order.filter(isNumScalar); }

@@ -217,6 +217,7 @@
 .dp-check__verdict svg { flex-shrink: 0; margin-top: 4px; }
 .dp-check__verdict.is-ok { color: var(--ink); background: var(--tan); border: 1px solid #e3cfa3; }
 .dp-check__verdict.is-bad { color: #fff; background: var(--accent); }
+.dp-check__verdict.is-na { color: var(--ink-3); background: var(--card-soft); border: 1px dashed var(--rule); }
 .dp-check__note { margin: 10px 0 0; font-size: 14.5px; line-height: 1.55; color: var(--ink-3); }
 
 /* ---------- Rounds ---------- */

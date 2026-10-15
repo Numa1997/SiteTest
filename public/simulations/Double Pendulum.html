@@ -348,7 +348,7 @@
                         <p>The error made in one step shrinks like \(h^5\) and the error accumulated over a fixed time like \(h^4\): halving the step makes the result sixteen times more accurate. The page uses \(h = 1/600\ \mathrm{s}\), ten steps per frame at sixty frames a second.</p>
                         <ul>
                             <li>Each frame advances by the real time elapsed multiplied by the <em>Time scale</em>, in steps of \(h\), with a 600-step guard. The clock caps a frame at 0.05 s and the Time scale at 1.5, so even including the carried remainder no more than 46 steps can be requested; the 600-step guard cannot act.</li>
-                            <li>RK4 does not conserve energy exactly, which is why the <em>Drift</em> readout is there. It measures the signed difference \(E - E_0\) against the depth of the potential well, \(E_\text{scale} = (m_1+m_2)\,g\,l_1 + m_2\,g\,l_2\), rather than against \(E_0\), which can be close to zero. Over the first 20 s of the default start it stays below \(3\times10^{-8}\).</li>
+                            <li>RK4 does not conserve energy exactly, which is why the <em>Drift</em> readout is there. It measures the signed difference \(E - E_0\) against the depth of the potential well, \(E_\text{scale} = (m_1+m_2)\,g\,l_1 + m_2\,g\,l_2\), rather than against \(E_0\), which can be close to zero. Over the first 20 s of the default start it stays within \(\pm 5\times10^{-8}\): its largest value is \(+4.7\times10^{-8}\), at \(t \approx 8.7\) s.</li>
                             <li>Moving a mass, length, angle or angular-velocity slider restarts the motion from those values; the Time scale slider does not.</li>
                         </ul>
                     </section>

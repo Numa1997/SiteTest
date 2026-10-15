@@ -543,7 +543,7 @@
                         <figure class="pfig">
                             <div class="pfig__plate">
                                 <svg viewBox="0 0 720 326" role="img" xmlns="http://www.w3.org/2000/svg">
-                                <defs><clipPath id="f7clipc4"><rect x="64.0" y="18.0" width="634.0" height="236.0"/></clipPath></defs>
+                                <defs><clipPath id="f7clipc4"><rect x="64.0" y="18.0" width="635.0" height="236.0"/></clipPath></defs>
                                 <line x1="64.0" x2="698.0" y1="254.0" y2="254.0" stroke="#eee6d9" stroke-width="1"/>
                                 <text class="tick" x="56.0" y="258.0" text-anchor="end">0</text>
                                 <line x1="64.0" x2="698.0" y1="184.6" y2="184.6" stroke="#eee6d9" stroke-width="1"/>
@@ -722,14 +722,14 @@
         ds.var('absz', [], 'float', { symbol: '|z|', long_name: 'distance of the pen from the origin', computed_in: 'draw()', formula: '√(x² + y²)', digits: 5 });
         ds.var('absz2', [], 'float', { symbol: '|z|²', long_name: 'squared', computed_in: 'draw()', formula: 'x² + y²', digits: 5 });
         ds.var('E', [], 'float', { symbol: 'Σ Aₖ²', long_name: 'the time average of |z|² when no two frequencies coincide', computed_in: 'readouts()', formula: 'Σ Aₖ²', digits: 5 });
-        ds.var('A_arm', ['arm'], Float64Array, { symbol: 'A′ₖ drawn', long_name: 'radius of each arm as drawn', computed_in: 'sumAt(), with the live-view output array', formula: 'A′ₖ', digits: 4, updates: 'every frame in the live view' });
+        ds.var('A_arm', ['arm'], Float64Array, { symbol: 'A′ₖ drawn', long_name: 'radius of each arm as drawn', computed_in: 'draw(), the arm loop', formula: 'A′ₖ', digits: 4, updates: 'every frame in the live view' });
         ds.var('ang', ['arm'], Float64Array, { symbol: 'θₖ', units: 'rad', long_name: 'angle of each arm', computed_in: 'sumAt(), with the live-view output array', formula: 'θ = ω t + φ', digits: 4, updates: 'every frame in the live view' });
         ds.var('vx', ['arm'], Float64Array, { symbol: 'Δxₖ', long_name: 'each arm, real part', computed_in: 'sumAt(), read in draw()', formula: 'A′ cos θ', digits: 5, updates: 'every frame in the live view' });
         ds.var('vy', ['arm'], Float64Array, { symbol: 'Δyₖ', long_name: 'each arm, imaginary part', computed_in: 'sumAt(), read in draw()', formula: 'A′ sin θ', digits: 5, updates: 'every frame in the live view' });
-        ds.var('jx', ['arm'], Float64Array, { symbol: 'Re zₖ', long_name: 'joint after each arm, the partial sum', computed_in: 'sumAt(), with the live-view output array', formula: 'Σ<sub>m ≤ k</sub> Δx_m', digits: 5, updates: 'every frame in the live view' });
-        ds.var('jy', ['arm'], Float64Array, { symbol: 'Im zₖ', long_name: 'joint after each arm, the partial sum', computed_in: 'sumAt(), with the live-view output array', formula: 'Σ<sub>m ≤ k</sub> Δy_m', digits: 5, updates: 'every frame in the live view' });
-        ds.var('px', ['arm'], Float64Array, { symbol: 'joint x px', units: 'css px', long_name: 'screen position of each joint', computed_in: 'sumAt(), with the live-view output array', formula: 'previous joint + Δx · scale', digits: 2, updates: 'every frame in the live view' });
-        ds.var('py', ['arm'], Float64Array, { symbol: 'joint y px', units: 'css px', long_name: 'screen position of each joint', computed_in: 'sumAt(), with the live-view output array', formula: 'previous joint − Δy · scale', digits: 2, updates: 'every frame in the live view' });
+        ds.var('jx', ['arm'], Float64Array, { symbol: 'Re zₖ', long_name: 'joint after each arm, the partial sum', computed_in: 'draw(), the arm loop', formula: 'Σ<sub>m ≤ k</sub> Δx_m', digits: 5, updates: 'every frame in the live view' });
+        ds.var('jy', ['arm'], Float64Array, { symbol: 'Im zₖ', long_name: 'joint after each arm, the partial sum', computed_in: 'draw(), the arm loop', formula: 'Σ<sub>m ≤ k</sub> Δy_m', digits: 5, updates: 'every frame in the live view' });
+        ds.var('px', ['arm'], Float64Array, { symbol: 'joint x px', units: 'css px', long_name: 'screen position of each joint', computed_in: 'draw(), the arm loop', formula: 'previous joint + Δx · scale', digits: 2, updates: 'every frame in the live view' });
+        ds.var('py', ['arm'], Float64Array, { symbol: 'joint y px', units: 'css px', long_name: 'screen position of each joint', computed_in: 'draw(), the arm loop', formula: 'previous joint − Δy · scale', digits: 2, updates: 'every frame in the live view' });
         ds.var('tip_px', [], 'float', { symbol: 'pen x px', units: 'css px', long_name: 'screen position of the pen', computed_in: 'draw()', formula: 'c_x + x · scale', digits: 2 });
         ds.var('tip_py', [], 'float', { symbol: 'pen y px', units: 'css px', long_name: 'screen position of the pen', computed_in: 'draw()', formula: 'c_y − y · scale', digits: 2 });
         ds.var('G', [], 'int', { symbol: 'G', long_name: 'gcd of 100·ω over the active circles', computed_in: 'structure()', formula: 'gcd(round(100 ωₖ))', digits: 0 });
@@ -1363,8 +1363,8 @@
         function armInputs(i) { return [['k', i + 1, '', 0], ['A′', ds.get('A_arm')[i], '', 5], ['θ', ds.get('ang')[i], 'rad', 5]]; }
         /* one round: the figure closes after 2π / g of phasor time; at most 20 s of real time */
         function phasorRound() {
-            var g = ds.get('g'), storedSpeed = ds.get('sf'), sf = Math.max(typeof storedSpeed === 'number' ? storedSpeed : 1, 0.05), T = g > 0 ? 2 * Math.PI / g : 2 * Math.PI;
-            return Math.min(T, 20 * sf);
+            var g = ds.get('g'), storedSpeed = ds.get('sf'), sf = typeof storedSpeed === 'number' ? storedSpeed : 1, T = g > 0 ? 2 * Math.PI / g : 2 * Math.PI;
+            return sf > 0 ? Math.min(T, 20 * sf) : T;
         }
         Sim.data = {
             ds: ds, kicker: 'Fig. 7 · data', file: 'fig7-phasor-sums',
