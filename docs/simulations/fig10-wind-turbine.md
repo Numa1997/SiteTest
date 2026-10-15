@@ -426,3 +426,8 @@ The page states this in `Sim.data.about` ([L1158](../../public/simulations/wind-
    follows it too. Corrected to "all ten figures" on 14 October 2026.
 
 Batch D store additions in `solve()`: `h` (s), `steps` (count), `rpm_min` and `rpm_max` (turns per minute), and `captured_pct` (%). They appear in the Energy group, have recomputation checks and DOM readbacks. The step readback infers h from the visible sampling interval and EVERY = 2. The speed range is the sampled run range, independent of the wider chart bounds. `readouts()` no longer computes these results.
+
+
+## Teaching revision · 15 October 2026
+
+The false global monotonicity argument is replaced by a local restoring torque slope of −3 K ω at the maximum-power operating point. The note explains proportional braking and integral memory before selecting gains, and uses relative airflow rather than a solid-wall blade analogy. Simulation code, inline styles and figure SVGs match the latest live baseline. See the [theory audit](../research-theory-audit.md).

@@ -327,3 +327,8 @@ The page's `about` paragraph ([L1402](../../public/simulations/draw-decompose.ht
 3. Fixed on 2026-10-15: the walkthrough distinguishes the 120 computed frequencies from a full 256-coefficient DFT; the K = 120 heart residual is 0.000491411444 (commit `:/^Batch C: align walkthroughs and metadata; verify excerpts and stored values$`).
 4. Fixed on 2026-10-15: L and step metadata describe calculation and storage; arcDistances replaces the local name that hid the dataset (commit `:/^Batch C: align walkthroughs and metadata; verify excerpts and stored values$`).
 5. Fixed on 2026-10-15: the thumbnail was retaken from .stage__canvas in Chromium at 1440 × 900, device scale 2, and saved as 800 × 500 WebP (commit `:/^Batch B: correct notes and layout; verify measured figures in Chromium$`).
+
+
+## Teaching revision · 15 October 2026
+
+The note distinguishes continuous coefficients from sampled coefficients, RMS at corresponding samples from nearest-outline distance, and the best K-term fit within the 120 computed components from a full-transform optimum. Wire analogies are stated as sampling approximations. Simulation code, inline styles and figure SVGs match the latest live baseline. See the [theory audit](../research-theory-audit.md).

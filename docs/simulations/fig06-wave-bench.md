@@ -373,3 +373,8 @@ Google Fonts; `../styles/sim.css`, `../styles/data.css`, `../styles/fold.css`; a
 6. Fixed on 2026-10-15: component readback checks alpha and the wave colour, accepting other colours only at stored crossings; white now fails (commit `:/^Batch D: store computed results once; verify values and pixel readbacks$`).
 7. Fixed on 2026-10-15: frames is incremented before storage (commit `:/^Batch D: store computed results once; verify values and pixel readbacks$`).
 8. Fixed on 2026-10-15: the Square preset stores 0.4, 1.2, 2 and 2.8 without extra decimal tails (commit `:/^Batch D: store computed results once; verify values and pixel readbacks$`).
+
+
+## Teaching revision · 15 October 2026
+
+Parseval and the 95% value measure mean-square displacement. String energy also weights each squared amplitude by frequency squared. The note qualifies envelope motion versus physical energy or information transport. Simulation code, inline styles and figure SVGs match the latest live baseline. See the [theory audit](../research-theory-audit.md).

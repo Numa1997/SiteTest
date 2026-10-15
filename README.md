@@ -74,3 +74,5 @@ The live app comes first. A change is made in the app, tested in a browser, depl
 the same files are copied here at the same paths, the pages of `docs/` that describe them are brought up to date,
 `python3 tools/inventory.py` rewrites the file list, and the change is committed. Details, and what the platform alters on
 a deploy: [docs/build-and-deploy.md](docs/build-and-deploy.md).
+
+The [theory readability audit](docs/research-theory-audit.md) records the selective teaching revisions to the ten lecture notes and both research projects, with the mathematical corrections and verification scope.

@@ -322,3 +322,8 @@ The plotted curves of Figures 3 and 4 are single SVG paths of 10–23 kB each on
 4. Fixed on 2026-10-15: the source-dot readback checks alpha before RGB (commit `:/^Batch D: store computed results once; verify values and pixel readbacks$`).
 5. **Apostrophe.** The catalog `subject` uses "Huygens’" ([catalog.js:54](../../public/scripts/catalog.js#L54)); the page's subject line uses a straight
    apostrophe ([L40](../../public/simulations/Circular%20Wave%20Interference%20Visualization.html#L40)).
+
+
+## Teaching revision · 15 October 2026
+
+The note distinguishes the chosen ring field from a physical two-dimensional wave-equation solution before the derivation; kr = 1 is a crossover, not an asymptotic accuracy guarantee. The colour is instantaneous signed displacement, not the amplitude map. Simulation code, inline styles and figure SVGs match the latest live baseline. See the [theory audit](../research-theory-audit.md).

@@ -388,3 +388,8 @@ the data panel prints. In detail:
 7. Fixed on 2026-10-15: the note gives the measured default solve time of 9.5–12.4 ms and states that timing depends on the machine (commit `:/^Batch B: correct notes and layout; verify measured figures in Chromium$`).
 8. **AGENTS.md** said the load order dataset.js → page → datalog.js holds for "all eight figures"; this page (Fig. 9)
    follows it too. Corrected to "all ten figures" on 14 October 2026.
+
+
+## Teaching revision · 15 October 2026
+
+The note separates undamped natural frequency from damped ringing, interprets the complex denominator as spring, inertia and quadrature damping, and uses the damped ringing frequency for the approximate default beat time. Simulation code, inline styles and figure SVGs match the latest live baseline. See the [theory audit](../research-theory-audit.md).

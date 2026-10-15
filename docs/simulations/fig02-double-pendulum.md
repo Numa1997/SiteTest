@@ -334,3 +334,8 @@ agree to the pixel; the trail is not stored.
 4. Fixed on 2026-10-15: the walkthrough cites lecture-note equations (6)–(8) (commit `:/^Batch C: align walkthroughs and metadata; verify excerpts and stored values$`).
 5. Fixed on 2026-10-15: y_twin locates the twin’s four stored screen coordinates; stored and recomputed coordinates are identical and the pixels are rose (commit `:/^Batch A: fix simulation and recording faults; verify in Chromium$`).
 6. Fixed on 2026-10-15: the note states the 4–17 px bob-2 radius clamp (commit `:/^Batch B: correct notes and layout; verify measured figures in Chromium$`).
+
+
+## Teaching revision · 15 October 2026
+
+The note distinguishes energy accuracy from long-time trajectory accuracy, identifies bob separation as a finite-time projection rather than a full-state Lyapunov calculation, and requires separate convergence checks for statistics. Simulation code, inline styles and figure SVGs match the latest live baseline. See the [theory audit](../research-theory-audit.md).

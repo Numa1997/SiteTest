@@ -317,7 +317,7 @@
                         <p>Mount a second arm on the tip of the first, a third on the tip of the second, and so on up to \(N\) arms. Mounting an arm on a moving tip means adding its arrow to the position of that tip, so the pen sits at</p>
                         \[ z(t) = \sum_{k=1}^{N} A_k\,e^{i(\omega_k t + \varphi_k)} . \tag{6} \]
                         <p>Each circle card on the page holds one triple \((A_k, \omega_k, \varphi_k)\): <em>Radius</em> \(A\) from 0 to 2, <em>Angular frequency</em> \(\omega\) from \(-32\) to \(32\ \mathrm{rad/s}\) and <em>Phase</em> \(\varphi\) from 0 to \(6.28\ \mathrm{rad}\), all in steps of 0.01. Lengths carry no unit, because the picture is scaled to fit (section 8): only their ratios matter. The <em>Current formula</em> box prints (6) with the stored numbers.</p>
-                        <p>The partial sums \(z_k = \sum_{m \le k} A_m\,e^{i(\omega_m t + \varphi_m)}\) are the joints of the chain (Figure 2), and the pen is the last one, \(z = z_N\). Addition does not care about order, so swapping two cards changes the chain but not the pen: the curve depends only on the list of triples. Each arm is a free rigid rotor, with Lagrangian \(L = \tfrac12 I\dot\theta^2\), whose equation of motion \(\ddot\theta = 0\) gives \(\theta = \omega t + \varphi\); no arm pushes or pulls on another. Everything on the screen is <em>kinematics</em>, geometry in motion, without forces.</p>
+                        <p>The partial sums \(z_k = \sum_{m \le k} A_m\,e^{i(\omega_m t + \varphi_m)}\) are the joints of the chain (Figure 2), and the pen is the last one, \(z = z_N\). Addition does not care about order, so swapping two cards changes the chain but not the pen: the curve depends only on the list of triples. Each arm’s angle is prescribed as \(\theta=\omega t+\varphi\). This constructs the curve geometrically; actual linked rods would exert forces and torques on one another, and would not generally maintain these independent rates. Everything on the screen is <em>kinematics</em>, geometry in motion, without forces.</p>
                         <figure class="pfig">
                             <div class="pfig__plate">
                                 <svg viewBox="0 0 720 360" role="img" aria-label="Three arms joined tip to tail, each with its circle; the angles are measured from the real direction; the end of the last arm is the pen, which draws the Spirograph curve.">
@@ -371,7 +371,7 @@
                         <h4><span class="psub__n">3.1</span>Velocity, and where the pen stops</h4>
                         <p>Differentiating (6) term by term, with \(\mathrm{d}e^{i\omega t}/\mathrm{d}t = i\omega\,e^{i\omega t}\) from (2),</p>
                         \[ \dot z(t) = \sum_{k=1}^{N} i\,\omega_k A_k\,e^{i(\omega_k t + \varphi_k)} . \tag{7} \]
-                        <p>Each arm adds a velocity of size \(A_k|\omega_k|\) at right angles to itself. The pen stops, \(\dot z = 0\), only where these velocities cancel, and there the curve has a <em>cusp</em>, a sharp point. With two arms this needs equal tip speeds, \(A_1|\omega_1| = A_2|\omega_2|\), together with the moment at which the two velocities point in opposite directions, which comes round once each time the angle between the arms grows by \(2\pi\). The <em>Trefoil</em> preset is built this way: \(A = 1, 0.5\) and \(\omega = 1, -2\ \mathrm{rad/s}\), so both tip speeds are 1. The angle between its arms grows at \(|\omega_1 - \omega_2| = 3\ \mathrm{rad/s}\), and in each period of \(2\pi\ \mathrm{s}\) the pen stops three times, \(2\pi/3\ \mathrm{s}\) apart. The curve is the three-cusped <em>deltoid</em>, the one a Spirograph wheel draws with the pen on its rim when it rolls inside a ring three times its radius.</p>
+                        <p>Each arm adds a velocity of size \(A_k|\omega_k|\) at right angles to itself. The pen stops, \(\dot z = 0\), only where these velocities cancel, so a stationary pen is possible there. It may form a <em>cusp</em>, a sharp point, but zero velocity alone is not enough: \(z=e^{it}+e^{-it}=2\cos t\) stops at its ends and smoothly retraces a straight segment. Two arm velocities can cancel only with equal tip speeds, \(A_1|\omega_1| = A_2|\omega_2|\), together with the moment at which the two velocities point in opposite directions, which, for distinct frequencies, comes round once each time the angle between the arms changes by \(2\pi\). The <em>Trefoil</em> preset is built this way: \(A = 1, 0.5\) and \(\omega = 1, -2\ \mathrm{rad/s}\), so both tip speeds are 1. The angle between its arms grows at \(|\omega_1 - \omega_2| = 3\ \mathrm{rad/s}\), and in each period of \(2\pi\ \mathrm{s}\) the pen stops three times, \(2\pi/3\ \mathrm{s}\) apart. The curve is the three-cusped <em>deltoid</em>, the one a Spirograph wheel draws with the pen on its rim when it rolls inside a ring three times its radius.</p>
                     </section>
 
                     <section class="psec" id="p-two">
@@ -447,8 +447,9 @@
 
                     <section class="psec" id="p-closure">
                         <h3><span class="psec__n">05</span>When the curve closes<span class="star" title="heavier mathematics">★</span></h3>
-                        <p>The pen returns to its start, and from then on retraces the same curve, if there is a time \(T\) with \(z(t + T) = z(t)\) for every \(t\). By (6) this needs \(e^{i\omega_k T} = 1\) for every arm at once, so every \(\omega_k T\) must be a whole multiple of \(2\pi\). If all the frequencies are whole multiples of one largest common frequency \(g\), the shortest such time is</p>
+                        <p>The pen returns to its start, and from then on retraces the same curve, if there is a time \(T\) with \(z(t + T) = z(t)\) for every \(t\). A common repeat time for all arms is obtained by requiring \(e^{i\omega_k T} = 1\) for every arm at once, so every \(\omega_k T\) must be a whole multiple of \(2\pi\). If all the frequencies are whole multiples of one largest common frequency \(g\), the shortest time that repeats every listed active arm is</p>
                         \[ T = \frac{2\pi}{g}, \qquad g = \gcd(\omega_1, \dots, \omega_N) , \tag{12} \]
+                        <p>This is a common period for the pen, but cancellation can shorten its true period. Combine equal-frequency complex amplitudes and remove any zero sums before seeking the pen’s shortest period. For example, \(e^{it}-e^{it}+e^{2it}=e^{2it}\) repeats after \(\pi\), although the listed frequencies give a common repeat time \(2\pi\). The readout uses the listed active arms.</p>
                         <p>where \(\gcd\) is the largest \(g\) for which every \(\omega_k/g\) is a whole number. The 3-petal rose has \(g = \gcd(4, 2) = 2\ \mathrm{rad/s}\) and closes after \(\pi\ \mathrm{s} = 3.14\ \mathrm{s}\); every other preset has \(g = 1\ \mathrm{rad/s}\) and closes after \(6.28\ \mathrm{s}\). If two frequencies have an irrational ratio, such as \(1\) and \(\sqrt2\ \mathrm{rad/s}\), no \(T\) exists: the curve never closes, and with two arms it passes, given time, as close as you like to every point of the ring between \(|A_1 - A_2|\) and \(A_1 + A_2\).</p>
                         <p>The sliders move in steps of \(0.01\ \mathrm{rad/s}\), so \(100\,\omega_k\) is a whole number and the page finds \(g\) exactly, with Euclid’s algorithm on these integers. Small changes can make the period long. Changing the second arm of the 3-petal rose from \(-2\) to \(-2.1\ \mathrm{rad/s}\) gives \(g = 0.1\ \mathrm{rad/s}\) and \(T = 62.83\ \mathrm{s}\); changing it to \(-2.01\) gives \(g = 0.01\ \mathrm{rad/s}\) and \(T = 628.32\ \mathrm{s}\). For two arms the number of petals in one period, the times \(|z|\) swings out and back, is \(|\omega_1 - \omega_2|/g\): 3 for the 3-petal rose, 61 for \(-2.1\).</p>
                         <h4><span class="psub__n">5.1</span>Rotational symmetry</h4>
@@ -543,7 +544,7 @@
                         <figure class="pfig">
                             <div class="pfig__plate">
                                 <svg viewBox="0 0 720 326" role="img" xmlns="http://www.w3.org/2000/svg">
-                                <defs><clipPath id="f7clipc4"><rect x="64.0" y="18.0" width="634.0" height="236.0"/></clipPath></defs>
+                                <defs><clipPath id="f7clipc4"><rect x="64.0" y="18.0" width="635.0" height="236.0"/></clipPath></defs>
                                 <line x1="64.0" x2="698.0" y1="254.0" y2="254.0" stroke="#eee6d9" stroke-width="1"/>
                                 <text class="tick" x="56.0" y="258.0" text-anchor="end">0</text>
                                 <line x1="64.0" x2="698.0" y1="184.6" y2="184.6" stroke="#eee6d9" stroke-width="1"/>
@@ -722,14 +723,14 @@
         ds.var('absz', [], 'float', { symbol: '|z|', long_name: 'distance of the pen from the origin', computed_in: 'draw()', formula: '√(x² + y²)', digits: 5 });
         ds.var('absz2', [], 'float', { symbol: '|z|²', long_name: 'squared', computed_in: 'draw()', formula: 'x² + y²', digits: 5 });
         ds.var('E', [], 'float', { symbol: 'Σ Aₖ²', long_name: 'the time average of |z|² when no two frequencies coincide', computed_in: 'readouts()', formula: 'Σ Aₖ²', digits: 5 });
-        ds.var('A_arm', ['arm'], Float64Array, { symbol: 'A′ₖ drawn', long_name: 'radius of each arm as drawn', computed_in: 'sumAt(), with the live-view output array', formula: 'A′ₖ', digits: 4, updates: 'every frame in the live view' });
+        ds.var('A_arm', ['arm'], Float64Array, { symbol: 'A′ₖ drawn', long_name: 'radius of each arm as drawn', computed_in: 'draw(), the arm loop', formula: 'A′ₖ', digits: 4, updates: 'every frame in the live view' });
         ds.var('ang', ['arm'], Float64Array, { symbol: 'θₖ', units: 'rad', long_name: 'angle of each arm', computed_in: 'sumAt(), with the live-view output array', formula: 'θ = ω t + φ', digits: 4, updates: 'every frame in the live view' });
         ds.var('vx', ['arm'], Float64Array, { symbol: 'Δxₖ', long_name: 'each arm, real part', computed_in: 'sumAt(), read in draw()', formula: 'A′ cos θ', digits: 5, updates: 'every frame in the live view' });
         ds.var('vy', ['arm'], Float64Array, { symbol: 'Δyₖ', long_name: 'each arm, imaginary part', computed_in: 'sumAt(), read in draw()', formula: 'A′ sin θ', digits: 5, updates: 'every frame in the live view' });
-        ds.var('jx', ['arm'], Float64Array, { symbol: 'Re zₖ', long_name: 'joint after each arm, the partial sum', computed_in: 'sumAt(), with the live-view output array', formula: 'Σ<sub>m ≤ k</sub> Δx_m', digits: 5, updates: 'every frame in the live view' });
-        ds.var('jy', ['arm'], Float64Array, { symbol: 'Im zₖ', long_name: 'joint after each arm, the partial sum', computed_in: 'sumAt(), with the live-view output array', formula: 'Σ<sub>m ≤ k</sub> Δy_m', digits: 5, updates: 'every frame in the live view' });
-        ds.var('px', ['arm'], Float64Array, { symbol: 'joint x px', units: 'css px', long_name: 'screen position of each joint', computed_in: 'sumAt(), with the live-view output array', formula: 'previous joint + Δx · scale', digits: 2, updates: 'every frame in the live view' });
-        ds.var('py', ['arm'], Float64Array, { symbol: 'joint y px', units: 'css px', long_name: 'screen position of each joint', computed_in: 'sumAt(), with the live-view output array', formula: 'previous joint − Δy · scale', digits: 2, updates: 'every frame in the live view' });
+        ds.var('jx', ['arm'], Float64Array, { symbol: 'Re zₖ', long_name: 'joint after each arm, the partial sum', computed_in: 'draw(), the arm loop', formula: 'Σ<sub>m ≤ k</sub> Δx_m', digits: 5, updates: 'every frame in the live view' });
+        ds.var('jy', ['arm'], Float64Array, { symbol: 'Im zₖ', long_name: 'joint after each arm, the partial sum', computed_in: 'draw(), the arm loop', formula: 'Σ<sub>m ≤ k</sub> Δy_m', digits: 5, updates: 'every frame in the live view' });
+        ds.var('px', ['arm'], Float64Array, { symbol: 'joint x px', units: 'css px', long_name: 'screen position of each joint', computed_in: 'draw(), the arm loop', formula: 'previous joint + Δx · scale', digits: 2, updates: 'every frame in the live view' });
+        ds.var('py', ['arm'], Float64Array, { symbol: 'joint y px', units: 'css px', long_name: 'screen position of each joint', computed_in: 'draw(), the arm loop', formula: 'previous joint − Δy · scale', digits: 2, updates: 'every frame in the live view' });
         ds.var('tip_px', [], 'float', { symbol: 'pen x px', units: 'css px', long_name: 'screen position of the pen', computed_in: 'draw()', formula: 'c_x + x · scale', digits: 2 });
         ds.var('tip_py', [], 'float', { symbol: 'pen y px', units: 'css px', long_name: 'screen position of the pen', computed_in: 'draw()', formula: 'c_y − y · scale', digits: 2 });
         ds.var('G', [], 'int', { symbol: 'G', long_name: 'gcd of 100·ω over the active circles', computed_in: 'structure()', formula: 'gcd(round(100 ωₖ))', digits: 0 });
@@ -1363,8 +1364,8 @@
         function armInputs(i) { return [['k', i + 1, '', 0], ['A′', ds.get('A_arm')[i], '', 5], ['θ', ds.get('ang')[i], 'rad', 5]]; }
         /* one round: the figure closes after 2π / g of phasor time; at most 20 s of real time */
         function phasorRound() {
-            var g = ds.get('g'), storedSpeed = ds.get('sf'), sf = Math.max(typeof storedSpeed === 'number' ? storedSpeed : 1, 0.05), T = g > 0 ? 2 * Math.PI / g : 2 * Math.PI;
-            return Math.min(T, 20 * sf);
+            var g = ds.get('g'), storedSpeed = ds.get('sf'), sf = typeof storedSpeed === 'number' ? storedSpeed : 1, T = g > 0 ? 2 * Math.PI / g : 2 * Math.PI;
+            return sf > 0 ? Math.min(T, 20 * sf) : T;
         }
         Sim.data = {
             ds: ds, kicker: 'Fig. 7 · data', file: 'fig7-phasor-sums',
@@ -1475,3 +1476,4 @@
     <script src="../scripts/datalog.js"></script>
 </body>
 </html>
+

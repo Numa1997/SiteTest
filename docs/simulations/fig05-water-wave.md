@@ -343,3 +343,8 @@ stylesheets `../styles/sim.css` (which imports the Google fonts, KaTeX's CSS and
 2. Fixed on 2026-10-15: the note and walkthrough cover both the 800 px field and the 400 px field below a 560 css-px canvas width (commit `:/^Batch B: correct notes and layout; verify measured figures in Chromium$`).
 3. Fixed on 2026-10-15: the skipped caption line is marked with an ellipsis (commit `:/^Batch C: align walkthroughs and metadata; verify excerpts and stored values$`).
 4. Fixed on 2026-10-15: frames is described as playing frames; it stays constant during paused drawing (commit `:/^Batch C: align walkthroughs and metadata; verify excerpts and stored values$`).
+
+
+## Teaching revision · 15 October 2026
+
+The model section makes the first-order circular-orbit approximation and exaggerated default steepness visible. The vorticity argument states the constant-density, inviscid, conservative-force assumptions of circulation conservation. Simulation code, inline styles and figure SVGs match the latest live baseline. See the [theory audit](../research-theory-audit.md).

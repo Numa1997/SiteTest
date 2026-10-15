@@ -131,7 +131,7 @@
 
                     <section class="psec" id="p-model">
                         <h3><span class="psec__n">02</span>The model</h3>
-                        <p>Physics begins by deciding what to keep. We keep a line of particles, the <em>medium</em>, and describe a wave by how far each particle has moved from where it rests. Label every particle by its rest position \(X,\) the place where it sits when there is no wave. Its <em>displacement</em> \(\xi(X,t)\) is how far it has moved at time \(t\): sideways in the transverse row, and along the line in the longitudinal row, where the particle is then found at \(x = X + \xi.\) The simulation uses the simplest travelling wave,</p>
+                        <p>Physics begins by deciding what to keep. We keep a line of particles, the <em>medium</em>, and describe a wave by how far each particle has moved from where it rests. Label every particle by its rest position \(X,\) the place where it sits when there is no wave. Its <em>displacement</em> \(\xi(X,t)\) is how far it has moved at time \(t\): sideways in the transverse row, and along the line in the longitudinal row, where the particle is then found at \(x = X + \xi.\) The simulation uses the simplest travelling wave,</p><p>The page prescribes particle positions with a sinusoidal formula. The wave equations derived below describe small slopes or small compression. The default longitudinal value \(A_{\rm L}k\approx0.743\) is deliberately large: its exact density follows from the coordinate map, but this does not make that prescribed motion a solution of nonlinear sound dynamics.</p>
                         \[ \begin{gathered} \xi(X,t) = A\sin(kX - \omega t), \\ k = \frac{2\pi}{\lambda}, \qquad \omega = 2\pi f . \end{gathered} \tag{1} \]
                         <p>Here \(A\) is the amplitude, the largest displacement; \(\lambda\) is the wavelength, the distance from one crest to the next; \(f\) is the frequency, the number of times per second each particle swings back and forth. The wavenumber \(k\) and the angular frequency \(\omega\) are the same two quantities counted in radians: \(k\) per pixel of distance, \(\omega\) per second. The combination \(\varphi = kX - \omega t\) is the <em>phase</em>. It says where in its cycle the particle at \(X\) is at time \(t.\)</p>
                         <ul>
@@ -1082,3 +1082,4 @@
     <script src="../scripts/datalog.js"></script>
 </body>
 </html>
+

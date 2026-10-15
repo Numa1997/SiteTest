@@ -164,7 +164,7 @@ None. The file reacts to nothing; it runs only when a page or the data panel cal
   [Fig. 4 L746](../../public/simulations/Transverse%20and%20longitudinal%20waves.html#L746),
   [Fig. 5 L578](../../public/simulations/water-wave.html#L578),
   [Fig. 6 L507](../../public/simulations/wave-interference.html#L507),
-  [Fig. 7 L709](../../public/simulations/phasor-sums.html#L709),
+  [Fig. 7 L709](../../public/simulations/phasor-sums.html#L710),
   [Fig. 8 L637](../../public/simulations/draw-decompose.html#L637),
   [Fig. 9 L478](../../public/simulations/driven-oscillator.html#L478),
   [Fig. 10 L566](../../public/simulations/wind-turbine.html#L566).

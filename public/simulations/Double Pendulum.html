@@ -138,7 +138,7 @@
                         <h3><span class="psec__n">01</span>A pendulum on a pendulum</h3>
                         <p class="psec__lead">Let a pen swing loosely between two fingers: that is a pendulum, and since Galileo we have known how to predict it. Now hang a second pen from the tip of the first.</p>
                         <p>You carry a double pendulum with you every day. Let your arm hang and swing it from the shoulder: the upper arm swings about the shoulder, the forearm about the elbow, and the hand follows a path that neither joint alone would draw. A gymnast turning on the high bar, a nunchaku, a crane hook hanging from its cable are all the same machine: two masses, two rods, one gravitational field.</p>
-                        <p>Released from a small angle, the double pendulum rocks gently and regularly, the two arms passing energy back and forth like two children on linked swings. Released from high up, the lower arm whips over the top, stops, reverses, and never settles into a pattern. Nothing random is involved. The equations we are about to derive fix the entire future from the starting state, and the computer solves them so accurately that the energy stays fixed to better than one part in ten million. Yet two starts that differ by a thousandth of a radian, one millimetre at the end of a one-metre rod, end up in unrelated places within five seconds.</p>
+                        <p>Released from a small angle, the double pendulum rocks gently and regularly, the two arms passing energy back and forth like two children on linked swings. For the high-angle start shown here, the lower arm whips over the top, stops and reverses in an irregular pattern. Nothing random is involved. The equations we are about to derive fix the entire future from the starting state, and the computer solves them so accurately that the energy stays fixed to better than one part in ten million. Yet two starts that differ by a thousandth of a radian, one millimetre at the end of a one-metre rod, end up in unrelated places within five seconds.</p>
                         <p>This pairing of exact laws with practically unpredictable outcomes is called <em>deterministic chaos</em>. It is the same mechanism that limits weather forecasts to about two weeks: the atmosphere obeys known equations, but we can never measure today’s state precisely enough.</p>
                         <figure class="pfig">
                             <div class="pfig__plate">
@@ -276,7 +276,7 @@
 
                     <section class="psec" id="p-chaos">
                         <h3><span class="psec__n">06</span>Chaos</h3>
-                        <p>Raise the energy and the small-angle picture breaks down: the \(\sin\) and \(\omega^2\) terms we dropped now dominate, and the motion becomes chaotic. The clearest sign is <em>sensitive dependence on the starting state</em>. Start two pendulums whose upper angles differ by \(0.001\ \mathrm{rad}\) and follow the distance \(d(t)\) between their lower masses. Figure 3 shows it for two starts, computed with the same equations and the same time step as the page.</p>
+                        <p>At larger angles the small-angle picture breaks down, and the nonlinear sine and angular-speed terms matter. Some starts then show chaotic motion, although high energy alone does not guarantee it. The clearest sign is <em>sensitive dependence on the starting state</em>. Start two pendulums whose upper angles differ by \(0.001\ \mathrm{rad}\) and follow the distance \(d(t)\) between their lower masses. Figure 3 shows it for two starts, computed with the same equations and the same time step as the page.</p>
                         <figure class="pfig">
                             <div class="pfig__plate">
                                 <svg viewBox="0 0 720 346" role="img" xmlns="http://www.w3.org/2000/svg">
@@ -332,9 +332,9 @@
                             </div>
                             <figcaption><span class="pfig__n">Figure 3</span>Distance between the lower masses of two pendulums whose upper angles start \(0.001\ \mathrm{rad}\) apart, on a logarithmic scale. Equal masses and lengths, both at rest at the start, RK4 with \(h = 1/600\ \mathrm{s}\). At low energy the distance stays below about 1.5 mm for the whole 20 s. At high energy it grows like a straight line on this scale, which means exponentially, until it is as large as the pendulum itself.</figcaption>
                         </figure>
-                        <p>A straight line on a logarithmic scale means \(d(t) \approx d_0\,e^{\lambda t}\). For the high-energy start of Figure 3 the line rises at about \(1.7\) per second, so the distance doubles roughly every \(0.4\ \mathrm{s}\) and reaches \(0.1\ \mathrm{m}\) after \(4.1\ \mathrm{s}\). The long-time average of this growth rate is the <em>largest Lyapunov exponent</em>,</p>
+                        <p>A straight line on a logarithmic scale means \(d(t) \approx d_0\,e^{\lambda t}\). For the high-energy start of Figure 3 the line rises at about \(1.7\) per second, so the distance doubles roughly every \(0.4\ \mathrm{s}\) and reaches \(0.1\ \mathrm{m}\) after \(4.1\ \mathrm{s}\). A systematic growth-rate calculation follows an infinitesimal perturbation of the full state (both angles and angular velocities), rescales it before it becomes large, and averages its logarithmic growth. This defines the <em>largest Lyapunov exponent</em>,</p>
                         \[ \lambda = \lim_{t\to\infty}\ \lim_{d_0\to 0}\ \frac{1}{t}\,\ln\frac{d(t)}{d_0} , \tag{12} \]
-                        <p>and the 1.7 per second read off one pair of runs is only an estimate of it. Its meaning is practical. Every extra second we want to predict costs a factor \(e^{1.7}\approx 5.5\) in the precision of the starting angles: to see ten seconds further, we would need to know the start about \(5.5^{10}\approx 2\times10^{7}\) times more precisely. Note what chaos is not: it is not noise, and it is not a failure of energy conservation. The energy stays fixed while the trajectory wanders unpredictably over everything that energy allows.</p>
+                        <p>where the distance in this definition refers to the full state. The 1.7 per second read from the lower bobs is a finite-time estimate in a two-dimensional projection; it illustrates sensitivity but is not a full Lyapunov calculation. Its meaning is practical. Every extra second we want to predict costs a factor \(e^{1.7}\approx 5.5\) in the precision of the starting angles: to see ten seconds further, we would need to know the start about \(5.5^{10}\approx 2\times10^{7}\) times more precisely. Note what chaos is not: it is not noise, and it is not a failure of energy conservation. Two different trajectories can have the same energy. A tiny energy drift therefore checks the integration without guaranteeing that detailed positions stay accurate indefinitely.</p>
                         <div class="pbox pbox--ex">
                             <span class="pbox__t">Exercise 6.1 · on the figure above</span>
                             <p>Switch on the <em>Chaos twin</em>, a second pendulum started with \(\theta_1\) larger by \(0.001\ \mathrm{rad}\). From \(10^\circ, 10^\circ\) its separation readout stays near \(10^{-3}\ \mathrm{m}\). From \(120^\circ, 150^\circ\) the pale twin peels away within a few seconds. Find the smallest starting angles at which you can see the two pendulums separate within 20 s.</p>
@@ -348,7 +348,7 @@
                         <p>The error made in one step shrinks like \(h^5\) and the error accumulated over a fixed time like \(h^4\): halving the step makes the result sixteen times more accurate. The page uses \(h = 1/600\ \mathrm{s}\), ten steps per frame at sixty frames a second.</p>
                         <ul>
                             <li>Each frame advances by the real time elapsed multiplied by the <em>Time scale</em>, in steps of \(h\), with a 600-step guard. The clock caps a frame at 0.05 s and the Time scale at 1.5, so even including the carried remainder no more than 46 steps can be requested; the 600-step guard cannot act.</li>
-                            <li>RK4 does not conserve energy exactly, which is why the <em>Drift</em> readout is there. It measures the signed difference \(E - E_0\) against the depth of the potential well, \(E_\text{scale} = (m_1+m_2)\,g\,l_1 + m_2\,g\,l_2\), rather than against \(E_0\), which can be close to zero. Over the first 20 s of the default start it stays below \(3\times10^{-8}\).</li>
+                            <li>RK4 does not conserve energy exactly, which is why the <em>Drift</em> readout is there. It measures the signed difference \(E - E_0\) against the depth of the potential well, \(E_\text{scale} = (m_1+m_2)\,g\,l_1 + m_2\,g\,l_2\), rather than against \(E_0\), which can be close to zero. Over the first 20 s of the default start it stays within \(\pm 5\times10^{-8}\): its largest value is \(+4.7\times10^{-8}\), at \(t \approx 8.7\) s.</li>
                             <li>Moving a mass, length, angle or angular-velocity slider restarts the motion from those values; the Time scale slider does not.</li>
                         </ul>
                     </section>
@@ -365,7 +365,7 @@
                             <li>Real rods have mass and a moment of inertia. A double pendulum made of two bars obeys equations of the same kind, with different coefficients.</li>
                             <li>There is no friction. A real pendulum slowly loses energy, and its chaos eventually calms into small, regular swings.</li>
                             <li>The masses may pass through each other and through the pivot; real rods would collide.</li>
-                            <li>After a few Lyapunov times any computed trajectory is a faithful example of how the pendulum can move, not the exact path from that start. Averages over many swings remain correct.</li>
+                            <li>After a few Lyapunov times, agreement of the detailed path from one start requires further convergence checks. Statistical quantities also need separate checks as the integration step and observation time are varied.</li>
                         </ul>
                         <h4><span class="psub__n">9.1</span>Further reading</h4>
                         <ol class="prefs">
@@ -867,3 +867,4 @@
     <script src="../scripts/datalog.js"></script>
 </body>
 </html>
+

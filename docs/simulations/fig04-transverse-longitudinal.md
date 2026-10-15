@@ -316,3 +316,8 @@ shown by [datalog.js:165](../../public/scripts/datalog.js#L165)).
 6. **Redraw while paused.** `draw()` runs every animation frame even when paused ([page:980](../../public/simulations/Transverse%20and%20longitudinal%20waves.html#L980),
    [sim.js:181–184](../../public/scripts/sim.js#L181-L184)). This is what makes the checkboxes and Particles work while paused,
    at the cost of about 60 identical redraws a second.
+
+
+## Teaching revision · 15 October 2026
+
+The model section now states the deliberately large default compression. Exact density from the prescribed coordinate map does not make that motion a solution of nonlinear sound dynamics. Simulation code, inline styles and figure SVGs match the latest live baseline. See the [theory audit](../research-theory-audit.md).
