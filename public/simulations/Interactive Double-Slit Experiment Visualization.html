@@ -728,7 +728,7 @@
             var nm = Math.floor(Math.sin(amax) * G.b / G.lambda + 1e-9) + 1;
             ds.dim('m', nm);
             var mS = ds.alloc('m_sin'), mT = ds.alloc('m_theta'), mX = ds.alloc('m_x');
-            for (var m = 0; m * G.lambda / G.b <= Math.sin(amax); m++) {
+            for (var m = 0; m < nm; m++) {
                 var tm = Math.asin(m * G.lambda / G.b);
                 if (m < nm) { mS[m] = m * G.lambda / G.b; mT[m] = tm / DEG; mX[m] = G.d * Math.tan(tm); }
                 /* the order m in maths italic; m = 0 sits on the axis, so its label starts right of it, clear of the tick label 1 */

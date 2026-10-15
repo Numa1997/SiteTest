@@ -90,7 +90,7 @@ RULES = [
     (r'postcss\.config\.js', 'PostCSS settings (template; unused by the site).', 'docs/build-and-deploy.md'),
     (r'src/main\.ts', 'Template script entry; index.html does not load it.', 'docs/build-and-deploy.md'),
     (r'src/styles\.css', 'Template Tailwind directives; unused.', 'docs/build-and-deploy.md'),
-    (r'tests/tests\.json', "Twelve plain-language test scenarios run by the platform's QA after each deploy.", 'docs/build-and-deploy.md'),
+    (r'tests/tests\.json', "Plain-language test scenarios run by the platform's QA after each deploy.", 'docs/build-and-deploy.md'),
     # pages
     (r'public/simulations\.html', 'The simulations catalog: one titled fold card per simulation, search and chips.', 'docs/pages.md'),
     (r'public/portfolios\.html', 'The Portfolios page: the two research projects.', 'docs/pages.md'),

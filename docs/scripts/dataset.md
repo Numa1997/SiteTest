@@ -30,9 +30,9 @@ Anyone may read the page; only the simulation writes on it.
 | Dataset | `new Dataset(meta)`: `title`, global `attrs`, `dims`, `vars`, `order` ([dataset.js:32-39](../../public/scripts/dataset.js#L32-L39)) | `Sim.dataset({ title: 'Double pendulum', attrs: { figure: 2, … } })` ([L406](../../public/simulations/Double%20Pendulum.html#L406)) |
 | Dimension | a name and a length in `dims` ([dataset.js:40-43](../../public/scripts/dataset.js#L40-L43)) | `ds.dim('q', 4)` ([L414](../../public/simulations/Double%20Pendulum.html#L414)) |
 | Array variable | `{ name, dims, type: <typed-array constructor>, attrs, data, version }` ([dataset.js:48](../../public/scripts/dataset.js#L48)) | `ds.var('y', ['q'], Float64Array, { … })` ([L415](../../public/simulations/Double%20Pendulum.html#L415)) |
-| Scalar | a variable with `dims = []`; `type` is a string | `ds.set('th1', s[0])` ([L650](../../public/simulations/Double%20Pendulum.html#L650)) |
+| Scalar | a variable with `dims = []`; `type` is a string | `ds.set('th1', s[0])` ([L654](../../public/simulations/Double%20Pendulum.html#L654)) |
 | Coordinate | a 1-D variable with `attrs.coordinate = true` ([dataset.js:58-62](../../public/scripts/dataset.js#L58-L62)) | `ds.coord('x', 'i', Float64Array, …)` ([Circular Wave Interference Visualization.html:547](../../public/simulations/Circular%20Wave%20Interference%20Visualization.html#L547)) |
-| Version | an integer per variable, raised on every change ([dataset.js:68](../../public/scripts/dataset.js#L68), [73](../../public/scripts/dataset.js#L73), [80](../../public/scripts/dataset.js#L80)) | `ds.touch('y')` after writing into the array in place ([L649](../../public/simulations/Double%20Pendulum.html#L649)) |
+| Version | an integer per variable, raised on every change ([dataset.js:68](../../public/scripts/dataset.js#L68), [73](../../public/scripts/dataset.js#L73), [80](../../public/scripts/dataset.js#L80)) | `ds.touch('y')` after writing into the array in place ([L653](../../public/simulations/Double%20Pendulum.html#L653)) |
 
 Arrays are stored flat in row-major order: element $(j, i)$ of a variable with dimensions $(J, I)$ sits at index
 $jI + i$ ([dataset.js:89-90](../../public/scripts/dataset.js#L89-L90)). The first dimension is the row.
@@ -84,8 +84,8 @@ Array types and their NumPy names, from the table `DTYPES` ([dataset.js:19-24](.
 page gave ([dataset.js:97](../../public/scripts/dataset.js#L97)). The comment names `'float'`, `'int'`, `'bool'` and `'str'`
 ([dataset.js:44](../../public/scripts/dataset.js#L44)); the pages use those, plus one `'uint8'` scalar holding an RGB
 triple ([Circular Wave Interference Visualization.html:572](../../public/simulations/Circular%20Wave%20Interference%20Visualization.html#L572)).
-Across the ten pages a grep finds 534 `ds.var` calls: 137 arrays (127 `Float64Array`, 7 `Float32Array`, 2 `Int32Array`,
-1 `Uint8ClampedArray`) and 397 scalars (299 `'float'`, 63 `'int'`, 28 `'bool'`, 6 `'str'`, 1 `'uint8'`), plus 13
+Across the ten pages a grep finds 538 `ds.var` calls: 137 arrays (127 `Float64Array`, 7 `Float32Array`, 2 `Int32Array`,
+1 `Uint8ClampedArray`) and 401 scalars (303 `'float'`, 63 `'int'`, 28 `'bool'`, 6 `'str'`, 1 `'uint8'`), plus 13
 `ds.coord` calls, all `Float64Array`.
 
 ### Attributes the rest of the site reads
@@ -95,13 +95,13 @@ Across the ten pages a grep finds 534 `ds.var` calls: 137 arrays (127 `Float64Ar
 
 | Key | Used for | Count |
 |---|---|---|
-| `symbol` | HTML symbol shown in the panel ([datalog.js:79](../../public/scripts/datalog.js#L79)) | 547 |
-| `long_name` | one-line meaning ([datalog.js:195](../../public/scripts/datalog.js#L195)) | 547 |
-| `computed_in` | function or line that computes it ([datalog.js:199](../../public/scripts/datalog.js#L199)) | 529 |
-| `digits` | decimals shown, default 4 ([datalog.js:80](../../public/scripts/datalog.js#L80)) | 489 |
-| `formula` | formula shown in Check and the array view ([datalog.js:508](../../public/scripts/datalog.js#L508)) | 351 |
-| `units` | SI or pixel unit ([datalog.js:81](../../public/scripts/datalog.js#L81)) | 343 |
-| `source` | Check text when there is no independent formula ([datalog.js:520](../../public/scripts/datalog.js#L520)) | 138 |
+| `symbol` | HTML symbol shown in the panel ([datalog.js:79](../../public/scripts/datalog.js#L79)) | 551 |
+| `long_name` | one-line meaning ([datalog.js:195](../../public/scripts/datalog.js#L195)) | 551 |
+| `computed_in` | function or line that computes it ([datalog.js:199](../../public/scripts/datalog.js#L199)) | 533 |
+| `digits` | decimals shown, default 4 ([datalog.js:80](../../public/scripts/datalog.js#L80)) | 493 |
+| `formula` | formula shown in Check and the array view ([datalog.js:508](../../public/scripts/datalog.js#L508)) | 354 |
+| `units` | SI or pixel unit ([datalog.js:81](../../public/scripts/datalog.js#L81)) | 347 |
+| `source` | Check text when there is no independent formula ([datalog.js:520](../../public/scripts/datalog.js#L520)) | 139 |
 | `updates` | when it changes ([datalog.js:507](../../public/scripts/datalog.js#L507)) | 109 |
 | `coordinate` | set by `coord`; coordinates are listed first by `along` and in `dataset.json` | set by 13 `ds.coord` calls |
 | `colour` | `true`: the scalar is an RGB triple, shown as a swatch ([datalog.js:226-229](../../public/scripts/datalog.js#L226-L229)) | 1 |
@@ -131,7 +131,7 @@ Across the ten pages a grep finds 534 `ds.var` calls: 137 arrays (127 `Float64Ar
 | `ds.npz` | [161-181](../../public/scripts/dataset.js#L161-L181) | `extra = [{ name, bytes }]` (`bytes` a string or `Uint8Array`) | A `Blob` (`application/zip`): one `<name>.npy` per array, `dataset.json`, then the extra files. |
 
 Fields read directly by `datalog.js`: `ds.title`, `ds.dims`, `ds.vars[name]` (its `dims`, `type`, `attrs`, `data`,
-`version`) and `ds.order` ([datalog.js:77](../../public/scripts/datalog.js#L77), [datalog.js:754](../../public/scripts/datalog.js#L754)).
+`version`) and `ds.order` ([datalog.js:77](../../public/scripts/datalog.js#L77), [datalog.js:756](../../public/scripts/datalog.js#L756)).
 
 ## Internal functions
 
@@ -161,7 +161,7 @@ None. The file reacts to nothing; it runs only when a page or the data panel cal
 - Must load after `sim.js`, which creates `window.Sim` afresh ([sim.js:490](../../public/scripts/sim.js#L490)); loaded
   before it, `Sim.dataset` would be wiped.
 - Each page makes exactly one store and hands it to the panel as `Sim.data.ds` (for example
-  [Double Pendulum.html:748](../../public/simulations/Double%20Pendulum.html#L748)). The `Sim.dataset(...)` call of each page:
+  [Double Pendulum.html:769](../../public/simulations/Double%20Pendulum.html#L769)). The `Sim.dataset(...)` call of each page:
   [Fig. 1 L526](../../public/simulations/Circular%20Wave%20Interference%20Visualization.html#L526),
   [Fig. 2 L406](../../public/simulations/Double%20Pendulum.html#L406),
   [Fig. 3 L561](../../public/simulations/Interactive%20Double-Slit%20Experiment%20Visualization.html#L561),
@@ -173,9 +173,9 @@ None. The file reacts to nothing; it runs only when a page or the data panel cal
   [Fig. 9 L478](../../public/simulations/driven-oscillator.html#L478),
   [Fig. 10 L566](../../public/simulations/wind-turbine.html#L566).
 - `datalog.js` builds a second, temporary `Dataset` for a recorded round and saves it with the same `npz`
-  ([datalog.js:965-972](../../public/scripts/datalog.js#L965-L972)).
+  ([datalog.js:969-976](../../public/scripts/datalog.js#L969-L976)).
 - Each page's `Sim.live()` reads the store and formats strings for the walkthrough (for example
-  [Double Pendulum.html:678-690](../../public/simulations/Double%20Pendulum.html#L678-L690)); see [walk.md](walk.md).
+  [Double Pendulum.html:684-696](../../public/simulations/Double%20Pendulum.html#L684-L696)); see [walk.md](walk.md).
 - Each page's own documentation lists its dimensions, variables and the line where each is written
   ([../simulations/](../simulations/)).
 

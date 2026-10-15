@@ -2,7 +2,7 @@
 
 | | |
 |---|---|
-| Page | [public/simulations/wind-turbine.html](../../public/simulations/wind-turbine.html) (1 154 lines, 174 kB) |
+| Page | [public/simulations/wind-turbine.html](../../public/simulations/wind-turbine.html) (1154 lines, 174 334 bytes) |
 | Walkthrough | [public/scripts/walk/turbine.js](../../public/scripts/walk/turbine.js) (121 lines, 7 steps, key `turbine`) |
 | Thumbnail | [public/images/sims/wind-turbine.webp](../../public/images/sims/wind-turbine.webp) (WebP, 800 × 500 px, 15.4 kB) |
 | Catalog entry | [public/scripts/catalog.js#L200](../../public/scripts/catalog.js#L200-L216) (`id: 'wind-turbine'`, `fig: 10`, `field: 'control'`, `stage: 2`, lines 200–216) |
@@ -286,6 +286,8 @@ store for the walkthrough keys `lam`, `cp`, `lopt`, `cpmax`, `Kopt`, `v`, `w`, `
 `n`, `t`, `th`, `Eg`, `bal`; row-valued keys use `i_now`. The walkthrough polls it every 200 ms
 ([sim.js:400](../../public/scripts/sim.js#L400)).
 
+`rpm_ref` is the raw rpm input captured by `solve()`, rather than a round-trip conversion of `w_ref`. Check of `w_ref` converts this stored input; changing the live target cannot change the check of an already solved run. All 27 target values from 8 to 21 turns per minute were checked and were bit-identical.
+
 **Check and read-back.** `Sim.data.check` ([L1080–L1123](../../public/simulations/wind-turbine.html#L1080-L1123)) recomputes
 each value from stored inputs; the integrated quantities (`om`, `Ictl`, `th`, `sw`, `Eg`) are checked by rerunning the same
 RK4 to row $n$, the totals by `fullReplay()`, and `lam_opt` by repeating the scan. `Sim.data.drawn`
@@ -420,11 +422,7 @@ The page states this in `Sim.data.about` ([L1142](../../public/simulations/wind-
 2. **Walkthrough step 6 quotes only part of a line.** [turbine.js:99](../../public/scripts/walk/turbine.js#L99) ends at
    `sw[n] = y[3];`, but page [L702](../../public/simulations/wind-turbine.html#L702) continues `Ic[n] = I; vt[n] = w * R;`.
    AGENTS.md asks for excerpts identical to the page code.
-3. **Check of `w_ref` can report a false mismatch.** It recomputes from the live rpm slider unless the run is stale
-   ([L1084](../../public/simulations/wind-turbine.html#L1084)). In "Follow the wind" the slider does not mark the run stale
-   ([L734](../../public/simulations/wind-turbine.html#L734)), so after moving it the check disagrees with a stored value that
-   is in fact the one the run used. In that mode the Controller group also shows $K_p$, $K_i$, $\tau_0$ computed for a
-   target the run does not use ([L677](../../public/simulations/wind-turbine.html#L677)).
+3. Fixed on 2026-10-15: w_ref is checked against the saved rpm input, including Follow the wind; all target steps recompute identically after live controls change (commit `:/^Batch A: fix simulation and recording faults; verify in Chromium$`).
 4. **Figure 2 of the note** labels its SVG with plain text "c_p" and "λ_opt" ([L276](../../public/simulations/wind-turbine.html#L276),
    [L283](../../public/simulations/wind-turbine.html#L283), [L286](../../public/simulations/wind-turbine.html#L286)); the
    underscores show literally.

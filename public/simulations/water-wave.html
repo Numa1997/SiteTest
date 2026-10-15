@@ -583,7 +583,7 @@
         ds.var('dispersion', [], 'bool', { symbol: 'dispersion', long_name: 'the deep-water law ω² = gk ties f to λ', computed_in: 'the dispersion switch', source: 'The state of the switch.' });
         ds.var('N', [], 'int', { symbol: 'N', long_name: 'parcels per layer', computed_in: 'count slider', digits: 0 });
         ds.var('layers', [], 'int', { symbol: 'layers', long_name: 'rows of parcels', computed_in: 'layers slider', digits: 0 });
-        ds.var('layers_drawn', [], 'int', { symbol: 'layers drawn', long_name: 'rows that fit on the canvas', computed_in: 'draw()', digits: 0, source: 'The loop stops at the first row below the canvas.' });
+        ds.var('layers_drawn', [], 'int', { symbol: 'layers drawn', long_name: 'rows that fit on the canvas', computed_in: 'draw()', digits: 0, source: 'Every row is computed and stored; only rows whose centres fit above the bottom margin are drawn.' });
         ds.var('k', [], 'float', { symbol: 'k', units: 'rad/px', long_name: 'wave number', computed_in: 'k(), in readouts()', formula: 'k = 2π / λ', digits: 5 });
         ds.var('k_m', [], 'float', { symbol: 'k', units: 'rad/m', long_name: 'the same in metres', computed_in: 'readouts()', formula: 'k · 100', digits: 4 });
         ds.var('omega', [], 'float', { symbol: 'ω', units: 'rad/s', long_name: 'angular frequency', computed_in: 'readouts()', formula: 'ω = 2π f', digits: 4 });
@@ -730,16 +730,19 @@
             ctx.font = T.mono;
             ctx.textAlign = 'right';
             ctx.textBaseline = 'middle';
+            var drawn = 0;
             for (var j = 0; j < L; j++) {
                 var z0 = -j * DZ, r = A * Math.exp(kk * z0), cy = ys - z0 * s;
                 rL[j] = r; zL[j] = -z0 / PX_PER_M; cyL[j] = cy;
-                if (cy > h - 8) break;
+                var visible = cy <= h - 8;
+                if (visible) drawn++;
                 for (var i = 0; i < N; i++) {
                     var X0 = 30 + i * (WORLD_W - 60) / (N - 1), cx = X0 * s;
                     th = kk * X0 - omegaT;
                     var px = (X0 - r * Math.sin(th)) * s, py = cy - r * Math.cos(th) * s;
                     q = j * N + i;
                     X0A[i] = X0; thM[q] = th; xiM[q] = -r * Math.sin(th); zeM[q] = r * Math.cos(th); uM[q] = r * om * Math.cos(th); wM[q] = r * om * Math.sin(th); pxM[q] = px; pyM[q] = py;
+                    if (!visible) continue;
                     var isF = i === follow;
                     if (orbitsBox.checked && r * s > 1.2) {
                         ctx.strokeStyle = isF ? 'rgba(122, 31, 43, 0.45)' : 'rgba(90, 80, 75, 0.24)';
@@ -764,9 +767,9 @@
                     ctx.fill();
                     if (isF) { ctx.lineWidth = 2; ctx.strokeStyle = T.card; ctx.stroke(); }
                 }
-                if (j > 0) depthLabel('= −' + zL[j].toFixed(2) + ' m', 8, cy - Math.max(14, r * s + 10));
+                if (visible && j > 0) depthLabel('= −' + zL[j].toFixed(2) + ' m', 8, cy - Math.max(14, r * s + 10));
             }
-            ds.set('layers_drawn', j);
+            ds.set('layers_drawn', drawn);
             ds.touch('X0'); ds.touch('r_z'); ds.touch('depth'); ds.touch('cy_px');
             ds.touch('theta'); ds.touch('xi'); ds.touch('zeta'); ds.touch('u'); ds.touch('w'); ds.touch('px'); ds.touch('py');
         }

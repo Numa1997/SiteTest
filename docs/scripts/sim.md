@@ -218,7 +218,7 @@ Listeners: `window` `error` ([sim.js:231](../../public/scripts/sim.js#L231)); `D
 
 - **Simulation pages** provide `<section class="walk" id="walk" data-walk="<key>">`, an `article.paper` with `\( \)` and
   `\[ \]`, captions `.stage__cap`, and a function `Sim.live()` that returns an object of display strings keyed by the
-  walkthrough's symbol keys (for example [Double Pendulum.html:678](../../public/simulations/Double%20Pendulum.html#L678)).
+  walkthrough's symbol keys (for example [Double Pendulum.html:684](../../public/simulations/Double%20Pendulum.html#L684)).
   See [walk.md](walk.md).
 - **`walk/<key>.js`** must define `window.WALK[<key>]` ([walk.md](walk.md)).
 - **`fold.js`** must load before `sim.js` so that `window.Fold` exists when the walkthrough calls `Fold.walk`

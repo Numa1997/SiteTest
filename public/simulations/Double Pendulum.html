@@ -445,6 +445,10 @@
         ds.var('y1_px', [], 'float', { symbol: 'y<sub>1</sub> px', units: 'css px', long_name: 'bob 1 as drawn, from the top', computed_in: 'pos(state), in diagnostics()', formula: 'oy + l₁ σ cos θ₁', digits: 1 });
         ds.var('x2_px', [], 'float', { symbol: 'x<sub>2</sub> px', units: 'css px', long_name: 'bob 2 as drawn, from the left', computed_in: 'pos(state), in diagnostics()', formula: 'x₁px + l₂ σ sin θ₂', digits: 1 });
         ds.var('y2_px', [], 'float', { symbol: 'y<sub>2</sub> px', units: 'css px', long_name: 'bob 2 as drawn, from the top', computed_in: 'pos(state), in diagnostics()', formula: 'y₁px + l₂ σ cos θ₂', digits: 1 });
+        ds.var('x1_twin_px', [], 'float', { symbol: 'x′<sub>1</sub> px', units: 'css px', long_name: 'twin bob 1 as drawn, from the left', computed_in: 'pos(twin), in diagnostics()', formula: 'ox + l₁ σ sin θ′₁', digits: 1 });
+        ds.var('y1_twin_px', [], 'float', { symbol: 'y′<sub>1</sub> px', units: 'css px', long_name: 'twin bob 1 as drawn, from the top', computed_in: 'pos(twin), in diagnostics()', formula: 'oy + l₁ σ cos θ′₁', digits: 1 });
+        ds.var('x2_twin_px', [], 'float', { symbol: 'x′<sub>2</sub> px', units: 'css px', long_name: 'twin bob 2 as drawn, from the left', computed_in: 'pos(twin), in diagnostics()', formula: 'x′₁px + l₂ σ sin θ′₂', digits: 1 });
+        ds.var('y2_twin_px', [], 'float', { symbol: 'y′<sub>2</sub> px', units: 'css px', long_name: 'twin bob 2 as drawn, from the top', computed_in: 'pos(twin), in diagnostics()', formula: 'y′₁px + l₂ σ cos θ′₂', digits: 1 });
         ds.var('scale', [], 'float', { symbol: 'σ', units: 'px/m', long_name: 'pixels per metre on screen', computed_in: 'layout()', formula: '(min(box.w, box.h)/2 − 34) / (l₁ + l₂)', digits: 2 });
         ds.var('ox', [], 'float', { symbol: 'o<sub>x</sub>', units: 'css px', long_name: 'pivot, from the left', computed_in: 'layout()', formula: 'box.w / 2', digits: 1 });
         ds.var('oy', [], 'float', { symbol: 'o<sub>y</sub>', units: 'css px', long_name: 'pivot, from the top', computed_in: 'layout()', formula: 'box.h / 2', digits: 1 });
@@ -664,9 +668,11 @@
             ds.set('twin_on', !!twin);
             if (twin) {
                 var q = pos(twin), sep = Math.hypot(p[2] - q[2], p[3] - q[3]) / scale;
+                ds.set('x1_twin_px', q[0]); ds.set('y1_twin_px', q[1]); ds.set('x2_twin_px', q[2]); ds.set('y2_twin_px', q[3]);
                 ds.set('sep', sep); ds.set('log10sep', sep > 0 ? Math.log(sep) / Math.LN10 : undefined);
             } else {
                 ds.set('sep', undefined); ds.set('log10sep', undefined);
+                ds.set('x1_twin_px', undefined); ds.set('y1_twin_px', undefined); ds.set('x2_twin_px', undefined); ds.set('y2_twin_px', undefined);
             }
             ds.set('t', simT); ds.set('steps', Math.round(simT / H)); ds.set('n', lastN); ds.set('acc', acc); ds.set('speed', speed.value);
             if (dt > 0) fps = fps ? fps + (1 / dt - fps) * 0.1 : 1 / dt;
@@ -729,6 +735,21 @@
             else if (dBob2 < r2 + 2) { expected += ', or bob 2 and its cream rim painted over it'; note = 'Bob 1 lies under bob 2 here (' + Sim.fmt(dBob2, 1) + ' px apart); bob 2 is painted after bob 1, with a 2 px cream rim.'; }
             return { what: 'screen pixel at ' + name + ', (' + Sim.fmt(x, 1) + ', ' + Sim.fmt(y, 1) + ') css px', drawn: px[3] === 0 ? 'nothing (transparent)' : 'rgb(' + px[0] + ', ' + px[1] + ', ' + px[2] + ')', expected: expected, ok: burgundy || pivot || rim, note: note };
         }
+        function twinPositionCheck(which) {
+            if (!ds.get('twin_on')) return { formula: 'the twin is off', inputs: [], value: undefined };
+            var s = ds.get('y_twin'), sc = ds.get('scale'), l = ds.get('l2');
+            var x1 = ds.get('ox') + ds.attrs.l1 * sc * Math.sin(s[0]), y1 = ds.get('oy') + ds.attrs.l1 * sc * Math.cos(s[0]);
+            var p = [x1, y1, x1 + l * sc * Math.sin(s[1]), y1 + l * sc * Math.cos(s[1])];
+            return { formula: 'the stored twin state mapped to screen coordinates', inputs: [['θ′₁', s[0], 'rad', 5], ['θ′₂', s[1], 'rad', 5], ['l₁', ds.attrs.l1, 'm', 4], ['l₂', l, 'm', 4], ['σ', sc, 'px/m', 2], ['ox', ds.get('ox'), 'px', 1], ['oy', ds.get('oy'), 'px', 1]], value: p[which] };
+        }
+        function twinPixel(bob) {
+            if (!ds.get('twin_on')) return { what: 'the twin bob', drawn: 'nothing', expected: 'nothing', ok: true, note: 'The chaos twin is switched off.' };
+            var x = ds.get('x' + bob + '_twin_px'), y = ds.get('y' + bob + '_twin_px');
+            var px = ctx.getImageData(Math.floor(x * box.dpr), Math.floor(y * box.dpr), 1, 1).data;
+            var rose = px[3] > 0 && Math.abs(px[0] - 226) < 40 && Math.abs(px[1] - 162) < 40 && Math.abs(px[2] - 170) < 40;
+            var covered = bobPixel('twin bob ' + bob, x, y).ok;
+            return { what: 'screen pixel at twin bob ' + bob, drawn: px[3] === 0 ? 'nothing (transparent)' : 'rgb(' + px[0] + ', ' + px[1] + ', ' + px[2] + ')', expected: 'the rose twin dot, rgb(226, 162, 170), or an overlying main bob or pivot', ok: rose || covered, note: 'The main pendulum is painted after the twin and can cover it where the bobs overlap.' };
+        }
         function alphaCheck(which) {
             var t1 = ds.get('th1'), t2 = ds.get('th2'), o1 = ds.get('w1'), o2 = ds.get('w2'), m = ds.get('m2'), l = ds.get('l2'), d = t1 - t2;
             var den = 2 * m1 + m - m * Math.cos(2 * d), v;
@@ -753,7 +774,7 @@
                 { title: 'Equations of motion', note: 'what deriv() computes from the state', vars: ['delta', 'den', 'alpha1', 'alpha2', 'M', 'detM', 'p1', 'p2'] },
                 { title: 'Energy', note: 'conserved by the physics, so its drift measures the integrator', vars: ['T', 'V', 'L', 'E', 'E0', 'drift'] },
                 { title: 'Bobs', note: 'metres with the pivot at the origin and y upwards; then the pixels as drawn', vars: ['x1', 'y1', 'x2', 'y2', 'v1', 'v2', 'x1_px', 'y1_px', 'x2_px', 'y2_px'] },
-                { title: 'Chaos twin', note: 'a copy started 0.001 rad away', vars: ['twin_on', 'y_twin', 'sep', 'log10sep'] },
+                { title: 'Chaos twin', note: 'a copy started 0.001 rad away; its own stored screen positions locate its state', vars: ['twin_on', 'y_twin', 'x1_twin_px', 'y1_twin_px', 'x2_twin_px', 'y2_twin_px', 'sep', 'log10sep'] },
                 { title: 'Integrator and drawing', note: 'fourth-order Runge–Kutta at h = 1/600 s', vars: ['t', 'n', 'steps', 'acc', 'scale', 'ox', 'oy', 'dt', 'fps', 'frames', 'playing'] }
             ],
             rowLabel: { q: function (j) { return QN[j]; }, a: function (j) { return QN[j]; } },
@@ -768,7 +789,8 @@
                 return { title: w + (w === 'pivot' ? ' · the whole system' : ''), at: at, rows: rows };
             },
             locate: function (name, idx) {
-                if (name === 'y' || name === 'dydt' || name === 'y_twin') return idx % 2 === 0 ? { x: ds.get('x1_px'), y: ds.get('y1_px') } : { x: ds.get('x2_px'), y: ds.get('y2_px') };
+                if (name === 'y_twin') return ds.get('twin_on') ? (idx % 2 === 0 ? { x: ds.get('x1_twin_px'), y: ds.get('y1_twin_px') } : { x: ds.get('x2_twin_px'), y: ds.get('y2_twin_px') }) : null;
+                if (name === 'y' || name === 'dydt') return idx % 2 === 0 ? { x: ds.get('x1_px'), y: ds.get('y1_px') } : { x: ds.get('x2_px'), y: ds.get('y2_px') };
                 if (name === 'M') return { x: ox, y: oy };
                 return null;
             },
@@ -832,6 +854,10 @@
             about: 'Here the rods and bobs are drawn at the stored pixel positions, so the picture and the store agree to the pixel. The trail is painted segment by segment at every RK4 step and fades away; it is not kept as an array; to keep the trajectory, record a round, which copies every frame of ten simulated seconds. The energy drift is the integrator’s own error, shown rather than hidden.'
         };
 
+        ['x1_twin_px', 'y1_twin_px', 'x2_twin_px', 'y2_twin_px'].forEach(function (name, i) {
+            Sim.data.check[name] = function () { return twinPositionCheck(i); };
+            Sim.data.drawn[name] = function () { return twinPixel(i < 2 ? 1 : 2); };
+        });
         restart();
         resize();
         diagnostics(0);

@@ -63,7 +63,7 @@ var ⟦deep|deep = Math.exp(-k() * DZ * (layers.value - 1))⟧;`,
             syms: [
                 ['r', 'r<sub>0</sub>', 'r (j = 0)', 'surface orbit radius, px'],
                 ['r1', 'r<sub>1</sub>', 'r (j = 1)', 'first layer below, px'],
-                ['z0', 'z<sub>deep</sub>', '−56 (layers − 1)', 'deepest layer shown, px'],
+                ['z0', 'z<sub>deep</sub>', '−56 (layers − 1)', 'deepest layer computed, px'],
                 ['deep', 'r/a', 'deep', 'deepest layer, fraction of a']
             ]
         },

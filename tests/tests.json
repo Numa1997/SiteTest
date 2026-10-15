@@ -18,7 +18,7 @@
   },
   {
     "name": "Simulations page lists every figure, filters by field and searches",
-    "sanity": true,
+    "sanity": false,
     "viewport": "desktop",
     "covers": [
       "simulations catalog page",
@@ -60,14 +60,17 @@
     "viewport": "desktop",
     "covers": [
       "UTF-8 characters",
-      "double-slit geometry and readouts"
+      "double-slit geometry and readouts",
+      "fringe-order boundary at thirty degrees"
     ],
     "description": "Verifies the double-slit page shows correct Greek symbols and a computed path difference.",
     "steps": [
       "Open the home page",
-      "In the simulations section, click the Launch button on the Double-Slit Interference card"
+      "In the simulations section, click the Launch button on the Double-Slit Interference card",
+      "Set Slit separation b to 40 px and Wavelength lambda to 20 px",
+      "Confirm Fig. 3b includes the bright-fringe label m = 1 at its thirty-degree edge"
     ],
-    "expected": "The opened page shows the heading Double-Slit Interference, a control labelled Angle with the Greek letter alpha and a degree value such as 20.0°, and a readout labelled δs exact with a value in px; no garbled characters such as Î± appear."
+    "expected": "The opened page shows the heading Double-Slit Interference, a control labelled Angle with the Greek letter alpha and a degree value such as 20.0°, and a readout labelled δs exact with a value in px; no garbled characters such as Î± appear. At b = 40 px and lambda = 20 px the pattern also labels m = 1 at thirty degrees."
   },
   {
     "name": "Wave workbench builds a square wave and removes a wave on mobile",
@@ -199,7 +202,7 @@
   },
   {
     "name": "Portfolios page opens the droplet project",
-    "sanity": true,
+    "sanity": false,
     "viewport": "desktop",
     "covers": [
       "portfolios page",
@@ -215,5 +218,41 @@
       "Click the link Numa Koudsie · Portfolios at the top left"
     ],
     "expected": "The Portfolios page with the heading Portfolios is shown again."
+  },
+  {
+    "name": "Wave bench handles a slow repeat and an empty sum",
+    "viewport": "desktop",
+    "covers": [
+      "exact-frequency round length",
+      "empty-bench dataset reset",
+      "empty-bench check"
+    ],
+    "description": "Verifies nearby wave frequencies use the twenty-second recording cap and removing every wave clears the stored sum.",
+    "steps": [
+      "Open simulations/wave-interference.html and choose Beats",
+      "Set Wave 2 Frequency to 1.05 and Speed to 0.95; open Data",
+      "Confirm Record one round describes twenty seconds of the pattern, 20.00 s",
+      "Close Data and remove both waves",
+      "Open Data, then open the y_sum array in Variables and check one of its zero-valued entries"
+    ],
+    "expected": "The empty bench has no wave cards and its sum array is zero; Check says Stored and recomputed identical."
+  },
+  {
+    "name": "Phasor recording explains zero speed and resumes at positive speed",
+    "viewport": "mobile",
+    "covers": [
+      "zero-speed recording guard",
+      "recording recovery after setting speed",
+      "phasor round completion"
+    ],
+    "description": "Verifies Speed 0 cannot silently start a round that never advances, and positive speed permits a complete round.",
+    "steps": [
+      "Open simulations/phasor-sums.html",
+      "Set Speed to 0, open Data, and press Record",
+      "Confirm the message says Set Speed above 0 because phasor time does not advance",
+      "Close Data, set Speed to 1, reopen Data, and press Record",
+      "Wait five seconds"
+    ],
+    "expected": "At Speed 0 the panel explains why recording cannot start. At Speed 1 one full figure finishes and the Rounds tab displays Round 1."
   }
 ]

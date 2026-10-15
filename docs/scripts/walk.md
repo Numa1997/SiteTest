@@ -86,7 +86,7 @@ else is copied from the page character for character, without the page's indenta
    for that key; a key the page does not return shows `—`, and an error in `Sim.live()` is caught and shows `—` everywhere
    ([sim.js:388-400](../../public/scripts/sim.js#L388-L400)). `Sim.live()` is defined by each page next to its own state and
    returns ready-formatted strings with units, read from the page's dataset; for example
-   `t1: f4(ds.get('th1'), 'rad')` in [Double Pendulum.html:678-690](../../public/simulations/Double%20Pendulum.html#L678-L690)
+   `t1: f4(ds.get('th1'), 'rad')` in [Double Pendulum.html:684-696](../../public/simulations/Double%20Pendulum.html#L684-L696)
    (dataset: [dataset.md](dataset.md)).
 5. **Hold the numbers.** Switching it on takes one snapshot of `Sim.live()` and stops the updates; every step then shows that
    same frozen instant, so the reader can compare steps at one moment. Switching it off resumes the updates

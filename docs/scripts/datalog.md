@@ -2,10 +2,10 @@
 
 | | |
 |---|---|
-| File | [public/scripts/datalog.js](../../public/scripts/datalog.js), 1084 lines, 76.7 kB (76 675 bytes) |
+| File | [public/scripts/datalog.js](../../public/scripts/datalog.js), 1089 lines, 77.2 kB (77 171 bytes) |
 | Loaded by | the ten simulation pages, last, after the page's own script (line numbers in the load-order table of [sim.md](sim.md#load-order-on-the-pages)); styles in [styles/data.css](../../public/styles/data.css), linked in each page's head (for example [Double Pendulum.html:12](../../public/simulations/Double%20Pendulum.html#L12)) |
 | Reads | `Sim.data` (the page's contract, below) and through it the page's dataset ([datalog.js:39-40](../../public/scripts/datalog.js#L39-L40)) |
-| Defines | `Sim.colourMap` ([datalog.js:67](../../public/scripts/datalog.js#L67)), `window.__dataPanel` ([datalog.js:1083](../../public/scripts/datalog.js#L1083)) |
+| Defines | `Sim.colourMap` ([datalog.js:67](../../public/scripts/datalog.js#L67)), `window.__dataPanel` ([datalog.js:1088](../../public/scripts/datalog.js#L1088)) |
 | Adds to the page | `button.dp-tab` and `aside#data-panel.dp` at the end of `<body>` ([datalog.js:167-168](../../public/scripts/datalog.js#L167-L168)); `canvas.dp-overlay` inside `#stage`, `div.dp-read` right after `#stage`, `button.dp-readbtn` in the figure caption ([datalog.js:567-589](../../public/scripts/datalog.js#L567-L589)) |
 
 `datalog.js` is the data panel: a variable explorer in the manner of Spyder's, fed by the page's one store
@@ -45,22 +45,22 @@ Save hands over the notebook.
 7. If the page has `#stage` and `Sim.data` has `probe` and `inspect`, it adds the Read values button, the overlay canvas and
    the strip, with their pointer listeners ([datalog.js:566-639](../../public/scripts/datalog.js#L566-L639)).
 8. It restores the reader's choices from `localStorage` and opens the panel if it was open last time, or, the first time, if
-   the window is at least 1500 px wide ([datalog.js:1070-1075](../../public/scripts/datalog.js#L1070-L1075)).
+   the window is at least 1500 px wide ([datalog.js:1075-1080](../../public/scripts/datalog.js#L1075-L1080)).
 9. Two animation frames later, after the simulation has drawn twice, it catches the first instant, so the ledger shows a real
-   frame and not the empty start ([datalog.js:1077](../../public/scripts/datalog.js#L1077)).
+   frame and not the empty start ([datalog.js:1082](../../public/scripts/datalog.js#L1082)).
 
 ### The loop that runs only when needed
 
 The panel has one `requestAnimationFrame` loop, and it runs only while `wanted()` is true: a round is recording, Read values
 is on with a pin or an outline showing, a table cell's position is being shown in the figure, the panel is open with Live on,
-or a marker still has to be wiped ([datalog.js:1059](../../public/scripts/datalog.js#L1059)). Any action that may need it calls
-`kick()`, which starts the loop if it is not running ([datalog.js:1060](../../public/scripts/datalog.js#L1060)). Each frame does,
+or a marker still has to be wiped ([datalog.js:1064](../../public/scripts/datalog.js#L1064)). Any action that may need it calls
+`kick()`, which starts the loop if it is not running ([datalog.js:1065](../../public/scripts/datalog.js#L1065)). Each frame does,
 in order: record one sample, draw the probe overlay, repaint the open view if Live is on, and either request the next frame or
-stop and wipe the overlay ([datalog.js:1061-1067](../../public/scripts/datalog.js#L1061-L1067)).
+stop and wipe the overlay ([datalog.js:1066-1072](../../public/scripts/datalog.js#L1066-L1072)).
 
 Animation-frame callbacks run in the order they were requested. The page's clock requests its next frame inside its own
 callback ([sim.js:185](../../public/scripts/sim.js#L185)), before any later `kick()` can, so in every frame the panel reads
-the store after the simulation has written it, as the comment says ([datalog.js:1057](../../public/scripts/datalog.js#L1057)).
+the store after the simulation has written it, as the comment says ([datalog.js:1062](../../public/scripts/datalog.js#L1062)).
 
 Measured in headless Chromium on Fig. 2 (window 1600 × 1000, panel open at load): with Live off and Read values off,
 `__dataPanel.running()` is `false`; with Read values switched on but nothing pinned, it is still `false`.
@@ -78,9 +78,9 @@ Min, max and mean skip NaN and infinite values and are cached until the variable
 
 `catchNow(why)` records the time and the reason, re-copies an open table, re-runs an open Check and repaints
 ([datalog.js:299-304](../../public/scripts/datalog.js#L299-L304)). It is called when the panel opens, on Catch now, when Live is
-switched off, and at the end of a round ([datalog.js:1025](../../public/scripts/datalog.js#L1025),
-[1037](../../public/scripts/datalog.js#L1037), [1041](../../public/scripts/datalog.js#L1041),
-[838](../../public/scripts/datalog.js#L838)). The line above the ledger says which instant is shown, for example
+switched off, and at the end of a round ([datalog.js:1030](../../public/scripts/datalog.js#L1030),
+[1042](../../public/scripts/datalog.js#L1042), [1046](../../public/scripts/datalog.js#L1046),
+[842](../../public/scripts/datalog.js#L842)). The line above the ledger says which instant is shown, for example
 "Values at t = 3.41 s · caught when the panel opened" ([datalog.js:293-298](../../public/scripts/datalog.js#L293-L298)).
 With Live on, `paint(false)` runs every frame: values every frame, thumbnails at most every 250 ms and only when the version
 moved ([datalog.js:279-291](../../public/scripts/datalog.js#L279-L291)).
@@ -173,65 +173,67 @@ A round is what the page says it is, in `Sim.data.round` ([datalog.js:21-23](../
 | Fig. | One round | Time variable | Mode | Can be blocked | Line |
 |---|---|---|---|---|---|
 | 1 | one period of the sources, $T$ | `t` | sampled | no | [L892](../../public/simulations/Circular%20Wave%20Interference%20Visualization.html#L892) |
-| 2 | ten seconds of simulated motion | `t` | sampled | no | [L829](../../public/simulations/Double%20Pendulum.html#L829) |
+| 2 | ten seconds of simulated motion | `t` | sampled | no | [L851](../../public/simulations/Double%20Pendulum.html#L851) |
 | 3 | ten seconds of slider changes | `wall` | `'change'` | no | [L910](../../public/simulations/Interactive%20Double-Slit%20Experiment%20Visualization.html#L910) |
-| 4 | one period, $T$ | `t` | sampled | no | [L1071](../../public/simulations/Transverse%20and%20longitudinal%20waves.html#L1071) |
-| 5 | one period, $T$ | `t` | sampled | no | [L875](../../public/simulations/water-wave.html#L875) |
-| 6 | one repeat of the pattern, at most 20 s | `t` | sampled | no | [L947](../../public/simulations/wave-interference.html#L947) |
+| 4 | one period, $T$ | `t` | sampled | no | [L1072](../../public/simulations/Transverse%20and%20longitudinal%20waves.html#L1072) |
+| 5 | one period, $T$ | `t` | sampled | no | [L878](../../public/simulations/water-wave.html#L878) |
+| 6 | one repeat of the pattern, at most 20 s | `t` | sampled | no | [L951](../../public/simulations/wave-interference.html#L951) |
 | 7 | one full figure (or part of it) in phasor time | `t` | sampled | yes, in the final-shape view | [L1462](../../public/simulations/phasor-sums.html#L1462) |
 | 8 | one loop of the circles | `t` | sampled | yes, until a shape is decomposed | [L1398](../../public/simulations/draw-decompose.html#L1398) |
 | 9 | one drive period $1/f$ of the stored run | `t_play` | sampled | yes, near the end of the run | [L1093](../../public/simulations/driven-oscillator.html#L1093) |
 | 10 | one rotor turn of the stored run | `t_play` | sampled | yes, near the end of the run | [L1138](../../public/simulations/wind-turbine.html#L1138) |
 
-`startRound()` ([datalog.js:755-778](../../public/scripts/datalog.js#L755-L778)) refuses with the page's reason if `blocked`
-returns one, presses Play if the simulation is paused, chooses the point to follow (the pinned point, else `round.point()`),
+`startRound()` ([datalog.js:757-780](../../public/scripts/datalog.js#L757-L780)) refuses with the page's reason if `blocked`
+returns one; the idle description keeps the reason visible and progress shows it if a round later becomes blocked, presses Play if the simulation is paused, chooses the point to follow (the pinned point, else `round.point()`),
 and prepares one buffer per numeric scalar of the whole store (`scalarNames()`, every scalar of type `float`, `int` or
 `bool`), one per row of the followed point, and two for time. It also notes the first group's scalars as the round's
-parameters. In sampled mode the target spacing is the round length over 600; in change mode it is zero.
+parameters. In sampled mode the target spacing is the round length over 600; the final slot is reserved for the ending frame. In change mode it is zero and the 600-change cap is unchanged.
 
-`recordFrame()` runs once per frame while recording ([datalog.js:786-815](../../public/scripts/datalog.js#L786-L815)). It reads
+`recordFrame()` runs once per frame while recording ([datalog.js:789-819](../../public/scripts/datalog.js#L789-L819)). It reads
 the time variable (or `performance.now()` if there is none, [datalog.js:102](../../public/scripts/datalog.js#L102)); the first
 frame sets $t_0$, and the elapsed time is $t - t_0$. A frame is taken when
 
-- sampled mode: it is the first, or at least $0.999 \cdot L/600$ after the last taken one, or the round has ended;
+- sampled mode: it is the first, or at least $0.999 \cdot L/600$ after the last taken one, or the round has ended (within 10⁻⁹ s);
 - change mode: the joined values of `round.columns` differ from the last frame's.
 
-At most 600 samples are taken (`MAXS`, [datalog.js:743](../../public/scripts/datalog.js#L743)). A taken frame stores $t$, the
+At most 600 samples are taken; sampled rounds reserve slot 600 for the ending frame (`MAXS`, [datalog.js:743](../../public/scripts/datalog.js#L743)). A taken frame stores $t$, the
 elapsed time, every numeric scalar (booleans as 1 or 0, anything else not numeric as NaN), and each row of the followed point,
-or NaN when the page's rows for that point changed shape ([datalog.js:799-807](../../public/scripts/datalog.js#L799-L807)). The
-progress bar is repainted every 125 ms ([datalog.js:811-813](../../public/scripts/datalog.js#L811-L813)). The round ends when
+or NaN when the page's rows for that point changed shape ([datalog.js:803-811](../../public/scripts/datalog.js#L803-L811)). The
+progress bar is repainted every 125 ms ([datalog.js:815-817](../../public/scripts/datalog.js#L815-L817)). The round ends when
 the elapsed time reaches $L$ (or, in change mode, at 600 samples), when Stop is pressed, or when time runs backwards because
-the page restarted ("the clock was reset", [datalog.js:791](../../public/scripts/datalog.js#L791)). A round with fewer than two
-samples is dropped with a message ([datalog.js:823](../../public/scripts/datalog.js#L823)).
+the page restarted ("the clock was reset", [datalog.js:794](../../public/scripts/datalog.js#L794)). A round with fewer than two
+samples is dropped with a message ([datalog.js:827](../../public/scripts/datalog.js#L827)).
 
 `finishRound()` turns the buffers into `Float64Array` series: time first, then one per chart column, then one per row of the
-followed point, keyed `<variable>[_<index>]_at_point` ([datalog.js:816-842](../../public/scripts/datalog.js#L816-L842)). The
-last five rounds are kept ([datalog.js:834](../../public/scripts/datalog.js#L834)); the panel opens on the Rounds tab. Each
+followed point, keyed `<variable>[_<index>]_at_point` ([datalog.js:820-846](../../public/scripts/datalog.js#L820-L846)). The
+last five rounds are kept ([datalog.js:838](../../public/scripts/datalog.js#L838)); the panel opens on the Rounds tab. Each
 round shows: chips to switch rounds, the parameters at the start, one chart per quantity that changed (black lines for the
 followed point, burgundy for the rest), one line for quantities that stayed constant or were undefined, and a collapsible
-table of every sample ([datalog.js:881-916](../../public/scripts/datalog.js#L881-L916)). Pointing at a chart draws a cursor on
-every chart at the nearest sample and lists all values at it ([datalog.js:927-939](../../public/scripts/datalog.js#L927-L939)).
+table of every sample ([datalog.js:885-920](../../public/scripts/datalog.js#L885-L920)). Pointing at a chart draws a cursor on
+every chart at the nearest sample and lists all values at it ([datalog.js:931-943](../../public/scripts/datalog.js#L931-L943)).
 
 Measured on Fig. 2: a 10 s round gave 600 samples from 601 frames, 15 series (time, 7 columns, 7 rows of the followed bob) and
-48 recorded scalars; the last sample sits at 9.983 s.
+52 recorded scalars after adding the twin screen coordinates; a controlled 60 Hz run now keeps the ending sample at 10.000000000000776 s (the 7.8 × 10⁻¹³ s gap is float64 accumulation).
 
 ### Save: what goes into the files
 
 | Button | File name | Contents | Lines |
 |---|---|---|---|
-| Save (panel header) | `<file>-<stamp>.zip` | the store via `ds.npz`: one `.npy` per array, `dataset.json`; then `round-<n>.csv` for each kept round and `README.txt` | [999-1003](../../public/scripts/datalog.js#L999-L1003) |
-| Save this round | `<file>-round-<n>-<stamp>.zip` | a new dataset with dimension `sample`, coordinate `time_into_round`, one `float64` variable per series and per recorded scalar, attributes (page, round label, samples, frames, time caught, time variable, followed point, `start_<parameter>`); plus `round.csv` and `README.txt` | [964-973](../../public/scripts/datalog.js#L964-L973) |
-| CSV | `<file>-round-<n>-<stamp>.csv` | the round as CSV | [963](../../public/scripts/datalog.js#L963) |
+| Save (panel header) | `<file>-<stamp>.zip` | the store via `ds.npz`: one `.npy` per array, `dataset.json`; then `round-<n>.csv` for each kept round and `README.txt` | [1003-1008](../../public/scripts/datalog.js#L1003-L1008) |
+| Save this round | `<file>-round-<n>-<stamp>.zip` | a new dataset with dimension `sample`, coordinate `time_into_round`, one `float64` variable per series and per recorded scalar, attributes (page, round label, samples, frames, time caught, time variable, followed point, `start_<parameter>`); plus `round.csv` and `README.txt` | [968-978](../../public/scripts/datalog.js#L968-L978) |
+| CSV | `<file>-round-<n>-<stamp>.csv` | the round as CSV | [967](../../public/scripts/datalog.js#L967) |
 
-`<file>` is `Sim.data.file` (for example `fig2-double-pendulum`, [Double Pendulum.html:748](../../public/simulations/Double%20Pendulum.html#L748));
-`<stamp>` is the UTC time as `YYYY-MM-DDTHH-MM-SS` ([datalog.js:957](../../public/scripts/datalog.js#L957)). The download goes
-through a temporary object URL that is revoked after 4 s ([datalog.js:948-956](../../public/scripts/datalog.js#L948-L956)).
+`<file>` is `Sim.data.file` (for example `fig2-double-pendulum`, [Double Pendulum.html:769](../../public/simulations/Double%20Pendulum.html#L769));
+`<stamp>` is the UTC time as `YYYY-MM-DDTHH-MM-SS` ([datalog.js:961](../../public/scripts/datalog.js#L961)). The download goes
+through a temporary object URL that is revoked after 4 s ([datalog.js:952-960](../../public/scripts/datalog.js#L952-L960)).
 
-The CSV ([datalog.js:941-947](../../public/scripts/datalog.js#L941-L947)) has the header `sample,time_into_round,` then the series
+The CSV ([datalog.js:945-951](../../public/scripts/datalog.js#L945-L951)) has the header `sample,time_into_round,` then the series
 keys, then every other recorded scalar; one row per sample, numbers written with `String(v)` (full double precision), NaN as an
 empty cell, `\n` line ends. Units are not in the CSV; they are in the round archive's `dataset.json`.
 
-The README ([datalog.js:977-998](../../public/scripts/datalog.js#L977-L998)) names the page and the time, explains the layout and
+The actual filename is generated once and passed to both the README and the download, for the store and for an individual round.
+
+The README ([datalog.js:982-1002](../../public/scripts/datalog.js#L982-L1002)) names the page and the time, explains the layout and
 gives Python to load the archive with `zipfile`, `json` and NumPy, and to build an xarray `Dataset`.
 
 ### The .npz writer, byte by byte
@@ -299,16 +301,16 @@ which pages set them (from the ten `Sim.data = {` blocks).
 |---|---|---|---|
 | `ds` | the dataset | [39](../../public/scripts/datalog.js#L39) | all |
 | `kicker` | text above the title (default: the dataset title) | [136](../../public/scripts/datalog.js#L136) | all, not in the comment |
-| `file` | base name of saved files | [963](../../public/scripts/datalog.js#L963), [978](../../public/scripts/datalog.js#L978), [1002](../../public/scripts/datalog.js#L1002) | all |
-| `playing` | `() → bool` | [759](../../public/scripts/datalog.js#L759), [781](../../public/scripts/datalog.js#L781) | all |
-| `play` | `() → void` | [759](../../public/scripts/datalog.js#L759) | all except Fig. 3 |
-| `groups` | `[{ title, note, vars }]` | [94](../../public/scripts/datalog.js#L94), [188](../../public/scripts/datalog.js#L188), [766](../../public/scripts/datalog.js#L766) | all |
+| `file` | base name of saved files | [967](../../public/scripts/datalog.js#L967), [976](../../public/scripts/datalog.js#L976), [1004](../../public/scripts/datalog.js#L1004) | all |
+| `playing` | `() → bool` | [761](../../public/scripts/datalog.js#L761), [783](../../public/scripts/datalog.js#L783) | all |
+| `play` | `() → void` | [761](../../public/scripts/datalog.js#L761) | all except Fig. 3 |
+| `groups` | `[{ title, note, vars }]` | [94](../../public/scripts/datalog.js#L94), [188](../../public/scripts/datalog.js#L188), [768](../../public/scripts/datalog.js#L768) | all |
 | `colour` | `{ name: (value, j, i) → [r, g, b] \| null }`, presentation only | [91](../../public/scripts/datalog.js#L91) | all except Figs. 2 and 10 |
 | `rowLabel` | `{ dim: (j) → text }` | [399](../../public/scripts/datalog.js#L399), [413](../../public/scripts/datalog.js#L413) | Figs. 2, 3, 5, 6, 7, 8; not in the comment |
 | `colLabel` | `{ name: (i) → html }` | [412](../../public/scripts/datalog.js#L412) | Figs. 1, 2; not in the comment |
 | `at` | `{ name: (j[, i]) → html }`, a note after a table cell's value | [402](../../public/scripts/datalog.js#L402), [416](../../public/scripts/datalog.js#L416) | Figs. 1, 2; not in the comment |
 | `probe` | `(x, y) → ref \| null`, CSS px in `#stage` | [550](../../public/scripts/datalog.js#L550) | all |
-| `inspect` | `(ref) → { title, at: {x, y}, rows: [[symbol, value, units, varName, index]] }` | [668](../../public/scripts/datalog.js#L668), [691](../../public/scripts/datalog.js#L691), [802](../../public/scripts/datalog.js#L802) | all |
+| `inspect` | `(ref) → { title, at: {x, y}, rows: [[symbol, value, units, varName, index]] }` | [668](../../public/scripts/datalog.js#L668), [691](../../public/scripts/datalog.js#L691), [806](../../public/scripts/datalog.js#L806) | all |
 | `locate` | `(varName, index) → {x, y} \| null` | [676](../../public/scripts/datalog.js#L676) | all |
 | `check` | `{ name: (index) → { formula, inputs: [[symbol, value, units, digits]], value } }` | [509](../../public/scripts/datalog.js#L509) | all |
 | `drawn` | `{ name: (index) → { what, drawn, expected, ok, note } }` | [523](../../public/scripts/datalog.js#L523) | all |
@@ -318,11 +320,11 @@ which pages set them (from the ten `Sim.data = {` blocks).
 | `touchProbe` | | not read | Fig. 8 only ([draw-decompose.html:1402](../../public/simulations/draw-decompose.html#L1402)) |
 
 The ten blocks: [Fig. 1 L798](../../public/simulations/Circular%20Wave%20Interference%20Visualization.html#L798),
-[Fig. 2 L747](../../public/simulations/Double%20Pendulum.html#L747),
+[Fig. 2 L747](../../public/simulations/Double%20Pendulum.html#L768),
 [Fig. 3 L829](../../public/simulations/Interactive%20Double-Slit%20Experiment%20Visualization.html#L829),
-[Fig. 4 L994](../../public/simulations/Transverse%20and%20longitudinal%20waves.html#L994),
-[Fig. 5 L807](../../public/simulations/water-wave.html#L807),
-[Fig. 6 L864](../../public/simulations/wave-interference.html#L864),
+[Fig. 4 L994](../../public/simulations/Transverse%20and%20longitudinal%20waves.html#L995),
+[Fig. 5 L807](../../public/simulations/water-wave.html#L810),
+[Fig. 6 L864](../../public/simulations/wave-interference.html#L868),
 [Fig. 7 L1369](../../public/simulations/phasor-sums.html#L1369),
 [Fig. 8 L1300](../../public/simulations/draw-decompose.html#L1300),
 [Fig. 9 L969](../../public/simulations/driven-oscillator.html#L969),
@@ -333,7 +335,7 @@ The ten blocks: [Fig. 1 L798](../../public/simulations/Circular%20Wave%20Interfe
 | Name | Lines | Arguments | What it does / returns |
 |---|---|---|---|
 | `Sim.colourMap` | [66-73](../../public/scripts/datalog.js#L66-L73) | `v, lim` | `[r, g, b]` on a diverging scale: $a = v/\text{lim}$ clipped to $[-1, 1]$, $s = |a|^{0.8}$, mixed from the paper colour (255, 250, 243) towards dark (58, 50, 46) for negative or burgundy (122, 31, 43) for positive values. Pages use it in their `colour` functions. |
-| `window.__dataPanel` | [1083](../../public/scripts/datalog.js#L1083) | | `{ running(), rounds(), recording() }`: hooks for tests. |
+| `window.__dataPanel` | [1088](../../public/scripts/datalog.js#L1088) | | `{ running(), rounds(), recording() }`: hooks for tests. |
 | `Sim.data` | [11-26](../../public/scripts/datalog.js#L11-L26) | | The contract above, provided by the page. |
 
 ## Internal functions
@@ -372,30 +374,30 @@ The ten blocks: [Fig. 1 L798](../../public/simulations/Circular%20Wave%20Interfe
 | `touched`, `wipe`, `drawRing`, `drawPin`, `clearOverlay` | [641-661](../../public/scripts/datalog.js#L641-L661) | Overlay drawing with dirty rectangles. |
 | `paintProbe` | [663-687](../../public/scripts/datalog.js#L663-L687) | Marker every frame; words at most every 250 ms. |
 | `rowsKey`, `paintStrip` | [688-736](../../public/scripts/datalog.js#L688-L736) | The strip and the "Pinned point" table. |
-| `roundLength`, `describeRound`, `scalarNames` | [747-754](../../public/scripts/datalog.js#L747-L754) | Round length (default 10), the Record box text, numeric scalars. |
-| `startRound`, `progress`, `recordFrame`, `finishRound` | [755-842](../../public/scripts/datalog.js#L755-L842) | Recording. |
-| `seriesRange`, `drawChart` | [845-880](../../public/scripts/datalog.js#L845-L880) | Range without NaN; one chart with optional cursor. |
-| `renderRounds` | [881-940](../../public/scripts/datalog.js#L881-L940) | Rounds view; inner `readout`, `drawAll`, `pick`. |
-| `roundCsv`, `download`, `stamp`, `readme` | [941-998](../../public/scripts/datalog.js#L941-L998) | Files. |
-| `show`, `setOpen` | [1007-1027](../../public/scripts/datalog.js#L1007-L1027) | Switch view; open or close the panel. |
-| `paintState`, `paint` | [1046-1055](../../public/scripts/datalog.js#L1046-L1055) | The "one instant / live / recording" label; repaint of the open view. |
-| `wanted`, `kick`, `frame` | [1059-1067](../../public/scripts/datalog.js#L1059-L1067) | The on-demand loop. |
-| `soon` | [1080](../../public/scripts/datalog.js#L1080) | Refreshes the round description once per frame after any input or click. |
+| `roundLength`, `describeRound`, `scalarNames` | [747-756](../../public/scripts/datalog.js#L747-L756) | Round length (default 10), the Record box text, numeric scalars. |
+| `startRound`, `progress`, `recordFrame`, `finishRound` | [757-846](../../public/scripts/datalog.js#L757-L846) | Recording. |
+| `seriesRange`, `drawChart` | [849-884](../../public/scripts/datalog.js#L849-L884) | Range without NaN; one chart with optional cursor. |
+| `renderRounds` | [885-944](../../public/scripts/datalog.js#L885-L944) | Rounds view; inner `readout`, `drawAll`, `pick`. |
+| `roundCsv`, `download`, `stamp`, `readme(what, filename)` | [945-1002](../../public/scripts/datalog.js#L945-L1002) | Files. |
+| `show`, `setOpen` | [1012-1032](../../public/scripts/datalog.js#L1012-L1032) | Switch view; open or close the panel. |
+| `paintState`, `paint` | [1051-1060](../../public/scripts/datalog.js#L1051-L1060) | The "one instant / live / recording" label; repaint of the open view. |
+| `wanted`, `kick`, `frame` | [1064-1072](../../public/scripts/datalog.js#L1064-L1072) | The on-demand loop. |
+| `soon` | [1085](../../public/scripts/datalog.js#L1085) | Refreshes the round description once per frame after any input or click. |
 
 ## State it keeps
 
 - `localStorage`: `datapanel.open` (`'1'`/`'0'`), `datapanel.live` (`'1'`/`'0'`), `datapanel.tab` (`'vars'`/`'rounds'`)
-  ([datalog.js:43](../../public/scripts/datalog.js#L43), [1014](../../public/scripts/datalog.js#L1014),
-  [1024](../../public/scripts/datalog.js#L1024), [1040](../../public/scripts/datalog.js#L1040)). The keys are the same for every
+  ([datalog.js:43](../../public/scripts/datalog.js#L43), [1019](../../public/scripts/datalog.js#L1019),
+  [1029](../../public/scripts/datalog.js#L1029), [1045](../../public/scripts/datalog.js#L1045)). The keys are the same for every
   page, so the choice carries from one figure to the next.
-- In memory: `isOpen`, `view`, `liveOn` ([1006](../../public/scripts/datalog.js#L1006)); `caught` (time and reason of the
+- In memory: `isOpen`, `view`, `liveOn` ([1011](../../public/scripts/datalog.js#L1011)); `caught` (time and reason of the
   instant, [292](../../public/scripts/datalog.js#L292)); `current`, `snap`, `grid` (open table, [373](../../public/scripts/datalog.js#L373));
   `checking` ([478](../../public/scripts/datalog.js#L478)); `held = { ref, cell }` and `probe` (Read values state,
   [541-542](../../public/scripts/datalog.js#L541-L542)); `rounds` (at most 5), `roundNo`, `rec` (the recording),
-  `sel` ([743](../../public/scripts/datalog.js#L743)); `running` ([1058](../../public/scripts/datalog.js#L1058)); `statCache`.
+  `sel` ([743](../../public/scripts/datalog.js#L743)); `running` ([1063](../../public/scripts/datalog.js#L1063)); `statCache`.
   Rounds are lost on reload.
 - DOM attributes and classes written: `body.dp-open`; `aria-expanded` on the tab; `aria-hidden` and `inert` on the closed panel
-  ([1018-1027](../../public/scripts/datalog.js#L1018-L1027)); `#stage.dp-reading` while reading
+  ([1023-1032](../../public/scripts/datalog.js#L1023-L1032)); `#stage.dp-reading` while reading
   ([561](../../public/scripts/datalog.js#L561)); `aria-pressed` on the Read button; `.dp-tab--away` while scrolling down on a
   phone ([122-129](../../public/scripts/datalog.js#L122-L129)); `.dp-rec.is-rec` while recording.
 - DOM read: `#stage`, the `.stage__cap` inside `#stage`'s parent ([588](../../public/scripts/datalog.js#L588)), CSS tokens `--accent`,
@@ -405,18 +407,18 @@ The ten blocks: [Fig. 1 L798](../../public/simulations/Circular%20Wave%20Interfe
 
 | What | Rate | Where |
 |---|---|---|
-| Panel loop | one animation frame while `wanted()`; none otherwise | [1059-1067](../../public/scripts/datalog.js#L1059-L1067) |
-| Live: ledger values | every frame | [1053](../../public/scripts/datalog.js#L1053) |
+| Panel loop | one animation frame while `wanted()`; none otherwise | [1064-1072](../../public/scripts/datalog.js#L1064-L1072) |
+| Live: ledger values | every frame | [1058](../../public/scripts/datalog.js#L1058) |
 | Live: thumbnails | at most every 250 ms, only after a version change | [285](../../public/scripts/datalog.js#L285) |
 | Read values: marker | every frame | [671-674](../../public/scripts/datalog.js#L671-L674) |
 | Read values: words | at most every 250 ms (4 per second; measured 3.7) | [686](../../public/scripts/datalog.js#L686) |
 | Outline before a click | after 300 ms of rest | [631](../../public/scripts/datalog.js#L631) |
 | Table cell shown in the figure | 600 ms after a hover, 3000 ms after a click | [456](../../public/scripts/datalog.js#L456) |
-| Recording: samples | every frame or every $L/600$, at most 600 | [797-798](../../public/scripts/datalog.js#L797-L798) |
-| Recording: progress bar | every 125 ms (8 per second) | [813](../../public/scripts/datalog.js#L813) |
-| First instant | two animation frames after load | [1077](../../public/scripts/datalog.js#L1077) |
-| Round description | at most once per frame, after an `input` or `click` anywhere | [1079-1082](../../public/scripts/datalog.js#L1079-L1082) |
-| Object URL of a download | revoked after 4 s | [955](../../public/scripts/datalog.js#L955) |
+| Recording: samples | every frame or every $L/600$, at most 600 | [800-801](../../public/scripts/datalog.js#L800-L801) |
+| Recording: progress bar | every 125 ms (8 per second) | [817](../../public/scripts/datalog.js#L817) |
+| First instant | two animation frames after load | [1082](../../public/scripts/datalog.js#L1082) |
+| Round description | at most once per frame, after an `input` or `click` anywhere | [1084-1087](../../public/scripts/datalog.js#L1084-L1087) |
+| Object URL of a download | revoked after 4 s | [959](../../public/scripts/datalog.js#L959) |
 
 Listeners: `window` `scroll` (passive) for the phone pill; `pointerdown`, `pointermove`, `pointerup`, `pointercancel` and
 `click`, `mousedown`, `mouseup`, `dblclick`, `contextmenu` on `#stage` in the capture phase, all inactive unless Read values is
@@ -460,18 +462,14 @@ capture phase for `soon()`; `ResizeObserver` on `#stage` and on the table.
    reads it.
 3. The fallback to `Sim.data.log` ([datalog.js:97-100](../../public/scripts/datalog.js#L97-L100)) is dead: all ten pages define
    `round`.
-4. The README's Python opens `'<file>.zip'` ([datalog.js:988](../../public/scripts/datalog.js#L988)), but the saved file is
-   named `<file>-<stamp>.zip` ([datalog.js:1002](../../public/scripts/datalog.js#L1002)) or `<file>-round-<n>-<stamp>.zip`
-   ([datalog.js:972](../../public/scripts/datalog.js#L972)); the reader must rename the file or edit the line.
+4. Fixed on 2026-10-15: store and round READMEs open the exact timestamped download filename; CRC and NumPy array shapes validate (commit `:/^Batch A: fix simulation and recording faults; verify in Chromium$`).
 5. `paintStrip(force)` never uses its parameter ([datalog.js:689](../../public/scripts/datalog.js#L689)).
-6. In sampled mode the 600-sample cap is reached one frame before the end of the round, so the sample at the round's end is
-   not stored: on Fig. 2 the last of 600 samples sits at 9.983 s of a 10 s round
-   ([datalog.js:797-798](../../public/scripts/datalog.js#L797-L798), [814](../../public/scripts/datalog.js#L814)).
+6. Fixed on 2026-10-15: sampled rounds reserve the final slot; the 600-sample, 10 s test retains its ending frame instead of stopping at 9.983 s (commit `:/^Batch A: fix simulation and recording faults; verify in Chromium$`).
 7. Hovering a cell of an array table, without a click, draws a ring on the running figure for 0.6 s
    ([datalog.js:363](../../public/scripts/datalog.js#L363), [456](../../public/scripts/datalog.js#L456)). The pointer crosses the
    table, not the figure, but the figure changes. CLAUDE.md asks that nothing on a running figure react to the pointer merely
    crossing; whether this case is meant to be covered is not determined from the code.
 8. Pressing Esc while focus is inside the panel and Read values is on does two things at once: it closes the panel
-   ([datalog.js:1030](../../public/scripts/datalog.js#L1030)) and stops reading ([datalog.js:638](../../public/scripts/datalog.js#L638)).
+   ([datalog.js:1035](../../public/scripts/datalog.js#L1035)) and stops reading ([datalog.js:638](../../public/scripts/datalog.js#L638)).
 9. AGENTS.md said the load order holds for "all eight figures"; it holds for all ten pages (load-order table in
    [sim.md](sim.md#load-order-on-the-pages)). Corrected to "all ten figures" on 14 October 2026.

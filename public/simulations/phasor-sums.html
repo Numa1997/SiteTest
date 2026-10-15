@@ -1363,7 +1363,7 @@
         function nz(v) { return v === undefined ? 0 : v; }
         /* one round: the figure closes after 2π / g of phasor time; at most 20 s of real time */
         function phasorRound() {
-            var g = ds.get('g'), sf = Math.max(ds.get('sf') || 1, 0.05), T = g > 0 ? 2 * Math.PI / g : 2 * Math.PI;
+            var g = ds.get('g'), storedSpeed = ds.get('sf'), sf = Math.max(typeof storedSpeed === 'number' ? storedSpeed : 1, 0.05), T = g > 0 ? 2 * Math.PI / g : 2 * Math.PI;
             return Math.min(T, 20 * sf);
         }
         Sim.data = {
@@ -1461,7 +1461,7 @@
             },
             round: { time: 't', length: phasorRound, columns: ['x', 'y', 'absz', 'sf'], point: function () { return { tip: true }; },
                 label: function () { var g = ds.get('g'), L = phasorRound(); return (g > 0 && L >= 2 * Math.PI / g - 1e-9 ? 'one full figure, ' : 'part of the figure, ') + Sim.fmt(L, 2) + ' s of phasor time'; },
-                blocked: function () { return ds.get('mode') === 'final' ? 'Switch to the Live view first: time only runs there.' : null; } },
+                blocked: function () { return ds.get('mode') === 'final' ? 'Switch to the Live view first: time only runs there.' : ds.get('sf') === 0 ? 'Set Speed above 0: phasor time does not advance at Speed 0.' : null; } },
             play: function () { clk.set(true); },
             about: 'The arms, joints and pen are drawn from the numbers stored here, every frame. The trail is the pen position at the end of each past frame, so its point spacing is the frame time times the speed: history, not a formula. In the final view the drawn path moves the fraction α of the way to the exact path each frame, so path_x, path_y lag final_x, final_y until the deviation reaches zero. The readouts under the figure refresh ten times a second; the store refreshes every frame. The audio numbers are measurements of the sound, smoothed over frames.'
         };

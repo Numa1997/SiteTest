@@ -206,8 +206,8 @@ saves as `fig1-wave-interference` ([L799](../../public/simulations/Circular%20Wa
 
 **One round** (`Sim.data.round`, [L892–893](../../public/simulations/Circular%20Wave%20Interference%20Visualization.html#L892-L893)) is one period of the sources, T = 1/f, measured on the play time `t`. Columns
 charted: `omegaT`, `cos_wt`, `sin_wt`, `psi_c`; the recorder also copies every numeric scalar. Unless the reader has pinned a
-point, the round follows the cell j = ⌊rows/2⌋, i = ⌊0.72 cols⌋ ([L893](../../public/simulations/Circular%20Wave%20Interference%20Visualization.html#L893), [datalog.js:760](../../public/scripts/datalog.js#L760)). The recorder keeps at most 600
-samples, one every T/600 ([datalog.js:743](../../public/scripts/datalog.js#L743), [datalog.js:770](../../public/scripts/datalog.js#L770)). *Reset* sets ωt to 0 but not `t`, so it does not end a round.
+point, the round follows the cell j = ⌊rows/2⌋, i = ⌊0.72 cols⌋ ([L893](../../public/simulations/Circular%20Wave%20Interference%20Visualization.html#L893), [datalog.js:762](../../public/scripts/datalog.js#L762)). The recorder keeps at most 600
+samples, one every T/600 ([datalog.js:743](../../public/scripts/datalog.js#L743), [datalog.js:772](../../public/scripts/datalog.js#L772)). *Reset* sets ωt to 0 but not `t`, so it does not end a round.
 
 **`Sim.live()`** ([L737–754](../../public/simulations/Circular%20Wave%20Interference%20Visualization.html#L737-L754)) returns formatted strings under the keys `lam`, `k`, `g`, `N`, `norm`, `dx`, `grid`, `C`, `S`,
 `c`, `s`, `psi`, `f`, `wt`, `v`, `idx`, `rgb`, `r`, `a`, `ph`, all read at the centre cell pc = j_c · cols + i_c. The walkthrough

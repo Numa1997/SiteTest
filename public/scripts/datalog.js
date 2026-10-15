@@ -749,6 +749,8 @@
         if (rec) return;
         var lab = safe(R.label, '') || 'ten seconds of play';
         var txt = 'One round = <b>' + lab + '</b>.<span class="dp-more-txt"> Every frame of it is caught' + (spec.inspect ? ', with ' + (held.ref ? 'the point you pinned' : 'a point the page chooses; pin another with Read values') : '') + '; then the recording stops by itself.</span>';
+        var why = R.blocked ? safe(R.blocked, null) : null;
+        if (why) txt += '<span class="dp-more-txt"><b>Not now.</b> ' + esc(why) + '</span>';
         if (txt !== recWhat._h) { recWhat.innerHTML = txt; recWhat._h = txt; }
     }
     function scalarNames() { return ds.order.filter(isNumScalar); }
@@ -779,7 +781,8 @@
     function progress(frac, el) {
         recBar.style.width = (100 * Math.max(0, Math.min(1, frac))) + '%';
         var paused = spec.playing && !safe(spec.playing, true) && rec && rec.mode !== 'change';
-        recSt.innerHTML = paused ? '<b>Paused.</b> Press Play: the round goes on when the simulation does.' :
+        var blocked = rec && R.blocked ? safe(R.blocked, null) : null;
+        recSt.innerHTML = blocked ? '<b>Waiting.</b> ' + esc(blocked) : paused ? '<b>Paused.</b> Press Play: the round goes on when the simulation does.' :
             rec.mode === 'change' ? num(el, 1) + ' of ' + num(rec.len, 0) + ' s · ' + rec.n + ' changes caught · move a slider' :
             num(el, 2) + ' of ' + num(rec.len, 2) + (timeUnit() ? ' ' + timeUnit() : '') + ' · ' + rec.n + ' samples';
     }
@@ -794,8 +797,9 @@
             var key = roundCols.map(function (n) { return String(ds.get(n)); }).join('|');
             take = key !== rec.key;
             rec.key = key;
-        } else take = rec.n === 0 || el - rec.lastEl >= rec.interval * 0.999 || el >= rec.len;
-        if (take && rec.n < MAXS) {
+        } else take = rec.n === 0 || el - rec.lastEl >= rec.interval * 0.999 || el >= rec.len - 1e-9;
+        /* Reserve the last sample for the frame that ends a sampled round. */
+        if (take && rec.n < MAXS && (rec.mode === 'change' || rec.n < MAXS - 1 || el >= rec.len - 1e-9)) {
             rec.buf.__t.push(t); rec.buf.__el.push(el);
             rec.names.forEach(function (n) { var x = ds.get(n); rec.buf[n].push(typeof x === 'boolean' ? (x ? 1 : 0) : typeof x === 'number' ? x : NaN); });
             if (rec.pointRows.length) {
@@ -969,13 +973,13 @@
             rd.set('time_into_round', r.elapsed);
             r.series.forEach(function (s) { if (!rd.has(s.key)) { rd.var(s.key, ['sample'], Float64Array, { symbol: plain(s.label), units: s.units, long_name: s.point ? plain(s.label) + ' at ' + plain(r.pointTitle) : (V(s.key) ? plain(A(s.key).long_name || '') : '') }); rd.set(s.key, s.data); } });
             Object.keys(r.all).forEach(function (n) { if (!rd.has(n)) { rd.var(n, ['sample'], Float64Array, { symbol: plain(sym(n)), units: unitOf(n), long_name: plain(A(n).long_name || '') }); rd.set(n, r.all[n]); } });
-            download(rd.npz([{ name: 'round.csv', bytes: roundCsv(r) }, { name: 'README.txt', bytes: readme('round ' + r.no) }]), (spec.file || 'dataset') + '-round-' + r.no + '-' + stamp() + '.zip');
+            var filename = (spec.file || 'dataset') + '-round-' + r.no + '-' + stamp() + '.zip';
+            download(rd.npz([{ name: 'round.csv', bytes: roundCsv(r) }, { name: 'README.txt', bytes: readme('round ' + r.no, filename) }]), filename);
         }
     });
 
     /* ---------- Save ---------- */
-    function readme(what) {
-        var base = (spec.file || 'dataset');
+    function readme(what, filename) {
         return [
             ds.title + ' · ' + what + ' saved from ' + location.href.replace(/[#?].*$/, ''),
             'Saved ' + new Date().toISOString(),
@@ -985,7 +989,7 @@
             '',
             'Python:',
             '    import json, zipfile, numpy as np',
-            "    z = zipfile.ZipFile('" + base + ".zip')",
+            '    z = zipfile.ZipFile(' + JSON.stringify(filename) + ')',
             "    meta = json.load(z.open('dataset.json'))",
             "    arrays = {k: np.load(z.open(v['file'])) for k, v in meta['data_vars'].items() if 'file' in v}",
             "    scalars = {k: v['value'] for k, v in meta['data_vars'].items() if 'value' in v}",
@@ -997,9 +1001,10 @@
         ].join('\n');
     }
     panel.querySelector('[data-save]').addEventListener('click', function () {
+        var filename = (spec.file || 'dataset') + '-' + stamp() + '.zip';
         var extra = rounds.map(function (r) { return { name: 'round-' + r.no + '.csv', bytes: roundCsv(r) }; });
-        extra.push({ name: 'README.txt', bytes: readme('the store at ' + timeText(timeNow()).replace(/<[^>]+>/g, '')) });
-        download(ds.npz(extra), (spec.file || 'dataset') + '-' + stamp() + '.zip');
+        extra.push({ name: 'README.txt', bytes: readme('the store at ' + timeText(timeNow()).replace(/<[^>]+>/g, ''), filename) });
+        download(ds.npz(extra), filename);
     });
 
     /* ---------- open, close, tabs ---------- */

@@ -578,7 +578,7 @@
         ds.var('dtau_dw', [], 'float', { symbol: '∂τ<sub>aero</sub>/∂ω', units: 'N m s', long_name: 'slope of the aerodynamic torque at the target speed and mean wind', computed_in: 'solve()', formula: 'central difference, δω = 10⁻⁴ rad/s', digits: 0 });
         ds.var('Kp', [], 'float', { symbol: 'K<sub>p</sub>', units: 'N m s', long_name: 'proportional gain', computed_in: 'solve()', formula: '2 ζ<sub>c</sub> ω<sub>n</sub> J + ∂τ<sub>aero</sub>/∂ω', digits: 0 });
         ds.var('Ki', [], 'float', { symbol: 'K<sub>i</sub>', units: 'N m', long_name: 'integral gain', computed_in: 'solve()', formula: 'J ω<sub>n</sub>²', digits: 0 });
-        ds.var('rpm_ref', [], 'float', { symbol: 'n<sub>ref</sub>', units: 'rpm', long_name: 'target rotor speed in turns per minute', computed_in: 'solve()', formula: 'ω<sub>ref</sub> · 60 / 2π', digits: 3 });
+        ds.var('rpm_ref', [], 'float', { symbol: 'n<sub>ref</sub>', units: 'rpm', long_name: 'target rotor speed in turns per minute', computed_in: 'solve()', source: 'The rpm slider value captured with the solved run; later slider changes do not alter this stored input.', digits: 3 });
         ds.var('cp_betz', [], 'float', { symbol: 'c<sub>p,Betz</sub>', long_name: 'Betz limit, the largest share any rotor can take', computed_in: 'optimum()', formula: '16/27', digits: 5 });
         ds.var('tau0', [], 'float', { symbol: 'τ<sub>0</sub>', units: 'N m', long_name: 'generator torque that balances the rotor at the start', computed_in: 'solve()', formula: 'τ<sub>aero</sub>(ω<sub>ref</sub>, v(0))', digits: 0 });
         ds.var('solve_ms', [], 'float', { symbol: 'solve time', units: 'ms', long_name: 'time the browser took to solve and store the run', computed_in: 'solve()', digits: 1, source: 'Measured with performance.now().' });
@@ -714,7 +714,7 @@
                 t = (step + 1) * H;
             }
             ['ts', 'vw', 'om', 'rpm', 'th', 'lam', 'cpv', 'ta', 'tg', 'Pg', 'Pa', 'Eg', 'sw', 'Ictl', 'vtip'].forEach(function (name) { ds.touch(name); });
-            var nref = c.wref * 60 / (2 * Math.PI), vmax = 0, rlo = c.ctrl === 'pi' ? nref : Infinity, rhi = c.ctrl === 'pi' ? nref : 0, pmax = 0;
+            var nref = rpm.value, vmax = 0, rlo = c.ctrl === 'pi' ? nref : Infinity, rhi = c.ctrl === 'pi' ? nref : 0, pmax = 0;
             for (n = 0; n < NS; n++) { vmax = Math.max(vmax, vw[n]); rlo = Math.min(rlo, rp[n]); rhi = Math.max(rhi, rp[n]); pmax = Math.max(pmax, Pg[n], Pa[n]); }
             ds.set('rpm_ref', nref); ds.set('v_hi', Math.ceil(1.1 * vmax)); ds.set('rpm_lo', Math.floor(rlo - 0.6)); ds.set('rpm_hi', Math.ceil(rhi + 0.6));
             ds.set('P_hi', Math.ceil(1.1 * pmax / 0.25e6) * 0.25e6); ds.set('px_per_m_air', AIRPX);
@@ -1081,8 +1081,8 @@
                 rho: function () { return { formula: 'the constant RHO in the code', inputs: [], value: RHO }; },
                 R: function () { return { formula: 'the constant R in the code', inputs: [], value: R }; },
                 J: function () { return { formula: 'the constant J in the code', inputs: [], value: J }; },
-                w_ref: function () { return { formula: 'rpm · 2π / 60', inputs: [['rpm slider', rpm.value, 'rpm', 1]], value: ds.get('stale') ? NaN : rpm.value * 2 * Math.PI / 60 }; },
-                rpm_ref: function () { return { formula: 'ω<sub>ref</sub> · 60 / 2π', inputs: [['ω<sub>ref</sub>', ds.get('w_ref'), 'rad/s', 6]], value: ds.get('w_ref') * 60 / (2 * Math.PI) }; },
+                w_ref: function () { return { formula: 'stored n<sub>ref</sub> · 2π / 60', inputs: [['stored n<sub>ref</sub>', ds.get('rpm_ref'), 'rpm', 1]], value: ds.get('rpm_ref') * 2 * Math.PI / 60 }; },
+                rpm_ref: function () { return { formula: 'the target input captured with the solved run', inputs: [['saved target', solved.rpm, 'rpm', 1]], value: solved.rpm }; },
                 lam_opt: function () { var best = 0, lb = 0; for (var l = 0.5; l <= 14; l += 0.001) { var c = cp(l); if (c > best) { best = c; lb = l; } } return { formula: 'argmax c<sub>p</sub>(λ), λ from 0.5 to 14 in steps of 0.001', inputs: [], value: lb }; },
                 cp_max: function () { return { formula: 'c<sub>p</sub>(λ<sub>opt</sub>)', inputs: [['λ<sub>opt</sub>', ds.get('lam_opt'), '', 4]], value: cp(ds.get('lam_opt')) }; },
                 cp_betz: function () { return { formula: '16/27', inputs: [], value: 16 / 27 }; },

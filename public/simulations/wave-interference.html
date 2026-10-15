@@ -714,6 +714,9 @@
                 ctx.stroke();
             } else {
                 peak = 0;
+                for (var i = 0; i <= samples; i++) {
+                    Xs[i] = i / samples * WORLD_W; Ys[i] = 0; PYs[i] = mid1;
+                }
             }
             ds.set('peak', peak); ds.set('ratio', ds.get('sum_A') > 0 ? peak / ds.get('sum_A') : NaN);
             ds.touch('A'); ds.touch('f'); ds.touch('phi'); ds.touch('s'); ds.touch('k'); ds.touch('omega'); ds.touch('lam'); ds.touch('v'); ds.touch('nu'); ds.touch('y_400');
@@ -858,8 +861,9 @@
         /* one round: the pattern repeats after 1 / gcd of the frequencies νᵢ = fᵢ sᵢ (to 0.01 Hz), at most 20 s */
         function benchRound() {
             var nu = ds.get('nu'), G = 0, i, a, b, r;
-            for (i = 0; i < nu.length; i++) { a = G; b = Math.round(Math.abs(nu[i]) * 100); while (b) { r = a % b; a = b; b = r; } G = a; }
-            return G ? Math.min(100 / G, 20) : 5;
+            /* nu is stored to 10^-6 Hz; retain every stored digit in the integer gcd. */
+            for (i = 0; i < nu.length; i++) { a = G; b = Math.round(Math.abs(nu[i]) * 1000000); while (b) { r = a % b; a = b; b = r; } G = a; }
+            return G ? Math.min(1000000 / G, 20) : 5;
         }
         Sim.data = {
             ds: ds, kicker: 'Fig. 6 · data', file: 'fig6-wave-bench',

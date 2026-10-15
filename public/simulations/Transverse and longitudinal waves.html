@@ -867,6 +867,7 @@
                 var y = yT - A * s * Math.sin(k * X - omegaT);
                 if (X === 0) ctx.moveTo(left + X * s, y); else ctx.lineTo(left + X * s, y);
             }
+            ctx.lineTo(right, yT - A * s * Math.sin(k * LENGTH - omegaT));
             ctx.stroke();
             var crest = (((Math.PI / 2 + omegaT) / k) % lambda.value + lambda.value) % lambda.value;
             for (X = crest; X <= LENGTH; X += lambda.value) marker(left + X * s, yT - A * s - 8);

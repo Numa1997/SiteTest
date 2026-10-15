@@ -54,25 +54,25 @@ These files come from AppDeploy's static-site template (`"name": "html-static-ap
 
 ## `tests/tests.json` · the platform's QA scenarios
 
-A list of twelve test scenarios written in plain language. After each deploy, AppDeploy's QA agent opens the live site in a
+A list of fourteen test scenarios written in plain language. After each deploy, AppDeploy's QA agent opens the live site in a
 browser and follows them, the way a person would. Each scenario has:
 
 | Field | Meaning |
 |---|---|
 | `name` | One-line title. |
-| `sanity` | `true` for the quick tests run first. |
+| `sanity` | `true` only for the critical home workflow run first. |
 | `viewport` | `desktop` or `mobile`. |
 | `covers` | The features the scenario touches. |
 | `description` | What is being verified. |
 | `steps` | What to click or type, in order. |
 | `expected` | What must be on screen at the end. |
 
-The twelve scenarios cover: the home page and its index; the simulations catalog (order, field chip, search, links both
+The fourteen scenarios cover: the home page and its index; the simulations catalog (order, field chip, search, links both
 ways); the double pendulum's controls and chaos twin; the double slit's Greek letters and path difference; the wave
 workbench on a phone; the Fig. 1 data panel (variables, an array as a table, one recorded round); the Fig. 2 data panel
 (state vector, energy); Fig. 6 Read values with the three-way check and the dataset download; the data sheet on a phone
 (Fig. 5); Fig. 9 solving before playing and its lecture note; Fig. 10 re-solving after a controller change; the Portfolios
-page and the droplet copy.
+page and the droplet copy; the exact wave-bench repeat and empty sum; and the zero-speed phasor recording guard and recovery.
 
 **Brought up to date on 14 October 2026.** The app's stored `tests/tests.json` was an older version: its first scenario
 looked for a footer reading "Claude version", while the footer reads "© 2026 Numa Koudsie"
@@ -89,3 +89,7 @@ Both live at the root of the app and of this repository; neither is served to re
 the fold mechanism, the data pipeline, the platform quirks. [`CLAUDE.md`](../CLAUDE.md) records how Numa expects an AI
 assistant to work on the project: persistence, plain language, the app before the repository, data tables as a pipeline,
 the house design and the lecture-note style.
+
+## Minor-fix batch A · 15 October 2026
+
+Deployed stored version `1792048596599`, then copied the same eleven files here. All ten Batch A faults were reproduced before editing. The live site passed the numerical and pixel checks at 1440 × 900 and 390 × 844, including the 960 × 900 hidden-layer case. The 600-sample test retains the end frame; archive READMEs name their own downloads and arrays and CRCs load correctly. The first QA scenario is unchanged; fourteen scenarios use only the home workflow as sanity. Evidence: [minor-issues-report.md](minor-issues-report.md).

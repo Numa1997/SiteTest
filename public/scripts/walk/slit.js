@@ -86,10 +86,10 @@ document.getElementById('r-ff').textContent = ff.toFixed(2) + ' px';`,
             title: 'Fringe orders on the pattern',
             where: 'drawPattern() — the m = … labels',
             math: 'bright: ⟦sinm|sin θ<sub>m</sub> = m λ / b⟧, &nbsp; m = 0, 1, 2, … while sin θ<sub>m</sub> ≤ sin 30°',
-            note: 'Setting δs = mλ in the far-field form gives the bright directions. The loop stops at the edge of the plotted range, 30°.',
-            code: `for (var m = 0; ⟦sinm|m * G.lambda / G.b⟧ <= Math.sin(amax); m++) {
+            note: 'Setting δs = mλ in the far-field form gives the bright directions. The loop fills exactly the nm orders counted with the 10⁻⁹ tolerance at the 30° edge.',
+            code: `for (var m = 0; m < nm; m++) {
     var tm = Math.asin(m * G.lambda / G.b);
-    if (m < nm) { mS[m] = m * G.lambda / G.b; mT[m] = tm / DEG; mX[m] = G.d * Math.tan(tm); }
+    if (m < nm) { mS[m] = ⟦sinm|m * G.lambda / G.b⟧; mT[m] = tm / DEG; mX[m] = G.d * Math.tan(tm); }
     /* the order m in maths italic; m = 0 sits on the axis, so its label starts right of it, clear of the tick label 1 */
     s += text(X(tm) + (m === 0 ? 6 : 0), yt - 9, '<tspan class="svg-m">m</tspan> = ' + m, 'svg-num', m === 0 ? 'start' : 'middle');
 }`,

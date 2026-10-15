@@ -2,7 +2,7 @@
 
 | | |
 |---|---|
-| Page | [public/simulations/Interactive Double-Slit Experiment Visualization.html](../../public/simulations/Interactive%20Double-Slit%20Experiment%20Visualization.html) (919 lines, 167 kB; 59 lines are longer than 300 characters, 53 of them in the lecture note) |
+| Page | [public/simulations/Interactive Double-Slit Experiment Visualization.html](../../public/simulations/Interactive%20Double-Slit%20Experiment%20Visualization.html) (919 lines, 166 599 bytes; 59 lines are longer than 300 characters, 53 of them in the lecture note) |
 | Walkthrough | [public/scripts/walk/slit.js](../../public/scripts/walk/slit.js) (116 lines, 7 steps) |
 | Thumbnail | [public/images/sims/double-slit.webp](../../public/images/sims/double-slit.webp) (800 × 500 px, 33 kB) |
 | Catalog entry | [public/scripts/catalog.js#L82](../../public/scripts/catalog.js#L82) (`id: 'double-slit'`, `fig: 3`, field `optics`, stage 1, `has: ALL`) |
@@ -209,7 +209,7 @@ defaults in Chromium (dot 0.9992 against 0.9991; bar 13.628 px; $P$ at (227.21, 
 
 **One round** (`Sim.data.round`, [page:910–911](../../public/simulations/Interactive%20Double-Slit%20Experiment%20Visualization.html#L910-L911)):
 ten seconds of `wall` time, `mode: 'change'`. In this mode the panel takes a sample only when one of the round columns
-`d, alpha_deg, b, lambda, L1, L2, ds, ratio, I` changes ([datalog.js:793–797](../../public/scripts/datalog.js#L793-L797)), so the reader
+`d, alpha_deg, b, lambda, L1, L2, ds, ratio, I` changes ([datalog.js:796–800](../../public/scripts/datalog.js#L796-L800)), so the reader
 records by moving sliders; the recorded point is $P$ (`{ pt: 3 }`). The page has no `play` hook, and none is needed: `wall` runs
 whether or not the wavelets move.
 
@@ -306,14 +306,7 @@ middle of line 625 (step 2) and the end of line 758 (step 7).
 
 ## Notes for maintainers
 
-1. **Stale fringe-order entries when $b/(2\lambda)$ is a whole number.** `nm` counts orders with a tolerance,
-   `Math.floor(Math.sin(amax) * G.b / G.lambda + 1e-9) + 1`, but the loop that fills the arrays stops at
-   `m * G.lambda / G.b <= Math.sin(amax)` without one ([page:728–733](../../public/simulations/Interactive%20Double-Slit%20Experiment%20Visualization.html#L728-L733)).
-   In double precision `Math.sin(30°)` is 0.49999999999999994, so when $m\lambda/b = 0.5$ exactly the dimension `m` gets one
-   entry more than the loop writes. The last entry of `m_sin`, `m_theta`, `m_x` keeps whatever the array held: zeros after a
-   resize, the previous values otherwise. 103 of the slider combinations hit this (Node sweep). Seen in Chromium: from the
-   defaults, set $b = 40$ then $\lambda = 20$: `m` stays 2, `m_sin` = [0, 0.3375] (stale; the Check recomputes 0.5),
-   `m_theta[1]` = 19.72° (stale), only the "m = 0" label is drawn, and the walkthrough shows $\theta_1$ = 19.72° instead of 30°.
+1. Fixed on 2026-10-15: the fringe loop fills the tolerance-counted array length; b = 40 px, λ = 20 px gives sin θ₁ = 0.5 and θ₁ = 30° (commit `:/^Batch A: fix simulation and recording faults; verify in Chromium$`).
 2. **Reduced motion.** `Sim.clock` starts paused when the system asks for reduced motion ([sim.js:178](../../public/scripts/sim.js#L178)),
    but the "Animate wavelets" checkbox is `checked` in the HTML ([page:107](../../public/simulations/Interactive%20Double-Slit%20Experiment%20Visualization.html#L107))
    and nothing syncs it to the clock. Seen in Chromium with `reducedMotion: 'reduce'`: the box is ticked, `Sim.data.playing()`

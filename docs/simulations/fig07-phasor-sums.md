@@ -2,7 +2,7 @@
 
 | | |
 |---|---|
-| Page | [public/simulations/phasor-sums.html](../../public/simulations/phasor-sums.html) (1477 lines, 259 719 bytes) |
+| Page | [public/simulations/phasor-sums.html](../../public/simulations/phasor-sums.html) (1477 lines, 259 864 bytes) |
 | Walkthrough | [public/scripts/walk/phasors.js](../../public/scripts/walk/phasors.js) (key `phasors`, 8 steps) |
 | Thumbnail | [public/images/sims/phasor-sums.webp](../../public/images/sims/phasor-sums.webp) (800 × 500 px: the 3-petal rose with its two arms and circles) |
 | Catalog entry | [public/scripts/catalog.js#L150](../../public/scripts/catalog.js#L150) (`id: 'phasor-sums'`, `fig: 7`, field `methods`, stage 2) |
@@ -250,7 +250,7 @@ rose (`fitR` = 2), `n_path` = 1500, `period` = π s, `q` = 3; on a 390 px window
 is `t`; the length is `phasorRound()` = $\min(T, 20\cdot s_f)$ of phasor time, with $T = 2\pi/g$ (or $2\pi$ s when
 $g = 0$) and $s_f$ the stored speed `sf` floored at 0.05
 ([L1365–1368](../../public/simulations/phasor-sums.html#L1365-L1368)), so at most about 20 s of real time. Columns:
-`x`, `y`, `absz`, `sf`; the point followed is the pen. Recording is blocked in the Final view, where time does not run.
+`x`, `y`, `absz`, `sf`; the point followed is the pen. Recording is blocked in the Final view and at Speed 0, where phasor time does not run. If Speed becomes 0 during a round, the panel says why it is waiting; raising Speed resumes the same round.
 How rounds are recorded and saved: [datalog.md](../scripts/datalog.md).
 
 **Data-panel hooks.** `probe` pins the nearest joint, the pen or a trail point within 12 px in the Live view, or a
@@ -366,11 +366,7 @@ The page states this in its `about` paragraph, shown in the data panel
    ([L816](../../public/simulations/phasor-sums.html#L816)) and `draw()` evaluates `live[i].freq * t + live[i].phase`
    a second time ([L1121](../../public/simulations/phasor-sums.html#L1121)). Same inputs, same value; it is a second
    evaluation rather than a store tap at the computing line.
-6. **A round never ends at Speed 0.** `phasorRound()` treats a stored `sf` of 0 as 1 (`|| 1`,
-   [L1366](../../public/simulations/phasor-sums.html#L1366)), so the round has a positive length, but `t` does not
-   advance; the panel's "Paused" hint appears only when the clock itself is paused
-   ([datalog.js:781](../../public/scripts/datalog.js#L781)). Measured: after 3 s the panel still read
-   "0.00 of 3.14 s · 1 samples" until stopped by hand.
+6. Fixed on 2026-10-15: Speed 0 has an explicit recording guard and waiting reason; a running round resumes after Speed is raised (commit `:/^Batch A: fix simulation and recording faults; verify in Chromium$`).
 7. **`nz()` is never called** ([L1363](../../public/simulations/phasor-sums.html#L1363)).
 8. **Replay does not wrap phases.** `perform()` moves each phase linearly toward the snapshot
    ([L1203](../../public/simulations/phasor-sums.html#L1203)), so a recorded change from 6.2 to 0.1 rad sweeps the arm
