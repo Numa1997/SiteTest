@@ -9,6 +9,21 @@ app is never edited. Install no dependencies; use the source's existing Vite.
 from pathlib import Path
 import re,shutil,subprocess,sys
 
+# Security (October 2026), see docs/build-and-deploy.md#security: the copy takes its fonts from the website's own
+# fonts/ folder instead of Google Fonts, and carries the website's policy and referrer tags right after its charset line.
+SITE=Path(__file__).resolve().parents[1]
+GOOGLE='@import"https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=IBM+Plex+Sans:ital,wght@0,400;0,500;0,600;1,400&family=IBM+Plex+Mono:wght@400;500&display=swap";'
+def secure(dist):
+    for css in (dist/'static').glob('index-*.css'):
+        c=css.read_text()
+        assert c.count(GOOGLE)==1,f'{css.name}: the app loads other Google fonts than public/fonts/instrument-plex.css holds; refresh public/fonts first'
+        css.write_text(c.replace(GOOGLE,'@import"../../../fonts/instrument-plex.css";'))
+    tags=re.search(r'\n *(<meta http-equiv="Content-Security-Policy"[^\n]*)\n *(<meta name="referrer"[^\n]*)\n',(SITE/'index.html').read_text())
+    index=dist/'index.html'
+    t,count=re.subn(r'\n( *)(<meta charset="UTF-8" />)\n',lambda m:f'\n{m[1]}{m[2]}\n{m[1]}{tags[1]}\n{m[1]}{tags[2]}\n',index.read_text())
+    assert count==1
+    index.write_text(t)
+
 source=Path(sys.argv[1]).resolve()
 work=Path(sys.argv[2]).resolve()
 assert not work.exists(),f'Working directory already exists: {work}'
@@ -55,4 +70,5 @@ def loader(m):
 t,count=re.subn(r'<link rel="stylesheet" crossorigin href="([^"]+)">',loader,t)
 assert count==1
 index.write_text(t)
+secure(work/'dist')
 print('Website copy:',work/'dist')

@@ -18,7 +18,7 @@ The repository is not a website of its own. It holds the app's files, file for f
 | `public/simulations.html`, `public/portfolios.html` | The simulations catalog and the Portfolios page. | [docs/pages.md](docs/pages.md) |
 | `public/scripts/` | Shared JavaScript: helpers, data store, data panel, folds, the catalog registry, and the walkthroughs in `walk/`. | [docs/scripts/](docs/scripts/) |
 | `public/styles/` | The seven stylesheets. | [docs/styles.md](docs/styles.md) |
-| `public/vendor/katex/`, `public/fonts/lm/`, `public/images/sims/` | The maths typesetter, the lecture-note typeface, the thumbnails. | [docs/assets.md](docs/assets.md) |
+| `public/vendor/katex/`, `public/fonts/`, `public/images/sims/` | The maths typesetter, the typefaces (Latin Modern, IBM Plex, Instrument Serif, all served by the site itself), the thumbnails. | [docs/assets.md](docs/assets.md) |
 | `public/portfolios/` | Built copies of the two research-project apps. | [docs/portfolios.md](docs/portfolios.md) |
 | `package.json`, `vite.config.ts`, `tsconfig.json`, `tailwind.config.js`, `postcss.config.js`, `src/` | Build files from the platform's template. | [docs/build-and-deploy.md](docs/build-and-deploy.md) |
 | `tests/tests.json` | The test scenarios the platform runs after each deploy. | [docs/build-and-deploy.md](docs/build-and-deploy.md) |

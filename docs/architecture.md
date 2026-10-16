@@ -43,7 +43,7 @@ pages follow the same order):
 | 4 | the page's own inline script | The simulation: state, physics, drawing, controls. It writes its numbers into the store. | the page's doc in [simulations/](simulations/) |
 | 5 | `scripts/datalog.js` | The data panel; it only reads the store. | [scripts/datalog.md](scripts/datalog.md) |
 
-Stylesheets, in the `<head>`: `styles/sim.css` (which imports the Google fonts, KaTeX's stylesheet and `paper.css`),
+Stylesheets, in the `<head>`: `styles/sim.css` (which imports the self-hosted fonts from `fonts/instrument-plex.css`, KaTeX's stylesheet and `paper.css`),
 `styles/data.css`, `styles/fold.css`. See [styles.md](styles.md).
 
 ## The data pipeline: one notebook, read three ways

@@ -24,8 +24,8 @@ Related pages: the fold mechanism is in [scripts/fold.md](scripts/fold.md), the 
 | Part | Home | Catalog | Portfolios |
 |---|---|---|---|
 | `<html class="no-js">`, switched to `js` by a one-line script in `<head>` | [2](../index.html#L2), [21–23](../index.html#L21-L23) | [2](../public/simulations.html#L2), [24–26](../public/simulations.html#L24-L26) | [2](../public/portfolios.html#L2), [25–27](../public/portfolios.html#L25-L27) |
-| `theme-color` `#f5f1ea` (the paper colour `--paper`) | [12](../index.html#L12) | [12](../public/simulations.html#L12) | [12](../public/portfolios.html#L12) |
-| `preconnect` to Google Fonts (the fonts themselves come from `@import` in the CSS, [styles.md](styles.md#design-rules)) | [13–14](../index.html#L13-L14) | [13–14](../public/simulations.html#L13-L14) | [13–14](../public/portfolios.html#L13-L14) |
+| `theme-color` `#f5f1ea` (the paper colour `--paper`) | [14](../index.html#L14) | [14](../public/simulations.html#L14) | [14](../public/portfolios.html#L14) |
+| Security policy and referrer rule, right after the charset line ([build-and-deploy.md](build-and-deploy.md#security)) | [5–6](../index.html#L5-L6) | [5–6](../public/simulations.html#L5-L6) | [5–6](../public/portfolios.html#L5-L6) |
 | Favicon: an inline SVG, a wine square with a letter | "N" [17–20](../index.html#L17-L20) | "NK" [20–23](../public/simulations.html#L20-L23) | "NK" [21–24](../public/portfolios.html#L21-L24) |
 | Skip link (`.skip-link`) | to `#main` [27](../index.html#L27) | to `#catalog` [30](../public/simulations.html#L30) | to `#projects` [31](../public/portfolios.html#L31) |
 | `scripts/fold.js` at the end of `<body>` | [622](../index.html#L622) | [123](../public/simulations.html#L123) | [267](../public/portfolios.html#L267) |
@@ -50,9 +50,10 @@ education, research projects, eight simulation plates and skills. It is the entr
 
 | Lines | Item |
 |---|---|
-| [6](../index.html#L6) | `<title>` "Numa Koudsie · Notebook" |
-| [7–12](../index.html#L7-L12) | `description`, `author`, `theme-color` |
-| [15](../index.html#L15) | `styles/site.css` (tokens, layout, hero, timeline, plates; loads IBM Plex from Google Fonts) |
+| [5–6](../index.html#L5-L6) | Security policy and referrer rule ([build-and-deploy.md](build-and-deploy.md#security)) |
+| [8](../index.html#L8) | `<title>` "Numa Koudsie · Notebook" |
+| [9–14](../index.html#L9-L14) | `description`, `author`, `theme-color` |
+| [15](../index.html#L15) | `styles/site.css` (tokens, layout, hero, timeline, plates; imports the self-hosted IBM Plex from `fonts/plex.css`) |
 | [16](../index.html#L16) | `styles/fold.css` (the fold cards) |
 | [21–23](../index.html#L21-L23) | `className = 'js'` |
 
@@ -60,7 +61,8 @@ Scripts, in load order, at the end of `<body>`: `scripts/fold.js` ([622](../inde
 ([623–1254](../index.html#L623-L1254)). No KaTeX, no `paper.css`: the home page has no mathematics typeset.
 
 Fonts as measured in Chromium: IBM Plex Sans 400/500, IBM Plex Mono 400/500, IBM Plex Serif 600 (titles) and 400 italic (the
-tagline). All come through the `@import` in [site.css:5](../public/styles/site.css#L5).
+tagline). All come from this site: the `@import` in [site.css:5](../public/styles/site.css#L5) loads `fonts/plex.css`, which points at
+the files in `fonts/ibm-plex-*/` ([assets.md](assets.md#publicfonts--ibm-plex-and-instrument-serif-55-files-078-mb)).
 
 ### Body, section by section
 
@@ -217,7 +219,8 @@ view is kept in the address. Everything is drawn from the registry [`scripts/cat
 
 | Lines | Item |
 |---|---|
-| [6](../public/simulations.html#L6) | `<title>` "Simulations · Numa Koudsie" |
+| [5–6](../public/simulations.html#L5-L6) | Security policy and referrer rule |
+| [8](../public/simulations.html#L8) | `<title>` "Simulations · Numa Koudsie" |
 | [15](../public/simulations.html#L15) | `styles/site.css`: tokens, base, footer, and the IBM Plex `@import` |
 | [16](../public/simulations.html#L16) | `vendor/katex/katex.min.css` (KaTeX 0.16.11, woff2 fonts only) |
 | [17](../public/simulations.html#L17) | `styles/paper.css`: Latin Modern `@font-face`, `--tex`, `--line-strong`, `--quote` |
@@ -337,7 +340,8 @@ its own pages. The projects themselves are static copies of two other apps under
 
 ### Head
 
-`<title>` "Portfolios · Numa Koudsie" ([6](../public/portfolios.html#L6)). Stylesheets in order
+Security policy and referrer rule ([5–6](../public/portfolios.html#L5-L6)), `<title>` "Portfolios · Numa Koudsie"
+([8](../public/portfolios.html#L8)). Stylesheets in order
 ([15–20](../public/portfolios.html#L15-L20)): `site.css`, `katex.min.css`, `paper.css`, `catalog.css` (top bar, masthead,
 `--serif`), `portfolio.css` (the project cards), `fold.css`. Scripts at the end of `<body>`: `scripts/fold.js`
 ([267](../public/portfolios.html#L267)), `vendor/katex/katex.min.js` ([268](../public/portfolios.html#L268)),
@@ -418,7 +422,7 @@ shows as TeX source between `\(` and `\)` (eight such formulas in part 1.1 alone
 4. Link only to `portfolios/<name>/index.html#/<route>` and take figures from `portfolios/<name>/fig/`; give each `img` the
    `width` and `height` of the picture's own proportions in CSS px, at a height of 300, never the raw `viewBox` numbers
    (see **Image sizes** above).
-5. Update the page `description` ([9](../public/portfolios.html#L9)) and the home page's research intro
+5. Update the page `description` ([11](../public/portfolios.html#L11)) and the home page's research intro
    ([index.html:234–239](../index.html#L234-L239)), which name the projects.
 
 `.proj__pages` lays out five links per row ([portfolio.css:220–227](../public/styles/portfolio.css#L220-L227)); a sixth

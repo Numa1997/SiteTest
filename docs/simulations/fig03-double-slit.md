@@ -234,7 +234,7 @@ returns strings for the walkthrough keys `d`, `a`, `b`, `P`, `S1`, `L1`, `L2`, `
 ## Page structure
 
 **Head** ([page:3–29](../../public/simulations/Interactive%20Double-Slit%20Experiment%20Visualization.html#L3-L29)): title "Double-Slit
-Interference · Numa Koudsie", description, Google Fonts preconnects, then stylesheets `../styles/sim.css`, `../styles/data.css`,
+Interference · Numa Koudsie", description, the security policy and referrer rule ([build-and-deploy.md](../build-and-deploy.md#security)), then stylesheets `../styles/sim.css`, `../styles/data.css`,
 `../styles/fold.css` (sim.css imports the fonts, KaTeX's CSS and paper.css: [sim.css:7–9](../../public/styles/sim.css#L7-L9)), an
 inline SVG favicon, and an inline `<style>` with the label classes `.svg-lbl`, `.svg-lbl--acc`, `.svg-mono`, `.svg-num`, `.svg-m`
 (larger below 560 px) and `.verdict` ([page:15–28](../../public/simulations/Interactive%20Double-Slit%20Experiment%20Visualization.html#L15-L28)).

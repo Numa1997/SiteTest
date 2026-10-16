@@ -4,7 +4,7 @@
    titles at weight 400 only, IBM Plex Sans text, IBM Plex Mono labels; the abstracts are set like a LaTeX write-up,
    in Latin Modern with KaTeX maths; every box has a visible 1 px outline; no card shadows. */
 
-@import url('https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=IBM+Plex+Sans:ital,wght@0,400;0,500;0,600;1,400&family=IBM+Plex+Mono:wght@400;500&display=swap');
+@import url('../fonts/instrument-plex.css');
 
 :root {
   --serif: 'Instrument Serif', Georgia, 'Times New Roman', serif;

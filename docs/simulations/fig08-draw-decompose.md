@@ -236,7 +236,7 @@ spectrum panel is not pinnable ([datalog.js:542](../../public/scripts/datalog.js
 
 ## Page structure
 
-Head ([L1–23](../../public/simulations/draw-decompose.html#L1-L23)): `styles/sim.css` (Google Fonts, KaTeX CSS and
+Head ([L1–23](../../public/simulations/draw-decompose.html#L1-L23)): `styles/sim.css` (the self-hosted fonts, KaTeX CSS and
 `paper.css` by `@import`, [sim.css:7–9](../../public/styles/sim.css#L7-L9)), `styles/data.css`, `styles/fold.css`, an
 inline favicon and a short inline `<style>`: crosshair cursor, `touch-action: none` on the canvas, no text selection on
 the stage, the preset grid, the hint, and `[hidden]` forced to `display: none`

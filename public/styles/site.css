@@ -2,7 +2,7 @@
    Editorial physics-journal layout: paper, ink, burgundy.
    IBM Plex Serif display · IBM Plex Sans text · IBM Plex Mono labels */
 
-@import url('https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&family=IBM+Plex+Sans:ital,wght@0,400;0,500;0,600;1,400&family=IBM+Plex+Serif:ital,wght@0,400;0,500;0,600;0,700;1,400&display=swap');
+@import url('../fonts/plex.css');
 
 :root {
   --paper: #f5f1ea;
