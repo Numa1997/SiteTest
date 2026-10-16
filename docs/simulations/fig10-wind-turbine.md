@@ -310,7 +310,7 @@ rotor-speed strip, the torques to the power strip, [L991](../../public/simulatio
 ## Page structure
 
 **Head** ([L3–L29](../../public/simulations/wind-turbine.html#L3-L29)): title "Wind Turbine Control · Numa Koudsie",
-description, preconnect to Google Fonts, stylesheets `../styles/sim.css`, `../styles/data.css`, `../styles/fold.css`
+description, the security policy and referrer rule ([build-and-deploy.md](../build-and-deploy.md#security)), stylesheets `../styles/sim.css`, `../styles/data.css`, `../styles/fold.css`
 ([L11–L13](../../public/simulations/wind-turbine.html#L11-L13)), inline SVG favicon, and an inline style for the solve box,
 the seek slider, the segmented buttons `.seg` and the greyed control `.ctl.is-off`
 ([L15–L28](../../public/simulations/wind-turbine.html#L15-L28)). Styles are described in [styles.md](../styles.md).

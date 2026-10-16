@@ -274,8 +274,8 @@ is not the sum curve.
 
 ## Page structure
 
-**Head** ([:3-27](../../public/simulations/wave-interference.html#L3-L27)): title, description, theme colour; preconnects to
-Google Fonts; `../styles/sim.css`, `../styles/data.css`, `../styles/fold.css`; an inline SVG favicon; and a page-specific
+**Head** ([:3-27](../../public/simulations/wave-interference.html#L3-L27)): title, description, theme colour; the security
+policy and referrer rule ([build-and-deploy.md](../build-and-deploy.md#security)); `../styles/sim.css`, `../styles/data.css`, `../styles/fold.css`; an inline SVG favicon; and a page-specific
 `<style>` for the wave cards: `.waves`, `.wave` with a left border in the wave's colour `--c`, `.wave__head`, `.wave__x`,
 `.wave__ctl` (two columns of sliders), `.empty` ([:15-26](../../public/simulations/wave-interference.html#L15-L26)). See
 [styles.md](../styles.md).

@@ -52,10 +52,29 @@ They are declared as the family `'Latin Modern Roman'` by four `@font-face` rule
 [`public/styles/paper.css:9–12`](../public/styles/paper.css#L9), with `font-display: swap` (text shows at once in a fallback
 serif and switches when the font arrives). See [styles.md](styles.md) for where the family is used.
 
-The other three typefaces of the house design (Instrument Serif for titles, IBM Plex Sans for text, IBM Plex Mono for labels)
-are not in this repository. The stylesheets fetch them from Google Fonts with an `@import` on their first lines
-([site.css:5](../public/styles/site.css#L5), [sim.css:7](../public/styles/sim.css#L7),
-[catalog.css:7](../public/styles/catalog.css#L7)); see [styles.md](styles.md).
+## `public/fonts/` · IBM Plex and Instrument Serif (55 files, 0.78 MB)
+
+The other typefaces of the house design: Instrument Serif for titles, IBM Plex Sans for text, IBM Plex Mono for labels, and IBM
+Plex Serif for the titles of the home page. Until 16 October 2026 the site fetched them from Google Fonts, so every visit sent the
+visitor's address to Google. Since then the site serves them itself, and the security policy refuses fonts from any other site
+([build-and-deploy.md](build-and-deploy.md#security)).
+
+| File | What it is |
+|---|---|
+| `plex.css` | 59 `@font-face` rules: IBM Plex Mono 400 and 500, Plex Sans 400, 500, 600 and 400 italic, Plex Serif 400, 500, 600, 700 and 400 italic. Imported by [site.css:5](../public/styles/site.css#L5). |
+| `instrument-plex.css` | 38 `@font-face` rules: Instrument Serif 400 and 400 italic, Plex Sans and Plex Mono as above. Imported by [sim.css:7](../public/styles/sim.css#L7), [catalog.css:7](../public/styles/catalog.css#L7) and the stylesheets of the two project copies ([portfolios.md](portfolios.md)). |
+| `ibm-plex-mono/`, `ibm-plex-sans/`, `ibm-plex-serif/`, `instrument-serif/` | 51 `.woff2` files (0.74 MB), named family, weight (`i` for italic) and script range, for example `ibm-plex-sans-400i-greek.woff2`. |
+| `OFL-IBM-Plex.txt`, `OFL-Instrument-Serif.txt` | The SIL Open Font License 1.1, under which both families may be copied and served. |
+
+The two stylesheets are copies of the two Google Fonts stylesheets the site used, with the same files and the same rules; only
+the addresses point here. Each face is cut by alphabet: the `unicode-range` of a rule names the characters its file covers
+(latin, latin-ext, greek, cyrillic, cyrillic-ext, vietnamese), and the browser downloads a file only when the page shows one of
+those characters. A page in English with Greek symbols therefore loads the latin file and, if a Plex face must draw a Greek letter,
+the greek one. Measured in Chromium: 6 to 22 faces load per page.
+
+**To refresh:** fetch the two stylesheet addresses (written at the top of each `.css` file) with the User-Agent of a current
+browser (Google sends `.woff2` only to browsers that announce support), download every file they name, and point the `url(…)`
+of each rule at the local name. Keep the rules and their order unchanged, so the pages render the same.
 
 ## `public/images/sims/` · the ten thumbnails (10 files, 0.19 MB)
 

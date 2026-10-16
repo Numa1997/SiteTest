@@ -33,15 +33,19 @@ The house design is `DESIGN.md` of the app `droplet-collection-yl7l26` ([AGENTS.
 
 | Family | Source | Declared in |
 |---|---|---|
-| Instrument Serif (normal, italic) | Google Fonts, by CSS `@import` | [catalog.css:7](../public/styles/catalog.css#L7), [sim.css:7](../public/styles/sim.css#L7) |
-| IBM Plex Sans (400, 500, 600, 400 italic), IBM Plex Mono (400, 500) | Google Fonts, by CSS `@import` | [site.css:5](../public/styles/site.css#L5), [catalog.css:7](../public/styles/catalog.css#L7), [sim.css:7](../public/styles/sim.css#L7) |
-| IBM Plex Serif (400–700, 400 italic) | Google Fonts, by CSS `@import` | [site.css:5](../public/styles/site.css#L5) only |
+| Instrument Serif (normal, italic) | self-hosted, `public/fonts/instrument-serif/`, by CSS `@import` of `fonts/instrument-plex.css` | [catalog.css:7](../public/styles/catalog.css#L7), [sim.css:7](../public/styles/sim.css#L7) |
+| IBM Plex Sans (400, 500, 600, 400 italic), IBM Plex Mono (400, 500) | self-hosted, `public/fonts/ibm-plex-sans/` and `ibm-plex-mono/`, by CSS `@import` of `fonts/plex.css` or `fonts/instrument-plex.css` | [site.css:5](../public/styles/site.css#L5), [catalog.css:7](../public/styles/catalog.css#L7), [sim.css:7](../public/styles/sim.css#L7) |
+| IBM Plex Serif (400–700, 400 italic) | self-hosted, `public/fonts/ibm-plex-serif/`, by CSS `@import` of `fonts/plex.css` | [site.css:5](../public/styles/site.css#L5) only |
 | Latin Modern Roman (regular, italic, bold, bold italic) | self-hosted, `public/fonts/lm/lmroman10-*.woff2` (GUST font licence beside them) | `@font-face` at [paper.css:9–12](../public/styles/paper.css#L9-L12) |
 | KaTeX_Main, KaTeX_Math and 18 more | self-hosted, `public/vendor/katex/fonts/*.woff2` (KaTeX 0.16.11, woff2 only) | 20 `@font-face` rules in `vendor/katex/katex.min.css`, loaded by `<link>` ([simulations.html:16](../public/simulations.html#L16), [portfolios.html:16](../public/portfolios.html#L16)) or `@import` ([sim.css:8](../public/styles/sim.css#L8)) |
 
-No HTML page links a Google Fonts stylesheet; the pages only `preconnect` to `fonts.googleapis.com` and `fonts.gstatic.com`
-(for example [index.html:13–14](../index.html#L13-L14)). The browser therefore finds the font CSS only after it has fetched
-`site.css`, `catalog.css` or `sim.css`, one round trip later than a `<link>` would.
+Until 16 October 2026 these three families came from Google Fonts, so every visit sent the visitor's address to Google. They are
+now served by the site itself: `fonts/plex.css` and `fonts/instrument-plex.css` are copies of the two Google Fonts stylesheets the
+site used, with the same files and the same `unicode-range` subsets, pointing at the `.woff2` files beside them
+([assets.md](assets.md#publicfonts--ibm-plex-and-instrument-serif-55-files-078-mb)). Measured in Chromium on all 15 pages before and
+after the change: the same font renders every sampled element. The browser finds the font CSS only after it has fetched `site.css`,
+`catalog.css` or `sim.css`, one round trip later than a `<link>` would; the security policy forbids loading fonts from any other site
+([build-and-deploy.md](build-and-deploy.md#security)).
 
 The four font stacks are tokens: `--serif`, `--sans`, `--mono` (site.css and sim.css) and `--tex` (paper.css). `--tex` is
 `'Latin Modern Roman', 'KaTeX_Math', 'Times New Roman', serif` ([paper.css:15–16](../public/styles/paper.css#L15-L16)): Latin
@@ -385,9 +389,10 @@ site `/src/main.ts` answers 403 (measured). The file comes from the app template
    hover colour apply to catalog entries until [fold.css:168](../public/styles/fold.css#L168) removes the dot. Likewise `site.css`'s
    `.tag` ([103–115](../public/styles/site.css#L103-L115)) would also style KaTeX's equation numbers (class `tag`) on a page that
    loads both; no such page has a numbered equation today.
-10. **Google Fonts is fetched twice** on the catalog and Portfolios pages: `site.css` and `catalog.css` both `@import` IBM Plex
-    Sans and Mono ([site.css:5](../public/styles/site.css#L5), [catalog.css:7](../public/styles/catalog.css#L7)); measured: each
-    of those faces appears twice in `document.fonts`.
+10. **IBM Plex Sans and Mono are declared twice** on the catalog and Portfolios pages: `site.css` imports `fonts/plex.css` and
+    `catalog.css` imports `fonts/instrument-plex.css`, and both declare those faces ([site.css:5](../public/styles/site.css#L5),
+    [catalog.css:7](../public/styles/catalog.css#L7)); each of those faces appears twice in `document.fonts`. Both declarations
+    point at the same files in `fonts/`.
 11. Fixed on 2026-10-15: the check view has a third verdict, `.dp-check__verdict.is-na`
     ([data.css:220](../public/styles/data.css#L220)): muted ink on the soft card colour inside a dashed outline, for a read-back
     that finds nothing drawn at the moment. Before, such a case fell to the burgundy `.is-bad` (audit repair, commit [32c240c](https://github.com/Numa1997/SiteTest/commit/32c240c52fd0535d39a0cef608dc404cf4219484)).

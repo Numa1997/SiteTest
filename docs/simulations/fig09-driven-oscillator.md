@@ -273,7 +273,7 @@ only every fifth sample is tried). How the panel uses these hooks is in [datalog
 ## Page structure
 
 **Head** ([L3–L25](../../public/simulations/driven-oscillator.html#L3-L25)): title "Driven Oscillator · Numa Koudsie",
-description, preconnect to Google Fonts, then the stylesheets `../styles/sim.css`, `../styles/data.css`,
+description, the security policy and referrer rule ([build-and-deploy.md](../build-and-deploy.md#security)), then the stylesheets `../styles/sim.css`, `../styles/data.css`,
 `../styles/fold.css` ([L11–L13](../../public/simulations/driven-oscillator.html#L11-L13)), an inline SVG favicon, and a
 small inline style for the solve box (`.solve`, `.solve__steps`, `.solve__status`, `.seek`,
 [L15–L24](../../public/simulations/driven-oscillator.html#L15-L24)). Styles are described in [styles.md](../styles.md).

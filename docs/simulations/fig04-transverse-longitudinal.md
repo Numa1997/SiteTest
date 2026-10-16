@@ -229,7 +229,7 @@ walkthrough polls it every 200 ms ([sim.js:326](../../public/scripts/sim.js#L326
 ## Page structure
 
 **Head** ([page:3–15](../../public/simulations/Transverse%20and%20longitudinal%20waves.html#L3-L15)): title "Transverse &amp;
-Longitudinal Waves · Numa Koudsie", description, Google Fonts preconnects, stylesheets `../styles/sim.css`, `../styles/data.css`,
+Longitudinal Waves · Numa Koudsie", description, the security policy and referrer rule ([build-and-deploy.md](../build-and-deploy.md#security)), stylesheets `../styles/sim.css`, `../styles/data.css`,
 `../styles/fold.css`, an inline SVG favicon. No page-specific `<style>`. See [styles.md](../styles.md).
 
 **Body.** The top bar with the Fig. 1–10 links, Fig. 4 marked `aria-current` ([page:17–32](../../public/simulations/Transverse%20and%20longitudinal%20waves.html#L17-L32));

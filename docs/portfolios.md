@@ -36,8 +36,8 @@ places, the links into it from `portfolios.html` and its one link back out.
    (4.5 kB) carries the pendulum integrator.
 3. **The stylesheet is added by a script.** In both `index.html` files the stylesheet is not a `<link>` tag but a one-line
    script that creates the `<link>` when the page runs
-   ([droplet-collection/index.html:12](../public/portfolios/droplet-collection/index.html#L12),
-   [rotor-pendula/index.html:12](../public/portfolios/rotor-pendula/index.html#L12)). The reason is a platform quirk:
+   ([droplet-collection/index.html:14](../public/portfolios/droplet-collection/index.html#L14),
+   [rotor-pendula/index.html:14](../public/portfolios/rotor-pendula/index.html#L14)). The reason is a platform quirk:
    when AppDeploy deploys an HTML file, it rewrites a relative stylesheet address such as `./static/index-<hash>.css` into an
    address at the site root, where the file does not exist (403), and the copy shows unstyled. The platform does not touch
    scripts, so a script that adds the same link at run time survives. Seen for `./assets/…` and, since October 2026, for
@@ -48,6 +48,11 @@ places, the links into it from `portfolios.html` and its one link back out.
 6. **No backend.** The copies are built without the apps' saved runs or server functions: the Saved runs page and the Save
    button are removed, and the Simulate page says that saving belongs to the standalone app. Everything a copy shows is
    computed in the browser or read from the files beside it.
+7. **Fonts and policy from the website.** The stylesheet's first rule imports the fonts from the website's own folder
+   (`@import"../../../fonts/instrument-plex.css"`), not from Google Fonts, and `index.html` carries the website's security
+   policy and referrer rule on lines 5–6, right after its charset line ([build-and-deploy.md](build-and-deploy.md#security)).
+   Both were patched into the built files on 16 October 2026, so the hashes in the two stylesheet names no longer match their
+   content; nothing depends on that.
 
 ## Files in each copy
 
@@ -55,9 +60,9 @@ places, the links into it from `portfolios.html` and its one link back out.
 
 | Path | What it is |
 |---|---|
-| `index.html` | The entry page: title, description, the module script, the stylesheet loader. |
+| `index.html` | The entry page: the security policy and referrer rule, title, description, the module script, the stylesheet loader. |
 | `static/index-DGIxitSc.js` | The whole application (React, KaTeX 0.16.47, the pages Overview, Theory, Results, Simulate, Checks), minified, 841 kB. |
-| `static/index-CGriahzx.css` | Its stylesheet (the house design and the KaTeX styles), 61 kB. |
+| `static/index-CGriahzx.css` | Its stylesheet (the house design and the KaTeX styles; fonts imported from `../../../fonts/instrument-plex.css`), 61 kB. |
 | `static/worker-ClooJ8Gk.js` | The Web Worker: the solver of the stochastic collection equation, 131 kB. |
 | `static/KaTeX_*.{woff2,woff,ttf}` | 59 font files of KaTeX, the maths typesetter, each in up to three formats (the bundle names them; the browser picks the first format it supports, in practice woff2). |
 | `fig/c1_ice.svg`, `fig/ecoll_map.svg`, `fig/fallspeed_gk.svg`, `fig/golovin.svg`, `fig/w2_rain.svg`, `fig/w2_spectra.svg` | Vector figures of the project. Four of them also appear as plates on the Portfolios page ([portfolios.html:128–140](../public/portfolios.html#L128-L140)). |
@@ -66,9 +71,9 @@ places, the links into it from `portfolios.html` and its one link back out.
 
 | Path | What it is |
 |---|---|
-| `index.html` | The entry page. |
+| `index.html` | The entry page, as in the other copy. |
 | `static/index-CsGEKbO8.js` | The whole application, including the Report page, minified, 1.01 MB. |
-| `static/index-CNYGhWdg.css` | Its stylesheet, 65 kB. |
+| `static/index-CNYGhWdg.css` | Its stylesheet (fonts imported as in the other copy), 65 kB. |
 | `static/worker-hcWKavQc.js` | The Web Worker: the pendulum integrator, 4.5 kB. |
 | `static/KaTeX_*` | The same 59 KaTeX font files. |
 | `fig/01_geometry.svg` … `fig/07_sensor_range.svg` | Seven vector figures of the study (geometry, power at the 18 mountings, generator topologies, geometry ratios, chaos scan, Poincaré sections, sensor range). |
@@ -105,7 +110,7 @@ places, the links into it from `portfolios.html` and its one link back out.
    python3 tools/make_portfolio_copy.py /absolute/app-source /absolute/new-workdir
    ~~~
 
-   The source must have its existing dependencies available. The helper makes an isolated source copy, removes the saved-run route and controls, retains solver error messages, adds the backlink and title suffix, builds with a separate Vite configuration and patches the stylesheet loader. It installs nothing. The output is `new-workdir/dist/`; the standalone app is not edited.
+   The source must have its existing dependencies available. The helper makes an isolated source copy, removes the saved-run route and controls, retains solver error messages, adds the backlink and title suffix, builds with a separate Vite configuration, patches the stylesheet loader, points the stylesheet's font import at the website's `fonts/` and adds the website's security policy and referrer rule (taken from `index.html`). It stops if the app loads other Google fonts than `public/fonts/instrument-plex.css` holds. It installs nothing. The output is `new-workdir/dist/`; the standalone app is not edited.
    Build with the KaTeX version the deployed app uses (0.16.47 today; it is the `content` of the `.katex-version` rule in the
    app's served CSS). The apps have no lockfile, so a fresh `node_modules` can bring a different KaTeX, which changes the
    hidden MathML that screen readers use and the spacing of multi-line equations while the visible maths looks the same
@@ -115,6 +120,9 @@ places, the links into it from `portfolios.html` and its one link back out.
    without it, replace the line `<link rel="stylesheet" crossorigin href="./static/index-<hash>.css">` with the one-line
    loader script used now, with the new hash:
    `<script>(function(){var l=document.createElement('link');l.rel='stylesheet';l.href='./static/index-<hash>.css';document.head.appendChild(l)})();</script>`
+   It has also replaced the stylesheet's `@import"https://fonts.googleapis.com/…"` with `@import"../../../fonts/instrument-plex.css"`
+   and added lines 5–6 of `public/index.html` (the security policy and referrer rule) after the charset line of `dist/index.html`.
+   Without these the copy would send every visitor's address to Google, and the website's policy would not cover it.
 5. Keep the links in `public/portfolios.html` pointing at `index.html#/…`, never at a folder.
 6. Deploy the website and open every route of the copy on the live site: the page must be styled (the stylesheet loaded
    with status 200), and the maths typeset.

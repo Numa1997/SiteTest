@@ -250,8 +250,8 @@ rgb(122, 31, 43), the burgundy of the followed parcel, at full alpha.
 
 ## Page structure
 
-**Head** ([:3-15](../../public/simulations/water-wave.html#L3-L15)): title, description, theme colour; preconnects to Google Fonts;
-stylesheets `../styles/sim.css` (which imports the Google fonts, KaTeX's CSS and `paper.css`), `../styles/data.css`,
+**Head** ([:3-15](../../public/simulations/water-wave.html#L3-L15)): title, description, theme colour; the security policy and referrer rule ([build-and-deploy.md](../build-and-deploy.md#security));
+stylesheets `../styles/sim.css` (which imports the self-hosted fonts, KaTeX's CSS and `paper.css`), `../styles/data.css`,
 `../styles/fold.css`; an inline SVG favicon. No page-specific `<style>`. See [styles.md](../styles.md).
 
 **Body.**

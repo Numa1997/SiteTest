@@ -273,7 +273,7 @@ keys the walkthrough tables use.
 
 ## Page structure
 
-Head ([L1–42](../../public/simulations/phasor-sums.html#L1-L42)): `styles/sim.css` (which imports the Google Fonts,
+Head ([L1–42](../../public/simulations/phasor-sums.html#L1-L42)): `styles/sim.css` (which imports the self-hosted fonts,
 KaTeX CSS and `paper.css`, [sim.css:7–9](../../public/styles/sim.css#L7-L9)), `styles/data.css`, `styles/fold.css`, an
 inline favicon and an inline `<style>` for the cards, selects, drop zone, meters and formula box
 ([L15–41](../../public/simulations/phasor-sums.html#L15-L41)). See [styles.md](../styles.md).

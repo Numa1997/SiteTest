@@ -241,8 +241,8 @@ burgundy fill.
 
 ## Page structure
 
-**Head** ([L3–15](../../public/simulations/Double%20Pendulum.html#L3-L15)): title "Double Pendulum Chaos · Numa Koudsie" and description ([L6–7](../../public/simulations/Double%20Pendulum.html#L6-L7)); preconnects to Google Fonts
-([L9–10](../../public/simulations/Double%20Pendulum.html#L9-L10)); stylesheets in order `../styles/sim.css`, `../styles/data.css`, `../styles/fold.css` ([L11–13](../../public/simulations/Double%20Pendulum.html#L11-L13)); an inline SVG
+**Head** ([L3–15](../../public/simulations/Double%20Pendulum.html#L3-L15)): title "Double Pendulum Chaos · Numa Koudsie" and description ([L8–9](../../public/simulations/Double%20Pendulum.html#L8-L9)); the security policy and referrer rule
+([L5–6](../../public/simulations/Double%20Pendulum.html#L5-L6), see [build-and-deploy.md](../build-and-deploy.md#security)); stylesheets in order `../styles/sim.css`, `../styles/data.css`, `../styles/fold.css` ([L11–13](../../public/simulations/Double%20Pendulum.html#L11-L13)); an inline SVG
 favicon ([L14](../../public/simulations/Double%20Pendulum.html#L14)). No inline style. See [styles.md](../styles.md).
 
 **Body**, top to bottom:

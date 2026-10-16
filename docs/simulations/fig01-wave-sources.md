@@ -230,9 +230,9 @@ identical to table row 79 for ψ = −0.3775; the screen pixel at source 1 was r
 
 ## Page structure
 
-**Head** ([L3–18](../../public/simulations/Circular%20Wave%20Interference%20Visualization.html#L3-L18)): title "Wave Interference · Numa Koudsie" and description ([L6–7](../../public/simulations/Circular%20Wave%20Interference%20Visualization.html#L6-L7)); preconnects to Google Fonts
-([L9–10](../../public/simulations/Circular%20Wave%20Interference%20Visualization.html#L9-L10)); stylesheets in order `../styles/sim.css`, `../styles/data.css`, `../styles/fold.css` ([L11–13](../../public/simulations/Circular%20Wave%20Interference%20Visualization.html#L11-L13)), where `sim.css`
-imports the fonts, KaTeX's CSS and `paper.css`; an inline SVG favicon ([L14](../../public/simulations/Circular%20Wave%20Interference%20Visualization.html#L14)); one inline rule, `#field { cursor: crosshair; }`
+**Head** ([L3–18](../../public/simulations/Circular%20Wave%20Interference%20Visualization.html#L3-L18)): title "Wave Interference · Numa Koudsie" and description ([L8–9](../../public/simulations/Circular%20Wave%20Interference%20Visualization.html#L8-L9)); the security policy and referrer rule
+([L5–6](../../public/simulations/Circular%20Wave%20Interference%20Visualization.html#L5-L6), see [build-and-deploy.md](../build-and-deploy.md#security)); stylesheets in order `../styles/sim.css`, `../styles/data.css`, `../styles/fold.css` ([L11–13](../../public/simulations/Circular%20Wave%20Interference%20Visualization.html#L11-L13)), where `sim.css`
+imports the self-hosted fonts, KaTeX's CSS and `paper.css`; an inline SVG favicon ([L14](../../public/simulations/Circular%20Wave%20Interference%20Visualization.html#L14)); one inline rule, `#field { cursor: crosshair; }`
 ([L15–17](../../public/simulations/Circular%20Wave%20Interference%20Visualization.html#L15-L17)). See [styles.md](../styles.md).
 
 **Body**, top to bottom:

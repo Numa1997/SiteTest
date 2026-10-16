@@ -34,11 +34,72 @@ the study PDF and ZIP, `fold.css`, `robots.txt`); the HTML pages differ only by 
 | Change | Effect | How the site copes |
 |---|---|---|
 | Stored source is reformatted with Prettier (a code formatter). | Line breaks and indentation of stored files can differ from what was uploaded. | Base every diff on the stored snapshot (`src_read`), not on an older local copy. |
-| Served HTML gets an overlay script, a `preconnect` line and touch icons injected into `<head>`. | A served page is longer than its source; `</head>` moves. | Nothing to do. Compare served HTML with the source line by line, ignoring the injected lines. |
+| Served HTML gets AppDeploy's overlay (an inline bootstrap script and `https://v2.appdeploy.ai/shared/js/overlay.js`, placed before `<html>`), a `preconnect` line, touch icons, social-media `meta` tags and a link to a web-app manifest; the home page also gets a script that registers a Firebase push-notification service worker (`/sw.js`). | A served page is longer than its source; `</head>` moves. The overlay sends request timings to `api-v2.appdeploy.ai` and, on phones, offers an install prompt loaded from unpkg.com. The manifest link is relative (`./manifest.json`), so on sub-pages it points at a missing file and phones log a 403 (measured 16 October 2026; nothing visible). | The security policy admits exactly these ([Security](#security)). Compare served HTML with the source line by line, ignoring the injected lines. |
 | A relative stylesheet link in a deployed HTML file (`./assets/…`, and since October 2026 `./static/…`) is rewritten to the site root. | The stylesheet is not found (403) and the page shows unstyled. | The two project copies add their stylesheet with a one-line script instead of a `<link>` ([portfolios.md](portfolios.md)). |
 | Unicode escapes in served JavaScript are written out as characters; CSV line endings are normalised. | Served `.js` and `.csv` files can differ byte-wise from the source while behaving the same. | Compare such files by content, not bytes. |
-| A folder address (`…/rotor-pendula/`) answers 403. | Links to folders fail. | Always link to `…/index.html`. |
+| A folder address (`…/rotor-pendula/`) answered 403 until mid-October 2026; on 16 October it answered 200 with the folder's `index.html`. | Links to folders may fail again if the platform changes back. | Always link to `…/index.html`. |
 | A file removed with `deletePaths` is gone from the stored source but still answers 200 for a while (seen for the old copy bundles after version `1792109157210`). | A stale address keeps working, so a missing link is not caught by the live site. | Check deletions with `src_glob`, not with a fetch; nothing links to the old hashed names. |
+
+## Security
+
+Since 16 October 2026 (app version `1792151590518`) every page, the two project copies included, carries two `meta` tags right
+after its charset line (lines 5 and 6, for example [index.html:5–6](../index.html#L5-L6)):
+
+- a **Content-Security-Policy**: a list, read by the visitor's browser, of the only places the page may load code, styles, fonts,
+  images and data from. Anything else is refused before it runs;
+- a **referrer rule** (`strict-origin-when-cross-origin`): a site the reader follows a link to learns only that the visit came
+  from this site, not from which page.
+
+The policy, one directive per row:
+
+| Directive | Allows | Why |
+|---|---|---|
+| `default-src` | `'self'` | Whatever no row below names may come only from this site. |
+| `script-src` | `'self' 'unsafe-inline' https://v2.appdeploy.ai` and one file on unpkg.com | The site's scripts; code written inside the pages (every page keeps its code inline, and AppDeploy injects inline scripts when it serves a page); AppDeploy's overlay; the install-prompt library the overlay loads on phones, exactly one file, which the overlay checks against a SHA-384 fingerprint. |
+| `style-src` | `'self' 'unsafe-inline'` | The stylesheets; inline styles (KaTeX writes them, and so does the overlay). |
+| `img-src` | `'self' data: blob: https://appdeploy.ai` | Images of the site, the inline SVG favicons (`data:`), canvas exports (`blob:`), the overlay's icons. |
+| `font-src` | `'self' data:` | The self-hosted fonts ([assets.md](assets.md)); one font the project copies' stylesheets carry inline. |
+| `connect-src` | `'self' https://api-v2.appdeploy.ai` | Requests for the site's own files (the project copies load their data); the overlay's timing reports. |
+| `worker-src` | `'self'` | The solver workers of the project copies; AppDeploy's service worker. |
+| `manifest-src` | `'self'` | The web-app manifest AppDeploy links. |
+| `object-src` | `'none'` | No plugins. |
+| `base-uri` | `'self'` | A slipped-in `<base>` tag cannot redirect the page's relative links to another site. |
+| `form-action` | `'self'` | No form can send what a reader types to another site. |
+| `upgrade-insecure-requests` | | Any `http://` address in a page is fetched as `https://`. |
+
+The full policy as it stands in every page:
+
+```
+default-src 'self'; script-src 'self' 'unsafe-inline' https://v2.appdeploy.ai https://unpkg.com/@khmyznikov/pwa-install@0.6.3/dist/pwa-install.bundle.js; style-src 'self' 'unsafe-inline'; img-src 'self' data: blob: https://appdeploy.ai; font-src 'self' data:; connect-src 'self' https://api-v2.appdeploy.ai; worker-src 'self'; manifest-src 'self'; object-src 'none'; base-uri 'self'; form-action 'self'; upgrade-insecure-requests
+```
+
+**What it does and does not do.** It stops code and data from any other site: an injected `<script src="https://…">` would not
+load, and nothing the page knows could be sent elsewhere. It does not stop code written inside a page (`'unsafe-inline'`); that
+door is closed a different way: no reader input ever reaches a page as HTML. The catalog's search text is written with
+`textContent` ([simulations.html:285](../public/simulations.html#L285)), its field and year filters must match a
+fixed list, and the `#…` part of an address is only used to look up an element by its `id` ([fold.js:260–263](../public/scripts/fold.js#L260-L263)). Checked by reading every place the pages take input from the address, on 16 October 2026.
+
+**Outside the app's reach.** Response headers (`Strict-Transport-Security`, `X-Frame-Options`, `X-Content-Type-Options`, a
+policy sent as a header) are set by the server, and AppDeploy serves the files from Amazon S3 through CloudFront with no
+setting for them (as of October 2026). A policy in a `meta` tag cannot forbid framing (`frame-ancestors` is ignored there), so
+another site can still show these pages inside a frame. The site's source files are not served (`AGENTS.md`, `package.json`,
+source maps: 403), and plain `http://` is redirected to `https://` (301). The strongest protection of all is not in the code:
+whoever signs in to the AppDeploy account can replace the site, so that account and its e-mail need two-step sign-in.
+
+**How it was tested.** On 16 October 2026, in headless Chromium, on all 15 pages, desktop and a phone profile, before and after
+the deploy: no request refused by the policy, no script error, no request to Google, and, read from Chromium's own font
+report, the same font for every sampled text element (83 to 413 per page) as with the Google-hosted fonts. To check the live
+site by hand: `curl -s https://numa-koudsie-website-0cyj78.v2.appdeploy.ai/ | grep -c Content-Security-Policy` prints `1`; in the
+browser's developer tools, the Network tab shows no request to `fonts.googleapis.com`.
+
+**Rules for later changes.**
+1. A new page copies lines 5–6 of any page.
+2. A new outside resource (a script, a font, an image from another site) needs its origin added to the policy in all 15 pages,
+   and [tools/make_portfolio_copy.py](../tools/make_portfolio_copy.py) takes the policy from `index.html`. Without it the browser
+   refuses the resource and logs a `Refused to load` error.
+3. Never link Google Fonts again; refresh the self-hosted copies instead ([assets.md](assets.md)).
+4. If AppDeploy changes its overlay (a new address, a new version of the install prompt), the browser console of the live site
+   shows a `Refused to load` error naming the address; add it to the policy.
 
 ## Build files at the root
 
@@ -87,7 +148,7 @@ there and back). The same file was deployed to the app.
 
 Both live at the root of the app and of this repository; neither is served to readers.
 [`AGENTS.md`](../AGENTS.md) is the maintainer's summary of the project: what may be changed, the layout, the design rules,
-the fold mechanism, the data pipeline, the platform quirks. [`CLAUDE.md`](../CLAUDE.md) records how Numa expects an AI
+the fold mechanism, the data pipeline, the platform quirks, the security rules. [`CLAUDE.md`](../CLAUDE.md) records how Numa expects an AI
 assistant to work on the project: persistence, plain language, the app before the repository, data tables as a pipeline,
 the house design and the lecture-note style.
 
