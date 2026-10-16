@@ -1,0 +1,4 @@
+# Numa Koudsie · physics website
+
+User-agent: *
+Allow: /

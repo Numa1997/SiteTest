@@ -1,0 +1,977 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Wave Interference Simulator · Numa Koudsie</title>
+    <meta name="description" content="Superposition workbench: add travelling waves with their own amplitude, frequency, phase and speed, and watch their sum and spectrum in real time.">
+    <meta name="theme-color" content="#f5f1ea">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link rel="stylesheet" href="../styles/sim.css">
+    <link rel="stylesheet" href="../styles/data.css">
+    <link rel="stylesheet" href="../styles/fold.css">
+    <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='12' fill='%237a1f2b'/%3E%3Ctext x='32' y='45' text-anchor='middle' font-family='Georgia,serif' font-size='38' fill='%23f5f1ea'%3EN%3C/text%3E%3C/svg%3E">
+    <style>
+        .waves { display: flex; flex-direction: column; gap: 10px; }
+        .wave { --c: var(--accent); background: var(--card-soft); border: 1px solid var(--rule-soft); border-left: 3px solid var(--c); border-radius: 8px; padding: 10px 12px 12px; animation: fade .4s ease both; }
+        .wave__head { display: flex; align-items: center; gap: 8px; margin-bottom: 6px; }
+        .wave__head h3 { flex: 1; font-size: 19px; font-weight: 400; }
+        .wave__x { width: 28px; height: 28px; border-radius: 6px; border: 1px solid var(--rule); background: transparent; color: var(--ink-3); font: 500 16px/1 var(--sans); cursor: pointer; transition: color .2s ease, border-color .2s ease; }
+        .wave__x:hover { color: var(--accent); border-color: var(--accent); }
+        .wave__ctl { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 6px 14px; }
+        .wave .ctl { font-size: 12.5px; }
+        .wave input[type="range"] { --c: inherit; }
+        .empty { font-family: var(--tex); font-style: italic; color: var(--muted); font-size: 15px; margin: 0; }
+    </style>
+</head>
+<body>
+    <header class="sim-top">
+        <a href="../simulations.html">← All simulations</a>
+        <nav class="sim-nav" aria-label="Simulations">
+            <span>Fig.</span>
+            <a href="Circular Wave Interference Visualization.html">1</a>
+            <a href="Double Pendulum.html">2</a>
+            <a href="Interactive Double-Slit Experiment Visualization.html">3</a>
+            <a href="Transverse and longitudinal waves.html">4</a>
+            <a href="water-wave.html">5</a>
+            <a href="wave-interference.html" aria-current="page">6</a>
+            <a href="phasor-sums.html">7</a>
+            <a href="draw-decompose.html">8</a>
+            <a href="driven-oscillator.html">9</a>
+            <a href="wind-turbine.html">10</a>
+        </nav>
+    </header>
+
+    <main class="sim">
+        <noscript><p class="sim-error"><b>This simulation needs JavaScript.</b> <a href="../simulations.html">Back to the simulations</a></p></noscript>
+        <div class="sim__head">
+            <p class="sim__num">Fig. 6 · superposition · Fourier analysis</p>
+            <h1>Wave Interference Simulator<span class="dot">.</span></h1>
+            <p class="sim__lede">A workbench for adding waves. Give each one its own amplitude, frequency, phase and speed, and watch the sum take shape.</p>
+        </div>
+
+        <div class="sim__grid">
+            <div class="stack">
+                <figure class="stage">
+                    <div class="stage__canvas" id="stage" style="--ar: 16 / 10; --ar-m: 1 / 1.1;">
+                        <canvas id="plot" aria-label="Sum of the waves above, individual waves below"></canvas>
+                    </div>
+                    <figcaption class="stage__cap">
+                        <span><b>Fig. 6</b> · <span class="tx">\(y_i = A_i \sin\big(2\pi f_i\,(x/200 - s_i t) + \varphi_i\big)\)</span></span>
+                        <span id="cap-n">1 wave</span>
+                    </figcaption>
+                </figure>
+                <figure class="stage">
+                    <div class="stage__canvas" id="stage-spec" style="--ar: 16 / 4.2; --ar-m: 16 / 7;">
+                        <canvas id="spec" aria-label="Amplitude spectrum of the waves"></canvas>
+                    </div>
+                    <figcaption class="stage__cap">
+                        <span><b>Fig. 6b</b> · amplitude spectrum · one line per frequency <span class="tx">\(\nu = f s\)</span></span>
+                        <span><i>ν</i> from 0 to 6 Hz</span>
+                    </figcaption>
+                </figure>
+            </div>
+
+            <aside class="panel" aria-label="Controls">
+                <div class="panel__group">
+                    <p class="panel__label">Run</p>
+                    <div class="actions">
+                        <button type="button" class="btn" id="play">Pause</button>
+                        <button type="button" class="btn btn--ghost" id="add">Add wave +</button>
+                    </div>
+                </div>
+                <div class="panel__group">
+                    <p class="panel__label">Presets</p>
+                    <div class="actions">
+                        <button type="button" class="btn btn--ghost" id="p-one">One wave</button>
+                        <button type="button" class="btn btn--ghost" id="p-beats">Beats</button>
+                        <button type="button" class="btn btn--ghost" id="p-square">Square wave</button>
+                    </div>
+                </div>
+                <div class="panel__group">
+                    <p class="panel__label">Waves</p>
+                    <div class="waves" id="waves"></div>
+                </div>
+                <dl class="readouts">
+                    <div><dt>Waves</dt><dd id="r-n">—</dd></div>
+                    <div><dt>Sum of amplitudes</dt><dd id="r-sum">—</dd></div>
+                    <div class="wide"><dt>Peak |y| on screen</dt><dd id="r-peak" class="is-accent">—</dd></div>
+                </dl>
+            </aside>
+        </div>
+
+        <article class="paper" id="paper" aria-labelledby="paper-title">
+            <header class="paper__head">
+                <p class="paper__kicker">Lecture note · Fig. 6 · superposition · Fourier analysis</p>
+                <h2 class="paper__title" id="paper-title">Adding waves: beats, square waves and the spectrum</h2>
+                <p class="paper__by">Numa Koudsie · for school students and first- and second-year undergraduates</p>
+                <div class="paper__abstract"><b>Abstract.</b> Every sound that reaches your ear is many waves at once, and the air carries them by simply adding them up. This note shows why adding is allowed and what sums of sines can build: the slow throb of beats that guitarists tune by, the near-silence inside a noise-cancelling headphone, and a square wave assembled from odd harmonics, with an overshoot at its corners that no number of terms removes. It then explains the spectrum below the plot, the list of frequencies a wave contains, which is also how your inner ear takes a sound apart, and how the page computes and draws every curve. Subsections marked ★ carry the heavier mathematics and can be skipped on a first reading without losing the thread.</div>
+            </header>
+            <div class="paper__grid">
+                <nav class="paper__toc" aria-label="Contents">
+                    <p>Contents</p>
+                    <ol>
+                        <li><a href="#p-sound"><span>1</span>Many sounds, one eardrum</a></li>
+                        <li><a href="#p-model"><span>2</span>The model</a></li>
+                        <li><a href="#p-super"><span>3</span>Waves simply add</a></li>
+                        <li><a href="#p-beat"><span>4</span>Beats</a></li>
+                        <li><a href="#p-fourier"><span>5</span>A square wave from sines</a></li>
+                        <li><a href="#p-spectrum"><span>6</span>The spectrum</a></li>
+                        <li><a href="#p-numerics"><span>7</span>Computing the curves</a></li>
+                        <li><a href="#p-screen"><span>8</span>From the medium to the screen</a></li>
+                        <li><a href="#p-limits"><span>9</span>What the model leaves out</a></li>
+                    </ol>
+                </nav>
+                <div class="paper__body">
+                    <section class="psec" id="p-sound">
+                        <h3><span class="psec__n">01</span>Many sounds, one eardrum</h3>
+                        <p class="psec__lead">Stand next to a guitarist tuning up. Two strings that should give the same note are plucked together, and the sound swells and fades, slower and slower as the peg is turned, until it holds steady.</p>
+                        <p>That slow pulsing is called a <em>beat</em>. If one string vibrates 110 times a second and the other 111 times, they fall out of step and back into step once every second, and you hear one swell per second. The air does nothing clever: each string sends out its own wave, and at your ear the air simply moves by the sum of the two.</p>
+                        <p>The same rule explains things that seem to have nothing in common. A noise-cancelling headphone listens to the outside noise with a small microphone and plays the same wave turned upside down; the two add to almost nothing, which works best for steady low hums such as an aircraft engine. An additive synthesizer works the other way round: it mixes pure sine tones at whole-number multiples of a note’s frequency, each with its own loudness, and the mixture can sound like an organ, a clarinet or a violin. The bowed string of a violin pulls on the bridge with a force shaped roughly like a sawtooth, which contains every multiple of the note, the \(n\)th one with a strength proportional to \(1/n.\) The low notes of a clarinet are dominated by the odd multiples, which is why a square wave, built from odd multiples alone, sounds hollow, a little like a clarinet.</p>
+                        <p>Your ear does the reverse of a synthesizer. Along the basilar membrane, a thin strip inside the snail-shaped cochlea of the inner ear, each place responds most strongly to one frequency, high near the entrance and low at the far end. The ear therefore takes the sum apart again and reports which frequencies are present and how strong each one is. That list is the <em>spectrum</em>, and it is what the panel below the plot, Fig. 6b, draws.</p>
+                        <p>The workbench above lets you play all of these games with up to six waves. The lower half of the plot shows the ingredients, the upper half their sum, and the spectrum below lists what is in the mix.</p>
+                    </section>
+
+                    <section class="psec" id="p-model">
+                        <h3><span class="psec__n">02</span>The model</h3>
+                        <p>Each wave on the bench is a sine travelling along a one-dimensional medium, such as a long, taut string, of which \(800\ \mathrm{px}\) are in view. Wave \(i\) carries four numbers, one per slider on its card: the <em>Amplitude</em> \(A_i\) in px, the <em>Frequency</em> \(f_i,\) the <em>Phase</em> \(\varphi_i\) in radians and the <em>Speed</em> factor \(s_i.\) Its displacement at position \(X,\) in px from the left edge of the view, and time \(t,\) in seconds, is</p>
+                        \[ y_i(X, t) = A_i \sin\!\left( 2\pi f_i \left( \frac{X}{200} - s_i\,t \right) + \varphi_i \right), \tag{1} \]
+                        <p>where \(f_i\) and \(s_i\) are the plain numbers shown on the sliders. Multiplying out the bracket gives the textbook form \(A_i\sin(k_i X - \omega_i t + \varphi_i),\) and its coefficients are</p>
+                        \[ \begin{aligned} k_i &= \frac{2\pi f_i}{200}\ \mathrm{rad/px}, & \lambda_i &= \frac{2\pi}{k_i} = \frac{200}{f_i}\ \mathrm{px}, \\ \omega_i &= 2\pi f_i s_i\ \mathrm{rad/s}, & \nu_i &= \frac{\omega_i}{2\pi} = f_i s_i\ \mathrm{Hz}, \\ v_i &= \frac{\omega_i}{k_i} = 200\,s_i\ \mathrm{px/s} . & & \end{aligned} \tag{2} \]
+                        <p>Here \(k_i\) is the wavenumber, \(\lambda_i\) the wavelength, \(\omega_i\) the angular frequency, \(\nu_i\) the frequency you would measure at a fixed point, that is the number of crests passing it per second, and \(v_i\) the phase speed at which every crest moves. Three facts follow, and they are worth keeping in mind on the page.</p>
+                        <ul>
+                            <li>The view is \(800\ \mathrm{px}\) wide, so it always holds \(4 f_i\) wavelengths: four for the default Frequency 1, whatever the size of your screen.</li>
+                            <li>The phase speed \(v_i = 200\,s_i\ \mathrm{px/s}\) is set by the <em>Speed</em> slider alone; the <em>Frequency</em> slider does not change it.</li>
+                            <li>The <em>Frequency</em> slider is labelled in hertz, and it is the frequency in hertz only at Speed 1×. In general it counts wavelengths per \(200\ \mathrm{px},\) and the frequency at a fixed point is \(\nu_i = f_i s_i.\) A wave with Speed 0 stands still and has \(\nu_i = 0.\)</li>
+                        </ul>
+                        <p>The phase slides a wave sideways without changing its shape: at \(X = 0\) and \(t = 0\) the wave starts at the height \(A_i\sin\varphi_i\) (Figure 1). A phase of \(2\pi\) is a whole wavelength, and the slider covers one full turn, from 0 to about \(2\pi.\)</p>
+                        <figure class="pfig">
+                            <div class="pfig__plate">
+                                <svg viewBox="0 0 720 300" role="img" aria-label="One component: a sine curve along X with its amplitude A, its wavelength lambda, its height A sin phi at X = 0, and the same curve a moment later, shifted to the right at the phase speed v.">
+                                <rect x="0" y="0" width="720" height="300" fill="#fff"/>
+                                <line x1="110" y1="160" x2="690" y2="160" stroke="#8b8079" stroke-width="1.2"/>
+                                <path d="M698.0 160.0 L689.6 163.3 L689.6 156.7 Z" fill="#8b8079"/>
+                                <line x1="110" y1="275" x2="110" y2="42" stroke="#8b8079" stroke-width="1.2"/>
+                                <path d="M110.0 34.0 L113.3 42.4 L106.7 42.4 Z" fill="#8b8079"/>
+                                <text class="m" x="704" y="178">X</text>
+                                <text class="m" x="120" y="30">y</text>
+                                <text class="tick" x="100" y="176" text-anchor="middle">0</text>
+                                <path d="M110.0 183.5 L112.0 180.0 L114.0 176.5 L116.0 172.9 L118.0 169.3 L120.0 165.6 L122.0 162.0 L124.0 158.3 L126.0 154.7 L128.0 151.0 L130.0 147.4 L132.0 143.8 L134.0 140.3 L136.0 136.8 L138.0 133.4 L140.0 130.0 L142.0 126.7 L144.0 123.6 L146.0 120.5 L148.0 117.5 L150.0 114.7 L152.0 111.9 L154.0 109.3 L156.0 106.9 L158.0 104.6 L160.0 102.4 L162.0 100.4 L164.0 98.6 L166.0 96.9 L168.0 95.4 L170.0 94.1 L172.0 92.9 L174.0 92.0 L176.0 91.2 L178.0 90.6 L180.0 90.2 L182.0 90.0 L184.0 90.0 L186.0 90.2 L188.0 90.6 L190.0 91.1 L192.0 91.9 L194.0 92.8 L196.0 94.0 L198.0 95.3 L200.0 96.8 L202.0 98.4 L204.0 100.2 L206.0 102.2 L208.0 104.4 L210.0 106.7 L212.0 109.1 L214.0 111.7 L216.0 114.4 L218.0 117.3 L220.0 120.2 L222.0 123.3 L224.0 126.5 L226.0 129.7 L228.0 133.1 L230.0 136.5 L232.0 140.0 L234.0 143.5 L236.0 147.1 L238.0 150.7 L240.0 154.4 L242.0 158.0 L244.0 161.7 L246.0 165.3 L248.0 169.0 L250.0 172.6 L252.0 176.2 L254.0 179.7 L256.0 183.2 L258.0 186.6 L260.0 190.0 L262.0 193.3 L264.0 196.4 L266.0 199.5 L268.0 202.5 L270.0 205.3 L272.0 208.1 L274.0 210.7 L276.0 213.1 L278.0 215.4 L280.0 217.6 L282.0 219.6 L284.0 221.4 L286.0 223.1 L288.0 224.6 L290.0 225.9 L292.0 227.1 L294.0 228.0 L296.0 228.8 L298.0 229.4 L300.0 229.8 L302.0 230.0 L304.0 230.0 L306.0 229.8 L308.0 229.4 L310.0 228.9 L312.0 228.1 L314.0 227.2 L316.0 226.0 L318.0 224.7 L320.0 223.2 L322.0 221.6 L324.0 219.8 L326.0 217.8 L328.0 215.6 L330.0 213.3 L332.0 210.9 L334.0 208.3 L336.0 205.6 L338.0 202.7 L340.0 199.8 L342.0 196.7 L344.0 193.5 L346.0 190.3 L348.0 186.9 L350.0 183.5 L352.0 180.0 L354.0 176.5 L356.0 172.9 L358.0 169.3 L360.0 165.6 L362.0 162.0 L364.0 158.3 L366.0 154.7 L368.0 151.0 L370.0 147.4 L372.0 143.8 L374.0 140.3 L376.0 136.8 L378.0 133.4 L380.0 130.0 L382.0 126.7 L384.0 123.6 L386.0 120.5 L388.0 117.5 L390.0 114.7 L392.0 111.9 L394.0 109.3 L396.0 106.9 L398.0 104.6 L400.0 102.4 L402.0 100.4 L404.0 98.6 L406.0 96.9 L408.0 95.4 L410.0 94.1 L412.0 92.9 L414.0 92.0 L416.0 91.2 L418.0 90.6 L420.0 90.2 L422.0 90.0 L424.0 90.0 L426.0 90.2 L428.0 90.6 L430.0 91.1 L432.0 91.9 L434.0 92.8 L436.0 94.0 L438.0 95.3 L440.0 96.8 L442.0 98.4 L444.0 100.2 L446.0 102.2 L448.0 104.4 L450.0 106.7 L452.0 109.1 L454.0 111.7 L456.0 114.4 L458.0 117.3 L460.0 120.2 L462.0 123.3 L464.0 126.5 L466.0 129.7 L468.0 133.1 L470.0 136.5 L472.0 140.0 L474.0 143.5 L476.0 147.1 L478.0 150.7 L480.0 154.4 L482.0 158.0 L484.0 161.7 L486.0 165.3 L488.0 169.0 L490.0 172.6 L492.0 176.2 L494.0 179.7 L496.0 183.2 L498.0 186.6 L500.0 190.0 L502.0 193.3 L504.0 196.4 L506.0 199.5 L508.0 202.5 L510.0 205.3 L512.0 208.1 L514.0 210.7 L516.0 213.1 L518.0 215.4 L520.0 217.6 L522.0 219.6 L524.0 221.4 L526.0 223.1 L528.0 224.6 L530.0 225.9 L532.0 227.1 L534.0 228.0 L536.0 228.8 L538.0 229.4 L540.0 229.8 L542.0 230.0 L544.0 230.0 L546.0 229.8 L548.0 229.4 L550.0 228.9 L552.0 228.1 L554.0 227.2 L556.0 226.0 L558.0 224.7 L560.0 223.2 L562.0 221.6 L564.0 219.8 L566.0 217.8 L568.0 215.6 L570.0 213.3 L572.0 210.9 L574.0 208.3 L576.0 205.6 L578.0 202.7 L580.0 199.8 L582.0 196.7 L584.0 193.5 L586.0 190.3 L588.0 186.9 L590.0 183.5 L592.0 180.0 L594.0 176.5 L596.0 172.9 L598.0 169.3 L600.0 165.6 L602.0 162.0 L604.0 158.3 L606.0 154.7 L608.0 151.0 L610.0 147.4 L612.0 143.8 L614.0 140.3 L616.0 136.8 L618.0 133.4 L620.0 130.0 L622.0 126.7 L624.0 123.6 L626.0 120.5 L628.0 117.5 L630.0 114.7 L632.0 111.9 L634.0 109.3 L636.0 106.9 L638.0 104.6 L640.0 102.4 L642.0 100.4 L644.0 98.6 L646.0 96.9 L648.0 95.4 L650.0 94.1 L652.0 92.9 L654.0 92.0 L656.0 91.2 L658.0 90.6 L660.0 90.2 L662.0 90.0 L664.0 90.0 L666.0 90.2 L668.0 90.6 L670.0 91.1 L672.0 91.9 L674.0 92.8 L676.0 94.0 L678.0 95.3 L680.0 96.8" fill="none" stroke="#e2a2aa" stroke-width="2.2" stroke-linecap="round"/>
+                                <path d="M110.0 120.5 L112.0 117.5 L114.0 114.7 L116.0 111.9 L118.0 109.3 L120.0 106.9 L122.0 104.6 L124.0 102.4 L126.0 100.4 L128.0 98.6 L130.0 96.9 L132.0 95.4 L134.0 94.1 L136.0 92.9 L138.0 92.0 L140.0 91.2 L142.0 90.6 L144.0 90.2 L146.0 90.0 L148.0 90.0 L150.0 90.2 L152.0 90.6 L154.0 91.1 L156.0 91.9 L158.0 92.8 L160.0 94.0 L162.0 95.3 L164.0 96.8 L166.0 98.4 L168.0 100.2 L170.0 102.2 L172.0 104.4 L174.0 106.7 L176.0 109.1 L178.0 111.7 L180.0 114.4 L182.0 117.3 L184.0 120.2 L186.0 123.3 L188.0 126.5 L190.0 129.7 L192.0 133.1 L194.0 136.5 L196.0 140.0 L198.0 143.5 L200.0 147.1 L202.0 150.7 L204.0 154.4 L206.0 158.0 L208.0 161.7 L210.0 165.3 L212.0 169.0 L214.0 172.6 L216.0 176.2 L218.0 179.7 L220.0 183.2 L222.0 186.6 L224.0 190.0 L226.0 193.3 L228.0 196.4 L230.0 199.5 L232.0 202.5 L234.0 205.3 L236.0 208.1 L238.0 210.7 L240.0 213.1 L242.0 215.4 L244.0 217.6 L246.0 219.6 L248.0 221.4 L250.0 223.1 L252.0 224.6 L254.0 225.9 L256.0 227.1 L258.0 228.0 L260.0 228.8 L262.0 229.4 L264.0 229.8 L266.0 230.0 L268.0 230.0 L270.0 229.8 L272.0 229.4 L274.0 228.9 L276.0 228.1 L278.0 227.2 L280.0 226.0 L282.0 224.7 L284.0 223.2 L286.0 221.6 L288.0 219.8 L290.0 217.8 L292.0 215.6 L294.0 213.3 L296.0 210.9 L298.0 208.3 L300.0 205.6 L302.0 202.7 L304.0 199.8 L306.0 196.7 L308.0 193.5 L310.0 190.3 L312.0 186.9 L314.0 183.5 L316.0 180.0 L318.0 176.5 L320.0 172.9 L322.0 169.3 L324.0 165.6 L326.0 162.0 L328.0 158.3 L330.0 154.7 L332.0 151.0 L334.0 147.4 L336.0 143.8 L338.0 140.3 L340.0 136.8 L342.0 133.4 L344.0 130.0 L346.0 126.7 L348.0 123.6 L350.0 120.5 L352.0 117.5 L354.0 114.7 L356.0 111.9 L358.0 109.3 L360.0 106.9 L362.0 104.6 L364.0 102.4 L366.0 100.4 L368.0 98.6 L370.0 96.9 L372.0 95.4 L374.0 94.1 L376.0 92.9 L378.0 92.0 L380.0 91.2 L382.0 90.6 L384.0 90.2 L386.0 90.0 L388.0 90.0 L390.0 90.2 L392.0 90.6 L394.0 91.1 L396.0 91.9 L398.0 92.8 L400.0 94.0 L402.0 95.3 L404.0 96.8 L406.0 98.4 L408.0 100.2 L410.0 102.2 L412.0 104.4 L414.0 106.7 L416.0 109.1 L418.0 111.7 L420.0 114.4 L422.0 117.3 L424.0 120.2 L426.0 123.3 L428.0 126.5 L430.0 129.7 L432.0 133.1 L434.0 136.5 L436.0 140.0 L438.0 143.5 L440.0 147.1 L442.0 150.7 L444.0 154.4 L446.0 158.0 L448.0 161.7 L450.0 165.3 L452.0 169.0 L454.0 172.6 L456.0 176.2 L458.0 179.7 L460.0 183.2 L462.0 186.6 L464.0 190.0 L466.0 193.3 L468.0 196.4 L470.0 199.5 L472.0 202.5 L474.0 205.3 L476.0 208.1 L478.0 210.7 L480.0 213.1 L482.0 215.4 L484.0 217.6 L486.0 219.6 L488.0 221.4 L490.0 223.1 L492.0 224.6 L494.0 225.9 L496.0 227.1 L498.0 228.0 L500.0 228.8 L502.0 229.4 L504.0 229.8 L506.0 230.0 L508.0 230.0 L510.0 229.8 L512.0 229.4 L514.0 228.9 L516.0 228.1 L518.0 227.2 L520.0 226.0 L522.0 224.7 L524.0 223.2 L526.0 221.6 L528.0 219.8 L530.0 217.8 L532.0 215.6 L534.0 213.3 L536.0 210.9 L538.0 208.3 L540.0 205.6 L542.0 202.7 L544.0 199.8 L546.0 196.7 L548.0 193.5 L550.0 190.3 L552.0 186.9 L554.0 183.5 L556.0 180.0 L558.0 176.5 L560.0 172.9 L562.0 169.3 L564.0 165.6 L566.0 162.0 L568.0 158.3 L570.0 154.7 L572.0 151.0 L574.0 147.4 L576.0 143.8 L578.0 140.3 L580.0 136.8 L582.0 133.4 L584.0 130.0 L586.0 126.7 L588.0 123.6 L590.0 120.5 L592.0 117.5 L594.0 114.7 L596.0 111.9 L598.0 109.3 L600.0 106.9 L602.0 104.6 L604.0 102.4 L606.0 100.4 L608.0 98.6 L610.0 96.9 L612.0 95.4 L614.0 94.1 L616.0 92.9 L618.0 92.0 L620.0 91.2 L622.0 90.6 L624.0 90.2 L626.0 90.0 L628.0 90.0 L630.0 90.2 L632.0 90.6 L634.0 91.1 L636.0 91.9 L638.0 92.8 L640.0 94.0 L642.0 95.3 L644.0 96.8 L646.0 98.4 L648.0 100.2 L650.0 102.2 L652.0 104.4 L654.0 106.7 L656.0 109.1 L658.0 111.7 L660.0 114.4 L662.0 117.3 L664.0 120.2 L666.0 123.3 L668.0 126.5 L670.0 129.7 L672.0 133.1 L674.0 136.5 L676.0 140.0 L678.0 143.5 L680.0 147.1" fill="none" stroke="#1c1518" stroke-width="2.6" stroke-linecap="round"/>
+                                <line x1="147.1" y1="160" x2="147.1" y2="98.0" stroke="#7a1f2b" stroke-width="1.6"/>
+                                <path d="M147.1 91.0 L150.4 99.4 L143.7 99.4 Z" fill="#7a1f2b"/>
+                                <text class="m acc" x="155.1" y="134">A<tspan class="m" font-size="12" dy="4">i</tspan></text>
+                                <circle cx="110" cy="120.5" r="4.5" fill="#7a1f2b"/>
+                                <line x1="104" y1="120.5" x2="110" y2="120.5" stroke="#8b8079" stroke-width="1" stroke-dasharray="3 3"/>
+                                <text class="m" x="98" y="125.5" text-anchor="end">A<tspan class="m" font-size="12" dy="4">i</tspan><tspan class="mu" dy="-4"> sin </tspan>φ<tspan class="m" font-size="12" dy="4">i</tspan></text>
+                                <text class="lbl" x="98" y="104.5" text-anchor="end">height at <tspan class="m" font-size="14">X</tspan> = 0</text>
+                                <line x1="387.1" y1="84" x2="387.1" y2="62" stroke="#8b8079" stroke-width="1" stroke-dasharray="3 3"/>
+                                <line x1="627.1" y1="84" x2="627.1" y2="62" stroke="#8b8079" stroke-width="1" stroke-dasharray="3 3"/>
+                                <line x1="389.1" y1="68" x2="625.1" y2="68" stroke="#4a413d" stroke-width="1.4"/>
+                                <path d="M388.1 68.0 L395.5 65.0 L395.5 71.0 Z" fill="#4a413d"/>
+                                <path d="M626.1 68.0 L618.7 71.0 L618.7 65.0 Z" fill="#4a413d"/>
+                                <text class="m" x="507.1" y="56" text-anchor="middle">λ<tspan class="m" font-size="12" dy="4">i</tspan><tspan class="mu" dy="-4"> = 200 / </tspan>f<tspan class="m" font-size="12" dy="4">i</tspan><tspan class="mu" dy="-4"> px</tspan></text>
+                                <line x1="267.1" y1="252" x2="296.1" y2="252" stroke="#7a1f2b" stroke-width="1.6"/>
+                                <path d="M303.1 252.0 L294.7 255.3 L294.7 248.7 Z" fill="#7a1f2b"/>
+                                <text class="m" x="291.1" y="279" text-anchor="middle">v<tspan class="m" font-size="12" dy="4">i</tspan><tspan class="mu" dy="-4"> = 200 </tspan>s<tspan class="m" font-size="12" dy="4">i</tspan><tspan class="mu" dy="-4"> px/s</tspan></text>
+                                <line x1="540" y1="252" x2="566" y2="252" stroke="#1c1518" stroke-width="2.6" stroke-linecap="round"/>
+                                <text class="lbl" x="576" y="256">at time <tspan class="m" font-size="14">t</tspan></text>
+                                <line x1="540" y1="274" x2="566" y2="274" stroke="#e2a2aa" stroke-width="2.2" stroke-linecap="round"/>
+                                <text class="lbl" x="576" y="278">a moment later</text>
+                                </svg>
+                            </div>
+                            <figcaption><span class="pfig__n">Figure 1</span>One component, equation (1). The amplitude \(A_i\) is the height of a crest above the axis, the wavelength \(\lambda_i\) the distance from crest to crest, and the phase \(\varphi_i\) fixes the height \(A_i\sin\varphi_i\) at \(X = 0.\) A moment later (pale curve) the whole shape has moved to the right, unchanged, at the phase speed \(v_i = 200\,s_i\ \mathrm{px/s}.\)</figcaption>
+                        </figure>
+                    </section>
+
+                    <section class="psec" id="p-super">
+                        <h3><span class="psec__n">03</span>Waves simply add</h3>
+                        <p class="psec__lead">The page draws the sum by adding the curves point by point. That is allowed because the equation the waves obey is linear.</p>
+                        <p>Differentiate (1) twice. Each time derivative brings down a factor \(-\omega_i,\) each space derivative a factor \(k_i,\) so</p>
+                        \[ \frac{\partial^2 y_i}{\partial t^2} = v_i^2\,\frac{\partial^2 y_i}{\partial X^2}, \qquad v_i = \frac{\omega_i}{k_i} . \tag{3} \]
+                        <p>This is the wave equation. For a string it says that each small piece accelerates in proportion to how sharply the string is bent there: Newton’s second law, with the tension supplying the force. When all the waves have the same speed \(v,\) they obey the same equation, \(\mathcal{L}y = 0\) with \(\mathcal{L} = \partial_t^2 - v^2\,\partial_X^2.\) The derivative of a sum is the sum of the derivatives, so for any numbers \(a\) and \(b\)</p>
+                        \[ \mathcal{L}\,(a\,y_1 + b\,y_2) = a\,\mathcal{L}y_1 + b\,\mathcal{L}y_2 = 0 . \tag{4} \]
+                        <p>Any weighted sum of solutions is again a solution. This is the <em>superposition principle</em>: each wave passes through the others as if they were not there, and the medium carries their sum. With equal speeds the sum also travels at \(v\) without changing shape; such a medium is called <em>non-dispersive</em>, and air is very nearly one for sound. When you give the waves different Speeds, each obeys its own equation and the page adds them anyway. That imitates a <em>dispersive</em> medium, in which waves of different frequency travel at different speeds, and the sum then changes shape as it goes.</p>
+                        <h4><span class="psub__n">3.1</span>Two waves of one frequency make one wave</h4>
+                        <p>When two waves share both Frequency and Speed, they share \(\theta = kX - \omega t\) and differ only in amplitude and phase. Their sum is a single sine of the same frequency. The neatest way to see this uses complex numbers: \(\sin\alpha\) is the imaginary part of \(e^{\mathrm{i}\alpha} = \cos\alpha + \mathrm{i}\sin\alpha,\) with \(\mathrm{i}^2 = -1,\) so</p>
+                        \[ \begin{aligned} A_1\sin(\theta+\varphi_1) + A_2\sin(\theta+\varphi_2) &= \operatorname{Im}\!\left[ e^{\mathrm{i}\theta}\left( A_1 e^{\mathrm{i}\varphi_1} + A_2 e^{\mathrm{i}\varphi_2} \right) \right] \\ &= C\sin(\theta+\psi), \qquad C\,e^{\mathrm{i}\psi} = A_1 e^{\mathrm{i}\varphi_1} + A_2 e^{\mathrm{i}\varphi_2} . \end{aligned} \tag{5} \]
+                        <p>Each term \(A e^{\mathrm{i}\varphi}\) is an arrow, a <em>phasor</em>, of length \(A\) at angle \(\varphi.\) Adding waves of one frequency is adding arrows tip to tail (Figure 2), and the length of the result follows from the cosine rule:</p>
+                        \[ C^2 = A_1^2 + A_2^2 + 2A_1A_2\cos(\varphi_1 - \varphi_2) . \tag{6} \]
+                        <p>In step, \(\varphi_1 = \varphi_2,\) the amplitudes add: \(C = A_1 + A_2.\) Half a turn apart, \(\varphi_2 - \varphi_1 = \pi,\) they subtract: \(C = |A_1 - A_2|,\) and two equal waves cancel completely. That is the noise-cancelling headphone, and you can build one on the page. Press <em>One wave</em>, then <em>Add wave +</em>. The new wave is a copy of the first (Amplitude \(20\ \mathrm{px},\) Frequency 1.00, Speed 1×), the sum doubles to \(40\ \mathrm{px},\) and the spectrum shows a single stem of \(40\ \mathrm{px}.\) Now drag the <em>Phase</em> of Wave 2 to \(1.00\,\pi.\) The slider moves in steps of \(0.05\ \mathrm{rad},\) and its nearest step to \(\pi,\) \(3.15\ \mathrm{rad},\) misses by \(0.0084\ \mathrm{rad}.\) By (6) the sum is then a wave of amplitude \(0.17\ \mathrm{px},\) and <em>Peak |y| on screen</em> reads \(0.2\ \mathrm{px}.\) A real headphone meets the same limit: it cancels only as well as it can match the phase.</p>
+                        <figure class="pfig">
+                            <div class="pfig__plate">
+                                <svg viewBox="0 0 720 300" role="img" aria-label="Phasor addition: an arrow of length A1 at angle phi1, a second arrow of length A2 at angle phi2 placed at its tip, and the resultant C at angle psi. Their heights, read on a scale at the right, are y1 and y1 + y2.">
+                                <rect x="0" y="0" width="720" height="300" fill="#fff"/>
+                                <line x1="110" y1="240" x2="470" y2="240" stroke="#8b8079" stroke-width="1.2"/>
+                                <path d="M478.0 240.0 L469.6 243.3 L469.6 236.7 Z" fill="#8b8079"/>
+                                <line x1="170" y1="285" x2="170" y2="30" stroke="#8b8079" stroke-width="1.2"/>
+                                <path d="M170.0 22.0 L173.3 30.4 L166.7 30.4 Z" fill="#8b8079"/>
+                                <text class="lbl" x="484" y="244">Re</text>
+                                <text class="lbl" x="180" y="20">Im</text>
+                                <line x1="170" y1="240" x2="187.4" y2="141.5" stroke="#cdc1ae" stroke-width="1.4" stroke-dasharray="4 4"/>
+                                <line x1="187.4" y1="141.5" x2="323.3" y2="78.1" stroke="#cdc1ae" stroke-width="1.4" stroke-dasharray="4 4"/>
+                                <line x1="305.9" y1="176.6" x2="357.9" y2="176.6" stroke="#8b8079" stroke-width="1" stroke-dasharray="3 3"/>
+                                <path d="M216.0 240.0 A46 46 0 0 0 211.7 220.6" fill="none" stroke="#4a413d" stroke-width="1.4"/>
+                                <path d="M335.9 176.6 A30 30 0 0 0 311.2 147.1" fill="none" stroke="#4a413d" stroke-width="1.4"/>
+                                <path d="M282.0 240.0 A112 112 0 0 0 247.0 158.7" fill="none" stroke="#7a1f2b" stroke-width="1.4"/>
+                                <line x1="170.0" y1="240.0" x2="298.7" y2="180.0" stroke="#1c1518" stroke-width="2.6" stroke-linecap="round"/><path d="M305.9 176.6 L297.7 185.4 L294.0 177.3 Z" fill="#1c1518"/>
+                                <line x1="305.9" y1="176.6" x2="321.9" y2="86.0" stroke="#4a413d" stroke-width="2.6" stroke-linecap="round"/><path d="M323.3 78.1 L325.8 89.9 L317.0 88.3 Z" fill="#4a413d"/>
+                                <line x1="170.0" y1="240.0" x2="317.8" y2="83.9" stroke="#7a1f2b" stroke-width="3" stroke-linecap="round"/><path d="M323.3 78.1 L318.9 89.3 L312.4 83.2 Z" fill="#7a1f2b"/>
+                                <text class="m" x="227.3" y="235.9">φ<tspan class="mu" font-size="12" dy="4">1</tspan></text>
+                                <text class="m" x="336.6" y="156.9">φ<tspan class="mu" font-size="12" dy="4">2</tspan></text>
+                                <text class="m acc" x="267.7" y="169.7">ψ</text>
+                                <text class="m" x="292" y="214">A<tspan class="mu" font-size="12" dy="4">1</tspan></text>
+                                <text class="m" x="326.6" y="131.4">A<tspan class="mu" font-size="12" dy="4">2</tspan></text>
+                                <text class="m acc" x="234.7" y="155.1" text-anchor="end">C</text>
+                                <line x1="560" y1="240" x2="560" y2="40" stroke="#8b8079" stroke-width="1.2"/>
+                                <line x1="555" y1="240" x2="565" y2="240" stroke="#8b8079" stroke-width="1"/>
+                                <line x1="311.9" y1="176.6" x2="560" y2="176.6" stroke="#8b8079" stroke-width="1" stroke-dasharray="3 3"/>
+                                <line x1="329.3" y1="78.1" x2="560" y2="78.1" stroke="#7a1f2b" stroke-width="1" stroke-dasharray="3 3"/>
+                                <circle cx="560" cy="176.6" r="4" fill="#1c1518"/>
+                                <circle cx="560" cy="78.1" r="4.5" fill="#7a1f2b"/>
+                                <text class="tick" x="572" y="244">0</text>
+                                <text class="m" x="572" y="181.6">y<tspan class="mu" font-size="12" dy="4">1</tspan><tspan class="mu" dy="-4"> = </tspan>A<tspan class="mu" font-size="12" dy="4">1</tspan><tspan class="mu" dy="-4"> sin </tspan>φ<tspan class="mu" font-size="12" dy="4">1</tspan></text>
+                                <text class="m" x="572" y="72.1">y<tspan class="mu" font-size="12" dy="4">1</tspan><tspan class="mu" dy="-4"> + </tspan>y<tspan class="mu" font-size="12" dy="4">2</tspan></text>
+                                <text class="m" x="572" y="94.1"><tspan class="mu">= </tspan>C<tspan class="mu"> sin </tspan>ψ</text>
+                                <text class="lbl" x="556" y="30">heights</text>
+                                </svg>
+                            </div>
+                            <figcaption><span class="pfig__n">Figure 2</span>Adding two waves of the same frequency, equation (5). Each wave is an arrow whose length is its amplitude and whose angle is its phase. The second arrow starts at the tip of the first, and the arrow \(C\) from the start to the end is the sum. As time passes the whole picture turns rigidly, at the angular frequency \(\omega,\) and the height of each tip, read off on the right, is a displacement: heights add because arrows add.</figcaption>
+                        </figure>
+                    </section>
+
+                    <section class="psec" id="p-beat">
+                        <h3><span class="psec__n">04</span>Beats</h3>
+                        <p class="psec__lead">Now take two waves of slightly different frequency. Their crests drift in and out of step, and the sum swells and fades: the guitarist’s beat.</p>
+                        <p>Give both waves the same amplitude \(A\) and write their phases as \(a = k_1X - \omega_1 t + \varphi_1\) and \(b = k_2X - \omega_2 t + \varphi_2.\) The sum-to-product identity of trigonometry turns the sum into a product,</p>
+                        \[ A\sin a + A\sin b = \underbrace{2A\cos\frac{a-b}{2}}_{\text{slow envelope}}\ \underbrace{\sin\frac{a+b}{2}}_{\text{fast carrier}} . \tag{7} \]
+                        <p>The second factor is a wave with the average wavenumber and the average frequency of the two, the <em>carrier</em>. The first changes slowly, because \(a - b = \Delta k\,X - \Delta\omega\,t + \Delta\varphi\) contains only the differences \(\Delta k = k_1 - k_2\) and \(\Delta\omega = \omega_1 - \omega_2.\) It acts as a slowly varying amplitude, the <em>envelope</em>. Loudness depends on the size of the envelope, not its sign, and \(|\cos|\) repeats every \(\pi,\) not every \(2\pi.\) The beat therefore repeats whenever \((a-b)/2\) grows by \(\pi{:}\)</p>
+                        \[ \lambda_\text{beat} = \frac{2\pi}{|\Delta k|} = \frac{200}{|f_1 - f_2|}\ \mathrm{px}, \qquad T_\text{beat} = \frac{2\pi}{|\Delta\omega|} = \frac{1}{|\nu_1 - \nu_2|} . \tag{8} \]
+                        <p>The beat frequency is the full difference \(|\nu_1 - \nu_2|,\) not half of it: for the two guitar strings, \(111 - 110 = 1\) beat per second. The <em>Beats</em> preset uses Amplitude \(18\ \mathrm{px}\) and Speed 1× for both waves, with Frequencies 1.00 and 1.25. Then \(\lambda_\text{beat} = 200/0.25 = 800\ \mathrm{px},\) exactly one beat across the view, and at any fixed point the sum swells and fades every \(1/0.25 = 4\ \mathrm{s}\) (Figure 3). The carrier has the mean frequency \(1.125\ \mathrm{Hz},\) so nine carrier oscillations fit into two beats.</p>
+                        <figure class="pfig">
+                            <div class="pfig__plate">
+                                <svg viewBox="0 0 720 326" role="img" aria-label="Chart: the sum of the Beats preset at X = 400 px over 8 seconds, swelling and fading inside a dashed envelope that falls to zero at 0, 4 and 8 seconds." xmlns="http://www.w3.org/2000/svg">
+                                <defs><clipPath id="f6clip-beats"><rect x="64.0" y="18.0" width="634.0" height="236.0"/></clipPath></defs>
+                                <line x1="64.0" x2="698.0" y1="254.0" y2="254.0" stroke="#eee6d9" stroke-width="1"/>
+                                <text class="tick" x="56.0" y="258.0" text-anchor="end">−40</text>
+                                <line x1="64.0" x2="698.0" y1="201.6" y2="201.6" stroke="#eee6d9" stroke-width="1"/>
+                                <text class="tick" x="56.0" y="205.6" text-anchor="end">−20</text>
+                                <line x1="64.0" x2="698.0" y1="149.1" y2="149.1" stroke="#eee6d9" stroke-width="1"/>
+                                <text class="tick" x="56.0" y="153.1" text-anchor="end">0</text>
+                                <line x1="64.0" x2="698.0" y1="96.7" y2="96.7" stroke="#eee6d9" stroke-width="1"/>
+                                <text class="tick" x="56.0" y="100.7" text-anchor="end">20</text>
+                                <line x1="64.0" x2="698.0" y1="44.2" y2="44.2" stroke="#eee6d9" stroke-width="1"/>
+                                <text class="tick" x="56.0" y="48.2" text-anchor="end">40</text>
+                                <line x1="64.0" x2="64.0" y1="254.0" y2="259.0" stroke="#8b8079"/>
+                                <text class="tick" x="64.0" y="273.0" text-anchor="middle">0</text>
+                                <line x1="143.2" x2="143.2" y1="254.0" y2="259.0" stroke="#8b8079"/>
+                                <text class="tick" x="143.2" y="273.0" text-anchor="middle">1</text>
+                                <line x1="222.5" x2="222.5" y1="254.0" y2="259.0" stroke="#8b8079"/>
+                                <text class="tick" x="222.5" y="273.0" text-anchor="middle">2</text>
+                                <line x1="301.8" x2="301.8" y1="254.0" y2="259.0" stroke="#8b8079"/>
+                                <text class="tick" x="301.8" y="273.0" text-anchor="middle">3</text>
+                                <line x1="381.0" x2="381.0" y1="254.0" y2="259.0" stroke="#8b8079"/>
+                                <text class="tick" x="381.0" y="273.0" text-anchor="middle">4</text>
+                                <line x1="460.2" x2="460.2" y1="254.0" y2="259.0" stroke="#8b8079"/>
+                                <text class="tick" x="460.2" y="273.0" text-anchor="middle">5</text>
+                                <line x1="539.5" x2="539.5" y1="254.0" y2="259.0" stroke="#8b8079"/>
+                                <text class="tick" x="539.5" y="273.0" text-anchor="middle">6</text>
+                                <line x1="618.8" x2="618.8" y1="254.0" y2="259.0" stroke="#8b8079"/>
+                                <text class="tick" x="618.8" y="273.0" text-anchor="middle">7</text>
+                                <line x1="698.0" x2="698.0" y1="254.0" y2="259.0" stroke="#8b8079"/>
+                                <text class="tick" x="698.0" y="273.0" text-anchor="middle">8</text>
+                                <line x1="64.0" x2="698.0" y1="254.0" y2="254.0" stroke="#8b8079"/>
+                                <line x1="64.0" x2="64.0" y1="18.0" y2="254.0" stroke="#8b8079"/>
+                                <text class="lbl" x="698.0" y="292.0" text-anchor="end">time t (s)</text>
+                                <text class="lbl" x="70.0" y="31.0">sum at X = 400 px (px)</text>
+                                <g clip-path="url(#f6clip-beats)">
+                                <path d="M64.0 149.1 L64.8 148.4 L65.6 147.6 L66.4 146.9 L67.2 146.1 L68.0 145.4 L68.8 144.7 L69.5 143.9 L70.3 143.2 L71.1 142.4 L71.9 141.7 L72.7 141.0 L73.5 140.2 L74.3 139.5 L75.1 138.8 L75.9 138.0 L76.7 137.3 L77.5 136.5 L78.3 135.8 L79.1 135.1 L79.8 134.3 L80.6 133.6 L81.4 132.9 L82.2 132.2 L83.0 131.4 L83.8 130.7 L84.6 130.0 L85.4 129.2 L86.2 128.5 L87.0 127.8 L87.8 127.1 L88.6 126.4 L89.4 125.6 L90.2 124.9 L90.9 124.2 L91.7 123.5 L92.5 122.8 L93.3 122.1 L94.1 121.4 L94.9 120.6 L95.7 119.9 L96.5 119.2 L97.3 118.5 L98.1 117.8 L98.9 117.1 L99.7 116.4 L100.5 115.7 L101.2 115.1 L102.0 114.4 L102.8 113.7 L103.6 113.0 L104.4 112.3 L105.2 111.6 L106.0 110.9 L106.8 110.3 L107.6 109.6 L108.4 108.9 L109.2 108.2 L110.0 107.6 L110.8 106.9 L111.5 106.3 L112.3 105.6 L113.1 104.9 L113.9 104.3 L114.7 103.6 L115.5 103.0 L116.3 102.3 L117.1 101.7 L117.9 101.1 L118.7 100.4 L119.5 99.8 L120.3 99.2 L121.1 98.5 L121.9 97.9 L122.6 97.3 L123.4 96.7 L124.2 96.1 L125.0 95.4 L125.8 94.8 L126.6 94.2 L127.4 93.6 L128.2 93.0 L129.0 92.4 L129.8 91.8 L130.6 91.3 L131.4 90.7 L132.2 90.1 L132.9 89.5 L133.7 88.9 L134.5 88.4 L135.3 87.8 L136.1 87.2 L136.9 86.7 L137.7 86.1 L138.5 85.6 L139.3 85.0 L140.1 84.5 L140.9 84.0 L141.7 83.4 L142.5 82.9 L143.2 82.4 L144.0 81.8 L144.8 81.3 L145.6 80.8 L146.4 80.3 L147.2 79.8 L148.0 79.3 L148.8 78.8 L149.6 78.3 L150.4 77.8 L151.2 77.3 L152.0 76.8 L152.8 76.4 L153.6 75.9 L154.3 75.4 L155.1 75.0 L155.9 74.5 L156.7 74.1 L157.5 73.6 L158.3 73.2 L159.1 72.7 L159.9 72.3 L160.7 71.9 L161.5 71.5 L162.3 71.0 L163.1 70.6 L163.9 70.2 L164.6 69.8 L165.4 69.4 L166.2 69.0 L167.0 68.6 L167.8 68.2 L168.6 67.9 L169.4 67.5 L170.2 67.1 L171.0 66.7 L171.8 66.4 L172.6 66.0 L173.4 65.7 L174.2 65.3 L175.0 65.0 L175.7 64.7 L176.5 64.3 L177.3 64.0 L178.1 63.7 L178.9 63.4 L179.7 63.1 L180.5 62.8 L181.3 62.5 L182.1 62.2 L182.9 61.9 L183.7 61.6 L184.5 61.3 L185.3 61.1 L186.0 60.8 L186.8 60.5 L187.6 60.3 L188.4 60.0 L189.2 59.8 L190.0 59.6 L190.8 59.3 L191.6 59.1 L192.4 58.9 L193.2 58.7 L194.0 58.5 L194.8 58.3 L195.6 58.1 L196.3 57.9 L197.1 57.7 L197.9 57.5 L198.7 57.3 L199.5 57.1 L200.3 57.0 L201.1 56.8 L201.9 56.7 L202.7 56.5 L203.5 56.4 L204.3 56.2 L205.1 56.1 L205.9 56.0 L206.7 55.9 L207.4 55.8 L208.2 55.7 L209.0 55.6 L209.8 55.5 L210.6 55.4 L211.4 55.3 L212.2 55.2 L213.0 55.1 L213.8 55.1 L214.6 55.0 L215.4 54.9 L216.2 54.9 L217.0 54.9 L217.7 54.8 L218.5 54.8 L219.3 54.8 L220.1 54.7 L220.9 54.7 L221.7 54.7 L222.5 54.7 L223.3 54.7 L224.1 54.7 L224.9 54.7 L225.7 54.8 L226.5 54.8 L227.3 54.8 L228.0 54.9 L228.8 54.9 L229.6 54.9 L230.4 55.0 L231.2 55.1 L232.0 55.1 L232.8 55.2 L233.6 55.3 L234.4 55.4 L235.2 55.5 L236.0 55.6 L236.8 55.7 L237.6 55.8 L238.4 55.9 L239.1 56.0 L239.9 56.1 L240.7 56.2 L241.5 56.4 L242.3 56.5 L243.1 56.7 L243.9 56.8 L244.7 57.0 L245.5 57.1 L246.3 57.3 L247.1 57.5 L247.9 57.7 L248.7 57.9 L249.4 58.1 L250.2 58.3 L251.0 58.5 L251.8 58.7 L252.6 58.9 L253.4 59.1 L254.2 59.3 L255.0 59.6 L255.8 59.8 L256.6 60.0 L257.4 60.3 L258.2 60.5 L259.0 60.8 L259.7 61.1 L260.5 61.3 L261.3 61.6 L262.1 61.9 L262.9 62.2 L263.7 62.5 L264.5 62.8 L265.3 63.1 L266.1 63.4 L266.9 63.7 L267.7 64.0 L268.5 64.3 L269.3 64.7 L270.1 65.0 L270.8 65.3 L271.6 65.7 L272.4 66.0 L273.2 66.4 L274.0 66.7 L274.8 67.1 L275.6 67.5 L276.4 67.9 L277.2 68.2 L278.0 68.6 L278.8 69.0 L279.6 69.4 L280.4 69.8 L281.1 70.2 L281.9 70.6 L282.7 71.0 L283.5 71.5 L284.3 71.9 L285.1 72.3 L285.9 72.7 L286.7 73.2 L287.5 73.6 L288.3 74.1 L289.1 74.5 L289.9 75.0 L290.7 75.4 L291.4 75.9 L292.2 76.4 L293.0 76.8 L293.8 77.3 L294.6 77.8 L295.4 78.3 L296.2 78.8 L297.0 79.3 L297.8 79.8 L298.6 80.3 L299.4 80.8 L300.2 81.3 L301.0 81.8 L301.8 82.4 L302.5 82.9 L303.3 83.4 L304.1 84.0 L304.9 84.5 L305.7 85.0 L306.5 85.6 L307.3 86.1 L308.1 86.7 L308.9 87.2 L309.7 87.8 L310.5 88.4 L311.3 88.9 L312.1 89.5 L312.8 90.1 L313.6 90.7 L314.4 91.3 L315.2 91.8 L316.0 92.4 L316.8 93.0 L317.6 93.6 L318.4 94.2 L319.2 94.8 L320.0 95.4 L320.8 96.1 L321.6 96.7 L322.4 97.3 L323.1 97.9 L323.9 98.5 L324.7 99.2 L325.5 99.8 L326.3 100.4 L327.1 101.1 L327.9 101.7 L328.7 102.3 L329.5 103.0 L330.3 103.6 L331.1 104.3 L331.9 104.9 L332.7 105.6 L333.4 106.3 L334.2 106.9 L335.0 107.6 L335.8 108.2 L336.6 108.9 L337.4 109.6 L338.2 110.3 L339.0 110.9 L339.8 111.6 L340.6 112.3 L341.4 113.0 L342.2 113.7 L343.0 114.4 L343.8 115.1 L344.5 115.7 L345.3 116.4 L346.1 117.1 L346.9 117.8 L347.7 118.5 L348.5 119.2 L349.3 119.9 L350.1 120.6 L350.9 121.4 L351.7 122.1 L352.5 122.8 L353.3 123.5 L354.1 124.2 L354.8 124.9 L355.6 125.6 L356.4 126.4 L357.2 127.1 L358.0 127.8 L358.8 128.5 L359.6 129.2 L360.4 130.0 L361.2 130.7 L362.0 131.4 L362.8 132.2 L363.6 132.9 L364.4 133.6 L365.2 134.3 L365.9 135.1 L366.7 135.8 L367.5 136.5 L368.3 137.3 L369.1 138.0 L369.9 138.8 L370.7 139.5 L371.5 140.2 L372.3 141.0 L373.1 141.7 L373.9 142.4 L374.7 143.2 L375.5 143.9 L376.2 144.7 L377.0 145.4 L377.8 146.1 L378.6 146.9 L379.4 147.6 L380.2 148.4 L381.0 149.1 L381.8 148.4 L382.6 147.6 L383.4 146.9 L384.2 146.1 L385.0 145.4 L385.8 144.7 L386.5 143.9 L387.3 143.2 L388.1 142.4 L388.9 141.7 L389.7 141.0 L390.5 140.2 L391.3 139.5 L392.1 138.8 L392.9 138.0 L393.7 137.3 L394.5 136.5 L395.3 135.8 L396.1 135.1 L396.9 134.3 L397.6 133.6 L398.4 132.9 L399.2 132.2 L400.0 131.4 L400.8 130.7 L401.6 130.0 L402.4 129.2 L403.2 128.5 L404.0 127.8 L404.8 127.1 L405.6 126.4 L406.4 125.6 L407.2 124.9 L407.9 124.2 L408.7 123.5 L409.5 122.8 L410.3 122.1 L411.1 121.4 L411.9 120.6 L412.7 119.9 L413.5 119.2 L414.3 118.5 L415.1 117.8 L415.9 117.1 L416.7 116.4 L417.5 115.7 L418.2 115.1 L419.0 114.4 L419.8 113.7 L420.6 113.0 L421.4 112.3 L422.2 111.6 L423.0 110.9 L423.8 110.3 L424.6 109.6 L425.4 108.9 L426.2 108.2 L427.0 107.6 L427.8 106.9 L428.6 106.3 L429.3 105.6 L430.1 104.9 L430.9 104.3 L431.7 103.6 L432.5 103.0 L433.3 102.3 L434.1 101.7 L434.9 101.1 L435.7 100.4 L436.5 99.8 L437.3 99.2 L438.1 98.5 L438.9 97.9 L439.6 97.3 L440.4 96.7 L441.2 96.1 L442.0 95.4 L442.8 94.8 L443.6 94.2 L444.4 93.6 L445.2 93.0 L446.0 92.4 L446.8 91.8 L447.6 91.3 L448.4 90.7 L449.2 90.1 L449.9 89.5 L450.7 88.9 L451.5 88.4 L452.3 87.8 L453.1 87.2 L453.9 86.7 L454.7 86.1 L455.5 85.6 L456.3 85.0 L457.1 84.5 L457.9 84.0 L458.7 83.4 L459.5 82.9 L460.2 82.4 L461.0 81.8 L461.8 81.3 L462.6 80.8 L463.4 80.3 L464.2 79.8 L465.0 79.3 L465.8 78.8 L466.6 78.3 L467.4 77.8 L468.2 77.3 L469.0 76.8 L469.8 76.4 L470.6 75.9 L471.3 75.4 L472.1 75.0 L472.9 74.5 L473.7 74.1 L474.5 73.6 L475.3 73.2 L476.1 72.7 L476.9 72.3 L477.7 71.9 L478.5 71.5 L479.3 71.0 L480.1 70.6 L480.9 70.2 L481.6 69.8 L482.4 69.4 L483.2 69.0 L484.0 68.6 L484.8 68.2 L485.6 67.9 L486.4 67.5 L487.2 67.1 L488.0 66.7 L488.8 66.4 L489.6 66.0 L490.4 65.7 L491.2 65.3 L492.0 65.0 L492.7 64.7 L493.5 64.3 L494.3 64.0 L495.1 63.7 L495.9 63.4 L496.7 63.1 L497.5 62.8 L498.3 62.5 L499.1 62.2 L499.9 61.9 L500.7 61.6 L501.5 61.3 L502.3 61.1 L503.0 60.8 L503.8 60.5 L504.6 60.3 L505.4 60.0 L506.2 59.8 L507.0 59.6 L507.8 59.3 L508.6 59.1 L509.4 58.9 L510.2 58.7 L511.0 58.5 L511.8 58.3 L512.6 58.1 L513.3 57.9 L514.1 57.7 L514.9 57.5 L515.7 57.3 L516.5 57.1 L517.3 57.0 L518.1 56.8 L518.9 56.7 L519.7 56.5 L520.5 56.4 L521.3 56.2 L522.1 56.1 L522.9 56.0 L523.6 55.9 L524.4 55.8 L525.2 55.7 L526.0 55.6 L526.8 55.5 L527.6 55.4 L528.4 55.3 L529.2 55.2 L530.0 55.1 L530.8 55.1 L531.6 55.0 L532.4 54.9 L533.2 54.9 L534.0 54.9 L534.7 54.8 L535.5 54.8 L536.3 54.8 L537.1 54.7 L537.9 54.7 L538.7 54.7 L539.5 54.7 L540.3 54.7 L541.1 54.7 L541.9 54.7 L542.7 54.8 L543.5 54.8 L544.3 54.8 L545.0 54.9 L545.8 54.9 L546.6 54.9 L547.4 55.0 L548.2 55.1 L549.0 55.1 L549.8 55.2 L550.6 55.3 L551.4 55.4 L552.2 55.5 L553.0 55.6 L553.8 55.7 L554.6 55.8 L555.4 55.9 L556.1 56.0 L556.9 56.1 L557.7 56.2 L558.5 56.4 L559.3 56.5 L560.1 56.7 L560.9 56.8 L561.7 57.0 L562.5 57.1 L563.3 57.3 L564.1 57.5 L564.9 57.7 L565.7 57.9 L566.4 58.1 L567.2 58.3 L568.0 58.5 L568.8 58.7 L569.6 58.9 L570.4 59.1 L571.2 59.3 L572.0 59.6 L572.8 59.8 L573.6 60.0 L574.4 60.3 L575.2 60.5 L576.0 60.8 L576.7 61.1 L577.5 61.3 L578.3 61.6 L579.1 61.9 L579.9 62.2 L580.7 62.5 L581.5 62.8 L582.3 63.1 L583.1 63.4 L583.9 63.7 L584.7 64.0 L585.5 64.3 L586.3 64.7 L587.1 65.0 L587.8 65.3 L588.6 65.7 L589.4 66.0 L590.2 66.4 L591.0 66.7 L591.8 67.1 L592.6 67.5 L593.4 67.9 L594.2 68.2 L595.0 68.6 L595.8 69.0 L596.6 69.4 L597.4 69.8 L598.1 70.2 L598.9 70.6 L599.7 71.0 L600.5 71.5 L601.3 71.9 L602.1 72.3 L602.9 72.7 L603.7 73.2 L604.5 73.6 L605.3 74.1 L606.1 74.5 L606.9 75.0 L607.7 75.4 L608.4 75.9 L609.2 76.4 L610.0 76.8 L610.8 77.3 L611.6 77.8 L612.4 78.3 L613.2 78.8 L614.0 79.3 L614.8 79.8 L615.6 80.3 L616.4 80.8 L617.2 81.3 L618.0 81.8 L618.8 82.4 L619.5 82.9 L620.3 83.4 L621.1 84.0 L621.9 84.5 L622.7 85.0 L623.5 85.6 L624.3 86.1 L625.1 86.7 L625.9 87.2 L626.7 87.8 L627.5 88.4 L628.3 88.9 L629.1 89.5 L629.8 90.1 L630.6 90.7 L631.4 91.3 L632.2 91.8 L633.0 92.4 L633.8 93.0 L634.6 93.6 L635.4 94.2 L636.2 94.8 L637.0 95.4 L637.8 96.1 L638.6 96.7 L639.4 97.3 L640.1 97.9 L640.9 98.5 L641.7 99.2 L642.5 99.8 L643.3 100.4 L644.1 101.1 L644.9 101.7 L645.7 102.3 L646.5 103.0 L647.3 103.6 L648.1 104.3 L648.9 104.9 L649.7 105.6 L650.5 106.3 L651.2 106.9 L652.0 107.6 L652.8 108.2 L653.6 108.9 L654.4 109.6 L655.2 110.3 L656.0 110.9 L656.8 111.6 L657.6 112.3 L658.4 113.0 L659.2 113.7 L660.0 114.4 L660.8 115.1 L661.5 115.7 L662.3 116.4 L663.1 117.1 L663.9 117.8 L664.7 118.5 L665.5 119.2 L666.3 119.9 L667.1 120.6 L667.9 121.4 L668.7 122.1 L669.5 122.8 L670.3 123.5 L671.1 124.2 L671.8 124.9 L672.6 125.6 L673.4 126.4 L674.2 127.1 L675.0 127.8 L675.8 128.5 L676.6 129.2 L677.4 130.0 L678.2 130.7 L679.0 131.4 L679.8 132.2 L680.6 132.9 L681.4 133.6 L682.1 134.3 L682.9 135.1 L683.7 135.8 L684.5 136.5 L685.3 137.3 L686.1 138.0 L686.9 138.8 L687.7 139.5 L688.5 140.2 L689.3 141.0 L690.1 141.7 L690.9 142.4 L691.7 143.2 L692.5 143.9 L693.2 144.7 L694.0 145.4 L694.8 146.1 L695.6 146.9 L696.4 147.6 L697.2 148.4 L698.0 149.1" fill="none" stroke="#1c1518" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round" stroke-dasharray="5 4"/>
+                                <path d="M64.0 149.1 L64.8 149.9 L65.6 150.6 L66.4 151.3 L67.2 152.1 L68.0 152.8 L68.8 153.6 L69.5 154.3 L70.3 155.0 L71.1 155.8 L71.9 156.5 L72.7 157.3 L73.5 158.0 L74.3 158.7 L75.1 159.5 L75.9 160.2 L76.7 160.9 L77.5 161.7 L78.3 162.4 L79.1 163.1 L79.8 163.9 L80.6 164.6 L81.4 165.3 L82.2 166.1 L83.0 166.8 L83.8 167.5 L84.6 168.3 L85.4 169.0 L86.2 169.7 L87.0 170.4 L87.8 171.1 L88.6 171.9 L89.4 172.6 L90.2 173.3 L90.9 174.0 L91.7 174.7 L92.5 175.4 L93.3 176.2 L94.1 176.9 L94.9 177.6 L95.7 178.3 L96.5 179.0 L97.3 179.7 L98.1 180.4 L98.9 181.1 L99.7 181.8 L100.5 182.5 L101.2 183.2 L102.0 183.9 L102.8 184.6 L103.6 185.2 L104.4 185.9 L105.2 186.6 L106.0 187.3 L106.8 188.0 L107.6 188.6 L108.4 189.3 L109.2 190.0 L110.0 190.6 L110.8 191.3 L111.5 192.0 L112.3 192.6 L113.1 193.3 L113.9 193.9 L114.7 194.6 L115.5 195.2 L116.3 195.9 L117.1 196.5 L117.9 197.2 L118.7 197.8 L119.5 198.4 L120.3 199.1 L121.1 199.7 L121.9 200.3 L122.6 200.9 L123.4 201.6 L124.2 202.2 L125.0 202.8 L125.8 203.4 L126.6 204.0 L127.4 204.6 L128.2 205.2 L129.0 205.8 L129.8 206.4 L130.6 207.0 L131.4 207.6 L132.2 208.1 L132.9 208.7 L133.7 209.3 L134.5 209.9 L135.3 210.4 L136.1 211.0 L136.9 211.5 L137.7 212.1 L138.5 212.6 L139.3 213.2 L140.1 213.7 L140.9 214.3 L141.7 214.8 L142.5 215.3 L143.2 215.9 L144.0 216.4 L144.8 216.9 L145.6 217.4 L146.4 217.9 L147.2 218.4 L148.0 218.9 L148.8 219.4 L149.6 219.9 L150.4 220.4 L151.2 220.9 L152.0 221.4 L152.8 221.8 L153.6 222.3 L154.3 222.8 L155.1 223.2 L155.9 223.7 L156.7 224.2 L157.5 224.6 L158.3 225.0 L159.1 225.5 L159.9 225.9 L160.7 226.3 L161.5 226.8 L162.3 227.2 L163.1 227.6 L163.9 228.0 L164.6 228.4 L165.4 228.8 L166.2 229.2 L167.0 229.6 L167.8 230.0 L168.6 230.4 L169.4 230.7 L170.2 231.1 L171.0 231.5 L171.8 231.8 L172.6 232.2 L173.4 232.5 L174.2 232.9 L175.0 233.2 L175.7 233.6 L176.5 233.9 L177.3 234.2 L178.1 234.5 L178.9 234.8 L179.7 235.1 L180.5 235.5 L181.3 235.7 L182.1 236.0 L182.9 236.3 L183.7 236.6 L184.5 236.9 L185.3 237.2 L186.0 237.4 L186.8 237.7 L187.6 237.9 L188.4 238.2 L189.2 238.4 L190.0 238.7 L190.8 238.9 L191.6 239.1 L192.4 239.3 L193.2 239.6 L194.0 239.8 L194.8 240.0 L195.6 240.2 L196.3 240.4 L197.1 240.5 L197.9 240.7 L198.7 240.9 L199.5 241.1 L200.3 241.2 L201.1 241.4 L201.9 241.5 L202.7 241.7 L203.5 241.8 L204.3 242.0 L205.1 242.1 L205.9 242.2 L206.7 242.3 L207.4 242.5 L208.2 242.6 L209.0 242.7 L209.8 242.8 L210.6 242.9 L211.4 242.9 L212.2 243.0 L213.0 243.1 L213.8 243.2 L214.6 243.2 L215.4 243.3 L216.2 243.3 L217.0 243.4 L217.7 243.4 L218.5 243.4 L219.3 243.5 L220.1 243.5 L220.9 243.5 L221.7 243.5 L222.5 243.5 L223.3 243.5 L224.1 243.5 L224.9 243.5 L225.7 243.5 L226.5 243.4 L227.3 243.4 L228.0 243.4 L228.8 243.3 L229.6 243.3 L230.4 243.2 L231.2 243.2 L232.0 243.1 L232.8 243.0 L233.6 242.9 L234.4 242.9 L235.2 242.8 L236.0 242.7 L236.8 242.6 L237.6 242.5 L238.4 242.3 L239.1 242.2 L239.9 242.1 L240.7 242.0 L241.5 241.8 L242.3 241.7 L243.1 241.5 L243.9 241.4 L244.7 241.2 L245.5 241.1 L246.3 240.9 L247.1 240.7 L247.9 240.5 L248.7 240.4 L249.4 240.2 L250.2 240.0 L251.0 239.8 L251.8 239.6 L252.6 239.3 L253.4 239.1 L254.2 238.9 L255.0 238.7 L255.8 238.4 L256.6 238.2 L257.4 237.9 L258.2 237.7 L259.0 237.4 L259.7 237.2 L260.5 236.9 L261.3 236.6 L262.1 236.3 L262.9 236.0 L263.7 235.7 L264.5 235.5 L265.3 235.1 L266.1 234.8 L266.9 234.5 L267.7 234.2 L268.5 233.9 L269.3 233.6 L270.1 233.2 L270.8 232.9 L271.6 232.5 L272.4 232.2 L273.2 231.8 L274.0 231.5 L274.8 231.1 L275.6 230.7 L276.4 230.4 L277.2 230.0 L278.0 229.6 L278.8 229.2 L279.6 228.8 L280.4 228.4 L281.1 228.0 L281.9 227.6 L282.7 227.2 L283.5 226.8 L284.3 226.3 L285.1 225.9 L285.9 225.5 L286.7 225.0 L287.5 224.6 L288.3 224.2 L289.1 223.7 L289.9 223.2 L290.7 222.8 L291.4 222.3 L292.2 221.8 L293.0 221.4 L293.8 220.9 L294.6 220.4 L295.4 219.9 L296.2 219.4 L297.0 218.9 L297.8 218.4 L298.6 217.9 L299.4 217.4 L300.2 216.9 L301.0 216.4 L301.8 215.9 L302.5 215.3 L303.3 214.8 L304.1 214.3 L304.9 213.7 L305.7 213.2 L306.5 212.6 L307.3 212.1 L308.1 211.5 L308.9 211.0 L309.7 210.4 L310.5 209.9 L311.3 209.3 L312.1 208.7 L312.8 208.1 L313.6 207.6 L314.4 207.0 L315.2 206.4 L316.0 205.8 L316.8 205.2 L317.6 204.6 L318.4 204.0 L319.2 203.4 L320.0 202.8 L320.8 202.2 L321.6 201.6 L322.4 200.9 L323.1 200.3 L323.9 199.7 L324.7 199.1 L325.5 198.4 L326.3 197.8 L327.1 197.2 L327.9 196.5 L328.7 195.9 L329.5 195.2 L330.3 194.6 L331.1 193.9 L331.9 193.3 L332.7 192.6 L333.4 192.0 L334.2 191.3 L335.0 190.6 L335.8 190.0 L336.6 189.3 L337.4 188.6 L338.2 188.0 L339.0 187.3 L339.8 186.6 L340.6 185.9 L341.4 185.2 L342.2 184.6 L343.0 183.9 L343.8 183.2 L344.5 182.5 L345.3 181.8 L346.1 181.1 L346.9 180.4 L347.7 179.7 L348.5 179.0 L349.3 178.3 L350.1 177.6 L350.9 176.9 L351.7 176.2 L352.5 175.4 L353.3 174.7 L354.1 174.0 L354.8 173.3 L355.6 172.6 L356.4 171.9 L357.2 171.1 L358.0 170.4 L358.8 169.7 L359.6 169.0 L360.4 168.3 L361.2 167.5 L362.0 166.8 L362.8 166.1 L363.6 165.3 L364.4 164.6 L365.2 163.9 L365.9 163.1 L366.7 162.4 L367.5 161.7 L368.3 160.9 L369.1 160.2 L369.9 159.5 L370.7 158.7 L371.5 158.0 L372.3 157.3 L373.1 156.5 L373.9 155.8 L374.7 155.0 L375.5 154.3 L376.2 153.6 L377.0 152.8 L377.8 152.1 L378.6 151.3 L379.4 150.6 L380.2 149.9 L381.0 149.1 L381.8 149.9 L382.6 150.6 L383.4 151.3 L384.2 152.1 L385.0 152.8 L385.8 153.6 L386.5 154.3 L387.3 155.0 L388.1 155.8 L388.9 156.5 L389.7 157.3 L390.5 158.0 L391.3 158.7 L392.1 159.5 L392.9 160.2 L393.7 160.9 L394.5 161.7 L395.3 162.4 L396.1 163.1 L396.9 163.9 L397.6 164.6 L398.4 165.3 L399.2 166.1 L400.0 166.8 L400.8 167.5 L401.6 168.3 L402.4 169.0 L403.2 169.7 L404.0 170.4 L404.8 171.1 L405.6 171.9 L406.4 172.6 L407.2 173.3 L407.9 174.0 L408.7 174.7 L409.5 175.4 L410.3 176.2 L411.1 176.9 L411.9 177.6 L412.7 178.3 L413.5 179.0 L414.3 179.7 L415.1 180.4 L415.9 181.1 L416.7 181.8 L417.5 182.5 L418.2 183.2 L419.0 183.9 L419.8 184.6 L420.6 185.2 L421.4 185.9 L422.2 186.6 L423.0 187.3 L423.8 188.0 L424.6 188.6 L425.4 189.3 L426.2 190.0 L427.0 190.6 L427.8 191.3 L428.6 192.0 L429.3 192.6 L430.1 193.3 L430.9 193.9 L431.7 194.6 L432.5 195.2 L433.3 195.9 L434.1 196.5 L434.9 197.2 L435.7 197.8 L436.5 198.4 L437.3 199.1 L438.1 199.7 L438.9 200.3 L439.6 200.9 L440.4 201.6 L441.2 202.2 L442.0 202.8 L442.8 203.4 L443.6 204.0 L444.4 204.6 L445.2 205.2 L446.0 205.8 L446.8 206.4 L447.6 207.0 L448.4 207.6 L449.2 208.1 L449.9 208.7 L450.7 209.3 L451.5 209.9 L452.3 210.4 L453.1 211.0 L453.9 211.5 L454.7 212.1 L455.5 212.6 L456.3 213.2 L457.1 213.7 L457.9 214.3 L458.7 214.8 L459.5 215.3 L460.2 215.9 L461.0 216.4 L461.8 216.9 L462.6 217.4 L463.4 217.9 L464.2 218.4 L465.0 218.9 L465.8 219.4 L466.6 219.9 L467.4 220.4 L468.2 220.9 L469.0 221.4 L469.8 221.8 L470.6 222.3 L471.3 222.8 L472.1 223.2 L472.9 223.7 L473.7 224.2 L474.5 224.6 L475.3 225.0 L476.1 225.5 L476.9 225.9 L477.7 226.3 L478.5 226.8 L479.3 227.2 L480.1 227.6 L480.9 228.0 L481.6 228.4 L482.4 228.8 L483.2 229.2 L484.0 229.6 L484.8 230.0 L485.6 230.4 L486.4 230.7 L487.2 231.1 L488.0 231.5 L488.8 231.8 L489.6 232.2 L490.4 232.5 L491.2 232.9 L492.0 233.2 L492.7 233.6 L493.5 233.9 L494.3 234.2 L495.1 234.5 L495.9 234.8 L496.7 235.1 L497.5 235.5 L498.3 235.7 L499.1 236.0 L499.9 236.3 L500.7 236.6 L501.5 236.9 L502.3 237.2 L503.0 237.4 L503.8 237.7 L504.6 237.9 L505.4 238.2 L506.2 238.4 L507.0 238.7 L507.8 238.9 L508.6 239.1 L509.4 239.3 L510.2 239.6 L511.0 239.8 L511.8 240.0 L512.6 240.2 L513.3 240.4 L514.1 240.5 L514.9 240.7 L515.7 240.9 L516.5 241.1 L517.3 241.2 L518.1 241.4 L518.9 241.5 L519.7 241.7 L520.5 241.8 L521.3 242.0 L522.1 242.1 L522.9 242.2 L523.6 242.3 L524.4 242.5 L525.2 242.6 L526.0 242.7 L526.8 242.8 L527.6 242.9 L528.4 242.9 L529.2 243.0 L530.0 243.1 L530.8 243.2 L531.6 243.2 L532.4 243.3 L533.2 243.3 L534.0 243.4 L534.7 243.4 L535.5 243.4 L536.3 243.5 L537.1 243.5 L537.9 243.5 L538.7 243.5 L539.5 243.5 L540.3 243.5 L541.1 243.5 L541.9 243.5 L542.7 243.5 L543.5 243.4 L544.3 243.4 L545.0 243.4 L545.8 243.3 L546.6 243.3 L547.4 243.2 L548.2 243.2 L549.0 243.1 L549.8 243.0 L550.6 242.9 L551.4 242.9 L552.2 242.8 L553.0 242.7 L553.8 242.6 L554.6 242.5 L555.4 242.3 L556.1 242.2 L556.9 242.1 L557.7 242.0 L558.5 241.8 L559.3 241.7 L560.1 241.5 L560.9 241.4 L561.7 241.2 L562.5 241.1 L563.3 240.9 L564.1 240.7 L564.9 240.5 L565.7 240.4 L566.4 240.2 L567.2 240.0 L568.0 239.8 L568.8 239.6 L569.6 239.3 L570.4 239.1 L571.2 238.9 L572.0 238.7 L572.8 238.4 L573.6 238.2 L574.4 237.9 L575.2 237.7 L576.0 237.4 L576.7 237.2 L577.5 236.9 L578.3 236.6 L579.1 236.3 L579.9 236.0 L580.7 235.7 L581.5 235.5 L582.3 235.1 L583.1 234.8 L583.9 234.5 L584.7 234.2 L585.5 233.9 L586.3 233.6 L587.1 233.2 L587.8 232.9 L588.6 232.5 L589.4 232.2 L590.2 231.8 L591.0 231.5 L591.8 231.1 L592.6 230.7 L593.4 230.4 L594.2 230.0 L595.0 229.6 L595.8 229.2 L596.6 228.8 L597.4 228.4 L598.1 228.0 L598.9 227.6 L599.7 227.2 L600.5 226.8 L601.3 226.3 L602.1 225.9 L602.9 225.5 L603.7 225.0 L604.5 224.6 L605.3 224.2 L606.1 223.7 L606.9 223.2 L607.7 222.8 L608.4 222.3 L609.2 221.8 L610.0 221.4 L610.8 220.9 L611.6 220.4 L612.4 219.9 L613.2 219.4 L614.0 218.9 L614.8 218.4 L615.6 217.9 L616.4 217.4 L617.2 216.9 L618.0 216.4 L618.8 215.9 L619.5 215.3 L620.3 214.8 L621.1 214.3 L621.9 213.7 L622.7 213.2 L623.5 212.6 L624.3 212.1 L625.1 211.5 L625.9 211.0 L626.7 210.4 L627.5 209.9 L628.3 209.3 L629.1 208.7 L629.8 208.1 L630.6 207.6 L631.4 207.0 L632.2 206.4 L633.0 205.8 L633.8 205.2 L634.6 204.6 L635.4 204.0 L636.2 203.4 L637.0 202.8 L637.8 202.2 L638.6 201.6 L639.4 200.9 L640.1 200.3 L640.9 199.7 L641.7 199.1 L642.5 198.4 L643.3 197.8 L644.1 197.2 L644.9 196.5 L645.7 195.9 L646.5 195.2 L647.3 194.6 L648.1 193.9 L648.9 193.3 L649.7 192.6 L650.5 192.0 L651.2 191.3 L652.0 190.6 L652.8 190.0 L653.6 189.3 L654.4 188.6 L655.2 188.0 L656.0 187.3 L656.8 186.6 L657.6 185.9 L658.4 185.2 L659.2 184.6 L660.0 183.9 L660.8 183.2 L661.5 182.5 L662.3 181.8 L663.1 181.1 L663.9 180.4 L664.7 179.7 L665.5 179.0 L666.3 178.3 L667.1 177.6 L667.9 176.9 L668.7 176.2 L669.5 175.4 L670.3 174.7 L671.1 174.0 L671.8 173.3 L672.6 172.6 L673.4 171.9 L674.2 171.1 L675.0 170.4 L675.8 169.7 L676.6 169.0 L677.4 168.3 L678.2 167.5 L679.0 166.8 L679.8 166.1 L680.6 165.3 L681.4 164.6 L682.1 163.9 L682.9 163.1 L683.7 162.4 L684.5 161.7 L685.3 160.9 L686.1 160.2 L686.9 159.5 L687.7 158.7 L688.5 158.0 L689.3 157.3 L690.1 156.5 L690.9 155.8 L691.7 155.0 L692.5 154.3 L693.2 153.6 L694.0 152.8 L694.8 152.1 L695.6 151.3 L696.4 150.6 L697.2 149.9 L698.0 149.1" fill="none" stroke="#1c1518" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round" stroke-dasharray="5 4"/>
+                                <path d="M64.0 149.1 L64.8 148.4 L65.6 147.6 L66.4 146.9 L67.2 146.3 L68.0 145.6 L68.8 145.1 L69.5 144.5 L70.3 144.1 L71.1 143.7 L71.9 143.5 L72.7 143.3 L73.5 143.2 L74.3 143.3 L75.1 143.4 L75.9 143.7 L76.7 144.1 L77.5 144.6 L78.3 145.2 L79.1 145.9 L79.8 146.8 L80.6 147.8 L81.4 148.9 L82.2 150.0 L83.0 151.3 L83.8 152.7 L84.6 154.2 L85.4 155.7 L86.2 157.3 L87.0 158.9 L87.8 160.6 L88.6 162.3 L89.4 164.1 L90.2 165.8 L90.9 167.5 L91.7 169.2 L92.5 170.9 L93.3 172.5 L94.1 174.0 L94.9 175.5 L95.7 176.9 L96.5 178.1 L97.3 179.2 L98.1 180.2 L98.9 181.1 L99.7 181.8 L100.5 182.3 L101.2 182.6 L102.0 182.8 L102.8 182.7 L103.6 182.5 L104.4 182.0 L105.2 181.4 L106.0 180.5 L106.8 179.4 L107.6 178.1 L108.4 176.6 L109.2 174.9 L110.0 173.0 L110.8 170.9 L111.5 168.6 L112.3 166.1 L113.1 163.4 L113.9 160.6 L114.7 157.6 L115.5 154.5 L116.3 151.3 L117.1 148.0 L117.9 144.6 L118.7 141.1 L119.5 137.6 L120.3 134.0 L121.1 130.5 L121.9 126.9 L122.6 123.4 L123.4 120.0 L124.2 116.6 L125.0 113.3 L125.8 110.1 L126.6 107.1 L127.4 104.2 L128.2 101.5 L129.0 99.0 L129.8 96.7 L130.6 94.7 L131.4 92.9 L132.2 91.3 L132.9 90.0 L133.7 89.1 L134.5 88.4 L135.3 88.0 L136.1 87.9 L136.9 88.2 L137.7 88.8 L138.5 89.7 L139.3 90.9 L140.1 92.5 L140.9 94.4 L141.7 96.6 L142.5 99.1 L143.2 101.9 L144.0 105.0 L144.8 108.4 L145.6 112.1 L146.4 116.0 L147.2 120.1 L148.0 124.4 L148.8 129.0 L149.6 133.7 L150.4 138.5 L151.2 143.5 L152.0 148.5 L152.8 153.7 L153.6 158.9 L154.3 164.1 L155.1 169.2 L155.9 174.4 L156.7 179.5 L157.5 184.4 L158.3 189.3 L159.1 194.0 L159.9 198.5 L160.7 202.9 L161.5 207.0 L162.3 210.8 L163.1 214.4 L163.9 217.6 L164.6 220.6 L165.4 223.2 L166.2 225.5 L167.0 227.4 L167.8 228.9 L168.6 230.0 L169.4 230.7 L170.2 231.0 L171.0 230.9 L171.8 230.4 L172.6 229.4 L173.4 228.0 L174.2 226.3 L175.0 224.1 L175.7 221.5 L176.5 218.5 L177.3 215.1 L178.1 211.4 L178.9 207.3 L179.7 202.9 L180.5 198.2 L181.3 193.2 L182.1 188.0 L182.9 182.5 L183.7 176.8 L184.5 170.9 L185.3 164.9 L186.0 158.8 L186.8 152.6 L187.6 146.3 L188.4 140.0 L189.2 133.8 L190.0 127.5 L190.8 121.4 L191.6 115.3 L192.4 109.4 L193.2 103.7 L194.0 98.2 L194.8 92.9 L195.6 87.8 L196.3 83.1 L197.1 78.7 L197.9 74.6 L198.7 70.8 L199.5 67.5 L200.3 64.6 L201.1 62.0 L201.9 59.9 L202.7 58.3 L203.5 57.1 L204.3 56.4 L205.1 56.1 L205.9 56.3 L206.7 57.0 L207.4 58.2 L208.2 59.8 L209.0 61.9 L209.8 64.4 L210.6 67.3 L211.4 70.7 L212.2 74.5 L213.0 78.6 L213.8 83.1 L214.6 88.0 L215.4 93.2 L216.2 98.6 L217.0 104.4 L217.7 110.3 L218.5 116.5 L219.3 122.8 L220.1 129.2 L220.9 135.8 L221.7 142.4 L222.5 149.1 L223.3 155.8 L224.1 162.4 L224.9 169.0 L225.7 175.4 L226.5 181.8 L227.3 187.9 L228.0 193.9 L228.8 199.6 L229.6 205.1 L230.4 210.2 L231.2 215.1 L232.0 219.6 L232.8 223.8 L233.6 227.5 L234.4 230.9 L235.2 233.9 L236.0 236.4 L236.8 238.4 L237.6 240.1 L238.4 241.2 L239.1 241.9 L239.9 242.1 L240.7 241.8 L241.5 241.1 L242.3 239.9 L243.1 238.3 L243.9 236.2 L244.7 233.7 L245.5 230.7 L246.3 227.4 L247.1 223.7 L247.9 219.6 L248.7 215.1 L249.4 210.4 L250.2 205.4 L251.0 200.1 L251.8 194.5 L252.6 188.8 L253.4 182.9 L254.2 176.9 L255.0 170.7 L255.8 164.5 L256.6 158.2 L257.4 151.9 L258.2 145.6 L259.0 139.4 L259.7 133.3 L260.5 127.3 L261.3 121.4 L262.1 115.7 L262.9 110.3 L263.7 105.0 L264.5 100.0 L265.3 95.3 L266.1 90.9 L266.9 86.8 L267.7 83.1 L268.5 79.8 L269.3 76.8 L270.1 74.2 L270.8 72.0 L271.6 70.2 L272.4 68.8 L273.2 67.9 L274.0 67.3 L274.8 67.2 L275.6 67.5 L276.4 68.2 L277.2 69.3 L278.0 70.8 L278.8 72.7 L279.6 75.0 L280.4 77.6 L281.1 80.6 L281.9 83.8 L282.7 87.4 L283.5 91.3 L284.3 95.4 L285.1 99.7 L285.9 104.2 L286.7 108.9 L287.5 113.8 L288.3 118.8 L289.1 123.8 L289.9 129.0 L290.7 134.2 L291.4 139.4 L292.2 144.5 L293.0 149.7 L293.8 154.7 L294.6 159.7 L295.4 164.6 L296.2 169.3 L297.0 173.8 L297.8 178.1 L298.6 182.3 L299.4 186.2 L300.2 189.8 L301.0 193.2 L301.8 196.3 L302.5 199.1 L303.3 201.6 L304.1 203.9 L304.9 205.7 L305.7 207.3 L306.5 208.5 L307.3 209.5 L308.1 210.0 L308.9 210.3 L309.7 210.2 L310.5 209.9 L311.3 209.2 L312.1 208.2 L312.8 206.9 L313.6 205.4 L314.4 203.5 L315.2 201.5 L316.0 199.2 L316.8 196.7 L317.6 194.0 L318.4 191.1 L319.2 188.1 L320.0 184.9 L320.8 181.6 L321.6 178.2 L322.4 174.8 L323.1 171.3 L323.9 167.7 L324.7 164.2 L325.5 160.6 L326.3 157.1 L327.1 153.6 L327.9 150.2 L328.7 146.9 L329.5 143.7 L330.3 140.6 L331.1 137.6 L331.9 134.8 L332.7 132.1 L333.4 129.7 L334.2 127.3 L335.0 125.2 L335.8 123.3 L336.6 121.6 L337.4 120.1 L338.2 118.8 L339.0 117.7 L339.8 116.8 L340.6 116.2 L341.4 115.7 L342.2 115.5 L343.0 115.5 L343.8 115.6 L344.5 115.9 L345.3 116.5 L346.1 117.2 L346.9 118.0 L347.7 119.0 L348.5 120.1 L349.3 121.4 L350.1 122.7 L350.9 124.2 L351.7 125.7 L352.5 127.3 L353.3 129.0 L354.1 130.7 L354.8 132.4 L355.6 134.1 L356.4 135.9 L357.2 137.6 L358.0 139.3 L358.8 140.9 L359.6 142.5 L360.4 144.1 L361.2 145.5 L362.0 146.9 L362.8 148.2 L363.6 149.4 L364.4 150.4 L365.2 151.4 L365.9 152.3 L366.7 153.0 L367.5 153.6 L368.3 154.1 L369.1 154.5 L369.9 154.8 L370.7 154.9 L371.5 155.0 L372.3 154.9 L373.1 154.7 L373.9 154.5 L374.7 154.1 L375.5 153.7 L376.2 153.2 L377.0 152.6 L377.8 152.0 L378.6 151.3 L379.4 150.6 L380.2 149.9 L381.0 149.1 L381.8 148.4 L382.6 147.6 L383.4 146.9 L384.2 146.3 L385.0 145.6 L385.8 145.1 L386.5 144.5 L387.3 144.1 L388.1 143.7 L388.9 143.5 L389.7 143.3 L390.5 143.2 L391.3 143.3 L392.1 143.4 L392.9 143.7 L393.7 144.1 L394.5 144.6 L395.3 145.2 L396.1 145.9 L396.9 146.8 L397.6 147.8 L398.4 148.9 L399.2 150.0 L400.0 151.3 L400.8 152.7 L401.6 154.2 L402.4 155.7 L403.2 157.3 L404.0 158.9 L404.8 160.6 L405.6 162.3 L406.4 164.1 L407.2 165.8 L407.9 167.5 L408.7 169.2 L409.5 170.9 L410.3 172.5 L411.1 174.0 L411.9 175.5 L412.7 176.9 L413.5 178.1 L414.3 179.2 L415.1 180.2 L415.9 181.1 L416.7 181.8 L417.5 182.3 L418.2 182.6 L419.0 182.8 L419.8 182.7 L420.6 182.5 L421.4 182.0 L422.2 181.4 L423.0 180.5 L423.8 179.4 L424.6 178.1 L425.4 176.6 L426.2 174.9 L427.0 173.0 L427.8 170.9 L428.6 168.6 L429.3 166.1 L430.1 163.4 L430.9 160.6 L431.7 157.6 L432.5 154.5 L433.3 151.3 L434.1 148.0 L434.9 144.6 L435.7 141.1 L436.5 137.6 L437.3 134.0 L438.1 130.5 L438.9 126.9 L439.6 123.4 L440.4 120.0 L441.2 116.6 L442.0 113.3 L442.8 110.1 L443.6 107.1 L444.4 104.2 L445.2 101.5 L446.0 99.0 L446.8 96.7 L447.6 94.7 L448.4 92.9 L449.2 91.3 L449.9 90.0 L450.7 89.1 L451.5 88.4 L452.3 88.0 L453.1 87.9 L453.9 88.2 L454.7 88.8 L455.5 89.7 L456.3 90.9 L457.1 92.5 L457.9 94.4 L458.7 96.6 L459.5 99.1 L460.2 101.9 L461.0 105.0 L461.8 108.4 L462.6 112.1 L463.4 116.0 L464.2 120.1 L465.0 124.4 L465.8 129.0 L466.6 133.7 L467.4 138.5 L468.2 143.5 L469.0 148.5 L469.8 153.7 L470.6 158.9 L471.3 164.1 L472.1 169.2 L472.9 174.4 L473.7 179.5 L474.5 184.4 L475.3 189.3 L476.1 194.0 L476.9 198.5 L477.7 202.9 L478.5 207.0 L479.3 210.8 L480.1 214.4 L480.9 217.6 L481.6 220.6 L482.4 223.2 L483.2 225.5 L484.0 227.4 L484.8 228.9 L485.6 230.0 L486.4 230.7 L487.2 231.0 L488.0 230.9 L488.8 230.4 L489.6 229.4 L490.4 228.0 L491.2 226.3 L492.0 224.1 L492.7 221.5 L493.5 218.5 L494.3 215.1 L495.1 211.4 L495.9 207.3 L496.7 202.9 L497.5 198.2 L498.3 193.2 L499.1 188.0 L499.9 182.5 L500.7 176.8 L501.5 170.9 L502.3 164.9 L503.0 158.8 L503.8 152.6 L504.6 146.3 L505.4 140.0 L506.2 133.8 L507.0 127.5 L507.8 121.4 L508.6 115.3 L509.4 109.4 L510.2 103.7 L511.0 98.2 L511.8 92.9 L512.6 87.8 L513.3 83.1 L514.1 78.7 L514.9 74.6 L515.7 70.8 L516.5 67.5 L517.3 64.6 L518.1 62.0 L518.9 59.9 L519.7 58.3 L520.5 57.1 L521.3 56.4 L522.1 56.1 L522.9 56.3 L523.6 57.0 L524.4 58.2 L525.2 59.8 L526.0 61.9 L526.8 64.4 L527.6 67.3 L528.4 70.7 L529.2 74.5 L530.0 78.6 L530.8 83.1 L531.6 88.0 L532.4 93.2 L533.2 98.6 L534.0 104.4 L534.7 110.3 L535.5 116.5 L536.3 122.8 L537.1 129.2 L537.9 135.8 L538.7 142.4 L539.5 149.1 L540.3 155.8 L541.1 162.4 L541.9 169.0 L542.7 175.4 L543.5 181.8 L544.3 187.9 L545.0 193.9 L545.8 199.6 L546.6 205.1 L547.4 210.2 L548.2 215.1 L549.0 219.6 L549.8 223.8 L550.6 227.5 L551.4 230.9 L552.2 233.9 L553.0 236.4 L553.8 238.4 L554.6 240.1 L555.4 241.2 L556.1 241.9 L556.9 242.1 L557.7 241.8 L558.5 241.1 L559.3 239.9 L560.1 238.3 L560.9 236.2 L561.7 233.7 L562.5 230.7 L563.3 227.4 L564.1 223.7 L564.9 219.6 L565.7 215.1 L566.4 210.4 L567.2 205.4 L568.0 200.1 L568.8 194.5 L569.6 188.8 L570.4 182.9 L571.2 176.9 L572.0 170.7 L572.8 164.5 L573.6 158.2 L574.4 151.9 L575.2 145.6 L576.0 139.4 L576.7 133.3 L577.5 127.3 L578.3 121.4 L579.1 115.7 L579.9 110.3 L580.7 105.0 L581.5 100.0 L582.3 95.3 L583.1 90.9 L583.9 86.8 L584.7 83.1 L585.5 79.8 L586.3 76.8 L587.1 74.2 L587.8 72.0 L588.6 70.2 L589.4 68.8 L590.2 67.9 L591.0 67.3 L591.8 67.2 L592.6 67.5 L593.4 68.2 L594.2 69.3 L595.0 70.8 L595.8 72.7 L596.6 75.0 L597.4 77.6 L598.1 80.6 L598.9 83.8 L599.7 87.4 L600.5 91.3 L601.3 95.4 L602.1 99.7 L602.9 104.2 L603.7 108.9 L604.5 113.8 L605.3 118.8 L606.1 123.8 L606.9 129.0 L607.7 134.2 L608.4 139.4 L609.2 144.5 L610.0 149.7 L610.8 154.7 L611.6 159.7 L612.4 164.6 L613.2 169.3 L614.0 173.8 L614.8 178.1 L615.6 182.3 L616.4 186.2 L617.2 189.8 L618.0 193.2 L618.8 196.3 L619.5 199.1 L620.3 201.6 L621.1 203.9 L621.9 205.7 L622.7 207.3 L623.5 208.5 L624.3 209.5 L625.1 210.0 L625.9 210.3 L626.7 210.2 L627.5 209.9 L628.3 209.2 L629.1 208.2 L629.8 206.9 L630.6 205.4 L631.4 203.5 L632.2 201.5 L633.0 199.2 L633.8 196.7 L634.6 194.0 L635.4 191.1 L636.2 188.1 L637.0 184.9 L637.8 181.6 L638.6 178.2 L639.4 174.8 L640.1 171.3 L640.9 167.7 L641.7 164.2 L642.5 160.6 L643.3 157.1 L644.1 153.6 L644.9 150.2 L645.7 146.9 L646.5 143.7 L647.3 140.6 L648.1 137.6 L648.9 134.8 L649.7 132.1 L650.5 129.7 L651.2 127.3 L652.0 125.2 L652.8 123.3 L653.6 121.6 L654.4 120.1 L655.2 118.8 L656.0 117.7 L656.8 116.8 L657.6 116.2 L658.4 115.7 L659.2 115.5 L660.0 115.5 L660.8 115.6 L661.5 115.9 L662.3 116.5 L663.1 117.2 L663.9 118.0 L664.7 119.0 L665.5 120.1 L666.3 121.4 L667.1 122.7 L667.9 124.2 L668.7 125.7 L669.5 127.3 L670.3 129.0 L671.1 130.7 L671.8 132.4 L672.6 134.1 L673.4 135.9 L674.2 137.6 L675.0 139.3 L675.8 140.9 L676.6 142.5 L677.4 144.1 L678.2 145.5 L679.0 146.9 L679.8 148.2 L680.6 149.4 L681.4 150.4 L682.1 151.4 L682.9 152.3 L683.7 153.0 L684.5 153.6 L685.3 154.1 L686.1 154.5 L686.9 154.8 L687.7 154.9 L688.5 155.0 L689.3 154.9 L690.1 154.7 L690.9 154.5 L691.7 154.1 L692.5 153.7 L693.2 153.2 L694.0 152.6 L694.8 152.0 L695.6 151.3 L696.4 150.6 L697.2 149.9 L698.0 149.1" fill="none" stroke="#7a1f2b" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/>
+                                </g>
+                                <line x1="64" x2="698" y1="298.0" y2="298.0" stroke="#eee6d9"/>
+                                <line x1="64.0" x2="86.0" y1="314.0" y2="314.0" stroke="#1c1518" stroke-width="2.2" stroke-linecap="round" stroke-dasharray="5 4"/>
+                                <text class="lbl" x="94.0" y="318.0">envelope ±36 |cos(π(t − 2)/4)| px</text>
+                                <line x1="341.6" x2="363.6" y1="314.0" y2="314.0" stroke="#7a1f2b" stroke-width="2.2" stroke-linecap="round"/>
+                                <text class="lbl" x="371.6" y="318.0">sum of the two waves</text>
+                                </svg>
+                            </div>
+                            <figcaption><span class="pfig__n">Figure 3</span>The <em>Beats</em> preset as heard at one point, the centre of the view, \(X = 400\ \mathrm{px}{:}\) the two waves of equation (1) summed every \(0.01\ \mathrm{s}\) from \(t = 0\) to \(8\ \mathrm{s}.\) The dashed envelope \(\pm 36\,|\cos(\pi(t-2)/4)|\ \mathrm{px},\) from (7), encloses the sum at every instant. It falls to zero at \(t = 0,\) 4 and \(8\ \mathrm{s},\) where the two waves are exactly out of step, and reaches \(2A = 36\ \mathrm{px}\) halfway between.</figcaption>
+                        </figure>
+                        <h4><span class="psub__n">4.1</span>The speed of the envelope<span class="star" title="heavier mathematics">★</span></h4>
+                        <p>Follow a point of fixed envelope, for example a quiet spot where \(\cos\frac{a-b}{2} = 0.\) It keeps \(\Delta k\,X - \Delta\omega\,t\) constant, so it moves at \(\Delta\omega/\Delta k.\) A crest of the carrier keeps \(a + b\) constant and moves at \(\bar\omega/\bar k,\) the ratio of the averages. With (2),</p>
+                        \[ \begin{aligned} v_\text{env} &= \frac{\Delta\omega}{\Delta k} = 200\,\frac{f_1 s_1 - f_2 s_2}{f_1 - f_2}\ \mathrm{px/s}, \\ v_\text{carrier} &= \frac{\bar\omega}{\bar k} = 200\,\frac{f_1 s_1 + f_2 s_2}{f_1 + f_2}\ \mathrm{px/s} . \end{aligned} \tag{9} \]
+                        <p>With equal speeds, \(s_1 = s_2 = s,\) both reduce to \(200\,s\ \mathrm{px/s}{:}\) envelope and carrier move together and the whole pattern slides along unchanged. With different speeds they part company, and the envelope can even run backwards (Exercise 4.1). In the limit of close frequencies, \(\Delta\omega/\Delta k\) becomes the derivative \(v_\text{g} = \mathrm{d}\omega/\mathrm{d}k,\) the <em>group velocity</em>, which describes a narrow envelope on a specified dispersion relation. In the lossless wave examples here it also describes energy transport. The independently assigned speeds on this bench illustrate envelope geometry; they do not by themselves define an information speed. On deep water, for example, \(\omega = \sqrt{gk}\) with \(g = 9.81\ \mathrm{m/s^2},\) so \(v_\text{g}\) is exactly half the phase speed: in a group of ocean swell, new crests appear at the back, run forward through the group and die out at the front.</p>
+                        <div class="pbox pbox--ex">
+                            <span class="pbox__t">Exercise 4.1 · on the figure above</span>
+                            <p>Press <em>Beats</em> and watch one point of the upper plot: it swells and fades every \(4\ \mathrm{s}.\) Now tune Wave 2 like a guitar string. Set its <em>Frequency</em> to 1.10 and the beat slows to one every \(10\ \mathrm{s}\) and stretches to \(2000\ \mathrm{px},\) two and a half times the view; at 1.00 it stops. Return it to 1.25 and set its <em>Speed</em> to 0.50×. Both waves still move to the right, at 200 and \(100\ \mathrm{px/s},\) yet by (9) the envelope now runs to the left at \(300\ \mathrm{px/s},\) while the carrier moves to the right at \(144\ \mathrm{px/s}.\) Check both against what you see; the Data panel lists the envelope speed as \(v_\text{env}.\)</p>
+                        </div>
+                    </section>
+
+                    <section class="psec" id="p-fourier">
+                        <h3><span class="psec__n">05</span>A square wave from sines</h3>
+                        <p class="psec__lead">Beats come from two frequencies that are almost equal. Harmonics are the opposite case: frequencies that are exact whole-number multiples of one fundamental. Added with the right strengths, they can build almost any repeating shape.</p>
+                        <p>The <em>Square wave</em> preset adds four waves with Frequencies 0.4, 1.2, 2.0 and 2.8, the first, third, fifth and seventh multiples of 0.4, and Amplitudes \(30/n\ \mathrm{px}\) for \(n = 1, 3, 5, 7{:}\) 30, 10, 6 and \(4.3\ \mathrm{px},\) the last rounded from \(30/7 = 4.29.\) All four have Phase 0 and Speed 1×. The result is a flat-topped wave that jumps between two levels, and the reason is Fourier’s series for the square wave \(\operatorname{sq}(x),\) which equals \(+1\) for \(0 < x < \pi\) and \(-1\) for \(-\pi < x < 0\) and repeats every \(2\pi{:}\)</p>
+                        \[ \operatorname{sq}(x) = \frac{4}{\pi}\left( \sin x + \frac{\sin 3x}{3} + \frac{\sin 5x}{5} + \frac{\sin 7x}{7} + \cdots \right) . \tag{10} \]
+                        <p>Section 5.1 derives it. With \(x = 2\pi \times 0.4\,(X/200 - t),\) the term \(\sin nx\) is exactly the page’s wave of Frequency \(0.4\,n,\) and the amplitudes \(30/n\) are those of (10) multiplied by a height \(H\) with \(4H/\pi = 30\ \mathrm{px}{:}\)</p>
+                        \[ \sum_{n = 1, 3, 5, 7} \frac{30\ \mathrm{px}}{n}\,\sin nx \;\approx\; H\operatorname{sq}(x), \qquad H = \frac{\pi}{4} \times 30\ \mathrm{px} = 23.56\ \mathrm{px} . \tag{11} \]
+                        <p>The square wave has the wavelength of its fundamental, \(200/0.4 = 500\ \mathrm{px},\) so 1.6 of them fit in the view, and at a fixed point it repeats every \(2.5\ \mathrm{s}.\) The preset stops at four terms because the next one, \(n = 9,\) would need a Frequency of 3.6, above the slider’s top value of 3.</p>
+                        <div class="pbox">
+                            <span class="pbox__t">Fourier’s theorem</span>
+                            <p>Any repeating wave of reasonable shape, with period \(2\pi\) in \(x,\) is a sum of sines and cosines at whole-number multiples of its fundamental frequency, \(F(x) = \tfrac12 a_0 + \sum_{n\ge1}\left( a_n\cos nx + b_n\sin nx \right),\) and each amplitude is found by one integral, equation (13). The list of amplitudes is the wave’s spectrum. A synthesizer uses the theorem forwards, building a tone from its spectrum; your ear uses it backwards.</p>
+                        </div>
+                        <p>Figure 4 shows the partial sums. One term is a plain sine that rises \(27\ \%\) above the plateau. Four terms, the preset, already have flat tops with small ripples; ten terms follow the square wave closely except right next to each jump, where every partial sum overshoots. The overshoot gets narrower as terms are added, but not lower: it settles at \(8.95\ \%\) of the jump, \(4.22\ \mathrm{px}\) above the plateau of the page’s square wave (Section 5.2).</p>
+                        <figure class="pfig">
+                            <div class="pfig__plate">
+                                <svg viewBox="0 0 720 346" role="img" aria-label="Chart: partial sums of the square-wave series over one wavelength, with 1, 4 and 10 terms, against the ideal square wave of height 23.56 px; every partial sum overshoots next to the jumps." xmlns="http://www.w3.org/2000/svg">
+                                <defs><clipPath id="f6clip-square"><rect x="64.0" y="18.0" width="634.0" height="256.0"/></clipPath></defs>
+                                <line x1="64.0" x2="698.0" y1="252.7" y2="252.7" stroke="#eee6d9" stroke-width="1"/>
+                                <text class="tick" x="56.0" y="256.7" text-anchor="end">−30</text>
+                                <line x1="64.0" x2="698.0" y1="217.1" y2="217.1" stroke="#eee6d9" stroke-width="1"/>
+                                <text class="tick" x="56.0" y="221.1" text-anchor="end">−20</text>
+                                <line x1="64.0" x2="698.0" y1="181.6" y2="181.6" stroke="#eee6d9" stroke-width="1"/>
+                                <text class="tick" x="56.0" y="185.6" text-anchor="end">−10</text>
+                                <line x1="64.0" x2="698.0" y1="146.0" y2="146.0" stroke="#eee6d9" stroke-width="1"/>
+                                <text class="tick" x="56.0" y="150.0" text-anchor="end">0</text>
+                                <line x1="64.0" x2="698.0" y1="110.4" y2="110.4" stroke="#eee6d9" stroke-width="1"/>
+                                <text class="tick" x="56.0" y="114.4" text-anchor="end">10</text>
+                                <line x1="64.0" x2="698.0" y1="74.9" y2="74.9" stroke="#eee6d9" stroke-width="1"/>
+                                <text class="tick" x="56.0" y="78.9" text-anchor="end">20</text>
+                                <line x1="64.0" x2="698.0" y1="39.3" y2="39.3" stroke="#eee6d9" stroke-width="1"/>
+                                <text class="tick" x="56.0" y="43.3" text-anchor="end">30</text>
+                                <line x1="64.0" x2="64.0" y1="274.0" y2="279.0" stroke="#8b8079"/>
+                                <text class="tick" x="64.0" y="293.0" text-anchor="middle">0</text>
+                                <line x1="127.4" x2="127.4" y1="274.0" y2="279.0" stroke="#8b8079"/>
+                                <text class="tick" x="127.4" y="293.0" text-anchor="middle">50</text>
+                                <line x1="190.8" x2="190.8" y1="274.0" y2="279.0" stroke="#8b8079"/>
+                                <text class="tick" x="190.8" y="293.0" text-anchor="middle">100</text>
+                                <line x1="254.2" x2="254.2" y1="274.0" y2="279.0" stroke="#8b8079"/>
+                                <text class="tick" x="254.2" y="293.0" text-anchor="middle">150</text>
+                                <line x1="317.6" x2="317.6" y1="274.0" y2="279.0" stroke="#8b8079"/>
+                                <text class="tick" x="317.6" y="293.0" text-anchor="middle">200</text>
+                                <line x1="381.0" x2="381.0" y1="274.0" y2="279.0" stroke="#8b8079"/>
+                                <text class="tick" x="381.0" y="293.0" text-anchor="middle">250</text>
+                                <line x1="444.4" x2="444.4" y1="274.0" y2="279.0" stroke="#8b8079"/>
+                                <text class="tick" x="444.4" y="293.0" text-anchor="middle">300</text>
+                                <line x1="507.8" x2="507.8" y1="274.0" y2="279.0" stroke="#8b8079"/>
+                                <text class="tick" x="507.8" y="293.0" text-anchor="middle">350</text>
+                                <line x1="571.2" x2="571.2" y1="274.0" y2="279.0" stroke="#8b8079"/>
+                                <text class="tick" x="571.2" y="293.0" text-anchor="middle">400</text>
+                                <line x1="634.6" x2="634.6" y1="274.0" y2="279.0" stroke="#8b8079"/>
+                                <text class="tick" x="634.6" y="293.0" text-anchor="middle">450</text>
+                                <line x1="698.0" x2="698.0" y1="274.0" y2="279.0" stroke="#8b8079"/>
+                                <text class="tick" x="698.0" y="293.0" text-anchor="middle">500</text>
+                                <line x1="64.0" x2="698.0" y1="274.0" y2="274.0" stroke="#8b8079"/>
+                                <line x1="64.0" x2="64.0" y1="18.0" y2="274.0" stroke="#8b8079"/>
+                                <text class="lbl" x="698.0" y="312.0" text-anchor="end">position X in the medium (px)</text>
+                                <text class="lbl" x="70.0" y="31.0">y at t = 0 (px)</text>
+                                <g clip-path="url(#f6clip-square)">
+                                <line x1="64.0" x2="698.0" y1="47.2" y2="47.2" stroke="#8b8079" stroke-width="1.4" stroke-dasharray="2 3"/>
+                                <line x1="64.0" x2="698.0" y1="244.8" y2="244.8" stroke="#8b8079" stroke-width="1.4" stroke-dasharray="2 3"/>
+                                <path d="M64.0 146.0 L64.0 62.2 L381.0 62.2 L381.0 229.8 L698.0 229.8 L698.0 146.0" fill="none" stroke="#1c1518" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round" stroke-dasharray="5 4"/>
+                                <path d="M64.0 146.0 L65.3 144.7 L66.5 143.3 L67.8 142.0 L69.1 140.6 L70.3 139.3 L71.6 138.0 L72.9 136.6 L74.1 135.3 L75.4 134.0 L76.7 132.6 L77.9 131.3 L79.2 130.0 L80.5 128.7 L81.8 127.3 L83.0 126.0 L84.3 124.7 L85.6 123.4 L86.8 122.1 L88.1 120.8 L89.4 119.5 L90.6 118.2 L91.9 116.9 L93.2 115.6 L94.4 114.3 L95.7 113.0 L97.0 111.8 L98.2 110.5 L99.5 109.2 L100.8 108.0 L102.0 106.7 L103.3 105.5 L104.6 104.3 L105.8 103.0 L107.1 101.8 L108.4 100.6 L109.6 99.4 L110.9 98.2 L112.2 97.0 L113.5 95.8 L114.7 94.6 L116.0 93.4 L117.3 92.3 L118.5 91.1 L119.8 90.0 L121.1 88.8 L122.3 87.7 L123.6 86.6 L124.9 85.5 L126.1 84.4 L127.4 83.3 L128.7 82.2 L129.9 81.2 L131.2 80.1 L132.5 79.0 L133.7 78.0 L135.0 77.0 L136.3 76.0 L137.5 75.0 L138.8 74.0 L140.1 73.0 L141.3 72.0 L142.6 71.1 L143.9 70.1 L145.2 69.2 L146.4 68.2 L147.7 67.3 L149.0 66.4 L150.2 65.5 L151.5 64.7 L152.8 63.8 L154.0 63.0 L155.3 62.1 L156.6 61.3 L157.8 60.5 L159.1 59.7 L160.4 58.9 L161.6 58.2 L162.9 57.4 L164.2 56.7 L165.4 55.9 L166.7 55.2 L168.0 54.5 L169.2 53.8 L170.5 53.2 L171.8 52.5 L173.0 51.9 L174.3 51.3 L175.6 50.7 L176.9 50.1 L178.1 49.5 L179.4 48.9 L180.7 48.4 L181.9 47.8 L183.2 47.3 L184.5 46.8 L185.7 46.3 L187.0 45.9 L188.3 45.4 L189.5 45.0 L190.8 44.6 L192.1 44.1 L193.3 43.8 L194.6 43.4 L195.9 43.0 L197.1 42.7 L198.4 42.4 L199.7 42.1 L200.9 41.8 L202.2 41.5 L203.5 41.2 L204.7 41.0 L206.0 40.8 L207.3 40.5 L208.6 40.4 L209.8 40.2 L211.1 40.0 L212.4 39.9 L213.6 39.7 L214.9 39.6 L216.2 39.5 L217.4 39.5 L218.7 39.4 L220.0 39.4 L221.2 39.3 L222.5 39.3 L223.8 39.3 L225.0 39.4 L226.3 39.4 L227.6 39.5 L228.8 39.5 L230.1 39.6 L231.4 39.7 L232.6 39.9 L233.9 40.0 L235.2 40.2 L236.4 40.4 L237.7 40.5 L239.0 40.8 L240.3 41.0 L241.5 41.2 L242.8 41.5 L244.1 41.8 L245.3 42.1 L246.6 42.4 L247.9 42.7 L249.1 43.0 L250.4 43.4 L251.7 43.8 L252.9 44.1 L254.2 44.6 L255.5 45.0 L256.7 45.4 L258.0 45.9 L259.3 46.3 L260.5 46.8 L261.8 47.3 L263.1 47.8 L264.3 48.4 L265.6 48.9 L266.9 49.5 L268.1 50.1 L269.4 50.7 L270.7 51.3 L272.0 51.9 L273.2 52.5 L274.5 53.2 L275.8 53.8 L277.0 54.5 L278.3 55.2 L279.6 55.9 L280.8 56.7 L282.1 57.4 L283.4 58.2 L284.6 58.9 L285.9 59.7 L287.2 60.5 L288.4 61.3 L289.7 62.1 L291.0 63.0 L292.2 63.8 L293.5 64.7 L294.8 65.5 L296.0 66.4 L297.3 67.3 L298.6 68.2 L299.8 69.2 L301.1 70.1 L302.4 71.1 L303.7 72.0 L304.9 73.0 L306.2 74.0 L307.5 75.0 L308.7 76.0 L310.0 77.0 L311.3 78.0 L312.5 79.0 L313.8 80.1 L315.1 81.2 L316.3 82.2 L317.6 83.3 L318.9 84.4 L320.1 85.5 L321.4 86.6 L322.7 87.7 L323.9 88.8 L325.2 90.0 L326.5 91.1 L327.7 92.3 L329.0 93.4 L330.3 94.6 L331.5 95.8 L332.8 97.0 L334.1 98.2 L335.4 99.4 L336.6 100.6 L337.9 101.8 L339.2 103.0 L340.4 104.3 L341.7 105.5 L343.0 106.7 L344.2 108.0 L345.5 109.2 L346.8 110.5 L348.0 111.8 L349.3 113.0 L350.6 114.3 L351.8 115.6 L353.1 116.9 L354.4 118.2 L355.6 119.5 L356.9 120.8 L358.2 122.1 L359.4 123.4 L360.7 124.7 L362.0 126.0 L363.2 127.3 L364.5 128.7 L365.8 130.0 L367.1 131.3 L368.3 132.6 L369.6 134.0 L370.9 135.3 L372.1 136.6 L373.4 138.0 L374.7 139.3 L375.9 140.6 L377.2 142.0 L378.5 143.3 L379.7 144.7 L381.0 146.0 L382.3 147.3 L383.5 148.7 L384.8 150.0 L386.1 151.4 L387.3 152.7 L388.6 154.0 L389.9 155.4 L391.1 156.7 L392.4 158.0 L393.7 159.4 L394.9 160.7 L396.2 162.0 L397.5 163.3 L398.8 164.7 L400.0 166.0 L401.3 167.3 L402.6 168.6 L403.8 169.9 L405.1 171.2 L406.4 172.5 L407.6 173.8 L408.9 175.1 L410.2 176.4 L411.4 177.7 L412.7 179.0 L414.0 180.2 L415.2 181.5 L416.5 182.8 L417.8 184.0 L419.0 185.3 L420.3 186.5 L421.6 187.7 L422.8 189.0 L424.1 190.2 L425.4 191.4 L426.6 192.6 L427.9 193.8 L429.2 195.0 L430.5 196.2 L431.7 197.4 L433.0 198.6 L434.3 199.7 L435.5 200.9 L436.8 202.0 L438.1 203.2 L439.3 204.3 L440.6 205.4 L441.9 206.5 L443.1 207.6 L444.4 208.7 L445.7 209.8 L446.9 210.8 L448.2 211.9 L449.5 213.0 L450.7 214.0 L452.0 215.0 L453.3 216.0 L454.5 217.0 L455.8 218.0 L457.1 219.0 L458.3 220.0 L459.6 220.9 L460.9 221.9 L462.2 222.8 L463.4 223.8 L464.7 224.7 L466.0 225.6 L467.2 226.5 L468.5 227.3 L469.8 228.2 L471.0 229.0 L472.3 229.9 L473.6 230.7 L474.8 231.5 L476.1 232.3 L477.4 233.1 L478.6 233.8 L479.9 234.6 L481.2 235.3 L482.4 236.1 L483.7 236.8 L485.0 237.5 L486.2 238.2 L487.5 238.8 L488.8 239.5 L490.0 240.1 L491.3 240.7 L492.6 241.3 L493.9 241.9 L495.1 242.5 L496.4 243.1 L497.7 243.6 L498.9 244.2 L500.2 244.7 L501.5 245.2 L502.7 245.7 L504.0 246.1 L505.3 246.6 L506.5 247.0 L507.8 247.4 L509.1 247.9 L510.3 248.2 L511.6 248.6 L512.9 249.0 L514.1 249.3 L515.4 249.6 L516.7 249.9 L517.9 250.2 L519.2 250.5 L520.5 250.8 L521.7 251.0 L523.0 251.2 L524.3 251.5 L525.6 251.6 L526.8 251.8 L528.1 252.0 L529.4 252.1 L530.6 252.3 L531.9 252.4 L533.2 252.5 L534.4 252.5 L535.7 252.6 L537.0 252.6 L538.2 252.7 L539.5 252.7 L540.8 252.7 L542.0 252.6 L543.3 252.6 L544.6 252.5 L545.8 252.5 L547.1 252.4 L548.4 252.3 L549.6 252.1 L550.9 252.0 L552.2 251.8 L553.4 251.6 L554.7 251.5 L556.0 251.2 L557.3 251.0 L558.5 250.8 L559.8 250.5 L561.1 250.2 L562.3 249.9 L563.6 249.6 L564.9 249.3 L566.1 249.0 L567.4 248.6 L568.7 248.2 L569.9 247.9 L571.2 247.4 L572.5 247.0 L573.7 246.6 L575.0 246.1 L576.3 245.7 L577.5 245.2 L578.8 244.7 L580.1 244.2 L581.3 243.6 L582.6 243.1 L583.9 242.5 L585.1 241.9 L586.4 241.3 L587.7 240.7 L589.0 240.1 L590.2 239.5 L591.5 238.8 L592.8 238.2 L594.0 237.5 L595.3 236.8 L596.6 236.1 L597.8 235.3 L599.1 234.6 L600.4 233.8 L601.6 233.1 L602.9 232.3 L604.2 231.5 L605.4 230.7 L606.7 229.9 L608.0 229.0 L609.2 228.2 L610.5 227.3 L611.8 226.5 L613.0 225.6 L614.3 224.7 L615.6 223.8 L616.8 222.8 L618.1 221.9 L619.4 220.9 L620.7 220.0 L621.9 219.0 L623.2 218.0 L624.5 217.0 L625.7 216.0 L627.0 215.0 L628.3 214.0 L629.5 213.0 L630.8 211.9 L632.1 210.8 L633.3 209.8 L634.6 208.7 L635.9 207.6 L637.1 206.5 L638.4 205.4 L639.7 204.3 L640.9 203.2 L642.2 202.0 L643.5 200.9 L644.7 199.7 L646.0 198.6 L647.3 197.4 L648.5 196.2 L649.8 195.0 L651.1 193.8 L652.4 192.6 L653.6 191.4 L654.9 190.2 L656.2 189.0 L657.4 187.7 L658.7 186.5 L660.0 185.3 L661.2 184.0 L662.5 182.8 L663.8 181.5 L665.0 180.2 L666.3 179.0 L667.6 177.7 L668.8 176.4 L670.1 175.1 L671.4 173.8 L672.6 172.5 L673.9 171.2 L675.2 169.9 L676.4 168.6 L677.7 167.3 L679.0 166.0 L680.2 164.7 L681.5 163.3 L682.8 162.0 L684.1 160.7 L685.3 159.4 L686.6 158.0 L687.9 156.7 L689.1 155.4 L690.4 154.0 L691.7 152.7 L692.9 151.4 L694.2 150.0 L695.5 148.7 L696.7 147.3 L698.0 146.0" fill="none" stroke="#8b8079" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
+                                <path d="M64.0 146.0 L65.3 140.6 L66.5 135.3 L67.8 130.0 L69.1 124.7 L70.3 119.5 L71.6 114.4 L72.9 109.4 L74.1 104.6 L75.4 99.8 L76.7 95.2 L77.9 90.8 L79.2 86.5 L80.5 82.5 L81.8 78.6 L83.0 74.9 L84.3 71.4 L85.6 68.2 L86.8 65.2 L88.1 62.4 L89.4 59.8 L90.6 57.5 L91.9 55.4 L93.2 53.6 L94.4 52.0 L95.7 50.6 L97.0 49.4 L98.2 48.5 L99.5 47.7 L100.8 47.2 L102.0 46.9 L103.3 46.8 L104.6 46.8 L105.8 47.0 L107.1 47.4 L108.4 47.9 L109.6 48.6 L110.9 49.3 L112.2 50.2 L113.5 51.2 L114.7 52.2 L116.0 53.3 L117.3 54.5 L118.5 55.7 L119.8 56.9 L121.1 58.1 L122.3 59.4 L123.6 60.6 L124.9 61.8 L126.1 62.9 L127.4 64.0 L128.7 65.1 L129.9 66.1 L131.2 67.0 L132.5 67.8 L133.7 68.6 L135.0 69.3 L136.3 69.9 L137.5 70.4 L138.8 70.7 L140.1 71.0 L141.3 71.2 L142.6 71.3 L143.9 71.3 L145.2 71.2 L146.4 71.0 L147.7 70.8 L149.0 70.4 L150.2 70.0 L151.5 69.5 L152.8 68.9 L154.0 68.3 L155.3 67.6 L156.6 66.9 L157.8 66.1 L159.1 65.3 L160.4 64.5 L161.6 63.7 L162.9 62.9 L164.2 62.1 L165.4 61.3 L166.7 60.5 L168.0 59.8 L169.2 59.1 L170.5 58.4 L171.8 57.8 L173.0 57.2 L174.3 56.7 L175.6 56.3 L176.9 55.9 L178.1 55.6 L179.4 55.4 L180.7 55.2 L181.9 55.1 L183.2 55.1 L184.5 55.2 L185.7 55.3 L187.0 55.5 L188.3 55.7 L189.5 56.1 L190.8 56.5 L192.1 56.9 L193.3 57.4 L194.6 57.9 L195.9 58.5 L197.1 59.1 L198.4 59.8 L199.7 60.5 L200.9 61.1 L202.2 61.8 L203.5 62.5 L204.7 63.2 L206.0 63.9 L207.3 64.5 L208.6 65.1 L209.8 65.7 L211.1 66.3 L212.4 66.8 L213.6 67.2 L214.9 67.7 L216.2 68.0 L217.4 68.3 L218.7 68.5 L220.0 68.7 L221.2 68.8 L222.5 68.8 L223.8 68.8 L225.0 68.7 L226.3 68.5 L227.6 68.3 L228.8 68.0 L230.1 67.7 L231.4 67.2 L232.6 66.8 L233.9 66.3 L235.2 65.7 L236.4 65.1 L237.7 64.5 L239.0 63.9 L240.3 63.2 L241.5 62.5 L242.8 61.8 L244.1 61.1 L245.3 60.5 L246.6 59.8 L247.9 59.1 L249.1 58.5 L250.4 57.9 L251.7 57.4 L252.9 56.9 L254.2 56.5 L255.5 56.1 L256.7 55.7 L258.0 55.5 L259.3 55.3 L260.5 55.2 L261.8 55.1 L263.1 55.1 L264.3 55.2 L265.6 55.4 L266.9 55.6 L268.1 55.9 L269.4 56.3 L270.7 56.7 L272.0 57.2 L273.2 57.8 L274.5 58.4 L275.8 59.1 L277.0 59.8 L278.3 60.5 L279.6 61.3 L280.8 62.1 L282.1 62.9 L283.4 63.7 L284.6 64.5 L285.9 65.3 L287.2 66.1 L288.4 66.9 L289.7 67.6 L291.0 68.3 L292.2 68.9 L293.5 69.5 L294.8 70.0 L296.0 70.4 L297.3 70.8 L298.6 71.0 L299.8 71.2 L301.1 71.3 L302.4 71.3 L303.7 71.2 L304.9 71.0 L306.2 70.7 L307.5 70.4 L308.7 69.9 L310.0 69.3 L311.3 68.6 L312.5 67.8 L313.8 67.0 L315.1 66.1 L316.3 65.1 L317.6 64.0 L318.9 62.9 L320.1 61.8 L321.4 60.6 L322.7 59.4 L323.9 58.1 L325.2 56.9 L326.5 55.7 L327.7 54.5 L329.0 53.3 L330.3 52.2 L331.5 51.2 L332.8 50.2 L334.1 49.3 L335.4 48.6 L336.6 47.9 L337.9 47.4 L339.2 47.0 L340.4 46.8 L341.7 46.8 L343.0 46.9 L344.2 47.2 L345.5 47.7 L346.8 48.5 L348.0 49.4 L349.3 50.6 L350.6 52.0 L351.8 53.6 L353.1 55.4 L354.4 57.5 L355.6 59.8 L356.9 62.4 L358.2 65.2 L359.4 68.2 L360.7 71.4 L362.0 74.9 L363.2 78.6 L364.5 82.5 L365.8 86.5 L367.1 90.8 L368.3 95.2 L369.6 99.8 L370.9 104.6 L372.1 109.4 L373.4 114.4 L374.7 119.5 L375.9 124.7 L377.2 130.0 L378.5 135.3 L379.7 140.6 L381.0 146.0 L382.3 151.4 L383.5 156.7 L384.8 162.0 L386.1 167.3 L387.3 172.5 L388.6 177.6 L389.9 182.6 L391.1 187.4 L392.4 192.2 L393.7 196.8 L394.9 201.2 L396.2 205.5 L397.5 209.5 L398.8 213.4 L400.0 217.1 L401.3 220.6 L402.6 223.8 L403.8 226.8 L405.1 229.6 L406.4 232.2 L407.6 234.5 L408.9 236.6 L410.2 238.4 L411.4 240.0 L412.7 241.4 L414.0 242.6 L415.2 243.5 L416.5 244.3 L417.8 244.8 L419.0 245.1 L420.3 245.2 L421.6 245.2 L422.8 245.0 L424.1 244.6 L425.4 244.1 L426.6 243.4 L427.9 242.7 L429.2 241.8 L430.5 240.8 L431.7 239.8 L433.0 238.7 L434.3 237.5 L435.5 236.3 L436.8 235.1 L438.1 233.9 L439.3 232.6 L440.6 231.4 L441.9 230.2 L443.1 229.1 L444.4 228.0 L445.7 226.9 L446.9 225.9 L448.2 225.0 L449.5 224.2 L450.7 223.4 L452.0 222.7 L453.3 222.1 L454.5 221.6 L455.8 221.3 L457.1 221.0 L458.3 220.8 L459.6 220.7 L460.9 220.7 L462.2 220.8 L463.4 221.0 L464.7 221.2 L466.0 221.6 L467.2 222.0 L468.5 222.5 L469.8 223.1 L471.0 223.7 L472.3 224.4 L473.6 225.1 L474.8 225.9 L476.1 226.7 L477.4 227.5 L478.6 228.3 L479.9 229.1 L481.2 229.9 L482.4 230.7 L483.7 231.5 L485.0 232.2 L486.2 232.9 L487.5 233.6 L488.8 234.2 L490.0 234.8 L491.3 235.3 L492.6 235.7 L493.9 236.1 L495.1 236.4 L496.4 236.6 L497.7 236.8 L498.9 236.9 L500.2 236.9 L501.5 236.8 L502.7 236.7 L504.0 236.5 L505.3 236.3 L506.5 235.9 L507.8 235.5 L509.1 235.1 L510.3 234.6 L511.6 234.1 L512.9 233.5 L514.1 232.9 L515.4 232.2 L516.7 231.5 L517.9 230.9 L519.2 230.2 L520.5 229.5 L521.7 228.8 L523.0 228.1 L524.3 227.5 L525.6 226.9 L526.8 226.3 L528.1 225.7 L529.4 225.2 L530.6 224.8 L531.9 224.3 L533.2 224.0 L534.4 223.7 L535.7 223.5 L537.0 223.3 L538.2 223.2 L539.5 223.2 L540.8 223.2 L542.0 223.3 L543.3 223.5 L544.6 223.7 L545.8 224.0 L547.1 224.3 L548.4 224.8 L549.6 225.2 L550.9 225.7 L552.2 226.3 L553.4 226.9 L554.7 227.5 L556.0 228.1 L557.3 228.8 L558.5 229.5 L559.8 230.2 L561.1 230.9 L562.3 231.5 L563.6 232.2 L564.9 232.9 L566.1 233.5 L567.4 234.1 L568.7 234.6 L569.9 235.1 L571.2 235.5 L572.5 235.9 L573.7 236.3 L575.0 236.5 L576.3 236.7 L577.5 236.8 L578.8 236.9 L580.1 236.9 L581.3 236.8 L582.6 236.6 L583.9 236.4 L585.1 236.1 L586.4 235.7 L587.7 235.3 L589.0 234.8 L590.2 234.2 L591.5 233.6 L592.8 232.9 L594.0 232.2 L595.3 231.5 L596.6 230.7 L597.8 229.9 L599.1 229.1 L600.4 228.3 L601.6 227.5 L602.9 226.7 L604.2 225.9 L605.4 225.1 L606.7 224.4 L608.0 223.7 L609.2 223.1 L610.5 222.5 L611.8 222.0 L613.0 221.6 L614.3 221.2 L615.6 221.0 L616.8 220.8 L618.1 220.7 L619.4 220.7 L620.7 220.8 L621.9 221.0 L623.2 221.3 L624.5 221.6 L625.7 222.1 L627.0 222.7 L628.3 223.4 L629.5 224.2 L630.8 225.0 L632.1 225.9 L633.3 226.9 L634.6 228.0 L635.9 229.1 L637.1 230.2 L638.4 231.4 L639.7 232.6 L640.9 233.9 L642.2 235.1 L643.5 236.3 L644.7 237.5 L646.0 238.7 L647.3 239.8 L648.5 240.8 L649.8 241.8 L651.1 242.7 L652.4 243.4 L653.6 244.1 L654.9 244.6 L656.2 245.0 L657.4 245.2 L658.7 245.2 L660.0 245.1 L661.2 244.8 L662.5 244.3 L663.8 243.5 L665.0 242.6 L666.3 241.4 L667.6 240.0 L668.8 238.4 L670.1 236.6 L671.4 234.5 L672.6 232.2 L673.9 229.6 L675.2 226.8 L676.4 223.8 L677.7 220.6 L679.0 217.1 L680.2 213.4 L681.5 209.5 L682.8 205.5 L684.1 201.2 L685.3 196.8 L686.6 192.2 L687.9 187.4 L689.1 182.6 L690.4 177.6 L691.7 172.5 L692.9 167.3 L694.2 162.0 L695.5 156.7 L696.7 151.4 L698.0 146.0" fill="none" stroke="#c9707e" stroke-width="2.0" stroke-linecap="round" stroke-linejoin="round"/>
+                                <path d="M64.0 146.0 L65.3 132.6 L66.5 119.6 L67.8 107.0 L69.1 95.3 L70.3 84.6 L71.6 75.0 L72.9 66.9 L74.1 60.1 L75.4 54.8 L76.7 50.9 L77.9 48.5 L79.2 47.3 L80.5 47.3 L81.8 48.3 L83.0 50.0 L84.3 52.4 L85.6 55.1 L86.8 58.1 L88.1 61.0 L89.4 63.7 L90.6 66.0 L91.9 68.0 L93.2 69.4 L94.4 70.2 L95.7 70.5 L97.0 70.2 L98.2 69.5 L99.5 68.3 L100.8 66.9 L102.0 65.2 L103.3 63.4 L104.6 61.7 L105.8 60.1 L107.1 58.7 L108.4 57.6 L109.6 56.9 L110.9 56.5 L112.2 56.5 L113.5 56.9 L114.7 57.5 L116.0 58.5 L117.3 59.6 L118.5 60.9 L119.8 62.1 L121.1 63.4 L122.3 64.5 L123.6 65.4 L124.9 66.1 L126.1 66.6 L127.4 66.7 L128.7 66.6 L129.9 66.2 L131.2 65.5 L132.5 64.7 L133.7 63.7 L135.0 62.7 L136.3 61.7 L137.5 60.7 L138.8 59.9 L140.1 59.2 L141.3 58.7 L142.6 58.5 L143.9 58.5 L145.2 58.7 L146.4 59.2 L147.7 59.8 L149.0 60.6 L150.2 61.4 L151.5 62.3 L152.8 63.2 L154.0 63.9 L155.3 64.6 L156.6 65.1 L157.8 65.4 L159.1 65.5 L160.4 65.4 L161.6 65.1 L162.9 64.6 L164.2 64.0 L165.4 63.3 L166.7 62.5 L168.0 61.7 L169.2 61.0 L170.5 60.3 L171.8 59.8 L173.0 59.5 L174.3 59.3 L175.6 59.3 L176.9 59.5 L178.1 59.8 L179.4 60.3 L180.7 60.9 L181.9 61.6 L183.2 62.3 L184.5 63.1 L185.7 63.7 L187.0 64.3 L188.3 64.7 L189.5 64.9 L190.8 65.0 L192.1 64.9 L193.3 64.7 L194.6 64.3 L195.9 63.7 L197.1 63.1 L198.4 62.4 L199.7 61.7 L200.9 61.1 L202.2 60.5 L203.5 60.0 L204.7 59.7 L206.0 59.6 L207.3 59.6 L208.6 59.7 L209.8 60.0 L211.1 60.5 L212.4 61.1 L213.6 61.7 L214.9 62.4 L216.2 63.0 L217.4 63.6 L218.7 64.2 L220.0 64.6 L221.2 64.8 L222.5 64.9 L223.8 64.8 L225.0 64.6 L226.3 64.2 L227.6 63.6 L228.8 63.0 L230.1 62.4 L231.4 61.7 L232.6 61.1 L233.9 60.5 L235.2 60.0 L236.4 59.7 L237.7 59.6 L239.0 59.6 L240.3 59.7 L241.5 60.0 L242.8 60.5 L244.1 61.1 L245.3 61.7 L246.6 62.4 L247.9 63.1 L249.1 63.7 L250.4 64.3 L251.7 64.7 L252.9 64.9 L254.2 65.0 L255.5 64.9 L256.7 64.7 L258.0 64.3 L259.3 63.7 L260.5 63.1 L261.8 62.3 L263.1 61.6 L264.3 60.9 L265.6 60.3 L266.9 59.8 L268.1 59.5 L269.4 59.3 L270.7 59.3 L272.0 59.5 L273.2 59.8 L274.5 60.3 L275.8 61.0 L277.0 61.7 L278.3 62.5 L279.6 63.3 L280.8 64.0 L282.1 64.6 L283.4 65.1 L284.6 65.4 L285.9 65.5 L287.2 65.4 L288.4 65.1 L289.7 64.6 L291.0 63.9 L292.2 63.2 L293.5 62.3 L294.8 61.4 L296.0 60.6 L297.3 59.8 L298.6 59.2 L299.8 58.7 L301.1 58.5 L302.4 58.5 L303.7 58.7 L304.9 59.2 L306.2 59.9 L307.5 60.7 L308.7 61.7 L310.0 62.7 L311.3 63.7 L312.5 64.7 L313.8 65.5 L315.1 66.2 L316.3 66.6 L317.6 66.7 L318.9 66.6 L320.1 66.1 L321.4 65.4 L322.7 64.5 L323.9 63.4 L325.2 62.1 L326.5 60.9 L327.7 59.6 L329.0 58.5 L330.3 57.5 L331.5 56.9 L332.8 56.5 L334.1 56.5 L335.4 56.9 L336.6 57.6 L337.9 58.7 L339.2 60.1 L340.4 61.7 L341.7 63.4 L343.0 65.2 L344.2 66.9 L345.5 68.3 L346.8 69.5 L348.0 70.2 L349.3 70.5 L350.6 70.2 L351.8 69.4 L353.1 68.0 L354.4 66.0 L355.6 63.7 L356.9 61.0 L358.2 58.1 L359.4 55.1 L360.7 52.4 L362.0 50.0 L363.2 48.3 L364.5 47.3 L365.8 47.3 L367.1 48.5 L368.3 50.9 L369.6 54.8 L370.9 60.1 L372.1 66.9 L373.4 75.0 L374.7 84.6 L375.9 95.3 L377.2 107.0 L378.5 119.6 L379.7 132.6 L381.0 146.0 L382.3 159.4 L383.5 172.4 L384.8 185.0 L386.1 196.7 L387.3 207.4 L388.6 217.0 L389.9 225.1 L391.1 231.9 L392.4 237.2 L393.7 241.1 L394.9 243.5 L396.2 244.7 L397.5 244.7 L398.8 243.7 L400.0 242.0 L401.3 239.6 L402.6 236.9 L403.8 233.9 L405.1 231.0 L406.4 228.3 L407.6 226.0 L408.9 224.0 L410.2 222.6 L411.4 221.8 L412.7 221.5 L414.0 221.8 L415.2 222.5 L416.5 223.7 L417.8 225.1 L419.0 226.8 L420.3 228.6 L421.6 230.3 L422.8 231.9 L424.1 233.3 L425.4 234.4 L426.6 235.1 L427.9 235.5 L429.2 235.5 L430.5 235.1 L431.7 234.5 L433.0 233.5 L434.3 232.4 L435.5 231.1 L436.8 229.9 L438.1 228.6 L439.3 227.5 L440.6 226.6 L441.9 225.9 L443.1 225.4 L444.4 225.3 L445.7 225.4 L446.9 225.8 L448.2 226.5 L449.5 227.3 L450.7 228.3 L452.0 229.3 L453.3 230.3 L454.5 231.3 L455.8 232.1 L457.1 232.8 L458.3 233.3 L459.6 233.5 L460.9 233.5 L462.2 233.3 L463.4 232.8 L464.7 232.2 L466.0 231.4 L467.2 230.6 L468.5 229.7 L469.8 228.8 L471.0 228.1 L472.3 227.4 L473.6 226.9 L474.8 226.6 L476.1 226.5 L477.4 226.6 L478.6 226.9 L479.9 227.4 L481.2 228.0 L482.4 228.7 L483.7 229.5 L485.0 230.3 L486.2 231.0 L487.5 231.7 L488.8 232.2 L490.0 232.5 L491.3 232.7 L492.6 232.7 L493.9 232.5 L495.1 232.2 L496.4 231.7 L497.7 231.1 L498.9 230.4 L500.2 229.7 L501.5 228.9 L502.7 228.3 L504.0 227.7 L505.3 227.3 L506.5 227.1 L507.8 227.0 L509.1 227.1 L510.3 227.3 L511.6 227.7 L512.9 228.3 L514.1 228.9 L515.4 229.6 L516.7 230.3 L517.9 230.9 L519.2 231.5 L520.5 232.0 L521.7 232.3 L523.0 232.4 L524.3 232.4 L525.6 232.3 L526.8 232.0 L528.1 231.5 L529.4 230.9 L530.6 230.3 L531.9 229.6 L533.2 229.0 L534.4 228.4 L535.7 227.8 L537.0 227.4 L538.2 227.2 L539.5 227.1 L540.8 227.2 L542.0 227.4 L543.3 227.8 L544.6 228.4 L545.8 229.0 L547.1 229.6 L548.4 230.3 L549.6 230.9 L550.9 231.5 L552.2 232.0 L553.4 232.3 L554.7 232.4 L556.0 232.4 L557.3 232.3 L558.5 232.0 L559.8 231.5 L561.1 230.9 L562.3 230.3 L563.6 229.6 L564.9 228.9 L566.1 228.3 L567.4 227.7 L568.7 227.3 L569.9 227.1 L571.2 227.0 L572.5 227.1 L573.7 227.3 L575.0 227.7 L576.3 228.3 L577.5 228.9 L578.8 229.7 L580.1 230.4 L581.3 231.1 L582.6 231.7 L583.9 232.2 L585.1 232.5 L586.4 232.7 L587.7 232.7 L589.0 232.5 L590.2 232.2 L591.5 231.7 L592.8 231.0 L594.0 230.3 L595.3 229.5 L596.6 228.7 L597.8 228.0 L599.1 227.4 L600.4 226.9 L601.6 226.6 L602.9 226.5 L604.2 226.6 L605.4 226.9 L606.7 227.4 L608.0 228.1 L609.2 228.8 L610.5 229.7 L611.8 230.6 L613.0 231.4 L614.3 232.2 L615.6 232.8 L616.8 233.3 L618.1 233.5 L619.4 233.5 L620.7 233.3 L621.9 232.8 L623.2 232.1 L624.5 231.3 L625.7 230.3 L627.0 229.3 L628.3 228.3 L629.5 227.3 L630.8 226.5 L632.1 225.8 L633.3 225.4 L634.6 225.3 L635.9 225.4 L637.1 225.9 L638.4 226.6 L639.7 227.5 L640.9 228.6 L642.2 229.9 L643.5 231.1 L644.7 232.4 L646.0 233.5 L647.3 234.5 L648.5 235.1 L649.8 235.5 L651.1 235.5 L652.4 235.1 L653.6 234.4 L654.9 233.3 L656.2 231.9 L657.4 230.3 L658.7 228.6 L660.0 226.8 L661.2 225.1 L662.5 223.7 L663.8 222.5 L665.0 221.8 L666.3 221.5 L667.6 221.8 L668.8 222.6 L670.1 224.0 L671.4 226.0 L672.6 228.3 L673.9 231.0 L675.2 233.9 L676.4 236.9 L677.7 239.6 L679.0 242.0 L680.2 243.7 L681.5 244.7 L682.8 244.7 L684.1 243.5 L685.3 241.1 L686.6 237.2 L687.9 231.9 L689.1 225.1 L690.4 217.0 L691.7 207.4 L692.9 196.7 L694.2 185.0 L695.5 172.4 L696.7 159.4 L698.0 146.0" fill="none" stroke="#7a1f2b" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/>
+                                </g>
+                                <text class="lbl" x="564.9" y="40.8" text-anchor="middle" style="fill:#8b8079">limit for many terms, 27.8 px</text>
+                                <line x1="64" x2="698" y1="318.0" y2="318.0" stroke="#eee6d9"/>
+                                <line x1="64.0" x2="86.0" y1="334.0" y2="334.0" stroke="#1c1518" stroke-width="2.2" stroke-linecap="round" stroke-dasharray="5 4"/>
+                                <text class="lbl" x="94.0" y="338.0">square wave</text>
+                                <line x1="183.2" x2="205.2" y1="334.0" y2="334.0" stroke="#8b8079" stroke-width="2.2" stroke-linecap="round"/>
+                                <text class="lbl" x="213.2" y="338.0">1 term</text>
+                                <line x1="266.4" x2="288.4" y1="334.0" y2="334.0" stroke="#c9707e" stroke-width="2.2" stroke-linecap="round"/>
+                                <text class="lbl" x="296.4" y="338.0">4 terms (the preset)</text>
+                                <line x1="450.4" x2="472.4" y1="334.0" y2="334.0" stroke="#7a1f2b" stroke-width="2.2" stroke-linecap="round"/>
+                                <text class="lbl" x="480.4" y="338.0">10 terms</text>
+                                </svg>
+                            </div>
+                            <figcaption><span class="pfig__n">Figure 4</span>Partial sums of (11) at \(t = 0\) over one wavelength, \(0 \le X \le 500\ \mathrm{px},\) evaluated every \(1\ \mathrm{px}{:}\) one term \((n = 1);\) the four terms of the <em>Square wave</em> preset with its amplitudes 30, 10, 6 and \(4.3\ \mathrm{px};\) and ten terms \((n = 1, 3, \dots, 19,\) amplitudes \(30/n\ \mathrm{px}),\) which the page cannot show because \(n \ge 9\) lies above its Frequency range. The dashed line is the square wave of height \(H = 23.56\ \mathrm{px},\) the dotted lines the limit of the overshoot for many terms, \(\pm 27.78\ \mathrm{px}.\) As terms are added the ripples crowd towards the jumps, while the crest next to each jump keeps nearly the same height.</figcaption>
+                        </figure>
+                        <h4><span class="psub__n">5.1</span>Fourier’s recipe for the amplitudes<span class="star" title="heavier mathematics">★</span></h4>
+                        <p>Suppose a function \(F(x)\) of period \(2\pi\) can be written as the series in the box. To find one coefficient, say \(b_m,\) we need a way to make all the other terms disappear, and the sines and cosines provide it. Over a full period, for whole numbers \(m, n \ge 1,\)</p>
+                        \[ \int_{-\pi}^{\pi}\sin mx\,\sin nx\,\mathrm{d}x = \pi\,\delta_{mn}, \qquad \int_{-\pi}^{\pi}\sin mx\,\cos nx\,\mathrm{d}x = 0, \tag{12} \]
+                        <p>where \(\delta_{mn}\) is 1 if \(m = n\) and 0 otherwise. To see the first, write \(\sin mx\,\sin nx = \tfrac12\left[ \cos(m-n)x - \cos(m+n)x \right].\) A cosine that makes a nonzero whole number of oscillations in the period averages to zero, and only for \(m = n\) does the first term become the constant \(\tfrac12,\) which contributes \(\pi.\) The second integral vanishes because its integrand is odd. Functions with this property are called <em>orthogonal</em>, by analogy with perpendicular vectors, whose dot product is zero. Multiply the series by \(\sin mx\) and integrate over a period: every term but one drops out, and</p>
+                        \[ b_m = \frac{1}{\pi}\int_{-\pi}^{\pi} F(x)\,\sin mx\,\mathrm{d}x . \tag{13} \]
+                        <p>The square wave is odd, \(\operatorname{sq}(-x) = -\operatorname{sq}(x),\) so all its cosine coefficients vanish, and the integrand in (13) is even, so the integral is twice that from 0 to \(\pi,\) where \(\operatorname{sq} = 1{:}\)</p>
+                        \[ b_n = \frac{2}{\pi}\int_{0}^{\pi}\sin nx\,\mathrm{d}x = \frac{2\,(1 - \cos n\pi)}{n\pi} = \begin{cases} \dfrac{4}{n\pi}, & n \text{ odd}, \\[6pt] 0, & n \text{ even}. \end{cases} \tag{14} \]
+                        <p class="eqnote">Checked by integrating (13) numerically with the trapezoid rule on \(2\,000\,001\) points: \(b_1 = 1.273240,\) \(b_3 = 0.424413,\) \(b_5 = 0.254648,\) equal to \(4/\pi,\) \(4/(3\pi)\) and \(4/(5\pi)\) to all six decimals, and \(b_2 = b_4 = 0.\)</p>
+                        <p>The even harmonics are missing because of a symmetry. Shifting the square wave by half a period turns it upside down, \(\operatorname{sq}(x + \pi) = -\operatorname{sq}(x),\) while an even harmonic is unchanged by that shift, so it cannot take part.</p>
+                        <h4><span class="psub__n">5.2</span>The overshoot that never shrinks<span class="star" title="heavier mathematics">★</span></h4>
+                        <p>Call \(S_N(x)\) the sum of the first \(N\) terms of (10), up to \(n = 2N - 1.\) Its slope is a sum of cosines, and the sum telescopes: since \(2\sin x\,\cos(2k-1)x = \sin 2kx - \sin(2k-2)x,\) adding these for \(k = 1, \dots, N\) leaves only \(\sin 2Nx,\) and</p>
+                        \[ \frac{\mathrm{d}S_N}{\mathrm{d}x} = \frac{4}{\pi}\sum_{k=1}^{N}\cos(2k-1)x = \frac{2}{\pi}\,\frac{\sin 2Nx}{\sin x} . \tag{15} \]
+                        <p>Just after the jump at \(x = 0\) the slope stays positive until \(2Nx = \pi,\) so the first and highest crest sits at \(x = \pi/(2N),\) which is \(X = 125/N\ \mathrm{px}\) after the jump on the page’s scale. Its height is the integral of the slope up to there. Substitute \(u = 2Nx\) and use \(\sin x \approx x\) for the small \(x\) involved, which becomes exact as \(N\) grows:</p>
+                        \[ S_N\!\left( \frac{\pi}{2N} \right) = \frac{2}{\pi}\int_0^{\pi/2N}\frac{\sin 2Nx}{\sin x}\,\mathrm{d}x \;\longrightarrow\; \frac{2}{\pi}\int_0^{\pi}\frac{\sin u}{u}\,\mathrm{d}u = 1.17898 . \tag{16} \]
+                        <p>\(N\) has dropped out. However many terms are added, the first crest overshoots the plateau at 1 by 0.17898, which is \(8.95\ \%\) of the jump from \(-1\) to \(+1;\) only its position, \(\pi/(2N),\) moves in towards the jump. This is the <em>Gibbs phenomenon</em>, named after the American physicist J. Willard Gibbs. On the page’s scale the limit is \(1.17898 \times 23.56\ \mathrm{px} = 27.78\ \mathrm{px}.\) The table compares it with partial sums of (11) evaluated directly on a grid of \(0.01\ \mathrm{px},\) giving each peak and its overshoot above \(H\) as a percentage of the jump \(2H = 47.12\ \mathrm{px}.\)</p>
+                        <table class="ptab">
+                            <thead><tr><th>terms</th><th>highest \(n\)</th><th>peak (px)</th><th>overshoot (%)</th></tr></thead>
+                            <tbody>
+                                <tr><td>1</td><td>1</td><td>30.00</td><td>13.66</td></tr>
+                                <tr><td>3 (no Wave 4)</td><td>5</td><td>28.00</td><td>9.42</td></tr>
+                                <tr><td>4 (preset)</td><td>7</td><td>27.91</td><td>9.22</td></tr>
+                                <tr><td>10</td><td>19</td><td>27.80</td><td>8.99</td></tr>
+                                <tr><td>100</td><td>199</td><td>27.78</td><td>8.95</td></tr>
+                                <tr><td>limit (16)</td><td>—</td><td>27.78</td><td>8.95</td></tr>
+                            </tbody>
+                        </table>
+                    </section>
+
+                    <section class="psec" id="p-spectrum">
+                        <h3><span class="psec__n">06</span>The spectrum</h3>
+                        <p class="psec__lead">The lower panel, Fig. 6b, is what an ear at one point would report: which frequencies are present there, and how strongly.</p>
+                        <p>Stand at the left edge of the view, \(X = 0,\) and listen. By (1), wave \(i\) arrives there as \(A_i\sin(\varphi_i - 2\pi\nu_i t),\) an oscillation of frequency \(\nu_i = f_i s_i.\) The panel draws one vertical line, a stem, for each different frequency, placed at \(\nu\) on the horizontal axis. Waves that share a frequency merge into one oscillation by (5), so the stem’s height is the length of their summed phasor,</p>
+                        \[ C_\nu = \Big| \sum_{i:\ \nu_i = \nu} A_i\,e^{\mathrm{i}\varphi_i} \Big| . \tag{17} \]
+                        <p>A stem that stands alone has the height of its wave’s amplitude. Two equal waves in step give a stem twice as tall; half a turn apart, no stem at all. A wave with Speed 0 does not oscillate: it adds the constant height \(A_i\sin\varphi_i\) at \(X = 0,\) and the stem at \(\nu = 0\) shows \(\big|\sum A_i\sin\varphi_i\big|.\)</p>
+                        <p>The stems tell how the mean-square displacement is shared: square the height at a fixed point and average over a long time, written \(\overline{y^2}.\) Squaring a sum of sines gives squares, each of which averages to half its amplitude squared, and cross terms such as \(\sin(2\pi\nu_1 t + \alpha)\,\sin(2\pi\nu_2 t + \beta),\) which average to zero when \(\nu_1 \ne \nu_2.\) For a spectrum with no stem at \(\nu = 0,\) therefore,</p>
+                        \[ \overline{y^2} = \frac{1}{2}\sum_{\nu} C_\nu^2 . \tag{18} \]
+                        <p>This is Parseval’s theorem: the mean square of a wave is the sum of the mean squares of its frequencies. For the <em>Square wave</em> preset it gives \(\tfrac12\,(30^2 + 10^2 + 6^2 + 4.3^2)\ \mathrm{px^2} = 527.2\ \mathrm{px^2}.\) The square wave it imitates sits at \(\pm H\) all the time, so its mean square is \(H^2 = 555.2\ \mathrm{px^2}{:}\) four terms already carry about \(95\ \%\) of the ideal square wave’s mean square; the rest lives in the sharp corners, which need the higher harmonics. That is a measure of the signal’s size, not automatically of its energy.</p><p>For a right-moving wave on an ideal string, velocity and slope both enter the energy density, giving mean energy per length \(\overline e=\tfrac12\mu\sum_n\omega_n^2A_n^2\), where \(\mu\) is mass per length. The extra frequency-squared factor matters: an ideal square displacement has \(A_n\propto1/n\) on its odd harmonics and \(\omega_n\propto n\), so each contributes the same energy and the infinite sum diverges. Its mean square stays finite. The preset approximates a square shape; its 95 % is not a string-energy fraction.</p>
+                        <p class="eqnote">Checked by averaging \(y^2\) of the preset at \(X = 0\) over one period, \(2.5\ \mathrm{s},\) on \(250\,000\) points: \(527.2450\ \mathrm{px^2},\) the value of (18).</p>
+                        <p>A simpler bound holds at every instant. No sine exceeds its amplitude, so by the triangle inequality</p>
+                        \[ \Big| \sum_i y_i \Big| \;\le\; \sum_i |y_i| \;\le\; \sum_i A_i . \tag{19} \]
+                        <p>The <em>Sum of amplitudes</em> readout is this ceiling, and <em>Peak |y| on screen</em> reaches it only where all the crests coincide. In the square wave they never do, since \(\sin 3x = -1\) wherever \(\sin x = 1;\) its peak, \(27.9\ \mathrm{px},\) stays well below the ceiling of \(50.3\ \mathrm{px}.\)</p>
+                        <p>What the spectrum leaves out is just as instructive. The stems record amplitudes, not phases, and to a good approximation the ear does the same for a steady tone, a rule known as Ohm’s acoustic law. Two waves with the same spectrum but different phases sound nearly alike, even when their shapes look nothing alike.</p>
+                        <div class="pbox pbox--ex">
+                            <span class="pbox__t">Exercise 6.1 · on the figure above</span>
+                            <p>Press <em>Square wave</em>; <em>Peak |y| on screen</em> reads \(27.9\ \mathrm{px}.\) Remove Wave 4 with its × button: three terms remain, the corners round off, the ripples widen, and the peak becomes \(28.0\ \mathrm{px},\) which is exactly \(30\cdot\tfrac12 + 10 + 6\cdot\tfrac12,\) the value at \(x = \pi/6.\) Press <em>Square wave</em> again and set the <em>Phase</em> of Wave 2 to \(1.00\,\pi.\) The flat tops vanish and the peak jumps to \(41.7\ \mathrm{px},\) yet no stem in the spectrum moves, because no amplitude has changed. Played as sound at an audible pitch, the two shapes would sound very nearly the same.</p>
+                        </div>
+                    </section>
+
+                    <section class="psec" id="p-numerics">
+                        <h3><span class="psec__n">07</span>Computing the curves</h3>
+                        <p>There is no differential equation to solve step by step: (1) gives every wave at every place and time directly, so the page simply evaluates it. Each frame does the following.</p>
+                        <ul>
+                            <li>The clock adds the real time since the last frame, \(\Delta t,\) to \(t,\) so the waves move at their stated speeds on any screen. \(\Delta t\) is capped at \(0.05\ \mathrm{s}{:}\) if the browser manages fewer than 20 frames a second, the motion slows down instead of jumping. <em>Pause</em> stops the clock.</li>
+                            <li>The plot is sampled once per screen pixel across its width, at \(M + 1\) points \(X_j = 800\,j/M\ \mathrm{px},\) \(j = 0, \dots, M,\) where \(M\) is the plot width in screen pixels minus 58. Measured in Chromium, a 1440 × 900 window gives a plot 770 pixels wide and \(M = 712,\) one sample every \(1.12\ \mathrm{px}\) of the medium; a phone 390 pixels wide gives \(M = 298,\) one sample every \(2.68\ \mathrm{px}.\)</li>
+                            <li>Each wave is evaluated exactly at every sample, and the sum is accumulated at the same points. The code calls the sine three times per wave and sample, twice for the component curve and once for the sum: \(3N(M+1)\) calls, \(8\,556\) per frame for the <em>Square wave</em> preset in the wide window, plus one per wave for the stored values at the centre of the view.</li>
+                            <li><em>Peak |y| on screen</em> is the largest \(|y|\) among the samples of the current frame. The readouts are rewritten every eighth frame, 7.5 times a second at 60 frames a second.</li>
+                        </ul>
+                        <p>The values themselves are exact to the precision of double-precision arithmetic, about 16 significant digits. The only approximation is in the drawing: the curve is a chain of straight segments between samples, and a chord cuts under a crest by about \(A k^2\,\Delta X^2/8,\) with \(\Delta X\) the sample spacing. For the shortest wave the sliders allow, Frequency 3 with \(\lambda = 66.7\ \mathrm{px},\) at the full amplitude of \(40\ \mathrm{px},\) that is \(0.06\ \mathrm{px}\) in the wide window and \(0.32\ \mathrm{px}\) on the phone, where about 25 samples still cover each wavelength. The same small gap can make the peak readout fall slightly short of the true crest. The spectrum is not measured from the curve at all: it is computed from the slider values with (17). The page writes the quantities used here, among them \(t,\) \(\Delta t,\) \(M,\) \(\Delta X\) and the peak, into its data store at the line that computes them, and the <em>Data</em> panel at the edge of the screen lists them.</p>
+                    </section>
+
+                    <section class="psec" id="p-screen">
+                        <h3><span class="psec__n">08</span>From the medium to the screen</h3>
+                        <p>The upper panel of the plot, \(56\ \%\) of the height left after the margins, shows the sum in ink with a soft burgundy fill down to the axis; the lower panel shows each wave in its own colour. Sample \(j\) sits in screen column \(44 + j,\) so the \(800\ \mathrm{px}\) of the medium always fill the plot width. Vertically each panel has its own range, \(\pm R\) for the sum and \(\pm R_\text{c}\) for the components, and a displacement \(y\) is drawn at the screen height</p>
+                        \[ \begin{aligned} R &= \max\!\left( 20,\ 10\left\lceil \tfrac{1}{10}\textstyle\sum_i A_i \right\rceil \right)\ \mathrm{px}, \\ R_\text{c} &= \max\!\left( 20,\ 10\left\lceil \tfrac{1}{10}\max_i A_i \right\rceil \right)\ \mathrm{px}, \\ y_\text{screen} &= y_\text{mid} - \frac{y}{R}\cdot\frac{h}{2}, \end{aligned} \tag{20} \]
+                        <p>where \(y_\text{mid}\) is the panel’s axis and \(h\) its height in screen pixels (with \(R_\text{c}\) in place of \(R\) for the components). The sum’s range is the ceiling (19) rounded up to the next \(10\ \mathrm{px},\) so the sum can never leave its panel. The two directions have different scales. For the <em>Square wave</em> preset in the wide window, \(R = 60\ \mathrm{px}\) and \(h = 220.1\) screen pixels, so \(1\ \mathrm{px}\) of displacement is drawn 1.83 pixels tall, while \(1\ \mathrm{px}\) along the medium is 0.89 pixels wide: the curves look about twice as steep as they are.</p>
+                        <p>In the spectrum, a stem at frequency \(\nu\) stands \(44 + (\nu/6\ \mathrm{Hz})\,(w - 58)\) screen pixels from the left edge, where \(w\) is the panel width, and its height is \(C_\nu\) scaled so that \(40\ \mathrm{px},\) or the tallest stem if that is taller, fills the panel. The axis runs from 0 to \(6\ \mathrm{Hz}\) because \(\nu = f s\) can reach \(3 \times 2 = 6\ \mathrm{Hz};\) the caption beneath the panel states this 0–6 Hz range. Each wave keeps one colour for its card, its sliders, its curve and its stem, and a stem shared by several waves is drawn in ink.</p>
+                        <p>One detail can puzzle. The Amplitude slider moves in whole pixels, so the \(4.3\ \mathrm{px}\) of the preset’s Wave 4 appears on its card as \(4\ \mathrm{px},\) while the wave itself, the <em>Sum of amplitudes</em> of \(50.3\ \mathrm{px}\) and the stored data keep \(4.3\ \mathrm{px}.\)</p>
+                    </section>
+
+                    <section class="psec" id="p-limits">
+                        <h3><span class="psec__n">09</span>What the model leaves out</h3>
+                        <ul>
+                            <li>The medium is infinite, uniform and lossless. The \(800\ \mathrm{px}\) view is a window onto it, and lengths are in pixels of that window rather than metres.</li>
+                            <li>The waves are exactly linear. Very loud sound is not: its compressions travel slightly faster than its rarefactions, the wave steepens as it goes, and harmonics appear that were not in the mix.</li>
+                            <li>Different Speeds imitate dispersion, but each wave’s speed is chosen by hand. In a real medium a dispersion relation \(\omega(k)\) fixes it, as \(\omega = \sqrt{gk}\) does on deep water.</li>
+                            <li>The spectrum is computed from the list of waves at \(X = 0,\) not measured. Two waves with the same \(\nu\) but different wavelengths are merged with their relative phase at \(X = 0;\) at another point that phase differs, and so would the merged stem.</li>
+                            <li>A real analyser, or an ear, listens for a finite time \(T\) and cannot separate frequencies closer than about \(1/T,\) so its lines have a width that these stems do not.</li>
+                        </ul>
+                        <h4><span class="psub__n">9.1</span>Further reading</h4>
+                        <ol class="prefs">
+                            <li>R. P. Feynman, R. B. Leighton and M. Sands, <em>The Feynman Lectures on Physics</em>, Volume I, Addison-Wesley, 1963: chapters 48 (Beats) and 50 (Harmonics).</li>
+                            <li>A. P. French, <em>Vibrations and Waves</em>, W. W. Norton, 1971: chapters 2 (the superposition of periodic motions, including beats) and 6 (normal modes of continuous systems and Fourier analysis).</li>
+                            <li>E. Hecht, <em>Optics</em>, 5th edition, Pearson, 2017: chapter 7 (the superposition of waves: beats, group velocity and Fourier series).</li>
+                            <li>M. L. Boas, <em>Mathematical Methods in the Physical Sciences</em>, 3rd edition, Wiley, 2006: chapter 7 (Fourier series and transforms, including Parseval’s theorem).</li>
+                        </ol>
+                    </section>
+                </div>
+            </div>
+        </article>
+
+        <section class="walk" id="walk" data-walk="bench" aria-label="From symbols to code"></section>
+    </main>
+
+    <footer class="sim-foot">
+        <span>© 2026 Numa Koudsie</span>
+        <span><a href="../simulations.html">All simulations ↑</a> · <a href="../index.html">Home page</a></span>
+    </footer>
+
+    <script src="../scripts/fold.js"></script>
+    <script src="../scripts/sim.js"></script>
+    <script src="../scripts/dataset.js"></script>
+    <script>
+    (function () {
+        'use strict';
+        var T = Sim.theme;
+        var WORLD_W = 800, MAX_WAVES = 6, FMAX = 3, NUMAX = 6;
+        var COLOURS = ['#7a1f2b', '#b07a2a', '#3a322e', '#c9707e', '#7a4b12', '#8b8079'];
+
+        var list = document.getElementById('waves');
+        var stage = document.getElementById('stage'), stageSpec = document.getElementById('stage-spec');
+        var box = Sim.canvas2d(document.getElementById('plot')), ctx = box.ctx;
+        var spec = Sim.canvas2d(document.getElementById('spec')), sctx = spec.ctx;
+        var addBtn = document.getElementById('add');
+        var waves = [], uid = 0, simT = 0, peak = 0, frames = 0, fps = 0;
+
+        /* ---------- the store: every number this page computes is written here, where it is computed (scripts/dataset.js) ---------- */
+        var ds = Sim.dataset({ title: 'Wave interference bench', attrs: { figure: 6, page: 'wave-interference.html', WORLD_W: WORLD_W, MAX_WAVES: MAX_WAVES, FMAX: FMAX, NUMAX: NUMAX, px_per_wavelength_unit: 200, left: 44, top1: 30, gap: 44, length_unit: 'px of the 800 px wide medium; X / 200 is the position in units where f is the spatial frequency' } });
+        ds.var('N', [], 'int', { symbol: 'N', long_name: 'waves on the bench', computed_in: 'render()', digits: 0, source: 'The number of wave cards.' });
+        ds.var('t', [], 'float', { symbol: 't', units: 's', long_name: 'simulation time', computed_in: 'Sim.clock callback', digits: 3, source: 'The clock adds each frame’s Δt while playing.' });
+        ds.dim('wave', 0);
+        ds.var('A', ['wave'], Float64Array, { symbol: 'Aᵢ', units: 'px', long_name: 'amplitude of each wave', computed_in: 'the wave cards', digits: 1, source: 'Set by the sliders on each wave card.', updates: 'every frame' });
+        ds.var('f', ['wave'], Float64Array, { symbol: 'fᵢ', units: 'Hz', long_name: 'frequency of each wave; also its spatial frequency per 200 px', computed_in: 'the wave cards', digits: 2, source: 'Set by the sliders on each wave card.', updates: 'every frame' });
+        ds.var('phi', ['wave'], Float64Array, { symbol: 'φᵢ', units: 'rad', long_name: 'phase of each wave', computed_in: 'the wave cards', digits: 3, source: 'Set by the sliders on each wave card.', updates: 'every frame' });
+        ds.var('s', ['wave'], Float64Array, { symbol: 'sᵢ', units: '×', long_name: 'speed factor of each wave', computed_in: 'the wave cards', digits: 2, source: 'Set by the sliders on each wave card.', updates: 'every frame' });
+        ds.var('k', ['wave'], Float64Array, { symbol: 'kᵢ', units: 'rad/px', long_name: 'wave number', computed_in: 'draw()', formula: 'k = 2π f / 200', digits: 5, updates: 'every frame' });
+        ds.var('omega', ['wave'], Float64Array, { symbol: 'ωᵢ', units: 'rad/s', long_name: 'angular frequency at a fixed point', computed_in: 'draw()', formula: 'ω = 2π f s', digits: 4, updates: 'every frame' });
+        ds.var('lam', ['wave'], Float64Array, { symbol: 'λᵢ', units: 'px', long_name: 'wavelength', computed_in: 'draw()', formula: 'λ = 200 / f', digits: 1, updates: 'every frame' });
+        ds.var('v', ['wave'], Float64Array, { symbol: 'vᵢ', units: 'px/s', long_name: 'phase speed', computed_in: 'draw()', formula: 'v = 200 s', digits: 1, updates: 'every frame' });
+        ds.var('nu', ['wave'], Float64Array, { symbol: 'νᵢ', units: 'Hz', long_name: 'temporal frequency at a fixed point', computed_in: 'draw()', formula: 'ν = f s, rounded to 1 µHz', digits: 3, updates: 'every frame' });
+        ds.var('y_400', ['wave'], Float64Array, { symbol: 'yᵢ(400)', units: 'px', long_name: 'each wave at X = 400 px', computed_in: 'draw()', formula: 'A sin(2π f (400/200 − s t) + φ)', digits: 3, updates: 'every frame' });
+        ds.var('sum_A', [], 'float', { symbol: 'Σ Aᵢ', units: 'px', long_name: 'largest possible sum', computed_in: 'draw()', formula: 'Σ Aᵢ', digits: 1 });
+        ds.var('peak', [], 'float', { symbol: 'peak', units: 'px', long_name: 'largest |Σ yᵢ| over the drawn samples', computed_in: 'draw(), the sum loop', formula: 'max |Σ yᵢ(X)|', digits: 3 });
+        ds.var('ratio', [], 'float', { symbol: 'peak / Σ A', long_name: 'reaches 1 only where all crests coincide', computed_in: 'draw()', formula: 'peak / Σ Aᵢ', digits: 4 });
+        ds.var('y_sum_400', [], 'float', { symbol: 'Σ yᵢ(400)', units: 'px', long_name: 'the sum at X = 400 px', computed_in: 'draw()', formula: 'Σ yᵢ(400)', digits: 3 });
+        ds.var('y1_400', [], 'float', { symbol: 'y₁(400)', units: 'px', long_name: 'wave 1 at X = 400 px', computed_in: 'draw()', formula: 'y_400[0]', digits: 3 });
+        ds.var('bl', [], 'float', { symbol: 'λ_beat', units: 'px', long_name: 'beat length of waves 1 and 2; undefined unless f₁ ≠ f₂', computed_in: 'draw()', formula: '200 / |f₁ − f₂|', digits: 1 });
+        ds.var('venv', [], 'float', { symbol: 'v_env', units: 'px/s', long_name: 'envelope speed of waves 1 and 2; undefined unless f₁ ≠ f₂', computed_in: 'draw()', formula: '200 (f₁ s₁ − f₂ s₂) / (f₁ − f₂)', digits: 1 });
+        ds.var('M', [], 'int', { symbol: 'M', long_name: 'sample steps across the plot, one per screen pixel', computed_in: 'draw()', formula: 'max(2, round(right − left))', digits: 0 });
+        ds.var('dX', [], 'float', { symbol: 'ΔX', units: 'px', long_name: 'medium step between samples', computed_in: 'draw()', formula: '800 / M', digits: 4 });
+        ds.dim('x', 0);
+        ds.coord('X', 'x', Float64Array, { symbol: 'X', units: 'px', long_name: 'position of each sample in the medium', computed_in: 'draw()', formula: 'X = i · 800 / M', digits: 2, updates: 'every frame' });
+        ds.var('y_comp', ['wave', 'x'], Float64Array, { symbol: 'yᵢ(X)', units: 'px', long_name: 'each wave at each sample', computed_in: 'draw(), the component loop', formula: 'A sin(2π f (X/200 − s t) + φ)', digits: 3, updates: 'every frame' });
+        ds.var('y_sum', ['x'], Float64Array, { symbol: 'Σ yᵢ(X)', units: 'px', long_name: 'the sum at each sample', computed_in: 'draw(), the sum loop', formula: 'Σ yᵢ(X)', digits: 3, updates: 'every frame' });
+        ds.var('py_comp', ['wave', 'x'], Float64Array, { symbol: 'y px (component)', units: 'css px', long_name: 'screen height of each component point', computed_in: 'draw(), the component loop', formula: 'mid₂ − yᵢ / R_c · h_comp / 2', digits: 2, updates: 'every frame' });
+        ds.var('py_sum', ['x'], Float64Array, { symbol: 'y px (sum)', units: 'css px', long_name: 'screen height of each sum point', computed_in: 'draw(), the sum loop', formula: 'mid₁ − Σ yᵢ / R · h_sum / 2', digits: 2, updates: 'every frame' });
+        ds.dim('line', 0);
+        ds.var('nu_line', ['line'], Float64Array, { symbol: 'ν', units: 'Hz', long_name: 'frequency of each spectrum line, one per distinct ν', computed_in: 'lines()', formula: 'the distinct νᵢ, in order of first appearance', digits: 3, updates: 'every frame' });
+        ds.var('A_line', ['line'], Float64Array, { symbol: '|Σ A e<sup>iφ</sup>|', units: 'px', long_name: 'height of each line: the phasor sum of the waves sharing that ν', computed_in: 'lines()', formula: 'ν = 0: |Σ A sin φ|; else |Σ A e<sup>iφ</sup>|', digits: 3, updates: 'every frame' });
+        ds.var('amax', [], 'float', { symbol: 'A_max', units: 'px', long_name: 'scale of the spectrum panel', computed_in: 'drawSpectrum()', formula: 'max(40, tallest line)', digits: 1 });
+        ds.var('x_line', ['line'], Float64Array, { symbol: 'x px', units: 'css px', long_name: 'screen position of each line', computed_in: 'drawSpectrum()', formula: '44 + ν / 6 · (w_spec − 58)', digits: 2, updates: 'every frame' });
+        ds.var('y_line', ['line'], Float64Array, { symbol: 'y px', units: 'css px', long_name: 'screen height of each line top', computed_in: 'drawSpectrum()', formula: 'base − A / A_max · (base − 14), base = h_spec − 24', digits: 2, updates: 'every frame' });
+        ds.var('R', [], 'float', { symbol: 'R', units: 'px', long_name: 'range of the sum panel', computed_in: 'draw()', formula: 'nice(Σ Aᵢ) = max(20, ⌈Σ A / 10⌉ · 10)', digits: 0 });
+        ds.var('Rc', [], 'float', { symbol: 'R_c', units: 'px', long_name: 'range of the component panel', computed_in: 'draw()', formula: 'nice(max Aᵢ)', digits: 0 });
+        ds.var('box_w', [], 'int', { symbol: 'box.w', units: 'css px', long_name: 'plot width on your screen', computed_in: 'draw()', digits: 0, source: 'Measured from the page layout.' });
+        ds.var('box_h', [], 'int', { symbol: 'box.h', units: 'css px', long_name: 'plot height on your screen', computed_in: 'draw()', digits: 0, source: 'Measured from the page layout.' });
+        ds.var('spec_w', [], 'int', { symbol: 'w_spec', units: 'css px', long_name: 'spectrum panel width', computed_in: 'drawSpectrum()', digits: 0, source: 'Measured from the page layout.' });
+        ds.var('spec_h', [], 'int', { symbol: 'h_spec', units: 'css px', long_name: 'spectrum panel height', computed_in: 'drawSpectrum()', digits: 0, source: 'Measured from the page layout.' });
+        ds.var('right', [], 'float', { symbol: 'right', units: 'css px', long_name: 'right edge of the plots', computed_in: 'draw()', formula: 'box.w − 14', digits: 0 });
+        ds.var('hSum', [], 'float', { symbol: 'h_sum', units: 'css px', long_name: 'height of the sum panel', computed_in: 'draw()', formula: '(box.h − 30 − 44 − 14) · 0.56', digits: 2 });
+        ds.var('top2', [], 'float', { symbol: 'top₂', units: 'css px', long_name: 'top of the component panel', computed_in: 'draw()', formula: '30 + h_sum + 44', digits: 2 });
+        ds.var('hComp', [], 'float', { symbol: 'h_comp', units: 'css px', long_name: 'height of the component panel', computed_in: 'draw()', formula: 'box.h − top₂ − 14', digits: 2 });
+        ds.var('mid1', [], 'float', { symbol: 'mid₁', units: 'css px', long_name: 'axis of the sum panel', computed_in: 'panel()', formula: '30 + h_sum / 2', digits: 2 });
+        ds.var('mid2', [], 'float', { symbol: 'mid₂', units: 'css px', long_name: 'axis of the component panel', computed_in: 'panel()', formula: 'top₂ + h_comp / 2', digits: 2 });
+        ds.var('dt', [], 'float', { symbol: 'Δt', units: 's', long_name: 'time between the last two frames', computed_in: 'Sim.clock', digits: 4, source: 'Measured by the clock.' });
+        ds.var('fps', [], 'float', { symbol: 'frame rate', units: 'Hz', long_name: 'smoothed over about ten frames', computed_in: 'Sim.clock callback', digits: 1, source: 'A running average of 1/Δt.' });
+        ds.var('frames', [], 'int', { symbol: 'frames', long_name: 'frames drawn so far', computed_in: 'Sim.clock callback', digits: 0, source: 'Counted frame by frame.' });
+        ds.var('playing', [], 'bool', { symbol: 'playing', long_name: 'the clock runs', computed_in: 'Sim.clock', source: 'The state of the Play button.' });
+
+        function nextColour() {
+            for (var i = 0; i < COLOURS.length; i++) {
+                var used = waves.some(function (w) { return w.colour === COLOURS[i]; });
+                if (!used) return COLOURS[i];
+            }
+            return COLOURS[waves.length % COLOURS.length];
+        }
+
+        function add(p) {
+            if (waves.length >= MAX_WAVES) return;
+            p = p || {};
+            waves.push({
+                id: ++uid,
+                colour: p.colour || nextColour(),
+                A: p.A !== undefined ? p.A : 20,
+                f: p.f !== undefined ? p.f : 1,
+                phi: p.phi !== undefined ? p.phi : 0,
+                s: p.s !== undefined ? p.s : 1
+            });
+            render();
+        }
+
+        function remove(id) {
+            waves = waves.filter(function (w) { return w.id !== id; });
+            render();
+        }
+
+        function field(w) {
+            return '<label class="ctl"><span class="ctl__row"><span>' + w.name + '</span><output id="' + w.id + '-out" for="' + w.id + '"></output></span>' +
+                '<input type="range" id="' + w.id + '" min="' + w.min + '" max="' + w.max + '" step="' + w.step + '" value="' + w.value + '"></label>';
+        }
+
+        function render() {
+            list.innerHTML = '';
+            if (!waves.length) list.innerHTML = '<p class="empty">No waves. Add one to begin.</p>';
+            waves.forEach(function (w, n) {
+                var card = document.createElement('div');
+                card.className = 'wave';
+                card.style.setProperty('--c', w.colour);
+                var key = 'w' + w.id;
+                card.innerHTML =
+                    '<div class="wave__head"><h3>Wave ' + (n + 1) + '</h3>' +
+                    '<button type="button" class="wave__x" aria-label="Remove wave ' + (n + 1) + '">×</button></div>' +
+                    '<div class="wave__ctl">' +
+                    field({ id: key + 'A', name: 'Amplitude', min: 0, max: 40, step: 1, value: w.A }) +
+                    field({ id: key + 'f', name: 'Frequency', min: 0.1, max: FMAX, step: 0.05, value: w.f }) +
+                    field({ id: key + 'p', name: 'Phase', min: 0, max: 6.28, step: 0.05, value: w.phi }) +
+                    field({ id: key + 's', name: 'Speed', min: 0, max: 2, step: 0.05, value: w.s }) +
+                    '</div>';
+                list.appendChild(card);
+                card.querySelector('.wave__x').addEventListener('click', function () { remove(w.id); });
+                Sim.slider(key + 'A', { format: function (v) { return v + ' px'; }, onInput: function (v) { w.A = v; } });
+                Sim.slider(key + 'f', { format: function (v) { return v.toFixed(2) + ' Hz'; }, onInput: function (v) { w.f = v; } });
+                Sim.slider(key + 'p', { format: function (v) { return (v / Math.PI).toFixed(2) + ' π'; }, onInput: function (v) { w.phi = v; } });
+                Sim.slider(key + 's', { format: function (v) { return v.toFixed(2) + '×'; }, onInput: function (v) { w.s = v; } });
+            });
+            addBtn.disabled = waves.length >= MAX_WAVES;
+            var n = waves.length;
+            ds.set('N', n);
+            document.getElementById('r-n').textContent = n + ' / ' + MAX_WAVES;
+            document.getElementById('cap-n').textContent = n === 1 ? '1 wave' : n + ' waves';
+        }
+
+        function y(w, X) { return w.A * Math.sin(2 * Math.PI * w.f * (X / 200 - w.s * simT) + w.phi); }
+
+        function nice(v) { return Math.max(20, Math.ceil(v / 10) * 10); }
+
+        function panel(top, height, range, title, left, right, formula) {
+            var mid = top + height / 2;
+            ctx.font = T.mono;
+            ctx.fillStyle = T.muted;
+            ctx.textBaseline = 'alphabetic';
+            ctx.textAlign = 'left';
+            ctx.fillText(title, left, top - 8);
+            if (formula) Sim.tex(ctx, formula, left + ctx.measureText(title).width + 12, top - 8, { size: 15, color: T.ink2 });
+            ctx.font = T.mono;
+            ctx.fillStyle = T.muted;
+            ctx.textAlign = 'right';
+            ctx.textBaseline = 'middle';
+            [-1, -0.5, 0, 0.5, 1].forEach(function (q) {
+                var yy = mid - q * height / 2;
+                ctx.strokeStyle = q === 0 ? 'rgba(90, 80, 75, 0.45)' : T.ruleSoft;
+                ctx.lineWidth = 1;
+                ctx.beginPath();
+                ctx.moveTo(left, yy);
+                ctx.lineTo(right, yy);
+                ctx.stroke();
+                if (q !== 0.5 && q !== -0.5) ctx.fillText(Sim.fmt(q * range, 0), left - 8, yy);
+            });
+            return mid;
+        }
+
+        function draw() {
+            var w = box.w, h = box.h, left = 44, right = w - 14, top1 = 30, gap = 44;
+            var hSum = (h - top1 - gap - 14) * 0.56, top2 = top1 + hSum + gap, hComp = h - top2 - 14;
+            var samples = Math.max(2, Math.round(right - left));
+            var sumRange = nice(waves.reduce(function (a, v) { return a + v.A; }, 0));
+            var compRange = nice(waves.reduce(function (a, v) { return Math.max(a, v.A); }, 0));
+            var NW = waves.length, MP = samples + 1, wi, wv0, s400 = 0;
+            ds.dim('wave', NW); ds.dim('x', MP);
+            var Aw = ds.alloc('A'), fw = ds.alloc('f'), phw = ds.alloc('phi'), sw = ds.alloc('s'), kw = ds.alloc('k'), omw = ds.alloc('omega'), lamw = ds.alloc('lam'), vw = ds.alloc('v'), nuw = ds.alloc('nu'), y4 = ds.alloc('y_400');
+            var Xs = ds.alloc('X'), Ys = ds.alloc('y_sum'), PYs = ds.alloc('py_sum'), Yc = ds.alloc('y_comp'), PYc = ds.alloc('py_comp');
+            for (wi = 0; wi < NW; wi++) {
+                wv0 = waves[wi];
+                Aw[wi] = wv0.A; fw[wi] = wv0.f; phw[wi] = wv0.phi; sw[wi] = wv0.s;
+                kw[wi] = 2 * Math.PI * wv0.f / 200; omw[wi] = 2 * Math.PI * wv0.f * wv0.s; lamw[wi] = 200 / wv0.f; vw[wi] = 200 * wv0.s; nuw[wi] = Math.round(wv0.f * wv0.s * 1e6) / 1e6;
+                y4[wi] = y(wv0, 400); s400 += y4[wi];
+            }
+            ds.set('M', samples); ds.set('dX', WORLD_W / samples); ds.set('R', sumRange); ds.set('Rc', compRange); ds.set('sum_A', waves.reduce(function (a, v) { return a + v.A; }, 0));
+            ds.set('y_sum_400', s400); ds.set('y1_400', NW ? y4[0] : NaN);
+            ds.set('bl', NW > 1 && waves[0].f !== waves[1].f ? 200 / Math.abs(waves[0].f - waves[1].f) : NaN);
+            ds.set('venv', NW > 1 && waves[0].f !== waves[1].f ? 200 * (waves[0].f * waves[0].s - waves[1].f * waves[1].s) / (waves[0].f - waves[1].f) : NaN);
+            ds.set('box_w', w); ds.set('box_h', h); ds.set('right', right); ds.set('hSum', hSum); ds.set('top2', top2); ds.set('hComp', hComp);
+            ctx.clearRect(0, 0, w, h);
+
+            var mid1 = panel(top1, hSum, sumRange, 'SUM', left, right, 'y = Σ y_{i}');
+            var mid2 = panel(top2, hComp, compRange, 'COMPONENTS', left, right, 'y_{i}');
+            ds.set('mid1', mid1); ds.set('mid2', mid2);
+
+            // components
+            waves.forEach(function (wv, wi) {
+                ctx.strokeStyle = wv.colour;
+                ctx.lineWidth = 1.6;
+                ctx.beginPath();
+                for (var i = 0; i <= samples; i++) {
+                    var X = i / samples * WORLD_W, py = mid2 - y(wv, X) / compRange * hComp / 2;
+                    Yc[wi * MP + i] = y(wv, X); PYc[wi * MP + i] = py;
+                    if (i === 0) ctx.moveTo(left + i, py); else ctx.lineTo(left + i, py);
+                }
+                ctx.stroke();
+            });
+
+            // sum with a soft fill to the axis
+            if (waves.length) {
+                var pts = [], pk = 0;
+                for (var i = 0; i <= samples; i++) {
+                    var X = i / samples * WORLD_W, v = 0;
+                    for (var j = 0; j < waves.length; j++) v += y(waves[j], X);
+                    pk = Math.max(pk, Math.abs(v));
+                    pts.push(mid1 - v / sumRange * hSum / 2);
+                    Xs[i] = X; Ys[i] = v; PYs[i] = pts[i];
+                }
+                peak = pk;
+                ctx.beginPath();
+                ctx.moveTo(left, mid1);
+                pts.forEach(function (py, i) { ctx.lineTo(left + i, py); });
+                ctx.lineTo(left + samples, mid1);
+                ctx.closePath();
+                ctx.fillStyle = 'rgba(122, 31, 43, 0.09)';
+                ctx.fill();
+                ctx.beginPath();
+                pts.forEach(function (py, i) { if (i === 0) ctx.moveTo(left, py); else ctx.lineTo(left + i, py); });
+                ctx.strokeStyle = T.ink;
+                ctx.lineWidth = 2.3;
+                ctx.lineJoin = 'round';
+                ctx.stroke();
+            } else {
+                peak = 0;
+                for (var i = 0; i <= samples; i++) {
+                    Xs[i] = i / samples * WORLD_W; Ys[i] = 0; PYs[i] = mid1;
+                }
+            }
+            ds.set('peak', peak); ds.set('ratio', ds.get('sum_A') > 0 ? peak / ds.get('sum_A') : NaN);
+            ds.touch('A'); ds.touch('f'); ds.touch('phi'); ds.touch('s'); ds.touch('k'); ds.touch('omega'); ds.touch('lam'); ds.touch('v'); ds.touch('nu'); ds.touch('y_400');
+            ds.touch('X'); ds.touch('y_sum'); ds.touch('py_sum'); ds.touch('y_comp'); ds.touch('py_comp');
+        }
+
+        /* temporal line spectrum at x = 0: nu = f * s; equal nu combine as phasors, |sum A e^(i phi)| */
+        function lines() {
+            var groups = {}, out = [];
+            waves.forEach(function (wv) {
+                var nu = Math.round(wv.f * wv.s * 1e6) / 1e6, g = groups[nu];
+                if (!g) { g = groups[nu] = { nu: nu, re: 0, im: 0, n: 0, colour: wv.colour }; out.push(g); }
+                g.re += wv.A * Math.cos(wv.phi);
+                g.im += wv.A * Math.sin(wv.phi);
+                g.n++;
+            });
+            return out.map(function (g) {
+                return { nu: g.nu, A: g.nu === 0 ? Math.abs(g.im) : Math.hypot(g.re, g.im), colour: g.n > 1 ? T.ink : g.colour };
+            });
+        }
+        function drawSpectrum() {
+            var w = spec.w, h = spec.h, left = 44, right = w - 14, base = h - 24, top = 14;
+            var X = function (nu) { return left + nu / NUMAX * (right - left); };
+            sctx.clearRect(0, 0, w, h);
+            sctx.strokeStyle = 'rgba(90, 80, 75, 0.45)';
+            sctx.lineWidth = 1;
+            sctx.beginPath();
+            sctx.moveTo(left, base);
+            sctx.lineTo(right, base);
+            sctx.stroke();
+            sctx.font = T.mono;
+            sctx.fillStyle = T.muted;
+            sctx.textAlign = 'center';
+            sctx.textBaseline = 'top';
+            for (var f = 0; f <= NUMAX; f += 0.5) {
+                sctx.fillRect(X(f) - 0.5, base, 1, 4);
+                if (f % 1 === 0) sctx.fillText(String(f), X(f), base + 7);
+            }
+            // the axis name once, at its right end: the numbers are frequencies ν in hertz
+            Sim.tex(sctx, 'ν', right - 44, top + 6, { size: 15, color: T.ink2, baseline: 'top' });
+            Sim.tex(sctx, '/ Hz', right - 33, top + 6, { size: 15, color: T.ink2, baseline: 'top', upright: true });
+            var ls = lines(), amax = Math.max(40, ls.reduce(function (m, g) { return Math.max(m, g.A); }, 0));
+            ds.dim('line', ls.length);
+            var nuL = ds.alloc('nu_line'), AL = ds.alloc('A_line'), xL = ds.alloc('x_line'), yL = ds.alloc('y_line');
+            ds.set('amax', amax); ds.set('spec_w', w); ds.set('spec_h', h);
+            ls.forEach(function (wv, li) {
+                var x = X(wv.nu), yTop = base - wv.A / amax * (base - top);
+                nuL[li] = wv.nu; AL[li] = wv.A; xL[li] = x; yL[li] = yTop;
+                sctx.strokeStyle = wv.colour;
+                sctx.lineWidth = 2.5;
+                sctx.beginPath();
+                sctx.moveTo(x, base);
+                sctx.lineTo(x, yTop);
+                sctx.stroke();
+                sctx.beginPath();
+                sctx.arc(x, yTop, 4.5, 0, Math.PI * 2);
+                sctx.fillStyle = wv.colour;
+                sctx.fill();
+                sctx.lineWidth = 2;
+                sctx.strokeStyle = T.card;
+                sctx.stroke();
+            });
+        }
+
+        function preset(items) {
+            waves = [];
+            items.forEach(function (p, i) { p.colour = COLOURS[i]; add(p); });
+            render();
+        }
+        document.getElementById('p-one').addEventListener('click', function () { preset([{ A: 20, f: 1 }]); });
+        document.getElementById('p-beats').addEventListener('click', function () { preset([{ A: 18, f: 1 }, { A: 18, f: 1.25 }]); });
+        document.getElementById('p-square').addEventListener('click', function () {
+            preset([1, 3, 5, 7].map(function (n) { return { A: Math.round(30 / n * 10) / 10, f: n * 2 / 5 }; }));
+        });
+        addBtn.addEventListener('click', function () { add(); });
+
+        /* live values for the walkthrough: read from the store, nothing recomputed */
+        Sim.live = function () {
+            var n = ds.get('N') || 0, none = 'no waves', A = ds.get('A'), f = ds.get('f'), sA = ds.get('sum_A') || 0, bl = ds.get('bl');
+            var out = {
+                N: String(n), sum: Sim.fmt(ds.get('y_sum_400') || 0, 2) + ' px', pk: Sim.fmt(ds.get('peak') || 0, 2) + ' px', sA: Sim.fmt(sA, 1) + ' px',
+                ratio: sA > 0 ? Sim.fmt(ds.get('ratio'), 3) : none, M: String(ds.get('M')), dX: Sim.fmt(ds.get('dX') || 0, 3) + ' px',
+                R: ds.get('R') + ' px', Rc: ds.get('Rc') + ' px',
+                An: Array.prototype.join.call(A, ', ') || none,
+                fn: Array.prototype.map.call(f, function (v) { return v.toFixed(2); }).join(', ') || none, fmax: NUMAX + ' Hz'
+            };
+            if (n && A.length) {
+                out.A = A[0] + ' px'; out.f = f[0].toFixed(2); out.s = ds.get('s')[0].toFixed(2) + '×'; out.phi = (ds.get('phi')[0] / Math.PI).toFixed(2) + ' π';
+                out.k = Sim.fmt(ds.get('k')[0], 5) + ' rad/px'; out.w = Sim.fmt(ds.get('omega')[0], 4) + ' rad/s';
+                out.lam = Sim.fmt(ds.get('lam')[0], 1) + ' px'; out.v = Sim.fmt(ds.get('v')[0], 0) + ' px/s'; out.y1 = Sim.fmt(ds.get('y1_400'), 2) + ' px';
+                out.hl = Sim.fmt(ds.get('nu')[0], 3) + ' Hz';
+            } else {
+                out.A = out.f = out.s = out.phi = out.k = out.w = out.lam = out.v = out.y1 = out.hl = none;
+            }
+            if (isFinite(bl)) {
+                out.bl = Sim.fmt(bl, 1) + ' px';
+                out.venv = Sim.fmt(ds.get('venv'), 1) + ' px/s';
+            } else {
+                out.bl = out.venv = 'needs two waves with different f';
+            }
+            return out;
+        };
+
+        var clk = Sim.clock(function (dt) {
+            simT += dt;
+            if (dt > 0) fps = fps ? fps + (1 / dt - fps) * 0.1 : 1 / dt;
+            ds.set('t', simT); ds.set('dt', dt); ds.set('fps', fps); ds.set('frames', ++frames); ds.set('playing', clk ? clk.playing : true);
+            draw();
+            drawSpectrum();
+            if ((frames - 1) % 8 === 0) {
+                document.getElementById('r-sum').textContent = ds.get('sum_A').toFixed(1) + ' px';
+                document.getElementById('r-peak').textContent = peak.toFixed(1) + ' px';
+            }
+        });
+        Sim.playButton(document.getElementById('play'), clk);
+
+        /* ---------- the data panel (scripts/datalog.js) reads the store; these hooks only say where things are drawn and how to test a value ---------- */
+        var LEFT = 44;
+        /* the device pixel that contains the point (floor, not round: a point at 635.5 lies in column 635) */
+        function pixelAt(c, bx, x, y) { return c.getImageData(Math.floor(x * bx.dpr), Math.floor(y * bx.dpr), 1, 1).data; }
+        function rgbText(px) { return px[3] === 0 ? 'nothing (transparent)' : 'rgb(' + px[0] + ', ' + px[1] + ', ' + px[2] + ')' + (px[3] < 255 ? ' at alpha ' + (px[3] / 255).toFixed(2) : ''); }
+        function lum(px) { return 0.2126 * px[0] + 0.7152 * px[1] + 0.0722 * px[2]; }
+        function waveOf(q) { return Math.floor(q / (ds.get('M') + 1)); }
+        /* where to read a stroke back: on the stored point, except at the two ends, where the flat cap leaves the end pixel half empty */
+        function onStroke(arr, i, off) { var M = ds.get('M'); if (i === 0) return { x: LEFT + 0.5, y: (arr[off] + arr[off + 1]) / 2, end: true }; if (i === M) return { x: LEFT + M - 0.5, y: (arr[off + M - 1] + arr[off + M]) / 2, end: true }; return { x: LEFT + i, y: arr[off + i], end: false }; }
+        function sampleOf(q) { return q % (ds.get('M') + 1); }
+        function waveInputs(wi) { return [['A', ds.get('A')[wi], 'px', 1], ['f', ds.get('f')[wi], 'Hz', 2], ['s', ds.get('s')[wi], '×', 2], ['φ', ds.get('phi')[wi], 'rad', 3], ['t', ds.get('t'), 's', 4]]; }
+        function yAt(wi, X) { var A = ds.get('A')[wi], f = ds.get('f')[wi], sp = ds.get('s')[wi], phi = ds.get('phi')[wi], t = ds.get('t'); return A * Math.sin(2 * Math.PI * f * (X / 200 - sp * t) + phi); }
+        function niceOf(v) { return Math.max(20, Math.ceil(v / 10) * 10); }
+        function sumA() { var A = ds.get('A'), v = 0; for (var i = 0; i < A.length; i++) v += A[i]; return v; }
+        function linesNow() {
+            var nu = ds.get('nu'), A = ds.get('A'), phi = ds.get('phi'), groups = {}, out = [];
+            for (var i = 0; i < nu.length; i++) {
+                var g = groups[nu[i]];
+                if (!g) { g = groups[nu[i]] = { nu: nu[i], re: 0, im: 0, n: 0 }; out.push(g); }
+                g.re += A[i] * Math.cos(phi[i]);
+                g.im += A[i] * Math.sin(phi[i]);
+                g.n++;
+            }
+            return out.map(function (g) { return { nu: g.nu, A: g.nu === 0 ? Math.abs(g.im) : Math.hypot(g.re, g.im), n: g.n }; });
+        }
+        /* one round: the pattern repeats after 1 / gcd of the frequencies νᵢ = fᵢ sᵢ (to one microhertz), at most 20 s */
+        function benchRound() {
+            var nu = ds.get('nu'), G = 0, i, a, b, r;
+            /* nu is stored to 10^-6 Hz; retain every stored digit in the integer gcd. */
+            for (i = 0; i < nu.length; i++) { a = G; b = Math.round(Math.abs(nu[i]) * 1000000); while (b) { r = a % b; a = b; b = r; } G = a; }
+            return G ? Math.min(1000000 / G, 20) : 5;
+        }
+        Sim.data = {
+            ds: ds, kicker: 'Fig. 6 · data', file: 'fig6-wave-bench',
+            playing: function () { return clk.playing; },
+            groups: [
+                { title: 'Waves', note: 'one row per wave; A, f, φ, s come from the cards', vars: ['N', 'A', 'f', 'phi', 's', 'k', 'omega', 'lam', 'v', 'nu', 'y_400'] },
+                { title: 'The sum', note: 'what the top panel shows', vars: ['sum_A', 'peak', 'ratio', 'y_sum_400', 'y1_400', 'bl', 'venv'] },
+                { title: 'Time', note: 'advances only while it plays', vars: ['t'] },
+                { title: 'Sampled curves', note: 'one column per screen pixel; point at a cell to find it in the plot', vars: ['M', 'dX', 'X', 'y_comp', 'y_sum', 'py_comp', 'py_sum'] },
+                { title: 'Spectrum', note: 'one row per line in the lower panel', vars: ['nu_line', 'A_line', 'amax', 'x_line', 'y_line'] },
+                { title: 'Drawing', note: 'how the picture is laid out', vars: ['R', 'Rc', 'box_w', 'box_h', 'right', 'hSum', 'top2', 'hComp', 'mid1', 'mid2', 'spec_w', 'spec_h', 'dt', 'fps', 'frames', 'playing'] }
+            ],
+            rowLabel: { wave: function (j) { return 'w' + (j + 1); } },
+            colour: {
+                y_comp: function (v, j) { return Sim.colourMap(v, ds.get('A')[j] || 1); },
+                y_sum: function (v) { return Sim.colourMap(v, ds.get('sum_A') || 1); },
+                y_400: function (v, j) { return Sim.colourMap(v, ds.get('A')[j] || 1); }
+            },
+            probe: function (x, y) {
+                var M = ds.get('M'), N = ds.get('N') || 0;
+                if (!M || !N) return null;
+                var i = Math.round(x - LEFT);
+                if (i < 0 || i > M) return null;
+                var MP = M + 1, best = null, bd = 14, d = Math.abs(y - ds.get('py_sum')[i]);
+                if (d < bd) { bd = d; best = { kind: 'sum', i: i }; }
+                for (var wi = 0; wi < N; wi++) { d = Math.abs(y - ds.get('py_comp')[wi * MP + i]); if (d < bd) { bd = d; best = { kind: 'comp', i: i, wi: wi }; } }
+                return best;
+            },
+            inspect: function (ref) {
+                var i = ref.i, MP = ds.get('M') + 1, X = ds.get('X')[i];
+                if (ref.kind === 'sum') return { title: 'the sum at X = ' + Sim.fmt(X, 1) + ' px', at: { x: LEFT + i, y: ds.get('py_sum')[i] }, rows: [['X', X, 'px', 'X', i], ['Σ yᵢ', ds.get('y_sum')[i], 'px', 'y_sum', i], ['y px', ds.get('py_sum')[i], 'css px', 'py_sum', i]] };
+                var wi = ref.wi, q = wi * MP + i;
+                return { title: 'wave ' + (wi + 1) + ' at X = ' + Sim.fmt(X, 1) + ' px', at: { x: LEFT + i, y: ds.get('py_comp')[q] },
+                    rows: [['X', X, 'px', 'X', i], ['yᵢ', ds.get('y_comp')[q], 'px', 'y_comp', q], ['A', ds.get('A')[wi], 'px', 'A', wi], ['f', ds.get('f')[wi], 'Hz', 'f', wi], ['φ', ds.get('phi')[wi], 'rad', 'phi', wi], ['s', ds.get('s')[wi], '×', 's', wi], ['y px', ds.get('py_comp')[q], 'css px', 'py_comp', q]] };
+            },
+            locate: function (name, idx) {
+                var v = ds.vars[name], M = ds.get('M');
+                if (!M) return null;
+                var MP = M + 1;
+                if (v.dims.length === 2) return { x: LEFT + idx % MP, y: ds.get('py_comp')[idx] };
+                if (v.dims[0] === 'x') return { x: LEFT + idx, y: name === 'X' ? ds.get('mid1') : ds.get('py_sum')[idx] };
+                if (v.dims[0] === 'wave') { var i = Math.round(M / 2); return { x: LEFT + i, y: ds.get('py_comp')[idx * MP + i] }; }
+                return null;
+            },
+            check: {
+                k: function (i) { return { formula: 'k = 2π f / 200', inputs: [['f', ds.get('f')[i], 'Hz', 2]], value: 2 * Math.PI * ds.get('f')[i] / 200 }; },
+                omega: function (i) { return { formula: 'ω = 2π f s', inputs: [['f', ds.get('f')[i], 'Hz', 2], ['s', ds.get('s')[i], '×', 2]], value: 2 * Math.PI * ds.get('f')[i] * ds.get('s')[i] }; },
+                lam: function (i) { return { formula: 'λ = 200 / f', inputs: [['f', ds.get('f')[i], 'Hz', 2]], value: 200 / ds.get('f')[i] }; },
+                v: function (i) { return { formula: 'v = 200 s', inputs: [['s', ds.get('s')[i], '×', 2]], value: 200 * ds.get('s')[i] }; },
+                nu: function (i) { return { formula: 'round(f s · 10⁶) / 10⁶', inputs: [['f', ds.get('f')[i], 'Hz', 2], ['s', ds.get('s')[i], '×', 2]], value: Math.round(ds.get('f')[i] * ds.get('s')[i] * 1e6) / 1e6 }; },
+                y_400: function (i) { return { formula: 'A sin(2π f (400/200 − s t) + φ)', inputs: waveInputs(i), value: yAt(i, 400) }; },
+                sum_A: function () { return { formula: 'Σ Aᵢ', inputs: [['A', Array.prototype.join.call(ds.get('A'), ', '), 'px']], value: sumA() }; },
+                peak: function () { var Y = ds.get('y_sum'), pk = 0; for (var i = 0; i < Y.length; i++) pk = Math.max(pk, Math.abs(Y[i])); return { formula: 'max |Σ yᵢ(X)| over the M + 1 samples', inputs: [['M', ds.get('M'), '', 0]], value: ds.get('N') ? pk : 0 }; },
+                ratio: function () { var sA = sumA(); return { formula: 'peak / Σ Aᵢ', inputs: [['peak', ds.get('peak'), 'px', 4], ['Σ A', sA, 'px', 1]], value: sA > 0 ? ds.get('peak') / sA : NaN }; },
+                y_sum_400: function () { var Y = ds.get('y_400'), v = 0; for (var i = 0; i < Y.length; i++) v += Y[i]; return { formula: 'Σ yᵢ(400)', inputs: [['yᵢ(400)', Array.prototype.map.call(Y, function (q) { return Sim.fmt(q, 3); }).join(', '), 'px']], value: v }; },
+                y1_400: function () { return { formula: 'y_400[0]', inputs: [['N', ds.get('N'), '', 0]], value: ds.get('N') ? ds.get('y_400')[0] : NaN }; },
+                bl: function () { var f = ds.get('f'), ok = f.length > 1 && f[0] !== f[1]; return { formula: '200 / |f₁ − f₂|', inputs: [['f₁', f[0], 'Hz', 2], ['f₂', f[1], 'Hz', 2]], value: ok ? 200 / Math.abs(f[0] - f[1]) : NaN }; },
+                venv: function () { var f = ds.get('f'), sp = ds.get('s'), ok = f.length > 1 && f[0] !== f[1]; return { formula: '200 (f₁ s₁ − f₂ s₂) / (f₁ − f₂)', inputs: [['f₁', f[0], 'Hz', 2], ['s₁', sp[0], '×', 2], ['f₂', f[1], 'Hz', 2], ['s₂', sp[1], '×', 2]], value: ok ? 200 * (f[0] * sp[0] - f[1] * sp[1]) / (f[0] - f[1]) : NaN }; },
+                M: function () { return { formula: 'max(2, round(right − 44))', inputs: [['right', ds.get('right'), 'css px', 0]], value: Math.max(2, Math.round(ds.get('right') - LEFT)) }; },
+                dX: function () { return { formula: '800 / M', inputs: [['M', ds.get('M'), '', 0]], value: WORLD_W / ds.get('M') }; },
+                X: function (i) { return { formula: 'X = i · 800 / M', inputs: [['i', i, '', 0], ['M', ds.get('M'), '', 0]], value: i / ds.get('M') * WORLD_W }; },
+                y_comp: function (q) { var wi = waveOf(q), i = sampleOf(q); return { formula: 'A sin(2π f (X/200 − s t) + φ)', inputs: waveInputs(wi).concat([['X', ds.get('X')[i], 'px', 3]]), value: yAt(wi, ds.get('X')[i]) }; },
+                y_sum: function (i) { var MP = ds.get('M') + 1, Yc = ds.get('y_comp'), v = 0, N = ds.get('N'); for (var wi = 0; wi < N; wi++) v += Yc[wi * MP + i]; return { formula: 'Σ yᵢ(X), wave by wave', inputs: [['X', ds.get('X')[i], 'px', 3], ['N', N, '', 0]], value: v }; },
+                py_comp: function (q) { return { formula: 'mid₂ − yᵢ / R_c · h_comp / 2', inputs: [['mid₂', ds.get('mid2'), 'css px', 2], ['yᵢ', ds.get('y_comp')[q], 'px', 4], ['R_c', ds.get('Rc'), 'px', 0], ['h_comp', ds.get('hComp'), 'css px', 2]], value: ds.get('mid2') - ds.get('y_comp')[q] / ds.get('Rc') * ds.get('hComp') / 2 }; },
+                py_sum: function (i) { return { formula: 'mid₁ − Σ yᵢ / R · h_sum / 2', inputs: [['mid₁', ds.get('mid1'), 'css px', 2], ['Σ yᵢ', ds.get('y_sum')[i], 'px', 4], ['R', ds.get('R'), 'px', 0], ['h_sum', ds.get('hSum'), 'css px', 2]], value: ds.get('mid1') - ds.get('y_sum')[i] / ds.get('R') * ds.get('hSum') / 2 }; },
+                nu_line: function (li) { var L = linesNow(); return { formula: 'the distinct νᵢ, in order of first appearance', inputs: [['νᵢ', Array.prototype.join.call(ds.get('nu'), ', '), 'Hz']], value: L[li] ? L[li].nu : NaN }; },
+                A_line: function (li) { var L = linesNow(); return { formula: 'ν = 0: |Σ A sin φ|; else |Σ A e<sup>iφ</sup>| over the waves with this ν', inputs: [['ν', L[li] ? L[li].nu : NaN, 'Hz', 3], ['waves in the group', L[li] ? L[li].n : 0, '', 0]], value: L[li] ? L[li].A : NaN }; },
+                amax: function () { var A = ds.get('A_line'), m = 0; for (var i = 0; i < A.length; i++) m = Math.max(m, A[i]); return { formula: 'max(40, tallest line)', inputs: [['tallest line', m, 'px', 3]], value: Math.max(40, m) }; },
+                x_line: function (li) { return { formula: '44 + ν / 6 · (w_spec − 58)', inputs: [['ν', ds.get('nu_line')[li], 'Hz', 3], ['w_spec', ds.get('spec_w'), 'css px', 0]], value: LEFT + ds.get('nu_line')[li] / NUMAX * (ds.get('spec_w') - 14 - LEFT) }; },
+                y_line: function (li) { var base = ds.get('spec_h') - 24; return { formula: 'base − A / A_max · (base − 14)', inputs: [['base', base, 'css px', 0], ['A', ds.get('A_line')[li], 'px', 3], ['A_max', ds.get('amax'), 'px', 1]], value: base - ds.get('A_line')[li] / ds.get('amax') * (base - 14) }; },
+                R: function () { return { formula: 'max(20, ⌈Σ A / 10⌉ · 10)', inputs: [['Σ A', sumA(), 'px', 1]], value: niceOf(sumA()) }; },
+                Rc: function () { var A = ds.get('A'), m = 0; for (var i = 0; i < A.length; i++) m = Math.max(m, A[i]); return { formula: 'max(20, ⌈max A / 10⌉ · 10)', inputs: [['max A', m, 'px', 1]], value: niceOf(m) }; },
+                right: function () { return { formula: 'box.w − 14', inputs: [['box.w', ds.get('box_w'), 'css px', 0]], value: ds.get('box_w') - 14 }; },
+                hSum: function () { return { formula: '(box.h − 30 − 44 − 14) · 0.56', inputs: [['box.h', ds.get('box_h'), 'css px', 0]], value: (ds.get('box_h') - 30 - 44 - 14) * 0.56 }; },
+                top2: function () { return { formula: '30 + h_sum + 44', inputs: [['h_sum', ds.get('hSum'), 'css px', 2]], value: 30 + ds.get('hSum') + 44 }; },
+                hComp: function () { return { formula: 'box.h − top₂ − 14', inputs: [['box.h', ds.get('box_h'), 'css px', 0], ['top₂', ds.get('top2'), 'css px', 2]], value: ds.get('box_h') - ds.get('top2') - 14 }; },
+                mid1: function () { return { formula: '30 + h_sum / 2', inputs: [['h_sum', ds.get('hSum'), 'css px', 2]], value: 30 + ds.get('hSum') / 2 }; },
+                mid2: function () { return { formula: 'top₂ + h_comp / 2', inputs: [['top₂', ds.get('top2'), 'css px', 2], ['h_comp', ds.get('hComp'), 'css px', 2]], value: ds.get('top2') + ds.get('hComp') / 2 }; }
+            },
+            drawn: {
+                sum_A: function () { var actual = document.getElementById('r-sum').textContent, expected = ds.get('sum_A').toFixed(1) + ' px'; return { what: 'the visible r-sum readout', drawn: actual, expected: expected, ok: actual === expected }; },
+                py_sum: function (i) { if (!waves.length) return { what: 'the sum curve', drawn: 'no sum curve: the bench has no waves', expected: 'not drawn', ok: null }; var pt = onStroke(ds.get('py_sum'), i, 0), px = pixelAt(ctx, box, pt.x, pt.y); return { what: 'screen pixel on the sum curve at sample ' + i + ', (' + Sim.fmt(pt.x, 1) + ', ' + Sim.fmt(pt.y, 1) + ') css px', drawn: rgbText(px), expected: 'the dark ink of the 2.3 px sum stroke', ok: px[3] > 0 && lum(px) < 150, note: pt.end ? 'The stroke starts and ends with a flat cap, so at the first and last sample the midpoint of the end segment is read.' : 'The stroke is centred on the stored point, so the pixel there carries its colour.' }; },
+                py_comp: function (q) {
+                    var wi = waveOf(q), i = sampleOf(q), MP = ds.get('M') + 1, Y = ds.get('py_comp'), pt = onStroke(Y, i, wi * MP), px = pixelAt(ctx, box, pt.x, pt.y), ok = false;
+                    if (px[3] > 0) {
+                        for (var j = 0; j < waves.length; j++) {
+                            var other = onStroke(Y, i, j * MP), colour = waves[j].colour;
+                            if (Math.abs(other.y - pt.y) <= 2 && Math.abs(px[0] - parseInt(colour.slice(1, 3), 16)) < 35 && Math.abs(px[1] - parseInt(colour.slice(3, 5), 16)) < 35 && Math.abs(px[2] - parseInt(colour.slice(5, 7), 16)) < 35) ok = true;
+                        }
+                    }
+                    return { what: 'screen pixel on wave ' + (wi + 1) + ' at sample ' + i, drawn: rgbText(px), expected: 'the wave colour, or the colour of a wave crossing within 2 css px', ok: ok, note: 'Alpha is checked first. A crossing colour is accepted only where its stored curve passes this point.' };
+                },
+                y_line: function (li) { var px = pixelAt(sctx, spec, ds.get('x_line')[li], ds.get('y_line')[li]); return { what: 'screen pixel at the top of spectrum line ' + li + ' (the dot)', drawn: rgbText(px), expected: 'a filled dot in the line colour', ok: px[3] > 0 && lum(px) < 200, note: 'The dot has radius 4.5 px, so the pixel at the stored top is the fill colour.' }; }
+            },
+            round: { time: 't', length: benchRound, label: function () { var L = benchRound(); return (L < 20 ? 'one repeat of the pattern, ' : 'twenty seconds of the pattern, ') + Sim.fmt(L, 2) + ' s'; },
+                columns: ['sum_A', 'peak', 'ratio', 'y_sum_400', 'y1_400'], point: function () { return { kind: 'sum', i: Math.round(ds.get('M') / 2) }; } },
+            play: function () { clk.set(true); },
+            about: 'The curves are drawn with one sample per screen pixel column, M + 1 points, so what you see is exactly the stored arrays joined by straight segments; the canvas then smooths each stroke to fractions of a pixel. The spectrum groups waves with the same ν = f·s into one line whose height is the magnitude of their phasor sum, as stored in A_line. The readouts under the figure refresh every 8th frame; the store refreshes every frame.'
+        };
+
+        add({ A: 20, f: 1 });
+        draw();
+        drawSpectrum();
+        Sim.onResize(stage, function () { box.fit(); });
+        Sim.onResize(stageSpec, function () { spec.fit(); });
+    })();
+    </script>
+    <script src="../scripts/datalog.js"></script>
+</body>
+</html>
+

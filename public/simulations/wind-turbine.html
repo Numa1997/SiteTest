@@ -1,0 +1,1171 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Wind Turbine Control · Numa Koudsie</title>
+    <meta name="description" content="A 2 MW-class wind turbine rotor driven by a wind that changes with time, braked by a generator whose torque a controller sets: hold a constant speed, or follow the wind at the best tip-speed ratio. Solved with RK4, stored, then played back.">
+    <meta name="theme-color" content="#f5f1ea">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link rel="stylesheet" href="../styles/sim.css">
+    <link rel="stylesheet" href="../styles/data.css">
+    <link rel="stylesheet" href="../styles/fold.css">
+    <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='12' fill='%237a1f2b'/%3E%3Ctext x='32' y='45' text-anchor='middle' font-family='Georgia,serif' font-size='38' fill='%23f5f1ea'%3EN%3C/text%3E%3C/svg%3E">
+    <style>
+        .solve { display: grid; gap: 10px; }
+        .solve__steps { display: flex; gap: 6px; margin: 0; padding: 0; list-style: none; font-family: var(--mono); font-size: 11px; color: var(--muted); }
+        .solve__steps li { flex: 1; padding: 6px 8px; border: 1px solid var(--rule); border-radius: 6px; text-align: center; }
+        .solve__steps li.is-done { color: var(--accent); border-color: var(--accent); }
+        .solve__status { margin: 0; font-size: 13px; line-height: 1.5; color: var(--ink-2); }
+        .solve__status.is-stale { color: var(--accent); }
+        .seek { display: grid; gap: 4px; }
+        .seek__row { display: flex; justify-content: space-between; font-family: var(--mono); font-size: 11px; color: var(--muted); }
+        .seg { display: flex; flex-wrap: wrap; gap: 4px; padding: 3px; border: 1px solid var(--rule); border-radius: 8px; }
+        .seg button { flex: 1 1 auto; padding: 6px 9px; border: 0; border-radius: 6px; background: transparent; font-family: var(--sans); font-size: 13px; color: var(--ink-3); cursor: pointer; }
+        .seg button[aria-pressed="true"] { background: var(--accent); color: #fff; }
+        .ctl.is-off { opacity: .45; }
+    </style>
+</head>
+<body>
+    <header class="sim-top">
+        <a href="../simulations.html">← All simulations</a>
+        <nav class="sim-nav" aria-label="Simulations">
+            <span>Fig.</span>
+            <a href="Circular Wave Interference Visualization.html">1</a>
+            <a href="Double Pendulum.html">2</a>
+            <a href="Interactive Double-Slit Experiment Visualization.html">3</a>
+            <a href="Transverse and longitudinal waves.html">4</a>
+            <a href="water-wave.html">5</a>
+            <a href="wave-interference.html">6</a>
+            <a href="phasor-sums.html">7</a>
+            <a href="draw-decompose.html">8</a>
+            <a href="driven-oscillator.html">9</a>
+            <a href="wind-turbine.html" aria-current="page">10</a>
+        </nav>
+    </header>
+
+    <main class="sim">
+        <noscript><p class="sim-error"><b>This simulation needs JavaScript.</b> <a href="../simulations.html">Back to the simulations</a></p></noscript>
+        <div class="sim__head">
+            <p class="sim__num">Fig. 10 · control systems · wind energy</p>
+            <h1>Wind Turbine Control<span class="dot">.</span></h1>
+            <p class="sim__lede">The wind turns the rotor; the generator brakes it and turns that work into electricity. A controller decides how hard to brake: hold the rotor at one speed, or let it follow the wind. Two minutes of operation are solved first, stored, and then played back.</p>
+        </div>
+
+        <div class="sim__grid">
+            <div>
+                <figure class="stage">
+                    <div class="stage__canvas" id="stage" style="--ar: 16 / 12.5; --ar-m: 1 / 1.75;">
+                        <canvas id="wt" aria-label="A three-bladed wind turbine turning in the wind; below, the stored wind speed, rotor speed and generator power over two minutes with a cursor at the frame being shown."></canvas>
+                    </div>
+                    <figcaption class="stage__cap">
+                        <span><b>Fig. 10</b> · <span class="tx">\(J\,\dot\omega = \tau_\mathrm{aero}(\omega, v) - \tau_\mathrm{gen}\)</span> · played from the stored run</span>
+                        <span id="cap-t"><i>t</i> = —</span>
+                    </figcaption>
+                </figure>
+                <figure class="stage" style="margin-top: 16px;">
+                    <div class="stage__canvas" id="stage-cp" style="--ar: 16 / 6.5; --ar-m: 16 / 12;">
+                        <canvas id="cp" aria-label="Power coefficient against tip-speed ratio, with the optimum and the present operating point."></canvas>
+                    </div>
+                    <figcaption class="stage__cap">
+                        <span><b>Operating point</b> · power coefficient <span class="tx">\(c_p\)</span> against tip-speed ratio <span class="tx">\(\lambda = \omega R / v\)</span></span>
+                        <span id="cap-op"><i>λ</i> = —</span>
+                    </figcaption>
+                </figure>
+            </div>
+
+            <aside class="panel" aria-label="Controls">
+                <div class="panel__group solve">
+                    <p class="panel__label">Solve, then play</p>
+                    <ol class="solve__steps" aria-label="What the page does">
+                        <li id="st-solve">1 solve</li>
+                        <li id="st-store">2 store</li>
+                        <li id="st-play">3 play</li>
+                    </ol>
+                    <div class="actions">
+                        <button type="button" class="btn" id="solve">Solve</button>
+                        <button type="button" class="btn btn--ghost" id="play">Pause</button>
+                        <button type="button" class="btn btn--ghost" id="restart">From t = 0</button>
+                    </div>
+                    <p class="solve__status" id="status" aria-live="polite">—</p>
+                    <label class="seek">
+                        <span class="seek__row"><span>Stored run</span><output id="seek-out" for="seek"></output></span>
+                        <input type="range" id="seek" min="0" max="6000" step="1" value="0" aria-label="Position in the stored run">
+                    </label>
+                    <label class="ctl">
+                        <span class="ctl__row"><span>Playback speed</span><output id="speed-out" for="speed"></output></span>
+                        <input type="range" id="speed" min="0.5" max="8" step="0.5" value="1">
+                    </label>
+                </div>
+
+                <div class="panel__group">
+                    <p class="panel__label">Controller · sets the generator torque</p>
+                    <div class="seg" role="group" aria-label="Controller" id="ctrl">
+                        <button type="button" data-v="pi" aria-pressed="true">Hold speed</button>
+                        <button type="button" data-v="opt" aria-pressed="false">Follow the wind</button>
+                    </div>
+                    <label class="ctl" id="rpm-ctl">
+                        <span class="ctl__row"><span>Target rotor speed</span><output id="rpm-out" for="rpm"></output></span>
+                        <input type="range" id="rpm" min="8" max="21" step="0.5" value="15">
+                    </label>
+                </div>
+
+                <div class="panel__group">
+                    <p class="panel__label">Wind · set by the weather</p>
+                    <div class="seg" role="group" aria-label="Wind" id="prof">
+                        <button type="button" data-v="steady" aria-pressed="false">Steady</button>
+                        <button type="button" data-v="gust" aria-pressed="false">Gust</button>
+                        <button type="button" data-v="step" aria-pressed="false">Step</button>
+                        <button type="button" data-v="turb" aria-pressed="true">Turbulent</button>
+                    </div>
+                    <label class="ctl">
+                        <span class="ctl__row"><span>Mean wind speed v₀</span><output id="v0-out" for="v0"></output></span>
+                        <input type="range" id="v0" min="4" max="11" step="0.1" value="8">
+                    </label>
+                    <label class="ctl" id="dv-ctl">
+                        <span class="ctl__row"><span id="dv-label">Turbulence σ</span><output id="dv-out" for="dv"></output></span>
+                        <input type="range" id="dv" min="0" max="4" step="0.1" value="1.5">
+                    </label>
+                </div>
+
+                <dl class="readouts">
+                    <div><dt>Mean power</dt><dd id="r-P">—</dd></div>
+                    <div><dt>Energy, 120 s</dt><dd id="r-E">—</dd></div>
+                    <div><dt>Rotor speed</dt><dd id="r-rpm">—</dd></div>
+                    <div><dt>Captured / in wind</dt><dd id="r-eff">—</dd></div>
+                    <div><dt>Energy balance</dt><dd id="r-bal">—</dd></div>
+                    <div><dt>Solve time</dt><dd id="r-ms">—</dd></div>
+                </dl>
+
+                <ul class="legend">
+                    <li><span class="sw sw--ink"></span>played</li>
+                    <li><span class="sw" style="background: var(--rule);"></span>still to come</li>
+                    <li><span class="sw"></span>now</li>
+                    <li><span class="sw sw--dash"></span>target / optimum</li>
+                </ul>
+            </aside>
+        </div>
+
+        <article class="paper" id="paper" aria-labelledby="paper-title">
+            <header class="paper__head">
+                <p class="paper__kicker">Lecture note · Fig. 10 · control systems</p>
+                <h2 class="paper__title" id="paper-title">Wind turbine control: catching energy from a wind you cannot choose</h2>
+                <p class="paper__by">Numa Koudsie · for school students and first- and second-year undergraduates</p>
+                <div class="paper__abstract"><b>Abstract.</b> A wind turbine is a driven system like the oscillator of Fig. 9, with two differences: the drive, the wind, is set by the weather, and the turbine has a hand of its own, the generator, whose braking torque a controller can choose at every instant. This note derives how much power the wind carries, why no rotor can take more than 16/27 of it (the Betz limit), and how the share a real rotor takes depends on the ratio of tip speed to wind speed. It then writes the rotor’s equation of motion and compares two controllers on the same two minutes of turbulent wind: one that holds the rotor at a constant speed, and one that lets the speed follow the wind. Sections marked ★ carry the heavier mathematics and can be skipped on a first reading.</div>
+            </header>
+            <div class="paper__grid">
+                <nav class="paper__toc" aria-label="Contents">
+                    <p>Contents</p>
+                    <ol>
+                        <li><a href="#p-wind"><span>1</span>From wind to electricity</a></li>
+                        <li><a href="#p-power"><span>2</span>The power in the wind</a></li>
+                        <li><a href="#p-betz"><span>3</span>The Betz limit&nbsp;★</a></li>
+                        <li><a href="#p-tsr"><span>4</span>Tip-speed ratio</a></li>
+                        <li><a href="#p-rotor"><span>5</span>The rotor’s equation of motion</a></li>
+                        <li><a href="#p-control"><span>6</span>Two controllers&nbsp;★</a></li>
+                        <li><a href="#p-compare"><span>7</span>Same wind, two answers</a></li>
+                        <li><a href="#p-solve"><span>8</span>Solve first, then play</a></li>
+                        <li><a href="#p-screen"><span>9</span>On screen</a></li>
+                        <li><a href="#p-limits"><span>10</span>What the model leaves out</a></li>
+                    </ol>
+                </nav>
+                <div class="paper__body">
+                    <section class="psec" id="p-wind">
+                        <h3><span class="psec__n">01</span>From wind to electricity</h3>
+                        <p class="psec__lead">Hold a paper windmill out of a car window and it spins faster the faster you drive. A modern wind turbine is the same toy, scaled up until each blade is longer than a jumbo jet’s wing.</p>
+                        <p>The turbine of this page has blades 40 m long. Their tips sweep a disc of \(\pi R^2 = 5027\ \mathrm{m^2}\), about 70 % of a football pitch. At its leisurely-looking 15 turns per minute, the tips move at \(\omega R = 62.8\ \mathrm{m/s}\), over 220 km/h. The wind pushes on the blades and makes the rotor turn; a generator in the nacelle brakes the rotor and turns the work of that braking into electrical energy.</p>
+                        <p>The interesting physics lies in the balance between the two torques. If the generator brakes too little, the rotor runs away. If it brakes too hard, the rotor slows until the blades stall and the wind slips past. The controller, a small computer reading the rotor speed many times a second, decides how hard to brake. It cannot choose the wind: the wind is a time-dependent drive set by someone else, exactly like the force in Fig. 9.</p>
+                        <figure class="pfig">
+                            <div class="pfig__plate">
+                                <svg viewBox="0 0 720 280" role="img" aria-label="Side view of the rotor disc in a stream tube: the wind arrives at speed v, slows as it passes the disc and leaves in a wider, slower wake; the blade tip moves at omega R across the wind.">
+                                    <rect x="0" y="0" width="720" height="280" fill="#fff"/>
+                                    <path d="M40 95 C 200 95, 300 80, 360 70 C 430 58, 560 40, 690 34" fill="none" stroke="#cdc1ae" stroke-width="1.6"/>
+                                    <path d="M40 185 C 200 185, 300 200, 360 210 C 430 222, 560 240, 690 246" fill="none" stroke="#cdc1ae" stroke-width="1.6"/>
+                                    <g stroke="#1c1518" stroke-width="2.2" fill="#1c1518">
+                                        <line x1="60" y1="120" x2="140" y2="120"/><path d="M136 114 L148 120 L136 126 Z"/>
+                                        <line x1="60" y1="160" x2="140" y2="160"/><path d="M136 154 L148 160 L136 166 Z"/>
+                                    </g>
+                                    <g stroke="#6f655f" stroke-width="2" fill="#6f655f">
+                                        <line x1="560" y1="120" x2="610" y2="120"/><path d="M606 115 L616 120 L606 125 Z"/>
+                                        <line x1="560" y1="160" x2="610" y2="160"/><path d="M606 155 L616 160 L606 165 Z"/>
+                                    </g>
+                                    <ellipse cx="360" cy="140" rx="16" ry="70" fill="#fbf6ee" stroke="#4a413d" stroke-width="2"/>
+                                    <line x1="360" y1="70" x2="360" y2="210" stroke="#7a1f2b" stroke-width="3"/>
+                                    <circle cx="360" cy="140" r="7" fill="#1c1518"/>
+                                    <line x1="380" y1="70" x2="440" y2="70" stroke="#7a1f2b" stroke-width="2"/>
+                                    <path d="M436 65 L446 70 L436 75 Z" fill="#7a1f2b"/>
+                                    <text class="m" x="452" y="76" style="fill:#7a1f2b">ωR</text>
+                                    <text class="m" x="86" y="108">v</text>
+                                    <text class="lbl" x="44" y="226">wind arrives at speed v</text>
+                                    <text class="lbl" x="296" y="244">rotor disc, area A = πR²</text>
+                                    <text class="lbl" x="524" y="196">slower, wider wake</text>
+                                    <line x1="324" y1="140" x2="324" y2="70" stroke="#8b8079" stroke-dasharray="3 3"/>
+                                    <text class="m" x="306" y="110">R</text>
+                                </svg>
+                            </div>
+                            <figcaption><span class="pfig__n">Figure 1</span>The rotor seen from the side, in the tube of air that passes through it. The air slows down as it gives up energy, so the tube widens behind the disc. The blade tips move across the wind at \(\omega R\), several times faster than the wind itself.</figcaption>
+                        </figure>
+                    </section>
+
+                    <section class="psec" id="p-power">
+                        <h3><span class="psec__n">02</span>The power in the wind</h3>
+                        <p>Count the energy that the air carries through the disc. In one second a slab of air of length \(v\) passes through the area \(A\): its mass is \(\rho A v\), and each kilogram carries kinetic energy \(\tfrac12 v^2\). The product is the power of the wind through the disc,</p>
+                        \[ P_\text{wind} = \tfrac12\,\rho A v^3 . \tag{1} \]
+                        <p>The cube is the most important fact in wind energy. Doubling the wind speed doubles the mass of air arriving each second and quadruples the energy of each kilogram: eight times the power. At \(v = 8\ \mathrm{m/s}\), with \(\rho = 1.225\ \mathrm{kg/m^3}\), the air brings \(1.58\ \mathrm{MW}\) through this rotor; at \(11\ \mathrm{m/s}\) it brings \(4.10\ \mathrm{MW}\).</p>
+                        <p>A rotor takes a share \(c_p\), the <em>power coefficient</em>, of this flux:</p>
+                        \[ P_\text{aero} = c_p\,\tfrac12\,\rho A v^3, \qquad \tau_\text{aero} = \frac{P_\text{aero}}{\omega} . \tag{2} \]
+                    </section>
+
+                    <section class="psec" id="p-betz">
+                        <h3><span class="psec__n">03</span>The Betz limit<span class="star" title="heavier mathematics">★</span></h3>
+                        <p>A rotor cannot take all of the wind’s energy: air that stopped completely would pile up in front of the disc and block the air behind it. Albert Betz worked out the best possible share in 1920 by replacing the rotor with an idealised disc that the air pushes against. Let the air arrive at speed \(v\), cross the disc at \(v(1-a)\) and leave in the far wake at \(v_w\). The number \(a\) measures how much the disc slows the air.</p>
+                        <p>Bernoulli’s equation, applied separately in front of and behind the disc, gives the pressure jump across it, \(\Delta p = \tfrac12\rho\,(v^2 - v_w^2)\). The force on the disc, \(\Delta p\,A\), must equal the momentum the air loses per second, \(\rho A v(1-a)\,(v - v_w)\). Equating the two shows that the disc sees exactly the average of the two speeds, \(v(1-a) = \tfrac12(v + v_w)\), so \(v_w = v(1-2a)\). The power the disc extracts is force times the air’s speed through it:</p>
+                        \[ P = \rho A v(1-a)\cdot 2av\cdot v(1-a) = 2\rho A v^3\,a(1-a)^2 \quad\Longrightarrow\quad c_p = \frac{P}{\tfrac12\rho A v^3} = 4a(1-a)^2 . \tag{3} \]
+                        <p>Setting \(\mathrm{d}c_p/\mathrm{d}a = 4(1-a)(1-3a) = 0\) gives \(a = 1/3\), and</p>
+                        \[ c_{p,\text{Betz}} = 4\cdot\tfrac13\left(\tfrac23\right)^2 = \frac{16}{27} \approx 0.593 . \tag{4} \]
+                        <div class="pbox">
+                            <span class="pbox__t">The Betz limit</span>
+                            <p>No rotor in open air can turn more than 59.3 % of the power flowing through its disc into shaft power. The best rotor slows the air to two thirds of its speed at the disc and to one third in the wake.</p>
+                        </div>
+                    </section>
+
+                    <section class="psec" id="p-tsr">
+                        <h3><span class="psec__n">04</span>Tip-speed ratio</h3>
+                        <p>How large \(c_p\) is depends mainly on one number, the <em>tip-speed ratio</em> \(\lambda = \omega R/v\), the speed of the blade tips in units of the wind speed. A rotor turning too slowly lets most of the air pass between its blades without touching them. A rotor turning too fast behaves almost like a solid wall, and the air flows around it. Behind both pictures is one mechanism: each blade meets the air at a speed and an angle set by the wind and the blade’s own motion together, and that angle of attack decides how much lift, and so how much torque, the blade takes from the flow. Between the two extremes lies a best ratio. The curve \(c_p(\lambda)\) used here is an empirical fit for one rotor; it has a maximum between its slow- and fast-running limits.</p>
+                        <p>This page uses an empirical fit to measured rotor curves due to Heier, with the blades at zero pitch,</p>
+                        \[ c_p(\lambda) = c_1\left(\frac{c_2}{\lambda_i} - c_4\right)e^{-c_5/\lambda_i} + c_6\,\lambda, \qquad \frac{1}{\lambda_i} = \frac{1}{\lambda} - 0.035, \tag{5} \]
+                        <p>with \(c_1 = 0.5176\), \(c_2 = 116\), \(c_4 = 5\), \(c_5 = 21\) and \(c_6 = 0.0068\). Scanning \(\lambda\) in steps of 0.001, its maximum is \(c_{p,\max} = 0.4800\) at \(\lambda_\text{opt} = 8.100\), comfortably below the Betz limit (Figure 2). One widely copied reproduction of the formula writes the last term as \(c_6\lambda_i\); that version peaks at 0.502 at \(\lambda = 8.25\) and does not match the quoted optimum, so the page uses \(c_6\lambda\).</p>
+                        <figure class="pfig">
+                            <div class="pfig__plate">
+                                <svg viewBox="0 0 720 326" role="img" xmlns="http://www.w3.org/2000/svg">
+                                <defs><clipPath id="f10cp.clip1"><rect x="64.0" y="18.0" width="634.0" height="236.0"/></clipPath></defs>
+                                <line x1="64.0" x2="698.0" y1="254.0" y2="254.0" stroke="#eee6d9" stroke-width="1"/>
+                                <text class="tick" x="56.0" y="258.0" text-anchor="end">0</text>
+                                <line x1="64.0" x2="698.0" y1="217.7" y2="217.7" stroke="#eee6d9" stroke-width="1"/>
+                                <text class="tick" x="56.0" y="221.7" text-anchor="end">0.10</text>
+                                <line x1="64.0" x2="698.0" y1="181.4" y2="181.4" stroke="#eee6d9" stroke-width="1"/>
+                                <text class="tick" x="56.0" y="185.4" text-anchor="end">0.20</text>
+                                <line x1="64.0" x2="698.0" y1="145.1" y2="145.1" stroke="#eee6d9" stroke-width="1"/>
+                                <text class="tick" x="56.0" y="149.1" text-anchor="end">0.30</text>
+                                <line x1="64.0" x2="698.0" y1="108.8" y2="108.8" stroke="#eee6d9" stroke-width="1"/>
+                                <text class="tick" x="56.0" y="112.8" text-anchor="end">0.40</text>
+                                <line x1="64.0" x2="698.0" y1="72.5" y2="72.5" stroke="#eee6d9" stroke-width="1"/>
+                                <text class="tick" x="56.0" y="76.5" text-anchor="end">0.50</text>
+                                <line x1="64.0" x2="698.0" y1="36.2" y2="36.2" stroke="#eee6d9" stroke-width="1"/>
+                                <text class="tick" x="56.0" y="40.2" text-anchor="end">0.60</text>
+                                <line x1="64.0" x2="64.0" y1="254.0" y2="259.0" stroke="#8b8079"/>
+                                <text class="tick" x="64.0" y="273.0" text-anchor="middle">0</text>
+                                <line x1="154.6" x2="154.6" y1="254.0" y2="259.0" stroke="#8b8079"/>
+                                <text class="tick" x="154.6" y="273.0" text-anchor="middle">2</text>
+                                <line x1="245.1" x2="245.1" y1="254.0" y2="259.0" stroke="#8b8079"/>
+                                <text class="tick" x="245.1" y="273.0" text-anchor="middle">4</text>
+                                <line x1="335.7" x2="335.7" y1="254.0" y2="259.0" stroke="#8b8079"/>
+                                <text class="tick" x="335.7" y="273.0" text-anchor="middle">6</text>
+                                <line x1="426.3" x2="426.3" y1="254.0" y2="259.0" stroke="#8b8079"/>
+                                <text class="tick" x="426.3" y="273.0" text-anchor="middle">8</text>
+                                <line x1="516.9" x2="516.9" y1="254.0" y2="259.0" stroke="#8b8079"/>
+                                <text class="tick" x="516.9" y="273.0" text-anchor="middle">10</text>
+                                <line x1="607.4" x2="607.4" y1="254.0" y2="259.0" stroke="#8b8079"/>
+                                <text class="tick" x="607.4" y="273.0" text-anchor="middle">12</text>
+                                <line x1="698.0" x2="698.0" y1="254.0" y2="259.0" stroke="#8b8079"/>
+                                <text class="tick" x="698.0" y="273.0" text-anchor="middle">14</text>
+                                <line x1="64.0" x2="698.0" y1="254.0" y2="254.0" stroke="#8b8079"/>
+                                <line x1="64.0" x2="64.0" y1="18.0" y2="254.0" stroke="#8b8079"/>
+                                <text class="lbl" x="698.0" y="292.0" text-anchor="end">tip-speed ratio λ = ωR/v</text>
+                                <text class="lbl" x="70.0" y="27.0">power coefficient c<tspan baseline-shift="sub" font-size="75%">p</tspan></text>
+                                <g clip-path="url(#f10cp.clip1)">
+                                <line x1="64.0" x2="698.0" y1="38.8" y2="38.8" stroke="#8b8079" stroke-width="1.4" stroke-dasharray="4 4"/>
+                                <line x1="430.8" x2="430.8" y1="18.0" y2="254.0" stroke="#8b8079" stroke-width="1.4" stroke-dasharray="4 4"/>
+                                <path d="M86.6 252.8 L87.1 252.7 L87.5 252.7 L88.0 252.7 L88.5 252.7 L88.9 252.6 L89.4 252.6 L89.8 252.6 L90.3 252.6 L90.7 252.5 L91.2 252.5 L91.6 252.5 L92.1 252.5 L92.5 252.4 L93.0 252.4 L93.4 252.4 L93.9 252.4 L94.3 252.3 L94.8 252.3 L95.2 252.3 L95.7 252.3 L96.2 252.2 L96.6 252.2 L97.1 252.2 L97.5 252.2 L98.0 252.1 L98.4 252.1 L98.9 252.1 L99.3 252.1 L99.8 252.0 L100.2 252.0 L100.7 252.0 L101.1 252.0 L101.6 252.0 L102.0 251.9 L102.5 251.9 L102.9 251.9 L103.4 251.9 L103.9 251.8 L104.3 251.8 L104.8 251.8 L105.2 251.8 L105.7 251.7 L106.1 251.7 L106.6 251.7 L107.0 251.7 L107.5 251.6 L107.9 251.6 L108.4 251.6 L108.8 251.6 L109.3 251.5 L109.7 251.5 L110.2 251.5 L110.6 251.5 L111.1 251.4 L111.6 251.4 L112.0 251.4 L112.5 251.4 L112.9 251.3 L113.4 251.3 L113.8 251.3 L114.3 251.3 L114.7 251.2 L115.2 251.2 L115.6 251.2 L116.1 251.2 L116.5 251.1 L117.0 251.1 L117.4 251.1 L117.9 251.1 L118.3 251.0 L118.8 251.0 L119.2 251.0 L119.7 251.0 L120.2 250.9 L120.6 250.9 L121.1 250.9 L121.5 250.9 L122.0 250.8 L122.4 250.8 L122.9 250.8 L123.3 250.8 L123.8 250.7 L124.2 250.7 L124.7 250.7 L125.1 250.7 L125.6 250.6 L126.0 250.6 L126.5 250.6 L126.9 250.6 L127.4 250.5 L127.9 250.5 L128.3 250.5 L128.8 250.5 L129.2 250.4 L129.7 250.4 L130.1 250.4 L130.6 250.4 L131.0 250.3 L131.5 250.3 L131.9 250.3 L132.4 250.2 L132.8 250.2 L133.3 250.2 L133.7 250.2 L134.2 250.1 L134.6 250.1 L135.1 250.1 L135.6 250.1 L136.0 250.0 L136.5 250.0 L136.9 250.0 L137.4 249.9 L137.8 249.9 L138.3 249.9 L138.7 249.9 L139.2 249.8 L139.6 249.8 L140.1 249.8 L140.5 249.7 L141.0 249.7 L141.4 249.7 L141.9 249.6 L142.3 249.6 L142.8 249.6 L143.3 249.5 L143.7 249.5 L144.2 249.5 L144.6 249.4 L145.1 249.4 L145.5 249.4 L146.0 249.3 L146.4 249.3 L146.9 249.3 L147.3 249.2 L147.8 249.2 L148.2 249.1 L148.7 249.1 L149.1 249.1 L149.6 249.0 L150.0 249.0 L150.5 248.9 L150.9 248.9 L151.4 248.9 L151.9 248.8 L152.3 248.8 L152.8 248.7 L153.2 248.7 L153.7 248.6 L154.1 248.6 L154.6 248.5 L155.0 248.5 L155.5 248.4 L155.9 248.4 L156.4 248.3 L156.8 248.3 L157.3 248.2 L157.7 248.2 L158.2 248.1 L158.6 248.1 L159.1 248.0 L159.6 247.9 L160.0 247.9 L160.5 247.8 L160.9 247.7 L161.4 247.7 L161.8 247.6 L162.3 247.6 L162.7 247.5 L163.2 247.4 L163.6 247.3 L164.1 247.3 L164.5 247.2 L165.0 247.1 L165.4 247.0 L165.9 247.0 L166.3 246.9 L166.8 246.8 L167.3 246.7 L167.7 246.6 L168.2 246.6 L168.6 246.5 L169.1 246.4 L169.5 246.3 L170.0 246.2 L170.4 246.1 L170.9 246.0 L171.3 245.9 L171.8 245.8 L172.2 245.7 L172.7 245.6 L173.1 245.5 L173.6 245.4 L174.0 245.3 L174.5 245.2 L175.0 245.1 L175.4 245.0 L175.9 244.9 L176.3 244.8 L176.8 244.7 L177.2 244.5 L177.7 244.4 L178.1 244.3 L178.6 244.2 L179.0 244.0 L179.5 243.9 L179.9 243.8 L180.4 243.7 L180.8 243.5 L181.3 243.4 L181.7 243.3 L182.2 243.1 L182.6 243.0 L183.1 242.8 L183.6 242.7 L184.0 242.5 L184.5 242.4 L184.9 242.2 L185.4 242.1 L185.8 241.9 L186.3 241.8 L186.7 241.6 L187.2 241.4 L187.6 241.3 L188.1 241.1 L188.5 240.9 L189.0 240.8 L189.4 240.6 L189.9 240.4 L190.3 240.3 L190.8 240.1 L191.3 239.9 L191.7 239.7 L192.2 239.5 L192.6 239.3 L193.1 239.1 L193.5 238.9 L194.0 238.8 L194.4 238.6 L194.9 238.4 L195.3 238.2 L195.8 237.9 L196.2 237.7 L196.7 237.5 L197.1 237.3 L197.6 237.1 L198.0 236.9 L198.5 236.7 L199.0 236.5 L199.4 236.2 L199.9 236.0 L200.3 235.8 L200.8 235.6 L201.2 235.3 L201.7 235.1 L202.1 234.9 L202.6 234.6 L203.0 234.4 L203.5 234.1 L203.9 233.9 L204.4 233.6 L204.8 233.4 L205.3 233.1 L205.7 232.9 L206.2 232.6 L206.7 232.4 L207.1 232.1 L207.6 231.9 L208.0 231.6 L208.5 231.3 L208.9 231.0 L209.4 230.8 L209.8 230.5 L210.3 230.2 L210.7 229.9 L211.2 229.7 L211.6 229.4 L212.1 229.1 L212.5 228.8 L213.0 228.5 L213.4 228.2 L213.9 227.9 L214.3 227.6 L214.8 227.3 L215.3 227.0 L215.7 226.7 L216.2 226.4 L216.6 226.1 L217.1 225.8 L217.5 225.5 L218.0 225.2 L218.4 224.9 L218.9 224.6 L219.3 224.3 L219.8 223.9 L220.2 223.6 L220.7 223.3 L221.1 223.0 L221.6 222.6 L222.0 222.3 L222.5 222.0 L223.0 221.6 L223.4 221.3 L223.9 221.0 L224.3 220.6 L224.8 220.3 L225.2 219.9 L225.7 219.6 L226.1 219.2 L226.6 218.9 L227.0 218.5 L227.5 218.2 L227.9 217.8 L228.4 217.5 L228.8 217.1 L229.3 216.7 L229.7 216.4 L230.2 216.0 L230.7 215.7 L231.1 215.3 L231.6 214.9 L232.0 214.5 L232.5 214.2 L232.9 213.8 L233.4 213.4 L233.8 213.0 L234.3 212.7 L234.7 212.3 L235.2 211.9 L235.6 211.5 L236.1 211.1 L236.5 210.7 L237.0 210.4 L237.4 210.0 L237.9 209.6 L238.4 209.2 L238.8 208.8 L239.3 208.4 L239.7 208.0 L240.2 207.6 L240.6 207.2 L241.1 206.8 L241.5 206.4 L242.0 206.0 L242.4 205.6 L242.9 205.2 L243.3 204.8 L243.8 204.4 L244.2 203.9 L244.7 203.5 L245.1 203.1 L245.6 202.7 L246.0 202.3 L246.5 201.9 L247.0 201.5 L247.4 201.0 L247.9 200.6 L248.3 200.2 L248.8 199.8 L249.2 199.3 L249.7 198.9 L250.1 198.5 L250.6 198.1 L251.0 197.6 L251.5 197.2 L251.9 196.8 L252.4 196.4 L252.8 195.9 L253.3 195.5 L253.7 195.1 L254.2 194.6 L254.7 194.2 L255.1 193.8 L255.6 193.3 L256.0 192.9 L256.5 192.4 L256.9 192.0 L257.4 191.6 L257.8 191.1 L258.3 190.7 L258.7 190.2 L259.2 189.8 L259.6 189.4 L260.1 188.9 L260.5 188.5 L261.0 188.0 L261.4 187.6 L261.9 187.1 L262.4 186.7 L262.8 186.2 L263.3 185.8 L263.7 185.3 L264.2 184.9 L264.6 184.4 L265.1 184.0 L265.5 183.5 L266.0 183.1 L266.4 182.6 L266.9 182.2 L267.3 181.7 L267.8 181.3 L268.2 180.8 L268.7 180.4 L269.1 179.9 L269.6 179.5 L270.1 179.0 L270.5 178.6 L271.0 178.1 L271.4 177.6 L271.9 177.2 L272.3 176.7 L272.8 176.3 L273.2 175.8 L273.7 175.4 L274.1 174.9 L274.6 174.5 L275.0 174.0 L275.5 173.5 L275.9 173.1 L276.4 172.6 L276.8 172.2 L277.3 171.7 L277.7 171.3 L278.2 170.8 L278.7 170.4 L279.1 169.9 L279.6 169.4 L280.0 169.0 L280.5 168.5 L280.9 168.1 L281.4 167.6 L281.8 167.2 L282.3 166.7 L282.7 166.3 L283.2 165.8 L283.6 165.3 L284.1 164.9 L284.5 164.4 L285.0 164.0 L285.4 163.5 L285.9 163.1 L286.4 162.6 L286.8 162.2 L287.3 161.7 L287.7 161.3 L288.2 160.8 L288.6 160.4 L289.1 159.9 L289.5 159.5 L290.0 159.0 L290.4 158.6 L290.9 158.1 L291.3 157.7 L291.8 157.2 L292.2 156.8 L292.7 156.3 L293.1 155.9 L293.6 155.4 L294.1 155.0 L294.5 154.5 L295.0 154.1 L295.4 153.6 L295.9 153.2 L296.3 152.7 L296.8 152.3 L297.2 151.9 L297.7 151.4 L298.1 151.0 L298.6 150.5 L299.0 150.1 L299.5 149.7 L299.9 149.2 L300.4 148.8 L300.8 148.3 L301.3 147.9 L301.8 147.5 L302.2 147.0 L302.7 146.6 L303.1 146.2 L303.6 145.7 L304.0 145.3 L304.5 144.9 L304.9 144.4 L305.4 144.0 L305.8 143.6 L306.3 143.2 L306.7 142.7 L307.2 142.3 L307.6 141.9 L308.1 141.4 L308.5 141.0 L309.0 140.6 L309.4 140.2 L309.9 139.8 L310.4 139.3 L310.8 138.9 L311.3 138.5 L311.7 138.1 L312.2 137.7 L312.6 137.3 L313.1 136.8 L313.5 136.4 L314.0 136.0 L314.4 135.6 L314.9 135.2 L315.3 134.8 L315.8 134.4 L316.2 134.0 L316.7 133.6 L317.1 133.2 L317.6 132.8 L318.1 132.4 L318.5 132.0 L319.0 131.6 L319.4 131.2 L319.9 130.8 L320.3 130.4 L320.8 130.0 L321.2 129.6 L321.7 129.2 L322.1 128.8 L322.6 128.4 L323.0 128.0 L323.5 127.6 L323.9 127.2 L324.4 126.8 L324.8 126.5 L325.3 126.1 L325.8 125.7 L326.2 125.3 L326.7 124.9 L327.1 124.5 L327.6 124.2 L328.0 123.8 L328.5 123.4 L328.9 123.0 L329.4 122.7 L329.8 122.3 L330.3 121.9 L330.7 121.6 L331.2 121.2 L331.6 120.8 L332.1 120.5 L332.5 120.1 L333.0 119.7 L333.5 119.4 L333.9 119.0 L334.4 118.7 L334.8 118.3 L335.3 118.0 L335.7 117.6 L336.2 117.2 L336.6 116.9 L337.1 116.6 L337.5 116.2 L338.0 115.9 L338.4 115.5 L338.9 115.2 L339.3 114.8 L339.8 114.5 L340.2 114.1 L340.7 113.8 L341.1 113.5 L341.6 113.1 L342.1 112.8 L342.5 112.5 L343.0 112.1 L343.4 111.8 L343.9 111.5 L344.3 111.2 L344.8 110.8 L345.2 110.5 L345.7 110.2 L346.1 109.9 L346.6 109.6 L347.0 109.2 L347.5 108.9 L347.9 108.6 L348.4 108.3 L348.8 108.0 L349.3 107.7 L349.8 107.4 L350.2 107.1 L350.7 106.8 L351.1 106.5 L351.6 106.2 L352.0 105.9 L352.5 105.6 L352.9 105.3 L353.4 105.0 L353.8 104.7 L354.3 104.4 L354.7 104.1 L355.2 103.8 L355.6 103.5 L356.1 103.2 L356.5 103.0 L357.0 102.7 L357.5 102.4 L357.9 102.1 L358.4 101.8 L358.8 101.6 L359.3 101.3 L359.7 101.0 L360.2 100.8 L360.6 100.5 L361.1 100.2 L361.5 100.0 L362.0 99.7 L362.4 99.4 L362.9 99.2 L363.3 98.9 L363.8 98.6 L364.2 98.4 L364.7 98.1 L365.2 97.9 L365.6 97.6 L366.1 97.4 L366.5 97.1 L367.0 96.9 L367.4 96.7 L367.9 96.4 L368.3 96.2 L368.8 95.9 L369.2 95.7 L369.7 95.5 L370.1 95.2 L370.6 95.0 L371.0 94.8 L371.5 94.5 L371.9 94.3 L372.4 94.1 L372.8 93.9 L373.3 93.6 L373.8 93.4 L374.2 93.2 L374.7 93.0 L375.1 92.8 L375.6 92.6 L376.0 92.4 L376.5 92.1 L376.9 91.9 L377.4 91.7 L377.8 91.5 L378.3 91.3 L378.7 91.1 L379.2 90.9 L379.6 90.7 L380.1 90.5 L380.5 90.3 L381.0 90.1 L381.5 90.0 L381.9 89.8 L382.4 89.6 L382.8 89.4 L383.3 89.2 L383.7 89.0 L384.2 88.9 L384.6 88.7 L385.1 88.5 L385.5 88.3 L386.0 88.2 L386.4 88.0 L386.9 87.8 L387.3 87.6 L387.8 87.5 L388.2 87.3 L388.7 87.2 L389.2 87.0 L389.6 86.8 L390.1 86.7 L390.5 86.5 L391.0 86.4 L391.4 86.2 L391.9 86.1 L392.3 85.9 L392.8 85.8 L393.2 85.6 L393.7 85.5 L394.1 85.3 L394.6 85.2 L395.0 85.1 L395.5 84.9 L395.9 84.8 L396.4 84.7 L396.9 84.5 L397.3 84.4 L397.8 84.3 L398.2 84.2 L398.7 84.0 L399.1 83.9 L399.6 83.8 L400.0 83.7 L400.5 83.6 L400.9 83.4 L401.4 83.3 L401.8 83.2 L402.3 83.1 L402.7 83.0 L403.2 82.9 L403.6 82.8 L404.1 82.7 L404.5 82.6 L405.0 82.5 L405.5 82.4 L405.9 82.3 L406.4 82.2 L406.8 82.1 L407.3 82.0 L407.7 81.9 L408.2 81.8 L408.6 81.8 L409.1 81.7 L409.5 81.6 L410.0 81.5 L410.4 81.4 L410.9 81.4 L411.3 81.3 L411.8 81.2 L412.2 81.1 L412.7 81.1 L413.2 81.0 L413.6 80.9 L414.1 80.9 L414.5 80.8 L415.0 80.8 L415.4 80.7 L415.9 80.6 L416.3 80.6 L416.8 80.5 L417.2 80.5 L417.7 80.4 L418.1 80.4 L418.6 80.3 L419.0 80.3 L419.5 80.2 L419.9 80.2 L420.4 80.2 L420.9 80.1 L421.3 80.1 L421.8 80.1 L422.2 80.0 L422.7 80.0 L423.1 80.0 L423.6 79.9 L424.0 79.9 L424.5 79.9 L424.9 79.9 L425.4 79.8 L425.8 79.8 L426.3 79.8 L426.7 79.8 L427.2 79.8 L427.6 79.8 L428.1 79.7 L428.6 79.7 L429.0 79.7 L429.5 79.7 L429.9 79.7 L430.4 79.7 L430.8 79.7 L431.3 79.7 L431.7 79.7 L432.2 79.7 L432.6 79.7 L433.1 79.7 L433.5 79.7 L434.0 79.8 L434.4 79.8 L434.9 79.8 L435.3 79.8 L435.8 79.8 L436.2 79.8 L436.7 79.9 L437.2 79.9 L437.6 79.9 L438.1 79.9 L438.5 80.0 L439.0 80.0 L439.4 80.0 L439.9 80.1 L440.3 80.1 L440.8 80.1 L441.2 80.2 L441.7 80.2 L442.1 80.2 L442.6 80.3 L443.0 80.3 L443.5 80.4 L443.9 80.4 L444.4 80.5 L444.9 80.5 L445.3 80.6 L445.8 80.6 L446.2 80.7 L446.7 80.7 L447.1 80.8 L447.6 80.9 L448.0 80.9 L448.5 81.0 L448.9 81.0 L449.4 81.1 L449.8 81.2 L450.3 81.2 L450.7 81.3 L451.2 81.4 L451.6 81.5 L452.1 81.5 L452.6 81.6 L453.0 81.7 L453.5 81.8 L453.9 81.9 L454.4 81.9 L454.8 82.0 L455.3 82.1 L455.7 82.2 L456.2 82.3 L456.6 82.4 L457.1 82.5 L457.5 82.6 L458.0 82.7 L458.4 82.8 L458.9 82.9 L459.3 83.0 L459.8 83.1 L460.3 83.2 L460.7 83.3 L461.2 83.4 L461.6 83.5 L462.1 83.6 L462.5 83.7 L463.0 83.8 L463.4 83.9 L463.9 84.1 L464.3 84.2 L464.8 84.3 L465.2 84.4 L465.7 84.5 L466.1 84.7 L466.6 84.8 L467.0 84.9 L467.5 85.0 L467.9 85.2 L468.4 85.3 L468.9 85.4 L469.3 85.6 L469.8 85.7 L470.2 85.8 L470.7 86.0 L471.1 86.1 L471.6 86.3 L472.0 86.4 L472.5 86.5 L472.9 86.7 L473.4 86.8 L473.8 87.0 L474.3 87.1 L474.7 87.3 L475.2 87.4 L475.6 87.6 L476.1 87.8 L476.6 87.9 L477.0 88.1 L477.5 88.2 L477.9 88.4 L478.4 88.6 L478.8 88.7 L479.3 88.9 L479.7 89.1 L480.2 89.2 L480.6 89.4 L481.1 89.6 L481.5 89.7 L482.0 89.9 L482.4 90.1 L482.9 90.3 L483.3 90.5 L483.8 90.6 L484.3 90.8 L484.7 91.0 L485.2 91.2 L485.6 91.4 L486.1 91.6 L486.5 91.7 L487.0 91.9 L487.4 92.1 L487.9 92.3 L488.3 92.5 L488.8 92.7 L489.2 92.9 L489.7 93.1 L490.1 93.3 L490.6 93.5 L491.0 93.7 L491.5 93.9 L492.0 94.1 L492.4 94.3 L492.9 94.5 L493.3 94.7 L493.8 95.0 L494.2 95.2 L494.7 95.4 L495.1 95.6 L495.6 95.8 L496.0 96.0 L496.5 96.2 L496.9 96.5 L497.4 96.7 L497.8 96.9 L498.3 97.1 L498.7 97.4 L499.2 97.6 L499.6 97.8 L500.1 98.0 L500.6 98.3 L501.0 98.5 L501.5 98.7 L501.9 99.0 L502.4 99.2 L502.8 99.4 L503.3 99.7 L503.7 99.9 L504.2 100.2 L504.6 100.4 L505.1 100.6 L505.5 100.9 L506.0 101.1 L506.4 101.4 L506.9 101.6 L507.3 101.9 L507.8 102.1 L508.3 102.4 L508.7 102.6 L509.2 102.9 L509.6 103.1 L510.1 103.4 L510.5 103.7 L511.0 103.9 L511.4 104.2 L511.9 104.4 L512.3 104.7 L512.8 105.0 L513.2 105.2 L513.7 105.5 L514.1 105.8 L514.6 106.0 L515.0 106.3 L515.5 106.6 L516.0 106.9 L516.4 107.1 L516.9 107.4 L517.3 107.7 L517.8 108.0 L518.2 108.2 L518.7 108.5 L519.1 108.8 L519.6 109.1 L520.0 109.4 L520.5 109.7 L520.9 109.9 L521.4 110.2 L521.8 110.5 L522.3 110.8 L522.7 111.1 L523.2 111.4 L523.7 111.7 L524.1 112.0 L524.6 112.3 L525.0 112.6 L525.5 112.9 L525.9 113.2 L526.4 113.5 L526.8 113.8 L527.3 114.1 L527.7 114.4 L528.2 114.7 L528.6 115.0 L529.1 115.3 L529.5 115.6 L530.0 115.9 L530.4 116.2 L530.9 116.5 L531.3 116.8 L531.8 117.2 L532.3 117.5 L532.7 117.8 L533.2 118.1 L533.6 118.4 L534.1 118.7 L534.5 119.1 L535.0 119.4 L535.4 119.7 L535.9 120.0 L536.3 120.3 L536.8 120.7 L537.2 121.0 L537.7 121.3 L538.1 121.7 L538.6 122.0 L539.0 122.3 L539.5 122.7 L540.0 123.0 L540.4 123.3 L540.9 123.7 L541.3 124.0 L541.8 124.3 L542.2 124.7 L542.7 125.0 L543.1 125.3 L543.6 125.7 L544.0 126.0 L544.5 126.4 L544.9 126.7 L545.4 127.1 L545.8 127.4 L546.3 127.8 L546.7 128.1 L547.2 128.5 L547.7 128.8 L548.1 129.2 L548.6 129.5 L549.0 129.9 L549.5 130.2 L549.9 130.6 L550.4 130.9 L550.8 131.3 L551.3 131.6 L551.7 132.0 L552.2 132.4 L552.6 132.7 L553.1 133.1 L553.5 133.5 L554.0 133.8 L554.4 134.2 L554.9 134.6 L555.4 134.9 L555.8 135.3 L556.3 135.7 L556.7 136.0 L557.2 136.4 L557.6 136.8 L558.1 137.1 L558.5 137.5 L559.0 137.9 L559.4 138.3 L559.9 138.7 L560.3 139.0 L560.8 139.4 L561.2 139.8 L561.7 140.2 L562.1 140.6 L562.6 140.9 L563.0 141.3 L563.5 141.7 L564.0 142.1 L564.4 142.5 L564.9 142.9 L565.3 143.3 L565.8 143.6 L566.2 144.0 L566.7 144.4 L567.1 144.8 L567.6 145.2 L568.0 145.6 L568.5 146.0 L568.9 146.4 L569.4 146.8 L569.8 147.2 L570.3 147.6 L570.7 148.0 L571.2 148.4 L571.7 148.8 L572.1 149.2 L572.6 149.6 L573.0 150.0 L573.5 150.4 L573.9 150.8 L574.4 151.2 L574.8 151.6 L575.3 152.0 L575.7 152.4 L576.2 152.8 L576.6 153.3 L577.1 153.7 L577.5 154.1 L578.0 154.5 L578.4 154.9 L578.9 155.3 L579.4 155.7 L579.8 156.2 L580.3 156.6 L580.7 157.0 L581.2 157.4 L581.6 157.8 L582.1 158.2 L582.5 158.7 L583.0 159.1 L583.4 159.5 L583.9 159.9 L584.3 160.4 L584.8 160.8 L585.2 161.2 L585.7 161.6 L586.1 162.1 L586.6 162.5 L587.1 162.9 L587.5 163.4 L588.0 163.8 L588.4 164.2 L588.9 164.7 L589.3 165.1 L589.8 165.5 L590.2 166.0 L590.7 166.4 L591.1 166.8 L591.6 167.3 L592.0 167.7 L592.5 168.1 L592.9 168.6 L593.4 169.0 L593.8 169.5 L594.3 169.9 L594.7 170.4 L595.2 170.8 L595.7 171.2 L596.1 171.7 L596.6 172.1 L597.0 172.6 L597.5 173.0 L597.9 173.5 L598.4 173.9 L598.8 174.4 L599.3 174.8 L599.7 175.3 L600.2 175.7 L600.6 176.2 L601.1 176.6 L601.5 177.1 L602.0 177.5 L602.4 178.0 L602.9 178.5 L603.4 178.9 L603.8 179.4 L604.3 179.8 L604.7 180.3 L605.2 180.7 L605.6 181.2 L606.1 181.7 L606.5 182.1 L607.0 182.6 L607.4 183.1 L607.9 183.5 L608.3 184.0 L608.8 184.4 L609.2 184.9 L609.7 185.4 L610.1 185.9 L610.6 186.3 L611.1 186.8 L611.5 187.3 L612.0 187.7 L612.4 188.2 L612.9 188.7 L613.3 189.1 L613.8 189.6 L614.2 190.1 L614.7 190.6 L615.1 191.0 L615.6 191.5 L616.0 192.0 L616.5 192.5 L616.9 192.9 L617.4 193.4 L617.8 193.9 L618.3 194.4 L618.8 194.9 L619.2 195.3 L619.7 195.8 L620.1 196.3 L620.6 196.8 L621.0 197.3 L621.5 197.8 L621.9 198.2 L622.4 198.7 L622.8 199.2 L623.3 199.7 L623.7 200.2 L624.2 200.7 L624.6 201.2 L625.1 201.6 L625.5 202.1 L626.0 202.6 L626.4 203.1 L626.9 203.6 L627.4 204.1 L627.8 204.6 L628.3 205.1 L628.7 205.6 L629.2 206.1 L629.6 206.6 L630.1 207.1 L630.5 207.6 L631.0 208.1 L631.4 208.6 L631.9 209.1 L632.3 209.6 L632.8 210.1 L633.2 210.6 L633.7 211.1 L634.1 211.6 L634.6 212.1 L635.1 212.6 L635.5 213.1 L636.0 213.6 L636.4 214.1 L636.9 214.6 L637.3 215.1 L637.8 215.6 L638.2 216.1 L638.7 216.6 L639.1 217.1 L639.6 217.6 L640.0 218.1 L640.5 218.6 L640.9 219.1 L641.4 219.6 L641.8 220.2 L642.3 220.7 L642.8 221.2 L643.2 221.7 L643.7 222.2 L644.1 222.7 L644.6 223.2 L645.0 223.7 L645.5 224.3 L645.9 224.8 L646.4 225.3 L646.8 225.8 L647.3 226.3 L647.7 226.8 L648.2 227.4 L648.6 227.9 L649.1 228.4 L649.5 228.9 L650.0 229.4 L650.5 230.0 L650.9 230.5 L651.4 231.0 L651.8 231.5 L652.3 232.0 L652.7 232.6 L653.2 233.1 L653.6 233.6 L654.1 234.1 L654.5 234.7 L655.0 235.2 L655.4 235.7 L655.9 236.2 L656.3 236.8 L656.8 237.3 L657.2 237.8 L657.7 238.4 L658.1 238.9 L658.6 239.4 L659.1 239.9 L659.5 240.5 L660.0 241.0 L660.4 241.5 L660.9 242.1 L661.3 242.6 L661.8 243.1 L662.2 243.7 L662.7 244.2 L663.1 244.7 L663.6 245.3 L664.0 245.8 L664.5 246.3 L664.9 246.9 L665.4 247.4 L665.8 248.0 L666.3 248.5 L666.8 249.0 L667.2 249.6 L667.7 250.1 L668.1 250.6 L668.6 251.2 L669.0 251.7 L669.5 252.3 L669.9 252.8 L670.4 253.4 L670.8 253.9 L671.3 254.0 L671.7 254.0 L672.2 254.0 L672.6 254.0 L673.1 254.0 L673.5 254.0 L674.0 254.0 L674.5 254.0 L674.9 254.0 L675.4 254.0 L675.8 254.0 L676.3 254.0 L676.7 254.0 L677.2 254.0 L677.6 254.0 L678.1 254.0 L678.5 254.0 L679.0 254.0 L679.4 254.0 L679.9 254.0 L680.3 254.0 L680.8 254.0 L681.2 254.0 L681.7 254.0 L682.2 254.0 L682.6 254.0 L683.1 254.0 L683.5 254.0 L684.0 254.0 L684.4 254.0 L684.9 254.0 L685.3 254.0 L685.8 254.0 L686.2 254.0 L686.7 254.0 L687.1 254.0 L687.6 254.0 L688.0 254.0 L688.5 254.0 L688.9 254.0 L689.4 254.0 L689.8 254.0 L690.3 254.0 L690.8 254.0 L691.2 254.0 L691.7 254.0 L692.1 254.0 L692.6 254.0 L693.0 254.0 L693.5 254.0 L693.9 254.0 L694.4 254.0 L694.8 254.0 L695.3 254.0 L695.7 254.0 L696.2 254.0 L696.6 254.0 L697.1 254.0 L697.5 254.0 L698.0 254.0" fill="none" stroke="#1c1518" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/>
+                                </g>
+                                <text class="lbl" x="485.2" y="31.6" text-anchor="start" style="fill:#6f655f">Betz limit 16/27 = 0.593</text>
+                                <text class="lbl" x="439.9" y="243.1" text-anchor="start" style="fill:#7a1f2b">λ<tspan baseline-shift="sub" font-size="75%">opt</tspan> = 8.1, c<tspan baseline-shift="sub" font-size="75%">p</tspan> = 0.48</text>
+                                <line x1="64" x2="698" y1="298.0" y2="298.0" stroke="#eee6d9"/>
+                                <line x1="64.0" x2="86.0" y1="314.0" y2="314.0" stroke="#1c1518" stroke-width="2.2" stroke-linecap="round"/>
+                                <text class="lbl" x="94.0" y="318.0">c<tspan baseline-shift="sub" font-size="75%">p</tspan>(λ), Heier fit, zero pitch</text>
+                                </svg>
+                            </div>
+                            <figcaption><span class="pfig__n">Figure 2</span>Power coefficient against tip-speed ratio from equation (5). The curve rises from zero, peaks at \(\lambda_\text{opt} = 8.1\) and falls back to zero at \(\lambda = 13.4\). The dashed horizontal line is the Betz limit of section 3. At 8 m/s, the best this rotor can do is \(0.48\times1.58\ \mathrm{MW} = 757\ \mathrm{kW}\), reached at \(15.5\) turns per minute.</figcaption>
+                        </figure>
+                    </section>
+
+                    <section class="psec" id="p-rotor">
+                        <h3><span class="psec__n">05</span>The rotor’s equation of motion</h3>
+                        <p>Newton’s second law for a rotation says that the net torque on the rotor changes its angular speed, in proportion to the inverse of its moment of inertia \(J\). Two torques act: the wind’s, which drives, and the generator’s, which brakes:</p>
+                        \[ J\,\frac{\mathrm{d}\omega}{\mathrm{d}t} = \tau_\text{aero}(\omega, v(t)) - \tau_\text{gen} . \tag{6} \]
+                        <p>For the rotor and drive train together, the page takes \(J = 4.0\times10^6\ \mathrm{kg\,m^2}\). Multiplying (6) by \(\omega\) turns it into an energy statement: the wind’s power \(\tau_\text{aero}\omega\) either goes into the generator, \(P_\text{gen} = \tau_\text{gen}\omega\), or changes the rotor’s kinetic energy \(\tfrac12 J\omega^2\). Integrated over the run,</p>
+                        \[ E_\text{aero} = E_\text{gen} + \Delta\!\left(\tfrac12 J\omega^2\right), \tag{7} \]
+                        <p>which the page checks after every solve: the <em>Energy balance</em> readout.</p>
+                        <p>Notice the two time dependences in (6). The wind \(v(t)\) depends on time through the weather alone. The generator torque is chosen by the controller from the measured speed \(\omega\). The first is a drive, as in Fig. 9; the second is <em>feedback</em> (Figure 3).</p>
+                        <figure class="pfig">
+                            <div class="pfig__plate">
+                                <svg viewBox="0 0 720 210" role="img" aria-label="Feedback loop: the wind v of t drives the aerodynamics, which give a torque to the rotor; the rotor speed omega is measured by the controller, which sets the generator torque, which brakes the rotor.">
+                                    <rect x="0" y="0" width="720" height="210" fill="#fff"/>
+                                    <text class="m" x="24" y="66" style="fill:#7a1f2b">v(t)</text>
+                                    <text class="lbl" x="18" y="40">wind, set by the weather</text>
+                                    <line x1="70" y1="60" x2="134" y2="60" stroke="#7a1f2b" stroke-width="2.2"/><path d="M130 54 L142 60 L130 66 Z" fill="#7a1f2b"/>
+                                    <rect x="144" y="30" width="150" height="60" rx="6" fill="#fbf6ee" stroke="#1c1518" stroke-width="1.8"/>
+                                    <text class="mu" x="160" y="56">aerodynamics</text>
+                                    <text class="m" x="160" y="78">τ_aero(ω, v)</text>
+                                    <line x1="294" y1="60" x2="370" y2="60" stroke="#1c1518" stroke-width="2.2"/><path d="M366 54 L378 60 L366 66 Z" fill="#1c1518"/>
+                                    <circle cx="392" cy="60" r="13" fill="#fff" stroke="#1c1518" stroke-width="1.8"/>
+                                    <text class="mu" x="384" y="66">+</text>
+                                    <text class="mu" x="392" y="100">−</text>
+                                    <line x1="405" y1="60" x2="460" y2="60" stroke="#1c1518" stroke-width="2.2"/><path d="M456 54 L468 60 L456 66 Z" fill="#1c1518"/>
+                                    <rect x="470" y="30" width="140" height="60" rx="6" fill="#fbf6ee" stroke="#1c1518" stroke-width="1.8"/>
+                                    <text class="mu" x="486" y="56">rotor</text>
+                                    <text class="m" x="486" y="78">J dω/dt</text>
+                                    <line x1="610" y1="60" x2="690" y2="60" stroke="#1c1518" stroke-width="2.2"/>
+                                    <text class="m" x="660" y="50">ω</text>
+                                    <line x1="680" y1="60" x2="680" y2="160" stroke="#1c1518" stroke-width="2"/>
+                                    <line x1="680" y1="160" x2="528" y2="160" stroke="#1c1518" stroke-width="2"/><path d="M532 154 L520 160 L532 166 Z" fill="#1c1518"/>
+                                    <rect x="372" y="130" width="146" height="60" rx="6" fill="#fff" stroke="#7a1f2b" stroke-width="2"/>
+                                    <text class="mu" x="388" y="156" style="fill:#7a1f2b">controller</text>
+                                    <text class="m" x="388" y="178">τ_gen(ω)</text>
+                                    <line x1="392" y1="130" x2="392" y2="86" stroke="#7a1f2b" stroke-width="2"/><path d="M386 90 L392 78 L398 90 Z" fill="#7a1f2b"/>
+                                    <text class="lbl" x="560" y="186">measured speed</text>
+                                    <text class="lbl" x="216" y="150">generator brakes</text>
+                                </svg>
+                            </div>
+                            <figcaption><span class="pfig__n">Figure 3</span>The turbine as a control loop. The wind enters from outside; the controller closes the loop by turning the measured speed \(\omega\) into a braking torque. Compare Figure 3 of Fig. 9, where no arrow led back.</figcaption>
+                        </figure>
+                    </section>
+
+                    <section class="psec" id="p-control">
+                        <h3><span class="psec__n">06</span>Two controllers<span class="star" title="heavier mathematics">★</span></h3>
+                        <h4><span class="psub__n">6.1</span>Follow the wind: the optimal-torque law</h4>
+                        <p>To take the most energy, the rotor should always run at \(\lambda_\text{opt}\). The controller cannot measure the wind reliably at the rotor, but it can measure \(\omega\). If the rotor is at the optimum, then \(v = \omega R/\lambda_\text{opt}\), and (2) becomes a function of \(\omega\) alone:</p>
+                        \[ \tau_\text{aero}\big|_{\lambda_\text{opt}} = \frac{\tfrac12\rho\pi R^2 c_{p,\max}}{\omega}\left(\frac{\omega R}{\lambda_\text{opt}}\right)^3 = K_\text{opt}\,\omega^2, \qquad K_\text{opt} = \frac{\rho\pi R^5 c_{p,\max}}{2\lambda_\text{opt}^3} . \tag{8} \]
+                        <p>The controller brakes with \(\tau_{\rm gen}=K_{\rm opt}\omega^2\), here \(K_{\rm opt}=1.78\times10^5\ \mathrm{N\,m\,s^2}\). Its intended equilibrium is locally stable at fixed wind. At a smooth maximum of \(c_p\), \(dc_p/d\lambda=0\). Since aerodynamic torque is wind power divided by \(\omega\), its slope at the equilibrium is \(-K_{\rm opt}\omega_*\), while the brake’s slope is \(2K_{\rm opt}\omega_*\). The net slope is therefore \(-3K_{\rm opt}\omega_*\lt0\): a small overspeed produces a restoring braking torque, and a small underspeed the opposite.</p><p>A small speed error consequently obeys \(J\,\delta\dot\omega\approx-3K_{\rm opt}\omega_*\,\delta\omega\), with relaxation time \(J/(3K_{\rm opt}\omega_*)\approx4.62\) s at 8 m/s wind. That is the local picture. The global one follows from the net torque, \(\tfrac12\rho\pi R^5\omega^2\left[c_p(\lambda)/\lambda^3 - c_{p,\max}/\lambda_\text{opt}^3\right]\). The function \(c_p(\lambda)/\lambda^3\) is not monotone (it rises between \(\lambda = 2.4\) and \(4.3\)), but it stays above its value at \(\lambda_\text{opt}\) for every \(\lambda\) below \(\lambda_\text{opt}\) and below it for every \(\lambda\) above, checked on a grid of step \(10^{-4}\). Above \(\lambda_\text{opt}\) this is automatic, because \(c_p \le c_{p,\max}\) while \(\lambda^3 > \lambda_\text{opt}^3\); below, it is a property of this fit. So in steady wind, with the torque below its limit, the rotor returns to \(\lambda_\text{opt}\) from any start at which it is already turning: too slow and the wind wins, too fast and the brake wins. (The fit gives no torque at a standstill, so it says nothing about starting.) What the argument does not promise is optimal capture in changing wind: the return takes a few relaxation times, and a gust shorter than that is over before the rotor has caught up.</p>
+                        <h4><span class="psub__n">6.2</span>Hold speed: a PI controller</h4>
+                        <p>Sometimes a constant speed is wanted: for a generator tied to the grid’s frequency, for quiet operation, or to stay away from a tower resonance. The controller then compares \(\omega\) with a target \(\omega_\text{ref}\) and brakes harder the faster the rotor turns, adding a term that remembers past errors:</p>
+                        \[ \tau_\text{gen} = \tau_0 + K_p\,(\omega - \omega_\text{ref}) + K_i\int_0^t(\omega - \omega_\text{ref})\,\mathrm{d}t' . \tag{9} \]
+                        <p>To choose the gains, linearise (6) around the target in steady wind. A small speed error \(\delta\omega\) changes the aerodynamic torque by \((\partial\tau_\text{aero}/\partial\omega)\,\delta\omega\). Differentiating once in time gives the equation of a damped oscillator, the same as in Fig. 9:</p>
+                        \[ J\,\delta\ddot\omega + \left(K_p - \frac{\partial\tau_\text{aero}}{\partial\omega}\right)\delta\dot\omega + K_i\,\delta\omega = 0 \quad\Longleftrightarrow\quad \delta\ddot\omega + 2\zeta_c\omega_n\,\delta\dot\omega + \omega_n^2\,\delta\omega = 0 . \tag{10} \]
+                        <p>The proportional term reacts to the speed error now. A positive error means overspeed, so it asks for more generator braking; a negative error reduces braking. The integral term remembers an error that persists: even a small overspeed builds a larger correction if it lasts. The linearised equation (10) above fixes how quickly a small disturbance decays. Torque limits and changing wind can take the rotor outside that approximation.</p><p>Picking a natural frequency \(\omega_n = 0.6\ \mathrm{rad/s}\) and a damping ratio \(\zeta_c = 0.8\) fixes \(K_i = J\omega_n^2 = 1.44\times10^6\ \mathrm{N\,m}\) and \(K_p = 2\zeta_c\omega_n J + \partial\tau_\text{aero}/\partial\omega\). At 15 turns per minute in an 8 m/s wind, the aerodynamic slope is \(-2.48\times10^5\ \mathrm{N\,m\,s}\): the wind itself damps the rotor a little. That gives \(K_p = 3.59\times10^6\ \mathrm{N\,m\,s}\). An error then decays within a few seconds without ringing. The torque is kept between 0 and \(1.2\ \mathrm{MN\,m}\), and the integral stops growing while the torque sits at a limit (anti-windup).</p>
+                    </section>
+
+                    <section class="psec" id="p-compare">
+                        <h3><span class="psec__n">07</span>Same wind, two answers</h3>
+                        <p>Figure 4 shows the page’s default wind, two minutes of turbulence around a mean of 8 m/s, built from sixteen sine waves between 0.005 and 0.5 Hz with amplitudes falling as \(f^{-1/3}\), and the two controllers’ responses to it.</p>
+                        <figure class="pfig">
+                            <div class="pfig__plate">
+                                <svg viewBox="0 0 720 226" role="img" xmlns="http://www.w3.org/2000/svg">
+                                <defs><clipPath id="f10winclip4"><rect x="64.0" y="18.0" width="634.0" height="136.0"/></clipPath></defs>
+                                <line x1="64.0" x2="698.0" y1="154.0" y2="154.0" stroke="#eee6d9" stroke-width="1"/>
+                                <text class="tick" x="56.0" y="158.0" text-anchor="end">4</text>
+                                <line x1="64.0" x2="698.0" y1="120.0" y2="120.0" stroke="#eee6d9" stroke-width="1"/>
+                                <text class="tick" x="56.0" y="124.0" text-anchor="end">6</text>
+                                <line x1="64.0" x2="698.0" y1="86.0" y2="86.0" stroke="#eee6d9" stroke-width="1"/>
+                                <text class="tick" x="56.0" y="90.0" text-anchor="end">8</text>
+                                <line x1="64.0" x2="698.0" y1="52.0" y2="52.0" stroke="#eee6d9" stroke-width="1"/>
+                                <text class="tick" x="56.0" y="56.0" text-anchor="end">10</text>
+                                <line x1="64.0" x2="698.0" y1="18.0" y2="18.0" stroke="#eee6d9" stroke-width="1"/>
+                                <text class="tick" x="56.0" y="22.0" text-anchor="end">12</text>
+                                <line x1="64.0" x2="64.0" y1="154.0" y2="159.0" stroke="#8b8079"/>
+                                <text class="tick" x="64.0" y="173.0" text-anchor="middle">0</text>
+                                <line x1="169.7" x2="169.7" y1="154.0" y2="159.0" stroke="#8b8079"/>
+                                <text class="tick" x="169.7" y="173.0" text-anchor="middle">20</text>
+                                <line x1="275.3" x2="275.3" y1="154.0" y2="159.0" stroke="#8b8079"/>
+                                <text class="tick" x="275.3" y="173.0" text-anchor="middle">40</text>
+                                <line x1="381.0" x2="381.0" y1="154.0" y2="159.0" stroke="#8b8079"/>
+                                <text class="tick" x="381.0" y="173.0" text-anchor="middle">60</text>
+                                <line x1="486.7" x2="486.7" y1="154.0" y2="159.0" stroke="#8b8079"/>
+                                <text class="tick" x="486.7" y="173.0" text-anchor="middle">80</text>
+                                <line x1="592.3" x2="592.3" y1="154.0" y2="159.0" stroke="#8b8079"/>
+                                <text class="tick" x="592.3" y="173.0" text-anchor="middle">100</text>
+                                <line x1="698.0" x2="698.0" y1="154.0" y2="159.0" stroke="#8b8079"/>
+                                <text class="tick" x="698.0" y="173.0" text-anchor="middle">120</text>
+                                <line x1="64.0" x2="698.0" y1="154.0" y2="154.0" stroke="#8b8079"/>
+                                <line x1="64.0" x2="64.0" y1="18.0" y2="154.0" stroke="#8b8079"/>
+                                <text class="lbl" x="698.0" y="192.0" text-anchor="end">time t (s)</text>
+                                <text class="lbl" x="70.0" y="31.0">wind speed (m/s)</text>
+                                <g clip-path="url(#f10winclip4)">
+                                <path d="M64.0 100.7 L65.1 105.8 L66.1 110.1 L67.2 112.6 L68.2 113.4 L69.3 113.0 L70.3 112.0 L71.4 111.5 L72.5 111.8 L73.5 113.1 L74.6 114.9 L75.6 116.7 L76.7 117.8 L77.7 117.8 L78.8 116.8 L79.8 115.2 L80.9 113.5 L82.0 112.0 L83.0 111.0 L84.1 110.2 L85.1 109.1 L86.2 107.2 L87.2 104.1 L88.3 99.9 L89.4 95.1 L90.4 90.3 L91.5 86.4 L92.5 83.8 L93.6 82.6 L94.6 82.2 L95.7 81.9 L96.8 80.9 L97.8 78.5 L98.9 74.8 L99.9 70.4 L101.0 66.2 L102.0 63.2 L103.1 62.2 L104.2 63.5 L105.2 66.6 L106.3 70.5 L107.3 73.9 L108.4 75.7 L109.4 75.5 L110.5 73.1 L111.5 69.4 L112.6 65.2 L113.7 61.7 L114.7 59.5 L115.8 59.0 L116.8 59.9 L117.9 61.9 L118.9 64.3 L120.0 66.9 L121.1 69.5 L122.1 72.4 L123.2 75.8 L124.2 79.9 L125.3 84.3 L126.3 88.7 L127.4 92.3 L128.5 94.4 L129.5 94.8 L130.6 93.5 L131.6 91.2 L132.7 88.8 L133.7 87.3 L134.8 87.4 L135.9 89.3 L136.9 92.6 L138.0 96.3 L139.0 99.5 L140.1 101.4 L141.1 101.9 L142.2 101.3 L143.2 100.4 L144.3 100.2 L145.4 101.5 L146.4 104.6 L147.5 109.2 L148.5 114.4 L149.6 119.1 L150.6 122.4 L151.7 123.6 L152.8 122.7 L153.8 120.4 L154.9 117.4 L155.9 114.6 L157.0 112.6 L158.0 111.6 L159.1 111.4 L160.2 111.4 L161.2 111.2 L162.3 110.5 L163.3 109.5 L164.4 108.5 L165.4 107.8 L166.5 107.8 L167.6 108.3 L168.6 109.1 L169.7 109.4 L170.7 108.8 L171.8 107.0 L172.8 104.3 L173.9 101.4 L174.9 99.3 L176.0 99.0 L177.1 101.0 L178.1 105.4 L179.2 111.5 L180.2 118.1 L181.3 123.9 L182.3 127.6 L183.4 128.9 L184.5 127.8 L185.5 125.0 L186.6 121.7 L187.6 118.7 L188.7 116.7 L189.7 115.8 L190.8 115.5 L191.9 115.2 L192.9 114.2 L194.0 112.1 L195.0 109.2 L196.1 105.9 L197.1 103.0 L198.2 101.1 L199.3 100.7 L200.3 101.6 L201.4 103.3 L202.4 105.2 L203.5 106.8 L204.5 107.9 L205.6 108.4 L206.7 108.8 L207.7 109.5 L208.8 110.7 L209.8 112.4 L210.9 114.2 L211.9 115.4 L213.0 115.4 L214.0 113.9 L215.1 111.1 L216.2 107.8 L217.2 105.0 L218.3 103.8 L219.3 105.0 L220.4 108.4 L221.4 113.6 L222.5 119.3 L223.6 124.4 L224.6 127.5 L225.7 128.1 L226.7 126.5 L227.8 123.2 L228.8 119.3 L229.9 115.8 L231.0 113.5 L232.0 112.5 L233.1 112.4 L234.1 112.6 L235.2 112.4 L236.2 111.4 L237.3 109.5 L238.4 107.1 L239.4 104.6 L240.5 102.4 L241.5 100.8 L242.6 99.5 L243.6 98.2 L244.7 96.4 L245.7 93.7 L246.8 90.3 L247.9 86.7 L248.9 83.5 L250.0 81.5 L251.0 81.2 L252.1 82.6 L253.1 85.1 L254.2 88.0 L255.3 90.4 L256.3 91.6 L257.4 91.4 L258.4 90.4 L259.5 89.4 L260.5 89.2 L261.6 90.5 L262.7 93.4 L263.7 97.4 L264.8 101.3 L265.8 104.2 L266.9 104.9 L267.9 103.2 L269.0 99.1 L270.1 93.7 L271.1 88.1 L272.2 83.5 L273.2 80.6 L274.3 79.7 L275.3 80.6 L276.4 82.6 L277.4 85.1 L278.5 87.5 L279.6 89.7 L280.6 91.8 L281.7 94.0 L282.7 96.4 L283.8 98.9 L284.8 101.2 L285.9 102.7 L287.0 102.8 L288.0 101.4 L289.1 98.5 L290.1 94.8 L291.2 91.1 L292.2 88.5 L293.3 87.4 L294.4 87.8 L295.4 89.3 L296.5 90.8 L297.5 91.5 L298.6 90.5 L299.6 87.7 L300.7 83.6 L301.8 78.9 L302.8 74.9 L303.9 72.5 L304.9 71.9 L306.0 72.9 L307.0 75.0 L308.1 76.9 L309.1 77.9 L310.2 77.5 L311.3 75.7 L312.3 73.2 L313.4 70.9 L314.4 69.5 L315.5 69.6 L316.5 71.2 L317.6 73.8 L318.7 76.8 L319.7 79.5 L320.8 81.5 L321.8 82.7 L322.9 83.4 L323.9 83.9 L325.0 84.5 L326.1 85.4 L327.1 86.3 L328.2 86.7 L329.2 86.1 L330.3 84.4 L331.3 81.9 L332.4 79.2 L333.4 77.2 L334.5 76.8 L335.6 78.4 L336.6 81.7 L337.7 86.2 L338.7 90.4 L339.8 93.2 L340.8 93.6 L341.9 91.1 L343.0 86.1 L344.0 79.6 L345.1 72.7 L346.1 66.6 L347.2 62.1 L348.2 59.2 L349.3 57.5 L350.4 56.3 L351.4 54.9 L352.5 52.9 L353.5 50.3 L354.6 47.7 L355.6 45.6 L356.7 44.6 L357.8 45.1 L358.8 46.8 L359.9 49.3 L360.9 51.9 L362.0 53.9 L363.0 55.0 L364.1 55.2 L365.1 55.1 L366.2 54.9 L367.3 55.0 L368.3 55.5 L369.4 56.1 L370.4 56.0 L371.5 54.8 L372.5 52.2 L373.6 48.4 L374.7 44.0 L375.7 40.1 L376.8 37.6 L377.8 37.0 L378.9 38.5 L379.9 41.3 L381.0 44.5 L382.1 46.8 L383.1 47.3 L384.2 45.7 L385.2 42.4 L386.3 38.2 L387.3 34.3 L388.4 32.0 L389.5 31.8 L390.5 33.8 L391.6 37.5 L392.6 42.0 L393.7 46.4 L394.7 50.1 L395.8 52.7 L396.9 54.5 L397.9 55.9 L399.0 57.2 L400.0 58.6 L401.1 60.0 L402.1 61.1 L403.2 61.5 L404.2 60.8 L405.3 59.3 L406.4 57.4 L407.4 55.8 L408.5 55.3 L409.5 56.3 L410.6 58.9 L411.6 62.6 L412.7 66.4 L413.8 69.6 L414.8 71.5 L415.9 71.9 L416.9 71.4 L418.0 70.7 L419.0 70.6 L420.1 71.8 L421.2 74.4 L422.2 77.9 L423.3 81.3 L424.3 83.4 L425.4 83.6 L426.4 81.4 L427.5 77.3 L428.5 72.1 L429.6 67.0 L430.7 63.2 L431.7 61.4 L432.8 61.6 L433.8 63.5 L434.9 66.1 L435.9 68.7 L437.0 70.6 L438.1 71.6 L439.1 71.7 L440.2 71.4 L441.2 70.9 L442.3 70.3 L443.3 69.5 L444.4 68.2 L445.5 66.0 L446.5 62.7 L447.6 58.5 L448.6 54.1 L449.7 50.3 L450.7 47.9 L451.8 47.3 L452.9 48.4 L453.9 50.6 L455.0 53.0 L456.0 54.5 L457.1 54.6 L458.1 52.9 L459.2 50.2 L460.2 47.2 L461.3 45.2 L462.4 45.1 L463.4 47.3 L464.5 51.4 L465.5 56.8 L466.6 62.3 L467.6 67.0 L468.7 70.3 L469.8 72.4 L470.8 73.6 L471.9 74.8 L472.9 76.7 L474.0 79.6 L475.0 83.4 L476.1 87.7 L477.2 91.6 L478.2 94.4 L479.3 95.6 L480.3 95.2 L481.4 93.7 L482.4 91.5 L483.5 89.3 L484.6 87.3 L485.6 85.5 L486.7 83.7 L487.7 81.5 L488.8 78.9 L489.8 76.1 L490.9 73.7 L492.0 72.4 L493.0 73.1 L494.1 75.9 L495.1 80.6 L496.2 86.3 L497.2 92.0 L498.3 96.2 L499.3 98.2 L500.4 97.6 L501.5 94.9 L502.5 91.2 L503.6 87.7 L504.6 85.5 L505.7 85.2 L506.7 86.9 L507.8 89.8 L508.9 93.2 L509.9 96.1 L511.0 97.9 L512.0 98.7 L513.1 98.7 L514.1 98.7 L515.2 99.1 L516.3 100.5 L517.3 102.7 L518.4 105.2 L519.4 107.4 L520.5 108.9 L521.5 109.4 L522.6 108.9 L523.6 108.1 L524.7 107.5 L525.8 107.4 L526.8 108.0 L527.9 108.9 L528.9 109.6 L530.0 109.5 L531.0 108.3 L532.1 106.1 L533.2 103.4 L534.2 101.0 L535.3 99.7 L536.3 100.1 L537.4 102.0 L538.4 104.9 L539.5 107.8 L540.6 109.4 L541.6 109.2 L542.7 106.8 L543.7 102.7 L544.8 98.1 L545.8 94.0 L546.9 91.7 L548.0 91.5 L549.0 93.5 L550.1 97.0 L551.1 100.8 L552.2 104.0 L553.2 105.7 L554.3 105.7 L555.4 104.2 L556.4 101.7 L557.5 98.7 L558.5 95.8 L559.6 93.0 L560.6 90.0 L561.7 86.7 L562.7 82.8 L563.8 78.7 L564.9 74.6 L565.9 71.4 L567.0 69.6 L568.0 69.7 L569.1 71.6 L570.1 74.7 L571.2 78.2 L572.3 81.0 L573.3 82.6 L574.4 82.8 L575.4 81.9 L576.5 80.8 L577.5 80.3 L578.6 80.9 L579.7 82.8 L580.7 85.4 L581.8 87.9 L582.8 89.1 L583.9 88.4 L584.9 85.4 L586.0 80.6 L587.0 74.9 L588.1 69.6 L589.2 65.6 L590.2 63.7 L591.3 63.7 L592.3 65.3 L593.4 67.4 L594.4 69.2 L595.5 70.1 L596.6 69.9 L597.6 68.9 L598.7 67.6 L599.7 66.6 L600.8 66.1 L601.8 66.2 L602.9 66.6 L604.0 66.9 L605.0 67.0 L606.1 66.9 L607.1 67.0 L608.2 67.8 L609.2 69.8 L610.3 73.3 L611.4 78.0 L612.4 83.1 L613.5 87.6 L614.5 90.5 L615.6 91.1 L616.6 89.5 L617.7 86.2 L618.8 82.3 L619.8 79.0 L620.9 77.2 L621.9 77.5 L623.0 79.4 L624.0 82.4 L625.1 85.2 L626.1 86.9 L627.2 87.1 L628.3 85.8 L629.3 83.5 L630.4 81.2 L631.4 79.4 L632.5 78.8 L633.5 79.1 L634.6 80.0 L635.7 80.6 L636.7 80.3 L637.8 78.7 L638.8 75.9 L639.9 72.4 L640.9 68.9 L642.0 66.0 L643.1 64.2 L644.1 63.4 L645.2 63.3 L646.2 63.6 L647.3 64.1 L648.3 64.8 L649.4 66.0 L650.5 68.3 L651.5 72.2 L652.6 77.7 L653.6 84.7 L654.7 92.2 L655.7 99.0 L656.8 104.0 L657.8 106.6 L658.9 106.6 L660.0 104.5 L661.0 101.6 L662.1 99.2 L663.1 98.2 L664.2 99.3 L665.2 102.3 L666.3 106.5 L667.4 110.8 L668.4 114.3 L669.5 116.4 L670.5 116.9 L671.6 116.4 L672.6 115.6 L673.7 115.1 L674.8 115.6 L675.8 117.1 L676.9 119.1 L677.9 121.2 L679.0 122.9 L680.0 123.9 L681.1 124.3 L682.1 124.7 L683.2 125.3 L684.3 126.7 L685.3 128.8 L686.4 131.2 L687.4 133.3 L688.5 134.4 L689.5 134.1 L690.6 132.3 L691.7 129.5 L692.7 126.6 L693.8 124.1 L694.8 122.7 L695.9 122.3 L696.9 122.5 L698.0 122.4" fill="none" stroke="#1c1518" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/>
+                                </g>
+                                <line x1="64" x2="698" y1="198.0" y2="198.0" stroke="#eee6d9"/>
+                                <line x1="64.0" x2="86.0" y1="214.0" y2="214.0" stroke="#1c1518" stroke-width="2.2" stroke-linecap="round"/>
+                                <text class="lbl" x="94.0" y="218.0">wind speed v(t), turbulent, v₀ = 8 m/s, σ = 1.5 m/s</text>
+                                </svg>
+                            </div>
+                            <div class="pfig__plate" style="margin-top: 12px;">
+                                <svg viewBox="0 0 720 276" role="img" xmlns="http://www.w3.org/2000/svg">
+                                <defs><clipPath id="f10rpmclip2"><rect x="64.0" y="18.0" width="634.0" height="186.0"/></clipPath></defs>
+                                <line x1="64.0" x2="698.0" y1="204.0" y2="204.0" stroke="#eee6d9" stroke-width="1"/>
+                                <text class="tick" x="56.0" y="208.0" text-anchor="end">10</text>
+                                <line x1="64.0" x2="698.0" y1="173.0" y2="173.0" stroke="#eee6d9" stroke-width="1"/>
+                                <text class="tick" x="56.0" y="177.0" text-anchor="end">12</text>
+                                <line x1="64.0" x2="698.0" y1="142.0" y2="142.0" stroke="#eee6d9" stroke-width="1"/>
+                                <text class="tick" x="56.0" y="146.0" text-anchor="end">14</text>
+                                <line x1="64.0" x2="698.0" y1="111.0" y2="111.0" stroke="#eee6d9" stroke-width="1"/>
+                                <text class="tick" x="56.0" y="115.0" text-anchor="end">16</text>
+                                <line x1="64.0" x2="698.0" y1="80.0" y2="80.0" stroke="#eee6d9" stroke-width="1"/>
+                                <text class="tick" x="56.0" y="84.0" text-anchor="end">18</text>
+                                <line x1="64.0" x2="698.0" y1="49.0" y2="49.0" stroke="#eee6d9" stroke-width="1"/>
+                                <text class="tick" x="56.0" y="53.0" text-anchor="end">20</text>
+                                <line x1="64.0" x2="698.0" y1="18.0" y2="18.0" stroke="#eee6d9" stroke-width="1"/>
+                                <text class="tick" x="56.0" y="22.0" text-anchor="end">22</text>
+                                <line x1="64.0" x2="64.0" y1="204.0" y2="209.0" stroke="#8b8079"/>
+                                <text class="tick" x="64.0" y="223.0" text-anchor="middle">0</text>
+                                <line x1="169.7" x2="169.7" y1="204.0" y2="209.0" stroke="#8b8079"/>
+                                <text class="tick" x="169.7" y="223.0" text-anchor="middle">20</text>
+                                <line x1="275.3" x2="275.3" y1="204.0" y2="209.0" stroke="#8b8079"/>
+                                <text class="tick" x="275.3" y="223.0" text-anchor="middle">40</text>
+                                <line x1="381.0" x2="381.0" y1="204.0" y2="209.0" stroke="#8b8079"/>
+                                <text class="tick" x="381.0" y="223.0" text-anchor="middle">60</text>
+                                <line x1="486.7" x2="486.7" y1="204.0" y2="209.0" stroke="#8b8079"/>
+                                <text class="tick" x="486.7" y="223.0" text-anchor="middle">80</text>
+                                <line x1="592.3" x2="592.3" y1="204.0" y2="209.0" stroke="#8b8079"/>
+                                <text class="tick" x="592.3" y="223.0" text-anchor="middle">100</text>
+                                <line x1="698.0" x2="698.0" y1="204.0" y2="209.0" stroke="#8b8079"/>
+                                <text class="tick" x="698.0" y="223.0" text-anchor="middle">120</text>
+                                <line x1="64.0" x2="698.0" y1="204.0" y2="204.0" stroke="#8b8079"/>
+                                <line x1="64.0" x2="64.0" y1="18.0" y2="204.0" stroke="#8b8079"/>
+                                <text class="lbl" x="698.0" y="242.0" text-anchor="end">time t (s)</text>
+                                <text class="lbl" x="70.0" y="31.0">rotor speed (rpm)</text>
+                                <g clip-path="url(#f10rpmclip2)">
+                                <path d="M64.0 145.0 L65.1 145.2 L66.1 145.7 L67.2 146.4 L68.2 147.2 L69.3 147.9 L70.3 148.6 L71.4 149.2 L72.5 149.8 L73.5 150.3 L74.6 151.0 L75.6 151.8 L76.7 152.6 L77.7 153.4 L78.8 154.2 L79.8 154.8 L80.9 155.3 L82.0 155.7 L83.0 156.0 L84.1 156.3 L85.1 156.4 L86.2 156.5 L87.2 156.4 L88.3 156.1 L89.4 155.5 L90.4 154.6 L91.5 153.5 L92.5 152.3 L93.6 150.9 L94.6 149.6 L95.7 148.2 L96.8 146.9 L97.8 145.5 L98.9 144.0 L99.9 142.2 L101.0 140.3 L102.0 138.1 L103.1 135.9 L104.2 133.8 L105.2 131.9 L106.3 130.2 L107.3 128.8 L108.4 127.6 L109.4 126.6 L110.5 125.4 L111.5 124.1 L112.6 122.6 L113.7 120.9 L114.7 119.0 L115.8 117.1 L116.8 115.2 L117.9 113.5 L118.9 112.1 L120.0 110.8 L121.1 109.8 L122.1 109.1 L123.2 108.6 L124.2 108.4 L125.3 108.6 L126.3 109.1 L127.4 109.9 L128.5 110.9 L129.5 111.9 L130.6 112.9 L131.6 113.6 L132.7 114.2 L133.7 114.6 L134.8 114.8 L135.9 115.2 L136.9 115.7 L138.0 116.5 L139.0 117.5 L140.1 118.7 L141.1 119.9 L142.2 121.0 L143.2 122.0 L144.3 122.9 L145.4 123.9 L146.4 124.9 L147.5 126.2 L148.5 127.7 L149.6 129.5 L150.6 131.5 L151.7 133.5 L152.8 135.5 L153.8 137.3 L154.9 138.8 L155.9 140.0 L157.0 141.1 L158.0 142.0 L159.1 142.9 L160.2 143.7 L161.2 144.4 L162.3 145.1 L163.3 145.8 L164.4 146.3 L165.4 146.7 L166.5 147.1 L167.6 147.5 L168.6 148.0 L169.7 148.4 L170.7 148.9 L171.8 149.2 L172.8 149.4 L173.9 149.4 L174.9 149.2 L176.0 148.9 L177.1 148.7 L178.1 148.7 L179.2 149.1 L180.2 149.9 L181.3 151.0 L182.3 152.4 L183.4 153.9 L184.5 155.3 L185.5 156.5 L186.6 157.5 L187.6 158.3 L188.7 158.9 L189.7 159.4 L190.8 159.8 L191.9 160.2 L192.9 160.5 L194.0 160.8 L195.0 160.8 L196.1 160.7 L197.1 160.4 L198.2 159.9 L199.3 159.4 L200.3 158.9 L201.4 158.6 L202.4 158.3 L203.5 158.2 L204.5 158.1 L205.6 158.1 L206.7 158.2 L207.7 158.2 L208.8 158.4 L209.8 158.6 L210.9 158.9 L211.9 159.3 L213.0 159.7 L214.0 160.1 L215.1 160.3 L216.2 160.3 L217.2 160.1 L218.3 159.8 L219.3 159.5 L220.4 159.4 L221.4 159.5 L222.5 160.0 L223.6 160.8 L224.6 161.8 L225.7 162.8 L226.7 163.8 L227.8 164.7 L228.8 165.2 L229.9 165.6 L231.0 165.7 L232.0 165.7 L233.1 165.7 L234.1 165.7 L235.2 165.8 L236.2 165.7 L237.3 165.6 L238.4 165.4 L239.4 165.0 L240.5 164.5 L241.5 163.9 L242.6 163.2 L243.6 162.5 L244.7 161.7 L245.7 160.8 L246.8 159.7 L247.9 158.5 L248.9 157.1 L250.0 155.6 L251.0 154.1 L252.1 152.6 L253.1 151.3 L254.2 150.2 L255.3 149.2 L256.3 148.5 L257.4 147.8 L258.4 147.0 L259.5 146.3 L260.5 145.5 L261.6 144.7 L262.7 144.2 L263.7 143.8 L264.8 143.8 L265.8 144.0 L266.9 144.3 L267.9 144.6 L269.0 144.6 L270.1 144.4 L271.1 143.8 L272.2 142.8 L273.2 141.7 L274.3 140.4 L275.3 139.2 L276.4 138.2 L277.4 137.3 L278.5 136.6 L279.6 136.1 L280.6 135.8 L281.7 135.6 L282.7 135.6 L283.8 135.8 L284.8 136.1 L285.9 136.5 L287.0 137.0 L288.0 137.4 L289.1 137.7 L290.1 137.7 L291.2 137.5 L292.2 137.0 L293.3 136.4 L294.4 135.9 L295.4 135.4 L296.5 135.0 L297.5 134.8 L298.6 134.5 L299.6 134.1 L300.7 133.5 L301.8 132.6 L302.8 131.5 L303.9 130.1 L304.9 128.7 L306.0 127.4 L307.0 126.2 L308.1 125.2 L309.1 124.4 L310.2 123.5 L311.3 122.7 L312.3 121.7 L313.4 120.6 L314.4 119.4 L315.5 118.1 L316.5 117.0 L317.6 116.1 L318.7 115.4 L319.7 115.0 L320.8 114.8 L321.8 114.7 L322.9 114.7 L323.9 114.7 L325.0 114.7 L326.1 114.8 L327.1 115.0 L328.2 115.2 L329.2 115.5 L330.3 115.6 L331.3 115.5 L332.4 115.3 L333.4 114.8 L334.5 114.3 L335.6 113.9 L336.6 113.7 L337.7 113.7 L338.7 114.2 L339.8 114.8 L340.8 115.6 L341.9 116.3 L343.0 116.6 L344.0 116.5 L345.1 115.8 L346.1 114.8 L347.2 113.3 L348.2 111.7 L349.3 109.9 L350.4 108.1 L351.4 106.3 L352.5 104.4 L353.5 102.4 L354.6 100.3 L355.6 98.1 L356.7 95.8 L357.8 93.6 L358.8 91.6 L359.9 89.8 L360.9 88.2 L362.0 86.9 L363.0 85.8 L364.1 84.8 L365.1 83.9 L366.2 82.9 L367.3 82.1 L368.3 81.2 L369.4 80.5 L370.4 79.8 L371.5 79.1 L372.5 78.3 L373.6 77.2 L374.7 75.8 L375.7 74.1 L376.8 72.3 L377.8 70.3 L378.9 68.5 L379.9 66.9 L381.0 65.7 L382.1 64.8 L383.1 64.1 L384.2 63.4 L385.2 62.5 L386.3 61.2 L387.3 59.7 L388.4 57.9 L389.5 56.1 L390.5 54.5 L391.6 53.2 L392.6 52.4 L393.7 52.0 L394.7 52.1 L395.8 52.4 L396.9 53.0 L397.9 53.6 L399.0 54.3 L400.0 55.1 L401.1 56.1 L402.1 57.0 L403.2 58.0 L404.2 58.9 L405.3 59.7 L406.4 60.3 L407.4 60.6 L408.5 60.9 L409.5 61.1 L410.6 61.5 L411.6 62.2 L412.7 63.2 L413.8 64.5 L414.8 65.9 L415.9 67.4 L416.9 68.7 L418.0 69.9 L419.0 71.1 L420.1 72.2 L421.2 73.4 L422.2 74.8 L423.3 76.4 L424.3 78.2 L425.4 80.0 L426.4 81.6 L427.5 82.9 L428.5 83.7 L429.6 84.0 L430.7 83.9 L431.7 83.6 L432.8 83.2 L433.8 82.9 L434.9 82.9 L435.9 83.1 L437.0 83.4 L438.1 83.9 L439.1 84.4 L440.2 84.9 L441.2 85.2 L442.3 85.6 L443.3 85.8 L444.4 86.0 L445.5 86.0 L446.5 85.7 L447.6 85.2 L448.6 84.3 L449.7 83.1 L450.7 81.7 L451.8 80.3 L452.9 78.9 L453.9 77.7 L455.0 76.8 L456.0 76.1 L457.1 75.5 L458.1 74.8 L459.2 74.0 L460.2 73.0 L461.3 71.8 L462.4 70.6 L463.4 69.5 L464.5 68.7 L465.5 68.4 L466.6 68.6 L467.6 69.3 L468.7 70.3 L469.8 71.5 L470.8 72.7 L471.9 74.0 L472.9 75.3 L474.0 76.8 L475.0 78.5 L476.1 80.4 L477.2 82.6 L478.2 84.9 L479.3 87.3 L480.3 89.6 L481.4 91.6 L482.4 93.4 L483.5 95.0 L484.6 96.3 L485.6 97.4 L486.7 98.3 L487.7 99.0 L488.8 99.4 L489.8 99.6 L490.9 99.6 L492.0 99.5 L493.0 99.3 L494.1 99.3 L495.1 99.5 L496.2 100.2 L497.2 101.3 L498.3 102.8 L499.3 104.4 L500.4 106.0 L501.5 107.4 L502.5 108.5 L503.6 109.2 L504.6 109.7 L505.7 110.0 L506.7 110.4 L507.8 111.0 L508.9 111.8 L509.9 112.8 L511.0 113.9 L512.0 115.1 L513.1 116.2 L514.1 117.3 L515.2 118.3 L516.3 119.4 L517.3 120.5 L518.4 121.8 L519.4 123.1 L520.5 124.6 L521.5 126.0 L522.6 127.4 L523.6 128.7 L524.7 129.8 L525.8 130.9 L526.8 132.0 L527.9 133.0 L528.9 134.1 L530.0 135.2 L531.0 136.1 L532.1 137.0 L533.2 137.6 L534.2 137.9 L535.3 138.2 L536.3 138.4 L537.4 138.7 L538.4 139.1 L539.5 139.8 L540.6 140.5 L541.6 141.3 L542.7 141.9 L543.7 142.3 L544.8 142.4 L545.8 142.2 L546.9 141.8 L548.0 141.3 L549.0 140.9 L550.1 140.7 L551.1 140.7 L552.2 141.0 L553.2 141.5 L554.3 141.9 L555.4 142.4 L556.4 142.6 L557.5 142.7 L558.5 142.5 L559.6 142.2 L560.6 141.7 L561.7 141.0 L562.7 140.1 L563.8 139.0 L564.9 137.6 L565.9 136.0 L567.0 134.3 L568.0 132.7 L569.1 131.1 L570.1 129.7 L571.2 128.6 L572.3 127.8 L573.3 127.2 L574.4 126.6 L575.4 126.1 L576.5 125.4 L577.5 124.8 L578.6 124.2 L579.7 123.6 L580.7 123.3 L581.8 123.2 L582.8 123.2 L583.9 123.3 L584.9 123.2 L586.0 122.8 L587.0 122.1 L588.1 120.9 L589.2 119.5 L590.2 117.9 L591.3 116.4 L592.3 114.9 L593.4 113.6 L594.4 112.5 L595.5 111.6 L596.6 110.7 L597.6 109.8 L598.7 108.9 L599.7 107.8 L600.8 106.8 L601.8 105.8 L602.9 104.9 L604.0 104.0 L605.0 103.2 L606.1 102.4 L607.1 101.6 L608.2 101.0 L609.2 100.4 L610.3 100.1 L611.4 100.1 L612.4 100.6 L613.5 101.4 L614.5 102.4 L615.6 103.6 L616.6 104.6 L617.7 105.4 L618.8 105.9 L619.8 106.1 L620.9 106.0 L621.9 105.9 L623.0 105.9 L624.0 106.1 L625.1 106.5 L626.1 107.1 L627.2 107.7 L628.3 108.3 L629.3 108.6 L630.4 108.8 L631.4 108.8 L632.5 108.7 L633.5 108.7 L634.6 108.6 L635.7 108.6 L636.7 108.7 L637.8 108.6 L638.8 108.4 L639.9 108.0 L640.9 107.3 L642.0 106.4 L643.1 105.3 L644.1 104.2 L645.2 103.1 L646.2 102.0 L647.3 101.0 L648.3 100.1 L649.4 99.4 L650.5 98.7 L651.5 98.4 L652.6 98.4 L653.6 99.0 L654.7 100.1 L655.7 101.7 L656.8 103.7 L657.8 105.9 L658.9 108.1 L660.0 110.0 L661.0 111.7 L662.1 113.1 L663.1 114.3 L664.2 115.5 L665.2 116.8 L666.3 118.2 L667.4 119.9 L668.4 121.8 L669.5 123.8 L670.5 125.8 L671.6 127.7 L672.6 129.4 L673.7 131.0 L674.8 132.6 L675.8 134.2 L676.9 135.8 L677.9 137.4 L679.0 139.2 L680.0 140.9 L681.1 142.6 L682.1 144.2 L683.2 145.8 L684.3 147.4 L685.3 149.0 L686.4 150.7 L687.4 152.5 L688.5 154.2 L689.5 155.9 L690.6 157.5 L691.7 158.9 L692.7 160.1 L693.8 161.1 L694.8 161.9 L695.9 162.7 L696.9 163.4 L698.0 164.1" fill="none" stroke="#8b8079" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/>
+                                <path d="M64.0 126.5 L65.1 126.7 L66.1 127.1 L67.2 127.7 L68.2 128.3 L69.3 128.7 L70.3 129.0 L71.4 129.2 L72.5 129.2 L73.5 129.3 L74.6 129.4 L75.6 129.6 L76.7 129.8 L77.7 130.0 L78.8 130.0 L79.8 129.9 L80.9 129.7 L82.0 129.4 L83.0 129.0 L84.1 128.6 L85.1 128.2 L86.2 127.7 L87.2 127.2 L88.3 126.5 L89.4 125.6 L90.4 124.6 L91.5 123.5 L92.5 122.3 L93.6 121.4 L94.6 120.6 L95.7 120.0 L96.8 119.5 L97.8 119.1 L98.9 118.7 L99.9 118.1 L101.0 117.5 L102.0 116.8 L103.1 116.3 L104.2 116.0 L105.2 116.0 L106.3 116.4 L107.3 117.2 L108.4 118.1 L109.4 119.0 L110.5 119.7 L111.5 120.2 L112.6 120.5 L113.7 120.5 L114.7 120.4 L115.8 120.4 L116.8 120.4 L117.9 120.6 L118.9 121.0 L120.0 121.6 L121.1 122.3 L122.1 123.1 L123.2 124.0 L124.2 125.0 L125.3 126.2 L126.3 127.4 L127.4 128.7 L128.5 130.0 L129.5 131.0 L130.6 131.8 L131.6 132.2 L132.7 132.4 L133.7 132.3 L134.8 132.1 L135.9 131.9 L136.9 131.9 L138.0 132.0 L139.0 132.3 L140.1 132.6 L141.1 132.8 L142.2 132.9 L143.2 132.9 L144.3 132.7 L145.4 132.6 L146.4 132.5 L147.5 132.6 L148.5 132.9 L149.6 133.4 L150.6 134.0 L151.7 134.4 L152.8 134.7 L153.8 134.8 L154.9 134.5 L155.9 134.1 L157.0 133.4 L158.0 132.7 L159.1 132.0 L160.2 131.4 L161.2 130.8 L162.3 130.2 L163.3 129.6 L164.4 129.1 L165.4 128.5 L166.5 128.0 L167.6 127.6 L168.6 127.3 L169.7 127.0 L170.7 126.8 L171.8 126.6 L172.8 126.2 L173.9 125.7 L174.9 125.2 L176.0 124.7 L177.1 124.3 L178.1 124.3 L179.2 124.6 L180.2 125.4 L181.3 126.3 L182.3 127.4 L183.4 128.3 L184.5 129.1 L185.5 129.6 L186.6 129.8 L187.6 129.8 L188.7 129.5 L189.7 129.2 L190.8 128.9 L191.9 128.6 L192.9 128.3 L194.0 127.9 L195.0 127.4 L196.1 126.8 L197.1 126.1 L198.2 125.3 L199.3 124.7 L200.3 124.2 L201.4 123.9 L202.4 123.8 L203.5 123.9 L204.5 124.1 L205.6 124.3 L206.7 124.5 L207.7 124.8 L208.8 125.1 L209.8 125.5 L210.9 125.9 L211.9 126.3 L213.0 126.7 L214.0 127.0 L215.1 127.1 L216.2 127.0 L217.2 126.7 L218.3 126.3 L219.3 125.9 L220.4 125.8 L221.4 126.0 L222.5 126.6 L223.6 127.3 L224.6 128.1 L225.7 128.9 L226.7 129.4 L227.8 129.7 L228.8 129.7 L229.9 129.4 L231.0 129.0 L232.0 128.5 L233.1 128.0 L234.1 127.6 L235.2 127.3 L236.2 127.0 L237.3 126.6 L238.4 126.2 L239.4 125.7 L240.5 125.1 L241.5 124.5 L242.6 124.0 L243.6 123.5 L244.7 123.1 L245.7 122.6 L246.8 122.0 L247.9 121.3 L248.9 120.6 L250.0 120.0 L251.0 119.4 L252.1 119.1 L253.1 119.0 L254.2 119.3 L255.3 119.8 L256.3 120.4 L257.4 121.0 L258.4 121.6 L259.5 122.0 L260.5 122.4 L261.6 122.8 L262.7 123.3 L263.7 124.0 L264.8 124.9 L265.8 125.9 L266.9 126.8 L267.9 127.5 L269.0 127.9 L270.1 127.9 L271.1 127.5 L272.2 126.8 L273.2 126.0 L274.3 125.2 L275.3 124.5 L276.4 124.1 L277.4 124.0 L278.5 124.1 L279.6 124.3 L280.6 124.7 L281.7 125.2 L282.7 125.7 L283.8 126.4 L284.8 127.1 L285.9 127.8 L287.0 128.4 L288.0 128.8 L289.1 129.0 L290.1 128.9 L291.2 128.5 L292.2 127.9 L293.3 127.4 L294.4 126.8 L295.4 126.5 L296.5 126.3 L297.5 126.2 L298.6 126.1 L299.6 125.9 L300.7 125.6 L301.8 125.0 L302.8 124.2 L303.9 123.4 L304.9 122.6 L306.0 122.1 L307.0 121.8 L308.1 121.8 L309.1 121.9 L310.2 122.1 L311.3 122.2 L312.3 122.3 L313.4 122.2 L314.4 122.0 L315.5 121.9 L316.5 122.0 L317.6 122.2 L318.7 122.6 L319.7 123.2 L320.8 123.9 L321.8 124.7 L322.9 125.3 L323.9 125.9 L325.0 126.5 L326.1 127.0 L327.1 127.5 L328.2 127.9 L329.2 128.2 L330.3 128.4 L331.3 128.4 L332.4 128.1 L333.4 127.8 L334.5 127.4 L335.6 127.1 L336.6 127.0 L337.7 127.2 L338.7 127.6 L339.8 128.2 L340.8 128.8 L341.9 129.1 L343.0 129.1 L344.0 128.7 L345.1 127.9 L346.1 126.8 L347.2 125.6 L348.2 124.3 L349.3 123.2 L350.4 122.2 L351.4 121.3 L352.5 120.6 L353.5 119.9 L354.6 119.3 L355.6 118.7 L356.7 118.3 L357.8 118.0 L358.8 117.9 L359.9 118.1 L360.9 118.5 L362.0 119.1 L363.0 119.7 L364.1 120.4 L365.1 121.1 L366.2 121.7 L367.3 122.3 L368.3 122.8 L369.4 123.4 L370.4 123.9 L371.5 124.3 L372.5 124.6 L373.6 124.7 L374.7 124.6 L375.7 124.3 L376.8 124.0 L377.8 123.6 L378.9 123.4 L379.9 123.4 L381.0 123.5 L382.1 123.8 L383.1 124.2 L384.2 124.5 L385.2 124.6 L386.3 124.6 L387.3 124.5 L388.4 124.2 L389.5 124.0 L390.5 123.8 L391.6 123.9 L392.6 124.1 L393.7 124.6 L394.7 125.2 L395.8 125.9 L396.9 126.7 L397.9 127.3 L399.0 128.0 L400.0 128.6 L401.1 129.1 L402.1 129.6 L403.2 130.0 L404.2 130.3 L405.3 130.4 L406.4 130.4 L407.4 130.2 L408.5 130.0 L409.5 129.7 L410.6 129.6 L411.6 129.6 L412.7 129.8 L413.8 130.1 L414.8 130.4 L415.9 130.8 L416.9 131.0 L418.0 131.0 L419.0 131.0 L420.1 131.0 L421.2 131.0 L422.2 131.1 L423.3 131.4 L424.3 131.8 L425.4 132.1 L426.4 132.2 L427.5 132.0 L428.5 131.5 L429.6 130.6 L430.7 129.6 L431.7 128.6 L432.8 127.7 L433.8 126.9 L434.9 126.4 L435.9 126.2 L437.0 126.1 L438.1 126.2 L439.1 126.3 L440.2 126.3 L441.2 126.3 L442.3 126.3 L443.3 126.3 L444.4 126.2 L445.5 126.0 L446.5 125.7 L447.6 125.2 L448.6 124.5 L449.7 123.8 L450.7 123.1 L451.8 122.4 L452.9 121.9 L453.9 121.6 L455.0 121.6 L456.0 121.8 L457.1 122.0 L458.1 122.2 L459.2 122.3 L460.2 122.3 L461.3 122.2 L462.4 122.2 L463.4 122.2 L464.5 122.5 L465.5 123.0 L466.6 123.8 L467.6 124.9 L468.7 126.0 L469.8 127.1 L470.8 128.1 L471.9 129.0 L472.9 129.8 L474.0 130.6 L475.0 131.4 L476.1 132.3 L477.2 133.2 L478.2 134.0 L479.3 134.8 L480.3 135.3 L481.4 135.6 L482.4 135.6 L483.5 135.3 L484.6 134.8 L485.6 134.2 L486.7 133.5 L487.7 132.6 L488.8 131.7 L489.8 130.7 L490.9 129.7 L492.0 128.6 L493.0 127.7 L494.1 127.1 L495.1 126.8 L496.2 126.8 L497.2 127.3 L498.3 128.0 L499.3 128.8 L500.4 129.4 L501.5 129.8 L502.5 129.8 L503.6 129.6 L504.6 129.1 L505.7 128.7 L506.7 128.3 L507.8 128.1 L508.9 128.2 L509.9 128.4 L511.0 128.7 L512.0 129.1 L513.1 129.3 L514.1 129.5 L515.2 129.6 L516.3 129.7 L517.3 129.9 L518.4 130.1 L519.4 130.4 L520.5 130.8 L521.5 131.0 L522.6 131.2 L523.6 131.2 L524.7 131.1 L525.8 131.0 L526.8 130.8 L527.9 130.7 L528.9 130.6 L530.0 130.4 L531.0 130.2 L532.1 129.9 L533.2 129.4 L534.2 128.8 L535.3 128.2 L536.3 127.6 L537.4 127.2 L538.4 127.0 L539.5 127.1 L540.6 127.2 L541.6 127.4 L542.7 127.4 L543.7 127.3 L544.8 126.8 L545.8 126.1 L546.9 125.3 L548.0 124.6 L549.0 124.2 L550.1 124.0 L551.1 124.1 L552.2 124.5 L553.2 125.0 L554.3 125.5 L555.4 125.8 L556.4 126.0 L557.5 126.0 L558.5 125.8 L559.6 125.4 L560.6 124.9 L561.7 124.3 L562.7 123.6 L563.8 122.8 L564.9 121.9 L565.9 121.0 L567.0 120.1 L568.0 119.4 L569.1 119.0 L570.1 119.0 L571.2 119.2 L572.3 119.8 L573.3 120.4 L574.4 121.1 L575.4 121.8 L576.5 122.3 L577.5 122.7 L578.6 123.1 L579.7 123.5 L580.7 124.1 L581.8 124.8 L582.8 125.5 L583.9 126.1 L584.9 126.5 L586.0 126.6 L587.0 126.3 L588.1 125.6 L589.2 124.8 L590.2 124.0 L591.3 123.3 L592.3 122.8 L593.4 122.6 L594.4 122.6 L595.5 122.7 L596.6 122.9 L597.6 123.0 L598.7 123.1 L599.7 123.2 L600.8 123.2 L601.8 123.3 L602.9 123.4 L604.0 123.5 L605.0 123.7 L606.1 123.9 L607.1 124.1 L608.2 124.3 L609.2 124.6 L610.3 125.0 L611.4 125.7 L612.4 126.6 L613.5 127.6 L614.5 128.7 L615.6 129.7 L616.6 130.5 L617.7 130.8 L618.8 130.9 L619.8 130.6 L620.9 130.1 L621.9 129.7 L623.0 129.3 L624.0 129.2 L625.1 129.2 L626.1 129.3 L627.2 129.5 L628.3 129.5 L629.3 129.4 L630.4 129.1 L631.4 128.6 L632.5 128.2 L633.5 127.8 L634.6 127.5 L635.7 127.3 L636.7 127.1 L637.8 126.9 L638.8 126.5 L639.9 126.0 L640.9 125.4 L642.0 124.7 L643.1 124.0 L644.1 123.4 L645.2 122.9 L646.2 122.5 L647.3 122.3 L648.3 122.2 L649.4 122.2 L650.5 122.4 L651.5 122.8 L652.6 123.5 L653.6 124.5 L654.7 125.9 L655.7 127.5 L656.8 129.2 L657.8 130.9 L658.9 132.2 L660.0 133.2 L661.0 133.7 L662.1 133.9 L663.1 133.8 L664.2 133.7 L665.2 133.6 L666.3 133.7 L667.4 133.9 L668.4 134.3 L669.5 134.6 L670.5 134.9 L671.6 135.0 L672.6 134.9 L673.7 134.7 L674.8 134.4 L675.8 134.2 L676.9 134.0 L677.9 133.8 L679.0 133.7 L680.0 133.6 L681.1 133.4 L682.1 133.2 L683.2 133.0 L684.3 132.8 L685.3 132.6 L686.4 132.5 L687.4 132.5 L688.5 132.4 L689.5 132.3 L690.6 132.1 L691.7 131.8 L692.7 131.3 L693.8 130.7 L694.8 130.0 L695.9 129.3 L696.9 128.8 L698.0 128.3" fill="none" stroke="#7a1f2b" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/>
+                                </g>
+                                <line x1="64" x2="698" y1="248.0" y2="248.0" stroke="#eee6d9"/>
+                                <line x1="64.0" x2="86.0" y1="264.0" y2="264.0" stroke="#8b8079" stroke-width="2.2" stroke-linecap="round"/>
+                                <text class="lbl" x="94.0" y="268.0">follow the wind</text>
+                                <line x1="212.0" x2="234.0" y1="264.0" y2="264.0" stroke="#7a1f2b" stroke-width="2.2" stroke-linecap="round"/>
+                                <text class="lbl" x="242.0" y="268.0">hold speed, target 15 rpm</text>
+                                </svg>
+                            </div>
+                            <div class="pfig__plate" style="margin-top: 12px;">
+                                <svg viewBox="0 0 720 276" role="img" xmlns="http://www.w3.org/2000/svg">
+                                <defs><clipPath id="f10powclip3"><rect x="64.0" y="18.0" width="634.0" height="186.0"/></clipPath></defs>
+                                <line x1="64.0" x2="698.0" y1="204.0" y2="204.0" stroke="#eee6d9" stroke-width="1"/>
+                                <text class="tick" x="56.0" y="208.0" text-anchor="end">0</text>
+                                <line x1="64.0" x2="698.0" y1="157.5" y2="157.5" stroke="#eee6d9" stroke-width="1"/>
+                                <text class="tick" x="56.0" y="161.5" text-anchor="end">0.40</text>
+                                <line x1="64.0" x2="698.0" y1="111.0" y2="111.0" stroke="#eee6d9" stroke-width="1"/>
+                                <text class="tick" x="56.0" y="115.0" text-anchor="end">0.80</text>
+                                <line x1="64.0" x2="698.0" y1="64.5" y2="64.5" stroke="#eee6d9" stroke-width="1"/>
+                                <text class="tick" x="56.0" y="68.5" text-anchor="end">1.20</text>
+                                <line x1="64.0" x2="698.0" y1="18.0" y2="18.0" stroke="#eee6d9" stroke-width="1"/>
+                                <text class="tick" x="56.0" y="22.0" text-anchor="end">1.60</text>
+                                <line x1="64.0" x2="64.0" y1="204.0" y2="209.0" stroke="#8b8079"/>
+                                <text class="tick" x="64.0" y="223.0" text-anchor="middle">0</text>
+                                <line x1="169.7" x2="169.7" y1="204.0" y2="209.0" stroke="#8b8079"/>
+                                <text class="tick" x="169.7" y="223.0" text-anchor="middle">20</text>
+                                <line x1="275.3" x2="275.3" y1="204.0" y2="209.0" stroke="#8b8079"/>
+                                <text class="tick" x="275.3" y="223.0" text-anchor="middle">40</text>
+                                <line x1="381.0" x2="381.0" y1="204.0" y2="209.0" stroke="#8b8079"/>
+                                <text class="tick" x="381.0" y="223.0" text-anchor="middle">60</text>
+                                <line x1="486.7" x2="486.7" y1="204.0" y2="209.0" stroke="#8b8079"/>
+                                <text class="tick" x="486.7" y="223.0" text-anchor="middle">80</text>
+                                <line x1="592.3" x2="592.3" y1="204.0" y2="209.0" stroke="#8b8079"/>
+                                <text class="tick" x="592.3" y="223.0" text-anchor="middle">100</text>
+                                <line x1="698.0" x2="698.0" y1="204.0" y2="209.0" stroke="#8b8079"/>
+                                <text class="tick" x="698.0" y="223.0" text-anchor="middle">120</text>
+                                <line x1="64.0" x2="698.0" y1="204.0" y2="204.0" stroke="#8b8079"/>
+                                <line x1="64.0" x2="64.0" y1="18.0" y2="204.0" stroke="#8b8079"/>
+                                <text class="lbl" x="698.0" y="242.0" text-anchor="end">time t (s)</text>
+                                <text class="lbl" x="70.0" y="31.0">generator power (MW)</text>
+                                <g clip-path="url(#f10powclip3)">
+                                <path d="M64.0 141.5 L65.1 141.7 L66.1 142.1 L67.2 142.7 L68.2 143.4 L69.3 144.0 L70.3 144.6 L71.4 145.1 L72.5 145.5 L73.5 146.0 L74.6 146.6 L75.6 147.2 L76.7 147.9 L77.7 148.6 L78.8 149.2 L79.8 149.7 L80.9 150.1 L82.0 150.4 L83.0 150.7 L84.1 150.8 L85.1 151.0 L86.2 151.0 L87.2 151.0 L88.3 150.7 L89.4 150.2 L90.4 149.5 L91.5 148.7 L92.5 147.6 L93.6 146.5 L94.6 145.4 L95.7 144.3 L96.8 143.1 L97.8 141.9 L98.9 140.6 L99.9 139.0 L101.0 137.2 L102.0 135.3 L103.1 133.2 L104.2 131.1 L105.2 129.2 L106.3 127.6 L107.3 126.2 L108.4 125.0 L109.4 123.9 L110.5 122.7 L111.5 121.4 L112.6 119.7 L113.7 117.8 L114.7 115.8 L115.8 113.6 L116.8 111.6 L117.9 109.6 L118.9 107.9 L120.0 106.5 L121.1 105.3 L122.1 104.4 L123.2 103.8 L124.2 103.6 L125.3 103.8 L126.3 104.5 L127.4 105.4 L128.5 106.6 L129.5 107.8 L130.6 108.9 L131.6 109.8 L132.7 110.4 L133.7 110.8 L134.8 111.1 L135.9 111.5 L136.9 112.2 L138.0 113.1 L139.0 114.2 L140.1 115.5 L141.1 116.8 L142.2 118.0 L143.2 119.1 L144.3 120.1 L145.4 121.1 L146.4 122.1 L147.5 123.5 L148.5 125.1 L149.6 126.9 L150.6 128.9 L151.7 130.9 L152.8 132.8 L153.8 134.4 L154.9 135.9 L155.9 137.0 L157.0 138.0 L158.0 138.8 L159.1 139.6 L160.2 140.3 L161.2 141.0 L162.3 141.6 L163.3 142.1 L164.4 142.6 L165.4 143.0 L166.5 143.3 L167.6 143.7 L168.6 144.0 L169.7 144.4 L170.7 144.8 L171.8 145.1 L172.8 145.2 L173.9 145.2 L174.9 145.1 L176.0 144.8 L177.1 144.7 L178.1 144.7 L179.2 145.0 L180.2 145.7 L181.3 146.6 L182.3 147.7 L183.4 148.9 L184.5 150.1 L185.5 151.0 L186.6 151.8 L187.6 152.4 L188.7 152.9 L189.7 153.2 L190.8 153.6 L191.9 153.9 L192.9 154.1 L194.0 154.3 L195.0 154.4 L196.1 154.3 L197.1 154.0 L198.2 153.7 L199.3 153.3 L200.3 152.9 L201.4 152.6 L202.4 152.4 L203.5 152.3 L204.5 152.3 L205.6 152.3 L206.7 152.3 L207.7 152.4 L208.8 152.5 L209.8 152.6 L210.9 152.9 L211.9 153.2 L213.0 153.5 L214.0 153.8 L215.1 153.9 L216.2 153.9 L217.2 153.8 L218.3 153.6 L219.3 153.3 L220.4 153.2 L221.4 153.3 L222.5 153.7 L223.6 154.3 L224.6 155.0 L225.7 155.8 L226.7 156.6 L227.8 157.2 L228.8 157.6 L229.9 157.8 L231.0 157.9 L232.0 157.9 L233.1 157.9 L234.1 157.9 L235.2 158.0 L236.2 157.9 L237.3 157.9 L238.4 157.7 L239.4 157.4 L240.5 157.0 L241.5 156.6 L242.6 156.1 L243.6 155.6 L244.7 155.0 L245.7 154.3 L246.8 153.5 L247.9 152.6 L248.9 151.5 L250.0 150.3 L251.0 149.1 L252.1 147.9 L253.1 146.8 L254.2 145.9 L255.3 145.1 L256.3 144.5 L257.4 143.9 L258.4 143.2 L259.5 142.6 L260.5 141.9 L261.6 141.2 L262.7 140.7 L263.7 140.4 L264.8 140.4 L265.8 140.6 L266.9 140.9 L267.9 141.1 L269.0 141.2 L270.1 140.9 L271.1 140.4 L272.2 139.5 L273.2 138.5 L274.3 137.4 L275.3 136.3 L276.4 135.3 L277.4 134.5 L278.5 133.8 L279.6 133.3 L280.6 133.0 L281.7 132.9 L282.7 132.9 L283.8 133.0 L284.8 133.3 L285.9 133.8 L287.0 134.2 L288.0 134.6 L289.1 134.9 L290.1 134.9 L291.2 134.6 L292.2 134.2 L293.3 133.7 L294.4 133.1 L295.4 132.7 L296.5 132.3 L297.5 132.1 L298.6 131.8 L299.6 131.5 L300.7 130.9 L301.8 130.0 L302.8 128.9 L303.9 127.5 L304.9 126.1 L306.0 124.7 L307.0 123.5 L308.1 122.5 L309.1 121.6 L310.2 120.7 L311.3 119.8 L312.3 118.8 L313.4 117.5 L314.4 116.2 L315.5 114.9 L316.5 113.6 L317.6 112.6 L318.7 111.8 L319.7 111.3 L320.8 111.1 L321.8 111.0 L322.9 110.9 L323.9 110.9 L325.0 111.0 L326.1 111.1 L327.1 111.3 L328.2 111.6 L329.2 111.8 L330.3 112.0 L331.3 111.9 L332.4 111.6 L333.4 111.1 L334.5 110.6 L335.6 110.0 L336.6 109.8 L337.7 109.9 L338.7 110.4 L339.8 111.1 L340.8 112.0 L341.9 112.7 L343.0 113.1 L344.0 113.0 L345.1 112.3 L346.1 111.0 L347.2 109.4 L348.2 107.5 L349.3 105.4 L350.4 103.3 L351.4 101.0 L352.5 98.7 L353.5 96.2 L354.6 93.5 L355.6 90.7 L356.7 87.7 L357.8 84.7 L358.8 82.0 L359.9 79.5 L360.9 77.3 L362.0 75.5 L363.0 74.0 L364.1 72.5 L365.1 71.1 L366.2 69.8 L367.3 68.5 L368.3 67.3 L369.4 66.2 L370.4 65.1 L371.5 64.1 L372.5 62.8 L373.6 61.2 L374.7 59.1 L375.7 56.5 L376.8 53.6 L377.8 50.5 L378.9 47.6 L379.9 45.1 L381.0 43.1 L382.1 41.6 L383.1 40.4 L384.2 39.2 L385.2 37.6 L386.3 35.5 L387.3 32.9 L388.4 29.9 L389.5 26.7 L390.5 23.9 L391.6 21.6 L392.6 20.1 L393.7 19.5 L394.7 19.5 L395.8 20.1 L396.9 21.1 L397.9 22.3 L399.0 23.6 L400.0 25.0 L401.1 26.6 L402.1 28.3 L403.2 30.0 L404.2 31.6 L405.3 33.0 L406.4 33.9 L407.4 34.5 L408.5 35.0 L409.5 35.4 L410.6 36.1 L411.6 37.2 L412.7 38.9 L413.8 41.0 L414.8 43.4 L415.9 45.7 L416.9 47.9 L418.0 49.9 L419.0 51.7 L420.1 53.4 L421.2 55.3 L422.2 57.5 L423.3 60.1 L424.3 62.8 L425.4 65.5 L426.4 67.9 L427.5 69.7 L428.5 70.9 L429.6 71.3 L430.7 71.2 L431.7 70.7 L432.8 70.2 L433.8 69.8 L434.9 69.7 L435.9 70.0 L437.0 70.5 L438.1 71.2 L439.1 71.9 L440.2 72.5 L441.2 73.1 L442.3 73.6 L443.3 73.9 L444.4 74.2 L445.5 74.2 L446.5 73.8 L447.6 73.1 L448.6 71.8 L449.7 70.1 L450.7 68.0 L451.8 65.8 L452.9 63.8 L453.9 62.0 L455.0 60.6 L456.0 59.5 L457.1 58.6 L458.1 57.6 L459.2 56.4 L460.2 54.8 L461.3 52.9 L462.4 50.9 L463.4 49.1 L464.5 47.9 L465.5 47.4 L466.6 47.8 L467.6 48.8 L468.7 50.4 L469.8 52.3 L470.8 54.3 L471.9 56.3 L472.9 58.4 L474.0 60.6 L475.0 63.2 L476.1 66.1 L477.2 69.3 L478.2 72.7 L479.3 76.0 L480.3 79.2 L481.4 82.0 L482.4 84.5 L483.5 86.6 L484.6 88.3 L485.6 89.7 L486.7 90.9 L487.7 91.8 L488.8 92.4 L489.8 92.7 L490.9 92.7 L492.0 92.5 L493.0 92.2 L494.1 92.2 L495.1 92.6 L496.2 93.4 L497.2 94.9 L498.3 96.7 L499.3 98.7 L500.4 100.7 L501.5 102.4 L502.5 103.7 L503.6 104.6 L504.6 105.1 L505.7 105.6 L506.7 106.0 L507.8 106.7 L508.9 107.6 L509.9 108.8 L511.0 110.0 L512.0 111.4 L513.1 112.7 L514.1 113.9 L515.2 115.0 L516.3 116.2 L517.3 117.5 L518.4 118.8 L519.4 120.3 L520.5 121.8 L521.5 123.3 L522.6 124.7 L523.6 126.0 L524.7 127.2 L525.8 128.3 L526.8 129.4 L527.9 130.4 L528.9 131.4 L530.0 132.5 L531.0 133.4 L532.1 134.1 L533.2 134.7 L534.2 135.1 L535.3 135.3 L536.3 135.5 L537.4 135.8 L538.4 136.2 L539.5 136.8 L540.6 137.4 L541.6 138.2 L542.7 138.7 L543.7 139.1 L544.8 139.2 L545.8 139.0 L546.9 138.6 L548.0 138.1 L549.0 137.8 L550.1 137.6 L551.1 137.6 L552.2 137.9 L553.2 138.3 L554.3 138.8 L555.4 139.1 L556.4 139.4 L557.5 139.4 L558.5 139.3 L559.6 139.0 L560.6 138.5 L561.7 137.9 L562.7 137.1 L563.8 136.0 L564.9 134.7 L565.9 133.3 L567.0 131.7 L568.0 130.0 L569.1 128.5 L570.1 127.1 L571.2 126.0 L572.3 125.2 L573.3 124.5 L574.4 123.9 L575.4 123.4 L576.5 122.7 L577.5 122.0 L578.6 121.4 L579.7 120.8 L580.7 120.5 L581.8 120.4 L582.8 120.4 L583.9 120.4 L584.9 120.3 L586.0 119.9 L587.0 119.1 L588.1 117.9 L589.2 116.4 L590.2 114.6 L591.3 112.9 L592.3 111.2 L593.4 109.7 L594.4 108.5 L595.5 107.4 L596.6 106.3 L597.6 105.3 L598.7 104.1 L599.7 102.9 L600.8 101.7 L601.8 100.5 L602.9 99.3 L604.0 98.2 L605.0 97.2 L606.1 96.2 L607.1 95.3 L608.2 94.4 L609.2 93.7 L610.3 93.3 L611.4 93.3 L612.4 93.9 L613.5 94.9 L614.5 96.2 L615.6 97.7 L616.6 99.0 L617.7 100.0 L618.8 100.6 L619.8 100.8 L620.9 100.7 L621.9 100.6 L623.0 100.6 L624.0 100.8 L625.1 101.3 L626.1 102.0 L627.2 102.8 L628.3 103.4 L629.3 103.9 L630.4 104.1 L631.4 104.1 L632.5 104.0 L633.5 103.9 L634.6 103.9 L635.7 103.9 L636.7 103.9 L637.8 103.9 L638.8 103.6 L639.9 103.1 L640.9 102.3 L642.0 101.1 L643.1 99.8 L644.1 98.4 L645.2 97.1 L646.2 95.7 L647.3 94.5 L648.3 93.3 L649.4 92.3 L650.5 91.5 L651.5 91.1 L652.6 91.1 L653.6 91.9 L654.7 93.3 L655.7 95.4 L656.8 97.9 L657.8 100.6 L658.9 103.2 L660.0 105.5 L661.0 107.5 L662.1 109.2 L663.1 110.6 L664.2 111.9 L665.2 113.3 L666.3 114.9 L667.4 116.8 L668.4 118.9 L669.5 121.0 L670.5 123.1 L671.6 125.0 L672.6 126.8 L673.7 128.4 L674.8 130.0 L675.8 131.5 L676.9 133.0 L677.9 134.6 L679.0 136.2 L680.0 137.8 L681.1 139.3 L682.1 140.8 L683.2 142.2 L684.3 143.5 L685.3 144.9 L686.4 146.3 L687.4 147.8 L688.5 149.2 L689.5 150.6 L690.6 151.8 L691.7 152.9 L692.7 153.8 L693.8 154.6 L694.8 155.2 L695.9 155.7 L696.9 156.3 L698.0 156.8" fill="none" stroke="#8b8079" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/>
+                                <path d="M64.0 143.0 L65.1 143.8 L66.1 146.1 L67.2 149.1 L68.2 152.2 L69.3 155.0 L70.3 157.1 L71.4 158.7 L72.5 160.0 L73.5 161.4 L74.6 163.0 L75.6 164.9 L76.7 166.9 L77.7 168.8 L78.8 170.2 L79.8 171.0 L80.9 171.2 L82.0 170.8 L83.0 170.1 L84.1 169.1 L85.1 167.9 L86.2 166.3 L87.2 164.1 L88.3 161.1 L89.4 156.8 L90.4 151.5 L91.5 145.3 L92.5 138.7 L93.6 132.3 L94.6 126.4 L95.7 121.2 L96.8 116.5 L97.8 111.9 L98.9 106.9 L99.9 101.2 L101.0 94.8 L102.0 88.1 L103.1 81.6 L104.2 76.2 L105.2 72.5 L106.3 70.8 L107.3 70.9 L108.4 72.2 L109.4 74.0 L110.5 75.2 L111.5 75.4 L112.6 74.4 L113.7 72.4 L114.7 69.8 L115.8 67.3 L116.8 65.3 L117.9 64.2 L118.9 64.1 L120.0 65.0 L121.1 66.9 L122.1 69.6 L123.2 73.2 L124.2 77.7 L125.3 83.1 L126.3 89.4 L127.4 96.3 L128.5 103.3 L129.5 109.7 L130.6 115.1 L131.6 119.1 L132.7 121.7 L133.7 123.3 L134.8 124.3 L135.9 125.4 L136.9 127.1 L138.0 129.6 L139.0 132.8 L140.1 136.3 L141.1 139.6 L142.2 142.3 L143.2 144.3 L144.3 145.8 L145.4 147.1 L146.4 148.9 L147.5 151.4 L148.5 155.1 L149.6 159.6 L150.6 164.5 L151.7 169.2 L152.8 173.3 L153.8 176.3 L154.9 178.1 L155.9 178.7 L157.0 178.4 L158.0 177.6 L159.1 176.6 L160.2 175.5 L161.2 174.4 L162.3 173.3 L163.3 171.9 L164.4 170.3 L165.4 168.5 L166.5 166.8 L167.6 165.3 L168.6 164.2 L169.7 163.4 L170.7 162.6 L171.8 161.5 L172.8 159.9 L173.9 157.5 L174.9 154.5 L176.0 151.5 L177.1 149.2 L178.1 148.2 L179.2 149.1 L180.2 151.9 L181.3 156.1 L182.3 161.1 L183.4 166.1 L184.5 170.4 L185.5 173.7 L186.6 175.8 L187.6 176.7 L188.7 176.8 L189.7 176.4 L190.8 175.8 L191.9 175.2 L192.9 174.4 L194.0 173.2 L195.0 171.4 L196.1 168.8 L197.1 165.5 L198.2 161.8 L199.3 158.2 L200.3 155.1 L201.4 152.8 L202.4 151.4 L203.5 150.9 L204.5 150.9 L205.6 151.1 L206.7 151.6 L207.7 152.1 L208.8 153.0 L209.8 154.2 L210.9 155.9 L211.9 157.8 L213.0 159.7 L214.0 161.1 L215.1 161.7 L216.2 161.3 L217.2 160.0 L218.3 158.1 L219.3 156.5 L220.4 155.8 L221.4 156.6 L222.5 158.9 L223.6 162.4 L224.6 166.6 L225.7 170.7 L226.7 174.1 L227.8 176.4 L228.8 177.5 L229.9 177.3 L231.0 176.3 L232.0 174.9 L233.1 173.5 L234.1 172.2 L235.2 171.1 L236.2 169.9 L237.3 168.3 L238.4 166.3 L239.4 163.7 L240.5 160.7 L241.5 157.4 L242.6 154.1 L243.6 150.8 L244.7 147.5 L245.7 143.8 L246.8 139.6 L247.9 134.7 L248.9 129.3 L250.0 123.7 L251.0 118.4 L252.1 114.1 L253.1 111.2 L254.2 109.9 L255.3 109.8 L256.3 110.5 L257.4 111.5 L258.4 112.3 L259.5 112.7 L260.5 113.0 L261.6 113.5 L262.7 114.8 L263.7 117.2 L264.8 120.8 L265.8 125.1 L266.9 129.5 L267.9 133.1 L269.0 135.4 L270.1 135.8 L271.1 134.3 L272.2 131.3 L273.2 127.3 L274.3 123.1 L275.3 119.4 L276.4 116.7 L277.4 115.1 L278.5 114.6 L279.6 115.0 L280.6 116.1 L281.7 117.9 L282.7 120.2 L283.8 123.2 L284.8 126.6 L285.9 130.2 L287.0 133.6 L288.0 136.3 L289.1 138.0 L290.1 138.3 L291.2 137.3 L292.2 135.4 L293.3 133.0 L294.4 130.7 L295.4 129.0 L296.5 128.1 L297.5 127.6 L298.6 127.1 L299.6 126.1 L300.7 124.0 L301.8 120.7 L302.8 116.3 L303.9 111.4 L304.9 106.5 L306.0 102.3 L307.0 99.2 L308.1 97.3 L309.1 96.3 L310.2 95.6 L311.3 94.7 L312.3 93.3 L313.4 91.3 L314.4 89.0 L315.5 86.9 L316.5 85.4 L317.6 85.0 L318.7 85.7 L319.7 87.4 L320.8 89.8 L321.8 92.6 L322.9 95.4 L323.9 98.1 L325.0 100.7 L326.1 103.2 L327.1 105.8 L328.2 108.2 L329.2 110.4 L330.3 111.8 L331.3 112.3 L332.4 111.9 L333.4 110.7 L334.5 109.2 L335.6 108.0 L336.6 107.7 L337.7 108.8 L338.7 111.2 L339.8 114.5 L340.8 117.9 L341.9 120.5 L343.0 121.5 L344.0 120.4 L345.1 117.2 L346.1 112.2 L347.2 106.1 L348.2 99.5 L349.3 92.8 L350.4 86.5 L351.4 80.5 L352.5 74.7 L353.5 69.0 L354.6 63.2 L355.6 57.6 L356.7 52.2 L357.8 47.6 L358.8 44.1 L359.9 41.9 L360.9 41.0 L362.0 41.2 L363.0 42.1 L364.1 43.4 L365.1 44.7 L366.2 46.0 L367.3 47.4 L368.3 48.8 L369.4 50.4 L370.4 52.1 L371.5 53.4 L372.5 54.2 L373.6 54.0 L374.7 52.8 L375.7 50.6 L376.8 48.0 L377.8 45.3 L378.9 43.0 L379.9 41.6 L381.0 41.3 L382.1 41.8 L383.1 42.8 L384.2 43.7 L385.2 43.8 L386.3 43.1 L387.3 41.5 L388.4 39.4 L389.5 37.3 L390.5 35.7 L391.6 35.0 L392.6 35.4 L393.7 37.1 L394.7 39.8 L395.8 43.1 L396.9 46.7 L397.9 50.3 L399.0 53.9 L400.0 57.5 L401.1 61.1 L402.1 64.5 L403.2 67.7 L404.2 70.5 L405.3 72.5 L406.4 73.7 L407.4 74.1 L408.5 74.1 L409.5 74.1 L410.6 74.4 L411.6 75.5 L412.7 77.5 L413.8 80.3 L414.8 83.4 L415.9 86.4 L416.9 88.9 L418.0 90.9 L419.0 92.3 L420.1 93.7 L421.2 95.3 L422.2 97.6 L423.3 100.6 L424.3 104.1 L425.4 107.4 L426.4 109.8 L427.5 110.9 L428.5 110.2 L429.6 107.9 L430.7 104.3 L431.7 100.2 L432.8 96.2 L433.8 92.9 L434.9 90.6 L435.9 89.3 L437.0 88.9 L438.1 89.0 L439.1 89.3 L440.2 89.5 L441.2 89.5 L442.3 89.4 L443.3 89.1 L444.4 88.5 L445.5 87.4 L446.5 85.5 L447.6 82.8 L448.6 79.1 L449.7 74.6 L450.7 69.7 L451.8 64.9 L452.9 60.8 L453.9 57.8 L455.0 55.9 L456.0 54.9 L457.1 54.5 L458.1 54.0 L459.2 53.1 L460.2 51.5 L461.3 49.5 L462.4 47.6 L463.4 46.2 L464.5 46.1 L465.5 47.6 L466.6 50.7 L467.6 55.2 L468.7 60.5 L469.8 66.1 L470.8 71.6 L471.9 76.7 L472.9 81.7 L474.0 86.7 L475.0 92.2 L476.1 98.2 L477.2 104.7 L478.2 111.3 L479.3 117.6 L480.3 123.0 L481.4 127.3 L482.4 130.3 L483.5 132.1 L484.6 132.8 L485.6 132.7 L486.7 131.8 L487.7 130.3 L488.8 128.0 L489.8 124.9 L490.9 121.3 L492.0 117.3 L493.0 113.5 L494.1 110.7 L495.1 109.3 L496.2 109.8 L497.2 112.2 L498.3 116.0 L499.3 120.3 L500.4 124.3 L501.5 127.1 L502.5 128.5 L503.6 128.5 L504.6 127.5 L505.7 126.0 L506.7 125.0 L507.8 124.7 L508.9 125.5 L509.9 127.3 L511.0 129.5 L512.0 131.9 L513.1 134.0 L514.1 135.8 L515.2 137.4 L516.3 139.0 L517.3 140.9 L518.4 143.3 L519.4 146.1 L520.5 149.0 L521.5 151.8 L522.6 154.2 L523.6 156.0 L524.7 157.2 L525.8 158.1 L526.8 158.9 L527.9 159.7 L528.9 160.6 L530.0 161.4 L531.0 161.9 L532.1 161.7 L533.2 160.6 L534.2 158.8 L535.3 156.6 L536.3 154.4 L537.4 152.8 L538.4 152.1 L539.5 152.5 L540.6 153.5 L541.6 154.6 L542.7 155.1 L543.7 154.6 L544.8 152.6 L545.8 149.5 L546.9 145.6 L548.0 141.7 L549.0 138.7 L550.1 136.9 L551.1 136.7 L552.2 137.8 L553.2 139.5 L554.3 141.4 L555.4 142.7 L556.4 143.3 L557.5 143.0 L558.5 141.7 L559.6 139.6 L560.6 136.9 L561.7 133.4 L562.7 129.1 L563.8 124.1 L564.9 118.2 L565.9 111.8 L567.0 105.3 L568.0 99.5 L569.1 94.7 L570.1 91.6 L571.2 90.3 L572.3 90.4 L573.3 91.5 L574.4 92.9 L575.4 94.2 L576.5 95.1 L577.5 95.7 L578.6 96.3 L579.7 97.4 L580.7 99.3 L581.8 101.9 L582.8 104.9 L583.9 107.6 L584.9 109.5 L586.0 109.7 L587.0 108.2 L588.1 105.1 L589.2 100.8 L590.2 96.0 L591.3 91.5 L592.3 87.8 L593.4 85.2 L594.4 83.7 L595.5 82.9 L596.6 82.4 L597.6 81.9 L598.7 81.1 L599.7 80.2 L600.8 79.1 L601.8 78.3 L602.9 77.6 L604.0 77.3 L605.0 77.2 L606.1 77.2 L607.1 77.2 L608.2 77.5 L609.2 78.2 L610.3 79.9 L611.4 82.7 L612.4 86.9 L613.5 92.3 L614.5 98.2 L615.6 104.0 L616.6 108.8 L617.7 112.1 L618.8 113.7 L619.8 113.9 L620.9 113.2 L621.9 112.1 L623.0 111.5 L624.0 111.7 L625.1 112.7 L626.1 114.3 L627.2 116.0 L628.3 117.2 L629.3 117.6 L630.4 117.2 L631.4 116.0 L632.5 114.5 L633.5 113.1 L634.6 112.0 L635.7 111.2 L636.7 110.6 L637.8 109.7 L638.8 108.2 L639.9 105.8 L640.9 102.5 L642.0 98.6 L643.1 94.3 L644.1 90.2 L645.2 86.4 L646.2 83.2 L647.3 80.5 L648.3 78.5 L649.4 77.0 L650.5 76.5 L651.5 77.1 L652.6 79.4 L653.6 83.6 L654.7 90.0 L655.7 98.0 L656.8 107.0 L657.8 116.0 L658.9 124.1 L660.0 130.8 L661.0 135.7 L662.1 139.0 L663.1 141.2 L664.2 143.0 L665.2 145.1 L666.3 147.9 L667.4 151.5 L668.4 155.7 L669.5 160.1 L670.5 164.1 L671.6 167.5 L672.6 170.0 L673.7 172.0 L674.8 173.5 L675.8 175.0 L676.9 176.6 L677.9 178.5 L679.0 180.5 L680.0 182.5 L681.1 184.2 L682.1 185.7 L683.2 187.1 L684.3 188.3 L685.3 189.8 L686.4 191.4 L687.4 193.3 L688.5 195.1 L689.5 196.8 L690.6 197.9 L691.7 198.2 L692.7 197.8 L693.8 196.6 L694.8 195.0 L695.9 193.3 L696.9 191.7 L698.0 190.2" fill="none" stroke="#7a1f2b" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/>
+                                </g>
+                                <line x1="64" x2="698" y1="248.0" y2="248.0" stroke="#eee6d9"/>
+                                <line x1="64.0" x2="86.0" y1="264.0" y2="264.0" stroke="#8b8079" stroke-width="2.2" stroke-linecap="round"/>
+                                <text class="lbl" x="94.0" y="268.0">follow the wind</text>
+                                <line x1="212.0" x2="234.0" y1="264.0" y2="264.0" stroke="#7a1f2b" stroke-width="2.2" stroke-linecap="round"/>
+                                <text class="lbl" x="242.0" y="268.0">hold speed</text>
+                                </svg>
+                            </div>
+                            <figcaption><span class="pfig__n">Figure 4</span>The default turbulent wind (\(v_0 = 8\ \mathrm{m/s}\), \(\sigma = 1.5\ \mathrm{m/s}\); over these 120 s its standard deviation is 1.30 m/s, because its slowest waves take longer than the run). Below it, the rotor speed and the generator power for the two controllers, computed with the page’s own algorithm. Holding the speed keeps the rotor between 14.4 and 15.7 rpm; following the wind lets it range from 12.5 to 19.8 rpm.</figcaption>
+                        </figure>
+                        <p>The table collects all eight combinations of controller and wind, with the page’s default sliders (\(v_0 = 8\ \mathrm{m/s}\), \(\Delta v = 1.5\ \mathrm{m/s}\), target 15 rpm).</p>
+                        <table class="ptab">
+                            <thead><tr><th>wind</th><th>controller</th><th>energy in 120 s</th><th>mean power</th><th>rotor speed</th><th>captured share</th></tr></thead>
+                            <tbody>
+                                <tr><td>steady</td><td>hold speed</td><td>25.15 kWh</td><td>754 kW</td><td>15.0 rpm</td><td>0.479</td></tr>
+                                <tr><td>steady</td><td>follow the wind</td><td>25.22 kWh</td><td>757 kW</td><td>15.5 rpm</td><td>0.480</td></tr>
+                                <tr><td>gust (IEC shape, 1.5 m/s)</td><td>hold speed</td><td>25.22 kWh</td><td>757 kW</td><td>14.8–15.3 rpm</td><td>0.478</td></tr>
+                                <tr><td>gust (IEC shape, 1.5 m/s)</td><td>follow the wind</td><td>25.30 kWh</td><td>759 kW</td><td>15.2–16.1 rpm</td><td>0.480</td></tr>
+                                <tr><td>step, +1.5 m/s at 30 s</td><td>hold speed</td><td>34.43 kWh</td><td>1033 kW</td><td>15.0–15.4 rpm</td><td>0.437</td></tr>
+                                <tr><td>step, +1.5 m/s at 30 s</td><td>follow the wind</td><td>37.18 kWh</td><td>1115 kW</td><td>15.5–18.4 rpm</td><td>0.479</td></tr>
+                                <tr><td>turbulent, σ = 1.5 m/s</td><td>hold speed</td><td>24.73 kWh</td><td>742 kW</td><td>14.4–15.7 rpm</td><td>0.443</td></tr>
+                                <tr><td>turbulent, σ = 1.5 m/s</td><td>follow the wind</td><td>26.18 kWh</td><td>785 kW</td><td>12.5–19.8 rpm</td><td>0.466</td></tr>
+                            </tbody>
+                        </table>
+                        <p>Two lessons stand out. In steady wind the two controllers do almost equally well, because 15 rpm is close to the optimum 15.5 rpm. When the wind changes, holding the speed costs energy: after the step to 9.5 m/s the rotor stays at 15 rpm, \(\lambda\) falls to 6.6, and the captured share drops from 0.48 to 0.44. Real turbines combine the two. Below their rated wind speed they follow the wind; above it they hold speed and power constant by turning the blades out of the wind (pitch control), which this model does not include.</p>
+                        <div class="pbox pbox--ex">
+                            <span class="pbox__t">Exercise 7.1 · on the figure above</span>
+                            <p>Choose <em>Step</em>, keep \(v_0 = 8\ \mathrm{m/s}\) and the step size at 1.5 m/s, and solve once with <em>Hold speed</em> and once with <em>Follow the wind</em>. Compare <em>Energy, 120 s</em>, and watch the operating point on the \(c_p\) curve after the step. Then compute the rotor speed that puts \(\lambda\) at 8.1 in a 9.5 m/s wind, set the target speed to the nearest slider value, solve again, and compare the energy with both earlier runs.</p>
+                        </div>
+                    </section>
+
+                    <section class="psec" id="p-solve">
+                        <h3><span class="psec__n">08</span>Solve first, then play</h3>
+                        <p>As in Fig. 9, nothing is integrated while you watch. The wind is a known function of time, so pressing <em>Solve</em> fixes the whole run.</p>
+                        <ol>
+                            <li><strong>Solve.</strong> RK4 advances the rotor speed \(\omega\) and the controller’s integral from \(t = 0\) to \(120\ \mathrm{s}\) in 12 000 steps of \(h = 10\ \mathrm{ms}\). The same steps carry the generator energy, the aerodynamic energy, the energy of the wind through the disc, the distance the air has travelled and the rotor angle \(\theta\). The run starts in balance: at the optimum speed when following the wind, or at the target speed with the generator torque equal to the wind’s.</li>
+                            <li><strong>Store.</strong> Every second state goes into the dataset: 6 001 rows of wind, speed, angle, tip-speed ratio, \(c_p\), both torques and both powers. With the default settings the energy balance (7) holds to about \(10^{-12}\).</li>
+                            <li><strong>Play.</strong> Each frame shows the stored row nearest to the playback time. The blades are drawn at the stored angle \(\theta\), so they turn exactly as fast as the solution says.</li>
+                        </ol>
+                    </section>
+
+                    <section class="psec" id="p-screen">
+                        <h3><span class="psec__n">09</span>On screen</h3>
+                        <p>The rotor is drawn as a disc seen at an angle, foreshortened to 50 % across, so that both its turning and the wind passing it can be seen; the burgundy blade marks the stored angle \(\theta\). The grey streaks are air: they move by the stored distance \(\int v\,\mathrm{d}t\), at 5 px per metre of air, with a constant pattern of 16 px dashes and 22 px gaps. Only the wind arrow grows with the wind speed. They pass through the rotor unchanged; the slowing of the air is not drawn. The table at the top right lists the stored values of the present row. Below, the wind, the rotor speed (with the target dashed) and the generator power are drawn over the full two minutes, dark up to the present sample and pale after it. The second figure shows the \(c_p\) curve with the present operating point and its last three seconds as a trail: when following the wind it stays near the peak; when holding speed it slides along the curve with every gust.</p>
+                    </section>
+
+                    <section class="psec" id="p-limits">
+                        <h3><span class="psec__n">10</span>What the model leaves out</h3>
+                        <ul>
+                            <li>No pitch control, so above about 11 m/s nothing limits the power except the generator’s torque limit; real turbines pitch their blades there.</li>
+                            <li>The wind is the same over the whole disc and arrives at once; real wind varies across 80 m of rotor and changes height by height.</li>
+                            <li>The power coefficient responds instantly to the tip-speed ratio. Real rotors have dynamic inflow and stall effects with delays of seconds.</li>
+                            <li>The drive train is rigid and lossless, and \(P_\text{gen}\) is mechanical power into the generator; electrical conversion loses a few per cent more.</li>
+                            <li>A natural next question for a project: hang a small pendulum, or a double pendulum, on each blade and let generators at its joints harvest its swinging. Energy conservation already settles one point: every joule the pendulums harvest comes out of the rotor, and so out of the main generator’s share. The open question is whether a small chaotic pendulum can supply useful power to sensors in the blade, and what that costs.</li>
+                        </ul>
+                        <h4><span class="psub__n">10.1</span>Further reading</h4>
+                        <ol class="prefs">
+                            <li>T. Burton, N. Jenkins, D. Sharpe and E. Bossanyi, <em>Wind Energy Handbook</em>, 2nd edition, Wiley, 2011: momentum theory, the Betz limit and turbine control.</li>
+                            <li>J. F. Manwell, J. G. McGowan and A. L. Rogers, <em>Wind Energy Explained</em>, 2nd edition, Wiley, 2009.</li>
+                            <li>S. Heier, <em>Grid Integration of Wind Energy Conversion Systems</em>, Wiley, 1998: source of the power-coefficient fit (5).</li>
+                            <li>K. Shirzadeh, H. Hangan and C. Crawford, “Experimental and numerical simulation of extreme operational conditions for horizontal axis wind turbines based on the IEC standard”, <em>Wind Energy Science</em> 5, 1755–1770 (2020): equation (4) gives the gust shape used by the page’s <em>Gust</em> wind.</li>
+                        </ol>
+                    </section>
+                </div>
+            </div>
+        </article>
+
+        <section class="walk" id="walk" data-walk="turbine" aria-label="From symbols to code"></section>
+    </main>
+
+    <footer class="sim-foot">
+        <span>© 2026 Numa Koudsie</span>
+        <span><a href="../simulations.html">All simulations ↑</a> · <a href="../index.html">Home page</a></span>
+    </footer>
+
+    <script src="../scripts/fold.js"></script>
+    <script src="../scripts/sim.js"></script>
+    <script src="../scripts/dataset.js"></script>
+    <script>
+    (function () {
+        'use strict';
+        var T = Sim.theme;
+        var RHO = 1.225, R = 40, J = 4.0e6, AREA = Math.PI * R * R, TMAX = 1.2e6, WN = 0.6, ZC = 0.8;
+        var H = 0.01, TEND = 120, EVERY = 2, NS = TEND / H / EVERY + 1, NL = 271;
+        var C1 = 0.5176, C2 = 116, C4 = 5, C5 = 21, C6 = 0.0068;
+        var TF = [], TA = [], PHASES = [3.9276, 5.6374, 4.8738, 1.4150, 1.8860, 5.4887, 0.0331, 5.1599, 5.0081, 2.9401, 1.9040, 1.7494, 1.6014, 2.7965, 3.1702, 3.4777];
+
+        var stage = document.getElementById('stage'), cpStage = document.getElementById('stage-cp');
+        var box = Sim.canvas2d(document.getElementById('wt')), ctx = box.ctx;
+        var cbox = Sim.canvas2d(document.getElementById('cp')), cctx = cbox.ctx;
+        var statusEl = document.getElementById('status');
+        var playT = 0, iNow = 0, fps = 0, solved = null, ctrl = 'pi', prof = 'turb', AIRPX = 5;
+
+        /* ---------- the store: every number this page computes is written here, where it is computed (scripts/dataset.js) ---------- */
+        var ds = Sim.dataset({ title: 'Wind turbine control', attrs: { figure: 10, page: 'wind-turbine.html', equation: 'J dω/dt = τ_aero(ω, v) − τ_gen', cp_model: 'Heier: c1 (c2/λi − c4) e^(−c5/λi) + c6 λ, 1/λi = 1/λ − 0.035, β = 0' } });
+        ds.var('rho', [], 'float', { symbol: 'ρ', units: 'kg/m³', long_name: 'air density', computed_in: 'constant RHO', digits: 3 });
+        ds.var('R', [], 'float', { symbol: 'R', units: 'm', long_name: 'rotor radius', computed_in: 'constant R', digits: 1 });
+        ds.var('J', [], 'float', { symbol: 'J', units: 'kg m²', long_name: 'moment of inertia of rotor and drive train', computed_in: 'constant J', digits: 0 });
+        ds.var('lam_opt', [], 'float', { symbol: 'λ<sub>opt</sub>', long_name: 'tip-speed ratio of the largest c<sub>p</sub>', computed_in: 'optimum()', formula: 'argmax c<sub>p</sub>(λ), scanned in steps of 0.001', digits: 3 });
+        ds.var('cp_max', [], 'float', { symbol: 'c<sub>p,max</sub>', long_name: 'largest power coefficient', computed_in: 'optimum()', formula: 'c<sub>p</sub>(λ<sub>opt</sub>)', digits: 4 });
+        ds.var('K_opt', [], 'float', { symbol: 'K<sub>opt</sub>', units: 'N m s²', long_name: 'gain of the optimal-torque law', computed_in: 'optimum()', formula: '½ ρ π R⁵ c<sub>p,max</sub> / λ<sub>opt</sub>³', digits: 0 });
+        ds.var('ctrl', [], 'str', { symbol: 'controller', long_name: 'hold speed (pi) or follow the wind (opt)', computed_in: 'solve()' });
+        ds.var('profile', [], 'str', { symbol: 'wind', long_name: 'steady, gust, step or turb', computed_in: 'solve()' });
+        ds.var('v0', [], 'float', { symbol: 'v<sub>0</sub>', units: 'm/s', long_name: 'mean wind speed', computed_in: 'v0 slider', digits: 1 });
+        ds.var('dv', [], 'float', { symbol: 'Δv', units: 'm/s', long_name: 'size of the gust or step, or standard deviation of the turbulence', computed_in: 'dv slider', digits: 1 });
+        ds.var('w_ref', [], 'float', { symbol: 'ω<sub>ref</sub>', units: 'rad/s', long_name: 'target rotor speed', computed_in: 'solve()', formula: 'rpm · 2π / 60', digits: 4 });
+        ds.var('dtau_dw', [], 'float', { symbol: '∂τ<sub>aero</sub>/∂ω', units: 'N m s', long_name: 'slope of the aerodynamic torque at the target speed and mean wind', computed_in: 'solve()', formula: 'central difference, δω = 10⁻⁴ rad/s', digits: 0 });
+        ds.var('Kp', [], 'float', { symbol: 'K<sub>p</sub>', units: 'N m s', long_name: 'proportional gain', computed_in: 'solve()', formula: '2 ζ<sub>c</sub> ω<sub>n</sub> J + ∂τ<sub>aero</sub>/∂ω', digits: 0 });
+        ds.var('Ki', [], 'float', { symbol: 'K<sub>i</sub>', units: 'N m', long_name: 'integral gain', computed_in: 'solve()', formula: 'J ω<sub>n</sub>²', digits: 0 });
+        ds.var('rpm_ref', [], 'float', { symbol: 'n<sub>ref</sub>', units: 'rpm', long_name: 'target rotor speed in turns per minute', computed_in: 'solve()', source: 'The rpm slider value captured with the solved run; later slider changes do not alter this stored input.', digits: 3 });
+        ds.var('cp_betz', [], 'float', { symbol: 'c<sub>p,Betz</sub>', long_name: 'Betz limit, the largest share any rotor can take', computed_in: 'optimum()', formula: '16/27', digits: 5 });
+        ds.var('tau0', [], 'float', { symbol: 'τ<sub>0</sub>', units: 'N m', long_name: 'generator torque that balances the rotor at the start', computed_in: 'solve()', formula: 'τ<sub>aero</sub>(ω<sub>ref</sub>, v(0))', digits: 0 });
+        ds.var('solve_ms', [], 'float', { symbol: 'solve time', units: 'ms', long_name: 'time the browser took to solve and store the run', computed_in: 'solve()', digits: 1, source: 'Measured with performance.now().' });
+        ds.var('stale', [], 'bool', { symbol: 'stale', long_name: 'a control changed since the last solve', computed_in: 'markStale()' });
+        ds.var('h', [], 'float', { symbol: 'h', units: 's', long_name: 'RK4 step H', computed_in: 'solve()', formula: 'RK4 step H', digits: 3 });
+        ds.var('steps', [], 'float', { symbol: 'steps', units: '', long_name: 'TEND / h', computed_in: 'solve()', formula: 'TEND / h', digits: 3 });
+        ds.var('rpm_min', [], 'float', { symbol: 'minimum rotor speed', units: 'rpm', long_name: 'min of stored rpm', computed_in: 'solve()', formula: 'min of stored rpm', digits: 3 });
+        ds.var('rpm_max', [], 'float', { symbol: 'maximum rotor speed', units: 'rpm', long_name: 'max of stored rpm', computed_in: 'solve()', formula: 'max of stored rpm', digits: 3 });
+        ds.var('captured_pct', [], 'float', { symbol: 'captured share', units: '%', long_name: '100 Ea / Ew', computed_in: 'solve()', formula: '100 Ea / Ew', digits: 3 });
+        ds.dim('n', NS);
+        ds.coord('ts', 'n', Float64Array, { symbol: 't<sub>n</sub>', units: 's', long_name: 'time of each stored sample', computed_in: 'solve()', formula: 'n · 2h', digits: 2 });
+        ds.var('vw', ['n'], Float64Array, { symbol: 'v', units: 'm/s', long_name: 'wind speed', computed_in: 'wind(), in solve()', formula: 'the chosen profile', digits: 4 });
+        ds.var('om', ['n'], Float64Array, { symbol: 'ω', units: 'rad/s', long_name: 'rotor speed, RK4', computed_in: 'solve()', formula: 'RK4, step h', digits: 6 });
+        ds.var('rpm', ['n'], Float64Array, { symbol: 'n<sub>rot</sub>', units: 'rpm', long_name: 'rotor speed in turns per minute', computed_in: 'solve()', formula: 'ω · 60 / 2π', digits: 3 });
+        ds.var('th', ['n'], Float64Array, { symbol: 'θ', units: 'rad', long_name: 'rotor angle, RK4', computed_in: 'solve()', formula: '∫ ω dt', digits: 5 });
+        ds.var('lam', ['n'], Float64Array, { symbol: 'λ', long_name: 'tip-speed ratio', computed_in: 'solve()', formula: 'ω R / v', digits: 4 });
+        ds.var('cpv', ['n'], Float64Array, { symbol: 'c<sub>p</sub>', long_name: 'power coefficient', computed_in: 'cp(), in solve()', formula: 'c<sub>p</sub>(λ)', digits: 5 });
+        ds.var('ta', ['n'], Float64Array, { symbol: 'τ<sub>aero</sub>', units: 'N m', long_name: 'aerodynamic torque', computed_in: 'tauAero(), in solve()', formula: '½ ρ A v³ c<sub>p</sub>(λ) / ω', digits: 1 });
+        ds.var('tg', ['n'], Float64Array, { symbol: 'τ<sub>gen</sub>', units: 'N m', long_name: 'generator torque set by the controller', computed_in: 'tauGen(), in solve()', formula: 'K<sub>opt</sub> ω², or τ<sub>0</sub> + K<sub>p</sub>(ω − ω<sub>ref</sub>) + K<sub>i</sub> I', digits: 1 });
+        ds.var('Pg', ['n'], Float64Array, { symbol: 'P<sub>gen</sub>', units: 'W', long_name: 'power into the generator', computed_in: 'solve()', formula: 'τ<sub>gen</sub> ω', digits: 0 });
+        ds.var('Pa', ['n'], Float64Array, { symbol: 'P<sub>aero</sub>', units: 'W', long_name: 'power the wind gives the rotor', computed_in: 'solve()', formula: 'τ<sub>aero</sub> ω', digits: 0 });
+        ds.var('Ictl', ['n'], Float64Array, { symbol: 'I', units: 'rad', long_name: 'the controller’s memory: the speed error integrated over time', computed_in: 'solve(), integrated with RK4', formula: '∫ (ω − ω<sub>ref</sub>) dt, held while the torque is at a limit', digits: 6 });
+        ds.var('vtip', ['n'], Float64Array, { symbol: 'v<sub>tip</sub>', units: 'm/s', long_name: 'speed of the blade tips', computed_in: 'solve()', formula: 'ω R', digits: 3 });
+        ds.var('Eg', ['n'], Float64Array, { symbol: 'E<sub>gen</sub>', units: 'J', long_name: 'energy into the generator so far', computed_in: 'solve(), integrated with RK4', formula: '∫ τ<sub>gen</sub> ω dt', digits: 0 });
+        ds.var('sw', ['n'], Float64Array, { symbol: 's<sub>air</sub>', units: 'm', long_name: 'distance the air has travelled, moves the wind streaks', computed_in: 'solve(), integrated with RK4', formula: '∫ v dt', digits: 3 });
+        ds.var('Ea', [], 'float', { symbol: 'E<sub>aero</sub>', units: 'J', long_name: 'energy the wind gave the rotor over the run', computed_in: 'solve(), integrated with RK4', formula: '∫ τ<sub>aero</sub> ω dt', digits: 0 });
+        ds.var('Ew', [], 'float', { symbol: 'E<sub>wind</sub>', units: 'J', long_name: 'kinetic energy carried through the rotor disc', computed_in: 'solve(), integrated with RK4', formula: '∫ ½ ρ A v³ dt', digits: 0 });
+        ds.var('Eg_end', [], 'float', { symbol: 'E<sub>gen</sub>(T)', units: 'J', long_name: 'energy into the generator over the run', computed_in: 'solve()', digits: 0 });
+        ds.var('balance', [], 'float', { symbol: 'balance', long_name: 'energy balance error, relative to E<sub>aero</sub>', computed_in: 'solve()', formula: '|E<sub>aero</sub> − E<sub>gen</sub> − ΔE<sub>rot</sub>| / E<sub>aero</sub>', digits: 12 });
+        ds.var('P_mean', [], 'float', { symbol: '⟨P<sub>gen</sub>⟩', units: 'W', long_name: 'mean generator power over the run', computed_in: 'solve()', formula: 'E<sub>gen</sub>(T) / T', digits: 0 });
+        ds.var('i_now', [], 'int', { symbol: 'n<sub>now</sub>', long_name: 'stored sample shown in this frame', computed_in: 'the clock', formula: 'round(t<sub>play</sub> / 2h)', digits: 0 });
+        ds.var('t_play', [], 'float', { symbol: 't<sub>play</sub>', units: 's', long_name: 'playback time in the stored run', computed_in: 'the clock', formula: 't<sub>play</sub> ← t<sub>play</sub> + speed · Δt', digits: 3 });
+        ds.var('v_now', [], 'float', { symbol: 'v', units: 'm/s', long_name: 'wind speed shown now (a stored sample)', computed_in: 'the clock', digits: 4 });
+        ds.var('rpm_now', [], 'float', { symbol: 'n<sub>rot</sub>', units: 'rpm', long_name: 'rotor speed shown now (a stored sample)', computed_in: 'the clock', digits: 3 });
+        ds.var('P_now', [], 'float', { symbol: 'P<sub>gen</sub>', units: 'W', long_name: 'generator power shown now (a stored sample)', computed_in: 'the clock', digits: 0 });
+        ds.var('lam_now', [], 'float', { symbol: 'λ', long_name: 'tip-speed ratio shown now (a stored sample)', computed_in: 'the clock', digits: 4 });
+        ds.var('cp_now', [], 'float', { symbol: 'c<sub>p</sub>', long_name: 'power coefficient shown now (a stored sample)', computed_in: 'the clock', digits: 5 });
+        ds.var('th_now', [], 'float', { symbol: 'θ', units: 'rad', long_name: 'rotor angle shown now (a stored sample)', computed_in: 'the clock', digits: 5 });
+        ds.dim('L', NL);
+        ds.coord('lamL', 'L', Float64Array, { symbol: 'λ<sub>j</sub>', long_name: 'tip-speed ratios of the c<sub>p</sub> curve', computed_in: 'optimum()', formula: '0.5 + 0.05 j', digits: 2 });
+        ds.var('cpL', ['L'], Float64Array, { symbol: 'c<sub>p</sub>(λ<sub>j</sub>)', long_name: 'the power-coefficient curve', computed_in: 'optimum()', formula: 'c<sub>p</sub>(λ<sub>j</sub>)', digits: 5 });
+        ds.var('v_hi', [], 'float', { symbol: 'v<sub>top</sub>', units: 'm/s', long_name: 'top of the wind chart', computed_in: 'solve()', formula: '⌈1.1 · max v<sub>n</sub>⌉', digits: 0 });
+        ds.var('rpm_lo', [], 'float', { symbol: 'n<sub>bottom</sub>', units: 'rpm', long_name: 'bottom of the rotor-speed chart', computed_in: 'solve()', formula: '⌊min(n<sub>rot</sub>, n<sub>ref</sub>) − 0.6⌋', digits: 0 });
+        ds.var('rpm_hi', [], 'float', { symbol: 'n<sub>top</sub>', units: 'rpm', long_name: 'top of the rotor-speed chart', computed_in: 'solve()', formula: '⌈max(n<sub>rot</sub>, n<sub>ref</sub>) + 0.6⌉', digits: 0 });
+        ds.var('P_hi', [], 'float', { symbol: 'P<sub>top</sub>', units: 'W', long_name: 'top of the power chart', computed_in: 'solve()', formula: '1.1 · max(P<sub>gen</sub>, P<sub>aero</sub>), rounded up to 0.25 MW', digits: 0 });
+        ds.var('px_per_m_air', [], 'float', { symbol: 'px per metre of air', units: 'css px/m', long_name: 'how far a wind streak moves on screen for each metre the air travels', computed_in: 'constant', digits: 1 });
+        ds.var('hub_x', [], 'float', { symbol: 'x<sub>hub</sub> px', units: 'css px', long_name: 'hub centre on screen', computed_in: 'draw()', digits: 1 });
+        ds.var('hub_y', [], 'float', { symbol: 'y<sub>hub</sub> px', units: 'css px', long_name: 'hub centre on screen', computed_in: 'draw()', digits: 1 });
+        ds.var('r_px', [], 'float', { symbol: 'R px', units: 'css px', long_name: 'blade length on screen', computed_in: 'draw()', digits: 1 });
+        ds.var('box_w', [], 'int', { symbol: 'box.w', units: 'css px', long_name: 'canvas width on your screen', computed_in: 'draw()', digits: 0, source: 'Measured from the page layout.' });
+        ds.var('box_h', [], 'int', { symbol: 'box.h', units: 'css px', long_name: 'canvas height on your screen', computed_in: 'draw()', digits: 0, source: 'Measured from the page layout.' });
+        ds.var('fps', [], 'float', { symbol: 'frame rate', units: 'Hz', long_name: 'smoothed over about ten frames', computed_in: 'the clock', digits: 1, source: 'A running average of 1/Δt.' });
+        ds.var('playing', [], 'bool', { symbol: 'playing', long_name: 'the playback runs', computed_in: 'Sim.clock', source: 'The state of the Play button.' });
+
+        var rpm = Sim.slider('rpm', { format: function (v) { return v.toFixed(1) + ' rpm'; }, onInput: markStale });
+        var v0 = Sim.slider('v0', { format: function (v) { return v.toFixed(1) + ' m/s'; }, onInput: markStale });
+        var dv = Sim.slider('dv', { format: function (v) { return v.toFixed(1) + ' m/s'; }, onInput: markStale });
+        var speed = Sim.slider('speed', { format: function (v) { return v.toFixed(1) + '×'; } });
+        var seek = Sim.slider('seek', { format: function (v) { return 't = ' + (v * EVERY * H).toFixed(1) + ' s of ' + TEND + ' s'; }, onInput: function (v) { playT = v * EVERY * H; frame(); } });
+
+        /* ---------- the aerodynamics: Heier's power coefficient, blades at zero pitch ---------- */
+        function cp(lam) {
+            if (lam <= 0.05) return 0;
+            var inv = 1 / lam - 0.035;
+            if (inv <= 0) return 0;
+            var li = 1 / inv;
+            return Math.max(0, C1 * (C2 / li - C4) * Math.exp(-C5 / li) + C6 * lam);
+        }
+        function tauAero(w, v) {
+            return w > 1e-6 ? 0.5 * RHO * AREA * v * v * v * cp(w * R / v) / w : 0;
+        }
+        function optimum() {
+            var best = 0, lbest = 0;
+            for (var l = 0.5; l <= 14; l += 0.001) { var c = cp(l); if (c > best) { best = c; lbest = l; } }
+            ds.set('lam_opt', lbest); ds.set('cp_max', best); ds.set('cp_betz', 16 / 27); ds.set('K_opt', 0.5 * RHO * Math.PI * Math.pow(R, 5) * best / Math.pow(lbest, 3));
+            var lamL = ds.alloc('lamL'), cpL = ds.alloc('cpL');
+            for (var j = 0; j < NL; j++) { lamL[j] = 0.5 + 0.05 * j; cpL[j] = cp(lamL[j]); }
+            ds.touch('lamL'); ds.touch('cpL');
+            ds.set('rho', RHO); ds.set('R', R); ds.set('J', J);
+        }
+
+        /* ---------- the wind, decided by someone else: a function of time only ---------- */
+        for (var q = 0; q < 16; q++) { TF.push(0.005 * Math.pow(100, q / 15)); TA.push(Math.pow(TF[q], -1 / 3)); }
+        var TNORM = Math.sqrt(TA.reduce(function (s, a) { return s + a * a / 2; }, 0));
+        function wind(t, w) {
+            if (w.prof === 'gust') {
+                var s = t - 30;
+                return s >= 0 && s <= 10.5 ? w.v0 - 0.37 * w.dv * Math.sin(3 * Math.PI * s / 10.5) * (1 - Math.cos(2 * Math.PI * s / 10.5)) : w.v0;
+            }
+            if (w.prof === 'step') return w.v0 + w.dv * Math.min(1, Math.max(0, (t - 30) / 2));
+            if (w.prof === 'turb') {
+                var u = 0;
+                for (var k = 0; k < 16; k++) u += TA[k] * Math.sin(2 * Math.PI * TF[k] * t + PHASES[k]);
+                return Math.max(0.5, w.v0 + w.dv * u / TNORM);
+            }
+            return w.v0;
+        }
+
+        /* ---------- the controller: the generator torque, from the measured rotor speed ---------- */
+        function tauGen(w, I, c) {
+            if (c.ctrl === 'opt') return Math.min(TMAX, ds.get('K_opt') * w * w);
+            return Math.min(TMAX, Math.max(0, c.tau0 + c.Kp * (w - c.wref) + c.Ki * I));
+        }
+        function rates(t, w, I, c) {
+            var v = wind(t, c), g = tauGen(w, I, c), a = tauAero(w, v), e = w - c.wref;
+            var raw = c.tau0 + c.Kp * e + c.Ki * I;
+            var dI = c.ctrl === 'opt' || (raw <= 0 && e < 0) || (raw >= TMAX && e > 0) ? 0 : e;
+            return [(a - g) / J, dI, g * w, a * w, 0.5 * RHO * AREA * v * v * v, v, w];
+        }
+
+        /* ---------- 1 solve, 2 store: two minutes of operation, before anything is drawn ---------- */
+        function solve() {
+            ds.set('h', H); ds.set('steps', TEND / H);
+            var start = performance.now();
+            var c = { ctrl: ctrl, prof: prof, v0: v0.value, dv: dv.value, wref: rpm.value * 2 * Math.PI / 60 };
+            c.tau0 = tauAero(c.wref, wind(0, c));
+            var dtd = (tauAero(c.wref + 1e-4, c.v0) - tauAero(c.wref - 1e-4, c.v0)) / 2e-4;
+            c.Kp = 2 * ZC * WN * J + dtd; c.Ki = J * WN * WN;
+            var ts = ds.alloc('ts'), vw = ds.alloc('vw'), om = ds.alloc('om'), rp = ds.alloc('rpm'), th = ds.alloc('th'), lam = ds.alloc('lam'), cpv = ds.alloc('cpv');
+            var ta = ds.alloc('ta'), tg = ds.alloc('tg'), Pg = ds.alloc('Pg'), Pa = ds.alloc('Pa'), Eg = ds.alloc('Eg'), sw = ds.alloc('sw'), Ic = ds.alloc('Ictl'), vt = ds.alloc('vtip');
+            var t = 0, w = c.ctrl === 'opt' ? ds.get('lam_opt') * wind(0, c) / R : c.wref, I = 0;
+            var y = [0, 0, 0, 0, 0], n = 0, KE0 = 0.5 * J * w * w, step, j;
+            for (step = 0; step <= TEND / H; step++) {
+                if (step % EVERY === 0) {
+                    var v = wind(t, c);
+                    ts[n] = t; vw[n] = v; om[n] = w; rp[n] = w * 60 / (2 * Math.PI); th[n] = y[4]; lam[n] = w * R / v; cpv[n] = cp(lam[n]);
+                    ta[n] = tauAero(w, v); tg[n] = tauGen(w, I, c); Pg[n] = tg[n] * w; Pa[n] = ta[n] * w; Eg[n] = y[0]; sw[n] = y[3]; Ic[n] = I; vt[n] = w * R;
+                    n++;
+                }
+                if (step === TEND / H) break;
+                // RK4 on (ω, I) with the energies, the air travel and the rotor angle carried along
+                var k1 = rates(t, w, I, c);
+                var k2 = rates(t + H / 2, w + H / 2 * k1[0], I + H / 2 * k1[1], c);
+                var k3 = rates(t + H / 2, w + H / 2 * k2[0], I + H / 2 * k2[1], c);
+                var k4 = rates(t + H, w + H * k3[0], I + H * k3[1], c);
+                w += H / 6 * (k1[0] + 2 * k2[0] + 2 * k3[0] + k4[0]);
+                I += H / 6 * (k1[1] + 2 * k2[1] + 2 * k3[1] + k4[1]);
+                for (j = 0; j < 5; j++) y[j] += H / 6 * (k1[j + 2] + 2 * k2[j + 2] + 2 * k3[j + 2] + k4[j + 2]);
+                t = (step + 1) * H;
+            }
+            ['ts', 'vw', 'om', 'rpm', 'th', 'lam', 'cpv', 'ta', 'tg', 'Pg', 'Pa', 'Eg', 'sw', 'Ictl', 'vtip'].forEach(function (name) { ds.touch(name); });
+            var nref = rpm.value, vmax = 0, rlo = c.ctrl === 'pi' ? nref : Infinity, rhi = c.ctrl === 'pi' ? nref : 0, pmax = 0;
+            for (n = 0; n < NS; n++) { vmax = Math.max(vmax, vw[n]); rlo = Math.min(rlo, rp[n]); rhi = Math.max(rhi, rp[n]); pmax = Math.max(pmax, Pg[n], Pa[n]); }
+            ds.set('rpm_ref', nref); ds.set('v_hi', Math.ceil(1.1 * vmax)); ds.set('rpm_lo', Math.floor(rlo - 0.6)); ds.set('rpm_hi', Math.ceil(rhi + 0.6));
+            ds.set('P_hi', Math.ceil(1.1 * pmax / 0.25e6) * 0.25e6); ds.set('px_per_m_air', AIRPX);
+            var KE = 0.5 * J * om[NS - 1] * om[NS - 1];
+            ds.set('ctrl', c.ctrl); ds.set('profile', c.prof); ds.set('v0', c.v0); ds.set('dv', c.dv); ds.set('w_ref', c.wref);
+            ds.set('dtau_dw', dtd); ds.set('Kp', c.Kp); ds.set('Ki', c.Ki); ds.set('tau0', c.tau0);
+            ds.set('rpm_min', minOf('rpm')); ds.set('rpm_max', maxOf('rpm'));
+            ds.set('captured_pct', 100 * y[1] / y[2]);
+            ds.set('Ea', y[1]); ds.set('Ew', y[2]); ds.set('Eg_end', y[0]); ds.set('P_mean', y[0] / TEND);
+            ds.set('balance', Math.abs(y[1] - y[0] - (KE - KE0)) / y[1]);
+            ds.set('solve_ms', performance.now() - start); ds.set('stale', false);
+            solved = { ctrl: c.ctrl, prof: c.prof, v0: c.v0, dv: c.dv, rpm: rpm.value };
+            readouts();
+            playT = 0;
+            clk.set(true);
+        }
+
+        function markStale() {
+            var s = !solved || solved.ctrl !== ctrl || solved.prof !== prof || solved.v0 !== v0.value || solved.dv !== dv.value || (ctrl === 'pi' && solved.rpm !== rpm.value);
+            ds.set('stale', s);
+            status();
+        }
+        var NAMES = { pi: 'hold speed', opt: 'follow the wind', steady: 'steady', gust: 'gust', step: 'step', turb: 'turbulent' };
+        function status() {
+            if (!solved) return;
+            statusEl.classList.toggle('is-stale', ds.get('stale'));
+            statusEl.textContent = ds.get('stale')
+                ? 'A control changed. The run below is still the one for ' + NAMES[solved.ctrl] + ', ' + NAMES[solved.prof] + ' wind, v₀ = ' + solved.v0.toFixed(1) + ' m/s. Press Solve to compute the new one.'
+                : 'Solved ' + Sim.fmt(ds.get('steps'), 0) + ' RK4 steps in ' + ds.get('solve_ms').toFixed(1) + ' ms and stored ' + NS + ' samples, one every ' + (EVERY * H * 1000).toFixed(0) + ' ms. Every frame shows one stored sample.';
+            ['st-solve', 'st-store'].forEach(function (id) { document.getElementById(id).classList.toggle('is-done', !ds.get('stale')); });
+        }
+        function readouts() {
+            document.getElementById('r-P').textContent = Sim.fmt(ds.get('P_mean') / 1000, 0) + ' kW';
+            document.getElementById('r-E').textContent = Sim.fmt(ds.get('Eg_end') / 3.6e6, 2) + ' kWh';
+            document.getElementById('r-rpm').textContent = Sim.fmt(ds.get('rpm_min'), 1) + '–' + Sim.fmt(ds.get('rpm_max'), 1) + ' rpm';
+            document.getElementById('r-eff').textContent = Sim.fmt(ds.get('captured_pct'), 1) + ' %';
+            document.getElementById('r-bal').textContent = ds.get('balance').toExponential(1).replace('-', '−');
+            document.getElementById('r-ms').textContent = Sim.fmt(ds.get('solve_ms'), 1) + ' ms';
+            status();
+        }
+
+        /* ---------- 3 play: each frame draws stored samples. The only arithmetic below turns metres, seconds, radians and watts into pixels. ---------- */
+        var BURG = T.accent, FAINT = 'rgba(28, 21, 24, 0.24)', ROSE = '#c98790', K = 0.5, DASH = [16, 22], LINE_SHIFT = 15;
+        function geom() {
+            // the layout of the figure, from the canvas size; draw() and the data panel both use it
+            var w = box.w, h = box.h, narrow = w < 560;
+            var sceneH = Math.round(h * (narrow ? 0.47 : 0.5)), groundY = sceneH - (narrow ? 18 : 22);
+            var r = Math.min((groundY - 26) / 2.3, w * (narrow ? 0.3 : 0.24)), cx = narrow ? w * 0.34 : w * 0.33, cy = groundY - 1.3 * r;
+            var g = { w: w, h: h, narrow: narrow, sceneH: sceneH, groundY: groundY, r: r, cx: cx, cy: cy };
+            g.lines = [];
+            for (var k = 0; k < 6; k++) g.lines.push(34 + k * (groundY - 46) / 5);
+            var L = narrow ? 44 : 56, R = w - (narrow ? 12 : 18), top = sceneH + 30, bot = h - 26, gap = narrow ? 30 : 32, ch = (bot - top - 2 * gap) / 3;
+            g.strips = { vw: { L: L, R: R, top: top, bot: top + ch }, rpm: { L: L, R: R, top: top + ch + gap, bot: top + 2 * ch + gap }, Pg: { L: L, R: R, top: top + 2 * (ch + gap), bot: bot } };
+            g.strips.Pa = g.strips.Pg;
+            g.range = { vw: [0, ds.get('v_hi')], rpm: [ds.get('rpm_lo'), ds.get('rpm_hi')], Pg: [0, ds.get('P_hi')], Pa: [0, ds.get('P_hi')] };
+            g.sx = function (t) { return L + t / TEND * (R - L); };
+            g.sy = function (name, v) { var p = g.strips[name], rg = g.range[name]; return p.bot - (Math.min(rg[1], Math.max(rg[0], v)) - rg[0]) / (rg[1] - rg[0]) * (p.bot - p.top); };
+            return g;
+        }
+        function label(c, sym, value, x, y, align, colour, size) {
+            // a symbol set like the lecture note, then its value in the mono face of the page
+            value = value.replace(/-/g, '−');
+            c.font = T.mono;
+            var vw = c.measureText(value).width, sw = Sim.tex(c, sym, 0, 0, { size: size || 15, measure: true });
+            var x0 = align === 'right' ? x - sw - vw : align === 'center' ? x - (sw + vw) / 2 : x;
+            Sim.tex(c, sym, x0, y, { size: size || 15, color: colour || T.ink });
+            c.font = T.mono; c.fillStyle = colour || T.ink; c.textAlign = 'left'; c.textBaseline = 'alphabetic';
+            c.fillText(value, x0 + sw, y);
+            return sw + vw;
+        }
+        function bladePath(c, g, a) {
+            // the blade lies in the rotor plane; seen from the side at an angle, the plane's horizontal is shortened by K
+            var ux = Math.cos(a) * K, uy = -Math.sin(a), vx = -Math.sin(a) * K, vy = -Math.cos(a), r = g.r, s, pts = [];
+            function chord(s) { return r * (s < 0.2 ? 0.05 + (0.115 - 0.05) * (s - 0.08) / 0.12 : 0.115 - 0.09 * (s - 0.2) / 0.8); }
+            for (s = 0.08; s <= 1.0001; s += 0.04) pts.push([g.cx + ux * r * s + vx * 0.38 * chord(s), g.cy + uy * r * s + vy * 0.38 * chord(s)]);
+            for (s = 1; s >= 0.0799; s -= 0.04) pts.push([g.cx + ux * r * s - vx * 0.62 * chord(s), g.cy + uy * r * s - vy * 0.62 * chord(s)]);
+            c.beginPath(); pts.forEach(function (q, k) { if (k) c.lineTo(q[0], q[1]); else c.moveTo(q[0], q[1]); }); c.closePath();
+        }
+        function drawScene(c, g, i) {
+            var w = g.w, r = g.r, th = ds.get('th')[i], v = ds.get('vw')[i], k;
+            // the air: dashes that travel with the stored distance the air has moved, ∫ v dt
+            var off = -ds.get('sw')[i] * ds.get('px_per_m_air');
+            c.setLineDash(DASH); c.strokeStyle = 'rgba(58, 50, 46, 0.26)'; c.lineWidth = 1.3;
+            g.lines.forEach(function (y, k) { c.lineDashOffset = off + LINE_SHIFT * k; c.beginPath(); c.moveTo(0, y); c.lineTo(w, y); c.stroke(); });
+            c.setLineDash([]); c.lineDashOffset = 0;
+            // ground
+            c.strokeStyle = T.muted; c.lineWidth = 1;
+            for (k = 4; k < w; k += 9) { c.beginPath(); c.moveTo(k, g.groundY); c.lineTo(k - 8, g.groundY + 8); c.stroke(); }
+            c.strokeStyle = T.ink2; c.lineWidth = 1.6; c.beginPath(); c.moveTo(0, g.groundY); c.lineTo(w, g.groundY); c.stroke();
+            // tower, tapered; nacelle behind the rotor, downwind
+            var tx = g.cx + 0.12 * r;
+            c.fillStyle = '#e8dfcf'; c.strokeStyle = '#b9ad9b'; c.lineWidth = 1;
+            c.beginPath(); c.moveTo(tx - 0.075 * r, g.groundY); c.lineTo(tx + 0.075 * r, g.groundY); c.lineTo(tx + 0.035 * r, g.cy); c.lineTo(tx - 0.035 * r, g.cy); c.closePath(); c.fill(); c.stroke();
+            c.fillStyle = '#ddd2bf'; c.strokeStyle = '#a89b88';
+            c.beginPath();
+            if (c.roundRect) c.roundRect(g.cx - 0.02 * r, g.cy - 0.075 * r, 0.42 * r, 0.15 * r, 0.05 * r); else c.rect(g.cx - 0.02 * r, g.cy - 0.075 * r, 0.42 * r, 0.15 * r);
+            c.fill(); c.stroke();
+            // the swept disc
+            c.setLineDash([3, 5]); c.strokeStyle = T.rule; c.lineWidth = 1;
+            c.beginPath(); c.ellipse(g.cx, g.cy, K * r, r, 0, 0, Math.PI * 2); c.stroke(); c.setLineDash([]);
+            // three blades at the stored rotor angle θ, 120° apart; blade 1 in burgundy so that the turning can be followed
+            for (var b = 2; b >= 0; b--) {
+                bladePath(c, g, th + b * 2 * Math.PI / 3);
+                c.fillStyle = b === 0 ? BURG : '#4a413d'; c.fill();
+                c.strokeStyle = b === 0 ? T.accentDark : T.ink; c.lineWidth = 0.8; c.stroke();
+            }
+            // spinner
+            c.fillStyle = T.ink2; c.beginPath(); c.ellipse(g.cx - 0.02 * r, g.cy, 0.05 * r, 0.075 * r, 0, 0, Math.PI * 2); c.fill();
+            // the wind now
+            label(c, 'v', ' = ' + Sim.fmt(v, 2) + ' m/s', 10, 20, 'left', T.ink2, 15);
+            c.strokeStyle = T.ink2; c.fillStyle = T.ink2; c.lineWidth = 1.6;
+            var ax = g.narrow ? 132 : 140, al = 6 + 3.2 * v;
+            c.beginPath(); c.moveTo(ax, 15); c.lineTo(ax + al - 6, 15); c.stroke();
+            c.beginPath(); c.moveTo(ax + al, 15); c.lineTo(ax + al - 7, 11.5); c.lineTo(ax + al - 7, 18.5); c.closePath(); c.fill();
+            // what the controller sees and does, from the stored sample
+            var rows = g.narrow
+                ? [['λ', Sim.fmt(ds.get('lam')[i], 2)], ['c_{p}', Sim.fmt(ds.get('cpv')[i], 3)], ['τ_{aero}', Sim.fmt(ds.get('ta')[i] / 1000, 0) + ' kN m'], ['τ_{gen}', Sim.fmt(ds.get('tg')[i] / 1000, 0) + ' kN m']]
+                : [['n_{rot}', Sim.fmt(ds.get('rpm')[i], 2) + ' rpm'], ['v_{tip}', Sim.fmt(ds.get('vtip')[i], 1) + ' m/s'], ['λ = v_{tip}/v', Sim.fmt(ds.get('lam')[i], 2)], ['c_{p}', Sim.fmt(ds.get('cpv')[i], 3)],
+                    ['τ_{aero}', Sim.fmt(ds.get('ta')[i] / 1000, 0) + ' kN m'], ['τ_{gen}', Sim.fmt(ds.get('tg')[i] / 1000, 0) + ' kN m'], ['P_{gen}', Sim.fmt(ds.get('Pg')[i] / 1000, 0) + ' kW']];
+            var bw = g.narrow ? 138 : 196, rh = 19, bh = rows.length * rh + 14, bx = w - bw - (g.narrow ? 8 : 14), by = 10;
+            c.fillStyle = 'rgba(255, 250, 243, 0.94)'; c.strokeStyle = T.rule; c.lineWidth = 1;
+            c.beginPath(); if (c.roundRect) c.roundRect(bx, by, bw, bh, 6); else c.rect(bx, by, bw, bh); c.fill(); c.stroke();
+            rows.forEach(function (row, k) {
+                var y = by + 22 + k * rh;
+                Sim.tex(c, row[0], bx + 10, y, { size: 14, color: T.ink3 });
+                c.font = T.mono; c.textAlign = 'right'; c.textBaseline = 'alphabetic'; c.fillStyle = row[0] === 'τ_{gen}' ? BURG : T.ink;
+                c.fillText(row[1].replace(/-/g, '−'), bx + bw - 10, y);
+            });
+        }
+        function drawStrip(c, g, i, name, title, unit, scale, digits) {
+            var p = g.strips[name], rg = g.range[name], ts = ds.get('ts'), a = ds.get(name), n, stride = Math.max(1, Math.floor(NS / ((p.R - p.L) * 2)));
+            var tk = Sim.ticks(rg[0] / scale, rg[1] / scale, 2);
+            c.font = T.mono; c.lineWidth = 1;
+            tk.values.forEach(function (u) {
+                var y = g.sy(name, u * scale);
+                c.strokeStyle = T.ruleSoft; c.beginPath(); c.moveTo(p.L, y); c.lineTo(p.R, y); c.stroke();
+                c.fillStyle = T.muted; c.textAlign = 'right'; c.textBaseline = 'middle'; c.fillText(u === 0 ? '0' : Sim.fmt(u, tk.digits), p.L - 6, y);
+            });
+            c.strokeStyle = T.rule; c.strokeRect(p.L, p.top, p.R - p.L, p.bot - p.top);
+            c.save(); c.beginPath(); c.rect(p.L, p.top - 1, p.R - p.L, p.bot - p.top + 2); c.clip();
+            if (name === 'rpm' && ds.get('ctrl') === 'pi') {
+                c.setLineDash([5, 4]); c.strokeStyle = T.muted; c.beginPath(); c.moveTo(p.L, g.sy('rpm', ds.get('rpm_ref'))); c.lineTo(p.R, g.sy('rpm', ds.get('rpm_ref'))); c.stroke(); c.setLineDash([]);
+            }
+            if (name === 'Pg') {
+                var pa = ds.get('Pa');
+                c.strokeStyle = ROSE; c.lineWidth = 1.3;
+                c.beginPath(); for (n = 0; n < NS; n += stride) { if (n) c.lineTo(g.sx(ts[n]), g.sy('Pa', pa[n])); else c.moveTo(g.sx(ts[n]), g.sy('Pa', pa[n])); } c.stroke();
+            }
+            c.lineJoin = 'round';
+            c.strokeStyle = FAINT; c.lineWidth = 1.5;
+            c.beginPath(); for (n = i; n < NS; n += stride) { if (n === i) c.moveTo(g.sx(ts[n]), g.sy(name, a[n])); else c.lineTo(g.sx(ts[n]), g.sy(name, a[n])); } c.stroke();
+            c.strokeStyle = T.ink; c.lineWidth = 1.8;
+            c.beginPath(); for (n = 0; n <= i; n += stride) { if (n) c.lineTo(g.sx(ts[n]), g.sy(name, a[n])); else c.moveTo(g.sx(ts[n]), g.sy(name, a[n])); } c.lineTo(g.sx(ts[i]), g.sy(name, a[i])); c.stroke();
+            c.restore();
+            c.fillStyle = BURG; c.beginPath(); c.arc(g.sx(ts[i]), g.sy(name, a[i]), 4, 0, Math.PI * 2); c.fill();
+            // title on the left, the value now on the right
+            label(c, title, ' (' + unit + ')', p.L, p.top - 9, 'left', T.ink2, 14);
+            c.font = T.mono; c.fillStyle = BURG; c.textAlign = 'right'; c.textBaseline = 'alphabetic';
+            c.fillText(Sim.fmt(a[i] / scale, digits).replace(/-/g, '−') + ' ' + unit, p.R, p.top - 9);
+            if (name === 'rpm' && ds.get('ctrl') === 'pi') { c.fillStyle = T.muted; c.textAlign = 'right'; c.fillText('target ' + Sim.fmt(ds.get('rpm_ref'), 1), p.R - (g.narrow ? 96 : 120), p.top - 9); }
+            if (name === 'Pg') {
+                var kx = p.R - (g.narrow ? 100 : 126);
+                c.strokeStyle = ROSE; c.lineWidth = 1.3; c.beginPath(); c.moveTo(kx - 58, p.top - 13); c.lineTo(kx - 40, p.top - 13); c.stroke();
+                Sim.tex(c, 'P_{aero}', kx - 36, p.top - 9, { size: 13, color: T.muted });
+            }
+        }
+        function draw() {
+            var i = iNow, g = geom();
+            ds.set('hub_x', g.cx); ds.set('hub_y', g.cy); ds.set('r_px', g.r); ds.set('box_w', g.w); ds.set('box_h', g.h);
+            ctx.clearRect(0, 0, g.w, g.h);
+            drawScene(ctx, g, i);
+            drawStrip(ctx, g, i, 'vw', 'v', 'm/s', 1, 2);
+            drawStrip(ctx, g, i, 'rpm', 'n_{rot}', 'rpm', 1, 2);
+            drawStrip(ctx, g, i, 'Pg', 'P_{gen}', 'MW', 1e6, 3);
+            var ts = ds.get('ts'), p = g.strips.Pg, x = g.sx(ts[i]);
+            ctx.strokeStyle = 'rgba(122, 31, 43, 0.5)'; ctx.lineWidth = 1;
+            ctx.beginPath(); ctx.moveTo(x, g.strips.vw.top); ctx.lineTo(x, p.bot); ctx.stroke();
+            ctx.font = T.mono; ctx.fillStyle = T.muted; ctx.textAlign = 'center'; ctx.textBaseline = 'alphabetic';
+            for (var tt = 0; tt < TEND; tt += 20) ctx.fillText(String(tt), g.sx(tt), g.h - 9);
+            ctx.textAlign = 'right'; ctx.fillText('t (s)', p.R, g.h - 9);
+        }
+
+        function cpGeom() {
+            var w = cbox.w, h = cbox.h, L = 54, Rr = w - 18, top = 30, bot = h - 30;
+            return { w: w, h: h, L: L, R: Rr, top: top, bot: bot, X: function (l) { return L + l / 14 * (Rr - L); }, Y: function (v) { return bot - v / 0.65 * (bot - top); } };
+        }
+        function drawCp() {
+            var G = cpGeom(), c = cctx, i = iNow, lamL = ds.get('lamL'), cpL = ds.get('cpL'), lam = ds.get('lam'), cpv = ds.get('cpv'), X = G.X, Y = G.Y, j, n;
+            c.clearRect(0, 0, G.w, G.h);
+            c.lineWidth = 1; c.font = T.mono;
+            [0, 0.1, 0.2, 0.3, 0.4, 0.5, 0.6].forEach(function (v) { c.strokeStyle = T.ruleSoft; c.beginPath(); c.moveTo(G.L, Y(v)); c.lineTo(G.R, Y(v)); c.stroke(); c.fillStyle = T.muted; c.textAlign = 'right'; c.textBaseline = 'middle'; c.fillText(v === 0 ? '0' : v.toFixed(1), G.L - 7, Y(v)); });
+            for (var l = 0; l <= 14; l += 2) { c.strokeStyle = T.ruleSoft; c.beginPath(); c.moveTo(X(l), G.top); c.lineTo(X(l), G.bot); c.stroke(); if (X(l) < G.R - 70) { c.fillStyle = T.muted; c.textAlign = 'center'; c.textBaseline = 'alphabetic'; c.fillText(String(l), X(l), G.bot + 16); } }
+            c.strokeStyle = T.rule; c.strokeRect(G.L, G.top, G.R - G.L, G.bot - G.top);
+            Sim.tex(c, 'c_{p}', G.L, G.top - 10, { size: 15, color: T.ink2 });
+            Sim.tex(c, 'λ = ωR/v', G.R, G.bot + 17, { size: 15, align: 'right', color: T.ink2 });
+            c.save(); c.beginPath(); c.rect(G.L, G.top, G.R - G.L, G.bot - G.top); c.clip();
+            c.setLineDash([5, 4]); c.strokeStyle = T.muted;
+            c.beginPath(); c.moveTo(G.L, Y(ds.get('cp_betz'))); c.lineTo(G.R, Y(ds.get('cp_betz'))); c.moveTo(X(ds.get('lam_opt')), G.top); c.lineTo(X(ds.get('lam_opt')), G.bot); c.stroke(); c.setLineDash([]);
+            c.strokeStyle = T.ink; c.lineWidth = 2; c.lineJoin = 'round';
+            c.beginPath(); for (j = 0; j < NL; j++) { if (j) c.lineTo(X(lamL[j]), Y(cpL[j])); else c.moveTo(X(lamL[j]), Y(cpL[j])); } c.stroke();
+            c.strokeStyle = 'rgba(122, 31, 43, 0.35)'; c.lineWidth = 3; c.lineCap = 'round';
+            var n0 = Math.max(0, i - 150);
+            c.beginPath(); for (n = n0; n <= i; n += 3) { if (n === n0) c.moveTo(X(lam[n]), Y(cpv[n])); else c.lineTo(X(lam[n]), Y(cpv[n])); } c.lineTo(X(lam[i]), Y(cpv[i])); c.stroke();
+            c.fillStyle = BURG; c.beginPath(); c.arc(X(lam[i]), Y(cpv[i]), 6, 0, Math.PI * 2); c.fill();
+            c.restore();
+            c.font = T.mono; c.fillStyle = T.muted; c.textAlign = 'right'; c.textBaseline = 'alphabetic';
+            c.fillText('Betz limit 16/27', G.R - 6, Y(ds.get('cp_betz')) - 6);
+            Sim.tex(c, 'λ_{opt} = ' + Sim.fmt(ds.get('lam_opt'), 2), X(ds.get('lam_opt')) + 6, G.bot - 10, { size: 14, color: T.muted });
+            document.getElementById('cap-op').innerHTML = '<i>λ</i> = ' + Sim.fmt(lam[i], 2) + ' · <i>c</i><sub>p</sub> = ' + Sim.fmt(cpv[i], 3) + ' · optimum ' + Sim.fmt(ds.get('cp_max'), 3) + ' at <i>λ</i> = ' + Sim.fmt(ds.get('lam_opt'), 2);
+        }
+
+        /* live values for the walkthrough: read from the store, nothing recomputed */
+        Sim.live = function () {
+            var i = ds.get('i_now');
+            return {
+                lam: Sim.fmt(ds.get('lam')[i], 4), cp: Sim.fmt(ds.get('cpv')[i], 5), lopt: Sim.fmt(ds.get('lam_opt'), 3), cpmax: Sim.fmt(ds.get('cp_max'), 4),
+                Kopt: Sim.fmt(ds.get('K_opt') / 1000, 1) + ' kN m s²', v: Sim.fmt(ds.get('vw')[i], 3) + ' m/s', w: Sim.fmt(ds.get('om')[i], 5) + ' rad/s',
+                ta: Sim.fmt(ds.get('ta')[i] / 1000, 2) + ' kN m', tg: Sim.fmt(ds.get('tg')[i] / 1000, 2) + ' kN m', Pg: Sim.fmt(ds.get('Pg')[i] / 1000, 1) + ' kW',
+                wref: Sim.fmt(ds.get('w_ref'), 4) + ' rad/s', Kp: Sim.fmt(ds.get('Kp') / 1e6, 3) + ' MN m s', Ki: Sim.fmt(ds.get('Ki') / 1e6, 3) + ' MN m', dtd: Sim.fmt(ds.get('dtau_dw') / 1000, 1) + ' kN m s',
+                n: String(i), t: Sim.fmt(ds.get('t_play'), 2) + ' s', th: Sim.fmt(ds.get('th')[i], 3) + ' rad', Eg: Sim.fmt(ds.get('Eg')[i] / 3.6e6, 3) + ' kWh', bal: ds.get('balance').toExponential(2)
+            };
+        };
+
+        function frame() {
+            var i = Math.min(NS - 1, Math.max(0, Math.round(playT / (EVERY * H))));
+            iNow = i;
+            ds.set('i_now', i); ds.set('t_play', playT);
+            ds.set('v_now', ds.get('vw')[i]); ds.set('rpm_now', ds.get('rpm')[i]); ds.set('P_now', ds.get('Pg')[i]);
+            ds.set('lam_now', ds.get('lam')[i]); ds.set('cp_now', ds.get('cpv')[i]); ds.set('th_now', ds.get('th')[i]);
+            seek.set(i);
+            document.getElementById('cap-t').innerHTML = '<i>t</i> = ' + ds.get('ts')[i].toFixed(1) + ' s of ' + TEND + ' s';
+            draw();
+            drawCp();
+        }
+        var clk = Sim.clock(function (dt) {
+            if (!solved) return;
+            if (dt > 0) { fps = fps ? fps + (1 / dt - fps) * 0.1 : 1 / dt; }
+            playT += speed.value * dt;
+            if (playT > TEND) { playT = TEND; clk.set(false); }
+            ds.set('fps', fps); ds.set('playing', clk.playing);
+            document.getElementById('st-play').classList.toggle('is-done', clk.playing);
+            frame();
+        });
+        Sim.playButton(document.getElementById('play'), clk);
+        document.getElementById('solve').addEventListener('click', solve);
+        document.getElementById('restart').addEventListener('click', function () { playT = 0; clk.set(true); });
+        function segmented(id, set) {
+            var el = document.getElementById(id);
+            el.addEventListener('click', function (e) {
+                var b = e.target.closest('button[data-v]');
+                if (!b) return;
+                Array.prototype.forEach.call(el.querySelectorAll('button'), function (x) { x.setAttribute('aria-pressed', x === b ? 'true' : 'false'); });
+                set(b.getAttribute('data-v'));
+                markStale();
+            });
+        }
+        var DVL = { steady: 'Change Δv (unused)', gust: 'Gust size V<sub>gust</sub>', step: 'Step size', turb: 'Turbulence σ' };
+        function controls() {
+            document.getElementById('rpm-ctl').classList.toggle('is-off', ctrl !== 'pi');
+            document.getElementById('dv-ctl').classList.toggle('is-off', prof === 'steady');
+            document.getElementById('dv-label').innerHTML = DVL[prof];
+        }
+        segmented('ctrl', function (v) { ctrl = v; controls(); });
+        segmented('prof', function (v) { prof = v; controls(); });
+        controls();
+
+        /* ---------- the data panel (scripts/datalog.js) reads the store; these hooks only say where things are drawn and how to test a value ---------- */
+        var STRIP_OF = { vw: 'vw', rpm: 'rpm', Pg: 'Pg', Pa: 'Pa', om: 'rpm', lam: 'rpm', cpv: 'rpm', ta: 'Pg', tg: 'Pg', th: 'rpm', ts: 'rpm' };
+        function stripPos(name, n) {
+            var g = geom(), t = ds.get('ts')[n], s = STRIP_OF[name] || 'rpm', arr = ds.get(s);
+            return { x: g.sx(t), y: g.sy(s, arr[n]), strip: s };
+        }
+        function rk4Replay(n) {
+            // the same integrator, rerun from t = 0 to sample n: the check of a stored ODE solution and of its integrals
+            var c = { ctrl: ds.get('ctrl'), prof: ds.get('profile'), v0: ds.get('v0'), dv: ds.get('dv'), wref: ds.get('w_ref'), tau0: ds.get('tau0'), Kp: ds.get('Kp'), Ki: ds.get('Ki') };
+            var t = 0, w = c.ctrl === 'opt' ? ds.get('lam_opt') * wind(0, c) / R : c.wref, I = 0, y = [0, 0, 0, 0, 0], j;
+            for (var step = 0; step < n * EVERY; step++) {
+                var k1 = rates(t, w, I, c);
+                var k2 = rates(t + H / 2, w + H / 2 * k1[0], I + H / 2 * k1[1], c);
+                var k3 = rates(t + H / 2, w + H / 2 * k2[0], I + H / 2 * k2[1], c);
+                var k4 = rates(t + H, w + H * k3[0], I + H * k3[1], c);
+                w += H / 6 * (k1[0] + 2 * k2[0] + 2 * k3[0] + k4[0]);
+                I += H / 6 * (k1[1] + 2 * k2[1] + 2 * k3[1] + k4[1]);
+                for (j = 0; j < 5; j++) y[j] += H / 6 * (k1[j + 2] + 2 * k2[j + 2] + 2 * k3[j + 2] + k4[j + 2]);
+                t = (step + 1) * H;
+            }
+            return { w: w, I: I, y: y };
+        }
+        var replayAll = null;
+        function fullReplay() {
+            var key = [ds.get('ctrl'), ds.get('profile'), ds.get('v0'), ds.get('dv'), ds.get('w_ref')].join();
+            if (!replayAll || replayAll.key !== key) { replayAll = rk4Replay(NS - 1); replayAll.key = key; }
+            return replayAll;
+        }
+        function at(name) { return function () { var n = ds.get('i_now'); return { formula: name + '<sub>n</sub> at n = n<sub>now</sub>', inputs: [['n<sub>now</sub>', n, '', 0]], value: ds.get(name)[n] }; }; }
+        function maxOf(name) { var a = ds.get(name), m = -Infinity; for (var n = 0; n < NS; n++) m = Math.max(m, a[n]); return m; }
+        function minOf(name) { var a = ds.get(name), m = Infinity; for (var n = 0; n < NS; n++) m = Math.min(m, a[n]); return m; }
+        function neutralInk(c) { return c[3] > 25 && c[0] < 100 && c[1] < 100 && c[2] < 100 && Math.abs(c[0] - c[2]) < 30; }
+        function isRose(c) { return c[3] > 60 && c[0] > 150 && c[0] - c[1] > 35 && c[0] - c[2] > 25; }
+        function readBack(b, what, pt, r, test, expected, note) {
+            var q = Sim.readPixel(b, pt.x, pt.y, r, test);
+            return { what: what + ', (' + Sim.fmt(pt.x, 1) + ', ' + Sim.fmt(pt.y, 1) + ') css px', drawn: q.text, expected: expected, ok: q.found, note: note };
+        }
+        function bladePixel() {
+            var a = ds.get('th_now'), g = geom();
+            var x = g.cx + Math.cos(a) * K * g.r * 0.6, y = g.cy - Math.sin(a) * g.r * 0.6;
+            return readBack(box, 'screen pixel 60 % along the burgundy blade', { x: x, y: y }, 0, Sim.isBurgundy, 'the burgundy blade',
+                'Blade 1 is drawn in burgundy at the stored angle θ, the other two 120° and 240° on. The point is on the blade’s span line, about ' + Sim.fmt(0.06 * g.r, 0) + ' px from its edges.');
+        }
+        function stripDot(name, label) {
+            return function () {
+                var n = ds.get('i_now'), p = stripPos(name, n);
+                return readBack(box, 'the dot on the ' + label + ' chart', p, 1, Sim.isBurgundy, 'the burgundy dot', 'The dot marks the stored sample on screen now.');
+            };
+        }
+        function stripCurve(name, label) {
+            return function (n) {
+                var p = stripPos(name, n), test = name === 'Pa' ? isRose : neutralInk;
+                return readBack(box, label + ' at sample n on its chart', p, 2, test, name === 'Pa' ? 'the rose curve' : 'the dark curve: solid where played, faint where still to come',
+                    'Each chart draws every ' + Math.max(1, Math.floor(NS / ((geom().strips.vw.R - geom().strips.vw.L) * 2))) + '-th stored sample, about two per screen pixel, joined by straight lines.');
+            };
+        }
+        function airPixel() {
+            // where a dash of the second air line must be: the dash pattern starts −s<sub>air</sub>·px/m into the line
+            var g = geom(), y = g.lines[1], P = DASH[0] + DASH[1], s = ds.get('sw')[ds.get('i_now')] * ds.get('px_per_m_air');
+            var x = ((DASH[0] / 2 + s - LINE_SHIFT) % P + P) % P;
+            while (x < 8) x += P;
+            return readBack(box, 'the middle of a dash on the second air line', { x: x, y: y }, 1, function (c) { return c[3] > 30; }, 'a grey dash',
+                'The dashes are 16 px long with 22 px gaps and are shifted by s<sub>air</sub> · px/m, so they travel with the stored distance the air has moved; each line starts 15 px further into its pattern than the one above, so the dashes do not line up.');
+        }
+        Sim.data = {
+            ds: ds, kicker: 'Fig. 10 · data', file: 'fig10-wind-turbine',
+            playing: function () { return clk.playing; },
+            groups: [
+                { title: 'Turbine', note: 'fixed for this rotor', vars: ['rho', 'R', 'J', 'lam_opt', 'cp_max', 'cp_betz', 'K_opt'] },
+                { title: 'Settings', note: 'what you chose, as used by the last solve', vars: ['ctrl', 'profile', 'v0', 'dv', 'w_ref', 'rpm_ref'] },
+                { title: 'Controller', note: 'the speed controller’s gains, tuned at the target speed', vars: ['dtau_dw', 'Kp', 'Ki', 'tau0'] },
+                { title: 'Stored run', note: 'one row per stored sample, every 20 ms of the 120 s', vars: ['ts', 'vw', 'om', 'rpm', 'vtip', 'th', 'lam', 'cpv', 'ta', 'tg', 'Ictl', 'Pa', 'Pg', 'Eg', 'sw'] },
+                { title: 'Energy', note: 'over the whole run', vars: ['h', 'steps', 'rpm_min', 'rpm_max', 'captured_pct', 'Ea', 'Ew', 'Eg_end', 'P_mean', 'balance', 'solve_ms', 'stale'] },
+                { title: 'Playback', note: 'the sample on screen now', vars: ['i_now', 't_play', 'v_now', 'rpm_now', 'P_now', 'lam_now', 'cp_now', 'th_now'] },
+                { title: 'Power curve', note: 'the curve of the second figure', vars: ['lamL', 'cpL'] },
+                { title: 'Drawing', note: 'how stored values become pixels', vars: ['v_hi', 'rpm_lo', 'rpm_hi', 'P_hi', 'px_per_m_air', 'hub_x', 'hub_y', 'r_px', 'box_w', 'box_h', 'fps', 'playing'] }
+            ],
+            probe: function (x, y) {
+                if (Math.hypot((x - ds.get('hub_x')) / K, y - ds.get('hub_y')) < ds.get('r_px')) return { what: 'rotor' };
+                var best = null, bd = 14;
+                ['vw', 'rpm', 'Pg'].forEach(function (name) {
+                    for (var n = 0; n < NS; n += 2) { var p = stripPos(name, n), d = Math.hypot(x - p.x, y - p.y); if (d < bd) { bd = d; best = { what: 'sample', n: n, strip: name }; } }
+                });
+                return best;
+            },
+            inspect: function (ref) {
+                var n = ref.what === 'rotor' ? ds.get('i_now') : ref.n;
+                var rows = [['t', ds.get('ts')[n], 's', 'ts', n], ['v', ds.get('vw')[n], 'm/s', 'vw', n], ['ω', ds.get('om')[n], 'rad/s', 'om', n], ['n<sub>rot</sub>', ds.get('rpm')[n], 'rpm', 'rpm', n], ['λ', ds.get('lam')[n], '', 'lam', n], ['c<sub>p</sub>', ds.get('cpv')[n], '', 'cpv', n], ['τ<sub>aero</sub>', ds.get('ta')[n], 'N m', 'ta', n], ['τ<sub>gen</sub>', ds.get('tg')[n], 'N m', 'tg', n], ['P<sub>gen</sub>', ds.get('Pg')[n], 'W', 'Pg', n]];
+                return { title: ref.what === 'rotor' ? 'the rotor, sample ' + n : 'stored sample ' + n, at: ref.what === 'rotor' ? { x: ds.get('hub_x'), y: ds.get('hub_y') } : stripPos(ref.strip || 'rpm', n), rows: rows };
+            },
+            locate: function (name, idx) {
+                var v = ds.vars[name];
+                if (v.dims[0] === 'n') return stripPos(name, idx);
+                if (name === 'th_now') return { x: ds.get('hub_x'), y: ds.get('hub_y') };
+                return null;
+            },
+            check: {
+                h: function () { return { formula: 'the RK4 step H', inputs: [], value: H }; },
+                steps: function () { return { formula: 'TEND / h', inputs: [['h', ds.get('h'), 's']], value: TEND / ds.get('h') }; },
+                rpm_min: function () { return { formula: 'min of stored rpm', inputs: [], value: minOf('rpm') }; },
+                rpm_max: function () { return { formula: 'max of stored rpm', inputs: [], value: maxOf('rpm') }; },
+                captured_pct: function () { return { formula: '100 Ea / Ew', inputs: [['Ea', ds.get('Ea'), 'J'], ['Ew', ds.get('Ew'), 'J']], value: 100 * ds.get('Ea') / ds.get('Ew') }; },
+                rho: function () { return { formula: 'the constant RHO in the code', inputs: [], value: RHO }; },
+                R: function () { return { formula: 'the constant R in the code', inputs: [], value: R }; },
+                J: function () { return { formula: 'the constant J in the code', inputs: [], value: J }; },
+                w_ref: function () { return { formula: 'stored n<sub>ref</sub> · 2π / 60', inputs: [['stored n<sub>ref</sub>', ds.get('rpm_ref'), 'rpm', 1]], value: ds.get('rpm_ref') * 2 * Math.PI / 60 }; },
+                rpm_ref: function () { return { formula: 'the target input captured with the solved run', inputs: [['saved target', solved.rpm, 'rpm', 1]], value: solved.rpm }; },
+                lam_opt: function () { var best = 0, lb = 0; for (var l = 0.5; l <= 14; l += 0.001) { var c = cp(l); if (c > best) { best = c; lb = l; } } return { formula: 'argmax c<sub>p</sub>(λ), λ from 0.5 to 14 in steps of 0.001', inputs: [], value: lb }; },
+                cp_max: function () { return { formula: 'c<sub>p</sub>(λ<sub>opt</sub>)', inputs: [['λ<sub>opt</sub>', ds.get('lam_opt'), '', 4]], value: cp(ds.get('lam_opt')) }; },
+                cp_betz: function () { return { formula: '16/27', inputs: [], value: 16 / 27 }; },
+                K_opt: function () { return { formula: '½ ρ π R⁵ c<sub>p,max</sub> / λ<sub>opt</sub>³', inputs: [['ρ', RHO, 'kg/m³', 3], ['R', R, 'm', 1], ['c<sub>p,max</sub>', ds.get('cp_max'), '', 5], ['λ<sub>opt</sub>', ds.get('lam_opt'), '', 4]], value: 0.5 * RHO * Math.PI * Math.pow(R, 5) * ds.get('cp_max') / Math.pow(ds.get('lam_opt'), 3) }; },
+                dtau_dw: function () { var wr = ds.get('w_ref'), v = ds.get('v0'); return { formula: '(τ<sub>aero</sub>(ω<sub>ref</sub> + δ, v<sub>0</sub>) − τ<sub>aero</sub>(ω<sub>ref</sub> − δ, v<sub>0</sub>)) / 2δ, δ = 10⁻⁴ rad/s', inputs: [['ω<sub>ref</sub>', wr, 'rad/s', 6], ['v<sub>0</sub>', v, 'm/s', 1]], value: (tauAero(wr + 1e-4, v) - tauAero(wr - 1e-4, v)) / 2e-4 }; },
+                Kp: function () { return { formula: '2 ζ<sub>c</sub> ω<sub>n</sub> J + ∂τ<sub>aero</sub>/∂ω', inputs: [['ζ<sub>c</sub>', ZC, '', 2], ['ω<sub>n</sub>', WN, 'rad/s', 2], ['J', J, 'kg m²', 0], ['∂τ/∂ω', ds.get('dtau_dw'), 'N m s', 0]], value: 2 * ZC * WN * J + ds.get('dtau_dw') }; },
+                Ki: function () { return { formula: 'J ω<sub>n</sub>²', inputs: [['J', J, 'kg m²', 0], ['ω<sub>n</sub>', WN, 'rad/s', 2]], value: J * WN * WN }; },
+                tau0: function () { var c = { prof: ds.get('profile'), v0: ds.get('v0'), dv: ds.get('dv') }; return { formula: 'τ<sub>aero</sub>(ω<sub>ref</sub>, v(0))', inputs: [['ω<sub>ref</sub>', ds.get('w_ref'), 'rad/s', 6], ['v(0)', wind(0, c), 'm/s', 4]], value: tauAero(ds.get('w_ref'), wind(0, c)) }; },
+                ts: function (n) { return { formula: 'n · 2h', inputs: [['n', n, '', 0], ['h', H, 's', 3]], value: n * EVERY * H }; },
+                vw: function (n) { return { formula: 'the ' + ds.get('profile') + ' profile at t<sub>n</sub>', inputs: [['t<sub>n</sub>', ds.get('ts')[n], 's', 2], ['v<sub>0</sub>', ds.get('v0'), 'm/s', 1], ['Δv', ds.get('dv'), 'm/s', 1]], value: wind(ds.get('ts')[n], { prof: ds.get('profile'), v0: ds.get('v0'), dv: ds.get('dv') }) }; },
+                om: function (n) { return { formula: 'the same RK4, rerun from t = 0 to sample n', inputs: [['n', n, '', 0], ['h', H, 's', 3]], value: rk4Replay(n).w }; },
+                Ictl: function (n) { return { formula: 'the same RK4, rerun from t = 0 to sample n', inputs: [['n', n, '', 0], ['h', H, 's', 3]], value: rk4Replay(n).I }; },
+                rpm: function (n) { return { formula: 'ω · 60 / 2π', inputs: [['ω', ds.get('om')[n], 'rad/s', 6]], value: ds.get('om')[n] * 60 / (2 * Math.PI) }; },
+                vtip: function (n) { return { formula: 'ω R', inputs: [['ω', ds.get('om')[n], 'rad/s', 6], ['R', R, 'm', 1]], value: ds.get('om')[n] * R }; },
+                th: function (n) { return { formula: 'the same RK4, rerun: ∫ ω dt', inputs: [['n', n, '', 0]], value: rk4Replay(n).y[4] }; },
+                sw: function (n) { return { formula: 'the same RK4, rerun: ∫ v dt', inputs: [['n', n, '', 0]], value: rk4Replay(n).y[3] }; },
+                lam: function (n) { return { formula: 'ω R / v', inputs: [['ω', ds.get('om')[n], 'rad/s', 6], ['R', R, 'm', 1], ['v', ds.get('vw')[n], 'm/s', 4]], value: ds.get('om')[n] * R / ds.get('vw')[n] }; },
+                cpv: function (n) { return { formula: 'c<sub>1</sub>(c<sub>2</sub>/λ<sub>i</sub> − c<sub>4</sub>) e<sup>−c₅/λᵢ</sup> + c<sub>6</sub> λ', inputs: [['λ', ds.get('lam')[n], '', 5]], value: cp(ds.get('lam')[n]) }; },
+                ta: function (n) { return { formula: '½ ρ A v³ c<sub>p</sub>(λ) / ω', inputs: [['v', ds.get('vw')[n], 'm/s', 4], ['ω', ds.get('om')[n], 'rad/s', 6], ['c<sub>p</sub>', ds.get('cpv')[n], '', 5]], value: tauAero(ds.get('om')[n], ds.get('vw')[n]) }; },
+                tg: function (n) { var c = { ctrl: ds.get('ctrl'), tau0: ds.get('tau0'), Kp: ds.get('Kp'), Ki: ds.get('Ki'), wref: ds.get('w_ref') }; return { formula: ds.get('ctrl') === 'opt' ? 'K<sub>opt</sub> ω², at most τ<sub>max</sub>' : 'τ<sub>0</sub> + K<sub>p</sub>(ω − ω<sub>ref</sub>) + K<sub>i</sub> I, kept between 0 and τ<sub>max</sub>', inputs: [['ω', ds.get('om')[n], 'rad/s', 6], ['I', ds.get('Ictl')[n], 'rad', 6]], value: tauGen(ds.get('om')[n], ds.get('Ictl')[n], c) }; },
+                Pg: function (n) { return { formula: 'τ<sub>gen</sub> ω', inputs: [['τ<sub>gen</sub>', ds.get('tg')[n], 'N m', 1], ['ω', ds.get('om')[n], 'rad/s', 6]], value: ds.get('tg')[n] * ds.get('om')[n] }; },
+                Pa: function (n) { return { formula: 'τ<sub>aero</sub> ω', inputs: [['τ<sub>aero</sub>', ds.get('ta')[n], 'N m', 1], ['ω', ds.get('om')[n], 'rad/s', 6]], value: ds.get('ta')[n] * ds.get('om')[n] }; },
+                Eg: function (n) { return { formula: 'the same RK4, rerun: ∫ τ<sub>gen</sub> ω dt', inputs: [['n', n, '', 0]], value: rk4Replay(n).y[0] }; },
+                Ea: function () { return { formula: 'the same RK4, rerun over the whole run: ∫ τ<sub>aero</sub> ω dt', inputs: [['steps', TEND / H, '', 0]], value: fullReplay().y[1] }; },
+                Ew: function () { return { formula: 'the same RK4, rerun over the whole run: ∫ ½ ρ A v³ dt', inputs: [['steps', TEND / H, '', 0]], value: fullReplay().y[2] }; },
+                Eg_end: function () { return { formula: 'the same RK4, rerun over the whole run: ∫ τ<sub>gen</sub> ω dt', inputs: [['steps', TEND / H, '', 0]], value: fullReplay().y[0] }; },
+                P_mean: function () { return { formula: 'E<sub>gen</sub>(T) / T', inputs: [['E<sub>gen</sub>(T)', ds.get('Eg_end'), 'J', 0], ['T', TEND, 's', 0]], value: ds.get('Eg_end') / TEND }; },
+                balance: function () { var om = ds.get('om'), KE0 = 0.5 * J * om[0] * om[0], KE = 0.5 * J * om[NS - 1] * om[NS - 1], ea = ds.get('Ea'), eg = ds.get('Eg_end'); return { formula: '|E<sub>aero</sub> − E<sub>gen</sub> − ΔE<sub>rot</sub>| / E<sub>aero</sub>, ΔE<sub>rot</sub> = ½ J (ω(T)² − ω(0)²)', inputs: [['E<sub>aero</sub>', ea, 'J', 0], ['E<sub>gen</sub>', eg, 'J', 0], ['ω(0)', om[0], 'rad/s', 6], ['ω(T)', om[NS - 1], 'rad/s', 6]], value: Math.abs(ea - eg - (KE - KE0)) / ea }; },
+                i_now: function () { return { formula: 'round(t<sub>play</sub> / 2h), at most 6000', inputs: [['t<sub>play</sub>', ds.get('t_play'), 's', 4]], value: Math.min(NS - 1, Math.max(0, Math.round(ds.get('t_play') / (EVERY * H)))) }; },
+                v_now: at('vw'), rpm_now: at('rpm'), P_now: at('Pg'), lam_now: at('lam'), cp_now: at('cpv'), th_now: at('th'),
+                lamL: function (j) { return { formula: '0.5 + 0.05 j', inputs: [['j', j, '', 0]], value: 0.5 + 0.05 * j }; },
+                cpL: function (j) { return { formula: 'c<sub>p</sub>(λ<sub>j</sub>)', inputs: [['λ<sub>j</sub>', ds.get('lamL')[j], '', 2]], value: cp(ds.get('lamL')[j]) }; },
+                v_hi: function () { return { formula: '⌈1.1 · max v<sub>n</sub>⌉, from the stored array', inputs: [['max v', maxOf('vw'), 'm/s', 4]], value: Math.ceil(1.1 * maxOf('vw')) }; },
+                rpm_lo: function () { var lo = Math.min(minOf('rpm'), ds.get('ctrl') === 'pi' ? ds.get('rpm_ref') : Infinity); return { formula: '⌊min(n<sub>rot</sub>, n<sub>ref</sub>) − 0.6⌋', inputs: [['min', lo, 'rpm', 3]], value: Math.floor(lo - 0.6) }; },
+                rpm_hi: function () { var hi = Math.max(maxOf('rpm'), ds.get('ctrl') === 'pi' ? ds.get('rpm_ref') : 0); return { formula: '⌈max(n<sub>rot</sub>, n<sub>ref</sub>) + 0.6⌉', inputs: [['max', hi, 'rpm', 3]], value: Math.ceil(hi + 0.6) }; },
+                P_hi: function () { var m = Math.max(maxOf('Pg'), maxOf('Pa')); return { formula: '1.1 · max(P<sub>gen</sub>, P<sub>aero</sub>), rounded up to 0.25 MW', inputs: [['max', m, 'W', 0]], value: Math.ceil(1.1 * m / 0.25e6) * 0.25e6 }; },
+                px_per_m_air: function () { return { formula: 'the constant AIRPX in the code', inputs: [], value: AIRPX }; }
+            },
+            drawn: {
+                h: function () { var m = statusEl.textContent.match(/one every (\d+) ms/), actual = m ? Number(m[1]) / 1000 / EVERY : NaN; return { what: 'step inferred from the visible sampling interval and EVERY = 2', drawn: isFinite(actual) ? actual + ' s' : 'status asks for a new solve', expected: ds.get('h') + ' s', ok: m ? actual === ds.get('h') : null }; },
+                steps: function () { var expected = Sim.fmt(ds.get('steps'), 0) + ' RK4 steps', actual = statusEl.textContent; return { what: 'the solved-run status', drawn: actual, expected: expected, ok: ds.get('stale') ? null : actual.indexOf(expected) >= 0, note: ds.get('stale') ? 'The status currently asks for a new solve.' : '' }; },
+                rpm_min: function () { var actual = document.getElementById('r-rpm').textContent, expected = Sim.fmt(ds.get('rpm_min'), 1) + '–' + Sim.fmt(ds.get('rpm_max'), 1) + ' rpm'; return { what: 'the visible r-rpm readout', drawn: actual, expected: expected, ok: actual === expected }; },
+                rpm_max: function () { var actual = document.getElementById('r-rpm').textContent, expected = Sim.fmt(ds.get('rpm_min'), 1) + '–' + Sim.fmt(ds.get('rpm_max'), 1) + ' rpm'; return { what: 'the visible r-rpm readout', drawn: actual, expected: expected, ok: actual === expected }; },
+                captured_pct: function () { var actual = document.getElementById('r-eff').textContent, expected = Sim.fmt(ds.get('captured_pct'), 1) + ' %'; return { what: 'the visible r-eff readout', drawn: actual, expected: expected, ok: actual === expected }; },
+                th_now: function () { return bladePixel(); },
+                v_now: stripDot('vw', 'wind'),
+                rpm_now: stripDot('rpm', 'rotor-speed'),
+                P_now: stripDot('Pg', 'power'),
+                vw: stripCurve('vw', 'v'),
+                rpm: stripCurve('rpm', 'n<sub>rot</sub>'),
+                Pg: stripCurve('Pg', 'P<sub>gen</sub>'),
+                Pa: stripCurve('Pa', 'P<sub>aero</sub>'),
+                sw: function () { return airPixel(); },
+                lam_now: function () { var G = cpGeom(); return readBack(cbox, 'the operating point on the c<sub>p</sub> chart', { x: G.X(ds.get('lam_now')), y: G.Y(ds.get('cp_now')) }, 1, Sim.isBurgundy, 'the burgundy dot', 'The dot sits at the stored λ and c<sub>p</sub> of the sample on screen now.'); },
+                cp_now: function () { var G = cpGeom(); return readBack(cbox, 'the operating point on the c<sub>p</sub> chart', { x: G.X(ds.get('lam_now')), y: G.Y(ds.get('cp_now')) }, 1, Sim.isBurgundy, 'the burgundy dot', 'The dot sits at the stored λ and c<sub>p</sub> of the sample on screen now.'); },
+                cpL: function (j) { var G = cpGeom(); return readBack(cbox, 'c<sub>p</sub>(λ<sub>j</sub>) on its curve', { x: G.X(ds.get('lamL')[j]), y: G.Y(ds.get('cpL')[j]) }, 2, neutralInk, 'the dark curve', 'x ∝ λ from 0 to 14, y ∝ c<sub>p</sub> from 0 to 0.65.'); }
+            },
+            round: { time: 't_play', label: function () { return 'one turn of the rotor at the present speed, ' + Sim.fmt(60 / ds.get('rpm_now'), 2) + ' s of the stored run'; }, length: function () { return 60 / ds.get('rpm_now'); },
+                columns: ['v_now', 'rpm_now', 'P_now', 'lam_now', 'cp_now', 'th_now'], point: function () { return { what: 'rotor' }; },
+                blocked: function () { return ds.get('t_play') + 60 / ds.get('rpm_now') > TEND ? 'the stored run ends before one more turn; press From t = 0' : null; } },
+            play: function () { clk.set(true); },
+            about: 'Nothing on this page is computed while you watch. The two minutes are solved once with RK4 at h = 10 ms, and every second state is stored, together with the controller’s integral I, the tip speed, the torques, the powers, the energies and the distance the air has travelled. Each frame draws the stored sample nearest to the playback time, without interpolation; the only arithmetic in the drawing turns metres, seconds, radians and watts into pixels, with the scales listed under Drawing. The blades are drawn at the stored rotor angle θ; the dashes of the air move by the stored travel ∫ v dt at 5 px per metre; the wind arrow is 6 px + 3.2 px per m/s long. The rotor disc is drawn as seen from the side at an angle, its horizontal shortened to half, so that both the turning and the wind can be seen. The charts draw about two stored samples per screen pixel.'
+        };
+
+        optimum();
+        solve();
+        Sim.onResize(stage, function () { box.fit(); frame(); });
+        Sim.onResize(cpStage, function () { cbox.fit(); frame(); });
+        if (document.fonts && document.fonts.ready) document.fonts.ready.then(function () { frame(); });
+    })();
+    </script>
+    <script src="../scripts/datalog.js"></script>
+</body>
+</html>
+
