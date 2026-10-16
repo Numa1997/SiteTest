@@ -383,3 +383,8 @@ Google Fonts; `../styles/sim.css`, `../styles/data.css`, `../styles/fold.css`; a
 8. Fixed on 2026-10-15: the Square preset stores 0.4, 1.2, 2 and 2.8 without extra decimal tails (commit [ce3bfc4](https://github.com/Numa1997/SiteTest/commit/ce3bfc439ce40b3e8b6bd7f59af2af9404bd4997)).
 9. Fixed on 2026-10-15: with no waves, `drawn.py_sum` returns `ok: null` ("no sum curve: the bench has no waves",
    [:948](../../public/simulations/wave-interference.html#L948)) and the panel shows "not in the picture" instead of passing on the faint zero line (audit repair, commit [32c240c](https://github.com/Numa1997/SiteTest/commit/32c240c52fd0535d39a0cef608dc404cf4219484)).
+
+
+## Teaching revision · 15 October 2026
+
+Parseval and the 95% value measure mean-square displacement. String energy also weights each squared amplitude by frequency squared. The note qualifies envelope motion versus physical energy or information transport. Simulation code, inline styles and figure SVGs match the latest live baseline. See the [theory audit](../research-theory-audit.md).

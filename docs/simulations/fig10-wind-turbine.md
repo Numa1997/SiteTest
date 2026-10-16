@@ -439,3 +439,12 @@ The page states this in `Sim.data.about` ([L1158](../../public/simulations/wind-
 10. Fixed on 2026-10-15: while the run is stale, the Checks of `h` and `steps` show "not in the picture" instead of a burgundy ✕:
     `drawn.h` and `drawn.steps` return `ok: null` there by design ([L1136–L1137](../../public/simulations/wind-turbine.html#L1136-L1137)), and the panel now honours it
     ([datalog.js:529](../../public/scripts/datalog.js#L529)) (audit repair, commit [32c240c](https://github.com/Numa1997/SiteTest/commit/32c240c52fd0535d39a0cef608dc404cf4219484)).
+
+Batch D store additions in `solve()`: `h` (s), `steps` (count), `rpm_min` and `rpm_max` (turns per minute), and `captured_pct` (%). They appear in the Energy group, have recomputation checks and DOM readbacks. The step readback infers h from the visible sampling interval and EVERY = 2. The speed range is the sampled run range, independent of the wider chart bounds. `readouts()` no longer computes these results.
+
+
+## Teaching revision · 15 October 2026
+
+The false global monotonicity argument is replaced by a local restoring torque slope of −3 K ω at the maximum-power operating point. The note explains proportional braking and integral memory before selecting gains, and uses relative airflow rather than a solid-wall blade analogy. Simulation code, inline styles and figure SVGs match the latest live baseline. See the [theory audit](../research-theory-audit.md).
+
+Fixed on 2026-10-16: "the linearised equation below" pointed at (10), which is above ([L346](../../public/simulations/wind-turbine.html#L346)); and the conclusion that no global argument exists is replaced by the sign of the net torque on each side of $\lambda_\text{opt}$ ([L340](../../public/simulations/wind-turbine.html#L340)): $c_p/\lambda^3$ is not monotone, but it stays above its value at $\lambda_\text{opt}$ for smaller $\lambda$ and below it for larger, so in steady wind the rotor returns from any start at which it is turning. See the [audit of the revision](../research-theory-audit.md).

@@ -43,7 +43,7 @@ places, the links into it from `portfolios.html` and its one link back out.
    scripts, so a script that adds the same link at run time survives. Seen for `./assets/…` and, since October 2026, for
    `./static/…`.
 4. **The build folder is `static/`, not Vite's default `assets/`.** All file names inside carry a content hash
-   (`index-CRh2Uwlk.js`): a new build gives new names, so a browser never mixes an old cached file with a new page.
+   (`index-ChNWgnGr.js`): a new build gives new names, so a browser never mixes an old cached file with a new page.
 5. **The way back.** Each bundle contains one link to `../../portfolios.html`, the Portfolios page of this site.
 6. **No backend.** The copies are built without the apps' saved runs or server functions: the Saved runs page and the Save
    button are removed, and the Simulate page says that saving belongs to the standalone app. Everything a copy shows is
@@ -56,7 +56,7 @@ places, the links into it from `portfolios.html` and its one link back out.
 | Path | What it is |
 |---|---|
 | `index.html` | The entry page: title, description, the module script, the stylesheet loader. |
-| `static/index-DOoZ3Yi-.js` | The whole application (React, KaTeX, the pages Overview, Theory, Results, Simulate, Checks), minified, 837 kB. |
+| `static/index-DOko3Da4.js` | The whole application (React, KaTeX 0.16.47, the pages Overview, Theory, Results, Simulate, Checks), minified, 840 kB. |
 | `static/index-CGriahzx.css` | Its stylesheet (the house design and the KaTeX styles), 61 kB. |
 | `static/worker-ClooJ8Gk.js` | The Web Worker: the solver of the stochastic collection equation, 131 kB. |
 | `static/KaTeX_*.{woff2,woff,ttf}` | 59 font files of KaTeX, the maths typesetter, each in up to three formats (the bundle names them; the browser picks the first format it supports, in practice woff2). |
@@ -67,7 +67,7 @@ places, the links into it from `portfolios.html` and its one link back out.
 | Path | What it is |
 |---|---|
 | `index.html` | The entry page. |
-| `static/index-CRh2Uwlk.js` | The whole application, including the Report page, minified, 1.0 MB. |
+| `static/index-ChNWgnGr.js` | The whole application, including the Report page, minified, 1.0 MB. |
 | `static/index-CNYGhWdg.css` | Its stylesheet, 65 kB. |
 | `static/worker-hcWKavQc.js` | The Web Worker: the pendulum integrator, 4.5 kB. |
 | `static/KaTeX_*` | The same 59 KaTeX font files. |
@@ -99,12 +99,21 @@ places, the links into it from `portfolios.html` and its one link back out.
 2. Make a website variant of its source, outside the app: remove the Saved runs page, its route and link, and the Save
    button with its server call; add the back link `← Numa Koudsie · Portfolios` to `../../portfolios.html` in the top bar;
    add ` · Numa Koudsie` to the page title. Build that variant with a separate Vite configuration that sets `base: './'` and
-   `build.assetsDir: 'static'` (the apps' own `vite.config.ts` keeps Vite's default `assets/`). For Rotor Pendula these edits
-   were made by a script, `make_site_copy.py`, which so far lives only in the working session; it is to be added to this
-   repository.
+   `build.assetsDir: 'static'` (the apps' own `vite.config.ts` keeps Vite's default `assets/`). The repeatable helper is [tools/make_portfolio_copy.py](../tools/make_portfolio_copy.py):
+
+   ~~~bash
+   python3 tools/make_portfolio_copy.py /absolute/app-source /absolute/new-workdir
+   ~~~
+
+   The source must have its existing dependencies available. The helper makes an isolated source copy, removes the saved-run route and controls, retains solver error messages, adds the backlink and title suffix, builds with a separate Vite configuration and patches the stylesheet loader. It installs nothing. The output is `new-workdir/dist/`; the standalone app is not edited.
+   Build with the KaTeX version the deployed app uses (0.16.47 today; it is the `content` of the `.katex-version` rule in the
+   app's served CSS). The apps have no lockfile, so a fresh `node_modules` can bring a different KaTeX, which changes the
+   hidden MathML that screen readers use and the spacing of multi-line equations while the visible maths looks the same
+   (seen on 15 October 2026 with 0.16.11).
 3. Replace the folder here with the new build output (delete the old `static/` first, because the hashed names change).
-4. In the new `index.html`, replace the line `<link rel="stylesheet" crossorigin href="./static/index-<hash>.css">` with the
-   one-line loader script used now, with the new hash:
+4. The helper has already replaced the stylesheet `<link>` of `dist/index.html` with the loader script. If you built
+   without it, replace the line `<link rel="stylesheet" crossorigin href="./static/index-<hash>.css">` with the one-line
+   loader script used now, with the new hash:
    `<script>(function(){var l=document.createElement('link');l.rel='stylesheet';l.href='./static/index-<hash>.css';document.head.appendChild(l)})();</script>`
 5. Keep the links in `public/portfolios.html` pointing at `index.html#/…`, never at a folder.
 6. Deploy the website and open every route of the copy on the live site: the page must be styled (the stylesheet loaded
@@ -116,3 +125,19 @@ places, the links into it from `portfolios.html` and its one link back out.
   the simulation pages) and once inside each copy's `static/` (59 files in woff2, woff and ttf; 2.1 MB for the two copies
   together, measured with `du -cb public/portfolios/*/static/KaTeX_*`). They are kept because each copy must work as a sealed
   parcel; sharing them would tie the copies to this site's folder layout.
+
+
+## Theory readability revision · 15 October 2026
+
+Both project apps were revised and verified before these copies were rebuilt. Droplet Collection now separates swept volume, event rate, population change and diagnostics, and corrects the interpretation of its L1 spectrum error. Rotor Pendula explains torque signs, moving-pivot kinetic energy, conservative gravity work, weak forcing versus small angle, and the range of the damping optimum. Its Report page identifies the added explanatory prose; the downloadable PDF, source and ZIP remain the original study record.
+
+The two worker bundles retain their previous names and bytes: neither numerical solver nor stored data changed. Both native apps and both website copies passed desktop and phone reading checks, including chapter jumps, keyboard disclosures, retained typeset maths and simulation presets. The complete review is [research-theory-audit.md](research-theory-audit.md).
+
+
+## Rebuilt on KaTeX 0.16.47 · 16 October 2026
+
+The copies above were rebuilt from the apps after the repairs of the independent audit
+([research-theory-audit.md](research-theory-audit.md), second part), with the KaTeX version of the native apps, 0.16.47,
+instead of the 0.16.11 of the 15 October build. The worker bundles, the figures and the study files are unchanged, and the
+stylesheets came back with their earlier hashes (`index-CGriahzx.css`, `index-CNYGhWdg.css`): only the application bundles
+changed.

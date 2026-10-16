@@ -38,6 +38,7 @@ the study PDF and ZIP, `fold.css`, `robots.txt`); the HTML pages differ only by 
 | A relative stylesheet link in a deployed HTML file (`./assets/…`, and since October 2026 `./static/…`) is rewritten to the site root. | The stylesheet is not found (403) and the page shows unstyled. | The two project copies add their stylesheet with a one-line script instead of a `<link>` ([portfolios.md](portfolios.md)). |
 | Unicode escapes in served JavaScript are written out as characters; CSV line endings are normalised. | Served `.js` and `.csv` files can differ byte-wise from the source while behaving the same. | Compare such files by content, not bytes. |
 | A folder address (`…/rotor-pendula/`) answers 403. | Links to folders fail. | Always link to `…/index.html`. |
+| A file removed with `deletePaths` is gone from the stored source but still answers 200 for a while (seen for the old copy bundles after version `1792109157210`). | A stale address keeps working, so a missing link is not caught by the live site. | Check deletions with `src_glob`, not with a fetch; nothing links to the old hashed names. |
 
 ## Build files at the root
 
@@ -101,3 +102,5 @@ Batch C, 15 October 2026: all targeted excerpts match complete source lines or e
 Batch D, 15 October 2026: stored-value and actual DOM/SVG/pixel checks pass locally and live at both requested viewports. The Square preset is exact at its intended decimal values, and an opaque white canvas no longer passes a component-wave readback.
 
 Batch E, 15 October 2026: global rg included all pages, scripts and embedded project bundles. At 1440 × 900 and 390 × 844, 26 visible-element comparisons of 11 style properties and all stored typed-array hashes match before cleanup. Local and live smoke, exports and round endpoint pass; Batch D stored-value readbacks also pass after cleanup locally. One live fold-shadow comparison needed a settled-transition recheck, which matched. No package was installed. Five batches were deployed separately and pushed to the session branch; GitHub Pages was not changed.
+
+Audit repairs, 15–16 October 2026: Droplet Collection v11 (`1792108231309`) and Rotor Pendula v5 (`1792108602425`) went out through the deploy tool's inline diffs, with no front-end or network errors reported by the platform's QA. The website update that carries the four corrected notes and the copies rebuilt on KaTeX 0.16.47 is stored version `1792109157210` (v63), sent as one upload of ten files and four deletions. See [research-theory-audit.md](research-theory-audit.md).

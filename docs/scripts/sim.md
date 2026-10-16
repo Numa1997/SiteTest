@@ -24,12 +24,12 @@ between `dataset.js` and `datalog.js`.
 | 1 | [Circular Wave Interference Visualization.html](../../public/simulations/Circular%20Wave%20Interference%20Visualization.html#L505) | L505 | L506 | L507 | L508 | L903 |
 | 2 | [Double Pendulum.html](../../public/simulations/Double%20Pendulum.html#L389) | L389 | L390 | L391 | L392 | L841 |
 | 3 | [Interactive Double-Slit Experiment Visualization.html](../../public/simulations/Interactive%20Double-Slit%20Experiment%20Visualization.html#L546) | L546 | L547 | L548 | L549 | L917 |
-| 4 | [Transverse and longitudinal waves.html](../../public/simulations/Transverse%20and%20longitudinal%20waves.html#L731) | L731 | L732 | L733 | L734 | L1081 |
+| 4 | [Transverse and longitudinal waves.html](../../public/simulations/Transverse%20and%20longitudinal%20waves.html#L732) | L731 | L732 | L733 | L734 | L1081 |
 | 5 | [water-wave.html](../../public/simulations/water-wave.html#L563) | L563 | L564 | L565 | L566 | L885 |
 | 6 | [wave-interference.html](../../public/simulations/wave-interference.html#L489) | L489 | L490 | L491 | L492 | L960 |
-| 7 | [phasor-sums.html](../../public/simulations/phasor-sums.html#L659) | L659 | L660 | L661 | L662 | L1475 |
-| 8 | [draw-decompose.html](../../public/simulations/draw-decompose.html#L617) | L617 | L618 | L619 | L620 | L1413 |
-| 9 | [driven-oscillator.html](../../public/simulations/driven-oscillator.html#L462) | L462 | L463 | L464 | L465 | L1106 |
+| 7 | [phasor-sums.html](../../public/simulations/phasor-sums.html#L660) | L659 | L660 | L661 | L662 | L1475 |
+| 8 | [draw-decompose.html](../../public/simulations/draw-decompose.html#L618) | L617 | L618 | L619 | L620 | L1413 |
+| 9 | [driven-oscillator.html](../../public/simulations/driven-oscillator.html#L463) | L462 | L463 | L464 | L465 | L1106 |
 | 10 | [wind-turbine.html](../../public/simulations/wind-turbine.html#L547) | L547 | L548 | L549 | L550 | L1152 |
 
 The scripts are plain `<script src>` tags at the end of the body, so they run while the document is still loading. That is

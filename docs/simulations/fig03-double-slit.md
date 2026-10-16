@@ -336,3 +336,12 @@ before the closing semicolon.
    `sin_theta1` and `theta1` shows a neutral "Not in the picture at the moment, so there is nothing to read back." instead
    of a burgundy ✕. `firstFringeReadback()` returns `ok: null` there by design ([page:844](../../public/simulations/Interactive%20Double-Slit%20Experiment%20Visualization.html#L844)); the panel now
    honours it ([datalog.js:529](../../public/scripts/datalog.js#L529)) (audit repair, commit [32c240c](https://github.com/Numa1997/SiteTest/commit/32c240c52fd0535d39a0cef608dc404cf4219484)).
+
+Batch D store additions: `sin_theta1 = λ/b`, `theta1 = asin(λ/b)` in degrees (NaN when λ > b), and `phi_pi = phi/π`. All three are scalars stored in `storeDerived(G)`, called by `compute()`. `firstFringeReadback()` reads the first-order label’s SVG x coordinate; outside the 0°–30° plot it reports that no label is drawn. L1, L2 and phase also have DOM readbacks.
+
+Function map addition: `storeDerived(G)` at [754–772](../../public/simulations/Interactive%20Double-Slit%20Experiment%20Visualization.html#L754-L772) stores points, phase, intensity and fringe scalars; `firstFringeReadback(sine)` reads the SVG label.
+
+
+## Teaching revision · 15 October 2026
+
+Missing even orders exclude the central maximum. The note separates a photon probability amplitude from the classical field and explains the Jacobian between angular and flat-screen counting densities. Simulation code, inline styles and figure SVGs match the latest live baseline. See the [theory audit](../research-theory-audit.md).

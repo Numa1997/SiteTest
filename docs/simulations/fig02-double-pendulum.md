@@ -339,3 +339,8 @@ agree to the pixel; the trail is not stored.
 7. Fixed on 2026-10-15: the note's drift sentence said ε stays below 3 × 10⁻⁸ over the first 20 s; measured, it reaches
    +4.710 × 10⁻⁸ at t = 8.665 s (and −3.185 × 10⁻⁸ at 19.13 s). It now reads "stays within ±5 × 10⁻⁸: its largest value is
    +4.7 × 10⁻⁸, at t ≈ 8.7 s" ([L351](../../public/simulations/Double%20Pendulum.html#L351)) (audit repair, commit [32c240c](https://github.com/Numa1997/SiteTest/commit/32c240c52fd0535d39a0cef608dc404cf4219484)).
+
+
+## Teaching revision · 15 October 2026
+
+The note distinguishes energy accuracy from long-time trajectory accuracy, identifies bob separation as a finite-time projection rather than a full-state Lyapunov calculation, and requires separate convergence checks for statistics. Simulation code, inline styles and figure SVGs match the latest live baseline. See the [theory audit](../research-theory-audit.md).

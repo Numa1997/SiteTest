@@ -51,7 +51,8 @@ return 403), with a back link to `../../portfolios.html`. Their build folder is 
 stylesheet link in a deployed HTML file to the site root (seen for `./assets/…` and, since October 2026, `./static/…`: both give 403), so
 after building, replace the `<link rel="stylesheet" href="./static/….css">` in the copy's `index.html` with a short script that adds
 the same link at run time (the platform leaves scripts alone); without it the copy shows unstyled. Their source stays in their apps;
-rebuild there, copy the build folder here, then patch the stylesheet link.
+rebuild there, copy the build folder here, then patch the stylesheet link. Build the copies with the KaTeX version the apps use
+(0.16.47; the apps have no lockfile), or their hidden MathML and equation spacing drift from the apps'.
 Data panel, a pipeline in three files. `scripts/dataset.js`: `Sim.dataset()` gives a page one named store (dims, typed-array variables,
 scalars, attrs; the shape of an xarray/NetCDF dataset) and the page writes every number into it at the line that computes it, every frame,
 overwriting the last frame; nothing is recomputed for display. `scripts/datalog.js` + `styles/data.css`: the panel, which only reads the

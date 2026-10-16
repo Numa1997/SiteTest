@@ -164,8 +164,8 @@
                     <section class="psec" id="p-push">
                         <h3><span class="psec__n">01</span>A push from outside</h3>
                         <p class="psec__lead">Push a child on a swing. Push at the wrong moments and the swing barely moves; push in time with it and, with gentle pushes, it soon flies high.</p>
-                        <p>The swing has a rhythm of its own, and your hand is a second rhythm that the swing does not control. Everything interesting about driven systems comes from the meeting of these two rhythms. A washing machine shakes hardest for a few seconds while its drum speeds up through one particular rate of turning. A loudspeaker cone follows the music only because it was designed so that its own rhythm lies far from the notes it plays. London’s Millennium Bridge swayed on its opening day in 2000 because thousands of footsteps fed its sideways motion.</p>
-                        <p>In each case a system with its own natural frequency is driven by a force that depends on time and on nothing else: the driver does not care where the system is. In control engineering this force is the <em>input</em>, the motion is the <em>output</em>, and the system in between is the <em>plant</em>. Our plant is the simplest one with a rhythm of its own (Figure 1).</p>
+                        <p>The swing has a rhythm of its own, and your hand is a second rhythm that the swing does not control. Everything interesting about driven systems comes from the meeting of these two rhythms. A washing machine shakes hardest for a few seconds while its drum speeds up through one particular rate of turning. A loudspeaker cone follows the music only because it was designed so that its own rhythm lies far from the notes it plays.</p>
+                        <p>Here we isolate the idealisation of a system driven by a prescribed force: the force depends on time, independently of the system’s motion. A real driver can interact with the oscillator, which would require an extended model. In control engineering this force is the <em>input</em>, the motion is the <em>output</em>, and the system in between is the <em>plant</em>. Our plant is the simplest one with a rhythm of its own (Figure 1).</p>
                         <figure class="pfig">
                             <div class="pfig__plate">
                                 <svg viewBox="0 0 720 250" role="img" aria-label="A block of mass m on a floor, joined to a wall by a spring k and a damper c; a force F(t) pushes it; x measures its displacement from rest.">
@@ -202,7 +202,7 @@
                         <h3><span class="psec__n">02</span>The model</h3>
                         <p>Three forces act along the floor. The spring pulls back in proportion to the stretch, \(-kx\) (Hooke’s law). The damper, a piston in oil, resists in proportion to the speed, \(-c\dot x\). The driver pushes with \(F(t)\). Newton’s second law adds them:</p>
                         \[ m\ddot x + c\dot x + kx = F_0\cos\Omega t . \tag{1} \]
-                        <p>It is tidier to describe the plant by two numbers with a direct meaning. The <em>natural frequency</em> \(\omega_0 = \sqrt{k/m}\) is how fast it rings when left alone; the <em>damping ratio</em> \(\zeta = c/(2\sqrt{km})\) says how quickly the ringing dies, from \(\zeta = 0\) (forever) to \(\zeta = 1\) (no ringing at all). Dividing (1) by \(m\),</p>
+                        <p>It is tidier to describe the plant by two numbers with a direct meaning. The <em>natural frequency</em> \(\omega_0 = \sqrt{k/m}\) is the undamped natural angular frequency; with underdamping, free ringing instead occurs at \(\omega_d=\omega_0\sqrt{1-\zeta^2}\); the <em>damping ratio</em> \(\zeta = c/(2\sqrt{km})\) says how quickly the ringing dies, from \(\zeta = 0\) (forever) to \(\zeta = 1\) (no ringing at all). Dividing (1) by \(m\),</p>
                         \[ \ddot x + 2\zeta\omega_0\,\dot x + \omega_0^2\,x = \frac{F_0}{m}\cos\Omega t . \tag{2} \]
                         <p>On the page \(m = 1\ \mathrm{kg}\) and the sliders set \(f_0 = \omega_0/2\pi\), \(\zeta\), \(F_0\) and the drive frequency \(f = \Omega/2\pi\). With the defaults, \(f_0 = 0.5\ \mathrm{Hz}\) and \(\zeta = 0.05\), so \(k = 9.87\ \mathrm{N/m}\) and \(c = 0.314\ \mathrm{kg/s}\). The block starts at rest in its rest position, \(x(0) = 0\), \(\dot x(0) = 0\).</p>
                         <p>Notice what sets this equation apart from the double pendulum of Fig. 2: the time \(t\) appears on its own, inside \(\cos\Omega t\). The future depends not only on where the block is, but also on the clock, because the clock belongs to someone else.</p>
@@ -214,6 +214,7 @@
                         <h4><span class="psub__n">3.1</span>The steady state</h4>
                         <p>Guess that, once things settle, the block moves at the driver’s own frequency. Complex numbers make the guess painless: write the force as the real part of \(\tfrac{F_0}{m}e^{i\Omega t}\) and try \(x = \operatorname{Re}\,Z e^{i\Omega t}\). Each time derivative becomes a factor \(i\Omega\), and (2) turns into algebra:</p>
                         \[ \left(\omega_0^2 - \Omega^2 + 2i\zeta\omega_0\Omega\right) Z = \frac{F_0}{m} \quad\Longrightarrow\quad Z = \frac{F_0/m}{\omega_0^2 - \Omega^2 + 2i\zeta\omega_0\Omega} = X e^{-i\varphi} . \tag{3} \]
+                        <p>At the drive frequency, acceleration is \(-\Omega^2\) times displacement. Spring and inertia therefore contribute the opposing real terms \(k\) and \(-m\Omega^2\); the damper contributes \(ic\Omega\), a quarter cycle out of phase. The physical denominator \(k-m\Omega^2+ic\Omega\) keeps these contributions together. Dividing by \(m\) gives the form in (3).</p>
                         <p>The modulus and argument of \(Z\) give the amplitude and the phase lag of the steady motion \(x_\text{p}(t) = X\cos(\Omega t - \varphi)\):</p>
                         \[ X = \frac{F_0/m}{\sqrt{\left(\omega_0^2-\Omega^2\right)^2 + \left(2\zeta\omega_0\Omega\right)^2}}, \qquad \varphi = \operatorname{atan2}\!\left(2\zeta\omega_0\Omega,\ \omega_0^2-\Omega^2\right) . \tag{4} \]
                         <h4><span class="psub__n">3.2</span>The transient</h4>
@@ -353,7 +354,7 @@
 
                     <section class="psec" id="p-start">
                         <h3><span class="psec__n">06</span>The start: beats and decay</h3>
-                        <p>Figure 4 is the run the page stores with its default settings. The drive at \(0.45\ \mathrm{Hz}\) is close to the natural \(0.50\ \mathrm{Hz}\), so during the first seconds two nearby rhythms are present at once: the driver’s, and the block’s own ringing from equation (5). Like two guitar strings slightly out of tune, they drift in and out of step every \(1/|f-f_0| = 20\ \mathrm{s}\), and the amplitude swells and shrinks; the first swell reaches \(0.596\ \mathrm{m}\) at \(t = 8.0\ \mathrm{s}\). Because the ringing decays with \(\tau = 6.4\ \mathrm{s}\), the second beat is already weak, and after half a minute only the steady oscillation at \(\pm X = \pm 0.482\ \mathrm{m}\) is left.</p>
+                        <p>Figure 4 is the run the page stores with its default settings. The drive at \(0.45\ \mathrm{Hz}\) is close to the natural \(0.50\ \mathrm{Hz}\), so during the first seconds two nearby rhythms are present at once: the driver’s, and the block’s own ringing from equation (5). Like two guitar strings slightly out of tune, they drift in and out of step on an approximate beat time \(1/|f-f_d|\approx20.25\ \mathrm{s}\), with \(f_d=\omega_d/(2\pi)\). Replacing \(f_d\) by \(f_0\) gives the useful weak-damping estimate of 20 s; the amplitude swells and shrinks; the first swell reaches \(0.596\ \mathrm{m}\) at \(t = 8.0\ \mathrm{s}\). Because the ringing decays with \(\tau = 6.4\ \mathrm{s}\), the second beat is already weak, and after half a minute only the steady oscillation at \(\pm X = \pm 0.482\ \mathrm{m}\) is left.</p>
                         <figure class="pfig">
                             <div class="pfig__plate">
                                 <svg viewBox="0 0 720 326" role="img" xmlns="http://www.w3.org/2000/svg">
@@ -1106,3 +1107,4 @@
     <script src="../scripts/datalog.js"></script>
 </body>
 </html>
+

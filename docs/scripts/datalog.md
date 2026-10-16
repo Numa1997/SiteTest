@@ -181,12 +181,12 @@ A round is what the page says it is, in `Sim.data.round` ([datalog.js:25-27](../
 | 1 | one period of the sources, $T$ | `t` | sampled | no | [L893](../../public/simulations/Circular%20Wave%20Interference%20Visualization.html#L893) |
 | 2 | ten seconds of simulated motion | `t` | sampled | no | [L851](../../public/simulations/Double%20Pendulum.html#L851) |
 | 3 | ten seconds of slider changes | `wall` | `'change'` | no | [L938](../../public/simulations/Interactive%20Double-Slit%20Experiment%20Visualization.html#L938) |
-| 4 | one period, $T$ | `t` | sampled | no | [L1072](../../public/simulations/Transverse%20and%20longitudinal%20waves.html#L1072) |
+| 4 | one period, $T$ | `t` | sampled | no | [L1073](../../public/simulations/Transverse%20and%20longitudinal%20waves.html#L1073) |
 | 5 | one period, $T$ | `t` | sampled | no | [L878](../../public/simulations/water-wave.html#L878) |
 | 6 | one repeat of the pattern, at most 20 s | `t` | sampled | no | [L961](../../public/simulations/wave-interference.html#L961) |
-| 7 | one full figure (or part of it) in phasor time | `t` | sampled | yes, in the final-shape view | [L1462](../../public/simulations/phasor-sums.html#L1462) |
-| 8 | one loop of the circles | `t` | sampled | yes, until a shape is decomposed | [L1398](../../public/simulations/draw-decompose.html#L1398) |
-| 9 | one drive period $1/f$ of the stored run | `t_play` | sampled | yes, near the end of the run | [L1093](../../public/simulations/driven-oscillator.html#L1093) |
+| 7 | one full figure (or part of it) in phasor time | `t` | sampled | yes, in the final-shape view | [L1463](../../public/simulations/phasor-sums.html#L1463) |
+| 8 | one loop of the circles | `t` | sampled | yes, until a shape is decomposed | [L1399](../../public/simulations/draw-decompose.html#L1399) |
+| 9 | one drive period $1/f$ of the stored run | `t_play` | sampled | yes, near the end of the run | [L1094](../../public/simulations/driven-oscillator.html#L1094) |
 | 10 | one rotor turn of the stored run | `t_play` | sampled | yes, near the end of the run | [L1154](../../public/simulations/wind-turbine.html#L1154) |
 
 While no round is running, `describeRound()` ([datalog.js:749-756](../../public/scripts/datalog.js#L749-L756)) writes the Record
@@ -333,12 +333,12 @@ which pages set them (from the ten `Sim.data = {` blocks).
 The ten blocks: [Fig. 1 L798](../../public/simulations/Circular%20Wave%20Interference%20Visualization.html#L798),
 [Fig. 2 L768](../../public/simulations/Double%20Pendulum.html#L768),
 [Fig. 3 L849](../../public/simulations/Interactive%20Double-Slit%20Experiment%20Visualization.html#L849),
-[Fig. 4 L995](../../public/simulations/Transverse%20and%20longitudinal%20waves.html#L995),
+[Fig. 4 L996](../../public/simulations/Transverse%20and%20longitudinal%20waves.html#L996),
 [Fig. 5 L810](../../public/simulations/water-wave.html#L810),
 [Fig. 6 L868](../../public/simulations/wave-interference.html#L868),
-[Fig. 7 L1369](../../public/simulations/phasor-sums.html#L1369),
-[Fig. 8 L1300](../../public/simulations/draw-decompose.html#L1300),
-[Fig. 9 L969](../../public/simulations/driven-oscillator.html#L969),
+[Fig. 7 L1370](../../public/simulations/phasor-sums.html#L1370),
+[Fig. 8 L1301](../../public/simulations/draw-decompose.html#L1301),
+[Fig. 9 L970](../../public/simulations/driven-oscillator.html#L970),
 [Fig. 10 L1054](../../public/simulations/wind-turbine.html#L1054).
 
 ## Public interface

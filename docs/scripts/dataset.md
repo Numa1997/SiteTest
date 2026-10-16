@@ -161,12 +161,12 @@ None. The file reacts to nothing; it runs only when a page or the data panel cal
   [Fig. 1 L526](../../public/simulations/Circular%20Wave%20Interference%20Visualization.html#L526),
   [Fig. 2 L406](../../public/simulations/Double%20Pendulum.html#L406),
   [Fig. 3 L561](../../public/simulations/Interactive%20Double-Slit%20Experiment%20Visualization.html#L561),
-  [Fig. 4 L746](../../public/simulations/Transverse%20and%20longitudinal%20waves.html#L746),
+  [Fig. 4 L747](../../public/simulations/Transverse%20and%20longitudinal%20waves.html#L747),
   [Fig. 5 L578](../../public/simulations/water-wave.html#L578),
   [Fig. 6 L507](../../public/simulations/wave-interference.html#L507),
-  [Fig. 7 L709](../../public/simulations/phasor-sums.html#L709),
-  [Fig. 8 L637](../../public/simulations/draw-decompose.html#L637),
-  [Fig. 9 L478](../../public/simulations/driven-oscillator.html#L478),
+  [Fig. 7 L709](../../public/simulations/phasor-sums.html#L710),
+  [Fig. 8 L638](../../public/simulations/draw-decompose.html#L638),
+  [Fig. 9 L479](../../public/simulations/driven-oscillator.html#L479),
   [Fig. 10 L566](../../public/simulations/wind-turbine.html#L566).
 - `datalog.js` builds a second, temporary `Dataset` for a recorded round and saves it with the same `npz`
   ([datalog.js:970-977](../../public/scripts/datalog.js#L970-L977)).

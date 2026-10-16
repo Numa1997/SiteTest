@@ -79,6 +79,7 @@ RULES = [
     (r'docs/.+\.md', lambda m: 'Documentation: ' + heading(m.group(0)) + '.', None),
     (r'\.gitignore', 'Files git leaves out: Python caches, node_modules, build output.', 'docs/files.md'),
     (r'tools/inventory\.py', 'Writes docs/files.md and checks that every file in the repository is described.', 'docs/files.md'),
+    (r'tools/make_portfolio_copy\.py', 'Builds a browser-only website copy of a research app from its source, without changing the app or installing dependencies.', 'docs/portfolios.md'),
     # root of the app
     (r'AGENTS\.md', "The maintainer's summary: ownership, layout, design rules, folds, the data pipeline, platform quirks.", 'docs/build-and-deploy.md'),
     (r'CLAUDE\.md', 'How Numa expects an AI assistant to work on the project.', 'docs/build-and-deploy.md'),
