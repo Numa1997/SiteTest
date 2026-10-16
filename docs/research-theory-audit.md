@@ -128,3 +128,34 @@ the inline form wrapped on a phone.
 Checks after the repairs: the three Markdown link checks of this repository pass (4174 links, 0 bad; 81.6 % of backticked
 identifiers land on their definition); the 13 website pages and the two copies' theory and report routes pass at both sizes
 locally; both apps report no runtime or network errors.
+
+## Second repairs: the pictures and the small slips · 16 October 2026
+
+Items 10 and 11 of the table above, applied after Numa chose to have them done without a preview. Each everyday picture
+that the revision had replaced is back, with the revision's precision kept beside it:
+
+| Where | Restored | Kept from the revision |
+|---|---|---|
+| Fig. 3, Section 7 | each photon interferes with itself; closing a slit or recording the path removes the fringes | the probability amplitude is not the classical field; counts per unit angle against per unit length on a flat screen (a factor 3/4 at 30°) |
+| Fig. 5, Section 4 | pressure pushes through a parcel's centre and gravity pulls at it, so neither can spin it; Kelvin's circulation theorem by name | the theorem's three conditions: constant density, no viscosity, a force with a potential |
+| Fig. 9, Section 1 | the Millennium Bridge, now as the counter-example: the walkers' steps fed back on the sway | the prescribed-force idealisation stated as such |
+| Fig. 10, Section 3 | too slow lets the air through, too fast acts like a wall | the angle of attack as the mechanism behind both |
+| Rotor Pendula ch. 07 | an arm with an elbow, the classic toy for chaos; "how much less, and why" | power only from the relative speed across a joint; "in the sampled cases" |
+| Rotor Pendula ch. 09 | the leaves in a calm stream and in rapids; compound interest | the test under the same forcing; $\Lambda$ in 1/s; transient growth and phase drift in regular motion |
+
+The small slips. Fig. 2's Lyapunov paragraphs: the limit defines the exponent and the rescaling algorithm computes it; the
+1.7 s⁻¹ is a finite-time estimate from two of the four coordinates; the energy sentence is back, with why a small drift
+proves only the integrator. Fig. 1's opening in plain words, and the $kr \gg 1$ caveat with the size of its first correction
+(a phase lag of $1/(8kr)$, 0.01 rad two wavelengths from a source). Fig. 6's sharp corners. The garbled sentence of Fig. 8
+and the run-on of Fig. 9. Droplet Collection (v12, `1792111079794`): the Stokes speed written $v_t^S$ as in (10); the
+spread example in numbers ($\sqrt2 \times 3.7 \times 10^{-11}$ kg $= 5.3 \times 10^{-11}$ kg, 19 %); the three-mass example after
+the one-half paragraph, with the pair counted twice in the gain integral; the $W_E$ column in numbers and the underflow
+threshold ($W_E > 648$, collectors from 0.8 mm); pointers to (8), (35) and the top-edge section; the $R^2$ cancellation
+behind $\dot R$. Rotor Pendula (v6, `1792111084380`): the sign check placed after the paragraph that names the three
+torques and written in $\theta$; plain glosses for the conjugate momentum, $\varphi = O(G)$, quadrature and the
+non-uniform limit; the lead-in to (11) naming all four numbers; the ±8 g headroom in numbers (2.0 g to 5.6 g at the six
+of the 18 mountings that pass, from `study.json`). Website v64 (`1792111100165`) carries the eight notes and the copies
+rebuilt from these pages (`index-DGIxitSc.js`, `index-CsGEKbO8.js`).
+
+Checks: the 13 pages and the copies' theory and report routes clean in Chromium at 1440 × 900 and 390 × 844, locally
+and live; both apps without runtime or network errors; the three link checks of this repository pass.

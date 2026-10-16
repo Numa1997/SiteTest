@@ -395,3 +395,5 @@ the data panel prints. In detail:
 The note separates undamped natural frequency from damped ringing, interprets the complex denominator as spring, inertia and quadrature damping, and uses the damped ringing frequency for the approximate default beat time. Simulation code, inline styles and figure SVGs match the latest live baseline. See the [theory audit](../research-theory-audit.md).
 
 Fixed on 2026-10-16: the paragraph reading the complex denominator had been placed between "(2) turns into algebra:" and equation (3); it now follows (3) and ends "gives the form in (3)" ([L217](../../public/simulations/driven-oscillator.html#L217)). See the [audit of the revision](../research-theory-audit.md).
+
+Fixed on 2026-10-16 (second repairs): the Millennium Bridge is back as the counter-example to a prescribed force (the walkers' steps fed back on the sway); the beat-time sentence is one sentence again ([L168](../../public/simulations/driven-oscillator.html#L168)). See the [audit of the revision](../research-theory-audit.md).

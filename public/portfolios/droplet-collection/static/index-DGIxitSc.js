@@ -446,7 +446,7 @@ l0,-`+(i+144)+`c-2,-159.3,-10,-310.7,-24,-454c-53.3,-528,-210,-949.7,
 
 <p>\\(K\\) is in m³/s. <span class='tag assumed'>Assumed</span> The thesis’s equations (9)–(10) use the geometric area and a coalescence factor, with no collision efficiency; the airflow efficiency is the app’s extension. The app’s “thesis kernel” keeps Stokes fall speeds, \\(E_{\\rm coll}=1\\) and the thesis’s \\(E_{\\rm coal}\\); its “new kernel” uses the drag-balance speeds of chapter 4 and the stored efficiencies of chapter 5.</p>
 
-<p>For a fixed pair of sizes, doubling the partner concentration doubles one collector’s merger rate. Doubling both populations quadruples the events per volume. The kernel itself stays the same: it describes how the pair moves and interacts; concentrations say how often such pairs are available.</p>
+<p>For a fixed pair of sizes, doubling the partner concentration doubles one collector’s merger rate. Doubling both populations quadruples the events per volume, equation (8) below. The kernel itself stays the same: it describes how the pair moves and interacts; concentrations say how often such pairs are available.</p>
 
 <p>Each merger adds the partner’s mass \\(m(r)\\) to the collector. Summing over partners gives the collector’s mass gain, and (1) turns it into radius growth:</p>
 
@@ -469,7 +469,7 @@ l0,-`+(i+144)+`c-2,-159.3,-10,-310.7,-24,-454c-53.3,-528,-210,-949.7,
 <p>Keep three numbers apart: \\(K\\) (m³/s) is a volume rate; \\(Kn_r\\,dr\\) (s⁻¹) is one collector’s event rate; \\(Kn_Rn_r\\,dR\\,dr\\) (m⁻³ s⁻¹) is the event rate per volume of air.</p>
 </details>
 
-<p>A larger drop usually sweeps a wider tube and overtakes small droplets faster. That can reinforce growth, as on the window pane, but it does not prove that \\(\\dot R\\) always rises with \\(R\\). Radius growth divides the mass gain by \\(4\\pi\\rho_pR^2\\), and the efficiencies and available partners also change. In particular, fast encounters can merge less readily. And two identical liquid spheres fall at the same speed: \\(\\Delta v=0\\), and gravity never brings them together. <span class='tag derived'>Derived</span> In the code such a pair gets \\(K=0\\); turbulence or electric forces, which could join them, are outside this model.</p>
+<p>A larger drop usually sweeps a wider tube and overtakes small droplets faster. That can reinforce growth, as on the window pane, but it does not prove that \\(\\dot R\\) always rises with \\(R\\). Radius growth divides the mass gain by \\(4\\pi\\rho_pR^2\\), and the efficiencies and available partners also change. For partners much smaller than the collector, the \\(R^2\\) of the swept tube cancels this \\(R^2\\): \\(\\dot R\\approx E\\,v_t(R)\\,L/(4\\rho_p)\\), with \\(E\\) the collection efficiency and \\(L\\) the water content of the partners, so the radius grows faster only because the drop falls faster and collects more efficiently. In particular, fast encounters can merge less readily. And two identical liquid spheres fall at the same speed: \\(\\Delta v=0\\), and gravity never brings them together. <span class='tag derived'>Derived</span> In the code such a pair gets \\(K=0\\); turbulence or electric forces, which could join them, are outside this model.</p>
 
 </section>
 
@@ -742,7 +742,7 @@ l0,-`+(i+144)+`c-2,-159.3,-10,-310.7,-24,-454c-53.3,-528,-210,-949.7,
 
 <aside class='model-note'>
 <h3>One approximation in the trajectory equation</h3>
-<p>Equation (24) uses linear Stokes drag. Strictly, its settling speed is \\(v_t(r)=\\tau_pg^*\\), so that is the value of \\(S U\\) obtained when deriving (25). Substituting the app’s fitted terminal speed while retaining the same relaxation time is a hybrid approximation, not an exact rescaling of (24). The browser reads stored efficiency tables; their generating code is unavailable, so this page cannot establish which choice it used. The trajectory argument explains the mechanism without proving the tables valid at every size.</p>
+<p>Equation (24) uses linear Stokes drag. Strictly, its settling speed is \\(\\tau_pg^*=v_t^S(r)\\), the Stokes speed of (10), so that is the value of \\(S\\,U\\) that (24) gives when (25) is derived. Using the app’s fitted speed \\(v_t(r)\\) in \\(S\\) while keeping the same relaxation time is a hybrid approximation, not an exact rescaling of (24). The browser reads stored efficiency tables; their generating code is unavailable, so this page cannot establish which choice it used. The trajectory argument explains the mechanism without proving the tables valid at every size.</p>
 </aside>
 
 <p>When \\(\\mathrm{St}\\to0\\) the partner follows the air, shifted by its settling, and touches only by interception: its radius reaches the surface while its centre rides past. When \\(\\mathrm{St}\\to\\infty\\) it goes straight, and every partner in the tube hits. Contact is at \\(|\\mathbf y|=1+r/R\\). <span class='tag computed'>Computed</span> At 10 °C and 850 hPa an 8 µm partner has \\(\\mathrm{St}=1.9\\) with a 20 µm collector and 3.6 with a 40 µm one; a 10 µm partner of a 100 µm collector has 9.1.</p>
@@ -810,7 +810,7 @@ l0,-`+(i+144)+`c-2,-159.3,-10,-310.7,-24,-454c-53.3,-528,-210,-949.7,
   <p class='equation-reading'>Creeping-flow efficiency \\(E_S\\) for collector Re well below 60, potential-flow \\(E_P\\) well above, a smooth blend between.</p>
 </div>
 
-<p>This blend is an adopted closure. Neither the interpolation nor its value 60 follows from the trajectory equations. Solving the airflow at each Reynolds number would remove this particular interpolation, but particle shape, mutual disturbance and the particle-drag model would still need to be specified.</p>
+<p>This blend is an adopted closure. Neither the interpolation nor its value 60 follows from the trajectory equations. Solving the airflow at each Reynolds number would remove this particular interpolation, but particle shape, mutual disturbance and the particle-drag model would still need to be specified. It plays the same role as the thesis’s fitted coalescence law (35).</p>
 
 <h2>What the app actually stores</h2>
 
@@ -916,14 +916,14 @@ l0,-`+(i+144)+`c-2,-159.3,-10,-310.7,-24,-454c-53.3,-528,-210,-949.7,
 <p><strong>Radius 100 µm meets 50 µm.</strong> Balance speeds 0.728 and 0.259 m/s, so \\(\\Delta v=0.469\\) m/s. The reduced mass is \\(4.65\\times10^{-10}\\) kg and \\(\\Delta E_k=5.1\\times10^{-11}\\) J. The merged drop has \\(d_f=208\\) µm and \\(E_s=1.01\\times10^{-8}\\) J, so \\(W_E=0.0051\\) and \\(E_{\\rm coal}=0.994\\). The surface energy freed by the merger, \\(1.6\\times10^{-9}\\) J, is 31 times the collision energy: a gentle touch. With Stokes speeds, \\(\\Delta v=0.922\\) m/s, \\(W_E=0.020\\), \\(E_{\\rm coal}=0.978\\).</p>
 <p><strong>Radius 500 µm meets 250 µm.</strong> Balance: \\(\\Delta v=2.12\\) m/s, \\(\\Delta E_k=1.31\\times10^{-7}\\) J, \\(d_f=1.04\\) mm, \\(E_s=2.53\\times10^{-7}\\) J, \\(W_E=0.52\\), \\(E_{\\rm coal}=0.55\\). Stokes: \\(\\Delta v=23.1\\) m/s, \\(W_E=61\\), \\(E_{\\rm coal}=3\\times10^{-31}\\). With Stokes speeds these two never merge.</p>
 <table>
-  <caption><span class='tag computed'>Computed</span> The largest energy ratio over all liquid pairs whose larger drop is at most a given radius (10 °C, 850 hPa), with the coalescence efficiency that goes with it.</caption>
+  <caption><span class='tag computed'>Computed</span> The largest energy ratio over all liquid pairs whose larger drop is at most a given radius (10 °C, 850 hPa), with the coalescence efficiency that goes with it. With Stokes speeds, \\(E_{\\rm coal}=\\exp(-1.15\\,W_E)\\) is exactly zero in double precision once \\(W_E\\) exceeds about 648, which first happens for collectors of about 0.8 mm.</caption>
   <thead><tr><th>larger radius up to</th><th>W<sub>E</sub>, balance</th><th>E<sub>coal</sub>, balance</th><th>W<sub>E</sub>, Stokes</th><th>E<sub>coal</sub>, Stokes</th></tr></thead>
   <tbody>
     <tr><td>100 µm</td><td>0.0051</td><td>0.994</td><td>0.021</td><td>0.976</td></tr>
     <tr><td>200 µm</td><td>0.041</td><td>0.954</td><td>0.66</td><td>0.47</td></tr>
     <tr><td>500 µm</td><td>0.52</td><td>0.55</td><td>66</td><td>≈ 10⁻³³</td></tr>
-    <tr><td>1 mm</td><td>1.66</td><td>0.15</td><td>finite; E<sub>coal</sub> underflows</td><td>0 at the maximum W<sub>E</sub></td></tr>
-    <tr><td>2 mm</td><td>3.16</td><td>0.026</td><td>finite; E<sub>coal</sub> underflows</td><td>0 at the maximum W<sub>E</sub></td></tr>
+    <tr><td>1 mm</td><td>1.66</td><td>0.15</td><td>≈ 2 × 10³</td><td>0 (exp underflows)</td></tr>
+    <tr><td>2 mm</td><td>3.16</td><td>0.026</td><td>≈ 7 × 10⁴</td><td>0 (exp underflows)</td></tr>
   </tbody>
 </table>
 </details>
@@ -982,9 +982,10 @@ l0,-`+(i+144)+`c-2,-159.3,-10,-310.7,-24,-454c-53.3,-528,-210,-949.7,
   <p class='equation-reading'>Births from all pairs that add up to \\(m\\), minus deaths of particles of mass \\(m\\) in any merger, with the kernel (6) written in masses.</p>
 </div>
 
-<p>For a concrete entry in the ledger, suppose the only allowed event joins a particle of mass \\(m_0\\) to one of mass \\(2m_0\\). If it happens \\(C\\) times per cubic metre per second, the three populations change at rates \\(-C\\), \\(-C\\) and \\(+C\\). Number falls at rate \\(C\\); the mass change is \\(-m_0C-2m_0C+3m_0C=0\\). The two integrals in (39) apply this same rule to every possible pair.</p>
 
 <p>The one half is there because, as \\(m'\\) runs from 0 to \\(m\\), each unordered pair is met twice; the loss term follows one particular particle, so nothing is doubled there. This is Smoluchowski’s coagulation equation, in cloud physics the stochastic collection equation. “Stochastic” describes the random events; the equation evolves their expected density deterministically, treating pairs as uncorrelated. The app does not draw random merger histories.</p>
+
+<p>For a concrete entry in the ledger, suppose the only allowed event joins a particle of mass \\(m_0\\) to one of mass \\(2m_0\\). If it happens \\(C\\) times per cubic metre per second, the three populations change at rates \\(-C\\), \\(-C\\) and \\(+C\\). Number falls at rate \\(C\\); the mass change is \\(-m_0C-2m_0C+3m_0C=0\\). The two integrals in (39) apply this same rule to every possible pair. In the gain integral at \\(m=3m_0\\) this pair appears twice, at \\(m'=m_0\\) and at \\(m'=2m_0\\); the ½ counts it once.</p>
 
 <div class='reading-table' tabindex='0'>
 <table>
@@ -1023,7 +1024,7 @@ l0,-`+(i+144)+`c-2,-159.3,-10,-310.7,-24,-454c-53.3,-528,-210,-949.7,
 
 <details class='derivation-detail'>
 <summary>Worked example: how large is the spread the drift leaves out?</summary>
-<p>A collector of radius 40.3 µm (a grid bin; \\(M=2.745\\times10^{-10}\\) kg) in the reference cloud mode at 10 °C and 850 hPa, new kernel. <span class='tag computed'>Computed</span> Summing over the cloud mode, \\(A=4.43\\times10^{-13}\\) kg/s and \\(B=2.24\\times10^{-24}\\) kg²/s. It merges 0.131 times per second, and its mean catch is 1.2 % of its own mass. Freezing these initial rates would give a mass-gain time \\(M/A=620\\) s, about 81 mergers. In that constant-rate illustration one collector’s mass has variance \\(Bt\\), giving a standard deviation \\(\\sqrt{BM/A}=3.7\\times10^{-11}\\) kg, 14 % of the starting mass. The difference of two independent collectors has \\(\\sqrt2\\) times that standard deviation. Actual growth changes \\(A\\), \\(B\\) and the pool, so this is a scale estimate, not a predicted distribution at doubling. It shows what a single mean growth path leaves out.</p>
+<p>A collector of radius 40.3 µm (a grid bin; \\(M=2.745\\times10^{-10}\\) kg) in the reference cloud mode at 10 °C and 850 hPa, new kernel. <span class='tag computed'>Computed</span> Summing over the cloud mode, \\(A=4.43\\times10^{-13}\\) kg/s and \\(B=2.24\\times10^{-24}\\) kg²/s. It merges 0.131 times per second, and its mean catch is 1.2 % of its own mass. If these initial rates stayed fixed, the collector would gain its own mass \\(M\\) again, that is, double, in \\(M/A=620\\) s, after about 81 mergers. In that constant-rate illustration one collector’s mass has variance \\(Bt\\), giving a standard deviation \\(\\sqrt{BM/A}=3.7\\times10^{-11}\\) kg, 14 % of the starting mass. The difference of two independent collectors has \\(\\sqrt2\\) times that standard deviation, \\(5.3\\times10^{-11}\\) kg or 19 % of \\(M\\). Actual growth changes \\(A\\), \\(B\\) and the pool, so this is a scale estimate, not a predicted distribution at the doubling. It shows what a single mean growth path leaves out.</p>
 </details>
 
 <table>
@@ -1447,7 +1448,7 @@ l0,-`+(i+144)+`c-2,-159.3,-10,-310.7,-24,-454c-53.3,-528,-210,-949.7,
   <p class='equation-reading'>The fraction is recorded once a minute, so threshold times are whole minutes, rounded up to the next record.</p>
 </div>
 
-<p>A rise of \\(F_{40}\\) means that more of the initial water mass sits in the selected large-particle bins. It need not mean that more large particles exist: a few large drops can hold the same mass as many smaller ones. Nor does a falling curve necessarily mean droplets shrank; mass can also leave through the grid’s top edge.</p>
+<p>A rise of \\(F_{40}\\) means that more of the initial water mass sits in the selected large-particle bins. It need not mean that more large particles exist: a few large drops can hold the same mass as many smaller ones. Nor does a falling curve necessarily mean droplets shrank; mass can also leave through the grid’s top edge, as the section of that name below shows.</p>
 
 <p>The solver calls \\(F_{40}\\) “rain”. Its radius of 40 µm is a diameter of 80 µm, a drizzle-sized drop. The model has no updraft and no cloud depth, so it cannot say whether such drops reach the ground. The interface calls it the 40 µm growth threshold; the stored values keep exactly this definition.</p>
 

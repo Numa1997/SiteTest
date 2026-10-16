@@ -327,3 +327,5 @@ The plotted curves of Figures 3 and 4 are single SVG paths of 10–23 kB each on
 ## Teaching revision · 15 October 2026
 
 The note distinguishes the chosen ring field from a physical two-dimensional wave-equation solution before the derivation; kr = 1 is a crossover, not an asymptotic accuracy guarantee. The colour is instantaneous signed displacement, not the amplitude map. Simulation code, inline styles and figure SVGs match the latest live baseline. See the [theory audit](../research-theory-audit.md).
+
+Fixed on 2026-10-16 (second repairs): the opening says in plain words what the figure adds and what it simplifies, and the $kr \gg 1$ caveat gives the size of the first correction, a phase lag of $1/(8kr)$ ([L190](../../public/simulations/Circular%20Wave%20Interference%20Visualization.html#L190)). See the [audit of the revision](../research-theory-audit.md).

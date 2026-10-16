@@ -344,3 +344,5 @@ agree to the pixel; the trail is not stored.
 ## Teaching revision · 15 October 2026
 
 The note distinguishes energy accuracy from long-time trajectory accuracy, identifies bob separation as a finite-time projection rather than a full-state Lyapunov calculation, and requires separate convergence checks for statistics. Simulation code, inline styles and figure SVGs match the latest live baseline. See the [theory audit](../research-theory-audit.md).
+
+Fixed on 2026-10-16 (second repairs): the Lyapunov paragraphs say that the limit defines the exponent and the rescaling algorithm computes it, that the 1.7 s⁻¹ is a finite-time estimate from two of the four coordinates, and that a small energy drift proves the integrator, not the positions; the limits item says the computed path is a faithful example, not the exact one ([L335](../../public/simulations/Double%20Pendulum.html#L335)). See the [audit of the revision](../research-theory-audit.md).

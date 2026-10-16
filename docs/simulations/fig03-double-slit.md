@@ -345,3 +345,5 @@ Function map addition: `storeDerived(G)` at [754–772](../../public/simulations
 ## Teaching revision · 15 October 2026
 
 Missing even orders exclude the central maximum. The note separates a photon probability amplitude from the classical field and explains the Jacobian between angular and flat-screen counting densities. Simulation code, inline styles and figure SVGs match the latest live baseline. See the [theory audit](../research-theory-audit.md).
+
+Fixed on 2026-10-16 (second repairs): the single-photon paragraph has its picture back (each photon interferes with itself; a which-slit record removes the fringes) beside the revision's point that the classical field is not the amplitude; the dot-density paragraph gives the factor $3/4$ at $30^\circ$ ([L491](../../public/simulations/Interactive%20Double-Slit%20Experiment%20Visualization.html#L491)). See the [audit of the revision](../research-theory-audit.md).

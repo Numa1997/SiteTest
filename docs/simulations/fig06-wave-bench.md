@@ -388,3 +388,5 @@ Google Fonts; `../styles/sim.css`, `../styles/data.css`, `../styles/fold.css`; a
 ## Teaching revision · 15 October 2026
 
 Parseval and the 95% value measure mean-square displacement. String energy also weights each squared amplitude by frequency squared. The note qualifies envelope motion versus physical energy or information transport. Simulation code, inline styles and figure SVGs match the latest live baseline. See the [theory audit](../research-theory-audit.md).
+
+Fixed on 2026-10-16 (second repairs): the Square-wave sentence says again where the missing 5 % lives ([L427](../../public/simulations/wave-interference.html#L427)). See the [audit of the revision](../research-theory-audit.md).

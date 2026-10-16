@@ -43,7 +43,7 @@ places, the links into it from `portfolios.html` and its one link back out.
    scripts, so a script that adds the same link at run time survives. Seen for `./assets/…` and, since October 2026, for
    `./static/…`.
 4. **The build folder is `static/`, not Vite's default `assets/`.** All file names inside carry a content hash
-   (`index-ChNWgnGr.js`): a new build gives new names, so a browser never mixes an old cached file with a new page.
+   (`index-CsGEKbO8.js`): a new build gives new names, so a browser never mixes an old cached file with a new page.
 5. **The way back.** Each bundle contains one link to `../../portfolios.html`, the Portfolios page of this site.
 6. **No backend.** The copies are built without the apps' saved runs or server functions: the Saved runs page and the Save
    button are removed, and the Simulate page says that saving belongs to the standalone app. Everything a copy shows is
@@ -56,7 +56,7 @@ places, the links into it from `portfolios.html` and its one link back out.
 | Path | What it is |
 |---|---|
 | `index.html` | The entry page: title, description, the module script, the stylesheet loader. |
-| `static/index-DOko3Da4.js` | The whole application (React, KaTeX 0.16.47, the pages Overview, Theory, Results, Simulate, Checks), minified, 840 kB. |
+| `static/index-DGIxitSc.js` | The whole application (React, KaTeX 0.16.47, the pages Overview, Theory, Results, Simulate, Checks), minified, 841 kB. |
 | `static/index-CGriahzx.css` | Its stylesheet (the house design and the KaTeX styles), 61 kB. |
 | `static/worker-ClooJ8Gk.js` | The Web Worker: the solver of the stochastic collection equation, 131 kB. |
 | `static/KaTeX_*.{woff2,woff,ttf}` | 59 font files of KaTeX, the maths typesetter, each in up to three formats (the bundle names them; the browser picks the first format it supports, in practice woff2). |
@@ -67,7 +67,7 @@ places, the links into it from `portfolios.html` and its one link back out.
 | Path | What it is |
 |---|---|
 | `index.html` | The entry page. |
-| `static/index-ChNWgnGr.js` | The whole application, including the Report page, minified, 1.0 MB. |
+| `static/index-CsGEKbO8.js` | The whole application, including the Report page, minified, 1.01 MB. |
 | `static/index-CNYGhWdg.css` | Its stylesheet, 65 kB. |
 | `static/worker-hcWKavQc.js` | The Web Worker: the pendulum integrator, 4.5 kB. |
 | `static/KaTeX_*` | The same 59 KaTeX font files. |
@@ -140,4 +140,4 @@ The copies above were rebuilt from the apps after the repairs of the independent
 ([research-theory-audit.md](research-theory-audit.md), second part), with the KaTeX version of the native apps, 0.16.47,
 instead of the 0.16.11 of the 15 October build. The worker bundles, the figures and the study files are unchanged, and the
 stylesheets came back with their earlier hashes (`index-CGriahzx.css`, `index-CNYGhWdg.css`): only the application bundles
-changed.
+changed. They were rebuilt once more the same day, after the second repairs of the wording (`index-DGIxitSc.js`, `index-CsGEKbO8.js`).

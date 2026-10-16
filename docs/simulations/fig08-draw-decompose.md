@@ -334,3 +334,5 @@ The page's `about` paragraph ([L1403](../../public/simulations/draw-decompose.ht
 The note distinguishes continuous coefficients from sampled coefficients, RMS at corresponding samples from nearest-outline distance, and the best K-term fit within the 120 computed components from a full-transform optimum. Wire analogies are stated as sampling approximations. Simulation code, inline styles and figure SVGs match the latest live baseline. See the [theory audit](../research-theory-audit.md).
 
 Fixed on 2026-10-16: the paragraph "Keep the two meanings separate" had been placed between "normalised by 1/N:" and equation (4), which it cites; it now follows (4) ([L305](../../public/simulations/draw-decompose.html#L305)). See the [audit of the revision](../research-theory-audit.md).
+
+Fixed on 2026-10-16 (second repairs): the RMS sentence reads "it says nothing about the curve between the samples" ([L331](../../public/simulations/draw-decompose.html#L331)). See the [audit of the revision](../research-theory-audit.md).

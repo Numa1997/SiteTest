@@ -368,7 +368,7 @@ Each part's `h3` carries an `id` (`dc-cloud`, `dc-changes`, … `rp-pages`) and 
 never to the folder: the copies are single-page apps with hash routes, and a folder address answers 403 on AppDeploy
 ([AGENTS.md:47–50](../AGENTS.md#L47-L50)). The routes used here exist in the copies' bundles: `/`, `/theory`, `/results`,
 `/simulate`, `/checks` in both, and `/report` in Rotor Pendula only (each bundle's route table, e.g. `path:"/report"` in
-`public/portfolios/rotor-pendula/static/index-ChNWgnGr.js`). Both copies link back with `href="../../portfolios.html"`.
+`public/portfolios/rotor-pendula/static/index-CsGEKbO8.js`). Both copies link back with `href="../../portfolios.html"`.
 The figure images come from each copy's `fig/` folder (for example
 [`portfolios/droplet-collection/fig/fallspeed_gk.svg`](../public/portfolios/droplet-collection/fig/fallspeed_gk.svg)).
 

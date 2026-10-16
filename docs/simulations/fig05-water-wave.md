@@ -348,3 +348,5 @@ stylesheets `../styles/sim.css` (which imports the Google fonts, KaTeX's CSS and
 ## Teaching revision · 15 October 2026
 
 The model section makes the first-order circular-orbit approximation and exaggerated default steepness visible. The vorticity argument states the constant-density, inviscid, conservative-force assumptions of circulation conservation. Simulation code, inline styles and figure SVGs match the latest live baseline. See the [theory audit](../research-theory-audit.md).
+
+Fixed on 2026-10-16 (second repairs): the vorticity paragraph has its picture back (pressure through the centre, gravity at the centre, only friction could twist a parcel) with the three conditions of Kelvin's theorem named ([L253](../../public/simulations/water-wave.html#L253)). See the [audit of the revision](../research-theory-audit.md).
