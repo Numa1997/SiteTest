@@ -69,4 +69,3 @@ after its own script (all ten figures). `Sim.live()` reads the store too. Keep t
 walkthrough excerpts untouched (insert after a quoted line, never inside a quoted pair).
 How Numa expects Claude to work (persistence, plain language, build when clear) is in CLAUDE.md.
 AppDeploy reformats stored source with Prettier; base any diff on the stored snapshot (`src_read`).
-Static site only: no backend, database, login, AI or scheduled jobs.
