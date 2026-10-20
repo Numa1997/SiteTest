@@ -505,7 +505,7 @@
 
                     <section class="psec" id="p-method">
                         <h3><span class="psec__n">08</span>Computing the picture</h3>
-                        <p>The positions (17) are known in closed form, so the page never steps a differential equation forward in time: each frame evaluates the formulas afresh. Only the phase is accumulated, from the time \(\Delta t\) between frames:</p>
+                        <p>The positions (17) are known in closed form, so the page never steps a differential equation forward in time: each frame evaluates the formulas afresh. Only the phase is accumulated, from the time \(\Delta t\) between frames, capped at \(0.05\ \mathrm{s}\) so that a stalled or hidden tab does not make the wave jump (after such a pause the picture lags the clock):</p>
                         \[ \begin{aligned} \omega t &amp;\;\leftarrow\; \omega t + 2\pi f\,\Delta t, \\ f &amp;= \frac{\sqrt{g\,k_\mathrm{m}}}{2\pi}, \qquad k_\mathrm{m} = 100\,k . \end{aligned} \tag{22} \]
                         <p>The page measures \(\lambda\) in pixels, so \(k = 2\pi/\lambda\) is in radians per pixel and \(k_\mathrm{m}\) is the same wave number in radians per metre. With <em>Deep-water dispersion</em> on, \(f\) comes from (13) at full precision; the <em>Frequency \(f\)</em> slider only displays it, rounded to \(0.01\ \mathrm{Hz}\). With the switch off, \(f\) is the slider value. Adding up the phase frame by frame, rather than computing \(\omega t\) from the clock, keeps the motion smooth when \(f\) changes. Each frame then computes, for every layer \(j\) and every parcel \(i\) in it:</p>
                         <ul>
@@ -527,7 +527,7 @@
                             <li>Each parcel is a dot, \(3.8\ \mathrm{px}\) in radius at the surface and \(3.1\ \mathrm{px}\) below. The followed column is the middle one (\(i = 8\), counting from zero, at \(X_0 = 378.2\ \mathrm{px}\) on the wide field or \(190\ \mathrm{px}\) on the narrow field for 18 parcels per layer): burgundy, with larger dots and a line from each orbit centre to its parcel.</li>
                             <li>With <em>Show orbits</em> on, each orbit is a dotted circle, solid for the followed column, drawn only while its radius exceeds 1.2 screen pixels.</li>
                         </ul>
-                        <p>The drawing differs from the stored numbers in three small ways. The surface line passes through points every \(3\ \mathrm{px}\) that are not stored parcels; the canvas rounds every position to its own pixel grid; and layers that fall below the bottom of the canvas are computed and stored but not drawn.</p>
+                        <p>The drawing differs from the stored numbers in three small ways. The surface line passes through points every \(3\ \mathrm{px}\) that are not stored parcels; the canvas paints on its own pixel grid, spreading a position that falls between pixels over the edge pixels (antialiasing); and layers that fall below the bottom of the canvas are computed and stored but not drawn.</p>
                     </section>
 
                     <section class="psec" id="p-limits">

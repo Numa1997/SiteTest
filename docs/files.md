@@ -4,7 +4,7 @@ Written by [`tools/inventory.py`](../tools/inventory.py) from the files in the r
 Run `python3 tools/inventory.py` after adding, removing or changing files, and `python3 tools/inventory.py --check`
 to confirm that every file is described. Sizes are those of the files when the list was written.
 
-432 files, 12.6 MB in all. Runs of more than 12 similar files are folded; open them to see each file.
+437 files, 12.7 MB in all. Runs of more than 12 similar files are folded; open them to see each file.
 
 | Folder | Files |
 |---|---|
@@ -26,7 +26,7 @@ to confirm that every file is described. Sizes are those of the files when the l
 | [Documentation](#documentation) | 28 |
 | [Tools](#tools) | 2 |
 | [Agents of the lecture-note review](#agents-of-the-lecture-note-review) | 4 |
-| [Record of the lecture-note review](#record-of-the-lecture-note-review) | 100 |
+| [Record of the lecture-note review](#record-of-the-lecture-note-review) | 105 |
 
 ## Repository root
 
@@ -64,7 +64,7 @@ to confirm that every file is described. Sizes are those of the files when the l
 | [`public/simulations/draw-decompose.html`](../public/simulations/draw-decompose.html) | 216.3 kB | Fig. 8 · Draw & Decompose: the simulation, its data panel, walkthrough and lecture note. | [fig08-draw-decompose.md](simulations/fig08-draw-decompose.md) |
 | [`public/simulations/driven-oscillator.html`](../public/simulations/driven-oscillator.html) | 183.1 kB | Fig. 9 · Driven Oscillator: the simulation, its data panel, walkthrough and lecture note. | [fig09-driven-oscillator.md](simulations/fig09-driven-oscillator.md) |
 | [`public/simulations/phasor-sums.html`](../public/simulations/phasor-sums.html) | 262.6 kB | Fig. 7 · Phasor Sums: the simulation, its data panel, walkthrough and lecture note. | [fig07-phasor-sums.md](simulations/fig07-phasor-sums.md) |
-| [`public/simulations/water-wave.html`](../public/simulations/water-wave.html) | 163.3 kB | Fig. 5 · Circular Water Waves: the simulation, its data panel, walkthrough and lecture note. | [fig05-water-wave.md](simulations/fig05-water-wave.md) |
+| [`public/simulations/water-wave.html`](../public/simulations/water-wave.html) | 163.5 kB | Fig. 5 · Circular Water Waves: the simulation, its data panel, walkthrough and lecture note. | [fig05-water-wave.md](simulations/fig05-water-wave.md) |
 | [`public/simulations/wave-interference.html`](../public/simulations/wave-interference.html) | 170.5 kB | Fig. 6 · Wave Interference Simulator: the simulation, its data panel, walkthrough and lecture note. | [fig06-wave-bench.md](simulations/fig06-wave-bench.md) |
 | [`public/simulations/wind-turbine.html`](../public/simulations/wind-turbine.html) | 184.1 kB | Fig. 10 · Wind Turbine Control: the simulation, its data panel, walkthrough and lecture note. | [fig10-wind-turbine.md](simulations/fig10-wind-turbine.md) |
 
@@ -504,6 +504,7 @@ to confirm that every file is described. Sizes are those of the files when the l
 | [`notes/fig01/plan.md`](../notes/fig01/plan.md) | 7.0 kB | Fig. 1: the teacher's verdict on each section of the note, and what it changed. | [notes.md](notes.md) |
 | [`notes/fig01/render-check.cjs`](../notes/fig01/render-check.cjs) | 4.2 kB | Fig. 1: a measuring script of the review, or its saved output. | [notes.md](notes.md) |
 | [`notes/fig01/serve.cjs`](../notes/fig01/serve.cjs) | 1.0 kB | Fig. 1: a measuring script of the review, or its saved output. | [notes.md](notes.md) |
+| [`notes/fig01/walk.md`](../notes/fig01/walk.md) | 24.1 kB | Fig. 1: the walkthrough check and its proposed fixes. | [notes.md](notes.md) |
 | [`notes/fig02/chromium.cjs`](../notes/fig02/chromium.cjs) | 7.6 kB | Fig. 2: a measuring script of the review, or its saved output. | [notes.md](notes.md) |
 | [`notes/fig02/derive.py`](../notes/fig02/derive.py) | 3.6 kB | Fig. 2: a measuring script of the review, or its saved output. | [notes.md](notes.md) |
 | [`notes/fig02/eq9_check.py`](../notes/fig02/eq9_check.py) | 1.2 kB | Fig. 2: a measuring script of the review, or its saved output. | [notes.md](notes.md) |
@@ -517,6 +518,7 @@ to confirm that every file is described. Sizes are those of the files when the l
 | [`notes/fig02/modes.cjs`](../notes/fig02/modes.cjs) | 1.6 kB | Fig. 2: a measuring script of the review, or its saved output. | [notes.md](notes.md) |
 | [`notes/fig02/overflow.cjs`](../notes/fig02/overflow.cjs) | 1.2 kB | Fig. 2: a measuring script of the review, or its saved output. | [notes.md](notes.md) |
 | [`notes/fig02/plan.md`](../notes/fig02/plan.md) | 6.7 kB | Fig. 2: the teacher's verdict on each section of the note, and what it changed. | [notes.md](notes.md) |
+| [`notes/fig02/walk.md`](../notes/fig02/walk.md) | 19.1 kB | Fig. 2: the walkthrough check and its proposed fixes. | [notes.md](notes.md) |
 | [`notes/fig02/where.cjs`](../notes/fig02/where.cjs) | 3.1 kB | Fig. 2: a measuring script of the review, or its saved output. | [notes.md](notes.md) |
 | [`notes/fig03/check.cjs`](../notes/fig03/check.cjs) | 5.4 kB | Fig. 3: a measuring script of the review, or its saved output. | [notes.md](notes.md) |
 | [`notes/fig03/check.md`](../notes/fig03/check.md) | 23.4 kB | Fig. 3: the derivation checker's table of equations and numbers. | [notes.md](notes.md) |
@@ -532,6 +534,7 @@ to confirm that every file is described. Sizes are those of the files when the l
 | [`notes/fig04/referee.md`](../notes/fig04/referee.md) | 16.6 kB | Fig. 4: the blind referee's report on the note. | [notes.md](notes.md) |
 | [`notes/fig04/verify.cjs`](../notes/fig04/verify.cjs) | 4.8 kB | Fig. 4: a measuring script of the review, or its saved output. | [notes.md](notes.md) |
 | [`notes/fig04/walk.md`](../notes/fig04/walk.md) | 10.7 kB | Fig. 4: the walkthrough check and its proposed fixes. | [notes.md](notes.md) |
+| [`notes/fig05/check.md`](../notes/fig05/check.md) | 25.0 kB | Fig. 5: the derivation checker's table of equations and numbers. | [notes.md](notes.md) |
 | [`notes/fig05/derive.py`](../notes/fig05/derive.py) | 4.3 kB | Fig. 5: a measuring script of the review, or its saved output. | [notes.md](notes.md) |
 | [`notes/fig05/fig4_rk4.py`](../notes/fig05/fig4_rk4.py) | 2.0 kB | Fig. 5: a measuring script of the review, or its saved output. | [notes.md](notes.md) |
 | [`notes/fig05/measure-after.json`](../notes/fig05/measure-after.json) | 5.7 kB | Fig. 5: a measuring script of the review, or its saved output. | [notes.md](notes.md) |
@@ -590,7 +593,9 @@ to confirm that every file is described. Sizes are those of the files when the l
 | [`notes/fig10/measure-out.json`](../notes/fig10/measure-out.json) | 9.5 kB | Fig. 10: a measuring script of the review, or its saved output. | [notes.md](notes.md) |
 | [`notes/fig10/measure.cjs`](../notes/fig10/measure.cjs) | 5.7 kB | Fig. 10: a measuring script of the review, or its saved output. | [notes.md](notes.md) |
 | [`notes/fig10/plan.md`](../notes/fig10/plan.md) | 6.0 kB | Fig. 10: the teacher's verdict on each section of the note, and what it changed. | [notes.md](notes.md) |
+| [`notes/fig10/referee.md`](../notes/fig10/referee.md) | 14.9 kB | Fig. 10: the blind referee's report on the note. | [notes.md](notes.md) |
 | [`notes/fig10/verify-out.json`](../notes/fig10/verify-out.json) | 855 B | Fig. 10: a measuring script of the review, or its saved output. | [notes.md](notes.md) |
 | [`notes/fig10/verify.cjs`](../notes/fig10/verify.cjs) | 4.9 kB | Fig. 10: a measuring script of the review, or its saved output. | [notes.md](notes.md) |
+| [`notes/fig10/walk.md`](../notes/fig10/walk.md) | 14.4 kB | Fig. 10: the walkthrough check and its proposed fixes. | [notes.md](notes.md) |
 | [`notes/verify.mjs`](../notes/verify.mjs) | 4.4 kB | Checks the ten simulation pages in headless Chromium at desktop and phone size. | [notes.md](notes.md) |
 | [`notes/walkcheck.cjs`](../notes/walkcheck.cjs) | 1.7 kB | Searches every quoted code line of the ten walkthroughs in its page. | [notes.md](notes.md) |
