@@ -5,7 +5,7 @@ This page is the map. Every box on it has its own page in `docs/`; the links say
 ## The pages and how they link
 
 ```
-index.html  (home: CV, research, simulation plates)
+index.html  (home: logo and note, CV, research, simulation plates)
   ├── public/simulations.html      the catalog: one card per simulation, in figure order
   │     └── public/simulations/*.html   ten simulation pages (Figs. 1–10)
   └── public/portfolios.html       the two research projects
@@ -13,8 +13,8 @@ index.html  (home: CV, research, simulation plates)
         └── public/portfolios/rotor-pendula/index.html#/…        built copy of its own app
 ```
 
-Every page is a plain HTML file. There is no server code, no database and no login: the server hands out files, and
-everything else happens in the reader's browser. Pages: [pages.md](pages.md). Simulations: [simulations/](simulations/).
+Every page is a plain HTML file. There is no server code, no database and no login: the server (Cloudflare for
+phyeinusul.com, AppDeploy for the older app) hands out files, and everything else happens in the reader's browser. Pages: [pages.md](pages.md). Simulations: [simulations/](simulations/).
 Project copies: [portfolios.md](portfolios.md).
 
 ## Anatomy of a simulation page
@@ -93,13 +93,15 @@ concepts). Adding a simulation means adding its page, one entry there, and its t
 
 ## Design
 
-The house design of the Droplet Collection app (`DESIGN.md` in `droplet-collection-yl7l26`): titles in Instrument Serif
-at weight 400 only, text in IBM Plex Sans, labels in IBM Plex Mono; every box outlined, no card shadows; lecture notes in
+The house design of the Droplet Collection app (`DESIGN.md` in `droplet-collection-yl7l26`): titles at weight 400 only,
+in IBM Plex Serif on the home, catalog and Portfolios pages (`site.css`) and in Instrument Serif on the simulation pages
+(`sim.css`); text in IBM Plex Sans, labels in IBM Plex Mono; the logo `images/phyein-usul-mark.svg` in wine; every box outlined, no card shadows; lecture notes in
 Latin Modern Roman with KaTeX maths, numbered equations and figures. Details: [styles.md](styles.md), fonts and KaTeX in
 [assets.md](assets.md).
 
 ## Where the source lives
 
-The live app `numa-koudsie-website-0cyj78` on AppDeploy is the deliverable. This repository holds the same files at the
-same paths, with this documentation beside them. How a change travels from one to the other, and what the platform does
+This repository is the source. Its `main` branch is built and served by Cloudflare as Phyein Usul, <https://phyeinusul.com>
+([usul.md](usul.md)). The AppDeploy app `numa-koudsie-website-0cyj78` still runs an older copy (v65, equal to commit
+`5c7ba7f`) and is changed only on Numa's request ([appdeploy-app.md](appdeploy-app.md)). Build steps and what AppDeploy does
 on a deploy: [build-and-deploy.md](build-and-deploy.md).

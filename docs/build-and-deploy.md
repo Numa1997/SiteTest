@@ -1,21 +1,27 @@
 # Build files, tests and deployment
 
-## The repository and the app are one tree
+## Where the site runs
 
-The website runs as the AppDeploy app **`numa-koudsie-website-0cyj78`** ("Numa Koudsie website"), live at
-<https://numa-koudsie-website-0cyj78.v2.appdeploy.ai>. AppDeploy stores the source of each deployed version (its *stored
-snapshot*). This repository holds that same source, file for file and at the same paths, plus three things that are not part
-of the app: `README.md`, `docs/` and `tools/`.
+One source, two places (since 20 October 2026):
 
-The live app is the deliverable; the repository is its documented copy. A change is made and checked in the app first, then
-the same files are copied here at the same paths, the documentation is brought up to date, and the change is committed.
+| | Address | Built from | How it is deployed |
+|---|---|---|---|
+| **Phyein Usul**, primary | <https://phyeinusul.com> | this repository's `main` | `npm run build`, then `npx wrangler deploy` (Cloudflare Worker `phyein-usul`, settings in `wrangler.jsonc`): [usul.md](usul.md) |
+| AppDeploy app `numa-koudsie-website-0cyj78` | <https://numa-koudsie-website-0cyj78.v2.appdeploy.ai> | its own stored copy, v65, equal to commit `5c7ba7f` | through AppDeploy's MCP server (below), only on Numa's request: [appdeploy-app.md](appdeploy-app.md) |
 
-Checked on 14 October 2026 against stored version `1792010233353`: the app lists 238 files (`src_glob`), the repository
+The repository comes first: a change is made and checked here, the documentation is brought up to date, the change is
+committed, and it is deployed to Cloudflare when Numa asks. `README.md`, `docs/` and `tools/` are not served by either.
+
+Until 20 October 2026 the order was the other way round: the AppDeploy app was the deliverable and this repository its copy.
+AppDeploy stores the source of each deployed version (its *stored snapshot*). Checked on 14 October 2026 against stored version `1792010233353`: the app lists 238 files (`src_glob`), the repository
 holds the same 238 paths; `vite.config.ts` was restored to the app's version, and `tests/tests.json` here is newer than the
 app's (see below). Sampled files served by the live site are byte-identical to the repository (fonts, thumbnails, KaTeX,
 the study PDF and ZIP, `fold.css`, `robots.txt`); the HTML pages differ only by what the platform injects (next section).
 
-## What happens on a deploy
+## What happens on an AppDeploy deploy
+
+This section and the next describe the AppDeploy app only. On Cloudflare the build is the same `vite build`, and
+`dist/` is served exactly as built: no overlay, no rewritten links, no QA run ([usul.md](usul.md)).
 
 1. **Upload.** The files are sent to AppDeploy through its MCP server (the only interface it offers; it signs in with
    Google, Apple or X, and has no key for unattended scripts). Many or binary files go through `upload_assets`: it returns a
@@ -29,7 +35,7 @@ the study PDF and ZIP, `fold.css`, `robots.txt`); the HTML pages differ only by 
 4. **Status.** `get_app_status` reports `deploying`, then `ready` or `failed`, with QA results and runtime errors.
    `get_app_versions` lists earlier versions; `apply_app_version` rolls back to one.
 
-### What the platform changes on the way (observed)
+### What AppDeploy changes on the way (observed)
 
 | Change | Effect | How the site copes |
 |---|---|---|
@@ -79,12 +85,16 @@ door is closed a different way: no reader input ever reaches a page as HTML. The
 `textContent` ([simulations.html:285](../public/simulations.html#L285)), its field and year filters must match a
 fixed list, and the `#…` part of an address is only used to look up an element by its `id` ([fold.js:260–263](../public/scripts/fold.js#L260-L263)). Checked by reading every place the pages take input from the address, on 16 October 2026.
 
-**Outside the app's reach.** Response headers (`Strict-Transport-Security`, `X-Frame-Options`, `X-Content-Type-Options`, a
+**Outside the AppDeploy app's reach** (on phyeinusul.com these are set: `public/_headers`, see [usul.md](usul.md#security)). Response headers (`Strict-Transport-Security`, `X-Frame-Options`, `X-Content-Type-Options`, a
 policy sent as a header) are set by the server, and AppDeploy serves the files from Amazon S3 through CloudFront with no
 setting for them (as of October 2026). A policy in a `meta` tag cannot forbid framing (`frame-ancestors` is ignored there), so
 another site can still show these pages inside a frame. The site's source files are not served (`AGENTS.md`, `package.json`,
 source maps: 403), and plain `http://` is redirected to `https://` (301). The strongest protection of all is not in the code:
-whoever signs in to the AppDeploy account can replace the site, so that account and its e-mail need two-step sign-in.
+whoever signs in to the AppDeploy account can replace the app, and whoever signs in to the Cloudflare account or can push to this
+repository can replace phyeinusul.com, so those accounts and their e-mail need two-step sign-in.
+
+On phyeinusul.com the AppDeploy addresses in the policy are unused (nothing injects the overlay there), so they allow nothing that
+loads; they stay so that one page works on both hosts.
 
 **How it was tested.** On 16 October 2026, in headless Chromium, on all 15 pages, desktop and a phone profile, before and after
 the deploy: no request refused by the policy, no script error, no request to Google, and, read from Chromium's own font
@@ -93,7 +103,7 @@ site by hand: `curl -s https://numa-koudsie-website-0cyj78.v2.appdeploy.ai/ | gr
 browser's developer tools, the Network tab shows no request to `fonts.googleapis.com`.
 
 **Rules for later changes.**
-1. A new page copies lines 5–6 of any page.
+1. A new page copies lines 5–6 of any page. On phyeinusul.com, `public/_headers` covers it by itself (`/*`).
 2. A new outside resource (a script, a font, an image from another site) needs its origin added to the policy in all 15 pages,
    and [tools/make_portfolio_copy.py](../tools/make_portfolio_copy.py) takes the policy from `index.html`. Without it the browser
    refuses the resource and logs a `Refused to load` error.
@@ -112,11 +122,11 @@ These files come from AppDeploy's static-site template (`"name": "html-static-ap
 | [`vite.config.ts`](../vite.config.ts) | `base: './'` makes every address in the build relative, so the site works from any folder. `outDir` and `sourcemap` follow the platform's environment variables. `maxParallelFileOps: 128` lets Rollup copy many files at once. |
 | [`tsconfig.json`](../tsconfig.json) | TypeScript settings for `src/`. Strict mode, no output (`noEmit`): Vite compiles, TypeScript only checks. |
 | [`tailwind.config.js`](../tailwind.config.js), [`postcss.config.js`](../postcss.config.js) | Tailwind would scan `index.html` and `src/` for utility classes, and PostCSS would run Tailwind and Autoprefixer over CSS that Vite processes. |
-| [`src/main.ts`](../src/main.ts), [`src/styles.css`](../src/styles.css) | The template's script entry (it only imports the stylesheet) and the three Tailwind directives. **Unused:** `index.html` does not load `src/main.ts` (`grep -n 'main.ts' index.html` finds nothing), so neither file reaches the site, and Tailwind's classes are never generated. They are kept because the app's stored source has them; removing them is a change to make in the app first. |
+| [`src/main.ts`](../src/main.ts), [`src/styles.css`](../src/styles.css) | The template's script entry (it only imports the stylesheet) and the three Tailwind directives. **Unused:** `index.html` does not load `src/main.ts` (`grep -n 'main.ts' index.html` finds nothing), so neither file reaches the site, and Tailwind's classes are never generated. They are kept because the AppDeploy app's stored source has them and its build expects them. |
 
 ## `tests/tests.json` · the platform's QA scenarios
 
-A list of fourteen test scenarios written in plain language. After each deploy, AppDeploy's QA agent opens the live site in a
+A list of seventeen test scenarios written in plain language (AppDeploy only; Cloudflare runs no tests). After each deploy, AppDeploy's QA agent opens the live site in a
 browser and follows them, the way a person would. Each scenario has:
 
 | Field | Meaning |
@@ -129,16 +139,18 @@ browser and follows them, the way a person would. Each scenario has:
 | `steps` | What to click or type, in order. |
 | `expected` | What must be on screen at the end. |
 
-The fifteen scenarios cover: the home page and its index; the simulations catalog (order, field chip, search, links both
+The scenarios cover: the home page and its index; the simulations catalog (order, field chip, search, links both
 ways); the double pendulum's controls and chaos twin; the double slit's Greek letters and path difference; the wave
 workbench on a phone; the Fig. 1 data panel (variables, an array as a table, one recorded round); the Fig. 2 data panel
 (state vector, energy); Fig. 6 Read values with the three-way check and the dataset download; the data sheet on a phone
 (Fig. 5); Fig. 9 solving before playing and its lecture note; Fig. 10 re-solving after a controller change; the Portfolios
-page and the droplet copy; the exact wave-bench repeat and empty sum; and the zero-speed phasor recording guard and recovery.
+page and the droplet copy; the exact wave-bench repeat and empty sum; the zero-speed phasor recording guard and recovery; the
+home fold tools at the intermediate breakpoint; stored results driving the visible values; and the shared tools after the
+unused-code cleanup.
 
 **Brought up to date on 14 October 2026.** The app's stored `tests/tests.json` was an older version: its first scenario
 looked for a footer reading "Claude version", while the footer reads "© 2026 Numa Koudsie"
-([index.html:618](../index.html#L618)); and the second scenario expected the catalog to open with ten full entries, while its
+([index.html:620](../index.html#L620)); and the second scenario expected the catalog to open with ten full entries, while its
 cards now open as closed titles that a chip or a search opens. Both scenarios now describe the site as it is; the second was
 followed step by step in headless Chromium before it was written down (ten closed titles and "10 shown"; the chip Wave optics
 opens Figs. 1 and 3 with picture, equation and button, "2 of 10 shown"; the search "runge" opens Fig. 2 alone; the links go
@@ -146,10 +158,10 @@ there and back). The same file was deployed to the app.
 
 ## `AGENTS.md` and `CLAUDE.md`
 
-Both live at the root of the app and of this repository; neither is served to readers.
+Both live at the root of this repository (and of the AppDeploy app); neither is served to readers.
 [`AGENTS.md`](../AGENTS.md) is the maintainer's summary of the project: what may be changed, the layout, the design rules,
-the fold mechanism, the data pipeline, the platform quirks, the security rules. [`CLAUDE.md`](../CLAUDE.md) records how Numa expects an AI
-assistant to work on the project: persistence, plain language, the app before the repository, data tables as a pipeline,
+the fold mechanism, the data pipeline, the AppDeploy quirks, the security rules, where the site runs. [`CLAUDE.md`](../CLAUDE.md) records how Numa expects an AI
+assistant to work on the project: persistence, plain language, the repository as the source of the live site, data tables as a pipeline,
 the house design and the lecture-note style.
 
 ## Minor-fix batch A · 15 October 2026

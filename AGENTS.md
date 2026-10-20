@@ -1,17 +1,22 @@
-# Numa Koudsie website — ownership and update notes
+# Phyein Usul (Numa Koudsie's physics website) — ownership and update notes
 
-This is Numa Koudsie's physics website: AppDeploy app `numa-koudsie-website-0cyj78`, display name "Numa Koudsie website".
-Owner: Numa. Changes need Numa's explicit request.
+This is Numa Koudsie's physics website, Phyein Usul. Owner: Numa. Changes need Numa's explicit request.
 
-The GitHub repository `Numa1997/SiteTest` is this app's documented copy: the same files at the same paths, plus `README.md`, `docs/`
-(what every file and script is and how it works) and `tools/`. It is not published as a website (no GitHub Pages: Numa's decision,
-14 October 2026). Change the app first; then copy the change to the same paths there, update the `docs/` pages that describe it, and
-run `python3 tools/inventory.py` (it rewrites `docs/files.md` and fails if a file is undescribed).
+The GitHub repository `Numa1997/SiteTest` is its source: `index.html` and `public/` are the site; `README.md`, `docs/` (what every file
+and script is and how it works) and `tools/` sit beside them. It runs in two places:
+- Primary, since 20 October 2026: <https://phyeinusul.com> (and www), Cloudflare Worker `phyein-usul`, static assets only, built from
+  `main` (`npm run build`, then `npx wrangler deploy`; settings in `wrangler.jsonc`). See `docs/usul.md`.
+- The AppDeploy app `numa-koudsie-website-0cyj78` ("Numa Koudsie website"), kept as it is at v65 (equal to commit `5c7ba7f`); it is
+  updated only on Numa's request. See `docs/appdeploy-app.md`.
+No GitHub Pages (Numa's decision, 14 October 2026). Change the repository first, build and check it, update the `docs/` pages that
+describe the change, and run `python3 tools/inventory.py` (it rewrites `docs/files.md` and fails if a file is undescribed); deploying
+to Cloudflare or AppDeploy happens only when Numa asks.
 Out of bounds for writes: the ChatGPT version `numa-physics-lab-chatgpt-k0ixwk` (its earlier copy `sitetest-chatgpt-r14hvr` was deleted)
 and the unrelated app `physik-radar-xvy59b`. This is a project instruction, not a technical access control.
 
 Layout (paths below are under `public/`, which the build serves at the site root; `index.html` and the build files sit at the root): `index.html`; `styles/site.css` and `styles/sim.css`;
-`scripts/sim.js` (shared helpers, lecture-note typesetting, walkthrough engine);
+`images/phyein-usul-mark.svg` (the logo: above the name with a short note on the home page, and linking home in the top bar of
+the catalog, Portfolios and every simulation page); `_headers` (Cloudflare's response headers); `scripts/sim.js` (shared helpers, lecture-note typesetting, walkthrough engine);
 `scripts/walk/<key>.js` ("From symbols to code", one file per page, chosen by the page's `data-walk` key:
 each equation paired with the page's own code lines; keep the excerpts identical to the page code when either
 changes; live values come from `Sim.live()` in each page); `simulations/*.html` (ten pages).
@@ -33,8 +38,9 @@ the registry `scripts/catalog.js` (`SIMULATIONS`, `SIM_FIELDS`, `SIM_TOOLS`) wit
 `SIMULATIONS` (and its field in `SIM_FIELDS` if new), its thumbnail (a missing one shows the Fig. number instead), and its number in the
 hand-written Fig. links at the top of every simulation page. Simulation pages link back to `simulations.html`; the home page keeps its plates
 and links to the catalog from the hero button, the section intro and a button under the plates.
-Design: the house design of `DESIGN.md` in the app `droplet-collection-yl7l26` (the reference; read it before changing styles): Instrument
-Serif titles at weight 400 only, IBM Plex Sans text, IBM Plex Mono labels, every box outlined, no card shadows. Explanations are lecture
+Design: the house design of `DESIGN.md` in the app `droplet-collection-yl7l26` (the reference; read it before changing styles): titles at
+weight 400 only, in IBM Plex Serif on the home, catalog and Portfolios pages (`styles/site.css`) and in Instrument Serif on the simulation
+pages (`styles/sim.css`); IBM Plex Sans text, IBM Plex Mono labels, every box outlined, no card shadows. Accent wine `#7a1f2b`. Explanations are lecture
 notes set like the house LaTeX write-up: `styles/paper.css` (prose and symbols in Latin Modern Roman, self-hosted in `fonts/lm/`, token
 `--tex`; mathematics by KaTeX 0.16.11, self-hosted in `vendor/katex/`, woff2 only; abstract box, wine section badges, numbered display
 equations on the quote ground, figures on white plates with "Figure n" captions, exercise boxes). Each simulation page ends with
@@ -68,5 +74,5 @@ dataset.json + the rounds as CSV + README. The contract is at the top of datalog
 after its own script (all ten figures). `Sim.live()` reads the store too. Keep the taps where the page computes a value; keep the
 walkthrough excerpts untouched (insert after a quoted line, never inside a quoted pair).
 How Numa expects Claude to work (persistence, plain language, build when clear) is in CLAUDE.md.
-AppDeploy reformats stored source with Prettier; base any diff on the stored snapshot (`src_read`).
-Security (October 2026): every page, the two portfolio copies included, opens its head with the charset line, then a Content-Security-Policy meta tag and `<meta name="referrer" content="strict-origin-when-cross-origin">`. The policy admits the site's own files and AppDeploy's injected overlay (script from v2.appdeploy.ai, beacons to api-v2.appdeploy.ai, images from appdeploy.ai, the one install-prompt file on unpkg.com) and nothing else; inline scripts stay allowed because every page keeps its code inline and AppDeploy injects inline scripts when it serves a page. A new page copies both meta tags; a new outside resource needs its origin added to the policy in every page. Fonts are self-hosted in `fonts/` (`plex.css`, `instrument-plex.css`; IBM Plex and Instrument Serif under the SIL Open Font License, `fonts/OFL-*.txt`), the same files Google Fonts serves: never link fonts.googleapis.com again, it sends every visitor's address to Google. After copying a portfolio build, replace its `@import"https://fonts.googleapis.com/…"` with `@import"../../../fonts/instrument-plex.css"` and add the two meta tags. Response headers (HSTS, framing, nosniff) are AppDeploy's, not the app's.
+For the AppDeploy app only: AppDeploy reformats stored source with Prettier; base any diff against the app on its stored snapshot (`src_read`).
+Security (October 2026): every page, the two portfolio copies included, opens its head with the charset line, then a Content-Security-Policy meta tag and `<meta name="referrer" content="strict-origin-when-cross-origin">`. The policy admits the site's own files and AppDeploy's injected overlay (script from v2.appdeploy.ai, beacons to api-v2.appdeploy.ai, images from appdeploy.ai, the one install-prompt file on unpkg.com) and nothing else; inline scripts stay allowed because every page keeps its code inline and AppDeploy injects inline scripts when it serves a page. A new page copies both meta tags; a new outside resource needs its origin added to the policy in every page. Fonts are self-hosted in `fonts/` (`plex.css`, `instrument-plex.css`; IBM Plex and Instrument Serif under the SIL Open Font License, `fonts/OFL-*.txt`), the same files Google Fonts serves: never link fonts.googleapis.com again, it sends every visitor's address to Google. After copying a portfolio build, replace its `@import"https://fonts.googleapis.com/…"` with `@import"../../../fonts/instrument-plex.css"` and add the two meta tags. Response headers: on phyeinusul.com they come from `public/_headers` (nosniff, framing only by the site itself, referrer, permissions, opener isolation, HSTS for one year; see `docs/usul.md`); on the AppDeploy app they are AppDeploy's and cannot be set. The policy's AppDeploy origins are unused on Cloudflare and harmless.

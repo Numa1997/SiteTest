@@ -2,7 +2,7 @@
 
 | | |
 |---|---|
-| Page | [public/simulations/Double Pendulum.html](../../public/simulations/Double%20Pendulum.html) (869 lines, 100 674 bytes) |
+| Page | [public/simulations/Double Pendulum.html](../../public/simulations/Double%20Pendulum.html) (870 lines, 102 423 bytes) |
 | Walkthrough | [public/scripts/walk/pendulum.js](../../public/scripts/walk/pendulum.js) (137 lines, 8 steps, key `pendulum`) |
 | Thumbnail | [public/images/sims/double-pendulum.webp](../../public/images/sims/double-pendulum.webp) (WebP, 800 × 500 px, 12.5 kB; the pendulum, its fading trail and the protractor) |
 | Catalog entry | [public/scripts/catalog.js#L65](../../public/scripts/catalog.js#L65) (`id: 'double-pendulum'`, `fig: 2`, `field: 'mechanics'`, `stage: 2`, lines 64–80) |
@@ -246,7 +246,8 @@ burgundy fill.
 favicon ([L14](../../public/simulations/Double%20Pendulum.html#L14)). No inline style. See [styles.md](../styles.md).
 
 **Body**, top to bottom:
-- Top bar with "← All simulations" and the hand-written Fig. 1–10 links ([L17–32](../../public/simulations/Double%20Pendulum.html#L17-L32)); a `<noscript>` message ([L35](../../public/simulations/Double%20Pendulum.html#L35)).
+- Top bar: one span holding the Phyein Usul logo (a link to `../index.html` with `../images/phyein-usul-mark.svg`, 87 × 48) and
+  "← All simulations" ([L18](../../public/simulations/Double%20Pendulum.html#L18)), then the hand-written Fig. 1–10 links ([L17–32](../../public/simulations/Double%20Pendulum.html#L17-L32)); a `<noscript>` message ([L35](../../public/simulations/Double%20Pendulum.html#L35)).
 - Heading: "Fig. 2 · classical mechanics · chaos", the title, the lede ([L36–40](../../public/simulations/Double%20Pendulum.html#L36-L40)).
 - The figure: `#stage` with aspect ratio 4 : 3, and 1 : 1.05 below 900 px ([L44](../../public/simulations/Double%20Pendulum.html#L44), [sim.css:213–215](../../public/styles/sim.css#L213-L215)); the canvas `#pend`
   ([L45](../../public/simulations/Double%20Pendulum.html#L45)); the caption with `cap-t` ([L47–50](../../public/simulations/Double%20Pendulum.html#L47-L50)). The canvas is transparent where nothing is drawn, so the stage's grid
@@ -320,7 +321,7 @@ agree to the pixel; the trail is not stored.
   `energy()` ([L500–502](../../public/simulations/Double%20Pendulum.html#L500-L502)), `kinetic()`/`potential()` ([L761–762](../../public/simulations/Double%20Pendulum.html#L761-L762)), the attributes ([L432–433](../../public/simulations/Double%20Pendulum.html#L432-L433)) and eqs. (3)–(4). The pixel map
   is in `pos()` and `layout()` ([L506–507](../../public/simulations/Double%20Pendulum.html#L506-L507), [L513](../../public/simulations/Double%20Pendulum.html#L513)), the checks ([L831–835](../../public/simulations/Double%20Pendulum.html#L831-L835)), the attributes ([L444–452](../../public/simulations/Double%20Pendulum.html#L444-L452)) and note §8
   ([L358](../../public/simulations/Double%20Pendulum.html#L358)). The bob-2 radius is in `drawPendulum()` ([L599](../../public/simulations/Double%20Pendulum.html#L599)) and `bobPixel()` ([L730](../../public/simulations/Double%20Pendulum.html#L730)). The expected colours in `bobPixel()`
-  (122, 31, 43) and (90, 80, 75) are `Sim.theme.accent` and `Sim.theme.ink3` ([L729–732](../../public/simulations/Double%20Pendulum.html#L729-L732), [sim.js:12](../../public/scripts/sim.js#L12), [sim.js:16](../../public/scripts/sim.js#L16)).
+  (122, 31, 43) and (90, 80, 75) are `Sim.theme.accent` and `Sim.theme.ink3` ([L729–732](../../public/simulations/Double%20Pendulum.html#L729-L732), [sim.js:16](../../public/scripts/sim.js#L16), [sim.js:12](../../public/scripts/sim.js#L12)).
 - **Constants quoted in text.** h = 1/600 s appears in the caption ([L48](../../public/simulations/Double%20Pendulum.html#L48)), the note (§7, Figure 3) and the panel group note
   ([L778](../../public/simulations/Double%20Pendulum.html#L778)); 0.001 rad appears on the twin switch ([L61](../../public/simulations/Double%20Pendulum.html#L61)) and in the note. Change them together with `H` and `EPS` ([L396](../../public/simulations/Double%20Pendulum.html#L396)).
 - **The catalog** entry's `equation`, `model`, `method` and `controls` ([catalog.js:73–76](../../public/scripts/catalog.js#L73-L76)) describe this page.

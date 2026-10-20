@@ -1,0 +1,13 @@
+// Cloudflare deployment of Phyein Usul (https://phyeinusul.com). See docs/usul.md.
+// Static files only: `npm run build` writes dist/, and `npx wrangler deploy` publishes it.
+{
+  "name": "phyein-usul",
+  "compatibility_date": "2026-10-06",
+  "assets": { "directory": "./dist" },
+  "workers_dev": true,
+  "routes": [
+    { "pattern": "phyeinusul.com", "custom_domain": true },
+    { "pattern": "www.phyeinusul.com", "custom_domain": true }
+  ],
+  "observability": { "enabled": true }
+}
