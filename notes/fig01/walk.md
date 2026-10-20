@@ -1,7 +1,8 @@
 # Fig. 1 · walkthrough check (`circles`)
 
 Checked on 20 October 2026 by the walkthrough keeper, at commit `d3ffae1` on branch `claude/physics-notes-rewrite-cwctkk`. The
-page was last changed in `a01cf85` (the teacher's edits to §4 at L285 and L287, §6 at L308, §10.1 at L487–L490). `circles.js` was
+page, `circles.js` and `sim.js` are byte-identical at `6df11fb`, which committed a first copy of this report; this copy differs
+only in the mark count (17 keys) and in setting the M6 code fixes as blocks. The page was last changed in `a01cf85` (the teacher's edits to §4 at L285 and L287, §6 at L308, §10.1 at L487–L490). `circles.js` was
 last changed in `ce3bfc4` (15 October).
 
 - Page: `public/simulations/Circular Wave Interference Visualization.html`, 907 lines, 192 185 bytes. The lecture note is at
@@ -26,7 +27,7 @@ last changed in `ce3bfc4` (15 October).
 | `math` fields against the note | 7 | 3 (steps 1, 5, 6) | **4** (steps 2, 3, 4, 7) |
 | `note` fields against the note | 7 | 6 | **1** (step 3: "the crest you see", now contradicted by §4) |
 | `syms` rows (symbol, in code, meaning) | 22 | 20 | **2** (step 3 `a`, step 6 `v`) |
-| Marks keyed to the wrong quantity | 13 distinct keys | 12 | **1** (step 6: `f` on `ds.get('v')`) |
+| Marks keyed to the wrong quantity | 17 distinct keys | 16 | **1** (step 6: `f` on `ds.get('v')`) |
 
 The code is quoted exactly. There are six mismatches:
 
@@ -245,11 +246,23 @@ New: `where: 'Sim.clock callback; readouts() — the Speed readout',`
 Old (circles.js:83): `math: '⟦wt|ωt⟧ ← ωt + 2π ⟦f|f⟧ Δt, &nbsp; v = f λ',`
 New: `math: '⟦wt|ωt⟧ ← ωt + 2π ⟦f|f⟧ Δt, &nbsp; ⟦v|v⟧ = f λ',`
 
-Old (circles.js:85): ``code: `⟦wt|omegaT += 2 * Math.PI * freq.value * dt⟧;``
-New: ``code: `⟦wt|omegaT⟧ += 2 * Math.PI * ⟦f|freq.value⟧ * dt;``
+Old (circles.js:85):
+```
+code: `⟦wt|omegaT += 2 * Math.PI * freq.value * dt⟧;
+```
+New:
+```
+code: `⟦wt|omegaT⟧ += 2 * Math.PI * ⟦f|freq.value⟧ * dt;
+```
 
-Old (circles.js:87): `document.getElementById('r-v').textContent = Math.round(⟦f|ds.get('v')⟧) + ' px/s';`,``
-New: `document.getElementById('r-v').textContent = Math.round(⟦v|ds.get('v')⟧) + ' px/s';`,``
+Old (circles.js:87):
+```
+document.getElementById('r-v').textContent = Math.round(⟦f|ds.get('v')⟧) + ' px/s';`,
+```
+New:
+```
+document.getElementById('r-v').textContent = Math.round(⟦v|ds.get('v')⟧) + ' px/s';`,
+```
 
 Old (circles.js:91): `['v', 'v', 'freq × λ', 'phase speed, px/s']`
 New: `['v', 'v', "ds.get('v')", 'phase speed, px/s']`

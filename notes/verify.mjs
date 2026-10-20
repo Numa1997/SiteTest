@@ -1,6 +1,6 @@
 // Lead's check of the ten simulation pages after the note repairs.
-// For each page at 1440 × 900 and 390 × 844: console and page errors, KaTeX errors, sideways scroll, every fold of the
-// note opening, numbered equations present, and (at desktop width) display equations wider than their box, whose number
+// For each page at 1440 × 900, 1600 × 900 and 390 × 844: console and page errors, KaTeX errors, sideways scroll, every fold of the
+// note opening, numbered equations present, and (at the two desktop widths) display equations wider than their box, whose number
 // would then sit outside the visible part.
 // Usage: APPDEPLOY_VITE_OUT_DIR=/tmp/lead-dist npm run build && node notes/verify.mjs /tmp/lead-dist [fig numbers…]
 import { createRequire } from 'module';
@@ -26,7 +26,7 @@ const port = server.address().port;
 const browser = await chromium.launch({ executablePath: '/opt/pw-browsers/chromium-1194/chrome-linux/chrome' });
 let bad = 0;
 for (const [fig, file] of PAGES) {
-  for (const [vw, vh, tag] of [[1440, 900, 'desk'], [390, 844, 'phone']]) {
+  for (const [vw, vh, tag] of [[1440, 900, 'desk'], [1600, 900, 'wide'], [390, 844, 'phone']]) {
     const page = await browser.newPage({ viewport: { width: vw, height: vh } });
     const errs = [];
     page.on('console', m => { if (m.type() === 'error') errs.push(m.text()); });
@@ -47,7 +47,7 @@ for (const [fig, file] of PAGES) {
         sideways: document.documentElement.scrollWidth - document.documentElement.clientWidth,
         tags, wide, closed, refs: p.querySelectorAll('.prefs li').length, refLinks: p.querySelectorAll('.prefs li a[href]').length
       };
-    }, tag === 'desk');
+    }, tag !== 'phone');
     const ok = !errs.length && !r.katexErr && r.sideways <= 0 && !r.wide.length && !r.closed;
     if (!ok) bad++;
     console.log(`Fig ${fig} ${tag}: ${ok ? 'ok' : 'PROBLEM'} · errors ${errs.length}${errs.length ? ' ' + errs.slice(0, 2).join(' | ') : ''} · katexErr ${r.katexErr} · sideways ${r.sideways}px · closed folds ${r.closed} · eqs ${r.tags.length} (${r.tags[0] || ''}…${r.tags[r.tags.length - 1] || ''}) · refs ${r.refs}, linked ${r.refLinks}${r.wide.length ? ' · WIDE: ' + r.wide.join(', ') : ''}`);

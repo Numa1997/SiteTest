@@ -2,7 +2,7 @@
 
 | | |
 |---|---|
-| Page | [public/simulations/Double Pendulum.html](../../public/simulations/Double%20Pendulum.html) (870 lines, 104 526 bytes) |
+| Page | [public/simulations/Double Pendulum.html](../../public/simulations/Double%20Pendulum.html) (870 lines, 105 179 bytes) |
 | Walkthrough | [public/scripts/walk/pendulum.js](../../public/scripts/walk/pendulum.js) (137 lines, 8 steps, key `pendulum`) |
 | Thumbnail | [public/images/sims/double-pendulum.webp](../../public/images/sims/double-pendulum.webp) (WebP, 800 × 500 px, 12.5 kB; the pendulum, its fading trail and the protractor) |
 | Catalog entry | [public/scripts/catalog.js#L65](../../public/scripts/catalog.js#L65) (`id: 'double-pendulum'`, `fig: 2`, `field: 'mechanics'`, `stage: 2`, lines 64–80) |
@@ -362,3 +362,7 @@ ln 2/(60 |ln 0.992|) ([L358](../../public/simulations/Double%20Pendulum.html#L35
 ## Repair round · 20 October 2026
 
 After the independent referee and derivation checks (`notes/fig02/`), the lead made only these changes, each on its existing line, so no line link moved: equations (5), (8), (9) and (13) broken over two or three lines so their numbers show at 1440 px ([L206](../../public/simulations/Double%20Pendulum.html#L206)); (8) ([L218](../../public/simulations/Double%20Pendulum.html#L218)); (9) ([L220](../../public/simulations/Double%20Pendulum.html#L220)); (13) ([L347](../../public/simulations/Double%20Pendulum.html#L347)). Checked in headless Chromium at 1440 × 900 and 390 × 844: no console or KaTeX errors, no sideways scroll, no display equation wider than its box at 1440 px (`notes/verify.mjs`).
+
+## Second check round · 20 October 2026
+
+From the derivation checks and blind referees that ran after the usage limit lifted (`notes/fig02/`), each change on its existing line: §5: the matrix whose determinant must vanish written out, and why ([L228](../../public/simulations/Double%20Pendulum.html#L228)); §6: why two nearby starts part (linear small swings; balancing near the top) ([L335](../../public/simulations/Double%20Pendulum.html#L335)); §6: the rough and full Lyapunov rates in one sentence; "much of what that energy allows" ([L337](../../public/simulations/Double%20Pendulum.html#L337)); §9: the Lyapunov time defined ([L368](../../public/simulations/Double%20Pendulum.html#L368)); equations (6), (9), (11) reflowed so their numbers show at 1600 px ([L212](../../public/simulations/Double%20Pendulum.html#L212)). Checked with `notes/verify.mjs` at 1440 × 900, 1600 × 900 and 390 × 844.

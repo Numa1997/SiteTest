@@ -2,7 +2,7 @@
 
 | | |
 |---|---|
-| Page | [public/simulations/wind-turbine.html](../../public/simulations/wind-turbine.html) (1 171 lines, 184 125 bytes) |
+| Page | [public/simulations/wind-turbine.html](../../public/simulations/wind-turbine.html) (1 171 lines, 184 619 bytes) |
 | Walkthrough | [public/scripts/walk/turbine.js](../../public/scripts/walk/turbine.js) (121 lines, 7 steps, key `turbine`) |
 | Thumbnail | [public/images/sims/wind-turbine.webp](../../public/images/sims/wind-turbine.webp) (WebP, 800 × 500 px, 15.4 kB) |
 | Catalog entry | [public/scripts/catalog.js#L200](../../public/scripts/catalog.js#L200-L216) (`id: 'wind-turbine'`, `fig: 10`, `field: 'control'`, `stage: 2`, lines 200–216) |
@@ -460,3 +460,7 @@ Judged section by section against `notes/STANDARD.md` (plan and verdicts in `not
 ## Repair round · 20 October 2026
 
 After the independent referee and derivation checks (`notes/fig10/`), the lead made only these changes, each on its existing line, so no line link moved: equations (3) and (10) broken over two lines so their numbers show at 1440 px ([L224](../../public/simulations/wind-turbine.html#L224)); (10) ([L345](../../public/simulations/wind-turbine.html#L345)). Checked in headless Chromium at 1440 × 900 and 390 × 844: no console or KaTeX errors, no sideways scroll, no display equation wider than its box at 1440 px (`notes/verify.mjs`).
+
+## Second check round · 20 October 2026
+
+From the derivation checks and blind referees that ran after the usage limit lifted (`notes/fig10/`), each change on its existing line: Figure 1: the tip speed drawn out of the page ([L197](../../public/simulations/wind-turbine.html#L197)); Figure 3: labels fit, subscripts set ([L306](../../public/simulations/wind-turbine.html#L306)); §2: power is torque times angular speed ([L216](../../public/simulations/wind-turbine.html#L216)); §4: the inflow angle 7° for the undisturbed wind, about 6° for the slowed air; one repeated sentence removed ([L235](../../public/simulations/wind-turbine.html#L235)); §6.1: the code, not the fit, gives no torque at a standstill ([L340](../../public/simulations/wind-turbine.html#L340)); §6.2 and §7: the Step wind is a 2 s ramp; overshoot 0.39 rpm ([L346](../../public/simulations/wind-turbine.html#L346)); equation (8) reflowed so its number shows at 1600 px ([L339](../../public/simulations/wind-turbine.html#L339)). Checked with `notes/verify.mjs` at 1440 × 900, 1600 × 900 and 390 × 844.

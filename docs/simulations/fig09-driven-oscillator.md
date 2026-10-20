@@ -2,7 +2,7 @@
 
 | | |
 |---|---|
-| Page | [public/simulations/driven-oscillator.html](../../public/simulations/driven-oscillator.html) (1 113 lines, 183 071 bytes) |
+| Page | [public/simulations/driven-oscillator.html](../../public/simulations/driven-oscillator.html) (1 113 lines, 183 130 bytes) |
 | Walkthrough | [public/scripts/walk/driven.js](../../public/scripts/walk/driven.js) (121 lines, 7 steps, key `driven`) |
 | Thumbnail | [public/images/sims/driven-oscillator.webp](../../public/images/sims/driven-oscillator.webp) (WebP, 800 × 500 px, 23.7 kB) |
 | Catalog entry | [public/scripts/catalog.js#L183](../../public/scripts/catalog.js#L183-L199) (`id: 'driven-oscillator'`, `fig: 9`, `field: 'control'`, `stage: 1`, lines 183–199) |
@@ -421,3 +421,7 @@ Vol. I, chapters 23 and 24 ([L448–L451](../../public/simulations/driven-oscill
 ## Repair round · 20 October 2026
 
 After the independent referee and derivation checks (`notes/fig09/`), the lead made only these changes, each on its existing line, so no line link moved: §2: ω_d no longer used before ζ is defined ([L205](../../public/simulations/driven-oscillator.html#L205)); §3.2: the ringing written before its constants are fixed ([L221](../../public/simulations/driven-oscillator.html#L221)); §5: X(s), F(s) named as transforms ([L332](../../public/simulations/driven-oscillator.html#L332)); Figure 3: the plant box widened so G(s) fits ([L342](../../public/simulations/driven-oscillator.html#L342)); §9: every run drawn at its own scale; compare runs on the ruler ([L435](../../public/simulations/driven-oscillator.html#L435)). Checked in headless Chromium at 1440 × 900 and 390 × 844: no console or KaTeX errors, no sideways scroll, no display equation wider than its box at 1440 px (`notes/verify.mjs`).
+
+## Second check round · 20 October 2026
+
+From the derivation checks and blind referees that ran after the usage limit lifted (`notes/fig09/`), each change on its existing line: §3.1: the driving term, not the force, is the real part of (F₀/m)e^{iΩt} ([L215](../../public/simulations/driven-oscillator.html#L215)); equation (3) reflowed so its number shows at 1600 px ([L216](../../public/simulations/driven-oscillator.html#L216)). Checked with `notes/verify.mjs` at 1440 × 900, 1600 × 900 and 390 × 844.

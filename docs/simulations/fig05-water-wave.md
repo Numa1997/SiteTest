@@ -2,7 +2,7 @@
 
 | | |
 |---|---|
-| Page | [public/simulations/water-wave.html](../../public/simulations/water-wave.html) (891 lines, 163 265 bytes) |
+| Page | [public/simulations/water-wave.html](../../public/simulations/water-wave.html) (891 lines, 163 474 bytes) |
 | Walkthrough | [public/scripts/walk/water.js](../../public/scripts/walk/water.js) (116 lines, key `water`) |
 | Thumbnail | [public/images/sims/water-wave.webp](../../public/images/sims/water-wave.webp) (800 × 500 px, 15 kB) |
 | Catalog entry | [public/scripts/catalog.js#L115](../../public/scripts/catalog.js#L115) (lines 115–131, `id: 'water-wave'`, `fig: 5`) |
@@ -362,3 +362,7 @@ to a page that was opened ([L545-L548](../../public/simulations/water-wave.html#
 ## Repair round · 20 October 2026
 
 After the independent referee and derivation checks (`notes/fig05/`), the lead made only these changes, each on its existing line, so no line link moved: Figure 1 caption: its two labels point to (4) and (9) ([L243](../../public/simulations/water-wave.html#L243)); §4.2: gz becomes gη at the surface ([L273](../../public/simulations/water-wave.html#L273)); §07: the sin² half of the Stokes-drift picture ([L453](../../public/simulations/water-wave.html#L453)); §08: W_field defined where first used ([L512](../../public/simulations/water-wave.html#L512)). Checked in headless Chromium at 1440 × 900 and 390 × 844: no console or KaTeX errors, no sideways scroll, no display equation wider than its box at 1440 px (`notes/verify.mjs`).
+
+## Second check round · 20 October 2026
+
+From the derivation checks and blind referees that ran after the usage limit lifted (`notes/fig05/`), each change on its existing line: §08: Δt capped at 0.05 s ([L508](../../public/simulations/water-wave.html#L508)); §09: the canvas antialiases, it does not round positions ([L530](../../public/simulations/water-wave.html#L530)). Checked with `notes/verify.mjs` at 1440 × 900, 1600 × 900 and 390 × 844.

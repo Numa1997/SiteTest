@@ -2,7 +2,7 @@
 
 | | |
 |---|---|
-| Page | [public/simulations/phasor-sums.html](../../public/simulations/phasor-sums.html) (1 479 lines, 262 578 bytes) |
+| Page | [public/simulations/phasor-sums.html](../../public/simulations/phasor-sums.html) (1 479 lines, 262 793 bytes) |
 | Walkthrough | [public/scripts/walk/phasors.js](../../public/scripts/walk/phasors.js) (key `phasors`, 8 steps) |
 | Thumbnail | [public/images/sims/phasor-sums.webp](../../public/images/sims/phasor-sums.webp) (800 × 500 px: the 3-petal rose with its two arms and circles) |
 | Catalog entry | [public/scripts/catalog.js#L150](../../public/scripts/catalog.js#L150) (`id: 'phasor-sums'`, `fig: 7`, field `methods`, stage 2) |
@@ -382,3 +382,7 @@ A stationary pen need not make a cusp. The listed-arm common period can exceed t
 ## Repair round · 20 October 2026
 
 After the independent referee and derivation checks (`notes/fig07/`), the lead made only these changes, each on its existing line, so no line link moved: §2.1: a parenthesis using symbols defined later removed ([L261](../../public/simulations/phasor-sums.html#L261)); §4: the beat length rises and falls at the full difference rate ([L381](../../public/simulations/phasor-sums.html#L381)); §4.1: why odd n gives n petals ([L389](../../public/simulations/phasor-sums.html#L389)); §4.2: why the law of cosines has a plus ([L439](../../public/simulations/phasor-sums.html#L439)); §7.1: blends are not the curves of the in-between settings ([L609](../../public/simulations/phasor-sums.html#L609)). Checked in headless Chromium at 1440 × 900 and 390 × 844: no console or KaTeX errors, no sideways scroll, no display equation wider than its box at 1440 px (`notes/verify.mjs`).
+
+## Second check round · 20 October 2026
+
+From the derivation checks and blind referees that ran after the usage limit lifted (`notes/fig07/`), each change on its existing line: §7.1: blends are in-between curves for a change of radius, not for frequency or phase ([L609](../../public/simulations/phasor-sums.html#L609)); §8.1: the beat burst as the code applies it (1 + 0.9 d_burst, ten frames) ([L624](../../public/simulations/phasor-sums.html#L624)). Checked with `notes/verify.mjs` at 1440 × 900, 1600 × 900 and 390 × 844.

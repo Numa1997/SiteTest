@@ -2,7 +2,7 @@
 
 | | |
 |---|---|
-| Page | [public/simulations/Circular Wave Interference Visualization.html](../../public/simulations/Circular%20Wave%20Interference%20Visualization.html) (907 lines, 192 185 bytes) |
+| Page | [public/simulations/Circular Wave Interference Visualization.html](../../public/simulations/Circular%20Wave%20Interference%20Visualization.html) (907 lines, 192 593 bytes) |
 | Walkthrough | [public/scripts/walk/circles.js](../../public/scripts/walk/circles.js) (110 lines, key `circles`) |
 | Thumbnail | [public/images/sims/wave-sources.webp](../../public/images/sims/wave-sources.webp) (WebP, 800 × 500 px, 36.5 kB; a still of the two-source field) |
 | Catalog entry | [public/scripts/catalog.js#L48](../../public/scripts/catalog.js#L48) (`id: 'wave-sources'`, `fig: 1`, `field: 'optics'`, `stage: 1`, lines 47–63) |
@@ -330,3 +330,7 @@ The plotted curves of Figures 3 and 4 are single SVG paths of 10–23 kB each on
 The note distinguishes the chosen ring field from a physical two-dimensional wave-equation solution before the derivation; kr = 1 is a crossover, not an asymptotic accuracy guarantee. The colour is instantaneous signed displacement, not the amplitude map. Simulation code, inline styles and figure SVGs match the latest live baseline. See the [theory audit](../research-theory-audit.md).
 
 Fixed on 2026-10-16 (second repairs): the opening says in plain words what the figure adds and what it simplifies, and the $kr \gg 1$ caveat gives the size of the first correction, a phase lag of $1/(8kr)$ ([L190](../../public/simulations/Circular%20Wave%20Interference%20Visualization.html#L190)). See the [audit of the revision](../research-theory-audit.md).
+
+## Second check round · 20 October 2026
+
+From the derivation checks and blind referees that ran after the usage limit lifted (`notes/fig01/`), each change on its existing line: §4: k, ω and aᵢ defined where (6) uses them, not only in the ★ Section 3 ([L282](../../public/simulations/Circular%20Wave%20Interference%20Visualization.html#L282)); §7: opens by recalling the beam directions of the ★ Section 6 ([L379](../../public/simulations/Circular%20Wave%20Interference%20Visualization.html#L379)); §10: dispersion contrasted correctly (in water the frequency fixes the wavelength) ([L478](../../public/simulations/Circular%20Wave%20Interference%20Visualization.html#L478)). Checked with `notes/verify.mjs` at 1440 × 900, 1600 × 900 and 390 × 844.
