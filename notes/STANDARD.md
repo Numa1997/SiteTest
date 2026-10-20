@@ -73,4 +73,7 @@ What this means for every agent:
 5. **Do not overload the simulations.** No new sections, figures or boxes unless the judgment shows the explanation cannot
    stand without them. The page's code is never touched.
 
-The pilot's verdict goes below this one.
+**20 October 2026, later.** Numa: "YOU JUDGE, YOU DECIDE, NOT ME". The lead judges each note and decides what changes; Numa
+is not asked to choose between options. Where the brief says "ask Numa" or "wait for Numa's yes" about the notes (pilot
+choice, pilot verdict, the swarm, the notes/ folder in the pull request), the lead decides and reports the decision with its
+reason. Still out of bounds without his explicit word: page code, deploys, other repositories, merging.
