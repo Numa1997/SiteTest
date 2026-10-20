@@ -263,3 +263,7 @@ Listeners: `window` `error` ([sim.js:230](../../public/scripts/sim.js#L230)); `D
 7. The "Now" column is rewritten every 200 ms ([sim.js:326](../../public/scripts/sim.js#L326)), 5 times a second, and the
    interval keeps running while the walkthrough is folded away. CLAUDE.md asks for "about 4 per second" for readouts of a
    running figure; this column sits outside the figure, so the rule may not apply.
+
+## The Algebra column is typeset (21 October 2026)
+
+`algebra(math)` in `sim.js` splits a step's `math` field at each `<br>`, translates each line from the light HTML it is written in (`<sub>`, `<sup>`, Unicode symbols, upright `<span style="font-style: normal">` words) to TeX with `htmlToTex()`, and typesets it with KaTeX, the same mathematics as the lecture note. A mark `⟦key|…⟧` becomes `\htmlClass{k}{\htmlData{k=key}{…}}`, so hovering still lights the formula, the code and the table together. A line KaTeX cannot read stays as written. The walkthrough is drawn again when KaTeX has loaded (the `typeset` event). Checked on all ten pages: 270 of 270 lines typeset, no sideways scroll at 390 px.

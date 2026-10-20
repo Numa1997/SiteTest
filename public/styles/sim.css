@@ -227,3 +227,6 @@ input[type="range"]:disabled { opacity: .45; cursor: not-allowed; }
 /* a caption's equation stays hidden until KaTeX has set it, so its TeX source never shows */
 html:not(.tex-ready) .stage__cap .tx { visibility: hidden; }
 .stage__cap .katex { font-size: 1.04em; color: var(--ink-2); }
+
+/* typeset walkthrough formulas: one line each; a long line scrolls inside its column instead of widening the page */
+.walk__line { overflow-x: auto; overflow-y: hidden; padding: 2px 0; }
