@@ -12,7 +12,7 @@ Project facts (layout, where the site runs, boundaries) are in AGENTS.md.
   (api.stackexchange.com/2.3) answers, and its "similar" endpoint matches a plain-language question.
 - Read primary sources whole. Download the PDF, open the source file, run the code. Never pass off a search
   summary as the source, and never cite a paper you have not read when you could have read it.
-- Measure numbers instead of estimating them. Example: the Fig. 1 field grid is 350 × 158 = 55 300 points on a
+- Measure numbers instead of estimating them. Example: the Fig. 1 field grid is 360 × 162 = 58 320 points on a
   1280–1600 px wide screen, 360 × 360 at 880 px; measured in headless Chromium, not guessed.
 
 ## Build when the request is clear
