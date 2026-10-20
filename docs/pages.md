@@ -4,16 +4,26 @@ Four files make the frame around the ten simulation pages:
 
 | File | Served at | Lines | What it is |
 |---|---|---|---|
-| [`index.html`](../index.html) | `/` | 1262 | The home page: CV, research, eight figure plates, a live double pendulum. |
-| [`public/simulations.html`](../public/simulations.html) | `/simulations.html` | 355 | The catalog: one fold card per simulation, search, field and year chips. |
+| [`index.html`](../index.html) | `/` | 1258 | The home page: the Phyein Usul logo and note, CV, research, eight figure plates, a live double pendulum. |
+| [`public/simulations.html`](../public/simulations.html) | `/simulations.html` | 353 | The catalog: one fold card per simulation, search, field and year chips. |
 | [`public/portfolios.html`](../public/portfolios.html) | `/portfolios.html` | 286 | The two research projects and the links into their copies. |
 | [`public/robots.txt`](../public/robots.txt) | `/robots.txt` | 4 | Rules for search-engine crawlers. |
 
 The build copies everything under `public/` to the site root, so a page under `public/` links to `styles/…` and
-`scripts/…` without a `public/` prefix (see [build-and-deploy.md](build-and-deploy.md)). Checked on 14 October 2026: the live
-site serves `/styles/site.css` and the six other stylesheets and `robots.txt` byte for byte as in the repository; the three
-HTML pages differ only by lines the platform injects into `<head>` (an overlay script, `og:`/`twitter:` meta tags, and on the
-home page also a web-app manifest and a service-worker registration).
+`scripts/…` without a `public/` prefix (see [build-and-deploy.md](build-and-deploy.md)). The same folder also holds
+[`public/_headers`](../public/_headers), which is not a page: Cloudflare reads it for the security headers and never serves it
+(measured: `/_headers` answers 404); AppDeploy ignores it ([usul.md](usul.md)).
+
+The site runs in two places. Checked on 14 October 2026 on the AppDeploy app
+(https://numa-koudsie-website-0cyj78.v2.appdeploy.ai, [appdeploy-app.md](appdeploy-app.md)): it serves `/styles/site.css` and
+the six other stylesheets and `robots.txt` byte for byte as in the repository; the three HTML pages differ only by lines the
+platform injects into `<head>` (an overlay script, `og:`/`twitter:` meta tags, and on the home page also a web-app manifest and
+a service-worker registration). That app is older than the repository: on 20 October 2026 its home page has no logo and no
+hero note, and it sends none of the `_headers` headers. Checked on 20 October 2026 on Cloudflare (https://phyeinusul.com and
+www.phyeinusul.com, [usul.md](usul.md)): the three HTML pages, the seven stylesheets and `robots.txt` are served byte for byte as
+in the repository, with nothing injected. Cloudflare answers an address ending in `.html` with a 307 redirect to the same
+address without it (`/simulations.html` → `/simulations`, `/index.html` → `/`), so on that host the pages' own addresses carry
+no `.html`.
 
 Related pages: the fold mechanism is in [scripts/fold.md](scripts/fold.md), the registry the catalog draws from in
 [scripts/catalog.md](scripts/catalog.md), the stylesheets in [styles.md](styles.md), the project copies in
@@ -28,8 +38,9 @@ Related pages: the fold mechanism is in [scripts/fold.md](scripts/fold.md), the 
 | Security policy and referrer rule, right after the charset line ([build-and-deploy.md](build-and-deploy.md#security)) | [5–6](../index.html#L5-L6) | [5–6](../public/simulations.html#L5-L6) | [5–6](../public/portfolios.html#L5-L6) |
 | Favicon: an inline SVG, a wine square with a letter | "N" [17–20](../index.html#L17-L20) | "NK" [20–23](../public/simulations.html#L20-L23) | "NK" [21–24](../public/portfolios.html#L21-L24) |
 | Skip link (`.skip-link`) | to `#main` [27](../index.html#L27) | to `#catalog` [30](../public/simulations.html#L30) | to `#projects` [31](../public/portfolios.html#L31) |
-| `scripts/fold.js` at the end of `<body>` | [622](../index.html#L622) | [123](../public/simulations.html#L123) | [267](../public/portfolios.html#L267) |
-| Footer: © line and "Back to top" | [617–620](../index.html#L617-L620) | [118–121](../public/simulations.html#L118-L121) | [262–265](../public/portfolios.html#L262-L265) |
+| Phyein Usul logo [`images/phyein-usul-mark.svg`](../public/images/phyein-usul-mark.svg) in an `a` to `index.html` (the ten simulation pages carry the same 87 × 48 logo in their top bar, linking to `../index.html`) | top of the hero, 217 × 120 [31](../index.html#L31) | top bar, 87 × 48 [33](../public/simulations.html#L33) | top bar, 87 × 48 [34](../public/portfolios.html#L34) |
+| `scripts/fold.js` at the end of `<body>` | [624](../index.html#L624) | [123](../public/simulations.html#L123) | [267](../public/portfolios.html#L267) |
+| Footer: © line and "Back to top" | [619–622](../index.html#L619-L622) | [118–121](../public/simulations.html#L118-L121) | [262–265](../public/portfolios.html#L262-L265) |
 
 The `js` class matters for one thing: [site.css:769–779](../public/styles/site.css#L769-L779) hides `.reveal` blocks
 only under `.js`, so without JavaScript nothing waits for a fade-in.
@@ -37,13 +48,16 @@ only under `.js`, so without JavaScript nothing waits for a fade-in.
 `fold.js` runs its `boot()` at `DOMContentLoaded` ([fold.js:404–411](../public/scripts/fold.js#L404-L411)). Each page's
 inline script sits after it and runs during parsing, so the inline script always runs first and fold.js then reshapes the
 finished DOM. What a reader opens or closes is stored in `localStorage` under `fold:` plus the path
-([fold.js:61](../public/scripts/fold.js#L61)); measured keys: `fold:/` for the home page and `fold:/simulations.html`.
+([fold.js:61](../public/scripts/fold.js#L61)); measured keys on AppDeploy: `fold:/` for the home page and
+`fold:/simulations.html`. On phyeinusul.com the path has no `.html` (see above), so the catalog's key there is
+`fold:/simulations`; the two hosts are different origins and never share stored choices anyway.
 
 ---
 
 ## 1. `index.html` · the home page
 
-**Purpose.** A one-page CV in the look of a physics journal: name and tagline, a live double pendulum (Fig. 0), positions,
+**Purpose.** A one-page CV in the look of a physics journal: the Phyein Usul logo and a short note on what the site is, name
+and tagline, a live double pendulum (Fig. 0), positions,
 education, research projects, eight simulation plates and skills. It is the entry page of the site and of the Vite build.
 
 ### Head
@@ -57,8 +71,8 @@ education, research projects, eight simulation plates and skills. It is the entr
 | [16](../index.html#L16) | `styles/fold.css` (the fold cards) |
 | [21–23](../index.html#L21-L23) | `className = 'js'` |
 
-Scripts, in load order, at the end of `<body>`: `scripts/fold.js` ([622](../index.html#L622)), then the inline script
-([623–1254](../index.html#L623-L1254)). No KaTeX, no `paper.css`: the home page has no mathematics typeset.
+Scripts, in load order, at the end of `<body>`: `scripts/fold.js` ([624](../index.html#L624)), then the inline script
+([625–1256](../index.html#L625-L1256)). No KaTeX, no `paper.css`: the home page has no mathematics typeset.
 
 Fonts as measured in Chromium: IBM Plex Sans 400/500, IBM Plex Mono 400/500, IBM Plex Serif 600 (titles) and 400 italic (the
 tagline). All come from this site: the `@import` in [site.css:5](../public/styles/site.css#L5) loads `fonts/plex.css`, which points at
@@ -66,33 +80,37 @@ the files in `fonts/ibm-plex-*/` ([assets.md](assets.md#publicfonts--ibm-plex-an
 
 ### Body, section by section
 
-**Hero** `header.hero#top` ([29–59](../index.html#L29-L59)), a two-column grid ([site.css:126–135](../public/styles/site.css#L126-L135)):
+**Hero** `header.hero#top` ([29–61](../index.html#L29-L61)), a two-column grid ([site.css:126–135](../public/styles/site.css#L126-L135)):
 
-- `.hero__text`: `h1.hero__name` with two `span`s and the wine `.dot` ([31–33](../index.html#L31-L33)); `.hero__tag` ([34–38](../index.html#L34-L38));
-  `.hero__meta` with place, e-mail and GitHub ([39–45](../index.html#L39-L45)); `.hero__cta` with three buttons: `See positions`
-  (`#positions`), `Open the simulations` (`simulations.html`), `Research portfolios` (`portfolios.html`) ([46–50](../index.html#L46-L50)).
-- `figure.figure` ([52–58](../index.html#L52-L58)): `canvas#pendulum` inside `.figure__stage`, caption "Fig. 0 · double pendulum ·
+- `.hero__text`: first the logo, an `a[href="index.html"]` around `img` `images/phyein-usul-mark.svg` at 217 × 120 css px
+  ([31](../index.html#L31)), then a `p` with the note "Phyein Usul · φύειν أصول, roots that grow. A personal website and an
+  archive: my work, notes and simulations kept in one place, the older pieces beside what grew from them."
+  ([32](../index.html#L32)); both are styled inline, not in `site.css`. Then
+  `h1.hero__name` with two `span`s and the wine `.dot` ([33–35](../index.html#L33-L35)); `.hero__tag` ([36–40](../index.html#L36-L40));
+  `.hero__meta` with place, e-mail and GitHub ([41–47](../index.html#L41-L47)); `.hero__cta` with three buttons: `See positions`
+  (`#positions`), `Open the simulations` (`simulations.html`), `Research portfolios` (`portfolios.html`) ([48–52](../index.html#L48-L52)).
+- `figure.figure` ([54–60](../index.html#L54-L60)): `canvas#pendulum` inside `.figure__stage`, caption "Fig. 0 · double pendulum ·
   RK4 · live" and `button#pendulum-reset`.
 
-**Layout** `div.layout` ([61–615](../index.html#L61-L615)): a 200 px column for the index and the content column
+**Layout** `div.layout` ([63–617](../index.html#L63-L617)): a 200 px column for the index and the content column
 ([site.css:278–285](../public/styles/site.css#L278-L285)).
 
-- `nav.index[data-fold-bar]` ([62–72](../index.html#L62-L72)): links to the five sections and `portfolios.html` ("Portfolios ↗").
+- `nav.index[data-fold-bar]` ([64–74](../index.html#L64-L74)): links to the five sections and `portfolios.html` ("Portfolios ↗").
   On wide screens it sticks 28 px from the top as a side column; at 980 px and below it becomes a full-width bar at the top
   ([site.css:803–813](../public/styles/site.css#L803-L813)). The attribute `data-fold-bar` lets fold.js measure it: measured
   `--fold-top` is 0 px at 1280 px (the side column does not count, [fold.js:295](../public/scripts/fold.js#L295)) and 49 px at
   900 and 390 px, so open section headers pin below the bar.
-- `main.content#main` ([74–614](../index.html#L74-L614)) holds five `section.section` elements, each with an `id` and an `h2`:
+- `main.content#main` ([76–616](../index.html#L76-L616)) holds five `section.section` elements, each with an `id` and an `h2`:
 
 | Section | Lines | Structure (classes a maintainer edits) | fold.js counts line |
 |---|---|---|---|
-| `#positions` "Positions" | [75–199](../index.html#L75-L199) | `.timeline` with `.timeline__line` (the wine line that grows) and seven `article.entry.reveal`: `.entry__when` (dates, optional `.tag` "current", `.tag.tag--soft`), `h3`, `.entry__org`, `ul.bullets`. The current one also has `.entry--current` (filled pulsing dot). | "7 roles" (`article.entry`) |
-| `#education` "Education" | [201–230](../index.html#L201-L230) | `.ledger` with three `.row.reveal`: `.row__when`, `h3`, `.row__org`, optional `.row__note` | "3 qualifications" (`h3`) |
-| `#research` "Research projects" | [232–276](../index.html#L232-L276) | `.section__intro` linking to Portfolios, `.projects` with three `article.project.reveal` (`.project__status`, `h3`, `ul.bullets`), then a `Portfolios →` button in `p.plates__more` | "3 projects" (`article`) |
-| `#simulations` "Interactive physics simulations" | [278–573](../index.html#L278-L573) | `.section__intro`, `.plates` with eight `article.plate.reveal` (Figs. 1–8), then `All simulations →` | "8 figures" (`article`) |
-| `#skills` "Skills & languages" | [575–613](../index.html#L575-L613) | `dl.skills`, seven `div.reveal` each with `dt` and `dd`; language levels in `span.lvl` | "7 areas" (`dt`) |
+| `#positions` "Positions" | [77–201](../index.html#L77-L201) | `.timeline` with `.timeline__line` (the wine line that grows) and seven `article.entry.reveal`: `.entry__when` (dates, optional `.tag` "current", `.tag.tag--soft`), `h3`, `.entry__org`, `ul.bullets`. The current one also has `.entry--current` (filled pulsing dot). | "7 roles" (`article.entry`) |
+| `#education` "Education" | [203–232](../index.html#L203-L232) | `.ledger` with three `.row.reveal`: `.row__when`, `h3`, `.row__org`, optional `.row__note` | "3 qualifications" (`h3`) |
+| `#research` "Research projects" | [234–278](../index.html#L234-L278) | `.section__intro` linking to Portfolios, `.projects` with three `article.project.reveal` (`.project__status`, `h3`, `ul.bullets`), then a `Portfolios →` button in `p.plates__more` | "3 projects" (`article`) |
+| `#simulations` "Interactive physics simulations" | [280–575](../index.html#L280-L575) | `.section__intro`, `.plates` with eight `article.plate.reveal` (Figs. 1–8), then `All simulations →` | "8 figures" (`article`) |
+| `#skills` "Skills & languages" | [577–615](../index.html#L577-L615) | `dl.skills`, seven `div.reveal` each with `dt` and `dd`; language levels in `span.lvl` | "7 areas" (`dt`) |
 
-A plate ([e.g. 288–322](../index.html#L288-L322)) is `article.plate.reveal` > `div.plate__fig[data-sketch="…"]` (empty in the
+A plate ([e.g. 290–324](../index.html#L290-L324)) is `article.plate.reveal` > `div.plate__fig[data-sketch="…"]` (empty in the
 HTML; the inline script draws an SVG into it) and `div.plate__body` > `p.plate__num` "Fig. n", `h3 > a` (opens the page in a new
 tab), a paragraph, `.plate__tags` (three `span.tag.tag--soft`), and `a.plate__launch` "Launch". The hrefs carry the file names
 with spaces as written; the browser encodes them (measured: `simulations/Circular%20Wave%20Interference%20Visualization.html`).
@@ -106,16 +124,16 @@ All sections start open. Measured at 1280 px: five folds `positions` … `skills
 Clicking an index link opens its section first and scrolls it below the pinned header (fold.js click handler,
 [fold.js:264–273](../public/scripts/fold.js#L264-L273)).
 
-**Footer** ([617–620](../index.html#L617-L620)): "© 2026 Numa Koudsie" and `#top`.
+**Footer** ([619–622](../index.html#L619-L622)): "© 2026 Numa Koudsie" and `#top`.
 
 ### The inline script
 
-One function expression wraps everything ([624–1253](../index.html#L624-L1253)). It has three independent parts.
+One function expression wraps everything ([626–1255](../index.html#L626-L1255)). It has three independent parts.
 
-**Fig. 0, the live double pendulum** ([629–838](../index.html#L629-L838)). The everyday picture: a pendulum hanging from the
+**Fig. 0, the live double pendulum** ([631–840](../index.html#L631-L840)). The everyday picture: a pendulum hanging from the
 bob of another pendulum; let it go from high up and it swings wildly, never retracing its path. The model: two point masses on
 massless rigid rods, no friction, angles $\theta_1, \theta_2$ measured from the downward vertical. The code uses
-$g = 9.81\ \mathrm{m/s^2}$, $m_1 = m_2 = 1\ \mathrm{kg}$, $l_1 = l_2 = 1\ \mathrm{m}$ ([635–639](../index.html#L635-L639)) and
+$g = 9.81\ \mathrm{m/s^2}$, $m_1 = m_2 = 1\ \mathrm{kg}$, $l_1 = l_2 = 1\ \mathrm{m}$ ([637–641](../index.html#L637-L641)) and
 evaluates, with $\Delta = \theta_1 - \theta_2$ and $D = 2m_1 + m_2 - m_2\cos 2\Delta$,
 
 $$\ddot\theta_1 = \frac{-g(2m_1+m_2)\sin\theta_1 - m_2 g\sin(\theta_1 - 2\theta_2) - 2\sin\Delta\, m_2\left(\dot\theta_2^2 l_2 + \dot\theta_1^2 l_1\cos\Delta\right)}{l_1 D}$$
@@ -131,54 +149,54 @@ the reader sees is the motion of the model, not an artefact of the step.
 
 | Function | Lines | What it does |
 |---|---|---|
-| `reduced` (value) | [625–627](../index.html#L625-L627) | True when the reader asks for reduced motion (`prefers-reduced-motion`). |
-| `deriv(s)` | [656–679](../index.html#L656-L679) | The right-hand side above: returns $(\dot\theta_1, \dot\theta_2, \ddot\theta_1, \ddot\theta_2)$. |
-| `rk4(s, h)` | [680–696](../index.html#L680-L696) | One RK4 step of size `h` seconds: four slopes, weighted 1, 2, 2, 1. |
-| `pos(s)` | [697–706](../index.html#L697-L706) | Pixel positions of both bobs: pivot `(ox, oy)`, `scale` pixels per metre, $x = \sin\theta$, $y = \cos\theta$ (screen y points down). |
-| `resize()` | [707–722](../index.html#L707-L722) | Sizes the canvas and the off-screen trail canvas to the CSS size times the device pixel ratio (capped at 2). Pivot at the centre, 36 % down; `scale` = 0.24 × the smaller side. |
-| `reset()` | [723–732](../index.html#L723-L732) | New random start at rest: $\theta_1 \in [112°, 157°]$, $\theta_2 \in [135°, 207°]$ (from `Math.PI * (0.62 + 0.25 r)` and `Math.PI * (0.75 + 0.4 r)`); clears the trail. |
-| `step(n, h)` | [733–748](../index.html#L733-L748) | Takes `n` RK4 steps and draws each move of the lower bob as a short wine segment (`rgba(122, 31, 43, 0.85)`, 1.4 px) on the trail canvas. |
-| `fadeTrace(a)` | [749–755](../index.html#L749-L755) | Erases a fraction `a` of the trail with `destination-out`, so old trail fades. |
-| `draw()` | [756–779](../index.html#L756-L779) | Clears, copies the trail, draws the rods (ink, 2.2 px), the grey pivot (3.5 px) and the wine bobs (7 and 9 px radius). |
-| `frame(ts)` | [780–793](../index.html#L780-L793) | The animation loop, below. |
-| `start()` | [794–799](../index.html#L794-L799) | Start the `requestAnimationFrame` loop; visibility gates the work. |
-| start-up | [801–819](../index.html#L801-L819) | `resize()`, `reset()`. With reduced motion: 2600 steps of 3.5 ms (9.1 s) and one still picture, no loop. Otherwise 560 steps of 2.5 ms (1.4 s) so the trail is not empty, then `start()`; pauses while the tab is hidden (`visibilitychange`) or the canvas is off screen (`IntersectionObserver`). |
-| resize handler | [820–828](../index.html#L820-L828) | 120 ms after the last resize: `resize()`, clear the trail, `draw()`. |
-| reset button | [829–837](../index.html#L829-L837) | `reset()`, then the 9.1 s pre-run if motion is reduced, then `draw()`. |
+| `reduced` (value) | [627–629](../index.html#L627-L629) | True when the reader asks for reduced motion (`prefers-reduced-motion`). |
+| `deriv(s)` | [658–681](../index.html#L658-L681) | The right-hand side above: returns $(\dot\theta_1, \dot\theta_2, \ddot\theta_1, \ddot\theta_2)$. |
+| `rk4(s, h)` | [682–698](../index.html#L682-L698) | One RK4 step of size `h` seconds: four slopes, weighted 1, 2, 2, 1. |
+| `pos(s)` | [699–708](../index.html#L699-L708) | Pixel positions of both bobs: pivot `(ox, oy)`, `scale` pixels per metre, $x = \sin\theta$, $y = \cos\theta$ (screen y points down). |
+| `resize()` | [709–724](../index.html#L709-L724) | Sizes the canvas and the off-screen trail canvas to the CSS size times the device pixel ratio (capped at 2). Pivot at the centre, 36 % down; `scale` = 0.24 × the smaller side. |
+| `reset()` | [725–734](../index.html#L725-L734) | New random start at rest: $\theta_1 \in [112°, 157°]$, $\theta_2 \in [135°, 207°]$ (from `Math.PI * (0.62 + 0.25 r)` and `Math.PI * (0.75 + 0.4 r)`); clears the trail. |
+| `step(n, h)` | [735–750](../index.html#L735-L750) | Takes `n` RK4 steps and draws each move of the lower bob as a short wine segment (`rgba(122, 31, 43, 0.85)`, 1.4 px) on the trail canvas. |
+| `fadeTrace(a)` | [751–757](../index.html#L751-L757) | Erases a fraction `a` of the trail with `destination-out`, so old trail fades. |
+| `draw()` | [758–781](../index.html#L758-L781) | Clears, copies the trail, draws the rods (ink, 2.2 px), the grey pivot (3.5 px) and the wine bobs (7 and 9 px radius). |
+| `frame(ts)` | [782–795](../index.html#L782-L795) | The animation loop, below. |
+| `start()` | [796–801](../index.html#L796-L801) | Start the `requestAnimationFrame` loop; visibility gates the work. |
+| start-up | [803–821](../index.html#L803-L821) | `resize()`, `reset()`. With reduced motion: 2600 steps of 3.5 ms (9.1 s) and one still picture, no loop. Otherwise 560 steps of 2.5 ms (1.4 s) so the trail is not empty, then `start()`; pauses while the tab is hidden (`visibilitychange`) or the canvas is off screen (`IntersectionObserver`). |
+| resize handler | [822–830](../index.html#L822-L830) | 120 ms after the last resize: `resize()`, clear the trail, `draw()`. |
+| reset button | [831–839](../index.html#L831-L839) | `reset()`, then the 9.1 s pre-run if motion is reduced, then `draw()`. |
 
-The frame loop in order ([780–793](../index.html#L780-L793)): the real time since the last frame `dt` is capped at 50 ms (so
+The frame loop in order ([782–795](../index.html#L782-L795)): the real time since the last frame `dt` is capped at 50 ms (so
 a stalled tab does not jump); simulated time `dt × SPEED` with `SPEED = 0.8` (the pendulum runs at 80 % of real speed) is added
 to an accumulator; the whole number of 2.5 ms steps it holds is taken (at 60 frames per second that is 5 or 6 steps); the trail
 fades by `1 − 0.99^(dt·60)`, which removes 1 % per 1/60 s whatever the frame rate (the trail halves in 69 frames, 1.15 s); then
 `draw()`.
 
-**Plate sketches** ([840–1199](../index.html#L840-L1199)). Each `div.plate__fig[data-sketch]` gets a small static SVG
+**Plate sketches** ([842–1201](../index.html#L842-L1201)). Each `div.plate__fig[data-sketch]` gets a small static SVG
 (`viewBox="0 0 200 110"`). Colours come from classes styled in [site.css:603–620](../public/styles/site.css#L603-L620):
 `ink`, `acc` (wine), `soft` (rose), `grey`, `acc-fill`, `grey-fill`.
 
 | Function | Lines | What it draws |
 |---|---|---|
-| `sine(x0, x1, y, amp, wl, ph, st)` | [841–848](../index.html#L841-L848) | SVG path of a sine curve sampled every `st` units. |
-| `svg(inner)` | [849–855](../index.html#L849-L855) | Wraps the markup in the 200 × 110 `<svg>`. |
-| `sketches.interference` | [857–882](../index.html#L857-L882) | Two sources at (62, 104) and (138, 104), ten rings each, fading outward. |
-| `sketches.pendulum` | [883–893](../index.html#L883-L893) | A drawn double pendulum with a dashed rose trail. |
-| `sketches.doubleslit` | [894–935](../index.html#L894-L935) | Plane wavefronts, a barrier with two slits at x = 66, half-circle wavelets, and 13 screen bars of height $\propto \cos^2(0.9 i)\,e^{-\lvert i\rvert/6}$. |
-| `sketches.wavetypes` | [936–955](../index.html#L936-L955) | A transverse sine (top) and 22 dots bunched by a sine (bottom): compressions. |
-| `sketches.waterwave` | [956–979](../index.html#L956-L979) | Seven rings round the centre and seven small orbits with a particle on each. |
-| `sketches.simulator` | [980–1010](../index.html#L980-L1010) | Two sines of wavelength 70 and 29 (top) and their sum (bottom). |
-| `sketches.phasors` | [1011–1092](../index.html#L1011-L1092) | The rose $z(t) = A e^{i(4t - \pi/2)} + A e^{i(-2t + \pi/2)}$, $A = 21$, with its two arms at $t = 0.3$. |
-| `sketches.fourier` | [1093–1191](../index.html#L1093-L1191) | The heart $x = 16\sin^3 u$, $y = 13\cos u - 5\cos 2u - 2\cos 3u - \cos 4u$ from its exact Fourier coefficients (the comment at 1100–1101 is correct: summing the eight terms gives back both formulas), three epicycles, and the spectrum $\lvert c_k\rvert$ for $k = -4 \dots 4$. |
-| fill loop | [1193–1199](../index.html#L1193-L1199) | For each `.plate__fig[data-sketch]`, looks up the function by name and sets `innerHTML`; an unknown name leaves the plate blank. |
+| `sine(x0, x1, y, amp, wl, ph, st)` | [843–850](../index.html#L843-L850) | SVG path of a sine curve sampled every `st` units. |
+| `svg(inner)` | [851–857](../index.html#L851-L857) | Wraps the markup in the 200 × 110 `<svg>`. |
+| `sketches.interference` | [859–884](../index.html#L859-L884) | Two sources at (62, 104) and (138, 104), ten rings each, fading outward. |
+| `sketches.pendulum` | [885–895](../index.html#L885-L895) | A drawn double pendulum with a dashed rose trail. |
+| `sketches.doubleslit` | [896–937](../index.html#L896-L937) | Plane wavefronts, a barrier with two slits at x = 66, half-circle wavelets, and 13 screen bars of height $\propto \cos^2(0.9 i)\,e^{-\lvert i\rvert/6}$. |
+| `sketches.wavetypes` | [938–957](../index.html#L938-L957) | A transverse sine (top) and 22 dots bunched by a sine (bottom): compressions. |
+| `sketches.waterwave` | [958–981](../index.html#L958-L981) | Seven rings round the centre and seven small orbits with a particle on each. |
+| `sketches.simulator` | [982–1012](../index.html#L982-L1012) | Two sines of wavelength 70 and 29 (top) and their sum (bottom). |
+| `sketches.phasors` | [1013–1094](../index.html#L1013-L1094) | The rose $z(t) = A e^{i(4t - \pi/2)} + A e^{i(-2t + \pi/2)}$, $A = 21$, with its two arms at $t = 0.3$. |
+| `sketches.fourier` | [1095–1193](../index.html#L1095-L1193) | The heart $x = 16\sin^3 u$, $y = 13\cos u - 5\cos 2u - 2\cos 3u - \cos 4u$ from its exact Fourier coefficients (the comment at 1096–1097 is correct: summing the eight terms gives back both formulas), three epicycles, and the spectrum $\lvert c_k\rvert$ for $k = -4 \dots 4$. |
+| fill loop | [1195–1201](../index.html#L1195-L1201) | For each `.plate__fig[data-sketch]`, looks up the function by name and sets `innerHTML`; an unknown name leaves the plate blank. |
 
-**Reveal on scroll and the active index link** ([1201–1252](../index.html#L1201-L1252)).
+**Reveal on scroll and the active index link** ([1203–1254](../index.html#L1203-L1254)).
 
 | Part | Lines | What it does |
 |---|---|---|
-| `io` observer | [1205–1215](../index.html#L1205-L1215) | When 10 % of an observed element is visible, adds `is-visible` once and stops watching it. |
-| stagger | [1216–1219](../index.html#L1216-L1219) | Each `.reveal` gets `--d = (i mod 5) × 80 ms`, the delay its fade uses ([site.css:773–774](../public/styles/site.css#L773-L774)). |
-| blocks | [1220–1222](../index.html#L1220-L1222) | `.section` and `.timeline` also get `is-visible`: the timeline line grows to full height in 1.8 s ([site.css:378–389](../public/styles/site.css#L378-L389)). |
-| `nav` observer | [1224–1244](../index.html#L1224-L1244) | `rootMargin: '-30% 0px -60% 0px'` watches a band 30–40 % down the window; the section crossing it marks its `.index` link `active`. Only links starting with `#` take part. |
-| fallback | [1245–1252](../index.html#L1245-L1252) | Without `IntersectionObserver`, everything is made visible at once. |
+| `io` observer | [1207–1217](../index.html#L1207-L1217) | When 10 % of an observed element is visible, adds `is-visible` once and stops watching it. |
+| stagger | [1218–1221](../index.html#L1218-L1221) | Each `.reveal` gets `--d = (i mod 5) × 80 ms`, the delay its fade uses ([site.css:773–774](../public/styles/site.css#L773-L774)). |
+| blocks | [1222–1224](../index.html#L1222-L1224) | `.section` and `.timeline` also get `is-visible`: the timeline line grows to full height in 1.8 s ([site.css:378–389](../public/styles/site.css#L378-L389)). |
+| `nav` observer | [1226–1246](../index.html#L1226-L1246) | `rootMargin: '-30% 0px -60% 0px'` watches a band 30–40 % down the window; the section crossing it marks its `.index` link `active`. Only links starting with `#` take part. |
+| fallback | [1247–1254](../index.html#L1247-L1254) | Without `IntersectionObserver`, everything is made visible at once. |
 
 ### Without JavaScript
 
@@ -188,20 +206,20 @@ the eight plate figures stay empty (only the grid background shows), and everyth
 
 ### How to change it
 
-- **Add a position.** Copy one `article.entry.reveal` inside `#positions .timeline` ([80–197](../index.html#L80-L197)).
+- **Add a position.** Copy one `article.entry.reveal` inside `#positions .timeline` ([82–199](../index.html#L82-L199)).
   The list runs by end date, newest first, with the current position on top. For a current post add `entry--current` and
   `<span class="tag">current</span>`; for a label such as "during studies" add `<span class="tag tag--soft">`. The fold
   count ("n roles") updates itself.
-- **Add an education row.** Copy a `.row.reveal` in `.ledger` ([204–228](../index.html#L204-L228)); `.row__note` is optional.
-- **Add a research project.** Copy an `article.project.reveal` in `.projects` ([241–271](../index.html#L241-L271)); the grid
+- **Add an education row.** Copy a `.row.reveal` in `.ledger` ([206–230](../index.html#L206-L230)); `.row__note` is optional.
+- **Add a research project.** Copy an `article.project.reveal` in `.projects` ([243–273](../index.html#L243-L273)); the grid
   has three columns ([site.css:500–504](../public/styles/site.css#L500-L504)), one at 980 px and below. A finished long
-  project belongs on the Portfolios page; also update the intro sentence at [234–239](../index.html#L234-L239).
-- **Add a plate.** Copy an `article.plate.reveal` in `.plates` ([288–566](../index.html#L288-L566)), set `p.plate__num`, both
+  project belongs on the Portfolios page; also update the intro sentence at [236–241](../index.html#L236-L241).
+- **Add a plate.** Copy an `article.plate.reveal` in `.plates` ([290–568](../index.html#L290-L568)), set `p.plate__num`, both
   hrefs and the three tags, and give `.plate__fig` a `data-sketch` name. Add a function of that name to `sketches`
-  ([856–1192](../index.html#L856-L1192)) returning `svg(…)`; use the classes `ink`, `acc`, `soft`, `grey`, `acc-fill`,
+  ([858–1194](../index.html#L858-L1194)) returning `svg(…)`; use the classes `ink`, `acc`, `soft`, `grey`, `acc-fill`,
   `grey-fill`. Plates are written by hand: they do not read [catalog.js](../public/scripts/catalog.js), and their titles
   differ from the catalog titles (for example "Wave Interference – Multiple Sources" against "Wave Interference").
-- **Add a skill row.** Copy a `div.reveal` in `dl.skills` ([578–611](../index.html#L578-L611)).
+- **Add a skill row.** Copy a `div.reveal` in `dl.skills` ([580–613](../index.html#L580-L613)).
 - **Add a section.** Give it `class="section"`, an `id` and an `h2`, add its link to `nav.index`, and, for a counts line,
   a rule in `units` ([fold.js:356–362](../public/scripts/fold.js#L356-L362)); without one the header shows no counts.
 
@@ -236,7 +254,7 @@ IBM Plex Mono 400/500, Latin Modern Roman 400 and 400 italic, and the KaTeX face
 
 | Lines | Element | Role |
 |---|---|---|
-| [32–40](../public/simulations.html#L32-L40) | `header.cat-top` | "← Numa Koudsie" and links to home sections and Portfolios. |
+| [32–40](../public/simulations.html#L32-L40) | `header.cat-top` | The Phyein Usul logo (`images/phyein-usul-mark.svg`, 87 × 48, linking to `index.html`) and "← Numa Koudsie" in one `span` ([33](../public/simulations.html#L33)), and links to home sections and Portfolios. |
 | [42–116](../public/simulations.html#L42-L116) | `main.cat` | The page column (max 1240 px). |
 | [43–54](../public/simulations.html#L43-L54) | `.cat__head` | `.cat__kicker`, `h1` "Simulations.", `.cat__lede`, and `ul#stats` (filled by `stats()`). |
 | [56–71](../public/simulations.html#L56-L71) | `.cat__bar[role=search][data-fold-bar]` | Sticky search bar: `input#q` (with a visually hidden label and a `/` key hint), `#fields` and `#stages` chip groups, `p#count` (`aria-live="polite"`). Measured height 104 px at 1280 px, 140 px at 900 px, 102 px at 390 px; fold.js uses it as `--fold-top`, so open titles pin below it. |
@@ -249,9 +267,9 @@ IBM Plex Mono 400/500, Latin Modern Roman 400 and 400 italic, and the KaTeX face
 **The markup one simulation becomes.** `cards()` and `entry()` build, for a registry entry `s`:
 
 ```
-section.simfold#simulation-<id>  [data-counts = subject, data-label = title]     cards()  235–241
+section.simfold#simulation-<id>  [data-counts = subject, data-label = title]     cards()  234–240
   h2.fs-title > span.fs-num "01" + title                      (moved into the fold header by fold.js)
-  article.entry#sim-<id>  [data-card, data-sim, data-collapsed]                   entry()  201–230
+  article.entry#sim-<id>  [data-card, data-sim, data-collapsed]                   entry()  200–229
     a.entry__fig > span.entry__plate > span.entry__ph "Fig. n" + img (images/sims/<id>.webp, 800 × 500, lazy)
     p.entry__cap   "Figure n" + subject
     div.entry__body
@@ -267,7 +285,7 @@ section.simfold#simulation-<id>  [data-counts = subject, data-label = title]    
 
 There are two levels of opening. The **title fold** (the `section`) is a level-1 fold made by `Fold.make`
 ([244](../public/simulations.html#L244)); it starts closed, and fold.js remembers each reader's choice in `localStorage`
-(measured: `fold:/simulations.html` → `{"simulation-double-pendulum":1}` after opening Fig. 2). The **card details** (the
+(measured on AppDeploy: `fold:/simulations.html` → `{"simulation-double-pendulum":1}` after opening Fig. 2). The **card details** (the
 `article`, a `[data-card]`) open with More / Less ([fold.js:209–224](../public/scripts/fold.js#L209-L224)); the page keeps
 that choice in `openCards` while the reader stays ([140](../public/simulations.html#L140)), across redraws, but not across a
 reload (measured).
@@ -350,7 +368,8 @@ Security policy and referrer rule ([5–6](../public/portfolios.html#L5-L6)), `<
 
 ### Body
 
-- `header.cat-top` ([33–41](../public/portfolios.html#L33-L41)), as on the catalog, with Simulations instead of Portfolios.
+- `header.cat-top` ([33–41](../public/portfolios.html#L33-L41)), as on the catalog (logo and "← Numa Koudsie" at
+  [34](../public/portfolios.html#L34)), with Simulations instead of Portfolios.
 - `main.cat#projects` ([43–260](../public/portfolios.html#L43-L260)). Its `.cat__head` has an inline style for one column
   ([44](../public/portfolios.html#L44)), since there is no stats box; kicker, `h1` "Portfolios.", lede.
 - Two `article.proj` with the same structure:
@@ -369,14 +388,16 @@ Security policy and referrer rule ([5–6](../public/portfolios.html#L5-L6)), `<
 Each part's `h3` carries an `id` (`dc-cloud`, `dc-changes`, … `rp-pages`) and a `span.psub__n` number.
 
 **Links into the copies.** Every link goes to `portfolios/<name>/index.html` or `portfolios/<name>/index.html#/<route>`,
-never to the folder: the copies are single-page apps with hash routes, and a folder address answers 403 on AppDeploy
-([AGENTS.md:47–50](../AGENTS.md#L47-L50)). The routes used here exist in the copies' bundles: `/`, `/theory`, `/results`,
+never to the folder: the copies are single-page apps with hash routes, and AppDeploy used to answer a folder address with
+403 ([AGENTS.md:55–56](../AGENTS.md#L55-L56), which still says so). Measured on 20 October 2026, both hosts answer `portfolios/rotor-pendula/` with
+the copy (AppDeploy 200; Cloudflare 200, and it redirects `…/index.html` there with a 307, keeping the `#/route`), so the file
+links work everywhere. The routes used here exist in the copies' bundles: `/`, `/theory`, `/results`,
 `/simulate`, `/checks` in both, and `/report` in Rotor Pendula only (each bundle's route table, e.g. `path:"/report"` in
 `public/portfolios/rotor-pendula/static/index-CsGEKbO8.js`). Both copies link back with `href="../../portfolios.html"`.
 The figure images come from each copy's `fig/` folder (for example
 [`portfolios/droplet-collection/fig/fallspeed_gk.svg`](../public/portfolios/droplet-collection/fig/fallspeed_gk.svg)).
 
-**Image sizes.** Every one of the eight `img` tags carries `width` and `height` in CSS px: the picture's own proportions at a
+**Image sizes.** Every one of the eight figure `img` tags carries `width` and `height` in CSS px: the picture's own proportions at a
 height of 300 px, rounded to whole pixels. The browser uses them to reserve the right box before the picture arrives; the
 stylesheet then sets `width: 100%; height: auto` ([portfolio.css:210–214](../public/styles/portfolio.css#L210-L214)). Without
 the stylesheet the picture shows at exactly these sizes. Droplet Collection
@@ -423,7 +444,7 @@ shows as TeX source between `\(` and `\)` (eight such formulas in part 1.1 alone
    `width` and `height` of the picture's own proportions in CSS px, at a height of 300, never the raw `viewBox` numbers
    (see **Image sizes** above).
 5. Update the page `description` ([11](../public/portfolios.html#L11)) and the home page's research intro
-   ([index.html:234–239](../index.html#L234-L239)), which name the projects.
+   ([index.html:236–241](../index.html#L236-L241)), which name the projects.
 
 `.proj__pages` lays out five links per row ([portfolio.css:220–227](../public/styles/portfolio.css#L220-L227)); a sixth
 wraps to a second row, as Rotor Pendula's does.
@@ -438,23 +459,26 @@ wraps to a second row, as Rotor Pendula's does.
 | [3](../public/robots.txt#L3) | `User-agent: *` | The rules below apply to every crawler. |
 | [4](../public/robots.txt#L4) | `Allow: /` | Everything may be crawled, including the project copies and their study files. |
 
-There is no `Sitemap:` line. Measured: `/robots.txt` on the live site answers 200 as `text/plain`, 58 bytes, identical to the
-file. To keep a path out of search engines, add a `Disallow: /path` line under `User-agent: *`.
+There is no `Sitemap:` line. Measured: `/robots.txt` answers 200 as `text/plain`, 58 bytes, identical to the file, on
+AppDeploy and (20 October 2026) on phyeinusul.com. To keep a path out of search engines, add a `Disallow: /path` line under `User-agent: *`.
 
 ---
 
 ## Notes for maintainers
 
-1. **Home page fonts and shadows depart from the house design.** AGENTS.md ([36–37](../AGENTS.md#L36-L37)) and CLAUDE.md ask
-   for Instrument Serif titles at weight 400 only and no card shadows. The home page loads only `site.css`, whose `--serif` is
+1. **Home page fonts and shadows depart from the house design.** AGENTS.md ([41–43](../AGENTS.md#L41-L43)) and CLAUDE.md
+   ([46–47](../CLAUDE.md#L46-L47)) ask, since 20 October 2026, for titles at weight 400 only, in IBM Plex Serif on the home,
+   catalog and Portfolios pages and in Instrument Serif on the simulation pages; AGENTS.md also asks for no card shadows. The
+   home page loads only `site.css`, whose `--serif` is
    IBM Plex Serif ([site.css:22](../public/styles/site.css#L22)) and whose titles are weight 600
    ([site.css:138](../public/styles/site.css#L138), [336](../public/styles/site.css#L336),
    [423](../public/styles/site.css#L423)). Measured: `h1`, five `h2` and 21 `h3` in IBM Plex Serif 600; box shadows on
-   `.figure`, `.project` and `.plate`. The catalog and Portfolios pages use Instrument Serif 400 (measured).
-2. **The home page shows eight figures, the site has ten.** The plates stop at Fig. 8 ([287–567](../index.html#L287-L567));
+   `.figure`, `.project` and `.plate`. The catalog and Portfolios pages use Instrument Serif 400 (measured; `catalog.css` sets `--serif` to Instrument Serif,
+   [catalog.css:10](../public/styles/catalog.css#L10)), not the IBM Plex Serif that the two files now name for them.
+2. **The home page shows eight figures, the site has ten.** The plates stop at Fig. 8 ([289–569](../index.html#L289-L569));
    Figs. 9 and 10 are only in the catalog ([catalog.js:183–216](../public/scripts/catalog.js#L183-L216)). The section intro says
    the simulations page "lists them all by field, with the question each one answers"
-   ([index.html:284–285](../index.html#L284-L285)); the catalog now lists them in figure order without grouping
+   ([index.html:286–287](../index.html#L286-L287)); the catalog now lists them in figure order without grouping
    ([simulations.html:231–233](../public/simulations.html#L231-L233)), and catalog entries have no question field.
 3. Fixed on 2026-10-15: the unused home stop function and its write-only request id were removed (commit [8982ed3](https://github.com/Numa1997/SiteTest/commit/8982ed35e78161ea7cdd82ae1794f44ccfe39f3c)).
 4. **The catalog's `noscript` points to the home page for the list** ([simulations.html:75–76](../public/simulations.html#L75-L76)),
@@ -469,8 +493,8 @@ file. To keep a path out of search engines, add a `Disallow: /path` line under `
    ([tests.json:33](../tests/tests.json#L33)) and deployed to the app. Still open: the home page scenario
    ([tests.json:17](../tests/tests.json#L17)) depends on there being exactly eight plates.
 8. **AGENTS.md contradicted itself on the catalog layout:** its Simulations-page paragraph said "in one grid", while the Folds
-   paragraph ([22–24](../AGENTS.md#L22-L24)) and the code ([fold.css:153](../public/styles/fold.css#L153)) give one column of
-   fold cards. Corrected on 14 October 2026 ([AGENTS.md:27–30](../AGENTS.md#L27-L30)).
+   paragraph ([27–29](../AGENTS.md#L27-L29)) and the code ([fold.css:153](../public/styles/fold.css#L153)) give one column of
+   fold cards. Corrected on 14 October 2026 ([AGENTS.md:32–35](../AGENTS.md#L32-L35)).
 9. Fixed on 2026-10-15: the four Droplet Collection image attributes use integer ratios exactly equal to their SVG viewBoxes (commit [74ef7d9](https://github.com/Numa1997/SiteTest/commit/74ef7d94571f467f31d2289be6c9668b6809a09f)).
    That fix copied the viewBox numbers times 1000 (for example 400520 × 188969), so with no stylesheet the pictures came out
    295 522 to 405 740 px wide. Replaced by note 11.

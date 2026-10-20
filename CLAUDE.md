@@ -43,8 +43,9 @@ Project facts (layout, where the site runs, boundaries) are in AGENTS.md.
 
 ## Design and explanations
 - The design is the house design in `DESIGN.md` of the app `droplet-collection-yl7l26`. Read it before touching fonts, colours or layout,
-  and generalise it; never introduce another font. Titles at weight 400 (IBM Plex Serif on the home, catalog and Portfolios pages,
-  Instrument Serif on the simulation pages), text in IBM Plex Sans, labels in IBM Plex Mono.
+  and generalise it; never introduce another font. Titles in Instrument Serif at weight 400 (simulations,
+  catalog and Portfolios pages); the home page alone sets its titles in IBM Plex Serif at weight 600 (`site.css`). Text in IBM Plex
+  Sans, labels in IBM Plex Mono.
 - Explanations are lecture notes set like a LaTeX document (Latin Modern text, KaTeX maths, numbered equations and figures), written as a
   professor for undergraduates and school students: motivate from everyday experience first, then the model, then the mathematics, with
   pictures. No question-and-answer format anywhere.

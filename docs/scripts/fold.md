@@ -3,7 +3,7 @@
 | | |
 |---|---|
 | File | [public/scripts/fold.js](../../public/scripts/fold.js), 414 lines, 24.0 kB (23 973 bytes) |
-| Loaded by | [index.html:622](../../index.html#L622) (the home page); [portfolios.html:267](../../public/portfolios.html#L267); [simulations.html:123](../../public/simulations.html#L123), before `catalog.js`; the ten simulation pages, first of the shared scripts (load-order table in [sim.md](sim.md#load-order-on-the-pages)) |
+| Loaded by | [index.html:624](../../index.html#L624) (the home page); [portfolios.html:267](../../public/portfolios.html#L267); [simulations.html:123](../../public/simulations.html#L123), before `catalog.js`; the ten simulation pages, first of the shared scripts (load-order table in [sim.md](sim.md#load-order-on-the-pages)) |
 | Defines | `window.Fold = { make, walk, all, openTo, setCard, onCard, onAll, tools }` ([fold.js:413](../../public/scripts/fold.js#L413)) |
 | Sets on `<html>` | CSS variables `--fold-open`, `--fold-close`, `--fold-ease` ([fold.js:21-23](../../public/scripts/fold.js#L21-L23)) and `--fold-top` ([fold.js:297](../../public/scripts/fold.js#L297)) |
 | Stores | `localStorage['fold:<path>']` ([fold.js:61](../../public/scripts/fold.js#L61)) |
@@ -110,7 +110,7 @@ the reader has already used the wheel, touch or a key ([fold.js:400-402](../../p
 ### Pinned headers below a page bar
 
 A bar that sticks across the whole width (the home page index on phones; the search bar of the simulations list) carries
-`data-fold-bar` ([index.html:62](../../index.html#L62), [simulations.html:56](../../public/simulations.html#L56)).
+`data-fold-bar` ([index.html:64](../../index.html#L64), [simulations.html:56](../../public/simulations.html#L56)).
 `measureTop()` ([fold.js:291-298](../../public/scripts/fold.js#L291-L298)) takes the tallest such bar that is currently `sticky`
 or `fixed`, at `top ≤ 1 px`, and wider than 60 % of the window, and writes its height to `--fold-top`. Headers pin below it
 ([fold.css:33](../../public/styles/fold.css#L33)). It re-measures on window `resize` and when a bar changes size.

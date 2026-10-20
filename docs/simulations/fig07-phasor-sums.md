@@ -2,7 +2,7 @@
 
 | | |
 |---|---|
-| Page | [public/simulations/phasor-sums.html](../../public/simulations/phasor-sums.html) (1 477 lines, 259 831 bytes) |
+| Page | [public/simulations/phasor-sums.html](../../public/simulations/phasor-sums.html) (1 479 lines, 261 179 bytes) |
 | Walkthrough | [public/scripts/walk/phasors.js](../../public/scripts/walk/phasors.js) (key `phasors`, 8 steps) |
 | Thumbnail | [public/images/sims/phasor-sums.webp](../../public/images/sims/phasor-sums.webp) (800 × 500 px: the 3-petal rose with its two arms and circles) |
 | Catalog entry | [public/scripts/catalog.js#L150](../../public/scripts/catalog.js#L150) (`id: 'phasor-sums'`, `fig: 7`, field `methods`, stage 2) |
@@ -96,7 +96,7 @@ $s = 0.44\,\min(w,h)/\max(R_\text{fit}, 0.05)\times\text{zoom}$ ([L1060](../../p
 $0.18 + 0.82\,(c+1)/12$, so 0.25 for the oldest ([L1107–1114](../../public/simulations/phasor-sums.html#L1107-L1114)).
 Then each arm: its circle in `T.rose` about the joint it turns on, its arm and a 3 px dot in the card's colour
 ([L1121–1145](../../public/simulations/phasor-sums.html#L1121-L1145)); the pen is a 5.5 px burgundy dot with a 2 px
-outline in the paper colour `T.card` ([L1146–1152](../../public/simulations/phasor-sums.html#L1146-L1152)). In the Final view the
+outline in the card colour `T.card` (`#fffaf3`; the paper colour is `T.paper`) ([L1146–1152](../../public/simulations/phasor-sums.html#L1146-L1152)). In the Final view the
 scale uses the largest $|z|$ of the drawn path instead of $R_\text{fit}$
 ([L1061–1065](../../public/simulations/phasor-sums.html#L1061-L1065)), and the path is drawn as a 6 px pale-rose band
 under a 1.8 px burgundy line ([L1096–1101](../../public/simulations/phasor-sums.html#L1096-L1101)).
@@ -278,7 +278,9 @@ KaTeX CSS and `paper.css`, [sim.css:7–9](../../public/styles/sim.css#L7-L9)), 
 inline favicon and an inline `<style>` for the cards, selects, drop zone, meters and formula box
 ([L15–41](../../public/simulations/phasor-sums.html#L15-L41)). See [styles.md](../styles.md).
 
-Body: the top bar with the hand-written Fig. links 1–10 ([L44–59](../../public/simulations/phasor-sums.html#L44-L59));
+Body: the top bar: one span holding the Phyein Usul logo (a link to `../index.html` with
+`../images/phyein-usul-mark.svg`, 87 × 48) and "← All simulations" ([L45](../../public/simulations/phasor-sums.html#L45)), then the hand-written Fig. links
+1–10 ([L44–59](../../public/simulations/phasor-sums.html#L44-L59));
 the head ([L63–67](../../public/simulations/phasor-sums.html#L63-L67)); the figure `#stage` with canvas `#field` and
 its caption ([L71–79](../../public/simulations/phasor-sums.html#L71-L79)); the card list `#plist` and formula box
 ([L81–96](../../public/simulations/phasor-sums.html#L81-L96)); the controls aside with readouts and legend
@@ -288,9 +290,9 @@ its caption ([L71–79](../../public/simulations/phasor-sums.html#L71-L79)); the
 tab, the *Read values* switch in the caption and the reading strip under `#stage`
 ([datalog.js:567–590](../../public/scripts/datalog.js#L567-L590)).
 
-Scripts, in load order: `fold.js`, `sim.js`, `dataset.js`, the page script
+Scripts, in load order: `fold.js`, `sim.js`, `dataset.js` ([L660–662](../../public/simulations/phasor-sums.html#L660-L662)), the page script
 ([L663–1475](../../public/simulations/phasor-sums.html#L663-L1475)), `datalog.js`
-([L660–1476](../../public/simulations/phasor-sums.html#L660-L1476)). `sim.js` loads the walkthrough file named by
+([L1476](../../public/simulations/phasor-sums.html#L1476)). `sim.js` loads the walkthrough file named by
 `data-walk` ([sim.js:404–410](../../public/scripts/sim.js#L404-L410)) and typesets the note with KaTeX
 ([sim.js:339–367](../../public/scripts/sim.js#L339-L367)); see [sim.md](../scripts/sim.md), [walk.md](../scripts/walk.md),
 [fold.md](../scripts/fold.md).

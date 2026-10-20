@@ -1,7 +1,7 @@
 # Stylesheets: `public/styles/`
 
-Seven stylesheets, plain CSS with no build step: the files are served as written (measured on 14 October 2026: all seven
-are byte-identical on the live site).
+Seven stylesheets, plain CSS with no build step: the files are served as written (measured on 20 October 2026: all seven
+are byte-identical on the live site, <https://phyeinusul.com>).
 
 | File | Lines | Loaded by | Job |
 |---|---|---|---|
@@ -17,7 +17,7 @@ The pages that use them are described in [pages.md](pages.md); the fonts and KaT
 
 ## Design rules
 
-The house design is `DESIGN.md` of the app `droplet-collection-yl7l26` ([AGENTS.md:36–44](../AGENTS.md#L36-L44)):
+The house design is `DESIGN.md` of the app `droplet-collection-yl7l26` ([AGENTS.md:41–43](../AGENTS.md#L41-L43)):
 
 - **Titles** in Instrument Serif, at weight 400 only (the font request asks for no other weight, [catalog.css:7](../public/styles/catalog.css#L7);
   a bold title would be a synthetic one).
@@ -61,6 +61,15 @@ Modern's text fonts have no Greek, so a Greek letter typed in the prose falls th
 | A simulation page (Fig. 5) | Instrument Serif 400 everywhere | `.stage`, `.panel`, open lecture-note sections and the walkthrough (fold.css), `.walk__card`, the data tab and panel |
 
 The departures are listed under [Notes for maintainers](#notes-for-maintainers).
+
+**The Phyein Usul mark** ([assets.md](assets.md#publicimagesphyein-usul-marksvg--the-phyein-usul-logo-1-file-018-mb)) has no
+rule in any stylesheet: every page sizes and places it with inline `style` attributes. On the home page it is a 217 × 120 image
+link to `index.html` above the name, with a 14 px note in `var(--muted)` under it ("Phyein Usul · φύειν أصول, roots that grow. …")
+([index.html:31–32](../index.html#L31-L32)). In the top bar of the catalog, Portfolios and the ten simulation pages it is an
+87 × 48 image link to the home page, set before the back link in a `span` with `display: inline-flex` and a 14 px gap
+([simulations.html:33](../public/simulations.html#L33), [portfolios.html:34](../public/portfolios.html#L34),
+[water-wave.html:18](../public/simulations/water-wave.html#L18)). Its strokes are `#7a1f2b` and `#4d0f18`, the values of
+`--accent` and `--accent-dark`, written into the SVG itself.
 
 ## Load order and the cascade
 
@@ -114,7 +123,7 @@ CSS custom properties, all on `:root` unless noted.
 | `--dp-w` | `520px`; `560px` from 1500 px | [data.css:6–7](../public/styles/data.css#L6-L7) | Data panel width. |
 | `--p`, `--c` | `50%`, `var(--accent)` on each range input | [sim.css:88](../public/styles/sim.css#L88); `--p` set by [sim.js:159](../public/scripts/sim.js#L159) | Slider fill up to the thumb. |
 | `--ar`, `--ar-m` | per figure, inline `style` | e.g. [water-wave.html:44](../public/simulations/water-wave.html#L44) | Figure aspect ratio, wide and at 900 px or less. |
-| `--d` | `(i mod 5) × 80 ms` per `.reveal` | [index.html:1217](../index.html#L1217) | Fade-in delay on the home page. |
+| `--d` | `(i mod 5) × 80 ms` per `.reveal` | [index.html:1219](../index.html#L1219) | Fade-in delay on the home page. |
 
 Five formerly undefined tokens were replaced with their unchanged fallback colours: `--on-accent` (`#fff`, in catalog.css and
 data.css), `--tag-soft` (`#f0eae0`, data.css), `--tan-line` (`#e3cfa3`, [data.css:218](../public/styles/data.css#L218)),
@@ -182,7 +191,7 @@ Expand / Collapse pair gets a 104 px top margin to match it ([fold.css:124](../p
 | Buttons | `.btn`, `.btn--ghost`, `.btn[disabled]` | [98–102](../public/styles/sim.css#L98-L102) |
 | Switches | `.switch` (34 × 20 px toggle drawn from a checkbox) | [105–109](../public/styles/sim.css#L105-L109) |
 | Readouts and legend | `.readouts` (two-column `dl`), `.legend`, swatches `.sw`, `.sw--dot/ink/rose/tan/dash`, `.colorbar`, `.colorbar-labels` | [112–129](../public/styles/sim.css#L112-L129) |
-| Equation and error blocks | `.eq` is used by the walkthrough; `.sim-error` remains for errors. | Retained. |
+| Equation and error blocks | `.eq` is used by the walkthrough; `.sim-error` remains for errors; `@keyframes open` for the walkthrough card. | [131–134](../public/styles/sim.css#L131-L134) |
 | Walkthrough | `.walk`, `.walk__head`, `.walk__frame` (220 px step list + card), `.walk__steps` buttons, `.walk__card`, `.walk__code pre` (ink ground), highlighted symbols `.k` / `.k.is-lit`, `.walk__table` with a pulsing "now" dot, `.walk__val`, `.walk__nav` ([scripts/walk.md](scripts/walk.md)) | [137–176](../public/styles/sim.css#L137-L176) |
 | Skip link, footer, keyframes | `.skip-link`, `.sim-foot`, `rise`, `fade` | [191–192](../public/styles/sim.css#L191-L192), [205–210](../public/styles/sim.css#L205-L210) |
 | Caption maths | `html:not(.tex-ready) .stage__cap .tx` hidden until KaTeX has set it (sim.js adds `tex-ready`, at the latest after 4 s, [sim.js:389–392](../public/scripts/sim.js#L389-L392)) | [228–229](../public/styles/sim.css#L228-L229) |
@@ -354,9 +363,9 @@ repeats those two rules for the folded layout. Keep each pair in step.
 
 [`src/styles.css`](../src/styles.css) holds the three Tailwind directives and a placeholder comment. Its only importer is
 [`src/main.ts:1`](../src/main.ts#L1), and no page loads `src/main.ts`: `index.html` has no module script
-(its only scripts are [index.html:21–23](../index.html#L21-L23), [622](../index.html#L622) and
-[623–1254](../index.html#L623-L1254)), and a search of the repository for `main.ts` finds only that file's own line. On the live
-site `/src/main.ts` answers 403 (measured). The file comes from the app template; see
+(its only scripts are [index.html:21–23](../index.html#L21-L23), [624](../index.html#L624) and
+[625–1256](../index.html#L625-L1256)), and a search of the repository for `main.ts` finds only that file's own line. On the live
+site <https://phyeinusul.com> `/src/main.ts` answers 404, on the AppDeploy copy 403 (measured 20 October 2026). The file comes from the app template; see
 [build-and-deploy.md](build-and-deploy.md#build-files-at-the-root).
 
 ---
@@ -370,7 +379,12 @@ site `/src/main.ts` answers 403 (measured). The file comes from the app template
    [635](../public/styles/site.css#L635)). Its cards carry shadows ([222](../public/styles/site.css#L222),
    [512](../public/styles/site.css#L512), [575](../public/styles/site.css#L575); hover shadows at
    [203](../public/styles/site.css#L203), [537](../public/styles/site.css#L537), [583](../public/styles/site.css#L583)).
-   AGENTS.md ([36–37](../AGENTS.md#L36-L37)) asks for Instrument Serif at 400 only and no card shadows.
+   AGENTS.md ([41–43](../AGENTS.md#L41-L43)) and CLAUDE.md ([45–47](../CLAUDE.md#L45-L47)) ask for titles at weight 400 only
+   (IBM Plex Serif on the home, catalog and Portfolios pages, Instrument Serif on the simulation pages) and no card shadows.
+   The code differs in two ways: the home page's titles are weight 600, and the catalog and Portfolios pages do not use IBM Plex
+   Serif at all, because `catalog.css` redefines `--serif` as Instrument Serif after `site.css`
+   ([catalog.css:9–11](../public/styles/catalog.css#L9-L11)). So `--serif` is IBM Plex Serif only on the home page and
+   Instrument Serif on the other twelve pages.
 2. **Shadows elsewhere, against the "no card shadows" comments** in [paper.css:7](../public/styles/paper.css#L7),
    [catalog.css:5](../public/styles/catalog.css#L5) and [portfolio.css:5](../public/styles/portfolio.css#L5): every open fold card
    ([fold.css:25](../public/styles/fold.css#L25)), the simulation figure and panel ([sim.css:67](../public/styles/sim.css#L67),

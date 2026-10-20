@@ -93,9 +93,9 @@ concepts). Adding a simulation means adding its page, one entry there, and its t
 
 ## Design
 
-The house design of the Droplet Collection app (`DESIGN.md` in `droplet-collection-yl7l26`): titles at weight 400 only,
-in IBM Plex Serif on the home, catalog and Portfolios pages (`site.css`) and in Instrument Serif on the simulation pages
-(`sim.css`); text in IBM Plex Sans, labels in IBM Plex Mono; the logo `images/phyein-usul-mark.svg` in wine; every box outlined, no card shadows; lecture notes in
+The house design of the Droplet Collection app (`DESIGN.md` in `droplet-collection-yl7l26`): titles in Instrument Serif at
+weight 400 on the simulation, catalog and Portfolios pages (`sim.css`, `catalog.css`), and in IBM Plex Serif at weight 600 on
+the home page alone (`site.css`); text in IBM Plex Sans, labels in IBM Plex Mono; the logo `images/phyein-usul-mark.svg` in wine; every box outlined, no card shadows; lecture notes in
 Latin Modern Roman with KaTeX maths, numbered equations and figures. Details: [styles.md](styles.md), fonts and KaTeX in
 [assets.md](assets.md).
 

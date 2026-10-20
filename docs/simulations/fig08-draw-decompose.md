@@ -2,7 +2,7 @@
 
 | | |
 |---|---|
-| Page | [public/simulations/draw-decompose.html](../../public/simulations/draw-decompose.html) (1 415 lines, 213 105 bytes) |
+| Page | [public/simulations/draw-decompose.html](../../public/simulations/draw-decompose.html) (1 416 lines, 214 981 bytes) |
 | Walkthrough | [public/scripts/walk/dft.js](../../public/scripts/walk/dft.js) (key `dft`, 6 steps) |
 | Thumbnail | [public/images/sims/draw-decompose.webp](../../public/images/sims/draw-decompose.webp) (800 × 500 px: the heart, its dashed samples and the chain of circles) |
 | Catalog entry | [public/scripts/catalog.js#L167](../../public/scripts/catalog.js#L167) (`id: 'draw-decompose'`, `fig: 8`, field `methods`, stage 2) |
@@ -242,7 +242,9 @@ inline favicon and a short inline `<style>`: crosshair cursor, `touch-action: no
 the stage, the preset grid, the hint, and `[hidden]` forced to `display: none`
 ([L15–22](../../public/simulations/draw-decompose.html#L15-L22)). See [styles.md](../styles.md).
 
-Body: the top bar with the hand-written Fig. links ([L25–40](../../public/simulations/draw-decompose.html#L25-L40)); the
+Body: the top bar: one span holding the Phyein Usul logo (a link to `../index.html` with
+`../images/phyein-usul-mark.svg`, 87 × 48) and "← All simulations" ([L26](../../public/simulations/draw-decompose.html#L26)), then the hand-written Fig. links
+([L25–40](../../public/simulations/draw-decompose.html#L25-L40)); the
 head ([L44–48](../../public/simulations/draw-decompose.html#L44-L48)); Fig. 8a, `#stage` with canvas `#field`, caption
 with `#cap-mode`, `#cap-src` ([L52–60](../../public/simulations/draw-decompose.html#L52-L60)); Fig. 8b, `#spec-stage`
 with canvas `#spec`, caption with `#cap-k` ([L61–69](../../public/simulations/draw-decompose.html#L61-L69)); the
@@ -251,9 +253,9 @@ controls aside: Shape group with hint, `#run-tools`, `#draw-tools` and presets, 
 ([L136–608](../../public/simulations/draw-decompose.html#L136-L608)); the walkthrough host `#walk` (`data-walk="dft"`,
 [L610](../../public/simulations/draw-decompose.html#L610)); the footer.
 
-Scripts, in load order: `fold.js`, `sim.js`, `dataset.js`, the page script
+Scripts, in load order: `fold.js`, `sim.js`, `dataset.js` ([L618–620](../../public/simulations/draw-decompose.html#L618-L620)), the page script
 ([L621–1412](../../public/simulations/draw-decompose.html#L621-L1412)), `datalog.js`
-([L618–1413](../../public/simulations/draw-decompose.html#L618-L1413)). `sim.js` fetches `walk/dft.js` from `data-walk`
+([L1413](../../public/simulations/draw-decompose.html#L1413)). `sim.js` fetches `walk/dft.js` from `data-walk`
 and typesets the note ([sim.js:339–367](../../public/scripts/sim.js#L339-L367), [sim.js:402–411](../../public/scripts/sim.js#L402-L411));
 the canvas labels use `Sim.tex` from `sim.js`. See [sim.md](../scripts/sim.md), [walk.md](../scripts/walk.md),
 [fold.md](../scripts/fold.md), [pages.md](../pages.md).

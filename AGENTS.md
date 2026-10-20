@@ -38,9 +38,9 @@ the registry `scripts/catalog.js` (`SIMULATIONS`, `SIM_FIELDS`, `SIM_TOOLS`) wit
 `SIMULATIONS` (and its field in `SIM_FIELDS` if new), its thumbnail (a missing one shows the Fig. number instead), and its number in the
 hand-written Fig. links at the top of every simulation page. Simulation pages link back to `simulations.html`; the home page keeps its plates
 and links to the catalog from the hero button, the section intro and a button under the plates.
-Design: the house design of `DESIGN.md` in the app `droplet-collection-yl7l26` (the reference; read it before changing styles): titles at
-weight 400 only, in IBM Plex Serif on the home, catalog and Portfolios pages (`styles/site.css`) and in Instrument Serif on the simulation
-pages (`styles/sim.css`); IBM Plex Sans text, IBM Plex Mono labels, every box outlined, no card shadows. Accent wine `#7a1f2b`. Explanations are lecture
+Design: the house design of `DESIGN.md` in the app `droplet-collection-yl7l26` (the reference; read it before changing styles): titles in
+Instrument Serif at weight 400 on the simulation, catalog and Portfolios pages (`styles/sim.css`, `styles/catalog.css`), and in IBM Plex
+Serif at weight 600 on the home page alone (`styles/site.css`); IBM Plex Sans text, IBM Plex Mono labels, every box outlined, no card shadows. Accent wine `#7a1f2b`. Explanations are lecture
 notes set like the house LaTeX write-up: `styles/paper.css` (prose and symbols in Latin Modern Roman, self-hosted in `fonts/lm/`, token
 `--tex`; mathematics by KaTeX 0.16.11, self-hosted in `vendor/katex/`, woff2 only; abstract box, wine section badges, numbered display
 equations on the quote ground, figures on white plates with "Figure n" captions, exercise boxes). Each simulation page ends with
