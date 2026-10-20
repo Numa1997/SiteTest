@@ -2,7 +2,7 @@
 
 | | |
 |---|---|
-| Page | [public/simulations/Transverse and longitudinal waves.html](../../public/simulations/Transverse%20and%20longitudinal%20waves.html) (1084 lines, 197 896 bytes; 87 lines are longer than 300 characters, 83 of them in the lecture note) |
+| Page | [public/simulations/Transverse and longitudinal waves.html](../../public/simulations/Transverse%20and%20longitudinal%20waves.html) (1086 lines, 199 133 bytes; 89 lines are longer than 300 characters, 84 of them in the lecture note) |
 | Walkthrough | [public/scripts/walk/tl.js](../../public/scripts/walk/tl.js) (110 lines, 7 steps) |
 | Thumbnail | [public/images/sims/transverse-longitudinal.webp](../../public/images/sims/transverse-longitudinal.webp) (800 × 500 px, 12 kB) |
 | Catalog entry | [public/scripts/catalog.js#L99](../../public/scripts/catalog.js#L99) (`id: 'transverse-longitudinal'`, `fig: 4`, title "Transverse & Longitudinal", field `waves`, stage 1, `has: ALL`) |
@@ -135,7 +135,7 @@ All functions live in one IIFE ([page:736–1081](../../public/simulations/Trans
 | slider `format` callbacks | [794–797](../../public/simulations/Transverse%20and%20longitudinal%20waves.html#L794-L797) | Text of each `<output>`: "26 px", "0.50 Hz", "220 px", "26". |
 | `longAmp()` | [799](../../public/simulations/Transverse%20and%20longitudinal%20waves.html#L799) | $A_\mathrm{L} = \min(A, 0.8\lambda/2\pi)$. |
 | `readouts()` | [801–813](../../public/simulations/Transverse%20and%20longitudinal%20waves.html#L801-L813) | Readouts, caption, derived scalars into the store. |
-| `label(text, x, y)` | [815–821](../../public/simulations/Transverse%20and%20longitudinal%20waves.html#L815-L821) | Row title in `T.mono`, muted colour. |
+| `label(textValue, x, y)` | [815–821](../../public/simulations/Transverse%20and%20longitudinal%20waves.html#L815-L821) | Row title in `T.mono`, muted colour. |
 | `marker(x, y)` | [823–831](../../public/simulations/Transverse%20and%20longitudinal%20waves.html#L823-L831) | Downward triangle 10 px wide, 7 px tall, tip at $(x, y)$, in `T.tanInk`. |
 | `draw()` | [834–961](../../public/simulations/Transverse%20and%20longitudinal%20waves.html#L834-L961) | The whole frame, eight steps above. |
 | `Sim.live` | [964–976](../../public/simulations/Transverse%20and%20longitudinal%20waves.html#L964-L976) | Strings for the walkthrough, read from the store at the followed bead. |
@@ -207,8 +207,8 @@ contract at [datalog.js:8–29](../../public/scripts/datalog.js#L8-L29), explain
 `kicker: 'Fig. 4 · data'`, `file: 'fig4-transverse-longitudinal'`, six groups (Physical parameters, Derived physics, Time,
 Particles, Crests and compressions, Drawing), and `colour` maps through `Sim.colourMap`
 ([datalog.js:71](../../public/scripts/datalog.js#L71)) for `xi` (scaled by $A$), `sL` (by $A_\mathrm{L}$) and `rho` ($\rho/\rho_0 - 1$
-scaled by $A_\mathrm{L}k$). Every `check` recomputes its value from stored inputs, with two exceptions: the four slider entries
-read the input element now, and `s_px`, `yT`, `yL` use the live `box.w`, `box.h` (Note 4).
+scaled by $A_\mathrm{L}k$). Every `check` recomputes its value from stored inputs, with one exception: the four slider entries
+read the input element now. `s_px`, `yT`, `yL` recompute from the stored `box_w`, `box_h` (Note 4).
 
 **Read-backs (`drawn`).** `beadPixel` reads one device pixel of the canvas at the stored bead centre. It first asks whether
 anything is drawn there (alpha > 0), then whether it is dark (luminance below 130; the bead fills ink `rgb(58, 50, 46)` and
@@ -232,7 +232,8 @@ walkthrough polls it every 200 ms ([sim.js:326](../../public/scripts/sim.js#L326
 Longitudinal Waves · Numa Koudsie", description, the security policy and referrer rule ([build-and-deploy.md](../build-and-deploy.md#security)), stylesheets `../styles/sim.css`, `../styles/data.css`,
 `../styles/fold.css`, an inline SVG favicon. No page-specific `<style>`. See [styles.md](../styles.md).
 
-**Body.** The top bar with the Fig. 1–10 links, Fig. 4 marked `aria-current` ([page:17–32](../../public/simulations/Transverse%20and%20longitudinal%20waves.html#L17-L32));
+**Body.** The top bar: one span holding the Phyein Usul logo (a link to `../index.html` with `../images/phyein-usul-mark.svg`,
+87 × 48) and "← All simulations" ([page:18](../../public/simulations/Transverse%20and%20longitudinal%20waves.html#L18)), then the Fig. 1–10 links, Fig. 4 marked `aria-current` ([page:17–32](../../public/simulations/Transverse%20and%20longitudinal%20waves.html#L17-L32));
 the heading "Fig. 4 · oscillations · wave kinematics" ([page:36–40](../../public/simulations/Transverse%20and%20longitudinal%20waves.html#L36-L40));
 the figure, `#stage` holding `canvas#waves`, with the caption ([page:43–51](../../public/simulations/Transverse%20and%20longitudinal%20waves.html#L43-L51));
 the control panel ([page:53–96](../../public/simulations/Transverse%20and%20longitudinal%20waves.html#L53-L96)); the lecture note
@@ -286,14 +287,14 @@ shown by [datalog.js:165](../../public/scripts/datalog.js#L165)).
 ## How to change it safely
 
 - **Values that must stay in sync.** The margin 22: `left` in `draw()` ([page:835](../../public/simulations/Transverse%20and%20longitudinal%20waves.html#L835)),
-  `LEFT` ([page:833](../../public/simulations/Transverse%20and%20longitudinal%20waves.html#L833)), the attrs, `check.s_px` (the 44,
+  `LEFT` ([page:833](../../public/simulations/Transverse%20and%20longitudinal%20waves.html#L833)), the attrs (as the 44 of `(box.w − 44) / 640`), `check.s_px` (as `2 LEFT`,
   [page:1062](../../public/simulations/Transverse%20and%20longitudinal%20waves.html#L1062)), walkthrough step 7 and equation (17).
   `LENGTH = 640`: the attrs, Section 2 and 8, `tl.js` steps 2 and 7. Row heights 0.3 and 0.77: `draw()`, `check.yT`, `check.yL`,
-  the attrs (784–785), `tl.js` step 7, Section 8. Marker offsets: crest `− 8` at [page:875](../../public/simulations/Transverse%20and%20longitudinal%20waves.html#L875)
+  the attrs (785–786), `tl.js` step 7, Section 8. Marker offsets: crest `− 8` at [page:875](../../public/simulations/Transverse%20and%20longitudinal%20waves.html#L875)
   and in `locate` ([page:1026](../../public/simulations/Transverse%20and%20longitudinal%20waves.html#L1026)); compression
-  `band + 6 = 40` at [page:918](../../public/simulations/Transverse%20and%20longitudinal%20waves.html#L918) and `yL − 40` in
+  `BAND + COMPRESSION_GAP` = 34 + 6 = 40 at [page:918](../../public/simulations/Transverse%20and%20longitudinal%20waves.html#L918) and `yL − 40` in
   `locate` ([page:1027](../../public/simulations/Transverse%20and%20longitudinal%20waves.html#L1027)). The cap 0.8: `longAmp()`,
-  the attrs (756), `check.AL` (1038), `tl.js` steps 4–5, equation (12) and Exercise 5.1.
+  the attrs (757), `check.AL` (1040), `tl.js` steps 4–5, equation (12) and Exercise 5.1.
 - **Walkthrough excerpts.** If you edit a line `tl.js` quotes (listed above), change the excerpt the same way. Add new store
   writes after a quoted line, never inside it.
 - **Read-backs.** `beadPixel` expects dark bead fills. A lighter bead colour, or a shape drawn over the bead centres, makes the

@@ -101,7 +101,7 @@ Across the ten pages a grep finds 546 `ds.var` calls: 137 arrays (127 `Float64Ar
 | `digits` | decimals shown, default 4 ([datalog.js:84](../../public/scripts/datalog.js#L84)) | 524 |
 | `formula` | formula shown in Check and the array view ([datalog.js:509](../../public/scripts/datalog.js#L509)) | 372 |
 | `units` | SI or pixel unit ([datalog.js:85](../../public/scripts/datalog.js#L85)) | 355 |
-| `source` | Check text when there is no independent formula ([datalog.js:521](../../public/scripts/datalog.js#L521)) | 146 |
+| `source` | Check text when there is no independent formula ([datalog.js:521](../../public/scripts/datalog.js#L521)) | 145 |
 | `updates` | when it changes ([datalog.js:508](../../public/scripts/datalog.js#L508)) | 119 |
 | `coordinate` | set by `coord`; coordinates are listed first by `along` and in `dataset.json` | set by 13 `ds.coord` calls |
 | `colour` | `true`: the scalar is an RGB triple, shown as a swatch ([datalog.js:227-230](../../public/scripts/datalog.js#L227-L230)) | 1 |
@@ -164,7 +164,7 @@ None. The file reacts to nothing; it runs only when a page or the data panel cal
   [Fig. 4 L747](../../public/simulations/Transverse%20and%20longitudinal%20waves.html#L747),
   [Fig. 5 L578](../../public/simulations/water-wave.html#L578),
   [Fig. 6 L507](../../public/simulations/wave-interference.html#L507),
-  [Fig. 7 L709](../../public/simulations/phasor-sums.html#L710),
+  [Fig. 7 L710](../../public/simulations/phasor-sums.html#L710),
   [Fig. 8 L638](../../public/simulations/draw-decompose.html#L638),
   [Fig. 9 L479](../../public/simulations/driven-oscillator.html#L479),
   [Fig. 10 L566](../../public/simulations/wind-turbine.html#L566).

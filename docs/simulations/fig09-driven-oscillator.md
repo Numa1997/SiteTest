@@ -2,7 +2,7 @@
 
 | | |
 |---|---|
-| Page | [public/simulations/driven-oscillator.html](../../public/simulations/driven-oscillator.html) (1 108 lines, 178 652 bytes) |
+| Page | [public/simulations/driven-oscillator.html](../../public/simulations/driven-oscillator.html) (1 110 lines, 180 179 bytes) |
 | Walkthrough | [public/scripts/walk/driven.js](../../public/scripts/walk/driven.js) (121 lines, 7 steps, key `driven`) |
 | Thumbnail | [public/images/sims/driven-oscillator.webp](../../public/images/sims/driven-oscillator.webp) (WebP, 800 × 500 px, 23.7 kB) |
 | Catalog entry | [public/scripts/catalog.js#L183](../../public/scripts/catalog.js#L183-L199) (`id: 'driven-oscillator'`, `fig: 9`, `field: 'control'`, `stage: 1`, lines 183–199) |
@@ -82,7 +82,7 @@ energy balance $1.27\times10^{-12}$.
 
 One line fixes the run ([L470](../../public/simulations/driven-oscillator.html#L470)):
 `M = 1` kg, `H = 0.001` s, `TEND = 60` s, `EVERY = 10`, and `NS = TEND / H / EVERY + 1`. In JavaScript `60 / 0.001` is
-exactly 60 000, so `NS` is exactly 6 001 (checked in Node). The page keeps five pieces of its own state
+exactly 60 000, so `NS` is exactly 6 001 (checked in Node). The page keeps four pieces of its own state
 ([L476](../../public/simulations/driven-oscillator.html#L476)): `playT` (playback time, s), `iNow` (row on screen),
 `fps` and `solved` (the slider values of the last solve, or `null`).
 
@@ -279,8 +279,9 @@ small inline style for the solve box (`.solve`, `.solve__steps`, `.solve__status
 [L15–L24](../../public/simulations/driven-oscillator.html#L15-L24)). Styles are described in [styles.md](../styles.md).
 
 **Body**, in order:
-- `header.sim-top` with the back link and the hand-written Fig. 1–10 links, Fig. 9 marked `aria-current`
-  ([L27–L42](../../public/simulations/driven-oscillator.html#L27-L42));
+- `header.sim-top`: one span holding the Phyein Usul logo (a link to `../index.html` with `../images/phyein-usul-mark.svg`,
+  87 × 48) and the back link "← All simulations" ([L28](../../public/simulations/driven-oscillator.html#L28)), then the hand-written Fig. 1–10 links, Fig. 9
+  marked `aria-current` ([L27–L42](../../public/simulations/driven-oscillator.html#L27-L42));
 - `.sim__head`: "Fig. 9 · control systems · forced oscillations", the `h1` and the lede
   ([L46–L50](../../public/simulations/driven-oscillator.html#L46-L50));
 - `.sim__grid`: the main figure `#stage` with `canvas#osc` and a caption holding the equation and `#cap-t`

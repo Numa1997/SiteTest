@@ -1,7 +1,7 @@
 # Working with Numa: method
 
 Read this before any work in this repository. It records how Numa expects Claude to think and persist.
-Project facts (layout, AppDeploy app, boundaries) are in AGENTS.md.
+Project facts (layout, where the site runs, boundaries) are in AGENTS.md.
 
 ## Persist; never settle for "I can't find anything"
 - One empty search is a fact about that search, not about the world. Before saying something does not exist,
@@ -12,7 +12,7 @@ Project facts (layout, AppDeploy app, boundaries) are in AGENTS.md.
   (api.stackexchange.com/2.3) answers, and its "similar" endpoint matches a plain-language question.
 - Read primary sources whole. Download the PDF, open the source file, run the code. Never pass off a search
   summary as the source, and never cite a paper you have not read when you could have read it.
-- Measure numbers instead of estimating them. Example: the Fig. 1 field grid is 350 × 158 = 55 300 points on a
+- Measure numbers instead of estimating them. Example: the Fig. 1 field grid is 360 × 162 = 58 320 points on a
   1280–1600 px wide screen, 360 × 360 at 880 px; measured in headless Chromium, not guessed.
 
 ## Build when the request is clear
@@ -24,12 +24,12 @@ Project facts (layout, AppDeploy app, boundaries) are in AGENTS.md.
 - Short sentences, everyday words. Physics pictures where they help; formulas only when asked.
 - When wrong, say so in one line and fix it. No grovelling, no excuses, no walls of text.
 
-## The application comes first, the repository second
-- The thing Numa looks at is the AppDeploy app. Work on it first: read its stored source (`src_read`), build and test against
-  that, deploy, verify the live site. Only then migrate the same change into the GitHub repository, commit and push.
-- Never start with the repository, and never report the repository first. The live app is the deliverable; the repo is its copy.
-- The repository is documentation, not a website: the app's files at the same paths, and `docs/` explaining every file and
-  script. A change is not migrated until the docs pages that describe the changed files say what the code now does.
+## The live site comes from the repository (since 20 October 2026)
+- The thing Numa looks at is Phyein Usul, <https://phyeinusul.com>, built from this repository's `main` and served by Cloudflare.
+  Work in the repository: change, build (`npm run build`), test in a real browser, commit; deploy (`npx wrangler deploy`) and verify the
+  live site when Numa asks for it. See `docs/usul.md`.
+- The AppDeploy app `numa-koudsie-website-0cyj78` stays as it is; touch it only on Numa's explicit request (`docs/appdeploy-app.md`).
+- A change is not done until the docs pages that describe the changed files say what the code now does.
 
 ## A data table is a pipeline, not a second simulation
 - The simulation writes each number into the store at the line that computes it; the display only reads. Never recompute for display.
@@ -43,7 +43,9 @@ Project facts (layout, AppDeploy app, boundaries) are in AGENTS.md.
 
 ## Design and explanations
 - The design is the house design in `DESIGN.md` of the app `droplet-collection-yl7l26`. Read it before touching fonts, colours or layout,
-  and generalise it; never introduce another font. Titles in Instrument Serif at weight 400, text in IBM Plex Sans, labels in IBM Plex Mono.
+  and generalise it; never introduce another font. Titles in Instrument Serif at weight 400 (simulations,
+  catalog and Portfolios pages); the home page alone sets its titles in IBM Plex Serif at weight 600 (`site.css`). Text in IBM Plex
+  Sans, labels in IBM Plex Mono.
 - Explanations are lecture notes set like a LaTeX document (Latin Modern text, KaTeX maths, numbered equations and figures), written as a
   professor for undergraduates and school students: motivate from everyday experience first, then the model, then the mathematics, with
   pictures. No question-and-answer format anywhere.

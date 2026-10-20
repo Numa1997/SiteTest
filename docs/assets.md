@@ -1,7 +1,7 @@
 # Fonts, maths and pictures: `public/vendor/`, `public/fonts/`, `public/images/`
 
-These folders hold files the site uses but does not compute: a maths typesetter, one typeface, and ten still pictures.
-None of them is edited by hand.
+These folders hold files the site uses but does not compute: a maths typesetter, the typefaces, ten still pictures and the
+Phyein Usul logo. None of them is edited by hand.
 
 ## `public/vendor/katex/` · the maths typesetter (24 files, 0.56 MB)
 
@@ -104,3 +104,18 @@ to this repository. If a thumbnail is missing, the catalog shows the figure numb
 scale it to 800 × 500 px, save it as WebP under the same name.
 
 Fig. 8 was renewed on 15 October 2026 from the current stage, including the TeX Re z / Im z labels and scale.
+
+## `public/images/phyein-usul-mark.svg` · the Phyein Usul logo (1 file, 0.18 MB)
+
+The mark of Phyein Usul (φύειν أصول, "roots that grow"): a fractal source with roots fading to the left and branches growing to
+the right. It is a plain SVG of 1 738 paths, `viewBox="104 0 452 250"`, in the two wines `#7a1f2b` and `#4d0f18` (the values of
+`--accent` and `--accent-dark`) on a transparent ground, with `role="img"` and `aria-label="Phyein Usul"`.
+
+| Where | Size | Line |
+|---|---|---|
+| Home page, above the name, followed by a short note ("Phyein Usul · φύειν أصول, roots that grow. A personal website and an archive: …") | 217 × 120 | [index.html:31–32](../index.html#L31-L32) |
+| Top bar of the catalog and of Portfolios, a link to the home page before "← Numa Koudsie" | 87 × 48 | [simulations.html:33](../public/simulations.html#L33), [portfolios.html:34](../public/portfolios.html#L34) |
+| Top bar of each of the ten simulation pages, a link to `../index.html` before "← All simulations" | 87 × 48 | for example [water-wave.html:18](../public/simulations/water-wave.html#L18) |
+
+No stylesheet styles it: size, spacing and the surrounding `inline-flex` span are inline `style` attributes on each page
+([styles.md](styles.md#design-rules)).

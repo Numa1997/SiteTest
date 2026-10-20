@@ -2,8 +2,8 @@
 
 | | |
 |---|---|
-| Page | [public/simulations/wave-interference.html](../../public/simulations/wave-interference.html) (966 lines, 166 361 bytes) |
-| Walkthrough | [public/scripts/walk/bench.js](../../public/scripts/walk/bench.js) (127 lines, key `bench`) |
+| Page | [public/simulations/wave-interference.html](../../public/simulations/wave-interference.html) (977 lines, 168 581 bytes) |
+| Walkthrough | [public/scripts/walk/bench.js](../../public/scripts/walk/bench.js) (123 lines, key `bench`) |
 | Thumbnail | [public/images/sims/wave-bench.webp](../../public/images/sims/wave-bench.webp) (800 × 500 px, 18 kB) |
 | Catalog entry | [public/scripts/catalog.js#L132](../../public/scripts/catalog.js#L132) (lines 132–148, `id: 'wave-bench'`, `fig: 6`) |
 
@@ -282,8 +282,9 @@ policy and referrer rule ([build-and-deploy.md](../build-and-deploy.md#security)
 
 **Body.**
 
-- Top bar with the catalog link and the Fig. 1–10 links, Fig. 6 marked `aria-current`
-  ([:29-44](../../public/simulations/wave-interference.html#L29-L44)).
+- Top bar: one span holding the Phyein Usul logo (a link to `../index.html` with `../images/phyein-usul-mark.svg`, 87 × 48)
+  and the catalog link "← All simulations" ([:30](../../public/simulations/wave-interference.html#L30)), then the Fig. 1–10
+  links, Fig. 6 marked `aria-current` ([:29-44](../../public/simulations/wave-interference.html#L29-L44)).
 - Heading: "Fig. 6 · superposition · Fourier analysis", the h1 and the lede
   ([:48-52](../../public/simulations/wave-interference.html#L48-L52)).
 - Two figures stacked in `.stack` ([:55-74](../../public/simulations/wave-interference.html#L55-L74)): the plot `#stage`
@@ -362,8 +363,8 @@ policy and referrer rule ([build-and-deploy.md](../build-and-deploy.md#security)
 - **Preset values are quoted** by the note (Beats at [:251](../../public/simulations/wave-interference.html#L251), Square wave at
   [:315](../../public/simulations/wave-interference.html#L315), the peaks 27.9, 28.0 and 41.7 px of Exercise 6.1) and by
   walkthrough steps 5–6. Recompute them if a preset changes.
-- **Walkthrough excerpts.** `bench.js` quotes these page lines: 622, 624, 654, 655, 656, 684, 695-698, 727, 729, 730, 734
-  (abridged with "..."), 739, 787, 789, 827 and 828 (checked by script). Keep them identical or edit `bench.js` in the same
+- **Walkthrough excerpts.** `bench.js` quotes these page lines: 622, 624, 654, 655, 656, 684, 695-698, 730, 732, 733, 737
+  (abridged with "..."), 742, 790, 792, 830 and 831 (checked by script). Keep them identical or edit `bench.js` in the same
   change; insert new store writes after a quoted line, never inside a quoted group ([AGENTS.md](../../AGENTS.md)).
 - **Write where you compute** and declare a `check` that uses stored inputs only, as for Fig. 5; `Sim.live` must only read.
 - **Re-test** in a real browser: load Square wave in a 1440 × 900 window and confirm $M$ = 712, $R$ = 60 px, `hSum` = 220.08,

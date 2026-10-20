@@ -2,8 +2,8 @@
 
 | | |
 |---|---|
-| Page | [public/simulations/Interactive Double-Slit Experiment Visualization.html](../../public/simulations/Interactive%20Double-Slit%20Experiment%20Visualization.html) (919 lines, 166 599 bytes; 59 lines are longer than 300 characters, 53 of them in the lecture note) |
-| Walkthrough | [public/scripts/walk/slit.js](../../public/scripts/walk/slit.js) (116 lines, 7 steps) |
+| Page | [public/simulations/Interactive Double-Slit Experiment Visualization.html](../../public/simulations/Interactive%20Double-Slit%20Experiment%20Visualization.html) (948 lines, 171 709 bytes; 59 lines are longer than 300 characters, 53 of them in the lecture note) |
+| Walkthrough | [public/scripts/walk/slit.js](../../public/scripts/walk/slit.js) (118 lines, 7 steps) |
 | Thumbnail | [public/images/sims/double-slit.webp](../../public/images/sims/double-slit.webp) (800 × 500 px, 33 kB) |
 | Catalog entry | [public/scripts/catalog.js#L82](../../public/scripts/catalog.js#L82) (`id: 'double-slit'`, `fig: 3`, field `optics`, stage 1, `has: ALL`) |
 
@@ -240,7 +240,8 @@ inline SVG favicon, and an inline `<style>` with the label classes `.svg-lbl`, `
 (larger below 560 px) and `.verdict` ([page:15–28](../../public/simulations/Interactive%20Double-Slit%20Experiment%20Visualization.html#L15-L28)).
 See [styles.md](../styles.md).
 
-**Body.** The top bar with the hand-written Fig. 1–10 links, Fig. 3 marked `aria-current`
+**Body.** The top bar: one span holding the Phyein Usul logo (a link to `../index.html` with `../images/phyein-usul-mark.svg`,
+87 × 48) and "← All simulations" ([page:32](../../public/simulations/Interactive%20Double-Slit%20Experiment%20Visualization.html#L32)), then the hand-written Fig. 1–10 links, Fig. 3 marked `aria-current`
 ([page:31–46](../../public/simulations/Interactive%20Double-Slit%20Experiment%20Visualization.html#L31-L46)); the heading
 "Fig. 3 · wave optics · wave–particle duality" ([page:50–54](../../public/simulations/Interactive%20Double-Slit%20Experiment%20Visualization.html#L50-L54));
 the grid with two figures, `#stage` holding `svg#geo` (viewBox 600 × 440, groups `#waves` under `#shapes`) and `svg#pattern`

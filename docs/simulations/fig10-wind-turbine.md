@@ -2,7 +2,7 @@
 
 | | |
 |---|---|
-| Page | [public/simulations/wind-turbine.html](../../public/simulations/wind-turbine.html) (1 154 lines, 174 597 bytes) |
+| Page | [public/simulations/wind-turbine.html](../../public/simulations/wind-turbine.html) (1 171 lines, 180 471 bytes) |
 | Walkthrough | [public/scripts/walk/turbine.js](../../public/scripts/walk/turbine.js) (121 lines, 7 steps, key `turbine`) |
 | Thumbnail | [public/images/sims/wind-turbine.webp](../../public/images/sims/wind-turbine.webp) (WebP, 800 × 500 px, 15.4 kB) |
 | Catalog entry | [public/scripts/catalog.js#L200](../../public/scripts/catalog.js#L200-L216) (`id: 'wind-turbine'`, `fig: 10`, `field: 'control'`, `stage: 2`, lines 200–216) |
@@ -316,7 +316,9 @@ the seek slider, the segmented buttons `.seg` and the greyed control `.ctl.is-of
 ([L15–L28](../../public/simulations/wind-turbine.html#L15-L28)). Styles are described in [styles.md](../styles.md).
 
 **Body**, in order:
-- `header.sim-top` with the Fig. 1–10 links, Fig. 10 marked `aria-current` ([L31–L46](../../public/simulations/wind-turbine.html#L31-L46));
+- `header.sim-top`: one span holding the Phyein Usul logo (a link to `../index.html` with `../images/phyein-usul-mark.svg`,
+  87 × 48) and "← All simulations" ([L32](../../public/simulations/wind-turbine.html#L32)), then the Fig. 1–10 links, Fig. 10 marked `aria-current`
+  ([L31–L46](../../public/simulations/wind-turbine.html#L31-L46));
 - `.sim__head`: "Fig. 10 · control systems · wind energy", `h1`, lede ([L50–L54](../../public/simulations/wind-turbine.html#L50-L54));
 - `.sim__grid`: the main figure `#stage` with `canvas#wt` and a caption with the equation and `#cap-t`
   ([L58–L66](../../public/simulations/wind-turbine.html#L58-L66)); the operating-point figure `#stage-cp` with `canvas#cp`

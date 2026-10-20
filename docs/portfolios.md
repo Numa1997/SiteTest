@@ -28,8 +28,10 @@ places, the links into it from `portfolios.html` and its one link back out.
    (Found with `grep -o 'path:"/[a-z-]*"' public/portfolios/*/static/index-*.js`.) Hash routes are used because the server
    only ever serves the one file `index.html`; everything after `#` stays in the browser. Links from `portfolios.html` therefore
    always name the file, as in `portfolios/rotor-pendula/index.html#/report`
-   ([portfolios.html:190](../public/portfolios.html#L190)). A link to the bare folder `portfolios/rotor-pendula/` would fail:
-   the AppDeploy server answers folder addresses with 403 (forbidden).
+   ([portfolios.html:190](../public/portfolios.html#L190)). The AppDeploy server used to answer a bare folder address such as
+   `portfolios/rotor-pendula/` with 403 (forbidden). Measured on 20 October 2026, both hosts serve the copy there (AppDeploy
+   200; Cloudflare 200, and Cloudflare redirects `…/index.html` to the folder with a 307, the browser keeping the `#/route`), so
+   the links that name the file work on both.
 2. **The solver runs off the main thread.** Each bundle starts a Web Worker (`static/worker-<hash>.js`). This is a second
    JavaScript thread that integrates the equations while the page stays responsive, like a second person doing the arithmetic
    while the first keeps talking. Droplet Collection's worker (130 kB) carries the collection-equation solver; Rotor Pendula's
@@ -41,18 +43,27 @@ places, the links into it from `portfolios.html` and its one link back out.
    when AppDeploy deploys an HTML file, it rewrites a relative stylesheet address such as `./static/index-<hash>.css` into an
    address at the site root, where the file does not exist (403), and the copy shows unstyled. The platform does not touch
    scripts, so a script that adds the same link at run time survives. Seen for `./assets/…` and, since October 2026, for
-   `./static/…`.
+   `./static/…`. Cloudflare serves the files unchanged (measured on 20 October 2026: the copy's `index.html` byte for byte), so
+   there the loader is not needed but does no harm.
 4. **The build folder is `static/`, not Vite's default `assets/`.** All file names inside carry a content hash
    (`index-CsGEKbO8.js`): a new build gives new names, so a browser never mixes an old cached file with a new page.
 5. **The way back.** Each bundle contains one link to `../../portfolios.html`, the Portfolios page of this site.
 6. **No backend.** The copies are built without the apps' saved runs or server functions: the Saved runs page and the Save
-   button are removed, and the Simulate page says that saving belongs to the standalone app. Everything a copy shows is
-   computed in the browser or read from the files beside it.
+   button are removed (neither bundle has a `/runs` route or the words "Saved runs"), and Rotor Pendula's Simulate page says
+   that saving runs to a shared list is part of the standalone app; Droplet Collection's Simulate page has no such sentence.
+   Neither bundle calls a server: no `XMLHttpRequest`, `WebSocket` or AppDeploy client is in them, and the one global
+   `fetch` is Vite's module-preload helper, which loads the copy's own `static/` files (the other `fetch(` are KaTeX's
+   parser), so a copy works the same on phyeinusul.com and on AppDeploy. What they keep in the browser is
+   only the reader's theme and closed folds in `localStorage` (`droplet.theme`, `droplet.closed`, `rotor.theme`,
+   `rotor.closed`). Everything a copy shows is computed in the browser or read from the files beside it. (Found with
+   `grep -o` on the two `static/index-*.js`; the apps' own source, and so their Saved runs backend, is not in this repository
+   and was not checked.)
 7. **Fonts and policy from the website.** The stylesheet's first rule imports the fonts from the website's own folder
    (`@import"../../../fonts/instrument-plex.css"`), not from Google Fonts, and `index.html` carries the website's security
    policy and referrer rule on lines 5–6, right after its charset line ([build-and-deploy.md](build-and-deploy.md#security)).
    Both were patched into the built files on 16 October 2026, so the hashes in the two stylesheet names no longer match their
-   content; nothing depends on that.
+   content; nothing depends on that. On phyeinusul.com the HTTP headers of [`public/_headers`](../public/_headers) also apply to
+   the copies (its rule `/*` covers every path; measured on `/portfolios/rotor-pendula/`).
 
 ## Files in each copy
 
@@ -110,7 +121,9 @@ places, the links into it from `portfolios.html` and its one link back out.
    python3 tools/make_portfolio_copy.py /absolute/app-source /absolute/new-workdir
    ~~~
 
-   The source must have its existing dependencies available. The helper makes an isolated source copy, removes the saved-run route and controls, retains solver error messages, adds the backlink and title suffix, builds with a separate Vite configuration, patches the stylesheet loader, points the stylesheet's font import at the website's `fonts/` and adds the website's security policy and referrer rule (taken from `index.html`). It stops if the app loads other Google fonts than `public/fonts/instrument-plex.css` holds. It installs nothing. The output is `new-workdir/dist/`; the standalone app is not edited.
+   The two copies now in this repository were not made by the present version of the helper: its Simulate note ("This
+   website copy runs in your browser. Saving named runs is available in the standalone project.") and its back-link class
+   `back-site` are in neither bundle. The source must have its existing dependencies available. The helper makes an isolated source copy, removes the saved-run route and controls, retains solver error messages, adds the backlink and title suffix, builds with a separate Vite configuration, patches the stylesheet loader, points the stylesheet's font import at the website's `fonts/` and adds the website's security policy and referrer rule (taken from `index.html`). It stops if the app loads other Google fonts than `public/fonts/instrument-plex.css` holds. It installs nothing. The output is `new-workdir/dist/`; the standalone app is not edited.
    Build with the KaTeX version the deployed app uses (0.16.47 today; it is the `content` of the `.katex-version` rule in the
    app's served CSS). The apps have no lockfile, so a fresh `node_modules` can bring a different KaTeX, which changes the
    hidden MathML that screen readers use and the spacing of multi-line equations while the visible maths looks the same
@@ -121,10 +134,11 @@ places, the links into it from `portfolios.html` and its one link back out.
    loader script used now, with the new hash:
    `<script>(function(){var l=document.createElement('link');l.rel='stylesheet';l.href='./static/index-<hash>.css';document.head.appendChild(l)})();</script>`
    It has also replaced the stylesheet's `@import"https://fonts.googleapis.com/…"` with `@import"../../../fonts/instrument-plex.css"`
-   and added lines 5–6 of `public/index.html` (the security policy and referrer rule) after the charset line of `dist/index.html`.
+   and added lines 5–6 of the root `index.html` (the security policy and referrer rule) after the charset line of `dist/index.html`.
    Without these the copy would send every visitor's address to Google, and the website's policy would not cover it.
 5. Keep the links in `public/portfolios.html` pointing at `index.html#/…`, never at a folder.
-6. Deploy the website and open every route of the copy on the live site: the page must be styled (the stylesheet loaded
+6. Deploy the website and open every route of the copy on the live site, https://phyeinusul.com ([usul.md](usul.md); the
+   AppDeploy app only on Numa's request, [appdeploy-app.md](appdeploy-app.md)): the page must be styled (the stylesheet loaded
    with status 200), and the maths typeset.
 
 ## Notes for maintainers

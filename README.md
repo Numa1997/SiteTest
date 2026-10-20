@@ -1,13 +1,14 @@
-# Numa Koudsie · physics website — source and documentation
+# Phyein Usul · Numa Koudsie's physics website — source and documentation
 
-This repository is the documented source of Numa Koudsie's physics website: ten interactive simulations, each with a
-lecture note and a data panel, two research projects, and a CV. The website itself runs as the AppDeploy app
-`numa-koudsie-website-0cyj78`:
+This repository is the source of Numa Koudsie's physics website, **Phyein Usul**: ten interactive simulations, each with a
+lecture note and a data panel, two research projects, and a CV. One source, two places where it runs:
 
-**<https://numa-koudsie-website-0cyj78.v2.appdeploy.ai>**
+| | Address | Built from | Doc |
+|---|---|---|---|
+| **Phyein Usul** (primary, since 20 October 2026) | **<https://phyeinusul.com>** | this repository's `main`, served by Cloudflare | [docs/usul.md](docs/usul.md) |
+| The AppDeploy app `numa-koudsie-website-0cyj78` (kept as it is) | <https://numa-koudsie-website-0cyj78.v2.appdeploy.ai> | its own stored copy, equal to `main` at `5c7ba7f` | [docs/appdeploy-app.md](docs/appdeploy-app.md) |
 
-The repository is not a website of its own. It holds the app's files, file for file at the same paths, and beside them
-`docs/`, which explains every file and every script and how they work.
+Beside the site's files, `docs/` explains every file and every script and how they work.
 
 ## What is where
 
@@ -18,10 +19,11 @@ The repository is not a website of its own. It holds the app's files, file for f
 | `public/simulations.html`, `public/portfolios.html` | The simulations catalog and the Portfolios page. | [docs/pages.md](docs/pages.md) |
 | `public/scripts/` | Shared JavaScript: helpers, data store, data panel, folds, the catalog registry, and the walkthroughs in `walk/`. | [docs/scripts/](docs/scripts/) |
 | `public/styles/` | The seven stylesheets. | [docs/styles.md](docs/styles.md) |
-| `public/vendor/katex/`, `public/fonts/`, `public/images/sims/` | The maths typesetter, the typefaces (Latin Modern, IBM Plex, Instrument Serif, all served by the site itself), the thumbnails. | [docs/assets.md](docs/assets.md) |
+| `public/vendor/katex/`, `public/fonts/`, `public/images/` | The maths typesetter, the typefaces (Latin Modern, IBM Plex, Instrument Serif, all served by the site itself), the thumbnails in `images/sims/` and the logo `images/phyein-usul-mark.svg`. | [docs/assets.md](docs/assets.md) |
 | `public/portfolios/` | Built copies of the two research-project apps. | [docs/portfolios.md](docs/portfolios.md) |
-| `package.json`, `vite.config.ts`, `tsconfig.json`, `tailwind.config.js`, `postcss.config.js`, `src/` | Build files from the platform's template. | [docs/build-and-deploy.md](docs/build-and-deploy.md) |
-| `tests/tests.json` | The test scenarios the platform runs after each deploy. | [docs/build-and-deploy.md](docs/build-and-deploy.md) |
+| `package.json`, `vite.config.ts`, `tsconfig.json`, `tailwind.config.js`, `postcss.config.js`, `src/` | Build files (Vite; first from AppDeploy's template). | [docs/build-and-deploy.md](docs/build-and-deploy.md) |
+| `public/_headers`, `wrangler.jsonc` | Cloudflare's security headers and deployment settings for phyeinusul.com. | [docs/usul.md](docs/usul.md) |
+| `tests/tests.json` | The test scenarios AppDeploy runs after each deploy of the app. | [docs/build-and-deploy.md](docs/build-and-deploy.md) |
 | `AGENTS.md`, `CLAUDE.md` | The maintainer's summary, and how an AI assistant is to work on the project. | [docs/build-and-deploy.md](docs/build-and-deploy.md) |
 | `docs/` | This documentation. [docs/files.md](docs/files.md) lists every file with what it is. | — |
 | `tools/` | Scripts for maintaining the repository. | [docs/files.md](docs/files.md) |
@@ -68,11 +70,14 @@ expect the other pages beside it, and browsers refuse to run the project copies'
 This recipe was checked on 14 October 2026: all 13 pages load in headless Chromium with no script errors, no maths errors,
 no broken links or images and no sideways scroll, on a desktop and a phone-sized window.
 
+Or build it as Cloudflare serves it: `npm install`, `npm run build`, then `npx wrangler dev` (see [docs/usul.md](docs/usul.md)).
+
 ## How a change travels
 
-The live app comes first. A change is made in the app, tested in a browser, deployed, and checked on the live site. Then
-the same files are copied here at the same paths, the pages of `docs/` that describe them are brought up to date,
-`python3 tools/inventory.py` rewrites the file list, and the change is committed. Details, and what the platform alters on
-a deploy: [docs/build-and-deploy.md](docs/build-and-deploy.md).
+The repository comes first (since 20 October 2026). A change is made here, built and checked in a browser, the pages of
+`docs/` that describe it are brought up to date, `python3 tools/inventory.py` rewrites the file list, the change is
+committed, and `npx wrangler deploy` publishes it to phyeinusul.com ([docs/usul.md](docs/usul.md)). The AppDeploy app gets
+the same files only when Numa asks ([docs/appdeploy-app.md](docs/appdeploy-app.md)); how AppDeploy builds and alters a
+deploy is in [docs/build-and-deploy.md](docs/build-and-deploy.md).
 
 The [theory readability audit](docs/research-theory-audit.md) records the selective teaching revisions to the ten lecture notes and both research projects, with the mathematical corrections and verification scope.

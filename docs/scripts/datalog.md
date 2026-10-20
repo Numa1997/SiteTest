@@ -2,7 +2,7 @@
 
 | | |
 |---|---|
-| File | [public/scripts/datalog.js](../../public/scripts/datalog.js), 1090 lines, 77.3 kB (77 286 bytes) |
+| File | [public/scripts/datalog.js](../../public/scripts/datalog.js), 1090 lines, 77.4 kB (77 425 bytes) |
 | Loaded by | the ten simulation pages, last, after the page's own script (line numbers in the load-order table of [sim.md](sim.md#load-order-on-the-pages)); styles in [styles/data.css](../../public/styles/data.css), linked in each page's head (for example [Double Pendulum.html:12](../../public/simulations/Double%20Pendulum.html#L12)) |
 | Reads | `Sim.data` (the page's contract, below) and through it the page's dataset ([datalog.js:43-44](../../public/scripts/datalog.js#L43-L44)) |
 | Defines | `Sim.colourMap` ([datalog.js:71](../../public/scripts/datalog.js#L71)), `window.__dataPanel` ([datalog.js:1089](../../public/scripts/datalog.js#L1089)) |
@@ -313,15 +313,15 @@ which pages set them (from the ten `Sim.data = {` blocks).
 | Key | Shape | Read at | Set by |
 |---|---|---|---|
 | `ds` | the dataset | [43](../../public/scripts/datalog.js#L43) | all |
-| `kicker` | text above the title (default: the dataset title) | [137](../../public/scripts/datalog.js#L137) | all, not in the comment |
+| `kicker` | text above the title (default: the dataset title) | [137](../../public/scripts/datalog.js#L137) | all |
 | `file` | base name of saved files | [968](../../public/scripts/datalog.js#L968), [977](../../public/scripts/datalog.js#L977), [1005](../../public/scripts/datalog.js#L1005) | all |
 | `playing` | `() → bool` | [762](../../public/scripts/datalog.js#L762), [784](../../public/scripts/datalog.js#L784) | all |
 | `play` | `() → void` | [762](../../public/scripts/datalog.js#L762) | all except Fig. 3 |
 | `groups` | `[{ title, note, vars }]` | [98](../../public/scripts/datalog.js#L98), [189](../../public/scripts/datalog.js#L189), [769](../../public/scripts/datalog.js#L769) | all |
 | `colour` | `{ name: (value, j, i) → [r, g, b] \| null }`, presentation only | [95](../../public/scripts/datalog.js#L95) | all except Figs. 2 and 10 |
-| `rowLabel` | `{ dim: (j) → text }` | [400](../../public/scripts/datalog.js#L400), [414](../../public/scripts/datalog.js#L414) | Figs. 2, 3, 5, 6, 7, 8; not in the comment |
-| `colLabel` | `{ name: (i) → html }` | [413](../../public/scripts/datalog.js#L413) | Figs. 1, 2; not in the comment |
-| `at` | `{ name: (j[, i]) → html }`, a note after a table cell's value | [403](../../public/scripts/datalog.js#L403), [417](../../public/scripts/datalog.js#L417) | Figs. 1, 2; not in the comment |
+| `rowLabel` | `{ dim: (j) → text }` | [400](../../public/scripts/datalog.js#L400), [414](../../public/scripts/datalog.js#L414) | Figs. 2, 3, 5, 6, 7, 8 |
+| `colLabel` | `{ name: (i) → html }` | [413](../../public/scripts/datalog.js#L413) | Figs. 1, 2 |
+| `at` | `{ name: (j[, i]) → html }`, a note after a table cell's value | [403](../../public/scripts/datalog.js#L403), [417](../../public/scripts/datalog.js#L417) | Figs. 1, 2 |
 | `probe` | `(x, y) → ref \| null`, CSS px in `#stage` | [551](../../public/scripts/datalog.js#L551) | all |
 | `inspect` | `(ref) → { title, at: {x, y}, rows: [[symbol, value, units, varName, index]] }` | [669](../../public/scripts/datalog.js#L669), [692](../../public/scripts/datalog.js#L692), [807](../../public/scripts/datalog.js#L807) | all |
 | `locate` | `(varName, index) → {x, y} \| null` | [677](../../public/scripts/datalog.js#L677) | all |
@@ -440,8 +440,9 @@ capture phase for `soon()`; `ResizeObserver` on `#stage` and on the table.
 
 ## Contracts with other files
 
-- **`dataset.js`**: the store and its fields `title`, `dims`, `vars`, `order`, methods `get`, `dtype`, `along`, `has`, `npz`
-  and the `Dataset` constructor for round archives ([dataset.md](dataset.md)).
+- **`dataset.js`**: the store and its fields `title`, `dims`, `vars`, `order`, methods `get`, `dtype`, `along`, `npz`; for a
+  round archive, `Sim.dataset` and the new store's `dim`, `coord`, `var`, `set`, `has` and `npz`
+  ([datalog.js:970-978](../../public/scripts/datalog.js#L970-L978); [dataset.md](dataset.md)).
 - **`sim.js`**: `Sim.fmt` for every number ([datalog.js:63](../../public/scripts/datalog.js#L63)); `readPixel` and
   `isBurgundy` are used by the `drawn` functions of Figs. 9 and 10 ([sim.md](sim.md)).
 - **The page**: `Sim.data` (above), `#stage` with a sibling `.stage__cap`, and the CSS tokens. Each page's documentation

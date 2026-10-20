@@ -119,8 +119,8 @@ Numa's reading of the wording.
 | 7 | Droplet Collection ch. 4 and ch. 9 | "the two effects compete" is false for partners much smaller than the collector ($E_\text{coal}$ stays 0.995 at Stokes speeds); the reading of (56) proved $\varepsilon = 2f$ for disjoint regions only, while the Golovin spectra overlap. | Both sentences made exact: for equal totals the deficit and the excess are each $\varepsilon L/2$ (app v11, snapshot `1792108231309`). |
 | 8 | QA scenarios | Rotor: the solver re-run test had lost its sanity flag. Droplet: two scenarios were merged with an ambiguous step order. Neither change was reported. | Flag restored; "Return to Theory" added to the step. |
 | 9 | Rotor Pendula ch. 10 | The renamed heading was still a question. | "The accelerometer's range on the blade". |
-| 10 | Figs. 3, 5, 9, 10; Rotor ch. 7 and 9 | Everyday pictures replaced by abstract wording: each photon interferes with itself; pressure cannot spin a parcel; a slow rotor lets the air slip between its blades; the leaves in calm water and in rapids. | Open: the wording goes to Numa first. |
-| 11 | Figs. 2, 8, 9; Droplet ch. 5, 7; Rotor ch. 3 | A garbled sentence, a run-on, $\varphi$ used before it is defined, $v_t$ used for the Stokes speed, a symbol clash on $f$. | Open, with item 10. |
+| 10 | Figs. 3, 5, 9, 10; Rotor ch. 7 and 9 | Everyday pictures replaced by abstract wording: each photon interferes with itself; pressure cannot spin a parcel; a slow rotor lets the air slip between its blades; the leaves in calm water and in rapids. | Fixed on 16 October 2026 (next section). Evidence: [Fig. 3 L491](../public/simulations/Interactive%20Double-Slit%20Experiment%20Visualization.html#L491) (both slits for every single photon), [Fig. 5 L253](../public/simulations/water-wave.html#L253) (Kelvin), [Fig. 9 L167](../public/simulations/driven-oscillator.html#L167) (Millennium Bridge), [Fig. 10 L235](../public/simulations/wind-turbine.html#L235) ("almost like a solid wall"); Rotor ch. 9 "like money at compound interest" in `index-CsGEKbO8.js`. |
+| 11 | Figs. 2, 8, 9; Droplet ch. 5, 7; Rotor ch. 3 | A garbled sentence, a run-on, $\varphi$ used before it is defined, $v_t$ used for the Stokes speed, a symbol clash on $f$. | Fixed on 16 October 2026 with item 10 (next section); for example the Stokes speed is written \(v_t^S\) in `index-DGIxitSc.js`. |
 
 Also in the Rotor Theory: the angle-only linearisation in chapter 3's fold-out is now displayed as equation (18a), because
 the inline form wrapped on a phone.
@@ -136,7 +136,7 @@ that the revision had replaced is back, with the revision's precision kept besid
 
 | Where | Restored | Kept from the revision |
 |---|---|---|
-| Fig. 3, Section 7 | each photon interferes with itself; closing a slit or recording the path removes the fringes | the probability amplitude is not the classical field; counts per unit angle against per unit length on a flat screen (a factor 3/4 at 30°) |
+| Fig. 3, Section 7 | every single photon needs both slits; closing a slit or recording the path removes the fringes ([L491](../public/simulations/Interactive%20Double-Slit%20Experiment%20Visualization.html#L491); the page does not use the words "interferes with itself") | the probability amplitude is not the classical field; counts per unit angle against per unit length on a flat screen (a factor 3/4 at 30°) |
 | Fig. 5, Section 4 | pressure pushes through a parcel's centre and gravity pulls at it, so neither can spin it; Kelvin's circulation theorem by name | the theorem's three conditions: constant density, no viscosity, a force with a potential |
 | Fig. 9, Section 1 | the Millennium Bridge, now as the counter-example: the walkers' steps fed back on the sway | the prescribed-force idealisation stated as such |
 | Fig. 10, Section 3 | too slow lets the air through, too fast acts like a wall | the angle of attack as the mechanism behind both |

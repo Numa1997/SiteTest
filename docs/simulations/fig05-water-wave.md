@@ -2,8 +2,8 @@
 
 | | |
 |---|---|
-| Page | [public/simulations/water-wave.html](../../public/simulations/water-wave.html) (890 lines, 159 733 bytes) |
-| Walkthrough | [public/scripts/walk/water.js](../../public/scripts/walk/water.js) (115 lines, key `water`) |
+| Page | [public/simulations/water-wave.html](../../public/simulations/water-wave.html) (891 lines, 161 372 bytes) |
+| Walkthrough | [public/scripts/walk/water.js](../../public/scripts/walk/water.js) (116 lines, key `water`) |
 | Thumbnail | [public/images/sims/water-wave.webp](../../public/images/sims/water-wave.webp) (800 × 500 px, 15 kB) |
 | Catalog entry | [public/scripts/catalog.js#L115](../../public/scripts/catalog.js#L115) (lines 115–131, `id: 'water-wave'`, `fig: 5`) |
 
@@ -256,8 +256,9 @@ stylesheets `../styles/sim.css` (which imports the self-hosted fonts, KaTeX's CS
 
 **Body.**
 
-- Top bar with the link back to the catalog and the hand-written Fig. 1–10 links, Fig. 5 marked `aria-current`
-  ([:17-32](../../public/simulations/water-wave.html#L17-L32)).
+- Top bar: one span holding the Phyein Usul logo (a link to `../index.html` with `../images/phyein-usul-mark.svg`, 87 × 48)
+  and the link back to the catalog, "← All simulations" ([:18](../../public/simulations/water-wave.html#L18)), then the
+  hand-written Fig. 1–10 links, Fig. 5 marked `aria-current` ([:17-32](../../public/simulations/water-wave.html#L17-L32)).
 - Heading: "Fig. 5 · fluid dynamics · particle motion", the h1 and the lede ([:36-40](../../public/simulations/water-wave.html#L36-L40)).
 - The figure: `#stage` with aspect ratio 16 / 7.6, or 1 / 0.95 below 900 px viewport width
   ([:44](../../public/simulations/water-wave.html#L44), [sim.css:215](../../public/styles/sim.css#L215)), the canvas `#water`, and
@@ -305,7 +306,7 @@ stylesheets `../styles/sim.css` (which imports the self-hosted fonts, KaTeX's CS
 - **Layers below the canvas.** Every layer and parcel is computed and stored; drawing is skipped when its centre line lies within 8 css px of the bottom
   ([:737](../../public/simulations/water-wave.html#L737)); `layers_drawn` counts visible rows only.
 - **Stokes drift.** The orbits close exactly; `stokes` is stored as a theoretical number and labelled "theory, not drawn"
-  ([:597](../../public/simulations/water-wave.html#L597), note Section 07 at [:504](../../public/simulations/water-wave.html#L504)).
+  ([:597](../../public/simulations/water-wave.html#L597), note Section 07 at [:503](../../public/simulations/water-wave.html#L503)).
 - **The frequency slider rounds.** With dispersion on, the motion uses the exact $f$; the slider shows it to 0.01 Hz
   ([:636](../../public/simulations/water-wave.html#L636), [:645](../../public/simulations/water-wave.html#L645)).
 - **Readouts round.** The side-panel readouts show at most two decimals; the store keeps full precision
@@ -324,7 +325,7 @@ stylesheets `../styles/sim.css` (which imports the self-hosted fonts, KaTeX's CS
   λ = 2.6 m, $a$ = 0.24 m, $ak$ = 0.58, $c$ = 2.01 m/s, the five radii of Section 06. Changing a slider default
   ([:67-87](../../public/simulations/water-wave.html#L67-L87)) means recomputing them, and the table and Figures 2–3.
 - **Walkthrough excerpts.** `water.js` quotes these page lines verbatim: 635, 637-639, 640, 653, 654, 656, 657, 658, 680, 681,
-  691-693, 734, 738-740 and 789 (checked by script: every excerpt line is a substring of one of these lines). Keep them
+  691-693, 735, 740-742 and 792 (checked by script: every excerpt line is a substring of one of these lines). Keep them
   identical, or edit `water.js` in the same change. When adding a store write, insert a new line after a quoted line, never
   inside a quoted group ([AGENTS.md](../../AGENTS.md)).
 - **Write where you compute.** A new quantity gets a `ds.var` declaration, a `ds.set` (or an array write) on the line that
