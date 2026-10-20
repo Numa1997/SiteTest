@@ -1,5 +1,10 @@
 # Fig. 4 · walkthrough check (`tl`)
 
+> Lead's note, 20 October 2026: these proposed fixes were written before some later edits of the note and were audited
+> against the current notes afterwards (docs/research-theory-audit.md, "Open, for Numa"). Fixes that touch a `code` or
+> `where` field need the same permission as the rest. Nothing here has been applied; the walkthrough file is unchanged.
+
+
 Checked on 20 October 2026 by the walkthrough keeper, at commit `127a8d2` (the working copy equals it for both files).
 
 - Page: `public/simulations/Transverse and longitudinal waves.html`, 1 086 lines; lecture note at lines 99–722;
@@ -98,7 +103,7 @@ x<sub>upper</sub> = 22 + s X
 | 1 | “The same function drives both rows; the only difference is the direction of ξ” | §2, line 137 (edited): the lower row’s amplitude A<sub>L</sub> equals A only at the default settings. §3, Exercise 3.1, line 470 (edited): “The lower row differs here: at 110 px the cap of Section 5 lowers its amplitude to 14 px” | **contradicted** |
 | 2 | bead keeps its x; minus sign because screen y points down | §8, line 694 | agrees |
 | 3 | true modulo; X<sub>c</sub> moves at dX<sub>c</sub>/dt = ω/k = v | eq. (2); §3, line 460 | agrees |
-| 4 | the same ξ added along the travel; nothing travels, only the pattern | §2, line 142 (“Both rows carry the same ξ”, not edited); §1 | agrees (see the optional note in section 5) |
+| 4 | the same ξ added along the travel; nothing travels, only the pattern | §2, line 142, edited later (468c139) to “Both rows carry the same phase kX − ωt” | **mismatch, added by the lead after the independent audit:** tl.js:60 old `The same ξ, now added along the direction of travel.` → new `The same phase kX − ωt, with the amplitude A<sub>L</sub> of step 5 in place of A, now added along the direction of travel.` |
 | 5 | A<sub>L</sub>k = 1 would let beads pass through each other; with A<sub>L</sub>k ≤ 0.8 the tightest spacing is 20 % of rest, the densest point 5 × rest | §5, lines 507–509; edited line 137 (“about a quarter” at A<sub>L</sub>k = 0.743, inside the 20 % bound) | agrees |
 | 6 | each compression λ/4 ahead of a crest; band darkens as max(0, −cos(kX − ωt)), 65 points | eq. (11); §8, line 698 | agrees; holds the known raw mark |
 | 7 | the row is 640 world px; 22 px margins give the 44 | §8, line 692; eq. (17) | agrees |

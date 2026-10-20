@@ -1,5 +1,10 @@
 # Fig. 1 · walkthrough check (`circles`)
 
+> Lead's note, 20 October 2026: these proposed fixes were written before some later edits of the note and were audited
+> against the current notes afterwards (docs/research-theory-audit.md, "Open, for Numa"). Fixes that touch a `code` or
+> `where` field need the same permission as the rest. Nothing here has been applied; the walkthrough file is unchanged.
+
+
 Checked on 20 October 2026 by the walkthrough keeper, at commit `d3ffae1` on branch `claude/physics-notes-rewrite-cwctkk`. The
 page, `circles.js` and `sim.js` are byte-identical at `6df11fb`, which committed a first copy of this report; this copy differs
 only in the mark count (17 keys) and in setting the M6 code fixes as blocks. The page was last changed in `a01cf85` (the teacher's edits to §4 at L285 and L287, §6 at L308, §10.1 at L487–L490). `circles.js` was

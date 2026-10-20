@@ -1,5 +1,10 @@
 # Fig. 9 · walkthrough check (`driven`)
 
+> Lead's note, 20 October 2026: these proposed fixes were written before some later edits of the note and were audited
+> against the current notes afterwards (docs/research-theory-audit.md, "Open, for Numa"). Fixes that touch a `code` or
+> `where` field need the same permission as the rest. Nothing here has been applied; the walkthrough file is unchanged.
+
+
 Checked on 20 October 2026 by the walkthrough keeper, at commit `d3ffae1`. The page and `driven.js` are the same as at `127a8d2`,
 the commit that added equation (6a), and the working copy matches both.
 
@@ -168,8 +173,10 @@ steady amplitude X of (4), the subject of this step's formula, is drawn: the das
 
 ```
 old:            note: 'This equation can also be solved with pencil and paper: a steady oscillation at the driver’s frequency plus a dying free oscillation. The page uses the exact solution only to grade the numerical one, never to draw.',
-new:            note: 'This equation can also be solved with pencil and paper: a steady oscillation at the driver’s frequency plus a dying free oscillation. The page uses the exact motion, equation (5), only to grade the numerical one, and never draws it; formula (4) is drawn only as guides, the dashed ±X lines of the window chart and the Bode plot.'
+new:            note: 'This equation can also be solved with pencil and paper: a steady oscillation at the driver’s frequency plus a dying free oscillation. The page uses the exact motion, equation (5), only to grade the numerical one, and never draws it; formula (4) is drawn only as guides, the dashed ±X lines of the window chart and the Bode plot.',
 ```
+
+(Corrected by the lead on 20 October 2026: the trailing comma was missing from the new text above; without it driven.js does not parse. Found by the independent audit.)
 
 The new text cites (4) and (5). Both numbers point to the right equations, at lines 219 and 222.
 

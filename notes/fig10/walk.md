@@ -1,5 +1,10 @@
 # Fig. 10 · walkthrough check (`turbine`)
 
+> Lead's note, 20 October 2026: these proposed fixes were written before some later edits of the note and were audited
+> against the current notes afterwards (docs/research-theory-audit.md, "Open, for Numa"). Fixes that touch a `code` or
+> `where` field need the same permission as the rest. Nothing here has been applied; the walkthrough file is unchanged.
+
+
 Checked on 20 October 2026 by the walkthrough keeper, at commit `468c139` (the working copy equals it for both files).
 
 - Page: `public/simulations/wind-turbine.html`, 1 171 lines; lecture note at lines 150–537; `#walk[data-walk="turbine"]` at

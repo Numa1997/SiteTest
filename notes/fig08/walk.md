@@ -1,5 +1,10 @@
 # Fig. 8 · walkthrough check (`dft`)
 
+> Lead's note, 20 October 2026: these proposed fixes were written before some later edits of the note and were audited
+> against the current notes afterwards (docs/research-theory-audit.md, "Open, for Numa"). Fixes that touch a `code` or
+> `where` field need the same permission as the rest. Nothing here has been applied; the walkthrough file is unchanged.
+
+
 Checked on 20 October 2026 by the walkthrough keeper, at commit `c29e570` (working copy equal to it for both files).
 
 - Page: `public/simulations/draw-decompose.html`, 1 416 lines; lecture note at lines 136–608; `#walk[data-walk="dft"]` at line 610.

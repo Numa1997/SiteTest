@@ -1,5 +1,10 @@
 # Fig. 2 · walkthrough check (`pendulum`)
 
+> Lead's note, 20 October 2026: these proposed fixes were written before some later edits of the note and were audited
+> against the current notes afterwards (docs/research-theory-audit.md, "Open, for Numa"). Fixes that touch a `code` or
+> `where` field need the same permission as the rest. Nothing here has been applied; the walkthrough file is unchanged.
+
+
 Checked on 20 October 2026 by the walkthrough keeper, on branch `claude/physics-notes-rewrite-cwctkk`. I started on the
 teacher's edited note (11 lines: L141, L219, L335, L337, L350–351, L358–359, L372–374), which the lead then committed in
 `a01cf85`. During the check the lead committed `468c139`. On the page it only splits the displayed equations (5), (8), (9) and

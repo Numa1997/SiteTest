@@ -1,5 +1,10 @@
 # Fig. 7 · Phasor sums · walkthrough check
 
+> Lead's note, 20 October 2026: these proposed fixes were written before some later edits of the note and were audited
+> against the current notes afterwards (docs/research-theory-audit.md, "Open, for Numa"). Fixes that touch a `code` or
+> `where` field need the same permission as the rest. Nothing here has been applied; the walkthrough file is unchanged.
+
+
 Walkthrough `public/scripts/walk/phasors.js` (key `phasors`, 134 lines, 8 190 bytes, 8 steps), page
 `public/simulations/phasor-sums.html` (`data-walk="phasors"` at L652), lecture note L221–650 as edited on 20 October 2026
 (`git diff`: §5 cancellation paragraph, §6 "at the foot of the controls", §8 dot radius, §8.1 Record/Replay, §9.1 links).

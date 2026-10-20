@@ -1,5 +1,10 @@
 # Fig. 5 · walkthrough `water` against water-wave.html · check
 
+> Lead's note, 20 October 2026: these proposed fixes were written before some later edits of the note and were audited
+> against the current notes afterwards (docs/research-theory-audit.md, "Open, for Numa"). Fixes that touch a `code` or
+> `where` field need the same permission as the rest. Nothing here has been applied; the walkthrough file is unchanged.
+
+
 Checked on 20 October 2026 by the walkthrough keeper. Read-only: `public/scripts/walk/water.js` is not changed (Numa has not
 allowed it). The fixes below are written out exactly, for the lead to apply if that permission comes.
 

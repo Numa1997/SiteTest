@@ -22,7 +22,7 @@ repository.
 | Path | What it holds |
 |---|---|
 | [STANDARD.md](../notes/STANDARD.md) | The standard every note is judged against, Numa's decisions, and his verdicts, which override the rest. |
-| [STATUS.md](../notes/STATUS.md) | One row per figure: verdicts, checks, rounds, open items. |
+| [STATUS.md](../notes/STATUS.md) | What is done (one row of check results per figure) and what waits for Numa. |
 | [verify.mjs](../notes/verify.mjs) | The lead's check of the ten pages in headless Chromium at 1440 × 900, 1600 × 900 and 390 × 844: console and KaTeX errors, sideways scroll, folds, equation numbers, links in the reading lists, and display equations wider than their box. Run after `APPDEPLOY_VITE_OUT_DIR=/tmp/lead-dist npm run build` as `node notes/verify.mjs /tmp/lead-dist`. |
 | [walkcheck.cjs](../notes/walkcheck.cjs) | Searches every quoted code line of the ten walkthroughs in its page, by the recipe of [scripts/walk.md](scripts/walk.md). Run as `node notes/walkcheck.cjs`. |
 | [.gitignore](../notes/.gitignore) | Keeps the agents' screenshots out of the repository; the scripts beside them reproduce them. |
