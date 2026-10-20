@@ -52,8 +52,8 @@ Figs. 9 (driven oscillator) and 10 (wind turbine control) solve the whole run fi
 stored samples back; nothing is integrated while the reader watches.
 Portfolios: `portfolios.html` introduces long research projects; each lives as a static copy under `portfolios/<name>/`:
 `portfolios/droplet-collection/` (app `droplet-collection-yl7l26`) and `portfolios/rotor-pendula/` (app `rotor-pendula-gafw0f`). Each is
-the Vite build of its app without saved runs and backend (hash routes; link to `portfolios/<name>/index.html#/…`, since folder addresses
-return 403), with a back link to `../../portfolios.html`. Their build folder is `static/`, not `assets/`. AppDeploy rewrites a relative
+the Vite build of its app without saved runs and backend (hash routes; link to `portfolios/<name>/index.html#/…`: folder addresses
+returned 403 on AppDeploy until mid-October 2026; on 20 October both hosts serve them), with a back link to `../../portfolios.html`. Their build folder is `static/`, not `assets/`. AppDeploy rewrites a relative
 stylesheet link in a deployed HTML file to the site root (seen for `./assets/…` and, since October 2026, `./static/…`: both give 403), so
 after building, replace the `<link rel="stylesheet" href="./static/….css">` in the copy's `index.html` with a short script that adds
 the same link at run time (the platform leaves scripts alone); without it the copy shows unstyled. Their source stays in their apps;

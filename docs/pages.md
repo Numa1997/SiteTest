@@ -466,15 +466,15 @@ AppDeploy and (20 October 2026) on phyeinusul.com. To keep a path out of search 
 
 ## Notes for maintainers
 
-1. **Home page fonts and shadows depart from the house design.** AGENTS.md ([41–43](../AGENTS.md#L41-L43)) and CLAUDE.md
-   ([46–47](../CLAUDE.md#L46-L47)) ask, since 20 October 2026, for titles at weight 400 only, in IBM Plex Serif on the home,
-   catalog and Portfolios pages and in Instrument Serif on the simulation pages; AGENTS.md also asks for no card shadows. The
-   home page loads only `site.css`, whose `--serif` is
+1. **Home page shadows depart from the house design; its title face is now a stated exception.** AGENTS.md
+   ([41–43](../AGENTS.md#L41-L43)) and CLAUDE.md ([46–47](../CLAUDE.md#L46-L47)) ask, since 20 October 2026, for titles in
+   Instrument Serif at weight 400 on the simulation, catalog and Portfolios pages and in IBM Plex Serif at weight 600 on the
+   home page alone; AGENTS.md also asks for no card shadows. The home page loads only `site.css`, whose `--serif` is
    IBM Plex Serif ([site.css:22](../public/styles/site.css#L22)) and whose titles are weight 600
    ([site.css:138](../public/styles/site.css#L138), [336](../public/styles/site.css#L336),
-   [423](../public/styles/site.css#L423)). Measured: `h1`, five `h2` and 21 `h3` in IBM Plex Serif 600; box shadows on
-   `.figure`, `.project` and `.plate`. The catalog and Portfolios pages use Instrument Serif 400 (measured; `catalog.css` sets `--serif` to Instrument Serif,
-   [catalog.css:10](../public/styles/catalog.css#L10)), not the IBM Plex Serif that the two files now name for them.
+   [423](../public/styles/site.css#L423)). Measured: `h1`, five `h2` and 21 `h3` in IBM Plex Serif 600, as the rule now says; box shadows on
+   `.figure`, `.project` and `.plate`, against it. The catalog and Portfolios pages use Instrument Serif 400 (measured; `catalog.css` sets `--serif` to Instrument Serif,
+   [catalog.css:10](../public/styles/catalog.css#L10)).
 2. **The home page shows eight figures, the site has ten.** The plates stop at Fig. 8 ([289–569](../index.html#L289-L569));
    Figs. 9 and 10 are only in the catalog ([catalog.js:183–216](../public/scripts/catalog.js#L183-L216)). The section intro says
    the simulations page "lists them all by field, with the question each one answers"

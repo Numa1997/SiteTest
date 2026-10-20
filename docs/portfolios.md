@@ -51,8 +51,9 @@ places, the links into it from `portfolios.html` and its one link back out.
 6. **No backend.** The copies are built without the apps' saved runs or server functions: the Saved runs page and the Save
    button are removed (neither bundle has a `/runs` route or the words "Saved runs"), and Rotor Pendula's Simulate page says
    that saving runs to a shared list is part of the standalone app; Droplet Collection's Simulate page has no such sentence.
-   Neither bundle calls a server: no global `fetch`, `XMLHttpRequest`, `WebSocket` or AppDeploy client is in them (every
-   `fetch(` is KaTeX's parser), so a copy works the same on phyeinusul.com and on AppDeploy. What they keep in the browser is
+   Neither bundle calls a server: no `XMLHttpRequest`, `WebSocket` or AppDeploy client is in them, and the one global
+   `fetch` is Vite's module-preload helper, which loads the copy's own `static/` files (the other `fetch(` are KaTeX's
+   parser), so a copy works the same on phyeinusul.com and on AppDeploy. What they keep in the browser is
    only the reader's theme and closed folds in `localStorage` (`droplet.theme`, `droplet.closed`, `rotor.theme`,
    `rotor.closed`). Everything a copy shows is computed in the browser or read from the files beside it. (Found with
    `grep -o` on the two `static/index-*.js`; the apps' own source, and so their Saved runs backend, is not in this repository

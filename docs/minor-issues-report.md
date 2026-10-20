@@ -2,7 +2,7 @@
 
 All five batches are complete. Each batch was deployed once, verified live, then committed and pushed to `codex/minor-issues-20261015`. No pull request was opened. No package was installed.
 
-Live site: https://numa-koudsie-website-0cyj78.v2.appdeploy.ai
+Live site at the time: https://numa-koudsie-website-0cyj78.v2.appdeploy.ai (the AppDeploy app, [appdeploy-app.md](appdeploy-app.md)). Since 20 October 2026 the primary site is https://phyeinusul.com, built from this repository and served by Cloudflare ([usul.md](usul.md)); the AppDeploy app still runs, unchanged since its version `1792151590518`.
 Final stored version: `1792053833126`.
 
 Commits: [A — 9d3175f](https://github.com/Numa1997/SiteTest/commit/9d3175f2cf50d0ad3f8792f1ee173e8ce56bab53), [B — 74ef7d9](https://github.com/Numa1997/SiteTest/commit/74ef7d94571f467f31d2289be6c9668b6809a09f), [C — 43d8238](https://github.com/Numa1997/SiteTest/commit/43d82383f4294428a1cf027f2727644ccf7dc8a5), [D — ce3bfc4](https://github.com/Numa1997/SiteTest/commit/ce3bfc439ce40b3e8b6bd7f59af2af9404bd4997). [E — 8982ed3](https://github.com/Numa1997/SiteTest/commit/8982ed35e78161ea7cdd82ae1794f44ccfe39f3c).
@@ -61,7 +61,7 @@ Readbacks respect the picture’s precision: stored/recomputed numbers match exa
 | E: overridden declarations | fixed | Removed earlier fold display/top and 26 px phone title rules; computed styles match. |
 | E: five undefined tokens | fixed | Replaced only with their existing fallback values; compared colours remain identical. |
 | E: overwritten label initializer | fixed | Removed sw = 0 before its unconditional assignment; drawing arrays remain identical. |
-| Home title font and weight | left for Numa | Preserved as requested. |
+| Home title font and weight | decided | Since 20 October 2026 AGENTS.md ([41–43](../AGENTS.md#L41-L43)) and CLAUDE.md ([46–47](../CLAUDE.md#L46-L47)) name IBM Plex Serif at weight 600 for the home page alone, which is what [site.css:138](../public/styles/site.css#L138) sets. |
 | Home card shadows | left for Numa | Preserved as requested. |
 | Fold, simulation and data shadows | left for Numa | Preserved as requested. |
 | Home eight-of-ten selection | left for Numa | Preserved as requested. |
@@ -77,21 +77,21 @@ Readbacks respect the picture’s precision: stored/recomputed numbers match exa
 | “This simulation stopped” error message | left for Numa | Preserved as requested. |
 | Walkthrough Now at 5 Hz | left for Numa | Preserved as requested. |
 | Two favicons | left for Numa | Preserved as requested. |
-| Duplicated Google Fonts import | left for Numa | Preserved as requested. |
+| Duplicated Google Fonts import | fixed (later, by the self-hosted fonts) | No page or stylesheet loads Google Fonts any more: no `fonts.googleapis.com` in `index.html` or `public/`; [site.css:5](../public/styles/site.css#L5) imports `../fonts/plex.css`, [sim.css:7](../public/styles/sim.css#L7) and [catalog.css:7](../public/styles/catalog.css#L7) import `../fonts/instrument-plex.css`. |
 | Repeated sim.css tokens | left for Numa | Preserved as requested. |
-| CLAUDE.md | left for Numa | Preserved as requested. |
+| CLAUDE.md | fixed in part | [CLAUDE.md:15–16](../CLAUDE.md#L15-L16) now gives the measured desktop grid 360 × 162 = 58 320; it keeps "360 × 360 at 880 px" (correct, [fig01-wave-sources.md](simulations/fig01-wave-sources.md)) and does not take the 390 px phone grid or the samples-per-wavelength and call counts of the proposed sentence below. |
 | House fonts and colours | left for Numa | Preserved as requested. |
 | Two embedded project copies | left for Numa | Preserved as requested. |
 | droplet-collection-yl7l26 | left for Numa | Preserved as requested. |
 | rotor-pendula-gafw0f | left for Numa | Preserved as requested. |
 | physik-radar-xvy59b | left for Numa | Preserved as requested. |
 | numa-physics-lab-chatgpt-k0ixwk | left for Numa | Preserved as requested. |
-| GitHub Pages | left for Numa | Preserved as requested. |
+| GitHub Pages | superseded | Since 20 October 2026 the site is published from this repository by Cloudflare ([wrangler.jsonc](../wrangler.jsonc), [usul.md](usul.md)); nothing in the repository configures GitHub Pages. |
 | Other maintainer notes outside the requested batches | left for Numa | Apostrophe consistency, xi naming, walkthrough path/header, unused catalog metadata, drawn_note, undeclared-value behavior, noscript listing, catalog debug state and cross-file CSS overrides remain. |
 
 Proposals for Numa (none applied):
 
-- **Home title font and weight:** Choose explicitly whether IBM Plex Serif 600 should remain or change to the documented house title face.
+- **Home title font and weight:** Choose explicitly whether IBM Plex Serif 600 should remain or change to the documented house title face. (Decided on 20 October 2026: IBM Plex Serif 600 stays; see the table.)
 - **Home card shadows:** Decide whether to keep the current shadows or adopt the no-shadow rule.
 - **Fold, simulation and data shadows:** Make one explicit shadow policy for the visible fold, figure, walkthrough and data panels.
 - **Home eight-of-ten selection:** Decide whether the home page remains a selection or adds Figs. 9 and 10.
@@ -107,7 +107,7 @@ Proposals for Numa (none applied):
 - **“This simulation stopped” error message:** Use a general page-error message unless the clock has actually stopped.
 - **Walkthrough Now at 5 Hz:** Choose 4 or 5 updates per second and whether folded walkthroughs should refresh.
 - **Two favicons:** Choose one N or NK mark for the three top-level pages.
-- **Duplicated Google Fonts import:** Consolidate font loading in a separate approved change.
+- **Duplicated Google Fonts import:** Consolidate font loading in a separate approved change. (Done: the fonts are self-hosted; see the table.)
 - **Repeated sim.css tokens:** Centralize the shared tokens in a separate approved change.
 - **CLAUDE.md:** Approve the measured replacement sentence below before editing this binding file.
 - **House fonts and colours:** Keep the existing palette and type system; approve any future design change explicitly.
@@ -116,11 +116,11 @@ Proposals for Numa (none applied):
 - **rotor-pendula-gafw0f:** Keep this app outside this website-maintenance change.
 - **physik-radar-xvy59b:** Keep this app outside this website-maintenance change.
 - **numa-physics-lab-chatgpt-k0ixwk:** Keep this app outside this website-maintenance change.
-- **GitHub Pages:** Choose a separate publishing task if this branch should later be served there.
+- **GitHub Pages:** Choose a separate publishing task if this branch should later be served there. (Superseded: Cloudflare serves the site since 20 October 2026.)
 
 - **Other untriaged notes:** consider consistent apostrophes and displacement names; document the walkthrough’s required path; decide whether to expose catalog metadata; decide the dataset’s missing-value contract; make the no-JavaScript catalog complete; refresh the debug-state reference; review cross-file CSS overrides separately.
 
-Proposed CLAUDE.md sentence, with the file unchanged: “In a 1280–1600 px desktop window, Fig. 1 computes a 360 × 162 = 58 320-point grid; on a 390 px phone it computes 324 × 324 = 104 976 points. At λ = 16 field px these give 7.2 and 6.48 samples per wavelength. Rebuilding Line of 16 on desktop uses 1 866 240 sine and cosine calls.”
+Proposed CLAUDE.md sentence, with the file unchanged (on 20 October 2026 its desktop numbers were taken into [CLAUDE.md:15–16](../CLAUDE.md#L15-L16); see the table): “In a 1280–1600 px desktop window, Fig. 1 computes a 360 × 162 = 58 320-point grid; on a 390 px phone it computes 324 × 324 = 104 976 points. At λ = 16 field px these give 7.2 and 6.48 samples per wavelength. Rebuilding Line of 16 on desktop uses 1 866 240 sine and cosine calls.”
 
 ## Independent audit, 15 October 2026
 
@@ -158,5 +158,8 @@ the live site. The shortfalls found were repaired in the app first (stored versi
 
 **Still open, newly noticed** (left for Numa): Fig. 4's longitudinal bead 11 fails its pixel read-back at 390 px (already so at
 `bad6513`); the lecture-note SVG labels render at about 5.7 px on a 390 px phone; Fig. 7's `Sim.live()` recomputes the effective
-α (`swMorph.checked ? morph.value : 1`) instead of reading the stored value; after A9 the last two samples of a round are two
+α (`swMorph.checked ? morph.value : 1`) instead of reading the stored value (fixed since: `Sim.live()` reads `ds.get('alpha')`,
+[phasor-sums.html:1301](../public/simulations/phasor-sums.html#L1301); the stored `alpha` is still written in the frame function
+by evaluating the same expression again, [1340](../public/simulations/phasor-sums.html#L1340), not at the line of `morphStep()`
+that uses it, [864](../public/simulations/phasor-sums.html#L864)); after A9 the last two samples of a round are two
 frames apart instead of one.
