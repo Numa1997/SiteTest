@@ -2,7 +2,7 @@
 
 | | |
 |---|---|
-| Page | [public/simulations/Double Pendulum.html](../../public/simulations/Double%20Pendulum.html) (870 lines, 102 423 bytes) |
+| Page | [public/simulations/Double Pendulum.html](../../public/simulations/Double%20Pendulum.html) (870 lines, 104 590 bytes) |
 | Walkthrough | [public/scripts/walk/pendulum.js](../../public/scripts/walk/pendulum.js) (137 lines, 8 steps, key `pendulum`) |
 | Thumbnail | [public/images/sims/double-pendulum.webp](../../public/images/sims/double-pendulum.webp) (WebP, 800 × 500 px, 12.5 kB; the pendulum, its fading trail and the protractor) |
 | Catalog entry | [public/scripts/catalog.js#L65](../../public/scripts/catalog.js#L65) (`id: 'double-pendulum'`, `fig: 2`, `field: 'mechanics'`, `stage: 2`, lines 64–80) |
@@ -347,3 +347,14 @@ agree to the pixel; the trail is not stored.
 The note distinguishes energy accuracy from long-time trajectory accuracy, identifies bob separation as a finite-time projection rather than a full-state Lyapunov calculation, and requires separate convergence checks for statistics. Simulation code, inline styles and figure SVGs match the latest live baseline. See the [theory audit](../research-theory-audit.md).
 
 Fixed on 2026-10-16 (second repairs): the Lyapunov paragraphs say that the limit defines the exponent and the rescaling algorithm computes it, that the 1.7 s⁻¹ is a finite-time estimate from two of the four coordinates, and that a small energy drift proves the integrator, not the positions; the limits item says the computed path is a faithful example, not the exact one ([L335](../../public/simulations/Double%20Pendulum.html#L335)). See the [audit of the revision](../research-theory-audit.md).
+
+Teaching pass, 20 October 2026 (notes/fig02/plan.md; the note's lines only, no line moved, numbering unchanged): the energy
+sentence of §1 is limited to the first twenty seconds ([L141](../../public/simulations/Double%20Pendulum.html#L141)); §4.4 names the identity sin θ₁ cos δ − sin θ₂ = cos θ₁ sin δ
+that gives α₂ its factor sin δ ([L219](../../public/simulations/Double%20Pendulum.html#L219)); the Lyapunov paragraphs replace the unsupported 1.7 s⁻¹ with the measured line
+through Figure 3's high-energy curve, λ ≈ 1.4 s⁻¹ up to the 0.1 m crossing at 4.06 s, and the full-state exponent of the
+default start, λ ≈ 1.45 s⁻¹ (rescaling every 0.1 s over 20 000 s), with e^1.45 ≈ 4.3 and e^14.5 ≈ 2 × 10⁶ ([L335](../../public/simulations/Double%20Pendulum.html#L335), [L337](../../public/simulations/Double%20Pendulum.html#L337));
+§7 says that the slider caps the time scale, that the drift creeps by about −7 × 10⁻⁸ a minute (−7.2 × 10⁻⁷ after ten
+simulated minutes in Chromium), and that the step fails for a heavy lower bob: ε reaches −3.6 × 10⁻⁴ in 20 s at m₂/m₁ = 10
+([L350](../../public/simulations/Double%20Pendulum.html#L350), [L351](../../public/simulations/Double%20Pendulum.html#L351)); §8 defines σ, the
+pivot and W × H, draws the bobs with σ, names the two protractor circles and Δt, and writes the half-life as
+ln 2/(60 |ln 0.992|) ([L358](../../public/simulations/Double%20Pendulum.html#L358), [L359](../../public/simulations/Double%20Pendulum.html#L359)); the three references link to pages opened that day ([L372–374](../../public/simulations/Double%20Pendulum.html#L372-L374)).

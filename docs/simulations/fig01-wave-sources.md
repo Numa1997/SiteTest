@@ -2,7 +2,7 @@
 
 | | |
 |---|---|
-| Page | [public/simulations/Circular Wave Interference Visualization.html](../../public/simulations/Circular%20Wave%20Interference%20Visualization.html) (907 lines, 190 554 bytes) |
+| Page | [public/simulations/Circular Wave Interference Visualization.html](../../public/simulations/Circular%20Wave%20Interference%20Visualization.html) (907 lines, 192 185 bytes) |
 | Walkthrough | [public/scripts/walk/circles.js](../../public/scripts/walk/circles.js) (110 lines, key `circles`) |
 | Thumbnail | [public/images/sims/wave-sources.webp](../../public/images/sims/wave-sources.webp) (WebP, 800 × 500 px, 36.5 kB; a still of the two-source field) |
 | Catalog entry | [public/scripts/catalog.js#L48](../../public/scripts/catalog.js#L48) (`id: 'wave-sources'`, `fig: 1`, `field: 'optics'`, `stage: 1`, lines 47–63) |
@@ -11,7 +11,7 @@ Links written `Lnnn` point into the page file; links to other files carry the fi
 
 The reader sees a wide field of cream, burgundy and dark-ink bands: the height ψ of a water surface at this instant, around
 point sources that sit on one line 10 px above the bottom edge ([L47–48](../../public/simulations/Circular%20Wave%20Interference%20Visualization.html#L47-L48), [L512](../../public/simulations/Circular%20Wave%20Interference%20Visualization.html#L512)). The page opens with two sources at
-x = 200 and 600 px ([L513](../../public/simulations/Circular%20Wave%20Interference%20Visualization.html#L513)) and the bands run outward at the speed v = fλ. A click on the field adds a source at that
+x = 200 and 600 px ([L513](../../public/simulations/Circular%20Wave%20Interference%20Visualization.html#L513)) and each source's rings run outward at the speed v = fλ (where rings cross at an angle, the crests of their sum run faster; note §4). A click on the field adds a source at that
 horizontal position ([L716–719](../../public/simulations/Circular%20Wave%20Interference%20Visualization.html#L716-L719)); buttons give a row of 16, five random sources, the two defaults, or none
 ([L59–65](../../public/simulations/Circular%20Wave%20Interference%20Visualization.html#L59-L65)); three sliders set the wavelength, frequency and damping ([L70–81](../../public/simulations/Circular%20Wave%20Interference%20Visualization.html#L70-L81)). Under the figure sit the Data panel and
 the Read values switch (added by `datalog.js`), the walkthrough "From symbols to code" ([L497](../../public/simulations/Circular%20Wave%20Interference%20Visualization.html#L497)) and the lecture note
@@ -265,7 +265,7 @@ this session confirmed that every quoted line is identical, after trimming inden
 | 7 | A number becomes a colour | [L588–589](../../public/simulations/Circular%20Wave%20Interference%20Visualization.html#L588-L589), [L667](../../public/simulations/Circular%20Wave%20Interference%20Visualization.html#L667) |
 
 **Lecture note** "Circular waves that add up to a straight one": abstract ([L103](../../public/simulations/Circular%20Wave%20Interference%20Visualization.html#L103)), contents ([L106–120](../../public/simulations/Circular%20Wave%20Interference%20Visualization.html#L106-L120)), ten sections, 19
-numbered display equations (1)–(19), four inline SVG figures, two exercises, one summary box and four references. Sections 3, 6
+numbered display equations (1)–(19), four inline SVG figures, two exercises, one summary box and five references, each linked to the publisher, a lending copy or an online edition. Sections 3, 6
 and 7.1 carry ★ (heavier mathematics).
 
 | § | id | Title | Lines | Equations | Figures, boxes |
