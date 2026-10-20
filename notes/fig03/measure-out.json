@@ -1,0 +1,303 @@
+{
+ "defaults": {
+  "d": 200,
+  "alpha": 20,
+  "b": 40,
+  "lambda": 13.5,
+  "L1": 206.8506982901971,
+  "L2": 220.47842327856344,
+  "ds": 13.627724988366344,
+  "b_sin_a": 13.680805733026748,
+  "ratio": 1.009461110249359,
+  "verdict": "Constructive · bright fringe, m = 1",
+  "m_x": [
+   0,
+   71.70739343554752
+  ],
+  "m_theta": [
+   0,
+   19.724633558701687
+  ],
+  "gamma_deg": 10.102813517368732,
+  "sin2half": 0.007752716310229168,
+  "readout_ratio": "1.01",
+  "readout_ds": "13.63 px",
+  "readout_ff": "13.68 px"
+ },
+ "ex51": {
+  "10": {
+   "d": 200,
+   "alpha": 10,
+   "b": 40,
+   "lambda": 13.5,
+   "L1": 200.5817347600793,
+   "L2": 207.49521442842544,
+   "ds": 6.9134796683461195,
+   "b_sin_a": 6.945927106677213,
+   "ratio": 0.5121096050626756,
+   "verdict": "Destructive · dark fringe between m = 0 and 1",
+   "m_x": [
+    0,
+    71.70739343554752
+   ],
+   "m_theta": [
+    0,
+    19.724633558701687
+   ],
+   "gamma_deg": 11.082161173925881,
+   "sin2half": 0.009323721288997553,
+   "readout_ratio": "0.51",
+   "readout_ds": "6.91 px",
+   "readout_ff": "6.95 px"
+  },
+  "20": {
+   "d": 200,
+   "alpha": 20,
+   "b": 40,
+   "lambda": 13.5,
+   "L1": 206.8506982901971,
+   "L2": 220.47842327856344,
+   "ds": 13.627724988366344,
+   "b_sin_a": 13.680805733026748,
+   "ratio": 1.009461110249359,
+   "verdict": "Constructive · bright fringe, m = 1",
+   "m_x": [
+    0,
+    71.70739343554752
+   ],
+   "m_theta": [
+    0,
+    19.724633558701687
+   ],
+   "gamma_deg": 10.102813517368732,
+   "sin2half": 0.007752716310229168,
+   "readout_ratio": "1.01",
+   "readout_ds": "13.63 px",
+   "readout_ff": "13.68 px"
+  },
+  "9.5": {
+   "d": 200,
+   "alpha": 9.5,
+   "b": 40,
+   "lambda": 13.5,
+   "L1": 200.45298970061714,
+   "L2": 207.02387018220486,
+   "ds": 6.570880481587778,
+   "b_sin_a": 6.601904234427106,
+   "ratio": 0.4867318875250206,
+   "verdict": "Destructive · dark fringe between m = 0 and 1",
+   "m_x": [
+    0,
+    71.70739343554752
+   ],
+   "m_theta": [
+    0,
+    19.724633558701687
+   ],
+   "gamma_deg": 11.1149381600707,
+   "sin2half": 0.009378781850434281,
+   "readout_ratio": "0.49",
+   "readout_ds": "6.57 px",
+   "readout_ff": "6.60 px"
+  },
+  "19.5": {
+   "d": 200,
+   "alpha": 19.5,
+   "b": 40,
+   "lambda": 13.5,
+   "L1": 206.35660870493484,
+   "L2": 219.65642971853282,
+   "ds": 13.299821013598002,
+   "b_sin_a": 13.352274369350836,
+   "ratio": 0.9851719269331853,
+   "verdict": "Constructive · bright fringe, m = 1",
+   "m_x": [
+    0,
+    71.70739343554752
+   ],
+   "m_theta": [
+    0,
+    19.724633558701687
+   ],
+   "gamma_deg": 10.165557915571997,
+   "sin2half": 0.007849059651560016,
+   "readout_ratio": "0.99",
+   "readout_ds": "13.30 px",
+   "readout_ff": "13.35 px"
+  }
+ },
+ "ex41_d100": {
+  "d": 100,
+  "alpha": 30,
+  "b": 80,
+  "lambda": 13.5,
+  "L1": 101.56048040363106,
+  "L2": 139.82895081795596,
+  "ds": 38.268470414324874,
+  "b_sin_a": 39.99999999999999,
+  "ratio": 2.834701512172213,
+  "verdict": "Partial · I/I₀ = 0.75",
+  "m_x": [
+   0,
+   17.120527453765053,
+   35.85369671777376
+  ],
+  "m_theta": [
+   0,
+   9.715149372070087,
+   19.724633558701687
+  ],
+  "gamma_deg": 34.28687697720898,
+  "sin2half": 0.08688632859622626,
+  "readout_ratio": "2.83",
+  "readout_ds": "38.27 px",
+  "readout_ff": "40.00 px"
+ },
+ "ex41_d300": {
+  "d": 300,
+  "alpha": 30,
+  "b": 80,
+  "lambda": 13.5,
+  "L1": 328.2431926780036,
+  "L2": 368.04402788328326,
+  "ds": 39.800835205279725,
+  "b_sin_a": 39.99999999999999,
+  "ratio": 2.9482100152059054,
+  "verdict": "Constructive · bright fringe, m = 3",
+  "m_x": [
+   0,
+   51.361582361295156,
+   107.56109015332127
+  ],
+  "m_theta": [
+   0,
+   9.715149372070087,
+   19.724633558701687
+  ],
+  "gamma_deg": 11.4587523458772,
+  "sin2half": 0.009966011438366063,
+  "readout_ratio": "2.95",
+  "readout_ds": "39.80 px",
+  "readout_ff": "40.00 px"
+ },
+ "gamma_grid": {
+  "gmin": 2.864788578003775,
+  "gmax": 43.60281897270364
+ },
+ "layout1440": {
+  "viewport": [
+   1440,
+   900
+  ],
+  "errors": [],
+  "folds": {
+   "total": 13,
+   "closedAfterCollapse": 13,
+   "opened": 13,
+   "failures": []
+  },
+  "checks": {
+   "katexError": 0,
+   "katexInPaper": 354,
+   "scrollWidth": 1440,
+   "clientWidth": 1440,
+   "sideways": 0,
+   "wideInPaper": [],
+   "refs": [
+    {
+     "text": "E. Hecht, Optics, 5th edition, Pearson, 2017: chapters 9 (in",
+     "links": [
+      "https://www.pearson.com/en-us/subject-catalog/p/Hecht-Optics-5th-Edition/P200000006793"
+     ]
+    },
+    {
+     "text": "D. Halliday, R. Resnick and J. Walker, Fundamentals of Physi",
+     "links": [
+      "https://www.wiley.com/en-gb/fundamentals-of-physics-extended-10th-edition-p-9781118547878"
+     ]
+    },
+    {
+     "text": "R. P. Feynman, R. B. Leighton and M. Sands, The Feynman Lect",
+     "links": [
+      "https://www.feynmanlectures.caltech.edu/I_29.html",
+      "https://www.feynmanlectures.caltech.edu/I_30.html",
+      "https://www.feynmanlectures.caltech.edu/III_01.html"
+     ]
+    },
+    {
+     "text": "T. Young, “The Bakerian Lecture: Experiments and calculation",
+     "links": [
+      "https://doi.org/10.1098/rstl.1804.0001"
+     ]
+    }
+   ]
+  },
+  "shots": [
+   "/home/user/SiteTest/notes/fig03/shot-box5-1440.png",
+   "/home/user/SiteTest/notes/fig03/shot-cross-1440.png",
+   "/home/user/SiteTest/notes/fig03/shot-quantum-1440.png",
+   "/home/user/SiteTest/notes/fig03/shot-limits-1440.png"
+  ]
+ },
+ "layout390": {
+  "viewport": [
+   390,
+   844
+  ],
+  "errors": [],
+  "folds": {
+   "total": 13,
+   "closedAfterCollapse": 13,
+   "opened": 13,
+   "failures": []
+  },
+  "checks": {
+   "katexError": 0,
+   "katexInPaper": 354,
+   "scrollWidth": 390,
+   "clientWidth": 390,
+   "sideways": 0,
+   "wideInPaper": [
+    "math.",
+    "semantics.",
+    "mrow.",
+    "mi.",
+    "mo."
+   ],
+   "refs": [
+    {
+     "text": "E. Hecht, Optics, 5th edition, Pearson, 2017: chapters 9 (in",
+     "links": [
+      "https://www.pearson.com/en-us/subject-catalog/p/Hecht-Optics-5th-Edition/P200000006793"
+     ]
+    },
+    {
+     "text": "D. Halliday, R. Resnick and J. Walker, Fundamentals of Physi",
+     "links": [
+      "https://www.wiley.com/en-gb/fundamentals-of-physics-extended-10th-edition-p-9781118547878"
+     ]
+    },
+    {
+     "text": "R. P. Feynman, R. B. Leighton and M. Sands, The Feynman Lect",
+     "links": [
+      "https://www.feynmanlectures.caltech.edu/I_29.html",
+      "https://www.feynmanlectures.caltech.edu/I_30.html",
+      "https://www.feynmanlectures.caltech.edu/III_01.html"
+     ]
+    },
+    {
+     "text": "T. Young, “The Bakerian Lecture: Experiments and calculation",
+     "links": [
+      "https://doi.org/10.1098/rstl.1804.0001"
+     ]
+    }
+   ]
+  },
+  "shots": [
+   "/home/user/SiteTest/notes/fig03/shot-box5-390.png",
+   "/home/user/SiteTest/notes/fig03/shot-cross-390.png",
+   "/home/user/SiteTest/notes/fig03/shot-quantum-390.png",
+   "/home/user/SiteTest/notes/fig03/shot-limits-390.png"
+  ]
+ }
+}

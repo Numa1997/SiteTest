@@ -2,7 +2,7 @@
 
 | | |
 |---|---|
-| Page | [public/simulations/Interactive Double-Slit Experiment Visualization.html](../../public/simulations/Interactive%20Double-Slit%20Experiment%20Visualization.html) (948 lines, 171 709 bytes; 59 lines are longer than 300 characters, 53 of them in the lecture note) |
+| Page | [public/simulations/Interactive Double-Slit Experiment Visualization.html](../../public/simulations/Interactive%20Double-Slit%20Experiment%20Visualization.html) (948 lines, 173 421 bytes; 62 lines are longer than 300 characters, 56 of them in the lecture note) |
 | Walkthrough | [public/scripts/walk/slit.js](../../public/scripts/walk/slit.js) (118 lines, 7 steps) |
 | Thumbnail | [public/images/sims/double-slit.webp](../../public/images/sims/double-slit.webp) (800 × 500 px, 33 kB) |
 | Catalog entry | [public/scripts/catalog.js#L82](../../public/scripts/catalog.js#L82) (`id: 'double-slit'`, `fig: 3`, field `optics`, stage 1, `has: ALL`) |
@@ -270,7 +270,7 @@ See [sim.md](../scripts/sim.md), [walk.md](../scripts/walk.md), [fold.md](../scr
 | 7 | `p-quantum` | One particle at a time | (12), (13); Figure 5, 20/200/2000 simulated arrivals ([453](../../public/simulations/Interactive%20Double-Slit%20Experiment%20Visualization.html#L453)) |
 | 8 | `p-method` | How the page computes | The steps of this document in prose ([497](../../public/simulations/Interactive%20Double-Slit%20Experiment%20Visualization.html#L497)) |
 | 9 | `p-screen` | From lengths to pixels | SVG layout, wavelets, scale of the pixel ([510](../../public/simulations/Interactive%20Double-Slit%20Experiment%20Visualization.html#L510)) |
-| 10 | `p-limits` | What the model leaves out | Limits; 10.1 Further reading (Hecht, Halliday–Resnick–Walker, Feynman) ([517](../../public/simulations/Interactive%20Double-Slit%20Experiment%20Visualization.html#L517)) |
+| 10 | `p-limits` | What the model leaves out | Limits, with the polarisation estimate (light polarised in the drawing's plane: the paths meet at $\gamma = 11^\circ$ at the default dark fringe, which keeps $\sin^2(\gamma/2) = 0.9\,\%$ of $I_0$); 10.1 Further reading, each item linked (Hecht, Halliday–Resnick–Walker, Feynman I-29, I-30, III-1, Young 1804) ([517](../../public/simulations/Interactive%20Double-Slit%20Experiment%20Visualization.html#L517)) |
 
 **Walkthrough** `walk/slit.js`, seven steps: where everything sits; two paths and their exact difference; the burgundy bar,
 point Q; phase difference and brightness; far field; fringe orders on the pattern; the verdict line

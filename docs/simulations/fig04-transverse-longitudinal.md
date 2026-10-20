@@ -2,7 +2,7 @@
 
 | | |
 |---|---|
-| Page | [public/simulations/Transverse and longitudinal waves.html](../../public/simulations/Transverse%20and%20longitudinal%20waves.html) (1086 lines, 199 133 bytes; 89 lines are longer than 300 characters, 84 of them in the lecture note) |
+| Page | [public/simulations/Transverse and longitudinal waves.html](../../public/simulations/Transverse%20and%20longitudinal%20waves.html) (1086 lines, 201 858 bytes; 92 lines are longer than 300 characters, 87 of them in the lecture note) |
 | Walkthrough | [public/scripts/walk/tl.js](../../public/scripts/walk/tl.js) (110 lines, 7 steps) |
 | Thumbnail | [public/images/sims/transverse-longitudinal.webp](../../public/images/sims/transverse-longitudinal.webp) (800 × 500 px, 12 kB) |
 | Catalog entry | [public/scripts/catalog.js#L99](../../public/scripts/catalog.js#L99) (`id: 'transverse-longitudinal'`, `fig: 4`, title "Transverse & Longitudinal", field `waves`, stage 1, `has: ALL`) |
@@ -259,7 +259,7 @@ four figures drawn as five inline SVG plates (Figure 2 has two), two exercises, 
 | 6 | `p-energy` | Energy carried ★ | (13)–(15) ([667](../../public/simulations/Transverse%20and%20longitudinal%20waves.html#L667)) |
 | 7 | `p-frame` | How the page computes a frame | (16), the phase step; the frame in words ([678](../../public/simulations/Transverse%20and%20longitudinal%20waves.html#L678)) |
 | 8 | `p-screen` | From medium pixels to screen pixels | (17), sizes, drawing details, a paragraph on picture versus store ([690](../../public/simulations/Transverse%20and%20longitudinal%20waves.html#L690)) |
-| 9 | `p-limits` | What the model leaves out | Limits; 9.1 Further reading (Young and Freedman, French, Stein and Wysession) ([703](../../public/simulations/Transverse%20and%20longitudinal%20waves.html#L703)) |
+| 9 | `p-limits` | What the model leaves out | Limits; 9.1 Further reading: Young and Freedman, French, Stein and Wysession, each linked to its publisher's page (French also to a lending copy at the Internet Archive), and the Feynman Lectures Vol. I ch. 47, free online; the four items stand on source lines 715–717 ([703](../../public/simulations/Transverse%20and%20longitudinal%20waves.html#L703)) |
 
 **Walkthrough** `walk/tl.js`, seven steps: one wave function for both rows; the transverse row; where the crests are; the
 longitudinal row; why the amplitude is capped; compressions and their shading; world pixels into screen pixels
@@ -300,10 +300,12 @@ shown by [datalog.js:165](../../public/scripts/datalog.js#L165)).
 - **Read-backs.** `beadPixel` expects dark bead fills. A lighter bead colour, or a shape drawn over the bead centres, makes the
   Check fail.
 - **Numbers in the lecture note** come from the defaults ($A = 26$, $f = 0.5$, $\lambda = 220$, $N = 26$): 110 px/s, 81.7 px/s,
-  0.743, 3.88, 0.574, 55 px, the exercises and Figures 1–4. Changing a default means recomputing them, and Section 8's measured
+  0.743, 3.88, 0.574, 55 px, the exercises and Figures 1–4 (Exercise 5.1 also sets Particles to 40: the closest bars then come
+  within 3.86 px, against a rest spacing of 16.41 px). Changing a default means recomputing them, and Section 8's measured
   canvas sizes change if the layout or `--ar` changes.
 - **Re-test** after a change: run the page at a desktop and a phone width; open the data panel and Check `xi`, `xl_px`, `rho`,
-  `crest` and `comp0` at the followed bead; set $\lambda = 100$ and $A = 40$ (cap active, bars nearly touching); pause and change
+  `crest` and `comp0` at the followed bead; set $\lambda = 100$, $A = 40$ and Particles to 40 (cap active; the closest bars come within 3.9 px: with 26 particles
+  they never come nearer than 7.3 px, about as near as at the defaults, 7.0 px); pause and change
   Particles (must redraw); record one round and see that it lasts one period.
 
 ## Notes for maintainers
@@ -326,3 +328,33 @@ shown by [datalog.js:165](../../public/scripts/datalog.js#L165)).
 The model section now states the deliberately large default compression. Exact density from the prescribed coordinate map does not make that motion a solution of nonlinear sound dynamics. Simulation code, inline styles and figure SVGs match the latest live baseline. See the [theory audit](../research-theory-audit.md).
 
 Fixed on 2026-10-16: the paragraph on the prescribed motion had been placed between "The simulation uses the simplest travelling wave," and equation (1); it now follows the reading of (1) ([L137](../../public/simulations/Transverse%20and%20longitudinal%20waves.html#L137)). See the [audit of the revision](../research-theory-audit.md).
+
+## Teaching revision · 20 October 2026
+
+Judged section by section against `notes/STANDARD.md`; clear sections untouched. Verdicts, plan and measurements:
+`notes/fig04/plan.md`, `notes/fig04/measure.cjs` (the page's formulas and the built page in headless Chromium),
+`notes/fig04/derive.py` (SymPy), `notes/fig04/verify.cjs`. Every change sits inside an existing line of the note, so the page
+keeps 1086 lines and every line link above stays valid. No equation was added or renumbered.
+
+- Section 2 ([L137](../../public/simulations/Transverse%20and%20longitudinal%20waves.html#L137)): $A_\mathrm{L}$ is introduced
+  where it is first used (equal to $A$ at the defaults), $A_\mathrm{L}k \approx 0.743$ is said in words (neighbours close to about a
+  quarter of their rest spacing), and "the coordinate map" became "the map $x = X + \xi$".
+- Exercise 3.1 ([L470](../../public/simulations/Transverse%20and%20longitudinal%20waves.html#L470)): "any particle in the upper
+  row"; at $\lambda = 110$ px the cap lowers $A_\mathrm{L}$ to 14 px (readout "14 px (cap)"), so the lower row's top speed does change.
+- 4.2 ([L486](../../public/simulations/Transverse%20and%20longitudinal%20waves.html#L486)): $B = \gamma p$ from $pV^\gamma$ fixed.
+  Computation note ([L488](../../public/simulations/Transverse%20and%20longitudinal%20waves.html#L488)): 28.97 g/mol gives
+  1.2043 kg/m³, not 1.2041; 343.2 m/s unchanged.
+- 4.3 ([L493](../../public/simulations/Transverse%20and%20longitudinal%20waves.html#L493)): where $K + \tfrac43 G$ comes from
+  (uniaxial strain = equal strain in all directions + a pure change of shape).
+- Section 5 ([L510](../../public/simulations/Transverse%20and%20longitudinal%20waves.html#L510)): why the denser half fills
+  $1/2 - A_\mathrm{L}k/\pi$ of the length. Exercise 5.1 ([L663](../../public/simulations/Transverse%20and%20longitudinal%20waves.html#L663)):
+  "the bars nearly touch" was not true with 26 particles (closest 7.26 px); it now sets Particles to 40 (closest 3.86 px).
+- Section 6 ([L669](../../public/simulations/Transverse%20and%20longitudinal%20waves.html#L669)): the tilt energy
+  $\tfrac12 F(\partial\xi/\partial X)^2$ from the stretched length.
+- Section 8 ([L696](../../public/simulations/Transverse%20and%20longitudinal%20waves.html#L696)): the curve has 215 points, not
+  214 (the last at $X = 640$), as step 3 of "How the code computes it" says.
+- 9.1 ([L715–L717](../../public/simulations/Transverse%20and%20longitudinal%20waves.html#L715-L717)): links to the pages opened
+  for each book, and the Feynman Lectures Vol. I ch. 47 added (on line 717, after Stein and Wysession).
+
+Checked in headless Chromium at 1440 × 900 and 390 × 844: no console errors, no `.katex-error` (275 KaTeX elements in the note),
+no sideways scroll, all 15 folds open.

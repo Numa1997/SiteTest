@@ -1,0 +1,320 @@
+{
+ "wide": {
+  "viewport": "1440 x 900",
+  "layout": {
+   "box_w": 770,
+   "box_h": 481,
+   "M": 712,
+   "dX": 1.1235955056179776,
+   "spec_w": 770,
+   "spec_h": 202
+  },
+  "twoCopies": {
+   "peak": 39.998616759179185,
+   "A_line": [
+    40
+   ],
+   "readout": {
+    "sum": "40.0 px",
+    "peak": "40.0 px"
+   },
+   "phaseSet": "3.15",
+   "after": {
+    "phi": [
+     0,
+     3.15
+    ],
+    "peak": 0.1681310275161843,
+    "A_line": [
+     0.16814643298753057
+    ],
+    "readout": {
+     "sum": "40.0 px",
+     "peak": "0.2 px"
+    },
+    "phaseLabel": "1.00 π"
+   }
+  },
+  "beats": {
+   "bl": 800,
+   "venv": 200,
+   "nu": [
+    1,
+    1.25
+   ],
+   "f110": {
+    "f": [
+     1,
+     1.1
+    ],
+    "bl": 1999.9999999999982
+   },
+   "s050": {
+    "s": [
+     1,
+     0.5
+    ],
+    "v": [
+     200,
+     100
+    ],
+    "venv": -300
+   }
+  },
+  "square": {
+   "A": [
+    30,
+    10,
+    6,
+    4.3
+   ],
+   "f": [
+    0.4,
+    1.2,
+    2,
+    2.8
+   ],
+   "sum_A": 50.3,
+   "R": 60,
+   "hSum": 220.08,
+   "peak": 27.90810453730408,
+   "readout": {
+    "sum": "50.3 px",
+    "peak": "27.9 px"
+   },
+   "card4Amp": "4 px",
+   "round": 2.5,
+   "A_line": [
+    30,
+    10,
+    6,
+    4.3
+   ],
+   "nu_line": [
+    0.4,
+    1.2,
+    2,
+    2.8
+   ],
+   "noWave4": {
+    "N": 3,
+    "peak": 27.99958503649072,
+    "readout": {
+     "sum": "46.0 px",
+     "peak": "28.0 px"
+    }
+   },
+   "phase2": {
+    "peak": 41.69998145420732,
+    "readout": {
+     "sum": "50.3 px",
+     "peak": "41.7 px"
+    },
+    "A_line": [
+     30,
+     9.999999999999998,
+     6,
+     4.3
+    ],
+    "phaseLabel": "1.00 π"
+   }
+  },
+  "katexErrors": 0,
+  "sideways": 0,
+  "folds": {
+   "folds": 15,
+   "closedAfterCollapseAll": 15,
+   "openAfterToggles": 15
+  },
+  "sidewaysAfterFolds": 0,
+  "prefsLinks": [
+   "https://www.feynmanlectures.caltech.edu/I_48.html",
+   "https://www.feynmanlectures.caltech.edu/I_50.html",
+   "https://archive.org/details/vibrationswaves0000fren",
+   "https://www.pearson.com/en-us/subject-catalog/p/optics/P200000006793",
+   "https://www.wiley.com/en-us/mathematical-methods-in-the-physical-sciences-3rd-edition-p-9780471198260"
+  ],
+  "eqTags": [
+   "(1)",
+   "(2)",
+   "(3)",
+   "(4)",
+   "(5)",
+   "(6)",
+   "(7)",
+   "(8)",
+   "(9)",
+   "(10)",
+   "(11)",
+   "(12)",
+   "(13)",
+   "(14)",
+   "(15)",
+   "(16)",
+   "(17)",
+   "(18)",
+   "(19)",
+   "(20)"
+  ],
+  "consoleErrors": []
+ },
+ "phone": {
+  "viewport": "390 x 844",
+  "layout": {
+   "box_w": 356,
+   "box_h": 392,
+   "M": 298,
+   "dX": 2.684563758389262,
+   "spec_w": 356,
+   "spec_h": 156
+  },
+  "twoCopies": {
+   "peak": 39.999070101488236,
+   "A_line": [
+    40
+   ],
+   "readout": {
+    "sum": "40.0 px",
+    "peak": "40.0 px"
+   },
+   "phaseSet": "3.15",
+   "after": {
+    "phi": [
+     0,
+     3.15
+    ],
+    "peak": 0.16814114981431422,
+    "A_line": [
+     0.16814643298753057
+    ],
+    "readout": {
+     "sum": "40.0 px",
+     "peak": "0.2 px"
+    },
+    "phaseLabel": "1.00 π"
+   }
+  },
+  "beats": {
+   "bl": 800,
+   "venv": 200,
+   "nu": [
+    1,
+    1.25
+   ],
+   "f110": {
+    "f": [
+     1,
+     1.1
+    ],
+    "bl": 1999.9999999999982
+   },
+   "s050": {
+    "s": [
+     1,
+     0.5
+    ],
+    "v": [
+     200,
+     100
+    ],
+    "venv": -300
+   }
+  },
+  "square": {
+   "A": [
+    30,
+    10,
+    6,
+    4.3
+   ],
+   "f": [
+    0.4,
+    1.2,
+    2,
+    2.8
+   ],
+   "sum_A": 50.3,
+   "R": 60,
+   "hSum": 170.24,
+   "peak": 27.90112656391283,
+   "readout": {
+    "sum": "50.3 px",
+    "peak": "27.9 px"
+   },
+   "card4Amp": "4 px",
+   "round": 2.5,
+   "A_line": [
+    30,
+    10,
+    6,
+    4.3
+   ],
+   "nu_line": [
+    0.4,
+    1.2,
+    2,
+    2.8
+   ],
+   "noWave4": {
+    "N": 3,
+    "peak": 27.990276026367397,
+    "readout": {
+     "sum": "46.0 px",
+     "peak": "28.0 px"
+    }
+   },
+   "phase2": {
+    "peak": 41.697764479880874,
+    "readout": {
+     "sum": "50.3 px",
+     "peak": "41.7 px"
+    },
+    "A_line": [
+     30,
+     9.999999999999998,
+     6,
+     4.3
+    ],
+    "phaseLabel": "1.00 π"
+   }
+  },
+  "katexErrors": 0,
+  "sideways": 0,
+  "folds": {
+   "folds": 15,
+   "closedAfterCollapseAll": 15,
+   "openAfterToggles": 15
+  },
+  "sidewaysAfterFolds": 0,
+  "prefsLinks": [
+   "https://www.feynmanlectures.caltech.edu/I_48.html",
+   "https://www.feynmanlectures.caltech.edu/I_50.html",
+   "https://archive.org/details/vibrationswaves0000fren",
+   "https://www.pearson.com/en-us/subject-catalog/p/optics/P200000006793",
+   "https://www.wiley.com/en-us/mathematical-methods-in-the-physical-sciences-3rd-edition-p-9780471198260"
+  ],
+  "eqTags": [
+   "(1)",
+   "(2)",
+   "(3)",
+   "(4)",
+   "(5)",
+   "(6)",
+   "(7)",
+   "(8)",
+   "(9)",
+   "(10)",
+   "(11)",
+   "(12)",
+   "(13)",
+   "(14)",
+   "(15)",
+   "(16)",
+   "(17)",
+   "(18)",
+   "(19)",
+   "(20)"
+  ],
+  "consoleErrors": []
+ }
+}

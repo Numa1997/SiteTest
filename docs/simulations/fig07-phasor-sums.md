@@ -2,7 +2,7 @@
 
 | | |
 |---|---|
-| Page | [public/simulations/phasor-sums.html](../../public/simulations/phasor-sums.html) (1 479 lines, 261 179 bytes) |
+| Page | [public/simulations/phasor-sums.html](../../public/simulations/phasor-sums.html) (1 479 lines, 262 209 bytes) |
 | Walkthrough | [public/scripts/walk/phasors.js](../../public/scripts/walk/phasors.js) (key `phasors`, 8 steps) |
 | Thumbnail | [public/images/sims/phasor-sums.webp](../../public/images/sims/phasor-sums.webp) (800 × 500 px: the 3-petal rose with its two arms and circles) |
 | Catalog entry | [public/scripts/catalog.js#L150](../../public/scripts/catalog.js#L150) (`id: 'phasor-sums'`, `fig: 7`, field `methods`, stage 2) |
@@ -128,8 +128,10 @@ $1 + \text{mid}\cdot d_\text{speed}$ ([L957](../../public/simulations/phasor-sum
 \varphi$ are never changed by the dance.
 
 **Record and replay** ([L1178–1251](../../public/simulations/phasor-sums.html#L1178-L1251)). A snapshot
-`{ t, d, p: [{ a, f, h, c }] }` of the whole list is taken every 50 ms against the audio time, or against wall time
-without audio ([L1179–1182](../../public/simulations/phasor-sums.html#L1179-L1182)). Replay finds the last snapshot not
+`{ t, d, p: [{ a, f, h, c }] }` of the whole list is taken on the first frame at least 50 ms after the last one, since the
+counter restarts at 0 ([L1187–1190](../../public/simulations/phasor-sums.html#L1187-L1190)): every third or fourth frame at
+60 frames per second, 58 ms apart on average (104 snapshots in 6 s, measured in headless Chromium). Its time is the audio
+time, or wall time without audio ([L1179–1182](../../public/simulations/phasor-sums.html#L1179-L1182)). Replay finds the last snapshot not
 later than the current time and moves each value the fraction $\min(1, \Delta t/0.05)$ toward it per frame
 ([L1195–1207](../../public/simulations/phasor-sums.html#L1195-L1207)); if the number of circles differs it reloads the list
 outright. Export writes `phasor-performance.json` as `{ v: 1, timeline }`
