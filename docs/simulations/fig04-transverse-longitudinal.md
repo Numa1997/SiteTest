@@ -2,7 +2,7 @@
 
 | | |
 |---|---|
-| Page | [public/simulations/Transverse and longitudinal waves.html](../../public/simulations/Transverse%20and%20longitudinal%20waves.html) (1086 lines, 201 858 bytes; 92 lines are longer than 300 characters, 87 of them in the lecture note) |
+| Page | [public/simulations/Transverse and longitudinal waves.html](../../public/simulations/Transverse%20and%20longitudinal%20waves.html) (1086 lines, 202 044 bytes; 92 lines are longer than 300 characters, 87 of them in the lecture note) |
 | Walkthrough | [public/scripts/walk/tl.js](../../public/scripts/walk/tl.js) (110 lines, 7 steps) |
 | Thumbnail | [public/images/sims/transverse-longitudinal.webp](../../public/images/sims/transverse-longitudinal.webp) (800 × 500 px, 12 kB) |
 | Catalog entry | [public/scripts/catalog.js#L99](../../public/scripts/catalog.js#L99) (`id: 'transverse-longitudinal'`, `fig: 4`, title "Transverse & Longitudinal", field `waves`, stage 1, `has: ALL`) |
@@ -358,3 +358,7 @@ keeps 1086 lines and every line link above stays valid. No equation was added or
 
 Checked in headless Chromium at 1440 × 900 and 390 × 844: no console errors, no `.katex-error` (275 KaTeX elements in the note),
 no sideways scroll, all 15 folds open.
+
+## Repair round · 20 October 2026
+
+After the independent referee and derivation checks (`notes/fig04/`), the lead made only these changes, each on its existing line, so no line link moved: §2: the caveat paragraph in plain words ([L137](../../public/simulations/Transverse%20and%20longitudinal%20waves.html#L137)); §2: both rows share the phase, not ξ ([L142](../../public/simulations/Transverse%20and%20longitudinal%20waves.html#L142)); Ex. 3.1: doubling f doubles v only because the page hands you a new medium ([L470](../../public/simulations/Transverse%20and%20longitudinal%20waves.html#L470)); §4.3: the ⁴⁄₃G paragraph in three sentences ([L493](../../public/simulations/Transverse%20and%20longitudinal%20waves.html#L493)); §8: y_T named ([L694](../../public/simulations/Transverse%20and%20longitudinal%20waves.html#L694)). Checked in headless Chromium at 1440 × 900 and 390 × 844: no console or KaTeX errors, no sideways scroll, no display equation wider than its box at 1440 px (`notes/verify.mjs`).

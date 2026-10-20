@@ -2,7 +2,7 @@
 
 | | |
 |---|---|
-| Page | [public/simulations/Interactive Double-Slit Experiment Visualization.html](../../public/simulations/Interactive%20Double-Slit%20Experiment%20Visualization.html) (948 lines, 173 421 bytes; 62 lines are longer than 300 characters, 56 of them in the lecture note) |
+| Page | [public/simulations/Interactive Double-Slit Experiment Visualization.html](../../public/simulations/Interactive%20Double-Slit%20Experiment%20Visualization.html) (948 lines, 173 798 bytes; 62 lines are longer than 300 characters, 56 of them in the lecture note) |
 | Walkthrough | [public/scripts/walk/slit.js](../../public/scripts/walk/slit.js) (118 lines, 7 steps) |
 | Thumbnail | [public/images/sims/double-slit.webp](../../public/images/sims/double-slit.webp) (800 × 500 px, 33 kB) |
 | Catalog entry | [public/scripts/catalog.js#L82](../../public/scripts/catalog.js#L82) (`id: 'double-slit'`, `fig: 3`, field `optics`, stage 1, `has: ALL`) |
@@ -348,3 +348,7 @@ Function map addition: `storeDerived(G)` at [754–772](../../public/simulations
 Missing even orders exclude the central maximum. The note separates a photon probability amplitude from the classical field and explains the Jacobian between angular and flat-screen counting densities. Simulation code, inline styles and figure SVGs match the latest live baseline. See the [theory audit](../research-theory-audit.md).
 
 Fixed on 2026-10-16 (second repairs): the single-photon paragraph has its picture back (each photon interferes with itself; a which-slit record removes the fringes) beside the revision's point that the classical field is not the amplitude; the dot-density paragraph gives the factor $3/4$ at $30^\circ$ ([L491](../../public/simulations/Interactive%20Double-Slit%20Experiment%20Visualization.html#L491)). See the [audit of the revision](../research-theory-audit.md).
+
+## Repair round · 20 October 2026
+
+After the independent referee and derivation checks (`notes/fig03/`), the lead made only these changes, each on its existing line, so no line link moved: §5: λd/b = 67.5 px is the small-angle estimate; the exact first bright fringe lies 72 px out, at 19.8°, where the default P sits ([L349](../../public/simulations/Interactive%20Double-Slit%20Experiment%20Visualization.html#L349)); §7: why the classical intensity predicts single-photon counts for any arrangement of slits ([L491](../../public/simulations/Interactive%20Double-Slit%20Experiment%20Visualization.html#L491)); §8: the dashed curve's point given as a distance d tan θ from the centre line (no sign clash with §2's frame) ([L504](../../public/simulations/Interactive%20Double-Slit%20Experiment%20Visualization.html#L504)). Checked in headless Chromium at 1440 × 900 and 390 × 844: no console or KaTeX errors, no sideways scroll, no display equation wider than its box at 1440 px (`notes/verify.mjs`).

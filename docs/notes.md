@@ -1,0 +1,37 @@
+# The lecture-note review: `notes/` and `.claude/agents/`
+
+On 20 October 2026 Numa asked for the ten lecture notes at the end of the simulation pages to be checked and, where they
+were unclear or wrong, repaired; his rule was "judge first, change only what needs it, never overload the simulations"
+([notes/STANDARD.md](../notes/STANDARD.md), "Numa's verdicts"). This page describes the files that review left behind. None of
+them is part of the website: the build serves `public/` and `index.html` only, and nothing in `public/` refers to them.
+
+## The team, `.claude/agents/`
+
+Four agent definitions for Claude Code, one file each; Claude Code offers them as agent types when a session opens this
+repository.
+
+| File | Role |
+|---|---|
+| [physics-teacher.md](../.claude/agents/physics-teacher.md) | Judges each section of one note, writes the verdicts in `notes/figNN/plan.md`, and repairs only the sections judged "needs work". |
+| [derivation-checker.md](../.claude/agents/derivation-checker.md) | Re-derives every numbered equation (SymPy) and recomputes every number from the page's own code, without reading the teacher's plan; writes `check.md`. |
+| [referee.md](../.claude/agents/referee.md) | Reads the rendered note blind, as a school student and as a graduate; writes `referee.md` with real obstacles (A), matters of taste (B) and overloaded passages (C). |
+| [walkthrough-keeper.md](../.claude/agents/walkthrough-keeper.md) | Checks by script that the walkthrough quotes the page's code character for character, and that its formulas match the note; writes `walk.md`. It never edits the walkthrough. |
+
+## The record, `notes/`
+
+| Path | What it holds |
+|---|---|
+| [STANDARD.md](../notes/STANDARD.md) | The standard every note is judged against, Numa's decisions, and his verdicts, which override the rest. |
+| [STATUS.md](../notes/STATUS.md) | One row per figure: verdicts, checks, rounds, open items. |
+| [verify.mjs](../notes/verify.mjs) | The lead's check of the ten pages in headless Chromium at 1440 × 900 and 390 × 844: console and KaTeX errors, sideways scroll, folds, equation numbers, links in the reading lists, and display equations wider than their box. Run after `APPDEPLOY_VITE_OUT_DIR=/tmp/lead-dist npm run build` as `node notes/verify.mjs /tmp/lead-dist`. |
+| [walkcheck.cjs](../notes/walkcheck.cjs) | Searches every quoted code line of the ten walkthroughs in its page, by the recipe of [scripts/walk.md](scripts/walk.md). Run as `node notes/walkcheck.cjs`. |
+| [.gitignore](../notes/.gitignore) | Keeps the agents' screenshots out of the repository; the scripts beside them reproduce them. |
+| `figNN/plan.md` | The teacher's verdict on each section of the note of Fig. NN and what it changed. |
+| `figNN/check.md` | The derivation checker's table: one row per equation and per number, "verified", "wrong, because …" or "unverifiable, because …". |
+| `figNN/referee.md` | The blind referee's report. |
+| `figNN/walk.md` | The walkthrough check: counts of quoted lines found verbatim, and every mismatch with its exact old → new text. These fixes wait for Numa's word, because walkthrough files change only with his explicit permission. |
+| other files in `figNN/` | The scripts each agent wrote to measure the numbers it states (Node scripts that run the page's own functions or drive the built page in Chromium, Python with SymPy or NumPy), and their saved output. |
+
+What the review found and changed, per figure, is in [research-theory-audit.md](research-theory-audit.md), section
+"Lecture notes · 20 October 2026", and in the "Teaching revision" and "Repair round" entries of each page's doc in
+[simulations/](simulations/).

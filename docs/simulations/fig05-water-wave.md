@@ -2,7 +2,7 @@
 
 | | |
 |---|---|
-| Page | [public/simulations/water-wave.html](../../public/simulations/water-wave.html) (891 lines, 162 709 bytes) |
+| Page | [public/simulations/water-wave.html](../../public/simulations/water-wave.html) (891 lines, 163 265 bytes) |
 | Walkthrough | [public/scripts/walk/water.js](../../public/scripts/walk/water.js) (116 lines, key `water`) |
 | Thumbnail | [public/images/sims/water-wave.webp](../../public/images/sims/water-wave.webp) (800 × 500 px, 15 kB) |
 | Catalog entry | [public/scripts/catalog.js#L115](../../public/scripts/catalog.js#L115) (lines 115–131, `id: 'water-wave'`, `fig: 5`) |
@@ -358,3 +358,7 @@ Figure 1 and defines $z_0$ ([L245](../../public/simulations/water-wave.html#L245
 two waves of nearly equal wave number ([L303](../../public/simulations/water-wave.html#L303)); Section 08 says the 307 or 174
 surface points are drawn but not stored ([L516](../../public/simulations/water-wave.html#L516)); each further-reading item links
 to a page that was opened ([L545-L548](../../public/simulations/water-wave.html#L545-L548)).
+
+## Repair round · 20 October 2026
+
+After the independent referee and derivation checks (`notes/fig05/`), the lead made only these changes, each on its existing line, so no line link moved: Figure 1 caption: its two labels point to (4) and (9) ([L243](../../public/simulations/water-wave.html#L243)); §4.2: gz becomes gη at the surface ([L273](../../public/simulations/water-wave.html#L273)); §07: the sin² half of the Stokes-drift picture ([L453](../../public/simulations/water-wave.html#L453)); §08: W_field defined where first used ([L512](../../public/simulations/water-wave.html#L512)). Checked in headless Chromium at 1440 × 900 and 390 × 844: no console or KaTeX errors, no sideways scroll, no display equation wider than its box at 1440 px (`notes/verify.mjs`).

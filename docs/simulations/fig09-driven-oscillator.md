@@ -2,7 +2,7 @@
 
 | | |
 |---|---|
-| Page | [public/simulations/driven-oscillator.html](../../public/simulations/driven-oscillator.html) (1 113 lines, 183 036 bytes) |
+| Page | [public/simulations/driven-oscillator.html](../../public/simulations/driven-oscillator.html) (1 113 lines, 183 071 bytes) |
 | Walkthrough | [public/scripts/walk/driven.js](../../public/scripts/walk/driven.js) (121 lines, 7 steps, key `driven`) |
 | Thumbnail | [public/images/sims/driven-oscillator.webp](../../public/images/sims/driven-oscillator.webp) (WebP, 800 × 500 px, 23.7 kB) |
 | Catalog entry | [public/scripts/catalog.js#L183](../../public/scripts/catalog.js#L183-L199) (`id: 'driven-oscillator'`, `fig: 9`, `field: 'control'`, `stage: 1`, lines 183–199) |
@@ -417,3 +417,7 @@ $\zeta = 0.01$: $\sqrt{C_1^2+C_2^2} = 1.00005\,X$, $|x|$ up to $0.224$ m $= 1.85
 $\pm X$ belong to the moving window ($\operatorname{clamp}(4/f, 6, 20)$ s, 8.9 s with the defaults) above the 60 s strip
 ([L435](../../public/simulations/driven-oscillator.html#L435)). Further reading now links every item and adds Feynman,
 Vol. I, chapters 23 and 24 ([L448–L451](../../public/simulations/driven-oscillator.html#L448-L451)).
+
+## Repair round · 20 October 2026
+
+After the independent referee and derivation checks (`notes/fig09/`), the lead made only these changes, each on its existing line, so no line link moved: §2: ω_d no longer used before ζ is defined ([L205](../../public/simulations/driven-oscillator.html#L205)); §3.2: the ringing written before its constants are fixed ([L221](../../public/simulations/driven-oscillator.html#L221)); §5: X(s), F(s) named as transforms ([L332](../../public/simulations/driven-oscillator.html#L332)); Figure 3: the plant box widened so G(s) fits ([L342](../../public/simulations/driven-oscillator.html#L342)); §9: every run drawn at its own scale; compare runs on the ruler ([L435](../../public/simulations/driven-oscillator.html#L435)). Checked in headless Chromium at 1440 × 900 and 390 × 844: no console or KaTeX errors, no sideways scroll, no display equation wider than its box at 1440 px (`notes/verify.mjs`).

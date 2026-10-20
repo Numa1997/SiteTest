@@ -2,7 +2,7 @@
 
 | | |
 |---|---|
-| Page | [public/simulations/draw-decompose.html](../../public/simulations/draw-decompose.html) (1 416 lines, 215 922 bytes) |
+| Page | [public/simulations/draw-decompose.html](../../public/simulations/draw-decompose.html) (1 416 lines, 216 305 bytes) |
 | Walkthrough | [public/scripts/walk/dft.js](../../public/scripts/walk/dft.js) (key `dft`, 6 steps) |
 | Thumbnail | [public/images/sims/draw-decompose.webp](../../public/images/sims/draw-decompose.webp) (800 × 500 px: the heart, its dashed samples and the chain of circles) |
 | Catalog entry | [public/scripts/catalog.js#L167](../../public/scripts/catalog.js#L167) (`id: 'draw-decompose'`, `fig: 8`, field `methods`, stage 2) |
@@ -338,3 +338,7 @@ The note distinguishes continuous coefficients from sampled coefficients, RMS at
 Fixed on 2026-10-16: the paragraph "Keep the two meanings separate" had been placed between "normalised by 1/N:" and equation (4), which it cites; it now follows (4) ([L305](../../public/simulations/draw-decompose.html#L305)). See the [audit of the revision](../research-theory-audit.md).
 
 Fixed on 2026-10-16 (second repairs): the RMS sentence reads "it says nothing about the curve between the samples" ([L331](../../public/simulations/draw-decompose.html#L331)). See the [audit of the revision](../research-theory-audit.md).
+
+## Repair round · 20 October 2026
+
+After the independent referee and derivation checks (`notes/fig08/`), the lead made only these changes, each on its existing line, so no line link moved: §5: one sentence recalls the two facts from the ★ Section 4 it uses ([L322](../../public/simulations/draw-decompose.html#L322)). Checked in headless Chromium at 1440 × 900 and 390 × 844: no console or KaTeX errors, no sideways scroll, no display equation wider than its box at 1440 px (`notes/verify.mjs`).
