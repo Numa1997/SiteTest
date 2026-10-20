@@ -1,0 +1,144 @@
+{
+ "390": {
+  "katexErrors": 0,
+  "katexInPaper": 346,
+  "tags": [
+   "(1)",
+   "(2)",
+   "(3)",
+   "(4)",
+   "(5)",
+   "(6)",
+   "(7)",
+   "(8)",
+   "(9)",
+   "(10)",
+   "(11)",
+   "(12)",
+   "(13)",
+   "(14)",
+   "(15)",
+   "(16)",
+   "(17)"
+  ],
+  "sideways": 0,
+  "box": [
+   356,
+   356
+  ],
+  "scale": 78.32000000000001,
+  "fitR": 2,
+  "n_path": 1500,
+  "period": 3.141592653589793,
+  "q": 3,
+  "figure": {
+   "left": 17,
+   "right": 373,
+   "top": 360.53125,
+   "bottom": 716.53125
+  },
+  "readoutE": {
+   "left": 42,
+   "right": 348,
+   "top": 3457.125,
+   "bottom": 3477.921875
+  },
+  "refs": [
+   {
+    "text": "R. P. Feynman, R. B. Leighton and M. Sands, The Feynman Lect",
+    "links": []
+   },
+   {
+    "text": "T. Needham, Visual Complex Analysis, Oxford University Press",
+    "links": []
+   },
+   {
+    "text": "E. Hecht, Optics, 5th edition, Pearson, 2017: chapter 7 (the",
+    "links": []
+   },
+   {
+    "text": "T. S. Kuhn, The Copernican Revolution, Harvard University Pr",
+    "links": []
+   }
+  ],
+  "folds": {
+   "total": 19,
+   "ok": 19,
+   "bad": []
+  },
+  "sidewaysAfterFolds": 0,
+  "katexErrorsAfter": 0,
+  "consoleErrors": []
+ },
+ "1440": {
+  "katexErrors": 0,
+  "katexInPaper": 346,
+  "tags": [
+   "(1)",
+   "(2)",
+   "(3)",
+   "(4)",
+   "(5)",
+   "(6)",
+   "(7)",
+   "(8)",
+   "(9)",
+   "(10)",
+   "(11)",
+   "(12)",
+   "(13)",
+   "(14)",
+   "(15)",
+   "(16)",
+   "(17)"
+  ],
+  "sideways": 0,
+  "box": [
+   770,
+   601
+  ],
+  "scale": 132.22,
+  "fitR": 2,
+  "n_path": 1500,
+  "period": 3.141592653589793,
+  "q": 3,
+  "figure": {
+   "left": 163,
+   "right": 933,
+   "top": 336.984375,
+   "bottom": 937.578125
+  },
+  "readoutE": {
+   "left": 988,
+   "right": 1248,
+   "top": 2159.5625,
+   "bottom": 2180.359375
+  },
+  "refs": [
+   {
+    "text": "R. P. Feynman, R. B. Leighton and M. Sands, The Feynman Lect",
+    "links": []
+   },
+   {
+    "text": "T. Needham, Visual Complex Analysis, Oxford University Press",
+    "links": []
+   },
+   {
+    "text": "E. Hecht, Optics, 5th edition, Pearson, 2017: chapter 7 (the",
+    "links": []
+   },
+   {
+    "text": "T. S. Kuhn, The Copernican Revolution, Harvard University Pr",
+    "links": []
+   }
+  ],
+  "folds": {
+   "total": 19,
+   "ok": 19,
+   "bad": []
+  },
+  "sidewaysAfterFolds": 0,
+  "katexErrorsAfter": 0,
+  "consoleErrors": []
+ }
+}

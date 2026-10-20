@@ -2,7 +2,7 @@
 
 | | |
 |---|---|
-| Page | [public/simulations/wave-interference.html](../../public/simulations/wave-interference.html) (977 lines, 168 581 bytes) |
+| Page | [public/simulations/wave-interference.html](../../public/simulations/wave-interference.html) (977 lines, 170 467 bytes) |
 | Walkthrough | [public/scripts/walk/bench.js](../../public/scripts/walk/bench.js) (123 lines, key `bench`) |
 | Thumbnail | [public/images/sims/wave-bench.webp](../../public/images/sims/wave-bench.webp) (800 × 500 px, 18 kB) |
 | Catalog entry | [public/scripts/catalog.js#L132](../../public/scripts/catalog.js#L132) (lines 132–148, `id: 'wave-bench'`, `fig: 6`) |
@@ -391,3 +391,9 @@ policy and referrer rule ([build-and-deploy.md](../build-and-deploy.md#security)
 Parseval and the 95% value measure mean-square displacement. String energy also weights each squared amplitude by frequency squared. The note qualifies envelope motion versus physical energy or information transport. Simulation code, inline styles and figure SVGs match the latest live baseline. See the [theory audit](../research-theory-audit.md).
 
 Fixed on 2026-10-16 (second repairs): the Square-wave sentence says again where the missing 5 % lives ([L427](../../public/simulations/wave-interference.html#L427)). See the [audit of the revision](../research-theory-audit.md).
+
+Note revision, 20 October 2026 (teacher team; working notes in `notes/fig06/`): Section 03 shows the second-derivative step behind (3) ([L191](../../public/simulations/wave-interference.html#L191)); 4.1 says the group velocity belongs to a long envelope of a narrow band of wavelengths, and that the bench's hand-set envelope carries nothing, which is why it can run backwards faster than either wave ([L305](../../public/simulations/wave-interference.html#L305)); Section 06 derives the string energy $\bar e = \tfrac12\mu\sum_n \omega_n^2 A_n^2$ from kinetic plus stretching energy, with the check of (18) moved next to its number ([L427-L428](../../public/simulations/wave-interference.html#L427-L428)); every item of Further reading links to a source that was opened ([L471-L474](../../public/simulations/wave-interference.html#L471-L474)). No line was added or removed, so the line links above still hold.
+
+## Repair round · 20 October 2026
+
+After the independent referee and derivation checks (`notes/fig06/`), the lead made only these changes, each on its existing line, so no line link moved: §3.1: why the cosine rule has a plus ([L199](../../public/simulations/wave-interference.html#L199)); eq. (5) on three lines so its number shows ([L198](../../public/simulations/wave-interference.html#L198)); §4.1: the bench has no medium; a real backward envelope would carry energy ([L305](../../public/simulations/wave-interference.html#L305)); §5: the one-term overshoot on the table's basis (6.4 px, 13.7 % of the jump) ([L324](../../public/simulations/wave-interference.html#L324)); §6: true vertical steps, not corners, cost infinite energy ([L428](../../public/simulations/wave-interference.html#L428)); §7: two sines per wave besides the curves ([L445](../../public/simulations/wave-interference.html#L445)). Checked in headless Chromium at 1440 × 900 and 390 × 844: no console or KaTeX errors, no sideways scroll, no display equation wider than its box at 1440 px (`notes/verify.mjs`).

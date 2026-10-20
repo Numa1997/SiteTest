@@ -2,7 +2,7 @@
 
 | | |
 |---|---|
-| Page | [public/simulations/wind-turbine.html](../../public/simulations/wind-turbine.html) (1 171 lines, 180 471 bytes) |
+| Page | [public/simulations/wind-turbine.html](../../public/simulations/wind-turbine.html) (1 171 lines, 184 619 bytes) |
 | Walkthrough | [public/scripts/walk/turbine.js](../../public/scripts/walk/turbine.js) (121 lines, 7 steps, key `turbine`) |
 | Thumbnail | [public/images/sims/wind-turbine.webp](../../public/images/sims/wind-turbine.webp) (WebP, 800 × 500 px, 15.4 kB) |
 | Catalog entry | [public/scripts/catalog.js#L200](../../public/scripts/catalog.js#L200-L216) (`id: 'wind-turbine'`, `fig: 10`, `field: 'control'`, `stage: 2`, lines 200–216) |
@@ -126,13 +126,13 @@ $\tfrac h6(k_1+2k_2+2k_3+k_4)$. Time is set from the step count, `t = (step + 1)
 ([L720](../../public/simulations/wind-turbine.html#L720)). Note that `tauGen` reads $K_\text{opt}$ from the store at every
 stage ([L682](../../public/simulations/wind-turbine.html#L682)), so `optimum()` must have run first.
 
-Why RK4 with $h = 10$ ms: the code does not state the reason. What can be measured is the margin. When holding speed the
+Why RK4 with $h = 10$ ms: the code does not state the reason; the note gives it in section 8, item 1 ([L507](../../public/simulations/wind-turbine.html#L507)). What can be measured is the margin. When holding speed the
 linearised error equation (equation (10) of the note) has eigenvalues of modulus $\omega_n = 0.6$ s⁻¹ with damping ratio
 0.8; when following the wind the relaxation rate at the optimum is 0.11–0.30 s⁻¹ for winds of 4–11 m/s (computed with the
 page's own functions). So $|\lambda| h \le 0.01$, far inside RK4's stable region, and the fastest wind component (0.5 Hz) gets 200 steps
 per period. The torque clipping and the anti-windup switch make the right-hand side non-smooth at the limits; the code does
 nothing special there. With the defaults the energy balance $E_\text{aero} = E_\text{gen} + \Delta(\tfrac12 J\omega^2)$ holds
-to $8.2\times10^{-13}$ (measured; between 0 and $8.2\times10^{-13}$ for all eight combinations of controller and wind).
+to $8.2\times10^{-13}$ (measured; between 0 and $8.2\times10^{-13}$ for all eight combinations of controller and wind). The step study, run in the page itself with only L555 changed: solving again with $h = 5$ ms (`EVERY = 4`, so the 6 001 rows fall at the same times) changes the stored $\omega$ by at most $2.0\times10^{-11}$ rpm (defaults), and $h = 20$ ms changes it 16.0 times as much, the factor $2^4$ of a fourth-order method; no run of the section 7 table brings the generator torque to 0 or to $\tau_\max$ (largest 916 kN m, smallest 32 kN m, both with hold speed in turbulent wind). Scripts: `notes/fig10/measure.cjs`, `notes/fig10/cp_checks.cjs`.
 
 ### 2 Store: every second state
 
@@ -452,3 +452,15 @@ The false global monotonicity argument is replaced by a local restoring torque s
 Fixed on 2026-10-16: "the linearised equation below" pointed at (10), which is above ([L346](../../public/simulations/wind-turbine.html#L346)); and the conclusion that no global argument exists is replaced by the sign of the net torque on each side of $\lambda_\text{opt}$ ([L340](../../public/simulations/wind-turbine.html#L340)): $c_p/\lambda^3$ is not monotone, but it stays above its value at $\lambda_\text{opt}$ for smaller $\lambda$ and below it for larger, so in steady wind the rotor returns from any start at which it is turning. See the [audit of the revision](../research-theory-audit.md).
 
 Fixed on 2026-10-16 (second repairs): the $c_p$ paragraph has its two pictures back (too slow lets the air through, too fast acts like a wall) with the angle of attack as the mechanism behind both ([L235](../../public/simulations/wind-turbine.html#L235)). See the [audit of the revision](../research-theory-audit.md).
+
+## Teaching revision · 20 October 2026
+
+Judged section by section against `notes/STANDARD.md` (plan and verdicts in `notes/fig10/plan.md`); sections 5 and 10 and the abstract were left as they were. Changes, all inside existing lines, so no line of the page moved and every link above still holds: $\omega$ and $R$ named in section 1 ([L177](../../public/simulations/wind-turbine.html#L177)) and $\rho$ in section 2 ([L213](../../public/simulations/wind-turbine.html#L213)); the Betz derivation now writes the two Bernoulli equations, says why Bernoulli does not hold across the disc, and divides by $v - v_w$ in the open, and the root $a = 1$ is named ([L223–L225](../../public/simulations/wind-turbine.html#L223-L225)); section 4 says why $c_p$ depends on $\omega$ and $v$ only through $\lambda$ (the relative wind meets the blade at $\tan\phi = (R/r)/\lambda$, 7.04° at the tip at $\lambda = 8.1$, [L235](../../public/simulations/wind-turbine.html#L235)); section 6.1 defines $\omega_*$ and gives the step to the slope $-K_\text{opt}\omega_*$ ([L340](../../public/simulations/wind-turbine.html#L340)); section 6.2 defines $\tau_0$, writes the linearised equation before it is differentiated into (10), and replaces "without ringing" by the measured Step-run overshoot of 0.39 rpm and dip of 0.01 rpm ($\zeta_c = 0.8 < 1$; [L344–L346](../../public/simulations/wind-turbine.html#L344-L346)); section 7 glosses $\Delta v$ and separates $c_p$ after the step (0.427, measured) from the whole-run share 0.437 ([L482](../../public/simulations/wind-turbine.html#L482), [L496](../../public/simulations/wind-turbine.html#L496)); section 8 adds the step study above ([L507](../../public/simulations/wind-turbine.html#L507)); section 9 names the rose $P_\text{aero}$ curve ([L515](../../public/simulations/wind-turbine.html#L515)); the four references have links to pages that were opened ([L529–L532](../../public/simulations/wind-turbine.html#L529-L532)). Heier's book itself could not be opened; its link is the publisher's description at the Library of Congress. Walkthrough step 4 still says "without ringing" ([turbine.js:64](../../public/scripts/walk/turbine.js#L64)); it was not edited.
+
+## Repair round · 20 October 2026
+
+After the independent referee and derivation checks (`notes/fig10/`), the lead made only these changes, each on its existing line, so no line link moved: equations (3) and (10) broken over two lines so their numbers show at 1440 px ([L224](../../public/simulations/wind-turbine.html#L224)); (10) ([L345](../../public/simulations/wind-turbine.html#L345)). Checked in headless Chromium at 1440 × 900 and 390 × 844: no console or KaTeX errors, no sideways scroll, no display equation wider than its box at 1440 px (`notes/verify.mjs`).
+
+## Second check round · 20 October 2026
+
+From the derivation checks and blind referees that ran after the usage limit lifted (`notes/fig10/`), each change on its existing line: Figure 1: the tip speed drawn out of the page ([L197](../../public/simulations/wind-turbine.html#L197)); Figure 3: labels fit, subscripts set ([L306](../../public/simulations/wind-turbine.html#L306)); §2: power is torque times angular speed ([L216](../../public/simulations/wind-turbine.html#L216)); §4: the inflow angle 7° for the undisturbed wind, about 6° for the slowed air; one repeated sentence removed ([L235](../../public/simulations/wind-turbine.html#L235)); §6.1: the code, not the fit, gives no torque at a standstill ([L340](../../public/simulations/wind-turbine.html#L340)); §6.2 and §7: the Step wind is a 2 s ramp; overshoot 0.39 rpm ([L346](../../public/simulations/wind-turbine.html#L346)); equation (8) reflowed so its number shows at 1600 px ([L339](../../public/simulations/wind-turbine.html#L339)). Checked with `notes/verify.mjs` at 1440 × 900, 1600 × 900 and 390 × 844.
