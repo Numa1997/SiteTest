@@ -9,10 +9,10 @@ Updated by the lead after every agent returns. Rule in force: judge first, chang
 | 2 | Double Pendulum.html | running | | | | | 0 | |
 | 3 | Interactive Double-Slit Experiment Visualization.html | running | | | | | 0 | |
 | 4 | Transverse and longitudinal waves.html | running | | | | | 0 | |
-| 5 | water-wave.html | running | | | | | 0 | |
+| 5 | water-wave.html | done; 4 repairs, lead accepted all | 8 clear / 4 needing work (§02 symbols before definition, §05 c_g asserted, §08 "stored" claim, references) | running | running | running | 1 | code: `cg` stored as c/2 with dispersion off (L663), report only |
 | 6 | wave-interference.html | running | | | | | 0 | |
 | 7 | phasor-sums.html | running | | | | | 0 | |
-| 8 | draw-decompose.html | running | | | | | 0 | |
+| 8 | draw-decompose.html | done; 6 repairs, lead accepted all | 6 clear / 5 needing work (§2 pointer, §4.1 inverse DFT step, Fig. 3 caption, §6.1 corner reason and a rounding slip, references) | running | running | running | 1 | design choice in `resamp()` (closed shapes sample the start point twice), report only |
 | 9 | driven-oscillator.html | running | | | | | 0 | |
 | 10 | wind-turbine.html | running | | | | | 0 | |
 

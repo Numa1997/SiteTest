@@ -2,7 +2,7 @@
 
 | | |
 |---|---|
-| Page | [public/simulations/draw-decompose.html](../../public/simulations/draw-decompose.html) (1 416 lines, 214 981 bytes) |
+| Page | [public/simulations/draw-decompose.html](../../public/simulations/draw-decompose.html) (1 416 lines, 215 922 bytes) |
 | Walkthrough | [public/scripts/walk/dft.js](../../public/scripts/walk/dft.js) (key `dft`, 6 steps) |
 | Thumbnail | [public/images/sims/draw-decompose.webp](../../public/images/sims/draw-decompose.webp) (800 × 500 px: the heart, its dashed samples and the chain of circles) |
 | Catalog entry | [public/scripts/catalog.js#L167](../../public/scripts/catalog.js#L167) (`id: 'draw-decompose'`, `fig: 8`, field `methods`, stage 2) |

@@ -2,7 +2,7 @@
 
 | | |
 |---|---|
-| Page | [public/simulations/water-wave.html](../../public/simulations/water-wave.html) (891 lines, 161 372 bytes) |
+| Page | [public/simulations/water-wave.html](../../public/simulations/water-wave.html) (891 lines, 162 709 bytes) |
 | Walkthrough | [public/scripts/walk/water.js](../../public/scripts/walk/water.js) (116 lines, key `water`) |
 | Thumbnail | [public/images/sims/water-wave.webp](../../public/images/sims/water-wave.webp) (800 × 500 px, 15 kB) |
 | Catalog entry | [public/scripts/catalog.js#L115](../../public/scripts/catalog.js#L115) (lines 115–131, `id: 'water-wave'`, `fig: 5`) |
@@ -351,3 +351,10 @@ stylesheets `../styles/sim.css` (which imports the self-hosted fonts, KaTeX's CS
 The model section makes the first-order circular-orbit approximation and exaggerated default steepness visible. The vorticity argument states the constant-density, inviscid, conservative-force assumptions of circulation conservation. Simulation code, inline styles and figure SVGs match the latest live baseline. See the [theory audit](../research-theory-audit.md).
 
 Fixed on 2026-10-16 (second repairs): the vorticity paragraph has its picture back (pressure through the centre, gravity at the centre, only friction could twist a parcel) with the three conditions of Kelvin's theorem named ([L253](../../public/simulations/water-wave.html#L253)). See the [audit of the revision](../research-theory-audit.md).
+
+Teaching review, 20 October 2026 (notes/fig05/plan.md): Sections 01, 03, 04, 06, 07, 09 and 10 (all but its reading list) judged clear and left alone. Four small repairs inside
+the note, no line added or removed, so every line link above stays valid: the warning paragraph of Section 02 moved after
+Figure 1 and defines $z_0$ ([L245](../../public/simulations/water-wave.html#L245)); the group velocity (15) is now reached from
+two waves of nearly equal wave number ([L303](../../public/simulations/water-wave.html#L303)); Section 08 says the 307 or 174
+surface points are drawn but not stored ([L516](../../public/simulations/water-wave.html#L516)); each further-reading item links
+to a page that was opened ([L545-L548](../../public/simulations/water-wave.html#L545-L548)).
