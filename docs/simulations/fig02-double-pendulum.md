@@ -2,7 +2,7 @@
 
 | | |
 |---|---|
-| Page | [public/simulations/Double Pendulum.html](../../public/simulations/Double%20Pendulum.html) (870 lines, 105 179 bytes) |
+| Page | [public/simulations/Double Pendulum.html](../../public/simulations/Double%20Pendulum.html) (870 lines, 105 641 bytes) |
 | Walkthrough | [public/scripts/walk/pendulum.js](../../public/scripts/walk/pendulum.js) (137 lines, 8 steps, key `pendulum`) |
 | Thumbnail | [public/images/sims/double-pendulum.webp](../../public/images/sims/double-pendulum.webp) (WebP, 800 × 500 px, 12.5 kB; the pendulum, its fading trail and the protractor) |
 | Catalog entry | [public/scripts/catalog.js#L65](../../public/scripts/catalog.js#L65) (`id: 'double-pendulum'`, `fig: 2`, `field: 'mechanics'`, `stage: 2`, lines 64–80) |
@@ -87,8 +87,9 @@ keeps the accuracy the same on every device ([pendulum.js:86](../../public/scrip
 drift ε rather than hiding it ([L351](../../public/simulations/Double%20Pendulum.html#L351), [L639](../../public/simulations/Double%20Pendulum.html#L639)). `rk4()` builds separate trial arrays `s2`, `s3`, `s4`, so all four slopes of a
 step use their own input state ([L489–496](../../public/simulations/Double%20Pendulum.html#L489-L496)). Measured in this session (1280 px window, default start, headless Chromium):
 ε = −2.4 × 10⁻⁸ at t = 21.2 s, n = 10 steps per frame at 60 frames per second, energy E = 18.3057 J. Over the first 20 s
-of the default start ε stays within ±5 × 10⁻⁸: its largest value is +4.710 × 10⁻⁸ at t = 8.665 s, its most negative
-−3.185 × 10⁻⁸ at t = 19.13 s. The step is fixed, so every run gives these same numbers. The note says so ([L351](../../public/simulations/Double%20Pendulum.html#L351)).
+of the default start ε stays within ±5 × 10⁻⁸: read once per frame, its largest value is +4.710 × 10⁻⁸ at t = 8.665 s, its most negative
+−3.185 × 10⁻⁸ at t = 19.13 s; step by step the peak is +5.0006 × 10⁻⁸ at t = 8.668 s (derivation check, 20 October 2026). The step is fixed,
+but which step a frame reads depends on the frame times, so the per-frame peak varies between runs (4.71 to 4.99 × 10⁻⁸). The note says so ([L351](../../public/simulations/Double%20Pendulum.html#L351)).
 
 **Sub-stepping.** Real frame times are uneven; the physics advances in equal steps. Each frame ([L700–703](../../public/simulations/Double%20Pendulum.html#L700-L703)):
 
@@ -366,3 +367,5 @@ After the independent referee and derivation checks (`notes/fig02/`), the lead m
 ## Second check round · 20 October 2026
 
 From the derivation checks and blind referees that ran after the usage limit lifted (`notes/fig02/`), each change on its existing line: §5: the matrix whose determinant must vanish written out, and why ([L228](../../public/simulations/Double%20Pendulum.html#L228)); §6: why two nearby starts part (linear small swings; balancing near the top) ([L335](../../public/simulations/Double%20Pendulum.html#L335)); §6: the rough and full Lyapunov rates in one sentence; "much of what that energy allows" ([L337](../../public/simulations/Double%20Pendulum.html#L337)); §9: the Lyapunov time defined ([L368](../../public/simulations/Double%20Pendulum.html#L368)); equations (6), (9), (11) reflowed so their numbers show at 1600 px ([L212](../../public/simulations/Double%20Pendulum.html#L212)). Checked with `notes/verify.mjs` at 1440 × 900, 1600 × 900 and 390 × 844.
+
+From the Fig. 2 derivation check (65 verified, 4 wrong, 1 unverifiable; `notes/fig02/check.md`): abstract: 600 steps a second, sixty frames a second ([L119](../../public/simulations/Double%20Pendulum.html#L119)); §7: drift peak +5.0 × 10⁻⁸ step by step, +4.7 × 10⁻⁸ as the readout samples it ([L351](../../public/simulations/Double%20Pendulum.html#L351)); §8: the trail as the canvas really fades it (half in 1.6 s, then a faint haze at a quarter opacity) ([L359](../../public/simulations/Double%20Pendulum.html#L359)); §9: the computed path stays true for 15–20 Lyapunov times, 11–14 s ([L368](../../public/simulations/Double%20Pendulum.html#L368)). The trail's haze is a page defect, reported in the audit, not changed.

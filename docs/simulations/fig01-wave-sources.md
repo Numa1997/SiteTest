@@ -2,7 +2,7 @@
 
 | | |
 |---|---|
-| Page | [public/simulations/Circular Wave Interference Visualization.html](../../public/simulations/Circular%20Wave%20Interference%20Visualization.html) (907 lines, 192 593 bytes) |
+| Page | [public/simulations/Circular Wave Interference Visualization.html](../../public/simulations/Circular%20Wave%20Interference%20Visualization.html) (907 lines, 192 669 bytes) |
 | Walkthrough | [public/scripts/walk/circles.js](../../public/scripts/walk/circles.js) (110 lines, key `circles`) |
 | Thumbnail | [public/images/sims/wave-sources.webp](../../public/images/sims/wave-sources.webp) (WebP, 800 × 500 px, 36.5 kB; a still of the two-source field) |
 | Catalog entry | [public/scripts/catalog.js#L48](../../public/scripts/catalog.js#L48) (`id: 'wave-sources'`, `fig: 1`, `field: 'optics'`, `stage: 1`, lines 47–63) |
@@ -334,3 +334,5 @@ Fixed on 2026-10-16 (second repairs): the opening says in plain words what the f
 ## Second check round · 20 October 2026
 
 From the derivation checks and blind referees that ran after the usage limit lifted (`notes/fig01/`), each change on its existing line: §4: k, ω and aᵢ defined where (6) uses them, not only in the ★ Section 3 ([L282](../../public/simulations/Circular%20Wave%20Interference%20Visualization.html#L282)); §7: opens by recalling the beam directions of the ★ Section 6 ([L379](../../public/simulations/Circular%20Wave%20Interference%20Visualization.html#L379)); §10: dispersion contrasted correctly (in water the frequency fixes the wavelength) ([L478](../../public/simulations/Circular%20Wave%20Interference%20Visualization.html#L478)). Checked with `notes/verify.mjs` at 1440 × 900, 1600 × 900 and 390 × 844.
+
+From the Fig. 1 derivation check (111 verified, 2 wrong, 1 unverifiable; `notes/fig01/check.md`): §3: the first correction to the far-field ring is a phase lead, not a lag (the 16 October wording had the sign reversed; the size, 0.01 rad, was right) ([L271](../../public/simulations/Circular%20Wave%20Interference%20Visualization.html#L271)); §6: the damping changes (12) by at most 0.04 at the default λ and up to 0.06 over the slider (0.03 came from a 0.1° grid) ([L308](../../public/simulations/Circular%20Wave%20Interference%20Visualization.html#L308)).

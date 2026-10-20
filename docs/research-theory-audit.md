@@ -176,7 +176,7 @@ did not say what error to expect, and reading lists without a single link (37 re
 
 | Fig. | What was wrong (examples) | What the note does now | Verified |
 |---|---|---|---|
-| 1 | "The pattern moves as one ring does" (§4): true of each ring, not of the summed crests; "the damping factors are all the same" (§6), false for γ > 0 | each ring at v, crests of the sum faster where rings cross (1.55 v up the middle, measured); the row derived at γ = 0, the damping effect bounded (≤ 0.03 at the default γ); 5 references linked | teacher's float64 recomputation and Chromium measurement |
+| 1 | "The pattern moves as one ring does" (§4): true of each ring, not of the summed crests; "the damping factors are all the same" (§6), false for γ > 0 | each ring at v, crests of the sum faster where rings cross (1.55 v up the middle, measured); the row derived at γ = 0, the damping effect bounded (≤ 0.04 at the default γ and λ, ≤ 0.06 over the λ slider); 5 references linked | teacher's float64 recomputation and Chromium measurement |
 | 2 | Lyapunov rate "1.7 per second" read off no curve; energy "fixed to one part in ten million" with no time limit; pixel formula adding metres to pixels; no word on where RK4 fails | fitted 1.4 and a full calculation of 1.45 per second; the energy claim for the first 20 s, with the slow creep and the heavy-bob failure measured; σ-based pixel formulas; four wide equations reflowed; references linked | teacher's SymPy, Node runs of the page's own `rk4`, Chromium |
 | 3 | θ undefined and the cross term never written (§5); "closing one slit gives the sum of two single-slit patterns" (§7); polarisation "changes nothing for small angles" (§10); 67.5 px fringe spacing where the page shows 72 px | θ and the cross term defined; one slit gives one single-slit pattern; polarisation measured (0.9 % residual at the dark fringe); small-angle estimate vs exact 72 px; references linked, Young 1804 added | checker: 119 verified, 0 wrong; blind referee |
 | 4 | A_L used before definition; Exercise 3.1 false for the lower row; B = γp and K + 4G/3 asserted; air density 1.2041 for 1.2043; Exercise 5.1 "bars nearly touch" | each derived in a sentence or two; the exercise corrected; the "new medium" point made where the speed doubles; overloaded caveat and ⁴⁄₃G sentence trimmed; references linked | teacher's SymPy and Chromium; blind referee |
@@ -187,19 +187,49 @@ did not say what error to expect, and reading lists without a single link (37 re
 | 9 | amplitude and phase, roots, constants, Ω_r and the ζ ≥ 1/√2 claim asserted; pole real part "1/τ"; Exercise 6.1 wrong; the window chart not described | each derived (Ω_r by completing the square, (6a)); sign and exercise corrected; the per-run drawing scale and the ruler said in words; Figure 3's label fits its box; references linked | teacher's SymPy and Chromium; blind referee |
 | 10 | ω, R, ρ undefined; the Bernoulli step of the Betz derivation asserted; why c_p depends on λ alone; ω*, τ₀ and the PI linearisation skipped; "without ringing" false (0.39 rpm overshoot); no RK4 error estimate | each defined or derived; step-size study h = 5 / 20 ms (ratio 16, fourth order); two wide equations reflowed; references linked | teacher's Node runs of the page's `cp()`/`tauAero()`, Chromium |
 
-Checks after the repairs, all passing: [notes/verify.mjs](../notes/verify.mjs) (ten pages at 1440 × 900 and 390 × 844: no
-console or KaTeX errors, no sideways scroll, every fold opens, no display equation wider than its box at 1440 px);
-[notes/walkcheck.cjs](../notes/walkcheck.cjs) (226 of 226 quoted code lines found verbatim); `tools/inventory.py --check`.
+Independent checks, all complete (one row per equation, number, method line and reference; `notes/figNN/check.md`):
 
-Open on 20 October 2026, 17:00 UTC:
-- The derivation checks of Figs. 1, 2, 4, 5, 7, 8, 9, 10 and the blind referees of Figs. 1, 2, 10 stopped when the account's
-  usage limit was reached; they resume after it resets. Until then those notes are verified by their teachers' own
-  computations only.
-- Walkthrough fixes: every walkthrough quotes its page exactly, but several use other symbols than the repaired notes (for
-  example Fig. 8's step 3 writes `a + ib` where the note uses a for an angle; Fig. 10's step 4 still says "without ringing").
-  The exact old → new text is in `notes/figNN/walk.md`; walkthrough files change only with Numa's permission.
-- Code findings, reported and not fixed: Fig. 2 `drift.toExponential(1).replace('-', '−')` replaces only the first hyphen
-  (L639, L691, L693); Fig. 5 stores `cg = c/2` also with dispersion off (L663); Fig. 7 Record snapshots come 58 ms apart, not
-  50 (`recAcc = 0`, L1189), and replay does not wrap phases (L1205); Fig. 8 `resamp()` samples a closed shape's start point
-  twice; Fig. 9 the last time-tick label can overlap "t (s)" (L783); Fig. 10 Play after 120 s does nothing (L962); Figs. 4, 9, 10
-  redraw every frame while paused; Fig. 3 "Animate wavelets" starts ticked while the clock may start paused.
+| Fig. | Derivation check: verified / wrong / unverifiable | Blind referee: sections clear / needing work | Walkthrough: quoted lines verbatim |
+|---|---|---|---|
+| 1 | 111 / 2 / 1 | 8 / 3 | 17 / 17 |
+| 2 | 65 / 4 / 1 | 6 / 3 | 31 / 31 |
+| 3 | 119 / 0 / 0 | 8 / 2 | 24 / 24 |
+| 4 | 107 / 0 / 0 | 6 / 3 | 16 / 16 |
+| 5 | 116 / 2 / 0 | 8 / 2 | 21 / 21 |
+| 6 | 79 / 3 / 0 | 7 / 2 | 19 / 19 |
+| 7 | 100 / 3 / 1 | 6 / 3 | 26 / 26 |
+| 8 | 90 / 5 / 0 | 8 / 1 | 22 / 22 |
+| 9 | 86 / 1 / 1 | 6 / 4 | 24 / 24 |
+| 10 | 91 / 4 / 1 | 8 / 2 | 26 / 26 |
+
+Every wrong row and every real obstacle a referee found was repaired in the note, each on its existing line, except where
+the fault is in the page itself (below). Two of the wrong rows were in sentences the lead had written in the first repair
+round (Fig. 8, section 5; Fig. 7, section 7.1); one, the sign of the far-field phase correction in Fig. 1, dates from
+16 October. The unverifiable rows are machine-dependent timings (Figs. 1, 9), a book that could not be opened (Heier, Fig. 10), the step
+count behind a figure (Fig. 7), and a rounding figure whose sampling the note does not state (Fig. 2, under (9)).
+
+Checks after the repairs, all passing: [notes/verify.mjs](../notes/verify.mjs) (ten pages at 1440 × 900, 1600 × 900 and
+390 × 844: no console or KaTeX errors, no sideways scroll, every fold opens, no display equation wider than its box at the
+two desktop widths); [notes/walkcheck.cjs](../notes/walkcheck.cjs) (226 of 226 quoted code lines found verbatim); every page
+byte-identical to `db1a24b` outside `<article id="paper">`; `tools/inventory.py --check`.
+
+Open, for Numa:
+- Walkthrough fixes: every walkthrough quotes its page exactly, but each uses some symbols or claims that differ from its
+  repaired note (for example Fig. 8's step 3 writes `a + ib` where the note uses a for an angle; Fig. 10's step 4 still says
+  "without ringing"; Fig. 2's step 8 says "no sign flip"). The exact old → new text is in `notes/figNN/walk.md`; walkthrough
+  files change only with Numa's permission.
+- Page faults found by the checks, reported and not fixed (page code needs Numa's yes):
+  - Fig. 7: the page's security policy has no `media-src`, so the browser refuses the audio file that Auto Dance plays from a
+    `blob:` URL; Auto Dance does nothing, on phyeinusul.com too. Fix: add `media-src 'self' blob:` to the policy.
+  - Fig. 2: the trail fades by multiplying an 8-bit opacity, so it stops at 63/255 and leaves a permanent faint haze wherever
+    bob 2 has been (13 % of the canvas after 60 s); the note now says so. Fix: fade with `globalCompositeOperation` and a
+    step that cannot round to zero, or clear below a threshold.
+  - Fig. 2: `drift.toExponential(1).replace('-', '−')` replaces only the first hyphen (L639, L691, L693); the store still names
+    the pivot o<sub>x</sub>, o<sub>y</sub> where the note writes x₀, y₀.
+  - Fig. 5: `cg` is stored as c/2 also with dispersion off (L663).
+  - Fig. 7: Record snapshots come 58 ms apart, not 50 (`recAcc = 0`, L1189); replay does not wrap phases (L1205); the beat
+    burst sets 1 + d_burst and overwrites it with 1 + 0.9 d_burst in the same call (the note describes what is drawn).
+  - Fig. 8: `resamp()` samples a closed shape's start point twice.
+  - Fig. 9: the last time-tick label can overlap "t (s)" (L783).
+  - Fig. 10: Play after 120 s does nothing (L962).
+  - Figs. 4, 9, 10 redraw every frame while paused; Fig. 3 "Animate wavelets" starts ticked while the clock may start paused.
