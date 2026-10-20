@@ -76,4 +76,6 @@ What this means for every agent:
 **20 October 2026, later.** Numa: "YOU JUDGE, YOU DECIDE, NOT ME". The lead judges each note and decides what changes; Numa
 is not asked to choose between options. Where the brief says "ask Numa" or "wait for Numa's yes" about the notes (pilot
 choice, pilot verdict, the swarm, the notes/ folder in the pull request), the lead decides and reports the decision with its
-reason. Still out of bounds without his explicit word: page code, deploys, other repositories, merging.
+reason. Still out of bounds without his explicit word: page code, the walkthrough files `public/scripts/walk/*.js`, deploys, other
+repositories, merging. Mismatches between a walkthrough and its note are listed with exact old → new text in
+`notes/figNN/walk.md`, ready to apply when Numa allows it.
