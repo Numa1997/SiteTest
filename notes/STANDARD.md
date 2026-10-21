@@ -79,3 +79,24 @@ choice, pilot verdict, the swarm, the notes/ folder in the pull request), the le
 reason. Still out of bounds without his explicit word: page code, the walkthrough files `public/scripts/walk/*.js`, deploys, other
 repositories, merging. Mismatches between a walkthrough and its note are listed with exact old → new text in
 `notes/figNN/walk.md`, ready to apply when Numa allows it.
+
+**21 October 2026. This verdict overrides the "judge first, smallest change" rule above and the "relaxed, Feynman-like voice" of
+the teacher brief.** Numa, after reading the notes: "as it stands now, it is not readable, not understandable, and feels like
+slop." He wants every note rewritten until it reads as a chapter of a bachelor's textbook, and he chose the model:
+**J. R. Taylor, *Classical Mechanics*.** What this means for every agent:
+1. **Rewrite the whole note**, every section, for a reader who meets the topic for the first time, up to second-year level.
+   Keep only what survives the rewrite; nothing is protected because an earlier pass judged it clear.
+2. **Taylor's way of teaching:** a patient "we"; every algebraic step shown, with the reason for it; every new word and symbol
+   defined where it first appears, one symbol one meaning; key results set apart in a `.pbox` titled "Key result · …";
+   numbered worked examples ("Example 5.1 · …") that use the page's own numbers; a short `.pbox.pbox--ex` titled "Problems"
+   at the end of the last section.
+3. **Voice: a professor, calm and focused, not dramatic.** Physical pictures from everyday experience where they make an idea
+   click, not in every paragraph. No AI tells: no rhetorical questions, no "That changes everything", no "It is not X. It is
+   not Y.", no "crucial / delve / landscape / underscore", no stacked em dashes, no headline-style hooks. Connected prose; no
+   bullet lists in the body except genuine lists. No question-and-answer format.
+4. **★ marks heavier mathematics that can be skipped**, and the results of any starred passage are restated unstarred, so a
+   reader who skips never loses the thread.
+5. **Correctness first:** every equation re-derived (SymPy or Wolfram), every number measured by running the page's own code,
+   units and at least one limiting case checked in the text. Never invent a number or a source.
+6. Figures, exercises, page code, walkthrough files and the `<head>` stay untouched unless a figure caption is wrong.
+Reference: the Fig. 2 note on this branch (double pendulum, 21 October) is the first note written to this verdict.
