@@ -32,6 +32,11 @@ npm run build           # vite build: index.html + everything in public/ -> dist
 npx wrangler deploy     # publishes dist/ to the Worker phyein-usul (needs a Cloudflare sign-in)
 ```
 
+Since 21 October 2026 the Worker is connected to this repository (Cloudflare dashboard → Workers & Pages → phyein-usul → Settings → Builds,
+repository Numa1997/SiteTest, branch `main`, build command `npm run build`, deploy command `npx wrangler deploy`). Every push or merge into
+`main` therefore builds and publishes the site by itself; nobody has to sign in to Wrangler. Build logs: the Deployments tab of the Worker.
+The two commands above still work by hand from a computer signed in to Cloudflare.
+
 Vite copies `public/` unchanged, so `dist/` is the file tree the visitor gets. Checked 20 October 2026: a fresh build of this
 repository gives 285 files, every one byte-identical to the files served by the live site. To check the live site by hand:
 `curl -sI https://phyeinusul.com/` shows status 200 and the security headers below.
