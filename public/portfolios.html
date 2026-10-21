@@ -8,7 +8,7 @@
     <title>Portfolios · Numa Koudsie</title>
     <meta
       name="description"
-      content="Research projects by Numa Koudsie, each with its derivations, solver and results: Droplet Collection, the remodel of a Bachelor thesis on how cloud droplets become rain, and Rotor Pendula, a corrected study of whether a pendulum on a turbine blade can power a sensor."
+      content="Research projects by Numa Koudsie, each with its derivations, solver and results: Droplet Collection, the remodel of a Bachelor thesis on how cloud droplets become rain; Rotor Pendula, a corrected study of whether a pendulum on a turbine blade can power a sensor; and the Hydraulic Press Study, a servo-hydraulic press under digital control, built from first principles."
     />
     <meta name="author" content="Numa Koudsie" />
     <meta name="theme-color" content="#f5f1ea" />
@@ -254,6 +254,104 @@
               <li><a href="portfolios/rotor-pendula/index.html#/report"><b>Report</b><span>Sol’s 14-page report in full: 20 equations, 9 tables rebuilt from the data and checked cell by cell, the PDF and all 181 files.</span></a></li>
             </ul>
             <p class="proj__note">A static copy of the Rotor Pendula app. Its saved-runs list is left out: every run is computed fresh in your browser, and nothing is stored.</p>
+          </section>
+        </div>
+      </article>
+
+      <article class="proj" id="hydraulic-press" aria-labelledby="hp-title">
+        <div class="proj__band">
+          <span class="proj__num">03</span>
+          <p>An interactive study · from first principles · 2026</p>
+          <span>fluid power · digital control · numerical simulation</span>
+        </div>
+        <div class="proj__body">
+          <div class="proj__head">
+            <div>
+              <h2 id="hp-title">Hydraulic Press Study</h2>
+              <p class="proj__sub">How a digital controller makes 12 MPa of oil press with 60 kN, and hold it</p>
+              <p class="proj__abs">
+                Push a small piston and a large one lifts a car: Pascal’s principle, the oldest trick in
+                hydraulics. A modern press adds a servo valve and a computer, and the trick becomes a control
+                problem. This study builds one such press from first principles: a pump held at 12 MPa, a
+                four-way servo valve, two metres of hose, a cylinder carrying a 160 kg ram, and a specimen to
+                squeeze, in a nonlinear model with eight state variables. A PID controller, sampled every
+                millisecond, drives the ram to the specimen in position control, switches to force control at
+                contact, ramps to 60 kN, holds and lets go. You watch every step with the oil coloured by its
+                pressure, change any setting and see the whole cycle recomputed, and ask the linearized loop,
+                with Bode, Nyquist and z-plane plots, whether it survives. A 23-chapter companion text derives
+                every equation the animation integrates, starting from Pascal’s press.
+              </p>
+              <div class="proj__actions">
+                <a class="proj__btn" href="portfolios/hydraulics/index.html#servo">Open the project</a>
+                <a class="proj__btn proj__btn--ghost" href="portfolios/hydraulics/index.html#theory">Read the derivations</a>
+                <a class="proj__btn proj__btn--ghost" href="portfolios/hydraulics/index.html#ideal">Start from Pascal</a>
+              </div>
+            </div>
+            <dl class="proj__tally" aria-label="Key figures">
+              <div><dt class="is-new">63.6<small> kN</small></dt><dd>peak force for a 60 kN set-point</dd></div>
+              <div><dt>64°<small> · 11 dB</small></dt><dd>phase and gain margin of the position loop</dd></div>
+              <div><dt>93<small> %</small></dt><dd>of the pump’s work turned into heat in the valve</dd></div>
+              <div><dt>52</dt><dd>numbers in the text, each recomputed from the model</dd></div>
+            </dl>
+          </div>
+
+          <section class="proj__part" aria-labelledby="hp-cycle">
+            <h3 id="hp-cycle"><span class="psub__n">3.1</span>One press cycle, 4.4 seconds</h3>
+            <ol class="proj__changes">
+              <li><b>Approach.</b> From 0.1 s the position law moves the ram up along a smooth path, the spool opening to 94 % on the way; at 1.1 s it slows to a 10 mm/s creep for the last 2 mm.</li>
+              <li><b>Contact and press.</b> At 1.316 s the load cell feels the specimen and the controller hands over to its force law, which ramps to 60 kN in 0.25 s, overshoots to 63.6 kN and settles while it holds for 0.5 s.</li>
+              <li><b>Release and retract.</b> From 2.066 s the force ramps back down; at 2.316 s the position law takes the ram home, and the cycle is done at 4.116 s.</li>
+              <li><b>Where the energy goes.</b> The pump does 26.3 kJ of work; the valve turns 24.4 kJ of it into heat, because a valve throttling a constant-pressure supply is a brake. The energy books close to \(2\times10^{-14}\) of the pump’s work.</li>
+            </ol>
+          </section>
+
+          <section class="proj__part" aria-labelledby="hp-model">
+            <h3 id="hp-model"><span class="psub__n">3.2</span>What the model keeps</h3>
+            <p>
+              Every block is a physical law with its own derivation. The valve’s metering edges are sharp-edged
+              orifices whose jet contracts to 0.61 of the opening, as the free-streamline theory of Helmholtz
+              and Kirchhoff predicts; the spool answers the controller as a
+              mass on a spring at 60 Hz. The two metres of hose are a slug of oil with inertia and friction,
+              laminar and turbulent. The oil itself is a spring whose stiffness depends on its pressure, through
+              the 0.5 % of air it carries as bubbles. The cylinder has two chambers of different area, seal friction and end
+              stops; the specimen is a spring with damping. The controller sees the world only once a
+              millisecond, through a zero-order hold, and the model is integrated with fourth-order Runge–Kutta
+              at 10 µs, a hundred steps per sample. An independent Python model, with SciPy for the numbers and
+              SymPy for the derivatives, recomputes the equilibria, the linearization, the closed-loop poles,
+              the margins and the whole nonlinear cycle, and agrees with the page.
+            </p>
+          </section>
+
+          <section class="proj__part" aria-labelledby="hp-figs">
+            <h3 id="hp-figs"><span class="psub__n">3.3</span>Four figures from the study</h3>
+            <div class="proj__figs">
+              <figure>
+                <a class="pfig__plate" href="portfolios/hydraulics/index.html#servo"><img src="portfolios/hydraulics/fig/01_press.webp" width="420" height="300" loading="lazy" alt="The servo press drawn in section during the press phase: the controller panel, the pump, the servo valve, the hose and the cylinder pressing the specimen, with the oil coloured by pressure."></a>
+                <figcaption><span class="pfig__n">Figure 1</span>The press at 1.45 s, under the force law: set-point 32.6 kN on its way to 60, spool 6.4 % open, oil coloured by pressure.</figcaption>
+              </figure>
+              <figure>
+                <a class="pfig__plate" href="portfolios/hydraulics/index.html#servo"><img src="portfolios/hydraulics/fig/02_traces.webp" width="462" height="300" loading="lazy" alt="Six time plots of one press cycle: position, force, the three pressures, valve command and spool position, the energy books, and the tracking error."></a>
+                <figcaption><span class="pfig__n">Figure 2</span>One cycle in six traces: position, force, pressures, valve, energy and tracking error, shaded by phase.</figcaption>
+              </figure>
+              <figure>
+                <a class="pfig__plate" href="portfolios/hydraulics/index.html#servo"><img src="portfolios/hydraulics/fig/03_loop.webp" width="748" height="300" loading="lazy" alt="Bode plot of the sampled position loop up to 500 Hz, and its Nyquist plot passing the point minus one at a safe distance."></a>
+                <figcaption><span class="pfig__n">Figure 3</span>The sampled position loop up to the Nyquist frequency of 500 Hz: crossover at 9.7 Hz with 64° of phase margin.</figcaption>
+              </figure>
+              <figure>
+                <a class="pfig__plate" href="portfolios/hydraulics/index.html#theory"><img src="portfolios/hydraulics/fig/04_map.webp" width="631" height="300" loading="lazy" alt="Block diagram of the servo press: controller, torque motor and spool, valve edges, hose, cap chamber, ram, rod chamber, pump, specimen and sensors, joined by arrows."></a>
+                <figcaption><span class="pfig__n">Figure 4</span>The machine as ten blocks, from chapter 0 of the text: between two blocks, a flow goes one way and a pressure or speed answers back.</figcaption>
+              </figure>
+            </div>
+          </section>
+
+          <section class="proj__part" aria-labelledby="hp-pages">
+            <h3 id="hp-pages"><span class="psub__n">3.4</span>The project’s own pages</h3>
+            <ul class="proj__pages proj__pages--3">
+              <li><a href="portfolios/hydraulics/index.html#servo"><b>Servo press</b><span>The animated press with its controller, gauges, every setting, the time traces, the loop analysis and nine worked solutions.</span></a></li>
+              <li><a href="portfolios/hydraulics/index.html#ideal"><b>Ideal press</b><span>Pascal’s press from one Lagrangian, drawn to scale, with a probe that reads the pressure anywhere in the oil.</span></a></li>
+              <li><a href="portfolios/hydraulics/index.html#theory"><b>Theory</b><span>Hydraulics from first principles: 23 chapters, 63 numbered equations, each number computed from the model.</span></a></li>
+            </ul>
+            <p class="proj__note">One self-contained page, generated from its source in this site’s repository, <a href="https://github.com/Numa1997/SiteTest/tree/main/portfolios-src/hydraulics">portfolios-src/hydraulics</a>. Everything is computed in your browser, and nothing is stored.</p>
           </section>
         </div>
       </article>

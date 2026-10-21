@@ -11,7 +11,7 @@ are byte-identical on the live site, <https://phyeinusul.com>).
 | [`catalog.css`](../public/styles/catalog.css) | 572 | catalog, Portfolios | Top bar, masthead, search bar, chips, catalog entries; switches titles to Instrument Serif. |
 | [`data.css`](../public/styles/data.css) | 358 | the ten simulation pages | The data panel and the Read values strip ([scripts/datalog.md](scripts/datalog.md)). |
 | [`fold.css`](../public/styles/fold.css) | 168 | every page | Fold cards, header bands, toggles, Expand / Collapse all ([scripts/fold.md](scripts/fold.md)). |
-| [`portfolio.css`](../public/styles/portfolio.css) | 288 | Portfolios | The project cards. |
+| [`portfolio.css`](../public/styles/portfolio.css) | 292 | Portfolios | The project cards. |
 
 The pages that use them are described in [pages.md](pages.md); the fonts and KaTeX files in [assets.md](assets.md).
 
@@ -123,7 +123,7 @@ CSS custom properties, all on `:root` unless noted.
 | `--dp-w` | `520px`; `560px` from 1500 px | [data.css:6–7](../public/styles/data.css#L6-L7) | Data panel width. |
 | `--p`, `--c` | `50%`, `var(--accent)` on each range input | [sim.css:88](../public/styles/sim.css#L88); `--p` set by [sim.js:159](../public/scripts/sim.js#L159) | Slider fill up to the thumb. |
 | `--ar`, `--ar-m` | per figure, inline `style` | e.g. [water-wave.html:44](../public/simulations/water-wave.html#L44) | Figure aspect ratio, wide and at 900 px or less. |
-| `--d` | `(i mod 5) × 80 ms` per `.reveal` | [index.html:1219](../index.html#L1219) | Fade-in delay on the home page. |
+| `--d` | `(i mod 5) × 80 ms` per `.reveal` | [index.html:1220](../index.html#L1220) | Fade-in delay on the home page. |
 
 Five formerly undefined tokens were replaced with their unchanged fallback colours: `--on-accent` (`#fff`, in catalog.css and
 data.css), `--tag-soft` (`#f0eae0`, data.css), `--tan-line` (`#e3cfa3`, [data.css:218](../public/styles/data.css#L218)),
@@ -346,11 +346,11 @@ tokens; it reads `--card`, `--accent`, `--line-strong`, `--quote`, `--serif`, `-
 | Key figures | `.proj__tally` (two columns with thin lines), `dt` (36 px serif), `dt.is-new` (wine), `dd` (mono) | [111–142](../public/styles/portfolio.css#L111-L142) |
 | Maths size | `.proj .katex` at 1.06 em, level with Latin Modern | [145–147](../public/styles/portfolio.css#L145-L147) |
 | Parts | `.proj__part`, its `h3` and `.psub__n`, `.proj__part > p` | [149–170](../public/styles/portfolio.css#L149-L170) |
-| Lists and figures | `.proj__changes` (numbered 01, 02 … by a CSS counter, two columns), `.proj__figs` (two columns; plates from `paper.css`), `.proj__pages` (five columns), `.proj__note` | [171–255](../public/styles/portfolio.css#L171-L255) |
+| Lists and figures | `.proj__changes` (numbered 01, 02 … by a CSS counter, two columns), `.proj__figs` (two columns; plates from `paper.css`), `.proj__pages` (five columns; `.proj__pages--3`, three, for a project with three pages), `.proj__note` | [171–259](../public/styles/portfolio.css#L171-L259) |
 
-**Breakpoints.** ≤ 1000 px: page links two per row ([257–261](../public/styles/portfolio.css#L257-L261)). ≤ 860 px: head,
-changes and figures one column ([262–268](../public/styles/portfolio.css#L262-L268)). ≤ 640 px: 16 px padding, smaller numbers
-and text, page links one column ([269–288](../public/styles/portfolio.css#L269-L288)). No print rules.
+**Breakpoints.** ≤ 1000 px: page links two per row ([261–265](../public/styles/portfolio.css#L261-L265)). ≤ 860 px: head,
+changes and figures one column ([266–272](../public/styles/portfolio.css#L266-L272)). ≤ 640 px: 16 px padding, smaller numbers
+and text, page links one column ([273–292](../public/styles/portfolio.css#L273-L292)). No print rules.
 
 **After fold.js.** fold.js removes `.proj__band` and the `h2` and builds a fold header in their place (measured: no band left
 with JavaScript on). So the band rules and `.proj h2` apply only without JavaScript. The paragraphs and note of a part move into
@@ -363,8 +363,8 @@ repeats those two rules for the folded layout. Keep each pair in step.
 
 [`src/styles.css`](../src/styles.css) holds the three Tailwind directives and a placeholder comment. Its only importer is
 [`src/main.ts:1`](../src/main.ts#L1), and no page loads `src/main.ts`: `index.html` has no module script
-(its only scripts are [index.html:21–23](../index.html#L21-L23), [624](../index.html#L624) and
-[625–1256](../index.html#L625-L1256)), and a search of the repository for `main.ts` finds only that file's own line. On the live
+(its only scripts are [index.html:21–23](../index.html#L21-L23), [625](../index.html#L625) and
+[626–1257](../index.html#L626-L1257)), and a search of the repository for `main.ts` finds only that file's own line. On the live
 site <https://phyeinusul.com> `/src/main.ts` answers 404, on the AppDeploy copy 403 (measured 20 October 2026). The file comes from the app template; see
 [build-and-deploy.md](build-and-deploy.md#build-files-at-the-root).
 

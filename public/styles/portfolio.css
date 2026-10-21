@@ -225,6 +225,10 @@
   padding: 0;
   list-style: none;
 }
+/* A project with three own pages (Hydraulic Press Study) fills one row instead of three fifths of it. */
+.proj__pages--3 {
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+}
 .proj__pages a {
   display: block;
   height: 100%;

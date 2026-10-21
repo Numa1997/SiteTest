@@ -1,7 +1,7 @@
 # Phyein Usul · Numa Koudsie's physics website — source and documentation
 
 This repository is the source of Numa Koudsie's physics website, **Phyein Usul**: ten interactive simulations, each with a
-lecture note and a data panel, two research projects, and a CV. One source, two places where it runs:
+lecture note and a data panel, three research projects, and a CV. One source, two places where it runs:
 
 | | Address | Built from | Doc |
 |---|---|---|---|
@@ -20,7 +20,8 @@ Beside the site's files, `docs/` explains every file and every script and how th
 | `public/scripts/` | Shared JavaScript: helpers, data store, data panel, folds, the catalog registry, and the walkthroughs in `walk/`. | [docs/scripts/](docs/scripts/) |
 | `public/styles/` | The seven stylesheets. | [docs/styles.md](docs/styles.md) |
 | `public/vendor/katex/`, `public/fonts/`, `public/images/` | The maths typesetter, the typefaces (Latin Modern, IBM Plex, Instrument Serif, all served by the site itself), the thumbnails in `images/sims/` and the logo `images/phyein-usul-mark.svg`. | [docs/assets.md](docs/assets.md) |
-| `public/portfolios/` | Built copies of the two research-project apps. | [docs/portfolios.md](docs/portfolios.md) |
+| `public/portfolios/` | Built copies of the two research-project apps, and the Hydraulic Press Study, one page generated from `portfolios-src/hydraulics/`. | [docs/portfolios.md](docs/portfolios.md) |
+| `portfolios-src/hydraulics/` | The Hydraulic Press Study's source: its three pages, the textbook's sources, the generator and its checks. Not served. | [docs/portfolios.md](docs/portfolios.md#the-hydraulic-press-study-hydraulics) |
 | `package.json`, `vite.config.ts`, `tsconfig.json`, `tailwind.config.js`, `postcss.config.js`, `src/` | Build files (Vite; first from AppDeploy's template). | [docs/build-and-deploy.md](docs/build-and-deploy.md) |
 | `public/_headers`, `wrangler.jsonc` | Cloudflare's security headers and deployment settings for phyeinusul.com. | [docs/usul.md](docs/usul.md) |
 | `tests/tests.json` | The test scenarios AppDeploy runs after each deploy of the app. | [docs/build-and-deploy.md](docs/build-and-deploy.md) |

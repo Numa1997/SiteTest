@@ -48,8 +48,11 @@ This section and the next describe the AppDeploy app only. On Cloudflare the bui
 
 ## Security
 
-Since 16 October 2026 (app version `1792151590518`) every page, the two project copies included, carries two `meta` tags right
-after its charset line (lines 5 and 6, for example [index.html:5–6](../index.html#L5-L6)):
+Since 16 October 2026 (app version `1792151590518`) every page, the project copies included, carries two `meta` tags right
+after its charset line (lines 5 and 6, for example [index.html:5–6](../index.html#L5-L6)). One page differs: the Hydraulic
+Press Study (`portfolios/hydraulics/index.html`, added 21 October 2026) adds `'unsafe-eval'` to `script-src` and `blob:` to
+`worker-src`, because its solver runs in a Web Worker that it builds at run time and starts from a `blob:` address; a policy in a
+`meta` tag binds only the page that carries it ([portfolios.md](portfolios.md#the-hydraulic-press-study-hydraulics)):
 
 - a **Content-Security-Policy**: a list, read by the visitor's browser, of the only places the page may load code, styles, fonts,
   images and data from. Anything else is refused before it runs;
@@ -150,7 +153,7 @@ unused-code cleanup.
 
 **Brought up to date on 14 October 2026.** The app's stored `tests/tests.json` was an older version: its first scenario
 looked for a footer reading "Claude version", while the footer reads "© 2026 Numa Koudsie"
-([index.html:620](../index.html#L620)); and the second scenario expected the catalog to open with ten full entries, while its
+([index.html:621](../index.html#L621)); and the second scenario expected the catalog to open with ten full entries, while its
 cards now open as closed titles that a chip or a search opens. Both scenarios now describe the site as it is; the second was
 followed step by step in headless Chromium before it was written down (ten closed titles and "10 shown"; the chip Wave optics
 opens Figs. 1 and 3 with picture, equation and button, "2 of 10 shown"; the search "runge" opens Fig. 2 alone; the links go

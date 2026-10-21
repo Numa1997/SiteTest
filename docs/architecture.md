@@ -8,9 +8,10 @@ This page is the map. Every box on it has its own page in `docs/`; the links say
 index.html  (home: logo and note, CV, research, simulation plates)
   ├── public/simulations.html      the catalog: one card per simulation, in figure order
   │     └── public/simulations/*.html   ten simulation pages (Figs. 1–10)
-  └── public/portfolios.html       the two research projects
+  └── public/portfolios.html       the three research projects
         ├── public/portfolios/droplet-collection/index.html#/…   built copy of its own app
-        └── public/portfolios/rotor-pendula/index.html#/…        built copy of its own app
+        ├── public/portfolios/rotor-pendula/index.html#/…        built copy of its own app
+        └── public/portfolios/hydraulics/index.html#servo|ideal|theory   one page, generated from portfolios-src/hydraulics/
 ```
 
 Every page is a plain HTML file. There is no server code, no database and no login: the server (Cloudflare for

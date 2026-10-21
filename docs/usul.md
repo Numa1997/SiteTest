@@ -21,7 +21,7 @@ runs as the AppDeploy app ([appdeploy-app.md](appdeploy-app.md)).
 Plans and costs (checked 20 October 2026): the Workers Free plan serves requests to static assets "free and unlimited"
 ([Cloudflare Workers pricing](https://developers.cloudflare.com/workers/platform/pricing/)); the site pays only the domain. A site
 can hold up to 20 000 files of at most 25 MiB each on the free plan
-([limits](https://developers.cloudflare.com/workers/platform/limits/)); the site has 285. Numa's decision, 20 October 2026: stay on the
+([limits](https://developers.cloudflare.com/workers/platform/limits/)); the site has 291. Numa's decision, 20 October 2026: stay on the
 free plan; dynamic features (for example a shared live counter) are for later and would need server code (Workers, D1).
 
 ## Build and deploy
@@ -82,6 +82,6 @@ sign-in. DDoS protection is included in every Cloudflare plan.
 
 ## Known limits
 
-- The two portfolio copies are built without Saved runs and without a backend, here as on AppDeploy; their source still lives in
+- The two app copies among the portfolios are built without Saved runs and without a backend, here as on AppDeploy; their source still lives in
   their own AppDeploy apps ([portfolios.md](portfolios.md)). They carry no logo (they are built bundles of separate apps).
 - The browser tab title and the home page heading still read "Numa Koudsie"; the site's name appears in the logo and the note.

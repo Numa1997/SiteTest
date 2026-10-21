@@ -1,15 +1,17 @@
-# The two research projects: `public/portfolios/`
+# The three research projects: `public/portfolios/`
 
-The Portfolios page ([`public/portfolios.html`](../public/portfolios.html), described in [pages.md](pages.md)) presents two
-long research projects. Each one is its own AppDeploy app with its own source. This website carries only a **built copy** of
-each one, so that a reader can open it here without leaving the site:
+The Portfolios page ([`public/portfolios.html`](../public/portfolios.html), described in [pages.md](pages.md)) presents three
+long research projects. The first two are each their own AppDeploy app with its own source; the third, the Hydraulic Press
+Study, is generated from its own GitHub repository ([below](#the-hydraulic-press-study-hydraulics)). This website carries only
+a **built copy** of each one, so that a reader can open it here without leaving the site:
 
 | Folder | Built from the app | What it is |
 |---|---|---|
 | [`public/portfolios/droplet-collection/`](../public/portfolios/droplet-collection/) | `droplet-collection-yl7l26` | Numa's Bachelor thesis (Leipzig) on how cloud droplets grow into rain by gravitational collection, remodelled: derivations, a solver of the stochastic collection equation that runs in the browser, results and checks. |
 | [`public/portfolios/rotor-pendula/`](../public/portfolios/rotor-pendula/) | `rotor-pendula-gafw0f` | Sol's corrected study of a pendulum riding on a wind-turbine blade, built as a sensor power supply: derivation from the Lagrangian, an in-browser solver, results, checks, and a Report page whose tables are rebuilt from the study's data. |
+| [`public/portfolios/hydraulics/`](../public/portfolios/hydraulics/) | its source in [`portfolios-src/hydraulics/`](../portfolios-src/hydraulics/) (not an app) | A servo-hydraulic press under digital control, from first principles: the animated press with its PID controller, loop analysis (Bode, Nyquist, z-plane), Pascal's ideal press, and a 23-chapter text deriving every equation. One self-contained page. |
 
-**The source code of these two apps is not in this repository.** It lives in their AppDeploy apps (readable there with
+**The source code of the first two apps is not in this repository.** It lives in their AppDeploy apps (readable there with
 `src_read`). What is here is the output of their build (`vite build`): one HTML file, one JavaScript bundle, one stylesheet,
 one Web Worker, the KaTeX fonts, and the figures and files they link to. Minified bundles are not meant to be read or edited
 by hand: to change a project, change its app, rebuild, and copy the build here again (the procedure is at the end of this page).
@@ -109,7 +111,64 @@ places, the links into it from `portfolios.html` and its one link back out.
 | `study/sources/README.md` | The two datasheets used for the sensor budget (ADXL362 accelerometer, CC2652R radio chip): addresses, SHA-256 checksums, the pages and values used, and the assumed duty cycle. The PDFs themselves are not included. |
 | `study/sources/access.json` | The same two sources as data: address, bytes, SHA-256, access date, HTTP status. |
 
-## How to update a copy
+## The Hydraulic Press Study: `hydraulics/`
+
+Unlike the other two, this project is not a Vite build of an app. It is one self-contained HTML page, generated from its
+source, which lives in this repository in [`portfolios-src/hydraulics/`](../portfolios-src/hydraulics/) (its
+[`README.md`](../portfolios-src/hydraulics/README.md) describes it). Vite neither builds nor serves that folder. The study was
+written in the repository `Numa1997/Gergi-s-vision` and moved here on 21 October 2026, so that the whole site has one
+repository.
+
+**What the reader gets.** A tab bar with three tabs: the servo-hydraulic press (pump, four-way servo valve, two metres of hose,
+differential cylinder and specimen under a PID controller sampled every 1 ms, animated, every setting recomputable, with
+time traces, Bode, Nyquist and z-plane plots and nine worked solutions), Pascal's ideal press, and *Hydraulics from First
+Principles*, a 23-chapter text with 63 numbered equations. `index.html#servo`, `#ideal` and `#theory` open a tab directly;
+the Portfolios page links to those three addresses.
+
+**How the page works.** Picture three finished pages packed into one envelope. Each of the three pages is stored inside
+`index.html` unchanged, as a JSON string, and shown in its own frame (`<iframe srcdoc>`, with a `blob:` frame as the fallback),
+so their styles, element ids and scripts cannot collide. A small script added to each embedded page turns the links between
+them into tab switches. Everything is inline: the scripts, the styles, the fonts of the three pages and KaTeX's fonts (as
+`data:` addresses; the text's maths is typeset when the page is generated, so no KaTeX runs in the browser). The page loads
+nothing but `../../fonts/instrument-plex.css` for its tab bar, and makes no request outside the site.
+
+**Its security policy has two additions.** The page carries the website's policy and referrer rule after its charset line,
+taken from the root `index.html`, as every page does. The servo press runs its solver in a Web Worker that it builds from text
+at run time, so this one page adds `'unsafe-eval'` to `script-src` (for `new Function`) and `blob:` to `worker-src` (the worker
+is started from a `blob:` address). A policy in a `meta` tag governs only the page that carries it, and the frames inherit
+it, so no other page of the site is affected. The response headers of [`public/_headers`](../public/_headers) apply as to
+every page; `X-Frame-Options: SAMEORIGIN` does not stop the page's own frames, which are same-origin.
+
+**Files.**
+
+| Path | What it is |
+|---|---|
+| `index.html` | The whole study, 5.09 MB: the tab bar and the three embedded pages. |
+| `LICENSE-fonts.txt` | The licences of the fonts embedded in the study (SIL Open Font License 1.1 for IBM Plex and Instrument Serif; MIT for KaTeX's fonts). |
+| `fig/01_press.webp` … `fig/04_map.webp` | The four plates of the Portfolios page (part 3.3), screenshots of the study at 600 px height: the press mid-cycle, the six time traces, Bode and Nyquist, and the block map of chapter 0. |
+
+**How to update it.** Change the study in `portfolios-src/hydraulics/`, then, from that folder:
+
+~~~bash
+(cd tools && npm ci)                       # KaTeX 0.16.11 for the theory page, once
+python3 tools/build_theory.py              # only if theory/*.src.html changed
+python3 tools/build_combined.py --site     # writes ../../public/portfolios/hydraulics/index.html and LICENSE-fonts.txt
+python3 check_physics.py && python3 check_control.py                          # the physics against independent Python models
+node tools/check_theory_numbers.js ../../public/portfolios/hydraulics/index.html   # 52 numbers in the text against the models
+~~~
+
+The folder has its own `package.json` only to say `"type": "commonjs"`: the site's root `package.json` declares ES modules,
+and the study's Node scripts are CommonJS. Then build this site, serve `dist/` (for example `python3 -m http.server` in it)
+and run, from that folder, `python3 tools/check_combined.py http://localhost:<port>/portfolios/hydraulics/index.html` (33 checks in a real browser:
+each tab complete, Play and the sliders working, links switching tabs, no script error, nothing scrolling sideways at 360 to
+1440 px). `--site` takes the policy from this repository's `index.html`, the tab icon from `portfolios.html` and the fonts from
+`public/fonts/instrument-plex.css`, so a change to those reaches the study on its next generation. The plates are not
+regenerated automatically; retake them when the pictures change.
+
+**Verified on 21 October 2026**, with the copy served from this repository's build under its own policy: 33 of 33 browser
+checks, 52 of 52 theory numbers, no request outside the site, the tab bar in the site's own Instrument Serif and IBM Plex Sans.
+
+## How to update a copy of an app
 
 1. Change the project in its own app (`droplet-collection-yl7l26` or `rotor-pendula-gafw0f`) and check it there.
 2. Make a website variant of its source, outside the app: remove the Saved runs page, its route and link, and the Save
@@ -143,8 +202,8 @@ places, the links into it from `portfolios.html` and its one link back out.
 
 ## Notes for maintainers
 
-- The KaTeX fonts are shipped three times on this site: once in `public/vendor/katex/fonts/` (20 woff2 files, 0.26 MB, for
-  the simulation pages) and once inside each copy's `static/` (59 files in woff2, woff and ttf; 2.1 MB for the two copies
+- The KaTeX fonts are shipped four times on this site: once in `public/vendor/katex/fonts/` (20 woff2 files, 0.26 MB, for
+  the simulation pages), embedded as `data:` addresses in the Hydraulic Press Study, and once inside each app copy's `static/` (59 files in woff2, woff and ttf; 2.1 MB for the two copies
   together, measured with `du -cb public/portfolios/*/static/KaTeX_*`). They are kept because each copy must work as a sealed
   parcel; sharing them would tie the copies to this site's folder layout.
 

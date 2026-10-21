@@ -1,0 +1,5 @@
+{
+  "//": "The website root declares \"type\": \"module\"; the study's Node scripts (dump_runs.js, dump_control.js) are CommonJS.",
+  "private": true,
+  "type": "commonjs"
+}
