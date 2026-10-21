@@ -1,0 +1,5 @@
+# Screenshots are reproducible from the scripts beside them and stay out of the repository.
+*.png
+*.jpg
+*.webp
+shots/

@@ -79,6 +79,18 @@ RULES = [
     (r'docs/.+\.md', lambda m: 'Documentation: ' + heading(m.group(0)) + '.', None),
     (r'\.gitignore', 'Files git leaves out: Python caches, node_modules, build output.', 'docs/files.md'),
     (r'tools/inventory\.py', 'Writes docs/files.md and checks that every file in the repository is described.', 'docs/files.md'),
+    # the lecture-note review of 20 October 2026: not part of the site
+    (r'\.claude/agents/([a-z-]+)\.md', lambda m: 'Claude Code agent definition: ' + m.group(1) + ', one role of the lecture-note review.', 'docs/notes.md'),
+    (r'notes/STANDARD\.md', 'The standard the lecture notes are judged against, and Numa\'s verdicts.', 'docs/notes.md'),
+    (r'notes/STATUS\.md', 'Status of the lecture-note review, one row per figure.', 'docs/notes.md'),
+    (r'notes/verify\.mjs', 'Checks the ten simulation pages in headless Chromium at desktop and phone size.', 'docs/notes.md'),
+    (r'notes/walkcheck\.cjs', 'Searches every quoted code line of the ten walkthroughs in its page.', 'docs/notes.md'),
+    (r'notes/\.gitignore', 'Keeps the review\'s screenshots out of the repository.', 'docs/notes.md'),
+    (r'notes/fig(\d\d)/plan\.md', lambda m: 'Fig. %d: the teacher\'s verdict on each section of the note, and what it changed.' % int(m.group(1)), 'docs/notes.md'),
+    (r'notes/fig(\d\d)/check\.md', lambda m: 'Fig. %d: the derivation checker\'s table of equations and numbers.' % int(m.group(1)), 'docs/notes.md'),
+    (r'notes/fig(\d\d)/referee\.md', lambda m: 'Fig. %d: the blind referee\'s report on the note.' % int(m.group(1)), 'docs/notes.md'),
+    (r'notes/fig(\d\d)/walk\.md', lambda m: 'Fig. %d: the walkthrough check and its proposed fixes.' % int(m.group(1)), 'docs/notes.md'),
+    (r'notes/fig(\d\d)/.+', lambda m: 'Fig. %d: a measuring script of the review, or its saved output.' % int(m.group(1)), 'docs/notes.md'),
     (r'tools/make_portfolio_copy\.py', 'Builds a browser-only website copy of a research app from its source, without changing the app or installing dependencies.', 'docs/portfolios.md'),
     # root of the app
     (r'AGENTS\.md', "The maintainer's summary: ownership, layout, design rules, folds, the data pipeline, platform quirks.", 'docs/build-and-deploy.md'),
@@ -175,6 +187,7 @@ SECTIONS = [
     ('public/portfolios/rotor-pendula/', 'Project copy: Rotor Pendula', None),
     ('src/', 'Template sources', None), ('tests/', 'Platform tests', None),
     ('docs/', 'Documentation', None), ('tools/', 'Tools', None),
+    ('.claude/agents/', 'Agents of the lecture-note review', None), ('notes/', 'Record of the lecture-note review', None),
 ]
 FOLD_OVER = 12  # a run of more than this many files with the same description is folded into <details>
 

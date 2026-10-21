@@ -1,0 +1,30 @@
+worldH = 360.519  y_s = 350.519  centre row y = 181.372  h = 169.147
+kr = 12.566: phase of H/asym = -0.00992 rad (1/(8kr) = 0.00995), |H/asym| - 1 = -3.92e-04
+e^-0.15 = 0.8607  lambda/2pi = 4.775
+lambda 30: calm lines m = -13..12, count 26; 2s/lambda = 26.67
+lambda 60: calm lines m = -7..6, count 14; 2s/lambda = 13.33
+gamma 0.15: calm-line residue max |a1-a2|/2 on centre row = 0.0711; grid local minima of A max = 0.1132; edge cell value 0.7985
+gamma 0.6: calm-line residue max |a1-a2|/2 on centre row = 0.1624; grid local minima of A max = 0.1627; edge cell value 0.4374
+bisector at centre row: r = 261.936, r/h = 1.5486, local wavelength = 46.46 px, crest speed = 51.10 px/s
+main-beam edge 2.3987 deg, first grating lobe 42.0395 deg, strongest side lobe 0.2201, side lobes between full beams 14
+lambda 40: sin(theta1) = 0.8929, theta1 = 63.23 deg; |F| at 90 deg = 0.042
+lambda 44: sin(theta1) = 0.9821, theta1 = 79.16 deg; |F| at 90 deg = 0.867
+lambda 45: sin(theta1) = 1.0045, none; |F| at 90 deg = 0.992
+lambda 64: sin(theta1) = 1.4286, none; |F| at 90 deg = 0.045
+lambda 64 edge: 5.1225
+gamma 0.15: largest change of |F| from the damping taper = 0.0322 at lambda, theta = (30, np.float64(-38.9))
+gamma 0.6: largest change of |F| from the damping taper = 0.1475 at lambda, theta = (30, np.float64(45.3))
+far-field check at 1e+06 px: max | |U| - |F| | = 2.21e-03
+far-field check at 1e+07 px: max | |U| - |F| | = 6.26e-05
+D^2/lambda = 15052.8 px = 18.82 field widths; D^2/(8 lambda) = 1881.6
+N=2, lambda 64: A on 200..600 from 0.009 to 0.829, mean 0.5369
+N=4, lambda 64: A on 200..600 from 0.036 to 0.765, mean 0.4264
+N=16, lambda 64: A on 200..600 from 0.119 to 0.168, mean 0.1402
+continuous row: mean on 200..600 0.1408; max |A16 - Acont| over 0..800 = 0.0721, on 200..600 = 0.0503
+Line of 16, lambda 30: A over 0..800 from 0.013 to 0.387; over 200..600 from 0.013 to 0.387
+Fresnel zone sqrt(lambda h) = 104.05; (17) A = 0.1423
+h = 50: mean A(16 sources) on 200..600 = 0.0760
+h = 100: mean A(16 sources) on 200..600 = 0.1098
+h = 169.148: mean A(16 sources) on 200..600 = 0.1402
+h = 250: mean A(16 sources) on 200..600 = 0.1568
+h = 340: mean A(16 sources) on 200..600 = 0.1728

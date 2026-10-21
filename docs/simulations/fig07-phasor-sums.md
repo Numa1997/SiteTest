@@ -2,7 +2,7 @@
 
 | | |
 |---|---|
-| Page | [public/simulations/phasor-sums.html](../../public/simulations/phasor-sums.html) (1 479 lines, 261 179 bytes) |
+| Page | [public/simulations/phasor-sums.html](../../public/simulations/phasor-sums.html) (1 479 lines, 262 793 bytes) |
 | Walkthrough | [public/scripts/walk/phasors.js](../../public/scripts/walk/phasors.js) (key `phasors`, 8 steps) |
 | Thumbnail | [public/images/sims/phasor-sums.webp](../../public/images/sims/phasor-sums.webp) (800 × 500 px: the 3-petal rose with its two arms and circles) |
 | Catalog entry | [public/scripts/catalog.js#L150](../../public/scripts/catalog.js#L150) (`id: 'phasor-sums'`, `fig: 7`, field `methods`, stage 2) |
@@ -128,8 +128,10 @@ $1 + \text{mid}\cdot d_\text{speed}$ ([L957](../../public/simulations/phasor-sum
 \varphi$ are never changed by the dance.
 
 **Record and replay** ([L1178–1251](../../public/simulations/phasor-sums.html#L1178-L1251)). A snapshot
-`{ t, d, p: [{ a, f, h, c }] }` of the whole list is taken every 50 ms against the audio time, or against wall time
-without audio ([L1179–1182](../../public/simulations/phasor-sums.html#L1179-L1182)). Replay finds the last snapshot not
+`{ t, d, p: [{ a, f, h, c }] }` of the whole list is taken on the first frame at least 50 ms after the last one, since the
+counter restarts at 0 ([L1187–1190](../../public/simulations/phasor-sums.html#L1187-L1190)): every third or fourth frame at
+60 frames per second, 58 ms apart on average (104 snapshots in 6 s, measured in headless Chromium). Its time is the audio
+time, or wall time without audio ([L1179–1182](../../public/simulations/phasor-sums.html#L1179-L1182)). Replay finds the last snapshot not
 later than the current time and moves each value the fraction $\min(1, \Delta t/0.05)$ toward it per frame
 ([L1195–1207](../../public/simulations/phasor-sums.html#L1195-L1207)); if the number of circles differs it reloads the list
 outright. Export writes `phasor-performance.json` as `{ v: 1, timeline }`
@@ -376,3 +378,11 @@ The page states this in its `about` paragraph, shown in the data panel
 ## Teaching revision · 15 October 2026
 
 A stationary pen need not make a cusp. The listed-arm common period can exceed the pen period after cancellations; the note explains both. Arm rotations are prescribed kinematics, not uncoupled physical rods. Simulation code, inline styles and figure SVGs match the latest live baseline. See the [theory audit](../research-theory-audit.md).
+
+## Repair round · 20 October 2026
+
+After the independent referee and derivation checks (`notes/fig07/`), the lead made only these changes, each on its existing line, so no line link moved: §2.1: a parenthesis using symbols defined later removed ([L261](../../public/simulations/phasor-sums.html#L261)); §4: the beat length rises and falls at the full difference rate ([L381](../../public/simulations/phasor-sums.html#L381)); §4.1: why odd n gives n petals ([L389](../../public/simulations/phasor-sums.html#L389)); §4.2: why the law of cosines has a plus ([L439](../../public/simulations/phasor-sums.html#L439)); §7.1: blends are not the curves of the in-between settings ([L609](../../public/simulations/phasor-sums.html#L609)). Checked in headless Chromium at 1440 × 900 and 390 × 844: no console or KaTeX errors, no sideways scroll, no display equation wider than its box at 1440 px (`notes/verify.mjs`).
+
+## Second check round · 20 October 2026
+
+From the derivation checks and blind referees that ran after the usage limit lifted (`notes/fig07/`), each change on its existing line: §7.1: blends are in-between curves for a change of radius, not for frequency or phase ([L609](../../public/simulations/phasor-sums.html#L609)); §8.1: the beat burst as the code applies it (1 + 0.9 d_burst, ten frames) ([L624](../../public/simulations/phasor-sums.html#L624)). Checked with `notes/verify.mjs` at 1440 × 900, 1600 × 900 and 390 × 844.

@@ -243,6 +243,83 @@
         return out + f(text.slice(last));
     }
 
+    /* The Algebra column is written as light HTML (<sub>, <sup>, Unicode symbols) with ⟦key|…⟧ marks.
+       Once KaTeX has loaded, each line is translated to TeX and typeset like the lecture note; a mark becomes
+       \htmlClass{k}{\htmlData{k=key}{…}}, so the hover link to the code and the table keeps working.
+       A line KaTeX cannot read stays as the HTML it was written in. */
+    var TEX_CHARS = {
+        '−': '-', '·': '\\cdot ', '×': '\\times ', '½': '\\tfrac{1}{2}', '⅓': '\\tfrac{1}{3}', '⅔': '\\tfrac{2}{3}', '¼': '\\tfrac{1}{4}',
+        '²': '^{2}', '³': '^{3}', '⁴': '^{4}', '⁻': '^{-}', '₀': '_{0}', '₁': '_{1}', '₂': '_{2}', '₃': '_{3}', '₄': '_{4}', '₅': '_{5}', '₆': '_{6}',
+        '…': '\\ldots ', '⇒': '\\;\\Rightarrow\\; ', '⟺': '\\;\\Longleftrightarrow\\; ', '→': '\\to ', '←': '\\leftarrow ', '≈': '\\approx ', '≤': '\\le ',
+        '≥': '\\ge ', '≠': '\\ne ', '±': '\\pm ', '∓': '\\mp ', '⌊': '\\lfloor ', '⌋': '\\rfloor ', '∫': '\\int ', '∂': '\\partial ', '∑': '\\sum ',
+        '∞': '\\infty ', '°': '^{\\circ}', '√': '\\surd ', '∝': '\\propto ', '∈': '\\in ', '⟨': '\\langle ', '⟩': '\\rangle ', '|': '\\vert ',
+        '%': '\\%', '#': '\\#', '&': '\\&', '_': '\\_', '{': '\\{', '}': '\\}', '\\': '\\backslash ', '$': '\\$', '~': '\\sim ', '^': '\\hat{}', ' ': '\\;'
+    };
+    var TEX_FUNCS = { sin: 1, cos: 1, tan: 1, exp: 1, ln: 1, log: 1, max: 1, min: 1, arg: 1, det: 1, sinh: 1, cosh: 1, tanh: 1, lim: 1 };
+    function texText(s) {
+        // phrases of words (three or more lower-case letters, or a function name) become \text{…} or \sin; the rest maps character by character
+        var SUP = { '⁰': '0', '¹': '1', '²': '2', '³': '3', '⁴': '4', '⁵': '5', '⁶': '6', '⁷': '7', '⁸': '8', '⁹': '9', '⁻': '-', '⁺': '+' };
+        var SUB = { '₀': '0', '₁': '1', '₂': '2', '₃': '3', '₄': '4', '₅': '5', '₆': '6', '₇': '7', '₈': '8', '₉': '9' };
+        s = s.replace(/[⁰¹²³⁴⁵⁶⁷⁸⁹⁻⁺]+/g, function (r) { return '\u0003' + r.split('').map(function (c) { return SUP[c]; }).join('') + '\u0004'; })
+             .replace(/[₀₁₂₃₄₅₆₇₈₉]+/g, function (r) { return '\u0005' + r.split('').map(function (c) { return SUB[c]; }).join('') + '\u0004'; })
+             .replace(/ẍ/g, '\u0006').replace(/ẋ/g, '\u0007');
+        return s.replace(/√\(([^()]*)\)/g, '\u0001$1\u0002').split(/([A-Za-z]{2,}(?:[  ]+[a-z]{2,})*)/).map(function (part, i, all) {
+            if (i % 2) {
+                if (TEX_FUNCS[part]) return '\\' + part + ' ';
+                if (/^[a-z]{3,}/.test(part) || /\s/.test(part) || /^(kg|px|Hz|rad|kN|MN|ms|km|mm|cm|nm|kW|MW|GW|rpm|Pa)$/.test(part)) {
+                    return (/\s$/.test(all[i - 1] || '') ? '\\ ' : '') + '\\text{' + part.replace(/ /g, ' ') + '}';
+                }
+                return part;
+            }
+            return part.split('').map(function (ch) {
+                if (ch === '\u0001') return '\\sqrt{';
+                if (ch === '\u0002') return '}';
+                if (ch === '\u0003') return '^{';
+                if (ch === '\u0005') return '_{';
+                if (ch === '\u0004') return '}';
+                if (ch === '\u0006') return '\\ddot{x}';
+                if (ch === '\u0007') return '\\dot{x}';
+                return Object.prototype.hasOwnProperty.call(TEX_CHARS, ch) ? TEX_CHARS[ch] : ch;
+            }).join('');
+        }).join('');
+    }
+    function htmlToTex(html) {
+        var out = '', re = /<(\/?)(sub|sup|span|i|b|em|strong|br)\b([^>]*)>|⟦([A-Za-z0-9_]+)\||⟧|&(nbsp|emsp|ensp|thinsp|lt|gt|amp|minus|middot);/g, last = 0, m, stack = [];
+        var ENT = { nbsp: ' ', emsp: '\\quad ', ensp: '\\;', thinsp: '\\,', lt: '<', gt: '>', amp: '\\&', minus: '-', middot: '\\cdot ' };
+        while ((m = re.exec(html))) {
+            out += texText(html.slice(last, m.index));
+            last = re.lastIndex;
+            if (m[4]) { out += '\\htmlClass{k}{\\htmlData{k=' + m[4] + '}{'; stack.push('}}'); continue; }
+            if (m[0] === '⟧') { out += stack.pop() || ''; continue; }
+            if (m[5]) { out += ENT[m[5]] === ' ' ? '\\;' : ENT[m[5]]; continue; }
+            var tag = m[2], close = m[1] === '/';
+            if (tag === 'sub' || tag === 'sup') { out += close ? '}' : (tag === 'sub' ? '_{' : '^{'); continue; }
+            if (tag === 'span') {
+                if (close) { out += stack.pop() || ''; continue; }
+                if (/font-style:\s*normal/.test(m[3])) { out += (/\s$/.test(out) ? '\\ ' : '') + '\\textrm{'; stack.push('}'); } else stack.push('');
+                continue;
+            }
+        }
+        out += texText(html.slice(last));
+        // an equation number set apart at the end of a line keeps its upright parentheses
+        out = out.replace(/\\textrm\{\s*\\(sin|cos|tan|exp|ln|log|max|min|arg|det|sinh|cosh|tanh|lim)\s*\}/g, '\\$1 ')
+                 .replace(/\\textrm\{\\text\{([^{}]*)\}\}/g, '\\textrm{$1}');
+        return out.replace(/\\textrm\{\s*\((\d+[a-z]?)\)\s*\}/g, '\\qquad\\textrm{($1)}').replace(/(\\quad|\\;)\s*\((\d+[a-z]?)\)\s*$/, '\\qquad\\textrm{($2)}');
+    }
+    function algebra(math) {
+        return String(math).split(/<br\s*\/?>/i).map(function (line) {
+            if (window.katex) {
+                try {
+                    return '<div class="walk__line">' + window.katex.renderToString(htmlToTex(line), {
+                        throwOnError: true, strict: 'ignore',
+                        trust: function (c) { return c.command === '\\htmlClass' || c.command === '\\htmlData'; }
+                    }) + '</div>';
+                } catch (err) { /* keep the line as written */ }
+            }
+            return '<div class="walk__line">' + markup(line, false) + '</div>';
+        }).join('');
+    }
+
     function walkthrough(data) {
         var host = document.getElementById('walk');
         if (!host || !data) return;
@@ -294,7 +371,7 @@
                 '<div class="walk__top"><p class="walk__num">Step ' + (i + 1) + ' of ' + data.steps.length + '</p>' +
                 '<h3>' + st.title + '</h3><p class="walk__where">' + esc(st.where) + '</p></div>' +
                 '<div class="walk__cols"><div class="walk__math"><p class="walk__label">Algebra</p>' +
-                '<div class="eq walk__eq">' + markup(st.math, false) + '</div><p class="walk__note">' + st.note + '</p></div>' +
+                '<div class="eq walk__eq">' + algebra(st.math) + '</div><p class="walk__note">' + st.note + '</p></div>' +
                 '<div class="walk__code"><p class="walk__label">Code · as written in this page</p><pre><code>' + markup(st.code, true) + '</code></pre></div></div>' +
                 '<div class="walk__tablewrap"><table class="walk__table"><thead><tr><th>Symbol</th><th>In code</th><th class="now">Now</th><th>Meaning</th></tr></thead>' +
                 '<tbody>' + rows + '</tbody></table></div>' +
@@ -325,6 +402,8 @@
         }
         setInterval(update, 200);
         show(0);
+        /* KaTeX may arrive after the first step was drawn: draw the step again, typeset */
+        document.addEventListener('typeset', function () { show(cur); });
         if (window.Fold) window.Fold.walk(host);
     }
 

@@ -1,0 +1,260 @@
+{
+ "1440x900": {
+  "errors": [],
+  "measure": {
+   "defaults": {
+    "f": 0.7749218302342832,
+    "k_m": 2.41660973353061,
+    "c": 2.0147967586091364,
+    "T": 1.2904527411463793,
+    "omega": 4.868977457940762,
+    "cg": 1.0073983793045682,
+    "a": 24,
+    "ak": 0.5799863360473464,
+    "stokes": 0.6777456950707644,
+    "deep": 0.00445732796663515,
+    "r_z": [
+     24,
+     6.201259270489233,
+     1.602317355826194,
+     0.414016056545124,
+     0.1069758711992436
+    ],
+    "N": 18,
+    "layers": 5,
+    "parcels": 90,
+    "world_w": 800,
+    "box_w": 770,
+    "box_h": 366,
+    "follow": 8,
+    "X0_follow": 378.2352941176471,
+    "layers_drawn": 5,
+    "aomega_mps": 1.1685545899057828,
+    "surface_points": 307
+   },
+   "readouts": {
+    "c": "2.01 m/s",
+    "T": "1.29 s",
+    "ak": "0.58",
+    "deep": "0.4 % of a"
+   },
+   "lam120": {
+    "c": "1.37 m/s",
+    "T": "0.88 s",
+    "ak": "0.90 (cap)",
+    "deep": "0.0 % of a",
+    "f": "1.14"
+   },
+   "lam400": {
+    "c": "2.50 m/s",
+    "T": "1.60 s",
+    "ak": "0.38",
+    "deep": "3.0 % of a",
+    "f": "0.62"
+   },
+   "amp50": {
+    "c": "2.01 m/s",
+    "T": "1.29 s",
+    "ak": 0.9,
+    "deep": "0.4 % of a",
+    "f": "0.77",
+    "a": 37.24225668350351
+   },
+   "dispOff": {
+    "c": "1.30 m/s",
+    "T": "2.00 s",
+    "ak": "0.58",
+    "deep": "0.4 % of a",
+    "f": "0.5",
+    "cg_stored": 0.65,
+    "c_deep": 2.0147967586091364
+   },
+   "dispOn": {
+    "c": "2.01 m/s",
+    "T": "1.29 s",
+    "ak": "0.58",
+    "deep": "0.4 % of a",
+    "f": "0.77"
+   }
+  },
+  "check": {
+   "katexErrors": 0,
+   "katex": 331,
+   "sideways": 0,
+   "sections": 10,
+   "foldsShort": 0,
+   "refs": [
+    {
+     "text": "R. P. Feynman, R. B. Leighton and M. Sands, The Feynman Lect",
+     "links": []
+    },
+    {
+     "text": "D. J. Acheson, Elementary Fluid Dynamics, Oxford University ",
+     "links": []
+    },
+    {
+     "text": "P. K. Kundu, I. M. Cohen and D. R. Dowling, Fluid Mechanics,",
+     "links": []
+    },
+    {
+     "text": "L. D. Landau and E. M. Lifshitz, Fluid Mechanics, 2nd editio",
+     "links": []
+    }
+   ],
+   "eqTags": [
+    "(1)",
+    "(2)",
+    "(3)",
+    "(4)",
+    "(5)",
+    "(6)",
+    "(7)",
+    "(8)",
+    "(9)",
+    "(10)",
+    "(11)",
+    "(12)",
+    "(13)",
+    "(14)",
+    "(15)",
+    "(16)",
+    "(17)",
+    "(18)",
+    "(19)",
+    "(20)",
+    "(21)",
+    "(22)",
+    "(23)"
+   ]
+  }
+ },
+ "390x844": {
+  "errors": [],
+  "measure": {
+   "defaults": {
+    "f": 0.7749218302342832,
+    "k_m": 2.41660973353061,
+    "c": 2.0147967586091364,
+    "T": 1.2904527411463793,
+    "omega": 4.868977457940762,
+    "cg": 1.0073983793045682,
+    "a": 24,
+    "ak": 0.5799863360473464,
+    "stokes": 0.6777456950707644,
+    "deep": 0.00445732796663515,
+    "r_z": [
+     24,
+     6.201259270489233,
+     1.602317355826194,
+     0.414016056545124,
+     0.1069758711992436
+    ],
+    "N": 18,
+    "layers": 5,
+    "parcels": 90,
+    "world_w": 400,
+    "box_w": 356,
+    "box_h": 338,
+    "follow": 8,
+    "X0_follow": 190,
+    "layers_drawn": 5,
+    "aomega_mps": 1.1685545899057828,
+    "surface_points": 174
+   },
+   "readouts": {
+    "c": "2.01 m/s",
+    "T": "1.29 s",
+    "ak": "0.58",
+    "deep": "0.4 % of a"
+   },
+   "lam120": {
+    "c": "1.37 m/s",
+    "T": "0.88 s",
+    "ak": "0.90 (cap)",
+    "deep": "0.0 % of a",
+    "f": "1.14"
+   },
+   "lam400": {
+    "c": "2.50 m/s",
+    "T": "1.60 s",
+    "ak": "0.38",
+    "deep": "3.0 % of a",
+    "f": "0.62"
+   },
+   "amp50": {
+    "c": "2.01 m/s",
+    "T": "1.29 s",
+    "ak": 0.9,
+    "deep": "0.4 % of a",
+    "f": "0.77",
+    "a": 37.24225668350351
+   },
+   "dispOff": {
+    "c": "1.30 m/s",
+    "T": "2.00 s",
+    "ak": "0.58",
+    "deep": "0.4 % of a",
+    "f": "0.5",
+    "cg_stored": 0.65,
+    "c_deep": 2.0147967586091364
+   },
+   "dispOn": {
+    "c": "2.01 m/s",
+    "T": "1.29 s",
+    "ak": "0.58",
+    "deep": "0.4 % of a",
+    "f": "0.77"
+   }
+  },
+  "check": {
+   "katexErrors": 0,
+   "katex": 331,
+   "sideways": 0,
+   "sections": 10,
+   "foldsShort": 0,
+   "refs": [
+    {
+     "text": "R. P. Feynman, R. B. Leighton and M. Sands, The Feynman Lect",
+     "links": []
+    },
+    {
+     "text": "D. J. Acheson, Elementary Fluid Dynamics, Oxford University ",
+     "links": []
+    },
+    {
+     "text": "P. K. Kundu, I. M. Cohen and D. R. Dowling, Fluid Mechanics,",
+     "links": []
+    },
+    {
+     "text": "L. D. Landau and E. M. Lifshitz, Fluid Mechanics, 2nd editio",
+     "links": []
+    }
+   ],
+   "eqTags": [
+    "(1)",
+    "(2)",
+    "(3)",
+    "(4)",
+    "(5)",
+    "(6)",
+    "(7)",
+    "(8)",
+    "(9)",
+    "(10)",
+    "(11)",
+    "(12)",
+    "(13)",
+    "(14)",
+    "(15)",
+    "(16)",
+    "(17)",
+    "(18)",
+    "(19)",
+    "(20)",
+    "(21)",
+    "(22)",
+    "(23)"
+   ]
+  }
+ }
+}

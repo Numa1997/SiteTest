@@ -29,7 +29,7 @@ between `dataset.js` and `datalog.js`.
 | 6 | [wave-interference.html](../../public/simulations/wave-interference.html#L489) | L489 | L490 | L491 | L492 | L974 |
 | 7 | [phasor-sums.html](../../public/simulations/phasor-sums.html#L660) | L660 | L661 | L662 | L663 | L1476 |
 | 8 | [draw-decompose.html](../../public/simulations/draw-decompose.html#L618) | L618 | L619 | L620 | L621 | L1413 |
-| 9 | [driven-oscillator.html](../../public/simulations/driven-oscillator.html#L463) | L463 | L464 | L465 | L466 | L1107 |
+| 9 | [driven-oscillator.html](../../public/simulations/driven-oscillator.html#L466) | L466 | L467 | L468 | L469 | L1110 |
 | 10 | [wind-turbine.html](../../public/simulations/wind-turbine.html#L547) | L547 | L548 | L549 | L550 | L1168 |
 
 The scripts are plain `<script src>` tags at the end of the body, so they run while the document is still loading. That is
@@ -263,3 +263,7 @@ Listeners: `window` `error` ([sim.js:230](../../public/scripts/sim.js#L230)); `D
 7. The "Now" column is rewritten every 200 ms ([sim.js:326](../../public/scripts/sim.js#L326)), 5 times a second, and the
    interval keeps running while the walkthrough is folded away. CLAUDE.md asks for "about 4 per second" for readouts of a
    running figure; this column sits outside the figure, so the rule may not apply.
+
+## The Algebra column is typeset (21 October 2026)
+
+`algebra(math)` in `sim.js` splits a step's `math` field at each `<br>`, translates each line from the light HTML it is written in (`<sub>`, `<sup>`, Unicode symbols, upright `<span style="font-style: normal">` words) to TeX with `htmlToTex()`, and typesets it with KaTeX, the same mathematics as the lecture note. A mark `⟦key|…⟧` becomes `\htmlClass{k}{\htmlData{k=key}{…}}`, so hovering still lights the formula, the code and the table together. A line KaTeX cannot read stays as written. The walkthrough is drawn again when KaTeX has loaded (the `typeset` event). Checked on all ten pages: 270 of 270 lines typeset, no sideways scroll at 390 px.
