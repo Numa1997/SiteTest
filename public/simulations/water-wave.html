@@ -274,6 +274,7 @@
                         \[ \frac{\partial\phi}{\partial t} + g\,\eta = 0 \qquad \text{at } z = 0 . \tag{8} \]
                         <p>This is where gravity enters: a raised surface means extra weight on the water beneath it.</p>
                         <h4><span class="psub__n">4.3</span>Deep water stays still</h4>
+                        <p>Nothing stirs the water far below the surface, so on deep water the flow must die away with depth:</p>
                         \[ \nabla\phi \to 0 \qquad \text{as } z \to -\infty . \tag{9} \]
                         <p>In practice “infinitely deep” means deeper than about half a wavelength; Section 10 measures how good that is.</p>
                     </section>
@@ -284,8 +285,8 @@
                         <p>Look for a wave of a single wavelength that travels without changing shape:</p>
                         \[ \eta = a\cos(kx - \omega t) . \tag{10} \]
                         <p>A crest sits where \(kx - \omega t = 0\), that is at \(x = (\omega/k)\,t\), so the crests move at the speed \(\omega/k\). Condition (6) needs \(\partial\phi/\partial z\) to vary like \(\partial\eta/\partial t\), which is proportional to \(\sin(kx - \omega t)\), so we try \(\phi = Z(z)\sin(kx - \omega t)\). Laplace’s equation (4) then requires \(Z'' - k^2 Z = 0\), whose solutions are</p>
-                        \[ Z(z) = A\,e^{kz} + B\,e^{-kz} . \tag{11} \]
-                        <p>Below the surface \(z\) is negative, so \(e^{-kz}\) grows without bound with depth; condition (9) forbids it, and \(B = 0\). The kinematic condition (6) reads \(a\omega\sin(kx - \omega t) = kA\sin(kx - \omega t)\), so \(A = a\omega/k\) and</p>
+                        \[ Z(z) = C\,e^{kz} + D\,e^{-kz} . \tag{11} \]
+                        <p>Below the surface \(z\) is negative, so \(e^{-kz}\) grows without bound with depth; condition (9) forbids it, and \(D = 0\). The kinematic condition (6) reads \(a\omega\sin(kx - \omega t) = kC\sin(kx - \omega t)\), so \(C = a\omega/k\) and</p>
                         \[ \phi = \frac{a\omega}{k}\,e^{kz}\sin(kx - \omega t) . \tag{12} \]
                         <p>The factor \(e^{kz}\) was not put in by hand. Laplace’s equation forces it: a pattern that repeats every \(\lambda\) along \(x\) must die away over a depth of about \(\lambda/2\pi\).</p>
                         <h4><span class="psub__n">5.2</span>The dispersion relation</h4>
