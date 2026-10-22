@@ -67,7 +67,7 @@ rule in any stylesheet: every page sizes and places it with inline `style` attri
 link to `index.html` above the name, with a 14 px note in `var(--muted)` under it ("Phyein Usul · φύειν أصول, roots that grow. …")
 ([index.html:31–32](../index.html#L31-L32)). In the top bar of the catalog, Portfolios and the ten simulation pages it is an
 87 × 48 image link to the home page, set before the back link in a `span` with `display: inline-flex` and a 14 px gap
-([simulations.html:33](../public/simulations.html#L33), [portfolios.html:34](../public/portfolios.html#L34),
+([simulations.html:33](../public/simulations.html#L33), [portfolios.html:35](../public/portfolios.html#L35),
 [water-wave.html:18](../public/simulations/water-wave.html#L18)). Its strokes are `#7a1f2b` and `#4d0f18`, the values of
 `--accent` and `--accent-dark`, written into the SVG itself.
 

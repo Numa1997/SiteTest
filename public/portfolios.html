@@ -8,7 +8,7 @@
     <title>Portfolios · Numa Koudsie</title>
     <meta
       name="description"
-      content="Research projects by Numa Koudsie, each with its derivations, solver and results: Droplet Collection, the remodel of a Bachelor thesis on how cloud droplets become rain; Rotor Pendula, a corrected study of whether a pendulum on a turbine blade can power a sensor; and the Hydraulic Press Study, a servo-hydraulic press under digital control, built from first principles."
+      content="Research projects by Numa Koudsie, each with its derivations, solver and results: Droplet Collection, the remodel of a Bachelor thesis on how cloud droplets become rain; Rotor Pendula, a corrected study of whether a pendulum on a turbine blade can power a sensor; the Hydraulic Press Study, a servo-hydraulic press under digital control, built from first principles; and Iron, Cotton and the Head, why an iron ball hurts and a cotton ball of the same mass does not, in English and Arabic."
     />
     <meta name="author" content="Numa Koudsie" />
     <meta name="theme-color" content="#f5f1ea" />
@@ -18,6 +18,7 @@
     <link rel="stylesheet" href="styles/catalog.css" />
     <link rel="stylesheet" href="styles/portfolio.css" />
     <link rel="stylesheet" href="styles/fold.css" />
+    <link rel="stylesheet" href="fonts/arabic.css" />
     <link
       rel="icon"
       href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='12' fill='%237a1f2b'/%3E%3Ctext x='32' y='45' text-anchor='middle' font-family='Georgia,serif' font-size='34' font-weight='700' fill='%23fff'%3ENK%3C/text%3E%3C/svg%3E"
@@ -352,6 +353,98 @@
               <li><a href="portfolios/hydraulics/index.html#theory"><b>Theory</b><span>Hydraulics from first principles: 23 chapters, 63 numbered equations, each number computed from the model.</span></a></li>
             </ul>
             <p class="proj__note">One self-contained page, generated from its source in this site’s repository, <a href="https://github.com/Numa1997/SiteTest/tree/main/portfolios-src/hydraulics">portfolios-src/hydraulics</a>. Everything is computed in your browser, and nothing is stored.</p>
+          </section>
+        </div>
+      </article>
+
+      <article class="proj" id="iron-cotton" aria-labelledby="ic-title">
+        <div class="proj__band">
+          <span class="proj__num">04</span>
+          <p>An interactive study · English and Arabic · 2026</p>
+          <span>impact mechanics · interatomic bonds · fibre networks</span>
+        </div>
+        <div class="proj__body">
+          <div class="proj__head">
+            <div>
+              <h2 id="ic-title">Iron, Cotton and the Head</h2>
+              <p class="proj__sub">Why an iron ball hurts and a cotton ball of the same mass does not</p>
+              <p class="proj__abs">
+                Drop two balls of exactly 1 kg from 10 m onto a head: one of iron, one of cotton. They bring
+                the same energy, and on the head’s scale they settle to the same weight, 9.81 N. The blow is
+                another matter. The iron ball does not give way, so the head must stop it within the few
+                millimetres a skull can yield, and a short stop needs a large force. The cotton ball gives way
+                itself and burns the energy inside its own fibres. The study builds both balls from their
+                bonds: iron as a lattice of atoms held by Morse potentials with iron’s shape, cotton as a
+                tangle of fibres that stretch, bend, cling where they cross and rub. Newton’s law moves every
+                particle, a peak-hold force gauge reads the impact, and the energy books show where every
+                joule goes. The text derives each step, from the fall with air drag to van Wyk’s law for fibre
+                masses and the way real force sensors work, and compares the model with a real skull.
+              </p>
+              <div class="proj__actions">
+                <a class="proj__btn" href="portfolios/impact/index.html">Open the study</a>
+                <a class="proj__btn proj__btn--ghost" href="portfolios/impact/ar.html" lang="ar" style="font-family:'Noto Naskh Arabic',serif">النسخة العربية</a>
+              </div>
+            </div>
+            <dl class="proj__tally" aria-label="Key figures">
+              <div><dt class="is-new">639<small> N</small></dt><dd>peak force of the iron ball on the model head</dd></div>
+              <div><dt>188<small> N</small></dt><dd>peak force of the cotton ball, same mass and speed</dd></div>
+              <div><dt>9.81<small> N</small></dt><dd>the weight both scales settle on: 1.000 kg each</dd></div>
+              <div><dt>19.8<small> kN</small></dt><dd>a real 0.5 kg iron ball from 10 m on a skull, against an 11.9 kN failure load</dd></div>
+            </dl>
+          </div>
+
+          <section class="proj__part" aria-labelledby="ic-drop">
+            <h3 id="ic-drop"><span class="psub__n">4.1</span>One drop, 9 seconds</h3>
+            <ol class="proj__changes">
+              <li><b>The fall.</b> Both balls are held 10 m above the head and fall under gravity alone; the first touch comes at 1.428 s, as Newton’s \(\sqrt{2h/g}\) predicts, at 14.0 m/s.</li>
+              <li><b>The blow.</b> The iron ball barely deforms and the head’s spring takes the whole stop: 639 N within about 50 ms, and the ball bounces. The cotton ball crushes through much of its size and peaks at 188 N.</li>
+              <li><b>The weight.</b> When the shaking has died away, both scales read 9.81 N, which is 1.000 kg: same mass, very different blows.</li>
+              <li><b>Where the energy goes.</b> The iron ball turns about 98 J into heat in the head; the cotton ball turns about 104 J into heat inside its own fibres. The energy books close to within half a joule.</li>
+            </ol>
+          </section>
+
+          <section class="proj__part" aria-labelledby="ic-model">
+            <h3 id="ic-model"><span class="psub__n">4.2</span>What the model keeps</h3>
+            <p>
+              Iron is 91 atoms on a triangular lattice, each bonded to its neighbours by a Morse valley with the
+              shape Girifalco and Weizer fitted to iron in 1959. Cotton is 18 fibres of 34 beads: stretch springs
+              along each fibre, bending springs on the angle between segments, breakable junctions where fibres
+              cross, and soft contact with friction where they touch, which gives the stiffening of van Wyk’s law.
+              The head is a plate on a spring and a damper and is also the scale. The model is two-dimensional,
+              leaves out air and is tuned for clarity, so its force ratio is about 3.4, where real iron against
+              real cotton gives about 120; the text says so and gives the real-world numbers beside the model’s.
+            </p>
+          </section>
+
+          <section class="proj__part" aria-labelledby="ic-figs">
+            <h3 id="ic-figs"><span class="psub__n">4.3</span>Four figures from the study</h3>
+            <div class="proj__figs">
+              <figure>
+                <a class="pfig__plate" href="portfolios/impact/index.html"><img src="portfolios/impact/fig/01_impact.webp" width="409" height="300" loading="lazy" alt="The two balls side by side at the instant of the iron ball’s peak: the iron lattice pressing its plate down, the cotton tangle just touching its plate, and below each a force gauge, iron reading 639 N at peak, cotton 35 N."></a>
+                <figcaption><span class="pfig__n">Figure 1</span>The iron ball’s peak, 1.447 s: its scale holds 639 N while the cotton has only begun to press.</figcaption>
+              </figure>
+              <figure>
+                <a class="pfig__plate" href="portfolios/impact/index.html"><img src="portfolios/impact/fig/02_force.webp" width="626" height="300" loading="lazy" alt="Force on the head against time around the impact: a tall narrow spike for iron reaching 639 N, a low wide hump for cotton reaching 188 N, and the dashed weight line at 9.81 N."></a>
+                <figcaption><span class="pfig__n">Figure 2</span>The same blow twice: iron as a tall spike, cotton as a low, wide hump.</figcaption>
+              </figure>
+              <figure>
+                <a class="pfig__plate" href="portfolios/impact/index.html"><img src="portfolios/impact/fig/03_energy.webp" width="734" height="300" loading="lazy" alt="Energy bars for each ball: the energy given by the fall above, and below it where it went, almost all heat in the head for iron and almost all heat in the cotton for cotton."></a>
+                <figcaption><span class="pfig__n">Figure 3</span>The energy books at the end: iron heats the head, cotton heats itself.</figcaption>
+              </figure>
+              <figure>
+                <a class="pfig__plate" href="portfolios/impact/index.html"><img src="portfolios/impact/fig/04_weight.webp" width="409" height="300" loading="lazy" alt="Both balls at rest on their plates after 9 s; both gauges read a weight of 9.81 N and a mass of 1.000 kg, with peaks of 639 N and 188 N kept by the peak-hold pointers."></a>
+                <figcaption><span class="pfig__n">Figure 4</span>At rest: both scales read 9.81 N, 1.000 kg, and keep their very different peaks.</figcaption>
+              </figure>
+            </div>
+          </section>
+
+          <section class="proj__part" aria-labelledby="ic-pages">
+            <h3 id="ic-pages"><span class="psub__n">4.4</span>The study’s own pages</h3>
+            <ul class="proj__pages">
+              <li><a href="portfolios/impact/index.html"><b>English</b><span>The drop, the gauges, the force curves, the energy books, and seven sections of derivations with every parameter.</span></a></li>
+              <li><a href="portfolios/impact/ar.html" lang="ar" dir="rtl" style="font-family:'Noto Naskh Arabic',serif"><b style="font-family:'Amiri',serif">العربية</b><span>الدراسة كاملةً بالعربية: السقوط، والموازين، ومنحنيات القوة، وحساب الطاقة، والاشتقاقات.</span></a></li>
+            </ul>
+            <p class="proj__note">Two self-contained pages, generated from their source in this site’s repository, <a href="https://github.com/Numa1997/SiteTest/tree/main/portfolios-src/impact">portfolios-src/impact</a>. The drop is computed in your browser when the page opens, and nothing is stored.</p>
           </section>
         </div>
       </article>

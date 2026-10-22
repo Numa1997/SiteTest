@@ -1,7 +1,7 @@
-# The three research projects: `public/portfolios/`
+# The four research projects: `public/portfolios/`
 
-The Portfolios page ([`public/portfolios.html`](../public/portfolios.html), described in [pages.md](pages.md)) presents three
-long research projects. The first two are each their own AppDeploy app with its own source; the third, the Hydraulic Press
+The Portfolios page ([`public/portfolios.html`](../public/portfolios.html), described in [pages.md](pages.md)) presents four
+research projects; the fourth, Iron, Cotton and the Head, is described [at the end](#iron-cotton-and-the-head-impact). The first two are each their own AppDeploy app with its own source; the third, the Hydraulic Press
 Study, is generated from its own GitHub repository ([below](#the-hydraulic-press-study-hydraulics)). This website carries only
 a **built copy** of each one, so that a reader can open it here without leaving the site:
 
@@ -30,7 +30,7 @@ places, the links into it from `portfolios.html` and its one link back out.
    (Found with `grep -o 'path:"/[a-z-]*"' public/portfolios/*/static/index-*.js`.) Hash routes are used because the server
    only ever serves the one file `index.html`; everything after `#` stays in the browser. Links from `portfolios.html` therefore
    always name the file, as in `portfolios/rotor-pendula/index.html#/report`
-   ([portfolios.html:190](../public/portfolios.html#L190)). The AppDeploy server used to answer a bare folder address such as
+   ([portfolios.html:191](../public/portfolios.html#L191)). The AppDeploy server used to answer a bare folder address such as
    `portfolios/rotor-pendula/` with 403 (forbidden). Measured on 20 October 2026, both hosts serve the copy there (AppDeploy
    200; Cloudflare 200, and Cloudflare redirects `…/index.html` to the folder with a 307, the browser keeping the `#/route`), so
    the links that name the file work on both.
@@ -78,7 +78,7 @@ places, the links into it from `portfolios.html` and its one link back out.
 | `static/index-CGriahzx.css` | Its stylesheet (the house design and the KaTeX styles; fonts imported from `../../../fonts/instrument-plex.css`), 61 kB. |
 | `static/worker-ClooJ8Gk.js` | The Web Worker: the solver of the stochastic collection equation, 131 kB. |
 | `static/KaTeX_*.{woff2,woff,ttf}` | 59 font files of KaTeX, the maths typesetter, each in up to three formats (the bundle names them; the browser picks the first format it supports, in practice woff2). |
-| `fig/c1_ice.svg`, `fig/ecoll_map.svg`, `fig/fallspeed_gk.svg`, `fig/golovin.svg`, `fig/w2_rain.svg`, `fig/w2_spectra.svg` | Vector figures of the project. Four of them also appear as plates on the Portfolios page ([portfolios.html:128–140](../public/portfolios.html#L128-L140)). |
+| `fig/c1_ice.svg`, `fig/ecoll_map.svg`, `fig/fallspeed_gk.svg`, `fig/golovin.svg`, `fig/w2_rain.svg`, `fig/w2_spectra.svg` | Vector figures of the project. Four of them also appear as plates on the Portfolios page ([portfolios.html:129–141](../public/portfolios.html#L129-L141)). |
 
 ### `rotor-pendula/` (84 files)
 
@@ -222,3 +222,27 @@ The copies above were rebuilt from the apps after the repairs of the independent
 instead of the 0.16.11 of the 15 October build. The worker bundles, the figures and the study files are unchanged, and the
 stylesheets came back with their earlier hashes (`index-CGriahzx.css`, `index-CNYGhWdg.css`): only the application bundles
 changed. They were rebuilt once more the same day, after the second repairs of the wording (`index-DGIxitSc.js`, `index-CsGEKbO8.js`).
+
+## Iron, Cotton and the Head: `impact/`
+
+Two pages, generated from [`portfolios-src/impact/`](../portfolios-src/impact/) (its [README](../portfolios-src/impact/README.md)
+lists every file) by `python3 portfolios-src/impact/build.py --site`. Never edit the two pages by hand.
+
+| Path | What it is |
+|---|---|
+| `impact/index.html` | The study in English: two balls of 1 kg, iron and cotton, dropped from 10 m onto a head drawn as a plate on a spring and damper, which is also the scale. A peak-hold force gauge and a digital panel under each ball, force curves, energy books, seven sections of derivations and a table of every parameter. |
+| `impact/ar.html` | The same study written in Arabic, right to left, set in Amiri and Noto Naskh Arabic ([assets.md](assets.md#arabic-faces-added-22-october-2026-on-numas-request)). |
+| `impact/fig/01_impact.webp` … `04_weight.webp` | The four plates of the Portfolios entry, screenshots of the English page. |
+
+**How a page works.** The model (`physics.js`, copied into the page between `/*PHYSICS-BEGIN*/` and `/*PHYSICS-END*/`) runs once
+when the page opens, in slices of 14 ms so the page stays usable, and stores every particle's position every 1 ms up to 2.5 s and
+every 2 ms after that; the animation only plays the stored run back, as Figs. 9 and 10 do. Each page carries the site's security
+policy and referrer rule after its charset line, loads only `../../fonts/instrument-plex.css` (and `arabic.css` on the Arabic page),
+makes no request outside the site, and links back to `../../portfolios.html`. The pages need no `'unsafe-eval'` and no worker.
+
+**What was checked** (22 October 2026, headless Chromium on the built site, `checks/site_check.cjs`): both pages at 1100 and
+390 px, no script errors, no failed or outside requests, no sideways scroll; iron peaks at 638.6 N, cotton at 188.0 N, both
+scales settle at 9.81 N; the first touch at 1.428 s equals √(2h/g); the energy books close to 0.21 J (iron) and 0.51 J (cotton) out
+of about 98 J (`checks/energy_books.cjs`); halving the time step changes the peaks by 0.0 % (iron) and 1.5 % (cotton)
+(`checks/step_size.cjs`).
+

@@ -1,0 +1,15 @@
+# Iron, Cotton and the Head: source
+
+Why an iron ball hurts and a cotton ball of the same mass does not. Two pages, English and Arabic, served at
+`public/portfolios/impact/index.html` and `ar.html`. This folder is not served.
+
+| File | What it is |
+|---|---|
+| `physics.js` | The model. Iron: 91 atoms on a triangular lattice, nearest neighbours joined by Morse bonds with iron's shape (αr₀ = 3.95, Girifalco and Weizer 1959). Cotton: 18 fibres of 34 beads with stretch springs, bending springs on the turning angle, breakable Morse junctions where fibres cross, and contact repulsion with friction. Head: a plate on a spring and damper; its spring force is the scale reading. Semi-implicit Euler, Δt = 2×10⁻⁴ s (iron 5 sub-steps, cotton 2). Energy books: every damper's power is integrated into heat. `physics.cjs` is the same file for the Node checks. |
+| `template.html` | The page: layout, styles, drawing, playback, gauges, plots, energy chart. Placeholders `{{…}}` are filled by `build.py`. |
+| `text_en.py`, `text_ar.py` | Every word of the two pages, including the derivations and the parameter table. The Arabic is written in Arabic, not translated line by line. |
+| `build.py` | `python3 build.py` writes stand-alone pages to `out/` (they load Google Fonts; not used by the site). `python3 build.py --site` writes the two site pages with the site's security policy, the site's fonts, the back link and the language switch. |
+| `checks/` | Node scripts (CommonJS, `.cjs`, because the site's `package.json` is an ES module): `energy_books.cjs` (energy closure), `weights.cjs` (settled weights), `step_size.cjs` (time-step convergence), `walkthrough.cjs` (screenshots of opening, fall, impact, end), `site_check.cjs` (the built site through a local server: fonts, policy, outside requests, numbers), `plates.cjs` and `plate3.cjs` (the four Portfolios plates). Run the browser ones with `NODE_PATH=$(npm root -g)` and the preinstalled Chromium. |
+
+Rebuild after any change: `python3 build.py --site`, then `npm run build` at the repository root, then `node checks/site_check.cjs`
+against `python3 -m http.server 8766` in `dist/`.

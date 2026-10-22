@@ -4,7 +4,7 @@ Written by [`tools/inventory.py`](../tools/inventory.py) from the files in the r
 Run `python3 tools/inventory.py` after adding, removing or changing files, and `python3 tools/inventory.py --check`
 to confirm that every file is described. Sizes are those of the files when the list was written.
 
-490 files, 23.5 MB in all. Runs of more than 12 similar files are folded; open them to see each file.
+518 files, 24.2 MB in all. Runs of more than 12 similar files are folded; open them to see each file.
 
 | Folder | Files |
 |---|---|
@@ -16,13 +16,15 @@ to confirm that every file is described. Sizes are those of the files when the l
 | [Stylesheets](#stylesheets) | 7 |
 | [KaTeX](#katex) | 24 |
 | [Latin Modern](#latin-modern) | 5 |
-| [IBM Plex and Instrument Serif](#ibm-plex-and-instrument-serif) | 55 |
+| [IBM Plex, Instrument Serif, and the Arabic faces](#ibm-plex-instrument-serif-and-the-arabic-faces) | 61 |
 | [Thumbnails](#thumbnails) | 10 |
 | [Logo](#logo) | 1 |
 | [Project copy: Droplet Collection](#project-copy-droplet-collection) | 69 |
 | [Project copy: Rotor Pendula](#project-copy-rotor-pendula) | 84 |
 | [Project copy: Hydraulic Press Study](#project-copy-hydraulic-press-study) | 6 |
+| [Iron, Cotton and the Head](#iron-cotton-and-the-head) | 6 |
 | [Source of the Hydraulic Press Study (not served)](#source-of-the-hydraulic-press-study-not-served) | 36 |
+| [Source of Iron, Cotton and the Head (not served)](#source-of-iron-cotton-and-the-head-not-served) | 16 |
 | [Template sources](#template-sources) | 2 |
 | [Platform tests](#platform-tests) | 1 |
 | [Documentation](#documentation) | 28 |
@@ -35,10 +37,10 @@ to confirm that every file is described. Sizes are those of the files when the l
 | File | Size | What it is | Explained in |
 |---|---|---|---|
 | [`.gitignore`](../.gitignore) | 39 B | Files git leaves out: Python caches, node_modules, build output. | [files.md](files.md) |
-| [`AGENTS.md`](../AGENTS.md) | 11.6 kB | The maintainer's summary: ownership, layout, design rules, folds, the data pipeline, platform quirks. | [build-and-deploy.md](build-and-deploy.md) |
+| [`AGENTS.md`](../AGENTS.md) | 12.0 kB | The maintainer's summary: ownership, layout, design rules, folds, the data pipeline, platform quirks. | [build-and-deploy.md](build-and-deploy.md) |
 | [`CLAUDE.md`](../CLAUDE.md) | 4.3 kB | How Numa expects an AI assistant to work on the project. | [build-and-deploy.md](build-and-deploy.md) |
-| [`README.md`](../README.md) | 7.4 kB | Start here: what the project is, how the files fit together, where each one is explained. | [README.md](../README.md) |
-| [`index.html`](../index.html) | 47.3 kB | The home page: CV, research, simulation plates, index; also the build entry page. | [pages.md](pages.md) |
+| [`README.md`](../README.md) | 7.7 kB | Start here: what the project is, how the files fit together, where each one is explained. | [README.md](../README.md) |
+| [`index.html`](../index.html) | 47.4 kB | The home page: CV, research, simulation plates, index; also the build entry page. | [pages.md](pages.md) |
 | [`package.json`](../package.json) | 479 B | Build declaration: vite build; template dependencies. | [build-and-deploy.md](build-and-deploy.md) |
 | [`postcss.config.js`](../postcss.config.js) | 81 B | PostCSS settings (template; unused by the site). | [build-and-deploy.md](build-and-deploy.md) |
 | [`tailwind.config.js`](../tailwind.config.js) | 155 B | Tailwind settings (template; unused by the site). | [build-and-deploy.md](build-and-deploy.md) |
@@ -51,7 +53,7 @@ to confirm that every file is described. Sizes are those of the files when the l
 | File | Size | What it is | Explained in |
 |---|---|---|---|
 | [`public/_headers`](../public/_headers) | 516 B | Security response headers Cloudflare sets on every file of phyeinusul.com; read by Cloudflare, never served. | [usul.md](usul.md) |
-| [`public/portfolios.html`](../public/portfolios.html) | 31.7 kB | The Portfolios page: the two research projects. | [pages.md](pages.md) |
+| [`public/portfolios.html`](../public/portfolios.html) | 40.2 kB | The Portfolios page: the two research projects. | [pages.md](pages.md) |
 | [`public/robots.txt`](../public/robots.txt) | 58 B | Instructions for search-engine crawlers. | [pages.md](pages.md) |
 | [`public/simulations.html`](../public/simulations.html) | 18.9 kB | The simulations catalog: one titled fold card per simulation, search and chips. | [pages.md](pages.md) |
 
@@ -156,12 +158,17 @@ to confirm that every file is described. Sizes are those of the files when the l
 | [`public/fonts/lm/lmroman10-italic.woff2`](../public/fonts/lm/lmroman10-italic.woff2) | 32.5 kB | A face of Latin Modern Roman, the typeface of the lecture notes. | [assets.md](assets.md) |
 | [`public/fonts/lm/lmroman10-regular.woff2`](../public/fonts/lm/lmroman10-regular.woff2) | 30.4 kB | A face of Latin Modern Roman, the typeface of the lecture notes. | [assets.md](assets.md) |
 
-## IBM Plex and Instrument Serif
+## IBM Plex, Instrument Serif, and the Arabic faces
 
 | File | Size | What it is | Explained in |
 |---|---|---|---|
+| [`public/fonts/OFL-Amiri.txt`](../public/fonts/OFL-Amiri.txt) | 4.4 kB | Licence of Amiri (SIL Open Font License 1.1). | [assets.md](assets.md) |
 | [`public/fonts/OFL-IBM-Plex.txt`](../public/fonts/OFL-IBM-Plex.txt) | 4.5 kB | Licence of IBM Plex (SIL Open Font License 1.1). | [assets.md](assets.md) |
 | [`public/fonts/OFL-Instrument-Serif.txt`](../public/fonts/OFL-Instrument-Serif.txt) | 4.4 kB | Licence of Instrument Serif (SIL Open Font License 1.1). | [assets.md](assets.md) |
+| [`public/fonts/OFL-Noto-Naskh-Arabic.txt`](../public/fonts/OFL-Noto-Naskh-Arabic.txt) | 4.4 kB | Licence of Noto Naskh Arabic (SIL Open Font License 1.1). | [assets.md](assets.md) |
+| [`public/fonts/amiri/amiri-400-arabic.woff2`](../public/fonts/amiri/amiri-400-arabic.woff2) | 107.5 kB | Amiri 400, cut to the Arabic blocks. | [assets.md](assets.md) |
+| [`public/fonts/amiri/amiri-700-arabic.woff2`](../public/fonts/amiri/amiri-700-arabic.woff2) | 108.4 kB | Amiri 700, cut to the Arabic blocks. | [assets.md](assets.md) |
+| [`public/fonts/arabic.css`](../public/fonts/arabic.css) | 1.4 kB | Amiri and Noto Naskh Arabic, served by the site itself: the @font-face rules of the Arabic pages. | [assets.md](assets.md) |
 | [`public/fonts/ibm-plex-mono/ibm-plex-mono-400-cyrillic-ext.woff2`](../public/fonts/ibm-plex-mono/ibm-plex-mono-400-cyrillic-ext.woff2) | 6.9 kB | A face of IBM Plex Mono for one script range (name: weight, i for italic, range). | [assets.md](assets.md) |
 | [`public/fonts/ibm-plex-mono/ibm-plex-mono-400-cyrillic.woff2`](../public/fonts/ibm-plex-mono/ibm-plex-mono-400-cyrillic.woff2) | 8.4 kB | A face of IBM Plex Mono for one script range (name: weight, i for italic, range). | [assets.md](assets.md) |
 | [`public/fonts/ibm-plex-mono/ibm-plex-mono-400-latin-ext.woff2`](../public/fonts/ibm-plex-mono/ibm-plex-mono-400-latin-ext.woff2) | 13.3 kB | A face of IBM Plex Mono for one script range (name: weight, i for italic, range). | [assets.md](assets.md) |
@@ -224,6 +231,7 @@ to confirm that every file is described. Sizes are those of the files when the l
 | [`public/fonts/instrument-serif/instrument-serif-400-latin.woff2`](../public/fonts/instrument-serif/instrument-serif-400-latin.woff2) | 21.0 kB | A face of Instrument Serif for one script range (name: weight, i for italic, range). | [assets.md](assets.md) |
 | [`public/fonts/instrument-serif/instrument-serif-400i-latin-ext.woff2`](../public/fonts/instrument-serif/instrument-serif-400i-latin-ext.woff2) | 12.4 kB | A face of Instrument Serif for one script range (name: weight, i for italic, range). | [assets.md](assets.md) |
 | [`public/fonts/instrument-serif/instrument-serif-400i-latin.woff2`](../public/fonts/instrument-serif/instrument-serif-400i-latin.woff2) | 22.1 kB | A face of Instrument Serif for one script range (name: weight, i for italic, range). | [assets.md](assets.md) |
+| [`public/fonts/noto-naskh-arabic/noto-naskh-arabic-wght-arabic.woff2`](../public/fonts/noto-naskh-arabic/noto-naskh-arabic-wght-arabic.woff2) | 88.2 kB | Noto Naskh Arabic, variable weight 400 to 700, cut to the Arabic blocks. | [assets.md](assets.md) |
 | [`public/fonts/plex.css`](../public/fonts/plex.css) | 21.3 kB | IBM Plex Mono, Sans and Serif, served by the site itself: the @font-face rules site.css imports. | [assets.md](assets.md) |
 
 ## Thumbnails
@@ -441,6 +449,17 @@ to confirm that every file is described. Sizes are those of the files when the l
 | [`public/portfolios/hydraulics/fig/04_map.webp`](../public/portfolios/hydraulics/fig/04_map.webp) | 36.1 kB | Plate 4 of the study on the Portfolios page, 600 px high. | [portfolios.md](portfolios.md) |
 | [`public/portfolios/hydraulics/index.html`](../public/portfolios/hydraulics/index.html) | 5.09 MB | The whole Hydraulic Press Study: tab bar and three embedded pages, generated from portfolios-src/hydraulics/. | [portfolios.md](portfolios.md) |
 
+## Iron, Cotton and the Head
+
+| File | Size | What it is | Explained in |
+|---|---|---|---|
+| [`public/portfolios/impact/ar.html`](../public/portfolios/impact/ar.html) | 78.1 kB | Iron, Cotton and the Head in Arabic, generated from portfolios-src/impact/ by build.py --site. | [portfolios.md](portfolios.md) |
+| [`public/portfolios/impact/fig/01_impact.webp`](../public/portfolios/impact/fig/01_impact.webp) | 16.9 kB | Plate 1 of the study on the Portfolios page, a screenshot of its English page, 600 px high. | [portfolios.md](portfolios.md) |
+| [`public/portfolios/impact/fig/02_force.webp`](../public/portfolios/impact/fig/02_force.webp) | 19.5 kB | Plate 2 of the study on the Portfolios page, a screenshot of its English page, 600 px high. | [portfolios.md](portfolios.md) |
+| [`public/portfolios/impact/fig/03_energy.webp`](../public/portfolios/impact/fig/03_energy.webp) | 20.2 kB | Plate 3 of the study on the Portfolios page, a screenshot of its English page, 600 px high. | [portfolios.md](portfolios.md) |
+| [`public/portfolios/impact/fig/04_weight.webp`](../public/portfolios/impact/fig/04_weight.webp) | 18.2 kB | Plate 4 of the study on the Portfolios page, a screenshot of its English page, 600 px high. | [portfolios.md](portfolios.md) |
+| [`public/portfolios/impact/index.html`](../public/portfolios/impact/index.html) | 66.5 kB | Iron, Cotton and the Head in English, generated from portfolios-src/impact/ by build.py --site. | [portfolios.md](portfolios.md) |
+
 ## Source of the Hydraulic Press Study (not served)
 
 | File | Size | What it is | Explained in |
@@ -482,6 +501,27 @@ to confirm that every file is described. Sizes are those of the files when the l
 | [`portfolios-src/hydraulics/tools/render_page_math.py`](../portfolios-src/hydraulics/tools/render_page_math.py) | 3.3 kB | Typesets the equation blocks inside the two simulation pages. | [README.md](../portfolios-src/hydraulics/README.md) |
 | [`portfolios-src/hydraulics/tools/theory_template.html`](../portfolios-src/hydraulics/tools/theory_template.html) | 15.9 kB | The page the text is set into. | [README.md](../portfolios-src/hydraulics/README.md) |
 
+## Source of Iron, Cotton and the Head (not served)
+
+| File | Size | What it is | Explained in |
+|---|---|---|---|
+| [`portfolios-src/impact/.gitignore`](../portfolios-src/impact/.gitignore) | 11 B | Keeps the stand-alone build (out/) and screenshots out of git. | [README.md](../portfolios-src/impact/README.md) |
+| [`portfolios-src/impact/README.md`](../portfolios-src/impact/README.md) | 2.1 kB | The study's source: every file, how the two pages are generated, the checks. | [README.md](../portfolios-src/impact/README.md) |
+| [`portfolios-src/impact/build.py`](../portfolios-src/impact/build.py) | 7.0 kB | Generates public/portfolios/impact/index.html and ar.html (--site), or stand-alone pages in out/. | [README.md](../portfolios-src/impact/README.md) |
+| [`portfolios-src/impact/checks/energy_books.cjs`](../portfolios-src/impact/checks/energy_books.cjs) | 1.1 kB | Check script energy_books (see the README). | [README.md](../portfolios-src/impact/README.md) |
+| [`portfolios-src/impact/checks/plate3.cjs`](../portfolios-src/impact/checks/plate3.cjs) | 699 B | Check script plate3 (see the README). | [README.md](../portfolios-src/impact/README.md) |
+| [`portfolios-src/impact/checks/plates.cjs`](../portfolios-src/impact/checks/plates.cjs) | 1.2 kB | Check script plates (see the README). | [README.md](../portfolios-src/impact/README.md) |
+| [`portfolios-src/impact/checks/portfolio_page.cjs`](../portfolios-src/impact/checks/portfolio_page.cjs) | 1.4 kB | Check script portfolio_page (see the README). | [README.md](../portfolios-src/impact/README.md) |
+| [`portfolios-src/impact/checks/site_check.cjs`](../portfolios-src/impact/checks/site_check.cjs) | 1.8 kB | Check script site_check (see the README). | [README.md](../portfolios-src/impact/README.md) |
+| [`portfolios-src/impact/checks/step_size.cjs`](../portfolios-src/impact/checks/step_size.cjs) | 323 B | Check script step_size (see the README). | [README.md](../portfolios-src/impact/README.md) |
+| [`portfolios-src/impact/checks/walkthrough.cjs`](../portfolios-src/impact/checks/walkthrough.cjs) | 1.9 kB | Check script walkthrough (see the README). | [README.md](../portfolios-src/impact/README.md) |
+| [`portfolios-src/impact/checks/weights.cjs`](../portfolios-src/impact/checks/weights.cjs) | 588 B | Check script weights (see the README). | [README.md](../portfolios-src/impact/README.md) |
+| [`portfolios-src/impact/physics.cjs`](../portfolios-src/impact/physics.cjs) | 10.6 kB | The model: Morse-bonded iron, fibre-network cotton, the head and scale, energy books (.cjs: the same file for the Node checks). | [README.md](../portfolios-src/impact/README.md) |
+| [`portfolios-src/impact/physics.js`](../portfolios-src/impact/physics.js) | 10.6 kB | The model: Morse-bonded iron, fibre-network cotton, the head and scale, energy books (.cjs: the same file for the Node checks). | [README.md](../portfolios-src/impact/README.md) |
+| [`portfolios-src/impact/template.html`](../portfolios-src/impact/template.html) | 22.9 kB | The page template: layout, drawing, playback, gauges, plots. | [README.md](../portfolios-src/impact/README.md) |
+| [`portfolios-src/impact/text_ar.py`](../portfolios-src/impact/text_ar.py) | 40.8 kB | Every word of the Arabic page. | [README.md](../portfolios-src/impact/README.md) |
+| [`portfolios-src/impact/text_en.py`](../portfolios-src/impact/text_en.py) | 30.4 kB | Every word of the English page. | [README.md](../portfolios-src/impact/README.md) |
+
 ## Template sources
 
 | File | Size | What it is | Explained in |
@@ -500,14 +540,14 @@ to confirm that every file is described. Sizes are those of the files when the l
 | File | Size | What it is | Explained in |
 |---|---|---|---|
 | [`docs/appdeploy-app.md`](appdeploy-app.md) | 2.5 kB | Documentation: The AppDeploy app · numa-koudsie-website-0cyj78. | [appdeploy-app.md](appdeploy-app.md) |
-| [`docs/architecture.md`](architecture.md) | 7.8 kB | Documentation: How the site fits together. | [architecture.md](architecture.md) |
-| [`docs/assets.md`](assets.md) | 9.3 kB | Documentation: Fonts, maths and pictures: `public/vendor/`, `public/fonts/`, `public/images/`. | [assets.md](assets.md) |
+| [`docs/architecture.md`](architecture.md) | 7.9 kB | Documentation: How the site fits together. | [architecture.md](architecture.md) |
+| [`docs/assets.md`](assets.md) | 10.8 kB | Documentation: Fonts, maths and pictures: `public/vendor/`, `public/fonts/`, `public/images/`. | [assets.md](assets.md) |
 | [`docs/build-and-deploy.md`](build-and-deploy.md) | 19.0 kB | Documentation: Build files, tests and deployment. | [build-and-deploy.md](build-and-deploy.md) |
 | [`docs/files.md`](files.md) | this file | This list. Written by tools/inventory.py; do not edit by hand. | [files.md](files.md) |
 | [`docs/minor-issues-report.md`](minor-issues-report.md) | 19.9 kB | Documentation: Minor issues · final verification report. | [minor-issues-report.md](minor-issues-report.md) |
 | [`docs/notes.md`](notes.md) | 3.7 kB | Documentation: The lecture-note review: `notes/` and `.claude/agents/`. | [notes.md](notes.md) |
-| [`docs/pages.md`](pages.md) | 49.5 kB | Documentation: The site's own pages: home, simulations catalog, Portfolios, robots.txt. | [pages.md](pages.md) |
-| [`docs/portfolios.md`](portfolios.md) | 21.6 kB | Documentation: The three research projects: `public/portfolios/`. | [portfolios.md](portfolios.md) |
+| [`docs/pages.md`](pages.md) | 50.8 kB | Documentation: The site's own pages: home, simulations catalog, Portfolios, robots.txt. | [pages.md](pages.md) |
+| [`docs/portfolios.md`](portfolios.md) | 23.8 kB | Documentation: The four research projects: `public/portfolios/`. | [portfolios.md](portfolios.md) |
 | [`docs/research-theory-audit.md`](research-theory-audit.md) | 29.1 kB | Documentation: Readability audit: Droplet Collection and Rotor Pendula. | [research-theory-audit.md](research-theory-audit.md) |
 | [`docs/scripts/catalog.md`](scripts/catalog.md) | 15.0 kB | Documentation: public/scripts/catalog.js. | [catalog.md](scripts/catalog.md) |
 | [`docs/scripts/datalog.md`](scripts/datalog.md) | 46.9 kB | Documentation: public/scripts/datalog.js. | [datalog.md](scripts/datalog.md) |
@@ -532,7 +572,7 @@ to confirm that every file is described. Sizes are those of the files when the l
 
 | File | Size | What it is | Explained in |
 |---|---|---|---|
-| [`tools/inventory.py`](../tools/inventory.py) | 24.6 kB | Writes docs/files.md and checks that every file in the repository is described. | [files.md](files.md) |
+| [`tools/inventory.py`](../tools/inventory.py) | 27.4 kB | Writes docs/files.md and checks that every file in the repository is described. | [files.md](files.md) |
 | [`tools/make_portfolio_copy.py`](../tools/make_portfolio_copy.py) | 4.4 kB | Builds a browser-only website copy of a research app from its source, without changing the app or installing dependencies. | [portfolios.md](portfolios.md) |
 
 ## Agents of the lecture-note review

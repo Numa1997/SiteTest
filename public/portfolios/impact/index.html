@@ -1,0 +1,555 @@
+<!doctype html>
+<html lang="en" dir="ltr">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline' https://v2.appdeploy.ai https://unpkg.com/@khmyznikov/pwa-install@0.6.3/dist/pwa-install.bundle.js; style-src 'self' 'unsafe-inline'; img-src 'self' data: blob: https://appdeploy.ai; font-src 'self' data:; connect-src 'self' https://api-v2.appdeploy.ai; worker-src 'self'; manifest-src 'self'; object-src 'none'; base-uri 'self'; form-action 'self'; upgrade-insecure-requests" />
+    <meta name="referrer" content="strict-origin-when-cross-origin" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Iron, Cotton and the Head · Numa Koudsie</title>
+    <meta name="description" content="Two balls of the same mass fall from the same height onto a head, drawn as a plate on a spring and a damper. The iron ball is a lattice of atoms joined by stiff bonds. The cotton ball is a tangle of thin fibres that bend, cling where they cross and rub on each other. The model runs once when the page opens and every curve and number on this page comes from it; the text below derives what the model does and compares it with real iron, real cotton and a real skull." />
+    <meta name="author" content="Numa Koudsie" />
+    <link
+      rel="icon"
+      href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='12' fill='%237a1f2b'/%3E%3Ctext x='32' y='45' text-anchor='middle' font-family='Georgia,serif' font-size='34' font-weight='700' fill='%23fff'%3ENK%3C/text%3E%3C/svg%3E"
+    />
+    <link rel="stylesheet" href="../../fonts/instrument-plex.css" />
+    <style>
+:root{--bg:#ece3d2;--panel:#f8f2e6;--paper:#fcf8f0;--ink:#23160f;--muted:#6f5b4c;--line:#3f2c23;--rule:#dccdb4;
+--wine:#7d1d2f;--wine-deep:#5a0f21;--wine-soft:#f3dfdb;--blue:#33627f;--blue-soft:#e1ebf0;--green:#3c6a46;--green-soft:#e3ece2;--pic:#f6ecdc}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);font:16.5px/1.68 var(--f-body)}
+main{max-width:1000px;margin:0 auto;padding-block:28px 48px;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px))}
+:root{color-scheme:light}
+.eyebrow{font:500 11.5px/1.4 var(--f-mono);letter-spacing:.14em;text-transform:uppercase;color:var(--wine)}
+h1{font:400 clamp(36px,6.4vw,60px)/1.06 var(--f-title);color:var(--wine-deep);margin:8px 0 10px}
+h2{font:400 clamp(26px,4vw,34px)/1.15 var(--f-title);color:var(--wine-deep);margin:0 0 10px;display:flex;gap:12px;align-items:center}
+h2 .num{font:500 13px var(--f-mono);background:var(--wine);color:#fff;border-radius:999px;padding:3px 10px;flex:none}
+h3{font:400 22px/1.2 var(--f-title);color:var(--wine-deep);margin:18px 0 6px}
+p{margin:0 0 12px;max-width:76ch}
+.lede{color:var(--muted);max-width:74ch;margin-bottom:20px}
+.card{background:var(--panel);border:1.5px solid var(--line);border-radius:12px;padding:16px;margin-bottom:18px}
+canvas{display:block;width:100%;background:var(--paper);border:1.5px solid var(--line);border-radius:8px}
+.bar{display:flex;flex-wrap:wrap;gap:8px;align-items:center;margin:12px 0}
+button{font:500 14px var(--f-body);background:var(--paper);color:var(--wine-deep);border:1.5px solid var(--line);border-radius:8px;padding:6px 14px;cursor:pointer}
+button.on{background:var(--wine);color:#fff}
+  .hint{border:1.5px solid var(--wine-deep);background:var(--paper);border-radius:8px;padding:8px 12px;margin-bottom:10px;color:var(--wine-deep)}
+.hint b{font-weight:500}
+button.go{background:var(--wine-deep);color:#fff;font-size:16px;padding:8px 22px}
+button:disabled{opacity:.55;cursor:wait}
+.small{font-size:14px;color:var(--muted)}
+.two{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+@media (max-width:700px){.two{grid-template-columns:1fr}}
+.read{background:var(--paper);border:1.5px solid var(--line);border-radius:8px;padding:10px 12px;font-size:14.5px}
+.read b{color:var(--wine-deep);font-weight:500}
+.read table{width:100%;border-collapse:collapse}
+.read td{padding:2px 0;vertical-align:top}
+.read td.v{text-align:end;font-family:var(--f-mono);white-space:nowrap;direction:ltr;unicode-bidi:isolate}
+.m{font-family:var(--f-math);font-style:normal;direction:ltr;unicode-bidi:isolate;white-space:nowrap}
+.eq{background:var(--paper);border:1.5px solid var(--line);border-radius:8px;padding:10px 14px;margin:0 0 12px;font:17px/1.6 var(--f-math);direction:ltr;text-align:center;overflow-x:auto}
+.eq.key{border:2px solid var(--wine)}
+.box{border:1.5px solid var(--line);border-radius:8px;padding:10px 14px;margin:0 0 12px}
+.box .tag{font:500 11px var(--f-mono);letter-spacing:.12em;text-transform:uppercase;margin-bottom:4px}
+.pic{background:var(--pic)} .pic .tag{color:var(--muted)}
+.chk{background:var(--green-soft)} .chk .tag{color:var(--green)}
+.toy{background:var(--wine-soft)} .toy .tag{color:var(--wine)}
+.note{background:var(--blue-soft)} .note .tag{color:var(--blue)}
+.box p:last-child{margin-bottom:0}
+.tw{overflow-x:auto}
+table.par{border-collapse:collapse;width:100%;font-size:14px;background:var(--paper)}
+table.par th,table.par td{border:1.5px solid var(--line);padding:6px 8px;text-align:start;vertical-align:top}
+table.par th{background:var(--wine-soft);color:var(--wine-deep);font-weight:500}
+table.par td.v{font-family:var(--f-mono);white-space:nowrap;direction:ltr;unicode-bidi:isolate}
+table.par tr.sec td{background:#efe5d3;color:var(--wine-deep);font-weight:500}
+ol.src{padding-inline-start:20px;font-size:14.5px} ol.src li{margin-bottom:4px}
+a{color:var(--wine)}
+.sitebar{display:flex;flex-wrap:wrap;justify-content:space-between;gap:8px 16px;font:500 13px var(--f-mono);margin-bottom:18px}
+.sitebar a{text-decoration:none}.sitebar .langs a[aria-current]{color:var(--ink);font-weight:600}
+:root{--f-body:"IBM Plex Sans",system-ui,sans-serif;--f-title:"Instrument Serif",Georgia,serif;--f-mono:"IBM Plex Mono",monospace;--f-math:"Instrument Serif",Georgia,serif}.m,.eq{font-size:1.08em}
+</style>
+  </head>
+  <body>
+<main lang="en" dir="ltr">
+<nav class="sitebar" aria-label="Site"><a href="../../portfolios.html">← Numa Koudsie · Portfolios</a><span class="langs"><a href="index.html" aria-current="page">English</a> · <a href="ar.html" lang="ar">العربية</a></span></nav>
+<div class="eyebrow" data-t="eyebrow"></div>
+<h1 data-t="title"></h1>
+<p class="lede" data-t="lede"></p>
+
+<div class="card">
+  <div class="hint" id="hint"></div>
+  <canvas id="sim"></canvas>
+  <p class="small" data-t="headnote" style="margin:8px 0 0"></p>
+  <div class="bar">
+    <button id="drop" class="go" data-t="drop"></button>
+    <button id="s1" data-t="speed1"></button>
+    <button id="s4" class="on" data-t="speed4"></button>
+    <button id="s20" data-t="speed20"></button>
+    <span class="small" id="clock"></span>
+  </div>
+  <div class="two">
+    <div class="read" id="rI"></div>
+    <div class="read" id="rC"></div>
+  </div>
+</div>
+
+<div class="card">
+  <h3 data-t="plot_title"></h3>
+  <p class="small" data-t="plot_note"></p>
+  <div class="two"><canvas id="pZoom" height="220"></canvas><canvas id="pAll" height="220"></canvas></div>
+</div>
+
+<div class="card">
+  <h3 data-t="energy_title"></h3>
+  <p class="small" data-t="energy_note"></p>
+  <canvas id="en" height="250"></canvas>
+</div>
+
+<div id="sections"></div>
+
+<div class="card">
+  <h2><span class="num">8</span><span data-t="h_par"></span></h2>
+  <p data-t="par_intro"></p>
+  <div class="tw"><table class="par" id="ptab"></table></div>
+</div>
+
+<div class="card">
+  <h2><span class="num">9</span><span data-t="h_src"></span></h2>
+  <ol class="src" id="src"></ol>
+</div>
+</main>
+
+<script>
+"use strict";
+document.documentElement.lang="en";document.documentElement.dir="ltr";
+/*PHYSICS-BEGIN*/
+// Every number of the animation lives in P. Scaled units: length in drawing units, mass 1 per ball, time in seconds.
+const P={
+  g:9.81, h:10.0, M:1.0, dt:2e-4, tmax:9.0,
+  iron:{R:0.5, a:0.10, k:1e5, ar0:3.95, c:2, rad:0.035, sub:5},
+  cot:{R:1.3, nf:18, nb:34, s:0.08, turn:0.35, kax:300, kb:0.25, cb:0.004, c:0.3,
+       jr:0.07, kj:40, Fj:4, drep:0.06, krep:20, crep:0.4, rad:0.03, seed:5, sub:2},
+  head:{mp:0.2, kh:6000, ch:62, wc:1350, zc:0.5}
+};
+function rng(seed){return()=>{seed=(seed*16807)%2147483647;return(seed-1)/2147483646}}
+function gauss(r){let u=0;while(!u)u=r();const v=r();return Math.sqrt(-2*Math.log(u))*Math.cos(2*Math.PI*v)}
+
+// A body: particles (positions x,y; velocities u,v; forces fx,fy), bonds, bending triplets.
+function newBody(kind,pts,fibre){
+  const N=pts.length;
+  let ymin=Infinity;for(const p of pts)ymin=Math.min(ymin,p.y);
+  const rad=P[kind==='iron'?'iron':'cot'].rad,lift=P.h-ymin+rad; // lowest point starts exactly h above the plate
+  const b={kind,N,m:P.M/N,rad,
+    x:new Float64Array(N),y:new Float64Array(N),u:new Float64Array(N),v:new Float64Array(N),
+    fx:new Float64Array(N),fy:new Float64Array(N),fib:new Int32Array(N),
+    bonds:[],tri:[],yp:0,vp:0,t:0,Fmax:0,tImpact:null,heat:0,heatBall:0,heatHead:0,Pd:0,Pdh:0,Ebond:0,Ebend:0,Erep:0,y00:0};
+  b.kc=b.m*P.head.wc*P.head.wc;b.cc=2*P.head.zc*b.m*P.head.wc;   // skin contact: every particle rebounds in the same time 2π/wc, damping ratio zc
+  pts.forEach((p,i)=>{b.x[i]=p.x;b.y[i]=p.y+lift;b.fib[i]=fibre?fibre[i]:0});
+  let yc=0;for(let i=0;i<N;i++)yc+=b.y[i];b.y00=yc/N-P.h;  // height energy measured so that it starts at exactly M g h
+  return b;
+}
+function packBonds(b,list){
+  const n=list.length;b.nb=n;
+  b.bi=new Int32Array(n);b.bj=new Int32Array(n);b.l0=new Float64Array(n);b.type=new Uint8Array(n); // 0 Morse metal, 1 fibre axial, 2 junction
+  b.D=new Float64Array(n);b.al=new Float64Array(n);b.k=new Float64Array(n);b.brk=new Float64Array(n);b.alive=new Uint8Array(n);b.strain=new Float64Array(n);
+  list.forEach((s,q)=>{b.bi[q]=s.i;b.bj[q]=s.j;b.l0[q]=s.l0;b.type[q]=s.type;b.D[q]=s.D||0;b.al[q]=s.al||0;b.k[q]=s.k||0;b.brk[q]=s.brk||1e9;b.alive[q]=1});
+}
+function makeIron(){
+  const q=P.iron,pts=[],n=8;
+  for(let j=-n;j<=n;j++)for(let i=-n;i<=n;i++){
+    const x=(i+(j&1)*0.5)*q.a,y=j*q.a*Math.sqrt(3)/2;
+    if(x*x+y*y<=q.R*q.R+1e-9)pts.push({x,y});
+  }
+  const b=newBody('iron',pts);
+  const al=q.ar0/q.a,D=q.k/(2*al*al),L=[];   // Morse: bond stiffness at the minimum is 2 D al^2 = k
+  for(let i=0;i<pts.length;i++)for(let j=i+1;j<pts.length;j++){
+    const d=Math.hypot(pts[i].x-pts[j].x,pts[i].y-pts[j].y);
+    if(d<q.a*1.05)L.push({i,j,l0:d,type:0,D,al});
+  }
+  packBonds(b,L);b.c=q.c;b.Dm=D;b.alm=al;
+  b.ntri=0;return b;
+}
+function turnAngle(ax,ay,bx,by,cx,cy){const ux=bx-ax,uy=by-ay,vx=cx-bx,vy=cy-by;return Math.atan2(ux*vy-uy*vx,ux*vx+uy*vy)}
+function makeCotton(){
+  const q=P.cot,r=rng(q.seed),pts=[],fibre=[],fibIdx=[];
+  for(let f=0;f<q.nf;f++){             // each fibre: a persistent random walk that turns back at the ball's edge
+    let x,y;do{x=(r()*2-1)*q.R;y=(r()*2-1)*q.R}while(x*x+y*y>(0.8*q.R)**2);
+    let th=r()*2*Math.PI;const idx=[];
+    for(let k=0;k<q.nb;k++){
+      idx.push(pts.length);pts.push({x,y});fibre.push(f);
+      th+=q.turn*gauss(r);
+      let nx=x+q.s*Math.cos(th),ny=y+q.s*Math.sin(th);
+      if(nx*nx+ny*ny>(0.95*q.R)**2){th=Math.atan2(-y,-x)+0.8*gauss(r);nx=x+q.s*Math.cos(th);ny=y+q.s*Math.sin(th)}
+      x=nx;y=ny;
+    }
+    fibIdx.push(idx);
+  }
+  const b=newBody('cot',pts,fibre),L=[],T=[];
+  for(const idx of fibIdx){
+    for(let k=0;k+1<idx.length;k++){const i=idx[k],j=idx[k+1];L.push({i,j,l0:Math.hypot(pts[i].x-pts[j].x,pts[i].y-pts[j].y),type:1,k:q.kax})}
+    for(let k=1;k+1<idx.length;k++){const i=idx[k-1],j=idx[k],l=idx[k+1];T.push([i,j,l,turnAngle(pts[i].x,pts[i].y,pts[j].x,pts[j].y,pts[l].x,pts[l].y)])}
+  }
+  // junctions: wherever two fibres (or two far-apart parts of one fibre) start within jr of each other
+  const a=q.kj/(4*q.Fj),D=2*q.Fj/a;   // Morse with stiffness 2Da^2 = kj and largest pull Da/2 = Fj
+  for(let i=0;i<pts.length;i++)for(let j=i+1;j<pts.length;j++){
+    if(fibre[i]===fibre[j]&&j-i<4)continue;
+    const d=Math.hypot(pts[i].x-pts[j].x,pts[i].y-pts[j].y);
+    if(d<q.jr)L.push({i,j,l0:d,type:2,D,al:a,brk:d+3*Math.log(2)/a});
+  }
+  packBonds(b,L);b.c=q.c;b.nj=L.filter(s=>s.type===2).length;
+  b.ntri=T.length;b.ti=new Int32Array(T.map(t=>t[0]));b.tj=new Int32Array(T.map(t=>t[1]));b.tk=new Int32Array(T.map(t=>t[2]));b.th0=new Float64Array(T.map(t=>t[3]));
+  b.cell=new Int32Array(pts.length);b.next=new Int32Array(pts.length);b.fibIdx=fibIdx;
+  relax(b);
+  return b;
+}
+function relax(b){          // let the freshly made tangle settle without gravity, then call that shape 'unstressed'
+  const g=P.g;P.g=0;const y0=Array.from(b.y),x0=Array.from(b.x);
+  for(let round=0;round<3;round++){
+    for(let k=0;k<400;k++){sub(b,P.dt);for(let i=0;i<b.N;i++){b.u[i]*=0.9;b.v[i]*=0.9}}
+    for(let q=0;q<b.nb;q++){const i=b.bi[q],j=b.bj[q];b.l0[q]=Math.hypot(b.x[j]-b.x[i],b.y[j]-b.y[i]);if(b.type[q]===2)b.brk[q]=b.l0[q]+3*Math.log(2)/b.al[q]}
+    for(let q=0;q<b.ntri;q++){const I=b.ti[q],J=b.tj[q],K=b.tk[q];b.th0[q]=turnAngle(b.x[I],b.y[I],b.x[J],b.y[J],b.x[K],b.y[K])}
+  }
+  P.g=g;
+  // put it back at the drop height, at rest, and start the energy books from zero
+  let ymin=Infinity;for(let i=0;i<b.N;i++)ymin=Math.min(ymin,b.y[i]);
+  const shift=P.h+b.rad-ymin;let yc=0;
+  for(let i=0;i<b.N;i++){b.y[i]+=shift;b.u[i]=0;b.v[i]=0;yc+=b.y[i]}
+  b.y00=yc/b.N-P.h;b.heat=0;b.heatBall=0;b.heatHead=0;b.yp=0;b.vp=0;b.t=0;b.tImpact=null;
+}
+function bondForces(b){
+  const {x,y,u,v,fx,fy}=b;let Eb=0;
+  for(let q=0;q<b.nb;q++){
+    if(!b.alive[q])continue;
+    const i=b.bi[q],j=b.bj[q],dx=x[j]-x[i],dy=y[j]-y[i],l=Math.sqrt(dx*dx+dy*dy)||1e-12,ex=dx/l,ey=dy/l;
+    if(l>b.brk[q]){b.alive[q]=0;continue}
+    let f;
+    if(b.type[q]===1)f=b.k[q]*(l-b.l0[q]);                                  // fibre axis: Hooke
+    else{const e=Math.exp(-b.al[q]*(l-b.l0[q]));f=2*b.D[q]*b.al[q]*e*(1-e)}  // Morse: f = dU/dr
+    const vr=(u[j]-u[i])*ex+(v[j]-v[i])*ey;
+    const fd=(b.type[q]===2?0.2:1)*b.c*vr;f+=fd;b.Pd+=fd*vr;   // damper power -> heat
+    if(b.type[q]===1)Eb+=0.5*b.k[q]*(l-b.l0[q])**2;else{const e=Math.exp(-b.al[q]*(l-b.l0[q]));Eb+=b.D[q]*(1-e)*(1-e)}
+    b.strain[q]=(l-b.l0[q])/b.l0[q];
+    fx[i]+=f*ex;fy[i]+=f*ey;fx[j]-=f*ex;fy[j]-=f*ey;
+  }
+  b.Ebond=Eb;
+}
+function bendForces(b){
+  const {x,y,u,v,fx,fy}=b,kb=P.cot.kb,cb=P.cot.cb;let Ebend=0;
+  for(let q=0;q<b.ntri;q++){
+    const I=b.ti[q],J=b.tj[q],K=b.tk[q];
+    const ux=x[J]-x[I],uy=y[J]-y[I],vx=x[K]-x[J],vy=y[K]-y[J],u2=ux*ux+uy*uy,v2=vx*vx+vy*vy;
+    let d=Math.atan2(ux*vy-uy*vx,ux*vx+uy*vy)-b.th0[q];d=Math.atan2(Math.sin(d),Math.cos(d));
+    const gix=-uy/u2,giy=ux/u2,gkx=-vy/v2,gky=vx/v2;               // gradient of the turning angle
+    const om=gix*u[I]+giy*v[I]+gkx*u[K]+gky*v[K]-(gix+gkx)*u[J]-(giy+gky)*v[J];
+    const T=-kb*d-cb*om;                                            // elastic + frictional bending moment
+    Ebend+=0.5*kb*d*d;b.Pd+=cb*om*om;
+    fx[I]+=T*gix;fy[I]+=T*giy;fx[K]+=T*gkx;fy[K]+=T*gky;fx[J]-=T*(gix+gkx);fy[J]-=T*(giy+gky);
+  }
+  b.Ebend=Ebend;
+}
+function contactForces(b){                 // fibres touching fibres: soft repulsion with friction
+  const q=P.cot,h=q.drep,{x,y,u,v,fx,fy,fib}=b,N=b.N;
+  let GX0=Infinity,GY0=Infinity,x1=-Infinity,y1=-Infinity;   // grid around the ball, cell size = contact range
+  for(let i=0;i<N;i++){if(x[i]<GX0)GX0=x[i];if(x[i]>x1)x1=x[i];if(y[i]<GY0)GY0=y[i];if(y[i]>y1)y1=y[i]}
+  const nx=Math.floor((x1-GX0)/h)+1,ny=Math.floor((y1-GY0)/h)+1;
+  if(!b.headArr||b.headArr.length<nx*ny)b.headArr=new Int32Array(nx*ny*2);
+  const head=b.headArr;head.fill(-1,0,nx*ny);
+  for(let i=0;i<N;i++){
+    const cx=Math.min(nx-1,Math.max(0,Math.floor((x[i]-GX0)/h))),cy=Math.min(ny-1,Math.max(0,Math.floor((y[i]-GY0)/h)));
+    const c=cx*ny+cy;b.cell[i]=c;b.next[i]=head[c];head[c]=i;
+  }
+  let Erep=0;
+  for(let i=0;i<N;i++){
+    const c=b.cell[i],cx=(c/ny)|0,cy=c-cx*ny;
+    for(let ox=-1;ox<=1;ox++){const X=cx+ox;if(X<0||X>=nx)continue;
+      for(let oy=-1;oy<=1;oy++){const Y=cy+oy;if(Y<0||Y>=ny)continue;
+        for(let j=head[X*ny+Y];j!==-1;j=b.next[j]){
+          if(j<=i||(fib[i]===fib[j]&&j-i<3))continue;
+          const dx=x[j]-x[i],dy=y[j]-y[i],r2=dx*dx+dy*dy;
+          if(r2>=h*h)continue;
+          const r=Math.sqrt(r2)||1e-12,ex=dx/r,ey=dy/r,vr=(u[j]-u[i])*ex+(v[j]-v[i])*ey;
+          const fe=-q.krep*(h-r),f=Math.min(0,fe+q.crep*vr);
+          Erep+=0.5*q.krep*(h-r)*(h-r);
+          b.Pd+=(f-fe)*vr;                  // power lost to contact friction (f-fe is the friction part)
+          fx[i]+=f*ex;fy[i]+=f*ey;fx[j]-=f*ex;fy[j]-=f*ey;
+        }}}
+  }
+  b.Erep=Erep;
+}
+function sub(b,dt){
+  const H=P.head,{x,y,u,v,fx,fy}=b,N=b.N,m=b.m;
+  for(let i=0;i<N;i++){fx[i]=0;fy[i]=-m*P.g}                      // Newton: weight on every particle
+  b.Pd=0;b.Pdh=0;b.Ebend=0;b.Erep=0;
+  bondForces(b);
+  if(b.kind==='cot'){bendForces(b);contactForces(b)}
+  let Fc=0,Ec=0;
+  for(let i=0;i<N;i++){                                              // particle on plate: stiff spring, damped, never pulls
+    const pen=b.yp-(y[i]-b.rad);
+    if(pen>0){const fe=b.kc*pen,f=Math.max(0,fe-b.cc*(v[i]-b.vp));fy[i]+=f;Fc+=f;Ec+=0.5*b.kc*pen*pen;b.Pdh+=(fe-f)*(b.vp-v[i])*-1}
+  }
+  b.Pdh+=H.ch*b.vp*b.vp;                                             // head damper (soft tissue)
+  for(let i=0;i<N;i++){u[i]+=fx[i]/m*dt;v[i]+=fy[i]/m*dt;x[i]+=u[i]*dt;y[i]+=v[i]*dt} // semi-implicit Euler
+  const ap=(-Fc-H.kh*b.yp-H.ch*b.vp)/H.mp;b.vp+=ap*dt;b.yp+=b.vp*dt;  // plate: m_p a = -F_contact - k_h y - c_h v
+  b.heatBall+=b.Pd*dt;b.heatHead+=b.Pdh*dt;b.heat=b.heatBall+b.heatHead;
+  b.t+=dt;
+  let KE=0,PE=0;for(let i=0;i<N;i++){KE+=0.5*m*(u[i]*u[i]+v[i]*v[i]);PE+=m*P.g*(y[i]-b.y00)}
+  b.E={KE,PE,heatBall:b.heatBall,heatHead:b.heatHead,elastic:b.Ebond+b.Ebend+b.Erep+Ec,head:0.5*H.kh*b.yp*b.yp+0.5*H.mp*b.vp*b.vp,heat:b.heat};
+  if(b.tImpact===null&&Fc>0)b.tImpact=b.t;
+}
+function step(b){                                                    // one frame step of length P.dt (iron: in 'sub' smaller steps, its bonds are stiff)
+  const n=b.kind==='iron'?P.iron.sub:P.cot.sub;
+  for(let s=0;s<n;s++)sub(b,P.dt/n);
+  const Fs=-P.head.kh*b.yp;                                          // the scale reads its spring: F = k_h * compression
+  if(Fs>b.Fmax)b.Fmax=Fs;
+  return Fs;
+}
+/*PHYSICS-END*/
+
+const T={"title_tag": "Iron, Cotton and the Head", "eyebrow": "Newton · Morse · Hooke · an interactive study", "title": "Why an iron ball hurts and a cotton ball does not", "lede": "Two balls of the same mass fall from the same height onto a head, drawn as a plate on a spring and a damper. The iron ball is a lattice of atoms joined by stiff bonds. The cotton ball is a tangle of thin fibres that bend, cling where they cross and rub on each other. The model runs once when the page opens and every curve and number on this page comes from it; the text below derives what the model does and compares it with real iron, real cotton and a real skull.", "replay": "Drop again", "drop": "Drop", "dropping": "Falling…", "startline": "start: 10 m above the head", "open1": "Both balls are held 10 m above the head.", "open2": "Press “Drop” below to let them fall.", "open2wait": "Computing the drop: {p} %. You can press “Drop” already.", "computing": "computing", "speed1": "Real time", "speed4": "Slow ×4", "speed20": "Slow ×20", "clock": "Simulated time", "iron": "Iron", "cotton": "Cotton", "head": "head: plate, spring, damper", "gain": "plate travel drawn 10× larger", "scale": "scale", "lcd_peak": "PEAK", "lcd_now": "NOW", "lcd_w": "WEIGHT", "plot_title": "What the scale reads", "plot_note": "Left: the moment of impact, stretched out. Right: the whole run. The dashed green line is the weight of either ball, Mg = 9.81 N. The iron curve is a tall, narrow spike; the cotton curve is a low, wide hump. After the shaking stops, both settle on the same line.", "plot_zoom": "Around the impact (0.4 s)", "plot_all": "Whole run, 0 to 9 s", "ax_t": "time (s)", "ax_f": "force (N)", "weightline": "weight Mg", "energy_title": "Where the energy goes", "energy_note": "The upper bar of each pair is the energy the fall has handed over so far: the height energy the ball has lost. The lower bar shows where that energy is now. If energy is conserved, the two bars are equally long; the line under them gives the difference in joules, which is the integrator’s own error.", "en_in": "given by the fall", "en_out": "where it is now", "en_books": "books", "en_diff": "difference", "en_ke": "motion", "en_el": "stored in the ball", "en_head": "stored in the head spring", "en_heatball": "heat in the ball", "en_heathead": "heat in the head", "r_contact": "first touch at", "r_pred": "Newton predicts √(2h/g) =", "r_peak": "impact force (peak)", "r_kg": "what a kitchen scale would show for that instant (F/g)", "r_weight": "weight after it settles", "r_mass": "mass", "headnote": "Each scale is the head itself: plate, spring and damper. Plate travel drawn 10× larger.", "r_settling": "still shaking…", "r_heatball": "heat made inside the ball", "r_heathead": "heat made in the head", "sections": "\n<div class=\"card\">\n<h2><span class=\"num\">1</span>The answer in one sentence</h2>\n<p>A falling ball hurts because of how <em>short</em> a distance it takes to stop it. Both balls bring about the same energy (in the model, exactly the same). The iron ball does not give way, so the head has to stop it within the few millimetres a skull can yield, and a short stop needs a large force. The cotton ball gives way itself: it is stopped over a large part of its own size, and most of its energy turns into heat inside the cotton, not in the head.</p>\n<div class=\"box pic\"><div class=\"tag\">Picture</div><p>Catch a raw egg with stiff hands and it breaks; let your hands travel back with it over 30 cm and it survives. The egg brings the same energy both times. Only the stopping distance changed.</p></div>\n</div>\n\n<div class=\"card\">\n<h2><span class=\"num\">2</span>The fall: Newton's second law</h2>\n<div class=\"box pic\"><div class=\"tag\">Picture</div><p>Drop a key and a ball of wool from a chair at the same moment: they land together. Gravity pulls every gram equally, and every gram has the same inertia to overcome, so in a vacuum everything falls alike.</p></div>\n<p>Each ball is a set of particles with masses <span class=\"m\">m<sub>i</sub></span>. Newton's second law holds for every one of them: mass times acceleration equals the sum of the forces on it. While the ball falls, nothing touches it and its bonds are relaxed, so only the weight acts:</p>\n<div class=\"eq\">m<sub>i</sub> ÿ<sub>i</sub> = − m<sub>i</sub> g &nbsp;&nbsp;⇒&nbsp;&nbsp; ÿ = − g</div>\n<p>The mass cancels. Start at rest at height <span class=\"m\">h</span> (measured from the plate to the lowest point of the ball) and integrate once, then once more:</p>\n<div class=\"eq\">v(t) = − g t, &nbsp;&nbsp; y(t) = h − ½ g t²</div>\n<p>The ball reaches the plate when <span class=\"m\">y = 0</span>:</p>\n<div class=\"eq key\">t* = √(2h/g), &nbsp;&nbsp; v* = g t* = √(2gh)</div>\n<div class=\"box chk\"><div class=\"tag\">Check</div><p>Units: √(m / (m/s²)) = s. Energy gives the same speed without mentioning time: the height energy <span class=\"m\">Mgh</span> becomes motion energy <span class=\"m\">½Mv*²</span>, so <span class=\"m\">v* = √(2gh)</span>.</p></div>\n<div class=\"box toy\"><div class=\"tag\">In our model</div><p>With <span class=\"m\">h = 10 m</span>: <span class=\"m\">t* = 1.428 s</span> and <span class=\"m\">v* = 14.0 m/s</span>. The model integrates the particles step by step and records the first touch; the readout above lets you compare it with the formula. The model leaves out air, so both balls arrive with the same speed and the comparison isolates the material.</p></div>\n<h3>With air, for real balls</h3>\n<p>A real ball also feels air drag, <span class=\"m\">½ ρ<sub>air</sub> C<sub>d</sub> A v²</span>, where <span class=\"m\">A</span> is its cross-section and <span class=\"m\">C<sub>d</sub> ≈ 0.47</span> for a sphere. Take <span class=\"m\">y</span> as the distance fallen, write the acceleration as <span class=\"m\">dv/dt = v dv/dy = ½ d(v²)/dy</span>, and define the terminal speed <span class=\"m\">v<sub>t</sub> = √(2mg / (ρ<sub>air</sub> C<sub>d</sub> A))</span>, at which drag equals weight:</p>\n<div class=\"eq\">½ d(v²)/dy = g (1 − v²/v<sub>t</sub>²) &nbsp;&nbsp;⇒&nbsp;&nbsp; v² = v<sub>t</sub>² (1 − e<sup>−2gy/v<sub>t</sub>²</sup>)</div>\n<div class=\"box chk\"><div class=\"tag\">Check</div><p>For a short fall, <span class=\"m\">e<sup>−x</sup> ≈ 1 − x</span> gives back <span class=\"m\">v² = 2gy</span>, the vacuum result.</p></div>\n<p>For a 0.5 kg ball dropped 10 m: solid iron (4.96 cm across) has <span class=\"m\">v<sub>t</sub> = 95 m/s</span> and arrives at 13.9 m/s, almost the vacuum value of 14.0 m/s. A ball of loose cotton wool of the same mass (density about 30 kg/m³, so 31.7 cm across) has <span class=\"m\">v<sub>t</sub> = 14.8 m/s</span> and arrives at 11.4 m/s. Air slows the cotton a little; it is not the main reason it is harmless.</p>\n</div>\n\n<div class=\"card\">\n<h2><span class=\"num\">3</span>The bonds: what holds a solid together</h2>\n<div class=\"box pic\"><div class=\"tag\">Picture</div><p>Think of a marble in a valley. One side of the valley is a steep wall, the other a long gentle slope that flattens into a plain. Nudge the marble and it rocks back and forth at the bottom. Push it towards the wall and it is thrown back hard. Push it up the gentle side hard enough and it rolls over the rim and away: the bond is broken. The marble is one atom, the bottom of the valley is its resting distance from its neighbour, and the shape of the valley is the bond.</p></div>\n<p>Two atoms at distance <span class=\"m\">r</span> have an energy <span class=\"m\">U(r)</span>. The force on each, along the line joining them, is <span class=\"m\">F = −dU/dr</span>. At the bottom of the valley, <span class=\"m\">r = r<sub>0</sub></span>, the force is zero and the atoms rest. Expand around that point. The first derivative vanishes at a minimum, so</p>\n<div class=\"eq\">U(r) ≈ U(r<sub>0</sub>) + ½ U″(r<sub>0</sub>) (r − r<sub>0</sub>)² &nbsp;&nbsp;⇒&nbsp;&nbsp; F ≈ − k (r − r<sub>0</sub>), &nbsp; k = U″(r<sub>0</sub>)</div>\n<p>Near rest, every bond is a Hooke spring. This is why springs appear everywhere in mechanics: any smooth valley looks like a parabola at its bottom.</p>\n<h3>The Morse bond</h3>\n<p>Philip Morse proposed in 1929 a valley with exactly the shape of the picture:</p>\n<div class=\"eq key\">U(r) = D [1 − e<sup>−α(r − r<sub>0</sub>)</sup>]²</div>\n<p><span class=\"m\">D</span> is the depth of the valley, the energy needed to pull the two atoms apart for good, and <span class=\"m\">1/α</span> is its width. Expanding <span class=\"m\">1 − e<sup>−αx</sup> ≈ αx</span> gives the spring constant <span class=\"m\">k = 2Dα²</span>. The pull of the bond, <span class=\"m\">dU/dr = 2Dα e<sup>−αx</sup>(1 − e<sup>−αx</sup>)</span>, is largest where <span class=\"m\">e<sup>−αx</sup> = ½</span>, at a stretch <span class=\"m\">x = ln 2 / α</span>, and there it equals <span class=\"m\">Dα/2</span>. Stretch further and the bond pulls back <em>less</em>: it is letting go.</p>\n<p>Girifalco and Weizer fitted Morse valleys to cubic metals in 1959, using each metal's cohesive energy, lattice spacing and compressibility. For iron they give <span class=\"m\">D = 0.4174 eV</span>, <span class=\"m\">α = 1.3885 Å⁻¹</span>, <span class=\"m\">r<sub>0</sub> = 2.845 Å</span> (an electronvolt is 1.602×10⁻¹⁹ J, an ångström is 10⁻¹⁰ m). Then</p>\n<div class=\"eq\">k = 2Dα² = 1.61 eV/Å² = 25.8 N/m</div>\n<p>One bond is a soft spring: a weight of 2.6 g would stretch it by a millimetre. A solid is strong because it has an enormous number of them. Stack such springs in a simple cubic pattern: every square metre of cross-section holds <span class=\"m\">1/r<sub>0</sub>²</span> parallel bonds, and each layer is <span class=\"m\">r<sub>0</sub></span> thick, so the stress per unit strain is</p>\n<div class=\"eq\">E ≈ k / r<sub>0</sub> = 25.8 N/m ÷ 2.845×10⁻¹⁰ m ≈ 9×10¹⁰ Pa = 90 GPa</div>\n<p>Measured iron has a Young's modulus of about 210 GPa. A crude stack of pair springs gets the order of magnitude right; the real lattice geometry and the many-body nature of metallic bonding make up the rest.</p>\n<div class=\"box note\"><div class=\"tag\">Honest note: metals are not really pair-bonded</div><p>In a metal the outer electrons are shared by all atoms, so how strongly an atom binds a neighbour depends on how many other neighbours it already has. A pair potential cannot express that, and it shows: in an unstressed cubic crystal held together by central pair forces, two of the elastic constants must be equal (the Cauchy relation <span class=\"m\">C<sub>12</sub> = C<sub>44</sub></span>), and real metals break that rule. The embedded-atom method of Daw and Baskes (1984) fixes it. Each atom sits in the electron density <span class=\"m\">ρ̄<sub>i</sub> = Σ<sub>j</sub> f(r<sub>ij</sub>)</span> made by its neighbours and pays an embedding energy <span class=\"m\">F(ρ̄<sub>i</sub>)</span> for it: <span class=\"m\">E = Σ<sub>i</sub> F(ρ̄<sub>i</sub>) + ½ Σ<sub>i≠j</sub> φ(r<sub>ij</sub>)</span>. For the small elastic squeeze of our question, every one of these models reduces to springs near rest, so the Morse bond is enough here.</p></div>\n<div class=\"box toy\"><div class=\"tag\">In our model: iron</div><p>91 atoms on a triangular lattice, each bonded to its nearest neighbours by a Morse valley with <span class=\"m\">αr<sub>0</sub> = 3.95</span>, the same shape as iron's (1.3885 × 2.845). The stiffness is set so that the ball is much stiffer than the head, as a real iron ball is: its stiffness is of order <span class=\"m\">E·r ≈ 210 GPa × 2.5 cm ≈ 5×10⁹ N/m</span>, about a thousand times a skull's.</p></div>\n\n<h3>Cotton: stiff fibres, soft tangle</h3>\n<div class=\"box pic\"><div class=\"tag\">Picture</div><p>Push a dry spaghetti strand along its length and it resists. Push its middle sideways and it bends at once. Cotton is a loose tangle of such strands, and any push on the tangle ends up bending strands.</p></div>\n<p>A cotton fibre is cellulose: glucose rings joined by strong covalent bonds into long chains, the chains packed side by side and held together by hydrogen bonds into fibrils, and the fibrils wound into a twisted, partly hollow fibre roughly 15 µm wide. As a material it is stiff, with a Young's modulus of several gigapascals. The softness of a cotton ball does not come from weak molecules. It comes from geometry.</p>\n<p>Treat a fibre segment of length <span class=\"m\">L</span> and diameter <span class=\"m\">d</span> as a beam. Stretching it, its stiffness is <span class=\"m\">k<sub>stretch</sub> = EA/L</span> with <span class=\"m\">A = πd²/4</span>. Bending it like a diving board clamped at one end, the tip stiffness is <span class=\"m\">k<sub>bend</sub> = 3EI/L³</span> with <span class=\"m\">I = πd⁴/64</span>, the second moment of area, which measures how much material sits far from the bending line. Their ratio is</p>\n<div class=\"eq key\">k<sub>bend</sub> / k<sub>stretch</sub> = (3/16) (d/L)²</div>\n<p>For <span class=\"m\">d = 15 µm</span> and <span class=\"m\">L = 1 mm</span> between contacts this is <span class=\"m\">4×10⁻⁵</span>: bending is about 24 000 times softer than stretching. Thin things bend.</p>\n<h3>Why a tangle stiffens as you squeeze it</h3>\n<p>Let <span class=\"m\">φ</span> be the volume fraction, the share of the ball's volume taken by fibre. For loose cotton wool <span class=\"m\">φ ≈ 30/1520 ≈ 0.02</span>: the ball is 98 % air. The scaling argument below drops all numerical factors.</p>\n<p>First, how far apart are the contacts along a fibre? A piece of fibre of length <span class=\"m\">b</span> brushes past a slab of area about <span class=\"m\">b·d</span>. Other fibres fill a fraction <span class=\"m\">φ</span> of space, so roughly <span class=\"m\">φ b d / d² = φ b/d</span> of them cross that slab. One contact per piece means <span class=\"m\">b ≈ d/φ</span>: the denser the tangle, the closer the contacts. Compress the ball by a small strain <span class=\"m\">ε</span>. Each free segment of length <span class=\"m\">b</span> bends by <span class=\"m\">δ ≈ εb</span> and pushes back with</p>\n<div class=\"eq\">f ≈ (E d⁴ / b³) · ε b = E d⁴ ε / b²</div>\n<p>The fibre length per unit volume is <span class=\"m\">4φ/(πd²)</span>, so a layer one segment thick contains about <span class=\"m\">φ/d²</span> load-carrying segments per unit area. The stress is force per segment times segments per area:</p>\n<div class=\"eq\">σ ≈ (E d⁴ ε / b²) · (φ / d²) = E φ d² ε / b² = E φ³ ε</div>\n<p>So the tangle's stiffness is about <span class=\"m\">E φ³</span>. Because <span class=\"m\">φ</span> rises as you squeeze, so does the stiffness. Integrating with <span class=\"m\">dε = dφ/φ</span> gives van Wyk's law for fibre masses, first measured on wool in 1946:</p>\n<div class=\"eq key\">σ = K E (φ³ − φ<sub>0</sub>³)</div>\n<div class=\"box chk\"><div class=\"tag\">Check</div><p>With <span class=\"m\">φ = 0.02</span>, <span class=\"m\">φ³ = 8×10⁻⁶</span>: the tangle is at least a hundred thousand times softer than the fibre it is made of. And the law says a squashed ball is harder to squash further, which your fingers confirm on any cotton ball.</p></div>\n<div class=\"box toy\"><div class=\"tag\">In our model: cotton</div><p>18 fibres of 34 beads each, curled at random inside a circle. Four ingredients act on them. Stretch springs along each fibre. Bending springs on the angle between successive segments, whose rest angles are the fibre's natural curl. Junctions where fibres cross, made of shallow Morse valleys that can break, standing in for friction and entanglement. Finally, when beads of different fibres touch they push apart and rub, with friction. New contacts forming under the squeeze give the van Wyk stiffening, and the rubbing turns motion into heat.</p></div>\n</div>\n\n<div class=\"card\">\n<h2><span class=\"num\">4</span>The hit: why stiff hurts</h2>\n<p>When something stops the ball over a distance <span class=\"m\">d</span>, the stopping force does work against its motion. The work–energy theorem says this work equals the motion energy removed:</p>\n<div class=\"eq key\">F̄ · d = ½ m v²</div>\n<p>where <span class=\"m\">F̄</span> is the force averaged over the distance. Same energy, ten times shorter stop, ten times larger force.</p>\n<h3>Iron: the head does all the yielding</h3>\n<p>Assume the ball is rigid (section 3 showed that a real iron ball is about a thousand times stiffer than a skull), the head is a linear spring of stiffness <span class=\"m\">k<sub>h</sub></span>, and nothing is lost on the way in. A linear spring is a simplification: measured skulls stiffen as they are pressed further. The motion energy goes into the spring: <span class=\"m\">½mv² = ½k<sub>h</sub>x<sub>max</sub>²</span>. Hence</p>\n<div class=\"eq key\">x<sub>max</sub> = v √(m/k<sub>h</sub>), &nbsp;&nbsp; F<sub>max</sub> = k<sub>h</sub> x<sub>max</sub> = v √(m k<sub>h</sub>), &nbsp;&nbsp; τ = π √(m/k<sub>h</sub>)</div>\n<p>The contact lasts <span class=\"m\">τ</span>, half an oscillation of the mass on the spring.</p>\n<div class=\"box chk\"><div class=\"tag\">Check</div><p>Units: <span class=\"m\">(m/s)·√(kg·N/m) = (m/s)·(kg/s) = N</span>. Limit: a softer head (<span class=\"m\">k<sub>h</sub> → 0</span>) gives a gentler, longer push, as a pillow does.</p></div>\n<p>A real head is not bolted down. During a millisecond the neck hardly acts, so the ball compresses the spring between itself and a free head of mass <span class=\"m\">M<sub>h</sub></span>, and <span class=\"m\">m</span> above is replaced by the reduced mass <span class=\"m\">μ = mM<sub>h</sub>/(m + M<sub>h</sub>)</span>. In words: the head recoils a little, so the spring between them is squeezed a little less.</p>\n<div class=\"box toy\"><div class=\"tag\">Real numbers</div><p>For the 0.5 kg iron ball at 13.9 m/s, and a mean dynamic skull stiffness of about 4.0 MN/m (measured by Yoganandan and co-workers on cadaver heads): <span class=\"m\">F<sub>max</sub> = 19.8 kN</span> over <span class=\"m\">τ = 1.1 ms</span>, with the skull yielding <span class=\"m\">x<sub>max</sub> = 4.9 mm</span>. With a free head of about 4.5 kg (an assumed typical value), <span class=\"m\">μ = 0.45 kg</span> and the peak drops to about 18.7 kN. The same study measured a mean dynamic failure load of 11.9 kN. The head's acceleration, <span class=\"m\">F/M<sub>h</sub></span>, is about 4200 m/s², over 400 times gravity.</p></div>\n<h3>Cotton: the ball does the yielding</h3>\n<p>The cotton ball is far softer than the head, so the head barely moves and the ball crushes instead, over a good part of its 32 cm. Take a stopping distance of about 20 cm (my estimate, not a measurement): <span class=\"m\">F̄ ≈ 32.5 J / 0.2 m ≈ 160 N</span>, an acceleration of the head of under 4 times gravity. That average is about 120 times below the iron's peak. The cotton's own peak lies above its average, because the tangle stiffens as it is squashed. By how much I could not pin down: a one-dimensional estimate of my own kept falling as I refined it, from 4.7 kN to 0.83 kN, and had not settled.</p>\n<h3>The decisive test: a solid cellulose ball</h3>\n<p>A solid ball of cellulose, the very molecule cotton is made of, is about a thousand times stiffer than a skull, just as iron is. In my one-dimensional model it hit with 19.5 kN, against 19.8 kN for iron. So the chemistry of the bonds does not decide the outcome. Their arrangement does.</p>\n<div class=\"box note\"><div class=\"tag\">A second picture: how fast the news travels</div><p>When the front of a ball stops, the back learns of it through a compression wave. In iron that wave runs at <span class=\"m\">√(E/ρ) ≈ 5.2 km/s</span> and crosses the 5 cm ball in about 10 µs, a hundred times faster than the contact lasts, so the whole ball stops as one body, like a hailstone. In loose cotton the wave runs at metres to tens of metres per second (I could not pin the number down), similar to the impact speed. The back of the ball keeps arriving after the front has stopped, so the cotton hits like a short shower of light pieces rather than like one stone.</p></div>\n<div class=\"box toy\"><div class=\"tag\">In our model</div><p>Here <span class=\"m\">v = 14.0 m/s</span>, <span class=\"m\">m = 1 kg</span> and <span class=\"m\">k<sub>h</sub> = 6000 N/m</span>, so the rigid-ball formula gives 1085 N. The model reads about 639 N, lower, because the head's damper and the soft contact between atoms and plate both cushion the peak. The cotton peaks near 188 N. The ratio in the model is about 3.4, far below the real one, because I had to keep the toy cotton much stiffer than real cotton for it to stay a visible ball.</p></div>\n</div>\n\n<div class=\"card\">\n<h2><span class=\"num\">5</span>The scale: how force sensors work</h2>\n<div class=\"box pic\"><div class=\"tag\">Picture</div><p>Stand at the end of a diving board and it bends; the heavier you are, the more it bends. Every scale is a diving board with a ruler. It measures how much something bends and turns that into a force.</p></div>\n<p>The scale in the animation is the head itself: a plate on a spring. It reads Hooke's law backwards, <span class=\"m\">F = k<sub>h</sub> × compression</span>. The black needle shows the force at this instant. The thin red pointer is a peak hold: the needle pushes it up and it stays at the largest force so far, which is the impact force. When the shaking has died away, the needle comes to rest where the spring holds the ball still, <span class=\"m\">k<sub>h</sub>x = Mg</span>, and the display switches to the weight. The cotton keeps swaying gently for a few seconds, so the scale does what a digital scale does with a noisy signal: it averages its reading, here from 4 s onward, and shows the result from 6.5 s. Both balls then read 9.81 N, which is 1.000 kg, because both are exactly 1 kg. Same weight, very different blows.</p>\n<p>A kitchen scale shows kilograms by dividing the force by <span class=\"m\">g</span>. So for the instant of impact the iron ball would read about 65 kg, the cotton ball about 19 kg, and both settle at 1 kg.</p>\n<h3>Inside a real kitchen or bathroom scale</h3>\n<p>Under the platform sits a load cell: a small aluminium block shaped so that it bends very slightly under load. Glued to it is a strain gauge, a thin metal foil laid out in a zigzag. When the block bends, the foil is stretched, becoming longer and thinner, and its electrical resistance <span class=\"m\">R = ρ<sub>e</sub>L/A</span> rises (here <span class=\"m\">ρ<sub>e</sub></span> is the metal's resistivity). For common foil alloys the relative change is about twice the strain, <span class=\"m\">ΔR/R ≈ 2ε</span>: a few tenths of a percent at most. To see such a small change, four resistors are wired in a diamond, a Wheatstone bridge, balanced so that it gives zero voltage with no load; any stretch unbalances it and a voltage appears. An amplifier measures it and the display divides by <span class=\"m\">g</span>.</p>\n<h3>Why a bathroom scale cannot read a blow</h3>\n<p>A scale is itself a mass on a spring. It can follow only forces that change slower than its own natural frequency <span class=\"m\">f<sub>0</sub> = (1/2π)√(k/m)</span>, the rate at which it rings when tapped; and its electronics average over a fraction of a second to show a steady number. A blow lasting a millisecond is over before the scale can respond.</p>\n<p>For impacts, engineers use piezoelectric force sensors. Squeeze a quartz crystal and its positive and negative ions shift slightly relative to each other inside the lattice, so its faces become electrically charged, about 2.3 pC per newton for quartz (a picocoulomb is 10⁻¹² C). The crystal is so stiff that it barely moves, so its natural frequency is tens of kilohertz and it can follow a millisecond blow. The charge comes from atoms displaced in their bond valleys, the same valleys as in section 3.</p>\n</div>\n\n<div class=\"card\">\n<h2><span class=\"num\">6</span>Where the energy goes</h2>\n<p>Energy is conserved, so the books must balance at every instant:</p>\n<div class=\"eq key\">height energy released = motion + stored in the ball + stored in the head spring + heat</div>\n<p>Heat is produced wherever something rubs or flows: in the dampers that stand for internal friction in the bonds, in fibres rubbing on fibres, in the head's damper (soft tissue) and in the contact between ball and plate. The model adds up each of these from its own law, so the two bars in the energy chart are computed independently and can disagree. They differ by a fraction of a joule, the numerical error of the time-stepping.</p>\n<div class=\"box toy\"><div class=\"tag\">In our model</div><p>The iron ball turns about 98 J into heat, almost all of it in the head. The cotton ball turns about 104 J into heat, almost all of it inside the cotton. It releases more than the 98.1 J of the drop because it ends up squashed lower than it started, so its centre of mass (the average position of its mass) falls further; it also starts with about 1.2 J stored in fibres that were pressed together when the tangle was made. That is the cotton's protection, in energy terms: it burns the blow inside itself.</p></div>\n</div>\n\n<div class=\"card\">\n<h2><span class=\"num\">7</span>What the model leaves out</h2>\n<p>It is two-dimensional, a slice through a three-dimensional ball. Air is left out, so both balls arrive at the same speed. The head is a flat plate on a spring and a damper, not a curved skull around a brain. The toy iron is stiffer than the head by a much smaller factor than real iron, and the toy cotton is much stiffer than real cotton, so the model shows the mechanism with a peak ratio of about 3.4, where the real ratio of iron's peak to cotton's average force is about 120. The fibres' contacts in the slice stand in for contacts in three dimensions. The real-world numbers in sections 2 and 4 come from separate hand calculations, whose inputs are listed in the table.</p>\n</div>\n", "h_par": "Every parameter", "par_intro": "The model uses SI units, but its balls are drawn and tuned for clarity, not to match real iron and real cotton. Every force law is listed here, then the inputs of the real-world estimates.", "th": ["Symbol", "Value", "Meaning"], "rows": [["Model: shared"], ["g, h", "9.81 m/s², 10 m", "gravity; drop height from the plate to the lowest point of the ball"], ["M", "1 kg", "mass of each ball, shared equally among its particles"], ["Δt, t<sub>end</sub>", "2×10⁻⁴ s, 9 s", "time step (iron takes 5 sub-steps and cotton 2, for stability); length of the run; positions are stored every 1 ms up to 2.5 s and every 2 ms after that, for playback"], ["Integrator", "semi-implicit Euler", "new velocity from the forces, then new position from the new velocity"], ["Model: iron"], ["N, a", "91, 0.10 m", "atoms on a triangular lattice; spacing"], ["k, αr<sub>0</sub>", "10⁵ N/m, 3.95", "Morse bond stiffness at rest (k = 2Dα²) and shape (iron’s, from Girifalco and Weizer)"], ["c", "2 N·s/m", "bond damper, standing for internal friction"], ["Model: cotton"], ["fibres × beads, s", "18 × 34, 0.08 m", "fibres, beads per fibre, bead spacing (612 beads)"], ["k<sub>ax</sub>, c", "300 N/m, 0.3 N·s/m", "stretch spring along a fibre, and its damper"], ["κ, c<sub>b</sub>", "0.25 N·m/rad, 0.004 N·m·s/rad", "bending spring on the angle between segments (rest angle = natural curl), and bending friction"], ["k<sub>j</sub>, F<sub>j</sub>", "40 N/m, 4 N", "junction where fibres cross: Morse valley with this stiffness and largest pull; breaks at three times the stretch of largest pull"], ["d<sub>c</sub>, k<sub>c</sub>, c<sub>c</sub>", "0.06 m, 20 N/m, 0.4 N·s/m", "fibre–fibre contact: range, push-back stiffness, rubbing friction"], ["Model: head and scale"], ["m<sub>p</sub>, k<sub>h</sub>, c<sub>h</sub>", "0.2 kg, 6000 N/m, 62 N·s/m", "plate mass, head spring, head damper"], ["ω<sub>c</sub>, ζ<sub>c</sub>", "1350 rad/s, 0.5", "skin contact between a particle and the plate: each particle rebounds at this angular frequency, with this damping ratio (ζ = 1 is the border between bouncing back and creeping back)"], ["Reading", "F = k<sub>h</sub> × compression", "what the scale shows; the weight is the average of the reading from 4 s onward, shown from 6.5 s; mass = weight / g"], ["Real-world estimates"], ["m, h", "0.5 kg, 10 m", "ball mass, drop height"], ["ρ", "7870, 1520, 30 kg/m³", "iron, cellulose, loose cotton wool (the cotton value is my assumption)"], ["ρ<sub>air</sub>, C<sub>d</sub>", "1.2 kg/m³, 0.47", "air density, drag coefficient of a sphere"], ["k<sub>h</sub>", "4.0 MN/m", "mean dynamic skull stiffness, Yoganandan et al."], ["M<sub>h</sub>", "4.5 kg", "mass of a head, assumed typical value"], ["E", "210 GPa, ~10 GPa", "Young’s modulus of iron; of cellulose (rounded, assumed)"], ["D, α, r<sub>0</sub>", "0.4174 eV, 1.3885 Å⁻¹, 2.845 Å", "Morse parameters of iron, Girifalco and Weizer (1959)"]], "h_src": "Sources", "sources": ["L. A. Girifalco, V. G. Weizer, “Application of the Morse potential function to cubic metals”, Phys. Rev. 114, 687 (1959). <a href=\"https://doi.org/10.1103/PhysRev.114.687\">doi:10.1103/PhysRev.114.687</a>; model listing: <a href=\"https://www.ctcms.nist.gov/potentials/entry/1959--Girifalco-L-A-Weizer-V-G--Fe\">NIST Interatomic Potentials Repository</a>. The iron values are quoted from my knowledge of the paper’s table; I could not open the table online.", "M. S. Daw, M. I. Baskes, “Embedded-atom method”, Phys. Rev. B 29, 6443 (1984). <a href=\"https://link.aps.org/doi/10.1103/PhysRevB.29.6443\">link</a>", "N. Yoganandan et al., biomechanics of the human head under quasistatic and dynamic loading (cadaver tests; mean dynamic failure load 11.9 kN, stiffness 4023 N/mm). <a href=\"https://wbldb.lievers.net/10149876.html\">abstract</a>", "C. M. van Wyk, “A study of the compressibility of wool”, Onderstepoort J. Vet. Sci. 21, 99 (1946). <a href=\"https://repository.up.ac.za/handle/2263/59727\">repository</a>", "Discrete fibre-network models of paper, Chalmers University of Technology. <a href=\"https://research.chalmers.se/en/publication/532887\">link</a>"]};
+const RTL=false;
+const FONT={"title": "600 15px 'IBM Plex Sans',sans-serif", "titleSmall": "600 15px 'IBM Plex Sans',sans-serif", "small": "12px 'IBM Plex Sans',sans-serif", "mono9": "10px 'IBM Plex Mono',monospace", "mono10": "10.5px 'IBM Plex Mono',monospace", "mono11": "11px 'IBM Plex Mono',monospace", "gaugeNum": "500 11px 'IBM Plex Sans',sans-serif", "gaugeUnit": "500 10px 'IBM Plex Sans',sans-serif", "panelLab": "600 9.5px 'IBM Plex Sans',sans-serif", "panelNum": "500 13px 'IBM Plex Mono',monospace", "ruler": "11px 'IBM Plex Sans',sans-serif", "colHead": "600 13px 'IBM Plex Sans',sans-serif", "colSub": "11px 'IBM Plex Mono',monospace"};
+
+// ---------------- page text ----------------
+document.querySelectorAll("[data-t]").forEach(e=>e.innerHTML=T[e.dataset.t]);
+document.getElementById("sections").innerHTML=T.sections;
+(function(){
+  let h=`<tr><th>${T.th[0]}</th><th>${T.th[1]}</th><th>${T.th[2]}</th></tr>`;
+  for(const r of T.rows){
+    if(r.length===1)h+=`<tr class="sec"><td colspan="3">${r[0]}</td></tr>`;
+    else h+=`<tr><td>${r[0]}</td><td class="v">${r[1]}</td><td>${r[2]}</td></tr>`;
+  }
+  document.getElementById("ptab").innerHTML=h;
+  document.getElementById("src").innerHTML=T.sources.map(s=>`<li>${s}</li>`).join("");
+})();
+
+// ---------------- run the model once, store it, then play it back ----------------
+// The drop is computed in small slices after the page opens (the page stays usable) and stored:
+// every 1 ms up to 2.5 s (fall and impact), every 2 ms after that (settling).
+const T1=2.5,NF1=Math.round(T1/1e-3),NF=NF1+Math.round((P.tmax-T1)/2e-3)+1;
+const tOf=k=>k<=NF1?k*1e-3:T1+(k-NF1)*2e-3;
+const kOf=t=>t<=T1?Math.round(t/1e-3):Math.min(NF-1,NF1+Math.round((t-T1)/2e-3));
+const S={};
+let iron,cot,computed=0,playing=false,tPlay=0,slow=4,last=null;
+function makeStore(b){return {N:b.N,xy:new Float32Array(NF*2*b.N),yp:new Float32Array(NF),F:new Float32Array(NF),Fmax:new Float32Array(NF),E:new Float32Array(NF*7),tImpact:null}}
+function record(b,st,k){
+  const o=k*2*b.N;for(let i=0;i<b.N;i++){st.xy[o+2*i]=b.x[i];st.xy[o+2*i+1]=b.y[i]}
+  st.yp[k]=b.yp;st.F[k]=b.Fs||0;st.Fmax[k]=b.Fmax;
+  const e=b.E;st.E.set([e.KE,e.PE,e.elastic,e.head,e.heatBall,e.heatHead,b.E0],k*7);
+  if(st.tImpact===null&&b.tImpact!==null)st.tImpact=b.tImpact;
+}
+function init(){
+  iron=makeIron();cot=makeCotton();S.iron=makeStore(iron);S.cot=makeStore(cot);
+  for(const b of [iron,cot]){b.Fs=step(b);const e=b.E;b.E0=e.KE+e.PE+e.elastic+e.head+e.heatBall+e.heatHead;record(b,S[b.kind==="iron"?"iron":"cot"],0)}
+  Object.assign(S.iron,{bi:iron.bi,bj:iron.bj,l0:iron.l0,nb:iron.nb,kind:"iron",rad:iron.rad});
+  Object.assign(S.cot,{bi:cot.bi,bj:cot.bj,l0:cot.l0,type:cot.type,nb:cot.nb,fibIdx:cot.fibIdx,kind:"cot",rad:cot.rad});
+  computed=1;setTimeout(work,0);
+}
+function work(){
+  const t0=performance.now();
+  while(computed<NF&&performance.now()-t0<14){
+    const target=tOf(computed);
+    while(iron.t<target-1e-9){iron.Fs=step(iron);cot.Fs=step(cot)}
+    record(iron,S.iron,computed);record(cot,S.cot,computed);computed++;
+  }
+  if(computed<NF)setTimeout(work,0);
+}
+const W0=4.0,WSHOW=6.5;            // the scale's weight: average of its reading from 4 s on, shown from 6.5 s
+function wAvg(st,k){
+  if(tOf(k)<WSHOW)return null;
+  let s=0,c=0;for(let j=kOf(W0);j<=k;j++){s+=st.F[j];c++}return s/c;
+}
+
+// ---------------- drawing ----------------
+const cv=document.getElementById("sim"),cx=cv.getContext("2d");
+let W=0,H=0,HS=0;
+const GAUGE_H=214,RULER=46,GAIN=10;     // gauge strip height; ruler width; plate travel drawn 10x larger
+function fitAll(){
+  const d=devicePixelRatio||1;
+  W=cv.getBoundingClientRect().width;HS=W<640?430:470;H=HS+GAUGE_H;
+  cv.style.height=H+"px";cv.width=W*d;cv.height=H*d;cx.setTransform(d,0,0,d,0,0);
+  for(const id of ["pZoom","pAll","en"]){const c=document.getElementById(id),r=c.getBoundingClientRect(),h=+c.getAttribute("height");c.style.height=h+"px";c.width=r.width*d;c.height=h*d;c.getContext("2d").setTransform(d,0,0,d,0,0)}
+}
+function txt(c,s,x,y,font,color,align,ltr){c.font=font;c.fillStyle=color;c.textAlign=align||"center";c.direction=(RTL&&!ltr)?"rtl":"ltr";c.fillText(s,x,y)}
+function spaced(c,s,x,y,font,color,sp){            // letter-spaced capitals for instrument labels (Latin only)
+  c.font=font;c.fillStyle=color;c.direction="ltr";c.textAlign="left";
+  if(RTL){c.textAlign="center";c.direction="rtl";c.fillText(s,x,y);return}
+  let w=0;for(const ch of s)w+=c.measureText(ch).width+sp;w-=sp;let xx=x-w/2;
+  for(const ch of s){c.fillText(ch,xx,y);xx+=c.measureText(ch).width+sp}
+}
+function gauge(c,x0,y0,R,F,Fmax,w){
+  // a precision force gauge: square-root scale so the 9.81 N weight and a 600 N blow both read clearly
+  const FS=700,a0=-225,span=270,ang=f=>(a0+span*Math.sqrt(Math.max(0,Math.min(f,FS))/FS))*Math.PI/180;
+  c.fillStyle="#2a1d16";c.beginPath();c.arc(x0,y0,R+5,0,7);c.fill();
+  c.fillStyle="#fbf8f2";c.beginPath();c.arc(x0,y0,R,0,7);c.fill();
+  c.strokeStyle="#cdbfa9";c.lineWidth=1;c.beginPath();c.arc(x0,y0,R-3,0,7);c.stroke();
+  for(let f=0;f<=FS;f+=(f<20?2:f<100?10:f<300?25:50)){
+    const a=ang(f),major=[0,10,50,100,200,400,700].includes(f),r1=R-4,r2=R-(major?13:8);
+    c.strokeStyle=major?"#23160f":"#8a7663";c.lineWidth=major?1.4:0.7;
+    c.beginPath();c.moveTo(x0+Math.cos(a)*r1,y0+Math.sin(a)*r1);c.lineTo(x0+Math.cos(a)*r2,y0+Math.sin(a)*r2);c.stroke();
+    if(major&&!(R<52&&(f===50||f===200)))txt(c,String(f),x0+Math.cos(a)*(R-24),y0+Math.sin(a)*(R-24)+4,FONT.gaugeNum,"#23160f","center",true);
+  }
+  const aw=ang(P.M*P.g);c.strokeStyle="#3c6a46";c.lineWidth=3;c.beginPath();c.arc(x0,y0,R-5,aw-0.05,aw+0.05);c.stroke();
+  txt(c,"N",x0,y0+R*0.42,FONT.gaugeUnit,"#6f5b4c","center",true);
+  const ap=ang(Fmax),an=ang(Math.max(0,F));
+  c.strokeStyle="#b02a3c";c.lineWidth=1.6;c.beginPath();c.moveTo(x0+Math.cos(ap)*R*0.35,y0+Math.sin(ap)*R*0.35);c.lineTo(x0+Math.cos(ap)*(R-5),y0+Math.sin(ap)*(R-5));c.stroke();
+  c.strokeStyle="#23160f";c.lineWidth=2.2;c.beginPath();c.moveTo(x0-Math.cos(an)*9,y0-Math.sin(an)*9);c.lineTo(x0+Math.cos(an)*(R-8),y0+Math.sin(an)*(R-8));c.stroke();
+  c.fillStyle="#23160f";c.beginPath();c.arc(x0,y0,4,0,7);c.fill();c.fillStyle="#b02a3c";c.beginPath();c.arc(x0,y0,1.6,0,7);c.fill();
+}
+function readoutPanel(c,x,y,w,F,Fmax,wt){
+  // digital panel: dark glass, cream figures, tabular digits
+  const h=62;c.fillStyle="#1d140f";c.beginPath();c.roundRect(x,y,w,h,6);c.fill();
+  const row=(lab,val,yy,col)=>{txt(c,lab,x+9,yy,FONT.panelLab,"#bfae96","left",true);txt(c,val,x+w-9,yy,FONT.panelNum,col,"right",true)};
+  row("PEAK",Fmax.toFixed(0)+" N",y+19,"#f3c9a0");
+  if(wt===null)row("LIVE",Math.max(0,F).toFixed(0)+" N",y+38,"#f6efe3");
+  else row("WEIGHT",wt.toFixed(2)+" N",y+38,"#cfe6c8");
+  row(wt===null?"":"MASS",wt===null?"":(wt/P.g).toFixed(3)+" kg",y+56,"#cfe6c8");
+}
+function camBottom(k,view){
+  const o=k*2*S.iron.N;let lo=Infinity;for(let i=0;i<S.iron.N;i++)lo=Math.min(lo,S.iron.xy[o+2*i+1]);
+  return Math.max(-2.3,lo-0.42*view);
+}
+function drawBall(st,k,X,Yb,sc){
+  const o=k*2*st.N,px=i=>X(st.xy[o+2*i]),py=i=>Yb(st.xy[o+2*i+1]);
+  if(st.kind==="cot"){
+    cx.fillStyle="rgba(214,201,182,.35)";for(let i=0;i<st.N;i++){cx.beginPath();cx.arc(px(i),py(i),0.16*sc,0,7);cx.fill()}
+    cx.fillStyle="rgba(255,253,248,.92)";for(let i=0;i<st.N;i++){cx.beginPath();cx.arc(px(i),py(i),0.1*sc,0,7);cx.fill()}
+    cx.lineCap="round";cx.lineJoin="round";
+    for(const pass of [["#a8998a",Math.max(1.6,sc*0.034)],["#ffffff",Math.max(0.8,sc*0.017)]]){
+      cx.strokeStyle=pass[0];cx.lineWidth=pass[1];
+      for(const idx of st.fibIdx){cx.beginPath();cx.moveTo(px(idx[0]),py(idx[0]));
+        for(let q=1;q<idx.length-1;q++){const a=idx[q],c2=idx[q+1];cx.quadraticCurveTo(px(a),py(a),(px(a)+px(c2))/2,(py(a)+py(c2))/2)}
+        const z=idx[idx.length-1];cx.lineTo(px(z),py(z));cx.stroke()}
+    }
+    for(let q=0;q<st.nb;q++){if(st.type[q]!==1)continue;const i=st.bi[q],j=st.bj[q];
+      const l=Math.hypot(st.xy[o+2*j]-st.xy[o+2*i],st.xy[o+2*j+1]-st.xy[o+2*i+1]),e=-(l-st.l0[q])/st.l0[q]*25;if(e<0.3)continue;
+      cx.strokeStyle=`rgba(125,29,47,${Math.min(.45,e-0.2)})`;cx.lineWidth=1.6;cx.beginPath();cx.moveTo(px(i),py(i));cx.lineTo(px(j),py(j));cx.stroke()}
+  }else{
+    for(let q=0;q<st.nb;q++){const i=st.bi[q],j=st.bj[q];
+      const l=Math.hypot(st.xy[o+2*j]-st.xy[o+2*i],st.xy[o+2*j+1]-st.xy[o+2*i+1]),e=Math.max(-1,Math.min(1,(l-st.l0[q])/st.l0[q]*150));
+      cx.strokeStyle=e<0?`rgba(125,29,47,${.3+.7*-e})`:`rgba(51,98,127,${.3+.7*e})`;cx.lineWidth=Math.max(1,sc*0.022);cx.beginPath();cx.moveTo(px(i),py(i));cx.lineTo(px(j),py(j));cx.stroke()}
+    cx.fillStyle="#3b332e";for(let i=0;i<st.N;i++){cx.beginPath();cx.arc(px(i),py(i),Math.max(1.6,sc*0.036),0,7);cx.fill()}
+  }
+}
+function drawSim(k){
+  cx.clearRect(0,0,W,H);
+  const top=40,bottom=HS-6,colW=(W-RULER-6)/2,sc=Math.min((bottom-top)/6.6,colW/3.3),view=(bottom-top)/sc;
+  const yb=camBottom(k,view),Y=y=>bottom-(y-yb)*sc;
+  const cols=RTL?[[S.cot,T.cotton],[S.iron,T.iron]]:[[S.iron,T.iron],[S.cot,T.cotton]];
+  // shared height ruler on the left
+  const rx=RULER-8;cx.strokeStyle="#bfae96";cx.lineWidth=1;cx.beginPath();cx.moveTo(rx,Math.max(top-6,Y(13)));cx.lineTo(rx,Math.min(bottom,Y(-1.5)));cx.stroke();
+  for(let m=-1;m<=13;m++){const yy=Y(m);if(yy<top-4||yy>bottom+2)continue;
+    cx.beginPath();cx.moveTo(rx-(m%5?4:8),yy);cx.lineTo(rx,yy);cx.stroke();
+    if(m>=0)txt(cx,m+" m",rx-11,yy+4,FONT.ruler,"#6f5b4c","right",true)}
+  // start height
+  if(Y(P.h)>top&&Y(P.h)<bottom){cx.strokeStyle="rgba(125,29,47,.6)";cx.setLineDash([5,5]);cx.beginPath();cx.moveTo(rx,Y(P.h));cx.lineTo(W-4,Y(P.h));cx.stroke();cx.setLineDash([]);
+    txt(cx,T.startline,rx+8,Y(P.h)+15,FONT.small,"#7d1d2f","left")}
+  cols.forEach(([st,label],ci)=>{
+    const ox=RULER+ci*colW,bx=ox+colW/2,shift=(GAIN-1)*st.yp[k];
+    const X=x=>bx+x*sc,Yb=y=>Y(y+shift);
+    // column heading: the material and its mass, so equal mass is stated where it is seen
+    spaced(cx,label.toUpperCase(),bx,24,FONT.colHead,"#5a0f21",2);
+    txt(cx,"M = "+P.M.toFixed(2)+" kg",bx,38,FONT.colSub,"#6f5b4c","center",true);
+    // head: spring, damper, plate
+    const plateY=Yb(0),baseY=Y(-1.5),pw=Math.min(2.9*sc,colW-14);
+    if(plateY<bottom+20){
+      cx.save();cx.beginPath();cx.rect(ox,top,colW,bottom-top+2);cx.clip();
+      cx.strokeStyle="#6f665e";cx.lineWidth=1.5;cx.beginPath();cx.moveTo(bx,plateY+10);
+      for(let i=1;i<12;i++)cx.lineTo(bx+(i%2?0.17:-0.17)*sc,plateY+10+(baseY-plateY-10)*i/12);cx.lineTo(bx,baseY);cx.stroke();
+      const mid=(plateY+baseY)/2,dx=0.55*sc;cx.lineWidth=1.3;cx.beginPath();cx.moveTo(bx+dx,plateY+10);cx.lineTo(bx+dx,mid+4);cx.moveTo(bx+dx-7,mid-6);cx.lineTo(bx+dx-7,mid+14);cx.lineTo(bx+dx+7,mid+14);cx.lineTo(bx+dx+7,mid-6);cx.moveTo(bx+dx,mid+14);cx.lineTo(bx+dx,baseY);cx.stroke();
+      cx.fillStyle="#3f2c23";cx.fillRect(bx-pw/2,baseY,pw,4);
+      cx.fillStyle="#e3cfae";cx.strokeStyle="#3f2c23";cx.lineWidth=1.4;cx.beginPath();cx.roundRect(bx-pw/2,plateY,pw,10,2);cx.fill();cx.stroke();
+      cx.restore();
+    }
+    cx.save();cx.beginPath();cx.rect(ox,top,colW,bottom-top+2);cx.clip();drawBall(st,k,X,Yb,sc);cx.restore();
+    // gauge strip
+    const gy=HS+8,R=Math.min(58,colW*0.3);
+    cx.strokeStyle="#dccdb4";cx.lineWidth=1;cx.beginPath();cx.moveTo(ox+8,HS);cx.lineTo(ox+colW-8,HS);cx.stroke();
+    const w=wAvg(st,k);
+    gauge(cx,bx,gy+R+8,R,st.F[k],st.Fmax[k],w);
+    const pwid=Math.min(colW-12,170);readoutPanel(cx,bx-pwid/2,gy+2*R+22,pwid,st.F[k],st.Fmax[k],w);
+  });
+  cx.strokeStyle="#dccdb4";cx.beginPath();cx.moveTo(RULER+colW,top);cx.lineTo(RULER+colW,H-8);cx.stroke();
+  const hint=document.getElementById("hint");
+  hint.hidden=playing||k>0;
+  if(!hint.hidden)hint.innerHTML=`<b>${T.open1}</b> ${computed<NF?T.open2wait.replace("{p}",Math.round(100*computed/NF)):T.open2}`;
+}
+function drawPlot(id,t0,t1,title,k){
+  const cvs=document.getElementById(id),c=cvs.getContext("2d"),w=cvs.getBoundingClientRect().width,h=220,L=46,B=34,Tp=26,R=10;
+  c.clearRect(0,0,w,h);
+  const fmax=700,X=t=>L+(w-L-R)*(t-t0)/(t1-t0),Y=f=>h-B-(h-B-Tp)*Math.max(0,f)/fmax;
+  txt(c,title,(w+L)/2,16,FONT.small,"#5a0f21");
+  c.strokeStyle="#dccdb4";c.lineWidth=1;
+  for(let f=0;f<=fmax;f+=100){c.beginPath();c.moveTo(L,Y(f));c.lineTo(w-R,Y(f));c.stroke();c.font=FONT.mono10;c.fillStyle="#6f5b4c";c.textAlign="right";c.direction="ltr";c.fillText(f,L-5,Y(f)+3)}
+  const dt=(t1-t0)>2?1:0.1;
+  for(let t=Math.ceil(t0/dt-1e-9)*dt;t<=t1+1e-9;t+=dt){c.font=FONT.mono10;c.fillStyle="#6f5b4c";c.textAlign="center";c.fillText(t.toFixed(dt<1?1:0),X(t),h-B+14)}
+  txt(c,T.ax_t,(w+L)/2,h-4,FONT.small,"#6f5b4c");
+  c.save();c.translate(12,(h-B+Tp)/2);c.rotate(-Math.PI/2);txt(c,T.ax_f,0,0,FONT.small,"#6f5b4c");c.restore();
+  c.strokeStyle="#3c6a46";c.setLineDash([5,4]);c.beginPath();c.moveTo(L,Y(P.M*P.g));c.lineTo(w-R,Y(P.M*P.g));c.stroke();c.setLineDash([]);
+  for(const [st,col] of [[S.cot,"#33627f"],[S.iron,"#7d1d2f"]]){
+    c.strokeStyle=col;c.lineWidth=1.8;c.beginPath();let on=false;
+    const j0=Math.max(0,kOf(t0)),j1=Math.min(k,kOf(t1));
+    for(let j=j0;j<=j1;j++){const t=tOf(j);if(!on){c.moveTo(X(t),Y(st.F[j]));on=true}else c.lineTo(X(t),Y(st.F[j]))}
+    c.stroke();
+  }
+  c.font=FONT.small;c.direction=RTL?"rtl":"ltr";c.textAlign=RTL?"left":"right";
+  const lx=RTL?L+6:w-R-4;
+  c.fillStyle="#7d1d2f";c.fillText("— "+T.iron,lx,Tp+16);c.fillStyle="#33627f";c.fillText("— "+T.cotton,lx,Tp+32);c.fillStyle="#3c6a46";c.fillText("- - "+T.weightline,lx,Tp+48);
+}
+function drawEnergy(k){
+  const cvs=document.getElementById("en"),c=cvs.getContext("2d"),w=cvs.getBoundingClientRect().width,h=250,L=RTL?14:130,R=RTL?130:14,Emax=120;
+  c.clearRect(0,0,w,h);
+  const X=e=>RTL?(w-R)-(w-L-R)*e/Emax:L+(w-L-R)*e/Emax,cols=["#ecc596","#7d1d2f","#33627f","#3c6a46","#c9783f","#b6aca1"];
+  for(const [st,name,y0] of [[S.iron,T.iron,20],[S.cot,T.cotton,130]]){
+    const E=st.E.subarray(k*7,k*7+7),released=E[6]-E[1],parts=[E[0],E[2],E[3],E[4],E[5]];
+    const ax=RTL?w-6:6,al=RTL?"right":"left";
+    txt(c,name,ax,y0+12,FONT.titleSmall,"#5a0f21",al);
+    txt(c,T.en_in,ax,y0+37,FONT.small,"#6f5b4c",al);
+    c.fillStyle=cols[0];c.strokeStyle="#3f2c23";c.lineWidth=1;
+    const a=X(0),bb=X(Math.min(Math.max(0,released),Emax));c.fillRect(Math.min(a,bb),y0+24,Math.abs(bb-a),18);c.strokeRect(Math.min(a,bb),y0+24,Math.abs(bb-a),18);
+    txt(c,T.en_out,ax,y0+65,FONT.small,"#6f5b4c",al);
+    let acc=0;parts.forEach((p,j)=>{const x1=X(acc),x2=X(Math.min(acc+Math.max(0,p),Emax));c.fillStyle=cols[j+1];c.fillRect(Math.min(x1,x2),y0+52,Math.abs(x2-x1),18);acc+=Math.max(0,p)});
+    c.strokeRect(Math.min(X(0),X(Math.min(acc,Emax))),y0+52,Math.abs(X(Math.min(acc,Emax))-X(0)),18);
+    c.font=FONT.mono10;c.fillStyle="#3f2c23";c.direction="ltr";c.textAlign=RTL?"right":"left";
+    const err=acc-released;
+    c.fillText(`${released.toFixed(2)} J  /  ${acc.toFixed(2)} J   (Δ = ${err>=0?"+":""}${err.toFixed(2)} J)`,RTL?w-R:L,y0+90);
+  }
+  const names=[T.en_ke,T.en_el,T.en_head,T.en_heatball,T.en_heathead];let lx=RTL?w-10:10,ly=h-10;
+  c.font=FONT.small;
+  names.forEach((n,j)=>{const tw=c.measureText(n).width;if(!RTL&&lx+tw+30>w){lx=10;ly+=0}
+    if(RTL){c.fillStyle=cols[j+1];c.fillRect(lx-12,ly-10,12,12);txt(c,n,lx-16,ly,FONT.small,"#3f2c23","right");lx-=tw+30}
+    else{c.fillStyle=cols[j+1];c.fillRect(lx,ly-10,12,12);txt(c,n,lx+16,ly,FONT.small,"#3f2c23","left");lx+=tw+30}});
+}
+function readout(st,k,el,name){
+  const E=st.E.subarray(k*7,k*7+7),w=wAvg(st,k),hit=st.tImpact!==null&&tOf(k)>=st.tImpact;
+  el.innerHTML=`<b>${name}</b><table>
+  <tr><td>${T.r_mass}</td><td class="v">${P.M.toFixed(3)} kg</td></tr>
+  <tr><td>${T.r_contact}</td><td class="v">${hit?st.tImpact.toFixed(3)+" s":"…"}</td></tr>
+  <tr><td>${T.r_pred}</td><td class="v">${Math.sqrt(2*P.h/P.g).toFixed(3)} s</td></tr>
+  <tr><td>${T.r_peak}</td><td class="v">${st.Fmax[k].toFixed(0)} N</td></tr>
+  <tr><td>${T.r_kg}</td><td class="v">${(st.Fmax[k]/P.g).toFixed(1)} kg</td></tr>
+  <tr><td>${T.r_weight}</td><td class="v">${w===null?(hit?T.r_settling:"…"):w.toFixed(2)+" N = "+(w/P.g).toFixed(3)+" kg"}</td></tr>
+  <tr><td>${T.r_heatball}</td><td class="v">${E[4].toFixed(1)} J</td></tr>
+  <tr><td>${T.r_heathead}</td><td class="v">${E[5].toFixed(1)} J</td></tr></table>`;
+}
+function frame(ts){
+  if(last===null)last=ts;const dtw=Math.min(0.05,(ts-last)/1000);last=ts;
+  if(playing){tPlay=Math.min(tPlay+dtw/slow,P.tmax,tOf(computed-1));if(tPlay>=P.tmax-1e-9)playing=false}
+  const k=Math.min(computed-1,kOf(tPlay));
+  drawSim(k);
+  const ti=S.iron.tImpact||Math.sqrt(2*P.h/P.g);
+  drawPlot("pZoom",ti-0.05,ti+0.35,T.plot_zoom,k);drawPlot("pAll",0,P.tmax,T.plot_all,k);drawEnergy(k);
+  readout(S.iron,k,document.getElementById("rI"),T.iron);readout(S.cot,k,document.getElementById("rC"),T.cotton);
+  const btn=document.getElementById("drop");
+  btn.textContent=playing?T.dropping:(tPlay>0?T.replay:T.drop);
+  document.getElementById("clock").textContent=`${T.clock} t = ${tOf(k).toFixed(3)} s`+(computed<NF?`  ·  ${T.computing} ${Math.round(100*computed/NF)} %`:"");
+  requestAnimationFrame(frame);
+}
+function setSpeed(s){slow=s;for(const [id,v] of [["s1",1],["s4",4],["s20",20]])document.getElementById(id).classList.toggle("on",v===s)}
+document.getElementById("drop").onclick=()=>{if(playing)return;tPlay=0;playing=true};
+document.getElementById("s1").onclick=()=>setSpeed(1);
+document.getElementById("s4").onclick=()=>setSpeed(4);
+document.getElementById("s20").onclick=()=>setSpeed(20);
+addEventListener("resize",fitAll);
+fitAll();init();requestAnimationFrame(frame);
+</script>
+
+  </body>
+</html>
