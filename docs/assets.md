@@ -24,7 +24,7 @@ demand: first `katex.min.js`, then `auto-render.min.js`, then typesets every lec
 ([sim.css:8](../public/styles/sim.css#L8)). `public/simulations.html` links the stylesheet in its `<head>`
 ([simulations.html:16](../public/simulations.html#L16)) and loads `katex.min.js` at the end of the body
 ([simulations.html:125](../public/simulations.html#L125)); `public/portfolios.html` does the same and also loads
-`auto-render.min.js` ([portfolios.html:16](../public/portfolios.html#L16), [366–367](../public/portfolios.html#L366-L367)).
+`auto-render.min.js` ([portfolios.html:16](../public/portfolios.html#L16), [459–460](../public/portfolios.html#L459-L460)).
 The home page `index.html` does not use KaTeX.
 
 **Why it is self-hosted** rather than loaded from a public server: the pages then work offline from a saved copy, and they
@@ -72,6 +72,24 @@ the addresses point here. Each face is cut by alphabet: the `unicode-range` of a
 those characters. A page in English with Greek symbols therefore loads the latin file and, if a Plex face must draw a Greek letter,
 the greek one. Measured in Chromium: 6 to 22 faces load per page.
 
+### Arabic faces (added 22 October 2026, on Numa's request)
+
+The Arabic page of the iron-versus-cotton study (`portfolios/impact/ar.html`) needs Arabic letters, which IBM Plex and
+Instrument Serif do not have. Numa asked for formal Arabic faces instead of IBM Plex Sans Arabic, so two were added. They are
+the only fonts outside the house set, and only Arabic pages use them.
+
+| File | What it is |
+|---|---|
+| `arabic.css` | 3 `@font-face` rules: Amiri 400 and 700 (titles), Noto Naskh Arabic as one variable face, weights 400 to 700 (text). Linked by [portfolios/impact/ar.html](../public/portfolios/impact/ar.html) and by [portfolios.html](../public/portfolios.html) for the two Arabic labels of project 04; its `unicode-range` means only pages that show Arabic letters download a file. |
+| `amiri/amiri-400-arabic.woff2`, `amiri/amiri-700-arabic.woff2` | Amiri by Khaled Hosny, a classical Naskh, 105 and 106 kB. |
+| `noto-naskh-arabic/noto-naskh-arabic-wght-arabic.woff2` | Noto Naskh Arabic by Google, variable weight, 86 kB. |
+| `OFL-Amiri.txt`, `OFL-Noto-Naskh-Arabic.txt` | Their SIL Open Font License 1.1. |
+
+Source: the TrueType files in `github.com/google/fonts` (`ofl/amiri`, `ofl/notonaskharabic`), cut with fontTools' `pyftsubset`
+to the Arabic blocks (U+0600–06FF, U+0750–077F, U+0870–08FF, U+FB50–FDFF, U+FE70–FEFC and the joiners), all OpenType
+features kept, saved as woff2. Each rule's `unicode-range` names the same blocks, so Latin letters and digits on the Arabic
+page still come from IBM Plex.
+
 **To refresh:** fetch the two stylesheet addresses (written at the top of each `.css` file) with the User-Agent of a current
 browser (Google sends `.woff2` only to browsers that announce support), download every file they name, and point the `url(…)`
 of each rule at the local name. Keep the rules and their order unchanged, so the pages render the same.
@@ -114,7 +132,7 @@ the right. It is a plain SVG of 1 738 paths, `viewBox="104 0 452 250"`, in the t
 | Where | Size | Line |
 |---|---|---|
 | Home page, above the name, followed by a short note ("Phyein Usul · φύειν أصول, roots that grow. A personal website and an archive: …") | 217 × 120 | [index.html:31–32](../index.html#L31-L32) |
-| Top bar of the catalog and of Portfolios, a link to the home page before "← Numa Koudsie" | 87 × 48 | [simulations.html:33](../public/simulations.html#L33), [portfolios.html:34](../public/portfolios.html#L34) |
+| Top bar of the catalog and of Portfolios, a link to the home page before "← Numa Koudsie" | 87 × 48 | [simulations.html:33](../public/simulations.html#L33), [portfolios.html:35](../public/portfolios.html#L35) |
 | Top bar of each of the ten simulation pages, a link to `../index.html` before "← All simulations" | 87 × 48 | for example [water-wave.html:18](../public/simulations/water-wave.html#L18) |
 
 No stylesheet styles it: size, spacing and the surrounding `inline-flex` span are inline `style` attributes on each page
