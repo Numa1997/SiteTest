@@ -1,0 +1,556 @@
+<!doctype html>
+<html lang="ar" dir="rtl">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline' https://v2.appdeploy.ai https://unpkg.com/@khmyznikov/pwa-install@0.6.3/dist/pwa-install.bundle.js; style-src 'self' 'unsafe-inline'; img-src 'self' data: blob: https://appdeploy.ai; font-src 'self' data:; connect-src 'self' https://api-v2.appdeploy.ai; worker-src 'self'; manifest-src 'self'; object-src 'none'; base-uri 'self'; form-action 'self'; upgrade-insecure-requests" />
+    <meta name="referrer" content="strict-origin-when-cross-origin" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>الحديد والقطن والرأس · Numa Koudsie</title>
+    <meta name="description" content="دراسة تفاعلية: كرة حديد وكرة قطن متساويتان في الكتلة تسقطان عشرة أمتار على رأس." />
+    <meta name="author" content="Numa Koudsie" />
+    <link
+      rel="icon"
+      href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='12' fill='%237a1f2b'/%3E%3Ctext x='32' y='45' text-anchor='middle' font-family='Georgia,serif' font-size='34' font-weight='700' fill='%23fff'%3ENK%3C/text%3E%3C/svg%3E"
+    />
+    <link rel="stylesheet" href="../../fonts/instrument-plex.css" />
+    <link rel="stylesheet" href="../../fonts/arabic.css" />
+    <style>
+:root{--bg:#ece3d2;--panel:#f8f2e6;--paper:#fcf8f0;--ink:#23160f;--muted:#6f5b4c;--line:#3f2c23;--rule:#dccdb4;
+--wine:#7d1d2f;--wine-deep:#5a0f21;--wine-soft:#f3dfdb;--blue:#33627f;--blue-soft:#e1ebf0;--green:#3c6a46;--green-soft:#e3ece2;--pic:#f6ecdc}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);font:16.5px/1.68 var(--f-body)}
+main{max-width:1000px;margin:0 auto;padding-block:28px 48px;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px))}
+:root{color-scheme:light}
+.eyebrow{font:500 11.5px/1.4 var(--f-mono);letter-spacing:.14em;text-transform:uppercase;color:var(--wine)}
+h1{font:400 clamp(36px,6.4vw,60px)/1.06 var(--f-title);color:var(--wine-deep);margin:8px 0 10px}
+h2{font:400 clamp(26px,4vw,34px)/1.15 var(--f-title);color:var(--wine-deep);margin:0 0 10px;display:flex;gap:12px;align-items:center}
+h2 .num{font:500 13px var(--f-mono);background:var(--wine);color:#fff;border-radius:999px;padding:3px 10px;flex:none}
+h3{font:400 22px/1.2 var(--f-title);color:var(--wine-deep);margin:18px 0 6px}
+p{margin:0 0 12px;max-width:76ch}
+.lede{color:var(--muted);max-width:74ch;margin-bottom:20px}
+.card{background:var(--panel);border:1.5px solid var(--line);border-radius:12px;padding:16px;margin-bottom:18px}
+canvas{display:block;width:100%;background:var(--paper);border:1.5px solid var(--line);border-radius:8px}
+.bar{display:flex;flex-wrap:wrap;gap:8px;align-items:center;margin:12px 0}
+button{font:500 14px var(--f-body);background:var(--paper);color:var(--wine-deep);border:1.5px solid var(--line);border-radius:8px;padding:6px 14px;cursor:pointer}
+button.on{background:var(--wine);color:#fff}
+  .hint{border:1.5px solid var(--wine-deep);background:var(--paper);border-radius:8px;padding:8px 12px;margin-bottom:10px;color:var(--wine-deep)}
+.hint b{font-weight:500}
+button.go{background:var(--wine-deep);color:#fff;font-size:16px;padding:8px 22px}
+button:disabled{opacity:.55;cursor:wait}
+.small{font-size:14px;color:var(--muted)}
+.two{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+@media (max-width:700px){.two{grid-template-columns:1fr}}
+.read{background:var(--paper);border:1.5px solid var(--line);border-radius:8px;padding:10px 12px;font-size:14.5px}
+.read b{color:var(--wine-deep);font-weight:500}
+.read table{width:100%;border-collapse:collapse}
+.read td{padding:2px 0;vertical-align:top}
+.read td.v{text-align:end;font-family:var(--f-mono);white-space:nowrap;direction:ltr;unicode-bidi:isolate}
+.m{font-family:var(--f-math);font-style:normal;direction:ltr;unicode-bidi:isolate;white-space:nowrap}
+.eq{background:var(--paper);border:1.5px solid var(--line);border-radius:8px;padding:10px 14px;margin:0 0 12px;font:17px/1.6 var(--f-math);direction:ltr;text-align:center;overflow-x:auto}
+.eq.key{border:2px solid var(--wine)}
+.box{border:1.5px solid var(--line);border-radius:8px;padding:10px 14px;margin:0 0 12px}
+.box .tag{font:500 11px var(--f-mono);letter-spacing:.12em;text-transform:uppercase;margin-bottom:4px}
+.pic{background:var(--pic)} .pic .tag{color:var(--muted)}
+.chk{background:var(--green-soft)} .chk .tag{color:var(--green)}
+.toy{background:var(--wine-soft)} .toy .tag{color:var(--wine)}
+.note{background:var(--blue-soft)} .note .tag{color:var(--blue)}
+.box p:last-child{margin-bottom:0}
+.tw{overflow-x:auto}
+table.par{border-collapse:collapse;width:100%;font-size:14px;background:var(--paper)}
+table.par th,table.par td{border:1.5px solid var(--line);padding:6px 8px;text-align:start;vertical-align:top}
+table.par th{background:var(--wine-soft);color:var(--wine-deep);font-weight:500}
+table.par td.v{font-family:var(--f-mono);white-space:nowrap;direction:ltr;unicode-bidi:isolate}
+table.par tr.sec td{background:#efe5d3;color:var(--wine-deep);font-weight:500}
+ol.src{padding-inline-start:20px;font-size:14.5px} ol.src li{margin-bottom:4px}
+a{color:var(--wine)}
+.sitebar{display:flex;flex-wrap:wrap;justify-content:space-between;gap:8px 16px;font:500 13px var(--f-mono);margin-bottom:18px}
+.sitebar a{text-decoration:none}.sitebar .langs a[aria-current]{color:var(--ink);font-weight:600}
+:root{--f-body:"Noto Naskh Arabic","Amiri",serif;--f-title:"Amiri","Noto Naskh Arabic",serif;--f-mono:"IBM Plex Mono",monospace;--f-math:"Instrument Serif",Georgia,serif}body{font-size:18px;line-height:1.95}h1{font-weight:700;line-height:1.35}h2,h3{font-weight:700;line-height:1.4}.eyebrow{font-family:"Noto Naskh Arabic",serif;letter-spacing:0;text-transform:none;font-size:14px}.box .tag{font-family:"Noto Naskh Arabic",serif;letter-spacing:0;text-transform:none;font-size:13px;font-weight:600}p{max-width:80ch}.m,.eq{font-size:1.02em}
+</style>
+  </head>
+  <body>
+<main lang="ar" dir="rtl">
+<nav class="sitebar" aria-label="Site"><a href="../../portfolios.html">← Numa Koudsie · Portfolios</a><span class="langs"><a href="index.html">English</a> · <a href="ar.html" lang="ar" aria-current="page">العربية</a></span></nav>
+<div class="eyebrow" data-t="eyebrow"></div>
+<h1 data-t="title"></h1>
+<p class="lede" data-t="lede"></p>
+
+<div class="card">
+  <div class="hint" id="hint"></div>
+  <canvas id="sim"></canvas>
+  <p class="small" data-t="headnote" style="margin:8px 0 0"></p>
+  <div class="bar">
+    <button id="drop" class="go" data-t="drop"></button>
+    <button id="s1" data-t="speed1"></button>
+    <button id="s4" class="on" data-t="speed4"></button>
+    <button id="s20" data-t="speed20"></button>
+    <span class="small" id="clock"></span>
+  </div>
+  <div class="two">
+    <div class="read" id="rI"></div>
+    <div class="read" id="rC"></div>
+  </div>
+</div>
+
+<div class="card">
+  <h3 data-t="plot_title"></h3>
+  <p class="small" data-t="plot_note"></p>
+  <div class="two"><canvas id="pZoom" height="220"></canvas><canvas id="pAll" height="220"></canvas></div>
+</div>
+
+<div class="card">
+  <h3 data-t="energy_title"></h3>
+  <p class="small" data-t="energy_note"></p>
+  <canvas id="en" height="250"></canvas>
+</div>
+
+<div id="sections"></div>
+
+<div class="card">
+  <h2><span class="num">8</span><span data-t="h_par"></span></h2>
+  <p data-t="par_intro"></p>
+  <div class="tw"><table class="par" id="ptab"></table></div>
+</div>
+
+<div class="card">
+  <h2><span class="num">9</span><span data-t="h_src"></span></h2>
+  <ol class="src" id="src"></ol>
+</div>
+</main>
+
+<script>
+"use strict";
+document.documentElement.lang="ar";document.documentElement.dir="rtl";
+/*PHYSICS-BEGIN*/
+// Every number of the animation lives in P. Scaled units: length in drawing units, mass 1 per ball, time in seconds.
+const P={
+  g:9.81, h:10.0, M:1.0, dt:2e-4, tmax:9.0,
+  iron:{R:0.5, a:0.10, k:1e5, ar0:3.95, c:2, rad:0.035, sub:5},
+  cot:{R:1.3, nf:18, nb:34, s:0.08, turn:0.35, kax:300, kb:0.25, cb:0.004, c:0.3,
+       jr:0.07, kj:40, Fj:4, drep:0.06, krep:20, crep:0.4, rad:0.03, seed:5, sub:2},
+  head:{mp:0.2, kh:6000, ch:62, wc:1350, zc:0.5}
+};
+function rng(seed){return()=>{seed=(seed*16807)%2147483647;return(seed-1)/2147483646}}
+function gauss(r){let u=0;while(!u)u=r();const v=r();return Math.sqrt(-2*Math.log(u))*Math.cos(2*Math.PI*v)}
+
+// A body: particles (positions x,y; velocities u,v; forces fx,fy), bonds, bending triplets.
+function newBody(kind,pts,fibre){
+  const N=pts.length;
+  let ymin=Infinity;for(const p of pts)ymin=Math.min(ymin,p.y);
+  const rad=P[kind==='iron'?'iron':'cot'].rad,lift=P.h-ymin+rad; // lowest point starts exactly h above the plate
+  const b={kind,N,m:P.M/N,rad,
+    x:new Float64Array(N),y:new Float64Array(N),u:new Float64Array(N),v:new Float64Array(N),
+    fx:new Float64Array(N),fy:new Float64Array(N),fib:new Int32Array(N),
+    bonds:[],tri:[],yp:0,vp:0,t:0,Fmax:0,tImpact:null,heat:0,heatBall:0,heatHead:0,Pd:0,Pdh:0,Ebond:0,Ebend:0,Erep:0,y00:0};
+  b.kc=b.m*P.head.wc*P.head.wc;b.cc=2*P.head.zc*b.m*P.head.wc;   // skin contact: every particle rebounds in the same time 2π/wc, damping ratio zc
+  pts.forEach((p,i)=>{b.x[i]=p.x;b.y[i]=p.y+lift;b.fib[i]=fibre?fibre[i]:0});
+  let yc=0;for(let i=0;i<N;i++)yc+=b.y[i];b.y00=yc/N-P.h;  // height energy measured so that it starts at exactly M g h
+  return b;
+}
+function packBonds(b,list){
+  const n=list.length;b.nb=n;
+  b.bi=new Int32Array(n);b.bj=new Int32Array(n);b.l0=new Float64Array(n);b.type=new Uint8Array(n); // 0 Morse metal, 1 fibre axial, 2 junction
+  b.D=new Float64Array(n);b.al=new Float64Array(n);b.k=new Float64Array(n);b.brk=new Float64Array(n);b.alive=new Uint8Array(n);b.strain=new Float64Array(n);
+  list.forEach((s,q)=>{b.bi[q]=s.i;b.bj[q]=s.j;b.l0[q]=s.l0;b.type[q]=s.type;b.D[q]=s.D||0;b.al[q]=s.al||0;b.k[q]=s.k||0;b.brk[q]=s.brk||1e9;b.alive[q]=1});
+}
+function makeIron(){
+  const q=P.iron,pts=[],n=8;
+  for(let j=-n;j<=n;j++)for(let i=-n;i<=n;i++){
+    const x=(i+(j&1)*0.5)*q.a,y=j*q.a*Math.sqrt(3)/2;
+    if(x*x+y*y<=q.R*q.R+1e-9)pts.push({x,y});
+  }
+  const b=newBody('iron',pts);
+  const al=q.ar0/q.a,D=q.k/(2*al*al),L=[];   // Morse: bond stiffness at the minimum is 2 D al^2 = k
+  for(let i=0;i<pts.length;i++)for(let j=i+1;j<pts.length;j++){
+    const d=Math.hypot(pts[i].x-pts[j].x,pts[i].y-pts[j].y);
+    if(d<q.a*1.05)L.push({i,j,l0:d,type:0,D,al});
+  }
+  packBonds(b,L);b.c=q.c;b.Dm=D;b.alm=al;
+  b.ntri=0;return b;
+}
+function turnAngle(ax,ay,bx,by,cx,cy){const ux=bx-ax,uy=by-ay,vx=cx-bx,vy=cy-by;return Math.atan2(ux*vy-uy*vx,ux*vx+uy*vy)}
+function makeCotton(){
+  const q=P.cot,r=rng(q.seed),pts=[],fibre=[],fibIdx=[];
+  for(let f=0;f<q.nf;f++){             // each fibre: a persistent random walk that turns back at the ball's edge
+    let x,y;do{x=(r()*2-1)*q.R;y=(r()*2-1)*q.R}while(x*x+y*y>(0.8*q.R)**2);
+    let th=r()*2*Math.PI;const idx=[];
+    for(let k=0;k<q.nb;k++){
+      idx.push(pts.length);pts.push({x,y});fibre.push(f);
+      th+=q.turn*gauss(r);
+      let nx=x+q.s*Math.cos(th),ny=y+q.s*Math.sin(th);
+      if(nx*nx+ny*ny>(0.95*q.R)**2){th=Math.atan2(-y,-x)+0.8*gauss(r);nx=x+q.s*Math.cos(th);ny=y+q.s*Math.sin(th)}
+      x=nx;y=ny;
+    }
+    fibIdx.push(idx);
+  }
+  const b=newBody('cot',pts,fibre),L=[],T=[];
+  for(const idx of fibIdx){
+    for(let k=0;k+1<idx.length;k++){const i=idx[k],j=idx[k+1];L.push({i,j,l0:Math.hypot(pts[i].x-pts[j].x,pts[i].y-pts[j].y),type:1,k:q.kax})}
+    for(let k=1;k+1<idx.length;k++){const i=idx[k-1],j=idx[k],l=idx[k+1];T.push([i,j,l,turnAngle(pts[i].x,pts[i].y,pts[j].x,pts[j].y,pts[l].x,pts[l].y)])}
+  }
+  // junctions: wherever two fibres (or two far-apart parts of one fibre) start within jr of each other
+  const a=q.kj/(4*q.Fj),D=2*q.Fj/a;   // Morse with stiffness 2Da^2 = kj and largest pull Da/2 = Fj
+  for(let i=0;i<pts.length;i++)for(let j=i+1;j<pts.length;j++){
+    if(fibre[i]===fibre[j]&&j-i<4)continue;
+    const d=Math.hypot(pts[i].x-pts[j].x,pts[i].y-pts[j].y);
+    if(d<q.jr)L.push({i,j,l0:d,type:2,D,al:a,brk:d+3*Math.log(2)/a});
+  }
+  packBonds(b,L);b.c=q.c;b.nj=L.filter(s=>s.type===2).length;
+  b.ntri=T.length;b.ti=new Int32Array(T.map(t=>t[0]));b.tj=new Int32Array(T.map(t=>t[1]));b.tk=new Int32Array(T.map(t=>t[2]));b.th0=new Float64Array(T.map(t=>t[3]));
+  b.cell=new Int32Array(pts.length);b.next=new Int32Array(pts.length);b.fibIdx=fibIdx;
+  relax(b);
+  return b;
+}
+function relax(b){          // let the freshly made tangle settle without gravity, then call that shape 'unstressed'
+  const g=P.g;P.g=0;const y0=Array.from(b.y),x0=Array.from(b.x);
+  for(let round=0;round<3;round++){
+    for(let k=0;k<400;k++){sub(b,P.dt);for(let i=0;i<b.N;i++){b.u[i]*=0.9;b.v[i]*=0.9}}
+    for(let q=0;q<b.nb;q++){const i=b.bi[q],j=b.bj[q];b.l0[q]=Math.hypot(b.x[j]-b.x[i],b.y[j]-b.y[i]);if(b.type[q]===2)b.brk[q]=b.l0[q]+3*Math.log(2)/b.al[q]}
+    for(let q=0;q<b.ntri;q++){const I=b.ti[q],J=b.tj[q],K=b.tk[q];b.th0[q]=turnAngle(b.x[I],b.y[I],b.x[J],b.y[J],b.x[K],b.y[K])}
+  }
+  P.g=g;
+  // put it back at the drop height, at rest, and start the energy books from zero
+  let ymin=Infinity;for(let i=0;i<b.N;i++)ymin=Math.min(ymin,b.y[i]);
+  const shift=P.h+b.rad-ymin;let yc=0;
+  for(let i=0;i<b.N;i++){b.y[i]+=shift;b.u[i]=0;b.v[i]=0;yc+=b.y[i]}
+  b.y00=yc/b.N-P.h;b.heat=0;b.heatBall=0;b.heatHead=0;b.yp=0;b.vp=0;b.t=0;b.tImpact=null;
+}
+function bondForces(b){
+  const {x,y,u,v,fx,fy}=b;let Eb=0;
+  for(let q=0;q<b.nb;q++){
+    if(!b.alive[q])continue;
+    const i=b.bi[q],j=b.bj[q],dx=x[j]-x[i],dy=y[j]-y[i],l=Math.sqrt(dx*dx+dy*dy)||1e-12,ex=dx/l,ey=dy/l;
+    if(l>b.brk[q]){b.alive[q]=0;continue}
+    let f;
+    if(b.type[q]===1)f=b.k[q]*(l-b.l0[q]);                                  // fibre axis: Hooke
+    else{const e=Math.exp(-b.al[q]*(l-b.l0[q]));f=2*b.D[q]*b.al[q]*e*(1-e)}  // Morse: f = dU/dr
+    const vr=(u[j]-u[i])*ex+(v[j]-v[i])*ey;
+    const fd=(b.type[q]===2?0.2:1)*b.c*vr;f+=fd;b.Pd+=fd*vr;   // damper power -> heat
+    if(b.type[q]===1)Eb+=0.5*b.k[q]*(l-b.l0[q])**2;else{const e=Math.exp(-b.al[q]*(l-b.l0[q]));Eb+=b.D[q]*(1-e)*(1-e)}
+    b.strain[q]=(l-b.l0[q])/b.l0[q];
+    fx[i]+=f*ex;fy[i]+=f*ey;fx[j]-=f*ex;fy[j]-=f*ey;
+  }
+  b.Ebond=Eb;
+}
+function bendForces(b){
+  const {x,y,u,v,fx,fy}=b,kb=P.cot.kb,cb=P.cot.cb;let Ebend=0;
+  for(let q=0;q<b.ntri;q++){
+    const I=b.ti[q],J=b.tj[q],K=b.tk[q];
+    const ux=x[J]-x[I],uy=y[J]-y[I],vx=x[K]-x[J],vy=y[K]-y[J],u2=ux*ux+uy*uy,v2=vx*vx+vy*vy;
+    let d=Math.atan2(ux*vy-uy*vx,ux*vx+uy*vy)-b.th0[q];d=Math.atan2(Math.sin(d),Math.cos(d));
+    const gix=-uy/u2,giy=ux/u2,gkx=-vy/v2,gky=vx/v2;               // gradient of the turning angle
+    const om=gix*u[I]+giy*v[I]+gkx*u[K]+gky*v[K]-(gix+gkx)*u[J]-(giy+gky)*v[J];
+    const T=-kb*d-cb*om;                                            // elastic + frictional bending moment
+    Ebend+=0.5*kb*d*d;b.Pd+=cb*om*om;
+    fx[I]+=T*gix;fy[I]+=T*giy;fx[K]+=T*gkx;fy[K]+=T*gky;fx[J]-=T*(gix+gkx);fy[J]-=T*(giy+gky);
+  }
+  b.Ebend=Ebend;
+}
+function contactForces(b){                 // fibres touching fibres: soft repulsion with friction
+  const q=P.cot,h=q.drep,{x,y,u,v,fx,fy,fib}=b,N=b.N;
+  let GX0=Infinity,GY0=Infinity,x1=-Infinity,y1=-Infinity;   // grid around the ball, cell size = contact range
+  for(let i=0;i<N;i++){if(x[i]<GX0)GX0=x[i];if(x[i]>x1)x1=x[i];if(y[i]<GY0)GY0=y[i];if(y[i]>y1)y1=y[i]}
+  const nx=Math.floor((x1-GX0)/h)+1,ny=Math.floor((y1-GY0)/h)+1;
+  if(!b.headArr||b.headArr.length<nx*ny)b.headArr=new Int32Array(nx*ny*2);
+  const head=b.headArr;head.fill(-1,0,nx*ny);
+  for(let i=0;i<N;i++){
+    const cx=Math.min(nx-1,Math.max(0,Math.floor((x[i]-GX0)/h))),cy=Math.min(ny-1,Math.max(0,Math.floor((y[i]-GY0)/h)));
+    const c=cx*ny+cy;b.cell[i]=c;b.next[i]=head[c];head[c]=i;
+  }
+  let Erep=0;
+  for(let i=0;i<N;i++){
+    const c=b.cell[i],cx=(c/ny)|0,cy=c-cx*ny;
+    for(let ox=-1;ox<=1;ox++){const X=cx+ox;if(X<0||X>=nx)continue;
+      for(let oy=-1;oy<=1;oy++){const Y=cy+oy;if(Y<0||Y>=ny)continue;
+        for(let j=head[X*ny+Y];j!==-1;j=b.next[j]){
+          if(j<=i||(fib[i]===fib[j]&&j-i<3))continue;
+          const dx=x[j]-x[i],dy=y[j]-y[i],r2=dx*dx+dy*dy;
+          if(r2>=h*h)continue;
+          const r=Math.sqrt(r2)||1e-12,ex=dx/r,ey=dy/r,vr=(u[j]-u[i])*ex+(v[j]-v[i])*ey;
+          const fe=-q.krep*(h-r),f=Math.min(0,fe+q.crep*vr);
+          Erep+=0.5*q.krep*(h-r)*(h-r);
+          b.Pd+=(f-fe)*vr;                  // power lost to contact friction (f-fe is the friction part)
+          fx[i]+=f*ex;fy[i]+=f*ey;fx[j]-=f*ex;fy[j]-=f*ey;
+        }}}
+  }
+  b.Erep=Erep;
+}
+function sub(b,dt){
+  const H=P.head,{x,y,u,v,fx,fy}=b,N=b.N,m=b.m;
+  for(let i=0;i<N;i++){fx[i]=0;fy[i]=-m*P.g}                      // Newton: weight on every particle
+  b.Pd=0;b.Pdh=0;b.Ebend=0;b.Erep=0;
+  bondForces(b);
+  if(b.kind==='cot'){bendForces(b);contactForces(b)}
+  let Fc=0,Ec=0;
+  for(let i=0;i<N;i++){                                              // particle on plate: stiff spring, damped, never pulls
+    const pen=b.yp-(y[i]-b.rad);
+    if(pen>0){const fe=b.kc*pen,f=Math.max(0,fe-b.cc*(v[i]-b.vp));fy[i]+=f;Fc+=f;Ec+=0.5*b.kc*pen*pen;b.Pdh+=(fe-f)*(b.vp-v[i])*-1}
+  }
+  b.Pdh+=H.ch*b.vp*b.vp;                                             // head damper (soft tissue)
+  for(let i=0;i<N;i++){u[i]+=fx[i]/m*dt;v[i]+=fy[i]/m*dt;x[i]+=u[i]*dt;y[i]+=v[i]*dt} // semi-implicit Euler
+  const ap=(-Fc-H.kh*b.yp-H.ch*b.vp)/H.mp;b.vp+=ap*dt;b.yp+=b.vp*dt;  // plate: m_p a = -F_contact - k_h y - c_h v
+  b.heatBall+=b.Pd*dt;b.heatHead+=b.Pdh*dt;b.heat=b.heatBall+b.heatHead;
+  b.t+=dt;
+  let KE=0,PE=0;for(let i=0;i<N;i++){KE+=0.5*m*(u[i]*u[i]+v[i]*v[i]);PE+=m*P.g*(y[i]-b.y00)}
+  b.E={KE,PE,heatBall:b.heatBall,heatHead:b.heatHead,elastic:b.Ebond+b.Ebend+b.Erep+Ec,head:0.5*H.kh*b.yp*b.yp+0.5*H.mp*b.vp*b.vp,heat:b.heat};
+  if(b.tImpact===null&&Fc>0)b.tImpact=b.t;
+}
+function step(b){                                                    // one frame step of length P.dt (iron: in 'sub' smaller steps, its bonds are stiff)
+  const n=b.kind==='iron'?P.iron.sub:P.cot.sub;
+  for(let s=0;s<n;s++)sub(b,P.dt/n);
+  const Fs=-P.head.kh*b.yp;                                          // the scale reads its spring: F = k_h * compression
+  if(Fs>b.Fmax)b.Fmax=Fs;
+  return Fs;
+}
+/*PHYSICS-END*/
+
+const T={"title_tag": "الحديد والقطن والرأس", "eyebrow": "نيوتن · مورس · هوك · دراسة تفاعلية", "title": "لماذا تؤذي كرةُ الحديد ولا تؤذي كرةُ القطن؟", "lede": "كرتان متساويتان في الكتلة تسقطان من الارتفاع نفسه على رأس، رُسم هنا صفيحةً فوق نابض ومخمِّد. كرة الحديد شبكة من الذرات تشدّها روابط صلبة، وكرة القطن تشابك من ألياف رفيعة تنثني، وتتماسك حيث تتقاطع، ويحتكّ بعضها ببعض. يُحسَب النموذج مرة واحدة عند فتح الصفحة، ومنه يأتي كل منحنى وكل رقم فيها؛ والنص في الأسفل يشتقّ ما يفعله النموذج ويقارنه بالحديد الحقيقي والقطن الحقيقي والجمجمة الحقيقية.", "replay": "أسقِطهما مجددًا", "drop": "أسقِط", "dropping": "تسقطان…", "startline": "البداية: على ارتفاع عشرة أمتار", "open1": "الكرتان معلّقتان على ارتفاع <span class=\"m\">10 m</span> فوق الرأس.", "open2": "اضغط «أسقِط» في الأسفل لتسقطا.", "open2wait": "جارٍ حساب السقوط: {p} %. يمكنك الضغط على «أسقِط» منذ الآن.", "computing": "جارٍ الحساب", "speed1": "الزمن الحقيقي", "speed4": "أبطأ ×4", "speed20": "أبطأ ×20", "clock": "زمن المحاكاة", "iron": "الحديد", "cotton": "القطن", "head": "الرأس: صفيحة ونابض ومخمِّد", "gain": "حركة الصفيحة مرسومة أكبر بعشر مرات", "scale": "الميزان", "lcd_peak": "PEAK", "lcd_now": "NOW", "lcd_w": "WEIGHT", "plot_title": "ما يقرؤه الميزان", "plot_note": "إلى اليمين: لحظة الاصطدام ممدودةً لتُرى. إلى اليسار: التجربة كلها. الخط الأخضر المتقطّع هو وزن أيٍّ من الكرتين، Mg = 9.81 N. منحنى الحديد قمّة عالية ضيّقة، ومنحنى القطن ربوة منخفضة عريضة. وحين يهدأ الاهتزاز يستقرّ الاثنان على الخط نفسه. (اللوحة الرقمية: PEAK أعلى قوة، LIVE القوة الآن، WEIGHT الوزن بعد الاستقرار، MASS الكتلة.)", "plot_zoom": "حول لحظة الاصطدام (0.4 s)", "plot_all": "التجربة كلها، من 0 إلى 9 s", "ax_t": "الزمن (s)", "ax_f": "القوة (N)", "weightline": "الوزن Mg", "energy_title": "إلى أين تذهب الطاقة؟", "energy_note": "الشريط الأعلى في كل زوج هو الطاقة التي سلّمها السقوط حتى الآن، أي ما خسرته الكرة من طاقة الارتفاع. والشريط الأدنى يبيّن أين هذه الطاقة الآن. فإن كانت الطاقة محفوظة كان الشريطان متساويين، والسطر تحتهما يعطي الفرق بالجول، وهو خطأ طريقة الحساب العددية نفسها.", "en_in": "ما سلّمه السقوط", "en_out": "أين هي الآن", "en_books": "الحساب", "en_diff": "الفرق", "en_ke": "حركة", "en_el": "مخزونة في الكرة", "en_head": "مخزونة في نابض الرأس", "en_heatball": "حرارة في الكرة", "en_heathead": "حرارة في الرأس", "r_contact": "أول تماس عند", "r_pred": "يتنبّأ نيوتن بـ √(2h/g) =", "r_peak": "قوة الاصطدام (القمّة)", "r_kg": "ما يُظهره ميزان مطبخ في تلك اللحظة (F/g)", "r_weight": "الوزن بعد الاستقرار", "r_mass": "الكتلة", "headnote": "كل ميزان هو الرأس نفسه: صفيحة ونابض ومخمِّد. حركة الصفيحة مرسومة أكبر بعشر مرات.", "r_settling": "ما زالت تهتزّ…", "r_heatball": "الحرارة المتولّدة داخل الكرة", "r_heathead": "الحرارة المتولّدة في الرأس", "sections": "\n<div class=\"card\">\n<h2><span class=\"num\">1</span>الجواب في جملة واحدة</h2>\n<p>الكرة الساقطة تؤذي بقدر ما تكون المسافة التي تتوقّف خلالها <em>قصيرة</em>. تحمل الكرتان مقدارًا متقاربًا من الطاقة (وفي النموذج المقدار نفسه تمامًا). كرة الحديد لا تلين، فعلى الرأس أن يوقفها خلال المليمترات القليلة التي تستطيع الجمجمة أن تنضغطها، والتوقّف القصير يحتاج قوة كبيرة. أما كرة القطن فتلين هي نفسها: تتوقّف على امتداد جزء كبير من حجمها، ويتحوّل معظم طاقتها إلى حرارة داخل القطن لا في الرأس.</p>\n<div class=\"box pic\"><div class=\"tag\">صورة</div><p>التقِط بيضة نيّئة بيدين متصلّبتين فتنكسر؛ ودَع يديك ترجعان معها نحو ثلاثين سنتيمترًا فتسلم. البيضة تحمل الطاقة نفسها في المرتين، ولم يتغيّر إلا طول مسافة التوقّف.</p></div>\n</div>\n\n<div class=\"card\">\n<h2><span class=\"num\">2</span>السقوط: قانون نيوتن الثاني</h2>\n<div class=\"box pic\"><div class=\"tag\">صورة</div><p>أفلِت مفتاحًا وكُبّة صوف من فوق كرسي في اللحظة نفسها: يصلان الأرض معًا. فالجاذبية تشدّ كل غرام بالقدر نفسه، ولكل غرام القصورُ الذاتي نفسه الذي عليها أن تتغلّب عليه، ولذلك يسقط كل شيء في الفراغ على النحو نفسه.</p></div>\n<p>كل كرة مجموعة من الجسيمات كتلها <span class=\"m\">m<sub>i</sub></span>، وقانون نيوتن الثاني يصحّ لكل جسيم منها: الكتلة في التسارع تساوي مجموع القوى المؤثّرة فيه. وما دامت الكرة تسقط فلا شيء يلمسها وروابطها مرتخية، فلا يؤثّر فيها إلا الوزن:</p>\n<div class=\"eq\">m<sub>i</sub> ÿ<sub>i</sub> = − m<sub>i</sub> g &nbsp;&nbsp;⇒&nbsp;&nbsp; ÿ = − g</div>\n<p>الكتلة تُختصر. لنبدأ من السكون على ارتفاع <span class=\"m\">h</span> (يُقاس من الصفيحة إلى أدنى نقطة في الكرة)، ولنكامِل مرة ثم مرة أخرى:</p>\n<div class=\"eq\">v(t) = − g t, &nbsp;&nbsp; y(t) = h − ½ g t²</div>\n<p>تبلغ الكرة الصفيحة حين يصير <span class=\"m\">y = 0</span>:</p>\n<div class=\"eq key\">t* = √(2h/g), &nbsp;&nbsp; v* = g t* = √(2gh)</div>\n<div class=\"box chk\"><div class=\"tag\">تحقّق</div><p>الوحدات: <span class=\"m\">√(m / (m/s²)) = s</span>. وتعطي الطاقة السرعة نفسها دون ذكر الزمن: طاقة الارتفاع <span class=\"m\">Mgh</span> تصير طاقة حركة <span class=\"m\">½Mv*²</span>، ومنه <span class=\"m\">v* = √(2gh)</span>.</p></div>\n<div class=\"box toy\"><div class=\"tag\">في نموذجنا</div><p>مع <span class=\"m\">h = 10 m</span>: <span class=\"m\">t* = 1.428 s</span> و<span class=\"m\">v* = 14.0 m/s</span>. يكامل النموذج حركة الجسيمات خطوةً خطوة ويسجّل لحظة أول تماس، ويمكنك أن تقارنها بالصيغة في جدول القراءات أعلاه. أسقطنا الهواء من النموذج، فتصل الكرتان بالسرعة نفسها، وتنحصر المقارنة في المادة وحدها.</p></div>\n<h3>مع الهواء، للكرات الحقيقية</h3>\n<p>تحسّ الكرة الحقيقية أيضًا بمقاومة الهواء <span class=\"m\">½ ρ<sub>air</sub> C<sub>d</sub> A v²</span>، حيث <span class=\"m\">A</span> مساحة مقطعها و<span class=\"m\">C<sub>d</sub> ≈ 0.47</span> للكرة. لنأخذ <span class=\"m\">y</span> مسافةَ السقوط، ونكتب التسارع على الصورة <span class=\"m\">dv/dt = v dv/dy = ½ d(v²)/dy</span>، ونعرّف السرعة الحدّية <span class=\"m\">v<sub>t</sub> = √(2mg / (ρ<sub>air</sub> C<sub>d</sub> A))</span>، وهي السرعة التي تتساوى عندها المقاومة والوزن:</p>\n<div class=\"eq\">½ d(v²)/dy = g (1 − v²/v<sub>t</sub>²) &nbsp;&nbsp;⇒&nbsp;&nbsp; v² = v<sub>t</sub>² (1 − e<sup>−2gy/v<sub>t</sub>²</sup>)</div>\n<div class=\"box chk\"><div class=\"tag\">تحقّق</div><p>في سقوط قصير يعيد التقريب <span class=\"m\">e<sup>−x</sup> ≈ 1 − x</span> النتيجة <span class=\"m\">v² = 2gy</span>، أي نتيجة الفراغ.</p></div>\n<p>لكرة كتلتها <span class=\"m\">0.5 kg</span> تسقط من <span class=\"m\">10 m</span>: كرة الحديد المصمتة (قطرها <span class=\"m\">4.96 cm</span>) سرعتها الحدّية <span class=\"m\">v<sub>t</sub> = 95 m/s</span>، فتصل بسرعة <span class=\"m\">13.9 m/s</span>، وهي تكاد تساوي قيمة الفراغ <span class=\"m\">14.0 m/s</span>. أما كرة من القطن المنفوش بالكتلة نفسها (كثافتها نحو <span class=\"m\">30 kg/m³</span>، فقطرها <span class=\"m\">31.7 cm</span>) فسرعتها الحدّية <span class=\"m\">v<sub>t</sub> = 14.8 m/s</span>، وتصل بسرعة <span class=\"m\">11.4 m/s</span>. الهواء يبطئ القطن قليلًا، لكنه ليس السبب الأساسي في أنه لا يؤذي.</p>\n</div>\n\n<div class=\"card\">\n<h2><span class=\"num\">3</span>الروابط: ما الذي يمسك الجسم الصلب</h2>\n<div class=\"box pic\"><div class=\"tag\">صورة</div><p>تخيّل كُلّة زجاجية في وادٍ. أحد جانبَي الوادي جدار شديد الانحدار، والآخر منحدر طويل لطيف ينبسط في سهل. ادفع الكُلّة دفعة خفيفة فتتأرجح في القاع. ادفعها نحو الجدار فيردّها بقوة. وادفعها على الجانب اللطيف بقوة كافية فتتجاوز الحافة وتمضي: لقد انكسرت الرابطة. الكُلّة ذرة، وقاع الوادي هو مسافة راحتها من جارتها، وشكل الوادي هو الرابطة.</p></div>\n<p>لذرّتين بينهما مسافة <span class=\"m\">r</span> طاقةٌ <span class=\"m\">U(r)</span>. والقوة على كلٍّ منهما، على الخط الواصل بينهما، هي <span class=\"m\">F = −dU/dr</span>. في قاع الوادي، عند <span class=\"m\">r = r<sub>0</sub></span>، تنعدم القوة وتسكن الذرّتان. لنفكّ الطاقة حول تلك النقطة؛ المشتقة الأولى تنعدم عند القاع، فيبقى:</p>\n<div class=\"eq\">U(r) ≈ U(r<sub>0</sub>) + ½ U″(r<sub>0</sub>) (r − r<sub>0</sub>)² &nbsp;&nbsp;⇒&nbsp;&nbsp; F ≈ − k (r − r<sub>0</sub>), &nbsp; k = U″(r<sub>0</sub>)</div>\n<p>قرب السكون تصير كل رابطة نابضًا يطيع قانون هوك. ولهذا تظهر النوابض في الميكانيك في كل مكان: كل وادٍ أملس يشبه قطعًا مكافئًا عند قاعه.</p>\n<h3>رابطة مورس</h3>\n<p>اقترح فيليب مورس عام 1929 واديًا له شكل الصورة السابقة بالضبط:</p>\n<div class=\"eq key\">U(r) = D [1 − e<sup>−α(r − r<sub>0</sub>)</sup>]²</div>\n<p><span class=\"m\">D</span> عمق الوادي، أي الطاقة اللازمة لفصل الذرّتين نهائيًا، و<span class=\"m\">1/α</span> عرضه. وفكّ <span class=\"m\">1 − e<sup>−αx</sup> ≈ αx</span> يعطي ثابت النابض <span class=\"m\">k = 2Dα²</span>. أما شدّ الرابطة، <span class=\"m\">dU/dr = 2Dα e<sup>−αx</sup>(1 − e<sup>−αx</sup>)</span>، فيبلغ أقصاه حيث <span class=\"m\">e<sup>−αx</sup> = ½</span>، أي عند استطالة <span class=\"m\">x = ln 2 / α</span>، ويساوي هناك <span class=\"m\">Dα/2</span>. فإن زادت الاستطالة شدّت الرابطة <em>أقلّ</em>: إنها تُفلِت.</p>\n<p>طابق جيريفالكو وفايتسر عام 1959 أودية مورس على المعادن المكعّبة، مستعينين بطاقة التماسك وتباعد الشبكة وقابلية الانضغاط لكل معدن. وللحديد أعطيا <span class=\"m\">D = 0.4174 eV</span>، <span class=\"m\">α = 1.3885 Å⁻¹</span>، <span class=\"m\">r<sub>0</sub> = 2.845 Å</span> (الإلكترون فولت يساوي <span class=\"m\">1.602×10⁻¹⁹ J</span>، والأنغستروم <span class=\"m\">10⁻¹⁰ m</span>). ومن ثَمّ:</p>\n<div class=\"eq\">k = 2Dα² = 1.61 eV/Å² = <span class=\"m\">25.8 N/m</span></div>\n<p>الرابطة الواحدة نابض ليّن: ثقلٌ كتلته 2.6 g يمطّها مليمترًا. وإنما يقوى الجسم الصلب بعدد روابطه الهائل. لنرصّ هذه النوابض في نمط مكعّب بسيط: في كل متر مربع من المقطع <span class=\"m\">1/r<sub>0</sub>²</span> رابطة متوازية، وسُمك كل طبقة <span class=\"m\">r<sub>0</sub></span>، فيكون الإجهاد لكل وحدة انفعال:</p>\n<div class=\"eq\">E ≈ k / r<sub>0</sub> = <span class=\"m\">25.8 N/m</span> ÷ <span class=\"m\">2.845×10⁻¹⁰ m</span> ≈ <span class=\"m\">9×10¹⁰ Pa</span> = <span class=\"m\">90 GPa</span></div>\n<p>معامل يونغ المقيس للحديد نحو <span class=\"m\">210 GPa</span>. فرصٌّ بسيط لنوابض ثنائية يصيب رتبة المقدار، والباقي تتكفّل به هندسة الشبكة الحقيقية وطبيعة الترابط المعدني متعدّدة الأجسام.</p>\n<div class=\"box note\"><div class=\"tag\">ملاحظة صريحة: المعادن ليست مترابطة أزواجًا في الحقيقة</div><p>في المعدن تتشارك الذرات كلها إلكتروناتها الخارجية، فقوة ارتباط الذرة بجارتها تتوقّف على عدد الجيران الآخرين الذين ترتبط بهم أصلًا. لا يستطيع جهدٌ ثنائي أن يعبّر عن ذلك، ويظهر هذا العجز: في بلّورة مكعّبة غير مُجهَدة تمسكها قوى ثنائية مركزية، يجب أن يتساوى ثابتان من ثوابت المرونة (علاقة كوشي <span class=\"m\">C<sub>12</sub> = C<sub>44</sub></span>)، والمعادن الحقيقية تخرق هذه القاعدة. وتُصلح ذلك طريقةُ الذرة المغمورة التي وضعها داو وباسكس عام 1984: كل ذرة تسكن في كثافة إلكترونية <span class=\"m\">ρ̄<sub>i</sub> = Σ<sub>j</sub> f(r<sub>ij</sub>)</span> يصنعها جيرانها، وتدفع عنها طاقة انغمار <span class=\"m\">F(ρ̄<sub>i</sub>)</span>: <span class=\"m\">E = Σ<sub>i</sub> F(ρ̄<sub>i</sub>) + ½ Σ<sub>i≠j</sub> φ(r<sub>ij</sub>)</span>. لكن في الانضغاط المرن الصغير الذي يعنينا هنا، يرجع كل واحد من هذه النماذج إلى نوابض قرب السكون، فتكفي رابطة مورس.</p></div>\n<div class=\"box toy\"><div class=\"tag\">في نموذجنا: الحديد</div><p>91 ذرة على شبكة مثلّثية، كل منها مربوطة بأقرب جاراتها بوادي مورس شكله <span class=\"m\">αr<sub>0</sub> = 3.95</span>، وهو شكل وادي الحديد نفسه (1.3885 × 2.845). واخترنا الصلابة بحيث تكون الكرة أصلب كثيرًا من الرأس، كما هي كرة الحديد الحقيقية: صلابتها من رتبة <span class=\"m\">E·r ≈ 210 GPa × 2.5 cm ≈ 5×10⁹ N/m</span>، أي نحو ألف ضعف صلابة الجمجمة.</p></div>\n\n<h3>القطن: ألياف صلبة وتشابك ليّن</h3>\n<div class=\"box pic\"><div class=\"tag\">صورة</div><p>اضغط عود معكرونة جافًا على طوله فيقاومك. ادفع منتصفه جانبيًا فينثني في الحال. القطن تشابك رخو من أعواد كهذه، وكل ضغط على التشابك ينتهي إلى ثني الأعواد.</p></div>\n<p>ليفة القطن من السليلوز: حلقات غلوكوز تربطها روابط تساهمية قوية في سلاسل طويلة، تتراصّ السلاسل جنبًا إلى جنب وتمسكها روابط هيدروجينية في لُيَيفات، وتُلفّ اللُّيَيفات في ليفة ملتوية مجوّفة جزئيًا عرضها نحو <span class=\"m\">15 µm</span>. والليفة بوصفها مادةً صلبةٌ، معامل يونغ لها بضع غيغاباسكالات. فليونة كرة القطن لا تأتي من جزيئات ضعيفة، بل من الهندسة.</p>\n<p>لنعامل قطعةً من الليفة طولها <span class=\"m\">L</span> وقطرها <span class=\"m\">d</span> معاملةَ عارضة. إن مُطّت كانت صلابتها <span class=\"m\">k<sub>stretch</sub> = EA/L</span> حيث <span class=\"m\">A = πd²/4</span>. وإن ثُنيت كلوح القفز المثبّت من طرف واحد كانت صلابة طرفها <span class=\"m\">k<sub>bend</sub> = 3EI/L³</span> حيث <span class=\"m\">I = πd⁴/64</span> هو عزم المساحة الثاني، الذي يقيس مقدار المادة البعيدة عن خط الانثناء. والنسبة بينهما:</p>\n<div class=\"eq key\">k<sub>bend</sub> / k<sub>stretch</sub> = (3/16) (d/L)²</div>\n<p>لـ <span class=\"m\">d = 15 µm</span> و<span class=\"m\">L = 1 mm</span> بين نقطتَي تماس تكون النسبة <span class=\"m\">4×10⁻⁵</span>: الثني أليَن من المطّ بنحو 24 ألف مرة. الأشياء الرفيعة تنثني.</p>\n<h3>لماذا يتصلّب التشابك كلما عصرته</h3>\n<p>ليكن <span class=\"m\">φ</span> الكسر الحجمي، أي نصيب الألياف من حجم الكرة. في القطن المنفوش <span class=\"m\">φ ≈ 30/1520 ≈ 0.02</span>: الكرة هواء بنسبة <span class=\"m\">98 %</span>. والحجّة التالية حجّةُ تدرّج تُسقط كل المعاملات العددية.</p>\n<p>أولًا، ما المسافة بين نقاط التماس على طول الليفة؟ قطعة من الليفة طولها <span class=\"m\">b</span> تمرّ بشريحة مساحتها نحو <span class=\"m\">b·d</span>. والألياف الأخرى تملأ الكسر <span class=\"m\">φ</span> من الفراغ، فيعبر تلك الشريحة منها قرابة <span class=\"m\">φ b d / d² = φ b/d</span>. وتماسٌّ واحد لكل قطعة يعني <span class=\"m\">b ≈ d/φ</span>: كلما اكتظّ التشابك تقاربت نقاط التماس.</p>\n<p>اضغط الكرة بانفعال صغير <span class=\"m\">ε</span>. كل قطعة حرّة طولها <span class=\"m\">b</span> تنثني بمقدار <span class=\"m\">δ ≈ εb</span> وتدفع بقوة:</p>\n<div class=\"eq\">f ≈ (E d⁴ / b³) · ε b = E d⁴ ε / b²</div>\n<p>طول الألياف في وحدة الحجم <span class=\"m\">4φ/(πd²)</span>، فطبقةٌ سُمكها قطعةٌ واحدة تحوي قرابة <span class=\"m\">φ/d²</span> قطعةً حاملةً للحِمل في وحدة المساحة. والإجهاد هو القوة لكل قطعة مضروبةً في عدد القطع لكل وحدة مساحة:</p>\n<div class=\"eq\">σ ≈ (E d⁴ ε / b²) · (φ / d²) = E φ d² ε / b² = E φ³ ε</div>\n<p>فصلابة التشابك نحو <span class=\"m\">E φ³</span>. ولأن <span class=\"m\">φ</span> يزداد كلما عصرت، تزداد الصلابة معه. والتكامل مع <span class=\"m\">dε = dφ/φ</span> يعطي قانون فان فيك لكتل الألياف، الذي قيس أول مرة على الصوف عام 1946:</p>\n<div class=\"eq key\">σ = K E (φ³ − φ<sub>0</sub>³)</div>\n<div class=\"box chk\"><div class=\"tag\">تحقّق</div><p>مع <span class=\"m\">φ = 0.02</span> يكون <span class=\"m\">φ³ = 8×10⁻⁶</span>: التشابك أليَن من الليفة التي صُنع منها بمئة ألف مرة على الأقل. ويقول القانون أيضًا إن الكرة المعصورة أصعب عصرًا بعد ذلك، وأصابعك تؤكّد هذا على أي كرة قطن.</p></div>\n<div class=\"box toy\"><div class=\"tag\">في نموذجنا: القطن</div><p>18 ليفة في كل منها 34 حبّة، ملتفّة عشوائيًا داخل دائرة. تؤثّر فيها أربعة مكوّنات: نوابض مطّ على طول كل ليفة؛ ونوابض ثني على الزاوية بين كل قطعتين متتاليتين، زواياها في الراحة هي التفاف الليفة الطبيعي؛ ووُصَلات حيث تتقاطع الألياف، من أودية مورس ضحلة قابلة للانكسار، تنوب عن الاحتكاك والتشابك؛ وأخيرًا، حين تتلامس حبّات من ليفتين مختلفتين تتدافعان وتحتكّان. التماسّات الجديدة التي تتكوّن تحت العصر تعطي تصلّب فان فيك، والاحتكاك يحوّل الحركة إلى حرارة.</p></div>\n</div>\n\n<div class=\"card\">\n<h2><span class=\"num\">4</span>الضربة: لماذا يؤذي الصُّلب</h2>\n<p>حين يوقف شيءٌ الكرةَ على مسافة <span class=\"m\">d</span>، تبذل قوة الإيقاف شغلًا ضد حركتها. ومبرهنة الشغل والطاقة تقول إن هذا الشغل يساوي طاقة الحركة المنزوعة:</p>\n<div class=\"eq key\">F̄ · d = ½ m v²</div>\n<p>حيث <span class=\"m\">F̄</span> متوسط القوة على امتداد المسافة. الطاقة نفسها، ومسافة توقّف أقصر بعشر مرات، تعني قوة أكبر بعشر مرات.</p>\n<h3>الحديد: الرأس يتحمّل الليونة كلها</h3>\n<p>لنفترض أن الكرة جاسئة (رأينا في القسم 3 أن كرة الحديد الحقيقية أصلب من الجمجمة بنحو ألف مرة)، وأن الرأس نابض خطّي صلابته <span class=\"m\">k<sub>h</sub></span>، وأن شيئًا لا يضيع في أثناء الانضغاط. تذهب طاقة الحركة إلى النابض: <span class=\"m\">½mv² = ½k<sub>h</sub>x<sub>max</sub>²</span>. والنابض الخطّي تبسيط: الجماجم المقيسة تتصلّب كلما ضُغطت أكثر. ومن ثَمّ:</p>\n<div class=\"eq key\">x<sub>max</sub> = v √(m/k<sub>h</sub>), &nbsp;&nbsp; F<sub>max</sub> = k<sub>h</sub> x<sub>max</sub> = v √(m k<sub>h</sub>), &nbsp;&nbsp; τ = π √(m/k<sub>h</sub>)</div>\n<p>ويدوم التماس زمنًا <span class=\"m\">τ</span>، أي نصف ذبذبة للكتلة على النابض.</p>\n<div class=\"box chk\"><div class=\"tag\">تحقّق</div><p>الوحدات: <span class=\"m\">(m/s)·√(kg·N/m) = (m/s)·(kg/s) = N</span>. والحدّ: رأس أليَن (<span class=\"m\">k<sub>h</sub> → 0</span>) يعطي دفعة أرفق وأطول، كما تفعل الوسادة.</p></div>\n<p>الرأس الحقيقي ليس مثبّتًا بمسامير. ففي جزء من الألف من الثانية لا تكاد الرقبة تعمل، فتضغط الكرة النابضَ الذي بينها وبين رأس حرّ كتلته <span class=\"m\">M<sub>h</sub></span>، ويُستبدل بـ <span class=\"m\">m</span> أعلاه الكتلةُ المختزلة <span class=\"m\">μ = mM<sub>h</sub>/(m + M<sub>h</sub>)</span>. وبالكلمات: يرتدّ الرأس قليلًا، فيُضغط النابض بينهما أقلّ قليلًا.</p>\n<div class=\"box toy\"><div class=\"tag\">أرقام حقيقية</div><p>لكرة الحديد ذات <span class=\"m\">0.5 kg</span> بسرعة <span class=\"m\">13.9 m/s</span>، ومع متوسط صلابة ديناميكية للجمجمة يقارب <span class=\"m\">4.0 MN/m</span> (قاسه يوغاناندان وزملاؤه على رؤوس جثث): <span class=\"m\">F<sub>max</sub> = 19.8 kN</span> خلال <span class=\"m\">τ = 1.1 ms</span>، وتنضغط الجمجمة <span class=\"m\">x<sub>max</sub> = 4.9 mm</span>. ومع رأس حرّ كتلته نحو <span class=\"m\">4.5 kg</span> (قيمة نموذجية مفترضة) تصير <span class=\"m\">μ = 0.45 kg</span> وتنخفض القمّة إلى نحو <span class=\"m\">18.7 kN</span>. وقد قاست الدراسة نفسها متوسط حِمل كسرٍ ديناميكي قدره <span class=\"m\">11.9 kN</span>. أما تسارع الرأس، <span class=\"m\">F/M<sub>h</sub></span>، فنحو <span class=\"m\">4200 m/s²</span>، أي أكثر من 400 ضعف الجاذبية.</p></div>\n<h3>القطن: الكرة تتحمّل الليونة</h3>\n<p>كرة القطن أليَن كثيرًا من الرأس، فلا يكاد الرأس يتحرّك، وتنسحق الكرة بدلًا منه على جزء كبير من قطرها البالغ <span class=\"m\">32 cm</span>. لنأخذ مسافة توقّف قدرها نحو <span class=\"m\">20 cm</span> (تقدير مني، لا قياس): <span class=\"m\">F̄ ≈ 32.5 J / 0.2 m ≈ 160 N</span>، وتسارع للرأس دون أربعة أضعاف الجاذبية. هذا المتوسط أقلّ من قمّة الحديد بنحو 120 مرة. وقمّة القطن نفسها فوق متوسطه، لأن التشابك يتصلّب كلما انسحق. بكم؟ لم أستطع أن أحسم ذلك: تقديرٌ أحادي البعد أجريته ظلّ ينخفض كلما دقّقته، من <span class=\"m\">4.7 kN</span> إلى <span class=\"m\">0.83 kN</span>، ولم يستقرّ.</p>\n<h3>الاختبار الحاسم: كرة سليلوز مصمتة</h3>\n<p>كرة مصمتة من السليلوز، وهو الجزيء نفسه الذي يُصنع منه القطن، أصلب من الجمجمة بنحو ألف مرة، كالحديد تمامًا. وفي نموذجي أحادي البعد ضربت بقوة <span class=\"m\">19.5 kN</span> مقابل <span class=\"m\">19.8 kN</span> للحديد. فليست كيمياء الروابط هي التي تحسم النتيجة، بل ترتيبها.</p>\n<div class=\"box note\"><div class=\"tag\">صورة ثانية: بأي سرعة ينتقل الخبر</div><p>حين تتوقّف مقدّمة الكرة، يعلم مؤخّرها بذلك عبر موجة انضغاط. في الحديد تجري هذه الموجة بسرعة <span class=\"m\">√(E/ρ) ≈ 5.2 km/s</span> وتعبر الكرة ذات الخمسة سنتيمترات في نحو <span class=\"m\">10 µs</span>، أي أسرع من مدة التماس بمئة مرة، فتتوقّف الكرة كلها كجسم واحد، كحبّة البَرَد. وفي القطن المنفوش تجري الموجة بسرعة أمتار إلى عشرات الأمتار في الثانية (لم أستطع ضبط الرقم)، وهي قريبة من سرعة الاصطدام. فيظلّ مؤخَّر الكرة يصل بعد أن توقّف مقدَّمها، فيضرب القطن كزخّة قصيرة من قطع خفيفة لا كحجر واحد.</p></div>\n<div class=\"box toy\"><div class=\"tag\">في نموذجنا</div><p>هنا <span class=\"m\">v = 14.0 m/s</span> و<span class=\"m\">m = 1 kg</span> و<span class=\"m\">k<sub>h</sub> = 6000 N/m</span>، فتعطي صيغة الكرة الجاسئة 1085 N. والنموذج يقرأ نحو 639 N، أقل، لأن مخمِّد الرأس والتماس الليّن بين الذرات والصفيحة يخفّفان القمّة كلاهما. وقمّة القطن قرب 188 N. النسبة في النموذج نحو 3.4، وهي أقلّ بكثير من النسبة الحقيقية، لأنني اضطررت إلى إبقاء قطن النموذج أصلب كثيرًا من القطن الحقيقي كي يبقى كرةً مرئية.</p></div>\n</div>\n\n<div class=\"card\">\n<h2><span class=\"num\">5</span>الميزان: كيف تعمل حسّاسات القوة</h2>\n<div class=\"box pic\"><div class=\"tag\">صورة</div><p>قِف على طرف لوح القفز في المسبح فينحني؛ وكلما ثقلت زاد انحناؤه. كل ميزان لوحُ قفزٍ ومسطرة: يقيس مقدار انحناء شيء ما ويحوّله إلى قوة.</p></div>\n<p>الميزان في المحاكاة هو الرأس نفسه: صفيحة على نابض. وهو يقرأ قانون هوك معكوسًا، <span class=\"m\">F = k<sub>h</sub> × الانضغاط</span>. الإبرة السوداء تُظهر القوة في هذه اللحظة. والمؤشّر الأحمر الرفيع ماسكُ القمّة: تدفعه الإبرة إلى أعلى فيبقى عند أكبر قوة بلغتها، وهي قوة الاصطدام. وحين يخمد الاهتزاز تستقرّ الإبرة حيث يمسك النابض الكرة ساكنة، <span class=\"m\">k<sub>h</sub>x = Mg</span>، وتنتقل الشاشة إلى الوزن. يظلّ القطن يتمايل برفق بضع ثوانٍ، فيفعل الميزان ما يفعله الميزان الرقمي بإشارة مضطربة: يأخذ متوسط قراءته، هنا ابتداءً من <span class=\"m\">4 s</span>، ويعرض النتيجة ابتداءً من <span class=\"m\">6.5 s</span>. عندئذ تقرأ الكرتان 9.81 N، أي <span class=\"m\">1.000 kg</span>، لأن كتلة كلٍّ منهما <span class=\"m\">1 kg</span> بالضبط. الوزن واحد، والضربتان مختلفتان جدًا.</p>\n<p>ميزان المطبخ يعرض الكيلوغرامات بقسمة القوة على <span class=\"m\">g</span>. ففي لحظة الاصطدام تقرأ كرة الحديد نحو <span class=\"m\">65 kg</span>، وكرة القطن نحو <span class=\"m\">19 kg</span>، ثم تستقرّ الاثنتان عند <span class=\"m\">1 kg</span>.</p>\n<h3>داخل ميزان المطبخ أو الحمّام</h3>\n<p>تحت سطح الميزان خليّة حِمل: كتلة صغيرة من الألمنيوم مصمَّمة لتنحني انحناءً طفيفًا جدًا تحت الحِمل. ومُلصق عليها مقياسُ انفعال، رقاقة معدنية رفيعة ممدودة على شكل متعرّج. حين تنحني الكتلة تُمطّ الرقاقة فتطول وتنحفّ، فترتفع مقاومتها الكهربائية <span class=\"m\">R = ρ<sub>e</sub>L/A</span> (حيث <span class=\"m\">ρ<sub>e</sub></span> مقاومية المعدن). وفي سبائك الرقائق الشائعة يكون التغيّر النسبي نحو ضعف الانفعال، <span class=\"m\">ΔR/R ≈ 2ε</span>: بضعة أعشار في المئة على الأكثر. ولرؤية تغيّر بهذا الصغر تُوصل أربع مقاومات على شكل معيّن، هو قنطرة ويتستون، موزونةً بحيث تعطي جهدًا صفريًا بلا حِمل؛ فأي مطّ يُخلّ بتوازنها ويظهر جهد. يقيسه مضخّم، وتقسم الشاشة على <span class=\"m\">g</span>.</p>\n<h3>لماذا لا يقرأ ميزان الحمّام ضربةً</h3>\n<p>الميزان نفسه كتلة على نابض. فلا يستطيع أن يتبع إلا القوى التي تتغيّر أبطأ من تردّده الطبيعي <span class=\"m\">f<sub>0</sub> = (1/2π)√(k/m)</span>، وهو المعدّل الذي يرنّ به حين تنقره؛ وإلكترونياته تأخذ متوسطًا على جزء من الثانية لتعرض رقمًا ثابتًا. والضربة التي تدوم جزءًا من الألف من الثانية تنتهي قبل أن يستجيب الميزان.</p>\n<p>ولقياس الضربات يستعمل المهندسون حسّاسات قوة كهرضغطية. اعصر بلّورة كوارتز فتنزاح أيوناتها الموجبة والسالبة قليلًا بعضها عن بعض داخل الشبكة، فتشحن أوجهها كهربائيًا، بنحو <span class=\"m\">2.3 pC</span> لكل نيوتن في الكوارتز (البيكوكولوم 10⁻¹² C). والبلّورة صلبة إلى حدّ أنها لا تكاد تتحرّك، فتردّدها الطبيعي عشرات الكيلوهرتز، فتستطيع أن تتبع ضربة تدوم جزءًا من الألف من الثانية. وتأتي الشحنة من ذرات انزاحت في أودية روابطها، الأودية نفسها التي في القسم 3.</p>\n</div>\n\n<div class=\"card\">\n<h2><span class=\"num\">6</span>إلى أين تذهب الطاقة</h2>\n<p>الطاقة محفوظة، فيجب أن يتوازن الحساب في كل لحظة:</p>\n<div class=\"eq key\">طاقة الارتفاع المحرَّرة = الحركة + المخزون في الكرة + المخزون في نابض الرأس + الحرارة</div>\n<p>تتولّد الحرارة حيثما احتكّ شيء أو انساب: في المخمِّدات التي تنوب عن الاحتكاك الداخلي في الروابط، وفي احتكاك الألياف بعضها ببعض، وفي مخمِّد الرأس (النسج الرخوة)، وفي التماس بين الكرة والصفيحة. ويجمع النموذج كلًّا من هذه بقانونه الخاص، فيُحسب الشريطان في مخطّط الطاقة كلٌّ على حدة، وقد يختلفان. والفرق بينهما جزء من الجول، وهو الخطأ العددي لطريقة التقدّم الزمني.</p>\n<div class=\"box toy\"><div class=\"tag\">في نموذجنا</div><p>تحوّل كرة الحديد نحو <span class=\"m\">98 J</span> إلى حرارة، كلها تقريبًا في الرأس. وتحوّل كرة القطن نحو <span class=\"m\">104 J</span> إلى حرارة، كلها تقريبًا داخل القطن. وهي تحرّر أكثر من الـ <span class=\"m\">98.1 J</span> التي يعطيها السقوط لأنها تنتهي منسحقةً أدنى مما بدأت، فيهبط مركز كتلتها (متوسط موضع كتلتها) أكثر؛ كما أنها تبدأ وفيها نحو <span class=\"m\">1.2 J</span> مخزونة في ألياف تضاغطت حين صُنع التشابك. هذه، بلغة الطاقة، هي حماية القطن: يحرق الضربة في داخله.</p></div>\n</div>\n\n<div class=\"card\">\n<h2><span class=\"num\">7</span>ما يتركه النموذج</h2>\n<p>النموذج ثنائي الأبعاد، شريحةٌ من كرة ثلاثية الأبعاد. وقد أسقطنا الهواء، فتصل الكرتان بالسرعة نفسها. والرأس صفيحة مستوية على نابض ومخمِّد، لا جمجمة مقوّسة حول دماغ. وحديد النموذج أصلب من الرأس بعامل أصغر بكثير مما في الحديد الحقيقي، وقطن النموذج أصلب كثيرًا من القطن الحقيقي، فيُظهر النموذج الآلية بنسبة قمم تقارب 3.4، بينما النسبة الحقيقية بين قمّة الحديد ومتوسط قوة القطن نحو 120. وتماسّات الألياف في الشريحة تنوب عن تماسّاتها في ثلاثة أبعاد. أما الأرقام الحقيقية في القسمين 2 و4 فمن حسابات يدوية منفصلة، مُدخلاتها في الجدول.</p>\n</div>\n", "h_par": "كل المعاملات", "par_intro": "يستعمل النموذج وحدات SI، لكن كراته مرسومة ومضبوطة للوضوح، لا لتطابق الحديد والقطن الحقيقيين. هنا كل قانون قوة في النموذج، ثم مُدخلات التقديرات الحقيقية.", "th": ["الرمز", "القيمة", "المعنى"], "rows": [["النموذج: مشترك"], ["g, h", "9.81 m/s², 10 m", "الجاذبية؛ ارتفاع السقوط من الصفيحة إلى أدنى نقطة في الكرة"], ["M", "1 kg", "كتلة كل كرة، موزّعة بالتساوي على جسيماتها"], ["Δt, t<sub>end</sub>", "2×10⁻⁴ s, 9 s", "خطوة الزمن (للحديد 5 خطوات فرعية وللقطن 2، من أجل الاستقرار العددي)؛ مدة التجربة؛ تُحفظ المواضع كل 1 ms حتى 2.5 s ثم كل 2 ms، للعرض"], ["طريقة التكامل", "semi-implicit Euler", "أويلر شبه الضمنية: السرعة الجديدة من القوى، ثم الموضع الجديد من السرعة الجديدة"], ["النموذج: الحديد"], ["N, a", "91, 0.10 m", "عدد الذرات على شبكة مثلّثية؛ التباعد"], ["k, αr<sub>0</sub>", "10⁵ N/m, 3.95", "صلابة رابطة مورس عند السكون (k = 2Dα²) وشكلها (شكل الحديد، عن جيريفالكو وفايتسر)"], ["c", "2 N·s/m", "مخمِّد الرابطة، ينوب عن الاحتكاك الداخلي"], ["النموذج: القطن"], ["ألياف × حبّات، s", "18 × 34, 0.08 m", "عدد الألياف، والحبّات في كل ليفة، والتباعد بين الحبّات (612 حبّة)"], ["k<sub>ax</sub>, c", "300 N/m, 0.3 N·s/m", "نابض المطّ على طول الليفة، ومخمِّده"], ["κ, c<sub>b</sub>", "0.25 N·m/rad, 0.004 N·m·s/rad", "نابض الثني على الزاوية بين القطع (زاوية الراحة = الالتفاف الطبيعي)، واحتكاك الثني"], ["k<sub>j</sub>, F<sub>j</sub>", "40 N/m, 4 N", "وُصلة تقاطع الألياف: وادي مورس بهذه الصلابة وبأكبر شدّ؛ تنكسر عند ثلاثة أضعاف استطالة أكبر شدّ"], ["d<sub>c</sub>, k<sub>c</sub>, c<sub>c</sub>", "0.06 m, 20 N/m, 0.4 N·s/m", "تماسّ ليفة بليفة: المدى، وصلابة الدفع، واحتكاك الفرك"], ["النموذج: الرأس والميزان"], ["m<sub>p</sub>, k<sub>h</sub>, c<sub>h</sub>", "0.2 kg, 6000 N/m, 62 N·s/m", "كتلة الصفيحة، ونابض الرأس، ومخمِّد الرأس"], ["ω<sub>c</sub>, ζ<sub>c</sub>", "1350 rad/s, 0.5", "تماسّ الجلد بين الجسيم والصفيحة: يرتدّ كل جسيم بهذا التردّد الزاوي وبنسبة التخميد هذه (ζ = 1 هي الحدّ بين الارتداد والزحف عائدًا)"], ["القراءة", "F = k<sub>h</sub> × compression", "ما يعرضه الميزان (القوة = صلابة النابض × انضغاطه)؛ والوزن متوسط القراءة ابتداءً من 4 s، يُعرض ابتداءً من 6.5 s؛ والكتلة = الوزن ÷ g"], ["تقديرات حقيقية"], ["m, h", "0.5 kg, 10 m", "كتلة الكرة، ارتفاع السقوط"], ["ρ", "7870, 1520, 30 kg/m³", "الحديد، السليلوز، القطن المنفوش (قيمة القطن افتراض مني)"], ["ρ<sub>air</sub>, C<sub>d</sub>", "1.2 kg/m³, 0.47", "كثافة الهواء، معامل سحب الكرة"], ["k<sub>h</sub>", "4.0 MN/m", "متوسط الصلابة الديناميكية للجمجمة، يوغاناندان وزملاؤه"], ["M<sub>h</sub>", "4.5 kg", "كتلة الرأس، قيمة نموذجية مفترضة"], ["E", "210 GPa, ~10 GPa", "معامل يونغ للحديد؛ وللسليلوز (مقرَّب، مفترض)"], ["D, α, r<sub>0</sub>", "0.4174 eV, 1.3885 Å⁻¹, 2.845 Å", "معاملات مورس للحديد، جيريفالكو وفايتسر (1959)"]], "h_src": "المصادر", "sources": ["L. A. Girifalco, V. G. Weizer, “Application of the Morse potential function to cubic metals”, Phys. Rev. 114, 687 (1959). <a href=\"https://doi.org/10.1103/PhysRev.114.687\">doi:10.1103/PhysRev.114.687</a>؛ مدخل النموذج: <a href=\"https://www.ctcms.nist.gov/potentials/entry/1959--Girifalco-L-A-Weizer-V-G--Fe\">NIST Interatomic Potentials Repository</a>. قيم الحديد منقولة من معرفتي بجدول الورقة؛ لم أستطع فتح الجدول على الإنترنت.", "M. S. Daw, M. I. Baskes, “Embedded-atom method”, Phys. Rev. B 29, 6443 (1984). <a href=\"https://link.aps.org/doi/10.1103/PhysRevB.29.6443\">رابط</a>", "N. Yoganandan et al.، الميكانيكا الحيوية لرأس الإنسان تحت الأحمال شبه الساكنة والديناميكية (اختبارات على جثث؛ متوسط حِمل الكسر الديناميكي 11.9 kN، والصلابة 4023 N/mm). <a href=\"https://wbldb.lievers.net/10149876.html\">الملخّص</a>", "C. M. van Wyk, “A study of the compressibility of wool”, Onderstepoort J. Vet. Sci. 21, 99 (1946). <a href=\"https://repository.up.ac.za/handle/2263/59727\">المستودع</a>", "نماذج شبكات الألياف المنفصلة للورق، جامعة تشالمرز للتكنولوجيا. <a href=\"https://research.chalmers.se/en/publication/532887\">رابط</a>"]};
+const RTL=true;
+const FONT={"title": "700 16px 'Noto Naskh Arabic',serif", "titleSmall": "700 16px 'Noto Naskh Arabic',serif", "small": "13px 'Noto Naskh Arabic',serif", "mono9": "10px 'IBM Plex Mono',monospace", "mono10": "10.5px 'IBM Plex Mono',monospace", "mono11": "11px 'IBM Plex Mono',monospace", "gaugeNum": "500 11px 'IBM Plex Sans',sans-serif", "gaugeUnit": "500 10px 'IBM Plex Sans',sans-serif", "panelLab": "600 9.5px 'IBM Plex Sans',sans-serif", "panelNum": "500 13px 'IBM Plex Mono',monospace", "ruler": "11px 'IBM Plex Sans',sans-serif", "colHead": "700 16px 'Noto Naskh Arabic',serif", "colSub": "11px 'IBM Plex Mono',monospace"};
+
+// ---------------- page text ----------------
+document.querySelectorAll("[data-t]").forEach(e=>e.innerHTML=T[e.dataset.t]);
+document.getElementById("sections").innerHTML=T.sections;
+(function(){
+  let h=`<tr><th>${T.th[0]}</th><th>${T.th[1]}</th><th>${T.th[2]}</th></tr>`;
+  for(const r of T.rows){
+    if(r.length===1)h+=`<tr class="sec"><td colspan="3">${r[0]}</td></tr>`;
+    else h+=`<tr><td>${r[0]}</td><td class="v">${r[1]}</td><td>${r[2]}</td></tr>`;
+  }
+  document.getElementById("ptab").innerHTML=h;
+  document.getElementById("src").innerHTML=T.sources.map(s=>`<li>${s}</li>`).join("");
+})();
+
+// ---------------- run the model once, store it, then play it back ----------------
+// The drop is computed in small slices after the page opens (the page stays usable) and stored:
+// every 1 ms up to 2.5 s (fall and impact), every 2 ms after that (settling).
+const T1=2.5,NF1=Math.round(T1/1e-3),NF=NF1+Math.round((P.tmax-T1)/2e-3)+1;
+const tOf=k=>k<=NF1?k*1e-3:T1+(k-NF1)*2e-3;
+const kOf=t=>t<=T1?Math.round(t/1e-3):Math.min(NF-1,NF1+Math.round((t-T1)/2e-3));
+const S={};
+let iron,cot,computed=0,playing=false,tPlay=0,slow=4,last=null;
+function makeStore(b){return {N:b.N,xy:new Float32Array(NF*2*b.N),yp:new Float32Array(NF),F:new Float32Array(NF),Fmax:new Float32Array(NF),E:new Float32Array(NF*7),tImpact:null}}
+function record(b,st,k){
+  const o=k*2*b.N;for(let i=0;i<b.N;i++){st.xy[o+2*i]=b.x[i];st.xy[o+2*i+1]=b.y[i]}
+  st.yp[k]=b.yp;st.F[k]=b.Fs||0;st.Fmax[k]=b.Fmax;
+  const e=b.E;st.E.set([e.KE,e.PE,e.elastic,e.head,e.heatBall,e.heatHead,b.E0],k*7);
+  if(st.tImpact===null&&b.tImpact!==null)st.tImpact=b.tImpact;
+}
+function init(){
+  iron=makeIron();cot=makeCotton();S.iron=makeStore(iron);S.cot=makeStore(cot);
+  for(const b of [iron,cot]){b.Fs=step(b);const e=b.E;b.E0=e.KE+e.PE+e.elastic+e.head+e.heatBall+e.heatHead;record(b,S[b.kind==="iron"?"iron":"cot"],0)}
+  Object.assign(S.iron,{bi:iron.bi,bj:iron.bj,l0:iron.l0,nb:iron.nb,kind:"iron",rad:iron.rad});
+  Object.assign(S.cot,{bi:cot.bi,bj:cot.bj,l0:cot.l0,type:cot.type,nb:cot.nb,fibIdx:cot.fibIdx,kind:"cot",rad:cot.rad});
+  computed=1;setTimeout(work,0);
+}
+function work(){
+  const t0=performance.now();
+  while(computed<NF&&performance.now()-t0<14){
+    const target=tOf(computed);
+    while(iron.t<target-1e-9){iron.Fs=step(iron);cot.Fs=step(cot)}
+    record(iron,S.iron,computed);record(cot,S.cot,computed);computed++;
+  }
+  if(computed<NF)setTimeout(work,0);
+}
+const W0=4.0,WSHOW=6.5;            // the scale's weight: average of its reading from 4 s on, shown from 6.5 s
+function wAvg(st,k){
+  if(tOf(k)<WSHOW)return null;
+  let s=0,c=0;for(let j=kOf(W0);j<=k;j++){s+=st.F[j];c++}return s/c;
+}
+
+// ---------------- drawing ----------------
+const cv=document.getElementById("sim"),cx=cv.getContext("2d");
+let W=0,H=0,HS=0;
+const GAUGE_H=214,RULER=46,GAIN=10;     // gauge strip height; ruler width; plate travel drawn 10x larger
+function fitAll(){
+  const d=devicePixelRatio||1;
+  W=cv.getBoundingClientRect().width;HS=W<640?430:470;H=HS+GAUGE_H;
+  cv.style.height=H+"px";cv.width=W*d;cv.height=H*d;cx.setTransform(d,0,0,d,0,0);
+  for(const id of ["pZoom","pAll","en"]){const c=document.getElementById(id),r=c.getBoundingClientRect(),h=+c.getAttribute("height");c.style.height=h+"px";c.width=r.width*d;c.height=h*d;c.getContext("2d").setTransform(d,0,0,d,0,0)}
+}
+function txt(c,s,x,y,font,color,align,ltr){c.font=font;c.fillStyle=color;c.textAlign=align||"center";c.direction=(RTL&&!ltr)?"rtl":"ltr";c.fillText(s,x,y)}
+function spaced(c,s,x,y,font,color,sp){            // letter-spaced capitals for instrument labels (Latin only)
+  c.font=font;c.fillStyle=color;c.direction="ltr";c.textAlign="left";
+  if(RTL){c.textAlign="center";c.direction="rtl";c.fillText(s,x,y);return}
+  let w=0;for(const ch of s)w+=c.measureText(ch).width+sp;w-=sp;let xx=x-w/2;
+  for(const ch of s){c.fillText(ch,xx,y);xx+=c.measureText(ch).width+sp}
+}
+function gauge(c,x0,y0,R,F,Fmax,w){
+  // a precision force gauge: square-root scale so the 9.81 N weight and a 600 N blow both read clearly
+  const FS=700,a0=-225,span=270,ang=f=>(a0+span*Math.sqrt(Math.max(0,Math.min(f,FS))/FS))*Math.PI/180;
+  c.fillStyle="#2a1d16";c.beginPath();c.arc(x0,y0,R+5,0,7);c.fill();
+  c.fillStyle="#fbf8f2";c.beginPath();c.arc(x0,y0,R,0,7);c.fill();
+  c.strokeStyle="#cdbfa9";c.lineWidth=1;c.beginPath();c.arc(x0,y0,R-3,0,7);c.stroke();
+  for(let f=0;f<=FS;f+=(f<20?2:f<100?10:f<300?25:50)){
+    const a=ang(f),major=[0,10,50,100,200,400,700].includes(f),r1=R-4,r2=R-(major?13:8);
+    c.strokeStyle=major?"#23160f":"#8a7663";c.lineWidth=major?1.4:0.7;
+    c.beginPath();c.moveTo(x0+Math.cos(a)*r1,y0+Math.sin(a)*r1);c.lineTo(x0+Math.cos(a)*r2,y0+Math.sin(a)*r2);c.stroke();
+    if(major&&!(R<52&&(f===50||f===200)))txt(c,String(f),x0+Math.cos(a)*(R-24),y0+Math.sin(a)*(R-24)+4,FONT.gaugeNum,"#23160f","center",true);
+  }
+  const aw=ang(P.M*P.g);c.strokeStyle="#3c6a46";c.lineWidth=3;c.beginPath();c.arc(x0,y0,R-5,aw-0.05,aw+0.05);c.stroke();
+  txt(c,"N",x0,y0+R*0.42,FONT.gaugeUnit,"#6f5b4c","center",true);
+  const ap=ang(Fmax),an=ang(Math.max(0,F));
+  c.strokeStyle="#b02a3c";c.lineWidth=1.6;c.beginPath();c.moveTo(x0+Math.cos(ap)*R*0.35,y0+Math.sin(ap)*R*0.35);c.lineTo(x0+Math.cos(ap)*(R-5),y0+Math.sin(ap)*(R-5));c.stroke();
+  c.strokeStyle="#23160f";c.lineWidth=2.2;c.beginPath();c.moveTo(x0-Math.cos(an)*9,y0-Math.sin(an)*9);c.lineTo(x0+Math.cos(an)*(R-8),y0+Math.sin(an)*(R-8));c.stroke();
+  c.fillStyle="#23160f";c.beginPath();c.arc(x0,y0,4,0,7);c.fill();c.fillStyle="#b02a3c";c.beginPath();c.arc(x0,y0,1.6,0,7);c.fill();
+}
+function readoutPanel(c,x,y,w,F,Fmax,wt){
+  // digital panel: dark glass, cream figures, tabular digits
+  const h=62;c.fillStyle="#1d140f";c.beginPath();c.roundRect(x,y,w,h,6);c.fill();
+  const row=(lab,val,yy,col)=>{txt(c,lab,x+9,yy,FONT.panelLab,"#bfae96","left",true);txt(c,val,x+w-9,yy,FONT.panelNum,col,"right",true)};
+  row("PEAK",Fmax.toFixed(0)+" N",y+19,"#f3c9a0");
+  if(wt===null)row("LIVE",Math.max(0,F).toFixed(0)+" N",y+38,"#f6efe3");
+  else row("WEIGHT",wt.toFixed(2)+" N",y+38,"#cfe6c8");
+  row(wt===null?"":"MASS",wt===null?"":(wt/P.g).toFixed(3)+" kg",y+56,"#cfe6c8");
+}
+function camBottom(k,view){
+  const o=k*2*S.iron.N;let lo=Infinity;for(let i=0;i<S.iron.N;i++)lo=Math.min(lo,S.iron.xy[o+2*i+1]);
+  return Math.max(-2.3,lo-0.42*view);
+}
+function drawBall(st,k,X,Yb,sc){
+  const o=k*2*st.N,px=i=>X(st.xy[o+2*i]),py=i=>Yb(st.xy[o+2*i+1]);
+  if(st.kind==="cot"){
+    cx.fillStyle="rgba(214,201,182,.35)";for(let i=0;i<st.N;i++){cx.beginPath();cx.arc(px(i),py(i),0.16*sc,0,7);cx.fill()}
+    cx.fillStyle="rgba(255,253,248,.92)";for(let i=0;i<st.N;i++){cx.beginPath();cx.arc(px(i),py(i),0.1*sc,0,7);cx.fill()}
+    cx.lineCap="round";cx.lineJoin="round";
+    for(const pass of [["#a8998a",Math.max(1.6,sc*0.034)],["#ffffff",Math.max(0.8,sc*0.017)]]){
+      cx.strokeStyle=pass[0];cx.lineWidth=pass[1];
+      for(const idx of st.fibIdx){cx.beginPath();cx.moveTo(px(idx[0]),py(idx[0]));
+        for(let q=1;q<idx.length-1;q++){const a=idx[q],c2=idx[q+1];cx.quadraticCurveTo(px(a),py(a),(px(a)+px(c2))/2,(py(a)+py(c2))/2)}
+        const z=idx[idx.length-1];cx.lineTo(px(z),py(z));cx.stroke()}
+    }
+    for(let q=0;q<st.nb;q++){if(st.type[q]!==1)continue;const i=st.bi[q],j=st.bj[q];
+      const l=Math.hypot(st.xy[o+2*j]-st.xy[o+2*i],st.xy[o+2*j+1]-st.xy[o+2*i+1]),e=-(l-st.l0[q])/st.l0[q]*25;if(e<0.3)continue;
+      cx.strokeStyle=`rgba(125,29,47,${Math.min(.45,e-0.2)})`;cx.lineWidth=1.6;cx.beginPath();cx.moveTo(px(i),py(i));cx.lineTo(px(j),py(j));cx.stroke()}
+  }else{
+    for(let q=0;q<st.nb;q++){const i=st.bi[q],j=st.bj[q];
+      const l=Math.hypot(st.xy[o+2*j]-st.xy[o+2*i],st.xy[o+2*j+1]-st.xy[o+2*i+1]),e=Math.max(-1,Math.min(1,(l-st.l0[q])/st.l0[q]*150));
+      cx.strokeStyle=e<0?`rgba(125,29,47,${.3+.7*-e})`:`rgba(51,98,127,${.3+.7*e})`;cx.lineWidth=Math.max(1,sc*0.022);cx.beginPath();cx.moveTo(px(i),py(i));cx.lineTo(px(j),py(j));cx.stroke()}
+    cx.fillStyle="#3b332e";for(let i=0;i<st.N;i++){cx.beginPath();cx.arc(px(i),py(i),Math.max(1.6,sc*0.036),0,7);cx.fill()}
+  }
+}
+function drawSim(k){
+  cx.clearRect(0,0,W,H);
+  const top=40,bottom=HS-6,colW=(W-RULER-6)/2,sc=Math.min((bottom-top)/6.6,colW/3.3),view=(bottom-top)/sc;
+  const yb=camBottom(k,view),Y=y=>bottom-(y-yb)*sc;
+  const cols=RTL?[[S.cot,T.cotton],[S.iron,T.iron]]:[[S.iron,T.iron],[S.cot,T.cotton]];
+  // shared height ruler on the left
+  const rx=RULER-8;cx.strokeStyle="#bfae96";cx.lineWidth=1;cx.beginPath();cx.moveTo(rx,Math.max(top-6,Y(13)));cx.lineTo(rx,Math.min(bottom,Y(-1.5)));cx.stroke();
+  for(let m=-1;m<=13;m++){const yy=Y(m);if(yy<top-4||yy>bottom+2)continue;
+    cx.beginPath();cx.moveTo(rx-(m%5?4:8),yy);cx.lineTo(rx,yy);cx.stroke();
+    if(m>=0)txt(cx,m+" m",rx-11,yy+4,FONT.ruler,"#6f5b4c","right",true)}
+  // start height
+  if(Y(P.h)>top&&Y(P.h)<bottom){cx.strokeStyle="rgba(125,29,47,.6)";cx.setLineDash([5,5]);cx.beginPath();cx.moveTo(rx,Y(P.h));cx.lineTo(W-4,Y(P.h));cx.stroke();cx.setLineDash([]);
+    txt(cx,T.startline,rx+8,Y(P.h)+15,FONT.small,"#7d1d2f","left")}
+  cols.forEach(([st,label],ci)=>{
+    const ox=RULER+ci*colW,bx=ox+colW/2,shift=(GAIN-1)*st.yp[k];
+    const X=x=>bx+x*sc,Yb=y=>Y(y+shift);
+    // column heading: the material and its mass, so equal mass is stated where it is seen
+    spaced(cx,label.toUpperCase(),bx,24,FONT.colHead,"#5a0f21",2);
+    txt(cx,"M = "+P.M.toFixed(2)+" kg",bx,38,FONT.colSub,"#6f5b4c","center",true);
+    // head: spring, damper, plate
+    const plateY=Yb(0),baseY=Y(-1.5),pw=Math.min(2.9*sc,colW-14);
+    if(plateY<bottom+20){
+      cx.save();cx.beginPath();cx.rect(ox,top,colW,bottom-top+2);cx.clip();
+      cx.strokeStyle="#6f665e";cx.lineWidth=1.5;cx.beginPath();cx.moveTo(bx,plateY+10);
+      for(let i=1;i<12;i++)cx.lineTo(bx+(i%2?0.17:-0.17)*sc,plateY+10+(baseY-plateY-10)*i/12);cx.lineTo(bx,baseY);cx.stroke();
+      const mid=(plateY+baseY)/2,dx=0.55*sc;cx.lineWidth=1.3;cx.beginPath();cx.moveTo(bx+dx,plateY+10);cx.lineTo(bx+dx,mid+4);cx.moveTo(bx+dx-7,mid-6);cx.lineTo(bx+dx-7,mid+14);cx.lineTo(bx+dx+7,mid+14);cx.lineTo(bx+dx+7,mid-6);cx.moveTo(bx+dx,mid+14);cx.lineTo(bx+dx,baseY);cx.stroke();
+      cx.fillStyle="#3f2c23";cx.fillRect(bx-pw/2,baseY,pw,4);
+      cx.fillStyle="#e3cfae";cx.strokeStyle="#3f2c23";cx.lineWidth=1.4;cx.beginPath();cx.roundRect(bx-pw/2,plateY,pw,10,2);cx.fill();cx.stroke();
+      cx.restore();
+    }
+    cx.save();cx.beginPath();cx.rect(ox,top,colW,bottom-top+2);cx.clip();drawBall(st,k,X,Yb,sc);cx.restore();
+    // gauge strip
+    const gy=HS+8,R=Math.min(58,colW*0.3);
+    cx.strokeStyle="#dccdb4";cx.lineWidth=1;cx.beginPath();cx.moveTo(ox+8,HS);cx.lineTo(ox+colW-8,HS);cx.stroke();
+    const w=wAvg(st,k);
+    gauge(cx,bx,gy+R+8,R,st.F[k],st.Fmax[k],w);
+    const pwid=Math.min(colW-12,170);readoutPanel(cx,bx-pwid/2,gy+2*R+22,pwid,st.F[k],st.Fmax[k],w);
+  });
+  cx.strokeStyle="#dccdb4";cx.beginPath();cx.moveTo(RULER+colW,top);cx.lineTo(RULER+colW,H-8);cx.stroke();
+  const hint=document.getElementById("hint");
+  hint.hidden=playing||k>0;
+  if(!hint.hidden)hint.innerHTML=`<b>${T.open1}</b> ${computed<NF?T.open2wait.replace("{p}",Math.round(100*computed/NF)):T.open2}`;
+}
+function drawPlot(id,t0,t1,title,k){
+  const cvs=document.getElementById(id),c=cvs.getContext("2d"),w=cvs.getBoundingClientRect().width,h=220,L=46,B=34,Tp=26,R=10;
+  c.clearRect(0,0,w,h);
+  const fmax=700,X=t=>L+(w-L-R)*(t-t0)/(t1-t0),Y=f=>h-B-(h-B-Tp)*Math.max(0,f)/fmax;
+  txt(c,title,(w+L)/2,16,FONT.small,"#5a0f21");
+  c.strokeStyle="#dccdb4";c.lineWidth=1;
+  for(let f=0;f<=fmax;f+=100){c.beginPath();c.moveTo(L,Y(f));c.lineTo(w-R,Y(f));c.stroke();c.font=FONT.mono10;c.fillStyle="#6f5b4c";c.textAlign="right";c.direction="ltr";c.fillText(f,L-5,Y(f)+3)}
+  const dt=(t1-t0)>2?1:0.1;
+  for(let t=Math.ceil(t0/dt-1e-9)*dt;t<=t1+1e-9;t+=dt){c.font=FONT.mono10;c.fillStyle="#6f5b4c";c.textAlign="center";c.fillText(t.toFixed(dt<1?1:0),X(t),h-B+14)}
+  txt(c,T.ax_t,(w+L)/2,h-4,FONT.small,"#6f5b4c");
+  c.save();c.translate(12,(h-B+Tp)/2);c.rotate(-Math.PI/2);txt(c,T.ax_f,0,0,FONT.small,"#6f5b4c");c.restore();
+  c.strokeStyle="#3c6a46";c.setLineDash([5,4]);c.beginPath();c.moveTo(L,Y(P.M*P.g));c.lineTo(w-R,Y(P.M*P.g));c.stroke();c.setLineDash([]);
+  for(const [st,col] of [[S.cot,"#33627f"],[S.iron,"#7d1d2f"]]){
+    c.strokeStyle=col;c.lineWidth=1.8;c.beginPath();let on=false;
+    const j0=Math.max(0,kOf(t0)),j1=Math.min(k,kOf(t1));
+    for(let j=j0;j<=j1;j++){const t=tOf(j);if(!on){c.moveTo(X(t),Y(st.F[j]));on=true}else c.lineTo(X(t),Y(st.F[j]))}
+    c.stroke();
+  }
+  c.font=FONT.small;c.direction=RTL?"rtl":"ltr";c.textAlign=RTL?"left":"right";
+  const lx=RTL?L+6:w-R-4;
+  c.fillStyle="#7d1d2f";c.fillText("— "+T.iron,lx,Tp+16);c.fillStyle="#33627f";c.fillText("— "+T.cotton,lx,Tp+32);c.fillStyle="#3c6a46";c.fillText("- - "+T.weightline,lx,Tp+48);
+}
+function drawEnergy(k){
+  const cvs=document.getElementById("en"),c=cvs.getContext("2d"),w=cvs.getBoundingClientRect().width,h=250,L=RTL?14:130,R=RTL?130:14,Emax=120;
+  c.clearRect(0,0,w,h);
+  const X=e=>RTL?(w-R)-(w-L-R)*e/Emax:L+(w-L-R)*e/Emax,cols=["#ecc596","#7d1d2f","#33627f","#3c6a46","#c9783f","#b6aca1"];
+  for(const [st,name,y0] of [[S.iron,T.iron,20],[S.cot,T.cotton,130]]){
+    const E=st.E.subarray(k*7,k*7+7),released=E[6]-E[1],parts=[E[0],E[2],E[3],E[4],E[5]];
+    const ax=RTL?w-6:6,al=RTL?"right":"left";
+    txt(c,name,ax,y0+12,FONT.titleSmall,"#5a0f21",al);
+    txt(c,T.en_in,ax,y0+37,FONT.small,"#6f5b4c",al);
+    c.fillStyle=cols[0];c.strokeStyle="#3f2c23";c.lineWidth=1;
+    const a=X(0),bb=X(Math.min(Math.max(0,released),Emax));c.fillRect(Math.min(a,bb),y0+24,Math.abs(bb-a),18);c.strokeRect(Math.min(a,bb),y0+24,Math.abs(bb-a),18);
+    txt(c,T.en_out,ax,y0+65,FONT.small,"#6f5b4c",al);
+    let acc=0;parts.forEach((p,j)=>{const x1=X(acc),x2=X(Math.min(acc+Math.max(0,p),Emax));c.fillStyle=cols[j+1];c.fillRect(Math.min(x1,x2),y0+52,Math.abs(x2-x1),18);acc+=Math.max(0,p)});
+    c.strokeRect(Math.min(X(0),X(Math.min(acc,Emax))),y0+52,Math.abs(X(Math.min(acc,Emax))-X(0)),18);
+    c.font=FONT.mono10;c.fillStyle="#3f2c23";c.direction="ltr";c.textAlign=RTL?"right":"left";
+    const err=acc-released;
+    c.fillText(`${released.toFixed(2)} J  /  ${acc.toFixed(2)} J   (Δ = ${err>=0?"+":""}${err.toFixed(2)} J)`,RTL?w-R:L,y0+90);
+  }
+  const names=[T.en_ke,T.en_el,T.en_head,T.en_heatball,T.en_heathead];let lx=RTL?w-10:10,ly=h-10;
+  c.font=FONT.small;
+  names.forEach((n,j)=>{const tw=c.measureText(n).width;if(!RTL&&lx+tw+30>w){lx=10;ly+=0}
+    if(RTL){c.fillStyle=cols[j+1];c.fillRect(lx-12,ly-10,12,12);txt(c,n,lx-16,ly,FONT.small,"#3f2c23","right");lx-=tw+30}
+    else{c.fillStyle=cols[j+1];c.fillRect(lx,ly-10,12,12);txt(c,n,lx+16,ly,FONT.small,"#3f2c23","left");lx+=tw+30}});
+}
+function readout(st,k,el,name){
+  const E=st.E.subarray(k*7,k*7+7),w=wAvg(st,k),hit=st.tImpact!==null&&tOf(k)>=st.tImpact;
+  el.innerHTML=`<b>${name}</b><table>
+  <tr><td>${T.r_mass}</td><td class="v">${P.M.toFixed(3)} kg</td></tr>
+  <tr><td>${T.r_contact}</td><td class="v">${hit?st.tImpact.toFixed(3)+" s":"…"}</td></tr>
+  <tr><td>${T.r_pred}</td><td class="v">${Math.sqrt(2*P.h/P.g).toFixed(3)} s</td></tr>
+  <tr><td>${T.r_peak}</td><td class="v">${st.Fmax[k].toFixed(0)} N</td></tr>
+  <tr><td>${T.r_kg}</td><td class="v">${(st.Fmax[k]/P.g).toFixed(1)} kg</td></tr>
+  <tr><td>${T.r_weight}</td><td class="v">${w===null?(hit?T.r_settling:"…"):w.toFixed(2)+" N = "+(w/P.g).toFixed(3)+" kg"}</td></tr>
+  <tr><td>${T.r_heatball}</td><td class="v">${E[4].toFixed(1)} J</td></tr>
+  <tr><td>${T.r_heathead}</td><td class="v">${E[5].toFixed(1)} J</td></tr></table>`;
+}
+function frame(ts){
+  if(last===null)last=ts;const dtw=Math.min(0.05,(ts-last)/1000);last=ts;
+  if(playing){tPlay=Math.min(tPlay+dtw/slow,P.tmax,tOf(computed-1));if(tPlay>=P.tmax-1e-9)playing=false}
+  const k=Math.min(computed-1,kOf(tPlay));
+  drawSim(k);
+  const ti=S.iron.tImpact||Math.sqrt(2*P.h/P.g);
+  drawPlot("pZoom",ti-0.05,ti+0.35,T.plot_zoom,k);drawPlot("pAll",0,P.tmax,T.plot_all,k);drawEnergy(k);
+  readout(S.iron,k,document.getElementById("rI"),T.iron);readout(S.cot,k,document.getElementById("rC"),T.cotton);
+  const btn=document.getElementById("drop");
+  btn.textContent=playing?T.dropping:(tPlay>0?T.replay:T.drop);
+  document.getElementById("clock").textContent=`${T.clock} t = ${tOf(k).toFixed(3)} s`+(computed<NF?`  ·  ${T.computing} ${Math.round(100*computed/NF)} %`:"");
+  requestAnimationFrame(frame);
+}
+function setSpeed(s){slow=s;for(const [id,v] of [["s1",1],["s4",4],["s20",20]])document.getElementById(id).classList.toggle("on",v===s)}
+document.getElementById("drop").onclick=()=>{if(playing)return;tPlay=0;playing=true};
+document.getElementById("s1").onclick=()=>setSpeed(1);
+document.getElementById("s4").onclick=()=>setSpeed(4);
+document.getElementById("s20").onclick=()=>setSpeed(20);
+addEventListener("resize",fitAll);
+fitAll();init();requestAnimationFrame(frame);
+</script>
+
+  </body>
+</html>
