@@ -29,7 +29,7 @@
  },
  "1c27bee04aa5": {
   "src": "rod chamber",
-  "tr": "Stangenkammer"
+  "tr": "Ringraum"
  },
  "1d71315e40d7": {
   "src": "given",
@@ -333,7 +333,7 @@
  },
  "e7e801c3c10c": {
   "src": "<b>Approach, 1 s.</b> The controller asks for a smooth climb to 2 mm short of the specimen, 118 mm up. To lift the ram it opens the spool positively: P→A and B→T open. Oil runs from the pump down the hose into the cap chamber, the cap pressure rises just enough to carry the ram’s weight and the seal friction, and the oil above the piston is pushed out to the tank.",
-  "tr": "<b>Annäherung, 1 s.</b> Der Regler verlangt einen sanften Anstieg bis auf 2 mm vor der Probe, also 118 mm nach oben. Um den Stößel anzuheben, öffnet er den Ventilschieber in positiver Richtung: P→A und B→T öffnen sich. Öl fließt von der Pumpe durch den Schlauch in die Kolbenbodenkammer; der Druck dort steigt gerade so weit, dass er das Gewicht des Stößels und die Dichtungsreibung trägt, und das Öl über dem Kolben wird in den Tank gedrückt."
+  "tr": "<b>Annäherung, 1 s.</b> Der Regler verlangt einen sanften Anstieg bis auf 2 mm vor der Probe, also 118 mm nach oben. Um den Stößel anzuheben, öffnet er den Ventilschieber in positiver Richtung: P→A und B→T öffnen sich. Öl fließt von der Pumpe durch den Schlauch in den Kolbenraum; der Druck dort steigt gerade so weit, dass er das Gewicht des Stößels und die Dichtungsreibung trägt, und das Öl über dem Kolben wird in den Tank gedrückt."
  },
  "ea04fa700638": {
   "src": "piston, rod and platen, 160 kg in all",

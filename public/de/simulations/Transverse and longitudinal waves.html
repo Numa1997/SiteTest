@@ -14,7 +14,7 @@
     <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='12' fill='%237a1f2b'/%3E%3Ctext x='32' y='45' text-anchor='middle' font-family='Georgia,serif' font-size='38' fill='%23f5f1ea'%3EN%3C/text%3E%3C/svg%3E">
 
     <script src="../../scripts/i18n/strings-de.js"></script>
-    <meta name="translated-from" content="English public/simulations/Transverse and longitudinal waves.html, commit cf6212d" />
+    <meta name="translated-from" content="English public/simulations/Transverse and longitudinal waves.html, commit cf6212d+" />
   </head>
 <body>
     <header class="sim-top">
@@ -986,7 +986,7 @@
         Sim.playButton(document.getElementById('play'), clk);
 
         /* ---------- the data panel (scripts/datalog.js) reads the store; these hooks only say where things are drawn and how to test a value ---------- */
-        function sliderCheck(input, label) { return { formula: _t('read from the ') + label + _t(' slider now'), inputs: [['slider', input.value, '']], value: parseFloat(input.value) }; }
+        function sliderCheck(input, label) { return { formula: _t('read from the ') + _t(label) + _t(' slider now'), inputs: [[_t('slider'), input.value, '']], value: parseFloat(input.value) }; }
         function tPos(i) { return { x: LEFT + ds.get('X')[i] * ds.get('s_px'), y: ds.get('yi_px')[i] }; }
         function lPos(i) { return { x: ds.get('xl_px')[i], y: ds.get('yL') }; }
         function beadPixel(what, pt) {

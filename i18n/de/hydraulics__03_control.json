@@ -5,7 +5,7 @@
  },
  "012af753ff5e": {
   "src": "cap chamber pressure, at its far end from the hose",
-  "tr": "Druck in der Bodenkammer, am vom Schlauch abgewandten Ende"
+  "tr": "Druck im Kolbenraum, am vom Schlauch abgewandten Ende"
  },
  "0137ccdc1034": {
   "src": "$K_{\\mathrm{vel}}$",
@@ -169,7 +169,7 @@
  },
  "1e35947b01da": {
   "src": "cap chamber volume",
-  "tr": "Volumen der Bodenkammer"
+  "tr": "Volumen des Kolbenraums"
  },
  "1e420c85a88f": {
   "src": "√Pa",
@@ -569,7 +569,7 @@
  },
  "6d4c7a65bb2a": {
   "src": "Read it as two pieces. The integrator $1/s$: a valve opening produces a flow, and a flow produces a speed, not a position. And a resonance at $\\omega_h$: the ram bouncing on the oil springs of its two chambers. The oil spring can be derived directly, which also handles the differential cylinder of the press, whose two chambers differ. Close both ports and push the ram up by a small $\\delta y$. The cap chamber grows by $A_A\\delta y$, and by (7.1) its pressure falls by $\\beta_A A_A\\delta y/V_A$; the force on the ram falls by $A_A$ times that. The rod chamber shrinks by $A_B\\delta y$; its pressure rises by $\\beta_B A_B\\delta y/V_B$ and pushes down on the annulus $A_B$. Both changes oppose the push, so the two chambers are springs in parallel:",
-  "tr": "Wir lesen es als zwei Teile. Der Integrator $1/s$: Das Öffnen des Ventils erzeugt einen Volumenstrom, und ein Volumenstrom erzeugt eine Geschwindigkeit, keine Position. Und eine Resonanz bei $\\omega_h$: Der Stößel schwingt auf den Ölfedern seiner beiden Kammern. Die Ölfeder lässt sich direkt herleiten, was auch den Differentialzylinder der Presse erfasst, dessen beide Kammern verschieden sind. Wir schließen beide Anschlüsse und drücken den Stößel um ein kleines $\\delta y$ nach oben. Die Kolbenbodenkammer wächst um $A_A\\delta y$, und nach (7.1) fällt ihr Druck um $\\beta_A A_A\\delta y/V_A$; die Kraft auf den Stößel sinkt um das $A_A$-Fache davon. Die Stangenkammer schrumpft um $A_B\\delta y$; ihr Druck steigt um $\\beta_B A_B\\delta y/V_B$ und drückt auf die Ringfläche $A_B$ nach unten. Beide Änderungen wirken der Verschiebung entgegen, also wirken die beiden Kammern als parallel geschaltete Federn:"
+  "tr": "Wir lesen es als zwei Teile. Der Integrator $1/s$: Das Öffnen des Ventils erzeugt einen Volumenstrom, und ein Volumenstrom erzeugt eine Geschwindigkeit, keine Position. Und eine Resonanz bei $\\omega_h$: Der Stößel schwingt auf den Ölfedern seiner beiden Kammern. Die Ölfeder lässt sich direkt herleiten, was auch den Differentialzylinder der Presse erfasst, dessen beide Kammern verschieden sind. Wir schließen beide Anschlüsse und drücken den Stößel um ein kleines $\\delta y$ nach oben. Der Kolbenraum wächst um $A_A\\delta y$, und nach (7.1) fällt sein Druck um $\\beta_A A_A\\delta y/V_A$; die Kraft auf den Stößel sinkt um das $A_A$-Fache davon. Der Ringraum schrumpft um $A_B\\delta y$; sein Druck steigt um $\\beta_B A_B\\delta y/V_B$ und drückt auf die Ringfläche $A_B$ nach unten. Beide Änderungen wirken der Verschiebung entgegen, also wirken die beiden Kammern als parallel geschaltete Federn:"
  },
  "6da368c94097": {
   "src": "velocity gain, ram speed per metre of position error",
@@ -981,7 +981,7 @@
  },
  "bbdc770aad36": {
   "src": "rod chamber volume",
-  "tr": "Volumen der Stangenkammer"
+  "tr": "Volumen des Ringraums"
  },
  "bc3c0854c5d9": {
   "src": "contact force from the specimen",
@@ -1189,7 +1189,7 @@
  },
  "dd7dbd1bb9e4": {
   "src": "pressure at valve port B, equal to the rod-chamber pressure",
-  "tr": "Druck am Ventilanschluss B, gleich dem Druck in der Stangenkammer"
+  "tr": "Druck am Ventilanschluss B, gleich dem Druck im Ringraum"
  },
  "de21e7091fc7": {
   "src": "moving mass (10 kg + tooling 150 kg)",

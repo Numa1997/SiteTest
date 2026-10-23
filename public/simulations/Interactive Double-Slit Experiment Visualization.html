@@ -820,7 +820,7 @@
         var PN = ['S₁', 'S₂', 'M', 'P', 'Q'], stageEl = document.getElementById('stage'), geoSvg = document.getElementById('geo');
         function toSvg(x, y) { var r = stageEl.getBoundingClientRect(), pt = geoSvg.createSVGPoint(); pt.x = r.left + x; pt.y = r.top + y; var q = pt.matrixTransform(geoSvg.getScreenCTM().inverse()); return { x: q.x, y: q.y }; }
         function toCss(X, Y) { var r = stageEl.getBoundingClientRect(), pt = geoSvg.createSVGPoint(); pt.x = X; pt.y = Y; var q = pt.matrixTransform(geoSvg.getScreenCTM()); return { x: q.x - r.left, y: q.y - r.top }; }
-        function sliderCheck(input, label) { return { formula: _t('read from the ') + label + _t(' slider now'), inputs: [['slider', input.value, '']], value: parseFloat(input.value) }; }
+        function sliderCheck(input, label) { return { formula: _t('read from the ') + _t(label) + _t(' slider now'), inputs: [[_t('slider'), input.value, '']], value: parseFloat(input.value) }; }
         function pointCheck(q, which) {
             var d = ds.get('d'), a = ds.get('alpha'), b = ds.get('b'), L1 = ds.get('L1'), ux = ds.get('ux'), uy = ds.get('uy');
             var xs = [X0 - b / 2, X0 + b / 2, X0, X0 - d * Math.tan(a), X0 - d * Math.tan(a) + ux * L1], ys = [Y0, Y0, Y0, Y0 - d, Y0 - d + uy * L1];

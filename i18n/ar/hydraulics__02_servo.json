@@ -477,7 +477,7 @@
  },
  "d2e2b78df999": {
   "src": "7.1 The bulk modulus",
-  "tr": "7.1 معامل الانضغاط الحجمي"
+  "tr": "7.1 معامل المرونة الحجمي"
  },
  "d311c6f291ba": {
   "src": "drop across it",
@@ -513,7 +513,7 @@
  },
  "e5ae5ed709dc": {
   "src": "The bulk modulus measures how much pressure it takes to squeeze a volume $V$ by a fraction $dV/V$:",
-  "tr": "يقيس معامل الانضغاط الحجمي مقدار الضغط اللازم لإنقاص حجمٍ $V$ بنسبة $dV/V$:"
+  "tr": "يقيس معامل المرونة الحجمي مقدار الضغط اللازم لإنقاص حجمٍ $V$ بنسبة $dV/V$:"
  },
  "e70d45901b3a": {
   "src": "<div class=\"ctag\">In our press</div>At 60 L/min in the 12 mm hose the mean speed is 8.8 m/s and $Re \\approx 3300$: turbulent. $R_{\\mathrm{lam}} = 1.09\\times10^8\\ \\mathrm{Pa\\,s/m^3}$, $K_t = 1.64\\times10^{11}\\ \\mathrm{kg/m^7}$ with $f = 0.02$ and $K_m = 1.5$. Be warned that $f = 0.02$ is on the low side: Blasius’s correlation for smooth pipes, $f = 0.316\\,Re^{-1/4}$, gives 0.042 at this Reynolds number, The pipe term $fL/d$ is 3.3 with the model’s value and 7.0 with Blasius’s, against $K_m = 1.5$ for the fittings, so the model’s turbulent loss in the hose, proportional to $fL/d + K_m$, is about 40 % low (4.8 against 8.5). Hose friction is a few hundred kilopascals at full flow, small beside the megapascals burnt in the valve (chapter 9), so the conclusions do not change.",
@@ -521,7 +521,7 @@
  },
  "e908dcc9a036": {
   "src": "derive the pressure build-up equation (7.2) for any chamber and the effective bulk modulus of oil with air (7.3);",
-  "tr": "تشتقَّ معادلةَ بناء الضغط (7.2) لأيّ حجرة، وكذلك معامل الانضغاط الحجمي الفعّال للزيت المختلط بالهواء (7.3)؛"
+  "tr": "تشتقَّ معادلةَ بناء الضغط (7.2) لأيّ حجرة، وكذلك معامل المرونة الحجمي الفعّال للزيت المختلط بالهواء (7.3)؛"
  },
  "eb5869edbf55": {
   "src": "With $R = d/2$:",
@@ -545,7 +545,7 @@
  },
  "f24b4877860b": {
   "src": "<div class=\"ctag\">In our press</div> <table class=\"mt\"><tr><th>gauge pressure</th><th>0</th><th>0.1 MPa</th><th>0.5 MPa</th><th>1 MPa</th><th>2 MPa</th><th>4.4 MPa</th><th>7.8 MPa</th><th>12 MPa</th></tr> <tr><td>$\\beta_{\\mathrm{eff}}$, 0.5 % air</td><td>28 MPa</td><td>87 MPa</td><td>428 MPa</td><td>795 MPa</td><td>1.16 GPa</td><td>1.39 GPa</td><td>1.46 GPa</td><td>1.48 GPa</td></tr> <tr><td>$\\beta_{\\mathrm{eff}}$, 2 % air</td><td>7.1 MPa</td><td>23 MPa</td><td>135 MPa</td><td>327 MPa</td><td>686 MPa</td><td>1.13 GPa</td><td>1.34 GPa</td><td>1.42 GPa</td></tr></table> The model uses $n = 1.4$: the pressure in a press cycle changes in milliseconds, too fast for the bubbles to exchange much heat. At zero gauge pressure half a percent of air makes the oil fifty times softer. Near vacuum ($p_{\\mathrm{abs}}\\to 0$) the effective modulus goes to zero, which in the model also stops the pressure from falling below absolute zero.",
-  "tr": "<div class=\"ctag\">في مكبسنا</div> <table class=\"mt\"><tr><th>الضغط النسبي</th><th>0</th><th>0.1 MPa</th><th>0.5 MPa</th><th>1 MPa</th><th>2 MPa</th><th>4.4 MPa</th><th>7.8 MPa</th><th>12 MPa</th></tr> <tr><td>$\\beta_{\\mathrm{eff}}$، 0.5 % هواء</td><td>28 MPa</td><td>87 MPa</td><td>428 MPa</td><td>795 MPa</td><td>1.16 GPa</td><td>1.39 GPa</td><td>1.46 GPa</td><td>1.48 GPa</td></tr> <tr><td>$\\beta_{\\mathrm{eff}}$، 2 % هواء</td><td>7.1 MPa</td><td>23 MPa</td><td>135 MPa</td><td>327 MPa</td><td>686 MPa</td><td>1.13 GPa</td><td>1.34 GPa</td><td>1.42 GPa</td></tr></table> يستخدم النموذج $n = 1.4$: يتغيّر الضغط في دورة المكبس خلال ملّي ثوانٍ، وهذا أسرع من أن تتبادل الفقاعات قدرًا يُذكر من الحرارة. وعند ضغطٍ نسبيٍّ صفري يجعل نصفٌ في المئة من الهواء الزيتَ ألينَ بخمسين مرّة. وقرب الفراغ ($p_{\\mathrm{abs}}\\to 0$) يؤول معامل الانضغاط الفعّال إلى الصفر، وهذا يمنع في النموذج أيضًا أن ينخفض الضغط المطلق دون الصفر."
+  "tr": "<div class=\"ctag\">في مكبسنا</div> <table class=\"mt\"><tr><th>الضغط النسبي</th><th>0</th><th>0.1 MPa</th><th>0.5 MPa</th><th>1 MPa</th><th>2 MPa</th><th>4.4 MPa</th><th>7.8 MPa</th><th>12 MPa</th></tr> <tr><td>$\\beta_{\\mathrm{eff}}$، 0.5 % هواء</td><td>28 MPa</td><td>87 MPa</td><td>428 MPa</td><td>795 MPa</td><td>1.16 GPa</td><td>1.39 GPa</td><td>1.46 GPa</td><td>1.48 GPa</td></tr> <tr><td>$\\beta_{\\mathrm{eff}}$، 2 % هواء</td><td>7.1 MPa</td><td>23 MPa</td><td>135 MPa</td><td>327 MPa</td><td>686 MPa</td><td>1.13 GPa</td><td>1.34 GPa</td><td>1.42 GPa</td></tr></table> يستخدم النموذج $n = 1.4$: يتغيّر الضغط في دورة المكبس خلال ملّي ثوانٍ، وهذا أسرع من أن تتبادل الفقاعات قدرًا يُذكر من الحرارة. وعند ضغطٍ نسبيٍّ صفري يجعل نصفٌ في المئة من الهواء الزيتَ ألينَ بخمسين مرّة. وقرب الفراغ ($p_{\\mathrm{abs}}\\to 0$) يؤول معامل المرونة الحجمي الفعّال إلى الصفر، وهذا يمنع في النموذج أيضًا أن ينخفض الضغط المطلق دون الصفر."
  },
  "f2edf03d3ca2": {
   "src": "The flow is proportional to the pressure difference, and to the <i>cube</i> of the clearance. The model uses $K_L = 2\\times10^{-13}\\ \\mathrm{m^3/(s\\,Pa)}$ for each leakage path. On a 10 mm spool with 1 mm of land and $\\eta = 27.8\\ \\mathrm{mPa\\,s}$, that is a radial clearance of 13 µm; halve the clearance and the leakage falls eightfold, which is why servo spools are lapped into their bores.",

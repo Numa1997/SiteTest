@@ -421,7 +421,7 @@
  },
  "4ee1fd1ac23c": {
   "src": "effective bulk modulus of oil with entrained air",
-  "tr": "معامل الانضغاط الحجمي الفعّال للزيت المختلط بالهواء"
+  "tr": "معامل المرونة الحجمي الفعّال للزيت المختلط بالهواء"
  },
  "50a332e23bbd": {
   "src": "hydraulic resonance frequency of the ram on its oil springs",
@@ -453,7 +453,7 @@
  },
  "5613085e74fc": {
   "src": "bulk modulus: pressure to squeeze oil volume by a given fraction",
-  "tr": "معامل الانضغاط الحجمي: الضغط الذي يُنقص حجم الزيت بكسرٍ معيّن"
+  "tr": "معامل المرونة الحجمي: الضغط الذي يُنقص حجم الزيت بكسرٍ معيّن"
  },
  "57a2effb3c9e": {
   "src": "Multiply each equation of the model by its “flow” partner and add them. The pump power $p_sQ_S$ splits as follows. The valve keeps (9.2). Each chamber turns $p\\,(Q_{\\mathrm{in}} - Q_{\\mathrm{out}} - \\dot{V})$ into compression energy; by (7.2) that is $p\\,(V/\\beta)\\,\\dot{p}$. The hose slug gains $\\tfrac{d}{dt}(\\tfrac12 IQ_h^2)$ and loses $\\Delta p_f Q_h$ to friction. The ram gains kinetic energy $\\tfrac{d}{dt}(\\tfrac12 m\\dot{y}^2)$ and height $mg\\dot{y}$, and loses $F_f\\dot{y}$ to the seals and $F_w\\dot{y}$ to the specimen. Summing every term, all the internal pressures cancel in pairs. Here is the bookkeeping, with $p_T = 0$. The valve's power balance (9.2) says where the pump power goes first:",
@@ -897,7 +897,7 @@
  },
  "abd78ddb9559": {
   "src": "bulk modulus of the oil alone",
-  "tr": "معامل الانضغاط الحجمي للزيت وحده"
+  "tr": "معامل المرونة الحجمي للزيت وحده"
  },
  "abe164fb9051": {
   "src": "flow gain, partial of Q<sub>A</sub> with respect to x<sub>v</sub>",
@@ -969,7 +969,7 @@
  },
  "b9a507866a98": {
   "src": "bulk modulus, air fraction at 1 atm, polytropic exponent",
-  "tr": "معامل الانضغاط الحجمي، ونسبة الهواء عند 1 atm، والأُسّ البوليتروبي"
+  "tr": "معامل المرونة الحجمي، ونسبة الهواء عند 1 atm، والأُسّ البوليتروبي"
  },
  "b9e8a35574b6": {
   "src": "Pa·s/m³",

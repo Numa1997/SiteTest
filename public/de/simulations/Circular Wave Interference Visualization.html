@@ -17,7 +17,7 @@
     </style>
 
     <script src="../../scripts/i18n/strings-de.js"></script>
-    <meta name="translated-from" content="English public/simulations/Circular Wave Interference Visualization.html, commit cf6212d" />
+    <meta name="translated-from" content="English public/simulations/Circular Wave Interference Visualization.html, commit cf6212d+" />
   </head>
 <body>
     <header class="sim-top">
@@ -774,7 +774,7 @@
         function cellIndex(j, i) { return j * cols + i; }
         function cellCentre(j, i) { return { x: (i + 0.5) / cols * box.w, y: (j + 0.5) / rows * box.h }; }
         function lut(v) { var n = Math.round(Math.max(-1, Math.min(1, v)) * 127.5 + 127.5) * 3; return [LUT[n], LUT[n + 1], LUT[n + 2]]; }
-        function sliderCheck(input, label) { return { formula: _t('read from the ') + label + _t(' slider now'), inputs: [['slider', input.value, '']], value: parseFloat(input.value) }; }
+        function sliderCheck(input, label) { return { formula: _t('read from the ') + _t(label) + _t(' slider now'), inputs: [[_t('slider'), input.value, '']], value: parseFloat(input.value) }; }
         /* self-test: the sum over sources at one cell, written out again from the stored inputs */
         function sumAt(p, trig) {
             var j = Math.floor(p / cols), i = p % cols, k = ds.get('k'), g = ds.get('g'), norm = ds.get('norm'), xs = ds.get('x_s'), ys = ds.get('y_s');

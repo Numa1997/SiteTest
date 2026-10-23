@@ -983,7 +983,7 @@
         Sim.playButton(document.getElementById('play'), clk);
 
         /* ---------- the data panel (scripts/datalog.js) reads the store; these hooks only say where things are drawn and how to test a value ---------- */
-        function sliderCheck(input, label) { return { formula: _t('read from the ') + label + _t(' slider now'), inputs: [['slider', input.value, '']], value: parseFloat(input.value) }; }
+        function sliderCheck(input, label) { return { formula: _t('read from the ') + _t(label) + _t(' slider now'), inputs: [[_t('slider'), input.value, '']], value: parseFloat(input.value) }; }
         function tPos(i) { return { x: LEFT + ds.get('X')[i] * ds.get('s_px'), y: ds.get('yi_px')[i] }; }
         function lPos(i) { return { x: ds.get('xl_px')[i], y: ds.get('yL') }; }
         function beadPixel(what, pt) {
