@@ -44,6 +44,9 @@ Thermal noise: surface energy of a 10 µm drop 9.0 × 10⁻¹¹ J = 2.3 × 10¹�
        thresholds (`skeptic-G3-r1.md`, Round 2), its five minor items and the one partial fix applied after.
 4. [x] Old app bundle `static/` removed (2.2 MB); old `fig/` kept for the German and Arabic pages.
 5. [x] PR https://github.com/Numa1997/SiteTest/pull/33 open, not merged (follow-up to #32, which Numa merged at 184f3bf).
+6. [~] L8 (Numa: "Sure go ahead", 23 Oct): drops with positions in a random turbulent flow (kinematic simulation, inertial drops,
+       ghost collisions). Correction to my first proposal: independent random velocities per drop are wrong at contact scales
+       (they would invent collisions ×20). Contract `contract-L8.md` written; skeptic round 1 running. No code before Gate 1.
 
 ## Done, with evidence
 
