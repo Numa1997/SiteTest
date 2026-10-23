@@ -33,6 +33,8 @@ def _sub(mt):
         raise SystemExit(f'unknown {kind} key: {key}')
     return store[key]
 body = re.sub(r'\{\{(n|table):([A-Za-z0-9_]+)\}\}', _sub, body)
+# figures: each SVG in a scroll box, so that on a phone it keeps a readable size and scrolls sideways inside its plate
+body = re.sub(r'(<figure class="fig[^"]*">)\s*(<svg.*?</svg>)', r'\1<div class="figscroll">\2</div>', body, flags=re.S)
 # keep a number with its unit, and the groups of a long number, on one line: a no-break space, outside maths and tags only
 _UNITS = r'(?:%|mW|µW|W|kW|MW|mV|V|mA|A|Ω|mm|cm|m|km|kg|g|rpm|Hz|ms|s|rad|mrad|N m|N|°)'
 def _nb(seg):

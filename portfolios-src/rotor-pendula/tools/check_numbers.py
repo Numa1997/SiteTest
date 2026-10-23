@@ -19,6 +19,7 @@ for p in sorted((ROOT / 'theory').glob('*.src.html')):
             print(f'{p.name}: missing {kind} key {key}'); bad += 1
     s = re.sub(r'\{\{(n|table):[A-Za-z0-9_]+\}\}', '#', s)
     s = re.sub(r'<h[23][^>]*>.*?</h[23]>', ' ', s, flags=re.S)
+    s = re.sub(r'<ol class="refs">.*?</ol>', ' ', s, flags=re.S)          # the list of sources: bibliographic numbers
     s = re.sub(r'\\tag\{[\d.]+\}', '', s)
     s = re.sub(r'<[^>]+>', ' ', s); s = re.sub(r'\s+', ' ', s)
     # cross-references: (2.3), section 3.1, chapters 4 to 6, Table 2, Figure 1
