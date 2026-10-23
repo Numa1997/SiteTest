@@ -20,7 +20,7 @@ window.WALK["circles"] = {
      "lam",
      "λ",
      "lambda.value",
-     "طول الموجة، بوحدة px"
+     "طول الموجة، px"
     ],
     [
      "f",
@@ -74,7 +74,7 @@ window.WALK["circles"] = {
      "lam",
      "λ",
      "lambda.value",
-     "طول الموجة، بوحدة px"
+     "طول الموجة، px"
     ],
     [
      "k",
@@ -152,7 +152,7 @@ window.WALK["circles"] = {
      "lam",
      "λ",
      "lambda.value",
-     "طول الموجة، بوحدة px"
+     "طول الموجة، px"
     ],
     [
      "v",

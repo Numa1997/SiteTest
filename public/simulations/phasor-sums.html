@@ -1161,7 +1161,7 @@
             $('r-n').textContent = String(phasors.length);
             $('r-z').textContent = Sim.fmt(Math.hypot(z.x, z.y), 3);
             $('r-period').textContent = st.n === 0 ? '—' : st.g > 0 ? Sim.fmt(TAU / st.g, 2) + ' s' : 'point';
-            $('r-fold').textContent = st.n <= 1 ? (st.n ? _t('∞ (circle)') : '—') : st.q + '-fold';
+            $('r-fold').textContent = st.n <= 1 ? (st.n ? _t('∞ (circle)') : '—') : _t('{q}-fold', { q: st.q });
             $('r-energy').textContent = Sim.fmt(e, 3);
             $('cap-t').innerHTML = '<i>t</i> = ' + Sim.fmt(t, 2) + ' s';
             $('cap-mode').textContent = mode === 'final' ? _t('final shape · ') + finalN + _t(' samples') : _t('live construction');
