@@ -120,7 +120,7 @@ expect('book-02', 'Stokes is too fast by', [40, 60, 100].map(a => f((vS(a * 1e-6
 // local drag exponent at 100 um: F ~ v^n; drag = weight less buoyancy, varied through the particle's density at fixed size
 const vRho = rp => P.vBeard(100e-6, A, rp), dr = 1e-3;
 const nexp = Math.log((1000 * (1 + dr) - A.rho) / (1000 * (1 - dr) - A.rho)) / Math.log(vRho(1000 * (1 + dr)) / vRho(1000 * (1 - dr)));
-expect('book-02', 'Doubling the speed of a 100 µm drop multiplies its drag by', f(Math.pow(2, nexp), 2));
+expect('book-02', 'Near 100 µm the drag grows as', `v^{${f(nexp, 2)}}: ${f((nexp - 1) * 100, 0)} % of the way`);
 const tB100 = (() => { let R = 40e-6, t = 0; const h = 0.05, fr = RR => Math.PI * (RR + 8e-6) ** 2 * (vB(RR) - vB(8e-6)) * W8 / (4 * Math.PI * RR * RR * RW);
   while (R < 100e-6) { const k1 = fr(R), k2 = fr(R + h / 2 * k1), k3 = fr(R + h / 2 * k2), k4 = fr(R + h * k3), Rn = R + h / 6 * (k1 + 2 * k2 + 2 * k3 + k4);
     if (Rn >= 100e-6) { t += h * (100e-6 - R) / (Rn - R); break; } R = Rn; t += h; } return t; })();

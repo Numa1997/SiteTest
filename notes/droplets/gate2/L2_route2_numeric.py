@@ -26,7 +26,7 @@ def hits(flow, St, S, p, b, Z, free=False):
     contact = lambda s_, y: np.hypot(y[0], y[1]) - rc; contact.terminal = True; contact.direction = -1
     gone = lambda s_, y: y[1] - (rc + 2.0); gone.terminal = True
     smax = 20 * Z + 200
-    sol = solve_ivp(f, [0, smax], y0, method='DOP853', rtol=1e-10, atol=1e-12, events=[contact, gone])
+    sol = solve_ivp(f, [0, smax], y0, method='DOP853', rtol=1e-13, atol=1e-15, events=[contact, gone])
     return len(sol.t_events[0]) > 0
 
 def critical_b(flow, St, S, p, Z):

@@ -1,25 +1,25 @@
 == (3.5)(a) zero-inertia limit, S = 0: grazing streamline gives E = psi-based closed form
    creeping  p = 0.05 : E (trajectories, flux form) = 0.003347 ; b_c^2/(1+p)^2 at start Z=60 : 0.003433 ; closed form 0.003347
-   creeping  p = 0.20 : E (trajectories, flux form) = 0.039344 ; b_c^2/(1+p)^2 at start Z=60 : 0.040353 ; closed form 0.039352
-   creeping  p = 1.00 : E (trajectories, flux form) = 0.311700 ; b_c^2/(1+p)^2 at start Z=60 : 0.319690 ; closed form 0.312500
-   potential p = 0.05 : E (trajectories, flux form) = 0.136124 ; b_c^2/(1+p)^2 at start Z=15 : 0.136165 ; closed form 0.136162
-   potential p = 0.20 : E (trajectories, flux form) = 0.420548 ; b_c^2/(1+p)^2 at start Z=15 : 0.420672 ; closed form 0.421296
-   potential p = 1.00 : E (trajectories, flux form) = 0.874058 ; b_c^2/(1+p)^2 at start Z=15 : 0.874311 ; closed form 0.875000
+   creeping  p = 0.20 : E (trajectories, flux form) = 0.039321 ; b_c^2/(1+p)^2 at start Z=60 : 0.040329 ; closed form 0.039352
+   creeping  p = 1.00 : E (trajectories, flux form) = 0.312225 ; b_c^2/(1+p)^2 at start Z=60 : 0.320229 ; closed form 0.312500
+   potential p = 0.05 : E (trajectories, flux form) = 0.136096 ; b_c^2/(1+p)^2 at start Z=15 : 0.136137 ; closed form 0.136162
+   potential p = 0.20 : E (trajectories, flux form) = 0.421137 ; b_c^2/(1+p)^2 at start Z=15 : 0.421261 ; closed form 0.421296
+   potential p = 1.00 : E (trajectories, flux form) = 0.874736 ; b_c^2/(1+p)^2 at start Z=15 : 0.874990 ; closed form 0.875000
 == (3.5)(b) large Stokes number: straight paths, E -> 1 (partners start with the free-stream velocity, Z = 30)
-   creeping  St = 100, p = 0.2 : b_c = 1.17615 (1+p = 1.2), E = b_c^2/(1+p)^2 = 0.96065
-   creeping  St = 10000, p = 0.2 : b_c = 1.19946 (1+p = 1.2), E = b_c^2/(1+p)^2 = 0.99911
-   potential St = 100, p = 0.2 : b_c = 1.19579 (1+p = 1.2), E = b_c^2/(1+p)^2 = 0.99299
-   potential St = 10000, p = 0.2 : b_c = 1.19827 (1+p = 1.2), E = b_c^2/(1+p)^2 = 0.99711
+   creeping  St = 100, p = 0.2 : b_c = 1.17616 (1+p = 1.2), E = b_c^2/(1+p)^2 = 0.96065
+   creeping  St = 10000, p = 0.2 : b_c = 1.19906 (1+p = 1.2), E = b_c^2/(1+p)^2 = 0.99844
+   potential St = 100, p = 0.2 : b_c = 1.19554 (1+p = 1.2), E = b_c^2/(1+p)^2 = 0.99258
+   potential St = 10000, p = 0.2 : b_c = 1.19936 (1+p = 1.2), E = b_c^2/(1+p)^2 = 0.99894
 == realistic pair 8 um on 40 um (cloud air): U = 0.17709 m/s, v(r) = 0.007963 m/s, tau = 8.1255e-04 s, St = 3.5974 (text 3.60), S = 0.0450 (text 0.045), p = 0.20, Re = 0.837 (text 0.84)
    2R/Re = 2.39 collector radii (text 2.4)
 == (3.5)(c) start distance: E(flux form), b_c^2/(1+p)^2, for creeping flow
-   Z =  50 : E_flux = 0.336723   b_c^2/(1+p)^2 = 0.347640   b_c = 0.70753
-   Z = 200 : E_flux = 0.337332   b_c^2/(1+p)^2 = 0.340002   b_c = 0.69972
-   Z = 400 : E_flux = 0.337501   b_c^2/(1+p)^2 = 0.338832   b_c = 0.69851
-   E_S = 0.33733 (creeping, Z=200), E_P = 0.83797 (potential, Z=30)
-   Langmuir weight Re/60 : E = 0.3442  (text: 0.344)
-   Langmuir weight Re/20 : E = 0.3574  (text: 0.358)
-   Langmuir weight Re/ 6 : E = 0.3986  (text: 0.399)
+   Z =  50 : E_flux = 0.336718   b_c^2/(1+p)^2 = 0.347636   b_c = 0.70753
+   Z = 200 : E_flux = 0.337474   b_c^2/(1+p)^2 = 0.340145   b_c = 0.69986
+   Z = 400 : E_flux = 0.337388   b_c^2/(1+p)^2 = 0.338718   b_c = 0.69839
+   E_S = 0.33747 (creeping, Z=200), E_P = 0.83767 (potential, Z=30)
+   Langmuir weight Re/60 : E = 0.3444  (text: 0.344)
+   Langmuir weight Re/20 : E = 0.3576  (text: 0.358)
+   Langmuir weight Re/ 6 : E = 0.3987  (text: 0.399)
    Langmuir weight Re/ 2 : E = 0.4850  (text: 0.485)
 == (3.1) dimensional integration vs (3.2) non-dimensional: same path?
    b = 0.8: max |y_dimensional/R - y_nondim| over 13 times: x 5.77e-13, z 4.95e-12 (path through z from -50 to 0.23)
