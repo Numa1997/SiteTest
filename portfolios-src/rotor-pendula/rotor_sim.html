@@ -1,0 +1,345 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Rotor Pendula Simulation</title>
+</head>
+<body>
+<script>
+/*PHYSICS-BEGIN*/
+// ----------------------------------------------------------------------------------------------------------------------------
+// The physics of the page. Plain JavaScript with no access to the page, so the same text runs in the page's Web Worker and in
+// Node (tools/check_sim.js, tools/sim_solutions.js):  new Function(block + 'return { CONST, DEFAULTS, makeModel, simulate };').
+//
+// Ideal brake (notes ch. 1-3; engine.py of the derivations): relative rod angles q from the blade's outward line, physical time t,
+// rotor angle phi = Omega t (uniform rotation).
+//   single:  m L^2 q'' = -m L [Omega^2 r_p sin q + g cos(phi + q)] - c q'                          (1.3), in the form (1.5)
+//   double:  A q1'' + D cos(q1-q2) q2'' = -D sin(q1-q2)(Omega + q2')^2 - M l1 [Omega^2 r_p sin q1 + g cos(phi + q1)] - c q1' + c (q2' - q1')
+//            B q2'' + D cos(q1-q2) q1'' =  D sin(q1-q2)(Omega + q1')^2 - m2 l2 [Omega^2 r_p sin q2 + g cos(phi + q2)] - c (q2' - q1')
+//            A = (m1+m2) l1^2, B = m2 l2^2, D = m2 l1 l2, M = m1 + m2
+//   harvested energy E' = c q'^2 (single), c q1'^2 + c (q2' - q1')^2 (double), carried as an extra state.
+// Geared generator (notes ch. 7; L4_full.py version 3), single pendulum only, rotor angle tau = Omega t as the time:
+//   x = j theta'' + f0 tanh(theta'/eps_w) + kappa_e theta'     (torque needed to turn the motor side, unit m L^2 Omega^2)
+//   theta'' + R sin theta + G cos(tau + theta) + k x = 0,  k = eta^(-tanh(x theta'/eps_p))   (gear loss on every power flow)
+//   states theta, theta', E_load, E_paid, E_fric (unit m L^2 Omega^2); theta'' found by bisection, then Newton inside the bracket.
+// Integrator: three-stage Radau IIA (order 5, L-stable), fixed step, finite-difference Jacobian, simplified Newton (engine.py).
+// ----------------------------------------------------------------------------------------------------------------------------
+const CONST = {
+  g: 9.80665,
+  tipSpeed: 56,                                   // blade tip speed, m/s: tip radius r_tip = 56/Omega
+  single: { m: 0.1, L: 0.2 },
+  double: { m1: 0.05, m2: 0.05, l1: 0.1, l2: 0.1 },
+  motor: { kt: 0.0208, ke: 0.02076, Rc: 1.53, J: 1.47e-6, I0: 0.0402, T0: 0.0208 * 0.0402 },   // maxon RE 25, 24 V
+  gears: {                                        // GP 32 C: ratio -> maximum efficiency, inertia at the input (kg m^2)
+    14: { eta: 0.75, Jg: 0.8e-7 }, 33: { eta: 0.75, Jg: 0.8e-7 }, 51: { eta: 0.70, Jg: 0.7e-7 },
+    111: { eta: 0.70, Jg: 0.7e-7 }, 190: { eta: 0.70, Jg: 0.7e-7 },
+  },
+  rpms: [400, 200, 100, 20, 14, 8],
+  fracs: [0.3, 0.6, 0.9],
+};
+
+const DEFAULTS = {
+  rpm: 20, frac: 0.3,              // rotor speed (rpm), pivot as a fraction of the blade
+  pend: 'single',                  // 'single' | 'double'
+  brake: 1,                        // ideal brake as a multiple of the best brake kappa*
+  c: null,                         // or the brake constant itself, N m s (overrides brake)
+  gen: 'ideal',                    // 'ideal' | 'geared' (single pendulum only)
+  N: 51,                           // gear ratio
+  RL: null,                        // load resistor, ohm; null: the best by the formula (7.6)-(7.7)
+  ce: null,                        // or the electrical brake c_e itself, N m s (overrides RL)
+  band: 1e-3,                      // smoothing band of sgn, as a fraction of the swing scale (L4_full.py)
+  bandScale: null,                 // swing scale for the band, rad; null: the formula's swing, kept within 0.01 to 0.5
+  steps: 240, settle: 60, measure: 40,               // ideal brake: steps per turn, turns to settle, turns to measure
+  stepsGeared: 1200, settleGeared: 100, measureGeared: 20,
+  recordTurns: 4, framesPerTurn: 240,               // playback record: the last turns of the run
+};
+
+// Radau IIA, three stages (Hairer & Wanner II, IV.5)
+const S6 = Math.sqrt(6);
+const RA = [[(88 - 7 * S6) / 360, (296 - 169 * S6) / 1800, (-2 + 3 * S6) / 225],
+            [(296 + 169 * S6) / 1800, (88 + 7 * S6) / 360, (-2 - 3 * S6) / 225],
+            [(16 - S6) / 36, (16 + S6) / 36, 1 / 9]];
+const RC = [(4 - S6) / 10, (4 + S6) / 10, 1];
+(function orderConditions() {                     // fail loudly if a coefficient is mistyped: quadrature order 5, stage order 3
+  for (let k = 0; k < 5; k++) {
+    const s = RA[2][0] * RC[0] ** k + RA[2][1] * RC[1] ** k + RA[2][2] * RC[2] ** k;
+    if (Math.abs(s - 1 / (k + 1)) > 1e-14) throw new Error('Radau IIA: quadrature condition ' + k);
+  }
+  for (let k = 0; k < 3; k++) for (let i = 0; i < 3; i++) {
+    const s = RA[i][0] * RC[0] ** k + RA[i][1] * RC[1] ** k + RA[i][2] * RC[2] ** k;
+    if (Math.abs(s - RC[i] ** (k + 1) / (k + 1)) > 1e-14) throw new Error('Radau IIA: stage condition ' + k);
+  }
+})();
+
+/** A stepper for y' = F(t, y) of size d, whose first nDyn components alone enter F (the rest are accumulated energies). */
+function makeRadau(F, d, nDyn) {
+  const n3 = 3 * d, F0 = new Float64Array(d), Yp = new Float64Array(d), Fp = new Float64Array(d), J = new Float64Array(d * d);
+  const Mm = new Float64Array(n3 * n3), piv = new Int32Array(n3), Z = new Float64Array(n3), Fz = new Float64Array(n3);
+  const Gv = new Float64Array(n3), Ys = new Float64Array(d), Fs = new Float64Array(d);
+  const tol = 1e-12, maxit = 12, eps = 1e-7;
+  function lu() {                                 // LU with partial pivoting of Mm, in place
+    for (let k = 0; k < n3; k++) {
+      let p = k, best = Math.abs(Mm[k * n3 + k]);
+      for (let i = k + 1; i < n3; i++) { const v = Math.abs(Mm[i * n3 + k]); if (v > best) { best = v; p = i; } }
+      piv[k] = p;
+      if (p !== k) for (let j = 0; j < n3; j++) { const tmp = Mm[k * n3 + j]; Mm[k * n3 + j] = Mm[p * n3 + j]; Mm[p * n3 + j] = tmp; }
+      const akk = Mm[k * n3 + k];
+      for (let i = k + 1; i < n3; i++) {
+        const f = (Mm[i * n3 + k] /= akk);
+        if (f !== 0) for (let j = k + 1; j < n3; j++) Mm[i * n3 + j] -= f * Mm[k * n3 + j];
+      }
+    }
+  }
+  function solve(b) {                              // b <- Mm^-1 b
+    for (let k = 0; k < n3; k++) { const p = piv[k]; if (p !== k) { const t = b[k]; b[k] = b[p]; b[p] = t; } }
+    for (let i = 1; i < n3; i++) { let s = b[i]; for (let j = 0; j < i; j++) s -= Mm[i * n3 + j] * b[j]; b[i] = s; }
+    for (let i = n3 - 1; i >= 0; i--) { let s = b[i]; for (let j = i + 1; j < n3; j++) s -= Mm[i * n3 + j] * b[j]; b[i] = s / Mm[i * n3 + i]; }
+  }
+  /** One step of length h from (t, Y); Y is overwritten with the new state. Returns the Newton iterations used. */
+  return function step(t, Y, h) {
+    F(t, Y, F0);
+    J.fill(0);
+    for (let j = 0; j < nDyn; j++) {                // forward-difference Jacobian; the energy columns are zero
+      const dy = eps * Math.max(1, Math.abs(Y[j]));
+      Yp.set(Y); Yp[j] += dy; F(t, Yp, Fp);
+      for (let i = 0; i < d; i++) J[i * d + j] = (Fp[i] - F0[i]) / dy;
+    }
+    for (let bi = 0; bi < 3; bi++) for (let bk = 0; bk < 3; bk++) for (let i = 0; i < d; i++) for (let j = 0; j < d; j++)
+      Mm[(bi * d + i) * n3 + bk * d + j] = (bi === bk && i === j ? 1 : 0) - h * RA[bi][bk] * J[i * d + j];
+    lu();
+    for (let s = 0; s < 3; s++) for (let i = 0; i < d; i++) Z[s * d + i] = RC[s] * h * F0[i];
+    let it = 0;
+    for (it = 1; it <= maxit; it++) {
+      for (let s = 0; s < 3; s++) {
+        for (let i = 0; i < d; i++) Ys[i] = Y[i] + Z[s * d + i];
+        F(t + RC[s] * h, Ys, Fs);
+        for (let i = 0; i < d; i++) Fz[s * d + i] = Fs[i];
+      }
+      for (let s = 0; s < 3; s++) for (let i = 0; i < d; i++)
+        Gv[s * d + i] = -(Z[s * d + i] - h * (RA[s][0] * Fz[i] + RA[s][1] * Fz[d + i] + RA[s][2] * Fz[2 * d + i]));
+      solve(Gv);
+      let err = 0;
+      for (let k = 0; k < n3; k++) { Z[k] += Gv[k]; const e = Math.abs(Gv[k]) / (1 + Math.abs(Z[k])); if (e > err) err = e; }
+      if (err < tol) break;
+    }
+    for (let i = 0; i < d; i++) Y[i] += Z[2 * d + i];   // stiffly accurate: y_{n+1} = y_n + Z_3
+    return Math.min(it, maxit);
+  };
+}
+
+/** Linear (small-swing) power of the double pendulum at brake c, both joints: 1/2 Omega^2 c (|Q1|^2 + |Q2 - Q1|^2). */
+function doublePowerLinear(c, Om, rp) {
+  const { m1, m2, l1, l2 } = CONST.double, g = CONST.g;
+  const A = (m1 + m2) * l1 * l1, B = m2 * l2 * l2, D = m2 * l1 * l2;
+  // (-Om^2 M + i Om C + K) Q = F, M = [[A, D], [D, B]], C = c [[2, -1], [-1, 1]], K = Om^2 [[M l1 rp + D, -D], [-D, m2 l2 rp + D]]
+  const a11r = -Om * Om * A + Om * Om * ((m1 + m2) * l1 * rp + D), a11i = 2 * Om * c;
+  const a12r = -Om * Om * D - Om * Om * D, a12i = -Om * c;
+  const a22r = -Om * Om * B + Om * Om * (m2 * l2 * rp + D), a22i = Om * c;
+  const f1 = -g * (m1 + m2) * l1, f2 = -g * m2 * l2;
+  // det = a11 a22 - a12^2
+  const detr = a11r * a22r - a11i * a22i - (a12r * a12r - a12i * a12i), deti = a11r * a22i + a11i * a22r - 2 * a12r * a12i;
+  const dd = detr * detr + deti * deti;
+  const n1r = a22r * f1 - a12r * f2, n1i = a22i * f1 - a12i * f2;     // Q1 = (a22 f1 - a12 f2)/det
+  const n2r = a11r * f2 - a12r * f1, n2i = a11i * f2 - a12i * f1;     // Q2 = (a11 f2 - a12 f1)/det
+  const q1r = (n1r * detr + n1i * deti) / dd, q1i = (n1i * detr - n1r * deti) / dd;
+  const q2r = (n2r * detr + n2i * deti) / dd, q2i = (n2i * detr - n2r * deti) / dd;
+  return 0.5 * Om * Om * c * (q1r * q1r + q1i * q1i + (q2r - q1r) ** 2 + (q2i - q1i) ** 2);
+}
+
+/** Golden-section maximum of f on [a, b]. */
+function goldenMax(f, a, b, tol = 1e-10) {
+  const r = (Math.sqrt(5) - 1) / 2;
+  let x1 = b - r * (b - a), x2 = a + r * (b - a), f1 = f(x1), f2 = f(x2);
+  while (b - a > tol) {
+    if (f1 < f2) { a = x1; x1 = x2; f1 = f2; x2 = a + r * (b - a); f2 = f(x2); }
+    else { b = x2; x2 = x1; f2 = f1; x1 = b - r * (b - a); f1 = f(x1); }
+  }
+  return 0.5 * (a + b);
+}
+
+/** The geared generator by the describing function (7.6)-(7.7): swing and powers at the electrical brake ce. */
+function generatorFormula(Om, rp, N, ce) {
+  const { g } = CONST, { m, L } = CONST.single, mo = CONST.motor, gear = CONST.gears[N];
+  const R = rp / L, G = g / (Om * Om * L), j = (mo.J + gear.Jg) * N * N / (m * L * L), u = m * L * L * Om ** 3;
+  const ke = ce / (m * L * L * Om), f = N * mo.T0 / (gear.eta * m * L * L * Om * Om), csc = N * N * mo.kt * mo.ke / mo.Rc;
+  const keta = ke / gear.eta, Dq = (R - 1 - j) ** 2 + keta * keta, a = 4 * f / Math.PI;
+  const Th = a >= G ? 0 : (-keta * a + Math.sqrt(keta * keta * a * a - Dq * (a * a - G * G))) / Dq;
+  return { Theta: Th, P_load: u * ke * (1 - ce / csc) * Th * Th / 2, P_paid: u * (keta * Th * Th / 2 + f * (2 / Math.PI) * Th), j, f, csc };
+}
+
+/** Everything the run and the page need for the settings P (missing fields from DEFAULTS). */
+function makeModel(Pin) {
+  const P = Object.assign({}, DEFAULTS, Pin || {});
+  const g = CONST.g, Om = P.rpm * 2 * Math.PI / 60, rTip = CONST.tipSpeed / Om, rp = P.frac * rTip;
+  const dbl = P.pend === 'double';
+  const M = dbl ? CONST.double.m1 + CONST.double.m2 : CONST.single.m;
+  const L = dbl ? CONST.double.l1 + CONST.double.l2 : CONST.single.L;
+  const R = rp / L, G = g / (Om * Om * L), cUnit = M * L * L * Om;          // kappa = c / (M L^2 Omega)
+  const Pstar = CONST.single.m * CONST.single.L * g * g / (4 * Om * Math.abs(rp - CONST.single.L));   // (2.5), the single pendulum
+  let kappaStar, PstarModel;
+  if (dbl) {
+    const lc = goldenMax(x => doublePowerLinear(Math.exp(x), Om, rp), Math.log(cUnit) - 12, Math.log(cUnit) + 12);
+    kappaStar = Math.exp(lc) / cUnit; PstarModel = doublePowerLinear(Math.exp(lc), Om, rp);
+  } else {
+    kappaStar = Math.abs(R - 1); PstarModel = Pstar;
+  }
+  const c = P.c != null ? P.c : P.brake * kappaStar * cUnit, kappa = c / cUnit;
+  const linearPower = k => dbl ? doublePowerLinear(k * cUnit, Om, rp)
+    : M * L * L * Om ** 3 * k * G * G / (2 * ((R - 1) ** 2 + k * k));           // (2.3)
+  const model = { P, Om, rTip, rp, R, G, M, L, cUnit, kappaStar, c, kappa, Pstar, PstarModel, linearPower, double: dbl,
+    turn: 2 * Math.PI / Om, mgL: CONST.single.m * g * CONST.single.L };
+  if (P.gen === 'geared') {
+    if (dbl) throw new Error('the geared generator is modelled for the single pendulum only');
+    const gear = CONST.gears[P.N];
+    if (!gear) throw new Error('unknown gear ratio ' + P.N);
+    const mo = CONST.motor, { m } = CONST.single, N = P.N;
+    const csc = N * N * mo.kt * mo.ke / mo.Rc;
+    let ce;
+    if (P.ce != null) ce = P.ce;
+    else if (P.RL != null) ce = N * N * mo.kt * mo.ke / (mo.Rc + P.RL);
+    else {
+      const lc = goldenMax(x => generatorFormula(Om, rp, N, Math.exp(x)).P_load, Math.log(csc) - 16, Math.log(csc) - 1e-9, 1e-9);
+      ce = Math.exp(lc);
+    }
+    const RL = N * N * mo.kt * mo.ke / ce - mo.Rc;
+    const form = generatorFormula(Om, rp, N, ce);
+    const j = (mo.J + gear.Jg) * N * N / (m * L * L), f0 = N * mo.T0 / (m * L * L * Om * Om), ke = ce / (m * L * L * Om);
+    const sc = P.bandScale != null ? P.bandScale : Math.min(Math.max(form.Theta, 1e-2), 0.5);   // the formula's swing, 0.01 to 0.5 rad
+    Object.assign(model, { geared: true, N, eta: gear.eta, Jg: gear.Jg, csc, ce, RL, ke, j, f0, keep: 1 - ce / csc,
+      formula: form, epsW: P.band * sc, epsP: P.band * G * sc, unitPower: m * L * L * Om ** 3,
+      frictionTorque: N * mo.T0 / gear.eta, jammed: N * mo.T0 / gear.eta > CONST.single.m * g * CONST.single.L });
+  }
+  return model;
+}
+
+/** Right-hand sides: F(t, y, out). */
+function rhsSingle(md) {
+  const { m, L } = CONST.single, g = CONST.g, Om = md.Om, rp = md.rp, c = md.c, mL2 = m * L * L;
+  return (t, y, o) => {
+    const q = y[0], w = y[1];
+    o[0] = w;
+    o[1] = (-m * L * (Om * Om * rp * Math.sin(q) + g * Math.cos(Om * t + q)) - c * w) / mL2;
+    o[2] = c * w * w;
+  };
+}
+function rhsDouble(md) {
+  const { m1, m2, l1, l2 } = CONST.double, g = CONST.g, Om = md.Om, rp = md.rp, c = md.c;
+  const Mt = m1 + m2, A = Mt * l1 * l1, B = m2 * l2 * l2, D = m2 * l1 * l2;
+  return (t, y, o) => {
+    const q1 = y[0], q2 = y[1], w1 = y[2], w2 = y[3], ph = Om * t;
+    const dl = q1 - q2, cd = Math.cos(dl), sd = Math.sin(dl);
+    const tq0 = c * w1, tq1 = c * (w2 - w1);
+    const f1 = -D * sd * (Om + w2) ** 2 - Mt * l1 * (Om * Om * rp * Math.sin(q1) + g * Math.cos(ph + q1)) - tq0 + tq1;
+    const f2 = D * sd * (Om + w1) ** 2 - m2 * l2 * (Om * Om * rp * Math.sin(q2) + g * Math.cos(ph + q2)) - tq1;
+    const M12 = D * cd, det = A * B - M12 * M12;
+    o[0] = w1; o[1] = w2;
+    o[2] = (B * f1 - M12 * f2) / det; o[3] = (A * f2 - M12 * f1) / det;
+    o[4] = c * w1 * w1 + c * (w2 - w1) ** 2;
+  };
+}
+function rhsGeared(md) {
+  const R = md.R, G = md.G, j = md.j, f0 = md.f0, ke = md.ke, eta = md.eta, keep = md.keep, epsW = md.epsW, epsP = md.epsP;
+  const lneta = Math.log(eta), nbis = 14, nnewt = 5;
+  return (t, y, o) => {
+    const th = y[0], w = y[1];
+    const fr = f0 * Math.tanh(w / epsW);
+    const Dg = R * Math.sin(th) + G * Math.cos(t + th);
+    const xr = fr + ke * w;
+    const Bd = Math.abs(Dg) + Math.abs(xr) / eta + 1e-12;
+    let lo = -Bd, hi = Bd;
+    for (let k = 0; k < nbis; k++) {
+      const mid = 0.5 * (lo + hi), x = j * mid + xr;
+      const h = mid + Dg + x * Math.exp(-lneta * Math.tanh(x * w / epsP));
+      if (h > 0) hi = mid; else lo = mid;
+    }
+    let a = 0.5 * (lo + hi);
+    for (let k = 0; k < nnewt; k++) {
+      const x = j * a + xr, u = x * w / epsP, tu = Math.tanh(u), kk = Math.exp(-lneta * tu);
+      const h = a + Dg + kk * x, dh = 1 + j * kk * (1 - lneta * u * (1 - tu * tu));
+      a = Math.min(Math.max(a - h / dh, lo), hi);
+    }
+    const x = j * a + xr, kk = Math.exp(-lneta * Math.tanh(x * w / epsP));
+    o[0] = w; o[1] = a; o[2] = ke * keep * w * w; o[3] = kk * x * w; o[4] = fr * w;
+  };
+}
+
+/**
+ * Settle, measure and record one setting. Returns the mean powers (W), the swing, the mean trail and a playback record of the
+ * last recordTurns turns (rotor angle phi, rod angles, generator power), all as plain numbers and typed arrays.
+ */
+function simulate(Pin) {
+  const t0 = Date.now();
+  const md = makeModel(Pin), P = md.P;
+  const geared = !!md.geared, dbl = md.double;
+  const nst = geared ? P.stepsGeared : P.steps, settle = geared ? P.settleGeared : P.settle, meas = geared ? P.measureGeared : P.measure;
+  const recTurns = Math.min(P.recordTurns, meas), every = Math.max(1, Math.round(nst / P.framesPerTurn));
+  const fpt = nst / every;
+  if (Math.abs(fpt - Math.round(fpt)) > 1e-9) throw new Error('steps per turn must be a multiple of the frames per turn');
+  const nFrames = Math.round(fpt) * recTurns + 1;
+  const rec = { phi: new Float64Array(nFrames), q1: new Float32Array(nFrames), q2: new Float32Array(nFrames),
+    p: new Float32Array(nFrames), pPaid: new Float32Array(nFrames), framesPerTurn: Math.round(fpt), turns: recTurns };
+  const out = { model: stripModel(md), steps: nst, settle, measure: meas, rec, jammed: false };
+  // time variable: physical time for the ideal brake, rotor angle tau for the geared generator; one turn = T
+  const T = geared ? 2 * Math.PI : md.turn, h = T / nst, phiOf = t => (geared ? t : md.Om * t);
+  let d, nDyn, F;
+  if (geared) { d = 5; nDyn = 2; F = rhsGeared(md); }
+  else if (dbl) { d = 5; nDyn = 4; F = rhsDouble(md); }
+  else { d = 3; nDyn = 2; F = rhsSingle(md); }
+  const Y = new Float64Array(d), dY = new Float64Array(d);
+  const powerNow = (t, y) => {                      // instantaneous generator power, W (load power for the geared generator)
+    F(t, y, dY);
+    return geared ? [dY[2] * md.unitPower, dY[3] * md.unitPower] : [dY[d - 1], dY[d - 1]];
+  };
+  if (geared && md.jammed) {
+    // Static argument (notes 7.2): the friction torque N T0/eta exceeds gravity's largest torque m g L; a rod at rest on the
+    // blade's line feels no centrifugal torque there, so it never starts. The smoothed model cannot resolve sticking.
+    out.jammed = true;
+    for (let k = 0; k < nFrames; k++) { rec.phi[k] = 2 * Math.PI * (settle + meas - recTurns) + k * 2 * Math.PI / fpt; }
+    Object.assign(out, { P_mean: 0, P_load: 0, P_paid: 0, P_fric: 0, Theta: 0, thetaAbsMax: 0, trail: 0, Theta2: 0, trail2: 0, maxit: 0, ms: Date.now() - t0 });
+    return out;
+  }
+  const step = makeRadau(F, d, nDyn);
+  const total = nst * (settle + meas), kMeas = nst * settle, kRec = nst * (settle + meas - recTurns);
+  let E0 = null, sumQ = 0, sumQ2 = 0, nQ = 0, qmax = -Infinity, qmin = Infinity, q2max = -Infinity, q2min = Infinity, absMax = 0, maxit = 0, fr = 0;
+  const i2 = dbl ? 1 : -1;
+  const frame = (t) => {
+    const pw = powerNow(t, Y);
+    rec.phi[fr] = phiOf(t); rec.q1[fr] = Y[0]; rec.q2[fr] = i2 >= 0 ? Y[i2] : 0; rec.p[fr] = pw[0]; rec.pPaid[fr] = pw[1]; fr++;
+  };
+  for (let k = 0; k < total; k++) {
+    const t = k * h;
+    if (k === kMeas) E0 = Y.slice(dbl || !geared ? d - 1 : 2);
+    if (k === kRec) frame(t);
+    const it = step(t, Y, h);
+    if (it > maxit) maxit = it;
+    if (k >= kMeas) {                               // samples at the ends of the steps of the measuring window
+      const q = Y[0]; sumQ += q; nQ++;
+      if (q > qmax) qmax = q; if (q < qmin) qmin = q; if (Math.abs(q) > absMax) absMax = Math.abs(q);
+      if (dbl) { const q2 = Y[1]; sumQ2 += q2; if (q2 > q2max) q2max = q2; if (q2 < q2min) q2min = q2; }
+    }
+    if (k >= kRec && (k + 1 - kRec) % every === 0) frame((k + 1) * h);
+  }
+  const Tm = meas * T;
+  if (geared) {
+    const u = md.unitPower;
+    out.P_load = (Y[2] - E0[0]) / Tm * u; out.P_paid = (Y[3] - E0[1]) / Tm * u; out.P_fric = (Y[4] - E0[2]) / Tm * u;
+    out.P_mean = out.P_load;
+  } else {
+    out.P_mean = (Y[d - 1] - E0[0]) / Tm;
+  }
+  out.Theta = 0.5 * (qmax - qmin); out.thetaAbsMax = absMax; out.trail = sumQ / nQ;
+  if (dbl) { out.Theta2 = 0.5 * (q2max - q2min); out.trail2 = sumQ2 / nQ; }
+  out.maxit = maxit; out.ms = Date.now() - t0;
+  return out;
+}
+
+/** The model without functions, for postMessage. */
+function stripModel(md) {
+  const o = {};
+  for (const k in md) if (typeof md[k] !== 'function') o[k] = md[k];
+  return o;
+}
+/*PHYSICS-END*/
+</script>
+</body>
+</html>
