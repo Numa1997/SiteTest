@@ -113,8 +113,9 @@ c) L3 (the main test): one edgewise modal degree of freedom of the NREL 5-MW bla
 d) L4: generator as an electrical machine (EMF constant, coil resistance, load, gearbox from a real datasheet);
    reflected inertia j = J N^2/(m L^2) changes P* by (R-1)/|R-1-j|; peak torque at the optimum is m g L/sqrt(2) =
    0.139 N m at every mounting. Electrical power and the sensor's need.
-e) THE LECTURE NOTE in portfolios-src/rotor-pendula/ (tools copied from hydraulics; rename their hydraulics
-   names: output file, title, links). Chapters: 1 the machine and the question; 2 sitting on the blade (centrifugal
+e) THE LECTURE NOTE in portfolios-src/rotor-pendula/ (tools copied from hydraulics; build_theory.py now writes
+   rotor_notes.html and the template's title reads "Pendula on a Turning Blade"; other hydraulics names remain, e.g. in
+   build_combined.py, check_combined.py, check_theory_numbers.js and the template's links). Chapters: 1 the machine and the question; 2 sitting on the blade (centrifugal
    pull, turning gravity, the Lagrangian, R, G, kappa); 3 the best brake and who pays (45 deg lag, P*, Sol's 18
    mountings); 4 big swings and two rods (one rod beats two; chaos at R = 1 loses); 5 random shaking and its power
    ceiling; 6 turbulent wind and the rotor; 7 the blade shakes too; 8 from swing to watts and the sensor; a box on

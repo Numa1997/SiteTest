@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Build hydraulic_theory.html from theory/*.src.html.
+"""Build rotor_notes.html from theory/*.src.html.
 
 The sources are HTML with LaTeX math: $...$ inline, $$...$$ display, \\tag{n} for an equation number and
 \\boxed{...} around a whole display for a key result. Every formula is typeset here, at build time, with
@@ -162,5 +162,5 @@ stats = (f'<span class="chip"><b>{n_ch}</b> chapters</span><span class="chip"><b
 
 out = (TEMPLATE.replace('{{FONTS}}', FONTS).replace('{{TOC}}', '\n'.join(toc)).replace('{{TOC_MOBILE}}', '\n'.join(toc_m))
        .replace('{{STATS}}', stats).replace('{{BODY}}', body))
-(ROOT / 'hydraulic_theory.html').write_text(out)
-print(f'wrote hydraulic_theory.html: {len(out)} bytes, {n_ch} chapters, {n_eq} equations, {n_fig} figures, {len(jobs)} formulas')
+(ROOT / 'rotor_notes.html').write_text(out)
+print(f'wrote rotor_notes.html: {len(out)} bytes, {n_ch} chapters, {n_eq} equations, {n_fig} figures, {len(jobs)} formulas')
