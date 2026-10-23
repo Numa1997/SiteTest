@@ -56,7 +56,7 @@ def put_figs(s):
     def rep(m):
         if m.group(1) not in figs:
             raise SystemExit('missing figure: ' + m.group(1))
-        return figs[m.group(1)]
+        return '<div class="figscroll">' + figs[m.group(1)] + '</div>'
     return re.sub(r'\{\{FIG:([\w-]+)\}\}', rep, s)
 
 
@@ -171,7 +171,7 @@ for m in re.finditer(r'<div class="part"><span class="part-n">([^<]+)</span><spa
 n_ch = len(re.findall(r'class="chapter"', book))
 n_fig = len(re.findall(r'<figure class="fig', book))
 stats = (f'<span class="chip"><b>{n_ch}</b> chapters</span><span class="chip"><b>{len(eq_ids)}</b> numbered equations</span>'
-         f'<span class="chip"><b>{n_fig}</b> figures</span><span class="chip">every number computed by the model</span>')
+         f'<span class="chip"><b>{n_fig}</b> figures</span><span class="chip">every number checked</span>')
 
 # ------------------------------------------------------------------ assemble
 tpl = read(HERE / 'template.html')
@@ -209,5 +209,16 @@ if SITE:
     assert 'googleapis' not in out
 fn.parent.mkdir(parents=True, exist_ok=True)
 fn.write_text(out, encoding='utf-8')
+if SITE:
+    # four plates for the Portfolios page article: the same SVGs as in the notes, with their text styles carried inside
+    style = ('<style>.tick{font:11px "IBM Plex Mono",Menlo,Consolas,monospace;fill:#4a3a30}'
+             '.axl{font:12.5px "IBM Plex Sans","Helvetica Neue",Arial,sans-serif;fill:#23160f}'
+             '.leg{font:12px "IBM Plex Sans","Helvetica Neue",Arial,sans-serif;fill:#23160f}</style>')
+    pdir = fn.parent / 'fig'
+    pdir.mkdir(exist_ok=True)
+    for name in ('fallspeed', 'efficiency', 'warm', 'first'):
+        svg = figs[name]
+        svg = svg.replace('<defs>', '<defs>' + style, 1) if '<defs>' in svg else re.sub(r'(<svg[^>]*>)', r'\1' + style, svg, count=1)
+        (pdir / f'plate-{name}.svg').write_text('<?xml version="1.0" encoding="UTF-8"?>\n' + svg, encoding='utf-8')
 print(f'wrote {fn.relative_to(ROOT) if SITE else fn}: {len(out)} bytes, {n_ch} chapters, {len(eq_ids)} equations, '
       f'{n_fig} figures, {len(jobs)} formulas')

@@ -1,0 +1,26 @@
+== (8.1) events per volume and time for two kinds + one self-colliding kind, uniform kernel K, volume V = 1: simulate the pair clocks
+   pairs = 3625 ; simulated rate 2537.40 +- 0.23 per unit time ; K n1 n2 + (1/2) K n3^2 (1 - 1/N3) = 2537.50 ; naive ordered double sum over N3 would give 3395.00
+   (8.1) is a sum over unordered pairs: for two different kinds K n1 n2, for one kind (1/2) K n^2, as the model code does (i == j gets 1/2).
+== (8.2) with the coefficients of Sotiropoulou et al. 2021, Appendix B (graupel-graupel, eq. B8): a0 = 3.78e4 (1 + 0.0079/D^1.5), A = a0/3 + max(2 a0/3 - a0 |T-258|/9, 0), C = 6.3e6 psi (psi = 3.5e-3 or 1), gamma = 0.3, F_max = 100
+   worked example: K0 = 2.607e-14 J ; alpha A = 9.202e-03 ; x = 1.785e-05 ; F = 3.398e-04 (text 3.4e-4)
+   psi = 3.5e-3 (C = 2.2e4): F = 6.325e-05 ; fragments per collision in the soft limit scale as C^0.3: ratio 5.37 (= 5.45)
+   soft-hit limit: F / (alpha A x^0.3) for x = 1e-12 ... 1e-2 : ['0.9999', '0.9980', '0.9844', '0.9396', '0.8843']
+   hard-hit limit: F / alpha A for x = 1e2 ... 1e8 (cap F_max = 100 not reached here): ['0.98133', '1.00000', '1.00000']
+   energy scaling in the soft regime: local exponent d ln F / d ln K0 at K0 = 2.6e-14 J: 0.2944 (gamma = 0.3)
+   with the true diameter in A (D = 16 um, outside the fitted range) at K0 = 2.6e-14: F = 1.279e-02
+   Mizuno-type correction used in the source's own implementation, dv = (1.7 (u1-u2)^2 + 0.3 u1 u2)^(1/2) instead of u1 - u2: dv = 0.2160 vs 0.1650 ; K0 x 1.71 ; F x 1.18
+== rough energy scale of the collisions the law was fitted to (ice spheres 900 kg/m3, D = 0.5 to 5 mm; fall speeds from a Schiller-Naumann drag balance, own estimate)
+   D = 1.0 and 0.5 mm : dv = 2.07 m/s, K0 = 1.12e-07 J
+   D = 2.0 and 0.5 mm : dv = 5.54 m/s, K0 = 8.89e-07 J
+   D = 2.0 and 1.0 mm : dv = 3.47 m/s, K0 = 2.52e-06 J
+   D = 5.0 and 0.5 mm : dv = 14.04 m/s, K0 = 5.80e-06 J
+   D = 5.0 and 1.0 mm : dv = 11.97 m/s, K0 = 3.35e-05 J
+   D = 5.0 and 2.0 mm : dv = 8.50 m/s, K0 = 1.28e-04 J
+   cloud collisions 1.3e-14 .. 2.3e-13 J; ratio of these fitted-range energies to the cloud ones: from 5.7 to 10.0 orders of magnitude (text: "eight to twelve")
+== the table of 8.3 from data/cold.json (model output, read only)
+   liquid 134.1 ice 166.9 cm^-3 ; ice-ice collisions 2.878 ; rime events with liquid >= 25 um radius 2.803 (text 2.88 and 2.80, 2.799 of 2.803 with the drop the larger partner)
+   rime25big 2.799 of rime25 2.803 ; shattering 0 .. 4.76 (text 0 to 4.8)
+   breakup clamped D: 3.01e-04 (psi 3.5e-3) .. 1.61e-03 (psi 1)  (text 3.0e-4 to 1.6e-3) ; true D: 0.050 (text 0.050) ; old rule 2.61 (text 2.6)
+   old rule / breakup: 1623 (text 1600) and 52 (text 52)
+   collision energies 5/50/95 %: ['1.3e-14', '5.4e-14', '2.3e-13', '3.7e-11'] J (text 1.3e-14 to 2.3e-13 for 5 and 95 %)
+   mean fragments per ice-ice collision: clamped 5.59e-04 (psi 1), 1.04e-04 (psi 3.5e-3) ; consistency with F of the worked example 3.4e-4: same order

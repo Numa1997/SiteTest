@@ -58,7 +58,7 @@
       <article class="proj" id="droplet-collection" aria-labelledby="dc-title">
         <div class="proj__band">
           <span class="proj__num">01</span>
-          <p>Bachelor thesis, Leipzig 2022 · remodelled</p>
+          <p>Bachelor thesis, Leipzig 2022 · rebuilt as lecture notes</p>
           <span>cloud physics · stochastic collection · numerical methods</span>
         </div>
         <div class="proj__body">
@@ -67,79 +67,71 @@
               <h2 id="dc-title">Droplet Collection</h2>
               <p class="proj__sub">How cloud droplets become rain</p>
               <p class="proj__abs">
-                A large drop falls faster than a small one and sweeps it up; that is
-                how a cloud of tiny droplets can turn into rain within minutes.
-                Numa Koudsie’s Bachelor thesis, <em>Collisional Ice Multiplication
-                Processes in Clouds</em> (Leipzig, 2022), modelled this collection
-                and the ice splinters it can produce, with Stokes’ law for the fall
-                speed and the geometric cross-section for the chance of a hit. The
-                remodel replaces each ingredient with physics that holds at the
-                sizes that matter: a drag balance for the fall speed, collision
-                efficiencies from the trajectory of the small droplet in the air
-                flow around the large one, and the full stochastic collection
-                equation for the bookkeeping. Every step is derived on the theory
-                page and tested on the checks page, and the solver runs in your
-                browser.
+                A cloud droplet is ten micrometres across and sinks a centimetre a second; a raindrop holds a
+                million of them. Gravity gathers them: a drop a little larger than its neighbours falls a little
+                faster, overtakes the droplets below it and swallows some of them. These lecture notes rebuild Numa
+                Koudsie’s Bachelor thesis, <em>Collisional Ice Multiplication Processes in Clouds</em> (Leipzig,
+                2022), from first principles, one physical effect at a time: Stokes’ drag derived from the stream
+                function, a drag balance for every size, droplet trajectories around a falling drop, the energy that
+                decides whether touching drops merge, the collection equation for a whole population, the exact
+                random process behind it, turbulence, and ice. Every number not attributed to a source is computed by
+                the model that runs in the page, and checked.
               </p>
               <div class="proj__actions">
-                <a class="proj__btn" href="portfolios/droplet-collection/index.html">Open the project</a>
-                <a class="proj__btn proj__btn--ghost" href="portfolios/droplet-collection/index.html#/theory">Read the derivations</a>
-                <a class="proj__btn proj__btn--ghost" href="portfolios/droplet-collection/index.html#/simulate">Run the cloud</a>
+                <a class="proj__btn" href="portfolios/droplet-collection/index.html#book">Read the lecture notes</a>
+                <a class="proj__btn proj__btn--ghost" href="portfolios/droplet-collection/index.html#sim">Run the cloud</a>
+                <a class="proj__btn proj__btn--ghost" href="portfolios/droplet-collection/index.html#checks">How it is checked</a>
               </div>
             </div>
             <dl class="proj__tally" aria-label="Key figures">
-              <div><dt class="is-new">6 / 14<small> min</small></dt><dd>to 50 / 90 % of the mass above 40 µm, extended kernel</dd></div>
-              <div><dt>3 / 5<small> min</small></dt><dd>the same, thesis kernel</dd></div>
+              <div><dt class="is-new">5.8 / 13.5<small> min</small></dt><dd>to half and nine tenths of the water in drops above 40 µm; with the collision efficiency’s uncertainty, nine tenths at 10.5 to 13.5 min</dd></div>
+              <div><dt>1<small> min</small></dt><dd>to the first drizzle drop in a cubic metre, ten times sooner than half the water: luck</dd></div>
+              <div><dt>50–1600<small>×</small></dt><dd>less new ice from ice–ice collisions than the thesis’s rule assumed</dd></div>
               <div><dt>2.1<small> %</small></dt><dd>largest fall-speed error against measurement, from 0.3 mm up</dd></div>
-              <div><dt>10<sup>−7</sup></dt><dd>mass error against Golovin’s exact solution</dd></div>
             </dl>
           </div>
 
           <section class="proj__part" aria-labelledby="dc-cloud">
-            <h3 id="dc-cloud"><span class="psub__n">1.1</span>The warm cloud</h3>
+            <h3 id="dc-cloud"><span class="psub__n">1.1</span>The cloud and the three questions</h3>
             <p>
-              The test case is a warm cloud of \(300\ \mathrm{cm^{-3}}\) droplets of
-              radius \(8\ \mathrm{\mu m}\) with \(1\ \mathrm{cm^{-3}}\) collectors of
-              \(40\ \mathrm{\mu m}\), at \(10\,{}^{\circ}\mathrm{C}\) and
-              \(850\ \mathrm{hPa}\). Growth is measured by the mass fraction in drops of
-              radius \(r \ge 40\ \mathrm{\mu m}\): a diagnostic of growth, not a rainfall
-              prediction. With the thesis kernel the mass piles up
-              near \(500\ \mathrm{\mu m}\) and stops, because the Weber number
-              computed with Stokes speeds switches coalescence off; with the extended
-              kernel the drops keep growing to millimetres. The kernel matters more
-              than the bookkeeping.
+              The test case is the thesis’s warm cloud: \(300\ \mathrm{cm^{-3}}\) droplets around
+              \(8\ \mathrm{\mu m}\) and \(1\ \mathrm{cm^{-3}}\) collectors around \(40\ \mathrm{\mu m}\), at
+              \(10\,{}^{\circ}\mathrm{C}\) and \(850\ \mathrm{hPa}\), in a closed, well-mixed box. The notes ask how
+              long until most of the water sits in large drops, how long until the very first drizzle drop appears
+              in a given volume, and whether collisions in a cold cloud make new ice. A ladder of models answers
+              them, each rung adding one effect with a computed number that shows it matters.
             </p>
           </section>
 
           <section class="proj__part" aria-labelledby="dc-changes">
-            <h3 id="dc-changes"><span class="psub__n">1.2</span>What changed, one line each</h3>
+            <h3 id="dc-changes"><span class="psub__n">1.2</span>What the rebuild found, one line each</h3>
             <ol class="proj__changes">
-              <li><b>Fall speed.</b> Stokes’ law gives \(\mathrm{Re}\approx 150\) for a \(200\ \mathrm{\mu m}\) drop, outside its own validity. A force balance with Beard’s drag coefficient \(C_D(\mathrm{Re})\), solved through the Davies number, reproduces the measurements of Gunn and Kinzer within 2.1 % from 0.3 mm up.</li>
-              <li><b>Collision efficiency.</b> The small droplet obeys \(\tau\,\dot{\mathbf v} = \mathbf u - \mathbf v - \tau g^{*}\mathbf e_z\) in the flow around the collector; scaled by \(R\) and \(U\) this is the Stokes number \(\mathrm{St} = \tau U/R\). The grazing trajectory gives \(E\); the solver reproduces the critical Stokes numbers \(1/12\) and \(1.21\).</li>
-              <li><b>Bookkeeping.</b> The thesis’s two fixed populations become one spectrum obeying the Smoluchowski collection equation; the thesis equations are recovered as its limit of rare collectors.</li>
-              <li><b>Numerics.</b> A logarithmic mass grid, pair fluxes computed in place, a deposit that conserves number and mass, and a limiter that is derived rather than guessed; tested against Golovin’s exact solution, with a mass error of \(10^{-7}\) and a spectrum error of 5 % at 8 bins per doubling.</li>
-              <li><b>Ice.</b> Splinter fragments join the interacting population. The app’s fragmentation is event-based: a fixed mass fraction \(\lambda\) per ice–ice collision and a fixed fragment mass. The thesis’s code drains mass at a random rate per second instead, so the cold runs test the app’s closure, not the thesis’s model. With fragments in the race the ice number grows from 167 to 1 700–2 100 cm⁻³ in an hour and the mass above 40 µm falls to 0.2–4 %: the closure, not the solver, drives that result.</li>
+              <li><b>Fall speed.</b> Stokes’ law breaks its own assumption at \(41\ \mathrm{\mu m}\), where its Reynolds number reaches 1. A drag balance through the Davies number matches the measurements of Gunn and Kinzer within 2.1 % from 0.3 mm up, and in the full population it slows growth by a factor 1.76, far more than for a single drop.</li>
+              <li><b>Collision efficiency.</b> Only a third of the droplets in a \(40\ \mathrm{\mu m}\) drop’s path touch it (\(E = 0.344\)); the rest ride round on the air it pushes aside. The trajectory solver reproduces the critical Stokes numbers \(1/12\) and \(1.21194\). The efficiency is the largest single change of the ladder, and the least certain: it moves the time to nine tenths of the water from 13.5 to 10.5 min.</li>
+              <li><b>Coalescence.</b> For cloud droplets the collision energy is \(10^{-5}\) of the surface energy, so touching drops merge; with Stokes speeds, large drops hit so hard that the thesis kernel stops merging them below a millimetre.</li>
+              <li><b>Luck.</b> The exact random process, sampled drop by drop in volumes up to a litre, makes the first \(100\ \mathrm{\mu m}\) drop through mergers of collectors with each other, in every one of 230 runs; a Poisson argument carries it to a cubic metre.</li>
+              <li><b>Ice.</b> At \(-10\,{}^{\circ}\mathrm{C}\) rime splintering is off, ice–ice breakup of the thesis’s small ice spheres makes almost nothing, and only the shattering of freezing drops could matter, between none and a few new particles per cm³ and minute: the measurements scatter that much.</li>
             </ol>
           </section>
 
           <section class="proj__part" aria-labelledby="dc-figs">
-            <h3 id="dc-figs"><span class="psub__n">1.3</span>Four figures from the project</h3>
+            <h3 id="dc-figs"><span class="psub__n">1.3</span>Four figures from the notes</h3>
             <div class="proj__figs">
               <figure>
-                <a class="pfig__plate" href="portfolios/droplet-collection/index.html#/theory"><img src="portfolios/droplet-collection/fig/fallspeed_gk.svg" width="636" height="300" loading="lazy" alt="Fall speed against drop size for the two models and the measurements of Gunn and Kinzer, and the error of the drag balance."></a>
-                <figcaption><span class="pfig__n">Figure 1</span>Left: the two fall-speed models against Gunn and Kinzer. Right: the error of the drag balance, at most 2.07 % at the listed sizes from 0.3 mm up and −7.57 % at 0.1 mm.</figcaption>
+                <a class="pfig__plate" href="portfolios/droplet-collection/index.html#fig-2-1"><img src="portfolios/droplet-collection/fig/plate-fallspeed.svg" width="545" height="300" loading="lazy" alt="Terminal speed of water drops against size: Stokes’ law, the drag balance and the measurements of Gunn and Kinzer."></a>
+                <figcaption><span class="pfig__n">Figure 1</span>How fast a drop falls: Stokes’ law runs away above 40 µm; the drag balance follows the measurements (chapter 2).</figcaption>
               </figure>
               <figure>
-                <a class="pfig__plate" href="portfolios/droplet-collection/index.html#/theory"><img src="portfolios/droplet-collection/fig/ecoll_map.svg" width="419" height="300" loading="lazy" alt="Map of the collision efficiency against the radii of the collector and the collected droplet."></a>
-                <figcaption><span class="pfig__n">Figure 2</span>Collision efficiency for water on water at \(10\,{}^{\circ}\mathrm{C}\), \(850\ \mathrm{hPa}\), on the \(45 \times 40\) grid used by the solver.</figcaption>
+                <a class="pfig__plate" href="portfolios/droplet-collection/index.html#fig-3-2"><img src="portfolios/droplet-collection/fig/plate-efficiency.svg" width="545" height="300" loading="lazy" alt="Collision efficiency against collector radius from droplet trajectories, with Hall’s compiled values."></a>
+                <figcaption><span class="pfig__n">Figure 2</span>Which droplets touch: collision efficiency from trajectories, against Hall’s (1980) table (chapter 3).</figcaption>
               </figure>
               <figure>
-                <a class="pfig__plate" href="portfolios/droplet-collection/index.html#/results"><img src="portfolios/droplet-collection/fig/w2_spectra.svg" width="580" height="300" loading="lazy" alt="Mass spectra of the warm cloud at several times, for the thesis kernel and the new kernel."></a>
-                <figcaption><span class="pfig__n">Figure 3</span>Evolution of the mass spectrum in the warm cloud, stochastic collection equation, thesis kernel (left) and new kernel (right).</figcaption>
+                <a class="pfig__plate" href="portfolios/droplet-collection/index.html#fig-5-2"><img src="portfolios/droplet-collection/fig/plate-warm.svg" width="545" height="300" loading="lazy" alt="Share of the water in drops of 40 µm or more against time, for the thesis kernel and the extended kernel."></a>
+                <figcaption><span class="pfig__n">Figure 3</span>The whole cloud: water in drops of 40 µm or more, for two kernels and two kinds of bookkeeping (chapter 5).</figcaption>
               </figure>
               <figure>
-                <a class="pfig__plate" href="portfolios/droplet-collection/index.html#/checks"><img src="portfolios/droplet-collection/fig/golovin.svg" width="470" height="300" loading="lazy" alt="Golovin test: numerical spectra against the exact solution."></a>
-                <figcaption><span class="pfig__n">Figure 4</span>Golovin test with 8 bins per doubling of mass: numerical (solid) against exact (dashed).</figcaption>
+                <a class="pfig__plate" href="portfolios/droplet-collection/index.html#fig-6-1"><img src="portfolios/droplet-collection/fig/plate-first.svg" width="545" height="300" loading="lazy" alt="Share of volumes holding a drop of 100 µm against time: exact runs and the Poisson prediction."></a>
+                <figcaption><span class="pfig__n">Figure 4</span>The first drizzle: exact runs against the Poisson prediction from the collection equation (chapter 6).</figcaption>
               </figure>
             </div>
           </section>
@@ -147,13 +139,11 @@
           <section class="proj__part" aria-labelledby="dc-pages">
             <h3 id="dc-pages"><span class="psub__n">1.4</span>The project’s own pages</h3>
             <ul class="proj__pages">
-              <li><a href="portfolios/droplet-collection/index.html#/"><b>Overview</b><span>The question, the warm cloud in two pictures, and the droplets falling.</span></a></li>
-              <li><a href="portfolios/droplet-collection/index.html#/theory"><b>Theory</b><span>Twelve chapters from the encounter to the evidence map, 62 numbered equations, worked examples, and each correction where it occurs.</span></a></li>
-              <li><a href="portfolios/droplet-collection/index.html#/results"><b>Results</b><span>Warm and cold clouds, four models of the same spectrum.</span></a></li>
-              <li><a href="portfolios/droplet-collection/index.html#/simulate"><b>Simulate</b><span>The solver of the collection equation, in your browser.</span></a></li>
-              <li><a href="portfolios/droplet-collection/index.html#/checks"><b>Checks</b><span>Fall speed, collision efficiency, critical Stokes numbers and the Golovin test.</span></a></li>
+              <li><a href="portfolios/droplet-collection/index.html#sim"><b>Simulation</b><span>The collection equation, the droplet trajectories and an exact random cloud, running in your browser.</span></a></li>
+              <li><a href="portfolios/droplet-collection/index.html#book"><b>Lecture notes</b><span>Ten chapters and an appendix, from one drop to ice: 22 numbered equations, each with its picture, its derivation and the model’s own numbers.</span></a></li>
+              <li><a href="portfolios/droplet-collection/index.html#problems"><b>Problems</b><span>Five worked problems with the model’s numbers.</span></a></li>
+              <li><a href="portfolios/droplet-collection/index.html#checks"><b>Checks</b><span>Exact solutions, independent recomputations in Python, and a script that finds every quoted number in the text.</span></a></li>
             </ul>
-            <p class="proj__note">A static copy of the Droplet Collection app. Its saved-runs list is left out: every run is computed fresh in your browser, and nothing is stored.</p>
           </section>
         </div>
       </article>

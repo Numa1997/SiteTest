@@ -154,3 +154,62 @@ The rates reproduce, and the prediction survives under the reading the cited sou
   10⁻¹⁴–10⁻¹³ J, not 10⁻¹²–10⁻⁹ J. The Hallett–Mossop window is misdescribed. The shattering events are big drops collecting small
   ice, which is the laboratory geometry, so the channel is better grounded than the contract says. The 0.03–1.7 bracket is built
   from maxima.
+
+---
+
+## Fixes check (round 1 answers, checked 23 October 2026)
+
+What I checked, and nothing else:
+- the answer sections: contract-L3 §9, contract-L6 §7, contract-L7 §8;
+- `tools/run_cold.cjs`, rerun with `node tools/run_cold.cjs`;
+- `text/book-04.src.html`, `book-07.src.html` and `book-08.src.html`, all committed in b1bea34.
+
+**The rerun matches chapter 8.** Every number in chapter 8 matches the script's output and `data/cold.json`:
+
+| Quantity | Value |
+|---|---|
+| Liquid fraction at −10 °C | 44.55 % |
+| Liquid / ice | 134.1 / 166.9 cm⁻³ |
+| A at D = 0.5 mm | 1.144 × 10⁷ m⁻² |
+| Events with drop larger than ice / all events with drops ≥ 25 µm radius | 2.7987 / 2.8028 cm⁻³ min⁻¹ |
+| Ice–ice collisions | 2.878 cm⁻³ min⁻¹ |
+| Collision energy, 5 / 50 / 95 %, largest | 1.3 / 5.4 / 23 × 10⁻¹⁴ J, 3.7 × 10⁻¹¹ J |
+| Shattering | 0 to 4.76 cm⁻³ min⁻¹ |
+| Breakup, D clamped (ψ = 3.5 × 10⁻³ / ψ = 1) | 3.01 × 10⁻⁴ / 1.61 × 10⁻³ cm⁻³ min⁻¹ |
+| Breakup, true D | 4.99 × 10⁻² cm⁻³ min⁻¹ |
+| Old rule | 2.61 cm⁻³ min⁻¹ |
+| Old rule ÷ breakup | 1.62 × 10³ (clamped), 52 (true D) |
+
+The worked collision in chapter 8 also checks: 0.1726 and 0.0076 m/s, K₀ = 2.6 × 10⁻¹⁴ J, αA = 9.2 × 10⁻³, CK₀ = 1.6 × 10⁻⁷,
+F = 3.4 × 10⁻⁴, old rule 0.51. These agree with my independent script from round 1. The script's a₀ = 3.78 × 10⁴ (1 + 0.0079/D^1.5)
+with D clamped to 0.5–5 mm is the form printed in Sotiropoulou et al. 2021, App. B.
+
+**Chapter 4 also checks.** CKE 3.0 × 10⁻¹⁴ J, We 2.0 × 10⁻⁵, E 0.99998, 60/50 We 2.9 × 10⁻⁴, and 500/250 We 0.52, E 0.55. The
+Stokes case gives We = 0.52 × (23.06/2.12)² = 61. The Beard et al. 2002 quotation and the Beard and Ochs 1984 paraphrase agree with
+their abstracts.
+
+**Chapter 7 also checks.** τ_K = 41 ms, response times 0.8 ms and 18 ms, St ≈ 0.4, the 43 µm cut, and the Wang et al. 2008 ×2 and ×7.
+
+### Remaining items
+
+| # | Severity | Where | Problem | Fix |
+|---|---|---|---|---|
+| F1 | must-fix (one clause) | ch. 8, worked collision and table: "With D held at the law's lower limit of 0.5 mm" | The numbers hold D at 0.5 mm in A only; α stays the surface of the true 16 µm sphere. That is the physically sensible reading, but the text does not say so, and Sotiropoulou's wording ("input variables … set to the nearest limit") also allows clamping α. Clamping α too gives 1.6 × 10⁻¹ cm⁻³ min⁻¹, only 16 times below the old rule (my `cold_probe2.cjs`). The prediction depends on this choice. | "D held at 0.5 mm in A; α is the true surface of the smaller sphere (holding α at 0.5 mm too would credit a 16 µm sphere with the bumps of a 0.5 mm one)." |
+| F2 | must-fix (one phrase) | ch. 8: "The only free-fall study with drops of our size, Brownscombe and Thorndike (1968…)" | Korolev and Leisner's Table 1 has other free-fall studies covering our sizes: Hobbs and Alkezweeny 1968 (20–150 µm), Bader et al. 1974 (30–84 µm), Takahashi 1975 (45–765 µm). Brownscombe and Thorndike is the only one of them that gives *both* a frequency and a fragment count. | "The only free-fall study of drops our size that reports both how often drops shatter and how many pieces they make …" |
+| F3 | must-fix (one sentence) | ch. 7: "Most of the gain comes from the fluid's accelerations, which the light droplet follows and the heavy collector does not" | In the formula as coded, the gravity–shear coupling term is larger than the acceleration term at 10 and 100 cm²/s³ (8.0 × 10⁻⁴ against 5.0 × 10⁻⁴ m²/s² at 100). Acceleration leads only at 400. | "The gain comes from two terms of similar size: the fluid's accelerations, which the light droplet follows and the heavy collector does not, and the collector's fall through the eddies' velocity differences (Ayala et al.'s new term)." |
+| F4 | minor | ch. 7: "turbulence also raises the collision efficiency itself, by up to about a factor of 2 for size ratios like ours (Wang et al. 2008)" | The abstract's "typically below 2" for ratios 0.2–0.8 is the *overall* enhancement (geometric and efficiency together), not the efficiency alone. My own round-1 hand-back was loose on this. | "raises the whole collision rate, efficiency included, typically by less than a factor 2 for size ratios like ours". |
+| F5 | minor | ch. 4 "changes t₉₀ by 0.25 %" against contract-L3 §9 "0.26 %"; ch. 7 band "10.5 to 13.5 min" against contract-L6 §7 "11.4 against 13.5 min, about 16 %" | The contracts do not match the pages. | Bring the contracts into line with the pages. |
+| F6 | minor | ch. 8 | ψ (the sublimation correction behind the C range) and Latham and Mason's dissent on splintering at −10 °C are in the contract but not on the page. | Optional: one clause each. |
+
+### Final Gate 1 verdicts
+
+- **L3: PASS.** All seven objections answered. F5 is bookkeeping only.
+- **L6: PASS with fixes.** Objections 1–7 answered. F3 must be edited because it misstates which term does the work. F4 is a wording
+  fix. No re-review is needed once F3 is applied as worded.
+- **L7: PASS with fixes.** Objections 1–12 answered, and the numbers match the rerun. F1 and F2 must be applied as worded. F1 matters
+  because the "1600 times" result depends on which input is clamped. No re-review is needed once both are applied.
+
+**Confirmed after the restore (23 October 2026).** F1–F3 are now on the pages. book-08 holds D at 0.5 mm "inside A" and keeps α as
+"the true surface of the 8 µm sphere" (radius 8 µm, the 16 µm sphere above). book-08 calls Brownscombe and Thorndike "the only
+free-fall study with drops of our size that reports both". book-07 names both effects and says gravity–shear coupling is the larger at
+10 and 100 cm²/s³. With these, L6 and L7 PASS.

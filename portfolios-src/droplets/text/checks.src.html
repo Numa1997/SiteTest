@@ -6,18 +6,44 @@ exact solutions the model must reproduce, independent recomputations in Python (
 SymPy), and a script that recomputes every number quoted in the notes and finds it in the text.</p>
 <div class="tblw"><table class="mt">
 <tr><th>test</th><th>result</th></tr>
-<tr><td class="wrap">Stokes drag from the stream function: $E^4\psi = 0$, no slip, pressure and shear (SymPy)</td><td class="wrap">$2\pi\mu aU + 4\pi\mu aU = 6\pi\mu aU$</td></tr>
+<tr><td class="wrap">Stokes drag from the stream function: $\mathcal E^4\psi = 0$, no slip, pressure and shear (SymPy)</td><td class="wrap">$2\pi\mu aU + 4\pi\mu aU = 6\pi\mu aU$</td></tr>
 <tr><td class="wrap">One collector: (1.4) against a numerical integration</td><td>9.9554 min both ways</td></tr>
 <tr><td class="wrap">Fall speed against Gunn and Kinzer (1949), d ≥ 0.3 mm</td><td>largest gap 2.07 %</td></tr>
 <tr><td class="wrap">Critical Stokes numbers, point droplet on the axis</td><td class="wrap">0.08333 (exact 1/12); 1.21194 (Michael and Norey 1970: 1.21194)</td></tr>
-<tr><td class="wrap">Point-droplet efficiencies against Langmuir's (1948) Table 1, K ≥ 5</td><td>within 3.2 %</td></tr>
+<tr><td class="wrap">Point-droplet efficiencies against Langmuir's (1948) Table 1</td><td class="wrap">within 3.2 % for K ≥ 5; 8–10 % low at K = 3–3.6, unresolved</td></tr>
+<tr><td class="wrap">E(40 µm, 8 µm) from an independent SciPy integration (flow from SymPy derivatives of the stream functions)</td><td>0.3442 against 0.3444</td></tr>
 <tr><td class="wrap">Golovin's exact solution, 60 min, 8 bins per doubling</td><td class="wrap">spectrum error 0.051; mass error −4.58 × 10⁻⁷ (grid truncation); scheme drift 2 × 10⁻¹³</td></tr>
 <tr><td class="wrap">Water conservation in every collection-equation run</td><td>to 3.4 × 10⁻¹³</td></tr>
 <tr><td class="wrap">Exact stochastic runs: kernel bound violated</td><td>0 times in 430 runs</td></tr>
 <tr><td class="wrap">First 100 µm drop, exact runs against the Poisson prediction (6.1)</td><td class="wrap">medians 286 s and 175 s against 280 s and 175 s</td></tr>
 <tr><td class="wrap">Old study's warm-cloud times, recorded to the minute</td><td class="wrap">3 / 5, 3 / 7, 6 / 14, 7 / 19 min reproduced</td></tr>
+<tr><td class="wrap">Collection equation solved again by independent NumPy code (all pairs at once, half the time step)</td><td class="wrap">$t_{50}$, $t_{90}$ = 5.774, 13.483 min against 5.767, 13.470</td></tr>
+<tr><td class="wrap">Exact stochastic engine against a problem solved exactly: one collector, 20 identical droplets (a pure capture chain), 4000 runs</td><td class="wrap">mean captures 8.246 ± 0.036 against 8.221; χ² test p = 0.15</td></tr>
+<tr><td class="wrap">Poisson prediction (6.1) against the exact first-drop times (Kolmogorov–Smirnov)</td><td class="wrap">p = 0.42 (1000 cm³), 0.40 (100 cm³)</td></tr>
 </table></div>
-<p class="note">The source of the study, its derivations and its check scripts are in the website's repository, folder
-<span class="mono">portfolios-src/droplets/</span>; the record of how each level was built and attacked is in
+<p>One of these tests taught something worth passing on. The second, independent solver of the collection equation first gave
+$t_{90}$ = 18.3 min instead of 13.5. The physics was the same; the difference was one line of bookkeeping. A step may not take more
+drops out of a bin than it holds, and the first version counted every merger of a large drop as a loss to its bin. But a 1 mm drop that
+sweeps up an 8 µm droplet stays a 1 mm drop: it almost never leaves its bin, so its bin loses almost nothing. Counting the gross loss
+throttled exactly the largest, fastest-growing drops. Counted net, the two solvers agree to 0.013 min. </p>
+
+<h3>Golovin's exact solution</h3>
+<p>Chapter 5 tests the grid against the one kernel for which (5.1) can be solved exactly, the sum kernel $K = b(m + m')$. With it the
+gain term of (5.1) is $\tfrac12 b\,m\int_0^m n(m')\,n(m - m')\,dm'$ (because $m' + (m - m') = m$), and the loss term is
+$b\,n(m)\,(mN + L)$, with $N(t) = \int n\,dm$ the number of drops and $L = \int m\,n\,dm$ the water, which is constant. Take the Laplace
+transform $F(p, t) = \int_0^\infty n(m, t)\,e^{-pm}\,dm$. A convolution becomes a product, and a factor $m$ becomes $-\partial_p$, so</p>
+$$\frac{\partial F}{\partial t} = -\frac b2\,\frac{\partial F^2}{\partial p} + bN\,\frac{\partial F}{\partial p} - bLF. \tag{C.1}$$
+<p>At $p = 0$, $F = N$, and (C.1) gives $dN/dt = -bLN$: the number falls as $N = N_0e^{-bLt}$. Subtract that from (C.1) and write
+$G = F - N$:</p>
+$$\frac{\partial G}{\partial t} + bG\,\frac{\partial G}{\partial p} = -bLG. \tag{C.2}$$
+<p>This is Burgers' equation without viscosity, with a damping term: each value of $G$ travels in $p$ at the speed $bG$ while it decays
+as $e^{-bLt}$. Along such a characteristic, $G = G_0(p_0)\,e^{-bLt}$ and $p = p_0 + G_0(p_0)\,(1 - e^{-bLt})/L$. For the exponential start
+$n_0 = (N_0/\bar m)\,e^{-m/\bar m}$, $G_0(p) = -N_0 p\bar m/(1 + p\bar m)$. Eliminating $p_0$ and transforming back to $m$ is the step
+Golovin (1963) carried out; the result, with $\theta = 1 - e^{-bLt}$, is</p>
+$$n(m, t) = \frac{N_0\,(1 - \theta)}{m\sqrt{\theta}}\;e^{-(1 + \theta)\,m/\bar m}\;I_1\!\Big(\frac{2m\sqrt{\theta}}{\bar m}\Big), \tag{C.3}$$
+<p>with $I_1$ the modified Bessel function. It satisfies (5.1) (checked by substituting it numerically, and its number and water
+reproduce $N_0e^{-bLt}$ and $L$ to $10^{-6}$). The spectrum error quoted in chapter 5 is $\varepsilon = \sum_k |M_k - M_k^{\rm exact}|/L$,
+the summed difference of the water in each bin, as a fraction of all the water.</p>
+<p class="note">The source of the study, its derivations and its check scripts are in the website's repository, folder <a href="https://github.com/Numa1997/SiteTest/tree/main/portfolios-src/droplets"><span class="mono">portfolios-src/droplets/</span></a>; the record of how each level was built and attacked is in
 <span class="mono">notes/droplets/</span>.</p>
 </div>

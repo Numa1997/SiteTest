@@ -35,6 +35,16 @@ of critical damping against the blade's 0.477 %. At the gravity-optimal damping 
 Expectation (opinion, to be tested, not assumed): gravity dominates; turbulence enters through the blade only if the edgewise
 acceleration at the pivot approaches g; chaos spreads the mobility over a wide band and should lose to a tuned single pendulum.
 
+## Current state (23 Oct, after resume)
+
+- Lecture note: portfolios-src/rotor-pendula/theory/ (chapters 0-7), numbers from tools/make_numbers.py, built
+  rotor_notes.html clean at 360-1440 px (commit bd71d9e). Revised against referee-note-r1.md (53 findings).
+- Running: second blind reader (referee-note-r2.md); generator scout (dossier-generator.md) for chapter 7 (L4).
+- Results added: L2 both torque laws (wind effect +0.5..+0.75 %; -2 % was the NREL controller); L3 sag (cancels within
+  1 %, two routes), L3 two-way shaking (L3_shake2.py; tuned 1.11 m rod valid only at 5 mm tip shaking).
+- Next: fix r2 findings; chapter 7 (generator) from the dossier; wire rotor_notes.html into the served page with Sol's
+  report kept (build_combined.py); Portfolios article and docs; pull request only when Numa asks.
+
 ## Queue (first open item first)
 
 1. [running] Power theorem Monte Carlo, full statistics (`derive/power_theorem_mc.py` → `mc_full.log`, ~25 min).
@@ -82,7 +92,7 @@ acceleration at the pivot approaches g; chaos spreads the mobility over a wide b
   To do: contract L2 round 2 (run both torque laws; overdamped picture, ζ = 4.5–8.4; dynamic inflow 15 s; σ₁ is the IEC 90 %
   quantile; C_p 0.482 vs 0.466; unresolved-variance torque rectification ~5.7 % of Q₀).
 - L1 map (`L1_map.json`): chaos only at R = 1 (G = 1, 16/16 members); none at R ≥ 2; 10 members diverged numerically, all at
-  G = 70 with R ≤ 5 (no real mounting): rerun them with more steps before quoting.
+  G = 70 with R ≤ 5; RERUN with 4x steps (`L1_map_g70.py`, 420-440 steps/turn): all 48 finite, none chaotic. Divergence was numerical.
 - External review prompt for Numa's ChatGPT agent: `review-prompt.md` (given 23 Oct, study unfinished).
 
 ## Found along the way

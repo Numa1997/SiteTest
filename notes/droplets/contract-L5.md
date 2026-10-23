@@ -107,3 +107,40 @@ the luck factor (Kostinski and Shaw 2005), the small-cell findings (Dziekan and 
 sizes, the 3σ_g truncation, fixed counts, four classes per doubling of radius. Price: a well-mixed box larger than about a litre is an
 idealisation; 1 m³ is reached only through the Poisson bridge, so its first-drop time is as good as the SCE's tail and the bridge's
 test at 1000 cm³; and the near-equal efficiency, which drives collector–collector mergers, is the least known closure of the study.
+
+## 9. Outcomes (computed after this contract; `tools/run_stochastic.cjs`, `tools/run_bridge.cjs`, `checks/check_physics.py`)
+
+The contract file is dated 12:26, the stored ensembles 12:28–12:36 (23 Oct).
+
+1. The gap: in 1 m³ the first 100 µm drop appears after about 60 s (bridge, s = 16); half the water is above 100 µm after 585 s:
+   a factor of about 10: **passed** (but known before the contract; see §10.1).
+2. Poisson bridge against exact runs (Kolmogorov–Smirnov): 1000 cm³, 30 runs, D = 0.156, p = 0.42; 100 cm³, 100 runs, D = 0.088,
+   p = 0.40: **passed** at the 5 % level. Medians 175 s and 286 s against the bridge's 175 s and 280 s.
+3. The route: 230 of 230 first drops ≥ 100 µm had merged with a partner ≥ 30 µm: **passed**.
+4. Small volumes: F₄₀ at 10 min 0.520 ± 0.019 (1 cm³), 0.696 ± 0.009 (10), 0.730 ± 0.004 (100), 0.740 ± 0.002 (1000); the SCE with
+   truncated modes gives 0.742 at 10 min: the lag at ≤ 10 cm³ **holds** (and is still 0.012 at 100 cm³, 7 standard errors at 20 min).
+   At 1000 cm³ the ensemble agrees with the truncated SCE (s = 16) within 1.3 standard errors at every odd minute to 21 min (F₄₀ = 0.99);
+   after that the runs exceed the SCE by 1–2 × 10⁻⁴, statistically significant (z up to 5) but invisible on the page; cause not
+   investigated: **failed** as written after 22 min (see §10.4).
+5. Engine test (added): one collector and 20 identical droplets, against the exact death chain, 4000 runs: mean 8.246 ± 0.036 against
+   8.221, χ² p = 0.15: **passed**. Zero majorant violations in all 430 ensemble runs.
+
+## 10. Answers to round 1 (`skeptic-G1-L4L5-r1.md`, L5: PASS with fixes)
+
+| # | Answer |
+|---|---|
+| 1 | Accepted: the gap was computed before this contract, so it is a result, not a prediction. The open prediction was the Poisson bridge (2), which could have failed and did not at 100 and 1000 cm³. |
+| 2 | Accepted, and it changes the teaching: the luck here is meeting another collector early, not lucky captures. Capture alone takes the largest starting collector (69 µm) to 100 µm in 560 s with 1312 captures, and its count varies by a few per cent. Chapter 6's picture and its paragraph on Telford, Kostinski and Shaw are rewritten. |
+| 3 | Accepted and measured: 55 / 57 / 61 s at s = 8 / 16 / 32 (`derive/L5_tail.cjs`, 1 s records; the skeptic's 65 s used coarser records). 1000 cm³: 170 / 173 / 179 s against 175 s exact; 100 cm³: 278 / 279 / 284 s against 286 s exact. The page says "about a minute" and gives the three values. The gap is about nine to eleven. |
+| 4 | Accepted: prediction 4 as written **failed** after 22 min at 1000 cm³ (the runs exceed the SCE by 1–2 × 10⁻⁴ in F₄₀, z up to 6–10). Cause not found. It is invisible on the page, and the page quotes nothing after 20 min from the comparison. |
+| 5 | Added to chapter 6: 1 cm³ cannot make a 100 µm drop (it needs the water of 3.75 cm³); in 10 cm³ every run made one (median 605 s) while (6.1) allows at most 32 % of volumes, because in a small volume the first merged drop sweeps up the rest: (6.1) needs rare and independent large drops. The 1 mm time in 1 m³ (about 18 min) is labelled untested (a 1 mm drop needs 3.75 L of cloud). |
+| 6 | 130 of 130 at V ≥ 100 cm³, and 100 of 100 at 10 cm³. |
+| 7 | The bound is checked at every proposal; the code stops after more than 10 violations; zero occurred. |
+| 8 | The test run is the stronger one: the full capture-count distribution against the matrix exponential (χ², p = 0.15). Same-class pairs with K > 0 are exercised by every ensemble run (0 violations in 430). |
+| 9 | Acceptance 0.50 / 0.55 / 0.59 / 0.59 at 1 / 10 / 100 / 1000 cm³; chapter 6 says "50 to 59 %". |
+| 10 | Mixing time about 5 s at 1 m against a first-drop time of about 60 s: the well-mixed cubic metre is an idealisation by a factor of about ten in time. |
+| 11 | "Moves 0.27 % of each mode's drops from its tails into its body." |
+| 12 | Continuous lognormal: 0.25 per m³ (chapter 6 now says 0.25). |
+| 13 | Adopted in chapter 6: one collector in 1 cm³ cannot meet another; n(n − 1)/2 = 0 where the SCE uses n²/2. |
+| 14 | With 30 runs the 5 % KS critical distance is 0.25, so the test excludes only large differences; the medians are the sharper evidence. |
+| 15 | Noted. |

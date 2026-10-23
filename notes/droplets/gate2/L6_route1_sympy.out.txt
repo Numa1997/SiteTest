@@ -1,0 +1,25 @@
+== Kolmogorov time by dimensional analysis: nu^a eps^b with the dimension of a time
+   exponents: {a: 1/2, b: -1/2}  -> tau_K = (nu/eps)^(1/2)  ; printed sqrt(nu/eps): True
+  units  tau_K = sqrt(nu/eps): s  vs  s  ->  OK
+  units  v_K = (nu eps)^(1/4): m s^-1  vs  m s^-1  ->  OK
+   smallest eddies: v_K eta/nu with eta = (nu^3/eps)^(1/4) = 1 (Reynolds number 1 at the Kolmogorov scale)
+   units of the energy dissipation rate per unit mass eps: m^2 s^-3 = m^2 s^-3 (J/kg/s)
+
+== the turbulent relative velocity in the weak-inertia limit (paper eq. 81 + eq. 26 + corrigendum eq. 4)
+   ratio <|w_r|> / (gravitational |v1 - v2|/2) with |v1 - v2| = d g : sqrt(15)*sqrt(120*a0*d**2*nu*v_k**2 + 15*pi*d**2*g**2*nu*tau_k**2 + 8*epsilon*tau_k**2*(2*A**2 + R**2))/(15*sqrt(pi)*d*g*sqrt(nu)*tau_k)
+   with v_k, tau_k substituted: ratio = sqrt(15)*sqrt(120*a0*d**2*epsilon**(3/2)*nu + 15*pi*d**2*g**2*nu**(3/2) + 8*epsilon*sqrt(nu)*(2*A**2 + R**2))/(15*sqrt(pi)*d*g*nu**(3/4))
+   limit eps -> 0 : 1   (gravity alone)
+   expansion in eps (leading terms): 1
+   (ratio - 1)/eps as eps -> 0 = 4*(2*A**2 + R**2)/(15*pi*d**2*g**2*nu)  = 4/(pi d^2 g^2) [R^2/(15 nu) + 2 A^2/(15 nu)]  : True (the acceleration term enters at eps^(3/2))
+   limit d -> 0 (equal drops): ratio -> oo, i.e. the gravitational reference vanishes; the formula is for size ratios where gravity dominates (text: ratio below 0.6)
+   sigma = 0 : <|w_r|> = d*g/2  = d g/2 : gravity only
+   units of each term of sigma^2 [m^2/s^2]:
+  units  R^2 eps/(15 nu): m^2 s^-2  vs  m^2 s^-2  ->  OK
+  units  d^2 a0 (v_k/tau_k)^2   (d = tau difference [s]): m^2 s^-2  vs  m^2 s^-2  ->  OK
+  units  A^2 2 eps/(15 nu)  (A = v tau [m]): m^2 s^-2  vs  m^2 s^-2  ->  OK
+  units  (pi/8) d^2 g^2: m^2 s^-2  vs  m^2 s^-2  ->  OK
+   a0 = (11 + 7 R_lambda)/(205 + R_lambda) at R_lambda = 2e4: 6.9295224 (-> 7 as R_lambda -> oo; Table 2 of the paper)
+
+== Stokes numbers quoted in the text
+   tau_p = v/g (the drag-corrected response time of chapter 3 and Table 2 of the paper: v_p = tau_p |g|); with v_Beard(40 um) = 0.17709 m/s: tau_p = 18.05 ms ; v_Beard(8 um) = 0.007963: 0.812 ms
+   tau_K = sqrt(nu/eps) with nu = 1.6935e-5 m^2/s (10 C, 850 hPa), eps = 1e-2 m^2/s^3: 41.15 ms ; St(40 um) = 0.439 ; St(8 um) = 0.0197

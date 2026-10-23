@@ -59,7 +59,7 @@
         { x: minutes(ref.thesis.t), y: ref.thesis.F40, label: 'thesis kernel, SCE (stored)', color: '#6f665e', dash: '5 4', width: 1.5 },
         { x: minutes(ref.extended.t), y: ref.extended.F40, label: 'extended kernel, SCE (stored)', color: '#33627f', dash: '5 4', width: 1.5 }
       ].concat(series || []);
-      $('bx-f40').innerHTML = CHART.line({ w: 620, h: 300, series: s, xmin: 0, xmax: 30, ymin: 0, ymax: 1, xlabel: 'time (min)', ylabel: 'water in drops r ≥ 40 µm', legendAt: 'bottom', id: 'bxf' });
+      $('bx-f40').innerHTML = CHART.line({ w: 620, h: 300, series: s, xmin: 0, xmax: 30, ymin: 0, ymax: 1, xlabel: 'time (min)', ylabel: 'water in drops r ≥ 40 µm', id: 'bxf' });
     }
     function drawSpec(grid, N, t) {
       var x = grid.r.map(function (r) { return r * 1e6; });
@@ -67,7 +67,7 @@
       var g = N.map(function (n, k) { return n * grid.x[k] / grid.dlnr * 1e3; });
       $('bx-spec').innerHTML = CHART.line({ w: 620, h: 280, xlog: true, xmin: 2, xmax: 4000, ymin: 0, series: [
         { x: x, y: g0, label: 'start', color: '#6f665e', dash: '4 3' }, { x: x, y: g, label: 'after ' + Math.round(t / 60) + ' min', color: '#7d1d2f' }],
-        xlabel: 'radius r (µm)', ylabel: 'g = dM/d ln r (g/m³)', legendAt: 'right', id: 'bxs' });
+        xlabel: 'radius r (µm)', ylabel: 'g = dM/d ln r (g/m³)', id: 'bxs' });
     }
     drawF40();
     $('bx-run').addEventListener('click', function () {
@@ -119,8 +119,8 @@
       var Re = 2 * R * A.rho * U / A.mu;
       var e = PHYS.pairEfficiency(R, r, A), fl = flow === 'blend' ? 'stokes' : flow;
       var bc = Math.sqrt(Math.max(0, (flow === 'potential' ? e.EP : e.ES))) * (1 + p);
-      var W = 520, H = 420, sc = 70, cx = W / 2, cz = H * 0.42, parts = ['<svg viewBox="0 0 ' + W + ' ' + H + '" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="droplet paths around a collector">',
-        '<rect width="' + W + '" height="' + H + '" fill="#fff"/>'];
+      var W = 520, H = 420, sc = 70, cx = W / 2, cz = H * 0.42, parts = ['<svg viewBox="0 0 ' + W + ' ' + (H + 60) + '" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="droplet paths around a collector">',
+        '<rect width="' + W + '" height="' + (H + 60) + '" fill="#fff"/><defs><clipPath id="tjclip"><rect width="' + W + '" height="' + H + '"/></clipPath></defs><g transform="translate(0 30)"><rect width="' + W + '" height="' + H + '" fill="#fff" stroke="#ece3d2"/><g clip-path="url(#tjclip)">'];
       var offs = [0.15, 0.35, 0.55, 0.75, 0.95, 1.15, 1.35, 1.55, 1.75].map(function (f) { return f * (1 + p); });
       offs.forEach(function (b) {
         var q = PHYS.trajPath(fl, St, S, p, b, 6, 3.2), pts = [];
@@ -132,11 +132,12 @@
       });
       parts.push('<circle cx="' + cx + '" cy="' + cz + '" r="' + sc + '" fill="#e1ebf0" stroke="#23160f" stroke-width="1.5"/>');
       parts.push('<circle cx="' + cx + '" cy="' + cz + '" r="' + (sc * (1 + p)) + '" fill="none" stroke="#6f665e" stroke-dasharray="3 3"/>');
-      parts.push('<text x="12" y="20" class="tick">air rises past the collector (its frame); droplets enter from below</text>');
-      parts.push('<text x="12" y="' + (H - 12) + '" class="tick">wine: touches · blue: carried round · dashed: contact at R + r</text></svg>');
+      parts.push('</g></g><text x="12" y="19" class="tick">air rises past the collector (its frame); droplets enter from below</text>');
+      parts.push('<text x="12" y="' + (H + 52) + '" class="tick">wine: touches · blue: carried round · dashed: contact at R + r</text></svg>');
       $('tj-svg').innerHTML = parts.join('');
       $('tj-out').innerHTML = 'Stokes number St = τU/R = <b>' + St.toFixed(2) + '</b> · settling ratio S = <b>' + S.toFixed(3) + '</b> · collector Re = <b>' + Re.toFixed(2) +
-        '</b><br>E (creeping flow) = <b>' + e.ES.toFixed(3) + '</b> · E (potential flow) = <b>' + e.EP.toFixed(3) + '</b> · E (Langmuir’s blend) = <b>' + e.E.toFixed(3) + '</b>';
+        '</b><br>E (creeping flow) = <b>' + e.ES.toFixed(3) + '</b> · E (potential flow) = <b>' + e.EP.toFixed(3) + '</b> · E (Langmuir’s blend) = <b>' + e.E.toFixed(3) + '</b>' +
+        (p > 0.6 ? '<br>Size ratio p = ' + p.toFixed(2) + ' is above 0.6, where the one-sided flow fails: the collection equation uses E at p = 0.6 instead (chapter 3).' : '');
     }
     ['tj-R', 'tj-r', 'tj-flow'].forEach(function (id) { $(id).addEventListener('change', drawTraj); });
     ['tj-R', 'tj-r'].forEach(function (id) { $(id).addEventListener('input', function () { $(id + 'l').textContent = $(id).value + ' µm'; }); });
@@ -153,10 +154,11 @@
         var t = ST.t100[V].slice().sort(function (a, b) { return a - b; }), n = ST.n[V];
         s.push({ x: [0].concat(t.map(function (x) { return x / 60; })), y: [0].concat(t.map(function (x, i) { return (i + 1) / n; })), label: V + ' cm³: ' + n + ' exact runs', color: cols[V], width: 2 });
         var br = DATA.bridge, Vm = V * 1e-6;
-        s.push({ x: minutes(br.t), y: br.N100.map(function (n100) { return 1 - Math.exp(-Vm * n100); }), color: cols[V], dash: '4 3', width: 1.5 });
+        var mx = 0;   // (6.1) with the largest n100 so far: a volume that once held a 100 um drop has had its first drop (figure 6.1)
+        s.push({ x: minutes(br.t), y: br.N100.map(function (n100) { mx = Math.max(mx, n100); return 1 - Math.exp(-Vm * mx); }), color: cols[V], dash: '4 3', width: 1.5 });
       });
       $('lk-cdf').innerHTML = CHART.line({ w: 620, h: 300, xmin: 0, xmax: 20, ymin: 0, ymax: 1, series: s.concat(extra || []), xlabel: 'time (min)',
-        ylabel: 'share of volumes with a 100 µm drop', legendAt: 'right', id: 'lkc' });
+        ylabel: 'share of volumes with a 100 µm drop', id: 'lkc' });
     }
     drawCDF();
     $('lk-run').addEventListener('click', function () {
@@ -168,11 +170,12 @@
         var t100 = r.firsts[100e-6];
         $('lk-status').textContent = 'done';
         var nb = r['bigMerges' + 100e-6];
-        $('lk-out').innerHTML = V + ' cm³ (' + radii.length + ' drops, seed ' + seed + '): ' + r.events + ' mergers in 30 min; first drop of 100 µm at <b>' +
-          (t100 !== undefined ? (t100 / 60).toFixed(1) + ' min</b>, grown through ' + nb + ' merger(s) with drops of 30 µm or more' : 'none within 30 min</b>');
+        $('lk-out').innerHTML = V + ' cm³ (' + radii.length + ' drops, seed ' + seed + '): ' + r.events + ' mergers in 30 min; ' +
+          (t100 !== undefined ? 'the first 100 µm drop appeared at <b>' + (t100 / 60).toFixed(1) + ' min</b>, after ' + nb + (nb === 1 ? ' merger' : ' mergers') + ' with drops of 30 µm or more'
+            : '<b>no drop reached 100 µm</b> within 30 min');
         $('lk-rmax').innerHTML = CHART.line({ w: 620, h: 260, xmin: 0, xmax: 30, ymin: 30, ymax: 160, series: [
           { x: minutes(r.t), y: r.rmax.map(function (x) { return x * 1e6; }), label: 'largest drop in your volume', color: '#7d1d2f', width: 2.5 }],
-          hlines: [{ y: 100, label: '100 µm' }], xlabel: 'time (min)', ylabel: 'radius (µm)', legendAt: 'bottom', id: 'lkr' });
+          hlines: [{ y: 100, label: '100 µm' }], xlabel: 'time (min)', ylabel: 'radius (µm)', id: 'lkr' });
       }, 20);
     });
   }

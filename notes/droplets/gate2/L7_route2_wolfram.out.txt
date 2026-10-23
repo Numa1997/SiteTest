@@ -1,0 +1,7 @@
+(transcribed from the Wolfram evaluator 15.0.1; code in L7_route2.wl; warnings omitted)
+hard hit: 1; K0->0: 0; series of 1-Exp[-y]: y - y^2/2 + y^3/6 + O[y]^4
+dF/dK0: C gam ((C K0)/(A al))^(-1 + gam) / E^(((C K0)/(A al))^gam)
+local exponent dlnF/dlnK0: gam ((C K0)/(A al))^gam / (-1 + E^(((C K0)/(A al))^gam))   -> at small x: gam
+K0 = 2.60662*10^-14 J ; alpha A = 0.00920208 ; C K0 = 1.64217*10^-7 ; F = 0.000339783 ; 1/F = 2943.05
+old rule fragments: 0.512
+thesis liquid fraction at -10 C: 44.5499 %

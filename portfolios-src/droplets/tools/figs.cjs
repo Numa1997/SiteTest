@@ -38,13 +38,13 @@ figs.growth = C.line({ id: 'f2', w: 600, h: 320, xmin: 0, xmax: 20, ymin: 40, ym
 // 3. droplet paths around a 40 um collector (creeping flow), drawn like the simulation panel
 (function () {
   const R = 40e-6, r = 8e-6, U = P.vBeard(R, A), vr = P.vBeard(r, A), gs = P.G0 * (1 - A.rho / 1000), St = vr / gs * U / R, S = vr / U, p = r / R;
-  const Wd = 520, H = 400, sc = 68, cx = Wd / 2, cz = H * 0.42, parts = [`<svg class="chart" viewBox="0 0 ${Wd} ${H}" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="droplet paths around a 40 micrometre collector"><rect width="${Wd}" height="${H}" fill="#fff"/>`];
+  const Wd = 520, H = 400, sc = 68, cx = Wd / 2, cz = H * 0.42, parts = [`<svg class="chart" viewBox="0 0 ${Wd} ${H + 64}" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="droplet paths around a 40 micrometre collector"><rect width="${Wd}" height="${H + 64}" fill="#fff"/><defs><clipPath id="f3clip"><rect width="${Wd}" height="${H}"/></clipPath></defs><g transform="translate(0 38)"><rect width="${Wd}" height="${H}" fill="#fff" stroke="#ece3d2"/><g clip-path="url(#f3clip)">`];
   [0.15, 0.35, 0.55, 0.75, 0.95, 1.15, 1.35, 1.55].map(f => f * (1 + p)).forEach(b => {
     const q = P.trajPath('stokes', St, S, p, b, 6, 3.2), col = q.hit ? '#7d1d2f' : '#33627f';
     for (const sg of [1, -1]) parts.push(`<polyline fill="none" stroke="${col}" stroke-width="1.6" points="${q.x.map((x, i) => (cx + sg * x * sc).toFixed(1) + ',' + (cz - q.z[i] * sc).toFixed(1)).join(' ')}"/>`);
   });
   parts.push(`<circle cx="${cx}" cy="${cz}" r="${sc}" fill="#e1ebf0" stroke="#23160f" stroke-width="1.5"/><circle cx="${cx}" cy="${cz}" r="${sc * (1 + p)}" fill="none" stroke="#6f665e" stroke-dasharray="3 3"/>`);
-  parts.push(`<text x="12" y="20" class="tick">collector R = 40 µm, droplet r = 8 µm, St = ${St.toFixed(2)}; air rises past the collector</text><text x="12" y="${H - 12}" class="tick">wine: touches · blue: carried round · dashed circle: contact at R + r</text></svg>`);
+  parts.push(`</g></g><text x="12" y="15" class="tick">collector R = 40 µm, droplet r = 8 µm, St = ${St.toFixed(2)}</text><text x="12" y="31" class="tick">air rises past the collector; droplets come from below</text><text x="12" y="${H + 56}" class="tick">wine: touches · blue: carried round · dashed: contact at R + r</text></svg>`);
   figs.paths = parts.join('');
 })();
 
@@ -56,7 +56,7 @@ const effSeries = [];
   const row = hall.E[hall.R.indexOf(Rum)];
   effSeries.push({ x: hall.p.slice(0, 12), y: row.slice(0, 12), color: col, dots: true, r: 2.5 });
 });
-figs.efficiency = C.line({ id: 'f4', w: 600, h: 330, xmin: 0, xmax: 0.6, ymin: 0, ymax: 1.02, xlabel: 'size ratio p = r/R', ylabel: 'collision efficiency E', series: effSeries, legendAt: 'right' });
+figs.efficiency = C.line({ id: 'f4', w: 600, h: 330, xmin: 0, xmax: 0.6, ymin: 0, ymax: 1.02, xlabel: 'size ratio p = r/R', ylabel: 'collision efficiency E', series: effSeries, legendAt: 'bottomright' });
 
 // 5. the warm cloud: F40 against time, two kernels, two bookkeepings, and Hall's efficiencies
 const w = D('warm'), m = t => t.map(s => s / 60);
@@ -65,12 +65,12 @@ figs.warm = C.line({ id: 'f5', w: 600, h: 330, xmin: 0, xmax: 30, ymin: 0, ymax:
   { x: m(w.thesis.gce.t), y: w.thesis.gce.F40, label: 'thesis kernel, GCE', color: '#6f665e', dash: '5 4' },
   { x: m(w.extended.t), y: w.extended.F40, label: 'extended kernel, SCE', color: '#7d1d2f' },
   { x: m(w.extended.gce.t), y: w.extended.gce.F40, label: 'extended kernel, GCE', color: '#7d1d2f', dash: '5 4' },
-  { x: m(w.extHall.t), y: w.extHall.F40, label: 'extended, Hall’s efficiencies', color: '#33627f', dash: '2 3' }], legendAt: 'bottom',
+  { x: m(w.extHall.t), y: w.extHall.F40, label: 'extended, Hall’s efficiencies', color: '#33627f', dash: '2 3' }],
   hlines: [{ y: 0.5 }, { y: 0.9 }] });
 
 // 6. mass spectra of the extended run
 const g = P.makeGrid(8, 4e-3), ru = g.r.map(r => r * 1e6), spec = N => N.map((n, k) => n * g.x[k] / g.dlnr * 1e3);
-figs.spectra = C.line({ id: 'f6', w: 600, h: 300, xlog: true, xmin: 2, xmax: 4000, ymin: 0, xlabel: 'radius r (µm)', ylabel: 'g = dM/d ln r (g/m³)', legendAt: 'right',
+figs.spectra = C.line({ id: 'f6', w: 600, h: 300, xlog: true, xmin: 2, xmax: 4000, ymin: 0, xlabel: 'radius r (µm)', ylabel: 'g = dM/d ln r (g/m³)',
   series: [[0, '#6f665e', 'start'], [600, '#c9783f', '10 min'], [1200, '#7d1d2f', '20 min'], [1800, '#33627f', '30 min']].map(([t, c, l]) => ({ x: ru, y: spec(w.extended.snaps[t]), label: l, color: c })) });
 
 // 7. Golovin test: numerical against exact at 60 min, 2 and 8 bins per doubling
@@ -85,7 +85,7 @@ figs.spectra = C.line({ id: 'f6', w: 600, h: 300, xlog: true, xmin: 2, xmax: 400
   });
   const rr = range(5, 3000, 300, true);
   s8.push({ x: rr, y: rr.map(r => { const x = P.massOf(r * 1e-6); return P.golovinDensity(x, 3600, b, N0, mbar) * x * x * 3 * 1e3; }), label: 'exact (Golovin)', color: '#23160f', dash: '5 4' });
-  figs.golovin = C.line({ id: 'f7', w: 600, h: 300, xlog: true, xmin: 5, xmax: 3000, ymin: 0, xlabel: 'radius r (µm)', ylabel: 'g = dM/d ln r (g/m³)', series: s8, legendAt: 'right' });
+  figs.golovin = C.line({ id: 'f7', w: 600, h: 300, xlog: true, xmin: 5, xmax: 3000, ymin: 0, xlabel: 'radius r (µm)', ylabel: 'g = dM/d ln r (g/m³)', series: s8 });
 })();
 
 // 8. ensemble-mean F40 against the volume, and the SCE (truncated modes)
@@ -96,16 +96,33 @@ const sF = [];
   sF.push({ x: runs[0].F40.map((_, i) => i), y: runs[0].F40.map((_, i) => runs.reduce((a, r) => a + r.F40[i], 0) / n), label: `${V} cm³ (${n} runs)`, color: c });
 });
 sF.push({ x: m(br.t), y: br.F40, label: 'SCE (mean field)', color: '#23160f', dash: '5 4' });
-figs.luckF40 = C.line({ id: 'f8', w: 600, h: 310, xmin: 0, xmax: 25, ymin: 0, ymax: 1, xlabel: 'time (min)', ylabel: 'mean water in drops r ≥ 40 µm', series: sF, legendAt: 'bottom' });
+figs.luckF40 = C.line({ id: 'f8', w: 600, h: 310, xmin: 0, xmax: 25, ymin: 0, ymax: 1, xlabel: 'time (min)', ylabel: 'mean water in drops r ≥ 40 µm', series: sF });
 
 // 9. first 100 um drop: share of volumes that have one, exact runs against the SCE's Poisson bridge
+// (6.1) with the largest n100 reached so far: later the large drops merge with each other and their number falls, but a volume
+// that once held one has had its first drop
+const nmax = []; br.N100.reduce((mx, N, i) => (nmax[i] = Math.max(mx, N)), 0);
 const sC = [];
 [['10', '#3c6a46'], ['100', '#33627f'], ['1000', '#7d1d2f']].forEach(([V, c]) => {
   const t = st.V[V].map(r => r.t100).filter(x => x !== null).sort((a, b) => a - b), n = st.V[V].length;
   sC.push({ x: [0].concat(t.map(x => x / 60)), y: [0].concat(t.map((_, i) => (i + 1) / n)), label: `${V} cm³, exact (${n} runs)`, color: c });
-  sC.push({ x: m(br.t), y: br.N100.map(N => 1 - Math.exp(-(+V) * 1e-6 * N)), color: c, dash: '4 3', width: 1.5 });
+  sC.push({ x: m(br.t), y: nmax.map(N => 1 - Math.exp(-(+V) * 1e-6 * N)), color: c, dash: '4 3', width: 1.5 });
 });
-sC.push({ x: m(br.t), y: br.N100.map(N => 1 - Math.exp(-N)), label: '1 m³, Poisson bridge from the SCE', color: '#23160f', dash: '4 3', width: 1.5 });
-figs.first = C.line({ id: 'f9', w: 600, h: 310, xmin: 0, xmax: 20, ymin: 0, ymax: 1, xlabel: 'time (min)', ylabel: 'share of volumes with a drop r ≥ 100 µm', series: sC, legendAt: 'right' });
+sC.push({ x: m(br.t), y: nmax.map(N => 1 - Math.exp(-N)), label: '1 m³, Poisson (6.1)', color: '#23160f', dash: '4 3', width: 1.5 });
+figs.first = C.line({ id: 'f9', w: 600, h: 310, xmin: 0, xmax: 20, ymin: 0, ymax: 1, xlabel: 'time (min)', ylabel: 'share of volumes with a drop r ≥ 100 µm', series: sC, legendAt: 'bottomright' });
 
+// 10. coalescence efficiency (4.2) for a collector R meeting a drop R/2, with drag-balance and with Stokes speeds
+(function () {
+  const Rs = range(20e-6, 2e-3, 120, true), sig = P.sigmaWater(A.T);
+  const E = v => Rs.map(R => P.eCoal(R, R / 2, Math.abs(v(R) - v(R / 2)), sig));
+  figs.coal = C.line({ id: 'f10', w: 600, h: 300, xlog: true, xmin: 0.02, xmax: 2, ymin: 0, ymax: 1.02, xlabel: 'collector radius R (mm), partner R/2', ylabel: 'coalescence efficiency', series: [
+    { x: Rs.map(R => R * 1e3), y: E(a => P.vBeard(a, A)), label: 'drag-balance speeds (chapter 2)', color: '#7d1d2f' },
+    { x: Rs.map(R => R * 1e3), y: E(a => P.vStokes(a, A)), label: "Stokes speeds (the thesis kernel)", color: '#6f665e', dash: '5 4' }] });
+})();
+// 11. turbulent gain of the 40/8 um kernel (Ayala et al. 2008, inside its range) against the dissipation rate
+(function () {
+  const es = range(1.5e-4, 5e-2, 80, true);
+  figs.turb = C.line({ id: 'f11', w: 600, h: 300, xlog: true, xmin: 1.5e-4, xmax: 5e-2, ymin: 0, ymax: 35, xlabel: 'dissipation rate ε (m²/s³)', ylabel: 'kernel raised by (%)', series: [
+    { x: es, y: es.map(e => (P.ayalaFactor(40e-6, 8e-6, A, e) - 1) * 100), label: '40 µm collector, 8 µm droplet', color: '#33627f' }] });
+})();
 process.stdout.write(JSON.stringify(figs));

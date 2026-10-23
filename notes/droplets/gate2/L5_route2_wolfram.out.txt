@@ -1,0 +1,9 @@
+(transcribed from the Wolfram evaluator 15.0.1; code in L5_route2.wl; Piecewise::pairs and global-symbol warnings omitted)
+Poisson P(0) = E^-mu ; mean, variance: mu, mu
+median condition: {{mu -> ConditionalExpression[2 I Pi C[1] + Log[2], C[1] in Integers]}}  = 0.69314718   (real branch: ln 2)
+Binomial(N, mu/N) pmf limits, k = 0..3: {E^-mu, mu/E^mu, mu^2/(2 E^mu), mu^3/(6 E^mu)}
+waiting time: survival of Exp(a0): Piecewise[{{E^(-a0 tau), tau >= 0}}, 1]; inverse of u = Exp[-a0 tau]: tau -> (2 I Pi C[1] + Log[1/u1])/a0   (real branch: -Log[u1]/a0)
+mean of Exp(a0): 1/a0
+thinned PGF E^(M q (-1+z)) ; Poisson(qM) PGF E^(M q (-1+z)) ; difference: 0
+lognormal tail 1e6 per m3 * P(r > 100 um), r_g = 40, sigma_g = 1.2: 0.250819
+max collector radius 40*1.2^3 = 69.12 ; captures (100^3-69^3)/8^3 = 1311.51

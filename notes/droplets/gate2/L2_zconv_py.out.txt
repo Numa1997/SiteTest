@@ -1,0 +1,8 @@
+own integrator (rtol 1e-10), creeping Z =   50 : E_flux = 0.336723  b_c = 0.707532
+own integrator (rtol 1e-10), creeping Z =  100 : E_flux = 0.336688  b_c = 0.701831
+own integrator (rtol 1e-10), creeping Z =  200 : E_flux = 0.337332  b_c = 0.699717
+own integrator (rtol 1e-10), creeping Z =  400 : E_flux = 0.337501  b_c = 0.698511
+own integrator (rtol 1e-10), creeping Z =  800 : E_flux = 0.337378  b_c = 0.697696
+own integrator (rtol 1e-13), creeping Z =  100 : E_flux = 0.337153  b_c = 0.702315
+own integrator (rtol 1e-13), creeping Z =  200 : E_flux = 0.337474  b_c = 0.699863
+own integrator (rtol 1e-13), creeping Z =  400 : E_flux = 0.337388  b_c = 0.698394

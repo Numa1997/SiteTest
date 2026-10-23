@@ -1,0 +1,28 @@
+== (8.1)  dN_new/dt = sum_pairs K n1 n2 F
+  units  K n1 n2  [events per m3 per s]: m^-3 s^-1  vs  m^-3 s^-1  ->  OK
+  units  K n1 n2 F  [new particles per m3 per s]: m^-3 s^-1  vs  m^-3 s^-1  ->  OK
+  pair counting: N1 drops of kind 1 and N2 of kind 2 in a volume V: N1 N2 pairs, each meeting at rate K/V -> events per volume = K N1 N2/V^2 = K n1 n2.
+  same kind: N(N-1)/2 pairs -> events per volume = K N(N-1)/(2 V^2) -> (1/2) K n^2 for large N: K/2 = K/2 (times n^2)
+  so a sum over all pairs of bins (i <= j) needs the factor 1/2 for i = j: the script tools/run_cold.cjs uses rate = K n_p n_q (1/2 if i == j), as required.
+  limits: F = 0 (rime splintering at -10 C) -> 0 ; F constant -> N_new = F x event rate.
+
+== (8.2)  F = alpha A [1 - exp(-(C K0/(alpha A))^gamma)], gamma = 0.3
+  units  alpha A  (surface x bumps per area): 1 (dimensionless)  vs  1 (dimensionless)  ->  OK
+  units  C K0/(alpha A): 1 (dimensionless)  vs  1 (dimensionless)  ->  OK
+  with y = (C K0/(alpha A))^gamma:  F = alpha A (1 - exp(-y))
+  hard hit  C K0 -> oo (y -> oo): F/(alpha A) -> 1  = every bump breaks, F -> alpha A
+  no energy K0 -> 0 (y -> 0): F/(alpha A) -> 0 (no energy, no fragments)
+  dF/dK0 = A*alpha*gamma*(C*K_0/(A*alpha))**gamma*exp(-(C*K_0)**gamma/(A*alpha)**gamma)/K_0 ; minus alpha A e^-y gamma y/K0 : 0  (positive: F rises monotonically with the energy)
+  local exponent d ln F/d ln K0 = gamma*(C*K_0/(A*alpha))**gamma/(exp((C*K_0)**gamma/(A*alpha)**gamma) - 1)  -> gamma * y e^-y/(1 - e^-y); limit y -> 0: 1  so F ~ K0^gamma
+  soft hit: 1 - exp(-y) = y - y**2/2 + y**3/6 + O(y**4) -> F = alpha A [x^0.3 - x^0.6/2 + x^0.9/6 - ...] = alpha^0.7 A^0.7 (C K0)^0.3 (1 - x^0.3/2 + ...) ; relative correction x^0.3/2 at x = 1.74e-5 : 0.01867
+  scaling: K0 x 10 -> F x 10^0.3 = 1.9953  ; K0 x 1e-8 -> F x 0.00398  (the weak power: eight orders of energy lower give only 2.4 orders fewer fragments)
+
+== worked example of the text (collision of a 40 um and an 8 um ice sphere at -10 C, 600 hPa)
+  masses 2.4127e-10 1.9302e-12 kg ; mu_red 1.9149e-12 kg ; K0 = 2.607e-14 J (text 2.6e-14)
+  T = 263.15 K: temperature factor 0.4278 ; a0(D = 0.5 mm) = 2.6747e+07 ; A = 1.1442e+07 m^-2 (B8: A = a0/3 + max(2 a0/3 - a0 |T-258|/9, 0))
+  alpha = pi D^2 = 8.0425e-10 m^2 ; alpha A = 9.202e-03 (text 9.2e-3) ; C K0 = 1.642e-07 (text 1.6e-7) ; x = 1.785e-05 ; F = 3.398e-04 (text 3.4e-4) ; 1/F = 2943 collisions per fragment (text "one per three thousand")
+  soft-hit approximation alpha A x^0.3 = 3.462e-04 ; ratio exact/approx = 0.9814
+  with C = 2.2e4 (psi = 3.5e-3): F = 6.325e-05 ; ratio of the two C values = 285.7 ; (6.3e6/2.2e4)^0.3 = 5.45
+  old rule: 0.001 x m_larger / m_fragment(5 um radius, 900 kg/m3) = 0.512 fragments (text 0.51)
+  F_liq(-10 C) from the thesis polynomial: 44.55 % (text 44.55) ; 301 x that = 134.1 liquid, 166.9 ice per cm3 (text 134.1, 166.9)
+  table: 2.80 freezing drops x 1.7 = 4.76 ; 0.14 x 12 = 1.68 ; ratio old rule 2.6 / 1.6e-3 = 1625, 2.6 / 0.050 = 52
