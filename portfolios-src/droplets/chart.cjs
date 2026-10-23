@@ -31,6 +31,10 @@ var CHART = (function () {
   function line(o) {
     var W = o.w || 560, H = o.h || 320, L = 62, R = 14, T = 16, B = 46;
     var pw = W - L - R, ph = H - T - B, s = o.series || [];
+    // legend below the plot (the default): it never covers a curve. 'right', 'bottom', 'bottomright' place it inside.
+    var legItems = o.legend === false ? [] : s.filter(function (q) { return q.label; });
+    var below = !o.legendAt || o.legendAt === 'below', legRows = below ? Math.ceil(legItems.length / 2) : 0, H0 = H;
+    H = H0 + (legRows ? legRows * 17 + 6 : 0);
     var xs = [], ys = [];
     s.forEach(function (q) { q.x.forEach(function (v, i) { var y = q.y[i]; if (isFinite(v) && isFinite(y) && (!o.xlog || v > 0) && (!o.ylog || y > 0)) { xs.push(v); ys.push(y); } }); });
     var xmin = o.xmin !== undefined ? o.xmin : Math.min.apply(null, xs), xmax = o.xmax !== undefined ? o.xmax : Math.max.apply(null, xs);
@@ -56,10 +60,15 @@ var CHART = (function () {
       else if (pts.length) out.push('<polyline fill="none" stroke="' + c + '" stroke-width="' + (q.width || 2) + '"' + (q.dash ? ' stroke-dasharray="' + q.dash + '"' : '') + ' points="' + pts.join(' ') + '"/>');
     });
     out.push('</g>');
-    if (o.xlabel) out.push('<text x="' + (L + pw / 2) + '" y="' + (H - 8) + '" text-anchor="middle" class="axl">' + esc(o.xlabel) + '</text>');
+    if (o.xlabel) out.push('<text x="' + (L + pw / 2) + '" y="' + (H0 - 8) + '" text-anchor="middle" class="axl">' + esc(o.xlabel) + '</text>');
     if (o.ylabel) out.push('<text transform="translate(14 ' + (T + ph / 2) + ') rotate(-90)" text-anchor="middle" class="axl">' + esc(o.ylabel) + '</text>');
-    if (o.legend !== false) {
-      var lx = L + 10, ly = T + 14, items = s.filter(function (q) { return q.label; });
+    if (below && legItems.length) {
+      legItems.forEach(function (q, k) {
+        var c = q.color || COL[s.indexOf(q) % COL.length], lx = L + (k % 2) * (pw / 2), y = H0 + 10 + 17 * Math.floor(k / 2);
+        out.push('<line x1="' + lx + '" x2="' + (lx + 18) + '" y1="' + (y - 4) + '" y2="' + (y - 4) + '" stroke="' + c + '" stroke-width="2.5"' + (q.dash ? ' stroke-dasharray="' + q.dash + '"' : '') + '/><text x="' + (lx + 24) + '" y="' + y + '" class="leg">' + esc(q.label) + '</text>');
+      });
+    } else if (o.legend !== false) {
+      var lx = L + 10, ly = T + 14, items = legItems;
       if (o.legendAt === 'right') { lx = L + pw - 200; }
       if (o.legendAt === 'bottom') { ly = T + ph - 14 * items.length; }
       if (o.legendAt === 'bottomright') { lx = L + pw - 182; ly = T + ph - 15 * items.length; }

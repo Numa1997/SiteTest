@@ -85,6 +85,12 @@ a { color: var(--wine); }
 .check .ctag { color: var(--green); } .callout .ctag { color: var(--blue); }
 figure.fig { margin: 18px 0; background: var(--paper); border: 1px solid var(--rule); border-radius: 10px; padding: 12px; }
 figure.fig svg { display: block; width: 100%; max-width: 620px; height: auto; margin: 0 auto; }
+/* On a phone the charts keep a readable text size (about 10 px) and scroll sideways inside their own box */
+@media (max-width: 620px) {
+  figure.fig .figscroll, .plot { overflow-x: auto; -webkit-overflow-scrolling: touch; }
+  figure.fig svg, .plot svg { min-width: 560px; }
+}
+input[type=range] { accent-color: var(--wine); }
 figure.fig figcaption { font-size: 13.5px; color: var(--muted); margin-top: 8px; }
 svg .tick { font: 11px var(--f-mono); fill: #4a3a30; } svg .axl { font: 12.5px var(--f-text); fill: var(--ink); } svg .leg { font: 12px var(--f-text); fill: var(--ink); }
 .tblw { overflow-x: auto; margin: 12px 0; }

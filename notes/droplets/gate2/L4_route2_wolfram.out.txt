@@ -1,0 +1,13 @@
+(transcribed from the Wolfram evaluator 15.0.1; code in L4_route2.wl; "C" was used as a symbol in the run, harmless warning)
+LaplaceTransform of printed density: -(1/2) (-1 + z) (1 + p + z - Sqrt[-4 z + (1 + p + z)^2]) / z
+difference from (1-z)(s-Sqrt[s^2-4z])/(2z), s=p+1+z (numeric, 3 points): {0., 0., 0.}
+N(0,T) = E^-T ; mass -N_p(0,T) = 1
+PDE residual numeric (p = 0.05, 1, 6 ; T = 0.3, 2.0): {{-4.4e-16, 2.8e-17}, {8.9e-16, 6.9e-18}, {2.2e-16, 6.9e-18}}
+PDE residual symbolic: 0
+initial condition: 1/(1 + p)
+dn/dt = b (-2 - 2 m + m^2)/(2 E^m)
+phi = m: LHS = 0  RHS(5.2) = 0
+phi = 1: LHS = -b  RHS(5.2) = -b
+phi = m^2: LHS = 4 b  RHS(5.2) = 4 b
+phi = E^(-m q): LHS = -(b (1 + q (3 + q)))/(1 + q)^3  RHS(5.2) = -(b (1 + 3 q + q^2))/(1 + q)^3
+lever rule: {{nuk -> C (-xk1 + xs)/(xk - xk1), nuk1 -> C (xk - xs)/(xk - xk1)}}

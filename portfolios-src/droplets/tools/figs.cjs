@@ -38,13 +38,13 @@ figs.growth = C.line({ id: 'f2', w: 600, h: 320, xmin: 0, xmax: 20, ymin: 40, ym
 // 3. droplet paths around a 40 um collector (creeping flow), drawn like the simulation panel
 (function () {
   const R = 40e-6, r = 8e-6, U = P.vBeard(R, A), vr = P.vBeard(r, A), gs = P.G0 * (1 - A.rho / 1000), St = vr / gs * U / R, S = vr / U, p = r / R;
-  const Wd = 520, H = 400, sc = 68, cx = Wd / 2, cz = H * 0.42, parts = [`<svg class="chart" viewBox="0 0 ${Wd} ${H}" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="droplet paths around a 40 micrometre collector"><rect width="${Wd}" height="${H}" fill="#fff"/>`];
+  const Wd = 520, H = 400, sc = 68, cx = Wd / 2, cz = H * 0.42, parts = [`<svg class="chart" viewBox="0 0 ${Wd} ${H + 64}" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="droplet paths around a 40 micrometre collector"><rect width="${Wd}" height="${H + 64}" fill="#fff"/><g transform="translate(0 38)"><rect width="${Wd}" height="${H}" fill="#fff" stroke="#ece3d2"/>`];
   [0.15, 0.35, 0.55, 0.75, 0.95, 1.15, 1.35, 1.55].map(f => f * (1 + p)).forEach(b => {
     const q = P.trajPath('stokes', St, S, p, b, 6, 3.2), col = q.hit ? '#7d1d2f' : '#33627f';
     for (const sg of [1, -1]) parts.push(`<polyline fill="none" stroke="${col}" stroke-width="1.6" points="${q.x.map((x, i) => (cx + sg * x * sc).toFixed(1) + ',' + (cz - q.z[i] * sc).toFixed(1)).join(' ')}"/>`);
   });
   parts.push(`<circle cx="${cx}" cy="${cz}" r="${sc}" fill="#e1ebf0" stroke="#23160f" stroke-width="1.5"/><circle cx="${cx}" cy="${cz}" r="${sc * (1 + p)}" fill="none" stroke="#6f665e" stroke-dasharray="3 3"/>`);
-  parts.push(`<text x="12" y="20" class="tick">collector R = 40 µm, droplet r = 8 µm, St = ${St.toFixed(2)}; air rises past the collector</text><text x="12" y="${H - 12}" class="tick">wine: touches · blue: carried round · dashed circle: contact at R + r</text></svg>`);
+  parts.push(`</g><text x="12" y="15" class="tick">collector R = 40 µm, droplet r = 8 µm, St = ${St.toFixed(2)}</text><text x="12" y="31" class="tick">air rises past the collector; droplets come from below</text><text x="12" y="${H + 56}" class="tick">wine: touches · blue: carried round · dashed: contact at R + r</text></svg>`);
   figs.paths = parts.join('');
 })();
 
@@ -65,12 +65,12 @@ figs.warm = C.line({ id: 'f5', w: 600, h: 330, xmin: 0, xmax: 30, ymin: 0, ymax:
   { x: m(w.thesis.gce.t), y: w.thesis.gce.F40, label: 'thesis kernel, GCE', color: '#6f665e', dash: '5 4' },
   { x: m(w.extended.t), y: w.extended.F40, label: 'extended kernel, SCE', color: '#7d1d2f' },
   { x: m(w.extended.gce.t), y: w.extended.gce.F40, label: 'extended kernel, GCE', color: '#7d1d2f', dash: '5 4' },
-  { x: m(w.extHall.t), y: w.extHall.F40, label: 'extended, Hall’s efficiencies', color: '#33627f', dash: '2 3' }], legendAt: 'bottom',
+  { x: m(w.extHall.t), y: w.extHall.F40, label: 'extended, Hall’s efficiencies', color: '#33627f', dash: '2 3' }],
   hlines: [{ y: 0.5 }, { y: 0.9 }] });
 
 // 6. mass spectra of the extended run
 const g = P.makeGrid(8, 4e-3), ru = g.r.map(r => r * 1e6), spec = N => N.map((n, k) => n * g.x[k] / g.dlnr * 1e3);
-figs.spectra = C.line({ id: 'f6', w: 600, h: 300, xlog: true, xmin: 2, xmax: 4000, ymin: 0, xlabel: 'radius r (µm)', ylabel: 'g = dM/d ln r (g/m³)', legendAt: 'right',
+figs.spectra = C.line({ id: 'f6', w: 600, h: 300, xlog: true, xmin: 2, xmax: 4000, ymin: 0, xlabel: 'radius r (µm)', ylabel: 'g = dM/d ln r (g/m³)',
   series: [[0, '#6f665e', 'start'], [600, '#c9783f', '10 min'], [1200, '#7d1d2f', '20 min'], [1800, '#33627f', '30 min']].map(([t, c, l]) => ({ x: ru, y: spec(w.extended.snaps[t]), label: l, color: c })) });
 
 // 7. Golovin test: numerical against exact at 60 min, 2 and 8 bins per doubling
@@ -85,7 +85,7 @@ figs.spectra = C.line({ id: 'f6', w: 600, h: 300, xlog: true, xmin: 2, xmax: 400
   });
   const rr = range(5, 3000, 300, true);
   s8.push({ x: rr, y: rr.map(r => { const x = P.massOf(r * 1e-6); return P.golovinDensity(x, 3600, b, N0, mbar) * x * x * 3 * 1e3; }), label: 'exact (Golovin)', color: '#23160f', dash: '5 4' });
-  figs.golovin = C.line({ id: 'f7', w: 600, h: 300, xlog: true, xmin: 5, xmax: 3000, ymin: 0, xlabel: 'radius r (µm)', ylabel: 'g = dM/d ln r (g/m³)', series: s8, legendAt: 'right' });
+  figs.golovin = C.line({ id: 'f7', w: 600, h: 300, xlog: true, xmin: 5, xmax: 3000, ymin: 0, xlabel: 'radius r (µm)', ylabel: 'g = dM/d ln r (g/m³)', series: s8 });
 })();
 
 // 8. ensemble-mean F40 against the volume, and the SCE (truncated modes)
@@ -96,7 +96,7 @@ const sF = [];
   sF.push({ x: runs[0].F40.map((_, i) => i), y: runs[0].F40.map((_, i) => runs.reduce((a, r) => a + r.F40[i], 0) / n), label: `${V} cm³ (${n} runs)`, color: c });
 });
 sF.push({ x: m(br.t), y: br.F40, label: 'SCE (mean field)', color: '#23160f', dash: '5 4' });
-figs.luckF40 = C.line({ id: 'f8', w: 600, h: 310, xmin: 0, xmax: 25, ymin: 0, ymax: 1, xlabel: 'time (min)', ylabel: 'mean water in drops r ≥ 40 µm', series: sF, legendAt: 'bottom' });
+figs.luckF40 = C.line({ id: 'f8', w: 600, h: 310, xmin: 0, xmax: 25, ymin: 0, ymax: 1, xlabel: 'time (min)', ylabel: 'mean water in drops r ≥ 40 µm', series: sF });
 
 // 9. first 100 um drop: share of volumes that have one, exact runs against the SCE's Poisson bridge
 // (6.1) with the largest n100 reached so far: later the large drops merge with each other and their number falls, but a volume

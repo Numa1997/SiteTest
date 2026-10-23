@@ -56,7 +56,7 @@ def put_figs(s):
     def rep(m):
         if m.group(1) not in figs:
             raise SystemExit('missing figure: ' + m.group(1))
-        return figs[m.group(1)]
+        return '<div class="figscroll">' + figs[m.group(1)] + '</div>'
     return re.sub(r'\{\{FIG:([\w-]+)\}\}', rep, s)
 
 

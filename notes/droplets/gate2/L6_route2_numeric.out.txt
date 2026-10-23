@@ -1,0 +1,41 @@
+== own implementation against physics.cjs ayalaFactor (model), 40 um on 8 um
+   eps = 1e-12 m2/s3 : own 1.000000000 ; model 1.000000000 ; (own-1)/eps = 3.568
+   eps = 1e-10 m2/s3 : own 1.000000000 ; model 1.000000000 ; (own-1)/eps = 3.568
+   eps = 1e-08 m2/s3 : own 1.000000036 ; model 1.000000036 ; (own-1)/eps = 3.57
+   eps = 1e-06 m2/s3 : own 1.000003590 ; model 1.000003590 ; (own-1)/eps = 3.59
+   eps = 1e-05 m2/s3 : own 1.000036380 ; model 1.000036380 ; (own-1)/eps = 3.638
+   eps = 1e-04 m2/s3 : own 1.000378967 ; model 1.000378967 ; (own-1)/eps = 3.79
+   eps = 1e-03 m2/s3 : own 1.004263022 ; model 1.004263022 ; (own-1)/eps = 4.263
+   eps = 1e-02 m2/s3 : own 1.056365757 ; model 1.056365757 ; (own-1)/eps = 5.637
+   eps = 4e-02 m2/s3 : own 1.281350886 ; model 1.281350886 ; (own-1)/eps = 7.034
+   eps = 1e-01 m2/s3 : own 1.767065206 ; model 1.000000000 ; (own-1)/eps = 7.671
+   text: +0.4 %, +5.6 %, +28 % at 10, 100, 400 cm2/s3:  own +0.43 %, +5.64 %, +28.14 %
+   other pairs (own vs model):
+      40 on  8 um, eps = 1e-03 : own 1.004263  model 1.004263
+      40 on  8 um, eps = 1e-02 : own 1.056366  model 1.056366
+      40 on  8 um, eps = 4e-02 : own 1.281351  model 1.281351
+      30 on 10 um, eps = 1e-03 : own 1.002143  model 1.002143
+      30 on 10 um, eps = 1e-02 : own 1.036038  model 1.036038
+      30 on 10 um, eps = 4e-02 : own 1.213145  model 1.213145
+      20 on 10 um, eps = 1e-03 : own 1.001093  model 1.001093
+      20 on 10 um, eps = 1e-02 : own 1.025837  model 1.025837
+      20 on 10 um, eps = 4e-02 : own 1.177963  model 1.177963
+      50 on 10 um, eps = 1e-03 : own 1.008353  model 1.008353
+      50 on 10 um, eps = 1e-02 : own 1.094638  model 1.094638
+      50 on 10 um, eps = 4e-02 : own 1.403979  model 1.000000
+== limit eps -> 0 (gravity alone): ratio - 1 divided by eps tends to the constant 4 (R^2 + 2 A^2)/(15 pi nu d^2 g^2)
+   eps = 1e-12 : (ratio-1)/eps = 3.56759 ; predicted limit 3.56761
+   eps = 1e-09 : (ratio-1)/eps = 3.56831 ; predicted limit 3.56761
+   eps = 1e-06 : (ratio-1)/eps = 3.58988 ; predicted limit 3.56761
+== share of each term at eps = 10, 100, 400 cm2/s3 (40 um on 8 um): increase of the kernel caused by shear / acceleration / coupling, alone
+   eps = 1e-03 : shear alone +0.00 % ; acceleration alone +0.07 % ; coupling alone +0.36 % ; all together +0.43 %
+   eps = 1e-02 : shear alone +0.00 % ; acceleration alone +2.20 % ; coupling alone +3.51 % ; all together +5.64 %
+   eps = 4e-02 : shear alone +0.00 % ; acceleration alone +16.47 % ; coupling alone +13.37 % ; all together +28.14 %
+== corrigendum: closed form |w_r| = sqrt(2/pi) sqrt(sigma^2 + pi/8 (dv)^2) against the exact direction average of E|dv cos(th) + sigma xi|
+   max relative difference of the closed form from the exact average over b in [0.01, 100]: 2.62 % at b = 1.27 (corrigendum: about 2.5 %); closed form is the larger
+== Stokes numbers (tau_p = v_Beard/g, tau_K = sqrt(nu/eps), nu = 1.6935e-05 m2/s)
+   eps = 10 cm2/s3 : tau_K = 130.14 ms ; St(8 um) = 0.0062 ; St(40 um) = 0.139 ; St(43 um) = 0.157 ; St(50 um) = 0.203
+   eps = 100 cm2/s3 : tau_K = 41.15 ms ; St(8 um) = 0.0197 ; St(40 um) = 0.439 ; St(43 um) = 0.498 ; St(50 um) = 0.642
+   eps = 400 cm2/s3 : tau_K = 20.58 ms ; St(8 um) = 0.0394 ; St(40 um) = 0.877 ; St(43 um) = 0.995 ; St(50 um) = 1.284
+   tau_p(8 um) = 0.812 ms (text 0.8), tau_p(40 um) = 18.05 ms (text 18)
+   radius where St passes 1 at eps = 400 cm2/s3: 43.15 um (text 43)

@@ -1,0 +1,44 @@
+== (6.1) Poisson: rare independent drops as a binomial scatter of N candidates, each a "hit" with probability mu/N
+   mu = 0.3000 : P(no drop) simulated 0.74276 +- 0.00069 ; exp(-mu) = 0.74082 ; mean 0.2981 var 0.2995 (Poisson: both = mu)
+   mu = 0.6931 : P(no drop) simulated 0.49988 +- 0.00079 ; exp(-mu) = 0.50000 ; mean 0.6932 var 0.6937 (Poisson: both = mu)
+   mu = 2.0000 : P(no drop) simulated 0.13539 +- 0.00054 ; exp(-mu) = 0.13534 ; mean 2.0016 var 1.9996 (Poisson: both = mu)
+   spatial Poisson process, density n = 4 per unit volume; probability that a randomly placed box of volume V = ln2/n holds none:
+      P(empty) = 0.4980 (expected 1/2 for V n = ln 2)
+== Gillespie: tau = -ln(u)/a0 with u uniform on (0,1]; pair chosen in proportion to its rate
+   mean tau = 0.27059 (1/a0 = 0.27027) ; KS test against Exp(a0): statistic 0.00092, p = 0.885
+   pair choice frequencies [0.0794 0.2372 0.0319 0.4764 0.175 ]  target [0.0794 0.2381 0.0317 0.4762 0.1746]  chi-square p = 0.723
+   competing clocks: min time mean 0.15934 (1/sum = 0.15873), who-first frequencies [0.0793 0.2374 0.0318 0.4751 0.1764]
+== thinning: Poisson stream at rate lam*, keep with probability q = K/K*; compare with a direct Poisson stream of rate lam* q
+   kept count: mean 22.1874 var 22.0830 (Poisson mean 22.200: both equal) ; chi-square against Poisson(22.200): p = 0.767
+   time to first kept event: mean 0.22545 (1/(lam* q) = 0.22523) ; KS against Exp(lam* q): p = 0.410
+== class-pair scheme (V = 1): per-pair accepted rate must equal K_ij
+   36 pairs, 172403 proposals: worst deviation of the accepted rate from K_ij in standard errors: 2.53
+== data-level check of (6.1) against the exact runs (data/stochastic.json) and the mean-field tail (data/bridge.json, 16 bins per doubling)
+   V =    10 cm3 (100 runs): empirical median 605 s ; (6.1) median never reached ; max V n100 over the hour = 0.391 (ln 2 = 0.693)
+        t =  250 s : fraction of runs with a 100 um drop 0.030 ; 1 - exp(-V n100) = 0.043 ; difference -0.013 (= -0.6 binomial standard errors)
+        t =  300 s : fraction of runs with a 100 um drop 0.060 ; 1 - exp(-V n100) = 0.089 ; difference -0.029 (= -1.0 binomial standard errors)
+        t =  400 s : fraction of runs with a 100 um drop 0.140 ; 1 - exp(-V n100) = 0.208 ; difference -0.068 (= -1.7 binomial standard errors)
+        t =  600 s : fraction of runs with a 100 um drop 0.480 ; 1 - exp(-V n100) = 0.324 ; difference +0.156 (= 3.3 binomial standard errors)
+        t =  900 s : fraction of runs with a 100 um drop 0.910 ; 1 - exp(-V n100) = 0.324 ; difference +0.586 (= 12.5 binomial standard errors)
+   V =   100 cm3 (100 runs): empirical median 286 s ; (6.1) median 280 s ; max V n100 over the hour = 3.913 (ln 2 = 0.693)
+        t =  150 s : fraction of runs with a 100 um drop 0.000 ; 1 - exp(-V n100) = 0.031 ; difference -0.031 (= -1.8 binomial standard errors)
+        t =  200 s : fraction of runs with a 100 um drop 0.110 ; 1 - exp(-V n100) = 0.140 ; difference -0.030 (= -0.9 binomial standard errors)
+        t =  250 s : fraction of runs with a 100 um drop 0.340 ; 1 - exp(-V n100) = 0.356 ; difference -0.016 (= -0.3 binomial standard errors)
+        t =  300 s : fraction of runs with a 100 um drop 0.540 ; 1 - exp(-V n100) = 0.606 ; difference -0.066 (= -1.3 binomial standard errors)
+        t =  400 s : fraction of runs with a 100 um drop 0.970 ; 1 - exp(-V n100) = 0.903 ; difference +0.067 (= 2.3 binomial standard errors)
+   V =  1000 cm3 ( 30 runs): empirical median 174 s ; (6.1) median 175 s ; max V n100 over the hour = 39.131 (ln 2 = 0.693)
+        t =  150 s : fraction of runs with a 100 um drop 0.167 ; 1 - exp(-V n100) = 0.268 ; difference -0.101 (= -1.3 binomial standard errors)
+        t =  200 s : fraction of runs with a 100 um drop 0.833 ; 1 - exp(-V n100) = 0.779 ; difference +0.054 (= 0.7 binomial standard errors)
+   1 m3 (V = 1): first 100 um drop at 60.0 s (text about 60 s) ; first 1 mm drop (N1mm = ln 2): 1075.0 s = 17.916666666666668 min (text about 18 min)
+   half the water above 100 um at t = 584.4 s (text 585 s, "to the 5 s record")
+== water available in a small volume (text: in 1 cm3 no drop ever reaches 100 um; truncated modes at 3 sigma)
+   V =  1 cm3 holds 1.1090e-09 kg of water: one drop of all of it has radius 64.2 um
+   V = 10 cm3 holds 1.1090e-08 kg of water: one drop of all of it has radius 138.3 um
+   no collector starts above rg sg^3 = 40 x 1.2^3 = 69.12 um (text 69)
+   untruncated lognormal tail: P(r > 100 um) for the 1 cm^-3 mode = 2.508e-07 -> 0.251 drops per m3 (text 0.25)
+sensitivity to the grid (8 bins per doubling): medians 100 cm3: 280.0 s, 1000 cm3: 170.0 s, 1 m3: 55.0 s ; half the water above 100 um: 580.8 s
+== arithmetic quoted in 6.2/6.3 (current text of book-06)
+   total water of the two modes (untruncated) 1.1163 g/m3 ; a 100 um drop holds the water of 3.75 cm3 (text 3.75) ; a 1 mm drop of 3.75 litres (text 3.75)
+   10 cm3 hold the water of one drop of radius 139 um (text 139)
+   captures of 8 um droplets from 69 to 100 um: (100^3 - 69^3)/8^3 = 1312 (text 1312)
+   mean-field share of 10 cm3 volumes that ever hold a 100 um drop: 1 - exp(-V max n100) = 32.4 % (text 32 %)
