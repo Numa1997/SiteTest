@@ -8,7 +8,7 @@ reported and left as it was."""
 import importlib.util, json, os, re, sys
 ROOT = os.path.abspath(os.path.join(os.path.dirname(__file__), '..', '..'))
 MATH = r'\$\$.*?\$\$|\$[^$]+\$|\\\(.*?\\\)|\\\[.*?\\\]'
-def maths(s): return re.findall(MATH, s, flags=re.S)
+def maths(s): return sorted(re.findall(MATH, s, flags=re.S))   # sentence order may move a formula
 def tags(s): return [t for t in re.findall(r'</?[A-Za-z][^>]*>', re.sub(MATH, '', s, flags=re.S)) if t not in ('<bdi>', '</bdi>')]
 def nums(s): return sorted(re.findall(r'\d+(?:\.\d+)?', re.sub(r'<[^>]+>|' + MATH, ' ', s, flags=re.S)))
 def marks(s): return sorted(re.findall(r'⟦[^⟧]*⟧', s)) + sorted(re.findall(r'(?<![A-Za-z])\{\w+\}', s))
