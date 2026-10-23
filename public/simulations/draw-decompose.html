@@ -781,7 +781,7 @@
 
         function decompose(pts, name) {
             var r = resamp(pts, NS);
-            if (!r) { $('cap-mode').textContent = 'stroke too short · draw again'; return; }
+            if (!r) { $('cap-mode').textContent = T('stroke too short · draw again'); return; }
             meanX = 0; meanY = 0;
             r.forEach(function (p) { meanX += p.x; meanY += p.y; });
             meanX /= NS; meanY /= NS;
@@ -919,7 +919,7 @@
             $('cancel').disabled = !coefs.length;
             canvas.style.cursor = m === 'draw' ? 'crosshair' : 'grab';
             $('hint').textContent = m === 'draw'
-                ? 'Press and drag on the figure to draw one stroke; a new stroke replaces it. Then press Decompose & play. Cancel returns to the previous shape.'
+                ? T('Press and drag on the figure to draw one stroke; a new stroke replaces it. Then press Decompose & play. Cancel returns to the previous shape.')
                 : 'While it plays, touching the figure never erases it: drag to pan, scroll or pinch to zoom. New drawing starts a stroke; the current shape stays until you decompose the new one.';
             readouts();
         }
@@ -983,7 +983,7 @@
                 if (!drawing) return;
                 drawing = false;
                 $('go').disabled = draft.length < 12;
-                if (draft.length < 12) $('cap-mode').textContent = 'stroke too short · draw again';
+                if (draft.length < 12) $('cap-mode').textContent = T('stroke too short · draw again');
                 return;
             }
             delete ptrs[e.pointerId];
@@ -1102,8 +1102,8 @@
                     ctx.fillStyle = T.muted;
                     ctx.font = T.mono;
                     ctx.textAlign = 'center';
-                    ctx.fillText('PRESS AND DRAG TO DRAW ONE STROKE', cx, cy - 12);
-                    ctx.fillText('THEN PRESS DECOMPOSE & PLAY', cx, cy + 8);
+                    ctx.fillText(T('PRESS AND DRAG TO DRAW ONE STROKE'), cx, cy - 12);
+                    ctx.fillText(T('THEN PRESS DECOMPOSE & PLAY'), cx, cy + 8);
                 }
                 return;
             }
@@ -1245,7 +1245,7 @@
             $('r-k1').textContent = has ? (coefs[0].k > 0 ? '+' : '') + Sim.fmt(coefs[0].k, 0) : '—';
             $('r-err').textContent = has ? Sim.fmt(err, 5) : '—';
             $('r-errp').textContent = has ? Sim.fmt(errP, 5) : '—';
-            $('cap-mode').textContent = mode === 'draw' ? 'new drawing · not yet decomposed' : has ? K.value + ' circles' : 'draw a shape';
+            $('cap-mode').textContent = mode === 'draw' ? T('new drawing · not yet decomposed') : has ? K.value + ' circles' : 'draw a shape';
             $('cap-src').textContent = source;
             $('cap-k').innerHTML = has ? '<i>K</i> = ' + K.value : '—';
         }
@@ -1290,7 +1290,7 @@
 
         /* ---------- the data panel (scripts/datalog.js) reads the store; these hooks only say where things are drawn and how to test a value ---------- */
         function pixelAt(c, bx, x, y) { return c.getImageData(Math.round(x * bx.dpr), Math.round(y * bx.dpr), 1, 1).data; }
-        function rgbText(px) { return px[3] === 0 ? 'nothing (transparent)' : 'rgb(' + px[0] + ', ' + px[1] + ', ' + px[2] + ')' + (px[3] < 255 ? ' at alpha ' + (px[3] / 255).toFixed(2) : ''); }
+        function rgbText(px) { return px[3] === 0 ? T('nothing (transparent)') : 'rgb(' + px[0] + ', ' + px[1] + ', ' + px[2] + ')' + (px[3] < 255 ? ' at alpha ' + (px[3] / 255).toFixed(2) : ''); }
         function lum(px) { return 0.2126 * px[0] + 0.7152 * px[1] + 0.0722 * px[2]; }
         function playing() { return ds.get('mode') === 'play'; }
         function toScreen(x, y) { return { x: ds.get('cx') + x * ds.get('scale'), y: ds.get('cy') - y * ds.get('scale') }; }
@@ -1394,11 +1394,11 @@
                 px: function (i) { if (!playing() || !ds.get('vectors')) return { what: 'joint ' + (i + 1), drawn: 'nothing', expected: 'nothing', ok: true, note: 'Joints are drawn only while playing with the arms switched on.' }; var px = pixelAt(ctx, box, ds.get('px')[i], ds.get('py')[i]); return { what: 'screen pixel at joint ' + (i + 1), drawn: rgbText(px), expected: 'the arrow’s colour at its head', ok: px[3] > 0, note: 'The arrow ends exactly at the joint; its head is drawn there when the arm is longer than 8 px.' }; },
                 full_x: function (i) { if (!playing() || !ds.get('full')) return { what: 'full curve point ' + i, drawn: 'nothing', expected: 'nothing', ok: true, note: 'The full curve is drawn only while playing with its switch on.' }; var p = toScreen(ds.get('full_x')[i], ds.get('full_y')[i]), px = pixelAt(ctx, box, p.x, p.y); return { what: 'screen pixel at full curve point ' + i + ', (' + Sim.fmt(p.x, 1) + ', ' + Sim.fmt(p.y, 1) + ') css px', drawn: rgbText(px), expected: 'the pink stroke, rgb(201, 112, 126), or anything drawn over it', ok: px[3] > 0, note: 'A 1.3 px stroke through the stored points.' }; },
                 trail_x: function (i) { if (!playing()) return { what: 'trail point ' + i, drawn: 'nothing', expected: 'nothing', ok: true, note: 'The trail is drawn only while playing.' }; var p = toScreen(ds.get('trail_x')[i], ds.get('trail_y')[i]), px = pixelAt(ctx, box, p.x, p.y); return { what: 'screen pixel at trail point ' + i + ', (' + Sim.fmt(p.x, 1) + ', ' + Sim.fmt(p.y, 1) + ') css px', drawn: rgbText(px), expected: 'burgundy, fainter for older points', ok: px[3] > 0, note: 'A 2.3 px stroke whose older segments are drawn with lower opacity.' }; },
-                spec_y: function (r) { var px = pixelAt(sctx, sbox, ds.get('spec_x')[r], ds.get('spec_y')[r]); return { what: 'screen pixel at the top of spectrum bar ' + r + ' (k = ' + ds.get('c_k')[r] + ')', drawn: rgbText(px), expected: r < ds.get('K') ? 'the burgundy dot of a kept circle' : 'the tan dot of a dropped one', ok: px[3] > 0 && lum(px) < 170, note: 'Each bar ends in a filled dot of radius 2.5 px (kept) or 1.8 px (dropped).' }; }
+                spec_y: function (r) { var px = pixelAt(sctx, sbox, ds.get('spec_x')[r], ds.get('spec_y')[r]); return { what: 'screen pixel at the top of spectrum bar ' + r + ' (k = ' + ds.get('c_k')[r] + ')', drawn: rgbText(px), expected: r < ds.get('K') ? T('the burgundy dot of a kept circle') : 'the tan dot of a dropped one', ok: px[3] > 0 && lum(px) < 170, note: 'Each bar ends in a filled dot of radius 2.5 px (kept) or 1.8 px (dropped).' }; }
             },
             round: { time: 't', label: function () { return 'one loop of the circles, ' + ds.get('loop_s') + ' s'; }, length: function () { return 2 * Math.PI; },
                 columns: ['x', 'y'], point: function () { return { tip: true }; },
-                blocked: function () { return ds.get('mode') !== 'play' ? 'Decompose a shape first: time only runs while it plays.' : null; } },
+                blocked: function () { return ds.get('mode') !== 'play' ? T('Decompose a shape first: time only runs while it plays.') : null; } },
             play: function () { clk.set(true); },
             about: 'The pen, arms and joints are drawn from the stored chain each frame. The dashed original is the 256 resampled, centred points zₙ joined by straight segments; the full curve is the stored 601-point reconstruction. The trail is the pen position at the end of each past frame over the last loop. The spectrum bars are drawn once per rebuild, from |c_k| sorted by size. The view scale relaxes toward the outer radius over about 0.4 s, so the stored scale is a smoothed quantity, not a formula of the current frame.'
         };

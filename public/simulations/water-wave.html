@@ -655,7 +655,7 @@
             document.getElementById('r-c').textContent = c.toFixed(2) + ' m/s';
             document.getElementById('cap-c').innerHTML = '<i>c</i> = ' + c.toFixed(2) + ' m/s';
             document.getElementById('r-t').textContent = (1 / f()).toFixed(2) + ' s';
-            document.getElementById('r-ak').textContent = (a() * k()).toFixed(2) + (a() < amp.value ? ' (cap)' : '');
+            document.getElementById('r-ak').textContent = (a() * k()).toFixed(2) + (a() < amp.value ? T(' (cap)') : '');
             var deep = Math.exp(-k() * DZ * (layers.value - 1));
             document.getElementById('r-deep').textContent = (deep * 100).toFixed(deep < 0.1 ? 1 : 0) + ' % of a';
             var kk = k(), ff = f(), aa = a(), om = 2 * Math.PI * ff, am = aa / PX_PER_M;
@@ -804,7 +804,7 @@
             var p = at(q), px = ctx.getImageData(Math.round(p.x * box.dpr), Math.round(p.y * box.dpr), 1, 1).data, lum = 0.2126 * px[0] + 0.7152 * px[1] + 0.0722 * px[2];
             var N = ds.get('N'), j = Math.floor(q / N), i = q % N;
             if (j >= ds.get('layers_drawn')) return { what: 'parcel (layer ' + j + ', column ' + i + ')', drawn: 'nothing', expected: 'nothing', ok: true, note: 'This layer lies below the bottom of the canvas, so the page does not draw it; its numbers are still computed and stored.' };
-            return { what: 'screen pixel at parcel (layer ' + j + ', column ' + i + '), (' + Sim.fmt(p.x, 1) + ', ' + Sim.fmt(p.y, 1) + ') css px', drawn: px[3] === 0 ? 'nothing (transparent)' : 'rgb(' + px[0] + ', ' + px[1] + ', ' + px[2] + ')', expected: 'a dark parcel: ink rgb(58, 50, 46) or burgundy rgb(122, 31, 43) on the pink water', ok: px[3] > 0 && lum < 130,
+            return { what: 'screen pixel at parcel (layer ' + j + ', column ' + i + '), (' + Sim.fmt(p.x, 1) + ', ' + Sim.fmt(p.y, 1) + ') css px', drawn: px[3] === 0 ? T('nothing (transparent)') : 'rgb(' + px[0] + ', ' + px[1] + ', ' + px[2] + ')', expected: 'a dark parcel: ink rgb(58, 50, 46) or burgundy rgb(122, 31, 43) on the pink water', ok: px[3] > 0 && lum < 130,
                 note: 'The parcels are filled discs of radius 3 to 6 px, so the pixel at the stored centre is the fill colour.' };
         }
         function qInputs(q) { var N = ds.get('N'), j = Math.floor(q / N), i = q % N; return [['layer j', j, '', 0], ['column i', i, '', 0], ['r', ds.get('r_z')[j], 'px', 4], ['θ', ds.get('theta')[q], 'rad', 4]]; }
@@ -827,7 +827,7 @@
             },
             inspect: function (ref) {
                 var q = ref.q, N = ds.get('N'), j = Math.floor(q / N), i = q % N;
-                return { title: 'parcel · layer ' + j + ', column ' + i + (j === 0 && i === ds.get('follow') ? ' · the followed one' : ''), at: at(q),
+                return { title: 'parcel · layer ' + j + ', column ' + i + (j === 0 && i === ds.get('follow') ? T(' · the followed one') : ''), at: at(q),
                     rows: [['X<sub>0</sub>', ds.get('X0')[i], 'px', 'X0', i], ['depth', ds.get('depth')[j], 'm', 'depth', j], ['r', ds.get('r_z')[j], 'px', 'r_z', j], ['θ', ds.get('theta')[q], 'rad', 'theta', q], ['ξ', ds.get('xi')[q], 'px', 'xi', q], ['ζ', ds.get('zeta')[q], 'px', 'zeta', q], ['u', ds.get('u')[q], 'px/s', 'u', q], ['w', ds.get('w')[q], 'px/s', 'w', q]] };
             },
             locate: function (name, idx) {

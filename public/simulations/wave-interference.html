@@ -590,14 +590,14 @@
 
         function render() {
             list.innerHTML = '';
-            if (!waves.length) list.innerHTML = '<p class="empty">No waves. Add one to begin.</p>';
+            if (!waves.length) list.innerHTML = T('<p class="empty">No waves. Add one to begin.</p>');
             waves.forEach(function (w, n) {
                 var card = document.createElement('div');
                 card.className = 'wave';
                 card.style.setProperty('--c', w.colour);
                 var key = 'w' + w.id;
                 card.innerHTML =
-                    '<div class="wave__head"><h3>Wave ' + (n + 1) + '</h3>' +
+                    T('<div class="wave__head"><h3>Wave ') + (n + 1) + '</h3>' +
                     '<button type="button" class="wave__x" aria-label="Remove wave ' + (n + 1) + '">×</button></div>' +
                     '<div class="wave__ctl">' +
                     field({ id: key + 'A', name: 'Amplitude', min: 0, max: 40, step: 1, value: w.A }) +
@@ -837,7 +837,7 @@
         var LEFT = 44;
         /* the device pixel that contains the point (floor, not round: a point at 635.5 lies in column 635) */
         function pixelAt(c, bx, x, y) { return c.getImageData(Math.floor(x * bx.dpr), Math.floor(y * bx.dpr), 1, 1).data; }
-        function rgbText(px) { return px[3] === 0 ? 'nothing (transparent)' : 'rgb(' + px[0] + ', ' + px[1] + ', ' + px[2] + ')' + (px[3] < 255 ? ' at alpha ' + (px[3] / 255).toFixed(2) : ''); }
+        function rgbText(px) { return px[3] === 0 ? T('nothing (transparent)') : 'rgb(' + px[0] + ', ' + px[1] + ', ' + px[2] + ')' + (px[3] < 255 ? ' at alpha ' + (px[3] / 255).toFixed(2) : ''); }
         function lum(px) { return 0.2126 * px[0] + 0.7152 * px[1] + 0.0722 * px[2]; }
         function waveOf(q) { return Math.floor(q / (ds.get('M') + 1)); }
         /* where to read a stroke back: on the stored point, except at the two ends, where the flat cap leaves the end pixel half empty */
@@ -945,7 +945,7 @@
             },
             drawn: {
                 sum_A: function () { var actual = document.getElementById('r-sum').textContent, expected = ds.get('sum_A').toFixed(1) + ' px'; return { what: 'the visible r-sum readout', drawn: actual, expected: expected, ok: actual === expected }; },
-                py_sum: function (i) { if (!waves.length) return { what: 'the sum curve', drawn: 'no sum curve: the bench has no waves', expected: 'not drawn', ok: null }; var pt = onStroke(ds.get('py_sum'), i, 0), px = pixelAt(ctx, box, pt.x, pt.y); return { what: 'screen pixel on the sum curve at sample ' + i + ', (' + Sim.fmt(pt.x, 1) + ', ' + Sim.fmt(pt.y, 1) + ') css px', drawn: rgbText(px), expected: 'the dark ink of the 2.3 px sum stroke', ok: px[3] > 0 && lum(px) < 150, note: pt.end ? 'The stroke starts and ends with a flat cap, so at the first and last sample the midpoint of the end segment is read.' : 'The stroke is centred on the stored point, so the pixel there carries its colour.' }; },
+                py_sum: function (i) { if (!waves.length) return { what: 'the sum curve', drawn: 'no sum curve: the bench has no waves', expected: 'not drawn', ok: null }; var pt = onStroke(ds.get('py_sum'), i, 0), px = pixelAt(ctx, box, pt.x, pt.y); return { what: 'screen pixel on the sum curve at sample ' + i + ', (' + Sim.fmt(pt.x, 1) + ', ' + Sim.fmt(pt.y, 1) + ') css px', drawn: rgbText(px), expected: 'the dark ink of the 2.3 px sum stroke', ok: px[3] > 0 && lum(px) < 150, note: pt.end ? T('The stroke starts and ends with a flat cap, so at the first and last sample the midpoint of the end segment is read.') : 'The stroke is centred on the stored point, so the pixel there carries its colour.' }; },
                 py_comp: function (q) {
                     var wi = waveOf(q), i = sampleOf(q), MP = ds.get('M') + 1, Y = ds.get('py_comp'), pt = onStroke(Y, i, wi * MP), px = pixelAt(ctx, box, pt.x, pt.y), ok = false;
                     if (px[3] > 0) {
@@ -958,7 +958,7 @@
                 },
                 y_line: function (li) { var px = pixelAt(sctx, spec, ds.get('x_line')[li], ds.get('y_line')[li]); return { what: 'screen pixel at the top of spectrum line ' + li + ' (the dot)', drawn: rgbText(px), expected: 'a filled dot in the line colour', ok: px[3] > 0 && lum(px) < 200, note: 'The dot has radius 4.5 px, so the pixel at the stored top is the fill colour.' }; }
             },
-            round: { time: 't', length: benchRound, label: function () { var L = benchRound(); return (L < 20 ? 'one repeat of the pattern, ' : 'twenty seconds of the pattern, ') + Sim.fmt(L, 2) + ' s'; },
+            round: { time: 't', length: benchRound, label: function () { var L = benchRound(); return (L < 20 ? T('one repeat of the pattern, ') : 'twenty seconds of the pattern, ') + Sim.fmt(L, 2) + ' s'; },
                 columns: ['sum_A', 'peak', 'ratio', 'y_sum_400', 'y1_400'], point: function () { return { kind: 'sum', i: Math.round(ds.get('M') / 2) }; } },
             play: function () { clk.set(true); },
             about: 'The curves are drawn with one sample per screen pixel column, M + 1 points, so what you see is exactly the stored arrays joined by straight segments; the canvas then smooths each stroke to fractions of a pixel. The spectrum groups waves with the same ν = f·s into one line whose height is the magnitude of their phasor sum, as stored in A_line. The readouts under the figure refresh every 8th frame; the store refreshes every frame.'

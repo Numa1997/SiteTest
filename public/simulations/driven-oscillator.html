@@ -826,7 +826,7 @@
             c.restore();
             c.strokeStyle = BURG; c.lineWidth = 1; c.beginPath(); c.moveTo(g.ox(ts[i]), p.top); c.lineTo(g.ox(ts[i]), p.bot); c.stroke();
             c.font = T.mono; c.fillStyle = T.muted; c.textBaseline = 'alphabetic';
-            c.textAlign = 'left'; c.fillText(g.narrow ? 'the whole run' : 'the whole run · the shaded band is the window above', p.L, p.top - 7);
+            c.textAlign = 'left'; c.fillText(g.narrow ? T('the whole run') : 'the whole run · the shaded band is the window above', p.L, p.top - 7);
             c.textAlign = 'center'; for (var t = 0; t < TEND; t += 10) c.fillText(String(t), g.ox(t), p.bot + 15);
             c.textAlign = 'right'; c.fillText(TEND + ' s', p.R, p.bot + 15);
         }
@@ -866,7 +866,7 @@
                     c.strokeStyle = T.ruleSoft; c.beginPath(); c.moveTo(B.X(p, f), p.top); c.lineTo(B.X(p, f), p.bot); c.stroke();
                     if (B.X(p, f) < p.R - 62) { c.fillStyle = T.muted; c.textAlign = 'center'; c.textBaseline = 'alphabetic'; c.fillText(String(f), B.X(p, f), p.bot + 16); }
                 });
-                c.fillStyle = T.muted; c.textAlign = 'right'; c.textBaseline = 'alphabetic'; c.fillText('f (Hz)', p.R, p.bot + 16);
+                c.fillStyle = T.muted; c.textAlign = 'right'; c.textBaseline = 'alphabetic'; c.fillText(T('f (Hz)'), p.R, p.bot + 16);
                 c.textBaseline = 'middle';
                 if (k === 0) for (var e = Math.ceil(B.lgBot); e <= B.lgTop; e++) { c.strokeStyle = T.ruleSoft; c.beginPath(); c.moveTo(p.L, B.Ym(p, Math.pow(10, e))); c.lineTo(p.R, B.Ym(p, Math.pow(10, e))); c.stroke(); Sim.tex(c, '10^{' + String(e).replace('-', '−') + '}', p.L - 7, B.Ym(p, Math.pow(10, e)) + 5, { size: 14, align: 'right', color: T.muted }); }
                 else [0, 45, 90, 135, 180].forEach(function (d) { c.strokeStyle = T.ruleSoft; c.beginPath(); c.moveTo(p.L, B.Yp(p, d)); c.lineTo(p.R, B.Yp(p, d)); c.stroke(); c.fillText(d + '°', p.L - 7, B.Yp(p, d)); });
@@ -1096,7 +1096,7 @@
             },
             round: { time: 't_play', label: function () { return 'one drive period, 1/f = ' + Sim.fmt(1 / ds.get('fd'), 3) + ' s of the stored run'; }, length: function () { return 1 / ds.get('fd'); },
                 columns: ['x_now', 'v_now', 'F_now', 'E_now', 'Pin_now'], point: function () { return { what: 'block' }; },
-                blocked: function () { return ds.get('t_play') + 1 / ds.get('fd') > TEND ? 'the stored run ends before one more drive period; press From t = 0' : null; } },
+                blocked: function () { return ds.get('t_play') + 1 / ds.get('fd') > TEND ? T('the stored run ends before one more drive period; press From t = 0') : null; } },
             play: function () { clk.set(true); },
             about: 'Nothing on this page is computed while you watch. The run is solved once, with RK4 at h = 1 ms, and every tenth state is stored together with the force F, the stretch F/k, the drive phase Ωt, the energy, the two powers and the exact solution. Each frame draws the stored sample nearest to the playback time, without interpolation; the only arithmetic in the drawing turns metres, seconds and newtons into pixels, with the scales listed under Drawing. The window chart draws every stored sample between its edges; the strip of the whole run draws about two samples per screen pixel. The block travels A<sub>px</sub> pixels either side of rest at the largest swing of the run, so the drawing scale px/m changes when the run changes; the ruler under the floor gives that swing in metres.'
         };

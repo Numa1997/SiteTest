@@ -895,7 +895,7 @@
             audio.ctx.resume().then(function () { return audio.el.play(); }).catch(function () {});
         }
         function audioControl(action) {
-            if (!audio.el) { $('drop-txt').textContent = 'Choose an audio file first.'; return; }
+            if (!audio.el) { $('drop-txt').textContent = T('Choose an audio file first.'); return; }
             if (action === 'play') { audio.ctx.resume(); audio.el.play().catch(function () {}); }
             else if (action === 'pause') audio.el.pause();
             else { audio.el.pause(); audio.el.currentTime = 0; }
@@ -979,7 +979,7 @@
                     ctl('freq', 'Angular frequency ω', -32, 32, p.freq, i) +
                     ctl('phase', 'Phase φ', 0, 6.28, p.phase, i) +
                     '<label class="ctl"><span class="ctl__row"><span>Bounce curve</span></span><select class="sel" data-curve="' + i + '">' +
-                    CURVES.map(function (c) { return '<option' + (c === p.curve ? ' selected' : '') + '>' + c + '</option>'; }).join('') +
+                    CURVES.map(function (c) { return '<option' + (c === p.curve ? T(' selected') : '') + '>' + c + '</option>'; }).join('') +
                     '</select></label></div>';
             }).join('') || '<p class="hint">No circles. Add one or pick a preset.</p>';
             Array.prototype.forEach.call(host.querySelectorAll('input[type="range"]'), paintRange);
@@ -1161,7 +1161,7 @@
             $('r-n').textContent = String(phasors.length);
             $('r-z').textContent = Sim.fmt(Math.hypot(z.x, z.y), 3);
             $('r-period').textContent = st.n === 0 ? '—' : st.g > 0 ? Sim.fmt(TAU / st.g, 2) + ' s' : 'point';
-            $('r-fold').textContent = st.n <= 1 ? (st.n ? '∞ (circle)' : '—') : st.q + '-fold';
+            $('r-fold').textContent = st.n <= 1 ? (st.n ? T('∞ (circle)') : '—') : st.q + '-fold';
             $('r-energy').textContent = Sim.fmt(e, 3);
             $('cap-t').innerHTML = '<i>t</i> = ' + Sim.fmt(t, 2) + ' s';
             $('cap-mode').textContent = mode === 'final' ? 'final shape · ' + finalN + ' samples' : 'live construction';
@@ -1353,7 +1353,7 @@
 
         /* ---------- the data panel (scripts/datalog.js) reads the store; these hooks only say where things are drawn and how to test a value ---------- */
         function pixelAt(x, y) { return ctx.getImageData(Math.round(x * box.dpr), Math.round(y * box.dpr), 1, 1).data; }
-        function rgbText(px) { return px[3] === 0 ? 'nothing (transparent)' : 'rgb(' + px[0] + ', ' + px[1] + ', ' + px[2] + ')' + (px[3] < 255 ? ' at alpha ' + (px[3] / 255).toFixed(2) : ''); }
+        function rgbText(px) { return px[3] === 0 ? T('nothing (transparent)') : 'rgb(' + px[0] + ', ' + px[1] + ', ' + px[2] + ')' + (px[3] < 255 ? ' at alpha ' + (px[3] / 255).toFixed(2) : ''); }
         function lum(px) { return 0.2126 * px[0] + 0.7152 * px[1] + 0.0722 * px[2]; }
         function isLive() { return ds.get('mode') === 'live'; }
         function trailAt(i) { return { x: ds.get('cx') + ds.get('trail_x')[i] * ds.get('scale'), y: ds.get('cy') - ds.get('trail_y')[i] * ds.get('scale') }; }
@@ -1461,8 +1461,8 @@
                 trail_x: function (i) { if (!isLive()) return { what: 'trail point ' + i, drawn: 'nothing', expected: 'nothing', ok: true, note: 'The trail is drawn only in the live view.' }; var p = trailAt(i), px = pixelAt(p.x, p.y); return { what: 'screen pixel at trail point ' + i + ', (' + Sim.fmt(p.x, 1) + ', ' + Sim.fmt(p.y, 1) + ') css px', drawn: rgbText(px), expected: 'burgundy, fainter for older points', ok: px[3] > 0, note: 'The trail is a 1.8 px stroke; older chunks are drawn with lower opacity, and circles or arms may be drawn over it.' }; }
             },
             round: { time: 't', length: phasorRound, columns: ['x', 'y', 'absz', 'sf'], point: function () { return { tip: true }; },
-                label: function () { var g = ds.get('g'), L = phasorRound(); return (g > 0 && L >= 2 * Math.PI / g - 1e-9 ? 'one full figure, ' : 'part of the figure, ') + Sim.fmt(L, 2) + ' s of phasor time'; },
-                blocked: function () { return ds.get('mode') === 'final' ? 'Switch to the Live view first: time only runs there.' : ds.get('sf') === 0 ? 'Set Speed above 0: phasor time does not advance at Speed 0.' : null; } },
+                label: function () { var g = ds.get('g'), L = phasorRound(); return (g > 0 && L >= 2 * Math.PI / g - 1e-9 ? T('one full figure, ') : 'part of the figure, ') + Sim.fmt(L, 2) + ' s of phasor time'; },
+                blocked: function () { return ds.get('mode') === 'final' ? T('Switch to the Live view first: time only runs there.') : ds.get('sf') === 0 ? T('Set Speed above 0: phasor time does not advance at Speed 0.') : null; } },
             play: function () { clk.set(true); },
             about: 'The arms, joints and pen are drawn from the numbers stored here, every frame. The trail is the pen position at the end of each past frame, so its point spacing is the frame time times the speed: history, not a formula. In the final view the drawn path moves the fraction α of the way to the exact path each frame, so path_x, path_y lag final_x, final_y until the deviation reaches zero. The readouts under the figure refresh ten times a second; the store refreshes every frame. The audio numbers are measurements of the sound, smoothed over frames.'
         };

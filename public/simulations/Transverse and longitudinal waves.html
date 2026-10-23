@@ -805,7 +805,7 @@
             document.getElementById('r-t').textContent = (1 / freq.value).toFixed(2) + ' s';
             document.getElementById('r-k').textContent = (2 * Math.PI / lambda.value).toFixed(4) + ' /px';
             var al = longAmp();
-            document.getElementById('r-al').textContent = al.toFixed(0) + ' px' + (al < amp.value ? ' (cap)' : '');
+            document.getElementById('r-al').textContent = al.toFixed(0) + ' px' + (al < amp.value ? T(' (cap)') : '');
             var kk = 2 * Math.PI / lambda.value, om = 2 * Math.PI * freq.value;
             ds.set('f', freq.value); ds.set('lambda', lambda.value); ds.set('A', amp.value); ds.set('v', v); ds.set('T', 1 / freq.value);
             ds.set('k', kk); ds.set('omega', om); ds.set('AL', al); ds.set('cap', al < amp.value); ds.set('L_over_lam', LENGTH / lambda.value);
@@ -969,7 +969,7 @@
                 X: Sim.fmt(ds.get('X')[i], 1) + ' px', phase: Sim.fmt(Math.atan2(Math.sin(ph), Math.cos(ph)), 3) + ' rad', xi: Sim.fmt(ds.get('xi')[i], 2) + ' px',
                 yi: Sim.fmt(ds.get('yi_px')[i], 1) + ' px',
                 xc: Sim.fmt(ds.get('crest'), 1) + ' px', xp: Sim.fmt(ds.get('comp0'), 1) + ' px',
-                AL: Sim.fmt(ds.get('AL'), 2) + ' px' + (ds.get('cap') ? ' (capped)' : ''), A: ds.get('A') + ' px', xl: Sim.fmt(ds.get('xL')[i], 2) + ' px',
+                AL: Sim.fmt(ds.get('AL'), 2) + ' px' + (ds.get('cap') ? T(' (capped)') : ''), A: ds.get('A') + ' px', xl: Sim.fmt(ds.get('xL')[i], 2) + ' px',
                 AkL: Sim.fmt(ds.get('ALk'), 4), rho: Sim.fmt(ds.get('rho')[i], 3), comp: Sim.fmt(ds.get('comp')[i], 3),
                 s: Sim.fmt(ds.get('s_px'), 4), yT: Sim.fmt(ds.get('yT'), 1) + ' px'
             };
@@ -988,7 +988,7 @@
         function lPos(i) { return { x: ds.get('xl_px')[i], y: ds.get('yL') }; }
         function beadPixel(what, pt) {
             var px = ctx.getImageData(Math.round(pt.x * box.dpr), Math.round(pt.y * box.dpr), 1, 1).data, lum = 0.2126 * px[0] + 0.7152 * px[1] + 0.0722 * px[2];
-            return { what: 'screen pixel at ' + what + ', (' + Sim.fmt(pt.x, 1) + ', ' + Sim.fmt(pt.y, 1) + ') css px', drawn: px[3] === 0 ? 'nothing (transparent)' : 'rgb(' + px[0] + ', ' + px[1] + ', ' + px[2] + ')', expected: 'a dark bead: ink rgb(58, 50, 46) or burgundy rgb(122, 31, 43)', ok: px[3] > 0 && lum < 130,
+            return { what: 'screen pixel at ' + what + ', (' + Sim.fmt(pt.x, 1) + ', ' + Sim.fmt(pt.y, 1) + ') css px', drawn: px[3] === 0 ? T('nothing (transparent)') : 'rgb(' + px[0] + ', ' + px[1] + ', ' + px[2] + ')', expected: 'a dark bead: ink rgb(58, 50, 46) or burgundy rgb(122, 31, 43)', ok: px[3] > 0 && lum < 130,
                 note: 'The beads are filled discs of radius 4 to 6.5 px, so the pixel at the stored centre is the fill colour.' };
         }
         var LONG = { sL: 1, xL: 1, vs: 1, rho: 1, comp: 1, xl_px: 1 };
@@ -1018,7 +1018,7 @@
                 var i = ref.i, rows;
                 if (ref.row === 'T') rows = [['X', ds.get('X')[i], 'px', 'X', i], ['kX − ωt', ds.get('phase')[i], 'rad', 'phase', i], ['ξ', ds.get('xi')[i], 'px', 'xi', i], ['∂ξ/∂t', ds.get('vxi')[i], 'px/s', 'vxi', i], ['y px', ds.get('yi_px')[i], 'css px', 'yi_px', i]];
                 else rows = [['X', ds.get('X')[i], 'px', 'X', i], ['kX − ωt', ds.get('phase')[i], 'rad', 'phase', i], ['s', ds.get('sL')[i], 'px', 'sL', i], ['x = X + s', ds.get('xL')[i], 'px', 'xL', i], ['∂s/∂t', ds.get('vs')[i], 'px/s', 'vs', i], ['ρ/ρ₀', ds.get('rho')[i], '', 'rho', i], ['comp', ds.get('comp')[i], '', 'comp', i]];
-                return { title: (ref.row === 'T' ? 'transverse' : 'longitudinal') + ' particle ' + i + (i === ds.get('follow') ? ' · the followed one' : ''), at: ref.row === 'T' ? tPos(i) : lPos(i), rows: rows };
+                return { title: (ref.row === 'T' ? 'transverse' : 'longitudinal') + ' particle ' + i + (i === ds.get('follow') ? T(' · the followed one') : ''), at: ref.row === 'T' ? tPos(i) : lPos(i), rows: rows };
             },
             locate: function (name, idx) {
                 var v = ds.vars[name];

@@ -837,7 +837,7 @@
             Array.prototype.forEach.call(gShapes.querySelectorAll('circle'), function (c) { var d = Math.hypot(+c.getAttribute('cx') - px[q], +c.getAttribute('cy') - py[q]); if (d < bd) { bd = d; best = c; } });
             var ok = best && bd < 0.02;
             return { what: PN[q] + ' as drawn: the nearest circle in the SVG', drawn: best ? '(' + best.getAttribute('cx') + ', ' + best.getAttribute('cy') + '), r = ' + best.getAttribute('r') : 'no circle', expected: '(' + px[q].toFixed(2) + ', ' + py[q].toFixed(2) + ')', ok: !!ok,
-                note: q === 4 && !ok ? 'Q is only drawn when δs > 0.05 px.' : 'SVG coordinates are written with two decimals, so the picture carries positions to 0.01 px.' };
+                note: q === 4 && !ok ? T('Q is only drawn when δs > 0.05 px.') : 'SVG coordinates are written with two decimals, so the picture carries positions to 0.01 px.' };
         }
         function firstFringeReadback(sine) {
             var label = Array.prototype.find.call(pattern.querySelectorAll('text'), function (el) { return el.textContent === 'm = 1'; });
@@ -871,7 +871,7 @@
                 if (q === 1) rows.push(['L<sub>2</sub> to P', ds.get('L2'), 'px', 'L2'], ['|S<sub>2</sub>Q|', ds.get('S2Q'), 'px', 'S2Q']);
                 if (q === 4) rows.push(['|S<sub>2</sub>Q| = δs', ds.get('S2Q'), 'px', 'S2Q']);
                 if (q === 2) rows.push(['b', ds.get('b'), 'px', 'b'], ['α', ds.get('alpha_deg'), '°', 'alpha_deg']);
-                return { title: PN[q] + (q === 3 ? ' · the observed point' : q === 2 ? ' · midpoint of the slits' : ''), at: toCss(px[q], py[q]), rows: rows };
+                return { title: PN[q] + (q === 3 ? T(' · the observed point') : q === 2 ? T(' · midpoint of the slits') : ''), at: toCss(px[q], py[q]), rows: rows };
             },
             locate: function (name, idx) {
                 if (name === 'pt_x' || name === 'pt_y') return toCss(ds.get('pt_x')[idx], ds.get('pt_y')[idx]);
