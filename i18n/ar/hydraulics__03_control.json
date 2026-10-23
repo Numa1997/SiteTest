@@ -1,4 +1,8 @@
 {
+ "0027034d8a10": {
+  "src": "$\\rho$",
+  "tr": "$\\rho$"
+ },
  "012af753ff5e": {
   "src": "cap chamber pressure, at its far end from the hose",
   "tr": "ضغط الحجرة السفلية، عند طرفها البعيد عن الخرطوم"
@@ -7,9 +11,17 @@
   "src": "$K_{\\mathrm{vel}}$",
   "tr": "$K_{\\mathrm{vel}}$"
  },
+ "02037ab9ff10": {
+  "src": "normalized spool travel, x/x<sub>max</sub>",
+  "tr": "مدى حركة المِزلاج المُطبَّع، x/x<sub>max</sub>"
+ },
  "0240c4e74351": {
   "src": "Pa·s",
   "tr": "Pa·s"
+ },
+ "02d3d04af88e": {
+  "src": "downward displacement of the input piston (generalized coordinate); reused as spool travel in ch. 8",
+  "tr": "الإزاحة الهابطة لمكبس الإدخال (إحداثيّ معمَّم)؛ أُعيد استعمالها كمدى حركة المِزلاج في الفصل 8"
  },
  "03a45952f811": {
   "src": "$\\eta$",
@@ -23,13 +35,45 @@
   "src": "$K_{ce}$",
   "tr": "$K_{ce}$"
  },
+ "09d4c7f101e2": {
+  "src": "chapter",
+  "tr": "الفصل"
+ },
+ "0b3cc6d2eea9": {
+  "src": "spool natural angular frequency, 2π f<sub>v</sub>",
+  "tr": "التردد الزاوي الطبيعي للمِزلاج، 2π f<sub>v</sub>"
+ },
  "0bf6380b9530": {
   "src": "$\\zeta_h$",
   "tr": "$\\zeta_h$"
  },
+ "0db78855023d": {
+  "src": "60 Hz, 0.7",
+  "tr": "60 Hz، 0.7"
+ },
+ "0e44c8b638ba": {
+  "src": "Further reading",
+  "tr": "مراجع للاستزادة"
+ },
  "10f32377ac67": {
   "src": "$\\alpha$",
   "tr": "$\\alpha$"
+ },
+ "11a50e9d9825": {
+  "src": "laminar leakage coefficient, Q<sub>L</sub> = K<sub>L</sub> Δp",
+  "tr": "معامل التسرّب الطبقي، Q<sub>L</sub> = K<sub>L</sub> Δp"
+ },
+ "12f0fd0746f7": {
+  "src": "force on the input piston",
+  "tr": "القوّة المؤثّرة في مكبس الإدخال"
+ },
+ "1389845b02c0": {
+  "src": "kg",
+  "tr": "kg"
+ },
+ "13f3690a5d22": {
+  "src": "energy function $T + V - F_1x$, which can only fall while the push ramps up",
+  "tr": "دالّة الطاقة $T + V - F_1x$، التي لا تنخفض إلا بينما تزداد قوّة الدفع"
  },
  "15afd0596eb8": {
   "src": "bottom stop contact force (stop law implied, not defined as a symbol)",
@@ -43,6 +87,10 @@
   "src": "$\\mathrm{GM}$",
   "tr": "$\\mathrm{GM}$"
  },
+ "1a7f6d82ea38": {
+  "src": "1 mm/s, 5 mm/s",
+  "tr": "1 mm/s، 5 mm/s"
+ },
  "1ac7b1ce8ba1": {
   "src": "$\\omega_h$",
   "tr": "$\\omega_h$"
@@ -50,6 +98,10 @@
  "1bae98eea24e": {
   "src": "$V_\\ell$",
   "tr": "$V_\\ell$"
+ },
+ "1ce908681faf": {
+  "src": "minimum input force that lifts the load off its stop",
+  "tr": "أصغر قوّة إدخال ترفع الحِمل عن حدّ توقّفه"
  },
  "1d37e9cd595d": {
   "src": "derivative filter time constant, 2 ms",
@@ -59,6 +111,14 @@
   "src": "cap chamber volume",
   "tr": "حجم الحجرة السفلية"
  },
+ "1e420c85a88f": {
+  "src": "√Pa",
+  "tr": "√Pa"
+ },
+ "1ebf39fcd568": {
+  "src": "$F_c,\\ k_{\\mathrm{st}},\\ b_v$",
+  "tr": "$F_c,\\ k_{\\mathrm{st}},\\ b_v$"
+ },
  "208a0bc36cab": {
   "src": "control error, y<sub>ref</sub> − y",
   "tr": "خطأ التحكّم، y<sub>ref</sub> − y"
@@ -67,13 +127,37 @@
   "src": "output matrix, picks the measured position",
   "tr": "مصفوفة الخرج، تختار الموضع المقيس"
  },
+ "2451b898a065": {
+  "src": "$\\omega_v$",
+  "tr": "$\\omega_v$"
+ },
+ "252b6a7aed2f": {
+  "src": "G. F. Franklin, J. D. Powell and M. Workman, <i>Digital Control of Dynamic Systems</i>, 3rd ed., Addison-Wesley, 1998: chapters 16 to 18.",
+  "tr": "G. F. Franklin، J. D. Powell و M. Workman، <i>Digital Control of Dynamic Systems</i>، الطبعة 3، Addison-Wesley، 1998: الفصول من 16 إلى 18."
+ },
+ "25b9010f12a2": {
+  "src": "flow-pressure coefficient, minus partial of Q<sub>A</sub> with respect to p<sub>a</sub>",
+  "tr": "معامل التدفّق والضغط، المشتقّة الجزئية لـ Q<sub>A</sub> بالنسبة إلى p<sub>a</sub> بإشارة سالبة"
+ },
+ "2705cc3d313a": {
+  "src": "Ideal press",
+  "tr": "المكبس الهيدروليكي المثالي"
+ },
  "2954e50ac2fa": {
   "src": "cap area, the full bore, πD²/4",
   "tr": "مساحة الجهة السفلية بالقطر الكامل، πD²/4"
  },
+ "29d9f584ee09": {
+  "src": "1 ms",
+  "tr": "1 ms"
+ },
  "2ae637aab873": {
   "src": "$K_{pF}$",
   "tr": "$K_{pF}$"
+ },
+ "2b5234e343df": {
+  "src": "M. Jelali and A. Kroll, <i>Hydraulic Servo-systems: Modelling, Identification and Control</i>, Springer, 2003.",
+  "tr": "M. Jelali و A. Kroll، <i>Hydraulic Servo-systems: Modelling, Identification and Control</i>، Springer، 2003."
  },
  "2c1916edadec": {
   "src": "oil outflow from a chamber",
@@ -83,9 +167,17 @@
   "src": "$\\beta_{\\mathrm{oil}}$",
   "tr": "$\\beta_{\\mathrm{oil}}$"
  },
+ "2cef55f237bd": {
+  "src": "volume flow",
+  "tr": "التدفّق الحجمي"
+ },
  "2e91bbbe6d9d": {
   "src": "$\\alpha_0$",
   "tr": "$\\alpha_0$"
+ },
+ "2e9ca295ea32": {
+  "src": "$v_s,\\ v_{\\mathrm{str}}$",
+  "tr": "$v_s,\\ v_{\\mathrm{str}}$"
  },
  "2efdb93f8c3c": {
   "src": "Linear model",
@@ -106,6 +198,22 @@
  "324a57423a1e": {
   "src": "polytropic exponent of the air",
   "tr": "الأُسّ البوليتروبي للهواء"
+ },
+ "32b65482ec36": {
+  "src": "position PID",
+  "tr": "المتحكّم PID للموضع"
+ },
+ "33571266edd3": {
+  "src": "potential energy as a function of x",
+  "tr": "الطاقة الكامنة بدلالة x"
+ },
+ "33b7e2bb2e9d": {
+  "src": "mass of the output piston",
+  "tr": "كتلة مكبس الإخراج"
+ },
+ "3558f48b17d4": {
+  "src": "$p_{\\mathrm{abs}}$",
+  "tr": "$p_{\\mathrm{abs}}$"
  },
  "36a0f1ab2bf0": {
   "src": "Sampling and control",
@@ -131,6 +239,10 @@
   "src": "speed over which the Stribeck bump dies away, 5 mm/s",
   "tr": "السرعة التي يتلاشى عندها نتوء ستريبك، 5 mm/s"
  },
+ "4084c0f3de3d": {
+  "src": "100 L/min, 7 MPa",
+  "tr": "100 L/min، 7 MPa"
+ },
  "416d6d32d68c": {
   "src": "kg/m⁴",
   "tr": "kg/m⁴"
@@ -143,13 +255,25 @@
   "src": "feed-forward gain from speed reference to command",
   "tr": "كسب التغذية الأمامية من مرجع السرعة إلى إشارة الأمر"
  },
+ "4766b2cc3bd2": {
+  "src": "$\\hat{x}$",
+  "tr": "$\\hat{x}$"
+ },
  "479bc2fe55be": {
   "src": "spool bandwidth frequency, 60 Hz",
   "tr": "تردد عرض النطاق للمِزلاج، 60 Hz"
  },
+ "493ac9457c0b": {
+  "src": "Valve and orifice",
+  "tr": "الصمّام والفتحة"
+ },
  "4bc59c0c578f": {
   "src": "break-away factor (Stribeck effect)",
   "tr": "معامل الانفصال (تأثير ستريبك)"
+ },
+ "4c6d256b8faf": {
+  "src": "pressure at valve port A, at the valve end of the hose",
+  "tr": "الضغط عند منفذ الصمّام A، عند الطرف الموصول بالصمّام من الخرطوم"
  },
  "4ee1fd1ac23c": {
   "src": "effective bulk modulus of oil with entrained air",
@@ -163,6 +287,10 @@
   "src": "total cylinder volume, two equal chambers of V<sub>t</sub>/2",
   "tr": "الحجم الكلّي للأسطوانة، حجرتان متساويتان حجم كلّ منهما V<sub>t</sub>/2"
  },
+ "546bc5db8c39": {
+  "src": "valve rated flow and pressure drop",
+  "tr": "التدفّق الاسمي للصمّام وهبوط الضغط عبره"
+ },
  "54d7d48553f4": {
   "src": "$\\omega$",
   "tr": "$\\omega$"
@@ -171,9 +299,57 @@
   "src": "viscous friction coefficient of the seals",
   "tr": "معامل الاحتكاك اللزج للحشوات"
  },
+ "5613085e74fc": {
+  "src": "bulk modulus: pressure to squeeze oil volume by a given fraction",
+  "tr": "معامل الانضغاط الحجمي: الضغط الذي يُنقص حجم الزيت بكسرٍ معيّن"
+ },
+ "5b7143c93280": {
+  "src": "load mass",
+  "tr": "كتلة الحِمل"
+ },
+ "5c8ad1de5914": {
+  "src": "$K_L,\\ p_{\\mathrm{tr}}$",
+  "tr": "$K_L,\\ p_{\\mathrm{tr}}$"
+ },
+ "5d72e89f8aef": {
+  "src": "gravitational acceleration, 9.81 m/s²",
+  "tr": "تسارع الجاذبية، 9.81 m/s²"
+ },
+ "5e7d6efc9447": {
+  "src": "oil column height at rest, 0.40 m",
+  "tr": "ارتفاع عمود الزيت في حالة السكون، 0.40 m"
+ },
  "5f13b8685639": {
   "src": "specimen damping, 5 % of critical",
   "tr": "تخامد العيّنة، 5 % من التخامد الحرج"
+ },
+ "6264827dca77": {
+  "src": "root regularization pressure, 0.1 MPa",
+  "tr": "ضغط تنظيم الجذر، 0.1 MPa"
+ },
+ "6312380c511a": {
+  "src": "power dissipated as heat in the valve jets",
+  "tr": "القدرة المبدَّدة على هيئة حرارة في نفّاثات الصمّام"
+ },
+ "631576d1507b": {
+  "src": "$g(\\Delta p)$",
+  "tr": "$g(\\Delta p)$"
+ },
+ "6344ebb989ac": {
+  "src": "SI unit",
+  "tr": "وحدة SI"
+ },
+ "643d53e928bf": {
+  "src": "spool bandwidth and damping",
+  "tr": "عرض النطاق الترددي والتخامد للمِزلاج"
+ },
+ "671dac9203b4": {
+  "src": "m³/(s·√Pa)",
+  "tr": "m³/(s·√Pa)"
+ },
+ "6741ee626394": {
+  "src": "bore, rod, stroke",
+  "tr": "قطر الأسطوانة، ساق المكبس، الشوط"
  },
  "69d53ed4d66b": {
   "src": "gas-to-liquid volume ratio V<sub>g</sub>/V<sub>ℓ</sub> at pressure p",
@@ -183,9 +359,17 @@
   "src": "$K_{iF}$",
   "tr": "$K_{iF}$"
  },
+ "6bfc1fa4c2f5": {
+  "src": "kinetic energy of the moving press",
+  "tr": "الطاقة الحركية للمكبس الهيدروليكي المتحرّك"
+ },
  "6ca9bfe38081": {
   "src": "flow through the hose",
   "tr": "التدفّق عبر الخرطوم"
+ },
+ "6ce5e08bdf3f": {
+  "src": "pressure downstream of the orifice, at the vena contracta",
+  "tr": "الضغط عند مصبّ الفتحة، في vena contracta"
  },
  "6d016551f561": {
   "src": "piston (ram) position, moving out at speed ẏ",
@@ -211,21 +395,93 @@
   "src": "$Q_{\\mathrm{in}}$",
   "tr": "$Q_{\\mathrm{in}}$"
  },
+ "703b3b3404e9": {
+  "src": "Geometry and fluid",
+  "tr": "الهندسة والمائع"
+ },
+ "71054f128f04": {
+  "src": "height of the right oil column, H<sub>0</sub> + rx",
+  "tr": "ارتفاع عمود الزيت الأيمن، H<sub>0</sub> + rx"
+ },
  "720a8feb0370": {
   "src": "discrete input matrix, ∫ e^{Aσ} dσ B",
   "tr": "مصفوفة الدخل المتقطّعة، ∫ e^{Aσ} dσ B"
+ },
+ "72fd7572d422": {
+  "src": "absolute pressure, p + p<sub>0</sub>",
+  "tr": "الضغط المطلق، p + p<sub>0</sub>"
+ },
+ "73f7f4c0c5f0": {
+  "src": "pipe length, 0.8 m",
+  "tr": "طول الأنبوب، 0.8 m"
  },
  "741cfaadf254": {
   "src": "load pressure, p<sub>1</sub> − p<sub>2</sub>",
   "tr": "ضغط الحمل، p<sub>1</sub> − p<sub>2</sub>"
  },
+ "7434b503d463": {
+  "src": "flow drawn from the pump",
+  "tr": "التدفّق المسحوب من المضخّة"
+ },
+ "744bd73d8b5a": {
+  "src": "atmospheric pressure, 101.325 kPa",
+  "tr": "الضغط الجوّي، 101.325 kPa"
+ },
+ "74d69eb4b344": {
+  "src": "area of the output piston",
+  "tr": "مساحة مكبس الإخراج"
+ },
+ "75e741031e05": {
+  "src": "normalized spool position, positive opens P to A",
+  "tr": "موضع المِزلاج المُطبَّع، الموجب يفتح P إلى A"
+ },
+ "7606fa7cba4f": {
+  "src": "pressure upstream of the orifice",
+  "tr": "الضغط عند منبع الفتحة"
+ },
+ "772068842744": {
+  "src": "$p_{\\mathrm{tr}}$",
+  "tr": "$p_{\\mathrm{tr}}$"
+ },
+ "774f32899017": {
+  "src": "oil density, 870 kg/m³ (constant, incompressible at first)",
+  "tr": "كثافة الزيت، 870 kg/m³ (ثابتة وغير قابلة للانضغاط في البداية)"
+ },
+ "77904f139cf1": {
+  "src": "150, 300, 200 cm³",
+  "tr": "150، 300، 200 cm³"
+ },
+ "77ef85f4b883": {
+  "src": "Coulomb friction, break-away factor, viscous",
+  "tr": "احتكاك كولوم، عامل كسر السكون، الاحتكاك اللزج"
+ },
+ "7c8481ef116e": {
+  "src": "2.0 m, 12 mm",
+  "tr": "2.0 m، 12 mm"
+ },
+ "7df422c95e19": {
+  "src": "m³/(s·Pa)",
+  "tr": "m³/(s·Pa)"
+ },
+ "7fbc7d93b12e": {
+  "src": "120 mm, 20 MN/m",
+  "tr": "120 mm، 20 MN/m"
+ },
  "802795d34e1f": {
   "src": "m³/Pa",
   "tr": "m³/Pa"
  },
+ "803c55570579": {
+  "src": "25 %/mm, 125 %/(mm·s), 0",
+  "tr": "25 %/mm، 125 %/(mm·s)، 0"
+ },
  "808759caa013": {
   "src": "seal friction force",
   "tr": "قوّة احتكاك الحشوات"
+ },
+ "833985197a32": {
+  "src": "force on the output piston",
+  "tr": "القوّة المؤثّرة في مكبس الإخراج"
  },
  "835503052f9b": {
   "src": "$K_{\\mathrm{coil}},\\ b_s,\\ m_s$",
@@ -235,9 +491,17 @@
   "src": "specimen stiffness, 20 MN/m",
   "tr": "صلابة العيّنة، 20 MN/m"
  },
+ "891a1c189682": {
+  "src": "leakage flow through the clearance gap (reused as load flow in ch. 15)",
+  "tr": "تدفّق التسرّب عبر فجوة الخلوص (أُعيد استعماله كتدفّق للحِمل في الفصل 15)"
+ },
  "8a0c3f145061": {
   "src": "integral state of the force law, loaded with the last command at the switch",
   "tr": "حالة التكامل لقانون القوّة، تُهيَّأ بآخر أمر عند لحظة التبديل"
+ },
+ "8b17221914b9": {
+  "src": "area of the input piston",
+  "tr": "مساحة مكبس الإدخال"
  },
  "8cd3caeb8486": {
   "src": "discrete loop gain, K(z) z^{-1} G(z)",
@@ -250,6 +514,10 @@
  "913e49ea63c6": {
   "src": "$\\Gamma$",
   "tr": "$\\Gamma$"
+ },
+ "93af770ae1ca": {
+  "src": "discharge coefficient, about 0.6 to 0.7",
+  "tr": "معامل التصريف، نحو 0.6 إلى 0.7"
  },
  "94b5284d8e74": {
   "src": "$\\zeta_v$",
@@ -267,17 +535,69 @@
   "src": "Hz",
   "tr": "Hz"
  },
+ "9adb13dc180b": {
+  "src": "turbulent friction factor, fitting losses",
+  "tr": "معامل احتكاك الجريان المضطرب، خسائر الوصلات"
+ },
+ "9cd576a2999e": {
+  "src": "supply pressure from the pump, at port P",
+  "tr": "ضغط الإمداد من المضخّة، عند المنفذ P"
+ },
+ "9ceaaa4c7e34": {
+  "src": "Every symbol in order of first appearance, grouped by topic, with its SI unit and the chapter that defines it (the number links there). Matrix symbols of the state-space chapters carry mixed units and show “?”. A few letters serve twice; the meaning column says where.",
+  "tr": "كلّ رمز مرتّباً بحسب أول ظهور له، ومجمّعاً حسب الموضوع، مع وحدته في النظام الدولي والفصلِ الذي يعرّفه (الرقم رابط يقود إليه). رموز المصفوفات في فصول فضاء الحالة تحمل وحدات مختلطة وتظهر «؟». تُستعمل بعض الحروف مرّتين، وعمود المعنى يبيّن أين."
+ },
+ "9df029e3894c": {
+  "src": "valve flow coefficient, Q = K<sub>v</sub> x̂ √Δp",
+  "tr": "معامل تدفّق الصمّام، Q = K<sub>v</sub> x̂ √Δp"
+ },
+ "9ecec2c846a5": {
+  "src": "smoothing speed, Stribeck speed",
+  "tr": "سرعة التنعيم، سرعة ستريبيك"
+ },
  "a1375f782ce1": {
   "src": "rod-side annulus area",
   "tr": "مساحة الحلقة على جهة الساق"
+ },
+ "a1b7eaaee3cb": {
+  "src": "mass of the input piston",
+  "tr": "كتلة مكبس الإدخال"
+ },
+ "a4223ebb8c81": {
+  "src": "rad/s",
+  "tr": "rad/s"
+ },
+ "a5e4fdb26227": {
+  "src": "F. M. White, <i>Fluid Mechanics</i>, McGraw-Hill: Bernoulli, pipe friction, orifices.",
+  "tr": "F. M. White، <i>Fluid Mechanics</i>، McGraw-Hill: برنولي، احتكاك الأنابيب، الفتحات."
+ },
+ "a6768dcb7ec1": {
+  "src": "$F_{1,\\min}$",
+  "tr": "$F_{1,\\min}$"
  },
  "a7e3dad3bb13": {
   "src": "N/A, N·s/m, kg",
   "tr": "N/A, N·s/m, kg"
  },
+ "a8179b9b9b3f": {
+  "src": "1.5 %/kN, 10 %/(kN·s)",
+  "tr": "1.5 %/kN، 10 %/(kN·s)"
+ },
+ "a846a87dc616": {
+  "src": "160 kg",
+  "tr": "160 kg"
+ },
+ "ab635ffb0bc3": {
+  "src": "$f_v,\\ \\zeta_v$",
+  "tr": "$f_v,\\ \\zeta_v$"
+ },
  "abd78ddb9559": {
   "src": "bulk modulus of the oil alone",
   "tr": "معامل الانضغاط الحجمي للزيت وحده"
+ },
+ "abe164fb9051": {
+  "src": "flow gain, partial of Q<sub>A</sub> with respect to x<sub>v</sub>",
+  "tr": "كسب التدفّق، المشتقّة الجزئية لـ Q<sub>A</sub> بالنسبة إلى x<sub>v</sub>"
  },
  "ac339b37813e": {
   "src": "$k_{\\mathrm{st}}$",
@@ -286,6 +606,10 @@
  "ad5645b20401": {
   "src": "position proportional gain",
   "tr": "الكسب التناسبي للموضع"
+ },
+ "af92fd5e956b": {
+  "src": "H. E. Merritt, <i>Hydraulic Control Systems</i>, Wiley, 1967: the classic source of chapter 15.",
+  "tr": "H. E. Merritt، <i>Hydraulic Control Systems</i>، Wiley، 1967: المرجع الكلاسيكي للفصل 15."
  },
  "b1b4dd69b3c2": {
   "src": "gas volume in the oil–air mixture",
@@ -319,6 +643,10 @@
   "src": "Pa·s/m³",
   "tr": "Pa·s/m³"
  },
+ "ba7523871b75": {
+  "src": "$\\mathcal{E}$",
+  "tr": "$\\mathcal{E}$"
+ },
  "bbdc770aad36": {
   "src": "rod chamber volume",
   "tr": "حجم حجرة القضيب"
@@ -335,17 +663,45 @@
   "src": "spool force per ampere, spool damping, spool mass (single-stage valve)",
   "tr": "قوّة المِزلاج لكلّ أمبير، وتخامد المِزلاج، وكتلة المِزلاج (الصمّام ذو المرحلة الواحدة)"
  },
+ "c17f649232dd": {
+  "src": "flow out of valve port B",
+  "tr": "التدفّق الخارج من منفذ الصمّام B"
+ },
+ "c18e117a84b7": {
+  "src": "$\\mu(x)$",
+  "tr": "$\\mu(x)$"
+ },
  "c1feb6b8dfb1": {
   "src": "$\\beta_{\\mathrm{eff}}$",
   "tr": "$\\beta_{\\mathrm{eff}}$"
+ },
+ "c2211315e0bb": {
+  "src": "dead volumes",
+  "tr": "الأحجام الميّتة"
+ },
+ "c227dd456f1d": {
+  "src": "orifice opening area, w x",
+  "tr": "مساحة انفتاح الفتحة، w x"
  },
  "c255c05388e9": {
   "src": "$R_{\\mathrm{lam}}$",
   "tr": "$R_{\\mathrm{lam}}$"
  },
+ "c3ed59f62eb2": {
+  "src": "area ratio A<sub>1</sub>/A<sub>2</sub>, equal to (d<sub>1</sub>/d<sub>2</sub>)²",
+  "tr": "نسبة المساحتين A<sub>1</sub>/A<sub>2</sub>، وتساوي (d<sub>1</sub>/d<sub>2</sub>)²"
+ },
  "c7369a8db1b4": {
   "src": "fitting (minor) loss coefficient",
   "tr": "معامل الفقد الموضعي في الوصلات"
+ },
+ "c743b10d78de": {
+  "src": "tank pressure",
+  "tr": "ضغط الخزّان"
+ },
+ "c891b2a74879": {
+  "src": "Pa",
+  "tr": "Pa"
  },
  "c9285b144757": {
   "src": "kg/m⁷",
@@ -359,13 +715,29 @@
   "src": "$C_{tp}$",
   "tr": "$C_{tp}$"
  },
+ "cd107b18b1d2": {
+  "src": "supply pressure",
+  "tr": "ضغط الإمداد"
+ },
  "cdb96b2f59ef": {
   "src": "turbulent friction coefficient, Δp = K<sub>t</sub> Q|Q|",
   "tr": "معامل احتكاك الجريان المضطرب، Δp = K<sub>t</sub> Q|Q|"
  },
+ "ce49798c4bbe": {
+  "src": "1.5 GPa, 0.5 %, 1.4",
+  "tr": "1.5 GPa، 0.5 %، 1.4"
+ },
+ "cfc038acd0c5": {
+  "src": "Lagrangian, T − V",
+  "tr": "اللاغرانجيان، T − V"
+ },
  "d07705035dc9": {
   "src": "discrete state matrix, e^{AT<sub>s</sub>}",
   "tr": "مصفوفة الحالة المتقطّعة، e^{AT<sub>s</sub>}"
+ },
+ "d0beacab5df9": {
+  "src": "force PI",
+  "tr": "المتحكّم PI للقوّة"
  },
  "d12b8fddaa02": {
   "src": "phase margin at the crossover frequency",
@@ -375,9 +747,17 @@
   "src": "gain margin at the −180° frequency, in decibels",
   "tr": "هامش الكسب عند التردد الذي يكون عنده الطور −180°، بالديسيبل"
  },
+ "d1b7520d8c7a": {
+  "src": "leakage conductance, root regularization",
+  "tr": "موصلية التسرّب، تنظيم الجذر"
+ },
  "d2e529b5fbc4": {
   "src": "linearized input matrix, ∂f/∂u",
   "tr": "مصفوفة الدخل بعد التقريب الخطّي، ∂f/∂u"
+ },
+ "d3dc7064c524": {
+  "src": "hose length and bore",
+  "tr": "طول الخرطوم وقطره الداخلي"
  },
  "d56f9b171dc0": {
   "src": "sample period, t<sub>k</sub> = kT<sub>s</sub>",
@@ -387,9 +767,25 @@
   "src": "$\\nu$",
   "tr": "$\\nu$"
  },
+ "d7d060a1fabb": {
+  "src": "2·10⁻¹³ m³/(s·Pa), 0.1 MPa",
+  "tr": "2·10⁻¹³ m³/(s·Pa)، 0.1 MPa"
+ },
+ "d7e74e8a7ed5": {
+  "src": "pipe cross-section area, 0.785 cm²",
+  "tr": "مساحة المقطع العرضي للأنبوب، 0.785 cm²"
+ },
  "d9fff6e4e930": {
   "src": "reference (set) position",
   "tr": "القيمة المرجعية للموضع"
+ },
+ "daaaabc1739b": {
+  "src": "<span class=\"chn\">B</span> List of symbols",
+  "tr": "<span class=\"chn\">B</span> قائمة الرموز"
+ },
+ "db67888f9c4c": {
+  "src": "height of the left oil column, H<sub>0</sub> − x",
+  "tr": "ارتفاع عمود الزيت الأيسر، H<sub>0</sub> − x"
  },
  "db813234d0f8": {
   "src": "linearized state matrix, ∂f/∂x (cylinder area A in ch. 15)",
@@ -399,6 +795,26 @@
   "src": "platen height at which the specimen is first touched",
   "tr": "ارتفاع اللوح الضاغط الذي تُلمَس عنده العيّنة لأوّل مرّة"
  },
+ "dd7dbd1bb9e4": {
+  "src": "pressure at valve port B, equal to the rod-chamber pressure",
+  "tr": "الضغط عند منفذ الصمّام B، ويساوي ضغط حجرة الساق"
+ },
+ "de21e7091fc7": {
+  "src": "moving mass (10 kg + tooling 150 kg)",
+  "tr": "الكتلة المتحرّكة (10 kg + الأدوات 150 kg)"
+ },
+ "de4bd0d3e89d": {
+  "src": "soft oil spring stiffness of the moving press",
+  "tr": "صلابة النابض الزيتي اللين للمكبس الهيدروليكي المتحرّك"
+ },
+ "df71860297a4": {
+  "src": "120 mm, 80 mm, 200 mm",
+  "tr": "120 mm، 80 mm، 200 mm"
+ },
+ "e001c435e5c1": {
+  "src": "kg/m³",
+  "tr": "kg/m³"
+ },
  "e0c008bab7d4": {
   "src": "oil inflow into a chamber",
   "tr": "تدفّق الزيت الداخل إلى الحجرة"
@@ -407,9 +823,21 @@
   "src": "$Q_{\\mathrm{out}}$",
   "tr": "$Q_{\\mathrm{out}}$"
  },
+ "e37bf8e5ebce": {
+  "src": "effective mass, the mass felt at the input piston",
+  "tr": "الكتلة الفعّالة، أي الكتلة التي يشعر بها مكبس الإدخال"
+ },
  "e44622ef8add": {
   "src": "dB",
   "tr": "dB"
+ },
+ "e4711164be57": {
+  "src": "sample period",
+  "tr": "فترة المعاينة"
+ },
+ "e4c83e221840": {
+  "src": "flow out of valve port A",
+  "tr": "التدفّق الخارج من منفذ الصمّام A"
  },
  "e6cd66074269": {
   "src": "total flow-pressure coefficient, K<sub>c</sub> + C<sub>tp</sub>",
@@ -435,28 +863,60 @@
   "src": "Hose and chambers",
   "tr": "الخرطوم والحجرات"
  },
+ "eec4a67954b5": {
+  "src": "regularized flow function, linear near zero and square-root far away",
+  "tr": "دالّة التدفّق المُنظَّمة: خطّية قرب الصفر وذات جذر تربيعي بعيداً عنه"
+ },
  "eee9cc43e6ea": {
   "src": "air volume fraction at atmospheric pressure",
   "tr": "نسبة حجم الهواء عند الضغط الجوّي"
+ },
+ "ef5b051cb73f": {
+  "src": "$Q_N,\\ \\Delta p_N$",
+  "tr": "$Q_N,\\ \\Delta p_N$"
  },
  "f0b37956de2d": {
   "src": "moving mass of the ram",
   "tr": "الكتلة المتحركة للمِدكّ"
  },
+ "f1482c8f8257": {
+  "src": "$P_{\\mathrm{valve}}$",
+  "tr": "$P_{\\mathrm{valve}}$"
+ },
+ "f16e5f828577": {
+  "src": "gauge pressure, measured above the atmosphere",
+  "tr": "ضغط القياس، ويُقاس فوق الضغط الجوّي"
+ },
  "f3001759ca29": {
   "src": "speed over which the Coulomb jump is smoothed, 1 mm/s",
   "tr": "السرعة التي تُنعَّم عندها قفزة كولوم، 1 mm/s"
+ },
+ "f34bc9fe30ec": {
+  "src": "contact height, specimen stiffness",
+  "tr": "ارتفاع التلامس، صلابة العيّنة"
  },
  "f3f43cb21ca5": {
   "src": "dynamic viscosity of the oil, η = ρν",
   "tr": "اللزوجة الديناميكية للزيت، η = ρν"
  },
+ "f5ecda6d5bba": {
+  "src": "$K_{pF},\\ K_{iF}$",
+  "tr": "$K_{pF},\\ K_{iF}$"
+ },
  "f8f6be697241": {
   "src": "friction pressure drop in the hose",
   "tr": "انخفاض الضغط بالاحتكاك في الخرطوم"
  },
+ "f92975f707d3": {
+  "src": "12 MPa",
+  "tr": "12 MPa"
+ },
  "fd93d173beba": {
   "src": "force proportional gain",
   "tr": "الكسب التناسبي للقوّة"
+ },
+ "fdb63b9e51ab": {
+  "src": "$\\beta$",
+  "tr": "$\\beta$"
  }
 }
