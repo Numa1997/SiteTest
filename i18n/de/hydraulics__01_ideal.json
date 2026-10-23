@@ -1,7 +1,7 @@
 {
  "045b4900cad5": {
   "src": "Take a tiny wedge of fluid at rest: a right-angled prism with a vertical face of height $dy$, a horizontal face of width $dx$, and a sloping face of length $ds$ at angle $\\theta$, all of depth $dz$ into the page. The geometry gives $dx = ds\\cos\\theta$ and $dy = ds\\sin\\theta$. Call the pressures on the three faces $p_x$, $p_y$ and $p_n$. A fluid is, by definition, a material that keeps deforming for as long as a shear stress acts on it, however small; a solid settles at a new shape. So a fluid at rest can carry no shear at all, and every force on a face of the wedge is normal to it.",
-  "tr": "Betrachten Sie ein winziges Keilstück ruhender Flüssigkeit: ein rechtwinkliges Prisma mit einer senkrechten Fläche der Höhe $dy$, einer waagerechten Fläche der Breite $dx$ und einer schrägen Fläche der Länge $ds$ unter dem Winkel $\\theta$, alles mit der Tiefe $dz$ in die Zeichenebene hinein. Die Geometrie liefert $dx = ds\\cos\\theta$ und $dy = ds\\sin\\theta$. Die Drücke auf die drei Flächen heißen $p_x$, $p_y$ und $p_n$. Ein Fluid ist per Definition ein Stoff, der sich so lange weiter verformt, wie eine Schubspannung auf ihn wirkt, und sei sie noch so klein; ein Festkörper nimmt dagegen eine neue Form an. Daher kann ein ruhendes Fluid überhaupt keine Schubspannung übertragen, und jede Kraft auf eine Fläche des Keils steht senkrecht auf ihr."
+  "tr": "Betrachten Sie ein winziges Keilstück ruhender Flüssigkeit: ein rechtwinkliges Prisma mit einer senkrechten Fläche der Höhe $dy$, einer waagerechten Fläche der Breite $dx$ und einer schrägen Fläche der Länge $ds$ unter dem Winkel $\\theta$, alles mit der Tiefe $dz$ in die Zeichenebene hinein. Die Geometrie liefert $dx = ds\\cos\\theta$ und $dy = ds\\sin\\theta$. Die Drücke auf die drei Flächen heißen $p_x$, $p_y$ und $p_n$. Ein Fluid ist per Definition ein Stoff, der sich so lange weiter verformt, wie eine Schubspannung auf ihn wirkt, und sei sie noch so klein; ein Festkörper kommt dagegen in einer neuen Form zur Ruhe. Daher kann ein ruhendes Fluid überhaupt keine Schubspannung übertragen, und jede Kraft auf eine Fläche des Keils steht senkrecht auf ihr."
  },
  "086252e48513": {
   "src": "Divide by $A_1$: this is exactly (5.9) with $p_{\\mathrm{top}} = p_2$. The pressure walk and the Lagrangian agree, term by term. The page uses $p_{\\mathrm{top}} = p_2$ as a live self-test; the error stays below $10^{-10}$ Pa.",
@@ -81,7 +81,7 @@
  },
  "47e00d0f9ffa": {
   "src": "Why Lagrange and not Newton? Newton would need every force between every part: the pressure of the oil on each piston, of each column on the pipe, of the walls on the oil. These are constraint forces. In a virtual displacement $\\delta x$ that respects the constraints, with the oil moving as continuity demands, they do no net work, because the oil of Part I is incompressible and frictionless (chapters 2 and 6), so it can neither store energy nor turn it into heat: the oil passes force from one piston to the other without storing or losing any energy. So they drop out, and only the forces that do work remain: gravity, through $V$, and the applied push. That is d’Alembert’s principle, and Lagrange’s equations are its consequence. The push $F_1(t)$ is not derived from a potential, so it enters as a generalized force: in a virtual displacement $\\delta x$ it does work $F_1\\,\\delta x$. Lagrange's equation with $L = T - V$ reads",
-  "tr": "Warum Lagrange und nicht Newton? Newton bräuchte jede Kraft zwischen jeweils zwei Teilen: den Druck des Öls auf jeden Kolben, der Säulen auf das Rohr, der Wände auf das Öl. Das sind Zwangskräfte. Bei einer virtuellen Verschiebung $\\delta x$, die die Zwänge respektiert, wobei sich das Öl gemäß der Kontinuität bewegt, leisten sie netto keine Arbeit, weil das Öl aus Teil I inkompressibel und reibungsfrei ist (Kapitel 2 und 6). Es kann also weder Energie speichern noch in Wärme umwandeln: Das Öl überträgt die Kraft von einem Kolben auf den anderen, ohne Energie zu speichern oder zu verlieren. Sie fallen daher heraus, und übrig bleiben nur die Kräfte, die Arbeit leisten: die Schwerkraft über $V$ und die angelegte Schubkraft. Das ist das d’Alembert-Prinzip, und die Lagrange-Gleichungen sind seine Folge. Die Schubkraft $F_1(t)$ lässt sich nicht aus einem Potential ableiten; sie geht daher als verallgemeinerte Kraft ein: Bei einer virtuellen Verschiebung $\\delta x$ leistet sie die Arbeit $F_1\\,\\delta x$. Die Lagrange-Gleichung mit $L = T - V$ lautet"
+  "tr": "Warum Lagrange und nicht Newton? Newton bräuchte jede Kraft zwischen jeweils zwei Teilen: den Druck des Öls auf jeden Kolben, der Säulen auf das Rohr, der Wände auf das Öl. Das sind Zwangskräfte. Bei einer virtuellen Verschiebung $\\delta x$, die mit den Zwangsbedingungen verträglich ist, wobei sich das Öl gemäß der Kontinuität bewegt, leisten sie netto keine Arbeit, weil das Öl aus Teil I inkompressibel und reibungsfrei ist (Kapitel 2 und 6). Es kann also weder Energie speichern noch in Wärme umwandeln: Das Öl überträgt die Kraft von einem Kolben auf den anderen, ohne Energie zu speichern oder zu verlieren. Sie fallen daher heraus, und übrig bleiben nur die Kräfte, die Arbeit leisten: die Schwerkraft über $V$ und die angelegte Schubkraft. Das ist das d’Alembert-Prinzip, und die Lagrange-Gleichungen sind seine Folge. Die Schubkraft $F_1(t)$ lässt sich nicht aus einem Potential ableiten; sie geht daher als verallgemeinerte Kraft ein: Bei einer virtuellen Verschiebung $\\delta x$ leistet sie die Arbeit $F_1\\,\\delta x$. Die Lagrange-Gleichung mit $L = T - V$ lautet"
  },
  "48b66c5331ad": {
   "src": "For a Lagrangian with a time-dependent force, define $\\mathcal{E} = T + V - F_1(t)\\,x$. Differentiate along a solution and use (4.5):",
@@ -105,7 +105,7 @@
  },
  "5468b6510fce": {
   "src": "Force is multiplied by 9 and distance divided by 9. An ideal hydraulic press is a lever made of oil: it trades distance for force and never creates energy. In the moving press the input work goes three places: kinetic energy, potential energy, and the losses at the stops. The page checks that bookkeeping at every frame.",
-  "tr": "Die Kraft wird mit 9 multipliziert und der Weg durch 9 geteilt. Eine ideale hydraulische Presse ist ein Hebel aus Öl: Sie tauscht Weg gegen Kraft und erzeugt nie Energie. In der bewegten Presse fließt die zugeführte Arbeit an drei Stellen: in kinetische Energie, in potentielle Energie und in die Verluste an den Anschlägen. Die Seite prüft diese Energiebilanz bei jedem Bild."
+  "tr": "Die Kraft wird mit 9 multipliziert und der Weg durch 9 geteilt. Eine ideale hydraulische Presse ist ein Hebel aus Öl: Sie tauscht Weg gegen Kraft und erzeugt nie Energie. In der bewegten Presse verteilt sich die zugeführte Arbeit auf drei Posten: kinetische Energie, potentielle Energie und die Verluste an den Anschlägen. Die Seite prüft diese Energiebilanz bei jedem Bild."
  },
  "54971e4c4abd": {
   "src": "This is the unsteady Bernoulli equation. The first term is the push needed to accelerate the fluid between the two points, the second the push needed to speed it up, the third the weight.",
@@ -117,7 +117,7 @@
  },
  "566019b16792": {
   "src": "Shrink the wedge to a point: $dy \\to 0$, so $p_y = p_n$. The weight is a volume force (third order in size) and loses to the surface forces (second order). Since the angle $\\theta$ was arbitrary, the pressure at a point is the same in every direction: it is a scalar.",
-  "tr": "Schrumpfen Sie das Keilstück auf einen Punkt: $dy \\to 0$, also $p_y = p_n$. Das Gewicht ist eine Volumenkraft (dritter Ordnung in der Größe) und gegenüber den Oberflächenkräften (zweiter Ordnung) vernachlässigbar. Da der Winkel $\\theta$ beliebig war, ist der Druck in einem Punkt in jeder Richtung derselbe: Er ist eine skalare Größe."
+  "tr": "Lassen Sie das Keilstück auf einen Punkt schrumpfen: $dy \\to 0$, also $p_y = p_n$. Das Gewicht ist eine Volumenkraft (dritter Ordnung in der Größe) und gegenüber den Oberflächenkräften (zweiter Ordnung) vernachlässigbar. Da der Winkel $\\theta$ beliebig war, ist der Druck in einem Punkt in jeder Richtung derselbe: Er ist eine skalare Größe."
  },
  "573c956b34fb": {
   "src": "<b>Down the left column</b>, from the piston face to the bottom. Measure $s$ downward along the column. The oil moves down at speed $v$ and accelerates at $a$ everywhere in it, so $\\int\\partial v/\\partial t\\,ds = a h_1$; the speed is the same at both ends, so the Bernoulli term vanishes; and going down, $z_2 - z_1 = -h_1$. Then (5.2) gives $p_{b1} - p_1 = -\\rho a h_1 + \\rho g h_1$: $$p_{b1} = p_1 + \\rho\\,(g - a)\\,h_1. \\tag{5.3}$$",
@@ -133,7 +133,7 @@
  },
  "5bb6b0599a15": {
   "src": "<span class=\"chn\">6</span> What “ideal” leaves out",
-  "tr": "<span class=\"chn\">6</span> Was das „Ideale“ weglässt"
+  "tr": "<span class=\"chn\">6</span> Was „ideal“ weglässt"
  },
  "5ca0ae9c3e01": {
   "src": "4.3 Potential energy",
@@ -165,7 +165,7 @@
  },
  "6ad195b530d1": {
   "src": "<div class=\"ctag\">In our press</div>With a 5 mm pipe, $A_1/A_p = 64$ and the oil in the pipe reaches 23.4 m/s just before the stop. The Bernoulli drop $\\tfrac12\\rho v_p^2 \\approx 240\\ \\mathrm{kPa}$ is larger than the 150 kPa in the oil, and the gauge pressure at the pipe outlet falls to −96 kPa: the oil there is under suction, which is why the page warns about cavitation. Cavitation is what happens when the absolute pressure falls to the vapour pressure of the oil: dissolved air and vapour come out as bubbles, which collapse violently where the pressure recovers and pit the metal.",
-  "tr": "<div class=\"ctag\">In unserer Presse</div>Mit einem 5-mm-Rohr ist $A_1/A_p = 64$, und das Öl im Rohr erreicht kurz vor dem Anschlag 23.4 m/s. Der Bernoulli-Abfall $\\tfrac12\\rho v_p^2 \\approx 240\\ \\mathrm{kPa}$ ist größer als die 150 kPa im Öl, und der Überdruck am Rohrausgang fällt auf −96 kPa: Das Öl steht dort unter Unterdruck (Sog), weshalb die Seite vor Kavitation warnt. Kavitation tritt auf, wenn der absolute Druck auf den Dampfdruck des Öls fällt: Gelöste Luft und Dampf treten als Blasen aus, die dort heftig zusammenfallen, wo sich der Druck wieder erholt, und das Metall narbig machen."
+  "tr": "<div class=\"ctag\">In unserer Presse</div>Mit einem 5-mm-Rohr ist $A_1/A_p = 64$, und das Öl im Rohr erreicht kurz vor dem Anschlag 23.4 m/s. Der Bernoulli-Abfall $\\tfrac12\\rho v_p^2 \\approx 240\\ \\mathrm{kPa}$ ist größer als die 150 kPa im Öl, und der Überdruck am Rohrausgang fällt auf −96 kPa: Das Öl steht dort unter Unterdruck (Sog), weshalb die Seite vor Kavitation warnt. Kavitation tritt auf, wenn der absolute Druck auf den Dampfdruck des Öls fällt: Gelöste Luft und Dampf treten als Blasen aus, die dort heftig zusammenfallen, wo sich der Druck wieder erholt, und das Metall durch Lochfraß angreifen."
  },
  "6cc2649b3ccc": {
   "src": "<div class=\"ctag\">In our press</div>$r = 1/9$: the full 30 cm stroke lifts the load by 3.33 cm. The 1 cm pipe has $A_1/A_p = 16$, so the oil in the pipe runs 16 times faster than the piston. That is why the tracer dots race through it.",
@@ -197,7 +197,7 @@
  },
  "83884a3fb922": {
   "src": "The ramp only increases ($\\dot{F}_1 \\ge 0$) and $x \\ge 0$, so $\\mathcal{E}$ can only decrease. It is zero while the load rests on its stop, so it is zero at lift-off and negative afterwards. At $x = 0$ we have $\\mathcal{E} = T \\ge 0$, which is only possible with $T = 0$. The load can come back to its stop, at best, with zero speed: it never falls back onto it. If the force is too small to reach the stroke stop, the load swings forever between two turning points. That is why the page needs a time limit.",
-  "tr": "Die Kraftrampe steigt nie ab ($\\dot{F}_1 \\ge 0$), und $x \\ge 0$, daher kann $\\mathcal{E}$ nur abnehmen. Solange die Last auf ihrem Anschlag ruht, ist die Energiefunktion null; also ist sie beim Abheben null und danach negativ. Bei $x = 0$ gilt $\\mathcal{E} = T \\ge 0$, was nur mit $T = 0$ möglich ist. Die Last kann höchstens mit der Geschwindigkeit null an ihren Anschlag zurückkehren: Sie fällt nie auf ihn zurück. Reicht die Kraft nicht bis zum Hubanschlag, so pendelt die Last ewig zwischen zwei Umkehrpunkten. Deshalb braucht die Seite eine Zeitbegrenzung."
+  "tr": "Die Rampe steigt nur an ($\\dot{F}_1 \\ge 0$), und $x \\ge 0$, daher kann $\\mathcal{E}$ nur abnehmen. Solange die Last auf ihrem Anschlag ruht, ist die Energiefunktion null; also ist sie beim Abheben null und danach negativ. Bei $x = 0$ gilt $\\mathcal{E} = T \\ge 0$, was nur mit $T = 0$ möglich ist. Die Last kann höchstens mit der Geschwindigkeit null an ihren Anschlag zurückkehren: Sie fällt nie auf ihn zurück. Reicht die Kraft nicht bis zum Hubanschlag, so pendelt die Last ewig zwischen zwei Umkehrpunkten. Deshalb braucht die Seite eine Zeitbegrenzung."
  },
  "86896ac802a6": {
   "src": "After Part I you can",
@@ -249,7 +249,7 @@
  },
  "985d5cc2f08b": {
   "src": "Take all 5.1 L of oil as the spring volume $V_{\\mathrm{oil}}$, $\\beta = 1.5\\ \\mathrm{GPa}$ and the impact speed $v = 0.67\\ \\mathrm{m/s}$: this is about 1.5 MPa, ten times the working pressure, ringing at $\\sqrt{k_o/\\mu}/2\\pi \\approx 25\\ \\mathrm{Hz}$. Two more losses are missing. Where the jet leaves the pipe into the wide column it does not slow down gently: it mixes, and the Borda–Carnot loss of a sudden widening (chapter 8 treats the jet that causes it), $\\tfrac12\\rho(v_p - rv)^2$ per unit volume, the kinetic energy of the speed the jet has to shed, is burnt as heat. And viscosity resists every flow; chapter 11 derives how much.",
-  "tr": "Nehmen Sie das gesamte Öl, 5.1 L, als Federvolumen $V_{\\mathrm{oil}}$, $\\beta = 1.5\\ \\mathrm{GPa}$ und die Aufprallgeschwindigkeit $v = 0.67\\ \\mathrm{m/s}$: Das ergibt etwa 1.5 MPa, das Zehnfache des Betriebsdrucks, und ein Nachschwingen bei $\\sqrt{k_o/\\mu}/2\\pi \\approx 25\\ \\mathrm{Hz}$. Zwei weitere Verluste fehlen. Wo der Strahl aus dem Rohr in die breite Säule austritt, wird er nicht sanft langsamer: Er vermischt sich, und der Borda-Carnot-Verlust einer plötzlichen Querschnittserweiterung (Kapitel 8 behandelt den Strahl, der sie verursacht), $\\tfrac12\\rho(v_p - rv)^2$ pro Volumeneinheit, die kinetische Energie der Geschwindigkeit, die der Strahl abbauen muss, geht als Wärme verloren. Und die Viskosität hemmt jede Strömung; Kapitel 11 leitet ab, wie stark."
+  "tr": "Nehmen Sie das gesamte Öl, 5.1 L, als Federvolumen $V_{\\mathrm{oil}}$, $\\beta = 1.5\\ \\mathrm{GPa}$ und die Aufprallgeschwindigkeit $v = 0.67\\ \\mathrm{m/s}$: Das ergibt etwa 1.5 MPa, das Zehnfache des Betriebsdrucks, und ein Nachschwingen bei $\\sqrt{k_o/\\mu}/2\\pi \\approx 25\\ \\mathrm{Hz}$. Zwei weitere Verluste fehlen. Wo der Strahl aus dem Rohr in die breite Säule austritt, wird er nicht sanft langsamer: Er vermischt sich, und der Borda-Carnot-Verlust einer plötzlichen Querschnittserweiterung (Kapitel 8 behandelt den Strahl, der ihn verursacht), $\\tfrac12\\rho(v_p - rv)^2$ pro Volumeneinheit, die kinetische Energie der Geschwindigkeit, die der Strahl abbauen muss, geht als Wärme verloren. Und die Viskosität hemmt jede Strömung; Kapitel 11 leitet ab, wie stark."
  },
  "991781e8b215": {
   "src": "<span class=\"lbl\">given</span>the push $F_1(t)$ on the input piston",
@@ -257,7 +257,7 @@
  },
  "9d355b29bab0": {
   "src": "Divide by $dt$ to get the speeds. The same rule fixes the speed everywhere in the oil if we assume <i>plug flow</i>, one speed across each cross-section. With $v = \\dot{x}_1$:",
-  "tr": "Dividieren Sie durch $dt$, um die Geschwindigkeiten zu erhalten. Dieselbe Regel legt die Geschwindigkeit überall im Öl fest, wenn wir <i>Propfenströmung</i> annehmen, also eine einheitliche Geschwindigkeit über jedem Querschnitt. Mit $v = \\dot{x}_1$:"
+  "tr": "Dividieren Sie durch $dt$, um die Geschwindigkeiten zu erhalten. Dieselbe Regel legt die Geschwindigkeit überall im Öl fest, wenn wir <i>Pfropfenströmung</i> annehmen, also eine einheitliche Geschwindigkeit über jedem Querschnitt. Mit $v = \\dot{x}_1$:"
  },
  "9f24b804ba2e": {
   "src": "The ideal press, in symbols",
@@ -281,7 +281,7 @@
  },
  "a9f39d82a4dc": {
   "src": "Press your palm flat into a bathtub and then turn it sideways: the push of the water on your palm does not change with its orientation, only with how deep it is.",
-  "tr": "Drücken Sie Ihre flache Handfläche in eine Badewanne und drehen Sie sie dann seitlich: Der Druck des Wassers auf Ihre Handfläche ändert sich nicht mit ihrer Ausrichtung, sondern nur mit der Tiefe."
+  "tr": "Drücken Sie Ihre flache Handfläche in das Wasser einer Badewanne und drehen Sie sie dann seitlich: Der Druck des Wassers auf Ihre Handfläche ändert sich nicht mit ihrer Ausrichtung, sondern nur mit der Tiefe."
  },
  "abc348188a81": {
   "src": "<span class=\"chn\">3</span> Energy: the hydraulic lever",
@@ -309,7 +309,7 @@
  },
  "c1bf2d98c9e2": {
   "src": "Expand with $h_1 = H_0 - x$ and $h_2 = H_0 + r x$. The pistons give $-m_1 g x + (m_2+M) g r x$. The columns give",
-  "tr": "Ausmultiplizieren mit $h_1 = H_0 - x$ und $h_2 = H_0 + r x$. Die Kolben liefern $-m_1 g x + (m_2+M) g r x$. Die Säulen liefern"
+  "tr": "Setzen Sie $h_1 = H_0 - x$ und $h_2 = H_0 + r x$ ein und multiplizieren Sie aus. Die Kolben liefern $-m_1 g x + (m_2+M) g r x$. Die Säulen liefern"
  },
  "c7790d082f09": {
   "src": "4.6 When does the load start to move?",
@@ -321,7 +321,7 @@
  },
  "c99eb4841801": {
   "src": "$\\mu$ is the <i>effective mass</i>: the mass you would feel in your hand if you pushed the input piston.",
-  "tr": "$\\mu$ ist die <i>effektive Masse</i>: die Masse, die Sie in der Hand spüren würden, wenn Sie den Eingangskolben schöben."
+  "tr": "$\\mu$ ist die <i>effektive Masse</i>: die Masse, die Sie in der Hand spüren würden, wenn Sie den Eingangskolben schieben würden."
  },
  "cbcded2253f4": {
   "src": "Is this the same as what the pistons demand? Subtract the two equations (5.8), using $p_2 A_1 = p_2 A_2 r$:",
@@ -349,7 +349,7 @@
  },
  "d68dcdd78084": {
   "src": "<div class=\"ctag\">In our press</div>The pipe holds only $\\rho A_p L_p = 55\\ \\mathrm{g}$ of oil, but it moves 16 times faster than the piston, and kinetic energy goes with the square of speed. It counts $16^2 = 256$ times: 14.0 kg of the total $\\mu = 18.5\\ \\mathrm{kg}$. Narrow pipes make heavy machines.",
-  "tr": "<div class=\"ctag\">In unserer Presse</div>Das Rohr enthält nur $\\rho A_p L_p = 55\\ \\mathrm{g}$ Öl, bewegt sich aber 16-mal so schnell wie der Kolben, und die kinetische Energie wächst mit dem Quadrat der Geschwindigkeit. Es zählt $16^2 = 256$-fach: 14.0 kg der Gesamtmasse $\\mu = 18.5\\ \\mathrm{kg}$. Enge Rohre machen schwere Maschinen."
+  "tr": "<div class=\"ctag\">In unserer Presse</div>Das Rohr enthält nur $\\rho A_p L_p = 55\\ \\mathrm{g}$ Öl, doch dieses Öl bewegt sich 16-mal so schnell wie der Kolben, und die kinetische Energie wächst mit dem Quadrat der Geschwindigkeit. Es zählt $16^2 = 256$-fach: 14.0 kg der Gesamtmasse $\\mu = 18.5\\ \\mathrm{kg}$. Enge Rohre machen schwere Maschinen."
  },
  "eb36efdf159e": {
   "src": "Part I is Pascal’s machine with nothing left out except what makes it hard: the oil cannot be squeezed, nothing leaks, nothing rubs. Chapters 1 to 3 explain why it multiplies force. Chapter 4 makes it move and finds its single equation of motion. Chapter 5 follows the pressure through the moving oil and shows that it agrees with that equation, term by term. Chapter 6 lists what this ideal picture leaves out, which is the programme of Part II.",
