@@ -27,8 +27,9 @@ for review in sys.argv[1:]:
         if rel.endswith('.py'):          # portfolios-src/impact/text_<lang>.py
             T = text_py(path); EN = text_py(os.path.join(os.path.dirname(path), 'text_en.py'))
             for k, v in fixes.items():
-                a, b = (EN[k], v) if isinstance(v, str) else (' '.join(EN[k]), ' '.join(v))
-                w = same(a, b) if k in EN and type(v) == type(EN[k]) and (isinstance(v, str) or len(v) == len(EN[k])) else ['shape']
+                flat = lambda x: x if isinstance(x, str) else ' '.join(flat(y) for y in x)
+                shape = lambda x: 's' if isinstance(x, str) else [shape(y) for y in x]
+                w = same(flat(EN[k]), flat(v)) if k in EN and shape(v) == shape(EN[k]) else ['shape']
                 if w: bad += 1; print('  rejected', rel, k, w); continue
                 T[k] = v; ok += 1
             lang = re.search(r'text_(\w+)\.py', rel).group(1)
