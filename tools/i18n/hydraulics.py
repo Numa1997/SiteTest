@@ -39,6 +39,15 @@ def panel_and_wrapped(html):
         if re.search(r'[A-Za-z]{2,}', re.sub(r'<[^>]+>', ' ', m.group(1))): out.append(m.group(1).replace("\\'", "'"))
     return out
 
+def code_words(src):
+    """Words the servo page prints from data rather than from literals: the mode names and control law (stepper and pill) and the "live" tag of its
+    symbol table. They are routed through _t in the working copy; returns the copy and the names to translate."""
+    src = (src.replace('>${md}</button>', '>${_t(md)}</button>').replace('`${mode} · ', '`${_t(mode)} · ')
+              .replace("() => 'live'", "() => _t('live')")
+              .replace("${force ? 'force' : 'position'}", "${force ? _t('force') : _t('position')}"))
+    m = re.search(r"const MODES = \[([^\]]*)\]", src)
+    return src, (re.findall(r"'(\w+)'", m.group(1)) if m else []) + [w for w in ('live', 'force', 'position') if "_t('%s')" % w in src]
+
 def arabic_css():
     """Arabic letters under the house font names, and the few right-to-left rules a study frame needs."""
     faces = ''
@@ -78,7 +87,8 @@ def todo(lang):
             shutil.copy(os.path.join(STUDY, f), os.path.join(d, f))
             subprocess.run(['node', os.path.join(B.ROOT, 'tools', 'i18n', 'wrap.cjs'), os.path.join(d, f)], check=True, capture_output=True,
                            env=dict(os.environ, NODE_PATH=os.path.join(B.ROOT, 'tools', 'i18n', 'node_modules'), WRAP_ARRAYS='1'))
-            want |= set(panel_and_wrapped(open(os.path.join(d, f), encoding='utf-8').read()))
+            src, words = code_words(open(os.path.join(d, f), encoding='utf-8').read())
+            want |= set(panel_and_wrapped(src)) | set(words)
     out['strings'] = {k: k for k in sorted(want) if k not in S}
     return out
 
@@ -93,12 +103,12 @@ def build(lang):
         p = os.path.join(dst, f)
         subprocess.run(['node', os.path.join(B.ROOT, 'tools', 'i18n', 'wrap.cjs'), p], check=True, capture_output=True,
                        env=dict(os.environ, NODE_PATH=os.path.join(B.ROOT, 'tools', 'i18n', 'node_modules'), WRAP_ARRAYS='1'))
-        src = open(p, encoding='utf-8').read()
+        src, words = code_words(open(p, encoding='utf-8').read())
         # the Web Worker the servo page builds from its own source gets the same table
         src = src.replace("new Blob([code], { type: 'text/javascript' })",
                           "new Blob(['self.I18N=' + JSON.stringify(window.I18N || {}) + ';self._t=function(s){var r=self.I18N[s];return typeof r==\\'string\\'?r:s};', code], { type: 'text/javascript' })")
         _, T = load(lang, tname(f)); html, miss, _n = B.translate(src, lang, T); missing += [(f, m) for m in miss]
-        want = panel_and_wrapped(html); missing += [(f, {'src': w}) for w in want if w not in S]
+        want = panel_and_wrapped(html) + words; missing += [(f, {'src': w}) for w in want if w not in S]
         if lang == 'ar': html = rtl_styles(html)
         head = strings_script(S, want, lang) + (arabic_css() if lang == 'ar' else '')
         # first thing in <head>: the page's own head scripts already call _t()
