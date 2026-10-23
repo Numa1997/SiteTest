@@ -1,0 +1,39 @@
+
+<div class="page page-simulate">
+<p>In-browser solver · stochastic collection equation</p>
+<div class="titlerow">
+<h1>Simulate a cloud</h1>
+</div>
+<p>Solve a prescribed homogeneous box using the SCE, 4 bins per doubling of mass and 1 s steps. The grid spans masses equivalent to 1 µm–2 mm water spheres. Two lognormal modes specify the initial spectrum; their geometric median and width are independent inputs. The displayed threshold is radius 40 µm. Read Theory chapters 9–11 for the numerical representation, phase assumptions and diagnostics.</p>
+<div class="simgrid">
+<div class="cat static">
+<div class="head-main">
+<h2>01Cloud</h2>
+<p>kernel · phase · two lognormal modes</p>
+</div>
+<div class="fold">
+<div class="fold-i">
+<div class="sec-body">
+<div class="sim-form">kernelphase
+<div class="row2">temperature (°C)pressure (hPa)</div>
+<p>cloud mode: lognormal number distribution</p>
+<div class="row3">N (cm⁻³)r_g (µm)σ_g</div>
+<p>collector mode: lognormal number distribution</p>
+<div class="row3">N (cm⁻³)r_g (µm)σ_g</div>
+<p>r_g is the geometric median radius; σ_g is the geometric standard deviation. Changing width changes initial mass even at fixed number. Cold mode uses spherical ice, immediate freezing on contact, and the app’s event-based fragment law. A low mass residual does not validate those assumptions.</p>
+<p>run</p>
+<div class="row2">duration (min)bins per doubling</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div class="sim-out">
+<div class="card sim-empty">
+<p>Set the cloud and press Run. A 30-minute warm cloud at 4 bins per doubling takes about a second; the cold cloud, with three pair types, a few seconds.</p>
+</div>
+</div>
+</div>
+</div>
+<p>Built on the Bachelor thesis <em>Collisional Ice Multiplication Processes in Clouds</em> (N. Koudsie, Leipzig 2022).</p>
+<p>Model: homogeneous collection box · SCE with two-bin remapping · empirical fall-speed closure and stored collision efficiencies. The 40 µm cutoff is a size diagnostic.</p>
