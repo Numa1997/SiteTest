@@ -35,6 +35,16 @@ of critical damping against the blade's 0.477 %. At the gravity-optimal damping 
 Expectation (opinion, to be tested, not assumed): gravity dominates; turbulence enters through the blade only if the edgewise
 acceleration at the pivot approaches g; chaos spreads the mobility over a wide band and should lose to a tuned single pendulum.
 
+## Current state (23 Oct, after resume)
+
+- Lecture note: portfolios-src/rotor-pendula/theory/ (chapters 0-7), numbers from tools/make_numbers.py, built
+  rotor_notes.html clean at 360-1440 px (commit bd71d9e). Revised against referee-note-r1.md (53 findings).
+- Running: second blind reader (referee-note-r2.md); generator scout (dossier-generator.md) for chapter 7 (L4).
+- Results added: L2 both torque laws (wind effect +0.5..+0.75 %; -2 % was the NREL controller); L3 sag (cancels within
+  1 %, two routes), L3 two-way shaking (L3_shake2.py; tuned 1.11 m rod valid only at 5 mm tip shaking).
+- Next: fix r2 findings; chapter 7 (generator) from the dossier; wire rotor_notes.html into the served page with Sol's
+  report kept (build_combined.py); Portfolios article and docs; pull request only when Numa asks.
+
 ## Queue (first open item first)
 
 1. [running] Power theorem Monte Carlo, full statistics (`derive/power_theorem_mc.py` → `mc_full.log`, ~25 min).
