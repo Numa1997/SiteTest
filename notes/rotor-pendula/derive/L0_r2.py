@@ -52,4 +52,6 @@ lean = np.mean([y[0, 0] for _, y in r['rec']])
 th = -Gv**2/(4*Rv*(Rv - 1))
 print(f'   mean lean at 8 rpm 30 %: integration {lean:.4f} rad, second-order theory {th:.4f} rad')
 check('mean lean agrees with -G^2/(4R(R-1)) within 10 % at the most nonlinear mounting', abs(lean/th - 1) < 0.1)
+import json as _json
+_json.dump(dict(lean_8rpm30=float(lean), lean_theory=float(th)), open(os.path.join(os.path.dirname(os.path.abspath(__file__)), 'L0_r2.json'), 'w'), indent=1)
 print('ALL PASS' if fails == 0 else f'{fails} FAIL'); sys.exit(1 if fails else 0)

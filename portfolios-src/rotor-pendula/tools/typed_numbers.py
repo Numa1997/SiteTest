@@ -53,7 +53,7 @@ TYPED = {
 },
 '05': {
     '0.12': ('calc', '0.186e-3/1.53*1e3', 0.02, 'L/R of the coil, ms'), '25': GEN, '20': GEN, '24': GEN, '339152': GEN,
-    '1.53': GEN, '20.8': GEN, '460': GEN, '60': 'def: seconds per minute', '0.02076': ('calc', '60/(2*math.pi*460)', 1e-3, ''),
+    '1.53': GEN, '20.8': GEN, '30.4': GEN, '0.01': 'def: floor of the smoothing band, rad', '460': GEN, '60': 'def: seconds per minute', '0.02076': ('calc', '60/(2*math.pi*460)', 1e-3, ''),
     '400': SOL, '30': SOL, '14.7': GEN, '32': GEN, '0.7': GEN, '1.5': GEN, '51': GEN, '100': SOL, '40.2': GEN, '10 900': GEN,
     '80': GEN, '75': GEN, '70': GEN, '190': GEN, '246': GEN, '492': GEN, '14': GEN, '33': GEN, '111': GEN,
     '0.5': 'def: swing limit chosen for the small-swing equations', '8000': GEN, '18': SOL,

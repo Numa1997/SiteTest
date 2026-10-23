@@ -47,7 +47,7 @@ best = max(rows, key=lambda x: x['Ps'])
 N['P_best'] = f(best['Ps']*1e3, 1); N['Pstar_best'] = f(best['Pstar']*1e3, 2)
 N['ratio_f_min'] = f(min(x['R'] for x in rows)**0.5, 2)
 N['ratio_f_max'] = f(max(x['R'] for x in rows)**0.5, 1)
-N['sensor_uW'] = '37.6'
+N['sensor_uW'] = '37.6'                                       # input: Sol's sensor budget (study/sources, two datasheets)
 N['margin_min'] = f'{min(x["Ps"] for x in rows)/(2*37.6e-6):.0f}'      # mechanical power over twice the sensor need
 tr = ['<p class="tcap">Table 1. Sol\'s 18 mountings ($\\Gamma = R/G$); full: the full nonlinear model; ratio: double ÷ single. ¹ At these two mountings Sol\'s brake is the best one found by a nonlinear search, not $\\kappa^*$.</p><table class="mt"><thead><tr><th>rotor</th><th>pivot</th><th>$R$</th><th>$G$</th>'
       '<th>$\\Theta^*$ (rad)</th><th>$P^*$ (2.5), mW</th><th>full, mW</th><th>double, mW</th><th>ratio</th></tr></thead><tbody>']
@@ -75,11 +75,11 @@ N['flex_cost_min'] = f(min(1 - x['ratio']/l for x, l in zip(rows, lock))*100, 1)
 # ---- mean lean at the most nonlinear mounting ------------------------------------------------------------------------
 w = max(rows, key=lambda x: x['Th'])
 N['lean_theory'] = f(-w['G']**2/(4*w['R']*(w['R'] - 1)), 3)
-N['lean_run'] = '−0.128'     # integrated, notes/rotor-pendula/derive/L0_r2.py (PASS within 10 %)
+N['lean_run'] = f(json.load(open(D / 'L0_r2.json'))['lean_8rpm30'], 3).replace('-', '−')   # integrated, L0_r2.py
 N['lean_deg'] = f(math.degrees(abs(w['G']**2/(4*w['R']*(w['R'] - 1)))), 1)
 leans = sorted(math.degrees(x['G']**2/(4*x['R']*(x['R'] - 1))) for x in rows)
 N['lean_next_deg'] = f(leans[-2], 1)
-N['lean_small_deg'] = f(max(math.degrees(x['G']**2/(4*x['R']*(x['R'] - 1))) for x in rows if x['rpm'] >= 100), 2)
+N['lean_small_deg'] = f(max(math.degrees(x['G']**2/(4*x['R']*(x['R'] - 1))) for x in rows if x['rpm'] >= 100), 3)
 
 # ---- tilted hinge --------------------------------------------------------------------------------------------------
 for key, R in (('fast', min(x['R'] for x in rows)), ('slow', max(x['R'] for x in rows))):
@@ -194,7 +194,8 @@ for law in ('nrel', 'k2'):
     N[f'l2_{law}_tot_min'] = f(min(tot), 2); N[f'l2_{law}_tot_max'] = f(max(tot), 2)
     N[f'l2_{law}_wnd_min'] = f(min(wnd), 2); N[f'l2_{law}_wnd_max'] = f(max(wnd), 2)
     N[f'l2_{law}_msh_min'] = f(min(msh), 2); N[f'l2_{law}_msh_max'] = f(max(msh), 2)
-N['jensen'] = f(0.103**2/2*100, 2); N['sigOm'] = '10.3'
+_s = json.load(open(D / 'L2_scales.json'))['sigOm']           # rotor-speed spread over the 10-minute records, L2_scales.py
+N['jensen'] = f(_s**2/2*100, 2); N['sigOm'] = f(_s*100, 1)
 
 # ---- L3 sag ---------------------------------------------------------------------------------------------------------
 sag = json.load(open(D / 'L3_sag.json'))
@@ -247,6 +248,7 @@ T0 = KT*I0; mgL = m*g*L; HALF_PLAY = math.radians(0.5)       # GP 32 C average b
 N['csc1'] = f'{KT*KE/RC:.5f}'
 cst = [m*L**2*x['rpm']*2*math.pi/60*abs(x['R'] - 1) for x in rows]
 N['cstar_min'] = f(min(cst), 2); N['cstar_max'] = f(max(cst), 2)
+N['cstar_x_min'] = f(round(min(cst)/(KT*KE/RC), -2), 0); N['cstar_x_max'] = f(round(max(cst)/(KT*KE/RC), -2), 0)
 N['Nneed_min'] = str(math.ceil(math.sqrt(min(cst)/(KT*KE/RC)))); N['Nneed_max'] = str(math.ceil(math.sqrt(max(cst)/(KT*KE/RC))))
 N['j_33'] = f((JM + 0.8e-7)*33**2/(m*L**2), 2); N['j_51'] = f((JM + 0.7e-7)*51**2/(m*L**2), 2); N['j_111'] = f((JM + 0.7e-7)*111**2/(m*L**2), 2)
 N['T0_mNm'] = f(T0*1e3, 2); N['mgL'] = f(mgL, 3)
