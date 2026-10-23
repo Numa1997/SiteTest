@@ -44,9 +44,9 @@ html[lang='ar'] { font-synthesis-style: none; }
 /* key figures such as "6 / 14 min" keep their left-to-right order */
 html[dir='rtl'] .proj__tally dt { direction: ltr; unicode-bidi: isolate; text-align: right; }
 /* figures read left to right in every language: canvas text inherits the canvas element's direction, SVG text its own, and the
-   simulation pages set inline maths in spans of class "m"; legends and readout values are maths too */
+   simulation pages set inline maths in spans of class "m"; legends, slider values ("24 px") and readout values are maths too */
 html[dir='rtl'] canvas, html[dir='rtl'] svg, html[dir='rtl'] .stage__canvas, html[dir='rtl'] .legend, html[dir='rtl'] .m,
-html[dir='rtl'] .readouts output, html[dir='rtl'] .readouts b { direction: ltr; unicode-bidi: isolate; }
+html[dir='rtl'] output, html[dir='rtl'] .readouts b { direction: ltr; unicode-bidi: isolate; }
 .sim-top .lang-switch { margin-inline-start: 14px; }
 
 /* ---------- the turn on a language switch (scripts/flip.js decides when) ---------- */

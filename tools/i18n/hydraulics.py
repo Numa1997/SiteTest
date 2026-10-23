@@ -114,12 +114,18 @@ def build(lang):
     t = t.replace('<html lang="en">', '<html lang="%s" dir="%s">' % (lang, dirattr), 1)
     if lang == 'ar': t = t.replace('</head>', arabic_css() + '\n</head>', 1)
     open(tpl, 'w', encoding='utf-8').write(t)
-    subprocess.run([sys.executable, os.path.join(dst, 'tools', 'build_theory.py')], check=True, capture_output=True)
-    # the wrapper: its language, tab labels, title, back link and file name
     tr = lambda s: S.get(s, s)
+    # the textbook's counters under its title
+    bt = os.path.join(dst, 'tools', 'build_theory.py'); b = open(bt, encoding='utf-8').read()
+    for w in ('chapters', 'numbered equations', 'figures'): b = b.replace('</b> %s</span>' % w, '</b> %s</span>' % tr(w))
+    b = b.replace('>every number computed from the model<', '>%s<' % tr('every number computed from the model'))
+    open(bt, 'w', encoding='utf-8').write(b)
+    subprocess.run([sys.executable, bt], check=True, capture_output=True)
+    # the wrapper: its language, tab labels, title, brand, back link and file name
     bc = os.path.join(dst, 'tools', 'build_combined.py'); c = open(bc, encoding='utf-8').read()
     for label in ('Servo press', 'Servo', 'Ideal press', 'Ideal', 'Theory'):
         c = c.replace("'%s'" % label, json.dumps(tr(label), ensure_ascii=False))
+    c = c.replace('<b>Hydraulic Press Study</b><span>from Pascal to a servo loop</span>', '<b>%s</b><span>%s</span>' % (tr('Hydraulic Press Study'), tr('from Pascal to a servo loop')))
     c = c.replace('<html lang="en">', '<html lang="%s" dir="%s">' % (lang, dirattr), 1)
     c = c.replace("title='Hydraulic Press Study · Numa Koudsie'", 'title=' + json.dumps(tr('Hydraulic Press Study') + ' · ' + NAME[lang], ensure_ascii=False))
     c = c.replace('href="../../portfolios.html">← Numa Koudsie · Portfolios</a>', 'href="../../%s/portfolios.html">%s</a>' % (lang, tr('← Numa Koudsie · Portfolios')))
