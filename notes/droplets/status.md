@@ -35,14 +35,15 @@ A 1 mm drop holds 4.19 mg, the water of 4.6 L of this cloud.
 Thermal noise: surface energy of a 10 µm drop 9.0 × 10⁻¹¹ J = 2.3 × 10¹⁰ kT: irrelevant. Kolmogorov time at ε = 10⁻² m²/s³ and this
 ν: 41 ms; τ_p(10 µm) = 1.26 ms; Stokes number 0.030 (0.010 to 0.096 for ε = 10⁻³ to 10⁻¹).
 
-## Queue (first open item is next; updated 23 Oct, after resume)
+## Queue (first open item is next)
 
-1. [~] Gate 1: L0 PASS (r3), L1 PASS (r3), L2 PASS (r3, one line applied), L3/L6/L7 PASS with fixes (applied; confirmation running),
-       L4/L5 PASS with fixes (applied; confirmation running).
-2. [~] Gate 2: checker running (check-L0.md … check-L7.md, scripts in gate2/).
-3. [ ] Gate 3: blind skeptic on the rendered pages, six thresholds.
-4. [ ] Remove the old app bundle (`static/`; keep old `fig/` until the i18n generator is rerun by its owner) after Gate 3.
-5. [ ] Commit, push, open the PR into main (NOT merged).
+1. [x] Gate 1: L0 PASS (r3), L1 PASS (r3), L2 PASS (r3), L3/L6/L7 PASS (fixes check), L4/L5 PASS (fixes check).
+2. [x] Gate 2: `check-L0.md` … `check-L7.md`: all 24 numbered equations right by SymPy and Wolfram (+ SciPy); (4.2)'s 1.15 and
+       (8.2)'s coefficients are fits, checked as transcriptions. Scripts in `gate2/`.
+3. [x] Gate 3: round 1 failed honest/sourced/readable (32 objections); all answered (`gate3-answers-r1.md`); round 2 PASS on all six
+       thresholds (`skeptic-G3-r1.md`, Round 2), its five minor items and the one partial fix applied after.
+4. [x] Old app bundle `static/` removed (2.2 MB); old `fig/` kept for the German and Arabic pages.
+5. [x] PR https://github.com/Numa1997/SiteTest/pull/33 open, not merged (follow-up to #32, which Numa merged at 184f3bf).
 
 ## Done, with evidence
 

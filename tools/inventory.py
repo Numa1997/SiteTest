@@ -195,6 +195,7 @@ RULES = [
     (r'notes/droplets/dossier-([a-z-]+)\.md', lambda m: 'Scout dossier on ' + m.group(1) + ': primary sources read for the study.', 'notes/droplets/status.md'),
     (r'notes/droplets/skeptic-(G\d)-(L[0-9L]+)-r(\d)\.md', lambda m: 'Blind skeptic report, gate ' + m.group(1)[1:] + ', level ' + m.group(2) + ', round ' + m.group(3) + '.', 'notes/droplets/status.md'),
     (r'notes/droplets/skeptic-(G\d)-(.+)\.md', lambda m: 'Blind skeptic report, gate ' + m.group(1)[1:] + ': ' + m.group(2) + '.', 'notes/droplets/status.md'),
+    (r'notes/droplets/gate3-answers-r(\d)\.md', lambda m: 'Answers to the Gate 3 skeptic, round ' + m.group(1) + '.', 'notes/droplets/status.md'),
     (r'notes/droplets/gate2/(.+)', lambda m: 'Gate 2 checker script or output: ' + m.group(1) + '.', 'notes/droplets/status.md'),
     (r'portfolios-src/droplets/README\.md', "The study's source: every folder, how the served page is built, the three checks.", 'portfolios-src/droplets/README.md'),
     (r'portfolios-src/droplets/\.gitignore', 'Keeps the stand-alone build (out/) out of git.', 'portfolios-src/droplets/README.md'),

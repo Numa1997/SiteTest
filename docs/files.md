@@ -4,7 +4,7 @@ Written by [`tools/inventory.py`](../tools/inventory.py) from the files in the r
 Run `python3 tools/inventory.py` after adding, removing or changing files, and `python3 tools/inventory.py --check`
 to confirm that every file is described. Sizes are those of the files when the list was written.
 
-717 files, 28.9 MB in all. Runs of more than 12 similar files are folded; open them to see each file.
+736 files, 27.3 MB in all. Runs of more than 12 similar files are folded; open them to see each file.
 
 | Folder | Files |
 |---|---|
@@ -21,14 +21,14 @@ to confirm that every file is described. Sizes are those of the files when the l
 | [IBM Plex, Instrument Serif, and the Arabic faces](#ibm-plex-instrument-serif-and-the-arabic-faces) | 61 |
 | [Thumbnails](#thumbnails) | 10 |
 | [Logo](#logo) | 1 |
-| [Project copy: Droplet Collection](#project-copy-droplet-collection) | 73 |
+| [Project copy: Droplet Collection](#project-copy-droplet-collection) | 11 |
 | [Project copy: Rotor Pendula](#project-copy-rotor-pendula) | 84 |
 | [Project copy: Hydraulic Press Study](#project-copy-hydraulic-press-study) | 6 |
 | [Iron, Cotton and the Head](#iron-cotton-and-the-head) | 6 |
 | [Source of the Hydraulic Press Study (not served)](#source-of-the-hydraulic-press-study-not-served) | 37 |
 | [Source of Iron, Cotton and the Head (not served)](#source-of-iron-cotton-and-the-head-not-served) | 18 |
 | [Source of the Rotor Pendula notes (not served)](#source-of-the-rotor-pendula-notes-not-served) | 20 |
-| [Source of the Droplet Collection study (not served)](#source-of-the-droplet-collection-study-not-served) | 63 |
+| [Source of the Droplet Collection study (not served)](#source-of-the-droplet-collection-study-not-served) | 65 |
 | [Template sources](#template-sources) | 2 |
 | [Platform tests](#platform-tests) | 1 |
 | [Documentation](#documentation) | 30 |
@@ -36,7 +36,7 @@ to confirm that every file is described. Sizes are those of the files when the l
 | [Translation tables](#translation-tables) | 8 |
 | [Agents of the lecture-note review](#agents-of-the-lecture-note-review) | 4 |
 | [Working notes of the Rotor Pendula study](#working-notes-of-the-rotor-pendula-study) | 47 |
-| [Working notes of the Droplet Collection study](#working-notes-of-the-droplet-collection-study) | 34 |
+| [Working notes of the Droplet Collection study](#working-notes-of-the-droplet-collection-study) | 113 |
 | [Record of the lecture-note review](#record-of-the-lecture-note-review) | 116 |
 
 ## Repository root
@@ -298,83 +298,11 @@ to confirm that every file is described. Sizes are those of the files when the l
 | [`public/portfolios/droplet-collection/fig/golovin.svg`](../public/portfolios/droplet-collection/fig/golovin.svg) | 56.2 kB | A vector figure of the project. | [portfolios.md](portfolios.md) |
 | [`public/portfolios/droplet-collection/fig/plate-efficiency.svg`](../public/portfolios/droplet-collection/fig/plate-efficiency.svg) | 8.9 kB | Plate of the Portfolios page article (efficiency), written by the Droplet Collection build. | [portfolios.md](portfolios.md) |
 | [`public/portfolios/droplet-collection/fig/plate-fallspeed.svg`](../public/portfolios/droplet-collection/fig/plate-fallspeed.svg) | 9.4 kB | Plate of the Portfolios page article (fallspeed), written by the Droplet Collection build. | [portfolios.md](portfolios.md) |
-| [`public/portfolios/droplet-collection/fig/plate-first.svg`](../public/portfolios/droplet-collection/fig/plate-first.svg) | 41.8 kB | Plate of the Portfolios page article (first), written by the Droplet Collection build. | [portfolios.md](portfolios.md) |
+| [`public/portfolios/droplet-collection/fig/plate-first.svg`](../public/portfolios/droplet-collection/fig/plate-first.svg) | 40.9 kB | Plate of the Portfolios page article (first), written by the Droplet Collection build. | [portfolios.md](portfolios.md) |
 | [`public/portfolios/droplet-collection/fig/plate-warm.svg`](../public/portfolios/droplet-collection/fig/plate-warm.svg) | 24.3 kB | Plate of the Portfolios page article (warm), written by the Droplet Collection build. | [portfolios.md](portfolios.md) |
 | [`public/portfolios/droplet-collection/fig/w2_rain.svg`](../public/portfolios/droplet-collection/fig/w2_rain.svg) | 45.0 kB | A vector figure of the project. | [portfolios.md](portfolios.md) |
 | [`public/portfolios/droplet-collection/fig/w2_spectra.svg`](../public/portfolios/droplet-collection/fig/w2_spectra.svg) | 74.0 kB | A vector figure of the project. | [portfolios.md](portfolios.md) |
-| [`public/portfolios/droplet-collection/index.html`](../public/portfolios/droplet-collection/index.html) | 850.1 kB | Entry page of the project copy: module script and stylesheet loader. | [portfolios.md](portfolios.md) |
-
-<details><summary>59 files: A KaTeX font inside the project build.</summary>
-
-| File | Size | What it is | Explained in |
-|---|---|---|---|
-| [`public/portfolios/droplet-collection/static/KaTeX_AMS-Regular-BQhdFMY1.woff2`](../public/portfolios/droplet-collection/static/KaTeX_AMS-Regular-BQhdFMY1.woff2) | 28.1 kB | A KaTeX font inside the project build. | [portfolios.md](portfolios.md) |
-| [`public/portfolios/droplet-collection/static/KaTeX_AMS-Regular-DMm9YOAa.woff`](../public/portfolios/droplet-collection/static/KaTeX_AMS-Regular-DMm9YOAa.woff) | 33.5 kB | A KaTeX font inside the project build. | [portfolios.md](portfolios.md) |
-| [`public/portfolios/droplet-collection/static/KaTeX_AMS-Regular-DRggAlZN.ttf`](../public/portfolios/droplet-collection/static/KaTeX_AMS-Regular-DRggAlZN.ttf) | 63.6 kB | A KaTeX font inside the project build. | [portfolios.md](portfolios.md) |
-| [`public/portfolios/droplet-collection/static/KaTeX_Caligraphic-Bold-ATXxdsX0.ttf`](../public/portfolios/droplet-collection/static/KaTeX_Caligraphic-Bold-ATXxdsX0.ttf) | 12.4 kB | A KaTeX font inside the project build. | [portfolios.md](portfolios.md) |
-| [`public/portfolios/droplet-collection/static/KaTeX_Caligraphic-Bold-BEiXGLvX.woff`](../public/portfolios/droplet-collection/static/KaTeX_Caligraphic-Bold-BEiXGLvX.woff) | 7.7 kB | A KaTeX font inside the project build. | [portfolios.md](portfolios.md) |
-| [`public/portfolios/droplet-collection/static/KaTeX_Caligraphic-Bold-Dq_IR9rO.woff2`](../public/portfolios/droplet-collection/static/KaTeX_Caligraphic-Bold-Dq_IR9rO.woff2) | 6.9 kB | A KaTeX font inside the project build. | [portfolios.md](portfolios.md) |
-| [`public/portfolios/droplet-collection/static/KaTeX_Caligraphic-Regular-CTRA-rTL.woff`](../public/portfolios/droplet-collection/static/KaTeX_Caligraphic-Regular-CTRA-rTL.woff) | 7.7 kB | A KaTeX font inside the project build. | [portfolios.md](portfolios.md) |
-| [`public/portfolios/droplet-collection/static/KaTeX_Caligraphic-Regular-Di6jR-x-.woff2`](../public/portfolios/droplet-collection/static/KaTeX_Caligraphic-Regular-Di6jR-x-.woff2) | 6.9 kB | A KaTeX font inside the project build. | [portfolios.md](portfolios.md) |
-| [`public/portfolios/droplet-collection/static/KaTeX_Caligraphic-Regular-wX97UBjC.ttf`](../public/portfolios/droplet-collection/static/KaTeX_Caligraphic-Regular-wX97UBjC.ttf) | 12.3 kB | A KaTeX font inside the project build. | [portfolios.md](portfolios.md) |
-| [`public/portfolios/droplet-collection/static/KaTeX_Fraktur-Bold-BdnERNNW.ttf`](../public/portfolios/droplet-collection/static/KaTeX_Fraktur-Bold-BdnERNNW.ttf) | 19.6 kB | A KaTeX font inside the project build. | [portfolios.md](portfolios.md) |
-| [`public/portfolios/droplet-collection/static/KaTeX_Fraktur-Bold-BsDP51OF.woff`](../public/portfolios/droplet-collection/static/KaTeX_Fraktur-Bold-BsDP51OF.woff) | 13.3 kB | A KaTeX font inside the project build. | [portfolios.md](portfolios.md) |
-| [`public/portfolios/droplet-collection/static/KaTeX_Fraktur-Bold-CL6g_b3V.woff2`](../public/portfolios/droplet-collection/static/KaTeX_Fraktur-Bold-CL6g_b3V.woff2) | 11.3 kB | A KaTeX font inside the project build. | [portfolios.md](portfolios.md) |
-| [`public/portfolios/droplet-collection/static/KaTeX_Fraktur-Regular-CB_wures.ttf`](../public/portfolios/droplet-collection/static/KaTeX_Fraktur-Regular-CB_wures.ttf) | 19.6 kB | A KaTeX font inside the project build. | [portfolios.md](portfolios.md) |
-| [`public/portfolios/droplet-collection/static/KaTeX_Fraktur-Regular-CTYiF6lA.woff2`](../public/portfolios/droplet-collection/static/KaTeX_Fraktur-Regular-CTYiF6lA.woff2) | 11.3 kB | A KaTeX font inside the project build. | [portfolios.md](portfolios.md) |
-| [`public/portfolios/droplet-collection/static/KaTeX_Fraktur-Regular-Dxdc4cR9.woff`](../public/portfolios/droplet-collection/static/KaTeX_Fraktur-Regular-Dxdc4cR9.woff) | 13.2 kB | A KaTeX font inside the project build. | [portfolios.md](portfolios.md) |
-| [`public/portfolios/droplet-collection/static/KaTeX_Main-Bold-Cx986IdX.woff2`](../public/portfolios/droplet-collection/static/KaTeX_Main-Bold-Cx986IdX.woff2) | 25.3 kB | A KaTeX font inside the project build. | [portfolios.md](portfolios.md) |
-| [`public/portfolios/droplet-collection/static/KaTeX_Main-Bold-Jm3AIy58.woff`](../public/portfolios/droplet-collection/static/KaTeX_Main-Bold-Jm3AIy58.woff) | 29.9 kB | A KaTeX font inside the project build. | [portfolios.md](portfolios.md) |
-| [`public/portfolios/droplet-collection/static/KaTeX_Main-Bold-waoOVXN0.ttf`](../public/portfolios/droplet-collection/static/KaTeX_Main-Bold-waoOVXN0.ttf) | 51.3 kB | A KaTeX font inside the project build. | [portfolios.md](portfolios.md) |
-| [`public/portfolios/droplet-collection/static/KaTeX_Main-BoldItalic-DxDJ3AOS.woff2`](../public/portfolios/droplet-collection/static/KaTeX_Main-BoldItalic-DxDJ3AOS.woff2) | 16.8 kB | A KaTeX font inside the project build. | [portfolios.md](portfolios.md) |
-| [`public/portfolios/droplet-collection/static/KaTeX_Main-BoldItalic-DzxPMmG6.ttf`](../public/portfolios/droplet-collection/static/KaTeX_Main-BoldItalic-DzxPMmG6.ttf) | 33.0 kB | A KaTeX font inside the project build. | [portfolios.md](portfolios.md) |
-| [`public/portfolios/droplet-collection/static/KaTeX_Main-BoldItalic-SpSLRI95.woff`](../public/portfolios/droplet-collection/static/KaTeX_Main-BoldItalic-SpSLRI95.woff) | 19.4 kB | A KaTeX font inside the project build. | [portfolios.md](portfolios.md) |
-| [`public/portfolios/droplet-collection/static/KaTeX_Main-Italic-3WenGoN9.ttf`](../public/portfolios/droplet-collection/static/KaTeX_Main-Italic-3WenGoN9.ttf) | 33.6 kB | A KaTeX font inside the project build. | [portfolios.md](portfolios.md) |
-| [`public/portfolios/droplet-collection/static/KaTeX_Main-Italic-BMLOBm91.woff`](../public/portfolios/droplet-collection/static/KaTeX_Main-Italic-BMLOBm91.woff) | 19.7 kB | A KaTeX font inside the project build. | [portfolios.md](portfolios.md) |
-| [`public/portfolios/droplet-collection/static/KaTeX_Main-Italic-NWA7e6Wa.woff2`](../public/portfolios/droplet-collection/static/KaTeX_Main-Italic-NWA7e6Wa.woff2) | 17.0 kB | A KaTeX font inside the project build. | [portfolios.md](portfolios.md) |
-| [`public/portfolios/droplet-collection/static/KaTeX_Main-Regular-B22Nviop.woff2`](../public/portfolios/droplet-collection/static/KaTeX_Main-Regular-B22Nviop.woff2) | 26.3 kB | A KaTeX font inside the project build. | [portfolios.md](portfolios.md) |
-| [`public/portfolios/droplet-collection/static/KaTeX_Main-Regular-Dr94JaBh.woff`](../public/portfolios/droplet-collection/static/KaTeX_Main-Regular-Dr94JaBh.woff) | 30.8 kB | A KaTeX font inside the project build. | [portfolios.md](portfolios.md) |
-| [`public/portfolios/droplet-collection/static/KaTeX_Main-Regular-ypZvNtVU.ttf`](../public/portfolios/droplet-collection/static/KaTeX_Main-Regular-ypZvNtVU.ttf) | 53.6 kB | A KaTeX font inside the project build. | [portfolios.md](portfolios.md) |
-| [`public/portfolios/droplet-collection/static/KaTeX_Math-BoldItalic-B3XSjfu4.ttf`](../public/portfolios/droplet-collection/static/KaTeX_Math-BoldItalic-B3XSjfu4.ttf) | 31.2 kB | A KaTeX font inside the project build. | [portfolios.md](portfolios.md) |
-| [`public/portfolios/droplet-collection/static/KaTeX_Math-BoldItalic-CZnvNsCZ.woff2`](../public/portfolios/droplet-collection/static/KaTeX_Math-BoldItalic-CZnvNsCZ.woff2) | 16.4 kB | A KaTeX font inside the project build. | [portfolios.md](portfolios.md) |
-| [`public/portfolios/droplet-collection/static/KaTeX_Math-BoldItalic-iY-2wyZ7.woff`](../public/portfolios/droplet-collection/static/KaTeX_Math-BoldItalic-iY-2wyZ7.woff) | 18.7 kB | A KaTeX font inside the project build. | [portfolios.md](portfolios.md) |
-| [`public/portfolios/droplet-collection/static/KaTeX_Math-Italic-DA0__PXp.woff`](../public/portfolios/droplet-collection/static/KaTeX_Math-Italic-DA0__PXp.woff) | 18.7 kB | A KaTeX font inside the project build. | [portfolios.md](portfolios.md) |
-| [`public/portfolios/droplet-collection/static/KaTeX_Math-Italic-flOr_0UB.ttf`](../public/portfolios/droplet-collection/static/KaTeX_Math-Italic-flOr_0UB.ttf) | 31.3 kB | A KaTeX font inside the project build. | [portfolios.md](portfolios.md) |
-| [`public/portfolios/droplet-collection/static/KaTeX_Math-Italic-t53AETM-.woff2`](../public/portfolios/droplet-collection/static/KaTeX_Math-Italic-t53AETM-.woff2) | 16.4 kB | A KaTeX font inside the project build. | [portfolios.md](portfolios.md) |
-| [`public/portfolios/droplet-collection/static/KaTeX_SansSerif-Bold-CFMepnvq.ttf`](../public/portfolios/droplet-collection/static/KaTeX_SansSerif-Bold-CFMepnvq.ttf) | 24.5 kB | A KaTeX font inside the project build. | [portfolios.md](portfolios.md) |
-| [`public/portfolios/droplet-collection/static/KaTeX_SansSerif-Bold-D1sUS0GD.woff2`](../public/portfolios/droplet-collection/static/KaTeX_SansSerif-Bold-D1sUS0GD.woff2) | 12.2 kB | A KaTeX font inside the project build. | [portfolios.md](portfolios.md) |
-| [`public/portfolios/droplet-collection/static/KaTeX_SansSerif-Bold-DbIhKOiC.woff`](../public/portfolios/droplet-collection/static/KaTeX_SansSerif-Bold-DbIhKOiC.woff) | 14.4 kB | A KaTeX font inside the project build. | [portfolios.md](portfolios.md) |
-| [`public/portfolios/droplet-collection/static/KaTeX_SansSerif-Italic-C3H0VqGB.woff2`](../public/portfolios/droplet-collection/static/KaTeX_SansSerif-Italic-C3H0VqGB.woff2) | 12.0 kB | A KaTeX font inside the project build. | [portfolios.md](portfolios.md) |
-| [`public/portfolios/droplet-collection/static/KaTeX_SansSerif-Italic-DN2j7dab.woff`](../public/portfolios/droplet-collection/static/KaTeX_SansSerif-Italic-DN2j7dab.woff) | 14.1 kB | A KaTeX font inside the project build. | [portfolios.md](portfolios.md) |
-| [`public/portfolios/droplet-collection/static/KaTeX_SansSerif-Italic-YYjJ1zSn.ttf`](../public/portfolios/droplet-collection/static/KaTeX_SansSerif-Italic-YYjJ1zSn.ttf) | 22.4 kB | A KaTeX font inside the project build. | [portfolios.md](portfolios.md) |
-| [`public/portfolios/droplet-collection/static/KaTeX_SansSerif-Regular-BNo7hRIc.ttf`](../public/portfolios/droplet-collection/static/KaTeX_SansSerif-Regular-BNo7hRIc.ttf) | 19.4 kB | A KaTeX font inside the project build. | [portfolios.md](portfolios.md) |
-| [`public/portfolios/droplet-collection/static/KaTeX_SansSerif-Regular-CS6fqUqJ.woff`](../public/portfolios/droplet-collection/static/KaTeX_SansSerif-Regular-CS6fqUqJ.woff) | 12.3 kB | A KaTeX font inside the project build. | [portfolios.md](portfolios.md) |
-| [`public/portfolios/droplet-collection/static/KaTeX_SansSerif-Regular-DDBCnlJ7.woff2`](../public/portfolios/droplet-collection/static/KaTeX_SansSerif-Regular-DDBCnlJ7.woff2) | 10.3 kB | A KaTeX font inside the project build. | [portfolios.md](portfolios.md) |
-| [`public/portfolios/droplet-collection/static/KaTeX_Script-Regular-C5JkGWo-.ttf`](../public/portfolios/droplet-collection/static/KaTeX_Script-Regular-C5JkGWo-.ttf) | 16.6 kB | A KaTeX font inside the project build. | [portfolios.md](portfolios.md) |
-| [`public/portfolios/droplet-collection/static/KaTeX_Script-Regular-D3wIWfF6.woff2`](../public/portfolios/droplet-collection/static/KaTeX_Script-Regular-D3wIWfF6.woff2) | 9.6 kB | A KaTeX font inside the project build. | [portfolios.md](portfolios.md) |
-| [`public/portfolios/droplet-collection/static/KaTeX_Script-Regular-D5yQViql.woff`](../public/portfolios/droplet-collection/static/KaTeX_Script-Regular-D5yQViql.woff) | 10.6 kB | A KaTeX font inside the project build. | [portfolios.md](portfolios.md) |
-| [`public/portfolios/droplet-collection/static/KaTeX_Size1-Regular-C195tn64.woff`](../public/portfolios/droplet-collection/static/KaTeX_Size1-Regular-C195tn64.woff) | 6.5 kB | A KaTeX font inside the project build. | [portfolios.md](portfolios.md) |
-| [`public/portfolios/droplet-collection/static/KaTeX_Size1-Regular-Dbsnue_I.ttf`](../public/portfolios/droplet-collection/static/KaTeX_Size1-Regular-Dbsnue_I.ttf) | 12.2 kB | A KaTeX font inside the project build. | [portfolios.md](portfolios.md) |
-| [`public/portfolios/droplet-collection/static/KaTeX_Size1-Regular-mCD8mA8B.woff2`](../public/portfolios/droplet-collection/static/KaTeX_Size1-Regular-mCD8mA8B.woff2) | 5.5 kB | A KaTeX font inside the project build. | [portfolios.md](portfolios.md) |
-| [`public/portfolios/droplet-collection/static/KaTeX_Size2-Regular-B7gKUWhC.ttf`](../public/portfolios/droplet-collection/static/KaTeX_Size2-Regular-B7gKUWhC.ttf) | 11.5 kB | A KaTeX font inside the project build. | [portfolios.md](portfolios.md) |
-| [`public/portfolios/droplet-collection/static/KaTeX_Size2-Regular-Dy4dx90m.woff2`](../public/portfolios/droplet-collection/static/KaTeX_Size2-Regular-Dy4dx90m.woff2) | 5.2 kB | A KaTeX font inside the project build. | [portfolios.md](portfolios.md) |
-| [`public/portfolios/droplet-collection/static/KaTeX_Size2-Regular-oD1tc_U0.woff`](../public/portfolios/droplet-collection/static/KaTeX_Size2-Regular-oD1tc_U0.woff) | 6.2 kB | A KaTeX font inside the project build. | [portfolios.md](portfolios.md) |
-| [`public/portfolios/droplet-collection/static/KaTeX_Size3-Regular-CTq5MqoE.woff`](../public/portfolios/droplet-collection/static/KaTeX_Size3-Regular-CTq5MqoE.woff) | 4.4 kB | A KaTeX font inside the project build. | [portfolios.md](portfolios.md) |
-| [`public/portfolios/droplet-collection/static/KaTeX_Size3-Regular-DgpXs0kz.ttf`](../public/portfolios/droplet-collection/static/KaTeX_Size3-Regular-DgpXs0kz.ttf) | 7.6 kB | A KaTeX font inside the project build. | [portfolios.md](portfolios.md) |
-| [`public/portfolios/droplet-collection/static/KaTeX_Size4-Regular-BF-4gkZK.woff`](../public/portfolios/droplet-collection/static/KaTeX_Size4-Regular-BF-4gkZK.woff) | 6.0 kB | A KaTeX font inside the project build. | [portfolios.md](portfolios.md) |
-| [`public/portfolios/droplet-collection/static/KaTeX_Size4-Regular-DWFBv043.ttf`](../public/portfolios/droplet-collection/static/KaTeX_Size4-Regular-DWFBv043.ttf) | 10.4 kB | A KaTeX font inside the project build. | [portfolios.md](portfolios.md) |
-| [`public/portfolios/droplet-collection/static/KaTeX_Size4-Regular-Dl5lxZxV.woff2`](../public/portfolios/droplet-collection/static/KaTeX_Size4-Regular-Dl5lxZxV.woff2) | 4.9 kB | A KaTeX font inside the project build. | [portfolios.md](portfolios.md) |
-| [`public/portfolios/droplet-collection/static/KaTeX_Typewriter-Regular-C0xS9mPB.woff`](../public/portfolios/droplet-collection/static/KaTeX_Typewriter-Regular-C0xS9mPB.woff) | 16.0 kB | A KaTeX font inside the project build. | [portfolios.md](portfolios.md) |
-| [`public/portfolios/droplet-collection/static/KaTeX_Typewriter-Regular-CO6r4hn1.woff2`](../public/portfolios/droplet-collection/static/KaTeX_Typewriter-Regular-CO6r4hn1.woff2) | 13.6 kB | A KaTeX font inside the project build. | [portfolios.md](portfolios.md) |
-| [`public/portfolios/droplet-collection/static/KaTeX_Typewriter-Regular-D3Ib7_Hf.ttf`](../public/portfolios/droplet-collection/static/KaTeX_Typewriter-Regular-D3Ib7_Hf.ttf) | 27.6 kB | A KaTeX font inside the project build. | [portfolios.md](portfolios.md) |
-
-</details>
-
-| File | Size | What it is | Explained in |
-|---|---|---|---|
-| [`public/portfolios/droplet-collection/static/index-CGriahzx.css`](../public/portfolios/droplet-collection/static/index-CGriahzx.css) | 60.6 kB | The project's stylesheet, built. | [portfolios.md](portfolios.md) |
-| [`public/portfolios/droplet-collection/static/index-DGIxitSc.js`](../public/portfolios/droplet-collection/static/index-DGIxitSc.js) | 841.3 kB | The whole project application, built and minified. | [portfolios.md](portfolios.md) |
-| [`public/portfolios/droplet-collection/static/worker-ClooJ8Gk.js`](../public/portfolios/droplet-collection/static/worker-ClooJ8Gk.js) | 130.6 kB | The project's Web Worker: its solver, off the main thread. | [portfolios.md](portfolios.md) |
+| [`public/portfolios/droplet-collection/index.html`](../public/portfolios/droplet-collection/index.html) | 984.4 kB | Entry page of the project copy: module script and stylesheet loader. | [portfolios.md](portfolios.md) |
 
 ## Project copy: Rotor Pendula
 
@@ -593,11 +521,11 @@ to confirm that every file is described. Sizes are those of the files when the l
 |---|---|---|---|
 | [`portfolios-src/droplets/.gitignore`](../portfolios-src/droplets/.gitignore) | 5 B | Keeps the stand-alone build (out/) out of git. | [README.md](../portfolios-src/droplets/README.md) |
 | [`portfolios-src/droplets/README.md`](../portfolios-src/droplets/README.md) | 4.1 kB | The study's source: every folder, how the served page is built, the three checks. | [README.md](../portfolios-src/droplets/README.md) |
-| [`portfolios-src/droplets/app.js`](../portfolios-src/droplets/app.js) | 12.2 kB | The page's script: tabs, hash routes, the three simulation panels. | [README.md](../portfolios-src/droplets/README.md) |
-| [`portfolios-src/droplets/chart.cjs`](../portfolios-src/droplets/chart.cjs) | 6.8 kB | House-style SVG line charts for the figures and the page. | [README.md](../portfolios-src/droplets/README.md) |
+| [`portfolios-src/droplets/app.js`](../portfolios-src/droplets/app.js) | 12.8 kB | The page's script: tabs, hash routes, the three simulation panels. | [README.md](../portfolios-src/droplets/README.md) |
+| [`portfolios-src/droplets/chart.cjs`](../portfolios-src/droplets/chart.cjs) | 7.7 kB | House-style SVG line charts for the figures and the page. | [README.md](../portfolios-src/droplets/README.md) |
 | [`portfolios-src/droplets/checks/check_browser.py`](../portfolios-src/droplets/checks/check_browser.py) | 2.6 kB | Check: check_browser.py (see the README). | [README.md](../portfolios-src/droplets/README.md) |
-| [`portfolios-src/droplets/checks/check_numbers.cjs`](../portfolios-src/droplets/checks/check_numbers.cjs) | 28.2 kB | Check: check_numbers.cjs (see the README). | [README.md](../portfolios-src/droplets/README.md) |
-| [`portfolios-src/droplets/checks/check_physics.py`](../portfolios-src/droplets/checks/check_physics.py) | 15.3 kB | Check: check_physics.py (see the README). | [README.md](../portfolios-src/droplets/README.md) |
+| [`portfolios-src/droplets/checks/check_numbers.cjs`](../portfolios-src/droplets/checks/check_numbers.cjs) | 31.9 kB | Check: check_numbers.cjs (see the README). | [README.md](../portfolios-src/droplets/README.md) |
+| [`portfolios-src/droplets/checks/check_physics.py`](../portfolios-src/droplets/checks/check_physics.py) | 15.4 kB | Check: check_physics.py (see the README). | [README.md](../portfolios-src/droplets/README.md) |
 | [`portfolios-src/droplets/checks/model_dump.cjs`](../portfolios-src/droplets/checks/model_dump.cjs) | 2.8 kB | Check: model_dump.cjs (see the README). | [README.md](../portfolios-src/droplets/README.md) |
 | [`portfolios-src/droplets/data/bridge.json`](../portfolios-src/droplets/data/bridge.json) | 56.1 kB | Data written by the model's run tools: bridge.json. | [README.md](../portfolios-src/droplets/README.md) |
 | [`portfolios-src/droplets/data/cold.json`](../portfolios-src/droplets/data/cold.json) | 482 B | Data written by the model's run tools: cold.json. | [README.md](../portfolios-src/droplets/README.md) |
@@ -624,25 +552,27 @@ to confirm that every file is described. Sizes are those of the files when the l
 | [`portfolios-src/droplets/derive/L2_trace.cjs`](../portfolios-src/droplets/derive/L2_trace.cjs) | 1.8 kB | Derivation or number script behind a Gate 1 contract: L2_trace.cjs. | [status.md](../notes/droplets/status.md) |
 | [`portfolios-src/droplets/derive/L2_traj.cjs`](../portfolios-src/droplets/derive/L2_traj.cjs) | 8.0 kB | Derivation or number script behind a Gate 1 contract: L2_traj.cjs. | [status.md](../notes/droplets/status.md) |
 | [`portfolios-src/droplets/derive/L3_coal.py`](../portfolios-src/droplets/derive/L3_coal.py) | 1.2 kB | Derivation or number script behind a Gate 1 contract: L3_coal.py. | [status.md](../notes/droplets/status.md) |
+| [`portfolios-src/droplets/derive/L4_conv.cjs`](../portfolios-src/droplets/derive/L4_conv.cjs) | 1.7 kB | Derivation or number script behind a Gate 1 contract: L4_conv.cjs. | [status.md](../notes/droplets/status.md) |
+| [`portfolios-src/droplets/derive/L5_tail.cjs`](../portfolios-src/droplets/derive/L5_tail.cjs) | 1.2 kB | Derivation or number script behind a Gate 1 contract: L5_tail.cjs. | [status.md](../notes/droplets/status.md) |
 | [`portfolios-src/droplets/derive/L6_ayala.py`](../portfolios-src/droplets/derive/L6_ayala.py) | 1.1 kB | Derivation or number script behind a Gate 1 contract: L6_ayala.py. | [status.md](../notes/droplets/status.md) |
 | [`portfolios-src/droplets/derive/beard.cjs`](../portfolios-src/droplets/derive/beard.cjs) | 1.4 kB | Derivation or number script behind a Gate 1 contract: beard.cjs. | [status.md](../notes/droplets/status.md) |
 | [`portfolios-src/droplets/physics.cjs`](../portfolios-src/droplets/physics.cjs) | 36.5 kB | The model, L0 to L7: fall speeds, trajectories, kernel, collection equation, exact stochastic process, turbulence (runs in the page and in Node). | [README.md](../portfolios-src/droplets/README.md) |
-| [`portfolios-src/droplets/template.html`](../portfolios-src/droplets/template.html) | 12.4 kB | The page template: house design, tabs, placeholders filled by the build. | [README.md](../portfolios-src/droplets/README.md) |
-| [`portfolios-src/droplets/text/book-00.src.html`](../portfolios-src/droplets/text/book-00.src.html) | 3.8 kB | Lecture notes, chapter 0. | [README.md](../portfolios-src/droplets/README.md) |
-| [`portfolios-src/droplets/text/book-01.src.html`](../portfolios-src/droplets/text/book-01.src.html) | 5.3 kB | Lecture notes, chapter 1. | [README.md](../portfolios-src/droplets/README.md) |
+| [`portfolios-src/droplets/template.html`](../portfolios-src/droplets/template.html) | 12.9 kB | The page template: house design, tabs, placeholders filled by the build. | [README.md](../portfolios-src/droplets/README.md) |
+| [`portfolios-src/droplets/text/book-00.src.html`](../portfolios-src/droplets/text/book-00.src.html) | 3.9 kB | Lecture notes, chapter 0. | [README.md](../portfolios-src/droplets/README.md) |
+| [`portfolios-src/droplets/text/book-01.src.html`](../portfolios-src/droplets/text/book-01.src.html) | 5.5 kB | Lecture notes, chapter 1. | [README.md](../portfolios-src/droplets/README.md) |
 | [`portfolios-src/droplets/text/book-02.src.html`](../portfolios-src/droplets/text/book-02.src.html) | 7.7 kB | Lecture notes, chapter 2. | [README.md](../portfolios-src/droplets/README.md) |
-| [`portfolios-src/droplets/text/book-03.src.html`](../portfolios-src/droplets/text/book-03.src.html) | 8.4 kB | Lecture notes, chapter 3. | [README.md](../portfolios-src/droplets/README.md) |
-| [`portfolios-src/droplets/text/book-04.src.html`](../portfolios-src/droplets/text/book-04.src.html) | 3.7 kB | Lecture notes, chapter 4. | [README.md](../portfolios-src/droplets/README.md) |
-| [`portfolios-src/droplets/text/book-05.src.html`](../portfolios-src/droplets/text/book-05.src.html) | 7.2 kB | Lecture notes, chapter 5. | [README.md](../portfolios-src/droplets/README.md) |
-| [`portfolios-src/droplets/text/book-06.src.html`](../portfolios-src/droplets/text/book-06.src.html) | 5.7 kB | Lecture notes, chapter 6. | [README.md](../portfolios-src/droplets/README.md) |
-| [`portfolios-src/droplets/text/book-07.src.html`](../portfolios-src/droplets/text/book-07.src.html) | 3.2 kB | Lecture notes, chapter 7. | [README.md](../portfolios-src/droplets/README.md) |
-| [`portfolios-src/droplets/text/book-08.src.html`](../portfolios-src/droplets/text/book-08.src.html) | 6.3 kB | Lecture notes, chapter 8. | [README.md](../portfolios-src/droplets/README.md) |
-| [`portfolios-src/droplets/text/book-09.src.html`](../portfolios-src/droplets/text/book-09.src.html) | 4.5 kB | Lecture notes, chapter 9 and appendix A. | [README.md](../portfolios-src/droplets/README.md) |
-| [`portfolios-src/droplets/text/checks.src.html`](../portfolios-src/droplets/text/checks.src.html) | 3.8 kB | Words of the checks tab. | [README.md](../portfolios-src/droplets/README.md) |
-| [`portfolios-src/droplets/text/problems.src.html`](../portfolios-src/droplets/text/problems.src.html) | 4.3 kB | Words of the problems tab. | [README.md](../portfolios-src/droplets/README.md) |
+| [`portfolios-src/droplets/text/book-03.src.html`](../portfolios-src/droplets/text/book-03.src.html) | 9.4 kB | Lecture notes, chapter 3. | [README.md](../portfolios-src/droplets/README.md) |
+| [`portfolios-src/droplets/text/book-04.src.html`](../portfolios-src/droplets/text/book-04.src.html) | 4.1 kB | Lecture notes, chapter 4. | [README.md](../portfolios-src/droplets/README.md) |
+| [`portfolios-src/droplets/text/book-05.src.html`](../portfolios-src/droplets/text/book-05.src.html) | 7.9 kB | Lecture notes, chapter 5. | [README.md](../portfolios-src/droplets/README.md) |
+| [`portfolios-src/droplets/text/book-06.src.html`](../portfolios-src/droplets/text/book-06.src.html) | 8.0 kB | Lecture notes, chapter 6. | [README.md](../portfolios-src/droplets/README.md) |
+| [`portfolios-src/droplets/text/book-07.src.html`](../portfolios-src/droplets/text/book-07.src.html) | 3.7 kB | Lecture notes, chapter 7. | [README.md](../portfolios-src/droplets/README.md) |
+| [`portfolios-src/droplets/text/book-08.src.html`](../portfolios-src/droplets/text/book-08.src.html) | 7.0 kB | Lecture notes, chapter 8. | [README.md](../portfolios-src/droplets/README.md) |
+| [`portfolios-src/droplets/text/book-09.src.html`](../portfolios-src/droplets/text/book-09.src.html) | 6.6 kB | Lecture notes, chapter 9 and appendix A. | [README.md](../portfolios-src/droplets/README.md) |
+| [`portfolios-src/droplets/text/checks.src.html`](../portfolios-src/droplets/text/checks.src.html) | 5.8 kB | Words of the checks tab. | [README.md](../portfolios-src/droplets/README.md) |
+| [`portfolios-src/droplets/text/problems.src.html`](../portfolios-src/droplets/text/problems.src.html) | 4.4 kB | Words of the problems tab. | [README.md](../portfolios-src/droplets/README.md) |
 | [`portfolios-src/droplets/text/sim.src.html`](../portfolios-src/droplets/text/sim.src.html) | 3.8 kB | Words of the sim tab. | [README.md](../portfolios-src/droplets/README.md) |
 | [`portfolios-src/droplets/tools/build.py`](../portfolios-src/droplets/tools/build.py) | 10.6 kB | Build or run tool: build.py (see the README). | [README.md](../portfolios-src/droplets/README.md) |
-| [`portfolios-src/droplets/tools/figs.cjs`](../portfolios-src/droplets/tools/figs.cjs) | 9.3 kB | Build or run tool: figs.cjs (see the README). | [README.md](../portfolios-src/droplets/README.md) |
+| [`portfolios-src/droplets/tools/figs.cjs`](../portfolios-src/droplets/tools/figs.cjs) | 11.0 kB | Build or run tool: figs.cjs (see the README). | [README.md](../portfolios-src/droplets/README.md) |
 | [`portfolios-src/droplets/tools/gen_tables.cjs`](../portfolios-src/droplets/tools/gen_tables.cjs) | 1.0 kB | Build or run tool: gen_tables.cjs (see the README). | [README.md](../portfolios-src/droplets/README.md) |
 | [`portfolios-src/droplets/tools/katex_render.cjs`](../portfolios-src/droplets/tools/katex_render.cjs) | 606 B | Build or run tool: katex_render.cjs (see the README). | [README.md](../portfolios-src/droplets/README.md) |
 | [`portfolios-src/droplets/tools/package-lock.json`](../portfolios-src/droplets/tools/package-lock.json) | 1.1 kB | Build or run tool: package-lock.json (see the README). | [README.md](../portfolios-src/droplets/README.md) |
@@ -682,7 +612,7 @@ to confirm that every file is described. Sizes are those of the files when the l
 | [`docs/minor-issues-report.md`](minor-issues-report.md) | 19.9 kB | Documentation: Minor issues · final verification report. | [minor-issues-report.md](minor-issues-report.md) |
 | [`docs/notes.md`](notes.md) | 3.7 kB | Documentation: The lecture-note review: `notes/` and `.claude/agents/`. | [notes.md](notes.md) |
 | [`docs/pages.md`](pages.md) | 51.9 kB | Documentation: The site's own pages: home, simulations catalog, Portfolios, robots.txt. | [pages.md](pages.md) |
-| [`docs/portfolios.md`](portfolios.md) | 39.2 kB | Documentation: The four research projects: `public/portfolios/`. | [portfolios.md](portfolios.md) |
+| [`docs/portfolios.md`](portfolios.md) | 39.5 kB | Documentation: The four research projects: `public/portfolios/`. | [portfolios.md](portfolios.md) |
 | [`docs/research-theory-audit.md`](research-theory-audit.md) | 29.1 kB | Documentation: Readability audit: Droplet Collection and Rotor Pendula. | [research-theory-audit.md](research-theory-audit.md) |
 | [`docs/scripts/catalog.md`](scripts/catalog.md) | 15.1 kB | Documentation: public/scripts/catalog.js. | [catalog.md](scripts/catalog.md) |
 | [`docs/scripts/datalog.md`](scripts/datalog.md) | 48.6 kB | Documentation: public/scripts/datalog.js. | [datalog.md](scripts/datalog.md) |
@@ -709,7 +639,7 @@ to confirm that every file is described. Sizes are those of the files when the l
 |---|---|---|---|
 | [`tools/i18n/build.py`](../tools/i18n/build.py) | 17.7 kB | Writes the German and Arabic pages, the script strings and the mirrored stylesheets from the English pages and the tables; --check fails on anything untranslated. | [i18n.md](i18n.md) |
 | [`tools/i18n/fill.py`](../tools/i18n/fill.py) | 1.3 kB | Stores translations into a page table, recording the English each one was made from. | [i18n.md](i18n.md) |
-| [`tools/inventory.py`](../tools/inventory.py) | 36.4 kB | Writes docs/files.md and checks that every file in the repository is described. | [files.md](files.md) |
+| [`tools/inventory.py`](../tools/inventory.py) | 36.5 kB | Writes docs/files.md and checks that every file in the repository is described. | [files.md](files.md) |
 | [`tools/make_portfolio_copy.py`](../tools/make_portfolio_copy.py) | 4.4 kB | Builds a browser-only website copy of a research app from its source, without changing the app or installing dependencies. | [portfolios.md](portfolios.md) |
 
 ## Translation tables
@@ -796,12 +726,20 @@ to confirm that every file is described. Sizes are those of the files when the l
 | [`notes/droplets/baseline/simulate.html`](../notes/droplets/baseline/simulate.html) | 2.0 kB | Text of the simulate page of the published Droplet Collection app, kept as the baseline the study starts from. | [brief.md](../notes/droplets/brief.md) |
 | [`notes/droplets/baseline/theory.html`](../notes/droplets/baseline/theory.html) | 105.7 kB | Text of the theory page of the published Droplet Collection app, kept as the baseline the study starts from. | [brief.md](../notes/droplets/brief.md) |
 | [`notes/droplets/brief.md`](../notes/droplets/brief.md) | 17.8 kB | The brief of the Droplet Collection study: question, method and gates, for an agent working in a loop. | [brief.md](../notes/droplets/brief.md) |
+| [`notes/droplets/check-L0.md`](../notes/droplets/check-L0.md) | 4.2 kB | Gate 2 check of level L0: each equation re-derived by two routes. | [status.md](../notes/droplets/status.md) |
+| [`notes/droplets/check-L1.md`](../notes/droplets/check-L1.md) | 6.7 kB | Gate 2 check of level L1: each equation re-derived by two routes. | [status.md](../notes/droplets/status.md) |
+| [`notes/droplets/check-L2.md`](../notes/droplets/check-L2.md) | 7.7 kB | Gate 2 check of level L2: each equation re-derived by two routes. | [status.md](../notes/droplets/status.md) |
+| [`notes/droplets/check-L3.md`](../notes/droplets/check-L3.md) | 4.1 kB | Gate 2 check of level L3: each equation re-derived by two routes. | [status.md](../notes/droplets/status.md) |
+| [`notes/droplets/check-L4.md`](../notes/droplets/check-L4.md) | 6.2 kB | Gate 2 check of level L4: each equation re-derived by two routes. | [status.md](../notes/droplets/status.md) |
+| [`notes/droplets/check-L5.md`](../notes/droplets/check-L5.md) | 6.5 kB | Gate 2 check of level L5: each equation re-derived by two routes. | [status.md](../notes/droplets/status.md) |
+| [`notes/droplets/check-L6.md`](../notes/droplets/check-L6.md) | 5.8 kB | Gate 2 check of level L6: each equation re-derived by two routes. | [status.md](../notes/droplets/status.md) |
+| [`notes/droplets/check-L7.md`](../notes/droplets/check-L7.md) | 6.6 kB | Gate 2 check of level L7: each equation re-derived by two routes. | [status.md](../notes/droplets/status.md) |
 | [`notes/droplets/contract-L0.md`](../notes/droplets/contract-L0.md) | 25.2 kB | Gate 1 contract of model level L0: question, picture, model, assumptions with their numbers, predictions, answers to the skeptic. | [status.md](../notes/droplets/status.md) |
 | [`notes/droplets/contract-L1.md`](../notes/droplets/contract-L1.md) | 18.6 kB | Gate 1 contract of model level L1: question, picture, model, assumptions with their numbers, predictions, answers to the skeptic. | [status.md](../notes/droplets/status.md) |
 | [`notes/droplets/contract-L2.md`](../notes/droplets/contract-L2.md) | 20.0 kB | Gate 1 contract of model level L2: question, picture, model, assumptions with their numbers, predictions, answers to the skeptic. | [status.md](../notes/droplets/status.md) |
 | [`notes/droplets/contract-L3.md`](../notes/droplets/contract-L3.md) | 7.1 kB | Gate 1 contract of model level L3: question, picture, model, assumptions with their numbers, predictions, answers to the skeptic. | [status.md](../notes/droplets/status.md) |
-| [`notes/droplets/contract-L4.md`](../notes/droplets/contract-L4.md) | 11.9 kB | Gate 1 contract of model level L4: question, picture, model, assumptions with their numbers, predictions, answers to the skeptic. | [status.md](../notes/droplets/status.md) |
-| [`notes/droplets/contract-L5.md`](../notes/droplets/contract-L5.md) | 11.8 kB | Gate 1 contract of model level L5: question, picture, model, assumptions with their numbers, predictions, answers to the skeptic. | [status.md](../notes/droplets/status.md) |
+| [`notes/droplets/contract-L4.md`](../notes/droplets/contract-L4.md) | 14.5 kB | Gate 1 contract of model level L4: question, picture, model, assumptions with their numbers, predictions, answers to the skeptic. | [status.md](../notes/droplets/status.md) |
+| [`notes/droplets/contract-L5.md`](../notes/droplets/contract-L5.md) | 14.5 kB | Gate 1 contract of model level L5: question, picture, model, assumptions with their numbers, predictions, answers to the skeptic. | [status.md](../notes/droplets/status.md) |
 | [`notes/droplets/contract-L6.md`](../notes/droplets/contract-L6.md) | 4.1 kB | Gate 1 contract of model level L6: question, picture, model, assumptions with their numbers, predictions, answers to the skeptic. | [status.md](../notes/droplets/status.md) |
 | [`notes/droplets/contract-L7.md`](../notes/droplets/contract-L7.md) | 6.1 kB | Gate 1 contract of model level L7: question, picture, model, assumptions with their numbers, predictions, answers to the skeptic. | [status.md](../notes/droplets/status.md) |
 | [`notes/droplets/done.md`](../notes/droplets/done.md) | 1.7 kB | Definition of done of the Droplet Collection study, as a checklist; only Numa may change it. | [done.md](../notes/droplets/done.md) |
@@ -809,11 +747,80 @@ to confirm that every file is described. Sizes are those of the files when the l
 | [`notes/droplets/dossier-fallspeed-efficiency.md`](../notes/droplets/dossier-fallspeed-efficiency.md) | 38.0 kB | Scout dossier on fallspeed-efficiency: primary sources read for the study. | [status.md](../notes/droplets/status.md) |
 | [`notes/droplets/dossier-ice.md`](../notes/droplets/dossier-ice.md) | 34.2 kB | Scout dossier on ice: primary sources read for the study. | [status.md](../notes/droplets/status.md) |
 | [`notes/droplets/dossier-stochastic.md`](../notes/droplets/dossier-stochastic.md) | 59.4 kB | Scout dossier on stochastic: primary sources read for the study. | [status.md](../notes/droplets/status.md) |
+| [`notes/droplets/gate2/L0_model_crosscheck.cjs`](../notes/droplets/gate2/L0_model_crosscheck.cjs) | 844 B | Gate 2 checker script or output: L0_model_crosscheck.cjs. | [status.md](../notes/droplets/status.md) |
+| [`notes/droplets/gate2/L0_model_crosscheck.out.txt`](../notes/droplets/gate2/L0_model_crosscheck.out.txt) | 338 B | Gate 2 checker script or output: L0_model_crosscheck.out.txt. | [status.md](../notes/droplets/status.md) |
 | [`notes/droplets/gate2/L0_route1_sympy.out.txt`](../notes/droplets/gate2/L0_route1_sympy.out.txt) | 2.1 kB | Gate 2 checker script or output: L0_route1_sympy.out.txt. | [status.md](../notes/droplets/status.md) |
 | [`notes/droplets/gate2/L0_route1_sympy.py`](../notes/droplets/gate2/L0_route1_sympy.py) | 4.3 kB | Gate 2 checker script or output: L0_route1_sympy.py. | [status.md](../notes/droplets/status.md) |
-| [`notes/droplets/gate2/L0_route2_numeric.out.txt`](../notes/droplets/gate2/L0_route2_numeric.out.txt) | 1.4 kB | Gate 2 checker script or output: L0_route2_numeric.out.txt. | [status.md](../notes/droplets/status.md) |
+| [`notes/droplets/gate2/L0_route2.wl`](../notes/droplets/gate2/L0_route2.wl) | 1.4 kB | Gate 2 checker script or output: L0_route2.wl. | [status.md](../notes/droplets/status.md) |
+| [`notes/droplets/gate2/L0_route2_numeric.out.txt`](../notes/droplets/gate2/L0_route2_numeric.out.txt) | 1.6 kB | Gate 2 checker script or output: L0_route2_numeric.out.txt. | [status.md](../notes/droplets/status.md) |
 | [`notes/droplets/gate2/L0_route2_numeric.py`](../notes/droplets/gate2/L0_route2_numeric.py) | 4.1 kB | Gate 2 checker script or output: L0_route2_numeric.py. | [status.md](../notes/droplets/status.md) |
+| [`notes/droplets/gate2/L0_route2_wolfram.out.txt`](../notes/droplets/gate2/L0_route2_wolfram.out.txt) | 624 B | Gate 2 checker script or output: L0_route2_wolfram.out.txt. | [status.md](../notes/droplets/status.md) |
+| [`notes/droplets/gate2/L1_collector_time.cjs`](../notes/droplets/gate2/L1_collector_time.cjs) | 1.1 kB | Gate 2 checker script or output: L1_collector_time.cjs. | [status.md](../notes/droplets/status.md) |
+| [`notes/droplets/gate2/L1_collector_time.out.txt`](../notes/droplets/gate2/L1_collector_time.out.txt) | 130 B | Gate 2 checker script or output: L1_collector_time.out.txt. | [status.md](../notes/droplets/status.md) |
+| [`notes/droplets/gate2/L1_model_dump.cjs`](../notes/droplets/gate2/L1_model_dump.cjs) | 564 B | Gate 2 checker script or output: L1_model_dump.cjs. | [status.md](../notes/droplets/status.md) |
+| [`notes/droplets/gate2/L1_model_dump.json`](../notes/droplets/gate2/L1_model_dump.json) | 2.0 kB | Gate 2 checker script or output: L1_model_dump.json. | [status.md](../notes/droplets/status.md) |
+| [`notes/droplets/gate2/L1_route1_sympy.out.txt`](../notes/droplets/gate2/L1_route1_sympy.out.txt) | 3.1 kB | Gate 2 checker script or output: L1_route1_sympy.out.txt. | [status.md](../notes/droplets/status.md) |
+| [`notes/droplets/gate2/L1_route1_sympy.py`](../notes/droplets/gate2/L1_route1_sympy.py) | 8.4 kB | Gate 2 checker script or output: L1_route1_sympy.py. | [status.md](../notes/droplets/status.md) |
+| [`notes/droplets/gate2/L1_route2.wl`](../notes/droplets/gate2/L1_route2.wl) | 3.8 kB | Gate 2 checker script or output: L1_route2.wl. | [status.md](../notes/droplets/status.md) |
+| [`notes/droplets/gate2/L1_route2_dragcurve.out.txt`](../notes/droplets/gate2/L1_route2_dragcurve.out.txt) | 4.1 kB | Gate 2 checker script or output: L1_route2_dragcurve.out.txt. | [status.md](../notes/droplets/status.md) |
+| [`notes/droplets/gate2/L1_route2_dragcurve.py`](../notes/droplets/gate2/L1_route2_dragcurve.py) | 3.7 kB | Gate 2 checker script or output: L1_route2_dragcurve.py. | [status.md](../notes/droplets/status.md) |
+| [`notes/droplets/gate2/L1_route2_numeric.out.txt`](../notes/droplets/gate2/L1_route2_numeric.out.txt) | 1.5 kB | Gate 2 checker script or output: L1_route2_numeric.out.txt. | [status.md](../notes/droplets/status.md) |
+| [`notes/droplets/gate2/L1_route2_numeric.py`](../notes/droplets/gate2/L1_route2_numeric.py) | 4.6 kB | Gate 2 checker script or output: L1_route2_numeric.py. | [status.md](../notes/droplets/status.md) |
+| [`notes/droplets/gate2/L1_route2_wolfram.out.txt`](../notes/droplets/gate2/L1_route2_wolfram.out.txt) | 1.1 kB | Gate 2 checker script or output: L1_route2_wolfram.out.txt. | [status.md](../notes/droplets/status.md) |
+| [`notes/droplets/gate2/L2_model_crosscheck.cjs`](../notes/droplets/gate2/L2_model_crosscheck.cjs) | 779 B | Gate 2 checker script or output: L2_model_crosscheck.cjs. | [status.md](../notes/droplets/status.md) |
+| [`notes/droplets/gate2/L2_model_crosscheck.out.txt`](../notes/droplets/gate2/L2_model_crosscheck.out.txt) | 430 B | Gate 2 checker script or output: L2_model_crosscheck.out.txt. | [status.md](../notes/droplets/status.md) |
+| [`notes/droplets/gate2/L2_route1_sympy.out.txt`](../notes/droplets/gate2/L2_route1_sympy.out.txt) | 3.9 kB | Gate 2 checker script or output: L2_route1_sympy.out.txt. | [status.md](../notes/droplets/status.md) |
+| [`notes/droplets/gate2/L2_route1_sympy.py`](../notes/droplets/gate2/L2_route1_sympy.py) | 7.6 kB | Gate 2 checker script or output: L2_route1_sympy.py. | [status.md](../notes/droplets/status.md) |
+| [`notes/droplets/gate2/L2_route2.wl`](../notes/droplets/gate2/L2_route2.wl) | 1.5 kB | Gate 2 checker script or output: L2_route2.wl. | [status.md](../notes/droplets/status.md) |
+| [`notes/droplets/gate2/L2_route2_numeric.out.txt`](../notes/droplets/gate2/L2_route2_numeric.out.txt) | 2.6 kB | Gate 2 checker script or output: L2_route2_numeric.out.txt. | [status.md](../notes/droplets/status.md) |
+| [`notes/droplets/gate2/L2_route2_numeric.py`](../notes/droplets/gate2/L2_route2_numeric.py) | 7.6 kB | Gate 2 checker script or output: L2_route2_numeric.py. | [status.md](../notes/droplets/status.md) |
+| [`notes/droplets/gate2/L2_route2_wolfram.out.txt`](../notes/droplets/gate2/L2_route2_wolfram.out.txt) | 1.7 kB | Gate 2 checker script or output: L2_route2_wolfram.out.txt. | [status.md](../notes/droplets/status.md) |
+| [`notes/droplets/gate2/L2_zconv.cjs`](../notes/droplets/gate2/L2_zconv.cjs) | 416 B | Gate 2 checker script or output: L2_zconv.cjs. | [status.md](../notes/droplets/status.md) |
+| [`notes/droplets/gate2/L2_zconv.out.txt`](../notes/droplets/gate2/L2_zconv.out.txt) | 294 B | Gate 2 checker script or output: L2_zconv.out.txt. | [status.md](../notes/droplets/status.md) |
+| [`notes/droplets/gate2/L2_zconv.py`](../notes/droplets/gate2/L2_zconv.py) | 768 B | Gate 2 checker script or output: L2_zconv.py. | [status.md](../notes/droplets/status.md) |
+| [`notes/droplets/gate2/L2_zconv_py.out.txt`](../notes/droplets/gate2/L2_zconv_py.out.txt) | 664 B | Gate 2 checker script or output: L2_zconv_py.out.txt. | [status.md](../notes/droplets/status.md) |
+| [`notes/droplets/gate2/L3_diameter_variant.cjs`](../notes/droplets/gate2/L3_diameter_variant.cjs) | 411 B | Gate 2 checker script or output: L3_diameter_variant.cjs. | [status.md](../notes/droplets/status.md) |
+| [`notes/droplets/gate2/L3_diameter_variant.out.txt`](../notes/droplets/gate2/L3_diameter_variant.out.txt) | 86 B | Gate 2 checker script or output: L3_diameter_variant.out.txt. | [status.md](../notes/droplets/status.md) |
+| [`notes/droplets/gate2/L3_model_dump.cjs`](../notes/droplets/gate2/L3_model_dump.cjs) | 535 B | Gate 2 checker script or output: L3_model_dump.cjs. | [status.md](../notes/droplets/status.md) |
+| [`notes/droplets/gate2/L3_model_dump.json`](../notes/droplets/gate2/L3_model_dump.json) | 1.0 kB | Gate 2 checker script or output: L3_model_dump.json. | [status.md](../notes/droplets/status.md) |
+| [`notes/droplets/gate2/L3_route1_sympy.out.txt`](../notes/droplets/gate2/L3_route1_sympy.out.txt) | 1.9 kB | Gate 2 checker script or output: L3_route1_sympy.out.txt. | [status.md](../notes/droplets/status.md) |
+| [`notes/droplets/gate2/L3_route1_sympy.py`](../notes/droplets/gate2/L3_route1_sympy.py) | 3.7 kB | Gate 2 checker script or output: L3_route1_sympy.py. | [status.md](../notes/droplets/status.md) |
+| [`notes/droplets/gate2/L3_route2.wl`](../notes/droplets/gate2/L3_route2.wl) | 1.3 kB | Gate 2 checker script or output: L3_route2.wl. | [status.md](../notes/droplets/status.md) |
+| [`notes/droplets/gate2/L3_route2_numeric.out.txt`](../notes/droplets/gate2/L3_route2_numeric.out.txt) | 2.4 kB | Gate 2 checker script or output: L3_route2_numeric.out.txt. | [status.md](../notes/droplets/status.md) |
+| [`notes/droplets/gate2/L3_route2_numeric.py`](../notes/droplets/gate2/L3_route2_numeric.py) | 2.9 kB | Gate 2 checker script or output: L3_route2_numeric.py. | [status.md](../notes/droplets/status.md) |
+| [`notes/droplets/gate2/L3_route2_wolfram.out.txt`](../notes/droplets/gate2/L3_route2_wolfram.out.txt) | 587 B | Gate 2 checker script or output: L3_route2_wolfram.out.txt. | [status.md](../notes/droplets/status.md) |
+| [`notes/droplets/gate2/L4_golovin_dump.cjs`](../notes/droplets/gate2/L4_golovin_dump.cjs) | 809 B | Gate 2 checker script or output: L4_golovin_dump.cjs. | [status.md](../notes/droplets/status.md) |
+| [`notes/droplets/gate2/L4_golovin_dump.json`](../notes/droplets/gate2/L4_golovin_dump.json) | 2.2 kB | Gate 2 checker script or output: L4_golovin_dump.json. | [status.md](../notes/droplets/status.md) |
+| [`notes/droplets/gate2/L4_lognormal.out.txt`](../notes/droplets/gate2/L4_lognormal.out.txt) | 824 B | Gate 2 checker script or output: L4_lognormal.out.txt. | [status.md](../notes/droplets/status.md) |
+| [`notes/droplets/gate2/L4_lognormal.py`](../notes/droplets/gate2/L4_lognormal.py) | 2.0 kB | Gate 2 checker script or output: L4_lognormal.py. | [status.md](../notes/droplets/status.md) |
+| [`notes/droplets/gate2/L4_route1_sympy.out.txt`](../notes/droplets/gate2/L4_route1_sympy.out.txt) | 3.5 kB | Gate 2 checker script or output: L4_route1_sympy.out.txt. | [status.md](../notes/droplets/status.md) |
+| [`notes/droplets/gate2/L4_route1_sympy.py`](../notes/droplets/gate2/L4_route1_sympy.py) | 6.8 kB | Gate 2 checker script or output: L4_route1_sympy.py. | [status.md](../notes/droplets/status.md) |
+| [`notes/droplets/gate2/L4_route2.wl`](../notes/droplets/gate2/L4_route2.wl) | 1.9 kB | Gate 2 checker script or output: L4_route2.wl. | [status.md](../notes/droplets/status.md) |
+| [`notes/droplets/gate2/L4_route2_numeric.out.txt`](../notes/droplets/gate2/L4_route2_numeric.out.txt) | 3.6 kB | Gate 2 checker script or output: L4_route2_numeric.out.txt. | [status.md](../notes/droplets/status.md) |
+| [`notes/droplets/gate2/L4_route2_numeric.py`](../notes/droplets/gate2/L4_route2_numeric.py) | 4.9 kB | Gate 2 checker script or output: L4_route2_numeric.py. | [status.md](../notes/droplets/status.md) |
+| [`notes/droplets/gate2/L4_route2_wolfram.out.txt`](../notes/droplets/gate2/L4_route2_wolfram.out.txt) | 826 B | Gate 2 checker script or output: L4_route2_wolfram.out.txt. | [status.md](../notes/droplets/status.md) |
+| [`notes/droplets/gate2/L5_route1_sympy.out.txt`](../notes/droplets/gate2/L5_route1_sympy.out.txt) | 2.6 kB | Gate 2 checker script or output: L5_route1_sympy.out.txt. | [status.md](../notes/droplets/status.md) |
+| [`notes/droplets/gate2/L5_route1_sympy.py`](../notes/droplets/gate2/L5_route1_sympy.py) | 4.3 kB | Gate 2 checker script or output: L5_route1_sympy.py. | [status.md](../notes/droplets/status.md) |
+| [`notes/droplets/gate2/L5_route2.wl`](../notes/droplets/gate2/L5_route2.wl) | 1.3 kB | Gate 2 checker script or output: L5_route2.wl. | [status.md](../notes/droplets/status.md) |
+| [`notes/droplets/gate2/L5_route2_numeric.out.txt`](../notes/droplets/gate2/L5_route2_numeric.out.txt) | 5.2 kB | Gate 2 checker script or output: L5_route2_numeric.out.txt. | [status.md](../notes/droplets/status.md) |
+| [`notes/droplets/gate2/L5_route2_numeric.py`](../notes/droplets/gate2/L5_route2_numeric.py) | 10.2 kB | Gate 2 checker script or output: L5_route2_numeric.py. | [status.md](../notes/droplets/status.md) |
+| [`notes/droplets/gate2/L5_route2_wolfram.out.txt`](../notes/droplets/gate2/L5_route2_wolfram.out.txt) | 803 B | Gate 2 checker script or output: L5_route2_wolfram.out.txt. | [status.md](../notes/droplets/status.md) |
+| [`notes/droplets/gate2/L6_model_dump.cjs`](../notes/droplets/gate2/L6_model_dump.cjs) | 1.0 kB | Gate 2 checker script or output: L6_model_dump.cjs. | [status.md](../notes/droplets/status.md) |
+| [`notes/droplets/gate2/L6_model_dump.json`](../notes/droplets/gate2/L6_model_dump.json) | 1.3 kB | Gate 2 checker script or output: L6_model_dump.json. | [status.md](../notes/droplets/status.md) |
+| [`notes/droplets/gate2/L6_route1_sympy.out.txt`](../notes/droplets/gate2/L6_route1_sympy.out.txt) | 2.2 kB | Gate 2 checker script or output: L6_route1_sympy.out.txt. | [status.md](../notes/droplets/status.md) |
+| [`notes/droplets/gate2/L6_route1_sympy.py`](../notes/droplets/gate2/L6_route1_sympy.py) | 4.3 kB | Gate 2 checker script or output: L6_route1_sympy.py. | [status.md](../notes/droplets/status.md) |
+| [`notes/droplets/gate2/L6_route2.wl`](../notes/droplets/gate2/L6_route2.wl) | 1.1 kB | Gate 2 checker script or output: L6_route2.wl. | [status.md](../notes/droplets/status.md) |
+| [`notes/droplets/gate2/L6_route2_numeric.out.txt`](../notes/droplets/gate2/L6_route2_numeric.out.txt) | 3.4 kB | Gate 2 checker script or output: L6_route2_numeric.out.txt. | [status.md](../notes/droplets/status.md) |
+| [`notes/droplets/gate2/L6_route2_numeric.py`](../notes/droplets/gate2/L6_route2_numeric.py) | 4.8 kB | Gate 2 checker script or output: L6_route2_numeric.py. | [status.md](../notes/droplets/status.md) |
+| [`notes/droplets/gate2/L6_route2_wolfram.out.txt`](../notes/droplets/gate2/L6_route2_wolfram.out.txt) | 482 B | Gate 2 checker script or output: L6_route2_wolfram.out.txt. | [status.md](../notes/droplets/status.md) |
+| [`notes/droplets/gate2/L7_route1_sympy.out.txt`](../notes/droplets/gate2/L7_route1_sympy.out.txt) | 3.0 kB | Gate 2 checker script or output: L7_route1_sympy.out.txt. | [status.md](../notes/droplets/status.md) |
+| [`notes/droplets/gate2/L7_route1_sympy.py`](../notes/droplets/gate2/L7_route1_sympy.py) | 5.4 kB | Gate 2 checker script or output: L7_route1_sympy.py. | [status.md](../notes/droplets/status.md) |
+| [`notes/droplets/gate2/L7_route2.wl`](../notes/droplets/gate2/L7_route2.wl) | 1.3 kB | Gate 2 checker script or output: L7_route2.wl. | [status.md](../notes/droplets/status.md) |
+| [`notes/droplets/gate2/L7_route2_numeric.out.txt`](../notes/droplets/gate2/L7_route2_numeric.out.txt) | 3.0 kB | Gate 2 checker script or output: L7_route2_numeric.out.txt. | [status.md](../notes/droplets/status.md) |
+| [`notes/droplets/gate2/L7_route2_numeric.py`](../notes/droplets/gate2/L7_route2_numeric.py) | 5.8 kB | Gate 2 checker script or output: L7_route2_numeric.py. | [status.md](../notes/droplets/status.md) |
+| [`notes/droplets/gate2/L7_route2_wolfram.out.txt`](../notes/droplets/gate2/L7_route2_wolfram.out.txt) | 502 B | Gate 2 checker script or output: L7_route2_wolfram.out.txt. | [status.md](../notes/droplets/status.md) |
 | [`notes/droplets/gate2/dims.py`](../notes/droplets/gate2/dims.py) | 1.1 kB | Gate 2 checker script or output: dims.py. | [status.md](../notes/droplets/status.md) |
+| [`notes/droplets/gate3-answers-r1.md`](../notes/droplets/gate3-answers-r1.md) | 3.3 kB | Answers to the Gate 3 skeptic, round 1. | [status.md](../notes/droplets/status.md) |
 | [`notes/droplets/skeptic-G1-L0-r1.md`](../notes/droplets/skeptic-G1-L0-r1.md) | 15.3 kB | Blind skeptic report, gate 1, level L0, round 1. | [status.md](../notes/droplets/status.md) |
 | [`notes/droplets/skeptic-G1-L0-r2.md`](../notes/droplets/skeptic-G1-L0-r2.md) | 19.4 kB | Blind skeptic report, gate 1, level L0, round 2. | [status.md](../notes/droplets/status.md) |
 | [`notes/droplets/skeptic-G1-L0-r3.md`](../notes/droplets/skeptic-G1-L0-r3.md) | 15.4 kB | Blind skeptic report, gate 1, level L0, round 3. | [status.md](../notes/droplets/status.md) |
@@ -822,8 +829,10 @@ to confirm that every file is described. Sizes are those of the files when the l
 | [`notes/droplets/skeptic-G1-L1-r3.md`](../notes/droplets/skeptic-G1-L1-r3.md) | 17.2 kB | Blind skeptic report, gate 1, level L1, round 3. | [status.md](../notes/droplets/status.md) |
 | [`notes/droplets/skeptic-G1-L2-r1.md`](../notes/droplets/skeptic-G1-L2-r1.md) | 18.2 kB | Blind skeptic report, gate 1, level L2, round 1. | [status.md](../notes/droplets/status.md) |
 | [`notes/droplets/skeptic-G1-L2-r2.md`](../notes/droplets/skeptic-G1-L2-r2.md) | 17.5 kB | Blind skeptic report, gate 1, level L2, round 2. | [status.md](../notes/droplets/status.md) |
-| [`notes/droplets/skeptic-G1-L3L6L7-r1.md`](../notes/droplets/skeptic-G1-L3L6L7-r1.md) | 23.4 kB | Blind skeptic report, gate 1, level L3L6L7, round 1. | [status.md](../notes/droplets/status.md) |
-| [`notes/droplets/status.md`](../notes/droplets/status.md) | 9.3 kB | Status of the Droplet Collection study: Fermi estimate, queue, done list with evidence, decisions for Numa. Read first. | [status.md](../notes/droplets/status.md) |
+| [`notes/droplets/skeptic-G1-L3L6L7-r1.md`](../notes/droplets/skeptic-G1-L3L6L7-r1.md) | 29.2 kB | Blind skeptic report, gate 1, level L3L6L7, round 1. | [status.md](../notes/droplets/status.md) |
+| [`notes/droplets/skeptic-G1-L4L5-r1.md`](../notes/droplets/skeptic-G1-L4L5-r1.md) | 21.5 kB | Blind skeptic report, gate 1, level L4L5, round 1. | [status.md](../notes/droplets/status.md) |
+| [`notes/droplets/skeptic-G3-r1.md`](../notes/droplets/skeptic-G3-r1.md) | 25.8 kB | Blind skeptic report, gate 3: r1. | [status.md](../notes/droplets/status.md) |
+| [`notes/droplets/status.md`](../notes/droplets/status.md) | 10.8 kB | Status of the Droplet Collection study: Fermi estimate, queue, done list with evidence, decisions for Numa. Read first. | [status.md](../notes/droplets/status.md) |
 
 ## Record of the lecture-note review
 

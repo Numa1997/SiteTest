@@ -1,0 +1,8 @@
+analytic: total water = 1.1163 g/m3 ; above 40 um = 0.2204 g/m3 ; fraction = 19.7401 % (text 20.09 %)
+quadrature in ln r: fraction = 19.7401 %
+mass fraction of exp(-m/mbar) below the lower edge of bin 0, s =  2 bins/doubling: 3.534e-07  (u_edge = 8.4090e-04)
+mass fraction of exp(-m/mbar) below the lower edge of bin 0, s =  4 bins/doubling: 4.202e-07  (u_edge = 9.1700e-04)
+mass fraction of exp(-m/mbar) below the lower edge of bin 0, s =  8 bins/doubling: 4.582e-07  (u_edge = 9.5760e-04)
+mass fraction of exp(-m/mbar) below the lower edge of bin 0, s = 16 bins/doubling: 4.785e-07  (u_edge = 9.7857e-04)
+(text: -4.58e-7; matches s = 8, which is the grid of the warm-cloud runs; the text does not say which s the number belongs to)
+model grid s=8: n bins 289  r0 = 0.000001  last r = 0.004096  dlnr = 0.028881132523331052

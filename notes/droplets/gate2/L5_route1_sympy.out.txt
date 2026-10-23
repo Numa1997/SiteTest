@@ -1,0 +1,25 @@
+== (6.1)  P(no drop of 100 um in V by t) = exp(-V n100), median V n100 = ln 2
+  rare, independent drops: N candidates in the volume, each above 100 um with probability mu/N (mu = V n100 = expected number)
+   k = 0 : limit N->oo of binomial pmf = exp(-mu) ; Poisson pmf exp(-mu) mu^k/k! = exp(-mu) ; difference 0
+   k = 1 : limit N->oo of binomial pmf = mu*exp(-mu) ; Poisson pmf exp(-mu) mu^k/k! = mu*exp(-mu) ; difference 0
+   k = 2 : limit N->oo of binomial pmf = mu**2*exp(-mu)/2 ; Poisson pmf exp(-mu) mu^k/k! = mu**2*exp(-mu)/2 ; difference 0
+   k = 3 : limit N->oo of binomial pmf = mu**3*exp(-mu)/6 ; Poisson pmf exp(-mu) mu^k/k! = mu**3*exp(-mu)/6 ; difference 0
+  P(no drop) = exp(-mu); mean = var = mu: 3.00000000000 (mu = 3 test of the mean)
+  median: exp(-mu) = 1/2 -> [log(2)] = ln 2 = 0.69314718
+  limits: V -> 0 or n100 -> 0: P -> 1 ; V n100 -> oo: P -> 0 ; for V n100 << 1, 1 - P = V n100 (first-order expansion): mu - mu**2/2 + O(mu**3)
+  units  V n100: 1 (dimensionless)  vs  1 (dimensionless)  ->  OK
+  statement used: n100 in the mean field is the Poisson mean at time t. ln 2 = 0.693: volume 100 cm3 = 1e-4 m3 needs n100 = ln2/V = 6931.5 m^-3 ; 1000 cm3: 693.15 m^-3 ; 1 m3: 0.69315 m^-3
+
+== Gillespie waiting time tau = -ln(u1)/a0
+  solve u = exp(-a0 tau) for tau: [-log(u1)/a0] ; u1 uniform on (0,1] so 1-u1 is too: -ln(u1)/a0 has survival exp(-a0*tau)
+  mean waiting time = int_0^oo tau a0 exp(-a0 tau) dtau = 1/a0  (= 1/a0)
+  units  tau = ln(u)/a0 with a0 in 1/s: s  vs  s  ->  OK
+
+== thinning (6.2): a Poisson stream of rate lam*, each point kept with probability q = K/K*, is Poisson with rate lam* q
+  PGF of kept count = exp(lam_star*q*t*(z - 1)) ; PGF of Poisson(q lam* t) = exp(lam_star*q*t*(z - 1)) ; difference: 0
+  counts in disjoint intervals stay independent (independent marks): the thinned process is Poisson with rate lam* q = lam* K/K*
+
+  per-pair rate bookkeeping of the class scheme (V = volume):
+   a != b : K* n_a n_b/V * 1/(n_a n_b) * K_ij/K* = K_ij/V  (= K_ij/V)
+   a = b  : K* n_a^2/(2V) * 2/n_a^2 * K_ij/K* = K_ij/V  ; total accepted-eligible proposals rate K* n_a^2/(2V) * (n_a-1)/n_a = Kstar*n_a*(n_a - 1)/(2*V) = K* n_a (n_a-1)/(2V) = (K*/V) x number of pairs
+  Gillespie method: the process is a continuous-time Markov chain with total rate a0 = sum over pairs K_ij/V; the next event is after Exp(a0) and is pair (i,j) with probability (K_ij/V)/a0 (competing exponential clocks): choosing a class pair with probability K* n_a n_b/(V A*) and a member pair uniformly then accepting with K/K* gives exactly (K_ij/V)/a0 among accepted proposals

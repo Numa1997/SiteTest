@@ -51,9 +51,9 @@ const kq = q => { let c = 0; for (const e of kev) { c += e[1]; if (c >= q * tot)
 console.log(`F_liq = ${(Fliq * 100).toFixed(2)} %, temperature factor of A ${fT.toFixed(4)}, A at D = 0.5 mm ${PH.A(5e-4).toExponential(3)} m^-2`);
 console.log(`riming events ${perMin(rime).toFixed(3)} cm^-3 min^-1; with liquid drop >= 25 um radius ${perMin(rime25).toFixed(4)}, of which the drop is the larger partner ${perMin(rime25big).toFixed(4)}`);
 console.log(`ice-ice collisions ${perMin(ii).toFixed(3)} cm^-3 min^-1; collision energy (event-weighted) 5/50/95 % = ${kq(0.05).toExponential(1)} / ${kq(0.5).toExponential(1)} / ${kq(0.95).toExponential(1)} J, largest ${kev[kev.length - 1][0].toExponential(1)} J`);
-console.log(`new ice per cm^3 per minute: Hallett-Mossop 0 (stops below about -8 C); drop shattering 0 to ${perMin(rime25 * 1.7).toExponential(2)} (0 to 0.14 x 12 = 1.7 fragments per freezing drop); ` +
+console.log(`new ice per cm^3 per minute: Hallett-Mossop 0 (stops below about -8 C); drop shattering 0 to ${perMin(rime25 * 0.14 * 12).toExponential(2)} (0 to 0.14 x 12 = 1.68 fragments per freezing drop); ` +
   `ice-ice breakup (Phillips, D clamped to 0.5 mm) ${perMin(fragLo).toExponential(2)} (psi = 3.5e-3) to ${perMin(fragHi).toExponential(2)} (psi = 1), with the true D ${perMin(fragTrueD).toExponential(2)}; ` +
   `the old rule (lambda = 0.001 per event, 5 um radius fragments) ${perMin(oldRule).toExponential(2)}; old rule / breakup ${(oldRule / fragHi).toExponential(2)} (clamped), ${(oldRule / fragTrueD).toFixed(0)} (true D)`);
-const out = { T, p: 60000, Fliq, liquid: ntot('w'), ice: ntot('i'), rime, rime25, rime25big, ii, fragLo, fragHi, fragTrueD, oldRule, hm: 0, shatter: [0, rime25 * 1.7],
+const out = { T, p: 60000, Fliq, liquid: ntot('w'), ice: ntot('i'), rime, rime25, rime25big, ii, fragLo, fragHi, fragTrueD, oldRule, hm: 0, shatter: [0, rime25 * 0.14 * 12],
   K0q: [kq(0.05), kq(0.5), kq(0.95), kev[kev.length - 1][0]], A05: PH.A(5e-4) };
 if (process.argv.includes('--json')) fs.writeFileSync(path.join(__dirname, '..', 'data', 'cold.json'), JSON.stringify(out));

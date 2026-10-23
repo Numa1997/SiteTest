@@ -1,0 +1,6 @@
+(transcribed from the Wolfram evaluator 15.0.1; code in L6_route2.wl; the DimensionalCombinations call of the first run failed on the unit specification and was dropped, Solve gives the same exponents)
+Solve exponents (nu^aa eps^bb has dimension of time): {{aa -> 1/2, bb -> -1/2}}
+limit eps->0: 1
+(ratio-1)/eps at eps->0: 4 (2 A2 + R^2)/(15 d^2 g^2 nu Pi)
+max over b in {0.05,0.2,0.5,1,1.27,2,4,10,30}: 0.0261611   at b=1.27: 0.0261611
+tau_K at nu=1.6935e-5, eps=1e-2: 0.0411522 s
