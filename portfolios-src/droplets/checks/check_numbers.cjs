@@ -144,7 +144,7 @@ expect('book-03', 'the partner coasts', f(pe.St, 1) + ' radii');
 const cross = c => (pe.ES + pe.EP * pe.Re / c) / (1 + pe.Re / c);
 expect('book-03', 'Move it and the answer moves:', `E(40, 8) = ${f(cross(60), 3)} with 60, ${f(cross(20), 3)} with 20, ${f(cross(6), 3)} with 6, ${f(cross(2), 3)} with 2`);
 const hr = R => [P.hallE(hall, R * 1e-6, 8 / R), P.pairEfficiency(R * 1e-6, 8e-6, A).E];
-expect('book-03', 'and they run', `(${f(hr(40)[0], 2)} against ${f(hr(40)[1], 3)} at 40 µm, ${f(hr(50)[0], 2)} against ${f(hr(50)[1], 2)} at 50 µm, ${f(hr(100)[0], 2)} against ${f(hr(100)[1], 2)} at 100 µm)`);
+expect('book-03', '1.2 to 1.5 times ours', `(${f(hr(40)[0], 2)} against ${f(hr(40)[1], 3)} at 40 µm, ${f(hr(50)[0], 2)} against ${f(hr(50)[1], 2)} at 50 µm, ${f(hr(100)[0], 2)} against ${f(hr(100)[1], 2)} at 100 µm)`);
 expect('book-03', 'its flow at the collector is', 'under 1 %', `${f(0.75 * 8 / 48 * pe.S * 100, 2)} % of U`);
 const Ip = p => 1 - 1.5 / (1 + p) + 0.5 / (1 + p) ** 3;
 expect('book-03', 'at 40/8 µm,', `${f(pe.S, 3)} against ${f(Ip(0.2), 3)}`);
@@ -201,7 +201,19 @@ expect('book-06', 'In every one of the', `${made.length} runs that made one`, `$
 const bridgeMed = V => { for (let i = 0; i < B.t.length; i++) if (V * B.N100[i] >= Math.LN2) return B.t[i]; };
 expect('book-06', '(6.1) predicts medians of', `${bridgeMed(1e-4)} s in 100 cm³ and ${bridgeMed(1e-3)} s in 1000 cm³`);
 expect('book-06', 'the exact runs gave', `${f(med('100'), 0)} and ${f(med('1000'), 0)} s`);
-expect('book-06', 'the first 100 µm drop in 1 m³ appears after about', `${bridgeMed(1)} s`);
+// the far tail at 8, 16, 32 bins per doubling, records every second (as derive/L5_tail.cjs)
+const tailMed = sb => { const r = P.sceRun(P.makeGrid(sb, 4e-3), A, KO, modes, { dt: 1, tEnd: 120, recordEvery: 1, trunc: 3, snapAt: [] });
+  let mx = 0; for (let i = 0; i < r.t.length; i++) { mx = Math.max(mx, r.N100[i]); if (mx >= Math.LN2) return r.t[i]; } return null; };
+expect('book-06', 'the first 100 µm drop in 1 m³ appears after', `about a minute (${tailMed(8)}, ${tailMed(16)} and ${tailMed(32)} s with 8, 16 and 32 bins per doubling`);
+const Wall = modeMass(modes[0]) + modeMass(modes[1]);
+expect('book-06', 'a 100 µm drop holds the water of', `${f(P.massOf(100e-6) / Wall * 1e6, 2)} cm³`);
+expect('book-06', 'a 1 mm drop holds the water of', `${f(P.massOf(1e-3) / Wall * 1e3, 2)} litres`);
+const cap = (() => { let R = 69e-6, t = 0; const h = 0.05, fr = RR => P.tableE(tab, RR, 8e-6 / RR, 'clamp') * Math.PI * (RR + 8e-6) ** 2 * (vB(RR) - vB(8e-6)) * W8 / (4 * Math.PI * RR * RR * RW);
+  while (R < 100e-6) { R += h * fr(R); t += h; } return t; })();
+expect('book-06', 'the largest collector the cloud starts with', `(${f(40 * 1.2 ** 3, 0)} µm) would need ${f((100 ** 3 - 69 ** 3) / 512, 0)} captures and ${f(cap, -1 + 1).replace(/\d$/, '0')} s`, `${f(cap, 1)} s`);
+const nmx = []; B.N100.reduce((m, N, i) => (nmx[i] = Math.max(m, N)), 0);
+expect('book-06', 'The mean field says that at most', `${f((1 - Math.exp(-1e-5 * Math.max(...nmx))) * 100, 0)} %`);
+expect('book-06', 'every one of the', `${S.V['10'].filter(q => q.t100 !== null).length} exact runs made one, after a median of ${f(med('10'), 0)} s`);
 let t1mm = null; for (let i = 0; i < B.t.length; i++) if (B.N1mm[i] >= Math.LN2) { t1mm = B.t[i]; break; }
 expect('book-06', 'the first 1 mm drop after about', `${f(t1mm / 60, 0)} min`, `${t1mm} s`);
 expect('book-06', 'Half of the water is in drops above 100 µm only after', `${Math.round(interp(B.t, B.F100, 0.5) / 5) * 5} s`, `${interp(B.t, B.F100, 0.5).toFixed(1)} s, to the 5 s record`);
@@ -235,6 +247,11 @@ expect('book-05', 'So $t_{90}$ =', `${f(tc[3], 1)} to ${f(tc[0], 1)} min`);
 expect('book-09', 'with $t_{90}$ anywhere from', `${f(tc[3], 1)} to ${f(tc[0], 1)} min`);
 expect('book-09', 'the bookkeeping changes $t_{90}$ by', `${f(gq('thesis', 0.9) - tq('thesis', 0.9), 1)} to ${f(gq('extended', 0.9) - tq('extended', 0.9), 1)} min`);
 
+// chapter 5: resolution
+const runS = (sb, dt) => { const r = P.sceRun(P.makeGrid(sb, 4e-3), A, KO, modes, { dt, tEnd: 1200, recordEvery: 5, snapAt: [] }); return interp(r.t, r.F40, 0.9) / 60; };
+const t4 = runS(4, 1), t16 = runS(16, 1), tq4 = runS(8, 0.25);
+expect('book-05', 'Halving the time step twice moves', `by ${f(Math.abs(tq4 - t90ext), 3)} min`);
+expect('book-05', 'going from 4 to 8 to 16 bins per doubling moves it from', `${f(t4, 2)} to ${f(t90ext, 2)} to ${f(t16, 2)} min`);
 // ---------------------------------------------------------------- chapter 4 continued: coalescence = 1 changes t90 by
 const t90c1 = runT(Object.assign({}, KO, { coal: 'one' }));
 expect('book-04', 'setting E_coal = 1 changes $t_{90}$ by', f((1 - t90c1 / t90ext) * 100, 2) + ' %');

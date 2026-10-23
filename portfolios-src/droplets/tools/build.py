@@ -209,5 +209,16 @@ if SITE:
     assert 'googleapis' not in out
 fn.parent.mkdir(parents=True, exist_ok=True)
 fn.write_text(out, encoding='utf-8')
+if SITE:
+    # four plates for the Portfolios page article: the same SVGs as in the notes, with their text styles carried inside
+    style = ('<style>.tick{font:11px "IBM Plex Mono",Menlo,Consolas,monospace;fill:#4a3a30}'
+             '.axl{font:12.5px "IBM Plex Sans","Helvetica Neue",Arial,sans-serif;fill:#23160f}'
+             '.leg{font:12px "IBM Plex Sans","Helvetica Neue",Arial,sans-serif;fill:#23160f}</style>')
+    pdir = fn.parent / 'fig'
+    pdir.mkdir(exist_ok=True)
+    for name in ('fallspeed', 'efficiency', 'warm', 'first'):
+        svg = figs[name]
+        svg = svg.replace('<defs>', '<defs>' + style, 1) if '<defs>' in svg else re.sub(r'(<svg[^>]*>)', r'\1' + style, svg, count=1)
+        (pdir / f'plate-{name}.svg').write_text('<?xml version="1.0" encoding="UTF-8"?>\n' + svg, encoding='utf-8')
 print(f'wrote {fn.relative_to(ROOT) if SITE else fn}: {len(out)} bytes, {n_ch} chapters, {len(eq_ids)} equations, '
       f'{n_fig} figures, {len(jobs)} formulas')

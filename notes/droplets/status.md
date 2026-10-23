@@ -35,20 +35,28 @@ A 1 mm drop holds 4.19 mg, the water of 4.6 L of this cloud.
 Thermal noise: surface energy of a 10 µm drop 9.0 × 10⁻¹¹ J = 2.3 × 10¹⁰ kT: irrelevant. Kolmogorov time at ε = 10⁻² m²/s³ and this
 ν: 41 ms; τ_p(10 µm) = 1.26 ms; Stokes number 0.030 (0.010 to 0.096 for ε = 10⁻³ to 10⁻¹).
 
-## Queue (first open item is next)
+## Queue (first open item is next; updated 23 Oct, after resume)
 
-1. [ ] L0: round 2 of Gate 1 (contract rewritten; skeptic round 2 to launch).
-2. [ ] L1: skeptic round 1 running on `contract-L1.md`.
-3. [ ] L2: contract (prototype solver works: St_c 1/12 and 1.21194; E(40,8) = 0.344; Langmuir Table 1 within 1–2 % for K ≥ 5).
-4. [ ] L3 contract (dossier says coalescence ≥ 0.9996 for our pairs: likely a stated check, not an active level).
-5. [ ] L4 SCE (two-bin), GCE, Golovin; reproduce 6/14 and 3/5; predictions 8.1 and 8.2 of contract L0.
-6. [ ] L5 Gillespie (bin-majorant thinning) and observable 2.
-7. [ ] L6 turbulence decision (dossier: +5.6 % on 40/8 µm at 100 cm²/s³; near-equal pairs ×2–7, unknown at 50–60 µm).
-8. [ ] L7 ice (dossier: Hallett–Mossop zero at −10 °C; ice–ice breakup extrapolated 4–9 orders in energy).
-9. [ ] Textbook, simulation page, problems, number script, Python checks, browser check.
-10. [ ] Gate 3, Portfolios page, docs, inventory, PR.
+1. [~] Gate 1: L0 PASS (r3), L1 PASS (r3), L2 PASS (r3, one line applied), L3/L6/L7 PASS with fixes (applied; confirmation running),
+       L4/L5 PASS with fixes (applied; confirmation running).
+2. [~] Gate 2: checker running (check-L0.md … check-L7.md, scripts in gate2/).
+3. [ ] Gate 3: blind skeptic on the rendered pages, six thresholds.
+4. [ ] Remove the old app bundle (`static/`; keep old `fig/` until the i18n generator is rerun by its owner) after Gate 3.
+5. [ ] Commit, push, open the PR into main (NOT merged).
 
 ## Done, with evidence
+
+- 23 Oct (after resume): `checks/check_numbers.cjs` 148/148 PASS; `checks/check_physics.py` 12/12 PASS; `checks/check_browser.py`
+  PASS at 360/390/1024/1440 px; `python3 tools/inventory.py --check` OK; `npm run build` OK (root package-lock removed).
+- Ice law corrected against Sotiropoulou et al. 2021 App. B (read): breakup 3.0e-4 to 1.6e-3 cm⁻³ min⁻¹ (clamped D), 0.050 (true D);
+  old rule 2.6, so 1600× and 52× less. Shattering bracket from Korolev and Leisner Table 1 (read): 0–1.7 fragments per freezing drop.
+- Efficiency band (L2 round 2, reproduced): t₉₀ = 13.47 / 12.60 / 11.48 / 10.49 min at crossover 60 / 20 / 6 / 2; Hall 11.38; E = 1
+  below 30 µm: 12.68 (`derive/L2_cross.cjs`). Resolution (`derive/L4_conv.cjs`): s = 4/8/16 → 13.35/13.47/13.53; Δt → 0.005 min.
+  Tail (`derive/L5_tail.cjs`): 1 m³ first-drop median 55/57/61 s at s = 8/16/32.
+- Chapters 3, 4, 5, 6, 7, 8, 9, problems and checks corrected to computed values and rewritten where the physics lesson changed
+  (luck = collector meets collector; 10 cm³ bridge failure; 1 cm³ one-collector argument; turbulence a lower bound).
+- Portfolios article rewritten (four plates from the build, links #book/#sim/#checks/#fig-…); `docs/portfolios.md`, `docs/pages.md`,
+  `portfolios-src/droplets/README.md`, `tools/inventory.py` rules, `docs/files.md` regenerated.
 
 - `done.md` written (23 Oct). Fermi estimate above.
 - Dossiers: `dossier-fallspeed-efficiency.md`, `dossier-stochastic.md`, `dossier-coalescence-turbulence.md`, `dossier-ice.md`.
@@ -78,7 +86,7 @@ Thermal noise: surface energy of a 10 µm drop 9.0 × 10⁻¹¹ J = 2.3 × 10¹�
   capture; goes into the text. L2 1 PASS (×1.69 > 1.20), L2 2 PASS (6/14). L3 1 FAILED narrowly (t₉₀ changes 0.26 %, predicted < 0.1 %;
   still far below the closure band). L6: −1.7 % at 100 cm²/s³ → stated check (X = 10 % from Ayala's +5.6 %).
 
-## Resumed by Numa ("resume", 23 Oct); queue below
+## Handoff notes
 
 Nothing is running. Resume list, in order:
 1. L0 Gate 1: round-3 fixes written (contract §12); skeptic was re-checking them when stopped (resume it or a fresh short check).
@@ -93,6 +101,12 @@ Done since the last update: browser check PASS at 360/390/1024/1440 px (book-05 
 `checks/check_physics.py` 12/12 PASS (incl. NumPy re-solve of the SCE 5.774/13.483 against 5.767/13.470, Gillespie against the exact
 capture chain p = 0.15, Poisson bridge KS p = 0.42); L2 prediction 3 PASS (Hall below 30 µm: t₉₀ −0.2 %); `physics.cjs` kernel option
 `hallBelow`; `derive/L2_stc.cjs` deleted. Nothing committed yet.
+
+## For the i18n session (not this study's files)
+
+- `public/de/portfolios.html` and `public/ar/portfolios.html` still show the old Droplet Collection article and its old `fig/` plates.
+  After this branch merges, the English article's pieces need German and Arabic translations and `python3 tools/i18n/build.py`;
+  then the old `public/portfolios/droplet-collection/fig/*.svg` (all but `plate-*.svg`) can go.
 
 ## Decisions for Numa
 

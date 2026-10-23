@@ -62,6 +62,7 @@ var CHART = (function () {
       var lx = L + 10, ly = T + 14, items = s.filter(function (q) { return q.label; });
       if (o.legendAt === 'right') { lx = L + pw - 200; }
       if (o.legendAt === 'bottom') { ly = T + ph - 14 * items.length; }
+      if (o.legendAt === 'bottomright') { lx = L + pw - 182; ly = T + ph - 15 * items.length; }
       items.forEach(function (q, k) {
         var c = q.color || COL[s.indexOf(q) % COL.length], y = ly + 15 * k;
         out.push('<line x1="' + lx + '" x2="' + (lx + 18) + '" y1="' + (y - 4) + '" y2="' + (y - 4) + '" stroke="' + c + '" stroke-width="2.5"' + (q.dash ? ' stroke-dasharray="' + q.dash + '"' : '') + '/><text x="' + (lx + 24) + '" y="' + y + '" class="leg">' + esc(q.label) + '</text>');

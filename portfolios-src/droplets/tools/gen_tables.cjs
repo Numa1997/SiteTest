@@ -1,6 +1,6 @@
 // Generate the collision-efficiency tables (L2) with the study's own trajectory solver and store them in data/.
 //   node tools/gen_tables.cjs            -> data/etab_warm.json (water on water, 10 C, 850 hPa)
-// The table records its air state and the generator's version; tools/check_tables.cjs recomputes sample entries.
+// The table records its air state and the generator's version; checks/check_physics.py recomputes E(40 um, 8 um) independently.
 'use strict';
 const fs = require('fs'), path = require('path');
 const P = require('../physics.cjs');

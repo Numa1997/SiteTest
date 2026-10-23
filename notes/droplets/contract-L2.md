@@ -146,7 +146,7 @@ Norey's 1.21194, Hall's comparison table. Chosen: one-sided flow, τ = v(r)/g*, 
 Price: the one-sided flow ignores the partner's own flow, which matters most for small collectors (where it underestimates E by
 0.01–0.08) and for near-equal sizes (where it fails); Langmuir's interpolation is not physics; our E is 1.2–1.5 times below Hall's
 compiled values along r = 8 µm, mostly because of the flow field at Re ≈ 1–20, so observable 1 carries a closure uncertainty that the
-page shows as a band: t₉₀ = 11.4 min (Hall) to 13.5 min (ours).
+page shows as a band: t₉₀ = 10.5 to 13.5 min (crossover 2 to 60; Hall 11.4 min).
 
 ## 9. Answers to round 1 (`skeptic-G1-L2-r1.md`)
 

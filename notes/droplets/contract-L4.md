@@ -128,3 +128,19 @@ numbers rather than a forecast about nature, and is labelled so on the page.
 Independent check (`checks/check_physics.py`): the SCE re-solved with different code and update order (NumPy, all pairs at once,
 Δt = 0.5 s) gives 5.774 / 13.483 min. A limiter that counts gross instead of net losses (a large drop sweeping up a droplet mostly stays
 in its own bin) slows the large drops and gives t₉₀ = 18.3 min; the model's limiter counts net losses, as it must.
+
+## 10. Answers to round 1 (`skeptic-G1-L4L5-r1.md`, L4: PASS with fixes)
+
+| # | Answer |
+|---|---|
+| 1 | The §6 checks, now reported. Golovin number error −0.0018 at s = 8 (`tools/run_golovin.cjs`). Constant kernel, monodisperse start, N/N₀ = 0.24993 against the exact 0.25000 after 6000 s (`derive/L4_conv.cjs`). The monodisperse 12 ± 2 % test was withdrawn in L0 round 3 (grid-dependent), and its grid-free replacement, the death-chain test of the stochastic engine, passed (`check_physics.py`). Positivity: 0 limiter corrections in every run. Δt and s convergence: next row. |
+| 2 | Accepted: code agreement is not a resolution error. Measured (`derive/L4_conv.cjs`): t₉₀ = 13.352 / 13.470 / 13.527 min at s = 4 / 8 / 16, and 13.470 / 13.473 / 13.474 min at Δt = 1 / 0.5 / 0.25 s. The numerical answer is good to about 0.1 min, against a physical band of 3.0 min. Chapter 5 now teaches this. |
+| 3 | Accepted: Golovin's ε measures the bulk of the spectrum, not the far tail. The skeptic measured the two-bin scheme over-filling the tail (×2.05 at s = 8 and ×1.31 at s = 16 at the 10⁻⁶ level). The consequence for L5 was measured directly: the 1 m³ first-drop median from (6.1) is 55 / 57 / 61 s at s = 8 / 16 / 32 (`derive/L5_tail.cjs`, 1 s records), so chapter 6 says "about a minute" and names the slow convergence. |
+| 4 | GCE times corrected to the interpolated 6.86 and 18.57 min; bookkeeping gaps 2.3 and 5.1 min (chapters 5 and 9; `check_numbers.cjs`). |
+| 5 | t₅₀, t₉₀ are interpolated between 5 s or 10 s records; the per-minute values appear only as the old study's comparison column. |
+| 6 | "A few × 10⁻¹³" (3.4 × 10⁻¹³ is the largest, as chapter 5 says). |
+| 7 | The notes say "it assumes that the numbers of drops in different size classes are uncorrelated" and, in chapter 6, give the n(n − 1) against n² example. The jump-expansion phrase is not on the page. |
+| 8 | N(≥ 100 µm) = 3.64 × 10⁴, 4.12 × 10³, 9.96 × 10² per m³ at 10 / 20 / 30 min (extended, s = 8): falling, because the 100 µm drops merge into larger ones. The caption of figure 6.1 now says why (6.1) uses the largest n₁₀₀ reached. |
+| 9 | Noted with thanks: the limiter acts only in the top bin and moves 5 × 10⁻²⁷ of the water. |
+| 10 | "A mean drop mass equal to that of a 10 µm sphere." |
+| 11 | Accepted: file times cannot be checked from git. The contract claims nothing about timing beyond labelling which outcomes were known. |

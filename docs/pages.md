@@ -39,8 +39,8 @@ Related pages: the fold mechanism is in [scripts/fold.md](scripts/fold.md), the 
 | Favicon: an inline SVG, a wine square with a letter | "N" [17–20](../index.html#L17-L20) | "NK" [20–23](../public/simulations.html#L20-L23) | "NK" [22–25](../public/portfolios.html#L22-L25) |
 | Skip link (`.skip-link`) | to `#main` [27](../index.html#L27) | to `#catalog` [30](../public/simulations.html#L30) | to `#projects` [32](../public/portfolios.html#L32) |
 | Phyein Usul logo [`images/phyein-usul-mark.svg`](../public/images/phyein-usul-mark.svg) in an `a` to `index.html` (the ten simulation pages carry the same 87 × 48 logo in their top bar, linking to `../index.html`) | top of the hero, 217 × 120 [31](../index.html#L31) | top bar, 87 × 48 [33](../public/simulations.html#L33) | top bar, 87 × 48 [35](../public/portfolios.html#L35) |
-| `scripts/fold.js` at the end of `<body>` | [625](../index.html#L625) | [123](../public/simulations.html#L123) | [458](../public/portfolios.html#L458) |
-| Footer: © line and "Back to top" | [620–623](../index.html#L620-L623) | [118–121](../public/simulations.html#L118-L121) | [453–456](../public/portfolios.html#L453-L456) |
+| `scripts/fold.js` at the end of `<body>` | [625](../index.html#L625) | [123](../public/simulations.html#L123) | [448](../public/portfolios.html#L448) |
+| Footer: © line and "Back to top" | [620–623](../index.html#L620-L623) | [118–121](../public/simulations.html#L118-L121) | [443–446](../public/portfolios.html#L443-L446) |
 
 The `js` class matters for one thing: [site.css:769–779](../public/styles/site.css#L769-L779) hides `.reveal` blocks
 only under `.js`, so without JavaScript nothing waits for a fade-in.
@@ -369,34 +369,34 @@ Security policy and referrer rule ([5–6](../public/portfolios.html#L5-L6)), `<
 ([8](../public/portfolios.html#L8)). Stylesheets in order
 ([15–21](../public/portfolios.html#L15-L21)): `site.css`, `katex.min.css`, `paper.css`, `catalog.css` (top bar, masthead,
 `--serif`), `portfolio.css` (the project cards), `fold.css`, and `fonts/arabic.css` for the two Arabic labels of project 04. Scripts at the end of `<body>`: `scripts/fold.js`
-([458](../public/portfolios.html#L458)), `vendor/katex/katex.min.js` ([459](../public/portfolios.html#L459)),
-`vendor/katex/contrib/auto-render.min.js` ([460](../public/portfolios.html#L460)), the inline script
-([461–475](../public/portfolios.html#L461-L475)).
+([448](../public/portfolios.html#L448)), `vendor/katex/katex.min.js` ([449](../public/portfolios.html#L449)),
+`vendor/katex/contrib/auto-render.min.js` ([450](../public/portfolios.html#L450)), the inline script
+([451–465](../public/portfolios.html#L451-L465)).
 
 ### Body
 
 - `header.cat-top` ([34–42](../public/portfolios.html#L34-L42)), as on the catalog (logo and "← Numa Koudsie" at
   [35](../public/portfolios.html#L35)), with Simulations instead of Portfolios.
-- `main.cat#projects` ([44–451](../public/portfolios.html#L44-L451)). Its `.cat__head` has an inline style for one column
+- `main.cat#projects` ([44–441](../public/portfolios.html#L44-L441)). Its `.cat__head` has an inline style for one column
   ([45](../public/portfolios.html#L45)), since there is no stats box; kicker, `h1` "Portfolios.", lede.
 - Three `article.proj` with the same structure:
 
 | Part | Droplet Collection | Rotor Pendula | Hydraulic Press Study |
 |---|---|---|---|
-| `article.proj#…[aria-labelledby]` | `#droplet-collection` [58–159](../public/portfolios.html#L58-L159) | `#rotor-pendula` [161–260](../public/portfolios.html#L161-L260) | `#hydraulic-press` [262–358](../public/portfolios.html#L262-L358) |
-| `.proj__band`: `span.proj__num`, a `p`, a last `span` | "01", thesis line, topics [59–63](../public/portfolios.html#L59-L63) | "02" [162–166](../public/portfolios.html#L162-L166) | "03" [263–267](../public/portfolios.html#L263-L267) |
-| `.proj__head`: `h2#…-title`, `.proj__sub`, `.proj__abs`, `.proj__actions` (`a.proj__btn`, `a.proj__btn--ghost`) | [65–89](../public/portfolios.html#L65-L89) | [168–193](../public/portfolios.html#L168-L193) | [269–290](../public/portfolios.html#L269-L290) |
-| `dl.proj__tally`: four `div > dt + dd`; `dt.is-new` is wine | [90–95](../public/portfolios.html#L90-L95) | [194–199](../public/portfolios.html#L194-L199) | [291–296](../public/portfolios.html#L291-L296) |
-| `section.proj__part` 1: text | 1.1 "The warm cloud" [98–112](../public/portfolios.html#L98-L112) | 2.1 "The answer in four lines" (`ol.proj__changes`) [202–210](../public/portfolios.html#L202-L210) | 3.1 "One press cycle, 4.4 seconds" (`ol.proj__changes`) [299–307](../public/portfolios.html#L299-L307) |
-| part 2 | 1.2 "What changed" (`ol.proj__changes`) [114–123](../public/portfolios.html#L114-L123) | 2.2 "What the audit corrected" [212–223](../public/portfolios.html#L212-L223) | 3.2 "What the model keeps" [309–324](../public/portfolios.html#L309-L324) |
-| part 3: `.proj__figs`, four `figure > a.pfig__plate > img` + `figcaption` with `span.pfig__n` | [125–145](../public/portfolios.html#L125-L145) | [225–245](../public/portfolios.html#L225-L245) | [326–346](../public/portfolios.html#L326-L346) |
-| part 4: `ul.proj__pages` and `p.proj__note` | five pages [147–157](../public/portfolios.html#L147-L157) | six pages [247–258](../public/portfolios.html#L247-L258) | three pages, `ul.proj__pages.proj__pages--3` [348–356](../public/portfolios.html#L348-L356) |
+| `article.proj#…[aria-labelledby]` | `#droplet-collection` [58–149](../public/portfolios.html#L58-L149) | `#rotor-pendula` [151–250](../public/portfolios.html#L151-L250) | `#hydraulic-press` [252–348](../public/portfolios.html#L252-L348) |
+| `.proj__band`: `span.proj__num`, a `p`, a last `span` | "01", thesis line, topics [59–63](../public/portfolios.html#L59-L63) | "02" [152–156](../public/portfolios.html#L152-L156) | "03" [253–257](../public/portfolios.html#L253-L257) |
+| `.proj__head`: `h2#…-title`, `.proj__sub`, `.proj__abs`, `.proj__actions` (`a.proj__btn`, `a.proj__btn--ghost`) | [65–85](../public/portfolios.html#L65-L85) | [158–183](../public/portfolios.html#L158-L183) | [259–280](../public/portfolios.html#L259-L280) |
+| `dl.proj__tally`: four `div > dt + dd`; `dt.is-new` is wine | [86–91](../public/portfolios.html#L86-L91) | [184–189](../public/portfolios.html#L184-L189) | [281–286](../public/portfolios.html#L281-L286) |
+| `section.proj__part` 1: text | 1.1 "The cloud and the three questions" [94–104](../public/portfolios.html#L94-L104) | 2.1 "The answer in four lines" (`ol.proj__changes`) [192–200](../public/portfolios.html#L192-L200) | 3.1 "One press cycle, 4.4 seconds" (`ol.proj__changes`) [289–297](../public/portfolios.html#L289-L297) |
+| part 2 | 1.2 "What the rebuild found" (`ol.proj__changes`) [106–115](../public/portfolios.html#L106-L115) | 2.2 "What the audit corrected" [202–213](../public/portfolios.html#L202-L213) | 3.2 "What the model keeps" [299–314](../public/portfolios.html#L299-L314) |
+| part 3: `.proj__figs`, four `figure > a.pfig__plate > img` + `figcaption` with `span.pfig__n` | [117–137](../public/portfolios.html#L117-L137) | [215–235](../public/portfolios.html#L215-L235) | [316–336](../public/portfolios.html#L316-L336) |
+| part 4: `ul.proj__pages` and `p.proj__note` | four pages, no note [139–147](../public/portfolios.html#L139-L147) | six pages [237–248](../public/portfolios.html#L237-L248) | three pages, `ul.proj__pages.proj__pages--3` [338–346](../public/portfolios.html#L338-L346) |
 
-A fourth `article.proj#iron-cotton` (Iron, Cotton and the Head, [portfolios.html:360–450](../public/portfolios.html#L360-L450),
+A fourth `article.proj#iron-cotton` (Iron, Cotton and the Head, [portfolios.html:350–440](../public/portfolios.html#L350-L440),
 added 22 October 2026) has the same parts: band "04", head with two buttons (the English page and, in Arabic, the Arabic page),
-tally ([388–393](../public/portfolios.html#L388-L393)), 4.1 "One drop, 9 seconds" (`ol.proj__changes`, [396–404](../public/portfolios.html#L396-L404)),
-4.2 "What the model keeps" ([406–417](../public/portfolios.html#L406-L417)), 4.3 four figures ([419–439](../public/portfolios.html#L419-L439)) and
-4.4 two pages in a plain `ul.proj__pages` ([441–448](../public/portfolios.html#L441-L448)); the Arabic item carries `lang="ar" dir="rtl"`.
+tally ([378–383](../public/portfolios.html#L378-L383)), 4.1 "One drop, 9 seconds" (`ol.proj__changes`, [386–394](../public/portfolios.html#L386-L394)),
+4.2 "What the model keeps" ([396–407](../public/portfolios.html#L396-L407)), 4.3 four figures ([409–429](../public/portfolios.html#L409-L429)) and
+4.4 two pages in a plain `ul.proj__pages` ([431–438](../public/portfolios.html#L431-L438)); the Arabic item carries `lang="ar" dir="rtl"`.
 
 Each part's `h3` carries an `id` (`dc-cloud`, `dc-changes`, … `rp-pages`, … `hp-pages`, … `ic-pages`) and a `span.psub__n` number.
 
@@ -410,30 +410,31 @@ links work everywhere. The routes used here exist in the copies' bundles: `/`, `
 with three tabs; its links use `portfolios/hydraulics/index.html#servo`, `#ideal` and `#theory`, which its tab bar reads on
 load ([portfolios.md](portfolios.md#the-hydraulic-press-study-hydraulics)). All three copies link back with `href="../../portfolios.html"`, and so do the two pages of Iron, Cotton and the Head (`portfolios/impact/index.html`, `ar.html`), which also link to each other.
 The figure images come from each copy's `fig/` folder (for example
-[`portfolios/droplet-collection/fig/fallspeed_gk.svg`](../public/portfolios/droplet-collection/fig/fallspeed_gk.svg)).
+[`portfolios/droplet-collection/fig/plate-fallspeed.svg`](../public/portfolios/droplet-collection/fig/plate-fallspeed.svg), written by the
+Droplet Collection build). Droplet Collection, since 23 October 2026 one generated page like the Hydraulic Press Study, is linked at
+`#book`, `#sim`, `#checks` and at four figure ids (`#fig-2-1`, `#fig-3-2`, `#fig-5-2`, `#fig-6-1`), which open their tab
+([portfolios.md](portfolios.md#droplet-collection-droplet-collection-since-23-october-2026)).
 
 **Image sizes.** Every one of the twelve figure `img` tags carries `width` and `height` in CSS px: the picture's own proportions at a
 height of 300 px, rounded to whole pixels. The browser uses them to reserve the right box before the picture arrives; the
 stylesheet then sets `width: 100%; height: auto` ([portfolio.css:210–214](../public/styles/portfolio.css#L210-L214)). Without
 the stylesheet the picture shows at exactly these sizes. Droplet Collection
-([portfolios.html:129](../public/portfolios.html#L129), [133](../public/portfolios.html#L133),
-[137](../public/portfolios.html#L137), [141](../public/portfolios.html#L141)):
+([portfolios.html:121](../public/portfolios.html#L121), [125](../public/portfolios.html#L125),
+[129](../public/portfolios.html#L129), [133](../public/portfolios.html#L133)), since 23 October 2026 the four plates written by its
+build, all with the `viewBox` of the notes' charts:
 
-| Picture | SVG `viewBox` (pt) | `width` × `height` (css px) | Ratio error from rounding |
+| Picture | SVG `viewBox` (px) | `width` × `height` (css px) | Ratio error from rounding |
 |---|---|---|---|
-| `fallspeed_gk.svg` | 400.52 × 188.969 | 636 × 300 | +0.02 % |
-| `ecoll_map.svg` | 295.522 × 211.745 | 419 × 300 | +0.07 % |
-| `w2_spectra.svg` | 405.74 × 209.972 | 580 × 300 | +0.05 % |
-| `golovin.svg` | 309.8 × 197.732 | 470 × 300 | −0.01 % |
+| `plate-fallspeed.svg`, `plate-efficiency.svg`, `plate-warm.svg`, `plate-first.svg` | 600 × 330 | 545 × 300 | −0.08 % |
 
-Rotor Pendula's four use the same rule: 648, 660, 715 and 655 × 300 ([229](../public/portfolios.html#L229),
-[233](../public/portfolios.html#L233), [237](../public/portfolios.html#L237), [241](../public/portfolios.html#L241)).
+Rotor Pendula's four use the same rule: 648, 660, 715 and 655 × 300 ([219](../public/portfolios.html#L219),
+[223](../public/portfolios.html#L223), [227](../public/portfolios.html#L227), [231](../public/portfolios.html#L231)).
 The Hydraulic Press Study's four are WebP screenshots of its own page, stored 600 px high for sharp display on high-density
-screens: 420, 462, 748 and 631 × 300 ([330](../public/portfolios.html#L330), [334](../public/portfolios.html#L334),
-[338](../public/portfolios.html#L338), [342](../public/portfolios.html#L342)).
+screens: 420, 462, 748 and 631 × 300 ([320](../public/portfolios.html#L320), [324](../public/portfolios.html#L324),
+[328](../public/portfolios.html#L328), [332](../public/portfolios.html#L332)).
 Iron, Cotton and the Head's four are WebP screenshots of its English page made by `portfolios-src/impact/checks/plates.cjs`, stored
-600 px high: 409, 626, 734 and 409 × 300 ([423](../public/portfolios.html#L423), [427](../public/portfolios.html#L427),
-[431](../public/portfolios.html#L431), [435](../public/portfolios.html#L435)).
+600 px high: 409, 626, 734 and 409 × 300 ([413](../public/portfolios.html#L413), [417](../public/portfolios.html#L417),
+[421](../public/portfolios.html#L421), [425](../public/portfolios.html#L425)).
 
 **What fold.js does here.** `portfolios()` ([fold.js:375–396](../public/scripts/fold.js#L375-L396)): every `.proj__part`
 becomes a level-2 fold with its `h3` as header and gets the id `<project id>-part-<n>` when it has none (measured:
@@ -446,8 +447,8 @@ Expand all / Collapse all goes before the first project. All start open.
 
 | Function | Lines | What it does |
 |---|---|---|
-| maths | [464–469](../public/portfolios.html#L464-L469) | `renderMathInElement` (KaTeX auto-render) over `#projects`, with `\[ … \]` for display and `\( … \)` for inline maths, `throwOnError: false`. Measured: 33 formulas typeset. It runs before fold.js reshapes the page, so the folds hold typeset maths. |
-| `#to-top` | [470–473](../public/portfolios.html#L470-L473) | Scrolls to the top (there is no `#top` element). |
+| maths | [454–459](../public/portfolios.html#L454-L459) | `renderMathInElement` (KaTeX auto-render) over `#projects`, with `\[ … \]` for display and `\( … \)` for inline maths, `throwOnError: false`. Measured: 33 formulas typeset. It runs before fold.js reshapes the page, so the folds hold typeset maths. |
+| `#to-top` | [460–463](../public/portfolios.html#L460-L463) | Scrolls to the top (there is no `#top` element). |
 
 ### Without JavaScript
 
@@ -524,6 +525,6 @@ AppDeploy and (20 October 2026) on phyeinusul.com. To keep a path out of search 
 10. **Two favicons.** The home page draws "N" ([index.html:19](../index.html#L19)), the other two pages a bold "NK"
     ([simulations.html:22](../public/simulations.html#L22), [portfolios.html:24](../public/portfolios.html#L24)).
 11. Fixed on 2026-10-15: the four Droplet Collection images carry `width` × `height` of 636 × 300, 419 × 300, 580 × 300 and
-    470 × 300 css px, the SVGs' proportions ([portfolios.html:129–141](../public/portfolios.html#L129-L141); table under
-    **Image sizes**). Before, they were the `viewBox` numbers times 1000 (400520 × 188969 and the like), which made the pictures
+    470 × 300 css px, the SVGs' proportions (those plates were replaced on 23 October 2026 by the rebuild's four, same rule; table
+    under **Image sizes**). Before, they were the `viewBox` numbers times 1000 (400520 × 188969 and the like), which made the pictures
     295 522 to 405 740 px wide when no stylesheet loads (audit repair, commit [32c240c](https://github.com/Numa1997/SiteTest/commit/32c240c52fd0535d39a0cef608dc404cf4219484)).

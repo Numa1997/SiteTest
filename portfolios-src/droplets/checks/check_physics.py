@@ -294,7 +294,7 @@ check("Gillespie engine against the exact capture chain (one 40 um collector, 20
 # ------------------------------------------------------------------ 8. the Poisson bridge (6.1) against the exact runs
 st = json.load(open(os.path.join(ROOT, 'data', 'stochastic.json')))
 br = json.load(open(os.path.join(ROOT, 'data', 'bridge.json')))['s16']
-tb, nb = np.array(br['t'], float), np.array(br['N100'], float)
+tb, nb = np.array(br['t'], float), np.maximum.accumulate(np.array(br['N100'], float))   # largest n100 so far (figure 6.1)
 for Vcm in ('1000', '100'):
     times = [q['t100'] for q in st['V'][Vcm] if q['t100'] is not None]
     nr = len(st['V'][Vcm])

@@ -1,0 +1,17 @@
+(a) velocity from numerically differentiated (2.1) vs textbook Cartesian field, 6 random points outside the sphere
+   |X|/a = 1.90  max|diff| = 2.55e-11  (|u| = 0.171)
+   |X|/a = 4.28  max|diff| = 3.23e-11  (|u| = 0.304)
+   |X|/a = 2.11  max|diff| = 5.83e-12  (|u| = 0.206)
+   |X|/a = 3.21  max|diff| = 3.17e-11  (|u| = 0.281)
+   |X|/a = 4.96  max|diff| = 2.64e-11  (|u| = 0.280)
+   |X|/a = 1.18  max|diff| = 9.17e-12  (|u| = 0.064)
+   no-slip: |u| on r = a at 5 random angles: [2.8e-17, 8.3e-17, 4.2e-17, 2.4e-17, 4.5e-17]
+   far field: u(100a)/U = [-0.00216216 -0.00297297  0.98864865]
+(b) drag by quadrature of the numerically differentiated stress (analytic velocity field, finite-difference gradient), 6 pi mu a U = 7.343975482590716
+   sphere r = 1.0 a : F = (-2.80e-28, 5.25e-28, 7.34397548)  ratio F_z/(6 pi mu a U) = 1.00000000
+   sphere r = 1.5 a : F = (-2.20e-19, -3.40e-18, 7.34397548)  ratio F_z/(6 pi mu a U) = 1.00000000
+   sphere r = 3.0 a : F = (-1.92e-18, -1.49e-18, 7.34397548)  ratio F_z/(6 pi mu a U) = 1.00000000
+   sphere r = 8.0 a : F = (2.78e-18, 1.75e-17, 7.34397548)  ratio F_z/(6 pi mu a U) = 1.00000000
+   pressure part on r = a: 2.44799183  (2 pi mu a U = 2.44799183) ;  viscous part = total - pressure = 4.89598366 (4 pi mu a U = 4.89598366)
+(c) (2.3): equation of motion m dv/dt = (m - m_displaced) g - 6 pi mu a v, a = 20 um water drop in air
+   v(t=50 ms) = 4.83843725e-02 m/s ; k a^2 = 4.83863111e-02 m/s ; relaxation time m/(6 pi mu a) = 4.938e-03 s (ODE reached 0.999960 of terminal after 50 ms = 10 tau)

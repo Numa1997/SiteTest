@@ -93,3 +93,36 @@ Checks that came out right: the crossover numbers, the hovering numbers, the nea
 A round-3 check should take minutes.
 
 Not checked by me: Hall's and Langmuir's page images (not attempted again); the flow fields Hall's 40–300 µm sources used (my recollection only); E in a real Navier–Stokes field (out of scope by instruction).
+
+## Round 3 (check of section 10 and the new script only)
+
+What I ran:
+- `node derive/L2_cross.cjs` (16 s with the cached `data/etab_split.json`). It prints t₉₀ = 13.47 / 12.60 / 11.48 / 10.49 min at
+  crossover 60 / 20 / 6 / 2, and 12.68 min with E = 1 below 30 µm. That is the same as my `sk3l_cross.cjs` and `sk3l_sce2.cjs`
+  (12.69 there; the difference is how E = 1 is applied, by table rows instead of by kernel).
+- `checks/check_physics.py`: PHYSICS CHECK PASS. It prints SciPy E(40, 8) = 0.3442 against the model's 0.3444. So 0.3442 is a real
+  independent value, and I withdraw that part of N5.
+- `data/warm.json`: t₉₀ = 7.963 min (E = 1, Beard), 13.470 min (own table), 11.383 min (Hall). These numbers are checked into the
+  page by `checks/check_numbers.cjs`. The rest of N5 is answered.
+
+| # | Verdict | Note |
+|---|---|---|
+| N1 | answered | §8 says "one-sided flow" and "not a bracket". Keeping the version string until the table is regenerated is reasonable. |
+| N2 | **answered in §3 and in chapter 3, not in §8** | §3 gives the four runs and "Band: 10.5–13.5 min". §8 still ends "t₉₀ = 11.4 min (Hall) to 13.5 min (ours)". One-line fix. |
+| N3 | answered | The false half is gone, and 12.68 min is printed. The sentence still opens "smaller because …" even though droplet–droplet pairs push the other way. It now says the shares are not separated, so the claim is no longer false. "Smaller; collector–collector and droplet–droplet pairs pull in opposite directions, and their shares are not separated" would read better. Minor. |
+| N4 | answered | 1.03 at 200 µm and the p < 0.05 rule are stated as our choice. "Factor 3 at p = 0.1" is unchanged; it is a factor 8 at R = 40 µm (tiny in absolute terms). Minor. |
+| N5 | answered | See above. |
+| N6 | answered | "Their flow fields were not opened", with dossier §6. |
+| N7 | answered | 0.006–0.011 U and 0.035–0.07 U. The lead-in still writes "(3/4)(r/d)v(r)"; harmless. Chapter 3 says "under 1 % of U" at 40/8; straight ahead it is 1.1 %, so "about 1 %" is right. Minor. |
+| N8 | answered | Correct times; conclusion "never here". |
+| N9 | answered | — |
+| N10 | answered | — |
+| N11 | answered | The separator is stated in the cell, and chapter 3 carries the plain paragraph. The chapter's "How far to trust it" reads well for a second-year student. |
+| r1-9 | answered | (I − S)/(1 − S) is in the hovering row. §9 row 2 still claims the "fails where" column names Re ≈ 1–20; it does not. Delete that clause. Minor. |
+
+Thresholds after round 3: motivated pass; **honest pass**, once §8's band is corrected (the band is now the model's own crossover
+spread, and Hall's table sits inside it); derived pass; checked pass; sourced pass; readable pass.
+
+**Gate 1 verdict, contract L2: PASS on one condition.** Change §8's band from "11.4 (Hall) to 13.5 min" to "10.5–13.5 min (the crossover
+spread; Hall's table 11.4)". That edit needs no further review. The four minor items (N3 wording, the factor 8 in N4, "about 1 %" in
+chapter 3, the §9 row 2 clause) are at the author's discretion.
