@@ -44,19 +44,17 @@ Thermal noise: surface energy of a 10 µm drop 9.0 × 10⁻¹¹ J = 2.3 × 10¹�
        thresholds (`skeptic-G3-r1.md`, Round 2), its five minor items and the one partial fix applied after.
 4. [x] Old app bundle `static/` removed (2.2 MB); old `fig/` kept for the German and Arabic pages.
 5. [x] PR https://github.com/Numa1997/SiteTest/pull/33 open, not merged (follow-up to #32, which Numa merged at 184f3bf).
-6. [~] Revision after Numa's "I don't agree … revise your work" (23 Oct). The ladder is renumbered: L8 energy, entropy and who eats
-       whom (`contract-L8.md`, new); L9 the random flow (the old L8, failed round 1: `contract-L9.md`, `skeptic-G1-L9-r1.md`);
-       L10 the cloud in space ("where we sit in the field"); L11 a flow from cloud images. Not one of these is on the page yet.
-   - L8 done so far: derivations `derive/L8_sympy.py` (all checks right), scales `derive/L8_energy.cjs`, ledger in `physics.cjs`
-     (optional; water evolves bit for bit as before), `tools/run_energy.cjs` → `data/energy.json`. Results: surface energy never rose
-     (0 steps, 0 events); tag conserved to 5e-14; drizzle budget 2e-11. Mergers at t50: c–d 90.9 %, d–d 0.014 %; energy-only Monte
-     Carlo (= constant kernel) d–d 99 %. Release ≤ 1.5 % of gravity's drag dissipation; gravity dissipates the start's surface energy
-     in 28 s. 1.8e10 k_B per merger. Drizzle water 69.5 % droplet-origin at t90. Max-entropy error (0–2): physical kernel 1.31/1.92
-     at t50/t90 (gamma 1.36/1.90), 0.39 (gamma) at 60 min; constant kernel < 0.1 by N/N0 = 0.005. Predictions 1, 2, 4, 5 pass;
-     prediction 3's "exact product" gateway is a grid artefact (bins 3.85 % apart near 100 µm), binned gateway 55 %: restate it.
-     Contract 6.2 asked N within 0.2 %: it is 0.36 % at step 0.02, first order in time (0.71/0.36/0.18 %); fix the contract.
-   - Open: skeptic G1-L8 (stopped by the rate limit; resume it with SendMessage), figures, chapter (Part IV), panel, checks.
-   - Scouts stopped by the rate limit: DNS kernels, stochastic field (partial dossier written), energy/entropy/space. Resume them.
+6. [x] Revision after Numa's "I don't agree … revise your work" and his correction "it is not a random velocity field, it just has a
+       stochastic element" (23 Oct). Built, checked and on the page (Part IV, chapters 10 and 11, panels 4 and 5, problems 6 and 7):
+   - L8 energy, entropy and who eats whom (`contract-L8.md` §9 results): surface energy a Lyapunov function (never rose); 1.8e10 k_B per
+     merger; Metropolis = constant kernel, d–d 99 % against 0.005 % in the cloud; max-entropy far from the cloud, exact for every-pair-alike.
+   - L10 a cloud with a shape (`contract-L10.md`): super-droplets, velocity = fall + overturning cell + Ornstein–Uhlenbeck stochastic
+     element (Thomson drift), evaporation outside the shape. Box within 1.2 % of the collection equation; well-mixed χ² 0.79. Seven
+     cases × 3 seeds: rain 22–46 %, more edge per area → less rain; 90 % of drizzle born in the updraft core (61 % of the area).
+   - Checks: numbers 215/215 PASS; physics 14/14 PASS; browser PASS at 360/390/1024/1440 px.
+7. [ ] Gate 1 and Gate 3 skeptics for chapters 10–11 (stopped by the usage limit; the page says "not yet reviewed").
+8. [ ] L9 (turbulence at contact scale, `contract-L9.md`) and L11 (a mean motion measured from cloud pictures): not built.
+9. [ ] `docs/files.md`: `tools/inventory.py` refuses to write while rotor-pendula theory files lack rules (the rotor session's files).
 
 ## Done, with evidence
 

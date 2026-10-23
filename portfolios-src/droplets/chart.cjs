@@ -13,9 +13,9 @@ var CHART = (function () {
     return t;
   }
   function logTicks(lo, hi) {
-    var t = [], e;
+    var t = [], e, decades = Math.log10(hi / lo) > 4;     // wide ranges: powers of ten only
     for (e = Math.floor(Math.log10(lo)); e <= Math.ceil(Math.log10(hi)); e++) {
-      [1, 2, 5].forEach(function (m) { var v = m * Math.pow(10, e); if (v >= lo * 0.999 && v <= hi * 1.001) t.push(v); });
+      (decades ? [1] : [1, 2, 5]).forEach(function (m) { var v = m * Math.pow(10, e); if (v >= lo * 0.999 && v <= hi * 1.001) t.push(v); });
     }
     return t;
   }

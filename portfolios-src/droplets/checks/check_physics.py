@@ -305,6 +305,44 @@ for Vcm in ('1000', '100'):
         ok = ks.pvalue > 0.01 if Vcm == '1000' else True
         check(f"Poisson bridge (6.1), {Vcm} cm3" + ("" if Vcm == '1000' else " (reported)"), ok, line)
 
+# ------------------------------------------------------------------ 9. energy, entropy and maximum entropy (chapter 10)
+from scipy import special, integrate
+en = json.load(open(os.path.join(ROOT, 'data', 'energy.json')))
+sig = sigma_w(T)
+def lognormal_area(N, rg, sg):     # sum of 4 pi r^2 over a lognormal mode: N 4 pi rg^2 exp(2 ln^2 sg)
+    return N * 4 * math.pi * rg ** 2 * math.exp(2 * math.log(sg) ** 2)
+Es_cont = sig * (lognormal_area(300e6, 8e-6, 1.25) + lognormal_area(1e6, 40e-6, 1.2))
+wr = en['warm']; recs = wr['recs']
+ok_es = rel(Es_cont, wr['Es0']) < 0.01
+ok_mono = all(recs[i + 1]['Es'] <= recs[i]['Es'] for i in range(len(recs) - 1)) and wr['rises'] == 0
+# the gamma fit of maximum entropy, redone with SciPy's digamma and gamma function on the stored 6-min spectrum
+s8 = en['s']; r = np.array(en['r']); x = 4 / 3 * math.pi * 1000 * r ** 3; w = math.log(2) / s8
+q6 = [q for q in recs if q['t'] == 360][0]; Nk = np.array(q6['spec']['N']); ov = q6['spec']['over']
+Nt = Nk.sum() + ov['N']; Mt = (Nk * x).sum() + ov['M']; L = (Nk * np.log(x)).sum() + (ov['N'] * math.log(ov['M'] / ov['N']) if ov['N'] > 0 else 0)
+cc = L / Nt - math.log(Mt / Nt)
+from scipy.optimize import brentq
+nu = brentq(lambda v: special.digamma(v) - math.log(v) - cc, 1e-6, 1e8); lam = nu / (Mt / Nt)
+Mg = np.exp(math.log(Nt) + nu * math.log(lam) + (nu + 1) * np.log(x) - lam * x - special.gammaln(nu)) * w
+Me = Nt / (Mt / Nt) * np.exp(-x / (Mt / Nt)) * x * x * w
+eG = (np.abs(Nk * x - Mg).sum() + abs(ov['M'] - max(0, Mt - Mg.sum()))) / Mt
+eE = (np.abs(Nk * x - Me).sum() + abs(ov['M'] - max(0, Mt - Me.sum()))) / Mt
+ok_me = abs(eG - q6['epsGamma']) < 2e-3 and abs(eE - q6['epsExp']) < 2e-3
+# entropy per merger: released energy over the hour / mergers / (k T)
+spm = wr['totRel'] / wr['totMerg'] / (1.380649e-23 * T)
+check("surface energy and maximum entropy (chapter 10)", ok_es and ok_mono and ok_me,
+      f"E_s(0) {wr['Es0']:.5f} J/m3 against {Es_cont:.5f} from the continuous modes; never rises in {len(recs)} records; "
+      f"maximum-entropy errors at 6 min {eE:.3f} / {eG:.3f} (SciPy) against {q6['epsExp']:.3f} / {q6['epsGamma']:.3f}; {spm:.2e} k_B per merger")
+
+# ------------------------------------------------------------------ 10. the cloud with a shape (chapter 11)
+try:
+    cl = json.load(open(os.path.join(ROOT, 'data', 'cloud.json')))
+    bx, mx = cl['box'], cl['mix']
+    check("super-droplet box against the collection equation, and the well-mixed test (chapter 11)",
+          abs(bx['sdm'][0] / bx['sce'][0] - 1) < 0.02 and abs(bx['sdm'][2] / bx['sce'][1] - 1) < 0.02 and 0.5 < mx['chi'] < 1.5,
+          f"t50/t90 {bx['sdm'][0]:.3f}/{bx['sdm'][2]:.3f} against {bx['sce'][0]:.3f}/{bx['sce'][1]:.3f} min; chi2 per cell after 30 min {mx['chi']:.2f} (Poisson: 1)")
+except FileNotFoundError:
+    check("cloud data present", False, "data/cloud.json missing: run tools/run_cloud.cjs --json")
+
 print(f"\n{sum(results)}/{len(results)} checks passed")
 print("PHYSICS CHECK PASS" if all(results) else "PHYSICS CHECK FAIL")
 sys.exit(0 if all(results) else 1)

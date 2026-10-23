@@ -125,4 +125,84 @@ figs.first = C.line({ id: 'f9', w: 600, h: 310, xmin: 0, xmax: 20, ymin: 0, ymax
   figs.turb = C.line({ id: 'f11', w: 600, h: 300, xlog: true, xmin: 1.5e-4, xmax: 5e-2, ymin: 0, ymax: 35, xlabel: 'dissipation rate ε (m²/s³)', ylabel: 'kernel raised by (%)', series: [
     { x: es, y: es.map(e => (P.ayalaFactor(40e-6, 8e-6, A, e) - 1) * 100), label: '40 µm collector, 8 µm droplet', color: '#33627f' }] });
 })();
+
+// ---------------------------------------------------------------- L8: energy, entropy and who eats whom (data/energy.json)
+(function () {
+  const E = D('energy'), wr = E.warm.recs, tm = wr.map(q => q.t / 60);
+  // 12. energy flows: surface energy released by merging, and gravity's work dissipated by drag, per m^3 of air
+  const rel = wr.map((q, i) => i === 0 ? null : (wr[i - 1].Es - q.Es) / (q.t - wr[i - 1].t));
+  figs.energyflow = C.line({ id: 'f12', w: 600, h: 320, ylog: true, xmin: 0, xmax: 30, ymin: 1e-8, ymax: 0.1, xlabel: 'time (min)', ylabel: 'power per m³ of cloud (W/m³)', series: [
+    { x: tm.slice(1), y: rel.slice(1), label: 'surface energy released by merging', color: '#7d1d2f' },
+    { x: tm, y: wr.map(q => q.Pg), label: 'gravity’s work turned to heat by drag', color: '#33627f' },
+    { x: [0, 30], y: [E.warm.rhoEps || 1.0458e-2, E.warm.rhoEps || 1.0458e-2], label: 'turbulence, ρₐε at ε = 10⁻² m²/s³', color: '#6f665e', dash: '5 4' }] });
+  // 13. the three populations: share of the water in droplets, collectors and drizzle
+  const W0 = E.warm.W0, cols = ['#33627f', '#c9783f', '#7d1d2f'];
+  figs.populations = C.line({ id: 'f13', w: 600, h: 300, xmin: 0, xmax: 30, ymin: 0, ymax: 1, xlabel: 'time (min)', ylabel: 'share of the water', series:
+    [0, 1, 2].map(c => ({ x: tm, y: wr.map(q => q.wat[c] / W0), label: ['droplets (r < 20 µm)', 'collectors (20–100 µm)', 'drizzle (r ≥ 100 µm)'][c], color: cols[c] })) });
+  // 14. the diet: water eaten in each channel since the start, as a share of all the water
+  const ch = [[1, 0, 'collectors ate droplets', '#c9783f', null], [2, 0, 'drizzle ate droplets', '#7d1d2f', null], [1, 1, 'collectors ate collectors', '#c9783f', '5 4'],
+    [2, 1, 'drizzle ate collectors', '#7d1d2f', '5 4'], [2, 2, 'drizzle ate drizzle', '#7d1d2f', '2 3'], [0, 0, 'droplets ate droplets', '#33627f', null]];
+  figs.diet = C.line({ id: 'f14', w: 600, h: 320, ylog: true, xmin: 0, xmax: 30, ymin: 1e-6, ymax: 2, xlabel: 'time (min)', ylabel: 'water eaten so far / all water', series:
+    ch.map(([a, b, l, c, d]) => ({ x: tm, y: wr.map(q => q.eaten[a * 3 + b] / W0), label: l, color: c, dash: d })) });
+  // 15. the spectrum at 6 min (half the water above 40 um) against the two maximum-entropy shapes with its number and water
+  const g = P.makeGrid(E.s, 4e-3), ru = g.r.map(r => r * 1e6), q6 = wr.find(q => q.t === 360), toG = Mk => Mk.map(v => v / g.dlnr * 1e3);
+  figs.maxent = C.line({ id: 'f15', w: 600, h: 300, xlog: true, xmin: 2, xmax: 1000, ymin: 0, xlabel: 'radius r (µm)', ylabel: 'g = dM/d ln r (g/m³)', series: [
+    { x: ru, y: toG(q6.spec.N.map((n, k) => n * g.x[k])), label: 'the cloud at 6 min (chapter 5)', color: '#7d1d2f' },
+    { x: ru, y: toG(q6.spec.Mexp), label: 'maximum entropy, same N and M', color: '#33627f', dash: '5 4' },
+    { x: ru, y: toG(q6.spec.Mgamma), label: 'maximum entropy, also ⟨ln m⟩ (gamma)', color: '#3c6a46', dash: '2 3' }] });
+  // 16. distance from the maximum-entropy shape as the number of drops falls: gravity's kernel against the constant kernel
+  const byN = E.warm.epsByN.filter(r => r[0] > 0 && r[0] <= 1), cr = E.constant.rows;
+  figs.maxentdist = C.line({ id: 'f16', w: 600, h: 310, xlog: true, xmin: 1e-4, xmax: 1, ymin: 0, ymax: 2, xlabel: 'drops left, N/N₀', ylabel: 'spectrum error ε (0 = same shape)', series: [
+    { x: byN.map(r => r[0]), y: byN.map(r => r[1]), label: 'gravity, against the exponential', color: '#7d1d2f' },
+    { x: byN.map(r => r[0]), y: byN.map(r => r[2]), label: 'gravity, against the gamma', color: '#7d1d2f', dash: '2 3' },
+    { x: cr.map(r => r.f), y: cr.map(r => r.epsExp), label: 'every pair alike, exponential', color: '#33627f' },
+    { x: cr.map(r => r.f), y: cr.map(r => r.epsGamma), label: 'every pair alike, gamma', color: '#33627f', dash: '2 3' }] });
+  // 17. surface energy left against the share of drops merged, under three rules (100 cm^3, Monte Carlo means; steepest: one run)
+  const mc = E.mc, xf = a => a.map(q => 1 - q.f);
+  figs.rules = C.line({ id: 'f17', w: 600, h: 310, xmin: 0, xmax: 1, ymin: 0, ymax: 1, xlabel: 'share of the drops merged away, 1 − N/N₀', ylabel: 'surface energy left / at start', series: [
+    { x: [0].concat(xf(mc.physical.agg)), y: [1].concat(mc.physical.agg.map(q => q.S)), label: 'gravity’s kernel (the cloud)', color: '#7d1d2f' },
+    { x: [0].concat(xf(mc.constant.agg)), y: [1].concat(mc.constant.agg.map(q => q.S)), label: 'every pair alike (energy only)', color: '#33627f' },
+    { x: [0].concat(mc.steepest.rows.map(q => 1 - q.f)), y: [1].concat(mc.steepest.rows.map(q => q.S)), label: 'largest pair first (steepest descent)', color: '#3c6a46', dash: '5 4' }] });
+})();
+
+// ---------------------------------------------------------------- L10: a cloud with a shape (data/cloud.json, tools/run_cloud.cjs)
+(function () {
+  let CL; try { CL = D('cloud'); } catch (e) { return; }
+  if (!CL.cases || !CL.cases.reference) return;
+  const Lx = 2000, Lz = 1500, W = 560, H = 420, H0 = 420, sx = x => 40 + x / Lx * W, sz = z => 14 + (1 - z / Lz) * H;
+  function slice(id, inside, dots, note, extra) {
+    const p = [`<svg class="chart" viewBox="0 0 ${W + 60} ${H + 70}" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="${note}"><rect width="${W + 60}" height="${H + 70}" fill="#fff"/>`];
+    p.push(`<rect x="40" y="14" width="${W}" height="${H}" fill="#f4f8fa" stroke="#3f2c23"/>`);
+    for (let i = 0; i < 80; i++) for (let j = 0; j < 60; j++) { const x = (i + 0.5) * 25, z = (j + 0.5) * 25; if (inside(x, z)) p.push(`<rect x="${sx(i * 25).toFixed(1)}" y="${sz((j + 1) * 25).toFixed(1)}" width="${(W / 80 + 0.4).toFixed(2)}" height="${(H / 60 + 0.4).toFixed(2)}" fill="#e1ebf0"/>`); }
+    dots.forEach(d => p.push(`<circle cx="${sx(d[0]).toFixed(1)}" cy="${sz(d[1]).toFixed(1)}" r="${d[2]}" fill="${d[3]}"/>`));
+    if (extra) p.push(extra);
+    [0, 500, 1000, 1500, 2000].forEach(x => p.push(`<text x="${sx(x)}" y="${H + 30}" text-anchor="middle" class="tick">${x}</text>`));
+    [0, 500, 1000, 1500].forEach(z => p.push(`<text x="34" y="${sz(z) + 4}" text-anchor="end" class="tick">${z}</text>`));
+    p.push(`<text x="${40 + W / 2}" y="${H + 48}" text-anchor="middle" class="axl">x (m)</text><text transform="translate(12 ${14 + H / 2}) rotate(-90)" text-anchor="middle" class="axl">height z (m)</text>`);
+    p.push(`<text x="40" y="${H + 64}" class="tick">${note}</text></svg>`);
+    return p.join('');
+  }
+  const inside = P.shapeFn('cumulus', Lx, Lz), ref = CL.cases.reference.runs[0];
+  // 18. the reference cloud at 20 min
+  const sn = ref.snaps[1200], col = r => r >= 100 ? '#7d1d2f' : r >= 20 ? '#c9783f' : 'rgba(51,98,127,0.5)';
+  figs.cloudsnap = slice('f18', inside, sn.map(d => [d[0], d[1], d[2] >= 100 ? 2.2 : d[2] >= 20 ? 1.5 : 0.9, col(d[2])]), 'blue: droplets · ochre: collectors · wine: drizzle ≥ 100 µm (one dot in six)');
+  // 19. where drizzle is born: the place each super-droplet first reached 100 um, coloured by the time
+  const born = CL.cases.reference.runs.flatMap(q => q.born), HB = {}, h = 50;
+  born.forEach(b => { const k = Math.floor(b[0] / h) + ',' + Math.floor(b[1] / h); HB[k] = (HB[k] || 0) + 1; });
+  const hmax = Math.max(...Object.values(HB)), cells = Object.keys(HB).map(k => { const [i, j] = k.split(',').map(Number); return [i, j, HB[k] / hmax]; });
+  const shade = cells.map(([i, j, v]) => `<rect x="${sx(i * h).toFixed(1)}" y="${sz((j + 1) * h).toFixed(1)}" width="${(W * h / Lx).toFixed(2)}" height="${(H0 * h / Lz).toFixed(2)}" fill="#7d1d2f" fill-opacity="${(0.08 + 0.92 * v).toFixed(2)}"/>`).join('');
+  const core = `<line x1="${sx(720)}" x2="${sx(720)}" y1="${sz(1350)}" y2="${sz(300)}" stroke="#23160f" stroke-dasharray="4 3"/><line x1="${sx(1280)}" x2="${sx(1280)}" y1="${sz(1350)}" y2="${sz(300)}" stroke="#23160f" stroke-dasharray="4 3"/>`;
+  figs.cloudwhere = slice('f19', inside, [], 'where drops first reach 100 µm (3 runs, darker = more); dashed: the updraft core', '<g>' + shade + core + '</g>');
+  // 20. rain at the ground: share of the water rained out, for each case (mean of the runs)
+  const cases = [['reference', 'cumulus, wind and eddies', '#7d1d2f', null], ['noStochastic', 'no stochastic element', '#7d1d2f', '5 4'], ['stillAir', 'still air, eddies only', '#6f665e', null],
+    ['peakedEps', 'eddies strongest in the core', '#9a5b8f', '2 3'], ['box', 'box', '#33627f', null], ['disc', 'disc', '#3c6a46', null], ['tower', 'tall tower', '#c9783f', null]];
+  const ser = [];
+  cases.forEach(([k, l, c, d]) => { const R = CL.cases[k]; if (!R) return; const runs = R.runs, t = runs[0].rec.t.map(v => v / 60);
+    ser.push({ x: t, y: t.map((_, i) => runs.reduce((a, q) => a + q.rec.rain[i], 0) / runs.length), label: l, color: c, dash: d }); });
+  figs.cloudrain = C.line({ id: 'f20', w: 600, h: 320, xmin: 0, xmax: 45, ymin: 0, xlabel: 'time (min)', ylabel: 'share of the water rained out', series: ser });
+  const ev = [];
+  cases.forEach(([k, l, c, d]) => { const R = CL.cases[k]; if (!R) return; const runs = R.runs, t = runs[0].rec.t.map(v => v / 60);
+    ev.push({ x: t, y: t.map((_, i) => runs.reduce((a, q) => a + q.rec.evap[i], 0) / runs.length), label: l, color: c, dash: d }); });
+  figs.cloudevap = C.line({ id: 'f21', w: 600, h: 320, xmin: 0, xmax: 45, ymin: 0, xlabel: 'time (min)', ylabel: 'share of the water evaporated in clear air', series: ev });
+})();
 process.stdout.write(JSON.stringify(figs));

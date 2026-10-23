@@ -7,7 +7,7 @@ a **built copy** of each one, so that a reader can open it here without leaving 
 
 | Folder | Built from the app | What it is |
 |---|---|---|
-| [`public/portfolios/droplet-collection/`](../public/portfolios/droplet-collection/) | its source in [`portfolios-src/droplets/`](../portfolios-src/droplets/) (since 23 October 2026; before, the app `droplet-collection-yl7l26`) | Numa's Bachelor thesis (Leipzig) on how cloud droplets grow into rain, rebuilt as lecture notes: ten chapters from one drop to ice, three simulations running in the browser, worked problems and checks. One self-contained page ([below](#droplet-collection-droplet-collection-since-23-october-2026)). |
+| [`public/portfolios/droplet-collection/`](../public/portfolios/droplet-collection/) | its source in [`portfolios-src/droplets/`](../portfolios-src/droplets/) (since 23 October 2026; before, the app `droplet-collection-yl7l26`) | Numa's Bachelor thesis (Leipzig) on how cloud droplets grow into rain, rebuilt as lecture notes: twelve chapters from one drop to ice, energy and entropy, and a cloud with a shape, five simulations running in the browser, worked problems and checks. One self-contained page ([below](#droplet-collection-droplet-collection-since-23-october-2026)). |
 | [`public/portfolios/rotor-pendula/`](../public/portfolios/rotor-pendula/) | `rotor-pendula-gafw0f` | Sol's corrected study of a pendulum riding on a wind-turbine blade, built as a sensor power supply: derivation from the Lagrangian, an in-browser solver, results, checks, and a Report page whose tables are rebuilt from the study's data. |
 | [`public/portfolios/hydraulics/`](../public/portfolios/hydraulics/) | its source in [`portfolios-src/hydraulics/`](../portfolios-src/hydraulics/) (not an app) | A servo-hydraulic press under digital control, from first principles: the animated press with its PID controller, loop analysis (Bode, Nyquist, z-plane), Pascal's ideal press, and a 23-chapter text deriving every equation. One self-contained page. |
 
@@ -80,7 +80,7 @@ Since 23 October 2026 the copy is generated from [`portfolios-src/droplets/`](..
 
 | Path | What it is |
 |---|---|
-| `index.html` | The whole project in one file, written by `portfolios-src/droplets/tools/build.py --site`: the lecture notes (maths typeset at build time with KaTeX 0.16.11), the model, the three simulations, the figures as inline SVG. It loads the site's `fonts/instrument-plex.css` and `vendor/katex/katex.min.css`. |
+| `index.html` | The whole project in one file, written by `portfolios-src/droplets/tools/build.py --site`: the lecture notes (maths typeset at build time with KaTeX 0.16.11), the model, the five simulations, the figures as inline SVG. It loads the site's `fonts/instrument-plex.css` and `vendor/katex/katex.min.css`. |
 | `fig/plate-fallspeed.svg`, `fig/plate-efficiency.svg`, `fig/plate-warm.svg`, `fig/plate-first.svg` | The four plates of the Portfolios page article, written by the same build from the same figures as the notes. |
 | `fig/c1_ice.svg`, `fig/ecoll_map.svg`, `fig/fallspeed_gk.svg`, `fig/golovin.svg`, `fig/w2_rain.svg`, `fig/w2_spectra.svg` | Left over from the app copy (its `static/` bundle was removed on 23 October 2026, once nothing loaded it). The German and Arabic Portfolios pages still show these old plates until the i18n generator is run again (`tools/i18n/build.py`), so they stay for now. |
 
@@ -392,10 +392,14 @@ how each model level was argued, attacked by an independent reviewer and checked
   Checks (`#checks`); any element id also works as an address (`#ch3`, `#fig-5-2`, `#eq-6.1`), opening its tab. The Portfolios
   page links to `#book`, `#sim`, `#checks` and to four figures.
 - **The model runs in the page.** The code between `/*PHYSICS-BEGIN*/` and `/*PHYSICS-END*/` of `physics.cjs` is inlined; the
-  same code runs in Node for the run tools and the checks. The three panels (collection equation in a box, droplet trajectories,
-  an exact random cloud) change only on a click, a slider release or a button; nothing reacts to the pointer crossing a figure.
-- **Every quoted number is checked.** `checks/check_numbers.cjs` recomputes 157 numbers from the model and finds each in the text
-  near its anchor; `checks/check_physics.py` recomputes the physics independently in Python (12 checks); `checks/check_browser.py`
+  same code runs in Node for the run tools and the checks. The five panels (collection equation in a box, droplet trajectories,
+  an exact random cloud, a cloud with a shape, one energy landscape under three rules) change only on a click, a slider release or a
+  button; nothing reacts to the pointer crossing a figure. Panel 4 animates on Start; its probe is pinned by a click and its words
+  change about four times a second.
+- **Every quoted number is checked.** `checks/check_numbers.cjs` recomputes 215 numbers from the model and finds each in the text
+  near its anchor; `checks/check_physics.py` recomputes the physics independently in Python (14 checks); `checks/check_browser.py`
   opens every tab at 360, 390, 1024 and 1440 px and counts KaTeX errors, page errors and horizontal overflow.
 - **The ladder.** L0 one collector (chapter 1); L1 fall speed (2); L2 collision efficiency (3); L3 coalescence (4); L4 the
-  collection equation (5); L5 the exact random process and the first drizzle (6); L6 turbulence, decided by a number (7); L7 ice (8).
+  collection equation (5); L5 the exact random process and the first drizzle (6); L6 turbulence, decided by a number (7); L7 ice (8); L8 energy, entropy and who eats whom (10);
+  L10 a cloud with a shape: fall, mean motion and a stochastic element (11). L9 (turbulence at contact scale) and L11 (a mean motion
+  measured from cloud pictures) are open; chapters 10 and 11 still await an independent reviewer.

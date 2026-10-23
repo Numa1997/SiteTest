@@ -140,3 +140,17 @@ Chosen: the class cuts at 20 and 100 µm, the uniform-in-mass prior, the gamma a
 Price: no new prediction of rain timing comes from this level; what it buys is the exact statement of what energy and entropy decide
 (the direction and, for one kernel, the shape) and what they do not (the path and the clock), and the diet ledger the earlier levels
 did not keep.
+
+## 9. Results against the predictions (23 October 2026, `tools/run_energy.cjs`; the Gate 1 skeptic was stopped by the usage limit)
+
+1. Droplet–droplet mergers: 0.005 % of all mergers over the hour (physical); 99.05 % of the first half (Metropolis). PASS.
+2. Release / gravity's drag dissipation: at most 1.49 %. PASS.
+3. Gateway into drizzle: ill-posed on the grid (bins 3.85 % apart in mass near 100 µm, so a droplet capture cannot carry a binned drop
+   across; the "exact product" gateway reads 100 % collector by construction). Dropped from the text; replaced by the diet (water eaten
+   per channel) and the droplet-mode tag, which are exact.
+4. Spectrum error, physical kernel: exponential 1.32 / 1.92 at 6 min / t90 (gamma 1.38 / 1.90); falls to 1.11 / 0.39 at 60 min, when all
+   water is in drops near 1 mm (outside the prediction's intent; reported on the page as figure 10.6). Constant kernel: 0.089 at N/N0 =
+   0.005, 0.018 at 10⁻³. PASS for the hour up to t90 and beyond 20 min; gamma at 60 min 0.39 > 0.3: PASS.
+5. Drizzle water from the droplet mode at t90: 69.5 %. PASS.
+- Exact result 2: number within 0.36 % (not 0.2 %) at step K₀N dt = 0.02; it halves with the step (0.71 / 0.36 / 0.18 %): first order in
+  time, not a scheme error. Spectrum error 0.006 against the exact exponential. The contract's 0.2 % was too tight for this step.
