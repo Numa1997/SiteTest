@@ -1,0 +1,15 @@
+ensemble N = 300 trajectories per case; seeds 11, 12, 21, 22 (dt), 13, 14, 23, 24 (dt/2)
+  single, small swings, dt = 2e-04 s, S = 0.007 m^2/s^3: P_diss = 0.3516 +- 0.0080 mW; (S/2)<m_eff> = 0.3491 +- 0.0000 mW; ratio 1.0075 +- 0.0230; <m_eff>/M = 0.9974; book residual -0.87 %; rms angle 0.051 rad
+  single, small swings, dt = 1e-04 s, S = 0.007 m^2/s^3: P_diss = 0.3335 +- 0.0068 mW; (S/2)<m_eff> = 0.3492 +- 0.0000 mW; ratio 0.9554 +- 0.0195; <m_eff>/M = 0.9976; book residual +4.22 %; rms angle 0.050 rad
+FAIL single, small swings: P_diss = (S/2)<m_eff> within 3 % (finest dt): 4.46 %
+  single, large swings, dt = 1e-04 s, S = 12.0 m^2/s^3: P_diss = 291.2752 +- 5.5442 mW; (S/2)<m_eff> = 301.4866 +- 0.9858 mW; ratio 0.9721 +- 0.0191; <m_eff>/M = 0.5025; book residual +2.95 %; rms angle 1.240 rad
+  single, large swings, dt = 5e-05 s, S = 12.0 m^2/s^3: P_diss = 294.3950 +- 6.2438 mW; (S/2)<m_eff> = 302.0868 +- 0.9508 mW; ratio 0.9804 +- 0.0215; <m_eff>/M = 0.5035; book residual +1.69 %; rms angle 1.232 rad
+PASS single, large swings: P_diss = (S/2)<m_eff> within 3 % (finest dt): 1.96 %
+  double, small swings, dt = 1.0e-04 s, S = 0.007 m^2/s^3: P_diss = 0.3439 +- 0.0107 mW; (S/2)<m_eff> = 0.3469 +- 0.0001 mW; ratio 0.9944 +- 0.0314; <m_eff>/M = 0.9913; book residual -1.49 %; top-rod turns over per trajectory 0.0
+  double, small swings, dt = 5.0e-05 s, S = 0.007 m^2/s^3: P_diss = 0.3467 +- 0.0108 mW; (S/2)<m_eff> = 0.3469 +- 0.0001 mW; ratio 1.0025 +- 0.0317; <m_eff>/M = 0.9912; book residual +0.23 %; top-rod turns over per trajectory 0.0
+PASS double, small swings: P_diss = (S/2)<m_eff> within 3 % (finest dt): 0.25 %
+  double, large chaotic swings, dt = 5.0e-05 s, S = 12.0 m^2/s^3: P_diss = 361.0444 +- 7.7778 mW; (S/2)<m_eff> = 363.6451 +- 1.1339 mW; ratio 1.0094 +- 0.0256; <m_eff>/M = 0.6061; book residual +0.92 %; top-rod turns over per trajectory 66.2
+  double, large chaotic swings, dt = 2.5e-05 s, S = 12.0 m^2/s^3: P_diss = 366.5731 +- 7.0975 mW; (S/2)<m_eff> = 364.4539 +- 1.0896 mW; ratio 1.0190 +- 0.0226; <m_eff>/M = 0.6074; book residual +0.92 %; top-rod turns over per trajectory 67.3
+PASS double, large chaotic swings: P_diss = (S/2)<m_eff> within 3 % (finest dt): 1.90 %
+(345 s)
+1 FAIL

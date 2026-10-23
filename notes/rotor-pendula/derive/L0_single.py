@@ -74,8 +74,8 @@ Pstar = sp.simplify(P_hat.subs(kap, R - 1)*m*L**2*W**3)
 check('best power (6): P* = m L g^2 / (4 Omega (r_p - L))', sp.simplify(Pstar.subs({G: g/(W**2*L), R: rp/L}) - m*L*g**2/(4*W*(rp - L))))
 
 # Sol's best mounting: Omega = 41.888 rad/s (400 rpm), r_p = 0.3 * (7*8/Omega), m = 0.1 kg, L = 0.2 m
-num = {m: 0.1, L: 0.2, g: 9.81, W: 41.888}
-num[rp] = 0.3*7*8/num[W]
+num = {m: 0.1, L: 0.2, g: 9.80665, W: 400*2*sp.pi/60}   # standard gravity, as Sol
+num[rp] = 0.3*7*8/float(num[W])
 Pv = float((m*L*g**2/(4*W*(rp - L))).subs(num))
 print(f'   P* at Sol\'s best mounting: {Pv*1e3:.2f} mW (Sol: 57.1 mW); r_p = {num[rp]:.4f} m, R = {num[rp]/0.2:.3f}')
 ok = abs(Pv*1e3 - 57.1) < 0.1
