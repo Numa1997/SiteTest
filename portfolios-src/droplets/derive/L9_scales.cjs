@@ -1,5 +1,5 @@
-// L8 (Gate 1 numbers): scales of drops in a turbulent cloud, and the kernels the L8 model must reproduce or predict.
-//   node derive/L8_scales.cjs
+// L9 (Gate 1 numbers; written as L8): scales of drops in a turbulent cloud, and the kernels the L9 model must reproduce or predict.
+//   node derive/L9_scales.cjs
 'use strict';
 const P = require('../physics.cjs');
 const A = P.air(283.15, 85000), g = P.G0, nu = A.nu;

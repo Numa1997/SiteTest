@@ -943,6 +943,7 @@ var PHYS = (function () {
   // o: { speed: 'stokes'|'beard', eff: 'one'|'table'|'hall', coal: 'one'|'law', near: 'clamp'|'one', tab, hall, hallBelow }
   // hallBelow (m): with eff 'table', use Hall's values for collectors smaller than this (a test of L2's prediction 3)
   function kernel(a1, a2, A, o) {
+    if (o.constant) return o.constant;   // L8 contrast: every pair equally likely (the energy-only Monte Carlo)
     var R = Math.max(a1, a2), r = Math.min(a1, a2);
     var vR = vTerminal(R, A, o.speed), vr = vTerminal(r, A, o.speed), dv = Math.abs(vR - vr);
     if (dv === 0) return 0;
@@ -1010,10 +1011,59 @@ var PHYS = (function () {
     for (i = 0; i < n; i++) for (j = i; j < n; j++) { var v = kernel(grid.r[i], grid.r[j], A, o); K[i * n + j] = v; K[j * n + i] = v; }
     return K;
   }
+  // ---------------------------------------------------------------- L8: energy, entropy and who eats whom (diagnostics only)
+  // Surface of a sphere 4 pi r^2 = (36 pi)^(1/3) rho_w^(-2/3) m^(2/3); E_s = sigma times the sum over drops. The ledger keeps, per
+  // channel (class of the larger partner, class of the smaller), the mergers, the water eaten (the smaller partner's) and the surface
+  // energy released by the exact product; the gateway water whose product crosses the top cut from a larger partner below it, by the
+  // smaller partner's class (gate: the exact product crosses the cut; gateBin: the water the lever rule puts into top-class bins, which
+  // closes the binned budget); the droplet-mode water per bin (tag); the overflow's exact surface (its drops never merge again).
+  var SURF = Math.pow(36 * Math.PI, 1 / 3) * Math.pow(RHO_W, -2 / 3);
+  function makeLedger(grid, cuts, tag0) {
+    var n = grid.n, nc = cuts.length + 1, cls = new Int8Array(n), k, c, xTop = massOf(cuts[cuts.length - 1]);
+    for (k = 0; k < n; k++) { c = 0; while (c < cuts.length && grid.r[k] >= cuts[c]) c++; cls[k] = c; }
+    return { nc: nc, cls: cls, cuts: cuts, xTop: xTop, mergers: new Float64Array(nc * nc), eaten: new Float64Array(nc * nc),
+      released: new Float64Array(nc * nc), gate: new Float64Array(nc), gateBin: new Float64Array(nc), tag: tag0 ? Float64Array.from(tag0) : null, overTag: 0, overS: 0,
+      x23: grid.x.map(function (v) { return Math.pow(v, 2 / 3); }) };
+  }
+  function ledgerAdd(led, i, j, C, xi, xj, xs) {
+    var a = led.cls[j] * led.nc + led.cls[i];
+    led.mergers[a] += C; led.eaten[a] += C * xi;
+    led.released[a] += C * (led.x23[i] + led.x23[j] - Math.pow(xs, 2 / 3));   // in kg^(2/3) per m^3: times sigma SURF for J/m^3
+    if (xj < led.xTop && xs >= led.xTop) led.gate[led.cls[i]] += C * xs;
+  }
+  function surfaceSum(led, N) { var S = led.overS, k; for (k = 0; k < N.length; k++) S += N[k] * led.x23[k]; return S; }
+  // Maximum entropy at fixed number N and water M (prior uniform in mass): n = (N^2/M) exp(-N m/M); with <ln m> fixed as well: the
+  // gamma n = N lam^nu m^(nu-1) exp(-lam m)/Gamma(nu), nu/lam = M/N, psi(nu) - ln nu = <ln m> - ln(M/N). Bin water n(x_k) x_k^2 ln2/s
+  // as in the Golovin test; the overflow (drops above the grid, counted at their mean mass) is compared with the shape's water beyond
+  // the grid. Spectrum error eps = sum |M_k - M_k^ME| / M (0 for equal shapes, 2 for shapes with no overlap).
+  function digamma(xv) { var r = 0; while (xv < 6) { r -= 1 / xv; xv += 1; } var f = 1 / (xv * xv); return r + Math.log(xv) - 0.5 / xv - f * (1 / 12 - f * (1 / 120 - f * (1 / 252 - f * (1 / 240 - f / 132)))); }
+  function lnGamma(z) {
+    var c = [0.99999999999980993, 676.5203681218851, -1259.1392167224028, 771.32342877765313, -176.61502916214059, 12.507343278686905, -0.13857109526572012, 9.9843695780195716e-6, 1.5056327351493116e-7], xx, tt, i;
+    if (z < 0.5) return Math.log(Math.PI / Math.sin(Math.PI * z)) - lnGamma(1 - z);
+    z -= 1; xx = c[0]; for (i = 1; i < 9; i++) xx += c[i] / (z + i); tt = z + 7.5;
+    return 0.5 * Math.log(2 * Math.PI) + (z + 0.5) * Math.log(tt) - tt + Math.log(xx);
+  }
+  function maxentCompare(grid, N, over) {
+    var n = grid.n, w = Math.LN2 / grid.s, k, Nt = over.N, Mt = over.M, L = 0;
+    for (k = 0; k < n; k++) { Nt += N[k]; Mt += N[k] * grid.x[k]; L += N[k] * Math.log(grid.x[k]); }
+    if (over.N > 0) L += over.N * Math.log(over.M / over.N);
+    var mbar = Mt / Nt, cc = L / Nt - Math.log(mbar), lo = 1e-6, hi = 1e8, it, nu, lam;
+    for (it = 0; it < 200; it++) { nu = Math.sqrt(lo * hi); if (digamma(nu) - Math.log(nu) < cc) lo = nu; else hi = nu; }
+    nu = Math.sqrt(lo * hi); lam = nu / mbar;
+    var Me = new Float64Array(n), Mg = new Float64Array(n), se = 0, sg = 0, eE = 0, eG = 0, lnZ = lnGamma(nu);
+    for (k = 0; k < n; k++) {
+      var xk = grid.x[k], Mk = N[k] * xk;
+      Me[k] = Nt / mbar * Math.exp(-xk / mbar) * xk * xk * w;
+      Mg[k] = Math.exp(Math.log(Nt) + nu * Math.log(lam) + (nu + 1) * Math.log(xk) - lam * xk - lnZ) * w;
+      se += Me[k]; sg += Mg[k]; eE += Math.abs(Mk - Me[k]); eG += Math.abs(Mk - Mg[k]);
+    }
+    eE += Math.abs(over.M - Math.max(0, Mt - se)); eG += Math.abs(over.M - Math.max(0, Mt - sg));
+    return { N: Nt, M: Mt, mbar: mbar, nu: nu, lam: lam, epsExp: eE / Mt, epsGamma: eG / Mt, Mexp: Me, Mgamma: Mg };
+  }
   // One SCE step: pairs i <= j, smaller bin first, in place; two-bin deposit (number and mass of products); limiter; overflow.
   // State: N (number per m^3 per bin), over {N, M}; returns the number of rounding fixes.
-  function sceStep(grid, K, N, over, dt, onlyPairs) {
-    var n = grid.n, x = grid.x, i, j, fixes = 0, lastK = n - 1;
+  function sceStep(grid, K, N, over, dt, onlyPairs, led) {
+    var n = grid.n, x = grid.x, i, j, fixes = 0, lastK = n - 1, fi = 0, fj = 0;
     for (i = 0; i < n; i++) {
       if (N[i] <= 0) continue;
       for (j = i; j < n; j++) {
@@ -1034,11 +1084,22 @@ var PHYS = (function () {
           if (C > capj) C = capj;
         }
         if (C <= 0) continue;
+        if (led) { fi = led.tag && N[i] > 0 ? led.tag[i] / (N[i] * x[i]) : 0; fj = led.tag && N[j] > 0 ? led.tag[j] / (N[j] * x[j]) : 0; ledgerAdd(led, i, j, C, x[i], x[j], xs); }
         if (i === j) N[i] -= 2 * C; else { N[i] -= C; N[j] -= C; }
-        if (kk >= lastK) { over.N += C; over.M += C * xs; }
+        if (kk >= lastK) { over.N += C; over.M += C * xs; if (led) { led.overS += C * Math.pow(xs, 2 / 3); if (led.tag) led.overTag += C * (x[i] * fi + x[j] * fj); } }
         else {
           f = (xs - x[kk]) / (x[kk + 1] - x[kk]);
           N[kk] += (1 - f) * C; N[kk + 1] += f * C;
+        }
+        if (led && led.cls[j] < led.nc - 1) {   // binned gateway: water a pair below the top class deposits into top-class bins
+          var top = led.nc - 1, wtop = 0;
+          if (kk >= lastK) wtop = C * xs; else { if (led.cls[kk] === top) wtop += (1 - f) * C * x[kk]; if (led.cls[kk + 1] === top) wtop += f * C * x[kk + 1]; }
+          led.gateBin[led.cls[i]] += wtop;
+        }
+        if (led && led.tag) {      // the droplet-mode water rides with the water: removed from i and j, deposited as the lever rule splits the product
+          var Pt = C * (x[i] * fi + x[j] * fj);
+          led.tag[i] -= C * x[i] * fi; led.tag[j] -= C * x[j] * fj;
+          if (kk < lastK) { led.tag[kk] += (1 - f) * C * x[kk] * Pt / (C * xs); led.tag[kk + 1] += f * C * x[kk + 1] * Pt / (C * xs); }
         }
         if (N[i] < 0) { N[i] = 0; fixes++; }
         if (N[j] < 0) { N[j] = 0; fixes++; }
@@ -1071,10 +1132,13 @@ var PHYS = (function () {
       out.t.push(t); out.F40.push(m40 / M0); out.F100.push((m100 + over.M) / M0); out.N100.push(n100 + over.N); out.N1mm.push(n1 + over.N);
       out.over.push(over.M / M0); out.drift.push(mo.Mall / M0 - 1);
       if (snapAt.indexOf(Math.round(t)) >= 0) out.snaps[Math.round(t)] = Array.from(N);
+      if (o.onRecord) o.onRecord(t, N, over, o.ledger);
     }
     record(0);
     for (st = 1; st <= steps; st++) {
-      fixes += sceStep(grid, K, N, over, dt, o.onlyPairs);
+      var S0 = o.ledger ? surfaceSum(o.ledger, N) : 0;
+      fixes += sceStep(grid, K, N, over, dt, o.onlyPairs, o.ledger);
+      if (o.ledger) { var S1 = surfaceSum(o.ledger, N); if (S1 > S0) { o.ledger.rises = (o.ledger.rises || 0) + 1; o.ledger.maxRise = Math.max(o.ledger.maxRise || 0, (S1 - S0) / S0); } }
       var t = st * dt;
       if (Math.abs(t / rec - Math.round(t / rec)) < 1e-9) record(t);
     }
@@ -1197,7 +1261,7 @@ var PHYS = (function () {
     for (a = 0; a < B; a++) for (b = a; b < B; b++) {
       var dvmax = Math.max(vhi[b] - vlo[a], vhi[a] - vlo[b], 0), E = 1;
       if (kopt.eff === 'table') E = Math.max(tableMax(kopt.tab, lo[b], hi[b], lo[a], hi[a], kopt.near), tableMax(kopt.tab, lo[a], hi[a], lo[b], hi[b], kopt.near));
-      var km = Math.PI * Math.pow(hi[a] + hi[b], 2) * dvmax * E * (1 + 1e-9);
+      var km = kopt.constant ? kopt.constant : Math.PI * Math.pow(hi[a] + hi[b], 2) * dvmax * E * (1 + 1e-9);
       Kmax[a * B + b] = km; Kmax[b * B + a] = km;
     }
     var rate = new Float64Array(B * B), rowSum = new Float64Array(B), total = 0;
@@ -1237,6 +1301,7 @@ var PHYS = (function () {
       if (u() >= K / Ks) continue;
       // merge: id2 absorbs id1
       events++;
+      if (o.onEvent) o.onEvent(r[id1], r[id2], t, alive);
       var c1 = cls[id1], c2 = cls[id2];
       remove(id1); remove(id2);
       big[id2] += big[id1] + (Math.min(r[id1], r[id2]) >= 30e-6 ? 1 : 0);   // mergers with a partner of 30 um or more in its history
@@ -1261,6 +1326,7 @@ var PHYS = (function () {
     weber: weber, eCoal: eCoal, kernel: kernel,
     makeGrid: makeGrid, lognormalBins: lognormalBins, kernelMatrix: kernelMatrix, sceStep: sceStep, moments: moments,
     sceRun: sceRun, gceRun: gceRun, besselI1e: besselI1e, golovinDensity: golovinDensity,
+    SURF: SURF, makeLedger: makeLedger, ledgerAdd: ledgerAdd, surfaceSum: surfaceSum, digamma: digamma, lnGamma: lnGamma, maxentCompare: maxentCompare,
     ayalaFactor: ayalaFactor, rng: rng, gaussian: gaussian, drawModes: drawModes, tableMax: tableMax, gillespieRun: gillespieRun
   };
 })();

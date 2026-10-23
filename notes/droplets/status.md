@@ -44,9 +44,19 @@ Thermal noise: surface energy of a 10 µm drop 9.0 × 10⁻¹¹ J = 2.3 × 10¹�
        thresholds (`skeptic-G3-r1.md`, Round 2), its five minor items and the one partial fix applied after.
 4. [x] Old app bundle `static/` removed (2.2 MB); old `fig/` kept for the German and Arabic pages.
 5. [x] PR https://github.com/Numa1997/SiteTest/pull/33 open, not merged (follow-up to #32, which Numa merged at 184f3bf).
-6. [~] L8 (Numa: "Sure go ahead", 23 Oct): drops with positions in a random turbulent flow (kinematic simulation, inertial drops,
-       ghost collisions). Correction to my first proposal: independent random velocities per drop are wrong at contact scales
-       (they would invent collisions ×20). Contract `contract-L8.md` written; skeptic round 1 running. No code before Gate 1.
+6. [~] Revision after Numa's "I don't agree … revise your work" (23 Oct). The ladder is renumbered: L8 energy, entropy and who eats
+       whom (`contract-L8.md`, new); L9 the random flow (the old L8, failed round 1: `contract-L9.md`, `skeptic-G1-L9-r1.md`);
+       L10 the cloud in space ("where we sit in the field"); L11 a flow from cloud images. Not one of these is on the page yet.
+   - L8 done so far: derivations `derive/L8_sympy.py` (all checks right), scales `derive/L8_energy.cjs`, ledger in `physics.cjs`
+     (optional; water evolves bit for bit as before), `tools/run_energy.cjs` → `data/energy.json`. Results: surface energy never rose
+     (0 steps, 0 events); tag conserved to 5e-14; drizzle budget 2e-11. Mergers at t50: c–d 90.9 %, d–d 0.014 %; energy-only Monte
+     Carlo (= constant kernel) d–d 99 %. Release ≤ 1.5 % of gravity's drag dissipation; gravity dissipates the start's surface energy
+     in 28 s. 1.8e10 k_B per merger. Drizzle water 69.5 % droplet-origin at t90. Max-entropy error (0–2): physical kernel 1.31/1.92
+     at t50/t90 (gamma 1.36/1.90), 0.39 (gamma) at 60 min; constant kernel < 0.1 by N/N0 = 0.005. Predictions 1, 2, 4, 5 pass;
+     prediction 3's "exact product" gateway is a grid artefact (bins 3.85 % apart near 100 µm), binned gateway 55 %: restate it.
+     Contract 6.2 asked N within 0.2 %: it is 0.36 % at step 0.02, first order in time (0.71/0.36/0.18 %); fix the contract.
+   - Open: skeptic G1-L8 (stopped by the rate limit; resume it with SendMessage), figures, chapter (Part IV), panel, checks.
+   - Scouts stopped by the rate limit: DNS kernels, stochastic field (partial dossier written), energy/entropy/space. Resume them.
 
 ## Done, with evidence
 
