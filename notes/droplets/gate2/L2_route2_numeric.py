@@ -106,9 +106,22 @@ def axis_reaches(flow, St_, Z):
     blow = lambda s_, Y: Y[1] + 1e3; blow.terminal = True
     sol = solve_ivp(f, [0, 400 * max(1, Z)], Y0, method='LSODA', rtol=1e-12, atol=1e-13, events=blow)
     return len(sol.t_events[0]) > 0
-for flow, lo, hi, Z in [('potential', 0.02, 0.3, 30.0), ('creeping', 0.5, 3.0, 200.0)]:
-    for _ in range(40):
-        mid = 0.5 * (lo + hi)
-        if axis_reaches(flow, mid, Z): hi = mid
-        else: lo = mid
-    print('   %-9s St_c = %.6f  (start at %g radii)   %s' % (flow, 0.5 * (lo + hi), Z, '1/12 = %.6f' % (1 / 12) if flow == 'potential' else 'text 1.21194'))
+def axis_reaches_y(St_, Z):
+    # creeping flow: the gap closes only algebraically (air speed ~ 1.5 eta^2), so plain Cartesian variables are fine: event gap < 1e-9
+    inward = lambda y: -(1 - 1.5 / y + 0.5 / y**3)
+    f = lambda s_, Y: [Y[1], (inward(Y[0]) - Y[1]) / St_]
+    ev = lambda s_, Y: Y[0] - 1.0 - 1e-9; ev.terminal = True
+    sol = solve_ivp(f, [0, 60 * Z], [Z, inward(Z)], method='LSODA', rtol=1e-12, atol=1e-14, events=ev)
+    return len(sol.t_events[0]) > 0
+lo, hi = 0.02, 0.3
+for _ in range(40):
+    mid = 0.5 * (lo + hi)
+    if axis_reaches('potential', mid, 30.0): hi = mid
+    else: lo = mid
+print('   potential St_c = %.6f  (start 29 radii from the surface)   1/12 = %.6f' % (0.5 * (lo + hi), 1 / 12))
+lo, hi = 0.5, 3.0
+for _ in range(40):
+    mid = 0.5 * (lo + hi)
+    if axis_reaches_y(mid, 200.0): hi = mid
+    else: lo = mid
+print('   creeping  St_c = %.6f  (start at 200 radii)   text (Michael and Norey 1970) 1.21194' % (0.5 * (lo + hi)))

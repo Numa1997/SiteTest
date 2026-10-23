@@ -113,7 +113,7 @@ test at 1000 cm³; and the near-equal efficiency, which drives collector–colle
 The contract file is dated 12:26, the stored ensembles 12:28–12:36 (23 Oct).
 
 1. The gap: in 1 m³ the first 100 µm drop appears after about 60 s (bridge, s = 16); half the water is above 100 µm after 585 s:
-   a factor of about 10: **passed**.
+   a factor of about 10: **passed** (but known before the contract; see §10.1).
 2. Poisson bridge against exact runs (Kolmogorov–Smirnov): 1000 cm³, 30 runs, D = 0.156, p = 0.42; 100 cm³, 100 runs, D = 0.088,
    p = 0.40: **passed** at the 5 % level. Medians 175 s and 286 s against the bridge's 175 s and 280 s.
 3. The route: 230 of 230 first drops ≥ 100 µm had merged with a partner ≥ 30 µm: **passed**.
@@ -121,7 +121,7 @@ The contract file is dated 12:26, the stored ensembles 12:28–12:36 (23 Oct).
    truncated modes gives 0.742 at 10 min: the lag at ≤ 10 cm³ **holds** (and is still 0.012 at 100 cm³, 7 standard errors at 20 min).
    At 1000 cm³ the ensemble agrees with the truncated SCE (s = 16) within 1.3 standard errors at every odd minute to 21 min (F₄₀ = 0.99);
    after that the runs exceed the SCE by 1–2 × 10⁻⁴, statistically significant (z up to 5) but invisible on the page; cause not
-   investigated: **passed** for the range the page uses, with that note.
+   investigated: **failed** as written after 22 min (see §10.4).
 5. Engine test (added): one collector and 20 identical droplets, against the exact death chain, 4000 runs: mean 8.246 ± 0.036 against
    8.221, χ² p = 0.15: **passed**. Zero majorant violations in all 430 ensemble runs.
 

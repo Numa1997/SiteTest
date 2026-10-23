@@ -1,0 +1,2276 @@
+# Wang‡
+URL: http://research.me.udel.edu/lwang/reprints/Ayala_etal_NJP_Theory.pdf
+
+#### Effects of Turbulence on the Geometric Collision
+
+#### Rate of Sedimenting Droplets: Part 2. Theory and
+
+#### Parameterization
+
+Orlando Ayala, Bogdan Rosa, and Lian-Ping Wang‡ Department of Mechanical Engineering, 126 Spencer Laboratory, University of Delaware, Newark, Delaware 19716-3140, USA
+
+E-mail: lwang@udel.edu
+
+Abstract. The effect of air turbulence on the geometric collision kernel of cloud droplets can be predicted if the effects of air turbulence on two kinematic pair statistics can be modelled. The first is the average radial relative velocity and the second is the radial distribution function. A survey of literature shows that no theory is available for predicting the radial relative velocity of finite-inertia sedimenting droplets in a turbulent flow. In this paper a theory for the radial relative velocity is developed, using a statistical approach assuming that the gravitational sedimentation dominates the relative motion of droplets before collision. In the weak-inertia limit, the theory reveals a new term making a positive contribution to the radial relative velocity resulting from a coupling between sedimentation and air turbulence on the motion of finite inertia droplets. The theory is compared to the DNS results in Part 1, showing a reasonable agreement with the DNS data for bidisperse cloud droplets. For droplets larger than 30 µm in radius, a nonlinear drag can also be included in the theory in terms of an effective inertial response time and an effective terminal velocity. In addition, an empirical model is developed to quantify the radial distribution function. This, together with the theory for radial relative velocity, provides a parameterization for the turbulent geometric collision kernel. Using this integrated model, we find that turbulence could triple the geometric collision kernel, relative to the stagnant air case, for a droplet pair of 10 µm and 20 µm sedimenting through a cumulus cloud at Rλ = 2 × 10 4 and ² = 600 cm 2/s 3. For the self-collisions of 20 µm droplets, the collision kernel depends sensitively on the flow dissipation rate.
+
+PACS numbers: 05.20.-y, 47.55.Kf, 47.55.Dz, 47.27.Eq
+
+Submitted to: New J. Phys.
+
+‡ Corresponding author: Department of Mechanical Engineering, 126 Spencer Laboratory, University of Delaware, Newark, Delaware 19716-3140. Phone: (302) 831-8160; Fax: (302) 831-3619; Electronic mail: lwang@udel.edu
+
+1. Introduction
+
+Understanding the geometric collision rate is a necessary step in determining the 
+collision-coalescence growth of cloud droplets [1]. In Part 1 [2], direct numerical 
+simulations (DNS) were used as numerical experiments to better understand the 
+interaction of sedimenting cloud droplets with three-dimensional, time-dependent 
+turbulent motion at the dissipation-range scales. DNS provided simultaneously dynamic 
+collision kernel and kinematic pair statistics, allowing direct validation of a kinematic 
+description of the geometric collision kernel. DNS results revealed that both the radial 
+relative velocity and radial distribution function could be moderately enhanced by air 
+turbulence. However, the level of enhancement depends, in a complex manner, on the 
+size of droplets (which in turn determines the response time and terminal velocity) and 
+the strength of air turbulence (i.e., the dissipation rate, Reynolds number, etc.). 
+In this paper, our objective is to develop an analytical parameterization for the 
+turbulent geometric collision kernel. There are several motivations for this. First, 
+DNS are expensive so the number of runs are necessarily limited by the available 
+computational resources. At the same time, even for a relatively simple bidisperse 
+system, the collision rate of cloud droplets depends on a large number of droplet 
+parameters and air flow characteristic scales. Second, DNS has its limitation in resolving 
+the range of length and time scales, which translates to the very limited range of 
+flow Reynolds numbers it can handle. For example, DNS alone will not be able to 
+resolve the effect of flow Reynolds number on the collision rate. Most importantly, 
+to include the effects of air turbulence on the growth of cloud droplets by collision 
+coalescence, a theoretical parameterization of the enhanced collision kernel is desired. 
+Carefully developed theoretical parameterization can also improve our understanding 
+on the complex interaction of droplets with air turbulence, possibly over a much wider 
+parameter range than what is achievable in DNS. 
+A comprehensive literature survey in Section 2 reveals that no general theory is 
+available to predict the radial relative velocity for finite-inertia, sedimenting droplets in 
+a turbulent flow. Previous theoretical treatments often greatly simplify the problem by 
+either completely neglecting the gravity or assuming the particle inertia is very small 
+or very large. In the context of cloud droplets, the air flow dissipation rate, droplet 
+response time, and droplet terminal velocity could each vary by two to three orders of 
+magnitude, most of the existing theoretical results can at best be viewed to be either 
+only qualitatively correct or applicable to some limiting cases for cloud droplets. 
+In Section 3, we will first develop a theory for radial relative velocity of sedimenting 
+droplets in a turbulent air, using a statistical approach assuming that the differential 
+sedimentation governs the relative motion of droplets before geometric collision contact. 
+We will show that the resulting theory correctly reproduces several limiting cases. It will 
+be also compared to DNS results reported in Part 1 as well as other previous theoretical 
+formulations. 
+In order to predict the collision kernel, we also need a model for the radial 
+
+Parameterization of turbulent geometric collision rate 3 distribution function. This will be constructed in Section 4 by extending the theory of Chun et al. [3] and by fitting DNS data of the radial distribution function. Finally the theory for radial relative velocity and the model for radial distribution function are combined to predict the DNS dynamic collision kernel in Section 5. This integrated parameterization of geometric collision kernel has already been used in our recent study of warm rain initiation [4].
+
+2. Theoretical background
+
+As in Part 1, we focus here on geometric collision of sedimenting droplets without 
+considering the local droplet-droplet aerodynamic interactions. For a dilute, bidisperse 
+system containing droplets of radii a1 and a2, the average geometric collision rate per 
+unit volume, N˙c, can be expressed as 
+N˙c = Γ12n1n2, (1) 
+where n1 and n2 are average number concentrations of the two size groups and Γ12 is 
+known as the collision kernel. 
+In Part 1, it was confirmed by DNS that the collision kernel for sedimenting droplets 
+in a turbulent air can be expressed in terms of the kinematic pair statistics as 
+
+Γ K 12 = 2πR 2 h| wr| (r = R)i g12(r = R), (2) where R = a1 + a2, the radial relative velocity wr is defined in terms of the relative velocity w between two droplets with separation vector r as wr ≡ w · r/| r| , with r ≡ | r| . The square brackets hi denote an average over all possible directions of r in addition to the usual ensemble averaging or averaging over space and time for a homogeneous and stationary system. The average radial relative velocity at contact h| wr| (r = R)i represents the average relative flux on the geometric collision sphere, a concept introduced initially by Saffman and Turner [5]. The other factor g12(r) in Eq. (2) is known as the radial distribution function measuring the effect of preferential concentration on the pair number density at separation distance r. It is the ratio of the actual pair concentration to that in a uniform suspension. For the base case of sedimenting droplets in a stagnant air, the kinematic properties and the collision kernel are given as
+
+### h| wr|i g =
+
+1
+
+2¯¯¯
+
+## vp2 − vp1¯¯¯ , g
+
+g 12 = 1.0, Γ g 12 = πR 2
+
+¯¯¯
+
+## vp2 − vp1¯¯¯
+
+; (3) where vp1 and vp2 are the terminal velocities corresponding to the two different sizes. DNS results [2] show that air turbulence can enhance the collision kernel by increasing both the relative velocity and the radial distribution function, relative to their respective value for gravitational collision. The overall enhancement can be expressed as
+
+Γ12 Γ
+
+g 12
+
+= h| wr|i h| wr|i g× g12, (4)
+
+### where h| wr|i /h| wr|i
+
+g represents the enhancement by air turbulence on the relative pair motion and will be referred to as the turbulent transport effect, g12 represents the effect of local nonuniform pair concentration due to interaction of droplets with local flow structures, and this contribution will be referred to as the accumulation effect. The task of predicting the turbulent collision kernel can then be divided into two parts: a theory for the turbulent transport effect and a formulation for the accumulation effect. Each of these will be considered in this paper. We will first review previous studies on these two aspects for both non-sedimenting and sedimenting particles, before proposing our own developments. Most of the theoretical studies discussed below were published outside the atmospheric sciences literature.
+
+2.1. Radial relative Velocity
+
+The relative velocity between two colliding droplets is affected by the unsteady, three 
+dimensional air velocity field and is usually larger than the differential terminal velocity 
+in still air. Theoretical modeling of this enhanced relative motion has been attempted 
+for over half a century. Most models were developed assuming no particle clustering 
+(g12 = 1.0), using either the cylindrical formulation or the spherical formulation [6, 7]. 
+For the cylindrical formulation the relative velocity was derived using 
+h| w|i =Z Z Z| w| p(w)d 3w, (5) 
+where p(w) is the probability density of the vector relative velocity w when the pair 
+is separated by a distance R. For the spherical formulation the relative velocity was 
+obtained in terms of the radial component 
+h| wr|i =Z Z Z| wr| p(wr)dwr, (6) 
+where p(wr) is the probability density of wr. Most studies assumed that p(w) and p(wr) 
+follow Gaussian probability distribution. Furthermore, p(w) and p(wr) were typically 
+assumed to be independent of the direction of R. This is a reasonable approximation for 
+p(wr) in the absence of gravity, however, Wang et al. [7] showed that this assumptions 
+does not hold for p(w) and, otherwise, an overprediction may occur if the dependence 
+of p(w) on the orientation of R is not correctly treated. 
+In the limiting case of zero-inertia particles, Saffman and Turner [5] derived an 
+analytical expression for the radial relative velocity using a spherical formulation 
+
+### h| wr|i =µ
+
+2
+
+π¶
+
+1/2 µ
+
+1 
+15 
+
+R
+
+2² ν¶
+
+1/2
+
+, (7) where ² is the average dissipation rate per unit mass and ν is the air kinematic viscosity. This simply represents the contribution from local flow shear at the dissipation scale. In the same paper, using a cylindrical formulation, they considered simultaneously the relative motion of droplets due to the dissipation range fluid shear, fluid acceleration, and the gravity and obtained the following expression
+
+### h| w|i =µ
+
+8 
+3π¶ 
+1/2 
+
+[ 3(τp2− τp1) 2*µ
+
+Du
+
+## Dt¶
+
++ +(vp2− vp1) 2+ 1 3
+
+R
+
+2² ν ]
+
+1/2
+
+, (8)
+
+Parameterization of turbulent geometric collision rate 5 where τp is the droplet inertial response time, u is the local air flow velocity, the first term is due to the acceleration mechanism, and the second is the gravitational term, and the third is due to the shear mechanism. It was assumed in the derivation of the above expression that τp is much less than the flow Kolmogorov time τk. Part 1 gives typical values of τk for cloud turbulence. Note that the shear term in Eq. (8) differs from the shear term in Eq. (7) due to an incorrect isotropy assumption for p(w), as shown in [7]. Furthermore, the above model does not properly account for the gravitational effect as the expression does not reduce to the expected result of h| w|i
+
+=¯¯¯ vp2 − vp1¯¯¯
+
+in
+
+the absence of turbulence. Hu and Mei [8] improved Saffman and Turner’s equation based on an asymptotic analysis for small particle inertia in a turbulent flow. They derived an equation for h| wr|i which includes the shear mechanism, the acceleration mechanism, and a new coupling term which accounts for the combined effect of spatial variation of fluid acceleration and particle inertia
+
+### h| wr|i =µ
+
+2
+
+π¶
+
+1/2 [ 1 15
+
+R
+
+2² 
+ν 
++ (τp2 − τp1) 2*µ 
+
+Du
+
+## Dt¶
+
+2 +
+
+## + 2τp1τp2*µ
+
+Du
+
+## Dt¶
+
+2 +
+
+R 2 
+λ 2 
+D ] 
+
+1/2
+
+, (9)
+
+where λD is the longitudinal Taylor-type microscale of fluid acceleration. Wang et al. [6] later extended Hu and Mei’s result to suggest an expression including the gravity effect
+
+### h| wr|i =µ
+
+2
+
+π¶
+
+1/2 [ 1 15
+
+R
+
+2² 
+ν 
++ (τp2 − τp1) 2*µ 
+
+Du
+
+## Dt¶
+
+2 +
+
+## + 2τp1τp2*µ
+
+Du
+
+## Dt¶
+
+2 +
+
+R 2 λ 2 D +
+
+π 8 (τp2 − τp1) 2g 2 ]
+
+1/2
+
+. (10)
+
+This is a more consistent expression than Saffman and Turner’s as the gravity-only case is recovered when neglecting turbulent effects. If the gravity effect is neglected, Eq. (10) is identical to Hu and Mei’s result. Using the spherical formulation, Dodin and Elperin [9] decomposed the relative velocity into turbulent and gravity-induced components and assumed that the turbulent component is normally distributed. They arrived at the following result
+
+### h| wr|i =µ
+
+2
+
+π¶
+
+1/2
+
+σf(b), (11)
+
+where σ 2 =
+
+1 
+15 
+
+R
+
+2² 
+ν 
++ (τp2 − τp1) 2*µ 
+
+Du
+
+## Dt¶
+
+2
+
++ , (12)
+
+b = g| τp2 − τp1| σ√2 , (13) f(b) = 0.5√πµ b + 0.5 b¶ erf(b) + 0.5 exp(− b 2). (14)
+
+The above result recovers the two special cases of inertialess particles without gravity and the gravity-only case without turbulence. They also showed that Wang et al ’s expression, Eq. (10), is in close agreement with their formulation. In the limit of large particle inertia (τp > TL with TL being the Lagrangian integral scale of air turbulence), particles move independent of one another, i.e., their individual motion is completely uncorrelated and similar to the random motion of molecules in kinetic theory. Abrahamson [10] deduced the following result
+
+### h| w|i = 2µ
+
+2
+
+π¶
+
+1/2 h v 0(2)2 + v 0(1)2
+
+i
+
+1/2
+
+, (15)
+
+where v 0 p
+
+(i)
+
+denotes the particle r.m.s. fluctuation velocity which can be obtained from
+
+v
+
+0(k)2
+
+=
+
+u 02 1 + τpk/TL
+
+, (16)
+
+where u 0
+
+is the fluid r.m.s. fluctuation velocity. Abrahamson also generalized his theory to include gravity and obtained
+
+### h| w|i =µ
+
+2
+
+π¶
+
+1/2 h v 0(2)2 + v 0(1)2
+
+i
+
+1/2
+
+× exp Ã−
+
+1 
+2 
+
+(vp2 − vp1) 2 v
+
+0(2)2
+
++ v 0(1)2!
+
++ (vp2 − vp1) 2 + v 0(2)2 + v 0(1)2 | vp2 − vp1| × erf
+
+
+
+| vp2 − vp1| q 2(v 0(2)2 + v 0(1)2 ) 
+
+. (17)
+
+This expression is consistent with (15) when the terminal velocities are set to zero as the second term in the r.h.s. of (17) becomes identical to the first term in (17). In the absence of air turbulence (i.e., v
+
+0(i)
+
+=0), this expression also recovers the expected result
+
+for the gravity-only case. 
+The above studies primarily addressed the two limiting cases of particle inertia. 
+For intermediate particle inertia (τk < τp < TL), major theoretical difficulties arise in 
+predicting the relative velocity. In this situation, it becomes necessary to consider the 
+interaction of particles with the complete spectrum of turbulent eddies as well as to 
+account for the correlation of the motion of neighboring particles. 
+Williams and Crane [11] proposed an expression of the radial relative velocity 
+due to the acceleration mechanism, taking into account the correlation of particle 
+velocities. Since analytical solutions were obtainable only for small and large particle 
+response times, the relative velocity applicable to the whole range of particle inertia 
+was interpolated with these limiting solutions. Williams and Crane considered the 
+acceleration mechanism but neglected the shear mechanism. Their expression followed 
+a spherical formulation and was written as 
+
+### h| wr|i =µ
+
+2
+
+π¶
+
+1/2
+
+r w 2 accelWC, (18)
+
+with
+
+w 2 accelWC u 02 = (θ1 + θ2) 2 − 4θ1θ2q
+
+1+θ2+θ2 (1+θ1)(1+θ2) (θ1 + θ2)(1 + θ1)(1 + θ2)
+
+, (19)
+
+where θi ≡ τpi/TL. This interpolated result, however, fails to recover their own limiting 
+case for weak-inertia particles. 
+Yuu [12] took an approach similar to Williams and Crane’s and derived a solution 
+for intermediate particle inertia with the combined effects of the shear and acceleration 
+collision mechanisms using a cylindrical formulation 
+
+### h| w|i =µ
+
+8 
+3π¶ 
+1/2 
+
+r w 2 shearY + w 2 accelY, (20)
+
+where
+
+w 2 shearY = (A1a 2 1 + 2Ba1a2 + A2a 2 2)µ
+
+² 3ν¶ ,
+
+w 2 accelY u 02 = (A1 − 2B + A2),
+
+(21)
+
+Ai =
+
+θi
+
+θi + 1 , B =
+
+C (1 + θ2 θ1)(1 − θ 2 1)(1 − θ 2 2) ,
+
+C = θ2³ 2 − (θ1 + θ2) − (θ 2 1 + θ 2 2) + θ1θ2(θ1 + θ2)´ . Yuu also included the effect of buoyancy through the added mass coefficient b = 3ρ/(2ρw + ρ) which is essentially zero for our cloud droplet problem. Here ρ and ρw are the air and water density, respectively. The drawback of Yuu’s model is that the velocities of equal-inertia particles are perfectly correlated, which is a poor approximation for large particles [13]. Therefore, his model cannot be used to predict the collision rate of large identical particles. Furthermore, his result is not valid for very weak-inertia particles as the exponential form of the Lagrangian fluid correlation adopted in his derivation is not valid in the viscous subrange of turbulence [14]. Kruis and Kusters [14] derived expressions for the relative velocity for the limiting cases of weak-inertia and large-inertia particle using a cylindrical formulation. For the weak-inertia particle case, they followed Yuu’s procedure but included the correct parabolic form of the correlation coefficient used by Williams and Crane [11]. While for the large-inertia particle case they extended Williams and Crane’s procedure by including added mass effect. By interpolating the limiting solutions, a general solution was obtained yielding
+
+### h| w|i =µ
+
+8 
+3π¶ 
+1/2 
+
+r w 2 accelKK, w 2 accelKK u 02 = 3
+
+γ γ − 1 (θ1 + θ2) 2 − 4θ1θ2q
+
+1+θ1+θ2 (1+θ1)(1+θ2)
+
+(θ1 + θ2)
+
+(22)
+
+×(
+
+1 (1 + θ1)(1 + θ2)−
+
+1 (1 + γθ1)(1 + γθ2)) ,
+
+where γ is defined as
+
+## γ =*µ
+
+Du
+
+## Dt¶
+
+2
+
+## + Ã u 0
+
+## TL!
+
+−2
+
+= 0.183
+
+u 02 ² 1/2ν 1/2≡ γKK. (23)
+
+A drawback of their theory is that their expression for the shear mechanism vanishes when the buoyancy effect is neglected. Thus, in this sense, their theory is incomplete. Based on DNS data, Wang et al [15] and Zhou et al [16] inferred that no existing model can accurately predict the particle relative velocity. Therefore, they modified the model by Kruis and Kusters [14] using the spherical formulation and empirical fitting to DNS results, yielding
+
+### h| wr|i =µ
+
+2
+
+π¶
+
+1/2
+
+r w 2 shearWZW + w 2 accelWZW,
+
+w 2 shearWZW =
+
+1 
+15 
+
+R
+
+2² ν
+
+, (24)
+
+w 2 accelWZW u 02 =
+
+1
+
+## 3 Cw(α)
+
+
+
+w 2 accelKK u 02  
+
+,
+
+Cw(α) = 1.0 + 0.6 exp h− (α − 1) 1.5 i , where α ≡ max[θ2/θ1, θ1/θ2]. The parameter γ was also modified to γ = αγKK. Note that they modeled the shear mechanism using the Saffman and Turner’s weak-inertia expression. Their model was shown to be in good agreement with their DNS data for h| wr|i at several moderate flow Reynolds numbers. Zaichik et al [13] developed two statistical models to predict the turbulence-induced collision rate for monodisperse systems (i.e., a1 = a2). These models are valid over the entire range of Stokes numbers from the zero-inertia to the high-inertia limit. The first analytical model is based on the assumption that the joint probability density function of the fluid and particle velocities follows a correlated Gaussian distribution and the result is as follows
+
+### h| wr|i =µ
+
+2
+
+π¶
+
+1/2 
+h 2³ v 02 
+− v 02 
+
+## fuf(R)´i
+
+1/2
+
+, v
+
+02
+
+= fuu 02, (25)
+
+fu =
+
+2θ + 2 γ 2θ + 2θ 2 + 2 γ
+
+,
+
+f(R) = 1 −
+
+²R 2 30u 02ν
+
+.
+
+fu is the coefficient measuring particle response to the fluid velocity fluctuations, f(R) is the spatial correlation coefficient of the fluid velocities at two points separated by
+
+Parameterization of turbulent geometric collision rate 9 the collision radius R, and γ is defined by Eq. (23), with an improved model for the acceleration variance as
+
+## *µ
+
+Du
+
+## Dt¶
+
+2
+
++ = a01 + a0∞Rλ a02 + Rλ µ
+
+## vk τk¶
+
+2
+
+## ≡ a0µ
+
+## vk τk¶
+
+2
+
+, a01 = 11, a02 = 205, a0∞ = 7. (26)
+
+Their model was shown to recover the limiting cases of Saffman and Turner [5] and Abrahamson [10]. The parameterization, Eq. (26), was derived from DNS data of fluid Lagrangian acceleration at low flow Reynolds numbers and the experimental data at moderate Reynolds numbers (Rλ ∼ 2000), see Fig. 1 of Zaichik et al.[13]. Hill [17] proposed asymptotic scaling formulas for Lagrangian fluid acceleration as follows:
+
+## *µ
+
+Du
+
+## Dt¶
+
+2
+
++ = 1 3 (0.11Rλ + 0.3| S| )µ
+
+## vk τk¶
+
+2
+
+, for Rλ < 20, (27)
+
+## *µ
+
+Du
+
+## Dt¶
+
+2 
++ = 1 
+3 
+
+(2.5R 0.25 λ + 0.08R 0.11
+
+## λ )µ
+
+## vk τk¶
+
+2
+
+, for Rλ > 400, (28)
+
+where S is the skewness of longitudinal velocity gradient and its value for Rλ < 20 
+was taken from Fig. 8 of Herring and Kerr [18]. In Fig. 1, we compare Zaichik et 
+al’s parameterization and Hill’s parameterization for Lagrangian fluid acceleration. A 
+smooth interpolation (a polynomial fit matching both the value and the gradient on the 
+linear-log plot at Rλ = 20 and 400) is used for Hill’s model in the range of 20 < Rλ < 400 
+(the region marked by two short vertical lines). The two models are very similar for 
+low to moderate Reynolds numbers. At very high flow Reynolds numbers, the two 
+models show different dependence on Rλ. At the typical cloud flow Reynolds number 
+of Rλ = 20, 000, the relative difference between the two models is about 30%. 
+Zaichik et al.[13] also presented a second model that stems from a kinetic equation 
+for the particle-pair PDF of the relative velocity distribution. It predicts the statistical 
+behavior of a pair of particles, namely, their mean and turbulent relative velocities and 
+the radial distribution function. The differential model provides a better prediction 
+of h| wr|i when compared to the DNS data of Wang et al. [15], while their first model, 
+Eq. (26), overpredicts the radial relative velocity in general due to an underprediction of 
+the two-particle velocity correlation, because they modeled the fluid velocity correlation 
+seen by finite-inertia particles simply as the Lagrangian velocity correlation of fluid 
+particles. This treatment is only valid in the weak-inertia limit. A major drawback of 
+the differential model is that the prediction is not expressed explicitly, but through a 
+differential equation that must be solved numerically. 
+In a recent study, Pinsky et al. [19] discussed the effect of non-Gaussian Lagrangian 
+fluid acceleration on the relative motion of droplets. Their theory is in spirit similar 
+to Wang et al. [6], namely, a leading-order formulation in terms of the droplet inertial 
+response time. They showed that the non-Gaussian distribution can lead to typically 
+10% reduction of the the radial relative velocity. Unfortunately, their results were not 
+given in a closed-form expression. 
+Table 1 summarizes the previous efforts in modeling the two-particle relative 
+velocity in a turbulent flow. We conclude that there is a lack of effort in modeling the pair 
+
+Parameterization of turbulent geometric collision rate 10 relative-velocity for sedimenting particles. The available formulations for sedimenting particles address only the limiting cases of very large and very small particle response times. For the cloud physics problem, the droplet response time could be on the order of the Kolmogorov time scale (τk), while at the same time the gravitational effect is crucial. Thus, for the problem of cloud droplets, there is no theory available to predict the pair relative velocity. In Section 3, we shall develop a theoretical model for h| wr|i that accounts for both particle inertia and gravitational effects.
+
+2.2. Radial distribution function 
+In local regions of the flow where the air streamlines are severely curved (e.g., regions 
+of high vorticity or high strain rate), sedimenting droplets, as a result of their finite 
+inertia, can be somewhat nonuniformly distributed. This is shown in Fig. 8 of the Part 
+1 paper. 
+Here we review previous attempts to model this effect in terms of the radial 
+distribution function (RDF, or g(r) for monodisperse systems and g12(r) for bidisperse 
+systems). The previous efforts were mostly based on observations from DNS. Reade and 
+Collins [21] determined the dependence of monodisperse RDF g(r) on St for Rλ = 54.5 
+in the following form 
+
+g(r) − 1.0 = c0Ã
+
+r
+
+η!
+
+−c1
+
+exp Ã− c2 r η! , (29)
+
+where c0 =
+
+x0St x1 d0 + St x2, c1 =
+
+x3St x4 d1 + St
+
+x5, (30) 
+and x0=7.92, x1=1.80, x2=3.29, x3=0.61, x4=0.88, x5=2.38, d0=0.58, d1=0.33, and c2 
+= 0.25. 
+Wang et al [15] proposed an equation that relates g(r = R) to St = τp/τk for several 
+Rλ in their DNS (45 < Rλ < 75) but with R = η, where τk and η are flow Kolmogorov 
+time and length. Their model is as follows 
+g(η) − 1.0 
+Rλ 
+
+=
+
+y0[1.0 − z0 2] Rλ
+
++ z0
+
+2 { y1[1.0 − z1] + y2z1 + y3z2} (31)
+
+where
+
+y1 ≡ 0.36St 2.5 exp(− St 2.5 ), y2 ≡ 0.24 exp(− 0.5St), (32)
+
+y3 ≡ 0.013 exp(− 0.07St), z0 ≡
+
+1 
+2· 1 + tanh St − 0.5 
+0.25 ¸ , (33) 
+
+z1 ≡
+
+1 2· 1 + tanh St − 1.25 0.1 ¸ , z2 ≡
+
+1 
+2· 1 + tanh St − 6.5 
+2.5 ¸ . (34) 
+
+Zhou et al [16] proposed a formulation for bidisperse systems by extending the formulation of Wang et al [15]. They related the bidisperse RDF to monodisperse RDF as
+
+g12(η) − 1.0 = ρ n 12[g11(η) − 1.0] 1/2[g22(η) − 1.0] 1/2, (35)
+
+Parameterization of turbulent geometric collision rate 11 
+with an empirically obtained correlation coefficient ρ n 
+12 = 2.6 exp(− ψ) + 
+0.205 exp(− 0.0206ψ) 1 2[1.0 + tanh(ψ − 3.0)], where ψ ≡ max[τp2/τp1, τp1/τp2]. The 
+monodisperse RDFs, g11(R) and g22(R), are given by Eq. (31). 
+The factor ρ n 
+12 in Eq. (35) signifies the rapid decorrelation of the concentration fields 
+of different size droplets, leading to rapid drop of the magnitude of the bidisperse RDF 
+relative to the monodisperse RDF [16]. Such a rapid reduction of g12 was also noted by 
+Bec et al. [20] who studied clustering and collisions of heavy particles of different sizes 
+in a random flow. 
+The above equations were developed for a limited range of Rλ. Collins and Keswani 
+[22] investigated the scaling of preferential concentration with Reynolds number. They 
+obtained g(r) for a range of Rλ from 65 to 152 and found that the radial distribution 
+function appears to be approaching a plateau with increasing Rλ for any interparticle 
+distance r much less than η. This appears to contradict the model by Wang et al [15] 
+who show a linear growth with Reynolds number for 45 < Rλ < 75. These could be due 
+to the very different nominal particle sizes used in these studies. It is worth pointing 
+out that both Wang et al [15] and Collins and Keswani [22] used ghost particles in 
+their simulations. The differential model of Zaichik et al [13] appears to be capable 
+of predicting DNS results of the radial distribution function reported in Reade and 
+Collins [21] and Wang et al [15]. But, again, the differential model does not provide a 
+closed-form solution for g(r). 
+Chun et al [3], following a similar procedure developed by Balkovsky et al [23] and 
+Zaichik and Alipchenkov [24], derived expressions for g(r) and g12(r) in the limit of 
+small particle inertia and r < η. They obtained the following expression for g12(r) 
+
+g12(R) = c
+
+∗ 0"
+
+η 2 + rc
+
+2 r 2 + rc 2#
+
+c 
+∗ 
+1/2 
+
+, (36)
+
+c
+
+∗ 1 =
+
+1 
+3Bnl 
+
+St2τk
+
+### 2 ³h S 2 i 1 − h R 2 i 1´ , rc
+
+η =µ aoτA
+
+## Bnlτk¶
+
+1/2
+
+| St2 − St1| , (37)
+
+where c ∗ 0 is a constant that was not explicitly derived by the authors but they claim
+
+that c ∗ 
+0 depends upon the manner in which the flow around particle 1 transitions in 
+space from local shear-driven small-scale to large-scale turbulence. rc is a length scale 
+of the turbulent acceleration diffusion experienced by the particles. h S 2 
+i 1 and h R 2 
+
+i 1
+
+are the average second invariant of the rate of strain and rate of rotation tensors seen by particle 1. ao is the normalized acceleration variance in isotropic turbulence (ao ≡ < (Du/Dt) 2 > /(vk/τk) 2), τA is a characteristic correlation time for acceleration, and Bnl is a non-local diffusion flux coefficient which was found to be 0.0926. This expression also covers the monodisperse case when rc = 0, then g(r) =
+
+c ∗ 
+0(η/r) c ∗ 1 which is similar to the power law equation proposed by Reade and Collins 
+[21]. Although this model provides a better understanding of the physics of particle 
+clustering, no explicit expressions were developed for c ∗ 
+0, h S 2 
+i 1, h R 2 
+i 1, and τA, thus the 
+
+model remains somewhat incomplete.
+
+In summary, the radial distribution function has been studied either empirically or through PDF modeling approaches that tend not to yield a closed-form expression, due to the complexities of the clustering phenomenon. Unfortunately, the gravitational effect has not been included in any of the models discussed above. Gravity may further decrease particle clustering as it reduces the interaction time of the particle with the turbulent eddies. This was indeed observed in direct numerical simulations by Vaillancourt et al. [25], Wang et al. [26, 2], and Franklin et al. [27] for sedimenting droplets. The only theoretical studies of RDF for sedimenting droplets in a turbulent flow is the work of Falkovich and co-worker [28, 29, 30]. By extending the formulation for monodisperse RDF, Falkovich et al. proposed the following expression for bidisperse RDF
+
+g12(R) ≈ 
+
+R
+
+## η +Ã 1 + gτ 2 k η!| St1 − St2|s 1 +µ
+
+## τpg vk¶
+
+2   −α
+
+, (38)
+
+where vk is the flow Kolmogorov velocity. The scaling exponent α should in general be a function of droplet response times, gravity, and flow Reynolds number. The inclusion of gravity in the above expression was based on a heuristic argument. It is not clear which droplet size should be used to compute the τp in the last term. Furthermore, since no explicit, closed-form expression for the scaling exponent α for a bidisperse, sedimenting system was provided, it is not clear how to compute g12 using this theory. A comparison of the Falkovich et al.’s theory with our DNS data was shown in Fig. 9(b) of the Part 1 paper [2], using a constant α based on the computed monodisperse RDF. In Section 4, we will develop empirical models for g and g12 when the gravity effect is considered.
+
+3. Radial relative velocity for sedimenting droplets
+
+Here we shall develop a theory for h| wr|i that is applicable to inertial droplets sedimenting under gravity in a turbulent flow. The basic assumption is that droplet relative trajectory is mostly determined by the gravitational sedimentation. The droplet inertia introduces a secondary correction to the relative trajectory. Therefore, the theory is applicable to cloud droplets where the terminal velocity, relative to the flow Kolmogorov velocity is large. We will compare the theory with the DNS data in Part 1 and other previous theories.
+
+3.1. Theory
+
+Following Dodin and Elperin [9], the radial relative velocity between two particles falling under gravity in a homogeneous isotropic turbulent flow at a specific angle of contact, θ, can be decomposed into a random part ξ caused by turbulent fluctuations and a deterministic part h due to gravity wr(θ) = ξ(θ) + h(θ), (39)
+
+Parameterization of turbulent geometric collision rate 13 
+where the angle of contact, θ, is measured from the vertical axis z (see Fig. 2). The 
+statistics of the radial relative velocity wr(θ) are axisymmetric with respect to the z if 
+the turbulent flow is isotropic and the gravity is aligned with the z-axis [9]. Assuming 
+the Stokes drag acting on the droplets, h(θ) can be written as h = −| g| (τp1− τp2)ez · er = 
+| g| (τp1 − τp2) cos θ. Therefore, h(π − θ) = − h(θ). 
+The random variable ξ(θ) has a mean equal to zero and a standard deviation 
+denoted by σ(θ). For sedimenting droplets, ξ(θ) can depend on θ due to the coupling of 
+turbulent fluctuations and gravity on the motion of droplets. The kinematic formulation 
+of collision kernel requires the average magnitude of the radial relative velocity h| wr|i . 
+Taking into consideration the axisymmetry and assuming a uniform distribution of pair 
+density, an integral average over the surface of the collision sphere yields 
+h| wr|i = 1 
+2Z 
+
+π 0 | wr(θ)| sin θdθ, (40) where | wr(θ)| is the mean absolute value of radial relative velocity at a given θ. Note that | wr(π − θ)| = | ξ(π − θ) + h(π − θ)| = | ξ(θ) − h(θ)| = | − ξ(θ) + h(θ)| . Since the random variable (− ξ) has the same distribution as ξ, the latter expression yields | wr(π − θ)| = | wr(θ)| as illustrated in Fig. 3. Therefore, Eq. (40) can be rewritten as
+
+### h| wr|i =Z
+
+π/2 0 | wr(θ)| sin θdθ, (41) where | wr(θ)| can be obtained through its probability distribution function
+
+| wr(θ)| =Z
+
+∞ 
+−∞| wr(θ)| Pwr(θ)dwr, (42) 
+here the mean value of | wr(θ)| does not depend on the sign of h, thus we choose to 
+define h = | g|| τp1 − τp2| cos θ. Assuming that ξ is normally distributed, the probability 
+distribution function Pwr(θ) can be written as 
+Pwr(θ) = 
+1 
+√2πσ(θ) 
+exp Ã− 
+
+[wr(θ) − h(θ)] 2 2σ(θ) 2 ! . (43)
+
+Combining the above two equations we have
+
+### h| wr|i =Z
+
+π/2
+
+## 0 Z
+
+∞
+−∞| wr(θ)|
+
+1 √2πσ(θ)
+
+× exp Ã−
+
+[wr(θ) − | g|| τp1 − τp2| cos θ] 2 2σ(θ) 2 ! dwr sin θdθ, (44) in which the only unknown is the variance σ(θ) 2 defined as σ(θ) 2 ≡ < (v 0(1) r − v 0(2) r ) 2 >, (45)
+
+where v 0(i) 
+r is the turbulent component of the i-th droplet velocity along the line of 
+centers. In terms of Cartesian coordinates 
+σ(θ) 2 =< (v 0(1) 
+z − v 0(2) z ) 2 >θ cos 2θ+ < (v 0(1) x − v 0(2) x ) 2 >θ sin 2θ, (46) 
+note that due to the axisymmetry the y-component and the x-component of the turbulent 
+relative velocity have identical statistics. < (v 0(1) 
+z − v 0(2) z ) 2 >θ and < (v 0(1) x − v 0(2) x ) 2 >θ 
+
+represent the variance of the z-component and x-component, respectively, of the 
+turbulent radial relative velocity at a given orientation angle θ. 
+The problem now reduces to determining the variance of the turbulent radial 
+relative velocity. The terms < (v 
+
+0(1) i − v 0(2) i ) 2 > can be written as
+
+< (v
+
+0(1) i − v 0(2) i ) 2 >=< (v 0(1) i ) 2 > + < (v 0(2) i ) 2 > − 2 < (v 0(1) i v 0(2) i ) >, (47)
+
+where < (v
+
+0(1) i ) 2 > is the mean square of the i-th velocity component (i = x, y, z) of the size-1 droplets (similar notation for size-2 droplets), while < (v
+
+0(1) i v
+
+0(2) i ) > is the
+
+cross-velocity covariance in the i-th direction. 
+The turbulent component of the particle velocity can be found by integrating the 
+particle equation of motion 
+dV (k)(t) 
+dt 
+= − 
+
+V (k)(t) − U(Y (k)(t),t) τ
+
+(k) p − g, (48)
+
+dY (k)(t) dt
+
+= V (k)(t). (49)
+
+After separating out the mean motion due to gravity [31], we obtain
+
+v
+
+0(k)
+
+## i =Z
+
+t −∞
+
+Ui(Y (k)(τ ), τ )
+
+τpk exp Ã
+
+τ − t τpk! dτ. (50)
+
+Setting the reference time t, when the pair is at contact, to zero, we can express the particle velocity covariance and the mean-square particle velocity as
+
+< (v
+
+0(1) i v
+
+0(2) i ) >=
+
+1
+
+## τp1τp2Z
+
+0
+
+## −∞ dτ1Z
+
+0 −∞
+
+dτ2 < Ui(Y (1)(τ1), τ1)Ui(Y (2)(τ2), τ2) >
+
+× exp Ã
+
+τ1
+
+## τp1! exp Ã
+
+τ2 τp2! , (51)
+
+< (v
+
+0(k) i ) 2 >=
+
+1
+
+## τpZ
+
+0 −∞ dτ < Ui(Y (k)(0), 0)Ui(Y (k)(τ ), τ ) > exp Ã τ τp1! . (52)
+
+where < Ui(Y (1)(τ1), τ1)Uj (Y (2)(τ2), τ2) > is the two-time fluid velocity covariance seen by two particles located at Y (1)(τ1) and Y (2)(τ2), while < Ui(Y (k)(0), 0)Ui(Y (k)(τ ), τ ) > is the fluid velocity correlation seen by a single particle. Both covariances depend on the particle trajectories and therefore the gravitational settling, a manifestation of the coupling between turbulent fluctuations and gravity.
+
+3.1.1. The fluid velocity correlations Fig. 4 illustrates the trajectories of two particles before colliding. It is important to note that due to the exponential term in (51) and (52), the main contribution to variance and covariance of particle velocity comes from the time interval right before the contact, say − 3τpk < τk < 0. Therefore, a good representation of the integrands is needed for that time interval. Now consider the two-particle fluid velocity correlation, during this period of time the droplet trajectory may be approximated by Y (2)(τ2) ≈ X + V (2)(0)τ2 and Y (1)(τ1) ≈ X + R + V (1)(0)τ1, where X is the location of particle 2 at the moment of contact, R is the separation
+
+vector at contact, and V (1)(0) and V (2)(0) are the particle velocities at the moment of 
+contact. 
+As a leading-order approximation, we assume that the particle trajectories before 
+collision (in the time interval − 3τpk < τk < 0) follow straight lines with a velocity 
+equal to the terminal velocity. The two-point, two-time fluid velocity correlation is 
+approximated as 
+
+< Ui(Y (1)(τ1), τ1)Uj (Y (2)(τ2), τ2) > u 02
+
+≈
+
+< Ui(X + vp2ezτ2, τ2)Uj (X + R + vp1ezτ1, τ1) > u 02 ≈ Rij (R + vp1ezτ1 − vp2ezτ2)DL(τ1 − τ2), (53)
+
+where the standard two-point fluid velocity correlation and the Lagrangian fluid velocity correlation are defined as
+
+Rij (r) =
+
+< Ui(x,t)Uj (x + r,t) > u 02 , (54)
+
+DL(τ ) =
+
+< Ui(Y f(t),t)Ui(Y f(t + τ ),t + τ ) > u 02 , (55)
+
+where Y f(t) is a fluid Lagrangian trajectory. 
+The approximation given by Eq. (53) becomes exact for two important limiting 
+cases. First, when the terminal velocities vp1 and vp2 are large, the trajectories are indeed 
+vertical lines and as such the Eulerian two-point fluid correlation essentially determines 
+the required Lagrangian fluid-velocity correlation seen by the particle pair, regardless 
+of the inertial response times of the particles. This similar concept was utilized in the 
+study of turbulent particle dispersion in [33]. Second, when both the terminal velocities 
+and the inertial response times are small, the particle pair essentially follows the motion 
+of a fluid element, the fluid velocity correlation seen by the particle pair reduces to 
+the Lagrangian fluid velocity correlation. In the context of cloud droplets, the inertial 
+response time of the droplets is usually small, use of the Lagrangian time correlation 
+is justified as a leading-order approximation. The spatial correlation also includes the 
+local shear effect of turbulence on the relative motion of droplets [5]. In summary, the 
+approximation (53) combines the effects of local shear, fluid Lagrangian time correlation, 
+and gravitational settling on the fluid-velocity correlation relevant to the relative motion 
+of droplets. 
+Similarly, the fluid velocity correlation seen by a single droplet is approximated as 
+< Ui(Y (1)(0), 0)Ui(Y (1)(τ ), τ ) > 
+u 02 
+
+≈
+
+< Ui(X, 0)Ui(X + vpkezτ, τ ) > u 02
+
+≈ Rii(vpkezτ )DL(τ ). (56)
+
+For the fluid Lagrangian velocity correlation DL, we used the two-scale bi exponential form [34, 13]
+
+DL(τ ) =
+
+1 2(1 − 2z 2) 1/2(³ 1 +√1 − 2z 2 ´× exp "− 2| τ | (1 +√1 − 2z 2)TL# −³ 1 − √1 − 2z 2 ´× exp "− 2| τ | (1 −√1 − 2z 2)TL#) , (57)
+
+where TL is the Lagrangian integral time scale and z = τT /TL. The Lagrangian integral time scale TL may be modelled as TL ≈ u 02/². For 2z 2 > 1, the above expression may be written in terms of trigonometric functions as
+
+DL(τ ) =
+
+1
+
+(2z 2 − 1) 1/2 exp Ã− | τ | z 2TL!
+
+×" √2z 2 − 1 cos Ã √2z 2 − 1| τ | z 2TL ! + sin Ã √2z 2 − 1| τ | z 2TL !# , (58)
+
+The Lagrangian Taylor microscale time τT is defined as
+
+τ 2 T =
+
+2u 02
+
+h (Du/Dt) 2
+
+i =
+
+2Rλ 
+15 1/2ao 
+
+τ 2 k, (59)
+
+where ao ≡ h (Du/Dt) 2 i /(vk/τk) 2 is the nondimensional variance of fluid acceleration, and is modelled according to Eq. (26). The expression for DL satisfies the conditions
+
+R
+
+∞ 0 DL(τ )dτ = TL and D 0 L(0) = 0. Additionally, Eqs (57) and (58) reduces to the one-scale exponential function
+
+DL(τ ) = exp Ã−| τ | TL! , (60)
+
+when τ À τT and (τT /TL) → 0 (for high Rλ flows). On the other hand, for small time delay (τ/τT ¿ 1), the Lagrangian correlation becomes
+
+DL(τ ) ≈ 1 −µ
+
+τ
+
+## τT¶
+
+2
+
+. (61)
+
+which is consistent with the definition of τT in Eq. (59). 
+For isotropic and homogeneous turbulence, the Eulerian two-point velocity 
+correlation Rij can be described through the longitudinal and transverse two-point 
+velocity correlations (f(r) and g(r)) as follows 
+Rij (r) = g(r)δij + [f(r) − g(r)] rirj 
+r 2 . (62) 
+The corresponding two-scale bi-exponential form for f(r) is 
+
+f(r) =
+
+1 2(1 − 2β 2) 1/2(µ 1 +q 1 − 2β 2 ¶× exp "− 2| r| (1 +√1 − 2β 2)Le# −µ 1 −q 1 − 2β 2 ¶× exp "− 2| r| (1 −√1 − 2β 2)Le#) , (63)
+
+here, Le ≡R
+
+∞ 0 f(r)dr is the Eulerian integral length scale and β =√2λ/Le. For 2β 2 > 1, the equation may be rearranged to obtain an expression similar to (58). This expression
+
+recovers the limiting cases as f(r) = exp µ−
+
+r Le¶ for Rλ → ∞ and r À λ, (64)
+
+f(r) = 1 −
+
+1
+
+## 2µ
+
+r
+
+λ¶
+
+2
+
+for r ¿ λ. (65) It is important to note that, for collision of cloud droplets considered in this paper, the inertial-range dynamics is not directly relevant, but rather the dissipation-range flow dynamics is most relevant. One way to see this is to compare the relaxation distance τ 2 pg with the Taylor microscale λ. The ratio τ 2 pg/λ is approximately equal to 0.52StSvR −0.5 λ . Taking a typical cloud Reynolds number of Rλ = 10, 000 and dissipation rate of 400 cm 2/s 3, this ratio is between 0.00015 to 0.15. Therefore, the inertial-range scaling is not relevant. The general expression, Eq. (63), has the correct dissipation-range scaling as shown by Eq. (65). It was also designed to produce the correct integral length scale. The transverse correlation function g(r) is related to f(r) as [35]
+
+g(r) = f(r) +
+
+r 2 df dr
+
+. (66)
+
+3.1.2. The variance of particle relative-velocity fluctuation We shall now derive a theory for the variance (σ 2) of turbulent component of the particle relative velocity. Eqs (51) and (52) can be written as
+
+< (v
+
+0(1) i v
+
+0(2) i ) >=
+
+1
+
+## τp1τp2Z
+
+∞
+
+## 0 dτ1Z
+
+∞
+
+0
+
+dτ2 < Ui(Y (1)(τ1), τ1)Ui(Y (2)(τ2), τ2) >
+
+× exp Ã−
+
+τ1
+
+## τp1! exp Ã−
+
+τ2 τp2! , (67)
+
+< (v
+
+0(k) i ) 2 >=
+
+1
+
+## τpkZ
+
+∞
+
+0 dτk < Ui(Y (k)(0), 0)Ui(Y (k)(τk), τk) > exp Ã−
+
+τk τp1! . (68)
+
+These properties are needed in order to evaluate σ(θ) through Eqs (46) and (47). 
+Let us first consider the special case that the particles collide with θ = 90 o as shown 
+in Fig. 5. In this case, Eq. (46) reduces to 
+[σ(θ = 90 o)] 
+
+2 = < (v 0(1) x − v 0(2) x ) 2 >θ=90o = < (v 0(2) x ) 2 > + < (v 0(1) x ) 2 > − 2 < (v 0(1) x v 0(2) x ) >, (69)
+
+where
+
+< (v 0(1) x v 0(2) x ) >=
+
+u 02
+
+## τp1τp2Z
+
+∞
+
+## 0 dτ1Z
+
+∞
+
+0
+
+dτ2R11(R + vp1ezτ1 − vp2ezτ2)DL(τ1 − τ2)
+
+× exp Ã−
+
+τ1
+
+## τp1! exp Ã−
+
+τ2 τp2! , (70)
+
+< (v 0(k) x ) 2 >=
+
+u 02
+
+## τpkZ
+
+∞
+
+0 dτR11(vpkezτ )DL(τ ) exp Ã− τ τpk! . (71)
+
+R11(vpkezτ ) is evaluated by using g(vpkτ ). In order to simplify the integrand, the two-particle fluid velocity correlation R11(R + vp1ezτ1 − vp2ezτ2) is approximated by
+
+f(R)g(vp1τ1 − vp2τ2). This turns out to be an excellent approximation as shown in Fig. 
+6, since, for our application, R ¿ η and f(R) = 1. 
+Therefore, (70) and (71) can be written as 
+
+< (v 0(1) x v 0(2) x ) >=
+
+u 02f(R)
+
+τp1τp2 Z
+
+∞
+
+## 0 dτ1Z
+
+∞
+
+0
+
+dτ2g(vp1τ1 − vp2τ2)DL(τ1 − τ2)
+
+× exp Ã−
+
+τ1
+
+## τp1! exp Ã−
+
+τ2 τp2! , (72)
+
+< (v 0(k) x ) 2 >=
+
+u 02
+
+## τpkZ
+
+∞
+
+0 dτkg(vpkτk)DL(τk) exp Ã− τk τp1! . (73)
+
+Substituting the expressions for DL(τ ), f(r), and g(r) and after lengthy integrations the particle velocity correlation < (v 0(1) x v 0(2) x ) > becomes
+
+< (v 0(1) x v 0(2) x ) > =
+
+u 02f(R)
+
+τp1τp2
+
+[b1d1Φ(c1, e1) − b1d2Φ(c1, e2) − b2d1Φ(c2, e1) + b2d2Φ(c2, e2)], (74) where the constants b1, b2, c1, c2, d1, d2, e1, and e2 are defined as
+
+b1 =
+
+1 +√1 − 2z 2 2√1 − 2z 2 , b2 = 1 −√1 − 2z 2 2√1 − 2z 2 ,
+
+c1 =
+
+(1 +√1 − 2z 2)TL 2
+
+, c2 =
+
+(1 −√1 − 2z 2)TL 2
+
+,
+
+d1 =
+
+1 +√1 − 2β 2 2√1 − 2β 2 , d2 = 1 −√1 − 2β 2 2√1 − 2β 2 ,
+
+e1 =
+
+(1 +√1 − 2β 2)Le 2
+
+, e2 =
+
+(1 −√1 − 2β 2)Le 2
+
+(75)
+
+and the function Φ(α, φ) is defined as
+
+Φ(α, φ) = 
+
+1 ³
+
+vp2
+φ −
+
+1
+
+τp2−
+
+1
+
+α´
+−
+
+1 ³
+
+vp1 φ + 1 τp1 + 1 α´  
+
+×
+
+vp1 − vp2
+
+2φ³
+
+vp1−vp2 φ + 1 τp1 + 1
+
+## τp2´
+
+2
+
++ 
+
+4 ³
+
+vp2 φ´
+
+2
+
+−³
+
+1 τp2 + 1
+
+α´
+
+2 −
+
+1 ³
+
+vp2 φ + 1 τp2 + 1
+
+α´
+
+2 −
+
+1 ³
+
+vp2
+φ −
+
+1
+
+τp2−
+
+1 α´ 2
+
+×
+
+vp2
+
+2φ³
+
+1
+
+τp1−
+
+1 α +³
+
+1 τp2 + 1
+
+α´ vp1 vp2´ + 
+
+2φ
+
+³
+
+vp1 φ + 1 τp1 + 1
+
+α´
+−
+
+2φ
+
+³
+
+vp2
+φ −
+
+1
+
+τp2−
+
+1
+
+α´
+−
+vp1
+
+³
+
+vp1 φ + 1 τp1 + 1
+
+α´
+
+2 + vp2
+
+³
+
+vp2
+φ −
+
+1
+
+τp2−
+
+1 α´ 2
+
+ ×
+
+1
+
+2φ³
+
+vp1−vp2 φ + 1 τp1 + 1
+
+## τp2´
+
+, (76)
+
+where it is assumed that vp1 > vp2. Similarly, the variance of the k-th particle velocity is given by
+
+< (v 0(k) x ) 2 > =
+
+u 02 τpk
+
+[b1d1Ψ(c1, e1) − b1d2Ψ(c1, e2)
+
+Parameterization of turbulent geometric collision rate 19 − b2d1Ψ(c2, e1) + b2d2Ψ(c2, e2)], (77)
+
+where Ψ(α, φ) is defined as
+
+Ψ(α, φ) =
+
+1
+
+1 τpk + 1 α + vpk φ −
+
+vpk
+
+2φ³
+
+1 τpk + 1 α + vpk
+
+φ´
+
+2. (78)
+
+The similar procedure can be carried out to obtain the variance of ξ for θ= 0 o and 
+θ= 45 o using Eq. (46) (see [36]). Fig. 7 shows σ(θ) for three θ values as a function 
+of a2 with a1=30 µm using the derived expressions. The turbulent flow used for the 
+figure has Rλ=72.41 and ²=400 cm 2/s 3. The flow parameters TL, τT , Le, and λ were 
+obtained from DNS, however, they could also be estimated in terms of ² and Rλ as we 
+will explain later. σ for the case of non-sedimenting droplets is shown, in which case 
+σ is independent of θ. It appears that the gravity enhances the fluctuation level of wr 
+when compared to the non-sedimenting case. 
+If we take the case of non-sedimenting particles as the reference, the addition of 
+gravity introduces two effects. First, gravity reduces the interaction time of droplets 
+with turbulent eddies, and therefore, the variance of particle velocities (i.e., the first 
+two terms in eq. 47) will be reduced (Fig. 8). Second, gravity also decreases the 
+correlation coefficient 
+
+ρ12 =
+
+< (v 0(1) x v 0(2) x ) > q < (v 0(1) x ) 2 >< (v 0(2) x ) 2 > , (79)
+
+as shown in Fig. 9. This reduces the last term in (47). The net effect here is an increase of fluctuation of wr. Fig. 7 also shows that σ is slightly larger for larger θ. Since this θ-dependence is relatively weak and the differential terminal velocity dominates the relative velocity for our application (Fig. 7), we shall no longer explicitly consider the θ-dependence. The result for θ = 90 o will be applied to all θ in deriving a closed-form expression for h| wr|i .
+
+3.2. The final result for h| wr|i Using σ(θ = 90 o) to approximate σ(θ), Eq. (44) can be readily integrated to obtain
+
+### h| wr|i =s
+
+2 π
+
+σf(b)
+
+f(b) =
+
+1 
+2√πµ b + 0.5 
+b¶ erf(b) + 1 
+2 
+
+exp (− b 2) (80)
+
+b =| g| × | τp1 − τp2| σ√2 where σ has been expressed in terms of τp1, vp1, τp2, vp2 and the flow parameters TL, τT , Le, λ defined in the previous section. The above expression is identical in form to that of Dodin and Elperin [9]. However, our approach leads to a more general theory for σ that is applicable to arbitrary τp1 and τp2 with gravity. Dodin and Elperin [9] assumed τp1 ¿ τk and τp2 ¿ τk in their derivation of σ.
+
+We shall now examine the limiting cases with our theory. For weak-inertia particles, using the fluid Lagrangian velocity correlation for short time delay DL = 1 − (τ/τT ) 2, we obtain
+
+σ 2 =
+
+1 
+15 
+
+R
+
+2² 
+ν 
++ (τp1 − τp2) 2*µ 
+
+Du
+
+## Dt¶
+
+2
+
++ + (vp1τp1 − vp2τp2) 2 2² 15ν
+
+(81)
+
+The first two terms represent the shear effect and the acceleration effect, similar to the results of Saffman and Turner [5]. The third term is new and it represents a coupling between gravity and fluid shear, a term that is absent in the previous theory by Dodin and Elperin [9]. This new term augments the turbulent transport effect. For typical conditions in clouds (e.g., Rλ=2x10 4 and ²=100 cm 2/s 3), the ratio of the acceleration term to the shear term can be written as
+
+(τp1 − τp2) 2
+
+¿³
+
+Du
+
+## Dt´
+
+2
+
+À1 15R 2 ² ν
+
+= 15ao(τp1 − τp2) 2vk 2/τk 2 R 2/τk 2
+
+="
+
+2 
+9 
+
+ρw ρ√15ao vk(a1 − a2)
+
+## ν #
+
+2
+
+. (82)
+
+For a 10µm-20µm or 20µm-30µm pair falling in a turbulent flow with Rλ=2x10 4 and ²=100 cm 2/s 3, the value of this ratio is 1.89x10 3, which means that for bidisperse systems of droplets, the turbulent acceleration effect is three orders of magnitude larger than the turbulent shear effect. The value of ao was obtained by using Eq. (26). The ratio of the coupling term to the shear term is
+
+(vp1τp1 − vp2τp2) 2 2² 15ν 1 15R 2 ² ν =  √2Ã
+
+2 
+9 
+
+ρw
+ρ!
+
+2
+
+| g| ν 2(a1 − a2)(a 2 1 + a 2 2) 
+
+2
+
+. (83)
+
+This ratio is independent of ², but increases quickly with the size of droplets. For instance, the ratio for a 10µm-20µm pair in the above turbulent flow is 140.49. For a 20µm-30µm pair, it becomes 949.75. The new coupling term is shown to be also important and cannot be neglected. The second limiting case is for very large particle inertia, namely τp1 À Te ≡ Le/u 0 , τp2 À Te. This case was studied by Abrahamson [10]. In this limit it is expected that two particles move independently or the last term in (47) approaches zero. The particle relative velocity is then determined entirely by the particle velocity fluctuations as given by the first two terms in (47). Our theory can be applied to reveal the nature by which this limiting case is approached. Fig. 10 shows that both the variance of particle fluctuating velocity and the covariance decrease with increasing τp2/Te, but the magnitude of the covariance is much smaller than the variance recovering the qualitative picture illustrated in the Abrahamson’s theory. It is important to point out that Abrahamson [10] did not consider the coupling between gravity and turbulence, so the variance of particle velocity was overestimated in his theory. The third limiting case concerns very large terminal velocities (i.e., very large Sv). Under this limit, both < (v 0(1)v 0(2)) > and < (v 0(k)) 2 > tend to zero (because Φ(α, φ) and Ψ(α, φ) go to zero) and our theory yields the expected radial relative velocity for
+
+gravitational collision. Physically, when particles settle very fast through the turbulent 
+flow, they do not have time to interact with the flow so that the particle motion is 
+unaffected by the flow. 
+Finally, for the case of negligible gravitational settling, we compare our theory with 
+the DNS data from Wang et al. [15] and Zhou et al. [16] in Fig. 11. Our theory was 
+not intended for this limiting case, and underpredicts the DNS results, particularly for 
+the monodisperse system. This results from an overestimation of the covariance in the 
+theory. 
+Coming back to cloud droplets, Fig. 12 demonstrates that the variance of droplet 
+velocity is well predicted by our theory. Cloud droplets correspond to small particle 
+inertia and large settling for which the approximation used in our theory is expected 
+to work best. When the terminal velocity is set to zero, our theory for < (v 0(k)) 2 > is 
+identical to that of Zaichik et al ’s [13] first approach. Zaichik et al [13] also found that 
+the particle-velocity variance for non-sedimenting particles from DNS of Sundaram and 
+Collins [37] can be well predicted. The comparison in fig. 12 shows that our extension 
+to include the gravity effect is very successful for single-particle energetics. 
+
+3.3. Comparison with DNS results
+
+In Fig. 13 we compare DNS results in Part 1 with our theory and previous theoretical 
+expressions for h| wr|i that considered simultaneously turbulence and gravity. Fig. 13a 
+shows that our theory agree with DNS data to within 5% relative difference for bidisperse 
+cases. On the other hand, the relative error in the predicted h| wr|i for monodisperse 
+systems at ²=400 cm 2/s 3 is about 48%. As noted earlier, the approximation for pair 
+trajectories used in our theory is not designed for droplet pairs of similar size (ı.e., very 
+small differential sedimentation). Interestingly, even for this case, Fig. 13(b) shows that 
+the theory provides a qualitatively correct prediction. It should be noted that the weak 
+θ− dependence discussed in Fig. 7 can be included in our theory, but the case of weak 
+sedimentation is not explicitly considered. 
+The theory by Abrahamson gravely overestimates the radial relative velocity due 
+to the exclusion of the covariance term and also overestimation of the variance. The 
+weak-inertia theory by Wang et al [6] underestimates h| wr|i for bidisperse systems but 
+it overestimates h| wr|i for monodisperse systems. 
+We also compare our theory with several other theories for sedimenting droplets 
+in Fig. 14(a) for droplet pair of 15 µm and 10 µm in radii, at a Reynolds number of 
+Rλ = 20, 000. This plot is similar to Fig. 8(a) in Pinsky et al. [19] and Hill’s fluid 
+acceleration model is assumed. All these previous theories shown in Fig. 14 assumed 
+that the two droplets interact with a same local turbulent eddy, and the lifetime of 
+such interaction is not affected by sedimentation. In other words, both droplets follow 
+precisely the same Lagrangian fluid element during the whole interval of the interaction. 
+While in our theory, the relative position of the pair is continuously changing due to 
+differential sedimentation, thus the local fluid velocities seen by the two droplets are 
+
+Parameterization of turbulent geometric collision rate 22 different and are not perfectly correlated. Therefore, our theory considers the coupling between the eddy-droplet pair interaction and differential sedimentation. As a result, our theory predicts a smaller enhancement of the relative motion by air turbulence. In Fig. 14(b) we plot the Stokes numbers and the ratios of droplet terminal velocity to kolmogorov velocity (Sv = vp/vk). Since Sv is at least one order of magnitude larger than St and St is finite for larger droplets, our treatment here could be more appropriate than the leading-oder treatment based on small St numbers. The dependences of the radial relative velocity on flow Reynolds number and fluid-acceleration parameterization are shown in Fig. 15. Our theory shows a much weak dependence on flow Reynolds number than the results of Pinsky et al. [19], for reasons discussed above. Hill’s model of fluid acceleration yields a slightly more sensitive dependence on flow Reynolds number than Zaichik et al.’s model.
+
+4. Radial distribution function: the accumulation effect
+
+In this section, we examine the second effect of air turbulence, namely, how the radial distribution function depends on gravity and the turbulent flow parameters. Several studies have attempted to correlate g(r) with particle and flow parameters for a monodisperse suspension of droplets in a turbulent flow. Typically a power law expression is used. For non-sedimenting particles, Chun et al [3] developed an expression for g(r) as follows
+
+g(r) = C0µ
+
+η
+
+## r¶
+
+C1
+
+for r ¿ η, (84) This expression is only valid for r smaller than the Kolmogorov length scale (η), which is relevant for cloud droplets. We shall extend this form to sedimenting droplets by assuming that C0 and C1 are functions of St, Rλ and a nondimensional parameter for gravity, | g| /(vk/τk). Using our DNS results, we obtained an empirical expression for C1 by curve-fitting our DNS data with C0 = 1. The resulting form is as follows
+
+C1 =
+
+f2(St) (| g| /(vk/τk)) f1(Rλ) (85)
+
+where
+
+f1(Rλ) = 0.1886 exp µ
+
+20.306
+
+Rλ ¶ f2(St) = − 0.1988St 4 + 1.5275St 3 − 4.2942St 2 + 5.3406St. In Fig. 16a we compare the empirical formula for g(r) with DNS results for monodisperse particles in a turbulent air flow. It is observed that the level of particle clustering depends on the turbulent dissipation rate ² and Rλ. The Stokes number increases with both ² and droplet radius a (see Fig. 1 in Part 1). The largest clustering is developed by droplets whose St is about unity as it has been found in non-sedimenting cases [15]. We also observe a higher droplet clustering for higher Rλ. The proposed empirical model correctly recovers several limiting cases. (1) For weak-inertia particles (i.e., St ¿ 1), the model gives g(r)=1.0 as C1 goes to zero. (2)
+
+If the effect of gravity is very strong in comparison with the turbulence effect (i.e., 
+| g| À (vk/τk)), C1 also goes to zero which brings g(r)=1.0. (3) The model mimics the 
+behavior independent of Rλ for small St (e.g. [15]). (4) For very large Rλ, the model 
+implies that C1 does not depend on gravity. 
+When a pair is made of two different sizes, any fluid acceleration or the gravity 
+will induce a relative velocity. This effect gives rise to a diffusion-like process in the 
+system that tends to smooth out inhomogeneities in the particle pair concentration. 
+Such diffusion process contributes negatively to the pair clustering process, i.e., RDF 
+will be reduced. 
+Chun et al [3] derived an expression for bidisperse pair RDF 
+
+g12(r) = C0Ã η 2 + rc 2 r 2 + rc 2!
+
+C1/2
+
+for r ¿ η, (86)
+
+where C0 and C1 are the same constants as in Eq. (84) for the monodisperse case. rc is 
+a parameter that incorporates the diffusion process (see Eq. 36). 
+If r ¿ rc, the acceleration-driven diffusion predominates so that g12(r) is 
+independent of r. On the other hand, if r À rc, the monodisperse case is recovered, i.e., 
+droplets in the pair do no react differently to local acceleration field. 
+Extending the empirical model for the monodisperse system, we propose the 
+following expression 
+
+g12(r) =Ã η 2 + rc 2 r 2 + rc 2!
+
+C1/2 (87)
+
+where r ¿ η is implied. C1 is assumed to follow the same expression found for the monodisperse case at St = max(St2, St1). In order to include the gravity effect, we modified the expression for rc in [3] as
+
+## Ã rc η!
+
+2
+
+= | St2 − St1| F(aog, Rλ), (88)
+
+where aog is aog = ao +
+
+π
+
+## 8Ã | g| vk/τk!
+
+2
+
+, (89)
+
+and F(aog, Rλ) is obtained by curve fitting
+
+F(aog, Rλ) = 20.115 µ
+
+aog
+
+## Rλ¶
+
+1/2
+
+. (90) 
+No attempt was made to justify the functional forms here, except that a reasonable fit 
+to our DNS data was realized. 
+In Fig. 16b we compare the model with DNS results. The effect of acceleration 
+driven diffusion is very strong for bidisperse pairs, making g12(R) close to one if the 
+size ratio a1/a2 is larger than 1.3, even for Fig. 16b where the flow dissipation rate 
+used is high in the context of clouds. The accumulation effect is important only when 
+a1/a2 <1.2. In Fig. 16b we also include the model proposed by Zhou et al [16] for 
+
+bidisperse systems, showing that their model overpredicts the DNS data as gravity was 
+not considered in that study. 
+In Fig. 17, we compare the proposed model with previous models by Wang et al [15] 
+and Reade and Collins [21] for monodisperse system. The turbulent flow has Rλ=54.5 
+and ² = 400 cm 2/s 3. We chose this Rλ value because the model by Reade and Collins 
+was developed based on this particular Rλ. 
+The model by Wang et al [15] always underpredicts g(r) as it was developed with 
+R/η = 1. Since the preferential concentration decreases with separation distance [21], 
+the underprediction by Wang et al ’s [15] model is anticipated. However, the overall 
+shape of the present model is similar to that of Wang et al ’s. 
+The model by Reade and Collins [21] appears to overpredict g(r) in the range from 
+20 µm to about 40 µm droplet radius. Since Reade and Collins’ model was obtained 
+for non-sedimenting particles, the overprediction is expected as gravity tends to drive 
+particles out of vortical regions and decrease the tendency of particle clustering. The 
+model by Wang et al [15] was also obtained for the case of no gravity. If this model 
+were corrected for r < η, it would probably show similar trend as Reade and Collins 
+[21]. 
+
+5. Geometric collision kernel
+
+We shall now combine the theory for the relative velocity and the empirical model for 
+RDF to predict the geometric collision kernel using the kinematic formulation for Γ12, 
+Eq. (2). In Fig. 18 we compare the geometric collision kernel predicted by the integrated 
+model with the dynamic collision kernel from DNS. In general, the model provides a 
+reasonable quantitative prediction. When the droplet Stokes number becomes large and 
+the gravity effect is weak, namely for high flow dissipation rate (²= 400 cm 2/s 3), the 
+model underpredicts the kernel by as much as 30%. 
+A known limitation of DNS is that the flow Reynolds number is much less than 
+that in real clouds. We can use the integrated model to extend the range of Rλ and 
+to illustrate the enhancements by turbulence in real clouds. In Fig. 19, we show the 
+results from the model at different Rλ as a function of ². Eq. (26) was used to represent 
+the turbulent acceleration variance (< (Du/Dt) 2 >), following Zaichik et al [13]. 
+The model suggests that the contribution of Rλ to the increase of collision rate is 
+as important as the contribution of ² for the bidisperse collision between droplets of 
+10µm and 20 µm in radii. The dependence on Rλ is much weaker for monodisperse self 
+collisions of 20 µm droplets. While our model underestimates Γ of bidisperse collisions 
+for large ², turbulence is expected to increase the overall collision kernel by a factor 
+ranging from 2 to 3, relative to the gravitational kernel, when the flow dissipation rate 
+is above 300 cm 2/s 3 and Rλ is on the order of 10 4. For 20 µm-droplet self-collisions, 
+the collision kernel depends sensitively on ². For example, the monodisperse collision 
+kernel at ² =600 cm 2/s 3 is about 9 times the collision kernel at ² =100 cm 2/s 3. Typical 
+dissipation rates in cumulus clouds range from 100 cm 2/s 3 to 650 cm 2/s 3 [38, 39]. 
+
+Most part of the dependence on flow Reynolds number results from its effect on RDF for the case shown in Fig. 19(a). This is demonstrated in Fig. 20 where the relative enhancements on RDF and the radial relative velocity are compared. The theory developed above assumed a linear Stokes drag acting on the droplets. In Part 1, it was shown that a nonlinear drag must be used for droplets larger than 30 µm in radius, as the droplet Reynolds number is on the order of one. Here we demonstrate that the effect of non-linear drag can be included in the theory. Following Wang and Maxey [32], we can apply our model to treat the nonlinear drag by modifying the particle response time and the terminal velocity as
+
+τp,NLD =
+
+2ρwa 2 
+9ρνf(Rep) 
+
+, vpNLD = τpNLDg. (91)
+
+where the nonlinear factor f(Rep) models the departure from the Stokes drag law and 
+is given as f(Rep) = 1 + 0.15Re 0.687 
+p [40]. Using these effective inertial response time 
+and terminal velocity, the integrated model shows good agreement with the DNS results 
+based on the nonlinear drag (Fig. 21). For the bidisperse cases (Fig. 21), the droplet 
+clustering is not significantly affected by the drag nonlinearity. The radial relative 
+velocity is clearly decreased due to the reduced mean droplet terminal velocities. As a 
+result, the collision kernel is also reduced by the nonlinear drag. 
+
+6. Summary and concluding remarks
+
+A new theory has been developed to describe the radial relative velocity between a pair of droplets sedimenting under gravity in a turbulent flow. The theory is based on a statistical approach of the single-droplet and two-droplet Lagrangian velocity correlations. The main assumption is that the separation distance of a droplet pair before collision contact is governed by the differential sedimentation. This is a reasonable assumption for cloud droplets as the sedimentation dominates the droplet relative motion, with the air turbulence introducing a moderate modification to the relative motion. The theory yielded a reasonable quantitative prediction of the radial relative velocity of bidisperse pairs of different sizes when compared to the DNS data from Part 1 [2]. For pairs of droplets of nearly equal size, the assumption is no longer valid; but interestingly, the theory could still provide a good qualitative prediction (see Fig. 13). In the weak-inertia limit, the theory reveals a new term making a positive contribution to the radial relative velocity resulting from a coupling between sedimentation and air turbulence on the motion of finite-inertia droplets. For droplets larger than 30 µm in radius, a nonlinear drag can also be included in the theory in terms of an effective inertial response time and an effective terminal velocity. This theory appears to fill a gap in the open literature concerning the prediction of radial relative velocity of finite-inertia, sedimenting droplets in a turbulent flow. The relative sedimentation of droplets causes decorrelation of local fluid velocities and local fluid accelerations seen by the two droplets of different sizes. The explicit consideration of this aspect in our theory yields a weaker enhancement of the radial
+
+relative velocity by turbulence, when compared to previous results of Saffman and 
+Turner [5], Wang et al. [6], and Pinsky et al. [19]. In these previous theories, 
+a perfectly correlataed local fluid element was used to describe the motion of two 
+droplets. Our theory, which is supported by DNS data, implies that the relatively 
+rapid sedimentation of droplets could reduce the applicability of approaches based on 
+leading-order approximation in terms of inertial response time of droplets alone. Since 
+our theory tends to under-estimate the radial relative velocity for pairs of negligible 
+differential sedimentation, it is likely that the true level of enhancement in radial relative 
+velocity by turbulence lies between our theory and those of previous results. 
+In a few recent studies, the relative motion between droplets due to turbulence 
+has been sub-divided into two general contributions: the relative motion due to local 
+flow shear/fluid acceleration and the relative motion due to interaction of two droplets 
+with different eddies, before coming into contact, that has been memorized by moderate 
+droplet inertia. The latter is referred to as the sling effect by Falkovich et al. [28, 30]. 
+It has been speculated that this sling effect could be significant compared to the local 
+effects for large Reynolds-number turbulent air flow in clouds, leading to the formation of 
+caustics of the particle velocity field and consequently, significantly enhanced collision 
+rates [43, 44, 45]. The nonlocal effect is partially accounted for in our leading-order 
+theory, at least for the case of large droplet sedimentation. This is because the integrals 
+in Eqs. (51) and (52) are over all previous time history. It may not be fully accounted 
+for due to the leading-order approximation of the relative trajectory based solely on the 
+relative sedimentation velocity. Since the integrals are over all time history, the local 
+effect and the non-local effects are not deliberately separated out. 
+An empirical model is also developed to quantify the radial distribution function, by 
+extending the theory of Chun et al. [3] and by fitting DNS data of the radial distribution 
+function. This, together with the theory for the radial relative velocity, provides a 
+theoretical parameterization for the turbulent geometric collision kernel. Using this 
+integrated model, we find that turbulence could triple the geometric collision kernel, 
+relative to the stagnant air case, for a droplet pair of 10 µm and 20 µm sedimenting 
+through a cumulus cloud at Rλ = 2 × 10 4 and ² = 600 cm 2/s 3. For the self-collisions 
+of 20 µm droplets, the collision kernel depends sensitively on the flow dissipation rate. 
+This parameterization of geometric collision kernel has been used in our recent study 
+of warm rain initiation [4], showing that the air turbulence plays a significant role in 
+the initial phase of growth by collision-coalescence, namely, growth by autoconversion 
+of cloud droplets. 
+The theory for the radial relative velocity extends the DNS results to higher flow 
+Reynolds numbers and dissipation rates. However, it should be viewed as a first step 
+due to the assumption used in its derivation. The approach used to approximate the 
+pair separation before collision is similar to the first-order iteration in Reeks’ approach 
+for single particle dispersion [31]. Reeks [31] was able to derive the dispersion statistics 
+using the successive, second-order trajectory approximation. It may also be possible to 
+develop a theory for the radial relative velocity using the successive, second-order pair 
+
+trajectory, but it would be a lot more labor-intensive than what was done in this paper. 
+The modeling of the radial distribution function remains a challenge. The recent 
+advances made by Zaichik et al. [13, 41, 42] based on a PDF theory offer a possibility 
+for predicting RDF for finite-inertia sedimenting droplets, although so far they have 
+not included the effect of gravitational sedimentation in their formulation. The gravity 
+breaks the spherical symmetry of relative motion and pair concentration, so it is not yet 
+clear whether their PDF approach can be applied to finite-inertia, sedimenting droplets. 
+Certainly, more DNS results of both RDF and radial relative velocity at higher flow 
+Reynolds numbers would be desired to build up sufficient data to test future theoretical 
+developments. Specifically, the scaling exponent α for a bidisperse, sedimenting system 
+has not been studied in DNS, which should be a priority for DNS study. 
+Finally, we summarize the integrated parameterization of turbulent collision kernel 
+below. All relationships are compiled together so our proposed parameterization can 
+be easily implemented by others in the future to include the effect of air turbulence 
+when modeling droplet size distribution. For cloud droplets which satisfy the condition 
+a ¿ η, ρw À ρ, and Sv > 1, the geometric collision kernel can be calculated as 
+Γ12 = 2πR 2 
+h| wr|i g12. 
+
+The average radial relative velocity h| wr|i is computed by
+
+### h| wr|i =s
+
+2 π
+
+σf(b)
+
+f(b) =
+
+1 
+2√πµ b + 0.5 
+b¶ erf(b) + 1 
+2 
+
+exp (− b 2)
+
+b =| g| × | τp1 − τp2| σ√2 or alternatively by
+
+### h| wr|i =s
+
+2 
+πµ σ + π 
+8 (τp1 − τp2) 2 
+
+| g|
+
+2 ¶
+
+1/2
+
+,
+
+where σ 2 =< (v 0(2)) 2 > + < (v 0(1)) 2 > − 2 < (v 0(2)v 0(1)) >, and
+
+< (v 0(k)) 2 > =
+
+u 02 τpk
+
+[b1d1Ψ(c1, e1) − b1d2Ψ(c1, e2)
+
+− b2d1Ψ(c2, e1) + b2d2Ψ(c2, e2)], < (v 0(1)v 0(2)) > =
+
+u 02f2(R) τp1τp2
+
+[b1d1Φ(c1, e1) − b1d2Φ(c1, e2)
+
+− b2d1Φ(c2, e1) + b2d2Φ(c2, e2)], where the longitudinal two-point velocity correlation evaluated at r = R is
+
+f2(R) =
+
+1 2(1 − 2β 2) 1/2 { (1 +q 1 − 2β 2) × exp "− 2R (1 +√1 − 2β 2)Le#
+
+− (1 −q 1 − 2β 2) × exp "−
+
+2R (1 −√1 − 2β 2)Le#} .
+
+The constants b1, b2, c1, c2, d1, d2, e1, and e2 are defined as
+
+b1 =
+
+1 +√1 − 2z 2 2√1 − 2z 2 , b2 = 1 −√1 − 2z 2 2√1 − 2z 2 ,
+
+c1 =
+
+(1 +√1 − 2z 2)TL 2
+
+, c2 =
+
+(1 −√1 − 2z 2)TL 2
+
+,
+
+d1 =
+
+1 +√1 − 2β 2 2√1 − 2β 2 , d2 = 1 −√1 − 2β 2 2√1 − 2β 2 ,
+
+e1 =
+
+(1 +√1 − 2β 2)Le 2
+
+, e2 =
+
+(1 −√1 − 2β 2)Le 2
+
+, where z = τT /TL, and β =√2λ/Le. The function Φ(α, φ), taking vp1 > vp2, is given by
+
+Φ(α, φ) = 
+
+1 ³
+
+vp2
+φ −
+
+1
+
+τp2−
+
+1
+
+α´
+−
+
+1 ³
+
+vp1 φ + 1 τp1 + 1 α´  
+
+×
+
+vp1 − vp2
+
+2φ³
+
+vp1−vp2 φ + 1 τp1 + 1
+
+## τp2´
+
+2
+
++ 
+
+4 ³
+
+vp2 φ´
+
+2
+
+−³
+
+1 τp2 + 1
+
+α´
+
+2 −
+
+1 ³
+
+vp2 φ + 1 τp2 + 1
+
+α´
+
+2 −
+
+1 ³
+
+vp2
+φ −
+
+1
+
+τp2−
+
+1 α´ 2
+
+×
+
+vp2
+
+2φ³
+
+1
+
+τp1−
+
+1 α +³
+
+1 τp2 + 1
+
+α´ vp1 vp2´ + 
+
+2φ
+
+³
+
+vp1 φ + 1 τp1 + 1
+
+α´
+−
+
+2φ
+
+³
+
+vp2
+φ −
+
+1
+
+τp2−
+
+1
+
+α´
+−
+vp1
+
+³
+
+vp1 φ + 1 τp1 + 1
+
+α´
+
+2 + vp2
+
+³
+
+vp2
+φ −
+
+1
+
+τp2−
+
+1 α´ 2
+
+ ×
+
+1
+
+2φ³
+
+vp1−vp2 φ + 1 τp1 + 1
+
+## τp2´
+
+,
+
+and Ψ(α, φ) is
+
+Ψ(α, φ) =
+
+1
+
+1 τpk + 1 α + vpk φ −
+
+vpk
+
+2φ³
+
+1 τpk + 1 α + vpk
+
+φ´
+
+2, for k = 1 or 2.
+
+The radial distribution function at contact g12 is given by
+
+g12 =Ã η 2 + rc 2 R 2 + rc 2!
+
+C1/2
+
+, with C1 =
+
+y(St) (| g| /(vk/τk)) f3(Rλ),
+
+where
+
+y(St) = − 0.1988St 4 + 1.5275St 3 − 4.2942St 2 + 5.3406St,
+
+f3(Rλ) = 0.1886 exp µ
+
+20.306 Rλ ¶ , and St ≡ max(St2, St1). Since the fitting for y(St) was done for a limited range of St in DNS, it should be set to zero for large St when the function y(St) becomes negative. The expression for rc is written as
+
+## Ã rc η!
+
+= | St2 − St1| F(aog, Rλ)
+
+where aog is aog = ao +
+
+π
+
+## 8Ã | g| vk/τk!
+
+2
+
+and F(aog, Rλ)
+
+F(aog, Rλ) = 20.115 µ
+
+aog
+
+## Rλ¶
+
+1/2
+
+.
+
+In the above parameterization, the input parameters are: (1) for the droplets, the radii a1 and a2, and the water density ρw; (2) for the turbulent air flow, the density ρ, the viscosity ν, the turbulence dissipation rate ², and the Taylor-microscale Reynolds number Rλ, and (3) the gravitational acceleration | g| . All other derived variables used in the model are listed in Table 2.
+
+Acknowledgments
+
+This study has been supported by the National Science Foundation through grants ATM-0114100 and ATM-0527140, and by the National Center for Atmospheric Research (NCAR). NCAR is sponsored by the National Science Foundation. LPW also acknowledges support from National Natural Science Foundation of China (Project No. 10628206). Most of the simulations were conducted using the SGI Origin 3800/2100 and IBM clusters at NCAR. OA is grateful to the additional computing resources provided by the Scientific Computing Division at NCAR.
+
+References
+
+[1] Wang L-P, Ayala O, Kasprzak S E and Grabowski W W 2005 J. Atmos. Sci. 62 2433–2450 [2] Ayala O, Rosa B, Wang L-P and Grabowski W W 2008 Effects of turbulence on the geometric collision rate of sedimenting droplets: Part 1. Results from direct numerical simulation. New J. Phys. (This Focus issue), in press [3] Chun J H, Koch D L, Rani S L and Ahluwalia A 2005 J. Fluid Mech. 536 219–51 [4] Xue, Y, Wang L-P and Grabowski W W 2007 J. Atmos. Sci. 65 331–56 [5] Saffman P G and Turner J S 1956 J. Fluid Mech. 1 16–30 [6] Wang L-P, Wexler A and Zhou Y 1998 Phys. Fluids 10 2647–51 [7] Wang L-P, Ayala O and Xue Y 2005 Phys. Fluids 17 Art. No. 067103 [8] Hu K and Mei R 1997 ASME Fluid Engineering Div. Summer Meeting, June 1997 [9] Dodin Z and Elperin T 2002 Phys. Fluids 14 2921–24 [10] Abrahamson J 1975 Chemical Engineering Science 30 1371–9 [11] Williams J J E and Crane R I 1983 Int. J. Multiphase Flow 9 421–35 [12] Yuu S 1984 AIChE J. 30 802–7 [13] Zaichik L I, Simonin O and Alipchenkov V M 2003 Phys. Fluids 15 2995–3005 [14] Kruis F E and Kusters K A 1996 J. Aerosol Sci. 27 263–264 [15] Wang L-P, Wexler A and Zhou Y 2000 J. Fluid Mech. 415 117–53 [16] Zhou Y, Wexler A and Wang L-P 2001 J. Fluid Mech. 433 77–104 [17] Hill R J 2002 J. Fluid Mech 452 361–370 [18] Herring J R and Kerr R M J. Fluid Mech 118 205–219 [19] Pinsky M B, Khain A P, Grits B, and Shapiro M 2006 J. Atmos. Sci. 63 2123–39 [20] Bec J, Celani A, Cencini M and Musacchio S 2005 Phys. Fluids 17, Art. No. 073301 [21] Reade W C and Collins L R 2000 Phys. Fluids 12 2530–40 [22] Collins L R and Keswani A 2004 Phys. Fluids 6 119 [23] Balkovsky E, Falkovich G and Fouxon A 2001 Phys. Rev. Letter. 86 2790–3 [24] Zaichik L I and Alipchenkov V M 2003 Phys. Fluids. 15 1776–87 [25] Vaillancourt P, Yau M, Bartello P and Grabowski W W 2002 J. Atmos. Sci. 59 3421–35 [26] Wang L-P, Ayala O, Xue Y, and Grabowski W W 2006 J. Atmos. Sci. 63 2397-2401 [27] Franklin C N, Vaillancourt P A and Yau M K 2007 J. Atmos. Sci. 64 938–954 [28] Falkovich G, Fouxon A and Stepanov M G 2002 Nature 419 151–4 [29] Falkovich G and Pumir A 2004 Phys. Fluids 16 L47–50 [30] Falkovich G and Pumir A 2007 J. Atmos. Sci. 64 4497–4505 [31] Reeks M W 1977 J. Fluid Mech. 83 529–546 [32] Wang L-P and Maxey M R 1993 J. Fluid Mech. 27 27–68 [33] Wang L-P and Stock D 1993 J. Atmos. Sci. 50 1897–913 [34] Sawford B L 1991 Phys. Fluids A 3 1577–86 [35] Hinze J O 1975 Turbulence (New York: McGraw-Hill) p 710 [36] Ayala O 2005: Effects of turbulence on the collision rate of cloud droplets. Ph.D. Dissertation, University of Delaware, 236 pages, AAT 3181864, ISBN 0542227762. Available from ProQuest Information and Learning Company, Ann Arbor, MI, U.S.A. (ProQuest document ID: 954050391) [37] Sundaram S and Collins L R 1997 J. Fluid Mech 335 75–109 [38] Rogers R R and Yau M K 1989 A Short Course in Cloud Physics (New York: Pergamon) p 293 [39] Pruppacher H R and Klett J D 1997 Microphysics of clouds and precipitation (Dordrecht: Kluvert Academic Publisher) p 954 [40] Clift R, Grace J R and Weber M E 1978 Bubble, Drops, and Particles (New York: Academic Press) p 380 [41] Zaichik, L I and V M Alipchenkov 2003, Phys. Fluids., 15 1776 – 1787 [42] Zaichik L I, Simonin O and Alipchenkov V M 2006 Phys. Fluids. 18 Art. No. 035110
+
+Parameterization of turbulent geometric collision rate 31 [43] Wilkinson M and Mehlig B 2005 Europhysics Lett. 71 186–192 [44] Wilkinson M, Mehlig B, and Bezuglyy V 2006 Phys. Rev. Lett 97 Art. No. 048501 [45] Boffetta G, Celani A, De Lillo F, and Musacchio S 2007 Europhysics Lett. 78 Art. No. 14001
+
+Table 1. A summary of previous theoretical studies of two-particle relative velocity in a turbulent flow.
+
+| | | | NO GRAVITY | GRAVITY |
+| --- | --- | --- | --- | --- |
+| Small particle inertia τp ¿ | Saffman Williams Kruis τk | Hu Wang Zaichik | and Turner and Crane Yuu (1984) and Kusters (1996) and Mei (1997) et al. (2000) et al. (2003a) | (1956) Saffman and Turner (1956) et al. (1983) Wang (1998) Dodin and Elperin (2002) |
+| Arbitrary particle inertia | Williams Kruis | Wang Zaichik | and Crane Yuu (1984) and Kusters (1996) et al. (2000) et al. (2003a) | (1983) |
+| Large particle inertia > τp | Williams Kruis TL | Abrahamson Wang Zaichik | (1975) and Crane Yuu (1984) and Kusters (1996) et al. (2000) et al. (2003a) | Abrahamson (1975) (1983) |
+
+Table 2. List of derived variables used in the parameterization.
+
+FLOW τk =³
+
+ν
+
+²´
+
+1/2
+
+η =³
+
+ν 3 ²´
+
+1/4
+
+vk = (ν²)
+
+1/4 u 0 =
+
+R
+
+1/2 λ 15 1/4 vk
+
+TL = u 02 ² Le = 0.5 u 03 ² ao = 11+7Rλ 205+Rλ τT =³
+
+2Rλ
+
+15 1/2ao´
+
+1/2 τk
+
+λ = u 0
+
+³
+
+15ν ²´
+
+1/2
+
+DROPLETS
+
+τp = 2 
+9 
+
+ρw ρ a 2
+
+νf(Rep)
+
+f(Rep) = 1 + 0.15Rep
+
+0.687
+
+### vp = τp| g|
+
+Rep =
+
+2avp ν
+
+St =
+
+τp
+τk
+
+¿³
+
+Du
+
+## Dt´
+
+2
+
+Figure 1. Models of normalized fluid acceleration.
+
+2
+
+1
+
+Figure 2. Notation for two colliding droplets sedimenting under gravity in a turbulent flow.
+
+for wr(π − θ)
+
+for wr(θ)
+
+Pwr(θ)
+
+0 wr
+
+Figure 3. Illustration of two probability distribution functions of wr.
+
+3τp1
+
+3τp2
+
+Figure 4. Trajectories of two droplets falling under gravity in a turbulent flow before they come into contact.
+
+vp1τ1 vp2τ2
+
+R Figure 5. Particles colliding side-by-side with θ=90 o.
+
+Figure 6. Two-point fluid velocity correlation along the trajectories of two particles colliding side-by-side at θ=90 o. z is the vertical distance between the two particles before collision. The distance is given in cm and R=60 µm.
+
+Figure 7. Standard deviation of wr (or ξ) as a function of a2 in a turbulent flow with Rλ=72.41 and ²=400 cm 2/s 3. a1 =30 µm. The standard deviation without sedimentation is also shown. The normalized radial relative velocity for the gravity only case is plotted for comparison.
+
+Figure 8. Variance of the particle velocity as a function of non-dimensional particle terminal velocity. The particle Stokes number is 0.5 and it is falling in a turbulent flow with Rλ=72.41 and ²=400 cm 2/s 3.
+
+Figure 9. Correlation coefficient ρ12 as a function of the gravitational acceleration | g| . The collision radius R is 0.1η. Particles have Stokes numbers of 0.5 and 1.0 and they are falling in a turbulent flow with Rλ=72.41 and ²=400 cm 2/s 3.
+
+Figure 10. Comparison of < (v 0(k)) 2 > and < (v 0(1)v 0(2)) > predicted by the present study and by Abrahamson’s theory for particles falling in a turbulent flow of Rλ=72.41 and ²=400 cm 2/s 3. τp1 = 2.5 Te, Sv1=9.3, and Sv2=1.25. The solid line represents the two-particle cross velocity correlation for our model while the other lines represent the mean square velocities of the particles.
+
+(a)
+
+(b)
+
+Figure 11. Comparison of the predicted and simulated radial relative velocity of non-sedimenting particles in a turbulent flow. The particle radius is equal to half the Kolmogorov length scale (a = η/2) (a) Bidisperse system (similar to Fig. 12 in Zhou et al. [16]), (b) Monodisperse system (similar to Fig. 8 in Wang et al. [15]).
+
+Figure 12. Comparison of the predicted and simulated mean-square horizontal particle velocity for droplets falling in a turbulent flow of Rλ=72.41 and ²=400 cm 2/s 3.
+
+(a)
+
+(b)
+
+Figure 13. Comparison of the predicted and simulated radial relative velocity of sedimenting droplets in a turbulent flow. (a) a1=30 µm and the turbulent flow parameters are: Rλ=72.41 and ²=400 cm 2/s 3, (b) Monodisperse case, here, the solid line correspond to the expression of Wang et al. [6] for a turbulent flow of Rλ=72.41 and ²=400 cm 2/s 3.
+
+(a)
+
+(b)
+
+Figure 14. (a) Comparison of the predicted radial relative velocity, normalized by the gravitational value, as a function of ² for droplet pair of 15 µm and 10 µm in radis. The flow Reynolds number is assumed to be Rλ = 20, 000. (b) The magnitude of Stokes numbers and sedimentation parameters for the parameters considered in (a).
+
+(a)
+
+(b)
+
+Figure 15. The relative enhancement by turbulence of radial relative velocity between 15 µm and 10 µm droplets, predicted by our theory: (a) based on Hill’s model of fluid acceleration; (b) based on Zaichik et al’s model of fluid acceleration. The data from Pinksy et al. [19] are also shown for comparison. The flow Reynolds number is assumed to be Rλ = 20, 000.
+
+(a)
+
+(b)
+
+Figure 16. DNS results and modeled radial distribution function of sedimenting droplets in a turbulent flow. (a) Monodisperse case, (b) Bidisperse system with a1=30 µm and the turbulent flow has Rλ=72.41 and ²=400 cm 2/s 3.
+
+Figure 17. Comparison of the present RDF model and previous models for monodisperse systems. The turbulent air flow has Rλ=54.5 and ² = 400 cm 2/s 3.
+
+(a)
+
+(b)
+
+Figure 18. DNS dynamic collision kernel and predicted collision kernel of sedimenting droplets in a turbulent flow. (a) a1=30 µm, Rλ=72.41 and ²=400 cm 2/s 3, (b) Monodisperse case.
+
+(a)
+
+(b)
+
+Figure 19. Dependence of the collision kernel of sedimenting droplets on the flow dissipation rate ² for different Rλ. (a) Collisions between 10 µm and 20 µm droplets, (b) Self-collisions of 20 µm droplets.
+
+Figure 20. The relative enhancements of the radial relative velocity and the RDF by turbulence, as a function of Rλ for droplet pair of 20 µm and 10 µm in radii [also see Fig. 19(a)]. The dissipation rate is ² = 400 cm 2/s 3. The horizontal dotted line marks the value of one.
+
+(a)
+
+(b)
+
+(c)
+
+Figure 21. The effect of nonlinear drag (NLD) in bidisperse systems with a1 = 30 µm, Rλ = 43.04, ²=400 cm 2/s 3. (a) h| wr|i , (b) g12(r = R), (c) Collision kernel.

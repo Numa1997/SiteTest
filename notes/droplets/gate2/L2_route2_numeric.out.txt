@@ -24,4 +24,5 @@
 == (3.1) dimensional integration vs (3.2) non-dimensional: same path?
    b = 0.8: max |y_dimensional/R - y_nondim| over 13 times: x 5.77e-13, z 4.95e-12 (path through z from -50 to 0.23)
 == (3.3)/(3.4) full nonlinear axis equation, p = 0, S = 0: St eta'' = a(eta) - eta' ; log variables xi = ln(eta), u = eta'/eta (u -> -infinity at a hit)
-   potential St_c = 0.083333  (start at 30 radii)   1/12 = 0.083333
+   potential St_c = 0.083333  (start 29 radii from the surface)   1/12 = 0.083333
+   creeping  St_c = 1.211942  (start at 200 radii)   text (Michael and Norey 1970) 1.21194

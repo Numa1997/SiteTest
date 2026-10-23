@@ -208,10 +208,17 @@ expect('book-06', 'the first 100 µm drop in 1 m³ appears after', `about a minu
 const Wall = modeMass(modes[0]) + modeMass(modes[1]);
 expect('book-06', 'a 100 µm drop holds the water of', `${f(P.massOf(100e-6) / Wall * 1e6, 2)} cm³`);
 expect('book-06', 'a 1 mm drop holds the water of', `${f(P.massOf(1e-3) / Wall * 1e3, 2)} litres`);
-const cap = (() => { let R = 69e-6, t = 0; const h = 0.05, fr = RR => P.tableE(tab, RR, 8e-6 / RR, 'clamp') * Math.PI * (RR + 8e-6) ** 2 * (vB(RR) - vB(8e-6)) * W8 / (4 * Math.PI * RR * RR * RW);
-  while (R < 100e-6) { R += h * fr(R); t += h; } return t; })();
-expect('book-06', 'the largest collector the cloud starts with', `(${f(40 * 1.2 ** 3, 0)} µm) would need ${f((100 ** 3 - 69 ** 3) / 512, 0)} captures and ${f(cap, -1 + 1).replace(/\d$/, '0')} s`, `${f(cap, 1)} s`);
+const cap = (() => { let R = 69e-6, t = 0; const h = 0.05, fr = RR => P.tableE(tab, RR, 8e-6 / RR, 'clamp') * Math.PI * (RR + 8e-6) ** 2 * (vB(RR) - vB(8e-6)) * modeMass(modes[0]) / (4 * Math.PI * RR * RR * RW);
+  while (R < 100e-6) { R += h * fr(R); t += h; } return t; })();   // all the droplet water, as 8 um droplets, none used up
+expect('book-06', 'the largest collector the cloud starts with', `(${f(40 * 1.2 ** 3, 0)} µm)`);
+expect('book-06', 'none used up, would need', `${f((100 ** 3 - 69 ** 3) / 512, 0)} captures and ${f(cap, 0)} s`);
 const nmx = []; B.N100.reduce((m, N, i) => (nmx[i] = Math.max(m, N)), 0);
+const i605 = B.t.indexOf(605);
+expect('book-06', 'Ten cm³ hold about ten collectors and the water for', `one drop of ${f(P.radiusOf(Wall * 1e-5) * 1e6, 0)} µm`);
+expect('book-06', 'at 605 s it already has', `${f(B.F100[i605] * 100, 0)} % of the water above 100 µm, but packed into drops of ${f(P.radiusOf(B.F100[i605] * Wall / B.N100[i605]) * 1e6, 0)} µm`);
+expect('book-06', 'radius), only', `${f(B.N100[i605] * 1e-5, 2)} of them per 10 cm³`);
+const rmx = S.V['10'].map(q => Math.max(...q.rmax));
+expect('book-06', 'every box ends with one drop of', `100 to ${r10(Math.max(...rmx))} µm`, `largest ${f(Math.max(...rmx), 1)} µm, smallest final ${f(Math.min(...S.V['10'].map(q => q.rmax[q.rmax.length - 1])), 1)} µm`);
 expect('book-06', 'The mean field says that at most', `${f((1 - Math.exp(-1e-5 * Math.max(...nmx))) * 100, 0)} %`);
 expect('book-06', 'every one of the', `${S.V['10'].filter(q => q.t100 !== null).length} exact runs made one, after a median of ${f(med('10'), 0)} s`);
 let t1mm = null; for (let i = 0; i < B.t.length; i++) if (B.N1mm[i] >= Math.LN2) { t1mm = B.t[i]; break; }
@@ -270,7 +277,7 @@ const fT = 1 / 3 + Math.max(2 / 3 - Math.abs(263.15 - 258) / 9, 0), aA = Math.PI
 const Fr = aA * (1 - Math.exp(-Math.pow(6.3e6 * K0 / aA, 0.3)));
 expect('book-08', 'A 40 µm ice sphere falls at', `${f(vi(40e-6), 4)} m/s, an 8 µm one at ${f(vi(8e-6), 4)} m/s`);
 expect('book-08', 'Their collision energy is', `$K_0 = ${texSci(K0, 1)}$ J`);
-expect('book-08', 'as its users recommend,', `$\\alpha A = ${texSci(aA, 1)}$ and $C K_0 = ${texSci(6.3e6 * K0, 1)}$`);
+expect('book-08', 'as its users recommend', `$\\alpha A = ${texSci(aA, 1)}$ and $C K_0 = ${texSci(6.3e6 * K0, 1)}$`);
 expect('book-08', 'so $F =', texSci(Fr, 1) + '$ fragments');
 expect('book-08', 'one new splinter per', 'three thousand', f(1 / Fr, 0));
 expect('book-08', "The old study's rule gave this collision", f(0.001 * mi(40e-6) / mi(5e-6), 2) + ' fragments');
@@ -278,7 +285,7 @@ expect('book-08', 'the ice–ice collisions in our cloud carry', `$${texSci(C.K0
 expect('book-08', 'eight to twelve orders', 'eight to twelve', `${f(Math.log10(1e-4 / C.K0q[2]), 1)} to ${f(Math.log10(1e-2 / C.K0q[0]), 1)} orders below 10⁻⁴–10⁻² J`);
 expect('book-08', '0 to 1.7 fragments per freezing drop,', `${f(pm(C.rime25), 2)} drops of 25 µm`);
 expect('book-08', 'or more freezing per cm³ and minute', `0 to ${f(pm(C.shatter[1]), 1)}`);
-expect('book-08', 'with $D$ held at 0.5 mm,', `${f(pm(C.ii), 2)} collisions per cm³`);
+expect('book-08', 'with $D$ held at 0.5 mm in $A$,', `${f(pm(C.ii), 2)} collisions per cm³`);
 expect('book-08', 'J⁻¹)', `$${texSci(pm(C.fragLo), 1)}$ to $${texSci(pm(C.fragHi), 1)}$`);
 expect('book-08', "true diameters put into (8.2)", f(pm(C.fragTrueD), 3));
 expect('book-08', 'as fragments of 5 µm radius', f(pm(C.oldRule), 1));
