@@ -114,6 +114,7 @@ def wanted():
         if f.startswith('public/simulations/'):
             for m in re.finditer(PANEL_KEYS, src):
                 if re.search(r'[A-Za-z]{2,}', re.sub(r'<[^>]+>', ' ', m.group(1))): out.setdefault(m.group(1).replace("\\'", "'"), f + ' (data panel)')
+        for m in re.finditer(r"\bsliderCheck\([^,()]+, '([^']*[A-Za-z][^']*)'", src): out.setdefault(m.group(1), f + ' (slider name)')
         for m in re.finditer(r"\bplural\((?:[^()']|\([^()]*\))+?, '([^']*)', '([^']*)'\)", src): out.setdefault(m.group(2), f + ' (plural)')
     js = ("global.window = {}; require(process.argv[1]);"
           "process.stdout.write(JSON.stringify({sims: window.SIMULATIONS, fields: window.SIM_FIELDS}));")

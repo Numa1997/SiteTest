@@ -1,7 +1,7 @@
 /* Numa Koudsie · simulations
    Shared helpers: the site palette, crisp high-DPI canvases, styled sliders and a pausable clock. */
 (function () {
-    'use strict'; window._t = window.T = window.T || function (s, v) { var d = window.I18N, r = d && d[s]; if (typeof r !== 'string') r = s; return v ? r.replace(/\{(\w+)\}/g, function (m, k) { return k in v ? v[k] : m; }) : r; };   /* a page's words: scripts/i18n/strings-<lang>.js on a translated page */
+    'use strict'; window._t = window.T = window.T || function (s, v) { var d = window.I18N, r = d && d[s]; if (r && typeof r === 'object' && v && 'n' in v) r = r[new Intl.PluralRules(document.documentElement.lang).select(v.n)] || r.other; if (typeof r !== 'string') r = s; return v ? r.replace(/\{(\w+)\}/g, function (m, k) { return k in v ? v[k] : m; }) : r; };   /* a page's words: scripts/i18n/strings-<lang>.js on a translated page */
 
     var theme = {
         paper: '#f5f1ea',

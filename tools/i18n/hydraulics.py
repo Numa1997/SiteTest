@@ -39,6 +39,15 @@ def panel_and_wrapped(html):
         if re.search(r'[A-Za-z]{2,}', re.sub(r'<[^>]+>', ' ', m.group(1))): out.append(m.group(1).replace("\\'", "'"))
     return out
 
+def code_words(src):
+    """Words the servo page prints from data rather than from literals: the mode names and control law (stepper and pill) and the "live" tag of its
+    symbol table. They are routed through _t in the working copy; returns the copy and the names to translate."""
+    src = (src.replace('>${md}</button>', '>${_t(md)}</button>').replace('`${mode} · ', '`${_t(mode)} · ')
+              .replace("() => 'live'", "() => _t('live')")
+              .replace("${force ? 'force' : 'position'}", "${force ? _t('force') : _t('position')}"))
+    m = re.search(r"const MODES = \[([^\]]*)\]", src)
+    return src, (re.findall(r"'(\w+)'", m.group(1)) if m else []) + [w for w in ('live', 'force', 'position') if "_t('%s')" % w in src]
+
 def arabic_css():
     """Arabic letters under the house font names, and the few right-to-left rules a study frame needs."""
     faces = ''
@@ -78,7 +87,8 @@ def todo(lang):
             shutil.copy(os.path.join(STUDY, f), os.path.join(d, f))
             subprocess.run(['node', os.path.join(B.ROOT, 'tools', 'i18n', 'wrap.cjs'), os.path.join(d, f)], check=True, capture_output=True,
                            env=dict(os.environ, NODE_PATH=os.path.join(B.ROOT, 'tools', 'i18n', 'node_modules'), WRAP_ARRAYS='1'))
-            want |= set(panel_and_wrapped(open(os.path.join(d, f), encoding='utf-8').read()))
+            src, words = code_words(open(os.path.join(d, f), encoding='utf-8').read())
+            want |= set(panel_and_wrapped(src)) | set(words)
     out['strings'] = {k: k for k in sorted(want) if k not in S}
     return out
 
@@ -93,12 +103,12 @@ def build(lang):
         p = os.path.join(dst, f)
         subprocess.run(['node', os.path.join(B.ROOT, 'tools', 'i18n', 'wrap.cjs'), p], check=True, capture_output=True,
                        env=dict(os.environ, NODE_PATH=os.path.join(B.ROOT, 'tools', 'i18n', 'node_modules'), WRAP_ARRAYS='1'))
-        src = open(p, encoding='utf-8').read()
+        src, words = code_words(open(p, encoding='utf-8').read())
         # the Web Worker the servo page builds from its own source gets the same table
         src = src.replace("new Blob([code], { type: 'text/javascript' })",
                           "new Blob(['self.I18N=' + JSON.stringify(window.I18N || {}) + ';self._t=function(s){var r=self.I18N[s];return typeof r==\\'string\\'?r:s};', code], { type: 'text/javascript' })")
         _, T = load(lang, tname(f)); html, miss, _n = B.translate(src, lang, T); missing += [(f, m) for m in miss]
-        want = panel_and_wrapped(html); missing += [(f, {'src': w}) for w in want if w not in S]
+        want = panel_and_wrapped(html) + words; missing += [(f, {'src': w}) for w in want if w not in S]
         if lang == 'ar': html = rtl_styles(html)
         head = strings_script(S, want, lang) + (arabic_css() if lang == 'ar' else '')
         # first thing in <head>: the page's own head scripts already call _t()
@@ -114,12 +124,18 @@ def build(lang):
     t = t.replace('<html lang="en">', '<html lang="%s" dir="%s">' % (lang, dirattr), 1)
     if lang == 'ar': t = t.replace('</head>', arabic_css() + '\n</head>', 1)
     open(tpl, 'w', encoding='utf-8').write(t)
-    subprocess.run([sys.executable, os.path.join(dst, 'tools', 'build_theory.py')], check=True, capture_output=True)
-    # the wrapper: its language, tab labels, title, back link and file name
     tr = lambda s: S.get(s, s)
+    # the textbook's counters under its title
+    bt = os.path.join(dst, 'tools', 'build_theory.py'); b = open(bt, encoding='utf-8').read()
+    for w in ('chapters', 'numbered equations', 'figures'): b = b.replace('</b> %s</span>' % w, '</b> %s</span>' % tr(w))
+    b = b.replace('>every number computed from the model<', '>%s<' % tr('every number computed from the model'))
+    open(bt, 'w', encoding='utf-8').write(b)
+    subprocess.run([sys.executable, bt], check=True, capture_output=True)
+    # the wrapper: its language, tab labels, title, brand, back link and file name
     bc = os.path.join(dst, 'tools', 'build_combined.py'); c = open(bc, encoding='utf-8').read()
     for label in ('Servo press', 'Servo', 'Ideal press', 'Ideal', 'Theory'):
         c = c.replace("'%s'" % label, json.dumps(tr(label), ensure_ascii=False))
+    c = c.replace('<b>Hydraulic Press Study</b><span>from Pascal to a servo loop</span>', '<b>%s</b><span>%s</span>' % (tr('Hydraulic Press Study'), tr('from Pascal to a servo loop')))
     c = c.replace('<html lang="en">', '<html lang="%s" dir="%s">' % (lang, dirattr), 1)
     c = c.replace("title='Hydraulic Press Study · Numa Koudsie'", 'title=' + json.dumps(tr('Hydraulic Press Study') + ' · ' + NAME[lang], ensure_ascii=False))
     c = c.replace('href="../../portfolios.html">← Numa Koudsie · Portfolios</a>', 'href="../../%s/portfolios.html">%s</a>' % (lang, tr('← Numa Koudsie · Portfolios')))

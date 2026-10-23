@@ -706,7 +706,7 @@
         function readouts() {
             var n = sources.length;
             document.getElementById('r-n').textContent = n + (n === MAX_SOURCES ? _t(' (max)') : '');
-            document.getElementById('cap-count').textContent = n === 0 ? _t('no sources · click the field') : n + (n === 1 ? _t(' source') : _t(' sources'));
+            document.getElementById('cap-count').textContent = n === 0 ? _t('no sources · click the field') : n === 1 ? _t('{n} source', { n: n }) : _t('{n} sources', { n: n });
             ds.set('lambda', lambda.value); ds.set('f', freq.value); ds.set('damp', damp.value);
             ds.set('v', freq.value * lambda.value); ds.set('omega', 2 * Math.PI * freq.value); ds.set('T', 1 / freq.value);
             document.getElementById('r-v').textContent = Math.round(ds.get('v')) + ' px/s';
@@ -771,7 +771,7 @@
         function cellIndex(j, i) { return j * cols + i; }
         function cellCentre(j, i) { return { x: (i + 0.5) / cols * box.w, y: (j + 0.5) / rows * box.h }; }
         function lut(v) { var n = Math.round(Math.max(-1, Math.min(1, v)) * 127.5 + 127.5) * 3; return [LUT[n], LUT[n + 1], LUT[n + 2]]; }
-        function sliderCheck(input, label) { return { formula: _t('read from the ') + label + _t(' slider now'), inputs: [['slider', input.value, '']], value: parseFloat(input.value) }; }
+        function sliderCheck(input, label) { return { formula: _t('read from the ') + _t(label) + _t(' slider now'), inputs: [[_t('slider'), input.value, '']], value: parseFloat(input.value) }; }
         /* self-test: the sum over sources at one cell, written out again from the stored inputs */
         function sumAt(p, trig) {
             var j = Math.floor(p / cols), i = p % cols, k = ds.get('k'), g = ds.get('g'), norm = ds.get('norm'), xs = ds.get('x_s'), ys = ds.get('y_s');

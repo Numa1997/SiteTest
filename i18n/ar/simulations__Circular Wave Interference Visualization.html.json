@@ -1,15 +1,15 @@
 {
  "0118e2ee28e1": {
   "src": "2 sources",
-  "tr": "2 مصدر"
+  "tr": "2 مصادر"
  },
  "01ddf406a082": {
   "src": "Section 6 found that, far away, a row sends one beam straight out and, when \\(s \\ge \\lambda\\), side beams in the directions \\(\\sin\\theta_m = m\\lambda/s\\). Equation (12) holds only very far away. Seen from a distance \\(r\\) on the normal through its middle, the ends of a row of length \\(D\\) are further away than its middle by about \\(D^2/(8r)\\), a path that (11) neglects; it must be a small part of a wavelength. The usual form of this <em>Fraunhofer condition</em> is",
-  "tr": "بيّن القسم 6 أن الصفّ يرسل من بعيد حزمة واحدة مستقيمة إلى الأمام، وإذا كان \\(s \\ge \\lambda\\) فحزمًا جانبية في الاتجاهات \\(\\sin\\theta_m = m\\lambda/s\\). والمعادلة (12) صحيحة فقط من مسافة بعيدة جدًا. فمن نقطة على بُعد \\(r\\) على العمود المار بمنتصفه، تكون طرفا صفّ طوله \\(D\\) أبعد من منتصفه بنحو \\(D^2/(8r)\\)، وهو مسار تُهمله (11)؛ ويجب أن يكون جزءًا صغيرًا من طول موجة. والصورة المعتادة لهذا <em>شرط فراونهوفر</em> هي"
+  "tr": "بيّن القسم 6 أن الصفّ يرسل، بعيدًا عنه، حزمة واحدة مستقيمة إلى الأمام، وإذا كان \\(s \\ge \\lambda\\) أرسل أيضًا حزمًا جانبية في الاتجاهات \\(\\sin\\theta_m = m\\lambda/s\\). والمعادلة (12) لا تصحّ إلا على مسافة بعيدة جدًا. فإذا نُظر إلى صفّ طوله \\(D\\) من نقطة على بُعد \\(r\\) على العموديّ المارّ بمنتصفه، كان طرفاه أبعد من منتصفه بنحو \\(D^2/(8r)\\)، وهو فرق مسار تُهمله (11)؛ ويجب أن يكون جزءًا صغيرًا من طول الموجة. والصيغة المعتادة لـ<em>شرط فراونهوفر</em> هذا هي"
  },
  "05dc30d7b5fa": {
   "src": "Throw one pebble into a still pond and a ring runs outward. Throw a handful in a line, all at the same moment, and a little way off the rings have merged into one straight ripple marching away from the line.",
-  "tr": "ألقِ حصاة واحدة في بركة ساكنة، فتسير حلقة إلى الخارج. ألقِ حفنة منها على خطٍّ واحد في اللحظة نفسها، فستكون الحلقات على مسافة قصيرة قد اندمجت في موجة مستقيمة واحدة تسير بعيدًا عن الخطّ."
+  "tr": "ألقِ حصاة واحدة في بركة ساكنة، فتسير حلقة إلى الخارج. ألقِ حفنة منها على خطٍّ واحد في اللحظة نفسها، فعلى مسافة قصيرة منه تكون الحلقات قد اندمجت في تموّج مستقيم واحد يسير مبتعدًا عن الخطّ."
  },
  "06f090e9b99a": {
   "src": "<span>3</span>One source, one ring&nbsp;★",
@@ -21,7 +21,7 @@
  },
  "0d1d907c8249": {
   "src": "This is Bessel’s equation of order zero, and \\(k\\) is the <em>wave number</em>, the phase gained per unit of distance. The term \\(u'/r\\) is the one a straight wave does not have: it records that the ring spreads over a longer and longer circle. Of the solutions of (3), the one that carries waves outward is the Hankel function \\(H_0^{(1)}(kr) = J_0(kr) + i\\,Y_0(kr)\\). Far from the source, for \\(kr \\gg 1\\), it behaves as",
-  "tr": "وهذه معادلة بيسل من الرتبة صفر، و\\(k\\) هو <em>العدد الموجي</em>، أي الطور الذي يُكتسب لكل وحدة مسافة. والحدّ \\(u'/r\\) هو ما لا تملكه الموجة المستقيمة: فهو يسجّل أن الحلقة تنتشر على دائرة أكبر فأكبر. ومن حلول (3) يكون الحلّ الذي يحمل الموجات إلى الخارج هو دالة هانكل \\(H_0^{(1)}(kr) = J_0(kr) + i\\,Y_0(kr)\\). وبعيدًا عن المصدر، حين \\(kr \\gg 1\\)، يسلك سلوك"
+  "tr": "وهذه معادلة بيسل من الرتبة صفر، و\\(k\\) هو <em>العدد الموجي</em>، أي الطور الذي يُكتسب لكل وحدة مسافة. والحدّ \\(u'/r\\) هو ما لا تملكه الموجة المستقيمة: فهو يعبّر عن أن الحلقة تنتشر على دائرة أكبر فأكبر. ومن حلول (3) يكون الحلّ الذي يحمل الموجات إلى الخارج هو دالة هانكل \\(H_0^{(1)}(kr) = J_0(kr) + i\\,Y_0(kr)\\). وبعيدًا عن المصدر، حين \\(kr \\gg 1\\)، يسلك سلوك"
  },
  "0d27d6bebc3e": {
   "src": "The tank is open: waves leave the picture without reflecting from its edges.",
@@ -29,7 +29,7 @@
  },
  "0e8c337015ef": {
   "src": "This is the <em>Speed</em> \\(v = f\\lambda\\) readout: \\(1.1\\ \\mathrm{Hz} \\times 30\\ \\mathrm{px} = 33\\ \\mathrm{px/s}\\) at the defaults, with one crest leaving each source every \\(T = 1/f = 0.909\\ \\mathrm{s}\\). It is the speed of each ring, not always of the crests you see. Where two rings cross at an angle, the crests of their sum sit where both rings are high together, and that meeting point slides along faster than either ring, like the crossing point of a pair of scissors closing. Straight up the middle between the two <em>Reset</em> sources, at the centre of a wide screen, the crests climb at \\(1.55\\,v = 51\\ \\mathrm{px/s}\\) and lie \\(46\\ \\mathrm{px}\\) apart instead of \\(30\\).",
-  "tr": "هذه قراءة <em>السرعة</em> \\(v = f\\lambda\\): \\(1.1\\ \\mathrm{Hz} \\times 30\\ \\mathrm{px} = 33\\ \\mathrm{px/s}\\) عند القيم الافتراضية، مع خروج قمّة من كل مصدر كل \\(T = 1/f = 0.909\\ \\mathrm{s}\\). وهي سرعة كل حلقة، لا دائمًا سرعة القمم التي تراها. فحيث تتقاطع حلقتان بزاوية، تقع قمم مجموعهما حيث تكون الحلقتان مرتفعتين معًا، وهذه النقطة تنزلق أسرع من أي من الحلقتين، كنقطة تقاطع شفرتي مقص تنغلقان. وفي المنتصف تمامًا بين المصدرين اللذين وضعهما <em>إعادة ضبط</em>، أي في وسط شاشة عريضة، تتحرّك القمم بسرعة \\(1.55\\,v = 51\\ \\mathrm{px/s}\\) وتبعد عن بعضها \\(46\\ \\mathrm{px}\\) بدلًا من \\(30\\)."
+  "tr": "هذه قراءة <em>السرعة</em> \\(v = f\\lambda\\): \\(1.1\\ \\mathrm{Hz} \\times 30\\ \\mathrm{px} = 33\\ \\mathrm{px/s}\\) عند القيم الافتراضية، مع خروج قمّة من كل مصدر كل \\(T = 1/f = 0.909\\ \\mathrm{s}\\). وهي سرعة كل حلقة، وليست دائمًا سرعة القمم التي تراها. فحيث تتقاطع حلقتان بزاوية، تقع قمم مجموعهما حيث تكون الحلقتان مرتفعتين معًا، وهذه النقطة تنزلق أسرع من أي من الحلقتين، كنقطة تقاطع شفرتي مقص تنغلقان. وعلى الخطّ العمودي الذي يمرّ بمنتصف المسافة بين المصدرين اللذين يضعهما <em>إعادة ضبط</em>، في وسط شاشة عريضة، تصعد القمم بسرعة \\(1.55\\,v = 51\\ \\mathrm{px/s}\\) والمسافة بينها \\(46\\ \\mathrm{px}\\) بدلًا من \\(30\\)."
  },
  "0ec98ee2ff1f": {
   "src": "crest +1",
@@ -37,7 +37,7 @@
  },
  "11859e0db1c7": {
   "src": "By superposition, the field of \\(N\\) sources is the sum of their rings. The page divides the sum by \\(N\\), so that the colour scale means the same whatever the number of sources:",
-  "tr": "بمبدأ التراكب، يكون حقل \\(N\\) مصدرًا هو مجموع حلقاتها. وتقسم الصفحة المجموع على \\(N\\)، حتى يكون لمقياس الألوان المعنى نفسه مهما كان عدد المصادر:"
+  "tr": "بحسب مبدأ التراكب، يكون حقل \\(N\\) من المصادر هو مجموع حلقاتها. وتقسم الصفحة المجموع على \\(N\\)، حتى يكون لمقياس الألوان المعنى نفسه مهما كان عدد المصادر:"
  },
  "13b038f5825f": {
   "src": "Fig. 1 · wave optics · Huygens' principle",
@@ -57,15 +57,15 @@
  },
  "1867a2b10e7e": {
   "src": "<span class=\"pfig__n\">Figure 4</span>Amplitude \\(A = |U|\\) of equation (7) along the centre row of the field on a wide screen (\\(y = 181.4\\ \\mathrm{px}\\), \\(169.1\\ \\mathrm{px}\\) above the sources), every \\(1\\ \\mathrm{px}\\) from \\(x = 0\\) to \\(800\\ \\mathrm{px}\\), at \\(\\lambda = 64\\ \\mathrm{px}\\) and \\(\\gamma = 0.15\\). The \\(N\\) sources sit where <em>Line of 16</em> puts them, \\(x = 64 + 672\\,n/(N-1)\\ \\mathrm{px}\\); the continuous row is 67 201 sources between the dashed lines at 64 and \\(736\\ \\mathrm{px}\\). Two and four sources leave deep calm and loud bands; sixteen give an almost even amplitude that follows the continuous row.",
-  "tr": "<span class=\"pfig__n\">الشكل 4</span>السعة \\(A = |U|\\) من المعادلة (7) على طول الخطّ الأوسط للحقل في شاشة عريضة (\\(y = 181.4\\ \\mathrm{px}\\)، على بُعد \\(169.1\\ \\mathrm{px}\\) فوق المصادر)، عند كل \\(1\\ \\mathrm{px}\\) من \\(x = 0\\) إلى \\(800\\ \\mathrm{px}\\)، عند \\(\\lambda = 64\\ \\mathrm{px}\\) و\\(\\gamma = 0.15\\). وتقع المصادر \\(N\\) حيث يضعها <em>صفّ من 16</em>، عند \\(x = 64 + 672\\,n/(N-1)\\ \\mathrm{px}\\)؛ والصفّ المتصل مؤلّف من 67 201 مصدر بين الخطّين المتقطّعين عند 64 و\\(736\\ \\mathrm{px}\\). ويُبقي مصدران وأربعة أهدابًا هادئة وصاخبة عميقة؛ أمّا ستة عشر فتعطي سعة شبه متساوية تتبع الصفّ المتصل."
+  "tr": "<span class=\"pfig__n\">الشكل 4</span>السعة \\(A = |U|\\) من المعادلة (7) على طول الخطّ الأوسط للحقل في شاشة عريضة (\\(y = 181.4\\ \\mathrm{px}\\)، على بُعد \\(169.1\\ \\mathrm{px}\\) فوق المصادر)، عند كل \\(1\\ \\mathrm{px}\\) من \\(x = 0\\) إلى \\(800\\ \\mathrm{px}\\)، عند \\(\\lambda = 64\\ \\mathrm{px}\\) و\\(\\gamma = 0.15\\). وتقع المصادر \\(N\\) حيث يضعها <em>صفّ من 16</em>، عند \\(x = 64 + 672\\,n/(N-1)\\ \\mathrm{px}\\)؛ والصفّ المتصل مؤلّف من 67 201 مصدر بين الخطّين المتقطّعين عند 64 و\\(736\\ \\mathrm{px}\\). ويترك مصدران وأربعة مصادر أهدابًا شديدة الهدوء وأخرى صاخبة؛ أمّا ستة عشر مصدرًا فتعطي سعة شبه منتظمة تتبع الصفّ المتصل."
  },
  "1999c760f00a": {
   "src": "Start with a single source at the origin of polar coordinates, oscillating at the angular frequency \\(\\omega = 2\\pi f\\). It is convenient to write the field as the real part of a complex one, \\(\\psi = \\operatorname{Re}\\,[\\,u(r)\\,e^{-i\\omega t}\\,]\\); every equation below is linear, so taking the real part at the end is allowed. The ring has no preferred direction, so \\(u\\) depends on the distance \\(r\\) alone. For such a function the two-dimensional Laplacian in (1) becomes \\(u'' + u'/r\\), and the wave equation turns into",
-  "tr": "نبدأ بمصدر واحد في نقطة الأصل للإحداثيات القطبية، يهتزّ بالتردد الزاوي \\(\\omega = 2\\pi f\\). ومن المريح كتابة الحقل على أنه الجزء الحقيقي من حقل عقدي، \\(\\psi = \\operatorname{Re}\\,[\\,u(r)\\,e^{-i\\omega t}\\,]\\)؛ وكل معادلة أدناه خطّية، فيجوز أخذ الجزء الحقيقي في النهاية. والحلقة لا تفضّل اتجاهًا، لذلك لا تعتمد \\(u\\) إلا على المسافة \\(r\\). ولهذه الدالة يصبح لابلاسيان ثنائي البعد في (1) هو \\(u'' + u'/r\\)، وتصير معادلة الموجة إلى"
+  "tr": "نبدأ بمصدر واحد في نقطة الأصل للإحداثيات القطبية، يهتزّ بالتردد الزاوي \\(\\omega = 2\\pi f\\). ومن الملائم كتابة الحقل على أنه الجزء الحقيقي من حقل عقدي، \\(\\psi = \\operatorname{Re}\\,[\\,u(r)\\,e^{-i\\omega t}\\,]\\)؛ وكل معادلة أدناه خطّية، فيجوز أخذ الجزء الحقيقي في النهاية. والحلقة لا تفضّل اتجاهًا، لذلك لا تعتمد \\(u\\) إلا على المسافة \\(r\\). ولمثل هذه الدالة يصبح مؤثّر لابلاس الثنائي البعد في (1) \\(u'' + u'/r\\)، وتؤول معادلة الموجة إلى"
  },
  "199c8b7b3f14": {
   "src": "Two facts are in (4). The phase \\(kr - \\omega t\\) says that the crests run outward: a crest keeps \\(kr - \\omega t\\) fixed, so it moves at \\(\\mathrm{d}r/\\mathrm{d}t = \\omega/k = f\\lambda\\). And the height falls as \\(1/\\sqrt r\\), for a simple reason. A steady source puts in energy at a steady rate, and with no losses the same power must cross every circle drawn round it. The length of the circle grows as \\(2\\pi r\\), so the energy per unit length of crest, which goes as \\(\\psi^2\\), falls as \\(1/r\\), and the height as \\(1/\\sqrt r\\). The asymptotic form needs \\(kr \\gg 1\\). At \\(\\lambda = 30\\ \\mathrm{px}\\), \\(kr = 1\\) at \\(r = \\lambda/2\\pi = 4.77\\ \\mathrm{px}\\); the first correction is a phase lead of \\(1/(8kr)\\) radians, \\(0.01\\) rad two wavelengths from a source and smaller beyond, with a still smaller error in the height, so the form holds everywhere on screen except within a few pixels of each source.",
-  "tr": "في (4) أمران. فالطور \\(kr - \\omega t\\) يقول إن القمم تسير إلى الخارج: فالقمّة تحافظ على \\(kr - \\omega t\\) ثابتًا، لذا تتحرّك بسرعة \\(\\mathrm{d}r/\\mathrm{d}t = \\omega/k = f\\lambda\\). وينخفض الارتفاع كـ \\(1/\\sqrt r\\) لسبب بسيط. فالمصدر الثابت يُدخل طاقة بمعدّل ثابت، وبلا فقد يجب أن تعبر القدرةُ نفسها كلّ دائرة تُرسم حوله. ومحيط الدائرة يكبر كـ \\(2\\pi r\\)، فتنخفض الطاقة لكل وحدة طول من القمّة، وهي تتناسب مع \\(\\psi^2\\)، كـ \\(1/r\\)، ويكون الارتفاع كـ \\(1/\\sqrt r\\). والشكل المقارب يحتاج إلى \\(kr \\gg 1\\). عند \\(\\lambda = 30\\ \\mathrm{px}\\) يكون \\(kr = 1\\) عند \\(r = \\lambda/2\\pi = 4.77\\ \\mathrm{px}\\)؛ والتصحيح الأول تقدّم في الطور قدره \\(1/(8kr)\\) راديان، أي \\(0.01\\) راديان على بُعد طولي موجة من مصدر، وأصغر بعد ذلك، مع خطأ أصغر أيضًا في الارتفاع. لذلك ينطبق الشكل في كل أنحاء الشاشة، ما عدا بضعة بكسلات حول كل مصدر."
+  "tr": "في (4) أمران. فالطور \\(kr - \\omega t\\) يقول إن القمم تسير إلى الخارج: فالقمّة تحافظ على \\(kr - \\omega t\\) ثابتًا، لذا تتحرّك بسرعة \\(\\mathrm{d}r/\\mathrm{d}t = \\omega/k = f\\lambda\\). وينخفض الارتفاع كـ \\(1/\\sqrt r\\) لسبب بسيط. فالمصدر المنتظم يُدخل طاقة بمعدّل ثابت، ومن دون ضياع يجب أن تعبر القدرةُ نفسها كلّ دائرة تُرسم حوله. ومحيط الدائرة يكبر كـ \\(2\\pi r\\)، فتنخفض الطاقة لكل وحدة طول من القمّة، وهي تتناسب مع \\(\\psi^2\\)، كـ \\(1/r\\)، ويكون الارتفاع كـ \\(1/\\sqrt r\\). والشكل المقارب يحتاج إلى \\(kr \\gg 1\\). عند \\(\\lambda = 30\\ \\mathrm{px}\\) يكون \\(kr = 1\\) عند \\(r = \\lambda/2\\pi = 4.77\\ \\mathrm{px}\\)؛ والتصحيح الأول تقدّم في الطور قدره \\(1/(8kr)\\) راديان، أي \\(0.01\\) راديان على بُعد طولي موجة من مصدر، وأصغر بعد ذلك، مع خطأ أصغر أيضًا في الارتفاع. لذلك ينطبق الشكل في كل أنحاء الشاشة، ما عدا بضعة بكسلات حول كل مصدر."
  },
  "1a1b7209c5ef": {
   "src": "<span class=\"psub__n\">10.1</span>Further reading",
@@ -73,11 +73,11 @@
  },
  "1b5fabdf3991": {
   "src": "Three sliders set the waves: <em>Wavelength</em> \\(\\lambda\\) from 16 to \\(64\\ \\mathrm{px}\\) (default \\(30\\ \\mathrm{px}\\)), <em>Frequency</em> \\(f\\) from 0.2 to \\(2\\ \\mathrm{Hz}\\) (default \\(1.1\\ \\mathrm{Hz}\\)) and <em>Damping</em> \\(\\gamma\\) from 0 to 0.6 (default 0.15). The buttons place the sources: <em>Reset</em> puts two at \\(x = 200\\) and \\(600\\ \\mathrm{px}\\), <em>Line of 16</em> spreads sixteen evenly from 64 to \\(736\\ \\mathrm{px}\\), and a click on the field adds one on the source line, at the horizontal position of the click.",
-  "tr": "ثلاثة مُنزلقات تضبط الموجات: <em>طول الموجة</em> \\(\\lambda\\) من 16 إلى \\(64\\ \\mathrm{px}\\) (القيمة الافتراضية \\(30\\ \\mathrm{px}\\))، و<em>التردد</em> \\(f\\) من 0.2 إلى \\(2\\ \\mathrm{Hz}\\) (القيمة الافتراضية \\(1.1\\ \\mathrm{Hz}\\))، و<em>التخامد</em> \\(\\gamma\\) من 0 إلى 0.6 (القيمة الافتراضية 0.15). وتضع الأزرار المصادر: <em>إعادة ضبط</em> تضع اثنين عند \\(x = 200\\) و\\(600\\ \\mathrm{px}\\)، و<em>صفّ من 16</em> توزّع ستة عشر مصدرًا بالتساوي من 64 إلى \\(736\\ \\mathrm{px}\\)، والنقر على الحقل يضيف مصدرًا على خطّ المصادر عند الموضع الأفقي للنقرة."
+  "tr": "ثلاثة مُنزلقات تضبط الموجات: <em>طول الموجة</em> \\(\\lambda\\) من 16 إلى \\(64\\ \\mathrm{px}\\) (القيمة الافتراضية \\(30\\ \\mathrm{px}\\))، و<em>التردد</em> \\(f\\) من 0.2 إلى \\(2\\ \\mathrm{Hz}\\) (القيمة الافتراضية \\(1.1\\ \\mathrm{Hz}\\))، و<em>التخامد</em> \\(\\gamma\\) من 0 إلى 0.6 (القيمة الافتراضية 0.15). وتضع الأزرار المصادر: <em>إعادة ضبط</em> تضع اثنين عند \\(x = 200\\) و\\(600\\ \\mathrm{px}\\)، و<em>صفّ من 16</em> يوزّع ستة عشر مصدرًا بالتساوي من 64 إلى \\(736\\ \\mathrm{px}\\)، والنقر على الحقل يضيف مصدرًا على خطّ المصادر عند الموضع الأفقي للنقرة."
  },
  "1f778cd8fc45": {
   "src": "Real water waves are dispersive: the frequency fixes the wavelength, and longer waves run faster (Fig. 5 of this site). Here \\(f\\) and \\(\\lambda\\) are set separately, and every wave moves at \\(v = f\\lambda\\).",
-  "tr": "الأمواج المائية الحقيقية مُشتِّتة: فالتردد يحدّد طول الموجة، والموجات الأطول تسير أسرع (الشكل 5 في هذا الموقع). وهنا يُضبط \\(f\\) و\\(\\lambda\\) كلٌّ على حدة، وتسير كل موجة بالسرعة \\(v = f\\lambda\\)."
+  "tr": "الأمواج المائية الحقيقية تشتّتية: فالتردد يحدّد طول الموجة، والموجات الأطول تسير أسرع (الشكل 5 في هذا الموقع). وهنا يُضبط \\(f\\) و\\(\\lambda\\) كلٌّ على حدة، وتسير كل موجة بالسرعة \\(v = f\\lambda\\)."
  },
  "219d9e5c063f": {
   "src": "<span class=\"psec__n\">01</span>Pebbles in a row",
@@ -85,7 +85,7 @@
  },
  "25a83bfb4c71": {
   "src": "The colours show the signed height at this instant, not an average over time. A calm line stays cream in every frame, while a loud band flickers between ink and burgundy once per period. The amplitude \\(A\\) of (7), which does not change in time, is not drawn; the data panel stores it as the map A.",
-  "tr": "تُظهر الألوان الارتفاع ذا الإشارة في هذه اللحظة، لا متوسطًا عبر الزمن. فالخط الهادئ يبقى كريميًا في كل إطار، بينما يرتعش الخط الصاخب بين الحبري والعنّابي مرة في كل دورة. والسعة \\(A\\) من (7)، التي لا تتغيّر مع الزمن، لا تُرسم؛ ويخزّنها لوح البيانات كخريطة A."
+  "tr": "تُظهر الألوان الارتفاع ذا الإشارة في هذه اللحظة، لا متوسطًا عبر الزمن. فالخط الهادئ يبقى كريميًا في كل إطار، بينما يرتعش الشريط الصاخب بين الحبري والعنّابي مرة في كل دورة. والسعة \\(A\\) من (7)، التي لا تتغيّر مع الزمن، لا تُرسم؛ وتخزّنها لوحة البيانات بوصفها الخريطة A."
  },
  "279ac3b49075": {
   "src": "All sources oscillate at the same frequency \\(f\\), with the same strength and in step, as if one motor drove them all.",
@@ -93,15 +93,15 @@
  },
  "28678204d2e6": {
   "src": "The same thing happens wherever many sources act in step. Sea waves arriving at a harbour mouth make the water in the gap rise and fall together; inside the harbour that strip of water behaves like a row of sources and sends the waves on in curved fronts. At a concert, the tall columns of loudspeakers hanging beside the stage are <em>line arrays</em>: many boxes driven with the same signal throw the sound forward in a flat sheet towards the audience, instead of spraying it in every direction. Radars and some mobile-phone base stations go one step further. By driving their elements with tiny delays instead of all together, they swing their beam without moving anything.",
-  "tr": "يحدث الشيء نفسه أينما عملت مصادر كثيرة في تزامن. فأمواج البحر التي تصل إلى مدخل ميناء ترفع الماء في الفتحة وتخفضه معًا؛ وداخل الميناء يتصرّف ذلك الشريط من الماء كصفٍّ من المصادر فيُرسل الأمواج في جبهات منحنية. وفي الحفلات الموسيقية تكون الأعمدة الطويلة من مكبّرات الصوت المعلّقة بجانب المسرح <em>مصفوفات خطّية</em>: صناديق كثيرة تُقاد بالإشارة نفسها، فتقذف الصوت في جبهة مسطّحة نحو الجمهور بدلًا من أن تبعثره في كل اتجاه. وتذهب أجهزة الرادار وبعض أبراج الهاتف المحمول خطوة أبعد: فبقيادة عناصرها بتأخيرات صغيرة جدًا بدلًا من تشغيلها معًا، تُدير شعاعها دون تحريك أي شيء."
+  "tr": "يحدث الشيء نفسه أينما عملت مصادر كثيرة في تزامن. فأمواج البحر التي تصل إلى مدخل ميناء ترفع الماء في الفتحة وتخفضه معًا؛ وداخل الميناء يتصرّف ذلك الشريط من الماء كصفٍّ من المصادر فيُرسل الأمواج في جبهات منحنية. وفي الحفلات الموسيقية تكون الأعمدة الطويلة من مكبّرات الصوت المعلّقة بجانب المسرح <em>مصفوفات خطّية</em>: صناديق كثيرة تُغذّى بالإشارة نفسها، فتقذف الصوت في جبهة مسطّحة نحو الجمهور بدلًا من أن تبعثره في كل اتجاه. وتذهب أجهزة الرادار وبعض أبراج الهاتف المحمول خطوة أبعد: فبتغذية عناصرها بتأخيرات صغيرة جدًا بدلًا من تغذيتها معًا، توجّه حزمتها دون تحريك أي شيء."
  },
  "2896c3a91b79": {
   "src": "When sources are added, cleared or reset, or the <em>Wavelength</em> or <em>Damping</em> slider moves, the page recomputes \\(C\\) and \\(S\\) at every grid point: \\(2N\\) cosines and sines at each grid point. The <em>Frequency</em> slider does not trigger this, because \\(f\\) enters only through \\(\\omega t\\): it changes how fast the pattern runs, never its shape.",
-  "tr": "عند إضافة مصادر أو مسحها أو إعادة ضبطها، أو تحريك المُنزلق <em>طول الموجة</em> أو <em>التخامد</em>، تُعيد الصفحة حساب \\(C\\) و\\(S\\) عند كل نقطة شبكية: أي \\(2N\\) من جيب التمام والجيب عند كل نقطة شبكية. أمّا مُنزلق <em>التردد</em> فلا يستدعي إعادة حساب، لأن \\(f\\) يدخل فقط عبر \\(\\omega t\\): فهو يغيّر سرعة حركة النمط، ولا يغيّر شكله أبدًا."
+  "tr": "عند إضافة مصادر أو مسحها أو إعادة ضبطها، أو تحريك المُنزلق <em>طول الموجة</em> أو <em>التخامد</em>، تُعيد الصفحة حساب \\(C\\) و\\(S\\) عند كل نقطة شبكية: أي \\(2N\\) قيمة من جيوب التمام والجيوب عند كل نقطة شبكية. أمّا مُنزلق <em>التردد</em> فلا يستدعي إعادة حساب، لأن \\(f\\) يدخل فقط عبر \\(\\omega t\\): فهو يغيّر سرعة حركة النمط، ولا يغيّر شكله أبدًا."
  },
  "2c3c18c3f48c": {
   "src": "Each source contributes an arrow of length \\(a_i/N\\), turned by the angle \\(kr_i\\): one full turn for every wavelength of path. The point oscillates with amplitude \\(A\\), the length of the sum of all the arrows. Where the arrows point the same way, the water heaves (<em>constructive interference</em>); where they point every which way, they cancel and the water is calm (<em>destructive interference</em>). The amplitude \\(A\\) describes how far each point can oscillate. The colours show its signed displacement at this instant, rather than the amplitude map itself. The page stores \\(C\\), \\(S\\) and \\(A\\) at every grid point, and the data panel shows them.",
-  "tr": "يسهم كل مصدر بسهم طوله \\(a_i/N\\)، يدور بزاوية \\(kr_i\\): دورة كاملة لكل طول موجة من المسار. تهتزّ النقطة بالسعة \\(A\\)، وهي طول مجموع كل الأسهم. وحيث تتّجه الأسهم في الاتجاه نفسه يرتفع الماء (<em>تداخل بنّاء</em>)؛ وحيث تتّجه في كل اتجاه تتلاشى، فيهدأ الماء (<em>تداخل هدّام</em>). وتصف السعة \\(A\\) مقدار ما يستطيع كل نقطة أن تهتزّ به. والألوان تُظهر الإزاحة ذات الإشارة في هذه اللحظة، لا خريطة السعة نفسها. وتخزّن الصفحة \\(C\\) و\\(S\\) و\\(A\\) عند كل نقطة شبكية، ويعرضها لوح البيانات."
+  "tr": "يسهم كل مصدر بسهم طوله \\(a_i/N\\)، مُدارًا بزاوية \\(kr_i\\): دورة كاملة لكل طول موجة من المسار. تهتزّ النقطة بالسعة \\(A\\)، وهي طول مجموع كل الأسهم. وحيث تتّجه الأسهم في الاتجاه نفسه يعلو الماء ويهبط بقوة (<em>تداخل بنّاء</em>)؛ وحيث تتّجه في كل الاتجاهات يُلغي بعضها بعضًا، فيهدأ الماء (<em>تداخل هدّام</em>). وتصف السعة \\(A\\) مقدار ما تستطيع كل نقطة أن تهتزّ به. والألوان تُظهر إزاحتها ذات الإشارة في هذه اللحظة، لا خريطة السعة نفسها. وتخزّن الصفحة \\(C\\) و\\(S\\) و\\(A\\) عند كل نقطة شبكية، ويعرضها لوح البيانات."
  },
  "2eb56be3c2d9": {
   "src": "Sources",
@@ -121,15 +121,15 @@
  },
  "32a143df3723": {
   "src": "First a word on what the figure shows. The page adds up the rings of all its sources, point by point, and colours each point by the sum, with its sign. That addition is exactly the physics of interference. The rings themselves are simplified in two ways, each explained where it matters: their height fades with distance in a different way from a real ring (section 3.1), and frequency and wavelength are set independently of each other (section 10).",
-  "tr": "أولًا كلمة عمّا يُظهره الشكل. تجمع الصفحة حلقات كلّ مصادرها نقطةً نقطة، وتُلوّن كلّ نقطة بمجموع الحلقات مع إشارته. وهذا الجمع هو عين فيزياء التداخل. أمّا الحلقات نفسها فمُبسّطة بطريقتين، تُشرحان حيث تهمّان: فارتفاعها يتناقص مع المسافة بطريقة مختلفة عن الحلقة الحقيقية (القسم 3.1)، وتُضبط الترددُ وطولُ الموجة كلٌّ على حدة (القسم 10)."
+  "tr": "أولًا كلمة عمّا يُظهره الشكل. تجمع الصفحة حلقات كلّ مصادرها نقطةً نقطة، وتُلوّن كلّ نقطة بمجموع الحلقات مع إشارته. وهذا الجمع هو عين فيزياء التداخل. أمّا الحلقات نفسها فمُبسّطة بطريقتين، تُشرحان حيث تهمّان: فارتفاعها يتناقص مع المسافة بطريقة مختلفة عن الحلقة الحقيقية (القسم 3.1)، ويُضبط الترددُ وطولُ الموجة كلٌّ على حدة (القسم 10)."
  },
  "3359562271a6": {
   "src": "<span class=\"pfig__n\">Figure 1</span>Huygens’ construction for a row of nine sources in step. Each source has sent out circular wavelets; two crests of each are drawn, one wavelength \\(\\lambda\\) apart (pale, with the wavelets of one source darker). The straight line that touches them all is the new wavefront, moving away from the row at the wave speed \\(v\\). Beyond the ends of the row the envelope bends round (dashed): a row of finite length cannot make a perfectly straight front.",
-  "tr": "<span class=\"pfig__n\">الشكل 1</span>بناء هويغنز لصفّ من تسعة مصادر في تزامن. أرسل كلّ مصدر موجات دائرية؛ وقد رُسمت قمّتان من كلٍّ منها، تفصل بينهما طول موجة واحدة \\(\\lambda\\) (بلون باهت، وموجات مصدر واحد بلون أغمق). الخطّ المستقيم الذي يلامسها جميعًا هو الجبهة الجديدة، وهي تتحرّك بعيدًا عن الصفّ بسرعة الموجة \\(v\\). وخارج طرفي الصفّ ينحني المغلّف (متقطّعًا): فالصفّ ذو الطول المحدود لا يستطيع أن يصنع جبهة مستقيمة تمامًا."
+  "tr": "<span class=\"pfig__n\">الشكل 1</span>بناء هويغنز لصفّ من تسعة مصادر في تزامن. أرسل كلّ مصدر موجات دائرية؛ وقد رُسمت قمّتان من كلٍّ منها، يفصل بينهما طولُ موجة واحد \\(\\lambda\\) (بلون باهت، وموجات مصدر واحد بلون أغمق). الخطّ المستقيم الذي يلامسها جميعًا هو الجبهة الجديدة، وهي تتحرّك بعيدًا عن الصفّ بسرعة الموجة \\(v\\). وخارج طرفي الصفّ ينحني المغلّف (متقطّعًا): فالصفّ ذو الطول المحدود لا يستطيع أن يصنع جبهة مستقيمة تمامًا."
  },
  "3394d863487c": {
   "src": "The sources right below \\(P\\) all arrive with nearly the same phase \\(kh\\), and their arrows line up. Further out the phase grows as \\(u^2\\), the arrows wind round faster and faster, and they cancel in pairs. The arrows that count are those within about \\(|u| &lt; \\sqrt{\\lambda h}\\) of the foot, the first <em>Fresnel zone</em>. Replacing the sum over sources by an integral, \\(\\tfrac1N\\sum_i \\to \\tfrac1D\\int\\mathrm{d}u\\), and using \\(\\int_{-\\infty}^{\\infty} e^{iau^2}\\,\\mathrm{d}u = \\sqrt{\\pi/a}\\;e^{i\\pi/4}\\) with \\(a = k/2h\\),",
-  "tr": "المصادر الواقعة مباشرة تحت \\(P\\) تصل كلها بالطور نفسه تقريبًا \\(kh\\)، فتصطفّ أسهمها. وأبعد من ذلك ينمو الطور كـ \\(u^2\\)، فتدور الأسهم أسرع فأسرع، وتتلاشى أزواجًا. والأسهم التي تُحتسب هي التي تقع داخل نحو \\(|u| &lt; \\sqrt{\\lambda h}\\) من القدم، أي أول <em>منطقة فرينل</em>. وبتحويل المجموع على المصادر إلى تكامل، \\(\\tfrac1N\\sum_i \\to \\tfrac1D\\int\\mathrm{d}u\\)، واستخدام \\(\\int_{-\\infty}^{\\infty} e^{iau^2}\\,\\mathrm{d}u = \\sqrt{\\pi/a}\\;e^{i\\pi/4}\\) مع \\(a = k/2h\\)،"
+  "tr": "المصادر الواقعة مباشرة تحت \\(P\\) تصل كلها بالطور نفسه تقريبًا \\(kh\\)، فتصطفّ أسهمها. وأبعد من ذلك ينمو الطور كـ \\(u^2\\)، فتدور الأسهم أسرع فأسرع، ويُلغي بعضها بعضًا مثنى مثنى. والأسهم المؤثّرة هي التي تقع داخل نحو \\(|u| &lt; \\sqrt{\\lambda h}\\) من القدم، أي <em>منطقة فرينل</em> الأولى. وبتحويل المجموع على المصادر إلى تكامل، \\(\\tfrac1N\\sum_i \\to \\tfrac1D\\int\\mathrm{d}u\\)، واستخدام \\(\\int_{-\\infty}^{\\infty} e^{iau^2}\\,\\mathrm{d}u = \\sqrt{\\pi/a}\\;e^{i\\pi/4}\\) مع \\(a = k/2h\\)،"
  },
  "33bd5a5dddcd": {
   "src": "© 2026 Numa Koudsie",
@@ -137,11 +137,11 @@
  },
  "3603efa05eab": {
   "src": "R. P. Feynman, R. B. Leighton and M. Sands, <em>The Feynman Lectures on Physics</em>, Addison-Wesley, 1963–1965, chapters linked to Caltech’s online edition: volume I, chapters <a href=\"https://www.feynmanlectures.caltech.edu/I_29.html\">29</a> (interference: two sources and the adding of arrows, as in sections 4 and 5) and <a href=\"https://www.feynmanlectures.caltech.edu/I_30.html\">30</a> (diffraction: the row of \\(n\\) equal sources, its beams and side beams, as in section 6). Free to read, and the gentlest of these five.",
-  "tr": "R. P. Feynman، وR. B. Leighton، وM. Sands، <em>The Feynman Lectures on Physics</em>، Addison-Wesley، 1963–1965: المجلد الأول، الفصل <a href=\"https://www.feynmanlectures.caltech.edu/I_29.html\">29</a> (التداخل: مصدران وجمع الأسهم، كما في القسمين 4 و5)، والفصل <a href=\"https://www.feynmanlectures.caltech.edu/I_30.html\">30</a> (الحيود: صفّ من \\(n\\) مصدرًا متساويًا، وحزمه وحزمه الجانبية، كما في القسم 6). وهو متاح للقراءة مجانًا، وأسهلها بين هذه الكتب الخمسة."
+  "tr": "R. P. Feynman، وR. B. Leighton، وM. Sands، <em>The Feynman Lectures on Physics</em>، Addison-Wesley، 1963–1965: المجلد الأول، الفصل <a href=\"https://www.feynmanlectures.caltech.edu/I_29.html\">29</a> (التداخل: مصدران وجمع الأسهم، كما في القسمين 4 و5)، والفصل <a href=\"https://www.feynmanlectures.caltech.edu/I_30.html\">30</a> (الحيود: صفّ من \\(n\\) من المصادر المتساوية، وحزمه وحزمه الجانبية، كما في القسم 6). وهو متاح للقراءة مجانًا، وأيسر هذه المراجع الخمسة."
  },
  "364d7bb9908a": {
   "src": "The page measures lengths in pixels of a field that is always \\(800\\ \\mathrm{px}\\) wide, whatever the size of the screen, and time in seconds; it fixes no scale in metres. As in Figure 2 (left), \\(x\\) runs to the right and \\(y\\) downwards from the top-left corner. The height of the field is \\(800\\ \\mathrm{px}\\) times the height of the canvas over its width: \\(360.5\\ \\mathrm{px}\\) on a wide screen, where the canvas measures 770 × 347 css pixels, and \\(800\\ \\mathrm{px}\\) on a phone, where it is square. All sources sit on one line \\(y = y_s\\), \\(10\\ \\mathrm{px}\\) above the bottom edge. Source \\(i\\) is at \\(x_i\\), and a point \\(P\\) of the field is at the distance",
-  "tr": "تقيس الصفحة الأطوال بالبكسل في حقلٍ عرضه دائمًا \\(800\\ \\mathrm{px}\\)، مهما كان حجم الشاشة، وتقيس الزمن بالثانية؛ ولا تحدّد مقياسًا بالمتر. وكما في الشكل 2 (يسارًا)، يمتدّ \\(x\\) إلى اليمين و\\(y\\) إلى الأسفل من الركن الأعلى الأيسر. وارتفاع الحقل يساوي \\(800\\ \\mathrm{px}\\) مضروبةً في نسبة ارتفاع منطقة الرسم إلى عرضها: أي \\(360.5\\ \\mathrm{px}\\) على شاشة عريضة حيث تقيس منطقة الرسم 770 × 347 بكسل CSS، و\\(800\\ \\mathrm{px}\\) على الهاتف حيث تكون مربّعة. وتقع كل المصادر على خطّ واحد \\(y = y_s\\)، على بُعد \\(10\\ \\mathrm{px}\\) فوق الحافة السفلى. والمصدر \\(i\\) عند \\(x_i\\)، ونقطة \\(P\\) من الحقل تبعد عنه مسافة"
+  "tr": "تقيس الصفحة الأطوال بالبكسل في حقلٍ عرضه دائمًا \\(800\\ \\mathrm{px}\\)، مهما كان حجم الشاشة، وتقيس الزمن بالثانية؛ ولا تحدّد مقياسًا بالمتر. وكما في الشكل 2 (على اليسار)، يمتدّ \\(x\\) إلى اليمين و\\(y\\) إلى الأسفل من الزاوية العليا اليسرى. وارتفاع الحقل يساوي \\(800\\ \\mathrm{px}\\) مضروبةً في نسبة ارتفاع منطقة الرسم إلى عرضها: أي \\(360.5\\ \\mathrm{px}\\) على شاشة عريضة حيث تقيس منطقة الرسم 770 × 347 بكسل CSS، و\\(800\\ \\mathrm{px}\\) على الهاتف حيث تكون مربّعة. وتقع كل المصادر على خطّ واحد \\(y = y_s\\)، على بُعد \\(10\\ \\mathrm{px}\\) فوق الحافة السفلى. والمصدر \\(i\\) عند \\(x_i\\)، ونقطة \\(P\\) من الحقل تبعد عنه مسافة"
  },
  "3728b5586b11": {
   "src": "<span class=\"psub__n\">7.1</span>Which sources build the front<span class=\"star\" title=\"heavier mathematics\">★</span>",
@@ -153,11 +153,11 @@
  },
  "3e70c09cc310": {
   "src": "Dividing by \\(N\\) keeps the colours comparable, but it also makes each source fainter as more are added.",
-  "tr": "تُبقي القسمة على \\(N\\) الألوان قابلة للمقارنة، لكنها تجعل كل مصدر أخفت كلما أُضيف مصادر أكثر."
+  "tr": "تُبقي القسمة على \\(N\\) الألوان قابلة للمقارنة، لكنها تجعل كل مصدر أخفت كلما أُضيفت مصادر أخرى."
  },
  "40e8cf16161b": {
   "src": "Press <em>Reset</em>: two sources, \\(s = 400\\ \\mathrm{px}\\) apart. Write \\(\\bar r = (r_1 + r_2)/2\\) for the mean distance of a point from them and \\(\\Delta r = r_2 - r_1\\) for the <em>path difference</em>. If the two rings arrive equally strong, \\(a_1 = a_2 = a\\), the identity \\(\\cos A + \\cos B = 2\\cos\\tfrac{A-B}{2}\\cos\\tfrac{A+B}{2}\\) turns (6) into",
-  "tr": "اضغط <em>إعادة ضبط</em>: مصدران على بُعد \\(s = 400\\ \\mathrm{px}\\). ولنكتب \\(\\bar r = (r_1 + r_2)/2\\) لمتوسط بُعد نقطة عنهما، و\\(\\Delta r = r_2 - r_1\\) لـ<em>فرق المسار</em>. فإذا وصلت الحلقتان بالقوة نفسها، \\(a_1 = a_2 = a\\)، فإن المتطابقة \\(\\cos A + \\cos B = 2\\cos\\tfrac{A-B}{2}\\cos\\tfrac{A+B}{2}\\) تحوّل (6) إلى"
+  "tr": "اضغط <em>إعادة ضبط</em>: مصدران المسافة بينهما \\(s = 400\\ \\mathrm{px}\\). ولنرمز بـ\\(\\bar r = (r_1 + r_2)/2\\) إلى متوسط بُعد نقطة عنهما، وبـ\\(\\Delta r = r_2 - r_1\\) إلى <em>فرق المسار</em>. فإذا وصلت الحلقتان بالقوة نفسها، \\(a_1 = a_2 = a\\)، فإن المتطابقة \\(\\cos A + \\cos B = 2\\cos\\tfrac{A-B}{2}\\cos\\tfrac{A+B}{2}\\) تحوّل (6) إلى"
  },
  "423bd014420d": {
   "src": "<span>5</span>Two sources: calm hyperbolae",
@@ -173,11 +173,11 @@
  },
  "464446871e9d": {
   "src": "Each source is drawn as a burgundy dot of radius 5.5 css pixels with a cream rim and a soft glow, on the line \\(y_s\\). A click on the field adds a source at the clicked \\(x\\), always at the height \\(y_s\\), and the list keeps the newest 24. <em>Add 5 random</em> adds five sources at random between \\(133.3\\) and \\(666.7\\ \\mathrm{px}\\); <em>Clear</em> removes them all. The readouts give the number of sources and the speed (8).",
-  "tr": "يُرسم كل مصدر كنقطة عنّابية نصف قطرها 5.5 بكسل CSS، ولها حافة كريمية وتوهّج ناعم، على الخط \\(y_s\\). ويضع النقر على الحقل مصدرًا عند \\(x\\) المنقور، دائمًا على الارتفاع \\(y_s\\)، وتحتفظ القائمة بأحدث 24. ويضيف <em>أضِف 5 عشوائيًا</em> خمسة مصادر عشوائية بين \\(133.3\\) و\\(666.7\\ \\mathrm{px}\\)؛ و<em>مسح</em> يزيلها جميعًا. وتعطي القراءات عدد المصادر والسرعة (8)."
+  "tr": "يُرسم كل مصدر كنقطة عنّابية نصف قطرها 5.5 بكسل CSS، ولها حافة كريمية وتوهّج ناعم، على الخط \\(y_s\\). ويضع النقر على الحقل مصدرًا عند الإحداثي \\(x\\) للنقرة، دائمًا على الارتفاع \\(y_s\\)، وتحتفظ القائمة بأحدث 24 مصدرًا. ويضيف <em>أضِف 5 عشوائيًا</em> خمسة مصادر عشوائية بين \\(133.3\\) و\\(666.7\\ \\mathrm{px}\\)؛ و<em>مسح</em> يزيلها جميعًا. وتعطي القراءات عدد المصادر والسرعة (8)."
  },
  "4b8b263a87f8": {
   "src": "Figure 4 follows the amplitude \\(A\\) of (7) along a line parallel to the row: the centre row of the field on a wide screen, \\(169.1\\ \\mathrm{px}\\) above the sources. It spreads \\(N = 2\\), 4 and 16 sources over the same \\(672\\ \\mathrm{px}\\), as <em>Line of 16</em> does, at \\(\\lambda = 64\\ \\mathrm{px}\\), and compares them with a continuous row. With two sources the line crosses calm and loud bands in turn, and between \\(x = 200\\) and \\(600\\ \\mathrm{px}\\) the amplitude swings from 0.009 to 0.829. Four sources still leave deep fringes, from 0.036 to 0.765. Sixteen sources, now \\(44.8\\ \\mathrm{px}\\) apart and so closer than one wavelength, keep the amplitude between 0.119 and 0.168, never more than 0.050 from the continuous row: the ripples have merged into one front, as in Figure 1. The slow ripple that remains, in the continuous row as well, comes from its ends, where the front bends round.",
-  "tr": "يتتبّع الشكل 4 السعة \\(A\\) من (7) على خطّ موازٍ للصفّ: الخطّ الأوسط للحقل في شاشة عريضة، على بُعد \\(169.1\\ \\mathrm{px}\\) فوق المصادر. ويوزّع \\(N = 2\\) و4 و16 مصدرًا على المسافة نفسها \\(672\\ \\mathrm{px}\\)، كما يفعل <em>صفّ من 16</em>، عند \\(\\lambda = 64\\ \\mathrm{px}\\)، ويقارنها بصفّ متصل. مع مصدرين يعبر الخطّ أهدابًا هادئة وصاخبة بالتناوب، وبين \\(x = 200\\) و\\(600\\ \\mathrm{px}\\) تتأرجح السعة بين 0.009 و0.829. ولا تزال أربعة مصادر تترك أهدابًا عميقة، بين 0.036 و0.765. أمّا ستة عشر مصدرًا، وقد أصبحت على بُعد \\(44.8\\ \\mathrm{px}\\) من بعضها، أي أقرب من طول موجة واحدة، فتُبقي السعة بين 0.119 و0.168، ولا تبتعد عن الصفّ المتصل أكثر من 0.050: فقد اندمجت الموجات في جبهة واحدة، كما في الشكل 1. أمّا التموّج البطيء الباقي، وهو موجود في الصفّ المتصل أيضًا، فمصدره طرفاه، حيث تنحني الجبهة."
+  "tr": "يتتبّع الشكل 4 السعة \\(A\\) من (7) على خطّ موازٍ للصفّ: الخطّ الأوسط للحقل في شاشة عريضة، على بُعد \\(169.1\\ \\mathrm{px}\\) فوق المصادر. ويوزّع \\(N = 2\\) و4 و16 مصدرًا على المسافة نفسها \\(672\\ \\mathrm{px}\\)، كما يفعل <em>صفّ من 16</em>، عند \\(\\lambda = 64\\ \\mathrm{px}\\)، ويقارنها بصفّ متصل. مع مصدرين يعبر الخطّ أهدابًا هادئة وصاخبة بالتناوب، وبين \\(x = 200\\) و\\(600\\ \\mathrm{px}\\) تتأرجح السعة بين 0.009 و0.829. ولا تزال أربعة مصادر تترك أهدابًا واضحة، بين 0.036 و0.765. أمّا ستة عشر مصدرًا، وقد أصبحت على بُعد \\(44.8\\ \\mathrm{px}\\) من بعضها، أي أقرب من طول موجة واحدة، فتُبقي السعة بين 0.119 و0.168، ولا تبتعد عن الصفّ المتصل أكثر من 0.050: فقد اندمجت الموجات في جبهة واحدة، كما في الشكل 1. أمّا التموّج البطيء الباقي، وهو موجود في الصفّ المتصل أيضًا، فمصدره طرفا الصفّ، حيث تنحني الجبهة."
  },
  "5286e5b2b3a5": {
   "src": "E. Hecht, <a href=\"https://www.pearson.com/en-us/subject-catalog/p/optics/P200000006793\"><em>Optics</em></a>, 5th edition, Pearson, 2017: chapters 4 (Huygens’ principle), 7 (the superposition of waves), 9 (interference) and 10 (diffraction).",
@@ -185,7 +185,7 @@
  },
  "5384f765518c": {
   "src": "with \\(v\\) the speed of the waves. The equation has a plain meaning. The bracket on the right measures how far the surface at a point sits below the average height of the water just around it; the left side is the acceleration of that point. Where the surface is dented, its surroundings pull it back up, as a stretched rubber sheet pulls back a spot pressed into it, and the further the point is from the average of its neighbours, the harder the pull. Every term contains \\(\\psi\\) once, and only once: the equation is <em>linear</em>. So if \\(\\psi_1\\) and \\(\\psi_2\\) are solutions, their sum \\(\\psi_1 + \\psi_2\\) is a solution too. This <em>superposition principle</em> is the whole engine of the simulation: two waves pass through each other and simply add.",
-  "tr": "حيث \\(v\\) سرعة الموجات. وللمعادلة معنى بسيط. فالقوس في الطرف الأيمن يقيس مقدار انخفاض السطح عند نقطة ما عن متوسط ارتفاع الماء حولها؛ أمّا الطرف الأيسر فهو تسارع تلك النقطة. فإذا انخفض السطح عند نقطة، شدّه ما حوله إلى أعلى، كما تشدّ الغشاءَ المطاطي المشدودَ نقطةٌ ضُغطت فيه، وكلّما بَعُدت النقطة عن متوسط جيرانها اشتدّ الشدّ. وكل حدّ يحتوي \\(\\psi\\) مرة واحدة فقط: المعادلة <em>خطّية</em>. فإن كانت \\(\\psi_1\\) و\\(\\psi_2\\) حلّين، فإنّ مجموعهما \\(\\psi_1 + \\psi_2\\) حلّ أيضًا. وهذا <em>مبدأ التراكب</em> هو المحرّك الكامل للمحاكاة: تمرّ الموجتان إحداهما من خلال الأخرى وتتجمّعان ببساطة."
+  "tr": "حيث \\(v\\) سرعة الموجات. وللمعادلة معنى بسيط. فالقوس في الطرف الأيمن يقيس مقدار انخفاض السطح عند نقطة ما عن متوسط ارتفاع الماء حولها؛ أمّا الطرف الأيسر فهو تسارع تلك النقطة. فإذا انخفض السطح عند نقطة، شدّه ما حوله إلى أعلى، كما يشدّ الغشاءُ المطاطي المشدودُ نقطةً ضُغطت فيه، وكلّما بَعُدت النقطة عن متوسط جيرانها اشتدّ الشدّ. وكل حدّ يحتوي \\(\\psi\\) مرة واحدة فقط: المعادلة <em>خطّية</em>. فإن كانت \\(\\psi_1\\) و\\(\\psi_2\\) حلّين، فإنّ مجموعهما \\(\\psi_1 + \\psi_2\\) حلّ أيضًا. وهذا <em>مبدأ التراكب</em> هو كل ما تقوم عليه المحاكاة: تمرّ الموجتان إحداهما عبر الأخرى وتُجمعان ببساطة."
  },
  "53ef7cdc11d3": {
   "src": "With damping, the two rings reach most points with different heights, \\(a_1 \\neq a_2\\), and (9) no longer holds exactly. On a calm line the two arrows of (7) still point in opposite directions but are no longer equally long, so the water keeps a small motion of amplitude \\(|a_1 - a_2|/2\\). Along the centre row of the field on a wide screen this residue reaches 0.071 at the default \\(\\gamma = 0.15\\) and 0.162 at \\(\\gamma = 0.6\\), largest out to the sides, where one source is much nearer than the other. At \\(\\gamma = 0\\) the calm lines are perfectly still.",
@@ -193,7 +193,7 @@
  },
  "5431a8c12cbd": {
   "src": "Checked against the page’s own sum (6) with \\(\\gamma = 0\\) at a distance of 10⁶ px: largest difference 2.2 × 10⁻³, and 6.3 × 10⁻⁵ at 10⁷ px. The difference is the curvature of the wavefront across the row, which (11) neglects.",
-  "tr": "تمّ التحقّق منه مقابل المجموع (6) للصفحة نفسها عند \\(\\gamma = 0\\) على مسافة 10⁶ px: أكبر فرق هو 2.2 × 10⁻³، و6.3 × 10⁻⁵ عند 10⁷ px. وهذا الفرق هو انحناء الجبهة عبر الصفّ، الذي تُهمله (11)."
+  "tr": "جرى التحقّق من ذلك بمقارنته بالمجموع (6) الذي تحسبه الصفحة نفسها عند \\(\\gamma = 0\\) على مسافة 10⁶ px: أكبر فرق هو 2.2 × 10⁻³، و6.3 × 10⁻⁵ عند 10⁷ px. وهذا الفرق ناتج عن انحناء جبهة الموجة على امتداد الصفّ، وهو ما تُهمله (11)."
  },
  "54fdc4d9ace2": {
   "src": "Frequency f",
@@ -233,7 +233,7 @@
  },
  "6c5a75c96bd0": {
   "src": "The row radiates downwards as strongly as upwards; that half lies below the bottom edge and is not drawn. Huygens’ wavelets share this flaw, a backward wave that is never observed. Fresnel and Kirchhoff removed it with an <em>obliquity factor</em>; in Kirchhoff’s form it weights each wavelet by \\((1 + \\cos\\chi)/2\\), where \\(\\chi\\) is the angle from the forward direction.",
-  "tr": "يُشعّ الصفّ إلى الأسفل بقوة مساوية لقوته إلى الأعلى؛ وهذا النصف يقع تحت الحافة السفلى ولا يُرسم. وتشارك الموجات الأولية لهويغنز هذا العيب: موجة خلفية لا تُرصد أبدًا. وقد أزاله فرينل وكيرشوف بـ<em>عامل الميل</em>؛ وفي صيغة كيرشوف يرجّح كل موجة أولية بالعامل \\((1 + \\cos\\chi)/2\\)، حيث \\(\\chi\\) الزاوية عن الاتجاه الأمامي."
+  "tr": "يُشعّ الصفّ إلى الأسفل بقوة مساوية لقوته إلى الأعلى؛ وهذا النصف يقع تحت الحافة السفلى ولا يُرسم. وتشارك الموجات الأولية لهويغنز هذا العيب: موجة خلفية لا تُرصد أبدًا. وقد أزاله فرينل وكيرشوف بـ<em>عامل الميل</em>؛ وفي صيغة كيرشوف يرجّح كل موجة أولية بالعامل \\((1 + \\cos\\chi)/2\\)، حيث \\(\\chi\\) الزاوية مع الاتجاه الأمامي."
  },
  "6c6c3c3b21a6": {
   "src": "<span class=\"psec__n\">06</span>A row: one beam and its side beams<span class=\"star\" title=\"heavier mathematics\">★</span>",
@@ -265,7 +265,7 @@
  },
  "769f9aef3bd8": {
   "src": "Here \\(k = 2\\pi/\\lambda\\), \\(\\omega = 2\\pi f\\), and \\(a_i = e^{-\\gamma r_i/R}\\) says how much ring \\(i\\) has faded by the time it reaches distance \\(r_i\\), equation (5). Since every \\(a_i \\le 1\\), \\(|\\psi|\\) can never exceed 1. All terms share one \\(\\omega\\), so every point of the field moves up and down at the frequency of the sources; from point to point only the size of the motion and its timing change. To see this, write each term as the real part of a turning arrow, a <em>phasor</em>: \\(a_i\\cos(kr_i - \\omega t) = \\operatorname{Re}\\,[\\,a_i e^{ikr_i} e^{-i\\omega t}\\,]\\). Then",
-  "tr": "هنا \\(k = 2\\pi/\\lambda\\)، و\\(\\omega = 2\\pi f\\)، و\\(a_i = e^{-\\gamma r_i/R}\\) تبيّن مقدار ما خفت به الحلقة \\(i\\) عند وصولها إلى المسافة \\(r_i\\)، المعادلة (5). وبما أن كل \\(a_i \\le 1\\)، فلا يمكن أن يتجاوز \\(|\\psi|\\) القيمة 1 أبدًا. ولكل الحدود \\(\\omega\\) مشتركة، فكل نقطة من الحقل تتحرّك صعودًا وهبوطًا بتردد المصادر؛ ولا يتغيّر من نقطة إلى أخرى إلا مقدار الحركة وتوقيتها. ولرؤية ذلك، اكتب كل حدّ كالجزء الحقيقي من سهم دوّار، أي <em>طوريّ</em>: \\(a_i\\cos(kr_i - \\omega t) = \\operatorname{Re}\\,[\\,a_i e^{ikr_i} e^{-i\\omega t}\\,]\\). فيصبح"
+  "tr": "هنا \\(k = 2\\pi/\\lambda\\)، و\\(\\omega = 2\\pi f\\)، و\\(a_i = e^{-\\gamma r_i/R}\\) يبيّن مقدار ما خفت به الحلقة \\(i\\) عند وصولها إلى المسافة \\(r_i\\)، المعادلة (5). وبما أن كل \\(a_i \\le 1\\)، فلا يمكن أن يتجاوز \\(|\\psi|\\) القيمة 1 أبدًا. وتشترك كل الحدود في \\(\\omega\\) واحد، فكل نقطة من الحقل تتحرّك صعودًا وهبوطًا بتردد المصادر؛ ولا يتغيّر من نقطة إلى أخرى إلا مقدار الحركة وتوقيتها. ولرؤية ذلك، اكتب كل حدّ على أنه الجزء الحقيقي من سهم دوّار، أي <em>طوريّ</em>: \\(a_i\\cos(kr_i - \\omega t) = \\operatorname{Re}\\,[\\,a_i e^{ikr_i} e^{-i\\omega t}\\,]\\). فيصبح"
  },
  "781961bc81c2": {
   "src": "Pause",
@@ -273,11 +273,11 @@
  },
  "78a47c0d7e0d": {
   "src": "<b>Abstract.</b> Drop a row of pebbles into a pond and, a little way off, their rings merge into one straight ripple. This note explains that everyday sight with a single idea: waves add. It starts from the ring sent out by one source, adds two rings to find the calm lines between them, adds a whole row to find a beam and its unwanted side beams, and then shows when the ripples of a row really merge into the straight front that Huygens drew in 1690. It ends with how the page computes and colours the field on every frame. Sections marked ★ carry the heavier mathematics and can be skipped on a first reading without losing the thread.",
-  "tr": "<b>ملخّص.</b> ألقِ صفًّا من الحصى في بركة ماء، وستندمج حلقاتها على مسافة قصيرة منك في موجة مستقيمة واحدة. تشرح هذه المذكّرة هذا المشهد اليومي بفكرة واحدة: الموجات تتراكب. تبدأ من الحلقة التي يرسلها مصدر واحد، ثم تجمع حلقتين لتجد الخطوط الهادئة بينهما، ثم تجمع صفًّا كاملًا لتجد حزمةً رئيسية وحزمًا جانبية غير مرغوب فيها، ثم تبيّن متى تندمج موجات الصفّ فعلًا في الجبهة المستقيمة التي رسمها هويغنز عام 1690. وتختم بكيفية حساب الصفحة للحقل وتلوينه في كل إطار. تحمل الأقسام المعلَّمة بـ ★ الرياضيات الأثقل، ويمكن تجاوزها في القراءة الأولى دون أن ينقطع الخيط."
+  "tr": "<b>ملخّص.</b> ألقِ صفًّا من الحصى في بركة ماء، وعلى مسافة قصيرة من الصفّ تندمج حلقاتها في تموّج مستقيم واحد. تشرح هذه المذكّرة هذا المشهد اليومي بفكرة واحدة: الموجات تتراكب. تبدأ من الحلقة التي يرسلها مصدر واحد، ثم تجمع حلقتين لتجد الخطوط الهادئة بينهما، ثم تجمع صفًّا كاملًا لتجد حزمةً رئيسية وحزمًا جانبية غير مرغوب فيها، ثم تبيّن متى تندمج موجات الصفّ فعلًا في الجبهة المستقيمة التي رسمها هويغنز عام 1690. وتختم بكيفية حساب الصفحة للحقل وتلوينه في كل إطار. تحمل الأقسام المعلَّمة بـ ★ الرياضيات الأثقل، ويمكن تجاوزها في القراءة الأولى دون أن ينقطع الخيط."
  },
  "799ac9eb3ba4": {
   "src": "On every frame the shared phase advances by the real time \\(\\Delta t\\) since the last frame, capped at \\(0.05\\ \\mathrm{s}\\), so that the waves run at the chosen frequency on any screen: \\(\\omega t \\leftarrow \\omega t + 2\\pi f\\,\\Delta t\\). Each point then costs two multiplications and an addition, whatever \\(N\\) is.",
-  "tr": "في كل إطار يتقدّم الطور المشترك بالزمن الحقيقي \\(\\Delta t\\) منذ الإطار السابق، بحدّ أقصاه \\(0.05\\ \\mathrm{s}\\)، حتى تسير الموجات بالتردد المختار على أي شاشة: \\(\\omega t \\leftarrow \\omega t + 2\\pi f\\,\\Delta t\\). وعندئذٍ تكلّف كل نقطة ضربين وجمعة واحدة، مهما كان \\(N\\)."
+  "tr": "في كل إطار يتقدّم الطور المشترك بالزمن الحقيقي \\(\\Delta t\\) منذ الإطار السابق، بحدّ أقصاه \\(0.05\\ \\mathrm{s}\\)، حتى تسير الموجات بالتردد المختار على أي شاشة: \\(\\omega t \\leftarrow \\omega t + 2\\pi f\\,\\Delta t\\). وعندئذٍ تكلّف كل نقطة عمليتي ضرب وعملية جمع واحدة، مهما كان \\(N\\)."
  },
  "7b3177194ddd": {
   "src": "Line of 16",
@@ -285,7 +285,7 @@
  },
  "7bc7fc16eea1": {
   "src": "The page keeps the travelling phase and makes two deliberate changes. It drops the constant \\(-\\pi/4\\), which is the same for every source and only shifts the origin of time. And it replaces the slow \\(1/\\sqrt r\\) by an exponential damping, which stays finite at the source and imitates the loss of energy in real water:",
-  "tr": "تحتفظ الصفحة بالطور المتحرّك وتُدخل تغييرين مقصودين. فتُسقط الثابت \\(-\\pi/4\\)، وهو واحد لكل المصادر ولا يفعل إلا إزاحة نقطة البداية للزمن. وتستبدل \\(1/\\sqrt r\\) البطيء بتخامد أسّي، يبقى منتهيًا عند المصدر ويحاكي فقد الطاقة في الماء الحقيقي:"
+  "tr": "تحتفظ الصفحة بالطور المتنقّل وتُدخل تغييرين مقصودين. فتُسقط الثابت \\(-\\pi/4\\)، وهو واحد لكل المصادر ولا يفعل سوى إزاحة مبدأ الزمن. وتستبدل \\(1/\\sqrt r\\) البطيء بتخامد أسّي، يبقى منتهيًا عند المصدر ويحاكي فقدان الطاقة في الماء الحقيقي:"
  },
  "7d252cd594b3": {
   "src": "All simulations ↑",
@@ -297,11 +297,11 @@
  },
  "842c6a99d547": {
   "src": "Three things follow. The phase \\(kh\\) is the same all along a line parallel to the row: the front is straight. The amplitude does not depend on where \\(P\\) is along the row, as long as both ends are more than a Fresnel zone away. And the amplitude is small. At \\(\\lambda = 64\\ \\mathrm{px}\\) and \\(h = 169.1\\ \\mathrm{px}\\) the Fresnel zone is \\(\\sqrt{\\lambda h} = 104.0\\ \\mathrm{px}\\), and (17) gives \\(A = 0.142\\), against an average of 0.141 for the continuous row in Figure 4 and 0.140 for sixteen sources, both taken between \\(x = 200\\) and \\(600\\ \\mathrm{px}\\). Most of the arrows cancel; the front at each point is built by the few sources within about a Fresnel zone of it, which is why <em>Line of 16</em> looks so much paler than two sources.",
-  "tr": "تنتج عن ذلك ثلاثة أمور. فالطور \\(kh\\) واحد على طول خطّ موازٍ للصفّ: الجبهة مستقيمة. والسعة لا تعتمد على موضع \\(P\\) على طول الصفّ، ما دام الطرفان أبعد من منطقة فرينل واحدة. والسعة صغيرة. فعند \\(\\lambda = 64\\ \\mathrm{px}\\) و\\(h = 169.1\\ \\mathrm{px}\\) تكون منطقة فرينل \\(\\sqrt{\\lambda h} = 104.0\\ \\mathrm{px}\\)، وتعطي (17) \\(A = 0.142\\)، مقابل متوسط 0.141 للصفّ المتصل في الشكل 4، و0.140 لستة عشر مصدرًا، وكلاهما متوسط بين \\(x = 200\\) و\\(600\\ \\mathrm{px}\\). فمعظم الأسهم تتلاشى؛ والجبهة عند كل نقطة تبنيها المصادر القليلة داخل منطقة فرينل واحدة حولها تقريبًا، ولهذا يبدو <em>صفّ من 16</em> أشحب بكثير من مصدرين."
+  "tr": "تنتج عن ذلك ثلاثة أمور. فالطور \\(kh\\) واحد على طول خطّ موازٍ للصفّ: الجبهة مستقيمة. والسعة لا تعتمد على موضع \\(P\\) على طول الصفّ، ما دام الطرفان أبعد من منطقة فرينل واحدة. والسعة صغيرة. فعند \\(\\lambda = 64\\ \\mathrm{px}\\) و\\(h = 169.1\\ \\mathrm{px}\\) تكون منطقة فرينل \\(\\sqrt{\\lambda h} = 104.0\\ \\mathrm{px}\\)، وتعطي (17) \\(A = 0.142\\)، مقابل متوسط 0.141 للصفّ المتصل في الشكل 4، و0.140 لستة عشر مصدرًا، وكلاهما متوسط بين \\(x = 200\\) و\\(600\\ \\mathrm{px}\\). فمعظم الأسهم يُلغي بعضها بعضًا؛ والجبهة عند كل نقطة تبنيها المصادر القليلة داخل منطقة فرينل واحدة حولها تقريبًا، ولهذا يبدو <em>صفّ من 16</em> أشحب بكثير من مصدرين."
  },
  "850809df03dd": {
   "src": "Huygens’ picture leaves two things open. It does not say why the wavelets themselves are invisible, leaving only the envelope, and it does not say how close together the sources must be for the envelope to be straight. Adding the waves crest by crest settles both, and that is what this note does.",
-  "tr": "تترك صورة هويغنز مسألتين مفتوحتين: فهي لا تقول لماذا تبقى الموجات الأولية نفسها غير مرئية فلا يظهر إلا المغلّف، ولا تقول مدى تقارب المصادر لكي يكون المغلّف مستقيمًا. وجمع الموجات قمّةً إلى قمّة يحسم المسألتين، وهذا ما تفعله هذه المذكّرة."
+  "tr": "تترك صورة هويغنز مسألتين مفتوحتين: فهي لا تقول لماذا تبقى الموجات الأولية نفسها غير مرئية فلا يظهر إلا المغلّف، ولا تقول كم يجب أن تتقارب المصادر لكي يكون المغلّف مستقيمًا. وجمع الموجات قمّةً إلى قمّة يحسم المسألتين، وهذا ما تفعله هذه المذكّرة."
  },
  "8fbc77a0c8b7": {
   "src": "For <em>Line of 16</em> at \\(\\lambda = 30\\ \\mathrm{px}\\), \\(D^2/\\lambda = 15\\,053\\ \\mathrm{px}\\), 18.8 times the width of the field. Everything on screen is <em>near field</em>: the beams of Figure 3 have not yet separated, and \\(42^\\circ\\) is the direction in which the side beams are heading, not a line one can read off the picture. The page always uses the exact distances (2), so it shows this near field correctly.",
@@ -321,7 +321,7 @@
  },
  "9234c46d073a": {
   "src": "Press <em>Reset</em> and let the waves run. The calm lines are the cream lines that stay cream while the water around them flickers. Count those that start from the bottom edge between the two sources: equation (10) predicts 26 at \\(\\lambda = 30\\ \\mathrm{px}\\). Set <em>Wavelength</em> \\(\\lambda\\) to \\(60\\ \\mathrm{px}\\) and count again; (10) predicts 14. Then return to \\(30\\ \\mathrm{px}\\), set <em>Damping</em> \\(\\gamma\\) to 0.6 and watch the outer calm lines: they no longer stay cream, but flicker faintly.",
-  "tr": "اضغط <em>إعادة ضبط</em> ودع الموجات تعمل. الخطوط الهادئة هي الخطوط الكريمية التي تبقى كريمية بينما يرتعش الماء حولها. عدّ تلك التي تبدأ من الحافة السفلى بين المصدرين: تتنبأ المعادلة (10) بـ 26 منها عند \\(\\lambda = 30\\ \\mathrm{px}\\). اضبط <em>طول الموجة</em> \\(\\lambda\\) على \\(60\\ \\mathrm{px}\\) وعدّ مرة أخرى؛ ستتنبأ (10) بـ 14. ثم ارجع إلى \\(30\\ \\mathrm{px}\\)، واضبط <em>التخامد</em> \\(\\gamma\\) على 0.6، وراقب الخطوط الهادئة الخارجية: لم تعد تبقى كريمية، بل ترتعش ارتعاشًا خفيفًا."
+  "tr": "اضغط <em>إعادة ضبط</em> ودع الموجات تسير. الخطوط الهادئة هي الخطوط الكريمية التي تبقى كريمية بينما يرتعش الماء حولها. عدّ تلك التي تبدأ من الحافة السفلى بين المصدرين: تتنبأ المعادلة (10) بـ 26 منها عند \\(\\lambda = 30\\ \\mathrm{px}\\). اضبط <em>طول الموجة</em> \\(\\lambda\\) على \\(60\\ \\mathrm{px}\\) وعدّ مرة أخرى؛ تتنبأ (10) بـ 14. ثم ارجع إلى \\(30\\ \\mathrm{px}\\)، واضبط <em>التخامد</em> \\(\\gamma\\) على 0.6، وراقب الخطوط الهادئة الخارجية: لم تعد تبقى كريمية، بل ترتعش ارتعاشًا خفيفًا."
  },
  "93a8161c11f4": {
   "src": "Back to the simulations",
@@ -337,7 +337,7 @@
  },
  "99b8bf147184": {
   "src": "At the default \\(\\lambda = 30\\ \\mathrm{px}\\) the same sixteen sources do not merge. Along the same line the amplitude runs from 0.013 to 0.387, with tall peaks about every \\(44\\ \\mathrm{px}\\), the spacing of the sources. Near the row the straight-ahead wave and the two side waves of (13) overlap. Where their crests meet the water is loud, where a crest meets a trough it is calm, and the pattern repeats along the row every \\(\\lambda/\\sin\\theta_1 = s\\). This is the near-field face of the grating lobes: a row with \\(s &gt; \\lambda\\) never makes a clean front.",
-  "tr": "عند القيمة الافتراضية \\(\\lambda = 30\\ \\mathrm{px}\\) لا تندمج المصادر الستة عشر نفسها. وعلى الخطّ نفسه تتراوح السعة بين 0.013 و0.387، مع قمم عالية تقريبًا كل \\(44\\ \\mathrm{px}\\)، وهو تباعد المصادر. وقرب الصفّ تتراكب الحزمة المستقيمة والحزمتان الجانبيتان في (13). فحيث تلتقي قممها يكون الماء صاخبًا، وحيث تلتقي قمة بقاع يكون هادئًا، ويتكرّر النمط على طول الصفّ كل \\(\\lambda/\\sin\\theta_1 = s\\). وهذا وجه الحقل القريب لفصوص الشبكة: فالصفّ الذي فيه \\(s &gt; \\lambda\\) لا يصنع جبهة نظيفة أبدًا."
+  "tr": "عند القيمة الافتراضية \\(\\lambda = 30\\ \\mathrm{px}\\) لا تندمج المصادر الستة عشر نفسها. وعلى الخطّ نفسه تتراوح السعة بين 0.013 و0.387، مع قمم عالية كل \\(44\\ \\mathrm{px}\\) تقريبًا، وهو تباعد المصادر. وقرب الصفّ تتراكب الحزمة المستقيمة والحزمتان الجانبيتان في (13). فحيث تلتقي قممها يكون الماء صاخبًا، وحيث تلتقي قمة بقاع يكون هادئًا، ويتكرّر النمط على طول الصفّ كل \\(\\lambda/\\sin\\theta_1 = s\\). وهكذا تظهر فصوص الشبكة في الحقل القريب: فالصفّ الذي فيه \\(s &gt; \\lambda\\) لا يصنع جبهة نظيفة أبدًا."
  },
  "9a8e3e617433": {
   "src": "Each ring runs outward as if it were alone: a crest of ring \\(i\\) keeps \\(kr_i - \\omega t\\) fixed and travels at",
@@ -345,15 +345,15 @@
  },
  "9bedb58097fa": {
   "src": "<span class=\"psub__n\">3.1</span>The page’s version of one ring",
-  "tr": "<span class=\"psub__n\">3.1</span>نسخة الصفحة من حلقة واحدة"
+  "tr": "<span class=\"psub__n\">3.1</span>الحلقة الواحدة كما تحسبها الصفحة"
  },
  "9df78eb8ac46": {
   "src": "For <em>Line of 16</em> on the wide screen one rebuild is \\(2 \\times 16 \\times 58\\,320 = 1\\,866\\,240\\) cosines and sines; it took 59–98 ms in three headless Chromium runs, while a frame took 0.9–1.6 ms. These times depend on the machine.",
-  "tr": "لـ<em>صفّ من 16</em> على الشاشة العريضة تكون إعادة الحساب الواحدة \\(2 \\times 16 \\times 58\\,320 = 1\\,866\\,240\\) من جيب التمام والجيب؛ واستغرقت 59 إلى 98 ms في ثلاثة تشغيلات لـ Chromium بلا واجهة، بينما استغرق الإطار الواحد من 0.9 إلى 1.6 ms. وهذه الأزمنة تعتمد على الجهاز."
+  "tr": "لـ<em>صفّ من 16</em> على الشاشة العريضة تكون إعادة الحساب الواحدة \\(2 \\times 16 \\times 58\\,320 = 1\\,866\\,240\\) قيمةً من جيوب التمام والجيوب؛ واستغرقت 59 إلى 98 ms في ثلاثة تشغيلات لـ Chromium بلا واجهة، بينما استغرق الإطار الواحد من 0.9 إلى 1.6 ms. وهذه الأزمنة تعتمد على الجهاز."
  },
  "a04921b2c25c": {
   "src": "Circular waves that add up to a straight one",
-  "tr": "موجات دائرية تتجمّع لتكوّن موجة مستقيمة"
+  "tr": "موجات دائرية مجموعها موجة مستقيمة"
  },
  "a28272643323": {
   "src": "<span class=\"psec__n\">02</span>The model",
@@ -361,11 +361,11 @@
  },
  "a33ec42aafd3": {
   "src": "with \\(c_0\\) cream \\((255, 250, 243)\\) for still water, \\(c_+\\) burgundy \\((122, 31, 43)\\) for a crest, \\(\\psi = +1\\), and \\(c_-\\) ink \\((58, 50, 46)\\) for a trough, \\(\\psi = -1\\). The power 0.8 lifts small values a little, so that the weak far field stays visible: \\(\\psi = 0.1\\) is drawn \\(0.1^{0.8} = 0.158\\) of the way from cream. One step of the table is \\(\\Delta\\psi = 2/255 = 0.0078\\). Before the lookup, \\(\\psi\\) is clipped to \\([-1, 1]\\), a guard against rounding only, since (6) already keeps \\(|\\psi| \\le 1\\).",
-  "tr": "مع \\(c_0\\) كريمي \\((255, 250, 243)\\) للماء الساكن، و\\(c_+\\) عنّابي \\((122, 31, 43)\\) للقمة، \\(\\psi = +1\\)، و\\(c_-\\) حبري \\((58, 50, 46)\\) للقاع، \\(\\psi = -1\\). والأس 0.8 يرفع القيم الصغيرة قليلًا، حتى يبقى المجال البعيد الضعيف مرئيًا: فالقيمة \\(\\psi = 0.1\\) تُرسم عند \\(0.1^{0.8} = 0.158\\) من الطريق من الكريمي. وخطوة واحدة في الجدول هي \\(\\Delta\\psi = 2/255 = 0.0078\\). وقبل البحث في الجدول تُقصّ \\(\\psi\\) إلى \\([-1, 1]\\)، احتياطًا ضد أخطاء التقريب فقط، لأن (6) تضمن \\(|\\psi| \\le 1\\) أصلًا."
+  "tr": "حيث \\(c_0\\) اللون الكريمي \\((255, 250, 243)\\) للماء الساكن، و\\(c_+\\) اللون العنّابي \\((122, 31, 43)\\) للقمة، \\(\\psi = +1\\)، و\\(c_-\\) اللون الحبري \\((58, 50, 46)\\) للقاع، \\(\\psi = -1\\). والأس 0.8 يرفع القيم الصغيرة قليلًا، حتى يبقى الحقل البعيد الضعيف مرئيًا: فالقيمة \\(\\psi = 0.1\\) تُرسم عند الكسر \\(0.1^{0.8} = 0.158\\) من المسافة بدءًا من الكريمي. وخطوة واحدة في الجدول هي \\(\\Delta\\psi = 2/255 = 0.0078\\). وقبل البحث في الجدول تُقصّ \\(\\psi\\) إلى \\([-1, 1]\\)، احتياطًا ضد أخطاء التقريب فقط، لأن (6) تضمن \\(|\\psi| \\le 1\\) أصلًا."
  },
  "a446c5104a0a": {
   "src": "The sources are points that do not disturb one another: a ring passes through a neighbouring source unchanged.",
-  "tr": "المصادر نقاط لا يُزعج بعضها بعضًا: فالحلقة تمرّ بالمصدر المجاور دون أن تتغيّر."
+  "tr": "المصادر نقاط لا يؤثّر بعضها في بعض: فالحلقة تعبر المصدر المجاور دون أن تتغيّر."
  },
  "a4ce3a9be794": {
   "src": "← All simulations",
@@ -381,7 +381,7 @@
  },
  "af8d34ebd7ca": {
   "src": "Let \\(\\psi(x, y, t)\\) be the signed field shown by the colours. For the physics, consider first a wave of one fixed speed, which obeys the two-dimensional wave equation",
-  "tr": "ليكن \\(\\psi(x, y, t)\\) الحقل ذا الإشارة الذي تُظهره الألوان. ولنبدأ بالفيزياء: موجة ذات سرعة ثابتة تحقّق معادلة الموجة ثنائية البعد"
+  "tr": "ليكن \\(\\psi(x, y, t)\\) الحقل ذا الإشارة الذي تُظهره الألوان. ومن ناحية الفيزياء، لننظر أولًا في موجة ذات سرعة واحدة ثابتة، تحقّق معادلة الموجة الثنائية البعد"
  },
  "b03a9c9d7193": {
   "src": "Damping γ",
@@ -389,11 +389,11 @@
  },
  "b183c6dd8142": {
   "src": "\\(|F|\\) is the amplitude far away in the direction \\(\\theta\\), as a fraction of what it would be if all \\(N\\) arrows lined up. They do line up whenever \\(\\beta\\) is a whole number of turns, \\(\\beta = 2\\pi m\\): every term then equals 1, the apparent \\(0/0\\) in (12) is removable, and \\(|F| = 1\\) exactly. The case \\(m = 0\\) is the main beam, straight out from the row; its edges are the first zeros, where \\(N\\beta/2 = \\pm\\pi\\). The cases \\(m = \\pm1, \\pm2, \\dots\\) are further beams of full strength, called <em>grating lobes</em>:",
-  "tr": "\\(|F|\\) هي السعة على مسافة بعيدة في الاتجاه \\(\\theta\\)، كنسبة مما تكون عليه لو اصطفّت كل الأسهم \\(N\\). وتصطفّ الأسهم فقط حين يكون \\(\\beta\\) عددًا صحيحًا من الدورات، \\(\\beta = 2\\pi m\\): فيكون كل حدّ مساويًا 1، ويكون الشكل الظاهري \\(0/0\\) في (12) قابلًا للإزالة، و\\(|F| = 1\\) بالضبط. والحالة \\(m = 0\\) هي الحزمة الرئيسية، مستقيمة إلى الخارج من الصفّ؛ وحدّاها هما أول الأصفار، حيث \\(N\\beta/2 = \\pm\\pi\\). أمّا الحالات \\(m = \\pm1, \\pm2, \\dots\\) فهي حزم أخرى بكامل القوة، تُسمّى <em>فصوص الشبكة</em>:"
+  "tr": "\\(|F|\\) هي السعة على مسافة بعيدة في الاتجاه \\(\\theta\\)، منسوبةً إلى ما تكون عليه لو اصطفّت كل الأسهم \\(N\\). وتصطفّ الأسهم كلما كان \\(\\beta\\) عددًا صحيحًا من الدورات، \\(\\beta = 2\\pi m\\): فيكون كل حدّ مساويًا 1، ويكون الشكل الظاهري \\(0/0\\) في (12) قابلًا للإزالة، و\\(|F| = 1\\) بالضبط. والحالة \\(m = 0\\) هي الحزمة الرئيسية، متّجهة من الصفّ إلى الأمام مباشرة؛ وحافّتاها هما الصفران الأوّلان، حيث \\(N\\beta/2 = \\pm\\pi\\). أمّا الحالات \\(m = \\pm1, \\pm2, \\dots\\) فهي حزم أخرى بكامل القوة، تُسمّى <em>فصوص الشبكة</em>:"
  },
  "b20f2f58612d": {
   "src": "The sources are points that neither feel nor scatter each other’s waves.",
-  "tr": "المصادر نقاط لا تشعر بموجات بعضها ولا تُشتّتها."
+  "tr": "المصادر نقاط لا تتأثّر بموجات بعضها ولا تُشتّتها."
  },
  "b47e83f2f08d": {
   "src": "<span>4</span>Adding the rings",
@@ -429,11 +429,11 @@
  },
  "c136b2a2a6c3": {
   "src": "The second factor is a wave running outward. The first does not depend on time: it is an envelope that fixes how far each point moves. The water never moves where it vanishes, that is where",
-  "tr": "العامل الثاني موجة تسير إلى الخارج. أمّا الأول فلا يعتمد على الزمن: إنه مغلّف يحدّد مدى حركة كل نقطة. والماء لا يتحرّك حيث يتلاشى، وذلك حيث"
+  "tr": "العامل الثاني موجة تسير إلى الخارج. أمّا الأول فلا يعتمد على الزمن: إنه مغلّف يحدّد مدى حركة كل نقطة. ولا يتحرّك الماء أبدًا حيث ينعدم هذا المغلّف، أي حيث"
  },
  "c14b3b6f24f5": {
   "src": "C. A. Balanis, <a href=\"https://www.wiley.com/en-us/antenna-theory-analysis-and-design-4th-edition-p-9781118642061\"><em>Antenna Theory: Analysis and Design</em></a>, 4th edition, Wiley, 2016: chapter 6 (linear arrays, array factor, grating lobes and beam steering).",
-  "tr": "C. A. Balanis، <a href=\"https://www.wiley.com/en-us/antenna-theory-analysis-and-design-4th-edition-p-9781118642061\"><em>Antenna Theory: Analysis and Design</em></a>، الطبعة 4، Wiley، 2016: الفصل 6 (المصفوفات الخطّية، ودالة المصفوفة، وفصوص الشبكة، وتوجيه الشعاع)."
+  "tr": "C. A. Balanis، <a href=\"https://www.wiley.com/en-us/antenna-theory-analysis-and-design-4th-edition-p-9781118642061\"><em>Antenna Theory: Analysis and Design</em></a>، الطبعة 4، Wiley، 2016: الفصل 6 (المصفوفات الخطّية، وعامل المصفوفة، وفصوص الشبكة، وتوجيه الحزمة)."
  },
  "c4cb588feeda": {
   "src": "Interference field of the wave sources. Click to add a source.",
@@ -441,11 +441,11 @@
  },
  "c67161d1058f": {
   "src": "for any whole number \\(m = 0, \\pm1, \\pm2, \\dots\\), and it moves most where \\(\\Delta r = m\\lambda\\): there the crests from both sources arrive together. A curve on which the difference of the distances to two fixed points is constant is a hyperbola with those points as foci. So the calm lines are hyperbolae fanning out from the stretch between the sources, with the loud bands in between. The path difference can never exceed the spacing, \\(|\\Delta r| \\le s\\), so the calm lines are those with \\(|m + \\tfrac12|\\,\\lambda &lt; s\\). At \\(\\lambda = 30\\ \\mathrm{px}\\) that is \\(m = -13\\) to \\(12\\): 26 calm lines, close to \\(2s/\\lambda = 26.7\\). At \\(\\lambda = 60\\ \\mathrm{px}\\) there are 14.",
-  "tr": "لأي عدد صحيح \\(m = 0, \\pm1, \\pm2, \\dots\\)، وتبلغ الحركة أقصاها حيث \\(\\Delta r = m\\lambda\\): هناك تصل قمم المصدرين معًا. والمنحنى الذي يكون فيه فرق البعدين عن نقطتين ثابتتين ثابتًا هو قطع زائد، بالنقطتين بؤرتين له. فالخطوط الهادئة إذن قطوع زائدة تتفرّع من المقطع بين المصادر، والأهداب الصاخبة بينها. ولا يمكن أن يتجاوز فرق المسار المسافة بين المصدرين، \\(|\\Delta r| \\le s\\)، لذلك تكون الخطوط الهادئة هي التي تحقّق \\(|m + \\tfrac12|\\,\\lambda &lt; s\\). وعند \\(\\lambda = 30\\ \\mathrm{px}\\) تكون \\(m = -13\\) إلى \\(12\\): أي 26 خطًّا هادئًا، قريبًا من \\(2s/\\lambda = 26.7\\). وعند \\(\\lambda = 60\\ \\mathrm{px}\\) تكون 14."
+  "tr": "لأي عدد صحيح \\(m = 0, \\pm1, \\pm2, \\dots\\)، وتبلغ الحركة أقصاها حيث \\(\\Delta r = m\\lambda\\): هناك تصل قمم المصدرين معًا. والمنحنى الذي يكون فيه فرق البعدين عن نقطتين ثابتتين ثابتًا هو قطع زائد، بؤرتاه هاتان النقطتان. فالخطوط الهادئة إذن قطوع زائدة تنفرج كالمروحة من القطعة الواصلة بين المصدرين، والأهداب الصاخبة بينها. ولا يمكن أن يتجاوز فرق المسار المسافة بين المصدرين، \\(|\\Delta r| \\le s\\)، لذلك تكون الخطوط الهادئة هي التي تحقّق \\(|m + \\tfrac12|\\,\\lambda &lt; s\\). وعند \\(\\lambda = 30\\ \\mathrm{px}\\) تمتدّ القيم من \\(m = -13\\) إلى \\(12\\): أي 26 خطًّا هادئًا، وهو عدد قريب من \\(2s/\\lambda = 26.7\\). وعند \\(\\lambda = 60\\ \\mathrm{px}\\) يكون عددها 14."
  },
  "c73d2ad7e610": {
   "src": "\\(N\\) equal sources a distance \\(s\\) apart, all in step, send their strongest wave straight out from the row, in a beam of half-width \\(\\sin\\theta = \\lambda/(Ns)\\): the longer the row, the narrower the beam. Whenever the spacing is at least one wavelength, \\(s \\ge \\lambda\\), they also send equally strong side beams, at \\(\\sin\\theta_m = m\\lambda/s\\). A row meant to make one clean beam needs its sources closer together than one wavelength.",
-  "tr": "يرسل \\(N\\) مصدرًا متساويًا على بُعد \\(s\\)، كلها في تزامن، أقوى موجاتها مستقيمة إلى الخارج من الصفّ، في حزمة نصف عرضها \\(\\sin\\theta = \\lambda/(Ns)\\): فكلما طال الصفّ ضاقت الحزمة. وكلما بلغ التباعد طول موجة واحدة على الأقل، \\(s \\ge \\lambda\\)، أرسلت أيضًا حزمًا جانبية بالقوة نفسها، عند \\(\\sin\\theta_m = m\\lambda/s\\). والصفّ الذي يُراد له أن يصنع حزمة واحدة نظيفة يحتاج إلى مصادر أقرب إلى بعضها من طول موجة واحدة."
+  "tr": "إذا كانت لدينا \\(N\\) من المصادر المتساوية، المسافة بين كل اثنين متجاورين منها \\(s\\)، وكلها متزامنة، فإنها ترسل أقوى موجاتها إلى الأمام مباشرة، عموديًا على الصفّ، في حزمة نصف عرضها \\(\\sin\\theta = \\lambda/(Ns)\\): فكلما طال الصفّ ضاقت الحزمة. وكلما بلغ التباعد طول موجة واحدة على الأقل، \\(s \\ge \\lambda\\)، أرسلت أيضًا حزمًا جانبية بالقوة نفسها، عند \\(\\sin\\theta_m = m\\lambda/s\\). والصفّ الذي يُراد له أن يصنع حزمة واحدة نظيفة يحتاج إلى مصادر أقرب إلى بعضها من طول موجة واحدة."
  },
  "c8687dac3f61": {
   "src": "<span>6</span>A row: one beam and its side beams&nbsp;★",
@@ -465,15 +465,15 @@
  },
  "d44b25b002b2": {
   "src": "Because the field is always \\(800\\ \\mathrm{px}\\) wide, \\(\\lambda = 30\\ \\mathrm{px}\\) is one 26.7th of the width on every screen, and the pattern is the same on a phone and on a monitor, only drawn smaller or larger. Each grid point becomes one pixel of a small image, and the browser stretches that image over the canvas with smoothing. That is why the bands look continuous rather than blocky; a screen pixel between two grid points shows a blend of both.",
-  "tr": "بما أن الحقل عرضه دائمًا \\(800\\ \\mathrm{px}\\)، فإن \\(\\lambda = 30\\ \\mathrm{px}\\) تمثّل جزءًا من 26.7 من العرض على كل شاشة، ويكون النمط نفسه على الهاتف والشاشة، مرسومًا أصغر أو أكبر فقط. ويصبح كل نقطة شبكية بكسلًا واحدًا من صورة صغيرة، ويمدّ المتصفح هذه الصورة فوق منطقة الرسم مع التنعيم. ولهذا تبدو الأهداب متصلة لا متكتّلة؛ فالبكسل الذي يقع بين نقطتين شبكيتين يُظهر مزيجًا من الاثنتين."
+  "tr": "بما أن الحقل عرضه دائمًا \\(800\\ \\mathrm{px}\\)، فإن \\(\\lambda = 30\\ \\mathrm{px}\\) تمثّل جزءًا من 26.7 من العرض على كل شاشة، ويكون النمط نفسه على الهاتف والشاشة، مرسومًا أصغر أو أكبر فقط. وتصبح كل نقطة شبكية بكسلًا واحدًا من صورة صغيرة، ويمدّ المتصفح هذه الصورة فوق منطقة الرسم مع التنعيم. ولهذا تبدو الأهداب متصلة لا مكوّنة من مربّعات؛ فالبكسل الذي يقع بين نقطتين شبكيتين يُظهر مزيجًا من الاثنتين."
  },
  "d5a3990f0174": {
   "src": "from it. The model makes four more assumptions.",
-  "tr": "عنه. ويفترض النموذج أربعة افتراضات إضافية."
+  "tr": "عنه. ويقوم النموذج على أربعة افتراضات أخرى."
  },
  "d659c81fc793": {
   "src": "<span class=\"pfig__n\">Figure 2</span>Left: the field in the page’s own coordinates. The sources sit on the dashed line \\(y = y_s\\), and a point \\(P\\) of the field is at the distances \\(r_1, \\dots, r_N\\) from them. Right: two neighbouring sources a distance \\(s\\) apart, seen from a point so far away that the paths to it are parallel, at the angle \\(\\theta\\) from the normal to the row. The left path is longer by \\(s\\sin\\theta\\) (burgundy), the piece cut off by the dashed line drawn at right angles to both paths.",
-  "tr": "<span class=\"pfig__n\">الشكل 2</span>يسارًا: الحقل بإحداثيات الصفحة نفسها. تقع المصادر على الخطّ المتقطّع \\(y = y_s\\)، وتبعد نقطة \\(P\\) من الحقل عنها المسافات \\(r_1, \\dots, r_N\\). يمينًا: مصدران متجاوران على بُعد \\(s\\)، يُريان من نقطة بعيدة جدًا حتى تتوازى الطرق إليها، عند الزاوية \\(\\theta\\) عن العمود على الصفّ. فالطريق اليسرى أطول بمقدار \\(s\\sin\\theta\\) (بلون عنّابي)، وهو الجزء الذي يقطعه الخطّ المتقطّع المرسوم عموديًا على الطريقين."
+  "tr": "<span class=\"pfig__n\">الشكل 2</span>على اليسار: الحقل بإحداثيات الصفحة نفسها. تقع المصادر على الخطّ المتقطّع \\(y = y_s\\)، وتبعد نقطة \\(P\\) من الحقل عنها المسافات \\(r_1, \\dots, r_N\\). على اليمين: مصدران متجاوران تفصل بينهما مسافة \\(s\\)، يُنظر إليهما من نقطة بعيدة جدًا حتى إن المسارين إليها متوازيان، بزاوية \\(\\theta\\) مع العموديّ على الصفّ. فالمسار الأيسر أطول بمقدار \\(s\\sin\\theta\\) (بلون عنّابي)، وهو الجزء الذي يقتطعه الخطّ المتقطّع المرسوم عموديًا على المسارين."
  },
  "d929322e4b16": {
   "src": "Fig.",
@@ -481,11 +481,11 @@
  },
  "ddfed9263cc6": {
   "src": "F. S. Crawford, <a href=\"https://archive.org/details/bwb_Y0-EAO-918_3\"><em>Waves</em></a>, Berkeley Physics Course, volume 3, McGraw-Hill, 1968: chapter 9 (interference and diffraction; section 9.6, Huygens’ principle). The link is a lending copy at the Internet Archive.",
-  "tr": "F. S. Crawford، <a href=\"https://archive.org/details/bwb_Y0-EAO-918_3\"><em>Waves</em></a>، Berkeley Physics Course، المجلد 3، McGraw-Hill، 1968: الفصل 9 (التداخل والحيود؛ القسم 9.6، مبدأ هويغنز). الرابط يقود إلى نسخة إعارة في الأرشيف الإنترنتي (Internet Archive)."
+  "tr": "F. S. Crawford، <a href=\"https://archive.org/details/bwb_Y0-EAO-918_3\"><em>Waves</em></a>، Berkeley Physics Course، المجلد 3، McGraw-Hill، 1968: الفصل 9 (التداخل والحيود؛ القسم 9.6، مبدأ هويغنز). الرابط يقود إلى نسخة إعارة في أرشيف الإنترنت (Internet Archive)."
  },
  "e0b8037eb322": {
   "src": "Concert line arrays and phased-array antennas obey (13) too, and add one trick that the page does not offer. If source \\(n\\) is driven a time \\(n\\tau\\) later than source 0, its arrow is turned by an extra \\(n\\omega\\tau\\). The arrows then line up where \\(ks\\sin\\theta = \\omega\\tau\\), and the main beam swings to",
-  "tr": "تخضع المصفوفات الخطّية في الحفلات والهوائيات المصفوفية أيضًا للمعادلة (13)، وتضيف حيلة لا تقدّمها الصفحة. فإن قيد المصدر \\(n\\) بعد زمن قدره \\(n\\tau\\) من المصدر 0، يدور سهمه بزاوية إضافية \\(n\\omega\\tau\\). فتصطفّ الأسهم حيث \\(ks\\sin\\theta = \\omega\\tau\\)، وتنحرف الحزمة الرئيسية إلى"
+  "tr": "تخضع المصفوفات الخطّية في الحفلات وهوائيات المصفوفات الطورية أيضًا للمعادلة (13)، وتضيف حيلة لا تقدّمها الصفحة. فإذا غُذّي المصدر \\(n\\) متأخرًا بزمن قدره \\(n\\tau\\) عن المصدر 0، دار سهمه بزاوية إضافية \\(n\\omega\\tau\\). فتصطفّ الأسهم حيث \\(ks\\sin\\theta = \\omega\\tau\\)، وتنحرف الحزمة الرئيسية إلى"
  },
  "e13b587879b0": {
   "src": "<span>2</span>The model",
@@ -497,15 +497,15 @@
  },
  "e4297de5a931": {
   "src": "The factor \\(\\sqrt h\\) in (17) is an artefact of the page’s rings, which do not spread out as \\(1/\\sqrt r\\), and a useful warning. Sixteen sources at \\(\\lambda = 64\\ \\mathrm{px}\\) give an average amplitude of 0.076, 0.110, 0.140, 0.157 and 0.173 on lines 50, 100, 169, 250 and \\(340\\ \\mathrm{px}\\) above the row: the merged front brightens as it travels. A real circular wave carries the factor \\(1/\\sqrt{kr}\\) of (4); in (17) it cancels the \\(\\sqrt h\\), and the front keeps a constant height, as a straight wave with nothing to spread into should.",
-  "tr": "العامل \\(\\sqrt h\\) في (17) أثر جانبي لحلقات الصفحة، فهي لا تنتشر كـ \\(1/\\sqrt r\\)، وهذه ملاحظة مفيدة. فستة عشر مصدرًا عند \\(\\lambda = 64\\ \\mathrm{px}\\) تعطي متوسط سعة 0.076 و0.110 و0.140 و0.157 و0.173 على الخطوط 50 و100 و169 و250 و\\(340\\ \\mathrm{px}\\) فوق الصفّ: فالجبهة المندمجة تزداد سطوعًا كلما ابتعدت. أمّا الموجة الدائرية الحقيقية فتحمل العامل \\(1/\\sqrt{kr}\\) من (4)؛ وفي (17) يلغي هذا العامل \\(\\sqrt h\\)، فتحافظ الجبهة على ارتفاع ثابت، كما ينبغي لموجة مستقيمة لا شيء يتبدّد فيه."
+  "tr": "العامل \\(\\sqrt h\\) في (17) أثرٌ مصطنع ناتج عن حلقات الصفحة، التي لا تنتشر كـ \\(1/\\sqrt r\\)، وهو تحذير مفيد. فستة عشر مصدرًا عند \\(\\lambda = 64\\ \\mathrm{px}\\) تعطي متوسط سعة 0.076 و0.110 و0.140 و0.157 و0.173 على الخطوط 50 و100 و169 و250 و\\(340\\ \\mathrm{px}\\) فوق الصفّ: فالجبهة المندمجة تزداد سطوعًا كلما ابتعدت. أمّا الموجة الدائرية الحقيقية فتحمل العامل \\(1/\\sqrt{kr}\\) من (4)؛ وفي (17) يلغي هذا العامل \\(\\sqrt h\\)، فتحافظ الجبهة على ارتفاع ثابت، كما ينبغي لموجة مستقيمة لا يبقى لها مكان تنتشر فيه."
  },
  "e981f77c98ed": {
   "src": "The <em>Damping</em> slider sets \\(\\gamma\\), the number of factors of \\(e\\) by which the amplitude falls over \\(300\\ \\mathrm{px}\\); at the default \\(\\gamma = 0.15\\) a ring keeps \\(e^{-0.15} = 0.861\\) of its height after \\(300\\ \\mathrm{px}\\). This is a stand-in, not physics derived from the water: at \\(\\gamma = 0\\) a ring on the page does not weaken at all with distance, whereas a real ripple still falls off as \\(1/\\sqrt r\\). Section 7.1 shows one visible consequence.",
-  "tr": "يضبط المُنزلق <em>التخامد</em> القيمة \\(\\gamma\\)، وهو عدد عوامل \\(e\\) التي يهبط بها السعة على مسافة \\(300\\ \\mathrm{px}\\)؛ وعند القيمة الافتراضية \\(\\gamma = 0.15\\) تحتفظ الحلقة بالنسبة \\(e^{-0.15} = 0.861\\) من ارتفاعها بعد \\(300\\ \\mathrm{px}\\). وهذا بديل، لا فيزياء مستنتجة من الماء: فعند \\(\\gamma = 0\\) لا تضعف الحلقة على الصفحة مع المسافة البتّة، بينما تستمر الموجة الحقيقية في الانخفاض كـ \\(1/\\sqrt r\\). ويُظهر القسم 7.1 نتيجة مرئية لذلك."
+  "tr": "يضبط المُنزلق <em>التخامد</em> القيمة \\(\\gamma\\)، وهو عدد عوامل \\(e\\) التي تهبط بها السعة على مسافة \\(300\\ \\mathrm{px}\\)؛ وعند القيمة الافتراضية \\(\\gamma = 0.15\\) تحتفظ الحلقة بالنسبة \\(e^{-0.15} = 0.861\\) من ارتفاعها بعد \\(300\\ \\mathrm{px}\\). وهذا بديل، لا فيزياء مستنتجة من الماء: فعند \\(\\gamma = 0\\) لا تضعف الحلقة على الصفحة مع المسافة البتّة، بينما تستمر الموجة الحقيقية في الانخفاض كـ \\(1/\\sqrt r\\). ويُظهر القسم 7.1 نتيجة مرئية لذلك."
  },
  "eab0781f1cb5": {
   "src": "tilted towards the sources that fire last, with nothing moving. In the simulation all sources are in step, \\(\\tau = 0\\), and the main beam always points straight up.",
-  "tr": "نحو المصادر التي تُطلق آخرًا، دون أن يتحرّك شيء. وفي المحاكاة تكون كل المصادر في تزامن، \\(\\tau = 0\\)، فتشير الحزمة الرئيسية دائمًا تمامًا إلى الأعلى."
+  "tr": "مائلةً نحو المصادر التي تُغذّى آخرًا، دون أن يتحرّك شيء. وفي المحاكاة تكون كل المصادر في تزامن، \\(\\tau = 0\\)، فتشير الحزمة الرئيسية دائمًا إلى الأعلى مباشرة."
  },
  "ec1cf294a370": {
   "src": "<span>10</span>What the model leaves out",
@@ -517,11 +517,11 @@
  },
  "efe4e4eabc8b": {
   "src": "Press <em>Line of 16</em>. At \\(\\lambda = 30\\ \\mathrm{px}\\) the field above the row is a chequerboard: straight crests crossed by two families of tilted crests, heading out at about \\(42^\\circ\\) to either side. Raise <em>Wavelength</em> \\(\\lambda\\) one step at a time and follow the tilted crests as they lean over towards the row, as (13) predicts. From \\(45\\ \\mathrm{px}\\) on, the region in front of the row fills with straight crests; at \\(64\\ \\mathrm{px}\\) they run unbroken across the field.",
-  "tr": "اضغط <em>صفّ من 16</em>. عند \\(\\lambda = 30\\ \\mathrm{px}\\) يكون الحقل فوق الصفّ رقعة شطرنج: قمم مستقيمة تتقاطع معها عائلتان من القمم المائلة، تنطلقان بزاوية نحو \\(42^\\circ\\) إلى الجانبين. ارفع <em>طول الموجة</em> \\(\\lambda\\) خطوةً بخطوة، وتابع القمم المائلة وهي تميل نحو الصفّ، كما تتنبأ (13). ومن \\(45\\ \\mathrm{px}\\) فصاعدًا تمتلئ المنطقة أمام الصفّ بقمم مستقيمة؛ وعند \\(64\\ \\mathrm{px}\\) تمتدّ على الحقل كله دون انقطاع."
+  "tr": "اضغط <em>صفّ من 16</em>. عند \\(\\lambda = 30\\ \\mathrm{px}\\) يكون الحقل فوق الصفّ رقعة شطرنج: قمم مستقيمة تتقاطع معها عائلتان من القمم المائلة، تنطلقان إلى الجانبين بزاوية تقارب \\(42^\\circ\\). ارفع <em>طول الموجة</em> \\(\\lambda\\) خطوةً بخطوة، وتابع القمم المائلة وهي تميل نحو الصفّ، كما تتنبأ (13). ومن \\(45\\ \\mathrm{px}\\) فصاعدًا تمتلئ المنطقة أمام الصفّ بقمم مستقيمة؛ وعند \\(64\\ \\mathrm{px}\\) تمتدّ على الحقل كله دون انقطاع."
  },
  "f16bc60b1fbc": {
   "src": "Now press <em>Line of 16</em>: sixteen sources at \\(x_n = 64 + 44.8\\,n\\ \\mathrm{px}\\), \\(n = 0, \\dots, 15\\), so that the spacing is \\(s = 44.8\\ \\mathrm{px}\\) and the row is \\(D = 15s = 672\\ \\mathrm{px}\\) long. Seen from very far away, in the direction at the angle \\(\\theta\\) from the normal to the row (Figure 2, right), the paths to all sources are parallel, and each source is nearer than its left-hand neighbour by \\(s\\sin\\theta\\):",
-  "tr": "الآن اضغط <em>صفّ من 16</em>: ستة عشر مصدرًا عند \\(x_n = 64 + 44.8\\,n\\ \\mathrm{px}\\)، حيث \\(n = 0, \\dots, 15\\)، فيكون التباعد \\(s = 44.8\\ \\mathrm{px}\\) وطول الصفّ \\(D = 15s = 672\\ \\mathrm{px}\\). ومن بعيد جدًا، في الاتجاه الذي يصنع الزاوية \\(\\theta\\) مع العمود على الصفّ (الشكل 2، يمينًا)، تكون الطرق إلى كل المصادر متوازية، ويكون كل مصدر أقرب من جاره الأيسر بمقدار \\(s\\sin\\theta\\):"
+  "tr": "الآن اضغط <em>صفّ من 16</em>: ستة عشر مصدرًا عند \\(x_n = 64 + 44.8\\,n\\ \\mathrm{px}\\)، حيث \\(n = 0, \\dots, 15\\)، فيكون التباعد \\(s = 44.8\\ \\mathrm{px}\\) وطول الصفّ \\(D = 15s = 672\\ \\mathrm{px}\\). وإذا نُظر من مسافة بعيدة جدًا، في الاتجاه الذي يصنع الزاوية \\(\\theta\\) مع العموديّ على الصفّ (الشكل 2، على اليمين)، تكون الطرق إلى كل المصادر متوازية، ويكون كل مصدر أقرب من جاره الأيسر بمقدار \\(s\\sin\\theta\\):"
  },
  "f44e1d9658b5": {
   "src": "There are no walls: waves simply leave the picture, and nothing comes back.",
@@ -533,7 +533,7 @@
  },
  "f71b24adcce8": {
   "src": "<span class=\"pfig__n\">Figure 3</span>Far-field amplitude \\(|F|\\) of <em>Line of 16</em> (\\(N = 16\\), \\(s = 44.8\\ \\mathrm{px}\\)), computed from equation (12) every \\(0.1^\\circ\\) from \\(-90^\\circ\\) to \\(90^\\circ\\). At the default \\(\\lambda = 30\\ \\mathrm{px}\\) (burgundy) the main beam, \\(2.40^\\circ\\) from its centre to its first zero, is joined by two side beams of full strength at \\(\\pm 42.04^\\circ\\). At \\(\\lambda = 64\\ \\mathrm{px}\\), longer than the spacing, the side beams are gone and the main beam is wider, \\(5.12^\\circ\\) to its first zero.",
-  "tr": "<span class=\"pfig__n\">الشكل 3</span>السعة البعيدة \\(|F|\\) لـ<em>صفّ من 16</em> (\\(N = 16\\)، \\(s = 44.8\\ \\mathrm{px}\\))، محسوبة من المعادلة (12) كل \\(0.1^\\circ\\) من \\(-90^\\circ\\) إلى \\(90^\\circ\\). وعند القيمة الافتراضية \\(\\lambda = 30\\ \\mathrm{px}\\) (عنّابي) تصاحب الحزمةَ الرئيسية، التي تبلغ \\(2.40^\\circ\\) من مركزها إلى أول صفر لها، حزمتان جانبيتان بكامل القوة عند \\(\\pm 42.04^\\circ\\). وعند \\(\\lambda = 64\\ \\mathrm{px}\\)، أطول من التباعد، تختفي الحزم الجانبية وتصبح الحزمة الرئيسية أعرض، \\(5.12^\\circ\\) حتى أول صفر لها."
+  "tr": "<span class=\"pfig__n\">الشكل 3</span>سعة الحقل البعيد \\(|F|\\) لـ<em>صفّ من 16</em> (\\(N = 16\\)، \\(s = 44.8\\ \\mathrm{px}\\))، محسوبة من المعادلة (12) كل \\(0.1^\\circ\\) من \\(-90^\\circ\\) إلى \\(90^\\circ\\). وعند القيمة الافتراضية \\(\\lambda = 30\\ \\mathrm{px}\\) (عنّابي) تصاحب الحزمةَ الرئيسية، التي تبلغ \\(2.40^\\circ\\) من مركزها إلى أول صفر لها، حزمتان جانبيتان بكامل القوة عند \\(\\pm 42.04^\\circ\\). وعند \\(\\lambda = 64\\ \\mathrm{px}\\)، وهو أطول من التباعد، تختفي الحزم الجانبية وتصبح الحزمة الرئيسية أعرض، \\(5.12^\\circ\\) حتى أول صفر لها."
  },
  "f72f0eda6052": {
   "src": "Simulations",
@@ -541,11 +541,11 @@
  },
  "f89bb8cef3bf": {
   "src": "The medium is <em>non-dispersive</em>: every wave travels at the same speed \\(v = f\\lambda\\), with \\(\\lambda\\) the wavelength.",
-  "tr": "الوسط <em>غير مُشتِّت</em>: تسير كل موجة بالسرعة نفسها \\(v = f\\lambda\\)، حيث \\(\\lambda\\) طول الموجة."
+  "tr": "الوسط <em>غير تشتّتي</em>: تسير كل موجة بالسرعة نفسها \\(v = f\\lambda\\)، حيث \\(\\lambda\\) طول الموجة."
  },
  "f8aa1d9b685e": {
   "src": "\\(C\\), \\(S\\) and \\(\\psi\\) are stored as 32-bit floating-point numbers, about seven significant figures, far finer than the colour steps of the next section.",
-  "tr": "تُخزَّن \\(C\\) و\\(S\\) و\\(\\psi\\) كأعداد عشرية بدقة 32 بت، بنحو سبع أرقام معنوية، وهي أدقّ بكثير من درجات الألوان في القسم التالي."
+  "tr": "تُخزَّن \\(C\\) و\\(S\\) و\\(\\psi\\) أعدادًا ذات فاصلة عائمة من 32 بت، بنحو سبعة أرقام معنوية، وهي أدقّ بكثير من درجات الألوان في القسم التالي."
  },
  "fb194e991a8e": {
   "src": "Wavelength λ",

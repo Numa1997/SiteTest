@@ -15,13 +15,9 @@
   "src": "In a treatise written in 1653 and printed in 1663, a year after his death, Blaise Pascal drew a sealed vessel full of water with two openings, each closed by a piston, and gave the figure a title: <i>Nouvelle sorte de Machine pour multiplier les forces</i>, a new kind of machine for multiplying forces. His text explains it in one sentence:",
   "tr": "In einer Abhandlung, die er 1653 verfasste und die 1663, ein Jahr nach seinem Tod, gedruckt wurde, zeichnete Blaise Pascal ein allseitig geschlossenes, mit Wasser gefülltes Gefäß mit zwei Öffnungen, von denen jede durch einen Kolben verschlossen ist, und gab der Abbildung einen Titel: <i>Nouvelle sorte de Machine pour multiplier les forces</i>, eine neuartige Maschine zum Vervielfachen von Kräften. Sein Text erklärt sie in einem einzigen Satz:"
  },
- "0eaeb027afbe": {
-  "src": "Why oil, and why not a lever? Because a fluid carries force <i>around corners</i>, through a pipe of any length and shape, and because it carries a great deal of it in a small space. At the 12 MPa of the servo press in Parts II and III, every square centimetre of piston feels 1.2 kN, the weight of a small car. The 12 cm piston of that press pushes with 136 kN, while the pipe that feeds it is 12 mm across. No gear train or cable of that size comes close.",
-  "tr": "Warum Öl und warum kein Hebel? Weil eine Flüssigkeit Kraft <i>um Ecken</i> trägt, durch ein Rohr beliebiger Länge und Form, und weil sie davon viel auf kleinem Raum trägt. Bei den 12 MPa der Servopresse in den Teilen II und III spürt jeder Quadratzentimeter Kolbenfläche 1.2 kN, das Gewicht eines kleinen Autos. Der 12 cm große Kolben dieser Presse drückt mit 136 kN, während die Leitung, die ihn speist, 12 mm Durchmesser hat. Kein Zahnradgetriebe und kein Seil dieser Größe kommt auch nur annähernd heran."
- },
  "1294c59a2c59": {
   "src": "cap chamber",
-  "tr": "Kolbenbodenkammer"
+  "tr": "Kolbenraum"
  },
  "1ade3077fe2c": {
   "src": "the oil under the piston",
@@ -29,7 +25,7 @@
  },
  "1c27bee04aa5": {
   "src": "rod chamber",
-  "tr": "Stangenkammer"
+  "tr": "Ringraum"
  },
  "1d71315e40d7": {
   "src": "given",
@@ -45,11 +41,11 @@
  },
  "258d1a0c7c5d": {
   "src": "The connections between blocks come in pairs. Wherever oil passes from one part to another it carries a <b>pressure</b> $p$ and a <b>flow</b> $Q$, and their product is a power:",
-  "tr": "Die Verbindungen zwischen Blöcken kommen paarweise vor. Überall dort, wo Öl von einem Teil zum anderen strömt, führt es einen <b>Druck</b> $p$ und einen <b>Volumenstrom</b> $Q$ mit sich, und deren Produkt ist eine Leistung:"
+  "tr": "Jede Verbindung zwischen zwei Blöcken besteht aus einem Paar von Größen. Überall dort, wo Öl von einem Teil zum anderen strömt, führt es einen <b>Druck</b> $p$ und einen <b>Volumenstrom</b> $Q$ mit sich, und deren Produkt ist eine Leistung:"
  },
  "261bc5ff37e1": {
   "src": "$y$, $\\dot{y}$ once touched",
-  "tr": "$y$, $\\dot{y}$, sobald berührt"
+  "tr": "$y$, $\\dot{y}$ nach dem Kontakt"
  },
  "2640c03b8f91": {
   "src": "port pressure $p_a$, hose flow $Q_h$",
@@ -105,7 +101,7 @@
  },
  "4af701bcc725": {
   "src": "Every part of a hydraulic machine works like that bottle. It is a <b>block</b>: a piece of hardware with a law inside it. Its <b>inputs</b> are what the rest of the machine imposes on it. Its <b>outputs</b> are what it answers with, computed from its inputs and from its own state, such as how much oil it holds or how fast it moves. A block is never a black box here. Each one is opened in its own chapter, and its law is derived there from Newton’s laws and the conservation of mass and energy.",
-  "tr": "Jedes Teil einer hydraulischen Maschine arbeitet wie diese Flasche. Es ist ein <b>Block</b>: ein Bauteil mit einem Gesetz im Inneren. Seine <b>Eingänge</b> sind das, was der Rest der Maschine ihm aufzwingt. Seine <b>Ausgänge</b> sind die Antworten, die er aus seinen Eingängen und aus seinem eigenen Zustand berechnet, etwa davon, wie viel Öl er enthält oder wie schnell er sich bewegt. Ein Block ist hier nie eine Black Box. Jeder Block wird in einem eigenen Kapitel geöffnet, und sein Gesetz wird dort aus den Newtonschen Gesetzen sowie aus der Erhaltung von Masse und Energie hergeleitet."
+  "tr": "Jedes Teil einer hydraulischen Maschine arbeitet wie diese Flasche. Es ist ein <b>Block</b>: ein Bauteil mit einem Gesetz im Inneren. Seine <b>Eingänge</b> sind das, was der Rest der Maschine ihm aufzwingt. Seine <b>Ausgänge</b> sind das, womit er antwortet, berechnet aus seinen Eingängen und aus seinem eigenen Zustand, etwa der Ölmenge, die er enthält, oder seiner Geschwindigkeit. Ein Block ist hier nie eine Black Box. Jeder Block wird in einem eigenen Kapitel geöffnet, und sein Gesetz wird dort aus den Newtonschen Gesetzen sowie aus der Erhaltung von Masse und Energie hergeleitet."
  },
  "4c99b986ad28": {
   "src": "supply pressure $p_s = 12\\ \\mathrm{MPa}$, held",
@@ -149,7 +145,7 @@
  },
  "6352c406ea2d": {
   "src": "<b>Creep, about 0.2 s.</b> The ram rises slowly, at 10 mm/s, until the load cell reads 1 kN: it has touched the specimen.",
-  "tr": "<b>Schleichfahrt, etwa 0.2 s.</b> Der Stößel steigt langsam, mit 10 mm/s, bis die Kraftmessdose 1 kN anzeigt: Er hat die Probe berührt."
+  "tr": "<b>Kriechen, etwa 0.2 s.</b> Der Stößel steigt langsam, mit 10 mm/s, bis die Kraftmessdose 1 kN anzeigt: Er hat die Probe berührt."
  },
  "63cccb5d942c": {
   "src": "force $F$",
@@ -221,11 +217,11 @@
  },
  "94bf65dd5119": {
   "src": "<b>Settle, 0.1 s.</b> The controller holds the ram at $y = 0$. The spool sits almost exactly in the middle: just enough off centre that the small leakage flows into and out of each chamber balance.",
-  "tr": "<b>Einpendeln, 0.1 s.</b> Der Regler hält den Stößel bei $y = 0$. Der Ventilschieber steht fast genau in der Mitte, nur so weit daneben, dass der kleine Leckstrom in jede Kammer hinein und aus jeder heraus sich die Waage hält."
+  "tr": "<b>Einschwingen, 0.1 s.</b> Der Regler hält den Stößel bei $y = 0$. Der Ventilschieber steht fast genau in der Mitte, nur so weit daneben, dass sich die kleinen Leckströme in jede Kammer hinein und aus ihr heraus die Waage halten."
  },
  "958d0ed6438a": {
   "src": "A <b>restriction</b>, such as the metering edge of a valve or a narrow pipe, also takes a pressure difference and answers with a flow, but at once, by friction or by turning pressure into the speed of a jet. It behaves like a <b>resistor</b>, a nonlinear one for a sharp edge (chapters 8 and 11).",
-  "tr": "Eine <b>Blende</b>, etwa die Steuerkante eines Ventils oder ein enges Rohr, nimmt ebenfalls eine Druckdifferenz auf und antwortet mit einem Volumenstrom, aber sofort, durch Reibung oder indem sie den Druck in die Geschwindigkeit eines Strahls verwandelt. Sie verhält sich wie ein <b>Widerstand</b>, bei einer scharfen Kante ein nichtlinearer (Kapitel 8 und 11)."
+  "tr": "Eine <b>Drosselstelle</b>, etwa die Steuerkante eines Ventils oder ein enges Rohr, nimmt ebenfalls eine Druckdifferenz auf und antwortet mit einem Volumenstrom, aber sofort, durch Reibung oder indem sie den Druck in die Geschwindigkeit eines Strahls verwandelt. Sie verhält sich wie ein <b>Widerstand</b>, bei einer scharfen Kante ein nichtlinearer (Kapitel 8 und 11)."
  },
  "978d574912a8": {
   "src": "A dot is a time derivative, $\\dot{x} = dx/dt$. A prime is a derivative with respect to a position coordinate, $\\mu' = d\\mu/dx$.",
@@ -245,7 +241,7 @@
  },
  "a79a767297a2": {
   "src": "Wherever a part pushes on a moving part, the pair is a <b>force</b> $F$ and a <b>speed</b> $v$, with $P = Fv$. In each pair one quantity flows one way through the diagram and the other comes back. Which way each goes is decided by the physics of the block, and there are only three kinds of hydraulic block:",
-  "tr": "Überall dort, wo ein Teil auf ein bewegtes Teil drückt, bildet das Paar eine <b>Kraft</b> $F$ und eine <b>Geschwindigkeit</b> $v$, mit $P = Fv$. In jedem Paar durchläuft eine Größe das Schaubild in einer Richtung, und die andere kehrt zurück. Welche Richtung jede nimmt, entscheidet die Physik des Blocks, und es gibt nur drei Arten hydraulischer Blöcke:"
+  "tr": "Überall dort, wo ein Teil auf ein bewegtes Teil drückt, besteht das Paar aus einer <b>Kraft</b> $F$ und einer <b>Geschwindigkeit</b> $v$, mit $P = Fv$. In jedem Paar durchläuft eine Größe das Schaubild in einer Richtung, und die andere kehrt zurück. Welche Richtung jede nimmt, entscheidet die Physik des Blocks, und es gibt nur drei Arten hydraulischer Blöcke:"
  },
  "a80d549631c8": {
   "src": "Every number in that story comes out of the equations of chapters 7 to 17, integrated by the page. The chapters derive those equations in the order in which oil meets the parts: first the ideal press, where nothing is compressible and nothing leaks, then the real one.",
@@ -257,7 +253,7 @@
  },
  "b0f25b698359": {
   "src": "The price is control. A fluid under pressure is also a spring, and a column of fluid in a hose is also a mass, so a press driven by oil can ring, overshoot and shake itself apart if it is commanded carelessly. The servo press of Parts II and III adds the valve and the computer that keep it in check. In 1950 W. C. Moog Jr. filed the patent for the first two-stage electrohydraulic servovalve, in which a small torque motor moves a flapper that steers a larger spool. Valves of that family still fly aircraft, steer ships and drive the materials-testing presses that this one is modelled on.",
-  "tr": "Der Preis dafür ist die Regelung. Eine unter Druck stehende Flüssigkeit wirkt zugleich wie eine Feder, und eine Ölsäule im Schlauch wirkt zugleich wie eine Masse. Deshalb kann eine ölbetriebene Presse schwingen, überschwingen und sich bei unvorsichtiger Ansteuerung selbst zerlegen. Die Servopresse aus den Teilen II und III ergänzt das Ventil und den Rechner, die sie im Zaum halten. Im Jahr 1950 meldete W. C. Moog Jr. das Patent für das erste zweistufige elektrohydraulische Servoventil an, bei dem ein kleiner Drehmomentmotor eine Klappe bewegt, die einen größeren Ventilschieber steuert. Ventile dieser Familie fliegen bis heute Flugzeuge, steuern Schiffe und treiben die Werkstoffprüfpressen an, denen diese Presse nachgebildet ist."
+  "tr": "Der Preis dafür ist die Regelung. Eine unter Druck stehende Flüssigkeit wirkt zugleich wie eine Feder, und eine Ölsäule im Schlauch wirkt zugleich wie eine Masse. Deshalb kann eine ölbetriebene Presse schwingen, überschwingen und sich bei unvorsichtiger Ansteuerung selbst zerlegen. Die Servopresse der Teile II und III fügt das Ventil und den Rechner hinzu, die sie im Zaum halten. Im Jahr 1950 meldete W. C. Moog Jr. das Patent für das erste zweistufige elektrohydraulische Servoventil an, bei dem ein kleiner Drehmomentmotor eine Prallplatte bewegt, die einen größeren Ventilschieber steuert. Ventile dieser Familie steuern bis heute Flugzeuge und Schiffe und treiben die Werkstoffprüfpressen an, denen diese Presse nachgebildet ist."
  },
  "b16403e64799": {
   "src": "four sharp-edged slots that the spool uncovers",
@@ -273,11 +269,15 @@
  },
  "bb7003423dc7": {
   "src": "Each derivation is built the same way. A <b>picture</b> tells you what to imagine with your hands and eyes. A <b>block</b> card says what the part is given and what it answers with. The <b>working</b> is the mathematics, one step per line. A <b>check</b> tests the result against units and limiting cases. <b>In our press</b> puts in the numbers the animation uses, so you can compare with what you see on screen.",
-  "tr": "Jede Herleitung ist gleich aufgebaut. Ein <b>Bild</b> sagt Ihnen, was Sie sich mit Händen und Augen vorstellen sollen. Eine <b>Blockkarte</b> sagt, was dem Teil vorgegeben wird und womit es antwortet. Die <b>Rechnung</b> ist die Mathematik, ein Schritt pro Zeile. Eine <b>Prüfung</b> testet das Ergebnis an Einheiten und Grenzfällen. <b>In unserer Presse</b> setzt die Zahlen ein, die die Animation verwendet, damit Sie mit dem vergleichen können, was Sie auf dem Bildschirm sehen."
+  "tr": "Jede Herleitung ist gleich aufgebaut. Ein <b>Bild</b> sagt Ihnen, was Sie sich mit Händen und Augen vorstellen sollen. Eine <b>Blockkarte</b> sagt, was dem Teil vorgegeben wird und womit es antwortet. Die <b>Rechnung</b> ist die Mathematik, ein Schritt pro Zeile. Eine <b>Kontrolle</b> prüft das Ergebnis an Einheiten und Grenzfällen. <b>In unserer Presse</b> setzt die Zahlen ein, die die Animation verwendet, damit Sie mit dem vergleichen können, was Sie auf dem Bildschirm sehen."
  },
  "bcdf4114ad55": {
   "src": "a motor-driven pump; the relief valve spills what is not needed back to the tank",
   "tr": "eine motorgetriebene Pumpe; das Druckbegrenzungsventil leitet alles, was nicht gebraucht wird, in den Tank zurück"
+ },
+ "c3d3aa7531c7": {
+  "src": "Why oil, and why not a lever? Because a fluid carries force <i>around corners</i>, through a pipe of any length and shape, and because it carries a great deal of it in a small space. At the 12 MPa of the servo press in Parts II and III, every square centimetre of piston feels 1.2 kN, the weight of two adults standing on a fingertip. The 12 cm piston of that press pushes with 136 kN, while the pipe that feeds it is 12 mm across. No gear train or cable of that size comes close.",
+  "tr": "Warum Öl und warum kein Hebel? Weil eine Flüssigkeit Kraft <i>um Ecken</i> herum überträgt, durch ein Rohr beliebiger Länge und Form, und weil sie auf kleinem Raum sehr viel davon überträgt. Bei den 12 MPa der Servopresse in den Teilen II und III spürt jeder Quadratzentimeter Kolbenfläche 1.2 kN, das Gewicht zweier Erwachsener, die auf einer Fingerspitze stehen. Der Kolben dieser Presse mit 12 cm Durchmesser drückt mit 136 kN, während die Leitung, die ihn speist, 12 mm Durchmesser hat. Kein Zahnradgetriebe und kein Seil dieser Größe kommt auch nur annähernd heran."
  },
  "c75c33a07a06": {
   "src": "The map of the servo press. Each box is a block with a law inside it; each arrow leaves the block that computes a quantity and enters the block that is given it. Solid arrows run with the oil, from the pump towards the ram: flows and forces. Dashed arrows run back: the pressure or speed with which a block answers its neighbour. Every hydraulic link is a pressure–flow pair, every mechanical link a force–speed pair. Blue arrows are signals: they carry information, not power. On a narrow screen, scroll the figure sideways.",
@@ -309,7 +309,7 @@
  },
  "dd82cba29c72": {
   "src": "<b>Press, 0.75 s.</b> The controller switches from position to force. It ramps the force to 60 kN in 0.25 s and holds it for 0.5 s. The ram hardly moves now, about 3 mm into a specimen that is a stiff spring. The ram pushes <i>up</i> into the specimen, so the specimen pushes down on the ram, and so does the ram’s weight. Holding 60 kN needs $p_A = 7.8\\ \\mathrm{MPa}$ under the piston against $p_B = 4.2\\ \\mathrm{MPa}$ above it: $$\\begin{aligned} &7.8\\ \\mathrm{MPa} \\times 113\\ \\mathrm{cm^2} - 4.2\\ \\mathrm{MPa} \\times 63\\ \\mathrm{cm^2}\\\\ &\\qquad \\approx 88.1\\ \\mathrm{kN} - 26.5\\ \\mathrm{kN} = 61.6\\ \\mathrm{kN}, \\end{aligned}$$ which is the 60 kN on the specimen plus the 1.6 kN weight of the ram.",
-  "tr": "<b>Pressen, 0.75 s.</b> Der Regler schaltet von Lageregelung auf Kraftregelung um. Er steigert die Kraft in 0.25 s auf 60 kN und hält sie 0.5 s lang. Der Stößel bewegt sich nun kaum noch, etwa 3 mm in eine Probe hinein, die wie eine steife Feder wirkt. Der Stößel drückt <i>nach oben</i> in die Probe, daher drückt die Probe nach unten auf den Stößel, ebenso wie das Gewicht des Stößels. Um 60 kN zu halten, braucht es $p_A = 7.8\\ \\mathrm{MPa}$ unter dem Kolben gegen $p_B = 4.2\\ \\mathrm{MPa}$ darüber: $$\\begin{aligned} &7.8\\ \\mathrm{MPa} \\times 113\\ \\mathrm{cm^2} - 4.2\\ \\mathrm{MPa} \\times 63\\ \\mathrm{cm^2}\\\\ &\\qquad \\approx 88.1\\ \\mathrm{kN} - 26.5\\ \\mathrm{kN} = 61.6\\ \\mathrm{kN}, \\end{aligned}$$ das ist die 60 kN auf der Probe plus die 1.6 kN Gewicht des Stößels."
+  "tr": "<b>Pressen, 0.75 s.</b> Der Regler schaltet von Lageregelung auf Kraftregelung um. Er steigert die Kraft in 0.25 s auf 60 kN und hält sie 0.5 s lang. Der Stößel bewegt sich nun kaum noch, etwa 3 mm in eine Probe hinein, die wie eine steife Feder wirkt. Der Stößel drückt <i>nach oben</i> in die Probe, daher drückt die Probe nach unten auf den Stößel, ebenso wie das Gewicht des Stößels. Um 60 kN zu halten, braucht es $p_A = 7.8\\ \\mathrm{MPa}$ unter dem Kolben gegen $p_B = 4.2\\ \\mathrm{MPa}$ darüber: $$\\begin{aligned} &7.8\\ \\mathrm{MPa} \\times 113\\ \\mathrm{cm^2} - 4.2\\ \\mathrm{MPa} \\times 63\\ \\mathrm{cm^2}\\\\ &\\qquad \\approx 88.1\\ \\mathrm{kN} - 26.5\\ \\mathrm{kN} = 61.6\\ \\mathrm{kN}, \\end{aligned}$$ das sind die 60 kN auf der Probe plus das Gewicht des Stößels von 1.6 kN."
  },
  "e03d7f0594f3": {
   "src": "set-points $y_{\\mathrm{ref}}, F_{\\mathrm{ref}}$; measured $y_k, F_k$",
@@ -317,7 +317,7 @@
  },
  "e1a1048a8aee": {
   "src": "compressibility and Newton for the oil slug, chapters 7 and 11",
-  "tr": "Kompressibilität und Newton für den Ölpfropfen, Kapitel 7 und 11"
+  "tr": "Kompressibilität und Newton für die Ölsäule, Kapitel 7 und 11"
  },
  "e1bdb12fc234": {
   "src": "0.5 How to read the rest",
@@ -333,7 +333,7 @@
  },
  "e7e801c3c10c": {
   "src": "<b>Approach, 1 s.</b> The controller asks for a smooth climb to 2 mm short of the specimen, 118 mm up. To lift the ram it opens the spool positively: P→A and B→T open. Oil runs from the pump down the hose into the cap chamber, the cap pressure rises just enough to carry the ram’s weight and the seal friction, and the oil above the piston is pushed out to the tank.",
-  "tr": "<b>Annäherung, 1 s.</b> Der Regler verlangt einen sanften Anstieg bis auf 2 mm vor der Probe, also 118 mm nach oben. Um den Stößel anzuheben, öffnet er den Ventilschieber eindeutig: P→A und B→T öffnen sich. Öl fließt von der Pumpe durch den Schlauch in die Kolbenbodenkammer; der Druck dort steigt gerade so weit, dass er das Gewicht des Stößels und die Dichtungsreibung trägt, und das Öl über dem Kolben wird in den Tank gedrückt."
+  "tr": "<b>Annähern, 1 s.</b> Der Regler verlangt einen sanften Anstieg bis auf 2 mm vor der Probe, also 118 mm nach oben. Um den Stößel anzuheben, öffnet er den Ventilschieber in positiver Richtung: P→A und B→T öffnen sich. Öl fließt von der Pumpe durch den Schlauch in den Kolbenraum; der Druck dort steigt gerade so weit, dass er das Gewicht des Stößels und die Dichtungsreibung trägt, und das Öl über dem Kolben wird in den Tank gedrückt."
  },
  "ea04fa700638": {
   "src": "piston, rod and platen, 160 kg in all",
@@ -341,7 +341,7 @@
  },
  "eb3d71dab005": {
   "src": "<b>Retract, 1.8 s.</b> Back to position control, and a smooth descent to $y = 0$: the spool opens negatively, P→B and A→T, and oil drains from the cap chamber back up the hose.",
-  "tr": "<b>Zurückfahren, 1.8 s.</b> Zurück zur Lageregelung und ein sanftes Absenken auf $y = 0$: Der Ventilschieber öffnet negativ, P→B und A→T, und Öl fließt aus der Kolbenbodenkammer zurück durch den Schlauch nach oben."
+  "tr": "<b>Zurückfahren, 1.8 s.</b> Zurück zur Lageregelung und ein sanftes Absenken auf $y = 0$: Der Ventilschieber öffnet in negativer Richtung, P→B und A→T, und Öl fließt aus dem Kolbenraum zurück durch den Schlauch nach oben."
  },
  "ebeb809725e6": {
   "src": "SI units throughout. A pressure written $p$ is a <i>gauge</i> pressure, measured above the atmosphere; the absolute pressure is $p_{\\mathrm{abs}} = p + p_0$ with $p_0 = 101.325\\ \\mathrm{kPa}$.",
@@ -361,7 +361,7 @@
  },
  "f8c8dc57ea66": {
   "src": "The animation of the servo press runs one cycle of about 4.4 s. Here is what each block does in it.",
-  "tr": "Die Animation der Servopresse läuft einen Zyklus von etwa 4.4 s ab. Hier steht, was jeder Block darin tut."
+  "tr": "Die Animation der Servopresse zeigt einen Zyklus von etwa 4.4 s. Hier steht, was jeder Block darin tut."
  },
  "f9591f01d828": {
   "src": "an LVDT for position, a load cell for force",
