@@ -46,6 +46,7 @@ acceleration at the pivot approaches g; chaos spreads the mobility over a wide b
    browser check, build script keeping Sol's report and `study/`).
 10. Gate 3: runner checks; blind skeptic on the rendered pages, six thresholds.
 11. Portfolios article, docs, inventory; push; pull request into main, not merged.
+12. Numa (23 Oct): when fully done, write a prompt that deploys "astra" (unknown to me; asked what it is) over the relevant parts of the repo to inspect the study, confirm it is physically solid and well written, and explain it to him. He reads nothing before that review passes.
 
 ## Done (with evidence)
 
