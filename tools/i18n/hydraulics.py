@@ -32,6 +32,13 @@ def load(lang, name):
 def wrapped_strings(html):
     return [m.group(1).replace("\\'", "'") for m in re.finditer(r"(?<![\w$.])_t\('((?:[^'\\]|\\.)*)'", html)]
 
+def panel_and_wrapped(html):
+    """What the reader can see from a page's scripts: the _t('...') strings and what the page tells the data panel."""
+    out = wrapped_strings(html)
+    for m in re.finditer(B.PANEL_KEYS, html):
+        if re.search(r'[A-Za-z]{2,}', re.sub(r'<[^>]+>', ' ', m.group(1))): out.append(m.group(1).replace("\\'", "'"))
+    return out
+
 def arabic_css():
     """Arabic letters under the house font names, and the few right-to-left rules a study frame needs."""
     faces = ''
@@ -54,12 +61,12 @@ def rtl_styles(html):
 
 def strings_script(table, wanted, lang):
     d = {k: (B.isolate_ar(table[k]) if lang == 'ar' else table[k]) for k in wanted if k in table}
-    return ('<script>window.I18N=' + json.dumps(d, ensure_ascii=False).replace('<', '\\u003c') + ';window._t=function(s,v){var r=window.I18N[s];'
+    return ('<script src="../../scripts/i18n/strings-' + lang + '.js"></script><script>window.I18N=Object.assign(window.I18N||{},' + json.dumps(d, ensure_ascii=False).replace('<', '\\u003c') + ');window._t=function(s,v){var r=window.I18N[s];'
             "if(typeof r!=='string')r=s;return v?r.replace(/\\{(\\w+)\\}/g,function(m,k){return k in v?v[k]:m}):r};</script>")
 
 def todo(lang):
     out = {}
-    for f in PAGES + THEORY:
+    for f in PAGES + THEORY + ['tools/theory_template.html']:
         _, T = load(lang, tname(f)); src = open(os.path.join(STUDY, f), encoding='utf-8').read(); p, a = B.cut(src)
         for x in [q[2] for q in p] + [q[3] for q in a]:
             k = B.key(x); e = T.get(k)
@@ -70,8 +77,8 @@ def todo(lang):
         for f in PAGES:
             shutil.copy(os.path.join(STUDY, f), os.path.join(d, f))
             subprocess.run(['node', os.path.join(B.ROOT, 'tools', 'i18n', 'wrap.cjs'), os.path.join(d, f)], check=True, capture_output=True,
-                           env=dict(os.environ, NODE_PATH=os.path.join(B.ROOT, 'tools', 'i18n', 'node_modules')))
-            want |= set(wrapped_strings(open(os.path.join(d, f), encoding='utf-8').read()))
+                           env=dict(os.environ, NODE_PATH=os.path.join(B.ROOT, 'tools', 'i18n', 'node_modules'), WRAP_ARRAYS='1'))
+            want |= set(panel_and_wrapped(open(os.path.join(d, f), encoding='utf-8').read()))
     out['strings'] = {k: k for k in sorted(want) if k not in S}
     return out
 
@@ -85,19 +92,24 @@ def build(lang):
     for f in PAGES:
         p = os.path.join(dst, f)
         subprocess.run(['node', os.path.join(B.ROOT, 'tools', 'i18n', 'wrap.cjs'), p], check=True, capture_output=True,
-                       env=dict(os.environ, NODE_PATH=os.path.join(B.ROOT, 'tools', 'i18n', 'node_modules')))
+                       env=dict(os.environ, NODE_PATH=os.path.join(B.ROOT, 'tools', 'i18n', 'node_modules'), WRAP_ARRAYS='1'))
         src = open(p, encoding='utf-8').read()
+        # the Web Worker the servo page builds from its own source gets the same table
+        src = src.replace("new Blob([code], { type: 'text/javascript' })",
+                          "new Blob(['self.I18N=' + JSON.stringify(window.I18N || {}) + ';self._t=function(s){var r=self.I18N[s];return typeof r==\\'string\\'?r:s};', code], { type: 'text/javascript' })")
         _, T = load(lang, tname(f)); html, miss, _n = B.translate(src, lang, T); missing += [(f, m) for m in miss]
-        want = wrapped_strings(html); missing += [(f, {'src': w}) for w in want if w not in S]
+        want = panel_and_wrapped(html); missing += [(f, {'src': w}) for w in want if w not in S]
         if lang == 'ar': html = rtl_styles(html)
         head = strings_script(S, want, lang) + (arabic_css() if lang == 'ar' else '')
-        html = html.replace('<html lang="en">', '<html lang="%s" dir="%s">' % (lang, dirattr), 1).replace('</head>', head + '\n</head>', 1)
+        # first thing in <head>: the page's own head scripts already call _t()
+        html = html.replace('<html lang="en">', '<html lang="%s" dir="%s">' % (lang, dirattr), 1).replace('<head>', '<head>\n' + head, 1)
         open(p, 'w', encoding='utf-8').write(html)
     for f in THEORY:
         p = os.path.join(dst, f); src = open(p, encoding='utf-8').read()
         _, T = load(lang, tname(f)); html, miss, _n = B.translate(src, lang, T); missing += [(f, m) for m in miss]
         open(p, 'w', encoding='utf-8').write(html)
     tpl = os.path.join(dst, 'tools', 'theory_template.html'); t = open(tpl, encoding='utf-8').read()
+    _, T = load(lang, tname('theory_template.html')); t, miss, _n = B.translate(t, lang, T); missing += [('theory_template.html', m) for m in miss]
     if lang == 'ar': t = rtl_styles(t)
     t = t.replace('<html lang="en">', '<html lang="%s" dir="%s">' % (lang, dirattr), 1)
     if lang == 'ar': t = t.replace('</head>', arabic_css() + '\n</head>', 1)
@@ -129,7 +141,7 @@ def ingest(lang, job, trfile):
         p, S = load(lang, 'hydraulics_strings.json')
         for en in src: S[en] = m.TR[en]
         json.dump(S, open(p, 'w', encoding='utf-8'), ensure_ascii=False, indent=1, sort_keys=True); return len(src)
-    f = [x for x in PAGES + THEORY if os.path.basename(x).replace('.src.html', '').replace('.html', '') == name][0]
+    f = [x for x in PAGES + THEORY + ['tools/theory_template.html'] if os.path.basename(x).replace('.src.html', '').replace('.html', '') == name][0]
     p, T = load(lang, tname(f))
     for k, en in src.items(): T[k] = {'src': en, 'tr': m.TR[k]}
     os.makedirs(os.path.dirname(p), exist_ok=True)

@@ -26,7 +26,7 @@ while ((m = re.exec(html))) {
       if (p.type === 'AssignmentExpression' && p.right === node && p.left.type === 'MemberExpression' && /^(textContent|innerHTML|innerText|title|placeholder|value)$/.test(p.left.property.name || '')) ok = true;
       if (p.type === 'ReturnStatement') ok = true;
       if (p.type === 'Property' && p.value === node && HOOK_KEYS.has(p.key.name || p.key.value)) ok = true;
-      if (p.type === 'ArrayExpression') ok = false;
+      if (p.type === 'ArrayExpression') ok = !!process.env.WRAP_ARRAYS && /[A-Za-z]{2,}\s+[A-Za-z]{2,}/.test(node.value.replace(/<[^>]*>/g, ' '));   // table rows of prose, only where asked
       if (p.type === 'CallExpression') {
         const c = p.callee, name = c.type === 'MemberExpression' ? (c.property.name || '') : (c.name || '');
         if (name === 'fillText' && p.arguments[0] === node) ok = true;

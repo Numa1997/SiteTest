@@ -23,9 +23,29 @@
   "src": "downward displacement of the input piston (generalized coordinate); reused as spool travel in ch. 8",
   "tr": "الإزاحة الهابطة لمكبس الإدخال (إحداثيّ معمَّم)؛ أُعيد استعمالها كمدى حركة المِزلاج في الفصل 8"
  },
+ "0315e8b0d065": {
+  "src": "Figure 7. A zero-order hold turns a smooth command into a staircase that trails it by half a sample on average.",
+  "tr": "الشكل 7. يحوّل الماسك من الرتبة الصفرية إشارة الأمر الناعمة إلى درجٍ يتأخّر عنها بنصف عيّنة في المتوسّط."
+ },
+ "03659bf9da29": {
+  "src": "16.1 Solving the linear system exactly",
+  "tr": "16.1 حلّ النظام الخطّي بدقّة"
+ },
  "03a45952f811": {
   "src": "$\\eta$",
   "tr": "$\\eta$"
+ },
+ "03b88ffa0576": {
+  "src": "The spool cannot open more than fully: $u$ is clipped to $[-1, 1]$. While it is clipped, the error persists and a naive integrator keeps growing; when the error finally reverses, the oversized integrator holds the valve open far too long. This is <i>windup</i>. The page uses conditional integration: it accepts the new integral only if the output is unsaturated, or if the error would drive it back out of saturation.",
+  "tr": "لا يستطيع المِزلاج أن ينفتح أكثر من الانفتاح التامّ: تُقصّ $u$ لتقع في $[-1, 1]$. وطالما كان القصّ جاريًا يبقى الخطأ قائمًا، ويستمرّ المكامِل الساذج في النموّ؛ وعندما ينعكس الخطأ أخيرًا، يُبقي المكامِلُ الضخم الصمّامَ مفتوحًا أطول بكثير ممّا ينبغي. وهذا هو <i>الانفلات التكاملي</i>. تستعمل الصفحة التكامل المشروط: فهي تقبل التكامل الجديد فقط إذا كان الخرج غير مشبَع، أو إذا كان الخطأ سيُخرجه من حالة الإشباع."
+ },
+ "04bfe3eaccf7": {
+  "src": "17.3 Saturation and windup",
+  "tr": "17.3 الإشباع والانفلات التكاملي"
+ },
+ "067831a2e53a": {
+  "src": "Hit the hold with one unit sample and it answers with a rectangle: height 1 for one period, then nothing. The Laplace transform of that rectangle is $\\int_0^{T_s} e^{-st}\\,dt = (1 - e^{-sT_s})/s$. Divided by $T_s$, so that a steady input passes with unit gain, the hold’s transfer function is $(1 - e^{-sT_s})/(sT_s)$. On the imaginary axis, factor out half a period:",
+  "tr": "عندما نغذّي الماسك بنبضة وحدة، يُخرج مستطيلًا: ارتفاعه 1 لفترة عيّنة واحدة، ثمّ لا شيء بعدها. وتحويل لابلاس لهذا المستطيل هو $\\int_0^{T_s} e^{-st}\\,dt = (1 - e^{-sT_s})/s$. وبقسمته على $T_s$ حتى يمرّ الدخل الثابت بكسب الوحدة، تكون دالّة تحويل الماسك $(1 - e^{-sT_s})/(sT_s)$. وعلى المحور التخيّلي نُخرج نصف فترة العيّنة عاملًا مشتركًا:"
  },
  "0684f39bd31c": {
   "src": "laminar (Hagen–Poiseuille) flow resistance",
@@ -47,6 +67,14 @@
   "src": "$\\zeta_h$",
   "tr": "$\\zeta_h$"
  },
+ "0c70ff38f15e": {
+  "src": "After Part III you can",
+  "tr": "بعد الجزء الثالث يمكنك أن:"
+ },
+ "0ca02c4e568a": {
+  "src": "The ram of mass $m$ bounces on them at $\\omega_h^2 = k_{\\mathrm{oil}}/m$:",
+  "tr": "يرتدّ المِدكّ ذو الكتلة $m$ عليها عند $\\omega_h^2 = k_{\\mathrm{oil}}/m$:"
+ },
  "0db78855023d": {
   "src": "60 Hz, 0.7",
   "tr": "60 Hz، 0.7"
@@ -54,6 +82,14 @@
  "0e44c8b638ba": {
   "src": "Further reading",
   "tr": "مراجع للاستزادة"
+ },
+ "0f2ebac6571f": {
+  "src": "The hold delays the signal by half a sample: a phase lag of $\\omega T_s/2$. The press's controller also needs one sample to compute, a further lag of $\\omega T_s$. Together:",
+  "tr": "يؤخّر الماسك الإشارة بنصف عيّنة: تأخّرٌ في الطور مقداره $\\omega T_s/2$. ويحتاج متحكّم المكبس أيضًا إلى عيّنة واحدة للحساب، فيضيف تأخّرًا آخر مقداره $\\omega T_s$. ومعًا:"
+ },
+ "10b533e19f7e": {
+  "src": "Both pages use the classical fourth-order Runge–Kutta method. From $\\mathbf{x}_n$ it samples the slope four times across a step $h$ and averages them with weights 1, 2, 2, 1:",
+  "tr": "تستعمل كلتا الصفحتين طريقة رونغه–كوتا الكلاسيكية من المرتبة الرابعة. ابتداءً من $\\mathbf{x}_n$ تُعاين الميلَ أربع مرّات عبر خطوة $h$، وتأخذ متوسّطها بأوزان 1 و2 و2 و1:"
  },
  "10f32377ac67": {
   "src": "$\\alpha$",
@@ -63,9 +99,17 @@
   "src": "laminar leakage coefficient, Q<sub>L</sub> = K<sub>L</sub> Δp",
   "tr": "معامل التسرّب الطبقي، Q<sub>L</sub> = K<sub>L</sub> Δp"
  },
+ "11f71917b8f9": {
+  "src": "An operating point is a state $\\mathbf{x}_0$ and input $u_0$ at which nothing changes except, possibly, the ram position, which may drift at a constant speed $v_0$. Setting the right-hand sides of section 13 to zero gives three conditions: the valve delivers exactly the flow the moving ram needs on each side, $Q_A = A_A v_0$ and $Q_B = -A_B v_0$; and the forces on the ram balance,",
+  "tr": "نقطة التشغيل حالةٌ $\\mathbf{x}_0$ ودخلٌ $u_0$ لا يتغيّر عندهما شيء، إلّا موضع المِدكّ ربّما، الذي قد ينجرف بسرعة ثابتة $v_0$. وبمساواة الطرفين الأيمنين في القسم 13 بالصفر نحصل على ثلاثة شروط: يوفّر الصمّام بالضبط التدفّق الذي يحتاجه المِدكّ المتحرّك في كلّ جانب، $Q_A = A_A v_0$ و $Q_B = -A_B v_0$؛ وتتوازن القوى المؤثّرة في المِدكّ،"
+ },
  "12f0fd0746f7": {
   "src": "force on the input piston",
   "tr": "القوّة المؤثّرة في مكبس الإدخال"
+ },
+ "1364727603df": {
+  "src": "17.2 Feed-forward",
+  "tr": "17.2 التغذية الأمامية"
  },
  "1389845b02c0": {
   "src": "kg",
@@ -74,6 +118,10 @@
  "13f3690a5d22": {
   "src": "energy function $T + V - F_1x$, which can only fall while the push ramps up",
   "tr": "دالّة الطاقة $T + V - F_1x$، التي لا تنخفض إلا بينما تزداد قوّة الدفع"
+ },
+ "158f288fe30d": {
+  "src": "17.1 PID in discrete time",
+  "tr": "17.1 PID في الزمن المتقطّع"
  },
  "15afd0596eb8": {
   "src": "bottom stop contact force (stop law implied, not defined as a symbol)",
@@ -98,6 +146,18 @@
  "1bae98eea24e": {
   "src": "$V_\\ell$",
   "tr": "$V_\\ell$"
+ },
+ "1c10d17a98e5": {
+  "src": "16.3 The z-transform",
+  "tr": "16.3 تحويل z"
+ },
+ "1c7b7af81d8e": {
+  "src": "Two numbers summarize how far the curve stays from $-1$. The <b>phase margin</b> is how much extra lag the loop tolerates at the crossover frequency, where $|L| = 1$: $\\mathrm{PM} = 180^\\circ + \\angle L$. The <b>gain margin</b> is by how much the gain may grow at the frequency where the phase reaches $-180^\\circ$: $\\mathrm{GM} = -20\\log_{10}|L|$ in decibels. Good designs keep $\\mathrm{PM} \\gtrsim 45^\\circ$ and $\\mathrm{GM} \\gtrsim 6\\ \\mathrm{dB}$.",
+  "tr": "يُلخّص عددانِ مدى بُعد المنحنى عن $-1$. <b>هامش الطور</b> هو مقدار التأخّر الإضافي الذي تتحمّله الحلقة عند تردّد العبور، حيث $|L| = 1$: $\\mathrm{PM} = 180^\\circ + \\angle L$. و<b>هامش الكسب</b> هو مقدار ما يُسمح للكسب أن يزيد به عند التردّد الذي يبلغ عنده الطور $-180^\\circ$: $\\mathrm{GM} = -20\\log_{10}|L|$ بالديسيبل. وتحافظ التصاميم الجيدة على $\\mathrm{PM} \\gtrsim 45^\\circ$ و$\\mathrm{GM} \\gtrsim 6\\ \\mathrm{dB}$."
+ },
+ "1cb14ba10e70": {
+  "src": "Read it row by row. The plant advances by (16.1), driven by the command $w_k$ that reached the valve this sample. The controller’s memory advances on the error $-C\\mathbf{x}_k$. The command it computes now, $C_c\\mathbf{s}_k - D_cC\\mathbf{x}_k$, is stored in $w$ and reaches the valve one sample later. The loop is stable if and only if every eigenvalue of this matrix lies inside the unit circle. The page computes them with a balanced Hessenberg QR algorithm; NumPy agrees to $10^{-15}$.",
+  "tr": "اقرأها صفًّا صفًّا. تتقدّم المنظومة وفق المعادلة (16.1)، مدفوعةً بإشارة الأمر $w_k$ التي وصلت إلى الصمّام في هذه العيّنة. وتتقدّم ذاكرة المتحكّم بالخطأ $-C\\mathbf{x}_k$. وتُخزَّن إشارة الأمر التي يحسبها الآن، $C_c\\mathbf{s}_k - D_cC\\mathbf{x}_k$، في $w$، وتصل إلى الصمّام بعد عيّنة واحدة. والحلقة مستقرّة إذا وفقط إذا وقعت كلّ قيمة ذاتية لهذه المصفوفة داخل دائرة الوحدة. وتحسبها الصفحة بخوارزمية QR على الصيغة الهيسنبرغية المتوازنة؛ ويتّفق NumPy معها حتى $10^{-15}$."
  },
  "1ce908681faf": {
   "src": "minimum input force that lifts the load off its stop",
@@ -127,9 +187,17 @@
   "src": "output matrix, picks the measured position",
   "tr": "مصفوفة الخرج، تختار الموضع المقيس"
  },
+ "22c553c268fc": {
+  "src": "14.1 Steady operation",
+  "tr": "14.1 التشغيل المستقرّ"
+ },
  "2451b898a065": {
   "src": "$\\omega_v$",
   "tr": "$\\omega_v$"
+ },
+ "246bfeb5fbb1": {
+  "src": "Each block of the map is replaced, in effect, by its tangent at the operating point: the orifice by a flow gain and a resistance (the $K_q$ and $K_c$ of chapter 9), the friction by a slope, each chamber by a capacitor with a fixed $V/\\beta$. The linear model is a chain of these tangents.",
+  "tr": "يُستبدل كلّ كتلة من المخطّط الكتلي فعليًّا بمماسّها عند نقطة التشغيل: الفتحةُ بكسب تدفّق ومقاومة (وهما $K_q$ و$K_c$ من الفصل 9)، والاحتكاكُ بميل، وكلّ حجرة بسعة هيدروليكية ذات $V/\\beta$ ثابتة. والنموذج الخطّي سلسلة من هذه المماسّات."
  },
  "252b6a7aed2f": {
   "src": "G. F. Franklin, J. D. Powell and M. Workman, <i>Digital Control of Dynamic Systems</i>, 3rd ed., Addison-Wesley, 1998: chapters 16 to 18.",
@@ -139,9 +207,21 @@
   "src": "flow-pressure coefficient, minus partial of Q<sub>A</sub> with respect to p<sub>a</sub>",
   "tr": "معامل التدفّق والضغط، المشتقّة الجزئية لـ Q<sub>A</sub> بالنسبة إلى p<sub>a</sub> بإشارة سالبة"
  },
+ "26bab891d07a": {
+  "src": "18.1 The closed-loop matrix",
+  "tr": "18.1 مصفوفة الحلقة المغلقة"
+ },
+ "26d14653b700": {
+  "src": "<span class=\"lbl\">given</span>continuous signals $y(t)$ and $F(t)$, and one command $u_k$ per sample",
+  "tr": "<span class=\"lbl\">المُعطى</span>إشارات مستمرّة $y(t)$ و$F(t)$، وإشارة أمر $u_k$ لكلّ عيّنة"
+ },
  "2705cc3d313a": {
   "src": "Ideal press",
   "tr": "المكبس الهيدروليكي المثالي"
+ },
+ "2738b1aafaa8": {
+  "src": "Part III closes the blue loop of the map. It replaces the press by straight-line approximations that can be analysed (chapters 14 and 15), describes what the computer does to the signals it reads and writes (16 and 17), and asks the decisive question: does a small disturbance die away, or grow (18)? Chapter 19 checks the energy books and chapter 20 explains how the computer integrates it all.",
+  "tr": "يُغلق الجزء الثالث الحلقةَ الزرقاء في المخطّط الكتلي. يستبدل المكبسَ بتقريبات مستقيمة يمكن تحليلها (الفصلان 14 و15)، ويصف ما يفعله الحاسوب بالإشارات التي يقرؤها ويكتبها (الفصلان 16 و17)، ويطرح السؤال الحاسم: هل تتلاشى الاضطرابات الصغيرة أم تنمو (الفصل 18)؟ ويتحقّق الفصل 19 من ميزانية الطاقة، ويشرح الفصل 20 كيف يُكامِل الحاسوبُ ذلك كلّه."
  },
  "2954e50ac2fa": {
   "src": "cap area, the full bore, πD²/4",
@@ -150,6 +230,10 @@
  "29d9f584ee09": {
   "src": "1 ms",
   "tr": "1 ms"
+ },
+ "2a9079f50339": {
+  "src": "meaning",
+  "tr": "المعنى"
  },
  "2ae637aab873": {
   "src": "$K_{pF}$",
@@ -162,6 +246,10 @@
  "2c1916edadec": {
   "src": "oil outflow from a chamber",
   "tr": "تدفّق الزيت الخارج من الحجرة"
+ },
+ "2c4df02c0d40": {
+  "src": "<div class=\"ctag\">Where linearization fails</div>The derivative must exist. The critically lapped valve has a kink at $x_v = 0$, where the flow gain jumps from $K_v\\sqrt{p_a}$ to $K_v\\sqrt{p_s - p_a}$, and the friction law has a near-jump at $\\dot{y} = 0$. Around such points a linear model describes only one side; worked solutions 3 and 4 on the Servo-Hydraulic Press page explore what follows.",
+  "tr": "<div class=\"ctag\">حيث يفشل التقريب الخطّي</div>يجب أن تكون المشتقّة موجودة. يملك الصمّام ذو التداخل الحرج انكسارًا عند $x_v = 0$، إذ يقفز كسب التدفّق من $K_v\\sqrt{p_a}$ إلى $K_v\\sqrt{p_s - p_a}$، ويملك قانون الاحتكاك قفزةً شبه فورية عند $\\dot{y} = 0$. وحول مثل هذه النقاط لا يصف النموذج الخطّي إلّا جانبًا واحدًا؛ ويستكشف الحلّان المفصّلان 3 و4 في صفحة المِكبس الهيدروليكي المؤازر ما يأتي بعد ذلك."
  },
  "2c7b5b23f7e7": {
   "src": "$\\beta_{\\mathrm{oil}}$",
@@ -187,6 +275,14 @@
   "src": "angular frequency of a command sinusoid, u = û e^{jωt}",
   "tr": "التردد الزاوي لإشارة الأمر الجيبية، u = û e^{jωt}"
  },
+ "2fbc36930f94": {
+  "src": "One more condition comes from the hose: in steady flow its slug does not accelerate, so (11.1) leaves $p_a - p_A = \\Delta p_f(Q_h)$, with $Q_h = Q_A$. Four equations, four unknowns $(x_v, p_a, p_A, p_B)$: the page solves them with Newton's method.",
+  "tr": "وثمّة شرط آخر يأتي من الخرطوم: ففي التدفّق المستقرّ لا يتسارع عمودُ الزيت فيه، فتبقى من المعادلة (11.1) العلاقة $p_a - p_A = \\Delta p_f(Q_h)$، مع $Q_h = Q_A$. أربع معادلات لأربعة مجاهيل $(x_v, p_a, p_A, p_B)$: تحلّها الصفحة بطريقة نيوتن."
+ },
+ "2fc2cb2e305c": {
+  "src": "Control: linearize, sample, close the loop, ask if it survives",
+  "tr": "التحكّم: التقريب الخطّي، والمعاينة، وإغلاق الحلقة، ثمّ السؤال: هل تصمد؟"
+ },
  "315981440018": {
   "src": "$F_{\\mathrm{stop}}$",
   "tr": "$F_{\\mathrm{stop}}$"
@@ -203,9 +299,17 @@
   "src": "position PID",
   "tr": "المتحكّم PID للموضع"
  },
+ "32cd31aae66e": {
+  "src": "The feedback then only has to correct what the feed-forward gets wrong.",
+  "tr": "ولا تحتاج التغذية الراجعة عندئذٍ إلّا إلى تصحيح ما تخطئ فيه التغذية الأمامية."
+ },
  "33571266edd3": {
   "src": "potential energy as a function of x",
   "tr": "الطاقة الكامنة بدلالة x"
+ },
+ "33576aabaaad": {
+  "src": "Bring the $Y$ terms together and divide by $A^2 s$:",
+  "tr": "نجمع حدود $Y$ معًا ونقسم على $A^2 s$:"
  },
  "33b7e2bb2e9d": {
   "src": "mass of the output piston",
@@ -215,9 +319,21 @@
   "src": "$p_{\\mathrm{abs}}$",
   "tr": "$p_{\\mathrm{abs}}$"
  },
+ "362dede6ea66": {
+  "src": "the controller<small>PID, PI and a supervisor</small>",
+  "tr": "المتحكّم<small>PID وPI ومُشرِف</small>"
+ },
  "36a0f1ab2bf0": {
   "src": "Sampling and control",
   "tr": "المعاينة والتحكّم"
+ },
+ "37bbc0277c34": {
+  "src": "sampler and hold<small>read every $T_s$, hold in between</small>",
+  "tr": "المُعاينة والماسك<small>تقرأ كلّ $T_s$، وتمسك القيمة بينهما</small>"
+ },
+ "3a821a12d595": {
+  "src": "Its denominator is $\\det(sI - A)$, which vanishes at the poles. Setting $s = j\\omega$ gives the response to a sine of angular frequency $\\omega$, as in chapter 10: the size of $Y/U$ is the gain, its angle the phase.",
+  "tr": "مقامها هو $\\det(sI - A)$، وهو يتلاشى عند الأقطاب. وبوضع $s = j\\omega$ نحصل على الاستجابة لدالّة جيبية ذات التردد الزاوي $\\omega$، كما في الفصل 10: مقدار $Y/U$ هو الكسب، وزاويته هي الطور."
  },
  "3ba30d6ac8a2": {
   "src": "viscous friction of the ram in the textbook model",
@@ -239,17 +355,41 @@
   "src": "speed over which the Stribeck bump dies away, 5 mm/s",
   "tr": "السرعة التي يتلاشى عندها نتوء ستريبك، 5 mm/s"
  },
+ "3e1bff49d116": {
+  "src": "Try a solution of the form $\\delta\\mathbf{x}(t) = \\mathbf{X}e^{st}$ in $\\delta\\dot{\\mathbf{x}} = A\\,\\delta\\mathbf{x}$, with $s$ a complex number. Differentiation brings down a factor $s$, so $s\\mathbf{X} = A\\mathbf{X}$: the exponents $s$ the system can follow on its own are the eigenvalues of $A$. They are its <b>poles</b>. A pole $s = \\sigma + j\\omega$ is a motion that oscillates at angular frequency $\\omega$ and grows or decays at rate $\\sigma$. The system is stable when every pole has $\\sigma &lt; 0$: every motion of its own dies away.",
+  "tr": "جرِّب حلًّا على الصورة $\\delta\\mathbf{x}(t) = \\mathbf{X}e^{st}$ في $\\delta\\dot{\\mathbf{x}} = A\\,\\delta\\mathbf{x}$، حيث $s$ عدد عقدي. يُخرج الاشتقاقُ عاملًا هو $s$، فيكون $s\\mathbf{X} = A\\mathbf{X}$: والأُسس $s$ التي يستطيع النظام أن يسلكها من تلقاء نفسه هي القيم الذاتية لـ $A$. وهي <b>أقطابه</b>. القطب $s = \\sigma + j\\omega$ حركةٌ تتذبذب بالتردد الزاوي $\\omega$ وتنمو أو تتلاشى بمعدّل $\\sigma$. يكون النظام مستقرًّا إذا كان لكلّ قطب $\\sigma &lt; 0$: فتتلاشى كلّ حركة خاصّة به."
+ },
+ "3eed337722fe": {
+  "src": "Newton for the ram of mass $m$ with viscous friction $b$ (the $b_v$ of chapter 12, written short here) and no external load: $m\\ddot{y} = A\\,p_L - b\\,\\dot{y}$. Take Laplace transforms with zero initial conditions and eliminate $Q_L$ and $p_L$. From (15.1) and (15.2), with $K_{ce} = K_c + C_{tp}$:",
+  "tr": "نطبّق قانون نيوتن على المِدكّ ذي الكتلة $m$ مع احتكاك لزج $b$ (وهو $b_v$ من الفصل 12، مكتوبًا هنا باختصار) ودون حمل خارجي: $m\\ddot{y} = A\\,p_L - b\\,\\dot{y}$. نأخذ تحويلات لابلاس بشروط ابتدائية صفرية، ونحذف $Q_L$ و$p_L$. ومن المعادلتين (15.1) و(15.2)، مع $K_{ce} = K_c + C_{tp}$:"
+ },
+ "3fc4bdb01005": {
+  "src": "The z-transform does for sequences what the Laplace transform does for functions. Define $X(z) = \\sum_{k\\ge0} x_k z^{-k}$. Shifting a sequence one step ahead multiplies its transform by $z$, if it starts from zero:",
+  "tr": "تفعل تحويلةُ z للمتتاليات ما يفعله تحويل لابلاس للدوالّ. نعرّف $X(z) = \\sum_{k\\ge0} x_k z^{-k}$. وإزاحة المتتالية خطوةً واحدةً إلى الأمام تضرب تحويلها في $z$، إذا كانت تبدأ من الصفر:"
+ },
  "4084c0f3de3d": {
   "src": "100 L/min, 7 MPa",
   "tr": "100 L/min، 7 MPa"
+ },
+ "41258be252a0": {
+  "src": "<span class=\"chn\">16</span> From continuous to discrete: sample and hold",
+  "tr": "<span class=\"chn\">16</span> من المستمرّ إلى المتقطّع: المعاينة والمسك"
  },
  "416d6d32d68c": {
   "src": "kg/m⁴",
   "tr": "kg/m⁴"
  },
+ "4185fcfb1cdc": {
+  "src": "<span class=\"chn\">15</span> The classical valve-controlled cylinder",
+  "tr": "<span class=\"chn\">15</span> الأسطوانة الكلاسيكية التي يتحكّم فيها الصمّام"
+ },
  "423cb1e5e725": {
   "src": "hydraulic damping ratio",
   "tr": "نسبة التخامد الهيدروليكي"
+ },
+ "4512600db4a0": {
+  "src": "<span class=\"chn\">19</span> Where the energy goes",
+  "tr": "<span class=\"chn\">19</span> إلى أين تذهب الطاقة"
  },
  "459abf6a01d0": {
   "src": "feed-forward gain from speed reference to command",
@@ -275,6 +415,10 @@
   "src": "pressure at valve port A, at the valve end of the hose",
   "tr": "الضغط عند منفذ الصمّام A، عند الطرف الموصول بالصمّام من الخرطوم"
  },
+ "4d793c215829": {
+  "src": "Part II built the press as eight nonlinear equations. A computer can integrate them, and the animation does, but they cannot answer the question a designer cares about: if I raise the controller gain, will the press shake? That question has a sharp answer only for <i>linear</i> systems, whose responses add and scale, and whose behaviour is fixed by a handful of numbers, the poles. So we look at the press near one way of running, where small disturbances obey linear equations. This chapter finds those ways of running and the linear equations around them, and ends with the tool that makes linear systems easy: the transfer function.",
+  "tr": "بنى الجزء الثاني المكبس بوصفه ثماني معادلات لا خطّية. يستطيع الحاسوب أن يكاملها، وتفعل الرسوم المتحرّكة ذلك، لكنّها لا تجيب عن السؤال الذي يهمّ المصمّم: إذا رفعتُ كسب المتحكّم، هل سيهتزّ المكبس؟ ولهذا السؤال جواب حادّ فقط بالنسبة إلى <i>الأنظمة الخطّية</i>، التي تتراكب استجاباتها وتتناسب، ويتحدّد سلوكها بعدد قليل من الأرقام، هي الأقطاب. لذلك ننظر إلى المكبس قرب نمط تشغيل واحد، تخضع فيه الاضطرابات الصغيرة لمعادلات خطّية. يجد هذا الفصل أنماط التشغيل هذه والمعادلات الخطّية حولها، ويختم بالأداة التي تجعل الأنظمة الخطّية سهلة: دالّة التحويل."
+ },
  "4ee1fd1ac23c": {
   "src": "effective bulk modulus of oil with entrained air",
   "tr": "معامل الانضغاط الحجمي الفعّال للزيت المختلط بالهواء"
@@ -286,6 +430,14 @@
  "51cb231946b0": {
   "src": "total cylinder volume, two equal chambers of V<sub>t</sub>/2",
   "tr": "الحجم الكلّي للأسطوانة، حجرتان متساويتان حجم كلّ منهما V<sub>t</sub>/2"
+ },
+ "527e76b94b76": {
+  "src": "exactly the integral in (16.1). The page computes $e^{MT_s}$ by scaling and squaring: it divides $MT_s$ by $2^j$ until its norm is below one half, sums the Taylor series, and squares the result $j$ times. SciPy's <span class=\"mono\">expm</span> agrees to $10^{-14}$.",
+  "tr": "بالضبط التكامل الوارد في المعادلة (16.1). تحسب الصفحة $e^{MT_s}$ بالتحجيم والتربيع: تقسم $MT_s$ على $2^j$ حتى يصبح نظيمها أصغر من النصف، وتجمع متسلسلة تايلور، ثمّ تربّع النتيجة $j$ مرّة. وتتّفق الدالّة <span class=\"mono\">expm</span> في SciPy معها حتى $10^{-14}$."
+ },
+ "53d43147f996": {
+  "src": "When the supervisor switches from position to force control, the command must not jump. At the switch the new error is zero (the force reference starts at the measured force), so $u = K_{pF}\\cdot 0 + I_F$. $I_F$ is the integral state of the force law. Setting $I_F = u_{\\mathrm{previous}}$ makes the command continuous. Worked solution 8 on the Servo-Hydraulic Press page removes this and measures a 2.7 kN stumble.",
+  "tr": "عندما ينتقل المشرف من التحكّم في الموضع إلى التحكّم في القوّة، يجب ألّا تقفز إشارة الأمر. وعند لحظة التبديل يكون الخطأ الجديد صفرًا (تبدأ القيمة المرجعية للقوّة من القوّة المقيسة)، فيكون $u = K_{pF}\\cdot 0 + I_F$. و$I_F$ هي حالة التكامل في قانون القوّة. وبوضع $I_F = u_{\\mathrm{previous}}$ تصبح إشارة الأمر متّصلة. ويحذف الحلّ المفصّل رقم 8 في صفحة المِكبس الهيدروليكي المؤازر هذا الإجراء، ويقيس هزّةً قدرها 2.7 kN."
  },
  "546bc5db8c39": {
   "src": "valve rated flow and pressure drop",
@@ -303,6 +455,22 @@
   "src": "bulk modulus: pressure to squeeze oil volume by a given fraction",
   "tr": "معامل الانضغاط الحجمي: الضغط الذي يُنقص حجم الزيت بكسرٍ معيّن"
  },
+ "57a2effb3c9e": {
+  "src": "Multiply each equation of the model by its “flow” partner and add them. The pump power $p_sQ_S$ splits as follows. The valve keeps (9.2). Each chamber turns $p\\,(Q_{\\mathrm{in}} - Q_{\\mathrm{out}} - \\dot{V})$ into compression energy; by (7.2) that is $p\\,(V/\\beta)\\,\\dot{p}$. The hose slug gains $\\tfrac{d}{dt}(\\tfrac12 IQ_h^2)$ and loses $\\Delta p_f Q_h$ to friction. The ram gains kinetic energy $\\tfrac{d}{dt}(\\tfrac12 m\\dot{y}^2)$ and height $mg\\dot{y}$, and loses $F_f\\dot{y}$ to the seals and $F_w\\dot{y}$ to the specimen. Summing every term, all the internal pressures cancel in pairs. Here is the bookkeeping, with $p_T = 0$. The valve's power balance (9.2) says where the pump power goes first:",
+  "tr": "نضرب كلّ معادلة في النموذج في «شريكها» التدفّقي ونجمعها. تتوزّع قدرة المضخّة $p_sQ_S$ على النحو الآتي. يحتفظ الصمّام بحصّته وفق المعادلة (9.2). وتحوّل كلّ حجرة $p\\,(Q_{\\mathrm{in}} - Q_{\\mathrm{out}} - \\dot{V})$ إلى طاقة انضغاط؛ ووفق المعادلة (7.2) تساوي $p\\,(V/\\beta)\\,\\dot{p}$. يكتسب عمودُ الزيت في الخرطوم $\\tfrac{d}{dt}(\\tfrac12 IQ_h^2)$ ويفقد $\\Delta p_f Q_h$ بسبب الاحتكاك. ويكتسب المِدكّ طاقة حركية $\\tfrac{d}{dt}(\\tfrac12 m\\dot{y}^2)$ وطاقة ارتفاع $mg\\dot{y}$، ويفقد $F_f\\dot{y}$ إلى الحشوات و$F_w\\dot{y}$ إلى العيّنة. وبجمع كلّ الحدود تتلاشى الضغوطُ الداخلية كلّها أزواجًا. وهذه هي موازنة الطاقة، مع $p_T = 0$. ويُظهر توازن القدرة في الصمّام (9.2) أوّلًا أين تذهب قدرة المضخّة:"
+ },
+ "58be6def6562": {
+  "src": "<span class=\"lbl\">answers with</span>samples $y_k$, $F_k$, and a staircase command $u(t)$",
+  "tr": "<span class=\"lbl\">يُخرج</span>عيّنات $y_k$ و$F_k$، وإشارة أمر متدرّجة $u(t)$"
+ },
+ "5a61f8aaa402": {
+  "src": "<span class=\"chn\">14</span> Operating points and linearization",
+  "tr": "<span class=\"chn\">14</span> نقاط التشغيل والتقريب الخطّي"
+ },
+ "5acbc034a7a7": {
+  "src": "<span class=\"chn\">18</span> Is it stable? Closed loop, Nyquist, margins",
+  "tr": "<span class=\"chn\">18</span> هل هو مستقرّ؟ الحلقة المغلقة، ونايكويست، والهوامش"
+ },
  "5b7143c93280": {
   "src": "load mass",
   "tr": "كتلة الحِمل"
@@ -319,9 +487,21 @@
   "src": "oil column height at rest, 0.40 m",
   "tr": "ارتفاع عمود الزيت في حالة السكون، 0.40 m"
  },
+ "5ed584c16fc0": {
+  "src": "870 kg/m³, 32 mm²/s, 27.8 mPa·s",
+  "tr": "870 kg/m³, 32 mm²/s, 27.8 mPa·s"
+ },
+ "5edebf47dd3b": {
+  "src": "The closed loop amplifies by $1/(1 + L)$, so trouble comes when $L$ approaches $-1$: a signal returns inverted with the same size and reinforces itself. Nyquist's criterion makes this exact, and the reason is a fact about complex functions, the argument principle. The closed-loop poles are the values of $z$ where $1 + L(z) = 0$. Walk $z$ once around the unit circle and watch the complex number $1 + L(z)$. Each zero of $1 + L$ outside the circle, which is an unstable closed-loop pole, makes $1 + L$ wind once around the origin; each pole of $L$ outside the circle, an unstable open-loop pole, winds it once the other way. Winding $1 + L$ around 0 is the same as winding $L$ around $-1$. So plot $L(e^{j\\omega T_s})$ as $\\omega$ runs once around: the number of clockwise encirclements of $-1$ equals the number of unstable closed-loop poles minus the number of unstable open-loop poles. The integrators of our loops sit exactly on the unit circle, at $z = 1$, where $L$ is infinite, so the contour cannot pass through them: it steps around each on a small half-circle. Near $z = 1$, $L$ behaves like $c/(z - 1)$, and as $z$ goes round a half-circle of radius $\\varepsilon$, $L$ goes round a half-circle of radius $c/\\varepsilon$: that is the very large arc, and why the plotted curve comes in from infinity.",
+  "tr": "تكون الحلقة المغلقة مُضخِّمةً بمقدار $1/(1 + L)$، لذا تقع المشكلة حين يقترب $L$ من $-1$: فإشارة تعود مقلوبةً بالحجم نفسه وتُعزّز نفسها. ويجعل معيار نايكويست ذلك دقيقًا، والسبب حقيقةٌ عن الدوالّ العقدية، وهي مبدأ الوسيطة. أقطاب الحلقة المغلقة هي قيم $z$ التي يكون عندها $1 + L(z) = 0$. امشِ بـ $z$ دورةً واحدةً حول دائرة الوحدة، وراقب العدد العقدي $1 + L(z)$. كلّ صفر لـ $1 + L$ خارج الدائرة، أي قطب غير مستقرّ للحلقة المغلقة، يجعل $1 + L$ يلتفّ دورةً واحدةً حول نقطة الأصل؛ وكلّ قطب لـ $L$ خارج الدائرة، أي قطب غير مستقرّ للحلقة المفتوحة، يجعله يلتفّ دورةً في الاتّجاه المعاكس. والالتفاف حول 0 لـ $1 + L$ هو نفسه الالتفاف لـ $L$ حول $-1$. لذا نرسم $L(e^{j\\omega T_s})$ بينما يدور $\\omega$ دورةً واحدةً: فعدد الدورات حول $-1$ في اتّجاه عقارب الساعة يساوي عدد الأقطاب غير المستقرّة للحلقة المغلقة ناقص عدد الأقطاب غير المستقرّة للحلقة المفتوحة. وتقع المكامِلات في حلقاتنا تمامًا على دائرة الوحدة، عند $z = 1$، حيث $L$ لانهائية، فلا يستطيع المسار المرور بها، بل يدور حول كلٍّ منها على نصف دائرة صغير. وقرب $z = 1$، يسلك $L$ سلوك $c/(z - 1)$، وحين يدور $z$ على نصف دائرة نصف قطرها $\\varepsilon$، يدور $L$ على نصف دائرة نصف قطرها $c/\\varepsilon$: وهذا هو القوس الكبير جدًّا، وهو سبب قدوم المنحنى المرسوم من اللانهاية."
+ },
  "5f13b8685639": {
   "src": "specimen damping, 5 % of critical",
   "tr": "تخامد العيّنة، 5 % من التخامد الحرج"
+ },
+ "61e573b3def1": {
+  "src": "The controller is a computer. It does not see the press continuously: it reads the sensors once a millisecond, computes, and writes one number to the valve, which then stays put until the next millisecond. Two blocks of the map do this, the sampler and the hold, and this chapter finds what they do to the loop.",
+  "tr": "المتحكّم حاسوبٌ. لا يرى المكبس بصورة مستمرّة، بل يقرأ الحسّاسات مرّة كلّ ملّي ثانية، ويحسب، ويكتب عددًا واحدًا إلى الصمّام، فيبقى الصمّام على حاله حتى الملّي ثانية التالية. ويؤدّي ذلك كتلتان في المخطّط الكتلي، هما المُعاينة والماسك، ويبيّن هذا الفصل ما تفعلانه بالحلقة."
  },
  "6264827dca77": {
   "src": "root regularization pressure, 0.1 MPa",
@@ -342,6 +522,10 @@
  "643d53e928bf": {
   "src": "spool bandwidth and damping",
   "tr": "عرض النطاق الترددي والتخامد للمِزلاج"
+ },
+ "66cc9280b64d": {
+  "src": "So $z$ means “one sample later”, and $\\mathbf{x}_{k+1}$ becomes $z\\,\\mathbf{X}$. Then (16.1) gives $\\mathbf{x} = (zI - \\Phi)^{-1}\\Gamma u$ and the discrete transfer function from command to output is",
+  "tr": "إذن تعني $z$ «عيّنةً لاحقة»، ويصبح $\\mathbf{x}_{k+1}$ مساويًا لـ $z\\,\\mathbf{X}$. ثمّ تعطي المعادلة (16.1) أنّ $\\mathbf{x} = (zI - \\Phi)^{-1}\\Gamma u$، فتكون دالّة التحويل المتقطّعة من إشارة التحكّم إلى الخرج هي:"
  },
  "671dac9203b4": {
   "src": "m³/(s·√Pa)",
@@ -383,13 +567,29 @@
   "src": "$\\mathrm{PM}$",
   "tr": "$\\mathrm{PM}$"
  },
+ "6d4c7a65bb2a": {
+  "src": "Read it as two pieces. The integrator $1/s$: a valve opening produces a flow, and a flow produces a speed, not a position. And a resonance at $\\omega_h$: the ram bouncing on the oil springs of its two chambers. The oil spring can be derived directly, which also handles the differential cylinder of the press, whose two chambers differ. Close both ports and push the ram up by a small $\\delta y$. The cap chamber grows by $A_A\\delta y$, and by (7.1) its pressure falls by $\\beta_A A_A\\delta y/V_A$; the force on the ram falls by $A_A$ times that. The rod chamber shrinks by $A_B\\delta y$; its pressure rises by $\\beta_B A_B\\delta y/V_B$ and pushes down on the annulus $A_B$. Both changes oppose the push, so the two chambers are springs in parallel:",
+  "tr": "نقرؤه على أنّه جزءان. المُكامِل $1/s$: فتح الصمّام يولّد تدفّقًا، والتدفّق يولّد سرعةً لا موضعًا. ورنينٌ عند $\\omega_h$: المِدكّ يرتدّ على النوابض الزيتية لحجرتيه. ويمكن اشتقاق نابض الزيت مباشرة، وهذا يشمل أيضًا الأسطوانة التفاضلية للمكبس، التي تختلف حجرتاها. نُغلق المنفذين ونَدفع المِدكّ إلى أعلى بمقدار صغير $\\delta y$. تكبر الحجرة السفلية بمقدار $A_A\\delta y$، وبحسب (7.1) ينخفض ضغطها بمقدار $\\beta_A A_A\\delta y/V_A$؛ فتنخفض القوّة على المِدكّ بمقدار $A_A$ ضربًا في ذلك. وتتقلّص حجرة القضيب بمقدار $A_B\\delta y$؛ فيرتفع ضغطها بمقدار $\\beta_B A_B\\delta y/V_B$ ويضغط على المساحة الحلقية $A_B$ إلى أسفل. يعاكس التغيّران الإزاحةَ، فالحجرتان نابضان متوازيان:"
+ },
  "6da368c94097": {
   "src": "velocity gain, ram speed per metre of position error",
   "tr": "كسب السرعة، سرعة المِدكّ لكلّ متر من خطأ الموضع"
  },
+ "6e20f6b44405": {
+  "src": "14.3 Transfer functions in one page",
+  "tr": "14.3 دوالّ التحويل في صفحة واحدة"
+ },
+ "6e61ab6a0cce": {
+  "src": "Insert into $(ms^2 + bs)Y = A P_L$ and clear the fraction by multiplying both sides by $K_{ce} + V_t s/(4\\beta)$:",
+  "tr": "نعوّض في $(ms^2 + bs)Y = A P_L$ ونُزيل الكسر بضرب طرفَي المعادلة في $K_{ce} + V_t s/(4\\beta)$:"
+ },
  "6f410b47568c": {
   "src": "inertance of the oil slug in the hose, ρL<sub>h</sub>/A<sub>h</sub>",
   "tr": "العطالة الهيدروليكية لعمود الزيت في الخرطوم، ρL<sub>h</sub>/A<sub>h</sub>"
+ },
+ "6f96af45bdd3": {
+  "src": "<div class=\"ctag\">In our press</div>The fastest mode of the servo model is the small valve-port volume charged through a wide-open valve while the pressure drop across it is small, where the rounded orifice law (8.3) is steepest: $\\lambda \\approx \\beta K_v/(V_a\\sqrt{p_{\\mathrm{tr}}}) \\approx 1.6\\times10^4\\ \\mathrm{s^{-1}}$. With $h = 10^{-5}$ s, $\\lambda h \\approx 0.16$, far inside the stable region. Stops are located inside a step by bisection on the step length, to $10^{-12}$ s.",
+  "tr": "<div class=\"ctag\">في مكبسنا</div>أسرع نمط في نموذج الصمّام المؤازر هو حجم منفذ الصمّام الصغير، الذي يُشحن عبر صمّام مفتوح على مصراعيه بينما فرق الضغط عبره صغير، وهنا يكون قانون الفتحة المستدير (8.3) أشدّ انحدارًا: $\\lambda \\approx \\beta K_v/(V_a\\sqrt{p_{\\mathrm{tr}}}) \\approx 1.6\\times10^4\\ \\mathrm{s^{-1}}$. ومع $h = 10^{-5}$ s يكون $\\lambda h \\approx 0.16$، أي داخل المنطقة المستقرّة بمسافة كبيرة. وتُحدَّد مواضع المصدّات داخل الخطوة بالتنصيف الثنائي على طول الخطوة، حتى $10^{-12}$ s."
  },
  "703714781829": {
   "src": "$Q_{\\mathrm{in}}$",
@@ -399,6 +599,14 @@
   "src": "Geometry and fluid",
   "tr": "الهندسة والمائع"
  },
+ "704fa6172e6e": {
+  "src": "whose error is of order $h^2$; the check script compares them with exact symbolic derivatives and finds agreement to $10^{-9}$ or better.",
+  "tr": "وخطؤها من المرتبة $h^2$؛ ويقارنهما برنامج التحقّق بالمشتقّات الرمزية الدقيقة، فيجد توافقًا بدقّة $10^{-9}$ أو أفضل."
+ },
+ "70a4a551dc4c": {
+  "src": "Starting from rest, $x(0) = 0$, every time derivative becomes a multiplication by $s$. A set of linear differential equations becomes a set of algebraic ones, which can be solved for the output in terms of the input. The ratio is the <b>transfer function</b>: for $\\delta\\dot{\\mathbf{x}} = A\\delta\\mathbf{x} + B\\delta u$ and $\\delta y = C\\delta\\mathbf{x}$, $s\\mathbf{X} = A\\mathbf{X} + BU$ gives",
+  "tr": "وإذا بدأنا من السكون، $x(0) = 0$، تصبح كلّ مشتقّة زمنية ضربًا في $s$. وتتحوّل مجموعة المعادلات التفاضلية الخطّية إلى مجموعة جبرية يمكن حلّها لإيجاد الخرج بدلالة الدخل. والنسبة هي <b>دالّة التحويل</b>: وبالنسبة إلى $\\delta\\dot{\\mathbf{x}} = A\\delta\\mathbf{x} + B\\delta u$ و$\\delta y = C\\delta\\mathbf{x}$ يُعطي $s\\mathbf{X} = A\\mathbf{X} + BU$:"
+ },
  "71054f128f04": {
   "src": "height of the right oil column, H<sub>0</sub> + rx",
   "tr": "ارتفاع عمود الزيت الأيمن، H<sub>0</sub> + rx"
@@ -406,6 +614,10 @@
  "720a8feb0370": {
   "src": "discrete input matrix, ∫ e^{Aσ} dσ B",
   "tr": "مصفوفة الدخل المتقطّعة، ∫ e^{Aσ} dσ B"
+ },
+ "725bd8d198ed": {
+  "src": "At an operating point $\\mathbf{f}(\\mathbf{x}_0,u_0)$ is zero, apart from the constant drift $v_0$ in the position row, which does not affect the deviations. What remains is a linear system $\\delta\\dot{\\mathbf{x}} = A\\,\\delta\\mathbf{x} + B\\,\\delta u$ with an output $\\delta y_{\\mathrm{out}} = C\\,\\delta\\mathbf{x}$: $C$ is a row of eight numbers. For the position loop it has a 1 in the $y$ column and zeros elsewhere; for the force loop, whose output is the specimen force $k_w\\,\\delta y + c_w\\,\\delta\\dot{y}$, it has $k_w$ in the $y$ column and $c_w$ in the $\\dot{y}$ column. The page computes $A$ and $B$ by central differences,",
+  "tr": "عند نقطة تشغيل تكون $\\mathbf{f}(\\mathbf{x}_0,u_0)$ صفرًا، ما عدا الانجراف الثابت $v_0$ في صفّ الموضع، وهو لا يؤثّر في الانحرافات. يبقى نظام خطّي $\\delta\\dot{\\mathbf{x}} = A\\,\\delta\\mathbf{x} + B\\,\\delta u$ مع خرج $\\delta y_{\\mathrm{out}} = C\\,\\delta\\mathbf{x}$: إنّ $C$ صفّ من ثمانية أعداد. وفي حلقة التحكّم في الموضع يكون فيه 1 في عمود $y$ وأصفار في بقيّة الأعمدة؛ أمّا في حلقة التحكّم في القوّة، التي خرجها قوّة العيّنة $k_w\\,\\delta y + c_w\\,\\delta\\dot{y}$، فيكون فيه $k_w$ في عمود $y$ و$c_w$ في عمود $\\dot{y}$. وتحسب الصفحة $A$ و$B$ بالفروق المركزية،"
  },
  "72fd7572d422": {
   "src": "absolute pressure, p + p<sub>0</sub>",
@@ -427,9 +639,17 @@
   "src": "atmospheric pressure, 101.325 kPa",
   "tr": "الضغط الجوّي، 101.325 kPa"
  },
+ "74af60d45ac3": {
+  "src": "Feedback corrects errors after they appear. If the controller knows the speed it is asking for, it can open the valve by the right amount in advance. From (8.2), a spool opening $\\hat{x}$ against roughly half the supply pressure produces a flow $K_v\\hat{x}\\sqrt{p_s/2}$ and a speed $K_v\\hat{x}\\sqrt{p_s/2}/A_A$. Inverting:",
+  "tr": "تُصحّح التغذية الراجعة الأخطاء بعد ظهورها. فإذا كان المتحكّم يعرف السرعة التي يطلبها، استطاع أن يفتح الصمّام مسبقًا بالقدر المناسب. ومن المعادلة (8.2)، تُنتج فتحة المِزلاج $\\hat{x}$ عند نحو نصف ضغط الإمداد تدفّقًا قدره $K_v\\hat{x}\\sqrt{p_s/2}$ وسرعةً قدرها $K_v\\hat{x}\\sqrt{p_s/2}/A_A$. نعكس العلاقة:"
+ },
  "74d69eb4b344": {
   "src": "area of the output piston",
   "tr": "مساحة مكبس الإخراج"
+ },
+ "75804bd4e027": {
+  "src": "<span class=\"chn\">20</span> How the computer solves it",
+  "tr": "<span class=\"chn\">20</span> كيف يحلّها الحاسوب"
  },
  "75e741031e05": {
   "src": "normalized spool position, positive opens P to A",
@@ -451,13 +671,25 @@
   "src": "150, 300, 200 cm³",
   "tr": "150، 300، 200 cm³"
  },
+ "77ebbccc1c4e": {
+  "src": "It is a negative real number: at the resonance the signal comes back exactly inverted. Chapter 18 shows that the loop goes unstable when such a signal comes back larger than it left, $|L| &gt; 1$, which is the rule. Worked solution 9 on the Servo-Hydraulic Press page shows why the real limit is lower: the valve’s own lag and the sampling delay add phase, so the inversion happens below $\\omega_h$, where the gain is larger.",
+  "tr": "إنّه عدد حقيقي سالب: فعند الرنين تعود الإشارة مقلوبةً تمامًا. يُظهر الفصل 18 أنّ الحلقة تصبح غير مستقرّة حين تعود إشارةٌ من هذا النوع أكبر ممّا خرجت به، $|L| &gt; 1$، ومن هنا تنشأ القاعدة. ويُبيّن الحلّ المفصّل رقم 9 في صفحة المِكبس الهيدروليكي المؤازر لماذا يكون الحدّ الفعلي أدنى: فتأخّر الصمّام الذاتي وتأخّر المعاينة يضيفان طورًا، فيحدث الانقلاب تحت $\\omega_h$، حيث يكون الكسب أكبر."
+ },
  "77ef85f4b883": {
   "src": "Coulomb friction, break-away factor, viscous",
   "tr": "احتكاك كولوم، عامل كسر السكون، الاحتكاك اللزج"
  },
+ "78dd59a0ca2c": {
+  "src": "<div class=\"ctag\">In our press</div>Position loop: 64.0° and 11.0 dB, crossover 9.7 Hz. Force loop: 49.5° and 10.6 dB, crossover 9.2 Hz. Raise the position gain to 90 %/mm and the closed-loop poles leave the unit circle.",
+  "tr": "<div class=\"ctag\">في مكبسنا</div>حلقة التحكّم في الموضع: 64.0° و11.0 dB، وتردّد العبور 9.7 Hz. حلقة التحكّم في القوّة: 49.5° و10.6 dB، وتردّد العبور 9.2 Hz. وعند رفع كسب الموضع إلى 90 %/mm تغادر أقطاب الحلقة المغلقة دائرة الوحدة."
+ },
  "7c8481ef116e": {
   "src": "2.0 m, 12 mm",
   "tr": "2.0 m، 12 mm"
+ },
+ "7c9f105f0b85": {
+  "src": "Multiply the port-volume equation of (12.1) by $p_a$, the hose equation (11.1) by $Q_h$, and the two chamber equations of (12.1) by $p_A$ and $p_B$. With $I\\dot{Q}_hQ_h = \\frac{d}{dt}\\left(\\tfrac12 IQ_h^2\\right)$:",
+  "tr": "نضرب معادلة حجم المنفذ في (12.1) في $p_a$، ومعادلة الخرطوم (11.1) في $Q_h$، ومعادلتَي الحجرتين في (12.1) في $p_A$ و$p_B$. ومع $I\\dot{Q}_hQ_h = \\frac{d}{dt}\\left(\\tfrac12 IQ_h^2\\right)$:"
  },
  "7df422c95e19": {
   "src": "m³/(s·Pa)",
@@ -475,9 +707,21 @@
   "src": "25 %/mm, 125 %/(mm·s), 0",
   "tr": "25 %/mm، 125 %/(mm·s)، 0"
  },
+ "805714bc21aa": {
+  "src": "The last term $bK_{ce}/A^2$ is tiny in practice: friction times leakage, both small. Dropping it, $N(s)$ is a quadratic with constant term 1. Write any such quadratic in the standard form of a damped oscillator, $s^2/\\omega_h^2 + 2\\zeta_h s/\\omega_h + 1$, and compare coefficients. The $s^2$ terms give $1/\\omega_h^2 = V_tm/(4\\beta A^2)$. The $s$ terms give",
+  "tr": "الحدّ الأخير $bK_{ce}/A^2$ صغير جدًّا عمليًّا: حاصل ضرب الاحتكاك في التسرّب، وكلاهما صغير. وبإسقاطه يكون $N(s)$ تربيعيًّا حدُّه الثابت 1. نكتب أيّ تربيعيّة من هذا النوع في الصيغة القياسية لمتذبذب مُخمَّد، $s^2/\\omega_h^2 + 2\\zeta_h s/\\omega_h + 1$، ونقارن المعاملات. فحدّا $s^2$ يعطيان $1/\\omega_h^2 = V_tm/(4\\beta A^2)$. أمّا الحدود ذات $s$ فتعطي"
+ },
  "808759caa013": {
   "src": "seal friction force",
   "tr": "قوّة احتكاك الحشوات"
+ },
+ "80c2eb2efeaf": {
+  "src": "<span class=\"lbl\">given</span>the set-point and the latest measurement, once a sample",
+  "tr": "<span class=\"lbl\">المُعطى</span>القيمة المرجعية وآخر قياس، عند كلّ عيّنة"
+ },
+ "810a25d76c31": {
+  "src": "symbol",
+  "tr": "الرمز"
  },
  "833985197a32": {
   "src": "force on the output piston",
@@ -491,6 +735,18 @@
   "src": "specimen stiffness, 20 MN/m",
   "tr": "صلابة العيّنة، 20 MN/m"
  },
+ "8694fcc46044": {
+  "src": "Write $\\mathbf{x} = \\mathbf{x}_0 + \\delta\\mathbf{x}$ and $u = u_0 + \\delta u$, and expand $\\mathbf{f}$ to first order in a Taylor series:",
+  "tr": "نكتب $\\mathbf{x} = \\mathbf{x}_0 + \\delta\\mathbf{x}$ و$u = u_0 + \\delta u$، ونفكّك $\\mathbf{f}$ بمتسلسلة تايلور حتى الحدّ الأوّل:"
+ },
+ "87334fd5dd7b": {
+  "src": "A digital controller sees the plant only at the sampling instants $t_k = kT_s$ and holds its command constant in between (a <i>zero-order hold</i>). For a linear system we can then step from one sample to the next exactly. Multiply $\\dot{\\mathbf{x}} = A\\mathbf{x} + B u$ by the integrating factor $e^{-At}$:",
+  "tr": "يرى المتحكّم الرقمي المنظومةَ فقط عند لحظات المعاينة $t_k = kT_s$، ويُبقي إشارة الأمر ثابتةً بينها (<i>ماسك من الرتبة الصفرية</i>). وفي حالة النظام الخطّي يمكننا عندئذٍ الانتقال من عيّنة إلى التالية بدقّة تامّة. نضرب $\\dot{\\mathbf{x}} = A\\mathbf{x} + B u$ في عامل التكامل $e^{-At}$:"
+ },
+ "874a9d5bbf8d": {
+  "src": "Trust, but verify. Each page has an independent Python script that re-derives the equations with SymPy, recomputes the matrices with SciPy and NumPy, re-integrates the full nonlinear motion with SciPy's adaptive DOP853 integrator, and compares everything with the page, sample by sample.",
+  "tr": "ثِق ولكن تحقّق. لكلّ صفحة برنامج Python مستقلّ يعيد اشتقاق المعادلات بمكتبة SymPy، ويعيد حساب المصفوفات بمكتبتي SciPy وNumPy، ويعيد تكامل الحركة اللاخطّية كاملةً بمكامل DOP853 التكيّفي من SciPy، ويقارن كلّ شيء بالصفحة عيّنةً عيّنةً."
+ },
  "891a1c189682": {
   "src": "leakage flow through the clearance gap (reused as load flow in ch. 15)",
   "tr": "تدفّق التسرّب عبر فجوة الخلوص (أُعيد استعماله كتدفّق للحِمل في الفصل 15)"
@@ -499,9 +755,21 @@
   "src": "integral state of the force law, loaded with the last command at the switch",
   "tr": "حالة التكامل لقانون القوّة، تُهيَّأ بآخر أمر عند لحظة التبديل"
  },
+ "8aa2a716b225": {
+  "src": "The bracket is $0 - x(0)$: at the upper limit $x\\,e^{-st} \\to 0$ for any $s$ with a large enough real part, which is the condition under which the transform exists at all.",
+  "tr": "القوس هو $0 - x(0)$: عند الحدّ الأعلى يكون $x\\,e^{-st} \\to 0$ لأيّ $s$ جزؤه الحقيقي كبير بما يكفي، وهذا هو الشرط الذي يوجد عنده التحويل أصلًا."
+ },
  "8b17221914b9": {
   "src": "area of the input piston",
   "tr": "مساحة مكبس الإدخال"
+ },
+ "8c1b888e1de1": {
+  "src": "<span class=\"chn\">A</span> Parameters of the servo press",
+  "tr": "<span class=\"chn\">A</span> معاملات المكبس المؤازر"
+ },
+ "8cb696ca2ab2": {
+  "src": "A continuous PID controller acts on the error $e = y_{\\mathrm{ref}} - y$ as $u = K_p e + K_i\\int e\\,dt + K_d\\,\\dot{e}$. Each term has a job. The <b>proportional</b> term pushes harder the further the ram is from where it should be. The <b>integral</b> term remembers: a steady load, such as the ram’s weight, needs a steady command, and a proportional term can only supply it if a steady error is left over; the integral keeps growing until that error is gone, because only then does it stop changing. The <b>derivative</b> term looks ahead: it brakes when the error is closing fast. In a computer the integral becomes a running sum. The <i>backward Euler</i> rule approximates $\\int_0^{t_k} e\\,dt$ by adding $T_s e_k$ each sample:",
+  "tr": "يعمل متحكّم PID المستمرّ على الخطأ $e = y_{\\mathrm{ref}} - y$ وفق $u = K_p e + K_i\\int e\\,dt + K_d\\,\\dot{e}$. ولكلّ حدّ وظيفته. يدفع الحدّ <b>التناسبي</b> بقوّة أكبر كلّما بَعُد المِدكّ عن موضعه الصحيح. أمّا الحدّ <b>التكاملي</b> فيتذكّر: فالحمل الثابت، كوزن المِدكّ مثلًا، يحتاج إلى إشارة أمر ثابتة، ولا يستطيع الحدّ التناسبي أن يوفّرها إلّا إذا بقي خطأ ثابت؛ فيظلّ الحدّ التكاملي ينمو حتى يزول هذا الخطأ، لأنّه عندها فقط يكفّ عن التغيّر. وينظر الحدّ <b>التفاضلي</b> إلى الأمام: فيكبح حين يقترب الخطأ بسرعة. وفي الحاسوب يصبح التكامل مجموعًا جاريًا. وتُقرِّب قاعدةُ <i>أويلر الضمنيّة</i> التكاملَ $\\int_0^{t_k} e\\,dt$ بإضافة $T_s e_k$ عند كلّ عيّنة:"
  },
  "8cd3caeb8486": {
   "src": "discrete loop gain, K(z) z^{-1} G(z)",
@@ -511,9 +779,17 @@
   "src": "hydraulic capacitance, V/β (same symbol as output matrix C in ch. 14)",
   "tr": "السعة الهيدروليكية، V/β (الرمز نفسه لمصفوفة الخرج C في الفصل 14)"
  },
+ "8eba85d44be0": {
+  "src": "write a discrete PID with filter, anti-windup and bumpless transfer (17.1)–(17.4), close the loop (18.1) and read its margins.",
+  "tr": "أن تكتب متحكّم PID متقطّعًا مزوّدًا بمرشِّح ومكافحةٍ للانفلات التكاملي وانتقالٍ سلس (17.1)–(17.4)، وأن تُغلق الحلقة (18.1)، وأن تقرأ هوامشها."
+ },
  "913e49ea63c6": {
   "src": "$\\Gamma$",
   "tr": "$\\Gamma$"
+ },
+ "92d1f122ed8a": {
+  "src": "The transfer function follows from the shift rule: $I_{k-1}$ transforms to $z^{-1}I(z)$, so $I(z)(1 - z^{-1}) = K_iT_s\\,E(z)$, and multiplying top and bottom by $z$ gives (17.1). Its pole at $z = 1$ is the discrete image of the integrator’s pole at $s = 0$.",
+  "tr": "تنتج دالّة التحويل من قاعدة الإزاحة: يتحوّل $I_{k-1}$ إلى $z^{-1}I(z)$، فيكون $I(z)(1 - z^{-1}) = K_iT_s\\,E(z)$. وبضرب البسط والمقام في $z$ نحصل على المعادلة (17.1). أمّا قطبها عند $z = 1$ فهو الصورة المتقطّعة لقطب المكامِل عند $s = 0$."
  },
  "93af770ae1ca": {
   "src": "discharge coefficient, about 0.6 to 0.7",
@@ -527,6 +803,10 @@
   "src": "hose length",
   "tr": "طول الخرطوم"
  },
+ "971f06accedb": {
+  "src": "discretize a plant exactly with a zero-order hold (16.1) and count the phase cost of sampling (16.5);",
+  "tr": "أن تحوّل منظومةً إلى الصيغة المتقطّعة بدقّة باستعمال الماسك من الرتبة الصفرية (16.1)، وأن تحسب كلفة الطور الناتجة عن المعاينة (16.5)؛"
+ },
  "9792a85e029d": {
   "src": "position integral gain",
   "tr": "الكسب التكاملي للموضع"
@@ -535,9 +815,21 @@
   "src": "Hz",
   "tr": "Hz"
  },
+ "9977ecce7d2a": {
+  "src": "Integrate from $t_k$ to $t_{k+1} = t_k + T_s$, with $u = u_k$ constant, and substitute $\\sigma = t_{k+1} - \\tau$:",
+  "tr": "نكامل من $t_k$ إلى $t_{k+1} = t_k + T_s$، مع ثبات $u = u_k$، ونعوّض $\\sigma = t_{k+1} - \\tau$:"
+ },
+ "99932ec51271": {
+  "src": "Cross-multiply, $\\left[(T_f + T_s)\\,z - T_f\\right]D(z) = K_d\\,(z - 1)\\,E(z)$, and read a factor $z$ as one step ahead in time: $(T_f + T_s)\\,D_{k+1} - T_f\\,D_k = K_d\\,(e_{k+1} - e_k)$. Shift every index down by one and solve for $D_k$. In the time domain this is the line the page runs:",
+  "tr": "نضرب تبادليًّا فنحصل على $\\left[(T_f + T_s)\\,z - T_f\\right]D(z) = K_d\\,(z - 1)\\,E(z)$، ونقرأ العامل $z$ بوصفه خطوةً واحدةً إلى الأمام في الزمن: $(T_f + T_s)\\,D_{k+1} - T_f\\,D_k = K_d\\,(e_{k+1} - e_k)$. نُزيح كلّ دليل بمقدار واحد إلى الخلف ونحلّ بالنسبة إلى $D_k$. وفي المجال الزمني هذا هو سطر الشيفرة الذي تنفّذه الصفحة:"
+ },
  "9adb13dc180b": {
   "src": "turbulent friction factor, fitting losses",
   "tr": "معامل احتكاك الجريان المضطرب، خسائر الوصلات"
+ },
+ "9be684790107": {
+  "src": "oil density, kinematic and dynamic viscosity",
+  "tr": "كثافة الزيت، واللزوجة الحركية واللزوجة الديناميكية"
  },
  "9cd576a2999e": {
   "src": "supply pressure from the pump, at port P",
@@ -555,6 +847,10 @@
   "src": "smoothing speed, Stribeck speed",
   "tr": "سرعة التنعيم، سرعة ستريبيك"
  },
+ "9f18cc24197a": {
+  "src": "Why does the corner hold $\\Gamma$? Powers of the block-triangular $M$ keep its shape: $M^n = \\begin{bmatrix}A^n & A^{n-1}B\\\\ 0 & 0\\end{bmatrix}$ for $n \\ge 1$. Summing the exponential series term by term, the top-right block is",
+  "tr": "لماذا تقع $\\Gamma$ في الزاوية اليمنى العليا؟ تحافظ قوى المصفوفة $M$ المثلّثية الكتل على شكلها: $M^n = \\begin{bmatrix}A^n & A^{n-1}B\\\\ 0 & 0\\end{bmatrix}$ لأجل $n \\ge 1$. وبجمع متسلسلة الأُسّ حدًّا حدًّا تكون الكتلة اليمنى العليا هي"
+ },
  "a1375f782ce1": {
   "src": "rod-side annulus area",
   "tr": "مساحة الحلقة على جهة الساق"
@@ -567,6 +863,10 @@
   "src": "rad/s",
   "tr": "rad/s"
  },
+ "a47e350a1384": {
+  "src": "The position controller is the sum of the three parts, and the force controller is a PI:",
+  "tr": "متحكّم الموضع هو مجموع الأجزاء الثلاثة، ومتحكّم القوّة هو PI:"
+ },
  "a5e4fdb26227": {
   "src": "F. M. White, <i>Fluid Mechanics</i>, McGraw-Hill: Bernoulli, pipe friction, orifices.",
   "tr": "F. M. White، <i>Fluid Mechanics</i>، McGraw-Hill: برنولي، احتكاك الأنابيب، الفتحات."
@@ -574,6 +874,10 @@
  "a6768dcb7ec1": {
   "src": "$F_{1,\\min}$",
   "tr": "$F_{1,\\min}$"
+ },
+ "a6c2e25c9359": {
+  "src": "18.2 The loop gain and the Nyquist plot",
+  "tr": "18.2 كسب الحلقة ومخطّط نايكويست"
  },
  "a7e3dad3bb13": {
   "src": "N/A, N·s/m, kg",
@@ -603,6 +907,10 @@
   "src": "$k_{\\mathrm{st}}$",
   "tr": "$k_{\\mathrm{st}}$"
  },
+ "ad093fc86b01": {
+  "src": "derive the valve-controlled cylinder transfer function (15.4) and the rule of thumb it implies;",
+  "tr": "أن تشتقّ دالّة التحويل للأسطوانة التي يتحكّم فيها الصمّام (15.4)، والقاعدة العملية التي تقتضيها؛"
+ },
  "ad5645b20401": {
   "src": "position proportional gain",
   "tr": "الكسب التناسبي للموضع"
@@ -610,6 +918,10 @@
  "af92fd5e956b": {
   "src": "H. E. Merritt, <i>Hydraulic Control Systems</i>, Wiley, 1967: the classic source of chapter 15.",
   "tr": "H. E. Merritt، <i>Hydraulic Control Systems</i>، Wiley، 1967: المرجع الكلاسيكي للفصل 15."
+ },
+ "b01c0ae8a286": {
+  "src": "Before trusting a computer with an eight-state model, it pays to derive the textbook three-state version by hand. Take a symmetric cylinder of area $A$ (in this chapter $A$ is a piston area, not the matrix of chapter 14) with equal chamber volumes $V_t/2$, no hose, a symmetric valve, and define the load pressure $p_L = p_1 - p_2$ and the load flow $Q_L = (Q_1 + Q_2)/2$, where $Q_1$ flows into chamber 1 and $Q_2$ out of chamber 2. These two combinations are chosen because they are what the piston feels: the net force on it is $Ap_L$, and in steady motion $Q_L$ is exactly the flow that moves it. Linearized as in (9.3), the valve gives",
+  "tr": "قبل أن نأتمن الحاسوب على نموذج ذي ثماني حالات، يستحقّ الأمر أن نشتقّ النسخة ذات الحالات الثلاث يدويًّا. لنأخذ أسطوانة متناظرة مساحتها $A$ (في هذا الفصل $A$ مساحةُ مكبس، لا المصفوفةُ الواردة في الفصل 14)، ولكلٍّ من حجرتيها حجمٌ $V_t/2$، دون خرطوم، وبصمّام متناظر، ونعرّف ضغط الحمل $p_L = p_1 - p_2$ وتدفّق الحمل $Q_L = (Q_1 + Q_2)/2$، حيث يدخل $Q_1$ إلى الحجرة 1 ويخرج $Q_2$ من الحجرة 2. اختيرت هاتان التركيبتان لأنهما ما يشعر به المكبس: فالقوّة الصافية عليه هي $Ap_L$، وفي الحركة المستقرّة يكون $Q_L$ بالضبط التدفّق الذي يحرّكه. وبعد التقريب الخطّي كما في المعادلة (9.3) يعطي الصمّام:"
  },
  "b1b4dd69b3c2": {
   "src": "gas volume in the oil–air mixture",
@@ -619,9 +931,25 @@
   "src": "kinematic viscosity of the oil",
   "tr": "اللزوجة الحركية للزيت"
  },
+ "b2930e610d71": {
+  "src": "Cut the loop at the controller output and follow a sinusoid around it: through the delay $z^{-1}$, the plant $G(z)$ and the controller $K(z)$. The ratio of what comes back to what went in is the <i>loop gain</i>",
+  "tr": "اقطع الحلقة عند خرج المتحكّم وتتبّع موجة جيبية حولها: عبر التأخير $z^{-1}$، والمنظومة $G(z)$، والمتحكّم $K(z)$. ونسبة ما يعود إلى ما دخل هي <i>كسب الحلقة</i>"
+ },
+ "b2ebc24b0de6": {
+  "src": "The local error is of order $h^5$ and the global error of order $h^4$: halving the step cuts the error sixteen-fold. To see what that means, apply one step to the test equation $\\dot{x} = \\lambda x$, whose exact solution grows by $e^{\\lambda h}$ per step. Writing $z = \\lambda h$: $\\mathbf{k}_1 = \\lambda x$, $\\mathbf{k}_2 = \\lambda x(1 + z/2)$, $\\mathbf{k}_3 = \\lambda x(1 + z/2 + z^2/4)$, $\\mathbf{k}_4 = \\lambda x(1 + z + z^2/2 + z^3/4)$. The weighted average multiplies $x$ by",
+  "tr": "الخطأ المحلّي من المرتبة $h^5$ والخطأ الكلّي من المرتبة $h^4$: فتقليص الخطوة إلى النصف يُنقص الخطأ ستّ عشرة مرّة. ولنرَ معنى ذلك، نطبّق خطوةً واحدةً على معادلة الاختبار $\\dot{x} = \\lambda x$ التي ينمو حلّها الدقيق بعامل $e^{\\lambda h}$ في كلّ خطوة. وبوضع $z = \\lambda h$: $\\mathbf{k}_1 = \\lambda x$، $\\mathbf{k}_2 = \\lambda x(1 + z/2)$، $\\mathbf{k}_3 = \\lambda x(1 + z/2 + z^2/4)$، $\\mathbf{k}_4 = \\lambda x(1 + z + z^2/2 + z^3/4)$. ويضرب المتوسّط المرجّح $x$ في"
+ },
+ "b32badf4e294": {
+  "src": "$\\rho,\\ \\nu,\\ \\eta = \\rho\\nu$",
+  "tr": "$\\rho,\\ \\nu,\\ \\eta = \\rho\\nu$"
+ },
  "b334d2e0331b": {
   "src": "spool damping ratio",
   "tr": "نسبة تخامد المِزلاج"
+ },
+ "b372cf35545c": {
+  "src": "A small state machine decides which law runs: <i>settle</i> holds position for 0.1 s; <i>approach</i> follows a quintic profile, $s(\\tau) = 10\\tau^3 - 15\\tau^4 + 6\\tau^5$, whose speed and acceleration are zero at both ends; <i>creep</i> rises at 10 mm/s until the load cell (the force sensor above the specimen) reads more than 1 kN; <i>press</i> ramps the force to its target and holds it; <i>release</i> ramps it down; <i>retract</i> returns on another quintic; <i>done</i> holds.",
+  "tr": "آلة حالات صغيرة تقرّر أيّ قانون يعمل: <i>الاستقرار</i> يُبقي الموضع ثابتًا 0.1 s؛ <i>الاقتراب</i> يتبع مسارًا من الدرجة الخامسة $s(\\tau) = 10\\tau^3 - 15\\tau^4 + 6\\tau^5$، تنعدم سرعته وتسارعه عند طرفيه؛ <i>الزحف</i> ينطلق بسرعة 10 mm/s صعودًا حتى تُظهر خلية الحمل (حسّاس القوّة فوق العيّنة) أكثر من 1 kN؛ <i>الكبس</i> يرفع القوّة تدريجيًّا حتى تبلغ هدفها ويُبقيها؛ <i>التخفيف</i> يخفضها تدريجيًّا؛ <i>الرجوع</i> يعود وفق مسار خماسي آخر؛ <i>الانتهاء</i> يُبقي الحالة."
  },
  "b74e98c0c4c0": {
   "src": "$K_{\\mathrm{ff}}$",
@@ -638,6 +966,10 @@
  "b912d9a2e4c8": {
   "src": "force integral gain",
   "tr": "الكسب التكاملي للقوّة"
+ },
+ "b9a507866a98": {
+  "src": "bulk modulus, air fraction at 1 atm, polytropic exponent",
+  "tr": "معامل الانضغاط الحجمي، ونسبة الهواء عند 1 atm، والأُسّ البوليتروبي"
  },
  "b9e8a35574b6": {
   "src": "Pa·s/m³",
@@ -658,6 +990,10 @@
  "bc3c7fb30ee9": {
   "src": "pressure wave speed, √(β/ρ)",
   "tr": "سرعة موجة الضغط، √(β/ρ)"
+ },
+ "bca3ea322bc2": {
+  "src": "Write the build-up equation (7.2) for each chamber, $(V_t/2\\beta)\\,\\dot{p}_1 = Q_1 - A\\dot{y} - C_{tp}p_L$ and $(V_t/2\\beta)\\,\\dot{p}_2 = -Q_2 + A\\dot{y} + C_{tp}p_L$, where $C_{tp}$ is the leakage across the piston. Subtract the second from the first and divide by 2:",
+  "tr": "نكتب معادلة تراكم الضغط (7.2) لكلّ حجرة: $(V_t/2\\beta)\\,\\dot{p}_1 = Q_1 - A\\dot{y} - C_{tp}p_L$ و$(V_t/2\\beta)\\,\\dot{p}_2 = -Q_2 + A\\dot{y} + C_{tp}p_L$، حيث $C_{tp}$ هو التسرّب عبر المكبس. نطرح الثانية من الأولى ونقسم على 2:"
  },
  "c049d0f2d962": {
   "src": "spool force per ampere, spool damping, spool mass (single-stage valve)",
@@ -691,6 +1027,10 @@
   "src": "area ratio A<sub>1</sub>/A<sub>2</sub>, equal to (d<sub>1</sub>/d<sub>2</sub>)²",
   "tr": "نسبة المساحتين A<sub>1</sub>/A<sub>2</sub>، وتساوي (d<sub>1</sub>/d<sub>2</sub>)²"
  },
+ "c485c5dbcec3": {
+  "src": "The page integrates every term separately and checks the sum against the pump work at each sample. The residual stays at $10^{-14}$ of the pump work: a test that every force in the mechanics matches its flow partner in the hydraulics.",
+  "tr": "تُكامل الصفحة كلّ حدّ على حدة، وتتحقّق من المجموع مقابل عمل المضخّة عند كلّ عيّنة. ويبقى الباقي عند $10^{-14}$ من عمل المضخّة: وهو اختبار يتحقّق من أن كلّ قوّة في الميكانيك تطابق شريكها التدفّقي في الهيدروليك."
+ },
  "c7369a8db1b4": {
   "src": "fitting (minor) loss coefficient",
   "tr": "معامل الفقد الموضعي في الوصلات"
@@ -699,13 +1039,29 @@
   "src": "tank pressure",
   "tr": "ضغط الخزّان"
  },
+ "c85dd97ac59f": {
+  "src": "<div class=\"ctag\">In our press</div>At the 9.7 Hz crossover this is 5.2° with $T_s = 1$ ms and 21.0° with $T_s = 4$ ms. The measured phase margin (the extra lag the loop could take before it oscillates; chapter 18) falls by 15.8°, almost exactly the difference.",
+  "tr": "<div class=\"ctag\">في مكبسنا</div>عند تردّد العبور 9.7 Hz يبلغ هذا 5.2° مع $T_s = 1$ ms، و21.0° مع $T_s = 4$ ms. ويقلّ هامش الطور المقيس (التأخّر الإضافي الذي تحتمله الحلقة قبل أن تتذبذب؛ الفصل 18) بمقدار 15.8°، وهذا يكاد يطابق الفرق تمامًا."
+ },
  "c891b2a74879": {
   "src": "Pa",
   "tr": "Pa"
  },
+ "c8fea20027f2": {
+  "src": "Substitute it for the last terms of the sum, and the sum for $p_aQ_A + p_BQ_B$ in the valve balance:",
+  "tr": "نعوّض بها عن الحدود الأخيرة في المجموع، ونعوّض بالمجموع عن $p_aQ_A + p_BQ_B$ في موازنة الصمّام:"
+ },
  "c9285b144757": {
   "src": "kg/m⁷",
   "tr": "kg/m⁷"
+ },
+ "c99542b09258": {
+  "src": "and collect:",
+  "tr": "ونجمع الحدود:"
+ },
+ "c9f243a2a9f5": {
+  "src": "14.2 Small deviations",
+  "tr": "14.2 الانحرافات الصغيرة"
  },
  "ca9602a06f18": {
   "src": "position derivative gain",
@@ -714,6 +1070,10 @@
  "caf9aa84a33b": {
   "src": "$C_{tp}$",
   "tr": "$C_{tp}$"
+ },
+ "cb51da2c1f9b": {
+  "src": "$\\beta_{\\mathrm{oil}},\\ \\alpha_0,\\ n$",
+  "tr": "$\\beta_{\\mathrm{oil}},\\ \\alpha_0,\\ n$"
  },
  "cd107b18b1d2": {
   "src": "supply pressure",
@@ -726,6 +1086,10 @@
  "ce49798c4bbe": {
   "src": "1.5 GPa, 0.5 %, 1.4",
   "tr": "1.5 GPa، 0.5 %، 1.4"
+ },
+ "ce9d07be6fbf": {
+  "src": "and substituting $\\omega_h = 2A\\sqrt{\\beta/(V_tm)}$ gives the $\\zeta_h$ below. This is the classic form:",
+  "tr": "وبالتعويض عن $\\omega_h = 2A\\sqrt{\\beta/(V_tm)}$ نحصل على $\\zeta_h$ الوارد أدناه. وهذه هي الصيغة الكلاسيكية:"
  },
  "cfc038acd0c5": {
   "src": "Lagrangian, T − V",
@@ -759,13 +1123,25 @@
   "src": "hose length and bore",
   "tr": "طول الخرطوم وقطره الداخلي"
  },
+ "d541643b5958": {
+  "src": "<div class=\"ctag\">In our press</div>Cruising up at 0.1 m/s at $y = 60$ mm: $x_v = 40.6\\,\\%$, $p_A = 1.91\\ \\mathrm{MPa}$, $p_B = 3.03\\ \\mathrm{MPa}$. Holding 60 kN: $x_v = 0.039\\,\\%$, $p_A = 7.79\\ \\mathrm{MPa}$, $p_B = 4.21\\ \\mathrm{MPa}$. At rest the critically lapped valve balances the leakages with the spool just off centre.",
+  "tr": "<div class=\"ctag\">في مكبسنا</div>عند صعود منتظم بسرعة 0.1 m/s عند $y = 60$ mm: $x_v = 40.6\\,\\%$، $p_A = 1.91\\ \\mathrm{MPa}$، $p_B = 3.03\\ \\mathrm{MPa}$. وعند الإبقاء على قوّة 60 kN: $x_v = 0.039\\,\\%$، $p_A = 7.79\\ \\mathrm{MPa}$، $p_B = 4.21\\ \\mathrm{MPa}$. وعند السكون يوازن الصمّام ذو التداخل الحرج التسرّبات، والمِزلاج منحرف قليلًا عن المركز."
+ },
  "d56f9b171dc0": {
   "src": "sample period, t<sub>k</sub> = kT<sub>s</sub>",
   "tr": "فترة المعاينة، t<sub>k</sub> = kT<sub>s</sub>"
  },
+ "d633a2a0228c": {
+  "src": "Add the four lines. The internal powers $p_aQ_h$ and $p_AQ_h$ each appear once on the left and once on the right, and cancel. Then multiply the ram equation (12.2) by $\\dot{y}$, using $m\\ddot{y}\\dot{y} = \\frac{d}{dt}\\left(\\tfrac12 m\\dot{y}^2\\right)$ and $mg\\dot{y} = \\frac{d}{dt}(mgy)$:",
+  "tr": "نجمع الأسطر الأربعة. تظهر القدرتان الداخليّتان $p_aQ_h$ و$p_AQ_h$ مرّةً في الطرف الأيسر ومرّةً في الأيمن، فتتلاشيان. ثمّ نضرب معادلة المِدكّ (12.2) في $\\dot{y}$، مستعملين $m\\ddot{y}\\dot{y} = \\frac{d}{dt}\\left(\\tfrac12 m\\dot{y}^2\\right)$ و$mg\\dot{y} = \\frac{d}{dt}(mgy)$:"
+ },
  "d6a7ccf879c4": {
   "src": "$\\nu$",
   "tr": "$\\nu$"
+ },
+ "d76b06a335e7": {
+  "src": "Part III",
+  "tr": "الجزء الثالث"
  },
  "d7d060a1fabb": {
   "src": "2·10⁻¹³ m³/(s·Pa), 0.1 MPa",
@@ -775,6 +1151,10 @@
   "src": "pipe cross-section area, 0.785 cm²",
   "tr": "مساحة المقطع العرضي للأنبوب، 0.785 cm²"
  },
+ "d8c62c144ac9": {
+  "src": "Its one essential property is what it does to a derivative. Integrate by parts:",
+  "tr": "وأهمّ خاصّيّة له هي ما يفعله بالمشتقّة. نُكامِل بالتجزئة:"
+ },
  "d9fff6e4e930": {
   "src": "reference (set) position",
   "tr": "القيمة المرجعية للموضع"
@@ -783,6 +1163,10 @@
   "src": "<span class=\"chn\">B</span> List of symbols",
   "tr": "<span class=\"chn\">B</span> قائمة الرموز"
  },
+ "db46d2893b0c": {
+  "src": "A pure derivative amplifies noise without limit, so it is filtered: $D(s) = K_d\\,s/(T_f s + 1)$ with $T_f = 2$ ms. Backward Euler replaces $s$ by $(1 - z^{-1})/T_s$:",
+  "tr": "تُضخّم المشتقّةُ الصِّرفة الضوضاءَ دون حدّ، لذلك تُرشَّح: $D(s) = K_d\\,s/(T_f s + 1)$ مع $T_f = 2$ ms. وتستبدل قاعدة أويلر الضمنيّة $s$ بالمقدار $(1 - z^{-1})/T_s$:"
+ },
  "db67888f9c4c": {
   "src": "height of the left oil column, H<sub>0</sub> − x",
   "tr": "ارتفاع عمود الزيت الأيسر، H<sub>0</sub> − x"
@@ -790,6 +1174,14 @@
  "db813234d0f8": {
   "src": "linearized state matrix, ∂f/∂x (cylinder area A in ch. 15)",
   "tr": "مصفوفة الحالة بعد التقريب الخطّي، ∂f/∂x (مساحة الأسطوانة A في الفصل 15)"
+ },
+ "dbae94f4ea9b": {
+  "src": "Ring a bell and it hums at its own notes; push it slowly and it just leans. A linear system has a small set of motions of its own, and every response is built from them.",
+  "tr": "اقرع جرسًا فيرنّ على نغماته الخاصّة؛ وادفعه ببطء فيميل فحسب. للنظام الخطّي مجموعة صغيرة من الحركات الخاصّة به، وتتكوّن كلّ استجابة منها."
+ },
+ "dc5979ce924c": {
+  "src": "A continuous pole $s$ becomes a discrete pole $z = e^{sT_s}$, because a motion $e^{st}$ seen only at $t = kT_s$ is the sequence $(e^{sT_s})^k$. The left half-plane, where continuous systems are stable, maps into the unit disc: a sampled system is stable when every pole satisfies $|z| &lt; 1$. A sinusoid of angular frequency $\\omega$ corresponds to $z = e^{j\\omega T_s}$, a point on the unit circle; frequencies run up to the Nyquist frequency, $\\omega = \\pi/T_s$ or $f = 1/(2T_s)$, which is 500 Hz at $T_s = 1$ ms.",
+  "tr": "يصبح القطب المستمرّ $s$ قطبًا متقطّعًا $z = e^{sT_s}$، لأنّ الحركة $e^{st}$ التي تُرى فقط عند $t = kT_s$ هي المتتالية $(e^{sT_s})^k$. ينتقل نصف المستوى الأيسر، حيث تكون الأنظمة المستمرّة مستقرّة، إلى قرص الوحدة: فالنظام المعاينُ مستقرّ حين يحقّق كلّ قطب $|z| &lt; 1$. وتقابل موجة جيبية ذات التردد الزاوي $\\omega$ النقطة $z = e^{j\\omega T_s}$ الواقعة على دائرة الوحدة؛ وتمتدّ الترددات حتى تردّد نايكويست $\\omega = \\pi/T_s$ أو $f = 1/(2T_s)$، أي 500 Hz عند $T_s = 1$ ms."
  },
  "dd3438fc4963": {
   "src": "platen height at which the specimen is first touched",
@@ -811,6 +1203,10 @@
   "src": "120 mm, 80 mm, 200 mm",
   "tr": "120 mm، 80 mm، 200 mm"
  },
+ "df8601f8660a": {
+  "src": "Multiply out the product in the bracket:",
+  "tr": "نفكّ الضربَ الموجود داخل القوس:"
+ },
  "e001c435e5c1": {
   "src": "kg/m³",
   "tr": "kg/m³"
@@ -818,6 +1214,10 @@
  "e0c008bab7d4": {
   "src": "oil inflow into a chamber",
   "tr": "تدفّق الزيت الداخل إلى الحجرة"
+ },
+ "e0d1fe8d4cc8": {
+  "src": "Treat the held input as an extra state that does not change: $\\dot{u} = 0$. The augmented system is",
+  "tr": "نعامل الدخل المحجوز بوصفه حالةً إضافيّة لا تتغيّر: $\\dot{u} = 0$. النظام الموسَّع هو:"
  },
  "e2eadf30ed8b": {
   "src": "$Q_{\\mathrm{out}}$",
@@ -843,6 +1243,10 @@
   "src": "total flow-pressure coefficient, K<sub>c</sub> + C<sub>tp</sub>",
   "tr": "المعامل الكلّي للتدفّق والضغط، K<sub>c</sub> + C<sub>tp</sub>"
  },
+ "e72119f88c84": {
+  "src": "<span class=\"chn\">17</span> The digital controller",
+  "tr": "<span class=\"chn\">17</span> المتحكّم الرقمي"
+ },
  "e789aacfad44": {
   "src": "$\\Delta p_f$",
   "tr": "$\\Delta p_f$"
@@ -851,9 +1255,29 @@
   "src": "valve command input, normalized, clipped to [−1, 1]",
   "tr": "إشارة أمر الصمّام، مُعيَّرة ومحصورة في [−1, 1]"
  },
+ "e9a7f34a54e0": {
+  "src": "These are the first five terms of $e^{\\lambda h}$, so the error per step starts at $(\\lambda h)^5/120$: the order $h^5$ quoted above. The method is stable while $|R| \\le 1$, which on the negative real axis means $\\lambda h \\ge -2.79$.",
+  "tr": "هذه أوّل خمسة حدود من $e^{\\lambda h}$، لذلك يبدأ الخطأ في كلّ خطوة من $(\\lambda h)^5/120$، أي المرتبة $h^5$ المذكورة أعلاه. والطريقة مستقرّة ما دام $|R| \\le 1$، وهذا يعني على المحور الحقيقي السالب أنّ $\\lambda h \\ge -2.79$."
+ },
  "e9b23ba51faa": {
   "src": "$y_{\\mathrm{ref}}$",
   "tr": "$y_{\\mathrm{ref}}$"
+ },
+ "eaecf8c7361c": {
+  "src": "Figure 8. The sampled loop. Everything left of the hold happens in the computer, once per sample; the plant runs continuously.",
+  "tr": "الشكل 8. حلقة التحكّم المُعاينة. كلّ ما يقع يسار الماسك يحدث في الحاسوب، مرّة واحدة في كلّ عيّنة؛ أمّا المنظومة فتعمل باستمرار."
+ },
+ "eba90ff3672c": {
+  "src": "16.2 One exponential gives both",
+  "tr": "16.2 المصفوفة الأُسّية تعطي الاثنين"
+ },
+ "ecc9bdb95640": {
+  "src": "16.4 What the hold costs in phase",
+  "tr": "16.4 ما الذي يكلّفه الماسك من الطور"
+ },
+ "ed13c7b96327": {
+  "src": "Write the controller as a discrete state-space system from its input (the error) to its output (the command): $\\mathbf{s}_{k+1} = A_c\\mathbf{s}_k + B_c e_k$ and $u_k = C_c\\mathbf{s}_k + D_c e_k$. Add one state $w_k$ for the command that is still waiting one sample to reach the valve. With $e_k = -C\\mathbf{x}_k$ for deviations from the reference:",
+  "tr": "نكتب المتحكّم نظامًا ذا فضاء حالة متقطّع من دخله (الخطأ) إلى خرجه (إشارة الأمر): $\\mathbf{s}_{k+1} = A_c\\mathbf{s}_k + B_c e_k$ و$u_k = C_c\\mathbf{s}_k + D_c e_k$. ونضيف حالةً واحدةً $w_k$ لإشارة الأمر التي ما زالت تنتظر عيّنةً واحدةً لتصل إلى الصمّام. وعند تعريف $e_k = -C\\mathbf{x}_k$ للانحرافات عن المرجع:"
  },
  "ed9ab37728d5": {
   "src": "valve-port volume, including half the hose",
@@ -871,6 +1295,10 @@
   "src": "air volume fraction at atmospheric pressure",
   "tr": "نسبة حجم الهواء عند الضغط الجوّي"
  },
+ "ef4d90edf3f4": {
+  "src": "17.5 The supervisor",
+  "tr": "17.5 المشرف"
+ },
  "ef5b051cb73f": {
   "src": "$Q_N,\\ \\Delta p_N$",
   "tr": "$Q_N,\\ \\Delta p_N$"
@@ -878,6 +1306,10 @@
  "f0b37956de2d": {
   "src": "moving mass of the ram",
   "tr": "الكتلة المتحركة للمِدكّ"
+ },
+ "f0d3946000e8": {
+  "src": "linearize a nonlinear model about an operating point and recognize where linearization fails (14.1);",
+  "tr": "أن تُقرّب نموذجًا لاخطّيًّا حول نقطة تشغيل، وأن تتعرّف المواضع التي يفشل فيها التقريب الخطّي (14.1)؛"
  },
  "f1482c8f8257": {
   "src": "$P_{\\mathrm{valve}}$",
@@ -887,9 +1319,21 @@
   "src": "gauge pressure, measured above the atmosphere",
   "tr": "ضغط القياس، ويُقاس فوق الضغط الجوّي"
  },
+ "f23c4e6085d5": {
+  "src": "<div class=\"ctag\">In our press</div>With both ports closed, (15.5), with each chamber’s $\\beta$ from (7.3) at its own pressure and the volumes of (12.1), gives 245 Hz near the bottom of the stroke, 213 Hz near the top and a minimum of 170 Hz at 116 mm. With the hose attached, the full model’s pole table (worked solution 2 on the Servo-Hydraulic Press page) shows the ram at 88 Hz with damping 0.26 at the cruise point: the hose slug and the extra volume soften and couple the resonance.",
+  "tr": "<div class=\"ctag\">في مكبسنا</div>مع إغلاق المنفذين، تعطي المعادلة (15.5)، مع $\\beta$ كلّ حجرة من المعادلة (7.3) عند ضغطها الخاصّ، وحجوم المعادلة (12.1)، تردّدًا قدره 245 Hz قرب أسفل الشوط، و213 Hz قرب أعلاه، وأدنى قيمة 170 Hz عند 116 mm. وعند توصيل الخرطوم، يُظهر جدول الأقطاب الكامل للنموذج (الحلّ المفصّل رقم 2 في صفحة المِكبس الهيدروليكي المؤازر) أنّ المِدكّ عند نقطة الصعود يتذبذب بتردّد 88 Hz وتخامد 0.26: فعمود الزيت في الخرطوم والحجم الإضافي يُليّنان الرنين ويقرنانه بالخرطوم."
+ },
+ "f2c2f5beaa9d": {
+  "src": "The shape of (15.4) explains the most famous rule of thumb in hydraulic servo design. A proportional position loop around an integrator has loop gain $K_{\\mathrm{vel}}/s$, where the velocity gain $K_{\\mathrm{vel}}$ (in 1/s) is the ram speed per metre of position error. It is not the valve coefficient $K_v$ of (8.2). It stays stable only if the loop gain has fallen well below 1 by the time the resonance lifts it again, which gives approximately $K_{\\mathrm{vel}} &lt; 2\\zeta_h\\omega_h$. Here is why. With the controller’s gain folded in, the loop gain is $L(s) = K_{\\mathrm{vel}}/[s(s^2/\\omega_h^2 + 2\\zeta_hs/\\omega_h + 1)]$. At $s = j\\omega_h$ the quadratic equals $-1 + 2j\\zeta_h + 1 = 2j\\zeta_h$, so",
+  "tr": "يفسّر شكل المعادلة (15.4) أشهر قاعدة عملية في تصميم المؤازرات الهيدروليكية. تملك حلقة التحكّم التناسبي في الموضع، حول مكامل، كسبَ حلقة مقداره $K_{\\mathrm{vel}}/s$، حيث كسب السرعة $K_{\\mathrm{vel}}$ (بالوحدة 1/s) هو سرعة المِدكّ لكلّ متر من خطأ الموضع. وهو ليس معامل الصمّام $K_v$ الوارد في المعادلة (8.2). ولا تبقى الحلقة مستقرّة إلّا إذا انخفض كسب الحلقة إلى ما دون 1 بوضوح قبل أن يرفعه الرنين من جديد، وهذا يعطي تقريبًا $K_{\\mathrm{vel}} &lt; 2\\zeta_h\\omega_h$. وإليك السبب. مع إدخال كسب المتحكّم، يكون كسب الحلقة $L(s) = K_{\\mathrm{vel}}/[s(s^2/\\omega_h^2 + 2\\zeta_hs/\\omega_h + 1)]$. وعند $s = j\\omega_h$ يساوي التربيع $-1 + 2j\\zeta_h + 1 = 2j\\zeta_h$، لذا فإنّ"
+ },
  "f3001759ca29": {
   "src": "speed over which the Coulomb jump is smoothed, 1 mm/s",
   "tr": "السرعة التي تُنعَّم عندها قفزة كولوم، 1 mm/s"
+ },
+ "f32b67c7e263": {
+  "src": "value",
+  "tr": "القيمة"
  },
  "f34bc9fe30ec": {
   "src": "contact height, specimen stiffness",
@@ -903,6 +1347,14 @@
   "src": "$K_{pF},\\ K_{iF}$",
   "tr": "$K_{pF},\\ K_{iF}$"
  },
+ "f85df22cee3a": {
+  "src": "17.4 Switching laws without a bump",
+  "tr": "17.4 قوانين التبديل دون قفزة"
+ },
+ "f89574168c54": {
+  "src": "18.3 Gain and phase margins",
+  "tr": "18.3 هامش الكسب وهامش الطور"
+ },
  "f8f6be697241": {
   "src": "friction pressure drop in the hose",
   "tr": "انخفاض الضغط بالاحتكاك في الخرطوم"
@@ -911,6 +1363,10 @@
   "src": "12 MPa",
   "tr": "12 MPa"
  },
+ "f99e4a496656": {
+  "src": "<span class=\"lbl\">answers with</span>the command $u_k \\in [-1, 1]$",
+  "tr": "<span class=\"lbl\">يُخرج</span>إشارة الأمر $u_k \\in [-1, 1]$"
+ },
  "fd93d173beba": {
   "src": "force proportional gain",
   "tr": "الكسب التناسبي للقوّة"
@@ -918,5 +1374,9 @@
  "fdb63b9e51ab": {
   "src": "$\\beta$",
   "tr": "$\\beta$"
+ },
+ "ffc42b165e3b": {
+  "src": "To handle inputs as well, use the <b>Laplace transform</b>, which turns a function of time into a function of $s$,",
+  "tr": "ولمعالجة المدخلات أيضًا نستعمل <b>تحويل لابلاس</b>، الذي يحوّل دالّةً للزمن إلى دالّة في $s$،"
  }
 }

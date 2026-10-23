@@ -441,7 +441,7 @@
  },
  "a4ce3a9be794": {
   "src": "← All simulations",
-  "tr": "← كل المحاكيات"
+  "tr": "→ كل المحاكيات"
  },
  "a9f7db125ca6": {
   "src": "The positions (17) are known in closed form, so the page never steps a differential equation forward in time: each frame evaluates the formulas afresh. Only the phase is accumulated, from the time \\(\\Delta t\\) between frames, capped at \\(0.05\\ \\mathrm{s}\\) so that a stalled or hidden tab does not make the wave jump (after such a pause the picture lags the clock):",

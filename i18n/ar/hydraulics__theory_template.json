@@ -1,0 +1,46 @@
+{
+ "260a99f6bf07": {
+  "src": "The servo-hydraulic press",
+  "tr": "المكبس الهيدروليكي المؤازَر"
+ },
+ "334ae6211c89": {
+  "src": "tools/build_theory.py",
+  "tr": "tools/build_theory.py"
+ },
+ "39ce5ae9101c": {
+  "src": "Every equation the two animations integrate, derived line by line from Newton's laws, conservation of mass and conservation of energy, with a picture to hold in your head for each one and the numbers of the real model beside it. Written for a second- or third-year physics or engineering student.",
+  "tr": "كلّ معادلة تُكامِلها الرسوم المتحرّكة الاثنتان، مُشتقّةٌ سطرًا بسطر من قوانين نيوتن ومن حفظ الكتلة وحفظ الطاقة، ومعها صورةٌ يحملها الذهن عن كلٍّ منها، وأرقامُ النموذج الحقيقي إلى جانبها. مكتوبٌ لطالبٍ في السنة الثانية أو الثالثة من دراسة الفيزياء أو الهندسة."
+ },
+ "41b79ddd1d9e": {
+  "src": "Parts II and III in motion: valve, hose, oil springs and a digital controller.",
+  "tr": "الجزءان الثاني والثالث في الحركة: الصمّام، والخرطوم، وأعمدة الزيت كنوابض، ومتحكّم رقميّ."
+ },
+ "4d46ff0bd341": {
+  "src": "{{STATS}}",
+  "tr": "{{STATS}}"
+ },
+ "6f2473d6ddeb": {
+  "src": "The ideal press",
+  "tr": "المكبس المثالي"
+ },
+ "7baf2fc24fcf": {
+  "src": "Hydraulics from <em>First Principles</em>",
+  "tr": "الهيدروليك من <em>المبادئ الأولى</em>"
+ },
+ "ac7bc4b131ce": {
+  "src": "Companion text to the two presses",
+  "tr": "نصٌّ مرافق للمكبسين"
+ },
+ "efe3ca5a6391": {
+  "src": "Hydraulics from First Principles",
+  "tr": "الهيدروليك من المبادئ الأولى"
+ },
+ "f45d768c5eaf": {
+  "src": "Part I in motion: Pascal, Bernoulli and Lagrange, drawn to scale.",
+  "tr": "الجزء الأول في الحركة: باسكال، وبرنولي، ولاغرانج، بمقياس رسم صحيح."
+ },
+ "f5cbdf6bfb51": {
+  "src": "Contents",
+  "tr": "المحتويات"
+ }
+}

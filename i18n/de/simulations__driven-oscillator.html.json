@@ -1,7 +1,7 @@
 {
  "01c0f20dc3dc": {
   "src": "The swing has a rhythm of its own, and your hand is a second rhythm that the swing does not control. Everything interesting about driven systems comes from the meeting of these two rhythms. A washing machine shakes hardest for a few seconds while its drum speeds up through one particular rate of turning. A loudspeaker cone follows the music only because it was designed so that its own rhythm lies far from the notes it plays. London’s Millennium Bridge swayed on its opening day in 2000 because thousands of footsteps fed its sideways motion.",
-  "tr": "Die Schaukel hat einen eigenen Rhythmus, und Ihre Hand ist ein zweiter Rhythmus, den die Schaukel nicht bestimmt. Alles Interessante an erzwungenen Systemen entsteht aus dem Zusammentreffen dieser beiden Rhythmen. Eine Waschmaschine schüttelt sich für einige Sekunden am heftigsten, während sich die Trommel durch eine bestimmte Drehzahl hindurch beschleunigt. Eine Lautsprechermembran folgt der Musik nur deshalb, weil sie so konstruiert ist, dass ihr eigener Rhythmus weit entfernt von den gespielten Tönen liegt. Die Millennium Bridge in London schwankte an ihrem Eröffnungstag im Jahr 2000, weil Tausende Schritte ihre seitliche Bewegung anfachten."
+  "tr": "Die Schaukel hat einen eigenen Rhythmus, und Ihre Hand ist ein zweiter Rhythmus, den die Schaukel nicht bestimmt. Alles Interessante an erzwungenen Systemen entsteht aus dem Zusammentreffen dieser beiden Rhythmen. Eine Waschmaschine schüttelt sich für einige Sekunden am heftigsten, während ihre Trommel beim Hochlaufen eine bestimmte Drehzahl durchläuft. Eine Lautsprechermembran folgt der Musik nur deshalb, weil sie so konstruiert ist, dass ihr eigener Rhythmus weit entfernt von den gespielten Tönen liegt. Die Millennium Bridge in London schwankte an ihrem Eröffnungstag im Jahr 2000, weil Tausende Schritte ihre seitliche Bewegung anfachten."
  },
  "0247f71c6533": {
   "src": "<span class=\"sw sw--ink\"></span>x(t), played",
@@ -25,11 +25,11 @@
  },
  "0b66e7e06b1d": {
   "src": "Driven oscillations: how a system answers a push it does not control",
-  "tr": "Erzwungene Schwingungen: wie ein System auf einen Stoß antwortet, den es nicht selbst bestimmt"
+  "tr": "Erzwungene Schwingungen: wie ein System auf einen Antrieb antwortet, den es nicht selbst steuert"
  },
  "0c31f7c8f547": {
   "src": "The amplitude is largest where this is smallest, where the bracket vanishes: \\(\\Omega_r = \\omega_0\\sqrt{1-2\\zeta^2}\\), that is \\(f_r = 0.4987\\ \\mathrm{Hz}\\) for the defaults. For \\(\\zeta \\ge 1/\\sqrt2\\) the bracket cannot vanish for any drive; the denominator is then smallest at \\(\\Omega = 0\\), the amplitude only falls as the drive speeds up, and there is no peak at all.",
-  "tr": "Die Amplitude ist dort am größten, wo dieser Ausdruck am kleinsten ist, nämlich dort, wo die Klammer verschwindet: \\(\\Omega_r = \\omega_0\\sqrt{1-2\\zeta^2}\\), das heißt \\(f_r = 0.4987\\ \\mathrm{Hz}\\) bei den Voreinstellungen. Für \\(\\zeta \\ge 1/\\sqrt2\\) kann die Klammer für keine Erregung verschwinden; der Nenner ist dann bei \\(\\Omega = 0\\) am kleinsten, die Amplitude fällt nur, wenn die Erregung schneller wird, und es gibt gar keinen Gipfel."
+  "tr": "Die Amplitude ist dort am größten, wo dieser Ausdruck am kleinsten ist, nämlich dort, wo die Klammer verschwindet: \\(\\Omega_r = \\omega_0\\sqrt{1-2\\zeta^2}\\), das heißt \\(f_r = 0.4987\\ \\mathrm{Hz}\\) bei den Voreinstellungen. Für \\(\\zeta \\ge 1/\\sqrt2\\) kann die Klammer bei keiner Erregerfrequenz verschwinden; der Nenner ist dann bei \\(\\Omega = 0\\) am kleinsten, die Amplitude nimmt mit steigender Erregerfrequenz nur noch ab, und es gibt gar keinen Gipfel."
  },
  "0f6afc311439": {
   "src": "Lecture note · Fig. 9 · control systems",
@@ -37,7 +37,7 @@
  },
  "0f6b2fae480b": {
   "src": "Notice what sets this equation apart from the double pendulum of Fig. 2: the time \\(t\\) appears on its own, inside \\(\\cos\\Omega t\\). The future depends not only on where the block is, but also on the clock, because the clock belongs to someone else.",
-  "tr": "Beachten Sie, was diese Gleichung vom Doppelpendel aus Abb. 2 unterscheidet: Die Zeit \\(t\\) tritt allein auf, innerhalb von \\(\\cos\\Omega t\\). Die Zukunft hängt nicht nur davon ab, wo sich der Block befindet, sondern auch von der Uhr, denn die Uhr gehört jemand anderem."
+  "tr": "Beachten Sie, was diese Gleichung vom Doppelpendel aus Abb. 2 unterscheidet: Die Zeit \\(t\\) tritt explizit auf, im Argument von \\(\\cos\\Omega t\\). Die Zukunft hängt nicht nur davon ab, wo sich der Block befindet, sondern auch von der Uhr, denn die Uhr gehört jemand anderem."
  },
  "11fff8b85b1f": {
   "src": "<span>3</span>The exact solution&nbsp;★",
@@ -45,7 +45,7 @@
  },
  "1416004c7fbb": {
   "src": "<b>Abstract.</b> Almost every machine is pushed by something outside it: a car body by the road, a building by the wind, a loudspeaker cone by the amplifier. This note studies the simplest such system, a mass on a spring with a damper, driven by a force \\(F_0\\cos\\Omega t\\) that someone else decides. We write down its equation of motion, solve it exactly, and use the exact answer to grade the numerical solution the page stores. Along the way we meet resonance, phase lag and the quality factor, and we translate everything into the language of control engineering: input, output, transfer function and Bode plot. Sections marked ★ carry the heavier mathematics and can be skipped on a first reading.",
-  "tr": "<b>Zusammenfassung.</b> Fast jede Maschine wird von etwas außerhalb ihrer selbst angestoßen: ein Autokasten von der Straße, ein Gebäude vom Wind, eine Lautsprechermembran vom Verstärker. Dieses Skript untersucht das einfachste solche System, eine Masse an einer Feder mit einem Dämpfer, angetrieben von einer Kraft \\(F_0\\cos\\Omega t\\), die jemand anderes festlegt. Wir schreiben seine Bewegungsgleichung auf, lösen sie exakt und nutzen die exakte Lösung, um die numerische Lösung zu prüfen, die die Seite speichert. Dabei begegnen uns Resonanz, Phasennacheilung und der Gütefaktor, und wir übersetzen alles in die Sprache der Regelungstechnik: Eingang, Ausgang, Übertragungsfunktion und Bode-Diagramm. Abschnitte mit ★ enthalten die schwierigere Mathematik und können beim ersten Lesen übersprungen werden."
+  "tr": "<b>Zusammenfassung.</b> Fast jede Maschine wird von etwas außerhalb ihrer selbst angeregt: eine Karosserie von der Straße, ein Gebäude vom Wind, eine Lautsprechermembran vom Verstärker. Dieses Skript untersucht das einfachste solche System, eine Masse an einer Feder mit einem Dämpfer, angetrieben von einer Kraft \\(F_0\\cos\\Omega t\\), die jemand anderes festlegt. Wir schreiben seine Bewegungsgleichung auf, lösen sie exakt und nutzen die exakte Lösung, um die numerische Lösung zu prüfen, die die Seite speichert. Dabei begegnen uns Resonanz, Phasennacheilung und der Gütefaktor, und wir übersetzen alles in die Sprache der Regelungstechnik: Eingang, Ausgang, Übertragungsfunktion und Bode-Diagramm. Abschnitte mit ★ enthalten die schwierigere Mathematik und können beim ersten Lesen übersprungen werden."
  },
  "14a2f9ce51c5": {
   "src": "Numa Koudsie · for school students and first- and second-year undergraduates",
@@ -61,7 +61,7 @@
  },
  "21a29dad7f0c": {
   "src": "Lower the damping ratio to 0.01 and press <em>Solve</em>. The beats now last for the whole minute. Count the time between two swells and compare with \\(1/|f - f_0|\\). Then set \\(f = 0.20\\ \\mathrm{Hz}\\), far from resonance. There are no slow beats now, but the block’s own ringing rides on the slow drive; use \\(C_1\\) in equation (5) to explain why it starts as large as the steady motion. (The force switches on at full strength at \\(t = 0\\).)",
-  "tr": "Senken Sie den Dämpfungsgrad auf 0.01 und drücken Sie <em>Lösen</em>. Die Schwebungen dauern nun die ganze Minute. Zählen Sie die Zeit zwischen zwei Anschwellungen und vergleichen Sie sie mit \\(1/|f - f_0|\\). Stellen Sie dann \\(f = 0.20\\ \\mathrm{Hz}\\) ein, weit weg von der Resonanz. Langsame Schwebungen gibt es jetzt nicht mehr, doch das eigene Nachschwingen des Blocks überlagert sich der langsamen Erregung; erklären Sie mit \\(C_1\\) aus Gleichung (5), warum es ebenso groß beginnt wie die stationäre Bewegung. (Die Kraft wird bei \\(t = 0\\) mit voller Stärke eingeschaltet.)"
+  "tr": "Senken Sie den Dämpfungsgrad auf 0.01 und drücken Sie <em>Lösen</em>. Die Schwebungen dauern nun die ganze Minute. Zählen Sie die Zeit zwischen zwei Maxima und vergleichen Sie sie mit \\(1/|f - f_0|\\). Stellen Sie dann \\(f = 0.20\\ \\mathrm{Hz}\\) ein, weit weg von der Resonanz. Langsame Schwebungen gibt es jetzt nicht mehr, doch das eigene Nachschwingen des Blocks überlagert sich der langsamen Erregung; erklären Sie mit \\(C_1\\) aus Gleichung (5), warum es ebenso groß beginnt wie die stationäre Bewegung. (Die Kraft wird bei \\(t = 0\\) mit voller Stärke eingeschaltet.)"
  },
  "235fe4e6ecc4": {
   "src": "<span>7</span>Where the energy goes",
@@ -85,7 +85,7 @@
  },
  "315593132908": {
   "src": "The block rests near the middle of the canvas, and every run is drawn at its own scale: its largest swing always spans about a fifth of the width, whatever the amplitude in metres. The ruler under the block gives the metres, so to compare two runs read the ruler, not the size of the swing. The burgundy arrow on the block has a length proportional to \\(F/F_0\\). The dial at the top right is the driver: its arm turns at \\(\\Omega\\), and its horizontal shadow is proportional to the force. Below, a window of the stored run follows the present sample: \\(x(t)\\) dark up to it and pale after it, \\(F(t)/k\\) dashed in burgundy and the steady amplitude \\(\\pm X\\) dashed in rose. The window spans four drive periods, but never less than 6 s or more than 20 s (8.9 s with the defaults). Under it, a thin strip shows the whole 60 s, with the window shaded. The Bode plot marks the present drive frequency with a filled dot (equation (4)) and the amplitude measured from the last 10 s of the run with a ring around it: when the run has settled, the two coincide.",
-  "tr": "Der Block ruht nahe der Mitte der Zeichenfläche, und jeder Lauf wird in seinem eigenen Maßstab gezeichnet: Sein größter Ausschlag füllt stets etwa ein Fünftel der Breite, unabhängig von der Amplitude in Metern. Das Lineal unter dem Block gibt die Meter an; wer zwei Läufe vergleichen will, liest also das Lineal ab und nicht die Größe des Ausschlags. Der weinrote Pfeil am Block hat eine Länge, die proportional zu \\(F/F_0\\) ist. Das Zifferblatt oben rechts ist der Erreger: Sein Zeiger dreht sich mit \\(\\Omega\\), und sein waagerechter Schatten ist proportional zur Kraft. Darunter folgt ein Fenster des gespeicherten Laufs dem aktuellen Messpunkt: \\(x(t)\\) dunkel bis zu ihm und hell danach, \\(F(t)/k\\) weinrot gestrichelt und die stationäre Amplitude \\(\\pm X\\) rosa gestrichelt. Das Fenster umfasst vier Erregerperioden, jedoch nie weniger als 6 s und nie mehr als 20 s (bei den Voreinstellungen 8.9 s). Darunter zeigt ein dünner Streifen den ganzen Lauf von 60 s, wobei das Fenster schattiert ist. Das Bode-Diagramm markiert die aktuelle Erregerfrequenz mit einem gefüllten Punkt (Gleichung (4)) und die aus den letzten 10 s des Laufs gemessene Amplitude mit einem Ring: Ist der Lauf eingeschwungen, fallen die beiden zusammen."
+  "tr": "Der Block ruht nahe der Mitte der Zeichenfläche, und jeder Lauf wird in seinem eigenen Maßstab gezeichnet: Sein größter Ausschlag füllt stets etwa ein Fünftel der Breite, unabhängig von der Amplitude in Metern. Das Lineal unter dem Block gibt die Meter an; wer zwei Läufe vergleichen will, liest also das Lineal ab und nicht die Größe des Ausschlags. Der weinrote Pfeil am Block hat eine Länge, die proportional zu \\(F/F_0\\) ist. Das Zifferblatt oben rechts ist der Erreger: Sein Zeiger dreht sich mit \\(\\Omega\\), und sein waagerechter Schatten ist proportional zur Kraft. Darunter folgt ein Fenster des gespeicherten Laufs dem aktuell gezeigten gespeicherten Punkt: \\(x(t)\\) dunkel bis zu ihm und hell danach, \\(F(t)/k\\) weinrot gestrichelt und die stationäre Amplitude \\(\\pm X\\) rosa gestrichelt. Das Fenster umfasst vier Erregerperioden, jedoch nie weniger als 6 s und nie mehr als 20 s (bei den Voreinstellungen 8.9 s). Darunter zeigt ein dünner Streifen den ganzen Lauf von 60 s, wobei das Fenster schattiert ist. Das Bode-Diagramm markiert die aktuelle Erregerfrequenz mit einem gefüllten Punkt (Gleichung (4)) und die aus den letzten 10 s des Laufs gemessene Amplitude mit einem Ring: Ist der Lauf eingeschwungen, fallen die beiden zusammen."
  },
  "33bd5a5dddcd": {
   "src": "© 2026 Numa Koudsie",
@@ -101,7 +101,7 @@
  },
  "381456db687d": {
   "src": "Real springs obey Hooke’s law only for small stretches; at large amplitude the restoring force stops being proportional to \\(x\\), and the resonance peak bends and can jump.",
-  "tr": "Reale Federn gehorchen dem Hookeschen Gesetz nur bei kleinen Dehnungen; bei großer Amplitude hört die Rückstellkraft auf, proportional zu \\(x\\) zu sein, und der Resonanzgipfel krümmt sich und kann springen."
+  "tr": "Reale Federn gehorchen dem Hookeschen Gesetz nur bei kleinen Dehnungen; bei großer Amplitude hört die Rückstellkraft auf, proportional zu \\(x\\) zu sein, und der Resonanzgipfel neigt sich zur Seite und kann springen."
  },
  "3d4ea8e5e317": {
   "src": "A. P. French, <a href=\"https://www.routledge.com/Vibrations-and-Waves/French/p/book/9780748744473\"><em>Vibrations and Waves</em></a>, W. W. Norton, 1971 (now CRC Press): chapter 4, forced vibrations and resonance.",
@@ -125,7 +125,7 @@
  },
  "4d04e391631c": {
   "src": "Unlike the earlier figures, this page does not integrate while you watch. Because the driver’s force is known for all time in advance, the whole future is fixed the moment you press <em>Solve</em>. The page uses that.",
-  "tr": "Anders als die früheren Abbildungen rechnet diese Seite nicht während Sie zusehen. Weil die Kraft des Erregers für alle Zeiten im Voraus bekannt ist, liegt die ganze Zukunft in dem Moment fest, in dem Sie <em>Lösen</em> drücken. Die Seite nutzt das."
+  "tr": "Anders als die früheren Abbildungen rechnet diese Seite nicht, während Sie zusehen. Weil die Kraft des Erregers für alle Zeiten im Voraus bekannt ist, liegt die ganze Zukunft in dem Moment fest, in dem Sie <em>Lösen</em> drücken. Die Seite nutzt das."
  },
  "4d54920cbdcb": {
   "src": "<span>9</span>On screen",
@@ -233,15 +233,15 @@
  },
  "7de9c134306d": {
   "src": "J. R. Taylor, <a href=\"https://books.google.com/books/about/Classical_Mechanics.html?id=P1kCtNr-pJsC\"><em>Classical Mechanics</em></a>, University Science Books, 2005: chapter 5, oscillations, driven damped oscillators and resonance.",
-  "tr": "J. R. Taylor, <a href=\"https://books.google.com/books/about/Classical_Mechanics.html?id=P1kCtNr-pJsC\"><em>Classical Mechanics</em></a>, University Science Books, 2005: Kapitel 5, Schwingungen, getriebene gedämpfte Oszillatoren und Resonanz."
+  "tr": "J. R. Taylor, <a href=\"https://books.google.com/books/about/Classical_Mechanics.html?id=P1kCtNr-pJsC\"><em>Classical Mechanics</em></a>, University Science Books, 2005: Kapitel 5, Schwingungen, angetriebene gedämpfte Oszillatoren und Resonanz."
  },
  "7e0d3d8ade7f": {
   "src": "Driven Oscillator<span class=\"dot\">.</span>",
-  "tr": "Der getriebene Oszillator<span class=\"dot\">.</span>"
+  "tr": "Erzwungene Schwingung<span class=\"dot\">.</span>"
  },
  "7f309319b7a8": {
   "src": "Driven Oscillator · Numa Koudsie",
-  "tr": "Der getriebene Oszillator · Numa Koudsie"
+  "tr": "Erzwungene Schwingung · Numa Koudsie"
  },
  "80b744952bb3": {
   "src": "The page covers the underdamped range \\(\\zeta \\le 0.9\\) only, where the exact solution (5) applies; \\(\\zeta \\ge 1\\) needs a different form of the transient.",
@@ -249,7 +249,7 @@
  },
  "810130d126d9": {
   "src": "In the first two cases a system with its own natural frequency is driven by a force that depends on time and on nothing else: the driver does not care where the system is. That is the idealisation of this page. The bridge shows its limit: the walkers adjusted their steps to the sway, so the force depended on the very motion it was driving, a feedback loop that needs a larger model. In control engineering this force is the <em>input</em>, the motion is the <em>output</em>, and the system in between is the <em>plant</em>. Our plant is the simplest one with a rhythm of its own (Figure 1).",
-  "tr": "In den ersten beiden Fällen wird ein System mit eigener Eigenfrequenz von einer Kraft angetrieben, die nur von der Zeit abhängt und von nichts sonst: Der Erreger kümmert sich nicht darum, wo sich das System befindet. Das ist die Idealisierung dieser Seite. Die Brücke zeigt ihre Grenze: Die Gehenden passten ihre Schritte dem Schwanken an, die Kraft hing also von genau der Bewegung ab, die sie antrieb, eine Rückkopplungsschleife, die ein größeres Modell verlangt. In der Regelungstechnik heißt diese Kraft <em>Eingang</em>, die Bewegung <em>Ausgang</em> und das System dazwischen <em>Strecke</em>. Unsere Strecke ist die einfachste mit einem eigenen Rhythmus (Abbildung 1)."
+  "tr": "In den ersten beiden Fällen wird ein System mit seiner Eigenfrequenz von einer Kraft angetrieben, die nur von der Zeit abhängt und von nichts sonst: Der Erreger kümmert sich nicht darum, wo sich das System befindet. Das ist die Idealisierung dieser Seite. Die Brücke zeigt ihre Grenze: Die Fußgänger passten ihre Schritte dem Schwanken an, die Kraft hing also von genau der Bewegung ab, die sie antrieb, eine Rückkopplungsschleife, die ein größeres Modell verlangt. In der Regelungstechnik heißt diese Kraft <em>Eingang</em>, die Bewegung <em>Ausgang</em> und das System dazwischen <em>Strecke</em>. Unsere Strecke ist die einfachste mit einem eigenen Rhythmus (Abbildung 1)."
  },
  "85619c9a9990": {
   "src": "Equation (2) is linear, so its solutions add. The general solution is one particular solution that keeps pace with the driver plus any solution of the free equation (right-hand side zero), chosen to satisfy the starting conditions.",
@@ -321,7 +321,7 @@
  },
  "b2fcac220201": {
   "src": "Figure 4 is the run the page stores with its default settings. The drive at \\(0.45\\ \\mathrm{Hz}\\) is close to the natural \\(0.50\\ \\mathrm{Hz}\\), so during the first seconds two nearby rhythms are present at once: the driver’s, and the block’s own ringing from equation (5). Like two guitar strings slightly out of tune, they drift in and out of step once every \\(1/|f-f_d| = 20.25\\ \\mathrm{s}\\), where \\(f_d = \\omega_d/2\\pi = 0.499\\ \\mathrm{Hz}\\) is the damped ringing frequency (with \\(f_0\\) in its place the estimate is 20 s, close enough at this weak damping). The amplitude swells and shrinks with that rhythm; the first swell reaches \\(0.596\\ \\mathrm{m}\\) at \\(t = 8.0\\ \\mathrm{s}\\). Because the ringing decays with \\(\\tau = 6.4\\ \\mathrm{s}\\), the second beat is already weak, and after half a minute only the steady oscillation at \\(\\pm X = \\pm 0.482\\ \\mathrm{m}\\) is left.",
-  "tr": "Abbildung 4 ist der Lauf, den die Seite mit ihren Voreinstellungen speichert. Die Erregung bei \\(0.45\\ \\mathrm{Hz}\\) liegt nahe der Eigenfrequenz \\(0.50\\ \\mathrm{Hz}\\), daher sind in den ersten Sekunden zwei nahe beieinanderliegende Rhythmen zugleich vorhanden: der des Erregers und das eigene Nachschwingen des Blocks aus Gleichung (5). Wie zwei leicht verstimmte Gitarrensaiten laufen sie alle \\(1/|f-f_d| = 20.25\\ \\mathrm{s}\\) einmal aus dem Takt und wieder in den Takt, wobei \\(f_d = \\omega_d/2\\pi = 0.499\\ \\mathrm{Hz}\\) die gedämpfte Schwingungsfrequenz des Nachschwingens ist (mit \\(f_0\\) an ihrer Stelle ergibt sich die Schätzung 20 s, bei dieser schwachen Dämpfung genau genug). Die Amplitude schwillt in diesem Rhythmus an und ab; die erste Anschwellung erreicht \\(0.596\\ \\mathrm{m}\\) bei \\(t = 8.0\\ \\mathrm{s}\\). Weil das Nachschwingen mit \\(\\tau = 6.4\\ \\mathrm{s}\\) abklingt, ist die zweite Schwebung schon schwach, und nach einer halben Minute bleibt nur noch die stationäre Schwingung mit \\(\\pm X = \\pm 0.482\\ \\mathrm{m}\\) übrig."
+  "tr": "Abbildung 4 ist der Lauf, den die Seite mit ihren Voreinstellungen speichert. Die Erregung bei \\(0.45\\ \\mathrm{Hz}\\) liegt nahe der Eigenfrequenz \\(0.50\\ \\mathrm{Hz}\\), daher sind in den ersten Sekunden zwei nahe beieinanderliegende Rhythmen zugleich vorhanden: der des Erregers und das eigene Nachschwingen des Blocks aus Gleichung (5). Wie zwei leicht verstimmte Gitarrensaiten laufen sie alle \\(1/|f-f_d| = 20.25\\ \\mathrm{s}\\) einmal aus dem Takt und wieder in den Takt, wobei \\(f_d = \\omega_d/2\\pi = 0.499\\ \\mathrm{Hz}\\) die gedämpfte Schwingungsfrequenz des Nachschwingens ist (mit \\(f_0\\) an ihrer Stelle ergibt sich die Schätzung 20 s, bei dieser schwachen Dämpfung genau genug). Die Amplitude schwillt in diesem Rhythmus an und ab; das erste Maximum erreicht \\(0.596\\ \\mathrm{m}\\) bei \\(t = 8.0\\ \\mathrm{s}\\). Weil das Nachschwingen mit \\(\\tau = 6.4\\ \\mathrm{s}\\) abklingt, ist die zweite Schwebung schon schwach, und nach einer halben Minute bleibt nur noch die stationäre Schwingung mit \\(\\pm X = \\pm 0.482\\ \\mathrm{m}\\) übrig."
  },
  "b7a5b228d7b5": {
   "src": "Setting \\(s = i\\Omega\\) gives the response to a steady sinusoidal input, and comparing with (3), \\(G(i\\Omega) = X e^{-i\\varphi}/F_0\\). Plotting \\(|G(i\\Omega)|\\) and \\(\\varphi\\) against the drive frequency on logarithmic axes gives the <em>Bode plot</em>, the second figure on this page. It is the plant’s identity card: from it an engineer reads how strongly each frequency gets through and how late it arrives. Designing a controller, a device that measures \\(x\\) and adds a correcting force, means reshaping this card. Fig. 10 does that for a wind turbine.",
@@ -337,7 +337,7 @@
  },
  "c01b14d3c569": {
   "src": "In the steady state the stored energy only sloshes between spring and block, so on average every joule the driver puts in is lost in the damper. The speed swings with amplitude \\(\\Omega X\\), and the square of a sine averages to one half over a period, so \\(\\langle P_\\text{in}\\rangle = \\langle P_\\text{loss}\\rangle = \\tfrac12 c\\,\\Omega^2 X^2\\), which is \\(0.292\\ \\mathrm{W}\\) for the defaults. Over the full 60 s run the page finds \\(W_\\text{in} = 19.03\\ \\mathrm{J}\\), \\(W_\\text{loss} = 17.93\\ \\mathrm{J}\\) and \\(E(T) - E(0) = 1.11\\ \\mathrm{J}\\). Equation (8) then holds to \\(1.3\\times10^{-12}\\) of \\(W_\\text{in}\\): this is the <em>Energy balance</em> readout, a test of the whole computation.",
-  "tr": "Im stationären Zustand pendelt die gespeicherte Energie nur zwischen Feder und Block hin und her, daher geht im Mittel jedes Joule, das der Erreger hineinsteckt, im Dämpfer verloren. Die Geschwindigkeit schwankt mit der Amplitude \\(\\Omega X\\), und das Quadrat einer Sinusfunktion mittelt sich über eine Periode zu einem halben, daher gilt \\(\\langle P_\\text{in}\\rangle = \\langle P_\\text{loss}\\rangle = \\tfrac12 c\\,\\Omega^2 X^2\\), was bei den Voreinstellungen \\(0.292\\ \\mathrm{W}\\) ergibt. Über den vollen Lauf von 60 s findet die Seite \\(W_\\text{in} = 19.03\\ \\mathrm{J}\\), \\(W_\\text{loss} = 17.93\\ \\mathrm{J}\\) und \\(E(T) - E(0) = 1.11\\ \\mathrm{J}\\). Gleichung (8) gilt dann auf \\(1.3\\times10^{-12}\\) von \\(W_\\text{in}\\) genau: Das ist die Anzeige <em>Energiebilanz</em>, ein Test der gesamten Rechnung."
+  "tr": "Im stationären Zustand pendelt die gespeicherte Energie nur zwischen Feder und Block hin und her, daher geht im Mittel jedes Joule, das der Erreger hineinsteckt, im Dämpfer verloren. Die Geschwindigkeit schwankt mit der Amplitude \\(\\Omega X\\), und das Quadrat einer Sinusfunktion hat über eine Periode den Mittelwert einhalb, daher gilt \\(\\langle P_\\text{in}\\rangle = \\langle P_\\text{loss}\\rangle = \\tfrac12 c\\,\\Omega^2 X^2\\), was bei den Voreinstellungen \\(0.292\\ \\mathrm{W}\\) ergibt. Über den vollen Lauf von 60 s findet die Seite \\(W_\\text{in} = 19.03\\ \\mathrm{J}\\), \\(W_\\text{loss} = 17.93\\ \\mathrm{J}\\) und \\(E(T) - E(0) = 1.11\\ \\mathrm{J}\\). Gleichung (8) gilt dann auf \\(1.3\\times10^{-12}\\) von \\(W_\\text{in}\\) genau: Das ist die Anzeige <em>Energiebilanz</em>, ein Test der gesamten Rechnung."
  },
  "c1b34a6a31df": {
   "src": "<span class=\"psec__n\">06</span>The start: beats and decay",
@@ -365,7 +365,7 @@
  },
  "cf1167a72a6d": {
   "src": "Real friction is often dry rather than viscous: it does not grow with speed. The linear damper is the version that keeps the equation solvable.",
-  "tr": "Reale Reibung ist oft trocken statt zähflüssig: Sie wächst nicht mit der Geschwindigkeit. Der lineare Dämpfer ist die Version, die die Gleichung lösbar hält."
+  "tr": "Reale Reibung ist oft trocken statt viskos: Sie wächst nicht mit der Geschwindigkeit. Der lineare Dämpfer ist die Version, die die Gleichung lösbar hält."
  },
  "d1622a8321e0": {
   "src": "Phyein Usul, home page",
@@ -417,7 +417,7 @@
  },
  "e30929b698e7": {
   "src": "<span class=\"pfig__n\">Figure 1</span>The plant. A block of mass \\(m\\), held by a spring of stiffness \\(k\\) and slowed by a damper with coefficient \\(c\\), is pushed by an outside force \\(F(t)\\). The coordinate \\(x\\) measures how far the block is from where it would rest without the force.",
-  "tr": "<span class=\"pfig__n\">Abbildung 1</span>Die Strecke. Ein Block der Masse \\(m\\) wird von einer Feder mit der Steifigkeit \\(k\\) gehalten und von einem Dämpfer mit dem Koeffizienten \\(c\\) gebremst; eine äußere Kraft \\(F(t)\\) stößt ihn an. Die Koordinate \\(x\\) misst, wie weit der Block von der Lage entfernt ist, in der er ohne Kraft ruhen würde."
+  "tr": "<span class=\"pfig__n\">Abbildung 1</span>Die Strecke. Ein Block der Masse \\(m\\) wird von einer Feder mit der Steifigkeit \\(k\\) gehalten und von einem Dämpfer mit dem Koeffizienten \\(c\\) gebremst; eine äußere Kraft \\(F(t)\\) treibt ihn an. Die Koordinate \\(x\\) misst, wie weit der Block von der Lage entfernt ist, in der er ohne Kraft ruhen würde."
  },
  "e74c0422b6ce": {
   "src": "<strong>Solve.</strong> The fourth-order Runge–Kutta method advances \\((x, \\dot x)\\) from \\(t = 0\\) to \\(60\\ \\mathrm{s}\\) in 60 000 steps of \\(h = 1\\ \\mathrm{ms}\\), carrying \\(W_\\text{in}\\) and \\(W_\\text{loss}\\) along in the same steps. Measured in headless Chromium, the default solve took 9.5–12.4 ms; the time depends on the machine.",

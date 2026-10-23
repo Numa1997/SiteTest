@@ -321,7 +321,7 @@
  },
  "a4ce3a9be794": {
   "src": "← All simulations",
-  "tr": "← جميع المحاكاة"
+  "tr": "→ جميع المحاكاة"
  },
  "a5398bb69f06": {
   "src": "The amplitudes are taken as equal. In the plane of the drawing, the wave from a long slit weakens as \\(1/\\sqrt L.\\) At the dark fringe for the defaults, \\(L_1 = 200.52\\ \\mathrm{px}\\) and \\(L_2 = 207.27\\ \\mathrm{px},\\) so the amplitudes differ by \\(1.6\\,\\%\\) and the dark fringe keeps \\(7\\times10^{-5}\\) of the peak intensity: invisible.",

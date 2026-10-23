@@ -365,7 +365,7 @@
  },
  "a4ce3a9be794": {
   "src": "← All simulations",
-  "tr": "← كل المحاكاة"
+  "tr": "→ كل المحاكاة"
  },
  "a4e2630dae79": {
   "src": "with \\(\\Delta t\\) the real time since the last frame, at most \\(0.05\\ \\mathrm{s}\\). The partial sums of (15) are the joints of the chain, and the last one is the pen. There is no integration and therefore no accumulated error: after every loop the pen returns to the same place.",
