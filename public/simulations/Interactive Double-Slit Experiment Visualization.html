@@ -10,7 +10,7 @@
     <meta name="theme-color" content="#f5f1ea">
     <link rel="stylesheet" href="../styles/sim.css">
     <link rel="stylesheet" href="../styles/data.css">
-    <link rel="stylesheet" href="../styles/fold.css">
+    <link rel="stylesheet" href="../styles/fold.css"><link rel="stylesheet" href="../styles/i18n.css"><script src="../scripts/flip.js"></script><!--I18N-ALTERNATES--><link rel="alternate" hreflang="en" href="https://phyeinusul.com/simulations/Interactive Double-Slit Experiment Visualization.html" /><link rel="alternate" hreflang="de" href="https://phyeinusul.com/de/simulations/Interactive Double-Slit Experiment Visualization.html" /><link rel="alternate" hreflang="ar" href="https://phyeinusul.com/ar/simulations/Interactive Double-Slit Experiment Visualization.html" /><link rel="alternate" hreflang="x-default" href="https://phyeinusul.com/simulations/Interactive Double-Slit Experiment Visualization.html" /><!--/I18N-ALTERNATES-->
     <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='12' fill='%237a1f2b'/%3E%3Ctext x='32' y='45' text-anchor='middle' font-family='Georgia,serif' font-size='38' fill='%23f5f1ea'%3EN%3C/text%3E%3C/svg%3E">
     <style>
         .svg-lbl { font-family: var(--tex); font-style: italic; font-size: 19px; fill: var(--ink); }
@@ -42,7 +42,7 @@
             <a href="draw-decompose.html">8</a>
             <a href="driven-oscillator.html">9</a>
             <a href="wind-turbine.html">10</a>
-        </nav>
+        </nav><span class="lang-switch" role="group" aria-label="Language" translate="no"><!--I18N-SWITCH--><a href="../simulations/Interactive Double-Slit Experiment Visualization.html" hreflang="en" lang="en" aria-current="page">English</a> · <a href="../de/simulations/Interactive Double-Slit Experiment Visualization.html" hreflang="de" lang="de">Deutsch</a> · <a href="../ar/simulations/Interactive Double-Slit Experiment Visualization.html" hreflang="ar" lang="ar" dir="rtl">العربية</a><!--/I18N-SWITCH--></span>
     </header>
 
     <main class="sim">
@@ -755,9 +755,9 @@
             var ratio = G.ds / G.lambda, phi = 2 * Math.PI * ratio;
             var ff = G.b * Math.sin(G.a);
             var f = ratio - Math.floor(ratio), verdict;
-            if (f < 0.08 || f > 0.92) verdict = 'Constructive · bright fringe, m = ' + Math.round(ratio);
-            else if (Math.abs(f - 0.5) < 0.08) verdict = 'Destructive · dark fringe between m = ' + Math.floor(ratio) + ' and ' + (Math.floor(ratio) + 1);
-            else verdict = 'Partial · I/I₀ = ' + Math.pow(Math.cos(phi / 2), 2).toFixed(2);
+            if (f < 0.08 || f > 0.92) verdict = _t('Constructive · bright fringe, m = ') + Math.round(ratio);
+            else if (Math.abs(f - 0.5) < 0.08) verdict = _t('Destructive · dark fringe between m = ') + Math.floor(ratio) + _t(' and ') + (Math.floor(ratio) + 1);
+            else verdict = _t('Partial · I/I₀ = ') + Math.pow(Math.cos(phi / 2), 2).toFixed(2);
             var px = ds.alloc('pt_x'), py = ds.alloc('pt_y'), P5 = [G.S1, G.S2, { x: X0, y: Y0 }, G.P, G.Q];
             for (var q = 0; q < 5; q++) { px[q] = P5[q].x; py[q] = P5[q].y; }
             ds.touch('pt_x'); ds.touch('pt_y');
@@ -802,7 +802,7 @@
                 u: '(' + ds.get('ux').toFixed(4) + ', ' + ds.get('uy').toFixed(4) + ')', Q: pt(4), S2Q: ds.get('S2Q').toFixed(4) + ' px',
                 lam: ds.get('lambda').toFixed(1) + ' px', m: ds.get('ratio').toFixed(4), phi: ds.get('phi_pi').toFixed(3) + ' π',
                 I: ds.get('I').toFixed(4), ff: ds.get('b_sin_a').toFixed(4) + ' px', Iff: ds.get('I_far_P').toFixed(4),
-                sinm: sl.toFixed(4), t1: sl <= 1 ? ds.get('theta1').toFixed(2) + '°' : 'none (λ > b)',
+                sinm: sl.toFixed(4), t1: sl <= 1 ? ds.get('theta1').toFixed(2) + '°' : _t('none (λ > b)'),
                 fr: f.toFixed(3), verdict: ds.get('verdict')
             };
         };
@@ -820,7 +820,7 @@
         var PN = ['S₁', 'S₂', 'M', 'P', 'Q'], stageEl = document.getElementById('stage'), geoSvg = document.getElementById('geo');
         function toSvg(x, y) { var r = stageEl.getBoundingClientRect(), pt = geoSvg.createSVGPoint(); pt.x = r.left + x; pt.y = r.top + y; var q = pt.matrixTransform(geoSvg.getScreenCTM().inverse()); return { x: q.x, y: q.y }; }
         function toCss(X, Y) { var r = stageEl.getBoundingClientRect(), pt = geoSvg.createSVGPoint(); pt.x = X; pt.y = Y; var q = pt.matrixTransform(geoSvg.getScreenCTM()); return { x: q.x - r.left, y: q.y - r.top }; }
-        function sliderCheck(input, label) { return { formula: 'read from the ' + label + ' slider now', inputs: [['slider', input.value, '']], value: parseFloat(input.value) }; }
+        function sliderCheck(input, label) { return { formula: _t('read from the ') + label + _t(' slider now'), inputs: [['slider', input.value, '']], value: parseFloat(input.value) }; }
         function pointCheck(q, which) {
             var d = ds.get('d'), a = ds.get('alpha'), b = ds.get('b'), L1 = ds.get('L1'), ux = ds.get('ux'), uy = ds.get('uy');
             var xs = [X0 - b / 2, X0 + b / 2, X0, X0 - d * Math.tan(a), X0 - d * Math.tan(a) + ux * L1], ys = [Y0, Y0, Y0, Y0 - d, Y0 - d + uy * L1];
@@ -836,26 +836,26 @@
             var px = ds.get('pt_x'), py = ds.get('pt_y'), best = null, bd = Infinity;
             Array.prototype.forEach.call(gShapes.querySelectorAll('circle'), function (c) { var d = Math.hypot(+c.getAttribute('cx') - px[q], +c.getAttribute('cy') - py[q]); if (d < bd) { bd = d; best = c; } });
             var ok = best && bd < 0.02;
-            return { what: PN[q] + ' as drawn: the nearest circle in the SVG', drawn: best ? '(' + best.getAttribute('cx') + ', ' + best.getAttribute('cy') + '), r = ' + best.getAttribute('r') : 'no circle', expected: '(' + px[q].toFixed(2) + ', ' + py[q].toFixed(2) + ')', ok: !!ok,
-                note: q === 4 && !ok ? 'Q is only drawn when δs > 0.05 px.' : 'SVG coordinates are written with two decimals, so the picture carries positions to 0.01 px.' };
+            return { what: PN[q] + _t(' as drawn: the nearest circle in the SVG'), drawn: best ? '(' + best.getAttribute('cx') + ', ' + best.getAttribute('cy') + '), r = ' + best.getAttribute('r') : _t('no circle'), expected: '(' + px[q].toFixed(2) + ', ' + py[q].toFixed(2) + ')', ok: !!ok,
+                note: q === 4 && !ok ? _t('Q is only drawn when δs > 0.05 px.') : _t('SVG coordinates are written with two decimals, so the picture carries positions to 0.01 px.') };
         }
         function firstFringeReadback(sine) {
             var label = Array.prototype.find.call(pattern.querySelectorAll('text'), function (el) { return el.textContent === 'm = 1'; });
-            if (!label) return { what: 'the first bright-fringe label', drawn: 'outside the 0°–30° plot', expected: 'not drawn', ok: null };
+            if (!label) return { what: _t('the first bright-fringe label'), drawn: _t('outside the 0°–30° plot'), expected: _t('not drawn'), ok: null };
             var angle = (Number(label.getAttribute('x')) - 56) / 500 * 30;
             var actual = sine ? Math.sin(angle * DEG) : angle, expected = ds.get(sine ? 'sin_theta1' : 'theta1');
-            return { what: 'first bright fringe, read from its SVG x coordinate', drawn: actual.toFixed(4), expected: expected.toFixed(4), ok: Math.abs(actual - expected) < 0.001 };
+            return { what: _t('first bright fringe, read from its SVG x coordinate'), drawn: actual.toFixed(4), expected: expected.toFixed(4), ok: Math.abs(actual - expected) < 0.001 };
         }
         Sim.data = {
-            ds: ds, kicker: 'Fig. 3 · data', file: 'fig3-double-slit',
+            ds: ds, kicker: _t('Fig. 3 · data'), file: 'fig3-double-slit',
             playing: function () { return clk.playing; },
             groups: [
-                { title: 'Physical parameters', note: 'what you set with the sliders', vars: ['d', 'alpha_deg', 'alpha', 'b', 'lambda'] },
-                { title: 'Geometry', note: 'points in figure coordinates: x to the right, y downwards', vars: ['pt_x', 'pt_y', 'L1', 'L2', 'ux', 'uy'] },
-                { title: 'Path difference and phase', note: 'what decides bright or dark', vars: ['ds', 'ds_direct', 'S2Q', 'b_sin_a', 'ds_err', 'ratio', 'frac', 'phi', 'phi_pi', 'sin_theta1', 'theta1'] },
-                { title: 'Intensity', note: 'two equal waves: I/I₀ = cos²(Δφ/2)', vars: ['I', 'I_far_P', 'verdict', 'theta', 'I_far', 'I_exact', 'I_diff'] },
-                { title: 'Bright fringes', note: 'far field: b sin θ<sub>m</sub> = mλ', vars: ['m_max', 'fringe_px', 'm_sin', 'm_theta', 'm_x'] },
-                { title: 'Animation', note: 'the wavelets only; the geometry does not move', vars: ['phase', 'ring_speed', 'ring_r', 'n_rings', 'animate', 'clock_t', 'wall', 'fps'] }
+                { title: _t('Physical parameters'), note: _t('what you set with the sliders'), vars: ['d', 'alpha_deg', 'alpha', 'b', 'lambda'] },
+                { title: _t('Geometry'), note: _t('points in figure coordinates: x to the right, y downwards'), vars: ['pt_x', 'pt_y', 'L1', 'L2', 'ux', 'uy'] },
+                { title: _t('Path difference and phase'), note: _t('what decides bright or dark'), vars: ['ds', 'ds_direct', 'S2Q', 'b_sin_a', 'ds_err', 'ratio', 'frac', 'phi', 'phi_pi', 'sin_theta1', 'theta1'] },
+                { title: _t('Intensity'), note: _t('two equal waves: I/I₀ = cos²(Δφ/2)'), vars: ['I', 'I_far_P', 'verdict', 'theta', 'I_far', 'I_exact', 'I_diff'] },
+                { title: _t('Bright fringes'), note: _t('far field: b sin θ<sub>m</sub> = mλ'), vars: ['m_max', 'fringe_px', 'm_sin', 'm_theta', 'm_x'] },
+                { title: _t('Animation'), note: _t('the wavelets only; the geometry does not move'), vars: ['phase', 'ring_speed', 'ring_r', 'n_rings', 'animate', 'clock_t', 'wall', 'fps'] }
             ],
             rowLabel: { pt: function (j) { return PN[j]; }, m: function (j) { return 'm = ' + j; } },
             colour: { I_far: function (v) { return Sim.colourMap(v, 1); }, I_exact: function (v) { return Sim.colourMap(v, 1); } },
@@ -871,7 +871,7 @@
                 if (q === 1) rows.push(['L<sub>2</sub> to P', ds.get('L2'), 'px', 'L2'], ['|S<sub>2</sub>Q|', ds.get('S2Q'), 'px', 'S2Q']);
                 if (q === 4) rows.push(['|S<sub>2</sub>Q| = δs', ds.get('S2Q'), 'px', 'S2Q']);
                 if (q === 2) rows.push(['b', ds.get('b'), 'px', 'b'], ['α', ds.get('alpha_deg'), '°', 'alpha_deg']);
-                return { title: PN[q] + (q === 3 ? ' · the observed point' : q === 2 ? ' · midpoint of the slits' : ''), at: toCss(px[q], py[q]), rows: rows };
+                return { title: PN[q] + (q === 3 ? _t(' · the observed point') : q === 2 ? _t(' · midpoint of the slits') : ''), at: toCss(px[q], py[q]), rows: rows };
             },
             locate: function (name, idx) {
                 if (name === 'pt_x' || name === 'pt_y') return toCss(ds.get('pt_x')[idx], ds.get('pt_y')[idx]);
@@ -918,26 +918,26 @@
             drawn: {
                 sin_theta1: function () { return firstFringeReadback(true); },
                 theta1: function () { return firstFringeReadback(false); },
-                L1: function () { var actual = document.getElementById('r-l1').textContent, expected = ds.get('L1').toFixed(1) + ' px'; return { what: 'the visible r-l1 readout', drawn: actual, expected: expected, ok: actual === expected }; },
-                L2: function () { var actual = document.getElementById('r-l2').textContent, expected = ds.get('L2').toFixed(1) + ' px'; return { what: 'the visible r-l2 readout', drawn: actual, expected: expected, ok: actual === expected }; },
-                phi_pi: function () { var actual = document.getElementById('r-phi').textContent, expected = ds.get('phi_pi').toFixed(2) + ' π'; return { what: 'the visible r-phi readout', drawn: actual, expected: expected, ok: actual === expected }; },
+                L1: function () { var actual = document.getElementById('r-l1').textContent, expected = ds.get('L1').toFixed(1) + ' px'; return { what: _t('the visible r-l1 readout'), drawn: actual, expected: expected, ok: actual === expected }; },
+                L2: function () { var actual = document.getElementById('r-l2').textContent, expected = ds.get('L2').toFixed(1) + ' px'; return { what: _t('the visible r-l2 readout'), drawn: actual, expected: expected, ok: actual === expected }; },
+                phi_pi: function () { var actual = document.getElementById('r-phi').textContent, expected = ds.get('phi_pi').toFixed(2) + ' π'; return { what: _t('the visible r-phi readout'), drawn: actual, expected: expected, ok: actual === expected }; },
                 pt_x: circleCheck, pt_y: circleCheck,
                 I: function () {
                     var c = pattern.querySelector('circle[r="5.5"]'), cy = c ? +c.getAttribute('cy') : NaN, val = (142 - cy) / (142 - 24);
-                    return { what: 'the dot on the intensity plot: its height read back as I/I₀', drawn: isFinite(val) ? val.toFixed(4) + ' (cy = ' + cy + ')' : 'no dot', expected: ds.get('I').toFixed(4), ok: Math.abs(val - ds.get('I')) < 2e-3,
-                        note: 'The dot is placed from the exact intensity at α; SVG coordinates carry two decimals, so the plot resolves I to about 1 part in 10 000.' };
+                    return { what: _t('the dot on the intensity plot: its height read back as I/I₀'), drawn: isFinite(val) ? val.toFixed(4) + ' (cy = ' + cy + ')' : _t('no dot'), expected: ds.get('I').toFixed(4), ok: Math.abs(val - ds.get('I')) < 2e-3,
+                        note: _t('The dot is placed from the exact intensity at α; SVG coordinates carry two decimals, so the plot resolves I to about 1 part in 10 000.') };
                 },
                 ds: function () {
                     var ok = false, bar = null;
                     Array.prototype.forEach.call(gShapes.querySelectorAll('line'), function (l) { if (l.getAttribute('stroke-width') === '5' && l.getAttribute('stroke') !== T.ink) bar = l; });
                     var len = bar ? Math.hypot(+bar.getAttribute('x2') - +bar.getAttribute('x1'), +bar.getAttribute('y2') - +bar.getAttribute('y1')) : NaN;
                     ok = Math.abs(len - ds.get('ds')) < 0.03;
-                    return { what: 'the burgundy bar S₂Q: its length in the SVG', drawn: isFinite(len) ? len.toFixed(3) + ' px' : 'no bar (δs ≤ 0.05 px)', expected: ds.get('ds').toFixed(3) + ' px', ok: ok };
+                    return { what: _t('the burgundy bar S₂Q: its length in the SVG'), drawn: isFinite(len) ? len.toFixed(3) + ' px' : _t('no bar (δs ≤ 0.05 px)'), expected: ds.get('ds').toFixed(3) + ' px', ok: ok };
                 }
             },
-            round: { time: 'wall', mode: 'change', label: function () { return 'ten seconds of slider changes: move a slider while it records'; }, length: function () { return 10; },
+            round: { time: 'wall', mode: 'change', label: function () { return _t('ten seconds of slider changes: move a slider while it records'); }, length: function () { return 10; },
                 columns: ['d', 'alpha_deg', 'b', 'lambda', 'L1', 'L2', 'ds', 'ratio', 'I'], point: function () { return { pt: 3 }; } },
-            about: 'Here nothing is sampled on a grid: the figure is drawn as SVG shapes from the stored points, with coordinates written to two decimals. The intensity plot samples 301 directions; the pattern is drawn as a smooth line through them. The wavelets are decoration: their radii are stored, but they carry no physics beyond λ.'
+            about: _t('Here nothing is sampled on a grid: the figure is drawn as SVG shapes from the stored points, with coordinates written to two decimals. The intensity plot samples 301 directions; the pattern is drawn as a smooth line through them. The wavelets are decoration: their radii are stored, but they carry no physics beyond λ.')
         };
         update();
     })();

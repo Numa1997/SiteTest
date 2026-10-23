@@ -1,0 +1,924 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline' https://v2.appdeploy.ai https://unpkg.com/@khmyznikov/pwa-install@0.6.3/dist/pwa-install.bundle.js; style-src 'self' 'unsafe-inline'; img-src 'self' data: blob: https://appdeploy.ai; font-src 'self' data:; connect-src 'self' https://api-v2.appdeploy.ai; worker-src 'self'; manifest-src 'self'; object-src 'none'; base-uri 'self'; form-action 'self'; upgrade-insecure-requests">
+    <meta name="referrer" content="strict-origin-when-cross-origin">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>الفوضى في النوّاس المزدوج · نعمة سائر قدسية</title>
+    <meta name="description" content="نوّاس مزدوج تفاعلي يُحسب بطريقة RK4: كتل وأطوال وشروط ابتدائية قابلة للضبط، وفحص للطاقة، وتوأم للفوضى يبدأ على بُعد ⁦0.001 rad⁩.">
+    <meta name="theme-color" content="#f5f1ea">
+    <link rel="stylesheet" href="../../styles/sim.rtl.css">
+    <link rel="stylesheet" href="../../styles/data.rtl.css">
+    <link rel="stylesheet" href="../../styles/fold.rtl.css"><link rel="stylesheet" href="../../styles/i18n.css"><script src="../../scripts/flip.js"></script><link rel="alternate" hreflang="en" href="https://phyeinusul.com/simulations/Double Pendulum.html" /><link rel="alternate" hreflang="de" href="https://phyeinusul.com/de/simulations/Double Pendulum.html" /><link rel="alternate" hreflang="ar" href="https://phyeinusul.com/ar/simulations/Double Pendulum.html" /><link rel="alternate" hreflang="x-default" href="https://phyeinusul.com/simulations/Double Pendulum.html" />
+    <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='12' fill='%237a1f2b'/%3E%3Ctext x='32' y='45' text-anchor='middle' font-family='Georgia,serif' font-size='38' fill='%23f5f1ea'%3EN%3C/text%3E%3C/svg%3E">
+
+    <link rel="stylesheet" href="../../fonts/arabic.css" />
+    <script src="../../scripts/i18n/strings-ar.js"></script>
+    <meta name="translated-from" content="English public/simulations/Double Pendulum.html, commit cf6212d" />
+  </head>
+<body>
+    <header class="sim-top">
+        <span style="display:inline-flex;align-items:center;gap:14px"><a href="../index.html" aria-label="Phyein Usul، الصفحة الرئيسية" style="display:inline-block;line-height:0"><img src="../../images/phyein-usul-mark.svg" alt="Phyein Usul" width="87" height="48" /></a><a href="../simulations.html">→ جميع المحاكاة</a></span>
+        <nav class="sim-nav" aria-label="المحاكاة">
+            <span>الشكل</span>
+            <a href="Circular Wave Interference Visualization.html">1</a>
+            <a href="Double Pendulum.html" aria-current="page">2</a>
+            <a href="Interactive Double-Slit Experiment Visualization.html">3</a>
+            <a href="Transverse and longitudinal waves.html">4</a>
+            <a href="water-wave.html">5</a>
+            <a href="wave-interference.html">6</a>
+            <a href="phasor-sums.html">7</a>
+            <a href="draw-decompose.html">8</a>
+            <a href="driven-oscillator.html">9</a>
+            <a href="wind-turbine.html">10</a>
+        </nav><span class="lang-switch" role="group" aria-label="اللغة" translate="no"><a href="../../simulations/Double Pendulum.html" hreflang="en" lang="en">English</a> · <a href="../../de/simulations/Double Pendulum.html" hreflang="de" lang="de">Deutsch</a> · <a href="../../ar/simulations/Double Pendulum.html" hreflang="ar" lang="ar" dir="rtl" aria-current="page">العربية</a></span>
+    </header>
+
+    <main class="sim">
+        <noscript><p class="sim-error"><b>هذه المحاكاة تحتاج إلى JavaScript.</b> <a href="../simulations.html">العودة إلى المحاكاة</a></p></noscript>
+        <div class="sim__head">
+            <p class="sim__num">الشكل 2 · الميكانيك الكلاسيكي · الفوضى</p>
+            <h1>النوّاس المزدوج<span class="dot">.</span></h1>
+            <p class="sim__lede">قضيبان صلبان، وكتلتان نقطيتان، ومجال جاذبية واحد. حتميّ، ومع ذلك يكفي تغيّرٌ في الزاوية الابتدائية بمقدار جزء من ألف من الراديان ليأخذ النوّاس إلى مكان آخر تمامًا.</p>
+        </div>
+
+        <div class="sim__grid">
+            <figure class="stage">
+                <div class="stage__canvas" id="stage" style="--ar: 4 / 3; --ar-m: 1 / 1.05;">
+                    <canvas id="pend" aria-label="رسوم متحركة للنوّاس المزدوج"></canvas>
+                </div>
+                <figcaption class="stage__cap">
+                    <span><b>الشكل 2</b> · النوّاس المزدوج · RK4، <span class="tx">\(h = 1/600\ \mathrm{s}\)</span></span>
+                    <span id="cap-t"><i>t</i> = 0.0 s</span>
+                </figcaption>
+            </figure>
+
+            <aside class="panel" aria-label="أدوات التحكّم">
+                <div class="panel__group">
+                    <p class="panel__label">تشغيل</p>
+                    <div class="actions">
+                        <button type="button" class="btn" id="play">إيقاف مؤقّت</button>
+                        <button type="button" class="btn btn--ghost" id="restart">إعادة التشغيل</button>
+                        <button type="button" class="btn btn--ghost" id="clear">مسح الأثر</button>
+                    </div>
+                    <label class="switch"><span>توأم الفوضى · θ<sub>1</sub> + ⁦0.001 rad⁩</span><input type="checkbox" id="twin"></label>
+                    <label class="ctl">
+                        <span class="ctl__row"><span>مقياس الزمن</span><output id="speed-out" for="speed"></output></span>
+                        <input type="range" id="speed" min="0.25" max="1.5" step="0.05" value="1">
+                    </label>
+                </div>
+
+                <div class="panel__group">
+                    <p class="panel__label">الاقتران</p>
+                    <label class="ctl">
+                        <span class="ctl__row"><span>نسبة الكتلتين m<sub>2</sub>/m<sub>1</sub></span><output id="mass-out" for="mass"></output></span>
+                        <input type="range" id="mass" min="-2.3" max="2.3" step="0.05" value="0">
+                    </label>
+                    <label class="ctl">
+                        <span class="ctl__row"><span>نسبة الطولين l<sub>2</sub>/l<sub>1</sub></span><output id="length-out" for="length"></output></span>
+                        <input type="range" id="length" min="-1.6" max="1.6" step="0.05" value="0">
+                    </label>
+                </div>
+
+                <div class="panel__group">
+                    <p class="panel__label">الشروط الابتدائية</p>
+                    <label class="ctl">
+                        <span class="ctl__row"><span>الزاوية θ<sub>1</sub></span><output id="th1-out" for="th1"></output></span>
+                        <input type="range" id="th1" min="-180" max="180" step="1" value="120">
+                    </label>
+                    <label class="ctl">
+                        <span class="ctl__row"><span>الزاوية θ<sub>2</sub></span><output id="th2-out" for="th2"></output></span>
+                        <input type="range" id="th2" min="-180" max="180" step="1" value="150">
+                    </label>
+                    <label class="ctl">
+                        <span class="ctl__row"><span>السرعة الزاوية ω<sub>1</sub></span><output id="w1-out" for="w1"></output></span>
+                        <input type="range" id="w1" min="-5" max="5" step="0.1" value="0">
+                    </label>
+                    <label class="ctl">
+                        <span class="ctl__row"><span>السرعة الزاوية ω<sub>2</sub></span><output id="w2-out" for="w2"></output></span>
+                        <input type="range" id="w2" min="-5" max="5" step="0.1" value="0">
+                    </label>
+                </div>
+
+                <dl class="readouts">
+                    <div><dt>الطاقة E</dt><dd id="r-e">—</dd></div>
+                    <div><dt>انجراف الطاقة</dt><dd id="r-drift">—</dd></div>
+                    <div class="wide"><dt>المسافة بين التوأمين · الثقل 2</dt><dd id="r-sep" class="is-accent">التوأم متوقّف</dd></div>
+                </dl>
+
+                <ul class="legend">
+                    <li><span class="sw sw--dot"></span>الكتلتان m₁، m₂</li>
+                    <li><span class="sw"></span>مسار m₂</li>
+                    <li><span class="sw sw--rose"></span>التوأم</li>
+                </ul>
+            </aside>
+        </div>
+
+        <article class="paper" id="paper" aria-labelledby="paper-title">
+            <header class="paper__head">
+                <p class="paper__kicker">مذكّرة المحاضرة · الشكل 2 · الميكانيك الكلاسيكي</p>
+                <h2 class="paper__title" id="paper-title">النوّاس المزدوج: قوانين دقيقة وحركة لا يمكن التنبّؤ بها</h2>
+                <p class="paper__by">نعمة سائر قدسية · لمن يلتقي الموضوع للمرة الأولى، من المدرسة حتى السنة الثانية في الجامعة</p>
+                <div class="paper__abstract"><b>الملخّص.</b> علّق نوّاسًا في طرف نوّاس آخر، فتحصل على أبسط آلة نستطيع أن نكتب قوانين مستقبلها بدقّة، ومع ذلك لا نستطيع التنبّؤ به. نبدأ في هذه المذكّرة مما تشعر به في ذراعك، ونبني معادلات الحركة من الطاقة وحدها بطريقة لاغرانج، ونحلّ حالة التأرجحات الصغيرة حلًّا كاملًا، ونقيس مدى سرعة ابتعاد حالتين ابتدائيتين متشابهتين جدًّا، ونتابع كيف تحوّل الصفحة المعادلات إلى الصورة المتحركة أعلاه. تُشرح كل كلمة جديدة عند أول ظهورها، ويُتحقَّق من كل نتيجة في مثال محلول بأرقام الصفحة نفسها. الفقرات المعلَّمة بنجمة ★ تحمل رياضيات إضافية؛ يمكنك تخطّيها وتبقى قادرًا على متابعة كل الخطوات اللاحقة، لأن النتائج التي تقود إليها تُذكر من جديد بلا نجمة.</div>
+            </header>
+            <div class="paper__grid">
+                <nav class="paper__toc" aria-label="المحتويات">
+                    <p>المحتويات</p>
+                    <ol>
+                        <li><a href="#p-swing"><span>1</span>نوّاس على نوّاس</a></li>
+                        <li><a href="#p-model"><span>2</span>النموذج</a></li>
+                        <li><a href="#p-energy"><span>3</span>الطاقة</a></li>
+                        <li><a href="#p-lagrange"><span>4</span>من الطاقة إلى الحركة</a></li>
+                        <li><a href="#p-modes"><span>5</span>التأرجحات الصغيرة</a></li>
+                        <li><a href="#p-chaos"><span>6</span>الفوضى</a></li>
+                        <li><a href="#p-rk4"><span>7</span>الحلّ خطوة بخطوة</a></li>
+                        <li><a href="#p-screen"><span>8</span>من الأمتار إلى البكسلات</a></li>
+                        <li><a href="#p-limits"><span>9</span>ما يُغفله النموذج</a></li>
+                    </ol>
+                </nav>
+                <div class="paper__body">
+                    <section class="psec" id="p-swing">
+                        <h3><span class="psec__n">01</span>نوّاس على نوّاس</h3>
+                        <p class="psec__lead">أمسك قلمًا بين إصبعين بخفّة، ودعه يتأرجح. هذا نوّاس، ومنذ غاليليو قبل أربعمئة عام نعرف كيف نتنبّأ بمكانه في أي لحظة. علّق الآن قلمًا ثانيًا من طرف الأول، فيزول التنبّؤ السهل.</p>
+                        <p>ذراعك نفسها نوّاس مزدوج. دعها تتدلّى بخفّة وادفعها من الكتف. يدور العضد حول الكتف، ويدور الساعد حول المرفق، وترسم يدك منحنى لا يرسمه أيٌّ من المفصلين وحده. تشعر بالجزأين يشدّ أحدهما الآخر: حين يندفع الساعد إلى الخارج يُجرّ العضد معه، وحين يتوقّف العضد يواصل الساعد حركته. لاعب الجمباز الذي يدور حول العارضة، وعصا النونشاكو، وخطّاف الرافعة المتأرجح على حبله، كلّها الآلة نفسها: كتلتان وقضيبان، والجاذبية تشدّ نحو الأسفل.</p>
+                        <p>أطلِق النوّاس المزدوج بدفعة صغيرة فيتأرجح برفق، ممازجًا بين إيقاعين ثابتين سنجدهما في القسم 5. وإن بدأته عاليًا، كما في المحاكاة أعلاه، انطلقت الذراع السفلى فوق القمّة، ثم توقّفت وارتدّت وتقلّبت في نمط لا يبدو أنه يتكرّر. لا شيء عشوائيًّا هنا: القوانين التي سنشتقّها تحدّد المستقبل كلّه متى أُعطيت الزوايا الابتدائية وسرعاتها الزاوية، والحاسوب يتبعها بأمانة، حتى إن الطاقة الكلّية تتغيّر في أول عشرين ثانية بأقل من جزء من عشرة ملايين. ومع ذلك فإن بدايتين تختلفان بجزء من ألف من الراديان، أي نحو مليمتر واحد عند طرف قضيب طوله متر، تنتهيان خلال خمس ثوانٍ إلى مكانين لا علاقة لأحدهما بالآخر.</p>
+                        <p>هذا الجمع بين قوانين دقيقة ونتائج لا يمكن التنبّؤ بها عمليًّا يسمّى <em>الفوضى الحتمية</em>. «الحتمية» تعني أن الحاضر يحدّد المستقبل دون رمي نرد. و«الفوضى» تعني أن هذا التحديد حسّاس جدًّا، فأي خطأ في معرفتنا بالحاضر ينمو حتى يبتلع التنبّؤ. الطقس يسلك السلوك نفسه: الهواء يخضع لمعادلات نعرفها جيدًا، لكننا لا نستطيع أبدًا قياس الغلاف الجوي اليوم بدقّة كافية، وتتلاشى التوقّعات بعد نحو أسبوعين.</p>
+                        <figure class="pfig">
+                            <div class="pfig__plate">
+                                <svg viewBox="0 0 720 330" role="img" aria-label="Geometry of the double pendulum: pivot, two rods of lengths l1 and l2 at angles theta1 and theta2 from the vertical, masses m1 and m2, gravity pointing down.">
+                                    <rect x="0" y="0" width="720" height="330" fill="#fff"/>
+                                    <line x1="200" y1="56" x2="360" y2="56" stroke="#1c1518" stroke-width="2"/>
+                                    <g stroke="#cdc1ae" stroke-width="1"><line x1="215" y1="56" x2="207" y2="46"/><line x1="235" y1="56" x2="227" y2="46"/><line x1="255" y1="56" x2="247" y2="46"/><line x1="275" y1="56" x2="267" y2="46"/><line x1="295" y1="56" x2="287" y2="46"/><line x1="315" y1="56" x2="307" y2="46"/><line x1="335" y1="56" x2="327" y2="46"/><line x1="355" y1="56" x2="347" y2="46"/></g>
+                                    <line x1="280" y1="56" x2="280" y2="230" stroke="#8b8079" stroke-width="1.2" stroke-dasharray="4 4"/>
+                                    <line x1="366.0" y1="178.9" x2="366.0" y2="300" stroke="#8b8079" stroke-width="1.2" stroke-dasharray="4 4"/>
+                                    <path d="M280 111 A55 55 0 0 0 311.5 101.1" fill="none" stroke="#7a1f2b" stroke-width="1.6"/>
+                                    <path d="M366 228.9 A50 50 0 0 0 413.0 196.0" fill="none" stroke="#7a1f2b" stroke-width="1.6"/>
+                                    <line x1="280" y1="56" x2="366.0" y2="178.9" stroke="#1c1518" stroke-width="3" stroke-linecap="round"/>
+                                    <line x1="366.0" y1="178.9" x2="507.0" y2="230.2" stroke="#1c1518" stroke-width="3" stroke-linecap="round"/>
+                                    <circle cx="280" cy="56" r="5" fill="#fff" stroke="#1c1518" stroke-width="2"/>
+                                    <circle cx="366.0" cy="178.9" r="13" fill="#7a1f2b"/>
+                                    <circle cx="507.0" cy="230.2" r="13" fill="#7a1f2b"/>
+                                    <text class="m" x="300" y="128">θ<tspan class="mu" font-size="12" dy="4">1</tspan></text>
+                                    <text class="m" x="410" y="226">θ<tspan class="mu" font-size="12" dy="4">2</tspan></text>
+                                    <text class="m" x="330" y="108">l<tspan class="mu" font-size="12" dy="4">1</tspan></text>
+                                    <text class="m" x="438" y="190">l<tspan class="mu" font-size="12" dy="4">2</tspan></text>
+                                    <text class="m" x="336" y="208">m<tspan class="mu" font-size="12" dy="4">1</tspan></text>
+                                    <text class="m" x="525" y="236">m<tspan class="mu" font-size="12" dy="4">2</tspan></text>
+                                    <line x1="620" y1="70" x2="620" y2="140" stroke="#1c1518" stroke-width="2"/>
+                                    <path d="M613 128 L620 142 L627 128 Z" fill="#1c1518"/>
+                                    <text class="m" x="632" y="112">g</text>
+                                    <line x1="70" y1="280" x2="130" y2="280" stroke="#8b8079" stroke-width="1.4"/>
+                                    <path d="M126 276 L134 280 L126 284 Z" fill="#8b8079"/>
+                                    <line x1="70" y1="280" x2="70" y2="220" stroke="#8b8079" stroke-width="1.4"/>
+                                    <path d="M66 224 L70 216 L74 224 Z" fill="#8b8079"/>
+                                    <text class="m" x="138" y="285">x</text>
+                                    <text class="m" x="64" y="210">y</text>
+                                    <text class="lbl" x="200" y="38">pivot</text>
+                                </svg>
+                            </div>
+                            <figcaption><span class="pfig__n">الشكل 1</span>النموذج. كتلتان نقطيتان \(m_1, m_2\) على قضيبين صلبين عديمي الكتلة طولاهما \(l_1, l_2\). تُقاس كل زاوية من الشاقول الهابط (المتقطّع)، وتكون موجبة عكس اتجاه عقارب الساعة. ويحدّد العددان \(\theta_1\) و\(\theta_2\) موضع كل شيء.</figcaption>
+                        </figure>
+                    </section>
+
+                    <section class="psec" id="p-model">
+                        <h3><span class="psec__n">02</span>النموذج</h3>
+                        <p>تبدأ الفيزياء بتقرير ما نتركه جانبًا، لأن الوصف الذي يحتفظ بكل شيء لا يستطيع أحد حلّه. النوّاس الحقيقي له قضبان ثقيلة، والهواء يدفعه، وفي مفاصله احتكاك، ويترنّح خارج مستواه. نحن نُبقي فقط ما يجعل النوّاس المزدوج نوّاسًا مزدوجًا. كل كتلة <em>نقطة مادّية</em>: كل وزنها في نقطة واحدة، كما تتصرّف كرة صغيرة ثقيلة. وكل قضيب <em>صلب</em> فلا يتمدّد أبدًا، و<em>عديم الكتلة</em> فهو يحفظ كرته على مسافة ثابتة فقط، ولا يحمل وزنًا خاصًّا به. كل الحركة تجري في مستوٍ شاقولي واحد، دون احتكاك ودون هواء. يعود القسم 9 إلى ما تكلّفه هذه الاختيارات.</p>
+                        <p>نحدّد كل قضيب بزاويته عن الاتجاه الشاقولي الهابط، أي الخط المتقطّع في الشكل 1، ونعدّها موجبة حين يدور القضيب عكس اتجاه عقارب الساعة. تُقاس الزوايا بـ<em>الراديان</em>. الراديان هو الزاوية التي يكون عندها طول القوس على الدائرة مساويًا تمامًا لنصف قطرها. فدورة كاملة هي \(2\pi \approx 6.28\) راديانًا، و\(1^\circ \approx 0.0175\) راديان. والراديان هو الوحدة الطبيعية للحركة على دائرة، لأن طول القوس عندئذٍ هو نصف القطر مضروبًا في الزاوية.</p>
+                        <p>نكتب الآن موضع كل كرة. نضع نقطة الارتكاز في المبدأ، ويشير المحور \(x\) نحو اليمين و\(y\) نحو الأعلى. القضيب الأول طوله \(l_1\) ويميل بزاوية \(\theta_1\)، وهو الضلع الطويل في مثلث قائم الزاوية: جزؤه الأفقي \(l_1\sin\theta_1\) وجزؤه الشاقولي \(l_1\cos\theta_1\). ولأن \(y\) يشير إلى الأعلى، والكرة معلّقة تحت نقطة الارتكاز، فارتفاعها سالب. يبدأ القضيب الثاني حيث ينتهي الأول، فنضيف إلى الكرة الثانية جزأيه الأفقي والشاقولي:</p>
+                        \[ \begin{aligned} x_1 &= l_1\sin\theta_1, & y_1 &= -l_1\cos\theta_1, \\ x_2 &= x_1 + l_2\sin\theta_2, & y_2 &= y_1 - l_2\cos\theta_2 . \end{aligned} \tag{1} \]
+                        <p>نختبر المعادلة (1) بالحدس. عند \(\theta_1 = 0\) تتدلّى الكرة الأولى شاقوليًّا إلى الأسفل عند \(y_1 = -l_1\)؛ وعند \(\theta_1 = 90^\circ\) تبرز أفقيًّا عند \(x_1 = l_1\)، \(y_1 = 0\). زاويتان تحدّدان الشكل كليًّا، فللنظام إذن <em>درجتا حرية</em>، أي طريقتان مستقلّتان للحركة.</p>
+                        <p>معرفة مكان الكرتين لا تكفي لمعرفة وجهتهما التالية: كرة في أخفض نقطة من تأرجحها قد تكون ساكنة أو مندفعة بسرعة. نحتاج أيضًا إلى مدى سرعة تغيّر كل زاوية، أي <em>السرعة الزاوية</em> \(\omega_i = \mathrm{d}\theta_i/\mathrm{d}t\)، مقاسة بالراديان في الثانية، ولاحقًا معدّل تغيّرها، أي <em>التسارع الزاوي</em> \(\alpha_i = \mathrm{d}\omega_i/\mathrm{d}t = \ddot\theta_i\). في هذه المذكّرة تعني النقطة فوق الحرف معدّل تغيّره الزمني. الأعداد الأربعة \((\theta_1, \theta_2, \omega_1, \omega_2)\) معًا تشكّل <em>الحالة</em>: إذا أُعطيت لقوانين الحركة، تحدّد المستقبل كلّه. على الصفحة، الكرة العليا وقضيبها مثبّتان عند \(m_1 = 1\ \mathrm{kg}\) و\(l_1 = 1\ \mathrm{m}\)، والجاذبية \(g = 9.81\ \mathrm{m/s^2}\)، والمنزلقات تضبط كتلة الكرة السفلى وطول قضيبها بوصفهما مضاعفاتٍ لكتلة العليا وطولها، أي \(m_2/m_1\) و\(l_2/l_1\). البداية الافتراضية هي \(\theta_1 = 120^\circ\) و\(\theta_2 = 150^\circ\)، وكلاهما ساكن، والكتلتان والطولان متساويان.</p>
+                    </section>
+
+                    <section class="psec" id="p-energy">
+                        <h3><span class="psec__n">03</span>الطاقة</h3>
+                        <p>الطريق البديهي إلى الحركة هو طريق نيوتن: نجمع القوى المؤثّرة في كل كرة ونساوي القوة بحاصل ضرب الكتلة في التسارع. وهذا شاقّ في النوّاس المزدوج، لأن كل قضيب يشدّ كرتيه أو يدفعهما بقوة لا نعرفها مسبقًا. تتغيّر هذه القوة في الشدّة والاتجاه في كل لحظة، وهي دائمًا بالقدر الذي يلزم لإبقاء طول القضيب ثابتًا. وهناك طريق أذكى لا يحتاج أبدًا إلى قوى القضبان هذه. يمرّ عبر الطاقة، وهي هنا نوعان: طاقة الحركة وطاقة الارتفاع.</p>
+                        <h4><span class="psub__n">3.1</span>مدى سرعة الكرتين</h4>
+                        <p>السرعة هي معدّل تغيّر الموضع، لذلك نأخذ المشتقّة الزمنية لكل سطر من المعادلة (1). الأطوال لا تتغيّر أبدًا، والذي يتغيّر هو الزوايا فقط. حين تتغيّر زاوية بالمعدّل \(\omega\)، تقول قاعدة السلسلة إن \(\sin\theta\) يتغيّر بالمعدّل \(\omega\cos\theta\)، و\(\cos\theta\) يتغيّر بالمعدّل \(-\omega\sin\theta\). لذلك نجد</p>
+                        \[ \begin{aligned} \dot x_1 &= l_1\omega_1\cos\theta_1, & \dot y_1 &= l_1\omega_1\sin\theta_1, \\ \dot x_2 &= \dot x_1 + l_2\omega_2\cos\theta_2, & \dot y_2 &= \dot y_1 + l_2\omega_2\sin\theta_2 . \end{aligned} \tag{2} \]
+                        <p>تنتج السرعة من فيثاغورس: \(v^2 = \dot x^2 + \dot y^2\). أما للكرة العليا فـ \(v_1^2 = l_1^2\omega_1^2(\cos^2\theta_1 + \sin^2\theta_1) = l_1^2\omega_1^2\). وهذا ما نتوقّعه تمامًا: كرة على قضيب طوله \(l_1\) تدور بسرعة زاوية \(\omega_1\) تجري على دائرتها بسرعة \(l_1\omega_1\). أما الكرة السفلى فإن التربيع والجمع يعطيان حدًّا لكل قضيب وحدًّا مختلطًا من الاثنين معًا:</p>
+                        \[ \begin{aligned} v_2^2 &= l_1^2\omega_1^2 + l_2^2\omega_2^2 + 2\,l_1 l_2\,\omega_1\omega_2\left(\cos\theta_1\cos\theta_2 + \sin\theta_1\sin\theta_2\right) \\ &= l_1^2\omega_1^2 + l_2^2\omega_2^2 + 2\,l_1 l_2\,\omega_1\omega_2\cos\varphi , \qquad \varphi \equiv \theta_1 - \theta_2 . \end{aligned} \]
+                        <p>في السطر الثاني اختُصرت الأقواس بقاعدة فرق الزاويتين في المثلثات، \(\cos a\cos b + \sin a\sin b = \cos(a-b)\). والرمز الجديد \(\varphi = \theta_1 - \theta_2\) هو الزاوية بين القضيبين، وسيظهر مرارًا وتكرارًا.</p>
+                        <h4><span class="psub__n">3.2</span>الطاقتان</h4>
+                        <p><em>الطاقة الحركية</em> للكرة، أي الطاقة التي تملكها لأنها تتحرّك، هي \(\tfrac12 m v^2\). وهي تساوي الشغل اللازم لتسريع الكرة من السكون إلى السرعة \(v\)، وتشعر بها لسعةً حين تهبط كرة سريعة في كفّك. للكرتين معًا،</p>
+                        \[ T = \tfrac12 m_1 l_1^2\omega_1^2 + \tfrac12 m_2\left[\, l_1^2\omega_1^2 + l_2^2\omega_2^2 + 2\,l_1 l_2\,\omega_1\omega_2\cos\varphi \right]. \tag{3} \]
+                        <p><em>طاقة الوضع</em> هي الطاقة المخزّنة بسبب الارتفاع. رفع كتلة \(m\) عبر ارتفاع \(\Delta y\) يكلّف الشغل \(m g\,\Delta y\)، والكتلة تعيد هذا الشغل حين تسقط. وبقياس الارتفاعات من نقطة الارتكاز، لكل كرة طاقة وضع \(mgy\)، وهي سالبة لأن الكرتين معلّقتان تحت نقطة الارتكاز. لا يهمّ إلا فرق طاقة الوضع، فاختيار الصفر أمر متروك لنا. ومن المعادلة (1) نستخرج</p>
+                        \[ V = m_1 g y_1 + m_2 g y_2 = -(m_1+m_2)\,g\,l_1\cos\theta_1 - m_2\,g\,l_2\cos\theta_2 . \tag{4} \]
+                        <p>لاحظ العامل \(m_1 + m_2\) في الحدّ الأول. فحين يميل القضيب العلوي، يرفع لا كرته وحدها، بل النوّاس السفلي كلّه معها.</p>
+                        <p>الحدّ الأخير في (3) يحمل قصّة الاقتران كلّها. الكرة السفلى محمولة على العليا، كما يُحمَل راكبٌ يمشي في ممرّ قطار متحرّك: سرعته هي سرعته الخاصّة زائد سرعة القطار. حين يشير القضيبان إلى الاتجاه نفسه ويدوران في الاتجاه نفسه، يكون \(\cos\varphi = 1\)، فتجتمع السرعتان ببساطة: \(v_2 = l_1\omega_1 + l_2\omega_2\)، كأنك تسير إلى الأمام في قطار يسير إلى الأمام. وحين يكون القضيبان متعامدين، يكون \(\cos\varphi = 0\)، فتجتمع السرعتان كأنهما الضلعان القصيران لمثلث قائم. ولأن اتجاهي القضيبين يتغيّران باستمرار، تتغيّر طريقة تركيب الحركتين باستمرار أيضًا. هذه هي الصيغة الرياضية لما شعرت به في ذراعك: كل قضيب يشدّ الآخر ويدفعه باستمرار.</p>
+                        <div class="pbox">
+                            <span class="pbox__t">مثال 3.1 · طاقة البداية الافتراضية</span>
+                            <p>البداية الافتراضية تجعل الكرتين ساكنتين، فـ \(T = 0\)؛ والزاويتان \(\theta_1 = 120^\circ\) و\(\theta_2 = 150^\circ\)، والكتلتان \(m_1 = m_2 = 1\ \mathrm{kg}\)، والطولان \(l_1 = l_2 = 1\ \mathrm{m}\). تعطي المعادلة (4) \(V = -2\times 9.81\times\cos 120^\circ - 9.81\times\cos 150^\circ = 9.81 + 8.50 = 18.31\ \mathrm{J}\). لو تدلّى النوّاس شاقوليًّا إلى الأسفل لكانت له طاقة وضع \(V = -3\times 9.81 = -29.43\ \mathrm{J}\)، فتكون البداية الافتراضية تحمل \(47.7\ \mathrm{J}\) زيادةً على النوّاس الساكن. ولو أوقفنا النوّاس كلّه على رأسه، قضيباه مستقيمان إلى الأعلى، لاحتاج \(V = +29.43\ \mathrm{J}\)، وهو أكبر من \(18.31\ \mathrm{J}\) المتاحة، فلا يستطيع القضيب العلوي أن يبلغ القمّة أبدًا. أما القضيب السفلي وحده فيستطيع أن يتجاوز القمّة بينما يتدلّى العلوي: عند \(\theta_1 = 0\) و\(\theta_2 = 180^\circ\) تكون \(V = -19.62 + 9.81 = -9.81\ \mathrm{J}\)، وهي في متناول اليد بسهولة. وهذا بالضبط ما تراه على الصفحة: الذراع السفلى تنقلب مرارًا وتكرارًا، والذراع العليا لا تنقلب أبدًا.</p>
+                        </div>
+                        <div class="pbox">
+                            <span class="pbox__t">الطاقة محفوظة</span>
+                            <p>لا احتكاك ولا هواء في النموذج، لذلك لا تتغيّر الطاقة الكلّية \(E = T + V\) أبدًا: فالنوّاس لا يستطيع إلا أن يبادل الارتفاع بالسرعة وبالعكس، كما تتدحرج كرة صعودًا ونزولًا على جانبي وادٍ. الجاذبية تغيّر السرعات، لكن بأن تأخذ من الارتفاع أو تعطيه. والقضبان لا تبذل شغلًا صافيًا. القضيب العلوي يسحب كرته نحو نقطة الارتكاز، عموديًّا على مسار الكرة الدائري، فلا يسرّعها ولا يبطّئها. أما القضيب السفلي فأدقّ: يستطيع أن يدفع الكرة العليا إلى الأمام والسفلى إلى الخلف أو العكس، فيبذل شغلًا على كل كرة على حدة. لكن لأن طوله لا يتغيّر، يتحرّك طرفاه على امتداد القضيب بالمعدّل نفسه، والشغل الذي يبذله على إحدى الكرتين هو بالضبط الشغل الذي ينزعه من الأخرى، مثل قضيب صلب يحمله متزلّجان. يعطي القسم 4.5 البرهان الصوري. وهذه الحفظيّة تمنح المحاكاة فحصًا مدمجًا: تُظهر قراءة <em>انجراف الطاقة</em> أعلاه مدى ابتعاد الطاقة المحسوبة عن قيمتها الابتدائية، وكل ابتعاد هو خطأ في الحساب، لا في الفيزياء أبدًا.</p>
+                        </div>
+                    </section>
+
+                    <section class="psec" id="p-lagrange">
+                        <h3><span class="psec__n">04</span>من الطاقة إلى الحركة</h3>
+                        <p>صارت لدينا الطاقتان. ولكي ننتقل منهما إلى الحركة دون أن نلتقي أبدًا بقوى القضبان المجهولة، نستخدم الطريقة التي وجدها لاغرانج في سنوات الـ1780، وصاغها هاملتون في صورتها الأعمق في سنوات الـ1830. كوّن الفرق بين الطاقتين، أي <em>اللاغرانجيان</em> \(L = T - V\). تخيّل كل الطرق الممكنة التي يمكن أن تنتقل بها الزاويتان من شكل ابتدائي معيّن إلى شكل نهائي معيّن في زمن معيّن: الطريق الحقيقي، وكذلك كل الطرق الخاطئة التي تتباطأ أو تسرع أو تتمايل. لكل طريق، اجمع \(L\) لحظةً بعد لحظة؛ هذا المجموع، \(S = \int L\,\mathrm{d}t\)، يُسمّى <em>فعلَ</em> الطريق. ينصّ <em>مبدأ هاملتون</em> على أن الطريق الذي تسلكه الطبيعة هو الذي لا يتغيّر فعله عند انحناء الطريق قليلًا، بالمرتبة الأولى. مثل وقوفك في قاع وادٍ: خطوة صغيرة جانبًا لا تغيّر ارتفاعك في البداية. لا تظهر قوى القضبان أبدًا، لأنها، كما رأينا في الإطار الخاص بالطاقة، لا تبذل شغلًا صافيًا في أي حركة تسمح بها القضبان.</p>
+                        <h4><span class="psub__n">4.1</span>معادلة أويلر–لاغرانج&nbsp;★</h4>
+                        <p>نحوّل المبدأ إلى معادلة. خذ المسار الحقيقي وغيّر زاوية واحدة بمقدار صغير \(\delta\theta_i(t)\)، وهو تموّج صغير يساوي صفرًا عند البداية والنهاية، لأن شكل البداية والنهاية ثابت. (هنا، وهنا فقط، تعني \(\delta\) «تغيّرًا صغيرًا في».) ثم تتغيّر السرعة الزاوية بمعدّل تغيّر التموّج، \(\delta\omega_i = \mathrm{d}(\delta\theta_i)/\mathrm{d}t\). في الرتبة الأولى يتغيّر الفعل بمقدار سرعة استجابة \(L\) لكل تغيّر، مضروبةً في التغيّر:</p>
+                        \[ \delta S = \int \left[ \frac{\partial L}{\partial\theta_i}\,\delta\theta_i + \frac{\partial L}{\partial\omega_i}\,\frac{\mathrm{d}(\delta\theta_i)}{\mathrm{d}t} \right]\mathrm{d}t . \]
+                        <p>الحدّ الثاني يحتوي معدّل تغيّر التموّج لا التموّج نفسه. ويقوم التكامل بالتجزئة، أي قاعدة الجداء مقروءةً بالعكس، بنقل المشتقّة الزمنية من التموّج إلى العامل الآخر، مقابل إشارة سالبة وحدٍّ حدّي. الحدّ الحدّي صفر لأن التموّج يختفي عند الطرفين، ويبقى التموّج مضروبًا في قوس واحد:</p>
+                        \[ \delta S = \int \left[ \frac{\partial L}{\partial\theta_i} - \frac{\mathrm{d}}{\mathrm{d}t}\frac{\partial L}{\partial\omega_i} \right] \delta\theta_i\,\mathrm{d}t . \]
+                        <p>هذا يجب أن يكون صفرًا لكل تموّج ممكن. فإن كان القوس موجبًا عند لحظة ما، أمكننا اختيار تموّج موجب هناك فقط وصفر في كل مكان آخر، فيتغيّر الفعل. إذن يجب أن ينعدم القوس نفسه في كل لحظة.</p>
+                        <div class="pbox"><span class="pbox__t">النتيجة الأساسية · معادلة أويلر–لاغرانج</span> \[ \frac{\mathrm{d}}{\mathrm{d}t}\frac{\partial L}{\partial\omega_i} - \frac{\partial L}{\partial\theta_i} = 0 , \qquad i = 1, 2. \tag{5} \] <p>توجد مثل هذه المعادلة لكل زاوية. اقرأها بوصفها قانون نيوتن الثاني متنكّرًا: الكمّية \(p_i = \partial L/\partial\omega_i\)، وهي <em>الزخم المعمَّم</em> للزاوية \(\theta_i\)، تتغيّر بمعدّل \(\partial L/\partial\theta_i\) الذي يلعب دور القوة.</p></div>
+                        <p>بالنسبة للزاوية العليا يكون الزخم المعمَّم</p>
+                        \[ p_1 = \frac{\partial L}{\partial\omega_1} = (m_1+m_2)\,l_1^2\,\omega_1 + m_2 l_1 l_2\,\omega_2\cos\varphi . \]
+                        <p>وهذا زخم زاوي حول نقطة الارتكاز، لكنه ليس ببساطة \(m_1 l_1^2\omega_1\): إنه يحتوي الكرة السفلى أصلًا، لأن القضيب العلوي حين يدور يحمل الكرة السفلى معه.</p>
+                        <h4><span class="psub__n">4.2</span>المعادلة الخاصة بالزاوية العليا</h4>
+                        <p>يلتقي نوعان من المشتقّات في المعادلة (5)، ويجب أن نفرّق بينهما. <em>المشتقّة الجزئية</em> مثل \(\partial L/\partial\omega_1\) تعامل \(L\) دالّةً لأربعة أعداد منفصلة \(\theta_1, \theta_2, \omega_1, \omega_2\)، وتسأل كيف يتغيّر \(L\) حين يتغيّر أحدها وحده وتبقى الثلاثة الأخرى ثابتة. أما المشتقّة الزمنية \(\mathrm{d}/\mathrm{d}t\) فتتبع الحركة الفعلية التي تتغيّر فيها الأعداد الأربعة معًا. وبشكل خاص تعطي قاعدة السلسلة \(\tfrac{\mathrm{d}}{\mathrm{d}t}\cos\varphi = -\sin\varphi\,(\omega_1-\omega_2)\). وأجزاء المعادلة (5) الثلاثة للزاوية العليا هي</p>
+                        \[ \begin{aligned} \frac{\partial L}{\partial\omega_1} &= (m_1+m_2)\,l_1^2\,\omega_1 + m_2 l_1 l_2\,\omega_2\cos\varphi, \\ \frac{\mathrm{d}}{\mathrm{d}t}\frac{\partial L}{\partial\omega_1} &= (m_1+m_2)\,l_1^2\,\alpha_1 + m_2 l_1 l_2\,\alpha_2\cos\varphi - m_2 l_1 l_2\,\omega_2(\omega_1-\omega_2)\sin\varphi, \\ \frac{\partial L}{\partial\theta_1} &= -m_2 l_1 l_2\,\omega_1\omega_2\sin\varphi - (m_1+m_2)\,g\,l_1\sin\theta_1 . \end{aligned} \]
+                        <p>في السطر الثالث، يأتي الحدّ الأول من \(T\)، حيث يختبئ \(\theta_1\) داخل \(\cos\varphi\)، ويأتي الثاني من \(-V\). وبطرح السطر الثالث من الثاني، كما تقتضي المعادلة (5)، يُلغي الحدّان اللذان يحتويان \(\omega_1\omega_2\) أحدهما الآخر تمامًا، وبقسمة على \(l_1\) نجد</p>
+                        \[ (m_1+m_2)\,l_1\,\alpha_1 + m_2 l_2\,\alpha_2\cos\varphi = -m_2 l_2\,\omega_2^2\sin\varphi - (m_1+m_2)\,g\sin\theta_1 . \tag{6} \]
+                        <p>لكل حدّ معنى تستشعره. على اليمين، \(-(m_1+m_2)g\sin\theta_1\): الجاذبية تشدّ النوّاس المائل كلّه إلى أسفل، وتشتدّ كلّما ابتعد عن الشاقول الهابط. الحدّ الذي فيه \(\omega_2^2\) هو الكرة السفلى تدور حول المرفق وتشدّ طرف القضيب العلوي إلى الخارج، وهو الشدّ نفسه الذي تشعر به في يدك حين تدير حجرًا على خيط. وعلى اليسار، الحدّ الذي فيه \(\alpha_2\) يقول: كلّما تسارعت الذراع السفلى أو تباطأت، هزّت الذراع العليا.</p>
+                        <h4><span class="psub__n">4.3</span>المعادلة الخاصة بالزاوية السفلى</h4>
+                        <p>نكرّر الخطوات الثلاث نفسها لـ \(\theta_2\). الآن يقع \(\theta_2\) داخل \(\cos\varphi\) بإشارة سالبة، لأن \(\varphi = \theta_1 - \theta_2\)، لذا \(\partial\cos\varphi/\partial\theta_2 = +\sin\varphi\):</p>
+                        \[ \begin{aligned} \frac{\partial L}{\partial\omega_2} &= m_2 l_2^2\,\omega_2 + m_2 l_1 l_2\,\omega_1\cos\varphi, \\ \frac{\mathrm{d}}{\mathrm{d}t}\frac{\partial L}{\partial\omega_2} &= m_2 l_2^2\,\alpha_2 + m_2 l_1 l_2\,\alpha_1\cos\varphi - m_2 l_1 l_2\,\omega_1(\omega_1-\omega_2)\sin\varphi, \\ \frac{\partial L}{\partial\theta_2} &= m_2 l_1 l_2\,\omega_1\omega_2\sin\varphi - m_2\,g\,l_2\sin\theta_2 . \end{aligned} \]
+                        <p>وعند الطرح تتلاشى حدود \(\omega_1\omega_2\) مرة أخرى، وبقسمة على \(m_2 l_2\) نجد</p>
+                        \[ l_1\,\alpha_1\cos\varphi + l_2\,\alpha_2 = l_1\,\omega_1^2\sin\varphi - g\sin\theta_2 . \tag{7} \]
+                        <p>تشعر الذراع السفلى بالجاذبية، \(-g\sin\theta_2\)، وبالشدّ الخارجي من دوران الكرة العليا، \(l_1\omega_1^2\sin\varphi\)، الذي يصلها عبر المرفق.</p>
+                        <h4><span class="psub__n">4.4</span>حلّ المعادلتين من أجل التسارعين</h4>
+                        <p>كل من (6) و(7) يحتوي التسارعين معًا، لأن كل قضيب يدفع الآخر. والحاسوب الذي يتقدّم في الزمن يحتاج كل تسارع على حدة، لذلك نعامل (6) و(7) معادلتين خطّيتين لمجهولين \(\alpha_1, \alpha_2\). في صيغة المصفوفة</p>
+                        \[ \begin{pmatrix} (m_1+m_2)\,l_1 & m_2 l_2\cos\varphi \\ l_1\cos\varphi & l_2 \end{pmatrix} \begin{pmatrix} \alpha_1 \\ \alpha_2 \end{pmatrix} = \begin{pmatrix} b_1 \\ b_2 \end{pmatrix}, \qquad \begin{aligned} b_1 &= -m_2 l_2\,\omega_2^2\sin\varphi - (m_1+m_2)\,g\sin\theta_1, \\ b_2 &= l_1\,\omega_1^2\sin\varphi - g\sin\theta_2 . \end{aligned} \tag{8} \]
+                        <p><em>محدِّد</em> المصفوفة هو حاصل ضرب عنصريها القطريين ناقص حاصل ضرب العنصرين الآخرين:</p>
+                        \[ D = (m_1+m_2)\,l_1 l_2 - m_2 l_1 l_2\cos^2\varphi = l_1 l_2\,(m_1 + m_2\sin^2\varphi) , \]
+                        <p>باستخدام \(1-\cos^2\varphi = \sin^2\varphi\). وهو موجب دائمًا لأن \(m_1\) موجب. والمحدِّد غير الصفري يعني أن المعادلتين لا تتناقضان ولا تقولان الشيء نفسه مرتين، فيوجد دائمًا حلّ واحد بالضبط. <em>قاعدة كرامر</em> تكتب هذا الحلّ: كل مجهول نسبة مقامها \(D\) وبسطها محدِّد المصفوفة التي يُستبدل فيها عمود ذلك المجهول بالطرف الأيمن.</p>
+                        \[ \alpha_1 = \frac{b_1\,l_2 - m_2 l_2\cos\varphi\;b_2}{D}, \qquad \alpha_2 = \frac{(m_1+m_2)\,l_1\,b_2 - l_1\cos\varphi\;b_1}{D} . \]
+                        <p>★ تحسب الصفحة العددين نفسيهما بصيغة أنظف. اضرب البسط والمقام في 2، واستخدم \(2\sin^2\varphi = 1-\cos 2\varphi\) في المقام. وفي بسط \(\alpha_1\) استخدم \(2\sin\theta_2\cos\varphi = \sin\theta_1 - \sin(\theta_1 - 2\theta_2)\)؛ وفي بسط \(\alpha_2\) استخدم \(\sin\theta_1\cos\varphi - \sin\theta_2 = \cos\theta_1\sin\varphi\)، وهو ناتج عن نشر \(\sin\theta_2 = \sin(\theta_1 - \varphi)\)، ومنه يأتي العامل المشترك \(\sin\varphi\) للمقدار \(\alpha_2\). والنتيجة هي</p>
+                        <div class="pbox"><span class="pbox__t">النتيجة الأساسية · معادلات الحركة كما تحسبها الصفحة</span> \[ \begin{aligned} \alpha_1 &= \frac{\begin{gathered} -g\,(2m_1+m_2)\sin\theta_1 - m_2\,g\sin(\theta_1-2\theta_2) \\ {} - 2\,m_2\sin\varphi\,\left(\omega_2^2\,l_2 + \omega_1^2\,l_1\cos\varphi\right) \end{gathered}}{l_1\,(2m_1+m_2-m_2\cos 2\varphi)}, \\[4pt] \alpha_2 &= \frac{\begin{gathered} 2\sin\varphi\,\bigl(\omega_1^2\,l_1\,(m_1+m_2) + g\,(m_1+m_2)\cos\theta_1 \\ {} + \omega_2^2\,l_2\,m_2\cos\varphi\bigr) \end{gathered}}{l_2\,(2m_1+m_2-m_2\cos 2\varphi)} . \end{aligned} \tag{9} \] <p>إذا أُعطيت الحالة \((\theta_1, \theta_2, \omega_1, \omega_2)\) في أي لحظة، تعطي المعادلة (9) التسارعين الزاويين في تلك اللحظة. كل ما يلي لا يستخدم إلا هذا.</p></div>
+                        <p class="eqnote">تم التحقق منها مقابل حلّ عددي مباشر للمعادلة (8) عند 10 000 حالة عشوائية وقيم عشوائية للوسائط، فتتطابق الاثنتان حتى خطأ التقريب، أي نحو جزء من \(10^{13}\).</p>
+                        <p>المعادلة الطويلة تستحق الشكّ، ولدى الفيزيائيين اختباران سريعان لها. الأول هو <em>الوحدات</em>. التسارع الزاوي وحدته \(1/\mathrm{s^2}\)، فيجب أن يكون لكل حدّ في (9) الوحدة نفسها، وهو كذلك: \(g\) مقسومًا على طول يعطي \(1/\mathrm{s^2}\)، و\(\omega^2 l\) مقسومًا على طول يعطي \(1/\mathrm{s^2}\)، والكتلتان تظهران فوق خط الكسر وتحته فتُختصران. والثاني اختبار <em>حالة قصوى</em> نعرف نتيجتها مسبقًا. لنجعل الكرة السفلى خفيفة إلى حدّ أنها تكاد لا توجد، \(m_2 \to 0\). فالذراع العليا لا تحمل شيئًا، ويجب أن تتأرجح كنوّاس بسيط عادي. نضع \(m_2 = 0\) في المعادلة (9): تسقط كل الحدود التي فيها \(m_2\)، ويصبح بسط \(\alpha_1\) مساويًا \(-2m_1 g\sin\theta_1\)، ومقامه \(2m_1 l_1\)، و\(\alpha_1 = -(g/l_1)\sin\theta_1\)، وهو قانون النوّاس البسيط الذي طوله \(l_1\) تمامًا. أي صيغة تفشل في أحد الاختبارين تكون خاطئة في مكان ما؛ وهذه تجتازهما معًا.</p>
+                        <h4><span class="psub__n">4.5</span>لماذا تُحفظ الطاقة&nbsp;★</h4>
+                        <p>الإطار في القسم 3 استدلّ بالقضبان. ومنهج لاغرانج يعطي برهانًا أقصر. عرّف الكمّية \(\mathcal{E} = \sum_i \omega_i\,\partial L/\partial\omega_i - L\). فاشتقّها زمنيًّا، واستبدل باستخدام المعادلة (5) \(\tfrac{\mathrm{d}}{\mathrm{d}t}\,\partial L/\partial\omega_i\) بـ \(\partial L/\partial\theta_i\)؛ عندئذ تتلاشى كل الحدود عدا \(-\partial L/\partial t\)، أي الجزء من تغيّر \(L\) الذي يأتي من الساعة نفسها. و\(L\) لا يحتوي الزمن صراحةً، إذن \(\mathcal{E}\) ثابتة. كل حدّ من \(T\) يحتوي سرعتين زاويتين بالضبط، لذلك \(\sum_i \omega_i\,\partial T/\partial\omega_i = 2T\)، بينما \(V\) لا يحتوي أيًّا منهما. ومن هذا يتبيّن أن \(\mathcal{E} = 2T - (T - V) = T + V\): الكمّية المحفوظة هي الطاقة الكلّية.</p>
+                    </section>
+
+                    <section class="psec" id="p-modes">
+                        <h3><span class="psec__n">05</span>التأرجحات الصغيرة: نمطان طبيعيان</h3>
+                        <p>المعادلات (9) معقّدة أكثر من أن تُحلّ بالقلم والورقة. قبل أن نسلّمها إلى الحاسوب، ننظر في الحالة الوحيدة التي نستطيع حلّها تمامًا: التأرجحات اللطيفة. حين تكون الزاوية صغيرة يقارب جيبها الزاوية نفسها مقدّرةً بالراديان. عند \(10^\circ\) مثلًا تكون \(\theta = 0.1745\) و\(\sin\theta = 0.1736\)، أي تختلفان بنصف بالمئة تقريبًا. وبالمثل \(\cos\varphi \approx 1\)، وحدود \(\omega^2\) هي جداءات كميّتين صغيرتين، أصغر بكثير من البقية، فنُهملها. مع كتلتين متساويتين \(m\) وطولين متساويين \(l\)، وبكتابة \(\ddot\theta_i\) بدلًا من \(\alpha_i\)، تصبح المعادلة (6) مقسومةً على \(ml\) هي \(2\ddot\theta_1 + \ddot\theta_2 = -2(g/l)\,\theta_1\)، وتصبح (7) مقسومةً على \(l\) هي \(\ddot\theta_1 + \ddot\theta_2 = -(g/l)\,\theta_2\). في صيغة المصفوفة</p>
+                        \[ \begin{pmatrix} 2 & 1 \\ 1 & 1 \end{pmatrix} \begin{pmatrix} \ddot\theta_1 \\ \ddot\theta_2 \end{pmatrix} = -\frac{g}{l} \begin{pmatrix} 2 & 0 \\ 0 & 1 \end{pmatrix} \begin{pmatrix} \theta_1 \\ \theta_2 \end{pmatrix} . \tag{10} \]
+                        <p>هذه المعادلات <em>خطّية</em>: الزوايا تظهر بالأسّ الأول فقط. ومجموع حلّين لمعادلة خطّية هو حلّ آخر، لذلك نبحث أولًا عن أبسط الحلول ونبني منها كل حركة صغيرة أخرى. النوّاس الواحد يتأرجح كـ \(\cos\Omega t\)، لذلك نجرّب الشيء نفسه للذراعين معًا، بتردّد زاوي مشترك \(\Omega\) وسعتين ثابتتين \(u_1, u_2\): \(\theta_i = u_i\cos\Omega t\). (نكتب \(\Omega\) لهذا التردّد كي نميّزه عن السرعات الزاوية \(\omega_i\).) كل مشتقة ثانية تُخرج عاملًا هو \(-\Omega^2\)، فتصبح المعادلة (10) على الشكل</p>
+                        \[ \Bigl[\tfrac gl\begin{pmatrix}2&0\\0&1\end{pmatrix} - \Omega^2\begin{pmatrix}2&1\\1&1\end{pmatrix}\Bigr]\begin{pmatrix}u_1\\u_2\end{pmatrix} = 0 . \]
+                        <p>هذا يملك دائمًا الحلّ التافه \(u_1 = u_2 = 0\)، أي أن النوّاس يبقى ساكنًا. ولا يملك حلًّا غير تافه إلا إذا كانت معادلتاه تقولان الشيء نفسه، وهذا يحدث تمامًا حين يكون محدّد القوس صفرًا:</p>
+                        \[ 2\left(\tfrac gl - \Omega^2\right)^2 - \Omega^4 = 0 \quad\Longrightarrow\quad \tfrac gl - \Omega^2 = \pm\frac{\Omega^2}{\sqrt2} \quad\Longrightarrow\quad \Omega^2 = \frac{g/l}{1 \pm 1/\sqrt2} . \]
+                        <p>بضرب البسط والمقام في \(\sqrt2(\sqrt2 \mp 1)\) يصبح المقام \((\sqrt2 \pm 1)(\sqrt2 \mp 1) = 1\)، فنحصل على</p>
+                        <div class="pbox"><span class="pbox__t">النتيجة الأساسية · الترددان الطبيعيان</span> \[ \Omega_\mp^2 = \left(2\mp\sqrt2\right)\frac{g}{l}, \quad \Omega_- = 2.40\ \mathrm{rad/s},\quad \Omega_+ = 5.79\ \mathrm{rad/s} \;\; (l = 1\ \mathrm{m}). \tag{11} \]</div>
+                        <p>لكل تردّد شكل حركة خاص به يحدّده الصفّ الأول من القوس: \(u_2/u_1 = 2\,(g/l-\Omega^2)/\Omega^2\). بالنسبة للتردّد البطيء تكون هذه النسبة \(+\sqrt2 \approx 1.41\): يتأرجح الذراعان في الاتجاه نفسه، والسفلى أبعد بنحو 1.4 مرّة، ويتحرّك النوّاس تقريبًا كقطعة واحدة. وبالنسبة للتردّد السريع تكون \(-\sqrt2\): يتأرجح الذراعان متعاكسين، والمرفق يذهب في اتجاه واليد في الاتجاه الآخر (الشكل 2). هاتان الحركتان هما <em>النمطان الطبيعيان</em> للنوّاس، أي الطريقتان للتأرجح اللتان يتابع فيهما كل جزء كل جزء آخر بتردّد واحد. وأي حركة صغيرة هي خليط من الاثنين. نسبة الترددين هي \(\Omega_+/\Omega_- = 1 + \sqrt2 \approx 2.41\)، وهي عدد غير نسبي، لذلك لا يتكرّر الخليط بالضبط؛ ومع ذلك يبقى منتظمًا تمامًا ويمكن التنبّؤ به تمامًا. لا توجد فوضى في التأرجحات الصغيرة.</p>
+                        <figure class="pfig">
+                            <div class="pfig__plate">
+                                <svg viewBox="0 0 720 300" role="img" aria-label="The two normal modes: on the left both rods lean the same way, the lower one further; on the right they lean opposite ways.">
+                                    <rect x="0" y="0" width="720" height="300" fill="#fff"/>
+                                    <g>
+                                        <line x1="110" y1="40" x2="250" y2="40" stroke="#1c1518" stroke-width="2"/>
+                                        <line x1="180" y1="40" x2="180" y2="270" stroke="#cdc1ae" stroke-width="1" stroke-dasharray="4 4"/>
+                                        <line x1="180" y1="40" x2="155.5" y2="155.3" stroke="#cdc1ae" stroke-width="2.4" stroke-linecap="round"/>
+                                        <line x1="155.5" y1="155.3" x2="121.0" y2="268.0" stroke="#cdc1ae" stroke-width="2.4" stroke-linecap="round"/>
+                                        <line x1="180" y1="40" x2="204.5" y2="155.3" stroke="#1c1518" stroke-width="2.6" stroke-linecap="round"/>
+                                        <line x1="204.5" y1="155.3" x2="239.0" y2="268.0" stroke="#1c1518" stroke-width="2.6" stroke-linecap="round"/>
+                                        <circle cx="155.5" cy="155.3" r="9" fill="#e2a2aa"/><circle cx="121.0" cy="268.0" r="9" fill="#e2a2aa"/>
+                                        <circle cx="204.5" cy="155.3" r="9" fill="#7a1f2b"/><circle cx="239.0" cy="268.0" r="9" fill="#7a1f2b"/>
+                                        <circle cx="180" cy="40" r="4" fill="#fff" stroke="#1c1518" stroke-width="2"/>
+                                        <text class="lbl" x="270" y="70">slow mode</text>
+                                        <text class="m" x="270" y="98">ω<tspan class="mu" font-size="12" dy="4">−</tspan><tspan class="mu" dy="-4"> = 2.40 rad/s</tspan></text>
+                                        <text class="lbl" x="270" y="124">period 2.62 s</text>
+                                        <text class="lbl" x="270" y="150">arms together,</text>
+                                        <text class="m" x="270" y="174">u<tspan class="mu" font-size="12" dy="4">2</tspan><tspan class="mu" dy="-4"> / </tspan>u<tspan class="mu" font-size="12" dy="4">1</tspan><tspan class="mu" dy="-4"> = +√2</tspan></text>
+                                    </g>
+                                    <g>
+                                        <line x1="430" y1="40" x2="570" y2="40" stroke="#1c1518" stroke-width="2"/>
+                                        <line x1="500" y1="40" x2="500" y2="270" stroke="#cdc1ae" stroke-width="1" stroke-dasharray="4 4"/>
+                                        <line x1="500" y1="40" x2="475.5" y2="155.3" stroke="#cdc1ae" stroke-width="2.4" stroke-linecap="round"/>
+                                        <line x1="475.5" y1="155.3" x2="510.0" y2="268.0" stroke="#cdc1ae" stroke-width="2.4" stroke-linecap="round"/>
+                                        <line x1="500" y1="40" x2="524.5" y2="155.3" stroke="#1c1518" stroke-width="2.6" stroke-linecap="round"/>
+                                        <line x1="524.5" y1="155.3" x2="490.0" y2="268.0" stroke="#1c1518" stroke-width="2.6" stroke-linecap="round"/>
+                                        <circle cx="475.5" cy="155.3" r="9" fill="#e2a2aa"/><circle cx="510.0" cy="268.0" r="9" fill="#e2a2aa"/>
+                                        <circle cx="524.5" cy="155.3" r="9" fill="#7a1f2b"/><circle cx="490.0" cy="268.0" r="9" fill="#7a1f2b"/>
+                                        <circle cx="500" cy="40" r="4" fill="#fff" stroke="#1c1518" stroke-width="2"/>
+                                        <text class="lbl" x="590" y="70">fast mode</text>
+                                        <text class="m" x="590" y="98">ω<tspan class="mu" font-size="12" dy="4">+</tspan><tspan class="mu" dy="-4"> = 5.79 rad/s</tspan></text>
+                                        <text class="lbl" x="590" y="124">period 1.09 s</text>
+                                        <text class="lbl" x="590" y="150">arms opposed,</text>
+                                        <text class="m" x="590" y="174">u<tspan class="mu" font-size="12" dy="4">2</tspan><tspan class="mu" dy="-4"> / </tspan>u<tspan class="mu" font-size="12" dy="4">1</tspan><tspan class="mu" dy="-4"> = −√2</tspan></text>
+                                    </g>
+                                </svg>
+                            </div>
+                            <figcaption><span class="pfig__n">الشكل 2</span>النمطان الطبيعيان لكتلتين متساويتين و\(l = 1\ \mathrm{m}\)، مع تضخيم الزوايا كي تُرى. داكن: إحدى نقطتَي الارتداد؛ فاتح: نقطة الارتداد المقابلة بعد نصف دور.</figcaption>
+                        </figure>
+                        <div class="pbox">
+                            <span class="pbox__t">مثال 5.1 · دورا الحركتين</span>
+                            <p>الدور هو الزمن اللازم لتأرجح كامل، \(2\pi/\Omega\). بالنسبة للقضيبين المتساويين، طول كل منهما \(1\ \mathrm{m}\)، يكون للنمط البطيء دور \(2\pi/2.397\ \mathrm{s} = 2.62\ \mathrm{s}\)، وللنمط السريع \(2\pi/5.787\ \mathrm{s} = 1.09\ \mathrm{s}\). للمقارنة، لنوّاس بسيط طوله \(1\ \mathrm{m}\) دور قدره \(2\pi\sqrt{l/g} = 2.01\ \mathrm{s}\). وتعليق نوّاس ثانٍ تحته يقسم هذا الإيقاع الواحد إلى إيقاع أبطأ وآخر أسرع.</p>
+                        </div>
+                        <div class="pbox pbox--ex">
+                            <span class="pbox__t">تمرين 5.1 · على الشكل أعلاه</span>
+                            <p>اجعل مُنزلقَي النسبة على 1، والسرعتين الزاويتين على 0. اضبط \(\theta_1 = 5^\circ\) و\(\theta_2 = 7^\circ\)، قريبًا من \(\sqrt2\times 5^\circ\): يتأرجح النوّاس تقريبًا كقطعة واحدة، بدور قريب من ⁦2.6 s⁩. ثم اضبط \(\theta_2 = -7^\circ\): يتأرجح الذراعان متعاكسين، أسرع بنحو الضعف من قبل وأكثر قليلًا. قِس زمن عشر تأرجحات من كل نوع وقارِن بالعلاقة (11).</p>
+                        </div>
+                    </section>
+
+                    <section class="psec" id="p-chaos">
+                        <h3><span class="psec__n">06</span>الفوضى</h3>
+                        <p>عند الزوايا الكبيرة يفشل تقريب الزوايا الصغيرة. لم تعد الجيوب تُستبدل بالزوايا، وتصبح حدود \(\omega^2\)، أي الشدّ نحو الخارج الذي تُحدثه الكرتان الدائرتان، قوية بقدر الجاذبية. عندئذ تؤدّي بعض البدايات إلى حركة فوضوية. ولا نتعرّف على الفوضى من مدى جموح الحركة، بل بالاختبار الدقيق: <em>الحساسية للشروط الابتدائية</em>. أطلِق نوّاسين تختلف زاويتاهما العلويتان بمقدار \(0.001\ \mathrm{rad}\)، أي نحو مليمتر واحد عند طرف قضيب طوله متر، ثم تابع المسافة \(d(t)\) بين كرتيهما السفليين. يُظهر الشكل 3 هذه المسافة لبداية لطيفة وأخرى عنيفة، محسوبة بالمعادلات نفسها وبخطوة الزمن نفسها كما في الصفحة.</p>
+                        <figure class="pfig">
+                            <div class="pfig__plate">
+                                <svg viewBox="0 0 720 346" role="img" xmlns="http://www.w3.org/2000/svg">
+                                <defs><clipPath id="clip1"><rect x="64.0" y="18.0" width="634.0" height="256.0"/></clipPath></defs>
+                                <line x1="64.0" x2="698.0" y1="274.0" y2="274.0" stroke="#eee6d9" stroke-width="1"/>
+                                <text class="tick" x="56.0" y="278.0" text-anchor="end">10⁻⁴</text>
+                                <line x1="64.0" x2="698.0" y1="222.8" y2="222.8" stroke="#eee6d9" stroke-width="1"/>
+                                <text class="tick" x="56.0" y="226.8" text-anchor="end">10⁻³</text>
+                                <line x1="64.0" x2="698.0" y1="171.6" y2="171.6" stroke="#eee6d9" stroke-width="1"/>
+                                <text class="tick" x="56.0" y="175.6" text-anchor="end">10⁻²</text>
+                                <line x1="64.0" x2="698.0" y1="120.4" y2="120.4" stroke="#eee6d9" stroke-width="1"/>
+                                <text class="tick" x="56.0" y="124.4" text-anchor="end">10⁻¹</text>
+                                <line x1="64.0" x2="698.0" y1="69.2" y2="69.2" stroke="#eee6d9" stroke-width="1"/>
+                                <text class="tick" x="56.0" y="73.2" text-anchor="end">10⁰</text>
+                                <line x1="64.0" x2="698.0" y1="18.0" y2="18.0" stroke="#eee6d9" stroke-width="1"/>
+                                <text class="tick" x="56.0" y="22.0" text-anchor="end">10¹</text>
+                                <line x1="64.0" x2="64.0" y1="274.0" y2="279.0" stroke="#8b8079"/>
+                                <text class="tick" x="64.0" y="293.0" text-anchor="middle">0</text>
+                                <line x1="127.4" x2="127.4" y1="274.0" y2="279.0" stroke="#8b8079"/>
+                                <text class="tick" x="127.4" y="293.0" text-anchor="middle">2</text>
+                                <line x1="190.8" x2="190.8" y1="274.0" y2="279.0" stroke="#8b8079"/>
+                                <text class="tick" x="190.8" y="293.0" text-anchor="middle">4</text>
+                                <line x1="254.2" x2="254.2" y1="274.0" y2="279.0" stroke="#8b8079"/>
+                                <text class="tick" x="254.2" y="293.0" text-anchor="middle">6</text>
+                                <line x1="317.6" x2="317.6" y1="274.0" y2="279.0" stroke="#8b8079"/>
+                                <text class="tick" x="317.6" y="293.0" text-anchor="middle">8</text>
+                                <line x1="381.0" x2="381.0" y1="274.0" y2="279.0" stroke="#8b8079"/>
+                                <text class="tick" x="381.0" y="293.0" text-anchor="middle">10</text>
+                                <line x1="444.4" x2="444.4" y1="274.0" y2="279.0" stroke="#8b8079"/>
+                                <text class="tick" x="444.4" y="293.0" text-anchor="middle">12</text>
+                                <line x1="507.8" x2="507.8" y1="274.0" y2="279.0" stroke="#8b8079"/>
+                                <text class="tick" x="507.8" y="293.0" text-anchor="middle">14</text>
+                                <line x1="571.2" x2="571.2" y1="274.0" y2="279.0" stroke="#8b8079"/>
+                                <text class="tick" x="571.2" y="293.0" text-anchor="middle">16</text>
+                                <line x1="634.6" x2="634.6" y1="274.0" y2="279.0" stroke="#8b8079"/>
+                                <text class="tick" x="634.6" y="293.0" text-anchor="middle">18</text>
+                                <line x1="698.0" x2="698.0" y1="274.0" y2="279.0" stroke="#8b8079"/>
+                                <text class="tick" x="698.0" y="293.0" text-anchor="middle">20</text>
+                                <line x1="64.0" x2="698.0" y1="274.0" y2="274.0" stroke="#8b8079"/>
+                                <line x1="64.0" x2="64.0" y1="18.0" y2="274.0" stroke="#8b8079"/>
+                                <text class="lbl" x="698.0" y="312.0" text-anchor="end">time t (s)</text>
+                                <text class="lbl" x="70.0" y="31.0">distance between the two lower masses (m)</text>
+                                <g clip-path="url(#clip1)">
+                                <path d="M64.0 222.8 L65.6 222.8 L67.2 222.8 L68.8 222.9 L70.3 223.1 L71.9 223.4 L73.5 224.1 L75.1 225.2 L76.7 226.8 L78.3 229.2 L79.8 232.6 L81.4 237.7 L83.0 245.7 L84.6 260.4 L86.2 323.2 L87.8 258.9 L89.4 243.5 L90.9 234.7 L92.5 228.7 L94.1 224.4 L95.7 221.3 L97.3 219.1 L98.9 217.6 L100.5 216.7 L102.0 216.4 L103.6 216.6 L105.2 217.2 L106.8 218.3 L108.4 219.7 L110.0 221.6 L111.5 223.8 L113.1 226.3 L114.7 229.2 L116.3 232.4 L117.9 235.9 L119.5 239.8 L121.1 244.4 L122.6 249.9 L124.2 257.1 L125.8 268.5 L127.4 296.0 L129.0 283.4 L130.6 261.5 L132.2 249.9 L133.7 241.8 L135.3 235.5 L136.9 230.5 L138.5 226.4 L140.1 223.1 L141.7 220.4 L143.2 218.3 L144.8 216.8 L146.4 215.7 L148.0 215.2 L149.6 215.2 L151.2 215.7 L152.8 216.8 L154.3 218.4 L155.9 220.8 L157.5 224.0 L159.1 228.1 L160.7 233.7 L162.3 241.3 L163.9 252.8 L165.4 275.7 L167.0 280.4 L168.6 257.2 L170.2 247.0 L171.8 240.9 L173.4 236.7 L175.0 233.8 L176.5 231.6 L178.1 229.8 L179.7 228.3 L181.3 227.0 L182.9 225.8 L184.5 224.5 L186.0 223.4 L187.6 222.3 L189.2 221.3 L190.8 220.4 L192.4 219.8 L194.0 219.5 L195.6 219.5 L197.1 219.9 L198.7 220.9 L200.3 222.5 L201.9 224.8 L203.5 228.3 L205.1 233.2 L206.7 240.6 L208.2 253.0 L209.8 287.1 L211.4 265.2 L213.0 246.3 L214.6 236.7 L216.2 230.5 L217.7 226.2 L219.3 223.3 L220.9 221.2 L222.5 219.9 L224.1 219.1 L225.7 218.9 L227.3 219.1 L228.8 219.6 L230.4 220.4 L232.0 221.4 L233.6 222.6 L235.2 223.9 L236.8 225.3 L238.4 226.7 L239.9 228.2 L241.5 229.8 L243.1 231.6 L244.7 233.7 L246.3 236.4 L247.9 239.9 L249.4 245.0 L251.0 252.9 L252.6 267.8 L254.2 300.8 L255.8 261.7 L257.4 246.7 L259.0 237.6 L260.5 231.1 L262.1 226.3 L263.7 222.6 L265.3 219.7 L266.9 217.7 L268.5 216.2 L270.1 215.3 L271.6 215.0 L273.2 215.2 L274.8 215.9 L276.4 217.1 L278.0 218.9 L279.6 221.3 L281.1 224.3 L282.7 228.0 L284.3 232.6 L285.9 238.4 L287.5 245.9 L289.1 256.4 L290.7 274.1 L292.2 309.2 L293.8 271.3 L295.4 258.2 L297.0 250.6 L298.6 245.1 L300.2 240.7 L301.8 236.9 L303.3 233.6 L304.9 230.5 L306.5 227.8 L308.1 225.2 L309.7 223.0 L311.3 221.0 L312.8 219.4 L314.4 218.1 L316.0 217.2 L317.6 216.7 L319.2 216.7 L320.8 217.3 L322.4 218.3 L323.9 220.1 L325.5 222.6 L327.1 226.2 L328.7 231.1 L330.3 238.1 L331.9 249.1 L333.4 272.5 L335.0 276.4 L336.6 251.5 L338.2 240.8 L339.8 234.4 L341.4 230.1 L343.0 227.2 L344.5 225.1 L346.1 223.8 L347.7 223.0 L349.3 222.5 L350.9 222.3 L352.5 222.4 L354.1 222.5 L355.6 222.6 L357.2 222.8 L358.8 223.0 L360.4 223.2 L362.0 223.4 L363.6 223.8 L365.1 224.4 L366.7 225.2 L368.3 226.6 L369.9 228.5 L371.5 231.3 L373.1 235.4 L374.7 241.6 L376.2 251.8 L377.8 274.9 L379.4 275.6 L381.0 250.6 L382.6 239.0 L384.2 231.7 L385.8 226.6 L387.3 222.8 L388.9 220.0 L390.5 218.1 L392.1 216.8 L393.7 216.2 L395.3 216.0 L396.9 216.4 L398.4 217.2 L400.0 218.4 L401.6 220.1 L403.2 222.2 L404.8 224.6 L406.4 227.5 L407.9 230.7 L409.5 234.4 L411.1 238.5 L412.7 243.2 L414.3 248.8 L415.9 256.0 L417.5 266.6 L419.0 288.2 L420.6 294.1 L422.2 266.4 L423.8 253.6 L425.4 245.0 L427.0 238.4 L428.5 233.0 L430.1 228.6 L431.7 225.0 L433.3 222.0 L434.9 219.6 L436.5 217.7 L438.1 216.4 L439.6 215.5 L441.2 215.1 L442.8 215.3 L444.4 216.0 L446.0 217.3 L447.6 219.2 L449.2 221.9 L450.7 225.5 L452.3 230.2 L453.9 236.6 L455.5 245.9 L457.1 261.5 L458.7 300.4 L460.2 263.7 L461.8 249.7 L463.4 242.1 L465.0 237.3 L466.6 233.9 L468.2 231.4 L469.8 229.6 L471.3 228.2 L472.9 227.0 L474.5 225.9 L476.1 224.9 L477.7 223.9 L479.3 222.9 L480.9 222.0 L482.4 221.2 L484.0 220.5 L485.6 220.0 L487.2 219.9 L488.8 220.0 L490.4 220.7 L492.0 221.9 L493.5 223.7 L495.1 226.5 L496.7 230.5 L498.3 236.3 L499.9 245.4 L501.5 262.8 L503.0 295.5 L504.6 254.3 L506.2 241.0 L507.8 233.2 L509.4 228.0 L511.0 224.3 L512.6 221.7 L514.1 220.0 L515.7 218.9 L517.3 218.4 L518.9 218.3 L520.5 218.6 L522.1 219.3 L523.7 220.3 L525.2 221.5 L526.8 222.9 L528.4 224.4 L530.0 226.1 L531.6 227.7 L533.2 229.5 L534.7 231.4 L536.3 233.5 L537.9 236.1 L539.5 239.3 L541.1 243.6 L542.7 250.1 L544.3 261.0 L545.8 287.7 L547.4 274.0 L549.0 253.1 L550.6 242.0 L552.2 234.4 L553.8 228.8 L555.4 224.5 L556.9 221.2 L558.5 218.7 L560.1 216.9 L561.7 215.6 L563.3 214.9 L564.9 214.8 L566.4 215.1 L568.0 216.0 L569.6 217.5 L571.2 219.5 L572.8 222.1 L574.4 225.5 L576.0 229.7 L577.5 235.1 L579.1 241.9 L580.7 251.3 L582.3 265.9 L583.9 301.4 L585.5 275.3 L587.0 259.5 L588.6 251.1 L590.2 245.4 L591.8 241.1 L593.4 237.5 L595.0 234.4 L596.6 231.5 L598.1 228.9 L599.7 226.4 L601.3 224.2 L602.9 222.2 L604.5 220.4 L606.1 219.0 L607.7 217.9 L609.2 217.2 L610.8 216.9 L612.4 217.1 L614.0 217.8 L615.6 219.1 L617.2 221.1 L618.8 224.0 L620.3 228.1 L621.9 233.8 L623.5 242.2 L625.1 256.9 L626.7 313.6 L628.3 260.4 L629.8 245.0 L631.4 236.7 L633.0 231.3 L634.6 227.7 L636.2 225.2 L637.8 223.5 L639.4 222.5 L640.9 221.9 L642.5 221.6 L644.1 221.6 L645.7 221.8 L647.3 222.1 L648.9 222.5 L650.5 222.8 L652.0 223.2 L653.6 223.6 L655.2 224.0 L656.8 224.5 L658.4 225.3 L660.0 226.4 L661.5 228.0 L663.1 230.4 L664.7 233.7 L666.3 238.6 L667.9 246.3 L669.5 260.3 L671.1 323.7 L672.6 260.5 L674.2 244.4 L675.8 235.3 L677.4 229.0 L679.0 224.5 L680.6 221.2 L682.1 218.8 L683.7 217.1 L685.3 216.1 L686.9 215.6 L688.5 215.6 L690.1 216.2 L691.7 217.2 L693.2 218.6 L694.8 220.5 L696.4 222.8 L698.0 225.6" fill="none" stroke="#4a413d" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/>
+                                <path d="M64.0 222.8 L65.6 222.7 L67.2 222.2 L68.8 221.5 L70.3 220.6 L71.9 219.5 L73.5 218.4 L75.1 217.3 L76.7 216.2 L78.3 215.2 L79.8 214.1 L81.4 212.8 L83.0 211.2 L84.6 209.7 L86.2 208.5 L87.8 208.0 L89.4 208.8 L90.9 209.4 L92.5 210.7 L94.1 213.6 L95.7 217.4 L97.3 221.5 L98.9 225.4 L100.5 229.5 L102.0 234.9 L103.6 245.7 L105.2 260.5 L106.8 246.2 L108.4 242.4 L110.0 241.7 L111.5 240.8 L113.1 239.2 L114.7 237.0 L116.3 234.8 L117.9 233.1 L119.5 232.2 L121.1 232.5 L122.6 234.6 L124.2 238.3 L125.8 237.0 L127.4 225.8 L129.0 213.7 L130.6 203.7 L132.2 195.7 L133.7 189.1 L135.3 183.6 L136.9 178.9 L138.5 174.8 L140.1 171.2 L141.7 167.9 L143.2 164.9 L144.8 162.0 L146.4 159.2 L148.0 156.5 L149.6 153.7 L151.2 150.9 L152.8 147.9 L154.3 145.0 L155.9 142.1 L157.5 139.5 L159.1 137.4 L160.7 136.5 L162.3 139.0 L163.9 154.5 L165.4 147.5 L167.0 143.9 L168.6 141.4 L170.2 135.7 L171.8 130.0 L173.4 126.3 L175.0 125.4 L176.5 130.5 L178.1 130.4 L179.7 124.2 L181.3 123.9 L182.9 125.9 L184.5 129.3 L186.0 133.4 L187.6 135.8 L189.2 133.3 L190.8 127.3 L192.4 121.0 L194.0 115.6 L195.6 110.9 L197.1 106.8 L198.7 103.1 L200.3 99.8 L201.9 97.2 L203.5 95.3 L205.1 93.5 L206.7 91.4 L208.2 89.0 L209.8 86.6 L211.4 84.7 L213.0 84.6 L214.6 89.1 L216.2 93.2 L217.7 84.1 L219.3 75.7 L220.9 71.3 L222.5 69.2 L224.1 68.0 L225.7 66.9 L227.3 65.3 L228.8 63.2 L230.4 61.3 L232.0 59.9 L233.6 60.2 L235.2 61.8 L236.8 62.9 L238.4 64.9 L239.9 67.1 L241.5 68.5 L243.1 68.7 L244.7 67.7 L246.3 65.6 L247.9 63.0 L249.4 60.1 L251.0 57.0 L252.6 53.9 L254.2 50.9 L255.8 48.4 L257.4 47.5 L259.0 49.2 L260.5 51.7 L262.1 54.5 L263.7 57.4 L265.3 60.4 L266.9 63.7 L268.5 67.3 L270.1 70.4 L271.6 70.8 L273.2 68.0 L274.8 63.8 L276.4 59.9 L278.0 57.1 L279.6 55.4 L281.1 55.1 L282.7 56.2 L284.3 58.0 L285.9 59.6 L287.5 60.7 L289.1 64.8 L290.7 72.7 L292.2 80.0 L293.8 76.2 L295.4 66.9 L297.0 59.0 L298.6 53.2 L300.2 50.0 L301.8 49.2 L303.3 48.9 L304.9 48.1 L306.5 46.8 L308.1 45.1 L309.7 43.2 L311.3 41.3 L312.8 39.7 L314.4 38.7 L316.0 38.7 L317.6 39.8 L319.2 41.5 L320.8 43.4 L322.4 45.3 L323.9 47.0 L325.5 48.4 L327.1 50.0 L328.7 52.9 L330.3 56.9 L331.9 60.1 L333.4 60.0 L335.0 56.5 L336.6 51.8 L338.2 47.9 L339.8 46.9 L341.4 47.9 L343.0 50.1 L344.5 53.3 L346.1 57.2 L347.7 61.4 L349.3 64.8 L350.9 66.4 L352.5 66.4 L354.1 65.0 L355.6 62.4 L357.2 58.7 L358.8 54.7 L360.4 51.4 L362.0 49.7 L363.6 49.4 L365.1 49.6 L366.7 50.7 L368.3 54.8 L369.9 61.4 L371.5 67.5 L373.1 67.1 L374.7 60.9 L376.2 55.3 L377.8 52.6 L379.4 51.8 L381.0 51.3 L382.6 50.7 L384.2 50.0 L385.8 49.3 L387.3 48.5 L388.9 47.8 L390.5 47.1 L392.1 46.4 L393.7 45.8 L395.3 45.1 L396.9 44.4 L398.4 43.7 L400.0 43.2 L401.6 42.8 L403.2 42.6 L404.8 42.5 L406.4 42.6 L407.9 42.9 L409.5 43.3 L411.1 44.2 L412.7 45.8 L414.3 48.5 L415.9 52.4 L417.5 57.7 L419.0 65.1 L420.6 73.2 L422.2 70.3 L423.8 60.1 L425.4 51.9 L427.0 47.1 L428.5 45.4 L430.1 45.0 L431.7 45.4 L433.3 46.8 L434.9 49.1 L436.5 52.0 L438.1 54.5 L439.6 54.7 L441.2 52.7 L442.8 50.0 L444.4 47.7 L446.0 45.9 L447.6 44.9 L449.2 45.6 L450.7 49.7 L452.3 56.5 L453.9 66.7 L455.5 84.0 L457.1 89.1 L458.7 70.3 L460.2 59.6 L461.8 52.9 L463.4 48.8 L465.0 48.8 L466.6 50.7 L468.2 52.6 L469.8 54.5 L471.3 57.3 L472.9 59.2 L474.5 59.0 L476.1 57.7 L477.7 56.3 L479.3 55.2 L480.9 54.3 L482.4 53.7 L484.0 53.3 L485.6 53.3 L487.2 53.4 L488.8 54.1 L490.4 56.5 L492.0 61.1 L493.5 66.6 L495.1 70.6 L496.7 70.2 L498.3 66.3 L499.9 61.7 L501.5 57.7 L503.0 54.6 L504.6 52.8 L506.2 52.5 L507.8 52.8 L509.4 53.5 L511.0 54.5 L512.6 56.0 L514.1 58.4 L515.7 62.9 L517.3 70.4 L518.9 82.7 L520.5 96.5 L522.1 83.1 L523.7 70.6 L525.2 62.6 L526.8 57.1 L528.4 53.8 L530.0 52.2 L531.6 51.4 L533.2 50.9 L534.7 50.7 L536.3 50.7 L537.9 51.0 L539.5 51.7 L541.1 52.7 L542.7 54.4 L544.3 55.5 L545.8 54.4 L547.4 52.0 L549.0 49.3 L550.6 46.8 L552.2 44.7 L553.8 43.0 L555.4 43.0 L556.9 44.6 L558.5 46.8 L560.1 48.9 L561.7 50.9 L563.3 52.5 L564.9 53.7 L566.4 54.4 L568.0 54.8 L569.6 55.1 L571.2 55.1 L572.8 54.7 L574.4 54.0 L576.0 53.1 L577.5 53.1 L579.1 55.4 L580.7 59.3 L582.3 63.1 L583.9 64.5 L585.5 62.3 L587.0 58.0 L588.6 54.2 L590.2 53.8 L591.8 55.2 L593.4 56.4 L595.0 57.0 L596.6 56.7 L598.1 55.4 L599.7 54.2 L601.3 54.9 L602.9 56.4 L604.5 58.2 L606.1 60.0 L607.7 62.2 L609.2 64.9 L610.8 68.0 L612.4 71.3 L614.0 74.9 L615.6 80.0 L617.2 88.0 L618.8 97.1 L620.3 92.4 L621.9 81.7 L623.5 74.2 L625.1 70.4 L626.7 70.7 L628.3 71.2 L629.8 69.2 L631.4 66.7 L633.0 67.1 L634.6 68.5 L636.2 69.1 L637.8 68.0 L639.4 65.4 L640.9 61.9 L642.5 58.1 L644.1 54.4 L645.7 51.2 L647.3 49.4 L648.9 49.5 L650.5 50.3 L652.0 50.7 L653.6 50.4 L655.2 49.5 L656.8 50.0 L658.4 54.3 L660.0 61.3 L661.5 71.5 L663.1 79.5 L664.7 72.2 L666.3 62.9 L667.9 56.6 L669.5 53.4 L671.1 55.4 L672.6 61.8 L674.2 73.5 L675.8 104.3 L677.4 88.2 L679.0 68.4 L680.6 58.4 L682.1 51.7 L683.7 47.0 L685.3 44.1 L686.9 43.2 L688.5 43.4 L690.1 44.0 L691.7 45.1 L693.2 46.9 L694.8 49.9 L696.4 53.6 L698.0 57.1" fill="none" stroke="#7a1f2b" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/>
+                                </g>
+                                <line x1="64" x2="698" y1="318.0" y2="318.0" stroke="#eee6d9"/>
+                                <line x1="64.0" x2="86.0" y1="334.0" y2="334.0" stroke="#4a413d" stroke-width="2.2" stroke-linecap="round"/>
+                                <text class="lbl" x="94.0" y="338.0">start 10°, 10° (low energy)</text>
+                                <line x1="298.4" x2="320.4" y1="334.0" y2="334.0" stroke="#7a1f2b" stroke-width="2.2" stroke-linecap="round"/>
+                                <text class="lbl" x="328.4" y="338.0">start 120°, 150° (high energy)</text>
+                                </svg>
+                            </div>
+                            <figcaption><span class="pfig__n">الشكل 3</span>المسافة بين الكتلتين السفليين لنوّاسين تبدأ زاويتاهما العلويتان متباعدتين بمقدار \(0.001\ \mathrm{rad}\)، على مقياس لوغاريتمي. كتلتان وطولان متساويان، وكلاهما ساكن عند البداية، وRK4 بخطوة \(h = 1/600\ \mathrm{s}\). عند طاقة منخفضة تبقى المسافة دون نحو ⁦1.5 mm⁩ طوال ⁦20 s⁩ كاملة. وعند طاقة مرتفعة تنمو على هذا المقياس كخط مستقيم، أي أُسّيًّا، حتى تصبح بحجم النوّاس نفسه.</figcaption>
+                        </figure>
+                        <p>المقياس الرأسي في الشكل 3 <em>لوغاريتمي</em>: كل درجة إلى الأعلى تضرب المسافة في عشرة. على مثل هذا المقياس، يصعد كل ما يتضاعف بالعامل نفسه في كل ثانية، كالمال الذي ينمو بالفوائد المركّبة، كخط مستقيم. في التأرجحات الصغيرة المعادلات خطّية، فالفرق بين حركتين هو نفسه تأرجح صغير ويحتفظ بحجمه: فالمنحنى عند الطاقة المنخفضة يصعد ويهبط في أقواس لكنه لا ينمو أبدًا. أما في التأرجحات الكبيرة فتُحمَل الذراع السفلى مرارًا إلى قرب القمّة، حيث تتوازن كقلم رصاص على رأسه. عندها يحسم فرق ضئيل جدًّا ما إذا كانت ستنقلب أم ستعود، وحين يختار النوّاسان اختيارين مختلفين فإنهما يسلكان طريقين مختلفين. كل لحظة من هذا النوع تكبّر الفجوة. وحين قيس ذلك بمعادلات الصفحة نفسها للبداية الافتراضية، وُجد أن الفجوة تنمو بسرعة تقارب ضعف سرعتها في أوقات أخرى، وذلك حين يكون القضيب السفلي أبعد من \(120^\circ\) عن الشاقول الهابط.</p>
+                        <p>خط مستقيم على مقياس لوغاريتمي يعني <em>نموًّا أُسّيًّا</em>، \(d(t) \approx d_0\,e^{\lambda t}\)، حيث \(d_0\) هي المسافة الابتدائية، و\(\lambda\) (لامبدا) هي معدّل النمو في الثانية. أما بالنسبة لبداية الطاقة العالية في الشكل 3، فالمنحنى يتذبذب، لكن خطًّا مستقيمًا يمرّ به حتى اللحظة التي تبلغ فيها المسافة \(0.1\ \mathrm{m}\) بعد \(4.1\ \mathrm{s}\)، يعطي \(\lambda \approx 1.4\) في الثانية: تتضاعف المسافة تقريبًا كل نصف ثانية. والطريقة الدقيقة لقياس \(\lambda\) تتبع تغيّرًا صغيرًا جدًّا في الحالة كلها، الزاويتين والسرعتين الزاويتين معًا، فتُقلّصه كلما نما، وتأخذ متوسط لوغاريتم نموّه على زمن طويل جدًّا. نهاية هذا المتوسّط هي <em>أُسّ ليابونوف الأكبر</em>، نسبةً إلى عالم الرياضيات الروسي ألكسندر ليابونوف:</p>
+                        \[ \lambda = \lim_{t\to\infty}\ \lim_{d_0\to 0}\ \frac{1}{t}\,\ln\frac{d(t)}{d_0} . \tag{12} \]
+                        <p>هنا \(d\) المسافة بين الحالتين؛ الزوايا بالراديان، والسرعات الزاوية بالراديان في الثانية، تُعامَل كأعداد مجرّدة. أي اختيار معقول آخر للمسافة يعطي \(\lambda\) نفسه، لأن \(\lambda\) يقيس معدّل نمو لا حجمًا. ترتيب النهايتين مهمّ: أولًا يُجعل الفرق الابتدائي صغيرًا إلى حدّ الانعدام، لكي نقيس نمو فروق صغيرة فعلًا، ثم بعد ذلك تُجعل المدّة طويلة. وإذا أُجري الحساب كاملًا للبداية الافتراضية بمعادلات الصفحة وخطوتها، مع تقليص التغيّر إلى حجمه الأصلي كل \(0.1\ \mathrm{s}\) على مدى \(20\,000\ \mathrm{s}\) من الحركة، أعطت المعادلة (12) \(\lambda \approx 1.46\) في الثانية. والرقم 1.4 الذي قرأناه من الشكل 3، الآتي من فترة زمنية واحدة ومن إحداثيين من الأربعة، لم يكن بعيدًا.</p>
+                        <div class="pbox">
+                            <span class="pbox__t">مثال 6.1 · ثمن التنبّؤ</span>
+                            <p>مع \(\lambda = 1.46\) في الثانية يُضرب الخطأ في الحالة الابتدائية بالعامل \(e^{1.46} \approx 4.3\) في كل ثانية. فلكي نتنبّأ عشر ثوانٍ أبعد بالدقّة النهائية نفسها، يجب أن نعرف البداية بدقّة أكبر بـ \(e^{14.6} \approx 2\times10^{6}\) مرّة. ويجب أن ينكمش خطأ ابتدائي قدره ميليمتر واحد إلى نحو نصف نانومتر، أي عرض بضع ذرّات. ولهذا لا يستطيع أي حاسوب، مهما بلغت سرعته، أن يتتبّع النوّاس المزدوج زمنًا طويلًا: الحدّ هو معرفتنا بالبداية، لا الحساب نفسه.</p>
+                        </div>
+                        <p>الفوضى ليست ضوضاء، لأنه لا يدخل فيها أي عشوائية، وليست فشلًا في حفظ الطاقة: فالطاقة تبقى ثابتة بينما تتجوّل الحركة فوق معظم ما تسمح به هذه الطاقة. ولهذا السبب نفسه، لا يثبت انجراف صغير في الطاقة داخل الحاسوب إلا نفسه. فمسارات مختلفة لا تُحصى تتقاسم الطاقة نفسها، لذلك يدلّ انجراف قدره بضعة أجزاء من \(10^{8}\) على أن الحساب سليم، لا على أن مواضعه هي الحقيقية وراء أفق إمكانية التنبّؤ.</p>
+                        <div class="pbox pbox--ex">
+                            <span class="pbox__t">تمرين 6.1 · على الشكل أعلاه</span>
+                            <p>فعّل <em>توأم الفوضى</em>، وهو نوّاس ثانٍ يبدأ بـ \(\theta_1\) أكبر بمقدار \(0.001\ \mathrm{rad}\). عند \(10^\circ, 10^\circ\) تبقى قراءة المسافة قريبة من \(10^{-3}\ \mathrm{m}\). وعند \(120^\circ, 150^\circ\) يبتعد التوأم الفاتح خلال ثوانٍ قليلة. أوجِد أصغر الزوايا الابتدائية التي ترى عندها النوّاسين يفترقان خلال ⁦20 s⁩.</p>
+                        </div>
+                    </section>
+
+                    <section class="psec" id="p-rk4">
+                        <h3><span class="psec__n">07</span>الحلّ خطوة بخطوة</h3>
+                        <p>تعطي المعادلات (9) التسارعات في أي حالة، لكن لا توجد صيغة تعطي الزوايا في زمن لاحق مباشرة. لذلك يفعل الحاسوب ما يفعله المتنزّه في الضباب: ينظر إلى الميل الذي يقف عليه، ويخطو خطوة صغيرة، ثم ينظر من جديد. نكتب الحالة بوصفها \(s = (\theta_1,\theta_2,\omega_1,\omega_2)\) وقوانين الحركة بوصفها \(\mathrm{d}s/\mathrm{d}t = F(s) = (\omega_1,\omega_2,\alpha_1,\alpha_2)\): تتغيّر الزوايا بالسرعات الزاوية، وتتغيّر السرعات الزاوية بالتسارعات (9). الطريقة الأبسط، وهي <em>طريقة أويلر</em>، تأخذ \(s(t+h) = s + h\,F(s)\) لخطوة زمنية صغيرة \(h\). وهي سهلة الفهم وضعيفة في التطبيق، لأنها تستعمل الميل في بداية كل خطوة فقط، وعلى مسار منحنٍ يكون هذا الميل خاطئًا عند منتصف الطريق. وإذا طُبّقت على نوّاس، فإن طريقة أويلر تجعل التأرجح يكبر قليلًا في كل خطوة، كما لو أن أحدًا يدفعه سرًّا.</p>
+                        <p><em>طريقة رونغه–كوتا من المرتبة الرابعة</em>، ويُختصر اسمها RK4، تنظر إلى الميل أربع مرات في كل خطوة: مرة في البداية، ومرتين في المنتصف (في كل مرة بأفضل تقدير متاح حتى الآن)، ومرة في النهاية. ثم تأخذ متوسطًا موزونًا:</p>
+                        \[ \begin{aligned} k_1 &= F(s), & k_2 &= F\!\left(s + \tfrac{h}{2}k_1\right), \\ k_3 &= F\!\left(s + \tfrac{h}{2}k_2\right), & k_4 &= F(s + h\,k_3), \\ s(t+h) &= s + \tfrac{h}{6}\left(k_1 + 2k_2 + 2k_3 + k_4\right). \end{aligned} \tag{13} \]
+                        <p>إذا كان الميل يعتمد على الزمن وحده، فستتطابق النظرتان في المنتصف وتصير الأوزان 1 و4 و1، أوزان قاعدة سيمبسون لمساحة تحت منحنى. وRK4 هو تعميم قاعدة سيمبسون لميل يعتمد أيضًا على المكان الذي نوجد فيه. الخطأ الذي يرتكبه في خطوة واحدة يتناقص كـ \(h^5\)، والخطأ المتراكم على زمن ثابت كـ \(h^4\)، لذلك فإن تنصيف الخطوة يجعل المسار المحسوب أدقّ بنحو ست عشرة مرّة. أما خطأ الطاقة الذي تُظهره قراءة <em>انجراف الطاقة</em> فيتناقص هنا أسرع من ذلك: ففي اختبارات أُجريت بشيفرة الصفحة نفسها، قلّص تنصيف الخطوة، ابتداءً من \(1/600\ \mathrm{s}\)، الانجراف بعد دقيقة نحو 35 مرّة، وقلّصه تنصيف آخر نحو 25 مرّة. وتستعمل الصفحة \(h = 1/600\ \mathrm{s}\). وعلى شاشة ترسم ستين صورة في الثانية، تتّسع الصورة بالضبط لعشر خطوات، فيبقى انجراف الطاقة للبداية الافتراضية خلال عشرين ثانية دون جزء من عشرة ملايين، أي أدنى بكثير مما يمكن أن تراه.</p>
+                        <p>كل صورة تُقدّم الحركة بالزمن الحقيقي الذي مضى، مضروبًا في منزلق <em>مقياس الزمن</em>، بخطوات مقدارها \(h\). ولا تُحسب صورة واحدة لأكثر من \(0.05\ \mathrm{s}\)، ولا يتجاوز مقياس الزمن 1.5 أبدًا، فتُتّخذ كحدّ أقصى 45 خطوة لصورة واحدة؛ ولا يُبلغ حدّ الأمان البالغ 600 خطوة في الشيفرة أبدًا. وتحريك منزلق الكتلة أو الطول أو الزاوية أو السرعة الزاوية يعيد تشغيل الحركة من هذه القيم؛ أما تحريك منزلق مقياس الزمن فلا يفعل ذلك.</p>
+                        <p>لا تُبقي RK4 الطاقة ثابتةً تمامًا، ولذلك توجد قراءة <em>انجراف الطاقة</em>. وهي تُظهر التغيّر \(E - E_0\) عن الطاقة الابتدائية مقسومًا على \(E_\text{scale} = (m_1+m_2)\,g\,l_1 + m_2\,g\,l_2\)، وهي الطاقة اللازمة لرفع الكرتين من أخفض موضع لهما إلى ارتفاع نقطة الارتكاز، لا مقسومًا على \(E_0\) نفسه، الذي قد يكون قريبًا من الصفر. في أول ⁦20 s⁩ من البداية الافتراضية يبقى الانجراف ضمن نحو \(\pm 5\times10^{-8}\)؛ وأكبر قيمة له، \(+5.0\times10^{-8}\)، تأتي عند \(t \approx 8.7\ \mathrm{s}\). وتسجّل بيانات الصفحة نحو \(+4.7\times10^{-8}\) لتلك الصورة، لكن نص القراءة يُعاد كتابته كل صورة سادسة فقط، ولذلك لن تلتقط الذروة على الشاشة في الغالب. بعد ذلك ينزلق الانجراف إلى الأسفل بخطّ يكاد يكون مستقيمًا، بنحو \(7\times10^{-8}\) في الدقيقة؛ وبعد عشر دقائق يقرأ نحو \(-7\times10^{-7}\).</p>
+                        <p>★ تفقد RK4 الطاقة بدلًا من أن تكسبها، ويوضّح ذلك أبسط تذبذب. طبّقها على \(\ddot x = -\Omega^2 x\). خطوة دقيقة واحدة تدير النقطة \((x, \dot x/\Omega)\) على دائرة بالزاوية \(\Omega h\) وتُبقي بُعدها عن المركز كما هو. أما خطوة RK4 فتديرها بالزاوية نفسها تقريبًا، لكنها تضرب البُعد في \(1 - (\Omega h)^6/144\)، وهو أقل من واحد بقليل. فكل خطوة تقتطع من التأرجح مقدارًا صغيرًا، كاحتكاك ضعيف جدًّا. أما الطرق التي تتجنّب ذلك، المسمّاة المكاملات <em>السيمبلكتية</em>، فتحفظ الطاقة من الانجراف على أزمنة طويلة، لكنها تُدخل أخطاءً صغيرة أخرى.</p>
+                        <p>الخطوة ليست جيّدة بالتساوي في كل مكان. اجعل نسبة الكتلتين عند أعلى قيمة لها وهي 10. في كل مرّة يقترب القضيبان من خط مستقيم إلى ما يقارب عشر درجات، تعطي الكرة السفلى الثقيلة القضيب العلوي الخفيف دفعة حادّة، بتسارعات زاوية تبلغ نحو \(1300\ \mathrm{rad/s^2}\)، مقابل \(75\ \mathrm{rad/s^2}\) عند الكتلتين المتساويتين. عندئذ تكون خطوات \(h\) خشنة أكثر من اللازم لتتبّع الدفعة، ويبلغ الانجراف \(-3.6\times10^{-4}\) خلال ⁦20 s⁩.</p>
+                    </section>
+
+                    <section class="psec" id="p-screen">
+                        <h3><span class="psec__n">08</span>من الأمتار إلى البكسلات</h3>
+                        <p>الحاسوب يعرف الزوايا، والشاشة تحتاج إلى نقاط. تقع نقطة الارتكاز \((x_0, y_0)\) في مركز الصورة، وهي \(W\) بكسلًا عرضًا و\(H\) ارتفاعًا، ويُختار المقياس بحيث يتّسع النوّاس المفرود تمامًا: \(\sigma = (\min(W, H)/2 - 34)/(l_1 + l_2)\) بكسل لكل متر. وعلى الشاشة يُعدّ \(y\) من الأعلى إلى الأسفل، أي عكس اتفاقنا، فتتحوّل إشارات الطرح في المعادلة (1) إلى إشارات جمع: تُرسم الكرة 1 عند \((x_0 + \sigma l_1\sin\theta_1,\ y_0 + \sigma l_1\cos\theta_1)\)، والكرة 2 أبعد منها بمقدار \((\sigma l_2\sin\theta_2,\ \sigma l_2\cos\theta_2)\). وتُعلِّم المنقلةُ الزوايا كل \(30^\circ\) من الشاقول الهابط، على دائرة خافتة نصف قطرها \(\sigma(l_1 + l_2)\)، أبعد نقطة تصلها الكرة 2؛ والدائرة المتقطّعة داخلها، نصف قطرها \(\sigma l_1\)، هي مسار الكرة 1.</p>
+                        <p>يُرسم الأثر العنّابي للكرة السفلى على طبقة شفّافة خاصّة به، بقطعة قصيرة لكل خطوة RK4، ويُخفَّض لونه في كل صورة بالعامل \((1-0.008)^{60\,\Delta t}\)، حيث \(\Delta t\) هو الزمن الحقيقي منذ الصورة الأخيرة. من حيث المبدأ ينخفض سطوعه إلى النصف كل \(\ln 2/(60\,|\ln 0.992|)\approx 1.4\ \mathrm{s}\). لكن الشاشة تخزّن الشفافية بخطوات كاملة مقدارها 1/255، فتُقرَّب خطوات الإخماد الصغيرة وتضيع. على شاشة ترسم ستين صورة في الثانية، يهبط الأثر إلى النصف خلال نحو ⁦1.6 s⁩، ثم يتوقّف عن الخفوت عند نحو ربع قوّته، فيبقى ضباب خفيف حيث كانت الكرة 2، حتى يُضغط <em>مسح الأثر</em> أو يُعاد التشغيل؛ وعلى الشاشات الأسرع يتوقّف الخفوت باكرًا. وتُرسم الكرة 1 بنصف قطر قدره 8 بكسلات من الشاشة. أما نصف قطر الكرة 2 فهو \(8(m_2/m_1)^{1/3}\) بكسل من الشاشة، كما لكرتين من المادّة نفسها كتلتاهما تنموان مع مكعب نصف القطر، ويُحفظ بين 4 و17 بكسلًا.</p>
+                    </section>
+
+                    <section class="psec" id="p-limits">
+                        <h3><span class="psec__n">09</span>ما يُغفله النموذج</h3>
+                        <p>القضبان الحقيقية لها كتلة توزّعها على طولها. ونوّاس مزدوج مصنوع من قضيبين مُصمتين يخضع لمعادلات من النوع نفسه كمعادلاتنا، مع معاملات عددية مختلفة أمام الحدود، لأن كل قضيب حينئذ له عزم عطالة خاص به حول نقطة ارتكازه. والمفاصل الحقيقية والهواء يأخذان أيضًا قدرًا من الطاقة في كل تأرجح. لذلك يتباطأ النوّاس المزدوج الحقيقي، ويهدأ تقلّبه إلى تأرجحات صغيرة منتظمة، ثم تخمد هذه التأرجحات؛ أما النموذج، بلا احتكاك، فيحتفظ بطاقته إلى الأبد. وفي النموذج قد تعبر الكرات بعضها خلال بعض ومن خلال نقطة الارتكاز، حيث كانت القضبان الحقيقية ستصطدم.</p>
+                        <p>القيد الأخير يعود إلى الحاسوب لا إلى النموذج. بعد نحو خمسة عشر إلى عشرين زمنًا من أزمنة ليابونوف (\(1/\lambda \approx 0.7\ \mathrm{s}\) لكل منها؛ من 10 إلى ⁦14 s⁩ للبداية الافتراضية)، لم يعد المسار المحسوب هو المسار الدقيق لهذه البداية. وبالمقارنة مع حساب بخطوات أصغر بثماني مرّات، يحيد مسار الصفحة بمقدار مليمتر واحد بعد ⁦10.9 s⁩، وبمقدار ⁦10 cm⁩ بعد ⁦14.3 s⁩. ويبقى مثالًا أمينًا لكيفية تحرّك النوّاس، لكنه ليس المسار الذي تنتجه تلك البداية نفسها. والمتوسطات عبر تأرجحات كثيرة متينة في الغالب، لكنها تستحق فحصًا أيضًا: نصِّف الخطوة، وأطِل التشغيل، وتحقّق من أنها تبقى كما هي.</p>
+                        <div class="pbox pbox--ex">
+                            <span class="pbox__t">مسائل</span>
+                            <p><b>9.1</b> تتبّع بنفسك الخطوات الثلاث من القسم 4.2 للزاوية السفلى، وصل إلى المعادلة (7). تحقّق من كل إشارة تأتي من \(\varphi = \theta_1 - \theta_2\).</p>
+                            <p><b>9.2</b> اشتقّ \(E = T + V\) بالنسبة للزمن، واستخدم (6) و(7) لتبيّن أن \(\mathrm{d}E/\mathrm{d}t = 0\).</p>
+                            <p><b>9.3</b> اجعل الكتلة العليا ثقيلة جدًّا، \(m_1 \to \infty\)، في المعادلة (9). بيّن أن القضيب العلوي يتأرجح عندئذ كنوّاس بسيط، \(\alpha_1 = -(g/l_1)\sin\theta_1\)، وصف بالكلمات ما يشعر به النوّاس السفلي.</p>
+                            <p><b>9.4</b> كرّر القسم 5 لكتلتين متساويتين لكن \(l_2 = 2\,l_1\)، وأوجد الترددين الطبيعيين. ثم اضبط منزلق نسبة الطول على 2 وقارن بالصفحة.</p>
+                        </div>
+                        <h4><span class="psub__n">9.2</span>قراءة إضافية</h4>
+                        <ol class="prefs">
+                            <li>J. R. Taylor، <a href="https://books.google.com/books/about/Classical_Mechanics.html?id=P1kCtNr-pJsC"><em>Classical Mechanics</em></a>، University Science Books، 2005: الفصول 7 (معادلات لاغرانج)، 11 (الاهتزازات المقترنة والأنماط الطبيعية) و12 (الميكانيك غير الخطّي والفوضى).</li>
+                            <li>L. D. Landau و E. M. Lifshitz، <a href="https://shop.elsevier.com/books/mechanics/landau/978-0-08-050347-9"><em>Mechanics</em></a>، الطبعة 3، Pergamon، 1976: §5، المسألة 1، النوّاس المزدوج المستوي.</li>
+                            <li>S. H. Strogatz، <a href="https://books.google.com/books/about/Nonlinear_Dynamics_and_Chaos.html?id=aNHPswEACAAJ"><em>Nonlinear Dynamics and Chaos</em></a>، الطبعة 2، Westview Press، 2015.</li>
+                                                    <li>T. Shinbrot، C. Grebogi، J. Wisdom و J. A. Yorke، <a href="https://doi.org/10.1119/1.16860">“Chaos in a double pendulum”</a>، <em>American Journal of Physics</em> 60، 491 (1992): قياسات على نوّاس مزدوج حقيقي، تُقارن بنموذج هذه المذكّرة.</li>
+                        </ol>
+                    </section>
+                </div>
+            </div>
+        </article>
+
+        <section class="walk" id="walk" data-walk="pendulum" aria-label="من الرموز إلى الشيفرة"></section>
+    </main>
+
+    <footer class="sim-foot">
+        <span>© 2026 نعمة سائر قدسية</span>
+        <span><a href="../simulations.html">↑ جميع المحاكاة</a> · <a href="../index.html">الصفحة الرئيسية</a></span>
+    </footer>
+
+    <script src="../../scripts/fold.js"></script>
+    <script src="../../scripts/sim.js"></script>
+    <script src="../../scripts/dataset.js"></script>
+    <script>
+    (function () {
+        'use strict';
+        var T = Sim.theme;
+        var g = 9.81, m1 = 1, l1 = 1, EPS = 0.001, H = 1 / 600;
+
+        var stage = document.getElementById('stage');
+        var box = Sim.canvas2d(document.getElementById('pend')), ctx = box.ctx;
+        var trail = document.createElement('canvas'), tctx = trail.getContext('2d');
+        var twinBox = document.getElementById('twin');
+        var m2, l2, state, twin, E0, simT = 0, acc = 0, ox, oy, scale, prevA = null, prevB = null, frames = 0, lastN = 0;
+        var fps = 0;
+
+        /* ---------- the store: every number this page computes is written here, where it is computed (scripts/dataset.js) ---------- */
+        var ds = Sim.dataset({ title: 'Double pendulum', attrs: { figure: 2, page: 'Double Pendulum.html', g: g, m1: m1, l1: l1, EPS: EPS, H: H, integrator: 'fourth-order Runge–Kutta at a fixed step', units: 'SI: kg, m, s, rad' } });
+        ds.var('m2', [], 'float', { symbol: 'm<sub>2</sub>', units: 'kg', long_name: 'lower bob mass', computed_in: 'restart()', formula: 'm<sub>2</sub> = m<sub>1</sub> e<sup>slider</sup>', digits: 4 });
+        ds.var('l2', [], 'float', { symbol: 'l<sub>2</sub>', units: 'm', long_name: 'lower rod length', computed_in: 'restart()', formula: 'l<sub>2</sub> = l<sub>1</sub> e<sup>slider</sup>', digits: 4 });
+        ds.var('th1_0', [], 'float', { symbol: 'θ<sub>1</sub>(0)', units: 'rad', long_name: 'starting angle of the upper rod, from the downward vertical', computed_in: 'restart()', formula: 'slider · π / 180', digits: 4 });
+        ds.var('th2_0', [], 'float', { symbol: 'θ<sub>2</sub>(0)', units: 'rad', long_name: 'starting angle of the lower rod', computed_in: 'restart()', formula: 'slider · π / 180', digits: 4 });
+        ds.var('w1_0', [], 'float', { symbol: 'ω<sub>1</sub>(0)', units: 'rad/s', long_name: 'starting angular velocity, upper', computed_in: 'restart()', formula: 'the slider value', digits: 2 });
+        ds.var('w2_0', [], 'float', { symbol: 'ω<sub>2</sub>(0)', units: 'rad/s', long_name: 'starting angular velocity, lower', computed_in: 'restart()', formula: 'the slider value', digits: 2 });
+        ds.var('speed', [], 'float', { symbol: 'time scale', units: '×', long_name: 'simulated seconds per real second', computed_in: 'speed slider', digits: 2 });
+        ds.dim('q', 4);
+        ds.var('y', ['q'], Float64Array, { symbol: 'y', long_name: 'the state vector (θ₁, θ₂, ω₁, ω₂) the integrator advances', computed_in: 'rk4(), stored in diagnostics()', digits: 5, updates: 'once per frame in diagnostics()' });
+        ds.var('dydt', ['q'], Float64Array, { symbol: 'dy/dt', long_name: 'its time derivative (ω₁, ω₂, α₁, α₂)', computed_in: 'deriv(), in diagnostics()', formula: 'deriv(y)', digits: 4, updates: 'every frame' });
+        ds.var('y_twin', ['q'], Float64Array, { symbol: 'y′', long_name: 'the chaos twin’s state; zeros while the twin is off', computed_in: 'rk4(), stored in diagnostics()', digits: 5, updates: 'once per frame in diagnostics()' });
+        ds.var('th1', [], 'float', { symbol: 'θ<sub>1</sub>', units: 'rad', long_name: 'upper rod angle', computed_in: 'rk4(), stored once per frame in diagnostics()', formula: 'y[0]', digits: 4 });
+        ds.var('th2', [], 'float', { symbol: 'θ<sub>2</sub>', units: 'rad', long_name: 'lower rod angle', computed_in: 'rk4(), stored once per frame in diagnostics()', formula: 'y[1]', digits: 4 });
+        ds.var('w1', [], 'float', { symbol: 'ω<sub>1</sub>', units: 'rad/s', long_name: 'upper angular velocity', computed_in: 'rk4(), stored once per frame in diagnostics()', formula: 'y[2]', digits: 4 });
+        ds.var('w2', [], 'float', { symbol: 'ω<sub>2</sub>', units: 'rad/s', long_name: 'lower angular velocity', computed_in: 'rk4(), stored once per frame in diagnostics()', formula: 'y[3]', digits: 4 });
+        ds.var('delta', [], 'float', { symbol: 'δ', units: 'rad', long_name: 'angle between the rods', computed_in: 'deriv()', formula: 'δ = θ<sub>1</sub> − θ<sub>2</sub>', digits: 4 });
+        ds.var('den', [], 'float', { symbol: 'D′', units: 'kg', long_name: 'shared denominator of both accelerations', computed_in: 'deriv()', formula: 'D′ = 2m<sub>1</sub> + m<sub>2</sub> − m<sub>2</sub> cos 2δ', digits: 4 });
+        ds.var('alpha1', [], 'float', { symbol: 'α<sub>1</sub>', units: 'rad/s²', long_name: 'upper angular acceleration', computed_in: 'deriv()', formula: '[−g(2m₁+m₂) sin θ₁ − m₂ g sin(θ₁−2θ₂) − 2 sin δ m₂ (ω₂² l₂ + ω₁² l₁ cos δ)] / (l₁ D′)', digits: 4 });
+        ds.var('alpha2', [], 'float', { symbol: 'α<sub>2</sub>', units: 'rad/s²', long_name: 'lower angular acceleration', computed_in: 'deriv()', formula: '2 sin δ [ω₁² l₁ (m₁+m₂) + g (m₁+m₂) cos θ₁ + ω₂² l₂ m₂ cos δ] / (l₂ D′)', digits: 4 });
+        ds.dim('a', 2);
+        ds.dim('b', 2);
+        ds.var('M', ['a', 'b'], Float64Array, { symbol: 'M', units: 'kg m²', long_name: 'mass matrix of the Lagrangian: T = ½ ω<sup>T</sup> M ω', computed_in: 'diagnostics()', formula: '[[(m₁+m₂) l₁², m₂ l₁ l₂ cos δ], [m₂ l₁ l₂ cos δ, m₂ l₂²]]', digits: 4, updates: 'every frame, through cos δ', cw: 96 });
+        ds.var('detM', [], 'float', { symbol: 'det M', units: 'kg² m⁴', long_name: 'never zero: m₂ l₁² l₂² (m₁ + m₂ sin² δ)', computed_in: 'diagnostics()', formula: 'M₀₀ M₁₁ − M₀₁²', digits: 4 });
+        ds.var('p1', [], 'float', { symbol: 'p<sub>θ₁</sub>', units: 'kg m²/s', long_name: 'generalised momentum ∂L/∂ω₁', computed_in: 'diagnostics()', formula: 'M₀₀ ω₁ + M₀₁ ω₂', digits: 4 });
+        ds.var('p2', [], 'float', { symbol: 'p<sub>θ₂</sub>', units: 'kg m²/s', long_name: 'generalised momentum ∂L/∂ω₂', computed_in: 'diagnostics()', formula: 'M₁₀ ω₁ + M₁₁ ω₂', digits: 4 });
+        ds.var('T', [], 'float', { symbol: 'T', units: 'J', long_name: 'kinetic energy', computed_in: 'diagnostics()', formula: 'T = E − V', digits: 4 });
+        ds.var('V', [], 'float', { symbol: 'V', units: 'J', long_name: 'potential energy, zero at the pivot', computed_in: 'diagnostics()', formula: 'V = −(m₁+m₂) g l₁ cos θ₁ − m₂ g l₂ cos θ₂', digits: 4 });
+        ds.var('L', [], 'float', { symbol: 'L', units: 'J', long_name: 'Lagrangian', computed_in: 'diagnostics()', formula: 'L = T − V', digits: 4 });
+        ds.var('E', [], 'float', { symbol: 'E', units: 'J', long_name: 'total energy now', computed_in: 'energy(state), in diagnostics()', formula: 'kinetic + potential', digits: 6 });
+        ds.var('E0', [], 'float', { symbol: 'E<sub>0</sub>', units: 'J', long_name: 'total energy at restart', computed_in: 'energy(state), in restart()', digits: 6, source: 'Stored once at restart; the check recomputes E from the current state instead.' });
+        ds.var('drift', [], 'float', { symbol: 'ε', long_name: 'relative energy error of the integrator', computed_in: 'diagnostics()', formula: 'ε = (E − E₀) / ((m₁+m₂) g l₁ + m₂ g l₂)', digits: 4 });
+        ds.var('x1', [], 'float', { symbol: 'x<sub>1</sub>', units: 'm', long_name: 'bob 1, right of the pivot', computed_in: 'diagnostics()', formula: 'l₁ sin θ₁', digits: 4 });
+        ds.var('y1', [], 'float', { symbol: 'y<sub>1</sub>', units: 'm', long_name: 'bob 1, above the pivot', computed_in: 'diagnostics()', formula: '−l₁ cos θ₁', digits: 4 });
+        ds.var('x2', [], 'float', { symbol: 'x<sub>2</sub>', units: 'm', long_name: 'bob 2, right of the pivot', computed_in: 'diagnostics()', formula: 'x₁ + l₂ sin θ₂', digits: 4 });
+        ds.var('y2', [], 'float', { symbol: 'y<sub>2</sub>', units: 'm', long_name: 'bob 2, above the pivot', computed_in: 'diagnostics()', formula: 'y₁ − l₂ cos θ₂', digits: 4 });
+        ds.var('v1', [], 'float', { symbol: '|v<sub>1</sub>|', units: 'm/s', long_name: 'speed of bob 1', computed_in: 'diagnostics()', formula: 'l₁ |ω₁|', digits: 4 });
+        ds.var('v2', [], 'float', { symbol: '|v<sub>2</sub>|', units: 'm/s', long_name: 'speed of bob 2', computed_in: 'diagnostics()', formula: '|(l₁ ω₁ cos θ₁ + l₂ ω₂ cos θ₂, l₁ ω₁ sin θ₁ + l₂ ω₂ sin θ₂)|', digits: 4 });
+        ds.var('x1_px', [], 'float', { symbol: 'x<sub>1</sub> px', units: 'css px', long_name: 'bob 1 as drawn, from the left', computed_in: 'pos(state), in diagnostics()', formula: 'ox + l₁ σ sin θ₁', digits: 1 });
+        ds.var('y1_px', [], 'float', { symbol: 'y<sub>1</sub> px', units: 'css px', long_name: 'bob 1 as drawn, from the top', computed_in: 'pos(state), in diagnostics()', formula: 'oy + l₁ σ cos θ₁', digits: 1 });
+        ds.var('x2_px', [], 'float', { symbol: 'x<sub>2</sub> px', units: 'css px', long_name: 'bob 2 as drawn, from the left', computed_in: 'pos(state), in diagnostics()', formula: 'x₁px + l₂ σ sin θ₂', digits: 1 });
+        ds.var('y2_px', [], 'float', { symbol: 'y<sub>2</sub> px', units: 'css px', long_name: 'bob 2 as drawn, from the top', computed_in: 'pos(state), in diagnostics()', formula: 'y₁px + l₂ σ cos θ₂', digits: 1 });
+        ds.var('x1_twin_px', [], 'float', { symbol: 'x′<sub>1</sub> px', units: 'css px', long_name: 'twin bob 1 as drawn, from the left', computed_in: 'pos(twin), in diagnostics()', formula: 'ox + l₁ σ sin θ′₁', digits: 1 });
+        ds.var('y1_twin_px', [], 'float', { symbol: 'y′<sub>1</sub> px', units: 'css px', long_name: 'twin bob 1 as drawn, from the top', computed_in: 'pos(twin), in diagnostics()', formula: 'oy + l₁ σ cos θ′₁', digits: 1 });
+        ds.var('x2_twin_px', [], 'float', { symbol: 'x′<sub>2</sub> px', units: 'css px', long_name: 'twin bob 2 as drawn, from the left', computed_in: 'pos(twin), in diagnostics()', formula: 'x′₁px + l₂ σ sin θ′₂', digits: 1 });
+        ds.var('y2_twin_px', [], 'float', { symbol: 'y′<sub>2</sub> px', units: 'css px', long_name: 'twin bob 2 as drawn, from the top', computed_in: 'pos(twin), in diagnostics()', formula: 'y′₁px + l₂ σ cos θ′₂', digits: 1 });
+        ds.var('scale', [], 'float', { symbol: 'σ', units: 'px/m', long_name: 'pixels per metre on screen', computed_in: 'layout()', formula: '(min(box.w, box.h)/2 − 34) / (l₁ + l₂)', digits: 2 });
+        ds.var('ox', [], 'float', { symbol: 'o<sub>x</sub>', units: 'css px', long_name: 'pivot, from the left', computed_in: 'layout()', formula: 'box.w / 2', digits: 1 });
+        ds.var('oy', [], 'float', { symbol: 'o<sub>y</sub>', units: 'css px', long_name: 'pivot, from the top', computed_in: 'layout()', formula: 'box.h / 2', digits: 1 });
+        ds.var('twin_on', [], 'bool', { symbol: 'twin on', long_name: 'a copy started 0.001 rad away runs alongside', computed_in: 'the Chaos twin switch', source: 'The state of the switch.' });
+        ds.var('sep', [], 'float', { symbol: 'd', units: 'm', long_name: 'distance between the two lower bobs', computed_in: 'diagnostics()', formula: '|(x₂ − x₂′, y₂ − y₂′)|', digits: 6 });
+        ds.var('log10sep', [], 'float', { symbol: 'log<sub>10</sub> d', long_name: 'grows roughly linearly in time while the motion is chaotic', computed_in: 'diagnostics()', formula: 'log₁₀ d', digits: 3 });
+        ds.var('t', [], 'float', { symbol: 't', units: 's', long_name: 'simulated time since restart', computed_in: 'Sim.clock callback', formula: 't ← t + h per step', digits: 3, source: 'Accumulated step by step.' });
+        ds.var('n', [], 'int', { symbol: 'n', long_name: 'RK4 steps taken in the last frame', computed_in: 'Sim.clock callback', formula: 'min(floor(τ / h), 600); the current clock and speed limits request at most 46 steps', digits: 0 });
+        ds.var('steps', [], 'int', { symbol: 'steps', long_name: 'RK4 steps since restart', computed_in: 'diagnostics()', formula: 'round(t / h)', digits: 0 });
+        ds.var('acc', [], 'float', { symbol: 'τ', units: 's', long_name: 'unspent time carried to the next frame', computed_in: 'Sim.clock callback', digits: 6, source: 'What is left after whole steps are taken.' });
+        ds.var('dt', [], 'float', { symbol: 'Δt', units: 's', long_name: 'real time between the last two frames', computed_in: 'Sim.clock', digits: 4, source: 'Measured by the clock.' });
+        ds.var('fps', [], 'float', { symbol: 'frame rate', units: 'Hz', long_name: 'smoothed over about ten frames', computed_in: 'Sim.clock callback', digits: 1, source: 'A running average of 1/Δt.' });
+        ds.var('frames', [], 'int', { symbol: 'frames', long_name: 'frames drawn so far', computed_in: 'Sim.clock callback', digits: 0, source: 'Counted frame by frame.' });
+        ds.var('playing', [], 'bool', { symbol: 'playing', long_name: 'the clock runs', computed_in: 'Sim.clock', source: 'The state of the Play button.' });
+
+        function ratio(v) { var r = Math.exp(v); return r < 1 ? '1/' + (1 / r).toFixed(2) : r.toFixed(2); }
+        function deg(v) { return Sim.fmt(v, 0) + '°'; }
+        function rads(v) { return Sim.fmt(v, 1) + ' rad/s'; }
+
+        var mass = Sim.slider('mass', { format: ratio, onInput: restart });
+        var len = Sim.slider('length', { format: ratio, onInput: restart });
+        var th1 = Sim.slider('th1', { format: deg, onInput: restart });
+        var th2 = Sim.slider('th2', { format: deg, onInput: restart });
+        var w1 = Sim.slider('w1', { format: rads, onInput: restart });
+        var w2 = Sim.slider('w2', { format: rads, onInput: restart });
+        var speed = Sim.slider('speed', { format: function (v) { return v.toFixed(2) + '×'; } });
+
+        function deriv(s) {
+            var t1 = s[0], t2 = s[1], o1 = s[2], o2 = s[3], d = t1 - t2;
+            var den = 2 * m1 + m2 - m2 * Math.cos(2 * d);
+            var a1 = (-g * (2 * m1 + m2) * Math.sin(t1) - m2 * g * Math.sin(t1 - 2 * t2)
+                - 2 * Math.sin(d) * m2 * (o2 * o2 * l2 + o1 * o1 * l1 * Math.cos(d))) / (l1 * den);
+            var a2 = (2 * Math.sin(d) * (o1 * o1 * l1 * (m1 + m2) + g * (m1 + m2) * Math.cos(t1)
+                + o2 * o2 * l2 * m2 * Math.cos(d))) / (l2 * den);
+            return [o1, o2, a1, a2];
+        }
+        function rk4(s, h) {
+            var k1 = deriv(s), i, s2 = [], s3 = [], s4 = [], out = [];
+            for (i = 0; i < 4; i++) s2[i] = s[i] + h / 2 * k1[i];
+            var k2 = deriv(s2);
+            for (i = 0; i < 4; i++) s3[i] = s[i] + h / 2 * k2[i];
+            var k3 = deriv(s3);
+            for (i = 0; i < 4; i++) s4[i] = s[i] + h * k3[i];
+            var k4 = deriv(s4);
+            for (i = 0; i < 4; i++) out[i] = s[i] + h / 6 * (k1[i] + 2 * k2[i] + 2 * k3[i] + k4[i]);
+            return out;
+        }
+        function energy(s) {
+            var kin = 0.5 * (m1 + m2) * l1 * l1 * s[2] * s[2] + 0.5 * m2 * l2 * l2 * s[3] * s[3]
+                + m2 * l1 * l2 * s[2] * s[3] * Math.cos(s[0] - s[1]);
+            var pot = -(m1 + m2) * g * l1 * Math.cos(s[0]) - m2 * g * l2 * Math.cos(s[1]);
+            return kin + pot;
+        }
+        function pos(s) {
+            var x1 = ox + l1 * scale * Math.sin(s[0]), y1 = oy + l1 * scale * Math.cos(s[0]);
+            return [x1, y1, x1 + l2 * scale * Math.sin(s[1]), y1 + l2 * scale * Math.cos(s[1])];
+        }
+
+        function layout() {
+            ox = box.w / 2;
+            oy = box.h / 2;
+            scale = (Math.min(box.w, box.h) / 2 - 34) / (l1 + l2);
+            ds.set('scale', scale); ds.set('ox', ox); ds.set('oy', oy);
+        }
+        function clearTrail() {
+            tctx.setTransform(1, 0, 0, 1, 0, 0);
+            tctx.clearRect(0, 0, trail.width, trail.height);
+            tctx.setTransform(box.dpr, 0, 0, box.dpr, 0, 0);
+            prevA = prevB = null;
+        }
+        function resize() {
+            box.fit();
+            trail.width = box.canvas.width;
+            trail.height = box.canvas.height;
+            layout();
+            clearTrail();
+        }
+
+        function restart() {
+            m2 = m1 * Math.exp(mass.value);
+            l2 = l1 * Math.exp(len.value);
+            state = [th1.value * Math.PI / 180, th2.value * Math.PI / 180, w1.value, w2.value];
+            twin = twinBox.checked ? [state[0] + EPS, state[1], state[2], state[3]] : null;
+            E0 = energy(state);
+            simT = 0;
+            acc = 0;
+            ds.set('m2', m2); ds.set('l2', l2); ds.set('E0', E0);
+            ds.set('th1_0', state[0]); ds.set('th2_0', state[1]); ds.set('w1_0', state[2]); ds.set('w2_0', state[3]);
+            layout();
+            clearTrail();
+        }
+        twinBox.addEventListener('change', function () {
+            twin = twinBox.checked ? [state[0] + EPS, state[1], state[2], state[3]] : null;
+            prevB = null;
+        });
+        document.getElementById('restart').addEventListener('click', restart);
+        document.getElementById('clear').addEventListener('click', clearTrail);
+
+        function segment(prev, p, colour, width) {
+            if (!prev) return;
+            tctx.strokeStyle = colour;
+            tctx.lineWidth = width;
+            tctx.lineCap = 'round';
+            tctx.beginPath();
+            tctx.moveTo(prev[2], prev[3]);
+            tctx.lineTo(p[2], p[3]);
+            tctx.stroke();
+        }
+        function fade(a) {
+            tctx.save();
+            tctx.setTransform(1, 0, 0, 1, 0, 0);
+            tctx.globalCompositeOperation = 'destination-out';
+            tctx.fillStyle = 'rgba(0, 0, 0, ' + a + ')';
+            tctx.fillRect(0, 0, trail.width, trail.height);
+            tctx.restore();
+        }
+
+        function drawProtractor() {
+            var R = (l1 + l2) * scale;
+            ctx.save();
+            ctx.strokeStyle = 'rgba(90, 80, 75, 0.2)';
+            ctx.lineWidth = 1;
+            ctx.beginPath();
+            ctx.arc(ox, oy, R, 0, Math.PI * 2);
+            ctx.stroke();
+            ctx.setLineDash([2, 5]);
+            ctx.beginPath();
+            ctx.arc(ox, oy, l1 * scale, 0, Math.PI * 2);
+            ctx.stroke();
+            ctx.setLineDash([]);
+            ctx.font = T.mono;
+            ctx.fillStyle = T.muted;
+            ctx.textAlign = 'center';
+            ctx.textBaseline = 'middle';
+            for (var a = 0; a < 360; a += 30) {
+                var r = a * Math.PI / 180, sx = Math.sin(r), cy = Math.cos(r);
+                ctx.beginPath();
+                ctx.moveTo(ox + sx * (R - 5), oy + cy * (R - 5));
+                ctx.lineTo(ox + sx * (R + 4), oy + cy * (R + 4));
+                ctx.stroke();
+                ctx.fillText(a + '°', ox + sx * (R + 18), oy + cy * (R + 18));
+            }
+            ctx.restore();
+        }
+
+        function drawPendulum(s, ghost) {
+            var p = pos(s);
+            var r1 = 8, r2 = Math.max(4, Math.min(17, 8 * Math.cbrt(m2 / m1)));
+            ctx.strokeStyle = ghost ? T.rose : T.ink;
+            ctx.lineWidth = ghost ? 1.6 : 2.4;
+            ctx.lineCap = 'round';
+            ctx.lineJoin = 'round';
+            ctx.beginPath();
+            ctx.moveTo(ox, oy);
+            ctx.lineTo(p[0], p[1]);
+            ctx.lineTo(p[2], p[3]);
+            ctx.stroke();
+            [[p[0], p[1], r1], [p[2], p[3], r2]].forEach(function (b) {
+                ctx.beginPath();
+                ctx.arc(b[0], b[1], b[2], 0, Math.PI * 2);
+                ctx.fillStyle = ghost ? T.rose : T.accent;
+                ctx.fill();
+                if (!ghost) {
+                    ctx.lineWidth = 2;
+                    ctx.strokeStyle = T.card;
+                    ctx.stroke();
+                }
+            });
+        }
+
+        function draw() {
+            ctx.clearRect(0, 0, box.w, box.h);
+            drawProtractor();
+            ctx.drawImage(trail, 0, 0, box.w, box.h);
+            if (twin) drawPendulum(twin, true);
+            drawPendulum(state, false);
+            ctx.beginPath();
+            ctx.arc(ox, oy, 3.5, 0, Math.PI * 2);
+            ctx.fillStyle = T.ink3;
+            ctx.fill();
+        }
+
+        /* the readouts show numbers from the store; diagnostics() below is where they are computed */
+        function readouts() {
+            var E = ds.get('E'), drift = ds.get('drift'), d = ds.get('sep');
+            document.getElementById('cap-t').innerHTML = '<i>t</i> = ' + simT.toFixed(1) + ' s';
+            document.getElementById('r-e').textContent = Sim.fmt(E, 3) + ' J';
+            document.getElementById('r-drift').textContent = Math.abs(drift) < 1e-12 ? '0' : drift.toExponential(1).replace('-', '−');
+            var sep = document.getElementById('r-sep');
+            if (twin) {
+                sep.textContent = (d < 1e-3 ? d.toExponential(1).replace('-', '−') : d.toFixed(3)) + ' m';
+            } else {
+                sep.textContent = _t('twin off');
+            }
+        }
+
+        /* ---------- diagnostics: the page computes every derived number once per frame and writes it into the store ---------- */
+        var yv = ds.alloc('y'), dydt = ds.alloc('dydt'), yTwin = ds.alloc('y_twin'), Mm = ds.alloc('M');
+        function diagnostics(dt) {
+            var s = state, k = deriv(s), d = s[0] - s[1], c = Math.cos(d), i;
+            for (i = 0; i < 4; i++) { yv[i] = s[i]; dydt[i] = k[i]; yTwin[i] = twin ? twin[i] : 0; }
+            ds.touch('y'); ds.touch('dydt'); ds.touch('y_twin');
+            ds.set('th1', s[0]); ds.set('th2', s[1]); ds.set('w1', s[2]); ds.set('w2', s[3]);
+            ds.set('delta', d); ds.set('den', 2 * m1 + m2 - m2 * Math.cos(2 * d)); ds.set('alpha1', k[2]); ds.set('alpha2', k[3]);
+            Mm[0] = (m1 + m2) * l1 * l1; Mm[1] = m2 * l1 * l2 * c; Mm[2] = Mm[1]; Mm[3] = m2 * l2 * l2;
+            ds.touch('M');
+            ds.set('detM', Mm[0] * Mm[3] - Mm[1] * Mm[2]); ds.set('p1', Mm[0] * s[2] + Mm[1] * s[3]); ds.set('p2', Mm[2] * s[2] + Mm[3] * s[3]);
+            var E = energy(s), V = -(m1 + m2) * g * l1 * Math.cos(s[0]) - m2 * g * l2 * Math.cos(s[1]), T = E - V;
+            var drift = (E - E0) / ((m1 + m2) * g * l1 + m2 * g * l2);
+            ds.set('E', E); ds.set('V', V); ds.set('T', T); ds.set('L', T - V); ds.set('drift', drift);
+            var x1 = l1 * Math.sin(s[0]), y1 = -l1 * Math.cos(s[0]);
+            ds.set('x1', x1); ds.set('y1', y1); ds.set('x2', x1 + l2 * Math.sin(s[1])); ds.set('y2', y1 - l2 * Math.cos(s[1]));
+            var u1 = l1 * s[2] * Math.cos(s[0]), v1 = l1 * s[2] * Math.sin(s[0]);
+            ds.set('v1', Math.hypot(u1, v1)); ds.set('v2', Math.hypot(u1 + l2 * s[3] * Math.cos(s[1]), v1 + l2 * s[3] * Math.sin(s[1])));
+            var p = pos(s);
+            ds.set('x1_px', p[0]); ds.set('y1_px', p[1]); ds.set('x2_px', p[2]); ds.set('y2_px', p[3]);
+            ds.set('twin_on', !!twin);
+            if (twin) {
+                var q = pos(twin), sep = Math.hypot(p[2] - q[2], p[3] - q[3]) / scale;
+                ds.set('x1_twin_px', q[0]); ds.set('y1_twin_px', q[1]); ds.set('x2_twin_px', q[2]); ds.set('y2_twin_px', q[3]);
+                ds.set('sep', sep); ds.set('log10sep', sep > 0 ? Math.log(sep) / Math.LN10 : undefined);
+            } else {
+                ds.set('sep', undefined); ds.set('log10sep', undefined);
+                ds.set('x1_twin_px', undefined); ds.set('y1_twin_px', undefined); ds.set('x2_twin_px', undefined); ds.set('y2_twin_px', undefined);
+            }
+            ds.set('t', simT); ds.set('steps', Math.round(simT / H)); ds.set('n', lastN); ds.set('acc', acc); ds.set('speed', speed.value);
+            if (dt > 0) fps = fps ? fps + (1 / dt - fps) * 0.1 : 1 / dt;
+            ds.set('dt', dt); ds.set('fps', fps); ds.set('frames', frames); ds.set('playing', clk ? clk.playing : true);
+        }
+
+        /* live values for the walkthrough: read from the store, nothing recomputed */
+        function f4(v, u) { return Sim.fmt(v, 4) + (u ? ' ' + u : ''); }
+        Sim.live = function () {
+            var k = ds.get('dydt'), drift = ds.get('drift');
+            return {
+                t1: f4(ds.get('th1'), 'rad'), t2: f4(ds.get('th2'), 'rad'), o1: f4(ds.get('w1'), 'rad/s'), o2: f4(ds.get('w2'), 'rad/s'),
+                d: f4(ds.get('delta'), 'rad'), den: f4(ds.get('den'), 'kg'), m2: f4(ds.get('m2'), 'kg'), l2: f4(ds.get('l2'), 'm'),
+                a1: f4(ds.get('alpha1'), 'rad/s²'), a2: f4(ds.get('alpha2'), 'rad/s²'),
+                k1: '(' + [k[0], k[1], k[2], k[3]].map(function (v) { return Sim.fmt(v, 2); }).join(', ') + ')',
+                h: '1/600 = ' + H.toFixed(6) + ' s', n: String(ds.get('n')), acc: ds.get('acc').toExponential(2).replace('-', '−') + ' s', t: ds.get('t').toFixed(3) + ' s',
+                kin: f4(ds.get('T'), 'J'), pot: f4(ds.get('V'), 'J'), E: f4(ds.get('E'), 'J'), E0: f4(ds.get('E0'), 'J'),
+                drift: Math.abs(drift) < 1e-12 ? '0' : drift.toExponential(2).replace('-', '−'),
+                scale: Sim.fmt(ds.get('scale'), 1) + ' px/m', y1: Sim.fmt(ds.get('y1_px'), 1) + ' px'
+            };
+        };
+
+        var clk = Sim.clock(function (dt) {
+            if (dt > 0) {
+                acc += dt * speed.value;
+                var n = Math.min(Math.floor(acc / H), 600);
+                lastN = n;
+                acc = Math.min(acc - n * H, H);
+                for (var i = 0; i < n; i++) {
+                    state = rk4(state, H);
+                    var pa = pos(state);
+                    segment(prevA, pa, 'rgba(122, 31, 43, 0.85)', 1.5);
+                    prevA = pa;
+                    if (twin) {
+                        twin = rk4(twin, H);
+                        var pb = pos(twin);
+                        segment(prevB, pb, 'rgba(226, 162, 170, 0.9)', 1.3);
+                        prevB = pb;
+                    }
+                    simT += H;
+                }
+                fade(1 - Math.pow(1 - 0.008, dt * 60));
+            }
+            diagnostics(dt);
+            draw();
+            if (frames++ % 6 === 0) readouts();
+        });
+        Sim.playButton(document.getElementById('play'), clk);
+
+        /* ---------- the data panel (scripts/datalog.js) reads the store; these hooks only say where things are drawn and how to test a value ---------- */
+        var QN = ['θ₁', 'θ₂', 'ω₁', 'ω₂'], QU = ['rad', 'rad', 'rad/s', 'rad/s'];
+        function sliderCheck(input, label, scale) { return { formula: _t('read from the ') + label + _t(' slider now') + (scale ? _t(', times π/180') : ''), inputs: [['slider', input.value, '']], value: parseFloat(input.value) * (scale || 1) }; }
+        function bobPixel(name, x, y) {
+            var px = ctx.getImageData(Math.floor(x * box.dpr), Math.floor(y * box.dpr), 1, 1).data, near = function (r, g, b) { return px[3] > 0 && Math.abs(px[0] - r) < 40 && Math.abs(px[1] - g) < 40 && Math.abs(px[2] - b) < 40; };
+            var r2 = Math.max(4, Math.min(17, 8 * Math.cbrt(m2 / m1))), dPivot = Math.hypot(x - ds.get('ox'), y - ds.get('oy'));
+            var dBob2 = name.indexOf('bob 1') === 0 ? Math.hypot(x - ds.get('x2_px'), y - ds.get('y2_px')) : Infinity;
+            var burgundy = near(122, 31, 43), pivot = dPivot < 4.5 && near(90, 80, 75), rim = dBob2 < r2 + 2 && (burgundy || near(255, 250, 243));
+            var expected = 'the burgundy bob, rgb(122, 31, 43)', note = _t('The bob is a filled disc, radius 8 px for bob 1 and ') + Sim.fmt(r2, 1) + _t(' px for bob 2, so the pixel at its stored centre is its fill colour.');
+            if (dPivot < 4.5) { expected += ', or the pivot dot rgb(90, 80, 75) painted over it'; note = _t('The bob centre is ') + Sim.fmt(dPivot, 1) + _t(' px from the pivot; the pivot dot (radius 3.5 px) is painted last, over the bobs.'); }
+            else if (dBob2 < r2 + 2) { expected += ', or bob 2 and its cream rim painted over it'; note = _t('Bob 1 lies under bob 2 here (') + Sim.fmt(dBob2, 1) + _t(' px apart); bob 2 is painted after bob 1, with a 2 px cream rim.'); }
+            return { what: _t('screen pixel at ') + name + ', (' + Sim.fmt(x, 1) + ', ' + Sim.fmt(y, 1) + _t(') css px'), drawn: px[3] === 0 ? _t('nothing (transparent)') : 'rgb(' + px[0] + ', ' + px[1] + ', ' + px[2] + ')', expected: expected, ok: burgundy || pivot || rim, note: note };
+        }
+        function twinPositionCheck(which) {
+            if (!ds.get('twin_on')) return { formula: 'the twin is off', inputs: [], value: undefined };
+            var s = ds.get('y_twin'), sc = ds.get('scale'), l = ds.get('l2');
+            var x1 = ds.get('ox') + ds.attrs.l1 * sc * Math.sin(s[0]), y1 = ds.get('oy') + ds.attrs.l1 * sc * Math.cos(s[0]);
+            var p = [x1, y1, x1 + l * sc * Math.sin(s[1]), y1 + l * sc * Math.cos(s[1])];
+            return { formula: 'the stored twin state mapped to screen coordinates', inputs: [['θ′₁', s[0], 'rad', 5], ['θ′₂', s[1], 'rad', 5], ['l₁', ds.attrs.l1, 'm', 4], ['l₂', l, 'm', 4], ['σ', sc, 'px/m', 2], ['ox', ds.get('ox'), 'px', 1], ['oy', ds.get('oy'), 'px', 1]], value: p[which] };
+        }
+        function twinPixel(bob) {
+            if (!ds.get('twin_on')) return { what: _t('the twin bob'), drawn: 'nothing', expected: 'nothing', ok: true, note: _t('The chaos twin is switched off.') };
+            var x = ds.get('x' + bob + '_twin_px'), y = ds.get('y' + bob + '_twin_px');
+            var px = ctx.getImageData(Math.floor(x * box.dpr), Math.floor(y * box.dpr), 1, 1).data;
+            var rose = px[3] > 0 && Math.abs(px[0] - 226) < 40 && Math.abs(px[1] - 162) < 40 && Math.abs(px[2] - 170) < 40;
+            var covered = bobPixel(_t('twin bob ') + bob, x, y).ok;
+            return { what: _t('screen pixel at twin bob ') + bob, drawn: px[3] === 0 ? _t('nothing (transparent)') : 'rgb(' + px[0] + ', ' + px[1] + ', ' + px[2] + ')', expected: _t('the rose twin dot, rgb(226, 162, 170), or an overlying main bob or pivot'), ok: rose || covered, note: _t('The main pendulum is painted after the twin and can cover it where the bobs overlap.') };
+        }
+        function alphaCheck(which) {
+            var t1 = ds.get('th1'), t2 = ds.get('th2'), o1 = ds.get('w1'), o2 = ds.get('w2'), m = ds.get('m2'), l = ds.get('l2'), d = t1 - t2;
+            var den = 2 * m1 + m - m * Math.cos(2 * d), v;
+            if (which === 1) v = (-g * (2 * m1 + m) * Math.sin(t1) - m * g * Math.sin(t1 - 2 * t2) - 2 * Math.sin(d) * m * (o2 * o2 * l + o1 * o1 * l1 * Math.cos(d))) / (l1 * den);
+            else v = (2 * Math.sin(d) * (o1 * o1 * l1 * (m1 + m) + g * (m1 + m) * Math.cos(t1) + o2 * o2 * l * m * Math.cos(d))) / (l * den);
+            return { formula: ds.vars[which === 1 ? 'alpha1' : 'alpha2'].attrs.formula, inputs: [['θ₁', t1, 'rad', 5], ['θ₂', t2, 'rad', 5], ['ω₁', o1, 'rad/s', 5], ['ω₂', o2, 'rad/s', 5], ['m₂', m, 'kg', 4], ['l₂', l, 'm', 4], ['D′', den, 'kg', 5]], value: v };
+        }
+        function stateInputs() { return [['θ₁', ds.get('th1'), 'rad', 5], ['θ₂', ds.get('th2'), 'rad', 5], ['ω₁', ds.get('w1'), 'rad/s', 5], ['ω₂', ds.get('w2'), 'rad/s', 5], ['m₂', ds.get('m2'), 'kg', 4], ['l₂', ds.get('l2'), 'm', 4]]; }
+        function kinetic() { var s = [ds.get('th1'), ds.get('th2'), ds.get('w1'), ds.get('w2')], m = ds.get('m2'), l = ds.get('l2'); return 0.5 * (m1 + m) * l1 * l1 * s[2] * s[2] + 0.5 * m * l * l * s[3] * s[3] + m * l1 * l * s[2] * s[3] * Math.cos(s[0] - s[1]); }
+        function potential() { var m = ds.get('m2'), l = ds.get('l2'); return -(m1 + m) * g * l1 * Math.cos(ds.get('th1')) - m * g * l * Math.cos(ds.get('th2')); }
+        function nearest(x, y) {
+            var cands = [['bob 2', ds.get('x2_px'), ds.get('y2_px')], ['bob 1', ds.get('x1_px'), ds.get('y1_px')], ['pivot', ox, oy]], best = null, bd = 28;
+            cands.forEach(function (c) { var d = Math.hypot(x - c[1], y - c[2]); if (d < bd) { bd = d; best = c[0]; } });
+            return best;
+        }
+        Sim.data = {
+            ds: ds, kicker: _t('Fig. 2 · data'), file: 'fig2-double-pendulum',
+            playing: function () { return clk.playing; },
+            groups: [
+                { title: _t('Physical parameters'), note: _t('fixed constants are in the dataset attributes; these you set'), vars: ['m2', 'l2', 'th1_0', 'th2_0', 'w1_0', 'w2_0', 'speed'] },
+                { title: _t('State'), note: _t('the four numbers the integrator advances'), vars: ['y', 'dydt', 'th1', 'th2', 'w1', 'w2'] },
+                { title: _t('Equations of motion'), note: _t('what deriv() computes from the state'), vars: ['delta', 'den', 'alpha1', 'alpha2', 'M', 'detM', 'p1', 'p2'] },
+                { title: _t('Energy'), note: _t('conserved by the physics, so its drift measures the integrator'), vars: ['T', 'V', 'L', 'E', 'E0', 'drift'] },
+                { title: _t('Bobs'), note: _t('metres with the pivot at the origin and y upwards; then the pixels as drawn'), vars: ['x1', 'y1', 'x2', 'y2', 'v1', 'v2', 'x1_px', 'y1_px', 'x2_px', 'y2_px'] },
+                { title: _t('Chaos twin'), note: _t('a copy started 0.001 rad away; its own stored screen positions locate its state'), vars: ['twin_on', 'y_twin', 'x1_twin_px', 'y1_twin_px', 'x2_twin_px', 'y2_twin_px', 'sep', 'log10sep'] },
+                { title: _t('Integrator and drawing'), note: _t('fourth-order Runge–Kutta at h = 1/600 s'), vars: ['t', 'n', 'steps', 'acc', 'scale', 'ox', 'oy', 'dt', 'fps', 'frames', 'playing'] }
+            ],
+            rowLabel: { q: function (j) { return QN[j]; }, a: function (j) { return QN[j]; } },
+            colLabel: { M: function (i) { return QN[i]; } },
+            at: { y: function (j) { return QU[j]; }, dydt: function (j) { return ['rad/s', 'rad/s', 'rad/s²', 'rad/s²'][j]; }, y_twin: function (j) { return QU[j]; } },
+            probe: function (x, y) { var n = nearest(x, y); return n ? { what: n } : null; },
+            inspect: function (ref) {
+                var w = ref.what, at, rows;
+                if (w === 'bob 2') { at = { x: ds.get('x2_px'), y: ds.get('y2_px') }; rows = [['θ<sub>2</sub>', ds.get('th2'), 'rad', 'th2'], ['ω<sub>2</sub>', ds.get('w2'), 'rad/s', 'w2'], ['α<sub>2</sub>', ds.get('alpha2'), 'rad/s²', 'alpha2'], ['x<sub>2</sub>', ds.get('x2'), 'm', 'x2'], ['y<sub>2</sub>', ds.get('y2'), 'm', 'y2'], ['|v<sub>2</sub>|', ds.get('v2'), 'm/s', 'v2'], ['p<sub>θ₂</sub>', ds.get('p2'), 'kg m²/s', 'p2']]; if (twin) rows.push(['d to twin', ds.get('sep'), 'm', 'sep']); }
+                else if (w === 'bob 1') { at = { x: ds.get('x1_px'), y: ds.get('y1_px') }; rows = [['θ<sub>1</sub>', ds.get('th1'), 'rad', 'th1'], ['ω<sub>1</sub>', ds.get('w1'), 'rad/s', 'w1'], ['α<sub>1</sub>', ds.get('alpha1'), 'rad/s²', 'alpha1'], ['x<sub>1</sub>', ds.get('x1'), 'm', 'x1'], ['y<sub>1</sub>', ds.get('y1'), 'm', 'y1'], ['|v<sub>1</sub>|', ds.get('v1'), 'm/s', 'v1'], ['p<sub>θ₁</sub>', ds.get('p1'), 'kg m²/s', 'p1']]; }
+                else { at = { x: ox, y: oy }; rows = [['T', ds.get('T'), 'J', 'T'], ['V', ds.get('V'), 'J', 'V'], ['E', ds.get('E'), 'J', 'E'], ['ε', ds.get('drift'), '', 'drift'], ['det M', ds.get('detM'), 'kg² m⁴', 'detM'], ['t', ds.get('t'), 's', 't']]; }
+                return { title: w + (w === 'pivot' ? _t(' · the whole system') : ''), at: at, rows: rows };
+            },
+            locate: function (name, idx) {
+                if (name === 'y_twin') return ds.get('twin_on') ? (idx % 2 === 0 ? { x: ds.get('x1_twin_px'), y: ds.get('y1_twin_px') } : { x: ds.get('x2_twin_px'), y: ds.get('y2_twin_px') }) : null;
+                if (name === 'y' || name === 'dydt') return idx % 2 === 0 ? { x: ds.get('x1_px'), y: ds.get('y1_px') } : { x: ds.get('x2_px'), y: ds.get('y2_px') };
+                if (name === 'M') return { x: ox, y: oy };
+                return null;
+            },
+            check: {
+                m2: function () { return { formula: 'm₂ = m₁ e<sup>slider</sup>', inputs: [['slider', mass.el.value, ''], ['m₁', m1, 'kg', 2]], value: m1 * Math.exp(parseFloat(mass.el.value)) }; },
+                l2: function () { return { formula: 'l₂ = l₁ e<sup>slider</sup>', inputs: [['slider', len.el.value, ''], ['l₁', l1, 'm', 2]], value: l1 * Math.exp(parseFloat(len.el.value)) }; },
+                th1_0: function () { return sliderCheck(th1.el, 'θ₁', Math.PI / 180); },
+                th2_0: function () { return sliderCheck(th2.el, 'θ₂', Math.PI / 180); },
+                w1_0: function () { return sliderCheck(w1.el, 'ω₁'); },
+                w2_0: function () { return sliderCheck(w2.el, 'ω₂'); },
+                speed: function () { return sliderCheck(speed.el, 'time scale'); },
+                y: function (j) { return { formula: _t('the integrator’s state array, component ') + QN[j], inputs: [['state[' + j + ']', state[j], QU[j], 6]], value: state[j] }; },
+                dydt: function (j) { var r = j < 2 ? { formula: 'dθ/dt = ω, read from the state', inputs: [[QN[j + 2], state[j + 2], 'rad/s', 6]], value: state[j + 2] } : alphaCheck(j - 1); return r; },
+                y_twin: function (j) { return { formula: twin ? _t('the twin’s state array, component ') + QN[j] : _t('the twin is off, so zero'), inputs: twin ? [['twin[' + j + ']', twin[j], QU[j], 6]] : [], value: twin ? twin[j] : 0 }; },
+                th1: function () { return { formula: 'y[0]', inputs: [['y[0]', state[0], 'rad', 6]], value: state[0] }; },
+                th2: function () { return { formula: 'y[1]', inputs: [['y[1]', state[1], 'rad', 6]], value: state[1] }; },
+                w1: function () { return { formula: 'y[2]', inputs: [['y[2]', state[2], 'rad/s', 6]], value: state[2] }; },
+                w2: function () { return { formula: 'y[3]', inputs: [['y[3]', state[3], 'rad/s', 6]], value: state[3] }; },
+                delta: function () { return { formula: 'δ = θ₁ − θ₂', inputs: [['θ₁', ds.get('th1'), 'rad', 5], ['θ₂', ds.get('th2'), 'rad', 5]], value: ds.get('th1') - ds.get('th2') }; },
+                den: function () { var d = ds.get('delta'), m = ds.get('m2'); return { formula: 'D′ = 2m₁ + m₂ − m₂ cos 2δ', inputs: [['m₁', m1, 'kg', 2], ['m₂', m, 'kg', 4], ['δ', d, 'rad', 5]], value: 2 * m1 + m - m * Math.cos(2 * d) }; },
+                alpha1: function () { return alphaCheck(1); },
+                alpha2: function () { return alphaCheck(2); },
+                M: function (q) { var c = Math.cos(ds.get('delta')), m = ds.get('m2'), l = ds.get('l2'), vals = [(m1 + m) * l1 * l1, m * l1 * l * c, m * l1 * l * c, m * l * l]; return { formula: ds.vars.M.attrs.formula, inputs: [['m₂', m, 'kg', 4], ['l₂', l, 'm', 4], ['cos δ', c, '', 5]], value: vals[q] }; },
+                detM: function () { var M = ds.get('M'); return { formula: 'M₀₀ M₁₁ − M₀₁²', inputs: [['M₀₀', M[0], 'kg m²', 4], ['M₁₁', M[3], 'kg m²', 4], ['M₀₁', M[1], 'kg m²', 4]], value: M[0] * M[3] - M[1] * M[1] }; },
+                p1: function () { var M = ds.get('M'); return { formula: 'M₀₀ ω₁ + M₀₁ ω₂', inputs: [['M₀₀', M[0], 'kg m²', 4], ['M₀₁', M[1], 'kg m²', 4], ['ω₁', ds.get('w1'), 'rad/s', 5], ['ω₂', ds.get('w2'), 'rad/s', 5]], value: M[0] * ds.get('w1') + M[1] * ds.get('w2') }; },
+                p2: function () { var M = ds.get('M'); return { formula: 'M₁₀ ω₁ + M₁₁ ω₂', inputs: [['M₁₀', M[2], 'kg m²', 4], ['M₁₁', M[3], 'kg m²', 4], ['ω₁', ds.get('w1'), 'rad/s', 5], ['ω₂', ds.get('w2'), 'rad/s', 5]], value: M[2] * ds.get('w1') + M[3] * ds.get('w2') }; },
+                T: function () { return { formula: 'T = ½(m₁+m₂) l₁² ω₁² + ½ m₂ l₂² ω₂² + m₂ l₁ l₂ ω₁ ω₂ cos δ', inputs: stateInputs(), value: kinetic() }; },
+                V: function () { return { formula: 'V = −(m₁+m₂) g l₁ cos θ₁ − m₂ g l₂ cos θ₂', inputs: stateInputs(), value: potential() }; },
+                L: function () { return { formula: 'L = T − V, from the formulas for T and V', inputs: stateInputs(), value: kinetic() - potential() }; },
+                E: function () { return { formula: 'E = T + V, from the formulas for T and V', inputs: stateInputs(), value: kinetic() + potential() }; },
+                drift: function () { var m = ds.get('m2'), l = ds.get('l2'); return { formula: 'ε = (E − E₀) / ((m₁+m₂) g l₁ + m₂ g l₂)', inputs: [['E', ds.get('E'), 'J', 6], ['E₀', ds.get('E0'), 'J', 6], ['m₂', m, 'kg', 4], ['l₂', l, 'm', 4]], value: (ds.get('E') - ds.get('E0')) / ((m1 + m) * g * l1 + m * g * l) }; },
+                x1: function () { return { formula: 'l₁ sin θ₁', inputs: [['θ₁', ds.get('th1'), 'rad', 5]], value: l1 * Math.sin(ds.get('th1')) }; },
+                y1: function () { return { formula: '−l₁ cos θ₁', inputs: [['θ₁', ds.get('th1'), 'rad', 5]], value: -l1 * Math.cos(ds.get('th1')) }; },
+                x2: function () { return { formula: 'l₁ sin θ₁ + l₂ sin θ₂', inputs: [['θ₁', ds.get('th1'), 'rad', 5], ['θ₂', ds.get('th2'), 'rad', 5], ['l₂', ds.get('l2'), 'm', 4]], value: l1 * Math.sin(ds.get('th1')) + ds.get('l2') * Math.sin(ds.get('th2')) }; },
+                y2: function () { return { formula: '−l₁ cos θ₁ − l₂ cos θ₂', inputs: [['θ₁', ds.get('th1'), 'rad', 5], ['θ₂', ds.get('th2'), 'rad', 5], ['l₂', ds.get('l2'), 'm', 4]], value: -l1 * Math.cos(ds.get('th1')) - ds.get('l2') * Math.cos(ds.get('th2')) }; },
+                v1: function () { return { formula: 'l₁ |ω₁|', inputs: [['ω₁', ds.get('w1'), 'rad/s', 5]], value: l1 * Math.abs(ds.get('w1')) }; },
+                v2: function () { var t1 = ds.get('th1'), t2 = ds.get('th2'), o1 = ds.get('w1'), o2 = ds.get('w2'), l = ds.get('l2'); return { formula: ds.vars.v2.attrs.formula, inputs: stateInputs(), value: Math.hypot(l1 * o1 * Math.cos(t1) + l * o2 * Math.cos(t2), l1 * o1 * Math.sin(t1) + l * o2 * Math.sin(t2)) }; },
+                x1_px: function () { return { formula: 'o<sub>x</sub> + l₁ σ sin θ₁', inputs: [['o<sub>x</sub>', ox, 'px', 1], ['σ', scale, 'px/m', 2], ['θ₁', ds.get('th1'), 'rad', 5]], value: ox + l1 * scale * Math.sin(ds.get('th1')) }; },
+                y1_px: function () { return { formula: 'o<sub>y</sub> + l₁ σ cos θ₁', inputs: [['o<sub>y</sub>', oy, 'px', 1], ['σ', scale, 'px/m', 2], ['θ₁', ds.get('th1'), 'rad', 5]], value: oy + l1 * scale * Math.cos(ds.get('th1')) }; },
+                x2_px: function () { return { formula: 'x₁px + l₂ σ sin θ₂', inputs: [['x₁ px', ds.get('x1_px'), 'px', 2], ['l₂', ds.get('l2'), 'm', 4], ['σ', scale, 'px/m', 2], ['θ₂', ds.get('th2'), 'rad', 5]], value: ds.get('x1_px') + ds.get('l2') * scale * Math.sin(ds.get('th2')) }; },
+                y2_px: function () { return { formula: 'y₁px + l₂ σ cos θ₂', inputs: [['y₁ px', ds.get('y1_px'), 'px', 2], ['l₂', ds.get('l2'), 'm', 4], ['σ', scale, 'px/m', 2], ['θ₂', ds.get('th2'), 'rad', 5]], value: ds.get('y1_px') + ds.get('l2') * scale * Math.cos(ds.get('th2')) }; },
+                scale: function () { return { formula: '(min(box.w, box.h)/2 − 34) / (l₁ + l₂)', inputs: [['box.w', box.w, 'px', 0], ['box.h', box.h, 'px', 0], ['l₂', ds.get('l2'), 'm', 4]], value: (Math.min(box.w, box.h) / 2 - 34) / (l1 + ds.get('l2')) }; },
+                ox: function () { return { formula: 'box.w / 2', inputs: [['box.w', box.w, 'px', 0]], value: box.w / 2 }; },
+                oy: function () { return { formula: 'box.h / 2', inputs: [['box.h', box.h, 'px', 0]], value: box.h / 2 }; },
+                sep: function () { if (!twin) return { formula: 'the twin is off', inputs: [], value: undefined }; var yt = ds.get('y_twin'), l = ds.get('l2'); var x2 = l1 * Math.sin(ds.get('th1')) + l * Math.sin(ds.get('th2')), y2 = -l1 * Math.cos(ds.get('th1')) - l * Math.cos(ds.get('th2')); var xt = l1 * Math.sin(yt[0]) + l * Math.sin(yt[1]), ytt = -l1 * Math.cos(yt[0]) - l * Math.cos(yt[1]); return { formula: '|(x₂ − x₂′, y₂ − y₂′)| from the two state vectors', inputs: [['θ₁', ds.get('th1'), 'rad', 5], ['θ₂', ds.get('th2'), 'rad', 5], ['θ₁′', yt[0], 'rad', 5], ['θ₂′', yt[1], 'rad', 5]], value: Math.hypot(x2 - xt, y2 - ytt) }; },
+                log10sep: function () { var d = ds.get('sep'); return { formula: 'log₁₀ d', inputs: [['d', d, 'm', 6]], value: d > 0 ? Math.log(d) / Math.LN10 : undefined }; },
+                steps: function () { return { formula: 'round(t / h)', inputs: [['t', ds.get('t'), 's', 4], ['h', H, 's', 6]], value: Math.round(ds.get('t') / H) }; },
+                n: function () { return { formula: 'the step count of the last frame', inputs: [['lastN', lastN, '', 0]], value: lastN }; }
+            },
+            drawn: {
+                x2_px: function () { return bobPixel('bob 2', ds.get('x2_px'), ds.get('y2_px')); },
+                y2_px: function () { return bobPixel('bob 2', ds.get('x2_px'), ds.get('y2_px')); },
+                x1_px: function () { return bobPixel('bob 1', ds.get('x1_px'), ds.get('y1_px')); },
+                y1_px: function () { return bobPixel('bob 1', ds.get('x1_px'), ds.get('y1_px')); },
+                th2: function () { return bobPixel('bob 2, placed from θ₂', ds.get('x2_px'), ds.get('y2_px')); },
+                th1: function () { return bobPixel('bob 1, placed from θ₁', ds.get('x1_px'), ds.get('y1_px')); }
+            },
+            round: { time: 't', label: function () { return _t('ten seconds of simulated motion'); }, length: function () { return 10; },
+                columns: ['th1', 'th2', 'w1', 'w2', 'E', 'drift', 'sep'], point: function () { return { what: _t('bob 2') }; } },
+            play: function () { clk.set(true); },
+            about: _t('Here the rods and bobs are drawn at the stored pixel positions, so the picture and the store agree to the pixel. The trail is painted segment by segment at every RK4 step and fades away; it is not kept as an array; to keep the trajectory, record a round, which copies every frame of ten simulated seconds. The energy drift is the integrator’s own error, shown rather than hidden.')
+        };
+
+        ['x1_twin_px', 'y1_twin_px', 'x2_twin_px', 'y2_twin_px'].forEach(function (name, i) {
+            Sim.data.check[name] = function () { return twinPositionCheck(i); };
+            Sim.data.drawn[name] = function () { return twinPixel(i < 2 ? 1 : 2); };
+        });
+        restart();
+        resize();
+        diagnostics(0);
+        Sim.onResize(stage, resize);
+    })();
+    </script>
+    <script src="../../scripts/datalog.js"></script>
+</body>
+</html>
+

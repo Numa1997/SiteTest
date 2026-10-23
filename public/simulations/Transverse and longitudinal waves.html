@@ -10,7 +10,7 @@
     <meta name="theme-color" content="#f5f1ea">
     <link rel="stylesheet" href="../styles/sim.css">
     <link rel="stylesheet" href="../styles/data.css">
-    <link rel="stylesheet" href="../styles/fold.css">
+    <link rel="stylesheet" href="../styles/fold.css"><link rel="stylesheet" href="../styles/i18n.css"><script src="../scripts/flip.js"></script><!--I18N-ALTERNATES--><link rel="alternate" hreflang="en" href="https://phyeinusul.com/simulations/Transverse and longitudinal waves.html" /><link rel="alternate" hreflang="de" href="https://phyeinusul.com/de/simulations/Transverse and longitudinal waves.html" /><link rel="alternate" hreflang="ar" href="https://phyeinusul.com/ar/simulations/Transverse and longitudinal waves.html" /><link rel="alternate" hreflang="x-default" href="https://phyeinusul.com/simulations/Transverse and longitudinal waves.html" /><!--/I18N-ALTERNATES-->
     <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='12' fill='%237a1f2b'/%3E%3Ctext x='32' y='45' text-anchor='middle' font-family='Georgia,serif' font-size='38' fill='%23f5f1ea'%3EN%3C/text%3E%3C/svg%3E">
 </head>
 <body>
@@ -28,7 +28,7 @@
             <a href="draw-decompose.html">8</a>
             <a href="driven-oscillator.html">9</a>
             <a href="wind-turbine.html">10</a>
-        </nav>
+        </nav><span class="lang-switch" role="group" aria-label="Language" translate="no"><!--I18N-SWITCH--><a href="../simulations/Transverse and longitudinal waves.html" hreflang="en" lang="en" aria-current="page">English</a> · <a href="../de/simulations/Transverse and longitudinal waves.html" hreflang="de" lang="de">Deutsch</a> · <a href="../ar/simulations/Transverse and longitudinal waves.html" hreflang="ar" lang="ar" dir="rtl">العربية</a><!--/I18N-SWITCH--></span>
     </header>
 
     <main class="sim">
@@ -805,7 +805,7 @@
             document.getElementById('r-t').textContent = (1 / freq.value).toFixed(2) + ' s';
             document.getElementById('r-k').textContent = (2 * Math.PI / lambda.value).toFixed(4) + ' /px';
             var al = longAmp();
-            document.getElementById('r-al').textContent = al.toFixed(0) + ' px' + (al < amp.value ? ' (cap)' : '');
+            document.getElementById('r-al').textContent = al.toFixed(0) + ' px' + (al < amp.value ? _t(' (cap)') : '');
             var kk = 2 * Math.PI / lambda.value, om = 2 * Math.PI * freq.value;
             ds.set('f', freq.value); ds.set('lambda', lambda.value); ds.set('A', amp.value); ds.set('v', v); ds.set('T', 1 / freq.value);
             ds.set('k', kk); ds.set('omega', om); ds.set('AL', al); ds.set('cap', al < amp.value); ds.set('L_over_lam', LENGTH / lambda.value);
@@ -964,12 +964,12 @@
         Sim.live = function () {
             var i = ds.get('follow'), ph = ds.get('phase')[i];
             return {
-                f: ds.get('f').toFixed(2) + ' Hz', k: Sim.fmt(ds.get('k'), 5) + ' rad/px', wt: Sim.fmt(ds.get('omegaT'), 2) + ' rad',
+                f: ds.get('f').toFixed(2) + ' Hz', k: Sim.fmt(ds.get('k'), 5) + ' rad/px', wt: Sim.fmt(ds.get('omegaT'), 2) + _t(' rad'),
                 v: Math.round(ds.get('v')) + ' px/s', T: ds.get('T').toFixed(3) + ' s',
-                X: Sim.fmt(ds.get('X')[i], 1) + ' px', phase: Sim.fmt(Math.atan2(Math.sin(ph), Math.cos(ph)), 3) + ' rad', xi: Sim.fmt(ds.get('xi')[i], 2) + ' px',
+                X: Sim.fmt(ds.get('X')[i], 1) + ' px', phase: Sim.fmt(Math.atan2(Math.sin(ph), Math.cos(ph)), 3) + _t(' rad'), xi: Sim.fmt(ds.get('xi')[i], 2) + ' px',
                 yi: Sim.fmt(ds.get('yi_px')[i], 1) + ' px',
                 xc: Sim.fmt(ds.get('crest'), 1) + ' px', xp: Sim.fmt(ds.get('comp0'), 1) + ' px',
-                AL: Sim.fmt(ds.get('AL'), 2) + ' px' + (ds.get('cap') ? ' (capped)' : ''), A: ds.get('A') + ' px', xl: Sim.fmt(ds.get('xL')[i], 2) + ' px',
+                AL: Sim.fmt(ds.get('AL'), 2) + ' px' + (ds.get('cap') ? _t(' (capped)') : ''), A: ds.get('A') + ' px', xl: Sim.fmt(ds.get('xL')[i], 2) + ' px',
                 AkL: Sim.fmt(ds.get('ALk'), 4), rho: Sim.fmt(ds.get('rho')[i], 3), comp: Sim.fmt(ds.get('comp')[i], 3),
                 s: Sim.fmt(ds.get('s_px'), 4), yT: Sim.fmt(ds.get('yT'), 1) + ' px'
             };
@@ -983,26 +983,26 @@
         Sim.playButton(document.getElementById('play'), clk);
 
         /* ---------- the data panel (scripts/datalog.js) reads the store; these hooks only say where things are drawn and how to test a value ---------- */
-        function sliderCheck(input, label) { return { formula: 'read from the ' + label + ' slider now', inputs: [['slider', input.value, '']], value: parseFloat(input.value) }; }
+        function sliderCheck(input, label) { return { formula: _t('read from the ') + label + _t(' slider now'), inputs: [['slider', input.value, '']], value: parseFloat(input.value) }; }
         function tPos(i) { return { x: LEFT + ds.get('X')[i] * ds.get('s_px'), y: ds.get('yi_px')[i] }; }
         function lPos(i) { return { x: ds.get('xl_px')[i], y: ds.get('yL') }; }
         function beadPixel(what, pt) {
             var px = ctx.getImageData(Math.round(pt.x * box.dpr), Math.round(pt.y * box.dpr), 1, 1).data, lum = 0.2126 * px[0] + 0.7152 * px[1] + 0.0722 * px[2];
-            return { what: 'screen pixel at ' + what + ', (' + Sim.fmt(pt.x, 1) + ', ' + Sim.fmt(pt.y, 1) + ') css px', drawn: px[3] === 0 ? 'nothing (transparent)' : 'rgb(' + px[0] + ', ' + px[1] + ', ' + px[2] + ')', expected: 'a dark bead: ink rgb(58, 50, 46) or burgundy rgb(122, 31, 43)', ok: px[3] > 0 && lum < 130,
-                note: 'The beads are filled discs of radius 4 to 6.5 px, so the pixel at the stored centre is the fill colour.' };
+            return { what: _t('screen pixel at ') + what + ', (' + Sim.fmt(pt.x, 1) + ', ' + Sim.fmt(pt.y, 1) + _t(') css px'), drawn: px[3] === 0 ? _t('nothing (transparent)') : 'rgb(' + px[0] + ', ' + px[1] + ', ' + px[2] + ')', expected: _t('a dark bead: ink rgb(58, 50, 46) or burgundy rgb(122, 31, 43)'), ok: px[3] > 0 && lum < 130,
+                note: _t('The beads are filled discs of radius 4 to 6.5 px, so the pixel at the stored centre is the fill colour.') };
         }
         var LONG = { sL: 1, xL: 1, vs: 1, rho: 1, comp: 1, xl_px: 1 };
         function inputsAt(i) { return [['i', i, '', 0], ['X', ds.get('X')[i], 'px', 1], ['k', ds.get('k'), 'rad/px', 5], ['ωt', ds.get('omegaT'), 'rad', 4]]; }
         Sim.data = {
-            ds: ds, kicker: 'Fig. 4 · data', file: 'fig4-transverse-longitudinal',
+            ds: ds, kicker: _t('Fig. 4 · data'), file: 'fig4-transverse-longitudinal',
             playing: function () { return clk.playing; },
             groups: [
-                { title: 'Physical parameters', note: 'what you set with the sliders', vars: ['A', 'f', 'lambda', 'N'] },
-                { title: 'Derived physics', note: 'computed by the page from the parameters', vars: ['k', 'omega', 'T', 'v', 'L_over_lam', 'AL', 'cap', 'Ak', 'ALk', 'Aomega'] },
-                { title: 'Time', note: 'advances only while it plays', vars: ['t', 'omegaT', 'periods'] },
-                { title: 'Particles', note: 'one row per particle; click to open, point at a cell to find the bead', vars: ['follow', 'X', 'phase', 'xi', 'vxi', 'sL', 'xL', 'vs', 'rho', 'comp', 'yi_px', 'xl_px'] },
-                { title: 'Crests and compressions', note: 'the small triangles', vars: ['crest', 'crests', 'comp0', 'compressions'] },
-                { title: 'Drawing', note: 'how the picture is laid out', vars: ['s_px', 'yT', 'yL', 'box_w', 'box_h', 'dt', 'fps', 'frames', 'playing'] }
+                { title: _t('Physical parameters'), note: _t('what you set with the sliders'), vars: ['A', 'f', 'lambda', 'N'] },
+                { title: _t('Derived physics'), note: _t('computed by the page from the parameters'), vars: ['k', 'omega', 'T', 'v', 'L_over_lam', 'AL', 'cap', 'Ak', 'ALk', 'Aomega'] },
+                { title: _t('Time'), note: _t('advances only while it plays'), vars: ['t', 'omegaT', 'periods'] },
+                { title: _t('Particles'), note: _t('one row per particle; click to open, point at a cell to find the bead'), vars: ['follow', 'X', 'phase', 'xi', 'vxi', 'sL', 'xL', 'vs', 'rho', 'comp', 'yi_px', 'xl_px'] },
+                { title: _t('Crests and compressions'), note: _t('the small triangles'), vars: ['crest', 'crests', 'comp0', 'compressions'] },
+                { title: _t('Drawing'), note: _t('how the picture is laid out'), vars: ['s_px', 'yT', 'yL', 'box_w', 'box_h', 'dt', 'fps', 'frames', 'playing'] }
             ],
             colour: { xi: function (v) { return Sim.colourMap(v, ds.get('A')); }, sL: function (v) { return Sim.colourMap(v, ds.get('AL')); }, rho: function (v) { return Sim.colourMap(v - 1, Math.max(1e-9, ds.get('ALk'))); } },
             probe: function (x, y) {
@@ -1018,7 +1018,7 @@
                 var i = ref.i, rows;
                 if (ref.row === 'T') rows = [['X', ds.get('X')[i], 'px', 'X', i], ['kX − ωt', ds.get('phase')[i], 'rad', 'phase', i], ['ξ', ds.get('xi')[i], 'px', 'xi', i], ['∂ξ/∂t', ds.get('vxi')[i], 'px/s', 'vxi', i], ['y px', ds.get('yi_px')[i], 'css px', 'yi_px', i]];
                 else rows = [['X', ds.get('X')[i], 'px', 'X', i], ['kX − ωt', ds.get('phase')[i], 'rad', 'phase', i], ['s', ds.get('sL')[i], 'px', 'sL', i], ['x = X + s', ds.get('xL')[i], 'px', 'xL', i], ['∂s/∂t', ds.get('vs')[i], 'px/s', 'vs', i], ['ρ/ρ₀', ds.get('rho')[i], '', 'rho', i], ['comp', ds.get('comp')[i], '', 'comp', i]];
-                return { title: (ref.row === 'T' ? 'transverse' : 'longitudinal') + ' particle ' + i + (i === ds.get('follow') ? ' · the followed one' : ''), at: ref.row === 'T' ? tPos(i) : lPos(i), rows: rows };
+                return { title: (ref.row === 'T' ? 'transverse' : 'longitudinal') + _t(' particle ') + i + (i === ds.get('follow') ? _t(' · the followed one') : ''), at: ref.row === 'T' ? tPos(i) : lPos(i), rows: rows };
             },
             locate: function (name, idx) {
                 var v = ds.vars[name];
@@ -1064,16 +1064,16 @@
                 yL: function () { return { formula: '0.77 stored box.h', inputs: [['box.h', ds.get('box_h'), 'css px', 0]], value: ds.get('box_h') * 0.77 }; }
             },
             drawn: {
-                xi: function (i) { return beadPixel('transverse bead ' + i, tPos(i)); },
-                yi_px: function (i) { return beadPixel('transverse bead ' + i, tPos(i)); },
-                sL: function (i) { return beadPixel('longitudinal bead ' + i, lPos(i)); },
-                xl_px: function (i) { return beadPixel('longitudinal bead ' + i, lPos(i)); },
-                xL: function (i) { return beadPixel('longitudinal bead ' + i, lPos(i)); }
+                xi: function (i) { return beadPixel(_t('transverse bead ') + i, tPos(i)); },
+                yi_px: function (i) { return beadPixel(_t('transverse bead ') + i, tPos(i)); },
+                sL: function (i) { return beadPixel(_t('longitudinal bead ') + i, lPos(i)); },
+                xl_px: function (i) { return beadPixel(_t('longitudinal bead ') + i, lPos(i)); },
+                xL: function (i) { return beadPixel(_t('longitudinal bead ') + i, lPos(i)); }
             },
-            round: { time: 't', label: function () { return 'one period, T = ' + Sim.fmt(ds.get('T'), 3) + ' s'; }, length: function () { return ds.get('T'); },
+            round: { time: 't', label: function () { return _t('one period, T = ') + Sim.fmt(ds.get('T'), 3) + ' s'; }, length: function () { return ds.get('T'); },
                 columns: ['omegaT'], point: function () { return { row: 'T', i: ds.get('follow') }; } },
             play: function () { clk.set(true); },
-            about: 'Here every bead is drawn at its stored screen position, rounded to the pixel by the canvas. The smooth transverse curve and the compression shading are drawn through extra sample points, every 3 px and every 10 px, that are not particles and are not stored.'
+            about: _t('Here every bead is drawn at its stored screen position, rounded to the pixel by the canvas. The smooth transverse curve and the compression shading are drawn through extra sample points, every 3 px and every 10 px, that are not particles and are not stored.')
         };
         readouts();
         draw();

@@ -1,0 +1,614 @@
+{
+ "04453d282e14": {
+  "src": "New drawing",
+  "tr": "Neue Zeichnung"
+ },
+ "06dc57774aec": {
+  "src": "<span class=\"pfig__n\">Figure 4</span>The heart and the square redrawn with their \\(K = 3\\), \\(10\\) and \\(50\\) largest circles, 601 points per loop as the <em>Full K-term curve</em> switch draws them, over the 256 centred samples (dashed). With three circles the heart has only a shallow dip where the notch should be and a rounded bottom; with ten the notch and the point appear; with fifty the curve covers the samples at this scale. The square, whose circles all sit at every fourth frequency, reaches a given error down to about \\(10^{-3}\\) with fewer circles than the heart (Figure 3), but its corners stay rounded: at \\(K = 10\\) the curve passes \\(0.019\\) to \\(0.022\\) units inside each corner.",
+  "tr": "<span class=\"pfig__n\">Abbildung 4</span>Das Herz und das Quadrat, neu gezeichnet mit ihren \\(K = 3\\), \\(10\\) und \\(50\\) größten Kreisen, 601 Punkte je Umlauf, so wie sie der Schalter <em>Vollständige Kurve mit K Termen</em> zeichnet, über den 256 zentrierten Stichproben (gestrichelt). Mit drei Kreisen hat das Herz an der Stelle der Kerbe nur eine flache Einbuchtung und eine abgerundete Unterseite; mit zehn erscheinen Kerbe und Spitze; mit fünfzig überdeckt die Kurve in diesem Maßstab die Stichproben. Das Quadrat, dessen Kreise alle auf jeder vierten Frequenz sitzen, erreicht einen gegebenen Fehler bis etwa \\(10^{-3}\\) mit weniger Kreisen als das Herz (Abbildung 3), aber seine Ecken bleiben abgerundet: Bei \\(K = 10\\) verläuft die Kurve \\(0.019\\) bis \\(0.022\\) Einheiten innerhalb jeder Ecke."
+ },
+ "0c87a499c14f": {
+  "src": "<span class=\"sw sw--dash\"></span>your drawing",
+  "tr": "<span class=\"sw sw--dash\"></span>Ihre Zeichnung"
+ },
+ "105eb6c309c0": {
+  "src": "Follow the pen",
+  "tr": "Dem Stift folgen"
+ },
+ "14a2f9ce51c5": {
+  "src": "Numa Koudsie · for school students and first- and second-year undergraduates",
+  "tr": "Numa Koudsie · für Schüler und Studierende im ersten und zweiten Studienjahr"
+ },
+ "153b9b8a7178": {
+  "src": "We keep only the shape of the drawing and ask for the motion of a bead that runs once around it at constant speed. Put the drawing in the complex plane, \\(z = x + iy\\), with \\(x\\) to the right, \\(y\\) up and \\(i^2 = -1\\). Let \\(s\\) be the distance travelled along the curve from its start and \\(L\\) its total length, and use the loop parameter \\(t = 2\\pi s/L\\), which runs from \\(0\\) to \\(2\\pi\\) once around. Here \\(t\\) is not a clock: the animation plays one loop in \\(T_\\text{loop}\\) seconds, set by the <em>Time per loop</em> slider (\\(12\\ \\mathrm{s}\\) by default). A closed curve is then a \\(2\\pi\\)-periodic function, and any such function whose squared size has a finite average has a Fourier series, which approaches it in the mean-square sense as more terms are added:",
+  "tr": "Wir behalten nur die Form der Zeichnung und fragen nach der Bewegung einer Perle, die mit konstanter Geschwindigkeit einmal um sie herumläuft. Legen Sie die Zeichnung in die komplexe Zahlenebene, \\(z = x + iy\\), mit \\(x\\) nach rechts, \\(y\\) nach oben und \\(i^2 = -1\\). Sei \\(s\\) die Strecke, die längs der Kurve vom Anfang aus zurückgelegt wird, und \\(L\\) ihre Gesamtlänge; verwenden Sie den Umlaufparameter \\(t = 2\\pi s/L\\), der einmal herum von \\(0\\) bis \\(2\\pi\\) läuft. Hier ist \\(t\\) keine Uhr: Die Animation spielt einen Umlauf in \\(T_\\text{loop}\\) Sekunden ab, eingestellt mit dem Regler <em>Zeit pro Umlauf</em> (standardmäßig \\(12\\ \\mathrm{s}\\)). Eine geschlossene Kurve ist dann eine \\(2\\pi\\)-periodische Funktion, und jede solche Funktion, deren quadratische Größe einen endlichen Mittelwert hat, besitzt eine Fourier-Reihe, die sich mit wachsender Zahl von Termen im quadratischen Mittel an sie annähert:"
+ },
+ "15539bd4f7de": {
+  "src": "⟨|z|²⟩ kept",
+  "tr": "⟨|z|²⟩ beibehalten"
+ },
+ "1692ab5be790": {
+  "src": "<span class=\"psec__n\">07</span>What the page computes",
+  "tr": "<span class=\"psec__n\">07</span>Was die Seite berechnet"
+ },
+ "172b4381ca5d": {
+  "src": "Most of a shape lives in a few slow, large circles: the two circles that turn once per loop, one each way, already draw an ellipse of roughly the right size and tilt. Faster, smaller circles add corners and wiggles. Fig. 8b lists the circle radii, and the K slider decides how many are kept. The description is kinematics, not dynamics. No force makes the bead move this way; the circles describe the motion completely without explaining it. That is also why Ptolemy’s epicycles, circles riding on circles, could follow the planets so well without being the right physics.",
+  "tr": "Der größte Teil einer Form steckt in wenigen langsamen, großen Kreisen: Die zwei Kreise, die je einmal pro Umlauf umlaufen, einer in jede Richtung, zeichnen schon eine Ellipse von ungefähr richtiger Größe und Neigung. Schnellere, kleinere Kreise fügen Ecken und Zacken hinzu. Abb. 8b listet die Kreisradien auf, und der Regler K bestimmt, wie viele behalten werden. Die Beschreibung ist Kinematik, nicht Dynamik. Keine Kraft bewegt die Perle auf diese Weise; die Kreise beschreiben die Bewegung vollständig, ohne sie zu erklären. Deshalb konnten auch Ptolemäus’ Epizykel, Kreise auf Kreisen, die Planeten so gut verfolgen, ohne die richtige Physik zu sein."
+ },
+ "1891c620c3ad": {
+  "src": "E. M. Stein and R. Shakarchi, <a href=\"https://press.princeton.edu/books/hardcover/9780691113845/fourier-analysis\"><em>Fourier Analysis: An Introduction</em></a>, Princeton University Press, 2003: chapters 2 and 3 (Fourier series and their convergence) and 7 (finite Fourier analysis).",
+  "tr": "E. M. Stein und R. Shakarchi, <a href=\"https://press.princeton.edu/books/hardcover/9780691113845/fourier-analysis\"><em>Fourier Analysis: An Introduction</em></a>, Princeton University Press, 2003: Kapitel 2 und 3 (Fourier-Reihen und ihre Konvergenz) und 7 (endliche Fourier-Analysis)."
+ },
+ "18ba04fdcc2d": {
+  "src": "Draw &amp; Decompose<span class=\"dot\">.</span>",
+  "tr": "Draw &amp; Decompose<span class=\"dot\">.</span>"
+ },
+ "194e900f464d": {
+  "src": "Trefoil",
+  "tr": "Kleeblatt"
+ },
+ "1c61cc6b9ffe": {
+  "src": "Drawing with circles: the Fourier series of a closed curve",
+  "tr": "Zeichnen mit Kreisen: die Fourier-Reihe einer geschlossenen Kurve"
+ },
+ "1f56d9173093": {
+  "src": "<span class=\"psec__n\">03</span>Each circle is an average",
+  "tr": "<span class=\"psec__n\">03</span>Jeder Kreis ist ein Mittelwert"
+ },
+ "20581766f133": {
+  "src": "Largest k",
+  "tr": "Größtes k"
+ },
+ "222743615a70": {
+  "src": "Since \\(e^{2\\pi i (k+N) n/N} = e^{2\\pi i k n/N}\\) for every whole \\(n\\), a circle that turns \\(k + N\\) times per loop passes through the same sample points as one that turns \\(k\\) times. The sum (4) cannot tell them apart and returns their total. Substituting (1) into (4) and using (5),",
+  "tr": "Da \\(e^{2\\pi i (k+N) n/N} = e^{2\\pi i k n/N}\\) für jedes ganze \\(n\\) gilt, läuft ein Kreis, der sich \\(k + N\\)-mal pro Umlauf dreht, durch dieselben Stichprobenpunkte wie einer, der sich \\(k\\)-mal dreht. Die Summe (4) kann sie nicht unterscheiden und liefert ihre Gesamtsumme. Setzt man (1) in (4) ein und benutzt (5),"
+ },
+ "22f91ac6d1bf": {
+  "src": "The error is measured at the 256 samples. Between them a truncated series can overshoot, most visibly next to corners and jumps (section 6.2).",
+  "tr": "Der Fehler wird an den 256 Stichproben gemessen. Dazwischen kann eine abgeschnittene Reihe überschwingen, am deutlichsten neben Ecken und Sprüngen (Abschnitt 6.2)."
+ },
+ "28394b6290da": {
+  "src": "Animations in which a chain of spinning circles draws a portrait, a signature or the outline of a country are shared widely online. Each circle turns at a steady rate, carried on the rim of the one before it, and the last one holds a pen. The figure above makes such a chain for any shape you draw.",
+  "tr": "Animationen, in denen eine Kette rotierender Kreise ein Porträt, eine Unterschrift oder den Umriss eines Landes zeichnet, werden im Netz weithin geteilt. Jeder Kreis dreht sich mit gleichbleibender Geschwindigkeit, getragen vom Rand des vorherigen, und der letzte hält einen Stift. Die Simulation oben baut eine solche Kette für jede Form, die Sie zeichnen."
+ },
+ "2a37335eebda": {
+  "src": "Heart",
+  "tr": "Herz"
+ },
+ "2b8694c318bd": {
+  "src": "The page uses only \\(-60 \\le k \\le 60\\), below \\(N/2 = 128\\), so every computed coefficient is one true coefficient plus small aliases. Where it matters they are negligible: compared with a transform of \\(65\\,536\\) samples, the aliases change the radii of the heart’s three largest circles by less than \\(0.1\\,\\%\\). Near \\(|k| = 60\\) they change the heart’s radii by about \\(20\\,\\%\\) and the open wave’s by \\(10\\,\\%\\), but those circles are tiny.",
+  "tr": "Die Seite verwendet nur \\(-60 \\le k \\le 60\\), unterhalb von \\(N/2 = 128\\), sodass jeder berechnete Koeffizient ein wahrer Koeffizient plus kleine Alias-Anteile ist. Wo es darauf ankommt, sind sie vernachlässigbar: Verglichen mit einer Transformation über \\(65\\,536\\) Stichproben ändern die Aliase die Radien der drei größten Kreise des Herzens um weniger als \\(0.1\\,\\%\\). Nahe \\(|k| = 60\\) ändern sie die Radien des Herzens um etwa \\(20\\,\\%\\) und die der offenen Welle um \\(10\\,\\%\\), aber diese Kreise sind winzig."
+ },
+ "2e2b734e0f08": {
+  "src": "For \\(j \\ne k\\) the integrand \\(e^{i(j-k)t}\\) goes round the unit circle \\(|j-k|\\) times and its average vanishes. Multiply the series (1) by \\(e^{-ikt}\\), average over one loop and use (2) term by term: only \\(c_k\\) survives.",
+  "tr": "Für \\(j \\ne k\\) läuft der Integrand \\(e^{i(j-k)t}\\) den Einheitskreis \\(|j-k|\\)-mal ab, und sein Mittelwert verschwindet. Multiplizieren Sie die Reihe (1) mit \\(e^{-ikt}\\), mitteln Sie über einen Umlauf und wenden Sie (2) Term für Term an: Nur \\(c_k\\) bleibt übrig."
+ },
+ "30f1d6232589": {
+  "src": "<span class=\"psub__n\">4.2</span>Aliasing: only N frequencies exist on N samples",
+  "tr": "<span class=\"psub__n\">4.2</span>Alias-Effekt: auf N Stichproben gibt es nur N Frequenzen"
+ },
+ "32b20b22c46c": {
+  "src": "Constant speed is a choice. The same shape traced at a different pace, for example with the timing of your own hand, would give a different set of circles. The page’s choice makes \\(\\langle |z|^2\\rangle\\) very nearly the moment of inertia per unit mass of a uniform wire and makes the circles depend on the shape alone.",
+  "tr": "Konstante Geschwindigkeit ist eine Wahl. Dieselbe Form in einem anderen Tempo nachgezeichnet, etwa im Takt Ihrer eigenen Hand, ergäbe eine andere Menge von Kreisen. Die Wahl der Seite macht \\(\\langle |z|^2\\rangle\\) sehr nahe am Trägheitsmoment pro Masseneinheit eines gleichmäßigen Drahtes und lässt die Kreise allein von der Form abhängen."
+ },
+ "33bd5a5dddcd": {
+  "src": "© 2026 Numa Koudsie",
+  "tr": "© 2026 Numa Koudsie"
+ },
+ "35ca4c5dc64c": {
+  "src": "<span class=\"pfig__n\">Figure 2</span>Left: a closed stroke as the pointer records it; the points bunch where the hand slowed down. Right: the same stroke resampled at \\(N\\) points a distance \\(\\Delta s\\) apart along it (\\(N = 16\\) here so they can be told apart; the page uses \\(N = 256\\)), computed with the page’s own resampling routine. The cross is the mean of the samples, an approximation to the centre of mass of a uniform wire of this shape, and the arrow from it is one centred sample \\(z_n\\). A hand-drawn stroke rarely closes exactly, so the series has to step from \\(z_{N-1}\\) back to \\(z_0\\) (dashed).",
+  "tr": "<span class=\"pfig__n\">Abbildung 2</span>Links: ein geschlossener Strich, wie der Mauszeiger ihn aufzeichnet; die Punkte häufen sich dort, wo die Hand langsamer wurde. Rechts: derselbe Strich, neu abgetastet an \\(N\\) Punkten im Abstand \\(\\Delta s\\) längs der Kurve (\\(N = 16\\) hier, damit sie sich unterscheiden lassen; die Seite verwendet \\(N = 256\\)), berechnet mit der eigenen Neuabtastungsroutine der Seite. Das Kreuz ist der Mittelwert der Stichproben, eine Näherung an den Schwerpunkt eines gleichmäßigen Drahtes dieser Form, und der Pfeil davon ist eine zentrierte Stichprobe \\(z_n\\). Ein von Hand gezeichneter Strich schließt sich selten genau, daher muss die Reihe von \\(z_{N-1}\\) zurück zu \\(z_0\\) springen (gestrichelt)."
+ },
+ "35dc39f09ee3": {
+  "src": "<span class=\"psub__n\">7.1</span>Accuracy",
+  "tr": "<span class=\"psub__n\">7.1</span>Genauigkeit"
+ },
+ "370aa897986d": {
+  "src": "<b>Abstract.</b> Any closed curve you can draw is the path of a pen carried by a chain of circles, each turning a whole number of times per loop. This note writes the curve as a periodic complex function, finds the circles by averaging (the Fourier coefficients), replaces the average by a sum over 256 points (the discrete Fourier transform), and uses Parseval’s theorem to say exactly how much of the shape is lost when only the K largest circles are kept, which is why the page sorts them by size. It then shows why corners cost many circles and smooth curves few, and how the page turns a pen stroke into numbers and pixels. Sections marked ★ carry the heavier mathematics and can be skipped on a first reading without losing the thread.",
+  "tr": "<b>Zusammenfassung.</b> Jede geschlossene Kurve, die man zeichnen kann, ist die Bahn eines Stifts, den eine Kette von Kreisen trägt; jeder Kreis macht je Umlauf eine ganze Zahl von Umdrehungen. Dieses Skript schreibt die Kurve als periodische komplexe Funktion, findet die Kreise durch Mittelung (die Fourier-Koeffizienten), ersetzt die Mittelung durch eine Summe über 256 Punkte (die diskrete Fourier-Transformation) und verwendet Parsevals Theorem, um genau zu sagen, wie viel von der Form verloren geht, wenn nur die K größten Kreise behalten werden; deshalb sortiert die Seite die Kreise nach ihrer Größe. Danach wird gezeigt, warum Ecken viele Kreise kosten und glatte Kurven wenige, und wie die Seite einen Stiftstrich in Zahlen und Bildpunkte verwandelt. Abschnitte mit ★ enthalten die schwereren Rechnungen; sie können beim ersten Lesen übersprungen werden, ohne den Faden zu verlieren."
+ },
+ "3731e7d06ecf": {
+  "src": "Interactive simulation: draw any closed shape, take its discrete Fourier transform and redraw it with a chain of spinning circles.",
+  "tr": "Interaktive Simulation: Zeichnen Sie eine beliebige geschlossene Form, bilden Sie ihre diskrete Fourier-Transformation und zeichnen Sie sie mit einer Kette rotierender Kreise neu."
+ },
+ "395f6b0a1b7b": {
+  "src": "Figure eight",
+  "tr": "Acht"
+ },
+ "3d932a7629bb": {
+  "src": "with equality for a polygon, whose velocity is constant between corners. If instead the position itself jumps by \\(\\Delta z\\), as it does where the series closes an open stroke, one integration by parts is enough and",
+  "tr": "mit Gleichheit für ein Polygon, dessen Geschwindigkeit zwischen den Ecken konstant ist. Springt dagegen die Position selbst um \\(\\Delta z\\), wie es geschieht, wenn die Reihe einen offenen Strich schließt, genügt eine partielle Integration, und"
+ },
+ "3e4e7a44dc9c": {
+  "src": "Press New drawing, draw one stroke on the figure, then press Decompose &amp; play.",
+  "tr": "Drücken Sie „Neue Zeichnung“, zeichnen Sie einen Strich auf die Zeichenfläche und drücken Sie dann „Zerlegen &amp; abspielen“."
+ },
+ "41962ad49762": {
+  "src": "The integer \\(k\\) counts whole turns per loop. Each term is a <em>phasor</em> exactly as in Fig. 7: writing the complex number \\(c_k = |c_k|\\,e^{i\\arg c_k}\\), the term \\(c_k e^{ikt} = |c_k|\\,e^{i(kt + \\arg c_k)}\\) is an arrow of length \\(|c_k|\\) that starts at angle \\(\\arg c_k\\) and turns \\(k\\) times per loop, anticlockwise for \\(k > 0\\) and clockwise for \\(k &lt; 0\\). For a real signal, such as the air pressure of a sound, \\(c_{-k}\\) is the complex conjugate of \\(c_k\\) and the two counter-rotating arrows pair up into an oscillation along a line. A curve in the plane is complex, so here \\(c_{-k}\\) and \\(c_k\\) are independent: clockwise and anticlockwise circles are separate pieces of information, and both are needed.",
+  "tr": "Die ganze Zahl \\(k\\) zählt die ganzen Umdrehungen pro Umlauf. Jeder Term ist ein <em>Zeiger</em> genau wie in Abb. 7: Mit der komplexen Zahl \\(c_k = |c_k|\\,e^{i\\arg c_k}\\) ist der Term \\(c_k e^{ikt} = |c_k|\\,e^{i(kt + \\arg c_k)}\\) ein Pfeil der Länge \\(|c_k|\\), der beim Winkel \\(\\arg c_k\\) beginnt und sich \\(k\\)-mal pro Umlauf dreht, gegen den Uhrzeigersinn für \\(k > 0\\) und im Uhrzeigersinn für \\(k &lt; 0\\). Bei einem reellen Signal, etwa dem Luftdruck eines Klangs, ist \\(c_{-k}\\) die konjugiert komplexe Zahl von \\(c_k\\), und die beiden gegenläufigen Pfeile paaren sich zu einer Schwingung längs einer Geraden. Eine Kurve in der Ebene ist komplex, deshalb sind hier \\(c_{-k}\\) und \\(c_k\\) unabhängig: Kreise im und gegen den Uhrzeigersinn sind getrennte Informationen, und beide werden benötigt."
+ },
+ "424de4a25f4d": {
+  "src": "<span class=\"sw\"></span>reconstruction",
+  "tr": "<span class=\"sw\"></span>Rekonstruktion"
+ },
+ "4353a28c5776": {
+  "src": "The Square preset has side \\(1.4\\) and length \\(L = 5.6\\). At each of its four corners the velocity turns through a right angle, \\(|\\Delta\\dot z_j| = \\sqrt2\\,v\\). The corners sit a quarter loop apart, \\(t_j = j\\pi/2\\), and each jump is the one before turned by a right angle, \\(\\Delta\\dot z_j = i^j\\,\\Delta\\dot z_0\\), so term \\(j\\) of (12) is \\(\\Delta\\dot z_0\\,(i\\,e^{-ik\\pi/2})^j\\). For \\(k = 1 - 4m\\) the bracket is \\(1\\): the four terms point the same way and add. For every other \\(k\\) it is \\(-1\\) or \\(\\pm i\\), and the four terms close up and cancel, like the arrows of (5). So",
+  "tr": "Das voreingestellte Quadrat hat die Seitenlänge \\(1.4\\) und die Länge \\(L = 5.6\\). An jeder seiner vier Ecken dreht sich die Geschwindigkeit um einen rechten Winkel, \\(|\\Delta\\dot z_j| = \\sqrt2\\,v\\). Die Ecken liegen einen Viertelumlauf auseinander, \\(t_j = j\\pi/2\\), und jeder Sprung ist der vorhergehende, um einen rechten Winkel gedreht, \\(\\Delta\\dot z_j = i^j\\,\\Delta\\dot z_0\\), sodass Term \\(j\\) von (12) gleich \\(\\Delta\\dot z_0\\,(i\\,e^{-ik\\pi/2})^j\\) ist. Für \\(k = 1 - 4m\\) ist die Klammer \\(1\\): Die vier Terme zeigen in dieselbe Richtung und addieren sich. Für jedes andere \\(k\\) ist sie \\(-1\\) oder \\(\\pm i\\), und die vier Terme schließen sich und heben sich auf, wie die Pfeile von (5). Also"
+ },
+ "447abf4d099b": {
+  "src": "<span class=\"sw sw--rose\"></span>circle of one term",
+  "tr": "<span class=\"sw sw--rose\"></span>Kreis eines Terms"
+ },
+ "44a3e6984625": {
+  "src": "Tip-to-tail vectors",
+  "tr": "Vektoren Spitze an Ende"
+ },
+ "44fd110dd97e": {
+  "src": "<span class=\"pfig__n\">Figure 1</span>Three circles chained tip to tail (a schematic, not one of the presets). The first circle is centred on the origin, and each later circle is centred on the tip of the arm before it. Arm \\(j\\) has length \\(|c_{k_j}|\\) and makes \\(k_j\\) turns per loop; its angle is \\(\\theta_j\\). The pen at the last tip traces the burgundy curve. With \\(k = 1, -2, 4\\), after a third of a loop the whole chain has the same shape turned through \\(120^\\circ\\), so the curve has three-fold symmetry.",
+  "tr": "<span class=\"pfig__n\">Abbildung 1</span>Drei Kreise, Spitze an Ende gereiht (eine Skizze, nicht eine der Voreinstellungen). Der erste Kreis ist um den Ursprung zentriert, und jeder spätere Kreis ist um die Spitze des vorherigen Arms zentriert. Arm \\(j\\) hat die Länge \\(|c_{k_j}|\\) und macht \\(k_j\\) Umdrehungen pro Umlauf; sein Winkel ist \\(\\theta_j\\). Der Stift an der letzten Spitze zeichnet die bordeauxrote Kurve. Mit \\(k = 1, -2, 4\\) hat nach einem Drittel eines Umlaufs die ganze Kette dieselbe Form, um \\(120^\\circ\\) gedreht; die Kurve besitzt daher eine dreizählige Symmetrie."
+ },
+ "4a81ec85f9b8": {
+  "src": "<span>9</span>What the model leaves out",
+  "tr": "<span>9</span>Was das Modell weglässt"
+ },
+ "4bb9c51147d6": {
+  "src": "Now the central quantity of the page: how far the redrawn curve lies from the drawing when only some circles are kept. Two facts from Section 4 carry it, and both can be taken on trust: the coefficients (4) of \\(N\\) neighbouring frequencies redraw the \\(N\\) samples exactly, \\(z_n = \\sum_k c_k\\,e^{2\\pi i k n/N}\\) (the page computes 120 of them, \\(|k| \\le 60\\)); and on the samples two different frequencies among those \\(N\\) average to zero, \\(\\tfrac1N\\sum_n e^{2\\pi i (j-k) n/N} = 0\\), which is equation (5), the sampled twin of (2). Square the discrete series, \\(|z_n|^2 = z_n z_n^{*} = \\sum_j\\sum_k c_j c_k^{*}\\, e^{2\\pi i (j-k) n/N}\\), where the star is the complex conjugate, and average over the samples. By (5) every cross term with \\(j \\ne k\\) averages to zero, leaving <em>Parseval’s theorem</em>:",
+  "tr": "Nun die zentrale Größe der Seite: wie weit die neu gezeichnete Kurve von der Zeichnung entfernt liegt, wenn nur einige Kreise behalten werden. Zwei Tatsachen aus Abschnitt 4 tragen sie, und beide können als gegeben hingenommen werden: Die Koeffizienten (4) von \\(N\\) benachbarten Frequenzen zeichnen die \\(N\\) Stichproben genau neu, \\(z_n = \\sum_k c_k\\,e^{2\\pi i k n/N}\\) (die Seite berechnet 120 davon, \\(|k| \\le 60\\)); und auf den Stichproben mitteln sich zwei verschiedene Frequenzen unter diesen \\(N\\) zu null, \\(\\tfrac1N\\sum_n e^{2\\pi i (j-k) n/N} = 0\\), was Gleichung (5) ist, das stichprobenbezogene Gegenstück zu (2). Quadrieren wir die diskrete Reihe, \\(|z_n|^2 = z_n z_n^{*} = \\sum_j\\sum_k c_j c_k^{*}\\, e^{2\\pi i (j-k) n/N}\\), wobei der Stern die konjugiert komplexe Zahl bezeichnet, und mitteln über die Stichproben. Nach (5) mittelt sich jeder Kreuzterm mit \\(j \\ne k\\) zu null, und es bleibt <em>Parsevals Theorem</em>:"
+ },
+ "4c70d3055a38": {
+  "src": "<span class=\"psub__n\">6.2</span>Overshoot near corners and jumps",
+  "tr": "<span class=\"psub__n\">6.2</span>Überschwingen an Ecken und Sprüngen"
+ },
+ "4d97e12fb86e": {
+  "src": "Restart loop",
+  "tr": "Umlauf neu starten"
+ },
+ "54239dd347f4": {
+  "src": "The series always closes the stroke. An open stroke is closed with a straight jump from its end to its start, and the ringing there narrows as K grows but does not shrink.",
+  "tr": "Die Reihe schließt den Strich immer. Ein offener Strich wird durch einen geraden Sprung von seinem Ende zu seinem Anfang geschlossen, und das Schwingen dort wird schmaler, wenn K wächst, schrumpft aber nicht."
+ },
+ "5473cd37c17c": {
+  "src": "The traced reconstruction is burgundy and fades over the last loop, in 24 segments whose opacity rises from \\(0.16\\) to \\(1\\). <em>Your drawing</em> shows the 256 centred samples joined by a dashed ink line, <em>Component circles</em> draws each circle in rose, and <em>Tip-to-tail vectors</em> draws the arms in four alternating colours, the first twelve numbered by rank. <em>Full K-term curve</em> adds the 601-point curve in pink. In Fig. 8b each stem is \\(|c_k|\\) divided by the largest radius, placed at its \\(k\\) from \\(-60\\) to \\(60\\), burgundy if the circle is among the K in use and tan if not.",
+  "tr": "Die nachgezeichnete Rekonstruktion ist bordeauxrot und verblasst über den letzten Umlauf, in 24 Abschnitten, deren Deckkraft von \\(0.16\\) auf \\(1\\) steigt. <em>Ihre Zeichnung</em> zeigt die 256 zentrierten Stichproben, verbunden durch eine gestrichelte Tintenlinie, <em>Teilkreise</em> zeichnet jeden Kreis in Rosa, und <em>Vektoren Spitze an Ende</em> zeichnet die Arme in vier abwechselnden Farben, die ersten zwölf nach Rang nummeriert. <em>Vollständige Kurve mit K Termen</em> fügt die 601-Punkte-Kurve in Pink hinzu. In Abb. 8b ist jeder Stab gleich \\(|c_k|\\) geteilt durch den größten Radius, an seinem \\(k\\) von \\(-60\\) bis \\(60\\) platziert, bordeauxrot, wenn der Kreis zu den verwendeten K gehört, und sandfarben, wenn nicht."
+ },
+ "555fe743ed54": {
+  "src": "Stand at the centre of a roundabout that turns with one of the circles, \\(k\\) times per loop. That circle’s arrow stands still in front of you. Every other arrow turns relative to you a whole number of times per loop, points in every direction equally often, and averages to nothing. In symbols, multiplying by \\(e^{-ikt}\\) turns the picture backwards at rate \\(k\\), and the exponentials are <em>orthogonal</em> over one loop:",
+  "tr": "Stellen Sie sich in die Mitte eines Karussells, das sich mit einem der Kreise dreht, \\(k\\)-mal pro Umlauf. Der Pfeil dieses Kreises steht dann vor Ihnen still. Jeder andere Pfeil dreht sich relativ zu Ihnen eine ganze Zahl von Malen pro Umlauf, zeigt gleich oft in jede Richtung und mittelt sich zu null. Symbolisch gesprochen dreht Multiplikation mit \\(e^{-ikt}\\) das Bild mit der Rate \\(k\\) rückwärts, und die Exponentialfunktionen sind über einen Umlauf <em>orthogonal</em>:"
+ },
+ "55c494a274d6": {
+  "src": "Draw &amp; Decompose · Numa Koudsie",
+  "tr": "Draw &amp; Decompose · Numa Koudsie"
+ },
+ "58391a04c046": {
+  "src": "Only \\(|k| \\le 60\\) is computed, so even \\(K = 120\\) is not exact. The <em>\\(\\langle |z|^2\\rangle\\) kept</em> readout tells you how much is missing; for the heart at \\(K = 120\\) the relative error is still \\(0.068\\,\\%\\).",
+  "tr": "Nur \\(|k| \\le 60\\) wird berechnet, daher ist selbst \\(K = 120\\) nicht exakt. Die Anzeige <em>\\(\\langle |z|^2\\rangle\\) erhalten</em> zeigt, wie viel fehlt; beim Herz bei \\(K = 120\\) beträgt der relative Fehler immer noch \\(0.068\\,\\%\\)."
+ },
+ "5888082d0a17": {
+  "src": "Exercise 5.1 · on the figure above",
+  "tr": "Übung 5.1 · zur Simulation oben"
+ },
+ "5cc4bad5a32b": {
+  "src": "<span>6</span>Corners cost circles&nbsp;★",
+  "tr": "<span>6</span>Ecken kosten Kreise&nbsp;★"
+ },
+ "5efc90d319d2": {
+  "src": "Reconstruction",
+  "tr": "Rekonstruktion"
+ },
+ "5ffb7d243875": {
+  "src": "<span class=\"psec__n\">06</span>Corners cost circles<span class=\"star\" title=\"heavier mathematics\">★</span>",
+  "tr": "<span class=\"psec__n\">06</span>Ecken kosten Kreise<span class=\"star\" title=\"heavier mathematics\">★</span>"
+ },
+ "60242475a170": {
+  "src": "Figure 3 shows that some shapes need many more circles than others. The reason is how fast the radii \\(|c_k|\\) fall as \\(k\\) grows, and that is set by how smooth the curve is. Integrate (3) by parts. The boundary term vanishes because \\(z\\) is periodic, and the derivative \\(\\dot z = \\mathrm{d}z/\\mathrm{d}t\\) is the bead’s velocity:",
+  "tr": "Abbildung 3 zeigt, dass manche Formen viel mehr Kreise brauchen als andere. Der Grund liegt darin, wie schnell die Radien \\(|c_k|\\) mit wachsendem \\(k\\) abfallen, und das bestimmt, wie glatt die Kurve ist. Integrieren Sie (3) partiell. Der Randterm verschwindet, weil \\(z\\) periodisch ist, und die Ableitung \\(\\dot z = \\mathrm{d}z/\\mathrm{d}t\\) ist die Geschwindigkeit der Perle:"
+ },
+ "6205c61dd83c": {
+  "src": "Exercise 6.1 · on the figure above",
+  "tr": "Übung 6.1 · zur Simulation oben"
+ },
+ "64d8e1005014": {
+  "src": "The circles describe the motion; they do not explain it. A Fourier series fits any periodic path, which is why fitting one proves nothing about the forces behind it.",
+  "tr": "Die Kreise beschreiben die Bewegung; sie erklären sie nicht. Eine Fourier-Reihe passt sich jedem periodischen Weg an, deshalb beweist das Anpassen einer Reihe nichts über die Kräfte dahinter."
+ },
+ "65a3403cebdc": {
+  "src": "Draw any closed shape with one stroke. Its Fourier transform turns it into a list of spinning circles, and the circles, chained tip to tail, draw it back.",
+  "tr": "Zeichnen Sie eine beliebige geschlossene Form mit einem Strich. Ihre Fourier-Transformation verwandelt sie in eine Liste rotierender Kreise, und die Kreise, Spitze an Ende gereiht, zeichnen sie wieder nach."
+ },
+ "676d0bf06202": {
+  "src": "the sum running over \\(N\\) neighbouring frequencies. The left side is the mean squared distance of the samples from the centre. Put an equal mass at each sample and it is exactly their moment of inertia about the centre divided by their total mass, \\(I/m\\); for the uniform wire it is very nearly the same (section 7.1). Parseval says that each circle carries the share \\(|c_k|^2\\) of it, with no cross terms. The same bookkeeping is called energy in acoustics and optics, where \\(|c_k|^2\\) is the power carried by one frequency, and that is why the error below is often called the dropped energy.",
+  "tr": "wobei die Summe über \\(N\\) benachbarte Frequenzen läuft. Die linke Seite ist der mittlere quadratische Abstand der Stichproben vom Mittelpunkt. Setzt man an jede Stichprobe dieselbe Masse, so ist sie genau das Trägheitsmoment dieser Massen um den Mittelpunkt, geteilt durch ihre Gesamtmasse, \\(I/m\\); für den gleichmäßigen Draht ist sie sehr nahe dasselbe (Abschnitt 7.1). Parseval besagt, dass jeder Kreis davon den Anteil \\(|c_k|^2\\) trägt, ohne Kreuzterme. Dieselbe Buchführung heißt in der Akustik und Optik Energie, wo \\(|c_k|^2\\) die Leistung ist, die eine Frequenz trägt; deshalb wird der Fehler unten oft als die verlorene Energie bezeichnet."
+ },
+ "67f4001cbc30": {
+  "src": "<span>4</span>From an integral to 256 samples&nbsp;★",
+  "tr": "<span>4</span>Vom Integral zu 256 Stichproben&nbsp;★"
+ },
+ "6ffdc9070f4b": {
+  "src": "A computer cannot integrate a hand-drawn curve, but it can add up samples. The page takes \\(N = 256\\) samples \\(z_n = z(t_n)\\) at equal steps \\(t_n = 2\\pi n/N\\), \\(n = 0, 1, \\dots, N-1\\) (very nearly: the page spaces them \\(L/(N-1)\\) apart along the stroke, so that the last repeats the first, Section 7.1), and replaces the integral (3) by a sum, the <em>discrete Fourier transform</em> normalised by \\(1/N\\):",
+  "tr": "Ein Computer kann eine von Hand gezeichnete Kurve nicht integrieren, wohl aber Stichproben aufsummieren. Die Seite nimmt \\(N = 256\\) Stichproben \\(z_n = z(t_n)\\) in gleichen Schritten \\(t_n = 2\\pi n/N\\), \\(n = 0, 1, \\dots, N-1\\) (genau genommen setzt die Seite sie \\(L/(N-1)\\) weit längs des Strichs, sodass die letzte die erste wiederholt, Abschnitt 7.1), und ersetzt das Integral (3) durch eine Summe, die <em>diskrete Fourier-Transformation</em>, normiert mit \\(1/N\\):"
+ },
+ "702b201c4b40": {
+  "src": "Phyein Usul",
+  "tr": "Phyein Usul"
+ },
+ "70cec7ea7ef9": {
+  "src": "Fig. 8a",
+  "tr": "Abb. 8a"
+ },
+ "719ea396ad92": {
+  "src": "Clear",
+  "tr": "Löschen"
+ },
+ "734b4e249b13": {
+  "src": "The idea is older than it looks. A music equaliser splits a sound into frequency bands and gives each band its own slider; a sound is a sum of steady tones, and the sliders set how loud each tone is. JPEG pictures and MP3 songs go one step further. They store a picture or a sound as a list of frequency components and round the small ones away, because the eye and the ear hardly miss them, and the file becomes much smaller. The <em>Circles K</em> slider of this page is the same move applied to a drawing: it keeps the K largest circles and silences the rest.",
+  "tr": "Die Idee ist älter, als sie aussieht. Ein Musikequalizer teilt einen Klang in Frequenzbänder auf und gibt jedem Band seinen eigenen Regler; ein Klang ist eine Summe gleichbleibender Töne, und die Regler legen fest, wie laut jeder Ton ist. JPEG-Bilder und MP3-Lieder gehen einen Schritt weiter. Sie speichern ein Bild oder einen Klang als Liste von Frequenzanteilen und runden die kleinen Anteile weg, weil Auge und Ohr sie kaum vermissen, und die Datei wird viel kleiner. Der Regler <em>Kreise K</em> dieser Seite ist derselbe Schritt, angewandt auf eine Zeichnung: Er behält die K größten Kreise und bringt die übrigen zum Schweigen."
+ },
+ "76237b2cf697": {
+  "src": "Full K-term curve",
+  "tr": "Vollständige Kurve mit K Termen"
+ },
+ "77dfd2135f4d": {
+  "src": "Cancel",
+  "tr": "Abbrechen"
+ },
+ "781961bc81c2": {
+  "src": "Pause",
+  "tr": "Pause"
+ },
+ "7834d8ef4fbe": {
+  "src": "E. Kreyszig, <a href=\"https://www.wiley.com/en-us/Advanced+Engineering+Mathematics%2C+10th+Edition-p-9781119455929\"><em>Advanced Engineering Mathematics</em></a>, 10th edition, Wiley, 2011: chapter 11, Fourier analysis.",
+  "tr": "E. Kreyszig, <a href=\"https://www.wiley.com/en-us/Advanced+Engineering+Mathematics%2C+10th+Edition-p-9781119455929\"><em>Advanced Engineering Mathematics</em></a>, 10. Auflage, Wiley, 2011: Kapitel 11, Fourier-Analysis."
+ },
+ "7d252cd594b3": {
+  "src": "All simulations ↑",
+  "tr": "Alle Simulationen ↑"
+ },
+ "7defd4393f5b": {
+  "src": "<b>Fig. 8b</b> · amplitude spectrum <span class=\"tx\">\\(|c_k|\\)</span>, <span class=\"tx\">\\(-60 \\le k \\le 60\\)</span> · burgundy = terms in use",
+  "tr": "<b>Abb. 8b</b> · Amplitudenspektrum <span class=\"tx\">\\(|c_k|\\)</span>, <span class=\"tx\">\\(-60 \\le k \\le 60\\)</span> · bordeauxrot = verwendete Terme"
+ },
+ "7e80864b313c": {
+  "src": "One detail of the resampling leaves a visible mark. The first and last samples are the two ends of the stroke, and the presets close exactly, so for them \\(z_{255}\\) lands on \\(z_0\\): one of the 256 steps around the loop has zero length, as if the bead paused there. Like any jump in the parametrisation, this one-step pause adds radii that fall only as \\(1/|k|\\), of about \\(\\Delta s/(2\\pi|k|)\\). For the figure eight, with \\(\\Delta s = 0.0203\\), that estimate gives \\(5.4\\times10^{-5}\\) at \\(|k| = 60\\), and the page finds \\(5.9\\times10^{-5}\\): the floor in Figure 5. The pause also breaks the square’s four-fold symmetry slightly, giving frequencies such as \\(k = 2\\) and \\(k = -1\\), which should be absent, radii of \\(2.5\\times10^{-3}\\), and it is the cause of the one-per-cent scatter noted under (14). A hand-drawn stroke rarely closes, and the gap you leave between its end and its start plays the same role: by (13), a gap of length \\(g\\) adds radii of about \\(g/(2\\pi|k|)\\). Sampling the loop at spacing \\(L/N\\) without repeating the start point would remove the floor: for the figure eight our computation gives a relative error at \\(K = 120\\) of \\(1.5\\times10^{-6}\\) instead of \\(8.4\\times10^{-4}\\).",
+  "tr": "Ein Detail der Neuabtastung hinterlässt eine sichtbare Spur. Die erste und die letzte Stichprobe sind die beiden Enden des Strichs, und die Voreinstellungen schließen sich genau, sodass für sie \\(z_{255}\\) auf \\(z_0\\) fällt: Einer der 256 Schritte um den Umlauf hat die Länge null, als hielte die Perle dort an. Wie jeder Sprung in der Parametrisierung fügt diese Pause von einem Schritt Radien hinzu, die nur wie \\(1/|k|\\) fallen, etwa \\(\\Delta s/(2\\pi|k|)\\). Für die Acht mit \\(\\Delta s = 0.0203\\) ergibt diese Schätzung \\(5.4\\times10^{-5}\\) bei \\(|k| = 60\\), und die Seite findet \\(5.9\\times10^{-5}\\): der Boden in Abbildung 5. Die Pause bricht außerdem die vierzählige Symmetrie des Quadrats leicht und erzeugt Frequenzen wie \\(k = 2\\) und \\(k = -1\\), die fehlen sollten, mit Radien von \\(2.5\\times10^{-3}\\); sie ist die Ursache der Streuung von einem Prozent, die unter (14) erwähnt wurde. Ein von Hand gezeichneter Strich schließt sich selten, und die Lücke zwischen seinem Ende und seinem Anfang spielt dieselbe Rolle: Nach (13) fügt eine Lücke der Länge \\(g\\) Radien von etwa \\(g/(2\\pi|k|)\\) hinzu. Würde man den Umlauf im Abstand \\(L/N\\) abtasten, ohne den Anfangspunkt zu wiederholen, verschwände der Boden: Für die Acht ergibt unsere Rechnung bei \\(K = 120\\) einen relativen Fehler von \\(1.5\\times10^{-6}\\) statt \\(8.4\\times10^{-4}\\)."
+ },
+ "7fd08ad7738c": {
+  "src": "Arc-length resampling cuts corners by at most one sample spacing, \\(\\Delta s = L/255\\); for the heart that is \\(0.021\\) units.",
+  "tr": "Die Neuabtastung bei gleicher Bogenlänge schneidet Ecken um höchstens einen Stichprobenabstand ab, \\(\\Delta s = L/255\\); beim Herz sind das \\(0.021\\) Einheiten."
+ },
+ "80d8db7ad9bc": {
+  "src": "Reset view",
+  "tr": "Ansicht zurücksetzen"
+ },
+ "82810cb97184": {
+  "src": "Square",
+  "tr": "Quadrat"
+ },
+ "836ad451c83c": {
+  "src": "By (9), the squared error is the sum of the squared radii you drop. To make it as small as possible with \\(K\\) circles, drop the smallest ones: keep the \\(K\\) largest \\(|c_k|\\). Within the 120 nonzero-frequency components computed by the page, no other choice of \\(K\\) circles comes closer to the samples in the least-squares sense. That is why the page sorts the circles by radius, and the same idea lies behind JPEG and MP3.",
+  "tr": "Nach (9) ist der quadratische Fehler die Summe der quadrierten Radien, die man weglässt. Um ihn mit \\(K\\) Kreisen so klein wie möglich zu machen, lässt man die kleinsten weg: Man behält die \\(K\\) größten \\(|c_k|\\). Unter den 120 Komponenten mit nicht verschwindender Frequenz, die die Seite berechnet, kommt keine andere Wahl von \\(K\\) Kreisen den Stichproben im Sinne der kleinsten Quadrate näher. Deshalb sortiert die Seite die Kreise nach ihrem Radius, und dieselbe Idee steckt hinter JPEG und MP3."
+ },
+ "85a7de6e2705": {
+  "src": "Star",
+  "tr": "Stern"
+ },
+ "8964f594bed2": {
+  "src": "Time per loop",
+  "tr": "Zeit pro Umlauf"
+ },
+ "89fc87b688b0": {
+  "src": "Keep the largest circles",
+  "tr": "Die größten Kreise behalten"
+ },
+ "8d778d2db5c6": {
+  "src": "<span>7</span>What the page computes",
+  "tr": "<span>7</span>Was die Seite berechnet"
+ },
+ "8ef523e58a57": {
+  "src": "<span class=\"pfig__n\">Figure 5</span>Radius \\(|c_k|\\) against \\(|k|\\), the larger of \\(c_k\\) and \\(c_{-k}\\), computed with the page’s algorithm for four presets. For the heart only even \\(k\\) are shown and for the square only \\(k = 1 - 4m\\), the frequencies (12) singles out. Dotted: the predictions (13) for the open wave and (14) for the square. The open wave falls as \\(1/|k|\\), the heart and the square as \\(1/k^2\\); the smooth figure eight falls much faster until it meets a floor near \\(10^{-4}\\) that comes from the sampling, not from the shape (section 7).",
+  "tr": "<span class=\"pfig__n\">Abbildung 5</span>Radius \\(|c_k|\\) über \\(|k|\\), der größere von \\(c_k\\) und \\(c_{-k}\\), berechnet mit dem Algorithmus der Seite für vier Voreinstellungen. Beim Herz sind nur gerade \\(k\\) gezeigt, beim Quadrat nur \\(k = 1 - 4m\\), die Frequenzen, die (12) auszeichnet. Punktiert: die Vorhersagen (13) für die offene Welle und (14) für das Quadrat. Die offene Welle fällt wie \\(1/|k|\\), das Herz und das Quadrat wie \\(1/k^2\\); die glatte Acht fällt viel schneller, bis sie auf einen Boden nahe \\(10^{-4}\\) trifft, der von der Abtastung und nicht von der Form herrührt (Abschnitt 7)."
+ },
+ "92114cd3121c": {
+  "src": "Component circles",
+  "tr": "Teilkreise"
+ },
+ "93a8161c11f4": {
+  "src": "Back to the simulations",
+  "tr": "Zurück zu den Simulationen"
+ },
+ "93e217882ac6": {
+  "src": "Write \\(z_n = x_n + i y_n\\) and \\(a_n = 2\\pi k n/N\\). Since \\(e^{-ia} = \\cos a - i\\sin a\\), the real and imaginary parts of (4) are",
+  "tr": "Man schreibe \\(z_n = x_n + i y_n\\) und \\(a_n = 2\\pi k n/N\\). Da \\(e^{-ia} = \\cos a - i\\sin a\\) gilt, sind Real- und Imaginärteil von (4)"
+ },
+ "9521dba25709": {
+  "src": "Home page",
+  "tr": "Startseite"
+ },
+ "961270dc9b10": {
+  "src": "Amplitude spectrum |c_k| against k. Terms in use are burgundy.",
+  "tr": "Amplitudenspektrum |c_k| über k. Verwendete Terme sind bordeauxrot."
+ },
+ "96e08b94a682": {
+  "src": "<span class=\"psub__n\">4.3</span>The sum the page computes",
+  "tr": "<span class=\"psub__n\">4.3</span>Die Summe, die die Seite berechnet"
+ },
+ "96ec1b073d08": {
+  "src": "… by Parseval",
+  "tr": "… nach Parseval"
+ },
+ "982e8cc439e3": {
+  "src": "<span>1</span>A drawing made of circles",
+  "tr": "<span>1</span>Eine Zeichnung aus Kreisen"
+ },
+ "9a1e6a13d242": {
+  "src": "<span>8</span>From units to pixels",
+  "tr": "<span>8</span>Von Einheiten zu Bildpunkten"
+ },
+ "9b2be4567e31": {
+  "src": "Samples N",
+  "tr": "Stichproben N"
+ },
+ "9b3cbed5c490": {
+  "src": "Zoom",
+  "tr": "Zoom"
+ },
+ "9f9fe5c46dbc": {
+  "src": "Decompose &amp; play",
+  "tr": "Zerlegen &amp; abspielen"
+ },
+ "9ffeccb0546b": {
+  "src": "Press <em>Open wave</em>, switch on <em>Full K-term curve</em> and move <em>Circles K</em> from 24 to 120. Watch the pink curve at the two ends of the wave: the overshoot grows to about \\(0.16\\) units and crowds closer to the ends. Then press <em>Heart</em> and step through \\(K = 3\\), \\(10\\) and \\(50\\), and compare with Figure 4.",
+  "tr": "Drücken Sie <em>Offene Welle</em>, schalten Sie <em>Vollständige Kurve mit K Termen</em> ein und bewegen Sie <em>Kreise K</em> von 24 auf 120. Beobachten Sie die rosa Kurve an den beiden Enden der Welle: Das Überschwingen wächst auf etwa \\(0.16\\) Einheiten und drängt sich näher an die Enden. Drücken Sie dann <em>Herz</em> und gehen Sie \\(K = 3\\), \\(10\\) und \\(50\\) durch, und vergleichen Sie mit Abbildung 4."
+ },
+ "a28272643323": {
+  "src": "<span class=\"psec__n\">02</span>The model",
+  "tr": "<span class=\"psec__n\">02</span>Das Modell"
+ },
+ "a4ce3a9be794": {
+  "src": "← All simulations",
+  "tr": "← Alle Simulationen"
+ },
+ "a4e2630dae79": {
+  "src": "with \\(\\Delta t\\) the real time since the last frame, at most \\(0.05\\ \\mathrm{s}\\). The partial sums of (15) are the joints of the chain, and the last one is the pen. There is no integration and therefore no accumulated error: after every loop the pen returns to the same place.",
+  "tr": "wobei \\(\\Delta t\\) die reale Zeit seit dem letzten Bild ist, höchstens \\(0.05\\ \\mathrm{s}\\). Die Teilsummen von (15) sind die Gelenke der Kette, und die letzte ist der Stift. Es gibt keine Integration und daher keinen angesammelten Fehler: Nach jedem Umlauf kehrt der Stift an dieselbe Stelle zurück."
+ },
+ "a5975d05f272": {
+  "src": "<span class=\"psec__n\">05</span>Parseval’s theorem and the error",
+  "tr": "<span class=\"psec__n\">05</span>Parsevals Theorem und der Fehler"
+ },
+ "a60313735fec": {
+  "src": "Circles K",
+  "tr": "Kreise K"
+ },
+ "a7b4440f8244": {
+  "src": "Near a corner or a jump the truncated series does not settle on the curve; it rings. At a corner the ringing is small: for the square at \\(K = 10\\) the curve crosses the line of a side by at most \\(0.010\\) units, close to a corner, and at \\(K = 50\\) by \\(0.0038\\). At a jump it is large and stubborn. With the Open wave at \\(K = 24\\), \\(50\\) and \\(120\\) the redrawn curve shoots past each end of the wave by \\(5.9\\,\\%\\), \\(7.9\\,\\%\\) and \\(9.5\\,\\%\\) of the \\(1.7\\)-unit jump. Adding circles makes the overshoot narrower, not smaller; for a jump the classical limit is about \\(9\\,\\%\\) (the Gibbs phenomenon).",
+  "tr": "Nahe einer Ecke oder eines Sprungs setzt sich die abgeschnittene Reihe nicht auf der Kurve ab; sie schwingt. An einer Ecke ist das Schwingen klein: Beim Quadrat bei \\(K = 10\\) schneidet die Kurve die Linie einer Seite höchstens um \\(0.010\\) Einheiten, nahe einer Ecke, und bei \\(K = 50\\) um \\(0.0038\\). An einem Sprung ist es groß und hartnäckig. Bei der offenen Welle überschießt die neu gezeichnete Kurve bei \\(K = 24\\), \\(50\\) und \\(120\\) jedes Ende der Welle um \\(5.9\\,\\%\\), \\(7.9\\,\\%\\) und \\(9.5\\,\\%\\) des Sprungs von \\(1.7\\) Einheiten. Mehr Kreise machen das Überschwingen schmaler, nicht kleiner; bei einem Sprung liegt der klassische Grenzwert bei etwa \\(9\\,\\%\\) (Gibbs-Phänomen)."
+ },
+ "a8be73190876": {
+  "src": "Everything above becomes five steps, run once each time a shape is decomposed, plus one cheap step per frame.",
+  "tr": "Alles oben Gesagte läuft auf fünf Schritte hinaus, die einmal bei jeder Zerlegung einer Form ausgeführt werden, plus einen günstigen Schritt je Bild."
+ },
+ "ab6eee346e90": {
+  "src": "The Open wave preset is not closed: it ends \\(1.7\\) units from where it starts, and the series must jump back. By (13), \\(|c_k| \\approx 1.7/(2\\pi|k|) = 0.271/|k|\\); the page finds \\(|k|\\,|c_k| = 0.271\\) at \\(k = 10\\). The tail now shrinks only as \\(K^{-1}\\), so the error falls as \\(K^{-1/2}\\): \\(20\\,\\%\\) at \\(K = 24\\), \\(14\\,\\%\\) at \\(K = 50\\) and still \\(8.4\\,\\%\\) at \\(K = 120\\). A smooth closed curve, such as the Figure eight, has every derivative continuous, and its radii fall faster than any power of \\(k\\). Computed from the shape itself, without the sampling detail of section 7, its largest radius is \\(0.40\\) at \\(k = \\pm1\\), and \\(|c_k|\\) is \\(5.8\\times10^{-4}\\) at \\(k = 10\\), \\(8.1\\times10^{-5}\\) at \\(20\\), \\(1.0\\times10^{-5}\\) at \\(30\\) and \\(1.3\\times10^{-6}\\) at \\(40\\): seven to nine times smaller for every ten steps in \\(k\\). Figure 5 shows the three behaviours side by side, as the page computes them.",
+  "tr": "Die Voreinstellung Offene Welle ist nicht geschlossen: Sie endet \\(1.7\\) Einheiten von ihrem Anfang entfernt, und die Reihe muss zurückspringen. Nach (13) gilt \\(|c_k| \\approx 1.7/(2\\pi|k|) = 0.271/|k|\\); die Seite findet \\(|k|\\,|c_k| = 0.271\\) bei \\(k = 10\\). Der Rest schrumpft jetzt nur noch wie \\(K^{-1}\\), also fällt der Fehler wie \\(K^{-1/2}\\): \\(20\\,\\%\\) bei \\(K = 24\\), \\(14\\,\\%\\) bei \\(K = 50\\) und immer noch \\(8.4\\,\\%\\) bei \\(K = 120\\). Eine glatte geschlossene Kurve, etwa die Acht, hat stetige Ableitungen aller Ordnungen, und ihre Radien fallen schneller als jede Potenz von \\(k\\). Aus der Form selbst berechnet, ohne die Abtastdetails aus Abschnitt 7, beträgt ihr größter Radius \\(0.40\\) bei \\(k = \\pm1\\), und \\(|c_k|\\) ist \\(5.8\\times10^{-4}\\) bei \\(k = 10\\), \\(8.1\\times10^{-5}\\) bei \\(20\\), \\(1.0\\times10^{-5}\\) bei \\(30\\) und \\(1.3\\times10^{-6}\\) bei \\(40\\): sieben- bis neunmal kleiner für jeweils zehn Schritte in \\(k\\). Abbildung 5 zeigt die drei Verhaltensweisen nebeneinander, so wie die Seite sie berechnet."
+ },
+ "ac9da43ece79": {
+  "src": "Two different things now carry the name \\(c_k\\), and it helps to keep them apart. The integral (3) belongs to the continuous curve. The sum (4) belongs to the 256 samples: for them it is exact, as Section 4.1 shows, while as an estimate of the integral it is only approximate. From here on \\(c_k\\) means the computed sum, except in (6), which compares the two.",
+  "tr": "Zwei verschiedene Dinge tragen nun den Namen \\(c_k\\), und es hilft, sie auseinanderzuhalten. Das Integral (3) gehört zur stetigen Kurve. Die Summe (4) gehört zu den 256 Stichproben: für sie ist sie exakt, wie Abschnitt 4.1 zeigt, während sie als Schätzung des Integrals nur näherungsweise gilt. Von hier an bedeutet \\(c_k\\) die berechnete Summe, außer in (6), wo die beiden verglichen werden."
+ },
+ "acc380d0f927": {
+  "src": "W. H. Press, S. A. Teukolsky, W. T. Vetterling and B. P. Flannery, <a href=\"https://numerical.recipes/book.html\"><em>Numerical Recipes: The Art of Scientific Computing</em></a>, 3rd edition, Cambridge University Press, 2007 (readable online): chapters 12 and 13, the fast Fourier transform and its applications.",
+  "tr": "W. H. Press, S. A. Teukolsky, W. T. Vetterling und B. P. Flannery, <a href=\"https://numerical.recipes/book.html\"><em>Numerical Recipes: The Art of Scientific Computing</em></a>, 3. Auflage, Cambridge University Press, 2007 (online lesbar): Kapitel 12 und 13, die schnelle Fourier-Transformation und ihre Anwendungen."
+ },
+ "adc93ae66729": {
+  "src": "The term with \\(k = 0\\) does not turn at all: \\(c_0\\) is the average of \\(z\\) over one loop. Because equal steps of \\(t\\) are equal lengths of wire, and so equal masses, \\(c_0\\) is the centre of mass of the wire. The page subtracts the mean of its samples, which is very nearly this centre of mass (section 7.1 explains the small difference), so the centred samples average to zero. Figure 2 shows both steps on a real stroke: the even spacing that makes \\(t\\) proportional to distance, and the centring.",
+  "tr": "Das Glied mit \\(k = 0\\) dreht sich gar nicht: \\(c_0\\) ist der Mittelwert von \\(z\\) über einen Umlauf. Weil gleiche Schritte von \\(t\\) gleich lange Drahtstücke und damit gleiche Massen sind, ist \\(c_0\\) der Schwerpunkt des Drahtes. Die Seite zieht den Mittelwert ihrer Stichproben ab, der dem Schwerpunkt sehr nahe kommt (Abschnitt 7.1 erklärt den kleinen Unterschied), sodass die zentrierten Stichproben im Mittel null ergeben. Abbildung 2 zeigt beide Schritte an einem echten Strich: den gleichmäßigen Abstand, der \\(t\\) proportional zur Strecke macht, und die Zentrierung."
+ },
+ "af739b36a2d5": {
+  "src": "Figure. In drawing mode, press and drag to draw a stroke; while playing, drag to pan and scroll or pinch to zoom.",
+  "tr": "Abbildung. Im Zeichenmodus drücken und ziehen Sie, um einen Strich zu zeichnen; während der Wiedergabe ziehen Sie, um zu verschieben, und scrollen oder zwei Finger zusammen- oder auseinanderziehen, um zu zoomen."
+ },
+ "b045a9b91c66": {
+  "src": "Every frame the loop parameter advances and the chain is evaluated in closed form,",
+  "tr": "Bei jedem Bild schreitet der Umlaufparameter voran, und die Kette wird in geschlossener Form ausgewertet,"
+ },
+ "b797cdc67a95": {
+  "src": "<b>Sort.</b> The coefficients are sorted by \\(|c_k|\\), largest first. The first K are used, and the largest circle sits at the centre of the chain.",
+  "tr": "<b>Sortieren.</b> Die Koeffizienten werden nach \\(|c_k|\\) sortiert, der größte zuerst. Die ersten K werden verwendet, und der größte Kreis sitzt im Zentrum der Kette."
+ },
+ "b9bd42f68856": {
+  "src": "The sum (4) is more than an approximation. On the sample points, the exponentials are orthogonal without any error. Put \\(w = e^{2\\pi i (j-k)/N}\\), so that \\(w^N = 1\\). If \\(j - k\\) is not a multiple of \\(N\\), then \\(w \\ne 1\\) and the finite geometric series gives",
+  "tr": "Die Summe (4) ist mehr als eine Näherung. An den Stichprobenpunkten sind die Exponentialfunktionen ohne jeden Fehler orthogonal. Setzen wir \\(w = e^{2\\pi i (j-k)/N}\\), sodass \\(w^N = 1\\) gilt. Wenn \\(j - k\\) kein Vielfaches von \\(N\\) ist, dann ist \\(w \\ne 1\\), und die endliche geometrische Reihe ergibt"
+ },
+ "bbfc9cf0840a": {
+  "src": "<span class=\"psec__n\">01</span>A drawing made of circles",
+  "tr": "<span class=\"psec__n\">01</span>Eine Zeichnung aus Kreisen"
+ },
+ "bd2c91b190b6": {
+  "src": "where \\(w\\) and \\(h\\) are the width and height of the figure in pixels and \\(R_\\text{view}\\) follows \\(R\\): it jumps up at once when \\(R\\) grows and relaxes down with a time constant of \\(0.4\\ \\mathrm{s}\\) when you lower K. At zoom \\(1\\times\\) nothing leaves the figure. The <em>Zoom</em> slider, the mouse wheel or a pinch set zoom from \\(1\\times\\) to \\(10^{1.8} \\approx 63\\times\\), and dragging pans the view; <em>Follow the pen</em> keeps the tip of the chain at the centre, so the smallest circles stay in sight while they turn. Zoom and pan change only the view, never the coefficients.",
+  "tr": "wobei \\(w\\) und \\(h\\) Breite und Höhe der Zeichenfläche in Bildpunkten sind und \\(R_\\text{view}\\) dem Wert \\(R\\) folgt: Es springt sofort nach oben, wenn \\(R\\) wächst, und klingt mit einer Zeitkonstante von \\(0.4\\ \\mathrm{s}\\) nach unten ab, wenn Sie K verringern. Bei Zoom \\(1\\times\\) verlässt nichts die Zeichenfläche. Der Regler <em>Zoom</em>, das Mausrad oder eine Pinch-Geste setzen den Zoom von \\(1\\times\\) bis \\(10^{1.8} \\approx 63\\times\\), und Ziehen verschiebt die Ansicht; <em>Dem Stift folgen</em> hält die Spitze der Kette in der Mitte, sodass die kleinsten Kreise im Blick bleiben, während sie sich drehen. Zoom und Verschieben ändern nur die Ansicht, nie die Koeffizienten."
+ },
+ "be2623ad879b": {
+  "src": "and these two lines are exactly what the page’s <code>dft()</code> adds up. For 120 frequencies and 256 samples that is \\(30\\,720\\) complex products, done once per shape. A fast Fourier transform would be quicker for large \\(N\\), but at this size the direct sum is fast and easier to read: in headless Chromium on our test machine it took about \\(1\\ \\mathrm{ms}\\), and the whole decomposition of a shape about \\(8\\ \\mathrm{ms}\\).",
+  "tr": "und diese zwei Zeilen sind genau das, was die Funktion <code>dft()</code> der Seite aufsummiert. Für 120 Frequenzen und 256 Stichproben sind das \\(30\\,720\\) komplexe Produkte, einmal je Form ausgeführt. Eine schnelle Fourier-Transformation wäre bei großem \\(N\\) schneller, aber bei dieser Größe ist die direkte Summe schnell genug und leichter zu lesen: In Headless-Chromium auf unserem Testrechner dauerte sie etwa \\(1\\ \\mathrm{ms}\\), und die ganze Zerlegung einer Form etwa \\(8\\ \\mathrm{ms}\\)."
+ },
+ "be5d59c29c68": {
+  "src": "draw a shape",
+  "tr": "eine Form zeichnen"
+ },
+ "bee75ca77f75": {
+  "src": "Controls",
+  "tr": "Bedienelemente"
+ },
+ "c1ba5713448f": {
+  "src": "Each time the curve can be differentiated once more without a jump, integration by parts can be repeated and another factor \\(1/k\\) appears. The bead moves at constant speed \\(v = L/2\\pi\\) per unit of \\(t\\). At a corner its velocity jumps: it keeps its speed but changes direction at once. If the velocity jumps by \\(\\Delta\\dot z_j\\) at the loop positions \\(t_j\\), a second integration by parts of (11) gives",
+  "tr": "Jedes Mal, wenn die Kurve noch einmal ohne Sprung differenziert werden kann, lässt sich die partielle Integration wiederholen, und ein weiterer Faktor \\(1/k\\) tritt auf. Die Perle bewegt sich mit konstanter Geschwindigkeit \\(v = L/2\\pi\\) pro Einheit von \\(t\\). An einer Ecke springt ihre Geschwindigkeit: Sie behält ihren Betrag, ändert aber sofort die Richtung. Springt die Geschwindigkeit um \\(\\Delta\\dot z_j\\) an den Umlaufpositionen \\(t_j\\), so ergibt eine zweite partielle Integration von (11)"
+ },
+ "c1f4b279c902": {
+  "src": "exact even for \\(k = 1\\). The page finds \\(0.803\\), \\(0.0903\\) and \\(0.0317\\) for \\(k = 1, -3, 5\\), against \\(0.802\\), \\(0.0892\\) and \\(0.0321\\) from (14); the scatter of about one per cent has a cause described in section 7.",
+  "tr": "exakt schon für \\(k = 1\\). Die Seite findet \\(0.803\\), \\(0.0903\\) und \\(0.0317\\) für \\(k = 1, -3, 5\\), gegenüber \\(0.802\\), \\(0.0892\\) und \\(0.0321\\) aus (14); die Streuung von etwa einem Prozent hat eine Ursache, die in Abschnitt 7 beschrieben wird."
+ },
+ "c21f45abc8ec": {
+  "src": "The RMS compares corresponding samples: sample \\(n\\) with the reconstruction at the same parameter value. It does not measure the shortest distance between two outlines, and it says nothing about the curve between the samples.",
+  "tr": "Der RMS-Fehler vergleicht einander entsprechende Stichproben: Stichprobe \\(n\\) mit der Rekonstruktion beim selben Parameterwert. Er misst nicht den kürzesten Abstand zwischen zwei Umrissen, und er sagt nichts über die Kurve zwischen den Stichproben aus."
+ },
+ "cad2dda3032c": {
+  "src": "heavier mathematics",
+  "tr": "schwerere Mathematik"
+ },
+ "cbe28c0effec": {
+  "src": "<span class=\"psec__n\">09</span>What the model leaves out",
+  "tr": "<span class=\"psec__n\">09</span>Was das Modell weglässt"
+ },
+ "ccbf12e7ad58": {
+  "src": "<span>3</span>Each circle is an average",
+  "tr": "<span>3</span>Jeder Kreis ist ein Mittelwert"
+ },
+ "d1622a8321e0": {
+  "src": "Phyein Usul, home page",
+  "tr": "Phyein Usul, Startseite"
+ },
+ "d1cf84927b20": {
+  "src": "Your drawing",
+  "tr": "Ihre Zeichnung"
+ },
+ "d4266c44041b": {
+  "src": "Each coefficient is therefore computed on its own, from the curve alone, without knowing any of the others. Adding a circle never changes the circles already found. That property is what makes the K slider cheap: changing K only decides how many of a fixed list are drawn.",
+  "tr": "Jeder Koeffizient wird daher für sich berechnet, allein aus der Kurve, ohne einen der anderen zu kennen. Das Hinzufügen eines Kreises ändert nie die bereits gefundenen Kreise. Diese Eigenschaft macht den Regler K billig: Eine Änderung von K entscheidet nur, wie viele aus einer festen Liste gezeichnet werden."
+ },
+ "d607785e75f0": {
+  "src": "Keep only a set \\(S\\) of \\(K\\) circles and call the redrawn samples \\(\\tilde z_n = \\sum_{k\\in S} c_k\\, e^{2\\pi i k n/N}\\). The difference \\(z_n - \\tilde z_n\\) is the sum of the dropped circles, so (8) applied to it gives the root-mean-square (RMS) error at the samples:",
+  "tr": "Behalten Sie nur eine Menge \\(S\\) von \\(K\\) Kreisen und nennen Sie die neu gezeichneten Stichproben \\(\\tilde z_n = \\sum_{k\\in S} c_k\\, e^{2\\pi i k n/N}\\). Die Differenz \\(z_n - \\tilde z_n\\) ist die Summe der weggelassenen Kreise; daher ergibt (8), darauf angewandt, den quadratischen Mittelwert-Fehler (RMS-Fehler) an den Stichproben:"
+ },
+ "d8464c408984": {
+  "src": "A physical picture helps. Bend a thin wire of uniform density into the shape you drew and slide a bead around it at constant speed, once per loop. The bead’s motion is periodic, and any periodic motion is a sum of harmonics, like the overtones of a plucked string. In the plane each harmonic is a uniform circular motion that turns a whole number of times per loop, anticlockwise or clockwise. The page finds those circles and chains them tip to tail (Figure 1), so the last tip rides the wire again. This is Fig. 7 run backwards: there the circles are given and the shape follows; here the shape is given and the circles follow.",
+  "tr": "Ein physikalisches Bild hilft. Biegen Sie einen dünnen Draht gleichmäßiger Dichte in die Form, die Sie gezeichnet haben, und lassen Sie eine Perle mit konstanter Geschwindigkeit einmal je Umlauf daran entlanglaufen. Die Bewegung der Perle ist periodisch, und jede periodische Bewegung ist eine Summe von Harmonischen, wie die Obertöne einer gezupften Saite. In der Ebene ist jede Harmonische eine gleichförmige Kreisbewegung, die sich eine ganze Zahl von Malen je Umlauf dreht, gegen den Uhrzeigersinn oder im Uhrzeigersinn. Die Seite findet diese Kreise und reiht sie Spitze an Ende (Abb. 1), sodass die letzte Spitze wieder auf dem Draht reitet. Dies ist Abb. 7 rückwärts gelesen: dort sind die Kreise gegeben und die Form folgt; hier ist die Form gegeben und die Kreise folgen."
+ },
+ "d929322e4b16": {
+  "src": "Fig.",
+  "tr": "Abb."
+ },
+ "da4dceb7406a": {
+  "src": "The drawing is stored in scale-free units: one unit is \\(0.46\\) of the shorter side of the figure, with the origin at its centre and \\(y\\) pointing up, so resizing the window never distorts a shape. While you draw, a pointer position closer than \\(0.006\\) units to the previous one is skipped.",
+  "tr": "Die Zeichnung wird in maßstabsfreien Einheiten gespeichert: Eine Einheit ist \\(0.46\\) der kürzeren Seite der Zeichenfläche, mit dem Ursprung in deren Mitte und \\(y\\) nach oben, sodass Größenänderungen des Fensters eine Form nie verzerren. Während des Zeichnens wird eine Mausposition übersprungen, die näher als \\(0.006\\) Einheiten an der vorigen liegt."
+ },
+ "e13b587879b0": {
+  "src": "<span>2</span>The model",
+  "tr": "<span>2</span>Das Modell"
+ },
+ "e1944d16b5bd": {
+  "src": "The panel shows this result twice. <em>RMS error</em> is measured sample by sample from the redrawn curve, and the readout under it, <em>… by Parseval</em>, is the right side of (9). Over every \\(K\\) from 1 to 120 they agree to within \\(3\\) parts in \\(10^{10}\\) for the default heart (measured in the page itself); the remaining difference comes from subtracting two nearly equal numbers in (9). The readout <em>\\(\\langle |z|^2\\rangle\\) kept</em> is the share \\(\\sum_{k\\in S}|c_k|^2 / \\langle |z|^2\\rangle\\), and the relative error follows from it with a square root:",
+  "tr": "Das Bedienfeld zeigt dieses Ergebnis zweimal. <em>RMS-Fehler</em> wird Stichprobe für Stichprobe an der neu gezeichneten Kurve gemessen, und die Anzeige darunter, <em>… nach Parseval</em>, ist die rechte Seite von (9). Für jedes \\(K\\) von 1 bis 120 stimmen beide für das voreingestellte Herz auf \\(3\\) Teile in \\(10^{10}\\) überein (in der Seite selbst gemessen); die verbleibende Differenz stammt von der Subtraktion zweier fast gleicher Zahlen in (9). Die Anzeige <em>\\(\\langle |z|^2\\rangle\\) erhalten</em> ist der Anteil \\(\\sum_{k\\in S}|c_k|^2 / \\langle |z|^2\\rangle\\), und der relative Fehler folgt daraus mit einer Quadratwurzel:"
+ },
+ "e1b8c742ae34": {
+  "src": "Press <em>Square</em> and set <em>Circles K</em> to 1. The panel reads \\(98.52\\,\\%\\) kept and an RMS error of \\(0.09831\\). Check (10): divide \\(0.09831\\) by \\(\\sqrt{0.6546} = 0.8091\\), the RMS size of this square, square the result and subtract it from 1; you get back the kept share, \\(0.9852\\). Now set K to 4: in Fig. 8b only every fourth bar is burgundy, at \\(k = 1, -3, 5, -7\\), because a square traced at constant speed looks the same after a quarter of a loop turned by a right angle, \\(z(t + \\pi/2) = i\\,z(t)\\), and by (3) only frequencies with \\(e^{ik\\pi/2} = i\\), that is \\(k = 1 - 4m\\), survive this symmetry. Compare the two error readouts at every K you try.",
+  "tr": "Drücken Sie <em>Quadrat</em> und stellen Sie <em>Kreise K</em> auf 1. Das Bedienfeld zeigt \\(98.52\\,\\%\\) erhalten und einen RMS-Fehler von \\(0.09831\\). Prüfen Sie (10): Teilen Sie \\(0.09831\\) durch \\(\\sqrt{0.6546} = 0.8091\\), die RMS-Größe dieses Quadrats, quadrieren Sie das Ergebnis und ziehen Sie es von 1 ab; Sie erhalten den erhaltenen Anteil zurück, \\(0.9852\\). Stellen Sie nun K auf 4: In Abb. 8b ist nur jeder vierte Balken bordeauxrot, bei \\(k = 1, -3, 5, -7\\), weil ein Quadrat, das mit konstanter Geschwindigkeit durchlaufen wird, nach einem Viertel eines Umlaufs, um einen rechten Winkel gedreht, gleich aussieht, \\(z(t + \\pi/2) = i\\,z(t)\\), und nach (3) nur Frequenzen mit \\(e^{ik\\pi/2} = i\\), also \\(k = 1 - 4m\\), diese Symmetrie überstehen. Vergleichen Sie bei jedem K, das Sie ausprobieren, die beiden Fehleranzeigen."
+ },
+ "e1d329a7394b": {
+  "src": "From symbols to code",
+  "tr": "Von den Symbolen zum Code"
+ },
+ "e2f8ffb8cdaa": {
+  "src": "The square root matters. For the heart a single circle (\\(k = -1\\): the preset is traced clockwise) keeps \\(94.3\\,\\%\\) of \\(\\langle |z|^2\\rangle\\), yet the relative error is \\(\\sqrt{0.057} = 24\\,\\%\\). At the default \\(K = 24\\) the panel reads \\(99.99\\,\\%\\) kept and an RMS error of \\(0.00541\\), which is still \\(0.75\\,\\%\\) of the heart’s RMS size \\(\\sqrt{0.5150} = 0.718\\). Figure 3 follows the relative error over every K, and Figure 4 shows what it looks like.",
+  "tr": "Die Quadratwurzel ist wichtig. Beim Herz behält ein einziger Kreis (\\(k = -1\\): die Voreinstellung wird im Uhrzeigersinn durchlaufen) \\(94.3\\,\\%\\) von \\(\\langle |z|^2\\rangle\\), doch der relative Fehler beträgt \\(\\sqrt{0.057} = 24\\,\\%\\). Bei dem Standardwert \\(K = 24\\) zeigt das Bedienfeld \\(99.99\\,\\%\\) erhalten und einen RMS-Fehler von \\(0.00541\\), was noch \\(0.75\\,\\%\\) der RMS-Größe des Herzens \\(\\sqrt{0.5150} = 0.718\\) ist. Abbildung 3 verfolgt den relativen Fehler für jedes K, und Abbildung 4 zeigt, wie er aussieht."
+ },
+ "e5b882545f0f": {
+  "src": "An independent Python transcription of these steps reproduces the page’s stored numbers to the last digit or two of double precision: for the default heart, \\(\\langle |z|^2\\rangle = 0.515044672459522\\) and, at \\(K = 24\\), \\(e_K = 0.005405966670666\\) in both. The two error readouts agree as described in section 5.",
+  "tr": "Eine unabhängige Python-Nachbildung dieser Schritte reproduziert die gespeicherten Zahlen der Seite bis auf die letzte Ziffer oder zwei der doppelten Genauigkeit: für das voreingestellte Herz \\(\\langle |z|^2\\rangle = 0.515044672459522\\) und bei \\(K = 24\\) \\(e_K = 0.005405966670666\\) in beiden Rechnungen. Die beiden Fehleranzeigen stimmen überein, wie in Abschnitt 5 beschrieben."
+ },
+ "ea5c1a20b7cf": {
+  "src": "Shape",
+  "tr": "Form"
+ },
+ "ea9ff33a7894": {
+  "src": "<b>Transform.</b> The sums (7) for every \\(k\\) from \\(-60\\) to \\(60\\) except \\(0\\): 120 coefficients.",
+  "tr": "<b>Transformation.</b> Die Summen (7) für jedes \\(k\\) von \\(-60\\) bis \\(60\\) außer \\(0\\): 120 Koeffizienten."
+ },
+ "ebc7689a2b45": {
+  "src": "<b>Rebuild</b> whenever K changes: the kept share, the error by Parseval (9), the error measured at the 256 samples, and 601 points of the K-term curve.",
+  "tr": "<b>Neu aufbauen</b>, sobald sich K ändert: den erhaltenen Anteil, den Fehler nach Parseval (9), den an den 256 Stichproben gemessenen Fehler und die 601 Punkte der Kurve mit K Termen."
+ },
+ "ec412b2f1519": {
+  "src": "<span class=\"psec__n\">04</span>From an integral to 256 samples<span class=\"star\" title=\"heavier mathematics\">★</span>",
+  "tr": "<span class=\"psec__n\">04</span>Vom Integral zu 256 Stichproben<span class=\"star\" title=\"heavier mathematics\">★</span>"
+ },
+ "ed408f11c172": {
+  "src": "<b>Centre.</b> The mean of the samples is subtracted, so \\(c_0 = 0\\) and the shape is drawn about the centre of the figure. The page stores \\(\\langle |z|^2\\rangle\\) at this point.",
+  "tr": "<b>Zentrieren.</b> Der Mittelwert der Stichproben wird abgezogen, sodass \\(c_0 = 0\\) gilt und die Form um den Mittelpunkt der Zeichenfläche gezeichnet wird. Die Seite speichert an dieser Stelle \\(\\langle |z|^2\\rangle\\)."
+ },
+ "ee635a0dbbf7": {
+  "src": "After decomposition the page finds the outermost point drawn over a whole loop, \\(R\\): the distance of each circle’s centre (a joint of the chain) from the origin plus its radius, over all circles in use at 256 instants around the loop, or the distance of any point of your centred drawing, whichever is larger. The view is then scaled so that",
+  "tr": "Nach der Zerlegung bestimmt die Seite den äußersten Punkt, der über einen ganzen Umlauf gezeichnet wird, \\(R\\): den Abstand des Mittelpunkts jedes Kreises (ein Gelenk der Kette) vom Ursprung plus dessen Radius, über alle verwendeten Kreise zu 256 Zeitpunkten um den Umlauf, oder den Abstand eines beliebigen Punktes Ihrer zentrierten Zeichnung, je nachdem, welcher größer ist. Die Ansicht wird dann so skaliert, dass"
+ },
+ "effadf0b3a7f": {
+  "src": "Terms K",
+  "tr": "Terme K"
+ },
+ "f069105a047c": {
+  "src": "Fig. 8 · Fourier analysis · discrete Fourier transform",
+  "tr": "Abb. 8 · Fourier-Analyse · diskrete Fourier-Transformation"
+ },
+ "f199e2e1a4ed": {
+  "src": "<span class=\"psub__n\">9.1</span>Further reading",
+  "tr": "<span class=\"psub__n\">9.1</span>Weiterführende Literatur"
+ },
+ "f27923ffc090": {
+  "src": "<span class=\"pfig__n\">Figure 3</span>Relative RMS error (10) against the number of circles kept, for the page’s Heart and Square presets, computed for every K from 1 to 120 with a Python transcription of the page’s own steps: 256 samples at equal arc length, centred, \\(-60 \\le k \\le 60\\), sorted by \\(|c_k|\\). For the heart the error falls from \\(24\\,\\%\\) at \\(K = 1\\) to \\(2.9\\,\\%\\) at \\(K = 10\\), \\(0.75\\,\\%\\) at \\(K = 24\\) and \\(0.23\\,\\%\\) at \\(K = 50\\), roughly as \\(K^{-3/2}\\) in the middle. Beyond \\(K \\approx 80\\) both curves flatten near \\(10^{-3}\\): the circles still left to add are tiny, and what is missing lies beyond \\(|k| = 60\\), where the page computes nothing.",
+  "tr": "<span class=\"pfig__n\">Abbildung 3</span>Relativer RMS-Fehler (10) in Abhängigkeit von der Zahl der behaltenen Kreise, für die Voreinstellungen Herz und Quadrat der Seite, berechnet für jedes K von 1 bis 120 mit einer Python-Nachbildung der eigenen Schritte der Seite: 256 Stichproben mit gleicher Bogenlänge, zentriert, \\(-60 \\le k \\le 60\\), sortiert nach \\(|c_k|\\). Beim Herz fällt der Fehler von \\(24\\,\\%\\) bei \\(K = 1\\) auf \\(2.9\\,\\%\\) bei \\(K = 10\\), \\(0.75\\,\\%\\) bei \\(K = 24\\) und \\(0.23\\,\\%\\) bei \\(K = 50\\), in der Mitte ungefähr wie \\(K^{-3/2}\\). Jenseits von \\(K \\approx 80\\) flachen beide Kurven bei etwa \\(10^{-3}\\) ab: Die noch hinzuzufügenden Kreise sind winzig, und das Fehlende liegt jenseits von \\(|k| = 60\\), wo die Seite nichts berechnet."
+ },
+ "f3b34708bf3f": {
+  "src": "Open wave",
+  "tr": "Offene Welle"
+ },
+ "f3fc51fde6d5": {
+  "src": "The Heart preset looks smooth but is not. At the notch and at the point, both derivatives of its parametric formula vanish, and the curve has a <em>cusp</em>: the bead arrives moving straight down and leaves moving straight up, so its velocity jumps by \\(2v\\). The two cusps sit half a loop apart, at \\(t = 0\\) and \\(t = \\pi\\). By (12) their contributions add for even \\(k\\), giving \\(|c_k| \\approx 4v/(2\\pi k^2) = L/(\\pi^2 k^2) = 0.550/k^2\\) with \\(L = 5.428\\), and cancel at leading order for odd \\(k\\). The page’s radii agree: \\(k^2|c_k| = 0.550\\), \\(0.552\\) and \\(0.544\\) for \\(k = 10\\), \\(20\\) and \\(30\\). Radii falling as \\(1/k^2\\) leave a tail \\(\\sum_{|k| &gt; K/2} |c_k|^2\\) that shrinks as \\(K^{-3}\\), hence the error \\(e_K \\propto K^{-3/2}\\) seen for the heart in Figure 3.",
+  "tr": "Die Voreinstellung Herz sieht glatt aus, ist es aber nicht. An der Kerbe und an der Spitze verschwinden beide Ableitungen ihrer Parameterformel, und die Kurve hat eine <em>Rückkehrspitze</em> (Cusp): Die Perle kommt senkrecht nach unten und verlässt die Stelle senkrecht nach oben, sodass ihre Geschwindigkeit um \\(2v\\) springt. Die beiden Spitzen liegen einen halben Umlauf auseinander, bei \\(t = 0\\) und \\(t = \\pi\\). Nach (12) addieren sich ihre Beiträge für gerade \\(k\\), was \\(|c_k| \\approx 4v/(2\\pi k^2) = L/(\\pi^2 k^2) = 0.550/k^2\\) mit \\(L = 5.428\\) ergibt, und sie heben sich für ungerade \\(k\\) in führender Ordnung auf. Die Radien der Seite stimmen überein: \\(k^2|c_k| = 0.550\\), \\(0.552\\) und \\(0.544\\) für \\(k = 10\\), \\(20\\) und \\(30\\). Radien, die wie \\(1/k^2\\) fallen, hinterlassen einen Rest \\(\\sum_{|k| &gt; K/2} |c_k|^2\\), der wie \\(K^{-3}\\) schrumpft, daher der Fehler \\(e_K \\propto K^{-3/2}\\), den man beim Herz in Abbildung 3 sieht."
+ },
+ "f560b89460c4": {
+  "src": "Lecture note · Fig. 8 · Fourier analysis",
+  "tr": "Skript · Abb. 8 · Fourier-Analyse"
+ },
+ "f5cbdf6bfb51": {
+  "src": "Contents",
+  "tr": "Inhalt"
+ },
+ "f639694213c7": {
+  "src": "<b>Resample at equal arc length.</b> The raw stroke is unevenly spaced, because you draw faster in some places (Figure 2). The page adds up the lengths of the stroke’s straight pieces, \\(s_i = \\sum_{j \\le i} |p_j - p_{j-1}|\\) for the stroke points \\(p_j\\), takes the total length \\(L\\) and the spacing \\(\\Delta s = L/(N-1)\\), and places sample \\(n\\) at distance \\(n\\,\\Delta s\\) along the stroke by linear interpolation, for \\(n = 0, \\dots, 255\\). Equal arc length means the pen moves at constant speed, so \\(t\\) is proportional to distance travelled.",
+  "tr": "<b>Neu abtasten bei gleicher Bogenlänge.</b> Der rohe Strich ist ungleichmäßig verteilt, weil Sie an manchen Stellen schneller zeichnen (Abbildung 2). Die Seite addiert die Längen der geraden Stücke des Strichs, \\(s_i = \\sum_{j \\le i} |p_j - p_{j-1}|\\) für die Strichpunkte \\(p_j\\), nimmt die Gesamtlänge \\(L\\) und den Abstand \\(\\Delta s = L/(N-1)\\), und setzt die Stichprobe \\(n\\) durch lineare Interpolation im Abstand \\(n\\,\\Delta s\\) längs des Strichs, für \\(n = 0, \\dots, 255\\). Gleiche Bogenlänge bedeutet, dass sich der Stift mit konstanter Geschwindigkeit bewegt, sodass \\(t\\) proportional zur zurückgelegten Strecke ist."
+ },
+ "f72f0eda6052": {
+  "src": "Simulations",
+  "tr": "Simulationen"
+ },
+ "f7a669b147b3": {
+  "src": "RMS error",
+  "tr": "RMS-Fehler"
+ },
+ "f9044871b8ed": {
+  "src": "M. L. Boas, <a href=\"https://www.wiley.com/en-us/Mathematical+Methods+in+the+Physical+Sciences%2C+3rd+Edition-p-9780471198260\"><em>Mathematical Methods in the Physical Sciences</em></a>, 3rd edition, Wiley, 2006: chapter 7, Fourier series and transforms, including Parseval’s theorem.",
+  "tr": "M. L. Boas, <a href=\"https://www.wiley.com/en-us/Mathematical+Methods+in+the+Physical+Sciences%2C+3rd+Edition-p-9780471198260\"><em>Mathematical Methods in the Physical Sciences</em></a>, 3. Auflage, Wiley, 2006: Kapitel 7, Fourier-Reihen und -Transformationen, einschließlich Parsevals Theorem."
+ },
+ "f93eadbc4a5b": {
+  "src": "<span class=\"psub__n\">6.1</span>Square, heart and open wave",
+  "tr": "<span class=\"psub__n\">6.1</span>Quadrat, Herz und offene Welle"
+ },
+ "fa54c7c29056": {
+  "src": "<span class=\"psub__n\">4.1</span>Orthogonality on the samples is exact",
+  "tr": "<span class=\"psub__n\">4.1</span>Orthogonalität auf den Stichproben ist exakt"
+ },
+ "fb57a7ac8366": {
+  "src": "This simulation needs JavaScript.",
+  "tr": "Diese Simulation benötigt JavaScript."
+ },
+ "fb6cf49d2082": {
+  "src": "<span>5</span>Parseval’s theorem and the error",
+  "tr": "<span>5</span>Parsevals Theorem und der Fehler"
+ },
+ "fef3de78209c": {
+  "src": "<span class=\"psec__n\">08</span>From units to pixels",
+  "tr": "<span class=\"psec__n\">08</span>Von Einheiten zu Bildpunkten"
+ },
+ "ff6e0b0af453": {
+  "src": "The picture is the one of Fig. 7: \\(N\\) unit arrows, equally spaced in angle, close into a regular polygon and add to zero. So keeping all \\(N\\) coefficients of \\(N\\) neighbouring frequencies reproduces every sample exactly, \\(z_n = \\sum_k c_k\\, e^{2\\pi i k n/N}\\). To see it, put (4) in for each \\(c_k\\): the sum over the \\(N\\) frequencies is the same geometric series as (5), with \\(k\\) and \\(n\\) trading places, and it wipes out every sample except \\(z_n\\) itself.",
+  "tr": "Das Bild ist dasjenige aus Abb. 7: \\(N\\) Einheitspfeile, im Winkel gleichmäßig verteilt, schließen sich zu einem regelmäßigen Vieleck und ergeben null. Behält man also alle \\(N\\) Koeffizienten von \\(N\\) benachbarten Frequenzen, so reproduziert man jede Stichprobe genau, \\(z_n = \\sum_k c_k\\, e^{2\\pi i k n/N}\\). Um es zu sehen, setzen Sie (4) für jedes \\(c_k\\) ein: Die Summe über die \\(N\\) Frequenzen ist dieselbe geometrische Reihe wie (5), wobei \\(k\\) und \\(n\\) die Rollen tauschen, und sie tilgt jede Stichprobe außer \\(z_n\\) selbst."
+ }
+}

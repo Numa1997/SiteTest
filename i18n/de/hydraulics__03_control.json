@@ -1,0 +1,1382 @@
+{
+ "0027034d8a10": {
+  "src": "$\\rho$",
+  "tr": "$\\rho$"
+ },
+ "012af753ff5e": {
+  "src": "cap chamber pressure, at its far end from the hose",
+  "tr": "Druck in der Bodenkammer, am vom Schlauch abgewandten Ende"
+ },
+ "0137ccdc1034": {
+  "src": "$K_{\\mathrm{vel}}$",
+  "tr": "$K_{\\mathrm{vel}}$"
+ },
+ "02037ab9ff10": {
+  "src": "normalized spool travel, x/x<sub>max</sub>",
+  "tr": "normierter Ventilschieberweg, x/x<sub>max</sub>"
+ },
+ "0240c4e74351": {
+  "src": "Pa·s",
+  "tr": "Pa·s"
+ },
+ "02d3d04af88e": {
+  "src": "downward displacement of the input piston (generalized coordinate); reused as spool travel in ch. 8",
+  "tr": "Abwärtsverschiebung des Eingangskolbens (verallgemeinerte Koordinate); in Kap. 8 als Ventilschieberweg wiederverwendet"
+ },
+ "0315e8b0d065": {
+  "src": "Figure 7. A zero-order hold turns a smooth command into a staircase that trails it by half a sample on average.",
+  "tr": "Abbildung 7. Ein Halteglied nullter Ordnung macht aus einem glatten Stellsignal eine Treppenfunktion, die ihm im Mittel um eine halbe Abtastperiode nachhinkt."
+ },
+ "03659bf9da29": {
+  "src": "16.1 Solving the linear system exactly",
+  "tr": "16.1 Das lineare System exakt lösen"
+ },
+ "03a45952f811": {
+  "src": "$\\eta$",
+  "tr": "$\\eta$"
+ },
+ "03b88ffa0576": {
+  "src": "The spool cannot open more than fully: $u$ is clipped to $[-1, 1]$. While it is clipped, the error persists and a naive integrator keeps growing; when the error finally reverses, the oversized integrator holds the valve open far too long. This is <i>windup</i>. The page uses conditional integration: it accepts the new integral only if the output is unsaturated, or if the error would drive it back out of saturation.",
+  "tr": "Der Ventilschieber kann nicht weiter als ganz geöffnet werden: $u$ wird auf $[-1, 1]$ begrenzt. Solange die Begrenzung greift, bleibt der Fehler bestehen, und ein naiver Integrator wächst weiter. Kehrt sich der Fehler schließlich um, hält der übergroße Integrator das Ventil viel zu lange offen. Das ist der <i>Windup</i>-Effekt. Die Seite verwendet eine bedingte Integration: Die Seite übernimmt den neuen Integralwert nur, wenn der Ausgang nicht gesättigt ist, oder wenn der Fehler ihn aus der Sättigung herausführen würde."
+ },
+ "04bfe3eaccf7": {
+  "src": "17.3 Saturation and windup",
+  "tr": "17.3 Sättigung und Windup"
+ },
+ "067831a2e53a": {
+  "src": "Hit the hold with one unit sample and it answers with a rectangle: height 1 for one period, then nothing. The Laplace transform of that rectangle is $\\int_0^{T_s} e^{-st}\\,dt = (1 - e^{-sT_s})/s$. Divided by $T_s$, so that a steady input passes with unit gain, the hold’s transfer function is $(1 - e^{-sT_s})/(sT_s)$. On the imaginary axis, factor out half a period:",
+  "tr": "Speist man das Halteglied mit einem Einheitsimpuls, antwortet es mit einem Rechteck: Höhe 1 für eine Abtastperiode, danach nichts. Die Laplace-Transformierte dieses Rechtecks ist $\\int_0^{T_s} e^{-st}\\,dt = (1 - e^{-sT_s})/s$. Geteilt durch $T_s$, damit ein stationärer Eingang mit der Verstärkung eins durchgeht, lautet die Übertragungsfunktion des Haltegliedes $(1 - e^{-sT_s})/(sT_s)$. Auf der imaginären Achse klammert man eine halbe Abtastperiode aus:"
+ },
+ "0684f39bd31c": {
+  "src": "laminar (Hagen–Poiseuille) flow resistance",
+  "tr": "Widerstand der laminaren Strömung (Hagen–Poiseuille)"
+ },
+ "09abd6d25928": {
+  "src": "$K_{ce}$",
+  "tr": "$K_{ce}$"
+ },
+ "09d4c7f101e2": {
+  "src": "chapter",
+  "tr": "Kapitel"
+ },
+ "0b3cc6d2eea9": {
+  "src": "spool natural angular frequency, 2π f<sub>v</sub>",
+  "tr": "Eigenkreisfrequenz des Ventilschiebers, 2π f<sub>v</sub>"
+ },
+ "0bf6380b9530": {
+  "src": "$\\zeta_h$",
+  "tr": "$\\zeta_h$"
+ },
+ "0c70ff38f15e": {
+  "src": "After Part III you can",
+  "tr": "Nach Teil III können Sie:"
+ },
+ "0ca02c4e568a": {
+  "src": "The ram of mass $m$ bounces on them at $\\omega_h^2 = k_{\\mathrm{oil}}/m$:",
+  "tr": "Der Stößel der Masse $m$ schwingt auf ihnen mit $\\omega_h^2 = k_{\\mathrm{oil}}/m$:"
+ },
+ "0db78855023d": {
+  "src": "60 Hz, 0.7",
+  "tr": "60 Hz, 0.7"
+ },
+ "0e44c8b638ba": {
+  "src": "Further reading",
+  "tr": "Weiterführende Literatur"
+ },
+ "0f2ebac6571f": {
+  "src": "The hold delays the signal by half a sample: a phase lag of $\\omega T_s/2$. The press's controller also needs one sample to compute, a further lag of $\\omega T_s$. Together:",
+  "tr": "Das Halteglied verzögert das Signal um eine halbe Abtastung: eine Phasennacheilung von $\\omega T_s/2$. Der Regler der Presse braucht zusätzlich eine Abtastung zum Rechnen, eine weitere Nacheilung von $\\omega T_s$. Zusammen ergibt das:"
+ },
+ "10b533e19f7e": {
+  "src": "Both pages use the classical fourth-order Runge–Kutta method. From $\\mathbf{x}_n$ it samples the slope four times across a step $h$ and averages them with weights 1, 2, 2, 1:",
+  "tr": "Beide Simulationsseiten verwenden das klassische Runge-Kutta-Verfahren vierter Ordnung. Ausgehend von $\\mathbf{x}_n$ tastet es die Steigung über einen Schritt $h$ viermal ab und mittelt sie mit den Gewichten 1, 2, 2, 1:"
+ },
+ "10f32377ac67": {
+  "src": "$\\alpha$",
+  "tr": "$\\alpha$"
+ },
+ "11a50e9d9825": {
+  "src": "laminar leakage coefficient, Q<sub>L</sub> = K<sub>L</sub> Δp",
+  "tr": "laminarer Leckagekoeffizient, Q<sub>L</sub> = K<sub>L</sub> Δp"
+ },
+ "11f71917b8f9": {
+  "src": "An operating point is a state $\\mathbf{x}_0$ and input $u_0$ at which nothing changes except, possibly, the ram position, which may drift at a constant speed $v_0$. Setting the right-hand sides of section 13 to zero gives three conditions: the valve delivers exactly the flow the moving ram needs on each side, $Q_A = A_A v_0$ and $Q_B = -A_B v_0$; and the forces on the ram balance,",
+  "tr": "Ein Arbeitspunkt ist ein Zustand $\\mathbf{x}_0$ und ein Eingang $u_0$, bei dem sich nichts ändert, außer möglicherweise der Stößelposition, die mit konstanter Geschwindigkeit $v_0$ wandern darf. Setzt man die rechten Seiten aus Abschnitt 13 gleich null, ergeben sich drei Bedingungen: Das Ventil liefert auf jeder Seite genau den Volumenstrom, den der bewegte Stößel braucht, $Q_A = A_A v_0$ und $Q_B = -A_B v_0$; und die Kräfte am Stößel gleichen sich aus,"
+ },
+ "12f0fd0746f7": {
+  "src": "force on the input piston",
+  "tr": "Kraft auf den Eingangskolben"
+ },
+ "1364727603df": {
+  "src": "17.2 Feed-forward",
+  "tr": "17.2 Vorsteuerung"
+ },
+ "1389845b02c0": {
+  "src": "kg",
+  "tr": "kg"
+ },
+ "13f3690a5d22": {
+  "src": "energy function $T + V - F_1x$, which can only fall while the push ramps up",
+  "tr": "Energiefunktion $T + V - F_1x$, die nur fallen kann, während die Antriebskraft anwächst"
+ },
+ "158f288fe30d": {
+  "src": "17.1 PID in discrete time",
+  "tr": "17.1 PID-Regler in diskreter Zeit"
+ },
+ "15afd0596eb8": {
+  "src": "bottom stop contact force (stop law implied, not defined as a symbol)",
+  "tr": "Kontaktkraft am unteren Anschlag (das Anschlaggesetz ist vorausgesetzt, aber nicht als Symbol definiert)"
+ },
+ "1729fa249d8b": {
+  "src": "leakage coefficient across the piston",
+  "tr": "Leckagebeiwert über den Kolben"
+ },
+ "1843a5169dbe": {
+  "src": "$\\mathrm{GM}$",
+  "tr": "$\\mathrm{GM}$"
+ },
+ "1a7f6d82ea38": {
+  "src": "1 mm/s, 5 mm/s",
+  "tr": "1 mm/s, 5 mm/s"
+ },
+ "1ac7b1ce8ba1": {
+  "src": "$\\omega_h$",
+  "tr": "$\\omega_h$"
+ },
+ "1bae98eea24e": {
+  "src": "$V_\\ell$",
+  "tr": "$V_\\ell$"
+ },
+ "1c10d17a98e5": {
+  "src": "16.3 The z-transform",
+  "tr": "16.3 Die z-Transformation"
+ },
+ "1c7b7af81d8e": {
+  "src": "Two numbers summarize how far the curve stays from $-1$. The <b>phase margin</b> is how much extra lag the loop tolerates at the crossover frequency, where $|L| = 1$: $\\mathrm{PM} = 180^\\circ + \\angle L$. The <b>gain margin</b> is by how much the gain may grow at the frequency where the phase reaches $-180^\\circ$: $\\mathrm{GM} = -20\\log_{10}|L|$ in decibels. Good designs keep $\\mathrm{PM} \\gtrsim 45^\\circ$ and $\\mathrm{GM} \\gtrsim 6\\ \\mathrm{dB}$.",
+  "tr": "Zwei Zahlen fassen zusammen, wie weit die Kurve von $-1$ entfernt bleibt. Die <b>Phasenreserve</b> ist, wie viel zusätzliche Nacheilung der Regelkreis bei der Durchtrittsfrequenz verträgt, wo $|L| = 1$ ist: $\\mathrm{PM} = 180^\\circ + \\angle L$. Die <b>Amplitudenreserve</b> gibt an, um wie viel die Verstärkung bei der Frequenz wachsen darf, bei der die Phase $-180^\\circ$ erreicht: $\\mathrm{GM} = -20\\log_{10}|L|$ in Dezibel. Gute Entwürfe halten $\\mathrm{PM} \\gtrsim 45^\\circ$ und $\\mathrm{GM} \\gtrsim 6\\ \\mathrm{dB}$ ein."
+ },
+ "1cb14ba10e70": {
+  "src": "Read it row by row. The plant advances by (16.1), driven by the command $w_k$ that reached the valve this sample. The controller’s memory advances on the error $-C\\mathbf{x}_k$. The command it computes now, $C_c\\mathbf{s}_k - D_cC\\mathbf{x}_k$, is stored in $w$ and reaches the valve one sample later. The loop is stable if and only if every eigenvalue of this matrix lies inside the unit circle. The page computes them with a balanced Hessenberg QR algorithm; NumPy agrees to $10^{-15}$.",
+  "tr": "Lesen wir sie Zeile für Zeile. Die Strecke schreitet nach (16.1) fort, getrieben von dem Stellsignal $w_k$, das in dieser Abtastung das Ventil erreicht hat. Das Gedächtnis des Reglers schreitet mit dem Fehler $-C\\mathbf{x}_k$ fort. Das Stellsignal, das er jetzt berechnet, $C_c\\mathbf{s}_k - D_cC\\mathbf{x}_k$, wird in $w$ gespeichert und erreicht das Ventil eine Abtastung später. Der Regelkreis ist genau dann stabil, wenn jeder Eigenwert dieser Matrix innerhalb des Einheitskreises liegt. Die Seite berechnet sie mit einem ausbalancierten Hessenberg-QR-Verfahren; NumPy stimmt auf $10^{-15}$ überein."
+ },
+ "1ce908681faf": {
+  "src": "minimum input force that lifts the load off its stop",
+  "tr": "minimale Eingangskraft, die die Last von ihrem Anschlag abhebt"
+ },
+ "1d37e9cd595d": {
+  "src": "derivative filter time constant, 2 ms",
+  "tr": "Zeitkonstante des Differenzierfilters, 2 ms"
+ },
+ "1e35947b01da": {
+  "src": "cap chamber volume",
+  "tr": "Volumen der Bodenkammer"
+ },
+ "1e420c85a88f": {
+  "src": "√Pa",
+  "tr": "√Pa"
+ },
+ "1ebf39fcd568": {
+  "src": "$F_c,\\ k_{\\mathrm{st}},\\ b_v$",
+  "tr": "$F_c,\\ k_{\\mathrm{st}},\\ b_v$"
+ },
+ "208a0bc36cab": {
+  "src": "control error, y<sub>ref</sub> − y",
+  "tr": "Regelabweichung, y<sub>ref</sub> − y"
+ },
+ "21b44f7a0fc2": {
+  "src": "output matrix, picks the measured position",
+  "tr": "Ausgangsmatrix, wählt die gemessene Position aus"
+ },
+ "22c553c268fc": {
+  "src": "14.1 Steady operation",
+  "tr": "14.1 Stationärer Betrieb"
+ },
+ "2451b898a065": {
+  "src": "$\\omega_v$",
+  "tr": "$\\omega_v$"
+ },
+ "246bfeb5fbb1": {
+  "src": "Each block of the map is replaced, in effect, by its tangent at the operating point: the orifice by a flow gain and a resistance (the $K_q$ and $K_c$ of chapter 9), the friction by a slope, each chamber by a capacitor with a fixed $V/\\beta$. The linear model is a chain of these tangents.",
+  "tr": "Jeder Block des Blockschaltbilds wird im Grunde durch seine Tangente im Arbeitspunkt ersetzt: die Blende durch eine Durchflussverstärkung und einen Widerstand (die $K_q$ und $K_c$ aus Kapitel 9), die Reibung durch eine Steigung, jede Kammer durch eine Kapazität mit festem $V/\\beta$. Das lineare Modell ist eine Kette dieser Tangenten."
+ },
+ "252b6a7aed2f": {
+  "src": "G. F. Franklin, J. D. Powell and M. Workman, <i>Digital Control of Dynamic Systems</i>, 3rd ed., Addison-Wesley, 1998: chapters 16 to 18.",
+  "tr": "G. F. Franklin, J. D. Powell und M. Workman, <i>Digital Control of Dynamic Systems</i>, 3. Aufl., Addison-Wesley, 1998: Kapitel 16 bis 18."
+ },
+ "25b9010f12a2": {
+  "src": "flow-pressure coefficient, minus partial of Q<sub>A</sub> with respect to p<sub>a</sub>",
+  "tr": "Durchfluss-Druck-Koeffizient, negative partielle Ableitung von Q<sub>A</sub> nach p<sub>a</sub>"
+ },
+ "26bab891d07a": {
+  "src": "18.1 The closed-loop matrix",
+  "tr": "18.1 Die Matrix des geschlossenen Regelkreises"
+ },
+ "26d14653b700": {
+  "src": "<span class=\"lbl\">given</span>continuous signals $y(t)$ and $F(t)$, and one command $u_k$ per sample",
+  "tr": "<span class=\"lbl\">gegeben</span>kontinuierliche Signale $y(t)$ und $F(t)$ sowie ein Stellsignal $u_k$ je Abtastwert"
+ },
+ "2705cc3d313a": {
+  "src": "Ideal press",
+  "tr": "Ideale Presse"
+ },
+ "2738b1aafaa8": {
+  "src": "Part III closes the blue loop of the map. It replaces the press by straight-line approximations that can be analysed (chapters 14 and 15), describes what the computer does to the signals it reads and writes (16 and 17), and asks the decisive question: does a small disturbance die away, or grow (18)? Chapter 19 checks the energy books and chapter 20 explains how the computer integrates it all.",
+  "tr": "Teil III schließt die blaue Schleife des Blockschaltbilds. Er ersetzt die Presse durch geradlinige Näherungen, die sich analysieren lassen (Kapitel 14 und 15), beschreibt, was der Rechner mit den Signalen tut, die er liest und schreibt (16 und 17), und stellt die entscheidende Frage: Klingt eine kleine Störung ab oder wächst sie an (18)? Kapitel 19 prüft die Energiebilanz, und Kapitel 20 erklärt, wie der Rechner das alles integriert."
+ },
+ "2954e50ac2fa": {
+  "src": "cap area, the full bore, πD²/4",
+  "tr": "Fläche der Bodenseite, volle Bohrung, πD²/4"
+ },
+ "29d9f584ee09": {
+  "src": "1 ms",
+  "tr": "1 ms"
+ },
+ "2a9079f50339": {
+  "src": "meaning",
+  "tr": "Bedeutung"
+ },
+ "2ae637aab873": {
+  "src": "$K_{pF}$",
+  "tr": "$K_{pF}$"
+ },
+ "2b5234e343df": {
+  "src": "M. Jelali and A. Kroll, <i>Hydraulic Servo-systems: Modelling, Identification and Control</i>, Springer, 2003.",
+  "tr": "M. Jelali und A. Kroll, <i>Hydraulic Servo-systems: Modelling, Identification and Control</i>, Springer, 2003."
+ },
+ "2c1916edadec": {
+  "src": "oil outflow from a chamber",
+  "tr": "Ölabfluss aus einer Kammer"
+ },
+ "2c4df02c0d40": {
+  "src": "<div class=\"ctag\">Where linearization fails</div>The derivative must exist. The critically lapped valve has a kink at $x_v = 0$, where the flow gain jumps from $K_v\\sqrt{p_a}$ to $K_v\\sqrt{p_s - p_a}$, and the friction law has a near-jump at $\\dot{y} = 0$. Around such points a linear model describes only one side; worked solutions 3 and 4 on the Servo-Hydraulic Press page explore what follows.",
+  "tr": "<div class=\"ctag\">Wo die Linearisierung versagt</div>Die Ableitung muss existieren. Das kritisch überdeckte Ventil hat bei $x_v = 0$ einen Knick, an dem die Durchflussverstärkung von $K_v\\sqrt{p_a}$ auf $K_v\\sqrt{p_s - p_a}$ springt, und das Reibungsgesetz hat bei $\\dot{y} = 0$ nahezu einen Sprung. In der Nähe solcher Punkte beschreibt ein lineares Modell nur eine Seite; die Musterlösungen 3 und 4 auf der Seite Servohydraulische Presse untersuchen, was danach geschieht."
+ },
+ "2c7b5b23f7e7": {
+  "src": "$\\beta_{\\mathrm{oil}}$",
+  "tr": "$\\beta_{\\mathrm{oil}}$"
+ },
+ "2cef55f237bd": {
+  "src": "volume flow",
+  "tr": "Volumenstrom"
+ },
+ "2e91bbbe6d9d": {
+  "src": "$\\alpha_0$",
+  "tr": "$\\alpha_0$"
+ },
+ "2e9ca295ea32": {
+  "src": "$v_s,\\ v_{\\mathrm{str}}$",
+  "tr": "$v_s,\\ v_{\\mathrm{str}}$"
+ },
+ "2efdb93f8c3c": {
+  "src": "Linear model",
+  "tr": "Lineares Modell"
+ },
+ "2efdf1305aa1": {
+  "src": "angular frequency of a command sinusoid, u = û e^{jωt}",
+  "tr": "Kreisfrequenz des sinusförmigen Stellsignals, u = û e^{jωt}"
+ },
+ "2fbc36930f94": {
+  "src": "One more condition comes from the hose: in steady flow its slug does not accelerate, so (11.1) leaves $p_a - p_A = \\Delta p_f(Q_h)$, with $Q_h = Q_A$. Four equations, four unknowns $(x_v, p_a, p_A, p_B)$: the page solves them with Newton's method.",
+  "tr": "Eine weitere Bedingung kommt vom Schlauch: Im stationären Fluss wird seine Ölsäule nicht beschleunigt, also lässt Gleichung (11.1) $p_a - p_A = \\Delta p_f(Q_h)$, mit $Q_h = Q_A$, übrig. Vier Gleichungen für vier Unbekannte $(x_v, p_a, p_A, p_B)$: Die Seite löst sie mit dem Newton-Verfahren."
+ },
+ "2fc2cb2e305c": {
+  "src": "Control: linearize, sample, close the loop, ask if it survives",
+  "tr": "Regelung: linearisieren, abtasten, den Regelkreis schließen, prüfen, ob er standhält"
+ },
+ "315981440018": {
+  "src": "$F_{\\mathrm{stop}}$",
+  "tr": "$F_{\\mathrm{stop}}$"
+ },
+ "31e6ea3d9c40": {
+  "src": "Coulomb friction force",
+  "tr": "Coulombsche Reibungskraft"
+ },
+ "324a57423a1e": {
+  "src": "polytropic exponent of the air",
+  "tr": "Polytropenexponent der Luft"
+ },
+ "32b65482ec36": {
+  "src": "position PID",
+  "tr": "PID-Lageregler"
+ },
+ "32cd31aae66e": {
+  "src": "The feedback then only has to correct what the feed-forward gets wrong.",
+  "tr": "Die Rückkopplung muss dann nur noch korrigieren, was die Vorsteuerung falsch macht."
+ },
+ "33571266edd3": {
+  "src": "potential energy as a function of x",
+  "tr": "potentielle Energie als Funktion von x"
+ },
+ "33576aabaaad": {
+  "src": "Bring the $Y$ terms together and divide by $A^2 s$:",
+  "tr": "Wir fassen die $Y$-Terme zusammen und dividieren durch $A^2 s$:"
+ },
+ "33b7e2bb2e9d": {
+  "src": "mass of the output piston",
+  "tr": "Masse des Ausgangskolbens"
+ },
+ "3558f48b17d4": {
+  "src": "$p_{\\mathrm{abs}}$",
+  "tr": "$p_{\\mathrm{abs}}$"
+ },
+ "362dede6ea66": {
+  "src": "the controller<small>PID, PI and a supervisor</small>",
+  "tr": "der Regler<small>PID, PI und ein Supervisor</small>"
+ },
+ "36a0f1ab2bf0": {
+  "src": "Sampling and control",
+  "tr": "Abtastung und Regelung"
+ },
+ "37bbc0277c34": {
+  "src": "sampler and hold<small>read every $T_s$, hold in between</small>",
+  "tr": "Abtaster und Halteglied<small>liest alle $T_s$, hält dazwischen</small>"
+ },
+ "3a821a12d595": {
+  "src": "Its denominator is $\\det(sI - A)$, which vanishes at the poles. Setting $s = j\\omega$ gives the response to a sine of angular frequency $\\omega$, as in chapter 10: the size of $Y/U$ is the gain, its angle the phase.",
+  "tr": "Der Nenner ist $\\det(sI - A)$; er verschwindet an den Polen. Setzt man $s = j\\omega$, erhält man die Antwort auf eine Sinusschwingung der Kreisfrequenz $\\omega$, wie in Kapitel 10: Der Betrag von $Y/U$ ist die Verstärkung, sein Winkel die Phase."
+ },
+ "3ba30d6ac8a2": {
+  "src": "viscous friction of the ram in the textbook model",
+  "tr": "viskose Reibung des Stößels im Lehrbuchmodell"
+ },
+ "3c147412e1ab": {
+  "src": "$v_{\\mathrm{str}}$",
+  "tr": "$v_{\\mathrm{str}}$"
+ },
+ "3cf2d9a7efd8": {
+  "src": "Ram and specimen",
+  "tr": "Stößel und Probe"
+ },
+ "3d9fad0c0b3c": {
+  "src": "Darcy friction factor",
+  "tr": "Rohrreibungszahl nach Darcy"
+ },
+ "3e19cf40d881": {
+  "src": "speed over which the Stribeck bump dies away, 5 mm/s",
+  "tr": "Geschwindigkeitsbereich, über den der Stribeck-Buckel abklingt, 5 mm/s"
+ },
+ "3e1bff49d116": {
+  "src": "Try a solution of the form $\\delta\\mathbf{x}(t) = \\mathbf{X}e^{st}$ in $\\delta\\dot{\\mathbf{x}} = A\\,\\delta\\mathbf{x}$, with $s$ a complex number. Differentiation brings down a factor $s$, so $s\\mathbf{X} = A\\mathbf{X}$: the exponents $s$ the system can follow on its own are the eigenvalues of $A$. They are its <b>poles</b>. A pole $s = \\sigma + j\\omega$ is a motion that oscillates at angular frequency $\\omega$ and grows or decays at rate $\\sigma$. The system is stable when every pole has $\\sigma &lt; 0$: every motion of its own dies away.",
+  "tr": "Man versuche einen Ansatz der Form $\\delta\\mathbf{x}(t) = \\mathbf{X}e^{st}$ in $\\delta\\dot{\\mathbf{x}} = A\\,\\delta\\mathbf{x}$, mit einer komplexen Zahl $s$. Differenzieren liefert einen Faktor $s$, also gilt $s\\mathbf{X} = A\\mathbf{X}$: Die Exponenten $s$, die das System von selbst annehmen kann, sind die Eigenwerte von $A$. Diese heißen seine <b>Pole</b>. Ein Pol $s = \\sigma + j\\omega$ ist eine Bewegung, die mit der Kreisfrequenz $\\omega$ schwingt und mit der Rate $\\sigma$ wächst oder abklingt. Das System ist stabil, wenn jeder Pol $\\sigma &lt; 0$ hat: Dann klingt jede seiner Eigenbewegungen ab."
+ },
+ "3eed337722fe": {
+  "src": "Newton for the ram of mass $m$ with viscous friction $b$ (the $b_v$ of chapter 12, written short here) and no external load: $m\\ddot{y} = A\\,p_L - b\\,\\dot{y}$. Take Laplace transforms with zero initial conditions and eliminate $Q_L$ and $p_L$. From (15.1) and (15.2), with $K_{ce} = K_c + C_{tp}$:",
+  "tr": "Das Newtonsche Grundgesetz für den Stößel der Masse $m$ mit viskoser Reibung $b$ (der $b_v$ aus Kapitel 12, hier kurz geschrieben) und ohne äußere Last: $m\\ddot{y} = A\\,p_L - b\\,\\dot{y}$. Wir bilden die Laplace-Transformierten mit verschwindenden Anfangsbedingungen und eliminieren $Q_L$ und $p_L$. Aus (15.1) und (15.2), mit $K_{ce} = K_c + C_{tp}$:"
+ },
+ "3fc4bdb01005": {
+  "src": "The z-transform does for sequences what the Laplace transform does for functions. Define $X(z) = \\sum_{k\\ge0} x_k z^{-k}$. Shifting a sequence one step ahead multiplies its transform by $z$, if it starts from zero:",
+  "tr": "Die z-Transformation tut für Folgen, was die Laplace-Transformation für Funktionen tut. Wir definieren $X(z) = \\sum_{k\\ge0} x_k z^{-k}$. Verschiebt man eine Folge um einen Schritt nach vorn, so multipliziert sich ihre Transformierte mit $z$, vorausgesetzt, sie beginnt bei null:"
+ },
+ "4084c0f3de3d": {
+  "src": "100 L/min, 7 MPa",
+  "tr": "100 L/min, 7 MPa"
+ },
+ "41258be252a0": {
+  "src": "<span class=\"chn\">16</span> From continuous to discrete: sample and hold",
+  "tr": "<span class=\"chn\">16</span> Von kontinuierlich zu diskret: Abtasten und Halten"
+ },
+ "416d6d32d68c": {
+  "src": "kg/m⁴",
+  "tr": "kg/m⁴"
+ },
+ "4185fcfb1cdc": {
+  "src": "<span class=\"chn\">15</span> The classical valve-controlled cylinder",
+  "tr": "<span class=\"chn\">15</span> Der klassische ventilgesteuerte Zylinder"
+ },
+ "423cb1e5e725": {
+  "src": "hydraulic damping ratio",
+  "tr": "hydraulischer Dämpfungsgrad"
+ },
+ "4512600db4a0": {
+  "src": "<span class=\"chn\">19</span> Where the energy goes",
+  "tr": "<span class=\"chn\">19</span> Wohin die Energie geht"
+ },
+ "459abf6a01d0": {
+  "src": "feed-forward gain from speed reference to command",
+  "tr": "Vorsteuerverstärkung von der Geschwindigkeitsvorgabe zum Stellsignal"
+ },
+ "4766b2cc3bd2": {
+  "src": "$\\hat{x}$",
+  "tr": "$\\hat{x}$"
+ },
+ "479bc2fe55be": {
+  "src": "spool bandwidth frequency, 60 Hz",
+  "tr": "Bandbreitenfrequenz des Ventilschiebers, 60 Hz"
+ },
+ "493ac9457c0b": {
+  "src": "Valve and orifice",
+  "tr": "Ventil und Blende"
+ },
+ "4bc59c0c578f": {
+  "src": "break-away factor (Stribeck effect)",
+  "tr": "Losbrechfaktor (Stribeck-Effekt)"
+ },
+ "4c6d256b8faf": {
+  "src": "pressure at valve port A, at the valve end of the hose",
+  "tr": "Druck am Ventilanschluss A, am ventilseitigen Ende des Schlauchs"
+ },
+ "4d793c215829": {
+  "src": "Part II built the press as eight nonlinear equations. A computer can integrate them, and the animation does, but they cannot answer the question a designer cares about: if I raise the controller gain, will the press shake? That question has a sharp answer only for <i>linear</i> systems, whose responses add and scale, and whose behaviour is fixed by a handful of numbers, the poles. So we look at the press near one way of running, where small disturbances obey linear equations. This chapter finds those ways of running and the linear equations around them, and ends with the tool that makes linear systems easy: the transfer function.",
+  "tr": "Teil II hat die Presse als acht nichtlineare Gleichungen aufgebaut. Ein Rechner kann sie integrieren, und die Animation tut das auch, doch sie können nicht die Frage beantworten, die einen Konstrukteur interessiert: Wenn ich die Reglerverstärkung erhöhe, fängt die Presse dann an zu schwingen? Eine scharfe Antwort darauf gibt es nur für <i>lineare</i> Systeme, deren Antworten sich addieren und skalieren lassen und deren Verhalten durch wenige Zahlen festgelegt ist, die Pole. Deshalb betrachten wir die Presse nahe bei einem Betriebszustand, in dem kleine Störungen linearen Gleichungen gehorchen. Dieses Kapitel findet solche Betriebszustände und die linearen Gleichungen um sie herum und endet mit dem Werkzeug, das lineare Systeme handlich macht: der Übertragungsfunktion."
+ },
+ "4ee1fd1ac23c": {
+  "src": "effective bulk modulus of oil with entrained air",
+  "tr": "effektiver Kompressionsmodul des Öls mit mitgerissener Luft"
+ },
+ "50a332e23bbd": {
+  "src": "hydraulic resonance frequency of the ram on its oil springs",
+  "tr": "hydraulische Eigenfrequenz des Stößels auf seinen Ölfedern"
+ },
+ "51cb231946b0": {
+  "src": "total cylinder volume, two equal chambers of V<sub>t</sub>/2",
+  "tr": "Gesamtvolumen des Zylinders, zwei gleiche Kammern mit je V<sub>t</sub>/2"
+ },
+ "527e76b94b76": {
+  "src": "exactly the integral in (16.1). The page computes $e^{MT_s}$ by scaling and squaring: it divides $MT_s$ by $2^j$ until its norm is below one half, sums the Taylor series, and squares the result $j$ times. SciPy's <span class=\"mono\">expm</span> agrees to $10^{-14}$.",
+  "tr": "genau das Integral aus (16.1). Die Seite berechnet $e^{MT_s}$ durch Skalieren und Quadrieren: Dazu teilt sie $MT_s$ durch $2^j$, bis ihre Norm kleiner als ein Halb ist, summiert die Taylor-Reihe und quadriert das Ergebnis $j$-mal. Die Funktion <span class=\"mono\">expm</span> von SciPy stimmt auf $10^{-14}$ überein."
+ },
+ "53d43147f996": {
+  "src": "When the supervisor switches from position to force control, the command must not jump. At the switch the new error is zero (the force reference starts at the measured force), so $u = K_{pF}\\cdot 0 + I_F$. $I_F$ is the integral state of the force law. Setting $I_F = u_{\\mathrm{previous}}$ makes the command continuous. Worked solution 8 on the Servo-Hydraulic Press page removes this and measures a 2.7 kN stumble.",
+  "tr": "Wenn der Supervisor von der Lage- zur Kraftregelung umschaltet, darf das Stellsignal nicht springen. Beim Umschalten ist der neue Fehler null (der Kraft-Sollwert beginnt beim gemessenen Kraftwert), also $u = K_{pF}\\cdot 0 + I_F$. $I_F$ ist der Integralzustand des Kraftgesetzes. Setzt man $I_F = u_{\\mathrm{previous}}$, wird das Stellsignal stetig. Musterlösung 8 auf der Seite Servohydraulische Presse lässt dies weg und misst einen Ruck von 2.7 kN."
+ },
+ "546bc5db8c39": {
+  "src": "valve rated flow and pressure drop",
+  "tr": "Nenndurchfluss und Druckabfall des Ventils"
+ },
+ "54d7d48553f4": {
+  "src": "$\\omega$",
+  "tr": "$\\omega$"
+ },
+ "54f54d866143": {
+  "src": "viscous friction coefficient of the seals",
+  "tr": "Koeffizient der viskosen Reibung der Dichtungen"
+ },
+ "5613085e74fc": {
+  "src": "bulk modulus: pressure to squeeze oil volume by a given fraction",
+  "tr": "Kompressionsmodul: Druck, der das Ölvolumen um einen gegebenen Bruchteil verkleinert"
+ },
+ "57a2effb3c9e": {
+  "src": "Multiply each equation of the model by its “flow” partner and add them. The pump power $p_sQ_S$ splits as follows. The valve keeps (9.2). Each chamber turns $p\\,(Q_{\\mathrm{in}} - Q_{\\mathrm{out}} - \\dot{V})$ into compression energy; by (7.2) that is $p\\,(V/\\beta)\\,\\dot{p}$. The hose slug gains $\\tfrac{d}{dt}(\\tfrac12 IQ_h^2)$ and loses $\\Delta p_f Q_h$ to friction. The ram gains kinetic energy $\\tfrac{d}{dt}(\\tfrac12 m\\dot{y}^2)$ and height $mg\\dot{y}$, and loses $F_f\\dot{y}$ to the seals and $F_w\\dot{y}$ to the specimen. Summing every term, all the internal pressures cancel in pairs. Here is the bookkeeping, with $p_T = 0$. The valve's power balance (9.2) says where the pump power goes first:",
+  "tr": "Wir multiplizieren jede Gleichung des Modells mit ihrem „Fluss“-Partner und addieren sie. Die Pumpenleistung $p_sQ_S$ teilt sich wie folgt auf. Das Ventil behält seinen Anteil nach (9.2). Jede Kammer wandelt $p\\,(Q_{\\mathrm{in}} - Q_{\\mathrm{out}} - \\dot{V})$ in Kompressionsenergie um; nach (7.2) ist das $p\\,(V/\\beta)\\,\\dot{p}$. Die Ölsäule im Schlauch gewinnt $\\tfrac{d}{dt}(\\tfrac12 IQ_h^2)$ und verliert $\\Delta p_f Q_h$ an die Reibung. Der Stößel gewinnt kinetische Energie $\\tfrac{d}{dt}(\\tfrac12 m\\dot{y}^2)$ und potenzielle Energie $mg\\dot{y}$ und verliert $F_f\\dot{y}$ an die Dichtungen und $F_w\\dot{y}$ an die Probe. Summiert man alle Terme, so heben sich sämtliche inneren Drücke paarweise auf. Hier die Energiebilanz, mit $p_T = 0$. Die Leistungsbilanz des Ventils (9.2) zeigt zuerst, wohin die Pumpenleistung geht:"
+ },
+ "58be6def6562": {
+  "src": "<span class=\"lbl\">answers with</span>samples $y_k$, $F_k$, and a staircase command $u(t)$",
+  "tr": "<span class=\"lbl\">liefert</span>Abtastwerte $y_k$, $F_k$ und ein treppenförmiges Stellsignal $u(t)$"
+ },
+ "5a61f8aaa402": {
+  "src": "<span class=\"chn\">14</span> Operating points and linearization",
+  "tr": "<span class=\"chn\">14</span> Arbeitspunkte und Linearisierung"
+ },
+ "5acbc034a7a7": {
+  "src": "<span class=\"chn\">18</span> Is it stable? Closed loop, Nyquist, margins",
+  "tr": "<span class=\"chn\">18</span> Ist es stabil? Geschlossener Regelkreis, Nyquist, Reserven"
+ },
+ "5b7143c93280": {
+  "src": "load mass",
+  "tr": "Lastmasse"
+ },
+ "5c8ad1de5914": {
+  "src": "$K_L,\\ p_{\\mathrm{tr}}$",
+  "tr": "$K_L,\\ p_{\\mathrm{tr}}$"
+ },
+ "5d72e89f8aef": {
+  "src": "gravitational acceleration, 9.81 m/s²",
+  "tr": "Fallbeschleunigung, 9.81 m/s²"
+ },
+ "5e7d6efc9447": {
+  "src": "oil column height at rest, 0.40 m",
+  "tr": "Höhe der Ölsäule im Ruhezustand, 0.40 m"
+ },
+ "5ed584c16fc0": {
+  "src": "870 kg/m³, 32 mm²/s, 27.8 mPa·s",
+  "tr": "870 kg/m³, 32 mm²/s, 27.8 mPa·s"
+ },
+ "5edebf47dd3b": {
+  "src": "The closed loop amplifies by $1/(1 + L)$, so trouble comes when $L$ approaches $-1$: a signal returns inverted with the same size and reinforces itself. Nyquist's criterion makes this exact, and the reason is a fact about complex functions, the argument principle. The closed-loop poles are the values of $z$ where $1 + L(z) = 0$. Walk $z$ once around the unit circle and watch the complex number $1 + L(z)$. Each zero of $1 + L$ outside the circle, which is an unstable closed-loop pole, makes $1 + L$ wind once around the origin; each pole of $L$ outside the circle, an unstable open-loop pole, winds it once the other way. Winding $1 + L$ around 0 is the same as winding $L$ around $-1$. So plot $L(e^{j\\omega T_s})$ as $\\omega$ runs once around: the number of clockwise encirclements of $-1$ equals the number of unstable closed-loop poles minus the number of unstable open-loop poles. The integrators of our loops sit exactly on the unit circle, at $z = 1$, where $L$ is infinite, so the contour cannot pass through them: it steps around each on a small half-circle. Near $z = 1$, $L$ behaves like $c/(z - 1)$, and as $z$ goes round a half-circle of radius $\\varepsilon$, $L$ goes round a half-circle of radius $c/\\varepsilon$: that is the very large arc, and why the plotted curve comes in from infinity.",
+  "tr": "Der geschlossene Kreis verstärkt um $1/(1 + L)$; Schwierigkeiten entstehen also, wenn sich $L$ dem Wert $-1$ nähert: Ein Signal kommt invertiert mit gleicher Größe zurück und verstärkt sich selbst. Das Nyquist-Kriterium macht dies exakt, und der Grund ist eine Tatsache über komplexe Funktionen, das Argumentprinzip. Die Pole des geschlossenen Kreises sind die Werte von $z$, bei denen $1 + L(z) = 0$ gilt. Man lasse $z$ einmal um den Einheitskreis laufen und beobachte die komplexe Zahl $1 + L(z)$. Jede Nullstelle von $1 + L$ außerhalb des Kreises, also ein instabiler Pol des geschlossenen Kreises, lässt $1 + L$ einmal um den Ursprung laufen; jeder Pol von $L$ außerhalb des Kreises, also ein instabiler Pol des offenen Kreises, lässt sie einmal in der anderen Richtung laufen. Das Umlaufen von $1 + L$ um 0 ist dasselbe wie das Umlaufen von $L$ um $-1$. Man trägt also $L(e^{j\\omega T_s})$ auf, während $\\omega$ einmal durchläuft: Die Anzahl der Umläufe im Uhrzeigersinn um $-1$ ist gleich der Anzahl instabiler Pole des geschlossenen Kreises minus der Anzahl instabiler Pole des offenen Kreises. Die Integratoren unserer Kreise liegen genau auf dem Einheitskreis, bei $z = 1$, wo $L$ unendlich ist; daher kann die Kurve nicht durch sie hindurchgehen. Stattdessen umläuft sie jeden auf einem kleinen Halbkreis. In der Nähe von $z = 1$ verhält sich $L$ wie $c/(z - 1)$, und während $z$ einen Halbkreis mit Radius $\\varepsilon$ durchläuft, durchläuft $L$ einen Halbkreis mit Radius $c/\\varepsilon$: Das ist der sehr große Bogen und der Grund, warum die gezeichnete Kurve aus dem Unendlichen kommt."
+ },
+ "5f13b8685639": {
+  "src": "specimen damping, 5 % of critical",
+  "tr": "Dämpfung der Probe, 5 % der kritischen Dämpfung"
+ },
+ "61e573b3def1": {
+  "src": "The controller is a computer. It does not see the press continuously: it reads the sensors once a millisecond, computes, and writes one number to the valve, which then stays put until the next millisecond. Two blocks of the map do this, the sampler and the hold, and this chapter finds what they do to the loop.",
+  "tr": "Der Regler ist ein Rechner. Er sieht die Presse nicht kontinuierlich: Er liest die Sensoren einmal pro Millisekunde, rechnet und schreibt eine einzige Zahl an das Ventil, das daraufhin bis zur nächsten Millisekunde unverändert bleibt. Zwei Blöcke des Blockschaltbilds leisten das, der Abtaster und das Halteglied, und dieses Kapitel untersucht, was sie mit dem Regelkreis anstellen."
+ },
+ "6264827dca77": {
+  "src": "root regularization pressure, 0.1 MPa",
+  "tr": "Druck der Wurzelregularisierung, 0.1 MPa"
+ },
+ "6312380c511a": {
+  "src": "power dissipated as heat in the valve jets",
+  "tr": "als Wärme dissipierte Leistung in den Strömungsstrahlen des Ventils"
+ },
+ "631576d1507b": {
+  "src": "$g(\\Delta p)$",
+  "tr": "$g(\\Delta p)$"
+ },
+ "6344ebb989ac": {
+  "src": "SI unit",
+  "tr": "SI-Einheit"
+ },
+ "643d53e928bf": {
+  "src": "spool bandwidth and damping",
+  "tr": "Bandbreite und Dämpfung des Ventilschiebers"
+ },
+ "66cc9280b64d": {
+  "src": "So $z$ means “one sample later”, and $\\mathbf{x}_{k+1}$ becomes $z\\,\\mathbf{X}$. Then (16.1) gives $\\mathbf{x} = (zI - \\Phi)^{-1}\\Gamma u$ and the discrete transfer function from command to output is",
+  "tr": "Also bedeutet $z$ „eine Abtastung später“, und $\\mathbf{x}_{k+1}$ wird zu $z\\,\\mathbf{X}$. Dann liefert (16.1) $\\mathbf{x} = (zI - \\Phi)^{-1}\\Gamma u$, und die diskrete Übertragungsfunktion vom Stellsignal zum Ausgang lautet:"
+ },
+ "671dac9203b4": {
+  "src": "m³/(s·√Pa)",
+  "tr": "m³/(s·√Pa)"
+ },
+ "6741ee626394": {
+  "src": "bore, rod, stroke",
+  "tr": "Zylinderbohrung, Kolbenstange, Hub"
+ },
+ "69d53ed4d66b": {
+  "src": "gas-to-liquid volume ratio V<sub>g</sub>/V<sub>ℓ</sub> at pressure p",
+  "tr": "Verhältnis Gas- zu Flüssigkeitsvolumen V<sub>g</sub>/V<sub>ℓ</sub> bei dem Druck p"
+ },
+ "6ac936a49f62": {
+  "src": "$K_{iF}$",
+  "tr": "$K_{iF}$"
+ },
+ "6bfc1fa4c2f5": {
+  "src": "kinetic energy of the moving press",
+  "tr": "kinetische Energie der bewegten Presse"
+ },
+ "6ca9bfe38081": {
+  "src": "flow through the hose",
+  "tr": "Durchfluss durch den Schlauch"
+ },
+ "6ce5e08bdf3f": {
+  "src": "pressure downstream of the orifice, at the vena contracta",
+  "tr": "Druck stromabwärts der Blende, an der Vena contracta"
+ },
+ "6d016551f561": {
+  "src": "piston (ram) position, moving out at speed ẏ",
+  "tr": "Position des Kolbens (Stößels), ausfahrend mit der Geschwindigkeit ẏ"
+ },
+ "6d05ff48872f": {
+  "src": "liquid volume in the oil–air mixture",
+  "tr": "Flüssigkeitsvolumen im Öl-Luft-Gemisch"
+ },
+ "6d355b28577e": {
+  "src": "$\\mathrm{PM}$",
+  "tr": "$\\mathrm{PM}$"
+ },
+ "6d4c7a65bb2a": {
+  "src": "Read it as two pieces. The integrator $1/s$: a valve opening produces a flow, and a flow produces a speed, not a position. And a resonance at $\\omega_h$: the ram bouncing on the oil springs of its two chambers. The oil spring can be derived directly, which also handles the differential cylinder of the press, whose two chambers differ. Close both ports and push the ram up by a small $\\delta y$. The cap chamber grows by $A_A\\delta y$, and by (7.1) its pressure falls by $\\beta_A A_A\\delta y/V_A$; the force on the ram falls by $A_A$ times that. The rod chamber shrinks by $A_B\\delta y$; its pressure rises by $\\beta_B A_B\\delta y/V_B$ and pushes down on the annulus $A_B$. Both changes oppose the push, so the two chambers are springs in parallel:",
+  "tr": "Wir lesen es als zwei Teile. Der Integrator $1/s$: Das Öffnen des Ventils erzeugt einen Volumenstrom, und ein Volumenstrom erzeugt eine Geschwindigkeit, nicht eine Position. Und eine Resonanz bei $\\omega_h$: Der Stößel schwingt auf den Ölfedern seiner beiden Kammern. Die Ölfeder lässt sich direkt herleiten, was auch den Differentialzylinder der Presse erfasst, dessen beide Kammern verschieden sind. Wir schließen beide Anschlüsse und drücken den Stößel um ein kleines $\\delta y$ nach oben. Die Kolbenbodenkammer wächst um $A_A\\delta y$, und nach (7.1) fällt ihr Druck um $\\beta_A A_A\\delta y/V_A$; die Kraft auf den Stößel sinkt um $A_A$ mal dies. Die Stangenkammer schrumpft um $A_B\\delta y$; ihr Druck steigt um $\\beta_B A_B\\delta y/V_B$ und drückt auf die Ringfläche $A_B$ nach unten. Beide Änderungen wirken der Verschiebung entgegen, also wirken die beiden Kammern als parallel geschaltete Federn:"
+ },
+ "6da368c94097": {
+  "src": "velocity gain, ram speed per metre of position error",
+  "tr": "Geschwindigkeitsverstärkung, Stößelgeschwindigkeit je Meter Lagefehler"
+ },
+ "6e20f6b44405": {
+  "src": "14.3 Transfer functions in one page",
+  "tr": "14.3 Übertragungsfunktionen auf einer Seite"
+ },
+ "6e61ab6a0cce": {
+  "src": "Insert into $(ms^2 + bs)Y = A P_L$ and clear the fraction by multiplying both sides by $K_{ce} + V_t s/(4\\beta)$:",
+  "tr": "Wir setzen dies in $(ms^2 + bs)Y = A P_L$ ein und beseitigen den Bruch, indem wir beide Seiten mit $K_{ce} + V_t s/(4\\beta)$ multiplizieren:"
+ },
+ "6f410b47568c": {
+  "src": "inertance of the oil slug in the hose, ρL<sub>h</sub>/A<sub>h</sub>",
+  "tr": "hydraulische Trägheit der Ölsäule im Schlauch, ρL<sub>h</sub>/A<sub>h</sub>"
+ },
+ "6f96af45bdd3": {
+  "src": "<div class=\"ctag\">In our press</div>The fastest mode of the servo model is the small valve-port volume charged through a wide-open valve while the pressure drop across it is small, where the rounded orifice law (8.3) is steepest: $\\lambda \\approx \\beta K_v/(V_a\\sqrt{p_{\\mathrm{tr}}}) \\approx 1.6\\times10^4\\ \\mathrm{s^{-1}}$. With $h = 10^{-5}$ s, $\\lambda h \\approx 0.16$, far inside the stable region. Stops are located inside a step by bisection on the step length, to $10^{-12}$ s.",
+  "tr": "<div class=\"ctag\">In unserer Presse</div>Die schnellste Eigenbewegung des Servomodells ist das kleine Volumen am Ventilanschluss, das über ein weit geöffnetes Ventil aufgeladen wird, während der Druckabfall darüber klein ist, also dort, wo das abgerundete Blendengesetz (8.3) am steilsten ist: $\\lambda \\approx \\beta K_v/(V_a\\sqrt{p_{\\mathrm{tr}}}) \\approx 1.6\\times10^4\\ \\mathrm{s^{-1}}$. Mit $h = 10^{-5}$ s ist $\\lambda h \\approx 0.16$, weit im stabilen Bereich. Die Anschläge werden innerhalb eines Schritts durch Bisektion der Schrittlänge auf $10^{-12}$ s genau bestimmt."
+ },
+ "703714781829": {
+  "src": "$Q_{\\mathrm{in}}$",
+  "tr": "$Q_{\\mathrm{in}}$"
+ },
+ "703b3b3404e9": {
+  "src": "Geometry and fluid",
+  "tr": "Geometrie und Fluid"
+ },
+ "704fa6172e6e": {
+  "src": "whose error is of order $h^2$; the check script compares them with exact symbolic derivatives and finds agreement to $10^{-9}$ or better.",
+  "tr": "deren Fehler von der Ordnung $h^2$ ist; das Prüfskript vergleicht sie mit exakten symbolischen Ableitungen und findet Übereinstimmung bis auf $10^{-9}$ oder besser."
+ },
+ "70a4a551dc4c": {
+  "src": "Starting from rest, $x(0) = 0$, every time derivative becomes a multiplication by $s$. A set of linear differential equations becomes a set of algebraic ones, which can be solved for the output in terms of the input. The ratio is the <b>transfer function</b>: for $\\delta\\dot{\\mathbf{x}} = A\\delta\\mathbf{x} + B\\delta u$ and $\\delta y = C\\delta\\mathbf{x}$, $s\\mathbf{X} = A\\mathbf{X} + BU$ gives",
+  "tr": "Ausgehend von der Ruhe, $x(0) = 0$, wird jede Zeitableitung zu einer Multiplikation mit $s$. Ein System linearer Differentialgleichungen wird so zu einem algebraischen Gleichungssystem, das sich nach dem Ausgang in Abhängigkeit vom Eingang auflösen lässt. Das Verhältnis ist die <b>Übertragungsfunktion</b>: Für $\\delta\\dot{\\mathbf{x}} = A\\delta\\mathbf{x} + B\\delta u$ und $\\delta y = C\\delta\\mathbf{x}$ ergibt $s\\mathbf{X} = A\\mathbf{X} + BU$:"
+ },
+ "71054f128f04": {
+  "src": "height of the right oil column, H<sub>0</sub> + rx",
+  "tr": "Höhe der rechten Ölsäule, H<sub>0</sub> + rx"
+ },
+ "720a8feb0370": {
+  "src": "discrete input matrix, ∫ e^{Aσ} dσ B",
+  "tr": "diskrete Eingangsmatrix, ∫ e^{Aσ} dσ B"
+ },
+ "725bd8d198ed": {
+  "src": "At an operating point $\\mathbf{f}(\\mathbf{x}_0,u_0)$ is zero, apart from the constant drift $v_0$ in the position row, which does not affect the deviations. What remains is a linear system $\\delta\\dot{\\mathbf{x}} = A\\,\\delta\\mathbf{x} + B\\,\\delta u$ with an output $\\delta y_{\\mathrm{out}} = C\\,\\delta\\mathbf{x}$: $C$ is a row of eight numbers. For the position loop it has a 1 in the $y$ column and zeros elsewhere; for the force loop, whose output is the specimen force $k_w\\,\\delta y + c_w\\,\\delta\\dot{y}$, it has $k_w$ in the $y$ column and $c_w$ in the $\\dot{y}$ column. The page computes $A$ and $B$ by central differences,",
+  "tr": "Bei einem Arbeitspunkt ist $\\mathbf{f}(\\mathbf{x}_0,u_0)$ null, abgesehen von der konstanten Drift $v_0$ in der Positionszeile, die die Abweichungen nicht beeinflusst. Übrig bleibt ein lineares System $\\delta\\dot{\\mathbf{x}} = A\\,\\delta\\mathbf{x} + B\\,\\delta u$ mit einem Ausgang $\\delta y_{\\mathrm{out}} = C\\,\\delta\\mathbf{x}$: $C$ ist eine Zeile aus acht Zahlen. Für den Lageregelkreis hat sie eine 1 in der $y$-Spalte und überall sonst Nullen; für den Kraftregelkreis, dessen Ausgang die Probenkraft $k_w\\,\\delta y + c_w\\,\\delta\\dot{y}$ ist, hat sie $k_w$ in der $y$-Spalte und $c_w$ in der $\\dot{y}$-Spalte. Die Seite berechnet $A$ und $B$ durch zentrale Differenzen,"
+ },
+ "72fd7572d422": {
+  "src": "absolute pressure, p + p<sub>0</sub>",
+  "tr": "Absolutdruck, p + p<sub>0</sub>"
+ },
+ "73f7f4c0c5f0": {
+  "src": "pipe length, 0.8 m",
+  "tr": "Rohrlänge, 0.8 m"
+ },
+ "741cfaadf254": {
+  "src": "load pressure, p<sub>1</sub> − p<sub>2</sub>",
+  "tr": "Lastdruck, p<sub>1</sub> − p<sub>2</sub>"
+ },
+ "7434b503d463": {
+  "src": "flow drawn from the pump",
+  "tr": "von der Pumpe entnommener Volumenstrom"
+ },
+ "744bd73d8b5a": {
+  "src": "atmospheric pressure, 101.325 kPa",
+  "tr": "Atmosphärendruck, 101.325 kPa"
+ },
+ "74af60d45ac3": {
+  "src": "Feedback corrects errors after they appear. If the controller knows the speed it is asking for, it can open the valve by the right amount in advance. From (8.2), a spool opening $\\hat{x}$ against roughly half the supply pressure produces a flow $K_v\\hat{x}\\sqrt{p_s/2}$ and a speed $K_v\\hat{x}\\sqrt{p_s/2}/A_A$. Inverting:",
+  "tr": "Die Rückkopplung korrigiert Fehler, nachdem sie aufgetreten sind. Kennt der Regler die verlangte Geschwindigkeit, kann er das Ventil im Voraus um den richtigen Betrag öffnen. Aus (8.2) folgt: Eine Schieberöffnung $\\hat{x}$ bei etwa halbem Versorgungsdruck erzeugt einen Volumenstrom $K_v\\hat{x}\\sqrt{p_s/2}$ und eine Geschwindigkeit $K_v\\hat{x}\\sqrt{p_s/2}/A_A$. Umgekehrt aufgelöst:"
+ },
+ "74d69eb4b344": {
+  "src": "area of the output piston",
+  "tr": "Fläche des Ausgangskolbens"
+ },
+ "75804bd4e027": {
+  "src": "<span class=\"chn\">20</span> How the computer solves it",
+  "tr": "<span class=\"chn\">20</span> Wie der Rechner es löst"
+ },
+ "75e741031e05": {
+  "src": "normalized spool position, positive opens P to A",
+  "tr": "normierte Ventilschieberlage, positiv öffnet P nach A"
+ },
+ "7606fa7cba4f": {
+  "src": "pressure upstream of the orifice",
+  "tr": "Druck stromaufwärts der Blende"
+ },
+ "772068842744": {
+  "src": "$p_{\\mathrm{tr}}$",
+  "tr": "$p_{\\mathrm{tr}}$"
+ },
+ "774f32899017": {
+  "src": "oil density, 870 kg/m³ (constant, incompressible at first)",
+  "tr": "Öldichte, 870 kg/m³ (zunächst konstant und inkompressibel)"
+ },
+ "77904f139cf1": {
+  "src": "150, 300, 200 cm³",
+  "tr": "150, 300, 200 cm³"
+ },
+ "77ebbccc1c4e": {
+  "src": "It is a negative real number: at the resonance the signal comes back exactly inverted. Chapter 18 shows that the loop goes unstable when such a signal comes back larger than it left, $|L| &gt; 1$, which is the rule. Worked solution 9 on the Servo-Hydraulic Press page shows why the real limit is lower: the valve’s own lag and the sampling delay add phase, so the inversion happens below $\\omega_h$, where the gain is larger.",
+  "tr": "Das ist eine negative reelle Zahl: Bei der Resonanz kehrt das Signal genau invertiert zurück. Kapitel 18 zeigt, dass der Regelkreis instabil wird, wenn ein solches Signal größer zurückkommt, als es losgegangen ist, $|L| &gt; 1$; daraus folgt die Regel. Musterlösung 9 auf der Seite Servohydraulische Presse zeigt, warum die reale Grenze tiefer liegt: Die eigene Verzögerung des Ventils und die Abtastverzögerung bringen zusätzliche Phase, sodass die Umkehr unterhalb von $\\omega_h$ geschieht, wo die Verstärkung größer ist."
+ },
+ "77ef85f4b883": {
+  "src": "Coulomb friction, break-away factor, viscous",
+  "tr": "Coulomb-Reibung, Losbrechfaktor, viskose Reibung"
+ },
+ "78dd59a0ca2c": {
+  "src": "<div class=\"ctag\">In our press</div>Position loop: 64.0° and 11.0 dB, crossover 9.7 Hz. Force loop: 49.5° and 10.6 dB, crossover 9.2 Hz. Raise the position gain to 90 %/mm and the closed-loop poles leave the unit circle.",
+  "tr": "<div class=\"ctag\">In unserer Presse</div>Lageregelkreis: 64.0° und 11.0 dB, Durchtrittsfrequenz 9.7 Hz. Kraftregelkreis: 49.5° und 10.6 dB, Durchtrittsfrequenz 9.2 Hz. Erhöht man die Lageverstärkung auf 90 %/mm, verlassen die Pole des geschlossenen Kreises den Einheitskreis."
+ },
+ "7c8481ef116e": {
+  "src": "2.0 m, 12 mm",
+  "tr": "2.0 m, 12 mm"
+ },
+ "7c9f105f0b85": {
+  "src": "Multiply the port-volume equation of (12.1) by $p_a$, the hose equation (11.1) by $Q_h$, and the two chamber equations of (12.1) by $p_A$ and $p_B$. With $I\\dot{Q}_hQ_h = \\frac{d}{dt}\\left(\\tfrac12 IQ_h^2\\right)$:",
+  "tr": "Wir multiplizieren die Gleichung des Anschlussvolumens aus (12.1) mit $p_a$, die Schlauchgleichung (11.1) mit $Q_h$ und die beiden Kammergleichungen aus (12.1) mit $p_A$ und $p_B$. Mit $I\\dot{Q}_hQ_h = \\frac{d}{dt}\\left(\\tfrac12 IQ_h^2\\right)$:"
+ },
+ "7df422c95e19": {
+  "src": "m³/(s·Pa)",
+  "tr": "m³/(s·Pa)"
+ },
+ "7fbc7d93b12e": {
+  "src": "120 mm, 20 MN/m",
+  "tr": "120 mm, 20 MN/m"
+ },
+ "802795d34e1f": {
+  "src": "m³/Pa",
+  "tr": "m³/Pa"
+ },
+ "803c55570579": {
+  "src": "25 %/mm, 125 %/(mm·s), 0",
+  "tr": "25 %/mm, 125 %/(mm·s), 0"
+ },
+ "805714bc21aa": {
+  "src": "The last term $bK_{ce}/A^2$ is tiny in practice: friction times leakage, both small. Dropping it, $N(s)$ is a quadratic with constant term 1. Write any such quadratic in the standard form of a damped oscillator, $s^2/\\omega_h^2 + 2\\zeta_h s/\\omega_h + 1$, and compare coefficients. The $s^2$ terms give $1/\\omega_h^2 = V_tm/(4\\beta A^2)$. The $s$ terms give",
+  "tr": "Der letzte Term $bK_{ce}/A^2$ ist in der Praxis winzig: Reibung mal Leckage, beide klein. Lässt man ihn weg, so ist $N(s)$ ein quadratisches Polynom mit dem konstanten Term 1. Schreibt man ein solches quadratisches Polynom in der Normalform eines gedämpften Schwingers, $s^2/\\omega_h^2 + 2\\zeta_h s/\\omega_h + 1$, und vergleicht die Koeffizienten. Die $s^2$-Terme liefern $1/\\omega_h^2 = V_tm/(4\\beta A^2)$. Die $s$-Terme liefern"
+ },
+ "808759caa013": {
+  "src": "seal friction force",
+  "tr": "Reibungskraft der Dichtungen"
+ },
+ "80c2eb2efeaf": {
+  "src": "<span class=\"lbl\">given</span>the set-point and the latest measurement, once a sample",
+  "tr": "<span class=\"lbl\">gegeben</span>der Sollwert und der jeweils letzte Messwert, bei jeder Abtastung"
+ },
+ "810a25d76c31": {
+  "src": "symbol",
+  "tr": "Symbol"
+ },
+ "833985197a32": {
+  "src": "force on the output piston",
+  "tr": "Kraft auf den Ausgangskolben"
+ },
+ "835503052f9b": {
+  "src": "$K_{\\mathrm{coil}},\\ b_s,\\ m_s$",
+  "tr": "$K_{\\mathrm{coil}},\\ b_s,\\ m_s$"
+ },
+ "837547c663d6": {
+  "src": "specimen stiffness, 20 MN/m",
+  "tr": "Steifigkeit der Probe, 20 MN/m"
+ },
+ "8694fcc46044": {
+  "src": "Write $\\mathbf{x} = \\mathbf{x}_0 + \\delta\\mathbf{x}$ and $u = u_0 + \\delta u$, and expand $\\mathbf{f}$ to first order in a Taylor series:",
+  "tr": "Wir setzen $\\mathbf{x} = \\mathbf{x}_0 + \\delta\\mathbf{x}$ und $u = u_0 + \\delta u$ und entwickeln $\\mathbf{f}$ bis zur ersten Ordnung in eine Taylor-Reihe:"
+ },
+ "87334fd5dd7b": {
+  "src": "A digital controller sees the plant only at the sampling instants $t_k = kT_s$ and holds its command constant in between (a <i>zero-order hold</i>). For a linear system we can then step from one sample to the next exactly. Multiply $\\dot{\\mathbf{x}} = A\\mathbf{x} + B u$ by the integrating factor $e^{-At}$:",
+  "tr": "Ein digitaler Regler sieht die Strecke nur zu den Abtastzeitpunkten $t_k = kT_s$ und hält sein Stellsignal dazwischen konstant (ein <i>Halteglied nullter Ordnung</i>). Für ein lineares System können wir dann exakt von einer Abtastung zur nächsten übergehen. Wir multiplizieren $\\dot{\\mathbf{x}} = A\\mathbf{x} + B u$ mit dem integrierenden Faktor $e^{-At}$:"
+ },
+ "874a9d5bbf8d": {
+  "src": "Trust, but verify. Each page has an independent Python script that re-derives the equations with SymPy, recomputes the matrices with SciPy and NumPy, re-integrates the full nonlinear motion with SciPy's adaptive DOP853 integrator, and compares everything with the page, sample by sample.",
+  "tr": "Vertrauen ist gut, nachprüfen ist besser. Jede Seite hat ein unabhängiges Python-Skript, das die Gleichungen mit SymPy neu herleitet, die Matrizen mit SciPy und NumPy neu berechnet, die vollständige nichtlineare Bewegung mit dem adaptiven Integrator DOP853 von SciPy erneut integriert und alles mit der Seite vergleicht, Abtastwert für Abtastwert."
+ },
+ "891a1c189682": {
+  "src": "leakage flow through the clearance gap (reused as load flow in ch. 15)",
+  "tr": "Leckagestrom durch den Spalt (in Kap. 15 als Lastvolumenstrom wiederverwendet)"
+ },
+ "8a0c3f145061": {
+  "src": "integral state of the force law, loaded with the last command at the switch",
+  "tr": "Integralzustand des Kraftgesetzes, beim Umschalten mit dem letzten Stellsignal vorbelegt"
+ },
+ "8aa2a716b225": {
+  "src": "The bracket is $0 - x(0)$: at the upper limit $x\\,e^{-st} \\to 0$ for any $s$ with a large enough real part, which is the condition under which the transform exists at all.",
+  "tr": "Die Klammer ist $0 - x(0)$: An der oberen Grenze gilt $x\\,e^{-st} \\to 0$ für jedes $s$ mit hinreichend großem Realteil; das ist die Bedingung, unter der die Transformation überhaupt existiert."
+ },
+ "8b17221914b9": {
+  "src": "area of the input piston",
+  "tr": "Fläche des Eingangskolbens"
+ },
+ "8c1b888e1de1": {
+  "src": "<span class=\"chn\">A</span> Parameters of the servo press",
+  "tr": "<span class=\"chn\">A</span> Parameter der Servopresse"
+ },
+ "8cb696ca2ab2": {
+  "src": "A continuous PID controller acts on the error $e = y_{\\mathrm{ref}} - y$ as $u = K_p e + K_i\\int e\\,dt + K_d\\,\\dot{e}$. Each term has a job. The <b>proportional</b> term pushes harder the further the ram is from where it should be. The <b>integral</b> term remembers: a steady load, such as the ram’s weight, needs a steady command, and a proportional term can only supply it if a steady error is left over; the integral keeps growing until that error is gone, because only then does it stop changing. The <b>derivative</b> term looks ahead: it brakes when the error is closing fast. In a computer the integral becomes a running sum. The <i>backward Euler</i> rule approximates $\\int_0^{t_k} e\\,dt$ by adding $T_s e_k$ each sample:",
+  "tr": "Ein kontinuierlicher PID-Regler wirkt auf die Regelabweichung $e = y_{\\mathrm{ref}} - y$ gemäß $u = K_p e + K_i\\int e\\,dt + K_d\\,\\dot{e}$. Jeder Term hat eine Aufgabe. Der <b>Proportionalanteil</b> drückt umso stärker, je weiter der Stößel von seiner Sollposition entfernt ist. Der <b>Integralanteil</b> erinnert sich: Eine konstante Last, etwa das Gewicht des Stößels, braucht ein konstantes Stellsignal, und ein Proportionalanteil kann es nur liefern, wenn ein bleibender Fehler übrig ist; der Integralanteil wächst so lange, bis dieser Fehler verschwunden ist, denn erst dann hört er auf, sich zu ändern. Der <b>Differentialanteil</b> schaut voraus: Er bremst, wenn sich der Fehler schnell schließt. Im Rechner wird das Integral zu einer laufenden Summe. Das <i>implizite Euler-Verfahren</i> nähert $\\int_0^{t_k} e\\,dt$ an, indem es bei jeder Abtastung $T_s e_k$ addiert:"
+ },
+ "8cd3caeb8486": {
+  "src": "discrete loop gain, K(z) z^{-1} G(z)",
+  "tr": "diskrete Schleifenverstärkung, K(z) z^{-1} G(z)"
+ },
+ "8e51d5126350": {
+  "src": "hydraulic capacitance, V/β (same symbol as output matrix C in ch. 14)",
+  "tr": "hydraulische Kapazität, V/β (dasselbe Symbol wie die Ausgangsmatrix C in Kap. 14)"
+ },
+ "8eba85d44be0": {
+  "src": "write a discrete PID with filter, anti-windup and bumpless transfer (17.1)–(17.4), close the loop (18.1) and read its margins.",
+  "tr": "einen diskreten PID-Regler mit Filter, Anti-Windup und stoßfreiem Übergang schreiben (17.1)–(17.4), den Regelkreis schließen (18.1) und seine Reserven ablesen."
+ },
+ "913e49ea63c6": {
+  "src": "$\\Gamma$",
+  "tr": "$\\Gamma$"
+ },
+ "92d1f122ed8a": {
+  "src": "The transfer function follows from the shift rule: $I_{k-1}$ transforms to $z^{-1}I(z)$, so $I(z)(1 - z^{-1}) = K_iT_s\\,E(z)$, and multiplying top and bottom by $z$ gives (17.1). Its pole at $z = 1$ is the discrete image of the integrator’s pole at $s = 0$.",
+  "tr": "Die Übertragungsfunktion folgt aus der Verschiebungsregel: $I_{k-1}$ transformiert sich zu $z^{-1}I(z)$, also $I(z)(1 - z^{-1}) = K_iT_s\\,E(z)$. Multipliziert man Zähler und Nenner mit $z$, ergibt sich (17.1). Der Pol bei $z = 1$ ist das diskrete Gegenstück zum Integratorpol bei $s = 0$."
+ },
+ "93af770ae1ca": {
+  "src": "discharge coefficient, about 0.6 to 0.7",
+  "tr": "Durchflussbeiwert, etwa 0.6 bis 0.7"
+ },
+ "94b5284d8e74": {
+  "src": "$\\zeta_v$",
+  "tr": "$\\zeta_v$"
+ },
+ "95ccc6dd0cd4": {
+  "src": "hose length",
+  "tr": "Schlauchlänge"
+ },
+ "971f06accedb": {
+  "src": "discretize a plant exactly with a zero-order hold (16.1) and count the phase cost of sampling (16.5);",
+  "tr": "eine Strecke mit einem Halteglied nullter Ordnung exakt diskretisieren (16.1) und den Phasenverlust durch die Abtastung (16.5) beziffern;"
+ },
+ "9792a85e029d": {
+  "src": "position integral gain",
+  "tr": "Integralverstärkung der Lageregelung"
+ },
+ "97aaf5bb4065": {
+  "src": "Hz",
+  "tr": "Hz"
+ },
+ "9977ecce7d2a": {
+  "src": "Integrate from $t_k$ to $t_{k+1} = t_k + T_s$, with $u = u_k$ constant, and substitute $\\sigma = t_{k+1} - \\tau$:",
+  "tr": "Wir integrieren von $t_k$ bis $t_{k+1} = t_k + T_s$, mit $u = u_k$ konstant, und setzen $\\sigma = t_{k+1} - \\tau$:"
+ },
+ "99932ec51271": {
+  "src": "Cross-multiply, $\\left[(T_f + T_s)\\,z - T_f\\right]D(z) = K_d\\,(z - 1)\\,E(z)$, and read a factor $z$ as one step ahead in time: $(T_f + T_s)\\,D_{k+1} - T_f\\,D_k = K_d\\,(e_{k+1} - e_k)$. Shift every index down by one and solve for $D_k$. In the time domain this is the line the page runs:",
+  "tr": "Über Kreuz multipliziert ergibt sich $\\left[(T_f + T_s)\\,z - T_f\\right]D(z) = K_d\\,(z - 1)\\,E(z)$, und einen Faktor $z$ liest man als einen Schritt in die Zukunft: $(T_f + T_s)\\,D_{k+1} - T_f\\,D_k = K_d\\,(e_{k+1} - e_k)$. Wir verschieben jeden Index um eins nach unten und lösen nach $D_k$ auf. Im Zeitbereich ist dies die Codezeile, die die Seite ausführt:"
+ },
+ "9adb13dc180b": {
+  "src": "turbulent friction factor, fitting losses",
+  "tr": "Reibungszahl der turbulenten Strömung, Armaturenverluste"
+ },
+ "9be684790107": {
+  "src": "oil density, kinematic and dynamic viscosity",
+  "tr": "Dichte des Öls, kinematische und dynamische Viskosität"
+ },
+ "9cd576a2999e": {
+  "src": "supply pressure from the pump, at port P",
+  "tr": "Versorgungsdruck von der Pumpe, am Anschluss P"
+ },
+ "9ceaaa4c7e34": {
+  "src": "Every symbol in order of first appearance, grouped by topic, with its SI unit and the chapter that defines it (the number links there). Matrix symbols of the state-space chapters carry mixed units and show “?”. A few letters serve twice; the meaning column says where.",
+  "tr": "Jedes Symbol in der Reihenfolge seines ersten Auftretens, nach Themen gruppiert, mit seiner SI-Einheit und dem Kapitel, in dem es definiert wird (die Nummer führt dorthin). Die Matrixsymbole der Zustandsraum-Kapitel tragen gemischte Einheiten und zeigen „?“. Einige Buchstaben werden zweimal verwendet; die Spalte Bedeutung gibt an, wo."
+ },
+ "9df029e3894c": {
+  "src": "valve flow coefficient, Q = K<sub>v</sub> x̂ √Δp",
+  "tr": "Durchflusskoeffizient des Ventils, Q = K<sub>v</sub> x̂ √Δp"
+ },
+ "9ecec2c846a5": {
+  "src": "smoothing speed, Stribeck speed",
+  "tr": "Glättungsgeschwindigkeit, Stribeck-Geschwindigkeit"
+ },
+ "9f18cc24197a": {
+  "src": "Why does the corner hold $\\Gamma$? Powers of the block-triangular $M$ keep its shape: $M^n = \\begin{bmatrix}A^n & A^{n-1}B\\\\ 0 & 0\\end{bmatrix}$ for $n \\ge 1$. Summing the exponential series term by term, the top-right block is",
+  "tr": "Warum steht $\\Gamma$ in der oberen rechten Ecke? Die Potenzen der blockdreiecksförmigen $M$ behalten ihre Form bei: $M^n = \\begin{bmatrix}A^n & A^{n-1}B\\\\ 0 & 0\\end{bmatrix}$ für $n \\ge 1$. Summiert man die Exponentialreihe Glied für Glied, so ist der rechte obere Block"
+ },
+ "a1375f782ce1": {
+  "src": "rod-side annulus area",
+  "tr": "Ringfläche auf der Stangenseite"
+ },
+ "a1b7eaaee3cb": {
+  "src": "mass of the input piston",
+  "tr": "Masse des Eingangskolbens"
+ },
+ "a4223ebb8c81": {
+  "src": "rad/s",
+  "tr": "rad/s"
+ },
+ "a47e350a1384": {
+  "src": "The position controller is the sum of the three parts, and the force controller is a PI:",
+  "tr": "Der Lageregler ist die Summe der drei Anteile, und der Kraftregler ist ein PI-Regler:"
+ },
+ "a5e4fdb26227": {
+  "src": "F. M. White, <i>Fluid Mechanics</i>, McGraw-Hill: Bernoulli, pipe friction, orifices.",
+  "tr": "F. M. White, <i>Fluid Mechanics</i>, McGraw-Hill: Bernoulli, Rohrreibung, Blenden."
+ },
+ "a6768dcb7ec1": {
+  "src": "$F_{1,\\min}$",
+  "tr": "$F_{1,\\min}$"
+ },
+ "a6c2e25c9359": {
+  "src": "18.2 The loop gain and the Nyquist plot",
+  "tr": "18.2 Die Kreisverstärkung und das Nyquist-Diagramm"
+ },
+ "a7e3dad3bb13": {
+  "src": "N/A, N·s/m, kg",
+  "tr": "N/A, N·s/m, kg"
+ },
+ "a8179b9b9b3f": {
+  "src": "1.5 %/kN, 10 %/(kN·s)",
+  "tr": "1.5 %/kN, 10 %/(kN·s)"
+ },
+ "a846a87dc616": {
+  "src": "160 kg",
+  "tr": "160 kg"
+ },
+ "ab635ffb0bc3": {
+  "src": "$f_v,\\ \\zeta_v$",
+  "tr": "$f_v,\\ \\zeta_v$"
+ },
+ "abd78ddb9559": {
+  "src": "bulk modulus of the oil alone",
+  "tr": "Kompressionsmodul des reinen Öls"
+ },
+ "abe164fb9051": {
+  "src": "flow gain, partial of Q<sub>A</sub> with respect to x<sub>v</sub>",
+  "tr": "Durchflussverstärkung, partielle Ableitung von Q<sub>A</sub> nach x<sub>v</sub>"
+ },
+ "ac339b37813e": {
+  "src": "$k_{\\mathrm{st}}$",
+  "tr": "$k_{\\mathrm{st}}$"
+ },
+ "ad093fc86b01": {
+  "src": "derive the valve-controlled cylinder transfer function (15.4) and the rule of thumb it implies;",
+  "tr": "die Übertragungsfunktion des ventilgesteuerten Zylinders (15.4) herleiten und die Faustregel ableiten, die daraus folgt;"
+ },
+ "ad5645b20401": {
+  "src": "position proportional gain",
+  "tr": "Proportionalverstärkung der Lageregelung"
+ },
+ "af92fd5e956b": {
+  "src": "H. E. Merritt, <i>Hydraulic Control Systems</i>, Wiley, 1967: the classic source of chapter 15.",
+  "tr": "H. E. Merritt, <i>Hydraulic Control Systems</i>, Wiley, 1967: die klassische Quelle zu Kapitel 15."
+ },
+ "b01c0ae8a286": {
+  "src": "Before trusting a computer with an eight-state model, it pays to derive the textbook three-state version by hand. Take a symmetric cylinder of area $A$ (in this chapter $A$ is a piston area, not the matrix of chapter 14) with equal chamber volumes $V_t/2$, no hose, a symmetric valve, and define the load pressure $p_L = p_1 - p_2$ and the load flow $Q_L = (Q_1 + Q_2)/2$, where $Q_1$ flows into chamber 1 and $Q_2$ out of chamber 2. These two combinations are chosen because they are what the piston feels: the net force on it is $Ap_L$, and in steady motion $Q_L$ is exactly the flow that moves it. Linearized as in (9.3), the valve gives",
+  "tr": "Bevor man einem Rechner ein Modell mit acht Zuständen anvertraut, lohnt es sich, die Lehrbuchversion mit drei Zuständen von Hand herzuleiten. Wir betrachten einen symmetrischen Zylinder mit der Fläche $A$ (in diesem Kapitel ist $A$ eine Kolbenfläche und nicht die Matrix aus Kapitel 14) mit gleichen Kammervolumina $V_t/2$, ohne Schlauch und mit einem symmetrischen Ventil, und wir definieren den Lastdruck $p_L = p_1 - p_2$ und den Lastvolumenstrom $Q_L = (Q_1 + Q_2)/2$, wobei $Q_1$ in Kammer 1 hineinfließt und $Q_2$ aus Kammer 2 herausfließt. Diese beiden Kombinationen werden gewählt, weil sie das sind, was der Kolben spürt: Die resultierende Kraft auf ihn ist $Ap_L$, und bei stationärer Bewegung ist $Q_L$ genau der Volumenstrom, der ihn bewegt. Linearisiert wie in (9.3) liefert das Ventil:"
+ },
+ "b1b4dd69b3c2": {
+  "src": "gas volume in the oil–air mixture",
+  "tr": "Gasvolumen im Öl-Luft-Gemisch"
+ },
+ "b271df55dc4d": {
+  "src": "kinematic viscosity of the oil",
+  "tr": "kinematische Viskosität des Öls"
+ },
+ "b2930e610d71": {
+  "src": "Cut the loop at the controller output and follow a sinusoid around it: through the delay $z^{-1}$, the plant $G(z)$ and the controller $K(z)$. The ratio of what comes back to what went in is the <i>loop gain</i>",
+  "tr": "Man öffne den Regelkreis am Reglerausgang und verfolge eine Sinusschwingung einmal um ihn herum: über die Verzögerung $z^{-1}$, die Strecke $G(z)$ und den Regler $K(z)$. Das Verhältnis dessen, was zurückkommt, zu dem, was hineingegeben wurde, ist die <i>Kreisverstärkung</i>"
+ },
+ "b2ebc24b0de6": {
+  "src": "The local error is of order $h^5$ and the global error of order $h^4$: halving the step cuts the error sixteen-fold. To see what that means, apply one step to the test equation $\\dot{x} = \\lambda x$, whose exact solution grows by $e^{\\lambda h}$ per step. Writing $z = \\lambda h$: $\\mathbf{k}_1 = \\lambda x$, $\\mathbf{k}_2 = \\lambda x(1 + z/2)$, $\\mathbf{k}_3 = \\lambda x(1 + z/2 + z^2/4)$, $\\mathbf{k}_4 = \\lambda x(1 + z + z^2/2 + z^3/4)$. The weighted average multiplies $x$ by",
+  "tr": "Der lokale Fehler ist von der Ordnung $h^5$ und der globale von der Ordnung $h^4$: Halbiert man die Schrittweite, so verringert sich der Fehler um den Faktor sechzehn. Um zu sehen, was das bedeutet, wenden wir einen Schritt auf die Testgleichung $\\dot{x} = \\lambda x$ an, deren exakte Lösung pro Schritt um den Faktor $e^{\\lambda h}$ wächst. Mit $z = \\lambda h$: $\\mathbf{k}_1 = \\lambda x$, $\\mathbf{k}_2 = \\lambda x(1 + z/2)$, $\\mathbf{k}_3 = \\lambda x(1 + z/2 + z^2/4)$, $\\mathbf{k}_4 = \\lambda x(1 + z + z^2/2 + z^3/4)$. Das gewichtete Mittel multipliziert $x$ mit"
+ },
+ "b32badf4e294": {
+  "src": "$\\rho,\\ \\nu,\\ \\eta = \\rho\\nu$",
+  "tr": "$\\rho,\\ \\nu,\\ \\eta = \\rho\\nu$"
+ },
+ "b334d2e0331b": {
+  "src": "spool damping ratio",
+  "tr": "Dämpfungsgrad des Ventilschiebers"
+ },
+ "b372cf35545c": {
+  "src": "A small state machine decides which law runs: <i>settle</i> holds position for 0.1 s; <i>approach</i> follows a quintic profile, $s(\\tau) = 10\\tau^3 - 15\\tau^4 + 6\\tau^5$, whose speed and acceleration are zero at both ends; <i>creep</i> rises at 10 mm/s until the load cell (the force sensor above the specimen) reads more than 1 kN; <i>press</i> ramps the force to its target and holds it; <i>release</i> ramps it down; <i>retract</i> returns on another quintic; <i>done</i> holds.",
+  "tr": "Eine kleine Zustandsmaschine entscheidet, welches Gesetz läuft: <i>Einschwingen</i> hält die Position 0.1 s lang; <i>Anfahren</i> folgt einem Profil fünften Grades $s(\\tau) = 10\\tau^3 - 15\\tau^4 + 6\\tau^5$, dessen Geschwindigkeit und Beschleunigung an beiden Enden null sind; <i>Kriechen</i> fährt mit 10 mm/s nach oben, bis die Kraftmessdose (der Kraftsensor über der Probe) mehr als 1 kN anzeigt; <i>Pressen</i> fährt die Kraft rampenförmig auf ihren Sollwert und hält sie; <i>Entlasten</i> fährt sie rampenförmig zurück; <i>Zurückfahren</i> folgt einem weiteren Profil fünften Grades; <i>Fertig</i> hält den Zustand."
+ },
+ "b74e98c0c4c0": {
+  "src": "$K_{\\mathrm{ff}}$",
+  "tr": "$K_{\\mathrm{ff}}$"
+ },
+ "b85bbfb165b8": {
+  "src": "$\\Phi$",
+  "tr": "$\\Phi$"
+ },
+ "b8ee13d0016e": {
+  "src": "oil volume of the hose, A<sub>h</sub>L<sub>h</sub>; half is counted with each end",
+  "tr": "Ölvolumen des Schlauchs, A<sub>h</sub>L<sub>h</sub>; die Hälfte wird an jedem Ende gezählt"
+ },
+ "b912d9a2e4c8": {
+  "src": "force integral gain",
+  "tr": "Integralverstärkung der Kraftregelung"
+ },
+ "b9a507866a98": {
+  "src": "bulk modulus, air fraction at 1 atm, polytropic exponent",
+  "tr": "Kompressionsmodul, Luftanteil bei 1 atm, polytropischer Exponent"
+ },
+ "b9e8a35574b6": {
+  "src": "Pa·s/m³",
+  "tr": "Pa·s/m³"
+ },
+ "ba7523871b75": {
+  "src": "$\\mathcal{E}$",
+  "tr": "$\\mathcal{E}$"
+ },
+ "bbdc770aad36": {
+  "src": "rod chamber volume",
+  "tr": "Volumen der Stangenkammer"
+ },
+ "bc3c0854c5d9": {
+  "src": "contact force from the specimen",
+  "tr": "Kontaktkraft von der Probe"
+ },
+ "bc3c7fb30ee9": {
+  "src": "pressure wave speed, √(β/ρ)",
+  "tr": "Geschwindigkeit der Druckwelle, √(β/ρ)"
+ },
+ "bca3ea322bc2": {
+  "src": "Write the build-up equation (7.2) for each chamber, $(V_t/2\\beta)\\,\\dot{p}_1 = Q_1 - A\\dot{y} - C_{tp}p_L$ and $(V_t/2\\beta)\\,\\dot{p}_2 = -Q_2 + A\\dot{y} + C_{tp}p_L$, where $C_{tp}$ is the leakage across the piston. Subtract the second from the first and divide by 2:",
+  "tr": "Wir schreiben die Druckaufbaugleichung (7.2) für jede Kammer an: $(V_t/2\\beta)\\,\\dot{p}_1 = Q_1 - A\\dot{y} - C_{tp}p_L$ und $(V_t/2\\beta)\\,\\dot{p}_2 = -Q_2 + A\\dot{y} + C_{tp}p_L$, wobei $C_{tp}$ die Leckage über den Kolben ist. Wir subtrahieren die zweite von der ersten und dividieren durch 2:"
+ },
+ "c049d0f2d962": {
+  "src": "spool force per ampere, spool damping, spool mass (single-stage valve)",
+  "tr": "Kraft am Ventilschieber je Ampere, Dämpfung des Ventilschiebers, Masse des Ventilschiebers (einstufiges Ventil)"
+ },
+ "c17f649232dd": {
+  "src": "flow out of valve port B",
+  "tr": "Volumenstrom aus dem Ventilanschluss B"
+ },
+ "c18e117a84b7": {
+  "src": "$\\mu(x)$",
+  "tr": "$\\mu(x)$"
+ },
+ "c1feb6b8dfb1": {
+  "src": "$\\beta_{\\mathrm{eff}}$",
+  "tr": "$\\beta_{\\mathrm{eff}}$"
+ },
+ "c2211315e0bb": {
+  "src": "dead volumes",
+  "tr": "Totvolumina"
+ },
+ "c227dd456f1d": {
+  "src": "orifice opening area, w x",
+  "tr": "Öffnungsfläche der Blende, w x"
+ },
+ "c255c05388e9": {
+  "src": "$R_{\\mathrm{lam}}$",
+  "tr": "$R_{\\mathrm{lam}}$"
+ },
+ "c3ed59f62eb2": {
+  "src": "area ratio A<sub>1</sub>/A<sub>2</sub>, equal to (d<sub>1</sub>/d<sub>2</sub>)²",
+  "tr": "Flächenverhältnis A<sub>1</sub>/A<sub>2</sub>, gleich (d<sub>1</sub>/d<sub>2</sub>)²"
+ },
+ "c485c5dbcec3": {
+  "src": "The page integrates every term separately and checks the sum against the pump work at each sample. The residual stays at $10^{-14}$ of the pump work: a test that every force in the mechanics matches its flow partner in the hydraulics.",
+  "tr": "Die Seite integriert jeden Term getrennt und prüft die Summe bei jeder Abtastung gegen die Pumpenarbeit. Das Residuum bleibt bei $10^{-14}$ der Pumpenarbeit: ein Test dafür, dass jede Kraft in der Mechanik zu ihrem Fluss-Partner in der Hydraulik passt."
+ },
+ "c7369a8db1b4": {
+  "src": "fitting (minor) loss coefficient",
+  "tr": "Verlustbeiwert für Formstücke (Einzelverluste)"
+ },
+ "c743b10d78de": {
+  "src": "tank pressure",
+  "tr": "Tankdruck"
+ },
+ "c85dd97ac59f": {
+  "src": "<div class=\"ctag\">In our press</div>At the 9.7 Hz crossover this is 5.2° with $T_s = 1$ ms and 21.0° with $T_s = 4$ ms. The measured phase margin (the extra lag the loop could take before it oscillates; chapter 18) falls by 15.8°, almost exactly the difference.",
+  "tr": "<div class=\"ctag\">In unserer Presse</div>Bei der Durchtrittsfrequenz von 9.7 Hz beträgt dieser Anteil 5.2° mit $T_s = 1$ ms und 21.0° mit $T_s = 4$ ms. Die gemessene Phasenreserve (die zusätzliche Nacheilung, die der Regelkreis vertragen könnte, bevor er schwingt; Kapitel 18) fällt um 15.8°, fast genau um diese Differenz."
+ },
+ "c891b2a74879": {
+  "src": "Pa",
+  "tr": "Pa"
+ },
+ "c8fea20027f2": {
+  "src": "Substitute it for the last terms of the sum, and the sum for $p_aQ_A + p_BQ_B$ in the valve balance:",
+  "tr": "Wir setzen sie für die letzten Terme der Summe ein und die Summe für $p_aQ_A + p_BQ_B$ in die Ventilbilanz:"
+ },
+ "c9285b144757": {
+  "src": "kg/m⁷",
+  "tr": "kg/m⁷"
+ },
+ "c99542b09258": {
+  "src": "and collect:",
+  "tr": "und fassen zusammen:"
+ },
+ "c9f243a2a9f5": {
+  "src": "14.2 Small deviations",
+  "tr": "14.2 Kleine Abweichungen"
+ },
+ "ca9602a06f18": {
+  "src": "position derivative gain",
+  "tr": "Differentialverstärkung der Lageregelung"
+ },
+ "caf9aa84a33b": {
+  "src": "$C_{tp}$",
+  "tr": "$C_{tp}$"
+ },
+ "cb51da2c1f9b": {
+  "src": "$\\beta_{\\mathrm{oil}},\\ \\alpha_0,\\ n$",
+  "tr": "$\\beta_{\\mathrm{oil}},\\ \\alpha_0,\\ n$"
+ },
+ "cd107b18b1d2": {
+  "src": "supply pressure",
+  "tr": "Versorgungsdruck"
+ },
+ "cdb96b2f59ef": {
+  "src": "turbulent friction coefficient, Δp = K<sub>t</sub> Q|Q|",
+  "tr": "Reibungsbeiwert der turbulenten Strömung, Δp = K<sub>t</sub> Q|Q|"
+ },
+ "ce49798c4bbe": {
+  "src": "1.5 GPa, 0.5 %, 1.4",
+  "tr": "1.5 GPa, 0.5 %, 1.4"
+ },
+ "ce9d07be6fbf": {
+  "src": "and substituting $\\omega_h = 2A\\sqrt{\\beta/(V_tm)}$ gives the $\\zeta_h$ below. This is the classic form:",
+  "tr": "und Einsetzen von $\\omega_h = 2A\\sqrt{\\beta/(V_tm)}$ ergibt das unten stehende $\\zeta_h$. Dies ist die klassische Form:"
+ },
+ "cfc038acd0c5": {
+  "src": "Lagrangian, T − V",
+  "tr": "Lagrange-Funktion, T − V"
+ },
+ "d07705035dc9": {
+  "src": "discrete state matrix, e^{AT<sub>s</sub>}",
+  "tr": "diskrete Zustandsmatrix, e^{AT<sub>s</sub>}"
+ },
+ "d0beacab5df9": {
+  "src": "force PI",
+  "tr": "PI-Kraftregler"
+ },
+ "d12b8fddaa02": {
+  "src": "phase margin at the crossover frequency",
+  "tr": "Phasenreserve bei der Durchtrittsfrequenz"
+ },
+ "d18cf29d15b7": {
+  "src": "gain margin at the −180° frequency, in decibels",
+  "tr": "Amplitudenreserve bei der Frequenz mit −180° Phase, in Dezibel"
+ },
+ "d1b7520d8c7a": {
+  "src": "leakage conductance, root regularization",
+  "tr": "Leckageleitwert, Wurzelregularisierung"
+ },
+ "d2e529b5fbc4": {
+  "src": "linearized input matrix, ∂f/∂u",
+  "tr": "linearisierte Eingangsmatrix, ∂f/∂u"
+ },
+ "d3dc7064c524": {
+  "src": "hose length and bore",
+  "tr": "Schlauchlänge und Innendurchmesser"
+ },
+ "d541643b5958": {
+  "src": "<div class=\"ctag\">In our press</div>Cruising up at 0.1 m/s at $y = 60$ mm: $x_v = 40.6\\,\\%$, $p_A = 1.91\\ \\mathrm{MPa}$, $p_B = 3.03\\ \\mathrm{MPa}$. Holding 60 kN: $x_v = 0.039\\,\\%$, $p_A = 7.79\\ \\mathrm{MPa}$, $p_B = 4.21\\ \\mathrm{MPa}$. At rest the critically lapped valve balances the leakages with the spool just off centre.",
+  "tr": "<div class=\"ctag\">In unserer Presse</div>Bei gleichmäßiger Aufwärtsfahrt mit 0.1 m/s bei $y = 60$ mm: $x_v = 40.6\\,\\%$, $p_A = 1.91\\ \\mathrm{MPa}$, $p_B = 3.03\\ \\mathrm{MPa}$. Beim Halten von 60 kN: $x_v = 0.039\\,\\%$, $p_A = 7.79\\ \\mathrm{MPa}$, $p_B = 4.21\\ \\mathrm{MPa}$. Im Stillstand gleicht das kritisch überdeckte Ventil die Leckagen aus, wobei der Ventilschieber knapp aus der Mitte steht."
+ },
+ "d56f9b171dc0": {
+  "src": "sample period, t<sub>k</sub> = kT<sub>s</sub>",
+  "tr": "Abtastperiode, t<sub>k</sub> = kT<sub>s</sub>"
+ },
+ "d633a2a0228c": {
+  "src": "Add the four lines. The internal powers $p_aQ_h$ and $p_AQ_h$ each appear once on the left and once on the right, and cancel. Then multiply the ram equation (12.2) by $\\dot{y}$, using $m\\ddot{y}\\dot{y} = \\frac{d}{dt}\\left(\\tfrac12 m\\dot{y}^2\\right)$ and $mg\\dot{y} = \\frac{d}{dt}(mgy)$:",
+  "tr": "Addieren wir die vier Zeilen. Die inneren Leistungen $p_aQ_h$ und $p_AQ_h$ erscheinen je einmal links und einmal rechts und heben sich auf. Dann multiplizieren wir die Stößelgleichung (12.2) mit $\\dot{y}$ und verwenden $m\\ddot{y}\\dot{y} = \\frac{d}{dt}\\left(\\tfrac12 m\\dot{y}^2\\right)$ sowie $mg\\dot{y} = \\frac{d}{dt}(mgy)$:"
+ },
+ "d6a7ccf879c4": {
+  "src": "$\\nu$",
+  "tr": "$\\nu$"
+ },
+ "d76b06a335e7": {
+  "src": "Part III",
+  "tr": "Teil III"
+ },
+ "d7d060a1fabb": {
+  "src": "2·10⁻¹³ m³/(s·Pa), 0.1 MPa",
+  "tr": "2·10⁻¹³ m³/(s·Pa), 0.1 MPa"
+ },
+ "d7e74e8a7ed5": {
+  "src": "pipe cross-section area, 0.785 cm²",
+  "tr": "Querschnittsfläche des Rohres, 0.785 cm²"
+ },
+ "d8c62c144ac9": {
+  "src": "Its one essential property is what it does to a derivative. Integrate by parts:",
+  "tr": "Die wichtigste Eigenschaft der Transformation ist, was sie mit einer Ableitung anstellt. Wir integrieren partiell:"
+ },
+ "d9fff6e4e930": {
+  "src": "reference (set) position",
+  "tr": "Sollposition"
+ },
+ "daaaabc1739b": {
+  "src": "<span class=\"chn\">B</span> List of symbols",
+  "tr": "<span class=\"chn\">B</span> Symbolverzeichnis"
+ },
+ "db46d2893b0c": {
+  "src": "A pure derivative amplifies noise without limit, so it is filtered: $D(s) = K_d\\,s/(T_f s + 1)$ with $T_f = 2$ ms. Backward Euler replaces $s$ by $(1 - z^{-1})/T_s$:",
+  "tr": "Eine reine Ableitung verstärkt Rauschen ohne Grenze, deshalb wird sie gefiltert: $D(s) = K_d\\,s/(T_f s + 1)$ mit $T_f = 2$ ms. Das implizite Euler-Verfahren ersetzt $s$ durch $(1 - z^{-1})/T_s$:"
+ },
+ "db67888f9c4c": {
+  "src": "height of the left oil column, H<sub>0</sub> − x",
+  "tr": "Höhe der linken Ölsäule, H<sub>0</sub> − x"
+ },
+ "db813234d0f8": {
+  "src": "linearized state matrix, ∂f/∂x (cylinder area A in ch. 15)",
+  "tr": "linearisierte Zustandsmatrix, ∂f/∂x (Zylinderfläche A in Kap. 15)"
+ },
+ "dbae94f4ea9b": {
+  "src": "Ring a bell and it hums at its own notes; push it slowly and it just leans. A linear system has a small set of motions of its own, and every response is built from them.",
+  "tr": "Schlägt man eine Glocke an, so klingt sie in ihren eigenen Tönen nach; drückt man sie langsam, so neigt sie sich nur. Ein lineares System hat eine kleine Menge eigener Bewegungen, und jede Antwort setzt sich aus ihnen zusammen."
+ },
+ "dc5979ce924c": {
+  "src": "A continuous pole $s$ becomes a discrete pole $z = e^{sT_s}$, because a motion $e^{st}$ seen only at $t = kT_s$ is the sequence $(e^{sT_s})^k$. The left half-plane, where continuous systems are stable, maps into the unit disc: a sampled system is stable when every pole satisfies $|z| &lt; 1$. A sinusoid of angular frequency $\\omega$ corresponds to $z = e^{j\\omega T_s}$, a point on the unit circle; frequencies run up to the Nyquist frequency, $\\omega = \\pi/T_s$ or $f = 1/(2T_s)$, which is 500 Hz at $T_s = 1$ ms.",
+  "tr": "Ein kontinuierlicher Pol $s$ wird zu einem diskreten Pol $z = e^{sT_s}$, denn eine Bewegung $e^{st}$, die nur zu den Zeitpunkten $t = kT_s$ beobachtet wird, ist die Folge $(e^{sT_s})^k$. Die linke Halbebene, in der kontinuierliche Systeme stabil sind, wird auf die Einheitskreisscheibe abgebildet: Ein abgetastetes System ist stabil, wenn jeder Pol $|z| &lt; 1$ erfüllt. Eine Sinusschwingung der Kreisfrequenz $\\omega$ entspricht $z = e^{j\\omega T_s}$, einem Punkt auf dem Einheitskreis; die Frequenzen reichen bis zur Nyquist-Frequenz $\\omega = \\pi/T_s$ oder $f = 1/(2T_s)$, das sind bei $T_s = 1$ ms genau 500 Hz."
+ },
+ "dd3438fc4963": {
+  "src": "platen height at which the specimen is first touched",
+  "tr": "Höhe der Druckplatte, bei der die Probe zum ersten Mal berührt wird"
+ },
+ "dd7dbd1bb9e4": {
+  "src": "pressure at valve port B, equal to the rod-chamber pressure",
+  "tr": "Druck am Ventilanschluss B, gleich dem Druck in der Stangenkammer"
+ },
+ "de21e7091fc7": {
+  "src": "moving mass (10 kg + tooling 150 kg)",
+  "tr": "bewegte Masse (10 kg + Werkzeug 150 kg)"
+ },
+ "de4bd0d3e89d": {
+  "src": "soft oil spring stiffness of the moving press",
+  "tr": "Steifigkeit der weichen Ölfeder der bewegten Presse"
+ },
+ "df71860297a4": {
+  "src": "120 mm, 80 mm, 200 mm",
+  "tr": "120 mm, 80 mm, 200 mm"
+ },
+ "df8601f8660a": {
+  "src": "Multiply out the product in the bracket:",
+  "tr": "Wir multiplizieren das Produkt in der Klammer aus:"
+ },
+ "e001c435e5c1": {
+  "src": "kg/m³",
+  "tr": "kg/m³"
+ },
+ "e0c008bab7d4": {
+  "src": "oil inflow into a chamber",
+  "tr": "Ölzufluss in eine Kammer"
+ },
+ "e0d1fe8d4cc8": {
+  "src": "Treat the held input as an extra state that does not change: $\\dot{u} = 0$. The augmented system is",
+  "tr": "Wir behandeln das gehaltene Eingangssignal als einen zusätzlichen Zustand, der sich nicht ändert: $\\dot{u} = 0$. Das erweiterte System lautet:"
+ },
+ "e2eadf30ed8b": {
+  "src": "$Q_{\\mathrm{out}}$",
+  "tr": "$Q_{\\mathrm{out}}$"
+ },
+ "e37bf8e5ebce": {
+  "src": "effective mass, the mass felt at the input piston",
+  "tr": "effektive Masse, die am Eingangskolben wirksame Masse"
+ },
+ "e44622ef8add": {
+  "src": "dB",
+  "tr": "dB"
+ },
+ "e4711164be57": {
+  "src": "sample period",
+  "tr": "Abtastperiode"
+ },
+ "e4c83e221840": {
+  "src": "flow out of valve port A",
+  "tr": "Volumenstrom aus dem Ventilanschluss A"
+ },
+ "e6cd66074269": {
+  "src": "total flow-pressure coefficient, K<sub>c</sub> + C<sub>tp</sub>",
+  "tr": "gesamter Durchfluss-Druck-Beiwert, K<sub>c</sub> + C<sub>tp</sub>"
+ },
+ "e72119f88c84": {
+  "src": "<span class=\"chn\">17</span> The digital controller",
+  "tr": "<span class=\"chn\">17</span> Der digitale Regler"
+ },
+ "e789aacfad44": {
+  "src": "$\\Delta p_f$",
+  "tr": "$\\Delta p_f$"
+ },
+ "e8baed30dc2b": {
+  "src": "valve command input, normalized, clipped to [−1, 1]",
+  "tr": "Stellsignal des Ventils, normiert, auf [−1, 1] begrenzt"
+ },
+ "e9a7f34a54e0": {
+  "src": "These are the first five terms of $e^{\\lambda h}$, so the error per step starts at $(\\lambda h)^5/120$: the order $h^5$ quoted above. The method is stable while $|R| \\le 1$, which on the negative real axis means $\\lambda h \\ge -2.79$.",
+  "tr": "Dies sind die ersten fünf Glieder von $e^{\\lambda h}$, daher beginnt der Fehler pro Schritt bei $(\\lambda h)^5/120$: die oben genannte Ordnung $h^5$. Das Verfahren ist stabil, solange $|R| \\le 1$ gilt, was auf der negativen reellen Achse $\\lambda h \\ge -2.79$ bedeutet."
+ },
+ "e9b23ba51faa": {
+  "src": "$y_{\\mathrm{ref}}$",
+  "tr": "$y_{\\mathrm{ref}}$"
+ },
+ "eaecf8c7361c": {
+  "src": "Figure 8. The sampled loop. Everything left of the hold happens in the computer, once per sample; the plant runs continuously.",
+  "tr": "Abbildung 8. Der abgetastete Regelkreis. Alles links vom Halteglied geschieht im Rechner, einmal pro Abtastung; die Strecke läuft kontinuierlich."
+ },
+ "eba90ff3672c": {
+  "src": "16.2 One exponential gives both",
+  "tr": "16.2 Eine Exponentialmatrix liefert beides"
+ },
+ "ecc9bdb95640": {
+  "src": "16.4 What the hold costs in phase",
+  "tr": "16.4 Was das Halteglied an Phase kostet"
+ },
+ "ed13c7b96327": {
+  "src": "Write the controller as a discrete state-space system from its input (the error) to its output (the command): $\\mathbf{s}_{k+1} = A_c\\mathbf{s}_k + B_c e_k$ and $u_k = C_c\\mathbf{s}_k + D_c e_k$. Add one state $w_k$ for the command that is still waiting one sample to reach the valve. With $e_k = -C\\mathbf{x}_k$ for deviations from the reference:",
+  "tr": "Wir schreiben den Regler als zeitdiskretes Zustandsraummodell vom Eingang (der Regelabweichung) zum Ausgang (dem Stellsignal): $\\mathbf{s}_{k+1} = A_c\\mathbf{s}_k + B_c e_k$ und $u_k = C_c\\mathbf{s}_k + D_c e_k$. Wir fügen einen Zustand $w_k$ für das Stellsignal hinzu, das noch eine Abtastung lang auf das Ventil wartet. Mit $e_k = -C\\mathbf{x}_k$ für Abweichungen von der Referenz:"
+ },
+ "ed9ab37728d5": {
+  "src": "valve-port volume, including half the hose",
+  "tr": "Volumen am Ventilanschluss, einschließlich der Hälfte des Schlauchs"
+ },
+ "ee7ffb869265": {
+  "src": "Hose and chambers",
+  "tr": "Schlauch und Kammern"
+ },
+ "eec4a67954b5": {
+  "src": "regularized flow function, linear near zero and square-root far away",
+  "tr": "regularisierte Durchflussfunktion, nahe null linear, weit davon eine Wurzelfunktion"
+ },
+ "eee9cc43e6ea": {
+  "src": "air volume fraction at atmospheric pressure",
+  "tr": "Volumenanteil der Luft bei Atmosphärendruck"
+ },
+ "ef4d90edf3f4": {
+  "src": "17.5 The supervisor",
+  "tr": "17.5 Der Supervisor"
+ },
+ "ef5b051cb73f": {
+  "src": "$Q_N,\\ \\Delta p_N$",
+  "tr": "$Q_N,\\ \\Delta p_N$"
+ },
+ "f0b37956de2d": {
+  "src": "moving mass of the ram",
+  "tr": "bewegte Masse des Stößels"
+ },
+ "f0d3946000e8": {
+  "src": "linearize a nonlinear model about an operating point and recognize where linearization fails (14.1);",
+  "tr": "ein nichtlineares Modell um einen Arbeitspunkt linearisieren und erkennen, wo die Linearisierung versagt (14.1);"
+ },
+ "f1482c8f8257": {
+  "src": "$P_{\\mathrm{valve}}$",
+  "tr": "$P_{\\mathrm{valve}}$"
+ },
+ "f16e5f828577": {
+  "src": "gauge pressure, measured above the atmosphere",
+  "tr": "Überdruck, gegen den Atmosphärendruck gemessen"
+ },
+ "f23c4e6085d5": {
+  "src": "<div class=\"ctag\">In our press</div>With both ports closed, (15.5), with each chamber’s $\\beta$ from (7.3) at its own pressure and the volumes of (12.1), gives 245 Hz near the bottom of the stroke, 213 Hz near the top and a minimum of 170 Hz at 116 mm. With the hose attached, the full model’s pole table (worked solution 2 on the Servo-Hydraulic Press page) shows the ram at 88 Hz with damping 0.26 at the cruise point: the hose slug and the extra volume soften and couple the resonance.",
+  "tr": "<div class=\"ctag\">In unserer Presse</div>Bei beiden geschlossenen Anschlüssen liefert (15.5), mit dem $\\beta$ jeder Kammer aus (7.3) bei deren eigenem Druck und den Volumina aus (12.1), 245 Hz nahe dem unteren Hubende, 213 Hz nahe dem oberen und ein Minimum von 170 Hz bei 116 mm. Mit angeschlossenem Schlauch zeigt die vollständige Tabelle der Pole des Modells (Musterlösung 2 auf der Seite Servohydraulische Presse), dass der Stößel am Fahrpunkt bei 88 Hz mit einer Dämpfung von 0.26 schwingt: Die Ölsäule im Schlauch und das zusätzliche Volumen machen die Resonanz weicher und koppeln sie."
+ },
+ "f2c2f5beaa9d": {
+  "src": "The shape of (15.4) explains the most famous rule of thumb in hydraulic servo design. A proportional position loop around an integrator has loop gain $K_{\\mathrm{vel}}/s$, where the velocity gain $K_{\\mathrm{vel}}$ (in 1/s) is the ram speed per metre of position error. It is not the valve coefficient $K_v$ of (8.2). It stays stable only if the loop gain has fallen well below 1 by the time the resonance lifts it again, which gives approximately $K_{\\mathrm{vel}} &lt; 2\\zeta_h\\omega_h$. Here is why. With the controller’s gain folded in, the loop gain is $L(s) = K_{\\mathrm{vel}}/[s(s^2/\\omega_h^2 + 2\\zeta_hs/\\omega_h + 1)]$. At $s = j\\omega_h$ the quadratic equals $-1 + 2j\\zeta_h + 1 = 2j\\zeta_h$, so",
+  "tr": "Die Form von (15.4) erklärt die berühmteste Faustregel im Entwurf hydraulischer Servoantriebe. Ein proportionaler Lageregelkreis um einen Integrator hat die Kreisverstärkung $K_{\\mathrm{vel}}/s$, wobei die Geschwindigkeitsverstärkung $K_{\\mathrm{vel}}$ (in 1/s) die Stößelgeschwindigkeit pro Meter Lagefehler ist. Diese Größe ist nicht der Ventilkoeffizient $K_v$ aus (8.2). Der Regelkreis bleibt nur stabil, wenn die Kreisverstärkung bis zu dem Zeitpunkt, an dem die Resonanz sie wieder anhebt, deutlich unter 1 gefallen ist; das ergibt näherungsweise $K_{\\mathrm{vel}} &lt; 2\\zeta_h\\omega_h$. Hier ist der Grund. Mit der hineingerechneten Reglerverstärkung ist die Kreisverstärkung $L(s) = K_{\\mathrm{vel}}/[s(s^2/\\omega_h^2 + 2\\zeta_hs/\\omega_h + 1)]$. Bei $s = j\\omega_h$ ist das Quadrat gleich $-1 + 2j\\zeta_h + 1 = 2j\\zeta_h$, also"
+ },
+ "f3001759ca29": {
+  "src": "speed over which the Coulomb jump is smoothed, 1 mm/s",
+  "tr": "Geschwindigkeitsbereich, über den der Coulombsche Sprung geglättet wird, 1 mm/s"
+ },
+ "f32b67c7e263": {
+  "src": "value",
+  "tr": "Wert"
+ },
+ "f34bc9fe30ec": {
+  "src": "contact height, specimen stiffness",
+  "tr": "Kontakthöhe, Steifigkeit der Probe"
+ },
+ "f3f43cb21ca5": {
+  "src": "dynamic viscosity of the oil, η = ρν",
+  "tr": "dynamische Viskosität des Öls, η = ρν"
+ },
+ "f5ecda6d5bba": {
+  "src": "$K_{pF},\\ K_{iF}$",
+  "tr": "$K_{pF},\\ K_{iF}$"
+ },
+ "f85df22cee3a": {
+  "src": "17.4 Switching laws without a bump",
+  "tr": "17.4 Umschaltgesetze ohne Sprung"
+ },
+ "f89574168c54": {
+  "src": "18.3 Gain and phase margins",
+  "tr": "18.3 Amplituden- und Phasenreserve"
+ },
+ "f8f6be697241": {
+  "src": "friction pressure drop in the hose",
+  "tr": "Reibungsdruckabfall im Schlauch"
+ },
+ "f92975f707d3": {
+  "src": "12 MPa",
+  "tr": "12 MPa"
+ },
+ "f99e4a496656": {
+  "src": "<span class=\"lbl\">answers with</span>the command $u_k \\in [-1, 1]$",
+  "tr": "<span class=\"lbl\">liefert</span>das Stellsignal $u_k \\in [-1, 1]$"
+ },
+ "fd93d173beba": {
+  "src": "force proportional gain",
+  "tr": "Proportionalverstärkung der Kraftregelung"
+ },
+ "fdb63b9e51ab": {
+  "src": "$\\beta$",
+  "tr": "$\\beta$"
+ },
+ "ffc42b165e3b": {
+  "src": "To handle inputs as well, use the <b>Laplace transform</b>, which turns a function of time into a function of $s$,",
+  "tr": "Um auch Eingänge zu behandeln, verwendet man die <b>Laplace-Transformation</b>, die eine Funktion der Zeit in eine Funktion von $s$ überführt,"
+ }
+}

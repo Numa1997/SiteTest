@@ -1,0 +1,586 @@
+{
+ "0436b85fb607": {
+  "src": "Fig. 6 · superposition · Fourier analysis",
+  "tr": "Abb. 6 · Superposition · Fourier-Analyse"
+ },
+ "060b42cf8509": {
+  "src": "1 wave",
+  "tr": "1 Welle"
+ },
+ "09bc0084f3fb": {
+  "src": "Square wave",
+  "tr": "Rechteckwelle"
+ },
+ "0b6086eb0023": {
+  "src": "<span>4</span>Beats",
+  "tr": "<span>4</span>Schwebungen"
+ },
+ "12aafda0ef58": {
+  "src": "Beats",
+  "tr": "Schwebung"
+ },
+ "1379c57d17af": {
+  "src": "That slow pulsing is called a <em>beat</em>. If one string vibrates 110 times a second and the other 111 times, they fall out of step and back into step once every second, and you hear one swell per second. The air does nothing clever: each string sends out its own wave, and at your ear the air simply moves by the sum of the two.",
+  "tr": "Dieses langsame Pulsieren heißt <em>Schwebung</em>. Schwingt eine Saite 110-mal in der Sekunde und die andere 111-mal, so geraten sie einmal in der Sekunde außer Tritt und wieder in Tritt, und Sie hören eine Anschwellung pro Sekunde. Die Luft tut nichts Raffiniertes: Jede Saite sendet ihre eigene Welle aus, und an Ihrem Ohr bewegt sich die Luft einfach um die Summe beider."
+ },
+ "14a2f9ce51c5": {
+  "src": "Numa Koudsie · for school students and first- and second-year undergraduates",
+  "tr": "Numa Koudsie · für Schülerinnen und Schüler sowie Studierende des ersten und zweiten Studienjahres"
+ },
+ "18d1343c8b22": {
+  "src": "<b>Fig. 6b</b> · amplitude spectrum · one line per frequency <span class=\"tx\">\\(\\nu = f s\\)</span>",
+  "tr": "<b>Abb. 6b</b> · Amplitudenspektrum · eine Linie je Frequenz <span class=\"tx\">\\(\\nu = f s\\)</span>"
+ },
+ "19b242b80632": {
+  "src": "The page draws the sum by adding the curves point by point. That is allowed because the equation the waves obey is linear.",
+  "tr": "Die Seite zeichnet die Summe, indem sie die Kurven punktweise addiert. Das ist erlaubt, weil die Gleichung, der die Wellen gehorchen, linear ist."
+ },
+ "1a2262d76e7a": {
+  "src": "where \\(y_\\text{mid}\\) is the panel’s axis and \\(h\\) its height in screen pixels (with \\(R_\\text{c}\\) in place of \\(R\\) for the components). The sum’s range is the ceiling (19) rounded up to the next \\(10\\ \\mathrm{px},\\) so the sum can never leave its panel. The two directions have different scales. For the <em>Square wave</em> preset in the wide window, \\(R = 60\\ \\mathrm{px}\\) and \\(h = 220.1\\) screen pixels, so \\(1\\ \\mathrm{px}\\) of displacement is drawn 1.83 pixels tall, while \\(1\\ \\mathrm{px}\\) along the medium is 0.89 pixels wide: the curves look about twice as steep as they are.",
+  "tr": "wobei \\(y_\\text{mid}\\) die Achse des Teils und \\(h\\) seine Höhe in Bildschirmpixeln ist (mit \\(R_\\text{c}\\) statt \\(R\\) für die Teilkurven). Der Bereich der Summe ist die Schranke (19), aufgerundet auf die nächsten \\(10\\ \\mathrm{px},\\) sodass die Summe ihren Teil nie verlassen kann. Die beiden Richtungen haben verschiedene Maßstäbe. Für das Preset <em>Rechteckwelle</em> im breiten Fenster gilt \\(R = 60\\ \\mathrm{px}\\) und \\(h = 220.1\\) Bildschirmpixel, sodass \\(1\\ \\mathrm{px}\\) Auslenkung als 1.83 Pixel hoch gezeichnet wird, während \\(1\\ \\mathrm{px}\\) entlang des Mediums 0.89 Pixel breit ist: Die Kurven wirken etwa doppelt so steil, wie sie sind."
+ },
+ "1c0da5946d67": {
+  "src": "Give both waves the same amplitude \\(A\\) and write their phases as \\(a = k_1X - \\omega_1 t + \\varphi_1\\) and \\(b = k_2X - \\omega_2 t + \\varphi_2.\\) The sum-to-product identity of trigonometry turns the sum into a product,",
+  "tr": "Geben Sie beiden Wellen dieselbe Amplitude \\(A\\) und schreiben Sie ihre Phasen als \\(a = k_1X - \\omega_1 t + \\varphi_1\\) und \\(b = k_2X - \\omega_2 t + \\varphi_2.\\) Die Summenformel der Trigonometrie verwandelt die Summe in ein Produkt,"
+ },
+ "1fb5e3e1331f": {
+  "src": "In step, \\(\\varphi_1 = \\varphi_2,\\) the amplitudes add: \\(C = A_1 + A_2.\\) Half a turn apart, \\(\\varphi_2 - \\varphi_1 = \\pi,\\) they subtract: \\(C = |A_1 - A_2|,\\) and two equal waves cancel completely. That is the noise-cancelling headphone, and you can build one on the page. Press <em>One wave</em>, then <em>Add wave +</em>. The new wave is a copy of the first (Amplitude \\(20\\ \\mathrm{px},\\) Frequency 1.00, Speed 1×), the sum doubles to \\(40\\ \\mathrm{px},\\) and the spectrum shows a single stem of \\(40\\ \\mathrm{px}.\\) Now drag the <em>Phase</em> of Wave 2 to \\(1.00\\,\\pi.\\) The slider moves in steps of \\(0.05\\ \\mathrm{rad},\\) and its nearest step to \\(\\pi,\\) \\(3.15\\ \\mathrm{rad},\\) misses by \\(0.0084\\ \\mathrm{rad}.\\) By (6) the sum is then a wave of amplitude \\(0.17\\ \\mathrm{px},\\) and <em>Peak |y| on screen</em> reads \\(0.2\\ \\mathrm{px}.\\) A real headphone meets the same limit: it cancels only as well as it can match the phase.",
+  "tr": "Im Takt, \\(\\varphi_1 = \\varphi_2,\\) addieren sich die Amplituden: \\(C = A_1 + A_2.\\) Um eine halbe Umdrehung versetzt, \\(\\varphi_2 - \\varphi_1 = \\pi,\\) subtrahieren sie sich: \\(C = |A_1 - A_2|,\\) und zwei gleiche Wellen löschen einander vollständig aus. Das ist der Noise-Cancelling-Kopfhörer, und Sie können auf dieser Seite selbst einen bauen. Drücken Sie <em>Eine Welle</em> und dann <em>Welle hinzufügen +</em>. Die neue Welle ist eine Kopie der ersten (Amplitude \\(20\\ \\mathrm{px},\\) Frequenz 1.00, Geschwindigkeit 1×), die Summe verdoppelt sich auf \\(40\\ \\mathrm{px},\\) und das Spektrum zeigt einen einzelnen Strich von \\(40\\ \\mathrm{px}.\\) Ziehen Sie nun die <em>Phase</em> der Welle 2 auf \\(1.00\\,\\pi.\\) Der Schieberegler springt in Schritten von \\(0.05\\ \\mathrm{rad},\\) und sein nächster Schritt zu \\(\\pi,\\) \\(3.15\\ \\mathrm{rad},\\) verfehlt ihn um \\(0.0084\\ \\mathrm{rad}.\\) Nach (6) ist die Summe dann eine Welle der Amplitude \\(0.17\\ \\mathrm{px},\\) und <em>Spitzenwert |y| auf dem Bildschirm</em> zeigt \\(0.2\\ \\mathrm{px}.\\) Ein echter Kopfhörer stößt auf dieselbe Grenze: Er löscht nur so gut aus, wie er die Phase treffen kann."
+ },
+ "26a3c7059c01": {
+  "src": "3 (no Wave 4)",
+  "tr": "3 (ohne Welle 4)"
+ },
+ "2e7f7fd2d878": {
+  "src": "<span>6</span>The spectrum",
+  "tr": "<span>6</span>Das Spektrum"
+ },
+ "2fbdb5352b6a": {
+  "src": "The upper panel of the plot, \\(56\\ \\%\\) of the height left after the margins, shows the sum in ink with a soft burgundy fill down to the axis; the lower panel shows each wave in its own colour. Sample \\(j\\) sits in screen column \\(44 + j,\\) so the \\(800\\ \\mathrm{px}\\) of the medium always fill the plot width. Vertically each panel has its own range, \\(\\pm R\\) for the sum and \\(\\pm R_\\text{c}\\) for the components, and a displacement \\(y\\) is drawn at the screen height",
+  "tr": "Der obere Teil des Diagramms, \\(56\\ \\%\\) der Höhe nach Abzug der Ränder, zeigt die Summe in Tintenfarbe mit einer weichen bordeauxroten Füllung bis zur Achse; der untere Teil zeigt jede Welle in ihrer eigenen Farbe. Probe \\(j\\) sitzt in der Bildschirmspalte \\(44 + j,\\) sodass die \\(800\\ \\mathrm{px}\\) des Mediums die Diagrammbreite immer ausfüllen. Vertikal hat jeder Teil seinen eigenen Bereich, \\(\\pm R\\) für die Summe und \\(\\pm R_\\text{c}\\) für die Teilkurven, und eine Auslenkung \\(y\\) wird auf der Bildschirmhöhe gezeichnet"
+ },
+ "33bd5a5dddcd": {
+  "src": "© 2026 Numa Koudsie",
+  "tr": "© 2026 Numa Koudsie"
+ },
+ "340283176253": {
+  "src": "Figure 4 shows the partial sums. One term is a plain sine whose crest stands \\(6.4\\ \\mathrm{px}\\) above the plateau, \\(13.7\\ \\%\\) of the jump. Four terms, the preset, already have flat tops with small ripples; ten terms follow the square wave closely except right next to each jump, where every partial sum overshoots. The overshoot gets narrower as terms are added, but from three terms on hardly lower: it settles at \\(8.95\\ \\%\\) of the jump, \\(4.22\\ \\mathrm{px}\\) above the plateau of the page’s square wave (Section 5.2).",
+  "tr": "Abb. 4 zeigt die Teilsummen. Ein einzelner Term ist eine schlichte Sinusschwingung, deren Scheitel \\(6.4\\ \\mathrm{px}\\) über dem Plateau steht, \\(13.7\\ \\%\\) des Sprungs. Vier Terme, das Preset, haben bereits flache Gipfel mit kleinen Welligkeiten; zehn Terme folgen der Rechteckwelle eng, außer dicht neben jedem Sprung, wo jede Teilsumme überschwingt. Das Überschwingen wird mit mehr Termen schmaler, aber von drei Termen an kaum niedriger: Es pendelt sich bei \\(8.95\\ \\%\\) des Sprungs ein, \\(4.22\\ \\mathrm{px}\\) über dem Plateau der Rechteckwelle der Seite (Abschnitt 5.2)."
+ },
+ "35ab2bdbf0f0": {
+  "src": "<span class=\"psub__n\">5.2</span>The overshoot that never shrinks<span class=\"star\" title=\"heavier mathematics\">★</span>",
+  "tr": "<span class=\"psub__n\">5.2</span>Das Überschwingen, das nie schrumpft<span class=\"star\" title=\"heavier mathematics\">★</span>"
+ },
+ "3824b0b0c157": {
+  "src": "This is the wave equation. For a string it says that each small piece accelerates in proportion to how sharply the string is bent there: Newton’s second law, with the tension supplying the force. When all the waves have the same speed \\(v,\\) they obey the same equation, \\(\\mathcal{L}y = 0\\) with \\(\\mathcal{L} = \\partial_t^2 - v^2\\,\\partial_X^2.\\) The derivative of a sum is the sum of the derivatives, so for any numbers \\(a\\) and \\(b\\)",
+  "tr": "Das ist die Wellengleichung. Für eine Saite besagt sie, dass sich jedes kleine Stück umso stärker beschleunigt, je schärfer die Saite dort gekrümmt ist: das zweite Newtonsche Gesetz, bei dem die Spannung die Kraft liefert. Haben alle Wellen dieselbe Geschwindigkeit \\(v,\\) so gehorchen sie derselben Gleichung, \\(\\mathcal{L}y = 0\\) mit \\(\\mathcal{L} = \\partial_t^2 - v^2\\,\\partial_X^2.\\) Die Ableitung einer Summe ist die Summe der Ableitungen, also gilt für beliebige Zahlen \\(a\\) und \\(b\\)"
+ },
+ "3ae50b8776e3": {
+  "src": "A stem that stands alone has the height of its wave’s amplitude. Two equal waves in step give a stem twice as tall; half a turn apart, no stem at all. A wave with Speed 0 does not oscillate: it adds the constant height \\(A_i\\sin\\varphi_i\\) at \\(X = 0,\\) and the stem at \\(\\nu = 0\\) shows \\(\\big|\\sum A_i\\sin\\varphi_i\\big|.\\)",
+  "tr": "Ein einzeln stehender Strich hat die Höhe der Amplitude seiner Welle. Zwei gleiche Wellen im Takt ergeben einen doppelt so hohen Strich; um eine halbe Umdrehung versetzt, gibt es gar keinen Strich. Eine Welle mit der Geschwindigkeit 0 schwingt nicht: Sie fügt bei \\(A_i\\sin\\varphi_i\\) die konstante Höhe \\(X = 0,\\) hinzu, und der Strich bei \\(\\nu = 0\\) zeigt \\(\\big|\\sum A_i\\sin\\varphi_i\\big|.\\)"
+ },
+ "3b4132d0a3ae": {
+  "src": "This is Parseval’s theorem: the mean square of a wave is the sum of the mean squares of its frequencies. For the <em>Square wave</em> preset it gives \\(\\tfrac12\\,(30^2 + 10^2 + 6^2 + 4.3^2)\\ \\mathrm{px^2} = 527.2\\ \\mathrm{px^2}.\\) The square wave it imitates sits at \\(\\pm H\\) all the time, so its mean square is \\(H^2 = 555.2\\ \\mathrm{px^2}{:}\\) four terms already carry about \\(95\\ \\%\\) of the ideal square wave’s mean square; the rest lives in the sharp corners, which need the higher harmonics. That is a measure of the signal’s size, not automatically of its energy.",
+  "tr": "Das ist der Satz von Parseval: Der Mittelwert des Quadrats einer Welle ist die Summe der Mittelwerte der Quadrate ihrer Frequenzen. Für das Preset <em>Rechteckwelle</em> ergibt er \\(\\tfrac12\\,(30^2 + 10^2 + 6^2 + 4.3^2)\\ \\mathrm{px^2} = 527.2\\ \\mathrm{px^2}.\\) Die Rechteckwelle, die es nachahmt, liegt ständig bei \\(\\pm H\\) also ist ihr mittleres Quadrat \\(H^2 = 555.2\\ \\mathrm{px^2}{:}\\) Vier Terme tragen bereits etwa \\(95\\ \\%\\) des mittleren Quadrats der idealen Rechteckwelle; der Rest steckt in den scharfen Ecken, die die höheren Harmonischen brauchen. Das ist ein Maß für die Größe des Signals, nicht automatisch für seine Energie."
+ },
+ "3b6ef1d7bb50": {
+  "src": "Sum of the waves above, individual waves below",
+  "tr": "Summe der Wellen oben, einzelne Wellen unten"
+ },
+ "3c92c52319b0": {
+  "src": "The <em>Sum of amplitudes</em> readout is this ceiling, and <em>Peak |y| on screen</em> reaches it only where all the crests coincide. In the square wave they never do, since \\(\\sin 3x = -1\\) wherever \\(\\sin x = 1;\\) its peak, \\(27.9\\ \\mathrm{px},\\) stays well below the ceiling of \\(50.3\\ \\mathrm{px}.\\)",
+  "tr": "Die Anzeige <em>Summe der Amplituden</em> ist diese Schranke, und <em>Spitzenwert |y| auf dem Bildschirm</em> erreicht sie nur dort, wo alle Wellenberge zusammenfallen. Bei der Rechteckwelle geschieht das nie, denn \\(\\sin 3x = -1\\) überall dort, wo \\(\\sin x = 1;\\) ihr Scheitel \\(27.9\\ \\mathrm{px},\\) bleibt deutlich unter der Schranke von \\(50.3\\ \\mathrm{px}.\\)"
+ },
+ "3e341c4dd3fe": {
+  "src": "The square wave has the wavelength of its fundamental, \\(200/0.4 = 500\\ \\mathrm{px},\\) so 1.6 of them fit in the view, and at a fixed point it repeats every \\(2.5\\ \\mathrm{s}.\\) The preset stops at four terms because the next one, \\(n = 9,\\) would need a Frequency of 3.6, above the slider’s top value of 3.",
+  "tr": "Die Rechteckwelle hat die Wellenlänge ihrer Grundschwingung, \\(200/0.4 = 500\\ \\mathrm{px},\\) sodass 1.6 davon ins Bild passen, und an einem festen Punkt wiederholt sie sich alle \\(2.5\\ \\mathrm{s}.\\) Das Preset endet bei vier Termen, weil der nächste, \\(n = 9,\\) eine Frequenz von 3.6 bräuchte, über dem Höchstwert des Schiebereglers von 3."
+ },
+ "4012e36e4f4f": {
+  "src": "<span>3</span>Waves simply add",
+  "tr": "<span>3</span>Wellen addieren sich einfach"
+ },
+ "415fcd807151": {
+  "src": "Peak |y| on screen",
+  "tr": "Spitzenwert |y| auf dem Bildschirm"
+ },
+ "41bd0e3ab024": {
+  "src": "Differentiate (1) twice. A sine differentiated twice comes back as minus itself, times \\(\\omega_i^2\\) if we differentiate in time and \\(k_i^2\\) if we differentiate in space, so",
+  "tr": "Leiten Sie (1) zweimal ab. Eine Sinusfunktion kommt, zweimal abgeleitet, mit umgekehrtem Vorzeichen zurück, multipliziert mit \\(\\omega_i^2\\), wenn wir nach der Zeit ableiten, und mit \\(k_i^2\\), wenn wir nach dem Ort ableiten, also"
+ },
+ "43a781ba8de6": {
+  "src": "R. P. Feynman, R. B. Leighton and M. Sands, <em>The Feynman Lectures on Physics</em>, Volume I, Addison-Wesley, 1963: chapters <a href=\"https://www.feynmanlectures.caltech.edu/I_48.html\">48 (Beats)</a> and <a href=\"https://www.feynmanlectures.caltech.edu/I_50.html\">50 (Harmonics)</a>, free in the Caltech online edition.",
+  "tr": "R. P. Feynman, R. B. Leighton und M. Sands, <em>The Feynman Lectures on Physics</em>, Band I, Addison-Wesley, 1963: Kapitel <a href=\"https://www.feynmanlectures.caltech.edu/I_48.html\">48 (Beats)</a> und <a href=\"https://www.feynmanlectures.caltech.edu/I_50.html\">50 (Harmonics)</a>, kostenlos in der Online-Ausgabe von Caltech."
+ },
+ "45a873ee4dd4": {
+  "src": "Fourier’s theorem",
+  "tr": "Fouriers Satz"
+ },
+ "45e1421c7238": {
+  "src": "Stand next to a guitarist tuning up. Two strings that should give the same note are plucked together, and the sound swells and fades, slower and slower as the peg is turned, until it holds steady.",
+  "tr": "Stellen Sie sich neben einen Gitarristen, der sein Instrument stimmt. Zwei Saiten, die denselben Ton geben sollen, werden gemeinsam angezupft, und der Klang schwillt an und ab, immer langsamer, je weiter der Wirbel gedreht wird, bis er ruhig stehen bleibt."
+ },
+ "46e4cc1f7f74": {
+  "src": "Suppose a function \\(F(x)\\) of period \\(2\\pi\\) can be written as the series in the box. To find one coefficient, say \\(b_m,\\) we need a way to make all the other terms disappear, and the sines and cosines provide it. Over a full period, for whole numbers \\(m, n \\ge 1,\\)",
+  "tr": "Angenommen, eine Funktion \\(F(x)\\) mit der Periode \\(2\\pi\\) lässt sich als die Reihe im Kasten schreiben. Um einen einzelnen Koeffizienten zu finden, etwa \\(b_m,\\) brauchen wir ein Mittel, alle übrigen Terme verschwinden zu lassen, und Sinus und Kosinus liefern es. Über eine volle Periode gilt für ganze Zahlen \\(m, n \\ge 1,\\)"
+ },
+ "483998def219": {
+  "src": "In the spectrum, a stem at frequency \\(\\nu\\) stands \\(44 + (\\nu/6\\ \\mathrm{Hz})\\,(w - 58)\\) screen pixels from the left edge, where \\(w\\) is the panel width, and its height is \\(C_\\nu\\) scaled so that \\(40\\ \\mathrm{px},\\) or the tallest stem if that is taller, fills the panel. The axis runs from 0 to \\(6\\ \\mathrm{Hz}\\) because \\(\\nu = f s\\) can reach \\(3 \\times 2 = 6\\ \\mathrm{Hz};\\) the caption beneath the panel states this 0–6 Hz range. Each wave keeps one colour for its card, its sliders, its curve and its stem, and a stem shared by several waves is drawn in ink.",
+  "tr": "Im Spektrum steht ein Strich bei der Frequenz \\(\\nu\\) in \\(44 + (\\nu/6\\ \\mathrm{Hz})\\,(w - 58)\\) Bildschirmpixeln vom linken Rand, wobei \\(w\\) die Breite des Teils ist, und seine Höhe ist \\(C_\\nu\\), so skaliert, dass \\(40\\ \\mathrm{px},\\) oder der höchste Strich, falls er höher ist, den Teil ausfüllt. Die Achse läuft von 0 bis \\(6\\ \\mathrm{Hz}\\) denn \\(\\nu = f s\\) kann bis \\(3 \\times 2 = 6\\ \\mathrm{Hz};\\) erreichen, und die Bildunterschrift nennt diesen Bereich von 0 bis 6 Hz. Jede Welle behält eine Farbe für ihre Karte, ihre Schieberegler, ihre Kurve und ihren Strich, und ein Strich, den mehrere Wellen teilen, wird in Tintenfarbe gezeichnet."
+ },
+ "4a59e9e8e553": {
+  "src": "With equal speeds, \\(s_1 = s_2 = s,\\) both reduce to \\(200\\,s\\ \\mathrm{px/s}{:}\\) envelope and carrier move together and the whole pattern slides along unchanged. With different speeds they part company, and the envelope can even run backwards (Exercise 4.1). In the limit of close frequencies, \\(\\Delta\\omega/\\Delta k\\) becomes the derivative \\(v_\\text{g} = \\mathrm{d}\\omega/\\mathrm{d}k,\\) the <em>group velocity</em>. It is the speed of a long, slowly varying envelope, built from a narrow band of wavelengths, in a medium whose dispersion relation \\(\\omega(k)\\) fixes the frequency of each wavelength; for waves that lose no energy it is also the speed at which the energy, and any slow signal, travels. On this bench, though, there is no medium: you choose each wave’s speed by hand, nothing carries energy, and the envelope’s speed follows only from the two pairs \\((k, \\omega)\\) you set. That is why it can run backwards faster than either wave. A real medium could show the same envelope only if its \\(\\omega(k)\\) fell with \\(k\\) there, and then the energy would travel backwards with it. On deep water, for example, \\(\\omega = \\sqrt{gk}\\) with \\(g = 9.81\\ \\mathrm{m/s^2},\\) so \\(v_\\text{g}\\) is exactly half the phase speed: in a group of ocean swell, new crests appear at the back, run forward through the group and die out at the front.",
+  "tr": "Bei gleichen Geschwindigkeiten, \\(s_1 = s_2 = s,\\) reduzieren sich beide auf \\(200\\,s\\ \\mathrm{px/s}{:}\\) Hüllkurve und Träger wandern gemeinsam, und das ganze Muster gleitet unverändert weiter. Bei verschiedenen Geschwindigkeiten gehen sie auseinander, und die Hüllkurve kann sogar rückwärts laufen (Aufgabe 4.1). Im Grenzfall nahe beieinander liegender Frequenzen wird \\(\\Delta\\omega/\\Delta k\\) zur Ableitung \\(v_\\text{g} = \\mathrm{d}\\omega/\\mathrm{d}k,\\) der <em>Gruppengeschwindigkeit</em>. Sie ist die Geschwindigkeit einer langen, langsam veränderlichen Hüllkurve, die aus einem schmalen Band von Wellenlängen aufgebaut ist, in einem Medium, dessen Dispersionsrelation \\(\\omega(k)\\) die Frequenz jeder Wellenlänge festlegt; für Wellen, die keine Energie verlieren, ist sie zugleich die Geschwindigkeit, mit der die Energie und jedes langsame Signal wandert. Auf dieser Werkbank gibt es jedoch kein Medium: Sie wählen die Geschwindigkeit jeder Welle von Hand, nichts trägt Energie, und die Geschwindigkeit der Hüllkurve folgt allein aus den beiden Paaren \\((k, \\omega)\\) die Sie einstellen. Deshalb kann sie rückwärts laufen, schneller als jede der beiden Wellen. Ein reales Medium könnte dieselbe Hüllkurve nur zeigen, wenn sein \\(\\omega(k)\\) dort mit \\(k\\) abnähme, und dann würde die Energie mit ihr rückwärts wandern. Auf tiefem Wasser zum Beispiel gilt \\(\\omega = \\sqrt{gk}\\) mit \\(g = 9.81\\ \\mathrm{m/s^2},\\) sodass \\(v_\\text{g}\\) genau die Hälfte der Phasengeschwindigkeit ist: In einer Gruppe von Meeresdünung entstehen hinten neue Wellenberge, laufen durch die Gruppe nach vorn und sterben vorn aus."
+ },
+ "4a81ec85f9b8": {
+  "src": "<span>9</span>What the model leaves out",
+  "tr": "<span>9</span>Was das Modell weglässt"
+ },
+ "50aa21524b2b": {
+  "src": "<span class=\"psub__n\">3.1</span>Two waves of one frequency make one wave",
+  "tr": "<span class=\"psub__n\">3.1</span>Zwei Wellen gleicher Frequenz ergeben eine Welle"
+ },
+ "566d8906db35": {
+  "src": "The stems tell how the mean-square displacement is shared: square the height at a fixed point and average over a long time, written \\(\\overline{y^2}.\\) Squaring a sum of sines gives squares, each of which averages to half its amplitude squared, and cross terms such as \\(\\sin(2\\pi\\nu_1 t + \\alpha)\\,\\sin(2\\pi\\nu_2 t + \\beta),\\) which average to zero when \\(\\nu_1 \\ne \\nu_2.\\) For a spectrum with no stem at \\(\\nu = 0,\\) therefore,",
+  "tr": "Die Striche zeigen, wie sich die mittlere quadratische Auslenkung verteilt: Quadrieren Sie die Höhe an einem festen Punkt und mitteln Sie über eine lange Zeit, geschrieben \\(\\overline{y^2}.\\) Das Quadrat einer Summe von Sinusfunktionen ergibt Quadrate, von denen jedes im Mittel das halbe Quadrat seiner Amplitude beträgt, und Kreuzterme wie \\(\\sin(2\\pi\\nu_1 t + \\alpha)\\,\\sin(2\\pi\\nu_2 t + \\beta),\\) die sich zu null mitteln, wenn \\(\\nu_1 \\ne \\nu_2.\\) Für ein Spektrum ohne Strich bei \\(\\nu = 0,\\) gilt daher,"
+ },
+ "576aaafcc319": {
+  "src": "Stand at the left edge of the view, \\(X = 0,\\) and listen. By (1), wave \\(i\\) arrives there as \\(A_i\\sin(\\varphi_i - 2\\pi\\nu_i t),\\) an oscillation of frequency \\(\\nu_i = f_i s_i.\\) The panel draws one vertical line, a stem, for each different frequency, placed at \\(\\nu\\) on the horizontal axis. Waves that share a frequency merge into one oscillation by (5), so the stem’s height is the length of their summed phasor,",
+  "tr": "Stellen Sie sich an den linken Rand des Bildes, \\(X = 0,\\) und hören Sie zu. Nach (1) kommt Welle \\(i\\) dort als \\(A_i\\sin(\\varphi_i - 2\\pi\\nu_i t),\\) als Schwingung der Frequenz \\(\\nu_i = f_i s_i.\\) an. Das Diagramm zeichnet für jede verschiedene Frequenz eine senkrechte Linie, einen Strich, an der Stelle \\(\\nu\\) auf der waagerechten Achse. Wellen mit gleicher Frequenz verschmelzen nach (5) zu einer Schwingung, sodass die Höhe des Strichs die Länge ihres summierten Zeigers ist,"
+ },
+ "5ab07c8cc6f5": {
+  "src": "<span class=\"pfig__n\">Figure 2</span>Adding two waves of the same frequency, equation (5). Each wave is an arrow whose length is its amplitude and whose angle is its phase. The second arrow starts at the tip of the first, and the arrow \\(C\\) from the start to the end is the sum. As time passes the whole picture turns rigidly, at the angular frequency \\(\\omega,\\) and the height of each tip, read off on the right, is a displacement: heights add because arrows add.",
+  "tr": "<span class=\"pfig__n\">Abb. 2</span>Addition zweier Wellen gleicher Frequenz, Gleichung (5). Jede Welle ist ein Pfeil, dessen Länge ihre Amplitude und dessen Winkel ihre Phase ist. Der zweite Pfeil beginnt an der Spitze des ersten, und der Pfeil \\(C\\) vom Anfang bis zum Ende ist die Summe. Mit der Zeit dreht sich das ganze Bild starr mit der Kreisfrequenz \\(\\omega,\\) und die Höhe jeder Spitze, rechts abgelesen, ist eine Auslenkung: Höhen addieren sich, weil Pfeile sich addieren."
+ },
+ "5b9266d412c2": {
+  "src": "Lecture note · Fig. 6 · superposition · Fourier analysis",
+  "tr": "Skript · Abb. 6 · Superposition · Fourier-Analyse"
+ },
+ "5bdb46045e49": {
+  "src": "<span class=\"psec__n\">04</span>Beats",
+  "tr": "<span class=\"psec__n\">04</span>Schwebungen"
+ },
+ "5c5b05f8ee34": {
+  "src": "where \\(\\delta_{mn}\\) is 1 if \\(m = n\\) and 0 otherwise. To see the first, write \\(\\sin mx\\,\\sin nx = \\tfrac12\\left[ \\cos(m-n)x - \\cos(m+n)x \\right].\\) A cosine that makes a nonzero whole number of oscillations in the period averages to zero, and only for \\(m = n\\) does the first term become the constant \\(\\tfrac12,\\) which contributes \\(\\pi.\\) The second integral vanishes because its integrand is odd. Functions with this property are called <em>orthogonal</em>, by analogy with perpendicular vectors, whose dot product is zero. Multiply the series by \\(\\sin mx\\) and integrate over a period: every term but one drops out, and",
+  "tr": "wobei \\(\\delta_{mn}\\) den Wert 1 hat, wenn \\(m = n\\), und sonst 0. Um den ersten zu sehen, schreiben Sie \\(\\sin mx\\,\\sin nx = \\tfrac12\\left[ \\cos(m-n)x - \\cos(m+n)x \\right].\\) Ein Kosinus, der in der Periode eine von null verschiedene ganze Zahl von Schwingungen macht, mittelt sich zu null, und nur für \\(m = n\\) wird der erste Term zur Konstanten \\(\\tfrac12,\\), die \\(\\pi.\\) beiträgt. Das zweite Integral verschwindet, weil sein Integrand ungerade ist. Funktionen mit dieser Eigenschaft heißen <em>orthogonal</em>, in Analogie zu senkrechten Vektoren, deren Skalarprodukt null ist. Multiplizieren Sie die Reihe mit \\(\\sin mx\\) und integrieren Sie über eine Periode: Alle Terme bis auf einen fallen weg, und"
+ },
+ "6093e32cc623": {
+  "src": "The same rule explains things that seem to have nothing in common. A noise-cancelling headphone listens to the outside noise with a small microphone and plays the same wave turned upside down; the two add to almost nothing, which works best for steady low hums such as an aircraft engine. An additive synthesizer works the other way round: it mixes pure sine tones at whole-number multiples of a note’s frequency, each with its own loudness, and the mixture can sound like an organ, a clarinet or a violin. The bowed string of a violin pulls on the bridge with a force shaped roughly like a sawtooth, which contains every multiple of the note, the \\(n\\)th one with a strength proportional to \\(1/n.\\) The low notes of a clarinet are dominated by the odd multiples, which is why a square wave, built from odd multiples alone, sounds hollow, a little like a clarinet.",
+  "tr": "Dieselbe Regel erklärt Dinge, die auf den ersten Blick nichts miteinander zu tun haben. Ein Noise-Cancelling-Kopfhörer hört den Außenlärm mit einem kleinen Mikrofon ab und spielt dieselbe Welle umgekehrt ab; beide addieren sich zu fast nichts, was bei gleichmäßigen tiefen Brummtönen wie dem eines Flugzeugtriebwerks am besten funktioniert. Ein additiver Synthesizer arbeitet umgekehrt: Er mischt reine Sinustöne bei ganzzahligen Vielfachen der Frequenz eines Tons, jeden mit eigener Lautstärke, und die Mischung kann wie eine Orgel, eine Klarinette oder eine Violine klingen. Die gestrichene Saite einer Violine drückt auf den Steg mit einer Kraft, die ungefähr die Form eines Sägezahns hat; sie enthält jedes Vielfache des Tons, das \\(n\\)-te mit einer Stärke proportional zu \\(1/n.\\) Die tiefen Töne einer Klarinette werden von den ungeraden Vielfachen beherrscht, weshalb eine Rechteckwelle, die nur aus ungeraden Vielfachen aufgebaut ist, hohl klingt, ein wenig wie eine Klarinette."
+ },
+ "61a0f3fe6d49": {
+  "src": "The workbench above lets you play all of these games with up to six waves. The lower half of the plot shows the ingredients, the upper half their sum, and the spectrum below lists what is in the mix.",
+  "tr": "Die Werkbank oben erlaubt es Ihnen, alle diese Spiele mit bis zu sechs Wellen durchzuspielen. Die untere Hälfte des Diagramms zeigt die Bestandteile, die obere Hälfte ihre Summe, und das Spektrum darunter listet auf, was in der Mischung steckt."
+ },
+ "6205c61dd83c": {
+  "src": "Exercise 6.1 · on the figure above",
+  "tr": "Aufgabe 6.1 · zur Abbildung oben"
+ },
+ "620a2113787d": {
+  "src": "<span class=\"psec__n\">06</span>The spectrum",
+  "tr": "<span class=\"psec__n\">06</span>Das Spektrum"
+ },
+ "65d41b3794e3": {
+  "src": "<span class=\"pfig__n\">Figure 3</span>The <em>Beats</em> preset as heard at one point, the centre of the view, \\(X = 400\\ \\mathrm{px}{:}\\) the two waves of equation (1) summed every \\(0.01\\ \\mathrm{s}\\) from \\(t = 0\\) to \\(8\\ \\mathrm{s}.\\) The dashed envelope \\(\\pm 36\\,|\\cos(\\pi(t-2)/4)|\\ \\mathrm{px},\\) from (7), encloses the sum at every instant. It falls to zero at \\(t = 0,\\) 4 and \\(8\\ \\mathrm{s},\\) where the two waves are exactly out of step, and reaches \\(2A = 36\\ \\mathrm{px}\\) halfway between.",
+  "tr": "<span class=\"pfig__n\">Abb. 3</span>Die Voreinstellung <em>Schwebung</em>, so wie sie an einem Punkt gehört wird, der Mitte des Bildes, \\(X = 400\\ \\mathrm{px}{:}\\) die beiden Wellen aus Gleichung (1), summiert alle \\(0.01\\ \\mathrm{s}\\) von \\(t = 0\\) bis \\(8\\ \\mathrm{s}.\\) Die gestrichelte Hüllkurve \\(\\pm 36\\,|\\cos(\\pi(t-2)/4)|\\ \\mathrm{px},\\) aus (7), umschließt die Summe zu jedem Zeitpunkt. Sie fällt bei \\(t = 0,\\) 4 und \\(8\\ \\mathrm{s},\\) auf null, wo die beiden Wellen genau außer Tritt sind, und erreicht \\(2A = 36\\ \\mathrm{px}\\) genau in der Mitte dazwischen."
+ },
+ "6b8ca8943b99": {
+  "src": "Amplitude spectrum of the waves",
+  "tr": "Amplitudenspektrum der Wellen"
+ },
+ "6bc74cfa4903": {
+  "src": "highest \\(n\\)",
+  "tr": "höchstes \\(n\\)"
+ },
+ "6c29d9e9621e": {
+  "src": "Adding waves: beats, square waves and the spectrum",
+  "tr": "Wellen addieren: Schwebungen, Rechteckwellen und das Spektrum"
+ },
+ "6db8077fc02e": {
+  "src": "The phase speed \\(v_i = 200\\,s_i\\ \\mathrm{px/s}\\) is set by the <em>Speed</em> slider alone; the <em>Frequency</em> slider does not change it.",
+  "tr": "Die Phasengeschwindigkeit \\(v_i = 200\\,s_i\\ \\mathrm{px/s}\\) wird allein durch den Schieberegler der <em>Geschwindigkeit</em> bestimmt; der Schieberegler der <em>Frequenz</em> ändert sie nicht."
+ },
+ "702b201c4b40": {
+  "src": "Phyein Usul",
+  "tr": "Phyein Usul"
+ },
+ "717c2865a07e": {
+  "src": "peak (px)",
+  "tr": "Scheitel (px)"
+ },
+ "726f517f2235": {
+  "src": "Waves",
+  "tr": "Wellen"
+ },
+ "768e873d2c52": {
+  "src": "The <em>Square wave</em> preset adds four waves with Frequencies 0.4, 1.2, 2.0 and 2.8, the first, third, fifth and seventh multiples of 0.4, and Amplitudes \\(30/n\\ \\mathrm{px}\\) for \\(n = 1, 3, 5, 7{:}\\) 30, 10, 6 and \\(4.3\\ \\mathrm{px},\\) the last rounded from \\(30/7 = 4.29.\\) All four have Phase 0 and Speed 1×. The result is a flat-topped wave that jumps between two levels, and the reason is Fourier’s series for the square wave \\(\\operatorname{sq}(x),\\) which equals \\(+1\\) for \\(0 < x < \\pi\\) and \\(-1\\) for \\(-\\pi < x < 0\\) and repeats every \\(2\\pi{:}\\)",
+  "tr": "Die Voreinstellung <em>Rechteckwelle</em> addiert vier Wellen mit den Frequenzen 0.4, 1.2, 2.0 und 2.8, der ersten, dritten, fünften und siebten Vielfachen von 0.4, und den Amplituden \\(30/n\\ \\mathrm{px}\\) für \\(n = 1, 3, 5, 7{:}\\) 30, 10, 6 und \\(4.3\\ \\mathrm{px},\\) wobei der letzte Wert aus \\(30/7 = 4.29.\\) gerundet ist. Alle vier haben die Phase 0 und die Geschwindigkeit 1×. Das Ergebnis ist eine flachgipfelige Welle, die zwischen zwei Niveaus springt, und der Grund ist die Fourier-Reihe für die Rechteckwelle \\(\\operatorname{sq}(x),\\) die \\(+1\\) für \\(0 < x < \\pi\\) und \\(-1\\) für \\(-\\pi < x < 0\\) ist und sich alle \\(2\\pi{:}\\) wiederholt:"
+ },
+ "781961bc81c2": {
+  "src": "Pause",
+  "tr": "Pause"
+ },
+ "7d252cd594b3": {
+  "src": "All simulations ↑",
+  "tr": "Alle Simulationen ↑"
+ },
+ "7f0c857fd102": {
+  "src": "Energy counts the harmonics differently. A stretched string with mass \\(\\mu\\) per length and tension \\(F\\) stores kinetic energy \\(\\tfrac12\\mu\\,(\\partial y/\\partial t)^2\\) and stretching energy \\(\\tfrac12 F\\,(\\partial y/\\partial X)^2\\) per length. For a wave running one way, \\(\\partial y/\\partial t = -v\\,\\partial y/\\partial X\\) and \\(F = \\mu v^2,\\) so the two are equal. A harmonic swings each point with a velocity of amplitude \\(\\omega_n A_n,\\) so its mean kinetic energy per length is \\(\\tfrac14\\mu\\,\\omega_n^2 A_n^2\\) and its total twice that; the cross terms average away as in (18), and the mean energy per length is \\(\\overline e = \\tfrac12\\mu\\sum_n \\omega_n^2 A_n^2.\\) The fast harmonics weigh more because they move faster. For a square wave \\(A_n \\propto 1/n\\) and \\(\\omega_n \\propto n,\\) so every odd harmonic carries the same energy (in the preset too, to within \\(0.7\\ \\%\\)) and the endless sum diverges: a string with true vertical steps would hold infinite energy in this small-slope model, though its mean square is only \\(H^2.\\) The \\(95\\ \\%\\) above says how close the preset’s shape comes to the square wave, not what share of a string’s energy it would carry.",
+  "tr": "Energie zählt die Oberschwingungen anders. Eine gespannte Saite mit der Masse \\(\\mu\\) pro Länge und der Spannung \\(F\\) speichert kinetische Energie \\(\\tfrac12\\mu\\,(\\partial y/\\partial t)^2\\) und Dehnungsenergie \\(\\tfrac12 F\\,(\\partial y/\\partial X)^2\\) pro Länge. Für eine Welle, die in eine Richtung läuft, gilt \\(\\partial y/\\partial t = -v\\,\\partial y/\\partial X\\) und \\(F = \\mu v^2,\\) sodass die beiden gleich sind. Eine Oberschwingung bewegt jeden Punkt mit einer Geschwindigkeitsamplitude \\(\\omega_n A_n,\\) also ist ihre mittlere kinetische Energie pro Länge \\(\\tfrac14\\mu\\,\\omega_n^2 A_n^2\\) und ihre Gesamtenergie das Doppelte; die Kreuzterme mitteln sich wie in (18) heraus, und die mittlere Energie pro Länge ist \\(\\overline e = \\tfrac12\\mu\\sum_n \\omega_n^2 A_n^2.\\) Die schnellen Oberschwingungen wiegen mehr, weil sie sich schneller bewegen. Für eine Rechteckwelle gilt \\(A_n \\propto 1/n\\) und \\(\\omega_n \\propto n,\\) sodass jede ungerade Oberschwingung dieselbe Energie trägt (im Preset auch, bis auf \\(0.7\\ \\%\\)), und die unendliche Summe divergiert: Eine Saite mit echten senkrechten Sprüngen hätte in diesem Modell mit kleiner Steigung unendliche Energie, obwohl ihr mittleres Quadrat nur \\(H^2.\\) beträgt. Die \\(95\\ \\%\\) oben sagen, wie nahe die Form des Presets an die Rechteckwelle herankommt, nicht, welcher Anteil der Energie einer Saite darauf entfiele."
+ },
+ "7f1ea7ae3415": {
+  "src": "<span class=\"psub__n\">4.1</span>The speed of the envelope<span class=\"star\" title=\"heavier mathematics\">★</span>",
+  "tr": "<span class=\"psub__n\">4.1</span>Die Geschwindigkeit der Hüllkurve<span class=\"star\" title=\"heavier mathematics\">★</span>"
+ },
+ "803f20699aef": {
+  "src": "<span>5</span>A square wave from sines",
+  "tr": "<span>5</span>Eine Rechteckwelle aus Sinusfunktionen"
+ },
+ "819de9cf83ab": {
+  "src": "<span>1</span>Many sounds, one eardrum",
+  "tr": "<span>1</span>Viele Klänge, ein Trommelfell"
+ },
+ "82890f2b7ba4": {
+  "src": "Each wave is evaluated exactly at every sample, and the sum is accumulated at the same points. The code calls the sine three times per wave and sample, twice for the component curve and once for the sum: \\(3N(M+1)\\) calls, \\(8\\,556\\) per frame for the <em>Square wave</em> preset in the wide window, plus two per wave, one for the stored values at the centre of the view and one for the spectrum.",
+  "tr": "Jede Welle wird an jeder Probe genau ausgewertet, und die Summe wird an denselben Punkten aufsummiert. Der Code ruft den Sinus pro Welle und Probe dreimal auf, zweimal für die Teilkurve und einmal für die Summe: \\(3N(M+1)\\) Aufrufe, \\(8\\,556\\) pro Bild für das Preset <em>Rechteckwelle</em> im breiten Fenster, dazu zwei pro Welle, einer für die gespeicherten Werte in der Mitte des Bildes und einer für das Spektrum."
+ },
+ "850899604011": {
+  "src": "Beats come from two frequencies that are almost equal. Harmonics are the opposite case: frequencies that are exact whole-number multiples of one fundamental. Added with the right strengths, they can build almost any repeating shape.",
+  "tr": "Schwebungen entstehen aus zwei fast gleichen Frequenzen. Oberschwingungen sind der entgegengesetzte Fall: Frequenzen, die genau ganzzahlige Vielfache einer Grundfrequenz sind. Mit den richtigen Stärken addiert, können sie nahezu jede sich wiederholende Form aufbauen."
+ },
+ "85b76337411d": {
+  "src": "Your ear does the reverse of a synthesizer. Along the basilar membrane, a thin strip inside the snail-shaped cochlea of the inner ear, each place responds most strongly to one frequency, high near the entrance and low at the far end. The ear therefore takes the sum apart again and reports which frequencies are present and how strong each one is. That list is the <em>spectrum</em>, and it is what the panel below the plot, Fig. 6b, draws.",
+  "tr": "Ihr Ohr macht das Umgekehrte eines Synthesizers. Entlang der Basilarmembran, einem dünnen Streifen im schneckenförmigen Innenohr (Cochlea), spricht jede Stelle am stärksten auf eine Frequenz an: hohe Frequenzen nahe am Eingang, tiefe am anderen Ende. Das Ohr zerlegt die Summe also wieder und meldet, welche Frequenzen vorhanden sind und wie stark jede ist. Diese Liste ist das <em>Spektrum</em>, und genau das zeichnet die Darstellung unter dem Diagramm, Abb. 6b."
+ },
+ "8615e651d62f": {
+  "src": "The square wave is odd, \\(\\operatorname{sq}(-x) = -\\operatorname{sq}(x),\\) so all its cosine coefficients vanish, and the integrand in (13) is even, so the integral is twice that from 0 to \\(\\pi,\\) where \\(\\operatorname{sq} = 1{:}\\)",
+  "tr": "Die Rechteckwelle ist ungerade, \\(\\operatorname{sq}(-x) = -\\operatorname{sq}(x),\\) daher verschwinden alle ihre Kosinuskoeffizienten, und der Integrand in (13) ist gerade, sodass das Integral doppelt so groß ist wie das von 0 bis \\(\\pi,\\) wo \\(\\operatorname{sq} = 1{:}\\)"
+ },
+ "8716854255ac": {
+  "src": "<i>ν</i> from 0 to 6 Hz",
+  "tr": "<i>ν</i> von 0 bis 6 Hz"
+ },
+ "89e74b6c95aa": {
+  "src": "Each term \\(A e^{\\mathrm{i}\\varphi}\\) is an arrow, a <em>phasor</em>, of length \\(A\\) at angle \\(\\varphi.\\) Adding waves of one frequency is adding arrows tip to tail (Figure 2), and the length of the result follows from the cosine rule. The angle inside the triangle, at the joint, is \\(\\pi - (\\varphi_2 - \\varphi_1),\\) and \\(\\cos(\\pi - \\alpha) = -\\cos\\alpha\\) turns the rule’s minus into a plus:",
+  "tr": "Jeder Term \\(A e^{\\mathrm{i}\\varphi}\\) ist ein Pfeil, ein <em>Phasor</em>, mit Länge \\(A\\) unter dem Winkel \\(\\varphi.\\) Das Addieren von Wellen gleicher Frequenz bedeutet, Pfeile Spitze an Schwanz aneinanderzusetzen (Abb. 2), und die Länge des Ergebnisses folgt aus dem Kosinussatz. Der Winkel im Dreieck an der Verbindungsstelle ist \\(\\pi - (\\varphi_2 - \\varphi_1),\\) und \\(\\cos(\\pi - \\alpha) = -\\cos\\alpha\\) macht aus dem Minus der Regel ein Plus:"
+ },
+ "8a55b52cd3d1": {
+  "src": "One wave",
+  "tr": "Eine Welle"
+ },
+ "8afc6052baf0": {
+  "src": "<span class=\"pfig__n\">Figure 4</span>Partial sums of (11) at \\(t = 0\\) over one wavelength, \\(0 \\le X \\le 500\\ \\mathrm{px},\\) evaluated every \\(1\\ \\mathrm{px}{:}\\) one term \\((n = 1);\\) the four terms of the <em>Square wave</em> preset with its amplitudes 30, 10, 6 and \\(4.3\\ \\mathrm{px};\\) and ten terms \\((n = 1, 3, \\dots, 19,\\) amplitudes \\(30/n\\ \\mathrm{px}),\\) which the page cannot show because \\(n \\ge 9\\) lies above its Frequency range. The dashed line is the square wave of height \\(H = 23.56\\ \\mathrm{px},\\) the dotted lines the limit of the overshoot for many terms, \\(\\pm 27.78\\ \\mathrm{px}.\\) As terms are added the ripples crowd towards the jumps, while the crest next to each jump keeps nearly the same height.",
+  "tr": "<span class=\"pfig__n\">Abb. 4</span>Teilsummen von (11) bei \\(t = 0\\) über eine Wellenlänge, \\(0 \\le X \\le 500\\ \\mathrm{px},\\) jeweils im Abstand von \\(1\\ \\mathrm{px}{:}\\) ein Term \\((n = 1);\\) die vier Terme des Presets <em>Rechteckwelle</em> mit ihren Amplituden 30, 10, 6 und \\(4.3\\ \\mathrm{px};\\) und zehn Terme \\((n = 1, 3, \\dots, 19,\\) Amplituden \\(30/n\\ \\mathrm{px}),\\) die die Seite nicht zeigen kann, weil \\(n \\ge 9\\) oberhalb ihres Frequenzbereichs liegt. Die gestrichelte Linie ist die Rechteckwelle mit der Höhe \\(H = 23.56\\ \\mathrm{px},\\) die gepunkteten Linien die Grenze des Überschwingens für viele Terme, \\(\\pm 27.78\\ \\mathrm{px}.\\) Mit mehr Termen drängen sich die Welligkeiten an die Sprünge, während der Scheitel neben jedem Sprung nahezu dieselbe Höhe behält."
+ },
+ "8f5fc61edca2": {
+  "src": "A workbench for adding waves. Give each one its own amplitude, frequency, phase and speed, and watch the sum take shape.",
+  "tr": "Eine Werkbank zum Addieren von Wellen. Geben Sie jeder Welle ihre eigene Amplitude, Frequenz, Phase und Geschwindigkeit und sehen Sie zu, wie sich die Summe formt."
+ },
+ "9377b21a7822": {
+  "src": "<span>8</span>From the medium to the screen",
+  "tr": "<span>8</span>Vom Medium zum Bildschirm"
+ },
+ "93a8161c11f4": {
+  "src": "Back to the simulations",
+  "tr": "Zurück zu den Simulationen"
+ },
+ "9521dba25709": {
+  "src": "Home page",
+  "tr": "Startseite"
+ },
+ "973432ed78e5": {
+  "src": "Section 5.1 derives it. With \\(x = 2\\pi \\times 0.4\\,(X/200 - t),\\) the term \\(\\sin nx\\) is exactly the page’s wave of Frequency \\(0.4\\,n,\\) and the amplitudes \\(30/n\\) are those of (10) multiplied by a height \\(H\\) with \\(4H/\\pi = 30\\ \\mathrm{px}{:}\\)",
+  "tr": "Abschnitt 5.1 leitet sie her. Mit \\(x = 2\\pi \\times 0.4\\,(X/200 - t),\\) ist der Term \\(\\sin nx\\) genau die Welle der Seite mit der Frequenz \\(0.4\\,n,\\) und die Amplituden \\(30/n\\) sind die aus (10), multipliziert mit einer Höhe \\(H\\) mit \\(4H/\\pi = 30\\ \\mathrm{px}{:}\\)"
+ },
+ "97ec8ab1959a": {
+  "src": "<b>Abstract.</b> Every sound that reaches your ear is many waves at once, and the air carries them by simply adding them up. This note shows why adding is allowed and what sums of sines can build: the slow throb of beats that guitarists tune by, the near-silence inside a noise-cancelling headphone, and a square wave assembled from odd harmonics, with an overshoot at its corners that no number of terms removes. It then explains the spectrum below the plot, the list of frequencies a wave contains, which is also how your inner ear takes a sound apart, and how the page computes and draws every curve. Subsections marked ★ carry the heavier mathematics and can be skipped on a first reading without losing the thread.",
+  "tr": "<b>Zusammenfassung.</b> Jeder Klang, der Ihr Ohr erreicht, besteht aus vielen Wellen gleichzeitig, und die Luft trägt sie, indem sie sich einfach addiert. Dieses Skript zeigt, warum Addieren erlaubt ist und was Summen von Sinusfunktionen aufbauen können: das langsame Pulsieren der Schwebungen, nach denen Gitarristen stimmen, die fast vollständige Stille im Inneren eines Noise-Cancelling-Kopfhörers und eine Rechteckwelle aus ungeraden Harmonischen mit einem Überschwingen an ihren Ecken, das keine noch so große Zahl von Gliedern beseitigt. Danach erklärt es das Spektrum unter dem Bild, also die Liste der Frequenzen, die eine Welle enthält, und zugleich, wie Ihr Innenohr einen Klang zerlegt, sowie wie das Programm jede Kurve berechnet und zeichnet. Abschnitte mit ★ enthalten die schwerere Mathematik und können beim ersten Lesen übersprungen werden, ohne den roten Faden zu verlieren."
+ },
+ "98ac15eeb354": {
+  "src": "The view is \\(800\\ \\mathrm{px}\\) wide, so it always holds \\(4 f_i\\) wavelengths: four for the default Frequency 1, whatever the size of your screen.",
+  "tr": "Das Bild ist \\(800\\ \\mathrm{px}\\) breit, es enthält also immer \\(4 f_i\\) Wellenlängen: vier bei der voreingestellten Frequenz 1, unabhängig von der Größe Ihres Bildschirms."
+ },
+ "9ae6cd1c64c2": {
+  "src": "Call \\(S_N(x)\\) the sum of the first \\(N\\) terms of (10), up to \\(n = 2N - 1.\\) Its slope is a sum of cosines, and the sum telescopes: since \\(2\\sin x\\,\\cos(2k-1)x = \\sin 2kx - \\sin(2k-2)x,\\) adding these for \\(k = 1, \\dots, N\\) leaves only \\(\\sin 2Nx,\\) and",
+  "tr": "Man nenne \\(S_N(x)\\) die Summe der ersten \\(N\\) Terme von (10), bis \\(n = 2N - 1.\\) Ihre Steigung ist eine Summe von Kosinusfunktionen, und die Summe teleskopiert: Da \\(2\\sin x\\,\\cos(2k-1)x = \\sin 2kx - \\sin(2k-2)x,\\) gilt, bleibt beim Addieren dieser Ausdrücke für \\(k = 1, \\dots, N\\) nur \\(\\sin 2Nx,\\) übrig, und"
+ },
+ "9af3736c4028": {
+  "src": "Exercise 4.1 · on the figure above",
+  "tr": "Aufgabe 4.1 · zur Abbildung oben"
+ },
+ "9b79113fea4d": {
+  "src": "There is no differential equation to solve step by step: (1) gives every wave at every place and time directly, so the page simply evaluates it. Each frame does the following.",
+  "tr": "Es gibt keine Differentialgleichung, die Schritt für Schritt zu lösen wäre: (1) gibt jede Welle an jedem Ort und zu jeder Zeit unmittelbar an, also wertet die Seite sie einfach aus. Jedes Bild tut Folgendes."
+ },
+ "9c48a3d4ea47": {
+  "src": "The beat frequency is the full difference \\(|\\nu_1 - \\nu_2|,\\) not half of it: for the two guitar strings, \\(111 - 110 = 1\\) beat per second. The <em>Beats</em> preset uses Amplitude \\(18\\ \\mathrm{px}\\) and Speed 1× for both waves, with Frequencies 1.00 and 1.25. Then \\(\\lambda_\\text{beat} = 200/0.25 = 800\\ \\mathrm{px},\\) exactly one beat across the view, and at any fixed point the sum swells and fades every \\(1/0.25 = 4\\ \\mathrm{s}\\) (Figure 3). The carrier has the mean frequency \\(1.125\\ \\mathrm{Hz},\\) so nine carrier oscillations fit into two beats.",
+  "tr": "Die Schwebungsfrequenz ist der volle Unterschied \\(|\\nu_1 - \\nu_2|,\\) nicht die Hälfte davon: Bei den beiden Gitarrensaiten ergibt \\(111 - 110 = 1\\) Schwebung pro Sekunde. Die Voreinstellung <em>Schwebung</em> verwendet für beide Wellen die Amplitude \\(18\\ \\mathrm{px}\\) und die Geschwindigkeit 1×, mit den Frequenzen 1.00 und 1.25. Dann ist \\(\\lambda_\\text{beat} = 200/0.25 = 800\\ \\mathrm{px},\\) genau eine Schwebung über das ganze Bild, und an jeder festen Stelle schwillt die Summe alle \\(1/0.25 = 4\\ \\mathrm{s}\\) an und ab (Abb. 3). Der Träger hat die mittlere Frequenz \\(1.125\\ \\mathrm{Hz},\\) sodass neun Trägerschwingungen in zwei Schwebungen passen."
+ },
+ "9dead516148c": {
+  "src": "The spectrum is computed from the list of waves at \\(X = 0,\\) not measured. Two waves with the same \\(\\nu\\) but different wavelengths are merged with their relative phase at \\(X = 0;\\) at another point that phase differs, and so would the merged stem.",
+  "tr": "Das Spektrum wird aus der Liste der Wellen bei \\(X = 0,\\) nicht gemessen, berechnet. Zwei Wellen mit demselben \\(\\nu\\), aber verschiedenen Wellenlängen werden mit ihrer relativen Phase bei \\(X = 0;\\) zusammengefasst; an einem anderen Punkt wäre diese Phase eine andere, und ebenso der zusammengefasste Strich."
+ },
+ "a273f7a52b47": {
+  "src": "The second factor is a wave with the average wavenumber and the average frequency of the two, the <em>carrier</em>. The first changes slowly, because \\(a - b = \\Delta k\\,X - \\Delta\\omega\\,t + \\Delta\\varphi\\) contains only the differences \\(\\Delta k = k_1 - k_2\\) and \\(\\Delta\\omega = \\omega_1 - \\omega_2.\\) It acts as a slowly varying amplitude, the <em>envelope</em>. Loudness depends on the size of the envelope, not its sign, and \\(|\\cos|\\) repeats every \\(\\pi,\\) not every \\(2\\pi.\\) The beat therefore repeats whenever \\((a-b)/2\\) grows by \\(\\pi{:}\\)",
+  "tr": "Der zweite Faktor ist eine Welle mit der mittleren Wellenzahl und der mittleren Frequenz der beiden, dem <em>Träger</em>. Der erste ändert sich langsam, denn \\(a - b = \\Delta k\\,X - \\Delta\\omega\\,t + \\Delta\\varphi\\) enthält nur die Differenzen \\(\\Delta k = k_1 - k_2\\) und \\(\\Delta\\omega = \\omega_1 - \\omega_2.\\) Er wirkt als langsam veränderliche Amplitude, die <em>Hüllkurve</em>. Die Lautstärke hängt von der Größe der Hüllkurve ab, nicht von ihrem Vorzeichen, und \\(|\\cos|\\) wiederholt sich alle \\(\\pi,\\) nicht alle \\(2\\pi.\\) Die Schwebung wiederholt sich daher immer dann, wenn \\((a-b)/2\\) um \\(\\pi{:}\\) wächst:"
+ },
+ "a28272643323": {
+  "src": "<span class=\"psec__n\">02</span>The model",
+  "tr": "<span class=\"psec__n\">02</span>Das Modell"
+ },
+ "a4ce3a9be794": {
+  "src": "← All simulations",
+  "tr": "← Alle Simulationen"
+ },
+ "a4ea10c6f220": {
+  "src": "Now take two waves of slightly different frequency. Their crests drift in and out of step, and the sum swells and fades: the guitarist’s beat.",
+  "tr": "Nehmen Sie nun zwei Wellen mit leicht verschiedenen Frequenzen. Ihre Wellenberge wandern aus dem Takt und wieder hinein, und die Summe schwillt an und ab: die Schwebung des Gitarristen."
+ },
+ "a871b6bfd19e": {
+  "src": "A real analyser, or an ear, listens for a finite time \\(T\\) and cannot separate frequencies closer than about \\(1/T,\\) so its lines have a width that these stems do not.",
+  "tr": "Ein echter Analysator oder ein Ohr hört nur eine endliche Zeit \\(T\\) lang zu und kann Frequenzen, die enger als etwa \\(1/T,\\) beieinander liegen, nicht trennen; seine Linien haben daher eine Breite, die diese Striche nicht haben."
+ },
+ "a98e826879fe": {
+  "src": "M. L. Boas, <em>Mathematical Methods in the Physical Sciences</em>, 3rd edition, Wiley, 2006: chapter 7 (Fourier series and transforms, with Parseval’s theorem in Section 7.11); <a href=\"https://www.wiley.com/en-us/mathematical-methods-in-the-physical-sciences-3rd-edition-p-9780471198260\">publisher’s page</a> with the contents.",
+  "tr": "M. L. Boas, <em>Mathematical Methods in the Physical Sciences</em>, 3. Auflage, Wiley, 2006: Kapitel 7 (Fourier-Reihen und -Transformationen, mit dem Satz von Parseval in Abschnitt 7.11); <a href=\"https://www.wiley.com/en-us/mathematical-methods-in-the-physical-sciences-3rd-edition-p-9780471198260\">Seite des Verlags</a> mit dem Inhaltsverzeichnis."
+ },
+ "aa4819c5e5cd": {
+  "src": "Wave Interference Simulator · Numa Koudsie",
+  "tr": "Werkbank für Wellenüberlagerung · Numa Koudsie"
+ },
+ "adeb098956e0": {
+  "src": "<span class=\"psec__n\">01</span>Many sounds, one eardrum",
+  "tr": "<span class=\"psec__n\">01</span>Viele Klänge, ein Trommelfell"
+ },
+ "b1b392607dea": {
+  "src": "Run",
+  "tr": "Start"
+ },
+ "b1cae58cd4ff": {
+  "src": "A simpler bound holds at every instant. No sine exceeds its amplitude, so by the triangle inequality",
+  "tr": "Eine einfachere Schranke gilt zu jedem Zeitpunkt. Kein Sinus überschreitet seine Amplitude, daher gilt nach der Dreiecksungleichung"
+ },
+ "b352c4ff0ab0": {
+  "src": "Here \\(k_i\\) is the wavenumber, \\(\\lambda_i\\) the wavelength, \\(\\omega_i\\) the angular frequency, \\(\\nu_i\\) the frequency you would measure at a fixed point, that is the number of crests passing it per second, and \\(v_i\\) the phase speed at which every crest moves. Three facts follow, and they are worth keeping in mind on the page.",
+  "tr": "Dabei ist \\(k_i\\) die Wellenzahl, \\(\\lambda_i\\) die Wellenlänge, \\(\\omega_i\\) die Kreisfrequenz, \\(\\nu_i\\) die Frequenz, die Sie an einer festen Stelle messen würden, also die Zahl der Wellenberge, die dort pro Sekunde vorbeikommen, und \\(v_i\\) die Phasengeschwindigkeit, mit der sich jeder Wellenberg bewegt. Drei Tatsachen folgen daraus, und es lohnt sich, sie auf dieser Seite im Auge zu behalten."
+ },
+ "b6f83a66d5a6": {
+  "src": "The clock adds the real time since the last frame, \\(\\Delta t,\\) to \\(t,\\) so the waves move at their stated speeds on any screen. \\(\\Delta t\\) is capped at \\(0.05\\ \\mathrm{s}{:}\\) if the browser manages fewer than 20 frames a second, the motion slows down instead of jumping. <em>Pause</em> stops the clock.",
+  "tr": "Die Uhr addiert die reale Zeit seit dem letzten Bild, \\(\\Delta t,\\) zu \\(t,\\), sodass sich die Wellen auf jedem Bildschirm mit ihren angegebenen Geschwindigkeiten bewegen. \\(\\Delta t\\) ist auf \\(0.05\\ \\mathrm{s}{:}\\) begrenzt: Schafft der Browser weniger als 20 Bilder pro Sekunde, wird die Bewegung langsamer, statt zu springen. <em>Pause</em> hält die Uhr an."
+ },
+ "b81fb1fd011d": {
+  "src": "<span class=\"psub__n\">5.1</span>Fourier’s recipe for the amplitudes<span class=\"star\" title=\"heavier mathematics\">★</span>",
+  "tr": "<span class=\"psub__n\">5.1</span>Fouriers Rezept für die Amplituden<span class=\"star\" title=\"heavier mathematics\">★</span>"
+ },
+ "bbbb04f518d3": {
+  "src": "The medium is infinite, uniform and lossless. The \\(800\\ \\mathrm{px}\\) view is a window onto it, and lengths are in pixels of that window rather than metres.",
+  "tr": "Das Medium ist unendlich, gleichförmig und verlustfrei. Das Bild mit \\(800\\ \\mathrm{px}\\) ist ein Fenster darauf, und Längen werden in Pixeln dieses Fensters gemessen, nicht in Metern."
+ },
+ "beda57e16b2a": {
+  "src": "What the spectrum leaves out is just as instructive. The stems record amplitudes, not phases, and to a good approximation the ear does the same for a steady tone, a rule known as Ohm’s acoustic law. Two waves with the same spectrum but different phases sound nearly alike, even when their shapes look nothing alike.",
+  "tr": "Was das Spektrum weglässt, ist ebenso lehrreich. Die Striche halten Amplituden fest, nicht Phasen, und in guter Näherung macht das Ohr bei einem gleichmäßigen Ton dasselbe, eine Regel, die als akustisches Gesetz von Ohm bekannt ist. Zwei Wellen mit demselben Spektrum, aber verschiedenen Phasen klingen fast gleich, auch wenn ihre Formen nicht im Geringsten gleich aussehen."
+ },
+ "bee75ca77f75": {
+  "src": "Controls",
+  "tr": "Bedienelemente"
+ },
+ "c59c013b2e92": {
+  "src": "overshoot (%)",
+  "tr": "Überschwingen (%)"
+ },
+ "c7877b24d736": {
+  "src": "<span class=\"psec__n\">08</span>From the medium to the screen",
+  "tr": "<span class=\"psec__n\">08</span>Vom Medium zum Bildschirm"
+ },
+ "cad2dda3032c": {
+  "src": "heavier mathematics",
+  "tr": "schwerere Mathematik"
+ },
+ "cbe28c0effec": {
+  "src": "<span class=\"psec__n\">09</span>What the model leaves out",
+  "tr": "<span class=\"psec__n\">09</span>Was das Modell weglässt"
+ },
+ "cd1395d44717": {
+  "src": "<em>Peak |y| on screen</em> is the largest \\(|y|\\) among the samples of the current frame. The readouts are rewritten every eighth frame, 7.5 times a second at 60 frames a second.",
+  "tr": "<em>Spitzenwert |y| auf dem Bildschirm</em> ist das größte \\(|y|\\) unter den Proben des aktuellen Bildes. Die Anzeigen werden alle acht Bilder neu geschrieben, also 7.5-mal pro Sekunde bei 60 Bildern pro Sekunde."
+ },
+ "ce620d674988": {
+  "src": "terms",
+  "tr": "Terme"
+ },
+ "d1622a8321e0": {
+  "src": "Phyein Usul, home page",
+  "tr": "Phyein Usul, Startseite"
+ },
+ "d39d692127da": {
+  "src": "Press <em>Square wave</em>; <em>Peak |y| on screen</em> reads \\(27.9\\ \\mathrm{px}.\\) Remove Wave 4 with its × button: three terms remain, the corners round off, the ripples widen, and the peak becomes \\(28.0\\ \\mathrm{px},\\) which is exactly \\(30\\cdot\\tfrac12 + 10 + 6\\cdot\\tfrac12,\\) the value at \\(x = \\pi/6.\\) Press <em>Square wave</em> again and set the <em>Phase</em> of Wave 2 to \\(1.00\\,\\pi.\\) The flat tops vanish and the peak jumps to \\(41.7\\ \\mathrm{px},\\) yet no stem in the spectrum moves, because no amplitude has changed. Played as sound at an audible pitch, the two shapes would sound very nearly the same.",
+  "tr": "Drücken Sie <em>Rechteckwelle</em>; <em>Spitzenwert |y| auf dem Bildschirm</em> zeigt \\(27.9\\ \\mathrm{px}.\\) Entfernen Sie Welle 4 mit ihrem ×-Knopf: Es bleiben drei Terme, die Ecken runden sich ab, die Welligkeiten werden breiter, und der Scheitel wird \\(28.0\\ \\mathrm{px},\\) was genau \\(30\\cdot\\tfrac12 + 10 + 6\\cdot\\tfrac12,\\) entspricht, dem Wert bei \\(x = \\pi/6.\\) Drücken Sie <em>Rechteckwelle</em> erneut und stellen Sie die <em>Phase</em> der Welle 2 auf \\(1.00\\,\\pi.\\) Die flachen Gipfel verschwinden, und der Scheitel springt auf \\(41.7\\ \\mathrm{px},\\) doch im Spektrum bewegt sich kein Strich, weil sich keine Amplitude geändert hat. Gespielt als Ton in hörbarer Tonhöhe würden die beiden Formen nahezu gleich klingen."
+ },
+ "d3cd068500dc": {
+  "src": "Just after the jump at \\(x = 0\\) the slope stays positive until \\(2Nx = \\pi,\\) so the first and highest crest sits at \\(x = \\pi/(2N),\\) which is \\(X = 125/N\\ \\mathrm{px}\\) after the jump on the page’s scale. Its height is the integral of the slope up to there. Substitute \\(u = 2Nx\\) and use \\(\\sin x \\approx x\\) for the small \\(x\\) involved, which becomes exact as \\(N\\) grows:",
+  "tr": "Direkt nach dem Sprung bei \\(x = 0\\) bleibt die Steigung positiv, bis \\(2Nx = \\pi,\\) sodass der erste und höchste Wellenberg bei \\(x = \\pi/(2N),\\) liegt, was auf dem Maßstab der Seite \\(X = 125/N\\ \\mathrm{px}\\) nach dem Sprung entspricht. Seine Höhe ist das Integral der Steigung bis dorthin. Setzen Sie \\(u = 2Nx\\) und verwenden Sie \\(\\sin x \\approx x\\) für die beteiligten kleinen \\(x\\) was mit wachsendem \\(N\\) exakt wird:"
+ },
+ "d4dd5a8bbcb6": {
+  "src": "The <em>Frequency</em> slider is labelled in hertz, and it is the frequency in hertz only at Speed 1×. In general it counts wavelengths per \\(200\\ \\mathrm{px},\\) and the frequency at a fixed point is \\(\\nu_i = f_i s_i.\\) A wave with Speed 0 stands still and has \\(\\nu_i = 0.\\)",
+  "tr": "Der Schieberegler der <em>Frequenz</em> ist in Hertz beschriftet, und nur bei der Geschwindigkeit 1× ist er tatsächlich die Frequenz in Hertz. Allgemein zählt er Wellenlängen pro \\(200\\ \\mathrm{px},\\) und die Frequenz an einer festen Stelle ist \\(\\nu_i = f_i s_i.\\) Eine Welle mit der Geschwindigkeit 0 steht still und hat \\(\\nu_i = 0.\\)"
+ },
+ "d67be5c7f560": {
+  "src": "Any weighted sum of solutions is again a solution. This is the <em>superposition principle</em>: each wave passes through the others as if they were not there, and the medium carries their sum. With equal speeds the sum also travels at \\(v\\) without changing shape; such a medium is called <em>non-dispersive</em>, and air is very nearly one for sound. When you give the waves different Speeds, each obeys its own equation and the page adds them anyway. That imitates a <em>dispersive</em> medium, in which waves of different frequency travel at different speeds, and the sum then changes shape as it goes.",
+  "tr": "Jede gewichtete Summe von Lösungen ist wieder eine Lösung. Das ist das <em>Superpositionsprinzip</em>: Jede Welle läuft durch die anderen hindurch, als wären sie nicht da, und das Medium trägt ihre Summe. Bei gleichen Geschwindigkeiten läuft die Summe ebenfalls mit \\(v\\) und ohne ihre Form zu ändern; ein solches Medium heißt <em>nichtdispersiv</em>, und Luft ist für Schall beinahe eines. Wenn Sie den Wellen unterschiedliche Geschwindigkeiten geben, gehorcht jede ihrer eigenen Gleichung, und die Seite addiert sie trotzdem. Das ahmt ein <em>dispersives</em> Medium nach, in dem Wellen verschiedener Frequenz sich mit verschiedenen Geschwindigkeiten ausbreiten, sodass die Summe mit der Zeit ihre Form ändert."
+ },
+ "d89fd485d5b8": {
+  "src": "Press <em>Beats</em> and watch one point of the upper plot: it swells and fades every \\(4\\ \\mathrm{s}.\\) Now tune Wave 2 like a guitar string. Set its <em>Frequency</em> to 1.10 and the beat slows to one every \\(10\\ \\mathrm{s}\\) and stretches to \\(2000\\ \\mathrm{px},\\) two and a half times the view; at 1.00 it stops. Return it to 1.25 and set its <em>Speed</em> to 0.50×. Both waves still move to the right, at 200 and \\(100\\ \\mathrm{px/s},\\) yet by (9) the envelope now runs to the left at \\(300\\ \\mathrm{px/s},\\) while the carrier moves to the right at \\(144\\ \\mathrm{px/s}.\\) Check both against what you see; the Data panel lists the envelope speed as \\(v_\\text{env}.\\)",
+  "tr": "Drücken Sie <em>Schwebung</em> und beobachten Sie einen Punkt im oberen Diagramm: Er schwillt an und verblasst alle \\(4\\ \\mathrm{s}.\\) Stimmen Sie nun Welle 2 wie eine Gitarrensaite. Stellen Sie ihre <em>Frequenz</em> auf 1.10, und die Schwebung wird langsamer, eine alle \\(10\\ \\mathrm{s}\\), und dehnt sich auf \\(2000\\ \\mathrm{px},\\) das Zweieinhalbfache des Bildes; bei 1.00 hört sie ganz auf. Stellen Sie sie zurück auf 1.25 und die <em>Geschwindigkeit</em> auf 0.50×. Beide Wellen laufen weiterhin nach rechts, mit 200 und \\(100\\ \\mathrm{px/s},\\) doch nach (9) läuft die Hüllkurve nun mit \\(300\\ \\mathrm{px/s},\\) nach links, während der Träger mit \\(144\\ \\mathrm{px/s}.\\) nach rechts läuft. Prüfen Sie beides an dem, was Sie sehen; das Datenpanel führt die Geschwindigkeit der Hüllkurve als \\(v_\\text{env}.\\) auf."
+ },
+ "d8e64e44bb86": {
+  "src": "One detail can puzzle. The Amplitude slider moves in whole pixels, so the \\(4.3\\ \\mathrm{px}\\) of the preset’s Wave 4 appears on its card as \\(4\\ \\mathrm{px},\\) while the wave itself, the <em>Sum of amplitudes</em> of \\(50.3\\ \\mathrm{px}\\) and the stored data keep \\(4.3\\ \\mathrm{px}.\\)",
+  "tr": "Ein Detail kann verwirren. Der Schieberegler der Amplitude bewegt sich in ganzen Pixeln, daher erscheint das \\(4.3\\ \\mathrm{px}\\) der Welle 4 des Presets auf ihrer Karte als \\(4\\ \\mathrm{px},\\) während die Welle selbst, die <em>Summe der Amplituden</em> von \\(50.3\\ \\mathrm{px}\\) und die gespeicherten Daten \\(4.3\\ \\mathrm{px}.\\) behalten."
+ },
+ "d929322e4b16": {
+  "src": "Fig.",
+  "tr": "Abb."
+ },
+ "d94c8e0a6fcd": {
+  "src": "<span class=\"psec__n\">03</span>Waves simply add",
+  "tr": "<span class=\"psec__n\">03</span>Wellen addieren sich einfach"
+ },
+ "db051fac8022": {
+  "src": "Wave Interference Simulator<span class=\"dot\">.</span>",
+  "tr": "Werkbank für Wellenüberlagerung<span class=\"dot\">.</span>"
+ },
+ "db3fb39ebd31": {
+  "src": "E. Hecht, <em>Optics</em>, 5th edition, Pearson, 2017: chapter 7 (the superposition of waves); <a href=\"https://www.pearson.com/en-us/subject-catalog/p/optics/P200000006793\">publisher’s page</a> with the contents.",
+  "tr": "E. Hecht, <em>Optics</em>, 5. Auflage, Pearson, 2017: Kapitel 7 (die Überlagerung von Wellen); <a href=\"https://www.pearson.com/en-us/subject-catalog/p/optics/P200000006793\">Seite des Verlags</a> mit dem Inhaltsverzeichnis."
+ },
+ "db7deff843b6": {
+  "src": "Any repeating wave of reasonable shape, with period \\(2\\pi\\) in \\(x,\\) is a sum of sines and cosines at whole-number multiples of its fundamental frequency, \\(F(x) = \\tfrac12 a_0 + \\sum_{n\\ge1}\\left( a_n\\cos nx + b_n\\sin nx \\right),\\) and each amplitude is found by one integral, equation (13). The list of amplitudes is the wave’s spectrum. A synthesizer uses the theorem forwards, building a tone from its spectrum; your ear uses it backwards.",
+  "tr": "Jede sich wiederholende Welle von hinreichend regelmäßiger Form, mit der Periode \\(2\\pi\\) in \\(x,\\) ist eine Summe von Sinus- und Kosinusfunktionen bei ganzzahligen Vielfachen ihrer Grundfrequenz, \\(F(x) = \\tfrac12 a_0 + \\sum_{n\\ge1}\\left( a_n\\cos nx + b_n\\sin nx \\right),\\) und jede Amplitude wird durch ein einziges Integral gefunden, Gleichung (13). Die Liste der Amplituden ist das Spektrum der Welle. Ein Synthesizer wendet den Satz vorwärts an und baut aus dem Spektrum einen Ton auf; Ihr Ohr wendet ihn rückwärts an."
+ },
+ "dec10feacdff": {
+  "src": "Different Speeds imitate dispersion, but each wave’s speed is chosen by hand. In a real medium a dispersion relation \\(\\omega(k)\\) fixes it, as \\(\\omega = \\sqrt{gk}\\) does on deep water.",
+  "tr": "Unterschiedliche Geschwindigkeiten ahmen die Dispersion nach, aber die Geschwindigkeit jeder Welle wird von Hand gewählt. In einem realen Medium legt eine Dispersionsrelation \\(\\omega(k)\\) sie fest, wie \\(\\omega = \\sqrt{gk}\\) auf tiefem Wasser."
+ },
+ "e06a1d24dbd2": {
+  "src": "4 (preset)",
+  "tr": "4 (Preset)"
+ },
+ "e0bbc31df62e": {
+  "src": "<span class=\"pfig__n\">Figure 1</span>One component, equation (1). The amplitude \\(A_i\\) is the height of a crest above the axis, the wavelength \\(\\lambda_i\\) the distance from crest to crest, and the phase \\(\\varphi_i\\) fixes the height \\(A_i\\sin\\varphi_i\\) at \\(X = 0.\\) A moment later (pale curve) the whole shape has moved to the right, unchanged, at the phase speed \\(v_i = 200\\,s_i\\ \\mathrm{px/s}.\\)",
+  "tr": "<span class=\"pfig__n\">Abb. 1</span>Eine Teilwelle, Gleichung (1). Die Amplitude \\(A_i\\) ist die Höhe eines Wellenbergs über der Achse, die Wellenlänge \\(\\lambda_i\\) der Abstand von Berg zu Berg, und die Phase \\(\\varphi_i\\) legt die Höhe \\(A_i\\sin\\varphi_i\\) bei \\(X = 0.\\) fest. Einen Augenblick später (helle Kurve) hat sich die ganze Form unverändert nach rechts verschoben, mit der Phasengeschwindigkeit \\(v_i = 200\\,s_i\\ \\mathrm{px/s}.\\)"
+ },
+ "e13b587879b0": {
+  "src": "<span>2</span>The model",
+  "tr": "<span>2</span>Das Modell"
+ },
+ "e1ab2237833e": {
+  "src": "The waves are exactly linear. Very loud sound is not: its compressions travel slightly faster than its rarefactions, the wave steepens as it goes, and harmonics appear that were not in the mix.",
+  "tr": "Die Wellen sind genau linear. Sehr laute Schallwellen sind es nicht: Ihre Verdichtungen laufen etwas schneller als ihre Verdünnungen, die Welle wird auf dem Weg steiler, und es entstehen Oberschwingungen, die im Gemisch nicht enthalten waren."
+ },
+ "e1d329a7394b": {
+  "src": "From symbols to code",
+  "tr": "Von den Symbolen zum Code"
+ },
+ "e58734c4c29b": {
+  "src": "<span class=\"psec__n\">07</span>Computing the curves",
+  "tr": "<span class=\"psec__n\">07</span>Die Kurven berechnen"
+ },
+ "e709e76ff542": {
+  "src": "Presets",
+  "tr": "Voreinstellungen"
+ },
+ "e7aee4ab90fa": {
+  "src": "<span>7</span>Computing the curves",
+  "tr": "<span>7</span>Die Kurven berechnen"
+ },
+ "e843c24d5523": {
+  "src": "Checked by averaging \\(y^2\\) of the preset at \\(X = 0\\) over one period, \\(2.5\\ \\mathrm{s},\\) on \\(250\\,000\\) points: \\(527.2450\\ \\mathrm{px^2},\\) the value of (18).",
+  "tr": "Nachgeprüft durch Mittelung von \\(y^2\\) des Presets bei \\(X = 0\\) über eine Periode, \\(2.5\\ \\mathrm{s},\\) mit \\(250\\,000\\) Punkten: \\(527.2450\\ \\mathrm{px^2},\\) der Wert von (18)."
+ },
+ "e8dee1c2f6e6": {
+  "src": "The plot is sampled once per screen pixel across its width, at \\(M + 1\\) points \\(X_j = 800\\,j/M\\ \\mathrm{px},\\) \\(j = 0, \\dots, M,\\) where \\(M\\) is the plot width in screen pixels minus 58. Measured in Chromium, a 1440 × 900 window gives a plot 770 pixels wide and \\(M = 712,\\) one sample every \\(1.12\\ \\mathrm{px}\\) of the medium; a phone 390 pixels wide gives \\(M = 298,\\) one sample every \\(2.68\\ \\mathrm{px}.\\)",
+  "tr": "Das Diagramm wird einmal pro Bildschirmpixel über seine Breite abgetastet, an \\(M + 1\\) Punkten \\(X_j = 800\\,j/M\\ \\mathrm{px},\\) \\(j = 0, \\dots, M,\\) wobei \\(M\\) die Breite des Diagramms in Bildschirmpixeln minus 58 ist. In Chromium gemessen ergibt ein Fenster von 1440 × 900 ein Diagramm von 770 Pixeln Breite und \\(M = 712,\\) eine Probe alle \\(1.12\\ \\mathrm{px}\\) des Mediums; ein Telefon mit 390 Pixeln Breite ergibt \\(M = 298,\\) eine Probe alle \\(2.68\\ \\mathrm{px}.\\)"
+ },
+ "e903907d59b4": {
+  "src": "Fig. 6",
+  "tr": "Abb. 6"
+ },
+ "ec006d7a8364": {
+  "src": "The phase slides a wave sideways without changing its shape: at \\(X = 0\\) and \\(t = 0\\) the wave starts at the height \\(A_i\\sin\\varphi_i\\) (Figure 1). A phase of \\(2\\pi\\) is a whole wavelength, and the slider covers one full turn, from 0 to about \\(2\\pi.\\)",
+  "tr": "Die Phase verschiebt eine Welle seitwärts, ohne ihre Form zu ändern: Bei \\(X = 0\\) und \\(t = 0\\) beginnt die Welle auf der Höhe \\(A_i\\sin\\varphi_i\\) (Abb. 1). Eine Phase von \\(2\\pi\\) ist eine ganze Wellenlänge, und der Schieberegler überstreicht eine volle Umdrehung, von 0 bis etwa \\(2\\pi.\\)"
+ },
+ "ecd78ade0666": {
+  "src": "<span class=\"psec__n\">05</span>A square wave from sines",
+  "tr": "<span class=\"psec__n\">05</span>Eine Rechteckwelle aus Sinusfunktionen"
+ },
+ "ecfa8e12e51a": {
+  "src": "When two waves share both Frequency and Speed, they share \\(\\theta = kX - \\omega t\\) and differ only in amplitude and phase. Their sum is a single sine of the same frequency. The neatest way to see this uses complex numbers: \\(\\sin\\alpha\\) is the imaginary part of \\(e^{\\mathrm{i}\\alpha} = \\cos\\alpha + \\mathrm{i}\\sin\\alpha,\\) with \\(\\mathrm{i}^2 = -1,\\) so",
+  "tr": "Haben zwei Wellen sowohl Frequenz als auch Geschwindigkeit gemeinsam, so teilen sie \\(\\theta = kX - \\omega t\\) und unterscheiden sich nur in Amplitude und Phase. Ihre Summe ist ein einzelner Sinus derselben Frequenz. Am elegantesten sieht man das mit komplexen Zahlen: \\(\\sin\\alpha\\) ist der Imaginärteil von \\(e^{\\mathrm{i}\\alpha} = \\cos\\alpha + \\mathrm{i}\\sin\\alpha,\\) mit \\(\\mathrm{i}^2 = -1,\\) also"
+ },
+ "ed4ec535c146": {
+  "src": "where \\(f_i\\) and \\(s_i\\) are the plain numbers shown on the sliders. Multiplying out the bracket gives the textbook form \\(A_i\\sin(k_i X - \\omega_i t + \\varphi_i),\\) and its coefficients are",
+  "tr": "wobei \\(f_i\\) und \\(s_i\\) die einfachen Zahlen sind, die auf den Schiebereglern stehen. Wird die Klammer ausmultipliziert, ergibt sich die Lehrbuchform \\(A_i\\sin(k_i X - \\omega_i t + \\varphi_i),\\) und ihre Koeffizienten sind"
+ },
+ "eefb0f034626": {
+  "src": "The lower panel, Fig. 6b, is what an ear at one point would report: which frequencies are present there, and how strongly.",
+  "tr": "Der untere Teil des Diagramms, Abb. 6b, ist das, was ein Ohr an einer Stelle melden würde: welche Frequenzen dort vorhanden sind und wie stark."
+ },
+ "f10c3e0aa59e": {
+  "src": "Sum of amplitudes",
+  "tr": "Summe der Amplituden"
+ },
+ "f199e2e1a4ed": {
+  "src": "<span class=\"psub__n\">9.1</span>Further reading",
+  "tr": "<span class=\"psub__n\">9.1</span>Weiterführende Literatur"
+ },
+ "f3993945745c": {
+  "src": "Each wave on the bench is a sine travelling along a one-dimensional medium, such as a long, taut string, of which \\(800\\ \\mathrm{px}\\) are in view. Wave \\(i\\) carries four numbers, one per slider on its card: the <em>Amplitude</em> \\(A_i\\) in px, the <em>Frequency</em> \\(f_i,\\) the <em>Phase</em> \\(\\varphi_i\\) in radians and the <em>Speed</em> factor \\(s_i.\\) Its displacement at position \\(X,\\) in px from the left edge of the view, and time \\(t,\\) in seconds, is",
+  "tr": "Jede Welle auf der Werkbank ist eine Sinusschwingung, die sich entlang eines eindimensionalen Mediums ausbreitet, etwa einer langen, gespannten Saite, von der \\(800\\ \\mathrm{px}\\) im Bild zu sehen sind. Welle \\(i\\) trägt vier Zahlen, je eine pro Schieberegler auf ihrer Karte: die <em>Amplitude</em> \\(A_i\\) in px, die <em>Frequenz</em> \\(f_i,\\) die <em>Phase</em> \\(\\varphi_i\\) in Radiant und den Faktor der <em>Geschwindigkeit</em> \\(s_i.\\) Ihre Auslenkung an der Stelle \\(X,\\) in px vom linken Rand des Bildes aus gemessen, und zur Zeit \\(t,\\) in Sekunden, ist"
+ },
+ "f3ff9c83910e": {
+  "src": "Add wave +",
+  "tr": "Welle hinzufügen +"
+ },
+ "f44d1b56331e": {
+  "src": "Follow a point of fixed envelope, for example a quiet spot where \\(\\cos\\frac{a-b}{2} = 0.\\) It keeps \\(\\Delta k\\,X - \\Delta\\omega\\,t\\) constant, so it moves at \\(\\Delta\\omega/\\Delta k.\\) A crest of the carrier keeps \\(a + b\\) constant and moves at \\(\\bar\\omega/\\bar k,\\) the ratio of the averages. With (2),",
+  "tr": "Verfolgen Sie einen Punkt konstanter Hüllkurve, etwa eine ruhige Stelle, an der \\(\\cos\\frac{a-b}{2} = 0.\\) Er hält \\(\\Delta k\\,X - \\Delta\\omega\\,t\\) konstant und bewegt sich daher mit \\(\\Delta\\omega/\\Delta k.\\) Ein Wellenberg des Trägers hält \\(a + b\\) konstant und bewegt sich mit \\(\\bar\\omega/\\bar k,\\) dem Verhältnis der Mittelwerte. Mit (2),"
+ },
+ "f4962e86a310": {
+  "src": "Superposition workbench: add travelling waves with their own amplitude, frequency, phase and speed, and watch their sum and spectrum in real time.",
+  "tr": "Werkbank zur Überlagerung: Fügen Sie fortschreitende Wellen mit eigener Amplitude, Frequenz, Phase und Geschwindigkeit hinzu und verfolgen Sie ihre Summe und ihr Spektrum in Echtzeit."
+ },
+ "f5cbdf6bfb51": {
+  "src": "Contents",
+  "tr": "Inhalt"
+ },
+ "f5ea69a546e1": {
+  "src": "limit (16)",
+  "tr": "Grenzwert (16)"
+ },
+ "f6e7e17036b2": {
+  "src": "Checked by integrating (13) numerically with the trapezoid rule on \\(2\\,000\\,001\\) points: \\(b_1 = 1.273240,\\) \\(b_3 = 0.424413,\\) \\(b_5 = 0.254648,\\) equal to \\(4/\\pi,\\) \\(4/(3\\pi)\\) and \\(4/(5\\pi)\\) to all six decimals, and \\(b_2 = b_4 = 0.\\)",
+  "tr": "Nachgeprüft durch numerische Integration von (13) mit der Trapezregel an \\(2\\,000\\,001\\) Punkten: \\(b_1 = 1.273240,\\) \\(b_3 = 0.424413,\\) \\(b_5 = 0.254648,\\) gleich \\(4/\\pi,\\) \\(4/(3\\pi)\\) und \\(4/(5\\pi)\\) auf alle sechs Dezimalstellen, und \\(b_2 = b_4 = 0.\\)"
+ },
+ "f72f0eda6052": {
+  "src": "Simulations",
+  "tr": "Simulationen"
+ },
+ "f788e34d2a8e": {
+  "src": "The even harmonics are missing because of a symmetry. Shifting the square wave by half a period turns it upside down, \\(\\operatorname{sq}(x + \\pi) = -\\operatorname{sq}(x),\\) while an even harmonic is unchanged by that shift, so it cannot take part.",
+  "tr": "Die geraden Oberschwingungen fehlen wegen einer Symmetrie. Verschiebt man die Rechteckwelle um eine halbe Periode, so steht sie auf dem Kopf, \\(\\operatorname{sq}(x + \\pi) = -\\operatorname{sq}(x),\\) während eine gerade Oberschwingung durch diese Verschiebung unverändert bleibt; daher kann sie nicht mitwirken."
+ },
+ "fb57a7ac8366": {
+  "src": "This simulation needs JavaScript.",
+  "tr": "Diese Simulation benötigt JavaScript."
+ },
+ "fc089f26271a": {
+  "src": "\\(N\\) has dropped out. However many terms are added, the first crest overshoots the plateau at 1 by 0.17898, which is \\(8.95\\ \\%\\) of the jump from \\(-1\\) to \\(+1;\\) only its position, \\(\\pi/(2N),\\) moves in towards the jump. This is the <em>Gibbs phenomenon</em>, named after the American physicist J. Willard Gibbs. On the page’s scale the limit is \\(1.17898 \\times 23.56\\ \\mathrm{px} = 27.78\\ \\mathrm{px}.\\) The table compares it with partial sums of (11) evaluated directly on a grid of \\(0.01\\ \\mathrm{px},\\) giving each peak and its overshoot above \\(H\\) as a percentage of the jump \\(2H = 47.12\\ \\mathrm{px}.\\)",
+  "tr": "\\(N\\) fällt heraus. So viele Terme man auch hinzufügt, der erste Scheitel überschwingt das Plateau bei 1 um 0.17898, das sind \\(8.95\\ \\%\\) des Sprungs von \\(-1\\) auf \\(+1;\\) nur seine Lage, \\(\\pi/(2N),\\) wandert auf den Sprung zu. Dies ist das <em>Gibbs-Phänomen</em>, benannt nach dem amerikanischen Physiker J. Willard Gibbs. Auf dem Maßstab der Seite beträgt der Grenzwert \\(1.17898 \\times 23.56\\ \\mathrm{px} = 27.78\\ \\mathrm{px}.\\) Die Tabelle vergleicht ihn mit Teilsummen von (11), die direkt auf einem Gitter von \\(0.01\\ \\mathrm{px},\\) ausgewertet wurden, und gibt jeden Scheitel und sein Überschwingen über \\(H\\) als Prozent des Sprungs \\(2H = 47.12\\ \\mathrm{px}.\\) an."
+ },
+ "fe4fe79bf347": {
+  "src": "A. P. French, <em>Vibrations and Waves</em>, W. W. Norton, 1971: chapters 2 (the superposition of periodic motions, including beats) and 6 (normal modes of continuous systems and Fourier analysis); <a href=\"https://archive.org/details/vibrationswaves0000fren\">Internet Archive record</a> with the contents.",
+  "tr": "A. P. French, <em>Vibrations and Waves</em>, W. W. Norton, 1971: Kapitel 2 (die Überlagerung periodischer Bewegungen, einschließlich Schwebungen) und 6 (Eigenschwingungen kontinuierlicher Systeme und Fourier-Analyse); <a href=\"https://archive.org/details/vibrationswaves0000fren\">Eintrag im Internet Archive</a> mit dem Inhaltsverzeichnis."
+ },
+ "feb42f07f2a3": {
+  "src": "The values themselves are exact to the precision of double-precision arithmetic, about 16 significant digits. The only approximation is in the drawing: the curve is a chain of straight segments between samples, and a chord cuts under a crest by about \\(A k^2\\,\\Delta X^2/8,\\) with \\(\\Delta X\\) the sample spacing. For the shortest wave the sliders allow, Frequency 3 with \\(\\lambda = 66.7\\ \\mathrm{px},\\) at the full amplitude of \\(40\\ \\mathrm{px},\\) that is \\(0.06\\ \\mathrm{px}\\) in the wide window and \\(0.32\\ \\mathrm{px}\\) on the phone, where about 25 samples still cover each wavelength. The same small gap can make the peak readout fall slightly short of the true crest. The spectrum is not measured from the curve at all: it is computed from the slider values with (17). The page writes the quantities used here, among them \\(t,\\) \\(\\Delta t,\\) \\(M,\\) \\(\\Delta X\\) and the peak, into its data store at the line that computes them, and the <em>Data</em> panel at the edge of the screen lists them.",
+  "tr": "Die Werte selbst sind bis zur Genauigkeit der Gleitkommaarithmetik mit doppelter Genauigkeit exakt, also auf etwa 16 signifikante Stellen. Die einzige Näherung liegt in der Zeichnung: Die Kurve ist eine Kette gerader Strecken zwischen den Proben, und eine Sehne schneidet unter einem Scheitel etwa \\(A k^2\\,\\Delta X^2/8,\\) ab, wobei \\(\\Delta X\\) der Abstand der Proben ist. Für die kürzeste Welle, die die Schieberegler erlauben, Frequenz 3 mit \\(\\lambda = 66.7\\ \\mathrm{px},\\) bei der vollen Amplitude von \\(40\\ \\mathrm{px},\\) sind das \\(0.06\\ \\mathrm{px}\\) im breiten Fenster und \\(0.32\\ \\mathrm{px}\\) auf dem Telefon, wo noch etwa 25 Proben jede Wellenlänge abdecken. Dieselbe kleine Lücke kann dazu führen, dass die Anzeige des Spitzenwerts den wahren Scheitel leicht verfehlt. Das Spektrum wird überhaupt nicht aus der Kurve gemessen: Es wird aus den Schiebereglerwerten mit (17) berechnet. Die Seite schreibt die hier verwendeten Größen, darunter \\(t,\\) \\(\\Delta t,\\) \\(M,\\) \\(\\Delta X\\) und den Spitzenwert, in ihren Datenspeicher an der Zeile, die sie berechnet, und das <em>Datenpanel</em> am Bildschirmrand listet sie auf."
+ }
+}

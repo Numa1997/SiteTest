@@ -17,7 +17,10 @@ from engine import Single, radau_step
 
 g = 9.80665*math.cos(math.radians(5.0))
 m, L = 0.1, 0.2
-OM0 = 0.9494                                    # steady speed at 8 m/s (nrel5mw.py: 0.9494 rad/s)
+LAW = sys.argv[1] if len(sys.argv) > 1 else 'nrel'
+W.TORQUE_LAW = LAW
+from scipy.optimize import brentq
+OM0 = brentq(lambda O: W.q_aero(8.0, O) - W.gen_torque(O), 0.5, 1.5)   # steady speed at 8 m/s for this law
 NREC = 40; DT = 0.1
 rps = np.array([0.3, 0.6, 0.9])*63.0
 c_opt = m*L**2*OM0*(rps/L - 1)
@@ -66,6 +69,7 @@ def P_uniform(Om, rp, c):
 
 if __name__ == '__main__':
     t0 = time.time()
+    print(f'torque law {LAW}: steady speed at 8 m/s {OM0:.4f} rad/s', flush=True)
     V = W.synth(8.0, W.iec_sigma(8.0), nrec=NREC, seed=11, rotor_eff=True)
     h = 2*math.pi/OM0/100
     Pt, Omb = run_turbulent(V, 1.0, h)
@@ -94,6 +98,7 @@ if __name__ == '__main__':
         check(f'P1 r_p = {rp:.1f}: |(b)+(c)| = {abs((b + cc).mean())*100:.3f} % < 1 % + 2 SE', abs((b + cc).mean()) < 0.01 + 2*se(b + cc))
         check(f'P2 r_p = {rp:.1f}: |(c)| = {abs(cc.mean()):.1e} < 1e-3', abs(cc.mean()) < 1e-3)
         check(f'P3 r_p = {rp:.1f}: total change {tot.mean()*100:+.2f} % between -3 % and -1 %', -0.03 < tot.mean() < -0.01)
-    json.dump(out, open(os.path.join(os.path.dirname(os.path.abspath(__file__)), 'L2_run.json'), 'w'))
+    out['law'] = LAW
+    json.dump(out, open(os.path.join(os.path.dirname(os.path.abspath(__file__)), f'L2_run_{LAW}.json'), 'w'))
     print(f'({time.time() - t0:.0f} s)')
     print('ALL PASS' if fails == 0 else f'{fails} FAIL')

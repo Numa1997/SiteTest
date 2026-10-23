@@ -10,7 +10,7 @@
     <meta name="theme-color" content="#f5f1ea">
     <link rel="stylesheet" href="../styles/sim.css">
     <link rel="stylesheet" href="../styles/data.css">
-    <link rel="stylesheet" href="../styles/fold.css">
+    <link rel="stylesheet" href="../styles/fold.css"><link rel="stylesheet" href="../styles/i18n.css"><script src="../scripts/flip.js"></script><!--I18N-ALTERNATES--><link rel="alternate" hreflang="en" href="https://phyeinusul.com/simulations/draw-decompose.html" /><link rel="alternate" hreflang="de" href="https://phyeinusul.com/de/simulations/draw-decompose.html" /><link rel="alternate" hreflang="ar" href="https://phyeinusul.com/ar/simulations/draw-decompose.html" /><link rel="alternate" hreflang="x-default" href="https://phyeinusul.com/simulations/draw-decompose.html" /><!--/I18N-ALTERNATES-->
     <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='12' fill='%237a1f2b'/%3E%3Ctext x='32' y='45' text-anchor='middle' font-family='Georgia,serif' font-size='38' fill='%23f5f1ea'%3EN%3C/text%3E%3C/svg%3E">
     <style>
         #field { cursor: crosshair; touch-action: none; }
@@ -36,7 +36,7 @@
             <a href="draw-decompose.html" aria-current="page">8</a>
             <a href="driven-oscillator.html">9</a>
             <a href="wind-turbine.html">10</a>
-        </nav>
+        </nav><span class="lang-switch" role="group" aria-label="Language" translate="no"><!--I18N-SWITCH--><a href="../simulations/draw-decompose.html" hreflang="en" lang="en" aria-current="page">English</a> · <a href="../de/simulations/draw-decompose.html" hreflang="de" lang="de">Deutsch</a> · <a href="../ar/simulations/draw-decompose.html" hreflang="ar" lang="ar" dir="rtl">العربية</a><!--/I18N-SWITCH--></span>
     </header>
 
     <main class="sim">
@@ -781,7 +781,7 @@
 
         function decompose(pts, name) {
             var r = resamp(pts, NS);
-            if (!r) { $('cap-mode').textContent = 'stroke too short · draw again'; return; }
+            if (!r) { $('cap-mode').textContent = _t('stroke too short · draw again'); return; }
             meanX = 0; meanY = 0;
             r.forEach(function (p) { meanX += p.x; meanY += p.y; });
             meanX /= NS; meanY /= NS;
@@ -919,8 +919,8 @@
             $('cancel').disabled = !coefs.length;
             canvas.style.cursor = m === 'draw' ? 'crosshair' : 'grab';
             $('hint').textContent = m === 'draw'
-                ? 'Press and drag on the figure to draw one stroke; a new stroke replaces it. Then press Decompose & play. Cancel returns to the previous shape.'
-                : 'While it plays, touching the figure never erases it: drag to pan, scroll or pinch to zoom. New drawing starts a stroke; the current shape stays until you decompose the new one.';
+                ? _t('Press and drag on the figure to draw one stroke; a new stroke replaces it. Then press Decompose & play. Cancel returns to the previous shape.')
+                : _t('While it plays, touching the figure never erases it: drag to pan, scroll or pinch to zoom. New drawing starts a stroke; the current shape stays until you decompose the new one.');
             readouts();
         }
         function startDraw() {
@@ -983,7 +983,7 @@
                 if (!drawing) return;
                 drawing = false;
                 $('go').disabled = draft.length < 12;
-                if (draft.length < 12) $('cap-mode').textContent = 'stroke too short · draw again';
+                if (draft.length < 12) $('cap-mode').textContent = _t('stroke too short · draw again');
                 return;
             }
             delete ptrs[e.pointerId];
@@ -1074,7 +1074,7 @@
             // axis names at the ends of the axes, in maths type on a pale ground; the scale in words
             axisName('\\mathrm{Im}\\mathrm{ }z', cx + 8, 20, 'left');
             axisName('\\mathrm{Re}\\mathrm{ }z', w - 10, cy - 12, 'right');
-            Sim.tex(ctx, '\\mathrm{' + Sim.fmt(s, 1) + ' px per unit of }z', 12, h - 14, { size: 14, color: T.ink3 });
+            Sim.tex(ctx, '\\mathrm{' + Sim.fmt(s, 1) + _t(' px per unit of }z'), 12, h - 14, { size: 14, color: T.ink3 });
             ctx.lineJoin = 'round';
             ctx.lineCap = 'round';
 
@@ -1102,8 +1102,8 @@
                     ctx.fillStyle = T.muted;
                     ctx.font = T.mono;
                     ctx.textAlign = 'center';
-                    ctx.fillText('PRESS AND DRAG TO DRAW ONE STROKE', cx, cy - 12);
-                    ctx.fillText('THEN PRESS DECOMPOSE & PLAY', cx, cy + 8);
+                    ctx.fillText(_t('PRESS AND DRAG TO DRAW ONE STROKE'), cx, cy - 12);
+                    ctx.fillText(_t('THEN PRESS DECOMPOSE & PLAY'), cx, cy + 8);
                 }
                 return;
             }
@@ -1245,7 +1245,7 @@
             $('r-k1').textContent = has ? (coefs[0].k > 0 ? '+' : '') + Sim.fmt(coefs[0].k, 0) : '—';
             $('r-err').textContent = has ? Sim.fmt(err, 5) : '—';
             $('r-errp').textContent = has ? Sim.fmt(errP, 5) : '—';
-            $('cap-mode').textContent = mode === 'draw' ? 'new drawing · not yet decomposed' : has ? K.value + ' circles' : 'draw a shape';
+            $('cap-mode').textContent = mode === 'draw' ? _t('new drawing · not yet decomposed') : has ? K.value + _t(' circles') : _t('draw a shape');
             $('cap-src').textContent = source;
             $('cap-k').innerHTML = has ? '<i>K</i> = ' + K.value : '—';
         }
@@ -1255,10 +1255,10 @@
             var has = (ds.dims.k || 0) > 0, out = { N: String(NS), L: Sim.fmt(ds.get('L') || 0, 4), ds: Sim.fmt(ds.get('step') || 0, 5), mx: Sim.fmt(ds.get('mx') || 0, 4), my: Sim.fmt(ds.get('my') || 0, 4),
                 K: String(ds.get('K')), tot: String(ds.dims.k || 0), E: Sim.fmt(ds.get('E') || 0, 5), kept: Sim.fmt(ds.get('kept') || 0, 5),
                 cap: ds.get('E') ? Sim.fmt(ds.get('cap'), 3) + ' %' : '—', err: Sim.fmt(ds.get('err') || 0, 6), errP: Sim.fmt(ds.get('errP') || 0, 6),
-                t: Sim.fmt(ds.get('t') || 0, 3) + ' rad', tl: ds.get('loop_s') + ' s', src: ds.get('source') };
+                t: Sim.fmt(ds.get('t') || 0, 3) + _t(' rad'), tl: ds.get('loop_s') + ' s', src: ds.get('source') };
             if (has) {
                 out.k1 = Sim.fmt(ds.get('c_k')[0], 0); out.re = Sim.fmt(ds.get('c_re')[0], 5); out.im = Sim.fmt(ds.get('c_im')[0], 5); out.A = Sim.fmt(ds.get('c_amp')[0], 5);
-                out.ph = Sim.fmt(ds.get('c_phase')[0], 4) + ' rad'; out.x = Sim.fmt(ds.get('x') || 0, 4); out.y = Sim.fmt(ds.get('y') || 0, 4);
+                out.ph = Sim.fmt(ds.get('c_phase')[0], 4) + _t(' rad'); out.x = Sim.fmt(ds.get('x') || 0, 4); out.y = Sim.fmt(ds.get('y') || 0, 4);
                 out.z0 = Sim.fmt(ds.get('z_x')[0], 4) + ' + ' + Sim.fmt(ds.get('z_y')[0], 4) + 'i';
             } else {
                 out.k1 = out.re = out.im = out.A = out.ph = out.x = out.y = out.z0 = 'no shape yet';
@@ -1290,7 +1290,7 @@
 
         /* ---------- the data panel (scripts/datalog.js) reads the store; these hooks only say where things are drawn and how to test a value ---------- */
         function pixelAt(c, bx, x, y) { return c.getImageData(Math.round(x * bx.dpr), Math.round(y * bx.dpr), 1, 1).data; }
-        function rgbText(px) { return px[3] === 0 ? 'nothing (transparent)' : 'rgb(' + px[0] + ', ' + px[1] + ', ' + px[2] + ')' + (px[3] < 255 ? ' at alpha ' + (px[3] / 255).toFixed(2) : ''); }
+        function rgbText(px) { return px[3] === 0 ? _t('nothing (transparent)') : 'rgb(' + px[0] + ', ' + px[1] + ', ' + px[2] + ')' + (px[3] < 255 ? _t(' at alpha ') + (px[3] / 255).toFixed(2) : ''); }
         function lum(px) { return 0.2126 * px[0] + 0.7152 * px[1] + 0.0722 * px[2]; }
         function playing() { return ds.get('mode') === 'play'; }
         function toScreen(x, y) { return { x: ds.get('cx') + x * ds.get('scale'), y: ds.get('cy') - y * ds.get('scale') }; }
@@ -1299,17 +1299,17 @@
         function nearest(x, y, xs, ys, bd, map) { var best = -1; for (var i = 0; i < xs.length; i++) { var p = map ? map(xs[i], ys[i]) : { x: xs[i], y: ys[i] }, d = Math.hypot(x - p.x, y - p.y); if (d < bd) { bd = d; best = i; } } return { i: best, d: bd }; }
         function armInputs(i) { return [['rank', i, '', 0], ['|c_k|', ds.get('A_arm')[i], '', 6], ['θ', ds.get('ang')[i], 'rad', 5]]; }
         Sim.data = {
-            ds: ds, kicker: 'Fig. 8 · data', file: 'fig8-draw-decompose',
+            ds: ds, kicker: _t('Fig. 8 · data'), file: 'fig8-draw-decompose',
             playing: function () { return clk.playing; },
             groups: [
-                { title: 'The stroke', note: 'what you drew or the preset, then resampled and centred', vars: ['source', 'mode', 'drawing', 'stroke_x', 'stroke_y', 'draft_x', 'draft_y', 'N', 'L', 'step', 'r_x', 'r_y', 'mx', 'my', 'z_x', 'z_y', 'E'] },
-                { title: 'Coefficients', note: 'one row per frequency, sorted by |c_k|; the first K are drawn', vars: ['c_k', 'c_re', 'c_im', 'c_amp', 'c_phase', 'K', 'kept', 'cap', 'errP', 'err', 'e_i', 'zr_x', 'zr_y', 'full_x', 'full_y', 'extR'] },
-                { title: 'The chain now', note: 'tip to tail, as drawn; point at a cell to find the joint', vars: ['t', 'loop_s', 'A_arm', 'ang', 'vx', 'vy', 'jx', 'jy', 'px', 'py', 'x', 'y', 'tip_px', 'tip_py'] },
-                { title: 'Trail', note: 'the pen over the last loop', vars: ['trail_t', 'trail_x', 'trail_y'] },
-                { title: 'Spectrum panel', note: 'the bars below the figure', vars: ['c_max', 'spec_x', 'spec_y', 'sbox_w', 'sbox_h'] },
-                { title: 'View and drawing', note: 'how the picture is laid out', vars: ['viewR', 'zoom', 'panX', 'panY', 'follow', 'S_fit', 'scale', 'cx', 'cy', 'box_w', 'box_h', 'circles', 'vectors', 'orig', 'full', 'dt', 'fps', 'frames', 'playing'] }
+                { title: _t('The stroke'), note: _t('what you drew or the preset, then resampled and centred'), vars: ['source', 'mode', 'drawing', 'stroke_x', 'stroke_y', 'draft_x', 'draft_y', 'N', 'L', 'step', 'r_x', 'r_y', 'mx', 'my', 'z_x', 'z_y', 'E'] },
+                { title: _t('Coefficients'), note: _t('one row per frequency, sorted by |c_k|; the first K are drawn'), vars: ['c_k', 'c_re', 'c_im', 'c_amp', 'c_phase', 'K', 'kept', 'cap', 'errP', 'err', 'e_i', 'zr_x', 'zr_y', 'full_x', 'full_y', 'extR'] },
+                { title: _t('The chain now'), note: _t('tip to tail, as drawn; point at a cell to find the joint'), vars: ['t', 'loop_s', 'A_arm', 'ang', 'vx', 'vy', 'jx', 'jy', 'px', 'py', 'x', 'y', 'tip_px', 'tip_py'] },
+                { title: _t('Trail'), note: _t('the pen over the last loop'), vars: ['trail_t', 'trail_x', 'trail_y'] },
+                { title: _t('Spectrum panel'), note: _t('the bars below the figure'), vars: ['c_max', 'spec_x', 'spec_y', 'sbox_w', 'sbox_h'] },
+                { title: _t('View and drawing'), note: _t('how the picture is laid out'), vars: ['viewR', 'zoom', 'panX', 'panY', 'follow', 'S_fit', 'scale', 'cx', 'cy', 'box_w', 'box_h', 'circles', 'vectors', 'orig', 'full', 'dt', 'fps', 'frames', 'playing'] }
             ],
-            rowLabel: { k: function (j) { return 'rank ' + j; }, n: function (j) { return 'n' + j; } },
+            rowLabel: { k: function (j) { return _t('rank ') + j; }, n: function (j) { return 'n' + j; } },
             colour: (function () { function byR(v) { return Sim.colourMap(v, Math.max(ds.get('extR') || 0, 1e-6)); } return { z_x: byR, z_y: byR, zr_x: byR, zr_y: byR, full_x: byR, full_y: byR, trail_x: byR, trail_y: byR, jx: byR, jy: byR, vx: byR, vy: byR, c_re: byR, c_im: byR, c_amp: byR, e_i: function (v) { return Sim.colourMap(v, Math.max(ds.get('err') || 0, 1e-9) * 3); } }; })(),
             probe: function (x, y) {
                 var r, best = null, bd = 10;
@@ -1324,13 +1324,13 @@
             },
             inspect: function (ref) {
                 var i;
-                if (ref.tip) return { title: 'the pen z(t)', at: { x: ds.get('tip_px'), y: ds.get('tip_py') }, rows: [['t', ds.get('t'), 'rad', 't'], ['Re z', ds.get('x'), '', 'x'], ['Im z', ds.get('y'), '', 'y']] };
-                if (ref.arm !== undefined) { i = ref.arm; return { title: 'circle ' + (i + 1) + ' · k = ' + ds.get('c_k')[i] + ' · its joint', at: { x: ds.get('px')[i], y: ds.get('py')[i] }, rows: [['k', ds.get('c_k')[i], '', 'c_k', i], ['|c_k|', ds.get('A_arm')[i], '', 'A_arm', i], ['arg c_k', ds.get('c_phase')[i], 'rad', 'c_phase', i], ['θ = k t + arg c_k', ds.get('ang')[i], 'rad', 'ang', i], ['Δx', ds.get('vx')[i], '', 'vx', i], ['Δy', ds.get('vy')[i], '', 'vy', i], ['joint x', ds.get('jx')[i], '', 'jx', i], ['joint y', ds.get('jy')[i], '', 'jy', i]] }; }
-                if (ref.sample !== undefined) { i = ref.sample; return { title: 'sample n = ' + i + ' of the original', at: toScreen(ds.get('z_x')[i], ds.get('z_y')[i]), rows: [['Re zₙ', ds.get('z_x')[i], '', 'z_x', i], ['Im zₙ', ds.get('z_y')[i], '', 'z_y', i], ['Re z̃ₙ', ds.get('zr_x')[i], '', 'zr_x', i], ['Im z̃ₙ', ds.get('zr_y')[i], '', 'zr_y', i], ['error', ds.get('e_i')[i], '', 'e_i', i]] }; }
-                if (ref.full !== undefined) { i = ref.full; return { title: 'full curve point ' + i + ' · t = ' + Sim.fmt(TAU * i / 600, 4) + ' rad', at: toScreen(ds.get('full_x')[i], ds.get('full_y')[i]), rows: [['x', ds.get('full_x')[i], '', 'full_x', i], ['y', ds.get('full_y')[i], '', 'full_y', i]] }; }
-                if (ref.trail !== undefined) { i = ref.trail; return { title: 'trail point ' + i + ' · t = ' + Sim.fmt(ds.get('trail_t')[i], 4) + ' rad', at: toScreen(ds.get('trail_x')[i], ds.get('trail_y')[i]), rows: [['t', ds.get('trail_t')[i], 'rad', 'trail_t', i], ['x', ds.get('trail_x')[i], '', 'trail_x', i], ['y', ds.get('trail_y')[i], '', 'trail_y', i]] }; }
+                if (ref.tip) return { title: _t('the pen z(t)'), at: { x: ds.get('tip_px'), y: ds.get('tip_py') }, rows: [['t', ds.get('t'), 'rad', 't'], ['Re z', ds.get('x'), '', 'x'], ['Im z', ds.get('y'), '', 'y']] };
+                if (ref.arm !== undefined) { i = ref.arm; return { title: _t('circle ') + (i + 1) + ' · k = ' + ds.get('c_k')[i] + _t(' · its joint'), at: { x: ds.get('px')[i], y: ds.get('py')[i] }, rows: [['k', ds.get('c_k')[i], '', 'c_k', i], ['|c_k|', ds.get('A_arm')[i], '', 'A_arm', i], ['arg c_k', ds.get('c_phase')[i], 'rad', 'c_phase', i], ['θ = k t + arg c_k', ds.get('ang')[i], 'rad', 'ang', i], ['Δx', ds.get('vx')[i], '', 'vx', i], ['Δy', ds.get('vy')[i], '', 'vy', i], ['joint x', ds.get('jx')[i], '', 'jx', i], ['joint y', ds.get('jy')[i], '', 'jy', i]] }; }
+                if (ref.sample !== undefined) { i = ref.sample; return { title: _t('sample n = ') + i + _t(' of the original'), at: toScreen(ds.get('z_x')[i], ds.get('z_y')[i]), rows: [['Re zₙ', ds.get('z_x')[i], '', 'z_x', i], ['Im zₙ', ds.get('z_y')[i], '', 'z_y', i], ['Re z̃ₙ', ds.get('zr_x')[i], '', 'zr_x', i], ['Im z̃ₙ', ds.get('zr_y')[i], '', 'zr_y', i], ['error', ds.get('e_i')[i], '', 'e_i', i]] }; }
+                if (ref.full !== undefined) { i = ref.full; return { title: _t('full curve point ') + i + ' · t = ' + Sim.fmt(TAU * i / 600, 4) + _t(' rad'), at: toScreen(ds.get('full_x')[i], ds.get('full_y')[i]), rows: [['x', ds.get('full_x')[i], '', 'full_x', i], ['y', ds.get('full_y')[i], '', 'full_y', i]] }; }
+                if (ref.trail !== undefined) { i = ref.trail; return { title: _t('trail point ') + i + ' · t = ' + Sim.fmt(ds.get('trail_t')[i], 4) + _t(' rad'), at: toScreen(ds.get('trail_x')[i], ds.get('trail_y')[i]), rows: [['t', ds.get('trail_t')[i], 'rad', 'trail_t', i], ['x', ds.get('trail_x')[i], '', 'trail_x', i], ['y', ds.get('trail_y')[i], '', 'trail_y', i]] }; }
                 i = ref.draft;
-                return { title: 'draft point ' + i, at: toScreen(ds.get('draft_x')[i], ds.get('draft_y')[i]), rows: [['x', ds.get('draft_x')[i], '', 'draft_x', i], ['y', ds.get('draft_y')[i], '', 'draft_y', i]] };
+                return { title: _t('draft point ') + i, at: toScreen(ds.get('draft_x')[i], ds.get('draft_y')[i]), rows: [['x', ds.get('draft_x')[i], '', 'draft_x', i], ['y', ds.get('draft_y')[i], '', 'draft_y', i]] };
             },
             locate: function (name, idx) {
                 var v = ds.vars[name], d = v.dims[0];
@@ -1390,17 +1390,17 @@
                 cy: function () { return { formula: 'h / 2 + (follow ? y : pan y) · scale', inputs: [['h', ds.get('box_h'), 'css px', 0], ['follow', ds.get('follow') ? 'on' : 'off', ''], ['y', ds.get('y'), '', 6], ['pan y', ds.get('panY'), '', 6], ['scale', ds.get('scale'), 'px per unit', 3]], value: playing() ? ds.get('box_h') / 2 + (ds.get('follow') ? ds.get('y') : ds.get('panY')) * ds.get('scale') : ds.get('box_h') / 2 }; }
             },
             drawn: {
-                tip_px: function () { if (!playing()) return { what: 'the pen', drawn: 'nothing', expected: 'nothing', ok: true, note: 'The pen is drawn only while playing.' }; var px = pixelAt(ctx, box, ds.get('tip_px'), ds.get('tip_py')); return { what: 'screen pixel at the pen, (' + Sim.fmt(ds.get('tip_px'), 1) + ', ' + Sim.fmt(ds.get('tip_py'), 1) + ') css px', drawn: rgbText(px), expected: 'the burgundy pen dot, rgb(122, 31, 43)', ok: px[3] > 0 && lum(px) < 130, note: 'The dot has radius 5 px, so the pixel at the stored centre is its fill.' }; },
-                px: function (i) { if (!playing() || !ds.get('vectors')) return { what: 'joint ' + (i + 1), drawn: 'nothing', expected: 'nothing', ok: true, note: 'Joints are drawn only while playing with the arms switched on.' }; var px = pixelAt(ctx, box, ds.get('px')[i], ds.get('py')[i]); return { what: 'screen pixel at joint ' + (i + 1), drawn: rgbText(px), expected: 'the arrow’s colour at its head', ok: px[3] > 0, note: 'The arrow ends exactly at the joint; its head is drawn there when the arm is longer than 8 px.' }; },
-                full_x: function (i) { if (!playing() || !ds.get('full')) return { what: 'full curve point ' + i, drawn: 'nothing', expected: 'nothing', ok: true, note: 'The full curve is drawn only while playing with its switch on.' }; var p = toScreen(ds.get('full_x')[i], ds.get('full_y')[i]), px = pixelAt(ctx, box, p.x, p.y); return { what: 'screen pixel at full curve point ' + i + ', (' + Sim.fmt(p.x, 1) + ', ' + Sim.fmt(p.y, 1) + ') css px', drawn: rgbText(px), expected: 'the pink stroke, rgb(201, 112, 126), or anything drawn over it', ok: px[3] > 0, note: 'A 1.3 px stroke through the stored points.' }; },
-                trail_x: function (i) { if (!playing()) return { what: 'trail point ' + i, drawn: 'nothing', expected: 'nothing', ok: true, note: 'The trail is drawn only while playing.' }; var p = toScreen(ds.get('trail_x')[i], ds.get('trail_y')[i]), px = pixelAt(ctx, box, p.x, p.y); return { what: 'screen pixel at trail point ' + i + ', (' + Sim.fmt(p.x, 1) + ', ' + Sim.fmt(p.y, 1) + ') css px', drawn: rgbText(px), expected: 'burgundy, fainter for older points', ok: px[3] > 0, note: 'A 2.3 px stroke whose older segments are drawn with lower opacity.' }; },
-                spec_y: function (r) { var px = pixelAt(sctx, sbox, ds.get('spec_x')[r], ds.get('spec_y')[r]); return { what: 'screen pixel at the top of spectrum bar ' + r + ' (k = ' + ds.get('c_k')[r] + ')', drawn: rgbText(px), expected: r < ds.get('K') ? 'the burgundy dot of a kept circle' : 'the tan dot of a dropped one', ok: px[3] > 0 && lum(px) < 170, note: 'Each bar ends in a filled dot of radius 2.5 px (kept) or 1.8 px (dropped).' }; }
+                tip_px: function () { if (!playing()) return { what: _t('the pen'), drawn: 'nothing', expected: 'nothing', ok: true, note: _t('The pen is drawn only while playing.') }; var px = pixelAt(ctx, box, ds.get('tip_px'), ds.get('tip_py')); return { what: _t('screen pixel at the pen, (') + Sim.fmt(ds.get('tip_px'), 1) + ', ' + Sim.fmt(ds.get('tip_py'), 1) + _t(') css px'), drawn: rgbText(px), expected: _t('the burgundy pen dot, rgb(122, 31, 43)'), ok: px[3] > 0 && lum(px) < 130, note: _t('The dot has radius 5 px, so the pixel at the stored centre is its fill.') }; },
+                px: function (i) { if (!playing() || !ds.get('vectors')) return { what: _t('joint ') + (i + 1), drawn: 'nothing', expected: 'nothing', ok: true, note: _t('Joints are drawn only while playing with the arms switched on.') }; var px = pixelAt(ctx, box, ds.get('px')[i], ds.get('py')[i]); return { what: _t('screen pixel at joint ') + (i + 1), drawn: rgbText(px), expected: _t('the arrow’s colour at its head'), ok: px[3] > 0, note: _t('The arrow ends exactly at the joint; its head is drawn there when the arm is longer than 8 px.') }; },
+                full_x: function (i) { if (!playing() || !ds.get('full')) return { what: _t('full curve point ') + i, drawn: 'nothing', expected: 'nothing', ok: true, note: _t('The full curve is drawn only while playing with its switch on.') }; var p = toScreen(ds.get('full_x')[i], ds.get('full_y')[i]), px = pixelAt(ctx, box, p.x, p.y); return { what: _t('screen pixel at full curve point ') + i + ', (' + Sim.fmt(p.x, 1) + ', ' + Sim.fmt(p.y, 1) + _t(') css px'), drawn: rgbText(px), expected: _t('the pink stroke, rgb(201, 112, 126), or anything drawn over it'), ok: px[3] > 0, note: _t('A 1.3 px stroke through the stored points.') }; },
+                trail_x: function (i) { if (!playing()) return { what: _t('trail point ') + i, drawn: 'nothing', expected: 'nothing', ok: true, note: _t('The trail is drawn only while playing.') }; var p = toScreen(ds.get('trail_x')[i], ds.get('trail_y')[i]), px = pixelAt(ctx, box, p.x, p.y); return { what: _t('screen pixel at trail point ') + i + ', (' + Sim.fmt(p.x, 1) + ', ' + Sim.fmt(p.y, 1) + _t(') css px'), drawn: rgbText(px), expected: _t('burgundy, fainter for older points'), ok: px[3] > 0, note: _t('A 2.3 px stroke whose older segments are drawn with lower opacity.') }; },
+                spec_y: function (r) { var px = pixelAt(sctx, sbox, ds.get('spec_x')[r], ds.get('spec_y')[r]); return { what: _t('screen pixel at the top of spectrum bar ') + r + ' (k = ' + ds.get('c_k')[r] + ')', drawn: rgbText(px), expected: r < ds.get('K') ? _t('the burgundy dot of a kept circle') : _t('the tan dot of a dropped one'), ok: px[3] > 0 && lum(px) < 170, note: _t('Each bar ends in a filled dot of radius 2.5 px (kept) or 1.8 px (dropped).') }; }
             },
-            round: { time: 't', label: function () { return 'one loop of the circles, ' + ds.get('loop_s') + ' s'; }, length: function () { return 2 * Math.PI; },
+            round: { time: 't', label: function () { return _t('one loop of the circles, ') + ds.get('loop_s') + ' s'; }, length: function () { return 2 * Math.PI; },
                 columns: ['x', 'y'], point: function () { return { tip: true }; },
-                blocked: function () { return ds.get('mode') !== 'play' ? 'Decompose a shape first: time only runs while it plays.' : null; } },
+                blocked: function () { return ds.get('mode') !== 'play' ? _t('Decompose a shape first: time only runs while it plays.') : null; } },
             play: function () { clk.set(true); },
-            about: 'The pen, arms and joints are drawn from the stored chain each frame. The dashed original is the 256 resampled, centred points zₙ joined by straight segments; the full curve is the stored 601-point reconstruction. The trail is the pen position at the end of each past frame over the last loop. The spectrum bars are drawn once per rebuild, from |c_k| sorted by size. The view scale relaxes toward the outer radius over about 0.4 s, so the stored scale is a smoothed quantity, not a formula of the current frame.'
+            about: _t('The pen, arms and joints are drawn from the stored chain each frame. The dashed original is the 256 resampled, centred points zₙ joined by straight segments; the full curve is the stored 601-point reconstruction. The trail is the pen position at the end of each past frame over the last loop. The spectrum bars are drawn once per rebuild, from |c_k| sorted by size. The view scale relaxes toward the outer radius over about 0.4 s, so the stored scale is a smoothed quantity, not a formula of the current frame.')
         };
         ds.set('loop_s', loop.value); ds.set('t', 0); ds.set('mode', mode);
         Sim.onResize(stage, function () { box.fit(); });
