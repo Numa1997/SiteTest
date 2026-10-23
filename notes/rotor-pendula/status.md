@@ -82,7 +82,7 @@ acceleration at the pivot approaches g; chaos spreads the mobility over a wide b
   To do: contract L2 round 2 (run both torque laws; overdamped picture, ζ = 4.5–8.4; dynamic inflow 15 s; σ₁ is the IEC 90 %
   quantile; C_p 0.482 vs 0.466; unresolved-variance torque rectification ~5.7 % of Q₀).
 - L1 map (`L1_map.json`): chaos only at R = 1 (G = 1, 16/16 members); none at R ≥ 2; 10 members diverged numerically, all at
-  G = 70 with R ≤ 5 (no real mounting): rerun them with more steps before quoting.
+  G = 70 with R ≤ 5; RERUN with 4x steps (`L1_map_g70.py`, 420-440 steps/turn): all 48 finite, none chaotic. Divergence was numerical.
 - External review prompt for Numa's ChatGPT agent: `review-prompt.md` (given 23 Oct, study unfinished).
 
 ## Found along the way
