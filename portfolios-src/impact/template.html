@@ -3,24 +3,38 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="{{FONTS}}" rel="stylesheet">
+<link rel="stylesheet" href="{{BASE}}styles/paper.css">
+<link rel="stylesheet" href="{{BASE}}styles/data.css">
 <style>
 :root{--bg:#ece3d2;--panel:#f8f2e6;--paper:#fcf8f0;--ink:#23160f;--muted:#6f5b4c;--line:#3f2c23;--rule:#dccdb4;
 --wine:#7d1d2f;--wine-deep:#5a0f21;--wine-soft:#f3dfdb;--blue:#33627f;--blue-soft:#e1ebf0;--green:#3c6a46;--green-soft:#e3ece2;--pic:#f6ecdc}
+/* the tokens the data panel (styles/data.css) reads, in this study's colours */
+:root{--accent:var(--wine);--accent-dark:var(--wine-deep);--accent-rose:#e2a2aa;--card:var(--paper);--card-soft:var(--panel);--ink-2:#3f2c23;--ink-3:#5c4839;
+--rule-soft:#e8dcc6;--tan:#efe4c8;--tan-ink:#7a4b12;--shadow:0 14px 40px rgba(60,40,20,.12);
+--sans:"IBM Plex Sans",system-ui,sans-serif;--mono:"IBM Plex Mono",ui-monospace,monospace;--serif:"Instrument Serif",Georgia,serif}
 *{box-sizing:border-box}
 body{margin:0;background:var(--bg);color:var(--ink);font:16.5px/1.68 var(--f-body)}
 main{max-width:1000px;margin:0 auto;padding-block:28px 48px;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px))}
 :root{color-scheme:light}
 .eyebrow{font:500 11.5px/1.4 var(--f-mono);letter-spacing:.14em;text-transform:uppercase;color:var(--wine)}
 h1{font:400 clamp(36px,6.4vw,60px)/1.06 var(--f-title);color:var(--wine-deep);margin:8px 0 10px}
-h2{font:400 clamp(26px,4vw,34px)/1.15 var(--f-title);color:var(--wine-deep);margin:0 0 10px;display:flex;gap:12px;align-items:center}
+/* element rules of the study, kept off the data panel's own elements and given no weight, so classes win as before */
+:where(h2:not(.dp *)){font:400 clamp(26px,4vw,34px)/1.15 var(--f-title);color:var(--wine-deep);margin:0 0 10px;display:flex;gap:12px;align-items:center}
 h2 .num{font:500 13px var(--f-mono);background:var(--wine);color:#fff;border-radius:999px;padding:3px 10px;flex:none}
-h3{font:400 22px/1.2 var(--f-title);color:var(--wine-deep);margin:18px 0 6px}
-p{margin:0 0 12px;max-width:76ch}
+:where(h3:not(.dp *)){font:400 22px/1.2 var(--f-title);color:var(--wine-deep);margin:18px 0 6px}
+:where(p:not(.dp *):not(.dp-read *)){margin:0 0 12px;max-width:76ch}
 .lede{color:var(--muted);max-width:74ch;margin-bottom:20px}
 .card{background:var(--panel);border:1.5px solid var(--line);border-radius:12px;padding:16px;margin-bottom:18px}
-canvas{display:block;width:100%;background:var(--paper);border:1.5px solid var(--line);border-radius:8px}
+:where(canvas:not(.dp-overlay):not(.dp canvas)){display:block;width:100%;background:var(--paper);border:1.5px solid var(--line);border-radius:8px}
+/* the main figure: the canvas fills #stage exactly, so the panel's overlay and the drawing share one set of css pixels */
+.stage{margin:0;background:var(--paper);border:1.5px solid var(--line);border-radius:8px;overflow:hidden}
+#stage{position:relative}
+#stage>#sim{border:0;border-radius:0}
+#stage>canvas.dp-overlay{position:absolute;inset:0;width:100%;height:100%;display:block;pointer-events:none;z-index:5}
+#stage.dp-reading{cursor:crosshair;touch-action:none;-webkit-user-select:none;user-select:none}
+.stage__cap{display:flex;flex-wrap:wrap;justify-content:space-between;align-items:center;gap:6px 16px;margin:0;max-width:none;padding:8px 12px;border-top:1px solid var(--rule);font-size:14px;color:var(--muted)}
 .bar{display:flex;flex-wrap:wrap;gap:8px;align-items:center;margin:12px 0}
-button{font:500 14px var(--f-body);background:var(--paper);color:var(--wine-deep);border:1.5px solid var(--line);border-radius:8px;padding:6px 14px;cursor:pointer}
+:where(button:not(.dp *):not(.dp-read *):not(.dp-readbtn):not(.dp-tab)){font:500 14px var(--f-body);background:var(--paper);color:var(--wine-deep);border:1.5px solid var(--line);border-radius:8px;padding:6px 14px;cursor:pointer}
 button.on{background:var(--wine);color:#fff}
   .hint{border:1.5px solid var(--wine-deep);background:var(--paper);border-radius:8px;padding:8px 12px;margin-bottom:10px;color:var(--wine-deep)}
 .hint b{font-weight:500}
@@ -54,6 +68,7 @@ ol.src{padding-inline-start:20px;font-size:14.5px} ol.src li{margin-bottom:4px}
 a{color:var(--wine)}
 .sitebar{display:flex;flex-wrap:wrap;justify-content:space-between;gap:8px 16px;font:500 13px var(--f-mono);margin-bottom:18px}
 .sitebar a{text-decoration:none}.sitebar .langs a[aria-current]{color:var(--ink);font-weight:600}
+.sim-error{border:1.5px solid var(--wine);background:var(--wine-soft);border-radius:8px;padding:8px 12px;margin-bottom:12px}
 {{CSSLANG}}
 </style>
 <main lang="{{LANG}}" dir="{{DIR}}">
@@ -64,8 +79,10 @@ a{color:var(--wine)}
 
 <div class="card">
   <div class="hint" id="hint"></div>
-  <canvas id="sim"></canvas>
-  <p class="small" data-t="headnote" style="margin:8px 0 0"></p>
+  <figure class="stage">
+    <div id="stage"><canvas id="sim"></canvas></div>
+    <figcaption class="stage__cap"><span data-t="headnote"></span></figcaption>
+  </figure>
   <div class="bar">
     <button id="drop" class="go" data-t="drop"></button>
     <button id="s1" data-t="speed1"></button>
@@ -105,6 +122,8 @@ a{color:var(--wine)}
 </div>
 </main>
 
+<script src="{{BASE}}scripts/sim.js"></script>
+<script src="{{BASE}}scripts/dataset.js"></script>
 <script>
 "use strict";
 document.documentElement.lang="{{LANG}}";document.documentElement.dir="{{DIR}}";
@@ -133,46 +152,217 @@ document.getElementById("sections").innerHTML=T.sections;
 const T1=2.5,NF1=Math.round(T1/1e-3),NF=NF1+Math.round((P.tmax-T1)/2e-3)+1;
 const tOf=k=>k<=NF1?k*1e-3:T1+(k-NF1)*2e-3;
 const kOf=t=>t<=T1?Math.round(t/1e-3):Math.min(NF-1,NF1+Math.round((t-T1)/2e-3));
-const S={};
-let iron,cot,computed=0,playing=false,tPlay=0,slow=4,last=null;
-function makeStore(b){return {N:b.N,xy:new Float32Array(NF*2*b.N),yp:new Float32Array(NF),F:new Float32Array(NF),Fmax:new Float32Array(NF),E:new Float32Array(NF*7),tImpact:null}}
-function record(b,st,k){
-  const o=k*2*b.N;for(let i=0;i<b.N;i++){st.xy[o+2*i]=b.x[i];st.xy[o+2*i+1]=b.y[i]}
-  st.yp[k]=b.yp;st.F[k]=b.Fs||0;st.Fmax[k]=b.Fmax;
-  const e=b.E;st.E.set([e.KE,e.PE,e.elastic,e.head,e.heatBall,e.heatHead,b.E0],k*7);
-  if(st.tImpact===null&&b.tImpact!==null)st.tImpact=b.tImpact;
+const CK=125,NCK=Math.floor((NF-1)/CK)+1;   // a full-state checkpoint every 125 samples: Check reruns the model from the one before a sample
+const W0=4.0,WSHOW=6.5,KW0=kOf(W0);         // the scale's weight: average of its reading from 4 s on, shown from 6.5 s
+const BALLS=["iron","cot"];
+let iron,cot,body={},computed=0,steps=0,playing=false,tPlay=0,slow=4,last=null,ds,D={},wsum={iron:0,cot:0},wcnt={iron:0,cot:0},tStart=0;
+
+// ---------------- the store: every number of the run is written into it where it is computed (scripts/dataset.js) ----------------
+function declare(){
+  ds=Sim.dataset({title:"Iron, cotton and the head",attrs:{study:"portfolios/impact",page:"{{PAGE}}",
+    model:"particles under Newton's second law, semi-implicit Euler; Morse bonds (iron), fibres with stretch, bending, junctions and contact (cotton); head = plate on a spring and damper",
+    start:"both balls at rest, lowest point 10 m above the plate"}});
+  const v=(n,dims,type,a)=>ds.var(n,dims,type,a);
+  const par=(n,val,a)=>{v(n,[],Number.isInteger(val)&&!a.float?"int":"float",Object.assign({computed_in:"P (the model's constants)"},a));ds.set(n,val)};
+  // parameters: the constants of P, exactly as the model uses them
+  par("g",P.g,{symbol:"g",units:"m/s²",long_name:"gravity",digits:2,float:1});
+  par("h",P.h,{symbol:"h",units:"m",long_name:"drop height, plate to the lowest point of the ball",digits:1,float:1});
+  par("M",P.M,{symbol:"M",units:"kg",long_name:"mass of each ball",digits:3,float:1});
+  par("dt",P.dt,{symbol:"Δt",units:"s",long_name:"frame step of the model",digits:5,float:1});
+  par("tmax",P.tmax,{symbol:"t<sub>end</sub>",units:"s",long_name:"length of the run",digits:1,float:1});
+  par("a_iron",P.iron.a,{symbol:"a",units:"m",long_name:"iron: lattice spacing",digits:3,float:1});
+  par("R_iron",P.iron.R,{symbol:"R<sub>Fe</sub>",units:"m",long_name:"iron: radius of the ball",digits:2,float:1});
+  par("k_iron",P.iron.k,{symbol:"k",units:"N/m",long_name:"iron: Morse bond stiffness at rest, 2Dα²",digits:0,float:1});
+  par("ar0",P.iron.ar0,{symbol:"αr<sub>0</sub>",long_name:"iron: Morse shape (Girifalco and Weizer)",digits:2,float:1});
+  par("c_iron",P.iron.c,{symbol:"c<sub>Fe</sub>",units:"N·s/m",long_name:"iron: bond damper",digits:2,float:1});
+  par("rad_iron",P.iron.rad,{symbol:"r<sub>Fe</sub>",units:"m",long_name:"iron: contact radius of an atom on the plate",digits:3,float:1});
+  par("sub_iron",P.iron.sub,{symbol:"n<sub>Fe</sub>",long_name:"iron: sub-steps per frame step",digits:0});
+  par("R_cot",P.cot.R,{symbol:"R<sub>c</sub>",units:"m",long_name:"cotton: radius of the circle the fibres curl in",digits:2,float:1});
+  par("nf",P.cot.nf,{symbol:"n<sub>f</sub>",long_name:"cotton: fibres",digits:0});
+  par("nb",P.cot.nb,{symbol:"n<sub>b</sub>",long_name:"cotton: beads per fibre",digits:0});
+  par("s_cot",P.cot.s,{symbol:"s",units:"m",long_name:"cotton: bead spacing",digits:3,float:1});
+  par("turn",P.cot.turn,{symbol:"σ<sub>turn</sub>",units:"rad",long_name:"cotton: random turn per bead while the fibre is laid",digits:2,float:1});
+  par("kax",P.cot.kax,{symbol:"k<sub>ax</sub>",units:"N/m",long_name:"cotton: stretch spring along a fibre",digits:0,float:1});
+  par("kb",P.cot.kb,{symbol:"κ",units:"N·m/rad",long_name:"cotton: bending spring",digits:3,float:1});
+  par("cb",P.cot.cb,{symbol:"c<sub>b</sub>",units:"N·m·s/rad",long_name:"cotton: bending friction",digits:4,float:1});
+  par("c_cot",P.cot.c,{symbol:"c",units:"N·s/m",long_name:"cotton: stretch damper (junctions take 0.2 of it)",digits:2,float:1});
+  par("jr",P.cot.jr,{symbol:"r<sub>j</sub>",units:"m",long_name:"cotton: beads closer than this at the start are joined",digits:3,float:1});
+  par("kj",P.cot.kj,{symbol:"k<sub>j</sub>",units:"N/m",long_name:"cotton: junction stiffness",digits:0,float:1});
+  par("Fj",P.cot.Fj,{symbol:"F<sub>j</sub>",units:"N",long_name:"cotton: largest pull of a junction",digits:1,float:1});
+  par("drep",P.cot.drep,{symbol:"d<sub>c</sub>",units:"m",long_name:"cotton: contact range between fibres",digits:3,float:1});
+  par("krep",P.cot.krep,{symbol:"k<sub>c</sub>",units:"N/m",long_name:"cotton: contact push-back",digits:0,float:1});
+  par("crep",P.cot.crep,{symbol:"c<sub>c</sub>",units:"N·s/m",long_name:"cotton: contact rubbing friction",digits:2,float:1});
+  par("rad_cot",P.cot.rad,{symbol:"r<sub>c</sub>",units:"m",long_name:"cotton: contact radius of a bead on the plate",digits:3,float:1});
+  par("seed",P.cot.seed,{symbol:"seed",long_name:"cotton: seed of the random tangle",digits:0});
+  par("sub_cot",P.cot.sub,{symbol:"n<sub>c</sub>",long_name:"cotton: sub-steps per frame step",digits:0});
+  par("mp",P.head.mp,{symbol:"m<sub>p</sub>",units:"kg",long_name:"head: plate mass",digits:2,float:1});
+  par("kh",P.head.kh,{symbol:"k<sub>h</sub>",units:"N/m",long_name:"head: spring, which is also the scale",digits:0,float:1});
+  par("ch",P.head.ch,{symbol:"c<sub>h</sub>",units:"N·s/m",long_name:"head: damper (soft tissue)",digits:1,float:1});
+  par("wc",P.head.wc,{symbol:"ω<sub>c</sub>",units:"rad/s",long_name:"skin contact: angular frequency of a particle on the plate",digits:0,float:1});
+  par("zc",P.head.zc,{symbol:"ζ<sub>c</sub>",long_name:"skin contact: damping ratio",digits:2,float:1});
+  // derived: computed once, when the two balls are built
+  for(const s of BALLS){const b=body[s],F=s==="iron"?"Fe":"c",nm=s==="iron"?"iron":"cotton";
+    v("N_"+s,[],"int",{symbol:"N<sub>"+F+"</sub>",long_name:nm+": particles",computed_in:s==="iron"?"makeIron()":"makeCotton()",digits:0});ds.set("N_"+s,b.N);
+    v("nbond_"+s,[],"int",{symbol:"n<sub>bonds</sub>",long_name:nm+": bonds"+(s==="cot"?" (stretch springs and junctions)":""),computed_in:s==="iron"?"makeIron()":"makeCotton()",digits:0});ds.set("nbond_"+s,b.nb);
+    v("m_"+s,[],"float",{symbol:"m<sub>"+F+"</sub>",units:"kg",long_name:nm+": mass of one particle",computed_in:"newBody()",formula:"M / N",digits:6});ds.set("m_"+s,b.m);
+    v("kc_"+s,[],"float",{symbol:"k<sub>skin</sub>",units:"N/m",long_name:nm+": stiffness of a particle's contact with the plate",computed_in:"newBody()",formula:"m ω<sub>c</sub>²",digits:2});ds.set("kc_"+s,b.kc);
+    v("cc_"+s,[],"float",{symbol:"c<sub>skin</sub>",units:"N·s/m",long_name:nm+": damping of that contact",computed_in:"newBody()",formula:"2 ζ<sub>c</sub> m ω<sub>c</sub>",digits:4});ds.set("cc_"+s,b.cc);
+    v("y00_"+s,[],"float",{symbol:"y<sub>00</sub>",units:"m",long_name:nm+": zero of the height energy (mean height at the start minus h)",computed_in:s==="iron"?"newBody()":"relax()",formula:"mean y<sub>i</sub>(0) − h",digits:6});ds.set("y00_"+s,b.y00);
+  }
+  v("alpha_iron",[],"float",{symbol:"α",units:"1/m",long_name:"iron: Morse width parameter",computed_in:"makeIron()",formula:"αr<sub>0</sub> / a",digits:3});ds.set("alpha_iron",iron.alm);
+  v("D_iron",[],"float",{symbol:"D",units:"J",long_name:"iron: Morse depth, the energy to pull two atoms apart",computed_in:"makeIron()",formula:"k / (2α²)",digits:4});ds.set("D_iron",iron.Dm);
+  v("nj_cot",[],"int",{symbol:"n<sub>j</sub>",long_name:"cotton: junctions where fibres cross",computed_in:"makeCotton()",digits:0});ds.set("nj_cot",cot.nj);
+  v("ntri_cot",[],"int",{symbol:"n<sub>bend</sub>",long_name:"cotton: bending joints",computed_in:"makeCotton()",digits:0});ds.set("ntri_cot",cot.ntri);
+  v("aj_cot",[],"float",{symbol:"α<sub>j</sub>",units:"1/m",long_name:"cotton: junction Morse width parameter",computed_in:"makeCotton()",formula:"k<sub>j</sub> / (4F<sub>j</sub>)",digits:3});ds.set("aj_cot",P.cot.kj/(4*P.cot.Fj));
+  v("Dj_cot",[],"float",{symbol:"D<sub>j</sub>",units:"J",long_name:"cotton: junction Morse depth",computed_in:"makeCotton()",formula:"2F<sub>j</sub> / α<sub>j</sub>",digits:4});ds.set("Dj_cot",2*P.cot.Fj/ds.get("aj_cot"));
+  v("t_star",[],"float",{symbol:"t*",units:"s",long_name:"first touch predicted by Newton for a free fall",computed_in:"declare()",formula:"√(2h/g)",digits:4});ds.set("t_star",Math.sqrt(2*P.h/P.g));
+  v("v_star",[],"float",{symbol:"v*",units:"m/s",long_name:"speed at that touch",computed_in:"declare()",formula:"√(2gh)",digits:4});ds.set("v_star",Math.sqrt(2*P.g*P.h));
+  v("Mg",[],"float",{symbol:"Mg",units:"N",long_name:"weight of either ball",computed_in:"declare()",formula:"M g",digits:4});ds.set("Mg",P.M*P.g);
+  for(const s of BALLS)v("E0_"+s,[],"float",{symbol:"E<sub>0</sub>",units:"J",long_name:(s==="iron"?"iron":"cotton")+": energy at the first stored sample, the start of the books",computed_in:"init()",formula:"K + V + E<sub>el</sub> + E<sub>head</sub> + Q<sub>ball</sub> + Q<sub>head</sub> at n = 0",digits:6});
+  // solver
+  v("CK",[],"int",{symbol:"Δn<sub>ck</sub>",long_name:"samples between two checkpoints",computed_in:"constant CK",digits:0});ds.set("CK",CK);
+  v("NF",[],"int",{symbol:"N<sub>s</sub>",long_name:"stored samples",computed_in:"constant NF",formula:"2500 at 1 ms + 3250 at 2 ms + 1",digits:0});ds.set("NF",NF);
+  v("computed",[],"int",{symbol:"n<sub>done</sub>",long_name:"samples computed so far",computed_in:"work()",digits:0,source:"Counted by work() as it stores each sample."});
+  v("steps",[],"int",{symbol:"steps",long_name:"frame steps of Δt taken so far (each ball)",computed_in:"work()",digits:0});
+  v("compute_ms",[],"float",{symbol:"compute time",units:"ms",long_name:"time the browser took to compute and store the run",computed_in:"work()",digits:0,source:"Measured with performance.now()."});
+  v("done",[],"bool",{symbol:"done",long_name:"the whole run is computed",computed_in:"work()",digits:0});
+  // results of the run, written when it is complete
+  for(const s of BALLS){const nm=s==="iron"?"iron":"cotton";
+    v("t_touch_"+s,[],"float",{symbol:"t<sub>touch</sub>",units:"s",long_name:nm+": first touch of the plate, in model time",computed_in:"sub(), recorded by record()",digits:4});ds.set("t_touch_"+s,NaN);
+    v("Fpeak_"+s,[],"float",{symbol:"F<sub>peak</sub>",units:"N",long_name:nm+": impact force, the largest reading of the scale",computed_in:"step(), recorded by record()",digits:2});ds.set("Fpeak_"+s,NaN);
+    v("W_end_"+s,[],"float",{symbol:"W",units:"N",long_name:nm+": weight, the mean reading from 4 s to 9 s",computed_in:"record()",formula:"mean F<sub>n</sub>, 4 s ≤ t<sub>n</sub> ≤ 9 s",digits:4});ds.set("W_end_"+s,NaN);
+    v("w_rel_"+s,[],"float",{symbol:"(W − Mg)/Mg",long_name:nm+": how far the weight is from Mg",computed_in:"work()",formula:"(W − Mg) / Mg",digits:6});ds.set("w_rel_"+s,NaN);
+    v("books_max_"+s,[],"float",{symbol:"max |Δ<sub>books</sub>|",units:"J",long_name:nm+": largest gap in the energy books over the run",computed_in:"work()",formula:"max over n of |Δ<sub>n</sub>|",digits:4});ds.set("books_max_"+s,NaN);
+  }
+  // the stored run
+  ds.dim("n",NF);ds.dim("p_iron",iron.N);ds.dim("p_cot",cot.N);ds.dim("b_iron",iron.nb);ds.dim("b_cot",cot.nb);ds.dim("c",NCK);
+  ds.coord("ts","n",Float64Array,{symbol:"t<sub>n</sub>",units:"s",long_name:"time of each stored sample",computed_in:"tOf()",formula:"n · 1 ms up to 2.5 s, then 2.5 s + (n − 2500) · 2 ms",digits:3});
+  v("nstep",["n"],Int32Array,{symbol:"steps<sub>n</sub>",long_name:"frame steps taken when sample n was stored",computed_in:"work()",formula:"steps of Δt until the model time reaches t<sub>n</sub>",digits:0});
+  for(const s of BALLS){const nm=s==="iron"?"iron":"cotton",P2=s==="iron"?"p_iron":"p_cot",B=s==="iron"?"b_iron":"b_cot",what=s==="iron"?"atom":"bead";
+    v("x_"+s,["n",P2],Float32Array,{symbol:"x<sub>i</sub>",units:"m",long_name:nm+": horizontal position of each "+what+" (float32)",computed_in:"sub(), recorded by record()",digits:5});
+    v("y_"+s,["n",P2],Float32Array,{symbol:"y<sub>i</sub>",units:"m",long_name:nm+": height of each "+what+" above the plate's rest position (float32)",computed_in:"sub(), recorded by record()",digits:5});
+    v("sp_"+s,["n",P2],Float32Array,{symbol:"|v<sub>i</sub>|",units:"m/s",long_name:nm+": speed of each "+what+" (float32)",computed_in:"record()",formula:"√(u<sub>i</sub>² + v<sub>i</sub>²)",digits:4});
+    v("yp_"+s,["n"],Float64Array,{symbol:"y<sub>p</sub>",units:"m",long_name:nm+": plate position; negative is pressed in",computed_in:"sub(), recorded by record()",digits:6});
+    v("vp_"+s,["n"],Float64Array,{symbol:"v<sub>p</sub>",units:"m/s",long_name:nm+": plate velocity",computed_in:"sub(), recorded by record()",digits:5});
+    v("F_"+s,["n"],Float64Array,{symbol:"F",units:"N",long_name:nm+": scale reading",computed_in:"step(), recorded by record()",formula:"F = −k<sub>h</sub> y<sub>p</sub> = k<sub>h</sub> × compression",digits:3});
+    v("Fmax_"+s,["n"],Float64Array,{symbol:"F<sub>peak</sub>",units:"N",long_name:nm+": peak hold, the largest reading so far (every step, not only stored samples)",computed_in:"step(), recorded by record()",digits:3});
+    v("KE_"+s,["n"],Float64Array,{symbol:"K",units:"J",long_name:nm+": kinetic energy of the ball",computed_in:"sub(), recorded by record()",formula:"Σ ½ m (u<sub>i</sub>² + v<sub>i</sub>²)",digits:4});
+    v("PE_"+s,["n"],Float64Array,{symbol:"V",units:"J",long_name:nm+": height energy of the ball",computed_in:"sub(), recorded by record()",formula:"Σ m g (y<sub>i</sub> − y<sub>00</sub>)",digits:4});
+    v("El_"+s,["n"],Float64Array,{symbol:"E<sub>el</sub>",units:"J",long_name:nm+": elastic energy stored in the ball (bonds, bending, contacts, skin)",computed_in:"sub(), recorded by record()",digits:5});
+    v("Eh_"+s,["n"],Float64Array,{symbol:"E<sub>head</sub>",units:"J",long_name:nm+": energy in the head spring and plate motion",computed_in:"sub(), recorded by record()",formula:"½ k<sub>h</sub> y<sub>p</sub>² + ½ m<sub>p</sub> v<sub>p</sub>²",digits:5});
+    v("Qb_"+s,["n"],Float64Array,{symbol:"Q<sub>ball</sub>",units:"J",long_name:nm+": heat made inside the ball so far",computed_in:"sub(): ∫ damper power dt",digits:4});
+    v("Qh_"+s,["n"],Float64Array,{symbol:"Q<sub>head</sub>",units:"J",long_name:nm+": heat made in the head and skin so far",computed_in:"sub(): ∫ damper power dt",digits:4});
+    v("Ein_"+s,["n"],Float64Array,{symbol:"E<sub>in</sub>",units:"J",long_name:nm+": energy the fall has handed over, the upper bar",computed_in:"record()",formula:"E<sub>0</sub> − V<sub>n</sub>",digits:4});
+    v("Esum_"+s,["n"],Float64Array,{symbol:"E<sub>now</sub>",units:"J",long_name:nm+": where it is now, the lower bar",computed_in:"record()",formula:"K + E<sub>el</sub> + E<sub>head</sub> + Q<sub>ball</sub> + Q<sub>head</sub>",digits:4});
+    v("books_"+s,["n"],Float64Array,{symbol:"Δ<sub>books</sub>",units:"J",long_name:nm+": gap in the energy books, the integrator's own error",computed_in:"record()",formula:"E<sub>now</sub> − E<sub>in</sub>",digits:4});
+    v("W_"+s,["n"],Float64Array,{symbol:"W<sub>n</sub>",units:"N",long_name:nm+": weight so far, mean reading from 4 s to t<sub>n</sub> (undefined before 4 s)",computed_in:"record()",formula:"mean F<sub>j</sub>, 4 s ≤ t<sub>j</sub> ≤ t<sub>n</sub>",digits:4});
+    v("bi_"+s,[B],Int32Array,{symbol:"i",long_name:nm+": first particle of each bond",computed_in:s==="iron"?"makeIron()":"makeCotton()",digits:0});
+    v("bj_"+s,[B],Int32Array,{symbol:"j",long_name:nm+": second particle of each bond",computed_in:s==="iron"?"makeIron()":"makeCotton()",digits:0});
+    v("l0_"+s,[B],Float64Array,{symbol:"l<sub>0</sub>",units:"m",long_name:nm+": rest length of each bond",computed_in:s==="iron"?"makeIron()":"relax()",digits:5});
+  }
+  v("type_cot",["b_cot"],Uint8Array,{symbol:"type",long_name:"cotton: kind of each bond, 1 stretch spring along a fibre, 2 junction",computed_in:"makeCotton()",digits:0});
+  v("fibre_cot",["p_cot"],Int32Array,{symbol:"fibre",long_name:"cotton: the fibre each bead belongs to",computed_in:"makeCotton()",digits:0});
+  // checkpoints: the full state of each ball every CK samples, so Check can rerun the model from the one before any sample
+  v("ck_n",["c"],Int32Array,{symbol:"n<sub>ck</sub>",long_name:"sample of each checkpoint",computed_in:"record()",formula:"c · Δn<sub>ck</sub>",digits:0});
+  v("ck_step",["c"],Int32Array,{symbol:"steps<sub>ck</sub>",long_name:"frame steps taken at each checkpoint",computed_in:"record()",digits:0});
+  for(const s of BALLS){const nm=s==="iron"?"iron":"cotton",P2=s==="iron"?"p_iron":"p_cot",B=s==="iron"?"b_iron":"b_cot";
+    for(const [q,sy,u,ln] of [["x","x","m","horizontal positions"],["y","y","m","heights"],["u","u","m/s","horizontal velocities"],["v","v","m/s","vertical velocities"]])
+      v("ck_"+q+"_"+s,["c",P2],Float64Array,{symbol:sy+"<sub>ck</sub>",units:u,long_name:nm+": checkpoint "+ln,computed_in:"record()",digits:6});
+    for(const [q,sy,u,ln] of [["t","t","s","model time"],["yp","y<sub>p</sub>","m","plate position"],["vp","v<sub>p</sub>","m/s","plate velocity"],["Fmax","F<sub>peak</sub>","N","peak hold"],["Qb","Q<sub>ball</sub>","J","heat in the ball"],["Qh","Q<sub>head</sub>","J","heat in the head"],["ti","t<sub>touch</sub>","s","first touch (undefined before it)"]])
+      v("ck_"+q+"_"+s,["c"],Float64Array,{symbol:sy+"<sub>ck</sub>",units:u,long_name:nm+": checkpoint "+ln,computed_in:"record()",digits:6});
+    v("ck_alive_"+s,["c",B],Uint8Array,{symbol:"alive<sub>ck</sub>",long_name:nm+": checkpoint, 1 for each bond still holding",computed_in:"record()",digits:0});
+  }
+  // playback: the sample on screen, written by the clock from the stored arrays
+  v("t_play",[],"float",{symbol:"t<sub>play</sub>",units:"s",long_name:"playback time in the stored run",computed_in:"the clock",formula:"t<sub>play</sub> ← t<sub>play</sub> + Δt<sub>wall</sub> / slow",digits:3,source:"Advanced by the clock from the wall time between frames; it has no other source."});
+  v("i_now",[],"int",{symbol:"n<sub>now</sub>",long_name:"stored sample shown in this frame",computed_in:"the clock",formula:"nearest n to t<sub>play</sub>, at most n<sub>done</sub> − 1",digits:0});
+  v("t_now",[],"float",{symbol:"t",units:"s",long_name:"time of the sample shown",computed_in:"the clock",formula:"t<sub>n</sub>, n = n<sub>now</sub>",digits:3});
+  v("slow",[],"int",{symbol:"slow",long_name:"slow-motion factor: 1, 4 or 20",computed_in:"setSpeed()",digits:0});
+  v("playing",[],"bool",{symbol:"playing",long_name:"the drop is playing",computed_in:"the clock",digits:0,source:"The state of the Drop button."});
+  for(const s of BALLS){const nm=s==="iron"?"iron":"cotton";
+    for(const [q,sy,u,ln,dg] of [["F","F","N","scale reading shown now",2],["Fmax","F<sub>peak</sub>","N","peak hold shown now",2],["yp","y<sub>p</sub>","m","plate position shown now",6],["KE","K","J","kinetic energy shown now",4],["books","Δ<sub>books</sub>","J","gap in the energy books shown now",4]])
+      v(q+"_now_"+s,[],"float",{symbol:sy,units:u,long_name:nm+": "+ln+" (a stored sample)",computed_in:"the clock",formula:sy+"<sub>n</sub>, n = n<sub>now</sub>",digits:dg});
+    v("W_now_"+s,[],"float",{symbol:"W",units:"N",long_name:nm+": weight on the panel (shown from 6.5 s; undefined before)",computed_in:"the clock",formula:"W<sub>n</sub>, n = n<sub>now</sub>, if t<sub>n</sub> ≥ 6.5 s",digits:2});
+    v("kgpeak_now_"+s,[],"float",{symbol:"F<sub>peak</sub>/g",units:"kg",long_name:nm+": what a kitchen scale would show for the peak",computed_in:"the clock",formula:"F<sub>peak</sub> / g",digits:1});
+    v("kgw_now_"+s,[],"float",{symbol:"W/g",units:"kg",long_name:nm+": mass the scale reports",computed_in:"the clock",formula:"W / g",digits:3});
+  }
+  // drawing: how stored numbers become pixels
+  for(const [n,sy,u,ln,dg,ci] of [["W_px","W","css px","canvas width",0,"fitAll()"],["H_px","H","css px","canvas height: scene plus gauge strip",0,"fitAll()"],["HS_px","H<sub>scene</sub>","css px","height of the scene above the gauges: 430 below 640 px width, else 470",0,"fitAll()"],
+    ["dpr","dpr","","device pixels per css px",2,"fitAll()"],["ruler_px","w<sub>ruler</sub>","css px","width of the height ruler",0,"constant RULER"],["gain","G","","plate travel and the ball above it drawn this many times larger",0,"constant GAIN"],
+    ["top_px","y<sub>top</sub>","css px","top of the scene",0,"drawSim()"],["bottom_px","y<sub>bottom</sub>","css px","bottom of the scene",0,"drawSim()"],["col_w","w<sub>col</sub>","css px","width of one column",2,"drawSim()"],
+    ["sc","s","px/m","drawing scale",3,"drawSim()"],["view_m","h<sub>view</sub>","m","height of model space the scene shows",4,"drawSim()"],["cam_y","y<sub>cam</sub>","m","height at the bottom of the scene: the camera follows the iron ball's lowest atom",5,"camBottom()"],
+    ["gauge_R","R<sub>g</sub>","css px","radius of each gauge",2,"drawSim()"],["gauge_cy","y<sub>g</sub>","css px","height of the gauge centres",2,"drawSim()"],["gauge_FS","F<sub>FS</sub>","N","full scale of the gauges (square-root dial)",0,"gauge()"]])
+    v(n,[],"float",{symbol:sy,units:u,long_name:ln,computed_in:ci,digits:dg});
+  ds.set("ruler_px",RULER);ds.set("gain",GAIN);ds.set("gauge_FS",FS);
+  for(const s of BALLS){const nm=s==="iron"?"iron":"cotton";
+    v("bx_"+s,[],"float",{symbol:"x<sub>col</sub>",units:"css px",long_name:nm+": centre of its column",computed_in:"drawSim()",formula:"w<sub>ruler</sub> + column · w<sub>col</sub> + w<sub>col</sub>/2",digits:2});
+    v("shift_"+s,[],"float",{symbol:"(G − 1) y<sub>p</sub>",units:"m",long_name:nm+": extra drawn offset of the plate and the ball above it, from the exaggerated plate travel",computed_in:"drawSim()",formula:"(G − 1) · y<sub>p</sub>",digits:6});
+    v("plate_px_"+s,[],"float",{symbol:"y<sub>plate</sub>",units:"css px",long_name:nm+": screen row of the plate's top edge",computed_in:"drawSim()",formula:"y<sub>bottom</sub> − (G y<sub>p</sub> − y<sub>cam</sub>) · s",digits:2});
+    v("needle_"+s,[],"float",{symbol:"θ<sub>needle</sub>",units:"°",long_name:nm+": angle of the black needle on the gauge, clockwise from the right",computed_in:"gauge()",formula:"−225° + 270° √(F/F<sub>FS</sub>)",digits:3});
+    v("peakneedle_"+s,[],"float",{symbol:"θ<sub>peak</sub>",units:"°",long_name:nm+": angle of the red peak-hold needle",computed_in:"gauge()",formula:"−225° + 270° √(F<sub>peak</sub>/F<sub>FS</sub>)",digits:3});
+  }
+  ds.set("slow",slow);ds.set("playing",false);ds.set("t_play",0);
+  const g=n=>ds.get(n);
+  for(const s of BALLS){D[s]={x:g("x_"+s),y:g("y_"+s),sp:g("sp_"+s),yp:g("yp_"+s),vp:g("vp_"+s),F:g("F_"+s),Fmax:g("Fmax_"+s),KE:g("KE_"+s),PE:g("PE_"+s),El:g("El_"+s),Eh:g("Eh_"+s),Qb:g("Qb_"+s),Qh:g("Qh_"+s),
+    Ein:g("Ein_"+s),Esum:g("Esum_"+s),books:g("books_"+s),W:g("W_"+s),N:body[s].N}}
+  const ts=ds.get("ts");for(let k=0;k<NF;k++)ts[k]=tOf(k);ds.touch("ts");
+  for(const s of BALLS){const b=body[s];ds.get("bi_"+s).set(b.bi);ds.get("bj_"+s).set(b.bj);ds.get("l0_"+s).set(b.l0);for(const q of ["bi","bj","l0"])ds.touch(q+"_"+s)}
+  ds.get("type_cot").set(cot.type);ds.get("fibre_cot").set(cot.fib);ds.touch("type_cot");ds.touch("fibre_cot");
 }
+function record(k){
+  for(const s of BALLS){
+    const b=body[s],d=D[s],N=b.N,o=k*N,e=b.E;
+    for(let i=0;i<N;i++){d.x[o+i]=b.x[i];d.y[o+i]=b.y[i];d.sp[o+i]=Math.sqrt(b.u[i]*b.u[i]+b.v[i]*b.v[i])}
+    d.yp[k]=b.yp;d.vp[k]=b.vp;d.F[k]=b.Fs;d.Fmax[k]=b.Fmax;
+    d.KE[k]=e.KE;d.PE[k]=e.PE;d.El[k]=e.elastic;d.Eh[k]=e.head;d.Qb[k]=e.heatBall;d.Qh[k]=e.heatHead;
+    d.Ein[k]=b.E0-d.PE[k];d.Esum[k]=d.KE[k]+d.El[k]+d.Eh[k]+d.Qb[k]+d.Qh[k];d.books[k]=d.Esum[k]-d.Ein[k];
+    if(k>=KW0){wsum[s]+=d.F[k];wcnt[s]++;d.W[k]=wsum[s]/wcnt[s]}else d.W[k]=NaN;
+    if(b.tImpact!==null&&!(ds.get("t_touch_"+s)>=0))ds.set("t_touch_"+s,b.tImpact);
+    if(k%CK===0){const c=k/CK,ck=n=>ds.get("ck_"+n+"_"+s);
+      ck("x").set(b.x,c*N);ck("y").set(b.y,c*N);ck("u").set(b.u,c*N);ck("v").set(b.v,c*N);ck("alive").set(b.alive,c*b.nb);
+      ck("t")[c]=b.t;ck("yp")[c]=b.yp;ck("vp")[c]=b.vp;ck("Fmax")[c]=b.Fmax;ck("Qb")[c]=b.heatBall;ck("Qh")[c]=b.heatHead;ck("ti")[c]=b.tImpact===null?NaN:b.tImpact}
+  }
+  ds.get("nstep")[k]=steps;
+  if(k%CK===0){ds.get("ck_n")[k/CK]=k;ds.get("ck_step")[k/CK]=steps}
+}
+const RUN=["nstep","ck_n","ck_step"];for(const s of BALLS)for(const q of ["x","y","sp","yp","vp","F","Fmax","KE","PE","El","Eh","Qb","Qh","Ein","Esum","books","W","ck_x","ck_y","ck_u","ck_v","ck_t","ck_yp","ck_vp","ck_Fmax","ck_Qb","ck_Qh","ck_ti","ck_alive"])RUN.push(q+"_"+s);
 function init(){
-  iron=makeIron();cot=makeCotton();S.iron=makeStore(iron);S.cot=makeStore(cot);
-  for(const b of [iron,cot]){b.Fs=step(b);const e=b.E;b.E0=e.KE+e.PE+e.elastic+e.head+e.heatBall+e.heatHead;record(b,S[b.kind==="iron"?"iron":"cot"],0)}
-  Object.assign(S.iron,{bi:iron.bi,bj:iron.bj,l0:iron.l0,nb:iron.nb,kind:"iron",rad:iron.rad});
-  Object.assign(S.cot,{bi:cot.bi,bj:cot.bj,l0:cot.l0,type:cot.type,nb:cot.nb,fibIdx:cot.fibIdx,kind:"cot",rad:cot.rad});
-  computed=1;setTimeout(work,0);
+  iron=makeIron();cot=makeCotton();body={iron:iron,cot:cot};
+  declare();
+  for(const s of BALLS){const b=body[s];b.Fs=step(b);const e=b.E;b.E0=e.KE+e.PE+e.elastic+e.head+e.heatBall+e.heatHead;ds.set("E0_"+s,b.E0)}
+  steps=1;record(0);computed=1;ds.set("computed",1);ds.set("steps",steps);ds.set("done",false);
+  tStart=performance.now();setTimeout(work,0);
 }
 function work(){
   const t0=performance.now();
   while(computed<NF&&performance.now()-t0<14){
     const target=tOf(computed);
-    while(iron.t<target-1e-9){iron.Fs=step(iron);cot.Fs=step(cot)}
-    record(iron,S.iron,computed);record(cot,S.cot,computed);computed++;
+    while(iron.t<target-1e-9){iron.Fs=step(iron);cot.Fs=step(cot);steps++}
+    record(computed);computed++;
   }
-  if(computed<NF)setTimeout(work,0);
+  ds.set("computed",computed);ds.set("steps",steps);for(const n of RUN)ds.touch(n);
+  if(computed<NF){setTimeout(work,0);return}
+  ds.set("compute_ms",performance.now()-tStart);
+  for(const s of BALLS){const d=D[s];let m=0;for(let k=0;k<NF;k++)m=Math.max(m,Math.abs(d.books[k]));
+    ds.set("Fpeak_"+s,d.Fmax[NF-1]);ds.set("W_end_"+s,d.W[NF-1]);ds.set("w_rel_"+s,(d.W[NF-1]-ds.get("Mg"))/ds.get("Mg"));ds.set("books_max_"+s,m)}
+  ds.set("done",true);
 }
-const W0=4.0,WSHOW=6.5;            // the scale's weight: average of its reading from 4 s on, shown from 6.5 s
-function wAvg(st,k){
-  if(tOf(k)<WSHOW)return null;
-  let s=0,c=0;for(let j=kOf(W0);j<=k;j++){s+=st.F[j];c++}return s/c;
+function setNow(k){       // the clock: the sample on screen, copied from the stored arrays
+  ds.set("t_play",tPlay);ds.set("i_now",k);ds.set("t_now",ds.get("ts")[k]);ds.set("playing",playing);
+  for(const s of BALLS){const d=D[s];
+    ds.set("F_now_"+s,d.F[k]);ds.set("Fmax_now_"+s,d.Fmax[k]);ds.set("yp_now_"+s,d.yp[k]);ds.set("KE_now_"+s,d.KE[k]);ds.set("books_now_"+s,d.books[k]);
+    ds.set("W_now_"+s,ds.get("t_now")>=WSHOW?d.W[k]:NaN);ds.set("kgpeak_now_"+s,ds.get("Fmax_now_"+s)/P.g);ds.set("kgw_now_"+s,ds.get("W_now_"+s)/P.g)}
 }
 
-// ---------------- drawing ----------------
+// ---------------- drawing: reads the store only ----------------
 const cv=document.getElementById("sim"),cx=cv.getContext("2d");
-let W=0,H=0,HS=0;
-const GAUGE_H=214,RULER=46,GAIN=10;     // gauge strip height; ruler width; plate travel drawn 10x larger
+let W=0,H=0,HS=0,DPR=1;
+const GAUGE_H=214,RULER=46,GAIN=10,FS=700;     // gauge strip height; ruler width; plate travel drawn 10x larger; gauge full scale
 function fitAll(){
-  const d=devicePixelRatio||1;
+  const d=devicePixelRatio||1;DPR=d;
   W=cv.getBoundingClientRect().width;HS=W<640?430:470;H=HS+GAUGE_H;
   cv.style.height=H+"px";cv.width=W*d;cv.height=H*d;cx.setTransform(d,0,0,d,0,0);
   for(const id of ["pZoom","pAll","en"]){const c=document.getElementById(id),r=c.getBoundingClientRect(),h=+c.getAttribute("height");c.style.height=h+"px";c.width=r.width*d;c.height=h*d;c.getContext("2d").setTransform(d,0,0,d,0,0)}
+  if(ds){ds.set("W_px",W);ds.set("H_px",H);ds.set("HS_px",HS);ds.set("dpr",d)}
 }
 function txt(c,s,x,y,font,color,align,ltr){c.font=font;c.fillStyle=color;c.textAlign=align||"center";c.direction=(RTL&&!ltr)?"rtl":"ltr";c.fillText(s,x,y)}
 function spaced(c,s,x,y,font,color,sp){            // letter-spaced capitals for instrument labels (Latin only)
@@ -181,9 +371,10 @@ function spaced(c,s,x,y,font,color,sp){            // letter-spaced capitals for
   let w=0;for(const ch of s)w+=c.measureText(ch).width+sp;w-=sp;let xx=x-w/2;
   for(const ch of s){c.fillText(ch,xx,y);xx+=c.measureText(ch).width+sp}
 }
-function gauge(c,x0,y0,R,F,Fmax,w){
+const angDeg=f=>-225+270*Math.sqrt(Math.max(0,Math.min(f,FS))/FS);
+function gauge(c,x0,y0,R,F,Fmax,s){
   // a precision force gauge: square-root scale so the 9.81 N weight and a 600 N blow both read clearly
-  const FS=700,a0=-225,span=270,ang=f=>(a0+span*Math.sqrt(Math.max(0,Math.min(f,FS))/FS))*Math.PI/180;
+  const ang=f=>angDeg(f)*Math.PI/180;
   c.fillStyle="#2a1d16";c.beginPath();c.arc(x0,y0,R+5,0,7);c.fill();
   c.fillStyle="#fbf8f2";c.beginPath();c.arc(x0,y0,R,0,7);c.fill();
   c.strokeStyle="#cdbfa9";c.lineWidth=1;c.beginPath();c.arc(x0,y0,R-3,0,7);c.stroke();
@@ -195,51 +386,59 @@ function gauge(c,x0,y0,R,F,Fmax,w){
   }
   const aw=ang(P.M*P.g);c.strokeStyle="#3c6a46";c.lineWidth=3;c.beginPath();c.arc(x0,y0,R-5,aw-0.05,aw+0.05);c.stroke();
   txt(c,"N",x0,y0+R*0.42,FONT.gaugeUnit,"#6f5b4c","center",true);
-  const ap=ang(Fmax),an=ang(Math.max(0,F));
+  ds.set("peakneedle_"+s,angDeg(Fmax));ds.set("needle_"+s,angDeg(Math.max(0,F)));
+  const ap=ds.get("peakneedle_"+s)*Math.PI/180,an=ds.get("needle_"+s)*Math.PI/180;
   c.strokeStyle="#b02a3c";c.lineWidth=1.6;c.beginPath();c.moveTo(x0+Math.cos(ap)*R*0.35,y0+Math.sin(ap)*R*0.35);c.lineTo(x0+Math.cos(ap)*(R-5),y0+Math.sin(ap)*(R-5));c.stroke();
   c.strokeStyle="#23160f";c.lineWidth=2.2;c.beginPath();c.moveTo(x0-Math.cos(an)*9,y0-Math.sin(an)*9);c.lineTo(x0+Math.cos(an)*(R-8),y0+Math.sin(an)*(R-8));c.stroke();
   c.fillStyle="#23160f";c.beginPath();c.arc(x0,y0,4,0,7);c.fill();c.fillStyle="#b02a3c";c.beginPath();c.arc(x0,y0,1.6,0,7);c.fill();
 }
-function readoutPanel(c,x,y,w,F,Fmax,wt){
+function readoutPanel(c,x,y,w,s){
   // digital panel: dark glass, cream figures, tabular digits
-  const h=62;c.fillStyle="#1d140f";c.beginPath();c.roundRect(x,y,w,h,6);c.fill();
+  const h=62,F=ds.get("F_now_"+s),Fmax=ds.get("Fmax_now_"+s),wt=ds.get("W_now_"+s),shown=wt===wt;
+  c.fillStyle="#1d140f";c.beginPath();c.roundRect(x,y,w,h,6);c.fill();
   const row=(lab,val,yy,col)=>{txt(c,lab,x+9,yy,FONT.panelLab,"#bfae96","left",true);txt(c,val,x+w-9,yy,FONT.panelNum,col,"right",true)};
   row("PEAK",Fmax.toFixed(0)+" N",y+19,"#f3c9a0");
-  if(wt===null)row("LIVE",Math.max(0,F).toFixed(0)+" N",y+38,"#f6efe3");
+  if(!shown)row("LIVE",Math.max(0,F).toFixed(0)+" N",y+38,"#f6efe3");
   else row("WEIGHT",wt.toFixed(2)+" N",y+38,"#cfe6c8");
-  row(wt===null?"":"MASS",wt===null?"":(wt/P.g).toFixed(3)+" kg",y+56,"#cfe6c8");
+  row(shown?"MASS":"",shown?ds.get("kgw_now_"+s).toFixed(3)+" kg":"",y+56,"#cfe6c8");
 }
 function camBottom(k,view){
-  const o=k*2*S.iron.N;let lo=Infinity;for(let i=0;i<S.iron.N;i++)lo=Math.min(lo,S.iron.xy[o+2*i+1]);
+  const y=D.iron.y,N=D.iron.N,o=k*N;let lo=Infinity;for(let i=0;i<N;i++)lo=Math.min(lo,y[o+i]);
   return Math.max(-2.3,lo-0.42*view);
 }
-function drawBall(st,k,X,Yb,sc){
-  const o=k*2*st.N,px=i=>X(st.xy[o+2*i]),py=i=>Yb(st.xy[o+2*i+1]);
-  if(st.kind==="cot"){
-    cx.fillStyle="rgba(214,201,182,.35)";for(let i=0;i<st.N;i++){cx.beginPath();cx.arc(px(i),py(i),0.16*sc,0,7);cx.fill()}
-    cx.fillStyle="rgba(255,253,248,.92)";for(let i=0;i<st.N;i++){cx.beginPath();cx.arc(px(i),py(i),0.1*sc,0,7);cx.fill()}
+let FIB=null;                                  // the beads of each fibre, in order, from the stored fibre numbers
+function fibres(){if(FIB)return FIB;FIB=[];const f=ds.get("fibre_cot");for(let i=0;i<f.length;i++)(FIB[f[i]]=FIB[f[i]]||[]).push(i);return FIB}
+// screen position of particle i of ball s at sample k, from the stored drawing variables (the same arithmetic drawSim uses)
+function partXY(s,k,i){const d=D[s],o=k*d.N,sc=ds.get("sc");
+  return {x:ds.get("bx_"+s)+d.x[o+i]*sc,y:ds.get("bottom_px")-(d.y[o+i]+(GAIN-1)*d.yp[k]-ds.get("cam_y"))*sc}}
+function drawBall(s,k,X,Yb,sc){
+  const d=D[s],o=k*d.N,px=i=>X(d.x[o+i]),py=i=>Yb(d.y[o+i]),N=d.N,bi=ds.get("bi_"+s),bj=ds.get("bj_"+s),l0=ds.get("l0_"+s),nb=bi.length;
+  const len=q=>Math.hypot(d.x[o+bj[q]]-d.x[o+bi[q]],d.y[o+bj[q]]-d.y[o+bi[q]]);
+  if(s==="cot"){
+    const type=ds.get("type_cot");
+    cx.fillStyle="rgba(214,201,182,.35)";for(let i=0;i<N;i++){cx.beginPath();cx.arc(px(i),py(i),0.16*sc,0,7);cx.fill()}
+    cx.fillStyle="rgba(255,253,248,.92)";for(let i=0;i<N;i++){cx.beginPath();cx.arc(px(i),py(i),0.1*sc,0,7);cx.fill()}
     cx.lineCap="round";cx.lineJoin="round";
     for(const pass of [["#a8998a",Math.max(1.6,sc*0.034)],["#ffffff",Math.max(0.8,sc*0.017)]]){
       cx.strokeStyle=pass[0];cx.lineWidth=pass[1];
-      for(const idx of st.fibIdx){cx.beginPath();cx.moveTo(px(idx[0]),py(idx[0]));
+      for(const idx of fibres()){cx.beginPath();cx.moveTo(px(idx[0]),py(idx[0]));
         for(let q=1;q<idx.length-1;q++){const a=idx[q],c2=idx[q+1];cx.quadraticCurveTo(px(a),py(a),(px(a)+px(c2))/2,(py(a)+py(c2))/2)}
         const z=idx[idx.length-1];cx.lineTo(px(z),py(z));cx.stroke()}
     }
-    for(let q=0;q<st.nb;q++){if(st.type[q]!==1)continue;const i=st.bi[q],j=st.bj[q];
-      const l=Math.hypot(st.xy[o+2*j]-st.xy[o+2*i],st.xy[o+2*j+1]-st.xy[o+2*i+1]),e=-(l-st.l0[q])/st.l0[q]*25;if(e<0.3)continue;
-      cx.strokeStyle=`rgba(125,29,47,${Math.min(.45,e-0.2)})`;cx.lineWidth=1.6;cx.beginPath();cx.moveTo(px(i),py(i));cx.lineTo(px(j),py(j));cx.stroke()}
+    for(let q=0;q<nb;q++){if(type[q]!==1)continue;const e=-(len(q)-l0[q])/l0[q]*25;if(e<0.3)continue;
+      cx.strokeStyle=`rgba(125,29,47,${Math.min(.45,e-0.2)})`;cx.lineWidth=1.6;cx.beginPath();cx.moveTo(px(bi[q]),py(bi[q]));cx.lineTo(px(bj[q]),py(bj[q]));cx.stroke()}
   }else{
-    for(let q=0;q<st.nb;q++){const i=st.bi[q],j=st.bj[q];
-      const l=Math.hypot(st.xy[o+2*j]-st.xy[o+2*i],st.xy[o+2*j+1]-st.xy[o+2*i+1]),e=Math.max(-1,Math.min(1,(l-st.l0[q])/st.l0[q]*150));
-      cx.strokeStyle=e<0?`rgba(125,29,47,${.3+.7*-e})`:`rgba(51,98,127,${.3+.7*e})`;cx.lineWidth=Math.max(1,sc*0.022);cx.beginPath();cx.moveTo(px(i),py(i));cx.lineTo(px(j),py(j));cx.stroke()}
-    cx.fillStyle="#3b332e";for(let i=0;i<st.N;i++){cx.beginPath();cx.arc(px(i),py(i),Math.max(1.6,sc*0.036),0,7);cx.fill()}
+    for(let q=0;q<nb;q++){const e=Math.max(-1,Math.min(1,(len(q)-l0[q])/l0[q]*150));
+      cx.strokeStyle=e<0?`rgba(125,29,47,${.3+.7*-e})`:`rgba(51,98,127,${.3+.7*e})`;cx.lineWidth=Math.max(1,sc*0.022);cx.beginPath();cx.moveTo(px(bi[q]),py(bi[q]));cx.lineTo(px(bj[q]),py(bj[q]));cx.stroke()}
+    cx.fillStyle="#3b332e";for(let i=0;i<N;i++){cx.beginPath();cx.arc(px(i),py(i),Math.max(1.6,sc*0.036),0,7);cx.fill()}
   }
 }
 function drawSim(k){
   cx.clearRect(0,0,W,H);
   const top=40,bottom=HS-6,colW=(W-RULER-6)/2,sc=Math.min((bottom-top)/6.6,colW/3.3),view=(bottom-top)/sc;
   const yb=camBottom(k,view),Y=y=>bottom-(y-yb)*sc;
-  const cols=RTL?[[S.cot,T.cotton],[S.iron,T.iron]]:[[S.iron,T.iron],[S.cot,T.cotton]];
+  ds.set("top_px",top);ds.set("bottom_px",bottom);ds.set("col_w",colW);ds.set("sc",sc);ds.set("view_m",view);ds.set("cam_y",yb);
+  const cols=RTL?[["cot",T.cotton],["iron",T.iron]]:[["iron",T.iron],["cot",T.cotton]];
   // shared height ruler on the left
   const rx=RULER-8;cx.strokeStyle="#bfae96";cx.lineWidth=1;cx.beginPath();cx.moveTo(rx,Math.max(top-6,Y(13)));cx.lineTo(rx,Math.min(bottom,Y(-1.5)));cx.stroke();
   for(let m=-1;m<=13;m++){const yy=Y(m);if(yy<top-4||yy>bottom+2)continue;
@@ -248,14 +447,17 @@ function drawSim(k){
   // start height
   if(Y(P.h)>top&&Y(P.h)<bottom){cx.strokeStyle="rgba(125,29,47,.6)";cx.setLineDash([5,5]);cx.beginPath();cx.moveTo(rx,Y(P.h));cx.lineTo(W-4,Y(P.h));cx.stroke();cx.setLineDash([]);
     txt(cx,T.startline,rx+8,Y(P.h)+15,FONT.small,"#7d1d2f","left")}
-  cols.forEach(([st,label],ci)=>{
-    const ox=RULER+ci*colW,bx=ox+colW/2,shift=(GAIN-1)*st.yp[k];
-    const X=x=>bx+x*sc,Yb=y=>Y(y+shift);
+  const R=Math.min(58,colW*0.3),gy=HS+8;ds.set("gauge_R",R);ds.set("gauge_cy",gy+R+8);
+  cols.forEach(([s,label],ci)=>{
+    const ox=RULER+ci*colW,bx=ox+colW/2;
+    ds.set("bx_"+s,bx);ds.set("shift_"+s,(GAIN-1)*D[s].yp[k]);
+    const shift=ds.get("shift_"+s),X=x=>bx+x*sc,Yb=y=>Y(y+shift);
     // column heading: the material and its mass, so equal mass is stated where it is seen
     spaced(cx,label.toUpperCase(),bx,24,FONT.colHead,"#5a0f21",2);
     txt(cx,"M = "+P.M.toFixed(2)+" kg",bx,38,FONT.colSub,"#6f5b4c","center",true);
     // head: spring, damper, plate
-    const plateY=Yb(0),baseY=Y(-1.5),pw=Math.min(2.9*sc,colW-14);
+    ds.set("plate_px_"+s,Yb(0));
+    const plateY=ds.get("plate_px_"+s),baseY=Y(-1.5),pw=Math.min(2.9*sc,colW-14);
     if(plateY<bottom+20){
       cx.save();cx.beginPath();cx.rect(ox,top,colW,bottom-top+2);cx.clip();
       cx.strokeStyle="#6f665e";cx.lineWidth=1.5;cx.beginPath();cx.moveTo(bx,plateY+10);
@@ -265,35 +467,35 @@ function drawSim(k){
       cx.fillStyle="#e3cfae";cx.strokeStyle="#3f2c23";cx.lineWidth=1.4;cx.beginPath();cx.roundRect(bx-pw/2,plateY,pw,10,2);cx.fill();cx.stroke();
       cx.restore();
     }
-    cx.save();cx.beginPath();cx.rect(ox,top,colW,bottom-top+2);cx.clip();drawBall(st,k,X,Yb,sc);cx.restore();
+    cx.save();cx.beginPath();cx.rect(ox,top,colW,bottom-top+2);cx.clip();drawBall(s,k,X,Yb,sc);cx.restore();
     // gauge strip
-    const gy=HS+8,R=Math.min(58,colW*0.3);
     cx.strokeStyle="#dccdb4";cx.lineWidth=1;cx.beginPath();cx.moveTo(ox+8,HS);cx.lineTo(ox+colW-8,HS);cx.stroke();
-    const w=wAvg(st,k);
-    gauge(cx,bx,gy+R+8,R,st.F[k],st.Fmax[k],w);
-    const pwid=Math.min(colW-12,170);readoutPanel(cx,bx-pwid/2,gy+2*R+22,pwid,st.F[k],st.Fmax[k],w);
+    gauge(cx,bx,ds.get("gauge_cy"),R,ds.get("F_now_"+s),ds.get("Fmax_now_"+s),s);
+    const pwid=Math.min(colW-12,170);readoutPanel(cx,bx-pwid/2,gy+2*R+22,pwid,s);
   });
   cx.strokeStyle="#dccdb4";cx.beginPath();cx.moveTo(RULER+colW,top);cx.lineTo(RULER+colW,H-8);cx.stroke();
   const hint=document.getElementById("hint");
   hint.hidden=playing||k>0;
-  if(!hint.hidden)hint.innerHTML=`<b>${T.open1}</b> ${computed<NF?T.open2wait.replace("{p}",Math.round(100*computed/NF)):T.open2}`;
+  if(!hint.hidden)hint.innerHTML=`<b>${T.open1}</b> ${computed<NF?T.open2wait.replace("{p}",Math.round(100*ds.get("computed")/NF)):T.open2}`;
 }
+const plotGeom=(id,t0,t1)=>{const w=document.getElementById(id).getBoundingClientRect().width,h=220,L=46,B=34,Tp=26,R=10,fmax=700;
+  return {w,h,L,B,Tp,R,X:t=>L+(w-L-R)*(t-t0)/(t1-t0),Y:f=>h-B-(h-B-Tp)*Math.max(0,f)/fmax}};
 function drawPlot(id,t0,t1,title,k){
-  const cvs=document.getElementById(id),c=cvs.getContext("2d"),w=cvs.getBoundingClientRect().width,h=220,L=46,B=34,Tp=26,R=10;
+  const cvs=document.getElementById(id),c=cvs.getContext("2d"),G=plotGeom(id,t0,t1),{w,h,L,B,Tp,R,X,Y}=G;
   c.clearRect(0,0,w,h);
-  const fmax=700,X=t=>L+(w-L-R)*(t-t0)/(t1-t0),Y=f=>h-B-(h-B-Tp)*Math.max(0,f)/fmax;
   txt(c,title,(w+L)/2,16,FONT.small,"#5a0f21");
   c.strokeStyle="#dccdb4";c.lineWidth=1;
-  for(let f=0;f<=fmax;f+=100){c.beginPath();c.moveTo(L,Y(f));c.lineTo(w-R,Y(f));c.stroke();c.font=FONT.mono10;c.fillStyle="#6f5b4c";c.textAlign="right";c.direction="ltr";c.fillText(f,L-5,Y(f)+3)}
+  for(let f=0;f<=700;f+=100){c.beginPath();c.moveTo(L,Y(f));c.lineTo(w-R,Y(f));c.stroke();c.font=FONT.mono10;c.fillStyle="#6f5b4c";c.textAlign="right";c.direction="ltr";c.fillText(f,L-5,Y(f)+3)}
   const dt=(t1-t0)>2?1:0.1;
   for(let t=Math.ceil(t0/dt-1e-9)*dt;t<=t1+1e-9;t+=dt){c.font=FONT.mono10;c.fillStyle="#6f5b4c";c.textAlign="center";c.fillText(t.toFixed(dt<1?1:0),X(t),h-B+14)}
   txt(c,T.ax_t,(w+L)/2,h-4,FONT.small,"#6f5b4c");
   c.save();c.translate(12,(h-B+Tp)/2);c.rotate(-Math.PI/2);txt(c,T.ax_f,0,0,FONT.small,"#6f5b4c");c.restore();
-  c.strokeStyle="#3c6a46";c.setLineDash([5,4]);c.beginPath();c.moveTo(L,Y(P.M*P.g));c.lineTo(w-R,Y(P.M*P.g));c.stroke();c.setLineDash([]);
-  for(const [st,col] of [[S.cot,"#33627f"],[S.iron,"#7d1d2f"]]){
-    c.strokeStyle=col;c.lineWidth=1.8;c.beginPath();let on=false;
+  c.strokeStyle="#3c6a46";c.setLineDash([5,4]);c.beginPath();c.moveTo(L,Y(ds.get("Mg")));c.lineTo(w-R,Y(ds.get("Mg")));c.stroke();c.setLineDash([]);
+  const ts=ds.get("ts");
+  for(const [s,col] of [["cot","#33627f"],["iron","#7d1d2f"]]){
+    const F=D[s].F;c.strokeStyle=col;c.lineWidth=1.8;c.beginPath();let on=false;
     const j0=Math.max(0,kOf(t0)),j1=Math.min(k,kOf(t1));
-    for(let j=j0;j<=j1;j++){const t=tOf(j);if(!on){c.moveTo(X(t),Y(st.F[j]));on=true}else c.lineTo(X(t),Y(st.F[j]))}
+    for(let j=j0;j<=j1;j++){const t=ts[j];if(!on){c.moveTo(X(t),Y(F[j]));on=true}else c.lineTo(X(t),Y(F[j]))}
     c.stroke();
   }
   c.font=FONT.small;c.direction=RTL?"rtl":"ltr";c.textAlign=RTL?"left":"right";
@@ -304,8 +506,8 @@ function drawEnergy(k){
   const cvs=document.getElementById("en"),c=cvs.getContext("2d"),w=cvs.getBoundingClientRect().width,h=250,L=RTL?14:130,R=RTL?130:14,Emax=120;
   c.clearRect(0,0,w,h);
   const X=e=>RTL?(w-R)-(w-L-R)*e/Emax:L+(w-L-R)*e/Emax,cols=["#ecc596","#7d1d2f","#33627f","#3c6a46","#c9783f","#b6aca1"];
-  for(const [st,name,y0] of [[S.iron,T.iron,20],[S.cot,T.cotton,130]]){
-    const E=st.E.subarray(k*7,k*7+7),released=E[6]-E[1],parts=[E[0],E[2],E[3],E[4],E[5]];
+  for(const [s,name,y0] of [["iron",T.iron,20],["cot",T.cotton,130]]){
+    const d=D[s],released=d.Ein[k],parts=[d.KE[k],d.El[k],d.Eh[k],d.Qb[k],d.Qh[k]];
     const ax=RTL?w-6:6,al=RTL?"right":"left";
     txt(c,name,ax,y0+12,FONT.titleSmall,"#5a0f21",al);
     txt(c,T.en_in,ax,y0+37,FONT.small,"#6f5b4c",al);
@@ -315,8 +517,8 @@ function drawEnergy(k){
     let acc=0;parts.forEach((p,j)=>{const x1=X(acc),x2=X(Math.min(acc+Math.max(0,p),Emax));c.fillStyle=cols[j+1];c.fillRect(Math.min(x1,x2),y0+52,Math.abs(x2-x1),18);acc+=Math.max(0,p)});
     c.strokeRect(Math.min(X(0),X(Math.min(acc,Emax))),y0+52,Math.abs(X(Math.min(acc,Emax))-X(0)),18);
     c.font=FONT.mono10;c.fillStyle="#3f2c23";c.direction="ltr";c.textAlign=RTL?"right":"left";
-    const err=acc-released;
-    c.fillText(`${released.toFixed(2)} J  /  ${acc.toFixed(2)} J   (Δ = ${err>=0?"+":""}${err.toFixed(2)} J)`,RTL?w-R:L,y0+90);
+    const err=d.books[k];
+    c.fillText(`${released.toFixed(2)} J  /  ${d.Esum[k].toFixed(2)} J   (Δ = ${err>=0?"+":""}${err.toFixed(2)} J)`,RTL?w-R:L,y0+90);
   }
   const names=[T.en_ke,T.en_el,T.en_head,T.en_heatball,T.en_heathead];let lx=RTL?w-10:10,ly=h-10;
   c.font=FONT.small;
@@ -324,36 +526,43 @@ function drawEnergy(k){
     if(RTL){c.fillStyle=cols[j+1];c.fillRect(lx-12,ly-10,12,12);txt(c,n,lx-16,ly,FONT.small,"#3f2c23","right");lx-=tw+30}
     else{c.fillStyle=cols[j+1];c.fillRect(lx,ly-10,12,12);txt(c,n,lx+16,ly,FONT.small,"#3f2c23","left");lx+=tw+30}});
 }
-function readout(st,k,el,name){
-  const E=st.E.subarray(k*7,k*7+7),w=wAvg(st,k),hit=st.tImpact!==null&&tOf(k)>=st.tImpact;
+function readout(s,k,el,name){
+  const d=D[s],tt=ds.get("t_touch_"+s),hit=tt>=0&&ds.get("t_now")>=tt,w=ds.get("W_now_"+s);
   el.innerHTML=`<b>${name}</b><table>
-  <tr><td>${T.r_mass}</td><td class="v">${P.M.toFixed(3)} kg</td></tr>
-  <tr><td>${T.r_contact}</td><td class="v">${hit?st.tImpact.toFixed(3)+" s":"…"}</td></tr>
-  <tr><td>${T.r_pred}</td><td class="v">${Math.sqrt(2*P.h/P.g).toFixed(3)} s</td></tr>
-  <tr><td>${T.r_peak}</td><td class="v">${st.Fmax[k].toFixed(0)} N</td></tr>
-  <tr><td>${T.r_kg}</td><td class="v">${(st.Fmax[k]/P.g).toFixed(1)} kg</td></tr>
-  <tr><td>${T.r_weight}</td><td class="v">${w===null?(hit?T.r_settling:"…"):w.toFixed(2)+" N = "+(w/P.g).toFixed(3)+" kg"}</td></tr>
-  <tr><td>${T.r_heatball}</td><td class="v">${E[4].toFixed(1)} J</td></tr>
-  <tr><td>${T.r_heathead}</td><td class="v">${E[5].toFixed(1)} J</td></tr></table>`;
+  <tr><td>${T.r_mass}</td><td class="v">${ds.get("M").toFixed(3)} kg</td></tr>
+  <tr><td>${T.r_contact}</td><td class="v">${hit?tt.toFixed(3)+" s":"…"}</td></tr>
+  <tr><td>${T.r_pred}</td><td class="v">${ds.get("t_star").toFixed(3)} s</td></tr>
+  <tr><td>${T.r_peak}</td><td class="v">${ds.get("Fmax_now_"+s).toFixed(0)} N</td></tr>
+  <tr><td>${T.r_kg}</td><td class="v">${ds.get("kgpeak_now_"+s).toFixed(1)} kg</td></tr>
+  <tr><td>${T.r_weight}</td><td class="v">${w!==w?(hit?T.r_settling:"…"):w.toFixed(2)+" N = "+ds.get("kgw_now_"+s).toFixed(3)+" kg"}</td></tr>
+  <tr><td>${T.r_heatball}</td><td class="v">${d.Qb[k].toFixed(1)} J</td></tr>
+  <tr><td>${T.r_heathead}</td><td class="v">${d.Qh[k].toFixed(1)} J</td></tr></table>`;
 }
 function frame(ts){
+  requestAnimationFrame(frame);                // first, so the data panel's frame always runs after this one
   if(last===null)last=ts;const dtw=Math.min(0.05,(ts-last)/1000);last=ts;
   if(playing){tPlay=Math.min(tPlay+dtw/slow,P.tmax,tOf(computed-1));if(tPlay>=P.tmax-1e-9)playing=false}
   const k=Math.min(computed-1,kOf(tPlay));
+  setNow(k);
   drawSim(k);
-  const ti=S.iron.tImpact||Math.sqrt(2*P.h/P.g);
+  const ti=ds.get("t_touch_iron")>=0?ds.get("t_touch_iron"):ds.get("t_star");
   drawPlot("pZoom",ti-0.05,ti+0.35,T.plot_zoom,k);drawPlot("pAll",0,P.tmax,T.plot_all,k);drawEnergy(k);
-  readout(S.iron,k,document.getElementById("rI"),T.iron);readout(S.cot,k,document.getElementById("rC"),T.cotton);
+  readout("iron",k,document.getElementById("rI"),T.iron);readout("cot",k,document.getElementById("rC"),T.cotton);
   const btn=document.getElementById("drop");
   btn.textContent=playing?T.dropping:(tPlay>0?T.replay:T.drop);
-  document.getElementById("clock").textContent=`${T.clock} t = ${tOf(k).toFixed(3)} s`+(computed<NF?`  ·  ${T.computing} ${Math.round(100*computed/NF)} %`:"");
-  requestAnimationFrame(frame);
+  document.getElementById("clock").textContent=`${T.clock} t = ${ds.get("t_now").toFixed(3)} s`+(computed<NF?`  ·  ${T.computing} ${Math.round(100*ds.get("computed")/NF)} %`:"");
 }
-function setSpeed(s){slow=s;for(const [id,v] of [["s1",1],["s4",4],["s20",20]])document.getElementById(id).classList.toggle("on",v===s)}
-document.getElementById("drop").onclick=()=>{if(playing)return;tPlay=0;playing=true};
+function setSpeed(s){slow=s;ds.set("slow",s);for(const [id,v] of [["s1",1],["s4",4],["s20",20]])document.getElementById(id).classList.toggle("on",v===s)}
+function startDrop(){tPlay=0;playing=true;last=null}   // last = null: the first frame of a drop advances nothing, so a recorded round starts at t = 0
+document.getElementById("drop").onclick=()=>{if(playing)return;startDrop()};
 document.getElementById("s1").onclick=()=>setSpeed(1);
 document.getElementById("s4").onclick=()=>setSpeed(4);
 document.getElementById("s20").onclick=()=>setSpeed(20);
 addEventListener("resize",fitAll);
-fitAll();init();requestAnimationFrame(frame);
+fitAll();init();fitAll();
+
+// ---------------- the data panel (scripts/datalog.js) reads the store; these hooks say where things are drawn and how to test a value ----------------
+{{DATAHOOKS}}
+requestAnimationFrame(frame);
 </script>
+<script src="{{BASE}}scripts/datalog.js"></script>

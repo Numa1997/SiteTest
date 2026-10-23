@@ -168,6 +168,50 @@ regenerated automatically; retake them when the pictures change.
 **Verified on 21 October 2026**, with the copy served from this repository's build under its own policy: 33 of 33 browser
 checks, 52 of 52 theory numbers, no request outside the site, the tab bar in the site's own Instrument Serif and IBM Plex Sans.
 
+### The data panel of the two simulations (since 23 October 2026)
+
+The ideal press and the servo press each carry the site's data panel ([scripts/datalog.md](scripts/datalog.md)), the same one as
+the ten simulations and Iron, Cotton and the Head. Each page is its own source, so the store and the panel's hooks are written into
+it, after the page's user-interface code: `declareStore()`, `storeRun()` (and on the servo page `storeAnalysis()`), `setNow()` and
+`Sim.data`.
+
+**Loading the shared files from inside a frame.** Each page sits in an `iframe srcdoc`, whose address for relative links is the
+study's own (`portfolios/hydraulics/index.html`), so `../../scripts/…` reaches the site's `sim.js`, `dataset.js`, `datalog.js` and
+`../../styles/…` its `paper.css` and `data.css`. A three-line loader in each page chooses the folder: two levels up when the
+address ends in `/portfolios/hydraulics/…`, `../../public/` when the page is opened from `portfolios-src/hydraulics/` on disk, and
+nothing elsewhere (the `blob:` fallback frame), where the page runs as before without a panel. The scripts are written into the page
+with `document.write` while it is being read, so they keep their order: `sim.js`, `dataset.js`, the page, `datalog.js`. `sim.js`
+loads a walkthrough only for an element that names one in `data-walk`, so the ideal press's chart `canvas#walk` (the pressure walk)
+no longer makes it request `walk/null.js`.
+
+**What is stored.** Ideal press (92 variables): the seven sliders, the eleven constants of `CONST`, ten numbers of `makeModel()`
+(areas, the lever $r$, $F_{1,\min}$, the level stiffness $k$, $\mu'$, $\mu(0)$), the run's results (outcome, departure, stroke stop,
+impact speed and lost energy, highest and lowest pressure, the two self-tests), the 18 recorded series over one sample per 1 ms plus
+$x_2 = r x$, $F_2 = p_2 A_2$ and Pascal's $F_1/r$, the sample on screen, and the drawing (scale, origin, piston rows, dial radius,
+centres, full scales and the five needle angles). Servo press: the sixteen sliders, the constants of `C0`, thirteen numbers of
+`makePlant()`, the cycle's results, the 28 recorded series per controller sample plus the two summed losses shown in the tiles, and for
+each loop the margins, the operating point, the frequency response (500 frequencies: $|L|$, dB, phase, Nyquist real and imaginary
+parts) and the open- and closed-loop poles with their frequencies and damping ratios, the sample on screen and the drawing (scale,
+dial centres, radius, full scales, the five needle angles).
+
+**What reads it.** The scene, the dials, the plots, the readouts, the status lines and chips, and on the servo page the Bode and Nyquist
+plots and the tables of margins and poles read the store's arrays and values (the z-plane plot draws the same closed-loop poles from
+the analysis result the store was filled from); the arithmetic left in the drawing turns metres, pascals and
+newtons into pixels and display units. The servo page's nine worked solutions compute their own small figures when opened; those
+numbers are not in the store, and the panel's paragraph says so.
+
+**Check.** A slider value against the slider; a constant against the code; a derived value from its formula with the stored inputs;
+every recorded series and every result by running `simulate()` again from the stored parameters (ideal press: a few milliseconds;
+servo press: the whole cycle and both analyses on this page, 1.6 s in Node, cached by the parameters); the drawing numbers from the
+layout formula and the stored inputs. **Read-back:** the five needles of each dial strip (a dark pixel 0.45 r from the hub along the
+stored angle) and, on the ideal press, the lower edges of both pistons at their stored rows. **Read values:** a click on a dial pins
+its value and needle angle, on a piston (ideal) or the ram and platen (servo) pins the motion, pressures and forces of the sample on
+screen, on the oil (ideal) pins the pressure there and its parts. **One round** is one run (ideal) or one press cycle (servo), from
+$t = 0$; Record plays it from the start.
+
+**The ideal press's pressure probe now needs a click.** It used to follow the mouse across the running figure, against the site's rule
+that nothing on a running figure reacts to a pointer merely crossing it; a click or tap places it, a click outside the oil removes it.
+
 ## How to update a copy of an app
 
 1. Change the project in its own app (`droplet-collection-yl7l26` or `rotor-pendula-gafw0f`) and check it there.
@@ -245,4 +289,88 @@ makes no request outside the site, and links back to `../../portfolios.html`. Th
 scales settle at 9.81 N; the first touch at 1.428 s equals √(2h/g); the energy books close to 0.21 J (iron) and 0.51 J (cotton) out
 of about 98 J (`checks/energy_books.cjs`); halving the time step changes the peaks by 0.0 % (iron) and 1.5 % (cotton)
 (`checks/step_size.cjs`).
+
+### The data panel of the study
+
+Since 23 October 2026 both pages carry the site's data panel, the same one as the ten simulations
+([scripts/datalog.md](scripts/datalog.md)). Picture an assistant beside the drop with a notebook: the run is computed once, and
+every number of it is written into one store, a dataset in the sense of [scripts/dataset.md](scripts/dataset.md); the drawing, the
+gauges, the readouts, the plots and the energy bars only read that store, and the panel shows it, checks it and saves it.
+
+**What loads.** The pages load the shared files from the site, no copies: `../../styles/paper.css` (for Latin Modern in the
+panel's symbols) and `../../styles/data.css` in the head; at the end of the body `../../scripts/sim.js`, `../../scripts/dataset.js`,
+the page script, and `../../scripts/datalog.js` last. `sim.js` does no harm here: it defines `window.Sim`, adds an error banner if a
+script fails, and would load KaTeX for a figure caption with mathematics; the study's caption has none, and since this change
+`sim.js` loads KaTeX on a page without a lecture note only when a caption contains `\(` (measured: the page requests
+`paper.css`, `data.css`, `sim.js`, `dataset.js`, `datalog.js` and fonts, nothing else). The study defines the panel's colour and
+font tokens in its own palette (`--accent` is the study's wine, `--sans` IBM Plex Sans, also on the Arabic page), and its element
+rules for `h2`, `h3`, `p`, `button` and `canvas` are written as `:where(…:not(.dp *))`, so they no longer reach into the panel.
+
+**Where the code is.** The store is declared in `declare()` and filled in `record()` in
+[`template.html`](../portfolios-src/impact/template.html); the panel's hooks (`probe`, `inspect`, `locate`, `check`, `drawn`,
+`round`, `about`) are in [`datahooks.js`](../portfolios-src/impact/datahooks.js), which `build.py` inserts after the page script.
+The canvas sits in `figure.stage > div#stage`, with the caption `figcaption.stage__cap` that receives the Read values switch.
+
+**The store.** Six dimensions: `n` (5751 samples: every 1 ms to 2.5 s, every 2 ms to 9 s), `p_iron` (91 atoms), `p_cot` (612
+beads), `b_iron` (240 bonds), `b_cot` (1196 bonds: 594 stretch springs along the fibres, 602 junctions) and `c` (47 checkpoints).
+The groups of the panel:
+
+| Group | What it holds |
+|---|---|
+| Parameters | the 35 constants of `P`, as scalars |
+| Derived physics | particles and bonds of each ball, particle mass $M/N$, skin contact $m\omega_c^2$ and $2\zeta_c m\omega_c$, iron's Morse $\alpha = \alpha r_0/a$ and $D = k/2\alpha^2$, the junction's $\alpha_j$ and $D_j$, the zero of height energy, $E_0$, $t^* = \sqrt{2h/g}$, $v^* = \sqrt{2gh}$, $Mg$ |
+| Solver | samples, checkpoint spacing, samples computed, frame steps, compute time, done |
+| Results | first touch, peak force, weight (mean reading from 4 s to 9 s), its distance from $Mg$, largest gap in the energy books |
+| Stored run | per sample: `ts`, `nstep`; for each ball the positions `x`, `y` and speeds `sp` of every particle (float32), plate position `yp` and velocity `vp`, scale reading `F`, peak hold `Fmax`, the six energy terms `KE`, `PE`, `El`, `Eh`, `Qb` (heat in the ball), `Qh` (heat in the head), the bars `Ein` and `Esum`, the gap `books` and the running weight `W` |
+| Shape of the balls | bond lists `bi`, `bj`, rest lengths `l0`, cotton's bond kinds and fibre of each bead |
+| Checkpoints | every 125 samples, the full state of each ball (positions, velocities, plate, peak hold, heat, first touch, which bonds hold) and the step count |
+| Playback | `t_play`, `i_now`, `t_now`, `slow`, `playing`, and for each ball the reading, peak, weight, kitchen-scale masses $F_\text{peak}/g$ and $W/g$, plate position, kinetic energy and books gap of the sample on screen |
+| Drawing | canvas size and device pixel ratio, ruler, scene top and bottom, column width and centres, the scale $s$ in px/m, the camera height, the gain $G = 10$ of the plate travel and the extra offset $(G-1)y_p$, the plate's screen row, the gauge radius and centre, the two needle angles, the gauge's full scale |
+
+Every variable has a symbol, units where it has any, a long name, `computed_in` and digits. Positions and speeds are float32: the
+cotton ball alone holds $612 \times 5751 \times 3$ of them, 42 MB as float32 and 84 MB as float64; everything else is float64.
+
+**What each Check recomputes.** A constant against `P`; a derived value from its formula with the stored inputs; counts, bond lists,
+rest lengths and the zero of height energy from a second build by `makeIron()` or `makeCotton()`. A position, speed, plate state,
+peak or energy term at sample $n$ by rerunning the same `step()` on a separately built ball, from the checkpoint before $n$ (never
+from $n$ itself) to $n$; the first checkpoint is checked by stepping a fresh build from $t = 0$, so the chain is anchored at the
+start. The step counts by adding the sub-steps $\Delta t/5$ again exactly as the model does. The scale reading as
+$F = -k_h y_p$ from the stored plate position; the bars as $E_\text{in} = E_0 - V_n$ and $E_\text{now} = K + E_\text{el} +
+E_\text{head} + Q_\text{ball} + Q_\text{head}$; the books gap as their difference; the weight as the mean of the stored readings;
+every drawing number from the stored drawing inputs. A rerun takes at most 1250 steps (0.67 s for cotton and 0.09 s for iron,
+measured in Node).
+
+**What each read-back reads.** The plate: two columns near its ends are scanned row by row for the plate's fill colour, which must
+begin half the outline below `plate_px`; the black needle: a dark pixel 0.3 R from the hub along the stored angle; the red peak
+needle: its tip, 6.5 px inside the rim, which the black needle never covers; a particle at the sample on screen: the dark atom disc
+or the pale bead core at the position worked out from the stored drawing variables; the scale reading of sample $n$: the wine
+(iron) or blue (cotton) curve of the whole-run plot. Values not drawn at the moment (another sample, a part outside the scene,
+cotton's curve under iron's) give "not in the picture at the moment".
+
+**Read values.** A click on an atom or a bead pins it: sample, time, $x$, $y$, speed (and the fibre of a bead). A click on a gauge,
+a digital panel or a plate pins that ball's scale: reading, peak, weight, plate position, needle angle. **One round** is one drop,
+$t = 0$ to 9 s of the stored run; Record starts a new drop from $t = 0$ (the first frame of a drop advances nothing, so the round
+begins exactly at 0), refuses while a drop is under way, and follows the iron scale unless another point is pinned.
+
+**What differs between store and picture**, said in the panel's paragraph: the plate travel, and the ball resting on it, are drawn
+ten times larger than computed; the camera follows the lowest iron atom for both columns; bond colours are worked out at drawing
+time from the stored positions; cotton fibres are smooth curves through the beads; the gauges have a square-root dial; the weight
+shows from 6.5 s.
+
+**The panel's words are English on the Arabic page too**, set left to right (`lang="en" dir="ltr"` on the panel, the tab, the strip
+and the switch, written by `datalog.js`), until the panel gets its string table.
+
+**Measured** (23 October 2026, headless Chromium, built site): English page at 1100 and 1600 px, Arabic page at 390 px
+(`portfolios-src/impact/checks/data_panel.cjs`): no script errors, no sideways scroll; 190 variables, each with symbol,
+long name, `computed_in` and digits, each in one of nine groups; Check on every scalar and on six indices of every array: 406
+identical, 34 agreeing to 7 or 8 figures (the float32 positions and speeds), 18 undefined on both sides (the weight before 4 s),
+0 differing, all 458 in 7.1 s; every read-back at the moment of impact (t = 1.452 s) shows its value (atoms, bead, both needles, both
+peak needles, both plates, both curves), and cotton's curve, where the iron curve covers it, reads "not in the picture at the
+moment"; Read values: a pointer swept across the figure paints 0 overlay pixels with the switch off and on, a click pins an atom, a
+bead or a scale, the strip sits directly under the figure (no overlap), its values change 4 times a second (12 batches in 3 s); one
+round, 0 to 9 s, records every frame (349 to 486 samples at real speed) with no undefined value at the followed scale; Save gives a
+51.6 MB zip that `zipfile.testzip()` accepts and NumPy reads (`x_cot` float32 5751 × 612, `F_iron` float64 5751, 73 members,
+units in `dataset.json`); with the panel closed `__dataPanel.running()` is false. The run itself gives the documented numbers: iron
+638.6 N, cotton 188.0 N, weights 9.810 N and 9.810 N, first touch 1.428 s, books closed to 0.21 J and 0.51 J. Computing the run
+takes 9 % longer than before the store (123 s against 113 s in this container's headless Chromium, which has no GPU).
 
