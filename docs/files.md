@@ -4,7 +4,7 @@ Written by [`tools/inventory.py`](../tools/inventory.py) from the files in the r
 Run `python3 tools/inventory.py` after adding, removing or changing files, and `python3 tools/inventory.py --check`
 to confirm that every file is described. Sizes are those of the files when the list was written.
 
-823 files, 45.9 MB in all. Runs of more than 12 similar files are folded; open them to see each file.
+838 files, 51.0 MB in all. Runs of more than 12 similar files are folded; open them to see each file.
 
 | Folder | Files |
 |---|---|
@@ -28,7 +28,7 @@ to confirm that every file is described. Sizes are those of the files when the l
 | [Source of the Hydraulic Press Study (not served)](#source-of-the-hydraulic-press-study-not-served) | 37 |
 | [Source of Rotor Pendula (not served)](#source-of-rotor-pendula-not-served) | 61 |
 | [Source of Iron, Cotton and the Head (not served)](#source-of-iron-cotton-and-the-head-not-served) | 19 |
-| [Source of the Droplet Collection study (not served)](#source-of-the-droplet-collection-study-not-served) | 65 |
+| [Source of the Droplet Collection study (not served)](#source-of-the-droplet-collection-study-not-served) | 75 |
 | [Template sources](#template-sources) | 2 |
 | [Platform tests](#platform-tests) | 1 |
 | [Documentation](#documentation) | 30 |
@@ -36,7 +36,7 @@ to confirm that every file is described. Sizes are those of the files when the l
 | [Translation tables](#translation-tables) | 46 |
 | [Agents of the lecture-note review](#agents-of-the-lecture-note-review) | 4 |
 | [Working notes of the Rotor Pendula study](#working-notes-of-the-rotor-pendula-study) | 87 |
-| [Working notes of the Droplet Collection study](#working-notes-of-the-droplet-collection-study) | 113 |
+| [Working notes of the Droplet Collection study](#working-notes-of-the-droplet-collection-study) | 118 |
 | [Record of the lecture-note review](#record-of-the-lecture-note-review) | 116 |
 
 ## Repository root
@@ -343,7 +343,7 @@ to confirm that every file is described. Sizes are those of the files when the l
 | [`public/portfolios/droplet-collection/fig/plate-warm.svg`](../public/portfolios/droplet-collection/fig/plate-warm.svg) | 24.3 kB | Plate of the Portfolios page article (warm), written by the Droplet Collection build. | [portfolios.md](portfolios.md) |
 | [`public/portfolios/droplet-collection/fig/w2_rain.svg`](../public/portfolios/droplet-collection/fig/w2_rain.svg) | 45.0 kB | A vector figure of the project. | [portfolios.md](portfolios.md) |
 | [`public/portfolios/droplet-collection/fig/w2_spectra.svg`](../public/portfolios/droplet-collection/fig/w2_spectra.svg) | 74.0 kB | A vector figure of the project. | [portfolios.md](portfolios.md) |
-| [`public/portfolios/droplet-collection/index.html`](../public/portfolios/droplet-collection/index.html) | 984.4 kB | Entry page of the project copy: module script and stylesheet loader. | [portfolios.md](portfolios.md) |
+| [`public/portfolios/droplet-collection/index.html`](../public/portfolios/droplet-collection/index.html) | 1.76 MB | Entry page of the project copy: module script and stylesheet loader. | [portfolios.md](portfolios.md) |
 
 ## Project copy: Rotor Pendula
 
@@ -524,15 +524,17 @@ to confirm that every file is described. Sizes are those of the files when the l
 | File | Size | What it is | Explained in |
 |---|---|---|---|
 | [`portfolios-src/droplets/.gitignore`](../portfolios-src/droplets/.gitignore) | 5 B | Keeps the stand-alone build (out/) out of git. | [README.md](../portfolios-src/droplets/README.md) |
-| [`portfolios-src/droplets/README.md`](../portfolios-src/droplets/README.md) | 4.1 kB | The study's source: every folder, how the served page is built, the three checks. | [README.md](../portfolios-src/droplets/README.md) |
-| [`portfolios-src/droplets/app.js`](../portfolios-src/droplets/app.js) | 12.8 kB | The page's script: tabs, hash routes, the three simulation panels. | [README.md](../portfolios-src/droplets/README.md) |
-| [`portfolios-src/droplets/chart.cjs`](../portfolios-src/droplets/chart.cjs) | 7.7 kB | House-style SVG line charts for the figures and the page. | [README.md](../portfolios-src/droplets/README.md) |
+| [`portfolios-src/droplets/README.md`](../portfolios-src/droplets/README.md) | 4.4 kB | The study's source: every folder, how the served page is built, the three checks. | [README.md](../portfolios-src/droplets/README.md) |
+| [`portfolios-src/droplets/app.js`](../portfolios-src/droplets/app.js) | 22.1 kB | The page's script: tabs, hash routes, the three simulation panels. | [README.md](../portfolios-src/droplets/README.md) |
+| [`portfolios-src/droplets/chart.cjs`](../portfolios-src/droplets/chart.cjs) | 7.8 kB | House-style SVG line charts for the figures and the page. | [README.md](../portfolios-src/droplets/README.md) |
 | [`portfolios-src/droplets/checks/check_browser.py`](../portfolios-src/droplets/checks/check_browser.py) | 2.6 kB | Check: check_browser.py (see the README). | [README.md](../portfolios-src/droplets/README.md) |
-| [`portfolios-src/droplets/checks/check_numbers.cjs`](../portfolios-src/droplets/checks/check_numbers.cjs) | 31.9 kB | Check: check_numbers.cjs (see the README). | [README.md](../portfolios-src/droplets/README.md) |
-| [`portfolios-src/droplets/checks/check_physics.py`](../portfolios-src/droplets/checks/check_physics.py) | 15.4 kB | Check: check_physics.py (see the README). | [README.md](../portfolios-src/droplets/README.md) |
+| [`portfolios-src/droplets/checks/check_numbers.cjs`](../portfolios-src/droplets/checks/check_numbers.cjs) | 41.4 kB | Check: check_numbers.cjs (see the README). | [README.md](../portfolios-src/droplets/README.md) |
+| [`portfolios-src/droplets/checks/check_physics.py`](../portfolios-src/droplets/checks/check_physics.py) | 18.3 kB | Check: check_physics.py (see the README). | [README.md](../portfolios-src/droplets/README.md) |
 | [`portfolios-src/droplets/checks/model_dump.cjs`](../portfolios-src/droplets/checks/model_dump.cjs) | 2.8 kB | Check: model_dump.cjs (see the README). | [README.md](../portfolios-src/droplets/README.md) |
 | [`portfolios-src/droplets/data/bridge.json`](../portfolios-src/droplets/data/bridge.json) | 56.1 kB | Data written by the model's run tools: bridge.json. | [README.md](../portfolios-src/droplets/README.md) |
+| [`portfolios-src/droplets/data/cloud.json`](../portfolios-src/droplets/data/cloud.json) | 3.27 MB | Data written by the model's run tools: cloud.json. | [README.md](../portfolios-src/droplets/README.md) |
 | [`portfolios-src/droplets/data/cold.json`](../portfolios-src/droplets/data/cold.json) | 482 B | Data written by the model's run tools: cold.json. | [README.md](../portfolios-src/droplets/README.md) |
+| [`portfolios-src/droplets/data/energy.json`](../portfolios-src/droplets/data/energy.json) | 845.5 kB | Data written by the model's run tools: energy.json. | [README.md](../portfolios-src/droplets/README.md) |
 | [`portfolios-src/droplets/data/etab_split.json`](../portfolios-src/droplets/data/etab_split.json) | 181.9 kB | Data written by the model's run tools: etab_split.json. | [README.md](../portfolios-src/droplets/README.md) |
 | [`portfolios-src/droplets/data/etab_warm.json`](../portfolios-src/droplets/data/etab_warm.json) | 23.4 kB | Data written by the model's run tools: etab_warm.json. | [README.md](../portfolios-src/droplets/README.md) |
 | [`portfolios-src/droplets/data/hall1980.json`](../portfolios-src/droplets/data/hall1980.json) | 1.7 kB | Data written by the model's run tools: hall1980.json. | [README.md](../portfolios-src/droplets/README.md) |
@@ -559,8 +561,11 @@ to confirm that every file is described. Sizes are those of the files when the l
 | [`portfolios-src/droplets/derive/L4_conv.cjs`](../portfolios-src/droplets/derive/L4_conv.cjs) | 1.7 kB | Derivation or number script behind a Gate 1 contract: L4_conv.cjs. | [status.md](../notes/droplets/status.md) |
 | [`portfolios-src/droplets/derive/L5_tail.cjs`](../portfolios-src/droplets/derive/L5_tail.cjs) | 1.2 kB | Derivation or number script behind a Gate 1 contract: L5_tail.cjs. | [status.md](../notes/droplets/status.md) |
 | [`portfolios-src/droplets/derive/L6_ayala.py`](../portfolios-src/droplets/derive/L6_ayala.py) | 1.1 kB | Derivation or number script behind a Gate 1 contract: L6_ayala.py. | [status.md](../notes/droplets/status.md) |
+| [`portfolios-src/droplets/derive/L8_energy.cjs`](../portfolios-src/droplets/derive/L8_energy.cjs) | 5.3 kB | Derivation or number script behind a Gate 1 contract: L8_energy.cjs. | [status.md](../notes/droplets/status.md) |
+| [`portfolios-src/droplets/derive/L8_sympy.py`](../portfolios-src/droplets/derive/L8_sympy.py) | 5.5 kB | Derivation or number script behind a Gate 1 contract: L8_sympy.py. | [status.md](../notes/droplets/status.md) |
+| [`portfolios-src/droplets/derive/L9_scales.cjs`](../portfolios-src/droplets/derive/L9_scales.cjs) | 1.4 kB | Derivation or number script behind a Gate 1 contract: L9_scales.cjs. | [status.md](../notes/droplets/status.md) |
 | [`portfolios-src/droplets/derive/beard.cjs`](../portfolios-src/droplets/derive/beard.cjs) | 1.4 kB | Derivation or number script behind a Gate 1 contract: beard.cjs. | [status.md](../notes/droplets/status.md) |
-| [`portfolios-src/droplets/physics.cjs`](../portfolios-src/droplets/physics.cjs) | 36.5 kB | The model, L0 to L7: fall speeds, trajectories, kernel, collection equation, exact stochastic process, turbulence (runs in the page and in Node). | [README.md](../portfolios-src/droplets/README.md) |
+| [`portfolios-src/droplets/physics.cjs`](../portfolios-src/droplets/physics.cjs) | 53.1 kB | The model, L0 to L10: fall speeds, trajectories, kernel, collection equation, exact stochastic process, turbulence, energy ledger, maximum entropy, a cloud with a shape (super-droplets with a stochastic element); runs in the page and in Node. | [README.md](../portfolios-src/droplets/README.md) |
 | [`portfolios-src/droplets/template.html`](../portfolios-src/droplets/template.html) | 12.9 kB | The page template: house design, tabs, placeholders filled by the build. | [README.md](../portfolios-src/droplets/README.md) |
 | [`portfolios-src/droplets/text/book-00.src.html`](../portfolios-src/droplets/text/book-00.src.html) | 3.9 kB | Lecture notes, chapter 0. | [README.md](../portfolios-src/droplets/README.md) |
 | [`portfolios-src/droplets/text/book-01.src.html`](../portfolios-src/droplets/text/book-01.src.html) | 5.5 kB | Lecture notes, chapter 1. | [README.md](../portfolios-src/droplets/README.md) |
@@ -571,18 +576,23 @@ to confirm that every file is described. Sizes are those of the files when the l
 | [`portfolios-src/droplets/text/book-06.src.html`](../portfolios-src/droplets/text/book-06.src.html) | 8.0 kB | Lecture notes, chapter 6. | [README.md](../portfolios-src/droplets/README.md) |
 | [`portfolios-src/droplets/text/book-07.src.html`](../portfolios-src/droplets/text/book-07.src.html) | 3.7 kB | Lecture notes, chapter 7. | [README.md](../portfolios-src/droplets/README.md) |
 | [`portfolios-src/droplets/text/book-08.src.html`](../portfolios-src/droplets/text/book-08.src.html) | 7.0 kB | Lecture notes, chapter 8. | [README.md](../portfolios-src/droplets/README.md) |
-| [`portfolios-src/droplets/text/book-09.src.html`](../portfolios-src/droplets/text/book-09.src.html) | 6.6 kB | Lecture notes, chapter 9 and appendix A. | [README.md](../portfolios-src/droplets/README.md) |
+| [`portfolios-src/droplets/text/book-09.src.html`](../portfolios-src/droplets/text/book-09.src.html) | 2.8 kB | Lecture notes, chapter 9. | [README.md](../portfolios-src/droplets/README.md) |
+| [`portfolios-src/droplets/text/book-10.src.html`](../portfolios-src/droplets/text/book-10.src.html) | 15.3 kB | Lecture notes, chapter 10. | [README.md](../portfolios-src/droplets/README.md) |
+| [`portfolios-src/droplets/text/book-11.src.html`](../portfolios-src/droplets/text/book-11.src.html) | 11.2 kB | Lecture notes, chapter 11. | [README.md](../portfolios-src/droplets/README.md) |
+| [`portfolios-src/droplets/text/book-99.src.html`](../portfolios-src/droplets/text/book-99.src.html) | 5.0 kB | Symbols and sources (appendix A). | [README.md](../portfolios-src/droplets/README.md) |
 | [`portfolios-src/droplets/text/checks.src.html`](../portfolios-src/droplets/text/checks.src.html) | 5.8 kB | Words of the checks tab. | [README.md](../portfolios-src/droplets/README.md) |
-| [`portfolios-src/droplets/text/problems.src.html`](../portfolios-src/droplets/text/problems.src.html) | 4.4 kB | Words of the problems tab. | [README.md](../portfolios-src/droplets/README.md) |
-| [`portfolios-src/droplets/text/sim.src.html`](../portfolios-src/droplets/text/sim.src.html) | 3.8 kB | Words of the sim tab. | [README.md](../portfolios-src/droplets/README.md) |
+| [`portfolios-src/droplets/text/problems.src.html`](../portfolios-src/droplets/text/problems.src.html) | 7.0 kB | Words of the problems tab. | [README.md](../portfolios-src/droplets/README.md) |
+| [`portfolios-src/droplets/text/sim.src.html`](../portfolios-src/droplets/text/sim.src.html) | 7.0 kB | Words of the sim tab. | [README.md](../portfolios-src/droplets/README.md) |
 | [`portfolios-src/droplets/tools/build.py`](../portfolios-src/droplets/tools/build.py) | 10.6 kB | Build or run tool: build.py (see the README). | [README.md](../portfolios-src/droplets/README.md) |
-| [`portfolios-src/droplets/tools/figs.cjs`](../portfolios-src/droplets/tools/figs.cjs) | 11.0 kB | Build or run tool: figs.cjs (see the README). | [README.md](../portfolios-src/droplets/README.md) |
+| [`portfolios-src/droplets/tools/figs.cjs`](../portfolios-src/droplets/tools/figs.cjs) | 20.4 kB | Build or run tool: figs.cjs (see the README). | [README.md](../portfolios-src/droplets/README.md) |
 | [`portfolios-src/droplets/tools/gen_tables.cjs`](../portfolios-src/droplets/tools/gen_tables.cjs) | 1.0 kB | Build or run tool: gen_tables.cjs (see the README). | [README.md](../portfolios-src/droplets/README.md) |
 | [`portfolios-src/droplets/tools/katex_render.cjs`](../portfolios-src/droplets/tools/katex_render.cjs) | 606 B | Build or run tool: katex_render.cjs (see the README). | [README.md](../portfolios-src/droplets/README.md) |
 | [`portfolios-src/droplets/tools/package-lock.json`](../portfolios-src/droplets/tools/package-lock.json) | 1.1 kB | Build or run tool: package-lock.json (see the README). | [README.md](../portfolios-src/droplets/README.md) |
 | [`portfolios-src/droplets/tools/package.json`](../portfolios-src/droplets/tools/package.json) | 207 B | Build or run tool: package.json (see the README). | [README.md](../portfolios-src/droplets/README.md) |
 | [`portfolios-src/droplets/tools/run_bridge.cjs`](../portfolios-src/droplets/tools/run_bridge.cjs) | 1.3 kB | Build or run tool: run_bridge.cjs (see the README). | [README.md](../portfolios-src/droplets/README.md) |
+| [`portfolios-src/droplets/tools/run_cloud.cjs`](../portfolios-src/droplets/tools/run_cloud.cjs) | 7.4 kB | Build or run tool: run_cloud.cjs (see the README). | [README.md](../portfolios-src/droplets/README.md) |
 | [`portfolios-src/droplets/tools/run_cold.cjs`](../portfolios-src/droplets/tools/run_cold.cjs) | 5.5 kB | Build or run tool: run_cold.cjs (see the README). | [README.md](../portfolios-src/droplets/README.md) |
+| [`portfolios-src/droplets/tools/run_energy.cjs`](../portfolios-src/droplets/tools/run_energy.cjs) | 16.8 kB | Build or run tool: run_energy.cjs (see the README). | [README.md](../portfolios-src/droplets/README.md) |
 | [`portfolios-src/droplets/tools/run_golovin.cjs`](../portfolios-src/droplets/tools/run_golovin.cjs) | 2.7 kB | Build or run tool: run_golovin.cjs (see the README). | [README.md](../portfolios-src/droplets/README.md) |
 | [`portfolios-src/droplets/tools/run_stochastic.cjs`](../portfolios-src/droplets/tools/run_stochastic.cjs) | 2.3 kB | Build or run tool: run_stochastic.cjs (see the README). | [README.md](../portfolios-src/droplets/README.md) |
 | [`portfolios-src/droplets/tools/run_warm.cjs`](../portfolios-src/droplets/tools/run_warm.cjs) | 3.2 kB | Build or run tool: run_warm.cjs (see the README). | [README.md](../portfolios-src/droplets/README.md) |
@@ -616,7 +626,7 @@ to confirm that every file is described. Sizes are those of the files when the l
 | [`docs/minor-issues-report.md`](minor-issues-report.md) | 19.9 kB | Documentation: Minor issues · final verification report. | [minor-issues-report.md](minor-issues-report.md) |
 | [`docs/notes.md`](notes.md) | 3.7 kB | Documentation: The lecture-note review: `notes/` and `.claude/agents/`. | [notes.md](notes.md) |
 | [`docs/pages.md`](pages.md) | 51.6 kB | Documentation: The site's own pages: home, simulations catalog, Portfolios, robots.txt. | [pages.md](pages.md) |
-| [`docs/portfolios.md`](portfolios.md) | 39.4 kB | Documentation: The four research projects: `public/portfolios/`. | [portfolios.md](portfolios.md) |
+| [`docs/portfolios.md`](portfolios.md) | 39.9 kB | Documentation: The four research projects: `public/portfolios/`. | [portfolios.md](portfolios.md) |
 | [`docs/research-theory-audit.md`](research-theory-audit.md) | 29.1 kB | Documentation: Readability audit: Droplet Collection and Rotor Pendula. | [research-theory-audit.md](research-theory-audit.md) |
 | [`docs/scripts/catalog.md`](scripts/catalog.md) | 15.1 kB | Documentation: public/scripts/catalog.js. | [catalog.md](scripts/catalog.md) |
 | [`docs/scripts/datalog.md`](scripts/datalog.md) | 48.6 kB | Documentation: public/scripts/datalog.js. | [datalog.md](scripts/datalog.md) |
@@ -648,7 +658,7 @@ to confirm that every file is described. Sizes are those of the files when the l
 | [`tools/i18n/ingest.py`](../tools/i18n/ingest.py) | 1.9 kB | Stores checked translations made outside the tables (page pieces, script strings, walkthrough prose). | [i18n.md](i18n.md) |
 | [`tools/i18n/package.json`](../tools/i18n/package.json) | 285 B | The parser wrap.cjs needs (acorn); npm install --prefix tools/i18n. | [i18n.md](i18n.md) |
 | [`tools/i18n/wrap.cjs`](../tools/i18n/wrap.cjs) | 3.7 kB | Wraps the reader-visible strings of a page's scripts in _t(), with a JavaScript parser (acorn). | [i18n.md](i18n.md) |
-| [`tools/inventory.py`](../tools/inventory.py) | 40.5 kB | Writes docs/files.md and checks that every file in the repository is described. | [files.md](files.md) |
+| [`tools/inventory.py`](../tools/inventory.py) | 40.6 kB | Writes docs/files.md and checks that every file in the repository is described. | [files.md](files.md) |
 | [`tools/make_portfolio_copy.py`](../tools/make_portfolio_copy.py) | 4.4 kB | Builds a browser-only website copy of a research app from its source, without changing the app or installing dependencies. | [portfolios.md](portfolios.md) |
 
 ## Translation tables
@@ -833,17 +843,21 @@ to confirm that every file is described. Sizes are those of the files when the l
 | [`notes/droplets/check-L7.md`](../notes/droplets/check-L7.md) | 6.6 kB | Gate 2 check of level L7: each equation re-derived by two routes. | [status.md](../notes/droplets/status.md) |
 | [`notes/droplets/contract-L0.md`](../notes/droplets/contract-L0.md) | 25.2 kB | Gate 1 contract of model level L0: question, picture, model, assumptions with their numbers, predictions, answers to the skeptic. | [status.md](../notes/droplets/status.md) |
 | [`notes/droplets/contract-L1.md`](../notes/droplets/contract-L1.md) | 18.6 kB | Gate 1 contract of model level L1: question, picture, model, assumptions with their numbers, predictions, answers to the skeptic. | [status.md](../notes/droplets/status.md) |
+| [`notes/droplets/contract-L10.md`](../notes/droplets/contract-L10.md) | 4.3 kB | Gate 1 contract of model level L10: question, picture, model, assumptions with their numbers, predictions, answers to the skeptic. | [status.md](../notes/droplets/status.md) |
 | [`notes/droplets/contract-L2.md`](../notes/droplets/contract-L2.md) | 20.0 kB | Gate 1 contract of model level L2: question, picture, model, assumptions with their numbers, predictions, answers to the skeptic. | [status.md](../notes/droplets/status.md) |
 | [`notes/droplets/contract-L3.md`](../notes/droplets/contract-L3.md) | 7.1 kB | Gate 1 contract of model level L3: question, picture, model, assumptions with their numbers, predictions, answers to the skeptic. | [status.md](../notes/droplets/status.md) |
 | [`notes/droplets/contract-L4.md`](../notes/droplets/contract-L4.md) | 14.5 kB | Gate 1 contract of model level L4: question, picture, model, assumptions with their numbers, predictions, answers to the skeptic. | [status.md](../notes/droplets/status.md) |
 | [`notes/droplets/contract-L5.md`](../notes/droplets/contract-L5.md) | 14.5 kB | Gate 1 contract of model level L5: question, picture, model, assumptions with their numbers, predictions, answers to the skeptic. | [status.md](../notes/droplets/status.md) |
 | [`notes/droplets/contract-L6.md`](../notes/droplets/contract-L6.md) | 4.1 kB | Gate 1 contract of model level L6: question, picture, model, assumptions with their numbers, predictions, answers to the skeptic. | [status.md](../notes/droplets/status.md) |
 | [`notes/droplets/contract-L7.md`](../notes/droplets/contract-L7.md) | 6.1 kB | Gate 1 contract of model level L7: question, picture, model, assumptions with their numbers, predictions, answers to the skeptic. | [status.md](../notes/droplets/status.md) |
+| [`notes/droplets/contract-L8.md`](../notes/droplets/contract-L8.md) | 16.1 kB | Gate 1 contract of model level L8: question, picture, model, assumptions with their numbers, predictions, answers to the skeptic. | [status.md](../notes/droplets/status.md) |
+| [`notes/droplets/contract-L9.md`](../notes/droplets/contract-L9.md) | 9.1 kB | Gate 1 contract of model level L9: question, picture, model, assumptions with their numbers, predictions, answers to the skeptic. | [status.md](../notes/droplets/status.md) |
 | [`notes/droplets/done.md`](../notes/droplets/done.md) | 1.7 kB | Definition of done of the Droplet Collection study, as a checklist; only Numa may change it. | [done.md](../notes/droplets/done.md) |
-| [`notes/droplets/dossier-coalescence-turbulence.md`](../notes/droplets/dossier-coalescence-turbulence.md) | 26.2 kB | Source dossier on coalescence-turbulence: primary sources read for the notes. | [status.md](../notes/droplets/status.md) |
-| [`notes/droplets/dossier-fallspeed-efficiency.md`](../notes/droplets/dossier-fallspeed-efficiency.md) | 38.0 kB | Source dossier on fallspeed-efficiency: primary sources read for the notes. | [status.md](../notes/droplets/status.md) |
-| [`notes/droplets/dossier-ice.md`](../notes/droplets/dossier-ice.md) | 34.2 kB | Source dossier on ice: primary sources read for the notes. | [status.md](../notes/droplets/status.md) |
-| [`notes/droplets/dossier-stochastic.md`](../notes/droplets/dossier-stochastic.md) | 59.4 kB | Source dossier on stochastic: primary sources read for the notes. | [status.md](../notes/droplets/status.md) |
+| [`notes/droplets/dossier-coalescence-turbulence.md`](../notes/droplets/dossier-coalescence-turbulence.md) | 26.2 kB | Scout dossier on coalescence-turbulence: primary sources read for the study. | [status.md](../notes/droplets/status.md) |
+| [`notes/droplets/dossier-fallspeed-efficiency.md`](../notes/droplets/dossier-fallspeed-efficiency.md) | 38.0 kB | Scout dossier on fallspeed-efficiency: primary sources read for the study. | [status.md](../notes/droplets/status.md) |
+| [`notes/droplets/dossier-ice.md`](../notes/droplets/dossier-ice.md) | 34.2 kB | Scout dossier on ice: primary sources read for the study. | [status.md](../notes/droplets/status.md) |
+| [`notes/droplets/dossier-stochastic-field.md`](../notes/droplets/dossier-stochastic-field.md) | 40.7 kB | Scout dossier on stochastic-field: primary sources read for the study. | [status.md](../notes/droplets/status.md) |
+| [`notes/droplets/dossier-stochastic.md`](../notes/droplets/dossier-stochastic.md) | 59.4 kB | Scout dossier on stochastic: primary sources read for the study. | [status.md](../notes/droplets/status.md) |
 | [`notes/droplets/gate2/L0_model_crosscheck.cjs`](../notes/droplets/gate2/L0_model_crosscheck.cjs) | 844 B | Gate 2 checker script or output: L0_model_crosscheck.cjs. | [status.md](../notes/droplets/status.md) |
 | [`notes/droplets/gate2/L0_model_crosscheck.out.txt`](../notes/droplets/gate2/L0_model_crosscheck.out.txt) | 338 B | Gate 2 checker script or output: L0_model_crosscheck.out.txt. | [status.md](../notes/droplets/status.md) |
 | [`notes/droplets/gate2/L0_route1_sympy.out.txt`](../notes/droplets/gate2/L0_route1_sympy.out.txt) | 2.1 kB | Gate 2 checker script or output: L0_route1_sympy.out.txt. | [status.md](../notes/droplets/status.md) |
@@ -928,8 +942,9 @@ to confirm that every file is described. Sizes are those of the files when the l
 | [`notes/droplets/skeptic-G1-L2-r2.md`](../notes/droplets/skeptic-G1-L2-r2.md) | 17.5 kB | Blind skeptic report, gate 1, level L2, round 2. | [status.md](../notes/droplets/status.md) |
 | [`notes/droplets/skeptic-G1-L3L6L7-r1.md`](../notes/droplets/skeptic-G1-L3L6L7-r1.md) | 29.2 kB | Blind skeptic report, gate 1, level L3L6L7, round 1. | [status.md](../notes/droplets/status.md) |
 | [`notes/droplets/skeptic-G1-L4L5-r1.md`](../notes/droplets/skeptic-G1-L4L5-r1.md) | 21.5 kB | Blind skeptic report, gate 1, level L4L5, round 1. | [status.md](../notes/droplets/status.md) |
+| [`notes/droplets/skeptic-G1-L9-r1.md`](../notes/droplets/skeptic-G1-L9-r1.md) | 20.6 kB | Blind skeptic report, gate 1, level L9, round 1. | [status.md](../notes/droplets/status.md) |
 | [`notes/droplets/skeptic-G3-r1.md`](../notes/droplets/skeptic-G3-r1.md) | 25.8 kB | Blind skeptic report, gate 3: r1. | [status.md](../notes/droplets/status.md) |
-| [`notes/droplets/status.md`](../notes/droplets/status.md) | 10.9 kB | Status of the Droplet Collection study: Fermi estimate, queue, done list with evidence, decisions for Numa. Read first. | [status.md](../notes/droplets/status.md) |
+| [`notes/droplets/status.md`](../notes/droplets/status.md) | 12.3 kB | Status of the Droplet Collection study: Fermi estimate, queue, done list with evidence, decisions for Numa. Read first. | [status.md](../notes/droplets/status.md) |
 
 ## Record of the lecture-note review
 

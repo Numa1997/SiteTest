@@ -11,3 +11,26 @@
 30 exact runs in 1000 cm³ gave a median of 175 s. In a whole cubic metre only 0.69 per m³ is needed, which the mean field reaches after
 about a minute: the first drizzle in a large volume comes from one-in-a-million luck.</p>
 </details>
+
+<details class="prob" id="p6"><summary><span class="pn">6</span>A temperature for splitting. Two droplets of 10 µm merge. How much
+surface energy is released, and at what temperature would the Metropolis rule (10.5) accept the reverse split with probability $1/e$?</summary>
+<div class="head">$3.85\times10^{-11}$ J, and a temperature of $2.79\times10^{12}$ K</div>
+<p>The product has radius $10\cdot2^{1/3}$ = 12.60 µm. The surface lost is $2\cdot4\pi(10\ \mu\mathrm m)^2 - 4\pi(12.60\ \mu\mathrm m)^2$, and with
+$\sigma$ = 0.07422 N/m the energy released is $\Delta E = 3.85\times10^{-11}$ J, which is $9.84\times10^{9}\,k_BT$ at 283 K. The split is accepted
+with probability $e^{-\Delta E/k_BT_{\rm eff}}$, which is $1/e$ when $k_BT_{\rm eff} = \Delta E$, at $T_{\rm eff} = 2.79\times10^{12}$ K.</p>
+<p>No air is that hot. Drops do break up in real clouds, but large ones, when a collision's kinetic energy beats the surface tension (Weber
+number near 1, chapter 4); that is mechanics, not heat. A Metropolis rule with an invented temperature high enough to split drops would be
+a free parameter with nothing physical behind it, which is why chapter 10 uses the rule only at the true temperature.</p>
+</details>
+
+<details class="prob" id="p7"><summary><span class="pn">7</span>The cloud that maximises entropy. Show that $n = (N^2/M)\,e^{-Nm/M}$
+with $N = N_0/(1 + KN_0t/2)$ solves the collection equation (5.1) when the kernel $K$ is the same for every pair, and that $M$ stays fixed.</summary>
+<div class="head">The gain is $\tfrac12K(N^4/M^2)\,m\,e^{-Nm/M}$; the rest is bookkeeping</div>
+<p>Gain: the convolution $\int_0^m n(m')\,n(m - m')\,dm' = (N^2/M)^2\,e^{-Nm/M}\int_0^m dm' = (N^4/M^2)\,m\,e^{-Nm/M}$, because the two exponents add to
+$-Nm/M$ for every $m'$. Loss: $K\,n(m)\int_0^\infty n\,dm' = K N\,(N^2/M)\,e^{-Nm/M}$. Left side: $\partial n/\partial t = \big[2N\dot N/M - (N^2/M)(\dot N m/M)\big]e^{-Nm/M}$,
+and $\dot N = -KN^2/2$ from integrating (5.1) over $m$. Substituting, the left side is $\big[-KN^3/M + \tfrac12K(N^4/M^2)\,m\big]e^{-Nm/M}$, which is gain minus loss.
+The water $\int m\,n\,dm = (N^2/M)(M/N)^2 = M$ for every $t$.</p>
+<p>The exponential is also what maximum entropy gives from $N$ and $M$ alone (10.6). So the cloud in which every pair is equally likely, which is
+the Metropolis cloud of section 10.3, keeps the maximum-entropy shape once it has it, and approaches it from any start (figure 10.6).
+Gravity's kernel prefers pairs with different fall speeds, and that preference is what keeps the real cloud far from this shape.</p>
+</details>

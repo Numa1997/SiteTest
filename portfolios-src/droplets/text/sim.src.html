@@ -52,3 +52,46 @@ from the collection equation (dashed). Run your own volume to see one history.</
 <div class="plots"><div class="plot" id="lk-cdf"></div><div class="plot" id="lk-rmax"></div></div>
 </div>
 </div>
+
+<div class="card" id="shape">
+<div class="eyebrow">Panel 4 · energy, chance and place</div>
+<h2>A cloud with a shape</h2>
+<p>A vertical slice of air 2 km wide and 1.5 km high. Each dot stands for many drops of one size: droplets blue, collectors ochre, drizzle
+wine. A drop moves with its fall speed, the air's mean motion (one overturning cell, rising 1 m/s in the middle) and a stochastic element:
+the eddies too small to draw, an Ornstein–Uhlenbeck velocity whose strength and memory come from the dissipation rate ε. Inside the shape
+the air is saturated; outside it drops evaporate. Drops collide only with drops in their own 50 m cell. Lecture notes,
+<a href="#ch11">chapter 11</a>.</p>
+<div class="simgrid">
+<div class="ctl">
+<label>Cloud shape <select id="sh-shape"><option value="cumulus">cumulus (flat base, cauliflower top)</option><option value="disc">disc</option><option value="box">box</option><option value="tower">tall tower</option></select></label>
+<label>Mean motion <select id="sh-wind"><option value="1">overturning cell, 1 m/s</option><option value="0">still air</option></select></label>
+<label>Stochastic element <select id="sh-stoch"><option value="on">on: unresolved eddies</option><option value="off">off: mean motion only</option></select></label>
+<label>Dissipation rate ε <select id="sh-eps"><option value="0.01">10⁻² m²/s³ (typical cumulus)</option><option value="0.001">10⁻³ m²/s³ (quiet)</option><option value="0.04">4 × 10⁻² m²/s³ (vigorous)</option></select></label>
+<button id="sh-go" type="button">Start</button>
+<button id="sh-reset" type="button" class="ghost">New cloud</button>
+<button id="sh-clear" type="button" class="ghost">Remove the probe</button>
+<div class="status" id="sh-status" aria-live="polite"></div>
+<div class="readout" id="sh-out">Press Start. Click inside the picture to pin a probe; its values appear below the picture.</div>
+</div>
+<div class="plots"><div class="plot"><canvas id="sh-cv" width="600" height="470" style="width:100%;height:auto;display:block" aria-label="drops in a cloud slice"></canvas></div>
+<div class="readout" id="sh-probe">No probe pinned.</div></div>
+</div>
+<p class="note">This panel uses 32 super-droplets per cell to stay quick; the runs of chapter 11 use 128, which the box test there shows to be
+within 2 % of the collection equation (at 32 the box is about 10 % slower).</p>
+</div>
+
+<div class="card" id="rules">
+<div class="eyebrow">Panel 5 · energy and entropy</div>
+<h2>One landscape, three rules</h2>
+<p>The same 10 cm³ of cloud (3010 drops) merged three ways: by the kernel of chapters 1 to 4, by the Metropolis rule that only asks
+whether energy falls (every pair alike), and by steepest descent (always the largest pair). Every merger lowers the surface energy, so all
+three end in one drop; the path is what differs. Lecture notes, <a href="#ch10">chapter 10</a>.</p>
+<div class="simgrid">
+<div class="ctl">
+<button id="ru-run" type="button">Merge under the three rules</button>
+<div class="status" id="ru-status" aria-live="polite"></div>
+<div class="readout" id="ru-out">Each press draws new drops.</div>
+</div>
+<div class="plot" id="ru-plot"></div>
+</div>
+</div>
