@@ -798,7 +798,7 @@
         Sim.playButton(document.getElementById('play'), clk);
 
         /* ---------- the data panel (scripts/datalog.js) reads the store; these hooks only say where things are drawn and how to test a value ---------- */
-        function sliderCheck(input, label) { return { formula: _t('read from the ') + label + _t(' slider now'), inputs: [['slider', input.value, '']], value: parseFloat(input.value) }; }
+        function sliderCheck(input, label) { return { formula: _t('read from the ') + _t(label) + _t(' slider now'), inputs: [[_t('slider'), input.value, '']], value: parseFloat(input.value) }; }
         function at(q) { return { x: ds.get('px')[q], y: ds.get('py')[q] }; }
         function parcelPixel(q) {
             var p = at(q), px = ctx.getImageData(Math.round(p.x * box.dpr), Math.round(p.y * box.dpr), 1, 1).data, lum = 0.2126 * px[0] + 0.7152 * px[1] + 0.0722 * px[2];

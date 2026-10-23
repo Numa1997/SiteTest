@@ -40,6 +40,8 @@ then into the tables. Machine tables: [i18n/de/strings.json](../i18n/de/strings.
 | Euler–Lagrange equations | Euler-Lagrange-Gleichungen | معادلات أويلر–لاغرانج |
 | chaos, sensitive dependence | Chaos, sensitive Abhängigkeit | الفوضى، الحساسية للشروط الابتدائية |
 | normal modes | Eigenschwingungen | الأنماط الطبيعية |
+| normal (to a surface) | Normale | الناظم |
+| scalar | skalar, Skalar | سلّمي، كمّية سلّمية |
 | Lyapunov exponent | Ljapunow-Exponent | أُسّ ليابونوف |
 | path difference, phase difference | Gangunterschied, Phasendifferenz | فرق المسار، فرق الطور |
 | fringes | Interferenzstreifen | الأهداب |
@@ -79,6 +81,8 @@ then into the tables. Machine tables: [i18n/de/strings.json](../i18n/de/strings.
 | energy harvesting | Energy Harvesting | حصاد الطاقة |
 | servo valve, spool | Servoventil, Ventilschieber | صمّام مؤازر، المِزلاج |
 | ram (of a press) | Stößel | المِدكّ |
+| cap chamber, rod chamber (cylinder) | Kolbenraum, Ringraum | حجرة الغطاء، حجرة الساق |
+| bulk modulus (K = −V dp/dV, a stiffness; not compressibility, which is 1/K) | Kompressionsmodul | معامل المرونة الحجمي |
 | phase margin, gain margin | Phasenreserve, Amplitudenreserve | هامش الطور، هامش الكسب |
 | zero-order hold | Halteglied nullter Ordnung | ماسك من الرتبة الصفرية |
 | fourth-order Runge–Kutta (RK4) | Runge-Kutta-Verfahren vierter Ordnung | طريقة رونغه–كوتا من المرتبة الرابعة |

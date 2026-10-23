@@ -1,7 +1,15 @@
 {
+ "03bb464503d2": {
+  "src": "How it is checked",
+  "tr": "كيف يُفحص"
+ },
  "04e22db50e7d": {
   "src": "Why an iron ball hurts and a cotton ball of the same mass does not",
   "tr": "لماذا تؤلم كرةُ الحديد ولا تؤلم كرةُ القطن ذاتُ الكتلة نفسها"
+ },
+ "08b7fea08119": {
+  "src": "<b>Ice.</b> At \\(-10\\,{}^{\\circ}\\mathrm{C}\\) rime splintering is off, ice–ice breakup of the thesis’s small ice spheres makes almost nothing, and only the shattering of freezing drops could matter, between none and a few new particles per cm³ and minute: the measurements scatter that much.",
+  "tr": "<b>الجليد.</b> عند \\(-10\\,{}^{\\circ}\\mathrm{C}\\) يكون تشظّي الجليد عند التصقيع متوقّفًا، وتكسّر كرات الجليد الصغيرة في الرسالة بتصادم الجليد بالجليد لا يصنع شيئًا يُذكر، ولا يمكن أن يُحدث فرقًا إلا تشظّي القطرات المتجمّدة، بين لا شيء وبضعة جسيمات جديدة لكلّ cm³ في الدقيقة: إلى هذا الحدّ تتبعثر القياسات."
  },
  "08f373f3b44d": {
   "src": "The servo press drawn in section during the press phase: the controller panel, the pump, the servo valve, the hose and the cylinder pressing the specimen, with the oil coloured by pressure.",
@@ -35,6 +43,10 @@
   "src": "The 18 mountings, one rod against two, chaos, and the sensor.",
   "tr": "مواضع التثبيت الـ18، وقضيبٌ واحد مقابل اثنين، والفوضى، والحسّاس."
  },
+ "117d71b35d3d": {
+  "src": "The collection equation, the droplet trajectories and an exact random cloud, running in your browser.",
+  "tr": "معادلة الالتقاط، ومسارات القُطَيرات، وغيمة عشوائية دقيقة، تعمل في متصفّحك."
+ },
  "11c756067811": {
   "src": "How cloud droplets become rain",
   "tr": "كيف تصير قُطيرات الغيمة مطرًا"
@@ -42,6 +54,14 @@
  "127b982c0ef1": {
   "src": "A large drop falls faster than a small one and sweeps it up; that is how a cloud of tiny droplets can turn into rain within minutes. Numa Koudsie’s Bachelor thesis, <em>Collisional Ice Multiplication Processes in Clouds</em> (Leipzig, 2022), modelled this collection and the ice splinters it can produce, with Stokes’ law for the fall speed and the geometric cross-section for the chance of a hit. The remodel replaces each ingredient with physics that holds at the sizes that matter: a drag balance for the fall speed, collision efficiencies from the trajectory of the small droplet in the air flow around the large one, and the full stochastic collection equation for the bookkeeping. Every step is derived on the theory page and tested on the checks page, and the solver runs in your browser.",
   "tr": "القطرة الكبيرة تسقط أسرع من الصغيرة فتلتقطها في طريقها؛ وهكذا يمكن لغيمةٍ من قُطيرات دقيقة أن تتحوّل إلى مطر في دقائق. نمذجت رسالة البكالوريوس التي كتبها نعمة سائر قدسية، <em>Collisional Ice Multiplication Processes in Clouds</em> (لايبزيغ، 2022)، هذا الالتقاطَ وشظايا الجليد التي قد تنتج عنه، مستعملةً قانون ستوكس لسرعة السقوط والمقطع الهندسي لاحتمال الإصابة. وتستبدل إعادةُ النمذجة كلَّ مكوّن بفيزياء تصحّ عند الأحجام المهمّة: توازن قوى مع مقاومة الهواء لسرعة السقوط، وكفاءات تصادم مأخوذة من مسار القُطيرة الصغيرة في جريان الهواء حول القطرة الكبيرة، ومعادلة الالتقاط العشوائي الكاملة لحفظ الحساب. كلّ خطوة مشتقّة في صفحة النظرية ومختبَرة في صفحة الفحوص، والحلّال يعمل في متصفّحك."
+ },
+ "13bb82abac9f": {
+  "src": "A cloud droplet is ten micrometres across and sinks a centimetre a second; a raindrop holds a million of them. Gravity gathers them: a drop a little larger than its neighbours falls a little faster, overtakes the droplets below it and swallows some of them. These lecture notes rebuild Numa Koudsie’s Bachelor thesis, <em>Collisional Ice Multiplication Processes in Clouds</em> (Leipzig, 2022), from first principles, one physical effect at a time: Stokes’ drag derived from the stream function, a drag balance for every size, droplet trajectories around a falling drop, the energy that decides whether touching drops merge, the collection equation for a whole population, the exact random process behind it, turbulence, and ice. Every number not attributed to a source is computed by the model that runs in the page, and checked.",
+  "tr": "قُطَيرة الغيم عرضها عشرة ميكرومترات، وتهبط سنتيمترًا في الثانية؛ وقطرة المطر تضمّ مليونًا منها. والجاذبية هي التي تجمعها: القطرة الأكبر قليلًا من جاراتها تسقط أسرع قليلًا، فتلحق بالقُطَيرات التي تحتها وتبتلع بعضها. تعيد مذكّرات المحاضرة هذه بناءَ رسالة بكالوريوس نعمة سائر قدسية، <em>Collisional Ice Multiplication Processes in Clouds</em> (لايبزيغ، 2022)، من المبادئ الأولى، أثرًا فيزيائيًّا واحدًا في كلّ مرّة: مقاومة ستوكس مشتقّةً من دالة الجريان، وميزان مقاومة لكلّ حجم، ومسارات القُطَيرات حول قطرة ساقطة، والطاقة التي تقرّر هل تندمج القطرات المتلامسة، ومعادلة الالتقاط لجماعة كاملة من القطرات، والعملية العشوائية الدقيقة التي وراءها، والاضطراب، والجليد. وكلّ رقم لا يُنسب إلى مصدر يحسبه النموذج الذي يعمل في الصفحة، ثم يُفحص."
+ },
+ "13e899a9f70a": {
+  "src": "less new ice from ice–ice collisions than the thesis’s rule assumed",
+  "tr": "جليد جديد من تصادمات الجليد بالجليد أقلّ ممّا افترضته قاعدة الرسالة"
  },
  "154563309bcc": {
   "src": "A static copy of the Droplet Collection app. Its saved-runs list is left out: every run is computed fresh in your browser, and nothing is stored.",
@@ -143,6 +163,10 @@
   "src": "Run a pendulum",
   "tr": "شغّل نوّاسًا"
  },
+ "3d1f9d4a0fa5": {
+  "src": "<span class=\"pfig__n\">Figure 4</span>The first drizzle: exact runs against the Poisson prediction from the collection equation (chapter 6).",
+  "tr": "<span class=\"pfig__n\">الشكل 4</span>الرذاذ الأوّل: تشغيلات دقيقة مقابل تنبّؤ بواسون من معادلة الالتقاط (الفصل 6)."
+ },
  "40acd8393970": {
   "src": "Fall speed, collision efficiency, critical Stokes numbers and the Golovin test.",
   "tr": "سرعة السقوط، وكفاءة التصادم، وعددا ستوكس الحرجان، واختبار غولوفين."
@@ -199,6 +223,18 @@
   "src": "Checks",
   "tr": "الفحوص"
  },
+ "51c92936b23c": {
+  "src": "Ten chapters and an appendix, from one drop to ice: 22 numbered equations, each with its picture, its derivation and the model’s own numbers.",
+  "tr": "عشرة فصول وملحق، من قطرة واحدة إلى الجليد: 22 معادلة مرقّمة، لكلّ منها صورتها واشتقاقها وأرقام النموذج نفسه."
+ },
+ "52ec4d95e62a": {
+  "src": "<span class=\"pfig__n\">Figure 2</span>Which droplets touch: collision efficiency from trajectories, against Hall’s (1980) table (chapter 3).",
+  "tr": "<span class=\"pfig__n\">الشكل 2</span>أيّ القُطَيرات تلمس: كفاءة التصادم من المسارات، مقابل جدول Hall (1980) (الفصل 3)."
+ },
+ "550f358eec15": {
+  "src": "Bachelor thesis, Leipzig 2022 · rebuilt as lecture notes",
+  "tr": "رسالة بكالوريوس، لايبزيغ 2022 · أُعيد بناؤها مذكّراتِ محاضرة"
+ },
  "55312aa6e492": {
   "src": "<span class=\"psub__n\">4.2</span>What the model keeps",
   "tr": "<span class=\"psub__n\">4.2</span>ما الذي يحفظه النموذج"
@@ -219,6 +255,10 @@
   "src": "<span class=\"pfig__n\">Figure 4</span>At rest: both scales read 9.81 N, 1.000 kg, and keep their very different peaks.",
   "tr": "<span class=\"pfig__n\">الشكل 4</span>في السكون: الميزانان كلاهما يقرأ 9.81 N، أي 1.000 kg، ويحتفظان بذروتيهما المختلفتين جدًّا."
  },
+ "5a364ae6e6c3": {
+  "src": "Five worked problems with the model’s numbers.",
+  "tr": "خمسة تمارين محلولة بأرقام النموذج."
+ },
  "5b1e898fc07d": {
   "src": "Theory",
   "tr": "النظرية"
@@ -226,6 +266,10 @@
  "5b6825d3c67a": {
   "src": "Site",
   "tr": "الموقع"
+ },
+ "5ba7d18d1c32": {
+  "src": "<span class=\"psub__n\">1.1</span>The cloud and the three questions",
+  "tr": "<span class=\"psub__n\">1.1</span>الغيمة والأسئلة الثلاثة"
  },
  "5d1c1481d224": {
   "src": "<span class=\"pfig__n\">Figure 2</span>One cycle in six traces: position, force, pressures, valve, energy and tracking error, shaded by phase.",
@@ -327,6 +371,10 @@
   "src": "<span class=\"psub__n\">1.1</span>The warm cloud",
   "tr": "<span class=\"psub__n\">1.1</span>الغيمة الدافئة"
  },
+ "76c203ba7d40": {
+  "src": "Collision efficiency against collector radius from droplet trajectories, with Hall’s compiled values.",
+  "tr": "كفاءة التصادم بحسب نصف قطر القطرة الجامعة، من مسارات القُطَيرات، مع القيم التي جمعها Hall."
+ },
  "7827699eb8b3": {
   "src": "Start from Pascal",
   "tr": "ابدأ من باسكال"
@@ -355,9 +403,21 @@
   "src": "Fall speed against drop size for the two models and the measurements of Gunn and Kinzer, and the error of the drag balance.",
   "tr": "سرعة السقوط مقابل حجم القطرة للنموذجين ولقياسات غَن وكينزر، وخطأ توازن القوى."
  },
+ "811917fe5504": {
+  "src": "to the first drizzle drop in a cubic metre, ten times sooner than half the water: luck",
+  "tr": "حتى أوّل قطرة رذاذ في متر مكعّب، أبكر بعشر مرّات من نصف الماء: إنّه الحظّ"
+ },
  "82868e56791b": {
   "src": "Pascal’s press from one Lagrangian, drawn to scale, with a probe that reads the pressure anywhere in the oil.",
   "tr": "مكبس باسكال من لاغرانجيان واحد، مرسومٌ بمقياس صحيح، مع مِجَسٍّ يقرأ الضغط في أيّ موضع من الزيت."
+ },
+ "8373958aa734": {
+  "src": "<b>Fall speed.</b> Stokes’ law breaks its own assumption at \\(41\\ \\mathrm{\\mu m}\\), where its Reynolds number reaches 1. A drag balance through the Davies number matches the measurements of Gunn and Kinzer within 2.1 % from 0.3 mm up, and in the full population it slows growth by a factor 1.76, far more than for a single drop.",
+  "tr": "<b>سرعة السقوط.</b> ينقض قانون ستوكس فرضيّته عند \\(41\\ \\mathrm{\\mu m}\\)، حيث يبلغ عدد رينولدز 1. وميزان المقاومة عبر عدد ديفيز يطابق قياسات Gunn وKinzer في حدود 2.1 % ابتداءً من 0.3 mm، وفي الجماعة الكاملة يُبطئ النموّ بعامل 1.76، أكثر بكثير ممّا في قطرة واحدة."
+ },
+ "86ac000bebfe": {
+  "src": "Share of volumes holding a drop of 100 µm against time: exact runs and the Poisson prediction.",
+  "tr": "حصّة الأحجام التي تحوي قطرة من 100 µm بمرور الزمن: تشغيلات دقيقة وتنبّؤ بواسون."
  },
  "88763ced3fa4": {
   "src": "to 50 / 90 % of the mass above 40 µm, extended kernel",
@@ -379,9 +439,21 @@
   "src": "Energy bars for each ball: the energy given by the fall above, and below it where it went, almost all heat in the head for iron and almost all heat in the cotton for cotton.",
   "tr": "أعمدة الطاقة لكلّ كرة: في الأعلى الطاقة التي أعطاها السقوط، وتحتها أين ذهبت، وهي تقريبًا كلّها حرارة في الرأس للحديد، وتقريبًا كلّها حرارة في القطن للقطن."
  },
+ "8e34943c353e": {
+  "src": "Simulation",
+  "tr": "المحاكاة"
+ },
+ "8e6b86dce8c4": {
+  "src": "Problems",
+  "tr": "التمارين"
+ },
  "8ec3509b5ead": {
   "src": "best harvest, single pendulum, 100 g on 20 cm",
   "tr": "أفضل حصاد، نوّاس مفرد، 100 g على 20 cm"
+ },
+ "905358f85cc7": {
+  "src": "<span class=\"psub__n\">1.2</span>What the rebuild found, one line each",
+  "tr": "<span class=\"psub__n\">1.2</span>ما وجدته إعادة البناء، سطرًا لكلّ نتيجة"
  },
  "90d693ebefa6": {
   "src": "Twelve chapters from the encounter to the evidence map, 62 numbered equations, worked examples, and each correction where it occurs.",
@@ -398,6 +470,10 @@
  "95c604566848": {
   "src": "Simulate",
   "tr": "المحاكاة"
+ },
+ "95d105a70c43": {
+  "src": "to half and nine tenths of the water in drops above 40 µm; with the collision efficiency’s uncertainty, nine tenths at 10.5 to 13.5 min",
+  "tr": "حتى يصير نصف الماء ثم تسعة أعشاره في قطرات أكبر من 40 µm؛ ومع عدم اليقين في كفاءة التصادم تبلغ تسعة الأعشار بين 10.5 و13.5 min"
  },
  "9af48c962762": {
   "src": "<span class=\"pfig__n\">Figure 1</span>The iron ball’s peak, 1.447 s: its scale holds 639 N while the cotton has only begun to press.",
@@ -423,6 +499,10 @@
   "src": "Research projects",
   "tr": "مشاريع بحثية"
  },
+ "a1a7a7e5b52b": {
+  "src": "<span class=\"pfig__n\">Figure 3</span>The whole cloud: water in drops of 40 µm or more, for two kernels and two kinds of bookkeeping (chapter 5).",
+  "tr": "<span class=\"pfig__n\">الشكل 3</span>الغيمة كلّها: الماء في قطرات من 40 µm فأكثر، لنواتين وطريقتين في الحساب (الفصل 5)."
+ },
  "a27650cb8d41": {
   "src": "<b>Where the energy goes.</b> The pump does 26.3 kJ of work; the valve turns 24.4 kJ of it into heat, because a valve throttling a constant-pressure supply is a brake. The energy books close to \\(2\\times10^{-14}\\) of the pump’s work.",
   "tr": "<b>أين تذهب الطاقة.</b> تبذل المضخّة 26.3 kJ من الشغل؛ يحوّل الصمّام 24.4 kJ منها إلى حرارة، لأنّ صمّامًا يخنق مصدرًا ثابت الضغط هو مكبح. ويُغلَق حساب الطاقة بدقّة \\(2\\times10^{-14}\\) من شغل المضخّة."
@@ -438,6 +518,14 @@
  "a6c936642021": {
   "src": "mass error against Golovin’s exact solution",
   "tr": "خطأ الكتلة مقارنةً بحلّ غولوفين الدقيق"
+ },
+ "a74052263561": {
+  "src": "Read the lecture notes",
+  "tr": "اقرأ مذكّرات المحاضرة"
+ },
+ "aa670fc16828": {
+  "src": "<b>Luck.</b> The exact random process, sampled drop by drop in volumes up to a litre, makes the first \\(100\\ \\mathrm{\\mu m}\\) drop through mergers of collectors with each other, in every one of 230 runs; a Poisson argument carries it to a cubic metre.",
+  "tr": "<b>الحظّ.</b> العملية العشوائية الدقيقة، مأخوذةً قطرةً قطرةً في أحجام تصل إلى لتر، تصنع أوّل قطرة \\(100\\ \\mathrm{\\mu m}\\) باندماج القطرات الجامعة بعضها ببعض، في كلّ واحد من 230 تشغيلًا؛ وحجّة بواسون تنقل النتيجة إلى متر مكعّب."
  },
  "acd3f7630174": {
   "src": "<span class=\"pfig__n\">Figure 3</span>The energy books at the end: iron heats the head, cotton heats itself.",
@@ -463,13 +551,29 @@
   "src": "min",
   "tr": "دقيقة"
  },
+ "b6e987cabfc2": {
+  "src": "The test case is the thesis’s warm cloud: \\(300\\ \\mathrm{cm^{-3}}\\) droplets around \\(8\\ \\mathrm{\\mu m}\\) and \\(1\\ \\mathrm{cm^{-3}}\\) collectors around \\(40\\ \\mathrm{\\mu m}\\), at \\(10\\,{}^{\\circ}\\mathrm{C}\\) and \\(850\\ \\mathrm{hPa}\\), in a closed, well-mixed box. The notes ask how long until most of the water sits in large drops, how long until the very first drizzle drop appears in a given volume, and whether collisions in a cold cloud make new ice. A ladder of models answers them, each rung adding one effect with a computed number that shows it matters.",
+  "tr": "حالة الاختبار هي الغيمة الدافئة في الرسالة: قُطَيرات تركيزها \\(300\\ \\mathrm{cm^{-3}}\\) حول \\(8\\ \\mathrm{\\mu m}\\)، وقطرات جامعة تركيزها \\(1\\ \\mathrm{cm^{-3}}\\) حول \\(40\\ \\mathrm{\\mu m}\\)، عند \\(10\\,{}^{\\circ}\\mathrm{C}\\) و\\(850\\ \\mathrm{hPa}\\)، في صندوق مغلق جيّد الخلط. وتسأل المذكّرات: كم يمضي من الوقت حتى يصير معظم الماء في قطرات كبيرة، وكم حتى تظهر أوّل قطرة رذاذ على الإطلاق في حجم معيّن، وهل تصنع التصادمات في غيمة باردة جليدًا جديدًا. ويجيب عنها سلّمٌ من النماذج، تضيف كلّ درجة منه أثرًا واحدًا، مع رقم محسوب يُظهر أنّه مهمّ."
+ },
  "b8a15ac3e90f": {
   "src": "<span class=\"pfig__n\">Figure 3</span>Left: the matched group, power against damping. Right: all 54 scanned cases; the vertical line alone is not the chaos test.",
   "tr": "<span class=\"pfig__n\">الشكل 3</span>يسارًا: المجموعة المتطابقة، القدرة مقابل التخامد. يمينًا: كلّ الحالات الـ54 المفحوصة؛ والخطّ الرأسي وحده ليس اختبار الفوضى."
  },
+ "ba3efd9a831f": {
+  "src": "<span class=\"psub__n\">1.3</span>Four figures from the notes",
+  "tr": "<span class=\"psub__n\">1.3</span>أربعة أشكال من المذكّرات"
+ },
+ "ba57e5a41fe2": {
+  "src": "Lecture notes",
+  "tr": "مذكّرات المحاضرة"
+ },
  "bc545b6211bb": {
   "src": "<span class=\"pfig__n\">Figure 2</span>Mean harvested power at the 18 mountings, single and double pendulum; lines only join the sampled points.",
   "tr": "<span class=\"pfig__n\">الشكل 2</span>متوسط القدرة المحصودة عند مواضع التثبيت الـ18، للنوّاس المفرد والمزدوج؛ والخطوط تصل النقاط المحسوبة فقط."
+ },
+ "bd49944ca656": {
+  "src": "Share of the water in drops of 40 µm or more against time, for the thesis kernel and the extended kernel.",
+  "tr": "حصّة الماء في قطرات من 40 µm فأكثر بمرور الزمن، لنواة الرسالة وللنواة الموسَّعة."
  },
  "be51bfd3ca95": {
   "src": "<span class=\"psub__n\">1.4</span>The project’s own pages",
@@ -482,6 +586,10 @@
  "be7e88229796": {
   "src": "Servo press",
   "tr": "المكبس المؤازَر"
+ },
+ "befe6eed6e7e": {
+  "src": "<b>Collision efficiency.</b> Only a third of the droplets in a \\(40\\ \\mathrm{\\mu m}\\) drop’s path touch it (\\(E = 0.344\\)); the rest ride round on the air it pushes aside. The trajectory solver reproduces the critical Stokes numbers \\(1/12\\) and \\(1.21194\\). The efficiency is the largest single change of the ladder, and the least certain: it moves the time to nine tenths of the water from 13.5 to 10.5 min.",
+  "tr": "<b>كفاءة التصادم.</b> ثلث القُطَيرات فقط في مسار قطرة \\(40\\ \\mathrm{\\mu m}\\) يلمسها (\\(E = 0.344\\))؛ والباقي ينزلق حولها مع الهواء الذي تدفعه جانبًا. ويعيد حلّال المسارات إنتاج عددَي ستوكس الحرجين \\(1/12\\) و\\(1.21194\\). والكفاءة أكبر تغيير منفرد في السلّم وأقلّه يقينًا: فهي تنقل زمن بلوغ تسعة أعشار الماء من 13.5 إلى 10.5 min."
  },
  "bf48642c413a": {
   "src": "Both balls at rest on their plates after 9 s; both gauges read a weight of 9.81 N and a mass of 1.000 kg, with peaks of 639 N and 188 N kept by the peak-hold pointers.",
@@ -522,6 +630,10 @@
  "d1622a8321e0": {
   "src": "Phyein Usul, home page",
   "tr": "Phyein Usul، الصفحة الرئيسية"
+ },
+ "d24aa1d379cb": {
+  "src": "Exact solutions, independent recomputations in Python, and a script that finds every quoted number in the text.",
+  "tr": "حلول دقيقة، وإعادة حسابات مستقلّة بلغة Python، وبرنامج يجد كلّ رقم مقتبس في النصّ."
  },
  "d54d2d82e37e": {
   "src": "An independent model, written from scratch, re-ran all 36 mapping cases and all 54 chaos cases; every headline number reproduced, to about one part in \\(10^{11}\\). Eight things in the report needed correcting, and none changes a conclusion. The main ones: the turbine-size formula is \\(56\\ \\mathrm{m/s}/\\Omega\\), not mm/s; the centrifugal factor \\(\\Gamma\\) rises with rotor speed, not falls; the chaotic power’s error bar is about \\(\\pm0.01\\ \\mathrm{W}\\), not \\(\\pm0.003\\ \\mathrm{W}\\); one mounting puts the bob 66 mm past the blade tip; and one figure is blurred by single-precision storage. The project shows each correction where it occurs, with its evidence.",
@@ -579,6 +691,10 @@
   "src": "<span class=\"psub__n\">2.1</span>The answer in four lines",
   "tr": "<span class=\"psub__n\">2.1</span>الجواب في أربعة أسطر"
  },
+ "e4529b013369": {
+  "src": "<span class=\"pfig__n\">Figure 1</span>How fast a drop falls: Stokes’ law runs away above 40 µm; the drag balance follows the measurements (chapter 2).",
+  "tr": "<span class=\"pfig__n\">الشكل 1</span>ما سرعة سقوط القطرة: قانون ستوكس يجمح فوق 40 µm، وميزان المقاومة يتبع القياسات (الفصل 2)."
+ },
  "e4e201469918": {
   "src": "Key figures",
   "tr": "أرقام رئيسية"
@@ -635,6 +751,10 @@
   "src": "Research projects by Numa Koudsie, each with its derivations, solver and results: Droplet Collection, the remodel of a Bachelor thesis on how cloud droplets become rain; Rotor Pendula, a corrected study of whether a pendulum on a turbine blade can power a sensor; the Hydraulic Press Study, a servo-hydraulic press under digital control, built from first principles; and Iron, Cotton and the Head, why an iron ball hurts and a cotton ball of the same mass does not, in English, German and Arabic.",
   "tr": "مشاريع بحثية لـنعمة سائر قدسية، لكلٍّ منها اشتقاقاته وحلّاله ونتائجه: Droplet Collection، إعادة نمذجة رسالة بكالوريوس عن تحوّل قُطيرات الغيمة إلى مطر؛ وRotor Pendula، دراسة مصحَّحة عن قدرة نوّاس على شفرة عنفة على تغذية حسّاس؛ ودراسة المكبس الهيدروليكي، مكبس هيدروليكي مؤازَر بتحكّم رقمي، مبنيّ من المبادئ الأولى؛ والحديد والقطن والرأس، لماذا تؤلم كرة الحديد ولا تؤلم كرة القطن ذات الكتلة نفسها، بالإنجليزية والألمانية والعربية."
  },
+ "f887939b2eee": {
+  "src": "<b>Coalescence.</b> For cloud droplets the collision energy is \\(10^{-5}\\) of the surface energy, so touching drops merge; with Stokes speeds, large drops hit so hard that the thesis kernel stops merging them below a millimetre.",
+  "tr": "<b>الاندماج.</b> في قُطَيرات الغيم تبلغ طاقة التصادم \\(10^{-5}\\) من طاقة السطح، فتندمج القطرات المتلامسة؛ ومع سرعات ستوكس تصطدم القطرات الكبيرة بشدّة تجعل نواة الرسالة تكفّ عن دمجها دون المليمتر."
+ },
  "f94fb36e0cb1": {
   "src": "An interactive study · English and Arabic · 2026",
   "tr": "دراسة تفاعلية · بالإنجليزية والعربية · 2026"
@@ -650,6 +770,10 @@
  "fbc3ef47fb9f": {
   "src": "The two balls side by side at the instant of the iron ball’s peak: the iron lattice pressing its plate down, the cotton tangle just touching its plate, and below each a force gauge, iron reading 639 N at peak, cotton 35 N.",
   "tr": "الكرتان جنبًا إلى جنب لحظة ذروة كرة الحديد: شبكة الحديد تضغط صفيحتها إلى الأسفل، وتشابك القطن بالكاد يلمس صفيحته، وتحت كلٍّ منهما مقياس قوّة، الحديد يقرأ 639 N عند الذروة والقطن 35 N."
+ },
+ "fc382d968d5d": {
+  "src": "Terminal speed of water drops against size: Stokes’ law, the drag balance and the measurements of Gunn and Kinzer.",
+  "tr": "السرعة الحدّية لقطرات الماء بحسب حجمها: قانون ستوكس، وميزان المقاومة، وقياسات Gunn وKinzer."
  },
  "fc5e8979c3c5": {
   "src": "<span class=\"pfig__n\">Figure 3</span>Evolution of the mass spectrum in the warm cloud, stochastic collection equation, thesis kernel (left) and new kernel (right).",

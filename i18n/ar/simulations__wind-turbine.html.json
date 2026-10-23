@@ -1,7 +1,7 @@
 {
  "00c08b89bb24": {
   "src": "The force on the disc, \\(\\Delta p\\,A\\), must equal the momentum the air loses per second, \\(\\rho A v(1-a)\\,(v - v_w)\\). Equating the two and dividing by \\(v - v_w\\) (recall \\(v^2 - v_w^2 = (v - v_w)(v + v_w)\\)) shows that the disc sees exactly the average of the two speeds, \\(v(1-a) = \\tfrac12(v + v_w)\\), so \\(v_w = v(1-2a)\\). The power the disc extracts is force times the air’s speed through it:",
-  "tr": "تساوي القوّة على القرص \\(\\Delta p\\,A\\) معدّل كمية الحركة التي يفقدها الهواء في الثانية، \\(\\rho A v(1-a)\\,(v - v_w)\\). وبمساواة الاثنين والقسمة على \\(v - v_w\\) (تذكّر أنّ \\(v^2 - v_w^2 = (v - v_w)(v + v_w)\\))، يتبيّن أنّ القرص يرى بالضبط متوسّط السرعتين، \\(v(1-a) = \\tfrac12(v + v_w)\\)، ومن ثَمّ \\(v_w = v(1-2a)\\). والقدرة التي يسحبها القرص هي القوّة مضروبةً في سرعة الهواء عبره:"
+  "tr": "يجب أن تساوي القوّةُ على القرص، \\(\\Delta p\\,A\\)، كميةَ الحركة التي يفقدها الهواء في الثانية، \\(\\rho A v(1-a)\\,(v - v_w)\\). وبمساواة الاثنين والقسمة على \\(v - v_w\\) (تذكّر أنّ \\(v^2 - v_w^2 = (v - v_w)(v + v_w)\\))، يتبيّن أنّ سرعة الهواء عند القرص هي بالضبط متوسّط السرعتين، \\(v(1-a) = \\tfrac12(v + v_w)\\)، ومن ثَمّ \\(v_w = v(1-2a)\\). والقدرة التي يستخلصها القرص هي القوّة مضروبةً في سرعة الهواء عبره:"
  },
  "04acf5986f61": {
   "src": "15.5 rpm",
@@ -13,7 +13,7 @@
  },
  "086f7510df4e": {
   "src": "This page uses an empirical fit to measured rotor curves due to Heier, with the blades at zero pitch,",
-  "tr": "تستعمل هذه الصفحة توفيقًا تجريبيًّا لمنحنيات دوّار مقاسة يعود إلى هايير، والشفرات على زاوية تطويح صفر،"
+  "tr": "تستعمل هذه الصفحة ملاءمةً تجريبيةً لمنحنياتٍ مَقيسة لدوّارات، تعود إلى هاير، وزاويةُ خطوة الشفرات فيها صفر،"
  },
  "09170ef8df9e": {
   "src": "<span>2</span>The power in the wind",
@@ -29,7 +29,7 @@
  },
  "0c8b214ca8c5": {
   "src": "The turbine of this page has blades 40 m long. Their tips sweep a disc of radius \\(R\\) and area \\(\\pi R^2 = 5027\\ \\mathrm{m^2}\\), about 70 % of a football pitch. At its leisurely-looking 15 turns per minute, an angular speed \\(\\omega = 1.57\\ \\mathrm{rad/s}\\), the tips move at \\(\\omega R = 62.8\\ \\mathrm{m/s}\\), over 220 km/h. The wind pushes on the blades and makes the rotor turn; a generator in the nacelle brakes the rotor and turns the work of that braking into electrical energy.",
-  "tr": "لعنفة هذه الصفحة شفراتٌ طولها 40 m. تمسح أطرافها قرصًا نصف قطره \\(R\\) ومساحته \\(\\pi R^2 = 5027\\ \\mathrm{m^2}\\)، أي نحو 70 % من ملعب كرة قدم. وعند 15 دورة في الدقيقة، وهي سرعة تبدو هادئة، أي سرعة زاوية \\(\\omega = 1.57\\ \\mathrm{rad/s}\\)، تتحرّك الأطراف بسرعة \\(\\omega R = 62.8\\ \\mathrm{m/s}\\)، أي أكثر من 220 km/h. تدفع الريح الشفرات فتدور؛ ويكبح مولّدٌ في غلاف المولّد الدوّارَ ويحوّل شغل هذا الكبح إلى طاقة كهربائية."
+  "tr": "لعنفة هذه الصفحة شفراتٌ طولها 40 m. تمسح أطرافها قرصًا نصف قطره \\(R\\) ومساحته \\(\\pi R^2 = 5027\\ \\mathrm{m^2}\\)، أي نحو 70 % من ملعب كرة قدم. وعند 15 دورة في الدقيقة، وهي سرعة تبدو هادئة، أي سرعة زاوية \\(\\omega = 1.57\\ \\mathrm{rad/s}\\)، تتحرّك الأطراف بسرعة \\(\\omega R = 62.8\\ \\mathrm{m/s}\\)، أي أكثر من 220 km/h. تدفع الريح الشفرات فيدور الدوّار؛ ويكبح مولّدٌ في حجرة الآلات (الناسِل) الدوّارَ، ويحوّل شغل هذا الكبح إلى طاقة كهربائية."
  },
  "12134ec6e890": {
   "src": "<span class=\"psec__n\">02</span>The power in the wind",
@@ -41,7 +41,7 @@
  },
  "1392d2e67a40": {
   "src": "No pitch control, so above about 11 m/s nothing limits the power except the generator’s torque limit; real turbines pitch their blades there.",
-  "tr": "لا يوجد تحكّم بزاوية الشفرات، فلا يحدّ شيء فوق نحو 11 m/s من القدرة سوى حدّ عزم المولّد؛ والعنفات الحقيقية تُدير شفراتها هناك."
+  "tr": "لا تحكّم بزاوية خطوة الشفرات، فلا شيء فوق نحو 11 m/s يحدّ من القدرة سوى حدّ عزم المولّد؛ أمّا العنفات الحقيقية فتغيّر هناك زاوية خطوة شفراتها."
  },
  "142b5758f344": {
   "src": "Wind",
@@ -53,7 +53,7 @@
  },
  "192bf5a10867": {
   "src": "<strong>Solve.</strong> RK4 advances the rotor speed \\(\\omega\\) and the controller’s integral from \\(t = 0\\) to \\(120\\ \\mathrm{s}\\) in 12 000 steps of \\(h = 10\\ \\mathrm{ms}\\). The same steps carry the generator energy, the aerodynamic energy, the energy of the wind through the disc, the distance the air has travelled and the rotor angle \\(\\theta\\). The run starts in balance: at the optimum speed when following the wind, or at the target speed with the generator torque equal to the wind’s. A step of 10 ms is small for this problem: the speed controller answers within seconds and the quickest wind wave has a period of 2 s, so each is cut into hundreds of steps, and RK4’s error shrinks like \\(h^4\\). Solving the defaults again with \\(h = 5\\ \\mathrm{ms}\\) changes the stored rotor speed by at most \\(2\\times10^{-11}\\) rpm, and with \\(h = 20\\ \\mathrm{ms}\\) by 16 times as much, as a fourth-order method should. The method would lose its high order where the generator torque hits one of its limits, because the right-hand side has a corner there; none of the eight runs of section 7 reaches a limit.",
-  "tr": "<strong>الحلّ.</strong> تُقدِّم طريقةُ رونغه–كوتا من المرتبة الرابعة (RK4) السرعةَ الزاوية \\(\\omega\\) وتكامل المتحكّم من \\(t = 0\\) إلى \\(120\\ \\mathrm{s}\\) في 12 000 خطوة طول كلٍّ منها \\(h = 10\\ \\mathrm{ms}\\). وتحمل الخطوات نفسها طاقة المولّد، والطاقة الهوائية، وطاقة الريح المارّة عبر القرص، والمسافة التي قطعها الهواء، وزاوية الدوّار \\(\\theta\\). ويبدأ التشغيل في توازن: عند السرعة المُثلى حين يتبع الدوّار الريح، أو عند السرعة المرجعية حين يتساوى عزم المولّد مع عزم الريح. والخطوة 10 ms صغيرة بالنسبة إلى هذه المسألة: فالمتحكّم بالسرعة يجيب خلال ثوانٍ، وأقصر موجة في الريح دورتها 2 s، فتُقطَّع كلّ منها إلى مئات الخطوات، وخطأ RK4 يتناقص مثل \\(h^4\\). ولو حُلّت الإعدادات الافتراضية مرّةً أخرى بـ\\(h = 5\\ \\mathrm{ms}\\)، فإنّ سرعة الدوّار المخزّنة تتغيّر بما لا يزيد على \\(2\\times10^{-11}\\) rpm، وبـ\\(h = 20\\ \\mathrm{ms}\\) بمقدار 16 ضعفًا، كما يليق بطريقةٍ من الرتبة الرابعة. وستفقد الطريقةُ رتبتها العالية حيث يبلغ عزم المولّد أحد حدوده، لأنّ الطرف الأيمن من المعادلة له زاوية هناك؛ ولا تبلغ أيٌّ من التشغيلات الثمانية في القسم 7 حدًّا."
+  "tr": "<strong>الحلّ.</strong> تُقدِّم طريقةُ رونغه–كوتا من المرتبة الرابعة (RK4) السرعةَ الزاوية \\(\\omega\\) وتكامل المتحكّم من \\(t = 0\\) إلى \\(120\\ \\mathrm{s}\\) في 12 000 خطوة طول كلٍّ منها \\(h = 10\\ \\mathrm{ms}\\). وتحمل الخطوات نفسها طاقة المولّد، والطاقة الهوائية، وطاقة الريح المارّة عبر القرص، والمسافة التي قطعها الهواء، وزاوية الدوّار \\(\\theta\\). ويبدأ الحلّ من حالة توازن: عند السرعة المُثلى حين يتبع الدوّار الريح، أو عند السرعة المرجعية حين يتساوى عزم المولّد مع عزم الريح. والخطوة 10 ms صغيرة بالنسبة إلى هذه المسألة: فمتحكّم السرعة يستجيب خلال ثوانٍ، وأسرع موجات الريح دورها 2 s، فتُقطَّع كلّ منها إلى مئات الخطوات، وخطأ RK4 يتناقص بالتناسب مع \\(h^4\\). ولو أُعيد الحلّ بالقيم الافتراضية مع \\(h = 5\\ \\mathrm{ms}\\)، فإنّ سرعة الدوّار المخزّنة تتغيّر بما لا يزيد على \\(2\\times10^{-11}\\) rpm، ومع \\(h = 20\\ \\mathrm{ms}\\) بـ16 ضعفَ ذلك، كما يُنتظر من طريقةٍ من المرتبة الرابعة. وتفقد الطريقةُ مرتبتها العالية حيث يبلغ عزم المولّد أحد حدوده، لأنّ للطرف الأيمن من المعادلة نقطةَ انكسار هناك؛ ولا يبلغ أيٌّ من الحلول الثمانية في القسم 7 حدًّا."
  },
  "1a1b7209c5ef": {
   "src": "<span class=\"psub__n\">10.1</span>Further reading",
@@ -69,11 +69,11 @@
  },
  "2295c8851fc9": {
   "src": "Power coefficient against tip-speed ratio, with the optimum and the present operating point.",
-  "tr": "معامل القدرة بدلالة نسبة سرعة طرف الشفرة، مع الأمثل ونقطة التشغيل الحالية."
+  "tr": "معامل القدرة بدلالة نسبة سرعة طرف الشفرة، مع النقطة المثلى ونقطة التشغيل الحالية."
  },
  "22e41baece31": {
   "src": "Count the energy that the air carries through the disc. In one second a slab of air of length \\(v\\) passes through the area \\(A\\): its mass is \\(\\rho A v\\), with \\(\\rho\\) the density of air, and each kilogram carries kinetic energy \\(\\tfrac12 v^2\\). The product is the power of the wind through the disc,",
-  "tr": "احسب الطاقة التي يحملها الهواء عبر القرص. في ثانية واحدة تمرّ شريحة من الهواء طولها \\(v\\) عبر المساحة \\(A\\): كتلتها \\(\\rho A v\\)، إذ \\(\\rho\\) كثافة الهواء، وكل كيلوغرام منها يحمل طاقة حركية قدرها \\(\\tfrac12 v^2\\). وحاصل الضرب هو قدرة الريح عبر القرص،"
+  "tr": "لنحسب الطاقة التي يحملها الهواء عبر القرص. في ثانية واحدة تمرّ شريحة من الهواء طولها \\(v\\) عبر المساحة \\(A\\): كتلتها \\(\\rho A v\\)، حيث \\(\\rho\\) كثافة الهواء، وكل كيلوغرام منها يحمل طاقة حركية قدرها \\(\\tfrac12 v^2\\). وحاصل الضرب هو قدرة الريح عبر القرص،"
  },
  "22f32d163611": {
   "src": "Sometimes a constant speed is wanted: for a generator tied to the grid’s frequency, for quiet operation, or to stay away from a tower resonance. The controller then compares \\(\\omega\\) with a target \\(\\omega_\\text{ref}\\) and brakes harder the faster the rotor turns, adding a term that remembers past errors:",
@@ -81,7 +81,7 @@
  },
  "2872dfa1b82f": {
   "src": "Wind turbine control: catching energy from a wind you cannot choose",
-  "tr": "التحكّم في عنفة ريحية: التقاط الطاقة من ريح لا تستطيع اختيارها"
+  "tr": "التحكّم في عنفة ريحية: التقاط الطاقة من ريح لا نملك اختيارها"
  },
  "2b451460baaa": {
   "src": "Lecture note · Fig. 10 · control systems",
@@ -89,7 +89,7 @@
  },
  "2b461ac87534": {
   "src": "Here \\(\\tau_0 = \\tau_\\text{aero}(\\omega_\\text{ref}, v(0))\\) is the torque that balances the wind at the start, so the run begins in equilibrium with nothing yet to remember. To choose the gains, linearise (6) around the target in steady wind. A small speed error \\(\\delta\\omega = \\omega - \\omega_\\text{ref}\\) changes the aerodynamic torque by \\((\\partial\\tau_\\text{aero}/\\partial\\omega)\\,\\delta\\omega\\). Put this and (9) into (6): the constant torques cancel, because \\(\\tau_0\\) balances the wind, and what is left is \\(J\\,\\delta\\dot\\omega = (\\partial\\tau_\\text{aero}/\\partial\\omega - K_p)\\,\\delta\\omega - K_i\\int_0^t\\delta\\omega\\,\\mathrm{d}t'\\). Differentiating once in time removes the integral and gives the equation of a damped oscillator, the same as in Fig. 9:",
-  "tr": "هنا \\(\\tau_0 = \\tau_\\text{aero}(\\omega_\\text{ref}, v(0))\\) هو العزم الذي يوازن الريح في البداية، فيبدأ التشغيل في توازن ولا شيء بعد يُتذكَّر. ولاختيار المعاملات، نُجري تقريبًا خطّيًّا للمعادلة (6) حول القيمة المرجعية في ريح ثابتة. ويغيّر انحرافُ السرعة الصغيرُ \\(\\delta\\omega = \\omega - \\omega_\\text{ref}\\) عزمَ الريح بمقدار \\((\\partial\\tau_\\text{aero}/\\partial\\omega)\\,\\delta\\omega\\). وبوضع هذا و(9) في (6) تُلغى العزوم الثابتة، لأنّ \\(\\tau_0\\) يوازن الريح، ويبقى \\(J\\,\\delta\\dot\\omega = (\\partial\\tau_\\text{aero}/\\partial\\omega - K_p)\\,\\delta\\omega - K_i\\int_0^t\\delta\\omega\\,\\mathrm{d}t'\\). وباشتقاق واحد بالنسبة للزمن يختفي التكامل، فنحصل على معادلة مهتزّ مخمَّد، كما في الشكل 9:"
+  "tr": "هنا \\(\\tau_0 = \\tau_\\text{aero}(\\omega_\\text{ref}, v(0))\\) هو العزم الذي يوازن الريح في البداية، فيبدأ الحلّ في توازن وليس للمتحكّم بعدُ ما يتذكّره. ولاختيار معاملات الكسب، نُجري تقريبًا خطّيًّا للمعادلة (6) حول القيمة المرجعية في ريح ثابتة. ويغيّر انحرافُ السرعة الصغيرُ \\(\\delta\\omega = \\omega - \\omega_\\text{ref}\\) العزمَ الهوائي بمقدار \\((\\partial\\tau_\\text{aero}/\\partial\\omega)\\,\\delta\\omega\\). وبوضع هذا و(9) في (6) تُلغى العزوم الثابتة، لأنّ \\(\\tau_0\\) يوازن الريح، ويبقى \\(J\\,\\delta\\dot\\omega = (\\partial\\tau_\\text{aero}/\\partial\\omega - K_p)\\,\\delta\\omega - K_i\\int_0^t\\delta\\omega\\,\\mathrm{d}t'\\). وباشتقاق واحد بالنسبة إلى الزمن يختفي التكامل، فنحصل على معادلة مهتزّ مخمَّد، كما في الشكل 9:"
  },
  "2b8b958b3699": {
   "src": "<span class=\"psec__n\">07</span>Same wind, two answers",
@@ -97,11 +97,11 @@
  },
  "2ed3f6f893fd": {
   "src": "<b>Abstract.</b> A wind turbine is a driven system like the oscillator of Fig. 9, with two differences: the drive, the wind, is set by the weather, and the turbine has a hand of its own, the generator, whose braking torque a controller can choose at every instant. This note derives how much power the wind carries, why no rotor can take more than 16/27 of it (the Betz limit), and how the share a real rotor takes depends on the ratio of tip speed to wind speed. It then writes the rotor’s equation of motion and compares two controllers on the same two minutes of turbulent wind: one that holds the rotor at a constant speed, and one that lets the speed follow the wind. Sections marked ★ carry the heavier mathematics and can be skipped on a first reading.",
-  "tr": "<b>الملخّص.</b> العنفة الريحية نظامٌ مدفوعٌ يشبه المهتزّ في الشكل 9، مع فرقين: الدافع، وهو الريح، تحدّده الأرصاد الجوّية، ولها يدٌ خاصّة بها، هي المولّد، الذي يستطيع متحكّمٌ أن يختار عزم كبحه في كلّ لحظة. تشتقّ هذه المذكّرة مقدار القدرة التي تحملها الريح، ولماذا لا يستطيع أيّ دوّار أن يأخذ أكثر من 16/27 منها (حدّ بيتز)، وكيف يتوقّف الجزء الذي يأخذه دوّارٌ حقيقي على نسبة سرعة طرف الشفرة إلى سرعة الريح. ثمّ تكتب معادلة حركة الدوّار، وتقارن بين متحكّمَين على الريح المضطربة نفسها لمدّة دقيقتين: أحدهما يُبقي الدوّار على سرعة ثابتة، والآخر يدع السرعة تتبع الريح. والأقسام المعلّمة بالنجمة ★ تحوي الرياضيات الأثقل، ويمكن تجاوزها في القراءة الأولى."
+  "tr": "<b>الملخّص.</b> العنفة الريحية نظامٌ قسريّ يشبه المهتزّ القسري في الشكل 9، مع فرقين: المؤثّر القسري، وهو الريح، يحدّده الطقس، وللعنفة يدٌ خاصّة بها هي المولّد، الذي يستطيع متحكّمٌ أن يختار عزم كبحه في كلّ لحظة. تشتقّ هذه المذكّرة مقدار القدرة التي تحملها الريح، ولماذا لا يستطيع أيّ دوّار أن يأخذ أكثر من 16/27 منها (حدّ بيتز)، وكيف يتوقّف الجزء الذي يأخذه دوّارٌ حقيقي على نسبة سرعة طرف الشفرة إلى سرعة الريح. ثمّ تكتب معادلة حركة الدوّار، وتقارن بين متحكّمَين على الريح المضطربة نفسها لمدّة دقيقتين: أحدهما يُبقي الدوّار على سرعة ثابتة، والآخر يدع السرعة تتبع الريح. والأقسام المعلّمة بالنجمة ★ تحوي الرياضيات الأثقل، ويمكن تجاوزها في القراءة الأولى."
  },
  "32f824cb4738": {
   "src": "T. Burton, N. Jenkins, D. Sharpe and E. Bossanyi, <a href=\"https://doi.org/10.1002/9781119992714\"><em>Wind Energy Handbook</em></a>, 2nd edition, Wiley, 2011: momentum theory, the Betz limit and turbine control (chapters 3 and 8).",
-  "tr": "T. Burton، N. Jenkins، D. Sharpe وE. Bossanyi، <a href=\"https://doi.org/10.1002/9781119992714\"><em>Wind Energy Handbook</em></a>، الطبعة 2، Wiley، 2011: نظرية الزخم، وحدّ بيتز، وتحكّم التوربينات (الفصلان 3 و8)."
+  "tr": "T. Burton، N. Jenkins، D. Sharpe وE. Bossanyi، <a href=\"https://doi.org/10.1002/9781119992714\"><em>Wind Energy Handbook</em></a>، الطبعة 2، Wiley، 2011: نظرية كمية الحركة، وحدّ بيتز، والتحكّم في العنفات (الفصلان 3 و8)."
  },
  "33bd5a5dddcd": {
   "src": "© 2026 Numa Koudsie",
@@ -113,7 +113,7 @@
  },
  "39cd0fbeaf65": {
   "src": "<span class=\"pfig__n\">Figure 4</span>The default turbulent wind (\\(v_0 = 8\\ \\mathrm{m/s}\\), \\(\\sigma = 1.5\\ \\mathrm{m/s}\\); over these 120 s its standard deviation is 1.30 m/s, because its slowest waves take longer than the run). Below it, the rotor speed and the generator power for the two controllers, computed with the page’s own algorithm. Holding the speed keeps the rotor between 14.4 and 15.7 rpm; following the wind lets it range from 12.5 to 19.8 rpm.",
-  "tr": "<span class=\"pfig__n\">الشكل 4</span>الريح المضطربة الافتراضية (\\(v_0 = 8\\ \\mathrm{m/s}\\)، \\(\\sigma = 1.5\\ \\mathrm{m/s}\\)؛ وعلى مدى هذه المدّة (120 s) يبلغ انحرافها المعياري 1.30 m/s، لأنّ أبطأ موجاتها تستغرق أطول من التشغيل). وأسفلها سرعة الدوّار وقدرة المولّد للمتحكّمين، محسوبةً بخوارزمية الصفحة نفسها. وإبقاء السرعة يُبقي الدوّار بين 14.4 و15.7 rpm؛ أمّا تتبّع الريح فيجعله يتراوح بين 12.5 و19.8 rpm."
+  "tr": "<span class=\"pfig__n\">الشكل 4</span>الريح المضطربة الافتراضية (\\(v_0 = 8\\ \\mathrm{m/s}\\)، \\(\\sigma = 1.5\\ \\mathrm{m/s}\\)؛ وعلى مدى هذه المدّة (120 s) يبلغ انحرافها المعياري 1.30 m/s، لأنّ أبطأ موجاتها تستغرق أطول من مدّة الحلّ). وأسفلها سرعة الدوّار وقدرة المولّد للمتحكّمين، محسوبةً بخوارزمية الصفحة نفسها. وإبقاء السرعة يُبقي الدوّار بين 14.4 و15.7 rpm؛ أمّا تتبّع الريح فيجعله يتراوح بين 12.5 و19.8 rpm."
  },
  "3a4f9140ee56": {
   "src": "Wind · set by the weather",
@@ -125,7 +125,7 @@
  },
  "3d6a01b092c6": {
   "src": "2 store",
-  "tr": "2 تخزين"
+  "tr": "2 خزّن"
  },
  "3db8cb2a81ec": {
   "src": "Wind Turbine Control<span class=\"dot\">.</span>",
@@ -161,15 +161,15 @@
  },
  "447197c02d07": {
   "src": "<span class=\"sw sw--ink\"></span>played",
-  "tr": "<span class=\"sw sw--ink\"></span>شُغِّل"
+  "tr": "<span class=\"sw sw--ink\"></span>ما عُرض"
  },
  "447dca7c5718": {
   "src": "Mean power",
-  "tr": "متوسط القدرة"
+  "tr": "متوسّط القدرة"
  },
  "488185fdbd5c": {
   "src": "The rotor is drawn as a disc seen at an angle, foreshortened to 50 % across, so that both its turning and the wind passing it can be seen; the burgundy blade marks the stored angle \\(\\theta\\). The grey streaks are air: they move by the stored distance \\(\\int v\\,\\mathrm{d}t\\), at 5 px per metre of air, with a constant pattern of 16 px dashes and 22 px gaps. Only the wind arrow grows with the wind speed. They pass through the rotor unchanged; the slowing of the air is not drawn. The table at the top right lists the stored values of the present row. Below, the wind, the rotor speed (with the target dashed) and the generator power are drawn over the full two minutes, dark up to the present sample and pale after it. Behind the generator power, a rose curve shows the power the wind gives the rotor, \\(P_\\text{aero} = \\tau_\\text{aero}\\omega\\); the gap between the two is the rotor storing or returning kinetic energy, as in (7). The second figure shows the \\(c_p\\) curve with the present operating point and its last three seconds as a trail: when following the wind it stays near the peak; when holding speed it slides along the curve with every gust.",
-  "tr": "يُرسم الدوّار قرصًا يُرى مائلًا، ومختزلًا بنسبة 50 % في العرض، ليظهر دورانه ومرور الريح عبره معًا؛ والشفرة العنّابيّة تعلّم الزاوية المخزَّنة \\(\\theta\\). والخطوط الرمادية هواء: تتحرّك بالمسافة المخزّنة \\(\\int v\\,\\mathrm{d}t\\)، بمقياس 5 px لكل متر من الهواء، بنمط ثابت من شرطات طولها 16 px وفراغات طولها 22 px. ويكبر سهم الريح وحده مع سرعة الريح. وتمرّ الخطوط عبر الدوّار دون تغيير؛ ولا يُرسم تباطؤ الهواء. ويعرض الجدول أعلى اليمين القيم المخزّنة للصفّ الحالي. وأسفله ترسم الريح وسرعة الدوّار (والهدف متقطّع) وقدرة المولّد على مدى الدقيقتين كاملتين، داكنةً حتى العيّنة الحالية وباهتةً بعدها. وخلف قدرة المولّد يرسم منحنى وردي القدرة التي تمنحها الريح للدوّار، \\(P_\\text{aero} = \\tau_\\text{aero}\\omega\\)؛ والفرق بينهما هو تخزين الدوّار للطاقة الحركية أو ردّها، كما في (7). والشكل الثاني يبيّن منحنى \\(c_p\\) مع نقطة التشغيل الحالية وآخر ثلاث ثوانٍ منها أثرًا؛ فعند تتبّع الريح تبقى قرب القمّة، وعند إبقاء السرعة تنزلق على المنحنى مع كل هبّة."
+  "tr": "يُرسم الدوّار قرصًا يُرى مائلًا، مضغوطًا إلى 50 % من عرضه، ليظهر دورانه ومرور الريح عبره معًا؛ والشفرة العنّابيّة تدلّ على الزاوية المخزَّنة \\(\\theta\\). والخطوط الرمادية هواء: تنزاح بمقدار المسافة المخزّنة \\(\\int v\\,\\mathrm{d}t\\)، بمقياس 5 px لكل متر من الهواء، بنمط ثابت من شرطات طولها 16 px وفراغات طولها 22 px. ويكبر سهم الريح وحده مع سرعة الريح. وتمرّ الخطوط عبر الدوّار دون تغيير؛ ولا يُرسم تباطؤ الهواء. ويعرض الجدول أعلى اليمين القيم المخزّنة للصفّ الحالي. وأسفله ترسم الريح وسرعة الدوّار (والسرعة المرجعية بخطّ متقطّع) وقدرة المولّد على مدى الدقيقتين كاملتين، داكنةً حتى العيّنة الحالية وباهتةً بعدها. وخلف قدرة المولّد يرسم منحنى وردي القدرة التي تمنحها الريح للدوّار، \\(P_\\text{aero} = \\tau_\\text{aero}\\omega\\)؛ والفرق بينهما هو تخزين الدوّار للطاقة الحركية أو ردّها، كما في (7). والشكل الثاني يبيّن منحنى \\(c_p\\) مع نقطة التشغيل الحالية ومسارها في الثواني الثلاث الأخيرة أثرًا؛ فعند تتبّع الريح تبقى قرب القمّة، وعند إبقاء السرعة تنزلق على المنحنى مع كل هبّة."
  },
  "498780c3e0ad": {
   "src": "14.8–15.3 rpm",
@@ -181,19 +181,19 @@
  },
  "4f86e6c91a51": {
   "src": "Captured / in wind",
-  "tr": "المحصودة / المتاحة في الريح"
+  "tr": "الملتقَطة / المتاحة في الريح"
  },
  "500b0c6be7f7": {
   "src": "The power coefficient responds instantly to the tip-speed ratio. Real rotors have dynamic inflow and stall effects with delays of seconds.",
-  "tr": "يستجيب معامل القدرة فورًا لنسبة سرعة طرف الشفرة. أمّا الدوّارات الحقيقية ففيها تأثيرات تدفّق داخليّ ديناميكيّ، وانهيارٌ للرفع، بتأخير يبلغ ثوانٍ."
+  "tr": "يستجيب معامل القدرة فورًا لنسبة سرعة طرف الشفرة. أمّا في الدوّارات الحقيقية فتظهر تأثيرات التدفّق الداخل المتغيّر وانهيار الرفع، بتأخيرات تبلغ بضع ثوانٍ."
  },
  "534803a1514f": {
   "src": "A rotor cannot take all of the wind’s energy: air that stopped completely would pile up in front of the disc and block the air behind it. Albert Betz worked out the best possible share in 1920 by replacing the rotor with an idealised disc that the air pushes against. Let the air arrive at speed \\(v\\), cross the disc at \\(v(1-a)\\) and leave in the far wake at \\(v_w\\). The number \\(a\\) measures how much the disc slows the air.",
-  "tr": "لا يستطيع الدوّار أن يأخذ كلّ طاقة الريح: فالهواء لو توقّف تمامًا لتكدّس أمام القرص وسدّ الهواء خلفه. وقد قدّر ألبرت بيتز أفضل حصّة ممكنة عام 1920 بأن استبدل بالدوّار قرصًا مثاليًّا تدفعه الريح. لنفرض أنّ الهواء يصل بسرعة \\(v\\)، ويعبر القرص بسرعة \\(v(1-a)\\)، ويخرج في الأثر البعيد بسرعة \\(v_w\\). والعدد \\(a\\) يقيس مقدار تباطؤ القرص للهواء."
+  "tr": "لا يستطيع الدوّار أن يأخذ كلّ طاقة الريح: فالهواء لو توقّف تمامًا لتكدّس أمام القرص وسدّ الطريق على الهواء القادم خلفه. وقد استنتج ألبرت بيتز أفضل حصّة ممكنة عام 1920 بأن استبدل بالدوّار قرصًا مثاليًّا يدفعه الهواء. لنفرض أنّ الهواء يصل بسرعة \\(v\\)، ويعبر القرص بسرعة \\(v(1-a)\\)، ويخرج في الأثر البعيد بسرعة \\(v_w\\). والعدد \\(a\\) يقيس مقدار ما يُبطئ القرصُ الهواءَ."
  },
  "555583b61e94": {
   "src": "The cube is the most important fact in wind energy. Doubling the wind speed doubles the mass of air arriving each second and quadruples the energy of each kilogram: eight times the power. At \\(v = 8\\ \\mathrm{m/s}\\), with \\(\\rho = 1.225\\ \\mathrm{kg/m^3}\\), the air brings \\(1.58\\ \\mathrm{MW}\\) through this rotor; at \\(11\\ \\mathrm{m/s}\\) it brings \\(4.10\\ \\mathrm{MW}\\).",
-  "tr": "القوّة الثالثة للسرعة هي أهمّ حقيقة في طاقة الرياح. فمضاعفة سرعة الريح تضاعف كتلة الهواء الواصلة كلّ ثانية، وتُضاعِف طاقة كلّ كيلوغرام أربع مرّات: أي ثمانية أضعاف القدرة. عند \\(v = 8\\ \\mathrm{m/s}\\)، ومع \\(\\rho = 1.225\\ \\mathrm{kg/m^3}\\)، يجلب الهواء عبر هذا الدوّار \\(1.58\\ \\mathrm{MW}\\)؛ وعند \\(11\\ \\mathrm{m/s}\\) يجلب \\(4.10\\ \\mathrm{MW}\\)."
+  "tr": "تناسبُ القدرة مع مكعّب السرعة هو أهمّ حقيقة في طاقة الرياح. فمضاعفة سرعة الريح تضاعف كتلة الهواء الواصلة كلّ ثانية، وتجعل طاقة كلّ كيلوغرام أربعة أضعاف ما كانت: أي ثمانية أضعاف القدرة. عند \\(v = 8\\ \\mathrm{m/s}\\)، ومع \\(\\rho = 1.225\\ \\mathrm{kg/m^3}\\)، يجلب الهواء عبر هذا الدوّار \\(1.58\\ \\mathrm{MW}\\)؛ وعند \\(11\\ \\mathrm{m/s}\\) يجلب \\(4.10\\ \\mathrm{MW}\\)."
  },
  "55a3cbce6926": {
   "src": "Turbulence σ",
@@ -205,11 +205,11 @@
  },
  "5739b5c5bfab": {
   "src": "<strong>Store.</strong> Every second state goes into the dataset: 6 001 rows of wind, speed, angle, tip-speed ratio, \\(c_p\\), both torques and both powers. With the default settings the energy balance (7) holds to about \\(10^{-12}\\).",
-  "tr": "<strong>التخزين.</strong> يُحفَظ كلّ حالة في الثانية في مجموعة البيانات: 6 001 صفًّا فيها الريح والسرعة والزاوية ونسبة سرعة طرف الشفرة و\\(c_p\\) والعزمان والقدرتان. وبالإعدادات الافتراضية تتحقّق معادلة ميزان الطاقة (7) إلى نحو \\(10^{-12}\\)."
+  "tr": "<strong>التخزين.</strong> تُحفَظ حالةٌ من كلّ حالتين في مجموعة البيانات: 6 001 صفّ فيها الريح والسرعة والزاوية ونسبة سرعة طرف الشفرة و\\(c_p\\) والعزمان والقدرتان. وبالإعدادات الافتراضية تتحقّق معادلة ميزان الطاقة (7) بدقّة نحو \\(10^{-12}\\)."
  },
  "575340585e2e": {
   "src": "S. Heier, <em>Grid Integration of Wind Energy Conversion Systems</em>, Wiley, 1998: source of the power-coefficient fit (5); <a href=\"https://catdir.loc.gov/catdir/description/wiley037/98018157.html\">publisher’s description</a> at the Library of Congress.",
-  "tr": "S. Heier، <em>Grid Integration of Wind Energy Conversion Systems</em>، Wiley، 1998: مصدر التوفيق (5) لمعامل القدرة؛ <a href=\"https://catdir.loc.gov/catdir/description/wiley037/98018157.html\">وصف الناشر</a> في مكتبة الكونغرس."
+  "tr": "S. Heier، <em>Grid Integration of Wind Energy Conversion Systems</em>، Wiley، 1998: مصدر الملاءمة (5) لمعامل القدرة؛ <a href=\"https://catdir.loc.gov/catdir/description/wiley037/98018157.html\">وصف الناشر</a> في مكتبة الكونغرس."
  },
  "5aeec92bf257": {
   "src": "<span>6</span>Two controllers&nbsp;★",
@@ -221,7 +221,7 @@
  },
  "5c9a8299ca22": {
   "src": "The table collects all eight combinations of controller and wind, with the page’s default sliders (\\(v_0 = 8\\ \\mathrm{m/s}\\), size of the gust, the step or the turbulence \\(\\Delta v = 1.5\\ \\mathrm{m/s}\\), target 15 rpm).",
-  "tr": "يجمع الجدول التركيبات الثماني للمتحكّم والريح، بالمنزلقات الافتراضية للصفحة (\\(v_0 = 8\\ \\mathrm{m/s}\\)، وحجم الهبّة أو القفزة أو الاضطراب \\(\\Delta v = 1.5\\ \\mathrm{m/s}\\)، والهدف 15 rpm)."
+  "tr": "يجمع الجدول التوليفات الثماني كلّها بين المتحكّم والريح، بالمنزلقات الافتراضية للصفحة (\\(v_0 = 8\\ \\mathrm{m/s}\\)، وحجم الهبّة أو القفزة أو الاضطراب \\(\\Delta v = 1.5\\ \\mathrm{m/s}\\)، والسرعة المرجعية 15 rpm)."
  },
  "5d83b8c6f9d0": {
   "src": "rotor speed",
@@ -229,7 +229,7 @@
  },
  "615becf1b5f6": {
   "src": "Bernoulli’s equation says that pressure plus \\(\\tfrac12\\rho\\) times the square of the speed stays the same along the flow, as long as nothing does work on the air. So it holds in front of the disc and behind it, but not across it, where the disc takes energy out. The air crosses the thin disc at one speed, \\(v(1-a)\\), since what flows in must flow out; only the pressure jumps there, from \\(p^+\\) just in front to \\(p^-\\) just behind. Far upstream and far downstream the pressure is that of the open air, \\(p_0\\). In front, \\(p_0 + \\tfrac12\\rho v^2 = p^+ + \\tfrac12\\rho v^2(1-a)^2\\); behind, \\(p^- + \\tfrac12\\rho v^2(1-a)^2 = p_0 + \\tfrac12\\rho v_w^2\\). Adding the two, \\(p_0\\) and the speed at the disc drop out, and what is left is the pressure jump, \\(\\Delta p = p^+ - p^- = \\tfrac12\\rho\\,(v^2 - v_w^2)\\).",
-  "tr": "تقول معادلة برنولي إنّ الضغط زائدًا \\(\\tfrac12\\rho\\) مضروبًا في مربّع السرعة يبقى ثابتًا على طول الجريان، ما دام لا شيء يبذل شغلًا على الهواء. فهي صحيحة أمام القرص وخلفه، لا عبره، حيث يسحب القرص الطاقة. يعبر الهواء القرص الرقيق بسرعة واحدة، \\(v(1-a)\\)، لأنّ ما يدخل يجب أن يخرج؛ ولا يقفز هناك إلّا الضغط، من \\(p^+\\) مباشرة أمامه إلى \\(p^-\\) مباشرة خلفه. وبعيدًا قبل القرص وبعيدًا بعده يكون الضغط ضغط الهواء المفتوح، \\(p_0\\). في الأمام: \\(p_0 + \\tfrac12\\rho v^2 = p^+ + \\tfrac12\\rho v^2(1-a)^2\\)؛ وفي الخلف: \\(p^- + \\tfrac12\\rho v^2(1-a)^2 = p_0 + \\tfrac12\\rho v_w^2\\). فإذا جمعنا المعادلتين سقط \\(p_0\\) والسرعة عند القرص، وبقي فرق الضغط \\(\\Delta p = p^+ - p^- = \\tfrac12\\rho\\,(v^2 - v_w^2)\\)."
+  "tr": "تقول معادلة برنولي إنّ الضغط زائدًا \\(\\tfrac12\\rho\\) مضروبًا في مربّع السرعة يبقى ثابتًا على طول الجريان، ما دام لا شيء يبذل شغلًا على الهواء. فهي صحيحة أمام القرص وخلفه، لا عبره، حيث يستخلص القرص الطاقة. يعبر الهواء القرص الرقيق بسرعة واحدة، \\(v(1-a)\\)، لأنّ ما يدخل يجب أن يخرج؛ ولا يقفز هناك إلّا الضغط، من \\(p^+\\) مباشرة أمامه إلى \\(p^-\\) مباشرة خلفه. وبعيدًا قبل القرص وبعيدًا بعده يكون الضغط ضغط الهواء الطلق، \\(p_0\\). في الأمام: \\(p_0 + \\tfrac12\\rho v^2 = p^+ + \\tfrac12\\rho v^2(1-a)^2\\)؛ وفي الخلف: \\(p^- + \\tfrac12\\rho v^2(1-a)^2 = p_0 + \\tfrac12\\rho v_w^2\\). فإذا جمعنا المعادلتين سقط \\(p_0\\) والسرعة عند القرص، وبقيت قفزة الضغط \\(\\Delta p = p^+ - p^- = \\tfrac12\\rho\\,(v^2 - v_w^2)\\)."
  },
  "61f04f39c2a8": {
   "src": "Setting \\(\\mathrm{d}c_p/\\mathrm{d}a = 4(1-a)(1-3a) = 0\\) gives \\(a = 1/3\\) (the other root, \\(a = 1\\), would stop the air at the disc and take nothing), and",
@@ -249,15 +249,15 @@
  },
  "67b7724f11a3": {
   "src": "Solve",
-  "tr": "حلّ"
+  "tr": "احسب"
  },
  "6be8728a9e71": {
   "src": "Notice the two time dependences in (6). The wind \\(v(t)\\) depends on time through the weather alone. The generator torque is chosen by the controller from the measured speed \\(\\omega\\). The first is a drive, as in Fig. 9; the second is <em>feedback</em> (Figure 3).",
-  "tr": "لاحظ الاعتمادين الزمنيّين في (6). فالريح \\(v(t)\\) تعتمد على الزمن بفعل الطقس وحده. أمّا عزم المولّد فيختاره المتحكّم من السرعة المقيسة \\(\\omega\\). الأوّل دافعٌ، كما في الشكل 9؛ والثاني <em>تغذيةٌ راجعة</em> (الشكل 3)."
+  "tr": "لاحظ الاعتمادين الزمنيّين في (6). فالريح \\(v(t)\\) تعتمد على الزمن بفعل الطقس وحده. أمّا عزم المولّد فيختاره المتحكّم من السرعة المقيسة \\(\\omega\\). الأوّل قسرٌ خارجي، كما في الشكل 9؛ والثاني <em>تغذيةٌ راجعة</em> (الشكل 3)."
  },
  "6ff42b75c926": {
   "src": "Playback speed",
-  "tr": "سرعة التشغيل"
+  "tr": "سرعة العرض"
  },
  "702b201c4b40": {
   "src": "Phyein Usul",
@@ -269,7 +269,7 @@
  },
  "719a850126f9": {
   "src": "The controller brakes with \\(\\tau_{\\rm gen}=K_{\\rm opt}\\omega^2\\), here \\(K_{\\rm opt}=1.78\\times10^5\\ \\mathrm{N\\,m\\,s^2}\\). Its intended equilibrium, the speed \\(\\omega_* = \\lambda_\\text{opt}v/R\\), is locally stable at fixed wind. At a smooth maximum of \\(c_p\\), \\(\\mathrm{d}c_p/\\mathrm{d}\\lambda = 0\\), so a small change of \\(\\omega\\) leaves the aerodynamic power \\(P_\\text{aero}\\) unchanged to first order. The torque \\(P_\\text{aero}/\\omega\\) then simply falls like \\(1/\\omega\\), with slope \\(-P_\\text{aero}/\\omega_*^2 = -K_{\\rm opt}\\omega_*\\), because \\(P_\\text{aero} = \\tau_\\text{aero}\\omega_* = K_{\\rm opt}\\omega_*^3\\) there. The brake’s slope is \\(2K_{\\rm opt}\\omega_*\\). The net slope is therefore \\(-3K_{\\rm opt}\\omega_*\\lt0\\): a small overspeed produces a restoring braking torque, and a small underspeed the opposite.",
-  "tr": "يكبح المتحكّم بعزم \\(\\tau_{\\rm gen}=K_{\\rm opt}\\omega^2\\)، وهنا \\(K_{\\rm opt}=1.78\\times10^5\\ \\mathrm{N\\,m\\,s^2}\\). وتوازنه المقصود، أي السرعة \\(\\omega_* = \\lambda_\\text{opt}v/R\\)، مستقرّ محلّيًّا عند ريحٍ ثابتة. وعند القمّة الملساء لـ\\(c_p\\) يكون \\(\\mathrm{d}c_p/\\mathrm{d}\\lambda = 0\\)، لذلك لا يغيّر تغيّرٌ صغير في \\(\\omega\\) القدرة الهوائية \\(P_\\text{aero}\\) في الدرجة الأولى. فالعزم \\(P_\\text{aero}/\\omega\\) يهبط بعد ذلك كالمقدار \\(1/\\omega\\)، بميل \\(-P_\\text{aero}/\\omega_*^2 = -K_{\\rm opt}\\omega_*\\)، لأنّ \\(P_\\text{aero} = \\tau_\\text{aero}\\omega_* = K_{\\rm opt}\\omega_*^3\\) هناك. وميل الكابح هو \\(2K_{\\rm opt}\\omega_*\\). إذن الميل الصافي \\(-3K_{\\rm opt}\\omega_*\\lt0\\): فالسرعة الزائدة الصغيرة تولّد عزم كبحٍ يُعيد الدوّار، والسرعة الناقصة الصغيرة تولّد العكس."
+  "tr": "يكبح المتحكّم بعزم \\(\\tau_{\\rm gen}=K_{\\rm opt}\\omega^2\\)، وهنا \\(K_{\\rm opt}=1.78\\times10^5\\ \\mathrm{N\\,m\\,s^2}\\). وتوازنه المقصود، أي السرعة \\(\\omega_* = \\lambda_\\text{opt}v/R\\)، مستقرّ محلّيًّا عند ريحٍ ثابتة. وعند القيمة العظمى الملساء لـ\\(c_p\\) يكون \\(\\mathrm{d}c_p/\\mathrm{d}\\lambda = 0\\)، لذلك لا يغيّر تغيّرٌ صغير في \\(\\omega\\) القدرة الهوائية \\(P_\\text{aero}\\) حتى الرتبة الأولى. فالعزم \\(P_\\text{aero}/\\omega\\) يتناقص عندئذٍ ببساطة مثل \\(1/\\omega\\)، بميل \\(-P_\\text{aero}/\\omega_*^2 = -K_{\\rm opt}\\omega_*\\)، لأنّ \\(P_\\text{aero} = \\tau_\\text{aero}\\omega_* = K_{\\rm opt}\\omega_*^3\\) هناك. وميل الكابح هو \\(2K_{\\rm opt}\\omega_*\\). إذن الميل الصافي \\(-3K_{\\rm opt}\\omega_*\\lt0\\): فالسرعة الزائدة الصغيرة تولّد عزم كبحٍ مُرجِعًا، والسرعة الناقصة الصغيرة تولّد العكس."
  },
  "71a93019bc0b": {
   "src": "Gust",
@@ -277,15 +277,15 @@
  },
  "71ce62dd6333": {
   "src": "A small speed error consequently obeys \\(J\\,\\delta\\dot\\omega\\approx-3K_{\\rm opt}\\omega_*\\,\\delta\\omega\\), with relaxation time \\(J/(3K_{\\rm opt}\\omega_*)\\approx4.62\\) s at 8 m/s wind. That is the local picture. The global one follows from the net torque, which with \\(v = \\omega R/\\lambda\\) in (2) reads \\(\\tfrac12\\rho\\pi R^5\\omega^2\\left[c_p(\\lambda)/\\lambda^3 - c_{p,\\max}/\\lambda_\\text{opt}^3\\right]\\). The function \\(c_p(\\lambda)/\\lambda^3\\) is not monotone (it rises between \\(\\lambda = 2.4\\) and \\(4.3\\)), but it stays above its value at \\(\\lambda_\\text{opt}\\) for every \\(\\lambda\\) below \\(\\lambda_\\text{opt}\\) and below it for every \\(\\lambda\\) above, checked on a grid of step \\(10^{-4}\\). Above \\(\\lambda_\\text{opt}\\) this is automatic, because \\(c_p \\le c_{p,\\max}\\) while \\(\\lambda^3 > \\lambda_\\text{opt}^3\\); below, it is a property of this fit. So in steady wind, with the torque below its limit, the rotor returns to \\(\\lambda_\\text{opt}\\) from any start at which it is already turning: too slow and the wind wins, too fast and the brake wins. (The code sets \\(c_p = 0\\) below \\(\\lambda = 0.05\\), so the page gives no torque at a standstill; the fit was not made for such slow running and says nothing about starting.) What the argument does not promise is optimal capture in changing wind: the return takes a few relaxation times, and a gust shorter than that is over before the rotor has caught up.",
-  "tr": "فالخطأ الصغير في السرعة يخضع إذن لـ\\(J\\,\\delta\\dot\\omega\\approx-3K_{\\rm opt}\\omega_*\\,\\delta\\omega\\)، بزمن استرخاء \\(J/(3K_{\\rm opt}\\omega_*)\\approx4.62\\) s عند ريح سرعتها 8 m/s. تلك هي الصورة المحلّية. أمّا الصورة الكلّية فتنتج عن العزم الصافي، الذي يصير مع \\(v = \\omega R/\\lambda\\) في (2) هو \\(\\tfrac12\\rho\\pi R^5\\omega^2\\left[c_p(\\lambda)/\\lambda^3 - c_{p,\\max}/\\lambda_\\text{opt}^3\\right]\\). والدالّة \\(c_p(\\lambda)/\\lambda^3\\) ليست رتيبة (فهي تصعد بين \\(\\lambda = 2.4\\) و\\(4.3\\))، لكنّها تبقى فوق قيمتها عند \\(\\lambda_\\text{opt}\\) لكلّ \\(\\lambda\\) أدنى من \\(\\lambda_\\text{opt}\\)، وتبقى تحتها لكلّ \\(\\lambda\\) أعلى منه، وذلك بالتحقّق على شبكة بخطوة \\(10^{-4}\\). وفوق \\(\\lambda_\\text{opt}\\) يحدث ذلك تلقائيًّا، لأنّ \\(c_p \\le c_{p,\\max}\\) بينما \\(\\lambda^3 > \\lambda_\\text{opt}^3\\)؛ أمّا تحته فهو خاصيّة لهذا التوفيق. فإذا كانت الريح ثابتة، وكان العزم دون حدّه، يعود الدوّار إلى \\(\\lambda_\\text{opt}\\) من أي بداية يكون فيها دائرًا أصلًا: إن كان بطيئًا جدًّا فالريح تكسب، وإن كان سريعًا جدًّا فالكابح يكسب. (تضبط الشيفرة \\(c_p = 0\\) دون \\(\\lambda = 0.05\\)، فلا تعطي الصفحة أيّ عزم عند السكون؛ والتوفيق لم يُصنع لهذا البطء، ولا يقول شيئًا عن البدء.) ما لا يَعِد به البرهان هو التقاط أمثل في ريح متغيّرة: فالعودة تستغرق عدّة أزمنة استرخاء، والهبّة الأقصر من ذلك تنقضي قبل أن يلحق الدوّار بها."
+  "tr": "فالخطأ الصغير في السرعة يخضع إذن لـ\\(J\\,\\delta\\dot\\omega\\approx-3K_{\\rm opt}\\omega_*\\,\\delta\\omega\\)، بزمن استرخاء \\(J/(3K_{\\rm opt}\\omega_*)\\approx4.62\\) s عند ريح سرعتها 8 m/s. تلك هي الصورة المحلّية. أمّا الصورة الكلّية فتنتج عن العزم الصافي، الذي يصير مع \\(v = \\omega R/\\lambda\\) في (2) هو \\(\\tfrac12\\rho\\pi R^5\\omega^2\\left[c_p(\\lambda)/\\lambda^3 - c_{p,\\max}/\\lambda_\\text{opt}^3\\right]\\). والدالّة \\(c_p(\\lambda)/\\lambda^3\\) ليست رتيبة (فهي تتزايد بين \\(\\lambda = 2.4\\) و\\(4.3\\))، لكنّها تبقى فوق قيمتها عند \\(\\lambda_\\text{opt}\\) لكلّ \\(\\lambda\\) أدنى من \\(\\lambda_\\text{opt}\\)، وتبقى تحتها لكلّ \\(\\lambda\\) أعلى منه، وقد تُحقِّق من ذلك على شبكة بخطوة \\(10^{-4}\\). وفوق \\(\\lambda_\\text{opt}\\) يحدث ذلك تلقائيًّا، لأنّ \\(c_p \\le c_{p,\\max}\\) بينما \\(\\lambda^3 > \\lambda_\\text{opt}^3\\)؛ أمّا تحته فهو خاصيّة لهذه الملاءمة. فإذا كانت الريح ثابتة، وكان العزم دون حدّه، يعود الدوّار إلى \\(\\lambda_\\text{opt}\\) من أي بداية يكون فيها دائرًا أصلًا: إن كان بطيئًا جدًّا فالريح تغلب، وإن كان سريعًا جدًّا فالكابح يغلب. (تضبط الشيفرة \\(c_p = 0\\) دون \\(\\lambda = 0.05\\)، فلا تعطي الصفحة أيّ عزم عند السكون؛ والملاءمة لم تُصنع لهذا البطء، ولا يقول شيئًا عن بدء الدوران.) ما لا يَعِد به البرهان هو التقاط أمثل في ريح متغيّرة: فالعودة تستغرق عدّة أزمنة استرخاء، والهبّة الأقصر من ذلك تنقضي قبل أن يلحق الدوّار بها."
  },
  "72d7cc865810": {
   "src": "Position in the stored run",
-  "tr": "الموضع في المسار المخزَّن"
+  "tr": "الموضع في الحلّ المخزَّن"
  },
  "736a68c5526c": {
   "src": "As in Fig. 9, nothing is integrated while you watch. The wind is a known function of time, so pressing <em>Solve</em> fixes the whole run.",
-  "tr": "كما في الشكل 9، لا يُحسب شيء أثناء المشاهدة. فالريح دالّة معلومة للزمن، لذلك يُثبِّت الضغطُ على <em>حلّ</em> التشغيلَ كلَّه."
+  "tr": "كما في الشكل 9، لا يجري أيّ تكامل أثناء المشاهدة. فالريح دالّة معلومة للزمن، لذلك يُثبِّت الضغطُ على <em>احسب</em> الحلَّ كلَّه."
  },
  "74db203475c0": {
   "src": "step, +1.5 m/s from 30 s to 32 s",
@@ -309,7 +309,7 @@
  },
  "7c625a5f49d4": {
   "src": "A 2 MW-class wind turbine rotor driven by a wind that changes with time, braked by a generator whose torque a controller sets: hold a constant speed, or follow the wind at the best tip-speed ratio. Solved with RK4, stored, then played back.",
-  "tr": "عنفة ريحية من فئة 2 MW، تدور بريحٍ تتغيّر مع الزمن، ويكبحها مولّدٌ يضبط متحكّمٌ عزمه: إمّا أن تُبقي سرعة ثابتة، وإمّا أن تتبّع الريح عند أفضل نسبة لسرعة طرف الشفرة. تُحلّ بطريقة RK4، وتُخزَّن، ثمّ تُشغَّل."
+  "tr": "دوّار عنفة ريحية من فئة 2 MW، تديره ريحٌ تتغيّر مع الزمن، ويكبحه مولّدٌ يضبط متحكّمٌ عزمه: إمّا أن يُبقي المتحكّمُ السرعةَ ثابتة، وإمّا أن يتتبّع الريح عند أفضل نسبة لسرعة طرف الشفرة. يُحلّ بطريقة RK4، ويُخزَّن، ثمّ يُعرض."
  },
  "7caf60a273ec": {
   "src": "<span>7</span>Same wind, two answers",
@@ -317,19 +317,19 @@
  },
  "7d252cd594b3": {
   "src": "All simulations ↑",
-  "tr": "كل المحاكاة ↑"
+  "tr": "جميع المحاكاة ↑"
  },
  "81be7b44f297": {
   "src": "Hold a paper windmill out of a car window and it spins faster the faster you drive. A modern wind turbine is the same toy, scaled up until each blade is longer than a jumbo jet’s wing.",
-  "tr": "أمسِك مروحةً ورقيّة خارج نافذة السيّارة، فتدور أسرع كلّما أسرعتَ. والعنفة الريحية الحديثة لعبةٌ من هذا النوع نفسه، مكبّرةٌ حتّى تصير كلّ شفرة أطول من جناح طائرة ركّاب ضخمة."
+  "tr": "أمسِك دوّارةَ هواءٍ ورقيّة (فرّارة) خارج نافذة السيّارة، فتدور أسرع كلّما أسرعتَ. والعنفة الريحية الحديثة لعبةٌ من هذا النوع نفسه، مكبّرةٌ حتّى تصير كلّ شفرة أطول من جناح طائرة ركّاب ضخمة."
  },
  "84c8bc9a89be": {
   "src": "Choose <em>Step</em>, keep \\(v_0 = 8\\ \\mathrm{m/s}\\) and the step size at 1.5 m/s, and solve once with <em>Hold speed</em> and once with <em>Follow the wind</em>. Compare <em>Energy, 120 s</em>, and watch the operating point on the \\(c_p\\) curve after the step. Then compute the rotor speed that puts \\(\\lambda\\) at 8.1 in a 9.5 m/s wind, set the target speed to the nearest slider value, solve again, and compare the energy with both earlier runs.",
-  "tr": "اختر <em>القفزة</em>، واترك \\(v_0 = 8\\ \\mathrm{m/s}\\) وحجم القفزة 1.5 m/s، ثم حُلّ مرّةً مع <em>إبقاء السرعة</em> ومرّةً مع <em>تتبّع الريح</em>. قارن <em>الطاقة في 120 s</em>، وراقب نقطة التشغيل على منحنى \\(c_p\\) بعد القفزة. ثمّ احسب سرعة الدوّار التي تجعل \\(\\lambda\\) تساوي 8.1 في ريح 9.5 m/s، واضبط السرعة المرجعية على أقرب قيمة في المنزلق، وأعِد الحلّ، وقارن الطاقة بالتشغيلين السابقين."
+  "tr": "اختر <em>قفزة</em>، واترك \\(v_0 = 8\\ \\mathrm{m/s}\\) وحجم القفزة 1.5 m/s، ثم احسب مرّةً مع <em>إبقاء السرعة</em> ومرّةً مع <em>تتبّع الريح</em>. قارن <em>الطاقة، 120 s</em>، وراقب نقطة التشغيل على منحنى \\(c_p\\) بعد القفزة. ثمّ احسب سرعة الدوّار التي تجعل \\(\\lambda\\) تساوي 8.1 في ريح سرعتها 9.5 m/s، واضبط السرعة المرجعية على أقرب قيمة في المنزلق، واحسب من جديد، وقارن الطاقة بالحلّين السابقين."
  },
  "8576d0bb5b17": {
   "src": "To take the most energy, the rotor should always run at \\(\\lambda_\\text{opt}\\). The controller cannot measure the wind reliably at the rotor, but it can measure \\(\\omega\\). If the rotor is at the optimum, then \\(v = \\omega R/\\lambda_\\text{opt}\\), and (2) becomes a function of \\(\\omega\\) alone:",
-  "tr": "لكي يأخذ أكبر قدر من الطاقة، ينبغي للدوّار أن يعمل دائمًا عند \\(\\lambda_\\text{opt}\\). والمتحكّم لا يستطيع قياس الريح عند الدوّار بثقة، لكنّه يستطيع قياس \\(\\omega\\). فإذا كان الدوّار عند الأمثل، إذن \\(v = \\omega R/\\lambda_\\text{opt}\\)، وتصير (2) دالّةً لـ\\(\\omega\\) وحدها:"
+  "tr": "لكي يأخذ أكبر قدر من الطاقة، ينبغي للدوّار أن يعمل دائمًا عند \\(\\lambda_\\text{opt}\\). والمتحكّم لا يستطيع قياس الريح عند الدوّار بثقة، لكنّه يستطيع قياس \\(\\omega\\). فإذا كان الدوّار عند النقطة المثلى، كان \\(v = \\omega R/\\lambda_\\text{opt}\\)، وتصير (2) دالّةً في \\(\\omega\\) وحدها:"
  },
  "8817244e6957": {
   "src": "The drive train is rigid and lossless, and \\(P_\\text{gen}\\) is mechanical power into the generator; electrical conversion loses a few per cent more.",
@@ -341,7 +341,7 @@
  },
  "8958f16db3a3": {
   "src": "Figure 4 shows the page’s default wind, two minutes of turbulence around a mean of 8 m/s, built from sixteen sine waves between 0.005 and 0.5 Hz with amplitudes falling as \\(f^{-1/3}\\), and the two controllers’ responses to it.",
-  "tr": "يبيّن الشكل 4 الريح الافتراضية للصفحة: دقيقتان من الاضطراب حول متوسّط قدره 8 m/s، تتألّف من ستّ عشرة موجة جيبيّة بين 0.005 و0.5 Hz، سعاتها تتناقص كالمقدار \\(f^{-1/3}\\)، ثم تُبيّن استجابة المتحكّمين لها."
+  "tr": "يبيّن الشكل 4 الريحَ الافتراضية للصفحة، وهي دقيقتان من الاضطراب حول متوسّط قدره 8 m/s، مركّبةٌ من ستّ عشرة موجةً جيبيّة تردّداتها بين 0.005 و0.5 Hz وسعاتها تتناقص بالتناسب مع \\(f^{-1/3}\\)، كما يبيّن استجابتَي المتحكّمين لها."
  },
  "8a7232836eda": {
   "src": "15.5–18.4 rpm",
@@ -349,11 +349,11 @@
  },
  "8ce35dc33af5": {
   "src": "K. Shirzadeh, H. Hangan and C. Crawford, <a href=\"https://doi.org/10.5194/wes-5-1755-2020\">“Experimental and numerical simulation of extreme operational conditions for horizontal axis wind turbines based on the IEC standard”</a>, <em>Wind Energy Science</em> 5, 1755–1770 (2020), open access: equation (4) gives the gust shape used by the page’s <em>Gust</em> wind.",
-  "tr": "K. Shirzadeh، H. Hangan وC. Crawford، <a href=\"https://doi.org/10.5194/wes-5-1755-2020\">“Experimental and numerical simulation of extreme operational conditions for horizontal axis wind turbines based on the IEC standard”</a>، <em>Wind Energy Science</em> 5، 1755–1770 (2020)، مفتوحة الوصول: المعادلة (4) تُعطي شكل الهبّة الذي تستخدمه الصفحة لريح <em>الهبّة</em>."
+  "tr": "K. Shirzadeh، H. Hangan وC. Crawford، <a href=\"https://doi.org/10.5194/wes-5-1755-2020\">“Experimental and numerical simulation of extreme operational conditions for horizontal axis wind turbines based on the IEC standard”</a>، <em>Wind Energy Science</em> 5، 1755–1770 (2020)، متاحة بالوصول المفتوح: المعادلة (4) تُعطي شكل الهبّة الذي تستخدمه الصفحة في الريح <em>هبّة</em>."
  },
  "8e16830cedef": {
   "src": "Mean wind speed v₀",
-  "tr": "متوسط سرعة الريح v₀"
+  "tr": "متوسّط سرعة الريح v₀"
  },
  "93a8161c11f4": {
   "src": "Back to the simulations",
@@ -365,7 +365,7 @@
  },
  "964e226031ca": {
   "src": "For the rotor and drive train together, the page takes \\(J = 4.0\\times10^6\\ \\mathrm{kg\\,m^2}\\). Multiplying (6) by \\(\\omega\\) turns it into an energy statement: the wind’s power \\(\\tau_\\text{aero}\\omega\\) either goes into the generator, \\(P_\\text{gen} = \\tau_\\text{gen}\\omega\\), or changes the rotor’s kinetic energy \\(\\tfrac12 J\\omega^2\\). Integrated over the run,",
-  "tr": "بالنسبة إلى الدوّار وناقل الحركة معًا، تأخذ الصفحة \\(J = 4.0\\times10^6\\ \\mathrm{kg\\,m^2}\\). وبضرب (6) في \\(\\omega\\) تصير عبارةً عن الطاقة: قدرة الريح \\(\\tau_\\text{aero}\\omega\\) إمّا أن تذهب إلى المولّد، \\(P_\\text{gen} = \\tau_\\text{gen}\\omega\\)، وإمّا أن تغيّر الطاقة الحركية للدوّار \\(\\tfrac12 J\\omega^2\\). وبالتكامل على طول التشغيل،"
+  "tr": "بالنسبة إلى الدوّار وناقل الحركة معًا، تأخذ الصفحة \\(J = 4.0\\times10^6\\ \\mathrm{kg\\,m^2}\\). وبضرب (6) في \\(\\omega\\) تصير علاقةً للطاقة: قدرة الريح \\(\\tau_\\text{aero}\\omega\\) إمّا أن تذهب إلى المولّد، \\(P_\\text{gen} = \\tau_\\text{gen}\\omega\\)، وإمّا أن تغيّر الطاقة الحركية للدوّار \\(\\tfrac12 J\\omega^2\\). وبالتكامل على مدى الحلّ كلّه،"
  },
  "97acd51f9540": {
   "src": "<span class=\"psec__n\">06</span>Two controllers<span class=\"star\" title=\"heavier mathematics\">★</span>",
@@ -377,7 +377,7 @@
  },
  "9a2fe1c583cb": {
   "src": "<b>Fig. 10</b> · <span class=\"tx\">\\(J\\,\\dot\\omega = \\tau_\\mathrm{aero}(\\omega, v) - \\tau_\\mathrm{gen}\\)</span> · played from the stored run",
-  "tr": "<b>الشكل 10</b> · <span class=\"tx\">\\(J\\,\\dot\\omega = \\tau_\\mathrm{aero}(\\omega, v) - \\tau_\\mathrm{gen}\\)</span> · يُشغَّل من المسار المخزَّن"
+  "tr": "<b>الشكل 10</b> · <span class=\"tx\">\\(J\\,\\dot\\omega = \\tau_\\mathrm{aero}(\\omega, v) - \\tau_\\mathrm{gen}\\)</span> · يُعرض من الحلّ المخزَّن"
  },
  "9b99ae59fd6e": {
   "src": "1033 kW",
@@ -385,7 +385,7 @@
  },
  "a0cdc2582013": {
   "src": "Two lessons stand out. In steady wind the two controllers do almost equally well, because 15 rpm is close to the optimum 15.5 rpm. When the wind changes, holding the speed costs energy: after the step to 9.5 m/s the rotor stays at 15 rpm, \\(\\lambda\\) falls to 6.6 and \\(c_p\\) drops from 0.48 to 0.43, which pulls the captured share of the whole run down to 0.44. Real turbines combine the two. Below their rated wind speed they follow the wind; above it they hold speed and power constant by turning the blades out of the wind (pitch control), which this model does not include.",
-  "tr": "تبرز ملاحظتان. ففي الريح الثابتة يؤدّي المتحكّمان أداءً متقاربًا تقريبًا، لأنّ 15 rpm قريبة من الأمثل وهو 15.5 rpm. وحين تتغيّر الريح، يكلّف إبقاءُ السرعة طاقةً: فبعد القفزة إلى 9.5 m/s يبقى الدوّار عند 15 rpm، فتهبط \\(\\lambda\\) إلى 6.6، ويتراجع \\(c_p\\) من 0.48 إلى 0.43، فيخفض الكسر المحصود من التشغيل كلّه إلى 0.44. والعنفات الحقيقية تجمع الأمرين: فدون سرعة الريح الاسمية تتبّع الريح، وفوقها تُبقي السرعة والقدرة ثابتتين بتدوير الشفرات بعيدًا عن الريح (التحكّم بزاوية الشفرات)، وهذا ما لا يتضمّنه النموذج."
+  "tr": "تبرز ملاحظتان. ففي الريح الثابتة يؤدّي المتحكّمان أداءً متقاربًا جدًّا، لأنّ 15 rpm قريبة من القيمة المثلى 15.5 rpm. وحين تتغيّر الريح، يكلّف إبقاءُ السرعة طاقةً: فبعد القفزة إلى 9.5 m/s يبقى الدوّار عند 15 rpm، فتهبط \\(\\lambda\\) إلى 6.6، ويتراجع \\(c_p\\) من 0.48 إلى 0.43، ممّا يخفض الحصّة الملتقَطة على مدى الحلّ كلّه إلى 0.44. والعنفات الحقيقية تجمع الأمرين: فدون سرعة الريح الاسمية تتبع الريح، وفوقها تُبقي السرعة والقدرة ثابتتين بتدوير الشفرات حول محاورها بعيدًا عن الريح (التحكّم بزاوية الخطوة)، وهذا ما لا يتضمّنه هذا النموذج."
  },
  "a25d883e5c08": {
   "src": "<span class=\"psec__n\">05</span>The rotor’s equation of motion",
@@ -401,15 +401,15 @@
  },
  "a387df7cb52e": {
   "src": "<span class=\"pfig__n\">Figure 1</span>The rotor seen from the side, in the tube of air that passes through it. The air slows down as it gives up energy, so the tube widens behind the disc. The blade tips move across the wind at \\(\\omega R\\), several times faster than the wind itself.",
-  "tr": "<span class=\"pfig__n\">الشكل 1</span>الدوّار كما يُرى من الجانب، في أنبوب الهواء الذي يمرّ عبره. يتباطأ الهواء كلّما أعطى طاقة، فيتّسع الأنبوب خلف القرص. تتحرّك أطراف الشفرات عبر الريح بسرعة \\(\\omega R\\)، أي أسرع منها بعدّة أضعاف."
+  "tr": "<span class=\"pfig__n\">الشكل 1</span>الدوّار كما يُرى من الجانب، في أنبوب الهواء الذي يمرّ عبره. يتباطأ الهواء إذ يتخلّى عن طاقته، فيتّسع الأنبوب خلف القرص. تتحرّك أطراف الشفرات عموديًّا على اتجاه الريح بسرعة \\(\\omega R\\)، أي أسرع منها بعدّة أضعاف."
  },
  "a4ce3a9be794": {
   "src": "← All simulations",
-  "tr": "→ كل المحاكاة"
+  "tr": "→ جميع المحاكاة"
  },
  "a6bb5b1ec4ee": {
   "src": "mean power",
-  "tr": "متوسط القدرة"
+  "tr": "متوسّط القدرة"
  },
  "a9b75cb42bf9": {
   "src": "<span class=\"sw\"></span>now",
@@ -417,7 +417,7 @@
  },
  "aa02dcaebb72": {
   "src": "Newton’s second law for a rotation says that the net torque on the rotor changes its angular speed, in proportion to the inverse of its moment of inertia \\(J\\). Two torques act: the wind’s, which drives, and the generator’s, which brakes:",
-  "tr": "ينصّ قانون نيوتن الثاني للدوران على أنّ العزم المحصّل على الدوّار يغيّر سرعته الزاوية، بتناسبٍ عكسيّ مع عزم قصوره الذاتي \\(J\\). ويعمل عزمان: عزم الريح، وهو الدافع، وعزم المولّد، وهو الكابح:"
+  "tr": "ينصّ قانون نيوتن الثاني للدوران على أنّ العزم المحصّل على الدوّار يغيّر سرعته الزاوية، بتناسبٍ عكسيّ مع عزم قصوره الذاتي \\(J\\). ويعمل عزمان: عزم الريح، وهو المحرِّك، وعزم المولّد، وهو الكابح:"
  },
  "aa99c2e3818d": {
   "src": "<span>3</span>The Betz limit&nbsp;★",
@@ -433,7 +433,7 @@
  },
  "b02f222f9aee": {
   "src": "No rotor in open air can turn more than 59.3 % of the power flowing through its disc into shaft power. The best rotor slows the air to two thirds of its speed at the disc and to one third in the wake.",
-  "tr": "لا يستطيع أيّ دوّار في الهواء الطلق أن يحوّل أكثر من 59.3 % من القدرة المارّة عبر قرصه إلى قدرة على عمود الدوران. أفضل دوّار يُبطئ الهواء عند القرص إلى ثلثي سرعته، وفي الأثر البعيد إلى ثلثها."
+  "tr": "لا يستطيع أيّ دوّار في الهواء الطلق أن يحوّل أكثر من 59.3 % من القدرة المارّة عبر قرصه إلى قدرة ميكانيكية على عمود الدوران. أفضل دوّار يُبطئ الهواء عند القرص إلى ثلثي سرعته، وفي الأثر البعيد إلى ثلثها."
  },
  "b0d6a60a8960": {
   "src": "The wind is the same over the whole disc and arrives at once; real wind varies across 80 m of rotor and changes height by height.",
@@ -445,7 +445,7 @@
  },
  "b266d09df42b": {
   "src": "Target rotor speed",
-  "tr": "سرعة الدوّار المطلوبة"
+  "tr": "السرعة المرجعية للدوّار"
  },
  "b3012de005fd": {
   "src": "Steady",
@@ -461,15 +461,15 @@
  },
  "b9fe9b22b0b1": {
   "src": "The wind turns the rotor; the generator brakes it and turns that work into electricity. A controller decides how hard to brake: hold the rotor at one speed, or let it follow the wind. Two minutes of operation are solved first, stored, and then played back.",
-  "tr": "تُدير الريحُ الدوّارَ، ويكبحه المولّد فيحوّل هذا الشغل إلى كهرباء. يقرّر المتحكّم مقدار الكبح: إمّا أن يُبقي الدوّار على سرعة واحدة، وإمّا أن يدع سرعته تتبع الريح. تُحلّ أولًا دقيقتان من التشغيل وتُخزَّنان، ثمّ تُشغَّلان."
+  "tr": "تُدير الريحُ الدوّارَ، ويكبحه المولّد فيحوّل هذا الشغل إلى كهرباء. يقرّر المتحكّم مقدار الكبح: إمّا أن يُبقي الدوّار على سرعة واحدة، وإمّا أن يدع سرعته تتبع الريح. تُحلّ أولًا دقيقتان من التشغيل وتُخزَّنان، ثمّ تُعرضان."
  },
  "bafb6e42511a": {
   "src": "How large \\(c_p\\) is depends mainly on one number, the <em>tip-speed ratio</em> \\(\\lambda = \\omega R/v\\), the speed of the blade tips in units of the wind speed. A rotor turning too slowly lets most of the air pass between its blades without touching them. A rotor turning too fast behaves almost like a solid wall, and the air flows around it. Behind both pictures is one mechanism: each blade meets the air at a speed and an angle set by the wind and the blade’s own motion together, and that angle of attack decides how much lift, and so how much torque, the blade takes from the flow. A piece of blade at distance \\(r\\) from the hub moves across the wind at \\(\\omega r\\), so it meets the air coming from an angle whose tangent is \\(v/(\\omega r) = (R/r)/\\lambda\\): at the tip, at \\(\\lambda = 8.1\\), the undisturbed wind comes from only 7° off the plane of the rotor, and the air the rotor has already slowed, by about 18 % at \\(c_p = 0.48\\) according to (3), from about 6°. Change \\(\\omega\\) and \\(v\\) together, keeping \\(\\lambda\\), and every piece of blade meets the air at the same angle as before; that is why \\(c_p\\) depends on the ratio and not on \\(\\omega\\) and \\(v\\) separately. Between the two extremes lies a best ratio.",
-  "tr": "يعتمد \\(c_p\\) في معظمه على عدد واحد، هو <em>نسبة سرعة طرف الشفرة</em> \\(\\lambda = \\omega R/v\\)، أي سرعة أطراف الشفرات مقيسةً بوحدات سرعة الريح. دوّارٌ يدور ببطء شديد يترك معظم الهواء يمرّ بين شفراته دون أن يلمسها. ودوّارٌ يدور بسرعة شديدة يتصرّف تقريبًا كجدار صلب، فيلتفّ الهواء حوله. وخلف الصورتين آلية واحدة: كل شفرة تلقى الهواء بسرعة وزاوية تحدّدهما الريح وحركة الشفرة معًا، وزاوية الهجوم هذه تحدّد مقدار الرفع، ومن ثَمّ مقدار العزم الذي تأخذه الشفرة من التدفّق. قطعة الشفرة التي تبعد \\(r\\) عن المحور تتحرّك عبر الريح بسرعة \\(\\omega r\\)، فتلقى الهواء القادم بزاوية ظلّها \\(v/(\\omega r) = (R/r)/\\lambda\\): عند الطرف، وعند \\(\\lambda = 8.1\\)، تأتي الريح غير المضطربة من 7° فقط عن مستوى الدوّار، والهواء الذي أبطأه الدوّار بالفعل، بنحو 18 % عند \\(c_p = 0.48\\) وفق (3)، يأتي من نحو 6°. فإذا غيّرنا \\(\\omega\\) و\\(v\\) معًا مع بقاء \\(\\lambda\\)، فإنّ كل قطعة من الشفرة تلقى الهواء بالزاوية نفسها كما كانت؛ ولهذا يعتمد \\(c_p\\) على النسبة لا على \\(\\omega\\) و\\(v\\) كلٍّ على حدة. وبين الطرفين تقع نسبةٌ مُثلى."
+  "tr": "يتوقّف مقدار \\(c_p\\) أساسًا على عدد واحد، هو <em>نسبة سرعة طرف الشفرة</em> \\(\\lambda = \\omega R/v\\)، أي سرعة أطراف الشفرات مقيسةً بوحدات سرعة الريح. دوّارٌ يدور ببطء شديد يترك معظم الهواء يمرّ بين شفراته دون أن يلمسها. ودوّارٌ يدور بسرعة شديدة يتصرّف تقريبًا كجدار صلب، فيلتفّ الهواء حوله. وخلف الصورتين آلية واحدة: كل شفرة تلقى الهواء بسرعة وزاوية تحدّدهما الريح وحركة الشفرة معًا، وزاوية الهجوم هذه تحدّد مقدار الرفع، ومن ثَمّ مقدار العزم الذي تأخذه الشفرة من التدفّق. قطعة الشفرة التي تبعد \\(r\\) عن المحور تتحرّك عموديًّا على اتجاه الريح بسرعة \\(\\omega r\\)، فتلقى الهواء القادم بزاوية ظلّها \\(v/(\\omega r) = (R/r)/\\lambda\\): عند الطرف، وعند \\(\\lambda = 8.1\\)، تأتي الريح التي لم يمسّها الدوّار بعدُ بزاوية 7° فقط مع مستوى الدوّار، والهواء الذي أبطأه الدوّار بالفعل، بنحو 18 % عند \\(c_p = 0.48\\) وفق (3)، يأتي بزاوية نحو 6°. فإذا غيّرنا \\(\\omega\\) و\\(v\\) معًا مع بقاء \\(\\lambda\\)، فإنّ كل قطعة من الشفرة تلقى الهواء بالزاوية نفسها كما كانت؛ ولهذا يعتمد \\(c_p\\) على النسبة لا على \\(\\omega\\) و\\(v\\) كلٍّ على حدة. وبين الطرفين تقع نسبةٌ مُثلى."
  },
  "bb1796b79102": {
   "src": "with \\(c_1 = 0.5176\\), \\(c_2 = 116\\), \\(c_4 = 5\\), \\(c_5 = 21\\) and \\(c_6 = 0.0068\\). Scanning \\(\\lambda\\) in steps of 0.001, its maximum is \\(c_{p,\\max} = 0.4800\\) at \\(\\lambda_\\text{opt} = 8.100\\), comfortably below the Betz limit (Figure 2). One widely copied reproduction of the formula writes the last term as \\(c_6\\lambda_i\\); that version peaks at 0.502 at \\(\\lambda = 8.25\\) and does not match the quoted optimum, so the page uses \\(c_6\\lambda\\).",
-  "tr": "مع \\(c_1 = 0.5176\\)، \\(c_2 = 116\\)، \\(c_4 = 5\\)، \\(c_5 = 21\\) و\\(c_6 = 0.0068\\). وبمسح \\(\\lambda\\) بخطوات 0.001 يكون أكبرُ قيمة له \\(c_{p,\\max} = 0.4800\\) عند \\(\\lambda_\\text{opt} = 8.100\\)، وهو أدنى بوضوح من حدّ بيتز (الشكل 2). وثمّة نسخة شائعة من الصيغة تكتب الحدّ الأخير \\(c_6\\lambda_i\\)؛ وهذه النسخة تبلغ ذروتها 0.502 عند \\(\\lambda = 8.25\\)، ولا تطابق الأمثل المذكور، لذلك تستعمل الصفحة \\(c_6\\lambda\\)."
+  "tr": "مع \\(c_1 = 0.5176\\)، \\(c_2 = 116\\)، \\(c_4 = 5\\)، \\(c_5 = 21\\) و\\(c_6 = 0.0068\\). وبمسح \\(\\lambda\\) بخطوات 0.001 تكون القيمة العظمى \\(c_{p,\\max} = 0.4800\\) عند \\(\\lambda_\\text{opt} = 8.100\\)، وهي أدنى بفارق مريح من حدّ بيتز (الشكل 2). وثمّة نسخة شائعة من الصيغة تكتب الحدّ الأخير على الصورة \\(c_6\\lambda_i\\)؛ وهذه النسخة تبلغ ذروتها 0.502 عند \\(\\lambda = 8.25\\)، ولا تطابق القيمة المثلى المذكورة، لذلك تستعمل الصفحة \\(c_6\\lambda\\)."
  },
  "bdde641d46ae": {
   "src": "<span>1</span>From wind to electricity",
@@ -477,7 +477,7 @@
  },
  "bee75ca77f75": {
   "src": "Controls",
-  "tr": "التحكّم"
+  "tr": "عناصر التحكّم"
  },
  "c56a58df6e51": {
   "src": "15.0–15.4 rpm",
@@ -525,7 +525,7 @@
  },
  "d85eba7b2b37": {
   "src": "1 solve",
-  "tr": "1 حلّ"
+  "tr": "1 احسب"
  },
  "d929322e4b16": {
   "src": "Fig.",
@@ -545,7 +545,7 @@
  },
  "dfd65cc1196a": {
   "src": "Stored run",
-  "tr": "المسار المخزَّن"
+  "tr": "الحلّ المخزَّن"
  },
  "e1d329a7394b": {
   "src": "From symbols to code",
@@ -553,7 +553,7 @@
  },
  "e3838eb76d1c": {
   "src": "<strong>Play.</strong> Each frame shows the stored row nearest to the playback time. The blades are drawn at the stored angle \\(\\theta\\), so they turn exactly as fast as the solution says.",
-  "tr": "<strong>التشغيل.</strong> يعرض كل إطار الصفّ المخزَّن الأقرب إلى وقت التشغيل. وتُرسم الشفرات عند الزاوية المخزَّنة \\(\\theta\\)، فتدور تمامًا بالسرعة التي يعطيها الحلّ."
+  "tr": "<strong>العرض.</strong> يعرض كل إطار الصفّ المخزَّن الأقرب إلى زمن العرض. وتُرسم الشفرات عند الزاوية المخزَّنة \\(\\theta\\)، فتدور تمامًا بالسرعة التي يعطيها الحلّ."
  },
  "e41885ae2465": {
   "src": "<span class=\"psub__n\">6.1</span>Follow the wind: the optimal-torque law",
@@ -561,7 +561,7 @@
  },
  "e44f336cdf68": {
   "src": "The interesting physics lies in the balance between the two torques. If the generator brakes too little, the rotor runs away. If it brakes too hard, the rotor slows until the blades stall and the wind slips past. The controller, a small computer reading the rotor speed many times a second, decides how hard to brake. It cannot choose the wind: the wind is a time-dependent drive set by someone else, exactly like the force in Fig. 9.",
-  "tr": "يكمن المعنى الفيزيائي المثير في التوازن بين العزمين. فإن كبح المولّد قليلًا انفلت الدوّار، وإن كبح بشدّة تباطأ الدوّار حتى تفقد الشفرات قوّة رفعها فتمرّ الريح بجانبها. والمتحكّم، وهو حاسوب صغير يقرأ سرعة الدوّار مرّاتٍ كثيرة في الثانية، يقرّر مقدار الكبح. لا يستطيع اختيار الريح: فالريح دافعٌ متغيّر مع الزمن، تحدّده جهةٌ أخرى، تمامًا كالقوّة في الشكل 9."
+  "tr": "تكمن الفيزياء الممتعة في التوازن بين العزمين. فإن كبح المولّد أقلّ ممّا يلزم انفلت الدوّار، وإن كبح أشدّ ممّا يلزم تباطأ الدوّار حتى تفقد الشفرات قوّة رفعها فتمرّ الريح بجانبها. والمتحكّم، وهو حاسوب صغير يقرأ سرعة الدوّار مرّاتٍ كثيرة في الثانية، يقرّر مقدار الكبح. ولا يستطيع أن يختار الريح: فالريح مؤثّرٌ قسريّ متغيّر مع الزمن تفرضه جهةٌ خارجية، تمامًا كالقوّة في الشكل 9."
  },
  "e627ee872120": {
   "src": "785 kW",
@@ -581,7 +581,7 @@
  },
  "ed30a15325e0": {
   "src": "A natural next question for a project: hang a small pendulum, or a double pendulum, on each blade and let generators at its joints harvest its swinging. Energy conservation already settles one point: every joule the pendulums harvest comes out of the rotor, and so out of the main generator’s share. The open question is whether a small chaotic pendulum can supply useful power to sensors in the blade, and what that costs.",
-  "tr": "ومن الأسئلة الطبيعية التالية لمشروعٍ من هذا النوع: أن تُعلَّق على كلّ شفرة بندولٌ صغير أو بندولٌ مزدوج، وتحصد مولّدات عند مفاصله تأرجحه. وقانون حفظ الطاقة يحسم نقطة واحدة سلفًا: كل جول يحصده البندولان يخرج من الدوّار، وبالتالي من حصّة المولّد الرئيسي. أمّا السؤال المفتوح فهو: هل يستطيع بندولٌ صغير فوضويّ أن يزوّد المستشعرات في الشفرة بقدرة مفيدة، وما الذي يكلّفه ذلك؟"
+  "tr": "سؤالٌ تالٍ طبيعي يصلح مشروعًا: أن يُعلَّق على كلّ شفرة نوّاسٌ صغير أو نوّاسٌ مزدوج، وأن تحصد مولّداتٌ عند مفاصله طاقةَ تأرجحه. وقانون انحفاظ الطاقة يحسم نقطةً واحدة سلفًا: كلّ جول تحصده النوّاسات يخرج من الدوّار، ومن ثَمّ من حصّة المولّد الرئيسي. أمّا السؤال المفتوح فهو: هل يستطيع نوّاسٌ صغير فوضويّ الحركة أن يزوّد المستشعرات في الشفرة بقدرة مفيدة، وما ثمن ذلك؟"
  },
  "ee175d8e6165": {
   "src": "Controller · sets the generator torque",
@@ -589,7 +589,7 @@
  },
  "eed28eec00a4": {
   "src": "Solve, then play",
-  "tr": "احلُل ثم شغِّل"
+  "tr": "احسب، ثم شغّل"
  },
  "efbbe80473f3": {
   "src": "742 kW",
@@ -601,11 +601,11 @@
  },
  "f2b34aece671": {
   "src": "<span class=\"sw sw--dash\"></span>target / optimum",
-  "tr": "<span class=\"sw sw--dash\"></span>الهدف / الأمثل"
+  "tr": "<span class=\"sw sw--dash\"></span>القيمة المرجعية / المثلى"
  },
  "f4be45ec9d77": {
   "src": "<span class=\"pfig__n\">Figure 3</span>The turbine as a control loop. The wind enters from outside; the controller closes the loop by turning the measured speed \\(\\omega\\) into a braking torque. Compare Figure 3 of Fig. 9, where no arrow led back.",
-  "tr": "<span class=\"pfig__n\">الشكل 3</span>العنفة كحلقة تحكّم. تدخل الريح من الخارج؛ ويغلق المتحكّم الحلقة بتحويل السرعة المقيسة \\(\\omega\\) إلى عزم كبح. قارن بالشكل 3 في الشكل 9، حيث لم يكن هناك سهم يعود إلى الخلف."
+  "tr": "<span class=\"pfig__n\">الشكل 3</span>العنفة بوصفها حلقة تحكّم. تدخل الريح من الخارج؛ ويغلق المتحكّم الحلقة بتحويل السرعة المقيسة \\(\\omega\\) إلى عزم كبح. قارن بالشكل 3 في الشكل 9، حيث لم يكن هناك سهم يعود إلى الخلف."
  },
  "f570ac8b3e84": {
   "src": "<span class=\"psec__n\">08</span>Solve first, then play",
@@ -613,7 +613,7 @@
  },
  "f595438cfaaa": {
   "src": "captured share",
-  "tr": "الكسر المحصود"
+  "tr": "الحصّة الملتقَطة"
  },
  "f5cbdf6bfb51": {
   "src": "Contents",
@@ -633,7 +633,7 @@
  },
  "f7a005a0ea24": {
   "src": "Picking a natural frequency \\(\\omega_n = 0.6\\ \\mathrm{rad/s}\\) and a damping ratio \\(\\zeta_c = 0.8\\) fixes \\(K_i = J\\omega_n^2 = 1.44\\times10^6\\ \\mathrm{N\\,m}\\) and \\(K_p = 2\\zeta_c\\omega_n J + \\partial\\tau_\\text{aero}/\\partial\\omega\\). At 15 turns per minute in an 8 m/s wind, the aerodynamic slope is \\(-2.48\\times10^5\\ \\mathrm{N\\,m\\,s}\\): the wind itself damps the rotor a little. That gives \\(K_p = 3.59\\times10^6\\ \\mathrm{N\\,m\\,s}\\). An error then decays within a few seconds. Because \\(\\zeta_c\\) is a little below 1 it does swing once past zero, but only by a few per cent: after the wind rises by 1.5 m/s within 2 s in the <em>Step</em> run, the rotor overshoots the target by 0.39 rpm and then dips below it by just 0.01 rpm. The torque is kept between 0 and \\(1.2\\ \\mathrm{MN\\,m}\\), and the integral stops growing while the torque sits at a limit (anti-windup).",
-  "tr": "باختيار تردّد طبيعي \\(\\omega_n = 0.6\\ \\mathrm{rad/s}\\) ونسبة تخامد \\(\\zeta_c = 0.8\\) تتحدّد \\(K_i = J\\omega_n^2 = 1.44\\times10^6\\ \\mathrm{N\\,m}\\) و\\(K_p = 2\\zeta_c\\omega_n J + \\partial\\tau_\\text{aero}/\\partial\\omega\\). وعند 15 دورة في الدقيقة في ريح 8 m/s، يكون الميل الديناميكي للهواء \\(-2.48\\times10^5\\ \\mathrm{N\\,m\\,s}\\): فالريح نفسها تُخمد الدوّار قليلًا. وهذا يعطي \\(K_p = 3.59\\times10^6\\ \\mathrm{N\\,m\\,s}\\). ثمّ يتلاشى الخطأ في غضون ثوانٍ قليلة. ولأنّ \\(\\zeta_c\\) أقلّ قليلًا من 1، فإنّه يتجاوز الصفر مرّةً واحدة، لكن بنسبة بضعة في المئة فقط: فبعد أن ترتفع الريح بمقدار 1.5 m/s خلال 2 s في تشغيل <em>القفزة</em>، يتجاوز الدوّار الهدف بـ0.39 rpm ثم ينخفض دونه بـ0.01 rpm فقط. ويُبقى العزم محصورًا بين 0 و\\(1.2\\ \\mathrm{MN\\,m}\\)، ولا يزداد الحدّ التكاملي ما دام العزم عند حدّ، وهو ما يسمّى مانعَ تراكم التكامل (anti-windup)."
+  "tr": "باختيار تردّد طبيعي \\(\\omega_n = 0.6\\ \\mathrm{rad/s}\\) ونسبة تخامد \\(\\zeta_c = 0.8\\) تتحدّد \\(K_i = J\\omega_n^2 = 1.44\\times10^6\\ \\mathrm{N\\,m}\\) و\\(K_p = 2\\zeta_c\\omega_n J + \\partial\\tau_\\text{aero}/\\partial\\omega\\). وعند 15 دورة في الدقيقة في ريح 8 m/s، يكون الميل الهوائي \\(-2.48\\times10^5\\ \\mathrm{N\\,m\\,s}\\): فالريح نفسها تُخمد الدوّار قليلًا. وهذا يعطي \\(K_p = 3.59\\times10^6\\ \\mathrm{N\\,m\\,s}\\). ثمّ يتلاشى الخطأ في غضون ثوانٍ قليلة. ولأنّ \\(\\zeta_c\\) أقلّ قليلًا من 1، فإنّه يتجاوز الصفر مرّةً واحدة، لكن بنسبة بضعة في المئة فقط: فبعد أن ترتفع الريح بمقدار 1.5 m/s خلال 2 s في حلّ الريح <em>قفزة</em>، تتجاوز سرعة الدوّار السرعة المرجعية بـ0.39 rpm ثم تنخفض دونها بـ0.01 rpm فقط. ويُبقى العزم محصورًا بين 0 و\\(1.2\\ \\mathrm{MN\\,m}\\)، ولا يزداد الحدّ التكاملي ما دام العزم عند حدّ، وهو ما يسمّى مانعَ تراكم التكامل (anti-windup)."
  },
  "f8033b444ece": {
   "src": "Energy balance",
@@ -657,7 +657,7 @@
  },
  "fc1a7c3f6453": {
   "src": "The proportional term reacts to the speed error now. A positive error means overspeed, so it asks for more generator braking; a negative error reduces braking. The integral term remembers an error that persists: even a small overspeed builds a larger correction if it lasts. The linearised equation (10) above fixes how quickly a small disturbance decays. Torque limits and changing wind can take the rotor outside that approximation.",
-  "tr": "يستجيب الحدّ التناسبي الآن للخطأ في السرعة. فالخطأ الموجب يعني سرعة زائدة، فيطلب كبحًا أكبر من المولّد؛ والخطأ السالب يخفّف الكبح. أمّا الحدّ التكاملي فيتذكّر الخطأ الذي يستمرّ: فحتى السرعة الزائدة الصغيرة تبني تصحيحًا أكبر إذا دامت. والمعادلة الخطّية (10) أعلاه تحدّد سرعة اضمحلال الاضطراب الصغير. وقد تُخرج حدود العزم والريح المتغيّرة الدوّار عن هذا التقريب."
+  "tr": "يستجيب الحدّ التناسبي للخطأ الحالي في السرعة. فالخطأ الموجب يعني سرعة زائدة، فيطلب الحدّ كبحًا أكبر من المولّد؛ والخطأ السالب يخفّف الكبح. أمّا الحدّ التكاملي فيتذكّر الخطأ الذي يستمرّ: فحتى السرعة الزائدة الصغيرة تبني تصحيحًا أكبر إذا طال أمدها. والمعادلة الخطّية (10) أعلاه تحدّد سرعة اضمحلال الاضطراب الصغير. وقد تُخرج حدود العزم والريح المتغيّرة الدوّار عن هذا التقريب."
  },
  "fcead1dfa8f5": {
   "src": "26.18 kWh",
@@ -665,6 +665,6 @@
  },
  "ffee58552336": {
   "src": "3 play",
-  "tr": "3 تشغيل"
+  "tr": "3 شغّل"
  }
 }

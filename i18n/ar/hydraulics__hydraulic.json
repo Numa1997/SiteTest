@@ -13,7 +13,7 @@
  },
  "0cdb65d14aca": {
   "src": "Put your thumb over the nozzle of a syringe full of water and press: the plunger hardly moves. In this model oil behaves the same way, because its density is fixed. Every cubic centimetre the input piston pushes out of the left cylinder has to reappear in the right one. If the input piston moves down by x₁ it sweeps out the volume A₁x₁, so the output piston rises by x₂ with",
-  "tr": "ضع إبهامك على فوّهة محقنة مملوءة بالماء واضغط: لا يكاد المكبس يتحرّك. في هذا النموذج يتصرّف الزيت بالطريقة نفسها، لأن كثافته ثابتة. كل سنتيمتر مكعّب يدفعه مكبس الإدخال خارج الأسطوانة اليسرى يجب أن يظهر من جديد في اليمنى. إذا تحرّك مكبس الإدخال إلى أسفل مسافة x₁ فإنه يجتاح الحجم A₁x₁، لذلك يرتفع مكبس الإخراج مسافة x₂ وفق"
+  "tr": "ضع إبهامك على فوّهة محقنة مملوءة بالماء واضغط: لا يكاد المكبس يتحرّك. في هذا النموذج يسلك الزيت السلوك نفسه، لأن كثافته ثابتة. كلّ سنتيمتر مكعّب يدفعه مكبس الإدخال خارج الأسطوانة اليسرى لا بدّ أن يظهر من جديد في اليمنى. إذا تحرّك مكبس الإدخال إلى الأسفل مسافة x₁ أزاح حجمًا قدره A₁x₁، لذلك يرتفع مكبس الإخراج مسافة x₂ وفق"
  },
  "0cf5fc6453c8": {
   "src": "Ideal Hydraulic Press",
@@ -33,11 +33,11 @@
  },
  "1bd85457c48d": {
   "src": "The stops are perfectly rigid and perfectly inelastic: the velocity jumps to zero in zero time.",
-  "tr": "المصدّات صلبة تمامًا وعديمة المرونة تمامًا: تقفز السرعة إلى الصفر في لحظة."
+  "tr": "المصدّات صلبة تمامًا وعديمة المرونة تمامًا: تهبط السرعة إلى الصفر في زمنٍ قدره صفر."
  },
  "21d266a396c9": {
   "src": "The oil carries no air, and all pressures are gauge pressures (atmosphere = 0). g = 9.81 m/s² everywhere.",
-  "tr": "الزيت لا يحمل هواءً، وجميع الضغوط مقيسة (الجوّ = 0). g = 9.81 m/s² في كل مكان."
+  "tr": "لا يحوي الزيت هواءً، وجميع الضغوط ضغوطٌ مقيسة (الضغط الجوّي = 0). g = 9.81 m/s² في كل مكان."
  },
  "24e32e1c4d5c": {
   "src": "Pressure and force",
@@ -53,7 +53,7 @@
  },
  "25e63f25287d": {
   "src": "As x grows, oil leaves the fast left column and joins the slow right column, so the moving mass shrinks (μ′ &lt; 0 when r &lt; 1). The ½μ′ẋ² term accounts for that exchange, like a chain sliding off the edge of a table. The page integrates this equation with fourth-order Runge–Kutta (RK4), a step of 10⁻⁴ s, and a recorded frame every 1 ms. The force ramps linearly from 0 to F₁ over τ.",
-  "tr": "مع نموّ x ينتقل الزيت من العمود الأيسر السريع إلى العمود الأيمن البطيء، فتتناقص الكتلة المتحرّكة (μ′ &lt; 0 عندما r &lt; 1). يحسب الحدّ ½μ′ẋ² هذا التبادل، كما تنزلق سلسلة عن حافّة طاولة. تكامل الصفحة هذه المعادلة بطريقة رونغه–كوتا من المرتبة الرابعة (RK4)، بخطوة 10⁻⁴ s، وإطار مسجّل كل 1 ms. تتزايد القوّة خطيًا من 0 إلى F₁ خلال الزمن τ."
+  "tr": "كلّما ازداد x انتقل الزيت من العمود الأيسر السريع إلى العمود الأيمن البطيء، فتتناقص الكتلة المتحرّكة (μ′ &lt; 0 عندما r &lt; 1). ويأخذ الحدّ ½μ′ẋ² هذا التبادل في الحسبان، كما في سلسلةٍ تنزلق عن حافّة طاولة. تُكامِل الصفحة هذه المعادلة بطريقة رونغه–كوتا من المرتبة الرابعة (RK4)، بخطوة 10⁻⁴ s، وتسجّل إطارًا كل 1 ms. وتتزايد القوّة خطّيًا من 0 إلى F₁ خلال الزمن τ."
  },
  "27ad1672d8c9": {
   "src": "rest",
@@ -73,7 +73,7 @@
  },
  "2b655dad559a": {
   "src": "Cylinders, pipe, pistons and stops are drawn to true scale; the load block's size is symbolic. The white dots are material points of oil: each keeps the oil volume between itself and the input piston, so in the pipe they run A₁/A_p times faster. The chart under the drawing walks the same pressure field from piston to piston against true path length: the vertical steps are Bernoulli, the slopes are weight and inertia (theory, chapter 5). Click or tap the oil to read the pressure there and its parts (a click outside the oil removes the reading): the push of the piston, the weight of the oil above, and the force that accelerates the oil.",
-  "tr": "تُرسم الأسطوانات والأنبوب والمكابس والمصدّات بالمقياس الحقيقي؛ أمّا حجم كتلة الحمل فرمزيّ. النقاط البيضاء هي نقاط مادّية من الزيت: تحتفظ كل نقطة بحجم الزيت الواقع بينها وبين مكبس الإدخال، فتسير في الأنبوب أسرع بمقدار A₁/A_p مرّة. ويتتبّع المخطّط أسفل الرسم حقل الضغط نفسه من مكبس إلى مكبس مقابل طول المسار الحقيقي: الدرجات الرأسية هي برنولي، والمنحدرات هي الوزن والقصور الذاتي (النظرية، الفصل 5). انقر على الزيت أو المسه لقراءة الضغط هناك وأجزائه (النقر خارج الزيت يزيل القراءة): دفع المكبس، ووزن الزيت الذي فوقه، والقوّة التي تُسرّع الزيت."
+  "tr": "تُرسم الأسطوانات والأنبوب والمكابس والمصدّات بالمقياس الحقيقي؛ أمّا حجم كتلة الحمل فرمزيّ. النقاط البيضاء نقاطٌ مادّية من الزيت: يبقى حجم الزيت بين كلّ نقطة ومكبس الإدخال ثابتًا، فتسير النقاط في الأنبوب أسرع بـ A₁/A_p مرّة. ويتتبّع المخطّط أسفل الرسم حقل الضغط نفسه من مكبس إلى مكبس بدلالة طول المسار الحقيقي: القفزات الرأسية أثرُ برنولي، والأجزاء المائلة أثرُ الوزن والعطالة (النظرية، الفصل 5). انقر على الزيت أو المسه لقراءة الضغط هناك ومكوّناته (النقر خارج الزيت يزيل القراءة): دفع المكبس، ووزن الزيت الذي فوقه، والقوّة التي تُسرّع الزيت."
  },
  "2b819e251784": {
   "src": "A_1x_1 = A_2x_2 \\quad\\Rightarrow\\quad x_2 = r\\,x_1,\\qquad r = \\frac{A_1}{A_2} = \\left(\\frac{d_1}{d_2}\\right)^2",
@@ -85,7 +85,7 @@
  },
  "322970f4948c": {
   "src": "Live readings",
-  "tr": "القراءات الحيّة"
+  "tr": "القراءات الآنيّة"
  },
  "334460037081": {
   "src": "Scene",
@@ -117,7 +117,7 @@
  },
  "403f153bc117": {
   "src": "With d₁ = 4 cm and d₂ = 12 cm, r = 1/9: the full 30 cm input stroke lifts the load by only 3.33 cm. The same rule fixes every speed in the oil. The left column moves at ẋ, the right column at r·ẋ, and the pipe at (A₁/A<sub>p</sub>)·ẋ = 16·ẋ, because the pipe's cross-section is 16 times smaller than the input bore. That is why the dots race through the pipe.",
-  "tr": "مع d₁ = 4 cm وd₂ = 12 cm وr = 1/9 يرفع شوط الإدخال الكامل البالغ 30 cm الحمل مسافة 3.33 cm فقط. تحدّد القاعدة نفسها كل سرعة في الزيت. العمود الأيسر يتحرّك بسرعة ẋ، والعمود الأيمن بسرعة r·ẋ، والأنبوب بسرعة (A₁/A<sub>p</sub>)·ẋ = 16·ẋ، لأن مقطع الأنبوب أصغر 16 مرّة من تجويف الإدخال. ولهذا تندفع النقاط عبر الأنبوب."
+  "tr": "عندما d₁ = 4 cm وd₂ = 12 cm يكون r = 1/9: فشوط الإدخال الكامل البالغ 30 cm لا يرفع الحمل إلا 3.33 cm. وتحدّد القاعدة نفسها كلّ سرعة في الزيت. يتحرّك العمود الأيسر بسرعة ẋ، والعمود الأيمن بسرعة r·ẋ، والزيت في الأنبوب بسرعة (A₁/A<sub>p</sub>)·ẋ = 16·ẋ، لأن مقطع الأنبوب أصغر 16 مرّة من مقطع أسطوانة الإدخال. ولهذا تندفع النقاط مسرعةً عبر الأنبوب."
  },
  "4213b083f954": {
   "src": "Knobs",
@@ -137,7 +137,7 @@
  },
  "4728fb6fa386": {
   "src": "Phases of the run; select one to jump to it",
-  "tr": "مراحل الجولة؛ اختر مرحلة للانتقال إليها"
+  "tr": "مراحل المحاكاة؛ اختر مرحلةً للانتقال إليها"
  },
  "4734b7154f95": {
   "src": "Recorded every millisecond",
@@ -149,15 +149,15 @@
  },
  "4cee3a37cd01": {
   "src": "6 · What a run does",
-  "tr": "6 · ما تفعله الجولة"
+  "tr": "6 · ما تفعله المحاكاة"
  },
  "58b271cef8dd": {
   "src": "The short version. Every step is derived in full in <a href=\"hydraulic_theory.html\">Hydraulics from First Principles</a>, Part I.",
-  "tr": "النسخة المختصرة. تُشتقّ كل خطوة كاملةً في <a href=\"hydraulic_theory.html\">الهيدروليكا من المبادئ الأولى</a>، الجزء الأول."
+  "tr": "النسخة المختصرة. تُشتقّ كلّ خطوة كاملةً في <a href=\"hydraulic_theory.html\">الهيدروليك من المبادئ الأولى</a>، الجزء الأول."
  },
  "5966faa83062": {
   "src": "Two cylinders joined by a pipe, filled with oil. Push the small piston and watch the oil carry the push to the large one. One generalized coordinate, one Lagrangian, integrated with RK4 and drawn to true scale; the oil is coloured by its pressure field and the dots are real material points.",
-  "tr": "أسطوانتان متّصلتان بأنبوب ومملوءتان بالزيت. ادفع المكبس الصغير وشاهد الزيت ينقل الدفعة إلى الكبير. إحداثيّ معمّم واحد، ولاغرانجيان واحد، يُكامَل بطريقة RK4 ويُرسم بالمقياس الحقيقي؛ يُلوَّن الزيت بحسب حقل ضغطه، والنقاط نقاط مادّية حقيقية."
+  "tr": "أسطوانتان متّصلتان بأنبوب ومملوءتان بالزيت. ادفع المكبس الصغير وشاهد الزيت ينقل الدفع إلى المكبس الكبير. إحداثيّ معمّم واحد، ولاغرانجيان واحد، يُكامَل بطريقة RK4 ويُرسم بالمقياس الحقيقي؛ يُلوَّن الزيت بحسب حقل ضغطه، والنقاط نقاط مادّية حقيقية."
  },
  "59b826a9d801": {
   "src": "\\begin{array}{lll} \\text{bottom of left column} & p_{b1} = p_1 + \\rho(g - a)\\,h_1 & \\text{weight of the column, less what its downward acceleration needs}\\\\ \\text{pipe inlet} & p_{\\mathrm{in}} = p_{b1} + \\tfrac12\\rho\\left(v^2 - v_p^2\\right) & \\text{Bernoulli: speeding the oil up costs pressure}\\\\ \\text{pipe outlet} & p_{\\mathrm{out}} = p_{\\mathrm{in}} - \\rho\\,\\dfrac{A_1}{A_p}\\,a\\,L_p & \\text{the force that accelerates the oil plug in the pipe}\\\\ \\text{bottom of right column} & p_{b2} = p_{\\mathrm{out}} + \\tfrac12\\rho\\left(v_p^2 - r^2v^2\\right) & \\text{slowing down gives the pressure back (lossless here)}\\\\ \\text{top of right column} & p_{b2} - \\rho(g + ra)\\,h_2 = p_2 & \\text{must agree with the output piston} \\end{array}",
@@ -173,11 +173,11 @@
  },
  "5efd49ecd716": {
   "src": "The oil is incompressible (infinite bulk modulus), and the walls and pistons are rigid.",
-  "tr": "الزيت غير قابل للانضغاط (معامل انضغاط حجمي لا نهائي)، والجدران والمكابس جامدة."
+  "tr": "الزيت غير قابل للانضغاط (معامل المرونة الحجمي لا نهائي)، والجدران والمكابس صلبة."
  },
  "5f667280fef1": {
   "src": "The press multiplies force by 9 and divides distance by 9, so the product does not change, just as with a lever:",
-  "tr": "يضاعف المكبس القوّة بعامل 9 ويقسم المسافة على 9، فلا يتغيّر الناتج، تمامًا كما في الرافعة:"
+  "tr": "يضاعف المكبس القوّة بعامل 9 ويقسم المسافة على 9، فلا يتغيّر حاصل ضربهما، تمامًا كما في الرافعة:"
  },
  "613026ac11dc": {
   "src": "Ideal Hydraulic <em>Press</em>",
@@ -189,11 +189,11 @@
  },
  "6656f0efc2ef": {
   "src": "Volume conservation leaves a single degree of freedom: x, the downward displacement of the input piston. The column heights are h₁ = H₀ − x and h₂ = H₀ + r·x. Adding the kinetic energies of the parts, with plug flow:",
-  "tr": "يترك حفظُ الحجم درجةَ حرّية واحدة: x، وهي الإزاحة إلى أسفل لمكبس الإدخال. ارتفاعا العمودين h₁ = H₀ − x وh₂ = H₀ + r·x. بجمع الطاقات الحركية للأجزاء مع جريان السدادة:"
+  "tr": "يترك حفظُ الحجم درجةَ حرّية واحدة: x، وهي إزاحة مكبس الإدخال نحو الأسفل. ارتفاعا العمودين h₁ = H₀ − x وh₂ = H₀ + r·x. وبجمع الطاقات الحركية للأجزاء، على فرض جريان السدادة، نحصل على:"
  },
  "68e877b10a69": {
   "src": "In oil at rest, the pressure is the same at all points at the same height. A pressure p pushes on a piston of area A with a force p·A. Push the small piston with F₁ and the oil carries p = F₁/A₁ to the large piston, which feels",
-  "tr": "في الزيت الساكن يكون الضغط واحدًا عند جميع النقاط المتساوية الارتفاع. يدفع الضغط p مكبسًا مساحته A بقوّة مقدارها p·A. ادفع المكبس الصغير بالقوّة F₁ فينقل الزيت الضغط p = F₁/A₁ إلى المكبس الكبير، الذي يشعر بقوّة مقدارها"
+  "tr": "في الزيت الساكن يكون الضغط واحدًا عند جميع النقاط المتساوية الارتفاع. يدفع الضغط p مكبسًا مساحته A بقوّة مقدارها p·A. ادفع المكبس الصغير بالقوّة F₁ فينقل الزيت الضغط p = F₁/A₁ إلى المكبس الكبير، فتؤثّر فيه قوّة مقدارها"
  },
  "69ebb422b227": {
   "src": "p₁ under input piston",
@@ -217,7 +217,7 @@
  },
  "6fc3e04d0b10": {
   "src": "Any change recomputes the whole run from t = 0.",
-  "tr": "أيّ تغيير يعيد حساب الجولة كاملةً من t = 0."
+  "tr": "أيّ تغيير يعيد حساب المحاكاة كاملةً من t = 0."
  },
  "6ff42b75c926": {
   "src": "Playback speed",
@@ -237,7 +237,7 @@
  },
  "788d34374de1": {
   "src": "Hover a plot to read every curve at one instant; press or drag in it to move the animation there.",
-  "tr": "مرِّر المؤشّر فوق المخطّط لقراءة كل المنحنيات عند لحظة واحدة؛ واضغط داخله أو اسحب لنقل الرسوم المتحركة إلى تلك اللحظة."
+  "tr": "مرِّر المؤشّر فوق المخطّط لقراءة كل المنحنيات عند لحظة واحدة؛ واضغط داخله أو اسحب لنقل الرسم المتحرّك إلى تلك اللحظة."
  },
  "798c12c57040": {
   "src": "lost at stops",
@@ -281,7 +281,7 @@
  },
  "958bcc0d42bf": {
   "src": "In the moving press, the work you put in, W = ∫F₁ dx, goes to three places:",
-  "tr": "في المكبس الهيدروليكي المتحرّك يذهب الشغل المبذول، W = ∫F₁ dx، إلى ثلاثة أوجه:"
+  "tr": "في المكبس الهيدروليكي المتحرّك يتوزّع الشغل الذي تبذله، W = ∫F₁ dx، على ثلاثة أوجه:"
  },
  "96b6180545f8": {
   "src": "Physics",
@@ -289,15 +289,15 @@
  },
  "96ea48b292d4": {
   "src": "Newton's law for each piston gives the pressure under it (a = ẍ):",
-  "tr": "يعطي قانون نيوتن لكل مكبس الضغط أسفله (a = ẍ):"
+  "tr": "يعطي قانون نيوتن، مطبَّقًا على كلّ مكبس، الضغطَ تحته (a = ẍ):"
  },
  "98b9a3925d4c": {
   "src": "<b>stalled</b>: if F₁ never exceeds F₁,min, the run ends 1 s after the ramp.",
-  "tr": "<b>متعطّل</b>: إن لم تتجاوز F₁ القيمة F₁,min أبدًا، تنتهي الجولة بعد 1 s من نهاية المنحدر."
+  "tr": "<b>متعطّل</b>: إن لم تتجاوز F₁ القيمة F₁,min أبدًا، تنتهي المحاكاة بعد 1 s من نهاية تصاعد القوّة."
  },
  "99b1aaf7c1f3": {
   "src": "Area changes are lossless: Bernoulli holds at the contraction and at the expansion, with no Borda–Carnot loss where the jet leaves the pipe.",
-  "tr": "تغيّرات المساحة بلا فقد: تنطبق معادلة برنولي عند الاختناق وعند التوسّع، من دون فقد بوردا–كارنو حيث تخرج الدفقة من الأنبوب."
+  "tr": "تغيّرات المساحة بلا فقد: تنطبق معادلة برنولي عند التضيّق وعند التوسّع، من دون فقد بوردا–كارنو حيث يخرج النفث من الأنبوب."
  },
  "99f548a9a9df": {
   "src": "Related pages",
@@ -305,7 +305,7 @@
  },
  "9a5f89e3d8cc": {
   "src": "3 · Energy: what you gain in force you pay in distance",
-  "tr": "3 · الطاقة: ما تكسبه بالقوّة تدفعه بالمسافة"
+  "tr": "3 · الطاقة: ما تكسبه في القوّة تدفع ثمنه في المسافة"
  },
  "9c7f732592c6": {
   "src": "Plots",
@@ -325,7 +325,7 @@
  },
  "a77676b02e88": {
   "src": "The last line is a self-test. The value at the end of the chain has to equal the p₂ that the output piston needs, and check_physics.py proves it symbolically. The oil is coloured by this pressure, pale amber at 0 and deep wine at the maximum of the run. Gauge pressure is pressure above the atmosphere. Below zero the oil is under suction, and a real press would draw in air or release dissolved gas there; near −100 kPa gauge the oil would boil (cavitate). The page warns as soon as any gauge pressure drops below 0.",
-  "tr": "السطر الأخير اختبار ذاتي. يجب أن تساوي القيمة في نهاية السلسلة الضغط p₂ الذي يحتاجه مكبس الإخراج، ويُثبت ذلك check_physics.py رمزيًا. يُلوَّن الزيت بحسب هذا الضغط: كهرماني شاحب عند 0، وأحمر نبيذي داكن عند أعلى قيمة في الجولة. الضغط المقيس هو الضغط فوق الضغط الجوّي. تحت الصفر يكون الزيت تحت شفط، وقد يسحب مكبس هيدروليكي حقيقي الهواء أو يطلق الغازات المذابة هناك؛ وعند نحو −100 kPa مقيسة يغلي الزيت (يتكهّف). تحذّر الصفحة فور انخفاض أي ضغط مقيس إلى ما دون 0."
+  "tr": "السطر الأخير اختبار ذاتي. يجب أن تساوي القيمة في نهاية السلسلة الضغط p₂ الذي يحتاجه مكبس الإخراج، ويُثبت ذلك check_physics.py رمزيًا. يُلوَّن الزيت بحسب هذا الضغط: كهرماني شاحب عند 0، وأحمر نبيذي داكن عند أعلى قيمة في المحاكاة. الضغط المقيس هو الضغط الزائد على الضغط الجوّي. تحت الصفر يكون الزيت في حالة شفط، وقد يسحب مكبس هيدروليكي حقيقي الهواء هناك أو يطلق الغازات المذابة؛ وعند ضغطٍ مقيس قريب من −100 kPa يغلي الزيت (يتكهّف). تحذّر الصفحة فور انخفاض أي ضغط مقيس إلى ما دون 0."
  },
  "ab8b22940f7b": {
   "src": "Gauges",
@@ -337,7 +337,7 @@
  },
  "af10ef20dd90": {
   "src": "in",
-  "tr": "دخول"
+  "tr": "in"
  },
  "afaea2449192": {
   "src": "There is no friction at the piston seals and there are no leaks.",
@@ -365,7 +365,7 @@
  },
  "bcdbab4d741d": {
   "src": "With the defaults this gives 170 N × 9 = 1530 N. The load and its piston weigh (m₂+M)·g = 160 kg × 9.81 m/s² = 1569.6 N, so 170 N on its own would not lift them. The 2 kg input piston tips the balance: its weight of 19.6 N also presses on the oil, and the threshold is F₁,min = (m₂+M)·g·r − m₁·g = 154.78 N. Height matters too. In still oil, pressure rises by ρg = 8.53 kPa per metre of depth, and once the press moves the two columns are no longer equally tall.",
-  "tr": "بالقيم الافتراضية يعطي هذا 170 N × 9 = 1530 N. يزن الحمل ومكبسه (m₂+M)·g = 160 kg × 9.81 m/s² = 1569.6 N، لذلك لا تكفي 170 N وحدها لرفعه. يرجّح مكبس الإدخال، الذي كتلته 2 kg، كفّة الميزان، فوزنه البالغ 19.6 N يضغط على الزيت أيضًا، وعتبة البدء هي F₁,min = (m₂+M)·g·r − m₁·g = 154.78 N. وللارتفاع أهمّية كذلك. ففي الزيت الساكن يرتفع الضغط بمقدار ρg = 8.53 kPa لكل متر من العمق، ومتى تحرّك المكبس الهيدروليكي لم يعد العمودان متساويي الارتفاع."
+  "tr": "بالقيم الافتراضية يعطي هذا 170 N × 9 = 1530 N. يزن الحمل ومكبسه (m₂+M)·g = 160 kg × 9.81 m/s² = 1569.6 N، لذلك لا تكفي 170 N وحدها لرفعهما. يرجّح مكبس الإدخال، الذي كتلته 2 kg، كفّة الميزان، فوزنه البالغ 19.6 N يضغط على الزيت أيضًا، وعتبة البدء هي F₁,min = (m₂+M)·g·r − m₁·g = 154.78 N. وللارتفاع أهمّية كذلك. ففي الزيت الساكن يرتفع الضغط بمقدار ρg = 8.53 kPa لكل متر من العمق، ومتى تحرّك المكبس الهيدروليكي لم يعد العمودان متساويي الارتفاع."
  },
  "bee75ca77f75": {
   "src": "Controls",
@@ -385,7 +385,7 @@
  },
  "c6884bb6f205": {
   "src": "Animated hydraulic press",
-  "tr": "المكبس الهيدروليكي المتحرّك"
+  "tr": "رسم متحرّك للمكبس الهيدروليكي"
  },
  "c77f1f0a4817": {
   "src": "The pipe term dominates. The pipe holds only 55 g of oil, but that oil moves 16 times faster than the piston, so its kinetic energy counts 16² = 256 times over. It contributes 14.0 kg of the 18.5 kg you feel through the piston.",
@@ -445,11 +445,11 @@
  },
  "f4800df8d1bc": {
   "src": "out",
-  "tr": "خروج"
+  "tr": "out"
  },
  "f77b9fda4ff3": {
   "src": "<b>time limit</b>: any other run ends at t = τ + 10 s. With a force that only ramps up, the energy function h = K + V − F₁(t)·x can only decrease, because dh/dt = −Ḟ₁·x ≤ 0. So the load can never come back to x = 0 with v &lt; 0. If the force is too small to reach the stroke stop, the load swings between two turning points forever, and the run needs a limit.",
-  "tr": "<b>الحدّ الزمني</b>: تنتهي أي جولة أخرى عند t = τ + 10 s. مع قوّة لا تفعل سوى التزايد، لا يمكن لدالّة الطاقة h = K + V − F₁(t)·x إلا أن تتناقص، لأن dh/dt = −Ḟ₁·x ≤ 0. لذلك لا يمكن للحمل أن يعود أبدًا إلى x = 0 بسرعة v &lt; 0. وإذا كانت القوّة أصغر من أن تبلغ مصدّ الشوط، يتأرجح الحمل بين نقطتي انعطاف إلى الأبد، فتحتاج الجولة إلى حدّ."
+  "tr": "<b>الحدّ الزمني</b>: تنتهي أي محاكاة أخرى عند t = τ + 10 s. وما دامت القوّة لا تتناقص أبدًا، لا يمكن لدالّة الطاقة h = K + V − F₁(t)·x إلا أن تتناقص، لأن dh/dt = −Ḟ₁·x ≤ 0. لذلك لا يمكن للحمل أن يعود أبدًا إلى x = 0 بسرعة v &lt; 0. وإذا كانت القوّة أصغر من أن تبلغ مصدّ الشوط، يتأرجح الحمل بين نقطتَي ارتداد إلى الأبد، فتحتاج المحاكاة إلى حدّ زمني."
  },
  "fb0ac464aee1": {
   "src": "\\begin{aligned} m_1a &= F_1 + m_1g - p_1A_1 &&\\Rightarrow\\quad p_1 = \\frac{F_1 + m_1g - m_1a}{A_1}\\\\ (m_2 + M)\\,r\\,a &= p_2A_2 - (m_2 + M)\\,g &&\\Rightarrow\\quad p_2 = \\frac{(m_2 + M)(g + ra)}{A_2} \\end{aligned}",
