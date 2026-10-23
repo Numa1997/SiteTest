@@ -1,0 +1,45 @@
+/* Phyein Usul in German and Arabic: the few rules a translated page needs on top of the house styles.
+   Loaded last by every page that tools/i18n/build.py writes into de/ and ar/ (the English pages load it for the language switch).
+   German uses the house fonts unchanged. Arabic keeps the house fonts for Latin letters, digits and maths and takes its Arabic
+   letters from the self-hosted faces in fonts/arabic.css: Amiri in the titles (where English has Instrument Serif or IBM Plex
+   Serif), Noto Naskh Arabic in the text and the labels (where English has IBM Plex Sans and Mono). Left and right are exchanged
+   on Arabic pages by mirrored copies of the house stylesheets (styles/*.rtl.css, made by the generator with rtlcss). */
+
+/* ---------- the language switch ---------- */
+.lang-switch { font: 12px/1.4 var(--mono, 'IBM Plex Mono', monospace); letter-spacing: 0.04em; color: var(--muted, #8b8079); white-space: nowrap; }
+.lang-switch a { color: var(--ink-3, #5a504b); text-decoration: none; }
+.lang-switch a:hover { color: var(--accent, #7a1f2b); }
+.lang-switch a[aria-current='page'] { color: var(--accent, #7a1f2b); font-weight: 600; }
+.lang-switch a[lang='ar'] { font-family: 'Noto Naskh Arabic', var(--sans, sans-serif); letter-spacing: 0; font-size: 13px; }
+.cat-top .lang-switch { margin-inline-start: 10px; padding-inline-start: 18px; border-inline-start: 1px solid var(--rule, #d9d0c2); }
+.lang-switch--top { position: absolute; top: 14px; inset-inline-end: 24px; z-index: 5; }
+@media (max-width: 560px) { .lang-switch--top { top: 10px; inset-inline-end: 16px; } }
+
+/* a piece whose English changed after it was translated: the English shows, with this small mark, until the translation follows */
+.i18n-pending { display: inline-block; width: 6px; height: 6px; margin-inline-start: 4px; border-radius: 50%; background: #c9a227; vertical-align: middle; }
+
+/* ---------- Arabic ---------- */
+html[lang='ar'] {
+  --serif: 'Instrument Serif', 'Amiri', Georgia, serif;
+  --sans: 'IBM Plex Sans', 'Noto Naskh Arabic', system-ui, sans-serif;
+  --mono: 'IBM Plex Mono', 'Noto Naskh Arabic', ui-monospace, monospace;
+  --tex: 'Latin Modern Roman', 'Noto Naskh Arabic', 'KaTeX_Math', serif;
+}
+html[lang='ar'] body { line-height: 1.85; }
+/* the home page sets its titles in IBM Plex Serif; in Arabic they take Amiri */
+html[lang='ar'] .hero__name, html[lang='ar'] h1, html[lang='ar'] h2, html[lang='ar'] h3 { font-family: 'IBM Plex Serif', 'Amiri', Georgia, serif; }
+html[lang='ar'] .cat h1, html[lang='ar'] .cat h2, html[lang='ar'] .cat h3, html[lang='ar'] .pf h1, html[lang='ar'] .pf h2, html[lang='ar'] .pf h3 { font-family: var(--serif); }
+/* Arabic letters join: spacing between letters breaks the words, and capitals do not exist */
+html[lang='ar'] body *:not(.katex):not(.katex *):not(code):not(code *) { letter-spacing: 0 !important; }
+html[lang='ar'] :is(h1, h2, h3, h4, .hero__name) { line-height: 1.35; }
+/* maths, code, addresses and numbers with units read left to right inside the right-to-left text */
+html[lang='ar'] .katex, html[lang='ar'] code, html[lang='ar'] pre, html[lang='ar'] kbd, html[lang='ar'] .ltr { direction: ltr; unicode-bidi: isolate; }
+html[lang='ar'] .katex-display { direction: ltr; }
+html[lang='ar'] input[type='search'] { text-align: right; }
+/* arrows drawn as characters point the way the text runs */
+html[lang='ar'] .flip { display: inline-block; transform: scaleX(-1); }
+/* Arabic has no italic: the Arabic faces have none, and a slanted copy of a naskh letter is not italic but damage. Latin words
+   inside keep their italic face. */
+html[lang='ar'] { font-synthesis-style: none; }
+/* the name on the home page stays a Latin line, with its full stop at its end */
+html[dir='rtl'] .hero__name > span { direction: ltr; unicode-bidi: isolate; text-align: right; }

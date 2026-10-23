@@ -1,0 +1,481 @@
+<!doctype html>
+<html lang="ar" dir="rtl" class="no-js">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline' https://v2.appdeploy.ai https://unpkg.com/@khmyznikov/pwa-install@0.6.3/dist/pwa-install.bundle.js; style-src 'self' 'unsafe-inline'; img-src 'self' data: blob: https://appdeploy.ai; font-src 'self' data:; connect-src 'self' https://api-v2.appdeploy.ai; worker-src 'self'; manifest-src 'self'; object-src 'none'; base-uri 'self'; form-action 'self'; upgrade-insecure-requests" />
+    <meta name="referrer" content="strict-origin-when-cross-origin" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Portfolios · Numa Koudsie<span class="i18n-pending" title="translation being updated"></span></title>
+    <meta
+      name="description"
+      content="Research projects by Numa Koudsie, each with its derivations, solver and results: Droplet Collection, the remodel of a Bachelor thesis on how cloud droplets become rain; Rotor Pendula, a corrected study of whether a pendulum on a turbine blade can power a sensor; the Hydraulic Press Study, a servo-hydraulic press under digital control, built from first principles; and Iron, Cotton and the Head, why an iron ball hurts and a cotton ball of the same mass does not, in English and Arabic."
+    />
+    <meta name="author" content="Numa Koudsie" />
+    <meta name="theme-color" content="#f5f1ea" /><link rel="alternate" hreflang="en" href="https://phyeinusul.com/portfolios.html" /><link rel="alternate" hreflang="de" href="https://phyeinusul.com/de/portfolios.html" /><link rel="alternate" hreflang="ar" href="https://phyeinusul.com/ar/portfolios.html" /><link rel="alternate" hreflang="x-default" href="https://phyeinusul.com/portfolios.html" />
+    <link rel="stylesheet" href="../styles/site.rtl.css" />
+    <link rel="stylesheet" href="../vendor/katex/katex.min.css" />
+    <link rel="stylesheet" href="../styles/paper.rtl.css" />
+    <link rel="stylesheet" href="../styles/catalog.rtl.css" />
+    <link rel="stylesheet" href="../styles/portfolio.rtl.css" />
+    <link rel="stylesheet" href="../styles/fold.rtl.css" /><link rel="stylesheet" href="../styles/i18n.css" />
+    <link rel="stylesheet" href="../fonts/arabic.css" />
+    <link
+      rel="icon"
+      href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='12' fill='%237a1f2b'/%3E%3Ctext x='32' y='45' text-anchor='middle' font-family='Georgia,serif' font-size='34' font-weight='700' fill='%23fff'%3ENK%3C/text%3E%3C/svg%3E"
+    />
+    <script>
+      document.documentElement.className = 'js';
+    </script>
+  
+    <link rel="stylesheet" href="../fonts/arabic.css" />
+    <script src="../scripts/i18n/strings-ar.js"></script>
+    <meta name="translated-from" content="English, commit 25c3cc2" />
+  </head>
+
+  <body>
+    <a class="skip-link" href="#projects">Skip to the projects<span class="i18n-pending" title="translation being updated"></span></a>
+
+    <header class="cat-top">
+      <span style="display:inline-flex;align-items:center;gap:14px"><a href="index.html" aria-label="Phyein Usul, home page" style="display:inline-block;line-height:0"><img src="../images/phyein-usul-mark.svg" alt="Phyein Usul" width="87" height="48" /></a><a href="index.html">← Numa Koudsie<span class="i18n-pending" title="translation being updated"></span></a></span>
+      <nav aria-label="Site">
+        <a href="index.html#positions">Positions<span class="i18n-pending" title="translation being updated"></span></a>
+        <a href="index.html#research">Research<span class="i18n-pending" title="translation being updated"></span></a>
+        <a href="simulations.html">Simulations<span class="i18n-pending" title="translation being updated"></span></a>
+        <a href="index.html#skills">Skills<span class="i18n-pending" title="translation being updated"></span></a><span class="lang-switch" role="group" aria-label="اللغة" translate="no"><a href="../portfolios.html" hreflang="en" lang="en">English</a> · <a href="../de/portfolios.html" hreflang="de" lang="de">Deutsch</a> · <a href="../ar/portfolios.html" hreflang="ar" lang="ar" dir="rtl" aria-current="page">العربية</a></span>
+      </nav>
+    </header>
+
+    <main class="cat" id="projects">
+      <div class="cat__head" style="grid-template-columns: minmax(0, 1fr);">
+        <div>
+          <p class="cat__kicker">Research projects<span class="i18n-pending" title="translation being updated"></span></p>
+          <h1>Portfolios<span class="dot">.</span><span class="i18n-pending" title="translation being updated"></span></h1>
+          <p class="cat__lede">
+            Projects of months rather than afternoons: a question from research,
+            a model rebuilt and checked step by step, a solver you can run, and
+            results you can reproduce. Each project keeps its own pages; this
+            page introduces them.
+          <span class="i18n-pending" title="translation being updated"></span></p>
+        </div>
+      </div>
+
+      <article class="proj" id="droplet-collection" aria-labelledby="dc-title">
+        <div class="proj__band">
+          <span class="proj__num">01</span>
+          <p>Bachelor thesis, Leipzig 2022 · remodelled<span class="i18n-pending" title="translation being updated"></span></p>
+          <span>cloud physics · stochastic collection · numerical methods<span class="i18n-pending" title="translation being updated"></span></span>
+        </div>
+        <div class="proj__body">
+          <div class="proj__head">
+            <div>
+              <h2 id="dc-title">Droplet Collection<span class="i18n-pending" title="translation being updated"></span></h2>
+              <p class="proj__sub">How cloud droplets become rain<span class="i18n-pending" title="translation being updated"></span></p>
+              <p class="proj__abs">
+                A large drop falls faster than a small one and sweeps it up; that is
+                how a cloud of tiny droplets can turn into rain within minutes.
+                Numa Koudsie’s Bachelor thesis, <em>Collisional Ice Multiplication
+                Processes in Clouds</em> (Leipzig, 2022), modelled this collection
+                and the ice splinters it can produce, with Stokes’ law for the fall
+                speed and the geometric cross-section for the chance of a hit. The
+                remodel replaces each ingredient with physics that holds at the
+                sizes that matter: a drag balance for the fall speed, collision
+                efficiencies from the trajectory of the small droplet in the air
+                flow around the large one, and the full stochastic collection
+                equation for the bookkeeping. Every step is derived on the theory
+                page and tested on the checks page, and the solver runs in your
+                browser.
+              <span class="i18n-pending" title="translation being updated"></span></p>
+              <div class="proj__actions">
+                <a class="proj__btn" href="../portfolios/droplet-collection/index.html">Open the project<span class="i18n-pending" title="translation being updated"></span></a>
+                <a class="proj__btn proj__btn--ghost" href="../portfolios/droplet-collection/index.html#/theory">Read the derivations<span class="i18n-pending" title="translation being updated"></span></a>
+                <a class="proj__btn proj__btn--ghost" href="../portfolios/droplet-collection/index.html#/simulate">Run the cloud<span class="i18n-pending" title="translation being updated"></span></a>
+              </div>
+            </div>
+            <dl class="proj__tally" aria-label="Key figures">
+              <div><dt class="is-new">6 / 14<small> min<span class="i18n-pending" title="translation being updated"></span></small></dt><dd>to 50 / 90 % of the mass above 40 µm, extended kernel<span class="i18n-pending" title="translation being updated"></span></dd></div>
+              <div><dt>3 / 5<small> min<span class="i18n-pending" title="translation being updated"></span></small></dt><dd>the same, thesis kernel<span class="i18n-pending" title="translation being updated"></span></dd></div>
+              <div><dt>2.1<small> %</small></dt><dd>largest fall-speed error against measurement, from 0.3 mm up<span class="i18n-pending" title="translation being updated"></span></dd></div>
+              <div><dt>10<sup>−7</sup></dt><dd>mass error against Golovin’s exact solution<span class="i18n-pending" title="translation being updated"></span></dd></div>
+            </dl>
+          </div>
+
+          <section class="proj__part" aria-labelledby="dc-cloud">
+            <h3 id="dc-cloud"><span class="psub__n">1.1</span>The warm cloud<span class="i18n-pending" title="translation being updated"></span></h3>
+            <p>
+              The test case is a warm cloud of \(300\ \mathrm{cm^{-3}}\) droplets of
+              radius \(8\ \mathrm{\mu m}\) with \(1\ \mathrm{cm^{-3}}\) collectors of
+              \(40\ \mathrm{\mu m}\), at \(10\,{}^{\circ}\mathrm{C}\) and
+              \(850\ \mathrm{hPa}\). Growth is measured by the mass fraction in drops of
+              radius \(r \ge 40\ \mathrm{\mu m}\): a diagnostic of growth, not a rainfall
+              prediction. With the thesis kernel the mass piles up
+              near \(500\ \mathrm{\mu m}\) and stops, because the Weber number
+              computed with Stokes speeds switches coalescence off; with the extended
+              kernel the drops keep growing to millimetres. The kernel matters more
+              than the bookkeeping.
+            <span class="i18n-pending" title="translation being updated"></span></p>
+          </section>
+
+          <section class="proj__part" aria-labelledby="dc-changes">
+            <h3 id="dc-changes"><span class="psub__n">1.2</span>What changed, one line each<span class="i18n-pending" title="translation being updated"></span></h3>
+            <ol class="proj__changes">
+              <li><b>Fall speed.</b> Stokes’ law gives \(\mathrm{Re}\approx 150\) for a \(200\ \mathrm{\mu m}\) drop, outside its own validity. A force balance with Beard’s drag coefficient \(C_D(\mathrm{Re})\), solved through the Davies number, reproduces the measurements of Gunn and Kinzer within 2.1 % from 0.3 mm up.<span class="i18n-pending" title="translation being updated"></span></li>
+              <li><b>Collision efficiency.</b> The small droplet obeys \(\tau\,\dot{\mathbf v} = \mathbf u - \mathbf v - \tau g^{*}\mathbf e_z\) in the flow around the collector; scaled by \(R\) and \(U\) this is the Stokes number \(\mathrm{St} = \tau U/R\). The grazing trajectory gives \(E\); the solver reproduces the critical Stokes numbers \(1/12\) and \(1.21\).<span class="i18n-pending" title="translation being updated"></span></li>
+              <li><b>Bookkeeping.</b> The thesis’s two fixed populations become one spectrum obeying the Smoluchowski collection equation; the thesis equations are recovered as its limit of rare collectors.<span class="i18n-pending" title="translation being updated"></span></li>
+              <li><b>Numerics.</b> A logarithmic mass grid, pair fluxes computed in place, a deposit that conserves number and mass, and a limiter that is derived rather than guessed; tested against Golovin’s exact solution, with a mass error of \(10^{-7}\) and a spectrum error of 5 % at 8 bins per doubling.<span class="i18n-pending" title="translation being updated"></span></li>
+              <li><b>Ice.</b> Splinter fragments join the interacting population. The app’s fragmentation is event-based: a fixed mass fraction \(\lambda\) per ice–ice collision and a fixed fragment mass. The thesis’s code drains mass at a random rate per second instead, so the cold runs test the app’s closure, not the thesis’s model. With fragments in the race the ice number grows from 167 to 1 700–2 100 cm⁻³ in an hour and the mass above 40 µm falls to 0.2–4 %: the closure, not the solver, drives that result.<span class="i18n-pending" title="translation being updated"></span></li>
+            </ol>
+          </section>
+
+          <section class="proj__part" aria-labelledby="dc-figs">
+            <h3 id="dc-figs"><span class="psub__n">1.3</span>Four figures from the project<span class="i18n-pending" title="translation being updated"></span></h3>
+            <div class="proj__figs">
+              <figure>
+                <a class="pfig__plate" href="../portfolios/droplet-collection/index.html#/theory"><img src="../portfolios/droplet-collection/fig/fallspeed_gk.svg" width="636" height="300" loading="lazy" alt="Fall speed against drop size for the two models and the measurements of Gunn and Kinzer, and the error of the drag balance."></a>
+                <figcaption><span class="pfig__n">Figure 1</span>Left: the two fall-speed models against Gunn and Kinzer. Right: the error of the drag balance, at most 2.07 % at the listed sizes from 0.3 mm up and −7.57 % at 0.1 mm.<span class="i18n-pending" title="translation being updated"></span></figcaption>
+              </figure>
+              <figure>
+                <a class="pfig__plate" href="../portfolios/droplet-collection/index.html#/theory"><img src="../portfolios/droplet-collection/fig/ecoll_map.svg" width="419" height="300" loading="lazy" alt="Map of the collision efficiency against the radii of the collector and the collected droplet."></a>
+                <figcaption><span class="pfig__n">Figure 2</span>Collision efficiency for water on water at \(10\,{}^{\circ}\mathrm{C}\), \(850\ \mathrm{hPa}\), on the \(45 \times 40\) grid used by the solver.<span class="i18n-pending" title="translation being updated"></span></figcaption>
+              </figure>
+              <figure>
+                <a class="pfig__plate" href="../portfolios/droplet-collection/index.html#/results"><img src="../portfolios/droplet-collection/fig/w2_spectra.svg" width="580" height="300" loading="lazy" alt="Mass spectra of the warm cloud at several times, for the thesis kernel and the new kernel."></a>
+                <figcaption><span class="pfig__n">Figure 3</span>Evolution of the mass spectrum in the warm cloud, stochastic collection equation, thesis kernel (left) and new kernel (right).<span class="i18n-pending" title="translation being updated"></span></figcaption>
+              </figure>
+              <figure>
+                <a class="pfig__plate" href="../portfolios/droplet-collection/index.html#/checks"><img src="../portfolios/droplet-collection/fig/golovin.svg" width="470" height="300" loading="lazy" alt="Golovin test: numerical spectra against the exact solution."></a>
+                <figcaption><span class="pfig__n">Figure 4</span>Golovin test with 8 bins per doubling of mass: numerical (solid) against exact (dashed).<span class="i18n-pending" title="translation being updated"></span></figcaption>
+              </figure>
+            </div>
+          </section>
+
+          <section class="proj__part" aria-labelledby="dc-pages">
+            <h3 id="dc-pages"><span class="psub__n">1.4</span>The project’s own pages<span class="i18n-pending" title="translation being updated"></span></h3>
+            <ul class="proj__pages">
+              <li><a href="../portfolios/droplet-collection/index.html#/"><b>Overview<span class="i18n-pending" title="translation being updated"></span></b><span>The question, the warm cloud in two pictures, and the droplets falling.<span class="i18n-pending" title="translation being updated"></span></span></a></li>
+              <li><a href="../portfolios/droplet-collection/index.html#/theory"><b>Theory<span class="i18n-pending" title="translation being updated"></span></b><span>Twelve chapters from the encounter to the evidence map, 62 numbered equations, worked examples, and each correction where it occurs.<span class="i18n-pending" title="translation being updated"></span></span></a></li>
+              <li><a href="../portfolios/droplet-collection/index.html#/results"><b>Results<span class="i18n-pending" title="translation being updated"></span></b><span>Warm and cold clouds, four models of the same spectrum.<span class="i18n-pending" title="translation being updated"></span></span></a></li>
+              <li><a href="../portfolios/droplet-collection/index.html#/simulate"><b>Simulate<span class="i18n-pending" title="translation being updated"></span></b><span>The solver of the collection equation, in your browser.<span class="i18n-pending" title="translation being updated"></span></span></a></li>
+              <li><a href="../portfolios/droplet-collection/index.html#/checks"><b>Checks<span class="i18n-pending" title="translation being updated"></span></b><span>Fall speed, collision efficiency, critical Stokes numbers and the Golovin test.<span class="i18n-pending" title="translation being updated"></span></span></a></li>
+            </ul>
+            <p class="proj__note">A static copy of the Droplet Collection app. Its saved-runs list is left out: every run is computed fresh in your browser, and nothing is stored.<span class="i18n-pending" title="translation being updated"></span></p>
+          </section>
+        </div>
+      </article>
+
+      <article class="proj" id="rotor-pendula" aria-labelledby="rp-title">
+        <div class="proj__band">
+          <span class="proj__num">02</span>
+          <p>A corrected study by Sol · independently audited · 2026<span class="i18n-pending" title="translation being updated"></span></p>
+          <span>rotating mechanics · energy harvesting · nonlinear dynamics<span class="i18n-pending" title="translation being updated"></span></span>
+        </div>
+        <div class="proj__body">
+          <div class="proj__head">
+            <div>
+              <h2 id="rp-title">Rotor Pendula<span class="i18n-pending" title="translation being updated"></span></h2>
+              <p class="proj__sub">Can a swinging weight on a turbine blade power a sensor?<span class="i18n-pending" title="translation being updated"></span></p>
+              <p class="proj__abs">
+                Hang a 100 g weight on a 20 cm rod from a point on a turning blade. Each
+                time the blade goes round, gravity pulls the weight first one way and then
+                the other, so it swings once per turn, like a child on a swing pushed once
+                per pass; a generator at the pivot brakes that swing and turns it into
+                electricity. The study builds everything from the pendulum’s Lagrangian:
+                the equations of motion, the energy books that say the rotor pays for every
+                milliwatt, the driven-oscillator resonance at \(r_p = L\) with the best
+                generator setting \(\kappa = |R-1|\), real turbine sizes from the tip-speed
+                ratio, the double pendulum, chaos, and a sensor budget from two datasheets.
+                An independent audit rebuilt the model from scratch and reproduced every
+                headline number; the solver runs in your browser. Sol’s whole report is
+                included, word for word, with its nine tables rebuilt from the data and all
+                181 files of the delivery to download.
+              <span class="i18n-pending" title="translation being updated"></span></p>
+              <div class="proj__actions">
+                <a class="proj__btn" href="../portfolios/rotor-pendula/index.html">Open the project<span class="i18n-pending" title="translation being updated"></span></a>
+                <a class="proj__btn proj__btn--ghost" href="../portfolios/rotor-pendula/index.html#/theory">Read the derivation<span class="i18n-pending" title="translation being updated"></span></a>
+                <a class="proj__btn proj__btn--ghost" href="../portfolios/rotor-pendula/index.html#/simulate">Run a pendulum<span class="i18n-pending" title="translation being updated"></span></a>
+                <a class="proj__btn proj__btn--ghost" href="../portfolios/rotor-pendula/index.html#/report">Read Sol’s report<span class="i18n-pending" title="translation being updated"></span></a>
+              </div>
+            </div>
+            <dl class="proj__tally" aria-label="Key figures">
+              <div><dt class="is-new">57.1<small> mW<span class="i18n-pending" title="translation being updated"></span></small></dt><dd>best harvest, single pendulum, 100 g on 20 cm<span class="i18n-pending" title="translation being updated"></span></dd></div>
+              <div><dt>37.6<small> µW</small></dt><dd>what a blade sensor node needs<span class="i18n-pending" title="translation being updated"></span></dd></div>
+              <div><dt>0.64–0.74</dt><dd>double ÷ single, same mass and reach<span class="i18n-pending" title="translation being updated"></span></dd></div>
+              <div><dt>7.2 × 10<sup>−5</sup></dt><dd>largest share of the turbine’s output, paid by the rotor<span class="i18n-pending" title="translation being updated"></span></dd></div>
+            </dl>
+          </div>
+
+          <section class="proj__part" aria-labelledby="rp-answer">
+            <h3 id="rp-answer"><span class="psub__n">2.1</span>The answer in four lines<span class="i18n-pending" title="translation being updated"></span></h3>
+            <ol class="proj__changes">
+              <li><b>There is enough power.</b> All 18 studied mountings give 9.55–57.1 mW of mechanical power; after an assumed 50 % conversion that is at least 127 times the 37.6 µW a low-duty sensor node draws.<span class="i18n-pending" title="translation being updated"></span></li>
+              <li><b>The rotor pays for it.</b> At fixed rotor speed the generator’s energy comes from the rotor’s drive; the pendulum cannot raise the turbine’s net output, and costs it at most \(7.2\times10^{-5}\) of it.<span class="i18n-pending" title="translation being updated"></span></li>
+              <li><b>One rod beats two.</b> With the same mass and the same reach, a double pendulum gives 0.64–0.74 of the single one’s power at every mounting: half its mass sits at half the reach.<span class="i18n-pending" title="translation being updated"></span></li>
+              <li><b>Chaos does not help.</b> 2 of 54 scanned double pendula are chaotic; at matched forcing the regular orbit harvests about 0.379 W, the chaotic one about 0.24–0.25 W. The catch is force, not power: a fast rotor’s pivot sits in 18–215 g, beyond a ±8 g accelerometer.<span class="i18n-pending" title="translation being updated"></span></li>
+            </ol>
+          </section>
+
+          <section class="proj__part" aria-labelledby="rp-audit">
+            <h3 id="rp-audit"><span class="psub__n">2.2</span>What the audit corrected<span class="i18n-pending" title="translation being updated"></span></h3>
+            <p>
+              An independent model, written from scratch, re-ran all 36 mapping cases and all 54 chaos cases; every
+              headline number reproduced, to about one part in \(10^{11}\). Eight things in the report needed
+              correcting, and none changes a conclusion. The main ones: the turbine-size formula is \(56\ \mathrm{m/s}/\Omega\), not
+              mm/s; the centrifugal factor \(\Gamma\) rises with rotor speed, not falls; the chaotic power’s error bar is
+              about \(\pm0.01\ \mathrm{W}\), not \(\pm0.003\ \mathrm{W}\); one mounting puts the bob 66 mm past the
+              blade tip; and one figure is blurred by single-precision storage. The project shows each correction
+              where it occurs, with its evidence.
+            <span class="i18n-pending" title="translation being updated"></span></p>
+          </section>
+
+          <section class="proj__part" aria-labelledby="rp-figs">
+            <h3 id="rp-figs"><span class="psub__n">2.3</span>Four figures from the study<span class="i18n-pending" title="translation being updated"></span></h3>
+            <div class="proj__figs">
+              <figure>
+                <a class="pfig__plate" href="../portfolios/rotor-pendula/index.html#/report"><img src="../portfolios/rotor-pendula/fig/01_geometry.svg" width="648" height="300" loading="lazy" alt="The planar model: a pivot on a circle around the hub, an upper rod and a lower rod, and the generators at the two joints."></a>
+                <figcaption><span class="pfig__n">Figure 1</span>The planar model: the pivot rides a circle round the hub; the generators feel relative joint speeds, not absolute rod speeds.<span class="i18n-pending" title="translation being updated"></span></figcaption>
+              </figure>
+              <figure>
+                <a class="pfig__plate" href="../portfolios/rotor-pendula/index.html#/results"><img src="../portfolios/rotor-pendula/fig/02_mapping_power.svg" width="660" height="300" loading="lazy" alt="Mean harvested power at the 18 mountings against rotor speed, single and double pendulum, small and large rotors."></a>
+                <figcaption><span class="pfig__n">Figure 2</span>Mean harvested power at the 18 mountings, single and double pendulum; lines only join the sampled points.<span class="i18n-pending" title="translation being updated"></span></figcaption>
+              </figure>
+              <figure>
+                <a class="pfig__plate" href="../portfolios/rotor-pendula/index.html#/results"><img src="../portfolios/rotor-pendula/fig/05_chaos.svg" width="715" height="300" loading="lazy" alt="Left: power against damping for the matched group; right: all 54 scanned cases."></a>
+                <figcaption><span class="pfig__n">Figure 3</span>Left: the matched group, power against damping. Right: all 54 scanned cases; the vertical line alone is not the chaos test.<span class="i18n-pending" title="translation being updated"></span></figcaption>
+              </figure>
+              <figure>
+                <a class="pfig__plate" href="../portfolios/rotor-pendula/index.html#/results"><img src="../portfolios/rotor-pendula/fig/07_sensor_range.svg" width="655" height="300" loading="lazy" alt="Largest radial specific force at the pivot for each mounting against the accelerometer range."></a>
+                <figcaption><span class="pfig__n">Figure 4</span>The largest radial specific force at the pivot, \(g(\Gamma+1)\), against the accelerometer’s \(\pm8\,g\) range.<span class="i18n-pending" title="translation being updated"></span></figcaption>
+              </figure>
+            </div>
+          </section>
+
+          <section class="proj__part" aria-labelledby="rp-pages">
+            <h3 id="rp-pages"><span class="psub__n">2.4</span>The project’s own pages<span class="i18n-pending" title="translation being updated"></span></h3>
+            <ul class="proj__pages">
+              <li><a href="../portfolios/rotor-pendula/index.html#/"><b>Overview<span class="i18n-pending" title="translation being updated"></span></b><span>The question, the answer in three numbers, and the best mounting in motion.<span class="i18n-pending" title="translation being updated"></span></span></a></li>
+              <li><a href="../portfolios/rotor-pendula/index.html#/theory"><b>Theory<span class="i18n-pending" title="translation being updated"></span></b><span>Twelve chapters from the Lagrangian to the sensor budget, 38 numbered equations.<span class="i18n-pending" title="translation being updated"></span></span></a></li>
+              <li><a href="../portfolios/rotor-pendula/index.html#/results"><b>Results<span class="i18n-pending" title="translation being updated"></span></b><span>The 18 mountings, one rod against two, chaos, and the sensor.<span class="i18n-pending" title="translation being updated"></span></span></a></li>
+              <li><a href="../portfolios/rotor-pendula/index.html#/simulate"><b>Simulate<span class="i18n-pending" title="translation being updated"></span></b><span>Any mounting or your own values, solved with RK4 in your browser.<span class="i18n-pending" title="translation being updated"></span></span></a></li>
+              <li><a href="../portfolios/rotor-pendula/index.html#/checks"><b>Checks<span class="i18n-pending" title="translation being updated"></span></b><span>The study’s runs recomputed live, the audit’s numbers, and what was corrected.<span class="i18n-pending" title="translation being updated"></span></span></a></li>
+              <li><a href="../portfolios/rotor-pendula/index.html#/report"><b>Report<span class="i18n-pending" title="translation being updated"></span></b><span>Sol’s 14-page report in full: 20 equations, 9 tables rebuilt from the data and checked cell by cell, the PDF and all 181 files.<span class="i18n-pending" title="translation being updated"></span></span></a></li>
+            </ul>
+            <p class="proj__note">A static copy of the Rotor Pendula app. Its saved-runs list is left out: every run is computed fresh in your browser, and nothing is stored.<span class="i18n-pending" title="translation being updated"></span></p>
+          </section>
+        </div>
+      </article>
+
+      <article class="proj" id="hydraulic-press" aria-labelledby="hp-title">
+        <div class="proj__band">
+          <span class="proj__num">03</span>
+          <p>An interactive study · from first principles · 2026<span class="i18n-pending" title="translation being updated"></span></p>
+          <span>fluid power · digital control · numerical simulation<span class="i18n-pending" title="translation being updated"></span></span>
+        </div>
+        <div class="proj__body">
+          <div class="proj__head">
+            <div>
+              <h2 id="hp-title">Hydraulic Press Study<span class="i18n-pending" title="translation being updated"></span></h2>
+              <p class="proj__sub">How a digital controller makes 12 MPa of oil press with 60 kN, and hold it<span class="i18n-pending" title="translation being updated"></span></p>
+              <p class="proj__abs">
+                Push a small piston and a large one lifts a car: Pascal’s principle, the oldest trick in
+                hydraulics. A modern press adds a servo valve and a computer, and the trick becomes a control
+                problem. This study builds one such press from first principles: a pump held at 12 MPa, a
+                four-way servo valve, two metres of hose, a cylinder carrying a 160 kg ram, and a specimen to
+                squeeze, in a nonlinear model with eight state variables. A PID controller, sampled every
+                millisecond, drives the ram to the specimen in position control, switches to force control at
+                contact, ramps to 60 kN, holds and lets go. You watch every step with the oil coloured by its
+                pressure, change any setting and see the whole cycle recomputed, and ask the linearized loop,
+                with Bode, Nyquist and z-plane plots, whether it survives. A 23-chapter companion text derives
+                every equation the animation integrates, starting from Pascal’s press.
+              <span class="i18n-pending" title="translation being updated"></span></p>
+              <div class="proj__actions">
+                <a class="proj__btn" href="../portfolios/hydraulics/index.html#servo">Open the project<span class="i18n-pending" title="translation being updated"></span></a>
+                <a class="proj__btn proj__btn--ghost" href="../portfolios/hydraulics/index.html#theory">Read the derivations<span class="i18n-pending" title="translation being updated"></span></a>
+                <a class="proj__btn proj__btn--ghost" href="../portfolios/hydraulics/index.html#ideal">Start from Pascal<span class="i18n-pending" title="translation being updated"></span></a>
+              </div>
+            </div>
+            <dl class="proj__tally" aria-label="Key figures">
+              <div><dt class="is-new">63.6<small> kN<span class="i18n-pending" title="translation being updated"></span></small></dt><dd>peak force for a 60 kN set-point<span class="i18n-pending" title="translation being updated"></span></dd></div>
+              <div><dt>64°<small> · 11 dB<span class="i18n-pending" title="translation being updated"></span></small></dt><dd>phase and gain margin of the position loop<span class="i18n-pending" title="translation being updated"></span></dd></div>
+              <div><dt>93<small> %</small></dt><dd>of the pump’s work turned into heat in the valve<span class="i18n-pending" title="translation being updated"></span></dd></div>
+              <div><dt>52</dt><dd>numbers in the text, each recomputed from the model<span class="i18n-pending" title="translation being updated"></span></dd></div>
+            </dl>
+          </div>
+
+          <section class="proj__part" aria-labelledby="hp-cycle">
+            <h3 id="hp-cycle"><span class="psub__n">3.1</span>One press cycle, 4.4 seconds<span class="i18n-pending" title="translation being updated"></span></h3>
+            <ol class="proj__changes">
+              <li><b>Approach.</b> From 0.1 s the position law moves the ram up along a smooth path, the spool opening to 94 % on the way; at 1.1 s it slows to a 10 mm/s creep for the last 2 mm.<span class="i18n-pending" title="translation being updated"></span></li>
+              <li><b>Contact and press.</b> At 1.316 s the load cell feels the specimen and the controller hands over to its force law, which ramps to 60 kN in 0.25 s, overshoots to 63.6 kN and settles while it holds for 0.5 s.<span class="i18n-pending" title="translation being updated"></span></li>
+              <li><b>Release and retract.</b> From 2.066 s the force ramps back down; at 2.316 s the position law takes the ram home, and the cycle is done at 4.116 s.<span class="i18n-pending" title="translation being updated"></span></li>
+              <li><b>Where the energy goes.</b> The pump does 26.3 kJ of work; the valve turns 24.4 kJ of it into heat, because a valve throttling a constant-pressure supply is a brake. The energy books close to \(2\times10^{-14}\) of the pump’s work.<span class="i18n-pending" title="translation being updated"></span></li>
+            </ol>
+          </section>
+
+          <section class="proj__part" aria-labelledby="hp-model">
+            <h3 id="hp-model"><span class="psub__n">3.2</span>What the model keeps<span class="i18n-pending" title="translation being updated"></span></h3>
+            <p>
+              Every block is a physical law with its own derivation. The valve’s metering edges are sharp-edged
+              orifices whose jet contracts to 0.61 of the opening, as the free-streamline theory of Helmholtz
+              and Kirchhoff predicts; the spool answers the controller as a
+              mass on a spring at 60 Hz. The two metres of hose are a slug of oil with inertia and friction,
+              laminar and turbulent. The oil itself is a spring whose stiffness depends on its pressure, through
+              the 0.5 % of air it carries as bubbles. The cylinder has two chambers of different area, seal friction and end
+              stops; the specimen is a spring with damping. The controller sees the world only once a
+              millisecond, through a zero-order hold, and the model is integrated with fourth-order Runge–Kutta
+              at 10 µs, a hundred steps per sample. An independent Python model, with SciPy for the numbers and
+              SymPy for the derivatives, recomputes the equilibria, the linearization, the closed-loop poles,
+              the margins and the whole nonlinear cycle, and agrees with the page.
+            <span class="i18n-pending" title="translation being updated"></span></p>
+          </section>
+
+          <section class="proj__part" aria-labelledby="hp-figs">
+            <h3 id="hp-figs"><span class="psub__n">3.3</span>Four figures from the study<span class="i18n-pending" title="translation being updated"></span></h3>
+            <div class="proj__figs">
+              <figure>
+                <a class="pfig__plate" href="../portfolios/hydraulics/index.html#servo"><img src="../portfolios/hydraulics/fig/01_press.webp" width="420" height="300" loading="lazy" alt="The servo press drawn in section during the press phase: the controller panel, the pump, the servo valve, the hose and the cylinder pressing the specimen, with the oil coloured by pressure."></a>
+                <figcaption><span class="pfig__n">Figure 1</span>The press at 1.45 s, under the force law: set-point 32.6 kN on its way to 60, spool 6.4 % open, oil coloured by pressure.<span class="i18n-pending" title="translation being updated"></span></figcaption>
+              </figure>
+              <figure>
+                <a class="pfig__plate" href="../portfolios/hydraulics/index.html#servo"><img src="../portfolios/hydraulics/fig/02_traces.webp" width="462" height="300" loading="lazy" alt="Six time plots of one press cycle: position, force, the three pressures, valve command and spool position, the energy books, and the tracking error."></a>
+                <figcaption><span class="pfig__n">Figure 2</span>One cycle in six traces: position, force, pressures, valve, energy and tracking error, shaded by phase.<span class="i18n-pending" title="translation being updated"></span></figcaption>
+              </figure>
+              <figure>
+                <a class="pfig__plate" href="../portfolios/hydraulics/index.html#servo"><img src="../portfolios/hydraulics/fig/03_loop.webp" width="748" height="300" loading="lazy" alt="Bode plot of the sampled position loop up to 500 Hz, and its Nyquist plot passing the point minus one at a safe distance."></a>
+                <figcaption><span class="pfig__n">Figure 3</span>The sampled position loop up to the Nyquist frequency of 500 Hz: crossover at 9.7 Hz with 64° of phase margin.<span class="i18n-pending" title="translation being updated"></span></figcaption>
+              </figure>
+              <figure>
+                <a class="pfig__plate" href="../portfolios/hydraulics/index.html#theory"><img src="../portfolios/hydraulics/fig/04_map.webp" width="631" height="300" loading="lazy" alt="Block diagram of the servo press: controller, torque motor and spool, valve edges, hose, cap chamber, ram, rod chamber, pump, specimen and sensors, joined by arrows."></a>
+                <figcaption><span class="pfig__n">Figure 4</span>The machine as ten blocks, from chapter 0 of the text: between two blocks, a flow goes one way and a pressure or speed answers back.<span class="i18n-pending" title="translation being updated"></span></figcaption>
+              </figure>
+            </div>
+          </section>
+
+          <section class="proj__part" aria-labelledby="hp-pages">
+            <h3 id="hp-pages"><span class="psub__n">3.4</span>The project’s own pages<span class="i18n-pending" title="translation being updated"></span></h3>
+            <ul class="proj__pages proj__pages--3">
+              <li><a href="../portfolios/hydraulics/index.html#servo"><b>Servo press<span class="i18n-pending" title="translation being updated"></span></b><span>The animated press with its controller, gauges, every setting, the time traces, the loop analysis and nine worked solutions.<span class="i18n-pending" title="translation being updated"></span></span></a></li>
+              <li><a href="../portfolios/hydraulics/index.html#ideal"><b>Ideal press<span class="i18n-pending" title="translation being updated"></span></b><span>Pascal’s press from one Lagrangian, drawn to scale, with a probe that reads the pressure anywhere in the oil.<span class="i18n-pending" title="translation being updated"></span></span></a></li>
+              <li><a href="../portfolios/hydraulics/index.html#theory"><b>Theory<span class="i18n-pending" title="translation being updated"></span></b><span>Hydraulics from first principles: 23 chapters, 63 numbered equations, each number computed from the model.<span class="i18n-pending" title="translation being updated"></span></span></a></li>
+            </ul>
+            <p class="proj__note">One self-contained page, generated from its source in this site’s repository, <a href="https://github.com/Numa1997/SiteTest/tree/main/portfolios-src/hydraulics">portfolios-src/hydraulics</a>. Everything is computed in your browser, and nothing is stored.<span class="i18n-pending" title="translation being updated"></span></p>
+          </section>
+        </div>
+      </article>
+
+      <article class="proj" id="iron-cotton" aria-labelledby="ic-title">
+        <div class="proj__band">
+          <span class="proj__num">04</span>
+          <p>An interactive study · English and Arabic · 2026<span class="i18n-pending" title="translation being updated"></span></p>
+          <span>impact mechanics · interatomic bonds · fibre networks<span class="i18n-pending" title="translation being updated"></span></span>
+        </div>
+        <div class="proj__body">
+          <div class="proj__head">
+            <div>
+              <h2 id="ic-title">Iron, Cotton and the Head<span class="i18n-pending" title="translation being updated"></span></h2>
+              <p class="proj__sub">Why an iron ball hurts and a cotton ball of the same mass does not<span class="i18n-pending" title="translation being updated"></span></p>
+              <p class="proj__abs">
+                Drop two balls of exactly 1 kg from 10 m onto a head: one of iron, one of cotton. They bring
+                the same energy, and on the head’s scale they settle to the same weight, 9.81 N. The blow is
+                another matter. The iron ball does not give way, so the head must stop it within the few
+                millimetres a skull can yield, and a short stop needs a large force. The cotton ball gives way
+                itself and burns the energy inside its own fibres. The study builds both balls from their
+                bonds: iron as a lattice of atoms held by Morse potentials with iron’s shape, cotton as a
+                tangle of fibres that stretch, bend, cling where they cross and rub. Newton’s law moves every
+                particle, a peak-hold force gauge reads the impact, and the energy books show where every
+                joule goes. The text derives each step, from the fall with air drag to van Wyk’s law for fibre
+                masses and the way real force sensors work, and compares the model with a real skull.
+              <span class="i18n-pending" title="translation being updated"></span></p>
+              <div class="proj__actions">
+                <a class="proj__btn" href="../portfolios/impact/index.html">Open the study<span class="i18n-pending" title="translation being updated"></span></a>
+                <a class="proj__btn proj__btn--ghost" href="../portfolios/impact/ar.html" lang="ar" style="font-family:'Noto Naskh Arabic',serif">النسخة العربية</a>
+              </div>
+            </div>
+            <dl class="proj__tally" aria-label="Key figures">
+              <div><dt class="is-new">639<small> N</small></dt><dd>peak force of the iron ball on the model head<span class="i18n-pending" title="translation being updated"></span></dd></div>
+              <div><dt>188<small> N</small></dt><dd>peak force of the cotton ball, same mass and speed<span class="i18n-pending" title="translation being updated"></span></dd></div>
+              <div><dt>9.81<small> N</small></dt><dd>the weight both scales settle on: 1.000 kg each<span class="i18n-pending" title="translation being updated"></span></dd></div>
+              <div><dt>19.8<small> kN<span class="i18n-pending" title="translation being updated"></span></small></dt><dd>a real 0.5 kg iron ball from 10 m on a skull, against an 11.9 kN failure load<span class="i18n-pending" title="translation being updated"></span></dd></div>
+            </dl>
+          </div>
+
+          <section class="proj__part" aria-labelledby="ic-drop">
+            <h3 id="ic-drop"><span class="psub__n">4.1</span>One drop, 9 seconds<span class="i18n-pending" title="translation being updated"></span></h3>
+            <ol class="proj__changes">
+              <li><b>The fall.</b> Both balls are held 10 m above the head and fall under gravity alone; the first touch comes at 1.428 s, as Newton’s \(\sqrt{2h/g}\) predicts, at 14.0 m/s.<span class="i18n-pending" title="translation being updated"></span></li>
+              <li><b>The blow.</b> The iron ball barely deforms and the head’s spring takes the whole stop: 639 N within about 50 ms, and the ball bounces. The cotton ball crushes through much of its size and peaks at 188 N.<span class="i18n-pending" title="translation being updated"></span></li>
+              <li><b>The weight.</b> When the shaking has died away, both scales read 9.81 N, which is 1.000 kg: same mass, very different blows.<span class="i18n-pending" title="translation being updated"></span></li>
+              <li><b>Where the energy goes.</b> The iron ball turns about 98 J into heat in the head; the cotton ball turns about 104 J into heat inside its own fibres. The energy books close to within half a joule.<span class="i18n-pending" title="translation being updated"></span></li>
+            </ol>
+          </section>
+
+          <section class="proj__part" aria-labelledby="ic-model">
+            <h3 id="ic-model"><span class="psub__n">4.2</span>What the model keeps<span class="i18n-pending" title="translation being updated"></span></h3>
+            <p>
+              Iron is 91 atoms on a triangular lattice, each bonded to its neighbours by a Morse valley with the
+              shape Girifalco and Weizer fitted to iron in 1959. Cotton is 18 fibres of 34 beads: stretch springs
+              along each fibre, bending springs on the angle between segments, breakable junctions where fibres
+              cross, and soft contact with friction where they touch, which gives the stiffening of van Wyk’s law.
+              The head is a plate on a spring and a damper and is also the scale. The model is two-dimensional,
+              leaves out air and is tuned for clarity, so its force ratio is about 3.4, where real iron against
+              real cotton gives about 120; the text says so and gives the real-world numbers beside the model’s.
+            <span class="i18n-pending" title="translation being updated"></span></p>
+          </section>
+
+          <section class="proj__part" aria-labelledby="ic-figs">
+            <h3 id="ic-figs"><span class="psub__n">4.3</span>Four figures from the study<span class="i18n-pending" title="translation being updated"></span></h3>
+            <div class="proj__figs">
+              <figure>
+                <a class="pfig__plate" href="../portfolios/impact/index.html"><img src="../portfolios/impact/fig/01_impact.webp" width="409" height="300" loading="lazy" alt="The two balls side by side at the instant of the iron ball’s peak: the iron lattice pressing its plate down, the cotton tangle just touching its plate, and below each a force gauge, iron reading 639 N at peak, cotton 35 N."></a>
+                <figcaption><span class="pfig__n">Figure 1</span>The iron ball’s peak, 1.447 s: its scale holds 639 N while the cotton has only begun to press.<span class="i18n-pending" title="translation being updated"></span></figcaption>
+              </figure>
+              <figure>
+                <a class="pfig__plate" href="../portfolios/impact/index.html"><img src="../portfolios/impact/fig/02_force.webp" width="626" height="300" loading="lazy" alt="Force on the head against time around the impact: a tall narrow spike for iron reaching 639 N, a low wide hump for cotton reaching 188 N, and the dashed weight line at 9.81 N."></a>
+                <figcaption><span class="pfig__n">Figure 2</span>The same blow twice: iron as a tall spike, cotton as a low, wide hump.<span class="i18n-pending" title="translation being updated"></span></figcaption>
+              </figure>
+              <figure>
+                <a class="pfig__plate" href="../portfolios/impact/index.html"><img src="../portfolios/impact/fig/03_energy.webp" width="734" height="300" loading="lazy" alt="Energy bars for each ball: the energy given by the fall above, and below it where it went, almost all heat in the head for iron and almost all heat in the cotton for cotton."></a>
+                <figcaption><span class="pfig__n">Figure 3</span>The energy books at the end: iron heats the head, cotton heats itself.<span class="i18n-pending" title="translation being updated"></span></figcaption>
+              </figure>
+              <figure>
+                <a class="pfig__plate" href="../portfolios/impact/index.html"><img src="../portfolios/impact/fig/04_weight.webp" width="409" height="300" loading="lazy" alt="Both balls at rest on their plates after 9 s; both gauges read a weight of 9.81 N and a mass of 1.000 kg, with peaks of 639 N and 188 N kept by the peak-hold pointers."></a>
+                <figcaption><span class="pfig__n">Figure 4</span>At rest: both scales read 9.81 N, 1.000 kg, and keep their very different peaks.<span class="i18n-pending" title="translation being updated"></span></figcaption>
+              </figure>
+            </div>
+          </section>
+
+          <section class="proj__part" aria-labelledby="ic-pages">
+            <h3 id="ic-pages"><span class="psub__n">4.4</span>The study’s own pages<span class="i18n-pending" title="translation being updated"></span></h3>
+            <ul class="proj__pages">
+              <li><a href="../portfolios/impact/index.html"><b>English<span class="i18n-pending" title="translation being updated"></span></b><span>The drop, the gauges, the force curves, the energy books, and seven sections of derivations with every parameter.<span class="i18n-pending" title="translation being updated"></span></span></a></li>
+              <li><a href="../portfolios/impact/ar.html" lang="ar" dir="rtl" style="font-family:'Noto Naskh Arabic',serif"><b style="font-family:'Amiri',serif">العربية</b><span>الدراسة كاملةً بالعربية: السقوط، والموازين، ومنحنيات القوة، وحساب الطاقة، والاشتقاقات.</span></a></li>
+            </ul>
+            <p class="proj__note">Two self-contained pages, generated from their source in this site’s repository, <a href="https://github.com/Numa1997/SiteTest/tree/main/portfolios-src/impact">portfolios-src/impact</a>. The drop is computed in your browser when the page opens, and nothing is stored.<span class="i18n-pending" title="translation being updated"></span></p>
+          </section>
+        </div>
+      </article>
+    </main>
+
+    <footer>
+      <span>© 2026 Numa Koudsie<span class="i18n-pending" title="translation being updated"></span></span>
+      <span><a href="index.html">Home page<span class="i18n-pending" title="translation being updated"></span></a> · <a href="simulations.html">Simulations<span class="i18n-pending" title="translation being updated"></span></a> · <a href="#top" id="to-top">Back to top ↑<span class="i18n-pending" title="translation being updated"></span></a></span>
+    </footer>
+
+    <script src="../scripts/fold.js"></script>
+    <script src="../vendor/katex/katex.min.js"></script>
+    <script src="../vendor/katex/contrib/auto-render.min.js"></script>
+    <script>
+      (function () {
+        'use strict';
+        if (window.renderMathInElement) {
+          window.renderMathInElement(document.getElementById('projects'), {
+            delimiters: [{ left: '\\[', right: '\\]', display: true }, { left: '\\(', right: '\\)', display: false }],
+            throwOnError: false
+          });
+        }
+        document.getElementById('to-top').addEventListener('click', function (e) {
+          e.preventDefault();
+          window.scrollTo(0, 0);
+        });
+      })();
+    </script>
+  </body>
+</html>
