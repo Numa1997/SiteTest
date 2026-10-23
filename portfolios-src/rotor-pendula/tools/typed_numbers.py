@@ -9,15 +9,15 @@ A number typed by hand is allowed only if it is listed here for its file, as one
 Integers from 0 to 10 without a decimal point are allowed everywhere (counts, small factors, exponents); section and
 equation numbers in headings and \\tag{} are skipped.
 """
-SOL = 'input: Sol\'s study (mountings, pendulum, settings)'
+SOL = 'input: the study\'s chosen mountings, pendulum and settings'
 GEN = 'input: maxon catalogue, RE 25 page 153 / GP 32 C pages 430-431 (dossier-generator.md)'
 NREL = 'input: Jonkman et al. 2009, NREL/TP-500-38060, and the OpenFAST r-test blade file (dossier-turbine.md)'
-r = lambda rpm: 56.0/(rpm*2*3.141592653589793/60)          # Sol's rotor radius at tip-speed ratio 7, 8 m/s
+r = lambda rpm: 56.0/(rpm*2*3.141592653589793/60)          # rotor radius at tip-speed ratio 7, 8 m/s
 
 TYPED = {
 '00': {
     '60': 'input: blade length of large turbines, order of magnitude (NREL 5 MW blade 61.5 m)', '50': 'def: illustration, 50 m out along a blade',
-    '100': SOL, '20': SOL, '100 000': 'def: unit of the share (parts in 100 000)', '14': SOL, '2026': 'def: date of Sol\'s study',
+    '100': SOL, '20': SOL, '100 000': 'def: unit of the share (parts in 100 000)', '14': SOL, 
     '18': SOL, '36': 'def: count, 18 mountings x 2 pendula', '400': SOL, '200': SOL, '30': SOL, '90': SOL,
     '1.3': ('calc', 'r(400)', 0.03, 'smallest rotor radius'), '5.3': ('calc', 'r(100)', 0.03, ''),
     '27': ('calc', 'r(20)', 0.03, ''), '67': ('calc', 'r(8)', 0.03, ''),
@@ -32,9 +32,9 @@ TYPED = {
     '18': SOL, '400': SOL,
 },
 '03': {
-    '30': ('calc', '2**5', 0.1, 'error ratio of a fifth-order method when the step halves'), '36': 'def: count of Sol\'s runs',
+    '30': ('calc', '2**5', 0.1, 'error ratio of a fifth-order method when the step halves'), '36': 'def: count of runs',
     '0.05': SOL, '0.1': SOL, '0.2': SOL, '0.01': 'def: chaos threshold chosen in the notes (per radian)',
-    '3.06': ('calc', '9.80665/(4**2*0.2)', 0.01, 'G of Sol\'s chaos case'), '0.030': SOL, '0.022': SOL, '0.045': SOL,
+    '3.06': ('calc', '9.80665/(4**2*0.2)', 0.01, 'G of the chaos case'), '0.030': SOL, '0.022': SOL, '0.045': SOL,
     '0.006': SOL, '300': ('calc', '0.9*r(8)/0.2', 0.01, ''), '70': 'def: grid limit chosen for the map',
     '16': 'def: count, 8 starts x 2 brakes', '40': ('calc', '0.3*r(20)/0.2', 0.01, 'smallest R on a large turbine'),
 },

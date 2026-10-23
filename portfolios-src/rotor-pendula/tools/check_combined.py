@@ -4,8 +4,7 @@
   1. Complete: each tab holds what its standalone page has (headings, typeset formulas, canvases, tables, links), counted
      in a real browser, and 0 KaTeX errors.
   2. Working:  no script errors; the default simulation solves and plays; the notes' "Simulation" link switches tabs and the
-     simulation's "Read the lecture notes" link switches back; #notes and #sim open the right tab; sol.html (Sol's own
-     study) loads its script and draws something.
+     simulation's "Read the lecture notes" link switches back; #notes and #sim open the right tab.
   3. Layout:   no sideways scrolling of the page or of either tab at 360, 390, 1024 and 1440 px; a screenshot of each tab
      at each width.
 
@@ -71,11 +70,6 @@ async def main():
             await p.close()
         p = await b.new_page(); await p.goto(URL + '#sim'); await p.wait_for_timeout(800)
         check(await p.get_attribute('#tab-sim', 'aria-selected') == 'true', '#sim opens the simulation tab'); await p.close()
-        p = await b.new_page(); errs = []; p.on('pageerror', lambda e: errs.append(str(e)))
-        await p.goto(URL.replace('index.html', 'sol.html')); await p.wait_for_timeout(3000)
-        n = await p.evaluate("document.getElementById('root') ? document.getElementById('root').innerText.length : 0")
-        check(n > 200 and not errs, f"sol.html (Sol's study) renders ({n} characters of text)")
-        if SHOTS: await p.screenshot(path=str(SHOTS / 'served_sol_1280.png'))
         await b.close()
     print('ALL PASS' if not fails else f'{len(fails)} FAIL'); sys.exit(1 if fails else 0)
 

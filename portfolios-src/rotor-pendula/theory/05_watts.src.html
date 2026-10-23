@@ -65,7 +65,7 @@ $$\bar P \le mgL\,\langle|\dot\theta|\rangle. \tag{8.1}$$
 <h3 id="answer-summary">8.2 What the pendulum can and cannot do</h3>
 <p>The question of these notes was whether pendula on turbine blades, double ones in particular, could turn the wind's disorder to their advantage. Here is the whole answer, chapter by chapter.</p>
 <ul>
-<li>A single pendulum of 100 g on 20 cm takes {{n:P_sol_min}} to {{n:P_sol_max}} mW from the rotor at Sol's mountings, by the best-brake rule $\kappa^* = |R - 1|$, and the rotor pays for every joule (chapters 2 and 3).</li>
+<li>A single pendulum of 100 g on 20 cm takes {{n:P_sol_min}} to {{n:P_sol_max}} mW from the rotor at the 18 mountings, by the best-brake rule $\kappa^* = |R - 1|$, and the rotor pays for every joule (chapters 2 and 3).</li>
 <li>A double pendulum of the same mass and reach takes less, {{n:ratio_min}} to {{n:ratio_max}} times as much, because its mass sits closer to the pivot. In every case tried, chaos appeared only near resonance, where no real mounting is, and there the best regular setting beat the chaotic ones (chapter 3).</li>
 <li>The disorder of the wind: random shaking of white-noise type has a hard ceiling set by the pendulum's mass (chapter 4), gusts change the power by a few per cent at most (chapter 5), and the blade's bending by a couple of per cent. Whether the blade's shaking helps depends on how hard the blade shakes, and no source we found states that for this blade: a short pendulum takes little from tip vibrations of 5 to 20 mm, but more than gravity gives at 100 mm (chapter 6).</li>
 <li>On a large turbine a real geared generator delivers {{n:g4_big_min}} to {{n:g4_big_max}} mW to the load, {{n:g4_margin}} times or more what the sensor of section 0.2 needs, and still about {{n:sens_margin}} times if the gearbox proves twice as draggy and much less efficient than its catalogue (chapter 7). Turning that slow, low voltage into a steady supply is the open problem.</li>
@@ -75,7 +75,6 @@ $$\bar P \le mgL\,\langle|\dot\theta|\rangle. \tag{8.1}$$
 <h3 id="answer-sources">8.3 Sources</h3>
 <p>Every value taken from outside these notes comes from one of these, each of which a reader can open.</p>
 <ol class="refs">
-<li>Sol, <i>Wind-driven rotor pendula</i>, report and delivery, 14 October 2026: <a href="study/report.pdf">report</a>, <a href="study/sources/README.md">its sources (sensor datasheets, with checksums)</a>. The 18 mountings, the pendula, the brake settings, the chaos group and the sensor budget.</li>
 <li>J. Jonkman, S. Butterfield, W. Musial, G. Scott, <i>Definition of a 5-MW Reference Wind Turbine for Offshore System Development</i>, NREL/TP-500-38060, 2009, <a href="https://www.osti.gov/servlets/purl/947422">osti.gov/servlets/purl/947422</a>. Rotor radius, inertia, torque law (Table 7-2), edgewise frequency 1.0793 Hz (Table 9-1).</li>
 <li>OpenFAST regression tests, NREL 5-MW blade file <code>NRELOffshrBsline5MW_Blade.dat</code>, <a href="https://github.com/OpenFAST/r-test">github.com/OpenFAST/r-test</a> (glue-codes/openfast/5MW_Baseline). The blade's mass and stiffness tables of chapter 6.</li>
 <li>NREL ROSCO, <code>Examples/Test_Cases/NREL-5MW/Cp_Ct_Cq.NREL5MW.txt</code>, <a href="https://github.com/NREL/ROSCO">github.com/NREL/ROSCO</a>. The power coefficient $C_p(\lambda)$ of chapter 5.</li>

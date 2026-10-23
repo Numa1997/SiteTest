@@ -7,9 +7,7 @@ to each page turns the links between the pages into tab switches and keeps in-pa
 inside the frame.
 
 This folder, portfolios-src/rotor-pendula/ of the website repository, is the study's source; the page the site serves is
-generated from it.  Sol's original interactive study (his Vite build, delivered before these notes) stays served beside it:
-sol/index.html here is its page, copied to public/portfolios/rotor-pendula/sol.html; its assets static/ and fig/ and his
-delivery study/ (report.pdf word for word, code, data) are kept in the public folder unchanged.
+generated from it.
 
 Usage: python3 tools/build_combined.py --site       -> the website's copy, public/portfolios/rotor-pendula/index.html of the
                                                        repository this folder sits in (see site_copy()); the usual command
@@ -125,7 +123,6 @@ main iframe.on { visibility: visible; }
 <body>
 <header>
 %(back)s  <div class="brand"><b>Rotor Pendula</b><span>pendula on a turning blade</span></div>
-  <a class="back sol" href="sol.html">Sol's original study</a>
   <nav role="tablist" aria-label="Pages">
 %(buttons)s
   </nav>
@@ -258,7 +255,6 @@ def site_copy(site):
     folder = site / 'public/portfolios/rotor-pendula'
     folder.mkdir(parents=True, exist_ok=True)
     (folder / 'index.html').write_text(out)
-    (folder / 'sol.html').write_text((ROOT / 'sol/index.html').read_text())          # Sol's page, unchanged
     (folder / 'LICENSE-fonts.txt').write_text((ROOT / 'fonts/LICENSE-fonts.txt').read_text())
     return folder / 'index.html', out
 

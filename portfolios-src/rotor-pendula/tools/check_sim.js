@@ -1,6 +1,6 @@
 #!/usr/bin/env node
 // Validation of the physics block of rotor_sim.html against the Python engine of the derivations.
-//  1. Sol's 18 mountings, single and double, at Sol's brake constants (data/L1_mountings.json, from engine.py): the mean power
+//  1. the 18 mountings, single and double, at their brake constants (data/L1_mountings.json, from engine.py): the mean power
 //     must agree within 0.1 %; prints every pair and the largest relative difference; exit 1 if any differs by more.
 //  2. If notes/rotor-pendula/derive/L4_check_2000.json exists: the geared generator at its settings (ratio, efficiency, c_e),
 //     with the smoothing band of that check (1e-3 of the swing it found, at least 0.01 rad); prints the differences in the load

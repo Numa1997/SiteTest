@@ -9,17 +9,15 @@ compute and check every number. The site serves one page generated from it,
 | tab | page here | what it is |
 |---|---|---|
 | Lecture notes (`#notes`) | `rotor_notes.html`, built from `theory/*.src.html` | *Pendula on a Turning Blade*: the Lagrangian, the best brake, big swings, two rods and chaos, a ceiling on random shaking, gusts, the bending blade, a real geared generator, and the answer. Every number in the text comes from `tools/make_numbers.py` (`numbers.json`) or is listed with its reason in `tools/typed_numbers.py`. |
-| Simulation (`#sim`) | `rotor_sim.html` | Pick a rotor (Sol's six speeds), a pivot, one rod or two, and an ideal brake or the maxon RE 25 + GP 32 C generator; the page solves the full equations (Radau IIA, in a Web Worker built from its physics block) and plays the last turns back. Read values: click a plot to pin a point; the values show outside the figure. Six worked solutions. |
+| Simulation (`#sim`) | `rotor_sim.html` | Pick a rotor (six speeds), a pivot, one rod or two, and an ideal brake or the maxon RE 25 + GP 32 C generator; the page solves the full equations (Radau IIA, in a Web Worker built from its physics block) and plays the last turns back. Read values: click a plot to pin a point; the values show outside the figure. Six worked solutions. |
 
-Sol's original interactive study, delivered before these notes, stays served beside it: `sol/index.html` here is its page,
-copied to `public/portfolios/rotor-pendula/sol.html`; its assets (`static/`, `fig/`) and his delivery `study/` (`report.pdf`,
-word for word, with his code and data) stay in the public folder unchanged. The derivations, model runs and review notes are
-in `notes/rotor-pendula/` (`derive/` holds the Python models; `contract-L*.md` and `skeptic-*.md` the review record).
+The derivations, model runs and review notes are in `notes/rotor-pendula/` (`derive/` holds the Python models;
+`contract-L*.md` and `skeptic-*.md` the review record).
 
 ## How the served page is made
 
 `tools/build_combined.py --site` embeds the two pages unchanged, each as a JSON string in its own frame, adds a small script
-that turns the links between them into tab switches, and writes `public/portfolios/rotor-pendula/index.html`, `sol.html` and
+that turns the links between them into tab switches, and writes `public/portfolios/rotor-pendula/index.html` and
 `LICENSE-fonts.txt`, with the site's security policy (plus `'unsafe-eval'` and `blob:` workers, which the simulation's worker
 needs), the site's fonts for the tab bar, and the back link to Portfolios. Never edit the generated files by hand.
 
@@ -44,7 +42,7 @@ The data files in `data/` are copied from `notes/rotor-pendula/derive/` after th
 | command (from this folder) | what it proves |
 |---|---|
 | `python3 tools/check_numbers.py` | Every number in the notes' sources is computed, or listed with its reason; derived ones are recomputed. |
-| `python3 -I check_physics.py` | Independent of the study's scripts (constants retyped): SymPy derives (1.5), (2.4), the 45° lag, (2.5), (3.3), (7.1), (7.2); SciPy re-integrates six of Sol's mountings (agreement about 1e-8) and the geared generator at two (about 2e-5). 17 checks. |
-| `node tools/check_sim.js` | The simulation's physics block reproduces Sol's 36 runs (worst 1.3e-8) and the generator runs of `data/L4_check_2000.json`. |
+| `python3 -I check_physics.py` | Independent of the study's scripts (constants retyped): SymPy derives (1.5), (2.4), the 45° lag, (2.5), (3.3), (7.1), (7.2); SciPy re-integrates six mountings (agreement about 1e-8) and the geared generator at two (about 2e-5). 17 checks. |
+| `node tools/check_sim.js` | The simulation's physics block reproduces the 36 reference runs of the Python engine (worst 1.3e-8) and the generator runs of `data/L4_check_2000.json`. |
 | `node tools/check_sim_browser.js` | The simulation page at 360, 390, 1024, 1440 px: no sideways scroll, no console errors, nothing reacts to the pointer crossing it, Read values pins and updates at about 4 per second. |
-| `python3 tools/check_combined.py <url>` | With `public/` served (`python3 -m http.server 8765` in `public/`): both tabs complete, 0 KaTeX errors, the simulation solves, links switch tabs, `sol.html` renders, no sideways scroll at 360–1440 px. |
+| `python3 tools/check_combined.py <url>` | With `public/` served (`python3 -m http.server 8765` in `public/`): both tabs complete, 0 KaTeX errors, the simulation solves, links switch tabs, no sideways scroll at 360–1440 px. |
