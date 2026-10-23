@@ -305,7 +305,7 @@ window.WALK["water"] = {
   },
   {
    "title": "Die Uhr: Nur die Phase wird schrittweise fortgeschrieben (22)",
-   "where": "Rückruf Sim.clock — einmal pro Bild",
+   "where": "Rückruffunktion Sim.clock — einmal pro Bild",
    "math": "⟦wt|ωt⟧ ← ωt + 2π ⟦f|f⟧ ⟦dt|Δt⟧ &emsp;(22)",
    "note": "Die Positionen (17) sind in geschlossener Form bekannt, daher integriert die Seite außer der Phase nichts. Sim.clock ruft diese Funktion einmal pro Animationsbild auf, mit dt, der Zeit Δt in s seit dem letzten Bild (von der Uhr auf 0.05 s begrenzt und während der Pause 0), und t, der Abspielzeit in s. Die erste Zeile darin addiert 2π f Δt zu omegaT, der Phase ωt in rad, mit dem genauen f() aus Schritt 2, nicht mit dem gerundeten Reglerwert. Das Aufsummieren der Phase, statt ωt aus t zu berechnen, hält die Bewegung glatt, wenn Sie einen Regler verschieben und sich f ändert. Solange f konstant bleibt, ist die Summe bis auf Rundung gleich 2πf t, sodass sich kein Fehler aufbaut, wie lange die Seite auch läuft. Der Speicher hält dann ωt und die Anzahl der durchlaufenen Perioden, ωt / 2π, und draw() wertet (17), (18) und (19) für die neue Phase erneut aus.",
    "code": "var clk = Sim.clock(function (⟦dt|dt⟧, t) {\n⟦wt|omegaT += 2 * Math.PI * f() * dt⟧;\n...\nds.set('omegaT', omegaT); ds.set('periods', omegaT / (2 * Math.PI)); ...\ndraw();\n});",
