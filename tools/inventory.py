@@ -174,6 +174,7 @@ RULES = [
     (r'portfolios-src/hydraulics/check_physics\.py', "Checks the ideal press's physics against an independent Python model.", 'portfolios-src/hydraulics/README.md'),
     (r'portfolios-src/hydraulics/check_control\.py', "Checks the servo press's physics and loop analysis against an independent SciPy/SymPy model.", 'portfolios-src/hydraulics/README.md'),
     (r'portfolios-src/hydraulics/dump_(runs|control)\.js', lambda m: "Runs the %s page's physics block in Node for its check script." % ('ideal press' if m.group(1) == 'runs' else 'servo press'), 'portfolios-src/hydraulics/README.md'),
+    (r'portfolios-src/hydraulics/tools/check_data_panel\.cjs', 'Checks the data panel inside the ideal and servo frames in a real browser.', 'portfolios-src/hydraulics/README.md'),
     (r'portfolios-src/hydraulics/tools/build_combined\.py', 'Generates public/portfolios/hydraulics/index.html from the three pages (--site).', 'portfolios-src/hydraulics/README.md'),
     (r'portfolios-src/hydraulics/tools/build_theory\.py', 'Builds hydraulic_theory.html from theory/*.src.html, typesetting every formula with KaTeX.', 'portfolios-src/hydraulics/README.md'),
     (r'portfolios-src/hydraulics/tools/build_fonts\.py', 'Downloads the font subsets in fonts/ and writes their @font-face rules.', 'portfolios-src/hydraulics/README.md'),

@@ -2649,7 +2649,7 @@ function poleRowsS(poles) {
 }
 function drawTables() {
   const Ls = loopSel === 'position' ? 'pos' : 'frc', sv = k => ds.get(Ls + '_' + k);
-  const m = HAS_DS ? { pm: sv('pm'), fc: sv('fc'), gm: sv('gm'), fg: sv('fg') } : an.margins, T = HAS_DS ? ds.get('Ts') : P.Ts;
+  const m = HAS_DS ? { pm: sv('pm'), fc: sv('fc'), gm: sv('gm'), fg: sv('fg') } : an.margins, T = HAS_DS ? ds.get('P_Ts') : P.Ts;
   const ok = an.stable;
   $('anVerdict').textContent = ok ? `Closed loop stable (max |z| = ${fmt(an.maxAbsZ, 4)})` : `Closed loop UNSTABLE (max |z| = ${fmt(an.maxAbsZ, 4)})`;
   $('anVerdict').className = `verdict ${ok ? 'good' : 'bad'}`;
@@ -3005,7 +3005,7 @@ const LOOPS = [['pos', 'position'], ['frc', 'force']];
 function declareStore() {
   const v = (n, dims, type, a) => ds.var(n, dims, type, a);
   const units = { ps: 'Pa', betaOil: 'Pa', alpha0: '', Lh: 'm', dh: 'm', fv: 'Hz', M: 'kg', Fc: 'N', kw: 'N/m', Fref: 'N', Ts: 's', Kp: '1/m', Ki: '1/(m·s)', Kd: 's/m', KpF: '1/N', KiF: '1/(N·s)' };
-  for (const s of SLIDERS) if (s.key) v(s.key, [], 'float', { symbol: s.label.split(' ')[0].replace(/_(\w+)/, '<sub>$1</sub>'), units: units[s.key] || '', long_name: s.label.replace(/^\S+\s/, ''), computed_in: s.key + ' slider', digits: 6 });
+  for (const s of SLIDERS) if (s.key) v('P_' + s.key, [], 'float', { symbol: s.label.split(' ')[0].replace(/_(\w+)/, '<sub>$1</sub>'), units: units[s.key] || '', long_name: s.label.replace(/^\S+\s/, ''), computed_in: s.key + ' slider', digits: 6 });
   for (const k in C0) v('c_' + k, [], 'float', { symbol: k, long_name: 'the constant C0.' + k, computed_in: 'C0', digits: 6 });
   for (const k of ['m', 'AA', 'AB', 'Ah', 'Vh', 'I', 'Rlam', 'Kt', 'Kv', 'wv', 'cw', 'cs', 'Va'])
     v('pl_' + k, [], 'float', { symbol: { m: 'm', AA: 'A<sub>A</sub>', AB: 'A<sub>B</sub>', Ah: 'A<sub>h</sub>', Vh: 'V<sub>h</sub>', I: 'I<sub>h</sub>', Rlam: 'R<sub>lam</sub>', Kt: 'K<sub>t</sub>', Kv: 'K<sub>v</sub>', wv: 'ω<sub>v</sub>', cw: 'c<sub>w</sub>', cs: 'c<sub>s</sub>', Va: 'V<sub>a</sub>' }[k],
@@ -3054,7 +3054,7 @@ function declareStore() {
 function storeRun() {
   if (!HAS_DS) return;
   const R = run.rec, pl = run.plant, N = R.t.length;
-  for (const s of SLIDERS) if (s.key) ds.set(s.key, run.P[s.key]);
+  for (const s of SLIDERS) if (s.key) ds.set('P_' + s.key, run.P[s.key]);
   for (const k in C0) ds.set('c_' + k, C0[k]);
   for (const k of ['m', 'AA', 'AB', 'Ah', 'Vh', 'I', 'Rlam', 'Kt', 'Kv', 'wv', 'cw', 'cs', 'Va']) ds.set('pl_' + k, pl[k]);
   ds.dim('n', N);
@@ -3100,12 +3100,12 @@ function setNow(i) {
 if (HAS_DS) declareStore();
 if (HAS_DS) {
   const G_ = n => ds.get(n), I = (sy, v, u, d) => [sy, v, u || '', d === undefined ? 6 : d];
-  const params = () => { const p = {}; for (const s of SLIDERS) if (s.key) p[s.key] = G_(s.key); return p; };
+  const params = () => { const p = {}; for (const s of SLIDERS) if (s.key) p[s.key] = G_('P_' + s.key); return p; };
   let again = null;                                  // the whole cycle and both analyses computed again from the stored parameters, cached by them
   const rerun = () => { const p = params(), key = JSON.stringify(p); if (!again || again.key !== key) { again = window.__computeHere('cycle', p); again.key = key; again.plant = makePlant(p); } return again; };
   const how = 'the cycle computed again on this page from the stored parameters (about a second)';
   const check = {};
-  for (const s of SLIDERS) if (s.key) check[s.key] = () => ({ formula: 'the slider, as used by the last cycle', inputs: [I('slider now', P[s.key], '', 6)], value: P[s.key] });
+  for (const s of SLIDERS) if (s.key) check['P_' + s.key] = () => ({ formula: 'the slider, as used by the last cycle', inputs: [I('slider now', P[s.key], '', 6)], value: P[s.key] });
   for (const k in C0) check['c_' + k] = () => ({ formula: 'the constant C0.' + k, inputs: [], value: C0[k] });
   for (const k of ['m', 'AA', 'AB', 'Ah', 'Vh', 'I', 'Rlam', 'Kt', 'Kv', 'wv', 'cw', 'cs', 'Va']) check['pl_' + k] = () => ({ formula: 'makePlant() run again from the stored parameters', inputs: [], value: makePlant(params())[k] });
   for (const k of REC_KEYS) check[k] = i => ({ formula: how, inputs: [I('n', i, '', 0)], value: rerun().run.rec[k][i] });
@@ -3138,9 +3138,9 @@ if (HAS_DS) {
     check[L + '_olZeta'] = i => { const wn = Math.hypot(re('olRe', i), re('olIm', i)); return { formula: '−Re s / |s|', inputs: [I('Re s', re('olRe', i), '1/s', 3)], value: wn > 1e-6 ? -re('olRe', i) / wn : NaN }; };
     check[L + '_clR'] = i => ({ formula: '|z|', inputs: [I('Re z', re('clRe', i), '', 6), I('Im z', re('clIm', i), '', 6)], value: Math.hypot(re('clRe', i), re('clIm', i)) });
     check[L + '_clAng'] = i => ({ formula: 'atan2(Im z, Re z) in degrees', inputs: [I('Re z', re('clRe', i), '', 6), I('Im z', re('clIm', i), '', 6)], value: Math.atan2(re('clIm', i), re('clRe', i)) * 180 / Math.PI });
-    const sOf = i => { const r = Math.hypot(re('clRe', i), re('clIm', i)), T = G_('Ts'); return r > 0 ? [Math.log(r) / T, Math.atan2(re('clIm', i), re('clRe', i)) / T] : [-Infinity, 0]; };
-    check[L + '_clF'] = i => { const s = sOf(i), wn = Math.hypot(s[0], s[1]); return { formula: '|ln z| / (2π T<sub>s</sub>)', inputs: [I('T<sub>s</sub>', G_('Ts'), 's', 4)], value: Number.isFinite(wn) ? wn / (2 * Math.PI) : Infinity }; };
-    check[L + '_clZeta'] = i => { const s = sOf(i), wn = Math.hypot(s[0], s[1]); return { formula: '−Re(ln z) / |ln z|', inputs: [I('T<sub>s</sub>', G_('Ts'), 's', 4)], value: Number.isFinite(wn) && wn > 0 ? -s[0] / wn : NaN }; };
+    const sOf = i => { const r = Math.hypot(re('clRe', i), re('clIm', i)), T = G_('P_Ts'); return r > 0 ? [Math.log(r) / T, Math.atan2(re('clIm', i), re('clRe', i)) / T] : [-Infinity, 0]; };
+    check[L + '_clF'] = i => { const s = sOf(i), wn = Math.hypot(s[0], s[1]); return { formula: '|ln z| / (2π T<sub>s</sub>)', inputs: [I('T<sub>s</sub>', G_('P_Ts'), 's', 4)], value: Number.isFinite(wn) ? wn / (2 * Math.PI) : Infinity }; };
+    check[L + '_clZeta'] = i => { const s = sOf(i), wn = Math.hypot(s[0], s[1]); return { formula: '−Re(ln z) / |ln z|', inputs: [I('T<sub>s</sub>', G_('P_Ts'), 's', 4)], value: Number.isFinite(wn) && wn > 0 ? -s[0] / wn : NaN }; };
   }
   // drawing
   const LAY = () => sceneLayout(G_('d_cssW') < 480);
@@ -3148,8 +3148,8 @@ if (HAS_DS) {
     d_s: () => ({ formula: 'W / W<sub>layout</sub>', inputs: [I('W', G_('d_cssW'), 'css px', 1), I('W<sub>layout</sub>', LAY().W, '', 0)], value: G_('d_cssW') / LAY().W }),
     d_dial_r: () => ({ formula: 's r<sub>layout</sub>', inputs: [I('s', G_('d_s'), '', 5)], value: G_('d_s') * LAY().cluster.r }),
     d_dial_cy: () => ({ formula: 's y<sub>layout</sub>', inputs: [I('s', G_('d_s'), '', 5)], value: G_('d_s') * LAY().cluster.cy }),
-    d_dial_pmax: () => ({ formula: '⌈p<sub>s</sub>/2 MPa⌉ · 2 MPa', inputs: [I('p<sub>s</sub>', G_('ps'), 'Pa', 0)], value: Math.ceil(G_('ps') / 2e6) * 2 }),
-    d_dial_fmax: () => ({ formula: 'max(20, ⌈1.25 F<sub>ref</sub>/10 kN⌉ · 10) kN', inputs: [I('F<sub>ref</sub>', G_('Fref'), 'N', 0)], value: Math.max(20e3, Math.ceil(1.25 * G_('Fref') / 1e4) * 1e4) / 1e3 }),
+    d_dial_pmax: () => ({ formula: '⌈p<sub>s</sub>/2 MPa⌉ · 2 MPa', inputs: [I('p<sub>s</sub>', G_('P_ps'), 'Pa', 0)], value: Math.ceil(G_('P_ps') / 2e6) * 2 }),
+    d_dial_fmax: () => ({ formula: 'max(20, ⌈1.25 F<sub>ref</sub>/10 kN⌉ · 10) kN', inputs: [I('F<sub>ref</sub>', G_('P_Fref'), 'N', 0)], value: Math.max(20e3, Math.ceil(1.25 * G_('P_Fref') / 1e4) * 1e4) / 1e3 }),
     dial_x: j => ({ formula: 's x<sub>layout</sub>', inputs: [I('dial', j, '', 0), I('s', G_('d_s'), '', 5)], value: G_('d_s') * LAY().cluster.xs[j] })
   });
   const DIALS = [['pa_now', 1e-6, () => 0, () => G_('d_dial_pmax')], ['pA_now', 1e-6, () => 0, () => G_('d_dial_pmax')], ['pB_now', 1e-6, () => 0, () => G_('d_dial_pmax')], ['F_now', 1e-3, () => 0, () => G_('d_dial_fmax')], ['xv_now', 100, () => -100, () => 100]];
@@ -3181,7 +3181,7 @@ if (HAS_DS) {
     ds, kicker: 'Hydraulic Press Study · servo press · data', file: 'hydraulics-servo-press',
     playing: () => playing, play: () => { if (!run) return; tView = 0; playing = true; lastTs = null; $('play').textContent = '❚❚ Pause'; },
     groups: [
-      { title: 'Parameters', note: 'the sliders, as used by the last cycle', vars: SLIDERS.filter(s => s.key).map(s => s.key) },
+      { title: 'Parameters', note: 'the sliders, as used by the last cycle (P_ plus the slider\'s key)', vars: SLIDERS.filter(s => s.key).map(s => 'P_' + s.key) },
       { title: 'Constants', note: 'C0 in the model', vars: Object.keys(C0).map(k => 'c_' + k) },
       { title: 'Plant', note: 'computed by makePlant() from the parameters', vars: ['pl_m', 'pl_AA', 'pl_AB', 'pl_Ah', 'pl_Vh', 'pl_I', 'pl_Rlam', 'pl_Kt', 'pl_Kv', 'pl_wv', 'pl_cw', 'pl_cs', 'pl_Va'] },
       { title: 'Results of the cycle', note: 'what simulate() found', vars: ['r_outcome', 'r_tEnd', 'r_tPress', 'r_Fpeak', 'r_satFrac', 'r_pMin', 'r_pMinT', 'r_pMinWhere', 'r_closureMax', 'r_closureRel', 'r_substeps'] },
