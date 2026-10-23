@@ -766,17 +766,19 @@ const colOf=s=>RTL?(s==="cot"?0:1):(s==="iron"?0:1);
 // ---- reruns for Check: a second pair of balls, built afresh by makeIron() and makeCotton(), stepped by the same step() ----
 const FB={};                                    // built afresh and never stepped: shapes, bonds, rest lengths
 const fresh=s=>FB[s]||(FB[s]=s==="iron"?makeIron():makeCotton());
-let lastRun=null;
+const RB={},runs=new Map();                     // RB: a second ball of each kind, built once and reloaded from checkpoints; runs: the last results
 function run(s,from,k){                         // the state of ball s at sample k, rerun from checkpoint `from` (−1: from a fresh build at t = 0)
-  const key=s+"|"+from+"|"+k;if(lastRun&&lastRun.key===key)return lastRun;
-  const b=s==="iron"?makeIron():makeCotton(),N=b.N,ns=ds.get("nstep");let todo=ns[k];
+  const key=s+"|"+from+"|"+k;if(runs.has(key))return runs.get(key);
+  const build=()=>s==="iron"?makeIron():makeCotton(),b=from>=0?(RB[s]||(RB[s]=build())):build(),N=b.N,ns=ds.get("nstep");let todo=ns[k];
   if(from>=0){const ck=n=>ds.get("ck_"+n+"_"+s);
     for(let i=0;i<N;i++){b.x[i]=ck("x")[from*N+i];b.y[i]=ck("y")[from*N+i];b.u[i]=ck("u")[from*N+i];b.v[i]=ck("v")[from*N+i]}
     b.alive.set(ck("alive").subarray(from*b.nb,(from+1)*b.nb));
     b.t=ck("t")[from];b.yp=ck("yp")[from];b.vp=ck("vp")[from];b.Fmax=ck("Fmax")[from];b.heatBall=ck("Qb")[from];b.heatHead=ck("Qh")[from];b.heat=b.heatBall+b.heatHead;
     const ti=ck("ti")[from];b.tImpact=ti===ti?ti:null;todo=ns[k]-ds.get("ck_step")[from]}
   for(let q=0;q<todo;q++)b.Fs=step(b);
-  lastRun={key,from,k,steps:todo,b};return lastRun;
+  const snap={x:Float64Array.from(b.x),y:Float64Array.from(b.y),u:Float64Array.from(b.u),v:Float64Array.from(b.v),alive:Uint8Array.from(b.alive),
+    t:b.t,yp:b.yp,vp:b.vp,Fmax:b.Fmax,heatBall:b.heatBall,heatHead:b.heatHead,tImpact:b.tImpact,E:Object.assign({},b.E)};
+  const r={key,from,k,steps:todo,b:snap};runs.set(key,r);if(runs.size>24)runs.delete(runs.keys().next().value);return r;
 }
 const fromFor=k=>k%CK===0?k/CK-1:Math.floor(k/CK);        // the checkpoint before sample k (never k itself)
 const replay=(s,k)=>run(s,fromFor(k),k);
@@ -811,7 +813,7 @@ function plateRow(s){
   let found=null;
   for(const x of [bx-pw/2+5,bx+pw/2-5])for(let y=top-6;y<=top+12;y+=1/DPR){const q=Sim.readPixel(stageBox,x,y,0);if(plateFill(q.rgba)){if(found===null||y<found.y)found={x,y};break}}
   const expect=top+0.7;     // the fill begins under the 1.4 px outline drawn on the edge
-  return {what:"first row of plate fill, scanned down two columns near the plate's ends",drawn:found?"fill from "+Sim.fmt(found.y,2)+" css px":"no plate fill found",expected:"fill from "+Sim.fmt(expect,2)+" css px (y<sub>plate</sub> + half the outline)",
+  return {what:"first row of plate fill, scanned down two columns near the plate's ends",drawn:found?"fill from "+Sim.fmt(found.y,2)+" css px":"no plate fill found",expected:"fill from "+Sim.fmt(expect,2)+" css px (the plate edge y_plate plus half the outline)",
     ok:!!found&&Math.abs(found.y-expect)<=1.01,note:"The plate's top edge is drawn at y<sub>plate</sub>; its travel, and the ball resting on it, are drawn G = 10 times larger than computed."};
 }
 const gaugeAt=(s,deg,r)=>({x:ds.get("bx_"+s)+r*Math.cos(deg*Math.PI/180),y:ds.get("gauge_cy")+r*Math.sin(deg*Math.PI/180)});
@@ -820,10 +822,10 @@ const needleBack=s=>readBack(stageBox,"the black needle, 0.3 R from the hub",gau
 const peakBack=s=>readBack(stageBox,"tip of the red peak-hold needle",gaugeAt(s,ds.get("peakneedle_"+s),ds.get("gauge_R")-6.5),1,Sim.isBurgundy,"the red needle tip",
   "The red needle reaches 3 px beyond the black one, so its tip shows even when both point the same way.");
 function curveBack(s,n){
-  if(n>ds.get("i_now"))return {what:"F<sub>"+n+"</sub> on the whole-run plot",drawn:"not drawn yet",expected:"the curve is drawn up to the sample on screen",ok:null,note:"The plots grow with the playback."};
+  if(n>ds.get("i_now"))return {what:"F of sample "+n+" on the whole-run plot",drawn:"not drawn yet",expected:"the curve is drawn up to the sample on screen",ok:null,note:"The plots grow with the playback."};
   const G=plotGeom("pAll",0,P.tmax),t=ds.get("ts")[n],p={x:G.X(t),y:G.Y(D[s].F[n])};
-  if(s==="cot"&&Math.abs(G.Y(D.iron.F[n])-p.y)<2.5)return {what:"F<sub>"+n+"</sub> of cotton on the whole-run plot",drawn:"under the iron curve",expected:"hidden: the iron curve is drawn over it here",ok:null,note:"Both balls read nearly the same force here, within 2.5 px of the plot."};
-  return readBack(plotBox("pAll"),"F<sub>"+n+"</sub> on the whole-run plot",p,2,s==="iron"?Sim.isBurgundy:blue,s==="iron"?"the wine curve":"the blue curve","x ∝ t from 0 to 9 s, y ∝ F from 0 to 700 N; every stored sample up to the one on screen is joined by straight lines.");
+  if(s==="cot"&&Math.abs(G.Y(D.iron.F[n])-p.y)<2.5)return {what:"F of sample "+n+", cotton, on the whole-run plot",drawn:"under the iron curve",expected:"hidden: the iron curve is drawn over it here",ok:null,note:"Both balls read nearly the same force here, within 2.5 px of the plot."};
+  return readBack(plotBox("pAll"),"F of sample "+n+" on the whole-run plot",p,2,s==="iron"?Sim.isBurgundy:blue,s==="iron"?"the wine curve":"the blue curve","x ∝ t from 0 to 9 s, y ∝ F from 0 to 700 N; every stored sample up to the one on screen is joined by straight lines.");
 }
 
 // ---- Check: recompute from the stored inputs ----
