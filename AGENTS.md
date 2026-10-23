@@ -77,7 +77,8 @@ value, the formula recomputed from the stored inputs, the pixel or SVG element r
 `Sim.data.round` says what a round is (one period, one loop, ten seconds); every frame of it is copied (all scalars and the pinned point,
 at most 600 samples), then shown as charts and a table and saved as .npz + CSV; at most five rounds are kept. Save: the store as .npz +
 dataset.json + the rounds as CSV + README. The contract is at the top of datalog.js. A page loads dataset.js after sim.js and datalog.js
-after its own script (all ten figures). `Sim.live()` reads the store too. Keep the taps where the page computes a value; keep the
+after its own script (all ten figures, and the two pages of Iron, Cotton and the Head, whose hooks are in
+`portfolios-src/impact/datahooks.js`). `Sim.live()` reads the store too. Keep the taps where the page computes a value; keep the
 walkthrough excerpts untouched (insert after a quoted line, never inside a quoted pair).
 How Numa expects Claude to work (persistence, plain language, build when clear) is in CLAUDE.md.
 For the AppDeploy app only: AppDeploy reformats stored source with Prettier; base any diff against the app on its stored snapshot (`src_read`).

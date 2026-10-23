@@ -3,7 +3,7 @@
 | | |
 |---|---|
 | File | [public/scripts/datalog.js](../../public/scripts/datalog.js), 1090 lines, 77.4 kB (77 425 bytes) |
-| Loaded by | the ten simulation pages, last, after the page's own script (line numbers in the load-order table of [sim.md](sim.md#load-order-on-the-pages)); styles in [styles/data.css](../../public/styles/data.css), linked in each page's head (for example [Double Pendulum.html:12](../../public/simulations/Double%20Pendulum.html#L12)) |
+| Loaded by | the ten simulation pages and the two pages of Iron, Cotton and the Head (`portfolios/impact/index.html`, `ar.html`), last, after the page's own script (line numbers in the load-order table of [sim.md](sim.md#load-order-on-the-pages)); styles in [styles/data.css](../../public/styles/data.css), linked in each page's head (for example [Double Pendulum.html:12](../../public/simulations/Double%20Pendulum.html#L12)) |
 | Reads | `Sim.data` (the page's contract, below) and through it the page's dataset ([datalog.js:43-44](../../public/scripts/datalog.js#L43-L44)) |
 | Defines | `Sim.colourMap` ([datalog.js:71](../../public/scripts/datalog.js#L71)), `window.__dataPanel` ([datalog.js:1089](../../public/scripts/datalog.js#L1089)) |
 | Adds to the page | `button.dp-tab` and `aside#data-panel.dp` at the end of `<body>` ([datalog.js:168-169](../../public/scripts/datalog.js#L168-L169)); `canvas.dp-overlay` inside `#stage`, `div.dp-read` right after `#stage`, `button.dp-readbtn` in the figure caption ([datalog.js:568-590](../../public/scripts/datalog.js#L568-L590)) |
@@ -188,6 +188,7 @@ A round is what the page says it is, in `Sim.data.round` ([datalog.js:25-27](../
 | 8 | one loop of the circles | `t` | sampled | yes, until a shape is decomposed | [L1399](../../public/simulations/draw-decompose.html#L1399) |
 | 9 | one drive period $1/f$ of the stored run | `t_play` | sampled | yes, near the end of the run | [L1097](../../public/simulations/driven-oscillator.html#L1097) |
 | 10 | one rotor turn of the stored run | `t_play` | sampled | yes, near the end of the run | [L1154](../../public/simulations/wind-turbine.html#L1154) |
+| Portfolios 04 (Iron, Cotton and the Head) | one drop, $t = 0$ to 9 s of the stored run; Record starts a new drop from $t = 0$ | `t_play` | sampled | yes, while a drop is under way | [index.html L989](../../public/portfolios/impact/index.html#L989), [ar.html](../../public/portfolios/impact/ar.html); source [datahooks.js](../../portfolios-src/impact/datahooks.js) |
 
 While no round is running, `describeRound()` ([datalog.js:749-756](../../public/scripts/datalog.js#L749-L756)) writes the Record
 box text: "One round = …", then a longer sentence in `span.dp-more-txt`, which phones hide
@@ -407,7 +408,10 @@ The ten blocks: [Fig. 1 L798](../../public/simulations/Circular%20Wave%20Interfe
   [542-543](../../public/scripts/datalog.js#L542-L543)); `rounds` (at most 5), `roundNo`, `rec` (the recording),
   `sel` ([744](../../public/scripts/datalog.js#L744)); `running` ([1064](../../public/scripts/datalog.js#L1064)); `statCache`.
   Rounds are lost on reload.
-- DOM attributes and classes written: `body.dp-open`; `aria-expanded` on the tab; `aria-hidden` and `inert` on the closed panel
+- DOM attributes and classes written: `lang="en"` and `dir="ltr"` on the tab, the panel and the strip, `lang="en"` on the Read
+  values switch ([datalog.js:120](../../public/scripts/datalog.js#L120), [134](../../public/scripts/datalog.js#L134),
+  [575](../../public/scripts/datalog.js#L575), [585](../../public/scripts/datalog.js#L585)): the panel's words are English, so on a page in another
+  language (the Arabic page of Iron, Cotton and the Head) they keep their language and read left to right; `body.dp-open`; `aria-expanded` on the tab; `aria-hidden` and `inert` on the closed panel
   ([1024-1033](../../public/scripts/datalog.js#L1024-L1033)); `#stage.dp-reading` while reading
   ([562](../../public/scripts/datalog.js#L562)); `aria-pressed` on the Read button; `.dp-tab--away` while scrolling down on a
   phone ([123-130](../../public/scripts/datalog.js#L123-L130)); `.dp-rec.is-rec` while recording.

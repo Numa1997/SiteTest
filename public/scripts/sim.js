@@ -418,7 +418,7 @@
     function typeset() {
         var papers = document.querySelectorAll('.paper'), caps = document.querySelectorAll('.stage__cap, .formula');
         if (!papers.length && !caps.length) return;
-        if (!papers.length) { mathIn(caps); return; }
+        if (!papers.length) { if (Array.prototype.some.call(caps, function (c) { return c.textContent.indexOf('\\(') >= 0; })) mathIn(caps); return; }   /* KaTeX only if a caption holds maths */
         var skip = document.createElement('a');
         skip.className = 'skip-link';
         skip.href = '#' + (papers[0].id || 'paper');

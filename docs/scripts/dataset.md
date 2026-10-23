@@ -3,7 +3,7 @@
 | | |
 |---|---|
 | File | [public/scripts/dataset.js](../../public/scripts/dataset.js), 175 lines, 8.6 kB (8 617 bytes) |
-| Loaded by | the ten simulation pages, third, right after `sim.js` and before the page's own script (line numbers in the load-order table of [sim.md](sim.md#load-order-on-the-pages)). No other page loads it. |
+| Loaded by | the ten simulation pages, third, right after `sim.js` and before the page's own script (line numbers in the load-order table of [sim.md](sim.md#load-order-on-the-pages)), and the two pages of Iron, Cotton and the Head ([portfolios.md](../portfolios.md#the-data-panel-of-the-study)). No other page loads it. |
 | Defines | `Sim.dataset(meta)` on `window.Sim` ([dataset.js:174-175](../../public/scripts/dataset.js#L174-L175)); creates `window.Sim` if it does not exist yet ([dataset.js:17](../../public/scripts/dataset.js#L17)) |
 | Used by | each page's script (writes), [datalog.js](datalog.md) (reads, saves), each page's `Sim.live()` (reads) |
 

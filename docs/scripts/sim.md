@@ -3,7 +3,7 @@
 | | |
 |---|---|
 | File | [public/scripts/sim.js](../../public/scripts/sim.js), 429 lines, 20.9 kB (20 925 bytes) |
-| Loaded by | the ten simulation pages in `public/simulations/`, as the second shared script, after `fold.js` and before `dataset.js` (table below). No other page loads it. |
+| Loaded by | the ten simulation pages in `public/simulations/`, as the second shared script, after `fold.js` and before `dataset.js` (table below); and the two pages of Iron, Cotton and the Head (`portfolios/impact/index.html`, `ar.html`), first, before `dataset.js`, for the data panel ([portfolios.md](../portfolios.md#the-data-panel-of-the-study)). No other page loads it. |
 | Defines | `window.Sim` ([sim.js:415](../../public/scripts/sim.js#L415)), a fresh object with 12 members |
 | Reads | `window.WALK` ([sim.js:409](../../public/scripts/sim.js#L409)), `window.Fold` ([sim.js:328](../../public/scripts/sim.js#L328)), `window.Sim.live` ([sim.js:315](../../public/scripts/sim.js#L315)), `window.renderMathInElement` from KaTeX ([sim.js:355](../../public/scripts/sim.js#L355)) |
 | Emits | the DOM event `typeset` on `document` ([sim.js:366](../../public/scripts/sim.js#L366), [sim.js:397](../../public/scripts/sim.js#L397)) |
@@ -96,7 +96,8 @@ The page's own script then runs and uses the helpers: it sizes its canvases, wir
 
 1. `typeset()` ([sim.js:339-382](../../public/scripts/sim.js#L339-L382)) sets the mathematics.
    - It collects every `.paper` (the lecture note) and every `.stage__cap` and `.formula` (figure captions)
-     ([sim.js:340](../../public/scripts/sim.js#L340)). With no paper but captions, `mathIn` sets only the captions
+     ([sim.js:340](../../public/scripts/sim.js#L340)). With no paper but captions, `mathIn` sets only the captions, and since 23 October 2026 only if a caption contains `\(`, so a
+     page without mathematics in its captions (the impact study) loads no KaTeX
      ([sim.js:342](../../public/scripts/sim.js#L342), [sim.js:391-400](../../public/scripts/sim.js#L391-L400)).
    - It adds a "Skip to the lecture note" link at the top of the body ([sim.js:343-347](../../public/scripts/sim.js#L343-L347)).
    - It loads `vendor/katex/katex.min.js`, then `vendor/katex/contrib/auto-render.min.js`, one after the other, from `ROOT`
