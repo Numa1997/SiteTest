@@ -25,9 +25,25 @@ SymPy), and a script that recomputes every number quoted in the notes and finds 
 $t_{90}$ = 18.3 min instead of 13.5. The physics was the same; the difference was one line of bookkeeping. A step may not take more
 drops out of a bin than it holds, and the first version counted every merger of a large drop as a loss to its bin. But a 1 mm drop that
 sweeps up an 8 µm droplet stays a 1 mm drop: it almost never leaves its bin, so its bin loses almost nothing. Counting the gross loss
-throttled exactly the largest, fastest-growing drops. Counted net, the two solvers agree to 0.013 min. In a numerical scheme, as in
-the physics, what matters is what actually moves.</p>
-<p class="note">The source of the study, its derivations and its check scripts are in the website's repository, folder
-<span class="mono">portfolios-src/droplets/</span>; the record of how each level was built and attacked is in
+throttled exactly the largest, fastest-growing drops. Counted net, the two solvers agree to 0.013 min. </p>
+
+<h3>Golovin's exact solution</h3>
+<p>Chapter 5 tests the grid against the one kernel for which (5.1) can be solved exactly, the sum kernel $K = b(m + m')$. With it the
+gain term of (5.1) is $\tfrac12 b\,m\int_0^m n(m')\,n(m - m')\,dm'$ (because $m' + (m - m') = m$), and the loss term is
+$b\,n(m)\,(mN + L)$, with $N(t) = \int n\,dm$ the number of drops and $L = \int m\,n\,dm$ the water, which is constant. Take the Laplace
+transform $F(p, t) = \int_0^\infty n(m, t)\,e^{-pm}\,dm$. A convolution becomes a product, and a factor $m$ becomes $-\partial_p$, so</p>
+$$\frac{\partial F}{\partial t} = -\frac b2\,\frac{\partial F^2}{\partial p} + bN\,\frac{\partial F}{\partial p} - bLF. \tag{C.1}$$
+<p>At $p = 0$, $F = N$, and (C.1) gives $dN/dt = -bLN$: the number falls as $N = N_0e^{-bLt}$. Subtract that from (C.1) and write
+$G = F - N$:</p>
+$$\frac{\partial G}{\partial t} + bG\,\frac{\partial G}{\partial p} = -bLG. \tag{C.2}$$
+<p>This is Burgers' equation without viscosity, with a damping term: each value of $G$ travels in $p$ at the speed $bG$ while it decays
+as $e^{-bLt}$. Along such a characteristic, $G = G_0(p_0)\,e^{-bLt}$ and $p = p_0 + G_0(p_0)\,(1 - e^{-bLt})/L$. For the exponential start
+$n_0 = (N_0/\bar m)\,e^{-m/\bar m}$, $G_0(p) = -N_0 p\bar m/(1 + p\bar m)$. Eliminating $p_0$ and transforming back to $m$ is the step
+Golovin (1963) carried out; the result, with $\theta = 1 - e^{-bLt}$, is</p>
+$$n(m, t) = \frac{N_0\,(1 - \theta)}{m\sqrt{\theta}}\;e^{-(1 + \theta)\,m/\bar m}\;I_1\!\Big(\frac{2m\sqrt{\theta}}{\bar m}\Big), \tag{C.3}$$
+<p>with $I_1$ the modified Bessel function. It satisfies (5.1) (checked by substituting it numerically, and its number and water
+reproduce $N_0e^{-bLt}$ and $L$ to $10^{-6}$). The spectrum error quoted in chapter 5 is $\varepsilon = \sum_k |M_k - M_k^{\rm exact}|/L$,
+the summed difference of the water in each bin, as a fraction of all the water.</p>
+<p class="note">The source of the study, its derivations and its check scripts are in the website's repository, folder <a href="https://github.com/Numa1997/SiteTest/tree/main/portfolios-src/droplets"><span class="mono">portfolios-src/droplets/</span></a>; the record of how each level was built and attacked is in
 <span class="mono">notes/droplets/</span>.</p>
 </div>

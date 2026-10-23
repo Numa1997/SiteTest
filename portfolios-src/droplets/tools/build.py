@@ -171,7 +171,7 @@ for m in re.finditer(r'<div class="part"><span class="part-n">([^<]+)</span><spa
 n_ch = len(re.findall(r'class="chapter"', book))
 n_fig = len(re.findall(r'<figure class="fig', book))
 stats = (f'<span class="chip"><b>{n_ch}</b> chapters</span><span class="chip"><b>{len(eq_ids)}</b> numbered equations</span>'
-         f'<span class="chip"><b>{n_fig}</b> figures</span><span class="chip">every number computed by the model</span>')
+         f'<span class="chip"><b>{n_fig}</b> figures</span><span class="chip">every number checked</span>')
 
 # ------------------------------------------------------------------ assemble
 tpl = read(HERE / 'template.html')

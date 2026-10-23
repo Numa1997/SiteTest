@@ -111,4 +111,18 @@ const sC = [];
 sC.push({ x: m(br.t), y: nmax.map(N => 1 - Math.exp(-N)), label: '1 m³, Poisson (6.1)', color: '#23160f', dash: '4 3', width: 1.5 });
 figs.first = C.line({ id: 'f9', w: 600, h: 310, xmin: 0, xmax: 20, ymin: 0, ymax: 1, xlabel: 'time (min)', ylabel: 'share of volumes with a drop r ≥ 100 µm', series: sC, legendAt: 'bottomright' });
 
+// 10. coalescence efficiency (4.2) for a collector R meeting a drop R/2, with drag-balance and with Stokes speeds
+(function () {
+  const Rs = range(20e-6, 2e-3, 120, true), sig = P.sigmaWater(A.T);
+  const E = v => Rs.map(R => P.eCoal(R, R / 2, Math.abs(v(R) - v(R / 2)), sig));
+  figs.coal = C.line({ id: 'f10', w: 600, h: 300, xlog: true, xmin: 0.02, xmax: 2, ymin: 0, ymax: 1.02, xlabel: 'collector radius R (mm), partner R/2', ylabel: 'coalescence efficiency', series: [
+    { x: Rs.map(R => R * 1e3), y: E(a => P.vBeard(a, A)), label: 'drag-balance speeds (chapter 2)', color: '#7d1d2f' },
+    { x: Rs.map(R => R * 1e3), y: E(a => P.vStokes(a, A)), label: "Stokes speeds (the thesis kernel)", color: '#6f665e', dash: '5 4' }] });
+})();
+// 11. turbulent gain of the 40/8 um kernel (Ayala et al. 2008, inside its range) against the dissipation rate
+(function () {
+  const es = range(1e-4, 5e-2, 80, true);
+  figs.turb = C.line({ id: 'f11', w: 600, h: 300, xlog: true, xmin: 1e-4, xmax: 5e-2, ymin: 0, ymax: 35, xlabel: 'dissipation rate ε (m²/s³)', ylabel: 'kernel raised by (%)', series: [
+    { x: es, y: es.map(e => (P.ayalaFactor(40e-6, 8e-6, A, e) - 1) * 100), label: '40 µm collector, 8 µm droplet', color: '#33627f' }] });
+})();
 process.stdout.write(JSON.stringify(figs));

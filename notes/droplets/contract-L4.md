@@ -86,7 +86,7 @@ it from (L4.1) as a drift (first term of a jump expansion) restricted to collect
   at s = 2, 4, 8, 16, the observed order log₂(ε_s/ε_{2s}), the number error against N₀ e^{−bLt} (exact), the mass error.
 - **Moment identities**: number decay e^{−bLt} for the sum kernel; for the constant kernel (K = K₀), N(t) = N₀/(1 + ½K₀N₀t).
 - **Monodisperse, capture only** (from contract L0, prediction 8.2): the SCE restricted to collector–droplet pairs, started with
-  identical collectors and droplets, puts 12 ± 2 % of collector mass above R_m = 60.15 µm at t₉₀ (master equation: 12.1 %).
+  identical collectors and droplets, puts 12 ± 2 % of collector mass above R_m = 60.15 µm at t₉₀ (master equation: 12.1 %). **Withdrawn** (L0 round 3: grid-dependent); replaced by the engine test of L5 (§10.1).
 - **Δt and s convergence** of t₅₀, t₉₀ (first recorded minutes) and of F₄₀(30 min).
 - **Positivity** counter = 0 in the warm runs.
 

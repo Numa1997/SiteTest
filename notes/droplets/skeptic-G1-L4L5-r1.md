@@ -100,3 +100,29 @@ A strong second-year student can follow both notes if the textbook keeps the led
 with K/K*" picture of thinning (L5). Three places would lose them: the "jump expansion" wording, the unexplained "C(m, m) = 0", and
 the luck story in L5 §2, which the results contradict. The two mass-budget lines (no 100 µm drop in 1 cm³, no 1 mm drop in a litre) are
 the most teachable facts in L5 and are currently missing.
+
+---
+
+## Fixes check (round 1 answers, contracts §10, chapters 5–6, `tools/figs.cjs`)
+
+I reran `derive/L4_conv.cjs` and `derive/L5_tail.cjs`, and both reproduce exactly:
+- L4: t₉₀ = 13.352 / 13.470 / 13.527 min at s = 4 / 8 / 16 and 13.470 / 13.473 / 13.474 min at Δt = 1 / 0.5 / 0.25 s. The constant kernel gives N/N₀ = 0.24993 against 0.25000.
+- L5: the bridge medians are 55 / 57 / 61 s (1 m³), 170 / 173 / 179 s (1000 cm³) and 278 / 279 / 284 s (100 cm³) at s = 8 / 16 / 32.
+
+My earlier 65 s came from 5 s records, so 61 s is the right figure. The running maximum of n₁₀₀ in figure 6.1 is correct, because a volume that once held a 100 µm drop keeps one. It leaves the 100 cm³, 1000 cm³ and 1 m³ medians unchanged, since they fall before n₁₀₀ peaks at 580 s. In 10 cm³ it gives the plateau of 1 − e^{−0.39} = 32 %. The L4 answers 1–11 and L5 answers 1–4 and 6–15 are accepted.
+
+**Remaining issues**
+
+| # | Severity | Where | Problem | Fix |
+|---|---|---|---|---|
+| R1 | must-fix (one sentence) | Chapter 6, the 10 cm³ paragraph: "The collection equation describes a cloud so large that no single drop matters, and spreads the same water over many drops." | The direction is backwards. The mean field puts the water in *fewer, larger* drops than a 10 cm³ box can hold. At 605 s (truncated SCE, s = 16), 53 % of the water is above 100 µm. That is 1.4 drops' worth of 100 µm per 10 cm³, but packed into drops of mass-mean radius 153 µm, only 0.39 per 10 cm³. By 15 and 30 min that radius is 250 and 630 µm. The mean-field drops keep growing on water from far beyond 10 cm³. A closed 10 cm³ box caps its largest drop at its own water, about 140 µm: the stored runs reach median 135 µm at 20 min and 138 µm at 60 min, never above 144 µm. So every box ends with exactly one drop of 100–140 µm. The page's own "the water ends up in one drop" is right; only the contrast sentence is wrong. | Replace with something like: "The collection equation describes a cloud so large that its big drops keep growing past 140 µm on water from far beyond 10 cm³, so there are fewer than one of them per 10 cm³. A closed 10 cm³ volume cannot grow a drop beyond its own water, about 140 µm, so every such volume ends with one." |
+| R2 | minor | Chapter 6 and L5 §10.2: "1312 captures and 560 s" | No script in the repository produces this. With the model's kernel and no droplet depletion I get 1 309 captures and 449 s for 8 µm droplets at 0.80 g/m³, and 906 captures and 387 s for the truncated droplet spectrum. 560 s may include depletion. The argument holds for any of these, since all are far above 60–175 s. | Name the assumptions (droplet size, depletion), or add a script line that prints the number. |
+| R3 | minor | L4 §6 still lists "Monodisperse, capture only … 12 ± 2 %"; §10.1 says "0 limiter corrections" | The test is withdrawn but still listed. And `fixes` counts rounding corrections, not limiter actions: the limiter does act, but only in the top bin (§10.9). | Strike the withdrawn line. Say "0 rounding fixes". |
+| R4 | minor | L5 §9.1 and §9.4 still read "**passed**" | §10 corrects both labels, but a reader of §9 alone would miss the corrections. | Add "(see §10)" to the two labels, or edit §9. |
+
+### Final Gate 1 verdicts
+
+- **L4: PASS.** R3 is cosmetic.
+- **L5: PASS once R1 is applied.** It is a one-sentence change and needs no new review round. R2 and R4 are cosmetic.
+
+Confirmed applied: R1 (the chapter 6 10 cm³ paragraph is now correct: 155 µm drops, 0.39 per 10 cm³, a box caps at 139 µm), R2 (448 s and 1312 captures for 8 µm droplets with no depletion; this matches my 449 s), R4 (§9.1 and §9.4 point to §10), and the R3 wording "0 rounding fixes". Still open: L4 §6 lists the withdrawn "Monodisperse, capture only … 12 ± 2 %" test with no withdrawn mark (cosmetic). Verdicts: L4 PASS, L5 PASS.

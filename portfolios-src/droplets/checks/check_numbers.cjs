@@ -142,7 +142,7 @@ expect('book-03', 'In our cloud E(40 µm, 8 µm) =', f(pe.E, 3) + ', against ' +
 expect('book-03', 'about $\\nu/U = 2R/\\mathrm{Re} =', f(2 / pe.Re, 1) + ' collector radii');
 expect('book-03', 'the partner coasts', f(pe.St, 1) + ' radii');
 const cross = c => (pe.ES + pe.EP * pe.Re / c) / (1 + pe.Re / c);
-expect('book-03', 'Move it and the answer moves:', `E(40, 8) = ${f(cross(60), 3)} with 60, ${f(cross(20), 3)} with 20, ${f(cross(6), 3)} with 6, ${f(cross(2), 3)} with 2`);
+
 const hr = R => [P.hallE(hall, R * 1e-6, 8 / R), P.pairEfficiency(R * 1e-6, 8e-6, A).E];
 expect('book-03', '1.2 to 1.5 times ours', `(${f(hr(40)[0], 2)} against ${f(hr(40)[1], 3)} at 40 µm, ${f(hr(50)[0], 2)} against ${f(hr(50)[1], 2)} at 50 µm, ${f(hr(100)[0], 2)} against ${f(hr(100)[1], 2)} at 100 µm)`);
 expect('book-03', 'its flow at the collector is', 'under 1 %', `${f(0.75 * 8 / 48 * pe.S * 100, 2)} % of U`);
@@ -165,11 +165,12 @@ expect('book-04', "Stokes' relative speed is", `${f(vS(500e-6) - vS(250e-6), 0)}
 const grid = P.makeGrid(8, 4e-3), N0 = P.lognormalBins(grid, modes);
 const k40 = grid.r.findIndex(r => r >= 40e-6);
 let m40 = 0, mall = 0; for (let i = 0; i < grid.n; i++) { mall += N0[i] * grid.x[i]; if (i >= k40) m40 += N0[i] * grid.x[i]; }
-expect('book-05', 'At the start', f(m40 / mall * 100, 2) + ' % of the water');
+const lnS = md => Math.log(md.sg), massAbove = (md, r) => modeMass(md) * 0.5 * erfc((Math.log(r) - Math.log(md.rg) - 3 * lnS(md) ** 2) / lnS(md) / Math.SQRT2);
+expect('book-05', 'At the start', `${f(m40 / mall * 100, 1)} % of the water is in drops above 40 µm on the grid of section 5.3 (${f((massAbove(modes[0], 40e-6) + massAbove(modes[1], 40e-6)) / (modeMass(modes[0]) + modeMass(modes[1])) * 100, 1)} %`);
 const gol = [2, 4, 8, 16].map(s => G.run(s, 1));
 expect('book-05', 'spectrum error falls from', `${f(gol[0].eps, 3)} at 2 bins per doubling to ${f(gol[1].eps, 3)}, ${f(gol[2].eps, 3)} and ${f(gol[3].eps, 3)}`);
 expect('book-05', 'an observed order of about', f((Math.log2(gol[0].eps / gol[1].eps) + Math.log2(gol[1].eps / gol[2].eps) + Math.log2(gol[2].eps / gol[3].eps)) / 3, 1));
-expect('book-05', 'Its mass error is', texSci(gol[2].massErr, 2));
+expect('book-05', 'At 8 bins per doubling its mass error is', texSci(gol[2].massErr, 2));
 expect('book-05', 'the scheme itself changes the mass by', texSci(Math.abs(gol[2].schemeDrift), 0).replace('2\\times', '2\\times'), gol[2].schemeDrift.toExponential(1));
 const gq = (run, q) => interp(W[run].gce.t, W[run].gce.F40, q) / 60;
 expect('book-05', 'thesis SCE', `${f(tq('thesis', 0.5), 2)} ${f(tq('thesis', 0.9), 2)}`);
@@ -189,7 +190,7 @@ const acc = Object.values(S.V).map(rs => rs.reduce((a, q) => a + q.events, 0) / 
 expect('book-06', 'zero violations in', `${allRuns.length} runs`, `${allRuns.reduce((a, q) => a + q.violations, 0)} violations`);
 expect('book-06', 'zero violations in', `${f(Math.min(...acc) * 100, 0)} to ${f(Math.max(...acc) * 100, 0)} %`);
 expect('book-06', 'no collector starts above', f(40 * 1.2 ** 3, 0) + ' µm');
-const erfc = x => { const t = 1 / (1 + 0.5 * Math.abs(x)); const y = t * Math.exp(-x * x - 1.26551223 + t * (1.00002368 + t * (0.37409196 + t * (0.09678418 + t * (-0.18628806 + t * (0.27886807 + t * (-1.13520398 + t * (1.48851587 + t * (-0.82215223 + t * 0.17087277))))))))); return x >= 0 ? y : 2 - y; };
+function erfc(x) { const t = 1 / (1 + 0.5 * Math.abs(x)); const y = t * Math.exp(-x * x - 1.26551223 + t * (1.00002368 + t * (0.37409196 + t * (0.09678418 + t * (-0.18628806 + t * (0.27886807 + t * (-1.13520398 + t * (1.48851587 + t * (-0.82215223 + t * 0.17087277))))))))); return x >= 0 ? y : 2 - y; };
 const tail100 = 1e6 * 0.5 * erfc(Math.log(100 / 40) / Math.log(1.2) / Math.SQRT2);
 expect('book-06', 'would put', f(tail100, 2) + ' drops of 100 µm', `${tail100.toPrecision(3)} per m³`);
 expect('book-06', 'Run the process many times', `(${S.plan.map(q => q[1]).join(', ').replace(/, (\d+)$/, ' and $1')} runs)`);
@@ -239,7 +240,7 @@ expect('book-07', 'for every collector above', f(lo2 * 1e6, 0) + ' µm');
 const runT = ko => { const r = P.sceRun(grid, A, ko, modes, { dt: 1, tEnd: 1500, recordEvery: 5, snapAt: [] }); return interp(r.t, r.F40, 0.9) / 60; };
 const t90ext = runT(KO), t90t100 = runT(Object.assign({}, KO, { eps: 1e-2 })), t90t400 = runT(Object.assign({}, KO, { eps: 4e-2 }));
 expect('book-07', 'shortens $t_{90}$ by', f((1 - t90t100 / t90ext) * 100, 1) + ' % at 100 cm²/s³');
-expect('book-07', 'turbulence seems to do less', `(−${f((1 - t90t400 / t90ext) * 100, 1)} %)`);
+expect('book-07', 'the stronger turbulence shortens', `by only ${f((1 - t90t400 / t90ext) * 100, 1)} %`);
 // Langmuir's crossover carried through the collection equation (split table written by derive/L2_cross.cjs with makeTable({split}))
 const SP = D('etab_split.json');
 const tabC = c => Object.assign({}, SP, { E: SP.ES.map((es, i) => (es + SP.EP[i] * SP.Re[i] / c) / (1 + SP.Re[i] / c)) });
@@ -247,7 +248,8 @@ const tc = [60, 20, 6, 2].map(c => runT(Object.assign({}, KO, { tab: tabC(c) }))
 const lnR30 = Math.log(30e-6), tab60 = tabC(60);
 const t90one = runT(Object.assign({}, KO, { tab: Object.assign({}, tab60, { E: tab60.E.map((e, i) => SP.lnR[Math.floor(i / SP.lnp.length)] < lnR30 ? 1 : e) }) }));
 expect('book-07', 'far less than the', `${f(tc[0] - tc[3], 1)} min by which the collision efficiency moves t_{90} (${f(tc[3], 1)} to ${f(tc[0], 1)} min`);
-expect('book-03', 'the crossover moves', `${f(tc[0], 1)} min (60) to ${f(tc[1], 1)}, ${f(tc[2], 1)} and ${f(tc[3], 1)} min (20, 6, 2); Hall's table gives ${f(tq('extHall', 0.9), 1)} min`);
+expect('book-03', 'his value, used here', `${f(cross(60), 3)} ${f(tc[0], 1)} 20 ${f(cross(20), 3)} ${f(tc[1], 1)} 6 ${f(cross(6), 3)} ${f(tc[2], 1)} 2 ${f(cross(2), 3)} ${f(tc[3], 1)} Hall's (1980) table instead ${f(P.hallE(hall, 40e-6, 0.2), 2)} ${f(tq('extHall', 0.9), 1)}`);
+expect('book-03', 'That spread,', `${f(tc[3], 1)} to ${f(tc[0], 1)} min`);
 expect('book-03', 'with E = 1 for collectors below 30 µm,', `falls to ${f(t90one, 1)} min`);
 expect('book-05', 'moves $t_{90}$ from', `${f(tc[0], 1)} down to ${f(tc[3], 1)} min, and Hall's table gives ${f(tq('extHall', 0.9), 1)} min`);
 expect('book-05', 'So $t_{90}$ =', `${f(tc[3], 1)} to ${f(tc[0], 1)} min`);
@@ -257,7 +259,7 @@ expect('book-09', 'the bookkeeping changes $t_{90}$ by', `${f(gq('thesis', 0.9) 
 // chapter 5: resolution
 const runS = (sb, dt) => { const r = P.sceRun(P.makeGrid(sb, 4e-3), A, KO, modes, { dt, tEnd: 1200, recordEvery: 5, snapAt: [] }); return interp(r.t, r.F40, 0.9) / 60; };
 const t4 = runS(4, 1), t16 = runS(16, 1), tq4 = runS(8, 0.25);
-expect('book-05', 'Halving the time step twice moves', `by ${f(Math.abs(tq4 - t90ext), 3)} min`);
+expect('book-05', 'halving the time step twice moves', `by ${f(Math.abs(tq4 - t90ext), 3)} min`);
 expect('book-05', 'going from 4 to 8 to 16 bins per doubling moves it from', `${f(t4, 2)} to ${f(t90ext, 2)} to ${f(t16, 2)} min`);
 // ---------------------------------------------------------------- chapter 4 continued: coalescence = 1 changes t90 by
 const t90c1 = runT(Object.assign({}, KO, { coal: 'one' }));
@@ -269,7 +271,7 @@ expect('book-03', "Putting Hall's values in for collectors below 30 µm changes"
 // ---------------------------------------------------------------- chapter 8 (tools/run_cold.cjs --json)
 const C = D('cold.json'), pm = x => x * 60 / 1e6;
 expect('book-08', 'stays liquid when supercooled,', f(C.Fliq * 100, 2) + ' %');
-expect('book-08', 'stays liquid when supercooled,', `${f(C.liquid / 1e6, 1)} liquid droplets and ${f(C.ice / 1e6, 1)} ice spheres`);
+expect('book-08', 'stays liquid when supercooled,', `${f(C.liquid / 1e6, 1)} liquid drops and ${f(C.ice / 1e6, 1)} ice spheres`);
 expect('book-08', 'almost every such event', `(${f(pm(C.rime25big), 3)} of ${f(pm(C.rime25), 3)} per cm³`);
 const Ai = P.air(263.15, 60000), vi = a => P.vBeard(a, Ai, 900), mi = a => P.massOf(a, 900);
 const K0 = 0.5 * mi(40e-6) * mi(8e-6) / (mi(40e-6) + mi(8e-6)) * (vi(40e-6) - vi(8e-6)) ** 2;
@@ -282,7 +284,12 @@ expect('book-08', 'so $F =', texSci(Fr, 1) + '$ fragments');
 expect('book-08', 'one new splinter per', 'three thousand', f(1 / Fr, 0));
 expect('book-08', "The old study's rule gave this collision", f(0.001 * mi(40e-6) / mi(5e-6), 2) + ' fragments');
 expect('book-08', 'the ice–ice collisions in our cloud carry', `$${texSci(C.K0q[0], 1)}$ to $${texSci(C.K0q[2], 1)}$ J`);
-expect('book-08', 'eight to twelve orders', 'eight to twelve', `${f(Math.log10(1e-4 / C.K0q[2]), 1)} to ${f(Math.log10(1e-2 / C.K0q[0]), 1)} orders below 10⁻⁴–10⁻² J`);
+const Kfit = 0.5 * mi(0.5e-3) * mi(0.25e-3) / (mi(0.5e-3) + mi(0.25e-3)) * (vi(0.5e-3) - vi(0.25e-3)) ** 2;
+expect('book-08', 'the smallest particles (8.2) was fitted to, fall at', `${f(vi(0.25e-3), 2)} and ${f(vi(0.5e-3), 2)} m/s and collide with K_0 = ${texSci(Kfit, 1)} J`);
+expect('book-08', 'our collisions carry', 'six to seven orders', `${f(Math.log10(Kfit / C.K0q[2]), 1)} to ${f(Math.log10(Kfit / C.K0q[0]), 1)} orders`);
+expect('book-08', 'with $a_0 = 3.78', `${f(fT, 3)} $a_0$ at −10`);
+expect('book-06', 'The 1 cm³ curve starts lower', `(${f(S.V['1'].reduce((a, q) => a + q.F40[0], 0) / S.V['1'].length, 2)})`);
+expect('book-01', 'with the droplets\' own size, (1.2), already at', `${f(P.L0blowup(40e-6, 8e-6, W8, A) / 60, 1)} min`);
 expect('book-08', '0 to 1.7 fragments per freezing drop,', `${f(pm(C.rime25), 2)} drops of 25 µm`);
 expect('book-08', 'or more freezing per cm³ and minute', `0 to ${f(pm(C.shatter[1]), 1)}`);
 expect('book-08', 'with $D$ held at 0.5 mm in $A$,', `${f(pm(C.ii), 2)} collisions per cm³`);
