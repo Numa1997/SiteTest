@@ -73,9 +73,17 @@ def q_aero(v, Om):
     lam = Om*T5.R_TIP/v
     return 0.5*T5.RHO_AIR*math.pi*T5.R_TIP**3*v**2*cp(lam)/lam
 
+TORQUE_LAW = 'nrel'          # 'nrel': the full baseline law (regions 1-3); 'k2': the pure region-2 law k Omega^2 everywhere
+K_LSS = T5.K_RGN2*(60/(2*math.pi))**2*T5.N_GEAR**3      # N m / (rad/s)^2 on the low-speed shaft
+
+def gen_torque(Om):
+    if TORQUE_LAW == 'k2':
+        return K_LSS*Om**2
+    return T5.gen_torque_lss(Om)[0]
+
 def rotor_accel(v, Om):
     """Omega' (rad/s^2) of the one-state rotor, with the ideal-pitch speed limit at rated."""
-    acc = (q_aero(v, Om) - T5.gen_torque_lss(Om)[0])/J_TOTAL
+    acc = (q_aero(v, Om) - gen_torque(Om))/J_TOTAL
     return np.where((Om >= OM_RATED) & (acc > 0), 0.0, acc)
 
 class WindInterp:

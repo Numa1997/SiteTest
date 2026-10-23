@@ -23,6 +23,16 @@ FONTS = (ROOT / 'fonts' / 'fonts-embedded.css').read_text().strip()
 KATEX = TOOLS / 'node_modules' / 'katex' / 'dist'
 
 body = '\n'.join(p.read_text() for p in SRC)
+
+# Numbers and tables computed by tools/make_numbers.py: {{n:key}} and {{table:key}}; an unknown key stops the build.
+NUM = json.loads((ROOT / 'numbers.json').read_text())
+def _sub(mt):
+    kind, key = mt.group(1), mt.group(2)
+    store = NUM['n'] if kind == 'n' else NUM['table']
+    if key not in store:
+        raise SystemExit(f'unknown {kind} key: {key}')
+    return store[key]
+body = re.sub(r'\{\{(n|table):([A-Za-z0-9_]+)\}\}', _sub, body)
 eq_ids = set()
 jobs = []          # formulas to typeset: (tex, display)
 
@@ -158,7 +168,7 @@ n_ch = len(re.findall(r'class="chapter"', body))
 n_eq = len(eq_ids)
 n_fig = len(re.findall(r'<figure class="fig">', body))
 stats = (f'<span class="chip"><b>{n_ch}</b> chapters</span><span class="chip"><b>{n_eq}</b> numbered equations</span>'
-         f'<span class="chip"><b>{n_fig}</b> figures</span><span class="chip">every number computed from the model</span>')
+         f'<span class="chip"><b>{n_fig}</b> figure{"" if n_fig == 1 else "s"}</span><span class="chip">every number computed from the model</span>')
 
 out = (TEMPLATE.replace('{{FONTS}}', FONTS).replace('{{TOC}}', '\n'.join(toc)).replace('{{TOC_MOBILE}}', '\n'.join(toc_m))
        .replace('{{STATS}}', stats).replace('{{BODY}}', body))

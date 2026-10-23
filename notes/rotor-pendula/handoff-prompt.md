@@ -86,7 +86,7 @@ Scripts are in notes/rotor-pendula/derive/; run with python3 -I <name>.py (numpy
 - L1_chaos.py: Sol's chaos group (R = 1, G = 3.065) with 16 starts per damping: chaos loses to the best regular orbit
   (379 mW vs 230-262 mW).
 - L1_map.py: chaos only at R = 1; none at R >= 2 (real mountings R >= 20). 10 members diverged numerically (G = 70,
-  R <= 5): rerun with more steps before quoting; never count NaN as regular.
+  R <= 5); rerun with 4x steps in L1_map_g70.py: all finite, none chaotic. Never count NaN as regular.
 - nrel5mw.py: NREL 5-MW numbers (J = 4.379e7 kg m^2; steady 8 m/s: Omega 0.9494 rad/s, C_p 0.466 from NREL's ROSCO
   table, report says 0.482; rotor time constant 7.34 s; edgewise modal mass 1416 kg, 1.0793 Hz (report); mode shape
   0.067/0.354/0.823 at 30/60/90 % span; tip gravity sag about 0.45 m).
@@ -103,7 +103,7 @@ a) L2 fix (fatal objection accepted): the reported -2 % was a controller artefac
    changes the power by +0.35..+0.57 %; Euler terms < 2e-4. Rewrite contract-L2.md, run both torque laws, correct the
    picture (at the optimum the pendulum is overdamped, zeta 4.5-8.4), state dynamic inflow (~15 s), sigma_1 as the
    IEC 90 % quantile, C_p 0.482 vs 0.466.
-b) L1: answer skeptic-G1-L1-r1.md if present; rerun the diverged map members.
+b) L1: answer skeptic-G1-L1-r1.md if present (the diverged map members are already rerun).
 c) L3 (the main test): one edgewise modal degree of freedom of the NREL 5-MW blade carrying the pivot; forced by the
    blade's gravity sag (first order: the drive becomes g + 2 Omega^2 w, about 1-11 % power at 30-90 % span; derive it)
    and by turbulence (no measured level exists: sweep tip rms 0.005-0.1 m and say so). Compare at equal mass and reach,
