@@ -14,7 +14,11 @@ The page has three tabs, one per standalone page here:
 | Ideal press (`#ideal`) | `hydraulic.html` | Pascal's press from a one-coordinate Lagrangian, drawn to scale, with a pressure probe in the oil. |
 | Theory (`#theory`) | `hydraulic_theory.html` | *Hydraulics from First Principles*: 23 chapters, 63 numbered equations, 8 figures, every formula typeset with KaTeX when the page is generated, every "In our press" number computed from the models. |
 
-Each page is self-contained (CSS, JavaScript and fonts inline) and opens straight from disk.
+Each page is self-contained (CSS, JavaScript and fonts inline) and opens straight from disk. The two simulation pages also load the website's
+data panel (`scripts/sim.js`, `dataset.js`, `datalog.js`, `styles/paper.css`, `data.css`): from the served study they are two folders
+up, from this folder on disk they are in `../../public/`; anywhere else the pages run without the panel. Each page keeps every number
+of its run in one store (`declareStore()`, `storeRun()`, `Sim.data` near the end of its script); see `docs/portfolios.md`, "The data
+panel of the two simulations".
 
 ## How the served page is made
 
@@ -52,6 +56,10 @@ All four must pass after any change:
 | `python3 check_control.py` | The servo press's equilibria, linearization, discretization, closed-loop poles, margins, nonlinear cycle and energy audit agree with an independent SciPy/SymPy model. |
 | `node tools/check_theory_numbers.js ../../public/portfolios/hydraulics/index.html` | Every one of the 52 numbers the theory quotes is what the models embedded in the served page compute. |
 | `python3 tools/check_combined.py http://localhost:<port>/portfolios/hydraulics/index.html` | With the built site served (`npm run build`, then `python3 -m http.server <port>` in `dist/`): each tab holds everything its standalone page has; Play, sliders, links, tabs and deep links work; no script errors; nothing scrolls sideways at 360–1440 px. 33 checks; needs Playwright for Python and Chromium. |
+
+`node tools/check_data_panel.cjs ideal|servo <width> <outdir>` (Playwright for Node, the built site on port 8767) checks the data panel inside
+each frame: the pointer sweep paints nothing, a dial and the piston or ram pin, a Check from the strip agrees, one round records, Save
+writes an archive NumPy reads, and the panel's loop stops when it is closed.
 
 The four plates on the Portfolios page (`public/portfolios/hydraulics/fig/`) are screenshots of the study; retake them when
 the pictures change.

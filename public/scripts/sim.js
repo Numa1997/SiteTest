@@ -481,7 +481,7 @@
     function boot() {
         typeset();
         var host = document.getElementById('walk');
-        if (!host) return;
+        if (!host || !host.getAttribute('data-walk')) return;   /* only an element that names its walkthrough */
         var s = document.createElement('script');
         s.charset = 'utf-8';
         s.src = '../scripts/walk/' + host.getAttribute('data-walk') + '.js';

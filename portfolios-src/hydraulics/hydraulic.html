@@ -139,14 +139,14 @@ h1 em { color: var(--wine); }
 .chips { display: flex; flex-wrap: wrap; gap: 8px; }
 .chip { font: 500 12.5px/1.2 var(--f-mono); border: 1px solid var(--rule); background: var(--paper); border-radius: 999px; padding: 5px 11px; white-space: nowrap; }
 .chip b { color: var(--wine); font-weight: 500; }
-h2 { font-family: var(--f-display); font-weight: 400; font-size: 30px; line-height: 1.05; margin: 2px 0 0; color: var(--wine-deep); text-wrap: balance; }
-h3 { font-family: var(--f-display); font-weight: 400; font-size: 23px; margin: 24px 0 6px; color: var(--wine-deep); }
+:where(h2:not(.dp *)) { font-family: var(--f-display); font-weight: 400; font-size: 30px; line-height: 1.05; margin: 2px 0 0; color: var(--wine-deep); text-wrap: balance; }
+:where(h3:not(.dp *)) { font-family: var(--f-display); font-weight: 400; font-size: 23px; margin: 24px 0 6px; color: var(--wine-deep); }
 .box { background: var(--panel); border: 1.5px solid var(--line); border-radius: var(--radius); padding: 16px; min-width: 0; box-shadow: var(--shadow); }
 .box-head { display: flex; justify-content: space-between; align-items: flex-end; gap: 10px 16px; flex-wrap: wrap; margin-bottom: 12px; }
 .grid { display: grid; gap: 18px; grid-template-columns: minmax(0, 1.8fr) minmax(0, 1fr); align-items: start; }
 .col { display: grid; gap: 18px; min-width: 0; }
 @media (max-width: 980px) { .grid { grid-template-columns: minmax(0, 1fr); } }
-canvas { display: block; width: 100%; }
+:where(canvas:not(.dp *):not(.dp-overlay)) { display: block; width: 100%; }
 .num, .mono { font-family: var(--f-mono); font-variant-numeric: tabular-nums; }
 .note { font-size: 13px; color: var(--muted); margin: 8px 0 0; }
 
@@ -162,7 +162,7 @@ canvas { display: block; width: 100%; }
 .stepper button.now { background: var(--wine); border-color: var(--wine-deep); color: #fbf3e8; }
 .stepper button.now::before { background: #fbf3e8; box-shadow: 0 0 0 3px rgba(251, 243, 232, 0.35); }
 .stepper button:hover { border-color: var(--line); }
-#scene { border: 1px solid var(--line); border-radius: 8px; background: var(--paper); }
+#scene { display: block; width: 100%; background: var(--paper); }
 .legend { display: flex; flex-wrap: wrap; align-items: center; gap: 6px 12px; margin-top: 10px; font-size: 13px; color: var(--muted); }
 .cbar { width: 150px; height: 10px; border-radius: 999px; border: 1px solid var(--line); background: linear-gradient(90deg, rgb(246,232,196), rgb(222,146,70) 45%, rgb(92,14,34)); }
 .swatch { display: inline-block; width: 14px; height: 10px; border-radius: 3px; border: 1px solid var(--line); vertical-align: -1px; background: rgb(62,104,135); }
@@ -172,9 +172,9 @@ canvas { display: block; width: 100%; }
 
 /* transport */
 .transport { display: flex; flex-wrap: wrap; align-items: center; gap: 10px 12px; }
-button, select { font: 500 14px var(--f-text); color: var(--ink); background: var(--paper); border: 1.5px solid var(--line); border-radius: 999px; padding: 7px 15px; cursor: pointer; }
+:where(button:not(.dp *):not(.dp-read *):not(.dp-readbtn):not(.dp-tab), select:not(.dp *)) { font: 500 14px var(--f-text); color: var(--ink); background: var(--paper); border: 1.5px solid var(--line); border-radius: 999px; padding: 7px 15px; cursor: pointer; }
 select { border-radius: 8px; max-width: 100%; }
-button:hover { background: #f1e6d2; }
+:where(button:not(.dp *):not(.dp-read *):not(.dp-readbtn):not(.dp-tab)):hover { background: #f1e6d2; }
 button:focus-visible, input:focus-visible, select:focus-visible { outline: 2px solid var(--wine); outline-offset: 2px; }
 button.primary { background: var(--wine); color: #fbf3e8; border-color: var(--wine-deep); min-width: 92px; }
 button.primary:hover { background: var(--wine-deep); }
@@ -286,7 +286,23 @@ input[type=range]::-moz-range-thumb { width: 13px; height: 13px; border-radius: 
 #walk { height: 190px; margin-top: 10px; border: 1px solid var(--line); border-radius: 8px; background: var(--paper); }
 .physics p, .physics li { max-width: 78ch; }
 .physics ul { padding-left: 22px; }
+
+/* the tokens of the site's data panel (styles/data.css), in this study's colours; the element rules above are kept off the panel */
+:root { --accent: var(--wine); --accent-dark: var(--wine-deep); --accent-rose: #e2a2aa; --card: var(--paper); --card-soft: var(--panel); --ink-2: #3f2c23; --ink-3: #5c4839;
+  --rule-soft: #e8dcc6; --tan: #efe4c8; --tan-ink: #7a4b12; --sans: var(--f-text); --mono: var(--f-mono); --serif: var(--f-display); }
+#stage { position: relative; border: 1px solid var(--line); border-radius: 8px; overflow: hidden; background: var(--paper); }
+#stage > #scene { border: 0; border-radius: 0; }
+#stage > canvas.dp-overlay { position: absolute; inset: 0; width: 100%; height: 100%; display: block; pointer-events: none; z-index: 5; }
+#stage.dp-reading { cursor: crosshair; touch-action: none; user-select: none; -webkit-user-select: none; }
+.stage__cap { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 6px 14px; margin: 6px 0 0; font-size: 13px; color: var(--muted); }
 </style>
+<script>
+/* The site's shared data panel: scripts/sim.js, dataset.js, datalog.js and styles/paper.css, data.css.
+   Served from the website (portfolios/hydraulics/, also inside the study's frames, whose address is the study's) they are two
+   folders up; opened from portfolios-src/hydraulics/ on disk they are in ../../public/. Elsewhere the page runs without the panel. */
+window.SHARED = /\/portfolios\/hydraulics\/[^/]*$/.test(document.baseURI.split(/[?#]/)[0]) ? '../../' : /\/portfolios-src\/hydraulics\/[^/]*$/.test(document.baseURI.split(/[?#]/)[0]) ? '../../public/' : null;
+if (window.SHARED) document.write('<link rel="stylesheet" href="' + SHARED + 'styles/paper.css"><link rel="stylesheet" href="' + SHARED + 'styles/data.css">');
+</script>
 </head>
 <body>
 <div class="wrap">
@@ -305,14 +321,15 @@ input[type=range]::-moz-range-thumb { width: 13px; height: 13px; border-radius: 
     <div class="col">
       <section class="box" aria-label="Scene">
         <ol class="stepper" id="stepper" aria-label="Phases of the run; select one to jump to it"></ol>
-        <canvas id="scene" aria-label="Animated hydraulic press"></canvas>
+        <div id="stage"><canvas id="scene" aria-label="Animated hydraulic press"></canvas></div>
+        <p class="stage__cap"><span>The press to true scale, and its dials</span></p>
         <canvas id="walk" aria-label="Pressure along the oil path"></canvas>
         <div class="legend">
           <span>Oil gauge pressure</span>
           <span class="num">0</span><span class="cbar" aria-hidden="true"></span><span class="num" id="pmaxLbl">–</span>
           <span><span class="swatch" aria-hidden="true"></span> below 0</span>
         </div>
-        <p class="note">Cylinders, pipe, pistons and stops are drawn to true scale; the load block's size is symbolic. The white dots are material points of oil: each keeps the oil volume between itself and the input piston, so in the pipe they run A₁/A_p times faster. The chart under the drawing walks the same pressure field from piston to piston against true path length: the vertical steps are Bernoulli, the slopes are weight and inertia (theory, chapter 5). Point at the oil, or tap it, to read the pressure there and its parts: the push of the piston, the weight of the oil above, and the force that accelerates the oil.</p>
+        <p class="note">Cylinders, pipe, pistons and stops are drawn to true scale; the load block's size is symbolic. The white dots are material points of oil: each keeps the oil volume between itself and the input piston, so in the pipe they run A₁/A_p times faster. The chart under the drawing walks the same pressure field from piston to piston against true path length: the vertical steps are Bernoulli, the slopes are weight and inertia (theory, chapter 5). Click or tap the oil to read the pressure there and its parts (a click outside the oil removes the reading): the push of the piston, the weight of the oil above, and the force that accelerates the oil.</p>
         <div class="status" id="status"></div>
       </section>
 
@@ -458,6 +475,7 @@ m_1a &amp;= F_1 + m_1g - p_1A_1 &amp;&amp;\Rightarrow\quad p_1 = \frac{F_1 + m_1
 
 </div>
 
+<script>if (window.SHARED) document.write('<script src="' + SHARED + 'scripts/sim.js"><\/script><script src="' + SHARED + 'scripts/dataset.js"><\/script>');</script>
 <script>
 /*PHYSICS-BEGIN*/
 // Ideal hydraulic press. One generalized coordinate x = input piston displacement, downward [m].
@@ -687,6 +705,7 @@ function pColor(p) {
 
 function recompute() {
   run = simulate(P);
+  storeRun();
   tracers = makeTracers(run.model);
   tView = 0; playing = false; $('play').textContent = '▶ Play';
   $('scrub').max = run.tEnd.toFixed(3); $('scrub').value = 0; setFill($('scrub'));
@@ -765,6 +784,7 @@ function layout() {
   const ox = (cssW - s * (xmax - xmin)) / 2 - s * xmin;
   const oy = sceneH - (sceneH - s * (ymax - ymin)) / 2 + s * ymin;
   G = { s, ox, oy, cssW, cssH, sceneH, stripH, phone, dpr, loadW, topL, topR, ymax, ymin };
+  if (HAS_DS) for (const k of ['s', 'ox', 'oy', 'cssW', 'cssH', 'sceneH', 'stripH', 'dpr']) ds.set('d_' + k, G[k]);
   for (const p of plots) { p.cv.width = Math.round(p.cv.clientWidth * dpr); p.cv.height = Math.round(p.cv.clientHeight * dpr); }
   buildPlots();
   dirty = true;
@@ -974,7 +994,8 @@ function drawDial(c, cx, cy, r, d) {
     const a = a0 + sweep * j / 10, r1 = r * (j % 5 === 0 ? 0.6 : 0.66);
     c.beginPath(); c.moveTo(cx + r1 * Math.cos(a), cy + r1 * Math.sin(a)); c.lineTo(cx + r * 0.7 * Math.cos(a), cy + r * 0.7 * Math.sin(a)); c.stroke();
   }
-  const a = ang(d.value);
+  if (HAS_DS && d.j !== undefined) ds.set('needle_' + d.j, ang(d.value));
+  const a = HAS_DS && d.j !== undefined ? ds.get('needle_' + d.j) : ang(d.value);
   c.strokeStyle = COL.ink; c.lineWidth = 2.2;
   c.beginPath(); c.moveTo(cx - 0.12 * r * Math.cos(a), cy - 0.12 * r * Math.sin(a)); c.lineTo(cx + 0.72 * r * Math.cos(a), cy + 0.72 * r * Math.sin(a)); c.stroke();
   c.fillStyle = COL.ink; c.beginPath(); c.arc(cx, cy, r * 0.08, 0, 2 * Math.PI); c.fill();
@@ -991,6 +1012,7 @@ function drawDialStrip(c, R, i) {
   c.strokeStyle = '#dccdb4'; c.lineWidth = 1; c.beginPath(); c.moveTo(0, top); c.lineTo(G.cssW, top); c.stroke();
   const pmax = Math.max(50, Math.ceil(run.pmax / 5e4) * 50);
   const vmax = Math.max(0.5, Math.ceil(Math.max(...R.v.map(Math.abs)) * 4) / 4);
+  if (HAS_DS) { ds.set('d_dial_pmax', pmax); ds.set('d_dial_vmax', vmax); }
   const dials = [
     { label: 'p₁ [kPa]', value: R.p1[i] / 1000, min: 0, max: pmax, text: fmt(R.p1[i] / 1000, 1) },
     { label: 'p₂ [kPa]', value: R.p2[i] / 1000, min: 0, max: pmax, text: fmt(R.p2[i] / 1000, 1) },
@@ -999,7 +1021,8 @@ function drawDialStrip(c, R, i) {
     { label: 'x₁ [cm]', value: 100 * R.x[i], min: 0, max: 100 * CONST.stroke, text: fmt(100 * R.x[i], 1) }
   ];
   const n = dials.length, cell = G.cssW / n, r = Math.min(30, cell / 2 - 12), cy = top + 12 + r * 1.08;
-  dials.forEach((d, j) => drawDial(c, cell * (j + 0.5), cy, r, d));
+  if (HAS_DS) { ds.set('d_dial_r', r); ds.set('d_dial_cy', cy); }
+  dials.forEach((d, j) => drawDial(c, cell * (j + 0.5), cy, r, Object.assign(d, { j })));
 }
 
 /** Draw frame i: back to front. */
@@ -1112,10 +1135,7 @@ function setProbe(e) {
   probe = my < G.sceneH ? { wx: (mx - G.ox) / G.s, wy: (G.oy - my) / G.s } : null;
   dirty = true;
 }
-scene.addEventListener('pointermove', setProbe);
-scene.addEventListener('pointerdown', setProbe);   // a tap places the probe on a touch screen
-// a mouse leaving clears it; a finger lifting leaves it until the next tap
-scene.addEventListener('pointerleave', e => { if (e.pointerType === 'mouse') { probe = null; dirty = true; } });
+scene.addEventListener('pointerdown', setProbe);   // a click or tap places the probe; a click outside the oil removes it
 
 function drawScene(i) {
   const c = sctx, m = run.model, Pm = m.P, R = run.rec, H0 = CONST.H0;
@@ -1123,6 +1143,7 @@ function drawScene(i) {
   const X = wx => G.ox + G.s * wx, Y = wy => G.oy - G.s * wy;
   const R1 = Pm.d1 / 2, R2 = Pm.d2 / 2, Lp = Pm.Lp, dp = Pm.dp;
   const x = R.x[i], h1 = H0 - x, h2 = H0 + m.r * x;
+  if (HAS_DS) { ds.set('d_face1_px', Y(h1)); ds.set('d_face2_px', Y(h2)); }
   drawBackdrop(c, X, Y);
   drawVessel(c, X, Y, Pm);
   drawOil(c, X(-R1), Y(0), X(R1), Y(h1), R.pb1[i], R.p1[i], false);
@@ -1197,7 +1218,7 @@ function buildPlots() {
   const R = run.rec, r = run.model.r;
   plots[0].series = [
     { name: 'x₁ [cm]', color: COL.wine, y: R.x.map(v => 100 * v) },
-    { name: 'x₂ [mm]', color: COL.blue, y: R.x.map(v => 1000 * r * v) }
+    { name: 'x₂ [mm]', color: COL.blue, y: R.x2 ? R.x2.map(v => 1000 * v) : R.x.map(v => 1000 * r * v) }
   ];
   plots[1].series = [
     { name: 'p₁', color: COL.wine, y: R.p1.map(v => v / 1000) },
@@ -1363,13 +1384,13 @@ function updateReadouts(i) {
   const set = (id, v, unit) => { $(id).innerHTML = `${v}<small>${unit}</small>`; };
   set('r_t', fmt(R.t[i], 3), 's');
   set('r_x1', fmt(100 * R.x[i], 2), 'cm');
-  set('r_x2', fmt(1000 * m.r * R.x[i], 2), 'mm');
+  set('r_x2', fmt(1000 * (R.x2 ? R.x2[i] : m.r * R.x[i]), 2), 'mm');
   set('r_v', fmt(R.v[i], 3), 'm/s');
   set('r_p1', fmt(R.p1[i] / 1000, 2), 'kPa');
   set('r_p2', fmt(R.p2[i] / 1000, 2), 'kPa');
   set('r_F', fmt(R.F[i], 1), 'N');
-  set('r_F2', fmt(R.p2[i] * m.A2, 1), 'N');
-  set('r_pascal', fmt(R.F[i] * m.A2 / m.A1, 1), 'N');
+  set('r_F2', fmt(R.F2 ? R.F2[i] : R.p2[i] * m.A2, 1), 'N');
+  set('r_pascal', fmt(R.Fpas ? R.Fpas[i] : R.F[i] * m.A2 / m.A1, 1), 'N');
   set('r_Fmin', fmt(m.F1min, 2), 'N');
   set('r_mu', fmt(R.mu[i], 3), 'kg');
   set('r_W', fmt(R.W[i], 4), 'J');
@@ -1378,7 +1399,7 @@ function updateReadouts(i) {
   set('r_L', fmt(R.L[i], 4), 'J');
   $('tLbl').textContent = `${fmt(R.t[i], 3)} s`;
 }
-function render() { const i = frameIndex(tView); drawScene(i); drawWalk(i); drawPlots(); updateReadouts(i); updateStepper(i); }
+function render() { const i = frameIndex(tView); setNow(i); drawScene(i); drawWalk(i); drawPlots(); updateReadouts(i); updateStepper(i); }
 function loop(ts) {
   if (playing) {
     if (lastTs !== null) tView += (ts - lastTs) / 1000 * speed;
@@ -1392,7 +1413,7 @@ function loop(ts) {
 $('play').addEventListener('click', () => {
   if (playing) { playing = false; $('play').textContent = '▶ Play'; return; }
   if (tView >= run.tEnd) tView = 0;
-  playing = true; $('play').textContent = '❚❚ Pause';
+  playing = true; lastTs = null; $('play').textContent = '❚❚ Pause';
 });
 $('reset').addEventListener('click', () => { playing = false; $('play').textContent = '▶ Play'; tView = 0; $('scrub').value = 0; setFill($('scrub')); dirty = true; });
 $('scrub').addEventListener('input', e => { tView = Number(e.target.value); setFill(e.target); dirty = true; });
@@ -1438,11 +1459,207 @@ new MutationObserver(list => {
   for (const rec of list) for (const n of rec.addedNodes) typesetSubs(n.nodeType === 3 ? n.parentElement : n);
 }).observe(document.body, { childList: true, subtree: true });
 
+// ================================================================= the store and the data panel
+// Every number of the run is written into one dataset (the site's scripts/dataset.js) by storeRun(), right after simulate()
+// computes it; the drawing, the dials, the plots and the readouts read the store's arrays. The site's data panel
+// (scripts/datalog.js) shows the store, checks it three ways and saves it. Without the site's scripts (a blob: frame or a page
+// opened from disk without the website beside it) the page runs on run.rec as before and has no panel.
+const HAS_DS = !!(window.Sim && Sim.dataset);
+const REC_ARR = ['t', 'x', 'v', 'a', 'phase', 'F', 'mu', 'p1', 'p2', 'pb1', 'pin', 'pout', 'pb2', 'ptop', 'W', 'K', 'V', 'L'];
+const ds = HAS_DS ? Sim.dataset({ title: 'Ideal hydraulic press', attrs: { study: 'portfolios/hydraulics', page: 'hydraulic.html',
+  model: 'one generalized coordinate x (input piston, downward), L = T − V with μ(x), integrated by RK4', start: 'at rest, x = 0' } }) : null;
+function declareStore() {
+  const v = (n, dims, type, a) => ds.var(n, dims, type, a);
+  const SL = { F1: ['F<sub>1</sub>', 'N', 'input force (after the ramp)', 1], M: ['M', 'kg', 'load', 1], d1: ['d<sub>1</sub>', 'm', 'input bore', 4], d2: ['d<sub>2</sub>', 'm', 'output bore', 4],
+    tau: ['τ', 's', 'force ramp time', 2], Lp: ['L<sub>p</sub>', 'm', 'pipe length', 3], dp: ['d<sub>p</sub>', 'm', 'pipe bore', 4] };
+  for (const k in SL) v(k, [], 'float', { symbol: SL[k][0], units: SL[k][1], long_name: SL[k][2], computed_in: k + ' slider', digits: SL[k][3] });
+  const CN = { g: ['g', 'm/s²', 'gravity', 2], rho: ['ρ', 'kg/m³', 'oil density', 0], H0: ['H<sub>0</sub>', 'm', 'oil height in both columns at rest', 3], stroke: ['s<sub>max</sub>', 'm', 'stroke of the input piston', 3],
+    m1: ['m<sub>1</sub>', 'kg', 'input piston and rod', 1], m2: ['m<sub>2</sub>', 'kg', 'output piston', 1], dt: ['Δt', 's', 'RK4 step', 5], recEvery: ['n<sub>rec</sub>', '', 'steps between stored samples', 0],
+    endHold: ['t<sub>hold</sub>', 's', 'run time kept after the stroke stop', 2], stallWait: ['t<sub>stall</sub>', 's', 'run time kept when the press stalls', 2], timeLimit: ['t<sub>limit</sub>', 's', 'longest run after the ramp', 1] };
+  for (const k in CN) v('c_' + k, [], k === 'recEvery' ? 'int' : 'float', { symbol: CN[k][0], units: CN[k][1], long_name: CN[k][2], computed_in: 'CONST', digits: CN[k][3] });
+  const MD = { A1: ['A<sub>1</sub>', 'm²', 'input piston area', 'π d<sub>1</sub>²/4', 8], A2: ['A<sub>2</sub>', 'm²', 'output piston area', 'π d<sub>2</sub>²/4', 8], Ap: ['A<sub>p</sub>', 'm²', 'pipe cross-section', 'π d<sub>p</sub>²/4', 8],
+    r: ['r', '', 'area ratio, the lever of the press', 'A<sub>1</sub>/A<sub>2</sub>', 6], q: ['q', '', 'speed ratio pipe/input column', 'A<sub>1</sub>/A<sub>p</sub>', 4], mL: ['m<sub>L</sub>', 'kg', 'output piston plus load', 'm<sub>2</sub> + M', 2],
+    F1min: ['F<sub>1,min</sub>', 'N', 'smallest input force that lifts the load', 'm<sub>L</sub> g r − m<sub>1</sub> g', 4], k: ['k', 'N/m', 'stiffness of the oil levels (head difference)', 'ρ g A<sub>1</sub>(1 + r)', 4],
+    dmu: ['μ′', 'kg/m', 'slope of the effective mass', 'ρ A<sub>1</sub>(r² − 1)', 4], mu0: ['μ(0)', 'kg', 'effective mass at rest', 'm<sub>1</sub> + m<sub>L</sub>r² + ρA<sub>1</sub>(H<sub>0</sub>(1 + r) + L<sub>p</sub> q)', 4] };
+  for (const k in MD) v('m_' + k, [], 'float', { symbol: MD[k][0], units: MD[k][1], long_name: MD[k][2], computed_in: 'makeModel()', formula: MD[k][3], digits: MD[k][4] });
+  const RS = { tEnd: ['t<sub>end</sub>', 's', 'end of the run', 4], selfTest: ['max |p<sub>top</sub> − p<sub>2</sub>|', 'Pa', 'self-test: the pressure walk arrives at p₂', 12], closure: ['max |W − K − V − lost|', 'J', 'self-test: energy closure', 12],
+    pmax: ['p<sub>max</sub>', 'Pa', 'highest gauge pressure anywhere in the run', 1], pmin: ['p<sub>min</sub>', 'Pa', 'lowest gauge pressure anywhere in the run', 1], pminT: ['t(p<sub>min</sub>)', 's', 'when it occurs', 4],
+    tDep: ['t<sub>dep</sub>', 's', 'departure: the load leaves its stop', 4], tStop: ['t<sub>stop</sub>', 's', 'the input piston reaches its stroke stop', 4], vImpact: ['v<sub>impact</sub>', 'm/s', 'speed at the stroke stop', 4], dK: ['ΔK', 'J', 'kinetic energy lost at the stop', 4] };
+  for (const k in RS) v('r_' + k, [], 'float', { symbol: RS[k][0], units: RS[k][1], long_name: RS[k][2], computed_in: 'simulate()', digits: RS[k][3] });
+  v('r_outcome', [], 'str', { symbol: 'outcome', long_name: 'how the run ended: stroke stop, stalled or time limit', computed_in: 'simulate()', digits: 0 });
+  v('r_pminWhere', [], 'str', { symbol: 'where', long_name: 'where the lowest pressure occurs', computed_in: 'simulate()', digits: 0 });
+  v('r_stalls', [], 'bool', { symbol: 'stalls', long_name: 'F₁ never exceeds F₁,min', computed_in: 'simulate()', digits: 0 });
+  ds.dim('n', 1);
+  const RA = { t: ['t<sub>n</sub>', 's', 'time of each stored sample', 4], x: ['x', 'm', 'input piston travel, downward', 6], v: ['v', 'm/s', 'input piston speed', 5], a: ['a', 'm/s²', 'input piston acceleration (0 at rest and at the stop)', 5],
+    phase: ['phase', '', '0 rest, 1 moving, 2 at the stroke stop', 0], F: ['F<sub>1</sub>(t)', 'N', 'applied force', 3], mu: ['μ(x)', 'kg', 'effective mass', 4], p1: ['p<sub>1</sub>', 'Pa', 'gauge pressure under the input piston', 2],
+    p2: ['p<sub>2</sub>', 'Pa', 'gauge pressure under the output piston', 2], pb1: ['p<sub>b1</sub>', 'Pa', 'bottom of the left column', 2], pin: ['p<sub>in</sub>', 'Pa', 'pipe inlet', 2], pout: ['p<sub>out</sub>', 'Pa', 'pipe outlet', 2],
+    pb2: ['p<sub>b2</sub>', 'Pa', 'bottom of the right column', 2], ptop: ['p<sub>top</sub>', 'Pa', 'top of the right column, walked from the left: must equal p₂', 2], W: ['W', 'J', 'work done by the input force', 6],
+    K: ['K', 'J', 'kinetic energy, ½ μ v²', 6], V: ['V', 'J', 'potential energy', 6], L: ['lost', 'J', 'kinetic energy lost at the stops', 6] };
+  ds.coord('t', 'n', Float64Array, { symbol: RA.t[0], units: RA.t[1], long_name: RA.t[2], computed_in: 'simulate(), record()', formula: 'every 10 RK4 steps, and the last instant', digits: RA.t[3] });
+  for (const k of REC_ARR) if (k !== 't') v(k, ['n'], Float64Array, { symbol: RA[k][0], units: RA[k][1], long_name: RA[k][2], computed_in: 'simulate(), record()', digits: RA[k][3] });
+  v('x2', ['n'], Float64Array, { symbol: 'x<sub>2</sub>', units: 'm', long_name: 'output piston travel, upward', computed_in: 'storeRun()', formula: 'r x', digits: 7 });
+  v('F2', ['n'], Float64Array, { symbol: 'F<sub>2</sub>', units: 'N', long_name: 'force of the oil on the output piston', computed_in: 'storeRun()', formula: 'p<sub>2</sub> A<sub>2</sub>', digits: 3 });
+  v('Fpas', ['n'], Float64Array, { symbol: 'F<sub>1</sub>A<sub>2</sub>/A<sub>1</sub>', units: 'N', long_name: "Pascal's static prediction for F₂", computed_in: 'storeRun()', formula: 'F<sub>1</sub> / r', digits: 3 });
+  const PB = { tView: ['t<sub>view</sub>', 's', 'playback time', 4, 'the clock'], i_now: ['n<sub>now</sub>', '', 'stored sample shown', 0, 'frameIndex()'], playing: ['playing', '', 'the playback runs', 0, 'Play button'],
+    speed: ['speed', '', 'playback speed', 2, 'speed buttons'] };
+  v('tView', [], 'float', { symbol: PB.tView[0], units: 's', long_name: PB.tView[2], computed_in: 'the clock', digits: 4, source: 'Advanced by the clock from the wall time between frames.' });
+  v('i_now', [], 'int', { symbol: PB.i_now[0], long_name: PB.i_now[2], computed_in: 'frameIndex()', formula: 'last n with t<sub>n</sub> ≤ t<sub>view</sub>', digits: 0 });
+  v('playing', [], 'bool', { symbol: 'playing', long_name: 'the playback runs', computed_in: 'Play button', digits: 0, source: 'The state of the Play button.' });
+  v('speed', [], 'float', { symbol: 'speed', long_name: 'playback speed', computed_in: 'speed buttons', digits: 2, source: 'The pressed speed button.' });
+  for (const k of ['x', 'v', 'F', 'p1', 'p2', 'x2', 'F2']) v(k + '_now', [], 'float', { symbol: (RA[k] ? RA[k][0] : k === 'x2' ? 'x<sub>2</sub>' : 'F<sub>2</sub>'), units: (RA[k] ? RA[k][1] : k === 'x2' ? 'm' : 'N'),
+    long_name: 'shown now (a stored sample)', computed_in: 'the clock', formula: k + '<sub>n</sub>, n = n<sub>now</sub>', digits: 5 });
+  const DR = { s: ['s', 'px/m', 'drawing scale, true scale for the press', 3], ox: ['o<sub>x</sub>', 'css px', 'screen x of the left cylinder axis', 2], oy: ['o<sub>y</sub>', 'css px', 'screen y of the cylinder floors', 2],
+    cssW: ['W', 'css px', 'canvas width', 1], cssH: ['H', 'css px', 'canvas height', 1], sceneH: ['H<sub>scene</sub>', 'css px', 'height of the press drawing above the dials', 1], stripH: ['H<sub>dials</sub>', 'css px', 'height of the dial strip', 0],
+    dpr: ['dpr', '', 'device pixels per css px', 2], dial_r: ['r<sub>dial</sub>', 'css px', 'dial radius', 2], dial_cy: ['y<sub>dial</sub>', 'css px', 'dial centres', 2], dial_pmax: ['p<sub>FS</sub>', 'kPa', 'full scale of the pressure dials', 0],
+    dial_vmax: ['v<sub>FS</sub>', 'm/s', 'full scale of the speed dial', 2], face1_px: ['y<sub>face,1</sub>', 'css px', 'screen row of the input piston face', 2], face2_px: ['y<sub>face,2</sub>', 'css px', 'screen row of the output piston face', 2] };
+  const SRC = { cssW: 'Measured from the page layout.', cssH: 'The scene height plus the dial strip.', stripH: '128 css px below 640 px width, 116 otherwise.', dpr: 'window.devicePixelRatio.' };
+  for (const k in DR) v('d_' + k, [], 'float', { symbol: DR[k][0], units: DR[k][1], long_name: DR[k][2], computed_in: k.startsWith('dial') ? 'drawDialStrip()' : k.startsWith('face') ? 'drawScene()' : 'layout()', digits: DR[k][3], source: SRC[k] });
+  for (let j = 0; j < 5; j++) v('needle_' + j, [], 'float', { symbol: 'θ<sub>' + (j + 1) + '</sub>', units: 'rad', long_name: ['p₁', 'p₂', 'F₁', 'v', 'x₁'][j] + ' dial: needle angle, clockwise from the right', computed_in: 'drawDial()', formula: '¾π + 1.5π (value − min)/(max − min)', digits: 4 });
+}
+function storeRun() {
+  if (!HAS_DS) return;
+  const R = run.rec, m = run.model, N = R.t.length;
+  for (const k in P) ds.set(k, P[k]);
+  for (const k in CONST) ds.set('c_' + k, CONST[k]);
+  for (const k of ['A1', 'A2', 'Ap', 'r', 'q', 'mL', 'F1min', 'k', 'dmu']) ds.set('m_' + k, m[k]);
+  ds.set('m_mu0', m.mu(0));
+  const ev = n => run.events.find(e => e.kind === n), dep = ev('departure'), hit = ev('stroke stop');
+  for (const [k, val] of [['tEnd', run.tEnd], ['selfTest', run.selfTest], ['closure', run.closure], ['pmax', run.pmax], ['pmin', run.pmin], ['pminT', run.pminT],
+    ['tDep', dep ? dep.t : NaN], ['tStop', hit ? hit.t : NaN], ['vImpact', hit ? hit.vImpact : NaN], ['dK', hit ? hit.dK : NaN]]) ds.set('r_' + k, val);
+  ds.set('r_outcome', run.outcome); ds.set('r_pminWhere', run.pminWhere || ''); ds.set('r_stalls', run.stalls);
+  ds.dim('n', N);
+  const out = {};
+  for (const k of REC_ARR) { const a = ds.alloc(k); for (let i = 0; i < N; i++) a[i] = R[k][i]; out[k] = a; }
+  const x2 = ds.alloc('x2'), F2 = ds.alloc('F2'), Fp = ds.alloc('Fpas');
+  for (let i = 0; i < N; i++) { x2[i] = m.r * out.x[i]; F2[i] = out.p2[i] * m.A2; Fp[i] = out.F[i] / m.r; }
+  out.x2 = x2; out.F2 = F2; out.Fpas = Fp;
+  run.rec = out;                    // from here on the drawing reads the store's arrays
+}
+function setNow(i) {
+  if (!HAS_DS) return;
+  ds.set('tView', tView); ds.set('i_now', i); ds.set('playing', playing); ds.set('speed', speed);
+  for (const k of ['x', 'v', 'F', 'p1', 'p2', 'x2', 'F2']) ds.set(k + '_now', run.rec[k][i]);
+}
+if (HAS_DS) declareStore();
+if (HAS_DS) {
+  const G_ = n => ds.get(n), I = (sy, v, u, d) => [sy, v, u || '', d === undefined ? 6 : d];
+  const params = () => { const p = {}; for (const k in DEFAULTS) p[k] = G_(k); return p; };
+  let again = null;                                  // simulate() run again from the stored parameters, cached by them
+  const rerun = () => { const p = params(), key = JSON.stringify(p); if (!again || again.key !== key) { again = simulate(p); again.key = key; } return again; };
+  const fromRun = (k, label) => i => ({ formula: 'simulate() run again from the stored parameters: ' + label, inputs: [I('n', i, '', 0)], value: rerun().rec[k][i] });
+  const check = {};
+  for (const k in DEFAULTS) check[k] = () => ({ formula: 'the slider, as used by the last run', inputs: [I('slider now', P[k], '', 6)], value: P[k] });
+  for (const k in CONST) check['c_' + k] = () => ({ formula: 'the constant CONST.' + k, inputs: [], value: CONST[k] });
+  const area = d => Math.PI * d * d / 4;
+  Object.assign(check, {
+    m_A1: () => ({ formula: 'π d<sub>1</sub>²/4', inputs: [I('d<sub>1</sub>', G_('d1'), 'm', 4)], value: area(G_('d1')) }),
+    m_A2: () => ({ formula: 'π d<sub>2</sub>²/4', inputs: [I('d<sub>2</sub>', G_('d2'), 'm', 4)], value: area(G_('d2')) }),
+    m_Ap: () => ({ formula: 'π d<sub>p</sub>²/4', inputs: [I('d<sub>p</sub>', G_('dp'), 'm', 4)], value: area(G_('dp')) }),
+    m_r: () => ({ formula: 'A<sub>1</sub> / A<sub>2</sub>', inputs: [I('A<sub>1</sub>', G_('m_A1'), 'm²', 8), I('A<sub>2</sub>', G_('m_A2'), 'm²', 8)], value: G_('m_A1') / G_('m_A2') }),
+    m_q: () => ({ formula: 'A<sub>1</sub> / A<sub>p</sub>', inputs: [I('A<sub>1</sub>', G_('m_A1'), 'm²', 8), I('A<sub>p</sub>', G_('m_Ap'), 'm²', 8)], value: G_('m_A1') / G_('m_Ap') }),
+    m_mL: () => ({ formula: 'm<sub>2</sub> + M', inputs: [I('m<sub>2</sub>', G_('c_m2'), 'kg', 1), I('M', G_('M'), 'kg', 1)], value: G_('c_m2') + G_('M') }),
+    m_F1min: () => ({ formula: 'm<sub>L</sub> g r − m<sub>1</sub> g', inputs: [I('m<sub>L</sub>', G_('m_mL'), 'kg', 2), I('r', G_('m_r'), '', 6)], value: G_('m_mL') * G_('c_g') * G_('m_r') - G_('c_m1') * G_('c_g') }),
+    m_k: () => ({ formula: 'ρ g A<sub>1</sub>(1 + r)', inputs: [I('ρ', G_('c_rho'), 'kg/m³', 0), I('A<sub>1</sub>', G_('m_A1'), 'm²', 8), I('r', G_('m_r'), '', 6)], value: G_('c_rho') * G_('c_g') * G_('m_A1') * (1 + G_('m_r')) }),
+    m_dmu: () => ({ formula: 'ρ A<sub>1</sub>(r² − 1)', inputs: [I('ρ', G_('c_rho'), 'kg/m³', 0), I('A<sub>1</sub>', G_('m_A1'), 'm²', 8), I('r', G_('m_r'), '', 6)], value: G_('c_rho') * G_('m_A1') * (G_('m_r') * G_('m_r') - 1) }),
+    m_mu0: () => { const A1 = G_('m_A1'), r = G_('m_r'), H0 = G_('c_H0'); return { formula: 'm<sub>1</sub> + m<sub>L</sub> r² + ρA<sub>1</sub>((H<sub>0</sub>) + r H<sub>0</sub> + L<sub>p</sub> q)', inputs: [I('m<sub>L</sub>', G_('m_mL'), 'kg', 2), I('q', G_('m_q'), '', 4)],
+      value: G_('c_m1') + G_('m_mL') * r * r + G_('c_rho') * A1 * ((H0 - 0) + r * (H0 + r * 0) + G_('Lp') * G_('m_q')) }; },
+    x2: i => ({ formula: 'r x', inputs: [I('r', G_('m_r'), '', 6), I('x', G_('x')[i], 'm', 7)], value: G_('m_r') * G_('x')[i] }),
+    F2: i => ({ formula: 'p<sub>2</sub> A<sub>2</sub>', inputs: [I('p<sub>2</sub>', G_('p2')[i], 'Pa', 2), I('A<sub>2</sub>', G_('m_A2'), 'm²', 8)], value: G_('p2')[i] * G_('m_A2') }),
+    Fpas: i => ({ formula: 'F<sub>1</sub> / r', inputs: [I('F<sub>1</sub>', G_('F')[i], 'N', 3), I('r', G_('m_r'), '', 6)], value: G_('F')[i] / G_('m_r') }),
+    i_now: () => ({ formula: 'last n with t<sub>n</sub> ≤ t<sub>view</sub>', inputs: [I('t<sub>view</sub>', G_('tView'), 's', 4)], value: frameIndex(G_('tView')) })
+  });
+  for (const k of REC_ARR) check[k] = fromRun(k, k + '<sub>n</sub>');
+  const RES = { tEnd: r => r.tEnd, selfTest: r => r.selfTest, closure: r => r.closure, pmax: r => r.pmax, pmin: r => r.pmin, pminT: r => r.pminT,
+    tDep: r => { const e = r.events.find(e => e.kind === 'departure'); return e ? e.t : NaN; }, tStop: r => { const e = r.events.find(e => e.kind === 'stroke stop'); return e ? e.t : NaN; },
+    vImpact: r => { const e = r.events.find(e => e.kind === 'stroke stop'); return e ? e.vImpact : NaN; }, dK: r => { const e = r.events.find(e => e.kind === 'stroke stop'); return e ? e.dK : NaN; },
+    outcome: r => r.outcome, pminWhere: r => r.pminWhere || '', stalls: r => r.stalls };
+  for (const k in RES) check['r_' + k] = () => ({ formula: 'simulate() run again from the stored parameters', inputs: [], value: RES[k](rerun()) });
+  for (const k of ['x', 'v', 'F', 'p1', 'p2', 'x2', 'F2']) check[k + '_now'] = () => ({ formula: k + '<sub>n</sub> at n = n<sub>now</sub>', inputs: [I('n<sub>now</sub>', G_('i_now'), '', 0)], value: G_(k)[G_('i_now')] });
+  // drawing: the layout formula again, from the stored parameters and the canvas width
+  function layoutAgain() {
+    const R1 = G_('d1') / 2, R2 = G_('d2') / 2, H0 = G_('c_H0'), r = G_('m_r'), st = G_('c_stroke'), loadW = Math.max(1.5 * G_('d2'), 0.1);
+    const topR = H0 + r * st + TP + 0.03, xmin = -R1 - WALL - 0.07, xmax = G_('Lp') + Math.max(R2 + WALL, loadW / 2) + 0.05, ymin = -G_('dp') - WALL - 0.06;
+    const ymax = Math.max(H0 + TP + ROD + ARROW_MAX + 0.05, H0 + r * st + TP + LOAD_H + 0.06, topR + 0.03), cssW = G_('d_cssW');
+    const sceneH = Math.max(260, Math.min(620, cssW * (ymax - ymin) / (xmax - xmin))), s = Math.min(cssW / (xmax - xmin), sceneH / (ymax - ymin));
+    return { s, sceneH, ox: (cssW - s * (xmax - xmin)) / 2 - s * xmin, oy: sceneH - (sceneH - s * (ymax - ymin)) / 2 + s * ymin };
+  }
+  Object.assign(check, {
+    d_s: () => ({ formula: 'min(W/(x<sub>max</sub> − x<sub>min</sub>), H<sub>scene</sub>/(y<sub>max</sub> − y<sub>min</sub>)), the layout formula again', inputs: [I('W', G_('d_cssW'), 'css px', 1)], value: layoutAgain().s }),
+    d_ox: () => ({ formula: 'the layout formula again', inputs: [I('s', G_('d_s'), 'px/m', 4)], value: layoutAgain().ox }),
+    d_oy: () => ({ formula: 'the layout formula again', inputs: [I('s', G_('d_s'), 'px/m', 4)], value: layoutAgain().oy }),
+    d_sceneH: () => ({ formula: 'W (y<sub>max</sub> − y<sub>min</sub>)/(x<sub>max</sub> − x<sub>min</sub>), between 260 and 620', inputs: [I('W', G_('d_cssW'), 'css px', 1)], value: layoutAgain().sceneH }),
+    d_face1_px: () => ({ formula: 'o<sub>y</sub> − s (H<sub>0</sub> − x)', inputs: [I('o<sub>y</sub>', G_('d_oy'), 'css px', 2), I('s', G_('d_s'), 'px/m', 4), I('x', G_('x_now'), 'm', 7)], value: G_('d_oy') - G_('d_s') * (G_('c_H0') - G_('x_now')) }),
+    d_face2_px: () => ({ formula: 'o<sub>y</sub> − s (H<sub>0</sub> + r x)', inputs: [I('o<sub>y</sub>', G_('d_oy'), 'css px', 2), I('r', G_('m_r'), '', 6), I('x', G_('x_now'), 'm', 7)], value: G_('d_oy') - G_('d_s') * (G_('c_H0') + G_('m_r') * G_('x_now')) }),
+    d_dial_r: () => ({ formula: 'min(30, W/10 − 12)', inputs: [I('W', G_('d_cssW'), 'css px', 1)], value: Math.min(30, G_('d_cssW') / 5 / 2 - 12) }),
+    d_dial_cy: () => ({ formula: 'H<sub>scene</sub> + 12 + 1.08 r<sub>dial</sub>', inputs: [I('H<sub>scene</sub>', G_('d_sceneH'), 'css px', 1)], value: G_('d_sceneH') + 12 + G_('d_dial_r') * 1.08 }),
+    d_dial_pmax: () => ({ formula: 'max(50, ⌈p<sub>max</sub>/50 kPa⌉ · 50) kPa', inputs: [I('p<sub>max</sub>', G_('r_pmax'), 'Pa', 1)], value: Math.max(50, Math.ceil(G_('r_pmax') / 5e4) * 50) }),
+    d_dial_vmax: () => { let m = 0; for (const x of G_('v')) m = Math.max(m, Math.abs(x)); return { formula: 'max(0.5, ⌈4 max|v<sub>n</sub>|⌉/4)', inputs: [I('max |v|', m, 'm/s', 4)], value: Math.max(0.5, Math.ceil(m * 4) / 4) }; }
+  });
+  const DIALS = [['p1_now', 1e-3, () => 0, () => G_('d_dial_pmax')], ['p2_now', 1e-3, () => 0, () => G_('d_dial_pmax')], ['F_now', 1, () => 0, () => 400], ['v_now', 1, () => -G_('d_dial_vmax'), () => G_('d_dial_vmax')], ['x_now', 100, () => 0, () => 100 * G_('c_stroke')]];
+  const needleAng = j => { const [k, f, lo, hi] = DIALS[j], v = G_(k) * f; return 0.75 * Math.PI + 1.5 * Math.PI * (Math.max(lo(), Math.min(hi(), v)) - lo()) / (hi() - lo()); };
+  for (let j = 0; j < 5; j++) check['needle_' + j] = () => ({ formula: '¾π + 1.5π (value − min)/(max − min), value clipped to the scale', inputs: [I('value', G_(DIALS[j][0]) * DIALS[j][1], '', 4)], value: needleAng(j) });
+  // read back from the picture
+  const box = { canvas: scene, ctx: sctx, get dpr() { return G.dpr; } };
+  const dark = c => c[3] > 200 && c[0] < 110 && c[1] < 110 && c[2] < 110;
+  const back = (what, pt, r, test, expected, note) => { const q = Sim.readPixel(box, pt.x, pt.y, r, test); return { what: what + ', (' + Sim.fmt(pt.x, 1) + ', ' + Sim.fmt(pt.y, 1) + ') css px', drawn: q.text, expected, ok: q.found, note }; };
+  const dialAt = (j, frac) => { const r = G_('d_dial_r'), a = G_('needle_' + j), cx = G_('d_cssW') / 5 * (j + 0.5); return { x: cx + frac * r * Math.cos(a), y: G_('d_dial_cy') + frac * r * Math.sin(a) }; };
+  const needleBack = j => () => back('the needle of dial ' + (j + 1) + ', 0.45 r from the hub', dialAt(j, 0.45), 1, dark, 'the dark needle', 'Each dial sweeps 270°, from ¾π (bottom left) clockwise; the value under it is printed in the store’s units scaled to the dial’s.');
+  const faceBack = (k, xc) => () => back('lower edge of the ' + (k === 1 ? 'input' : 'output') + ' piston', { x: G_('d_ox') + G_('d_s') * xc(), y: G_('d_face' + k + '_px') }, 1, dark, 'the dark outline of the piston',
+    'Drawn to true scale: the face is at H<sub>0</sub> − x on the left and H<sub>0</sub> + r x on the right.');
+  const drawn = {};
+  for (let j = 0; j < 5; j++) { drawn['needle_' + j] = needleBack(j); drawn[DIALS[j][0]] = needleBack(j); }
+  Object.assign(drawn, { d_face1_px: faceBack(1, () => G_('d1') / 4), d_face2_px: faceBack(2, () => G_('Lp') - G_('d2') / 4), x2_now: faceBack(2, () => G_('Lp') - G_('d2') / 4) });
+  drawn.x = i => i === G_('i_now') ? faceBack(1, () => G_('d1') / 4)() : { what: 'input piston at sample ' + i, drawn: 'not drawn now', expected: 'drawn only while sample ' + i + ' is shown', ok: null, note: '' };
+  // what lies at a point of the figure
+  const toW = (x, y) => ({ wx: (x - G_('d_ox')) / G_('d_s'), wy: (G_('d_oy') - y) / G_('d_s') });
+  function probeAt(x, y) {
+    if (y > G_('d_sceneH')) { const j = Math.floor(x / (G_('d_cssW') / 5)); return j >= 0 && j < 5 && Math.abs(y - G_('d_dial_cy')) < G_('d_dial_r') * 1.1 ? { what: 'dial', j } : null; }
+    const w = toW(x, y), x1 = G_('x_now'), H0 = G_('c_H0'), r = G_('m_r'), tol = 4 / G_('d_s');
+    if (Math.abs(w.wx) <= G_('d1') / 2 && Math.abs(w.wy - (H0 - x1 + TP / 2)) <= TP / 2 + tol) return { what: 'piston', k: 1 };
+    if (Math.abs(w.wx - G_('Lp')) <= G_('d2') / 2 && Math.abs(w.wy - (H0 + r * x1 + TP / 2)) <= TP / 2 + tol) return { what: 'piston', k: 2 };
+    if (probeReading(G_('i_now'), w.wx, w.wy)) return { what: 'oil', wx: w.wx, wy: w.wy };
+    return null;
+  }
+  function inspectRef(ref) {
+    const i = G_('i_now');
+    if (ref.what === 'dial') { const k = DIALS[ref.j][0]; return { title: 'dial ' + (ref.j + 1), at: dialAt(ref.j, 0), rows: [['t', G_('t')[i], 's', 't', i], [G_ && ds.vars[k].attrs.symbol, G_(k), ds.vars[k].attrs.units, k, null], ['θ', G_('needle_' + ref.j), 'rad', 'needle_' + ref.j, null]] }; }
+    if (ref.what === 'piston') return ref.k === 1
+      ? { title: 'the input piston', at: { x: G_('d_ox'), y: G_('d_face1_px') - G_('d_s') * TP / 2 }, rows: [['t', G_('t')[i], 's', 't', i], ['x', G_('x')[i], 'm', 'x', i], ['v', G_('v')[i], 'm/s', 'v', i], ['a', G_('a')[i], 'm/s²', 'a', i], ['F<sub>1</sub>', G_('F')[i], 'N', 'F', i], ['p<sub>1</sub>', G_('p1')[i], 'Pa', 'p1', i]] }
+      : { title: 'the output piston and load', at: { x: G_('d_ox') + G_('d_s') * G_('Lp'), y: G_('d_face2_px') - G_('d_s') * TP / 2 }, rows: [['t', G_('t')[i], 's', 't', i], ['x<sub>2</sub>', G_('x2')[i], 'm', 'x2', i], ['p<sub>2</sub>', G_('p2')[i], 'Pa', 'p2', i], ['F<sub>2</sub>', G_('F2')[i], 'N', 'F2', i], ['F<sub>1</sub>/r', G_('Fpas')[i], 'N', 'Fpas', i]] };
+    const rd = probeReading(i, ref.wx, ref.wy), rows = [['t', G_('t')[i], 's', 't', i]];
+    if (rd) { rd.rows.forEach(([l, v]) => rows.push([l.replace(/_(\w+)/g, '<sub>$1</sub>'), v, 'Pa', null, null])); rows.push(['p here', rd.rows.reduce((a, r) => a + r[1], 0), 'Pa', null, null]); }
+    return { title: rd ? rd.head : 'oil', at: { x: G_('d_ox') + G_('d_s') * ref.wx, y: G_('d_oy') - G_('d_s') * ref.wy }, rows };
+  }
+  Sim.data = {
+    ds, kicker: 'Hydraulic Press Study · ideal press · data', file: 'hydraulics-ideal-press',
+    playing: () => playing, play: () => { tView = 0; playing = true; lastTs = null; $('play').textContent = '❚❚ Pause'; },
+    groups: [
+      { title: 'Parameters', note: 'what you set with the sliders, as used by the last run', vars: Object.keys(DEFAULTS) },
+      { title: 'Constants', note: 'CONST in the model', vars: Object.keys(CONST).map(k => 'c_' + k) },
+      { title: 'Derived physics', note: 'computed by makeModel() from the parameters', vars: ['m_A1', 'm_A2', 'm_Ap', 'm_r', 'm_q', 'm_mL', 'm_F1min', 'm_k', 'm_dmu', 'm_mu0'] },
+      { title: 'Results of the run', note: 'what simulate() found', vars: ['r_outcome', 'r_stalls', 'r_tEnd', 'r_tDep', 'r_tStop', 'r_vImpact', 'r_dK', 'r_pmax', 'r_pmin', 'r_pminT', 'r_pminWhere', 'r_selfTest', 'r_closure'] },
+      { title: 'Stored run', note: 'one row per stored sample, every 1 ms', vars: REC_ARR.concat(['x2', 'F2', 'Fpas']) },
+      { title: 'Playback', note: 'the sample on screen now', vars: ['tView', 'i_now', 'playing', 'speed', 'x_now', 'v_now', 'F_now', 'p1_now', 'p2_now', 'x2_now', 'F2_now'] },
+      { title: 'Drawing', note: 'how stored values become pixels', vars: ['d_cssW', 'd_cssH', 'd_sceneH', 'd_stripH', 'd_dpr', 'd_s', 'd_ox', 'd_oy', 'd_face1_px', 'd_face2_px', 'd_dial_r', 'd_dial_cy', 'd_dial_pmax', 'd_dial_vmax', 'needle_0', 'needle_1', 'needle_2', 'needle_3', 'needle_4'] }
+    ],
+    rowLabel: { n: j => 't = ' + Sim.fmt(G_('t')[j], 3) + ' s' },
+    probe: probeAt, inspect: inspectRef,
+    locate: (name, idx) => (ds.vars[name].dims[0] === 'n' && idx === G_('i_now') && (name === 'x' || name === 'v' || name === 'F' || name === 'p1')) ? { x: G_('d_ox'), y: G_('d_face1_px') } : null,
+    check, drawn,
+    round: { time: 'tView', label: () => 'one run, t = 0 to ' + Sim.fmt(G_('r_tEnd'), 3) + ' s', length: () => G_('r_tEnd'), columns: ['x_now', 'v_now', 'F_now', 'p1_now', 'p2_now', 'x2_now'],
+      point: () => ({ what: 'piston', k: 1 }), blocked: () => playing && tView > 0.02 ? 'the run is playing; when it ends, Record plays it again from t = 0' : null },
+    about: 'Nothing here is computed while you watch: each slider change runs simulate() once (RK4, Δt = 0.1 ms, a sample every 1 ms) and the whole run is stored. Each frame shows the last stored sample at or before the playback time. ' +
+      'The press is drawn to true scale; the load block\'s size is symbolic; the force arrow is 0.16 m long at 400 N. The oil colour is the stored pressure at both ends of each column or the pipe, blended linearly between them, on a scale from 0 to the run\'s highest pressure. ' +
+      'The white dots are material points placed from the stored x and the volumes, not stored themselves. The dials clip at their full scale; the plots draw every stored sample. The oil reading you get by clicking the oil adds the stored p₁ or p₂ and a, by the hydrostatic law of the theory, chapter 5.'
+  };
+}
+
 plots.forEach(wirePlot);
 buildControls();
 recompute();
 requestAnimationFrame(loop);
 if (document.fonts && document.fonts.ready) document.fonts.ready.then(() => { buildPlots(); dirty = true; });
 </script>
+<script>if (window.SHARED) document.write('<script src="' + SHARED + 'scripts/datalog.js"><\/script>');</script>
 </body>
 </html>
