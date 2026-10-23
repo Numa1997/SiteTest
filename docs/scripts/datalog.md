@@ -212,7 +212,9 @@ frame sets $t_0$, and the elapsed time is $t - t_0$. A frame is taken when
 
 At most 600 samples are taken; sampled rounds reserve slot 600 for the ending frame (`MAXS`, [datalog.js:744](../../public/scripts/datalog.js#L744)). A taken frame stores $t$, the
 elapsed time, every numeric scalar (booleans as 1 or 0, anything else not numeric as NaN), and each row of the followed point,
-or NaN when the page's rows for that point changed shape ([datalog.js:804-812](../../public/scripts/datalog.js#L804-L812)). The
+or NaN when the page's rows for that point changed shape ([datalog.js:804-812](../../public/scripts/datalog.js#L804-L812)). A row is matched by its label and
+variable name, not by its index (since 23 October 2026): on a stored run the followed point's index moves with the playback (Figs. 9, 10, the impact
+study), and matching the index as well made every sample after the first NaN. The series keeps the index of the first sample in its name. The
 progress bar is repainted every 125 ms ([datalog.js:816-818](../../public/scripts/datalog.js#L816-L818)). The round ends when
 the elapsed time reaches $L$ (or, in change mode, at 600 samples), when Stop is pressed, or when time runs backwards because
 the page restarted ("the clock was reset", [datalog.js:795](../../public/scripts/datalog.js#L795)). A round with fewer than two

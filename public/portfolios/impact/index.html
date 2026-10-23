@@ -826,7 +826,9 @@ function curveBack(s,n){
   if(n>ds.get("i_now"))return {what:"F of sample "+n+" on the whole-run plot",drawn:"not drawn yet",expected:"the curve is drawn up to the sample on screen",ok:null,note:"The plots grow with the playback."};
   const G=plotGeom("pAll",0,P.tmax),t=ds.get("ts")[n],p={x:G.X(t),y:G.Y(D[s].F[n])};
   if(s==="cot"&&Math.abs(G.Y(D.iron.F[n])-p.y)<2.5)return {what:"F of sample "+n+", cotton, on the whole-run plot",drawn:"under the iron curve",expected:"hidden: the iron curve is drawn over it here",ok:null,note:"Both balls read nearly the same force here, within 2.5 px of the plot."};
-  return readBack(plotBox("pAll"),"F of sample "+n+" on the whole-run plot",p,2,s==="iron"?Sim.isBurgundy:blue,s==="iron"?"the wine curve":"the blue curve","x ∝ t from 0 to 9 s, y ∝ F from 0 to 700 N; every stored sample up to the one on screen is joined by straight lines.");
+  const r=readBack(plotBox("pAll"),"F of sample "+n+" on the whole-run plot",p,2,s==="iron"?Sim.isBurgundy:blue,s==="iron"?"the wine curve":"the blue curve","x ∝ t from 0 to 9 s, y ∝ F from 0 to 700 N; every stored sample up to the one on screen is joined by straight lines.");
+  if(s==="cot"&&!r.ok&&Sim.readPixel(plotBox("pAll"),p.x,p.y,2,Sim.isBurgundy).found)return {what:r.what,drawn:"the wine iron curve",expected:"hidden: the iron curve, drawn after it, covers it here",ok:null,note:"Near the impact the iron spike crosses the cotton curve; on a narrow plot it covers it."};
+  return r;
 }
 
 // ---- Check: recompute from the stored inputs ----
@@ -959,7 +961,7 @@ function inspect(ref){
     return {title:s==="iron"?"iron atom "+i:"cotton bead "+i+", fibre "+G("fibre_cot")[i],at:partXY(s,n,i),rows}}
   const bx=G("bx_"+s),R=G("gauge_R"),at=ref.part==="gauge"?{x:bx,y:G("gauge_cy")}:ref.part==="panel"?{x:bx,y:G("HS_px")+8+2*R+22+31}:{x:bx,y:G("plate_px_"+s)+5};
   return {title:"the scale under the "+NAME[s]+" ball ("+(ref.part==="gauge"?"its gauge":ref.part==="panel"?"its digital panel":"the plate")+")",at,
-    rows:[["t",ts[n],"s","ts",n],["F",d.F[n],"N","F_"+s,n],["F<sub>peak</sub>",d.Fmax[n],"N","Fmax_"+s,n],["W",d.W[n],"N","W_"+s,n],["y<sub>p</sub>",d.yp[n],"m","yp_"+s,n],["θ<sub>needle</sub>",G("needle_"+s),"°","needle_"+s,null]]};
+    rows:[["t",G("t_now"),"s","t_now",null],["F",G("F_now_"+s),"N","F_now_"+s,null],["F<sub>peak</sub>",G("Fmax_now_"+s),"N","Fmax_now_"+s,null],["W",G("W_now_"+s),"N","W_now_"+s,null],["y<sub>p</sub>",G("yp_now_"+s),"m","yp_now_"+s,null],["θ<sub>needle</sub>",G("needle_"+s),"°","needle_"+s,null]]};
 }
 function locate(name,idx){
   const m=/^(x|y|sp)_(iron|cot)$/.exec(name);

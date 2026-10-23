@@ -764,7 +764,7 @@
         var names = scalarNames();
         rec = {
             no: roundNo + 1, len: roundLength(), label: safe(R.label, '') || 'ten seconds of play', mode: R.mode, ref: info ? ref : null,
-            pointTitle: info ? info.title : '', pointRows: info ? info.rows.map(function (row) { return { label: row[0], units: row[2] || '', name: row[3], idx: row[4], key: row[0] + '|' + row[3] + '|' + row[4] }; }) : [],
+            pointTitle: info ? info.title : '', pointRows: info ? info.rows.map(function (row) { return { label: row[0], units: row[2] || '', name: row[3], idx: row[4], key: row[0] + '|' + row[3] }; }) : [],   /* the key leaves out the index: a followed point moves through a stored run */
             names: names, t0: null, lastEl: -Infinity, key: null, n: 0, frames: 0, wall0: performance.now(),
             buf: { __t: [], __el: [] }, params: (spec.groups[0] ? spec.groups[0].vars : []).filter(isNumScalar).map(function (n) { return [n, ds.get(n)]; })
         };
@@ -806,7 +806,7 @@
             if (rec.pointRows.length) {
                 var info = safe(function () { return spec.inspect(rec.ref); }, null), rows = info ? info.rows : [];
                 rec.pointRows.forEach(function (pr, k) {
-                    var row = rows[k], ok = row && (row[0] + '|' + row[3] + '|' + row[4]) === pr.key;
+                    var row = rows[k], ok = row && (row[0] + '|' + row[3]) === pr.key;
                     rec.buf['__p' + k].push(ok && typeof row[1] === 'number' ? row[1] : NaN);
                 });
             }
