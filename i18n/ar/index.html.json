@@ -33,7 +33,7 @@
  },
  "1b0699dd1971": {
   "src": "Completed projects, rebuilt in full with their derivations, solver and checks, are on the <a href=\"portfolios.html\">Portfolios page</a>: the Bachelor thesis on how cloud droplets become rain, a corrected study of whether a pendulum on a turbine blade can power a sensor, a servo-hydraulic press under digital control, built from first principles, and a study, in English and Arabic, of why an iron ball hurts and a cotton ball of the same mass does not.",
-  "tr": "المشاريع المكتملة، بعد إعادة بنائها كاملةً مع اشتقاقاتها وحلّالاتها واختباراتها، موجودة في <a href=\"portfolios.html\">صفحة الملفّات</a>: أطروحة البكالوريوس عن كيف تصير قطيرات السحاب مطرًا، ودراسة مصحَّحة عمّا إذا كان نوّاسٌ على شفرة توربين قادرًا على تغذية حسّاس، ومكبس هيدروليكي مؤازَر بتحكّم رقمي مبنيّ من المبادئ الأولى، ودراسة، بالإنجليزية والعربية، عن سبب إيلام كرة الحديد وعدم إيلام كرة القطن ذات الكتلة نفسها."
+  "tr": "المشاريع المكتملة، بعد إعادة بنائها كاملةً مع اشتقاقاتها وحلّالاتها وفحوصها، موجودة في <a href=\"portfolios.html\">صفحة الملفّات</a>: رسالة البكالوريوس عن كيفيّة تحوّل قُطيرات الغيمة إلى مطر، ودراسة مصحَّحة عمّا إذا كان نوّاسٌ على شفرة عنفة قادرًا على تغذية حسّاس، ومكبس هيدروليكي مؤازَر بتحكّم رقمي مبنيّ من المبادئ الأولى، ودراسة، بالإنجليزية والعربية، عن سبب إيلام كرة الحديد وعدم إيلام كرة القطن ذات الكتلة نفسها."
  },
  "1cb8d7de8274": {
   "src": "Data &amp; Web Management",
@@ -69,7 +69,7 @@
  },
  "28cde6369fc9": {
   "src": "117 CP",
-  "tr": "117 ساعة معتمدة (CP)"
+  "tr": "117 نقطة اعتماد ECTS (CP)"
  },
  "29193e373178": {
   "src": "Computational physics, numerical modeling, dashboards, quality control, database architecture",
@@ -105,7 +105,7 @@
  },
  "38e5f1a1def8": {
   "src": "Cellular Mechanics",
-  "tr": "ميكانيكا الخلية"
+  "tr": "ميكانيك الخلية"
  },
  "3ab7190fa092": {
   "src": "Analysis and report generation based on several different datasets",
@@ -117,7 +117,7 @@
  },
  "3eae19a4b117": {
   "src": "Circular Water Waves",
-  "tr": "أمواج الماء الدائرية"
+  "tr": "أمواج الماء والمدارات الدائرية"
  },
  "42cf35eb30f2": {
   "src": "Database, dashboard, and report development, building, and generation respectively for test results",
@@ -185,7 +185,7 @@
  },
  "64472dd0fbfb": {
   "src": "Visualizations of wave mechanics, classical mechanics, and interference, written in vanilla JavaScript, React, and HTML5 Canvas. Each plate opens the live simulation in a new tab. The <a href=\"simulations.html\">simulations page</a> lists them all by field, with the question each one answers and a search.",
-  "tr": "تصوّرات لميكانيكا الأمواج والميكانيكا الكلاسيكية والتداخل، مكتوبة بلغة JavaScript الخالصة وReact وHTML5 Canvas. كلّ لوحة تفتح المحاكاة الحيّة في تبويب جديد. و<a href=\"simulations.html\">صفحة المحاكاة</a> تعرضها كلّها بحسب المجال، مع السؤال الذي تجيب عنه كلٌّ منها، وأداةٍ للبحث."
+  "tr": "تصوّرات لميكانيك الأمواج والميكانيك الكلاسيكي والتداخل، مكتوبة بلغة JavaScript الخالصة وReact وHTML5 Canvas. كلّ لوحة تفتح المحاكاة الحيّة في تبويب جديد. و<a href=\"simulations.html\">صفحة المحاكاة</a> تعرضها كلّها بحسب المجال، مع السؤال الذي تجيب عنه كلٌّ منها، وأداةٍ للبحث."
  },
  "6d18c7faff29": {
   "src": "Automated inventory tracking, website development",
@@ -217,7 +217,7 @@
  },
  "73ce68c730dd": {
   "src": "Rotating complex numbers added tip to tail. Roses, beats and spirographs from a few circles, with live period and symmetry readouts; an audio file can make the arms dance.",
-  "tr": "أعداد مركّبة دوّارة تُجمع رأسًا إلى ذيل. ورود ونبضات ورسوم سبيروغراف من بضع دوائر، مع قراءة حيّة للدور والتناظر؛ ويمكن لملفّ صوتي أن يجعل الأذرع ترقص."
+  "tr": "أعداد عقدية دوّارة تُجمع رأسًا إلى ذيل. ورود وضربات ورسوم سبيروغراف من بضع دوائر، مع قراءة حيّة للدور والتناظر؛ ويمكن لملفّ صوتي أن يجعل الأذرع ترقص."
  },
  "76cadb7bc66e": {
   "src": "Step-strain protocols for complex modulus estimation",
@@ -245,7 +245,7 @@
  },
  "807b8185ce6a": {
   "src": "Double-Slit Interference",
-  "tr": "تداخل الشقّ المزدوج"
+  "tr": "التداخل في تجربة الشقّين"
  },
  "81c04f86a4de": {
   "src": "<b style=\"font-weight:600\">Phyein Usul</b> · φύειν أصول, roots that grow. A personal website and an archive: my work, notes and simulations kept in one place, the older pieces beside what grew from them.",
@@ -345,11 +345,11 @@
  },
  "a8b07b7fabe8": {
   "src": "University of Leipzig &amp; TROPOS",
-  "tr": "جامعة لايبزيغ و TROPOS"
+  "tr": "جامعة لايبزيغ وTROPOS"
  },
  "aa7166e8175b": {
   "src": "Phasor Sums – Epicycles &amp; Roses",
-  "tr": "مجاميع الطوريّات – الدوائر التدويرية والورود"
+  "tr": "مجاميع الطوريّات – أفلاك التدوير والورود"
  },
  "aaf87fe57ae6": {
   "src": "Education",
@@ -357,7 +357,7 @@
  },
  "ab6077217544": {
   "src": "Draw &amp; Decompose – Fourier Epicycles",
-  "tr": "ارسم وفكّك – دوائر فورييه التدويرية"
+  "tr": "ارسم وفكّك – أفلاك تدوير فورييه"
  },
  "acc39d31c283": {
   "src": "Quality tests for cross checking the physical tolerances imposed on products coming out of the line",
@@ -425,7 +425,7 @@
  },
  "c73d272e6489": {
   "src": "See positions",
-  "tr": "الخبرات المهنية"
+  "tr": "اطّلع على الخبرات"
  },
  "cd4683fadf70": {
   "src": "Positions",
@@ -457,7 +457,7 @@
  },
  "d422148d76f5": {
   "src": "Wave Interference Simulator",
-  "tr": "منضدة تداخل الأمواج"
+  "tr": "منضدة تراكب الأمواج"
  },
  "d51b87f95972": {
   "src": "GRU neural networks for behavioral sequences",
@@ -501,7 +501,7 @@
  },
  "e84ef0bf0497": {
   "src": "Drop Population Dynamics",
-  "tr": "ديناميكا تعداد القطرات"
+  "tr": "ديناميك تعداد القطرات"
  },
  "e8f91b18f228": {
   "src": "B.Sc. Physics",
@@ -517,7 +517,7 @@
  },
  "eb552463266d": {
   "src": "Chaotic dynamics with adjustable mass ratios, lengths, and initial conditions. Tiny changes in the starting angles produce completely different trajectories.",
-  "tr": "ديناميكا فوضوية بنسب كتل وأطوال وشروط ابتدائية قابلة للضبط. تغييرات ضئيلة في زوايا البدء تُنتج مسارات مختلفة تمامًا."
+  "tr": "ديناميك فوضوي بنسب كتل وأطوال وشروط ابتدائية قابلة للضبط. تغييرات ضئيلة في زوايا البدء تُنتج مسارات مختلفة تمامًا."
  },
  "ed92a8d62940": {
   "src": "Interactive physics simulations",
@@ -541,7 +541,7 @@
  },
  "f4df3869f83c": {
   "src": "Complex phasors",
-  "tr": "الطوريّات المركّبة"
+  "tr": "الطوريّات العقدية"
  },
  "f5ea17dba1dc": {
   "src": "Wave–particle duality",

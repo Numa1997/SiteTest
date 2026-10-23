@@ -17,7 +17,7 @@
  },
  "0b54e7416729": {
   "src": "<b>Fall speed.</b> Stokes’ law gives \\(\\mathrm{Re}\\approx 150\\) for a \\(200\\ \\mathrm{\\mu m}\\) drop, outside its own validity. A force balance with Beard’s drag coefficient \\(C_D(\\mathrm{Re})\\), solved through the Davies number, reproduces the measurements of Gunn and Kinzer within 2.1 % from 0.3 mm up.",
-  "tr": "<b>سرعة السقوط.</b> يعطي قانون ستوكس \\(\\mathrm{Re}\\approx 150\\) لقطرةٍ من \\(200\\ \\mathrm{\\mu m}\\)، أي خارج مجال صلاحيته هو. أمّا توازن القوى مع معامل الكبح \\(C_D(\\mathrm{Re})\\) الذي وضعه Beard، محلولًا عبر عدد ديفيز، فيعيد قياسات غَن وكينزر بدقّة 2.1 % من 0.3 mm فما فوق."
+  "tr": "<b>سرعة السقوط.</b> يعطي قانون ستوكس \\(\\mathrm{Re}\\approx 150\\) لقطرةٍ من \\(200\\ \\mathrm{\\mu m}\\)، أي خارج مجال صلاحيته هو. أمّا توازن القوى مع معامل الكبح \\(C_D(\\mathrm{Re})\\) الذي وضعه بيرد، محلولًا عبر عدد ديفيز، فيعيد قياسات غَن وكينزر بدقّة 2.1 % من 0.3 mm فما فوق."
  },
  "0c4a6d9fb9f0": {
   "src": "<span class=\"psub__n\">3.4</span>The project’s own pages",
@@ -25,7 +25,7 @@
  },
  "0c82a5d9b019": {
   "src": "peak force of the iron ball on the model head",
-  "tr": "ذروة قوّة كرة الحديد على الرأس النموذجي"
+  "tr": "ذروة قوّة كرة الحديد على رأس النموذج"
  },
  "0efc2e6be4c2": {
   "src": "Overview",
@@ -65,7 +65,7 @@
  },
  "2392054b4832": {
   "src": "Rotor Pendula",
-  "tr": "نوّاسات الدوّار"
+  "tr": "Rotor Pendula"
  },
  "23ca0d9fd944": {
   "src": "<span class=\"pfig__n\">Figure 1</span>The planar model: the pivot rides a circle round the hub; the generators feel relative joint speeds, not absolute rod speeds.",
@@ -73,7 +73,7 @@
  },
  "26f85d2d5c2c": {
   "src": "<b>The fall.</b> Both balls are held 10 m above the head and fall under gravity alone; the first touch comes at 1.428 s, as Newton’s \\(\\sqrt{2h/g}\\) predicts, at 14.0 m/s.",
-  "tr": "<b>السقوط.</b> تُمسَك الكرتان على ارتفاع 10 m فوق الرأس وتسقطان تحت الجاذبية وحدها؛ ويأتي أوّل تلامس عند 1.428 s، كما يتنبّأ \\(\\sqrt{2h/g}\\) عند نيوتن، بسرعة 14.0 m/s."
+  "tr": "<b>السقوط.</b> تُمسَك الكرتان على ارتفاع 10 m فوق الرأس وتسقطان تحت الجاذبية وحدها؛ ويأتي أوّل تلامس عند 1.428 s، كما تتنبّأ صيغة نيوتن \\(\\sqrt{2h/g}\\)، بسرعة 14.0 m/s."
  },
  "2705cc3d313a": {
   "src": "Ideal press",
@@ -137,7 +137,7 @@
  },
  "38bfbe5a1389": {
   "src": "Push a small piston and a large one lifts a car: Pascal’s principle, the oldest trick in hydraulics. A modern press adds a servo valve and a computer, and the trick becomes a control problem. This study builds one such press from first principles: a pump held at 12 MPa, a four-way servo valve, two metres of hose, a cylinder carrying a 160 kg ram, and a specimen to squeeze, in a nonlinear model with eight state variables. A PID controller, sampled every millisecond, drives the ram to the specimen in position control, switches to force control at contact, ramps to 60 kN, holds and lets go. You watch every step with the oil coloured by its pressure, change any setting and see the whole cycle recomputed, and ask the linearized loop, with Bode, Nyquist and z-plane plots, whether it survives. A 23-chapter companion text derives every equation the animation integrates, starting from Pascal’s press.",
-  "tr": "ادفع مكبسًا صغيرًا يرفعْ مكبسٌ كبير سيّارة: مبدأ باسكال، أقدم حيلة في الهيدروليك. ويضيف المكبس الحديث صمّامًا مؤازرًا وحاسوبًا، فتصير الحيلة مسألة تحكّم. تبني هذه الدراسة مكبسًا من هذا النوع من المبادئ الأولى: مضخّة مثبَّتة عند 12 MPa، وصمّام مؤازر رباعي المسالك، ومتران من الخرطوم، وأسطوانة تحمل مِدكًّا كتلته 160 kg، وعيّنة تُضغَط، في نموذج لاخطّي بثمانية متغيّرات حالة. متحكّمٌ PID يُعايَن كلّ ميليثانية يقود المِدكّ إلى العيّنة بالتحكّم في الموضع، ثمّ ينتقل إلى التحكّم في القوّة عند التلامس، ويرفع القوّة إلى 60 kN، ويحافظ عليها، ثمّ يُفلت. تشاهد كلّ خطوة والزيت ملوّنٌ بحسب ضغطه، وتغيّر أيَّ ضبط فترى الدورة كلّها محسوبة من جديد، وتسأل الحلقة المخطَّطة، بمخطّطات بودي ونايكويست ومستوي z، هل تبقى مستقرّة. ونصٌّ مرافق في 23 فصلًا يشتقّ كلّ معادلة تكاملها الرسوم المتحرّكة، بدءًا من مكبس باسكال."
+  "tr": "ادفع مكبسًا صغيرًا يرفعْ مكبسٌ كبير سيّارة: مبدأ باسكال، أقدم حيلة في الهيدروليك. ويضيف المكبس الحديث صمّامًا مؤازرًا وحاسوبًا، فتصير الحيلة مسألة تحكّم. تبني هذه الدراسة مكبسًا من هذا النوع من المبادئ الأولى: مضخّة مثبَّتة عند 12 MPa، وصمّام مؤازر رباعي المسالك، ومتران من الخرطوم، وأسطوانة تحمل مِدكًّا كتلته 160 kg، وعيّنة تُضغَط، في نموذج لاخطّي بثمانية متغيّرات حالة. متحكّمٌ PID يُعايَن كلّ ميليثانية يقود المِدكّ إلى العيّنة بالتحكّم في الموضع، ثمّ ينتقل إلى التحكّم في القوّة عند التلامس، ويرفع القوّة إلى 60 kN، ويحافظ عليها، ثمّ يُفلت. تشاهد كلّ خطوة والزيت ملوّنٌ بحسب ضغطه، وتغيّر أيَّ ضبط فترى الدورة كلّها محسوبة من جديد، وتسأل الحلقةَ بعد تقريبها خطّيًّا، بمخطّطات بودي ونايكويست ومستوي z، هل تبقى مستقرّة. ونصٌّ مرافق في 23 فصلًا يشتقّ كلّ معادلة تكاملها الرسوم المتحرّكة، بدءًا من مكبس باسكال."
  },
  "3c39e3e8ecb6": {
   "src": "Run a pendulum",
@@ -189,7 +189,7 @@
  },
  "508340303282": {
   "src": "<b>Chaos does not help.</b> 2 of 54 scanned double pendula are chaotic; at matched forcing the regular orbit harvests about 0.379 W, the chaotic one about 0.24–0.25 W. The catch is force, not power: a fast rotor’s pivot sits in 18–215 g, beyond a ±8 g accelerometer.",
-  "tr": "<b>الفوضى لا تساعد.</b> اثنان من 54 نوّاسًا مزدوجًا مفحوصًا فوضويّان؛ وعند تأثيرٍ مماثل يحصد المدار المنتظم نحو 0.379 W والفوضوي نحو 0.24–0.25 W. والعقبة هي القوّة لا القدرة: محور الدوّار السريع يتعرّض لـ18–215 g، وهذا أبعد من مدى مقياس تسارع يقيس ±8 g."
+  "tr": "<b>الفوضى لا تساعد.</b> 2 من 54 نوّاسًا مزدوجًا مفحوصًا فوضويّان؛ وعند قسرٍ متطابق يحصد المدار المنتظم نحو 0.379 W والفوضوي نحو 0.24–0.25 W. والعقبة هي القوّة لا القدرة: محور الدوّار السريع يتعرّض لـ18–215 g، وهذا أبعد من مدى مقياس تسارع يقيس ±8 g."
  },
  "5098dd1999a4": {
   "src": "Checks",
@@ -297,7 +297,7 @@
  },
  "715df1d9e346": {
   "src": "Bode plot of the sampled position loop up to 500 Hz, and its Nyquist plot passing the point minus one at a safe distance.",
-  "tr": "مخطّط بودي لحلقة الموضع المُعايَنة حتى 500 Hz، ومخطّط نايكويست لها يمرّ بالنقطة سالب واحد على مسافة آمنة."
+  "tr": "مخطّط بودي لحلقة الموضع المُعايَنة حتى 500 Hz، ومخطّط نايكويست لها يمرّ بعيدًا عن النقطة سالب واحد بمسافة آمنة."
  },
  "71b1c97a1c07": {
   "src": "<span class=\"pfig__n\">Figure 4</span>Golovin test with 8 bins per doubling of mass: numerical (solid) against exact (dashed).",
@@ -365,7 +365,7 @@
  },
  "8c1f15e14b4f": {
   "src": "Research projects by Numa Koudsie, each with its derivations, solver and results: Droplet Collection, the remodel of a Bachelor thesis on how cloud droplets become rain; Rotor Pendula, a corrected study of whether a pendulum on a turbine blade can power a sensor; the Hydraulic Press Study, a servo-hydraulic press under digital control, built from first principles; and Iron, Cotton and the Head, why an iron ball hurts and a cotton ball of the same mass does not, in English and Arabic.",
-  "tr": "مشاريع بحثية لـنعمة سائر قدسية، لكلٍّ منها اشتقاقاته وحلّاله ونتائجه: التقاط القُطيرات، إعادة نمذجة رسالة بكالوريوس عن تحوّل قُطيرات الغيمة إلى مطر؛ ونوّاسات الدوّار، دراسة مصحَّحة عن قدرة نوّاس على شفرة عنفة أن يغذّي حسّاسًا؛ ودراسة المكبس الهيدروليكي، مكبس هيدروليكي مؤازَر بتحكّم رقمي، مبنيّ من المبادئ الأولى؛ والحديد والقطن والرأس، لماذا تؤلم كرة الحديد ولا تؤلم كرة القطن ذات الكتلة نفسها، بالإنجليزية والعربية."
+  "tr": "مشاريع بحثية لـنعمة سائر قدسية، لكلٍّ منها اشتقاقاته وحلّاله ونتائجه: Droplet Collection، إعادة نمذجة رسالة بكالوريوس عن تحوّل قُطيرات الغيمة إلى مطر؛ وRotor Pendula، دراسة مصحَّحة عن قدرة نوّاس على شفرة عنفة على تغذية حسّاس؛ ودراسة المكبس الهيدروليكي، مكبس هيدروليكي مؤازَر بتحكّم رقمي، مبنيّ من المبادئ الأولى؛ والحديد والقطن والرأس، لماذا تؤلم كرة الحديد ولا تؤلم كرة القطن ذات الكتلة نفسها، بالإنجليزية والعربية."
  },
  "8e171c6df64c": {
   "src": "Bachelor thesis, Leipzig 2022 · remodelled",
@@ -409,7 +409,7 @@
  },
  "9dd35bd1eabb": {
   "src": "Droplet Collection",
-  "tr": "التقاط القُطيرات"
+  "tr": "Droplet Collection"
  },
  "a01abbeeb83e": {
   "src": "Warm and cold clouds, four models of the same spectrum.",
@@ -449,7 +449,7 @@
  },
  "b0b2de8f1fe7": {
   "src": "Drop two balls of exactly 1 kg from 10 m onto a head: one of iron, one of cotton. They bring the same energy, and on the head’s scale they settle to the same weight, 9.81 N. The blow is another matter. The iron ball does not give way, so the head must stop it within the few millimetres a skull can yield, and a short stop needs a large force. The cotton ball gives way itself and burns the energy inside its own fibres. The study builds both balls from their bonds: iron as a lattice of atoms held by Morse potentials with iron’s shape, cotton as a tangle of fibres that stretch, bend, cling where they cross and rub. Newton’s law moves every particle, a peak-hold force gauge reads the impact, and the energy books show where every joule goes. The text derives each step, from the fall with air drag to van Wyk’s law for fibre masses and the way real force sensors work, and compares the model with a real skull.",
-  "tr": "أسقِط كرتين كتلةُ كلٍّ منهما 1 kg بالضبط من ارتفاع 10 m على رأس: واحدةً من الحديد، وواحدةً من القطن. تحملان الطاقة نفسها، وعلى ميزان الرأس تستقرّان على الوزن نفسه، 9.81 N. أمّا الضربة فأمرٌ آخر. كرة الحديد لا تتراجع، فعلى الرأس أن يوقفها خلال المليمترات القليلة التي تستطيع الجمجمة أن تنضغط بها، والإيقاف القصير يحتاج إلى قوّة كبيرة. أمّا كرة القطن فتتراجع هي نفسها وتستهلك الطاقة داخل أليافها. تبني الدراسة الكرتين من روابطهما: الحديد شبكةً من الذرّات تمسكها كمونات مورس بشكل الحديد، والقطن تشابكًا من الألياف التي تتمطّط وتنحني وتلتصق حيث تتقاطع وتحتكّ. قانون نيوتن يحرّك كلّ جسيم، ومقياسُ قوّةٍ يمسك الذروة يقرأ الصدمة، وحساب الطاقة يُظهر أين يذهب كلّ جول. ويشتقّ النصّ كلّ خطوة، من السقوط مع مقاومة الهواء إلى قانون فان فيك لكتل الألياف وطريقة عمل حسّاسات القوّة الحقيقية، ويقارن النموذج بجمجمة حقيقية."
+  "tr": "أسقِط كرتين كتلةُ كلٍّ منهما 1 kg بالضبط من ارتفاع 10 m على رأس: واحدةً من الحديد، وواحدةً من القطن. تحملان الطاقة نفسها، وعلى ميزان الرأس تستقرّان على الوزن نفسه، 9.81 N. أمّا الضربة فأمرٌ آخر. كرة الحديد لا تلين، فعلى الرأس أن يوقفها خلال المليمترات القليلة التي تستطيع الجمجمة أن تنضغط بها، والإيقاف القصير يحتاج إلى قوّة كبيرة. أمّا كرة القطن فتلين هي نفسها وتستهلك الطاقة داخل أليافها. تبني الدراسة الكرتين من روابطهما: الحديد شبكةً من الذرّات تمسكها كمونات مورس بشكل الحديد، والقطن تشابكًا من الألياف التي تتمطّط وتنحني وتلتصق حيث تتقاطع وتحتكّ. قانون نيوتن يحرّك كلّ جسيم، ومقياسُ قوّةٍ يمسك الذروة يقرأ الصدمة، وحساب الطاقة يُظهر أين يذهب كلّ جول. ويشتقّ النصّ كلّ خطوة، من السقوط مع مقاومة الهواء إلى قانون فان فيك لكتل الألياف وطريقة عمل حسّاسات القوّة الحقيقية، ويقارن النموذج بجمجمة حقيقية."
  },
  "b13b8e96ff0e": {
   "src": "A static copy of the Rotor Pendula app. Its saved-runs list is left out: every run is computed fresh in your browser, and nothing is stored.",
@@ -513,7 +513,7 @@
  },
  "ce5dc750e285": {
   "src": "Every block is a physical law with its own derivation. The valve’s metering edges are sharp-edged orifices whose jet contracts to 0.61 of the opening, as the free-streamline theory of Helmholtz and Kirchhoff predicts; the spool answers the controller as a mass on a spring at 60 Hz. The two metres of hose are a slug of oil with inertia and friction, laminar and turbulent. The oil itself is a spring whose stiffness depends on its pressure, through the 0.5 % of air it carries as bubbles. The cylinder has two chambers of different area, seal friction and end stops; the specimen is a spring with damping. The controller sees the world only once a millisecond, through a zero-order hold, and the model is integrated with fourth-order Runge–Kutta at 10 µs, a hundred steps per sample. An independent Python model, with SciPy for the numbers and SymPy for the derivatives, recomputes the equilibria, the linearization, the closed-loop poles, the margins and the whole nonlinear cycle, and agrees with the page.",
-  "tr": "كلّ كتلة في النموذج قانونٌ فيزيائي له اشتقاقه. حوافّ القياس في الصمّام فتحاتٌ حادّة الحوافّ ينقبض نفثها إلى 0.61 من الفتحة، كما تتنبّأ نظرية الخطوط الانسيابية الحرّة لهلمهولتز وكيرشهوف؛ والمِزلاج يستجيب للمتحكّم ككتلةٍ على نابض عند 60 Hz. والمتران من الخرطوم عمودُ زيتٍ له عطالة واحتكاك، صفائحيٌّ ومضطرب. والزيت نفسه نابضٌ تتوقّف صلابته على ضغطه، عبر الـ0.5 % من الهواء التي يحملها فقاعات. وللأسطوانة حجرتان مختلفتا المساحة، واحتكاك في الحشوات، ومصدّات نهاية؛ والعيّنة نابضٌ مع تخميد. ولا يرى المتحكّم العالم إلّا مرّة كلّ ميليثانية، عبر ماسكٍ من الرتبة الصفرية، ويُكامَل النموذج بطريقة رونغه–كوتا من الرتبة الرابعة بخطوة 10 µs، أي مئة خطوة في كلّ عيّنة. ونموذجٌ مستقلّ بلغة Python، يستعمل SciPy للأرقام وSymPy للمشتقّات، يعيد حساب نقاط التوازن، والتخطيط الخطّي، وأقطاب الحلقة المغلقة، والهوامش، والدورة اللاخطّية كلّها، ويتّفق مع الصفحة."
+  "tr": "كلّ كتلة في النموذج قانونٌ فيزيائي له اشتقاقه. حوافّ التحكّم في الصمّام فتحاتٌ حادّة الحوافّ ينقبض نفثها إلى 0.61 من الفتحة، كما تتنبّأ نظرية الخطوط الانسيابية الحرّة لهلمهولتز وكيرشهوف؛ والمِزلاج يستجيب للمتحكّم ككتلةٍ على نابض عند 60 Hz. والمتران من الخرطوم عمودُ زيتٍ له عطالة واحتكاك، صفائحيٌّ ومضطرب. والزيت نفسه نابضٌ تتوقّف صلابته على ضغطه، عبر الـ0.5 % من الهواء التي يحملها على هيئة فقاعات. وللأسطوانة حجرتان مختلفتا المساحة، واحتكاك في الحشوات، ومصدّات نهاية؛ والعيّنة نابضٌ مع تخميد. ولا يرى المتحكّم العالم إلّا مرّة كلّ ميليثانية، عبر ماسكٍ من الرتبة الصفرية، ويُكامَل النموذج بطريقة رونغه–كوتا من الرتبة الرابعة بخطوة 10 µs، أي مئة خطوة في كلّ فترة معاينة. ونموذجٌ مستقلّ بلغة Python، يستعمل SciPy للأرقام وSymPy للمشتقّات، يعيد حساب نقاط التوازن، والتقريب الخطّي، وأقطاب الحلقة المغلقة، والهوامش، والدورة اللاخطّية كلّها، ويتّفق مع الصفحة."
  },
  "d1622a8321e0": {
   "src": "Phyein Usul, home page",
@@ -521,7 +521,7 @@
  },
  "d54d2d82e37e": {
   "src": "An independent model, written from scratch, re-ran all 36 mapping cases and all 54 chaos cases; every headline number reproduced, to about one part in \\(10^{11}\\). Eight things in the report needed correcting, and none changes a conclusion. The main ones: the turbine-size formula is \\(56\\ \\mathrm{m/s}/\\Omega\\), not mm/s; the centrifugal factor \\(\\Gamma\\) rises with rotor speed, not falls; the chaotic power’s error bar is about \\(\\pm0.01\\ \\mathrm{W}\\), not \\(\\pm0.003\\ \\mathrm{W}\\); one mounting puts the bob 66 mm past the blade tip; and one figure is blurred by single-precision storage. The project shows each correction where it occurs, with its evidence.",
-  "tr": "أعاد نموذجٌ مستقلّ، كُتب من الصفر، تشغيلَ حالات المسح الـ36 كلّها وحالات الفوضى الـ54 كلّها؛ فأُعيد إنتاج كلّ رقم رئيسي بدقّة جزءٍ واحد تقريبًا من \\(10^{11}\\). احتاجت ثمانية مواضع في التقرير إلى تصحيح، ولا يغيّر أيٌّ منها خلاصة. أهمّها: صيغة حجم العنفة هي \\(56\\ \\mathrm{m/s}/\\Omega\\) لا mm/s؛ والمعامل الطارد \\(\\Gamma\\) يزداد مع سرعة الدوّار لا يتناقص؛ وهامش الخطأ في القدرة الفوضوية نحو \\(\\pm0.01\\ \\mathrm{W}\\) لا \\(\\pm0.003\\ \\mathrm{W}\\)؛ وأحد مواضع التثبيت يضع الثقل 66 mm خارج طرف الشفرة؛ وأحد الأشكال ضبابيّ بسبب التخزين بالدقّة المفردة. ويعرض المشروع كلّ تصحيح في موضعه مع دليله."
+  "tr": "أعاد نموذجٌ مستقلّ، كُتب من الصفر، تشغيلَ حالات المسح الـ36 كلّها وحالات الفوضى الـ54 كلّها؛ فأُعيد إنتاج كلّ رقم رئيسي بدقّة جزءٍ واحد تقريبًا من \\(10^{11}\\). احتاجت ثمانية مواضع في التقرير إلى تصحيح، ولا يغيّر أيٌّ منها خلاصة. أهمّها: صيغة حجم العنفة هي \\(56\\ \\mathrm{m/s}/\\Omega\\) لا mm/s؛ ومعامل الطرد المركزي \\(\\Gamma\\) يزداد مع سرعة الدوّار لا يتناقص؛ وهامش الخطأ في القدرة الفوضوية نحو \\(\\pm0.01\\ \\mathrm{W}\\) لا \\(\\pm0.003\\ \\mathrm{W}\\)؛ وأحد مواضع التثبيت يضع الثقل 66 mm خارج طرف الشفرة؛ وأحد الأشكال ضبابيّ بسبب التخزين بالدقّة المفردة. ويعرض المشروع كلّ تصحيح في موضعه مع دليله."
  },
  "d6fc8958bfe6": {
   "src": "<b>Ice.</b> Splinter fragments join the interacting population. The app’s fragmentation is event-based: a fixed mass fraction \\(\\lambda\\) per ice–ice collision and a fixed fragment mass. The thesis’s code drains mass at a random rate per second instead, so the cold runs test the app’s closure, not the thesis’s model. With fragments in the race the ice number grows from 167 to 1 700–2 100 cm⁻³ in an hour and the mass above 40 µm falls to 0.2–4 %: the closure, not the solver, drives that result.",
@@ -625,7 +625,7 @@
  },
  "f7e315e89890": {
   "src": "<b>Approach.</b> From 0.1 s the position law moves the ram up along a smooth path, the spool opening to 94 % on the way; at 1.1 s it slows to a 10 mm/s creep for the last 2 mm.",
-  "tr": "<b>الاقتراب.</b> من 0.1 s يحرّك قانونُ الموضع المِدكَّ إلى الأعلى على مسار ناعم، ويُفتح المِزلاج في الطريق حتى 94 %؛ وعند 1.1 s يبطئ إلى زحفٍ بسرعة 10 mm/s للميليمترين الأخيرين."
+  "tr": "<b>الاقتراب.</b> من 0.1 s يحرّك قانونُ الموضع المِدكَّ إلى الأعلى على مسار ناعم، ويُفتح المِزلاج في الطريق حتى 94 %؛ وعند 1.1 s يبطئ إلى زحفٍ بسرعة 10 mm/s في آخر 2 mm."
  },
  "f94fb36e0cb1": {
   "src": "An interactive study · English and Arabic · 2026",

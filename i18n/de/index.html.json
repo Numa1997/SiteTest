@@ -33,7 +33,7 @@
  },
  "1b0699dd1971": {
   "src": "Completed projects, rebuilt in full with their derivations, solver and checks, are on the <a href=\"portfolios.html\">Portfolios page</a>: the Bachelor thesis on how cloud droplets become rain, a corrected study of whether a pendulum on a turbine blade can power a sensor, a servo-hydraulic press under digital control, built from first principles, and a study, in English and Arabic, of why an iron ball hurts and a cotton ball of the same mass does not.",
-  "tr": "Abgeschlossene Projekte, vollständig neu aufgebaut mit ihren Herleitungen, Lösern und Prüfungen, stehen auf der <a href=\"portfolios.html\">Portfolios-Seite</a>: die Bachelorarbeit darüber, wie aus Wolkentröpfchen Regen wird, eine korrigierte Studie, ob ein Pendel auf einem Turbinenblatt einen Sensor versorgen kann, eine digital geregelte servohydraulische Presse, aus ersten Prinzipien aufgebaut, und eine Studie, auf Englisch und Arabisch, warum eine Eisenkugel wehtut und eine Wattekugel derselben Masse nicht."
+  "tr": "Abgeschlossene Projekte, vollständig neu aufgebaut mit ihren Herleitungen, Lösern und Prüfungen, stehen auf der <a href=\"portfolios.html\">Portfolios-Seite</a>: die Bachelorarbeit darüber, wie aus Wolkentröpfchen Regen wird, eine korrigierte Studie, ob ein Pendel auf einem Turbinenblatt einen Sensor versorgen kann, eine digital geregelte servohydraulische Presse, aus ersten Prinzipien aufgebaut, und eine Studie, auf Englisch und Arabisch, warum eine Eisenkugel wehtut und eine Baumwollkugel derselben Masse nicht."
  },
  "1cb8d7de8274": {
   "src": "Data &amp; Web Management",
@@ -117,7 +117,7 @@
  },
  "3eae19a4b117": {
   "src": "Circular Water Waves",
-  "tr": "Kreisförmige Wasserwellen"
+  "tr": "Wasserwellen und Kreisbahnen"
  },
  "42cf35eb30f2": {
   "src": "Database, dashboard, and report development, building, and generation respectively for test results",
@@ -245,7 +245,7 @@
  },
  "807b8185ce6a": {
   "src": "Double-Slit Interference",
-  "tr": "Doppelspalt-Interferenz"
+  "tr": "Interferenz am Doppelspalt"
  },
  "81c04f86a4de": {
   "src": "<b style=\"font-weight:600\">Phyein Usul</b> · φύειν أصول, roots that grow. A personal website and an archive: my work, notes and simulations kept in one place, the older pieces beside what grew from them.",
@@ -457,7 +457,7 @@
  },
  "d422148d76f5": {
   "src": "Wave Interference Simulator",
-  "tr": "Interferenz-Werkbank"
+  "tr": "Werkbank für Wellenüberlagerung"
  },
  "d51b87f95972": {
   "src": "GRU neural networks for behavioral sequences",

@@ -84,6 +84,12 @@ then into the tables. Machine tables: [i18n/de/strings.json](../i18n/de/strings.
 | fourth-order Runge–Kutta (RK4) | Runge-Kutta-Verfahren vierter Ordnung | طريقة رونغه–كوتا من المرتبة الرابعة |
 | peak-hold force gauge | Kraftmesser mit Schleppzeiger | مقياس قوّة يمسك الذروة |
 | Morse potential | Morse-Potential | كمون مورس |
+| linearization | Linearisierung | التقريب الخطّي |
+| sample, sampling period (control) | Abtastung, Abtastperiode | المعاينة، فترة المعاينة |
+| metering edges (valve) | Steuerkanten | حوافّ التحكّم |
+| centrifugal | Zentrifugal- | الطرد المركزي |
+| matched forcing | gleiche Anregung | قسرٌ متطابق |
+| ECTS credit points (CP) | Leistungspunkte (LP) | نقاط اعتماد ECTS |
 
 ## Writing conventions
 
@@ -91,5 +97,7 @@ then into the tables. Machine tables: [i18n/de/strings.json](../i18n/de/strings.
   them; SI units with a space. In Arabic text the generator keeps each number with its unit left to right.
 - German addresses the reader as "Sie".
 - Arabic has no italic and no letter-spacing; names of people are written in Arabic letters in running text (هويغنز، ستوكس)
-  and stay Latin where they label a product, an app or a file (Droplet Collection, Rotor Pendula, Python, SciPy).
+  and stay Latin where they label a product, an app or a file (Droplet Collection, Rotor Pendula, Python, SciPy), in headings too.
+- Mechanics and dynamics are الميكانيك and الديناميك (Levant forms), on every page.
+- One simulation has one name: the home page plates use the catalog's titles.
 - The name: نعمة سائر قدسية on Arabic pages, Numa Koudsie in English and German.
