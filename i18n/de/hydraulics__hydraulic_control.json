@@ -1,4 +1,12 @@
 {
+ "03b361d08fd1": {
+  "src": "At an operating point (x₀, u₀) where all states are steady except y, which drifts at the cruising speed, the eight plant states obey δẋ = A·δx + B·δu, with A and B taken by central differences of the nonlinear right-hand side. The zero-order hold turns this into an exact discrete model:",
+  "tr": "An einem Arbeitspunkt (x₀, u₀), an dem alle Zustände außer y stationär sind und y mit der Reisegeschwindigkeit wandert, gehorchen die acht Streckenzustände δẋ = A·δx + B·δu, wobei A und B durch zentrale Differenzen der nichtlinearen rechten Seite bestimmt werden. Das Halteglied nullter Ordnung macht daraus ein exaktes diskretes Modell:"
+ },
+ "043050eb2ac8": {
+  "src": "Hydraulic natural frequency, both chambers closed",
+  "tr": "Hydraulische Eigenfrequenz bei beidseitig geschlossenen Kammern"
+ },
  "06c1cf0d627d": {
   "src": "<b>Load cell.</b> Measures the specimen force F for the controller.",
   "tr": "<b>Kraftmessdose.</b> Misst die Probenkraft F für den Regler."
@@ -6,6 +14,10 @@
  "0706025b2bbc": {
   "src": "max",
   "tr": "max"
+ },
+ "074c3fe26454": {
+  "src": "<b>retract</b>: position control, quintic back to y = 0 in 1.8 s. <b>done</b>: hold 0.3 s.",
+  "tr": "<b>Zurückfahren</b>: Lageregelung, quintisch zurück auf y = 0 in 1.8 s. <b>Fertig</b>: 0.3 s halten."
  },
  "0e5c5eb62e4f": {
   "src": "The compact version. Every equation here is derived step by step in <a href=\"hydraulic_theory.html\">Hydraulics from First Principles</a>, Parts II and III.",
@@ -15,13 +27,57 @@
   "src": "1 · What you are looking at",
   "tr": "1 · Was Sie hier sehen"
  },
+ "0ed548baea08": {
+  "src": "87.9 Hz (ζ 0.26) and 174.2 Hz (ζ 0.022)",
+  "tr": "87.9 Hz (ζ 0.26) und 174.2 Hz (ζ 0.022)"
+ },
+ "1280b208e59e": {
+  "src": "lam",
+  "tr": "lam"
+ },
+ "1389845b02c0": {
+  "src": "kg",
+  "tr": "kg"
+ },
+ "1478c028a167": {
+  "src": "pos",
+  "tr": "pos"
+ },
  "16cd8e27b7c9": {
   "src": "Loop analysis",
   "tr": "Regelkreisanalyse"
  },
+ "17116c85dd7f": {
+  "src": "Increase T<sub>s</sub> from 1 ms to 4 ms with the gains unchanged. Read off the phase margin before and after, and explain the loss using the phase of z⁻¹ and of the zero-order hold, −ωT<sub>s</sub> − ωT<sub>s</sub>/2. <a href=\"#sol-6\">Worked solution ↓</a>",
+  "tr": "Erhöhen Sie T<sub>s</sub> von 1 ms auf 4 ms bei unveränderten Verstärkungen. Lesen Sie die Phasenreserve vor und nach der Änderung ab und erklären Sie den Verlust mit der Phase von z⁻¹ und der des Halteglieds nullter Ordnung, −ωT<sub>s</sub> − ωT<sub>s</sub>/2. <a href=\"#sol-6\">Musterlösung ↓</a>"
+ },
  "1773412c1a61": {
   "src": "set-point y_ref",
   "tr": "Sollwert y_ref"
+ },
+ "1a96e74165ae": {
+  "src": "27.8 → 7.1 MPa",
+  "tr": "27.8 → 7.1 MPa"
+ },
+ "1b3206ef8993": {
+  "src": "closed loop:",
+  "tr": "geschlossener Regelkreis:"
+ },
+ "1b480158e1f3": {
+  "src": "stop",
+  "tr": "stop"
+ },
+ "1e6db0d8d42f": {
+  "src": "Derive the hydraulic natural frequency of the ram with both chambers closed, ω<sub>h</sub>² = (β<sub>A</sub>A<sub>A</sub>²/V<sub>A</sub> + β<sub>B</sub>A<sub>B</sub>²/V<sub>B</sub>)/m. Evaluate it at y = 10 mm and y = 190 mm. Where in the stroke is the press softest, and why does a differential cylinder make this asymmetric? <a href=\"#sol-1\">Worked solution ↓</a>",
+  "tr": "Leiten Sie die hydraulische Eigenfrequenz des Stößels bei beidseitig geschlossenen Kammern her, ω<sub>h</sub>² = (β<sub>A</sub>A<sub>A</sub>²/V<sub>A</sub> + β<sub>B</sub>A<sub>B</sub>²/V<sub>B</sub>)/m. Werten Sie sie bei y = 10 mm und y = 190 mm aus. Wo im Hub ist die Presse am weichsten, und warum macht ein Differentialzylinder dies asymmetrisch? <a href=\"#sol-1\">Musterlösung ↓</a>"
+ },
+ "1ea4d4875008": {
+  "src": "1.54·10⁷ kg/m⁴ → <b>96.3 Hz</b>",
+  "tr": "1.54·10⁷ kg/m⁴ → <b>96.3 Hz</b>"
+ },
+ "1f3f3ce972e1": {
+  "src": "Linearize the valve flow Q<sub>A</sub>(x<sub>v</sub>, p<sub>a</sub>) at x<sub>v</sub> = 0⁺ and at x<sub>v</sub> = 0⁻. Show that the flow gain differs by √((p<sub>s</sub> − p<sub>a</sub>)/p<sub>a</sub>), and argue why a single linear model cannot describe a critically lapped valve at null. <a href=\"#sol-3\">Worked solution ↓</a>",
+  "tr": "Linearisieren Sie den Volumenstrom durch das Ventil Q<sub>A</sub>(x<sub>v</sub>, p<sub>a</sub>) bei x<sub>v</sub> = 0⁺ und bei x<sub>v</sub> = 0⁻. Zeigen Sie, dass sich die Durchflussverstärkung um den Faktor √((p<sub>s</sub> − p<sub>a</sub>)/p<sub>a</sub>) unterscheidet, und begründen Sie, warum ein einziges lineares Modell einen kritisch überdeckten Ventilschieber in der Nullstellung nicht beschreiben kann. <a href=\"#sol-3\">Musterlösung ↓</a>"
  },
  "1f841a6d0d2c": {
   "src": "stored in motion, height, oil",
@@ -31,21 +87,69 @@
   "src": "Symbols",
   "tr": "Symbole"
  },
+ "236a737e4a16": {
+  "src": "The pump delivers p<sub>s</sub>·Q<sub>S</sub>. The valve burns p<sub>s</sub>Q<sub>S</sub> − p<sub>a</sub>Q<sub>A</sub> − p<sub>B</sub>Q<sub>B</sub> as heat. The rest compresses oil (Σ p·V/β·ṗ), accelerates the hose slug (½IQ<sub>h</sub>²) and the ram (½mẏ²), lifts the ram (mgy), heats the hose and the seals, and does work on the specimen and the stop. The page integrates every term separately; their sum must equal the pump work, and the check is shown under the scene.",
+  "tr": "Die Pumpe liefert p<sub>s</sub>·Q<sub>S</sub>. Das Ventil setzt p<sub>s</sub>Q<sub>S</sub> − p<sub>a</sub>Q<sub>A</sub> − p<sub>B</sub>Q<sub>B</sub> als Wärme um. Der Rest komprimiert das Öl (Σ p·V/β·ṗ), beschleunigt die Ölsäule im Schlauch (½IQ<sub>h</sub>²) und den Stößel (½mẏ²), hebt den Stößel (mgy), erwärmt den Schlauch und die Dichtungen und verrichtet Arbeit an der Probe und am Anschlag. Die Seite integriert jeden Term getrennt; ihre Summe muss gleich der Pumpenarbeit sein, und die Prüfung wird unter der Darstellung gezeigt."
+ },
+ "23c4b562ac93": {
+  "src": "hover pressures p_A, p_B → β_A, β_B",
+  "tr": "Drücke im Schwebezustand p_A, p_B → β_A, β_B"
+ },
+ "240a55be8c6f": {
+  "src": "Why it is lopsided: per unit of oil volume the cap side counts (A_A/A_B)² = 3.24 times more, and it also carries half the hose (113 cm³) as dead volume. The sum of the two springs is smallest past mid-stroke, at 116 mm rather than 100 mm.",
+  "tr": "Warum sie unsymmetrisch ist: Je Volumeneinheit Öl wirkt die Kolbenseite (A_A/A_B)² = 3.24-mal stärker, und sie trägt außerdem die halbe Schlauchfüllung (113 cm³) als Totvolumen. Die Summe der beiden Federn ist hinter der Hubmitte am kleinsten, bei 116 mm statt bei 100 mm."
+ },
  "259890c5e0a0": {
   "src": "Operating point",
   "tr": "Arbeitspunkt"
+ },
+ "26630f795204": {
+  "src": "Four times more entrained air",
+  "tr": "Viermal mehr mitgerissene Luft"
+ },
+ "267c20467827": {
+  "src": "filtered derivative,",
+  "tr": "gefilterte Ableitung,"
+ },
+ "26cc3217be64": {
+  "src": "ms",
+  "tr": "ms"
  },
  "27e90dfa57c3": {
   "src": "at",
   "tr": "bei"
  },
+ "28ceb12a0588": {
+  "src": "Problem set · answers from this very press",
+  "tr": "Aufgabensammlung · Antworten aus dieser Presse selbst"
+ },
  "2a6e00ec22c4": {
   "src": "Energy since t = 0",
   "tr": "Energie seit t = 0"
  },
+ "2a95a321ffa9": {
+  "src": "Treat the hose as a lumped mass between two compliances, C<sub>a</sub> = V<sub>a</sub>/β and C<sub>A</sub> = V<sub>A</sub>/β. Show that the slosh mode has ω² = (1/C<sub>a</sub> + 1/C<sub>A</sub>)/I and find it in the open-loop pole table. What happens to it when you double the hose length? When you halve the bore? <a href=\"#sol-2\">Worked solution ↓</a>",
+  "tr": "Behandeln Sie den Schlauch als konzentrierte Masse zwischen zwei Nachgiebigkeiten, C<sub>a</sub> = V<sub>a</sub>/β und C<sub>A</sub> = V<sub>A</sub>/β. Zeigen Sie, dass die Schwappmode ω² = (1/C<sub>a</sub> + 1/C<sub>A</sub>)/I hat, und finden Sie sie in der Polstabelle des offenen Regelkreises. Was geschieht damit, wenn Sie die Schlauchlänge verdoppeln? Wenn Sie die Bohrung halbieren? <a href=\"#sol-2\">Musterlösung ↓</a>"
+ },
+ "2e3ca3e9c287": {
+  "src": "hose 4 m",
+  "tr": "Schlauch 4 m"
+ },
  "322970f4948c": {
   "src": "Live readings",
   "tr": "Live-Messwerte"
+ },
+ "3442496b96dd": {
+  "src": "str",
+  "tr": "str"
+ },
+ "3798859412f6": {
+  "src": "bore 6 mm",
+  "tr": "Bohrung 6 mm"
+ },
+ "3b4dfc971393": {
+  "src": "Working",
+  "tr": "Rechnung"
  },
  "3c854622886c": {
   "src": "<b>LVDT.</b> Position sensor; measures the ram position y.",
@@ -67,6 +171,10 @@
   "src": "<b>Dashed wine lines.</b> Electrical signals: u to the valve, F and y back to the controller.",
   "tr": "<b>Gestrichelte weinrote Linien.</b> Elektrische Signale: u zum Ventil, F und y zurück zum Regler."
  },
+ "42dc26330cb1": {
+  "src": "This press, cruising at 0.1 m/s",
+  "tr": "Diese Presse bei Reisegeschwindigkeit 0.1 m/s"
+ },
  "44bc25bda28f": {
   "src": "<b>Rod and platen.</b> Moving mass m; the platen carries the tooling M and presses the specimen.",
   "tr": "<b>Kolbenstange und Pressplatte.</b> Bewegte Masse m; die Pressplatte trägt das Werkzeug M und drückt auf die Probe."
@@ -79,6 +187,18 @@
   "src": "hose flow Q_h",
   "tr": "Schlauchdurchfluss Q_h"
  },
+ "47d714d2807b": {
+  "src": "pF",
+  "tr": "pF"
+ },
+ "4956dcb5fbf9": {
+  "src": "In force control the plant from spool to force is nearly an integrator. Show that for a stiff specimen dF/dt ≈ k<sub>eff</sub>·K<sub>q</sub>·x<sub>v</sub>/A<sub>A</sub>, with 1/k<sub>eff</sub> = 1/k<sub>w</sub> + V<sub>A</sub>/(β·A<sub>A</sub>²). Use this to choose K<sub>pF</sub> for a 10 Hz crossover, then check your answer in the Bode plot. <a href=\"#sol-7\">Worked solution ↓</a>",
+  "tr": "Bei der Kraftregelung ist die Strecke vom Ventilschieber zur Kraft nahezu ein Integrator. Zeigen Sie, dass für eine steife Probe dF/dt ≈ k<sub>eff</sub>·K<sub>q</sub>·x<sub>v</sub>/A<sub>A</sub> gilt, mit 1/k<sub>eff</sub> = 1/k<sub>w</sub> + V<sub>A</sub>/(β·A<sub>A</sub>²). Wählen Sie damit K<sub>pF</sub> für eine Durchtrittsfrequenz von 10 Hz und prüfen Sie Ihre Antwort anschließend im Bode-Diagramm. <a href=\"#sol-7\">Musterlösung ↓</a>"
+ },
+ "4a5fcbadaf0a": {
+  "src": "Every T<sub>s</sub> the controller samples y and F, computes u, and the valve receives it one sample later (computation delay); between samples u is held constant (zero-order hold). A supervisor decides which law runs:",
+  "tr": "Im Takt T<sub>s</sub> tastet der Regler y und F ab, berechnet u, und das Ventil erhält u eine Abtastung später (Rechenverzögerung); zwischen zwei Abtastungen bleibt u konstant (Halteglied nullter Ordnung). Ein Supervisor entscheidet, welches Regelgesetz läuft:"
+ },
  "4bafe595f753": {
   "src": "<b>Pump with relief valve.</b> Holds the supply line at the constant pressure p<sub>s</sub>.",
   "tr": "<b>Pumpe mit Druckbegrenzungsventil.</b> Hält die Versorgungsleitung auf dem konstanten Druck p<sub>s</sub>."
@@ -86,6 +206,10 @@
  "4cdff9cf3870": {
   "src": "<b>Torque motor.</b> Turns the electrical command u into spool motion; its armature (wine bar) tilts with u, and the spool follows with bandwidth f<sub>v</sub>.",
   "tr": "<b>Drehmomentmotor.</b> Wandelt die elektrische Stellgröße u in eine Schieberbewegung um; sein Anker (der weinrote Balken) kippt mit u, und der Schieber folgt mit der Bandbreite f<sub>v</sub>."
+ },
+ "4dbb8d572bad": {
+  "src": "1389 → 1132 MPa (−18 %)",
+  "tr": "1389 → 1132 MPa (−18 %)"
  },
  "513f2a7f25ed": {
   "src": "The press and its gauge panel",
@@ -95,9 +219,25 @@
   "src": "ram speed ẏ",
   "tr": "Stößelgeschwindigkeit ẏ"
  },
+ "573d32a9b4ae": {
+  "src": "y = 10 mm: V_A, V_B",
+  "tr": "y = 10 mm: V_A, V_B"
+ },
+ "583261f898c0": {
+  "src": "Clamp the piston between two springs made of oil: a fat one below, pressing on 113 cm², and a thin one above, pressing on 63 cm². Push the piston up by δy. The cap oil relaxes, the rod oil is squeezed, and both push it back down.",
+  "tr": "Spannen Sie den Kolben zwischen zwei Federn aus Öl ein: eine dicke unten, die auf 113 cm² drückt, und eine dünne oben, die auf 63 cm² drückt. Schieben Sie den Kolben um δy nach oben. Das Öl auf der Kolbenseite entspannt sich, das Öl auf der Stangenseite wird zusammengedrückt, und beide drücken ihn wieder nach unten."
+ },
  "5846955db6be": {
   "src": "Legend",
   "tr": "Legende"
+ },
+ "592060d83458": {
+  "src": "This press",
+  "tr": "Diese Presse"
+ },
+ "592974a0c75a": {
+  "src": "bottom stop",
+  "tr": "unterer Anschlag"
  },
  "5935cae6935f": {
   "src": "2 · The servo valve",
@@ -111,6 +251,10 @@
   "src": "Theory",
   "tr": "Theorie"
  },
+ "5b23457fa8bc": {
+  "src": "Opening gives 1.32 times the gain of closing",
+  "tr": "Öffnen ergibt das 1.32-Fache der Verstärkung des Schließens"
+ },
  "5e17c8a62ecf": {
   "src": "Position loop: cruising up at 0.1 m/s, y = 60 mm",
   "tr": "Lageregelkreis: Aufwärtsfahrt mit 0.1 m/s, y = 60 mm"
@@ -119,21 +263,65 @@
   "src": "3 · Oil that is not quite incompressible",
   "tr": "3 · Öl, das nicht ganz inkompressibel ist"
  },
+ "608db4bf8e4e": {
+  "src": "Bore 120 mm, rod 80 mm: A<sub>A</sub> = 113.1 cm², A<sub>B</sub> = 62.8 cm². Stroke S = 200 mm, the specimen starts at y<sub>c</sub> = 120 mm. Ram plus tooling m = 10 kg + M.",
+  "tr": "Bohrung 120 mm, Kolbenstange 80 mm: A<sub>A</sub> = 113.1 cm², A<sub>B</sub> = 62.8 cm². Hub S = 200 mm, die Probe beginnt bei y<sub>c</sub> = 120 mm. Stößel mit Werkzeug m = 10 kg + M."
+ },
+ "62f741658fa0": {
+  "src": "frozen while saturated in the same direction (anti-windup)",
+  "tr": "eingefroren, solange die Sättigung in dieselbe Richtung anliegt (Anti-Windup)"
+ },
  "65a703187e59": {
   "src": "Hydraulic servo control · interactive study",
   "tr": "Hydraulische Servoregelung · interaktive Studie"
+ },
+ "673dbc1f06e9": {
+  "src": "β_eff at 4.37 MPa, hover",
+  "tr": "β_eff bei 4.37 MPa, Schwebezustand"
+ },
+ "68668b458430": {
+  "src": "1722, 730 cm³ → <b>169.7 Hz</b>",
+  "tr": "1722, 730 cm³ → <b>169.7 Hz</b>"
+ },
+ "69449f994d55": {
+  "src": "ref",
+  "tr": "ref"
  },
  "6ddf481b238a": {
   "src": "A pump, a four-way servo valve, two metres of hose and a differential cylinder pressing a specimen. A digital controller drives the ram to the specimen in position control, switches to force control, holds, releases and retracts. Every curve comes from the nonlinear model; the analysis panel linearizes it and asks whether the loop survives.",
   "tr": "Eine Pumpe, ein Vierwege-Servoventil, zwei Meter Schlauch und ein Differentialzylinder, der eine Probe presst. Ein digitaler Regler fährt den Stößel in Lageregelung an die Probe heran, schaltet auf Kraftregelung um, hält, entlastet und fährt zurück. Jede Kurve stammt aus dem nichtlinearen Modell; das Analysepanel linearisiert es und prüft, ob der Regelkreis stabil bleibt."
  },
+ "6e2e73413db5": {
+  "src": "See it: force-loop poles",
+  "tr": "Ansehen: Pole des Kraftregelkreises"
+ },
+ "6fddb70e9742": {
+  "src": "β_eff at 0 MPa (0.5 % → 2 %)",
+  "tr": "β_eff bei 0 MPa (0.5 % → 2 %)"
+ },
  "704ace423028": {
   "src": "<b>Gauge panel dials.</b> Pressures p_a, p_A, p_B, the specimen force F and the spool x_v. The wine arc fills up to the reading; on the spool dial the thin blue needle is the command u, so you can see the spool lag behind it.",
   "tr": "<b>Zifferblätter der Instrumententafel.</b> Drücke p_a, p_A, p_B, die Probenkraft F und der Schieberweg x_v. Der weinrote Bogen füllt sich bis zum abgelesenen Wert; auf dem Schieberweg-Zifferblatt ist die dünne blaue Nadel die Stellgröße u, sodass man sieht, wie der Schieber ihr nachhinkt."
  },
+ "70e22dd9ce41": {
+  "src": "Worked solutions",
+  "tr": "Musterlösungen"
+ },
+ "73b680b34d7d": {
+  "src": "2.18·10⁻¹³, 9.57·10⁻¹³ m³/Pa",
+  "tr": "2.18·10⁻¹³, 9.57·10⁻¹³ m³/Pa"
+ },
  "75522e5a7561": {
   "src": "<b>Blue oil.</b> Gauge pressure below 0: suction, risk of air release and cavitation.",
   "tr": "<b>Blaues Öl.</b> Überdruck unter 0: Unterdruck, Gefahr der Luftausscheidung und Kavitation."
+ },
+ "7622019e8122": {
+  "src": "The left and right derivatives at x_v = 0 differ, so ∂Q/∂x_v does not exist there: the flow law has a kink, like |x|. Any Jacobian picks one side. The force-hold operating point sits at x_v = +0.039 %, only 0.0004 from the kink, so its linear model uses the opening gain alone. A wobble bigger than that crosses the kink and meets the other gain, which is territory for describing functions and limit cycles.",
+  "tr": "Die linke und die rechte Ableitung bei x_v = 0 unterscheiden sich, daher existiert ∂Q/∂x_v dort nicht: Das Strömungsgesetz hat einen Knick, wie |x|. Jede Jacobi-Matrix wählt eine Seite. Der Arbeitspunkt beim Kraft-Halten liegt bei x_v = +0.039 %, nur 0.0004 vom Knick entfernt, daher verwendet sein lineares Modell allein die Öffnungsverstärkung. Eine größere Schwankung überschreitet den Knick und trifft auf die andere Verstärkung. Das ist das Gebiet der Beschreibungsfunktionen und Grenzzyklen."
+ },
+ "76f42bc8b07e": {
+  "src": "6 · Linearize, discretize, close the loop",
+  "tr": "6 · Linearisieren, diskretisieren, Regelkreis schließen"
  },
  "7793e10f12fa": {
   "src": "The loop gain is L(z) = K(z)·z⁻¹·G(z): G is the zero-order-hold discretization of the plant linearized at the operating point, z⁻¹ the one-sample computation delay, K the discrete controller. Stability is decided by the closed-loop eigenvalues (all |z| &lt; 1); the margins and the Nyquist curve say how close it is.",
@@ -147,13 +335,29 @@
   "src": "The spool is a second-order system driven by the command u ∈ [−1, 1]. Each metering edge is a sharp-edged orifice, so the flow grows with the square root of the pressure drop; a small regularization (p<sub>tr</sub> = 0.1 MPa) removes the infinite slope at zero drop. The valve is critically lapped: at x<sub>v</sub> = 0 only the internal leakage K<sub>L</sub> flows.",
   "tr": "Der Ventilschieber ist ein System zweiter Ordnung, angetrieben von der Stellgröße u ∈ [−1, 1]. Jede Steuerkante ist eine scharfkantige Blende, daher wächst der Durchfluss mit der Wurzel aus dem Druckabfall; eine kleine Regularisierung (p<sub>tr</sub> = 0.1 MPa) beseitigt die unendliche Steigung bei null Druckabfall. Das Ventil hat Nullüberdeckung: bei x<sub>v</sub> = 0 fließt nur die innere Leckage K<sub>L</sub>."
  },
+ "7b95c955f503": {
+  "src": "position:",
+  "tr": "Lage:"
+ },
  "7c148e457725": {
   "src": "Key to the drawing",
   "tr": "Erklärung zur Zeichnung"
  },
+ "7cb9c423607d": {
+  "src": "the integrator of the new law is loaded with the last command, so",
+  "tr": "der Integrator des neuen Regelgesetzes wird mit der letzten Stellgröße geladen, sodass"
+ },
+ "7de396245548": {
+  "src": "Stribeck: break-away",
+  "tr": "Stribeck: Losbrechen"
+ },
  "7fc9d4e2361b": {
   "src": "<b>Flow arrow.</b> Points the way the oil moves; it grows with the flow rate.",
   "tr": "<b>Strömungspfeil.</b> Zeigt die Richtung, in die sich das Öl bewegt; er wird mit dem Volumenstrom größer."
+ },
+ "8026347898b6": {
+  "src": "Flow gain of a critically lapped valve at null",
+  "tr": "Durchflussverstärkung eines kritisch überdeckten Ventils in der Nullstellung"
  },
  "81e9209e64bd": {
   "src": "sign",
@@ -163,17 +367,53 @@
   "src": "abs",
   "tr": "abs"
  },
+ "843f1db4041f": {
+  "src": "force:",
+  "tr": "Kraft:"
+ },
  "8617db601848": {
   "src": "Force loop: holding the set force on the specimen",
   "tr": "Kraftregelkreis: hält die Sollkraft auf der Probe"
+ },
+ "869597ceef85": {
+  "src": "Softest at y = 116 mm: 170 Hz",
+  "tr": "Am weichsten bei y = 116 mm: 170 Hz"
+ },
+ "86b77de2442f": {
+  "src": "exp",
+  "tr": "exp"
  },
  "8720f140fd91": {
   "src": "Oil gauge pressure",
   "tr": "Öl-Überdruck"
  },
+ "8725a10c62cd": {
+  "src": "<b>press</b>: force control, F_ref ramps to its target in 0.25 s and holds 0.5 s. <b>release</b>: ramps down to 1 kN in 0.25 s.",
+  "tr": "<b>Pressen</b>: Kraftregelung, F_ref fährt in 0.25 s auf seinen Zielwert und hält 0.5 s. <b>Lösen</b>: fällt in 0.25 s auf 1 kN ab."
+ },
+ "8752112a2234": {
+  "src": "pole table",
+  "tr": "Polstabelle"
+ },
  "875467cc7fbf": {
   "src": "Any change re-runs the whole cycle and the loop analysis.",
   "tr": "Jede Änderung startet den ganzen Zyklus und die Regelkreisanalyse neu."
+ },
+ "87c51ffcfc05": {
+  "src": "4.37, 7.63 MPa → 1.389, 1.454 GPa",
+  "tr": "4.37, 7.63 MPa → 1.389, 1.454 GPa"
+ },
+ "898497853a83": {
+  "src": "The bumpless transfer loads the integrator with the last command. Remove it on paper: what jump in u, and in force, would the switch from creep to press produce at the default gains? <a href=\"#sol-8\">Worked solution ↓</a>",
+  "tr": "Der stoßfreie Übergang lädt den Integrator mit der letzten Stellgröße. Denken Sie ihn auf dem Papier weg: Welcher Sprung in u und in der Kraft würde der Wechsel vom Kriechgang zum Pressen bei den Standardverstärkungen erzeugen? <a href=\"#sol-8\">Musterlösung ↓</a>"
+ },
+ "8a3c7820bc49": {
+  "src": "A 0.2 kg slug of oil, squeezed through a 12 mm bore, behaves like a heavy piston (inertance 1.5·10⁷ kg/m⁴). It bounces between two oil springs: the small volume at the valve port and the large cap chamber.",
+  "tr": "Eine Ölsäule von 0.2 kg, die durch eine 12 mm große Bohrung gedrückt wird, verhält sich wie ein schwerer Kolben (Inertanz 1.5·10⁷ kg/m⁴). Sie schwingt zwischen zwei Ölfedern: dem kleinen Volumen am Ventilanschluss und der großen Kolbenkammer."
+ },
+ "8b0ea5946747": {
+  "src": "Find the largest K<sub>p</sub> for which the position loop is stable. Compare it with the textbook rule K<sub>vel</sub> &lt; 2ζ<sub>h</sub>ω<sub>h</sub>, where K<sub>vel</sub> is the velocity gain of the loop, and explain the difference. <a href=\"#sol-9\">Worked solution ↓</a>",
+  "tr": "Bestimmen Sie das größte K<sub>p</sub>, für das der Lageregelkreis stabil ist. Vergleichen Sie es mit der Lehrbuchregel K<sub>vel</sub> &lt; 2ζ<sub>h</sub>ω<sub>h</sub>, wobei K<sub>vel</sub> die Geschwindigkeitsverstärkung des Regelkreises ist, und erklären Sie den Unterschied. <a href=\"#sol-9\">Musterlösung ↓</a>"
  },
  "8dc2a6624f2c": {
   "src": "<span class=\"swatch\" aria-hidden=\"true\"></span> below 0",
@@ -191,9 +431,21 @@
   "src": "<b>Tank.</b> Oil returns here at atmospheric pressure, p<sub>T</sub> = 0.",
   "tr": "<b>Tank.</b> Das Öl fließt hier bei Atmosphärendruck zurück, p<sub>T</sub> = 0."
  },
+ "91079b9342be": {
+  "src": "The closed-loop state contains the plant (8), the controller memory (3 for PID, 1 for PI) and the delayed command (1). The system is stable when every eigenvalue lies inside the unit circle. Each z maps back to a continuous pole s = ln(z)/T<sub>s</sub>, which gives a frequency and a damping ratio you can feel.",
+  "tr": "Der Zustand des geschlossenen Regelkreises umfasst die Strecke (8), den Speicher des Reglers (3 bei PID, 1 bei PI) und die verzögerte Stellgröße (1). Das System ist stabil, wenn jeder Eigenwert innerhalb des Einheitskreises liegt. Jedes z ergibt, zurückgerechnet, einen kontinuierlichen Pol s = ln(z)/T<sub>s</sub>, aus dem sich eine Frequenz und ein Dämpfungsgrad ablesen lassen, die man anschaulich deuten kann."
+ },
  "928facd980a0": {
   "src": "Entrained air of volume fraction α₀ at atmospheric pressure p₀ is squeezed polytropically (n = 1.4). Mixing the compliances of oil and air gives",
   "tr": "Mitgerissene Luft mit dem Volumenanteil α₀ bei Atmosphärendruck p₀ wird polytrop komprimiert (n = 1.4). Mischt man die Nachgiebigkeiten von Öl und Luft, erhält man"
+ },
+ "936682e1d6f6": {
+  "src": "does not jump",
+  "tr": "u nicht springt"
+ },
+ "9427081f5b0a": {
+  "src": "The spool is a door between rooms. Open it towards the pump and the oil is pushed by p_s − p_a = 7.6 MPa. Open it towards the tank and only p_a = 4.4 MPa pushes. Same door, a different wind.",
+  "tr": "Der Ventilschieber ist eine Tür zwischen zwei Räumen. Öffnet man sie zur Pumpe hin, wird das Öl von p_s − p_a = 7.6 MPa geschoben. Öffnet man sie zum Tank hin, drückt nur p_a = 4.4 MPa. Dieselbe Tür, ein anderer Luftzug."
  },
  "949fe56a12be": {
   "src": "spool x_v / command u",
@@ -203,13 +455,29 @@
   "src": "Shaded bands mark the controller mode: settle, approach, creep, press, release, retract, done. Hover a plot to read every curve at one instant; press or drag in it to move the animation there.",
   "tr": "Farbige Bänder markieren die Betriebsart des Reglers: einschwingen, annähern, kriechen, pressen, entlasten, zurückfahren, fertig. Fahren Sie mit dem Mauszeiger über ein Diagramm, um alle Kurven zu einem Zeitpunkt abzulesen; klicken oder ziehen Sie darin, um die Animation dorthin zu bewegen."
  },
+ "9b02d9974c14": {
+  "src": "st",
+  "tr": "st"
+ },
+ "9b4efa2de3b0": {
+  "src": "7 · Where the energy goes",
+  "tr": "7 · Wohin die Energie fließt"
+ },
  "9b5489d54ef8": {
   "src": "pump work",
   "tr": "Pumpenarbeit"
  },
+ "9bcff9db1c19": {
+  "src": "<span class=\"tag\">Twist</span> The open-loop pole table shows the ram at 88 Hz, not 170 to 245 Hz. The cap chamber is not closed: it breathes through the hose into the valve-port volume, and the hose slug adds inertia. The closed-chamber figure is an upper bound.",
+  "tr": "<span class=\"tag\">Wendung</span> Die Polstabelle des offenen Regelkreises zeigt den Stößel bei 88 Hz, nicht bei 170 bis 245 Hz. Die Kolbenkammer ist nicht geschlossen: Sie atmet über den Schlauch in das Volumen am Ventilanschluss, und die Ölsäule im Schlauch fügt Trägheit hinzu. Der Wert für geschlossene Kammern ist eine obere Schranke."
+ },
  "9c5f3bb9b451": {
   "src": "The model, equation by equation",
   "tr": "Das Modell, Gleichung für Gleichung"
+ },
+ "9ced8e62092c": {
+  "src": "ζ ≈ 3: an overdamped illusion",
+  "tr": "ζ ≈ 3: eine überdämpfte Täuschung"
  },
  "9d328152ebc9": {
   "src": "<b>Cylinder.</b> Cap chamber below the piston (p<sub>A</sub>, pushes up), rod chamber above it (p<sub>B</sub>, pushes down). Drawn to scale.",
@@ -223,6 +491,14 @@
   "src": "Notation",
   "tr": "Bezeichnungen"
  },
+ "a050016e5ec5": {
+  "src": "Linearizing stick-slip friction at standstill",
+  "tr": "Linearisierung der Haft-Gleit-Reibung im Stillstand"
+ },
+ "a3497e4d367f": {
+  "src": "2562, 263 cm³ → <b>213.5 Hz</b>",
+  "tr": "2562, 263 cm³ → <b>213.5 Hz</b>"
+ },
  "a45efcc044cf": {
   "src": "ram position y",
   "tr": "Stößelposition y"
@@ -230,6 +506,18 @@
  "a4ab4f21160c": {
   "src": "clamp",
   "tr": "clamp"
+ },
+ "a4d5bd4d142c": {
+  "src": "Air bites at low pressure, not at 8 MPa",
+  "tr": "Luft macht sich bei niedrigem Druck bemerkbar, nicht bei 8 MPa"
+ },
+ "a4f6d6e49143": {
+  "src": "hover, p_a = 4.37 MPa: K_q⁺, K_q⁻",
+  "tr": "Schwebezustand, p_a = 4.37 MPa: K_q⁺, K_q⁻"
+ },
+ "a528b6ee5b22": {
+  "src": "96 Hz on paper, split into 88 Hz and 174 Hz",
+  "tr": "96 Hz auf dem Papier, aufgespalten in 88 Hz und 174 Hz"
  },
  "a5f58c39cc52": {
   "src": "oil",
@@ -239,6 +527,10 @@
   "src": "Small-signal stability",
   "tr": "Kleinsignalstabilität"
  },
+ "a68aa78ef04b": {
+  "src": "switching:",
+  "tr": "Umschalten:"
+ },
  "a9e11aee948d": {
   "src": "L/min",
   "tr": "L/min"
@@ -246,6 +538,10 @@
  "ab8b22940f7b": {
   "src": "Gauges",
   "tr": "Anzeigen"
+ },
+ "acdcce288f21": {
+  "src": "lumped 60.5 Hz; R_lam ×16; real poles 31, 47 Hz; GM → 25.6 dB",
+  "tr": "konzentriert 60.5 Hz; R_lam ×16; reelle Pole 31, 47 Hz; AR → 25.6 dB"
  },
  "adb8cacd9f02": {
   "src": "rod chamber p_B",
@@ -255,6 +551,10 @@
   "src": "At 10 MPa the air is crushed and β<sub>eff</sub> ≈ 1.47 GPa; near zero gauge pressure it collapses to tens of MPa, and towards vacuum it goes to zero, which also keeps the pressure from falling below absolute zero.",
   "tr": "Bei 10 MPa ist die Luft zusammengedrückt, und β<sub>eff</sub> ≈ 1.47 GPa; nahe null Überdruck bricht es auf einige zehn MPa ein, und zum Vakuum hin geht es gegen null, was zugleich verhindert, dass der Druck unter den absoluten Nullpunkt fällt."
  },
+ "b17a2bddd4a8": {
+  "src": "5 · The digital controller",
+  "tr": "5 · Der digitale Regler"
+ },
  "b24b52e7bb0a": {
   "src": "<b>Oil colour.</b> Pale amber at 0, deep wine at p<sub>s</sub>; chambers, hose and lines are all coloured by their pressure.",
   "tr": "<b>Ölfarbe.</b> Hellbernstein bei 0, tiefes Weinrot bei p<sub>s</sub>; Kammern, Schlauch und Leitungen sind alle nach ihrem Druck gefärbt."
@@ -263,9 +563,17 @@
   "src": "<b>Controller panel.</b> Current mode, set-point, measurement and command u (the value applied now lags one sample).",
   "tr": "<b>Reglertafel.</b> Aktuelle Betriebsart, Sollwert, Messwert und Stellgröße u (der jetzt angelegte Wert hinkt um eine Abtastperiode hinterher)."
  },
+ "b6b476bf6e88": {
+  "src": "the specimen pushes, never pulls",
+  "tr": "die Probe drückt nur, sie zieht nie"
+ },
  "b6c935d4f3c7": {
   "src": "min",
   "tr": "min"
+ },
+ "b6ded05e15fb": {
+  "src": "Bubbles are springs that stiffen as you squeeze them. At atmospheric pressure a 2 % bubble cloud makes the oil 200 times softer. At 8 MPa the bubbles are crushed to a fortieth of their size and the oil is nearly itself again.",
+  "tr": "Blasen sind Federn, die steifer werden, wenn man sie zusammendrückt. Bei atmosphärischem Druck macht eine Blasenwolke von 2 % das Öl 200-mal weicher. Bei 8 MPa werden die Blasen auf ein Vierzigstel ihrer Größe zerdrückt, und das Öl ist fast wieder reines Öl."
  },
  "b7824598aa8f": {
   "src": "oil stiffness β_eff(p_A)",
@@ -275,13 +583,37 @@
   "src": "Read the derivations →",
   "tr": "Die Herleitungen lesen →"
  },
+ "b8d09b4d8580": {
+  "src": "mm",
+  "tr": "mm"
+ },
+ "bad6f6c57db6": {
+  "src": "Every number below was computed from the model on this page at its default settings, and checked by <span class=\"mono\">check_control.py</span>. The blue buttons change the press so you can watch the effect; “Back to defaults” undoes them.",
+  "tr": "Jede Zahl unten wurde mit dem Modell dieser Seite bei den Standardeinstellungen berechnet und mit <span class=\"mono\">check_control.py</span> geprüft. Die blauen Schaltflächen verändern die Presse, damit Sie die Wirkung beobachten können; „Zu den Standardwerten zurück“ macht die Änderungen rückgängig."
+ },
  "bc0305685e20": {
   "src": "Back to defaults",
   "tr": "Auf Standardwerte zurücksetzen"
  },
+ "bdf1dc6e51f4": {
+  "src": "lumped 59.1 Hz; poles 54.7 Hz (ζ 0.32), 164.6 Hz; GM 11.0 → 9.2 dB",
+  "tr": "konzentriert 59.1 Hz; Pole 54.7 Hz (ζ 0.32), 164.6 Hz; AR 11.0 → 9.2 dB"
+ },
+ "be08c3085f2e": {
+  "src": "The slug and the ram share the cap volume, so their two modes repel like a pair of pendulums tied by a spring: one drops to 88 Hz, the other climbs to 174 Hz. A longer hose lowers both and costs gain margin. A thinner bore quadruples the inertance, but its laminar resistance grows sixteen-fold (d⁻⁴), which chokes the slosh into real poles: friction buys stability and pays for it in pressure drop.",
+  "tr": "Die Ölsäule und der Stößel teilen sich das Volumen der Kolbenseite, deshalb stoßen sich ihre beiden Moden ab wie zwei Pendel, die durch eine Feder verbunden sind: Die eine sinkt auf 88 Hz, die andere steigt auf 174 Hz. Ein längerer Schlauch senkt beide und kostet Amplitudenreserve. Eine dünnere Bohrung vervierfacht die Inertanz, aber ihr laminarer Widerstand wächst auf das Sechzehnfache (d⁻⁴), was das Schwappen zu reellen Polen drosselt: Reibung erkauft Stabilität und bezahlt dafür mit Druckverlust."
+ },
  "be6f2379431d": {
   "src": "Cylinder, rod, platen and specimen are drawn to scale; valve, pump and hose route are schematic. The dots in the hose ride with the oil and wrap round at the ends. Spool travel is exaggerated. Moving dashes on the signal lines show which way the information flows.",
   "tr": "Zylinder, Kolbenstange, Pressplatte und Probe sind maßstabsgetreu gezeichnet; Ventil, Pumpe und Schlauchführung sind schematisch. Die Punkte im Schlauch wandern mit dem Öl und laufen an den Enden um. Der Schieberweg ist übertrieben dargestellt. Die wandernden Striche auf den Signalleitungen zeigen, in welche Richtung die Information fließt."
+ },
+ "c1b8bbaf7b34": {
+  "src": "Set α₀ = 2 % and rerun. Explain from β<sub>eff</sub>(p) why the force loop barely changes while the start of the approach does. <a href=\"#sol-5\">Worked solution ↓</a>",
+  "tr": "Setzen Sie α₀ = 2 % und rechnen Sie neu. Erklären Sie aus β<sub>eff</sub>(p), warum sich die Kraftschleife kaum ändert, der Beginn der Annäherung aber schon. <a href=\"#sol-5\">Musterlösung ↓</a>"
+ },
+ "c55de0f5998e": {
+  "src": "sat",
+  "tr": "sat"
  },
  "c7f73bb54d92": {
   "src": "Settings",
@@ -307,6 +639,10 @@
   "src": "Recorded every sample",
   "tr": "Bei jeder Abtastung aufgezeichnet"
  },
+ "d07563a929ec": {
+  "src": "526, 1394 cm³ → <b>244.9 Hz</b>",
+  "tr": "526, 1394 cm³ → <b>244.9 Hz</b>"
+ },
  "d0a238d4995e": {
   "src": "<b>Frame.</b> Base plate, two columns and the crosshead that holds the specimen and load cell.",
   "tr": "<b>Rahmen.</b> Grundplatte, zwei Säulen und die Traverse, die Probe und Kraftmessdose halten."
@@ -314,6 +650,18 @@
  "d0b13ffaed5b": {
   "src": "burnt in hose + seals",
   "tr": "in Schlauch + Dichtungen in Wärme umgesetzt"
+ },
+ "d2e49134cbfa": {
+  "src": "softest point, y = 115.7 mm",
+  "tr": "weichster Punkt, y = 115.7 mm"
+ },
+ "d37e354550b3": {
+  "src": "ratio from the model / from the formula",
+  "tr": "Verhältnis aus dem Modell / aus der Formel"
+ },
+ "d38cb6198424": {
+  "src": "The hose slosh mode",
+  "tr": "Die Schwappmode des Schlauchs"
  },
  "d41c7beb8d71": {
   "src": "set-point F_ref",
@@ -323,9 +671,17 @@
   "src": "settle",
   "tr": "einschwingen"
  },
+ "d4a298ef3115": {
+  "src": "Smoothed stiction is a pot of honey. The tanh law turns the jump from −1.3 F_c to +1.3 F_c into a ramp 1 mm/s wide, and to a linear model a ramp in force against speed is a damper.",
+  "tr": "Die geglättete Haftreibung ist wie ein Topf zähen Honigs. Das tanh-Gesetz verwandelt den Sprung von −1.3 F_c auf +1.3 F_c in eine Rampe von 1 mm/s Breite, und für ein lineares Modell ist eine Rampe der Kraft über der Geschwindigkeit ein Dämpfer."
+ },
  "d6f18fa68583": {
   "src": "Hydraulics",
   "tr": "Hydraulik"
+ },
+ "d88ed48a315d": {
+  "src": "<b>settle</b> (0.1 s): hold y_ref = 0. <b>approach</b>: quintic profile to y<sub>c</sub> − 2 mm in 1 s. <b>creep</b>: y_ref rises at 10 mm/s until the load cell reads more than 1 kN.",
+  "tr": "<b>Beruhigen</b> (0.1 s): y_ref = 0 halten. <b>Annäherung</b>: quintisches Profil bis y<sub>c</sub> − 2 mm in 1 s. <b>Kriechgang</b>: y_ref steigt mit 10 mm/s, bis die Kraftmessdose mehr als 1 kN anzeigt."
  },
  "d9e83874d260": {
   "src": "tr",
@@ -339,6 +695,10 @@
   "src": "4 · Volumes, the hose, and the ram",
   "tr": "4 · Volumina, Schlauch und Stößel"
  },
+ "e37dc0a85458": {
+  "src": "tanh",
+  "tr": "tanh"
+ },
  "e4182f7d5c98": {
   "src": "Servo-Hydraulic Press",
   "tr": "Servohydraulische Presse"
@@ -351,9 +711,17 @@
   "src": "MPa",
   "tr": "MPa"
  },
+ "e6de2f462705": {
+  "src": "8 · Problems",
+  "tr": "8 · Aufgaben"
+ },
  "e6e49b714dad": {
   "src": "eff",
   "tr": "eff"
+ },
+ "e6f3a250a0a7": {
+  "src": "y = 190 mm: V_A, V_B",
+  "tr": "y = 190 mm: V_A, V_B"
  },
  "ea04a18a13db": {
   "src": "<b>Specimen.</b> The part being pressed, contact at y<sub>c</sub> = 120 mm; it reddens as the force rises.",
@@ -363,6 +731,10 @@
   "src": "net work into specimen and stop",
   "tr": "Nettoarbeit an Probe und Anschlag"
  },
+ "ed70c57d7564": {
+  "src": "ff",
+  "tr": "ff"
+ },
  "ed733fa14b4b": {
   "src": "Every symbol on this page, what it means, and its value with the current settings. Values marked “live” change during the cycle; read them in the gauges and time traces.",
   "tr": "Jedes Symbol auf dieser Seite, was es bedeutet und welchen Wert es bei den aktuellen Einstellungen hat. Werte, die als „live“ markiert sind, ändern sich während des Zyklus; lesen Sie sie in den Anzeigen und Zeitverläufen ab."
@@ -371,6 +743,10 @@
   "src": "burnt in the valve",
   "tr": "im Ventil in Wärme umgesetzt"
  },
+ "ef6c07d8f29a": {
+  "src": "In the force-loop pole table this appears as a fast real pole near −c/m ≈ −6.3·10³ s⁻¹. Halve v_s and the “damping” doubles, although nothing physical changed: only the smoothing did. Real stiction is a constraint (the ram stays put while |F| &lt; F_s), not a dashpot. Use small-signal analysis only while sliding; for stick-slip, simulate the hybrid system or use describing functions.",
+  "tr": "In der Polstabelle des Kraftregelkreises erscheint dies als schneller reeller Pol nahe −c/m ≈ −6.3·10³ s⁻¹. Halbiert man v_s, verdoppelt sich die „Dämpfung“, obwohl sich physikalisch nichts geändert hat: Nur die Glättung hat sich geändert. Echte Haftreibung ist eine Nebenbedingung (der Stößel bleibt stehen, solange |F| &lt; F_s), kein Dämpfer. Verwenden Sie die Kleinsignalanalyse nur während des Gleitens; bei Stick-Slip simulieren Sie das hybride System oder verwenden Sie Beschreibungsfunktionen."
+ },
  "f1017b86804b": {
   "src": "Notice what this does to a linear analysis: opening the valve towards the cap side meters against p<sub>s</sub> − p<sub>a</sub>, closing it meters against p<sub>a</sub>. The flow gain on the two sides of x<sub>v</sub> = 0 differs, and the model is not differentiable there.",
   "tr": "Beachten Sie, was das für die lineare Analyse bedeutet: Öffnet man das Ventil zur Bodenseite hin, dosiert es gegen den Druck p<sub>s</sub> − p<sub>a</sub>; schließt man es, dosiert es gegen p<sub>a</sub>. Die Durchflussverstärkung auf den beiden Seiten von x<sub>v</sub> = 0 ist verschieden, und das Modell ist dort nicht differenzierbar."
@@ -378,6 +754,18 @@
  "f342c4d1a760": {
   "src": "<b>Hose and its dots.</b> Two metres of hose, drawn shortened; the white dots ride with the oil (they wrap round at the ends).",
   "tr": "<b>Schlauch und seine Punkte.</b> Zwei Meter Schlauch, verkürzt gezeichnet; die weißen Punkte wandern mit dem Öl (sie laufen an den Enden um)."
+ },
+ "f671a9754649": {
+  "src": "See it: hose 4 m",
+  "tr": "Ansehen: Schlauch 4 m"
+ },
+ "f9e33cb1f9d7": {
+  "src": "At standstill the smoothed Coulomb friction has slope F<sub>c</sub>·k<sub>st</sub>/v<sub>s</sub> ≈ 10⁶ N·s/m. Explain why linearizing about ẏ = 0 then predicts an absurdly well damped ram, and what this tells you about using small-signal analysis on stick-slip systems. <a href=\"#sol-4\">Worked solution ↓</a>",
+  "tr": "Im Stillstand hat die geglättete Coulomb-Reibung die Steigung F<sub>c</sub>·k<sub>st</sub>/v<sub>s</sub> ≈ 10⁶ N·s/m. Erklären Sie, warum die Linearisierung um ẏ = 0 dann einen absurd gut gedämpften Stößel vorhersagt, und was Sie daraus über die Kleinsignalanalyse bei Stick-Slip-Systemen lernen. <a href=\"#sol-4\">Musterlösung ↓</a>"
+ },
+ "fa75c7baa4f2": {
+  "src": "See it: bore 6 mm",
+  "tr": "Ansehen: Bohrung 6 mm"
  },
  "fbef447c2869": {
   "src": "Motion and force",

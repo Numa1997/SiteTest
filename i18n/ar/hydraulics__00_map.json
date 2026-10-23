@@ -1,0 +1,382 @@
+{
+ "0214b4b355d1": {
+  "src": "block",
+  "tr": "الكتلة"
+ },
+ "0482ebcd7a92": {
+  "src": "flow $Q_B$, ram speed $\\dot{y}$",
+  "tr": "التدفّق $Q_B$، سرعة المِدكّ $\\dot{y}$"
+ },
+ "06866d5823ee": {
+  "src": "$Q_A$ from the valve, $p_A$ from the cylinder",
+  "tr": "$Q_A$ من الصمّام، و$p_A$ من الأسطوانة"
+ },
+ "0b10884d8dba": {
+  "src": "In a treatise written in 1653 and printed in 1663, a year after his death, Blaise Pascal drew a sealed vessel full of water with two openings, each closed by a piston, and gave the figure a title: <i>Nouvelle sorte de Machine pour multiplier les forces</i>, a new kind of machine for multiplying forces. His text explains it in one sentence:",
+  "tr": "في رسالةٍ كتبها عام 1653 ونُشرت عام 1663، أي بعد وفاته بعام، رسم بليز باسكال وعاءً مغلقًا من كل جهة، مملوءًا بالماء، وله فتحتان يُغلَق كلٌّ منهما بمكبس، وأعطى الشكل عنوانًا: <i>Nouvelle sorte de Machine pour multiplier les forces</i>، أي «آلة من نوع جديد لمضاعفة القوى». ويشرح نصُّه ذلك في جملة واحدة:"
+ },
+ "0eaeb027afbe": {
+  "src": "Why oil, and why not a lever? Because a fluid carries force <i>around corners</i>, through a pipe of any length and shape, and because it carries a great deal of it in a small space. At the 12 MPa of the servo press in Parts II and III, every square centimetre of piston feels 1.2 kN, the weight of a small car. The 12 cm piston of that press pushes with 136 kN, while the pipe that feeds it is 12 mm across. No gear train or cable of that size comes close.",
+  "tr": "لماذا الزيت، ولماذا لا تكون رافعة؟ لأن السائل يحمل القوّة <i>حول الزوايا</i>، عبر أنبوب بأيّ طول وشكل، ولأنه يحملها بكمّيّة كبيرة في حيّز صغير. وعند ضغط 12 MPa في المكبس المؤازر في الجزأين الثاني والثالث، يشعر كل سنتيمتر مربّع من سطح المكبس بقوّة 1.2 kN، أي وزن سيّارة صغيرة. ومكبس هذه الآلة الذي قطره 12 cm يدفع بقوّة 136 kN، بينما الأنبوب الذي يغذّيه قطره 12 mm فقط. ولا تقترب من ذلك أيّ مجموعة تروس أو حبل بهذا الحجم."
+ },
+ "1294c59a2c59": {
+  "src": "cap chamber",
+  "tr": "حجرة الغطاء"
+ },
+ "1ade3077fe2c": {
+  "src": "the oil under the piston",
+  "tr": "الزيت تحت المكبس"
+ },
+ "1c27bee04aa5": {
+  "src": "rod chamber",
+  "tr": "حجرة الساق"
+ },
+ "1d71315e40d7": {
+  "src": "given",
+  "tr": "المُعطى"
+ },
+ "1e2e5cef8921": {
+  "src": "pump and relief valve",
+  "tr": "المضخّة وصمّام تحديد الضغط"
+ },
+ "20da65831237": {
+  "src": "Flows $Q$ are volume flows in $\\mathrm{m^3/s}$; one litre per minute is $1.667\\times10^{-5}\\ \\mathrm{m^3/s}$.",
+  "tr": "التدفّقات $Q$ تُقاس بوحدة $\\mathrm{m^3/s}$؛ ولتر واحد في الدقيقة يساوي $1.667\\times10^{-5}\\ \\mathrm{m^3/s}$."
+ },
+ "258d1a0c7c5d": {
+  "src": "The connections between blocks come in pairs. Wherever oil passes from one part to another it carries a <b>pressure</b> $p$ and a <b>flow</b> $Q$, and their product is a power:",
+  "tr": "تأتي الوصلات بين الكتل في أزواج. فحيثما ينتقل الزيت من جزء إلى آخر، فإنه يحمل <b>ضغطًا</b> $p$ و<b>معدّل تدفّق</b> $Q$، وحاصل ضربهما قدرةٌ:"
+ },
+ "261bc5ff37e1": {
+  "src": "$y$, $\\dot{y}$ once touched",
+  "tr": "$y$، $\\dot{y}$ بعد أن تُلامَس"
+ },
+ "2640c03b8f91": {
+  "src": "port pressure $p_a$, hose flow $Q_h$",
+  "tr": "ضغط المنفذ $p_a$، تدفّق الخرطوم $Q_h$"
+ },
+ "285ab8199fdb": {
+  "src": "sensors",
+  "tr": "المجسّات"
+ },
+ "2ad4a6443270": {
+  "src": "spring and damper in parallel, chapter 12",
+  "tr": "نابض ومخمِّد على التوازي، الفصل 12"
+ },
+ "2b99a1e510a5": {
+  "src": "what it is",
+  "tr": "ما هي"
+ },
+ "35011873333a": {
+  "src": "Read the map from left to right, following the oil, and then back along the blue line, following the information:",
+  "tr": "اقرأ الخريطة من اليسار إلى اليمين متتبّعًا الزيت، ثم عُد على امتداد الخط الأزرق متتبّعًا المعلومات:"
+ },
+ "365e65cd136e": {
+  "src": "ideal, sampled every $T_s$, chapter 16",
+  "tr": "مثالية، تُعايَن كل $T_s$، الفصل 16"
+ },
+ "38c04d948cc5": {
+  "src": "Traité de l’équilibre des liqueurs",
+  "tr": "Traité de l’équilibre des liqueurs"
+ },
+ "3b111323cfa9": {
+  "src": "discrete PID, chapter 17",
+  "tr": "متحكّم PID متقطّع الزمن، الفصل 17"
+ },
+ "3eb5f1d03fce": {
+  "src": "0.3 The servo press, block by block",
+  "tr": "0.3 المكبس المؤازر، كتلةً كتلةً"
+ },
+ "3ff22742c1a2": {
+  "src": "the flow drawn, $Q_S$",
+  "tr": "معدّل التدفّق المسحوب، $Q_S$"
+ },
+ "430e586374e3": {
+  "src": "torque motor and spool",
+  "tr": "محرّك العزم والمِزلاج"
+ },
+ "44da7761af6e": {
+  "src": "hose",
+  "tr": "الخرطوم"
+ },
+ "49af03841c72": {
+  "src": "Œuvres de Blaise Pascal",
+  "tr": "Œuvres de Blaise Pascal"
+ },
+ "4af701bcc725": {
+  "src": "Every part of a hydraulic machine works like that bottle. It is a <b>block</b>: a piece of hardware with a law inside it. Its <b>inputs</b> are what the rest of the machine imposes on it. Its <b>outputs</b> are what it answers with, computed from its inputs and from its own state, such as how much oil it holds or how fast it moves. A block is never a black box here. Each one is opened in its own chapter, and its law is derived there from Newton’s laws and the conservation of mass and energy.",
+  "tr": "كل جزء في آلة هيدروليكية يعمل مثل تلك الزجاجة. إنه <b>كتلة</b>: قطعة عتاد لها قانون في داخلها. أمّا <b>المدخلات</b> فهي ما تفرضه بقيّة الآلة عليها. وأمّا <b>المخرجات</b> فهي ما تجيب به، محسوبًا من مدخلاتها ومن حالتها الداخلية، كمقدار الزيت الذي تحويه أو سرعة حركتها. والكتلة هنا ليست صندوقًا أسود أبدًا. تُفتح كل كتلة في فصلها الخاص، ويُشتقّ قانونها هناك من قوانين نيوتن ومن حفظ الكتلة والطاقة."
+ },
+ "4c99b986ad28": {
+  "src": "supply pressure $p_s = 12\\ \\mathrm{MPa}$, held",
+  "tr": "ضغط الإمداد $p_s = 12\\ \\mathrm{MPa}$، مُحافَظ عليه ثابتًا"
+ },
+ "4ce14ab5a4d5": {
+  "src": "flows $Q_A$, $Q_B$, $Q_S$",
+  "tr": "معدّلات التدفّق $Q_A$، $Q_B$، $Q_S$"
+ },
+ "4e4389a988f8": {
+  "src": "<b>Done, 0.3 s.</b> The ram holds at the bottom.",
+  "tr": "<b>الانتهاء، 0.3 s.</b> يبقى المِدكّ ثابتًا في الأسفل."
+ },
+ "4f578b3dda57": {
+  "src": "valve edges",
+  "tr": "حوافّ التحكّم"
+ },
+ "5185f95b2a81": {
+  "src": "$p_A$, $p_B$, the specimen force $F$, seal friction",
+  "tr": "$p_A$، $p_B$، قوّة العيّنة $F$، احتكاك الحشوة"
+ },
+ "52630b87b0ad": {
+  "src": "A <b>volume of oil</b>, such as a cylinder chamber, takes in <i>flows</i> and answers with a <i>pressure</i>. Oil is slightly compressible, so the pressure rises as the net inflow packs oil in. It behaves like an electrical <b>capacitor</b>, with pressure as the voltage and flow as the current (chapter 7).",
+  "tr": "<b>حجمٌ من الزيت</b>، مثل حجرة الأسطوانة، يستقبل <i>تدفّقات</i> ويجيب بـ<i>ضغط</i>. الزيت قابل للانضغاط قليلًا، لذلك يرتفع الضغط كلّما ضغط صافي التدفّق الداخل مزيدًا من الزيت. وهو يتصرّف كـ<b>مُكثِّف</b> كهربائي، فيقابل الضغطُ الجهدَ ومعدّلُ التدفّق التيارَ (الفصل 7)."
+ },
+ "52b99240178e": {
+  "src": "compressibility, chapters 7 and 12",
+  "tr": "الانضغاط، الفصلان 7 و12"
+ },
+ "54397b9d2e5b": {
+  "src": "0.1 A machine for multiplying forces",
+  "tr": "0.1 آلة لمضاعفة القوى"
+ },
+ "61856b8c17a4": {
+  "src": "Conventions",
+  "tr": "الاصطلاحات"
+ },
+ "6332496ded5e": {
+  "src": "2 m of 12 mm hose, with a small volume of oil at the valve end",
+  "tr": "خرطوم بطول 2 m وقطر 12 mm، مع حجم صغير من الزيت عند طرف الصمّام"
+ },
+ "6352c406ea2d": {
+  "src": "<b>Creep, about 0.2 s.</b> The ram rises slowly, at 10 mm/s, until the load cell reads 1 kN: it has touched the specimen.",
+  "tr": "<b>الزحف البطيء، نحو 0.2 s.</b> يصعد المِدكّ ببطء بسرعة 10 mm/s حتى تقرأ خليّة الحمل 1 kN: لقد لامس العيّنة."
+ },
+ "63cccb5d942c": {
+  "src": "force $F$",
+  "tr": "القوّة $F$"
+ },
+ "6426ead9bc41": {
+  "src": "Every equation the two animations integrate is derived here, line by line, from Newton’s laws, conservation of mass and conservation of energy. You need single-variable calculus, a little vector calculus and, for Part III, the Laplace transform and some linear algebra.",
+  "tr": "كل معادلة تُكاملها الرسمان المتحرّكان تُشتقّ هنا سطرًا بسطر، من قوانين نيوتن ومن حفظ الكتلة ومن حفظ الطاقة. وتحتاج إلى حساب التفاضل والتكامل لمتغيّر واحد، وقليل من حساب المتجهات، وفي الجزء الثالث تحويل لابلاس وقدر من الجبر الخطّي."
+ },
+ "6849710b7355": {
+  "src": "an ideal pressure source, chapter 9",
+  "tr": "مصدر ضغط مثالي، الفصل 9"
+ },
+ "69733690944c": {
+  "src": "pressure $p_B$",
+  "tr": "الضغط $p_B$"
+ },
+ "6f8dd34fe1e5": {
+  "src": "Two things in this table are worth a second look. First, no block is given what it answers with: the chambers never decide a flow, the hose never decides a pressure. That is what makes the model solvable one step at a time, as chapter 13 shows. Second, the loop closes. The ram’s position goes through the sensors to the controller, which moves the spool, which changes the flows, which change the pressures, which push the ram. Part III is about what that loop does to itself: whether a disturbance dies away or grows.",
+  "tr": "في هذا الجدول أمران يستحقّان نظرة ثانية. أوّلًا، لا تُعطى أيّ كتلة ما تجيب به: فالحجرات لا تحدّد تدفّقًا أبدًا، ولا يحدّد الخرطوم ضغطًا أبدًا. وهذا بالضبط ما يجعل النموذج قابلًا للحلّ خطوةً خطوةً، كما يبيّن الفصل 13. ثانيًا، تُغلَق الحلقة: فموضع المِدكّ يمرّ عبر المجسّات إلى المتحكّم، فيحرّك المتحكّمُ المِزلاجَ، فيغيّر المِزلاجُ التدفّقات، فتغيّر التدفّقاتُ الضغوطَ، فتدفع الضغوطُ المِدكّ. ويتناول الجزء الثالث ما تفعله هذه الحلقة بنفسها: هل يتلاشى الاضطراب أم ينمو؟"
+ },
+ "728b51947b10": {
+  "src": "If a vessel full of water, closed on all sides, has two openings, one a hundred times the other, and each is fitted with a piston that fits it exactly, one man pushing the small piston will equal the force of a hundred men pushing the piston a hundred times larger, and will overcome ninety-nine of them.",
+  "tr": "إذا كان لوعاءٍ مملوءٍ بالماء ومغلقٍ من كل جهة فتحتان، إحداهما أكبر من الأخرى بمئة مرّة، وركّب في كلٍّ منهما مكبسٌ يلائمها تمامًا، فإن رجلًا يدفع المكبس الصغير يعادل قوّةَ مئةِ رجلٍ يدفعون المكبس الأكبر بمئة مرّة، بل يغلب تسعةً وتسعين منهم."
+ },
+ "77c7960e890d": {
+  "src": "ram",
+  "tr": "المِدكّ"
+ },
+ "7aad8be44d69": {
+  "src": "mass on a damped spring, chapter 10",
+  "tr": "كتلة على نابض مُخمَّد، الفصل 10"
+ },
+ "854d9c8d7c5b": {
+  "src": "<span class=\"chn\">0</span> The machine, before any equation",
+  "tr": "<span class=\"chn\">0</span> الآلة، قبل أيّ معادلة"
+ },
+ "8932293cd3d5": {
+  "src": "Squeeze a sealed plastic bottle full of water: you push, and the pressure inside answers. You cannot choose both how hard you push <i>and</i> how high the pressure goes; you choose one, and the bottle decides the other.",
+  "tr": "اعصِر زجاجة بلاستيكية مغلقة مملوءة بالماء: تدفع، فيستجيب الضغط في داخلها. لا يمكنك أن تختار معًا مقدار شدّة دفعك <i>و</i> مقدار ارتفاع الضغط؛ أنت تختار أحدهما، والزجاجة تقرّر الآخر."
+ },
+ "8af512388f1a": {
+  "src": "flow $Q_h$, ram speed $\\dot{y}$",
+  "tr": "التدفّق $Q_h$، سرعة المِدكّ $\\dot{y}$"
+ },
+ "8d17a66e76c6": {
+  "src": "the oil above the piston, around the rod",
+  "tr": "الزيت فوق المكبس، حول الساق"
+ },
+ "8d21be7d018b": {
+  "src": "its law",
+  "tr": "قانونها"
+ },
+ "8d638cd8ee73": {
+  "src": "Pascal did not build it. Joseph Bramah did: he was granted a patent for his hydraulic press in 1795, after studying the existing literature on the motion of fluids while he improved the flush toilet. He and William Armstrong are remembered as the two pioneers of industrial hydraulics, and the machine is still called the Bramah press. Part I of this text is Pascal’s and Bramah’s machine, made to move.",
+  "tr": "لم يبنِ باسكال الآلة، بل بناها جوزيف براما: فقد نال عام 1795 براءة اختراع لمكبسه الهيدروليكي، بعد أن درس الأدبيات القائمة حول حركة السوائل، وهو يحسّن مرحاض الشطف. ويُعدّ هو ووليام أرمسترونغ رائدَي الهيدروليك الصناعي، ولا تزال الآلة تُسمّى مِكبس براما. والجزء الأول من هذا النصّ يتناول آلة باسكال وآلة براما، وقد صُنعتا لتتحرّكا."
+ },
+ "8e959967370d": {
+  "src": "Wikisource",
+  "tr": "Wikisource"
+ },
+ "93c88cf61c0e": {
+  "src": "Bernoulli through an orifice, chapters 8 and 9",
+  "tr": "برنولي عبر فتحة، الفصلان 8 و9"
+ },
+ "94671fd336cd": {
+  "src": "samples $y_k$, $F_k$",
+  "tr": "قيم المعاينة $y_k$، $F_k$"
+ },
+ "94bf65dd5119": {
+  "src": "<b>Settle, 0.1 s.</b> The controller holds the ram at $y = 0$. The spool sits almost exactly in the middle: just enough off centre that the small leakage flows into and out of each chamber balance.",
+  "tr": "<b>استقرار، 0.1 s.</b> يُبقي المتحكّم المِدكّ عند $y = 0$. ويقف المِزلاج قريبًا جدًّا من المنتصف، مُزاحًا عنه بالقدر الذي يجعل التسرّب الصغير الداخل إلى كل حجرة والخارج منها متوازنًا."
+ },
+ "958d0ed6438a": {
+  "src": "A <b>restriction</b>, such as the metering edge of a valve or a narrow pipe, also takes a pressure difference and answers with a flow, but at once, by friction or by turning pressure into the speed of a jet. It behaves like a <b>resistor</b>, a nonlinear one for a sharp edge (chapters 8 and 11).",
+  "tr": "<b>فتحة تحديد</b>، مثل حافّة التحكّم في صمّام أو أنبوب ضيّق، تأخذ هي أيضًا فرقَ ضغط وتجيب بتدفّق، لكن فورًا، بالاحتكاك أو بتحويل الضغط إلى سرعة نفّاثة. وهي تتصرّف كـ<b>مقاومة</b>، غير خطّية عند الحافّة الحادّة (الفصلان 8 و11)."
+ },
+ "978d574912a8": {
+  "src": "A dot is a time derivative, $\\dot{x} = dx/dt$. A prime is a derivative with respect to a position coordinate, $\\mu' = d\\mu/dx$.",
+  "tr": "النقطة فوق الرمز تعني مشتقّة بالنسبة إلى الزمن، $\\dot{x} = dx/dt$. والشرطة العليا تعني مشتقّة بالنسبة إلى إحداثيّ مكاني، $\\mu' = d\\mu/dx$."
+ },
+ "99cc6c0225f9": {
+  "src": "A <b>column of moving oil</b>, such as the oil inside a long hose, takes in a <i>pressure difference</i> and answers with a <i>flow</i>. The pressure difference accelerates the column like any mass. It behaves like an <b>inductor</b> (chapter 11).",
+  "tr": "<b>عمود من الزيت المتحرّك</b>، مثل الزيت داخل خرطوم طويل، يستقبل <i>فرق ضغط</i> ويجيب بـ<i>تدفّق</i>. ويُسرّع فرقُ الضغط العمودَ كأيّ كتلة. وهو يتصرّف كـ<b>محاثّة</b> (الفصل 11)."
+ },
+ "9a82ff6bea3d": {
+  "src": "the part being pressed",
+  "tr": "الجزء الذي يُضغط"
+ },
+ "a791c57b9a3e": {
+  "src": "<b>Release, 0.25 s.</b> The force ramps back down to 1 kN.",
+  "tr": "<b>التخفيف، 0.25 s.</b> تنخفض القوّة تدريجيًا عائدةً إلى 1 kN."
+ },
+ "a79a767297a2": {
+  "src": "Wherever a part pushes on a moving part, the pair is a <b>force</b> $F$ and a <b>speed</b> $v$, with $P = Fv$. In each pair one quantity flows one way through the diagram and the other comes back. Which way each goes is decided by the physics of the block, and there are only three kinds of hydraulic block:",
+  "tr": "حيثما يدفع جزءٌ جزءًا متحركًا، فإن الزوج هو <b>قوّة</b> $F$ و<b>سرعة</b> $v$، مع $P = Fv$. وفي كل زوج تسري إحدى الكميتين في اتجاه واحد عبر المخطّط، وتعود الأخرى. ويحدّد الاتجاه الذي تسلكه كل منهما فيزياءُ الكتلة، وليس للكتل الهيدروليكية إلا ثلاثة أنواع:"
+ },
+ "a80d549631c8": {
+  "src": "Every number in that story comes out of the equations of chapters 7 to 17, integrated by the page. The chapters derive those equations in the order in which oil meets the parts: first the ideal press, where nothing is compressible and nothing leaks, then the real one.",
+  "tr": "كل رقم في هذه القصّة يخرج من معادلات الفصول من 7 إلى 17، تُكاملها هذه الصفحة عدديًّا. وتشتقّ الفصول هذه المعادلات بالترتيب الذي يلتقي فيه الزيت بالأجزاء: أوّلًا المكبس المثالي، حيث لا شيء قابل للانضغاط ولا شيء يتسرّب، ثم المكبس الحقيقي."
+ },
+ "a829e6707de5": {
+  "src": "a coil that turns current into a small force; the force moves the spool against springs",
+  "tr": "ملفّ يحوّل التيار إلى قوّة صغيرة؛ وتحرّك هذه القوّةُ المِزلاجَ ضدّ النوابض"
+ },
+ "b0f25b698359": {
+  "src": "The price is control. A fluid under pressure is also a spring, and a column of fluid in a hose is also a mass, so a press driven by oil can ring, overshoot and shake itself apart if it is commanded carelessly. The servo press of Parts II and III adds the valve and the computer that keep it in check. In 1950 W. C. Moog Jr. filed the patent for the first two-stage electrohydraulic servovalve, in which a small torque motor moves a flapper that steers a larger spool. Valves of that family still fly aircraft, steer ships and drive the materials-testing presses that this one is modelled on.",
+  "tr": "الثمن هو التحكّم. فالسائل تحت الضغط يعمل أيضًا كنابض، وعمود الزيت في الخرطوم يعمل أيضًا ككتلة، ولذلك يمكن للمكبس الذي يدفعه الزيت أن يهتزّ ويتجاوز الهدف ويتحطّم بنفسه إذا أُعطي أمرًا دون عناية. أمّا المكبس المؤازر في الجزأين الثاني والثالث فيضيف الصمّام والحاسوب اللذين يُبقيانه تحت السيطرة. وفي عام 1950 قدّم دبليو سي. موغ جونيور طلب براءة اختراع لأوّل صمّام مؤازر كهروهيدروليكي ذي مرحلتين، يحرّك فيه محرّك عزم صغير لسانًا يوجّه مِزلاجًا أكبر. وما زالت صمّامات هذه العائلة تقود الطائرات وتوجّه السفن وتشغّل مكابس اختبار المواد التي صُمّمت هذه الآلة على غرارها."
+ },
+ "b16403e64799": {
+  "src": "four sharp-edged slots that the spool uncovers",
+  "tr": "أربع فتحات حادّة الحافّة يكشفها المِزلاج"
+ },
+ "b4d3171f1c02": {
+  "src": "answers with",
+  "tr": "تجيب بـ"
+ },
+ "ba39d49904ea": {
+  "src": "0.2 Blocks, inputs and outputs",
+  "tr": "0.2 الكتل والمدخلات والمخرجات"
+ },
+ "bb7003423dc7": {
+  "src": "Each derivation is built the same way. A <b>picture</b> tells you what to imagine with your hands and eyes. A <b>block</b> card says what the part is given and what it answers with. The <b>working</b> is the mathematics, one step per line. A <b>check</b> tests the result against units and limiting cases. <b>In our press</b> puts in the numbers the animation uses, so you can compare with what you see on screen.",
+  "tr": "كل اشتقاق مبنيّ بالطريقة نفسها. تخبرك <b>الصورة</b> بما ينبغي أن تتخيّله بيديك وعينيك. وبطاقة <b>الكتلة</b> تقول ما يُعطى الجزء وبماذا يجيب. و<b>الحساب</b> هو الرياضيات، خطوةً واحدةً في كل سطر. و<b>التحقّق</b> يختبر النتيجة بالوحدات والحالات الحدّية. و<b>في مكبسنا</b> توضع الأرقام التي تستخدمها الرسوم المتحركة، لتقارن بما تراه على الشاشة."
+ },
+ "bcdf4114ad55": {
+  "src": "a motor-driven pump; the relief valve spills what is not needed back to the tank",
+  "tr": "مضخّة تُدار بمحرّك؛ ويعيد صمّام تحديد الضغط ما لا حاجة إليه إلى الخزّان"
+ },
+ "c75c33a07a06": {
+  "src": "The map of the servo press. Each box is a block with a law inside it; each arrow leaves the block that computes a quantity and enters the block that is given it. Solid arrows run with the oil, from the pump towards the ram: flows and forces. Dashed arrows run back: the pressure or speed with which a block answers its neighbour. Every hydraulic link is a pressure–flow pair, every mechanical link a force–speed pair. Blue arrows are signals: they carry information, not power. On a narrow screen, scroll the figure sideways.",
+  "tr": "خريطة المكبس المؤازر. كل صندوق كتلةٌ لها قانونها في داخلها؛ وكل سهم يخرج من الكتلة التي تحسب كميّةً ويدخل الكتلةَ التي تُعطى إيّاها. الأسهم المتّصلة تسير مع الزيت، من المضخّة نحو المِدكّ: تدفّقات وقوى. والأسهم المتقطّعة تسير راجعةً: الضغط أو السرعة التي تجيب بها الكتلةُ جارتَها. كل وصلة هيدروليكية هي زوج ضغط–تدفّق، وكل وصلة ميكانيكية هي زوج قوّة–سرعة. والأسهم الزرقاء إشارات: تحمل معلومات لا قدرةً. وعلى الشاشة الضيّقة مرِّر الشكل أفقيًا."
+ },
+ "c9cb387a39c7": {
+  "src": "« Si un Vaisseau plein d’eau, clos de toutes parts, a deux ouvertures, l’une centuple de l’autre : en mettant à chacune un Piston qui luy soit juste, un homme poussant le petit Piston égalera la force de cent hommes, qui pousseront celuy qui est cent fois plus large, et en surmontera quatre vingt dix neuf. »",
+  "tr": "« Si un Vaisseau plein d’eau, clos de toutes parts, a deux ouvertures, l’une centuple de l’autre : en mettant à chacune un Piston qui luy soit juste, un homme poussant le petit Piston égalera la force de cent hommes, qui pousseront celuy qui est cent fois plus large, et en surmontera quatre vingt dix neuf. »"
+ },
+ "ca92e565fcb8": {
+  "src": "command $u \\in [-1, 1]$",
+  "tr": "أمر التحكّم $u \\in [-1, 1]$"
+ },
+ "cf382a18e90a": {
+  "src": "position $y$, speed $\\dot{y}$",
+  "tr": "الموضع $y$، السرعة $\\dot{y}$"
+ },
+ "cfac810fe6f1": {
+  "src": "Newton’s second law, chapter 12",
+  "tr": "قانون نيوتن الثاني، الفصل 12"
+ },
+ "d3e186b9ee6b": {
+  "src": "command $u$",
+  "tr": "أمر التحكّم $u$"
+ },
+ "da957fe74223": {
+  "src": "$x_v$ and the pressures on both sides of each slot",
+  "tr": "$x_v$ والضغوط على جانبَي كلّ فتحة"
+ },
+ "dd82cba29c72": {
+  "src": "<b>Press, 0.75 s.</b> The controller switches from position to force. It ramps the force to 60 kN in 0.25 s and holds it for 0.5 s. The ram hardly moves now, about 3 mm into a specimen that is a stiff spring. The ram pushes <i>up</i> into the specimen, so the specimen pushes down on the ram, and so does the ram’s weight. Holding 60 kN needs $p_A = 7.8\\ \\mathrm{MPa}$ under the piston against $p_B = 4.2\\ \\mathrm{MPa}$ above it: $$\\begin{aligned} &7.8\\ \\mathrm{MPa} \\times 113\\ \\mathrm{cm^2} - 4.2\\ \\mathrm{MPa} \\times 63\\ \\mathrm{cm^2}\\\\ &\\qquad \\approx 88.1\\ \\mathrm{kN} - 26.5\\ \\mathrm{kN} = 61.6\\ \\mathrm{kN}, \\end{aligned}$$ which is the 60 kN on the specimen plus the 1.6 kN weight of the ram.",
+  "tr": "<b>الكبس، 0.75 s.</b> ينتقل المتحكّم من التحكّم في الموضع إلى التحكّم في القوّة. يرفع القوّة خلال 0.25 s حتى تبلغ 60 kN ويُمسكها 0.5 s. ولا يكاد المِدكّ يتحرّك الآن، إذ يغوص نحو 3 mm في عيّنة تُشبه نابضًا صلبًا. والمِدكّ يدفع <i>إلى أعلى</i> نحو العيّنة، فتدفع العيّنة المِدكّ إلى أسفل، وكذلك يفعل وزن المِدكّ. ولإمساك 60 kN يلزم $p_A = 7.8\\ \\mathrm{MPa}$ تحت المكبس مقابل $p_B = 4.2\\ \\mathrm{MPa}$ فوقه: $$\\begin{aligned} &7.8\\ \\mathrm{MPa} \\times 113\\ \\mathrm{cm^2} - 4.2\\ \\mathrm{MPa} \\times 63\\ \\mathrm{cm^2}\\\\ &\\qquad \\approx 88.1\\ \\mathrm{kN} - 26.5\\ \\mathrm{kN} = 61.6\\ \\mathrm{kN}, \\end{aligned}$$ وهذا يساوي 60 kN على العيّنة زائد وزن المِدكّ البالغ 1.6 kN."
+ },
+ "e03d7f0594f3": {
+  "src": "set-points $y_{\\mathrm{ref}}, F_{\\mathrm{ref}}$; measured $y_k, F_k$",
+  "tr": "القيم المرجعية $y_{\\mathrm{ref}}, F_{\\mathrm{ref}}$؛ والقيم المقاسة $y_k, F_k$"
+ },
+ "e1a1048a8aee": {
+  "src": "compressibility and Newton for the oil slug, chapters 7 and 11",
+  "tr": "الانضغاط وقانون نيوتن لكتلة الزيت، الفصلان 7 و11"
+ },
+ "e1bdb12fc234": {
+  "src": "0.5 How to read the rest",
+  "tr": "0.5 كيف تقرأ البقيّة"
+ },
+ "e28ae40d2370": {
+  "src": "specimen",
+  "tr": "العيّنة"
+ },
+ "e57cdaca25c1": {
+  "src": "pressure $p_A$",
+  "tr": "الضغط $p_A$"
+ },
+ "e7e801c3c10c": {
+  "src": "<b>Approach, 1 s.</b> The controller asks for a smooth climb to 2 mm short of the specimen, 118 mm up. To lift the ram it opens the spool positively: P→A and B→T open. Oil runs from the pump down the hose into the cap chamber, the cap pressure rises just enough to carry the ram’s weight and the seal friction, and the oil above the piston is pushed out to the tank.",
+  "tr": "<b>الاقتراب، 1 s.</b> يطلب المتحكّم صعودًا ناعمًا حتى يبقى المِدكّ على بُعد 2 mm من العيّنة، أي على ارتفاع 118 mm. ولرفع المِدكّ يفتح المِزلاج فتحًا حاسمًا، فتنفتح P→A وB→T. يجري الزيت من المضخّة عبر الخرطوم إلى حجرة الغطاء، فيرتفع ضغطها بالقدر الذي يكفي لحمل وزن المِدكّ واحتكاك الحشوة، ويُدفع الزيت الذي فوق المكبس إلى الخزّان."
+ },
+ "ea04fa700638": {
+  "src": "piston, rod and platen, 160 kg in all",
+  "tr": "المكبس والساق واللوح الضاغط، بمجموع 160 kg"
+ },
+ "eb3d71dab005": {
+  "src": "<b>Retract, 1.8 s.</b> Back to position control, and a smooth descent to $y = 0$: the spool opens negatively, P→B and A→T, and oil drains from the cap chamber back up the hose.",
+  "tr": "<b>التراجع، 1.8 s.</b> عودةٌ إلى التحكّم في الموضع، ونزولٌ ناعم حتى $y = 0$: يفتح المِزلاج فتحًا سالبًا، أي P→B وA→T، فيتسرّب الزيت من حجرة الغطاء راجعًا عبر الخرطوم إلى الأعلى."
+ },
+ "ebeb809725e6": {
+  "src": "SI units throughout. A pressure written $p$ is a <i>gauge</i> pressure, measured above the atmosphere; the absolute pressure is $p_{\\mathrm{abs}} = p + p_0$ with $p_0 = 101.325\\ \\mathrm{kPa}$.",
+  "tr": "وحدات SI في كل النصّ. والضغط المكتوب $p$ هو <i>ضغط مقيس</i>، أي يُقاس فوق الضغط الجوّي؛ والضغط المطلق هو $p_{\\mathrm{abs}} = p + p_0$ مع $p_0 = 101.325\\ \\mathrm{kPa}$."
+ },
+ "ec8a0b96cbee": {
+  "src": "0.4 One press cycle, told in words",
+  "tr": "0.4 دورة كبس واحدة، تُروى بالكلام"
+ },
+ "f31014e205e1": {
+  "src": "Mechanical parts follow the same pattern: a mass takes in forces and answers with a speed (Newton), a spring takes in a displacement and answers with a force (Hooke). Once you know which of these each block is, you know which way its arrows point, and the whole machine becomes a chain of answers.",
+  "tr": "تتّبع الأجزاء الميكانيكية النمط نفسه: الجسمُ ذو الكتلة يستقبل قوًى ويجيب بسرعة (نيوتن)، والنابض يستقبل إزاحةً ويجيب بقوّة (هوك). وحين تعرف أيًّا من هذه الأنواع تمثّله كلُّ كتلة، تعرف الاتجاه الذي تشير إليه أسهمها، وتصبح الآلة كلّها سلسلةً من الإجابات."
+ },
+ "f79a2222c311": {
+  "src": "controller",
+  "tr": "المتحكّم"
+ },
+ "f8c8dc57ea66": {
+  "src": "The animation of the servo press runs one cycle of about 4.4 s. Here is what each block does in it.",
+  "tr": "تُنفّذ الرسوم المتحركة للمكبس المؤازر دورةً واحدةً مدّتها نحو 4.4 s. وفيما يلي ما تفعله كل كتلة فيها."
+ },
+ "f9591f01d828": {
+  "src": "an LVDT for position, a load cell for force",
+  "tr": "مِحوّل LVDT لقياس الموضع، وخليّة حمل لقياس القوّة"
+ },
+ "f9d1acb86036": {
+  "src": "spool position $x_v$",
+  "tr": "موضع المِزلاج $x_v$"
+ },
+ "fd68ac9fdbf6": {
+  "src": "a computer that wakes up every millisecond",
+  "tr": "حاسوب يستيقظ كل ملّي ثانية"
+ },
+ "fe5c531c73a6": {
+  "src": "Numbers quoted “in our press” are for the default settings of the pages.",
+  "tr": "الأرقام المذكورة «في مكبسنا» هي للإعدادات الافتراضية للصفحات."
+ }
+}

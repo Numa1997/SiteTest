@@ -1,4 +1,12 @@
 {
+ "03b361d08fd1": {
+  "src": "At an operating point (x₀, u₀) where all states are steady except y, which drifts at the cruising speed, the eight plant states obey δẋ = A·δx + B·δu, with A and B taken by central differences of the nonlinear right-hand side. The zero-order hold turns this into an exact discrete model:",
+  "tr": "عند نقطة تشغيل (x₀, u₀) تكون فيها جميع الحالات ثابتة ما عدا y الذي ينجرف بالسرعة المنتظمة، تخضع الحالات الثماني للمنظومة للمعادلة δẋ = A·δx + B·δu، حيث تُحسب A وB بالفروق المركزية للطرف الأيمن غير الخطّي. ويحوّل ماسك الرتبة الصفرية هذا إلى نموذج متقطّع دقيق:"
+ },
+ "043050eb2ac8": {
+  "src": "Hydraulic natural frequency, both chambers closed",
+  "tr": "التردد الطبيعي الهيدروليكي، والحجرتان مغلقتان"
+ },
  "06c1cf0d627d": {
   "src": "<b>Load cell.</b> Measures the specimen force F for the controller.",
   "tr": "<b>خليّة الحمل.</b> تقيس قوّة العيّنة F للمتحكّم."
@@ -6,6 +14,10 @@
  "0706025b2bbc": {
   "src": "max",
   "tr": "max"
+ },
+ "074c3fe26454": {
+  "src": "<b>retract</b>: position control, quintic back to y = 0 in 1.8 s. <b>done</b>: hold 0.3 s.",
+  "tr": "<b>الرجوع</b>: التحكّم في الموضع، مسار كثير حدود من الدرجة الخامسة إلى y = 0 خلال 1.8 s. <b>الانتهاء</b>: تثبيت 0.3 s."
  },
  "0e5c5eb62e4f": {
   "src": "The compact version. Every equation here is derived step by step in <a href=\"hydraulic_theory.html\">Hydraulics from First Principles</a>, Parts II and III.",
@@ -15,13 +27,57 @@
   "src": "1 · What you are looking at",
   "tr": "1 · ما تنظر إليه"
  },
+ "0ed548baea08": {
+  "src": "87.9 Hz (ζ 0.26) and 174.2 Hz (ζ 0.022)",
+  "tr": "87.9 Hz (ζ 0.26) و174.2 Hz (ζ 0.022)"
+ },
+ "1280b208e59e": {
+  "src": "lam",
+  "tr": "lam"
+ },
+ "1389845b02c0": {
+  "src": "kg",
+  "tr": "kg"
+ },
+ "1478c028a167": {
+  "src": "pos",
+  "tr": "pos"
+ },
  "16cd8e27b7c9": {
   "src": "Loop analysis",
   "tr": "تحليل حلقة التحكّم"
  },
+ "17116c85dd7f": {
+  "src": "Increase T<sub>s</sub> from 1 ms to 4 ms with the gains unchanged. Read off the phase margin before and after, and explain the loss using the phase of z⁻¹ and of the zero-order hold, −ωT<sub>s</sub> − ωT<sub>s</sub>/2. <a href=\"#sol-6\">Worked solution ↓</a>",
+  "tr": "زِد T<sub>s</sub> من 1 ms إلى 4 ms مع إبقاء قيم الكسب كما هي. اقرأ هامش الطور قبل التغيير وبعده، واشرح الخسارة باستعمال طور z⁻¹ وطور ماسك الرتبة الصفرية، −ωT<sub>s</sub> − ωT<sub>s</sub>/2. <a href=\"#sol-6\">الحل المُفصّل ↓</a>"
+ },
  "1773412c1a61": {
   "src": "set-point y_ref",
   "tr": "القيمة المرجعية y_ref"
+ },
+ "1a96e74165ae": {
+  "src": "27.8 → 7.1 MPa",
+  "tr": "27.8 → 7.1 MPa"
+ },
+ "1b3206ef8993": {
+  "src": "closed loop:",
+  "tr": "الحلقة المغلقة:"
+ },
+ "1b480158e1f3": {
+  "src": "stop",
+  "tr": "stop"
+ },
+ "1e6db0d8d42f": {
+  "src": "Derive the hydraulic natural frequency of the ram with both chambers closed, ω<sub>h</sub>² = (β<sub>A</sub>A<sub>A</sub>²/V<sub>A</sub> + β<sub>B</sub>A<sub>B</sub>²/V<sub>B</sub>)/m. Evaluate it at y = 10 mm and y = 190 mm. Where in the stroke is the press softest, and why does a differential cylinder make this asymmetric? <a href=\"#sol-1\">Worked solution ↓</a>",
+  "tr": "اشتقّ التردد الطبيعي الهيدروليكي للمِدكّ والحجرتان مغلقتان، ω<sub>h</sub>² = (β<sub>A</sub>A<sub>A</sub>²/V<sub>A</sub> + β<sub>B</sub>A<sub>B</sub>²/V<sub>B</sub>)/m. واحسبه عند y = 10 mm وعند y = 190 mm. في أيّ موضع من الشوط تكون المِكبسة الأقلّ صلابةً، ولماذا تجعل الأسطوانةُ التفاضلية ذلك غير متماثل؟ <a href=\"#sol-1\">الحل المُفصّل ↓</a>"
+ },
+ "1ea4d4875008": {
+  "src": "1.54·10⁷ kg/m⁴ → <b>96.3 Hz</b>",
+  "tr": "1.54·10⁷ kg/m⁴ → <b>96.3 Hz</b>"
+ },
+ "1f3f3ce972e1": {
+  "src": "Linearize the valve flow Q<sub>A</sub>(x<sub>v</sub>, p<sub>a</sub>) at x<sub>v</sub> = 0⁺ and at x<sub>v</sub> = 0⁻. Show that the flow gain differs by √((p<sub>s</sub> − p<sub>a</sub>)/p<sub>a</sub>), and argue why a single linear model cannot describe a critically lapped valve at null. <a href=\"#sol-3\">Worked solution ↓</a>",
+  "tr": "قرِّب خطّيًّا تدفّق الصمّام Q<sub>A</sub>(x<sub>v</sub>, p<sub>a</sub>) عند x<sub>v</sub> = 0⁺ وعند x<sub>v</sub> = 0⁻. أثبت أنّ كسب التدفّق يختلف بمقدار √((p<sub>s</sub> − p<sub>a</sub>)/p<sub>a</sub>)، واستدلّ على سبب عجز نموذج خطّي واحد عن وصف صمّام مُغطّى تغطيةً حرجة عند الحياد. <a href=\"#sol-3\">الحل المُفصّل ↓</a>"
  },
  "1f841a6d0d2c": {
   "src": "stored in motion, height, oil",
@@ -31,21 +87,69 @@
   "src": "Symbols",
   "tr": "الرموز"
  },
+ "236a737e4a16": {
+  "src": "The pump delivers p<sub>s</sub>·Q<sub>S</sub>. The valve burns p<sub>s</sub>Q<sub>S</sub> − p<sub>a</sub>Q<sub>A</sub> − p<sub>B</sub>Q<sub>B</sub> as heat. The rest compresses oil (Σ p·V/β·ṗ), accelerates the hose slug (½IQ<sub>h</sub>²) and the ram (½mẏ²), lifts the ram (mgy), heats the hose and the seals, and does work on the specimen and the stop. The page integrates every term separately; their sum must equal the pump work, and the check is shown under the scene.",
+  "tr": "توفّر المضخّة p<sub>s</sub>·Q<sub>S</sub>. ويُبدّد الصمّام p<sub>s</sub>Q<sub>S</sub> − p<sub>a</sub>Q<sub>A</sub> − p<sub>B</sub>Q<sub>B</sub> على شكل حرارة. ويضغط الباقي الزيتَ (Σ p·V/β·ṗ)، ويسرّع عمود الزيت في الخرطوم (½IQ<sub>h</sub>²) والمِدكّ (½mẏ²)، ويرفع المِدكّ (mgy)، ويُسخّن الخرطوم والحشيّات، ويبذل شغلًا على العيّنة وعلى المِصَدّ. وتحسب الصفحة كل حدّ على حدة بالتكامل العددي؛ ويجب أن يساوي مجموعها شغل المضخّة، ويُعرض الفحص تحت المشهد."
+ },
+ "23c4b562ac93": {
+  "src": "hover pressures p_A, p_B → β_A, β_B",
+  "tr": "ضغوط الاتزان المعلّق p_A, p_B → β_A, β_B"
+ },
+ "240a55be8c6f": {
+  "src": "Why it is lopsided: per unit of oil volume the cap side counts (A_A/A_B)² = 3.24 times more, and it also carries half the hose (113 cm³) as dead volume. The sum of the two springs is smallest past mid-stroke, at 116 mm rather than 100 mm.",
+  "tr": "لماذا هو غير متماثل: لكل وحدة حجم من الزيت تُسهم جهةُ الغطاء بمقدار (A_A/A_B)² = 3.24 مرة أكثر، وتحمل كذلك نصفَ الخرطوم (113 cm³) بوصفه حجمًا ميّتًا. ومجموع الزنبركين يكون أصغر ما يمكن بعد منتصف الشوط، عند 116 mm لا عند 100 mm."
+ },
  "259890c5e0a0": {
   "src": "Operating point",
   "tr": "نقطة التشغيل"
+ },
+ "26630f795204": {
+  "src": "Four times more entrained air",
+  "tr": "أربعة أضعاف الهواء المحتجز"
+ },
+ "267c20467827": {
+  "src": "filtered derivative,",
+  "tr": "المشتقّة المُرشَّحة،"
+ },
+ "26cc3217be64": {
+  "src": "ms",
+  "tr": "ms"
  },
  "27e90dfa57c3": {
   "src": "at",
   "tr": "عند"
  },
+ "28ceb12a0588": {
+  "src": "Problem set · answers from this very press",
+  "tr": "مجموعة المسائل · إجابات من هذه المِكبسة نفسها"
+ },
  "2a6e00ec22c4": {
   "src": "Energy since t = 0",
   "tr": "الطاقة منذ t = 0"
  },
+ "2a95a321ffa9": {
+  "src": "Treat the hose as a lumped mass between two compliances, C<sub>a</sub> = V<sub>a</sub>/β and C<sub>A</sub> = V<sub>A</sub>/β. Show that the slosh mode has ω² = (1/C<sub>a</sub> + 1/C<sub>A</sub>)/I and find it in the open-loop pole table. What happens to it when you double the hose length? When you halve the bore? <a href=\"#sol-2\">Worked solution ↓</a>",
+  "tr": "اعتبِر الخرطوم كتلةً مُجمَّعة بين قابليتين للانضغاط، C<sub>a</sub> = V<sub>a</sub>/β وC<sub>A</sub> = V<sub>A</sub>/β. أثبت أنّ نمط الترجرج له ω² = (1/C<sub>a</sub> + 1/C<sub>A</sub>)/I، وجِدْه في جدول أقطاب الحلقة المفتوحة. ماذا يحدث له عند مضاعفة طول الخرطوم؟ وماذا عند تنصيف القطر الداخلي؟ <a href=\"#sol-2\">الحل المُفصّل ↓</a>"
+ },
+ "2e3ca3e9c287": {
+  "src": "hose 4 m",
+  "tr": "الخرطوم 4 m"
+ },
  "322970f4948c": {
   "src": "Live readings",
   "tr": "القراءات الحيّة"
+ },
+ "3442496b96dd": {
+  "src": "str",
+  "tr": "str"
+ },
+ "3798859412f6": {
+  "src": "bore 6 mm",
+  "tr": "الفتحة 6 mm"
+ },
+ "3b4dfc971393": {
+  "src": "Working",
+  "tr": "الحساب"
  },
  "3c854622886c": {
   "src": "<b>LVDT.</b> Position sensor; measures the ram position y.",
@@ -67,6 +171,10 @@
   "src": "<b>Dashed wine lines.</b> Electrical signals: u to the valve, F and y back to the controller.",
   "tr": "<b>الخطوط المتقطّعة الخمرية.</b> إشارات كهربائية: u إلى الصمّام، و F و y عائدةٌ إلى المتحكّم."
  },
+ "42dc26330cb1": {
+  "src": "This press, cruising at 0.1 m/s",
+  "tr": "هذه المِكبسة بالسرعة المنتظمة 0.1 m/s"
+ },
  "44bc25bda28f": {
   "src": "<b>Rod and platen.</b> Moving mass m; the platen carries the tooling M and presses the specimen.",
   "tr": "<b>ساق المكبس ولوح الضغط.</b> كتلة متحرّكة m؛ يحمل لوح الضغط القالب M ويضغط العيّنة."
@@ -79,6 +187,18 @@
   "src": "hose flow Q_h",
   "tr": "تدفّق الخرطوم Q_h"
  },
+ "47d714d2807b": {
+  "src": "pF",
+  "tr": "pF"
+ },
+ "4956dcb5fbf9": {
+  "src": "In force control the plant from spool to force is nearly an integrator. Show that for a stiff specimen dF/dt ≈ k<sub>eff</sub>·K<sub>q</sub>·x<sub>v</sub>/A<sub>A</sub>, with 1/k<sub>eff</sub> = 1/k<sub>w</sub> + V<sub>A</sub>/(β·A<sub>A</sub>²). Use this to choose K<sub>pF</sub> for a 10 Hz crossover, then check your answer in the Bode plot. <a href=\"#sol-7\">Worked solution ↓</a>",
+  "tr": "في التحكّم في القوّة تكون المنظومة الممتدّة من المِزلاج إلى القوّة قريبةً جدًّا من مُكامِل. أثبت أنّه بالنسبة إلى عيّنة جاسئة: dF/dt ≈ k<sub>eff</sub>·K<sub>q</sub>·x<sub>v</sub>/A<sub>A</sub>، مع 1/k<sub>eff</sub> = 1/k<sub>w</sub> + V<sub>A</sub>/(β·A<sub>A</sub>²). واستعمل ذلك لاختيار K<sub>pF</sub> من أجل تردّد عبور 10 Hz، ثم تحقّق من جوابك في مخطّط بودي. <a href=\"#sol-7\">الحل المُفصّل ↓</a>"
+ },
+ "4a5fcbadaf0a": {
+  "src": "Every T<sub>s</sub> the controller samples y and F, computes u, and the valve receives it one sample later (computation delay); between samples u is held constant (zero-order hold). A supervisor decides which law runs:",
+  "tr": "في كل فترة معاينة T<sub>s</sub> يعاين المتحكّم y وF ويحسب u، ويتسلّم الصمّام u بعد عيّنة واحدة (تأخير الحساب)، وتبقى u ثابتة بين عيّنتين (ماسك من الرتبة الصفرية). يقرّر المُشرِف أيّ قانون تحكّم يعمل:"
+ },
  "4bafe595f753": {
   "src": "<b>Pump with relief valve.</b> Holds the supply line at the constant pressure p<sub>s</sub>.",
   "tr": "<b>مضخّة مع صمّام تحديد الضغط.</b> تُبقي خطّ التغذية عند الضغط الثابت p<sub>s</sub>."
@@ -86,6 +206,10 @@
  "4cdff9cf3870": {
   "src": "<b>Torque motor.</b> Turns the electrical command u into spool motion; its armature (wine bar) tilts with u, and the spool follows with bandwidth f<sub>v</sub>.",
   "tr": "<b>محرّك العزم.</b> يحوّل أمر التحكّم الكهربائي u إلى حركة للمِزلاج؛ ذراعه المتحرّك (القضيب الخمري) يميل مع u، والمِزلاج يتبعه بعرض النطاق الترددي f<sub>v</sub>."
+ },
+ "4dbb8d572bad": {
+  "src": "1389 → 1132 MPa (−18 %)",
+  "tr": "1389 → 1132 MPa (−18 %)"
  },
  "513f2a7f25ed": {
   "src": "The press and its gauge panel",
@@ -95,9 +219,25 @@
   "src": "ram speed ẏ",
   "tr": "سرعة المِدكّ ẏ"
  },
+ "573d32a9b4ae": {
+  "src": "y = 10 mm: V_A, V_B",
+  "tr": "y = 10 mm: V_A, V_B"
+ },
+ "583261f898c0": {
+  "src": "Clamp the piston between two springs made of oil: a fat one below, pressing on 113 cm², and a thin one above, pressing on 63 cm². Push the piston up by δy. The cap oil relaxes, the rod oil is squeezed, and both push it back down.",
+  "tr": "ثبّت المكبس بين زنبركين من الزيت: زنبرك سميك في الأسفل يضغط على 113 cm²، وزنبرك رفيع في الأعلى يضغط على 63 cm². ادفع المكبس نحو الأعلى بمقدار δy. يسترخي زيت جهة الغطاء، ويُضغط زيت جهة الساق، ويدفعانه كلاهما إلى الأسفل من جديد."
+ },
  "5846955db6be": {
   "src": "Legend",
   "tr": "مفتاح الرسم"
+ },
+ "592060d83458": {
+  "src": "This press",
+  "tr": "هذه المِكبسة"
+ },
+ "592974a0c75a": {
+  "src": "bottom stop",
+  "tr": "المِصَدّ السفلي"
  },
  "5935cae6935f": {
   "src": "2 · The servo valve",
@@ -111,6 +251,10 @@
   "src": "Theory",
   "tr": "النظرية"
  },
+ "5b23457fa8bc": {
+  "src": "Opening gives 1.32 times the gain of closing",
+  "tr": "الفتح يعطي 1.32 ضعف كسب الإغلاق"
+ },
  "5e17c8a62ecf": {
   "src": "Position loop: cruising up at 0.1 m/s, y = 60 mm",
   "tr": "حلقة التحكّم في الموضع: صعود بسرعة 0.1 m/s، و y = 60 mm"
@@ -119,21 +263,65 @@
   "src": "3 · Oil that is not quite incompressible",
   "tr": "3 · زيت ليس عديم الانضغاط تمامًا"
  },
+ "608db4bf8e4e": {
+  "src": "Bore 120 mm, rod 80 mm: A<sub>A</sub> = 113.1 cm², A<sub>B</sub> = 62.8 cm². Stroke S = 200 mm, the specimen starts at y<sub>c</sub> = 120 mm. Ram plus tooling m = 10 kg + M.",
+  "tr": "قطر الأسطوانة 120 mm، وقطر ساق المكبس 80 mm: A<sub>A</sub> = 113.1 cm²، A<sub>B</sub> = 62.8 cm². الشوط S = 200 mm، وتبدأ العيّنة عند y<sub>c</sub> = 120 mm. المِدكّ مع العُدّة m = 10 kg + M."
+ },
+ "62f741658fa0": {
+  "src": "frozen while saturated in the same direction (anti-windup)",
+  "tr": "مُجمَّد ما دام التشبّع في الاتجاه نفسه (منع انفلات التكامل)"
+ },
  "65a703187e59": {
   "src": "Hydraulic servo control · interactive study",
   "tr": "التحكّم الهيدروليكي المؤازر · دراسة تفاعلية"
+ },
+ "673dbc1f06e9": {
+  "src": "β_eff at 4.37 MPa, hover",
+  "tr": "β_eff عند 4.37 MPa، الاتزان المعلّق"
+ },
+ "68668b458430": {
+  "src": "1722, 730 cm³ → <b>169.7 Hz</b>",
+  "tr": "1722, 730 cm³ → <b>169.7 Hz</b>"
+ },
+ "69449f994d55": {
+  "src": "ref",
+  "tr": "ref"
  },
  "6ddf481b238a": {
   "src": "A pump, a four-way servo valve, two metres of hose and a differential cylinder pressing a specimen. A digital controller drives the ram to the specimen in position control, switches to force control, holds, releases and retracts. Every curve comes from the nonlinear model; the analysis panel linearizes it and asks whether the loop survives.",
   "tr": "مضخّة، وصمّام مؤازر رباعي المنافذ، وخرطوم طوله مترانِ، وأسطوانة تفاضلية تضغط عيّنة. يقود متحكّم رقمي المِدكّ نحو العيّنة في التحكّم في الموضع، ثم ينتقل إلى التحكّم في القوّة فيُثبّت القوّة، ثم يُرخي الحمل ويسحب المِدكّ إلى الخلف. كل منحنى يأتي من النموذج اللاخطّي؛ ولوحة التحليل تُجري له تقريبًا خطّيًا وتسأل هل تبقى حلقة التحكّم مستقرّة."
  },
+ "6e2e73413db5": {
+  "src": "See it: force-loop poles",
+  "tr": "أرِني: أقطاب حلقة القوّة"
+ },
+ "6fddb70e9742": {
+  "src": "β_eff at 0 MPa (0.5 % → 2 %)",
+  "tr": "β_eff عند 0 MPa (0.5 % → 2 %)"
+ },
  "704ace423028": {
   "src": "<b>Gauge panel dials.</b> Pressures p_a, p_A, p_B, the specimen force F and the spool x_v. The wine arc fills up to the reading; on the spool dial the thin blue needle is the command u, so you can see the spool lag behind it.",
   "tr": "<b>أقراص لوحة المقاييس.</b> الضغوط p_a و p_A و p_B، وقوّة العيّنة F، ومشوار المِزلاج x_v. القوس الخمري يمتلئ حتى القراءة؛ وفي قرص المِزلاج تكون الإبرة الزرقاء الرفيعة هي أمر التحكّم u، فترى المِزلاج يتأخّر خلفها."
  },
+ "70e22dd9ce41": {
+  "src": "Worked solutions",
+  "tr": "الحلول المُفصّلة"
+ },
+ "73b680b34d7d": {
+  "src": "2.18·10⁻¹³, 9.57·10⁻¹³ m³/Pa",
+  "tr": "2.18·10⁻¹³, 9.57·10⁻¹³ m³/Pa"
+ },
  "75522e5a7561": {
   "src": "<b>Blue oil.</b> Gauge pressure below 0: suction, risk of air release and cavitation.",
   "tr": "<b>الزيت الأزرق.</b> ضغط مقيس أقل من 0: سحب، وخطر انفصال الهواء والتكهّف."
+ },
+ "7622019e8122": {
+  "src": "The left and right derivatives at x_v = 0 differ, so ∂Q/∂x_v does not exist there: the flow law has a kink, like |x|. Any Jacobian picks one side. The force-hold operating point sits at x_v = +0.039 %, only 0.0004 from the kink, so its linear model uses the opening gain alone. A wobble bigger than that crosses the kink and meets the other gain, which is territory for describing functions and limit cycles.",
+  "tr": "المشتقّتان اليسرى واليمنى عند x_v = 0 مختلفتان، لذلك لا توجد ∂Q/∂x_v هناك: لقانون التدفّق انكسار، مثل |x|. وأيّ مصفوفة يعقوبية تختار جانبًا واحدًا. نقطة تشغيل الإمساك بالقوّة تقع عند x_v = +0.039 %، على بُعد 0.0004 فقط من الانكسار، لذا يستعمل نموذجها الخطّي كسب الفتح وحده. أما الاهتزاز الأكبر من ذلك فيعبر الانكسار ويصطدم بالكسب الآخر، وهذا مجال دوال الوصف والدورات الحدّية."
+ },
+ "76f42bc8b07e": {
+  "src": "6 · Linearize, discretize, close the loop",
+  "tr": "6 · التقريب الخطّي، والتقطيع الزمني، وإغلاق الحلقة"
  },
  "7793e10f12fa": {
   "src": "The loop gain is L(z) = K(z)·z⁻¹·G(z): G is the zero-order-hold discretization of the plant linearized at the operating point, z⁻¹ the one-sample computation delay, K the discrete controller. Stability is decided by the closed-loop eigenvalues (all |z| &lt; 1); the margins and the Nyquist curve say how close it is.",
@@ -147,13 +335,29 @@
   "src": "The spool is a second-order system driven by the command u ∈ [−1, 1]. Each metering edge is a sharp-edged orifice, so the flow grows with the square root of the pressure drop; a small regularization (p<sub>tr</sub> = 0.1 MPa) removes the infinite slope at zero drop. The valve is critically lapped: at x<sub>v</sub> = 0 only the internal leakage K<sub>L</sub> flows.",
   "tr": "المِزلاج منظومة من الدرجة الثانية يقودها أمر التحكّم u ∈ [−1, 1]. كل حافّة تحكّم هي فتحة ذات حافّة حادّة، لذا يتناسب السريان مع الجذر التربيعي لهبوط الضغط؛ وتزيل تسويةٌ صغيرة (p<sub>tr</sub> = 0.1 MPa) الميلَ اللانهائي عند انعدام هبوط الضغط. الصمّام ذو تغطية صفرية: عند x<sub>v</sub> = 0 لا يسري إلا التسرّب الداخلي K<sub>L</sub>."
  },
+ "7b95c955f503": {
+  "src": "position:",
+  "tr": "الموضع:"
+ },
  "7c148e457725": {
   "src": "Key to the drawing",
   "tr": "شرح الرسم"
  },
+ "7cb9c423607d": {
+  "src": "the integrator of the new law is loaded with the last command, so",
+  "tr": "يُحمَّل مُكامِل القانون الجديد بآخر إشارة تحكّم، وبذلك"
+ },
+ "7de396245548": {
+  "src": "Stribeck: break-away",
+  "tr": "ستريبيك: الانفكاك"
+ },
  "7fc9d4e2361b": {
   "src": "<b>Flow arrow.</b> Points the way the oil moves; it grows with the flow rate.",
   "tr": "<b>سهم السريان.</b> يشير إلى الاتجاه الذي يتحرّك فيه الزيت، ويكبر مع معدّل السريان."
+ },
+ "8026347898b6": {
+  "src": "Flow gain of a critically lapped valve at null",
+  "tr": "كسب التدفّق لصمّام مُغطّى تغطيةً حرجة عند الحياد"
  },
  "81e9209e64bd": {
   "src": "sign",
@@ -163,17 +367,53 @@
   "src": "abs",
   "tr": "abs"
  },
+ "843f1db4041f": {
+  "src": "force:",
+  "tr": "القوّة:"
+ },
  "8617db601848": {
   "src": "Force loop: holding the set force on the specimen",
   "tr": "حلقة التحكّم في القوّة: تُبقي القوّة المرجعية على العيّنة"
+ },
+ "869597ceef85": {
+  "src": "Softest at y = 116 mm: 170 Hz",
+  "tr": "الأقلّ صلابةً عند y = 116 mm: 170 Hz"
+ },
+ "86b77de2442f": {
+  "src": "exp",
+  "tr": "exp"
  },
  "8720f140fd91": {
   "src": "Oil gauge pressure",
   "tr": "ضغط الزيت المقيس"
  },
+ "8725a10c62cd": {
+  "src": "<b>press</b>: force control, F_ref ramps to its target in 0.25 s and holds 0.5 s. <b>release</b>: ramps down to 1 kN in 0.25 s.",
+  "tr": "<b>الكبس</b>: التحكّم في القوّة، يرتفع F_ref إلى قيمته المستهدفة خلال 0.25 s ويبقى ثابتًا 0.5 s. <b>الإطلاق</b>: ينخفض إلى 1 kN خلال 0.25 s."
+ },
+ "8752112a2234": {
+  "src": "pole table",
+  "tr": "جدول الأقطاب"
+ },
  "875467cc7fbf": {
   "src": "Any change re-runs the whole cycle and the loop analysis.",
   "tr": "كل تغيير يعيد تشغيل الدورة كاملة وتحليل حلقة التحكّم."
+ },
+ "87c51ffcfc05": {
+  "src": "4.37, 7.63 MPa → 1.389, 1.454 GPa",
+  "tr": "4.37, 7.63 MPa → 1.389, 1.454 GPa"
+ },
+ "898497853a83": {
+  "src": "The bumpless transfer loads the integrator with the last command. Remove it on paper: what jump in u, and in force, would the switch from creep to press produce at the default gains? <a href=\"#sol-8\">Worked solution ↓</a>",
+  "tr": "يُحمّل التحويل الخالي من القفزات المُكامِلَ بآخر إشارة تحكّم. احذفه على الورق: ما القفزة في u وفي القوّة التي كان التبديل من الزحف إلى الكبس سيُحدثها عند قيم الكسب الافتراضية؟ <a href=\"#sol-8\">الحل المُفصّل ↓</a>"
+ },
+ "8a3c7820bc49": {
+  "src": "A 0.2 kg slug of oil, squeezed through a 12 mm bore, behaves like a heavy piston (inertance 1.5·10⁷ kg/m⁴). It bounces between two oil springs: the small volume at the valve port and the large cap chamber.",
+  "tr": "عمود زيت كتلته 0.2 kg، يُدفع عبر فتحة قطرها 12 mm، يتصرّف كمكبس ثقيل (عامل القصور الذاتي 1.5·10⁷ kg/m⁴). يرتدّ بين زنبركين من الزيت: الحجم الصغير عند منفذ الصمّام، وحجرة جهة الغطاء الكبيرة."
+ },
+ "8b0ea5946747": {
+  "src": "Find the largest K<sub>p</sub> for which the position loop is stable. Compare it with the textbook rule K<sub>vel</sub> &lt; 2ζ<sub>h</sub>ω<sub>h</sub>, where K<sub>vel</sub> is the velocity gain of the loop, and explain the difference. <a href=\"#sol-9\">Worked solution ↓</a>",
+  "tr": "أوجد أكبر K<sub>p</sub> تبقى عندها حلقة التحكّم في الموضع مستقرّة. قارِنها بالقاعدة الواردة في الكتب K<sub>vel</sub> &lt; 2ζ<sub>h</sub>ω<sub>h</sub>، حيث K<sub>vel</sub> هو كسب السرعة للحلقة، واشرح الفرق. <a href=\"#sol-9\">الحل المُفصّل ↓</a>"
  },
  "8dc2a6624f2c": {
   "src": "<span class=\"swatch\" aria-hidden=\"true\"></span> below 0",
@@ -191,9 +431,21 @@
   "src": "<b>Tank.</b> Oil returns here at atmospheric pressure, p<sub>T</sub> = 0.",
   "tr": "<b>الخزّان.</b> يعود الزيت إلى هنا عند الضغط الجوّي، p<sub>T</sub> = 0."
  },
+ "91079b9342be": {
+  "src": "The closed-loop state contains the plant (8), the controller memory (3 for PID, 1 for PI) and the delayed command (1). The system is stable when every eigenvalue lies inside the unit circle. Each z maps back to a continuous pole s = ln(z)/T<sub>s</sub>, which gives a frequency and a damping ratio you can feel.",
+  "tr": "تتضمّن حالةُ الحلقة المغلقة المنظومةَ (8)، وذاكرةَ المتحكّم (3 في PID، و1 في PI)، وإشارةَ التحكّم المتأخّرة (1). يكون النظام مستقرًّا حين تقع كل قيمة ذاتية داخل دائرة الوحدة. وتُعاد كل قيمة z إلى قطب مستمر s = ln(z)/T<sub>s</sub>، فنحصل منه على تردّد ونسبة تخامد يمكن تصوّرهما."
+ },
  "928facd980a0": {
   "src": "Entrained air of volume fraction α₀ at atmospheric pressure p₀ is squeezed polytropically (n = 1.4). Mixing the compliances of oil and air gives",
   "tr": "الهواء المحبوس ذو كسر الحجم α₀ عند الضغط الجوّي p₀ يُعصَر عصرًا بوليتروبيًّا (n = 1.4). وبخلط مطاوعتَي الزيت والهواء نحصل على"
+ },
+ "936682e1d6f6": {
+  "src": "does not jump",
+  "tr": "لا تقفز"
+ },
+ "9427081f5b0a": {
+  "src": "The spool is a door between rooms. Open it towards the pump and the oil is pushed by p_s − p_a = 7.6 MPa. Open it towards the tank and only p_a = 4.4 MPa pushes. Same door, a different wind.",
+  "tr": "المِزلاج باب بين غرفتين. إذا فتحتَه نحو المضخّة دفع الزيتَ الفرقُ p_s − p_a = 7.6 MPa، وإذا فتحتَه نحو الخزّان لم يدفعه إلا p_a = 4.4 MPa. الباب نفسه، لكن الريح مختلفة."
  },
  "949fe56a12be": {
   "src": "spool x_v / command u",
@@ -203,13 +455,29 @@
   "src": "Shaded bands mark the controller mode: settle, approach, creep, press, release, retract, done. Hover a plot to read every curve at one instant; press or drag in it to move the animation there.",
   "tr": "الأشرطة المظلّلة تبيّن وضع المتحكّم: الاستقرار، والاقتراب، والزحف، والكبس، والإرخاء، والتراجع، والانتهاء. حوّم بالمؤشّر فوق المخطّط لقراءة كل المنحنيات عند لحظة واحدة؛ واضغط فيه أو اسحب لتنقل الرسم المتحرّك إلى تلك اللحظة."
  },
+ "9b02d9974c14": {
+  "src": "st",
+  "tr": "st"
+ },
+ "9b4efa2de3b0": {
+  "src": "7 · Where the energy goes",
+  "tr": "7 · أين تذهب الطاقة"
+ },
  "9b5489d54ef8": {
   "src": "pump work",
   "tr": "شغل المضخّة"
  },
+ "9bcff9db1c19": {
+  "src": "<span class=\"tag\">Twist</span> The open-loop pole table shows the ram at 88 Hz, not 170 to 245 Hz. The cap chamber is not closed: it breathes through the hose into the valve-port volume, and the hose slug adds inertia. The closed-chamber figure is an upper bound.",
+  "tr": "<span class=\"tag\">منعطف</span> يُظهر جدول أقطاب الحلقة المفتوحة المِدكّ عند 88 Hz، لا عند 170 إلى 245 Hz. حجرة جهة الغطاء ليست مغلقة: إنها تتنفّس عبر الخرطوم إلى حجم منفذ الصمّام، ويضيف عمود الزيت في الخرطوم قصورًا ذاتيًّا. والرقم الخاص بالحجرة المغلقة حدٌّ أعلى."
+ },
  "9c5f3bb9b451": {
   "src": "The model, equation by equation",
   "tr": "النموذج، معادلةً بعد معادلة"
+ },
+ "9ced8e62092c": {
+  "src": "ζ ≈ 3: an overdamped illusion",
+  "tr": "ζ ≈ 3: وهمٌ من التخامد الزائد"
  },
  "9d328152ebc9": {
   "src": "<b>Cylinder.</b> Cap chamber below the piston (p<sub>A</sub>, pushes up), rod chamber above it (p<sub>B</sub>, pushes down). Drawn to scale.",
@@ -223,6 +491,14 @@
   "src": "Notation",
   "tr": "الترميز"
  },
+ "a050016e5ec5": {
+  "src": "Linearizing stick-slip friction at standstill",
+  "tr": "تقريب احتكاك الالتصاق والانزلاق خطّيًّا عند السكون"
+ },
+ "a3497e4d367f": {
+  "src": "2562, 263 cm³ → <b>213.5 Hz</b>",
+  "tr": "2562, 263 cm³ → <b>213.5 Hz</b>"
+ },
  "a45efcc044cf": {
   "src": "ram position y",
   "tr": "موضع المِدكّ y"
@@ -230,6 +506,18 @@
  "a4ab4f21160c": {
   "src": "clamp",
   "tr": "clamp"
+ },
+ "a4d5bd4d142c": {
+  "src": "Air bites at low pressure, not at 8 MPa",
+  "tr": "الهواء يؤثّر عند الضغط المنخفض، لا عند 8 MPa"
+ },
+ "a4f6d6e49143": {
+  "src": "hover, p_a = 4.37 MPa: K_q⁺, K_q⁻",
+  "tr": "الاتزان المعلّق، p_a = 4.37 MPa: K_q⁺, K_q⁻"
+ },
+ "a528b6ee5b22": {
+  "src": "96 Hz on paper, split into 88 Hz and 174 Hz",
+  "tr": "96 Hz على الورق، ينقسم إلى 88 Hz و174 Hz"
  },
  "a5f58c39cc52": {
   "src": "oil",
@@ -239,6 +527,10 @@
   "src": "Small-signal stability",
   "tr": "الاستقرار عند الإشارات الصغيرة"
  },
+ "a68aa78ef04b": {
+  "src": "switching:",
+  "tr": "التبديل:"
+ },
  "a9e11aee948d": {
   "src": "L/min",
   "tr": "L/min"
@@ -246,6 +538,10 @@
  "ab8b22940f7b": {
   "src": "Gauges",
   "tr": "المقاييس"
+ },
+ "acdcce288f21": {
+  "src": "lumped 60.5 Hz; R_lam ×16; real poles 31, 47 Hz; GM → 25.6 dB",
+  "tr": "مُجمَّع 60.5 Hz; R_lam ×16; أقطاب حقيقية 31، 47 Hz; هامش الكسب → 25.6 dB"
  },
  "adb8cacd9f02": {
   "src": "rod chamber p_B",
@@ -255,6 +551,10 @@
   "src": "At 10 MPa the air is crushed and β<sub>eff</sub> ≈ 1.47 GPa; near zero gauge pressure it collapses to tens of MPa, and towards vacuum it goes to zero, which also keeps the pressure from falling below absolute zero.",
   "tr": "عند 10 MPa يُسحَق الهواء ويصبح β<sub>eff</sub> ≈ 1.47 GPa؛ وقرب الضغط المقيس صفر ينهار إلى عشرات MPa، وباتجاه الفراغ يؤول إلى الصفر، وهذا يمنع أيضًا هبوط الضغط تحت الصفر المطلق."
  },
+ "b17a2bddd4a8": {
+  "src": "5 · The digital controller",
+  "tr": "5 · المتحكّم الرقمي"
+ },
  "b24b52e7bb0a": {
   "src": "<b>Oil colour.</b> Pale amber at 0, deep wine at p<sub>s</sub>; chambers, hose and lines are all coloured by their pressure.",
   "tr": "<b>لون الزيت.</b> كهرماني فاتح عند 0، وخمري غامق عند p<sub>s</sub>؛ تُلوَّن الحجرات والخرطوم والخطوط كلّها حسب ضغطها."
@@ -263,9 +563,17 @@
   "src": "<b>Controller panel.</b> Current mode, set-point, measurement and command u (the value applied now lags one sample).",
   "tr": "<b>لوحة المتحكّم.</b> الوضع الحالي، والقيمة المرجعية، والقيمة المقاسة، والأمر u (القيمة المطبّقة الآن تتأخّر بفترة معاينة واحدة)."
  },
+ "b6b476bf6e88": {
+  "src": "the specimen pushes, never pulls",
+  "tr": "العيّنة تدفع ولا تشدّ أبدًا"
+ },
  "b6c935d4f3c7": {
   "src": "min",
   "tr": "min"
+ },
+ "b6ded05e15fb": {
+  "src": "Bubbles are springs that stiffen as you squeeze them. At atmospheric pressure a 2 % bubble cloud makes the oil 200 times softer. At 8 MPa the bubbles are crushed to a fortieth of their size and the oil is nearly itself again.",
+  "tr": "الفقاعات تشبه زنابرك تزداد صلابةً كلما ضغطتَها. عند الضغط الجوّي تجعل سحابةُ فقاعات بنسبة 2 % الزيتَ أقلّ صلابةً بمقدار 200 مرة. عند 8 MPa تُسحق الفقاعات إلى واحد من أربعين من حجمها، ويعود الزيت تقريبًا إلى طبيعته."
  },
  "b7824598aa8f": {
   "src": "oil stiffness β_eff(p_A)",
@@ -275,13 +583,37 @@
   "src": "Read the derivations →",
   "tr": "اقرأ الاشتقاقات →"
  },
+ "b8d09b4d8580": {
+  "src": "mm",
+  "tr": "mm"
+ },
+ "bad6f6c57db6": {
+  "src": "Every number below was computed from the model on this page at its default settings, and checked by <span class=\"mono\">check_control.py</span>. The blue buttons change the press so you can watch the effect; “Back to defaults” undoes them.",
+  "tr": "حُسبت كل الأرقام أدناه من النموذج في هذه الصفحة بإعداداته الافتراضية، وتحقّق منها بواسطة <span class=\"mono\">check_control.py</span>. تغيّر الأزرار الزرقاء المِكبسةَ لتشاهد الأثر، و«العودة إلى الإعدادات الافتراضية» تُلغي التغييرات."
+ },
  "bc0305685e20": {
   "src": "Back to defaults",
   "tr": "العودة إلى القيم الافتراضية"
  },
+ "bdf1dc6e51f4": {
+  "src": "lumped 59.1 Hz; poles 54.7 Hz (ζ 0.32), 164.6 Hz; GM 11.0 → 9.2 dB",
+  "tr": "مُجمَّع 59.1 Hz; الأقطاب 54.7 Hz (ζ 0.32)، 164.6 Hz; هامش الكسب 11.0 → 9.2 dB"
+ },
+ "be08c3085f2e": {
+  "src": "The slug and the ram share the cap volume, so their two modes repel like a pair of pendulums tied by a spring: one drops to 88 Hz, the other climbs to 174 Hz. A longer hose lowers both and costs gain margin. A thinner bore quadruples the inertance, but its laminar resistance grows sixteen-fold (d⁻⁴), which chokes the slosh into real poles: friction buys stability and pays for it in pressure drop.",
+  "tr": "يتقاسم عمود الزيت والمِدكّ حجمَ جهة الغطاء، لذلك تتنافر نمطاهما كزوج من النوّاسين مربوطين بزنبرك: ينخفض أحدهما إلى 88 Hz ويرتفع الآخر إلى 174 Hz. الخرطوم الأطول يخفض النمطين معًا ويكلّف هامش الكسب. الفتحة الأرفع تضاعف القصور الذاتي أربع مرات، لكن مقاومتها الصفائحية تزداد ستة عشر ضعفًا (d⁻⁴)، فتكبح الترجرج إلى أقطاب حقيقية: الاحتكاك يشتري الاستقرار ويدفع ثمنه بانخفاض الضغط."
+ },
  "be6f2379431d": {
   "src": "Cylinder, rod, platen and specimen are drawn to scale; valve, pump and hose route are schematic. The dots in the hose ride with the oil and wrap round at the ends. Spool travel is exaggerated. Moving dashes on the signal lines show which way the information flows.",
   "tr": "الأسطوانة وساق المكبس ولوح الضغط والعيّنة مرسومة بمقياس رسم حقيقي؛ أمّا الصمّام والمضخّة ومسار الخرطوم فتخطيطيّة. النقاط في الخرطوم تسير مع الزيت وتلتفّ عند الطرفين. مشوار المِزلاج مُبالَغ فيه. الشرطات المتحرّكة على خطوط الإشارة تبيّن اتجاه تدفّق المعلومات."
+ },
+ "c1b8bbaf7b34": {
+  "src": "Set α₀ = 2 % and rerun. Explain from β<sub>eff</sub>(p) why the force loop barely changes while the start of the approach does. <a href=\"#sol-5\">Worked solution ↓</a>",
+  "tr": "اضبط α₀ = 2 % وأعِد التشغيل. اشرح من β<sub>eff</sub>(p) لماذا تكاد حلقة القوّة لا تتغيّر، بينما يتغيّر بداية الاقتراب. <a href=\"#sol-5\">الحل المُفصّل ↓</a>"
+ },
+ "c55de0f5998e": {
+  "src": "sat",
+  "tr": "sat"
  },
  "c7f73bb54d92": {
   "src": "Settings",
@@ -307,6 +639,10 @@
   "src": "Recorded every sample",
   "tr": "تُسجَّل عند كل معاينة"
  },
+ "d07563a929ec": {
+  "src": "526, 1394 cm³ → <b>244.9 Hz</b>",
+  "tr": "526, 1394 cm³ → <b>244.9 Hz</b>"
+ },
  "d0a238d4995e": {
   "src": "<b>Frame.</b> Base plate, two columns and the crosshead that holds the specimen and load cell.",
   "tr": "<b>الإطار.</b> اللوح الأساسي، وعمودان، والرأس العرضي الذي يحمل العيّنة وخليّة الحمل."
@@ -314,6 +650,18 @@
  "d0b13ffaed5b": {
   "src": "burnt in hose + seals",
   "tr": "تحوّل إلى حرارة في الخرطوم والحشوات"
+ },
+ "d2e49134cbfa": {
+  "src": "softest point, y = 115.7 mm",
+  "tr": "نقطة أقلّ صلابة، y = 115.7 mm"
+ },
+ "d37e354550b3": {
+  "src": "ratio from the model / from the formula",
+  "tr": "النسبة من النموذج / من الصيغة"
+ },
+ "d38cb6198424": {
+  "src": "The hose slosh mode",
+  "tr": "نمط ترجرج الخرطوم"
  },
  "d41c7beb8d71": {
   "src": "set-point F_ref",
@@ -323,9 +671,17 @@
   "src": "settle",
   "tr": "الاستقرار"
  },
+ "d4a298ef3115": {
+  "src": "Smoothed stiction is a pot of honey. The tanh law turns the jump from −1.3 F_c to +1.3 F_c into a ramp 1 mm/s wide, and to a linear model a ramp in force against speed is a damper.",
+  "tr": "الاحتكاك السكوني المُمهَّد يشبه وعاءً من العسل. يحوّل قانون tanh القفزةَ من −1.3 F_c إلى +1.3 F_c إلى منحدر عرضه 1 mm/s، وبالنسبة إلى نموذج خطّي يكون المنحدر في القوّة بدلالة السرعة مُخمِدًا."
+ },
  "d6f18fa68583": {
   "src": "Hydraulics",
   "tr": "الهيدروليك"
+ },
+ "d88ed48a315d": {
+  "src": "<b>settle</b> (0.1 s): hold y_ref = 0. <b>approach</b>: quintic profile to y<sub>c</sub> − 2 mm in 1 s. <b>creep</b>: y_ref rises at 10 mm/s until the load cell reads more than 1 kN.",
+  "tr": "<b>التهدئة</b> (0.1 s): تثبيت y_ref = 0. <b>الاقتراب</b>: مسار كثير حدود من الدرجة الخامسة إلى y<sub>c</sub> − 2 mm خلال 1 s. <b>الزحف</b>: يرتفع y_ref بمعدّل 10 mm/s حتى تُظهر خلية الحمل أكثر من 1 kN."
  },
  "d9e83874d260": {
   "src": "tr",
@@ -339,6 +695,10 @@
   "src": "4 · Volumes, the hose, and the ram",
   "tr": "4 · الحجوم والخرطوم والمِدكّ"
  },
+ "e37dc0a85458": {
+  "src": "tanh",
+  "tr": "tanh"
+ },
  "e4182f7d5c98": {
   "src": "Servo-Hydraulic Press",
   "tr": "المِكبس الهيدروليكي المؤازر"
@@ -351,9 +711,17 @@
   "src": "MPa",
   "tr": "MPa"
  },
+ "e6de2f462705": {
+  "src": "8 · Problems",
+  "tr": "8 · المسائل"
+ },
  "e6e49b714dad": {
   "src": "eff",
   "tr": "eff"
+ },
+ "e6f3a250a0a7": {
+  "src": "y = 190 mm: V_A, V_B",
+  "tr": "y = 190 mm: V_A, V_B"
  },
  "ea04a18a13db": {
   "src": "<b>Specimen.</b> The part being pressed, contact at y<sub>c</sub> = 120 mm; it reddens as the force rises.",
@@ -363,6 +731,10 @@
   "src": "net work into specimen and stop",
   "tr": "الشغل الصافي الواصل إلى العيّنة والمِصدّ"
  },
+ "ed70c57d7564": {
+  "src": "ff",
+  "tr": "ff"
+ },
  "ed733fa14b4b": {
   "src": "Every symbol on this page, what it means, and its value with the current settings. Values marked “live” change during the cycle; read them in the gauges and time traces.",
   "tr": "كل رمز في هذه الصفحة، وما يعنيه، وقيمته مع الإعدادات الحالية. القيم المعلَّمة بـ«حيّ» تتغيّر أثناء الدورة؛ اقرأها في المقاييس ومنحنيات الزمن."
@@ -371,6 +743,10 @@
   "src": "burnt in the valve",
   "tr": "تحوّل إلى حرارة في الصمّام"
  },
+ "ef6c07d8f29a": {
+  "src": "In the force-loop pole table this appears as a fast real pole near −c/m ≈ −6.3·10³ s⁻¹. Halve v_s and the “damping” doubles, although nothing physical changed: only the smoothing did. Real stiction is a constraint (the ram stays put while |F| &lt; F_s), not a dashpot. Use small-signal analysis only while sliding; for stick-slip, simulate the hybrid system or use describing functions.",
+  "tr": "في جدول أقطاب حلقة القوّة يظهر هذا كقطب حقيقي سريع قرب −c/m ≈ −6.3·10³ s⁻¹. إذا خفّضنا v_s إلى النصف تضاعف «التخامد»، مع أن شيئًا فيزيائيًّا لم يتغيّر، فالتنعيم وحده تغيّر. الاحتكاك السكوني الحقيقي قيدٌ (يبقى المِدكّ ساكنًا ما دام |F| &lt; F_s)، وليس مُخمِدًا. استعمل التحليل عند الإشارة الصغيرة أثناء الانزلاق فقط، أما في الالتصاق والانزلاق فحاكِ المنظومة الهجينة أو استعمل دوال الوصف."
+ },
  "f1017b86804b": {
   "src": "Notice what this does to a linear analysis: opening the valve towards the cap side meters against p<sub>s</sub> − p<sub>a</sub>, closing it meters against p<sub>a</sub>. The flow gain on the two sides of x<sub>v</sub> = 0 differs, and the model is not differentiable there.",
   "tr": "لاحظ ما يفعله هذا بالتحليل الخطّي: فتح الصمّام نحو جهة الغطاء يُنظّم السريان مقابل p<sub>s</sub> − p<sub>a</sub>، أمّا إغلاقه فيُنظّمه مقابل p<sub>a</sub>. يختلف كسب السريان على جانبي x<sub>v</sub> = 0، والنموذج غير قابل للاشتقاق هناك."
@@ -378,6 +754,18 @@
  "f342c4d1a760": {
   "src": "<b>Hose and its dots.</b> Two metres of hose, drawn shortened; the white dots ride with the oil (they wrap round at the ends).",
   "tr": "<b>الخرطوم ونقاطه.</b> مترانِ من الخرطوم، مرسومٌ مُقصَّرًا؛ النقاط البيضاء تسير مع الزيت (وتلتفّ عند الطرفين)."
+ },
+ "f671a9754649": {
+  "src": "See it: hose 4 m",
+  "tr": "أرِني: الخرطوم 4 m"
+ },
+ "f9e33cb1f9d7": {
+  "src": "At standstill the smoothed Coulomb friction has slope F<sub>c</sub>·k<sub>st</sub>/v<sub>s</sub> ≈ 10⁶ N·s/m. Explain why linearizing about ẏ = 0 then predicts an absurdly well damped ram, and what this tells you about using small-signal analysis on stick-slip systems. <a href=\"#sol-4\">Worked solution ↓</a>",
+  "tr": "عند السكون يملك احتكاك كولوم المُنعَّم ميلًا قدره F<sub>c</sub>·k<sub>st</sub>/v<sub>s</sub> ≈ 10⁶ N·s/m. اشرح لماذا يتنبّأ التقريب الخطّي حول ẏ = 0 عندئذٍ بمِدكّ شديد التخامد بشكل عبثيّ، وماذا يخبرك ذلك عن استعمال تحليل الإشارة الصغيرة على أنظمة الالتصاق والانزلاق. <a href=\"#sol-4\">الحل المُفصّل ↓</a>"
+ },
+ "fa75c7baa4f2": {
+  "src": "See it: bore 6 mm",
+  "tr": "أرِني: الفتحة 6 mm"
  },
  "fbef447c2869": {
   "src": "Motion and force",
