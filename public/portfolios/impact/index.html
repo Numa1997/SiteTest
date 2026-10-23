@@ -809,11 +809,13 @@ function partDrawn(s,idx){
 function plateRow(s){
   const top=ds.get("plate_px_"+s),bx=ds.get("bx_"+s),pw=Math.min(2.9*ds.get("sc"),ds.get("col_w")-14);
   if(top>ds.get("bottom_px")+18)return {what:"the "+NAME[s]+" plate",drawn:"below the scene",expected:"not drawn",ok:null,note:"The camera follows the iron ball; the plate is out of view."};
-  let found=null;
-  for(const x of [bx-pw/2+5,bx+pw/2-5])for(let y=top-6;y<=top+12;y+=1/DPR){const q=Sim.readPixel(stageBox,x,y,0);if(plateFill(q.rgba)){if(found===null||y<found.y)found={x,y};break}}
-  const expect=top+0.7;     // the fill begins under the 1.4 px outline drawn on the edge
-  return {what:"first row of plate fill, scanned down two columns near the plate's ends",drawn:found?"fill from "+Sim.fmt(found.y,2)+" css px":"no plate fill found",expected:"fill from "+Sim.fmt(expect,2)+" css px (the plate edge y_plate plus half the outline)",
-    ok:!!found&&Math.abs(found.y-expect)<=1.01,note:"The plate's top edge is drawn at y<sub>plate</sub>; its travel, and the ball resting on it, are drawn G = 10 times larger than computed."};
+  let found=null;                               // scan whole device-pixel rows: Sim.readPixel reads device row round(y·dpr), so y = r/dpr reads row r
+  for(const x of [bx-pw/2+5,bx+pw/2-5])for(let r=Math.floor((top-6)*DPR);r<=Math.ceil((top+12)*DPR);r++){const q=Sim.readPixel(stageBox,x,r/DPR,0);if(plateFill(q.rgba)){if(found===null||r<found.r)found={x,r};break}}
+  // the 1.4 px outline is centred on the edge, so it ends at y_plate + 0.7; the row it ends in is a blend of outline and fill,
+  // so the first row of pure fill is the next whole device row
+  const expRow=Math.ceil((top+0.7)*DPR);
+  return {what:"first device-pixel row of pure plate fill, scanned down two columns near the plate's ends",drawn:found?"row "+found.r+" ("+Sim.fmt(found.r/DPR,2)+" css px)":"no plate fill found",expected:"row "+expRow+" ("+Sim.fmt(expRow/DPR,2)+" css px), the first whole row under the outline that ends at y_plate + 0.7 = "+Sim.fmt(top+0.7,2)+" css px",
+    ok:!!found&&Math.abs(found.r-expRow)<=1,note:"The plate's top edge is drawn at y<sub>plate</sub>; its travel, and the ball resting on it, are drawn G = 10 times larger than computed."};
 }
 const gaugeAt=(s,deg,r)=>({x:ds.get("bx_"+s)+r*Math.cos(deg*Math.PI/180),y:ds.get("gauge_cy")+r*Math.sin(deg*Math.PI/180)});
 const needleBack=s=>readBack(stageBox,"the black needle, 0.3 R from the hub",gaugeAt(s,ds.get("needle_"+s),0.3*ds.get("gauge_R")),1,dark,"the dark needle",
