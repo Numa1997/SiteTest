@@ -4,16 +4,18 @@ Written by [`tools/inventory.py`](../tools/inventory.py) from the files in the r
 Run `python3 tools/inventory.py` after adding, removing or changing files, and `python3 tools/inventory.py --check`
 to confirm that every file is described. Sizes are those of the files when the list was written.
 
-521 files, 24.5 MB in all. Runs of more than 12 similar files are folded; open them to see each file.
+622 files, 26.4 MB in all. Runs of more than 12 similar files are folded; open them to see each file.
 
 | Folder | Files |
 |---|---|
 | [Repository root](#repository-root) | 11 |
 | [Pages under public/](#pages-under-public) | 4 |
+| [German pages (generated)](#german-pages-generated) | 3 |
+| [Arabic pages (generated)](#arabic-pages-generated) | 3 |
 | [Simulation pages](#simulation-pages) | 10 |
 | [Walkthroughs](#walkthroughs) | 10 |
-| [Shared scripts](#shared-scripts) | 5 |
-| [Stylesheets](#stylesheets) | 7 |
+| [Shared scripts](#shared-scripts) | 7 |
+| [Stylesheets](#stylesheets) | 15 |
 | [KaTeX](#katex) | 24 |
 | [Latin Modern](#latin-modern) | 5 |
 | [IBM Plex, Instrument Serif, and the Arabic faces](#ibm-plex-instrument-serif-and-the-arabic-faces) | 61 |
@@ -25,11 +27,15 @@ to confirm that every file is described. Sizes are those of the files when the l
 | [Iron, Cotton and the Head](#iron-cotton-and-the-head) | 6 |
 | [Source of the Hydraulic Press Study (not served)](#source-of-the-hydraulic-press-study-not-served) | 37 |
 | [Source of Iron, Cotton and the Head (not served)](#source-of-iron-cotton-and-the-head-not-served) | 18 |
+| [Source of the Rotor Pendula notes (not served)](#source-of-the-rotor-pendula-notes-not-served) | 20 |
 | [Template sources](#template-sources) | 2 |
 | [Platform tests](#platform-tests) | 1 |
-| [Documentation](#documentation) | 28 |
-| [Tools](#tools) | 2 |
+| [Documentation](#documentation) | 30 |
+| [Tools](#tools) | 4 |
+| [Translation tables](#translation-tables) | 8 |
 | [Agents of the lecture-note review](#agents-of-the-lecture-note-review) | 4 |
+| [Working notes of the Rotor Pendula study](#working-notes-of-the-rotor-pendula-study) | 47 |
+| [Working notes of the Droplet Collection study](#working-notes-of-the-droplet-collection-study) | 6 |
 | [Record of the lecture-note review](#record-of-the-lecture-note-review) | 116 |
 
 ## Repository root
@@ -37,10 +43,10 @@ to confirm that every file is described. Sizes are those of the files when the l
 | File | Size | What it is | Explained in |
 |---|---|---|---|
 | [`.gitignore`](../.gitignore) | 39 B | Files git leaves out: Python caches, node_modules, build output. | [files.md](files.md) |
-| [`AGENTS.md`](../AGENTS.md) | 12.2 kB | The maintainer's summary: ownership, layout, design rules, folds, the data pipeline, platform quirks. | [build-and-deploy.md](build-and-deploy.md) |
+| [`AGENTS.md`](../AGENTS.md) | 12.8 kB | The maintainer's summary: ownership, layout, design rules, folds, the data pipeline, platform quirks. | [build-and-deploy.md](build-and-deploy.md) |
 | [`CLAUDE.md`](../CLAUDE.md) | 4.3 kB | How Numa expects an AI assistant to work on the project. | [build-and-deploy.md](build-and-deploy.md) |
 | [`README.md`](../README.md) | 7.7 kB | Start here: what the project is, how the files fit together, where each one is explained. | [README.md](../README.md) |
-| [`index.html`](../index.html) | 47.4 kB | The home page: CV, research, simulation plates, index; also the build entry page. | [pages.md](pages.md) |
+| [`index.html`](../index.html) | 48.2 kB | The home page: CV, research, simulation plates, index; also the build entry page. | [pages.md](pages.md) |
 | [`package.json`](../package.json) | 479 B | Build declaration: vite build; template dependencies. | [build-and-deploy.md](build-and-deploy.md) |
 | [`postcss.config.js`](../postcss.config.js) | 81 B | PostCSS settings (template; unused by the site). | [build-and-deploy.md](build-and-deploy.md) |
 | [`tailwind.config.js`](../tailwind.config.js) | 155 B | Tailwind settings (template; unused by the site). | [build-and-deploy.md](build-and-deploy.md) |
@@ -53,9 +59,25 @@ to confirm that every file is described. Sizes are those of the files when the l
 | File | Size | What it is | Explained in |
 |---|---|---|---|
 | [`public/_headers`](../public/_headers) | 516 B | Security response headers Cloudflare sets on every file of phyeinusul.com; read by Cloudflare, never served. | [usul.md](usul.md) |
-| [`public/portfolios.html`](../public/portfolios.html) | 40.2 kB | The Portfolios page: the two research projects. | [pages.md](pages.md) |
+| [`public/portfolios.html`](../public/portfolios.html) | 41.0 kB | The Portfolios page: the two research projects. | [pages.md](pages.md) |
 | [`public/robots.txt`](../public/robots.txt) | 58 B | Instructions for search-engine crawlers. | [pages.md](pages.md) |
-| [`public/simulations.html`](../public/simulations.html) | 18.9 kB | The simulations catalog: one titled fold card per simulation, search and chips. | [pages.md](pages.md) |
+| [`public/simulations.html`](../public/simulations.html) | 20.7 kB | The simulations catalog: one titled fold card per simulation, search and chips. | [pages.md](pages.md) |
+
+## German pages (generated)
+
+| File | Size | What it is | Explained in |
+|---|---|---|---|
+| [`public/de/index.html`](../public/de/index.html) | 47.3 kB | German index.html, generated by tools/i18n/build.py; do not edit. | [i18n.md](i18n.md) |
+| [`public/de/portfolios.html`](../public/de/portfolios.html) | 43.2 kB | German portfolios.html, generated by tools/i18n/build.py; do not edit. | [i18n.md](i18n.md) |
+| [`public/de/simulations.html`](../public/de/simulations.html) | 20.8 kB | German simulations.html, generated by tools/i18n/build.py; do not edit. | [i18n.md](i18n.md) |
+
+## Arabic pages (generated)
+
+| File | Size | What it is | Explained in |
+|---|---|---|---|
+| [`public/ar/index.html`](../public/ar/index.html) | 49.7 kB | Arabic index.html, generated by tools/i18n/build.py; do not edit. | [i18n.md](i18n.md) |
+| [`public/ar/portfolios.html`](../public/ar/portfolios.html) | 51.5 kB | Arabic portfolios.html, generated by tools/i18n/build.py; do not edit. | [i18n.md](i18n.md) |
+| [`public/ar/simulations.html`](../public/ar/simulations.html) | 21.7 kB | Arabic simulations.html, generated by tools/i18n/build.py; do not edit. | [i18n.md](i18n.md) |
 
 ## Simulation pages
 
@@ -94,7 +116,9 @@ to confirm that every file is described. Sizes are those of the files when the l
 | [`public/scripts/catalog.js`](../public/scripts/catalog.js) | 14.2 kB | The registry of simulations (SIMULATIONS, SIM_FIELDS, SIM_TOOLS) that the catalog page draws. | [catalog.md](scripts/catalog.md) |
 | [`public/scripts/datalog.js`](../public/scripts/datalog.js) | 77.7 kB | The data panel: variables, Read values, Check, Record one round, Save (.npz + CSV). | [datalog.md](scripts/datalog.md) |
 | [`public/scripts/dataset.js`](../public/scripts/dataset.js) | 8.6 kB | Sim.dataset(): the one named data store each simulation writes its numbers into. | [dataset.md](scripts/dataset.md) |
-| [`public/scripts/fold.js`](../public/scripts/fold.js) | 24.0 kB | Fold-out sections on every page: pinned header bands, remembered state, Expand/Collapse all. | [fold.md](scripts/fold.md) |
+| [`public/scripts/fold.js`](../public/scripts/fold.js) | 24.5 kB | Fold-out sections on every page: pinned header bands, remembered state, Expand/Collapse all. | [fold.md](scripts/fold.md) |
+| [`public/scripts/i18n/strings-ar.js`](../public/scripts/i18n/strings-ar.js) | 19.7 kB | The Arabic string table the scripts read through T(), generated; do not edit. | [i18n.md](i18n.md) |
+| [`public/scripts/i18n/strings-de.js`](../public/scripts/i18n/strings-de.js) | 15.5 kB | The German string table the scripts read through T(), generated; do not edit. | [i18n.md](i18n.md) |
 | [`public/scripts/sim.js`](../public/scripts/sim.js) | 27.2 kB | Shared helpers of the simulation pages: KaTeX typesetting of the notes, the walkthrough engine. | [sim.md](scripts/sim.md) |
 
 ## Stylesheets
@@ -102,12 +126,20 @@ to confirm that every file is described. Sizes are those of the files when the l
 | File | Size | What it is | Explained in |
 |---|---|---|---|
 | [`public/styles/catalog.css`](../public/styles/catalog.css) | 11.5 kB | The catalog entries (paper abstracts) on the simulations page. | [styles.md](styles.md) |
+| [`public/styles/catalog.rtl.css`](../public/styles/catalog.rtl.css) | 11.7 kB | catalog.css with left and right exchanged, for the Arabic pages; generated with rtlcss, do not edit. | [styles.md](styles.md) |
 | [`public/styles/data.css`](../public/styles/data.css) | 31.1 kB | The data panel and the Read values strip. | [styles.md](styles.md) |
+| [`public/styles/data.rtl.css`](../public/styles/data.rtl.css) | 31.3 kB | data.css with left and right exchanged, for the Arabic pages; generated with rtlcss, do not edit. | [styles.md](styles.md) |
 | [`public/styles/fold.css`](../public/styles/fold.css) | 10.6 kB | The fold-out sections: cards, header bands, toggles, Expand/Collapse all. | [styles.md](styles.md) |
+| [`public/styles/fold.rtl.css`](../public/styles/fold.rtl.css) | 10.8 kB | fold.css with left and right exchanged, for the Arabic pages; generated with rtlcss, do not edit. | [styles.md](styles.md) |
+| [`public/styles/i18n.css`](../public/styles/i18n.css) | 3.8 kB | Language switch, Arabic fonts and the few right-to-left rules of the translated pages. | [styles.md](styles.md) |
 | [`public/styles/paper.css`](../public/styles/paper.css) | 8.8 kB | Lecture notes set like LaTeX: Latin Modern, numbered equations, figures, abstract box. | [styles.md](styles.md) |
+| [`public/styles/paper.rtl.css`](../public/styles/paper.rtl.css) | 9.0 kB | paper.css with left and right exchanged, for the Arabic pages; generated with rtlcss, do not edit. | [styles.md](styles.md) |
 | [`public/styles/portfolio.css`](../public/styles/portfolio.css) | 6.1 kB | The project cards and figure plates of the Portfolios page. | [styles.md](styles.md) |
+| [`public/styles/portfolio.rtl.css`](../public/styles/portfolio.rtl.css) | 6.3 kB | portfolio.css with left and right exchanged, for the Arabic pages; generated with rtlcss, do not edit. | [styles.md](styles.md) |
 | [`public/styles/sim.css`](../public/styles/sim.css) | 18.4 kB | Design of the simulation pages: stage, controls, readouts, walkthrough; imports paper.css and KaTeX. | [styles.md](styles.md) |
+| [`public/styles/sim.rtl.css`](../public/styles/sim.rtl.css) | 18.5 kB | sim.css with left and right exchanged, for the Arabic pages; generated with rtlcss, do not edit. | [styles.md](styles.md) |
 | [`public/styles/site.css`](../public/styles/site.css) | 17.0 kB | Design of the home, catalog and Portfolios pages: tokens, top bar, sections, cards. | [styles.md](styles.md) |
+| [`public/styles/site.rtl.css`](../public/styles/site.rtl.css) | 17.2 kB | site.css with left and right exchanged, for the Arabic pages; generated with rtlcss, do not edit. | [styles.md](styles.md) |
 
 ## KaTeX
 
@@ -525,6 +557,31 @@ to confirm that every file is described. Sizes are those of the files when the l
 | [`portfolios-src/impact/text_ar.py`](../portfolios-src/impact/text_ar.py) | 40.8 kB | Every word of the Arabic page. | [README.md](../portfolios-src/impact/README.md) |
 | [`portfolios-src/impact/text_en.py`](../portfolios-src/impact/text_en.py) | 30.4 kB | Every word of the English page. | [README.md](../portfolios-src/impact/README.md) |
 
+## Source of the Rotor Pendula notes (not served)
+
+| File | Size | What it is | Explained in |
+|---|---|---|---|
+| [`portfolios-src/rotor-pendula/fonts/LICENSE-fonts.txt`](../portfolios-src/rotor-pendula/fonts/LICENSE-fonts.txt) | 8.5 kB | Fonts of the Rotor Pendula notes build: LICENSE-fonts.txt. | [LICENSE-fonts.txt](../portfolios-src/rotor-pendula/fonts/LICENSE-fonts.txt) |
+| [`portfolios-src/rotor-pendula/fonts/fonts-embedded.css`](../portfolios-src/rotor-pendula/fonts/fonts-embedded.css) | 233.7 kB | Fonts of the Rotor Pendula notes build: fonts-embedded.css. | [fonts-embedded.css](../portfolios-src/rotor-pendula/fonts/fonts-embedded.css) |
+| [`portfolios-src/rotor-pendula/fonts/fonts-linked.css`](../portfolios-src/rotor-pendula/fonts/fonts-linked.css) | 3.2 kB | Fonts of the Rotor Pendula notes build: fonts-linked.css. | [fonts-linked.css](../portfolios-src/rotor-pendula/fonts/fonts-linked.css) |
+| [`portfolios-src/rotor-pendula/fonts/ibm-plex-mono-400-normal-latin.woff2`](../portfolios-src/rotor-pendula/fonts/ibm-plex-mono-400-normal-latin.woff2) | 14.7 kB | Self-hosted font for the Rotor Pendula notes build: ibm-plex-mono-400-normal-latin.woff2. | [ibm-plex-mono-400-normal-latin.woff2](../portfolios-src/rotor-pendula/fonts/ibm-plex-mono-400-normal-latin.woff2) |
+| [`portfolios-src/rotor-pendula/fonts/ibm-plex-mono-500-normal-latin.woff2`](../portfolios-src/rotor-pendula/fonts/ibm-plex-mono-500-normal-latin.woff2) | 14.9 kB | Self-hosted font for the Rotor Pendula notes build: ibm-plex-mono-500-normal-latin.woff2. | [ibm-plex-mono-500-normal-latin.woff2](../portfolios-src/rotor-pendula/fonts/ibm-plex-mono-500-normal-latin.woff2) |
+| [`portfolios-src/rotor-pendula/fonts/ibm-plex-sans-400-600-normal-greek.woff2`](../portfolios-src/rotor-pendula/fonts/ibm-plex-sans-400-600-normal-greek.woff2) | 19.5 kB | Self-hosted font for the Rotor Pendula notes build: ibm-plex-sans-400-600-normal-greek.woff2. | [ibm-plex-sans-400-600-normal-greek.woff2](../portfolios-src/rotor-pendula/fonts/ibm-plex-sans-400-600-normal-greek.woff2) |
+| [`portfolios-src/rotor-pendula/fonts/ibm-plex-sans-400-600-normal-latin.woff2`](../portfolios-src/rotor-pendula/fonts/ibm-plex-sans-400-600-normal-latin.woff2) | 45.7 kB | Self-hosted font for the Rotor Pendula notes build: ibm-plex-sans-400-600-normal-latin.woff2. | [ibm-plex-sans-400-600-normal-latin.woff2](../portfolios-src/rotor-pendula/fonts/ibm-plex-sans-400-600-normal-latin.woff2) |
+| [`portfolios-src/rotor-pendula/fonts/ibm-plex-sans-400-italic-greek.woff2`](../portfolios-src/rotor-pendula/fonts/ibm-plex-sans-400-italic-greek.woff2) | 10.6 kB | Self-hosted font for the Rotor Pendula notes build: ibm-plex-sans-400-italic-greek.woff2. | [ibm-plex-sans-400-italic-greek.woff2](../portfolios-src/rotor-pendula/fonts/ibm-plex-sans-400-italic-greek.woff2) |
+| [`portfolios-src/rotor-pendula/fonts/ibm-plex-sans-400-italic-latin.woff2`](../portfolios-src/rotor-pendula/fonts/ibm-plex-sans-400-italic-latin.woff2) | 24.4 kB | Self-hosted font for the Rotor Pendula notes build: ibm-plex-sans-400-italic-latin.woff2. | [ibm-plex-sans-400-italic-latin.woff2](../portfolios-src/rotor-pendula/fonts/ibm-plex-sans-400-italic-latin.woff2) |
+| [`portfolios-src/rotor-pendula/fonts/instrument-serif-400-italic-latin.woff2`](../portfolios-src/rotor-pendula/fonts/instrument-serif-400-italic-latin.woff2) | 22.1 kB | Self-hosted font for the Rotor Pendula notes build: instrument-serif-400-italic-latin.woff2. | [instrument-serif-400-italic-latin.woff2](../portfolios-src/rotor-pendula/fonts/instrument-serif-400-italic-latin.woff2) |
+| [`portfolios-src/rotor-pendula/fonts/instrument-serif-400-normal-latin.woff2`](../portfolios-src/rotor-pendula/fonts/instrument-serif-400-normal-latin.woff2) | 21.0 kB | Self-hosted font for the Rotor Pendula notes build: instrument-serif-400-normal-latin.woff2. | [instrument-serif-400-normal-latin.woff2](../portfolios-src/rotor-pendula/fonts/instrument-serif-400-normal-latin.woff2) |
+| [`portfolios-src/rotor-pendula/tools/build_combined.py`](../portfolios-src/rotor-pendula/tools/build_combined.py) | 13.0 kB | Build and check tool of the Rotor Pendula notes, adapted from the Hydraulic Press Study's tools: build_combined.py. | [build_combined.py](../portfolios-src/rotor-pendula/tools/build_combined.py) |
+| [`portfolios-src/rotor-pendula/tools/build_fonts.py`](../portfolios-src/rotor-pendula/tools/build_fonts.py) | 9.7 kB | Build and check tool of the Rotor Pendula notes, adapted from the Hydraulic Press Study's tools: build_fonts.py. | [build_fonts.py](../portfolios-src/rotor-pendula/tools/build_fonts.py) |
+| [`portfolios-src/rotor-pendula/tools/build_theory.py`](../portfolios-src/rotor-pendula/tools/build_theory.py) | 6.9 kB | Build and check tool of the Rotor Pendula notes, adapted from the Hydraulic Press Study's tools: build_theory.py. | [build_theory.py](../portfolios-src/rotor-pendula/tools/build_theory.py) |
+| [`portfolios-src/rotor-pendula/tools/check_combined.py`](../portfolios-src/rotor-pendula/tools/check_combined.py) | 10.2 kB | Build and check tool of the Rotor Pendula notes, adapted from the Hydraulic Press Study's tools: check_combined.py. | [check_combined.py](../portfolios-src/rotor-pendula/tools/check_combined.py) |
+| [`portfolios-src/rotor-pendula/tools/check_theory_numbers.js`](../portfolios-src/rotor-pendula/tools/check_theory_numbers.js) | 11.0 kB | Build and check tool of the Rotor Pendula notes, adapted from the Hydraulic Press Study's tools: check_theory_numbers.js. | [check_theory_numbers.js](../portfolios-src/rotor-pendula/tools/check_theory_numbers.js) |
+| [`portfolios-src/rotor-pendula/tools/katex_render.js`](../portfolios-src/rotor-pendula/tools/katex_render.js) | 613 B | Build and check tool of the Rotor Pendula notes, adapted from the Hydraulic Press Study's tools: katex_render.js. | [katex_render.js](../portfolios-src/rotor-pendula/tools/katex_render.js) |
+| [`portfolios-src/rotor-pendula/tools/package-lock.json`](../portfolios-src/rotor-pendula/tools/package-lock.json) | 1.1 kB | Build and check tool of the Rotor Pendula notes, adapted from the Hydraulic Press Study's tools: package-lock.json. | [package-lock.json](../portfolios-src/rotor-pendula/tools/package-lock.json) |
+| [`portfolios-src/rotor-pendula/tools/package.json`](../portfolios-src/rotor-pendula/tools/package.json) | 207 B | Build and check tool of the Rotor Pendula notes, adapted from the Hydraulic Press Study's tools: package.json. | [package.json](../portfolios-src/rotor-pendula/tools/package.json) |
+| [`portfolios-src/rotor-pendula/tools/theory_template.html`](../portfolios-src/rotor-pendula/tools/theory_template.html) | 15.7 kB | Build and check tool of the Rotor Pendula notes, adapted from the Hydraulic Press Study's tools: theory_template.html. | [theory_template.html](../portfolios-src/rotor-pendula/tools/theory_template.html) |
+
 ## Template sources
 
 | File | Size | What it is | Explained in |
@@ -547,15 +604,17 @@ to confirm that every file is described. Sizes are those of the files when the l
 | [`docs/assets.md`](assets.md) | 10.8 kB | Documentation: Fonts, maths and pictures: `public/vendor/`, `public/fonts/`, `public/images/`. | [assets.md](assets.md) |
 | [`docs/build-and-deploy.md`](build-and-deploy.md) | 19.0 kB | Documentation: Build files, tests and deployment. | [build-and-deploy.md](build-and-deploy.md) |
 | [`docs/files.md`](files.md) | this file | This list. Written by tools/inventory.py; do not edit by hand. | [files.md](files.md) |
+| [`docs/glossary.md`](glossary.md) | 7.7 kB | Documentation: Glossary: English, German, Arabic. | [glossary.md](glossary.md) |
+| [`docs/i18n.md`](i18n.md) | 8.7 kB | Documentation: The site in German and Arabic: `tools/i18n/`, `i18n/`, `public/de/`, `public/ar/`. | [i18n.md](i18n.md) |
 | [`docs/minor-issues-report.md`](minor-issues-report.md) | 19.9 kB | Documentation: Minor issues · final verification report. | [minor-issues-report.md](minor-issues-report.md) |
 | [`docs/notes.md`](notes.md) | 3.7 kB | Documentation: The lecture-note review: `notes/` and `.claude/agents/`. | [notes.md](notes.md) |
-| [`docs/pages.md`](pages.md) | 50.8 kB | Documentation: The site's own pages: home, simulations catalog, Portfolios, robots.txt. | [pages.md](pages.md) |
+| [`docs/pages.md`](pages.md) | 51.5 kB | Documentation: The site's own pages: home, simulations catalog, Portfolios, robots.txt. | [pages.md](pages.md) |
 | [`docs/portfolios.md`](portfolios.md) | 37.0 kB | Documentation: The four research projects: `public/portfolios/`. | [portfolios.md](portfolios.md) |
 | [`docs/research-theory-audit.md`](research-theory-audit.md) | 29.1 kB | Documentation: Readability audit: Droplet Collection and Rotor Pendula. | [research-theory-audit.md](research-theory-audit.md) |
-| [`docs/scripts/catalog.md`](scripts/catalog.md) | 15.0 kB | Documentation: public/scripts/catalog.js. | [catalog.md](scripts/catalog.md) |
+| [`docs/scripts/catalog.md`](scripts/catalog.md) | 15.1 kB | Documentation: public/scripts/catalog.js. | [catalog.md](scripts/catalog.md) |
 | [`docs/scripts/datalog.md`](scripts/datalog.md) | 48.6 kB | Documentation: public/scripts/datalog.js. | [datalog.md](scripts/datalog.md) |
 | [`docs/scripts/dataset.md`](scripts/dataset.md) | 17.0 kB | Documentation: public/scripts/dataset.js. | [dataset.md](scripts/dataset.md) |
-| [`docs/scripts/fold.md`](scripts/fold.md) | 21.8 kB | Documentation: public/scripts/fold.js. | [fold.md](scripts/fold.md) |
+| [`docs/scripts/fold.md`](scripts/fold.md) | 22.6 kB | Documentation: public/scripts/fold.js. | [fold.md](scripts/fold.md) |
 | [`docs/scripts/sim.md`](scripts/sim.md) | 26.6 kB | Documentation: public/scripts/sim.js. | [sim.md](scripts/sim.md) |
 | [`docs/scripts/walk.md`](scripts/walk.md) | 19.9 kB | Documentation: public/scripts/walk/*.js. | [walk.md](scripts/walk.md) |
 | [`docs/simulations/fig01-wave-sources.md`](simulations/fig01-wave-sources.md) | 50.0 kB | Documentation: Fig. 1 · Wave Interference. | [fig01-wave-sources.md](simulations/fig01-wave-sources.md) |
@@ -568,15 +627,30 @@ to confirm that every file is described. Sizes are those of the files when the l
 | [`docs/simulations/fig08-draw-decompose.md`](simulations/fig08-draw-decompose.md) | 34.8 kB | Documentation: Fig. 8 · Draw & Decompose. | [fig08-draw-decompose.md](simulations/fig08-draw-decompose.md) |
 | [`docs/simulations/fig09-driven-oscillator.md`](simulations/fig09-driven-oscillator.md) | 42.4 kB | Documentation: Fig. 9 · Driven Oscillator. | [fig09-driven-oscillator.md](simulations/fig09-driven-oscillator.md) |
 | [`docs/simulations/fig10-wind-turbine.md`](simulations/fig10-wind-turbine.md) | 50.9 kB | Documentation: Fig. 10 · Wind Turbine Control. | [fig10-wind-turbine.md](simulations/fig10-wind-turbine.md) |
-| [`docs/styles.md`](styles.md) | 42.3 kB | Documentation: Stylesheets: `public/styles/`. | [styles.md](styles.md) |
+| [`docs/styles.md`](styles.md) | 42.7 kB | Documentation: Stylesheets: `public/styles/`. | [styles.md](styles.md) |
 | [`docs/usul.md`](usul.md) | 6.2 kB | Documentation: Phyein Usul · the website at phyeinusul.com. | [usul.md](usul.md) |
 
 ## Tools
 
 | File | Size | What it is | Explained in |
 |---|---|---|---|
-| [`tools/inventory.py`](../tools/inventory.py) | 27.7 kB | Writes docs/files.md and checks that every file in the repository is described. | [files.md](files.md) |
+| [`tools/i18n/build.py`](../tools/i18n/build.py) | 17.7 kB | Writes the German and Arabic pages, the script strings and the mirrored stylesheets from the English pages and the tables; --check fails on anything untranslated. | [i18n.md](i18n.md) |
+| [`tools/i18n/fill.py`](../tools/i18n/fill.py) | 1.3 kB | Stores translations into a page table, recording the English each one was made from. | [i18n.md](i18n.md) |
+| [`tools/inventory.py`](../tools/inventory.py) | 32.7 kB | Writes docs/files.md and checks that every file in the repository is described. | [files.md](files.md) |
 | [`tools/make_portfolio_copy.py`](../tools/make_portfolio_copy.py) | 4.4 kB | Builds a browser-only website copy of a research app from its source, without changing the app or installing dependencies. | [portfolios.md](portfolios.md) |
+
+## Translation tables
+
+| File | Size | What it is | Explained in |
+|---|---|---|---|
+| [`i18n/ar/index.html.json`](../i18n/ar/index.html.json) | 21.9 kB | Arabic table of index.html: per piece, the English it was translated from and the translation. | [i18n.md](i18n.md) |
+| [`i18n/ar/portfolios.html.json`](../i18n/ar/portfolios.html.json) | 60.5 kB | Arabic table of portfolios.html: per piece, the English it was translated from and the translation. | [i18n.md](i18n.md) |
+| [`i18n/ar/simulations.html.json`](../i18n/ar/simulations.html.json) | 6.6 kB | Arabic table of simulations.html: per piece, the English it was translated from and the translation. | [i18n.md](i18n.md) |
+| [`i18n/ar/strings.json`](../i18n/ar/strings.json) | 19.6 kB | Arabic words of the scripts and of the catalog, with plural forms. | [i18n.md](i18n.md) |
+| [`i18n/de/index.html.json`](../i18n/de/index.html.json) | 19.6 kB | German table of index.html: per piece, the English it was translated from and the translation. | [i18n.md](i18n.md) |
+| [`i18n/de/portfolios.html.json`](../i18n/de/portfolios.html.json) | 53.0 kB | German table of portfolios.html: per piece, the English it was translated from and the translation. | [i18n.md](i18n.md) |
+| [`i18n/de/simulations.html.json`](../i18n/de/simulations.html.json) | 5.8 kB | German table of simulations.html: per piece, the English it was translated from and the translation. | [i18n.md](i18n.md) |
+| [`i18n/de/strings.json`](../i18n/de/strings.json) | 15.4 kB | German words of the scripts and of the catalog, with plural forms. | [i18n.md](i18n.md) |
 
 ## Agents of the lecture-note review
 
@@ -586,6 +660,69 @@ to confirm that every file is described. Sizes are those of the files when the l
 | [`.claude/agents/physics-teacher.md`](../.claude/agents/physics-teacher.md) | 1.5 kB | Claude Code agent definition: physics-teacher, one role of the lecture-note review. | [notes.md](notes.md) |
 | [`.claude/agents/referee.md`](../.claude/agents/referee.md) | 760 B | Claude Code agent definition: referee, one role of the lecture-note review. | [notes.md](notes.md) |
 | [`.claude/agents/walkthrough-keeper.md`](../.claude/agents/walkthrough-keeper.md) | 614 B | Claude Code agent definition: walkthrough-keeper, one role of the lecture-note review. | [notes.md](notes.md) |
+
+## Working notes of the Rotor Pendula study
+
+| File | Size | What it is | Explained in |
+|---|---|---|---|
+| [`notes/rotor-pendula/baseline/checks.html`](../notes/rotor-pendula/baseline/checks.html) | 14.3 kB | Text of the checks page of the published Rotor Pendula app, kept as the baseline the study starts from. | [status.md](../notes/rotor-pendula/status.md) |
+| [`notes/rotor-pendula/baseline/overview.html`](../notes/rotor-pendula/baseline/overview.html) | 5.7 kB | Text of the overview page of the published Rotor Pendula app, kept as the baseline the study starts from. | [status.md](../notes/rotor-pendula/status.md) |
+| [`notes/rotor-pendula/baseline/report.html`](../notes/rotor-pendula/baseline/report.html) | 70.3 kB | Text of the report page of the published Rotor Pendula app, kept as the baseline the study starts from. | [status.md](../notes/rotor-pendula/status.md) |
+| [`notes/rotor-pendula/baseline/results.html`](../notes/rotor-pendula/baseline/results.html) | 11.5 kB | Text of the results page of the published Rotor Pendula app, kept as the baseline the study starts from. | [status.md](../notes/rotor-pendula/status.md) |
+| [`notes/rotor-pendula/baseline/simulate.html`](../notes/rotor-pendula/baseline/simulate.html) | 4.7 kB | Text of the simulate page of the published Rotor Pendula app, kept as the baseline the study starts from. | [status.md](../notes/rotor-pendula/status.md) |
+| [`notes/rotor-pendula/baseline/theory.html`](../notes/rotor-pendula/baseline/theory.html) | 83.0 kB | Text of the theory page of the published Rotor Pendula app, kept as the baseline the study starts from. | [status.md](../notes/rotor-pendula/status.md) |
+| [`notes/rotor-pendula/brief.md`](../notes/rotor-pendula/brief.md) | 19.8 kB | The brief of the Rotor Pendula study: question, method and gates, for an agent working in a loop. | [brief.md](../notes/rotor-pendula/brief.md) |
+| [`notes/rotor-pendula/contract-L0.md`](../notes/rotor-pendula/contract-L0.md) | 11.5 kB | Gate 1 contract of model level L0: question, model, assumptions with their numbers, checks. | [status.md](../notes/rotor-pendula/status.md) |
+| [`notes/rotor-pendula/contract-L1.md`](../notes/rotor-pendula/contract-L1.md) | 6.5 kB | Gate 1 contract of model level L1: question, model, assumptions with their numbers, checks. | [status.md](../notes/rotor-pendula/status.md) |
+| [`notes/rotor-pendula/contract-L2.md`](../notes/rotor-pendula/contract-L2.md) | 7.3 kB | Gate 1 contract of model level L2: question, model, assumptions with their numbers, checks. | [status.md](../notes/rotor-pendula/status.md) |
+| [`notes/rotor-pendula/derive/L0_r2.py`](../notes/rotor-pendula/derive/L0_r2.py) | 3.4 kB | Derivation or computation script of the study, L0_r2.py: prints PASS/FAIL and exits 1 on a failure. | [status.md](../notes/rotor-pendula/status.md) |
+| [`notes/rotor-pendula/derive/L0_single.py`](../notes/rotor-pendula/derive/L0_single.py) | 4.8 kB | Derivation or computation script of the study, L0_single.py: prints PASS/FAIL and exits 1 on a failure. | [status.md](../notes/rotor-pendula/status.md) |
+| [`notes/rotor-pendula/derive/L0_table.py`](../notes/rotor-pendula/derive/L0_table.py) | 5.8 kB | Derivation or computation script of the study, L0_table.py: prints PASS/FAIL and exits 1 on a failure. | [status.md](../notes/rotor-pendula/status.md) |
+| [`notes/rotor-pendula/derive/L1_chaos.json`](../notes/rotor-pendula/derive/L1_chaos.json) | 3.5 kB | Saved output of L1_chaos.py (numbers). | [status.md](../notes/rotor-pendula/status.md) |
+| [`notes/rotor-pendula/derive/L1_chaos.log`](../notes/rotor-pendula/derive/L1_chaos.log) | 1.3 kB | Saved output of L1_chaos.py (log). | [status.md](../notes/rotor-pendula/status.md) |
+| [`notes/rotor-pendula/derive/L1_chaos.py`](../notes/rotor-pendula/derive/L1_chaos.py) | 2.6 kB | Derivation or computation script of the study, L1_chaos.py: prints PASS/FAIL and exits 1 on a failure. | [status.md](../notes/rotor-pendula/status.md) |
+| [`notes/rotor-pendula/derive/L1_double.py`](../notes/rotor-pendula/derive/L1_double.py) | 7.5 kB | Derivation or computation script of the study, L1_double.py: prints PASS/FAIL and exits 1 on a failure. | [status.md](../notes/rotor-pendula/status.md) |
+| [`notes/rotor-pendula/derive/L1_engine_check.log`](../notes/rotor-pendula/derive/L1_engine_check.log) | 3.2 kB | Saved output of L1_engine_check.py (log). | [status.md](../notes/rotor-pendula/status.md) |
+| [`notes/rotor-pendula/derive/L1_engine_check.py`](../notes/rotor-pendula/derive/L1_engine_check.py) | 8.0 kB | Derivation or computation script of the study, L1_engine_check.py: prints PASS/FAIL and exits 1 on a failure. | [status.md](../notes/rotor-pendula/status.md) |
+| [`notes/rotor-pendula/derive/L1_map.json`](../notes/rotor-pendula/derive/L1_map.json) | 57.9 kB | Saved output of L1_map.py (numbers). | [status.md](../notes/rotor-pendula/status.md) |
+| [`notes/rotor-pendula/derive/L1_map.log`](../notes/rotor-pendula/derive/L1_map.log) | 2.6 kB | Saved output of L1_map.py (log). | [status.md](../notes/rotor-pendula/status.md) |
+| [`notes/rotor-pendula/derive/L1_map.py`](../notes/rotor-pendula/derive/L1_map.py) | 4.0 kB | Derivation or computation script of the study, L1_map.py: prints PASS/FAIL and exits 1 on a failure. | [status.md](../notes/rotor-pendula/status.md) |
+| [`notes/rotor-pendula/derive/L1_mountings.json`](../notes/rotor-pendula/derive/L1_mountings.json) | 5.9 kB | Saved output of L1_mountings.py (numbers). | [status.md](../notes/rotor-pendula/status.md) |
+| [`notes/rotor-pendula/derive/L2_run.json`](../notes/rotor-pendula/derive/L2_run.json) | 10.7 kB | Saved output of L2_run.py (numbers). | [status.md](../notes/rotor-pendula/status.md) |
+| [`notes/rotor-pendula/derive/L2_run.log`](../notes/rotor-pendula/derive/L2_run.log) | 1.1 kB | Saved output of L2_run.py (log). | [status.md](../notes/rotor-pendula/status.md) |
+| [`notes/rotor-pendula/derive/L2_run.py`](../notes/rotor-pendula/derive/L2_run.py) | 5.0 kB | Derivation or computation script of the study, L2_run.py: prints PASS/FAIL and exits 1 on a failure. | [status.md](../notes/rotor-pendula/status.md) |
+| [`notes/rotor-pendula/derive/L2_scales.py`](../notes/rotor-pendula/derive/L2_scales.py) | 3.4 kB | Derivation or computation script of the study, L2_scales.py: prints PASS/FAIL and exits 1 on a failure. | [status.md](../notes/rotor-pendula/status.md) |
+| [`notes/rotor-pendula/derive/data/Cp_Ct_Cq.NREL5MW.txt`](../notes/rotor-pendula/derive/data/Cp_Ct_Cq.NREL5MW.txt) | 33.1 kB | Cited data of the NREL 5-MW reference turbine: Cp_Ct_Cq.NREL5MW.txt. | [status.md](../notes/rotor-pendula/status.md) |
+| [`notes/rotor-pendula/derive/data/NRELOffshrBsline5MW_Blade.dat`](../notes/rotor-pendula/derive/data/NRELOffshrBsline5MW_Blade.dat) | 8.0 kB | Cited data of the NREL 5-MW reference turbine: NRELOffshrBsline5MW_Blade.dat. | [status.md](../notes/rotor-pendula/status.md) |
+| [`notes/rotor-pendula/derive/engine.py`](../notes/rotor-pendula/derive/engine.py) | 7.6 kB | Derivation or computation script of the study, engine.py: prints PASS/FAIL and exits 1 on a failure. | [status.md](../notes/rotor-pendula/status.md) |
+| [`notes/rotor-pendula/derive/fermi.py`](../notes/rotor-pendula/derive/fermi.py) | 3.1 kB | Derivation or computation script of the study, fermi.py: prints PASS/FAIL and exits 1 on a failure. | [status.md](../notes/rotor-pendula/status.md) |
+| [`notes/rotor-pendula/derive/mc_full.log`](../notes/rotor-pendula/derive/mc_full.log) | 2.2 kB | Saved output of mc_full.py (log). | [status.md](../notes/rotor-pendula/status.md) |
+| [`notes/rotor-pendula/derive/mc_quick.log`](../notes/rotor-pendula/derive/mc_quick.log) | 2.2 kB | Saved output of mc_quick.py (log). | [status.md](../notes/rotor-pendula/status.md) |
+| [`notes/rotor-pendula/derive/nrel5mw.py`](../notes/rotor-pendula/derive/nrel5mw.py) | 7.3 kB | Derivation or computation script of the study, nrel5mw.py: prints PASS/FAIL and exits 1 on a failure. | [status.md](../notes/rotor-pendula/status.md) |
+| [`notes/rotor-pendula/derive/power_theorem.py`](../notes/rotor-pendula/derive/power_theorem.py) | 7.0 kB | Derivation or computation script of the study, power_theorem.py: prints PASS/FAIL and exits 1 on a failure. | [status.md](../notes/rotor-pendula/status.md) |
+| [`notes/rotor-pendula/derive/power_theorem_mc.py`](../notes/rotor-pendula/derive/power_theorem_mc.py) | 6.4 kB | Derivation or computation script of the study, power_theorem_mc.py: prints PASS/FAIL and exits 1 on a failure. | [status.md](../notes/rotor-pendula/status.md) |
+| [`notes/rotor-pendula/derive/scales.py`](../notes/rotor-pendula/derive/scales.py) | 2.7 kB | Derivation or computation script of the study, scales.py: prints PASS/FAIL and exits 1 on a failure. | [status.md](../notes/rotor-pendula/status.md) |
+| [`notes/rotor-pendula/derive/turbulence.py`](../notes/rotor-pendula/derive/turbulence.py) | 5.2 kB | Derivation or computation script of the study, turbulence.py: prints PASS/FAIL and exits 1 on a failure. | [status.md](../notes/rotor-pendula/status.md) |
+| [`notes/rotor-pendula/done.md`](../notes/rotor-pendula/done.md) | 2.5 kB | Definition of done of the Rotor Pendula study, as a checklist; only Numa may change it. | [done.md](../notes/rotor-pendula/done.md) |
+| [`notes/rotor-pendula/dossier-edgewise.md`](../notes/rotor-pendula/dossier-edgewise.md) | 33.9 kB | Scout dossier on edgewise: primary sources read for the study. | [status.md](../notes/rotor-pendula/status.md) |
+| [`notes/rotor-pendula/dossier-harvesting.md`](../notes/rotor-pendula/dossier-harvesting.md) | 33.8 kB | Scout dossier on harvesting: primary sources read for the study. | [status.md](../notes/rotor-pendula/status.md) |
+| [`notes/rotor-pendula/dossier-turbine.md`](../notes/rotor-pendula/dossier-turbine.md) | 54.8 kB | Scout dossier on turbine: primary sources read for the study. | [status.md](../notes/rotor-pendula/status.md) |
+| [`notes/rotor-pendula/handoff-prompt.md`](../notes/rotor-pendula/handoff-prompt.md) | 11.7 kB | Prompt for handing the Rotor Pendula study to another agent. | [status.md](../notes/rotor-pendula/status.md) |
+| [`notes/rotor-pendula/review-prompt.md`](../notes/rotor-pendula/review-prompt.md) | 3.6 kB | Prompt for an independent reviewer of the Rotor Pendula study. | [status.md](../notes/rotor-pendula/status.md) |
+| [`notes/rotor-pendula/skeptic-G1-L0-r1.md`](../notes/rotor-pendula/skeptic-G1-L0-r1.md) | 17.4 kB | Blind skeptic report, gate 1, level L0, round 1. | [status.md](../notes/rotor-pendula/status.md) |
+| [`notes/rotor-pendula/skeptic-G1-L2-r1.md`](../notes/rotor-pendula/skeptic-G1-L2-r1.md) | 17.5 kB | Blind skeptic report, gate 1, level L2, round 1. | [status.md](../notes/rotor-pendula/status.md) |
+| [`notes/rotor-pendula/status.md`](../notes/rotor-pendula/status.md) | 10.0 kB | Status of the Rotor Pendula study: queue, done list with evidence, decisions for Numa. Read first. | [status.md](../notes/rotor-pendula/status.md) |
+
+## Working notes of the Droplet Collection study
+
+| File | Size | What it is | Explained in |
+|---|---|---|---|
+| [`notes/droplets/baseline/checks.html`](../notes/droplets/baseline/checks.html) | 6.8 kB | Text of the checks page of the published Droplet Collection app, kept as the baseline the study starts from. | [brief.md](../notes/droplets/brief.md) |
+| [`notes/droplets/baseline/overview.html`](../notes/droplets/baseline/overview.html) | 4.2 kB | Text of the overview page of the published Droplet Collection app, kept as the baseline the study starts from. | [brief.md](../notes/droplets/brief.md) |
+| [`notes/droplets/baseline/results.html`](../notes/droplets/baseline/results.html) | 5.6 kB | Text of the results page of the published Droplet Collection app, kept as the baseline the study starts from. | [brief.md](../notes/droplets/brief.md) |
+| [`notes/droplets/baseline/simulate.html`](../notes/droplets/baseline/simulate.html) | 2.0 kB | Text of the simulate page of the published Droplet Collection app, kept as the baseline the study starts from. | [brief.md](../notes/droplets/brief.md) |
+| [`notes/droplets/baseline/theory.html`](../notes/droplets/baseline/theory.html) | 105.7 kB | Text of the theory page of the published Droplet Collection app, kept as the baseline the study starts from. | [brief.md](../notes/droplets/brief.md) |
+| [`notes/droplets/brief.md`](../notes/droplets/brief.md) | 17.8 kB | The brief of the Droplet Collection study: question, method and gates, for an agent working in a loop. | [brief.md](../notes/droplets/brief.md) |
 
 ## Record of the lecture-note review
 

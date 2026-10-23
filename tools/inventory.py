@@ -79,6 +79,22 @@ RULES = [
     (r'docs/.+\.md', lambda m: 'Documentation: ' + heading(m.group(0)) + '.', None),
     (r'\.gitignore', 'Files git leaves out: Python caches, node_modules, build output.', 'docs/files.md'),
     (r'tools/inventory\.py', 'Writes docs/files.md and checks that every file in the repository is described.', 'docs/files.md'),
+    # working notes of the Rotor Pendula and Droplet Collection studies (another session's work; start with status.md and brief.md)
+    (r'notes/(droplets|rotor-pendula)/brief\.md', lambda m: 'The brief of the ' + {'droplets': 'Droplet Collection', 'rotor-pendula': 'Rotor Pendula'}[m.group(1)] + ' study: question, method and gates, for an agent working in a loop.', None),
+    (r'notes/rotor-pendula/status\.md', 'Status of the Rotor Pendula study: queue, done list with evidence, decisions for Numa. Read first.', None),
+    (r'notes/rotor-pendula/done\.md', 'Definition of done of the Rotor Pendula study, as a checklist; only Numa may change it.', None),
+    (r'notes/rotor-pendula/handoff-prompt\.md', 'Prompt for handing the Rotor Pendula study to another agent.', 'notes/rotor-pendula/status.md'),
+    (r'notes/rotor-pendula/review-prompt\.md', 'Prompt for an independent reviewer of the Rotor Pendula study.', 'notes/rotor-pendula/status.md'),
+    (r'notes/rotor-pendula/contract-L(\d)\.md', lambda m: 'Gate 1 contract of model level L' + m.group(1) + ': question, model, assumptions with their numbers, checks.', 'notes/rotor-pendula/status.md'),
+    (r'notes/rotor-pendula/dossier-([a-z-]+)\.md', lambda m: 'Scout dossier on ' + m.group(1) + ': primary sources read for the study.', 'notes/rotor-pendula/status.md'),
+    (r'notes/rotor-pendula/skeptic-(G\d)-(L\d)-r(\d)\.md', lambda m: 'Blind skeptic report, gate ' + m.group(1)[1:] + ', level ' + m.group(2) + ', round ' + m.group(3) + '.', 'notes/rotor-pendula/status.md'),
+    (r'notes/(droplets|rotor-pendula)/baseline/([a-z]+)\.html', lambda m: 'Text of the ' + m.group(2) + ' page of the published ' + {'droplets': 'Droplet Collection', 'rotor-pendula': 'Rotor Pendula'}[m.group(1)] + ' app, kept as the baseline the study starts from.', lambda m: {'droplets': 'notes/droplets/brief.md', 'rotor-pendula': 'notes/rotor-pendula/status.md'}[m.group(1)]),
+    (r'notes/rotor-pendula/derive/([A-Za-z0-9_]+)\.py', lambda m: 'Derivation or computation script of the study, ' + m.group(1) + '.py: prints PASS/FAIL and exits 1 on a failure.', 'notes/rotor-pendula/status.md'),
+    (r'notes/rotor-pendula/derive/([A-Za-z0-9_]+)\.(json|log)', lambda m: 'Saved output of ' + m.group(1) + '.py' + (' (numbers)' if m.group(2) == 'json' else ' (log)') + '.', 'notes/rotor-pendula/status.md'),
+    (r'notes/rotor-pendula/derive/data/(.+)', lambda m: 'Cited data of the NREL 5-MW reference turbine: ' + m.group(1) + '.', 'notes/rotor-pendula/status.md'),
+    (r'portfolios-src/rotor-pendula/fonts/(.+\.woff2)', lambda m: 'Self-hosted font for the Rotor Pendula notes build: ' + m.group(1) + '.', None),
+    (r'portfolios-src/rotor-pendula/fonts/(.+)', lambda m: 'Fonts of the Rotor Pendula notes build: ' + m.group(1) + '.', None),
+    (r'portfolios-src/rotor-pendula/tools/(.+)', lambda m: 'Build and check tool of the Rotor Pendula notes, adapted from the Hydraulic Press Study\'s tools: ' + m.group(1) + '.', None),
     # the site in German and Arabic (docs/i18n.md): English pages are the source, everything below is made from them
     (r'tools/i18n/build\.py', 'Writes the German and Arabic pages, the script strings and the mirrored stylesheets from the English pages and the tables; --check fails on anything untranslated.', 'docs/i18n.md'),
     (r'tools/i18n/fill\.py', 'Stores translations into a page table, recording the English each one was made from.', 'docs/i18n.md'),
@@ -248,10 +264,13 @@ SECTIONS = [
     ('public/portfolios/impact/', 'Iron, Cotton and the Head', None),
     ('portfolios-src/hydraulics/', 'Source of the Hydraulic Press Study (not served)', None),
     ('portfolios-src/impact/', 'Source of Iron, Cotton and the Head (not served)', None),
+    ('portfolios-src/rotor-pendula/', 'Source of the Rotor Pendula notes (not served)', None),
     ('src/', 'Template sources', None), ('tests/', 'Platform tests', None),
     ('docs/', 'Documentation', None), ('tools/', 'Tools', None),
     ('i18n/', 'Translation tables', None),
-    ('.claude/agents/', 'Agents of the lecture-note review', None), ('notes/', 'Record of the lecture-note review', None),
+    ('.claude/agents/', 'Agents of the lecture-note review', None),
+    ('notes/rotor-pendula/', 'Working notes of the Rotor Pendula study', None), ('notes/droplets/', 'Working notes of the Droplet Collection study', None),
+    ('notes/', 'Record of the lecture-note review', None),
 ]
 FOLD_OVER = 12  # a run of more than this many files with the same description is folded into <details>
 
