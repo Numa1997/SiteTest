@@ -1,26 +1,61 @@
 <section id="ch8" class="chapter">
 <h2><span class="chn">8</span> Ice: can collisions make new ice?</h2>
-<div class="picture">Shake ice cubes in a glass and small chips break off; drip water onto a freezing window and some drops crack and spit
-splinters. Each chip is new ice made from old ice: the number of pieces rises, the mass of ice does not.</div>
-<p>The thesis asked whether collisions multiply ice. Its cold case is the same cloud at −10 °C and 600 hPa, with the droplets split by the
-thesis's fit for the share that stays liquid when supercooled, 44.55 % at −10 °C: 134.1 liquid droplets and 166.9 ice spheres per cm³.
-New particles per volume and time are (fragments per event) × (events per volume and time). The event rates follow from the kernel of
-chapters 1–4, with each phase's density, liquid freezing on contact with ice and ice sticking to ice. The fragments per event can only
-come from measurements, and there are three candidates.</p>
+<div class="picture">Shake ice cubes in a glass and small chips break off: the number of pieces rises, the mass of ice does not. Now
+picture a large supercooled drop, colder than 0&nbsp;°C but still liquid, that touches a speck of ice. It freezes from the outside in; the
+shell traps the liquid core, the core expands as it freezes, and the shell may crack and spit splinters. Here the ice mass does grow
+(the drop's water becomes ice), and so may the number of pieces.</div>
+
+<h3>8.1 Counting new ice</h3>
+<p>The thesis asked whether collisions multiply ice. Its cold case is the same cloud at −10&nbsp;°C and 600 hPa, with the droplets split by the
+thesis's fit for the share that stays liquid when supercooled, 44.55 % at −10&nbsp;°C: 134.1 liquid droplets and 166.9 ice spheres
+(density 900 kg/m³) per cm³. Whatever the mechanism, new ice is counted the same way: how often a kind of event happens, times how many
+fragments each event makes,</p>
+$$\frac{dN_{\rm new}}{dt} = \sum_{\text{pairs}} \underbrace{K\,n_1 n_2}_{\text{events per m}^3\text{ and s}}\times\underbrace{F}_{\text{fragments per event}}. \tag{8.1}$$
+<p>The event rates come from the kernel of chapters 1–4, with each phase's density, liquid freezing on contact with ice and ice sticking
+to ice. The fragments per event cannot be derived here: they come only from experiments. So the question becomes which experiments
+apply to these particles.</p>
+
+<h3>8.2 Three candidates</h3>
+<p><em>Rime splintering</em> (Hallett and Mossop 1974): an ice particle collecting droplets throws off splinters while the rime freezes.
+They measured from −2 to −16&nbsp;°C and found production peaking near −5&nbsp;°C and stopping below about −8&nbsp;°C (Korolev and Leisner 2020,
+Table 2). At −10&nbsp;°C it is zero.</p>
+<p><em>Shattering of freezing drops.</em> In our cloud almost every such event (2.799 of 2.803 per cm³ and minute with drops of 25 µm
+radius or more) is a large supercooled drop sweeping up a small ice sphere and freezing, the picture above. That is the geometry of the
+laboratory experiments, which nucleated their drops with tiny ice crystals. The only free-fall study with drops of our size,
+Brownscombe and Thorndike (1968, drops of 50–90 µm diameter), saw at most 14 % of drops shatter, with at most 12 fragments, both maxima
+over −5 to −15&nbsp;°C. So a freezing drop makes between 0 and 0.14 × 12 = 1.7 fragments; both numbers are upper-leaning.</p>
+<p><em>Breakup in ice–ice collisions.</em> Phillips, Yano and Khain (2017) fitted a law to collisions of ice particles from 0.5 mm to
+5 mm (coefficients as printed by Sotiropoulou et al. 2021). With $K_0 = \tfrac12\mu_{\rm red}\Delta v^2$ the collision kinetic energy of
+chapter 4 and $\alpha = \pi D^2$ the surface of the smaller particle,</p>
+$$F = \alpha A\left[1 - \exp\!\Big(-\Big(\frac{C K_0}{\alpha A}\Big)^{\gamma}\Big)\right],\qquad \gamma = 0.3, \tag{8.2}$$
+<p>where $A$ is the number of breakable bumps per m² of ice surface and $C$ (J⁻¹) how fragile they are. Read it as a saturation law: a
+hard hit breaks every bump, $F \to \alpha A$; a soft hit breaks a fraction. For soft hits, $C K_0 \ll \alpha A$, the bracket is about
+$(CK_0/\alpha A)^{0.3}$, and the fragments grow only as the 0.3 power of the energy. That weak power is the danger: it keeps producing
+fragments however small the energy, so the answer depends on how far one trusts it below the experiments.</p>
+<div class="press"><div class="ctag">In our cloud: one collision worked through</div>A 40 µm ice sphere falls at 0.1726 m/s, an 8 µm one at
+0.0076 m/s. Their collision energy is $K_0 = 2.6\times10^{-14}$ J. With $D$ held at the law's lower limit of 0.5 mm, as its users
+recommend, $\alpha A = 9.2\times10^{-3}$ and $C K_0 = 1.6\times10^{-7}$ (at $C = 6.3\times10^6$ J⁻¹), so $F = 3.4\times10^{-4}$
+fragments: one new splinter per three thousand such collisions. The old study's rule gave this collision 0.51 fragments.</div>
+<p>Over all pairs, the ice–ice collisions in our cloud carry $1.3\times10^{-14}$ to $2.3\times10^{-13}$ J (5 % and 95 % of events),
+eight to twelve orders of magnitude below the collisions (8.2) was fitted to. Every number from (8.2) here is an extrapolation of that
+size.</p>
+
+<h3>8.3 The answer, with its limits</h3>
 <div class="press"><div class="ctag">In our cloud, at the start of the cold case</div>
 <div class="tblw"><table class="mt">
 <tr><th>mechanism (source of the yield)</th><th>new ice, cm⁻³ min⁻¹</th></tr>
-<tr><td class="wrap">rime splintering (Hallett and Mossop): measured only between −8 and −3 °C</td><td>0</td></tr>
-<tr><td class="wrap">shattering of freezing drops (Korolev and Leisner 2020): 0.03–1.7 fragments per freezing drop of 50 µm diameter or more,
-applied to the 2.80 such drops per cm³ and minute caught by ice</td><td>0.084 to 4.8</td></tr>
-<tr><td class="wrap">breakup in ice–ice collisions (Phillips, Yano and Khain 2017), extrapolated from collision energies of 10⁻⁴ J down to ours
-(10⁻¹² to 10⁻⁹ J), 2.88 ice–ice collisions per cm³ and minute</td><td>$7.0\times10^{-5}$ to $3.7\times10^{-4}$</td></tr>
-<tr><td class="wrap">the old study's rule: a thousandth of the larger particle's mass per ice–ice collision, as 5 µm fragments</td><td>2.6</td></tr>
+<tr><td class="wrap">rime splintering (Hallett and Mossop 1974): stops below about −8&nbsp;°C</td><td>0</td></tr>
+<tr><td class="wrap">shattering of freezing drops (Brownscombe and Thorndike 1968): 0 to 1.7 fragments per freezing drop, 2.80 drops of 25 µm radius
+or more freezing per cm³ and minute</td><td>0 to 4.8</td></tr>
+<tr><td class="wrap">breakup in ice–ice collisions, (8.2) with $D$ held at 0.5 mm, 2.88 collisions per cm³ and minute ($C$ from $2.2\times10^4$ to
+$6.3\times10^6$ J⁻¹)</td><td>$3.0\times10^{-4}$ to $1.6\times10^{-3}$</td></tr>
+<tr><td class="wrap">the same, with the particles' true diameters put into (8.2)</td><td>0.050</td></tr>
+<tr><td class="wrap">the old study's rule: a thousandth of the larger particle's mass per ice–ice collision, as fragments of 5 µm radius</td><td>2.6</td></tr>
 </table></div></div>
-<p>Two conclusions follow, and both are honest only with their limits. First, collisions between the thesis's small ice spheres carry
-10⁻⁵ to 10⁻¹⁰ of the energy of the laboratory collisions that break ice, and the only law fitted to those collisions, pushed down that
-far, gives at least seven thousand times less new ice than the old study's rule assumed. The old rule's tenfold
-multiplication of ice had no measurement behind it. Second, the one channel that could matter at −10 °C is the shattering of drops that
-freeze, and its yield was measured for drops freezing alone, not for drops freezing on contact with ice. So these notes bound the answer
-to the thesis's question, from almost nothing to a few new particles per cm³ and minute, but cannot pin it down.</p>
+<p>What a student should take from the table is not one number but its shape. The measured channel, freezing drops shattering, can give
+a few new particles per cm³ and minute, or none: the measurements scatter that much. Ice–ice breakup, the mechanism the thesis was
+about, gives between 1600 times (the law used as recommended) and 52 times (the law trusted all the way down) less new ice than the old
+study's rule, which had no measurement behind it. One more caution: 167 ice spheres per cm³ is the thesis's starting state and far more
+ice than real clouds at −10&nbsp;°C hold (of order one per litre). Ice–ice collisions scale as the square of the ice number, shattering only
+linearly, so in a real cloud breakup matters even less than the table shows.</p>
 </section>

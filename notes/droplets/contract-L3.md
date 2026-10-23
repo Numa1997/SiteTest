@@ -56,10 +56,10 @@ For pairs with ice (L7) E_coal = 1: liquid freezes on contact, ice is taken to s
 | 1000 / 500 | 2.68 (92.2) | 1.66 | 0.148 (0) | 0.094 |
 | 2000 / 1000 | 2.53 (369) | 2.95 | 0.034 (0) | 0.053 |
 
-For every pair that decides observable 1 the collision energy is 10⁻⁵ to 10⁻⁴ of the surface energy: E_coal = 1 to 4 parts in 10⁴.
+For every pair that decides observable 1 the collision energy is 2 × 10⁻⁵ to 3 × 10⁻⁴ of the surface energy: E_coal = 1 to 4 parts in 10⁴.
 No measurement of coalescence for cloud droplets this small was found in the sources read (the energy laws know nothing of a bouncing
 air film; Beard and Ochs 1995 would be the test). For drizzle and rain the law matters, and with Stokes speeds it switches mergers off
-above about 200 µm: this is why the thesis kernel stalls.
+above about 300 µm radius (E = 0.49 at 200/100 µm, about 0 at 500/250): this is why the thesis kernel stalls.
 
 ## 6. Exact and limiting behaviour
 
@@ -81,3 +81,15 @@ Straub et al. 2010's form and fit range). Chosen: to use it for all liquid pairs
 gives 1 to within 4 × 10⁻⁴ — a choice that is harmless only because any energy law gives the same there, and the page says that no
 measurement covers those sizes. Price: for raindrop pairs the two available laws differ by up to 0.2 (0.55 against 0.34 at 500/250 µm),
 so the millimetre end of the spectrum carries that uncertainty.
+
+## 9. Answers to round 1 (`skeptic-G1-L3L6L7-r1.md`, L3: PASS with fixes)
+
+| # | Answer |
+|---|---|
+| 1 | Picture now names both hazards (air film, tearing) and says the law describes only the second (chapter 4 of the notes). |
+| 2 | Evidence both ways now on the page, read from the abstracts (OpenAlex): Beard et al. 2002, E_coal "certainly greater than 91 % and likely greater than 95 %" for 55–105 µm pairs at ratio 0.5–1; Beard and Ochs 1984, time-averaged collection efficiency halved for growth from 50 to 500 µm by 30 µm droplets. "E_coal = 1" restated as "(L3.2) gives 1 to within 4 × 10⁻⁴". |
+| 3 | Low and List rejected for being far outside its measured range and for contradicting Beard et al. 2002 (0.23 for 60/50 µm against > 0.91). |
+| 4 | "2 × 10⁻⁵ to 3 × 10⁻⁴". |
+| 5 | Prediction 1 relabelled a consistency check; outcome 0.26 % (failed narrowly as a prediction, still far below the closure band). |
+| 6 | "Above about 300 µm radius (E = 0.49 at 200/100, about 0 at 500/250)". |
+| 7 | The three raindrop rows are in section 5. |

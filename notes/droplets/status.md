@@ -78,7 +78,7 @@ Thermal noise: surface energy of a 10 µm drop 9.0 × 10⁻¹¹ J = 2.3 × 10¹�
   capture; goes into the text. L2 1 PASS (×1.69 > 1.20), L2 2 PASS (6/14). L3 1 FAILED narrowly (t₉₀ changes 0.26 %, predicted < 0.1 %;
   still far below the closure band). L6: −1.7 % at 100 cm²/s³ → stated check (X = 10 % from Ayala's +5.6 %).
 
-## PAUSED by Numa (23 Oct, about 13:50 UTC): resume only on his "go"
+## Resumed by Numa ("resume", 23 Oct); queue below
 
 Nothing is running. Resume list, in order:
 1. L0 Gate 1: round-3 fixes written (contract §12); skeptic was re-checking them when stopped (resume it or a fresh short check).

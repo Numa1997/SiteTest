@@ -10,13 +10,23 @@ SymPy), and a script that recomputes every number quoted in the notes and finds 
 <tr><td class="wrap">One collector: (1.4) against a numerical integration</td><td>9.9554 min both ways</td></tr>
 <tr><td class="wrap">Fall speed against Gunn and Kinzer (1949), d ≥ 0.3 mm</td><td>largest gap 2.07 %</td></tr>
 <tr><td class="wrap">Critical Stokes numbers, point droplet on the axis</td><td class="wrap">0.08333 (exact 1/12); 1.21194 (Michael and Norey 1970: 1.21194)</td></tr>
-<tr><td class="wrap">Point-droplet efficiencies against Langmuir's (1948) Table 1, K ≥ 5</td><td>within 3.2 %</td></tr>
+<tr><td class="wrap">Point-droplet efficiencies against Langmuir's (1948) Table 1</td><td class="wrap">within 3.2 % for K ≥ 5; 8–10 % low at K = 3–3.6, unresolved</td></tr>
+<tr><td class="wrap">E(40 µm, 8 µm) from an independent SciPy integration (flow from SymPy derivatives of the stream functions)</td><td>0.3442 against 0.3444</td></tr>
 <tr><td class="wrap">Golovin's exact solution, 60 min, 8 bins per doubling</td><td class="wrap">spectrum error 0.051; mass error −4.58 × 10⁻⁷ (grid truncation); scheme drift 2 × 10⁻¹³</td></tr>
 <tr><td class="wrap">Water conservation in every collection-equation run</td><td>to 3.4 × 10⁻¹³</td></tr>
 <tr><td class="wrap">Exact stochastic runs: kernel bound violated</td><td>0 times in 430 runs</td></tr>
 <tr><td class="wrap">First 100 µm drop, exact runs against the Poisson prediction (6.1)</td><td class="wrap">medians 286 s and 175 s against 280 s and 175 s</td></tr>
 <tr><td class="wrap">Old study's warm-cloud times, recorded to the minute</td><td class="wrap">3 / 5, 3 / 7, 6 / 14, 7 / 19 min reproduced</td></tr>
+<tr><td class="wrap">Collection equation solved again by independent NumPy code (all pairs at once, half the time step)</td><td class="wrap">$t_{50}$, $t_{90}$ = 5.774, 13.483 min against 5.767, 13.470</td></tr>
+<tr><td class="wrap">Exact stochastic engine against a problem solved exactly: one collector, 20 identical droplets (a pure capture chain), 4000 runs</td><td class="wrap">mean captures 8.246 ± 0.036 against 8.221; χ² test p = 0.15</td></tr>
+<tr><td class="wrap">Poisson prediction (6.1) against the exact first-drop times (Kolmogorov–Smirnov)</td><td class="wrap">p = 0.42 (1000 cm³), 0.40 (100 cm³)</td></tr>
 </table></div>
+<p>One of these tests taught something worth passing on. The second, independent solver of the collection equation first gave
+$t_{90}$ = 18.3 min instead of 13.5. The physics was the same; the difference was one line of bookkeeping. A step may not take more
+drops out of a bin than it holds, and the first version counted every merger of a large drop as a loss to its bin. But a 1 mm drop that
+sweeps up an 8 µm droplet stays a 1 mm drop: it almost never leaves its bin, so its bin loses almost nothing. Counting the gross loss
+throttled exactly the largest, fastest-growing drops. Counted net, the two solvers agree to 0.013 min. In a numerical scheme, as in
+the physics, what matters is what actually moves.</p>
 <p class="note">The source of the study, its derivations and its check scripts are in the website's repository, folder
 <span class="mono">portfolios-src/droplets/</span>; the record of how each level was built and attacked is in
 <span class="mono">notes/droplets/</span>.</p>
