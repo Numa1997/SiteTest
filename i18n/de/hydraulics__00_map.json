@@ -15,13 +15,9 @@
   "src": "In a treatise written in 1653 and printed in 1663, a year after his death, Blaise Pascal drew a sealed vessel full of water with two openings, each closed by a piston, and gave the figure a title: <i>Nouvelle sorte de Machine pour multiplier les forces</i>, a new kind of machine for multiplying forces. His text explains it in one sentence:",
   "tr": "In einer Abhandlung, die er 1653 verfasste und die 1663, ein Jahr nach seinem Tod, gedruckt wurde, zeichnete Blaise Pascal ein allseitig geschlossenes, mit Wasser gefülltes Gefäß mit zwei Öffnungen, von denen jede durch einen Kolben verschlossen ist, und gab der Abbildung einen Titel: <i>Nouvelle sorte de Machine pour multiplier les forces</i>, eine neuartige Maschine zum Vervielfachen von Kräften. Sein Text erklärt sie in einem einzigen Satz:"
  },
- "0eaeb027afbe": {
-  "src": "Why oil, and why not a lever? Because a fluid carries force <i>around corners</i>, through a pipe of any length and shape, and because it carries a great deal of it in a small space. At the 12 MPa of the servo press in Parts II and III, every square centimetre of piston feels 1.2 kN, the weight of a small car. The 12 cm piston of that press pushes with 136 kN, while the pipe that feeds it is 12 mm across. No gear train or cable of that size comes close.",
-  "tr": "Warum Öl und warum kein Hebel? Weil eine Flüssigkeit Kraft <i>um Ecken</i> herum überträgt, durch ein Rohr beliebiger Länge und Form, und weil sie auf kleinem Raum sehr viel davon überträgt. Bei den 12 MPa der Servopresse in den Teilen II und III spürt jeder Quadratzentimeter Kolbenfläche 1.2 kN, das Gewicht eines kleinen Autos. Der Kolben dieser Presse mit 12 cm Durchmesser drückt mit 136 kN, während die Leitung, die ihn speist, 12 mm Durchmesser hat. Kein Zahnradgetriebe und kein Seil dieser Größe kommt auch nur annähernd heran."
- },
  "1294c59a2c59": {
   "src": "cap chamber",
-  "tr": "Kolbenbodenkammer"
+  "tr": "Kolbenraum"
  },
  "1ade3077fe2c": {
   "src": "the oil under the piston",
@@ -149,7 +145,7 @@
  },
  "6352c406ea2d": {
   "src": "<b>Creep, about 0.2 s.</b> The ram rises slowly, at 10 mm/s, until the load cell reads 1 kN: it has touched the specimen.",
-  "tr": "<b>Schleichfahrt, etwa 0.2 s.</b> Der Stößel steigt langsam, mit 10 mm/s, bis die Kraftmessdose 1 kN anzeigt: Er hat die Probe berührt."
+  "tr": "<b>Kriechen, etwa 0.2 s.</b> Der Stößel steigt langsam, mit 10 mm/s, bis die Kraftmessdose 1 kN anzeigt: Er hat die Probe berührt."
  },
  "63cccb5d942c": {
   "src": "force $F$",
@@ -221,7 +217,7 @@
  },
  "94bf65dd5119": {
   "src": "<b>Settle, 0.1 s.</b> The controller holds the ram at $y = 0$. The spool sits almost exactly in the middle: just enough off centre that the small leakage flows into and out of each chamber balance.",
-  "tr": "<b>Einpendeln, 0.1 s.</b> Der Regler hält den Stößel bei $y = 0$. Der Ventilschieber steht fast genau in der Mitte, nur so weit daneben, dass sich die kleinen Leckströme in jede Kammer hinein und aus ihr heraus die Waage halten."
+  "tr": "<b>Einschwingen, 0.1 s.</b> Der Regler hält den Stößel bei $y = 0$. Der Ventilschieber steht fast genau in der Mitte, nur so weit daneben, dass sich die kleinen Leckströme in jede Kammer hinein und aus ihr heraus die Waage halten."
  },
  "958d0ed6438a": {
   "src": "A <b>restriction</b>, such as the metering edge of a valve or a narrow pipe, also takes a pressure difference and answers with a flow, but at once, by friction or by turning pressure into the speed of a jet. It behaves like a <b>resistor</b>, a nonlinear one for a sharp edge (chapters 8 and 11).",
@@ -279,6 +275,10 @@
   "src": "a motor-driven pump; the relief valve spills what is not needed back to the tank",
   "tr": "eine motorgetriebene Pumpe; das Druckbegrenzungsventil leitet alles, was nicht gebraucht wird, in den Tank zurück"
  },
+ "c3d3aa7531c7": {
+  "src": "Why oil, and why not a lever? Because a fluid carries force <i>around corners</i>, through a pipe of any length and shape, and because it carries a great deal of it in a small space. At the 12 MPa of the servo press in Parts II and III, every square centimetre of piston feels 1.2 kN, the weight of two adults standing on a fingertip. The 12 cm piston of that press pushes with 136 kN, while the pipe that feeds it is 12 mm across. No gear train or cable of that size comes close.",
+  "tr": "Warum Öl und warum kein Hebel? Weil eine Flüssigkeit Kraft <i>um Ecken</i> herum überträgt, durch ein Rohr beliebiger Länge und Form, und weil sie auf kleinem Raum sehr viel davon überträgt. Bei den 12 MPa der Servopresse in den Teilen II und III spürt jeder Quadratzentimeter Kolbenfläche 1.2 kN, das Gewicht zweier Erwachsener, die auf einer Fingerspitze stehen. Der Kolben dieser Presse mit 12 cm Durchmesser drückt mit 136 kN, während die Leitung, die ihn speist, 12 mm Durchmesser hat. Kein Zahnradgetriebe und kein Seil dieser Größe kommt auch nur annähernd heran."
+ },
  "c75c33a07a06": {
   "src": "The map of the servo press. Each box is a block with a law inside it; each arrow leaves the block that computes a quantity and enters the block that is given it. Solid arrows run with the oil, from the pump towards the ram: flows and forces. Dashed arrows run back: the pressure or speed with which a block answers its neighbour. Every hydraulic link is a pressure–flow pair, every mechanical link a force–speed pair. Blue arrows are signals: they carry information, not power. On a narrow screen, scroll the figure sideways.",
   "tr": "Der Plan der Servopresse. Jedes Kästchen ist ein Block mit einem Gesetz im Inneren; jeder Pfeil verlässt den Block, der eine Größe berechnet, und tritt in den Block ein, dem sie vorgegeben wird. Durchgezogene Pfeile laufen mit dem Öl, von der Pumpe zum Stößel: Volumenströme und Kräfte. Gestrichelte Pfeile laufen zurück: der Druck oder die Geschwindigkeit, mit der ein Block seinem Nachbarn antwortet. Jede hydraulische Verbindung ist ein Druck-Volumenstrom-Paar, jede mechanische Verbindung ein Kraft-Geschwindigkeit-Paar. Blaue Pfeile sind Signale: Sie tragen Information, keine Leistung. Auf einem schmalen Bildschirm scrollen Sie die Abbildung seitlich."
@@ -333,7 +333,7 @@
  },
  "e7e801c3c10c": {
   "src": "<b>Approach, 1 s.</b> The controller asks for a smooth climb to 2 mm short of the specimen, 118 mm up. To lift the ram it opens the spool positively: P→A and B→T open. Oil runs from the pump down the hose into the cap chamber, the cap pressure rises just enough to carry the ram’s weight and the seal friction, and the oil above the piston is pushed out to the tank.",
-  "tr": "<b>Annäherung, 1 s.</b> Der Regler verlangt einen sanften Anstieg bis auf 2 mm vor der Probe, also 118 mm nach oben. Um den Stößel anzuheben, öffnet er den Ventilschieber in positiver Richtung: P→A und B→T öffnen sich. Öl fließt von der Pumpe durch den Schlauch in den Kolbenraum; der Druck dort steigt gerade so weit, dass er das Gewicht des Stößels und die Dichtungsreibung trägt, und das Öl über dem Kolben wird in den Tank gedrückt."
+  "tr": "<b>Annähern, 1 s.</b> Der Regler verlangt einen sanften Anstieg bis auf 2 mm vor der Probe, also 118 mm nach oben. Um den Stößel anzuheben, öffnet er den Ventilschieber in positiver Richtung: P→A und B→T öffnen sich. Öl fließt von der Pumpe durch den Schlauch in den Kolbenraum; der Druck dort steigt gerade so weit, dass er das Gewicht des Stößels und die Dichtungsreibung trägt, und das Öl über dem Kolben wird in den Tank gedrückt."
  },
  "ea04fa700638": {
   "src": "piston, rod and platen, 160 kg in all",
@@ -341,7 +341,7 @@
  },
  "eb3d71dab005": {
   "src": "<b>Retract, 1.8 s.</b> Back to position control, and a smooth descent to $y = 0$: the spool opens negatively, P→B and A→T, and oil drains from the cap chamber back up the hose.",
-  "tr": "<b>Zurückfahren, 1.8 s.</b> Zurück zur Lageregelung und ein sanftes Absenken auf $y = 0$: Der Ventilschieber öffnet in negativer Richtung, P→B und A→T, und Öl fließt aus der Kolbenbodenkammer zurück durch den Schlauch nach oben."
+  "tr": "<b>Zurückfahren, 1.8 s.</b> Zurück zur Lageregelung und ein sanftes Absenken auf $y = 0$: Der Ventilschieber öffnet in negativer Richtung, P→B und A→T, und Öl fließt aus dem Kolbenraum zurück durch den Schlauch nach oben."
  },
  "ebeb809725e6": {
   "src": "SI units throughout. A pressure written $p$ is a <i>gauge</i> pressure, measured above the atmosphere; the absolute pressure is $p_{\\mathrm{abs}} = p + p_0$ with $p_0 = 101.325\\ \\mathrm{kPa}$.",

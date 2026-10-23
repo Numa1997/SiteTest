@@ -18,7 +18,7 @@
 
     <link rel="stylesheet" href="../../fonts/arabic.css" />
     <script src="../../scripts/i18n/strings-ar.js"></script>
-    <meta name="translated-from" content="English public/simulations/Circular Wave Interference Visualization.html, commit 59cd5c7" />
+    <meta name="translated-from" content="English public/simulations/Circular Wave Interference Visualization.html, commit 59cd5c7+" />
   </head>
 <body>
     <header class="sim-top">
@@ -710,7 +710,7 @@
         function readouts() {
             var n = sources.length;
             document.getElementById('r-n').textContent = n + (n === MAX_SOURCES ? _t(' (max)') : '');
-            document.getElementById('cap-count').textContent = n === 0 ? _t('no sources · click the field') : n + (n === 1 ? _t(' source') : _t(' sources'));
+            document.getElementById('cap-count').textContent = n === 0 ? _t('no sources · click the field') : n === 1 ? _t('{n} source', { n: n }) : _t('{n} sources', { n: n });
             ds.set('lambda', lambda.value); ds.set('f', freq.value); ds.set('damp', damp.value);
             ds.set('v', freq.value * lambda.value); ds.set('omega', 2 * Math.PI * freq.value); ds.set('T', 1 / freq.value);
             document.getElementById('r-v').textContent = Math.round(ds.get('v')) + ' px/s';

@@ -28,7 +28,7 @@
     </style>
 
     <script src="../../scripts/i18n/strings-de.js"></script>
-    <meta name="translated-from" content="English public/simulations/wind-turbine.html, commit cf6212d" />
+    <meta name="translated-from" content="English public/simulations/wind-turbine.html, commit cf6212d+" />
   </head>
 <body>
     <header class="sim-top">
@@ -746,12 +746,12 @@
             ds.set('stale', s);
             status();
         }
-        var NAMES = { pi: 'hold speed', opt: 'follow the wind', steady: 'steady', gust: 'gust', step: 'step', turb: 'turbulent' };
+        var NAMES = { pi: _t('hold speed'), opt: _t('follow the wind'), steady: _t('steady'), gust: _t('gust'), step: _t('step'), turb: _t('turbulent') };
         function status() {
             if (!solved) return;
             statusEl.classList.toggle('is-stale', ds.get('stale'));
             statusEl.textContent = ds.get('stale')
-                ? _t('A control changed. The run below is still the one for ') + NAMES[solved.ctrl] + ', ' + NAMES[solved.prof] + ' wind, v₀ = ' + solved.v0.toFixed(1) + _t(' m/s. Press Solve to compute the new one.')
+                ? _t('A control changed. The run below is still the one for {ctrl}, {prof} wind, v₀ = {v} m/s. Press Solve to compute the new one.', { ctrl: NAMES[solved.ctrl], prof: NAMES[solved.prof], v: solved.v0.toFixed(1) })
                 : _t('Solved ') + Sim.fmt(ds.get('steps'), 0) + _t(' RK4 steps in ') + ds.get('solve_ms').toFixed(1) + _t(' ms and stored ') + NS + _t(' samples, one every ') + (EVERY * H * 1000).toFixed(0) + _t(' ms. Every frame shows one stored sample.');
             ['st-solve', 'st-store'].forEach(function (id) { document.getElementById(id).classList.toggle('is-done', !ds.get('stale')); });
         }
