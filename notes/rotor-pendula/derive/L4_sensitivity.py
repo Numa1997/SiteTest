@@ -1,7 +1,7 @@
-"""L4 sensitivity (Gate-1 skeptic objection M1, the gearhead drag the catalogue does not give, and A1, the backdriven
+"""L4 sensitivity (the gearhead drag the catalogue does not give, and the backdriven
 efficiency): the formula (7.6)-(7.7) of L4_generator.py with the friction torque x1, x2, x3 and the efficiency at the sheet
-value or 0.5, best catalogue ratio and load each time; also the load voltage peak.  First written by the Gate-1 skeptic
-(skeptic-G1-L4-r1.md); adopted and rerun here, extended to all large-rotor mountings.  Run: python3 -I L4_sensitivity.py
+value or 0.5, best catalogue ratio and load each time; also the load voltage peak.
+All large-rotor mountings.  Run: python3 -I L4_sensitivity.py
 (writes L4_sensitivity.json)"""
 import math, sys
 import os, json; D=os.path.dirname(os.path.abspath(__file__)); sys.path.insert(0,D)

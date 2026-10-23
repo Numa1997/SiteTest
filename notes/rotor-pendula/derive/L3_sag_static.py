@@ -1,7 +1,7 @@
-"""L3 sag, second shape model (Gate-1 skeptic objection M1): the static gravity deflection integrated directly from the
+"""L3 sag, second shape model: the static gravity deflection integrated directly from the
 OpenFAST blade table (shear, moment, curvature M/EI, slope, deflection), with the same 1P factor and g cos 5 deg, once with the
 edgewise stiffness alone and once with the in-plane compliance projected through the structural twist; then the same linear
-power formula as L3_sag_numbers.py.  First written by the Gate-1 skeptic (skeptic-G1-L3-r1.md); adopted and rerun here.
+power formula as L3_sag_numbers.py.
 Run: python3 -I L3_sag_static.py   (writes L3_sag_static.json)"""
 import math, sys, json
 import numpy as np

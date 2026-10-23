@@ -1,10 +1,10 @@
-"""L0 round 2: checks of the skeptic's new physics, in SymPy and by integration.
+"""L0 extensions: the tilted hinge and the mean lean, in SymPy and by integration.
 
 Run: python3 -I L0_r2.py   (PASS/FAIL; exit 1 on any FAIL)
 1. Tilted hinge: hinge axis turned from the shaft axis towards the blade axis by alpha; the bob swings in the plane normal to it.
    Claimed linear equation (blade-angle time): x'' + (R cos(a) - sin(a)^2 - G cos(a) sin(phi)) x = -G cos(phi)  [+ damping].
-2. Mean lean of the straight pendulum at second order: theta_bar = -G^2/(4 R (R-1)) at kappa = R - 1 (skeptic: -0.123 theory,
-   -0.129 integration at 8 rpm 30 %).
+2. Mean lean of the straight pendulum at second order: theta_bar = -G^2/(4 R (R-1)) at kappa = R - 1 (checked against
+   integration at 8 rpm 30 %).
 """
 import sys, math, os
 import numpy as np, sympy as sp

@@ -1,7 +1,7 @@
-"""L4: does the rod stick, and what voltage does the load see?  (Gate-1 skeptic objection M4 and M2.)  The full equation
+"""L4: does the rod stick, and what voltage does the load see?  The full equation
 (L4_full.py) at the settings of L4_scan.py, 2000 steps per turn, 60 turns to settle and 3 recorded: the fraction of the turn
-with |theta'| below 1 % of its largest value, the EMF and the load voltage at their peaks, the motor speed.  First written by the
-Gate-1 skeptic; adopted and rerun here.  Run: python3 -I L4_stick.py"""
+with |theta'| below 1 % of its largest value, the EMF and the load voltage at their peaks, the motor speed.
+Run: python3 -I L4_stick.py"""
 import glob, json, math, os, sys
 import numpy as np
 D = os.path.dirname(os.path.abspath(__file__))

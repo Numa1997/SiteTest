@@ -11,8 +11,7 @@ compute and check every number. The site serves one page generated from it,
 | Lecture notes (`#notes`) | `rotor_notes.html`, built from `theory/*.src.html` | *Pendula on a Turning Blade*: the Lagrangian, the best brake, big swings, two rods and chaos, a ceiling on random shaking, gusts, the bending blade, a real geared generator, and the answer. Every number in the text comes from `tools/make_numbers.py` (`numbers.json`) or is listed with its reason in `tools/typed_numbers.py`. |
 | Simulation (`#sim`) | `rotor_sim.html` | Pick a rotor (six speeds), a pivot, one rod or two, and an ideal brake or the maxon RE 25 + GP 32 C generator; the page solves the full equations (Radau IIA, in a Web Worker built from its physics block) and plays the last turns back. Read values: click a plot to pin a point; the values show outside the figure. Six worked solutions. |
 
-The derivations, model runs and review notes are in `notes/rotor-pendula/` (`derive/` holds the Python models;
-`contract-L*.md` and `skeptic-*.md` the review record).
+The derivations and model runs are in `notes/rotor-pendula/` (`derive/` holds the Python models; `README.md` is the record).
 
 ## How the served page is made
 
