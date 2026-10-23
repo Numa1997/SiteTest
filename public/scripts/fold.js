@@ -109,7 +109,7 @@
         var btn = node.querySelector(':scope > .fs-head .fs-toggle');
         if (btn) {
             btn.setAttribute('aria-expanded', String(open));
-            btn.setAttribute('aria-label', T(open ? 'Collapse {x}' : 'Expand {x}', { x: btn.getAttribute('data-label') }));
+            btn.setAttribute('aria-label', (open ? T('Collapse {x}', { x: btn.getAttribute('data-label') }) : T('Expand {x}', { x: btn.getAttribute('data-label') })));
         }
     }
 
