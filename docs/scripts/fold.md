@@ -165,6 +165,13 @@ page opens with 10 folds, all closed; `?q=chaos` shows 1 fold, open.
 Markup the file reacts to: `[data-fold-level]`, `[data-card]` with a `.fold` and a `.fs-more` button inside, `[data-fold-bar]`,
 and the page structures in the adapter table.
 
+**Words on translated pages.** The strict-mode line ([fold.js:14](../../public/scripts/fold.js#L14)) defines `T(s, vars)`: it
+returns the translation of the English `s` from `window.I18N` (set by `scripts/i18n/strings-<lang>.js` on a German or Arabic
+page) and `s` itself on an English page, filling `{name}` placeholders from `vars`. Every word fold.js writes goes through it
+(More, Less, Show details, Expand all, "Expand {x}", the walkthrough's count line), and `plural(n, one, many)`
+([fold.js:306](../../public/scripts/fold.js#L306)) picks the plural form with `Intl.PluralRules` when the table holds an object
+for `many` (Arabic has six forms). See [i18n.md](../i18n.md#words-inside-scripts-t-and-i18nlangstringsjson).
+
 ## Internal functions
 
 | Name | Lines | What it does |

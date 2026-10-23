@@ -1,0 +1,458 @@
+{
+ "060956bec023": {
+  "src": "top of right column",
+  "tr": "Oberseite der rechten Säule"
+ },
+ "07985f13c37b": {
+  "src": "bottom of left column",
+  "tr": "Boden der linken Säule"
+ },
+ "08a919c3bd0a": {
+  "src": "The page checks W = K + V + E<sub>lost</sub> at every recorded instant.",
+  "tr": "Die Seite prüft W = K + V + E<sub>lost</sub> zu jedem aufgezeichneten Zeitpunkt."
+ },
+ "0cdb65d14aca": {
+  "src": "Put your thumb over the nozzle of a syringe full of water and press: the plunger hardly moves. In this model oil behaves the same way, because its density is fixed. Every cubic centimetre the input piston pushes out of the left cylinder has to reappear in the right one. If the input piston moves down by x₁ it sweeps out the volume A₁x₁, so the output piston rises by x₂ with",
+  "tr": "Halten Sie den Daumen über die Düse einer mit Wasser gefüllten Spritze und drücken Sie: Der Kolben bewegt sich kaum. In diesem Modell verhält sich Öl genauso, weil seine Dichte fest ist. Jeder Kubikzentimeter, den der Eingangskolben aus dem linken Zylinder schiebt, muss im rechten wieder erscheinen. Bewegt sich der Eingangskolben um x₁ nach unten, so verdrängt er das Volumen A₁x₁; der Ausgangskolben steigt daher um x₂ mit"
+ },
+ "0cf5fc6453c8": {
+  "src": "Ideal Hydraulic Press",
+  "tr": "Ideale hydraulische Presse"
+ },
+ "1281ec316d4c": {
+  "src": "bottom of right column",
+  "tr": "Boden der rechten Säule"
+ },
+ "18d21a6968dc": {
+  "src": "p₂·A₂ on output piston",
+  "tr": "p₂·A₂ am Ausgangskolben"
+ },
+ "192f594ae674": {
+  "src": "pipe inlet",
+  "tr": "Einlauf des Rohrs"
+ },
+ "1bd85457c48d": {
+  "src": "The stops are perfectly rigid and perfectly inelastic: the velocity jumps to zero in zero time.",
+  "tr": "Die Anschläge sind vollkommen starr und vollkommen unelastisch: Die Geschwindigkeit springt ohne jede Zeitverzögerung auf null."
+ },
+ "21d266a396c9": {
+  "src": "The oil carries no air, and all pressures are gauge pressures (atmosphere = 0). g = 9.81 m/s² everywhere.",
+  "tr": "Das Öl enthält keine Luft, und alle Drücke sind Überdrücke (Atmosphärendruck = 0). g = 9.81 m/s² überall."
+ },
+ "24e32e1c4d5c": {
+  "src": "Pressure and force",
+  "tr": "Druck und Kraft"
+ },
+ "2545bd038408": {
+  "src": "W work in, ∫F₁dx",
+  "tr": "W zugeführte Arbeit, ∫F₁dx"
+ },
+ "2588aeea63dc": {
+  "src": "Bernoulli: speeding the oil up costs pressure",
+  "tr": "Bernoulli: Beschleunigen des Öls kostet Druck"
+ },
+ "25e63f25287d": {
+  "src": "As x grows, oil leaves the fast left column and joins the slow right column, so the moving mass shrinks (μ′ &lt; 0 when r &lt; 1). The ½μ′ẋ² term accounts for that exchange, like a chain sliding off the edge of a table. The page integrates this equation with fourth-order Runge–Kutta (RK4), a step of 10⁻⁴ s, and a recorded frame every 1 ms. The force ramps linearly from 0 to F₁ over τ.",
+  "tr": "Während x wächst, verlässt Öl die schnelle linke Säule und tritt in die langsame rechte Säule ein, sodass die bewegte Masse abnimmt (μ′ &lt; 0 für r &lt; 1). Der Term ½μ′ẋ² erfasst diesen Austausch, wie eine Kette, die über die Tischkante rutscht. Die Seite integriert diese Gleichung mit dem Runge-Kutta-Verfahren vierter Ordnung (RK4), mit einem Schritt von 10⁻⁴ s und einem aufgezeichneten Bild alle 1 ms. Die Kraft steigt linear von 0 auf F₁ in der Zeit τ an."
+ },
+ "27ad1672d8c9": {
+  "src": "rest",
+  "tr": "Ruhe"
+ },
+ "2a09959b83b5": {
+  "src": "V potential",
+  "tr": "V potentiell"
+ },
+ "2abf3f6aa374": {
+  "src": "The press to true scale, and its dials",
+  "tr": "Die Presse maßstabsgetreu und ihre Anzeigen"
+ },
+ "2b219918c53e": {
+  "src": "μ effective mass (the pipe oil counts (A₁/A_p)² times)",
+  "tr": "μ wirksame Masse (das Rohröl zählt (A₁/A_p)²-fach)"
+ },
+ "2b655dad559a": {
+  "src": "Cylinders, pipe, pistons and stops are drawn to true scale; the load block's size is symbolic. The white dots are material points of oil: each keeps the oil volume between itself and the input piston, so in the pipe they run A₁/A_p times faster. The chart under the drawing walks the same pressure field from piston to piston against true path length: the vertical steps are Bernoulli, the slopes are weight and inertia (theory, chapter 5). Click or tap the oil to read the pressure there and its parts (a click outside the oil removes the reading): the push of the piston, the weight of the oil above, and the force that accelerates the oil.",
+  "tr": "Zylinder, Rohr, Kolben und Anschläge sind maßstabsgetreu gezeichnet; die Größe des Lastblocks ist symbolisch. Die weißen Punkte sind materielle Punkte des Öls: Das Ölvolumen zwischen jedem Punkt und dem Eingangskolben bleibt fest, daher laufen die Punkte im Rohr A₁/A_p-mal schneller. Das Diagramm unter der Zeichnung verfolgt dasselbe Druckfeld von Kolben zu Kolben, aufgetragen über der wahren Weglänge: Die senkrechten Stufen sind Bernoulli, die schrägen Stücke sind Gewicht und Trägheit (Theorie, Kapitel 5). Klicken oder tippen Sie auf das Öl, um dort den Druck und seine Anteile abzulesen (ein Klick außerhalb des Öls hebt die Anzeige wieder auf): der Schub des Kolbens, das Gewicht des Öls darüber und die Kraft, die das Öl beschleunigt."
+ },
+ "2b819e251784": {
+  "src": "A_1x_1 = A_2x_2 \\quad\\Rightarrow\\quad x_2 = r\\,x_1,\\qquad r = \\frac{A_1}{A_2} = \\left(\\frac{d_1}{d_2}\\right)^2",
+  "tr": "A_1x_1 = A_2x_2 \\quad\\Rightarrow\\quad x_2 = r\\,x_1,\\qquad r = \\frac{A_1}{A_2} = \\left(\\frac{d_1}{d_2}\\right)^2"
+ },
+ "2cc431c77e1b": {
+  "src": "If the load falls back to x = 0 with v &lt; 0, the same inelastic stop applies and the press returns to rest.",
+  "tr": "Fällt die Last zurück auf x = 0 mit v &lt; 0, gilt derselbe unelastische Anschlag, und die Presse kehrt zur Ruhe zurück."
+ },
+ "322970f4948c": {
+  "src": "Live readings",
+  "tr": "Aktuelle Messwerte"
+ },
+ "334460037081": {
+  "src": "Scene",
+  "tr": "Szene"
+ },
+ "34edf7159153": {
+  "src": "<b>rest</b>: the load sits on its lower stop until F₁(t) &gt; F₁,min. The oil is static: p₁ = (F₁+m₁g)/A₁ and p₂ = p₁ + ρg(h₁−h₂). The stop carries the rest of the load.",
+  "tr": "<b>Ruhe</b>: Die Last liegt auf ihrem unteren Anschlag, bis F₁(t) &gt; F₁,min ist. Das Öl ist statisch: p₁ = (F₁+m₁g)/A₁ und p₂ = p₁ + ρg(h₁−h₂). Der Anschlag trägt den Rest der Last."
+ },
+ "3505aaebfded": {
+  "src": "7 · What “ideal” leaves out",
+  "tr": "7 · Was „ideal“ weglässt"
+ },
+ "35d39cf3004f": {
+  "src": "The turns from the columns into the pipe are ignored, and the pipe lies horizontal at the base of the columns.",
+  "tr": "Die Umlenkungen von den Säulen in das Rohr werden vernachlässigt, und das Rohr liegt waagerecht am Fuß der Säulen."
+ },
+ "3b7c4175a3df": {
+  "src": "Readouts",
+  "tr": "Messwerte"
+ },
+ "3d88bd8c2b24": {
+  "src": "V(x) = -m_1g\\,x + (m_2 + M)\\,g\\,r\\,x + \\tfrac12\\rho gA_1(1 + r)\\,x^2",
+  "tr": "V(x) = -m_1g\\,x + (m_2 + M)\\,g\\,r\\,x + \\tfrac12\\rho gA_1(1 + r)\\,x^2"
+ },
+ "3e5b3be0af25": {
+  "src": "Time traces",
+  "tr": "Zeitverläufe"
+ },
+ "403f153bc117": {
+  "src": "With d₁ = 4 cm and d₂ = 12 cm, r = 1/9: the full 30 cm input stroke lifts the load by only 3.33 cm. The same rule fixes every speed in the oil. The left column moves at ẋ, the right column at r·ẋ, and the pipe at (A₁/A<sub>p</sub>)·ẋ = 16·ẋ, because the pipe's cross-section is 16 times smaller than the input bore. That is why the dots race through the pipe.",
+  "tr": "Mit d₁ = 4 cm und d₂ = 12 cm ist r = 1/9: Der volle Eingangshub von 30 cm hebt die Last nur um 3.33 cm an. Dieselbe Regel legt jede Geschwindigkeit im Öl fest. Die linke Säule bewegt sich mit ẋ, die rechte mit r·ẋ und das Öl im Rohr mit (A₁/A<sub>p</sub>)·ẋ = 16·ẋ, weil der Rohrquerschnitt 16-mal kleiner ist als die Eingangsbohrung. Deshalb sausen die Punkte durch das Rohr."
+ },
+ "4213b083f954": {
+  "src": "Knobs",
+  "tr": "Drehknöpfe"
+ },
+ "4335be7694b1": {
+  "src": "4 · One coordinate, one Lagrangian",
+  "tr": "4 · Eine Koordinate, eine Lagrange-Funktion"
+ },
+ "437bcb151127": {
+  "src": "Energy",
+  "tr": "Energie"
+ },
+ "44c57abd888a": {
+  "src": "Reset",
+  "tr": "Zurücksetzen"
+ },
+ "4728fb6fa386": {
+  "src": "Phases of the run; select one to jump to it",
+  "tr": "Phasen des Laufs; eine auswählen, um dorthin zu springen"
+ },
+ "4734b7154f95": {
+  "src": "Recorded every millisecond",
+  "tr": "Jede Millisekunde aufgezeichnet"
+ },
+ "49c2afb5e5ec": {
+  "src": "There is no viscosity: no friction loss along the pipe (Hagen–Poiseuille) and no damping.",
+  "tr": "Es gibt keine Zähigkeit: keinen Reibungsverlust entlang des Rohres (Hagen-Poiseuille) und keine Dämpfung."
+ },
+ "4cee3a37cd01": {
+  "src": "6 · What a run does",
+  "tr": "6 · Was ein Lauf tut"
+ },
+ "58b271cef8dd": {
+  "src": "The short version. Every step is derived in full in <a href=\"hydraulic_theory.html\">Hydraulics from First Principles</a>, Part I.",
+  "tr": "Die Kurzfassung. Jeder Schritt wird vollständig in <a href=\"hydraulic_theory.html\">Hydraulik aus ersten Prinzipien</a>, Teil I, hergeleitet."
+ },
+ "5966faa83062": {
+  "src": "Two cylinders joined by a pipe, filled with oil. Push the small piston and watch the oil carry the push to the large one. One generalized coordinate, one Lagrangian, integrated with RK4 and drawn to true scale; the oil is coloured by its pressure field and the dots are real material points.",
+  "tr": "Zwei Zylinder, durch ein Rohr verbunden und mit Öl gefüllt. Drücken Sie auf den kleinen Kolben und beobachten Sie, wie das Öl den Druck zum großen Kolben weiterleitet. Eine verallgemeinerte Koordinate, eine Lagrange-Funktion, mit RK4 integriert und maßstabsgetreu gezeichnet; das Öl ist nach seinem Druckfeld eingefärbt, und die Punkte sind echte materielle Punkte."
+ },
+ "59b826a9d801": {
+  "src": "\\begin{array}{lll} \\text{bottom of left column} & p_{b1} = p_1 + \\rho(g - a)\\,h_1 & \\text{weight of the column, less what its downward acceleration needs}\\\\ \\text{pipe inlet} & p_{\\mathrm{in}} = p_{b1} + \\tfrac12\\rho\\left(v^2 - v_p^2\\right) & \\text{Bernoulli: speeding the oil up costs pressure}\\\\ \\text{pipe outlet} & p_{\\mathrm{out}} = p_{\\mathrm{in}} - \\rho\\,\\dfrac{A_1}{A_p}\\,a\\,L_p & \\text{the force that accelerates the oil plug in the pipe}\\\\ \\text{bottom of right column} & p_{b2} = p_{\\mathrm{out}} + \\tfrac12\\rho\\left(v_p^2 - r^2v^2\\right) & \\text{slowing down gives the pressure back (lossless here)}\\\\ \\text{top of right column} & p_{b2} - \\rho(g + ra)\\,h_2 = p_2 & \\text{must agree with the output piston} \\end{array}",
+  "tr": "\\begin{array}{lll} \\text{Boden der linken Säule} & p_{b1} = p_1 + \\rho(g - a)\\,h_1 & \\text{Gewicht der Säule, abzüglich des Anteils für ihre Abwärtsbeschleunigung}\\\\ \\text{Einlauf des Rohrs} & p_{\\mathrm{in}} = p_{b1} + \\tfrac12\\rho\\left(v^2 - v_p^2\\right) & \\text{Bernoulli: Beschleunigen des Öls kostet Druck}\\\\ \\text{Auslauf des Rohrs} & p_{\\mathrm{out}} = p_{\\mathrm{in}} - \\rho\\,\\dfrac{A_1}{A_p}\\,a\\,L_p & \\text{die Kraft, die den Ölpfropfen im Rohr beschleunigt}\\\\ \\text{Boden der rechten Säule} & p_{b2} = p_{\\mathrm{out}} + \\tfrac12\\rho\\left(v_p^2 - r^2v^2\\right) & \\text{Abbremsen gibt den Druck zurück (hier verlustfrei)}\\\\ \\text{Oberseite der rechten Säule} & p_{b2} - \\rho(g + ra)\\,h_2 = p_2 & \\text{muss mit dem Ausgangskolben übereinstimmen} \\end{array}"
+ },
+ "5a5725935967": {
+  "src": "▶ Play",
+  "tr": "▶ Abspielen"
+ },
+ "5cb3fa8488ff": {
+  "src": "input stroke x₁",
+  "tr": "Eingangshub x₁"
+ },
+ "5efd49ecd716": {
+  "src": "The oil is incompressible (infinite bulk modulus), and the walls and pistons are rigid.",
+  "tr": "Das Öl ist inkompressibel (unendlicher Kompressionsmodul), und Wände und Kolben sind starr."
+ },
+ "5f667280fef1": {
+  "src": "The press multiplies force by 9 and divides distance by 9, so the product does not change, just as with a lever:",
+  "tr": "Die Presse vervielfacht die Kraft um den Faktor 9 und teilt den Weg durch 9, sodass sich das Produkt nicht ändert, genau wie beim Hebel:"
+ },
+ "613026ac11dc": {
+  "src": "Ideal Hydraulic <em>Press</em>",
+  "tr": "Ideale hydraulische <em>Presse</em>"
+ },
+ "61a6df4f178d": {
+  "src": "1 · The syringe picture",
+  "tr": "1 · Das Bild der Spritze"
+ },
+ "6656f0efc2ef": {
+  "src": "Volume conservation leaves a single degree of freedom: x, the downward displacement of the input piston. The column heights are h₁ = H₀ − x and h₂ = H₀ + r·x. Adding the kinetic energies of the parts, with plug flow:",
+  "tr": "Die Volumenerhaltung lässt einen einzigen Freiheitsgrad übrig: x, die Abwärtsverschiebung des Eingangskolbens. Die Säulenhöhen sind h₁ = H₀ − x und h₂ = H₀ + r·x. Summiert man die kinetischen Energien der Teile, bei Pfropfenströmung, so erhält man:"
+ },
+ "68e877b10a69": {
+  "src": "In oil at rest, the pressure is the same at all points at the same height. A pressure p pushes on a piston of area A with a force p·A. Push the small piston with F₁ and the oil carries p = F₁/A₁ to the large piston, which feels",
+  "tr": "In ruhendem Öl ist der Druck an allen Punkten gleicher Höhe gleich. Ein Druck p drückt auf einen Kolben der Fläche A mit der Kraft p·A. Drücken Sie mit F₁ auf den kleinen Kolben, so trägt das Öl den Druck p = F₁/A₁ zum großen Kolben, der die Kraft erfährt"
+ },
+ "69ebb422b227": {
+  "src": "p₁ under input piston",
+  "tr": "p₁ unter dem Eingangskolben"
+ },
+ "6bb48432e172": {
+  "src": "\\begin{aligned} T &= \\tfrac12m_1\\dot{x}^2 + \\tfrac12(m_2 + M)(r\\dot{x})^2 + \\tfrac12\\rho A_1h_1\\dot{x}^2\\\\ &\\quad + \\tfrac12\\rho A_pL_p\\left(\\frac{A_1}{A_p}\\dot{x}\\right)^2 + \\tfrac12\\rho A_2h_2(r\\dot{x})^2 = \\tfrac12\\,\\mu(x)\\,\\dot{x}^2\\\\ \\mu(x) &= m_1 + (m_2 + M)\\,r^2 + \\rho A_1\\left[(H_0 - x) + r\\,(H_0 + rx) + L_p\\,\\frac{A_1}{A_p}\\right] \\end{aligned}",
+  "tr": "\\begin{aligned} T &= \\tfrac12m_1\\dot{x}^2 + \\tfrac12(m_2 + M)(r\\dot{x})^2 + \\tfrac12\\rho A_1h_1\\dot{x}^2\\\\ &\\quad + \\tfrac12\\rho A_pL_p\\left(\\frac{A_1}{A_p}\\dot{x}\\right)^2 + \\tfrac12\\rho A_2h_2(r\\dot{x})^2 = \\tfrac12\\,\\mu(x)\\,\\dot{x}^2\\\\ \\mu(x) &= m_1 + (m_2 + M)\\,r^2 + \\rho A_1\\left[(H_0 - x) + r\\,(H_0 + rx) + L_p\\,\\frac{A_1}{A_p}\\right] \\end{aligned}"
+ },
+ "6c82e6dd8680": {
+  "src": "Time",
+  "tr": "Zeit"
+ },
+ "6dfc7d281b36": {
+  "src": "the potential energy V(x): the load is lifted, the input piston is lowered, and oil is moved from the top of the left column to the top of the right one;",
+  "tr": "die potentielle Energie V(x): Die Last wird angehoben, der Eingangskolben wird abgesenkt, und Öl wird von der Oberseite der linken Säule zur Oberseite der rechten verschoben;"
+ },
+ "6e097543e5df": {
+  "src": "the energy lost when a stop halts a moving piston instantly.",
+  "tr": "die Energie, die verloren geht, wenn ein Anschlag einen bewegten Kolben sofort anhält."
+ },
+ "6fc3e04d0b10": {
+  "src": "Any change recomputes the whole run from t = 0.",
+  "tr": "Jede Änderung berechnet den ganzen Lauf neu ab t = 0."
+ },
+ "6ff42b75c926": {
+  "src": "Playback speed",
+  "tr": "Wiedergabegeschwindigkeit"
+ },
+ "737873b16083": {
+  "src": "Energies",
+  "tr": "Energien"
+ },
+ "7525e61a31e3": {
+  "src": "the force that accelerates the oil plug in the pipe",
+  "tr": "die Kraft, die den Ölpfropfen im Rohr beschleunigt"
+ },
+ "75e038c29768": {
+  "src": "Now follow the oil from the input piston to the output piston, with v = ẋ and v<sub>p</sub> = (A₁/A<sub>p</sub>)·v:",
+  "tr": "Nun verfolgen wir das Öl vom Eingangskolben zum Ausgangskolben, mit v = ẋ und v<sub>p</sub> = (A₁/A<sub>p</sub>)·v:"
+ },
+ "788d34374de1": {
+  "src": "Hover a plot to read every curve at one instant; press or drag in it to move the animation there.",
+  "tr": "Fahren Sie mit dem Mauszeiger über ein Diagramm, um jede Kurve zu einem Zeitpunkt abzulesen; drücken oder ziehen Sie darin, um die Animation dorthin zu bewegen."
+ },
+ "798c12c57040": {
+  "src": "lost at stops",
+  "tr": "an Anschlägen verloren"
+ },
+ "79ee791147d8": {
+  "src": "F₁ applied now",
+  "tr": "F₁ jetzt aufgebracht"
+ },
+ "84b23bf4aa92": {
+  "src": "must agree with the output piston",
+  "tr": "muss mit dem Ausgangskolben übereinstimmen"
+ },
+ "85acc5081c30": {
+  "src": "slowing down gives the pressure back (lossless here)",
+  "tr": "Abbremsen gibt den Druck zurück (hier verlustfrei)"
+ },
+ "8720f140fd91": {
+  "src": "Oil gauge pressure",
+  "tr": "Öl-Überdruck"
+ },
+ "8dc2a6624f2c": {
+  "src": "<span class=\"swatch\" aria-hidden=\"true\"></span> below 0",
+  "tr": "<span class=\"swatch\" aria-hidden=\"true\"></span> unter 0"
+ },
+ "902e9077bc99": {
+  "src": "K kinetic, ½μẋ²",
+  "tr": "K kinetisch, ½μẋ²"
+ },
+ "91589e4c1a23": {
+  "src": "The last term has a simple picture. A slab of oil of volume A₁x leaves the top of the left column, where its centre was at H₀ − x/2, and is laid on top of the right column, where its centre is at H₀ + r·x/2. It rises by (1+r)·x/2, so it acts as a spring of stiffness k = ρgA₁(1+r) = 11.9 N/m. Lagrange's equation with the generalized force F₁(t):",
+  "tr": "Der letzte Term hat ein einfaches Bild. Eine Ölscheibe vom Volumen A₁x verlässt die Oberseite der linken Säule, wo ihr Schwerpunkt bei H₀ − x/2 lag, und wird oben auf die rechte Säule gelegt, wo ihr Schwerpunkt bei H₀ + r·x/2 liegt. Sie steigt um (1+r)·x/2 und wirkt daher wie eine Feder der Steifigkeit k = ρgA₁(1+r) = 11.9 N/m. Lagrange-Gleichung mit der verallgemeinerten Kraft F₁(t):"
+ },
+ "919ee4eeb925": {
+  "src": "Pascal · Bernoulli · Lagrange · interactive study",
+  "tr": "Pascal · Bernoulli · Lagrange · interaktive Studie"
+ },
+ "91fa743062a5": {
+  "src": "the kinetic energy K = ½μẋ² of everything that moves;",
+  "tr": "die kinetische Energie K = ½μẋ² aller bewegten Teile;"
+ },
+ "958bcc0d42bf": {
+  "src": "In the moving press, the work you put in, W = ∫F₁ dx, goes to three places:",
+  "tr": "In der bewegten Presse verteilt sich die Arbeit, die Sie hineinstecken, W = ∫F₁ dx, auf drei Posten:"
+ },
+ "96b6180545f8": {
+  "src": "Physics",
+  "tr": "Physik"
+ },
+ "96ea48b292d4": {
+  "src": "Newton's law for each piston gives the pressure under it (a = ẍ):",
+  "tr": "Das Newtonsche Gesetz für jeden Kolben liefert den Druck unter ihm (a = ẍ):"
+ },
+ "98b9a3925d4c": {
+  "src": "<b>stalled</b>: if F₁ never exceeds F₁,min, the run ends 1 s after the ramp.",
+  "tr": "<b>Blockiert</b>: Übersteigt F₁ nie F₁,min, endet der Lauf 1 s nach dem Ende der Rampe."
+ },
+ "99b1aaf7c1f3": {
+  "src": "Area changes are lossless: Bernoulli holds at the contraction and at the expansion, with no Borda–Carnot loss where the jet leaves the pipe.",
+  "tr": "Querschnittsänderungen sind verlustfrei: Bernoulli gilt an der Verengung und an der Erweiterung, ohne Borda-Carnot-Verlust dort, wo der Strahl das Rohr verlässt."
+ },
+ "99f548a9a9df": {
+  "src": "Related pages",
+  "tr": "Verwandte Seiten"
+ },
+ "9a5f89e3d8cc": {
+  "src": "3 · Energy: what you gain in force you pay in distance",
+  "tr": "3 · Energie: Was man an Kraft gewinnt, zahlt man mit Weg"
+ },
+ "9c7f732592c6": {
+  "src": "Plots",
+  "tr": "Diagramme"
+ },
+ "9d5c76f774e9": {
+  "src": "<b>end</b>: the input piston hits its stop after a 30 cm stroke. Its velocity drops to 0 at once, the kinetic energy is recorded as lost, and the static pressures p₂ = (m₂+M)g/A₂ and p₁ = p₂ + ρg(h₂−h₁) are shown for 0.6 s.",
+  "tr": "<b>Ende</b>: Der Eingangskolben trifft nach einem Hub von 30 cm auf seinen Anschlag. Seine Geschwindigkeit fällt sofort auf 0, die kinetische Energie wird als verloren gezählt, und die statischen Drücke p₂ = (m₂+M)g/A₂ und p₁ = p₂ + ρg(h₂−h₁) werden 0.6 s lang angezeigt."
+ },
+ "a324fa042a25": {
+  "src": "weight of the column, less what its downward acceleration needs",
+  "tr": "Gewicht der Säule, abzüglich des Anteils für ihre Abwärtsbeschleunigung"
+ },
+ "a62c370098d1": {
+  "src": "Theory in brief",
+  "tr": "Theorie in Kürze"
+ },
+ "a77676b02e88": {
+  "src": "The last line is a self-test. The value at the end of the chain has to equal the p₂ that the output piston needs, and check_physics.py proves it symbolically. The oil is coloured by this pressure, pale amber at 0 and deep wine at the maximum of the run. Gauge pressure is pressure above the atmosphere. Below zero the oil is under suction, and a real press would draw in air or release dissolved gas there; near −100 kPa gauge the oil would boil (cavitate). The page warns as soon as any gauge pressure drops below 0.",
+  "tr": "Die letzte Zeile ist eine Selbstprüfung. Der Wert am Ende der Kette muss gleich dem p₂ sein, das der Ausgangskolben braucht, und check_physics.py beweist das symbolisch. Das Öl ist nach diesem Druck eingefärbt, blassbernsteinfarben bei 0 und tiefweinrot beim Maximum des Laufs. Überdruck ist der Druck über dem Atmosphärendruck. Unter null herrscht im Öl Sog; eine echte Presse würde dort Luft ansaugen oder gelöste Gase freisetzen, und nahe −100 kPa Überdruck würde das Öl sieden (kavitieren). Die Seite warnt, sobald ein Überdruck unter 0 fällt."
+ },
+ "ab8b22940f7b": {
+  "src": "Gauges",
+  "tr": "Anzeigen"
+ },
+ "ad611c7f2528": {
+  "src": "pipe outlet",
+  "tr": "Auslauf des Rohrs"
+ },
+ "af10ef20dd90": {
+  "src": "in",
+  "tr": "in"
+ },
+ "afaea2449192": {
+  "src": "There is no friction at the piston seals and there are no leaks.",
+  "tr": "An den Kolbendichtungen gibt es keine Reibung, und es gibt keine Leckagen."
+ },
+ "afe00e5aea98": {
+  "src": "load lift x₂",
+  "tr": "Lasthub x₂"
+ },
+ "b04a5de6d9c2": {
+  "src": "Pressures",
+  "tr": "Drücke"
+ },
+ "b81110fc51e6": {
+  "src": "Read the derivations →",
+  "tr": "Zu den Herleitungen →"
+ },
+ "bbf4fcc26677": {
+  "src": "The servo-hydraulic press →",
+  "tr": "Die servohydraulische Presse →"
+ },
+ "bc0305685e20": {
+  "src": "Back to defaults",
+  "tr": "Auf Standardwerte zurücksetzen"
+ },
+ "bcdbab4d741d": {
+  "src": "With the defaults this gives 170 N × 9 = 1530 N. The load and its piston weigh (m₂+M)·g = 160 kg × 9.81 m/s² = 1569.6 N, so 170 N on its own would not lift them. The 2 kg input piston tips the balance: its weight of 19.6 N also presses on the oil, and the threshold is F₁,min = (m₂+M)·g·r − m₁·g = 154.78 N. Height matters too. In still oil, pressure rises by ρg = 8.53 kPa per metre of depth, and once the press moves the two columns are no longer equally tall.",
+  "tr": "Mit den Standardwerten ergibt das 170 N × 9 = 1530 N. Die Last samt ihrem Kolben wiegt (m₂+M)·g = 160 kg × 9.81 m/s² = 1569.6 N, sodass 170 N allein sie nicht anheben würden. Den Ausschlag gibt der 2 kg schwere Eingangskolben: Sein Gewicht von 19.6 N drückt ebenfalls auf das Öl, und die Schwelle ist F₁,min = (m₂+M)·g·r − m₁·g = 154.78 N. Auch die Höhe spielt eine Rolle. In ruhendem Öl steigt der Druck um ρg = 8.53 kPa je Meter Tiefe, und sobald sich die Presse bewegt, sind die beiden Säulen nicht mehr gleich hoch."
+ },
+ "bee75ca77f75": {
+  "src": "Controls",
+  "tr": "Bedienelemente"
+ },
+ "c1bb0da7dbef": {
+  "src": "p₂ under output piston",
+  "tr": "p₂ unter dem Ausgangskolben"
+ },
+ "c5113e319b95": {
+  "src": "<b>moving</b>: the equation of motion is integrated.",
+  "tr": "<b>Bewegung</b>: Die Bewegungsgleichung wird integriert."
+ },
+ "c63d95fc491d": {
+  "src": "Pressure along the oil path",
+  "tr": "Druck entlang des Ölwegs"
+ },
+ "c6884bb6f205": {
+  "src": "Animated hydraulic press",
+  "tr": "Animierte hydraulische Presse"
+ },
+ "c77f1f0a4817": {
+  "src": "The pipe term dominates. The pipe holds only 55 g of oil, but that oil moves 16 times faster than the piston, so its kinetic energy counts 16² = 256 times over. It contributes 14.0 kg of the 18.5 kg you feel through the piston.",
+  "tr": "Der Rohrterm dominiert. Das Rohr enthält nur 55 g Öl, aber dieses Öl bewegt sich 16-mal so schnell wie der Kolben, sodass seine kinetische Energie 16² = 256-fach zählt. Es steuert 14.0 kg der 18.5 kg bei, die Sie über den Kolben spüren."
+ },
+ "c7f73bb54d92": {
+  "src": "Settings",
+  "tr": "Einstellungen"
+ },
+ "c8e308704911": {
+  "src": "Playback",
+  "tr": "Wiedergabe"
+ },
+ "cc39db213018": {
+  "src": "time t",
+  "tr": "Zeit t"
+ },
+ "d0f50b3d3ec2": {
+  "src": "5 · The pressure field inside the oil",
+  "tr": "5 · Das Druckfeld im Öl"
+ },
+ "d171e96eea63": {
+  "src": "F_2 = p\\,A_2 = F_1\\,\\frac{A_2}{A_1}",
+  "tr": "F_2 = p\\,A_2 = F_1\\,\\frac{A_2}{A_1}"
+ },
+ "da55cb17cc57": {
+  "src": "Plug flow: one speed across each cross-section.",
+  "tr": "Pfropfenströmung: eine Geschwindigkeit über jeden Querschnitt."
+ },
+ "db153dbb00ab": {
+  "src": "\\begin{aligned} &\\frac{d}{dt}\\frac{\\partial T}{\\partial\\dot{x}} - \\frac{\\partial T}{\\partial x} + \\frac{\\partial V}{\\partial x} = F_1(t)\\\\ \\Rightarrow\\quad &\\mu(x)\\,\\ddot{x} + \\tfrac12\\,\\mu'\\dot{x}^2 = F_1(t) - V'(x),\\qquad \\mu' = \\frac{d\\mu}{dx} = \\rho A_1(r^2 - 1) \\end{aligned}",
+  "tr": "\\begin{aligned} &\\frac{d}{dt}\\frac{\\partial T}{\\partial\\dot{x}} - \\frac{\\partial T}{\\partial x} + \\frac{\\partial V}{\\partial x} = F_1(t)\\\\ \\Rightarrow\\quad &\\mu(x)\\,\\ddot{x} + \\tfrac12\\,\\mu'\\dot{x}^2 = F_1(t) - V'(x),\\qquad \\mu' = \\frac{d\\mu}{dx} = \\rho A_1(r^2 - 1) \\end{aligned}"
+ },
+ "e01c25fb83ad": {
+  "src": "Displacements",
+  "tr": "Verschiebungen"
+ },
+ "e035943e2cf2": {
+  "src": "F₁,min to start",
+  "tr": "F₁,min zum Anfahren"
+ },
+ "e040db2b7f13": {
+  "src": "Motion",
+  "tr": "Bewegung"
+ },
+ "e1181aef0554": {
+  "src": "2 · Pascal's principle",
+  "tr": "2 · Pascalsches Prinzip"
+ },
+ "e9c4bd2b937e": {
+  "src": "speed v = ẋ",
+  "tr": "Geschwindigkeit v = ẋ"
+ },
+ "ee0b739c9894": {
+  "src": "Pascal, static F₁·A₂/A₁",
+  "tr": "Pascal, statisch F₁·A₂/A₁"
+ },
+ "f4800df8d1bc": {
+  "src": "out",
+  "tr": "out"
+ },
+ "f77b9fda4ff3": {
+  "src": "<b>time limit</b>: any other run ends at t = τ + 10 s. With a force that only ramps up, the energy function h = K + V − F₁(t)·x can only decrease, because dh/dt = −Ḟ₁·x ≤ 0. So the load can never come back to x = 0 with v &lt; 0. If the force is too small to reach the stroke stop, the load swings between two turning points forever, and the run needs a limit.",
+  "tr": "<b>Zeitgrenze</b>: Jeder andere Lauf endet bei t = τ + 10 s. Bei einer Kraft, die nur ansteigt, kann die Energiefunktion h = K + V − F₁(t)·x nur abnehmen, weil dh/dt = −Ḟ₁·x ≤ 0 ist. Daher kann die Last nie mit v &lt; 0 zu x = 0 zurückkehren. Ist die Kraft zu klein, um den Hubanschlag zu erreichen, pendelt die Last für immer zwischen zwei Umkehrpunkten, und der Lauf braucht eine Grenze."
+ },
+ "fb0ac464aee1": {
+  "src": "\\begin{aligned} m_1a &= F_1 + m_1g - p_1A_1 &&\\Rightarrow\\quad p_1 = \\frac{F_1 + m_1g - m_1a}{A_1}\\\\ (m_2 + M)\\,r\\,a &= p_2A_2 - (m_2 + M)\\,g &&\\Rightarrow\\quad p_2 = \\frac{(m_2 + M)(g + ra)}{A_2} \\end{aligned}",
+  "tr": "\\begin{aligned} m_1a &= F_1 + m_1g - p_1A_1 &&\\Rightarrow\\quad p_1 = \\frac{F_1 + m_1g - m_1a}{A_1}\\\\ (m_2 + M)\\,r\\,a &= p_2A_2 - (m_2 + M)\\,g &&\\Rightarrow\\quad p_2 = \\frac{(m_2 + M)(g + ra)}{A_2} \\end{aligned}"
+ }
+}

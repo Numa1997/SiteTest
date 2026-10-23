@@ -10,7 +10,7 @@
     <meta name="theme-color" content="#f5f1ea">
     <link rel="stylesheet" href="../styles/sim.css">
     <link rel="stylesheet" href="../styles/data.css">
-    <link rel="stylesheet" href="../styles/fold.css">
+    <link rel="stylesheet" href="../styles/fold.css"><link rel="stylesheet" href="../styles/i18n.css"><script src="../scripts/flip.js"></script><!--I18N-ALTERNATES--><link rel="alternate" hreflang="en" href="https://phyeinusul.com/simulations/driven-oscillator.html" /><link rel="alternate" hreflang="de" href="https://phyeinusul.com/de/simulations/driven-oscillator.html" /><link rel="alternate" hreflang="ar" href="https://phyeinusul.com/ar/simulations/driven-oscillator.html" /><link rel="alternate" hreflang="x-default" href="https://phyeinusul.com/simulations/driven-oscillator.html" /><!--/I18N-ALTERNATES-->
     <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='12' fill='%237a1f2b'/%3E%3Ctext x='32' y='45' text-anchor='middle' font-family='Georgia,serif' font-size='38' fill='%23f5f1ea'%3EN%3C/text%3E%3C/svg%3E">
     <style>
         .solve { display: grid; gap: 10px; }
@@ -38,7 +38,7 @@
             <a href="draw-decompose.html">8</a>
             <a href="driven-oscillator.html" aria-current="page">9</a>
             <a href="wind-turbine.html">10</a>
-        </nav>
+        </nav><span class="lang-switch" role="group" aria-label="Language" translate="no"><!--I18N-SWITCH--><a href="../simulations/driven-oscillator.html" hreflang="en" lang="en" aria-current="page">English</a> · <a href="../de/simulations/driven-oscillator.html" hreflang="de" lang="de">Deutsch</a> · <a href="../ar/simulations/driven-oscillator.html" hreflang="ar" lang="ar" dir="rtl">العربية</a><!--/I18N-SWITCH--></span>
     </header>
 
     <main class="sim">
@@ -643,8 +643,8 @@
             if (!solved) return;
             statusEl.classList.toggle('is-stale', ds.get('stale'));
             statusEl.textContent = ds.get('stale')
-                ? 'A slider moved. The run below is still the one for f₀ = ' + solved.f0.toFixed(2) + ' Hz, ζ = ' + solved.zeta.toFixed(2) + ', F₀ = ' + solved.F0.toFixed(1) + ' N, f = ' + solved.fd.toFixed(2) + ' Hz. Press Solve to compute the new one.'
-                : 'Solved ' + Sim.fmt(ds.get('steps'), 0) + ' RK4 steps in ' + ds.get('solve_ms').toFixed(1) + ' ms and stored ' + NS + ' samples, one every ' + (EVERY * H * 1000).toFixed(0) + ' ms. Every frame shows one stored sample.';
+                ? _t('A slider moved. The run below is still the one for f₀ = ') + solved.f0.toFixed(2) + ' Hz, ζ = ' + solved.zeta.toFixed(2) + ', F₀ = ' + solved.F0.toFixed(1) + ' N, f = ' + solved.fd.toFixed(2) + _t(' Hz. Press Solve to compute the new one.')
+                : _t('Solved ') + Sim.fmt(ds.get('steps'), 0) + _t(' RK4 steps in ') + ds.get('solve_ms').toFixed(1) + _t(' ms and stored ') + NS + _t(' samples, one every ') + (EVERY * H * 1000).toFixed(0) + _t(' ms. Every frame shows one stored sample.');
             ['st-solve', 'st-store'].forEach(function (id) { document.getElementById(id).classList.toggle('is-done', !ds.get('stale')); });
         }
         function readouts() {
@@ -654,7 +654,7 @@
             document.getElementById('r-Q').textContent = Sim.fmt(ds.get('Q'), 1);
             document.getElementById('r-err').textContent = ds.get('err_max').toExponential(1).replace('-', '−') + ' m';
             document.getElementById('r-bal').textContent = ds.get('balance').toExponential(1).replace('-', '−');
-            document.getElementById('cap-res').innerHTML = ds.get('fr') > 0 ? '<i>f</i><sub>r</sub> = ' + Sim.fmt(ds.get('fr'), 3) + ' Hz' : 'no resonance peak (<i>ζ</i> ≥ 0.71)';
+            document.getElementById('cap-res').innerHTML = ds.get('fr') > 0 ? '<i>f</i><sub>r</sub> = ' + Sim.fmt(ds.get('fr'), 3) + ' Hz' : _t('no resonance peak (<i>ζ</i> ≥ 0.71)');
             status();
         }
 
@@ -826,7 +826,7 @@
             c.restore();
             c.strokeStyle = BURG; c.lineWidth = 1; c.beginPath(); c.moveTo(g.ox(ts[i]), p.top); c.lineTo(g.ox(ts[i]), p.bot); c.stroke();
             c.font = T.mono; c.fillStyle = T.muted; c.textBaseline = 'alphabetic';
-            c.textAlign = 'left'; c.fillText(g.narrow ? 'the whole run' : 'the whole run · the shaded band is the window above', p.L, p.top - 7);
+            c.textAlign = 'left'; c.fillText(g.narrow ? _t('the whole run') : _t('the whole run · the shaded band is the window above'), p.L, p.top - 7);
             c.textAlign = 'center'; for (var t = 0; t < TEND; t += 10) c.fillText(String(t), g.ox(t), p.bot + 15);
             c.textAlign = 'right'; c.fillText(TEND + ' s', p.R, p.bot + 15);
         }
@@ -958,12 +958,12 @@
             if (!replayAll || replayAll.key !== key) { replayAll = rk4Replay(NS - 1); replayAll.key = key; }
             return replayAll;
         }
-        function sliderCheck(input, label) { return { formula: 'read from the ' + label + ' slider at the last solve', inputs: [['slider now', input.value, '']], value: ds.get('stale') ? NaN : parseFloat(input.value) }; }
-        function at(name) { return function () { var n = ds.get('i_now'); return { formula: name + '<sub>n</sub> at n = n<sub>now</sub>', inputs: [['n<sub>now</sub>', n, '', 0]], value: ds.get(name)[n] }; }; }
+        function sliderCheck(input, label) { return { formula: _t('read from the ') + _t(label) + _t(' slider at the last solve'), inputs: [[_t('slider now'), input.value, '']], value: ds.get('stale') ? NaN : parseFloat(input.value) }; }
+        function at(name) { return function () { var n = ds.get('i_now'); return { formula: name + _t('<sub>n</sub> at n = n<sub>now</sub>'), inputs: [['n<sub>now</sub>', n, '', 0]], value: ds.get(name)[n] }; }; }
         function neutralInk(c) { return c[3] > 25 && c[0] < 100 && c[1] < 100 && c[2] < 100 && Math.abs(c[0] - c[2]) < 30; }
         function readBack(b, what, pt, r, test, expected, note) {
             var q = Sim.readPixel(b, pt.x, pt.y, r, test);
-            return { what: what + ', (' + Sim.fmt(pt.x, 1) + ', ' + Sim.fmt(pt.y, 1) + ') css px', drawn: q.text, expected: expected, ok: q.found, note: note };
+            return { what: what + ', (' + Sim.fmt(pt.x, 1) + ', ' + Sim.fmt(pt.y, 1) + _t(') css px'), drawn: q.text, expected: expected, ok: q.found, note: note };
         }
         function blockPixel() {
             var g = geom(), x = ds.get('block_px') - 0.32 * g.m.bw, y = ds.get('block_y');
@@ -971,16 +971,16 @@
                 'The block is drawn centred on x<sub>block</sub> = x<sub>eq</sub> + x · px/m; this pixel lies 0.32 block widths left of that centre, clear of the letter m.');
         }
         Sim.data = {
-            ds: ds, kicker: 'Fig. 9 · data', file: 'fig9-driven-oscillator',
+            ds: ds, kicker: _t('Fig. 9 · data'), file: 'fig9-driven-oscillator',
             playing: function () { return clk.playing; },
             groups: [
-                { title: 'Parameters', note: 'what you set with the sliders, as used by the last solve', vars: ['m', 'f0', 'zeta', 'F0', 'fd'] },
-                { title: 'Derived physics', note: 'computed from the parameters by solve()', vars: ['omega0', 'k', 'c', 'Omega', 'tau', 'Q', 'X', 'phi', 'phi_deg', 'G_drive', 'fr'] },
-                { title: 'Solver', note: 'how the run was computed, and what it measured', vars: ['h', 'steps', 'solve_ms', 'err_max', 'Xm', 'Gm_drive', 'Win', 'Wloss', 'balance', 'stale'] },
-                { title: 'Stored run', note: 'one row per stored sample, every 10 ms of the 60 s', vars: ['ts', 'xs', 'vs', 'Fs', 'xqs', 'ph', 'Es', 'Pin', 'Ploss', 'xex'] },
-                { title: 'Playback', note: 'the sample on screen now', vars: ['i_now', 't_play', 'x_now', 'v_now', 'F_now', 'ph_now', 'E_now', 'Pin_now'] },
-                { title: 'Bode plot', note: 'the curves of the second figure', vars: ['fb', 'Gmag', 'Gphase'] },
-                { title: 'Drawing', note: 'how stored values become pixels', vars: ['xmax', 'ylim', 'amp_px', 'px_per_m', 'eq_px', 'block_px', 'block_y', 'Fmax_px', 'F_px', 'win_t0', 'win_T', 'box_w', 'box_h', 'fps', 'playing'] }
+                { title: _t('Parameters'), note: _t('what you set with the sliders, as used by the last solve'), vars: ['m', 'f0', 'zeta', 'F0', 'fd'] },
+                { title: _t('Derived physics'), note: _t('computed from the parameters by solve()'), vars: ['omega0', 'k', 'c', 'Omega', 'tau', 'Q', 'X', 'phi', 'phi_deg', 'G_drive', 'fr'] },
+                { title: _t('Solver'), note: _t('how the run was computed, and what it measured'), vars: ['h', 'steps', 'solve_ms', 'err_max', 'Xm', 'Gm_drive', 'Win', 'Wloss', 'balance', 'stale'] },
+                { title: _t('Stored run'), note: _t('one row per stored sample, every 10 ms of the 60 s'), vars: ['ts', 'xs', 'vs', 'Fs', 'xqs', 'ph', 'Es', 'Pin', 'Ploss', 'xex'] },
+                { title: _t('Playback'), note: _t('the sample on screen now'), vars: ['i_now', 't_play', 'x_now', 'v_now', 'F_now', 'ph_now', 'E_now', 'Pin_now'] },
+                { title: _t('Bode plot'), note: _t('the curves of the second figure'), vars: ['fb', 'Gmag', 'Gphase'] },
+                { title: _t('Drawing'), note: _t('how stored values become pixels'), vars: ['xmax', 'ylim', 'amp_px', 'px_per_m', 'eq_px', 'block_px', 'block_y', 'Fmax_px', 'F_px', 'win_t0', 'win_T', 'box_w', 'box_h', 'fps', 'playing'] }
             ],
             colour: { xs: function (v) { return Sim.colourMap(v, ds.get('xmax')); }, Fs: function (v) { return Sim.colourMap(v, Math.max(ds.get('F0'), 1e-9)); } },
             probe: function (x, y) {
@@ -996,7 +996,7 @@
             inspect: function (ref) {
                 var n = ref.what === 'block' ? ds.get('i_now') : ref.n;
                 var rows = [['n', n, '', 'i_now', null], ['t', ds.get('ts')[n], 's', 'ts', n], ['x', ds.get('xs')[n], 'm', 'xs', n], ['v', ds.get('vs')[n], 'm/s', 'vs', n], ['F', ds.get('Fs')[n], 'N', 'Fs', n], ['F/k', ds.get('xqs')[n], 'm', 'xqs', n], ['E', ds.get('Es')[n], 'J', 'Es', n], ['P<sub>in</sub>', ds.get('Pin')[n], 'W', 'Pin', n], ['x<sub>exact</sub>', ds.get('xex')[n], 'm', 'xex', n]];
-                return { title: ref.what === 'block' ? 'the block, sample ' + n : 'stored sample ' + n, at: ref.what === 'block' ? { x: ds.get('block_px'), y: ds.get('block_y') } : chartPos(n), rows: rows };
+                return { title: ref.what === 'block' ? _t('the block, sample ') + n : _t('stored sample ') + n, at: ref.what === 'block' ? { x: ds.get('block_px'), y: ds.get('block_y') } : chartPos(n), rows: rows };
             },
             locate: function (name, idx) {
                 var v = ds.vars[name];
@@ -1060,7 +1060,7 @@
                     var g = geom(), fpx = ds.get('F_px'), y = ds.get('block_y') - g.m.bh / 2 - 15, x = ds.get('block_px') + fpx / 2;
                     if (Math.abs(fpx) < 2) {
                         var none = Sim.readPixel(box, x, y, 1, Sim.isBurgundy);
-                        return { what: 'where the force arrow would start, (' + Sim.fmt(x, 1) + ', ' + Sim.fmt(y, 1) + ') css px', drawn: none.found ? none.text : 'no burgundy pixel', expected: 'no arrow: |F| is below 2 px of the arrow scale', ok: !none.found, note: 'The arrow is drawn only when it is at least 2 px long.' };
+                        return { what: _t('where the force arrow would start, (') + Sim.fmt(x, 1) + ', ' + Sim.fmt(y, 1) + _t(') css px'), drawn: none.found ? none.text : _t('no burgundy pixel'), expected: _t('no arrow: |F| is below 2 px of the arrow scale'), ok: !none.found, note: _t('The arrow is drawn only when it is at least 2 px long.') };
                     }
                     return readBack(box, 'screen pixel half-way along the force arrow', { x: x, y: y }, 1, Sim.isBurgundy, 'the burgundy arrow', 'The arrow starts at the block centre and is F/F<sub>0</sub> · L<sub>F</sub> pixels long, to the right for F > 0.');
                 },
@@ -1071,7 +1071,7 @@
                 xs: function (n) {
                     var p = chartPos(n);
                     return readBack(box, 'x<sub>n</sub> on ' + p.where, p, 2, neutralInk, 'the dark curve of x(t): solid where played, faint where still to come',
-                        'The window draws every stored sample between its edges; the strip of the whole run draws every ' + Math.max(1, Math.floor(NS / ((geom().ov.R - geom().ov.L) * 2))) + '-th, about two per screen pixel.');
+                        _t('The window draws every stored sample between its edges; the strip of the whole run draws every ') + Math.max(1, Math.floor(NS / ((geom().ov.R - geom().ov.L) * 2))) + _t('-th, about two per screen pixel.'));
                 },
                 xqs: function (n) {
                     var p = chartPosQ(n);
@@ -1094,11 +1094,11 @@
                     return readBack(bbox, 'the drive frequency on the phase plot', { x: B.X(p, ds.get('fd')), y: B.Yp(p, ds.get('phi_deg')) }, 1, Sim.isBurgundy, 'the burgundy dot', 'The dot sits at f and φ.');
                 }
             },
-            round: { time: 't_play', label: function () { return 'one drive period, 1/f = ' + Sim.fmt(1 / ds.get('fd'), 3) + ' s of the stored run'; }, length: function () { return 1 / ds.get('fd'); },
+            round: { time: 't_play', label: function () { return _t('one drive period, 1/f = ') + Sim.fmt(1 / ds.get('fd'), 3) + _t(' s of the stored run'); }, length: function () { return 1 / ds.get('fd'); },
                 columns: ['x_now', 'v_now', 'F_now', 'E_now', 'Pin_now'], point: function () { return { what: 'block' }; },
-                blocked: function () { return ds.get('t_play') + 1 / ds.get('fd') > TEND ? 'the stored run ends before one more drive period; press From t = 0' : null; } },
+                blocked: function () { return ds.get('t_play') + 1 / ds.get('fd') > TEND ? _t('the stored run ends before one more drive period; press From t = 0') : null; } },
             play: function () { clk.set(true); },
-            about: 'Nothing on this page is computed while you watch. The run is solved once, with RK4 at h = 1 ms, and every tenth state is stored together with the force F, the stretch F/k, the drive phase Ωt, the energy, the two powers and the exact solution. Each frame draws the stored sample nearest to the playback time, without interpolation; the only arithmetic in the drawing turns metres, seconds and newtons into pixels, with the scales listed under Drawing. The window chart draws every stored sample between its edges; the strip of the whole run draws about two samples per screen pixel. The block travels A<sub>px</sub> pixels either side of rest at the largest swing of the run, so the drawing scale px/m changes when the run changes; the ruler under the floor gives that swing in metres.'
+            about: _t('Nothing on this page is computed while you watch. The run is solved once, with RK4 at h = 1 ms, and every tenth state is stored together with the force F, the stretch F/k, the drive phase Ωt, the energy, the two powers and the exact solution. Each frame draws the stored sample nearest to the playback time, without interpolation; the only arithmetic in the drawing turns metres, seconds and newtons into pixels, with the scales listed under Drawing. The window chart draws every stored sample between its edges; the strip of the whole run draws about two samples per screen pixel. The block travels A<sub>px</sub> pixels either side of rest at the largest swing of the run, so the drawing scale px/m changes when the run changes; the ruler under the floor gives that swing in metres.')
         };
 
         solve();

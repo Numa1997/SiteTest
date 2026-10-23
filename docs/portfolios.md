@@ -1,22 +1,26 @@
 # The four research projects: `public/portfolios/`
 
 The Portfolios page ([`public/portfolios.html`](../public/portfolios.html), described in [pages.md](pages.md)) presents four
-research projects; the fourth, Iron, Cotton and the Head, is described [at the end](#iron-cotton-and-the-head-impact). Droplet Collection is its own AppDeploy app with its own source; Rotor Pendula, since 23 October 2026, is generated from its source in this repository and keeps the copy of Sol's app beside it ([below](#rotor-pendula-rotor-pendula)); the third, the Hydraulic Press
+research projects; the fourth, Iron, Cotton and the Head, is described [at the end](#iron-cotton-and-the-head-impact). Droplet Collection ([below](#droplet-collection-droplet-collection-since-23-october-2026)) and Rotor Pendula ([below](#rotor-pendula-rotor-pendula)) are, since 23 October 2026, generated from their sources in this repository, and Rotor Pendula keeps the copy of Sol's app beside it; the third, the Hydraulic Press
 Study, is generated from its own GitHub repository ([below](#the-hydraulic-press-study-hydraulics)). This website carries only
 a **built copy** of each one, so that a reader can open it here without leaving the site:
 
 | Folder | Built from the app | What it is |
 |---|---|---|
-| [`public/portfolios/droplet-collection/`](../public/portfolios/droplet-collection/) | `droplet-collection-yl7l26` | Numa's Bachelor thesis (Leipzig) on how cloud droplets grow into rain by gravitational collection, remodelled: derivations, a solver of the stochastic collection equation that runs in the browser, results and checks. |
+| [`public/portfolios/droplet-collection/`](../public/portfolios/droplet-collection/) | its source in [`portfolios-src/droplets/`](../portfolios-src/droplets/) (since 23 October 2026; before, the app `droplet-collection-yl7l26`) | Numa's Bachelor thesis (Leipzig) on how cloud droplets grow into rain, rebuilt as lecture notes: ten chapters from one drop to ice, three simulations running in the browser, worked problems and checks. One self-contained page ([below](#droplet-collection-droplet-collection-since-23-october-2026)). |
 | [`public/portfolios/rotor-pendula/`](../public/portfolios/rotor-pendula/) | its source in [`portfolios-src/rotor-pendula/`](../portfolios-src/rotor-pendula/); `sol.html` and `static/` from the app `rotor-pendula-gafw0f` | A pendulum riding on a wind-turbine blade as a sensor's power supply: lecture notes in nine chapters and a simulation page (`index.html`), built on Sol's corrected study, whose app copy (`sol.html`, with its Report page) and delivery (`study/`) are kept. |
 | [`public/portfolios/hydraulics/`](../public/portfolios/hydraulics/) | its source in [`portfolios-src/hydraulics/`](../portfolios-src/hydraulics/) (not an app) | A servo-hydraulic press under digital control, from first principles: the animated press with its PID controller, loop analysis (Bode, Nyquist, z-plane), Pascal's ideal press, and a 23-chapter text deriving every equation. One self-contained page. |
 
-**The source code of the first two apps is not in this repository.** It lives in their AppDeploy apps (readable there with
+**The source code of the app copies is not in this repository** (today one copy: Sol's Rotor Pendula app, served as
+`sol.html`). It lives in its AppDeploy app (readable there with
 `src_read`). What is here is the output of their build (`vite build`): one HTML file, one JavaScript bundle, one stylesheet,
 one Web Worker, the KaTeX fonts, and the figures and files they link to. Minified bundles are not meant to be read or edited
 by hand: to change a project, change its app, rebuild, and copy the build here again (the procedure is at the end of this page).
 
 ## How a copy works
+
+(This section describes the app copies. Rotor Pendula is one; Droplet Collection was one until 23 October 2026, and its mentions
+below describe that former copy. The page it is now is described [at the end](#droplet-collection-droplet-collection-since-23-october-2026).)
 
 Picture a sealed parcel: everything the project needs is inside its folder, and it touches the rest of the site in only two
 places, the links into it from `portfolios.html` and its one link back out.
@@ -24,7 +28,8 @@ places, the links into it from `portfolios.html` and its one link back out.
 1. **One page, many views.** Each copy is a single-page application written in React. The browser loads
    `index.html`, which loads one JavaScript module (`static/index-<hash>.js`). That module draws every view of the project into
    `<div id="root">`. The view to show is chosen by the part of the address after `#`, the **hash route**:
-   - Droplet Collection: `#/` (Overview), `#/theory`, `#/results`, `#/simulate`, `#/checks`;
+   - (Droplet Collection used `#/`, `#/theory`, `#/results`, `#/simulate`, `#/checks` until 23 October 2026; it is now one
+     generated page, described [below](#droplet-collection-droplet-collection-since-23-october-2026).)
    - Rotor Pendula (Sol's app, now `sol.html`): `#/` (Overview), `#/theory`, `#/results`, `#/simulate`, `#/checks`, `#/report`.
 
    (Found with `grep -o 'path:"/[a-z-]*"' public/portfolios/*/static/index-*.js`.) Hash routes are used because the server
@@ -68,16 +73,16 @@ places, the links into it from `portfolios.html` and its one link back out.
 
 ## Files in each copy
 
-### `droplet-collection/` (69 files)
+### `droplet-collection/`
+
+Since 23 October 2026 the copy is generated from [`portfolios-src/droplets/`](../portfolios-src/droplets/); see
+[below](#droplet-collection-droplet-collection-since-23-october-2026). What sits in the folder:
 
 | Path | What it is |
 |---|---|
-| `index.html` | The entry page: the security policy and referrer rule, title, description, the module script, the stylesheet loader. |
-| `static/index-DGIxitSc.js` | The whole application (React, KaTeX 0.16.47, the pages Overview, Theory, Results, Simulate, Checks), minified, 841 kB. |
-| `static/index-CGriahzx.css` | Its stylesheet (the house design and the KaTeX styles; fonts imported from `../../../fonts/instrument-plex.css`), 61 kB. |
-| `static/worker-ClooJ8Gk.js` | The Web Worker: the solver of the stochastic collection equation, 131 kB. |
-| `static/KaTeX_*.{woff2,woff,ttf}` | 59 font files of KaTeX, the maths typesetter, each in up to three formats (the bundle names them; the browser picks the first format it supports, in practice woff2). |
-| `fig/c1_ice.svg`, `fig/ecoll_map.svg`, `fig/fallspeed_gk.svg`, `fig/golovin.svg`, `fig/w2_rain.svg`, `fig/w2_spectra.svg` | Vector figures of the project. Four of them also appear as plates on the Portfolios page ([portfolios.html:129–141](../public/portfolios.html#L129-L141)). |
+| `index.html` | The whole project in one file, written by `portfolios-src/droplets/tools/build.py --site`: the lecture notes (maths typeset at build time with KaTeX 0.16.11), the model, the three simulations, the figures as inline SVG. It loads the site's `fonts/instrument-plex.css` and `vendor/katex/katex.min.css`. |
+| `fig/plate-fallspeed.svg`, `fig/plate-efficiency.svg`, `fig/plate-warm.svg`, `fig/plate-first.svg` | The four plates of the Portfolios page article, written by the same build from the same figures as the notes. |
+| `fig/c1_ice.svg`, `fig/ecoll_map.svg`, `fig/fallspeed_gk.svg`, `fig/golovin.svg`, `fig/w2_rain.svg`, `fig/w2_spectra.svg` | Left over from the app copy (its `static/` bundle was removed on 23 October 2026, once nothing loaded it). The German and Arabic Portfolios pages still show these old plates until the i18n generator is run again (`tools/i18n/build.py`), so they stay for now. |
 
 ### `rotor-pendula/`
 
@@ -302,6 +307,7 @@ lists every file) by `python3 portfolios-src/impact/build.py --site`. Never edit
 |---|---|
 | `impact/index.html` | The study in English: two balls of 1 kg, iron and cotton, dropped from 10 m onto a head drawn as a plate on a spring and damper, which is also the scale. A peak-hold force gauge and a digital panel under each ball, force curves, energy books, seven sections of derivations and a table of every parameter. |
 | `impact/ar.html` | The same study written in Arabic, right to left, set in Amiri and Noto Naskh Arabic ([assets.md](assets.md#arabic-faces-added-22-october-2026-on-numas-request)). |
+| `impact/de.html` | The same study in German (`text_de.py`, since 23 October 2026), house fonts; its sitebar links English · Deutsch · العربية and the German Portfolios page. |
 | `impact/fig/01_impact.webp` … `04_weight.webp` | The four plates of the Portfolios entry, screenshots of the English page. |
 
 **How a page works.** The model (`physics.js`, copied into the page between `/*PHYSICS-BEGIN*/` and `/*PHYSICS-END*/`) runs once
@@ -400,3 +406,23 @@ units in `dataset.json`); with the panel closed `__dataPanel.running()` is false
 638.6 N, cotton 188.0 N, weights 9.810 N and 9.810 N, first touch 1.428 s, books closed to 0.21 J and 0.51 J. Computing the run
 takes 9 % longer than before the store (123 s against 113 s in this container's headless Chromium, which has no GPU).
 
+
+
+## Droplet Collection: `droplet-collection/` (since 23 October 2026)
+
+The project was rebuilt from first principles as lecture notes; the app copy it replaces is described in the sections above as it
+was. Source, build and checks are in [`portfolios-src/droplets/README.md`](../portfolios-src/droplets/README.md); the record of
+how each model level was argued, attacked by an independent reviewer and checked is in [`notes/droplets/`](../notes/droplets/)
+(`status.md` first).
+
+- **One page, four tabs.** `index.html` holds the tabs Simulation (`#sim`), Lecture notes (`#book`), Problems (`#problems`) and
+  Checks (`#checks`); any element id also works as an address (`#ch3`, `#fig-5-2`, `#eq-6.1`), opening its tab. The Portfolios
+  page links to `#book`, `#sim`, `#checks` and to four figures.
+- **The model runs in the page.** The code between `/*PHYSICS-BEGIN*/` and `/*PHYSICS-END*/` of `physics.cjs` is inlined; the
+  same code runs in Node for the run tools and the checks. The three panels (collection equation in a box, droplet trajectories,
+  an exact random cloud) change only on a click, a slider release or a button; nothing reacts to the pointer crossing a figure.
+- **Every quoted number is checked.** `checks/check_numbers.cjs` recomputes 157 numbers from the model and finds each in the text
+  near its anchor; `checks/check_physics.py` recomputes the physics independently in Python (12 checks); `checks/check_browser.py`
+  opens every tab at 360, 390, 1024 and 1440 px and counts KaTeX errors, page errors and horizontal overflow.
+- **The ladder.** L0 one collector (chapter 1); L1 fall speed (2); L2 collision efficiency (3); L3 coalescence (4); L4 the
+  collection equation (5); L5 the exact random process and the first drizzle (6); L6 turbulence, decided by a number (7); L7 ice (8).

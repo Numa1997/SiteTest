@@ -1,0 +1,606 @@
+{
+ "0172f8e5dd88": {
+  "src": "<span class=\"lbl\">answers with</span>the flow along it, $Q_h$",
+  "tr": "<span class=\"lbl\">الناتج</span>التدفّق فيه، $Q_h$"
+ },
+ "02027d933cc0": {
+  "src": "with $p_{\\mathrm{tr}} = 0.1\\ \\mathrm{MPa}$. Both limits follow from the denominator. When $|\\Delta p| \\ll p_{\\mathrm{tr}}$, $(\\Delta p^2 + p_{\\mathrm{tr}}^2)^{1/4} \\to p_{\\mathrm{tr}}^{1/2}$, so $g \\to \\Delta p/\\sqrt{p_{\\mathrm{tr}}}$: a straight line, like laminar flow. When $|\\Delta p| \\gg p_{\\mathrm{tr}}$, $(\\Delta p^2)^{1/4} = |\\Delta p|^{1/2}$, so $g \\to \\Delta p/\\sqrt{|\\Delta p|} = \\operatorname{sign}(\\Delta p)\\sqrt{|\\Delta p|}$. At $\\Delta p = p_{\\mathrm{tr}}$ the two meet, and $g$ is $2^{-1/4} = 0.84$ of the pure square root. The function is smooth everywhere and handles reverse flow through the sign of $\\Delta p$. It is a modelling choice, not a law of nature: it buys a well-behaved equation at the price of a small error in a range of pressure differences the press passes through quickly.",
+  "tr": "مع $p_{\\mathrm{tr}} = 0.1\\ \\mathrm{MPa}$. ويُقرأ السلوكان الحدّيان كلاهما من المقام. فعندما $|\\Delta p| \\ll p_{\\mathrm{tr}}$ يكون $(\\Delta p^2 + p_{\\mathrm{tr}}^2)^{1/4} \\to p_{\\mathrm{tr}}^{1/2}$، ومن ثَمّ $g \\to \\Delta p/\\sqrt{p_{\\mathrm{tr}}}$: خطٌّ مستقيم كما في الجريان الطبقي. وعندما $|\\Delta p| \\gg p_{\\mathrm{tr}}$ يكون $(\\Delta p^2)^{1/4} = |\\Delta p|^{1/2}$، ومن ثَمّ $g \\to \\Delta p/\\sqrt{|\\Delta p|} = \\operatorname{sign}(\\Delta p)\\sqrt{|\\Delta p|}$. وعند $\\Delta p = p_{\\mathrm{tr}}$ يلتقي التقريبان، وتكون $g$ عندها $2^{-1/4} = 0.84$ من الجذر التربيعي الصِّرف. والدالّة ملساء في كل مكان، وتعالج الجريان العكسي بإشارة $\\Delta p$. وهي خيار في النمذجة لا قانونٌ من قوانين الطبيعة: فهي تمنح معادلة حسنة السلوك، ثمنها خطأ صغير في مدى من فروق الضغط يمرّ به المكبس بسرعة."
+ },
+ "045a4879ca65": {
+  "src": "Figure 3. A sharp-edged orifice. The jet narrows downstream of the edge, then loses its kinetic energy in turbulence.",
+  "tr": "الشكل 3. فتحة حادّة الحافّة. يضيق التيّار المندفع بعد الحافّة، ثم يفقد طاقته الحركية في الدوّامات المضطربة."
+ },
+ "046d49225488": {
+  "src": "Every edge of the valve is an orifice: a sharp-edged opening that the spool makes larger or smaller. This chapter derives how much oil flows through one, given the pressures on its two sides. It is the law of the “valve edges” box on the map.",
+  "tr": "كل حافّة تحكّم في الصمّام فتحةٌ حادّةُ الحافّة يكبّرها المِزلاج أو يصغّرها. يستخرج هذا الفصل مقدار الزيت الذي يمرّ عبر إحدى هذه الفتحات، إذا عُلم الضغطان على جانبيها. وهو قانون مربّع «حوافّ التحكّم» في الخريطة."
+ },
+ "0681dbd6bdbb": {
+  "src": "<span class=\"lbl\">given</span>the pressures at its two ends, $p_a$ and $p_A$",
+  "tr": "<span class=\"lbl\">المُعطى</span>الضغطان عند طرفيه، $p_a$ و$p_A$"
+ },
+ "086a9a468f0b": {
+  "src": "9.1 Where the power goes",
+  "tr": "9.1 إلى أين تذهب القدرة"
+ },
+ "0cf88634ea79": {
+  "src": "Put the blocks of the map together. What does the model have to remember from one instant to the next? Exactly one number for each form of stored energy, because energy cannot jump: the spool stores kinetic energy in its speed and spring energy in its position; each of the three volumes of oil stores compression energy in its pressure; the hose slug stores kinetic energy in its flow; the ram stores kinetic energy in its speed, and potential energy, in gravity and in the specimen, in its position. That makes eight, and they are the <i>state</i>:",
+  "tr": "اجمع كتل الخريطة معًا. ما الذي يجب أن يتذكّره النموذج من لحظة إلى اللحظة التالية؟ عددٌ واحد بالضبط لكلّ شكل من صور الطاقة المخزّنة، لأنّ الطاقة لا تقفز: يخزّن المِزلاج طاقة حركية في سرعته، وطاقةً مرونية في موضعه؛ ويخزّن كلّ حجم من الأحجام الثلاثة للزيت طاقة انضغاط في ضغطه؛ ويخزّن عمود الزيت في الخرطوم طاقة حركية في تدفّقه؛ ويخزّن المِدكّ طاقة حركية في سرعته، وطاقة وضع في موضعه، سواء في الجاذبية أو في العيّنة. فتلك ثمانية أعداد، وهي تؤلّف <i>الحالة</i>:"
+ },
+ "0edddda6981f": {
+  "src": "Now the cylinder. Its two chambers are volumes of oil, so chapter 7 gives their laws at once. The ram between them is a mass, so Newton gives its law. What remains is to say honestly what pushes on the ram besides the oil: its own weight, the drag of its seals, and the specimen once it touches.",
+  "tr": "والآن الأسطوانة. حجرتاها حجمان من الزيت، فيعطينا الفصل 7 قانونيهما فورًا. والمِدكّ الذي بينهما كتلة، فيعطينا نيوتن قانونه. ويبقى أن نقول بصدق ما الذي يدفع المِدكّ غير الزيت: وزنه الذاتي، واحتكاك حشواته، والعيّنة حين تلامسه."
+ },
+ "0eff98d237dc": {
+  "src": "Push a heavy box across a floor: it refuses to move until you push hard enough, jerks loose, then slides with less effort. Piston seals do the same.",
+  "tr": "ادفع صندوقًا ثقيلًا على الأرض: يرفض التحرّك حتى تدفع بقوّة كافية، ثم ينطلق فجأةً ويَنزلق بعد ذلك بجهد أقلّ. وحشوات المكابس تفعل الشيء نفسه."
+ },
+ "116a64bcc988": {
+  "src": "12.1 The three pressure equations",
+  "tr": "12.1 معادلات الضغط الثلاث"
+ },
+ "1291f11ddc99": {
+  "src": "<span class=\"lbl\">answers with</span>the spool position $x_v$",
+  "tr": "<span class=\"lbl\">الناتج</span>موضع المِزلاج $x_v$"
+ },
+ "148be98dbdfa": {
+  "src": "out of B: $-K_v x^+ g(p_B - p_T)$ in $Q_B$",
+  "tr": "خارجًا من B: $-K_v x^+ g(p_B - p_T)$ في $Q_B$"
+ },
+ "153cc934f83f": {
+  "src": "Part I treated oil as incompressible, and for a hand press that is fine. A servo press is different: its oil is squeezed by 12 MPa and asked to respond within milliseconds, and at that scale the oil’s small give becomes a spring that the whole machine bounces on. This chapter finds the law of that spring. It is the law of every chamber on the map of chapter 0.",
+  "tr": "عامل الجزءُ الأول الزيتَ على أنّه غير قابل للانضغاط، وهذا مقبول في المكبس اليدوي. أمّا المكبس المؤازر فمختلف: زيتُه يُضغط بضغط 12 MPa ويُطلب منه أن يستجيب في غضون أجزاء من الألف من الثانية، وعند هذا المقياس يصير الانضغاطُ الطفيف للزيت نابضًا تهتزّ عليه الآلةُ كلّها. يجد هذا الفصل قانونَ هذا النابض. وهو قانون كل حجرة على خريطة الفصل 0."
+ },
+ "18dc03a39dad": {
+  "src": "<span class=\"chn\">10</span> The spool and its torque motor",
+  "tr": "<span class=\"chn\">10</span> المِزلاج ومحرّك عزمه"
+ },
+ "19b8b8ec5754": {
+  "src": "Bernoulli along a streamline into the jet gives $p_u - p_d = \\tfrac12\\rho v_j^2$. Substitute:",
+  "tr": "تعطي معادلة برنولي على طول خطّ انسيابٍ يدخل في التيّار $p_u - p_d = \\tfrac12\\rho v_j^2$. عوّض:"
+ },
+ "1df600921d63": {
+  "src": "That is the wave equation, and $c$ is the speed of sound in oil. (A rubber hose bulges as a wave passes and slows it somewhat, the Korteweg correction; the model ignores that.) A 2 m hose rings like an organ pipe at about $c/2L \\approx 330\\ \\mathrm{Hz}$ and above. One rigid slug is a good model only well below that. The servo loop crosses over near 10 Hz (its loop gain falls through 1 there; chapter 18), so the lumped model is good where the controller works. The 174 Hz mode it predicts, the slug bouncing between the port volume and the cap chamber (worked solution 2 on the Servo-Hydraulic Press page evaluates it with the volumes of (12.1)), is however already halfway to the first wave mode, so treat its exact frequency with care.",
+  "tr": "وتلك هي معادلة الموجة، و$c$ سرعة الصوت في الزيت. (ينتفخ الخرطوم المطّاطي حين تمرّ الموجة فيُبطئها قليلًا، وهو ما يُسمّى تصحيح كورتيفيغ؛ والنموذج يتجاهله.) وخرطوم طوله 2 m يرنّ كأنّه أنبوب أرغن عند نحو $c/2L \\approx 330\\ \\mathrm{Hz}$ فما فوق. ولا يصلح العمود الصلب نموذجًا جيّدًا إلّا دون ذلك بكثير. ويبلغ تردد العبور لحلقة المؤازرة قرب 10 Hz (إذ يهبط عنده كسب الحلقة مارًّا بالقيمة 1؛ الفصل 18)، فالنموذج المجمَّع جيّد حيث يعمل المتحكّم. أمّا نمط الـ 174 Hz الذي يتنبّأ به النموذج، أي ارتداد عمود الزيت بين حجم المنفذ وحجرة الغطاء (يحسبه الحلّ المفصّل رقم 2 على صفحة «المكبس الهيدروليكي المؤازر» بحجوم المعادلة (12.1))، فيقع مع ذلك في منتصف الطريق إلى أوّل نمط موجيّ؛ لذا تعامل مع تردّده الدقيق بحذر."
+ },
+ "1e368359cd95": {
+  "src": "Apply the build-up equation (7.2) three times. The small volume at the valve port, $V_a$, which includes half the hose, receives $Q_A$ and sends $Q_h$ down the hose. The cap chamber receives $Q_h$ and grows as the ram rises. The rod chamber receives $Q_B$ and shrinks as the ram rises. The hose holds the volume $V_h = A_hL_h$; half of it is counted with each end. That split is the usual way to lump a line: the slug of chapter 11 carries the hose’s mass, and its compressibility, spread along its length, is shared between the two volumes it joins. Mind the case of the subscripts: $p_a$ is the pressure at the valve end of the hose, $p_A$ the pressure in the cap chamber at its far end.",
+  "tr": "طبِّق معادلة بناء الضغط (7.2) ثلاث مرّات. فالحجم الصغير عند منفذ الصمّام، $V_a$، الذي يشمل نصف الخرطوم، يستقبل $Q_A$ ويدفع $Q_h$ في الخرطوم. وتستقبل حجرةُ الغطاء $Q_h$ وتكبر كلّما ارتفع المِدكّ. وتستقبل حجرة الساق $Q_B$ وتتقلّص كلّما ارتفع المِدكّ. ويحتوي الخرطوم على الحجم $V_h = A_hL_h$؛ ونحسب نصفه مع كلّ طرف. وهذا التقسيم هو الطريقة المعتادة لتمثيل الأنبوب بعناصر مجمَّعة: فعمود الفصل 11 يحمل كتلة الخرطوم، وانضغاطيّته الموزّعة على طوله تُقسَم بين الحجمين اللذين يصلهما. وانتبه إلى الفرق بين الحرف الصغير والكبير في الأدلّة: $p_a$ هو الضغط عند طرف الخرطوم الذي يلي الصمّام، و$p_A$ هو ضغط حجرة الغطاء عند طرفه البعيد."
+ },
+ "1ea52bdfa3ad": {
+  "src": "Put four orifices of chapter 8 into one bore, all opened and closed by one spool, and you have the valve that steers the press. This chapter writes down the flow through each of its edges, adds them into the flows at its ports, and finds the two numbers, $K_q$ and $K_c$, that summarise how the valve answers small changes.",
+  "tr": "ضع أربع فتحات من الفصل 8 في تجويف واحد، يفتحها ويغلقها مِزلاجٌ واحد، فتحصل على الصمّام الذي يوجّه المكبس. يكتب هذا الفصل التدفّق عبر كل حافّة من حافّاته، ويجمعها في التدفّقات عند منافذه، ويستخرج العددين $K_q$ و$K_c$ اللذين يلخّصان كيف يستجيب الصمّام للتغيّرات الصغيرة."
+ },
+ "2084551bf6cd": {
+  "src": "$I$ is the <i>inertance</i>, the hydraulic analogue of an inductor. It grows as the bore shrinks, $I\\propto 1/d_h^2$: a narrow hose is a heavy hose.",
+  "tr": "$I$ هي <i>العطالة الهيدروليكية</i>، النظير الهيدروليكي للمُحاثّة. وتزداد كلّما ضاق القطر الداخلي، $I\\propto 1/d_h^2$: الخرطوم الضيّق خرطوم ثقيل."
+ },
+ "22c332743c1a": {
+  "src": "That is the 0.61 measured in practice. The two cases bracket reality: a re-entrant tube contracts the jet most ($C_c = 0.5$), a sharp edge in a flat wall less (0.611), a rounded entry hardly at all (close to 1). A valve edge, with oil arriving along the spool rather than head-on, behaves much the same, which is why $C_d \\approx 0.6$ to $0.7$ is the working value.",
+  "tr": "هذه هي القيمة 0.61 المقيسة عمليًّا. والحالتان تحصران الواقع بينهما: أنبوبٌ يبرز إلى الداخل يُضيّق التيّار أكثر من غيره ($C_c = 0.5$)، وحافّة حادّة في جدار مستوٍ أقلّ (0.611)، ومدخلٌ مدوَّر الحافّة لا يكاد يضيّقه (قريب من 1). وحافّة الصمّام، حيث يصل الزيت على امتداد المِزلاج لا مواجهةً، تسلك سلوكًا قريبًا جدًّا، ولذلك يكون $C_d \\approx 0.6$ إلى $0.7$ القيمة العملية."
+ },
+ "23aafbf79a37": {
+  "src": "Treat the oil in a hose of length $L_h$ and cross-section $A_h$ as one rigid slug of mass $\\rho A_h L_h$, moving at speed $Q_h/A_h$. The pressure at the inlet pushes it forward with $p_a A_h$, the pressure at the outlet pushes it back with $p_A A_h$, and friction costs a pressure drop $\\Delta p_f$. Newton's second law:",
+  "tr": "نعامل الزيت في خرطوم طوله $L_h$ ومساحة مقطعه $A_h$ بوصفه عمودًا صلبًا واحدًا كتلته $\\rho A_h L_h$، يتحرّك بسرعة $Q_h/A_h$. يدفعه الضغط عند المدخل إلى الأمام بقوّة $p_a A_h$، ويدفعه الضغط عند المخرج إلى الخلف بقوّة $p_A A_h$، ويكلّف الاحتكاك هبوطًا في الضغط قدره $\\Delta p_f$. قانون نيوتن الثاني:"
+ },
+ "2582002618ef": {
+  "src": "11.1 Inertance",
+  "tr": "11.1 العطالة الهيدروليكية"
+ },
+ "25db783989f5": {
+  "src": "9.2 The two valve coefficients",
+  "tr": "9.2 معاملا الصمّام"
+ },
+ "2622c4b727b6": {
+  "src": "7.3 Air in the oil",
+  "tr": "7.3 الهواء في الزيت"
+ },
+ "27e33a47d6b0": {
+  "src": "Divide by $m_s$ and name the two combinations that appear: the undamped natural frequency $\\omega_v = \\sqrt{k/m_s}$ and the damping ratio $\\zeta_v = b_s/(2\\sqrt{k m_s})$, so that $k/m_s = \\omega_v^2$ and $b_s/m_s = 2\\zeta_v\\omega_v$. Measure the travel as a fraction of full stroke, $x_v = x/x_{\\max}$, and the command as a fraction of the current that holds the spool at full stroke, $u = K_{\\mathrm{coil}} i/(k\\,x_{\\max})$. Then",
+  "tr": "نقسم على $m_s$، ونسمّي التركيبتين اللتين تظهران: التردد الطبيعي غير المُخمَّد $\\omega_v = \\sqrt{k/m_s}$ ونسبة التخامد $\\zeta_v = b_s/(2\\sqrt{k m_s})$، بحيث يكون $k/m_s = \\omega_v^2$ و$b_s/m_s = 2\\zeta_v\\omega_v$. ونقيس الإزاحة بوصفها نسبةً من الشوط الكامل، $x_v = x/x_{\\max}$، ونقيس الأمر بوصفه نسبةً من التيار الذي يُبقي المِزلاج عند الشوط الكامل، $u = K_{\\mathrm{coil}} i/(k\\,x_{\\max})$. عندئذٍ"
+ },
+ "287ad6a81253": {
+  "src": "out of A: $+K_v x^- g(p_a - p_T)$ in $Q_A$, negative since $x^- < 0$",
+  "tr": "خارجًا من A: $+K_v x^- g(p_a - p_T)$ في $Q_A$، وهو سالب لأنّ $x^- < 0$"
+ },
+ "28a669cd4f69": {
+  "src": "Squeeze a garden hose with your thumb and the water shoots out fast: pressure turned into speed. In the valve, the speed is then lost in a turbulent swirl, and the pressure difference becomes heat.",
+  "tr": "اضغط خرطوم حديقة بإبهامك فينطلق الماء بسرعة: يتحوّل الضغط إلى سرعة. وفي الصمّام تضيع هذه السرعة بعد ذلك في دوّامة مضطربة، ويتحوّل فرق الضغط إلى حرارة."
+ },
+ "2f206e947f44": {
+  "src": "7.2 The pressure build-up equation",
+  "tr": "7.2 معادلة بناء الضغط"
+ },
+ "2f6ea60daa87": {
+  "src": "Integrate twice with the oil at rest on both walls, $u(0) = u(c) = 0$, and add up the flow across the gap:",
+  "tr": "أجرِ التكامل مرّتين والزيتُ ساكنٌ عند الجدارين، $u(0) = u(c) = 0$، ثم اجمع التدفّق عبر الخلوص:"
+ },
+ "33558fb480fb": {
+  "src": "<span class=\"chn\">7</span> Oil is a stiff spring",
+  "tr": "<span class=\"chn\">7</span> الزيت نابضٌ قاسٍ"
+ },
+ "36ae371fa43c": {
+  "src": "Command a sine, $u = \\hat{u}\\,e^{j\\omega t}$. Once the start-up transient has died away the spool moves at the same frequency, $x_v = \\hat{x}\\,e^{j\\omega t}$, so each time derivative brings down a factor $j\\omega$. Substitute into (10.1): $(-\\omega^2 + 2j\\zeta_v\\omega_v\\omega + \\omega_v^2)\\,\\hat{x} = \\omega_v^2\\,\\hat{u}$. Divide by $\\omega_v^2\\hat{u}$ to get the ratio of output to input, a complex number whose size is the gain and whose angle is the phase:",
+  "tr": "لنفرض أنّ الأمر إشارة جيبية، $u = \\hat{u}\\,e^{j\\omega t}$. وبعد أن تخمد الحالة العابرة الابتدائية، يتحرّك المِزلاج بالتردد نفسه، $x_v = \\hat{x}\\,e^{j\\omega t}$، فيخرج من كلّ اشتقاق زمني عامل $j\\omega$. نعوّض في (10.1): $(-\\omega^2 + 2j\\zeta_v\\omega_v\\omega + \\omega_v^2)\\,\\hat{x} = \\omega_v^2\\,\\hat{u}$. نقسم على $\\omega_v^2\\hat{u}$ فنحصل على نسبة الخرج إلى الدخل، وهي عدد عقدي طويلته هي الكسب وزاويته هي الطور:"
+ },
+ "37f09ec6401e": {
+  "src": "<span class=\"lbl\">given</span>the spool position $x_v$; the pressures $p_s$, $p_T$ and the port pressures $p_a$, $p_B$",
+  "tr": "<span class=\"lbl\">المُعطى</span>موضعُ المِزلاج $x_v$؛ والضغطان $p_s$ و$p_T$، وضغطا المنفذين $p_a$ و$p_B$"
+ },
+ "3aa1ab2ac896": {
+  "src": "<span class=\"lbl\">answers with</span>the force $F$ it pushes back with",
+  "tr": "<span class=\"lbl\">الناتج</span>القوّة $F$ التي تردّ بها"
+ },
+ "3ac4d540f95d": {
+  "src": "Figure 6. Laminar flow in a pipe: a parabola, zero at the wall.",
+  "tr": "الشكل 6. الجريان الطبقي في أنبوب: قطعٌ مكافئ، صفرٌ عند الجدار."
+ },
+ "3c94de6edef6": {
+  "src": "The flow through the opening is the jet speed times the jet’s area at the vena contracta, and that area is smaller than the hole: a fraction $C_c$ of the opening $A_o$, the <i>contraction coefficient</i>. Why the jet contracts at all, and by how much, is the subject of the next section. A little friction also slows the jet, by a factor $C_v \\approx 0.98$. Both factors are lumped into a <i>discharge coefficient</i> $C_d = C_cC_v \\approx 0.6$ to $0.7$:",
+  "tr": "التدفّق عبر الفتحة هو سرعة التيّار المندفع مضروبةً في مساحة التيّار عند المقطع المنقبض، وهذه المساحة أصغر من الثقب: نسبةٌ $C_c$ من الفتحة $A_o$، وهي <i>معامل الانقباض</i>. أمّا سبب انقباض التيّار أصلًا، ومقدار هذا الانقباض، فموضوع القسم التالي. ويُبطئ التيّار كذلك احتكاكٌ بسيط بعامل $C_v \\approx 0.98$. ويُجمَع العاملان في <i>معامل التصريف</i> $C_d = C_cC_v \\approx 0.6$ إلى $0.7$:"
+ },
+ "3d0e4bf8fc2e": {
+  "src": "<span class=\"lbl\">given</span>the opening $A_o$ and the pressures $p_u$ upstream and $p_d$ downstream",
+  "tr": "<span class=\"lbl\">المُعطى</span>الفتحة $A_o$ والضغطان $p_u$ قبل الفتحة و$p_d$ بعدها"
+ },
+ "403ccf651ec5": {
+  "src": "the specimen<small>a spring and a damper</small>",
+  "tr": "العيّنة<small>نابض ومُخمِّد</small>"
+ },
+ "44081c4b9c98": {
+  "src": "model a hose as an inertance with laminar and turbulent friction (11.1)–(11.3), and say when that lumped model holds;",
+  "tr": "تُمثّلَ الخرطومَ بعطالة هيدروليكية مع احتكاك طبقيّ ومضطرب (11.1)–(11.3)، وأن تبيّنَ متى يصحّ ذلك النموذج المجمَّع؛"
+ },
+ "456df62eae8c": {
+  "src": "Leakage adds a laminar path from the pump into each port and from each port to the tank, all with the conductance $K_L$ of section 8.3. For port A that is",
+  "tr": "يضيف التسرّب مسارًا طبقيًّا من المضخّة إلى كل منفذ، ومن كل منفذ إلى الخزّان، ولها جميعًا الناقلية $K_L$ من القسم 8.3. وبالنسبة إلى المنفذ A يكون ذلك"
+ },
+ "47c3f1a140cd": {
+  "src": "a volume of oil<small>capacitor, $C = V/\\beta$</small>",
+  "tr": "حجمٌ من الزيت<small>مكثّف، $C = V/\\beta$</small>"
+ },
+ "47e025ab31e5": {
+  "src": "Take a mixture of a liquid volume $V_\\ell$ and a gas volume $V_g$. When the pressure rises by $dp$ both shrink. The liquid follows (7.1): $dV_\\ell = -V_\\ell\\,dp/\\beta_{\\mathrm{oil}}$. The gas follows a polytropic law $p_{\\mathrm{abs}}V_g^n = \\text{const}$, whose differential is $n\\,p_{\\mathrm{abs}}V_g^{n-1}dV_g + V_g^n\\,dp = 0$, so $dV_g = -V_g\\,dp/(n\\,p_{\\mathrm{abs}})$. The compliances add:",
+  "tr": "خُذ خليطًا من حجم سائل $V_\\ell$ وحجم غاز $V_g$. عندما يزداد الضغط بمقدار $dp$ ينكمش كلاهما. يتبع السائل (7.1): $dV_\\ell = -V_\\ell\\,dp/\\beta_{\\mathrm{oil}}$. ويتبع الغاز قانونًا بوليتروبيًّا $p_{\\mathrm{abs}}V_g^n = \\text{const}$، تفاضُله $n\\,p_{\\mathrm{abs}}V_g^{n-1}dV_g + V_g^n\\,dp = 0$، إذن $dV_g = -V_g\\,dp/(n\\,p_{\\mathrm{abs}})$. وتُضاف المطاوعات:"
+ },
+ "484fbca24606": {
+  "src": "A steady command gives $x_v = u$: the spool goes where it is told, once it has had time. In a two-stage valve the torque motor moves a flapper that steers a small pilot flow, and the pilot flow pushes the main spool; there are more parts and more equations, but measured responses of good two-stage valves are close to (10.1) over the band where they are used, so manufacturers quote $f_v$ and $\\zeta_v$ and the model uses the same form.",
+  "tr": "يُعطي الأمرُ الثابت $x_v = u$: يذهب المِزلاج إلى حيث يُؤمَر، بعد أن يأخذ وقتًا كافيًا. وفي الصمّام ثنائي المرحلة يحرّك محرّك العزم صفيحةً متأرجحة توجّه تدفّقًا دليليًّا صغيرًا، ويدفع هذا التدفّقُ الدليليّ المِزلاجَ الرئيسي. وفيه أجزاء ومعادلات أكثر، لكنّ الاستجابات المقيسة للصمّامات الجيّدة ثنائية المرحلة تقارب (10.1) ضمن مجال الترددات الذي تُستعمل فيه، ولذلك تذكر الشركات المصنّعة $f_v$ و$\\zeta_v$، ويستعمل النموذج الصيغة نفسها."
+ },
+ "4b93b94d151f": {
+  "src": "Even a closed edge leaks. Between each land and the bore there is a radial clearance $c$ of micrometres, and oil creeps through it along the land, a length $L$, from the high-pressure side to the low. The gap is so thin that the flow is laminar. Unroll the ring into a flat slit of width $w = \\pi d$ for a spool of diameter $d$. Take a thin layer of oil between heights $z$ and $z + dz$ across the gap. The pressure difference pushes it along with $\\Delta p\\,w\\,dz$; the shear stress $\\tau = \\eta\\,du/dz$ of its neighbours acts on its top and bottom faces, of area $wL$. In steady flow the forces balance:",
+  "tr": "حتى الحافّة المغلقة يتسرّب منها الزيت. بين كل كتف وجدار التجويف خلوصٌ شعاعيّ $c$ يُقاس بالميكرومتر، ويزحف الزيت عبره على طول الكتف، أي مسافة $L$، من جهة الضغط المرتفع إلى جهة الضغط المنخفض. والخلوص رقيق جدًّا، فيكون الجريان طبقيًّا. افرد الحلقة في ذهنك إلى شقٍّ مستوٍ عرضه $w = \\pi d$ من أجل مِزلاج قطره $d$. خذ طبقة رقيقة من الزيت بين الارتفاعين $z$ و $z + dz$ عبر الخلوص. يدفعها فرق الضغط إلى الأمام بالقوّة $\\Delta p\\,w\\,dz$، وإجهاد القصّ $\\tau = \\eta\\,du/dz$ الذي تؤثّر به الطبقات المجاورة يؤثّر في سطحيها العلوي والسفلي، وكل منهما مساحته $wL$. في الجريان المستقرّ تتوازن القوى:"
+ },
+ "4d8c5081d61e": {
+  "src": "The jet has half the area of the hole, exactly. Momentum demands it: Bernoulli turns the pressure difference into a speed, but the same pressure difference acting on the hole can only supply half the momentum that a full-bore jet at that speed would carry.",
+  "tr": "مساحة التيّار هي نصف مساحة الثقب بالضبط. وكمية الحركة تقتضي ذلك: يحوّل برنولي فرق الضغط إلى سرعة، لكنّ فرق الضغط نفسه، إذ يؤثّر في الثقب، لا يستطيع أن يوفّر إلا نصف كمية الحركة التي يحملها تيّار بكامل مقطع الثقب بتلك السرعة."
+ },
+ "4feaa29995a7": {
+  "src": "10.2 How the spool lags a sine",
+  "tr": "10.2 كيف يتأخّر المِزلاج عن إشارة جيبية"
+ },
+ "510666f2b9a3": {
+  "src": "<div class=\"ctag\">In our press</div>Over one cycle the pump does 26.3 kJ of work and the valve burns 24.4 kJ of it: 93 %. A valve throttling a constant-pressure supply is a brake. Industrial presses use variable pumps or accumulators to waste less.",
+  "tr": "<div class=\"ctag\">في مكبسنا</div>في الدورة الواحدة تبذل المضخّة شغلًا قدره 26.3 kJ، ويحوّل الصمّام منه 24.4 kJ إلى حرارة: 93 %. الصمّام الذي يخنق مصدرًا بضغط ثابت يعمل عمل المكابح. وتستعمل المكابس الصناعية مضخّات متغيّرة الإزاحة أو مُراكِمات لتقليل الهدر."
+ },
+ "539f49f92688": {
+  "src": "Equations (10.1), (12.1), (11.1) and (12.2), with the valve flows (9.1), friction (12.3) and contact (12.4), form a system $\\dot{\\mathbf{x}} = \\mathbf{f}(\\mathbf{x}, u)$ of eight first-order nonlinear differential equations driven by one input, the command $u$. Every other quantity, the valve flows, the friction, the specimen force, is computed from the state at each instant: these are the dissipating blocks, the resistors, which store nothing. That is all the servo press is. The page integrates it with fourth-order Runge–Kutta at 100 steps per controller sample, and integrates seven more quantities alongside to keep the energy books (chapter 19).",
+  "tr": "تُكوِّن المعادلات (10.1) و(12.1) و(11.1) و(12.2)، مع تدفّقات الصمّام (9.1) والاحتكاك (12.3) والتلامس (12.4)، نظامًا $\\dot{\\mathbf{x}} = \\mathbf{f}(\\mathbf{x}, u)$ من ثماني معادلات تفاضلية غير خطّية من الرتبة الأولى، يقودها دخلٌ واحد هو الأمر $u$. وكلّ كمّية أخرى، أي تدفّقات الصمّام والاحتكاك وقوّة العيّنة، تُحسب من الحالة في كلّ لحظة؛ وهذه هي الكتل المبدِّدة، أي المقاومات، التي لا تخزّن شيئًا. وهذا كلّ ما في المكبس المؤازَر. وتكامل الصفحة النظامَ بطريقة رونغه–كوتا من المرتبة الرابعة بمعدّل 100 خطوة لكلّ فترة معاينة للمتحكّم، وتكامل معه سبع كمّيات أخرى لإجراء موازنة الطاقة (الفصل 19)."
+ },
+ "54030d02e904": {
+  "src": "Seal a syringe full of oil and lean on the plunger with all your weight: it moves by a hair. The oil is not incompressible, only very stiff.",
+  "tr": "أحكِم سدّ محقنة مملوءة بالزيت، ثم اتّكئ بكامل وزنك على مكبس المحقنة: فلا يتحرّك إلّا قيدَ شعرة. الزيت ليس غير قابل للانضغاط، بل شديد الصلابة فحسب."
+ },
+ "5427012bcc27": {
+  "src": "Seal friction is not derived from first principles here, because nobody can: it depends on the rubber, the oil film and the surface finish. What can be explained is its shape. In 1902 Richard Stribeck measured the friction in lubricated bearings as a function of speed and found that it falls as speed rises from zero, reaches a minimum, and then grows again (Stribeck, <i>Zeitschrift des Vereines deutscher Ingenieure</i> 46, 1902). At rest and at crawling speed the seal touches the rod through a broken oil film, and solid friction dominates. As speed rises, the oil is dragged into the contact and lifts the seal off, so friction falls. At higher speed the film is complete and its viscous shear grows with speed.",
+  "tr": "لا يُشتقّ احتكاك الحشوات هنا من المبادئ الأولى، لأنّ أحدًا لا يستطيع ذلك: فهو يعتمد على المطّاط، وعلى غشاء الزيت، وعلى نعومة السطح. ما يمكن تفسيره هو شكله. ففي عام 1902 قاس ريتشارد ستريبك الاحتكاك في المحامل المزيّتة بدلالة السرعة، فوجد أنّه ينخفض مع ارتفاع السرعة من الصفر، ويبلغ حدًّا أدنى، ثم يعاود الازدياد (ستريبك، <i>Zeitschrift des Vereines deutscher Ingenieure</i> 46، 1902). وعند السكون وعند السرعة الزاحفة تلامس الحشوةُ الساقَ عبر غشاء زيت متقطّع، فيسود الاحتكاك الجاف. ومع ارتفاع السرعة يُسحب الزيت إلى نقطة التلامس فيرفع الحشوةَ عن الساق، فينخفض الاحتكاك. وعند سرعة أعلى يكتمل الغشاء، فيزداد قصّه اللزج مع السرعة."
+ },
+ "57c9ea1bd91d": {
+  "src": "10.1 Newton for the spool",
+  "tr": "10.1 نيوتن للمِزلاج"
+ },
+ "583389584619": {
+  "src": "assemble a complete nonlinear state model of a valve-controlled actuator (13.1).",
+  "tr": "تُركّبَ نموذج حالةٍ غير خطّي كاملًا لمُشغِّل يتحكّم فيه صمّام (13.1)."
+ },
+ "5a30dd133789": {
+  "src": "<span class=\"lbl\">given</span>the net flow into it, $Q_{\\mathrm{in}} - Q_{\\mathrm{out}}$, and the speed of its moving wall, $\\dot V$",
+  "tr": "<span class=\"lbl\">المُعطى</span>صافي التدفّق الداخل إليه، $Q_{\\mathrm{in}} - Q_{\\mathrm{out}}$، وسرعةُ جداره المتحرّك، $\\dot V$"
+ },
+ "5acac8cb5905": {
+  "src": "The slug model assumes that a push at one end of the hose moves all of its oil at once. It does not: a push travels as a pressure wave. Follow a short piece of the oil column, $dx$ long, as a small pressure disturbance $p(x,t)$ and speed $u(x,t)$ pass through. Mass conservation for the piece, with (7.1), says that oil piling up raises the pressure: $\\partial p/\\partial t = -\\beta\\,\\partial u/\\partial x$. Newton for the piece says that a pressure gradient accelerates it: $\\rho\\,\\partial u/\\partial t = -\\partial p/\\partial x$. Differentiate the first in time, the second in space, and eliminate $u$:",
+  "tr": "يفترض نموذج العمود أنّ دفعةً عند أحد طرفي الخرطوم تحرّك زيته كلّه في آنٍ واحد. وهذا غير صحيح: فالدفعة تنتقل على هيئة موجة ضغط. لنتتبّع قطعة قصيرة من عمود الزيت طولها $dx$، بينما يمرّ بها اضطراب صغير في الضغط $p(x,t)$ والسرعة $u(x,t)$. تقول معادلة حفظ الكتلة للقطعة، مع (7.1)، إنّ الزيت المتراكم يرفع الضغط: $\\partial p/\\partial t = -\\beta\\,\\partial u/\\partial x$. ويقول قانون نيوتن للقطعة إنّ تدرّج الضغط يُكسبها تسارعًا: $\\rho\\,\\partial u/\\partial t = -\\partial p/\\partial x$. فاشتقَّ الأولى بالنسبة إلى الزمن والثانية بالنسبة إلى المكان، واحذفْ $u$:"
+ },
+ "5c2938120bcd": {
+  "src": "the ram<small>a mass</small>",
+  "tr": "المِدكّ<small>كتلة</small>"
+ },
+ "624e995814aa": {
+  "src": "<div class=\"ctag\">In our press</div>$Q_N = 100\\ \\mathrm{L/min}$ at 7 MPa gives $K_v = 8.91\\times10^{-7}\\ \\mathrm{m^3/(s\\sqrt{Pa})}$. With $C_d = 0.62$ that is a full opening $w\\,x_{\\max} = 30\\ \\mathrm{mm^2}$: a 10 mm diameter port ring opened by about 1 mm.",
+  "tr": "<div class=\"ctag\">في مكبسنا</div>$Q_N = 100\\ \\mathrm{L/min}$ عند 7 MPa يعطي $K_v = 8.91\\times10^{-7}\\ \\mathrm{m^3/(s\\sqrt{Pa})}$. ومع $C_d = 0.62$ يكون ذلك فتحةً كاملة $w\\,x_{\\max} = 30\\ \\mathrm{mm^2}$: حلقة منافذ قطرها 10 mm مفتوحة بنحو 1 mm."
+ },
+ "6279813401bc": {
+  "src": "The model adds the two, $\\Delta p_f = R_{\\mathrm{lam}}Q + K_t Q|Q|$: the laminar term dominates at small flow, the turbulent term at large flow. The form $Q|Q|$ keeps the sign of the loss opposite to the flow.",
+  "tr": "يجمع النموذج الحدّين، $\\Delta p_f = R_{\\mathrm{lam}}Q + K_t Q|Q|$: فالحدّ الطبقي يغلب عند التدفّق الصغير، والحدّ المضطرب عند التدفّق الكبير. وتجعل الصيغة $Q|Q|$ إشارةَ الخسارة معاكسةً للتدفّق."
+ },
+ "63a8afc0eed9": {
+  "src": "In a spool valve a stepped rod, the <i>spool</i>, slides in a close-fitting bore. Its wide sections, the <i>lands</i>, cover and uncover slots cut in the wall of the bore. The opening is such a slot: $A_o = w\\,x$, with $w$ the circumferential width of the port (the <i>area gradient</i>) and $x$ the spool travel. Normalize the travel to $\\hat{x} = x/x_{\\max} \\in [-1, 1]$ and collect the constants into one valve coefficient:",
+  "tr": "في صمّام المِزلاج ينزلق قضيبٌ مدرَّج، هو <i>المِزلاج</i>، داخل تجويفٍ محكَم المقاس. أقسامه العريضة، أي <i>الأكتاف</i>، تغطّي الشقوق المحفورة في جدار التجويف وتكشفها. والفتحة شقٌّ من هذا النوع: $A_o = w\\,x$، حيث $w$ العرض المحيطي للمنفذ (<i>تدرّج المساحة</i>)، و$x$ إزاحة المِزلاج. ننسب الإزاحة إلى قيمتها العظمى، $\\hat{x} = x/x_{\\max} \\in [-1, 1]$، ونجمع الثوابت في معامل واحد للصمّام:"
+ },
+ "64c6561c79dc": {
+  "src": "Take the simplest servo valve, a single-stage one, in which the torque motor pushes the spool directly. The coil current $i$ produces a force $K_{\\mathrm{coil}}\\,i$ on the spool. Centring springs of stiffness $k$ pull it back to the middle, oil films and the motor’s eddy currents damp it with a force $b_s\\,\\dot{x}$, and the spool has mass $m_s$. Newton:",
+  "tr": "لنأخذ أبسط صمّام مؤازر، وهو صمّام ذو مرحلة واحدة، يدفع فيه محرّك العزم المِزلاج مباشرةً. يُنتج تيار الملفّ $i$ قوّة $K_{\\mathrm{coil}}\\,i$ على المِزلاج. وتعيده نوابض التوسيط ذات الصلابة $k$ إلى الوسط، وتُخمِّده أغشية الزيت والتيّارات الدوّامية في المحرّك بقوّة $b_s\\,\\dot{x}$، وكتلة المِزلاج $m_s$. معادلة نيوتن:"
+ },
+ "66c708aeead2": {
+  "src": "Expand the left side with the product rule, and use (7.1) to replace $\\dot{\\rho}$ by $(\\rho/\\beta)\\dot{p}$:",
+  "tr": "انشر الطرف الأيسر بقاعدة الجداء، واستعمل (7.1) لاستبدال $\\dot{\\rho}$ بالمقدار $(\\rho/\\beta)\\dot{p}$:"
+ },
+ "680d323a1d1f": {
+  "src": "Add up the flow through thin rings of area $2\\pi r\\,dr$:",
+  "tr": "نجمع التدفّق عبر حلقات رقيقة مساحتها $2\\pi r\\,dr$:"
+ },
+ "6d807687b6fd": {
+  "src": "torque motor and spool<small>a mass on a damped spring</small>",
+  "tr": "محرّك العزم والمِزلاج<small>كتلة على نابض مُخمَّد</small>"
+ },
+ "6dd539947b5f": {
+  "src": "Divide by $\\rho$:",
+  "tr": "اقسم على $\\rho$:"
+ },
+ "6e682c8ea390": {
+  "src": "Figure 4. Spool shifted to positive $x_v$: the pump P feeds port A, port B drains to the tank T. Negative $x_v$ swaps the roles.",
+  "tr": "الشكل 4. المِزلاج مُزاحٌ نحو قيم $x_v$ الموجبة: المضخّة P تغذّي المنفذ A، والمنفذ B يُصرّف إلى الخزّان T. والقيمة السالبة لـ $x_v$ تبدّل الأدوار."
+ },
+ "7018ce81fdeb": {
+  "src": "Hang a weight from a spring in a jar of honey and tug the top of the spring: the weight follows, a moment late and without bouncing much. The spool is that weight.",
+  "tr": "علّق ثقلًا بنابض في وعاءٍ مملوء بالعسل، واجذب طرف النابض جذبةً مفاجئة: يتبعه الثقل متأخّرًا لحظةً دون أن يهتزّ كثيرًا. والمِزلاج هو ذلك الثقل."
+ },
+ "71e349211942": {
+  "src": "The pump delivers hydraulic power $p_s Q_S$. The ports deliver $p_a Q_A + p_B Q_B$ to the actuator, and the tank receives $p_T(Q_S - Q_A - Q_B)$. The difference is lost in the jets as heat:",
+  "tr": "تقدّم المضخّة القدرة الهيدروليكية $p_s Q_S$. وتقدّم المنافذ $p_a Q_A + p_B Q_B$ إلى الأسطوانة، ويستقبل الخزّان $p_T(Q_S - Q_A - Q_B)$. ويضيع الفرق في التيّارات حرارةً:"
+ },
+ "72fc482d2182": {
+  "src": "In slow, steady flow the layers of oil slide over each other. Take a cylinder of oil of radius $r$ and length $L$, coaxial with the pipe. The pressure difference pushes its ends with $\\Delta p\\,\\pi r^2$. On its curved surface the shear stress $\\tau = -\\eta\\,du/dr$ of the slower outer oil holds it back, where $\\eta = \\rho\\nu$ is the dynamic viscosity (written $\\eta$ here because $\\mu$ is already the effective mass of Part I) with $\\tau\\,2\\pi r L$. In steady flow these balance:",
+  "tr": "في الجريان البطيء المستقرّ تنزلق طبقات الزيت بعضها فوق بعض. لنأخذ أسطوانة من الزيت نصف قطرها $r$ وطولها $L$، متّحدة المحور مع الأنبوب. يدفع فرق الضغط طرفيها بقوّة $\\Delta p\\,\\pi r^2$. ويُعيقها على سطحها المنحني إجهادُ القصّ $\\tau = -\\eta\\,du/dr$ للزيت الخارجي الأبطأ، حيث $\\eta = \\rho\\nu$ هي اللزوجة الديناميكية (كُتبت $\\eta$ هنا لأنّ $\\mu$ تعني الكتلة الفعّالة في الجزء الأوّل)، وقوّة القصّ هي $\\tau\\,2\\pi r L$. وفي الجريان المستقرّ تتوازن هذه القوى:"
+ },
+ "77290afb87b6": {
+  "src": "12.4 The specimen and the stop",
+  "tr": "12.4 العيّنة والمِصدّ"
+ },
+ "78e8fc17e87c": {
+  "src": "<span class=\"lbl\">answers with</span>its position $y$ and speed $\\dot y$",
+  "tr": "<span class=\"lbl\">الناتج</span>موضعه $y$ وسرعته $\\dot y$"
+ },
+ "791c74cca78d": {
+  "src": "The exponent $n$ is 1 for a slow, isothermal squeeze, where heat has time to leave, and $\\gamma = 1.4$ for a fast, adiabatic one. Air at atmospheric pressure has $\\beta_{\\mathrm{gas}} = 0.10$ to $0.14\\ \\mathrm{MPa}$, ten thousand times softer than oil. That contrast is the whole story of section 7.3.",
+  "tr": "يساوي الأُسّ $n$ القيمة 1 في الضغط البطيء متساوي درجة الحرارة، حيث يتسنّى للحرارة أن تخرج، و $\\gamma = 1.4$ في الضغط السريع الأدياباتيّ. الهواء عند الضغط الجوّي له $\\beta_{\\mathrm{gas}} = 0.10$ إلى $0.14\\ \\mathrm{MPa}$، أي إنّه ألين من الزيت بعشرة آلاف مرّة. وهذا التباين هو محور القسم 7.3 كلّه."
+ },
+ "7a80860062ee": {
+  "src": "The term $K_c$ acts like a resistor that bleeds flow when the pressure rises; it supplies most of the damping of an open valve.",
+  "tr": "يعمل الحدّ $K_c$ عمل مقاومةٍ تُسرّب جزءًا من التدفّق عندما يرتفع الضغط، وهو يوفّر معظم التخامد للصمّام المفتوح."
+ },
+ "7adbf054bd65": {
+  "src": "Whether the flow stays laminar depends on the Reynolds number $Re = \\bar{u}\\,d/\\nu$, the ratio of inertial to viscous forces. Above about 2300 the flow becomes turbulent. Eddies then carry momentum across the pipe far more effectively than viscosity does, and the wall stress no longer depends on the viscosity but on the density and the speed. Dimensional analysis then fixes the form: the only pressure that can be built from $\\rho$ and $\\bar{u}$ is $\\tfrac12\\rho\\bar{u}^2$, and the drop must grow in proportion to the length per diameter, $L/d$. The dimensionless factor in front, the <i>friction factor</i> $f$, is measured. Adding the losses in fittings and bends, $K_m$, gives the Darcy–Weisbach law:",
+  "tr": "يتوقّف بقاء الجريان طبقيًّا على عدد رينولدز $Re = \\bar{u}\\,d/\\nu$، وهو نسبة قوى العطالة إلى قوى اللزوجة. وفوق نحو 2300 يصير الجريان مضطربًا. عندئذٍ تنقل الدوّامات كمّية الحركة عبر الأنبوب بكفاءة أكبر بكثير من اللزوجة، ولا يعود إجهاد الجدار يتعلّق باللزوجة، بل بالكثافة والسرعة. ثم يحدّد تحليلُ الأبعاد الصيغةَ: فالضغط الوحيد الذي يمكن تكوينه من $\\rho$ و$\\bar{u}$ هو $\\tfrac12\\rho\\bar{u}^2$، ويجب أن يزداد الهبوط متناسبًا مع نسبة طول الأنبوب إلى قطره، $L/d$. أمّا العامل عديم البُعد الذي أمامه، أي <i>معامل الاحتكاك</i> $f$، فيُقاس تجريبيًّا. وبإضافة خسائر الوصلات والانحناءات $K_m$ نحصل على قانون دارسي–وايسباخ:"
+ },
+ "8048c0979662": {
+  "src": "Integrate with the no-slip condition $u(R) = 0$ at the wall:",
+  "tr": "نكامل بشرط عدم الانزلاق $u(R) = 0$ عند الجدار:"
+ },
+ "818ff6af20b2": {
+  "src": "12.3 Seal friction",
+  "tr": "12.3 احتكاك الحشوات"
+ },
+ "832f94bf5aec": {
+  "src": "opening",
+  "tr": "الفتحة"
+ },
+ "834131e75b14": {
+  "src": "Two metres of hose join the valve to the cylinder. The oil in it weighs only 0.2 kg, but it has to be pushed back and forth every time the valve changes its mind, and through a 12 mm bore that takes a surprising pressure. This chapter finds that pressure, the friction on the way, and the limit beyond which a hose stops behaving like one lump of oil.",
+  "tr": "يصل خرطومٌ طولُه مترانِ الصمّامَ بالأسطوانة. كتلة الزيت فيه 0.2 kg فقط، لكن لا بدّ من دفعه ذهابًا وإيابًا كلّما غيّر الصمّام اتّجاهه، وبقطر داخلي 12 mm يتطلّب ذلك ضغطًا كبيرًا على نحوٍ مفاجئ. يبحث هذا الفصل في هذا الضغط، وفي الاحتكاك على امتداد الخرطوم، وفي الحدّ الذي بعده لا يسلك الخرطوم كما لو كان كتلة واحدة من الزيت."
+ },
+ "84e8f0bbb157": {
+  "src": "four-way valve<small>four orifices on one spool</small>",
+  "tr": "صمّام رباعيّ الاتجاهات<small>أربع فتحات على مِزلاج واحد</small>"
+ },
+ "86f7fb5b0bf9": {
+  "src": "<div class=\"ctag\">In our press</div>$f_v = 60\\ \\mathrm{Hz}$, $\\zeta_v = 0.7$. At 10 Hz the spool lags by 13°, at 38 Hz already by 56°: the valve alone eats a good part of the phase a feedback loop can afford.",
+  "tr": "<div class=\"ctag\">في مكبسنا</div>$f_v = 60\\ \\mathrm{Hz}$، $\\zeta_v = 0.7$. عند 10 Hz يتأخّر المِزلاج بمقدار 13°، وعند 38 Hz يتأخّر بمقدار 56° بالفعل: الصمّام وحده يستنزف جزءًا كبيرًا من ميزانية الطور التي تستطيع حلقة التغذية الراجعة تحمّلها."
+ },
+ "872bc1b89820": {
+  "src": "<span class=\"lbl\">answers with</span>the flow $Q$",
+  "tr": "<span class=\"lbl\">الناتج</span>التدفّق $Q$"
+ },
+ "89956f7f47ee": {
+  "src": "The cap area is the full bore, $A_A = \\pi D^2/4$; the rod side has the annulus $A_B = \\pi(D^2 - d_r^2)/4$. Each chamber carries its own $\\beta(p)$ from (7.3), because each sits at its own pressure.",
+  "tr": "مساحة جانب الغطاء هي مساحة المقطع الكامل للأسطوانة، $A_A = \\pi D^2/4$؛ وأمّا جانب الساق فله المساحة الحلقية $A_B = \\pi(D^2 - d_r^2)/4$. ولكلّ حجرة $\\beta(p)$ الخاصّ بها من (7.3)، لأنّ كلّ واحدة عند ضغطها الخاصّ."
+ },
+ "8a88d954f298": {
+  "src": "8.3 Leakage",
+  "tr": "8.3 التسرّب"
+ },
+ "8bbd0bbd49cb": {
+  "src": "Watch a bath drain or a tap fill a glass: the stream narrows just after it leaves the opening. Oil arriving from the sides cannot turn the corner at the edge instantly; it keeps some sideways speed and squeezes the jet.",
+  "tr": "راقِب تصريف حوض الاستحمام أو امتلاء كأس من الصنبور: يضيق التيّار مباشرة بعد خروجه من الفتحة. والزيت القادم من الجانبين لا يستطيع أن يدور حول الحافّة فورًا، فهو يحتفظ بقدر من سرعته الجانبية، فيُضيّق التيّار."
+ },
+ "8c5121af283e": {
+  "src": "The minus sign makes $\\beta$ positive, since volume falls as pressure rises. The second form follows because the mass $\\rho V$ of a sealed sample is fixed: $d(\\rho V) = V\\,d\\rho + \\rho\\,dV = 0$, so $d\\rho/\\rho = -dV/V$. Mineral hydraulic oil has $\\beta \\approx 1.5\\ \\mathrm{GPa}$: squeezing it by 1 % takes 15 MPa.",
+  "tr": "علامة السالب تجعل $\\beta$ موجبة، لأنّ الحجم يتناقص مع ازدياد الضغط. أمّا الصيغة الثانية فتتبع من أنّ كتلة العيّنة المغلقة $\\rho V$ ثابتة: $d(\\rho V) = V\\,d\\rho + \\rho\\,dV = 0$، إذن $d\\rho/\\rho = -dV/V$. ولزيت الهيدروليك المعدني $\\beta \\approx 1.5\\ \\mathrm{GPa}$: ضغطُه بنسبة 1 % يتطلّب 15 MPa."
+ },
+ "8d14376f1d6f": {
+  "src": "Each line is built edge by edge. A port gains oil through the edge that connects it to the pump and loses oil through the edge that connects it to the tank; each edge passes $K_v\\,|\\text{opening}|\\,g(\\text{pressure drop across it})$ from (8.2) and (8.3):",
+  "tr": "يُبنى كل تدفّق عند منفذ حافّةً بعد حافّة. يكتسب المنفذ زيتًا عبر الحافّة التي تصله بالمضخّة، ويفقد زيتًا عبر الحافّة التي تصله بالخزّان؛ وتمرّر كل حافّة $K_v\\,|\\text{opening}|\\,g(\\text{pressure drop across it})$ بحسب (8.2) و(8.3):"
+ },
+ "8e0c18826e07": {
+  "src": "11.4 When is one slug enough?",
+  "tr": "11.4 متى يكفي عمود واحد؟"
+ },
+ "91857dd5b947": {
+  "src": "<span class=\"chn\">11</span> The hose: a slug of oil",
+  "tr": "<span class=\"chn\">11</span> الخرطوم: عمود من الزيت"
+ },
+ "9a34a209027f": {
+  "src": "Part II",
+  "tr": "الجزء الثاني"
+ },
+ "9e3a2f16e67e": {
+  "src": "<span class=\"lbl\">answers with</span>its pressure $p$",
+  "tr": "<span class=\"lbl\">الناتج</span>ضغطُه $p$"
+ },
+ "a0743a21106d": {
+  "src": "Manufacturers quote a rated flow $Q_N$ at a rated drop $\\Delta p_N$ across the whole valve, which is two metering edges in series, each taking $\\Delta p_N/2$. Hence $K_v = Q_N/\\sqrt{\\Delta p_N/2}$.",
+  "tr": "يذكر المصنّعون التدفّق الاسمي $Q_N$ عند فرق الضغط الاسمي $\\Delta p_N$ عبر الصمّام كلّه، وهو يتألّف من حافّتي تحكّم على التوالي، يهبط الضغط على كلٍّ منهما بمقدار $\\Delta p_N/2$. ومن ثَمّ $K_v = Q_N/\\sqrt{\\Delta p_N/2}$."
+ },
+ "a0f2c69a18ea": {
+  "src": "edge",
+  "tr": "الحافّة"
+ },
+ "a21bebd8cafb": {
+  "src": "Read it as a budget: the net flow into the chamber either moves the boundary ($\\dot V$) or compresses the oil already there ($V\\dot p/\\beta$). The ratio $C = V/\\beta$ is the <i>hydraulic capacitance</i>; it plays the role of a capacitor, with pressure as voltage and flow as current. Every chamber of the servo press obeys (7.2).",
+  "tr": "اقرأها على أنّها موازنة: صافي التدفّق الداخل إلى الحجرة إمّا أن يحرّك الحدّ ($\\dot V$) وإمّا أن يضغط الزيتَ الموجود فيها أصلًا ($V\\dot p/\\beta$). والنسبة $C = V/\\beta$ هي <i>السعة الهيدروليكية</i>؛ وهي تؤدّي دور المكثّف، فالضغط يقابل الجهد، والتدفّق يقابل التيّار. وتخضع كل حجرة في المكبس المؤازر للمعادلة (7.2)."
+ },
+ "a2bd77b79d48": {
+  "src": "After Part II you can",
+  "tr": "بعد الجزء الثاني تستطيع أن"
+ },
+ "a33c9be28cf9": {
+  "src": "Figure 5. The hose slug bouncing between two oil springs: the slosh mode of worked solution 2 on the Servo-Hydraulic Press page.",
+  "tr": "الشكل 5. عمود الزيت في الخرطوم يرتدّ بين نابضين زيتيّين: نمط الترجرج للحلّ المفصّل رقم 2 على صفحة «المكبس الهيدروليكي المؤازر»."
+ },
+ "a391476c7b3e": {
+  "src": "cap and rod chambers<small>two capacitors</small>",
+  "tr": "حجرتا الغطاء والساق<small>مُكثّفان</small>"
+ },
+ "a44dd6c8ec34": {
+  "src": "The square root has an infinite slope at $\\Delta p = 0$, which a linear analysis and a numerical integrator both dislike. Real orifices also become laminar at tiny flows, where $Q \\propto \\Delta p$. The model uses",
+  "tr": "للجذر التربيعي ميلٌ لا نهائي عند $\\Delta p = 0$، ولا يستسيغ ذلك التحليلُ الخطّي ولا المكامِلُ العددي. والفتحات الحقيقية يصير الجريان فيها أيضًا طبقيًّا عند التدفّقات الصغيرة جدًّا، حيث $Q \\propto \\Delta p$. ويستخدم النموذج"
+ },
+ "a5e261b12a88": {
+  "src": "The gas volume itself shrinks with pressure, while the liquid volume, used as the reference in $\\alpha = V_g/V_\\ell$, is taken at its unsqueezed value: at 12 MPa the oil itself shrinks by only $p/\\beta_{\\mathrm{oil}} \\approx 0.8\\,\\%$, and that compression is already counted in (7.3) through its $1/\\beta_{\\mathrm{oil}}$ term. If the air makes up a fraction $\\alpha_0$ of the total volume at atmospheric pressure $p_0$, its volume there is $V_{g0}$ with $V_{g0}/(V_\\ell + V_{g0}) = \\alpha_0$, so $V_{g0}/V_\\ell = \\alpha_0/(1-\\alpha_0)$. The polytropic law carries the bubble from $p_0$ to $p_{\\mathrm{abs}}$, $p_{\\mathrm{abs}}V_g^n = p_0 V_{g0}^n$, so $V_g = V_{g0}\\,(p_0/p_{\\mathrm{abs}})^{1/n}$. Divide by $V_\\ell$:",
+  "tr": "يتقلّص حجم الغاز نفسه مع الضغط، بينما يُؤخذ حجم السائل، المستعمَل مرجعًا في $\\alpha = V_g/V_\\ell$، عند قيمته غير المضغوطة: عند 12 MPa ينضغط الزيتُ نفسه بمقدار $p/\\beta_{\\mathrm{oil}} \\approx 0.8\\,\\%$ فقط، وهذا الانضغاط محسوب أصلًا في (7.3) عبر حدّه $1/\\beta_{\\mathrm{oil}}$. إذا شكّل الهواء نسبةً $\\alpha_0$ من الحجم الكلّي عند الضغط الجوّي $p_0$، فإنّ حجمه هناك $V_{g0}$ بحيث $V_{g0}/(V_\\ell + V_{g0}) = \\alpha_0$، إذن $V_{g0}/V_\\ell = \\alpha_0/(1-\\alpha_0)$. ويحمل القانونُ البوليتروبي الفقاعةَ من $p_0$ إلى $p_{\\mathrm{abs}}$، فيكون $p_{\\mathrm{abs}}V_g^n = p_0 V_{g0}^n$، إذن $V_g = V_{g0}\\,(p_0/p_{\\mathrm{abs}})^{1/n}$. اقسم على $V_\\ell$:"
+ },
+ "a8aed62b98fe": {
+  "src": "The cap pressure pushes up on the full bore, the rod pressure pushes down on the annulus, gravity pulls down, and three contact forces remain.",
+  "tr": "يدفع ضغطُ حجرة الغطاء إلى الأعلى على المقطع الكامل، ويدفع ضغطُ حجرة الساق إلى الأسفل على المساحة الحلقية، وتسحب الجاذبية إلى الأسفل، وتبقى ثلاث قوى تلامس."
+ },
+ "abaf9d6857b4": {
+  "src": "For a sharp edge in a flat wall, the wall next to the edge does feel the moving oil, so the momentum balance no longer closes on its own. The free-streamline theory of Helmholtz and Kirchhoff solves that case with conformal mapping, and von Mises worked it out for many shapes in 1917; the derivation is beyond this text, so take the result as cited. For a long two-dimensional slot, the case of a valve edge, it gives",
+  "tr": "عند حافّة حادّة في جدار مستوٍ، يشعر الجدار المجاور للحافّة بالزيت المتحرّك، فلا تكفي موازنة كمية الحركة وحدها لإغلاق الحساب. أمّا نظرية خطوط الانسياب الحرّة لهلمهولتز وكيرشهوف فتحلّ هذه الحالة بالتحويل المطابِق (الحافظ للزوايا)، وقد أنجز فون ميزس الحلّ لأشكال كثيرة سنة 1917؛ والاشتقاق يتجاوز هذا النص، لذلك نأخذ النتيجة كما نُقلت عن مصدرها. وبالنسبة إلى شقّ طويل ثنائي البُعد، وهي حالة حافّة الصمّام، تكون النتيجة"
+ },
+ "abfc650096c8": {
+  "src": "and likewise for B; the pump feeds both leaks into the ports, $K_L(p_s - p_a) + K_L(p_s - p_B)$.",
+  "tr": "وكذلك بالنسبة إلى B؛ وتغذّي المضخّة التسرّبين إلى المنفذين، $K_L(p_s - p_a) + K_L(p_s - p_B)$."
+ },
+ "aca3e54c3430": {
+  "src": "The servo press: building the model from the parts",
+  "tr": "المكبس المؤازر: بناء النموذج من أجزائه"
+ },
+ "adf1248a3f9e": {
+  "src": "<span class=\"lbl\">given</span>flows $Q_h$ into the cap side and $Q_B$ into the rod side; the ram speed $\\dot y$",
+  "tr": "<span class=\"lbl\">المُعطى</span>التدفّقان الداخلان: $Q_h$ إلى جانب الغطاء و$Q_B$ إلى جانب الساق، وسرعة المِدكّ $\\dot y$"
+ },
+ "b174fbc9cd2b": {
+  "src": "11.2 Laminar friction: Hagen–Poiseuille",
+  "tr": "11.2 احتكاك الجريان الطبقي: هاغن–بوازوي"
+ },
+ "b3ea6af14c1b": {
+  "src": "From here on $x_v$ is the normalized spool travel $\\hat{x}$ of (8.2), between −1 and 1. The pump holds the supply pressure $p_s$ at port P, and the tank pressure $p_T$ (zero here) sits at port T. Port A feeds the long hose, and its pressure is $p_a$; port B feeds the rod chamber through a short rigid line, so its pressure is the rod-chamber pressure $p_B$. A four-way valve has four metering edges. For $x_v > 0$ the edges P→A and B→T open; for $x_v < 0$ the edges P→B and A→T open. The valve is <i>critically lapped</i>: each land is exactly as wide as the slot it covers, with neither overlap nor gap, so at $x_v = 0$ all four edges are exactly closed and only leakage flows. Writing $x^+ = \\max(\\hat{x}, 0)$ and $x^- = \\min(\\hat{x}, 0)$, the flows out of the ports are",
+  "tr": "من هنا فصاعدًا يكون $x_v$ هو إزاحة المِزلاج المنسوبة $\\hat{x}$ من (8.2)، بين −1 و1. تُبقي المضخّة ضغط الإمداد $p_s$ عند المنفذ P، ويقع ضغط الخزّان $p_T$ (وهو هنا صفر) عند المنفذ T. يغذّي المنفذ A الخرطوم الطويل، وضغط هذا المنفذ $p_a$؛ ويغذّي المنفذ B حجرة الساق عبر أنبوب قصير صلب، فيكون ضغطه ضغط حجرة الساق $p_B$. وللصمّام رباعيّ الاتجاهات أربع حوافّ تحكّم. عندما $x_v > 0$ تنفتح الحافّتان P→A و B→T؛ وعندما $x_v < 0$ تنفتح P→B و A→T. والصمّام <i>صفريّ التداخل</i>: كلُّ كتف بعرض الشقّ الذي يغطّيه تمامًا، دون تداخل ودون فجوة، فعند $x_v = 0$ تكون الحافّات الأربع مغلقةً إغلاقًا تامًّا، ولا يجري إلا التسرّب. وبوضع $x^+ = \\max(\\hat{x}, 0)$ و$x^- = \\min(\\hat{x}, 0)$، تكون التدفّقات الخارجة من المنافذ"
+ },
+ "b93127ea6074": {
+  "src": "<span class=\"lbl\">answers with</span>the port flows $Q_A$, $Q_B$ and the pump flow $Q_S$",
+  "tr": "<span class=\"lbl\">الناتج</span>تدفّقات المنافذ $Q_A$ و$Q_B$، وتدفّق المضخّة $Q_S$"
+ },
+ "b9b8a4ace1ef": {
+  "src": "8.2 Taming the square root",
+  "tr": "8.2 ترويض الجذر التربيعي"
+ },
+ "ba467fe47408": {
+  "src": "The specimen is a spring $k_w$ with a damper $c_w$ in parallel (a Kelvin–Voigt solid); the damper is set to 5 % of critical. <i>Critical</i> damping is the value that separates bouncing from creeping: for a mass $m$ on a spring $k$ with damper $c$, the motion $m\\ddot{\\delta} + c\\dot{\\delta} + k\\delta = 0$ goes as $e^{\\lambda t}$ with $m\\lambda^2 + c\\lambda + k = 0$, whose roots are real, so the motion does not oscillate, once $c^2 \\ge 4mk$. The boundary is $c_{\\mathrm{crit}} = 2\\sqrt{km}$, and here $c_w = 0.05\\cdot 2\\sqrt{k_w m}$, with $m = 160\\ \\mathrm{kg}$ the ram that presses on the specimen: a lightly damped specimen, as a steel part is. It is only touched when the platen has climbed past $y_c$, and it can push but not pull:",
+  "tr": "العيّنة نابضٌ $k_w$ يتوازى معه مُخمِّد $c_w$ (جسم كلفن–فويغت)؛ والمُخمِّد مضبوط على 5 % من التخامد الحرج. <i>التخامد الحرج</i> هو القيمة التي تفصل بين الاهتزاز والزحف: لكتلة $m$ على نابض $k$ ومُخمِّد $c$ تحقّق الحركةُ $m\\ddot{\\delta} + c\\dot{\\delta} + k\\delta = 0$. وبوضع الحلّ $e^{\\lambda t}$ نجد $m\\lambda^2 + c\\lambda + k = 0$، ويكون جذراها حقيقيّين، فلا تهتزّ الحركة، متى كان $c^2 \\ge 4mk$. والحدّ هو $c_{\\mathrm{crit}} = 2\\sqrt{km}$، وهنا $c_w = 0.05\\cdot 2\\sqrt{k_w m}$، مع $m = 160\\ \\mathrm{kg}$ وهي كتلة المِدكّ الذي يضغط على العيّنة: عيّنة قليلة التخامد، شأنها شأن القطعة الفولاذية. ولا تُمَسّ إلّا بعد أن يصعد اللوح الضاغط إلى ما بعد $y_c$، وهي تستطيع أن تدفع لا أن تسحب:"
+ },
+ "bb02512be4cf": {
+  "src": "<span class=\"lbl\">given</span>the ram position $y$ and speed $\\dot y$, once in contact",
+  "tr": "<span class=\"lbl\">المُعطى</span>موضع المِدكّ $y$ وسرعته $\\dot y$، عند حدوث التلامس"
+ },
+ "bbf7d5eac14a": {
+  "src": "11.3 Turbulent friction",
+  "tr": "11.3 الاحتكاك المضطرب"
+ },
+ "bd21389cf19b": {
+  "src": "A few bubbles turn the stiff spring into a soft one. Bubbles are springs that stiffen as you squeeze them: crush them to a fortieth of their size and they barely matter.",
+  "tr": "تكفي فقاعات قليلة لتحويل النابض القاسي إلى نابض ليّن. الفقاعات نوابض تزداد صلابةً كلّما ضغطتَها: اضغطها حتى تصير إلى واحد من أربعين من حجمها الأصلي، فلا يكاد يبقى لها أثر يُذكر."
+ },
+ "bfbedaf7a00e": {
+  "src": "<span class=\"lbl\">answers with</span>the pressures $p_A$ and $p_B$",
+  "tr": "<span class=\"lbl\">الناتج</span>الضغطان $p_A$ و$p_B$"
+ },
+ "c1694e97aca2": {
+  "src": "Swing the end of a garden hose full of water: the water lags behind, then pushes back. The column has mass, and a narrow bore makes it hard to get moving, because every litre per second must run fast.",
+  "tr": "حرِّك طرف خرطوم حديقة ممتلئ بالماء حركةً متأرجحة: يتخلّف الماء عن الحركة، ثم يدفع في الاتّجاه المعاكس. للعمود كتلة، وقطر داخلي ضيّق يجعل تحريكه عسيرًا، لأنّ كلّ لتر في الثانية يجب أن يمرّ بسرعة."
+ },
+ "c1e6bf06afc3": {
+  "src": "a sharp-edged orifice<small>nonlinear resistor</small>",
+  "tr": "فتحة حادّة الحافّة<small>مقاومة غير خطّية</small>"
+ },
+ "c43f9cf80103": {
+  "src": "For small changes around a steady operating point, expand $Q_A(x_v, p_a)$ to first order:",
+  "tr": "من أجل تغيّرات صغيرة حول نقطة تشغيل مستقرّة، نَنشُر $Q_A(x_v, p_a)$ حتى الرتبة الأولى:"
+ },
+ "c5822c358bd2": {
+  "src": "The bottom stop is the same law with a very stiff spring, $k_s = 2\\times10^8\\ \\mathrm{N/m}$, acting when $y < 0$.",
+  "tr": "والمِصدّ السفلي يتبع القانون نفسه بنابض شديد الصلابة، $k_s = 2\\times10^8\\ \\mathrm{N/m}$، يعمل عندما $y < 0$."
+ },
+ "c589b97292b7": {
+  "src": "<span class=\"chn\">13</span> The complete model",
+  "tr": "<span class=\"chn\">13</span> النموذج الكامل"
+ },
+ "c5f2cd998332": {
+  "src": "<div class=\"ctag\">Check</div>The fourth power is brutal: halve the bore and the resistance rises sixteen times. Units: $\\mathrm{Pa\\,s\\cdot m}/\\mathrm{m^4} = \\mathrm{Pa\\,s/m^3}$, a pressure per flow.",
+  "tr": "<div class=\"ctag\">التحقّق</div>الأُسّ الرابع قاسٍ: إذا أنقصنا القطر الداخلي إلى النصف، ارتفعت المقاومة ستّة عشر ضعفًا. الوحدات: $\\mathrm{Pa\\,s\\cdot m}/\\mathrm{m^4} = \\mathrm{Pa\\,s/m^3}$، أي ضغطٌ لكلّ وحدة تدفّق."
+ },
+ "c7f69aeca6cb": {
+  "src": "<span class=\"lbl\">given</span>the chamber pressures, the specimen force, friction and gravity",
+  "tr": "<span class=\"lbl\">المُعطى</span>ضغطا الحجرتين، وقوّة العيّنة، والاحتكاك، والجاذبية"
+ },
+ "ca526d3aca9d": {
+  "src": "Why so stiff? In a liquid the molecules already touch; squeezing it means pushing electron clouds into each other, and they resist hard. Water, at 2.2 GPa, is stiffer still. A gas is the opposite: its molecules are far apart and the pressure comes only from their impacts. For an ideal gas compressed as $pV^n = \\text{const}$, differentiating gives $V^n\\,dp + n p V^{n-1}dV = 0$, so",
+  "tr": "لماذا كل هذه الصلابة؟ في السائل تكون الجزيئات متلامسةً أصلًا، وضغطه يعني دفع سُحُب الإلكترونات بعضها نحو بعض، فتقاوم بشدّة. والماء أشدّ صلابةً منه أيضًا، إذ يبلغ معامله 2.2 GPa. أمّا الغاز فعلى العكس: جزيئاته متباعدة، والضغط يأتي فقط من اصطداماتها. ولغاز مثالي يُضغط وفق $pV^n = \\text{const}$، يعطي الاشتقاق $V^n\\,dp + n p V^{n-1}dV = 0$، إذن"
+ },
+ "cfe25a02795c": {
+  "src": "derive the orifice law (8.1) from Bernoulli and turn a valve data sheet into a flow coefficient;",
+  "tr": "تشتقَّ قانون الفتحة (8.1) من برنولي، وتحوّلَ ورقة بيانات الصمّام إلى معامل تدفّق؛"
+ },
+ "d1aff8bb2b49": {
+  "src": "<div class=\"ctag\">In our press</div>2 m of 12 mm hose: $I = 1.54\\times10^{7}\\ \\mathrm{kg/m^4}$. To accelerate the flow by 10 L/min in 10 ms takes $$I\\,\\dot{Q} = 1.54\\times10^7\\times\\frac{1.67\\times10^{-4}}{0.01} = 0.26\\ \\mathrm{MPa}.$$",
+  "tr": "<div class=\"ctag\">في مكبسنا</div>خرطوم طوله 2 m وقطره الداخلي 12 mm: $I = 1.54\\times10^{7}\\ \\mathrm{kg/m^4}$. ولتسريع التدفّق بمقدار 10 L/min خلال 10 ms يلزم $$I\\,\\dot{Q} = 1.54\\times10^7\\times\\frac{1.67\\times10^{-4}}{0.01} = 0.26\\ \\mathrm{MPa}.$$"
+ },
+ "d2e2b78df999": {
+  "src": "7.1 The bulk modulus",
+  "tr": "7.1 معامل المرونة الحجمي"
+ },
+ "d311c6f291ba": {
+  "src": "drop across it",
+  "tr": "فرق الضغط عبرها"
+ },
+ "d3545662fbb6": {
+  "src": "The smoothing makes the equations integrable with a fixed step. Its price is that at rest the friction behaves like an enormous damper of slope $F_c k_{\\mathrm{st}}/v_s \\approx 10^6\\ \\mathrm{N\\,s/m}$; worked solution 4 on the Servo-Hydraulic Press page shows how that misleads a linear analysis.",
+  "tr": "يجعل التنعيمُ المعادلاتِ قابلةً للتكامل بخطوة ثابتة. وثمنه أنّ الاحتكاك عند السكون يسلك سلوك مُخمِّد هائل ميله $F_c k_{\\mathrm{st}}/v_s \\approx 10^6\\ \\mathrm{N\\,s/m}$؛ والحلّ المفصّل رقم 4 على صفحة «المكبس الهيدروليكي المؤازر» يبيّن كيف يُضلّل ذلك التحليلَ الخطّي."
+ },
+ "d59a57255b93": {
+  "src": "<span class=\"chn\">12</span> Chambers, ram, friction, contact",
+  "tr": "<span class=\"chn\">12</span> الحجرات، والمِدكّ، والاحتكاك، والتلامس"
+ },
+ "ddcc31e4c435": {
+  "src": "Upstream of the opening the oil is almost still at pressure $p_u$. It accelerates through the gap and the jet keeps contracting a little beyond the edge, to its narrowest section, the <i>vena contracta</i>, where the streamlines are parallel and the pressure equals the downstream pressure $p_d$. Apply steady Bernoulli, (5.2) without the time term, between a point upstream and the vena contracta:",
+  "tr": "قبل الفتحة يكون الزيت شبه ساكن عند الضغط $p_u$. يتسارع عبر الفتحة، ويستمرّ التيّار المندفع في الانكماش قليلًا بعد الحافّة، حتى يبلغ أضيق مقاطعه، وهو <i>المقطع المنقبض (vena contracta)</i>، حيث تكون خطوط الانسياب متوازية، ويساوي الضغطُ فيه الضغطَ بعد الفتحة $p_d$. طبّق معادلة برنولي للجريان المستقرّ (5.2) دون حدّ الزمن، بين نقطةٍ قبل الفتحة والمقطع المنقبض:"
+ },
+ "df21e851d10a": {
+  "src": "into A: $+K_v x^+ g(p_s - p_a)$ in $Q_A$ and $Q_S$",
+  "tr": "داخلًا إلى A: $+K_v x^+ g(p_s - p_a)$ في $Q_A$ و$Q_S$"
+ },
+ "e0e5d3ed22ad": {
+  "src": "<span class=\"chn\">8</span> Flow through a sharp-edged orifice",
+  "tr": "<span class=\"chn\">8</span> الجريان عبر فتحة ذات حافّة حادّة"
+ },
+ "e2badf74fc2c": {
+  "src": "The model captures that curve with three terms. A Coulomb force $F_c$ opposes sliding; at low speeds a higher break-away force $k_{\\mathrm{st}}F_c$ (the Stribeck effect) has to be overcome; and a viscous term $b_v\\dot{y}$ grows with speed. The jump of the Coulomb force at $\\dot{y} = 0$ is smoothed with a hyperbolic tangent over a speed $v_s = 1\\ \\mathrm{mm/s}$, and the Stribeck bump dies away over $v_{\\mathrm{str}} = 5\\ \\mathrm{mm/s}$:",
+  "tr": "يمثّل النموذج هذا المنحنى بثلاثة حدود. تعاكس قوّة كولوم $F_c$ الانزلاق؛ وعند السرعات الصغيرة يجب التغلّب على قوّة انفلات أكبر $k_{\\mathrm{st}}F_c$ (تأثير ستريبك)؛ ويزداد حدّ اللزوجة $b_v\\dot{y}$ مع السرعة. وتُنعَّم قفزةُ قوّة كولوم عند $\\dot{y} = 0$ بالظلّ الزائدي على مدى السرعة $v_s = 1\\ \\mathrm{mm/s}$، ويتلاشى نتوء ستريبك على مدى السرعة $v_{\\mathrm{str}} = 5\\ \\mathrm{mm/s}$:"
+ },
+ "e5323863b714": {
+  "src": "its flow, as a term of (9.1)",
+  "tr": "تدفّقها، بوصفه حدًّا في (9.1)"
+ },
+ "e5ae5ed709dc": {
+  "src": "The bulk modulus measures how much pressure it takes to squeeze a volume $V$ by a fraction $dV/V$:",
+  "tr": "يقيس معامل المرونة الحجمي مقدار الضغط اللازم لإنقاص حجمٍ $V$ بنسبة $dV/V$:"
+ },
+ "e70d45901b3a": {
+  "src": "<div class=\"ctag\">In our press</div>At 60 L/min in the 12 mm hose the mean speed is 8.8 m/s and $Re \\approx 3300$: turbulent. $R_{\\mathrm{lam}} = 1.09\\times10^8\\ \\mathrm{Pa\\,s/m^3}$, $K_t = 1.64\\times10^{11}\\ \\mathrm{kg/m^7}$ with $f = 0.02$ and $K_m = 1.5$. Be warned that $f = 0.02$ is on the low side: Blasius’s correlation for smooth pipes, $f = 0.316\\,Re^{-1/4}$, gives 0.042 at this Reynolds number, The pipe term $fL/d$ is 3.3 with the model’s value and 7.0 with Blasius’s, against $K_m = 1.5$ for the fittings, so the model’s turbulent loss in the hose, proportional to $fL/d + K_m$, is about 40 % low (4.8 against 8.5). Hose friction is a few hundred kilopascals at full flow, small beside the megapascals burnt in the valve (chapter 9), so the conclusions do not change.",
+  "tr": "<div class=\"ctag\">في مكبسنا</div>عند 60 L/min في الخرطوم ذي القطر الداخلي 12 mm يكون متوسّط السرعة 8.8 m/s و$Re \\approx 3300$: الجريان مضطرب. $R_{\\mathrm{lam}} = 1.09\\times10^8\\ \\mathrm{Pa\\,s/m^3}$، و$K_t = 1.64\\times10^{11}\\ \\mathrm{kg/m^7}$ مع $f = 0.02$ و$K_m = 1.5$. وننبّه إلى أنّ $f = 0.02$ قيمة منخفضة نسبيًّا؛ فعلاقة بلازيوس للأنابيب الملساء، $f = 0.316\\,Re^{-1/4}$، تعطي 0.042 عند عدد رينولدز هذا. أمّا $fL/d$ للأنبوب فيساوي 3.3 بقيمة النموذج و7.0 بقيمة بلازيوس، في مقابل $K_m = 1.5$ للوصلات. لذلك يكون الفقد المضطرب في الخرطوم في النموذج، المتناسب مع $fL/d + K_m$، أقلّ من الواقع بنحو 40 % (4.8 مقابل 8.5). واحتكاك الخرطوم عند التدفّق الكامل بضعُ مئات من الكيلوباسكال، وهو صغير بجانب الميغاباسكال التي تُهدر في الصمّام (الفصل 9)، فلا تتغيّر الخلاصات."
+ },
+ "e908dcc9a036": {
+  "src": "derive the pressure build-up equation (7.2) for any chamber and the effective bulk modulus of oil with air (7.3);",
+  "tr": "تشتقَّ معادلةَ بناء الضغط (7.2) لأيّ حجرة، وكذلك معامل المرونة الحجمي الفعّال للزيت المختلط بالهواء (7.3)؛"
+ },
+ "eb5869edbf55": {
+  "src": "With $R = d/2$:",
+  "tr": "مع $R = d/2$:"
+ },
+ "ecafdb0f7e07": {
+  "src": "At $\\omega = \\omega_v$ the real part of the denominator vanishes and the response is $1/(2j\\zeta_v)$: the spool lags by exactly 90°, whatever the damping. That is how $f_v$ is measured. Here $\\operatorname{atan2}(b, a)$ is the angle of the complex number $a + jb$, so the phase runs smoothly from 0 through −90° at $\\omega_v$ towards −180°. The plain form $\\varphi = -\\arctan(b/a)$ would be wrong above resonance, where $a < 0$: at 100 Hz it gives +52.7° instead of −127.3°.",
+  "tr": "عند $\\omega = \\omega_v$ يساوي الجزء الحقيقي للمقام صفرًا، وتصبح الاستجابة $1/(2j\\zeta_v)$: يتأخّر المِزلاج بالضبط 90°، مهما كان التخامد. وبهذا يُقاس $f_v$. وهنا $\\operatorname{atan2}(b, a)$ هي زاوية العدد العقدي $a + jb$، فيمرّ الطور بسلاسة من 0 عبر −90° عند $\\omega_v$ نحو −180°. أمّا الصيغة البسيطة $\\varphi = -\\arctan(b/a)$ فتكون خاطئة فوق الرنين، حيث $a < 0$: فعند 100 Hz تعطي +52.7° بدلًا من −127.3°."
+ },
+ "ed856c1d1ce3": {
+  "src": "Figure 2. A control volume whose boundary moves.",
+  "tr": "الشكل 2. حجم تحكّم حدُّه متحرّك."
+ },
+ "edc66f456e6a": {
+  "src": "open when",
+  "tr": "تنفتح عندما"
+ },
+ "efff3f1433c6": {
+  "src": "the oil in the hose<small>an inductor and a resistor in series</small>",
+  "tr": "الزيت في الخرطوم<small>مُحاثّة ومقاومة على التوالي</small>"
+ },
+ "f24b4877860b": {
+  "src": "<div class=\"ctag\">In our press</div> <table class=\"mt\"><tr><th>gauge pressure</th><th>0</th><th>0.1 MPa</th><th>0.5 MPa</th><th>1 MPa</th><th>2 MPa</th><th>4.4 MPa</th><th>7.8 MPa</th><th>12 MPa</th></tr> <tr><td>$\\beta_{\\mathrm{eff}}$, 0.5 % air</td><td>28 MPa</td><td>87 MPa</td><td>428 MPa</td><td>795 MPa</td><td>1.16 GPa</td><td>1.39 GPa</td><td>1.46 GPa</td><td>1.48 GPa</td></tr> <tr><td>$\\beta_{\\mathrm{eff}}$, 2 % air</td><td>7.1 MPa</td><td>23 MPa</td><td>135 MPa</td><td>327 MPa</td><td>686 MPa</td><td>1.13 GPa</td><td>1.34 GPa</td><td>1.42 GPa</td></tr></table> The model uses $n = 1.4$: the pressure in a press cycle changes in milliseconds, too fast for the bubbles to exchange much heat. At zero gauge pressure half a percent of air makes the oil fifty times softer. Near vacuum ($p_{\\mathrm{abs}}\\to 0$) the effective modulus goes to zero, which in the model also stops the pressure from falling below absolute zero.",
+  "tr": "<div class=\"ctag\">في مكبسنا</div> <table class=\"mt\"><tr><th>الضغط النسبي</th><th>0</th><th>0.1 MPa</th><th>0.5 MPa</th><th>1 MPa</th><th>2 MPa</th><th>4.4 MPa</th><th>7.8 MPa</th><th>12 MPa</th></tr> <tr><td>$\\beta_{\\mathrm{eff}}$، 0.5 % هواء</td><td>28 MPa</td><td>87 MPa</td><td>428 MPa</td><td>795 MPa</td><td>1.16 GPa</td><td>1.39 GPa</td><td>1.46 GPa</td><td>1.48 GPa</td></tr> <tr><td>$\\beta_{\\mathrm{eff}}$، 2 % هواء</td><td>7.1 MPa</td><td>23 MPa</td><td>135 MPa</td><td>327 MPa</td><td>686 MPa</td><td>1.13 GPa</td><td>1.34 GPa</td><td>1.42 GPa</td></tr></table> يستخدم النموذج $n = 1.4$: يتغيّر الضغط في دورة المكبس خلال ملّي ثوانٍ، وهذا أسرع من أن تتبادل الفقاعات قدرًا يُذكر من الحرارة. وعند ضغطٍ نسبيٍّ صفري يجعل نصفٌ في المئة من الهواء الزيتَ ألينَ بخمسين مرّة. وقرب الفراغ ($p_{\\mathrm{abs}}\\to 0$) يؤول معامل المرونة الحجمي الفعّال إلى الصفر، وهذا يمنع في النموذج أيضًا أن ينخفض الضغط المطلق دون الصفر."
+ },
+ "f2edf03d3ca2": {
+  "src": "The flow is proportional to the pressure difference, and to the <i>cube</i> of the clearance. The model uses $K_L = 2\\times10^{-13}\\ \\mathrm{m^3/(s\\,Pa)}$ for each leakage path. On a 10 mm spool with 1 mm of land and $\\eta = 27.8\\ \\mathrm{mPa\\,s}$, that is a radial clearance of 13 µm; halve the clearance and the leakage falls eightfold, which is why servo spools are lapped into their bores.",
+  "tr": "يتناسب التدفّق مع فرق الضغط ومع <i>مكعّب</i> الخلوص. ويستخدم النموذج $K_L = 2\\times10^{-13}\\ \\mathrm{m^3/(s\\,Pa)}$ لكل مسار تسرّب. في مِزلاج قطره 10 mm، ومع كتف عرضه 1 mm، و$\\eta = 27.8\\ \\mathrm{mPa\\,s}$، يكون الخلوص الشعاعي 13 µm؛ فإذا قُلِّص الخلوص إلى النصف، انخفض التسرّب إلى ثُمنه، ولهذا تُصقَل مزاليج الصمّامات المؤازرة بالتلبيس (lapping) داخل تجاويفها."
+ },
+ "f2f52b381685": {
+  "src": "$K_q$ is the <i>flow gain</i>: how much more oil the port delivers per unit of spool travel. $K_c$ is the <i>flow-pressure coefficient</i>: how much less it delivers per pascal of back-pressure. For $x_v > 0$ and $|\\Delta p| \\gg p_{\\mathrm{tr}}$ only the P→A edge and the leaks matter, $Q_A = K_v x_v\\sqrt{p_s - p_a} + K_L(p_s - 2p_a + p_T)$, and differentiating gives",
+  "tr": "$K_q$ هو <i>كسب التدفّق</i>: مقدار ما يزيد به تدفّق الزيت من المنفذ لكلّ وحدة من إزاحة المِزلاج. $K_c$ هو <i>معامل التدفّق والضغط</i>: مقدار ما ينقص به هذا التدفّق لكلّ باسكال من الضغط المعاكس. من أجل $x_v > 0$ و$|\\Delta p| \\gg p_{\\mathrm{tr}}$ لا تؤثّر إلّا حافّة التحكّم P→A والتسرّبات، فيكون $Q_A = K_v x_v\\sqrt{p_s - p_a} + K_L(p_s - 2p_a + p_T)$، وبالاشتقاق نجد"
+ },
+ "f33a95c42332": {
+  "src": "<div class=\"ctag\">Check</div>Units: $\\mathrm{m^3/Pa}\\cdot\\mathrm{Pa/s} = \\mathrm{m^3/s}$. Limit $\\beta\\to\\infty$: the left side vanishes and $Q_{\\mathrm{in}} - Q_{\\mathrm{out}} = \\dot{V}$, the incompressible continuity of chapter 2.",
+  "tr": "<div class=\"ctag\">التحقّق</div>الوحدات: $\\mathrm{m^3/Pa}\\cdot\\mathrm{Pa/s} = \\mathrm{m^3/s}$. الحالة الحدّية $\\beta\\to\\infty$: يتلاشى الطرف الأيسر، فيبقى $Q_{\\mathrm{in}} - Q_{\\mathrm{out}} = \\dot{V}$، وهي معادلة الاستمرار للموائع غير القابلة للانضغاط من الفصل 2."
+ },
+ "f37e5d4da17d": {
+  "src": "<span class=\"chn\">9</span> The four-way valve",
+  "tr": "<span class=\"chn\">9</span> الصمّام رباعيّ الاتجاهات"
+ },
+ "f42b449befb0": {
+  "src": "This is the most important equation in hydraulics. Take a chamber whose volume $V(t)$ can change because a piston of area $A$ moves out at speed $\\dot{y}$, so $\\dot{V} = A\\dot{y}$. Oil flows in at $Q_{\\mathrm{in}}$ and out at $Q_{\\mathrm{out}}$ (Figure 2). The mass inside is $m = \\rho V$. Mass is conserved, so it changes only through the flows:",
+  "tr": "هذه أهمّ معادلة في الهيدروليك. خُذ حجرةً حجمها $V(t)$ يمكن أن يتغيّر، لأنّ مكبسًا مساحته $A$ يتحرّك إلى الخارج بسرعة $\\dot{y}$، فيكون $\\dot{V} = A\\dot{y}$. يدخل الزيت بالتدفّق $Q_{\\mathrm{in}}$ ويخرج بالتدفّق $Q_{\\mathrm{out}}$ (الشكل 2). الكتلة داخلها $m = \\rho V$. الكتلةُ محفوظة، فلا تتغيّر إلا عبر التدفّقات:"
+ },
+ "f48c5bde95a4": {
+  "src": "<div class=\"ctag\">In our press</div>Cruising up at 0.1 m/s, the spool is 40.6 % open with $p_s - p_a = 9.75\\ \\mathrm{MPa}$: $K_q = 2.8\\times10^{-3}\\ \\mathrm{m^3/s}$ per unit spool and $K_c = 5.8\\times10^{-11}\\ \\mathrm{m^3/(s\\,Pa)}$, about 290 times the leakage conductance $K_L$.",
+  "tr": "<div class=\"ctag\">في مكبسنا</div>عند الصعود بسرعة 0.1 m/s يكون المِزلاج مفتوحًا بنسبة 40.6 %، ومع $p_s - p_a = 9.75\\ \\mathrm{MPa}$: $K_q = 2.8\\times10^{-3}\\ \\mathrm{m^3/s}$ لكلّ وحدة من إزاحة المِزلاج، و$K_c = 5.8\\times10^{-11}\\ \\mathrm{m^3/(s\\,Pa)}$، أي نحو 290 ضعفَ ناقلية التسرّب $K_L$."
+ },
+ "f4add7a7304c": {
+  "src": "12.2 Newton for the ram",
+  "tr": "12.2 نيوتن للمِدكّ"
+ },
+ "f6c5fb78bbaa": {
+  "src": "One case can be solved exactly from momentum alone. Let a tank drain through a short tube that pokes <i>into</i> the tank, a “Borda mouthpiece”. Far from the tube’s mouth the oil is almost still, so the pressure on every part of the tank wall is the hydrostatic value, with one exception: the patch of wall opposite the mouth, of area $A_o$, has no wall facing it on the other side. Take the oil in the tank as a control volume and balance momentum along the tube axis. The only unbalanced force is the pressure excess $(p_u - p_d)$ on that missing patch, and it must supply the momentum carried out by the jet each second:",
+  "tr": "يمكن حلّ حالة واحدة حلًّا دقيقًا بالاعتماد على كمية الحركة وحدها. تخيّل خزّانًا يُفرَّغ عبر أنبوب قصير يبرز <i>إلى داخل</i> الخزّان، وهو ما يُسمّى «فوهة بوردا». فبعيدًا عن فم الأنبوب يكون الزيت شبه ساكن، فيكون الضغط على كل جزء من جدار الخزّان هو الضغط الهيدروستاتيكي، باستثناء واحد: الجزء المقابل للفم، ومساحته $A_o$، لا يقابله جدار على الجانب الآخر. اعتبر الزيت داخل الخزّان حجم تحكّم، ووازِن كمية الحركة على محور الأنبوب. القوّة غير المتوازنة الوحيدة هي فائض الضغط $(p_u - p_d)$ على ذلك الجزء الناقص، وعليه أن يوفّر كمية الحركة التي يحملها التيّار إلى خارج الخزّان في كل ثانية:"
+ },
+ "f6cc8c22b34d": {
+  "src": "into B: $-K_v x^- g(p_s - p_B)$ in $Q_B$ and $Q_S$",
+  "tr": "داخلًا إلى B: $-K_v x^- g(p_s - p_B)$ في $Q_B$ و$Q_S$"
+ },
+ "f6fe3cb5f5f7": {
+  "src": "The controller’s command is a small electric current. Something has to turn it into a spool position, and that something has inertia and springs, so it cannot follow the command instantly. This chapter derives how it lags.",
+  "tr": "أمر المتحكّم تيارٌ كهربائيّ صغير. ولا بدّ من شيء يحوّله إلى موضع للمِزلاج، وهذا الشيء له عطالة ونوابض، فلا يستطيع أن يتبع الأمر فورًا. يستخرج هذا الفصل كيف يتأخّر عنه."
+ },
+ "fc492f885325": {
+  "src": "Apply the definition (7.1) to the mixture, $\\beta_{\\mathrm{eff}} = -(V_\\ell + V_g)/(dV/dp)$, and divide top and bottom by $V_\\ell$, writing $\\alpha = V_g/V_\\ell$:",
+  "tr": "طبّق التعريف (7.1) على الخليط، $\\beta_{\\mathrm{eff}} = -(V_\\ell + V_g)/(dV/dp)$، واقسم البسط والمقام على $V_\\ell$، مع كتابة $\\alpha = V_g/V_\\ell$:"
+ },
+ "fc5cb75f6612": {
+  "src": "<span class=\"lbl\">given</span>the command $u$, a coil current",
+  "tr": "<span class=\"lbl\">المُعطى</span>الأمر $u$، وهو تيار في الملفّ"
+ },
+ "fe9b8928a37e": {
+  "src": "8.1 Why the jet is narrower than the hole",
+  "tr": "8.1 لماذا يكون التيّار أضيق من الثقب"
+ },
+ "ff578a746b0d": {
+  "src": "Part II takes the servo press of the map in chapter 0 apart and derives the law inside each block, in the order the oil meets them: the oil itself as a spring (chapter 7), the orifice and the valve built from four of them (8 and 9), the spool that moves them (10), the hose (11), and the cylinder, ram and specimen (12). Chapter 13 puts the blocks back together into eight equations.",
+  "tr": "يفكّك الجزء الثاني المكبسَ المؤازر من خريطة الفصل 0، ويشتقّ القانونَ داخل كل كتلة، بالترتيب الذي يصادف فيه الزيتُ هذه الكتل: الزيتُ نفسه بوصفه نابضًا (الفصل 7)، والفتحةُ والصمّامُ المبنيّ من أربع فتحات منها (الفصلان 8 و9)، والمِزلاجُ الذي يحرّكها (الفصل 10)، والخرطومُ (الفصل 11)، والأسطوانةُ والمِدكّ والعيّنةُ (الفصل 12). ويعيد الفصل 13 تركيب الكتل معًا في ثماني معادلات."
+ }
+}

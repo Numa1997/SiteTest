@@ -1,0 +1,550 @@
+{
+ "00cf65af925b": {
+  "src": "The medium responds linearly, twice the push, twice the displacement, as a real one does while the displacements are small.",
+  "tr": "Das Medium reagiert linear: doppelte Kraft, doppelte Auslenkung, wie ein echtes Medium, solange die Auslenkungen klein sind."
+ },
+ "02174ae1b172": {
+  "src": "Fig. 4 · oscillations · wave kinematics",
+  "tr": "Abb. 4 · Schwingungen · Wellenkinematik"
+ },
+ "028fdbe91227": {
+  "src": "Both rows share one medium \\(640\\ \\mathrm{px}\\) long, stretched across the canvas between margins of \\(22\\ \\mathrm{px}.\\) With \\(W\\) the canvas width in screen pixels, the scale \\(s\\) and the horizontal screen positions of a particle in the two rows are",
+  "tr": "Beide Reihen teilen sich ein Medium von \\(640\\ \\mathrm{px}\\) Länge, das über die Zeichenfläche gespannt ist, mit Rändern von \\(22\\ \\mathrm{px}.\\) Ist \\(W\\) die Breite der Zeichenfläche in Bildschirmpixeln, so sind der Maßstab \\(s\\) und die waagerechten Bildschirmpositionen eines Teilchens in den beiden Reihen"
+ },
+ "02a04bfb4e66": {
+  "src": "Lengths are pixels of the drawing and speeds pixels per second. Only the ratio \\(A/\\lambda\\) fixes the shape.",
+  "tr": "Längen sind Pixel der Zeichnung, Geschwindigkeiten Pixel pro Sekunde. Nur das Verhältnis \\(A/\\lambda\\) legt die Form fest."
+ },
+ "043236bae3c2": {
+  "src": "Follow one particle",
+  "tr": "Ein Teilchen verfolgen"
+ },
+ "048859a96e6b": {
+  "src": "S. Stein and M. Wysession, <em>An Introduction to Seismology, Earthquakes, and Earth Structure</em>, Blackwell, 2003: chapters 2 (basic seismological theory, beginning with waves on a string) and 3 (seismology and Earth structure). <a href=\"https://www.wiley.com/en-us/An+Introduction+to+Seismology%2C+Earthquakes%2C+and+Earth+Structure-p-9780865420786\">Publisher’s page</a>.",
+  "tr": "S. Stein und M. Wysession, <em>An Introduction to Seismology, Earthquakes, and Earth Structure</em>, Blackwell, 2003: Kapitel 2 (grundlegende seismologische Theorie, beginnend mit Wellen auf einer Saite) und 3 (Seismologie und Aufbau der Erde). <a href=\"https://www.wiley.com/en-us/An+Introduction+to+Seismology%2C+Earthquakes%2C+and+Earth+Structure-p-9780865420786\">Seite des Verlags</a>."
+ },
+ "06a92ff3ba92": {
+  "src": "Wavenumber k",
+  "tr": "Wellenzahl k"
+ },
+ "07cdbcdc6e4f": {
+  "src": "Particles",
+  "tr": "Teilchen"
+ },
+ "08419457f95c": {
+  "src": "The exact density in (10) carries a warning. If \\(A_\\mathrm{L}k\\) reached 1, the spacing \\(1 + \\partial\\xi/\\partial X\\) would drop to zero at the compression centres and then turn negative: particles would pass through their neighbours, which no real medium allows. By (3) this is the same as saying that no particle may move forward faster than the wave itself. The page therefore caps the amplitude of the lower row,",
+  "tr": "Die genaue Dichte in (10) trägt eine Warnung. Erreichte \\(A_\\mathrm{L}k\\) den Wert 1, würde der Abstand \\(1 + \\partial\\xi/\\partial X\\) an den Verdichtungszentren auf null sinken und dann negativ werden: Teilchen würden durch ihre Nachbarn hindurchgehen, was kein echtes Medium zulässt. Nach (3) ist das gleichbedeutend damit, dass kein Teilchen schneller nach vorn laufen darf als die Welle selbst. Die Seite begrenzt daher die Amplitude der unteren Reihe,"
+ },
+ "0880b8ccc492": {
+  "src": "Equation (1) is a function of two variables, and there are two natural ways to look at it. Freeze the time and you get a <em>snapshot</em>: \\(\\xi\\) against \\(X,\\) a sine curve that repeats every wavelength \\(\\lambda.\\) This is what the upper row shows at each instant. Fix the place instead and you get a <em>history</em>: the displacement of one particle against time, a sine curve that repeats every period \\(T = 1/f.\\) This is what the burgundy particle traces out. Figure 2 shows both, computed from (1) with the default sliders.",
+  "tr": "Gleichung (1) ist eine Funktion zweier Variablen, und es gibt zwei naheliegende Arten, sie zu betrachten. Friert man die Zeit ein, erhält man eine <em>Momentaufnahme</em>: \\(\\xi\\) gegen \\(X,\\) eine Sinuskurve, die sich nach jeder Wellenlänge wiederholt, \\(\\lambda.\\) Das zeigt die obere Reihe zu jedem Augenblick. Hält man stattdessen den Ort fest, erhält man einen <em>Zeitverlauf</em>: die Auslenkung eines Teilchens gegen die Zeit, eine Sinuskurve mit der Periode \\(T = 1/f.\\) Das zeichnet das bordeauxrote Teilchen nach. Abbildung 2 zeigt beides, berechnet aus (1) mit den Standardreglern."
+ },
+ "0a0a6f35efc2": {
+  "src": "No damping, no reflections at the ends, no dispersion. Water waves, the subject of Fig. 5, are dispersive: their speed depends on their wavelength.",
+  "tr": "Keine Dämpfung, keine Reflexionen an den Enden, keine Dispersion. Wasserwellen, Gegenstand von Abb. 5, sind dispersiv: Die Geschwindigkeit der Wasserwellen hängt von ihrer Wellenlänge ab."
+ },
+ "0bbe499b7216": {
+  "src": "<b>Fig. 4</b> · <span class=\"tx\">\\(\\xi(x, t) = A \\sin(kx - \\omega t)\\)</span> · both waves travel to the right",
+  "tr": "<b>Abb. 4</b> · <span class=\"tx\">\\(\\xi(x, t) = A \\sin(kx - \\omega t)\\)</span> · beide Wellen laufen nach rechts"
+ },
+ "14a2f9ce51c5": {
+  "src": "Numa Koudsie · for school students and first- and second-year undergraduates",
+  "tr": "Numa Koudsie · für Schülerinnen und Schüler sowie Studierende im ersten und zweiten Studienjahr"
+ },
+ "1526fbe34b07": {
+  "src": "The same wave, twice. Above, the particles move across the direction of travel; below, along it. In both, each particle only oscillates in place while the pattern moves on.",
+  "tr": "Dieselbe Welle, zweimal. Oben bewegen sich die Teilchen quer zur Ausbreitungsrichtung, unten längs dazu. In beiden Fällen schwingt jedes Teilchen nur an seinem Platz, während das Muster weiterwandert."
+ },
+ "1cf5c35d5192": {
+  "src": "Take a string stretched with tension \\(F,\\) a force in newtons, with mass \\(\\mu\\) per metre. Look at a short piece between \\(X\\) and \\(X + \\mathrm{d}X,\\) displaced sideways by \\(\\xi.\\) The tension pulls along the string at each end. Where the string is tilted by a small angle \\(\\theta,\\) the pull has a small sideways part, \\(F\\sin\\theta \\approx F\\,\\partial\\xi/\\partial X.\\) The two ends pull in opposite directions, so the net sideways force is set by the difference between the slopes at the two ends, and that difference is not zero where the string is curved. Newton’s second law for the piece reads",
+  "tr": "Man nehme eine Saite, die mit der Spannkraft \\(F,\\) einer Kraft in Newton, gespannt ist, mit der Masse \\(\\mu\\) pro Meter. Man betrachte ein kurzes Stück zwischen \\(X\\) und \\(X + \\mathrm{d}X,\\) das seitlich ausgelenkt ist, und zwar um \\(\\xi.\\) Die Spannkraft zieht an jedem Ende längs der Saite. Ist die Saite um einen kleinen Winkel \\(\\theta,\\) geneigt, so hat der Zug einen kleinen seitlichen Anteil, \\(F\\sin\\theta \\approx F\\,\\partial\\xi/\\partial X.\\) Die beiden Enden ziehen in entgegengesetzte Richtungen, daher wird die resultierende seitliche Kraft durch die Differenz der Steigungen an den beiden Enden bestimmt, und diese Differenz ist dort nicht null, wo die Saite gekrümmt ist. Das zweite Newtonsche Gesetz für das Stück lautet"
+ },
+ "1e4cfe856d52": {
+  "src": "<span class=\"pfig__n\">Figure 4</span>Density of the lower row relative to rest, against rest position, at the first frame (\\(\\omega t = 0\\)) with the default sliders, sampled every \\(1\\ \\mathrm{px}\\): the exact expression of equation (10) (solid) and its linearised form (dashed). The dots are the values at the 26 particles. The exact density peaks at 3.88 in the compressions and falls to 0.574 in the rarefactions; the linear form would put the peaks at 1.74 and the troughs at 0.26. Both curves cross the rest density, 1, at the same places.",
+  "tr": "<span class=\"pfig__n\">Abbildung 4</span>Dichte der unteren Reihe relativ zur Ruhedichte, aufgetragen gegen die Ruhelage, im ersten Bild (\\(\\omega t = 0\\)) mit den Standardreglern, abgetastet alle \\(1\\ \\mathrm{px}\\): der genaue Ausdruck aus Gleichung (10) (durchgezogen) und seine linearisierte Form (gestrichelt). Die Punkte sind die Werte an den 26 Teilchen. Die genaue Dichte erreicht in den Verdichtungen 3.88 und fällt in den Verdünnungen auf 0.574; die lineare Form würde die Maxima bei 1.74 und die Minima bei 0.26 ansetzen. Beide Kurven schneiden die Ruhedichte 1 an denselben Stellen."
+ },
+ "21ec57c412d5": {
+  "src": "<span>1</span>The pattern travels, the medium stays",
+  "tr": "<span>1</span>Das Muster wandert, das Medium bleibt"
+ },
+ "22a49b059ffc": {
+  "src": "<span class=\"psec__n\">01</span>The pattern travels, the medium stays",
+  "tr": "<span class=\"psec__n\">01</span>Das Muster wandert, das Medium bleibt"
+ },
+ "2313c2f4cf0e": {
+  "src": "Physics begins by deciding what to keep. We keep a line of particles, the <em>medium</em>, and describe a wave by how far each particle has moved from where it rests. Label every particle by its rest position \\(X,\\) the place where it sits when there is no wave. Its <em>displacement</em> \\(\\xi(X,t)\\) is how far it has moved at time \\(t\\): sideways in the transverse row, and along the line in the longitudinal row, where the particle is then found at \\(x = X + \\xi.\\) The simulation uses the simplest travelling wave,",
+  "tr": "Die Physik beginnt damit, festzulegen, was man behält. Wir behalten eine Reihe von Teilchen, das <em>Medium</em>, und beschreiben eine Welle dadurch, wie weit jedes Teilchen aus seiner Ruhelage ausgelenkt ist. Jedes Teilchen wird über seine Ruhelage \\(X,\\) den Ort, an dem es ohne Welle sitzt, benannt. Seine <em>Auslenkung</em> \\(\\xi(X,t)\\) gibt an, wie weit es zur Zeit \\(t\\) verschoben ist: seitlich in der transversalen Reihe, und längs der Linie in der longitudinalen Reihe; dort steht es dann bei \\(x = X + \\xi.\\) Die Simulation verwendet die einfachste fortschreitende Welle,"
+ },
+ "23d7346392ad": {
+  "src": "R. P. Feynman, R. B. Leighton and M. Sands, <em>The Feynman Lectures on Physics</em>, Vol. I, chapter 47, “Sound. The wave equation”: the wave equation for sound from Newton’s laws, and why the squeezes are adiabatic. <a href=\"https://www.feynmanlectures.caltech.edu/I_47.html\">Free online edition</a>, Caltech.",
+  "tr": "R. P. Feynman, R. B. Leighton und M. Sands, <em>The Feynman Lectures on Physics</em>, Bd. I, Kapitel 47, „Sound. The wave equation“: die Wellengleichung für Schall aus den Newtonschen Gesetzen und warum die Verdichtungen adiabatisch sind. <a href=\"https://www.feynmanlectures.caltech.edu/I_47.html\">Kostenlose Online-Ausgabe</a>, Caltech."
+ },
+ "2443e1b6d734": {
+  "src": "<span class=\"psec__n\">04</span>Where the wave equation comes from<span class=\"star\" title=\"heavier mathematics\">★</span>",
+  "tr": "<span class=\"psec__n\">04</span>Woher die Wellengleichung kommt<span class=\"star\" title=\"heavier mathematics\">★</span>"
+ },
+ "27d109bfa96f": {
+  "src": "Transverse and longitudinal waves: the pattern travels, the medium stays",
+  "tr": "Transversale und longitudinale Wellen: Das Muster wandert, das Medium bleibt"
+ },
+ "2aa013e11371": {
+  "src": "Keep the default sliders. The burgundy particle in the upper row takes \\(2\\ \\mathrm{s}\\) to go up and down once, the value in the <em>Period</em> readout, while a crest triangle needs \\(640/110 = 5.8\\ \\mathrm{s}\\) to cross the whole row. Set <em>Frequency</em> to \\(1.00\\ \\mathrm{Hz}\\): the period halves and the <em>Speed</em> readout doubles to \\(220\\ \\mathrm{px/s}.\\) That is the page handing you a new medium in which waves run twice as fast; in a real medium the speed is fixed, and doubling the frequency halves the wavelength instead (Section 4.4). Now set <em>Wavelength</em> to \\(110\\ \\mathrm{px}.\\) The speed falls back to \\(110\\ \\mathrm{px/s},\\) while the particle still swings once a second. Check with equation (3) that the wavelength changes the pattern but neither the period nor the top speed of any particle in the upper row. The lower row differs here: at \\(110\\ \\mathrm{px}\\) the cap of Section 5 lowers its amplitude to \\(14\\ \\mathrm{px},\\) as the <em>Longit. A</em> readout shows.",
+  "tr": "Lassen Sie die Standardregler stehen. Das bordeauxrote Teilchen in der oberen Reihe braucht \\(2\\ \\mathrm{s}\\) für eine Auf- und Abbewegung, der Wert in der Anzeige <em>Periode</em>, während ein Wellenberg-Dreieck \\(640/110 = 5.8\\ \\mathrm{s}\\) braucht, um die ganze Reihe zu durchqueren. Stellen Sie <em>Frequenz</em> auf \\(1.00\\ \\mathrm{Hz}\\): Die Periode halbiert sich, und die Anzeige <em>Geschwindigkeit</em> verdoppelt sich auf \\(220\\ \\mathrm{px/s}.\\) Die Seite gibt Ihnen damit ein neues Medium, in dem Wellen doppelt so schnell laufen; in einem echten Medium ist die Geschwindigkeit fest, und eine Verdopplung der Frequenz halbiert stattdessen die Wellenlänge (Abschnitt 4.4). Stellen Sie nun <em>Wellenlänge</em> auf \\(110\\ \\mathrm{px}.\\) Die Geschwindigkeit fällt wieder auf \\(110\\ \\mathrm{px/s},\\) während das Teilchen weiterhin einmal pro Sekunde schwingt. Prüfen Sie mit Gleichung (3), dass die Wellenlänge zwar das Muster ändert, aber weder die Periode noch die größte Geschwindigkeit eines Teilchens in der oberen Reihe. Die untere Reihe verhält sich hier anders: Bei \\(110\\ \\mathrm{px}\\) senkt die Begrenzung aus Abschnitt 5 ihre Amplitude auf \\(14\\ \\mathrm{px},\\) wie die Anzeige <em>Längs. A</em> zeigt."
+ },
+ "2e5c8b8d0fd3": {
+  "src": "The acceleration of each bit of string is proportional to how sharply the string is bent there. A tighter string carries waves faster and a heavier one slower: that is how a guitarist tunes a string, and why the thick strings sound low.",
+  "tr": "Die Beschleunigung jedes Saitenstücks ist proportional dazu, wie stark die Saite dort gekrümmt ist. Eine straffere Saite trägt Wellen schneller, eine schwerere langsamer: So stimmt ein Gitarrist eine Saite, und deshalb klingen die dicken Saiten tief."
+ },
+ "30e8391215ff": {
+  "src": "The particles are samples of a continuous medium, not masses joined by springs. A chain of masses a distance \\(a\\) apart is dispersive, \\(\\omega \\propto \\lvert\\sin(ka/2)\\rvert;\\) with the default spacing \\(a = 25.6\\ \\mathrm{px}\\) and \\(\\lambda = 220\\ \\mathrm{px},\\) such a chain would carry the wave \\(2.2\\,\\%\\) more slowly than the continuous medium.",
+  "tr": "Die Teilchen sind Abtastpunkte eines kontinuierlichen Mediums, keine durch Federn verbundenen Massen. Eine Kette von Massen im Abstand \\(a\\) voneinander ist dispersiv, \\(\\omega \\propto \\lvert\\sin(ka/2)\\rvert;\\) mit dem Standardabstand \\(a = 25.6\\ \\mathrm{px}\\) und \\(\\lambda = 220\\ \\mathrm{px},\\) würde eine solche Kette die Welle \\(2.2\\,\\%\\) langsamer fortpflanzen als das kontinuierliche Medium."
+ },
+ "31da9fe676c4": {
+  "src": "One speed for both rows. The page gives the two rows the same \\(v\\) so that they can be compared side by side. In a solid the longitudinal wave is faster, equation (8); on a stretched wire the longitudinal wave, set by the stiffness of the metal, is faster than the transverse one, set by the tension.",
+  "tr": "Eine Geschwindigkeit für beide Reihen. Die Seite gibt beiden Reihen dasselbe \\(v\\), damit man sie nebeneinander vergleichen kann. In einem Festkörper ist die Longitudinalwelle schneller, Gleichung (8); auf einem gespannten Draht ist die Longitudinalwelle, bestimmt durch die Steifigkeit des Metalls, schneller als die transversale, bestimmt durch die Spannkraft."
+ },
+ "324f210915c5": {
+  "src": "<span class=\"pfig__n\">Figure 1</span>The two rows at the first frame of the simulation, \\(\\omega t = 0,\\) drawn to scale for the default sliders: one unit of the drawing is one pixel of the medium. Above, each particle is lifted by \\(\\xi\\) from its rest position \\(X\\) (pale ticks); the triangles mark the crests, \\(\\lambda = 220\\ \\mathrm{px}\\) apart, and the burgundy particle is rising with velocity \\(u = \\partial\\xi/\\partial t.\\) Below, the same displacements are applied along the row. The particles bunch into compressions (triangles) and spread out into rarefactions, and each compression sits \\(\\lambda/4 = 55\\ \\mathrm{px}\\) ahead of a crest. The tint under the lower row is the page’s compression shading.",
+  "tr": "<span class=\"pfig__n\">Abbildung 1</span>Die beiden Reihen im ersten Bild der Simulation, \\(\\omega t = 0,\\) maßstabsgetreu für die Standardregler gezeichnet: eine Einheit der Zeichnung ist ein Pixel des Mediums. Oben ist jedes Teilchen um \\(\\xi\\) aus seiner Ruhelage \\(X\\) gehoben (helle Striche); die Dreiecke markieren die Wellenberge, \\(\\lambda = 220\\ \\mathrm{px}\\) voneinander entfernt, und das bordeauxrote Teilchen steigt mit der Geschwindigkeit \\(u = \\partial\\xi/\\partial t.\\) Unten werden dieselben Auslenkungen entlang der Reihe angewandt. Die Teilchen bündeln sich zu Verdichtungen (Dreiecke) und breiten sich zu Verdünnungen aus, und jede Verdichtung liegt \\(\\lambda/4 = 55\\ \\mathrm{px}\\) vor einem Wellenberg. Die Tönung unter der unteren Reihe ist die Verdichtungsschattierung der Seite."
+ },
+ "3332d7bb61a2": {
+  "src": "<span class=\"sw sw--dot sw--ink\"></span>particle",
+  "tr": "<span class=\"sw sw--dot sw--ink\"></span>Teilchen"
+ },
+ "33bd5a5dddcd": {
+  "src": "© 2026 Numa Koudsie",
+  "tr": "© 2026 Numa Koudsie"
+ },
+ "3434d96a4087": {
+  "src": "Different physics, the same equation. That is why one function \\(\\xi(X,t)\\) can drive both rows of the simulation.",
+  "tr": "Andere Physik, dieselbe Gleichung. Deshalb kann eine einzige Funktion \\(\\xi(X,t)\\) beide Reihen der Simulation antreiben."
+ },
+ "3560a1ac4a55": {
+  "src": "<span class=\"psec__n\">06</span>Energy carried<span class=\"star\" title=\"heavier mathematics\">★</span>",
+  "tr": "<span class=\"psec__n\">06</span>Transportierte Energie<span class=\"star\" title=\"heavier mathematics\">★</span>"
+ },
+ "361224814de2": {
+  "src": "In each frame the page computes, for every one of the \\(N\\) particles, the rest position \\(X_i = i \\cdot 640/(N - 1)\\) and the phase; \\(\\xi\\) and \\(u\\) for the upper row; and the displacement, position, velocity, density (10) and shading for the lower row. Each number is written into the page’s data store at the line that computes it; the <em>Data</em> panel reads it from there and recomputes nothing.",
+  "tr": "In jedem Bild berechnet die Seite für jedes der \\(N\\) Teilchen die Ruhelage \\(X_i = i \\cdot 640/(N - 1)\\) und die Phase; \\(\\xi\\) und \\(u\\) für die obere Reihe; und Auslenkung, Lage, Geschwindigkeit, Dichte (10) und Schattierung für die untere Reihe. Jede Zahl wird in den Datenspeicher der Seite an der Zeile geschrieben, die sie berechnet; das <em>Datenpanel</em> liest sie von dort und rechnet nichts neu."
+ },
+ "362a28e2b23e": {
+  "src": "<span class=\"psub__n\">4.3</span>Shear needs a solid",
+  "tr": "<span class=\"psub__n\">4.3</span>Scherung braucht einen Festkörper"
+ },
+ "371e668d6fba": {
+  "src": "Transverse wave above, longitudinal wave below",
+  "tr": "Transversale Welle oben, longitudinale Welle unten"
+ },
+ "38af3f4ef234": {
+  "src": "Speed v = fλ",
+  "tr": "Geschwindigkeit v = fλ"
+ },
+ "3a3f80374f41": {
+  "src": "The two pictures are tied together. A crest is the place where the phase equals \\(\\pi/2,\\) and every feature of the wave is a place of fixed phase. Keeping \\(kX - \\omega t\\) fixed while \\(t\\) grows forces \\(X\\) to grow, at the rate",
+  "tr": "Die beiden Bilder hängen zusammen. Ein Wellenberg ist die Stelle mit der Phase \\(\\pi/2,\\) und jedes Merkmal der Welle ist eine Stelle konstanter Phase. Hält man \\(kX - \\omega t\\) fest, während \\(t\\) wächst, muss \\(X\\) wachsen, und zwar mit der Geschwindigkeit"
+ },
+ "3cec94bb81cf": {
+  "src": "Multiply the wave equation \\(\\mu\\,\\partial^2\\xi/\\partial t^2 = F\\,\\partial^2\\xi/\\partial X^2\\) by \\(\\partial\\xi/\\partial t\\) and use the product rule. The result is a local conservation law, the same shape as the continuity equation for electric charge:",
+  "tr": "Multiplizieren Sie die Wellengleichung \\(\\mu\\,\\partial^2\\xi/\\partial t^2 = F\\,\\partial^2\\xi/\\partial X^2\\) mit \\(\\partial\\xi/\\partial t\\) und wenden Sie die Produktregel an. Das Ergebnis ist ein lokaler Erhaltungssatz, von derselben Form wie die Kontinuitätsgleichung für elektrische Ladung:"
+ },
+ "411e7537ba0b": {
+  "src": "While paused, \\(\\Delta t = 0\\) and the phase stands still. A frame that takes longer than \\(0.05\\ \\mathrm{s}\\) is counted as \\(0.05\\ \\mathrm{s},\\) so after a stall the wave resumes instead of leaping ahead; at the top frequency, \\(2\\ \\mathrm{Hz},\\) this limits the step to \\(2\\pi \\times 2 \\times 0.05 = 0.63\\ \\mathrm{rad}\\) per frame.",
+  "tr": "Während die Wiedergabe angehalten ist, gilt \\(\\Delta t = 0\\), und die Phase steht still. Ein Bild, das länger als \\(0.05\\ \\mathrm{s}\\) dauert, wird so gezählt, als wären es \\(0.05\\ \\mathrm{s},\\) sodass die Welle nach einem Stocken weiterläuft, statt vorauszuspringen; bei der höchsten Frequenz, \\(2\\ \\mathrm{Hz},\\) begrenzt dies den Schritt auf \\(2\\pi \\times 2 \\times 0.05 = 0.63\\ \\mathrm{rad}\\) pro Bild."
+ },
+ "4213bd6a3565": {
+  "src": "A solid resists not only being squeezed but also being sheared, one layer slid sideways past the next; its shear modulus \\(G\\) measures how strongly. A sideways displacement that changes along the direction of travel shears the material, and the argument of 4.2 with \\(G\\) in place of \\(E\\) gives a transverse wave. In a large block, which cannot bulge sideways as a thin rod can, the two speeds are",
+  "tr": "Ein Festkörper widersteht nicht nur dem Zusammendrücken, sondern auch dem Scheren, bei dem eine Schicht seitlich an der nächsten vorbeigleitet; sein Schubmodul \\(G\\) misst, wie stark. Eine seitliche Auslenkung, die sich in Ausbreitungsrichtung ändert, schert das Material, und die Herleitung aus Abschnitt 4.2 mit \\(G\\) anstelle von \\(E\\) ergibt eine transversale Welle. In einem großen Block, der sich nicht seitlich ausbauchen kann wie ein dünner Stab, sind die beiden Geschwindigkeiten"
+ },
+ "43f4b1b78165": {
+  "src": "<span>4</span>Where the wave equation comes from&nbsp;★",
+  "tr": "<span>4</span>Woher die Wellengleichung kommt&nbsp;★"
+ },
+ "47fd8260ebe9": {
+  "src": "An earthquake sends both kinds through rock. The longitudinal ones, called P waves (primary), are faster and arrive first; the transverse ones, S waves (secondary, or shear), arrive later. Solid rock resists shear, so it carries both. Seismometers on the far side of the Earth from an earthquake record P waves that have crossed the deep interior, but no S waves along those paths. Something deep inside stops the shear waves, and the material that does that is one with no resistance to shear at all: a liquid. This is how we know that the Earth’s outer core is liquid metal.",
+  "tr": "Ein Erdbeben schickt beide Arten durch das Gestein. Die longitudinalen Wellen, P-Wellen (Primärwellen) genannt, sind schneller und kommen zuerst an; die transversalen, S-Wellen (Sekundärwellen oder Scherwellen), kommen später. Festes Gestein widersteht der Scherung, also trägt es beide. Seismometer auf der dem Erdbeben gegenüberliegenden Seite der Erde zeichnen P-Wellen auf, die das tiefe Innere durchquert haben, auf diesen Wegen aber keine S-Wellen. Etwas tief im Inneren hält die Scherwellen auf, und das Material, das dies tut, hat überhaupt keinen Widerstand gegen Scherung: eine Flüssigkeit. So wissen wir, dass der äußere Erdkern aus flüssigem Metall besteht."
+ },
+ "48a351c6d698": {
+  "src": "Upper row: discs of radius \\(4.5\\ \\mathrm{px}\\) (\\(6.5\\ \\mathrm{px}\\) for the followed particle), a rose line from the rest line to each disc, and pale ticks at the rest positions when <em>Equilibrium positions</em> is on. A thin burgundy curve runs through 215 points of (1), one every \\(3\\ \\mathrm{px}\\) of the medium and the last at its end, \\(X = 640\\ \\mathrm{px}.\\) The crest triangles sit \\(8\\ \\mathrm{px}\\) above the highest point, \\(sA.\\)",
+  "tr": "Obere Reihe: Scheiben mit Radius \\(4.5\\ \\mathrm{px}\\) (\\(6.5\\ \\mathrm{px}\\) für das verfolgte Teilchen), eine rosafarbene Linie von der Ruhelinie zu jeder Scheibe und helle Striche an den Ruhelagen, wenn <em>Ruhelagen</em> eingeschaltet ist. Eine dünne bordeauxrote Kurve läuft durch 215 Punkte von (1), einen alle \\(3\\ \\mathrm{px}\\) des Mediums, und den letzten am Ende, \\(X = 640\\ \\mathrm{px}.\\) Die Dreiecke der Wellenberge sitzen \\(8\\ \\mathrm{px}\\) über dem höchsten Punkt, \\(sA.\\)"
+ },
+ "4a81ec85f9b8": {
+  "src": "<span>9</span>What the model leaves out",
+  "tr": "<span>9</span>Was das Modell weglässt"
+ },
+ "53171668732c": {
+  "src": "Lecture note · Fig. 4 · oscillations · wave kinematics",
+  "tr": "Skript · Abb. 4 · Schwingungen · Wellenkinematik"
+ },
+ "54fdc4d9ace2": {
+  "src": "Frequency f",
+  "tr": "Frequenz f"
+ },
+ "55bf8b7b1959": {
+  "src": "each compression is a quarter wavelength ahead of a crest of the same \\(\\xi,\\) in the direction of travel. This detail is easy to get wrong and easy to see in the simulation: the triangles above the lower row are shifted to the right of those above the upper row by \\(55\\ \\mathrm{px}\\) of the medium. Equation (3) adds a second way to read the lower row, since the strain is \\(\\partial\\xi/\\partial X = -u/v.\\) Where the medium is compressed the particles move with the wave; where it is stretched they move against it.",
+  "tr": "jede Verdichtung liegt eine Viertelwellenlänge vor einem Wellenberg mit demselben \\(\\xi,\\) in Ausbreitungsrichtung. Bei diesem Detail irrt man sich leicht, und in der Simulation sieht man es leicht: Die Dreiecke über der unteren Reihe sind gegenüber denen über der oberen Reihe um \\(55\\ \\mathrm{px}\\) des Mediums nach rechts verschoben. Gleichung (3) liefert eine zweite Lesart der unteren Reihe, denn die Dehnung ist \\(\\partial\\xi/\\partial X = -u/v.\\) Wo das Medium zusammengedrückt wird, bewegen sich die Teilchen mit der Welle; wo es gedehnt wird, bewegen sie sich gegen sie."
+ },
+ "5779132c887a": {
+  "src": "\\(P\\) is the power flowing past the point \\(X,\\) in watts: the energy of a piece of string changes only by flowing in at one end or out at the other. For a wave moving to the right, (3) gives \\(\\partial\\xi/\\partial X = -u/v,\\) so \\(P = (F/v)\\,u^2 = \\mu v\\,u^2 \\ge 0\\): the energy flows in the direction of travel at every instant. The same substitution shows that the two terms of (13) are equal at every point and every moment. Averaged over a period, \\(u^2 = A^2\\omega^2\\cos^2(kX - \\omega t)\\) gives \\(\\tfrac12 A^2\\omega^2,\\) so",
+  "tr": "\\(P\\) ist die Leistung in Watt, die an der Stelle \\(X,\\) vorbeiströmt: Die Energie eines Saitenstücks ändert sich nur dadurch, dass Energie an einem Ende hinein- oder am anderen Ende hinausfließt. Für eine nach rechts laufende Welle liefert (3) \\(\\partial\\xi/\\partial X = -u/v,\\) also \\(P = (F/v)\\,u^2 = \\mu v\\,u^2 \\ge 0\\): Die Energie fließt zu jedem Zeitpunkt in Laufrichtung. Dieselbe Einsetzung zeigt, dass die beiden Terme von (13) an jedem Ort und zu jedem Zeitpunkt gleich sind. Über eine Periode gemittelt ergibt \\(u^2 = A^2\\omega^2\\cos^2(kX - \\omega t)\\) den Wert \\(\\tfrac12 A^2\\omega^2,\\) also"
+ },
+ "584eeebeda4d": {
+  "src": "<span>7</span>How the page computes a frame",
+  "tr": "<span>7</span>Wie die Seite ein Bild berechnet"
+ },
+ "5888082d0a17": {
+  "src": "Exercise 5.1 · on the figure above",
+  "tr": "Übung 5.1 · zur Abbildung oben"
+ },
+ "5af2ccbd3b62": {
+  "src": "<span class=\"psub__n\">4.1</span>A string under tension",
+  "tr": "<span class=\"psub__n\">4.1</span>Eine Saite unter Spannung"
+ },
+ "5bbd47e48fd0": {
+  "src": "A wave carries energy without carrying matter: the energy of the stadium wave is in the moving spectators, and it travels round the stands while they stay put. On the string, each piece has kinetic energy from its sideways motion and potential energy from being stretched by its tilt: a piece of rest length \\(\\mathrm{d}X\\) tilted to the slope \\(\\partial\\xi/\\partial X\\) is \\(\\mathrm{d}X\\sqrt{1 + (\\partial\\xi/\\partial X)^2} \\approx \\mathrm{d}X\\,[1 + \\tfrac12(\\partial\\xi/\\partial X)^2]\\) long, and the tension did work \\(F\\) times that extra length to stretch it. Per unit length,",
+  "tr": "Eine Welle transportiert Energie, ohne Materie zu transportieren: Die Energie der Stadionwelle steckt in den bewegten Zuschauern, und sie läuft um die Ränge, während diese auf ihren Plätzen bleiben. Auf der Saite hat jedes Stück kinetische Energie aus seiner seitlichen Bewegung und potentielle Energie daraus, dass es durch seine Neigung gedehnt wird: Ein Stück der Ruhelänge \\(\\mathrm{d}X\\), das mit der Steigung \\(\\partial\\xi/\\partial X\\) geneigt ist, hat die Länge \\(\\mathrm{d}X\\sqrt{1 + (\\partial\\xi/\\partial X)^2} \\approx \\mathrm{d}X\\,[1 + \\tfrac12(\\partial\\xi/\\partial X)^2]\\), und die Spannkraft verrichtete, um es zu dehnen, die Arbeit \\(F\\) mal jener zusätzlichen Länge. Pro Längeneinheit,"
+ },
+ "5d3db5d4d794": {
+  "src": "The energy travels at the wave speed, and the power grows with the square of both the amplitude and the frequency: double the frequency at the same amplitude and the string carries four times the power. For a rod, put \\(\\rho S\\) in place of \\(\\mu\\) and \\(ES\\) in place of \\(F;\\) the result is the same.",
+  "tr": "Die Energie wandert mit der Wellengeschwindigkeit, und die Leistung wächst mit dem Quadrat sowohl der Amplitude als auch der Frequenz: Verdoppelt man die Frequenz bei gleicher Amplitude, so transportiert die Saite die vierfache Leistung. Für einen Stab setzt man \\(\\rho S\\) an die Stelle von \\(\\mu\\) und \\(ES\\) an die Stelle von \\(F;\\) das Ergebnis ist dasselbe."
+ },
+ "5d935eb9d6de": {
+  "src": "Exercise 3.1 · on the figure above",
+  "tr": "Übung 3.1 · zur Abbildung oben"
+ },
+ "5e2a2448b8ff": {
+  "src": "The simulation shows one and the same wave both ways. In the upper row each particle moves up and down; in the lower row each moves left and right. In both rows the pattern runs to the right and no particle goes anywhere. The burgundy particle in the middle of each row makes that visible.",
+  "tr": "Die Simulation zeigt ein und dieselbe Welle auf beide Arten. In der oberen Reihe bewegt sich jedes Teilchen auf und ab; in der unteren Reihe bewegt sich jedes nach links und rechts. In beiden Reihen läuft das Muster nach rechts, und kein Teilchen wandert irgendwohin. Das bordeauxrote Teilchen in der Mitte jeder Reihe macht das sichtbar."
+ },
+ "627c1ff2faea": {
+  "src": "<span class=\"psub__n\">4.4</span>Every shape travels",
+  "tr": "<span class=\"psub__n\">4.4</span>Jede Form wandert"
+ },
+ "62e11cf11c63": {
+  "src": "A gas has no Young’s modulus, but it pushes back when squeezed: a strain \\(\\partial\\xi/\\partial X\\) changes the pressure by \\(\\delta p = -B\\,\\partial\\xi/\\partial X,\\) with \\(B\\) the bulk modulus, and the same steps give \\(v = \\sqrt{B/\\rho}.\\) A sound wave squeezes and releases the air too quickly for heat to flow. For such adiabatic changes \\(pV^\\gamma\\) stays fixed, with \\(\\gamma\\) the ratio of the two heat capacities of the gas, so squeezing the volume by a small fraction \\(-\\mathrm{d}V/V\\) raises the pressure by \\(\\mathrm{d}p = -\\gamma p\\,\\mathrm{d}V/V\\): that is \\(B = \\gamma p.\\) For dry air at \\(20\\ {}^\\circ\\mathrm{C},\\) with \\(\\gamma = 1.40,\\) \\(p = 101\\,325\\ \\mathrm{Pa}\\) and \\(\\rho = 1.204\\ \\mathrm{kg/m^3},\\)",
+  "tr": "Ein Gas hat keinen Elastizitätsmodul, aber es drückt zurück, wenn man es zusammendrückt: Eine Dehnung \\(\\partial\\xi/\\partial X\\) verändert den Druck um \\(\\delta p = -B\\,\\partial\\xi/\\partial X,\\) wobei \\(B\\) der Kompressionsmodul ist, und dieselben Schritte liefern \\(v = \\sqrt{B/\\rho}.\\) Eine Schallwelle presst die Luft und lässt sie wieder los, zu schnell, als dass Wärme fließen könnte. Für solche adiabatischen Änderungen bleibt \\(pV^\\gamma\\) konstant, wobei \\(\\gamma\\) das Verhältnis der beiden Wärmekapazitäten des Gases ist. Das Verkleinern des Volumens um einen kleinen Bruchteil \\(-\\mathrm{d}V/V\\) erhöht den Druck also um \\(\\mathrm{d}p = -\\gamma p\\,\\mathrm{d}V/V\\): Das heißt \\(B = \\gamma p.\\) Für trockene Luft bei \\(20\\ {}^\\circ\\mathrm{C},\\) mit \\(\\gamma = 1.40,\\) \\(p = 101\\,325\\ \\mathrm{Pa}\\) und \\(\\rho = 1.204\\ \\mathrm{kg/m^3},\\)"
+ },
+ "648ab26ec2dc": {
+  "src": "<span>8</span>From medium pixels to screen pixels",
+  "tr": "<span>8</span>Von Pixeln des Mediums zu Pixeln des Bildschirms"
+ },
+ "64973d0018a7": {
+  "src": "In the lower row the displacement is along the line, so neighbouring particles can come closer together or move further apart. Two particles that rest \\(\\mathrm{d}X\\) apart are found at \\(X + \\xi(X)\\) and \\(X + \\mathrm{d}X + \\xi(X + \\mathrm{d}X),\\) a distance \\(\\mathrm{d}X\\,(1 + \\partial\\xi/\\partial X)\\) apart. The material between them is the same, so its density changes in inverse proportion:",
+  "tr": "In der unteren Reihe liegt die Auslenkung längs der Linie, daher können benachbarte Teilchen näher zusammenrücken oder weiter auseinanderlaufen. Zwei Teilchen, die im Ruhezustand \\(\\mathrm{d}X\\) auseinanderliegen, befinden sich bei \\(X + \\xi(X)\\) und \\(X + \\mathrm{d}X + \\xi(X + \\mathrm{d}X),\\) also im Abstand \\(\\mathrm{d}X\\,(1 + \\partial\\xi/\\partial X)\\). Das Material zwischen ihnen bleibt dasselbe, daher ändert sich seine Dichte umgekehrt proportional:"
+ },
+ "66437af85ed6": {
+  "src": "A guitar string vibrates sideways, so the wave running along the string between its fixed ends is transverse. The sound that reaches your ear is longitudinal: the vibrating body of the guitar pushes on the air, the air is squeezed and released, and those compressions spread outwards at the speed of sound. Air can carry only this kind. It resists being squeezed, but it does not resist one layer sliding sideways past the next, so a sideways shake has nothing with which to drag the neighbouring air along.",
+  "tr": "Eine Gitarrensaite schwingt seitlich, daher ist die Welle, die zwischen ihren festen Enden entlangläuft, transversal. Der Schall, der Ihr Ohr erreicht, ist longitudinal: Der schwingende Korpus der Gitarre drückt auf die Luft, die Luft wird zusammengedrückt und wieder losgelassen, und diese Verdichtungen breiten sich mit der Schallgeschwindigkeit nach außen aus. Luft kann nur diese Art tragen. Sie setzt dem Zusammendrücken Widerstand entgegen, doch sie leistet keinen Widerstand, wenn eine Schicht seitlich an der nächsten vorbeigleitet; deshalb hat eine seitliche Auslenkung nichts, womit sie die benachbarte Luft mitziehen könnte."
+ },
+ "6a658f5c6457": {
+  "src": "with \\(K\\) the bulk modulus of the solid. The \\(\\tfrac43 G\\) is the price of not bulging. A strain \\(\\varepsilon\\) along the line, with none across it, splits into two simpler strains. One is \\(\\varepsilon/3\\) in all three directions at once: it changes only the volume, by the fraction \\(\\varepsilon,\\) and the medium resists it with a stress \\(K\\varepsilon.\\) The rest, \\(2\\varepsilon/3\\) along the line and \\(-\\varepsilon/3\\) in each direction across it, changes only the shape, and the medium resists that with \\(2G\\) times its strain along the line, \\(2G \\cdot 2\\varepsilon/3 = \\tfrac43 G\\varepsilon.\\) The longitudinal P wave is always the faster of the two, which is why it reaches a seismometer first. In a liquid or a gas \\(G = 0\\): there is no S wave at all, and only the longitudinal kind travels through the bulk. The S waves missing on the far side of the Earth are equation (8) at work in the outer core.",
+  "tr": "wobei \\(K\\) der Kompressionsmodul des Festkörpers ist. Das \\(\\tfrac43 G\\) ist der Preis dafür, dass er sich nicht ausbauchen kann. Eine Dehnung \\(\\varepsilon\\) längs der Linie, ohne Dehnung quer dazu, zerfällt in zwei einfachere Dehnungen. Die eine ist \\(\\varepsilon/3\\) in allen drei Richtungen zugleich: Sie ändert nur das Volumen, um den Bruchteil \\(\\varepsilon,\\) und das Medium wehrt sich dagegen mit der Spannung \\(K\\varepsilon.\\) Der Rest, \\(2\\varepsilon/3\\) längs der Linie und \\(-\\varepsilon/3\\) in jeder Richtung quer dazu, ändert nur die Gestalt; dagegen wehrt sich das Medium mit \\(2G\\) mal seiner Dehnung längs der Linie, \\(2G \\cdot 2\\varepsilon/3 = \\tfrac43 G\\varepsilon.\\) Die longitudinale P-Welle ist immer die schnellere der beiden, deshalb erreicht sie ein Seismometer zuerst. In einer Flüssigkeit oder einem Gas ist \\(G = 0\\): Dort gibt es gar keine S-Welle, und nur die longitudinale Art breitet sich durch das Innere aus. Die S-Wellen, die auf der fernen Seite der Erde fehlen, zeigen Gleichung (8) im äußeren Erdkern am Werk."
+ },
+ "6c28ecb36be1": {
+  "src": "<b>Abstract.</b> A wave carries a pattern and energy from one place to another, while the material it travels through only shakes about where it was. This note follows one formula, \\(\\xi = A\\sin(kX - \\omega t),\\) through both kinds of wave in the simulation above: across the direction of travel, as on a rope, and along it, as in sound. It shows how the speed \\(v = f\\lambda\\) follows from the formula alone; derives the wave equation for a string, a rod and a gas from Newton’s second law; explains where the compressions of the lower row come from and why they sit a quarter wavelength ahead of the crests; and works out the energy a wave carries. It ends with what the page computes in each frame and how the numbers become dots. Sections marked ★ carry the heavier mathematics and can be skipped on a first reading without losing the thread.",
+  "tr": "<b>Zusammenfassung.</b> Eine Welle trägt ein Muster und Energie von einem Ort zum anderen, während das Material, durch das sie läuft, nur um seine Ruhelage schwingt. Dieses Skript verfolgt eine Formel, \\(\\xi = A\\sin(kX - \\omega t),\\) durch beide Wellenarten, die die Simulation oben zeigt: quer zur Ausbreitungsrichtung, wie auf einem Seil, und längs dazu, wie beim Schall. Es zeigt, wie die Geschwindigkeit \\(v = f\\lambda\\) allein aus der Formel folgt; es leitet die Wellengleichung für eine Saite, einen Stab und ein Gas aus dem zweiten Newtonschen Gesetz ab; es erklärt, woher die Verdichtungen der unteren Reihe kommen und warum sie eine Viertelwellenlänge vor den Wellenbergen liegen; und es berechnet die Energie, die eine Welle transportiert. Zum Schluss steht, was die Seite in jedem Bild berechnet und wie aus den Zahlen die Punkte werden. Abschnitte mit ★ enthalten die schwierigere Mathematik und können beim ersten Lesen übersprungen werden, ohne den Faden zu verlieren."
+ },
+ "6c50a0418afc": {
+  "src": "One direction of displacement. In three dimensions a transverse wave can shake in either of two directions across its path, its polarisation; a longitudinal wave has only one. That is why light, a transverse wave, can be polarised and sound cannot.",
+  "tr": "Eine Richtung der Auslenkung. In drei Dimensionen kann eine transversale Welle quer zu ihrem Weg in zwei Richtungen schwingen, das ist ihre Polarisation; eine longitudinale Welle hat nur eine. Deshalb kann Licht, eine transversale Welle, polarisiert werden, Schall dagegen nicht."
+ },
+ "6fe54e29a48c": {
+  "src": "<span class=\"pfig__n\">Figure 2</span>Left: snapshots of equation (1) at \\(t = 0\\) and \\(t = 0.5\\ \\mathrm{s},\\) a quarter period later, for \\(A = 26\\ \\mathrm{px},\\) \\(f = 0.50\\ \\mathrm{Hz},\\) \\(\\lambda = 220\\ \\mathrm{px},\\) sampled every \\(2.5\\ \\mathrm{px};\\) the dots are the 26 particles at \\(t = 0.\\) The whole curve has moved \\(55\\ \\mathrm{px}\\) to the right without changing its shape. Right: histories of the followed particle, \\(X = 307.2\\ \\mathrm{px},\\) and of the particle two places further on, \\(X = 358.4\\ \\mathrm{px},\\) over \\(4\\ \\mathrm{s}\\) in steps of \\(0.025\\ \\mathrm{s}.\\) Both repeat every \\(T = 2\\ \\mathrm{s};\\) the second lags behind by \\(51.2/110 = 0.47\\ \\mathrm{s},\\) the time the pattern needs to cover the distance between them.",
+  "tr": "<span class=\"pfig__n\">Abbildung 2</span>Links: Momentaufnahmen von Gleichung (1) zu \\(t = 0\\) und \\(t = 0.5\\ \\mathrm{s},\\) also eine Viertelperiode später, für \\(A = 26\\ \\mathrm{px},\\) \\(f = 0.50\\ \\mathrm{Hz},\\) \\(\\lambda = 220\\ \\mathrm{px},\\) abgetastet alle \\(2.5\\ \\mathrm{px};\\) die Punkte sind die 26 Teilchen zur Zeit \\(t = 0.\\) Die ganze Kurve ist um \\(55\\ \\mathrm{px}\\) nach rechts gewandert, ohne ihre Form zu ändern. Rechts: Verläufe des verfolgten Teilchens bei \\(X = 307.2\\ \\mathrm{px},\\) und des Teilchens zwei Plätze weiter bei \\(X = 358.4\\ \\mathrm{px},\\) über \\(4\\ \\mathrm{s}\\) in Schritten von \\(0.025\\ \\mathrm{s}.\\) Beide wiederholen sich alle \\(T = 2\\ \\mathrm{s};\\) das zweite hinkt hinterher, und zwar um \\(51.2/110 = 0.47\\ \\mathrm{s},\\) die Zeit, die das Muster für den Abstand zwischen beiden braucht."
+ },
+ "702b201c4b40": {
+  "src": "Phyein Usul",
+  "tr": "Phyein Usul"
+ },
+ "724df73e9f21": {
+  "src": "Leave <em>Wavelength</em> at \\(220\\ \\mathrm{px}\\) and raise <em>Amplitude</em> from \\(26\\ \\mathrm{px}.\\) The <em>Longit. A</em> readout follows up to \\(28\\ \\mathrm{px};\\) at \\(29\\ \\mathrm{px}\\) it reads “28 px (cap)” while the upper row keeps growing. Now lower <em>Wavelength</em> to \\(100\\ \\mathrm{px}.\\) The cap falls to \\(0.8\\times 100\\ \\mathrm{px}/2\\pi = 12.7\\ \\mathrm{px}\\) and the readout shows “13 px (cap)”. In the lower row the bars crowd at the compressions but never cross; set <em>Particles</em> to 40 and the closest two come within \\(3.9\\ \\mathrm{px}\\) of each other, against a rest spacing of \\(16.4\\ \\mathrm{px}.\\) In the upper row, at the same settings, the steepest slope is \\(Ak = 29\\times 2\\pi/100 = 1.82\\): far beyond the small slopes that equation (4) assumed.",
+  "tr": "Lassen Sie <em>Wellenlänge</em> bei \\(220\\ \\mathrm{px}\\) und erhöhen Sie <em>Amplitude</em> schrittweise, ausgehend von \\(26\\ \\mathrm{px}.\\) Die Anzeige <em>Längs. A</em> folgt bis \\(28\\ \\mathrm{px};\\) bei \\(29\\ \\mathrm{px}\\) zeigt sie „28 px (Grenze)“, während die obere Reihe weiter wächst. Senken Sie nun <em>Wellenlänge</em> auf \\(100\\ \\mathrm{px}.\\) Die Begrenzung sinkt auf \\(0.8\\times 100\\ \\mathrm{px}/2\\pi = 12.7\\ \\mathrm{px}\\), und die Anzeige zeigt „13 px (Grenze)“. In der unteren Reihe drängen sich die Balken an den Verdichtungen, überschneiden sich aber nie; stellen Sie <em>Teilchen</em> auf 40, dann kommen sich die beiden nächsten Teilchen bis auf \\(3.9\\ \\mathrm{px}\\) nahe, gegenüber einem Ruheabstand von \\(16.4\\ \\mathrm{px}.\\) In der oberen Reihe ist bei denselben Einstellungen die steilste Neigung \\(Ak = 29\\times 2\\pi/100 = 1.82\\): weit über den kleinen Neigungen, die Gleichung (4) voraussetzte."
+ },
+ "747edb0b5bc3": {
+  "src": "On a device set to reduce motion, the clock starts paused.",
+  "tr": "Auf einem Gerät, das auf reduzierte Bewegung eingestellt ist, startet die Uhr angehalten."
+ },
+ "74925336dcec": {
+  "src": "A. P. French, <em>Vibrations and Waves</em>, M.I.T. Introductory Physics Series, W. W. Norton, 1971: chapter 7 (progressive waves). <a href=\"https://www.routledge.com/Vibrations-and-Waves/French/p/book/9780748744473\">Publisher’s page</a> (now CRC Press); <a href=\"https://archive.org/details/vibrationswaves0000fren\">a lending copy of the 1971 edition</a> at the Internet Archive.",
+  "tr": "A. P. French, <em>Vibrations and Waves</em>, M.I.T. Introductory Physics Series, W. W. Norton, 1971: Kapitel 7 (fortschreitende Wellen). <a href=\"https://www.routledge.com/Vibrations-and-Waves/French/p/book/9780748744473\">Seite des Verlags</a> (heute CRC Press); <a href=\"https://archive.org/details/vibrationswaves0000fren\">ein Leihexemplar der Ausgabe von 1971</a> im Internet Archive."
+ },
+ "781961bc81c2": {
+  "src": "Pause",
+  "tr": "Pause"
+ },
+ "78a4efd00b40": {
+  "src": "<strong>Where the picture and the stored numbers differ.</strong> The tint is a guide to where the compressions are, not a plot of the density. It follows \\(\\max(0,\\,{-\\cos(kX - \\omega t)}),\\) which is symmetric and stops at an opacity of 0.23, whereas the stored density (10) is lopsided: 3.88 at the compression centres and 0.574 in the rarefactions for the defaults (Figure 4). The tint is laid out by rest position \\(X\\) and the particles by \\(X + \\xi;\\) the two agree at the compression centres, where \\(\\xi = 0.\\) The faithful picture of the density is the crowding of the bars themselves. The burgundy curve and the tint are drawn through extra sample points that are not particles and are not stored, while every particle is drawn at exactly the screen position stored for it.",
+  "tr": "<strong>Wo Bild und gespeicherte Zahlen sich unterscheiden.</strong> Die Tönung ist ein Hinweis darauf, wo die Verdichtungen liegen, kein Diagramm der Dichte. Sie folgt \\(\\max(0,\\,{-\\cos(kX - \\omega t)}),\\) ist symmetrisch und endet bei einer Deckkraft von 0.23, während die gespeicherte Dichte (10) unsymmetrisch ist: 3.88 in den Verdichtungszentren und 0.574 in den Verdünnungen bei den Standardwerten (Abbildung 4). Die Tönung wird nach der Ruhelage \\(X\\) angelegt und die Teilchen nach \\(X + \\xi;\\) beide stimmen an den Verdichtungszentren überein, wo \\(\\xi = 0.\\) Das getreue Bild der Dichte ist das Gedränge der Balken selbst. Die bordeauxrote Kurve und die Tönung sind durch zusätzliche Stützpunkte gezeichnet, die keine Teilchen sind und nicht gespeichert werden, während jedes Teilchen genau an der Bildschirmposition gezeichnet wird, die für es gespeichert ist."
+ },
+ "7a889ae23868": {
+  "src": "Both rows carry the same phase \\(kX - \\omega t\\) and therefore travel at the same speed. Real media do not oblige (Section 9).",
+  "tr": "Beide Reihen tragen dieselbe Phase \\(kX - \\omega t\\) und laufen deshalb mit derselben Geschwindigkeit. Reale Medien fügen sich dem nicht (Abschnitt 9)."
+ },
+ "7abfedd9af24": {
+  "src": "The particles move quite differently. Differentiating (1) at fixed \\(X\\) gives the velocity \\(u\\) of a particle; differentiating at fixed \\(t\\) gives the slope of the snapshot:",
+  "tr": "Die Teilchen bewegen sich ganz anders. Differenziert man (1) bei festem \\(X\\), erhält man die Geschwindigkeit \\(u\\) eines Teilchens; differenziert man bei festem \\(t\\), erhält man die Steigung der Momentaufnahme:"
+ },
+ "7d252cd594b3": {
+  "src": "All simulations ↑",
+  "tr": "Alle Simulationen ↑"
+ },
+ "7e1a0998d229": {
+  "src": "Lower row: each particle is a disc of radius \\(4\\ \\mathrm{px}\\) on a vertical bar \\(56\\ \\mathrm{px}\\) tall, so that crowding reads as density. With <em>Follow one particle</em> and <em>Equilibrium positions</em> both on, a rose line joins the followed particle to its rest tick.",
+  "tr": "Untere Reihe: Jedes Teilchen ist eine Scheibe mit Radius \\(4\\ \\mathrm{px}\\) auf einem senkrechten Balken von \\(56\\ \\mathrm{px}\\) Höhe, damit das Gedränge als Dichte gelesen werden kann. Sind <em>Ein Teilchen verfolgen</em> und <em>Ruhelagen</em> beide eingeschaltet, verbindet eine rosafarbene Linie das verfolgte Teilchen mit seinem Ruhestrich."
+ },
+ "81899d12c9bc": {
+  "src": "Because the solution (1) is known exactly, the page solves nothing step by step. Each frame evaluates the formula afresh at every particle, so no error builds up in the shape of the wave; what remains is the rounding of double-precision arithmetic. The one quantity carried from frame to frame is the phase of the source,",
+  "tr": "Da die Lösung (1) genau bekannt ist, löst die Seite nichts Schritt für Schritt. Jedes Bild wertet die Formel für jedes Teilchen neu aus, sodass sich kein Fehler in der Gestalt der Welle aufbaut; übrig bleibt nur der Rundungsfehler der Gleitkommarechnung mit doppelter Genauigkeit. Die einzige Größe, die von einem Bild zum nächsten mitgeführt wird, ist die Phase der Quelle,"
+ },
+ "83ad9570709d": {
+  "src": "Here \\(A\\) is the amplitude, the largest displacement; \\(\\lambda\\) is the wavelength, the distance from one crest to the next; \\(f\\) is the frequency, the number of times per second each particle swings back and forth. The wavenumber \\(k\\) and the angular frequency \\(\\omega\\) count the same cycles in radians: \\(k\\) is the phase gained per pixel of distance, \\(\\omega\\) the phase gained per second. The combination \\(\\varphi = kX - \\omega t\\) is the <em>phase</em>. It says where in its cycle the particle at \\(X\\) is at time \\(t.\\)",
+  "tr": "Dabei ist \\(A\\) die Amplitude, die größte Auslenkung; \\(\\lambda\\) ist die Wellenlänge, der Abstand von einem Wellenberg zum nächsten; \\(f\\) ist die Frequenz, die Anzahl der Schwingungen pro Sekunde, die jedes Teilchen hin und her ausführt. Die Wellenzahl \\(k\\) und die Kreisfrequenz \\(\\omega\\) zählen dieselben Zyklen im Bogenmaß: \\(k\\) ist die Phase, die pro Pixel Abstand hinzukommt, \\(\\omega\\) die Phase, die pro Sekunde hinzukommt. Die Kombination \\(\\varphi = kX - \\omega t\\) ist die <em>Phase</em>. Sie gibt an, an welcher Stelle seines Zyklus sich das Teilchen bei \\(X\\) befindet, und zwar zur Zeit \\(t.\\)"
+ },
+ "8638c9099c46": {
+  "src": "Period T",
+  "tr": "Periode T"
+ },
+ "86447724e1aa": {
+  "src": "The page simply draws formula (1). That is how a real string or column of air moves while the wave is small, and the equations below are derived for that case. The default wave is large on purpose, so that the bunching in the lower row can be seen: there the amplitude \\(A_{\\rm L}\\) equals \\(A\\) at the default settings (Section 5 gives the rule), \\(A_{\\rm L}k\\approx0.743,\\) and at the compressions neighbours close to about a quarter of their rest spacing. A real medium pushed that hard would no longer move exactly like (1) (Section 9).",
+  "tr": "Die Seite zeichnet einfach Formel (1). So bewegen sich eine echte Saite oder eine Luftsäule, solange die Welle klein ist, und die Gleichungen unten werden für diesen Fall hergeleitet. Die Standardwelle ist absichtlich groß gewählt, damit das Zusammendrängen in der unteren Reihe sichtbar wird: Dort ist die Amplitude \\(A_{\\rm L}\\) bei den Standardeinstellungen gleich \\(A\\) (Abschnitt 5 gibt die Regel an), \\(A_{\\rm L}k\\approx0.743,\\) und an den Verdichtungen rücken Nachbarn bis auf etwa ein Viertel ihres Ruheabstands zusammen. Ein echtes Medium, das so stark ausgelenkt wird, würde sich nicht mehr genau wie (1) bewegen (Abschnitt 9)."
+ },
+ "8837a4805773": {
+  "src": "<span class=\"pfig__n\">Figure 3</span>Paths of the lower row through time: the position \\(x = X + A_\\mathrm{L}\\sin(kX - \\omega t)\\) of each of the 26 particles for the default sliders, over two periods, \\(0 \\le t \\le 4\\ \\mathrm{s}\\) in steps of \\(0.025\\ \\mathrm{s},\\) with time running upwards. Each particle swings about its rest position and goes nowhere; the followed particle is in burgundy. Where the lines crowd together there is a compression. The crowding climbs the diagram along the dashed lines \\(x = (\\pi + \\omega t)/k + n\\lambda,\\) which advance \\(110\\ \\mathrm{px}\\) every second: the compressions travel at \\(v,\\) the particles do not.",
+  "tr": "<span class=\"pfig__n\">Abbildung 3</span>Bahnen der unteren Reihe über die Zeit: die Lage \\(x = X + A_\\mathrm{L}\\sin(kX - \\omega t)\\) jedes der 26 Teilchen bei den Standardreglern, über zwei Perioden, \\(0 \\le t \\le 4\\ \\mathrm{s}\\) in Schritten von \\(0.025\\ \\mathrm{s},\\) die Zeit läuft nach oben. Jedes Teilchen schwingt um seine Ruhelage und wandert nirgendwohin; das verfolgte Teilchen ist bordeauxrot. Wo sich die Linien zusammendrängen, liegt eine Verdichtung. Das Gedränge wandert im Diagramm nach oben entlang der gestrichelten Linien \\(x = (\\pi + \\omega t)/k + n\\lambda,\\) die sich jede Sekunde um \\(110\\ \\mathrm{px}\\) verschieben: Die Verdichtungen laufen mit \\(v,\\) die Teilchen nicht."
+ },
+ "8ab81043ea7b": {
+  "src": "Transverse &amp; Longitudinal<span class=\"dot\">.</span>",
+  "tr": "Transversal &amp; Longitudinal<span class=\"dot\">.</span>"
+ },
+ "8ae8b67be987": {
+  "src": "Equation (1) describes the wave; it does not say why a rope or the air should carry it, or how fast. For that we need forces. For both kinds of wave the answer turns out to be the same equation.",
+  "tr": "Gleichung (1) beschreibt die Welle; sie sagt nicht, warum ein Seil oder die Luft sie tragen sollte, oder wie schnell. Dafür brauchen wir Kräfte. Für beide Wellenarten ergibt sich am Ende dieselbe Gleichung."
+ },
+ "9045bba496d1": {
+  "src": "Now let the particles move along the line. A piece of rest length \\(\\mathrm{d}X\\) has its ends displaced by \\(\\xi(X)\\) and \\(\\xi(X + \\mathrm{d}X),\\) so its new length is \\(\\mathrm{d}X\\,(1 + \\partial\\xi/\\partial X).\\) The fractional change of length, the <em>strain</em>, is \\(\\partial\\xi/\\partial X.\\) In a thin rod Hooke’s law turns strain into stress, force per area: \\(\\sigma = E\\,\\partial\\xi/\\partial X,\\) with \\(E\\) the Young’s modulus. The net force on the piece is the difference of the stress across it times the cross-section \\(S,\\) and its mass is \\(\\rho\\,S\\,\\mathrm{d}X,\\) with \\(\\rho\\) the density. Dividing by \\(S\\,\\mathrm{d}X,\\)",
+  "tr": "Nun lassen wir die Teilchen sich längs der Linie bewegen. Ein Stück der Ruhelänge \\(\\mathrm{d}X\\) hat seine Enden um \\(\\xi(X)\\) und \\(\\xi(X + \\mathrm{d}X),\\) verschoben, daher ist seine neue Länge \\(\\mathrm{d}X\\,(1 + \\partial\\xi/\\partial X).\\) Die relative Längenänderung, die <em>Dehnung</em>, ist \\(\\partial\\xi/\\partial X.\\) In einem dünnen Stab verwandelt das Hookesche Gesetz die Dehnung in Spannung, Kraft pro Fläche: \\(\\sigma = E\\,\\partial\\xi/\\partial X,\\) wobei \\(E\\) der Elastizitätsmodul ist. Die Nettokraft auf das Stück ist die Differenz der Spannungen an seinen beiden Enden mal dem Querschnitt \\(S,\\) und seine Masse ist \\(\\rho\\,S\\,\\mathrm{d}X,\\) wobei \\(\\rho\\) die Dichte ist. Nach Division durch \\(S\\,\\mathrm{d}X,\\)"
+ },
+ "934b335681de": {
+  "src": "Every feature of the pattern moves at \\(v = f\\lambda = \\omega/k,\\) in both rows. Every particle only swings about its rest position, with amplitude \\(A,\\) frequency \\(f\\) and a speed of at most \\(A\\omega.\\) The two speeds are different things: the first belongs to the pattern, the second to the matter.",
+  "tr": "Jedes Merkmal des Musters wandert mit \\(v = f\\lambda = \\omega/k,\\) in beiden Reihen. Jedes Teilchen schwingt nur um seine Ruhelage, mit Amplitude \\(A,\\) Frequenz \\(f\\) und einer Geschwindigkeit von höchstens \\(A\\omega.\\) Die beiden Geschwindigkeiten sind verschiedene Dinge: Die erste gehört zum Muster, die zweite zum Material."
+ },
+ "93a8161c11f4": {
+  "src": "Back to the simulations",
+  "tr": "Zurück zu den Simulationen"
+ },
+ "9517f9094dd8": {
+  "src": "No damping and no dispersion: the wave never fades, and every wavelength travels at the same speed.",
+  "tr": "Keine Dämpfung und keine Dispersion: Die Welle klingt nie ab, und jede Wellenlänge läuft mit derselben Geschwindigkeit."
+ },
+ "9521dba25709": {
+  "src": "Home page",
+  "tr": "Startseite"
+ },
+ "98ff66856a14": {
+  "src": "Amplitude A",
+  "tr": "Amplitude A"
+ },
+ "9d7fb4bb904c": {
+  "src": "In a stadium a wave runs right round the stands, and yet every spectator ends up exactly where they started: in their own seat.",
+  "tr": "In einem Stadion läuft eine Welle rings um die Tribünen, und doch kommt jeder Zuschauer genau dort an, wo er angefangen hat: auf seinem eigenen Platz."
+ },
+ "a141d636025a": {
+  "src": "Transverse &amp; Longitudinal Waves · Numa Koudsie",
+  "tr": "Transversale &amp; longitudinale Wellen · Numa Koudsie"
+ },
+ "a24d601189fb": {
+  "src": "Wave",
+  "tr": "Welle"
+ },
+ "a25d99bc4ff2": {
+  "src": "with \\(\\Delta t\\) the real time since the previous frame. Adding up the phase, rather than computing \\(2\\pi f t\\) from the clock, keeps the wave continuous when you move the <em>Frequency</em> slider: only the rate at which the phase grows changes. With \\(2\\pi f t\\) every particle’s phase would jump by \\(2\\pi\\,\\Delta f\\,t,\\) a jump that grows with the time already played. Moving the <em>Wavelength</em> slider, by contrast, changes \\(k\\) at once. The pattern then redraws stretched about the left end of the row, \\(X = 0,\\) whose phase \\(-\\omega t\\) does not depend on \\(k.\\)",
+  "tr": "wobei \\(\\Delta t\\) die tatsächlich verstrichene Zeit seit dem vorigen Bild ist. Das Aufsummieren der Phase, statt \\(2\\pi f t\\) aus der Uhr zu berechnen, hält die Welle stetig, wenn Sie den Regler <em>Frequenz</em> verschieben: Nur die Geschwindigkeit, mit der die Phase wächst, ändert sich. Mit \\(2\\pi f t\\) würde die Phase jedes Teilchens um \\(2\\pi\\,\\Delta f\\,t,\\) springen, ein Sprung, der mit der schon abgespielten Zeit wächst. Der Regler <em>Wellenlänge</em> dagegen ändert \\(k\\) sofort. Das Muster wird dann um das linke Ende der Reihe, \\(X = 0,\\) gestreckt neu gezeichnet, dessen Phase \\(-\\omega t\\) unabhängig ist von \\(k.\\)"
+ },
+ "a28272643323": {
+  "src": "<span class=\"psec__n\">02</span>The model",
+  "tr": "<span class=\"psec__n\">02</span>Das Modell"
+ },
+ "a4ce3a9be794": {
+  "src": "← All simulations",
+  "tr": "← Alle Simulationen"
+ },
+ "a72bb44b4eba": {
+  "src": "<span class=\"sw sw--tan\"></span>crest · compression",
+  "tr": "<span class=\"sw sw--tan\"></span>Wellenberg · Verdichtung"
+ },
+ "a7520b10a1d5": {
+  "src": "Longit. A",
+  "tr": "Längs. A"
+ },
+ "a7eeac48e59f": {
+  "src": "In words: in one period the pattern moves on by one wavelength. With the defaults \\(v = 0.50\\ \\mathrm{Hz}\\times 220\\ \\mathrm{px} = 110\\ \\mathrm{px/s},\\) the value in the <em>Speed</em> readout and under the figure. The minus sign in \\(kX - \\omega t\\) is what sends the wave to the right; with a plus sign it would travel to the left. The crest triangles above the upper row sit at \\(X_\\mathrm{c} = (\\pi/2 + \\omega t)/k,\\) plus whole wavelengths, and so they move at \\(v.\\)",
+  "tr": "In Worten: In einer Periode rückt das Muster um eine Wellenlänge weiter. Mit den Standardwerten ist \\(v = 0.50\\ \\mathrm{Hz}\\times 220\\ \\mathrm{px} = 110\\ \\mathrm{px/s},\\) das ist der Wert in der Anzeige <em>Geschwindigkeit</em> und unter der Abbildung. Das Minuszeichen in \\(kX - \\omega t\\) bewirkt, dass die Welle nach rechts läuft; mit einem Pluszeichen liefe sie nach links. Die Dreiecke der Wellenberge über der oberen Reihe liegen bei \\(X_\\mathrm{c} = (\\pi/2 + \\omega t)/k,\\) zuzüglich ganzer Wellenlängen, und bewegen sich daher mit \\(v.\\)"
+ },
+ "ab494e569432": {
+  "src": "Wave speed and particle speed",
+  "tr": "Wellengeschwindigkeit und Teilchengeschwindigkeit"
+ },
+ "ac17bc6fb9e7": {
+  "src": "Even so, the default wave is far from small: \\(A_\\mathrm{L}k = 0.743.\\) Figure 3 follows the 26 particles of the lower row for two periods, and Figure 4 shows the density they make. At the compression centres the density is \\(1/(1 - 0.743) = 3.88\\) times the rest density, in the rarefactions only \\(1/(1 + 0.743) = 0.574\\) times; the linear approximation in (10) would give 1.74 and 0.26. The compressions are narrow and crowded, the rarefactions broad and thin: the denser half of the particles fills only \\(1/2 - A_\\mathrm{L}k/\\pi = 26\\,\\%\\) of the length. At rest that half, the particles with phases between \\(\\pi/2\\) and \\(3\\pi/2,\\) spans half a wavelength; but the rearmost of them is pushed forward by \\(A_\\mathrm{L}\\) and the foremost pulled back by \\(A_\\mathrm{L},\\) so together they fit into \\(\\lambda/2 - 2A_\\mathrm{L}.\\) At the first frame the gaps between neighbours range from \\(7.0\\ \\mathrm{px}\\) to \\(44.1\\ \\mathrm{px},\\) around a rest spacing of \\(25.6\\ \\mathrm{px}.\\)",
+  "tr": "Trotzdem ist die Standardwelle alles andere als klein: \\(A_\\mathrm{L}k = 0.743.\\) Abbildung 3 verfolgt die 26 Teilchen der unteren Reihe über zwei Perioden, und Abbildung 4 zeigt die Dichte, die sie erzeugen. An den Verdichtungszentren beträgt die Dichte \\(1/(1 - 0.743) = 3.88\\) mal die Ruhedichte, in den Verdünnungen nur \\(1/(1 + 0.743) = 0.574\\) mal; die lineare Näherung in (10) ergäbe 1.74 und 0.26. Die Verdichtungen sind schmal und gedrängt, die Verdünnungen breit und dünn: Die dichtere Hälfte der Teilchen füllt nur \\(1/2 - A_\\mathrm{L}k/\\pi = 26\\,\\%\\) der Länge. Im Ruhezustand würde diese Hälfte, also die Teilchen mit Phasen zwischen \\(\\pi/2\\) und \\(3\\pi/2,\\) eine halbe Wellenlänge überspannen; da aber das hinterste von ihnen um \\(A_\\mathrm{L}\\) nach vorn gedrückt und das vorderste um den Betrag \\(A_\\mathrm{L},\\) zurückgezogen wird, passen sie zusammen in \\(\\lambda/2 - 2A_\\mathrm{L}.\\) Im ersten Bild reichen die Lücken zwischen Nachbarn von \\(7.0\\ \\mathrm{px}\\) bis \\(44.1\\ \\mathrm{px},\\) bei einem Ruheabstand von \\(25.6\\ \\mathrm{px}.\\)"
+ },
+ "b1b392607dea": {
+  "src": "Run",
+  "tr": "Starten"
+ },
+ "b23f121b95cf": {
+  "src": "<span>6</span>Energy carried&nbsp;★",
+  "tr": "<span>6</span>Transportierte Energie&nbsp;★"
+ },
+ "b4f8e695f7f5": {
+  "src": "The medium has no ends, so nothing reflects from the edges of the picture.",
+  "tr": "Das Medium hat keine Enden, daher wird nichts an den Rändern des Bildes reflektiert."
+ },
+ "b96b4ff05e37": {
+  "src": "Density from the ideal-gas law with molar mass 28.97 g/mol at 293.15 K: 1.2043 kg/m³. Then √(1.40 × 101 325 / 1.204) = 343.2 m/s.",
+  "tr": "Dichte aus dem idealen Gasgesetz mit der molaren Masse 28.97 g/mol bei 293.15 K: 1.2043 kg/m³. Dann √(1.40 × 101 325 / 1.204) = 343.2 m/s."
+ },
+ "bb0feba16a5b": {
+  "src": "Any function of \\(X - vt\\) solves (5): by the chain rule its second derivative in time is \\(v^2\\) times its second derivative in space. The same holds for any function of \\(X + vt.\\) This is d’Alembert’s solution,",
+  "tr": "Jede Funktion von \\(X - vt\\) löst (5): Nach der Kettenregel ist ihre zweite Zeitableitung \\(v^2\\)-mal ihre zweite Ortsableitung. Dasselbe gilt für jede Funktion von \\(X + vt.\\) Das ist die d’Alembertsche Lösung,"
+ },
+ "bee75ca77f75": {
+  "src": "Controls",
+  "tr": "Regler"
+ },
+ "c64ebd442a82": {
+  "src": "H. D. Young and R. A. Freedman, <em>University Physics with Modern Physics</em>, 15th edition, Pearson, 2020: chapters 15 (mechanical waves) and 16 (sound and hearing). <a href=\"https://www.pearson.com/en-us/subject-catalog/p/university-physics-with-modern-physics/P200000006855/9780135216125\">Publisher’s page</a>.",
+  "tr": "H. D. Young und R. A. Freedman, <em>University Physics with Modern Physics</em>, 15. Auflage, Pearson, 2020: Kapitel 15 (mechanische Wellen) und 16 (Schall und Gehör). <a href=\"https://www.pearson.com/en-us/subject-catalog/p/university-physics-with-modern-physics/P200000006855/9780135216125\">Seite des Verlags</a>."
+ },
+ "c8c2d1bc6e1a": {
+  "src": "Dividing by \\(\\mu\\,\\mathrm{d}X\\) gives the <em>wave equation</em>,",
+  "tr": "Division durch \\(\\mu\\,\\mathrm{d}X\\) ergibt die <em>Wellengleichung</em>,"
+ },
+ "ca4759d2b294": {
+  "src": "<span class=\"psec__n\">07</span>How the page computes a frame",
+  "tr": "<span class=\"psec__n\">07</span>Wie die Seite ein Bild berechnet"
+ },
+ "cad2dda3032c": {
+  "src": "heavier mathematics",
+  "tr": "anspruchsvollere Mathematik"
+ },
+ "cbe28c0effec": {
+  "src": "<span class=\"psec__n\">09</span>What the model leaves out",
+  "tr": "<span class=\"psec__n\">09</span>Was das Modell weglässt"
+ },
+ "cfaa0edbb773": {
+  "src": "<span class=\"psub__n\">4.2</span>A rod and a column of gas",
+  "tr": "<span class=\"psub__n\">4.2</span>Ein Stab und eine Gassäule"
+ },
+ "d1622a8321e0": {
+  "src": "Phyein Usul, home page",
+  "tr": "Phyein Usul, Startseite"
+ },
+ "d67855baa92d": {
+  "src": "<span class=\"psec__n\">03</span>One formula, two pictures",
+  "tr": "<span class=\"psec__n\">03</span>Eine Formel, zwei Bilder"
+ },
+ "d6cc5fcc2132": {
+  "src": "<span class=\"sw sw--rose\"></span>displacement",
+  "tr": "<span class=\"sw sw--rose\"></span>Auslenkung"
+ },
+ "d6cc84d9aa86": {
+  "src": "Behind the lower row lies a band \\(68\\ \\mathrm{px}\\) tall, tinted burgundy with opacity \\(0.03 + 0.2\\max(0,\\,{-\\cos(kX - \\omega t)}),\\) set at 65 points, one every \\(10\\ \\mathrm{px}\\) of the medium, and blended linearly between them. The compression triangles sit above the band.",
+  "tr": "Hinter der unteren Reihe liegt ein Band von \\(68\\ \\mathrm{px}\\) Höhe, bordeauxrot getönt mit der Deckkraft \\(0.03 + 0.2\\max(0,\\,{-\\cos(kX - \\omega t)}),\\) festgelegt an 65 Stützstellen, eine alle \\(10\\ \\mathrm{px}\\) des Mediums, und dazwischen linear interpoliert. Die Dreiecke der Verdichtungen sitzen über dem Band."
+ },
+ "d6dfa262b96a": {
+  "src": "Lengths on the page are pixels of a medium \\(640\\ \\mathrm{px}\\) long; time is real time in seconds. At the start the sliders stand at \\(A = 26\\ \\mathrm{px},\\) \\(f = 0.50\\ \\mathrm{Hz},\\) \\(\\lambda = 220\\ \\mathrm{px}\\) and 26 particles, spaced \\(640/25 = 25.6\\ \\mathrm{px}\\) apart. The followed particle is number 12, counting from 0, at \\(X = 307.2\\ \\mathrm{px}.\\) Only the ratio \\(A/\\lambda\\) fixes the shape of the wave; the pixel is just a convenient ruler.",
+  "tr": "Längen auf der Seite sind Pixel eines Mediums von \\(640\\ \\mathrm{px}\\) Länge; die Zeit ist die reale Zeit in Sekunden. Zu Beginn stehen die Regler auf \\(A = 26\\ \\mathrm{px},\\) \\(f = 0.50\\ \\mathrm{Hz},\\) \\(\\lambda = 220\\ \\mathrm{px}\\) und 26 Teilchen, im Abstand \\(640/25 = 25.6\\ \\mathrm{px}\\) voneinander. Das verfolgte Teilchen ist Nummer 12, wenn man bei 0 zu zählen beginnt, bei \\(X = 307.2\\ \\mathrm{px}.\\) Nur das Verhältnis \\(A/\\lambda\\) bestimmt die Form der Welle; das Pixel ist nur ein bequemer Maßstab."
+ },
+ "d929322e4b16": {
+  "src": "Fig.",
+  "tr": "Abb."
+ },
+ "d94d9873f6c2": {
+  "src": "<span class=\"sw sw--dot\"></span>followed particle",
+  "tr": "<span class=\"sw sw--dot\"></span>verfolgtes Teilchen"
+ },
+ "d9813df3cc30": {
+  "src": "<span class=\"psec__n\">05</span>Compressions and rarefactions",
+  "tr": "<span class=\"psec__n\">05</span>Verdichtungen und Verdünnungen"
+ },
+ "ddca3f390894": {
+  "src": "so that the tightest spacing is \\(20\\,\\%\\) of the rest spacing and the densest point 5 times the rest density. The <em>Longit. A</em> readout shows \\(A_\\mathrm{L}\\) and adds “(cap)” when the cap acts. With the defaults the cap is \\(28.0\\ \\mathrm{px},\\) above \\(A = 26\\ \\mathrm{px},\\) so both rows have the same amplitude.",
+  "tr": "sodass der engste Abstand \\(20\\,\\%\\) des Ruheabstands beträgt und die dichteste Stelle das 5-Fache der Ruhedichte. Die Anzeige <em>Längs. A</em> zeigt \\(A_\\mathrm{L}\\) und fügt „(Grenze)“ hinzu, wenn die Begrenzung wirkt. Mit den Standardwerten liegt die Begrenzung bei \\(28.0\\ \\mathrm{px},\\) über \\(A = 26\\ \\mathrm{px},\\) sodass beide Reihen dieselbe Amplitude haben."
+ },
+ "ddeb0d6a3372": {
+  "src": "The particle speed is at most \\(A\\omega,\\) which is \\(81.7\\ \\mathrm{px/s}\\) for the defaults. It depends on the amplitude and the frequency but not on the wavelength. Its ratio to the wave speed is \\(A\\omega/v = Ak = 0.743\\): here the particles move more slowly than the pattern, and on average they go nowhere at all. The last relation in (3) holds for any shape that moves to the right without changing, not only for a sine. Where the curve falls towards the right, the higher part behind a particle is about to arrive, so the particle is rising.",
+  "tr": "Die Teilchengeschwindigkeit ist höchstens \\(A\\omega,\\) das sind bei den Standardwerten \\(81.7\\ \\mathrm{px/s}\\). Sie hängt von Amplitude und Frequenz ab, nicht von der Wellenlänge. Ihr Verhältnis zur Wellengeschwindigkeit ist \\(A\\omega/v = Ak = 0.743\\): Hier bewegen sich die Teilchen langsamer als das Muster, und im Mittel kommen sie gar nicht vom Fleck. Die letzte Beziehung in (3) gilt für jede Form, die sich nach rechts bewegt, ohne sich zu verändern, nicht nur für eine Sinuskurve. Wo die Kurve nach rechts abfällt, kommt der höhere Teil hinter einem Teilchen gleich an; deshalb steigt das Teilchen."
+ },
+ "e13b587879b0": {
+  "src": "<span>2</span>The model",
+  "tr": "<span>2</span>Das Modell"
+ },
+ "e1d329a7394b": {
+  "src": "From symbols to code",
+  "tr": "Von den Symbolen zum Code"
+ },
+ "e3becde40511": {
+  "src": "<span>3</span>One formula, two pictures",
+  "tr": "<span>3</span>Eine Formel, zwei Bilder"
+ },
+ "e481bb928b5e": {
+  "src": "<span>5</span>Compressions and rarefactions",
+  "tr": "<span>5</span>Verdichtungen und Verdünnungen"
+ },
+ "e54c02e78abf": {
+  "src": "where \\(\\rho_0\\) is the density at rest and \\(A_\\mathrm{L}\\) the amplitude of the lower row, defined below. The medium is densest where \\(\\cos(kX - \\omega t) = -1,\\) at phase \\(\\pi.\\) There the displacement \\(A_\\mathrm{L}\\sin\\pi\\) is zero: the particles just behind have been pushed forward and those just ahead pulled back, so both crowd towards the centre. By (3), the particles at the centre move forward at full speed. A compression centre therefore sits at \\(X_\\mathrm{p} = (\\pi + \\omega t)/k,\\) and",
+  "tr": "wobei \\(\\rho_0\\) die Dichte im Ruhezustand und \\(A_\\mathrm{L}\\) die Amplitude der unteren Reihe ist, die weiter unten definiert wird. Das Medium ist am dichtesten dort, wo \\(\\cos(kX - \\omega t) = -1,\\) bei der Phase \\(\\pi.\\) Dort ist die Auslenkung \\(A_\\mathrm{L}\\sin\\pi\\) null: Die Teilchen direkt dahinter wurden nach vorn gedrückt und die direkt davor nach hinten gezogen, sodass beide zur Mitte drängen. Nach (3) bewegen sich die Teilchen in der Mitte mit voller Geschwindigkeit nach vorn. Ein Verdichtungszentrum sitzt daher bei \\(X_\\mathrm{p} = (\\pi + \\omega t)/k,\\) und"
+ },
+ "e8c0ab61e15f": {
+  "src": "a shape moving to the right plus a shape moving to the left, each keeping its form. The sine wave (1) is the case \\(g(z) = A\\sin kz,\\) \\(h = 0\\): writing \\(kX - \\omega t = k\\,(X - vt)\\) requires \\(\\omega = vk,\\) which is equation (2) again. Here the physics adds something the kinematics alone could not. On a real string \\(v\\) is fixed by \\(F\\) and \\(\\mu;\\) the source fixes the frequency, and the wavelength has no choice, \\(\\lambda = v/f.\\) On the page both \\(f\\) and \\(\\lambda\\) are sliders and \\(v\\) follows from them, which amounts to choosing a new medium every time you move one.",
+  "tr": "eine Form, die nach rechts wandert, plus eine Form, die nach links wandert, wobei jede ihre Gestalt behält. Die Sinuswelle (1) ist der Fall \\(g(z) = A\\sin kz,\\) \\(h = 0\\): Schreibt man \\(kX - \\omega t = k\\,(X - vt)\\), so folgt \\(\\omega = vk,\\) was wieder Gleichung (2) ist. Hier fügt die Physik etwas hinzu, was die Kinematik allein nicht leisten konnte. Auf einer echten Saite ist \\(v\\) festgelegt durch \\(F\\) und \\(\\mu;\\) die Quelle legt die Frequenz fest, und die Wellenlänge hat keine Wahl, \\(\\lambda = v/f.\\) Auf der Seite sind sowohl \\(f\\) als auch \\(\\lambda\\) Regler, und \\(v\\) ergibt sich aus ihnen, was der Wahl eines neuen Mediums bei jedem Verschieben eines der beiden gleichkommt."
+ },
+ "ea37fcbd5441": {
+  "src": "<span class=\"psec__n\">08</span>From medium pixels to screen pixels",
+  "tr": "<span class=\"psec__n\">08</span>Von Pixeln des Mediums zu Pixeln des Bildschirms"
+ },
+ "eba286997294": {
+  "src": "That is the whole idea of a wave. Each spectator only stands up and sits down again, a moment after their neighbour; what travels round the stadium is the pattern “stand up now”. The people move up and down while the wave moves sideways along the stands. The motion of the medium is <em>across</em> the direction of travel, and such a wave is called <em>transverse</em>.",
+  "tr": "Darin liegt die ganze Idee einer Welle. Jeder Zuschauer steht nur auf und setzt sich wieder hin, einen Moment nach seinem Nachbarn; was um das Stadion läuft, ist das Muster „jetzt aufstehen“. Die Menschen bewegen sich auf und ab, während die Welle seitlich an den Tribünen entlangläuft. Die Bewegung des Mediums verläuft <em>quer</em> zur Ausbreitungsrichtung, und eine solche Welle heißt <em>transversal</em>."
+ },
+ "ebdeff9a20c3": {
+  "src": "Equilibrium positions",
+  "tr": "Ruhelagen"
+ },
+ "ef58b230ead6": {
+  "src": "Interactive comparison of a transverse and a longitudinal wave with the same amplitude, frequency and wavelength.",
+  "tr": "Interaktiver Vergleich einer transversalen und einer longitudinalen Welle mit gleicher Amplitude, Frequenz und Wellenlänge."
+ },
+ "f199e2e1a4ed": {
+  "src": "<span class=\"psub__n\">9.1</span>Further reading",
+  "tr": "<span class=\"psub__n\">9.1</span>Weiterführende Literatur"
+ },
+ "f5cbdf6bfb51": {
+  "src": "Contents",
+  "tr": "Inhalt"
+ },
+ "f72f0eda6052": {
+  "src": "Simulations",
+  "tr": "Simulationen"
+ },
+ "f80ceb3a399d": {
+  "src": "Small amplitudes. The defaults are not small: the steepest slope of the upper row, \\(Ak = 0.743,\\) is an angle of \\(36.6^\\circ,\\) and a real string tilted that far stretches and changes its tension. Sound of large amplitude steepens as it travels, because the compressed parts move slightly faster than the rarefied ones, until the front becomes a shock.",
+  "tr": "Kleine Amplituden. Die Standardwerte sind nicht klein: Die steilste Neigung der oberen Reihe, \\(Ak = 0.743,\\) entspricht einem Winkel von \\(36.6^\\circ,\\) und eine echte Saite, die so weit geneigt ist, dehnt sich und ändert ihre Spannkraft. Schall großer Amplitude steilt sich bei der Ausbreitung auf, weil die verdichteten Teile sich etwas schneller bewegen als die verdünnten, bis die Front zu einer Stoßwelle wird."
+ },
+ "f8329eb1a2fe": {
+  "src": "A slinky on a table shows both kinds. Shake one end sideways and a kink runs along it: transverse again. Push the end in and out along the slinky and something different runs along it: a group of coils bunched together, a <em>compression</em>, followed by a stretch where the coils are spread apart, a <em>rarefaction</em>. Every coil moves only back and forth, along the direction in which the pattern travels. This is a <em>longitudinal</em> wave.",
+  "tr": "Eine Spiralfeder auf dem Tisch zeigt beide Arten. Schüttelt man ein Ende seitlich, läuft ein Knick entlang der Feder: wieder eine Transversalwelle. Drückt man das Ende längs der Feder hin und her, läuft etwas anderes entlang: ein Bündel eng zusammengedrückter Windungen, eine <em>Verdichtung</em>, gefolgt von einem Stück, in dem die Windungen weit auseinanderliegen, einer <em>Verdünnung</em>. Jede Windung bewegt sich nur vor und zurück, in der Richtung, in die das Muster wandert. Dies ist eine <em>Longitudinalwelle</em>."
+ },
+ "f94cddac6777": {
+  "src": "Measured in headless Chromium, the canvas is \\(770 \\times 481\\) px in a \\(1440\\ \\mathrm{px}\\) wide window, so \\(s = 1.134,\\) and \\(356 \\times 374\\) px on a \\(390\\ \\mathrm{px}\\) wide phone, so \\(s = 0.4875.\\) The rest line of the upper row, \\(y_\\mathrm{T},\\) lies at \\(30\\,\\%\\) of the canvas height and the lower row at \\(77\\,\\%.\\) A transverse particle is drawn at height \\(y_\\mathrm{T} - s\\,\\xi,\\) with a minus sign because screen \\(y\\) points down.",
+  "tr": "Im Test mit Headless-Chromium gemessen ist die Zeichenfläche \\(770 \\times 481\\) px in einem \\(1440\\ \\mathrm{px}\\) breiten Fenster groß, also \\(s = 1.134,\\) und \\(356 \\times 374\\) px auf einem \\(390\\ \\mathrm{px}\\) breiten Telefon, also \\(s = 0.4875.\\) Die Ruhelinie der oberen Reihe, \\(y_\\mathrm{T},\\) liegt bei \\(30\\,\\%\\) der Höhe der Zeichenfläche und die der unteren Reihe bei \\(77\\,\\%.\\) Die Höhe eines transversalen Teilchens ist \\(y_\\mathrm{T} - s\\,\\xi,\\) mit einem Minuszeichen, weil die \\(y\\)-Achse des Bildschirms nach unten zeigt."
+ },
+ "fb194e991a8e": {
+  "src": "Wavelength λ",
+  "tr": "Wellenlänge λ"
+ },
+ "fb57a7ac8366": {
+  "src": "This simulation needs JavaScript.",
+  "tr": "Diese Simulation benötigt JavaScript."
+ }
+}

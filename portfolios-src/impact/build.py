@@ -1,7 +1,7 @@
 """Build the iron-versus-cotton study.
 
     python3 build.py            -> out/iron-vs-cotton-en.html, out/iron-vs-cotton-ar.html (stand-alone pages, Google Fonts)
-    python3 build.py --site     -> ../../public/portfolios/impact/index.html (English) and ar.html (Arabic):
+    python3 build.py --site     -> ../../public/portfolios/impact/index.html (English), de.html (German) and ar.html (Arabic):
                                    the site's security policy and referrer rule, the site's own fonts, a back link
                                    to the Portfolios page and a language switch.
 The physics is physics.js (between PHYSICS-BEGIN/END), the page is template.html, the words are text_en.py / text_ar.py,
@@ -34,7 +34,12 @@ CSS_AR = (':root{--f-body:"Noto Naskh Arabic","Amiri",serif;--f-title:"Amiri","N
           '.eyebrow{font-family:"Noto Naskh Arabic",serif;letter-spacing:0;text-transform:none;font-size:14px}'
           '.box .tag{font-family:"Noto Naskh Arabic",serif;letter-spacing:0;text-transform:none;font-size:13px;font-weight:600}p{max-width:80ch}.m,.eq{font-size:1.02em}')
 GF = {'en': 'https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&family=IBM+Plex+Sans:ital,wght@0,400;0,500;0,600;1,400&family=Instrument+Serif&display=swap',
+      'de': 'https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&family=IBM+Plex+Sans:ital,wght@0,400;0,500;0,600;1,400&family=Instrument+Serif&display=swap',
       'ar': 'https://fonts.googleapis.com/css2?family=Amiri:ital,wght@0,400;0,700;1,400&family=Noto+Naskh+Arabic:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500&family=IBM+Plex+Sans:wght@400;500;600&family=Instrument+Serif&display=swap'}
+
+PAGE = {'en': 'index.html', 'de': 'de.html', 'ar': 'ar.html'}
+NAME = {'en': 'Numa Koudsie', 'de': 'Numa Koudsie', 'ar': 'نعمة سائر قدسية'}
+BACK = {'en': '← Numa Koudsie · Portfolios', 'de': '← Numa Koudsie · Portfolios', 'ar': '→ نعمة سائر قدسية · الملفّات'}
 
 def build(lang):
     T = importlib.import_module('text_' + lang).T
@@ -49,7 +54,7 @@ def build(lang):
            .replace('{{FONTS}}', GF[lang]).replace('{{CSSLANG}}', CSS_AR if lang == 'ar' else CSS_EN).replace('{{PHYSICS}}', phys)
            .replace('{{TEXT_JSON}}', json.dumps(T, ensure_ascii=False)).replace('{{RTL}}', 'true' if lang == 'ar' else 'false')
            .replace('{{CANVAS_FONTS}}', json.dumps(CF_AR if lang == 'ar' else CF_EN))
-           .replace('{{DATAHOOKS}}', hooks).replace('{{PAGE}}', 'index.html' if lang == 'en' else 'ar.html')
+           .replace('{{DATAHOOKS}}', hooks).replace('{{PAGE}}', PAGE[lang])
            .replace('{{BASE}}', '../../' if SITE else '../../../public/'))
     if not SITE:
         out = out.replace('{{SITEBAR}}', '')
@@ -59,28 +64,29 @@ def build(lang):
         idx = open(os.path.join(ROOT, 'index.html'), encoding='utf-8').read()
         csp = re.search(r'<meta http-equiv="Content-Security-Policy"[^>]*/>', idx).group(0)
         icon = re.search(r'<link\s+rel="icon"\s+href="[^"]*"\s*/>', open(os.path.join(ROOT, 'public', 'portfolios.html'), encoding='utf-8').read()).group(0)
-        bar = ('<nav class="sitebar" aria-label="Site"><a href="../../portfolios.html">%s</a><span class="langs">'
-               '<a href="index.html"%s>English</a> · <a href="ar.html" lang="ar"%s>العربية</a></span></nav>') % (
-               '← Numa Koudsie · Portfolios' if lang == 'en' else '← Numa Koudsie · Portfolios',
-               ' aria-current="page"' if lang == 'en' else '', ' aria-current="page"' if lang == 'ar' else '')
+        cur = lambda l: ' aria-current="page"' if l == lang else ''
+        bar = ('<nav class="sitebar" aria-label="Site"><a href="../../%sportfolios.html">%s</a><span class="langs">'
+               '<a href="index.html" lang="en"%s>English</a> · <a href="de.html" lang="de"%s>Deutsch</a> · <a href="ar.html" lang="ar"%s>العربية</a></span></nav>') % (
+               '' if lang == 'en' else lang + '/', BACK[lang], cur('en'), cur('de'), cur('ar'))
         body_start = out.index('<main')
         head_old, body = out[:body_start], out[body_start:]
         style = re.search(r'<style>.*?</style>', head_old, re.S).group(0)
         fonts = '<link rel="stylesheet" href="../../fonts/instrument-plex.css" />' + ('\n    <link rel="stylesheet" href="../../fonts/arabic.css" />' if lang == 'ar' else '')
         fonts += '\n    <link rel="stylesheet" href="../../styles/paper.css" />\n    <link rel="stylesheet" href="../../styles/data.css" />'
-        desc = T['lede'] if lang == 'en' else 'دراسة تفاعلية: كرة حديد وكرة قطن متساويتان في الكتلة تسقطان عشرة أمتار على رأس.'
+        if lang != 'en': fonts += '\n    <script src="../../scripts/i18n/strings-%s.js"></script>' % lang   # the data panel's words in this language
+        desc = T['lede'] if lang != 'ar' else 'دراسة تفاعلية: كرة حديد وكرة قطن متساويتان في الكتلة تسقطان عشرة أمتار على رأس.'
         desc = re.sub(r'<[^>]+>', '', desc).replace('"', '&quot;')
         head = ('<!doctype html>\n<html lang="%s" dir="%s">\n  <head>\n    <meta charset="UTF-8" />\n    %s\n'
                 '    <meta name="referrer" content="strict-origin-when-cross-origin" />\n    <meta name="viewport" content="width=device-width, initial-scale=1.0" />\n'
-                '    <title>%s · Numa Koudsie</title>\n    <meta name="description" content="%s" />\n    <meta name="author" content="Numa Koudsie" />\n'
+                '    <title>%s · ' + NAME[lang] + '</title>\n    <meta name="description" content="%s" />\n    <meta name="author" content="' + NAME[lang] + '" />\n'
                 '    %s\n    %s\n    %s\n  </head>\n  <body>\n') % (lang, 'rtl' if lang == 'ar' else 'ltr', csp, T['title_tag'], desc, icon, fonts, style)
         out = head + body.replace('{{SITEBAR}}', bar) + '\n  </body>\n</html>\n'
         assert 'googleapis' not in out
         d = os.path.join(ROOT, 'public', 'portfolios', 'impact'); os.makedirs(d, exist_ok=True)
-        fn = os.path.join(d, 'index.html' if lang == 'en' else 'ar.html')
+        fn = os.path.join(d, PAGE[lang])
     assert '{{' not in out
     open(fn, 'w', encoding='utf-8').write(out)
     print(fn, len(out))
 
-for lang in ('en', 'ar'):
+for lang in ('en', 'de', 'ar'):
     build(lang)

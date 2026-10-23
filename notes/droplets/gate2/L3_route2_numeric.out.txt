@@ -1,0 +1,18 @@
+== (4.1) random masses and 3-D velocities: energy lost in a perfect merger (momentum conservation gives the final velocity)
+   max relative deviation over 1e5 random cases (merger loss vs mu dv^2/2 ; KE vs M V^2/2 + mu dv^2/2): 1.08e-12
+   1-D example m=(2,3), u=(4,-1): CKE = 15.0000 ; KE before 17.5000 ; KE after merger 2.5000 ; lost 15.0000
+== (4.2) example numbers (radii in um; fall speeds from the model: inputs)
+  air cloud: T = 283.15 K, sigma (own IAPWS) = 0.07422 N/m, model sigmaWater = 0.07422
+   cloud     drag balance dv =   0.16913 m/s CKE = 3.043e-14 J  We = 2.028e-05  E_coal = exp(-1.15 We) = 0.999977   [8 um on 40 um (text: CKE 3.0e-14 J, We 2.0e-5, E 0.99998)]
+   cloud     Stokes       dv =   0.18887 m/s CKE = 3.795e-14 J  We = 2.529e-05  E_coal = exp(-1.15 We) = 0.999971   []
+   cloud     drag balance dv =   0.08862 m/s CKE = 1.302e-12 J  We = 2.861e-04  E_coal = exp(-1.15 We) = 0.999671   [collectors 60 and 50 um (text We 2.9e-4)]
+   cloud     Stokes       dv =   0.13526 m/s CKE = 3.034e-12 J  We = 6.664e-04  E_coal = exp(-1.15 We) = 0.999234   []
+   cloud     drag balance dv =   2.12313 m/s CKE = 1.311e-07 J  We = 5.199e-01  E_coal = exp(-1.15 We) = 0.549987   [radii 500 and 250 um (text We 0.52, E 0.55, dv 2.1 m/s; Stokes dv 23 m/s, We 61)]
+   cloud     Stokes       dv =  23.05516 m/s CKE = 1.546e-05 J  We = 6.130e+01  E_coal = exp(-1.15 We) = 2.41417e-31   []
+  air std20: T = 293.15 K, sigma (own IAPWS) = 0.07274 N/m, model sigmaWater = 0.07274
+   std20     drag balance dv =   0.16325 m/s CKE = 2.835e-14 J  We = 1.928e-05  E_coal = exp(-1.15 We) = 0.999978   [8 um on 40 um (text: CKE 3.0e-14 J, We 2.0e-5, E 0.99998)]
+   std20     Stokes       dv =   0.18370 m/s CKE = 3.590e-14 J  We = 2.442e-05  E_coal = exp(-1.15 We) = 0.999972   []
+   std20     drag balance dv =   0.08449 m/s CKE = 1.184e-12 J  We = 2.654e-04  E_coal = exp(-1.15 We) = 0.999695   [collectors 60 and 50 um (text We 2.9e-4)]
+   std20     Stokes       dv =   0.13156 m/s CKE = 2.870e-12 J  We = 6.434e-04  E_coal = exp(-1.15 We) = 0.99926   []
+   std20     drag balance dv =   1.99040 m/s CKE = 1.152e-07 J  We = 4.662e-01  E_coal = exp(-1.15 We) = 0.584984   [radii 500 and 250 um (text We 0.52, E 0.55, dv 2.1 m/s; Stokes dv 23 m/s, We 61)]
+   std20     Stokes       dv =  22.42489 m/s CKE = 1.463e-05 J  We = 5.918e+01  E_coal = exp(-1.15 We) = 2.77033e-30   []

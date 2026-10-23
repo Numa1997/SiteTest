@@ -4,44 +4,50 @@ Written by [`tools/inventory.py`](../tools/inventory.py) from the files in the r
 Run `python3 tools/inventory.py` after adding, removing or changing files, and `python3 tools/inventory.py --check`
 to confirm that every file is described. Sizes are those of the files when the list was written.
 
-707 files, 30.6 MB in all. Runs of more than 12 similar files are folded; open them to see each file.
+937 files, 50.9 MB in all. Runs of more than 12 similar files are folded; open them to see each file.
 
 | Folder | Files |
 |---|---|
 | [Repository root](#repository-root) | 11 |
 | [Pages under public/](#pages-under-public) | 4 |
+| [German pages (generated)](#german-pages-generated) | 13 |
+| [Arabic pages (generated)](#arabic-pages-generated) | 13 |
 | [Simulation pages](#simulation-pages) | 10 |
-| [Walkthroughs](#walkthroughs) | 10 |
-| [Shared scripts](#shared-scripts) | 5 |
-| [Stylesheets](#stylesheets) | 7 |
+| [Walkthroughs](#walkthroughs) | 30 |
+| [Shared scripts](#shared-scripts) | 8 |
+| [Stylesheets](#stylesheets) | 15 |
 | [KaTeX](#katex) | 24 |
 | [Latin Modern](#latin-modern) | 5 |
 | [IBM Plex, Instrument Serif, and the Arabic faces](#ibm-plex-instrument-serif-and-the-arabic-faces) | 61 |
 | [Thumbnails](#thumbnails) | 10 |
 | [Logo](#logo) | 1 |
-| [Project copy: Droplet Collection](#project-copy-droplet-collection) | 69 |
+| [Project copy: Droplet Collection](#project-copy-droplet-collection) | 11 |
 | [Project copy: Rotor Pendula](#project-copy-rotor-pendula) | 86 |
-| [Project copy: Hydraulic Press Study](#project-copy-hydraulic-press-study) | 6 |
-| [Iron, Cotton and the Head](#iron-cotton-and-the-head) | 6 |
+| [Project copy: Hydraulic Press Study](#project-copy-hydraulic-press-study) | 8 |
+| [Iron, Cotton and the Head](#iron-cotton-and-the-head) | 7 |
 | [Source of the Hydraulic Press Study (not served)](#source-of-the-hydraulic-press-study-not-served) | 37 |
 | [Source of Rotor Pendula (not served)](#source-of-rotor-pendula-not-served) | 62 |
-| [Source of Iron, Cotton and the Head (not served)](#source-of-iron-cotton-and-the-head-not-served) | 18 |
+| [Source of Iron, Cotton and the Head (not served)](#source-of-iron-cotton-and-the-head-not-served) | 19 |
+| [Source of the Droplet Collection study (not served)](#source-of-the-droplet-collection-study-not-served) | 65 |
 | [Template sources](#template-sources) | 2 |
 | [Platform tests](#platform-tests) | 1 |
-| [Documentation](#documentation) | 28 |
-| [Tools](#tools) | 2 |
+| [Documentation](#documentation) | 30 |
+| [Tools](#tools) | 9 |
+| [Translation tables](#translation-tables) | 46 |
 | [Agents of the lecture-note review](#agents-of-the-lecture-note-review) | 4 |
-| [Record of the lecture-note review](#record-of-the-lecture-note-review) | 238 |
+| [Working notes of the Rotor Pendula study](#working-notes-of-the-rotor-pendula-study) | 116 |
+| [Working notes of the Droplet Collection study](#working-notes-of-the-droplet-collection-study) | 113 |
+| [Record of the lecture-note review](#record-of-the-lecture-note-review) | 116 |
 
 ## Repository root
 
 | File | Size | What it is | Explained in |
 |---|---|---|---|
 | [`.gitignore`](../.gitignore) | 39 B | Files git leaves out: Python caches, node_modules, build output. | [files.md](files.md) |
-| [`AGENTS.md`](../AGENTS.md) | 12.2 kB | The maintainer's summary: ownership, layout, design rules, folds, the data pipeline, platform quirks. | [build-and-deploy.md](build-and-deploy.md) |
+| [`AGENTS.md`](../AGENTS.md) | 12.8 kB | The maintainer's summary: ownership, layout, design rules, folds, the data pipeline, platform quirks. | [build-and-deploy.md](build-and-deploy.md) |
 | [`CLAUDE.md`](../CLAUDE.md) | 4.3 kB | How Numa expects an AI assistant to work on the project. | [build-and-deploy.md](build-and-deploy.md) |
 | [`README.md`](../README.md) | 7.7 kB | Start here: what the project is, how the files fit together, where each one is explained. | [README.md](../README.md) |
-| [`index.html`](../index.html) | 47.4 kB | The home page: CV, research, simulation plates, index; also the build entry page. | [pages.md](pages.md) |
+| [`index.html`](../index.html) | 48.2 kB | The home page: CV, research, simulation plates, index; also the build entry page. | [pages.md](pages.md) |
 | [`package.json`](../package.json) | 479 B | Build declaration: vite build; template dependencies. | [build-and-deploy.md](build-and-deploy.md) |
 | [`postcss.config.js`](../postcss.config.js) | 81 B | PostCSS settings (template; unused by the site). | [build-and-deploy.md](build-and-deploy.md) |
 | [`tailwind.config.js`](../tailwind.config.js) | 155 B | Tailwind settings (template; unused by the site). | [build-and-deploy.md](build-and-deploy.md) |
@@ -54,31 +60,87 @@ to confirm that every file is described. Sizes are those of the files when the l
 | File | Size | What it is | Explained in |
 |---|---|---|---|
 | [`public/_headers`](../public/_headers) | 516 B | Security response headers Cloudflare sets on every file of phyeinusul.com; read by Cloudflare, never served. | [usul.md](usul.md) |
-| [`public/portfolios.html`](../public/portfolios.html) | 39.9 kB | The Portfolios page: the two research projects. | [pages.md](pages.md) |
+| [`public/portfolios.html`](../public/portfolios.html) | 40.6 kB | The Portfolios page: the two research projects. | [pages.md](pages.md) |
 | [`public/robots.txt`](../public/robots.txt) | 58 B | Instructions for search-engine crawlers. | [pages.md](pages.md) |
-| [`public/simulations.html`](../public/simulations.html) | 18.9 kB | The simulations catalog: one titled fold card per simulation, search and chips. | [pages.md](pages.md) |
+| [`public/simulations.html`](../public/simulations.html) | 20.7 kB | The simulations catalog: one titled fold card per simulation, search and chips. | [pages.md](pages.md) |
+
+## German pages (generated)
+
+| File | Size | What it is | Explained in |
+|---|---|---|---|
+| [`public/de/index.html`](../public/de/index.html) | 47.3 kB | German index.html, generated by tools/i18n/build.py; do not edit. | [i18n.md](i18n.md) |
+| [`public/de/portfolios.html`](../public/de/portfolios.html) | 43.2 kB | German portfolios.html, generated by tools/i18n/build.py; do not edit. | [i18n.md](i18n.md) |
+| [`public/de/simulations.html`](../public/de/simulations.html) | 20.8 kB | German simulations.html, generated by tools/i18n/build.py; do not edit. | [i18n.md](i18n.md) |
+| [`public/de/simulations/Circular Wave Interference Visualization.html`](../public/de/simulations/Circular%20Wave%20Interference%20Visualization.html) | 198.9 kB | German simulations/Circular Wave Interference Visualization.html, generated by tools/i18n/build.py; do not edit. | [i18n.md](i18n.md) |
+| [`public/de/simulations/Double Pendulum.html`](../public/de/simulations/Double%20Pendulum.html) | 135.5 kB | German simulations/Double Pendulum.html, generated by tools/i18n/build.py; do not edit. | [i18n.md](i18n.md) |
+| [`public/de/simulations/Interactive Double-Slit Experiment Visualization.html`](../public/de/simulations/Interactive%20Double-Slit%20Experiment%20Visualization.html) | 179.5 kB | German simulations/Interactive Double-Slit Experiment Visualization.html, generated by tools/i18n/build.py; do not edit. | [i18n.md](i18n.md) |
+| [`public/de/simulations/Transverse and longitudinal waves.html`](../public/de/simulations/Transverse%20and%20longitudinal%20waves.html) | 208.0 kB | German simulations/Transverse and longitudinal waves.html, generated by tools/i18n/build.py; do not edit. | [i18n.md](i18n.md) |
+| [`public/de/simulations/draw-decompose.html`](../public/de/simulations/draw-decompose.html) | 222.7 kB | German simulations/draw-decompose.html, generated by tools/i18n/build.py; do not edit. | [i18n.md](i18n.md) |
+| [`public/de/simulations/driven-oscillator.html`](../public/de/simulations/driven-oscillator.html) | 187.5 kB | German simulations/driven-oscillator.html, generated by tools/i18n/build.py; do not edit. | [i18n.md](i18n.md) |
+| [`public/de/simulations/phasor-sums.html`](../public/de/simulations/phasor-sums.html) | 269.5 kB | German simulations/phasor-sums.html, generated by tools/i18n/build.py; do not edit. | [i18n.md](i18n.md) |
+| [`public/de/simulations/water-wave.html`](../public/de/simulations/water-wave.html) | 170.0 kB | German simulations/water-wave.html, generated by tools/i18n/build.py; do not edit. | [i18n.md](i18n.md) |
+| [`public/de/simulations/wave-interference.html`](../public/de/simulations/wave-interference.html) | 177.2 kB | German simulations/wave-interference.html, generated by tools/i18n/build.py; do not edit. | [i18n.md](i18n.md) |
+| [`public/de/simulations/wind-turbine.html`](../public/de/simulations/wind-turbine.html) | 189.4 kB | German simulations/wind-turbine.html, generated by tools/i18n/build.py; do not edit. | [i18n.md](i18n.md) |
+
+## Arabic pages (generated)
+
+| File | Size | What it is | Explained in |
+|---|---|---|---|
+| [`public/ar/index.html`](../public/ar/index.html) | 49.7 kB | Arabic index.html, generated by tools/i18n/build.py; do not edit. | [i18n.md](i18n.md) |
+| [`public/ar/portfolios.html`](../public/ar/portfolios.html) | 51.3 kB | Arabic portfolios.html, generated by tools/i18n/build.py; do not edit. | [i18n.md](i18n.md) |
+| [`public/ar/simulations.html`](../public/ar/simulations.html) | 21.7 kB | Arabic simulations.html, generated by tools/i18n/build.py; do not edit. | [i18n.md](i18n.md) |
+| [`public/ar/simulations/Circular Wave Interference Visualization.html`](../public/ar/simulations/Circular%20Wave%20Interference%20Visualization.html) | 208.2 kB | Arabic simulations/Circular Wave Interference Visualization.html, generated by tools/i18n/build.py; do not edit. | [i18n.md](i18n.md) |
+| [`public/ar/simulations/Double Pendulum.html`](../public/ar/simulations/Double%20Pendulum.html) | 146.3 kB | Arabic simulations/Double Pendulum.html, generated by tools/i18n/build.py; do not edit. | [i18n.md](i18n.md) |
+| [`public/ar/simulations/Interactive Double-Slit Experiment Visualization.html`](../public/ar/simulations/Interactive%20Double-Slit%20Experiment%20Visualization.html) | 188.6 kB | Arabic simulations/Interactive Double-Slit Experiment Visualization.html, generated by tools/i18n/build.py; do not edit. | [i18n.md](i18n.md) |
+| [`public/ar/simulations/Transverse and longitudinal waves.html`](../public/ar/simulations/Transverse%20and%20longitudinal%20waves.html) | 216.2 kB | Arabic simulations/Transverse and longitudinal waves.html, generated by tools/i18n/build.py; do not edit. | [i18n.md](i18n.md) |
+| [`public/ar/simulations/draw-decompose.html`](../public/ar/simulations/draw-decompose.html) | 232.1 kB | Arabic simulations/draw-decompose.html, generated by tools/i18n/build.py; do not edit. | [i18n.md](i18n.md) |
+| [`public/ar/simulations/driven-oscillator.html`](../public/ar/simulations/driven-oscillator.html) | 192.7 kB | Arabic simulations/driven-oscillator.html, generated by tools/i18n/build.py; do not edit. | [i18n.md](i18n.md) |
+| [`public/ar/simulations/phasor-sums.html`](../public/ar/simulations/phasor-sums.html) | 278.8 kB | Arabic simulations/phasor-sums.html, generated by tools/i18n/build.py; do not edit. | [i18n.md](i18n.md) |
+| [`public/ar/simulations/water-wave.html`](../public/ar/simulations/water-wave.html) | 178.9 kB | Arabic simulations/water-wave.html, generated by tools/i18n/build.py; do not edit. | [i18n.md](i18n.md) |
+| [`public/ar/simulations/wave-interference.html`](../public/ar/simulations/wave-interference.html) | 186.1 kB | Arabic simulations/wave-interference.html, generated by tools/i18n/build.py; do not edit. | [i18n.md](i18n.md) |
+| [`public/ar/simulations/wind-turbine.html`](../public/ar/simulations/wind-turbine.html) | 197.2 kB | Arabic simulations/wind-turbine.html, generated by tools/i18n/build.py; do not edit. | [i18n.md](i18n.md) |
 
 ## Simulation pages
 
 | File | Size | What it is | Explained in |
 |---|---|---|---|
-| [`public/simulations/Circular Wave Interference Visualization.html`](../public/simulations/Circular%20Wave%20Interference%20Visualization.html) | 193.2 kB | Fig. 1 · Wave Interference: the simulation, its data panel, walkthrough and lecture note. | [fig01-wave-sources.md](simulations/fig01-wave-sources.md) |
-| [`public/simulations/Double Pendulum.html`](../public/simulations/Double%20Pendulum.html) | 128.9 kB | Fig. 2 · Double Pendulum: the simulation, its data panel, walkthrough and lecture note. | [fig02-double-pendulum.md](simulations/fig02-double-pendulum.md) |
-| [`public/simulations/Interactive Double-Slit Experiment Visualization.html`](../public/simulations/Interactive%20Double-Slit%20Experiment%20Visualization.html) | 173.9 kB | Fig. 3 · Double-Slit Interference: the simulation, its data panel, walkthrough and lecture note. | [fig03-double-slit.md](simulations/fig03-double-slit.md) |
-| [`public/simulations/Transverse and longitudinal waves.html`](../public/simulations/Transverse%20and%20longitudinal%20waves.html) | 202.1 kB | Fig. 4 · Transverse & Longitudinal: the simulation, its data panel, walkthrough and lecture note. | [fig04-transverse-longitudinal.md](simulations/fig04-transverse-longitudinal.md) |
-| [`public/simulations/draw-decompose.html`](../public/simulations/draw-decompose.html) | 216.3 kB | Fig. 8 · Draw & Decompose: the simulation, its data panel, walkthrough and lecture note. | [fig08-draw-decompose.md](simulations/fig08-draw-decompose.md) |
-| [`public/simulations/driven-oscillator.html`](../public/simulations/driven-oscillator.html) | 183.3 kB | Fig. 9 · Driven Oscillator: the simulation, its data panel, walkthrough and lecture note. | [fig09-driven-oscillator.md](simulations/fig09-driven-oscillator.md) |
-| [`public/simulations/phasor-sums.html`](../public/simulations/phasor-sums.html) | 262.8 kB | Fig. 7 · Phasor Sums: the simulation, its data panel, walkthrough and lecture note. | [fig07-phasor-sums.md](simulations/fig07-phasor-sums.md) |
-| [`public/simulations/water-wave.html`](../public/simulations/water-wave.html) | 163.6 kB | Fig. 5 · Circular Water Waves: the simulation, its data panel, walkthrough and lecture note. | [fig05-water-wave.md](simulations/fig05-water-wave.md) |
-| [`public/simulations/wave-interference.html`](../public/simulations/wave-interference.html) | 170.5 kB | Fig. 6 · Wave Interference Simulator: the simulation, its data panel, walkthrough and lecture note. | [fig06-wave-bench.md](simulations/fig06-wave-bench.md) |
-| [`public/simulations/wind-turbine.html`](../public/simulations/wind-turbine.html) | 184.7 kB | Fig. 10 · Wind Turbine Control: the simulation, its data panel, walkthrough and lecture note. | [fig10-wind-turbine.md](simulations/fig10-wind-turbine.md) |
+| [`public/simulations/Circular Wave Interference Visualization.html`](../public/simulations/Circular%20Wave%20Interference%20Visualization.html) | 194.4 kB | Fig. 1 · Wave Interference: the simulation, its data panel, walkthrough and lecture note. | [fig01-wave-sources.md](simulations/fig01-wave-sources.md) |
+| [`public/simulations/Double Pendulum.html`](../public/simulations/Double%20Pendulum.html) | 130.0 kB | Fig. 2 · Double Pendulum: the simulation, its data panel, walkthrough and lecture note. | [fig02-double-pendulum.md](simulations/fig02-double-pendulum.md) |
+| [`public/simulations/Interactive Double-Slit Experiment Visualization.html`](../public/simulations/Interactive%20Double-Slit%20Experiment%20Visualization.html) | 175.2 kB | Fig. 3 · Double-Slit Interference: the simulation, its data panel, walkthrough and lecture note. | [fig03-double-slit.md](simulations/fig03-double-slit.md) |
+| [`public/simulations/Transverse and longitudinal waves.html`](../public/simulations/Transverse%20and%20longitudinal%20waves.html) | 203.3 kB | Fig. 4 · Transverse & Longitudinal: the simulation, its data panel, walkthrough and lecture note. | [fig04-transverse-longitudinal.md](simulations/fig04-transverse-longitudinal.md) |
+| [`public/simulations/draw-decompose.html`](../public/simulations/draw-decompose.html) | 217.5 kB | Fig. 8 · Draw & Decompose: the simulation, its data panel, walkthrough and lecture note. | [fig08-draw-decompose.md](simulations/fig08-draw-decompose.md) |
+| [`public/simulations/driven-oscillator.html`](../public/simulations/driven-oscillator.html) | 184.4 kB | Fig. 9 · Driven Oscillator: the simulation, its data panel, walkthrough and lecture note. | [fig09-driven-oscillator.md](simulations/fig09-driven-oscillator.md) |
+| [`public/simulations/phasor-sums.html`](../public/simulations/phasor-sums.html) | 264.0 kB | Fig. 7 · Phasor Sums: the simulation, its data panel, walkthrough and lecture note. | [fig07-phasor-sums.md](simulations/fig07-phasor-sums.md) |
+| [`public/simulations/water-wave.html`](../public/simulations/water-wave.html) | 164.7 kB | Fig. 5 · Circular Water Waves: the simulation, its data panel, walkthrough and lecture note. | [fig05-water-wave.md](simulations/fig05-water-wave.md) |
+| [`public/simulations/wave-interference.html`](../public/simulations/wave-interference.html) | 171.6 kB | Fig. 6 · Wave Interference Simulator: the simulation, its data panel, walkthrough and lecture note. | [fig06-wave-bench.md](simulations/fig06-wave-bench.md) |
+| [`public/simulations/wind-turbine.html`](../public/simulations/wind-turbine.html) | 185.9 kB | Fig. 10 · Wind Turbine Control: the simulation, its data panel, walkthrough and lecture note. | [fig10-wind-turbine.md](simulations/fig10-wind-turbine.md) |
 
 ## Walkthroughs
 
 | File | Size | What it is | Explained in |
 |---|---|---|---|
+| [`public/scripts/walk/ar/bench.js`](../public/scripts/walk/ar/bench.js) | 40.4 kB | Arabic walkthrough bench, generated from the English one; do not edit. | [i18n.md](i18n.md) |
+| [`public/scripts/walk/ar/circles.js`](../public/scripts/walk/ar/circles.js) | 23.4 kB | Arabic walkthrough circles, generated from the English one; do not edit. | [i18n.md](i18n.md) |
+| [`public/scripts/walk/ar/dft.js`](../public/scripts/walk/ar/dft.js) | 30.9 kB | Arabic walkthrough dft, generated from the English one; do not edit. | [i18n.md](i18n.md) |
+| [`public/scripts/walk/ar/driven.js`](../public/scripts/walk/ar/driven.js) | 40.7 kB | Arabic walkthrough driven, generated from the English one; do not edit. | [i18n.md](i18n.md) |
+| [`public/scripts/walk/ar/pendulum.js`](../public/scripts/walk/ar/pendulum.js) | 38.0 kB | Arabic walkthrough pendulum, generated from the English one; do not edit. | [i18n.md](i18n.md) |
+| [`public/scripts/walk/ar/phasors.js`](../public/scripts/walk/ar/phasors.js) | 41.9 kB | Arabic walkthrough phasors, generated from the English one; do not edit. | [i18n.md](i18n.md) |
+| [`public/scripts/walk/ar/slit.js`](../public/scripts/walk/ar/slit.js) | 29.8 kB | Arabic walkthrough slit, generated from the English one; do not edit. | [i18n.md](i18n.md) |
+| [`public/scripts/walk/ar/tl.js`](../public/scripts/walk/ar/tl.js) | 32.2 kB | Arabic walkthrough tl, generated from the English one; do not edit. | [i18n.md](i18n.md) |
+| [`public/scripts/walk/ar/turbine.js`](../public/scripts/walk/ar/turbine.js) | 42.7 kB | Arabic walkthrough turbine, generated from the English one; do not edit. | [i18n.md](i18n.md) |
+| [`public/scripts/walk/ar/water.js`](../public/scripts/walk/ar/water.js) | 28.6 kB | Arabic walkthrough water, generated from the English one; do not edit. | [i18n.md](i18n.md) |
 | [`public/scripts/walk/bench.js`](../public/scripts/walk/bench.js) | 31.9 kB | "From symbols to code" for Fig. 6 · Wave Interference Simulator. | [walk.md](scripts/walk.md) |
 | [`public/scripts/walk/circles.js`](../public/scripts/walk/circles.js) | 18.6 kB | "From symbols to code" for Fig. 1 · Wave Interference. | [walk.md](scripts/walk.md) |
+| [`public/scripts/walk/de/bench.js`](../public/scripts/walk/de/bench.js) | 34.4 kB | German walkthrough bench, generated from the English one; do not edit. | [i18n.md](i18n.md) |
+| [`public/scripts/walk/de/circles.js`](../public/scripts/walk/de/circles.js) | 19.5 kB | German walkthrough circles, generated from the English one; do not edit. | [i18n.md](i18n.md) |
+| [`public/scripts/walk/de/dft.js`](../public/scripts/walk/de/dft.js) | 26.3 kB | German walkthrough dft, generated from the English one; do not edit. | [i18n.md](i18n.md) |
+| [`public/scripts/walk/de/driven.js`](../public/scripts/walk/de/driven.js) | 34.7 kB | German walkthrough driven, generated from the English one; do not edit. | [i18n.md](i18n.md) |
+| [`public/scripts/walk/de/pendulum.js`](../public/scripts/walk/de/pendulum.js) | 32.1 kB | German walkthrough pendulum, generated from the English one; do not edit. | [i18n.md](i18n.md) |
+| [`public/scripts/walk/de/phasors.js`](../public/scripts/walk/de/phasors.js) | 35.6 kB | German walkthrough phasors, generated from the English one; do not edit. | [i18n.md](i18n.md) |
+| [`public/scripts/walk/de/slit.js`](../public/scripts/walk/de/slit.js) | 24.8 kB | German walkthrough slit, generated from the English one; do not edit. | [i18n.md](i18n.md) |
+| [`public/scripts/walk/de/tl.js`](../public/scripts/walk/de/tl.js) | 27.9 kB | German walkthrough tl, generated from the English one; do not edit. | [i18n.md](i18n.md) |
+| [`public/scripts/walk/de/turbine.js`](../public/scripts/walk/de/turbine.js) | 36.4 kB | German walkthrough turbine, generated from the English one; do not edit. | [i18n.md](i18n.md) |
+| [`public/scripts/walk/de/water.js`](../public/scripts/walk/de/water.js) | 24.5 kB | German walkthrough water, generated from the English one; do not edit. | [i18n.md](i18n.md) |
 | [`public/scripts/walk/dft.js`](../public/scripts/walk/dft.js) | 24.4 kB | "From symbols to code" for Fig. 8 · Draw & Decompose. | [walk.md](scripts/walk.md) |
 | [`public/scripts/walk/driven.js`](../public/scripts/walk/driven.js) | 33.0 kB | "From symbols to code" for Fig. 9 · Driven Oscillator. | [walk.md](scripts/walk.md) |
 | [`public/scripts/walk/pendulum.js`](../public/scripts/walk/pendulum.js) | 30.2 kB | "From symbols to code" for Fig. 2 · Double Pendulum. | [walk.md](scripts/walk.md) |
@@ -93,22 +155,33 @@ to confirm that every file is described. Sizes are those of the files when the l
 | File | Size | What it is | Explained in |
 |---|---|---|---|
 | [`public/scripts/catalog.js`](../public/scripts/catalog.js) | 14.2 kB | The registry of simulations (SIMULATIONS, SIM_FIELDS, SIM_TOOLS) that the catalog page draws. | [catalog.md](scripts/catalog.md) |
-| [`public/scripts/datalog.js`](../public/scripts/datalog.js) | 77.7 kB | The data panel: variables, Read values, Check, Record one round, Save (.npz + CSV). | [datalog.md](scripts/datalog.md) |
+| [`public/scripts/datalog.js`](../public/scripts/datalog.js) | 78.3 kB | The data panel: variables, Read values, Check, Record one round, Save (.npz + CSV). | [datalog.md](scripts/datalog.md) |
 | [`public/scripts/dataset.js`](../public/scripts/dataset.js) | 8.6 kB | Sim.dataset(): the one named data store each simulation writes its numbers into. | [dataset.md](scripts/dataset.md) |
-| [`public/scripts/fold.js`](../public/scripts/fold.js) | 24.0 kB | Fold-out sections on every page: pinned header bands, remembered state, Expand/Collapse all. | [fold.md](scripts/fold.md) |
-| [`public/scripts/sim.js`](../public/scripts/sim.js) | 27.2 kB | Shared helpers of the simulation pages: KaTeX typesetting of the notes, the walkthrough engine. | [sim.md](scripts/sim.md) |
+| [`public/scripts/flip.js`](../public/scripts/flip.js) | 1.3 kB | Turns the page over on a change of language (cross-document view transition), and only then. | [i18n.md](i18n.md) |
+| [`public/scripts/fold.js`](../public/scripts/fold.js) | 24.5 kB | Fold-out sections on every page: pinned header bands, remembered state, Expand/Collapse all. | [fold.md](scripts/fold.md) |
+| [`public/scripts/i18n/strings-ar.js`](../public/scripts/i18n/strings-ar.js) | 125.8 kB | The Arabic string table the scripts read through T(), generated; do not edit. | [i18n.md](i18n.md) |
+| [`public/scripts/i18n/strings-de.js`](../public/scripts/i18n/strings-de.js) | 107.8 kB | The German string table the scripts read through T(), generated; do not edit. | [i18n.md](i18n.md) |
+| [`public/scripts/sim.js`](../public/scripts/sim.js) | 27.6 kB | Shared helpers of the simulation pages: KaTeX typesetting of the notes, the walkthrough engine. | [sim.md](scripts/sim.md) |
 
 ## Stylesheets
 
 | File | Size | What it is | Explained in |
 |---|---|---|---|
 | [`public/styles/catalog.css`](../public/styles/catalog.css) | 11.5 kB | The catalog entries (paper abstracts) on the simulations page. | [styles.md](styles.md) |
+| [`public/styles/catalog.rtl.css`](../public/styles/catalog.rtl.css) | 11.7 kB | catalog.css with left and right exchanged, for the Arabic pages; generated with rtlcss, do not edit. | [styles.md](styles.md) |
 | [`public/styles/data.css`](../public/styles/data.css) | 31.1 kB | The data panel and the Read values strip. | [styles.md](styles.md) |
+| [`public/styles/data.rtl.css`](../public/styles/data.rtl.css) | 31.3 kB | data.css with left and right exchanged, for the Arabic pages; generated with rtlcss, do not edit. | [styles.md](styles.md) |
 | [`public/styles/fold.css`](../public/styles/fold.css) | 10.6 kB | The fold-out sections: cards, header bands, toggles, Expand/Collapse all. | [styles.md](styles.md) |
+| [`public/styles/fold.rtl.css`](../public/styles/fold.rtl.css) | 10.8 kB | fold.css with left and right exchanged, for the Arabic pages; generated with rtlcss, do not edit. | [styles.md](styles.md) |
+| [`public/styles/i18n.css`](../public/styles/i18n.css) | 5.2 kB | Language switch, Arabic fonts and the few right-to-left rules of the translated pages. | [styles.md](styles.md) |
 | [`public/styles/paper.css`](../public/styles/paper.css) | 8.8 kB | Lecture notes set like LaTeX: Latin Modern, numbered equations, figures, abstract box. | [styles.md](styles.md) |
+| [`public/styles/paper.rtl.css`](../public/styles/paper.rtl.css) | 9.0 kB | paper.css with left and right exchanged, for the Arabic pages; generated with rtlcss, do not edit. | [styles.md](styles.md) |
 | [`public/styles/portfolio.css`](../public/styles/portfolio.css) | 6.1 kB | The project cards and figure plates of the Portfolios page. | [styles.md](styles.md) |
+| [`public/styles/portfolio.rtl.css`](../public/styles/portfolio.rtl.css) | 6.3 kB | portfolio.css with left and right exchanged, for the Arabic pages; generated with rtlcss, do not edit. | [styles.md](styles.md) |
 | [`public/styles/sim.css`](../public/styles/sim.css) | 18.4 kB | Design of the simulation pages: stage, controls, readouts, walkthrough; imports paper.css and KaTeX. | [styles.md](styles.md) |
+| [`public/styles/sim.rtl.css`](../public/styles/sim.rtl.css) | 18.5 kB | sim.css with left and right exchanged, for the Arabic pages; generated with rtlcss, do not edit. | [styles.md](styles.md) |
 | [`public/styles/site.css`](../public/styles/site.css) | 17.0 kB | Design of the home, catalog and Portfolios pages: tokens, top bar, sections, cards. | [styles.md](styles.md) |
+| [`public/styles/site.rtl.css`](../public/styles/site.rtl.css) | 17.2 kB | site.css with left and right exchanged, for the Arabic pages; generated with rtlcss, do not edit. | [styles.md](styles.md) |
 
 ## KaTeX
 
@@ -264,81 +337,13 @@ to confirm that every file is described. Sizes are those of the files when the l
 | [`public/portfolios/droplet-collection/fig/ecoll_map.svg`](../public/portfolios/droplet-collection/fig/ecoll_map.svg) | 75.7 kB | A vector figure of the project. | [portfolios.md](portfolios.md) |
 | [`public/portfolios/droplet-collection/fig/fallspeed_gk.svg`](../public/portfolios/droplet-collection/fig/fallspeed_gk.svg) | 57.1 kB | A vector figure of the project. | [portfolios.md](portfolios.md) |
 | [`public/portfolios/droplet-collection/fig/golovin.svg`](../public/portfolios/droplet-collection/fig/golovin.svg) | 56.2 kB | A vector figure of the project. | [portfolios.md](portfolios.md) |
+| [`public/portfolios/droplet-collection/fig/plate-efficiency.svg`](../public/portfolios/droplet-collection/fig/plate-efficiency.svg) | 8.9 kB | Plate of the Portfolios page article (efficiency), written by the Droplet Collection build. | [portfolios.md](portfolios.md) |
+| [`public/portfolios/droplet-collection/fig/plate-fallspeed.svg`](../public/portfolios/droplet-collection/fig/plate-fallspeed.svg) | 9.4 kB | Plate of the Portfolios page article (fallspeed), written by the Droplet Collection build. | [portfolios.md](portfolios.md) |
+| [`public/portfolios/droplet-collection/fig/plate-first.svg`](../public/portfolios/droplet-collection/fig/plate-first.svg) | 40.9 kB | Plate of the Portfolios page article (first), written by the Droplet Collection build. | [portfolios.md](portfolios.md) |
+| [`public/portfolios/droplet-collection/fig/plate-warm.svg`](../public/portfolios/droplet-collection/fig/plate-warm.svg) | 24.3 kB | Plate of the Portfolios page article (warm), written by the Droplet Collection build. | [portfolios.md](portfolios.md) |
 | [`public/portfolios/droplet-collection/fig/w2_rain.svg`](../public/portfolios/droplet-collection/fig/w2_rain.svg) | 45.0 kB | A vector figure of the project. | [portfolios.md](portfolios.md) |
 | [`public/portfolios/droplet-collection/fig/w2_spectra.svg`](../public/portfolios/droplet-collection/fig/w2_spectra.svg) | 74.0 kB | A vector figure of the project. | [portfolios.md](portfolios.md) |
-| [`public/portfolios/droplet-collection/index.html`](../public/portfolios/droplet-collection/index.html) | 1.3 kB | Entry page of the project copy: module script and stylesheet loader. | [portfolios.md](portfolios.md) |
-
-<details><summary>59 files: A KaTeX font inside the project build.</summary>
-
-| File | Size | What it is | Explained in |
-|---|---|---|---|
-| [`public/portfolios/droplet-collection/static/KaTeX_AMS-Regular-BQhdFMY1.woff2`](../public/portfolios/droplet-collection/static/KaTeX_AMS-Regular-BQhdFMY1.woff2) | 28.1 kB | A KaTeX font inside the project build. | [portfolios.md](portfolios.md) |
-| [`public/portfolios/droplet-collection/static/KaTeX_AMS-Regular-DMm9YOAa.woff`](../public/portfolios/droplet-collection/static/KaTeX_AMS-Regular-DMm9YOAa.woff) | 33.5 kB | A KaTeX font inside the project build. | [portfolios.md](portfolios.md) |
-| [`public/portfolios/droplet-collection/static/KaTeX_AMS-Regular-DRggAlZN.ttf`](../public/portfolios/droplet-collection/static/KaTeX_AMS-Regular-DRggAlZN.ttf) | 63.6 kB | A KaTeX font inside the project build. | [portfolios.md](portfolios.md) |
-| [`public/portfolios/droplet-collection/static/KaTeX_Caligraphic-Bold-ATXxdsX0.ttf`](../public/portfolios/droplet-collection/static/KaTeX_Caligraphic-Bold-ATXxdsX0.ttf) | 12.4 kB | A KaTeX font inside the project build. | [portfolios.md](portfolios.md) |
-| [`public/portfolios/droplet-collection/static/KaTeX_Caligraphic-Bold-BEiXGLvX.woff`](../public/portfolios/droplet-collection/static/KaTeX_Caligraphic-Bold-BEiXGLvX.woff) | 7.7 kB | A KaTeX font inside the project build. | [portfolios.md](portfolios.md) |
-| [`public/portfolios/droplet-collection/static/KaTeX_Caligraphic-Bold-Dq_IR9rO.woff2`](../public/portfolios/droplet-collection/static/KaTeX_Caligraphic-Bold-Dq_IR9rO.woff2) | 6.9 kB | A KaTeX font inside the project build. | [portfolios.md](portfolios.md) |
-| [`public/portfolios/droplet-collection/static/KaTeX_Caligraphic-Regular-CTRA-rTL.woff`](../public/portfolios/droplet-collection/static/KaTeX_Caligraphic-Regular-CTRA-rTL.woff) | 7.7 kB | A KaTeX font inside the project build. | [portfolios.md](portfolios.md) |
-| [`public/portfolios/droplet-collection/static/KaTeX_Caligraphic-Regular-Di6jR-x-.woff2`](../public/portfolios/droplet-collection/static/KaTeX_Caligraphic-Regular-Di6jR-x-.woff2) | 6.9 kB | A KaTeX font inside the project build. | [portfolios.md](portfolios.md) |
-| [`public/portfolios/droplet-collection/static/KaTeX_Caligraphic-Regular-wX97UBjC.ttf`](../public/portfolios/droplet-collection/static/KaTeX_Caligraphic-Regular-wX97UBjC.ttf) | 12.3 kB | A KaTeX font inside the project build. | [portfolios.md](portfolios.md) |
-| [`public/portfolios/droplet-collection/static/KaTeX_Fraktur-Bold-BdnERNNW.ttf`](../public/portfolios/droplet-collection/static/KaTeX_Fraktur-Bold-BdnERNNW.ttf) | 19.6 kB | A KaTeX font inside the project build. | [portfolios.md](portfolios.md) |
-| [`public/portfolios/droplet-collection/static/KaTeX_Fraktur-Bold-BsDP51OF.woff`](../public/portfolios/droplet-collection/static/KaTeX_Fraktur-Bold-BsDP51OF.woff) | 13.3 kB | A KaTeX font inside the project build. | [portfolios.md](portfolios.md) |
-| [`public/portfolios/droplet-collection/static/KaTeX_Fraktur-Bold-CL6g_b3V.woff2`](../public/portfolios/droplet-collection/static/KaTeX_Fraktur-Bold-CL6g_b3V.woff2) | 11.3 kB | A KaTeX font inside the project build. | [portfolios.md](portfolios.md) |
-| [`public/portfolios/droplet-collection/static/KaTeX_Fraktur-Regular-CB_wures.ttf`](../public/portfolios/droplet-collection/static/KaTeX_Fraktur-Regular-CB_wures.ttf) | 19.6 kB | A KaTeX font inside the project build. | [portfolios.md](portfolios.md) |
-| [`public/portfolios/droplet-collection/static/KaTeX_Fraktur-Regular-CTYiF6lA.woff2`](../public/portfolios/droplet-collection/static/KaTeX_Fraktur-Regular-CTYiF6lA.woff2) | 11.3 kB | A KaTeX font inside the project build. | [portfolios.md](portfolios.md) |
-| [`public/portfolios/droplet-collection/static/KaTeX_Fraktur-Regular-Dxdc4cR9.woff`](../public/portfolios/droplet-collection/static/KaTeX_Fraktur-Regular-Dxdc4cR9.woff) | 13.2 kB | A KaTeX font inside the project build. | [portfolios.md](portfolios.md) |
-| [`public/portfolios/droplet-collection/static/KaTeX_Main-Bold-Cx986IdX.woff2`](../public/portfolios/droplet-collection/static/KaTeX_Main-Bold-Cx986IdX.woff2) | 25.3 kB | A KaTeX font inside the project build. | [portfolios.md](portfolios.md) |
-| [`public/portfolios/droplet-collection/static/KaTeX_Main-Bold-Jm3AIy58.woff`](../public/portfolios/droplet-collection/static/KaTeX_Main-Bold-Jm3AIy58.woff) | 29.9 kB | A KaTeX font inside the project build. | [portfolios.md](portfolios.md) |
-| [`public/portfolios/droplet-collection/static/KaTeX_Main-Bold-waoOVXN0.ttf`](../public/portfolios/droplet-collection/static/KaTeX_Main-Bold-waoOVXN0.ttf) | 51.3 kB | A KaTeX font inside the project build. | [portfolios.md](portfolios.md) |
-| [`public/portfolios/droplet-collection/static/KaTeX_Main-BoldItalic-DxDJ3AOS.woff2`](../public/portfolios/droplet-collection/static/KaTeX_Main-BoldItalic-DxDJ3AOS.woff2) | 16.8 kB | A KaTeX font inside the project build. | [portfolios.md](portfolios.md) |
-| [`public/portfolios/droplet-collection/static/KaTeX_Main-BoldItalic-DzxPMmG6.ttf`](../public/portfolios/droplet-collection/static/KaTeX_Main-BoldItalic-DzxPMmG6.ttf) | 33.0 kB | A KaTeX font inside the project build. | [portfolios.md](portfolios.md) |
-| [`public/portfolios/droplet-collection/static/KaTeX_Main-BoldItalic-SpSLRI95.woff`](../public/portfolios/droplet-collection/static/KaTeX_Main-BoldItalic-SpSLRI95.woff) | 19.4 kB | A KaTeX font inside the project build. | [portfolios.md](portfolios.md) |
-| [`public/portfolios/droplet-collection/static/KaTeX_Main-Italic-3WenGoN9.ttf`](../public/portfolios/droplet-collection/static/KaTeX_Main-Italic-3WenGoN9.ttf) | 33.6 kB | A KaTeX font inside the project build. | [portfolios.md](portfolios.md) |
-| [`public/portfolios/droplet-collection/static/KaTeX_Main-Italic-BMLOBm91.woff`](../public/portfolios/droplet-collection/static/KaTeX_Main-Italic-BMLOBm91.woff) | 19.7 kB | A KaTeX font inside the project build. | [portfolios.md](portfolios.md) |
-| [`public/portfolios/droplet-collection/static/KaTeX_Main-Italic-NWA7e6Wa.woff2`](../public/portfolios/droplet-collection/static/KaTeX_Main-Italic-NWA7e6Wa.woff2) | 17.0 kB | A KaTeX font inside the project build. | [portfolios.md](portfolios.md) |
-| [`public/portfolios/droplet-collection/static/KaTeX_Main-Regular-B22Nviop.woff2`](../public/portfolios/droplet-collection/static/KaTeX_Main-Regular-B22Nviop.woff2) | 26.3 kB | A KaTeX font inside the project build. | [portfolios.md](portfolios.md) |
-| [`public/portfolios/droplet-collection/static/KaTeX_Main-Regular-Dr94JaBh.woff`](../public/portfolios/droplet-collection/static/KaTeX_Main-Regular-Dr94JaBh.woff) | 30.8 kB | A KaTeX font inside the project build. | [portfolios.md](portfolios.md) |
-| [`public/portfolios/droplet-collection/static/KaTeX_Main-Regular-ypZvNtVU.ttf`](../public/portfolios/droplet-collection/static/KaTeX_Main-Regular-ypZvNtVU.ttf) | 53.6 kB | A KaTeX font inside the project build. | [portfolios.md](portfolios.md) |
-| [`public/portfolios/droplet-collection/static/KaTeX_Math-BoldItalic-B3XSjfu4.ttf`](../public/portfolios/droplet-collection/static/KaTeX_Math-BoldItalic-B3XSjfu4.ttf) | 31.2 kB | A KaTeX font inside the project build. | [portfolios.md](portfolios.md) |
-| [`public/portfolios/droplet-collection/static/KaTeX_Math-BoldItalic-CZnvNsCZ.woff2`](../public/portfolios/droplet-collection/static/KaTeX_Math-BoldItalic-CZnvNsCZ.woff2) | 16.4 kB | A KaTeX font inside the project build. | [portfolios.md](portfolios.md) |
-| [`public/portfolios/droplet-collection/static/KaTeX_Math-BoldItalic-iY-2wyZ7.woff`](../public/portfolios/droplet-collection/static/KaTeX_Math-BoldItalic-iY-2wyZ7.woff) | 18.7 kB | A KaTeX font inside the project build. | [portfolios.md](portfolios.md) |
-| [`public/portfolios/droplet-collection/static/KaTeX_Math-Italic-DA0__PXp.woff`](../public/portfolios/droplet-collection/static/KaTeX_Math-Italic-DA0__PXp.woff) | 18.7 kB | A KaTeX font inside the project build. | [portfolios.md](portfolios.md) |
-| [`public/portfolios/droplet-collection/static/KaTeX_Math-Italic-flOr_0UB.ttf`](../public/portfolios/droplet-collection/static/KaTeX_Math-Italic-flOr_0UB.ttf) | 31.3 kB | A KaTeX font inside the project build. | [portfolios.md](portfolios.md) |
-| [`public/portfolios/droplet-collection/static/KaTeX_Math-Italic-t53AETM-.woff2`](../public/portfolios/droplet-collection/static/KaTeX_Math-Italic-t53AETM-.woff2) | 16.4 kB | A KaTeX font inside the project build. | [portfolios.md](portfolios.md) |
-| [`public/portfolios/droplet-collection/static/KaTeX_SansSerif-Bold-CFMepnvq.ttf`](../public/portfolios/droplet-collection/static/KaTeX_SansSerif-Bold-CFMepnvq.ttf) | 24.5 kB | A KaTeX font inside the project build. | [portfolios.md](portfolios.md) |
-| [`public/portfolios/droplet-collection/static/KaTeX_SansSerif-Bold-D1sUS0GD.woff2`](../public/portfolios/droplet-collection/static/KaTeX_SansSerif-Bold-D1sUS0GD.woff2) | 12.2 kB | A KaTeX font inside the project build. | [portfolios.md](portfolios.md) |
-| [`public/portfolios/droplet-collection/static/KaTeX_SansSerif-Bold-DbIhKOiC.woff`](../public/portfolios/droplet-collection/static/KaTeX_SansSerif-Bold-DbIhKOiC.woff) | 14.4 kB | A KaTeX font inside the project build. | [portfolios.md](portfolios.md) |
-| [`public/portfolios/droplet-collection/static/KaTeX_SansSerif-Italic-C3H0VqGB.woff2`](../public/portfolios/droplet-collection/static/KaTeX_SansSerif-Italic-C3H0VqGB.woff2) | 12.0 kB | A KaTeX font inside the project build. | [portfolios.md](portfolios.md) |
-| [`public/portfolios/droplet-collection/static/KaTeX_SansSerif-Italic-DN2j7dab.woff`](../public/portfolios/droplet-collection/static/KaTeX_SansSerif-Italic-DN2j7dab.woff) | 14.1 kB | A KaTeX font inside the project build. | [portfolios.md](portfolios.md) |
-| [`public/portfolios/droplet-collection/static/KaTeX_SansSerif-Italic-YYjJ1zSn.ttf`](../public/portfolios/droplet-collection/static/KaTeX_SansSerif-Italic-YYjJ1zSn.ttf) | 22.4 kB | A KaTeX font inside the project build. | [portfolios.md](portfolios.md) |
-| [`public/portfolios/droplet-collection/static/KaTeX_SansSerif-Regular-BNo7hRIc.ttf`](../public/portfolios/droplet-collection/static/KaTeX_SansSerif-Regular-BNo7hRIc.ttf) | 19.4 kB | A KaTeX font inside the project build. | [portfolios.md](portfolios.md) |
-| [`public/portfolios/droplet-collection/static/KaTeX_SansSerif-Regular-CS6fqUqJ.woff`](../public/portfolios/droplet-collection/static/KaTeX_SansSerif-Regular-CS6fqUqJ.woff) | 12.3 kB | A KaTeX font inside the project build. | [portfolios.md](portfolios.md) |
-| [`public/portfolios/droplet-collection/static/KaTeX_SansSerif-Regular-DDBCnlJ7.woff2`](../public/portfolios/droplet-collection/static/KaTeX_SansSerif-Regular-DDBCnlJ7.woff2) | 10.3 kB | A KaTeX font inside the project build. | [portfolios.md](portfolios.md) |
-| [`public/portfolios/droplet-collection/static/KaTeX_Script-Regular-C5JkGWo-.ttf`](../public/portfolios/droplet-collection/static/KaTeX_Script-Regular-C5JkGWo-.ttf) | 16.6 kB | A KaTeX font inside the project build. | [portfolios.md](portfolios.md) |
-| [`public/portfolios/droplet-collection/static/KaTeX_Script-Regular-D3wIWfF6.woff2`](../public/portfolios/droplet-collection/static/KaTeX_Script-Regular-D3wIWfF6.woff2) | 9.6 kB | A KaTeX font inside the project build. | [portfolios.md](portfolios.md) |
-| [`public/portfolios/droplet-collection/static/KaTeX_Script-Regular-D5yQViql.woff`](../public/portfolios/droplet-collection/static/KaTeX_Script-Regular-D5yQViql.woff) | 10.6 kB | A KaTeX font inside the project build. | [portfolios.md](portfolios.md) |
-| [`public/portfolios/droplet-collection/static/KaTeX_Size1-Regular-C195tn64.woff`](../public/portfolios/droplet-collection/static/KaTeX_Size1-Regular-C195tn64.woff) | 6.5 kB | A KaTeX font inside the project build. | [portfolios.md](portfolios.md) |
-| [`public/portfolios/droplet-collection/static/KaTeX_Size1-Regular-Dbsnue_I.ttf`](../public/portfolios/droplet-collection/static/KaTeX_Size1-Regular-Dbsnue_I.ttf) | 12.2 kB | A KaTeX font inside the project build. | [portfolios.md](portfolios.md) |
-| [`public/portfolios/droplet-collection/static/KaTeX_Size1-Regular-mCD8mA8B.woff2`](../public/portfolios/droplet-collection/static/KaTeX_Size1-Regular-mCD8mA8B.woff2) | 5.5 kB | A KaTeX font inside the project build. | [portfolios.md](portfolios.md) |
-| [`public/portfolios/droplet-collection/static/KaTeX_Size2-Regular-B7gKUWhC.ttf`](../public/portfolios/droplet-collection/static/KaTeX_Size2-Regular-B7gKUWhC.ttf) | 11.5 kB | A KaTeX font inside the project build. | [portfolios.md](portfolios.md) |
-| [`public/portfolios/droplet-collection/static/KaTeX_Size2-Regular-Dy4dx90m.woff2`](../public/portfolios/droplet-collection/static/KaTeX_Size2-Regular-Dy4dx90m.woff2) | 5.2 kB | A KaTeX font inside the project build. | [portfolios.md](portfolios.md) |
-| [`public/portfolios/droplet-collection/static/KaTeX_Size2-Regular-oD1tc_U0.woff`](../public/portfolios/droplet-collection/static/KaTeX_Size2-Regular-oD1tc_U0.woff) | 6.2 kB | A KaTeX font inside the project build. | [portfolios.md](portfolios.md) |
-| [`public/portfolios/droplet-collection/static/KaTeX_Size3-Regular-CTq5MqoE.woff`](../public/portfolios/droplet-collection/static/KaTeX_Size3-Regular-CTq5MqoE.woff) | 4.4 kB | A KaTeX font inside the project build. | [portfolios.md](portfolios.md) |
-| [`public/portfolios/droplet-collection/static/KaTeX_Size3-Regular-DgpXs0kz.ttf`](../public/portfolios/droplet-collection/static/KaTeX_Size3-Regular-DgpXs0kz.ttf) | 7.6 kB | A KaTeX font inside the project build. | [portfolios.md](portfolios.md) |
-| [`public/portfolios/droplet-collection/static/KaTeX_Size4-Regular-BF-4gkZK.woff`](../public/portfolios/droplet-collection/static/KaTeX_Size4-Regular-BF-4gkZK.woff) | 6.0 kB | A KaTeX font inside the project build. | [portfolios.md](portfolios.md) |
-| [`public/portfolios/droplet-collection/static/KaTeX_Size4-Regular-DWFBv043.ttf`](../public/portfolios/droplet-collection/static/KaTeX_Size4-Regular-DWFBv043.ttf) | 10.4 kB | A KaTeX font inside the project build. | [portfolios.md](portfolios.md) |
-| [`public/portfolios/droplet-collection/static/KaTeX_Size4-Regular-Dl5lxZxV.woff2`](../public/portfolios/droplet-collection/static/KaTeX_Size4-Regular-Dl5lxZxV.woff2) | 4.9 kB | A KaTeX font inside the project build. | [portfolios.md](portfolios.md) |
-| [`public/portfolios/droplet-collection/static/KaTeX_Typewriter-Regular-C0xS9mPB.woff`](../public/portfolios/droplet-collection/static/KaTeX_Typewriter-Regular-C0xS9mPB.woff) | 16.0 kB | A KaTeX font inside the project build. | [portfolios.md](portfolios.md) |
-| [`public/portfolios/droplet-collection/static/KaTeX_Typewriter-Regular-CO6r4hn1.woff2`](../public/portfolios/droplet-collection/static/KaTeX_Typewriter-Regular-CO6r4hn1.woff2) | 13.6 kB | A KaTeX font inside the project build. | [portfolios.md](portfolios.md) |
-| [`public/portfolios/droplet-collection/static/KaTeX_Typewriter-Regular-D3Ib7_Hf.ttf`](../public/portfolios/droplet-collection/static/KaTeX_Typewriter-Regular-D3Ib7_Hf.ttf) | 27.6 kB | A KaTeX font inside the project build. | [portfolios.md](portfolios.md) |
-
-</details>
-
-| File | Size | What it is | Explained in |
-|---|---|---|---|
-| [`public/portfolios/droplet-collection/static/index-CGriahzx.css`](../public/portfolios/droplet-collection/static/index-CGriahzx.css) | 60.6 kB | The project's stylesheet, built. | [portfolios.md](portfolios.md) |
-| [`public/portfolios/droplet-collection/static/index-DGIxitSc.js`](../public/portfolios/droplet-collection/static/index-DGIxitSc.js) | 841.3 kB | The whole project application, built and minified. | [portfolios.md](portfolios.md) |
-| [`public/portfolios/droplet-collection/static/worker-ClooJ8Gk.js`](../public/portfolios/droplet-collection/static/worker-ClooJ8Gk.js) | 130.6 kB | The project's Web Worker: its solver, off the main thread. | [portfolios.md](portfolios.md) |
+| [`public/portfolios/droplet-collection/index.html`](../public/portfolios/droplet-collection/index.html) | 984.4 kB | Entry page of the project copy: module script and stylesheet loader. | [portfolios.md](portfolios.md) |
 
 ## Project copy: Rotor Pendula
 
@@ -446,6 +451,8 @@ to confirm that every file is described. Sizes are those of the files when the l
 | File | Size | What it is | Explained in |
 |---|---|---|---|
 | [`public/portfolios/hydraulics/LICENSE-fonts.txt`](../public/portfolios/hydraulics/LICENSE-fonts.txt) | 8.5 kB | Licences of the fonts embedded in the study (OFL 1.1; MIT for KaTeX). | [portfolios.md](portfolios.md) |
+| [`public/portfolios/hydraulics/ar.html`](../public/portfolios/hydraulics/ar.html) | 5.26 MB | The Hydraulic Press Study in Arabic, generated by tools/i18n/hydraulics.py from the English source and i18n/ar/hydraulics*.json. | [i18n.md](i18n.md) |
+| [`public/portfolios/hydraulics/de.html`](../public/portfolios/hydraulics/de.html) | 5.21 MB | The Hydraulic Press Study in German, generated by tools/i18n/hydraulics.py from the English source and i18n/de/hydraulics*.json. | [i18n.md](i18n.md) |
 | [`public/portfolios/hydraulics/fig/01_press.webp`](../public/portfolios/hydraulics/fig/01_press.webp) | 30.4 kB | Plate 1 of the study on the Portfolios page, 600 px high. | [portfolios.md](portfolios.md) |
 | [`public/portfolios/hydraulics/fig/02_traces.webp`](../public/portfolios/hydraulics/fig/02_traces.webp) | 31.2 kB | Plate 2 of the study on the Portfolios page, 600 px high. | [portfolios.md](portfolios.md) |
 | [`public/portfolios/hydraulics/fig/03_loop.webp`](../public/portfolios/hydraulics/fig/03_loop.webp) | 36.8 kB | Plate 3 of the study on the Portfolios page, 600 px high. | [portfolios.md](portfolios.md) |
@@ -456,12 +463,13 @@ to confirm that every file is described. Sizes are those of the files when the l
 
 | File | Size | What it is | Explained in |
 |---|---|---|---|
-| [`public/portfolios/impact/ar.html`](../public/portfolios/impact/ar.html) | 135.8 kB | Iron, Cotton and the Head in Arabic, generated from portfolios-src/impact/ by build.py --site. | [portfolios.md](portfolios.md) |
+| [`public/portfolios/impact/ar.html`](../public/portfolios/impact/ar.html) | 135.9 kB | Iron, Cotton and the Head in Arabic, generated from portfolios-src/impact/ by build.py --site. | [portfolios.md](portfolios.md) |
+| [`public/portfolios/impact/de.html`](../public/portfolios/impact/de.html) | 128.6 kB | Iron, Cotton and the Head in German, generated from portfolios-src/impact/ by build.py --site. | [portfolios.md](portfolios.md) |
 | [`public/portfolios/impact/fig/01_impact.webp`](../public/portfolios/impact/fig/01_impact.webp) | 16.9 kB | Plate 1 of the study on the Portfolios page, a screenshot of its English page, 600 px high. | [portfolios.md](portfolios.md) |
 | [`public/portfolios/impact/fig/02_force.webp`](../public/portfolios/impact/fig/02_force.webp) | 19.5 kB | Plate 2 of the study on the Portfolios page, a screenshot of its English page, 600 px high. | [portfolios.md](portfolios.md) |
 | [`public/portfolios/impact/fig/03_energy.webp`](../public/portfolios/impact/fig/03_energy.webp) | 20.2 kB | Plate 3 of the study on the Portfolios page, a screenshot of its English page, 600 px high. | [portfolios.md](portfolios.md) |
 | [`public/portfolios/impact/fig/04_weight.webp`](../public/portfolios/impact/fig/04_weight.webp) | 18.2 kB | Plate 4 of the study on the Portfolios page, a screenshot of its English page, 600 px high. | [portfolios.md](portfolios.md) |
-| [`public/portfolios/impact/index.html`](../public/portfolios/impact/index.html) | 124.1 kB | Iron, Cotton and the Head in English, generated from portfolios-src/impact/ by build.py --site. | [portfolios.md](portfolios.md) |
+| [`public/portfolios/impact/index.html`](../public/portfolios/impact/index.html) | 124.2 kB | Iron, Cotton and the Head in English, generated from portfolios-src/impact/ by build.py --site. | [portfolios.md](portfolios.md) |
 
 ## Source of the Hydraulic Press Study (not served)
 
@@ -544,17 +552,17 @@ to confirm that every file is described. Sizes are those of the files when the l
 
 | File | Size | What it is | Explained in |
 |---|---|---|---|
-| [`portfolios-src/rotor-pendula/fonts/LICENSE-fonts.txt`](../portfolios-src/rotor-pendula/fonts/LICENSE-fonts.txt) | 8.5 kB | Font subsets and their @font-face rules, embedded by the build scripts. | [README.md](../portfolios-src/rotor-pendula/README.md) |
-| [`portfolios-src/rotor-pendula/fonts/fonts-embedded.css`](../portfolios-src/rotor-pendula/fonts/fonts-embedded.css) | 233.7 kB | Font subsets and their @font-face rules, embedded by the build scripts. | [README.md](../portfolios-src/rotor-pendula/README.md) |
-| [`portfolios-src/rotor-pendula/fonts/fonts-linked.css`](../portfolios-src/rotor-pendula/fonts/fonts-linked.css) | 3.2 kB | Font subsets and their @font-face rules, embedded by the build scripts. | [README.md](../portfolios-src/rotor-pendula/README.md) |
-| [`portfolios-src/rotor-pendula/fonts/ibm-plex-mono-400-normal-latin.woff2`](../portfolios-src/rotor-pendula/fonts/ibm-plex-mono-400-normal-latin.woff2) | 14.7 kB | Font subsets and their @font-face rules, embedded by the build scripts. | [README.md](../portfolios-src/rotor-pendula/README.md) |
-| [`portfolios-src/rotor-pendula/fonts/ibm-plex-mono-500-normal-latin.woff2`](../portfolios-src/rotor-pendula/fonts/ibm-plex-mono-500-normal-latin.woff2) | 14.9 kB | Font subsets and their @font-face rules, embedded by the build scripts. | [README.md](../portfolios-src/rotor-pendula/README.md) |
-| [`portfolios-src/rotor-pendula/fonts/ibm-plex-sans-400-600-normal-greek.woff2`](../portfolios-src/rotor-pendula/fonts/ibm-plex-sans-400-600-normal-greek.woff2) | 19.5 kB | Font subsets and their @font-face rules, embedded by the build scripts. | [README.md](../portfolios-src/rotor-pendula/README.md) |
-| [`portfolios-src/rotor-pendula/fonts/ibm-plex-sans-400-600-normal-latin.woff2`](../portfolios-src/rotor-pendula/fonts/ibm-plex-sans-400-600-normal-latin.woff2) | 45.7 kB | Font subsets and their @font-face rules, embedded by the build scripts. | [README.md](../portfolios-src/rotor-pendula/README.md) |
-| [`portfolios-src/rotor-pendula/fonts/ibm-plex-sans-400-italic-greek.woff2`](../portfolios-src/rotor-pendula/fonts/ibm-plex-sans-400-italic-greek.woff2) | 10.6 kB | Font subsets and their @font-face rules, embedded by the build scripts. | [README.md](../portfolios-src/rotor-pendula/README.md) |
-| [`portfolios-src/rotor-pendula/fonts/ibm-plex-sans-400-italic-latin.woff2`](../portfolios-src/rotor-pendula/fonts/ibm-plex-sans-400-italic-latin.woff2) | 24.4 kB | Font subsets and their @font-face rules, embedded by the build scripts. | [README.md](../portfolios-src/rotor-pendula/README.md) |
-| [`portfolios-src/rotor-pendula/fonts/instrument-serif-400-italic-latin.woff2`](../portfolios-src/rotor-pendula/fonts/instrument-serif-400-italic-latin.woff2) | 22.1 kB | Font subsets and their @font-face rules, embedded by the build scripts. | [README.md](../portfolios-src/rotor-pendula/README.md) |
-| [`portfolios-src/rotor-pendula/fonts/instrument-serif-400-normal-latin.woff2`](../portfolios-src/rotor-pendula/fonts/instrument-serif-400-normal-latin.woff2) | 21.0 kB | Font subsets and their @font-face rules, embedded by the build scripts. | [README.md](../portfolios-src/rotor-pendula/README.md) |
+| [`portfolios-src/rotor-pendula/fonts/LICENSE-fonts.txt`](../portfolios-src/rotor-pendula/fonts/LICENSE-fonts.txt) | 8.5 kB | Fonts of the Rotor Pendula notes build: LICENSE-fonts.txt. | [LICENSE-fonts.txt](../portfolios-src/rotor-pendula/fonts/LICENSE-fonts.txt) |
+| [`portfolios-src/rotor-pendula/fonts/fonts-embedded.css`](../portfolios-src/rotor-pendula/fonts/fonts-embedded.css) | 233.7 kB | Fonts of the Rotor Pendula notes build: fonts-embedded.css. | [fonts-embedded.css](../portfolios-src/rotor-pendula/fonts/fonts-embedded.css) |
+| [`portfolios-src/rotor-pendula/fonts/fonts-linked.css`](../portfolios-src/rotor-pendula/fonts/fonts-linked.css) | 3.2 kB | Fonts of the Rotor Pendula notes build: fonts-linked.css. | [fonts-linked.css](../portfolios-src/rotor-pendula/fonts/fonts-linked.css) |
+| [`portfolios-src/rotor-pendula/fonts/ibm-plex-mono-400-normal-latin.woff2`](../portfolios-src/rotor-pendula/fonts/ibm-plex-mono-400-normal-latin.woff2) | 14.7 kB | Self-hosted font for the Rotor Pendula notes build: ibm-plex-mono-400-normal-latin.woff2. | [ibm-plex-mono-400-normal-latin.woff2](../portfolios-src/rotor-pendula/fonts/ibm-plex-mono-400-normal-latin.woff2) |
+| [`portfolios-src/rotor-pendula/fonts/ibm-plex-mono-500-normal-latin.woff2`](../portfolios-src/rotor-pendula/fonts/ibm-plex-mono-500-normal-latin.woff2) | 14.9 kB | Self-hosted font for the Rotor Pendula notes build: ibm-plex-mono-500-normal-latin.woff2. | [ibm-plex-mono-500-normal-latin.woff2](../portfolios-src/rotor-pendula/fonts/ibm-plex-mono-500-normal-latin.woff2) |
+| [`portfolios-src/rotor-pendula/fonts/ibm-plex-sans-400-600-normal-greek.woff2`](../portfolios-src/rotor-pendula/fonts/ibm-plex-sans-400-600-normal-greek.woff2) | 19.5 kB | Self-hosted font for the Rotor Pendula notes build: ibm-plex-sans-400-600-normal-greek.woff2. | [ibm-plex-sans-400-600-normal-greek.woff2](../portfolios-src/rotor-pendula/fonts/ibm-plex-sans-400-600-normal-greek.woff2) |
+| [`portfolios-src/rotor-pendula/fonts/ibm-plex-sans-400-600-normal-latin.woff2`](../portfolios-src/rotor-pendula/fonts/ibm-plex-sans-400-600-normal-latin.woff2) | 45.7 kB | Self-hosted font for the Rotor Pendula notes build: ibm-plex-sans-400-600-normal-latin.woff2. | [ibm-plex-sans-400-600-normal-latin.woff2](../portfolios-src/rotor-pendula/fonts/ibm-plex-sans-400-600-normal-latin.woff2) |
+| [`portfolios-src/rotor-pendula/fonts/ibm-plex-sans-400-italic-greek.woff2`](../portfolios-src/rotor-pendula/fonts/ibm-plex-sans-400-italic-greek.woff2) | 10.6 kB | Self-hosted font for the Rotor Pendula notes build: ibm-plex-sans-400-italic-greek.woff2. | [ibm-plex-sans-400-italic-greek.woff2](../portfolios-src/rotor-pendula/fonts/ibm-plex-sans-400-italic-greek.woff2) |
+| [`portfolios-src/rotor-pendula/fonts/ibm-plex-sans-400-italic-latin.woff2`](../portfolios-src/rotor-pendula/fonts/ibm-plex-sans-400-italic-latin.woff2) | 24.4 kB | Self-hosted font for the Rotor Pendula notes build: ibm-plex-sans-400-italic-latin.woff2. | [ibm-plex-sans-400-italic-latin.woff2](../portfolios-src/rotor-pendula/fonts/ibm-plex-sans-400-italic-latin.woff2) |
+| [`portfolios-src/rotor-pendula/fonts/instrument-serif-400-italic-latin.woff2`](../portfolios-src/rotor-pendula/fonts/instrument-serif-400-italic-latin.woff2) | 22.1 kB | Self-hosted font for the Rotor Pendula notes build: instrument-serif-400-italic-latin.woff2. | [instrument-serif-400-italic-latin.woff2](../portfolios-src/rotor-pendula/fonts/instrument-serif-400-italic-latin.woff2) |
+| [`portfolios-src/rotor-pendula/fonts/instrument-serif-400-normal-latin.woff2`](../portfolios-src/rotor-pendula/fonts/instrument-serif-400-normal-latin.woff2) | 21.0 kB | Self-hosted font for the Rotor Pendula notes build: instrument-serif-400-normal-latin.woff2. | [instrument-serif-400-normal-latin.woff2](../portfolios-src/rotor-pendula/fonts/instrument-serif-400-normal-latin.woff2) |
 | [`portfolios-src/rotor-pendula/numbers.json`](../portfolios-src/rotor-pendula/numbers.json) | 18.5 kB | Every computed number and table of the notes, written by tools/make_numbers.py. | [README.md](../portfolios-src/rotor-pendula/README.md) |
 | [`portfolios-src/rotor-pendula/rotor_notes.html`](../portfolios-src/rotor-pendula/rotor_notes.html) | 1.25 MB | Pendula on a Turning Blade, the lecture notes (chapters 0-8); generated by tools/build_theory.py. | [README.md](../portfolios-src/rotor-pendula/README.md) |
 | [`portfolios-src/rotor-pendula/rotor_sim.html`](../portfolios-src/rotor-pendula/rotor_sim.html) | 649.8 kB | The simulation page: physics block, solve-then-playback, Read values, worked solutions. | [README.md](../portfolios-src/rotor-pendula/README.md) |
@@ -565,30 +573,30 @@ to confirm that every file is described. Sizes are those of the files when the l
 | [`portfolios-src/rotor-pendula/theory/03_rods.src.html`](../portfolios-src/rotor-pendula/theory/03_rods.src.html) | 11.2 kB | Source of the notes, part 03 (rods): HTML with LaTeX maths and number placeholders. | [README.md](../portfolios-src/rotor-pendula/README.md) |
 | [`portfolios-src/rotor-pendula/theory/04_shaking.src.html`](../portfolios-src/rotor-pendula/theory/04_shaking.src.html) | 19.4 kB | Source of the notes, part 04 (shaking): HTML with LaTeX maths and number placeholders. | [README.md](../portfolios-src/rotor-pendula/README.md) |
 | [`portfolios-src/rotor-pendula/theory/05_watts.src.html`](../portfolios-src/rotor-pendula/theory/05_watts.src.html) | 24.1 kB | Source of the notes, part 05 (watts): HTML with LaTeX maths and number placeholders. | [README.md](../portfolios-src/rotor-pendula/README.md) |
-| [`portfolios-src/rotor-pendula/tools/build_combined.py`](../portfolios-src/rotor-pendula/tools/build_combined.py) | 13.4 kB | Build script: build_combined (see README.md). | [README.md](../portfolios-src/rotor-pendula/README.md) |
-| [`portfolios-src/rotor-pendula/tools/build_fonts.py`](../portfolios-src/rotor-pendula/tools/build_fonts.py) | 9.7 kB | Build script: build_fonts (see README.md). | [README.md](../portfolios-src/rotor-pendula/README.md) |
-| [`portfolios-src/rotor-pendula/tools/build_sim.py`](../portfolios-src/rotor-pendula/tools/build_sim.py) | 3.7 kB | Build script: build_sim (see README.md). | [README.md](../portfolios-src/rotor-pendula/README.md) |
-| [`portfolios-src/rotor-pendula/tools/build_theory.py`](../portfolios-src/rotor-pendula/tools/build_theory.py) | 8.1 kB | Build script: build_theory (see README.md). | [README.md](../portfolios-src/rotor-pendula/README.md) |
-| [`portfolios-src/rotor-pendula/tools/check_combined.py`](../portfolios-src/rotor-pendula/tools/check_combined.py) | 5.5 kB | Check script: check_combined (see README.md). | [README.md](../portfolios-src/rotor-pendula/README.md) |
-| [`portfolios-src/rotor-pendula/tools/check_numbers.py`](../portfolios-src/rotor-pendula/tools/check_numbers.py) | 2.7 kB | Check script: check_numbers (see README.md). | [README.md](../portfolios-src/rotor-pendula/README.md) |
-| [`portfolios-src/rotor-pendula/tools/check_sim.js`](../portfolios-src/rotor-pendula/tools/check_sim.js) | 5.1 kB | Check script: check_sim (see README.md). | [README.md](../portfolios-src/rotor-pendula/README.md) |
-| [`portfolios-src/rotor-pendula/tools/check_sim_browser.js`](../portfolios-src/rotor-pendula/tools/check_sim_browser.js) | 7.5 kB | Check script: check_sim_browser (see README.md). | [README.md](../portfolios-src/rotor-pendula/README.md) |
-| [`portfolios-src/rotor-pendula/tools/katex_render.js`](../portfolios-src/rotor-pendula/tools/katex_render.js) | 613 B | Build helper of the study (KaTeX, physics block, worked solutions, template). | [README.md](../portfolios-src/rotor-pendula/README.md) |
-| [`portfolios-src/rotor-pendula/tools/make_numbers.py`](../portfolios-src/rotor-pendula/tools/make_numbers.py) | 23.3 kB | Computes every number and table of the notes from data/. | [README.md](../portfolios-src/rotor-pendula/README.md) |
-| [`portfolios-src/rotor-pendula/tools/package-lock.json`](../portfolios-src/rotor-pendula/tools/package-lock.json) | 1.1 kB | Build helper of the study (KaTeX, physics block, worked solutions, template). | [README.md](../portfolios-src/rotor-pendula/README.md) |
-| [`portfolios-src/rotor-pendula/tools/package.json`](../portfolios-src/rotor-pendula/tools/package.json) | 207 B | Build helper of the study (KaTeX, physics block, worked solutions, template). | [README.md](../portfolios-src/rotor-pendula/README.md) |
-| [`portfolios-src/rotor-pendula/tools/physics_block.js`](../portfolios-src/rotor-pendula/tools/physics_block.js) | 804 B | Build helper of the study (KaTeX, physics block, worked solutions, template). | [README.md](../portfolios-src/rotor-pendula/README.md) |
-| [`portfolios-src/rotor-pendula/tools/sim_solutions.js`](../portfolios-src/rotor-pendula/tools/sim_solutions.js) | 12.7 kB | Build helper of the study (KaTeX, physics block, worked solutions, template). | [README.md](../portfolios-src/rotor-pendula/README.md) |
-| [`portfolios-src/rotor-pendula/tools/theory_template.html`](../portfolios-src/rotor-pendula/tools/theory_template.html) | 16.6 kB | Build helper of the study (KaTeX, physics block, worked solutions, template). | [README.md](../portfolios-src/rotor-pendula/README.md) |
-| [`portfolios-src/rotor-pendula/tools/typed_numbers.py`](../portfolios-src/rotor-pendula/tools/typed_numbers.py) | 5.2 kB | The numbers typed by hand in the notes, each with its reason, for check_numbers.py. | [README.md](../portfolios-src/rotor-pendula/README.md) |
+| [`portfolios-src/rotor-pendula/tools/build_combined.py`](../portfolios-src/rotor-pendula/tools/build_combined.py) | 13.4 kB | Build and check tool of the Rotor Pendula notes, adapted from the Hydraulic Press Study's tools: build_combined.py. | [build_combined.py](../portfolios-src/rotor-pendula/tools/build_combined.py) |
+| [`portfolios-src/rotor-pendula/tools/build_fonts.py`](../portfolios-src/rotor-pendula/tools/build_fonts.py) | 9.7 kB | Build and check tool of the Rotor Pendula notes, adapted from the Hydraulic Press Study's tools: build_fonts.py. | [build_fonts.py](../portfolios-src/rotor-pendula/tools/build_fonts.py) |
+| [`portfolios-src/rotor-pendula/tools/build_sim.py`](../portfolios-src/rotor-pendula/tools/build_sim.py) | 3.7 kB | Build and check tool of the Rotor Pendula notes, adapted from the Hydraulic Press Study's tools: build_sim.py. | [build_sim.py](../portfolios-src/rotor-pendula/tools/build_sim.py) |
+| [`portfolios-src/rotor-pendula/tools/build_theory.py`](../portfolios-src/rotor-pendula/tools/build_theory.py) | 8.1 kB | Build and check tool of the Rotor Pendula notes, adapted from the Hydraulic Press Study's tools: build_theory.py. | [build_theory.py](../portfolios-src/rotor-pendula/tools/build_theory.py) |
+| [`portfolios-src/rotor-pendula/tools/check_combined.py`](../portfolios-src/rotor-pendula/tools/check_combined.py) | 5.5 kB | Build and check tool of the Rotor Pendula notes, adapted from the Hydraulic Press Study's tools: check_combined.py. | [check_combined.py](../portfolios-src/rotor-pendula/tools/check_combined.py) |
+| [`portfolios-src/rotor-pendula/tools/check_numbers.py`](../portfolios-src/rotor-pendula/tools/check_numbers.py) | 2.7 kB | Build and check tool of the Rotor Pendula notes, adapted from the Hydraulic Press Study's tools: check_numbers.py. | [check_numbers.py](../portfolios-src/rotor-pendula/tools/check_numbers.py) |
+| [`portfolios-src/rotor-pendula/tools/check_sim.js`](../portfolios-src/rotor-pendula/tools/check_sim.js) | 5.1 kB | Build and check tool of the Rotor Pendula notes, adapted from the Hydraulic Press Study's tools: check_sim.js. | [check_sim.js](../portfolios-src/rotor-pendula/tools/check_sim.js) |
+| [`portfolios-src/rotor-pendula/tools/check_sim_browser.js`](../portfolios-src/rotor-pendula/tools/check_sim_browser.js) | 7.5 kB | Build and check tool of the Rotor Pendula notes, adapted from the Hydraulic Press Study's tools: check_sim_browser.js. | [check_sim_browser.js](../portfolios-src/rotor-pendula/tools/check_sim_browser.js) |
+| [`portfolios-src/rotor-pendula/tools/katex_render.js`](../portfolios-src/rotor-pendula/tools/katex_render.js) | 613 B | Build and check tool of the Rotor Pendula notes, adapted from the Hydraulic Press Study's tools: katex_render.js. | [katex_render.js](../portfolios-src/rotor-pendula/tools/katex_render.js) |
+| [`portfolios-src/rotor-pendula/tools/make_numbers.py`](../portfolios-src/rotor-pendula/tools/make_numbers.py) | 23.3 kB | Build and check tool of the Rotor Pendula notes, adapted from the Hydraulic Press Study's tools: make_numbers.py. | [make_numbers.py](../portfolios-src/rotor-pendula/tools/make_numbers.py) |
+| [`portfolios-src/rotor-pendula/tools/package-lock.json`](../portfolios-src/rotor-pendula/tools/package-lock.json) | 1.1 kB | Build and check tool of the Rotor Pendula notes, adapted from the Hydraulic Press Study's tools: package-lock.json. | [package-lock.json](../portfolios-src/rotor-pendula/tools/package-lock.json) |
+| [`portfolios-src/rotor-pendula/tools/package.json`](../portfolios-src/rotor-pendula/tools/package.json) | 207 B | Build and check tool of the Rotor Pendula notes, adapted from the Hydraulic Press Study's tools: package.json. | [package.json](../portfolios-src/rotor-pendula/tools/package.json) |
+| [`portfolios-src/rotor-pendula/tools/physics_block.js`](../portfolios-src/rotor-pendula/tools/physics_block.js) | 804 B | Build and check tool of the Rotor Pendula notes, adapted from the Hydraulic Press Study's tools: physics_block.js. | [physics_block.js](../portfolios-src/rotor-pendula/tools/physics_block.js) |
+| [`portfolios-src/rotor-pendula/tools/sim_solutions.js`](../portfolios-src/rotor-pendula/tools/sim_solutions.js) | 12.7 kB | Build and check tool of the Rotor Pendula notes, adapted from the Hydraulic Press Study's tools: sim_solutions.js. | [sim_solutions.js](../portfolios-src/rotor-pendula/tools/sim_solutions.js) |
+| [`portfolios-src/rotor-pendula/tools/theory_template.html`](../portfolios-src/rotor-pendula/tools/theory_template.html) | 16.6 kB | Build and check tool of the Rotor Pendula notes, adapted from the Hydraulic Press Study's tools: theory_template.html. | [theory_template.html](../portfolios-src/rotor-pendula/tools/theory_template.html) |
+| [`portfolios-src/rotor-pendula/tools/typed_numbers.py`](../portfolios-src/rotor-pendula/tools/typed_numbers.py) | 5.2 kB | Build and check tool of the Rotor Pendula notes, adapted from the Hydraulic Press Study's tools: typed_numbers.py. | [typed_numbers.py](../portfolios-src/rotor-pendula/tools/typed_numbers.py) |
 
 ## Source of Iron, Cotton and the Head (not served)
 
 | File | Size | What it is | Explained in |
 |---|---|---|---|
 | [`portfolios-src/impact/.gitignore`](../portfolios-src/impact/.gitignore) | 11 B | Keeps the stand-alone build (out/) and screenshots out of git. | [README.md](../portfolios-src/impact/README.md) |
-| [`portfolios-src/impact/README.md`](../portfolios-src/impact/README.md) | 2.8 kB | The study's source: every file, how the two pages are generated, the checks. | [README.md](../portfolios-src/impact/README.md) |
-| [`portfolios-src/impact/build.py`](../portfolios-src/impact/build.py) | 7.5 kB | Generates public/portfolios/impact/index.html and ar.html (--site), or stand-alone pages in out/. | [README.md](../portfolios-src/impact/README.md) |
+| [`portfolios-src/impact/README.md`](../portfolios-src/impact/README.md) | 3.0 kB | The study's source: every file, how the two pages are generated, the checks. | [README.md](../portfolios-src/impact/README.md) |
+| [`portfolios-src/impact/build.py`](../portfolios-src/impact/build.py) | 8.1 kB | Generates public/portfolios/impact/index.html, de.html and ar.html (--site), or stand-alone pages in out/. | [README.md](../portfolios-src/impact/README.md) |
 | [`portfolios-src/impact/checks/data_panel.cjs`](../portfolios-src/impact/checks/data_panel.cjs) | 10.1 kB | Check script data_panel (see the README). | [README.md](../portfolios-src/impact/README.md) |
 | [`portfolios-src/impact/checks/energy_books.cjs`](../portfolios-src/impact/checks/energy_books.cjs) | 1.1 kB | Check script energy_books (see the README). | [README.md](../portfolios-src/impact/README.md) |
 | [`portfolios-src/impact/checks/plate3.cjs`](../portfolios-src/impact/checks/plate3.cjs) | 699 B | Check script plate3 (see the README). | [README.md](../portfolios-src/impact/README.md) |
@@ -603,7 +611,78 @@ to confirm that every file is described. Sizes are those of the files when the l
 | [`portfolios-src/impact/physics.js`](../portfolios-src/impact/physics.js) | 10.6 kB | The model: Morse-bonded iron, fibre-network cotton, the head and scale, energy books (.cjs: the same file for the Node checks). | [README.md](../portfolios-src/impact/README.md) |
 | [`portfolios-src/impact/template.html`](../portfolios-src/impact/template.html) | 50.9 kB | The page template: layout, the store filled by record(), drawing, playback, gauges, plots. | [README.md](../portfolios-src/impact/README.md) |
 | [`portfolios-src/impact/text_ar.py`](../portfolios-src/impact/text_ar.py) | 40.8 kB | Every word of the Arabic page. | [README.md](../portfolios-src/impact/README.md) |
+| [`portfolios-src/impact/text_de.py`](../portfolios-src/impact/text_de.py) | 35.0 kB | Every word of the German page. | [README.md](../portfolios-src/impact/README.md) |
 | [`portfolios-src/impact/text_en.py`](../portfolios-src/impact/text_en.py) | 30.4 kB | Every word of the English page. | [README.md](../portfolios-src/impact/README.md) |
+
+## Source of the Droplet Collection study (not served)
+
+| File | Size | What it is | Explained in |
+|---|---|---|---|
+| [`portfolios-src/droplets/.gitignore`](../portfolios-src/droplets/.gitignore) | 5 B | Keeps the stand-alone build (out/) out of git. | [README.md](../portfolios-src/droplets/README.md) |
+| [`portfolios-src/droplets/README.md`](../portfolios-src/droplets/README.md) | 4.1 kB | The study's source: every folder, how the served page is built, the three checks. | [README.md](../portfolios-src/droplets/README.md) |
+| [`portfolios-src/droplets/app.js`](../portfolios-src/droplets/app.js) | 12.8 kB | The page's script: tabs, hash routes, the three simulation panels. | [README.md](../portfolios-src/droplets/README.md) |
+| [`portfolios-src/droplets/chart.cjs`](../portfolios-src/droplets/chart.cjs) | 7.7 kB | House-style SVG line charts for the figures and the page. | [README.md](../portfolios-src/droplets/README.md) |
+| [`portfolios-src/droplets/checks/check_browser.py`](../portfolios-src/droplets/checks/check_browser.py) | 2.6 kB | Check: check_browser.py (see the README). | [README.md](../portfolios-src/droplets/README.md) |
+| [`portfolios-src/droplets/checks/check_numbers.cjs`](../portfolios-src/droplets/checks/check_numbers.cjs) | 31.9 kB | Check: check_numbers.cjs (see the README). | [README.md](../portfolios-src/droplets/README.md) |
+| [`portfolios-src/droplets/checks/check_physics.py`](../portfolios-src/droplets/checks/check_physics.py) | 15.4 kB | Check: check_physics.py (see the README). | [README.md](../portfolios-src/droplets/README.md) |
+| [`portfolios-src/droplets/checks/model_dump.cjs`](../portfolios-src/droplets/checks/model_dump.cjs) | 2.8 kB | Check: model_dump.cjs (see the README). | [README.md](../portfolios-src/droplets/README.md) |
+| [`portfolios-src/droplets/data/bridge.json`](../portfolios-src/droplets/data/bridge.json) | 56.1 kB | Data written by the model's run tools: bridge.json. | [README.md](../portfolios-src/droplets/README.md) |
+| [`portfolios-src/droplets/data/cold.json`](../portfolios-src/droplets/data/cold.json) | 482 B | Data written by the model's run tools: cold.json. | [README.md](../portfolios-src/droplets/README.md) |
+| [`portfolios-src/droplets/data/etab_split.json`](../portfolios-src/droplets/data/etab_split.json) | 181.9 kB | Data written by the model's run tools: etab_split.json. | [README.md](../portfolios-src/droplets/README.md) |
+| [`portfolios-src/droplets/data/etab_warm.json`](../portfolios-src/droplets/data/etab_warm.json) | 23.4 kB | Data written by the model's run tools: etab_warm.json. | [README.md](../portfolios-src/droplets/README.md) |
+| [`portfolios-src/droplets/data/hall1980.json`](../portfolios-src/droplets/data/hall1980.json) | 1.7 kB | Data written by the model's run tools: hall1980.json. | [README.md](../portfolios-src/droplets/README.md) |
+| [`portfolios-src/droplets/data/stochastic.json`](../portfolios-src/droplets/data/stochastic.json) | 399.3 kB | Data written by the model's run tools: stochastic.json. | [README.md](../portfolios-src/droplets/README.md) |
+| [`portfolios-src/droplets/data/warm.json`](../portfolios-src/droplets/data/warm.json) | 158.4 kB | Data written by the model's run tools: warm.json. | [README.md](../portfolios-src/droplets/README.md) |
+| [`portfolios-src/droplets/derive/L0_numbers.py`](../portfolios-src/droplets/derive/L0_numbers.py) | 2.2 kB | Derivation or number script behind a Gate 1 contract: L0_numbers.py. | [status.md](../notes/droplets/status.md) |
+| [`portfolios-src/droplets/derive/L0_population.py`](../portfolios-src/droplets/derive/L0_population.py) | 4.7 kB | Derivation or number script behind a Gate 1 contract: L0_population.py. | [status.md](../notes/droplets/status.md) |
+| [`portfolios-src/droplets/derive/L0_r2.py`](../portfolios-src/droplets/derive/L0_r2.py) | 3.4 kB | Derivation or number script behind a Gate 1 contract: L0_r2.py. | [status.md](../notes/droplets/status.md) |
+| [`portfolios-src/droplets/derive/L0_r3.cjs`](../portfolios-src/droplets/derive/L0_r3.cjs) | 4.7 kB | Derivation or number script behind a Gate 1 contract: L0_r3.cjs. | [status.md](../notes/droplets/status.md) |
+| [`portfolios-src/droplets/derive/L0_sympy.py`](../portfolios-src/droplets/derive/L0_sympy.py) | 2.0 kB | Derivation or number script behind a Gate 1 contract: L0_sympy.py. | [status.md](../notes/droplets/status.md) |
+| [`portfolios-src/droplets/derive/L0_wolfram.md`](../portfolios-src/droplets/derive/L0_wolfram.md) | 1.4 kB | Derivation or number script behind a Gate 1 contract: L0_wolfram.md. | [status.md](../notes/droplets/status.md) |
+| [`portfolios-src/droplets/derive/L1_beard.py`](../portfolios-src/droplets/derive/L1_beard.py) | 2.9 kB | Derivation or number script behind a Gate 1 contract: L1_beard.py. | [status.md](../notes/droplets/status.md) |
+| [`portfolios-src/droplets/derive/L1_r2.py`](../portfolios-src/droplets/derive/L1_r2.py) | 8.6 kB | Derivation or number script behind a Gate 1 contract: L1_r2.py. | [status.md](../notes/droplets/status.md) |
+| [`portfolios-src/droplets/derive/L1_stokes_sympy.py`](../portfolios-src/droplets/derive/L1_stokes_sympy.py) | 1.6 kB | Derivation or number script behind a Gate 1 contract: L1_stokes_sympy.py. | [status.md](../notes/droplets/status.md) |
+| [`portfolios-src/droplets/derive/L2_cross.cjs`](../portfolios-src/droplets/derive/L2_cross.cjs) | 2.0 kB | Derivation or number script behind a Gate 1 contract: L2_cross.cjs. | [status.md](../notes/droplets/status.md) |
+| [`portfolios-src/droplets/derive/L2_langmuir.cjs`](../portfolios-src/droplets/derive/L2_langmuir.cjs) | 982 B | Derivation or number script behind a Gate 1 contract: L2_langmuir.cjs. | [status.md](../notes/droplets/status.md) |
+| [`portfolios-src/droplets/derive/L2_numbers.cjs`](../portfolios-src/droplets/derive/L2_numbers.cjs) | 2.0 kB | Derivation or number script behind a Gate 1 contract: L2_numbers.cjs. | [status.md](../notes/droplets/status.md) |
+| [`portfolios-src/droplets/derive/L2_pairs.cjs`](../portfolios-src/droplets/derive/L2_pairs.cjs) | 1.5 kB | Derivation or number script behind a Gate 1 contract: L2_pairs.cjs. | [status.md](../notes/droplets/status.md) |
+| [`portfolios-src/droplets/derive/L2_r2.cjs`](../portfolios-src/droplets/derive/L2_r2.cjs) | 3.1 kB | Derivation or number script behind a Gate 1 contract: L2_r2.cjs. | [status.md](../notes/droplets/status.md) |
+| [`portfolios-src/droplets/derive/L2_scan.cjs`](../portfolios-src/droplets/derive/L2_scan.cjs) | 714 B | Derivation or number script behind a Gate 1 contract: L2_scan.cjs. | [status.md](../notes/droplets/status.md) |
+| [`portfolios-src/droplets/derive/L2_trace.cjs`](../portfolios-src/droplets/derive/L2_trace.cjs) | 1.8 kB | Derivation or number script behind a Gate 1 contract: L2_trace.cjs. | [status.md](../notes/droplets/status.md) |
+| [`portfolios-src/droplets/derive/L2_traj.cjs`](../portfolios-src/droplets/derive/L2_traj.cjs) | 8.0 kB | Derivation or number script behind a Gate 1 contract: L2_traj.cjs. | [status.md](../notes/droplets/status.md) |
+| [`portfolios-src/droplets/derive/L3_coal.py`](../portfolios-src/droplets/derive/L3_coal.py) | 1.2 kB | Derivation or number script behind a Gate 1 contract: L3_coal.py. | [status.md](../notes/droplets/status.md) |
+| [`portfolios-src/droplets/derive/L4_conv.cjs`](../portfolios-src/droplets/derive/L4_conv.cjs) | 1.7 kB | Derivation or number script behind a Gate 1 contract: L4_conv.cjs. | [status.md](../notes/droplets/status.md) |
+| [`portfolios-src/droplets/derive/L5_tail.cjs`](../portfolios-src/droplets/derive/L5_tail.cjs) | 1.2 kB | Derivation or number script behind a Gate 1 contract: L5_tail.cjs. | [status.md](../notes/droplets/status.md) |
+| [`portfolios-src/droplets/derive/L6_ayala.py`](../portfolios-src/droplets/derive/L6_ayala.py) | 1.1 kB | Derivation or number script behind a Gate 1 contract: L6_ayala.py. | [status.md](../notes/droplets/status.md) |
+| [`portfolios-src/droplets/derive/beard.cjs`](../portfolios-src/droplets/derive/beard.cjs) | 1.4 kB | Derivation or number script behind a Gate 1 contract: beard.cjs. | [status.md](../notes/droplets/status.md) |
+| [`portfolios-src/droplets/physics.cjs`](../portfolios-src/droplets/physics.cjs) | 36.5 kB | The model, L0 to L7: fall speeds, trajectories, kernel, collection equation, exact stochastic process, turbulence (runs in the page and in Node). | [README.md](../portfolios-src/droplets/README.md) |
+| [`portfolios-src/droplets/template.html`](../portfolios-src/droplets/template.html) | 12.9 kB | The page template: house design, tabs, placeholders filled by the build. | [README.md](../portfolios-src/droplets/README.md) |
+| [`portfolios-src/droplets/text/book-00.src.html`](../portfolios-src/droplets/text/book-00.src.html) | 3.9 kB | Lecture notes, chapter 0. | [README.md](../portfolios-src/droplets/README.md) |
+| [`portfolios-src/droplets/text/book-01.src.html`](../portfolios-src/droplets/text/book-01.src.html) | 5.5 kB | Lecture notes, chapter 1. | [README.md](../portfolios-src/droplets/README.md) |
+| [`portfolios-src/droplets/text/book-02.src.html`](../portfolios-src/droplets/text/book-02.src.html) | 7.7 kB | Lecture notes, chapter 2. | [README.md](../portfolios-src/droplets/README.md) |
+| [`portfolios-src/droplets/text/book-03.src.html`](../portfolios-src/droplets/text/book-03.src.html) | 9.4 kB | Lecture notes, chapter 3. | [README.md](../portfolios-src/droplets/README.md) |
+| [`portfolios-src/droplets/text/book-04.src.html`](../portfolios-src/droplets/text/book-04.src.html) | 4.1 kB | Lecture notes, chapter 4. | [README.md](../portfolios-src/droplets/README.md) |
+| [`portfolios-src/droplets/text/book-05.src.html`](../portfolios-src/droplets/text/book-05.src.html) | 7.9 kB | Lecture notes, chapter 5. | [README.md](../portfolios-src/droplets/README.md) |
+| [`portfolios-src/droplets/text/book-06.src.html`](../portfolios-src/droplets/text/book-06.src.html) | 8.0 kB | Lecture notes, chapter 6. | [README.md](../portfolios-src/droplets/README.md) |
+| [`portfolios-src/droplets/text/book-07.src.html`](../portfolios-src/droplets/text/book-07.src.html) | 3.7 kB | Lecture notes, chapter 7. | [README.md](../portfolios-src/droplets/README.md) |
+| [`portfolios-src/droplets/text/book-08.src.html`](../portfolios-src/droplets/text/book-08.src.html) | 7.0 kB | Lecture notes, chapter 8. | [README.md](../portfolios-src/droplets/README.md) |
+| [`portfolios-src/droplets/text/book-09.src.html`](../portfolios-src/droplets/text/book-09.src.html) | 6.6 kB | Lecture notes, chapter 9 and appendix A. | [README.md](../portfolios-src/droplets/README.md) |
+| [`portfolios-src/droplets/text/checks.src.html`](../portfolios-src/droplets/text/checks.src.html) | 5.8 kB | Words of the checks tab. | [README.md](../portfolios-src/droplets/README.md) |
+| [`portfolios-src/droplets/text/problems.src.html`](../portfolios-src/droplets/text/problems.src.html) | 4.4 kB | Words of the problems tab. | [README.md](../portfolios-src/droplets/README.md) |
+| [`portfolios-src/droplets/text/sim.src.html`](../portfolios-src/droplets/text/sim.src.html) | 3.8 kB | Words of the sim tab. | [README.md](../portfolios-src/droplets/README.md) |
+| [`portfolios-src/droplets/tools/build.py`](../portfolios-src/droplets/tools/build.py) | 10.6 kB | Build or run tool: build.py (see the README). | [README.md](../portfolios-src/droplets/README.md) |
+| [`portfolios-src/droplets/tools/figs.cjs`](../portfolios-src/droplets/tools/figs.cjs) | 11.0 kB | Build or run tool: figs.cjs (see the README). | [README.md](../portfolios-src/droplets/README.md) |
+| [`portfolios-src/droplets/tools/gen_tables.cjs`](../portfolios-src/droplets/tools/gen_tables.cjs) | 1.0 kB | Build or run tool: gen_tables.cjs (see the README). | [README.md](../portfolios-src/droplets/README.md) |
+| [`portfolios-src/droplets/tools/katex_render.cjs`](../portfolios-src/droplets/tools/katex_render.cjs) | 606 B | Build or run tool: katex_render.cjs (see the README). | [README.md](../portfolios-src/droplets/README.md) |
+| [`portfolios-src/droplets/tools/package-lock.json`](../portfolios-src/droplets/tools/package-lock.json) | 1.1 kB | Build or run tool: package-lock.json (see the README). | [README.md](../portfolios-src/droplets/README.md) |
+| [`portfolios-src/droplets/tools/package.json`](../portfolios-src/droplets/tools/package.json) | 207 B | Build or run tool: package.json (see the README). | [README.md](../portfolios-src/droplets/README.md) |
+| [`portfolios-src/droplets/tools/run_bridge.cjs`](../portfolios-src/droplets/tools/run_bridge.cjs) | 1.3 kB | Build or run tool: run_bridge.cjs (see the README). | [README.md](../portfolios-src/droplets/README.md) |
+| [`portfolios-src/droplets/tools/run_cold.cjs`](../portfolios-src/droplets/tools/run_cold.cjs) | 5.5 kB | Build or run tool: run_cold.cjs (see the README). | [README.md](../portfolios-src/droplets/README.md) |
+| [`portfolios-src/droplets/tools/run_golovin.cjs`](../portfolios-src/droplets/tools/run_golovin.cjs) | 2.7 kB | Build or run tool: run_golovin.cjs (see the README). | [README.md](../portfolios-src/droplets/README.md) |
+| [`portfolios-src/droplets/tools/run_stochastic.cjs`](../portfolios-src/droplets/tools/run_stochastic.cjs) | 2.3 kB | Build or run tool: run_stochastic.cjs (see the README). | [README.md](../portfolios-src/droplets/README.md) |
+| [`portfolios-src/droplets/tools/run_warm.cjs`](../portfolios-src/droplets/tools/run_warm.cjs) | 3.2 kB | Build or run tool: run_warm.cjs (see the README). | [README.md](../portfolios-src/droplets/README.md) |
+| [`portfolios-src/droplets/tools/tail_resolution.cjs`](../portfolios-src/droplets/tools/tail_resolution.cjs) | 1.2 kB | Build or run tool: tail_resolution.cjs (see the README). | [README.md](../portfolios-src/droplets/README.md) |
+| [`portfolios-src/droplets/tools/test_gillespie.cjs`](../portfolios-src/droplets/tools/test_gillespie.cjs) | 1.6 kB | Build or run tool: test_gillespie.cjs (see the README). | [README.md](../portfolios-src/droplets/README.md) |
 
 ## Template sources
 
@@ -627,15 +706,17 @@ to confirm that every file is described. Sizes are those of the files when the l
 | [`docs/assets.md`](assets.md) | 10.8 kB | Documentation: Fonts, maths and pictures: `public/vendor/`, `public/fonts/`, `public/images/`. | [assets.md](assets.md) |
 | [`docs/build-and-deploy.md`](build-and-deploy.md) | 19.0 kB | Documentation: Build files, tests and deployment. | [build-and-deploy.md](build-and-deploy.md) |
 | [`docs/files.md`](files.md) | this file | This list. Written by tools/inventory.py; do not edit by hand. | [files.md](files.md) |
+| [`docs/glossary.md`](glossary.md) | 8.1 kB | Documentation: Glossary: English, German, Arabic. | [glossary.md](glossary.md) |
+| [`docs/i18n.md`](i18n.md) | 15.2 kB | Documentation: The site in German and Arabic: `tools/i18n/`, `i18n/`, `public/de/`, `public/ar/`. | [i18n.md](i18n.md) |
 | [`docs/minor-issues-report.md`](minor-issues-report.md) | 19.9 kB | Documentation: Minor issues · final verification report. | [minor-issues-report.md](minor-issues-report.md) |
 | [`docs/notes.md`](notes.md) | 3.7 kB | Documentation: The lecture-note review: `notes/` and `.claude/agents/`. | [notes.md](notes.md) |
-| [`docs/pages.md`](pages.md) | 50.9 kB | Documentation: The site's own pages: home, simulations catalog, Portfolios, robots.txt. | [pages.md](pages.md) |
-| [`docs/portfolios.md`](portfolios.md) | 40.2 kB | Documentation: The four research projects: `public/portfolios/`. | [portfolios.md](portfolios.md) |
+| [`docs/pages.md`](pages.md) | 52.0 kB | Documentation: The site's own pages: home, simulations catalog, Portfolios, robots.txt. | [pages.md](pages.md) |
+| [`docs/portfolios.md`](portfolios.md) | 43.0 kB | Documentation: The four research projects: `public/portfolios/`. | [portfolios.md](portfolios.md) |
 | [`docs/research-theory-audit.md`](research-theory-audit.md) | 29.1 kB | Documentation: Readability audit: Droplet Collection and Rotor Pendula. | [research-theory-audit.md](research-theory-audit.md) |
-| [`docs/scripts/catalog.md`](scripts/catalog.md) | 15.0 kB | Documentation: public/scripts/catalog.js. | [catalog.md](scripts/catalog.md) |
+| [`docs/scripts/catalog.md`](scripts/catalog.md) | 15.1 kB | Documentation: public/scripts/catalog.js. | [catalog.md](scripts/catalog.md) |
 | [`docs/scripts/datalog.md`](scripts/datalog.md) | 48.6 kB | Documentation: public/scripts/datalog.js. | [datalog.md](scripts/datalog.md) |
 | [`docs/scripts/dataset.md`](scripts/dataset.md) | 17.0 kB | Documentation: public/scripts/dataset.js. | [dataset.md](scripts/dataset.md) |
-| [`docs/scripts/fold.md`](scripts/fold.md) | 21.8 kB | Documentation: public/scripts/fold.js. | [fold.md](scripts/fold.md) |
+| [`docs/scripts/fold.md`](scripts/fold.md) | 22.6 kB | Documentation: public/scripts/fold.js. | [fold.md](scripts/fold.md) |
 | [`docs/scripts/sim.md`](scripts/sim.md) | 26.6 kB | Documentation: public/scripts/sim.js. | [sim.md](scripts/sim.md) |
 | [`docs/scripts/walk.md`](scripts/walk.md) | 19.9 kB | Documentation: public/scripts/walk/*.js. | [walk.md](scripts/walk.md) |
 | [`docs/simulations/fig01-wave-sources.md`](simulations/fig01-wave-sources.md) | 50.0 kB | Documentation: Fig. 1 · Wave Interference. | [fig01-wave-sources.md](simulations/fig01-wave-sources.md) |
@@ -648,15 +729,73 @@ to confirm that every file is described. Sizes are those of the files when the l
 | [`docs/simulations/fig08-draw-decompose.md`](simulations/fig08-draw-decompose.md) | 34.8 kB | Documentation: Fig. 8 · Draw & Decompose. | [fig08-draw-decompose.md](simulations/fig08-draw-decompose.md) |
 | [`docs/simulations/fig09-driven-oscillator.md`](simulations/fig09-driven-oscillator.md) | 42.4 kB | Documentation: Fig. 9 · Driven Oscillator. | [fig09-driven-oscillator.md](simulations/fig09-driven-oscillator.md) |
 | [`docs/simulations/fig10-wind-turbine.md`](simulations/fig10-wind-turbine.md) | 50.9 kB | Documentation: Fig. 10 · Wind Turbine Control. | [fig10-wind-turbine.md](simulations/fig10-wind-turbine.md) |
-| [`docs/styles.md`](styles.md) | 42.3 kB | Documentation: Stylesheets: `public/styles/`. | [styles.md](styles.md) |
+| [`docs/styles.md`](styles.md) | 42.7 kB | Documentation: Stylesheets: `public/styles/`. | [styles.md](styles.md) |
 | [`docs/usul.md`](usul.md) | 6.2 kB | Documentation: Phyein Usul · the website at phyeinusul.com. | [usul.md](usul.md) |
 
 ## Tools
 
 | File | Size | What it is | Explained in |
 |---|---|---|---|
-| [`tools/inventory.py`](../tools/inventory.py) | 31.7 kB | Writes docs/files.md and checks that every file in the repository is described. | [files.md](files.md) |
+| [`tools/i18n/apply_review.py`](../tools/i18n/apply_review.py) | 3.4 kB | Applies a reviewer's corrections, only those that keep markup, maths and numbers. | [i18n.md](i18n.md) |
+| [`tools/i18n/build.py`](../tools/i18n/build.py) | 22.1 kB | Writes the German and Arabic pages, the script strings and the mirrored stylesheets from the English pages and the tables; --check fails on anything untranslated. | [i18n.md](i18n.md) |
+| [`tools/i18n/fill.py`](../tools/i18n/fill.py) | 1.3 kB | Stores translations into a page table, recording the English each one was made from. | [i18n.md](i18n.md) |
+| [`tools/i18n/hydraulics.py`](../tools/i18n/hydraulics.py) | 12.2 kB | Builds the Hydraulic Press Study in German and Arabic from its unchanged English source, through the study's own tools. | [i18n.md](i18n.md) |
+| [`tools/i18n/ingest.py`](../tools/i18n/ingest.py) | 1.9 kB | Stores checked translations made outside the tables (page pieces, script strings, walkthrough prose). | [i18n.md](i18n.md) |
+| [`tools/i18n/package.json`](../tools/i18n/package.json) | 285 B | The parser wrap.cjs needs (acorn); npm install --prefix tools/i18n. | [i18n.md](i18n.md) |
+| [`tools/i18n/wrap.cjs`](../tools/i18n/wrap.cjs) | 3.7 kB | Wraps the reader-visible strings of a page's scripts in _t(), with a JavaScript parser (acorn). | [i18n.md](i18n.md) |
+| [`tools/inventory.py`](../tools/inventory.py) | 42.2 kB | Writes docs/files.md and checks that every file in the repository is described. | [files.md](files.md) |
 | [`tools/make_portfolio_copy.py`](../tools/make_portfolio_copy.py) | 4.4 kB | Builds a browser-only website copy of a research app from its source, without changing the app or installing dependencies. | [portfolios.md](portfolios.md) |
+
+## Translation tables
+
+| File | Size | What it is | Explained in |
+|---|---|---|---|
+| [`i18n/ar/hydraulics__00_map.json`](../i18n/ar/hydraulics__00_map.json) | 32.2 kB | Arabic table of hydraulics__00_map: per piece, the English it was translated from and the translation. | [i18n.md](i18n.md) |
+| [`i18n/ar/hydraulics__01_ideal.json`](../i18n/ar/hydraulics__01_ideal.json) | 45.2 kB | Arabic table of hydraulics__01_ideal: per piece, the English it was translated from and the translation. | [i18n.md](i18n.md) |
+| [`i18n/ar/hydraulics__02_servo.json`](../i18n/ar/hydraulics__02_servo.json) | 85.8 kB | Arabic table of hydraulics__02_servo: per piece, the English it was translated from and the translation. | [i18n.md](i18n.md) |
+| [`i18n/ar/hydraulics__03_control.json`](../i18n/ar/hydraulics__03_control.json) | 97.0 kB | Arabic table of hydraulics__03_control: per piece, the English it was translated from and the translation. | [i18n.md](i18n.md) |
+| [`i18n/ar/hydraulics__hydraulic.json`](../i18n/ar/hydraulics__hydraulic.json) | 30.7 kB | Arabic table of hydraulics__hydraulic: per piece, the English it was translated from and the translation. | [i18n.md](i18n.md) |
+| [`i18n/ar/hydraulics__hydraulic_control.json`](../i18n/ar/hydraulics__hydraulic_control.json) | 79.1 kB | Arabic table of hydraulics__hydraulic_control: per piece, the English it was translated from and the translation. | [i18n.md](i18n.md) |
+| [`i18n/ar/hydraulics__theory_template.json`](../i18n/ar/hydraulics__theory_template.json) | 2.2 kB | Arabic table of hydraulics__theory_template: per piece, the English it was translated from and the translation. | [i18n.md](i18n.md) |
+| [`i18n/ar/hydraulics_strings.json`](../i18n/ar/hydraulics_strings.json) | 34.0 kB | Arabic table of hydraulics_strings: per piece, the English it was translated from and the translation. | [i18n.md](i18n.md) |
+| [`i18n/ar/index.html.json`](../i18n/ar/index.html.json) | 23.2 kB | Arabic table of index.html: per piece, the English it was translated from and the translation. | [i18n.md](i18n.md) |
+| [`i18n/ar/portfolios.html.json`](../i18n/ar/portfolios.html.json) | 75.7 kB | Arabic table of portfolios.html: per piece, the English it was translated from and the translation. | [i18n.md](i18n.md) |
+| [`i18n/ar/simulations.html.json`](../i18n/ar/simulations.html.json) | 6.6 kB | Arabic table of simulations.html: per piece, the English it was translated from and the translation. | [i18n.md](i18n.md) |
+| [`i18n/ar/simulations__Circular Wave Interference Visualization.html.json`](../i18n/ar/simulations__Circular%20Wave%20Interference%20Visualization.html.json) | 86.0 kB | Arabic table of simulations__Circular Wave Interference Visualization.html: per piece, the English it was translated from and the translation. | [i18n.md](i18n.md) |
+| [`i18n/ar/simulations__Double Pendulum.html.json`](../i18n/ar/simulations__Double%20Pendulum.html.json) | 107.8 kB | Arabic table of simulations__Double Pendulum.html: per piece, the English it was translated from and the translation. | [i18n.md](i18n.md) |
+| [`i18n/ar/simulations__Interactive Double-Slit Experiment Visualization.html.json`](../i18n/ar/simulations__Interactive%20Double-Slit%20Experiment%20Visualization.html.json) | 83.7 kB | Arabic table of simulations__Interactive Double-Slit Experiment Visualization.html: per piece, the English it was translated from and the translation. | [i18n.md](i18n.md) |
+| [`i18n/ar/simulations__Transverse and longitudinal waves.html.json`](../i18n/ar/simulations__Transverse%20and%20longitudinal%20waves.html.json) | 84.7 kB | Arabic table of simulations__Transverse and longitudinal waves.html: per piece, the English it was translated from and the translation. | [i18n.md](i18n.md) |
+| [`i18n/ar/simulations__draw-decompose.html.json`](../i18n/ar/simulations__draw-decompose.html.json) | 84.2 kB | Arabic table of simulations__draw-decompose.html: per piece, the English it was translated from and the translation. | [i18n.md](i18n.md) |
+| [`i18n/ar/simulations__driven-oscillator.html.json`](../i18n/ar/simulations__driven-oscillator.html.json) | 56.0 kB | Arabic table of simulations__driven-oscillator.html: per piece, the English it was translated from and the translation. | [i18n.md](i18n.md) |
+| [`i18n/ar/simulations__phasor-sums.html.json`](../i18n/ar/simulations__phasor-sums.html.json) | 91.1 kB | Arabic table of simulations__phasor-sums.html: per piece, the English it was translated from and the translation. | [i18n.md](i18n.md) |
+| [`i18n/ar/simulations__water-wave.html.json`](../i18n/ar/simulations__water-wave.html.json) | 93.9 kB | Arabic table of simulations__water-wave.html: per piece, the English it was translated from and the translation. | [i18n.md](i18n.md) |
+| [`i18n/ar/simulations__wave-interference.html.json`](../i18n/ar/simulations__wave-interference.html.json) | 88.0 kB | Arabic table of simulations__wave-interference.html: per piece, the English it was translated from and the translation. | [i18n.md](i18n.md) |
+| [`i18n/ar/simulations__wind-turbine.html.json`](../i18n/ar/simulations__wind-turbine.html.json) | 67.5 kB | Arabic table of simulations__wind-turbine.html: per piece, the English it was translated from and the translation. | [i18n.md](i18n.md) |
+| [`i18n/ar/strings.json`](../i18n/ar/strings.json) | 125.9 kB | Arabic words of the scripts and of the catalog, with plural forms. | [i18n.md](i18n.md) |
+| [`i18n/ar/walk.json`](../i18n/ar/walk.json) | 385.6 kB | Arabic prose of the ten walkthroughs, keyed by the English. | [i18n.md](i18n.md) |
+| [`i18n/de/hydraulics__00_map.json`](../i18n/de/hydraulics__00_map.json) | 28.7 kB | German table of hydraulics__00_map: per piece, the English it was translated from and the translation. | [i18n.md](i18n.md) |
+| [`i18n/de/hydraulics__01_ideal.json`](../i18n/de/hydraulics__01_ideal.json) | 41.0 kB | German table of hydraulics__01_ideal: per piece, the English it was translated from and the translation. | [i18n.md](i18n.md) |
+| [`i18n/de/hydraulics__02_servo.json`](../i18n/de/hydraulics__02_servo.json) | 76.0 kB | German table of hydraulics__02_servo: per piece, the English it was translated from and the translation. | [i18n.md](i18n.md) |
+| [`i18n/de/hydraulics__03_control.json`](../i18n/de/hydraulics__03_control.json) | 86.4 kB | German table of hydraulics__03_control: per piece, the English it was translated from and the translation. | [i18n.md](i18n.md) |
+| [`i18n/de/hydraulics__hydraulic.json`](../i18n/de/hydraulics__hydraulic.json) | 27.4 kB | German table of hydraulics__hydraulic: per piece, the English it was translated from and the translation. | [i18n.md](i18n.md) |
+| [`i18n/de/hydraulics__hydraulic_control.json`](../i18n/de/hydraulics__hydraulic_control.json) | 71.1 kB | German table of hydraulics__hydraulic_control: per piece, the English it was translated from and the translation. | [i18n.md](i18n.md) |
+| [`i18n/de/hydraulics__theory_template.json`](../i18n/de/hydraulics__theory_template.json) | 1.9 kB | German table of hydraulics__theory_template: per piece, the English it was translated from and the translation. | [i18n.md](i18n.md) |
+| [`i18n/de/hydraulics_strings.json`](../i18n/de/hydraulics_strings.json) | 28.1 kB | German table of hydraulics_strings: per piece, the English it was translated from and the translation. | [i18n.md](i18n.md) |
+| [`i18n/de/index.html.json`](../i18n/de/index.html.json) | 20.6 kB | German table of index.html: per piece, the English it was translated from and the translation. | [i18n.md](i18n.md) |
+| [`i18n/de/portfolios.html.json`](../i18n/de/portfolios.html.json) | 66.4 kB | German table of portfolios.html: per piece, the English it was translated from and the translation. | [i18n.md](i18n.md) |
+| [`i18n/de/simulations.html.json`](../i18n/de/simulations.html.json) | 5.8 kB | German table of simulations.html: per piece, the English it was translated from and the translation. | [i18n.md](i18n.md) |
+| [`i18n/de/simulations__Circular Wave Interference Visualization.html.json`](../i18n/de/simulations__Circular%20Wave%20Interference%20Visualization.html.json) | 76.9 kB | German table of simulations__Circular Wave Interference Visualization.html: per piece, the English it was translated from and the translation. | [i18n.md](i18n.md) |
+| [`i18n/de/simulations__Double Pendulum.html.json`](../i18n/de/simulations__Double%20Pendulum.html.json) | 97.2 kB | German table of simulations__Double Pendulum.html: per piece, the English it was translated from and the translation. | [i18n.md](i18n.md) |
+| [`i18n/de/simulations__Interactive Double-Slit Experiment Visualization.html.json`](../i18n/de/simulations__Interactive%20Double-Slit%20Experiment%20Visualization.html.json) | 74.7 kB | German table of simulations__Interactive Double-Slit Experiment Visualization.html: per piece, the English it was translated from and the translation. | [i18n.md](i18n.md) |
+| [`i18n/de/simulations__Transverse and longitudinal waves.html.json`](../i18n/de/simulations__Transverse%20and%20longitudinal%20waves.html.json) | 76.6 kB | German table of simulations__Transverse and longitudinal waves.html: per piece, the English it was translated from and the translation. | [i18n.md](i18n.md) |
+| [`i18n/de/simulations__draw-decompose.html.json`](../i18n/de/simulations__draw-decompose.html.json) | 74.9 kB | German table of simulations__draw-decompose.html: per piece, the English it was translated from and the translation. | [i18n.md](i18n.md) |
+| [`i18n/de/simulations__driven-oscillator.html.json`](../i18n/de/simulations__driven-oscillator.html.json) | 51.0 kB | German table of simulations__driven-oscillator.html: per piece, the English it was translated from and the translation. | [i18n.md](i18n.md) |
+| [`i18n/de/simulations__phasor-sums.html.json`](../i18n/de/simulations__phasor-sums.html.json) | 82.0 kB | German table of simulations__phasor-sums.html: per piece, the English it was translated from and the translation. | [i18n.md](i18n.md) |
+| [`i18n/de/simulations__water-wave.html.json`](../i18n/de/simulations__water-wave.html.json) | 85.2 kB | German table of simulations__water-wave.html: per piece, the English it was translated from and the translation. | [i18n.md](i18n.md) |
+| [`i18n/de/simulations__wave-interference.html.json`](../i18n/de/simulations__wave-interference.html.json) | 79.2 kB | German table of simulations__wave-interference.html: per piece, the English it was translated from and the translation. | [i18n.md](i18n.md) |
+| [`i18n/de/simulations__wind-turbine.html.json`](../i18n/de/simulations__wind-turbine.html.json) | 60.2 kB | German table of simulations__wind-turbine.html: per piece, the English it was translated from and the translation. | [i18n.md](i18n.md) |
+| [`i18n/de/strings.json`](../i18n/de/strings.json) | 108.2 kB | German words of the scripts and of the catalog, with plural forms. | [i18n.md](i18n.md) |
+| [`i18n/de/walk.json`](../i18n/de/walk.json) | 336.4 kB | German prose of the ten walkthroughs, keyed by the English. | [i18n.md](i18n.md) |
 
 ## Agents of the lecture-note review
 
@@ -667,6 +806,245 @@ to confirm that every file is described. Sizes are those of the files when the l
 | [`.claude/agents/referee.md`](../.claude/agents/referee.md) | 760 B | Claude Code agent definition: referee, one role of the lecture-note review. | [notes.md](notes.md) |
 | [`.claude/agents/walkthrough-keeper.md`](../.claude/agents/walkthrough-keeper.md) | 614 B | Claude Code agent definition: walkthrough-keeper, one role of the lecture-note review. | [notes.md](notes.md) |
 
+## Working notes of the Rotor Pendula study
+
+| File | Size | What it is | Explained in |
+|---|---|---|---|
+| [`notes/rotor-pendula/baseline/checks.html`](../notes/rotor-pendula/baseline/checks.html) | 14.3 kB | Text of the checks page of the published Rotor Pendula app, kept as the baseline the study starts from. | [status.md](../notes/rotor-pendula/status.md) |
+| [`notes/rotor-pendula/baseline/overview.html`](../notes/rotor-pendula/baseline/overview.html) | 5.7 kB | Text of the overview page of the published Rotor Pendula app, kept as the baseline the study starts from. | [status.md](../notes/rotor-pendula/status.md) |
+| [`notes/rotor-pendula/baseline/report.html`](../notes/rotor-pendula/baseline/report.html) | 70.3 kB | Text of the report page of the published Rotor Pendula app, kept as the baseline the study starts from. | [status.md](../notes/rotor-pendula/status.md) |
+| [`notes/rotor-pendula/baseline/results.html`](../notes/rotor-pendula/baseline/results.html) | 11.5 kB | Text of the results page of the published Rotor Pendula app, kept as the baseline the study starts from. | [status.md](../notes/rotor-pendula/status.md) |
+| [`notes/rotor-pendula/baseline/simulate.html`](../notes/rotor-pendula/baseline/simulate.html) | 4.7 kB | Text of the simulate page of the published Rotor Pendula app, kept as the baseline the study starts from. | [status.md](../notes/rotor-pendula/status.md) |
+| [`notes/rotor-pendula/baseline/theory.html`](../notes/rotor-pendula/baseline/theory.html) | 83.0 kB | Text of the theory page of the published Rotor Pendula app, kept as the baseline the study starts from. | [status.md](../notes/rotor-pendula/status.md) |
+| [`notes/rotor-pendula/brief.md`](../notes/rotor-pendula/brief.md) | 19.8 kB | The brief of the Rotor Pendula study: question, method and gates, for an agent working in a loop. | [brief.md](../notes/rotor-pendula/brief.md) |
+| [`notes/rotor-pendula/check-note-r1.md`](../notes/rotor-pendula/check-note-r1.md) | 23.6 kB | Rotor Pendula study record: brief, status, contracts, skeptic and referee reports, dossiers. | [portfolios.md](portfolios.md) |
+| [`notes/rotor-pendula/contract-L0.md`](../notes/rotor-pendula/contract-L0.md) | 11.5 kB | Gate 1 contract of model level L0: question, model, assumptions with their numbers, checks. | [status.md](../notes/rotor-pendula/status.md) |
+| [`notes/rotor-pendula/contract-L1.md`](../notes/rotor-pendula/contract-L1.md) | 6.5 kB | Gate 1 contract of model level L1: question, model, assumptions with their numbers, checks. | [status.md](../notes/rotor-pendula/status.md) |
+| [`notes/rotor-pendula/contract-L2.md`](../notes/rotor-pendula/contract-L2.md) | 7.3 kB | Gate 1 contract of model level L2: question, model, assumptions with their numbers, checks. | [status.md](../notes/rotor-pendula/status.md) |
+| [`notes/rotor-pendula/contract-L3.md`](../notes/rotor-pendula/contract-L3.md) | 8.0 kB | Gate 1 contract of model level L3: question, model, assumptions with their numbers, checks. | [status.md](../notes/rotor-pendula/status.md) |
+| [`notes/rotor-pendula/contract-L4.md`](../notes/rotor-pendula/contract-L4.md) | 8.3 kB | Gate 1 contract of model level L4: question, model, assumptions with their numbers, checks. | [status.md](../notes/rotor-pendula/status.md) |
+| [`notes/rotor-pendula/derive/L0_r2.json`](../notes/rotor-pendula/derive/L0_r2.json) | 77 B | Saved output of L0_r2.py (numbers). | [status.md](../notes/rotor-pendula/status.md) |
+| [`notes/rotor-pendula/derive/L0_r2.log`](../notes/rotor-pendula/derive/L0_r2.log) | 446 B | Saved output of L0_r2.py (log). | [status.md](../notes/rotor-pendula/status.md) |
+| [`notes/rotor-pendula/derive/L0_r2.py`](../notes/rotor-pendula/derive/L0_r2.py) | 3.6 kB | Derivation or computation script of the study, L0_r2.py: prints PASS/FAIL and exits 1 on a failure. | [status.md](../notes/rotor-pendula/status.md) |
+| [`notes/rotor-pendula/derive/L0_single.py`](../notes/rotor-pendula/derive/L0_single.py) | 4.8 kB | Derivation or computation script of the study, L0_single.py: prints PASS/FAIL and exits 1 on a failure. | [status.md](../notes/rotor-pendula/status.md) |
+| [`notes/rotor-pendula/derive/L0_table.py`](../notes/rotor-pendula/derive/L0_table.py) | 5.8 kB | Derivation or computation script of the study, L0_table.py: prints PASS/FAIL and exits 1 on a failure. | [status.md](../notes/rotor-pendula/status.md) |
+| [`notes/rotor-pendula/derive/L1_chaos.json`](../notes/rotor-pendula/derive/L1_chaos.json) | 3.5 kB | Saved output of L1_chaos.py (numbers). | [status.md](../notes/rotor-pendula/status.md) |
+| [`notes/rotor-pendula/derive/L1_chaos.log`](../notes/rotor-pendula/derive/L1_chaos.log) | 1.3 kB | Saved output of L1_chaos.py (log). | [status.md](../notes/rotor-pendula/status.md) |
+| [`notes/rotor-pendula/derive/L1_chaos.py`](../notes/rotor-pendula/derive/L1_chaos.py) | 2.6 kB | Derivation or computation script of the study, L1_chaos.py: prints PASS/FAIL and exits 1 on a failure. | [status.md](../notes/rotor-pendula/status.md) |
+| [`notes/rotor-pendula/derive/L1_double.py`](../notes/rotor-pendula/derive/L1_double.py) | 7.5 kB | Derivation or computation script of the study, L1_double.py: prints PASS/FAIL and exits 1 on a failure. | [status.md](../notes/rotor-pendula/status.md) |
+| [`notes/rotor-pendula/derive/L1_engine_check.log`](../notes/rotor-pendula/derive/L1_engine_check.log) | 3.2 kB | Saved output of L1_engine_check.py (log). | [status.md](../notes/rotor-pendula/status.md) |
+| [`notes/rotor-pendula/derive/L1_engine_check.py`](../notes/rotor-pendula/derive/L1_engine_check.py) | 8.0 kB | Derivation or computation script of the study, L1_engine_check.py: prints PASS/FAIL and exits 1 on a failure. | [status.md](../notes/rotor-pendula/status.md) |
+| [`notes/rotor-pendula/derive/L1_map.json`](../notes/rotor-pendula/derive/L1_map.json) | 57.9 kB | Saved output of L1_map.py (numbers). | [status.md](../notes/rotor-pendula/status.md) |
+| [`notes/rotor-pendula/derive/L1_map.log`](../notes/rotor-pendula/derive/L1_map.log) | 2.6 kB | Saved output of L1_map.py (log). | [status.md](../notes/rotor-pendula/status.md) |
+| [`notes/rotor-pendula/derive/L1_map.py`](../notes/rotor-pendula/derive/L1_map.py) | 4.0 kB | Derivation or computation script of the study, L1_map.py: prints PASS/FAIL and exits 1 on a failure. | [status.md](../notes/rotor-pendula/status.md) |
+| [`notes/rotor-pendula/derive/L1_map_g70.json`](../notes/rotor-pendula/derive/L1_map_g70.json) | 6.1 kB | Saved output of L1_map_g70.py (numbers). | [status.md](../notes/rotor-pendula/status.md) |
+| [`notes/rotor-pendula/derive/L1_map_g70.py`](../notes/rotor-pendula/derive/L1_map_g70.py) | 1.1 kB | Derivation or computation script of the study, L1_map_g70.py: prints PASS/FAIL and exits 1 on a failure. | [status.md](../notes/rotor-pendula/status.md) |
+| [`notes/rotor-pendula/derive/L1_mountings.json`](../notes/rotor-pendula/derive/L1_mountings.json) | 5.9 kB | Saved output of L1_mountings.py (numbers). | [status.md](../notes/rotor-pendula/status.md) |
+| [`notes/rotor-pendula/derive/L2_run.json`](../notes/rotor-pendula/derive/L2_run.json) | 10.7 kB | Saved output of L2_run.py (numbers). | [status.md](../notes/rotor-pendula/status.md) |
+| [`notes/rotor-pendula/derive/L2_run.log`](../notes/rotor-pendula/derive/L2_run.log) | 1.1 kB | Saved output of L2_run.py (log). | [status.md](../notes/rotor-pendula/status.md) |
+| [`notes/rotor-pendula/derive/L2_run.py`](../notes/rotor-pendula/derive/L2_run.py) | 5.3 kB | Derivation or computation script of the study, L2_run.py: prints PASS/FAIL and exits 1 on a failure. | [status.md](../notes/rotor-pendula/status.md) |
+| [`notes/rotor-pendula/derive/L2_run_k2.json`](../notes/rotor-pendula/derive/L2_run_k2.json) | 10.7 kB | Saved output of L2_run_k2.py (numbers). | [status.md](../notes/rotor-pendula/status.md) |
+| [`notes/rotor-pendula/derive/L2_run_k2.log`](../notes/rotor-pendula/derive/L2_run_k2.log) | 1.2 kB | Saved output of L2_run_k2.py (log). | [status.md](../notes/rotor-pendula/status.md) |
+| [`notes/rotor-pendula/derive/L2_run_nrel.json`](../notes/rotor-pendula/derive/L2_run_nrel.json) | 10.8 kB | Saved output of L2_run_nrel.py (numbers). | [status.md](../notes/rotor-pendula/status.md) |
+| [`notes/rotor-pendula/derive/L2_run_nrel.log`](../notes/rotor-pendula/derive/L2_run_nrel.log) | 1.1 kB | Saved output of L2_run_nrel.py (log). | [status.md](../notes/rotor-pendula/status.md) |
+| [`notes/rotor-pendula/derive/L2_scales.json`](../notes/rotor-pendula/derive/L2_scales.json) | 100 B | Saved output of L2_scales.py (numbers). | [status.md](../notes/rotor-pendula/status.md) |
+| [`notes/rotor-pendula/derive/L2_scales.log`](../notes/rotor-pendula/derive/L2_scales.log) | 1.2 kB | Saved output of L2_scales.py (log). | [status.md](../notes/rotor-pendula/status.md) |
+| [`notes/rotor-pendula/derive/L2_scales.py`](../notes/rotor-pendula/derive/L2_scales.py) | 3.6 kB | Derivation or computation script of the study, L2_scales.py: prints PASS/FAIL and exits 1 on a failure. | [status.md](../notes/rotor-pendula/status.md) |
+| [`notes/rotor-pendula/derive/L3_sag.json`](../notes/rotor-pendula/derive/L3_sag.json) | 629 B | Saved output of L3_sag.py (numbers). | [status.md](../notes/rotor-pendula/status.md) |
+| [`notes/rotor-pendula/derive/L3_sag.py`](../notes/rotor-pendula/derive/L3_sag.py) | 3.0 kB | Derivation or computation script of the study, L3_sag.py: prints PASS/FAIL and exits 1 on a failure. | [status.md](../notes/rotor-pendula/status.md) |
+| [`notes/rotor-pendula/derive/L3_sag_check.py`](../notes/rotor-pendula/derive/L3_sag_check.py) | 3.3 kB | Derivation or computation script of the study, L3_sag_check.py: prints PASS/FAIL and exits 1 on a failure. | [status.md](../notes/rotor-pendula/status.md) |
+| [`notes/rotor-pendula/derive/L3_sag_numbers.py`](../notes/rotor-pendula/derive/L3_sag_numbers.py) | 2.1 kB | Derivation or computation script of the study, L3_sag_numbers.py: prints PASS/FAIL and exits 1 on a failure. | [status.md](../notes/rotor-pendula/status.md) |
+| [`notes/rotor-pendula/derive/L3_sag_static.json`](../notes/rotor-pendula/derive/L3_sag_static.json) | 1.2 kB | Saved output of L3_sag_static.py (numbers). | [status.md](../notes/rotor-pendula/status.md) |
+| [`notes/rotor-pendula/derive/L3_sag_static.py`](../notes/rotor-pendula/derive/L3_sag_static.py) | 2.3 kB | Derivation or computation script of the study, L3_sag_static.py: prints PASS/FAIL and exits 1 on a failure. | [status.md](../notes/rotor-pendula/status.md) |
+| [`notes/rotor-pendula/derive/L3_shake.json`](../notes/rotor-pendula/derive/L3_shake.json) | 5.2 kB | Saved output of L3_shake.py (numbers). | [status.md](../notes/rotor-pendula/status.md) |
+| [`notes/rotor-pendula/derive/L3_shake.py`](../notes/rotor-pendula/derive/L3_shake.py) | 4.6 kB | Derivation or computation script of the study, L3_shake.py: prints PASS/FAIL and exits 1 on a failure. | [status.md](../notes/rotor-pendula/status.md) |
+| [`notes/rotor-pendula/derive/L3_shake2.json`](../notes/rotor-pendula/derive/L3_shake2.json) | 4.7 kB | Saved output of L3_shake2.py (numbers). | [status.md](../notes/rotor-pendula/status.md) |
+| [`notes/rotor-pendula/derive/L3_shake2.py`](../notes/rotor-pendula/derive/L3_shake2.py) | 6.8 kB | Derivation or computation script of the study, L3_shake2.py: prints PASS/FAIL and exits 1 on a failure. | [status.md](../notes/rotor-pendula/status.md) |
+| [`notes/rotor-pendula/derive/L3_shake_model.json`](../notes/rotor-pendula/derive/L3_shake_model.json) | 122 B | Saved output of L3_shake_model.py (numbers). | [status.md](../notes/rotor-pendula/status.md) |
+| [`notes/rotor-pendula/derive/L3_shake_model.py`](../notes/rotor-pendula/derive/L3_shake_model.py) | 955 B | Derivation or computation script of the study, L3_shake_model.py: prints PASS/FAIL and exits 1 on a failure. | [status.md](../notes/rotor-pendula/status.md) |
+| [`notes/rotor-pendula/derive/L4_check.log`](../notes/rotor-pendula/derive/L4_check.log) | 695 B | Saved output of L4_check.py (log). | [status.md](../notes/rotor-pendula/status.md) |
+| [`notes/rotor-pendula/derive/L4_check.py`](../notes/rotor-pendula/derive/L4_check.py) | 4.5 kB | Derivation or computation script of the study, L4_check.py: prints PASS/FAIL and exits 1 on a failure. | [status.md](../notes/rotor-pendula/status.md) |
+| [`notes/rotor-pendula/derive/L4_check_100.json`](../notes/rotor-pendula/derive/L4_check_100.json) | 3.4 kB | Saved output of L4_check_100.py (numbers). | [status.md](../notes/rotor-pendula/status.md) |
+| [`notes/rotor-pendula/derive/L4_check_2000.json`](../notes/rotor-pendula/derive/L4_check_2000.json) | 9.7 kB | Saved output of L4_check_2000.py (numbers). | [status.md](../notes/rotor-pendula/status.md) |
+| [`notes/rotor-pendula/derive/L4_check_2000.log`](../notes/rotor-pendula/derive/L4_check_2000.log) | 3.5 kB | Saved output of L4_check_2000.py (log). | [status.md](../notes/rotor-pendula/status.md) |
+| [`notes/rotor-pendula/derive/L4_check_2000.time`](../notes/rotor-pendula/derive/L4_check_2000.time) | 44 B | Rotor Pendula model or model run (L0-L4): script, its output or its log; see the script header. | [portfolios.md](portfolios.md) |
+| [`notes/rotor-pendula/derive/L4_check_4000.json`](../notes/rotor-pendula/derive/L4_check_4000.json) | 9.7 kB | Saved output of L4_check_4000.py (numbers). | [status.md](../notes/rotor-pendula/status.md) |
+| [`notes/rotor-pendula/derive/L4_check_4000.log`](../notes/rotor-pendula/derive/L4_check_4000.log) | 3.5 kB | Saved output of L4_check_4000.py (log). | [status.md](../notes/rotor-pendula/status.md) |
+| [`notes/rotor-pendula/derive/L4_check_4000.time`](../notes/rotor-pendula/derive/L4_check_4000.time) | 44 B | Rotor Pendula model or model run (L0-L4): script, its output or its log; see the script header. | [portfolios.md](portfolios.md) |
+| [`notes/rotor-pendula/derive/L4_converge.py`](../notes/rotor-pendula/derive/L4_converge.py) | 993 B | Derivation or computation script of the study, L4_converge.py: prints PASS/FAIL and exits 1 on a failure. | [status.md](../notes/rotor-pendula/status.md) |
+| [`notes/rotor-pendula/derive/L4_full.py`](../notes/rotor-pendula/derive/L4_full.py) | 3.8 kB | Derivation or computation script of the study, L4_full.py: prints PASS/FAIL and exits 1 on a failure. | [status.md](../notes/rotor-pendula/status.md) |
+| [`notes/rotor-pendula/derive/L4_generator.json`](../notes/rotor-pendula/derive/L4_generator.json) | 28.4 kB | Saved output of L4_generator.py (numbers). | [status.md](../notes/rotor-pendula/status.md) |
+| [`notes/rotor-pendula/derive/L4_generator.py`](../notes/rotor-pendula/derive/L4_generator.py) | 5.2 kB | Derivation or computation script of the study, L4_generator.py: prints PASS/FAIL and exits 1 on a failure. | [status.md](../notes/rotor-pendula/status.md) |
+| [`notes/rotor-pendula/derive/L4_harmonics.json`](../notes/rotor-pendula/derive/L4_harmonics.json) | 798 B | Saved output of L4_harmonics.py (numbers). | [status.md](../notes/rotor-pendula/status.md) |
+| [`notes/rotor-pendula/derive/L4_harmonics.log`](../notes/rotor-pendula/derive/L4_harmonics.log) | 1.4 kB | Saved output of L4_harmonics.py (log). | [status.md](../notes/rotor-pendula/status.md) |
+| [`notes/rotor-pendula/derive/L4_harmonics.py`](../notes/rotor-pendula/derive/L4_harmonics.py) | 3.2 kB | Derivation or computation script of the study, L4_harmonics.py: prints PASS/FAIL and exits 1 on a failure. | [status.md](../notes/rotor-pendula/status.md) |
+| [`notes/rotor-pendula/derive/L4_resonance.json`](../notes/rotor-pendula/derive/L4_resonance.json) | 2.3 kB | Saved output of L4_resonance.py (numbers). | [status.md](../notes/rotor-pendula/status.md) |
+| [`notes/rotor-pendula/derive/L4_resonance.log`](../notes/rotor-pendula/derive/L4_resonance.log) | 0 B | Saved output of L4_resonance.py (log). | [status.md](../notes/rotor-pendula/status.md) |
+| [`notes/rotor-pendula/derive/L4_resonance.py`](../notes/rotor-pendula/derive/L4_resonance.py) | 3.3 kB | Derivation or computation script of the study, L4_resonance.py: prints PASS/FAIL and exits 1 on a failure. | [status.md](../notes/rotor-pendula/status.md) |
+| [`notes/rotor-pendula/derive/L4_resonance_v2.json`](../notes/rotor-pendula/derive/L4_resonance_v2.json) | 2.3 kB | Saved output of L4_resonance_v2.py (numbers). | [status.md](../notes/rotor-pendula/status.md) |
+| [`notes/rotor-pendula/derive/L4_scan.json`](../notes/rotor-pendula/derive/L4_scan.json) | 5.8 kB | Saved output of L4_scan.py (numbers). | [status.md](../notes/rotor-pendula/status.md) |
+| [`notes/rotor-pendula/derive/L4_scan.log`](../notes/rotor-pendula/derive/L4_scan.log) | 2.8 kB | Saved output of L4_scan.py (log). | [status.md](../notes/rotor-pendula/status.md) |
+| [`notes/rotor-pendula/derive/L4_scan.py`](../notes/rotor-pendula/derive/L4_scan.py) | 4.8 kB | Derivation or computation script of the study, L4_scan.py: prints PASS/FAIL and exits 1 on a failure. | [status.md](../notes/rotor-pendula/status.md) |
+| [`notes/rotor-pendula/derive/L4_scan_0.json`](../notes/rotor-pendula/derive/L4_scan_0.json) | 3.1 kB | Saved output of L4_scan_0.py (numbers). | [status.md](../notes/rotor-pendula/status.md) |
+| [`notes/rotor-pendula/derive/L4_scan_0.log`](../notes/rotor-pendula/derive/L4_scan_0.log) | 1.3 kB | Saved output of L4_scan_0.py (log). | [status.md](../notes/rotor-pendula/status.md) |
+| [`notes/rotor-pendula/derive/L4_scan_1.json`](../notes/rotor-pendula/derive/L4_scan_1.json) | 2.6 kB | Saved output of L4_scan_1.py (numbers). | [status.md](../notes/rotor-pendula/status.md) |
+| [`notes/rotor-pendula/derive/L4_scan_1.log`](../notes/rotor-pendula/derive/L4_scan_1.log) | 1.3 kB | Saved output of L4_scan_1.py (log). | [status.md](../notes/rotor-pendula/status.md) |
+| [`notes/rotor-pendula/derive/L4_scan_2.json`](../notes/rotor-pendula/derive/L4_scan_2.json) | 2.6 kB | Saved output of L4_scan_2.py (numbers). | [status.md](../notes/rotor-pendula/status.md) |
+| [`notes/rotor-pendula/derive/L4_scan_2.log`](../notes/rotor-pendula/derive/L4_scan_2.log) | 1.3 kB | Saved output of L4_scan_2.py (log). | [status.md](../notes/rotor-pendula/status.md) |
+| [`notes/rotor-pendula/derive/L4_sensitivity.json`](../notes/rotor-pendula/derive/L4_sensitivity.json) | 7.5 kB | Saved output of L4_sensitivity.py (numbers). | [status.md](../notes/rotor-pendula/status.md) |
+| [`notes/rotor-pendula/derive/L4_sensitivity.log`](../notes/rotor-pendula/derive/L4_sensitivity.log) | 4.9 kB | Saved output of L4_sensitivity.py (log). | [status.md](../notes/rotor-pendula/status.md) |
+| [`notes/rotor-pendula/derive/L4_sensitivity.py`](../notes/rotor-pendula/derive/L4_sensitivity.py) | 1.9 kB | Derivation or computation script of the study, L4_sensitivity.py: prints PASS/FAIL and exits 1 on a failure. | [status.md](../notes/rotor-pendula/status.md) |
+| [`notes/rotor-pendula/derive/L4_stick.json`](../notes/rotor-pendula/derive/L4_stick.json) | 2.2 kB | Saved output of L4_stick.py (numbers). | [status.md](../notes/rotor-pendula/status.md) |
+| [`notes/rotor-pendula/derive/L4_stick.log`](../notes/rotor-pendula/derive/L4_stick.log) | 3.5 kB | Saved output of L4_stick.py (log). | [status.md](../notes/rotor-pendula/status.md) |
+| [`notes/rotor-pendula/derive/L4_stick.py`](../notes/rotor-pendula/derive/L4_stick.py) | 2.8 kB | Derivation or computation script of the study, L4_stick.py: prints PASS/FAIL and exits 1 on a failure. | [status.md](../notes/rotor-pendula/status.md) |
+| [`notes/rotor-pendula/derive/data/Cp_Ct_Cq.NREL5MW.txt`](../notes/rotor-pendula/derive/data/Cp_Ct_Cq.NREL5MW.txt) | 33.1 kB | Cited data of the NREL 5-MW reference turbine: Cp_Ct_Cq.NREL5MW.txt. | [status.md](../notes/rotor-pendula/status.md) |
+| [`notes/rotor-pendula/derive/data/NRELOffshrBsline5MW_Blade.dat`](../notes/rotor-pendula/derive/data/NRELOffshrBsline5MW_Blade.dat) | 8.0 kB | Cited data of the NREL 5-MW reference turbine: NRELOffshrBsline5MW_Blade.dat. | [status.md](../notes/rotor-pendula/status.md) |
+| [`notes/rotor-pendula/derive/engine.py`](../notes/rotor-pendula/derive/engine.py) | 7.6 kB | Derivation or computation script of the study, engine.py: prints PASS/FAIL and exits 1 on a failure. | [status.md](../notes/rotor-pendula/status.md) |
+| [`notes/rotor-pendula/derive/fermi.py`](../notes/rotor-pendula/derive/fermi.py) | 3.1 kB | Derivation or computation script of the study, fermi.py: prints PASS/FAIL and exits 1 on a failure. | [status.md](../notes/rotor-pendula/status.md) |
+| [`notes/rotor-pendula/derive/mc_full.log`](../notes/rotor-pendula/derive/mc_full.log) | 2.2 kB | Saved output of mc_full.py (log). | [status.md](../notes/rotor-pendula/status.md) |
+| [`notes/rotor-pendula/derive/mc_quick.log`](../notes/rotor-pendula/derive/mc_quick.log) | 2.2 kB | Saved output of mc_quick.py (log). | [status.md](../notes/rotor-pendula/status.md) |
+| [`notes/rotor-pendula/derive/nrel5mw.py`](../notes/rotor-pendula/derive/nrel5mw.py) | 7.3 kB | Derivation or computation script of the study, nrel5mw.py: prints PASS/FAIL and exits 1 on a failure. | [status.md](../notes/rotor-pendula/status.md) |
+| [`notes/rotor-pendula/derive/power_theorem.py`](../notes/rotor-pendula/derive/power_theorem.py) | 7.0 kB | Derivation or computation script of the study, power_theorem.py: prints PASS/FAIL and exits 1 on a failure. | [status.md](../notes/rotor-pendula/status.md) |
+| [`notes/rotor-pendula/derive/power_theorem_mc.py`](../notes/rotor-pendula/derive/power_theorem_mc.py) | 6.4 kB | Derivation or computation script of the study, power_theorem_mc.py: prints PASS/FAIL and exits 1 on a failure. | [status.md](../notes/rotor-pendula/status.md) |
+| [`notes/rotor-pendula/derive/scales.py`](../notes/rotor-pendula/derive/scales.py) | 2.7 kB | Derivation or computation script of the study, scales.py: prints PASS/FAIL and exits 1 on a failure. | [status.md](../notes/rotor-pendula/status.md) |
+| [`notes/rotor-pendula/derive/turbulence.py`](../notes/rotor-pendula/derive/turbulence.py) | 5.6 kB | Derivation or computation script of the study, turbulence.py: prints PASS/FAIL and exits 1 on a failure. | [status.md](../notes/rotor-pendula/status.md) |
+| [`notes/rotor-pendula/done.md`](../notes/rotor-pendula/done.md) | 2.5 kB | Definition of done of the Rotor Pendula study, as a checklist; only Numa may change it. | [done.md](../notes/rotor-pendula/done.md) |
+| [`notes/rotor-pendula/dossier-edgewise.md`](../notes/rotor-pendula/dossier-edgewise.md) | 33.9 kB | Scout dossier on edgewise: primary sources read for the study. | [status.md](../notes/rotor-pendula/status.md) |
+| [`notes/rotor-pendula/dossier-generator.md`](../notes/rotor-pendula/dossier-generator.md) | 15.9 kB | Scout dossier on generator: primary sources read for the study. | [status.md](../notes/rotor-pendula/status.md) |
+| [`notes/rotor-pendula/dossier-harvesting.md`](../notes/rotor-pendula/dossier-harvesting.md) | 33.8 kB | Scout dossier on harvesting: primary sources read for the study. | [status.md](../notes/rotor-pendula/status.md) |
+| [`notes/rotor-pendula/dossier-turbine.md`](../notes/rotor-pendula/dossier-turbine.md) | 54.8 kB | Scout dossier on turbine: primary sources read for the study. | [status.md](../notes/rotor-pendula/status.md) |
+| [`notes/rotor-pendula/handoff-prompt.md`](../notes/rotor-pendula/handoff-prompt.md) | 11.7 kB | Prompt for handing the Rotor Pendula study to another agent. | [status.md](../notes/rotor-pendula/status.md) |
+| [`notes/rotor-pendula/referee-note-r1.md`](../notes/rotor-pendula/referee-note-r1.md) | 30.9 kB | Rotor Pendula study record: brief, status, contracts, skeptic and referee reports, dossiers. | [portfolios.md](portfolios.md) |
+| [`notes/rotor-pendula/referee-note-r3-answers.md`](../notes/rotor-pendula/referee-note-r3-answers.md) | 4.1 kB | Rotor Pendula study record: brief, status, contracts, skeptic and referee reports, dossiers. | [portfolios.md](portfolios.md) |
+| [`notes/rotor-pendula/referee-note-r3.md`](../notes/rotor-pendula/referee-note-r3.md) | 28.7 kB | Rotor Pendula study record: brief, status, contracts, skeptic and referee reports, dossiers. | [portfolios.md](portfolios.md) |
+| [`notes/rotor-pendula/review-prompt.md`](../notes/rotor-pendula/review-prompt.md) | 3.6 kB | Prompt for an independent reviewer of the Rotor Pendula study. | [status.md](../notes/rotor-pendula/status.md) |
+| [`notes/rotor-pendula/skeptic-G1-L0-r1.md`](../notes/rotor-pendula/skeptic-G1-L0-r1.md) | 17.4 kB | Blind skeptic report, gate 1, level L0, round 1. | [status.md](../notes/rotor-pendula/status.md) |
+| [`notes/rotor-pendula/skeptic-G1-L2-r1.md`](../notes/rotor-pendula/skeptic-G1-L2-r1.md) | 17.5 kB | Blind skeptic report, gate 1, level L2, round 1. | [status.md](../notes/rotor-pendula/status.md) |
+| [`notes/rotor-pendula/skeptic-G1-L3-r1.md`](../notes/rotor-pendula/skeptic-G1-L3-r1.md) | 9.7 kB | Blind skeptic report, gate 1, level L3, round 1. | [status.md](../notes/rotor-pendula/status.md) |
+| [`notes/rotor-pendula/skeptic-G1-L3-r2.md`](../notes/rotor-pendula/skeptic-G1-L3-r2.md) | 3.0 kB | Blind skeptic report, gate 1, level L3, round 2. | [status.md](../notes/rotor-pendula/status.md) |
+| [`notes/rotor-pendula/skeptic-G1-L4-r1.md`](../notes/rotor-pendula/skeptic-G1-L4-r1.md) | 14.1 kB | Blind skeptic report, gate 1, level L4, round 1. | [status.md](../notes/rotor-pendula/status.md) |
+| [`notes/rotor-pendula/skeptic-G1-L4-r2.md`](../notes/rotor-pendula/skeptic-G1-L4-r2.md) | 4.7 kB | Blind skeptic report, gate 1, level L4, round 2. | [status.md](../notes/rotor-pendula/status.md) |
+| [`notes/rotor-pendula/skeptic-G3-r1.md`](../notes/rotor-pendula/skeptic-G3-r1.md) | 20.3 kB | Rotor Pendula study record: brief, status, contracts, skeptic and referee reports, dossiers. | [portfolios.md](portfolios.md) |
+| [`notes/rotor-pendula/status.md`](../notes/rotor-pendula/status.md) | 11.7 kB | Status of the Rotor Pendula study: queue, done list with evidence, decisions for Numa. Read first. | [status.md](../notes/rotor-pendula/status.md) |
+
+## Working notes of the Droplet Collection study
+
+| File | Size | What it is | Explained in |
+|---|---|---|---|
+| [`notes/droplets/baseline/checks.html`](../notes/droplets/baseline/checks.html) | 6.8 kB | Text of the checks page of the published Droplet Collection app, kept as the baseline the study starts from. | [brief.md](../notes/droplets/brief.md) |
+| [`notes/droplets/baseline/overview.html`](../notes/droplets/baseline/overview.html) | 4.2 kB | Text of the overview page of the published Droplet Collection app, kept as the baseline the study starts from. | [brief.md](../notes/droplets/brief.md) |
+| [`notes/droplets/baseline/results.html`](../notes/droplets/baseline/results.html) | 5.6 kB | Text of the results page of the published Droplet Collection app, kept as the baseline the study starts from. | [brief.md](../notes/droplets/brief.md) |
+| [`notes/droplets/baseline/simulate.html`](../notes/droplets/baseline/simulate.html) | 2.0 kB | Text of the simulate page of the published Droplet Collection app, kept as the baseline the study starts from. | [brief.md](../notes/droplets/brief.md) |
+| [`notes/droplets/baseline/theory.html`](../notes/droplets/baseline/theory.html) | 105.7 kB | Text of the theory page of the published Droplet Collection app, kept as the baseline the study starts from. | [brief.md](../notes/droplets/brief.md) |
+| [`notes/droplets/brief.md`](../notes/droplets/brief.md) | 17.8 kB | The brief of the Droplet Collection study: question, method and gates, for an agent working in a loop. | [brief.md](../notes/droplets/brief.md) |
+| [`notes/droplets/check-L0.md`](../notes/droplets/check-L0.md) | 4.2 kB | Gate 2 check of level L0: each equation re-derived by two routes. | [status.md](../notes/droplets/status.md) |
+| [`notes/droplets/check-L1.md`](../notes/droplets/check-L1.md) | 6.7 kB | Gate 2 check of level L1: each equation re-derived by two routes. | [status.md](../notes/droplets/status.md) |
+| [`notes/droplets/check-L2.md`](../notes/droplets/check-L2.md) | 7.7 kB | Gate 2 check of level L2: each equation re-derived by two routes. | [status.md](../notes/droplets/status.md) |
+| [`notes/droplets/check-L3.md`](../notes/droplets/check-L3.md) | 4.1 kB | Gate 2 check of level L3: each equation re-derived by two routes. | [status.md](../notes/droplets/status.md) |
+| [`notes/droplets/check-L4.md`](../notes/droplets/check-L4.md) | 6.2 kB | Gate 2 check of level L4: each equation re-derived by two routes. | [status.md](../notes/droplets/status.md) |
+| [`notes/droplets/check-L5.md`](../notes/droplets/check-L5.md) | 6.5 kB | Gate 2 check of level L5: each equation re-derived by two routes. | [status.md](../notes/droplets/status.md) |
+| [`notes/droplets/check-L6.md`](../notes/droplets/check-L6.md) | 5.8 kB | Gate 2 check of level L6: each equation re-derived by two routes. | [status.md](../notes/droplets/status.md) |
+| [`notes/droplets/check-L7.md`](../notes/droplets/check-L7.md) | 6.6 kB | Gate 2 check of level L7: each equation re-derived by two routes. | [status.md](../notes/droplets/status.md) |
+| [`notes/droplets/contract-L0.md`](../notes/droplets/contract-L0.md) | 25.2 kB | Gate 1 contract of model level L0: question, picture, model, assumptions with their numbers, predictions, answers to the skeptic. | [status.md](../notes/droplets/status.md) |
+| [`notes/droplets/contract-L1.md`](../notes/droplets/contract-L1.md) | 18.6 kB | Gate 1 contract of model level L1: question, picture, model, assumptions with their numbers, predictions, answers to the skeptic. | [status.md](../notes/droplets/status.md) |
+| [`notes/droplets/contract-L2.md`](../notes/droplets/contract-L2.md) | 20.0 kB | Gate 1 contract of model level L2: question, picture, model, assumptions with their numbers, predictions, answers to the skeptic. | [status.md](../notes/droplets/status.md) |
+| [`notes/droplets/contract-L3.md`](../notes/droplets/contract-L3.md) | 7.1 kB | Gate 1 contract of model level L3: question, picture, model, assumptions with their numbers, predictions, answers to the skeptic. | [status.md](../notes/droplets/status.md) |
+| [`notes/droplets/contract-L4.md`](../notes/droplets/contract-L4.md) | 14.5 kB | Gate 1 contract of model level L4: question, picture, model, assumptions with their numbers, predictions, answers to the skeptic. | [status.md](../notes/droplets/status.md) |
+| [`notes/droplets/contract-L5.md`](../notes/droplets/contract-L5.md) | 14.5 kB | Gate 1 contract of model level L5: question, picture, model, assumptions with their numbers, predictions, answers to the skeptic. | [status.md](../notes/droplets/status.md) |
+| [`notes/droplets/contract-L6.md`](../notes/droplets/contract-L6.md) | 4.1 kB | Gate 1 contract of model level L6: question, picture, model, assumptions with their numbers, predictions, answers to the skeptic. | [status.md](../notes/droplets/status.md) |
+| [`notes/droplets/contract-L7.md`](../notes/droplets/contract-L7.md) | 6.1 kB | Gate 1 contract of model level L7: question, picture, model, assumptions with their numbers, predictions, answers to the skeptic. | [status.md](../notes/droplets/status.md) |
+| [`notes/droplets/done.md`](../notes/droplets/done.md) | 1.7 kB | Definition of done of the Droplet Collection study, as a checklist; only Numa may change it. | [done.md](../notes/droplets/done.md) |
+| [`notes/droplets/dossier-coalescence-turbulence.md`](../notes/droplets/dossier-coalescence-turbulence.md) | 26.2 kB | Scout dossier on coalescence-turbulence: primary sources read for the study. | [status.md](../notes/droplets/status.md) |
+| [`notes/droplets/dossier-fallspeed-efficiency.md`](../notes/droplets/dossier-fallspeed-efficiency.md) | 38.0 kB | Scout dossier on fallspeed-efficiency: primary sources read for the study. | [status.md](../notes/droplets/status.md) |
+| [`notes/droplets/dossier-ice.md`](../notes/droplets/dossier-ice.md) | 34.2 kB | Scout dossier on ice: primary sources read for the study. | [status.md](../notes/droplets/status.md) |
+| [`notes/droplets/dossier-stochastic.md`](../notes/droplets/dossier-stochastic.md) | 59.4 kB | Scout dossier on stochastic: primary sources read for the study. | [status.md](../notes/droplets/status.md) |
+| [`notes/droplets/gate2/L0_model_crosscheck.cjs`](../notes/droplets/gate2/L0_model_crosscheck.cjs) | 844 B | Gate 2 checker script or output: L0_model_crosscheck.cjs. | [status.md](../notes/droplets/status.md) |
+| [`notes/droplets/gate2/L0_model_crosscheck.out.txt`](../notes/droplets/gate2/L0_model_crosscheck.out.txt) | 338 B | Gate 2 checker script or output: L0_model_crosscheck.out.txt. | [status.md](../notes/droplets/status.md) |
+| [`notes/droplets/gate2/L0_route1_sympy.out.txt`](../notes/droplets/gate2/L0_route1_sympy.out.txt) | 2.1 kB | Gate 2 checker script or output: L0_route1_sympy.out.txt. | [status.md](../notes/droplets/status.md) |
+| [`notes/droplets/gate2/L0_route1_sympy.py`](../notes/droplets/gate2/L0_route1_sympy.py) | 4.3 kB | Gate 2 checker script or output: L0_route1_sympy.py. | [status.md](../notes/droplets/status.md) |
+| [`notes/droplets/gate2/L0_route2.wl`](../notes/droplets/gate2/L0_route2.wl) | 1.4 kB | Gate 2 checker script or output: L0_route2.wl. | [status.md](../notes/droplets/status.md) |
+| [`notes/droplets/gate2/L0_route2_numeric.out.txt`](../notes/droplets/gate2/L0_route2_numeric.out.txt) | 1.6 kB | Gate 2 checker script or output: L0_route2_numeric.out.txt. | [status.md](../notes/droplets/status.md) |
+| [`notes/droplets/gate2/L0_route2_numeric.py`](../notes/droplets/gate2/L0_route2_numeric.py) | 4.1 kB | Gate 2 checker script or output: L0_route2_numeric.py. | [status.md](../notes/droplets/status.md) |
+| [`notes/droplets/gate2/L0_route2_wolfram.out.txt`](../notes/droplets/gate2/L0_route2_wolfram.out.txt) | 624 B | Gate 2 checker script or output: L0_route2_wolfram.out.txt. | [status.md](../notes/droplets/status.md) |
+| [`notes/droplets/gate2/L1_collector_time.cjs`](../notes/droplets/gate2/L1_collector_time.cjs) | 1.1 kB | Gate 2 checker script or output: L1_collector_time.cjs. | [status.md](../notes/droplets/status.md) |
+| [`notes/droplets/gate2/L1_collector_time.out.txt`](../notes/droplets/gate2/L1_collector_time.out.txt) | 130 B | Gate 2 checker script or output: L1_collector_time.out.txt. | [status.md](../notes/droplets/status.md) |
+| [`notes/droplets/gate2/L1_model_dump.cjs`](../notes/droplets/gate2/L1_model_dump.cjs) | 564 B | Gate 2 checker script or output: L1_model_dump.cjs. | [status.md](../notes/droplets/status.md) |
+| [`notes/droplets/gate2/L1_model_dump.json`](../notes/droplets/gate2/L1_model_dump.json) | 2.0 kB | Gate 2 checker script or output: L1_model_dump.json. | [status.md](../notes/droplets/status.md) |
+| [`notes/droplets/gate2/L1_route1_sympy.out.txt`](../notes/droplets/gate2/L1_route1_sympy.out.txt) | 3.1 kB | Gate 2 checker script or output: L1_route1_sympy.out.txt. | [status.md](../notes/droplets/status.md) |
+| [`notes/droplets/gate2/L1_route1_sympy.py`](../notes/droplets/gate2/L1_route1_sympy.py) | 8.4 kB | Gate 2 checker script or output: L1_route1_sympy.py. | [status.md](../notes/droplets/status.md) |
+| [`notes/droplets/gate2/L1_route2.wl`](../notes/droplets/gate2/L1_route2.wl) | 3.8 kB | Gate 2 checker script or output: L1_route2.wl. | [status.md](../notes/droplets/status.md) |
+| [`notes/droplets/gate2/L1_route2_dragcurve.out.txt`](../notes/droplets/gate2/L1_route2_dragcurve.out.txt) | 4.1 kB | Gate 2 checker script or output: L1_route2_dragcurve.out.txt. | [status.md](../notes/droplets/status.md) |
+| [`notes/droplets/gate2/L1_route2_dragcurve.py`](../notes/droplets/gate2/L1_route2_dragcurve.py) | 3.7 kB | Gate 2 checker script or output: L1_route2_dragcurve.py. | [status.md](../notes/droplets/status.md) |
+| [`notes/droplets/gate2/L1_route2_numeric.out.txt`](../notes/droplets/gate2/L1_route2_numeric.out.txt) | 1.5 kB | Gate 2 checker script or output: L1_route2_numeric.out.txt. | [status.md](../notes/droplets/status.md) |
+| [`notes/droplets/gate2/L1_route2_numeric.py`](../notes/droplets/gate2/L1_route2_numeric.py) | 4.6 kB | Gate 2 checker script or output: L1_route2_numeric.py. | [status.md](../notes/droplets/status.md) |
+| [`notes/droplets/gate2/L1_route2_wolfram.out.txt`](../notes/droplets/gate2/L1_route2_wolfram.out.txt) | 1.1 kB | Gate 2 checker script or output: L1_route2_wolfram.out.txt. | [status.md](../notes/droplets/status.md) |
+| [`notes/droplets/gate2/L2_model_crosscheck.cjs`](../notes/droplets/gate2/L2_model_crosscheck.cjs) | 779 B | Gate 2 checker script or output: L2_model_crosscheck.cjs. | [status.md](../notes/droplets/status.md) |
+| [`notes/droplets/gate2/L2_model_crosscheck.out.txt`](../notes/droplets/gate2/L2_model_crosscheck.out.txt) | 430 B | Gate 2 checker script or output: L2_model_crosscheck.out.txt. | [status.md](../notes/droplets/status.md) |
+| [`notes/droplets/gate2/L2_route1_sympy.out.txt`](../notes/droplets/gate2/L2_route1_sympy.out.txt) | 3.9 kB | Gate 2 checker script or output: L2_route1_sympy.out.txt. | [status.md](../notes/droplets/status.md) |
+| [`notes/droplets/gate2/L2_route1_sympy.py`](../notes/droplets/gate2/L2_route1_sympy.py) | 7.6 kB | Gate 2 checker script or output: L2_route1_sympy.py. | [status.md](../notes/droplets/status.md) |
+| [`notes/droplets/gate2/L2_route2.wl`](../notes/droplets/gate2/L2_route2.wl) | 1.5 kB | Gate 2 checker script or output: L2_route2.wl. | [status.md](../notes/droplets/status.md) |
+| [`notes/droplets/gate2/L2_route2_numeric.out.txt`](../notes/droplets/gate2/L2_route2_numeric.out.txt) | 2.6 kB | Gate 2 checker script or output: L2_route2_numeric.out.txt. | [status.md](../notes/droplets/status.md) |
+| [`notes/droplets/gate2/L2_route2_numeric.py`](../notes/droplets/gate2/L2_route2_numeric.py) | 7.6 kB | Gate 2 checker script or output: L2_route2_numeric.py. | [status.md](../notes/droplets/status.md) |
+| [`notes/droplets/gate2/L2_route2_wolfram.out.txt`](../notes/droplets/gate2/L2_route2_wolfram.out.txt) | 1.7 kB | Gate 2 checker script or output: L2_route2_wolfram.out.txt. | [status.md](../notes/droplets/status.md) |
+| [`notes/droplets/gate2/L2_zconv.cjs`](../notes/droplets/gate2/L2_zconv.cjs) | 416 B | Gate 2 checker script or output: L2_zconv.cjs. | [status.md](../notes/droplets/status.md) |
+| [`notes/droplets/gate2/L2_zconv.out.txt`](../notes/droplets/gate2/L2_zconv.out.txt) | 294 B | Gate 2 checker script or output: L2_zconv.out.txt. | [status.md](../notes/droplets/status.md) |
+| [`notes/droplets/gate2/L2_zconv.py`](../notes/droplets/gate2/L2_zconv.py) | 768 B | Gate 2 checker script or output: L2_zconv.py. | [status.md](../notes/droplets/status.md) |
+| [`notes/droplets/gate2/L2_zconv_py.out.txt`](../notes/droplets/gate2/L2_zconv_py.out.txt) | 664 B | Gate 2 checker script or output: L2_zconv_py.out.txt. | [status.md](../notes/droplets/status.md) |
+| [`notes/droplets/gate2/L3_diameter_variant.cjs`](../notes/droplets/gate2/L3_diameter_variant.cjs) | 411 B | Gate 2 checker script or output: L3_diameter_variant.cjs. | [status.md](../notes/droplets/status.md) |
+| [`notes/droplets/gate2/L3_diameter_variant.out.txt`](../notes/droplets/gate2/L3_diameter_variant.out.txt) | 86 B | Gate 2 checker script or output: L3_diameter_variant.out.txt. | [status.md](../notes/droplets/status.md) |
+| [`notes/droplets/gate2/L3_model_dump.cjs`](../notes/droplets/gate2/L3_model_dump.cjs) | 535 B | Gate 2 checker script or output: L3_model_dump.cjs. | [status.md](../notes/droplets/status.md) |
+| [`notes/droplets/gate2/L3_model_dump.json`](../notes/droplets/gate2/L3_model_dump.json) | 1.0 kB | Gate 2 checker script or output: L3_model_dump.json. | [status.md](../notes/droplets/status.md) |
+| [`notes/droplets/gate2/L3_route1_sympy.out.txt`](../notes/droplets/gate2/L3_route1_sympy.out.txt) | 1.9 kB | Gate 2 checker script or output: L3_route1_sympy.out.txt. | [status.md](../notes/droplets/status.md) |
+| [`notes/droplets/gate2/L3_route1_sympy.py`](../notes/droplets/gate2/L3_route1_sympy.py) | 3.7 kB | Gate 2 checker script or output: L3_route1_sympy.py. | [status.md](../notes/droplets/status.md) |
+| [`notes/droplets/gate2/L3_route2.wl`](../notes/droplets/gate2/L3_route2.wl) | 1.3 kB | Gate 2 checker script or output: L3_route2.wl. | [status.md](../notes/droplets/status.md) |
+| [`notes/droplets/gate2/L3_route2_numeric.out.txt`](../notes/droplets/gate2/L3_route2_numeric.out.txt) | 2.4 kB | Gate 2 checker script or output: L3_route2_numeric.out.txt. | [status.md](../notes/droplets/status.md) |
+| [`notes/droplets/gate2/L3_route2_numeric.py`](../notes/droplets/gate2/L3_route2_numeric.py) | 2.9 kB | Gate 2 checker script or output: L3_route2_numeric.py. | [status.md](../notes/droplets/status.md) |
+| [`notes/droplets/gate2/L3_route2_wolfram.out.txt`](../notes/droplets/gate2/L3_route2_wolfram.out.txt) | 587 B | Gate 2 checker script or output: L3_route2_wolfram.out.txt. | [status.md](../notes/droplets/status.md) |
+| [`notes/droplets/gate2/L4_golovin_dump.cjs`](../notes/droplets/gate2/L4_golovin_dump.cjs) | 809 B | Gate 2 checker script or output: L4_golovin_dump.cjs. | [status.md](../notes/droplets/status.md) |
+| [`notes/droplets/gate2/L4_golovin_dump.json`](../notes/droplets/gate2/L4_golovin_dump.json) | 2.2 kB | Gate 2 checker script or output: L4_golovin_dump.json. | [status.md](../notes/droplets/status.md) |
+| [`notes/droplets/gate2/L4_lognormal.out.txt`](../notes/droplets/gate2/L4_lognormal.out.txt) | 824 B | Gate 2 checker script or output: L4_lognormal.out.txt. | [status.md](../notes/droplets/status.md) |
+| [`notes/droplets/gate2/L4_lognormal.py`](../notes/droplets/gate2/L4_lognormal.py) | 2.0 kB | Gate 2 checker script or output: L4_lognormal.py. | [status.md](../notes/droplets/status.md) |
+| [`notes/droplets/gate2/L4_route1_sympy.out.txt`](../notes/droplets/gate2/L4_route1_sympy.out.txt) | 3.5 kB | Gate 2 checker script or output: L4_route1_sympy.out.txt. | [status.md](../notes/droplets/status.md) |
+| [`notes/droplets/gate2/L4_route1_sympy.py`](../notes/droplets/gate2/L4_route1_sympy.py) | 6.8 kB | Gate 2 checker script or output: L4_route1_sympy.py. | [status.md](../notes/droplets/status.md) |
+| [`notes/droplets/gate2/L4_route2.wl`](../notes/droplets/gate2/L4_route2.wl) | 1.9 kB | Gate 2 checker script or output: L4_route2.wl. | [status.md](../notes/droplets/status.md) |
+| [`notes/droplets/gate2/L4_route2_numeric.out.txt`](../notes/droplets/gate2/L4_route2_numeric.out.txt) | 3.6 kB | Gate 2 checker script or output: L4_route2_numeric.out.txt. | [status.md](../notes/droplets/status.md) |
+| [`notes/droplets/gate2/L4_route2_numeric.py`](../notes/droplets/gate2/L4_route2_numeric.py) | 4.9 kB | Gate 2 checker script or output: L4_route2_numeric.py. | [status.md](../notes/droplets/status.md) |
+| [`notes/droplets/gate2/L4_route2_wolfram.out.txt`](../notes/droplets/gate2/L4_route2_wolfram.out.txt) | 826 B | Gate 2 checker script or output: L4_route2_wolfram.out.txt. | [status.md](../notes/droplets/status.md) |
+| [`notes/droplets/gate2/L5_route1_sympy.out.txt`](../notes/droplets/gate2/L5_route1_sympy.out.txt) | 2.6 kB | Gate 2 checker script or output: L5_route1_sympy.out.txt. | [status.md](../notes/droplets/status.md) |
+| [`notes/droplets/gate2/L5_route1_sympy.py`](../notes/droplets/gate2/L5_route1_sympy.py) | 4.3 kB | Gate 2 checker script or output: L5_route1_sympy.py. | [status.md](../notes/droplets/status.md) |
+| [`notes/droplets/gate2/L5_route2.wl`](../notes/droplets/gate2/L5_route2.wl) | 1.3 kB | Gate 2 checker script or output: L5_route2.wl. | [status.md](../notes/droplets/status.md) |
+| [`notes/droplets/gate2/L5_route2_numeric.out.txt`](../notes/droplets/gate2/L5_route2_numeric.out.txt) | 5.2 kB | Gate 2 checker script or output: L5_route2_numeric.out.txt. | [status.md](../notes/droplets/status.md) |
+| [`notes/droplets/gate2/L5_route2_numeric.py`](../notes/droplets/gate2/L5_route2_numeric.py) | 10.2 kB | Gate 2 checker script or output: L5_route2_numeric.py. | [status.md](../notes/droplets/status.md) |
+| [`notes/droplets/gate2/L5_route2_wolfram.out.txt`](../notes/droplets/gate2/L5_route2_wolfram.out.txt) | 803 B | Gate 2 checker script or output: L5_route2_wolfram.out.txt. | [status.md](../notes/droplets/status.md) |
+| [`notes/droplets/gate2/L6_model_dump.cjs`](../notes/droplets/gate2/L6_model_dump.cjs) | 1.0 kB | Gate 2 checker script or output: L6_model_dump.cjs. | [status.md](../notes/droplets/status.md) |
+| [`notes/droplets/gate2/L6_model_dump.json`](../notes/droplets/gate2/L6_model_dump.json) | 1.3 kB | Gate 2 checker script or output: L6_model_dump.json. | [status.md](../notes/droplets/status.md) |
+| [`notes/droplets/gate2/L6_route1_sympy.out.txt`](../notes/droplets/gate2/L6_route1_sympy.out.txt) | 2.2 kB | Gate 2 checker script or output: L6_route1_sympy.out.txt. | [status.md](../notes/droplets/status.md) |
+| [`notes/droplets/gate2/L6_route1_sympy.py`](../notes/droplets/gate2/L6_route1_sympy.py) | 4.3 kB | Gate 2 checker script or output: L6_route1_sympy.py. | [status.md](../notes/droplets/status.md) |
+| [`notes/droplets/gate2/L6_route2.wl`](../notes/droplets/gate2/L6_route2.wl) | 1.1 kB | Gate 2 checker script or output: L6_route2.wl. | [status.md](../notes/droplets/status.md) |
+| [`notes/droplets/gate2/L6_route2_numeric.out.txt`](../notes/droplets/gate2/L6_route2_numeric.out.txt) | 3.4 kB | Gate 2 checker script or output: L6_route2_numeric.out.txt. | [status.md](../notes/droplets/status.md) |
+| [`notes/droplets/gate2/L6_route2_numeric.py`](../notes/droplets/gate2/L6_route2_numeric.py) | 4.8 kB | Gate 2 checker script or output: L6_route2_numeric.py. | [status.md](../notes/droplets/status.md) |
+| [`notes/droplets/gate2/L6_route2_wolfram.out.txt`](../notes/droplets/gate2/L6_route2_wolfram.out.txt) | 482 B | Gate 2 checker script or output: L6_route2_wolfram.out.txt. | [status.md](../notes/droplets/status.md) |
+| [`notes/droplets/gate2/L7_route1_sympy.out.txt`](../notes/droplets/gate2/L7_route1_sympy.out.txt) | 3.0 kB | Gate 2 checker script or output: L7_route1_sympy.out.txt. | [status.md](../notes/droplets/status.md) |
+| [`notes/droplets/gate2/L7_route1_sympy.py`](../notes/droplets/gate2/L7_route1_sympy.py) | 5.4 kB | Gate 2 checker script or output: L7_route1_sympy.py. | [status.md](../notes/droplets/status.md) |
+| [`notes/droplets/gate2/L7_route2.wl`](../notes/droplets/gate2/L7_route2.wl) | 1.3 kB | Gate 2 checker script or output: L7_route2.wl. | [status.md](../notes/droplets/status.md) |
+| [`notes/droplets/gate2/L7_route2_numeric.out.txt`](../notes/droplets/gate2/L7_route2_numeric.out.txt) | 3.0 kB | Gate 2 checker script or output: L7_route2_numeric.out.txt. | [status.md](../notes/droplets/status.md) |
+| [`notes/droplets/gate2/L7_route2_numeric.py`](../notes/droplets/gate2/L7_route2_numeric.py) | 5.8 kB | Gate 2 checker script or output: L7_route2_numeric.py. | [status.md](../notes/droplets/status.md) |
+| [`notes/droplets/gate2/L7_route2_wolfram.out.txt`](../notes/droplets/gate2/L7_route2_wolfram.out.txt) | 502 B | Gate 2 checker script or output: L7_route2_wolfram.out.txt. | [status.md](../notes/droplets/status.md) |
+| [`notes/droplets/gate2/dims.py`](../notes/droplets/gate2/dims.py) | 1.1 kB | Gate 2 checker script or output: dims.py. | [status.md](../notes/droplets/status.md) |
+| [`notes/droplets/gate3-answers-r1.md`](../notes/droplets/gate3-answers-r1.md) | 3.3 kB | Answers to the Gate 3 skeptic, round 1. | [status.md](../notes/droplets/status.md) |
+| [`notes/droplets/skeptic-G1-L0-r1.md`](../notes/droplets/skeptic-G1-L0-r1.md) | 15.3 kB | Blind skeptic report, gate 1, level L0, round 1. | [status.md](../notes/droplets/status.md) |
+| [`notes/droplets/skeptic-G1-L0-r2.md`](../notes/droplets/skeptic-G1-L0-r2.md) | 19.4 kB | Blind skeptic report, gate 1, level L0, round 2. | [status.md](../notes/droplets/status.md) |
+| [`notes/droplets/skeptic-G1-L0-r3.md`](../notes/droplets/skeptic-G1-L0-r3.md) | 15.4 kB | Blind skeptic report, gate 1, level L0, round 3. | [status.md](../notes/droplets/status.md) |
+| [`notes/droplets/skeptic-G1-L1-r1.md`](../notes/droplets/skeptic-G1-L1-r1.md) | 17.3 kB | Blind skeptic report, gate 1, level L1, round 1. | [status.md](../notes/droplets/status.md) |
+| [`notes/droplets/skeptic-G1-L1-r2.md`](../notes/droplets/skeptic-G1-L1-r2.md) | 19.3 kB | Blind skeptic report, gate 1, level L1, round 2. | [status.md](../notes/droplets/status.md) |
+| [`notes/droplets/skeptic-G1-L1-r3.md`](../notes/droplets/skeptic-G1-L1-r3.md) | 17.2 kB | Blind skeptic report, gate 1, level L1, round 3. | [status.md](../notes/droplets/status.md) |
+| [`notes/droplets/skeptic-G1-L2-r1.md`](../notes/droplets/skeptic-G1-L2-r1.md) | 18.2 kB | Blind skeptic report, gate 1, level L2, round 1. | [status.md](../notes/droplets/status.md) |
+| [`notes/droplets/skeptic-G1-L2-r2.md`](../notes/droplets/skeptic-G1-L2-r2.md) | 17.5 kB | Blind skeptic report, gate 1, level L2, round 2. | [status.md](../notes/droplets/status.md) |
+| [`notes/droplets/skeptic-G1-L3L6L7-r1.md`](../notes/droplets/skeptic-G1-L3L6L7-r1.md) | 29.2 kB | Blind skeptic report, gate 1, level L3L6L7, round 1. | [status.md](../notes/droplets/status.md) |
+| [`notes/droplets/skeptic-G1-L4L5-r1.md`](../notes/droplets/skeptic-G1-L4L5-r1.md) | 21.5 kB | Blind skeptic report, gate 1, level L4L5, round 1. | [status.md](../notes/droplets/status.md) |
+| [`notes/droplets/skeptic-G3-r1.md`](../notes/droplets/skeptic-G3-r1.md) | 25.8 kB | Blind skeptic report, gate 3: r1. | [status.md](../notes/droplets/status.md) |
+| [`notes/droplets/status.md`](../notes/droplets/status.md) | 10.9 kB | Status of the Droplet Collection study: Fermi estimate, queue, done list with evidence, decisions for Numa. Read first. | [status.md](../notes/droplets/status.md) |
+
 ## Record of the lecture-note review
 
 | File | Size | What it is | Explained in |
@@ -674,12 +1052,6 @@ to confirm that every file is described. Sizes are those of the files when the l
 | [`notes/.gitignore`](../notes/.gitignore) | 118 B | Keeps the review's screenshots out of the repository. | [notes.md](notes.md) |
 | [`notes/STANDARD.md`](../notes/STANDARD.md) | 8.6 kB | The standard the lecture notes are judged against, and Numa's verdicts. | [notes.md](notes.md) |
 | [`notes/STATUS.md`](../notes/STATUS.md) | 2.3 kB | Status of the lecture-note review, one row per figure. | [notes.md](notes.md) |
-| [`notes/droplets/baseline/checks.html`](../notes/droplets/baseline/checks.html) | 6.8 kB | Text of the Droplet Collection app pages before its study, kept for comparison. | [portfolios.md](portfolios.md) |
-| [`notes/droplets/baseline/overview.html`](../notes/droplets/baseline/overview.html) | 4.2 kB | Text of the Droplet Collection app pages before its study, kept for comparison. | [portfolios.md](portfolios.md) |
-| [`notes/droplets/baseline/results.html`](../notes/droplets/baseline/results.html) | 5.6 kB | Text of the Droplet Collection app pages before its study, kept for comparison. | [portfolios.md](portfolios.md) |
-| [`notes/droplets/baseline/simulate.html`](../notes/droplets/baseline/simulate.html) | 2.0 kB | Text of the Droplet Collection app pages before its study, kept for comparison. | [portfolios.md](portfolios.md) |
-| [`notes/droplets/baseline/theory.html`](../notes/droplets/baseline/theory.html) | 105.7 kB | Text of the Droplet Collection app pages before its study, kept for comparison. | [portfolios.md](portfolios.md) |
-| [`notes/droplets/brief.md`](../notes/droplets/brief.md) | 17.8 kB | The brief of the Droplet Collection study. | [portfolios.md](portfolios.md) |
 | [`notes/fig01/check-out.txt`](../notes/fig01/check-out.txt) | 2.2 kB | Fig. 1: a measuring script of the review, or its saved output. | [notes.md](notes.md) |
 | [`notes/fig01/check.md`](../notes/fig01/check.md) | 23.9 kB | Fig. 1: the derivation checker's table of equations and numbers. | [notes.md](notes.md) |
 | [`notes/fig01/check.py`](../notes/fig01/check.py) | 6.3 kB | Fig. 1: a measuring script of the review, or its saved output. | [notes.md](notes.md) |
@@ -791,138 +1163,5 @@ to confirm that every file is described. Sizes are those of the files when the l
 | [`notes/fig10/verify-out.json`](../notes/fig10/verify-out.json) | 855 B | Fig. 10: a measuring script of the review, or its saved output. | [notes.md](notes.md) |
 | [`notes/fig10/verify.cjs`](../notes/fig10/verify.cjs) | 4.9 kB | Fig. 10: a measuring script of the review, or its saved output. | [notes.md](notes.md) |
 | [`notes/fig10/walk.md`](../notes/fig10/walk.md) | 14.7 kB | Fig. 10: the walkthrough check and its proposed fixes. | [notes.md](notes.md) |
-| [`notes/rotor-pendula/baseline/checks.html`](../notes/rotor-pendula/baseline/checks.html) | 14.3 kB | Text of Sol's app pages before this study, kept for comparison. | [portfolios.md](portfolios.md) |
-| [`notes/rotor-pendula/baseline/overview.html`](../notes/rotor-pendula/baseline/overview.html) | 5.7 kB | Text of Sol's app pages before this study, kept for comparison. | [portfolios.md](portfolios.md) |
-| [`notes/rotor-pendula/baseline/report.html`](../notes/rotor-pendula/baseline/report.html) | 70.3 kB | Text of Sol's app pages before this study, kept for comparison. | [portfolios.md](portfolios.md) |
-| [`notes/rotor-pendula/baseline/results.html`](../notes/rotor-pendula/baseline/results.html) | 11.5 kB | Text of Sol's app pages before this study, kept for comparison. | [portfolios.md](portfolios.md) |
-| [`notes/rotor-pendula/baseline/simulate.html`](../notes/rotor-pendula/baseline/simulate.html) | 4.7 kB | Text of Sol's app pages before this study, kept for comparison. | [portfolios.md](portfolios.md) |
-| [`notes/rotor-pendula/baseline/theory.html`](../notes/rotor-pendula/baseline/theory.html) | 83.0 kB | Text of Sol's app pages before this study, kept for comparison. | [portfolios.md](portfolios.md) |
-| [`notes/rotor-pendula/brief.md`](../notes/rotor-pendula/brief.md) | 19.8 kB | Rotor Pendula study record: brief, status, contracts, skeptic and referee reports, dossiers. | [portfolios.md](portfolios.md) |
-| [`notes/rotor-pendula/check-note-r1.md`](../notes/rotor-pendula/check-note-r1.md) | 23.6 kB | Rotor Pendula study record: brief, status, contracts, skeptic and referee reports, dossiers. | [portfolios.md](portfolios.md) |
-| [`notes/rotor-pendula/contract-L0.md`](../notes/rotor-pendula/contract-L0.md) | 11.5 kB | Rotor Pendula study record: brief, status, contracts, skeptic and referee reports, dossiers. | [portfolios.md](portfolios.md) |
-| [`notes/rotor-pendula/contract-L1.md`](../notes/rotor-pendula/contract-L1.md) | 6.5 kB | Rotor Pendula study record: brief, status, contracts, skeptic and referee reports, dossiers. | [portfolios.md](portfolios.md) |
-| [`notes/rotor-pendula/contract-L2.md`](../notes/rotor-pendula/contract-L2.md) | 7.3 kB | Rotor Pendula study record: brief, status, contracts, skeptic and referee reports, dossiers. | [portfolios.md](portfolios.md) |
-| [`notes/rotor-pendula/contract-L3.md`](../notes/rotor-pendula/contract-L3.md) | 8.0 kB | Rotor Pendula study record: brief, status, contracts, skeptic and referee reports, dossiers. | [portfolios.md](portfolios.md) |
-| [`notes/rotor-pendula/contract-L4.md`](../notes/rotor-pendula/contract-L4.md) | 8.3 kB | Rotor Pendula study record: brief, status, contracts, skeptic and referee reports, dossiers. | [portfolios.md](portfolios.md) |
-
-<details><summary>85 files: Rotor Pendula model or model run (L0-L4): script, its output or its log; see the script header.</summary>
-
-| File | Size | What it is | Explained in |
-|---|---|---|---|
-| [`notes/rotor-pendula/derive/L0_r2.json`](../notes/rotor-pendula/derive/L0_r2.json) | 77 B | Rotor Pendula model or model run (L0-L4): script, its output or its log; see the script header. | [portfolios.md](portfolios.md) |
-| [`notes/rotor-pendula/derive/L0_r2.log`](../notes/rotor-pendula/derive/L0_r2.log) | 446 B | Rotor Pendula model or model run (L0-L4): script, its output or its log; see the script header. | [portfolios.md](portfolios.md) |
-| [`notes/rotor-pendula/derive/L0_r2.py`](../notes/rotor-pendula/derive/L0_r2.py) | 3.6 kB | Rotor Pendula model or model run (L0-L4): script, its output or its log; see the script header. | [portfolios.md](portfolios.md) |
-| [`notes/rotor-pendula/derive/L0_single.py`](../notes/rotor-pendula/derive/L0_single.py) | 4.8 kB | Rotor Pendula model or model run (L0-L4): script, its output or its log; see the script header. | [portfolios.md](portfolios.md) |
-| [`notes/rotor-pendula/derive/L0_table.py`](../notes/rotor-pendula/derive/L0_table.py) | 5.8 kB | Rotor Pendula model or model run (L0-L4): script, its output or its log; see the script header. | [portfolios.md](portfolios.md) |
-| [`notes/rotor-pendula/derive/L1_chaos.json`](../notes/rotor-pendula/derive/L1_chaos.json) | 3.5 kB | Rotor Pendula model or model run (L0-L4): script, its output or its log; see the script header. | [portfolios.md](portfolios.md) |
-| [`notes/rotor-pendula/derive/L1_chaos.log`](../notes/rotor-pendula/derive/L1_chaos.log) | 1.3 kB | Rotor Pendula model or model run (L0-L4): script, its output or its log; see the script header. | [portfolios.md](portfolios.md) |
-| [`notes/rotor-pendula/derive/L1_chaos.py`](../notes/rotor-pendula/derive/L1_chaos.py) | 2.6 kB | Rotor Pendula model or model run (L0-L4): script, its output or its log; see the script header. | [portfolios.md](portfolios.md) |
-| [`notes/rotor-pendula/derive/L1_double.py`](../notes/rotor-pendula/derive/L1_double.py) | 7.5 kB | Rotor Pendula model or model run (L0-L4): script, its output or its log; see the script header. | [portfolios.md](portfolios.md) |
-| [`notes/rotor-pendula/derive/L1_engine_check.log`](../notes/rotor-pendula/derive/L1_engine_check.log) | 3.2 kB | Rotor Pendula model or model run (L0-L4): script, its output or its log; see the script header. | [portfolios.md](portfolios.md) |
-| [`notes/rotor-pendula/derive/L1_engine_check.py`](../notes/rotor-pendula/derive/L1_engine_check.py) | 8.0 kB | Rotor Pendula model or model run (L0-L4): script, its output or its log; see the script header. | [portfolios.md](portfolios.md) |
-| [`notes/rotor-pendula/derive/L1_map.json`](../notes/rotor-pendula/derive/L1_map.json) | 57.9 kB | Rotor Pendula model or model run (L0-L4): script, its output or its log; see the script header. | [portfolios.md](portfolios.md) |
-| [`notes/rotor-pendula/derive/L1_map.log`](../notes/rotor-pendula/derive/L1_map.log) | 2.6 kB | Rotor Pendula model or model run (L0-L4): script, its output or its log; see the script header. | [portfolios.md](portfolios.md) |
-| [`notes/rotor-pendula/derive/L1_map.py`](../notes/rotor-pendula/derive/L1_map.py) | 4.0 kB | Rotor Pendula model or model run (L0-L4): script, its output or its log; see the script header. | [portfolios.md](portfolios.md) |
-| [`notes/rotor-pendula/derive/L1_map_g70.json`](../notes/rotor-pendula/derive/L1_map_g70.json) | 6.1 kB | Rotor Pendula model or model run (L0-L4): script, its output or its log; see the script header. | [portfolios.md](portfolios.md) |
-| [`notes/rotor-pendula/derive/L1_map_g70.py`](../notes/rotor-pendula/derive/L1_map_g70.py) | 1.1 kB | Rotor Pendula model or model run (L0-L4): script, its output or its log; see the script header. | [portfolios.md](portfolios.md) |
-| [`notes/rotor-pendula/derive/L1_mountings.json`](../notes/rotor-pendula/derive/L1_mountings.json) | 5.9 kB | Rotor Pendula model or model run (L0-L4): script, its output or its log; see the script header. | [portfolios.md](portfolios.md) |
-| [`notes/rotor-pendula/derive/L2_run.json`](../notes/rotor-pendula/derive/L2_run.json) | 10.7 kB | Rotor Pendula model or model run (L0-L4): script, its output or its log; see the script header. | [portfolios.md](portfolios.md) |
-| [`notes/rotor-pendula/derive/L2_run.log`](../notes/rotor-pendula/derive/L2_run.log) | 1.1 kB | Rotor Pendula model or model run (L0-L4): script, its output or its log; see the script header. | [portfolios.md](portfolios.md) |
-| [`notes/rotor-pendula/derive/L2_run.py`](../notes/rotor-pendula/derive/L2_run.py) | 5.3 kB | Rotor Pendula model or model run (L0-L4): script, its output or its log; see the script header. | [portfolios.md](portfolios.md) |
-| [`notes/rotor-pendula/derive/L2_run_k2.json`](../notes/rotor-pendula/derive/L2_run_k2.json) | 10.7 kB | Rotor Pendula model or model run (L0-L4): script, its output or its log; see the script header. | [portfolios.md](portfolios.md) |
-| [`notes/rotor-pendula/derive/L2_run_k2.log`](../notes/rotor-pendula/derive/L2_run_k2.log) | 1.2 kB | Rotor Pendula model or model run (L0-L4): script, its output or its log; see the script header. | [portfolios.md](portfolios.md) |
-| [`notes/rotor-pendula/derive/L2_run_nrel.json`](../notes/rotor-pendula/derive/L2_run_nrel.json) | 10.8 kB | Rotor Pendula model or model run (L0-L4): script, its output or its log; see the script header. | [portfolios.md](portfolios.md) |
-| [`notes/rotor-pendula/derive/L2_run_nrel.log`](../notes/rotor-pendula/derive/L2_run_nrel.log) | 1.1 kB | Rotor Pendula model or model run (L0-L4): script, its output or its log; see the script header. | [portfolios.md](portfolios.md) |
-| [`notes/rotor-pendula/derive/L2_scales.json`](../notes/rotor-pendula/derive/L2_scales.json) | 100 B | Rotor Pendula model or model run (L0-L4): script, its output or its log; see the script header. | [portfolios.md](portfolios.md) |
-| [`notes/rotor-pendula/derive/L2_scales.log`](../notes/rotor-pendula/derive/L2_scales.log) | 1.2 kB | Rotor Pendula model or model run (L0-L4): script, its output or its log; see the script header. | [portfolios.md](portfolios.md) |
-| [`notes/rotor-pendula/derive/L2_scales.py`](../notes/rotor-pendula/derive/L2_scales.py) | 3.6 kB | Rotor Pendula model or model run (L0-L4): script, its output or its log; see the script header. | [portfolios.md](portfolios.md) |
-| [`notes/rotor-pendula/derive/L3_sag.json`](../notes/rotor-pendula/derive/L3_sag.json) | 629 B | Rotor Pendula model or model run (L0-L4): script, its output or its log; see the script header. | [portfolios.md](portfolios.md) |
-| [`notes/rotor-pendula/derive/L3_sag.py`](../notes/rotor-pendula/derive/L3_sag.py) | 3.0 kB | Rotor Pendula model or model run (L0-L4): script, its output or its log; see the script header. | [portfolios.md](portfolios.md) |
-| [`notes/rotor-pendula/derive/L3_sag_check.py`](../notes/rotor-pendula/derive/L3_sag_check.py) | 3.3 kB | Rotor Pendula model or model run (L0-L4): script, its output or its log; see the script header. | [portfolios.md](portfolios.md) |
-| [`notes/rotor-pendula/derive/L3_sag_numbers.py`](../notes/rotor-pendula/derive/L3_sag_numbers.py) | 2.1 kB | Rotor Pendula model or model run (L0-L4): script, its output or its log; see the script header. | [portfolios.md](portfolios.md) |
-| [`notes/rotor-pendula/derive/L3_sag_static.json`](../notes/rotor-pendula/derive/L3_sag_static.json) | 1.2 kB | Rotor Pendula model or model run (L0-L4): script, its output or its log; see the script header. | [portfolios.md](portfolios.md) |
-| [`notes/rotor-pendula/derive/L3_sag_static.py`](../notes/rotor-pendula/derive/L3_sag_static.py) | 2.3 kB | Rotor Pendula model or model run (L0-L4): script, its output or its log; see the script header. | [portfolios.md](portfolios.md) |
-| [`notes/rotor-pendula/derive/L3_shake.json`](../notes/rotor-pendula/derive/L3_shake.json) | 5.2 kB | Rotor Pendula model or model run (L0-L4): script, its output or its log; see the script header. | [portfolios.md](portfolios.md) |
-| [`notes/rotor-pendula/derive/L3_shake.py`](../notes/rotor-pendula/derive/L3_shake.py) | 4.6 kB | Rotor Pendula model or model run (L0-L4): script, its output or its log; see the script header. | [portfolios.md](portfolios.md) |
-| [`notes/rotor-pendula/derive/L3_shake2.json`](../notes/rotor-pendula/derive/L3_shake2.json) | 4.7 kB | Rotor Pendula model or model run (L0-L4): script, its output or its log; see the script header. | [portfolios.md](portfolios.md) |
-| [`notes/rotor-pendula/derive/L3_shake2.py`](../notes/rotor-pendula/derive/L3_shake2.py) | 6.8 kB | Rotor Pendula model or model run (L0-L4): script, its output or its log; see the script header. | [portfolios.md](portfolios.md) |
-| [`notes/rotor-pendula/derive/L3_shake_model.json`](../notes/rotor-pendula/derive/L3_shake_model.json) | 122 B | Rotor Pendula model or model run (L0-L4): script, its output or its log; see the script header. | [portfolios.md](portfolios.md) |
-| [`notes/rotor-pendula/derive/L3_shake_model.py`](../notes/rotor-pendula/derive/L3_shake_model.py) | 955 B | Rotor Pendula model or model run (L0-L4): script, its output or its log; see the script header. | [portfolios.md](portfolios.md) |
-| [`notes/rotor-pendula/derive/L4_check.log`](../notes/rotor-pendula/derive/L4_check.log) | 695 B | Rotor Pendula model or model run (L0-L4): script, its output or its log; see the script header. | [portfolios.md](portfolios.md) |
-| [`notes/rotor-pendula/derive/L4_check.py`](../notes/rotor-pendula/derive/L4_check.py) | 4.5 kB | Rotor Pendula model or model run (L0-L4): script, its output or its log; see the script header. | [portfolios.md](portfolios.md) |
-| [`notes/rotor-pendula/derive/L4_check_100.json`](../notes/rotor-pendula/derive/L4_check_100.json) | 3.4 kB | Rotor Pendula model or model run (L0-L4): script, its output or its log; see the script header. | [portfolios.md](portfolios.md) |
-| [`notes/rotor-pendula/derive/L4_check_2000.json`](../notes/rotor-pendula/derive/L4_check_2000.json) | 9.7 kB | Rotor Pendula model or model run (L0-L4): script, its output or its log; see the script header. | [portfolios.md](portfolios.md) |
-| [`notes/rotor-pendula/derive/L4_check_2000.log`](../notes/rotor-pendula/derive/L4_check_2000.log) | 3.5 kB | Rotor Pendula model or model run (L0-L4): script, its output or its log; see the script header. | [portfolios.md](portfolios.md) |
-| [`notes/rotor-pendula/derive/L4_check_2000.time`](../notes/rotor-pendula/derive/L4_check_2000.time) | 44 B | Rotor Pendula model or model run (L0-L4): script, its output or its log; see the script header. | [portfolios.md](portfolios.md) |
-| [`notes/rotor-pendula/derive/L4_check_4000.json`](../notes/rotor-pendula/derive/L4_check_4000.json) | 9.7 kB | Rotor Pendula model or model run (L0-L4): script, its output or its log; see the script header. | [portfolios.md](portfolios.md) |
-| [`notes/rotor-pendula/derive/L4_check_4000.log`](../notes/rotor-pendula/derive/L4_check_4000.log) | 3.5 kB | Rotor Pendula model or model run (L0-L4): script, its output or its log; see the script header. | [portfolios.md](portfolios.md) |
-| [`notes/rotor-pendula/derive/L4_check_4000.time`](../notes/rotor-pendula/derive/L4_check_4000.time) | 44 B | Rotor Pendula model or model run (L0-L4): script, its output or its log; see the script header. | [portfolios.md](portfolios.md) |
-| [`notes/rotor-pendula/derive/L4_converge.py`](../notes/rotor-pendula/derive/L4_converge.py) | 993 B | Rotor Pendula model or model run (L0-L4): script, its output or its log; see the script header. | [portfolios.md](portfolios.md) |
-| [`notes/rotor-pendula/derive/L4_full.py`](../notes/rotor-pendula/derive/L4_full.py) | 3.8 kB | Rotor Pendula model or model run (L0-L4): script, its output or its log; see the script header. | [portfolios.md](portfolios.md) |
-| [`notes/rotor-pendula/derive/L4_generator.json`](../notes/rotor-pendula/derive/L4_generator.json) | 28.4 kB | Rotor Pendula model or model run (L0-L4): script, its output or its log; see the script header. | [portfolios.md](portfolios.md) |
-| [`notes/rotor-pendula/derive/L4_generator.py`](../notes/rotor-pendula/derive/L4_generator.py) | 5.2 kB | Rotor Pendula model or model run (L0-L4): script, its output or its log; see the script header. | [portfolios.md](portfolios.md) |
-| [`notes/rotor-pendula/derive/L4_harmonics.json`](../notes/rotor-pendula/derive/L4_harmonics.json) | 798 B | Rotor Pendula model or model run (L0-L4): script, its output or its log; see the script header. | [portfolios.md](portfolios.md) |
-| [`notes/rotor-pendula/derive/L4_harmonics.log`](../notes/rotor-pendula/derive/L4_harmonics.log) | 1.4 kB | Rotor Pendula model or model run (L0-L4): script, its output or its log; see the script header. | [portfolios.md](portfolios.md) |
-| [`notes/rotor-pendula/derive/L4_harmonics.py`](../notes/rotor-pendula/derive/L4_harmonics.py) | 3.2 kB | Rotor Pendula model or model run (L0-L4): script, its output or its log; see the script header. | [portfolios.md](portfolios.md) |
-| [`notes/rotor-pendula/derive/L4_resonance.json`](../notes/rotor-pendula/derive/L4_resonance.json) | 2.3 kB | Rotor Pendula model or model run (L0-L4): script, its output or its log; see the script header. | [portfolios.md](portfolios.md) |
-| [`notes/rotor-pendula/derive/L4_resonance.log`](../notes/rotor-pendula/derive/L4_resonance.log) | 0 B | Rotor Pendula model or model run (L0-L4): script, its output or its log; see the script header. | [portfolios.md](portfolios.md) |
-| [`notes/rotor-pendula/derive/L4_resonance.py`](../notes/rotor-pendula/derive/L4_resonance.py) | 3.3 kB | Rotor Pendula model or model run (L0-L4): script, its output or its log; see the script header. | [portfolios.md](portfolios.md) |
-| [`notes/rotor-pendula/derive/L4_resonance_v2.json`](../notes/rotor-pendula/derive/L4_resonance_v2.json) | 2.3 kB | Rotor Pendula model or model run (L0-L4): script, its output or its log; see the script header. | [portfolios.md](portfolios.md) |
-| [`notes/rotor-pendula/derive/L4_scan.json`](../notes/rotor-pendula/derive/L4_scan.json) | 5.8 kB | Rotor Pendula model or model run (L0-L4): script, its output or its log; see the script header. | [portfolios.md](portfolios.md) |
-| [`notes/rotor-pendula/derive/L4_scan.log`](../notes/rotor-pendula/derive/L4_scan.log) | 2.8 kB | Rotor Pendula model or model run (L0-L4): script, its output or its log; see the script header. | [portfolios.md](portfolios.md) |
-| [`notes/rotor-pendula/derive/L4_scan.py`](../notes/rotor-pendula/derive/L4_scan.py) | 4.8 kB | Rotor Pendula model or model run (L0-L4): script, its output or its log; see the script header. | [portfolios.md](portfolios.md) |
-| [`notes/rotor-pendula/derive/L4_scan_0.json`](../notes/rotor-pendula/derive/L4_scan_0.json) | 3.1 kB | Rotor Pendula model or model run (L0-L4): script, its output or its log; see the script header. | [portfolios.md](portfolios.md) |
-| [`notes/rotor-pendula/derive/L4_scan_0.log`](../notes/rotor-pendula/derive/L4_scan_0.log) | 1.3 kB | Rotor Pendula model or model run (L0-L4): script, its output or its log; see the script header. | [portfolios.md](portfolios.md) |
-| [`notes/rotor-pendula/derive/L4_scan_1.json`](../notes/rotor-pendula/derive/L4_scan_1.json) | 2.6 kB | Rotor Pendula model or model run (L0-L4): script, its output or its log; see the script header. | [portfolios.md](portfolios.md) |
-| [`notes/rotor-pendula/derive/L4_scan_1.log`](../notes/rotor-pendula/derive/L4_scan_1.log) | 1.3 kB | Rotor Pendula model or model run (L0-L4): script, its output or its log; see the script header. | [portfolios.md](portfolios.md) |
-| [`notes/rotor-pendula/derive/L4_scan_2.json`](../notes/rotor-pendula/derive/L4_scan_2.json) | 2.6 kB | Rotor Pendula model or model run (L0-L4): script, its output or its log; see the script header. | [portfolios.md](portfolios.md) |
-| [`notes/rotor-pendula/derive/L4_scan_2.log`](../notes/rotor-pendula/derive/L4_scan_2.log) | 1.3 kB | Rotor Pendula model or model run (L0-L4): script, its output or its log; see the script header. | [portfolios.md](portfolios.md) |
-| [`notes/rotor-pendula/derive/L4_sensitivity.json`](../notes/rotor-pendula/derive/L4_sensitivity.json) | 7.5 kB | Rotor Pendula model or model run (L0-L4): script, its output or its log; see the script header. | [portfolios.md](portfolios.md) |
-| [`notes/rotor-pendula/derive/L4_sensitivity.log`](../notes/rotor-pendula/derive/L4_sensitivity.log) | 4.9 kB | Rotor Pendula model or model run (L0-L4): script, its output or its log; see the script header. | [portfolios.md](portfolios.md) |
-| [`notes/rotor-pendula/derive/L4_sensitivity.py`](../notes/rotor-pendula/derive/L4_sensitivity.py) | 1.9 kB | Rotor Pendula model or model run (L0-L4): script, its output or its log; see the script header. | [portfolios.md](portfolios.md) |
-| [`notes/rotor-pendula/derive/L4_stick.json`](../notes/rotor-pendula/derive/L4_stick.json) | 2.2 kB | Rotor Pendula model or model run (L0-L4): script, its output or its log; see the script header. | [portfolios.md](portfolios.md) |
-| [`notes/rotor-pendula/derive/L4_stick.log`](../notes/rotor-pendula/derive/L4_stick.log) | 3.5 kB | Rotor Pendula model or model run (L0-L4): script, its output or its log; see the script header. | [portfolios.md](portfolios.md) |
-| [`notes/rotor-pendula/derive/L4_stick.py`](../notes/rotor-pendula/derive/L4_stick.py) | 2.8 kB | Rotor Pendula model or model run (L0-L4): script, its output or its log; see the script header. | [portfolios.md](portfolios.md) |
-| [`notes/rotor-pendula/derive/data/Cp_Ct_Cq.NREL5MW.txt`](../notes/rotor-pendula/derive/data/Cp_Ct_Cq.NREL5MW.txt) | 33.1 kB | Rotor Pendula model or model run (L0-L4): script, its output or its log; see the script header. | [portfolios.md](portfolios.md) |
-| [`notes/rotor-pendula/derive/data/NRELOffshrBsline5MW_Blade.dat`](../notes/rotor-pendula/derive/data/NRELOffshrBsline5MW_Blade.dat) | 8.0 kB | Rotor Pendula model or model run (L0-L4): script, its output or its log; see the script header. | [portfolios.md](portfolios.md) |
-| [`notes/rotor-pendula/derive/engine.py`](../notes/rotor-pendula/derive/engine.py) | 7.6 kB | Rotor Pendula model or model run (L0-L4): script, its output or its log; see the script header. | [portfolios.md](portfolios.md) |
-| [`notes/rotor-pendula/derive/fermi.py`](../notes/rotor-pendula/derive/fermi.py) | 3.1 kB | Rotor Pendula model or model run (L0-L4): script, its output or its log; see the script header. | [portfolios.md](portfolios.md) |
-| [`notes/rotor-pendula/derive/mc_full.log`](../notes/rotor-pendula/derive/mc_full.log) | 2.2 kB | Rotor Pendula model or model run (L0-L4): script, its output or its log; see the script header. | [portfolios.md](portfolios.md) |
-| [`notes/rotor-pendula/derive/mc_quick.log`](../notes/rotor-pendula/derive/mc_quick.log) | 2.2 kB | Rotor Pendula model or model run (L0-L4): script, its output or its log; see the script header. | [portfolios.md](portfolios.md) |
-| [`notes/rotor-pendula/derive/nrel5mw.py`](../notes/rotor-pendula/derive/nrel5mw.py) | 7.3 kB | Rotor Pendula model or model run (L0-L4): script, its output or its log; see the script header. | [portfolios.md](portfolios.md) |
-| [`notes/rotor-pendula/derive/power_theorem.py`](../notes/rotor-pendula/derive/power_theorem.py) | 7.0 kB | Rotor Pendula model or model run (L0-L4): script, its output or its log; see the script header. | [portfolios.md](portfolios.md) |
-| [`notes/rotor-pendula/derive/power_theorem_mc.py`](../notes/rotor-pendula/derive/power_theorem_mc.py) | 6.4 kB | Rotor Pendula model or model run (L0-L4): script, its output or its log; see the script header. | [portfolios.md](portfolios.md) |
-| [`notes/rotor-pendula/derive/scales.py`](../notes/rotor-pendula/derive/scales.py) | 2.7 kB | Rotor Pendula model or model run (L0-L4): script, its output or its log; see the script header. | [portfolios.md](portfolios.md) |
-| [`notes/rotor-pendula/derive/turbulence.py`](../notes/rotor-pendula/derive/turbulence.py) | 5.6 kB | Rotor Pendula model or model run (L0-L4): script, its output or its log; see the script header. | [portfolios.md](portfolios.md) |
-
-</details>
-
-<details><summary>18 files: Rotor Pendula study record: brief, status, contracts, skeptic and referee reports, dossiers.</summary>
-
-| File | Size | What it is | Explained in |
-|---|---|---|---|
-| [`notes/rotor-pendula/done.md`](../notes/rotor-pendula/done.md) | 2.5 kB | Rotor Pendula study record: brief, status, contracts, skeptic and referee reports, dossiers. | [portfolios.md](portfolios.md) |
-| [`notes/rotor-pendula/dossier-edgewise.md`](../notes/rotor-pendula/dossier-edgewise.md) | 33.9 kB | Rotor Pendula study record: brief, status, contracts, skeptic and referee reports, dossiers. | [portfolios.md](portfolios.md) |
-| [`notes/rotor-pendula/dossier-generator.md`](../notes/rotor-pendula/dossier-generator.md) | 15.9 kB | Rotor Pendula study record: brief, status, contracts, skeptic and referee reports, dossiers. | [portfolios.md](portfolios.md) |
-| [`notes/rotor-pendula/dossier-harvesting.md`](../notes/rotor-pendula/dossier-harvesting.md) | 33.8 kB | Rotor Pendula study record: brief, status, contracts, skeptic and referee reports, dossiers. | [portfolios.md](portfolios.md) |
-| [`notes/rotor-pendula/dossier-turbine.md`](../notes/rotor-pendula/dossier-turbine.md) | 54.8 kB | Rotor Pendula study record: brief, status, contracts, skeptic and referee reports, dossiers. | [portfolios.md](portfolios.md) |
-| [`notes/rotor-pendula/handoff-prompt.md`](../notes/rotor-pendula/handoff-prompt.md) | 11.7 kB | Rotor Pendula study record: brief, status, contracts, skeptic and referee reports, dossiers. | [portfolios.md](portfolios.md) |
-| [`notes/rotor-pendula/referee-note-r1.md`](../notes/rotor-pendula/referee-note-r1.md) | 30.9 kB | Rotor Pendula study record: brief, status, contracts, skeptic and referee reports, dossiers. | [portfolios.md](portfolios.md) |
-| [`notes/rotor-pendula/referee-note-r3-answers.md`](../notes/rotor-pendula/referee-note-r3-answers.md) | 4.1 kB | Rotor Pendula study record: brief, status, contracts, skeptic and referee reports, dossiers. | [portfolios.md](portfolios.md) |
-| [`notes/rotor-pendula/referee-note-r3.md`](../notes/rotor-pendula/referee-note-r3.md) | 28.7 kB | Rotor Pendula study record: brief, status, contracts, skeptic and referee reports, dossiers. | [portfolios.md](portfolios.md) |
-| [`notes/rotor-pendula/review-prompt.md`](../notes/rotor-pendula/review-prompt.md) | 3.6 kB | Rotor Pendula study record: brief, status, contracts, skeptic and referee reports, dossiers. | [portfolios.md](portfolios.md) |
-| [`notes/rotor-pendula/skeptic-G1-L0-r1.md`](../notes/rotor-pendula/skeptic-G1-L0-r1.md) | 17.4 kB | Rotor Pendula study record: brief, status, contracts, skeptic and referee reports, dossiers. | [portfolios.md](portfolios.md) |
-| [`notes/rotor-pendula/skeptic-G1-L2-r1.md`](../notes/rotor-pendula/skeptic-G1-L2-r1.md) | 17.5 kB | Rotor Pendula study record: brief, status, contracts, skeptic and referee reports, dossiers. | [portfolios.md](portfolios.md) |
-| [`notes/rotor-pendula/skeptic-G1-L3-r1.md`](../notes/rotor-pendula/skeptic-G1-L3-r1.md) | 9.7 kB | Rotor Pendula study record: brief, status, contracts, skeptic and referee reports, dossiers. | [portfolios.md](portfolios.md) |
-| [`notes/rotor-pendula/skeptic-G1-L3-r2.md`](../notes/rotor-pendula/skeptic-G1-L3-r2.md) | 3.0 kB | Rotor Pendula study record: brief, status, contracts, skeptic and referee reports, dossiers. | [portfolios.md](portfolios.md) |
-| [`notes/rotor-pendula/skeptic-G1-L4-r1.md`](../notes/rotor-pendula/skeptic-G1-L4-r1.md) | 14.1 kB | Rotor Pendula study record: brief, status, contracts, skeptic and referee reports, dossiers. | [portfolios.md](portfolios.md) |
-| [`notes/rotor-pendula/skeptic-G1-L4-r2.md`](../notes/rotor-pendula/skeptic-G1-L4-r2.md) | 4.7 kB | Rotor Pendula study record: brief, status, contracts, skeptic and referee reports, dossiers. | [portfolios.md](portfolios.md) |
-| [`notes/rotor-pendula/skeptic-G3-r1.md`](../notes/rotor-pendula/skeptic-G3-r1.md) | 20.3 kB | Rotor Pendula study record: brief, status, contracts, skeptic and referee reports, dossiers. | [portfolios.md](portfolios.md) |
-| [`notes/rotor-pendula/status.md`](../notes/rotor-pendula/status.md) | 11.7 kB | Rotor Pendula study record: brief, status, contracts, skeptic and referee reports, dossiers. | [portfolios.md](portfolios.md) |
-
-</details>
-
-| File | Size | What it is | Explained in |
-|---|---|---|---|
 | [`notes/verify.mjs`](../notes/verify.mjs) | 4.5 kB | Checks the ten simulation pages in headless Chromium at desktop and phone size. | [notes.md](notes.md) |
 | [`notes/walkcheck.cjs`](../notes/walkcheck.cjs) | 1.7 kB | Searches every quoted code line of the ten walkthroughs in its page. | [notes.md](notes.md) |

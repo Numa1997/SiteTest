@@ -10,7 +10,7 @@
     <meta name="theme-color" content="#f5f1ea">
     <link rel="stylesheet" href="../styles/sim.css">
     <link rel="stylesheet" href="../styles/data.css">
-    <link rel="stylesheet" href="../styles/fold.css">
+    <link rel="stylesheet" href="../styles/fold.css"><link rel="stylesheet" href="../styles/i18n.css"><script src="../scripts/flip.js"></script><!--I18N-ALTERNATES--><link rel="alternate" hreflang="en" href="https://phyeinusul.com/simulations/phasor-sums.html" /><link rel="alternate" hreflang="de" href="https://phyeinusul.com/de/simulations/phasor-sums.html" /><link rel="alternate" hreflang="ar" href="https://phyeinusul.com/ar/simulations/phasor-sums.html" /><link rel="alternate" hreflang="x-default" href="https://phyeinusul.com/simulations/phasor-sums.html" /><!--/I18N-ALTERNATES-->
     <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='12' fill='%237a1f2b'/%3E%3Ctext x='32' y='45' text-anchor='middle' font-family='Georgia,serif' font-size='38' fill='%23f5f1ea'%3EN%3C/text%3E%3C/svg%3E">
     <style>
         .plist { display: grid; grid-template-columns: repeat(auto-fill, minmax(230px, 1fr)); gap: 10px; }
@@ -55,7 +55,7 @@
             <a href="draw-decompose.html">8</a>
             <a href="driven-oscillator.html">9</a>
             <a href="wind-turbine.html">10</a>
-        </nav>
+        </nav><span class="lang-switch" role="group" aria-label="Language" translate="no"><!--I18N-SWITCH--><a href="../simulations/phasor-sums.html" hreflang="en" lang="en" aria-current="page">English</a> · <a href="../de/simulations/phasor-sums.html" hreflang="de" lang="de">Deutsch</a> · <a href="../ar/simulations/phasor-sums.html" hreflang="ar" lang="ar" dir="rtl">العربية</a><!--/I18N-SWITCH--></span>
     </header>
 
     <main class="sim">
@@ -895,7 +895,7 @@
             audio.ctx.resume().then(function () { return audio.el.play(); }).catch(function () {});
         }
         function audioControl(action) {
-            if (!audio.el) { $('drop-txt').textContent = 'Choose an audio file first.'; return; }
+            if (!audio.el) { $('drop-txt').textContent = _t('Choose an audio file first.'); return; }
             if (action === 'play') { audio.ctx.resume(); audio.el.play().catch(function () {}); }
             else if (action === 'pause') audio.el.pause();
             else { audio.el.pause(); audio.el.currentTime = 0; }
@@ -960,7 +960,7 @@
         var FMT = {
             amp: function (v) { return v.toFixed(2); },
             freq: function (v) { return Sim.fmt(v, 2) + ' rad/s'; },
-            phase: function (v) { return v.toFixed(2) + ' rad'; }
+            phase: function (v) { return v.toFixed(2) + _t(' rad'); }
         };
         function paintRange(el) {
             var min = parseFloat(el.min), max = parseFloat(el.max), v = parseFloat(el.value);
@@ -973,13 +973,13 @@
         function renderList() {
             var host = $('plist');
             host.innerHTML = phasors.map(function (p, i) {
-                return '<div class="ph"><div class="ph__head"><span><span class="ph__sw" style="background:' + p.color + '"></span>Circle ' + (i + 1) + '</span>' +
+                return '<div class="ph"><div class="ph__head"><span><span class="ph__sw" style="background:' + p.color + _t('"></span>Circle ') + (i + 1) + '</span>' +
                     '<button type="button" class="ph__x" data-rm="' + i + '" aria-label="Remove circle ' + (i + 1) + '">×</button></div>' +
                     ctl('amp', 'Radius A', 0, 2, p.amp, i) +
                     ctl('freq', 'Angular frequency ω', -32, 32, p.freq, i) +
                     ctl('phase', 'Phase φ', 0, 6.28, p.phase, i) +
-                    '<label class="ctl"><span class="ctl__row"><span>Bounce curve</span></span><select class="sel" data-curve="' + i + '">' +
-                    CURVES.map(function (c) { return '<option' + (c === p.curve ? ' selected' : '') + '>' + c + '</option>'; }).join('') +
+                    _t('<label class="ctl"><span class="ctl__row"><span>Bounce curve</span></span><select class="sel" data-curve="') + i + '">' +
+                    CURVES.map(function (c) { return '<option' + (c === p.curve ? _t(' selected') : '') + '>' + c + '</option>'; }).join('') +
                     '</select></label></div>';
             }).join('') || '<p class="hint">No circles. Add one or pick a preset.</p>';
             Array.prototype.forEach.call(host.querySelectorAll('input[type="range"]'), paintRange);
@@ -1161,10 +1161,10 @@
             $('r-n').textContent = String(phasors.length);
             $('r-z').textContent = Sim.fmt(Math.hypot(z.x, z.y), 3);
             $('r-period').textContent = st.n === 0 ? '—' : st.g > 0 ? Sim.fmt(TAU / st.g, 2) + ' s' : 'point';
-            $('r-fold').textContent = st.n <= 1 ? (st.n ? '∞ (circle)' : '—') : st.q + '-fold';
+            $('r-fold').textContent = st.n <= 1 ? (st.n ? _t('∞ (circle)') : '—') : _t('{q}-fold', { q: st.q });
             $('r-energy').textContent = Sim.fmt(e, 3);
             $('cap-t').innerHTML = '<i>t</i> = ' + Sim.fmt(t, 2) + ' s';
-            $('cap-mode').textContent = mode === 'final' ? 'final shape · ' + finalN + ' samples' : 'live construction';
+            $('cap-mode').textContent = mode === 'final' ? _t('final shape · ') + finalN + _t(' samples') : _t('live construction');
         }
         function hud() {
             $('beat').classList.toggle('on', beatPulse > 0.4);
@@ -1188,7 +1188,7 @@
                 if (recAcc >= 0.05) {
                     recAcc = 0;
                     tl.push(snapshot());
-                    status('Recording · ' + tl.length + ' snapshots');
+                    status(_t('Recording · ') + tl.length + _t(' snapshots'));
                 }
             }
             if (!replaying || !tl.length) return;
@@ -1209,8 +1209,8 @@
             }
             if (s.d !== danceOn) { danceOn = s.d; $('dance').checked = danceOn; }
             var end = tl[tl.length - 1].t;
-            status('Replaying · ' + Sim.fmt(rt, 1) + ' s of ' + Sim.fmt(end, 1) + ' s');
-            if (rt > end + 0.25) { replaying = false; status('Replay finished · ' + tl.length + ' snapshots.'); }
+            status(_t('Replaying · ') + Sim.fmt(rt, 1) + ' s of ' + Sim.fmt(end, 1) + ' s');
+            if (rt > end + 0.25) { replaying = false; status(_t('Replay finished · ') + tl.length + ' snapshots.'); }
         }
         $('rec').addEventListener('click', function () {
             tl = []; recording = true; replaying = false; recAcc = 0; wall = 0;
@@ -1303,8 +1303,8 @@
                 burst: Sim.fmt(ds.get('burst') || 1, 3), dance: ds.get('dance') ? 'on' : 'off'
             };
             if (N && ds.get('ang').length) {
-                out.A = Sim.fmt(ds.get('A')[0], 3); out.w = Sim.fmt(ds.get('omega')[0], 2) + ' rad/s'; out.ph = Sim.fmt(ds.get('phi')[0], 3) + ' rad';
-                out.ang = Sim.fmt(ds.get('ang')[0], 3) + ' rad'; out.x1 = Sim.fmt(ds.get('vx')[0], 4); out.y1 = Sim.fmt(ds.get('vy')[0], 4);
+                out.A = Sim.fmt(ds.get('A')[0], 3); out.w = Sim.fmt(ds.get('omega')[0], 2) + ' rad/s'; out.ph = Sim.fmt(ds.get('phi')[0], 3) + _t(' rad');
+                out.ang = Sim.fmt(ds.get('ang')[0], 3) + _t(' rad'); out.x1 = Sim.fmt(ds.get('vx')[0], 4); out.y1 = Sim.fmt(ds.get('vy')[0], 4);
                 out.mul = Sim.fmt(ds.get('mul')[0], 3); out.Ar = Sim.fmt(ds.get('A_live')[0], 3);
             } else {
                 out.A = out.w = out.ph = out.ang = out.x1 = out.y1 = out.mul = out.Ar = 'no circles';
@@ -1353,7 +1353,7 @@
 
         /* ---------- the data panel (scripts/datalog.js) reads the store; these hooks only say where things are drawn and how to test a value ---------- */
         function pixelAt(x, y) { return ctx.getImageData(Math.round(x * box.dpr), Math.round(y * box.dpr), 1, 1).data; }
-        function rgbText(px) { return px[3] === 0 ? 'nothing (transparent)' : 'rgb(' + px[0] + ', ' + px[1] + ', ' + px[2] + ')' + (px[3] < 255 ? ' at alpha ' + (px[3] / 255).toFixed(2) : ''); }
+        function rgbText(px) { return px[3] === 0 ? _t('nothing (transparent)') : 'rgb(' + px[0] + ', ' + px[1] + ', ' + px[2] + ')' + (px[3] < 255 ? _t(' at alpha ') + (px[3] / 255).toFixed(2) : ''); }
         function lum(px) { return 0.2126 * px[0] + 0.7152 * px[1] + 0.0722 * px[2]; }
         function isLive() { return ds.get('mode') === 'live'; }
         function trailAt(i) { return { x: ds.get('cx') + ds.get('trail_x')[i] * ds.get('scale'), y: ds.get('cy') - ds.get('trail_y')[i] * ds.get('scale') }; }
@@ -1368,17 +1368,17 @@
             return sf > 0 ? Math.min(T, 20 * sf) : T;
         }
         Sim.data = {
-            ds: ds, kicker: 'Fig. 7 · data', file: 'fig7-phasor-sums',
+            ds: ds, kicker: _t('Fig. 7 · data'), file: 'fig7-phasor-sums',
             playing: function () { return clk.playing; },
             groups: [
-                { title: 'Circles', note: 'one row per circle: the list as stored, and the copy the dance scales', vars: ['N', 'A', 'omega', 'phi', 'curve', 'mul', 'A_live', 'n_active'] },
-                { title: 'The sum z(t)', note: 'the pen', vars: ['t', 'x', 'y', 'absz', 'absz2', 'E'] },
-                { title: 'Arms and joints', note: 'tip to tail, as drawn in the live view; point at a cell to find the joint', vars: ['A_arm', 'ang', 'vx', 'vy', 'jx', 'jy', 'px', 'py', 'tip_px', 'tip_py'] },
-                { title: 'Structure', note: 'period and symmetry from integer gcds on 100·ω', vars: ['G', 'g', 'period', 'M', 'q'] },
-                { title: 'Final shape', note: 'the exact path, and the drawn path that morphs toward it', vars: ['n_path', 'span', 'span_slider', 'auto', 'final_x', 'final_y', 'path_x', 'path_y', 'morph_on', 'morph_slider', 'alpha', 'dev', 'scale_final'] },
-                { title: 'Trail', note: 'history of the pen', vars: ['trail_max', 'trail_len', 'trail_x', 'trail_y'] },
-                { title: 'Dance and audio', note: 'measured from the sound, smoothed; all 0 without audio', vars: ['dance', 'bass', 'mid', 'high', 'burst', 'bpm', 'beat', 'd_bass', 'd_speed', 'd_burst', 'd_high'] },
-                { title: 'Time and drawing', note: 'how the picture is laid out', vars: ['dt', 'spd', 'sf', 'mode', 'zoom', 'fitR', 'scale', 'cx', 'cy', 'box_w', 'box_h', 'circles', 'vectors', 'fps', 'frames', 'playing'] }
+                { title: _t('Circles'), note: _t('one row per circle: the list as stored, and the copy the dance scales'), vars: ['N', 'A', 'omega', 'phi', 'curve', 'mul', 'A_live', 'n_active'] },
+                { title: _t('The sum z(t)'), note: _t('the pen'), vars: ['t', 'x', 'y', 'absz', 'absz2', 'E'] },
+                { title: _t('Arms and joints'), note: _t('tip to tail, as drawn in the live view; point at a cell to find the joint'), vars: ['A_arm', 'ang', 'vx', 'vy', 'jx', 'jy', 'px', 'py', 'tip_px', 'tip_py'] },
+                { title: _t('Structure'), note: _t('period and symmetry from integer gcds on 100·ω'), vars: ['G', 'g', 'period', 'M', 'q'] },
+                { title: _t('Final shape'), note: _t('the exact path, and the drawn path that morphs toward it'), vars: ['n_path', 'span', 'span_slider', 'auto', 'final_x', 'final_y', 'path_x', 'path_y', 'morph_on', 'morph_slider', 'alpha', 'dev', 'scale_final'] },
+                { title: _t('Trail'), note: _t('history of the pen'), vars: ['trail_max', 'trail_len', 'trail_x', 'trail_y'] },
+                { title: _t('Dance and audio'), note: _t('measured from the sound, smoothed; all 0 without audio'), vars: ['dance', 'bass', 'mid', 'high', 'burst', 'bpm', 'beat', 'd_bass', 'd_speed', 'd_burst', 'd_high'] },
+                { title: _t('Time and drawing'), note: _t('how the picture is laid out'), vars: ['dt', 'spd', 'sf', 'mode', 'zoom', 'fitR', 'scale', 'cx', 'cy', 'box_w', 'box_h', 'circles', 'vectors', 'fps', 'frames', 'playing'] }
             ],
             rowLabel: { arm: function (j) { return 'c' + (j + 1); } },
             colour: (function () { function byReach(v) { return Sim.colourMap(v, Math.max(ds.get('fitR') || 0, 0.05)); } return { vx: byReach, vy: byReach, jx: byReach, jy: byReach, final_x: byReach, final_y: byReach, path_x: byReach, path_y: byReach, trail_x: byReach, trail_y: byReach }; })(),
@@ -1398,11 +1398,11 @@
             },
             inspect: function (ref) {
                 var i;
-                if (ref.tip) return { title: 'the pen z(t)', at: { x: ds.get('tip_px'), y: ds.get('tip_py') }, rows: [['t', ds.get('t'), 's', 't'], ['Re z', ds.get('x'), '', 'x'], ['Im z', ds.get('y'), '', 'y'], ['|z|', ds.get('absz'), '', 'absz']] };
-                if (ref.arm !== undefined) { i = ref.arm; return { title: 'circle ' + (i + 1) + ' · its joint', at: { x: ds.get('px')[i], y: ds.get('py')[i] }, rows: [['A′', ds.get('A_arm')[i], '', 'A_arm', i], ['ω', ds.get('omega')[i], 'rad/s', 'omega', i], ['φ', ds.get('phi')[i], 'rad', 'phi', i], ['θ = ωt + φ', ds.get('ang')[i], 'rad', 'ang', i], ['Δx', ds.get('vx')[i], '', 'vx', i], ['Δy', ds.get('vy')[i], '', 'vy', i], ['Re z_k', ds.get('jx')[i], '', 'jx', i], ['Im z_k', ds.get('jy')[i], '', 'jy', i], ['mul', ds.get('mul')[i], '', 'mul', i]] }; }
-                if (ref.trail !== undefined) { i = ref.trail; return { title: 'trail point ' + i + ' of ' + ds.get('trail_len') + ' · ' + (ds.get('trail_len') - 1 - i) + ' frames ago', at: trailAt(i), rows: [['x', ds.get('trail_x')[i], '', 'trail_x', i], ['y', ds.get('trail_y')[i], '', 'trail_y', i]] }; }
+                if (ref.tip) return { title: _t('the pen z(t)'), at: { x: ds.get('tip_px'), y: ds.get('tip_py') }, rows: [['t', ds.get('t'), 's', 't'], ['Re z', ds.get('x'), '', 'x'], ['Im z', ds.get('y'), '', 'y'], ['|z|', ds.get('absz'), '', 'absz']] };
+                if (ref.arm !== undefined) { i = ref.arm; return { title: _t('circle ') + (i + 1) + _t(' · its joint'), at: { x: ds.get('px')[i], y: ds.get('py')[i] }, rows: [['A′', ds.get('A_arm')[i], '', 'A_arm', i], ['ω', ds.get('omega')[i], 'rad/s', 'omega', i], ['φ', ds.get('phi')[i], 'rad', 'phi', i], ['θ = ωt + φ', ds.get('ang')[i], 'rad', 'ang', i], ['Δx', ds.get('vx')[i], '', 'vx', i], ['Δy', ds.get('vy')[i], '', 'vy', i], ['Re z_k', ds.get('jx')[i], '', 'jx', i], ['Im z_k', ds.get('jy')[i], '', 'jy', i], ['mul', ds.get('mul')[i], '', 'mul', i]] }; }
+                if (ref.trail !== undefined) { i = ref.trail; return { title: _t('trail point ') + i + ' of ' + ds.get('trail_len') + ' · ' + (ds.get('trail_len') - 1 - i) + _t(' frames ago'), at: trailAt(i), rows: [['x', ds.get('trail_x')[i], '', 'trail_x', i], ['y', ds.get('trail_y')[i], '', 'trail_y', i]] }; }
                 i = ref.path;
-                return { title: 'final path point ' + i + ' · t = ' + Sim.fmt(i / ds.get('n_path') * ds.get('span'), 3) + ' s', at: pathAt(i), rows: [['exact Re z', ds.get('final_x')[i], '', 'final_x', i], ['exact Im z', ds.get('final_y')[i], '', 'final_y', i], ['drawn x', ds.get('path_x')[i], '', 'path_x', i], ['drawn y', ds.get('path_y')[i], '', 'path_y', i]] };
+                return { title: _t('final path point ') + i + ' · t = ' + Sim.fmt(i / ds.get('n_path') * ds.get('span'), 3) + ' s', at: pathAt(i), rows: [['exact Re z', ds.get('final_x')[i], '', 'final_x', i], ['exact Im z', ds.get('final_y')[i], '', 'final_y', i], ['drawn x', ds.get('path_x')[i], '', 'path_x', i], ['drawn y', ds.get('path_y')[i], '', 'path_y', i]] };
             },
             locate: function (name, idx) {
                 var v = ds.vars[name];
@@ -1418,7 +1418,7 @@
                     var W = ds.get('omega'), absF = Array.prototype.map.call(W, Math.abs), maxAbs = Math.max.apply(null, [1e-6].concat(Array.prototype.slice.call(absF))), med = median(Array.prototype.slice.call(absF)), m, cv = CURVES[ds.get('curve')[i]];
                     if (absF[i] <= med) m = 1 + EASE[cv](clamp01(ds.get('bass'))) * ds.get('d_bass') * (1 - 0.7 * absF[i] / maxAbs); else m = 1 + clamp01(ds.get('high')) * ds.get('d_high');
                     m *= ds.get('burst');
-                    return { formula: absF[i] <= med ? '(1 + ' + cv + '(bass) · d_bass · (1 − 0.7 |ω| / max|ω|)) · burst' : '(1 + high · d_high) · burst', inputs: [['|ω|', absF[i], 'rad/s', 2], ['median |ω|', med, 'rad/s', 2], ['max |ω|', maxAbs, 'rad/s', 2], ['bass', ds.get('bass'), '', 4], ['high', ds.get('high'), '', 4], ['burst', ds.get('burst'), '', 4], ['d_bass', ds.get('d_bass'), '', 2], ['d_high', ds.get('d_high'), '', 2]], value: m };
+                    return { formula: absF[i] <= med ? '(1 + ' + cv + _t('(bass) · d_bass · (1 − 0.7 |ω| / max|ω|)) · burst') : _t('(1 + high · d_high) · burst'), inputs: [['|ω|', absF[i], 'rad/s', 2], ['median |ω|', med, 'rad/s', 2], ['max |ω|', maxAbs, 'rad/s', 2], ['bass', ds.get('bass'), '', 4], ['high', ds.get('high'), '', 4], ['burst', ds.get('burst'), '', 4], ['d_bass', ds.get('d_bass'), '', 2], ['d_high', ds.get('d_high'), '', 2]], value: m };
                 },
                 A_live: function (i) { return { formula: 'A · mul', inputs: [['A', ds.get('A')[i], '', 4], ['mul', ds.get('mul')[i], '', 4]], value: ds.get('A')[i] * ds.get('mul')[i] }; },
                 n_active: function () { return { formula: 'count of A > 0', inputs: [['A', Array.prototype.join.call(ds.get('A'), ', '), '']], value: activeW().length }; },
@@ -1455,16 +1455,16 @@
                 cy: function () { return { formula: 'box.h / 2', inputs: [['box.h', ds.get('box_h'), 'css px', 0]], value: ds.get('box_h') / 2 }; }
             },
             drawn: {
-                tip_px: function () { if (!isLive()) return { what: 'the pen', drawn: 'nothing', expected: 'nothing', ok: true, note: 'The pen is drawn only in the live view.' }; var px = pixelAt(ds.get('tip_px'), ds.get('tip_py')); return { what: 'screen pixel at the pen, (' + Sim.fmt(ds.get('tip_px'), 1) + ', ' + Sim.fmt(ds.get('tip_py'), 1) + ') css px', drawn: rgbText(px), expected: 'the burgundy pen dot, rgb(122, 31, 43)', ok: px[3] > 0 && lum(px) < 130, note: 'The dot has radius 5.5 px, so the pixel at the stored centre is its fill.' }; },
-                px: function (i) { if (!isLive() || !ds.get('vectors')) return { what: 'joint ' + (i + 1), drawn: 'nothing', expected: 'nothing', ok: true, note: 'Joints are drawn only in the live view with the arms switched on.' }; var px = pixelAt(ds.get('px')[i], ds.get('py')[i]); return { what: 'screen pixel at joint ' + (i + 1), drawn: rgbText(px), expected: 'the dot in the circle’s colour, ' + phasors[i].color, ok: px[3] > 0 && lum(px) < 200, note: 'Each joint carries a filled dot of radius 3 px.' }; },
-                path_x: function (i) { if (isLive()) return { what: 'final path point ' + i, drawn: 'nothing', expected: 'nothing', ok: true, note: 'The final path is drawn only in the final view.' }; var p = pathAt(i), px = pixelAt(p.x, p.y); return { what: 'screen pixel at path point ' + i + ', (' + Sim.fmt(p.x, 1) + ', ' + Sim.fmt(p.y, 1) + ') css px', drawn: rgbText(px), expected: 'the rose halo or the burgundy line', ok: px[3] > 0, note: 'The path is a 6 px rose stroke under a 1.8 px burgundy one, centred on the stored points.' }; },
-                trail_x: function (i) { if (!isLive()) return { what: 'trail point ' + i, drawn: 'nothing', expected: 'nothing', ok: true, note: 'The trail is drawn only in the live view.' }; var p = trailAt(i), px = pixelAt(p.x, p.y); return { what: 'screen pixel at trail point ' + i + ', (' + Sim.fmt(p.x, 1) + ', ' + Sim.fmt(p.y, 1) + ') css px', drawn: rgbText(px), expected: 'burgundy, fainter for older points', ok: px[3] > 0, note: 'The trail is a 1.8 px stroke; older chunks are drawn with lower opacity, and circles or arms may be drawn over it.' }; }
+                tip_px: function () { if (!isLive()) return { what: _t('the pen'), drawn: 'nothing', expected: 'nothing', ok: true, note: _t('The pen is drawn only in the live view.') }; var px = pixelAt(ds.get('tip_px'), ds.get('tip_py')); return { what: _t('screen pixel at the pen, (') + Sim.fmt(ds.get('tip_px'), 1) + ', ' + Sim.fmt(ds.get('tip_py'), 1) + _t(') css px'), drawn: rgbText(px), expected: _t('the burgundy pen dot, rgb(122, 31, 43)'), ok: px[3] > 0 && lum(px) < 130, note: _t('The dot has radius 5.5 px, so the pixel at the stored centre is its fill.') }; },
+                px: function (i) { if (!isLive() || !ds.get('vectors')) return { what: _t('joint ') + (i + 1), drawn: 'nothing', expected: 'nothing', ok: true, note: _t('Joints are drawn only in the live view with the arms switched on.') }; var px = pixelAt(ds.get('px')[i], ds.get('py')[i]); return { what: _t('screen pixel at joint ') + (i + 1), drawn: rgbText(px), expected: _t('the dot in the circle’s colour, ') + phasors[i].color, ok: px[3] > 0 && lum(px) < 200, note: _t('Each joint carries a filled dot of radius 3 px.') }; },
+                path_x: function (i) { if (isLive()) return { what: _t('final path point ') + i, drawn: 'nothing', expected: 'nothing', ok: true, note: _t('The final path is drawn only in the final view.') }; var p = pathAt(i), px = pixelAt(p.x, p.y); return { what: _t('screen pixel at path point ') + i + ', (' + Sim.fmt(p.x, 1) + ', ' + Sim.fmt(p.y, 1) + _t(') css px'), drawn: rgbText(px), expected: _t('the rose halo or the burgundy line'), ok: px[3] > 0, note: _t('The path is a 6 px rose stroke under a 1.8 px burgundy one, centred on the stored points.') }; },
+                trail_x: function (i) { if (!isLive()) return { what: _t('trail point ') + i, drawn: 'nothing', expected: 'nothing', ok: true, note: _t('The trail is drawn only in the live view.') }; var p = trailAt(i), px = pixelAt(p.x, p.y); return { what: _t('screen pixel at trail point ') + i + ', (' + Sim.fmt(p.x, 1) + ', ' + Sim.fmt(p.y, 1) + _t(') css px'), drawn: rgbText(px), expected: _t('burgundy, fainter for older points'), ok: px[3] > 0, note: _t('The trail is a 1.8 px stroke; older chunks are drawn with lower opacity, and circles or arms may be drawn over it.') }; }
             },
             round: { time: 't', length: phasorRound, columns: ['x', 'y', 'absz', 'sf'], point: function () { return { tip: true }; },
-                label: function () { var g = ds.get('g'), L = phasorRound(); return (g > 0 && L >= 2 * Math.PI / g - 1e-9 ? 'one full figure, ' : 'part of the figure, ') + Sim.fmt(L, 2) + ' s of phasor time'; },
-                blocked: function () { return ds.get('mode') === 'final' ? 'Switch to the Live view first: time only runs there.' : ds.get('sf') === 0 ? 'Set Speed above 0: phasor time does not advance at Speed 0.' : null; } },
+                label: function () { var g = ds.get('g'), L = phasorRound(); return (g > 0 && L >= 2 * Math.PI / g - 1e-9 ? _t('one full figure, ') : _t('part of the figure, ')) + Sim.fmt(L, 2) + _t(' s of phasor time'); },
+                blocked: function () { return ds.get('mode') === 'final' ? _t('Switch to the Live view first: time only runs there.') : ds.get('sf') === 0 ? _t('Set Speed above 0: phasor time does not advance at Speed 0.') : null; } },
             play: function () { clk.set(true); },
-            about: 'The arms, joints and pen are drawn from the numbers stored here, every frame. The trail is the pen position at the end of each past frame, so its point spacing is the frame time times the speed: history, not a formula. In the final view the drawn path moves the fraction α of the way to the exact path each frame, so path_x, path_y lag final_x, final_y until the deviation reaches zero. The readouts under the figure refresh ten times a second; the store refreshes every frame. The audio numbers are measurements of the sound, smoothed over frames.'
+            about: _t('The arms, joints and pen are drawn from the numbers stored here, every frame. The trail is the pen position at the end of each past frame, so its point spacing is the frame time times the speed: history, not a formula. In the final view the drawn path moves the fraction α of the way to the exact path each frame, so path_x, path_y lag final_x, final_y until the deviation reaches zero. The readouts under the figure refresh ten times a second; the store refreshes every frame. The audio numbers are measurements of the sound, smoothed over frames.')
         };
 
         Sim.onResize(stage, function () { box.fit(); });

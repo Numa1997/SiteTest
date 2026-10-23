@@ -1,0 +1,670 @@
+{
+ "00c08b89bb24": {
+  "src": "The force on the disc, \\(\\Delta p\\,A\\), must equal the momentum the air loses per second, \\(\\rho A v(1-a)\\,(v - v_w)\\). Equating the two and dividing by \\(v - v_w\\) (recall \\(v^2 - v_w^2 = (v - v_w)(v + v_w)\\)) shows that the disc sees exactly the average of the two speeds, \\(v(1-a) = \\tfrac12(v + v_w)\\), so \\(v_w = v(1-2a)\\). The power the disc extracts is force times the air’s speed through it:",
+  "tr": "Die Kraft auf die Scheibe, \\(\\Delta p\\,A\\), muss gleich dem Impuls sein, den die Luft pro Sekunde verliert, \\(\\rho A v(1-a)\\,(v - v_w)\\). Setzt man beides gleich und teilt durch \\(v - v_w\\) (erinnern Sie sich an \\(v^2 - v_w^2 = (v - v_w)(v + v_w)\\)), so zeigt sich, dass die Luft an der Scheibe genau den Mittelwert der beiden Geschwindigkeiten hat, \\(v(1-a) = \\tfrac12(v + v_w)\\), also \\(v_w = v(1-2a)\\). Die Leistung, die die Scheibe entnimmt, ist Kraft mal die Geschwindigkeit der Luft durch sie hindurch:"
+ },
+ "04acf5986f61": {
+  "src": "15.5 rpm",
+  "tr": "15.5 rpm"
+ },
+ "0516c4c56cd1": {
+  "src": "25.30 kWh",
+  "tr": "25.30 kWh"
+ },
+ "086f7510df4e": {
+  "src": "This page uses an empirical fit to measured rotor curves due to Heier, with the blades at zero pitch,",
+  "tr": "Diese Seite verwendet eine empirische Anpassung an gemessene Rotorkennlinien nach Heier, bei einem Blattwinkel von null,"
+ },
+ "09170ef8df9e": {
+  "src": "<span>2</span>The power in the wind",
+  "tr": "<span>2</span>Die Leistung im Wind"
+ },
+ "09c5fee32110": {
+  "src": "<span class=\"psec__n\">10</span>What the model leaves out",
+  "tr": "<span class=\"psec__n\">10</span>Was das Modell weglässt"
+ },
+ "0c69e7aaeb1a": {
+  "src": "steady",
+  "tr": "konstant"
+ },
+ "0c8b214ca8c5": {
+  "src": "The turbine of this page has blades 40 m long. Their tips sweep a disc of radius \\(R\\) and area \\(\\pi R^2 = 5027\\ \\mathrm{m^2}\\), about 70 % of a football pitch. At its leisurely-looking 15 turns per minute, an angular speed \\(\\omega = 1.57\\ \\mathrm{rad/s}\\), the tips move at \\(\\omega R = 62.8\\ \\mathrm{m/s}\\), over 220 km/h. The wind pushes on the blades and makes the rotor turn; a generator in the nacelle brakes the rotor and turns the work of that braking into electrical energy.",
+  "tr": "Die Turbine dieser Seite hat 40 m lange Blätter. Ihre Spitzen überstreichen eine Scheibe vom Radius \\(R\\) und der Fläche \\(\\pi R^2 = 5027\\ \\mathrm{m^2}\\), etwa 70 % eines Fußballfeldes. Bei gemächlich wirkenden 15 Umdrehungen pro Minute, einer Winkelgeschwindigkeit \\(\\omega = 1.57\\ \\mathrm{rad/s}\\), bewegen sich die Spitzen mit \\(\\omega R = 62.8\\ \\mathrm{m/s}\\), also über 220 km/h. Der Wind drückt auf die Blätter und dreht den Rotor; ein Generator im Maschinenhaus bremst den Rotor und wandelt die Arbeit dieser Bremsung in elektrische Energie um."
+ },
+ "12134ec6e890": {
+  "src": "<span class=\"psec__n\">02</span>The power in the wind",
+  "tr": "<span class=\"psec__n\">02</span>Die Leistung im Wind"
+ },
+ "1391d3f027b0": {
+  "src": "The Betz limit",
+  "tr": "Die Betz-Grenze"
+ },
+ "1392d2e67a40": {
+  "src": "No pitch control, so above about 11 m/s nothing limits the power except the generator’s torque limit; real turbines pitch their blades there.",
+  "tr": "Keine Blattverstellung; oberhalb von etwa 11 m/s begrenzt daher nichts die Leistung außer der Drehmomentgrenze des Generators. Echte Turbinen verstellen dort ihre Blätter."
+ },
+ "142b5758f344": {
+  "src": "Wind",
+  "tr": "Wind"
+ },
+ "14a2f9ce51c5": {
+  "src": "Numa Koudsie · for school students and first- and second-year undergraduates",
+  "tr": "Numa Koudsie · für Schülerinnen und Schüler sowie Studierende im ersten und zweiten Studienjahr"
+ },
+ "192bf5a10867": {
+  "src": "<strong>Solve.</strong> RK4 advances the rotor speed \\(\\omega\\) and the controller’s integral from \\(t = 0\\) to \\(120\\ \\mathrm{s}\\) in 12 000 steps of \\(h = 10\\ \\mathrm{ms}\\). The same steps carry the generator energy, the aerodynamic energy, the energy of the wind through the disc, the distance the air has travelled and the rotor angle \\(\\theta\\). The run starts in balance: at the optimum speed when following the wind, or at the target speed with the generator torque equal to the wind’s. A step of 10 ms is small for this problem: the speed controller answers within seconds and the quickest wind wave has a period of 2 s, so each is cut into hundreds of steps, and RK4’s error shrinks like \\(h^4\\). Solving the defaults again with \\(h = 5\\ \\mathrm{ms}\\) changes the stored rotor speed by at most \\(2\\times10^{-11}\\) rpm, and with \\(h = 20\\ \\mathrm{ms}\\) by 16 times as much, as a fourth-order method should. The method would lose its high order where the generator torque hits one of its limits, because the right-hand side has a corner there; none of the eight runs of section 7 reaches a limit.",
+  "tr": "<strong>Lösen.</strong> Das Runge-Kutta-Verfahren vierter Ordnung (RK4) führt die Rotordrehzahl \\(\\omega\\) und das Integral des Reglers von \\(t = 0\\) bis \\(120\\ \\mathrm{s}\\) in 12 000 Schritten zu je \\(h = 10\\ \\mathrm{ms}\\) weiter. Dieselben Schritte tragen die Generatorenergie, die aerodynamische Energie, die Energie des Windes durch die Scheibe, die Strecke, die die Luft zurückgelegt hat, und den Rotorwinkel \\(\\theta\\). Der Lauf beginnt im Gleichgewicht: bei der optimalen Drehzahl beim Folgen des Windes oder bei der Solldrehzahl, wobei das Generatordrehmoment dem des Windes gleich ist. Ein Schritt von 10 ms ist für dieses Problem klein: Der Drehzahlregler reagiert innerhalb von Sekunden, und die schnellste Windwelle hat eine Periode von 2 s, sodass jede in Hunderte von Schritten zerlegt wird; der Fehler von RK4 schrumpft wie \\(h^4\\). Rechnet man mit den Standardwerten noch einmal mit \\(h = 5\\ \\mathrm{ms}\\), ändert sich die gespeicherte Rotordrehzahl um höchstens \\(2\\times10^{-11}\\) rpm, und mit \\(h = 20\\ \\mathrm{ms}\\) um das 16-Fache davon, wie es bei einem Verfahren vierter Ordnung sein soll. Das Verfahren würde seine hohe Ordnung dort verlieren, wo das Generatordrehmoment eine seiner Grenzen erreicht, denn die rechte Seite hat dort einen Knick; keiner der acht Läufe aus Abschnitt 7 erreicht eine Grenze."
+ },
+ "1a1b7209c5ef": {
+  "src": "<span class=\"psub__n\">10.1</span>Further reading",
+  "tr": "<span class=\"psub__n\">10.1</span>Weiterführende Literatur"
+ },
+ "1ad22380ce1e": {
+  "src": "Rotor speed",
+  "tr": "Rotordrehzahl"
+ },
+ "1de7062c2939": {
+  "src": "15.2–16.1 rpm",
+  "tr": "15.2–16.1 rpm"
+ },
+ "2295c8851fc9": {
+  "src": "Power coefficient against tip-speed ratio, with the optimum and the present operating point.",
+  "tr": "Leistungsbeiwert gegen Schnelllaufzahl, mit Optimum und aktuellem Arbeitspunkt."
+ },
+ "22e41baece31": {
+  "src": "Count the energy that the air carries through the disc. In one second a slab of air of length \\(v\\) passes through the area \\(A\\): its mass is \\(\\rho A v\\), with \\(\\rho\\) the density of air, and each kilogram carries kinetic energy \\(\\tfrac12 v^2\\). The product is the power of the wind through the disc,",
+  "tr": "Bilanzieren Sie die Energie, die die Luft durch die Scheibe trägt. In einer Sekunde passiert eine Luftsäule der Länge \\(v\\) die Fläche \\(A\\): Ihre Masse ist \\(\\rho A v\\), mit \\(\\rho\\) der Dichte der Luft, und jedes Kilogramm trägt die kinetische Energie \\(\\tfrac12 v^2\\). Das Produkt ist die Leistung des Windes durch die Scheibe,"
+ },
+ "22f32d163611": {
+  "src": "Sometimes a constant speed is wanted: for a generator tied to the grid’s frequency, for quiet operation, or to stay away from a tower resonance. The controller then compares \\(\\omega\\) with a target \\(\\omega_\\text{ref}\\) and brakes harder the faster the rotor turns, adding a term that remembers past errors:",
+  "tr": "Manchmal ist eine konstante Drehzahl gewünscht: für einen Generator, der an die Netzfrequenz gekoppelt ist, für ruhigen Betrieb oder um eine Resonanz des Turms zu meiden. Der Regler vergleicht dann \\(\\omega\\) mit einem Sollwert \\(\\omega_\\text{ref}\\) und bremst umso stärker, je schneller sich der Rotor dreht; hinzu kommt ein Glied, das frühere Abweichungen speichert:"
+ },
+ "2872dfa1b82f": {
+  "src": "Wind turbine control: catching energy from a wind you cannot choose",
+  "tr": "Regelung einer Windturbine: Energie aus einem Wind einfangen, den man nicht wählen kann"
+ },
+ "2b451460baaa": {
+  "src": "Lecture note · Fig. 10 · control systems",
+  "tr": "Skript · Abb. 10 · Regelungstechnik"
+ },
+ "2b461ac87534": {
+  "src": "Here \\(\\tau_0 = \\tau_\\text{aero}(\\omega_\\text{ref}, v(0))\\) is the torque that balances the wind at the start, so the run begins in equilibrium with nothing yet to remember. To choose the gains, linearise (6) around the target in steady wind. A small speed error \\(\\delta\\omega = \\omega - \\omega_\\text{ref}\\) changes the aerodynamic torque by \\((\\partial\\tau_\\text{aero}/\\partial\\omega)\\,\\delta\\omega\\). Put this and (9) into (6): the constant torques cancel, because \\(\\tau_0\\) balances the wind, and what is left is \\(J\\,\\delta\\dot\\omega = (\\partial\\tau_\\text{aero}/\\partial\\omega - K_p)\\,\\delta\\omega - K_i\\int_0^t\\delta\\omega\\,\\mathrm{d}t'\\). Differentiating once in time removes the integral and gives the equation of a damped oscillator, the same as in Fig. 9:",
+  "tr": "Hier ist \\(\\tau_0 = \\tau_\\text{aero}(\\omega_\\text{ref}, v(0))\\) das Drehmoment, das den Wind zu Beginn ausgleicht, sodass der Lauf im Gleichgewicht beginnt und noch nichts zu speichern hat. Um die Verstärkungen zu wählen, linearisieren Sie (6) um den Sollwert bei konstantem Wind. Eine kleine Drehzahlabweichung \\(\\delta\\omega = \\omega - \\omega_\\text{ref}\\) ändert das aerodynamische Drehmoment um \\((\\partial\\tau_\\text{aero}/\\partial\\omega)\\,\\delta\\omega\\). Setzt man dies und (9) in (6) ein, heben sich die konstanten Momente auf, weil \\(\\tau_0\\) den Wind ausgleicht, und übrig bleibt \\(J\\,\\delta\\dot\\omega = (\\partial\\tau_\\text{aero}/\\partial\\omega - K_p)\\,\\delta\\omega - K_i\\int_0^t\\delta\\omega\\,\\mathrm{d}t'\\). Einmaliges Ableiten nach der Zeit beseitigt das Integral und ergibt die Gleichung eines gedämpften Oszillators, wie in Abb. 9:"
+ },
+ "2b8b958b3699": {
+  "src": "<span class=\"psec__n\">07</span>Same wind, two answers",
+  "tr": "<span class=\"psec__n\">07</span>Derselbe Wind, zwei Antworten"
+ },
+ "2ed3f6f893fd": {
+  "src": "<b>Abstract.</b> A wind turbine is a driven system like the oscillator of Fig. 9, with two differences: the drive, the wind, is set by the weather, and the turbine has a hand of its own, the generator, whose braking torque a controller can choose at every instant. This note derives how much power the wind carries, why no rotor can take more than 16/27 of it (the Betz limit), and how the share a real rotor takes depends on the ratio of tip speed to wind speed. It then writes the rotor’s equation of motion and compares two controllers on the same two minutes of turbulent wind: one that holds the rotor at a constant speed, and one that lets the speed follow the wind. Sections marked ★ carry the heavier mathematics and can be skipped on a first reading.",
+  "tr": "<b>Abstract.</b> Eine Windturbine ist ein angetriebenes System wie der Oszillator aus Abb. 9, mit zwei Unterschieden: Der Antrieb, der Wind, wird vom Wetter bestimmt, und die Turbine hat einen eigenen Hebel, den Generator, dessen Bremsmoment ein Regler zu jedem Zeitpunkt wählen kann. Dieses Skript leitet ab, wie viel Leistung der Wind trägt, warum kein Rotor mehr als 16/27 davon aufnehmen kann (die Betz-Grenze), und wie der Anteil, den ein realer Rotor aufnimmt, vom Verhältnis der Blattspitzengeschwindigkeit zur Windgeschwindigkeit abhängt. Danach schreibt es die Bewegungsgleichung des Rotors auf und vergleicht zwei Regler an denselben zwei Minuten turbulenten Windes: einen, der den Rotor auf konstanter Drehzahl hält, und einen, der die Drehzahl dem Wind folgen lässt. Abschnitte mit ★ enthalten die schwerere Mathematik und können beim ersten Lesen übersprungen werden."
+ },
+ "32f824cb4738": {
+  "src": "T. Burton, N. Jenkins, D. Sharpe and E. Bossanyi, <a href=\"https://doi.org/10.1002/9781119992714\"><em>Wind Energy Handbook</em></a>, 2nd edition, Wiley, 2011: momentum theory, the Betz limit and turbine control (chapters 3 and 8).",
+  "tr": "T. Burton, N. Jenkins, D. Sharpe und E. Bossanyi, <a href=\"https://doi.org/10.1002/9781119992714\"><em>Wind Energy Handbook</em></a>, 2. Auflage, Wiley, 2011: Impulstheorie, die Betz-Grenze und Turbinenregelung (Kapitel 3 und 8)."
+ },
+ "33bd5a5dddcd": {
+  "src": "© 2026 Numa Koudsie",
+  "tr": "© 2026 Numa Koudsie"
+ },
+ "344f072eb8ba": {
+  "src": "turbulent, σ = 1.5 m/s",
+  "tr": "turbulent, σ = 1.5 m/s"
+ },
+ "39cd0fbeaf65": {
+  "src": "<span class=\"pfig__n\">Figure 4</span>The default turbulent wind (\\(v_0 = 8\\ \\mathrm{m/s}\\), \\(\\sigma = 1.5\\ \\mathrm{m/s}\\); over these 120 s its standard deviation is 1.30 m/s, because its slowest waves take longer than the run). Below it, the rotor speed and the generator power for the two controllers, computed with the page’s own algorithm. Holding the speed keeps the rotor between 14.4 and 15.7 rpm; following the wind lets it range from 12.5 to 19.8 rpm.",
+  "tr": "<span class=\"pfig__n\">Abbildung 4</span>Der voreingestellte turbulente Wind (\\(v_0 = 8\\ \\mathrm{m/s}\\), \\(\\sigma = 1.5\\ \\mathrm{m/s}\\); über diese 120 s beträgt seine Standardabweichung 1.30 m/s, weil seine langsamsten Wellen länger dauern als der Lauf). Darunter die Rotordrehzahl und die Generatorleistung für beide Regler, berechnet mit dem eigenen Algorithmus der Seite. Beim Halten der Drehzahl bleibt der Rotor zwischen 14.4 und 15.7 rpm; beim Folgen des Windes reicht er von 12.5 bis 19.8 rpm."
+ },
+ "3a4f9140ee56": {
+  "src": "Wind · set by the weather",
+  "tr": "Wind · vorgegeben durch das Wetter"
+ },
+ "3abf612a5667": {
+  "src": "Wind Turbine Control · Numa Koudsie",
+  "tr": "Regelung einer Windturbine · Numa Koudsie"
+ },
+ "3d6a01b092c6": {
+  "src": "2 store",
+  "tr": "2 speichern"
+ },
+ "3db8cb2a81ec": {
+  "src": "Wind Turbine Control<span class=\"dot\">.</span>",
+  "tr": "Regelung einer Windturbine<span class=\"dot\">.</span>"
+ },
+ "3df48cd9d4d3": {
+  "src": "hold speed",
+  "tr": "Drehzahl halten"
+ },
+ "401eb5cf5231": {
+  "src": "24.73 kWh",
+  "tr": "24.73 kWh"
+ },
+ "402c133d31e0": {
+  "src": "which the page checks after every solve: the <em>Energy balance</em> readout.",
+  "tr": "was die Seite nach jeder Berechnung prüft: die Anzeige <em>Energiebilanz</em>."
+ },
+ "40f220bb83a0": {
+  "src": "<span class=\"psub__n\">6.2</span>Hold speed: a PI controller",
+  "tr": "<span class=\"psub__n\">6.2</span>Drehzahl halten: ein PI-Regler"
+ },
+ "43b024c90b77": {
+  "src": "Fig. 10 · control systems · wind energy",
+  "tr": "Abb. 10 · Regelungstechnik · Windenergie"
+ },
+ "43c1d5a1df26": {
+  "src": "25.22 kWh",
+  "tr": "25.22 kWh"
+ },
+ "440f0199383b": {
+  "src": "Solve time",
+  "tr": "Rechenzeit"
+ },
+ "447197c02d07": {
+  "src": "<span class=\"sw sw--ink\"></span>played",
+  "tr": "<span class=\"sw sw--ink\"></span>abgespielt"
+ },
+ "447dca7c5718": {
+  "src": "Mean power",
+  "tr": "Mittlere Leistung"
+ },
+ "488185fdbd5c": {
+  "src": "The rotor is drawn as a disc seen at an angle, foreshortened to 50 % across, so that both its turning and the wind passing it can be seen; the burgundy blade marks the stored angle \\(\\theta\\). The grey streaks are air: they move by the stored distance \\(\\int v\\,\\mathrm{d}t\\), at 5 px per metre of air, with a constant pattern of 16 px dashes and 22 px gaps. Only the wind arrow grows with the wind speed. They pass through the rotor unchanged; the slowing of the air is not drawn. The table at the top right lists the stored values of the present row. Below, the wind, the rotor speed (with the target dashed) and the generator power are drawn over the full two minutes, dark up to the present sample and pale after it. Behind the generator power, a rose curve shows the power the wind gives the rotor, \\(P_\\text{aero} = \\tau_\\text{aero}\\omega\\); the gap between the two is the rotor storing or returning kinetic energy, as in (7). The second figure shows the \\(c_p\\) curve with the present operating point and its last three seconds as a trail: when following the wind it stays near the peak; when holding speed it slides along the curve with every gust.",
+  "tr": "Der Rotor ist als Scheibe dargestellt, schräg von der Seite gesehen und auf 50 % der Breite verkürzt, damit man sowohl seine Drehung als auch den vorbeiziehenden Wind sieht; das bordeauxrote Blatt markiert den gespeicherten Winkel \\(\\theta\\). Die grauen Streifen sind Luft: Sie bewegen sich um die gespeicherte Strecke \\(\\int v\\,\\mathrm{d}t\\), mit 5 px pro Meter Luft, in einem festen Muster aus 16 px langen Strichen und 22 px langen Lücken. Nur der Windpfeil wächst mit der Windgeschwindigkeit. Die Streifen gehen unverändert durch den Rotor; die Verlangsamung der Luft wird nicht gezeichnet. Die Tabelle oben rechts listet die gespeicherten Werte der aktuellen Zeile. Darunter werden Wind, Rotordrehzahl (gestrichelt: Sollwert) und Generatorleistung über die volle Dauer von zwei Minuten gezeichnet, dunkel bis zum aktuellen Messpunkt und hell danach. Hinter der Generatorleistung zeigt eine rosafarbene Kurve die Leistung, die der Wind dem Rotor gibt, \\(P_\\text{aero} = \\tau_\\text{aero}\\omega\\); der Abstand zwischen beiden ist die Speicherung oder Rückgabe kinetischer Energie des Rotors, wie in (7). Die zweite Abbildung zeigt die \\(c_p\\)-Kurve mit dem aktuellen Arbeitspunkt und seinen letzten drei Sekunden als Spur; beim Folgen des Windes bleibt er nahe dem Maximum, beim Halten der Drehzahl wandert er mit jeder Böe an der Kurve entlang."
+ },
+ "498780c3e0ad": {
+  "src": "14.8–15.3 rpm",
+  "tr": "14.8–15.3 rpm"
+ },
+ "4d54920cbdcb": {
+  "src": "<span>9</span>On screen",
+  "tr": "<span>9</span>Auf dem Bildschirm"
+ },
+ "4f86e6c91a51": {
+  "src": "Captured / in wind",
+  "tr": "Aufgefangen / im Wind"
+ },
+ "500b0c6be7f7": {
+  "src": "The power coefficient responds instantly to the tip-speed ratio. Real rotors have dynamic inflow and stall effects with delays of seconds.",
+  "tr": "Der Leistungsbeiwert reagiert sofort auf die Schnelllaufzahl. Echte Rotoren haben dynamische Zuströmung und Strömungsabrisse mit Verzögerungen von Sekunden."
+ },
+ "534803a1514f": {
+  "src": "A rotor cannot take all of the wind’s energy: air that stopped completely would pile up in front of the disc and block the air behind it. Albert Betz worked out the best possible share in 1920 by replacing the rotor with an idealised disc that the air pushes against. Let the air arrive at speed \\(v\\), cross the disc at \\(v(1-a)\\) and leave in the far wake at \\(v_w\\). The number \\(a\\) measures how much the disc slows the air.",
+  "tr": "Ein Rotor kann nicht die ganze Energie des Windes aufnehmen: Luft, die ganz zum Stillstand käme, würde sich vor der Scheibe stauen und die Luft dahinter blockieren. Albert Betz bestimmte 1920 den bestmöglichen Anteil, indem er den Rotor durch eine idealisierte Scheibe ersetzte, gegen die die Luft drückt. Die Luft kommt mit der Geschwindigkeit \\(v\\) an, durchquert die Scheibe mit \\(v(1-a)\\) und hat im fernen Nachlauf die Geschwindigkeit \\(v_w\\). Die Zahl \\(a\\) misst, wie stark die Scheibe die Luft verlangsamt."
+ },
+ "555583b61e94": {
+  "src": "The cube is the most important fact in wind energy. Doubling the wind speed doubles the mass of air arriving each second and quadruples the energy of each kilogram: eight times the power. At \\(v = 8\\ \\mathrm{m/s}\\), with \\(\\rho = 1.225\\ \\mathrm{kg/m^3}\\), the air brings \\(1.58\\ \\mathrm{MW}\\) through this rotor; at \\(11\\ \\mathrm{m/s}\\) it brings \\(4.10\\ \\mathrm{MW}\\).",
+  "tr": "Die dritte Potenz ist die wichtigste Tatsache der Windenergie. Verdoppelt man die Windgeschwindigkeit, verdoppelt sich die Masse der Luft, die jede Sekunde ankommt, und die Energie jedes Kilogramms vervierfacht sich: achtmal so viel Leistung. Bei \\(v = 8\\ \\mathrm{m/s}\\) mit \\(\\rho = 1.225\\ \\mathrm{kg/m^3}\\) bringt die Luft durch diesen Rotor \\(1.58\\ \\mathrm{MW}\\); bei \\(11\\ \\mathrm{m/s}\\) sind es \\(4.10\\ \\mathrm{MW}\\)."
+ },
+ "55a3cbce6926": {
+  "src": "Turbulence σ",
+  "tr": "Turbulenz σ"
+ },
+ "56429215bf8d": {
+  "src": "25.15 kWh",
+  "tr": "25.15 kWh"
+ },
+ "5739b5c5bfab": {
+  "src": "<strong>Store.</strong> Every second state goes into the dataset: 6 001 rows of wind, speed, angle, tip-speed ratio, \\(c_p\\), both torques and both powers. With the default settings the energy balance (7) holds to about \\(10^{-12}\\).",
+  "tr": "<strong>Speichern.</strong> Jeder zweite Zustand kommt in den Datensatz: 6 001 Zeilen mit Wind, Drehzahl, Winkel, Schnelllaufzahl, \\(c_p\\), beiden Drehmomenten und beiden Leistungen. Bei den Standardeinstellungen gilt die Energiebilanz (7) bis auf etwa \\(10^{-12}\\)."
+ },
+ "575340585e2e": {
+  "src": "S. Heier, <em>Grid Integration of Wind Energy Conversion Systems</em>, Wiley, 1998: source of the power-coefficient fit (5); <a href=\"https://catdir.loc.gov/catdir/description/wiley037/98018157.html\">publisher’s description</a> at the Library of Congress.",
+  "tr": "S. Heier, <em>Grid Integration of Wind Energy Conversion Systems</em>, Wiley, 1998: Quelle der Anpassung (5) für den Leistungsbeiwert; <a href=\"https://catdir.loc.gov/catdir/description/wiley037/98018157.html\">Beschreibung des Verlags</a> bei der Library of Congress."
+ },
+ "5aeec92bf257": {
+  "src": "<span>6</span>Two controllers&nbsp;★",
+  "tr": "<span>6</span>Zwei Regler&nbsp;★"
+ },
+ "5af60281d97b": {
+  "src": "34.43 kWh",
+  "tr": "34.43 kWh"
+ },
+ "5c9a8299ca22": {
+  "src": "The table collects all eight combinations of controller and wind, with the page’s default sliders (\\(v_0 = 8\\ \\mathrm{m/s}\\), size of the gust, the step or the turbulence \\(\\Delta v = 1.5\\ \\mathrm{m/s}\\), target 15 rpm).",
+  "tr": "Die Tabelle fasst alle acht Kombinationen aus Regler und Wind zusammen, mit den voreingestellten Schiebereglern der Seite (\\(v_0 = 8\\ \\mathrm{m/s}\\), Größe der Böe, des Sprungs oder der Turbulenz \\(\\Delta v = 1.5\\ \\mathrm{m/s}\\), Sollwert 15 rpm)."
+ },
+ "5d83b8c6f9d0": {
+  "src": "rotor speed",
+  "tr": "Rotordrehzahl"
+ },
+ "615becf1b5f6": {
+  "src": "Bernoulli’s equation says that pressure plus \\(\\tfrac12\\rho\\) times the square of the speed stays the same along the flow, as long as nothing does work on the air. So it holds in front of the disc and behind it, but not across it, where the disc takes energy out. The air crosses the thin disc at one speed, \\(v(1-a)\\), since what flows in must flow out; only the pressure jumps there, from \\(p^+\\) just in front to \\(p^-\\) just behind. Far upstream and far downstream the pressure is that of the open air, \\(p_0\\). In front, \\(p_0 + \\tfrac12\\rho v^2 = p^+ + \\tfrac12\\rho v^2(1-a)^2\\); behind, \\(p^- + \\tfrac12\\rho v^2(1-a)^2 = p_0 + \\tfrac12\\rho v_w^2\\). Adding the two, \\(p_0\\) and the speed at the disc drop out, and what is left is the pressure jump, \\(\\Delta p = p^+ - p^- = \\tfrac12\\rho\\,(v^2 - v_w^2)\\).",
+  "tr": "Die Bernoulli-Gleichung besagt, dass Druck plus \\(\\tfrac12\\rho\\) mal das Quadrat der Geschwindigkeit entlang der Strömung gleich bleibt, solange an der Luft keine Arbeit verrichtet wird. Sie gilt also vor der Scheibe und hinter ihr, aber nicht durch sie hindurch, wo die Scheibe Energie entzieht. Die Luft durchquert die dünne Scheibe mit einer einzigen Geschwindigkeit, \\(v(1-a)\\), denn was hineinfließt, muss auch herausfließen; nur der Druck springt dort, von \\(p^+\\) kurz vor der Scheibe auf \\(p^-\\) kurz dahinter. Weit stromauf und weit stromab ist der Druck der der freien Umgebung, \\(p_0\\). Vorne gilt \\(p_0 + \\tfrac12\\rho v^2 = p^+ + \\tfrac12\\rho v^2(1-a)^2\\); hinten \\(p^- + \\tfrac12\\rho v^2(1-a)^2 = p_0 + \\tfrac12\\rho v_w^2\\). Addiert man beide, fallen \\(p_0\\) und die Geschwindigkeit an der Scheibe heraus, und übrig bleibt der Drucksprung \\(\\Delta p = p^+ - p^- = \\tfrac12\\rho\\,(v^2 - v_w^2)\\)."
+ },
+ "61f04f39c2a8": {
+  "src": "Setting \\(\\mathrm{d}c_p/\\mathrm{d}a = 4(1-a)(1-3a) = 0\\) gives \\(a = 1/3\\) (the other root, \\(a = 1\\), would stop the air at the disc and take nothing), and",
+  "tr": "Mit \\(\\mathrm{d}c_p/\\mathrm{d}a = 4(1-a)(1-3a) = 0\\) folgt \\(a = 1/3\\) (die andere Lösung, \\(a = 1\\), würde die Luft an der Scheibe anhalten und nichts entnehmen), und"
+ },
+ "6486b485d938": {
+  "src": "15.0 rpm",
+  "tr": "15.0 rpm"
+ },
+ "6681a23edcb5": {
+  "src": "37.18 kWh",
+  "tr": "37.18 kWh"
+ },
+ "66e7a28045e1": {
+  "src": "<span class=\"psec__n\">03</span>The Betz limit<span class=\"star\" title=\"heavier mathematics\">★</span>",
+  "tr": "<span class=\"psec__n\">03</span>Die Betz-Grenze<span class=\"star\" title=\"heavier mathematics\">★</span>"
+ },
+ "67b7724f11a3": {
+  "src": "Solve",
+  "tr": "Lösen"
+ },
+ "6be8728a9e71": {
+  "src": "Notice the two time dependences in (6). The wind \\(v(t)\\) depends on time through the weather alone. The generator torque is chosen by the controller from the measured speed \\(\\omega\\). The first is a drive, as in Fig. 9; the second is <em>feedback</em> (Figure 3).",
+  "tr": "Beachten Sie die zwei zeitlichen Abhängigkeiten in (6). Der Wind \\(v(t)\\) hängt nur durch das Wetter von der Zeit ab. Das Generatordrehmoment wählt der Regler aus der gemessenen Drehzahl \\(\\omega\\). Das erste ist ein Antrieb, wie in Abb. 9; das zweite ist eine <em>Rückkopplung</em> (Abbildung 3)."
+ },
+ "6ff42b75c926": {
+  "src": "Playback speed",
+  "tr": "Abspielgeschwindigkeit"
+ },
+ "702b201c4b40": {
+  "src": "Phyein Usul",
+  "tr": "Phyein Usul"
+ },
+ "7120137f90c8": {
+  "src": "A three-bladed wind turbine turning in the wind; below, the stored wind speed, rotor speed and generator power over two minutes with a cursor at the frame being shown.",
+  "tr": "Eine dreiblättrige Windturbine, die sich im Wind dreht; darunter die gespeicherte Windgeschwindigkeit, Rotordrehzahl und Generatorleistung über zwei Minuten, mit einem Cursor am gezeigten Bild."
+ },
+ "719a850126f9": {
+  "src": "The controller brakes with \\(\\tau_{\\rm gen}=K_{\\rm opt}\\omega^2\\), here \\(K_{\\rm opt}=1.78\\times10^5\\ \\mathrm{N\\,m\\,s^2}\\). Its intended equilibrium, the speed \\(\\omega_* = \\lambda_\\text{opt}v/R\\), is locally stable at fixed wind. At a smooth maximum of \\(c_p\\), \\(\\mathrm{d}c_p/\\mathrm{d}\\lambda = 0\\), so a small change of \\(\\omega\\) leaves the aerodynamic power \\(P_\\text{aero}\\) unchanged to first order. The torque \\(P_\\text{aero}/\\omega\\) then simply falls like \\(1/\\omega\\), with slope \\(-P_\\text{aero}/\\omega_*^2 = -K_{\\rm opt}\\omega_*\\), because \\(P_\\text{aero} = \\tau_\\text{aero}\\omega_* = K_{\\rm opt}\\omega_*^3\\) there. The brake’s slope is \\(2K_{\\rm opt}\\omega_*\\). The net slope is therefore \\(-3K_{\\rm opt}\\omega_*\\lt0\\): a small overspeed produces a restoring braking torque, and a small underspeed the opposite.",
+  "tr": "Der Regler bremst mit \\(\\tau_{\\rm gen}=K_{\\rm opt}\\omega^2\\), hier \\(K_{\\rm opt}=1.78\\times10^5\\ \\mathrm{N\\,m\\,s^2}\\). Sein beabsichtigtes Gleichgewicht, die Drehzahl \\(\\omega_* = \\lambda_\\text{opt}v/R\\), ist bei konstantem Wind lokal stabil. An einem glatten Maximum von \\(c_p\\) gilt \\(\\mathrm{d}c_p/\\mathrm{d}\\lambda = 0\\); daher ändert eine kleine Variation von \\(\\omega\\) die aerodynamische Leistung \\(P_\\text{aero}\\) in erster Ordnung nicht. Das Drehmoment \\(P_\\text{aero}/\\omega\\) fällt dann einfach wie \\(1/\\omega\\), mit der Steigung \\(-P_\\text{aero}/\\omega_*^2 = -K_{\\rm opt}\\omega_*\\), weil dort \\(P_\\text{aero} = \\tau_\\text{aero}\\omega_* = K_{\\rm opt}\\omega_*^3\\) gilt. Die Steigung der Bremse ist \\(2K_{\\rm opt}\\omega_*\\). Die Nettosteigung ist daher \\(-3K_{\\rm opt}\\omega_*\\lt0\\): Eine kleine Überdrehzahl erzeugt ein rückstellendes Bremsmoment, und eine kleine Unterdrehzahl das Gegenteil."
+ },
+ "71a93019bc0b": {
+  "src": "Gust",
+  "tr": "Böe"
+ },
+ "71ce62dd6333": {
+  "src": "A small speed error consequently obeys \\(J\\,\\delta\\dot\\omega\\approx-3K_{\\rm opt}\\omega_*\\,\\delta\\omega\\), with relaxation time \\(J/(3K_{\\rm opt}\\omega_*)\\approx4.62\\) s at 8 m/s wind. That is the local picture. The global one follows from the net torque, which with \\(v = \\omega R/\\lambda\\) in (2) reads \\(\\tfrac12\\rho\\pi R^5\\omega^2\\left[c_p(\\lambda)/\\lambda^3 - c_{p,\\max}/\\lambda_\\text{opt}^3\\right]\\). The function \\(c_p(\\lambda)/\\lambda^3\\) is not monotone (it rises between \\(\\lambda = 2.4\\) and \\(4.3\\)), but it stays above its value at \\(\\lambda_\\text{opt}\\) for every \\(\\lambda\\) below \\(\\lambda_\\text{opt}\\) and below it for every \\(\\lambda\\) above, checked on a grid of step \\(10^{-4}\\). Above \\(\\lambda_\\text{opt}\\) this is automatic, because \\(c_p \\le c_{p,\\max}\\) while \\(\\lambda^3 > \\lambda_\\text{opt}^3\\); below, it is a property of this fit. So in steady wind, with the torque below its limit, the rotor returns to \\(\\lambda_\\text{opt}\\) from any start at which it is already turning: too slow and the wind wins, too fast and the brake wins. (The code sets \\(c_p = 0\\) below \\(\\lambda = 0.05\\), so the page gives no torque at a standstill; the fit was not made for such slow running and says nothing about starting.) What the argument does not promise is optimal capture in changing wind: the return takes a few relaxation times, and a gust shorter than that is over before the rotor has caught up.",
+  "tr": "Eine kleine Abweichung der Drehzahl gehorcht daher \\(J\\,\\delta\\dot\\omega\\approx-3K_{\\rm opt}\\omega_*\\,\\delta\\omega\\), mit der Relaxationszeit \\(J/(3K_{\\rm opt}\\omega_*)\\approx4.62\\) s bei 8 m/s Wind. Das ist das lokale Bild. Das globale folgt aus dem resultierenden Drehmoment, das mit \\(v = \\omega R/\\lambda\\) in (2) als \\(\\tfrac12\\rho\\pi R^5\\omega^2\\left[c_p(\\lambda)/\\lambda^3 - c_{p,\\max}/\\lambda_\\text{opt}^3\\right]\\) geschrieben wird. Die Funktion \\(c_p(\\lambda)/\\lambda^3\\) ist nicht monoton (sie steigt zwischen \\(\\lambda = 2.4\\) und \\(4.3\\)), bleibt aber über ihrem Wert bei \\(\\lambda_\\text{opt}\\) für jedes \\(\\lambda\\) unterhalb von \\(\\lambda_\\text{opt}\\) und darunter für jedes \\(\\lambda\\) darüber; geprüft auf einem Gitter mit Schrittweite \\(10^{-4}\\). Oberhalb von \\(\\lambda_\\text{opt}\\) folgt dies automatisch, denn \\(c_p \\le c_{p,\\max}\\), während \\(\\lambda^3 > \\lambda_\\text{opt}^3\\) ist; unterhalb ist es eine Eigenschaft dieser Anpassung. Bei stationärem Wind, wenn das Drehmoment unter seiner Grenze liegt, kehrt der Rotor also aus jedem Anfangszustand, in dem er sich bereits dreht, zu \\(\\lambda_\\text{opt}\\) zurück: Zu langsam, und der Wind gewinnt; zu schnell, und die Bremse gewinnt. (Der Code setzt \\(c_p = 0\\) unterhalb von \\(\\lambda = 0.05\\), so gibt die Seite im Stillstand kein Drehmoment; die Anpassung wurde nicht für so langsamen Lauf erstellt und sagt nichts über das Anfahren aus.) Was das Argument nicht verspricht, ist eine optimale Energieausbeute bei wechselndem Wind: Die Rückkehr dauert einige Relaxationszeiten, und eine Böe, die kürzer ist als das, ist vorbei, bevor der Rotor nachgekommen ist."
+ },
+ "72d7cc865810": {
+  "src": "Position in the stored run",
+  "tr": "Position im gespeicherten Lauf"
+ },
+ "736a68c5526c": {
+  "src": "As in Fig. 9, nothing is integrated while you watch. The wind is a known function of time, so pressing <em>Solve</em> fixes the whole run.",
+  "tr": "Wie in Abb. 9 wird beim Zuschauen nichts integriert. Der Wind ist eine bekannte Funktion der Zeit; ein Klick auf <em>Lösen</em> legt daher den ganzen Lauf fest."
+ },
+ "74db203475c0": {
+  "src": "step, +1.5 m/s from 30 s to 32 s",
+  "tr": "Sprung, +1.5 m/s von 30 s bis 32 s"
+ },
+ "7712c416a469": {
+  "src": "754 kW",
+  "tr": "754 kW"
+ },
+ "781961bc81c2": {
+  "src": "Pause",
+  "tr": "Pause"
+ },
+ "7a9656c671cf": {
+  "src": "Energy, 120 s",
+  "tr": "Energie, 120 s"
+ },
+ "7bebc07fd167": {
+  "src": "gust (IEC shape, 1.5 m/s)",
+  "tr": "Böe (IEC-Form, 1.5 m/s)"
+ },
+ "7c625a5f49d4": {
+  "src": "A 2 MW-class wind turbine rotor driven by a wind that changes with time, braked by a generator whose torque a controller sets: hold a constant speed, or follow the wind at the best tip-speed ratio. Solved with RK4, stored, then played back.",
+  "tr": "Ein Windturbinenrotor der 2-MW-Klasse, angetrieben von einem Wind, der sich mit der Zeit ändert, und gebremst von einem Generator, dessen Drehmoment ein Regler vorgibt: eine konstante Drehzahl halten oder dem Wind bei der besten Schnelllaufzahl folgen. Mit RK4 gelöst, gespeichert und dann abgespielt."
+ },
+ "7caf60a273ec": {
+  "src": "<span>7</span>Same wind, two answers",
+  "tr": "<span>7</span>Derselbe Wind, zwei Antworten"
+ },
+ "7d252cd594b3": {
+  "src": "All simulations ↑",
+  "tr": "Alle Simulationen ↑"
+ },
+ "81be7b44f297": {
+  "src": "Hold a paper windmill out of a car window and it spins faster the faster you drive. A modern wind turbine is the same toy, scaled up until each blade is longer than a jumbo jet’s wing.",
+  "tr": "Halten Sie ein Papierwindrad aus dem Autofenster, und es dreht sich schneller, je schneller Sie fahren. Eine moderne Windturbine ist dasselbe Spielzeug, vergrößert, bis jedes Blatt länger ist als der Flügel eines Jumbojets."
+ },
+ "84c8bc9a89be": {
+  "src": "Choose <em>Step</em>, keep \\(v_0 = 8\\ \\mathrm{m/s}\\) and the step size at 1.5 m/s, and solve once with <em>Hold speed</em> and once with <em>Follow the wind</em>. Compare <em>Energy, 120 s</em>, and watch the operating point on the \\(c_p\\) curve after the step. Then compute the rotor speed that puts \\(\\lambda\\) at 8.1 in a 9.5 m/s wind, set the target speed to the nearest slider value, solve again, and compare the energy with both earlier runs.",
+  "tr": "Wählen Sie <em>Sprung</em>, behalten Sie \\(v_0 = 8\\ \\mathrm{m/s}\\) und die Sprunghöhe von 1.5 m/s bei, und lösen Sie einmal mit <em>Drehzahl halten</em> und einmal mit <em>Dem Wind folgen</em>. Vergleichen Sie <em>Energie, 120 s</em>, und beobachten Sie den Arbeitspunkt auf der \\(c_p\\)-Kurve nach dem Sprung. Berechnen Sie dann die Rotordrehzahl, bei der \\(\\lambda\\) bei 9.5 m/s Wind den Wert 8.1 hat, stellen Sie die Solldrehzahl auf den nächsten Schieberegler-Wert ein, lösen Sie erneut und vergleichen Sie die Energie mit beiden früheren Läufen."
+ },
+ "8576d0bb5b17": {
+  "src": "To take the most energy, the rotor should always run at \\(\\lambda_\\text{opt}\\). The controller cannot measure the wind reliably at the rotor, but it can measure \\(\\omega\\). If the rotor is at the optimum, then \\(v = \\omega R/\\lambda_\\text{opt}\\), and (2) becomes a function of \\(\\omega\\) alone:",
+  "tr": "Um am meisten Energie zu gewinnen, sollte der Rotor stets mit \\(\\lambda_\\text{opt}\\) laufen. Der Regler kann den Wind am Rotor nicht zuverlässig messen, wohl aber \\(\\omega\\). Liegt der Rotor im Optimum, dann gilt \\(v = \\omega R/\\lambda_\\text{opt}\\), und (2) wird zu einer Funktion von \\(\\omega\\) allein:"
+ },
+ "8817244e6957": {
+  "src": "The drive train is rigid and lossless, and \\(P_\\text{gen}\\) is mechanical power into the generator; electrical conversion loses a few per cent more.",
+  "tr": "Der Antriebsstrang ist starr und verlustfrei, und \\(P_\\text{gen}\\) ist die mechanische Leistung in den Generator; die elektrische Umwandlung verliert noch einige Prozent mehr."
+ },
+ "887d86687666": {
+  "src": "Exercise 7.1 · on the figure above",
+  "tr": "Übung 7.1 · zur Abbildung oben"
+ },
+ "8958f16db3a3": {
+  "src": "Figure 4 shows the page’s default wind, two minutes of turbulence around a mean of 8 m/s, built from sixteen sine waves between 0.005 and 0.5 Hz with amplitudes falling as \\(f^{-1/3}\\), and the two controllers’ responses to it.",
+  "tr": "Abbildung 4 zeigt den voreingestellten Wind der Seite: zwei Minuten Turbulenz um einen Mittelwert von 8 m/s, aufgebaut aus sechzehn Sinuswellen zwischen 0.005 und 0.5 Hz mit Amplituden, die wie \\(f^{-1/3}\\) abfallen, und die Antworten der beiden Regler darauf."
+ },
+ "8a7232836eda": {
+  "src": "15.5–18.4 rpm",
+  "tr": "15.5–18.4 rpm"
+ },
+ "8ce35dc33af5": {
+  "src": "K. Shirzadeh, H. Hangan and C. Crawford, <a href=\"https://doi.org/10.5194/wes-5-1755-2020\">“Experimental and numerical simulation of extreme operational conditions for horizontal axis wind turbines based on the IEC standard”</a>, <em>Wind Energy Science</em> 5, 1755–1770 (2020), open access: equation (4) gives the gust shape used by the page’s <em>Gust</em> wind.",
+  "tr": "K. Shirzadeh, H. Hangan und C. Crawford, <a href=\"https://doi.org/10.5194/wes-5-1755-2020\">“Experimental and numerical simulation of extreme operational conditions for horizontal axis wind turbines based on the IEC standard”</a>, <em>Wind Energy Science</em> 5, 1755–1770 (2020), Open Access: Gleichung (4) liefert die Böenform, die die Seite für den Wind <em>Böe</em> verwendet."
+ },
+ "8e16830cedef": {
+  "src": "Mean wind speed v₀",
+  "tr": "Mittlere Windgeschwindigkeit v₀"
+ },
+ "93a8161c11f4": {
+  "src": "Back to the simulations",
+  "tr": "Zurück zu den Simulationen"
+ },
+ "9521dba25709": {
+  "src": "Home page",
+  "tr": "Startseite"
+ },
+ "964e226031ca": {
+  "src": "For the rotor and drive train together, the page takes \\(J = 4.0\\times10^6\\ \\mathrm{kg\\,m^2}\\). Multiplying (6) by \\(\\omega\\) turns it into an energy statement: the wind’s power \\(\\tau_\\text{aero}\\omega\\) either goes into the generator, \\(P_\\text{gen} = \\tau_\\text{gen}\\omega\\), or changes the rotor’s kinetic energy \\(\\tfrac12 J\\omega^2\\). Integrated over the run,",
+  "tr": "Für Rotor und Antriebsstrang zusammen setzt die Seite \\(J = 4.0\\times10^6\\ \\mathrm{kg\\,m^2}\\). Multipliziert man (6) mit \\(\\omega\\), wird daraus eine Energiebilanz: Die Leistung des Windes \\(\\tau_\\text{aero}\\omega\\) geht entweder in den Generator, \\(P_\\text{gen} = \\tau_\\text{gen}\\omega\\), oder ändert die kinetische Energie des Rotors, \\(\\tfrac12 J\\omega^2\\). Über den ganzen Lauf integriert gilt"
+ },
+ "97acd51f9540": {
+  "src": "<span class=\"psec__n\">06</span>Two controllers<span class=\"star\" title=\"heavier mathematics\">★</span>",
+  "tr": "<span class=\"psec__n\">06</span>Zwei Regler<span class=\"star\" title=\"heavier mathematics\">★</span>"
+ },
+ "980ed047eded": {
+  "src": "<span>5</span>The rotor’s equation of motion",
+  "tr": "<span>5</span>Die Bewegungsgleichung des Rotors"
+ },
+ "9a2fe1c583cb": {
+  "src": "<b>Fig. 10</b> · <span class=\"tx\">\\(J\\,\\dot\\omega = \\tau_\\mathrm{aero}(\\omega, v) - \\tau_\\mathrm{gen}\\)</span> · played from the stored run",
+  "tr": "<b>Abb. 10</b> · <span class=\"tx\">\\(J\\,\\dot\\omega = \\tau_\\mathrm{aero}(\\omega, v) - \\tau_\\mathrm{gen}\\)</span> · aus dem gespeicherten Lauf abgespielt"
+ },
+ "9b99ae59fd6e": {
+  "src": "1033 kW",
+  "tr": "1033 kW"
+ },
+ "a0cdc2582013": {
+  "src": "Two lessons stand out. In steady wind the two controllers do almost equally well, because 15 rpm is close to the optimum 15.5 rpm. When the wind changes, holding the speed costs energy: after the step to 9.5 m/s the rotor stays at 15 rpm, \\(\\lambda\\) falls to 6.6 and \\(c_p\\) drops from 0.48 to 0.43, which pulls the captured share of the whole run down to 0.44. Real turbines combine the two. Below their rated wind speed they follow the wind; above it they hold speed and power constant by turning the blades out of the wind (pitch control), which this model does not include.",
+  "tr": "Zwei Lehren fallen auf. Bei konstantem Wind schneiden die beiden Regler fast gleich gut ab, weil 15 rpm nahe am optimalen Wert von 15.5 rpm liegt. Ändert sich der Wind, so kostet das Halten der Drehzahl Energie: Nach dem Sprung auf 9.5 m/s bleibt der Rotor bei 15 rpm, \\(\\lambda\\) sinkt auf 6.6, und \\(c_p\\) fällt von 0.48 auf 0.43, was den aufgenommenen Anteil des gesamten Laufs auf 0.44 drückt. Echte Turbinen kombinieren beides. Unterhalb ihrer Nennwindgeschwindigkeit folgen sie dem Wind; darüber halten sie Drehzahl und Leistung konstant, indem sie die Blätter aus dem Wind drehen (Blattverstellung), was dieses Modell nicht enthält."
+ },
+ "a25d883e5c08": {
+  "src": "<span class=\"psec__n\">05</span>The rotor’s equation of motion",
+  "tr": "<span class=\"psec__n\">05</span>Die Bewegungsgleichung des Rotors"
+ },
+ "a2f6c06c1737": {
+  "src": "From t = 0",
+  "tr": "Ab t = 0"
+ },
+ "a36a5ffa6e0d": {
+  "src": "Controller",
+  "tr": "Regler"
+ },
+ "a387df7cb52e": {
+  "src": "<span class=\"pfig__n\">Figure 1</span>The rotor seen from the side, in the tube of air that passes through it. The air slows down as it gives up energy, so the tube widens behind the disc. The blade tips move across the wind at \\(\\omega R\\), several times faster than the wind itself.",
+  "tr": "<span class=\"pfig__n\">Abbildung 1</span>Der Rotor von der Seite, in der Stromröhre der Luft, die durch ihn hindurchgeht. Die Luft wird langsamer, während sie Energie abgibt; deshalb weitet sich die Röhre hinter der Scheibe. Die Blattspitzen bewegen sich quer zum Wind mit \\(\\omega R\\), mehrmals schneller als der Wind selbst."
+ },
+ "a4ce3a9be794": {
+  "src": "← All simulations",
+  "tr": "← Alle Simulationen"
+ },
+ "a6bb5b1ec4ee": {
+  "src": "mean power",
+  "tr": "mittlere Leistung"
+ },
+ "a9b75cb42bf9": {
+  "src": "<span class=\"sw\"></span>now",
+  "tr": "<span class=\"sw\"></span>jetzt"
+ },
+ "aa02dcaebb72": {
+  "src": "Newton’s second law for a rotation says that the net torque on the rotor changes its angular speed, in proportion to the inverse of its moment of inertia \\(J\\). Two torques act: the wind’s, which drives, and the generator’s, which brakes:",
+  "tr": "Das Newtonsche Grundgesetz für Drehbewegungen besagt, dass das resultierende Drehmoment am Rotor seine Winkelgeschwindigkeit ändert, und zwar proportional zum Kehrwert seines Trägheitsmoments \\(J\\). Zwei Drehmomente wirken: das des Windes, das antreibt, und das des Generators, das bremst:"
+ },
+ "aa99c2e3818d": {
+  "src": "<span>3</span>The Betz limit&nbsp;★",
+  "tr": "<span>3</span>Die Betz-Grenze&nbsp;★"
+ },
+ "ad1c53ce8332": {
+  "src": "757 kW",
+  "tr": "757 kW"
+ },
+ "b02961738af2": {
+  "src": "759 kW",
+  "tr": "759 kW"
+ },
+ "b02f222f9aee": {
+  "src": "No rotor in open air can turn more than 59.3 % of the power flowing through its disc into shaft power. The best rotor slows the air to two thirds of its speed at the disc and to one third in the wake.",
+  "tr": "Kein Rotor in freier Strömung kann mehr als 59.3 % des Leistungsflusses durch seine Scheibe in Wellenleistung umwandeln. Der beste Rotor verlangsamt die Luft an der Scheibe auf zwei Drittel ihrer Geschwindigkeit und im Nachlauf auf ein Drittel."
+ },
+ "b0d6a60a8960": {
+  "src": "The wind is the same over the whole disc and arrives at once; real wind varies across 80 m of rotor and changes height by height.",
+  "tr": "Der Wind ist über die ganze Scheibe gleich und trifft überall gleichzeitig ein; echter Wind schwankt über die 80 m des Rotors und von Höhe zu Höhe."
+ },
+ "b0ea321dc42f": {
+  "src": "<span class=\"psec__n\">01</span>From wind to electricity",
+  "tr": "<span class=\"psec__n\">01</span>Vom Wind zum Strom"
+ },
+ "b266d09df42b": {
+  "src": "Target rotor speed",
+  "tr": "Solldrehzahl des Rotors"
+ },
+ "b3012de005fd": {
+  "src": "Steady",
+  "tr": "Konstant"
+ },
+ "b487cd8a3b3f": {
+  "src": "Turbulent",
+  "tr": "Turbulent"
+ },
+ "b9d9e25cf680": {
+  "src": "1115 kW",
+  "tr": "1115 kW"
+ },
+ "b9fe9b22b0b1": {
+  "src": "The wind turns the rotor; the generator brakes it and turns that work into electricity. A controller decides how hard to brake: hold the rotor at one speed, or let it follow the wind. Two minutes of operation are solved first, stored, and then played back.",
+  "tr": "Der Wind dreht den Rotor; der Generator bremst ihn und wandelt diese Arbeit in elektrische Energie um. Ein Regler entscheidet, wie stark gebremst wird: Er hält den Rotor auf einer Drehzahl, oder er lässt ihn dem Wind folgen. Zwei Minuten Betrieb werden zuerst berechnet, gespeichert und dann abgespielt."
+ },
+ "bafb6e42511a": {
+  "src": "How large \\(c_p\\) is depends mainly on one number, the <em>tip-speed ratio</em> \\(\\lambda = \\omega R/v\\), the speed of the blade tips in units of the wind speed. A rotor turning too slowly lets most of the air pass between its blades without touching them. A rotor turning too fast behaves almost like a solid wall, and the air flows around it. Behind both pictures is one mechanism: each blade meets the air at a speed and an angle set by the wind and the blade’s own motion together, and that angle of attack decides how much lift, and so how much torque, the blade takes from the flow. A piece of blade at distance \\(r\\) from the hub moves across the wind at \\(\\omega r\\), so it meets the air coming from an angle whose tangent is \\(v/(\\omega r) = (R/r)/\\lambda\\): at the tip, at \\(\\lambda = 8.1\\), the undisturbed wind comes from only 7° off the plane of the rotor, and the air the rotor has already slowed, by about 18 % at \\(c_p = 0.48\\) according to (3), from about 6°. Change \\(\\omega\\) and \\(v\\) together, keeping \\(\\lambda\\), and every piece of blade meets the air at the same angle as before; that is why \\(c_p\\) depends on the ratio and not on \\(\\omega\\) and \\(v\\) separately. Between the two extremes lies a best ratio.",
+  "tr": "Wie groß \\(c_p\\) ist, hängt vor allem von einer Zahl ab, der <em>Schnelllaufzahl</em> \\(\\lambda = \\omega R/v\\), der Geschwindigkeit der Blattspitzen in Einheiten der Windgeschwindigkeit. Ein Rotor, der zu langsam dreht, lässt den größten Teil der Luft zwischen seinen Blättern hindurch, ohne sie zu berühren. Ein Rotor, der zu schnell dreht, verhält sich fast wie eine feste Wand, und die Luft strömt um ihn herum. Hinter beiden Bildern steckt ein einziger Mechanismus: Jedes Blatt trifft die Luft mit einer Geschwindigkeit und unter einem Winkel, die sich aus dem Wind und der eigenen Bewegung des Blattes zusammen ergeben, und dieser Anströmwinkel bestimmt, wie viel Auftrieb und damit wie viel Drehmoment das Blatt aus der Strömung entnimmt. Ein Blattstück im Abstand \\(r\\) von der Nabe bewegt sich mit \\(\\omega r\\) quer zum Wind und trifft daher die Luft unter einem Winkel, dessen Tangens \\(v/(\\omega r) = (R/r)/\\lambda\\) ist: An der Spitze, bei \\(\\lambda = 8.1\\), kommt der ungestörte Wind unter nur 7° zur Rotorebene; die Luft, die der Rotor bereits verlangsamt hat, um etwa 18 % bei \\(c_p = 0.48\\) nach (3), kommt unter etwa 6°. Ändert man \\(\\omega\\) und \\(v\\) gemeinsam so, dass \\(\\lambda\\) gleich bleibt, trifft jedes Blattstück die Luft unter dem gleichen Winkel wie zuvor; deshalb hängt \\(c_p\\) vom Verhältnis ab und nicht getrennt von \\(\\omega\\) und \\(v\\). Zwischen den beiden Extremen liegt ein bestes Verhältnis."
+ },
+ "bb1796b79102": {
+  "src": "with \\(c_1 = 0.5176\\), \\(c_2 = 116\\), \\(c_4 = 5\\), \\(c_5 = 21\\) and \\(c_6 = 0.0068\\). Scanning \\(\\lambda\\) in steps of 0.001, its maximum is \\(c_{p,\\max} = 0.4800\\) at \\(\\lambda_\\text{opt} = 8.100\\), comfortably below the Betz limit (Figure 2). One widely copied reproduction of the formula writes the last term as \\(c_6\\lambda_i\\); that version peaks at 0.502 at \\(\\lambda = 8.25\\) and does not match the quoted optimum, so the page uses \\(c_6\\lambda\\).",
+  "tr": "mit \\(c_1 = 0.5176\\), \\(c_2 = 116\\), \\(c_4 = 5\\), \\(c_5 = 21\\) und \\(c_6 = 0.0068\\). Durchläuft man \\(\\lambda\\) in Schritten von 0.001, ist das Maximum \\(c_{p,\\max} = 0.4800\\) bei \\(\\lambda_\\text{opt} = 8.100\\), deutlich unter der Betz-Grenze (Abbildung 2). Eine weit verbreitete Nachbildung der Formel schreibt den letzten Term als \\(c_6\\lambda_i\\); diese Version erreicht bei \\(\\lambda = 8.25\\) ein Maximum von 0.502 und passt nicht zum angegebenen Optimum, daher verwendet die Seite \\(c_6\\lambda\\)."
+ },
+ "bdde641d46ae": {
+  "src": "<span>1</span>From wind to electricity",
+  "tr": "<span>1</span>Vom Wind zum Strom"
+ },
+ "bee75ca77f75": {
+  "src": "Controls",
+  "tr": "Bedienelemente"
+ },
+ "c56a58df6e51": {
+  "src": "15.0–15.4 rpm",
+  "tr": "15.0–15.4 rpm"
+ },
+ "c5e437ba5b30": {
+  "src": "12.5–19.8 rpm",
+  "tr": "12.5–19.8 rpm"
+ },
+ "c969f9c36972": {
+  "src": "<span class=\"psec__n\">04</span>Tip-speed ratio",
+  "tr": "<span class=\"psec__n\">04</span>Schnelllaufzahl"
+ },
+ "c989fb66d7a8": {
+  "src": "14.4–15.7 rpm",
+  "tr": "14.4–15.7 rpm"
+ },
+ "cad2dda3032c": {
+  "src": "heavier mathematics",
+  "tr": "schwerere Mathematik"
+ },
+ "cee69545b8cb": {
+  "src": "<span>4</span>Tip-speed ratio",
+  "tr": "<span>4</span>Schnelllaufzahl"
+ },
+ "cfa3763a8fe9": {
+  "src": "Follow the wind",
+  "tr": "Dem Wind folgen"
+ },
+ "d1622a8321e0": {
+  "src": "Phyein Usul, home page",
+  "tr": "Phyein Usul, Startseite"
+ },
+ "d1bd32294cc6": {
+  "src": "follow the wind",
+  "tr": "dem Wind folgen"
+ },
+ "d1fb2aadcc81": {
+  "src": "<span>8</span>Solve first, then play",
+  "tr": "<span>8</span>Zuerst lösen, dann abspielen"
+ },
+ "d21472ca188d": {
+  "src": "J. F. Manwell, J. G. McGowan and A. L. Rogers, <a href=\"https://doi.org/10.1002/9781119994367\"><em>Wind Energy Explained</em></a>, 2nd edition, Wiley, 2009.",
+  "tr": "J. F. Manwell, J. G. McGowan und A. L. Rogers, <a href=\"https://doi.org/10.1002/9781119994367\"><em>Wind Energy Explained</em></a>, 2. Auflage, Wiley, 2009."
+ },
+ "d85eba7b2b37": {
+  "src": "1 solve",
+  "tr": "1 lösen"
+ },
+ "d929322e4b16": {
+  "src": "Fig.",
+  "tr": "Abb."
+ },
+ "db367cf88021": {
+  "src": "What the page does",
+  "tr": "Was die Seite tut"
+ },
+ "dc12ac9dc18f": {
+  "src": "<span class=\"psec__n\">09</span>On screen",
+  "tr": "<span class=\"psec__n\">09</span>Auf dem Bildschirm"
+ },
+ "dc416e1088e4": {
+  "src": "Step",
+  "tr": "Sprung"
+ },
+ "dfd65cc1196a": {
+  "src": "Stored run",
+  "tr": "Gespeicherter Lauf"
+ },
+ "e1d329a7394b": {
+  "src": "From symbols to code",
+  "tr": "Von den Symbolen zum Code"
+ },
+ "e3838eb76d1c": {
+  "src": "<strong>Play.</strong> Each frame shows the stored row nearest to the playback time. The blades are drawn at the stored angle \\(\\theta\\), so they turn exactly as fast as the solution says.",
+  "tr": "<strong>Abspielen.</strong> Jedes Bild zeigt die gespeicherte Zeile, die dem Abspielzeitpunkt am nächsten liegt. Die Blätter sind beim gespeicherten Winkel \\(\\theta\\) gezeichnet, drehen sich also genau so schnell, wie es die Lösung angibt."
+ },
+ "e41885ae2465": {
+  "src": "<span class=\"psub__n\">6.1</span>Follow the wind: the optimal-torque law",
+  "tr": "<span class=\"psub__n\">6.1</span>Dem Wind folgen: das Gesetz des optimalen Drehmoments"
+ },
+ "e44f336cdf68": {
+  "src": "The interesting physics lies in the balance between the two torques. If the generator brakes too little, the rotor runs away. If it brakes too hard, the rotor slows until the blades stall and the wind slips past. The controller, a small computer reading the rotor speed many times a second, decides how hard to brake. It cannot choose the wind: the wind is a time-dependent drive set by someone else, exactly like the force in Fig. 9.",
+  "tr": "Die spannende Physik liegt im Gleichgewicht der beiden Drehmomente. Bremst der Generator zu wenig, läuft der Rotor davon. Bremst er zu stark, verlangsamt sich der Rotor, bis die Strömung an den Blättern abreißt und der Wind an ihnen vorbeistreicht. Der Regler, ein kleiner Rechner, der die Drehzahl des Rotors viele Male pro Sekunde liest, entscheidet, wie stark gebremst wird. Den Wind kann er nicht wählen: Der Wind ist ein zeitabhängiger Antrieb, der von außen vorgegeben wird, genau wie die Kraft in Abb. 9."
+ },
+ "e627ee872120": {
+  "src": "785 kW",
+  "tr": "785 kW"
+ },
+ "e70091e7cdb7": {
+  "src": "wind",
+  "tr": "Wind"
+ },
+ "ebe20b89256c": {
+  "src": "Hold speed",
+  "tr": "Drehzahl halten"
+ },
+ "ec1cf294a370": {
+  "src": "<span>10</span>What the model leaves out",
+  "tr": "<span>10</span>Was das Modell weglässt"
+ },
+ "ed30a15325e0": {
+  "src": "A natural next question for a project: hang a small pendulum, or a double pendulum, on each blade and let generators at its joints harvest its swinging. Energy conservation already settles one point: every joule the pendulums harvest comes out of the rotor, and so out of the main generator’s share. The open question is whether a small chaotic pendulum can supply useful power to sensors in the blade, and what that costs.",
+  "tr": "Eine naheliegende nächste Frage für ein Projekt: Man hänge an jedes Blatt ein kleines Pendel oder ein Doppelpendel und lasse Generatoren an seinen Gelenken die Energie seiner Schwingung ernten. Der Energieerhaltungssatz klärt bereits einen Punkt: Jedes Joule, das die Pendel ernten, kommt aus dem Rotor und damit aus dem Anteil des Hauptgenerators. Offen bleibt, ob ein kleines chaotisches Pendel nützliche Leistung für Sensoren im Blatt liefern kann und was das kostet."
+ },
+ "ee175d8e6165": {
+  "src": "Controller · sets the generator torque",
+  "tr": "Regler · legt das Generatordrehmoment fest"
+ },
+ "eed28eec00a4": {
+  "src": "Solve, then play",
+  "tr": "Lösen, dann abspielen"
+ },
+ "efbbe80473f3": {
+  "src": "742 kW",
+  "tr": "742 kW"
+ },
+ "f0208dad074e": {
+  "src": "<b>Operating point</b> · power coefficient <span class=\"tx\">\\(c_p\\)</span> against tip-speed ratio <span class=\"tx\">\\(\\lambda = \\omega R / v\\)</span>",
+  "tr": "<b>Arbeitspunkt</b> · Leistungsbeiwert <span class=\"tx\">\\(c_p\\)</span> gegen Schnelllaufzahl <span class=\"tx\">\\(\\lambda = \\omega R / v\\)</span>"
+ },
+ "f2b34aece671": {
+  "src": "<span class=\"sw sw--dash\"></span>target / optimum",
+  "tr": "<span class=\"sw sw--dash\"></span>Sollwert / Optimum"
+ },
+ "f4be45ec9d77": {
+  "src": "<span class=\"pfig__n\">Figure 3</span>The turbine as a control loop. The wind enters from outside; the controller closes the loop by turning the measured speed \\(\\omega\\) into a braking torque. Compare Figure 3 of Fig. 9, where no arrow led back.",
+  "tr": "<span class=\"pfig__n\">Abbildung 3</span>Die Turbine als Regelkreis. Der Wind kommt von außen herein; der Regler schließt den Kreis, indem er die gemessene Drehzahl \\(\\omega\\) in ein Bremsmoment umsetzt. Vergleichen Sie Abbildung 3 in Abb. 9, wo kein Pfeil zurückführte."
+ },
+ "f570ac8b3e84": {
+  "src": "<span class=\"psec__n\">08</span>Solve first, then play",
+  "tr": "<span class=\"psec__n\">08</span>Zuerst lösen, dann abspielen"
+ },
+ "f595438cfaaa": {
+  "src": "captured share",
+  "tr": "aufgenommener Anteil"
+ },
+ "f5cbdf6bfb51": {
+  "src": "Contents",
+  "tr": "Inhalt"
+ },
+ "f6017d60a812": {
+  "src": "A rotor takes a share \\(c_p\\), the <em>power coefficient</em>, of this flux; and since power is torque times angular speed, the wind’s torque on the rotor is that power divided by \\(\\omega\\):",
+  "tr": "Ein Rotor nimmt einen Anteil \\(c_p\\), den <em>Leistungsbeiwert</em>, dieses Flusses auf; und da Leistung gleich Drehmoment mal Winkelgeschwindigkeit ist, ist das Drehmoment des Windes auf den Rotor diese Leistung geteilt durch \\(\\omega\\):"
+ },
+ "f72f0eda6052": {
+  "src": "Simulations",
+  "tr": "Simulationen"
+ },
+ "f79a2222c311": {
+  "src": "controller",
+  "tr": "Regler"
+ },
+ "f7a005a0ea24": {
+  "src": "Picking a natural frequency \\(\\omega_n = 0.6\\ \\mathrm{rad/s}\\) and a damping ratio \\(\\zeta_c = 0.8\\) fixes \\(K_i = J\\omega_n^2 = 1.44\\times10^6\\ \\mathrm{N\\,m}\\) and \\(K_p = 2\\zeta_c\\omega_n J + \\partial\\tau_\\text{aero}/\\partial\\omega\\). At 15 turns per minute in an 8 m/s wind, the aerodynamic slope is \\(-2.48\\times10^5\\ \\mathrm{N\\,m\\,s}\\): the wind itself damps the rotor a little. That gives \\(K_p = 3.59\\times10^6\\ \\mathrm{N\\,m\\,s}\\). An error then decays within a few seconds. Because \\(\\zeta_c\\) is a little below 1 it does swing once past zero, but only by a few per cent: after the wind rises by 1.5 m/s within 2 s in the <em>Step</em> run, the rotor overshoots the target by 0.39 rpm and then dips below it by just 0.01 rpm. The torque is kept between 0 and \\(1.2\\ \\mathrm{MN\\,m}\\), and the integral stops growing while the torque sits at a limit (anti-windup).",
+  "tr": "Wählt man eine Eigenkreisfrequenz \\(\\omega_n = 0.6\\ \\mathrm{rad/s}\\) und einen Dämpfungsgrad \\(\\zeta_c = 0.8\\), so folgt \\(K_i = J\\omega_n^2 = 1.44\\times10^6\\ \\mathrm{N\\,m}\\) und \\(K_p = 2\\zeta_c\\omega_n J + \\partial\\tau_\\text{aero}/\\partial\\omega\\). Bei 15 Umdrehungen pro Minute in einem Wind von 8 m/s beträgt die aerodynamische Steigung \\(-2.48\\times10^5\\ \\mathrm{N\\,m\\,s}\\): Der Wind selbst dämpft den Rotor ein wenig. Das ergibt \\(K_p = 3.59\\times10^6\\ \\mathrm{N\\,m\\,s}\\). Ein Fehler klingt dann innerhalb weniger Sekunden ab. Weil \\(\\zeta_c\\) etwas unter 1 liegt, schwingt er einmal über null hinaus, aber nur um einige Prozent: Nachdem der Wind im <em>Sprung</em>-Lauf innerhalb von 2 s um 1.5 m/s gestiegen ist, überschreitet die Drehzahl den Sollwert um 0.39 rpm und unterschreitet ihn danach nur um 0.01 rpm. Das Drehmoment wird zwischen 0 und \\(1.2\\ \\mathrm{MN\\,m}\\) gehalten, und der Integralanteil wächst nicht weiter, solange das Drehmoment an einer Grenze liegt (Anti-Windup)."
+ },
+ "f8033b444ece": {
+  "src": "Energy balance",
+  "tr": "Energiebilanz"
+ },
+ "f817adf60650": {
+  "src": "<span class=\"sw\" style=\"background: var(--rule);\"></span>still to come",
+  "tr": "<span class=\"sw\" style=\"background: var(--rule);\"></span>noch ausstehend"
+ },
+ "f870d82e0717": {
+  "src": "<span class=\"pfig__n\">Figure 2</span>Power coefficient against tip-speed ratio from equation (5). The curve rises from zero, peaks at \\(\\lambda_\\text{opt} = 8.1\\) and falls back to zero at \\(\\lambda = 13.4\\). The dashed horizontal line is the Betz limit of section 3. At 8 m/s, the best this rotor can do is \\(0.48\\times1.58\\ \\mathrm{MW} = 757\\ \\mathrm{kW}\\), reached at \\(15.5\\) turns per minute.",
+  "tr": "<span class=\"pfig__n\">Abbildung 2</span>Leistungsbeiwert gegen Schnelllaufzahl nach Gleichung (5). Die Kurve steigt von null an, erreicht ihr Maximum bei \\(\\lambda_\\text{opt} = 8.1\\) und fällt bei \\(\\lambda = 13.4\\) wieder auf null. Die gestrichelte Waagerechte ist die Betz-Grenze aus Abschnitt 3. Bei 8 m/s kann dieser Rotor höchstens \\(0.48\\times1.58\\ \\mathrm{MW} = 757\\ \\mathrm{kW}\\) erreichen, und zwar bei \\(15.5\\) Umdrehungen pro Minute."
+ },
+ "fa92b747e333": {
+  "src": "energy in 120 s",
+  "tr": "Energie in 120 s"
+ },
+ "fb57a7ac8366": {
+  "src": "This simulation needs JavaScript.",
+  "tr": "Diese Simulation braucht JavaScript."
+ },
+ "fc1a7c3f6453": {
+  "src": "The proportional term reacts to the speed error now. A positive error means overspeed, so it asks for more generator braking; a negative error reduces braking. The integral term remembers an error that persists: even a small overspeed builds a larger correction if it lasts. The linearised equation (10) above fixes how quickly a small disturbance decays. Torque limits and changing wind can take the rotor outside that approximation.",
+  "tr": "Der proportionale Anteil reagiert auf die momentane Drehzahlabweichung. Eine positive Abweichung bedeutet Überdrehzahl, und sie verlangt mehr Bremsmoment vom Generator; eine negative Abweichung verringert die Bremsung. Der integrale Anteil merkt sich eine Abweichung, die anhält: Selbst eine kleine Überdrehzahl baut eine größere Korrektur auf, wenn sie andauert. Die linearisierte Gleichung (10) oben legt fest, wie schnell eine kleine Störung abklingt. Drehmomentgrenzen und wechselnder Wind können den Rotor aus dieser Näherung herausführen."
+ },
+ "fcead1dfa8f5": {
+  "src": "26.18 kWh",
+  "tr": "26.18 kWh"
+ },
+ "ffee58552336": {
+  "src": "3 play",
+  "tr": "3 abspielen"
+ }
+}

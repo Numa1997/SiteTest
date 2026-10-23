@@ -1,0 +1,47 @@
+== (2.1)  ansatz psi = sin^2(th) f(r)
+  E2[sin^2 f] / sin^2 - (f'' - 2f/r^2) = 0
+  general power solution: E4 psi = 0 (zero for every A,B,C,D)
+  indicial polynomial of (d2 - 2/r2)^2 acting on r^s : (s - 4)*(s - 2)*(s - 1)*(s + 1)  roots s = -1, 1, 2, 4  -> f = A r^4 + B r^2 + C r + D/r
+  far field psi -> U r^2 sin^2/2 gives A=0, B=U/2; no slip f(a)=f'(a)=0 gives {C: -3*U*a/4, D: U*a**3/4}
+  printed (2.1) minus derived: 0
+  E4 psi (printed) = 0
+  u_r = U*(a**3 + r**2*(-3*a + 2*r))*cos(theta)/(2*r**3) 
+  u_th = U*(a**3 + r**2*(3*a - 4*r))*sin(theta)/(4*r**3)
+  no slip u_r(a), u_th(a) = 0 0
+  far field limit u_r/cos(th) , u_th/(-sin th) as r->oo : U U
+  continuity (1/r2) d_r(r2 ur) + 1/(r sin) d_th(sin ut) = 0
+  momentum, r-component  dp/dr - mu lap_r = 0
+  momentum, theta-component (1/r) dp/dth - mu lap_th = 0
+  u_r, u_th printed in closed form match derived: True True
+  Cartesian point {x: 3/2, y: 1/3, z: -2} : grad p - mu lap u = [0, 0, 0]  div u = 0
+  Cartesian point {x: -1/2, y: 7/5, z: 5/3} : grad p - mu lap u = [0, 0, 0]  div u = 0
+  at r=a:  normal viscous stress 2 mu d_r u_r = 0 ;  shear tau_r_th = -3*U*mu*sin(theta)/(2*a)   (printed -3/2 mu U sin/a)
+  p - p_inf at th = pi (upstream face) = 3*U*mu/(2*a)  > 0 : higher upstream, as printed
+== (2.2)  F_z = integral (sig_rr cos - tau sin) dA :  pressure part = 2*pi*U*a*mu  shear part = 4*pi*U*a*mu  sum = 6*pi*U*a*mu
+  p_inf contributes 0 (uniform pressure: zero net force)
+  units  F = 6 pi mu a U: kg m s^-2  vs  kg m s^-2  ->  OK
+  Dimensional analysis: variables (F, mu, a, U) in (M,L,T): nullspace of exponent matrix =
+    [Matrix([
+[-1],
+[ 1],
+[ 1],
+[ 1]])]  -> one group F/(mu a U): the factor 6 pi needs the solution
+
+== (2.3) terminal speed: weight less buoyancy = Stokes drag
+  v = 2*a**2*g*(-rho_a + rho_w)/(9*mu)  ; printed difference = 0
+  units  v = k a^2: m s^-1  vs  m s^-1  ->  OK
+  limit rho_a -> 0 : 2*a**2*g*rho_w/(9*mu)  ; sign: positive for rho_w > rho_a, zero at rho_w = rho_a (neutral drop does not sink)
+  Re_Stokes = 2 a rho_a v/mu = 4 rho_a drho g a^3/(9 mu^2): check by substitution: 0
+  Re = 1 at a = [4.09887349453404e-5] m  (text: 41.0 um) in cloud air (10 C, 850 hPa)
+
+== (2.4)/(2.5) drag balance and Davies number
+  (2.4) with C_D = F/(rho_a v^2 pi a^2 /2): C_D definition inserted -> F = pi*C_D*a**2*rho_a*v**2/2
+  N_Da = C_D Re^2 = 32*a**3*g*rho_a*(-rho_a + rho_w)/(3*mu**2)  (v cancelled: True )
+  printed 4 rho_a drho g d^3/(3 mu^2) with d = 2a minus derived = 0
+  units  N_Da: 1 (dimensionless)  vs  1 (dimensionless)  ->  OK
+  units  C_D = F/(rho v^2 pi a^2/2): 1 (dimensionless)  vs  1 (dimensionless)  ->  OK
+  units  Re = rho v d/mu: 1 (dimensionless)  vs  1 (dimensionless)  ->  OK
+  Buckingham: variables (F, a, v, rho_a, mu): 5 quantities, rank of dimension matrix and null space
+    rank = 3  -> groups = 2  ; null space vectors: [[-1, 2, 2, 1, 0], [-1, 1, 1, 0, 1]]
+  Stokes drag C_D = 24/Re : N_Da = 24*Re = 24 Re ; v from Re = N_Da/24 : 0 (difference with (2.3), 0 = identical)
+  limit check Stokes drag in (2.4): 0 (=0: reduces to 6 pi mu a v)

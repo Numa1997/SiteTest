@@ -10,7 +10,7 @@
     <meta name="theme-color" content="#f5f1ea">
     <link rel="stylesheet" href="../styles/sim.css">
     <link rel="stylesheet" href="../styles/data.css">
-    <link rel="stylesheet" href="../styles/fold.css">
+    <link rel="stylesheet" href="../styles/fold.css"><link rel="stylesheet" href="../styles/i18n.css"><script src="../scripts/flip.js"></script><!--I18N-ALTERNATES--><link rel="alternate" hreflang="en" href="https://phyeinusul.com/simulations/Double Pendulum.html" /><link rel="alternate" hreflang="de" href="https://phyeinusul.com/de/simulations/Double Pendulum.html" /><link rel="alternate" hreflang="ar" href="https://phyeinusul.com/ar/simulations/Double Pendulum.html" /><link rel="alternate" hreflang="x-default" href="https://phyeinusul.com/simulations/Double Pendulum.html" /><!--/I18N-ALTERNATES-->
     <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='12' fill='%237a1f2b'/%3E%3Ctext x='32' y='45' text-anchor='middle' font-family='Georgia,serif' font-size='38' fill='%23f5f1ea'%3EN%3C/text%3E%3C/svg%3E">
 </head>
 <body>
@@ -28,7 +28,7 @@
             <a href="draw-decompose.html">8</a>
             <a href="driven-oscillator.html">9</a>
             <a href="wind-turbine.html">10</a>
-        </nav>
+        </nav><span class="lang-switch" role="group" aria-label="Language" translate="no"><!--I18N-SWITCH--><a href="../simulations/Double Pendulum.html" hreflang="en" lang="en" aria-current="page">English</a> · <a href="../de/simulations/Double Pendulum.html" hreflang="de" lang="de">Deutsch</a> · <a href="../ar/simulations/Double Pendulum.html" hreflang="ar" lang="ar" dir="rtl">العربية</a><!--/I18N-SWITCH--></span>
     </header>
 
     <main class="sim">
@@ -702,7 +702,7 @@
             if (twin) {
                 sep.textContent = (d < 1e-3 ? d.toExponential(1).replace('-', '−') : d.toFixed(3)) + ' m';
             } else {
-                sep.textContent = 'twin off';
+                sep.textContent = _t('twin off');
             }
         }
 
@@ -785,16 +785,16 @@
 
         /* ---------- the data panel (scripts/datalog.js) reads the store; these hooks only say where things are drawn and how to test a value ---------- */
         var QN = ['θ₁', 'θ₂', 'ω₁', 'ω₂'], QU = ['rad', 'rad', 'rad/s', 'rad/s'];
-        function sliderCheck(input, label, scale) { return { formula: 'read from the ' + label + ' slider now' + (scale ? ', times π/180' : ''), inputs: [['slider', input.value, '']], value: parseFloat(input.value) * (scale || 1) }; }
+        function sliderCheck(input, label, scale) { return { formula: _t('read from the ') + _t(label) + _t(' slider now') + (scale ? _t(', times π/180') : ''), inputs: [[_t('slider'), input.value, '']], value: parseFloat(input.value) * (scale || 1) }; }
         function bobPixel(name, x, y) {
             var px = ctx.getImageData(Math.floor(x * box.dpr), Math.floor(y * box.dpr), 1, 1).data, near = function (r, g, b) { return px[3] > 0 && Math.abs(px[0] - r) < 40 && Math.abs(px[1] - g) < 40 && Math.abs(px[2] - b) < 40; };
             var r2 = Math.max(4, Math.min(17, 8 * Math.cbrt(m2 / m1))), dPivot = Math.hypot(x - ds.get('ox'), y - ds.get('oy'));
             var dBob2 = name.indexOf('bob 1') === 0 ? Math.hypot(x - ds.get('x2_px'), y - ds.get('y2_px')) : Infinity;
             var burgundy = near(122, 31, 43), pivot = dPivot < 4.5 && near(90, 80, 75), rim = dBob2 < r2 + 2 && (burgundy || near(255, 250, 243));
-            var expected = 'the burgundy bob, rgb(122, 31, 43)', note = 'The bob is a filled disc, radius 8 px for bob 1 and ' + Sim.fmt(r2, 1) + ' px for bob 2, so the pixel at its stored centre is its fill colour.';
-            if (dPivot < 4.5) { expected += ', or the pivot dot rgb(90, 80, 75) painted over it'; note = 'The bob centre is ' + Sim.fmt(dPivot, 1) + ' px from the pivot; the pivot dot (radius 3.5 px) is painted last, over the bobs.'; }
-            else if (dBob2 < r2 + 2) { expected += ', or bob 2 and its cream rim painted over it'; note = 'Bob 1 lies under bob 2 here (' + Sim.fmt(dBob2, 1) + ' px apart); bob 2 is painted after bob 1, with a 2 px cream rim.'; }
-            return { what: 'screen pixel at ' + name + ', (' + Sim.fmt(x, 1) + ', ' + Sim.fmt(y, 1) + ') css px', drawn: px[3] === 0 ? 'nothing (transparent)' : 'rgb(' + px[0] + ', ' + px[1] + ', ' + px[2] + ')', expected: expected, ok: burgundy || pivot || rim, note: note };
+            var expected = 'the burgundy bob, rgb(122, 31, 43)', note = _t('The bob is a filled disc, radius 8 px for bob 1 and ') + Sim.fmt(r2, 1) + _t(' px for bob 2, so the pixel at its stored centre is its fill colour.');
+            if (dPivot < 4.5) { expected += ', or the pivot dot rgb(90, 80, 75) painted over it'; note = _t('The bob centre is ') + Sim.fmt(dPivot, 1) + _t(' px from the pivot; the pivot dot (radius 3.5 px) is painted last, over the bobs.'); }
+            else if (dBob2 < r2 + 2) { expected += ', or bob 2 and its cream rim painted over it'; note = _t('Bob 1 lies under bob 2 here (') + Sim.fmt(dBob2, 1) + _t(' px apart); bob 2 is painted after bob 1, with a 2 px cream rim.'); }
+            return { what: _t('screen pixel at ') + name + ', (' + Sim.fmt(x, 1) + ', ' + Sim.fmt(y, 1) + _t(') css px'), drawn: px[3] === 0 ? _t('nothing (transparent)') : 'rgb(' + px[0] + ', ' + px[1] + ', ' + px[2] + ')', expected: expected, ok: burgundy || pivot || rim, note: note };
         }
         function twinPositionCheck(which) {
             if (!ds.get('twin_on')) return { formula: 'the twin is off', inputs: [], value: undefined };
@@ -804,12 +804,12 @@
             return { formula: 'the stored twin state mapped to screen coordinates', inputs: [['θ′₁', s[0], 'rad', 5], ['θ′₂', s[1], 'rad', 5], ['l₁', ds.attrs.l1, 'm', 4], ['l₂', l, 'm', 4], ['σ', sc, 'px/m', 2], ['ox', ds.get('ox'), 'px', 1], ['oy', ds.get('oy'), 'px', 1]], value: p[which] };
         }
         function twinPixel(bob) {
-            if (!ds.get('twin_on')) return { what: 'the twin bob', drawn: 'nothing', expected: 'nothing', ok: true, note: 'The chaos twin is switched off.' };
+            if (!ds.get('twin_on')) return { what: _t('the twin bob'), drawn: 'nothing', expected: 'nothing', ok: true, note: _t('The chaos twin is switched off.') };
             var x = ds.get('x' + bob + '_twin_px'), y = ds.get('y' + bob + '_twin_px');
             var px = ctx.getImageData(Math.floor(x * box.dpr), Math.floor(y * box.dpr), 1, 1).data;
             var rose = px[3] > 0 && Math.abs(px[0] - 226) < 40 && Math.abs(px[1] - 162) < 40 && Math.abs(px[2] - 170) < 40;
-            var covered = bobPixel('twin bob ' + bob, x, y).ok;
-            return { what: 'screen pixel at twin bob ' + bob, drawn: px[3] === 0 ? 'nothing (transparent)' : 'rgb(' + px[0] + ', ' + px[1] + ', ' + px[2] + ')', expected: 'the rose twin dot, rgb(226, 162, 170), or an overlying main bob or pivot', ok: rose || covered, note: 'The main pendulum is painted after the twin and can cover it where the bobs overlap.' };
+            var covered = bobPixel(_t('twin bob ') + bob, x, y).ok;
+            return { what: _t('screen pixel at twin bob ') + bob, drawn: px[3] === 0 ? _t('nothing (transparent)') : 'rgb(' + px[0] + ', ' + px[1] + ', ' + px[2] + ')', expected: _t('the rose twin dot, rgb(226, 162, 170), or an overlying main bob or pivot'), ok: rose || covered, note: _t('The main pendulum is painted after the twin and can cover it where the bobs overlap.') };
         }
         function alphaCheck(which) {
             var t1 = ds.get('th1'), t2 = ds.get('th2'), o1 = ds.get('w1'), o2 = ds.get('w2'), m = ds.get('m2'), l = ds.get('l2'), d = t1 - t2;
@@ -827,16 +827,16 @@
             return best;
         }
         Sim.data = {
-            ds: ds, kicker: 'Fig. 2 · data', file: 'fig2-double-pendulum',
+            ds: ds, kicker: _t('Fig. 2 · data'), file: 'fig2-double-pendulum',
             playing: function () { return clk.playing; },
             groups: [
-                { title: 'Physical parameters', note: 'fixed constants are in the dataset attributes; these you set', vars: ['m2', 'l2', 'th1_0', 'th2_0', 'w1_0', 'w2_0', 'speed'] },
-                { title: 'State', note: 'the four numbers the integrator advances', vars: ['y', 'dydt', 'th1', 'th2', 'w1', 'w2'] },
-                { title: 'Equations of motion', note: 'what deriv() computes from the state', vars: ['delta', 'den', 'alpha1', 'alpha2', 'M', 'detM', 'p1', 'p2'] },
-                { title: 'Energy', note: 'conserved by the physics, so its drift measures the integrator', vars: ['T', 'V', 'L', 'E', 'E0', 'drift'] },
-                { title: 'Bobs', note: 'metres with the pivot at the origin and y upwards; then the pixels as drawn', vars: ['x1', 'y1', 'x2', 'y2', 'v1', 'v2', 'x1_px', 'y1_px', 'x2_px', 'y2_px'] },
-                { title: 'Chaos twin', note: 'a copy started 0.001 rad away; its own stored screen positions locate its state', vars: ['twin_on', 'y_twin', 'x1_twin_px', 'y1_twin_px', 'x2_twin_px', 'y2_twin_px', 'sep', 'log10sep'] },
-                { title: 'Integrator and drawing', note: 'fourth-order Runge–Kutta at h = 1/600 s', vars: ['t', 'n', 'steps', 'acc', 'scale', 'ox', 'oy', 'dt', 'fps', 'frames', 'playing'] }
+                { title: _t('Physical parameters'), note: _t('fixed constants are in the dataset attributes; these you set'), vars: ['m2', 'l2', 'th1_0', 'th2_0', 'w1_0', 'w2_0', 'speed'] },
+                { title: _t('State'), note: _t('the four numbers the integrator advances'), vars: ['y', 'dydt', 'th1', 'th2', 'w1', 'w2'] },
+                { title: _t('Equations of motion'), note: _t('what deriv() computes from the state'), vars: ['delta', 'den', 'alpha1', 'alpha2', 'M', 'detM', 'p1', 'p2'] },
+                { title: _t('Energy'), note: _t('conserved by the physics, so its drift measures the integrator'), vars: ['T', 'V', 'L', 'E', 'E0', 'drift'] },
+                { title: _t('Bobs'), note: _t('metres with the pivot at the origin and y upwards; then the pixels as drawn'), vars: ['x1', 'y1', 'x2', 'y2', 'v1', 'v2', 'x1_px', 'y1_px', 'x2_px', 'y2_px'] },
+                { title: _t('Chaos twin'), note: _t('a copy started 0.001 rad away; its own stored screen positions locate its state'), vars: ['twin_on', 'y_twin', 'x1_twin_px', 'y1_twin_px', 'x2_twin_px', 'y2_twin_px', 'sep', 'log10sep'] },
+                { title: _t('Integrator and drawing'), note: _t('fourth-order Runge–Kutta at h = 1/600 s'), vars: ['t', 'n', 'steps', 'acc', 'scale', 'ox', 'oy', 'dt', 'fps', 'frames', 'playing'] }
             ],
             rowLabel: { q: function (j) { return QN[j]; }, a: function (j) { return QN[j]; } },
             colLabel: { M: function (i) { return QN[i]; } },
@@ -847,7 +847,7 @@
                 if (w === 'bob 2') { at = { x: ds.get('x2_px'), y: ds.get('y2_px') }; rows = [['θ<sub>2</sub>', ds.get('th2'), 'rad', 'th2'], ['ω<sub>2</sub>', ds.get('w2'), 'rad/s', 'w2'], ['α<sub>2</sub>', ds.get('alpha2'), 'rad/s²', 'alpha2'], ['x<sub>2</sub>', ds.get('x2'), 'm', 'x2'], ['y<sub>2</sub>', ds.get('y2'), 'm', 'y2'], ['|v<sub>2</sub>|', ds.get('v2'), 'm/s', 'v2'], ['p<sub>θ₂</sub>', ds.get('p2'), 'kg m²/s', 'p2']]; if (twin) rows.push(['d to twin', ds.get('sep'), 'm', 'sep']); }
                 else if (w === 'bob 1') { at = { x: ds.get('x1_px'), y: ds.get('y1_px') }; rows = [['θ<sub>1</sub>', ds.get('th1'), 'rad', 'th1'], ['ω<sub>1</sub>', ds.get('w1'), 'rad/s', 'w1'], ['α<sub>1</sub>', ds.get('alpha1'), 'rad/s²', 'alpha1'], ['x<sub>1</sub>', ds.get('x1'), 'm', 'x1'], ['y<sub>1</sub>', ds.get('y1'), 'm', 'y1'], ['|v<sub>1</sub>|', ds.get('v1'), 'm/s', 'v1'], ['p<sub>θ₁</sub>', ds.get('p1'), 'kg m²/s', 'p1']]; }
                 else { at = { x: ox, y: oy }; rows = [['T', ds.get('T'), 'J', 'T'], ['V', ds.get('V'), 'J', 'V'], ['E', ds.get('E'), 'J', 'E'], ['ε', ds.get('drift'), '', 'drift'], ['det M', ds.get('detM'), 'kg² m⁴', 'detM'], ['t', ds.get('t'), 's', 't']]; }
-                return { title: w + (w === 'pivot' ? ' · the whole system' : ''), at: at, rows: rows };
+                return { title: w + (w === 'pivot' ? _t(' · the whole system') : ''), at: at, rows: rows };
             },
             locate: function (name, idx) {
                 if (name === 'y_twin') return ds.get('twin_on') ? (idx % 2 === 0 ? { x: ds.get('x1_twin_px'), y: ds.get('y1_twin_px') } : { x: ds.get('x2_twin_px'), y: ds.get('y2_twin_px') }) : null;
@@ -863,9 +863,9 @@
                 w1_0: function () { return sliderCheck(w1.el, 'ω₁'); },
                 w2_0: function () { return sliderCheck(w2.el, 'ω₂'); },
                 speed: function () { return sliderCheck(speed.el, 'time scale'); },
-                y: function (j) { return { formula: 'the integrator’s state array, component ' + QN[j], inputs: [['state[' + j + ']', state[j], QU[j], 6]], value: state[j] }; },
+                y: function (j) { return { formula: _t('the integrator’s state array, component ') + QN[j], inputs: [['state[' + j + ']', state[j], QU[j], 6]], value: state[j] }; },
                 dydt: function (j) { var r = j < 2 ? { formula: 'dθ/dt = ω, read from the state', inputs: [[QN[j + 2], state[j + 2], 'rad/s', 6]], value: state[j + 2] } : alphaCheck(j - 1); return r; },
-                y_twin: function (j) { return { formula: twin ? 'the twin’s state array, component ' + QN[j] : 'the twin is off, so zero', inputs: twin ? [['twin[' + j + ']', twin[j], QU[j], 6]] : [], value: twin ? twin[j] : 0 }; },
+                y_twin: function (j) { return { formula: twin ? _t('the twin’s state array, component ') + QN[j] : _t('the twin is off, so zero'), inputs: twin ? [['twin[' + j + ']', twin[j], QU[j], 6]] : [], value: twin ? twin[j] : 0 }; },
                 th1: function () { return { formula: 'y[0]', inputs: [['y[0]', state[0], 'rad', 6]], value: state[0] }; },
                 th2: function () { return { formula: 'y[1]', inputs: [['y[1]', state[1], 'rad', 6]], value: state[1] }; },
                 w1: function () { return { formula: 'y[2]', inputs: [['y[2]', state[2], 'rad/s', 6]], value: state[2] }; },
@@ -909,10 +909,10 @@
                 th2: function () { return bobPixel('bob 2, placed from θ₂', ds.get('x2_px'), ds.get('y2_px')); },
                 th1: function () { return bobPixel('bob 1, placed from θ₁', ds.get('x1_px'), ds.get('y1_px')); }
             },
-            round: { time: 't', label: function () { return 'ten seconds of simulated motion'; }, length: function () { return 10; },
-                columns: ['th1', 'th2', 'w1', 'w2', 'E', 'drift', 'sep'], point: function () { return { what: 'bob 2' }; } },
+            round: { time: 't', label: function () { return _t('ten seconds of simulated motion'); }, length: function () { return 10; },
+                columns: ['th1', 'th2', 'w1', 'w2', 'E', 'drift', 'sep'], point: function () { return { what: _t('bob 2') }; } },
             play: function () { clk.set(true); },
-            about: 'Here the rods and bobs are drawn at the stored pixel positions, so the picture and the store agree to the pixel. The trail is painted segment by segment at every RK4 step and fades away; it is not kept as an array; to keep the trajectory, record a round, which copies every frame of ten simulated seconds. The energy drift is the integrator’s own error, shown rather than hidden.'
+            about: _t('Here the rods and bobs are drawn at the stored pixel positions, so the picture and the store agree to the pixel. The trail is painted segment by segment at every RK4 step and fades away; it is not kept as an array; to keep the trajectory, record a round, which copies every frame of ten simulated seconds. The energy drift is the integrator’s own error, shown rather than hidden.')
         };
 
         ['x1_twin_px', 'y1_twin_px', 'x2_twin_px', 'y2_twin_px'].forEach(function (name, i) {

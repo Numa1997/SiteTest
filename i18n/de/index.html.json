@@ -1,0 +1,570 @@
+{
+ "01084a174e96": {
+  "src": "Web Audio API",
+  "tr": "Web Audio API"
+ },
+ "01cab6d863f6": {
+  "src": "Arabic <span class=\"lvl\">native</span> · English <span class=\"lvl\">C1</span> · German <span class=\"lvl\">B2</span>",
+  "tr": "Arabisch <span class=\"lvl\">Muttersprache</span> · Englisch <span class=\"lvl\">C1</span> · Deutsch <span class=\"lvl\">B2</span>"
+ },
+ "0a4470d64e9d": {
+  "src": "Skip to content",
+  "tr": "Zum Inhalt springen"
+ },
+ "11826f821795": {
+  "src": "Fig. 3",
+  "tr": "Abb. 3"
+ },
+ "11f84af620e1": {
+  "src": "Building AND/OR gates operations to specify component-wise power consumption of the system",
+  "tr": "Aufbau von UND/ODER-Gatterlogik, um den Stromverbrauch des Systems nach Komponenten aufzuschlüsseln"
+ },
+ "142cd31b719b": {
+  "src": "<b>Fig. 0</b> · double pendulum · RK4 · live",
+  "tr": "<b>Abb. 0</b> · Doppelpendel · RK4 · live"
+ },
+ "1497a320cba1": {
+  "src": "Wave Interference – Multiple Sources",
+  "tr": "Welleninterferenz – mehrere Quellen"
+ },
+ "19300c13439d": {
+  "src": "Portfolios ↗",
+  "tr": "Portfolios ↗"
+ },
+ "1b0699dd1971": {
+  "src": "Completed projects, rebuilt in full with their derivations, solver and checks, are on the <a href=\"portfolios.html\">Portfolios page</a>: the Bachelor thesis on how cloud droplets become rain, a corrected study of whether a pendulum on a turbine blade can power a sensor, a servo-hydraulic press under digital control, built from first principles, and a study, in English and Arabic, of why an iron ball hurts and a cotton ball of the same mass does not.",
+  "tr": "Abgeschlossene Projekte, vollständig neu aufgebaut mit ihren Herleitungen, Lösern und Prüfungen, stehen auf der <a href=\"portfolios.html\">Portfolios-Seite</a>: die Bachelorarbeit darüber, wie aus Wolkentröpfchen Regen wird, eine korrigierte Studie, ob ein Pendel auf einem Turbinenblatt einen Sensor versorgen kann, eine digital geregelte servohydraulische Presse, aus ersten Prinzipien aufgebaut, und eine Studie, auf Englisch und Arabisch, warum eine Eisenkugel wehtut und eine Baumwollkugel derselben Masse nicht."
+ },
+ "1cb8d7de8274": {
+  "src": "Data &amp; Web Management",
+  "tr": "Daten- &amp; Webverwaltung"
+ },
+ "1da4c927a185": {
+  "src": "02.2023 – present <span class=\"tag\">current</span> <span class=\"tag tag--soft\">minijob</span>",
+  "tr": "02.2023 – heute <span class=\"tag\">aktuell</span> <span class=\"tag tag--soft\">Minijob</span>"
+ },
+ "22b8e2294018": {
+  "src": "Pandas, NumPy, SciPy, TensorFlow, PyTorch",
+  "tr": "Pandas, NumPy, SciPy, TensorFlow, PyTorch"
+ },
+ "22dd3c7d585b": {
+  "src": "Model Developer",
+  "tr": "Modellentwicklung"
+ },
+ "2365a132b4ee": {
+  "src": "Fig. 2",
+  "tr": "Abb. 2"
+ },
+ "24e8db21fed4": {
+  "src": "Draw any closed shape; a discrete Fourier transform turns it into spinning circles that redraw it, with Parseval's theorem checking the error live.",
+  "tr": "Zeichnen Sie eine beliebige geschlossene Form; eine diskrete Fourier-Transformation macht daraus kreisende Zeiger, die sie nachzeichnen, und der Satz von Parseval prüft laufend den Fehler."
+ },
+ "24ec25845d4d": {
+  "src": "Fourier analysis",
+  "tr": "Fourier-Analyse"
+ },
+ "276d2c34f015": {
+  "src": "Water particles tracing circular orbits as the crest passes through, with the orbits shrinking quickly with depth.",
+  "tr": "Wasserteilchen beschreiben Kreisbahnen, während der Wellenberg vorbeizieht; mit der Tiefe werden die Bahnen rasch kleiner."
+ },
+ "28cde6369fc9": {
+  "src": "117 CP",
+  "tr": "117 LP"
+ },
+ "29193e373178": {
+  "src": "Computational physics, numerical modeling, dashboards, quality control, database architecture",
+  "tr": "Computational Physics, numerische Modellierung, Dashboards, Qualitätskontrolle, Datenbankarchitektur"
+ },
+ "2a72a62fd10b": {
+  "src": "Open the simulations",
+  "tr": "Zu den Simulationen"
+ },
+ "3006b416f6fa": {
+  "src": "Faiveley Transport",
+  "tr": "Faiveley Transport"
+ },
+ "31069064dd63": {
+  "src": "Serving and waiting customers and tables respectively",
+  "tr": "Bedienung der Gäste und Tische"
+ },
+ "33bd5a5dddcd": {
+  "src": "© 2026 Numa Koudsie",
+  "tr": "© 2026 Numa Koudsie"
+ },
+ "358f84705075": {
+  "src": "Lemur Behavior Analysis",
+  "tr": "Verhaltensanalyse bei Lemuren"
+ },
+ "37a21c2b6b0e": {
+  "src": "Research Assistant",
+  "tr": "Wissenschaftliche Hilfskraft"
+ },
+ "3829f25f04bf": {
+  "src": "Systems Analyst",
+  "tr": "Systemanalyse"
+ },
+ "38e5f1a1def8": {
+  "src": "Cellular Mechanics",
+  "tr": "Zellmechanik"
+ },
+ "3ab7190fa092": {
+  "src": "Analysis and report generation based on several different datasets",
+  "tr": "Analysen und Berichte auf der Grundlage mehrerer unterschiedlicher Datensätze"
+ },
+ "3e5aa58f3a51": {
+  "src": "The classic experiment, step by step. Adjust slit separation and viewing angle to see how the path difference builds the interference pattern.",
+  "tr": "Das klassische Experiment, Schritt für Schritt. Stellen Sie Spaltabstand und Beobachtungswinkel ein und sehen Sie, wie der Gangunterschied das Interferenzmuster aufbaut."
+ },
+ "3eae19a4b117": {
+  "src": "Circular Water Waves",
+  "tr": "Wasserwellen und Kreisbahnen"
+ },
+ "42cf35eb30f2": {
+  "src": "Database, dashboard, and report development, building, and generation respectively for test results",
+  "tr": "Aufbau von Datenbank, Dashboard und Berichten für die Prüfergebnisse"
+ },
+ "42f78557323a": {
+  "src": "Portfolios →",
+  "tr": "Portfolios →"
+ },
+ "439d34518406": {
+  "src": "Fig. 8",
+  "tr": "Abb. 8"
+ },
+ "46ece4595914": {
+  "src": "Physics graduate with expertise in data analysis, modeling, and software development, and experience in the production of energy storage and distribution systems.",
+  "tr": "Abschluss in Physik (B.Sc.), Schwerpunkt Datenanalyse, Modellierung und Softwareentwicklung, mit Erfahrung in der Produktion von Energiespeicher- und Energieverteilungssystemen."
+ },
+ "4ad48a02590f": {
+  "src": "Launch",
+  "tr": "Öffnen"
+ },
+ "4ba6974e530c": {
+  "src": "Vanilla JavaScript",
+  "tr": "Reines JavaScript"
+ },
+ "4c4756e00c3e": {
+  "src": "Constructive and destructive interference from several point sources. Click to add sources and watch circular waves combine into straight wavefronts.",
+  "tr": "Konstruktive und destruktive Interferenz mehrerer Punktquellen. Klicken Sie, um Quellen hinzuzufügen, und sehen Sie zu, wie sich Kreiswellen zu geraden Wellenfronten verbinden."
+ },
+ "4d1f996aa178": {
+  "src": "React",
+  "tr": "React"
+ },
+ "4f4c9b155e91": {
+  "src": "Saxony International School Reinsdorf",
+  "tr": "Saxony International School Reinsdorf"
+ },
+ "4f7826be5ba7": {
+  "src": "University of Leipzig",
+  "tr": "Universität Leipzig"
+ },
+ "4fa8cc860c52": {
+  "src": "Tools",
+  "tr": "Werkzeuge"
+ },
+ "4ff4e073fcf4": {
+  "src": "Double Pendulum Chaos",
+  "tr": "Chaos im Doppelpendel"
+ },
+ "50fce6d02899": {
+  "src": "SVG",
+  "tr": "SVG"
+ },
+ "5352ea16f04e": {
+  "src": "Leipzig, Germany",
+  "tr": "Leipzig, Deutschland"
+ },
+ "53c6634a8a05": {
+  "src": "during studies",
+  "tr": "während des Studiums"
+ },
+ "5cf5911bdad4": {
+  "src": "Transverse &amp; Longitudinal Waves",
+  "tr": "Transversal- &amp; Longitudinalwellen"
+ },
+ "64472dd0fbfb": {
+  "src": "Visualizations of wave mechanics, classical mechanics, and interference, written in vanilla JavaScript, React, and HTML5 Canvas. Each plate opens the live simulation in a new tab. The <a href=\"simulations.html\">simulations page</a> lists them all by field, with the question each one answers and a search.",
+  "tr": "Visualisierungen zu Wellenmechanik, klassischer Mechanik und Interferenz, geschrieben in reinem JavaScript, React und HTML5 Canvas. Jede Tafel öffnet die laufende Simulation in einem neuen Tab. Die <a href=\"simulations.html\">Simulationsseite</a> führt sie alle nach Gebieten auf, mit der Frage, die jede beantwortet, und einer Suche."
+ },
+ "6d18c7faff29": {
+  "src": "Automated inventory tracking, website development",
+  "tr": "Automatisierte Bestandsverfolgung, Entwicklung der Website"
+ },
+ "6dd53b0cb240": {
+  "src": "Skeleton Technologies Superfactory, Markranstädt",
+  "tr": "Skeleton Technologies Superfactory, Markranstädt"
+ },
+ "6ee41b557a20": {
+  "src": "Erasmus+ Program",
+  "tr": "Erasmus+-Programm"
+ },
+ "6f532f511731": {
+  "src": "Development of web react elements and simulations of basic physical phenomena",
+  "tr": "Entwicklung von React-Elementen für das Web und von Simulationen grundlegender physikalischer Phänomene"
+ },
+ "6fa887c4b945": {
+  "src": "Live double pendulum drawing",
+  "tr": "Live-Zeichnung eines Doppelpendels"
+ },
+ "702b201c4b40": {
+  "src": "Phyein Usul",
+  "tr": "Phyein Usul"
+ },
+ "73b4aa6f7d16": {
+  "src": "Back to top ↑",
+  "tr": "Nach oben ↑"
+ },
+ "73ce68c730dd": {
+  "src": "Rotating complex numbers added tip to tail. Roses, beats and spirographs from a few circles, with live period and symmetry readouts; an audio file can make the arms dance.",
+  "tr": "Rotierende komplexe Zahlen, Spitze an Fuß aneinandergesetzt. Rosen, Schwebungen und Spirographen aus wenigen Kreisen, mit laufender Anzeige von Periode und Symmetrie; eine Audiodatei kann die Arme tanzen lassen."
+ },
+ "76cadb7bc66e": {
+  "src": "Step-strain protocols for complex modulus estimation",
+  "tr": "Sprungdehnungsprotokolle zur Bestimmung des komplexen Moduls"
+ },
+ "7a1b5cbf43eb": {
+  "src": "Chaos theory",
+  "tr": "Chaostheorie"
+ },
+ "7c1ff947231c": {
+  "src": "System energy optimization for equilibrium modeling",
+  "tr": "Optimierung der Systemenergie für die Modellierung des Gleichgewichts"
+ },
+ "7e315f1450ba": {
+  "src": "Research portfolios",
+  "tr": "Forschungsportfolios"
+ },
+ "7f3b61e60922": {
+  "src": "Python simulations for water/ice particle coalescence; synthetic data analysis",
+  "tr": "Python-Simulationen der Koaleszenz von Wasser- und Eisteilchen; Analyse synthetischer Daten"
+ },
+ "7ff5a6dafd80": {
+  "src": "Sections",
+  "tr": "Abschnitte"
+ },
+ "807b8185ce6a": {
+  "src": "Double-Slit Interference",
+  "tr": "Interferenz am Doppelspalt"
+ },
+ "81c04f86a4de": {
+  "src": "<b style=\"font-weight:600\">Phyein Usul</b> · φύειν أصول, roots that grow. A personal website and an archive: my work, notes and simulations kept in one place, the older pieces beside what grew from them.",
+  "tr": "<b style=\"font-weight:600\">Phyein Usul</b> · φύειν أصول, Wurzeln, die wachsen. Eine persönliche Website und ein Archiv: meine Arbeiten, Notizen und Simulationen an einem Ort, die älteren Stücke neben dem, was aus ihnen gewachsen ist."
+ },
+ "82d4a085e86b": {
+  "src": "Fig. 7",
+  "tr": "Abb. 7"
+ },
+ "83be90f42b14": {
+  "src": "Production line coordination, personnel and machinery supervision",
+  "tr": "Koordination der Produktionslinie, Aufsicht über Personal und Maschinen"
+ },
+ "84f9bee9475a": {
+  "src": "A multi-wave workbench. Add waves with different frequencies, amplitudes, and phases and watch the resulting sum in real time.",
+  "tr": "Eine Werkbank für viele Wellen. Fügen Sie Wellen mit verschiedenen Frequenzen, Amplituden und Phasen hinzu und sehen Sie ihre Summe in Echtzeit."
+ },
+ "8590ab7e80d1": {
+  "src": "Numa Koudsie · Notebook",
+  "tr": "Numa Koudsie · Notizbuch"
+ },
+ "8aa7881300c3": {
+  "src": "Laser-Induced Breakdown Spectroscopy (LIBS) on lake sediments; atomic emission spectra analysis",
+  "tr": "Laserinduzierte Plasmaspektroskopie (LIBS) an Seesedimenten; Analyse atomarer Emissionsspektren"
+ },
+ "8eaecb2b9802": {
+  "src": "Dhillons Irish Pub and Grill",
+  "tr": "Dhillons Irish Pub and Grill"
+ },
+ "8f8c63d75e8d": {
+  "src": "Stochastic differential equations for viscoelastic properties",
+  "tr": "Stochastische Differentialgleichungen für viskoelastische Eigenschaften"
+ },
+ "9233728e6188": {
+  "src": "Real-time plotting",
+  "tr": "Darstellung in Echtzeit"
+ },
+ "926819f4f001": {
+  "src": "Fig. 1",
+  "tr": "Abb. 1"
+ },
+ "93424259ad3d": {
+  "src": "github.com/Numa1997",
+  "tr": "github.com/Numa1997"
+ },
+ "94b8082643fc": {
+  "src": "Fig. 4",
+  "tr": "Abb. 4"
+ },
+ "9a51b18b8ef2": {
+  "src": "Fig. 5",
+  "tr": "Abb. 5"
+ },
+ "9a75b493d439": {
+  "src": "Georg-August-Universität Göttingen",
+  "tr": "Georg-August-Universität Göttingen"
+ },
+ "9ca132558c37": {
+  "src": "HTML5 Canvas",
+  "tr": "HTML5 Canvas"
+ },
+ "a024c68075c4": {
+  "src": "Discrete Fourier transform",
+  "tr": "Diskrete Fourier-Transformation"
+ },
+ "a05c647b4254": {
+  "src": "Python, SQL, MATLAB, Julia, HTML/CSS/JS",
+  "tr": "Python, SQL, MATLAB, Julia, HTML/CSS/JS"
+ },
+ "a07f01da81b4": {
+  "src": "Autodesk Inventor, SolidWorks, AutoCAD, DIAdem",
+  "tr": "Autodesk Inventor, SolidWorks, AutoCAD, DIAdem"
+ },
+ "a0d641b3f1af": {
+  "src": "Domains",
+  "tr": "Gebiete"
+ },
+ "a169f1e8b869": {
+  "src": "Research projects",
+  "tr": "Forschungsprojekte"
+ },
+ "a3f80b87a456": {
+  "src": "Canvas",
+  "tr": "Canvas"
+ },
+ "a412873cd464": {
+  "src": "Current focus: pattern recognition in social behaviors",
+  "tr": "Aktueller Schwerpunkt: Mustererkennung im Sozialverhalten"
+ },
+ "a4d4c1cc16f7": {
+  "src": "Particle motion",
+  "tr": "Teilchenbewegung"
+ },
+ "a65d6c82a98e": {
+  "src": "Cooling system analysis (R134a, R290); DIAdem integration for automated data processing",
+  "tr": "Analyse von Kühlsystemen (R134a, R290); Einbindung von DIAdem für die automatische Datenverarbeitung"
+ },
+ "a8b07b7fabe8": {
+  "src": "University of Leipzig &amp; TROPOS",
+  "tr": "Universität Leipzig &amp; TROPOS"
+ },
+ "aa7166e8175b": {
+  "src": "Phasor Sums – Epicycles &amp; Roses",
+  "tr": "Zeigersummen – Epizykel &amp; Rosen"
+ },
+ "aaf87fe57ae6": {
+  "src": "Education",
+  "tr": "Ausbildung"
+ },
+ "ab6077217544": {
+  "src": "Draw &amp; Decompose – Fourier Epicycles",
+  "tr": "Zeichnen &amp; Zerlegen – Fourier-Epizykel"
+ },
+ "acc39d31c283": {
+  "src": "Quality tests for cross checking the physical tolerances imposed on products coming out of the line",
+  "tr": "Qualitätsprüfungen: Abgleich der Produkte vom Band mit den vorgegebenen physikalischen Toleranzen"
+ },
+ "adbe9df55ba8": {
+  "src": "Completed · computational",
+  "tr": "Abgeschlossen · rechnergestützt"
+ },
+ "ae45f5043e3a": {
+  "src": "Teaching Assistant",
+  "tr": "Unterrichtsassistenz"
+ },
+ "ae83a7188ea3": {
+  "src": "numakoudsie@gmail.com",
+  "tr": "numakoudsie@gmail.com"
+ },
+ "b0cf34cfb377": {
+  "src": "CAD &amp; analysis",
+  "tr": "CAD &amp; Analyse"
+ },
+ "b60b20f0f1ab": {
+  "src": "SVG animation",
+  "tr": "SVG-Animation"
+ },
+ "b795817627df": {
+  "src": "Synthetic data generation for lemur interactions",
+  "tr": "Erzeugung synthetischer Daten für Interaktionen zwischen Lemuren"
+ },
+ "be601df25eea": {
+  "src": "Research",
+  "tr": "Forschung"
+ },
+ "bf067e21ddbe": {
+  "src": "Git, Jupyter, VS Code, Linux",
+  "tr": "Git, Jupyter, VS Code, Linux"
+ },
+ "bf0cade71443": {
+  "src": "All simulations →",
+  "tr": "Alle Simulationen →"
+ },
+ "bfe63e506aa2": {
+  "src": "Plotly, Matplotlib, D3.js, HTML5 Canvas",
+  "tr": "Plotly, Matplotlib, D3.js, HTML5 Canvas"
+ },
+ "c010a2efff03": {
+  "src": "Parseval's theorem",
+  "tr": "Satz von Parseval"
+ },
+ "c2a080d36cf8": {
+  "src": "GRU networks for behavior prediction (lemurs); tensor-based data organization",
+  "tr": "GRU-Netze zur Verhaltensvorhersage (Lemuren); tensorbasierte Datenorganisation"
+ },
+ "c2df9b932637": {
+  "src": "Index",
+  "tr": "Inhalt"
+ },
+ "c32da6cd1988": {
+  "src": "RK4 integration",
+  "tr": "RK4-Integration"
+ },
+ "c7080a85a336": {
+  "src": "Huygens' principle",
+  "tr": "Huygens’sches Prinzip"
+ },
+ "c73d272e6489": {
+  "src": "See positions",
+  "tr": "Zu den Stationen"
+ },
+ "cd4683fadf70": {
+  "src": "Positions",
+  "tr": "Stationen"
+ },
+ "cd6c43c05742": {
+  "src": "Engineering Physics",
+  "tr": "Technische Physik (Engineering Physics)"
+ },
+ "cdb7d6ad687d": {
+  "src": "Numa Koudsie",
+  "tr": "Numa Koudsie"
+ },
+ "ce1c474416c0": {
+  "src": "Mathematical framework: V<sub>i</sub>* = C<sub>ij</sub> V<sub >j</sub >",
+  "tr": "Mathematischer Rahmen: V<sub>i</sub>* = C<sub>ij</sub> V<sub >j</sub >"
+ },
+ "d1622a8321e0": {
+  "src": "Phyein Usul, home page",
+  "tr": "Phyein Usul, Startseite"
+ },
+ "d175985b87dd": {
+  "src": "Visualization",
+  "tr": "Visualisierung"
+ },
+ "d1a946bf8b2f": {
+  "src": "Programming",
+  "tr": "Programmierung"
+ },
+ "d422148d76f5": {
+  "src": "Wave Interference Simulator",
+  "tr": "Werkbank für Wellenüberlagerung"
+ },
+ "d51b87f95972": {
+  "src": "GRU neural networks for behavioral sequences",
+  "tr": "Neuronale GRU-Netze für Verhaltenssequenzen"
+ },
+ "d64b45b3fb9c": {
+  "src": "Oscillations",
+  "tr": "Schwingungen"
+ },
+ "d94389502fbb": {
+  "src": "reset ↻",
+  "tr": "neu starten ↻"
+ },
+ "db07be184479": {
+  "src": "Languages",
+  "tr": "Sprachen"
+ },
+ "df4ea2d706c4": {
+  "src": "Carl von Ossietzky University of Oldenburg",
+  "tr": "Carl von Ossietzky Universität Oldenburg"
+ },
+ "e09212c7d3ea": {
+  "src": "Skills",
+  "tr": "Kenntnisse"
+ },
+ "e1589bdf46b3": {
+  "src": "Compare the two kinds of wave propagation side by side. Adjust amplitude, frequency, and wavelength to see how each property shapes the motion.",
+  "tr": "Die beiden Arten der Wellenausbreitung nebeneinander. Stellen Sie Amplitude, Frequenz und Wellenlänge ein und sehen Sie, wie jede Größe die Bewegung formt."
+ },
+ "e23ab8427ba2": {
+  "src": "<b>Ongoing</b> · computational",
+  "tr": "<b>Laufend</b> · rechnergestützt"
+ },
+ "e3eef1f8c910": {
+  "src": "Team Coordinator",
+  "tr": "Teamkoordination"
+ },
+ "e7137ce08df4": {
+  "src": "Focus: computational physics",
+  "tr": "Schwerpunkt: Computational Physics"
+ },
+ "e84ef0bf0497": {
+  "src": "Drop Population Dynamics",
+  "tr": "Populationsdynamik von Tropfen"
+ },
+ "e8f91b18f228": {
+  "src": "B.Sc. Physics",
+  "tr": "B.Sc. Physik"
+ },
+ "e903907d59b4": {
+  "src": "Fig. 6",
+  "tr": "Abb. 6"
+ },
+ "ea58ddcdd6e2": {
+  "src": "Numa",
+  "tr": "Numa"
+ },
+ "eb552463266d": {
+  "src": "Chaotic dynamics with adjustable mass ratios, lengths, and initial conditions. Tiny changes in the starting angles produce completely different trajectories.",
+  "tr": "Chaotische Dynamik mit einstellbaren Massenverhältnissen, Längen und Anfangsbedingungen. Winzige Änderungen der Anfangswinkel führen zu völlig verschiedenen Bahnen."
+ },
+ "ed92a8d62940": {
+  "src": "Interactive physics simulations",
+  "tr": "Interaktive Physiksimulationen"
+ },
+ "ed9d90ec7f5e": {
+  "src": "Skills &amp; languages",
+  "tr": "Kenntnisse &amp; Sprachen"
+ },
+ "f037aaacfa82": {
+  "src": "Data-driven sales analysis",
+  "tr": "Datengestützte Umsatzanalyse"
+ },
+ "f1623fbbcdc6": {
+  "src": "Bilingual instruction of classes 6, 8, 9, 10, and 12 in Physics and natural sciences",
+  "tr": "Zweisprachiger Unterricht in Physik und Naturwissenschaften in den Klassen 6, 8, 9, 10 und 12"
+ },
+ "f34f870654be": {
+  "src": "Koudsie<span class=\"dot\">.</span>",
+  "tr": "Koudsie<span class=\"dot\">.</span>"
+ },
+ "f4df3869f83c": {
+  "src": "Complex phasors",
+  "tr": "Komplexe Zeiger"
+ },
+ "f5ea17dba1dc": {
+  "src": "Wave–particle duality",
+  "tr": "Welle-Teilchen-Dualismus"
+ },
+ "f72f0eda6052": {
+  "src": "Simulations",
+  "tr": "Simulationen"
+ },
+ "f8e064a838dd": {
+  "src": "University of Groningen",
+  "tr": "Rijksuniversiteit Groningen"
+ },
+ "fc8a068be442": {
+  "src": "Completed projects, rebuilt in full with their derivations, solver and checks, are on the <a href=\"portfolios.html\">Portfolios page</a>: the Bachelor thesis on how cloud droplets become rain, a corrected study of whether a pendulum on a turbine blade can power a sensor, a servo-hydraulic press under digital control, built from first principles, and a study, in English, German and Arabic, of why an iron ball hurts and a cotton ball of the same mass does not.",
+  "tr": "Abgeschlossene Projekte, vollständig neu aufgebaut mit ihren Herleitungen, Lösern und Prüfungen, stehen auf der <a href=\"portfolios.html\">Portfolios-Seite</a>: die Bachelorarbeit darüber, wie aus Wolkentröpfchen Regen wird, eine korrigierte Studie, ob ein Pendel auf einem Turbinenblatt einen Sensor versorgen kann, eine digital geregelte servohydraulische Presse, aus ersten Prinzipien aufgebaut, und eine Studie, auf Englisch, Deutsch und Arabisch, warum eine Eisenkugel wehtut und eine Baumwollkugel derselben Masse nicht."
+ },
+ "ff5d03c7680b": {
+  "src": "Numa Koudsie — physics graduate with expertise in data analysis, modeling, and software development. Positions, education, research projects, interactive physics simulations, and skills.",
+  "tr": "Numa Koudsie – Physik (B.Sc.), Schwerpunkt Datenanalyse, Modellierung und Softwareentwicklung. Stationen, Ausbildung, Forschungsprojekte, interaktive Physiksimulationen und Kenntnisse."
+ },
+ "ff91c2bef0a9": {
+  "src": "Data analysis",
+  "tr": "Datenanalyse"
+ }
+}

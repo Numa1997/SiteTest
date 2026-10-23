@@ -11,6 +11,11 @@ and script is and how it works) and `tools/` sit beside them. It runs in two pla
 No GitHub Pages (Numa's decision, 14 October 2026). Change the repository first, build and check it, update the `docs/` pages that
 describe the change, and run `python3 tools/inventory.py` (it rewrites `docs/files.md` and fails if a file is undescribed); deploying
 to Cloudflare or AppDeploy happens only when Numa asks.
+Languages (since 23 October 2026): English is the only source. `tools/i18n/build.py` writes the German and Arabic pages into
+`public/de/` and `public/ar/` from the English pages and the tables in `i18n/<lang>/`; after changing an English page that has a
+translation, `scripts/catalog.js`, a script using `T('…')` or a stylesheet with an `.rtl.css` copy, run it (`--check` fails on
+anything untranslated) and commit what it writes. Never edit `public/de/`, `public/ar/`, `scripts/i18n/` or `*.rtl.css` by hand.
+Terms: `docs/glossary.md`; mechanism: `docs/i18n.md`. Arabic pages give the name as نعمة سائر قدسية.
 Out of bounds for writes: the ChatGPT version `numa-physics-lab-chatgpt-k0ixwk` (its earlier copy `sitetest-chatgpt-r14hvr` was deleted)
 and the unrelated app `physik-radar-xvy59b`. This is a project instruction, not a technical access control.
 

@@ -1,0 +1,6 @@
+{
+  "name": "phyein-usul-i18n-tools",
+  "private": true,
+  "description": "JavaScript parser for tools/i18n/wrap.cjs (wraps reader-visible strings of a page's scripts in _t()). Install: npm install --prefix tools/i18n",
+  "dependencies": { "acorn": "8.12.1", "acorn-walk": "8.3.4" }
+}

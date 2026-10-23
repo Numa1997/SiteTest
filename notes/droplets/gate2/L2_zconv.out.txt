@@ -1,0 +1,5 @@
+model creeping Z = 50 E_S = 0.336676 b_c = 0.707484 0.0 s
+model creeping Z = 100 E_S = 0.337057 b_c = 0.702215 0.0 s
+model creeping Z = 200 E_S = 0.337474 b_c = 0.699863 0.0 s
+model creeping Z = 400 E_S = 0.337458 b_c = 0.698466 0.0 s
+model creeping Z = 800 E_S = 0.337516 b_c = 0.697839 0.0 s

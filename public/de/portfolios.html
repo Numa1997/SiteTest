@@ -1,0 +1,384 @@
+<!doctype html>
+<html lang="de" dir="ltr" class="no-js">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline' https://v2.appdeploy.ai https://unpkg.com/@khmyznikov/pwa-install@0.6.3/dist/pwa-install.bundle.js; style-src 'self' 'unsafe-inline'; img-src 'self' data: blob: https://appdeploy.ai; font-src 'self' data:; connect-src 'self' https://api-v2.appdeploy.ai; worker-src 'self'; manifest-src 'self'; object-src 'none'; base-uri 'self'; form-action 'self'; upgrade-insecure-requests" />
+    <meta name="referrer" content="strict-origin-when-cross-origin" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Portfolios · Numa Koudsie</title>
+    <meta
+      name="description"
+      content="Forschungsprojekte von Numa Koudsie, jedes mit Herleitungen, Löser und Ergebnissen: Droplet Collection, die Neumodellierung einer Bachelorarbeit darüber, wie aus Wolkentröpfchen Regen wird; Rotor Pendula, eine korrigierte Studie zur Frage, ob ein Pendel an einem Turbinenblatt einen Sensor versorgen kann; die Studie einer hydraulischen Presse, einer servohydraulischen Presse unter digitaler Regelung, aus ersten Prinzipien aufgebaut; und Eisen, Baumwolle und der Kopf, warum eine Eisenkugel wehtut und eine Baumwollkugel derselben Masse nicht, auf Englisch, Deutsch und Arabisch."
+    />
+    <meta name="author" content="Numa Koudsie" />
+    <meta name="theme-color" content="#f5f1ea" /><link rel="alternate" hreflang="en" href="https://phyeinusul.com/portfolios.html" /><link rel="alternate" hreflang="de" href="https://phyeinusul.com/de/portfolios.html" /><link rel="alternate" hreflang="ar" href="https://phyeinusul.com/ar/portfolios.html" /><link rel="alternate" hreflang="x-default" href="https://phyeinusul.com/portfolios.html" />
+    <link rel="stylesheet" href="../styles/site.css" />
+    <link rel="stylesheet" href="../vendor/katex/katex.min.css" />
+    <link rel="stylesheet" href="../styles/paper.css" />
+    <link rel="stylesheet" href="../styles/catalog.css" />
+    <link rel="stylesheet" href="../styles/portfolio.css" />
+    <link rel="stylesheet" href="../styles/fold.css" /><link rel="stylesheet" href="../styles/i18n.css" /><script src="../scripts/flip.js"></script>
+    <link rel="stylesheet" href="../fonts/arabic.css" />
+    <link
+      rel="icon"
+      href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='12' fill='%237a1f2b'/%3E%3Ctext x='32' y='45' text-anchor='middle' font-family='Georgia,serif' font-size='34' font-weight='700' fill='%23fff'%3ENK%3C/text%3E%3C/svg%3E"
+    />
+    <script>
+      document.documentElement.className = 'js';
+    </script>
+  
+    <script src="../scripts/i18n/strings-de.js"></script>
+    <meta name="translated-from" content="English public/portfolios.html, commit 8b8d504" />
+  </head>
+
+  <body>
+    <a class="skip-link" href="#projects">Zu den Projekten springen</a>
+
+    <header class="cat-top">
+      <span style="display:inline-flex;align-items:center;gap:14px"><a href="index.html" aria-label="Phyein Usul, Startseite" style="display:inline-block;line-height:0"><img src="../images/phyein-usul-mark.svg" alt="Phyein Usul" width="87" height="48" /></a><a href="index.html">← Numa Koudsie</a></span>
+      <nav aria-label="Website">
+        <a href="index.html#positions">Stationen</a>
+        <a href="index.html#research">Forschung</a>
+        <a href="simulations.html">Simulationen</a>
+        <a href="index.html#skills">Kenntnisse</a><span class="lang-switch" role="group" aria-label="Sprache" translate="no"><a href="../portfolios.html" hreflang="en" lang="en">English</a> · <a href="../de/portfolios.html" hreflang="de" lang="de" aria-current="page">Deutsch</a> · <a href="../ar/portfolios.html" hreflang="ar" lang="ar" dir="rtl">العربية</a></span>
+      </nav>
+    </header>
+
+    <main class="cat" id="projects">
+      <div class="cat__head" style="grid-template-columns: minmax(0, 1fr);">
+        <div>
+          <p class="cat__kicker">Forschungsprojekte</p>
+          <h1>Portfolios<span class="dot">.</span></h1>
+          <p class="cat__lede">Projekte von Monaten statt Nachmittagen: eine Frage aus der Forschung, ein Modell, Schritt für Schritt neu aufgebaut und geprüft, ein Löser, den Sie selbst laufen lassen können, und Ergebnisse, die sich nachrechnen lassen. Jedes Projekt hat seine eigenen Seiten; diese Seite stellt sie vor.</p>
+        </div>
+      </div>
+
+      <article class="proj" id="droplet-collection" aria-labelledby="dc-title">
+        <div class="proj__band">
+          <span class="proj__num">01</span>
+          <p>Bachelorarbeit, Leipzig 2022 · als Vorlesungsskript neu aufgebaut</p>
+          <span>Wolkenphysik · stochastische Koaleszenz · numerische Methoden</span>
+        </div>
+        <div class="proj__body">
+          <div class="proj__head">
+            <div>
+              <h2 id="dc-title">Droplet Collection</h2>
+              <p class="proj__sub">Wie aus Wolkentröpfchen Regen wird</p>
+              <p class="proj__abs">Ein Wolkentröpfchen ist zehn Mikrometer groß und sinkt einen Zentimeter pro Sekunde; ein Regentropfen enthält eine Million davon. Die Schwerkraft sammelt sie ein: Ein Tropfen, der etwas größer ist als seine Nachbarn, fällt etwas schneller, holt die Tröpfchen unter sich ein und verschluckt einige von ihnen. Dieses Vorlesungsskript baut Numa Koudsies Bachelorarbeit, <em>Collisional Ice Multiplication Processes in Clouds</em> (Leipzig, 2022), aus ersten Prinzipien neu auf, einen physikalischen Effekt nach dem anderen: der Stokes-Widerstand, hergeleitet aus der Stromfunktion, eine Widerstandsbilanz für jede Größe, die Bahnen der Tröpfchen um einen fallenden Tropfen, die Energie, die entscheidet, ob sich berührende Tropfen verschmelzen, die Koaleszenzgleichung für eine ganze Population, der exakte Zufallsprozess dahinter, Turbulenz und Eis. Jede Zahl, die keiner Quelle zugeschrieben ist, berechnet das Modell, das auf der Seite läuft, und sie wird geprüft.</p>
+              <div class="proj__actions">
+                <a class="proj__btn" href="../portfolios/droplet-collection/index.html#book">Das Vorlesungsskript lesen</a>
+                <a class="proj__btn proj__btn--ghost" href="../portfolios/droplet-collection/index.html#sim">Die Wolke rechnen lassen</a>
+                <a class="proj__btn proj__btn--ghost" href="../portfolios/droplet-collection/index.html#checks">Wie es geprüft wird</a>
+              </div>
+            </div>
+            <dl class="proj__tally" aria-label="Kennzahlen">
+              <div><dt class="is-new">5.8 / 13.5<small>min</small></dt><dd>bis die Hälfte und neun Zehntel des Wassers in Tropfen über 40 µm stecken; mit der Unsicherheit der Kollisionseffizienz neun Zehntel bei 10.5 bis 13.5 min</dd></div>
+              <div><dt>1<small>min</small></dt><dd>bis zum ersten Nieseltropfen in einem Kubikmeter, zehnmal früher als die Hälfte des Wassers: Glück</dd></div>
+              <div><dt>50–1600<small>×</small></dt><dd>weniger neues Eis aus Eis-Eis-Stößen, als die Regel der Arbeit annahm</dd></div>
+              <div><dt>2.1<small> %</small></dt><dd>größter Fehler der Fallgeschwindigkeit gegenüber Messungen, ab 0.3 mm</dd></div>
+            </dl>
+          </div>
+
+          <section class="proj__part" aria-labelledby="dc-cloud">
+            <h3 id="dc-cloud"><span class="psub__n">1.1</span>Die Wolke und die drei Fragen</h3>
+            <p>Der Testfall ist die warme Wolke der Arbeit: \(300\ \mathrm{cm^{-3}}\) Tröpfchen um \(8\ \mathrm{\mu m}\) und \(1\ \mathrm{cm^{-3}}\) Sammeltropfen um \(40\ \mathrm{\mu m}\), bei \(10\,{}^{\circ}\mathrm{C}\) und \(850\ \mathrm{hPa}\), in einem geschlossenen, gut durchmischten Kasten. Das Skript fragt, wie lange es dauert, bis der größte Teil des Wassers in großen Tropfen steckt, wie lange, bis in einem gegebenen Volumen der allererste Nieseltropfen erscheint, und ob Stöße in einer kalten Wolke neues Eis erzeugen. Eine Leiter von Modellen beantwortet diese Fragen; jede Sprosse fügt einen Effekt hinzu, mit einer berechneten Zahl, die zeigt, dass er zählt.</p>
+          </section>
+
+          <section class="proj__part" aria-labelledby="dc-changes">
+            <h3 id="dc-changes"><span class="psub__n">1.2</span>Was der Neuaufbau fand, je eine Zeile</h3>
+            <ol class="proj__changes">
+              <li><b>Fallgeschwindigkeit.</b> Das Stokes-Gesetz verletzt seine eigene Annahme bei \(41\ \mathrm{\mu m}\), wo seine Reynolds-Zahl 1 erreicht. Eine Widerstandsbilanz über die Davies-Zahl trifft die Messungen von Gunn und Kinzer ab 0.3 mm auf 2.1 % genau, und in der ganzen Population bremst sie das Wachstum um den Faktor 1.76, weit mehr als bei einem einzelnen Tropfen.</li>
+              <li><b>Kollisionseffizienz.</b> Nur ein Drittel der Tröpfchen auf der Bahn eines \(40\ \mathrm{\mu m}\)-Tropfens berührt ihn (\(E = 0.344\)); die übrigen reiten auf der Luft um ihn herum, die er beiseiteschiebt. Der Bahnlöser reproduziert die kritischen Stokes-Zahlen \(1/12\) und \(1.21194\). Die Effizienz ist die größte einzelne Änderung der Leiter und die unsicherste: Sie verschiebt die Zeit bis zu neun Zehnteln des Wassers von 13.5 auf 10.5 min.</li>
+              <li><b>Koaleszenz.</b> Für Wolkentröpfchen beträgt die Stoßenergie \(10^{-5}\) der Oberflächenenergie, also verschmelzen sich berührende Tropfen; mit Stokes-Geschwindigkeiten treffen große Tropfen so hart, dass der Kern der Arbeit sie unterhalb eines Millimeters nicht mehr verschmelzen lässt.</li>
+              <li><b>Glück.</b> Der exakte Zufallsprozess, Tropfen für Tropfen in Volumina bis zu einem Liter abgetastet, bildet den ersten \(100\ \mathrm{\mu m}\)-Tropfen durch Verschmelzen von Sammeltropfen untereinander, in jedem einzelnen von 230 Läufen; ein Poisson-Argument trägt das Ergebnis bis zu einem Kubikmeter.</li>
+              <li><b>Eis.</b> Bei \(-10\,{}^{\circ}\mathrm{C}\) ist die Splitterbildung beim Bereifen abgeschaltet, das Zerbrechen der kleinen Eiskugeln der Arbeit bei Eis-Eis-Stößen erzeugt fast nichts, und nur das Zerspringen gefrierender Tropfen könnte zählen, zwischen null und einigen neuen Teilchen pro cm³ und Minute: So weit streuen die Messungen.</li>
+            </ol>
+          </section>
+
+          <section class="proj__part" aria-labelledby="dc-figs">
+            <h3 id="dc-figs"><span class="psub__n">1.3</span>Vier Abbildungen aus dem Skript</h3>
+            <div class="proj__figs">
+              <figure>
+                <a class="pfig__plate" href="../portfolios/droplet-collection/index.html#fig-2-1"><img src="../portfolios/droplet-collection/fig/plate-fallspeed.svg" width="545" height="300" loading="lazy" alt="Endgeschwindigkeit von Wassertropfen über ihrer Größe: das Stokes-Gesetz, die Widerstandsbilanz und die Messungen von Gunn und Kinzer."></a>
+                <figcaption><span class="pfig__n">Abbildung 1</span>Wie schnell ein Tropfen fällt: Das Stokes-Gesetz läuft oberhalb von 40 µm davon; die Widerstandsbilanz folgt den Messungen (Kapitel 2).</figcaption>
+              </figure>
+              <figure>
+                <a class="pfig__plate" href="../portfolios/droplet-collection/index.html#fig-3-2"><img src="../portfolios/droplet-collection/fig/plate-efficiency.svg" width="545" height="300" loading="lazy" alt="Kollisionseffizienz über dem Radius des Sammeltropfens, aus den Bahnen der Tröpfchen, mit den von Hall zusammengestellten Werten."></a>
+                <figcaption><span class="pfig__n">Abbildung 2</span>Welche Tröpfchen treffen: Kollisionseffizienz aus den Bahnen, verglichen mit der Tabelle von Hall (1980) (Kapitel 3).</figcaption>
+              </figure>
+              <figure>
+                <a class="pfig__plate" href="../portfolios/droplet-collection/index.html#fig-5-2"><img src="../portfolios/droplet-collection/fig/plate-warm.svg" width="545" height="300" loading="lazy" alt="Anteil des Wassers in Tropfen von 40 µm und mehr über der Zeit, für den Kern der Arbeit und den erweiterten Kern."></a>
+                <figcaption><span class="pfig__n">Abbildung 3</span>Die ganze Wolke: Wasser in Tropfen von 40 µm und mehr, für zwei Kerne und zwei Arten der Buchführung (Kapitel 5).</figcaption>
+              </figure>
+              <figure>
+                <a class="pfig__plate" href="../portfolios/droplet-collection/index.html#fig-6-1"><img src="../portfolios/droplet-collection/fig/plate-first.svg" width="545" height="300" loading="lazy" alt="Anteil der Volumina, die einen Tropfen von 100 µm enthalten, über der Zeit: exakte Läufe und die Poisson-Vorhersage."></a>
+                <figcaption><span class="pfig__n">Abbildung 4</span>Der erste Niesel: exakte Läufe gegen die Poisson-Vorhersage aus der Koaleszenzgleichung (Kapitel 6).</figcaption>
+              </figure>
+            </div>
+          </section>
+
+          <section class="proj__part" aria-labelledby="dc-pages">
+            <h3 id="dc-pages"><span class="psub__n">1.4</span>Die Seiten des Projekts</h3>
+            <ul class="proj__pages">
+              <li><a href="../portfolios/droplet-collection/index.html#sim"><b>Simulation</b><span>Die Koaleszenzgleichung, die Bahnen der Tröpfchen und eine exakte Zufallswolke, in Ihrem Browser.</span></a></li>
+              <li><a href="../portfolios/droplet-collection/index.html#book"><b>Vorlesungsskript</b><span>Zehn Kapitel und ein Anhang, von einem Tropfen bis zum Eis: 22 nummerierte Gleichungen, jede mit ihrem Bild, ihrer Herleitung und den eigenen Zahlen des Modells.</span></a></li>
+              <li><a href="../portfolios/droplet-collection/index.html#problems"><b>Aufgaben</b><span>Fünf durchgerechnete Aufgaben mit den Zahlen des Modells.</span></a></li>
+              <li><a href="../portfolios/droplet-collection/index.html#checks"><b>Prüfungen</b><span>Exakte Lösungen, unabhängige Nachrechnungen in Python und ein Skript, das jede im Text zitierte Zahl findet.</span></a></li>
+            </ul>
+          </section>
+        </div>
+      </article>
+
+      <article class="proj" id="rotor-pendula" aria-labelledby="rp-title">
+        <div class="proj__band">
+          <span class="proj__num">02</span>
+          <p>Eine korrigierte Studie von Sol · unabhängig geprüft · 2026</p>
+          <span>Mechanik rotierender Systeme · Energy Harvesting · nichtlineare Dynamik</span>
+        </div>
+        <div class="proj__body">
+          <div class="proj__head">
+            <div>
+              <h2 id="rp-title">Rotor Pendula</h2>
+              <p class="proj__sub">Kann ein schwingendes Gewicht an einem Turbinenblatt einen Sensor versorgen?</p>
+              <p class="proj__abs">Hängen Sie ein Gewicht von 100 g an einer 20 cm langen Stange an einen Punkt eines sich drehenden Blatts. Bei jeder Umdrehung zieht die Schwerkraft das Gewicht erst in die eine, dann in die andere Richtung, sodass es einmal pro Umdrehung schwingt, wie ein Kind auf der Schaukel, das bei jedem Vorbeischwingen einmal angeschoben wird; ein Generator am Drehpunkt bremst diese Schwingung und macht daraus Strom. Die Studie baut alles aus der Lagrange-Funktion des Pendels auf: die Bewegungsgleichungen, die Energiebilanzen, die zeigen, dass der Rotor jedes Milliwatt bezahlt, die Resonanz des erzwungenen Oszillators bei \(r_p = L\) mit der besten Generatoreinstellung \(\kappa = |R-1|\), reale Turbinengrößen aus der Schnelllaufzahl, das Doppelpendel, Chaos und ein Sensorbudget aus zwei Datenblättern. Eine unabhängige Prüfung hat das Modell von Grund auf neu gebaut und jedes Kernergebnis reproduziert; der Löser läuft in Ihrem Browser. Sols vollständiger Bericht ist enthalten, Wort für Wort, mit seinen neun Tabellen aus den Daten neu aufgebaut und allen 181 Dateien der Lieferung zum Herunterladen.</p>
+              <div class="proj__actions">
+                <a class="proj__btn" href="../portfolios/rotor-pendula/index.html">Projekt öffnen</a>
+                <a class="proj__btn proj__btn--ghost" href="../portfolios/rotor-pendula/index.html#/theory">Die Herleitung lesen</a>
+                <a class="proj__btn proj__btn--ghost" href="../portfolios/rotor-pendula/index.html#/simulate">Ein Pendel rechnen lassen</a>
+                <a class="proj__btn proj__btn--ghost" href="../portfolios/rotor-pendula/index.html#/report">Sols Bericht lesen</a>
+              </div>
+            </div>
+            <dl class="proj__tally" aria-label="Kennzahlen">
+              <div><dt class="is-new">57.1<small>mW</small></dt><dd>beste Ausbeute, Einzelpendel, 100 g an 20 cm</dd></div>
+              <div><dt>37.6<small> µW</small></dt><dd>was ein Sensorknoten am Blatt braucht</dd></div>
+              <div><dt>0.64–0.74</dt><dd>doppelt ÷ einfach, gleiche Masse und Reichweite</dd></div>
+              <div><dt>7.2 × 10<sup>−5</sup></dt><dd>größter Anteil an der Leistung der Turbine, vom Rotor bezahlt</dd></div>
+            </dl>
+          </div>
+
+          <section class="proj__part" aria-labelledby="rp-answer">
+            <h3 id="rp-answer"><span class="psub__n">2.1</span>Die Antwort in vier Zeilen</h3>
+            <ol class="proj__changes">
+              <li><b>Die Leistung reicht.</b> Alle 18 untersuchten Befestigungen liefern 9.55–57.1 mW mechanische Leistung; nach einer angenommenen Wandlung mit 50 % ist das mindestens das 127-Fache der 37.6 µW, die ein selten sendender Sensorknoten aufnimmt.</li>
+              <li><b>Der Rotor bezahlt dafür.</b> Bei fester Rotordrehzahl stammt die Energie des Generators aus dem Antrieb des Rotors; das Pendel kann die Nettoleistung der Turbine nicht erhöhen und kostet sie höchstens \(7.2\times10^{-5}\) davon.</li>
+              <li><b>Eine Stange schlägt zwei.</b> Bei gleicher Masse und gleicher Reichweite liefert ein Doppelpendel an jeder Befestigung das 0.64- bis 0.74-Fache der Leistung des Einzelpendels: Die Hälfte seiner Masse sitzt auf halber Reichweite.</li>
+              <li><b>Chaos hilft nicht.</b> 2 von 54 untersuchten Doppelpendeln sind chaotisch; bei gleicher Anregung erntet die reguläre Bahn etwa 0.379 W, die chaotische etwa 0.24–0.25 W. Der Haken ist die Kraft, nicht die Leistung: Bei einem schnellen Rotor liegt der Drehpunkt bei 18–215 g, jenseits eines Beschleunigungssensors für ±8 g.</li>
+            </ol>
+          </section>
+
+          <section class="proj__part" aria-labelledby="rp-audit">
+            <h3 id="rp-audit"><span class="psub__n">2.2</span>Was die Prüfung korrigiert hat</h3>
+            <p>Ein unabhängiges, von Grund auf neu geschriebenes Modell hat alle 36 Fälle der Kartierung und alle 54 Chaos-Fälle neu gerechnet; jedes Kernergebnis wurde reproduziert, bis auf etwa eins zu \(10^{11}\). Acht Stellen im Bericht mussten korrigiert werden, und keine ändert eine Schlussfolgerung. Die wichtigsten: Die Formel für die Turbinengröße lautet \(56\ \mathrm{m/s}/\Omega\), nicht mm/s; der Zentrifugalfaktor \(\Gamma\) steigt mit der Rotordrehzahl, statt zu fallen; der Fehlerbalken der chaotischen Leistung beträgt etwa \(\pm0.01\ \mathrm{W}\), nicht \(\pm0.003\ \mathrm{W}\); eine Befestigung setzt den Pendelkörper 66 mm über die Blattspitze hinaus; und eine Abbildung ist durch Speicherung in einfacher Genauigkeit verwaschen. Das Projekt zeigt jede Korrektur an der Stelle, an der sie auftritt, mit ihrem Beleg.</p>
+          </section>
+
+          <section class="proj__part" aria-labelledby="rp-figs">
+            <h3 id="rp-figs"><span class="psub__n">2.3</span>Vier Abbildungen aus der Studie</h3>
+            <div class="proj__figs">
+              <figure>
+                <a class="pfig__plate" href="../portfolios/rotor-pendula/index.html#/report"><img src="../portfolios/rotor-pendula/fig/01_geometry.svg" width="648" height="300" loading="lazy" alt="Das ebene Modell: ein Drehpunkt auf einem Kreis um die Nabe, eine obere und eine untere Stange und die Generatoren an den beiden Gelenken."></a>
+                <figcaption><span class="pfig__n">Abbildung 1</span>Das ebene Modell: Der Drehpunkt läuft auf einem Kreis um die Nabe; die Generatoren spüren relative Gelenkgeschwindigkeiten, nicht absolute Stangengeschwindigkeiten.</figcaption>
+              </figure>
+              <figure>
+                <a class="pfig__plate" href="../portfolios/rotor-pendula/index.html#/results"><img src="../portfolios/rotor-pendula/fig/02_mapping_power.svg" width="660" height="300" loading="lazy" alt="Mittlere geerntete Leistung an den 18 Befestigungen gegen die Rotordrehzahl, Einzel- und Doppelpendel, kleine und große Rotoren."></a>
+                <figcaption><span class="pfig__n">Abbildung 2</span>Mittlere geerntete Leistung an den 18 Befestigungen, Einzel- und Doppelpendel; die Linien verbinden nur die berechneten Punkte.</figcaption>
+              </figure>
+              <figure>
+                <a class="pfig__plate" href="../portfolios/rotor-pendula/index.html#/results"><img src="../portfolios/rotor-pendula/fig/05_chaos.svg" width="715" height="300" loading="lazy" alt="Links: Leistung gegen Dämpfung für die abgeglichene Gruppe; rechts: alle 54 untersuchten Fälle."></a>
+                <figcaption><span class="pfig__n">Abbildung 3</span>Links: die abgeglichene Gruppe, Leistung gegen Dämpfung. Rechts: alle 54 untersuchten Fälle; die senkrechte Linie allein ist nicht der Chaostest.</figcaption>
+              </figure>
+              <figure>
+                <a class="pfig__plate" href="../portfolios/rotor-pendula/index.html#/results"><img src="../portfolios/rotor-pendula/fig/07_sensor_range.svg" width="655" height="300" loading="lazy" alt="Größte radiale spezifische Kraft am Drehpunkt für jede Befestigung, gegenüber dem Messbereich des Beschleunigungssensors."></a>
+                <figcaption><span class="pfig__n">Abbildung 4</span>Die größte radiale spezifische Kraft am Drehpunkt, \(g(\Gamma+1)\), gegenüber dem Messbereich \(\pm8\,g\) des Beschleunigungssensors.</figcaption>
+              </figure>
+            </div>
+          </section>
+
+          <section class="proj__part" aria-labelledby="rp-pages">
+            <h3 id="rp-pages"><span class="psub__n">2.4</span>Die Seiten des Projekts</h3>
+            <ul class="proj__pages">
+              <li><a href="../portfolios/rotor-pendula/index.html#/"><b>Überblick</b><span>Die Frage, die Antwort in drei Zahlen und die beste Befestigung in Bewegung.</span></a></li>
+              <li><a href="../portfolios/rotor-pendula/index.html#/theory"><b>Theorie</b><span>Zwölf Kapitel von der Lagrange-Funktion bis zum Sensorbudget, 38 nummerierte Gleichungen.</span></a></li>
+              <li><a href="../portfolios/rotor-pendula/index.html#/results"><b>Ergebnisse</b><span>Die 18 Befestigungen, eine Stange gegen zwei, Chaos und der Sensor.</span></a></li>
+              <li><a href="../portfolios/rotor-pendula/index.html#/simulate"><b>Simulieren</b><span>Jede Befestigung oder Ihre eigenen Werte, mit RK4 in Ihrem Browser gelöst.</span></a></li>
+              <li><a href="../portfolios/rotor-pendula/index.html#/checks"><b>Prüfungen</b><span>Die Läufe der Studie live neu gerechnet, die Zahlen der Prüfung und was korrigiert wurde.</span></a></li>
+              <li><a href="../portfolios/rotor-pendula/index.html#/report"><b>Bericht</b><span>Sols 14-seitiger Bericht vollständig: 20 Gleichungen, 9 Tabellen aus den Daten neu aufgebaut und Zelle für Zelle geprüft, das PDF und alle 181 Dateien.</span></a></li>
+            </ul>
+            <p class="proj__note">Eine statische Kopie der App Rotor Pendula; die App selbst ist auf Englisch. Ihre Liste gespeicherter Läufe fehlt: Jeder Lauf wird frisch in Ihrem Browser berechnet, und nichts wird gespeichert.</p>
+          </section>
+        </div>
+      </article>
+
+      <article class="proj" id="hydraulic-press" aria-labelledby="hp-title">
+        <div class="proj__band">
+          <span class="proj__num">03</span>
+          <p>Eine interaktive Studie · aus ersten Prinzipien · 2026</p>
+          <span>Fluidtechnik · digitale Regelung · numerische Simulation</span>
+        </div>
+        <div class="proj__body">
+          <div class="proj__head">
+            <div>
+              <h2 id="hp-title">Studie einer hydraulischen Presse</h2>
+              <p class="proj__sub">Wie ein digitaler Regler Öl unter 12 MPa mit 60 kN pressen lässt und die Kraft hält</p>
+              <p class="proj__abs">Drücken Sie einen kleinen Kolben, und ein großer hebt ein Auto: das Pascalsche Prinzip, der älteste Trick der Hydraulik. Eine moderne Presse fügt ein Servoventil und einen Computer hinzu, und aus dem Trick wird eine Regelungsaufgabe. Diese Studie baut eine solche Presse aus ersten Prinzipien auf: eine Pumpe, die auf 12 MPa gehalten wird, ein Vierwege-Servoventil, zwei Meter Schlauch, einen Zylinder mit einem 160 kg schweren Stößel und eine Probe zum Zusammendrücken, in einem nichtlinearen Modell mit acht Zustandsgrößen. Ein PID-Regler, jede Millisekunde abgetastet, fährt den Stößel in Lageregelung an die Probe, schaltet beim Kontakt auf Kraftregelung um, fährt auf 60 kN hoch, hält und lässt los. Sie sehen jeden Schritt, mit dem Öl nach seinem Druck gefärbt, ändern jede Einstellung, sehen den ganzen Zyklus neu berechnet und fragen den linearisierten Regelkreis mit Bode-, Nyquist- und z-Ebenen-Diagrammen, ob er stabil bleibt. Ein Begleittext in 23 Kapiteln leitet jede Gleichung her, die die Animation integriert, beginnend mit Pascals Presse.</p>
+              <div class="proj__actions">
+                <a class="proj__btn" href="../portfolios/hydraulics/de.html#servo">Projekt öffnen</a>
+                <a class="proj__btn proj__btn--ghost" href="../portfolios/hydraulics/de.html#theory">Die Herleitungen lesen</a>
+                <a class="proj__btn proj__btn--ghost" href="../portfolios/hydraulics/de.html#ideal">Bei Pascal beginnen</a>
+              </div>
+            </div>
+            <dl class="proj__tally" aria-label="Kennzahlen">
+              <div><dt class="is-new">63.6<small>kN</small></dt><dd>Spitzenkraft bei einem Sollwert von 60 kN</dd></div>
+              <div><dt>64°<small>· 11 dB</small></dt><dd>Phasen- und Amplitudenreserve des Lageregelkreises</dd></div>
+              <div><dt>93<small> %</small></dt><dd>der Pumpenarbeit werden im Ventil zu Wärme</dd></div>
+              <div><dt>52</dt><dd>Zahlen im Text, jede aus dem Modell neu berechnet</dd></div>
+            </dl>
+          </div>
+
+          <section class="proj__part" aria-labelledby="hp-cycle">
+            <h3 id="hp-cycle"><span class="psub__n">3.1</span>Ein Pressenzyklus, 4.4 Sekunden</h3>
+            <ol class="proj__changes">
+              <li><b>Anfahren.</b> Ab 0.1 s bewegt das Lagegesetz den Stößel auf einer glatten Bahn nach oben, wobei sich der Ventilschieber unterwegs auf 94 % öffnet; bei 1.1 s bremst es den Stößel für die letzten 2 mm auf ein Schleichtempo von 10 mm/s ab.</li>
+              <li><b>Kontakt und Pressen.</b> Bei 1.316 s spürt die Kraftmessdose die Probe, und der Regler übergibt an sein Kraftgesetz, das in 0.25 s auf 60 kN hochfährt, auf 63.6 kN überschwingt und sich einschwingt, während es 0.5 s lang hält.</li>
+              <li><b>Entlasten und Zurückfahren.</b> Ab 2.066 s fährt die Kraft wieder herunter; bei 2.316 s bringt das Lagegesetz den Stößel in die Ausgangslage zurück, und bei 4.116 s ist der Zyklus vorbei.</li>
+              <li><b>Wohin die Energie geht.</b> Die Pumpe verrichtet 26.3 kJ Arbeit; das Ventil macht daraus 24.4 kJ Wärme, denn ein Ventil, das eine Versorgung mit konstantem Druck drosselt, ist eine Bremse. Die Energiebilanz schließt auf \(2\times10^{-14}\) der Pumpenarbeit.</li>
+            </ol>
+          </section>
+
+          <section class="proj__part" aria-labelledby="hp-model">
+            <h3 id="hp-model"><span class="psub__n">3.2</span>Was das Modell enthält</h3>
+            <p>Jeder Block ist ein physikalisches Gesetz mit eigener Herleitung. Die Steuerkanten des Ventils sind scharfkantige Blenden, deren Strahl sich auf 0.61 der Öffnung einschnürt, wie die Theorie der freien Stromlinien von Helmholtz und Kirchhoff vorhersagt; der Ventilschieber antwortet dem Regler wie eine Masse an einer Feder bei 60 Hz. Die zwei Meter Schlauch sind eine Ölsäule mit Trägheit und Reibung, laminar und turbulent. Das Öl selbst ist eine Feder, deren Steifigkeit von seinem Druck abhängt, über die 0.5 % Luft, die es als Bläschen mitführt. Der Zylinder hat zwei Kammern unterschiedlicher Fläche, Dichtungsreibung und Endanschläge; die Probe ist eine gedämpfte Feder. Der Regler sieht die Welt nur einmal pro Millisekunde, über ein Halteglied nullter Ordnung, und das Modell wird mit dem Runge-Kutta-Verfahren vierter Ordnung bei 10 µs integriert, hundert Schritte pro Abtastung. Ein unabhängiges Python-Modell, mit SciPy für die Zahlen und SymPy für die Ableitungen, berechnet die Gleichgewichtslagen, die Linearisierung, die Pole des geschlossenen Kreises, die Reserven und den ganzen nichtlinearen Zyklus neu und stimmt mit der Seite überein.</p>
+          </section>
+
+          <section class="proj__part" aria-labelledby="hp-figs">
+            <h3 id="hp-figs"><span class="psub__n">3.3</span>Vier Abbildungen aus der Studie</h3>
+            <div class="proj__figs">
+              <figure>
+                <a class="pfig__plate" href="../portfolios/hydraulics/de.html#servo"><img src="../portfolios/hydraulics/fig/01_press.webp" width="420" height="300" loading="lazy" alt="Die Servopresse im Schnitt während der Pressphase: das Reglerfeld, die Pumpe, das Servoventil, der Schlauch und der Zylinder, der die Probe presst, mit dem Öl nach Druck gefärbt."></a>
+                <figcaption><span class="pfig__n">Abbildung 1</span>Die Presse bei 1.45 s unter dem Kraftgesetz: Sollwert 32.6 kN auf dem Weg zu 60, Ventilschieber zu 6.4 % offen, das Öl nach Druck gefärbt.</figcaption>
+              </figure>
+              <figure>
+                <a class="pfig__plate" href="../portfolios/hydraulics/de.html#servo"><img src="../portfolios/hydraulics/fig/02_traces.webp" width="462" height="300" loading="lazy" alt="Sechs Zeitdiagramme eines Pressenzyklus: Lage, Kraft, die drei Drücke, Ventilbefehl und Schieberstellung, die Energiebilanz und die Regelabweichung."></a>
+                <figcaption><span class="pfig__n">Abbildung 2</span>Ein Zyklus in sechs Verläufen: Lage, Kraft, Drücke, Ventil, Energie und Regelabweichung, nach Phase schattiert.</figcaption>
+              </figure>
+              <figure>
+                <a class="pfig__plate" href="../portfolios/hydraulics/de.html#servo"><img src="../portfolios/hydraulics/fig/03_loop.webp" width="748" height="300" loading="lazy" alt="Bode-Diagramm des abgetasteten Lageregelkreises bis 500 Hz und seine Nyquist-Ortskurve, die den Punkt minus eins in sicherem Abstand passiert."></a>
+                <figcaption><span class="pfig__n">Abbildung 3</span>Der abgetastete Lageregelkreis bis zur Nyquist-Frequenz von 500 Hz: Durchtritt bei 9.7 Hz mit 64° Phasenreserve.</figcaption>
+              </figure>
+              <figure>
+                <a class="pfig__plate" href="../portfolios/hydraulics/de.html#theory"><img src="../portfolios/hydraulics/fig/04_map.webp" width="631" height="300" loading="lazy" alt="Blockschaltbild der Servopresse: Regler, Torquemotor und Schieber, Ventilkanten, Schlauch, Kolbenraum, Stößel, Ringraum, Pumpe, Probe und Sensoren, durch Pfeile verbunden."></a>
+                <figcaption><span class="pfig__n">Abbildung 4</span>Die Maschine als zehn Blöcke, aus Kapitel 0 des Textes: Zwischen zwei Blöcken geht ein Fluss in die eine Richtung, und ein Druck oder eine Geschwindigkeit wirkt zurück.</figcaption>
+              </figure>
+            </div>
+          </section>
+
+          <section class="proj__part" aria-labelledby="hp-pages">
+            <h3 id="hp-pages"><span class="psub__n">3.4</span>Die Seiten des Projekts</h3>
+            <ul class="proj__pages proj__pages--3">
+              <li><a href="../portfolios/hydraulics/de.html#servo"><b>Servopresse</b><span>Die animierte Presse mit Regler, Anzeigen, allen Einstellungen, den Zeitverläufen, der Regelkreisanalyse und neun durchgerechneten Lösungen.</span></a></li>
+              <li><a href="../portfolios/hydraulics/de.html#ideal"><b>Ideale Presse</b><span>Pascals Presse aus einer Lagrange-Funktion, maßstabsgetreu gezeichnet, mit einer Sonde, die den Druck an jeder Stelle im Öl abliest.</span></a></li>
+              <li><a href="../portfolios/hydraulics/de.html#theory"><b>Theorie</b><span>Hydraulik aus ersten Prinzipien: 23 Kapitel, 63 nummerierte Gleichungen, jede Zahl aus dem Modell berechnet.</span></a></li>
+            </ul>
+            <p class="proj__note">Eine in sich geschlossene Seite, erzeugt aus ihrer Quelle im Repository dieser Website, <a href="https://github.com/Numa1997/SiteTest/tree/main/portfolios-src/hydraulics">portfolios-src/hydraulics</a>. Alles wird in Ihrem Browser berechnet, und nichts wird gespeichert.</p>
+          </section>
+        </div>
+      </article>
+
+      <article class="proj" id="iron-cotton" aria-labelledby="ic-title">
+        <div class="proj__band">
+          <span class="proj__num">04</span>
+          <p>Eine interaktive Studie · Englisch, Deutsch und Arabisch · 2026</p>
+          <span>Stoßmechanik · interatomare Bindungen · Fasernetzwerke</span>
+        </div>
+        <div class="proj__body">
+          <div class="proj__head">
+            <div>
+              <h2 id="ic-title">Eisen, Baumwolle und der Kopf</h2>
+              <p class="proj__sub">Warum eine Eisenkugel wehtut und eine Baumwollkugel derselben Masse nicht</p>
+              <p class="proj__abs">Lassen Sie zwei Kugeln von genau 1 kg aus 10 m auf einen Kopf fallen: eine aus Eisen, eine aus Baumwolle. Sie bringen dieselbe Energie mit, und auf der Waage des Kopfes kommen sie auf dasselbe Gewicht, 9.81 N. Der Schlag ist etwas anderes. Die Eisenkugel gibt nicht nach, also muss der Kopf sie auf den wenigen Millimetern abbremsen, um die ein Schädel nachgeben kann, und ein kurzer Bremsweg braucht eine große Kraft. Die Baumwollkugel gibt selbst nach und verbraucht die Energie in ihren eigenen Fasern. Die Studie baut beide Kugeln aus ihren Bindungen auf: Eisen als Gitter von Atomen, gehalten von Morse-Potentialen in der Form des Eisens, Baumwolle als Gewirr von Fasern, die sich dehnen, biegen, an Kreuzungen haften und reiben. Das Newtonsche Gesetz bewegt jedes Teilchen, ein Schleppzeiger-Kraftmesser liest den Aufprall ab, und die Energiebilanz zeigt, wohin jedes Joule geht. Der Text leitet jeden Schritt her, vom Fall mit Luftwiderstand bis zum Gesetz von van Wyk für Fasermassen und der Arbeitsweise echter Kraftsensoren, und vergleicht das Modell mit einem echten Schädel.</p>
+              <div class="proj__actions">
+                <a class="proj__btn" href="../portfolios/impact/de.html">Die Studie öffnen</a>
+                <a class="proj__btn proj__btn--ghost" href="../portfolios/impact/ar.html" lang="ar" style="font-family:'Noto Naskh Arabic',serif">النسخة العربية</a>
+              </div>
+            </div>
+            <dl class="proj__tally" aria-label="Kennzahlen">
+              <div><dt class="is-new">639<small> N</small></dt><dd>Spitzenkraft der Eisenkugel auf den Modellkopf</dd></div>
+              <div><dt>188<small> N</small></dt><dd>Spitzenkraft der Baumwollkugel, gleiche Masse und Geschwindigkeit</dd></div>
+              <div><dt>9.81<small> N</small></dt><dd>das Gewicht, auf dem beide Waagen stehen bleiben: je 1.000 kg</dd></div>
+              <div><dt>19.8<small>kN</small></dt><dd>eine echte Eisenkugel von 0.5 kg aus 10 m auf einen Schädel, gegenüber einer Bruchlast von 11.9 kN</dd></div>
+            </dl>
+          </div>
+
+          <section class="proj__part" aria-labelledby="ic-drop">
+            <h3 id="ic-drop"><span class="psub__n">4.1</span>Ein Fall, 9 Sekunden</h3>
+            <ol class="proj__changes">
+              <li><b>Der Fall.</b> Beide Kugeln werden 10 m über dem Kopf gehalten und fallen allein unter der Schwerkraft; die erste Berührung kommt bei 1.428 s, wie Newtons \(\sqrt{2h/g}\) vorhersagt, mit 14.0 m/s.</li>
+              <li><b>Der Schlag.</b> Die Eisenkugel verformt sich kaum, und die Feder des Kopfes übernimmt das ganze Abbremsen: 639 N innerhalb von etwa 50 ms, und die Kugel prallt ab. Die Baumwollkugel wird über einen großen Teil ihrer Größe zusammengedrückt und erreicht höchstens 188 N.</li>
+              <li><b>Das Gewicht.</b> Wenn das Zittern abgeklungen ist, zeigen beide Waagen 9.81 N, also 1.000 kg: gleiche Masse, sehr verschiedene Schläge.</li>
+              <li><b>Wohin die Energie geht.</b> Die Eisenkugel macht etwa 98 J im Kopf zu Wärme; die Baumwollkugel macht etwa 104 J in ihren eigenen Fasern zu Wärme. Die Energiebilanz schließt auf ein halbes Joule.</li>
+            </ol>
+          </section>
+
+          <section class="proj__part" aria-labelledby="ic-model">
+            <h3 id="ic-model"><span class="psub__n">4.2</span>Was das Modell enthält</h3>
+            <p>Das Eisen besteht aus 91 Atomen auf einem Dreiecksgitter, jedes mit seinen Nachbarn durch ein Morse-Tal verbunden, in der Form, die Girifalco und Weizer 1959 an Eisen angepasst haben. Die Baumwolle besteht aus 18 Fasern zu je 34 Perlen: Dehnfedern entlang jeder Faser, Biegefedern am Winkel zwischen den Segmenten, lösbare Verbindungen, wo sich Fasern kreuzen, und weicher Kontakt mit Reibung, wo sie sich berühren; das ergibt die Versteifung nach dem Gesetz von van Wyk. Der Kopf ist eine Platte auf einer Feder und einem Dämpfer und zugleich die Waage. Das Modell ist zweidimensional, lässt die Luft weg und ist auf Anschaulichkeit abgestimmt, daher beträgt sein Kraftverhältnis etwa 3.4, während echtes Eisen gegen echte Baumwolle etwa 120 ergibt; der Text sagt das und nennt die Zahlen der Wirklichkeit neben denen des Modells.</p>
+          </section>
+
+          <section class="proj__part" aria-labelledby="ic-figs">
+            <h3 id="ic-figs"><span class="psub__n">4.3</span>Vier Abbildungen aus der Studie</h3>
+            <div class="proj__figs">
+              <figure>
+                <a class="pfig__plate" href="../portfolios/impact/de.html"><img src="../portfolios/impact/fig/01_impact.webp" width="409" height="300" loading="lazy" alt="Die beiden Kugeln nebeneinander im Augenblick der Spitze der Eisenkugel: das Eisengitter drückt seine Platte hinunter, das Baumwollgewirr berührt seine Platte gerade, und unter jeder ein Kraftmesser, Eisen mit 639 N an der Spitze, Baumwolle mit 35 N."></a>
+                <figcaption><span class="pfig__n">Abbildung 1</span>Die Spitze der Eisenkugel, 1.447 s: Ihre Waage hält 639 N, während die Baumwolle gerade erst zu drücken beginnt.</figcaption>
+              </figure>
+              <figure>
+                <a class="pfig__plate" href="../portfolios/impact/de.html"><img src="../portfolios/impact/fig/02_force.webp" width="626" height="300" loading="lazy" alt="Kraft auf den Kopf über der Zeit um den Aufprall: eine hohe, schmale Spitze für Eisen bis 639 N, ein flacher, breiter Buckel für Baumwolle bis 188 N und die gestrichelte Gewichtslinie bei 9.81 N."></a>
+                <figcaption><span class="pfig__n">Abbildung 2</span>Derselbe Schlag zweimal: Eisen als hohe Spitze, Baumwolle als flacher, breiter Buckel.</figcaption>
+              </figure>
+              <figure>
+                <a class="pfig__plate" href="../portfolios/impact/de.html"><img src="../portfolios/impact/fig/03_energy.webp" width="734" height="300" loading="lazy" alt="Energiebalken für jede Kugel: oben die Energie, die der Fall liefert, darunter, wohin sie ging, beim Eisen fast alles Wärme im Kopf, bei der Baumwolle fast alles Wärme in der Baumwolle."></a>
+                <figcaption><span class="pfig__n">Abbildung 3</span>Die Energiebilanz am Ende: Eisen erwärmt den Kopf, Baumwolle erwärmt sich selbst.</figcaption>
+              </figure>
+              <figure>
+                <a class="pfig__plate" href="../portfolios/impact/de.html"><img src="../portfolios/impact/fig/04_weight.webp" width="409" height="300" loading="lazy" alt="Beide Kugeln nach 9 s in Ruhe auf ihren Platten; beide Anzeigen zeigen ein Gewicht von 9.81 N und eine Masse von 1.000 kg, und die Schleppzeiger halten die Spitzen von 639 N und 188 N fest."></a>
+                <figcaption><span class="pfig__n">Abbildung 4</span>In Ruhe: Beide Waagen zeigen 9.81 N, 1.000 kg, und behalten ihre sehr verschiedenen Spitzenwerte.</figcaption>
+              </figure>
+            </div>
+          </section>
+
+          <section class="proj__part" aria-labelledby="ic-pages">
+            <h3 id="ic-pages"><span class="psub__n">4.4</span>Die Seiten der Studie</h3>
+            <ul class="proj__pages">
+              <li><a href="../portfolios/impact/index.html" hreflang="en"><b>Englisch</b><span>Der Fall, die Anzeigen, die Kraftkurven, die Energiebilanzen und sieben Abschnitte Herleitungen mit allen Parametern.</span></a></li><li translate="no"><a href="../portfolios/impact/de.html" hreflang="de" lang="de"><b>Deutsch</b><span>Die ganze Studie auf Deutsch: der Fall, die Anzeigen, die Kraftkurven, die Energiebilanzen und die Herleitungen.</span></a></li>
+              <li><a href="../portfolios/impact/ar.html" lang="ar" dir="rtl" style="font-family:'Noto Naskh Arabic',serif"><b style="font-family:'Amiri',serif">العربية</b><span>الدراسة كاملةً بالعربية: السقوط، والموازين، ومنحنيات القوة، وحساب الطاقة، والاشتقاقات.</span></a></li>
+            </ul>
+            <p class="proj__note">Zwei in sich geschlossene Seiten, erzeugt aus ihrer Quelle im Repository dieser Website, <a href="https://github.com/Numa1997/SiteTest/tree/main/portfolios-src/impact">portfolios-src/impact</a>. Der Fall wird beim Öffnen der Seite in Ihrem Browser berechnet, und nichts wird gespeichert.</p>
+          </section>
+        </div>
+      </article>
+    </main>
+
+    <footer>
+      <span>© 2026 Numa Koudsie</span>
+      <span><a href="index.html">Startseite</a> · <a href="simulations.html">Simulationen</a> · <a href="#top" id="to-top">Nach oben ↑</a></span>
+    </footer>
+
+    <script src="../scripts/fold.js"></script>
+    <script src="../vendor/katex/katex.min.js"></script>
+    <script src="../vendor/katex/contrib/auto-render.min.js"></script>
+    <script>
+      (function () {
+        'use strict';
+        if (window.renderMathInElement) {
+          window.renderMathInElement(document.getElementById('projects'), {
+            delimiters: [{ left: '\\[', right: '\\]', display: true }, { left: '\\(', right: '\\)', display: false }],
+            throwOnError: false
+          });
+        }
+        document.getElementById('to-top').addEventListener('click', function (e) {
+          e.preventDefault();
+          window.scrollTo(0, 0);
+        });
+      })();
+    </script>
+  </body>
+</html>

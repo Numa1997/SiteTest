@@ -1,0 +1,158 @@
+{
+ "02c6ad61a7bb": {
+  "src": "The physics, written out",
+  "tr": "Die Physik, ausgeschrieben"
+ },
+ "04a7338235d5": {
+  "src": "Interactive physics simulations with lecture notes: mechanics, waves, fluids, wave optics, mathematical methods and control systems. Each figure comes with its model, derivation, numerical method and every number it draws.",
+  "tr": "Interaktive Physiksimulationen mit Skripten: Mechanik, Wellen, Fluide, Wellenoptik, mathematische Methoden und Regelungstechnik. Zu jeder Abbildung gehören ihr Modell, ihre Herleitung, ihr numerisches Verfahren und jede Zahl, die sie zeichnet."
+ },
+ "1816be1c837a": {
+  "src": "Skip to the simulations",
+  "tr": "Zu den Simulationen springen"
+ },
+ "18dfe8c23def": {
+  "src": "The walkthrough",
+  "tr": "Der Rundgang"
+ },
+ "27d56e7491d7": {
+  "src": "Portfolios",
+  "tr": "Portfolios"
+ },
+ "28300086f75a": {
+  "src": "Open any figure and you find the same layout, so what you learn on one page carries over to the next.",
+  "tr": "Jede Abbildung ist gleich aufgebaut; was Sie auf einer Seite lernen, gilt auch auf der nächsten."
+ },
+ "3008d2facc4b": {
+  "src": "Every simulation, the same four parts",
+  "tr": "Jede Simulation, dieselben vier Teile"
+ },
+ "33bd5a5dddcd": {
+  "src": "© 2026 Numa Koudsie",
+  "tr": "© 2026 Numa Koudsie"
+ },
+ "5b6825d3c67a": {
+  "src": "Site",
+  "tr": "Website"
+ },
+ "702b201c4b40": {
+  "src": "Phyein Usul",
+  "tr": "Phyein Usul"
+ },
+ "73b4aa6f7d16": {
+  "src": "Back to top ↑",
+  "tr": "Nach oben ↑"
+ },
+ "7b3cbf6411df": {
+  "src": "The numbers",
+  "tr": "Die Zahlen"
+ },
+ "7d8cbef18a2c": {
+  "src": "Catalog in numbers",
+  "tr": "Der Katalog in Zahlen"
+ },
+ "7de26f7a28d4": {
+  "src": "← Numa Koudsie",
+  "tr": "← Numa Koudsie"
+ },
+ "7fee9914adce": {
+  "src": "Simulations<span class=\"dot\">.</span>",
+  "tr": "Simulationen<span class=\"dot\">.</span>"
+ },
+ "84f806a86d75": {
+  "src": "01 · Figure",
+  "tr": "01 · Abbildung"
+ },
+ "8dfab0452a7e": {
+  "src": "Interactive physics · simulations and lecture notes",
+  "tr": "Interaktive Physik · Simulationen und Skripte"
+ },
+ "9521dba25709": {
+  "src": "Home page",
+  "tr": "Startseite"
+ },
+ "a022c8cc2c82": {
+  "src": "Sliders and clicks set the physics: lengths, frequencies, masses, start conditions, the wind. The picture answers at once, or, where the whole run is solved first, as soon as you press Solve.",
+  "tr": "Schieberegler und Klicks stellen die Physik ein: Längen, Frequenzen, Massen, Anfangsbedingungen, den Wind. Das Bild antwortet sofort oder, wo der ganze Lauf vorab gelöst wird, sobald Sie auf Lösen drücken."
+ },
+ "a5e599f7e768": {
+  "src": "Change it and watch",
+  "tr": "Ändern und zusehen"
+ },
+ "ab827dc68b80": {
+  "src": "Simulations · Numa Koudsie",
+  "tr": "Simulationen · Numa Koudsie"
+ },
+ "af276ef20966": {
+  "src": "02 · Lecture note",
+  "tr": "02 · Skript"
+ },
+ "b454206269e3": {
+  "src": "Every variable the figure draws, with units. Pin a point with Read values, record one round as a table, check a value three ways, save it as .npz or CSV.",
+  "tr": "Jede Variable, die die Abbildung zeichnet, mit Einheiten. Mit „Werte ablesen“ einen Punkt festhalten, eine Runde als Tabelle aufzeichnen, einen Wert auf drei Wegen prüfen, als .npz oder CSV speichern."
+ },
+ "b760d12f27b4": {
+  "src": "03 · From symbols to code",
+  "tr": "03 · Von den Symbolen zum Code"
+ },
+ "b7a94acedd92": {
+  "src": "<b>This catalog needs JavaScript.</b> The simulations are also listed on the <a href=\"index.html#simulations\">home page</a>.",
+  "tr": "<b>Dieser Katalog braucht JavaScript.</b> Die Simulationen stehen auch auf der <a href=\"index.html#simulations\">Startseite</a>."
+ },
+ "bd03f7f58d88": {
+  "src": "Search: chaos, Fourier, resonance…",
+  "tr": "Suche: Chaos, Fourier, Resonanz…"
+ },
+ "be601df25eea": {
+  "src": "Research",
+  "tr": "Forschung"
+ },
+ "bfaaf494abf2": {
+  "src": "04 · Data panel",
+  "tr": "04 · Datenpanel"
+ },
+ "c326a4660b67": {
+  "src": "Field",
+  "tr": "Gebiet"
+ },
+ "c382b1d6789f": {
+  "src": "Each formula next to the line of the page’s own code that computes it, with the live value beside it.",
+  "tr": "Jede Formel neben der Zeile im Code der Seite, die sie berechnet, mit dem aktuellen Wert daneben."
+ },
+ "cd4683fadf70": {
+  "src": "Positions",
+  "tr": "Stationen"
+ },
+ "cdb7d6ad687d": {
+  "src": "Numa Koudsie",
+  "tr": "Numa Koudsie"
+ },
+ "d1622a8321e0": {
+  "src": "Phyein Usul, home page",
+  "tr": "Phyein Usul, Startseite"
+ },
+ "e09212c7d3ea": {
+  "src": "Skills",
+  "tr": "Kenntnisse"
+ },
+ "e26b0edd27dc": {
+  "src": "Each figure is a small laboratory with its lecture note beneath it: the physical picture, the model, the derivation, the numerical method, and every number the picture is drawn from.",
+  "tr": "Jede Abbildung ist ein kleines Labor mit seinem Skript darunter: das physikalische Bild, das Modell, die Herleitung, das numerische Verfahren und jede Zahl, aus der das Bild gezeichnet wird."
+ },
+ "eca9974a46d5": {
+  "src": "Course stage",
+  "tr": "Studienjahr"
+ },
+ "f695e8247c55": {
+  "src": "No simulation matches <b id=\"empty-q\"></b>. <button type=\"button\" id=\"clear\">Show all simulations</button>",
+  "tr": "Keine Simulation passt zu <b id=\"empty-q\"></b>. <button type=\"button\" id=\"clear\">Alle Simulationen zeigen</button>"
+ },
+ "f844e3c69dbe": {
+  "src": "A motivating picture, the model, the derivation, the numerical method, what is on screen and what the model leaves out, with numbered equations, figures and exercises.",
+  "tr": "Ein motivierendes Bild, das Modell, die Herleitung, das numerische Verfahren, was auf dem Bildschirm zu sehen ist und was das Modell weglässt, mit nummerierten Gleichungen, Abbildungen und Aufgaben."
+ },
+ "fd1a38ab07a2": {
+  "src": "Search the simulations",
+  "tr": "Simulationen durchsuchen"
+ }
+}

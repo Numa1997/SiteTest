@@ -10,7 +10,7 @@
     <meta name="theme-color" content="#f5f1ea">
     <link rel="stylesheet" href="../styles/sim.css">
     <link rel="stylesheet" href="../styles/data.css">
-    <link rel="stylesheet" href="../styles/fold.css">
+    <link rel="stylesheet" href="../styles/fold.css"><link rel="stylesheet" href="../styles/i18n.css"><script src="../scripts/flip.js"></script><!--I18N-ALTERNATES--><link rel="alternate" hreflang="en" href="https://phyeinusul.com/simulations/wave-interference.html" /><link rel="alternate" hreflang="de" href="https://phyeinusul.com/de/simulations/wave-interference.html" /><link rel="alternate" hreflang="ar" href="https://phyeinusul.com/ar/simulations/wave-interference.html" /><link rel="alternate" hreflang="x-default" href="https://phyeinusul.com/simulations/wave-interference.html" /><!--/I18N-ALTERNATES-->
     <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='12' fill='%237a1f2b'/%3E%3Ctext x='32' y='45' text-anchor='middle' font-family='Georgia,serif' font-size='38' fill='%23f5f1ea'%3EN%3C/text%3E%3C/svg%3E">
     <style>
         .waves { display: flex; flex-direction: column; gap: 10px; }
@@ -40,7 +40,7 @@
             <a href="draw-decompose.html">8</a>
             <a href="driven-oscillator.html">9</a>
             <a href="wind-turbine.html">10</a>
-        </nav>
+        </nav><span class="lang-switch" role="group" aria-label="Language" translate="no"><!--I18N-SWITCH--><a href="../simulations/wave-interference.html" hreflang="en" lang="en" aria-current="page">English</a> · <a href="../de/simulations/wave-interference.html" hreflang="de" lang="de">Deutsch</a> · <a href="../ar/simulations/wave-interference.html" hreflang="ar" lang="ar" dir="rtl">العربية</a><!--/I18N-SWITCH--></span>
     </header>
 
     <main class="sim">
@@ -590,14 +590,14 @@
 
         function render() {
             list.innerHTML = '';
-            if (!waves.length) list.innerHTML = '<p class="empty">No waves. Add one to begin.</p>';
+            if (!waves.length) list.innerHTML = _t('<p class="empty">No waves. Add one to begin.</p>');
             waves.forEach(function (w, n) {
                 var card = document.createElement('div');
                 card.className = 'wave';
                 card.style.setProperty('--c', w.colour);
                 var key = 'w' + w.id;
                 card.innerHTML =
-                    '<div class="wave__head"><h3>Wave ' + (n + 1) + '</h3>' +
+                    _t('<div class="wave__head"><h3>Wave ') + (n + 1) + '</h3>' +
                     '<button type="button" class="wave__x" aria-label="Remove wave ' + (n + 1) + '">×</button></div>' +
                     '<div class="wave__ctl">' +
                     field({ id: key + 'A', name: 'Amplitude', min: 0, max: 40, step: 1, value: w.A }) +
@@ -616,7 +616,7 @@
             var n = waves.length;
             ds.set('N', n);
             document.getElementById('r-n').textContent = n + ' / ' + MAX_WAVES;
-            document.getElementById('cap-n').textContent = n === 1 ? '1 wave' : n + ' waves';
+            document.getElementById('cap-n').textContent = n === 1 ? _t('1 wave') : n + _t(' waves');
         }
 
         function y(w, X) { return w.A * Math.sin(2 * Math.PI * w.f * (X / 200 - w.s * simT) + w.phi); }
@@ -837,7 +837,7 @@
         var LEFT = 44;
         /* the device pixel that contains the point (floor, not round: a point at 635.5 lies in column 635) */
         function pixelAt(c, bx, x, y) { return c.getImageData(Math.floor(x * bx.dpr), Math.floor(y * bx.dpr), 1, 1).data; }
-        function rgbText(px) { return px[3] === 0 ? 'nothing (transparent)' : 'rgb(' + px[0] + ', ' + px[1] + ', ' + px[2] + ')' + (px[3] < 255 ? ' at alpha ' + (px[3] / 255).toFixed(2) : ''); }
+        function rgbText(px) { return px[3] === 0 ? _t('nothing (transparent)') : 'rgb(' + px[0] + ', ' + px[1] + ', ' + px[2] + ')' + (px[3] < 255 ? _t(' at alpha ') + (px[3] / 255).toFixed(2) : ''); }
         function lum(px) { return 0.2126 * px[0] + 0.7152 * px[1] + 0.0722 * px[2]; }
         function waveOf(q) { return Math.floor(q / (ds.get('M') + 1)); }
         /* where to read a stroke back: on the stored point, except at the two ends, where the flat cap leaves the end pixel half empty */
@@ -866,15 +866,15 @@
             return G ? Math.min(1000000 / G, 20) : 5;
         }
         Sim.data = {
-            ds: ds, kicker: 'Fig. 6 · data', file: 'fig6-wave-bench',
+            ds: ds, kicker: _t('Fig. 6 · data'), file: 'fig6-wave-bench',
             playing: function () { return clk.playing; },
             groups: [
-                { title: 'Waves', note: 'one row per wave; A, f, φ, s come from the cards', vars: ['N', 'A', 'f', 'phi', 's', 'k', 'omega', 'lam', 'v', 'nu', 'y_400'] },
-                { title: 'The sum', note: 'what the top panel shows', vars: ['sum_A', 'peak', 'ratio', 'y_sum_400', 'y1_400', 'bl', 'venv'] },
-                { title: 'Time', note: 'advances only while it plays', vars: ['t'] },
-                { title: 'Sampled curves', note: 'one column per screen pixel; point at a cell to find it in the plot', vars: ['M', 'dX', 'X', 'y_comp', 'y_sum', 'py_comp', 'py_sum'] },
-                { title: 'Spectrum', note: 'one row per line in the lower panel', vars: ['nu_line', 'A_line', 'amax', 'x_line', 'y_line'] },
-                { title: 'Drawing', note: 'how the picture is laid out', vars: ['R', 'Rc', 'box_w', 'box_h', 'right', 'hSum', 'top2', 'hComp', 'mid1', 'mid2', 'spec_w', 'spec_h', 'dt', 'fps', 'frames', 'playing'] }
+                { title: _t('Waves'), note: _t('one row per wave; A, f, φ, s come from the cards'), vars: ['N', 'A', 'f', 'phi', 's', 'k', 'omega', 'lam', 'v', 'nu', 'y_400'] },
+                { title: _t('The sum'), note: _t('what the top panel shows'), vars: ['sum_A', 'peak', 'ratio', 'y_sum_400', 'y1_400', 'bl', 'venv'] },
+                { title: _t('Time'), note: _t('advances only while it plays'), vars: ['t'] },
+                { title: _t('Sampled curves'), note: _t('one column per screen pixel; point at a cell to find it in the plot'), vars: ['M', 'dX', 'X', 'y_comp', 'y_sum', 'py_comp', 'py_sum'] },
+                { title: _t('Spectrum'), note: _t('one row per line in the lower panel'), vars: ['nu_line', 'A_line', 'amax', 'x_line', 'y_line'] },
+                { title: _t('Drawing'), note: _t('how the picture is laid out'), vars: ['R', 'Rc', 'box_w', 'box_h', 'right', 'hSum', 'top2', 'hComp', 'mid1', 'mid2', 'spec_w', 'spec_h', 'dt', 'fps', 'frames', 'playing'] }
             ],
             rowLabel: { wave: function (j) { return 'w' + (j + 1); } },
             colour: {
@@ -894,9 +894,9 @@
             },
             inspect: function (ref) {
                 var i = ref.i, MP = ds.get('M') + 1, X = ds.get('X')[i];
-                if (ref.kind === 'sum') return { title: 'the sum at X = ' + Sim.fmt(X, 1) + ' px', at: { x: LEFT + i, y: ds.get('py_sum')[i] }, rows: [['X', X, 'px', 'X', i], ['Σ yᵢ', ds.get('y_sum')[i], 'px', 'y_sum', i], ['y px', ds.get('py_sum')[i], 'css px', 'py_sum', i]] };
+                if (ref.kind === 'sum') return { title: _t('the sum at X = ') + Sim.fmt(X, 1) + ' px', at: { x: LEFT + i, y: ds.get('py_sum')[i] }, rows: [['X', X, 'px', 'X', i], ['Σ yᵢ', ds.get('y_sum')[i], 'px', 'y_sum', i], ['y px', ds.get('py_sum')[i], 'css px', 'py_sum', i]] };
                 var wi = ref.wi, q = wi * MP + i;
-                return { title: 'wave ' + (wi + 1) + ' at X = ' + Sim.fmt(X, 1) + ' px', at: { x: LEFT + i, y: ds.get('py_comp')[q] },
+                return { title: _t('wave ') + (wi + 1) + ' at X = ' + Sim.fmt(X, 1) + ' px', at: { x: LEFT + i, y: ds.get('py_comp')[q] },
                     rows: [['X', X, 'px', 'X', i], ['yᵢ', ds.get('y_comp')[q], 'px', 'y_comp', q], ['A', ds.get('A')[wi], 'px', 'A', wi], ['f', ds.get('f')[wi], 'Hz', 'f', wi], ['φ', ds.get('phi')[wi], 'rad', 'phi', wi], ['s', ds.get('s')[wi], '×', 's', wi], ['y px', ds.get('py_comp')[q], 'css px', 'py_comp', q]] };
             },
             locate: function (name, idx) {
@@ -944,8 +944,8 @@
                 mid2: function () { return { formula: 'top₂ + h_comp / 2', inputs: [['top₂', ds.get('top2'), 'css px', 2], ['h_comp', ds.get('hComp'), 'css px', 2]], value: ds.get('top2') + ds.get('hComp') / 2 }; }
             },
             drawn: {
-                sum_A: function () { var actual = document.getElementById('r-sum').textContent, expected = ds.get('sum_A').toFixed(1) + ' px'; return { what: 'the visible r-sum readout', drawn: actual, expected: expected, ok: actual === expected }; },
-                py_sum: function (i) { if (!waves.length) return { what: 'the sum curve', drawn: 'no sum curve: the bench has no waves', expected: 'not drawn', ok: null }; var pt = onStroke(ds.get('py_sum'), i, 0), px = pixelAt(ctx, box, pt.x, pt.y); return { what: 'screen pixel on the sum curve at sample ' + i + ', (' + Sim.fmt(pt.x, 1) + ', ' + Sim.fmt(pt.y, 1) + ') css px', drawn: rgbText(px), expected: 'the dark ink of the 2.3 px sum stroke', ok: px[3] > 0 && lum(px) < 150, note: pt.end ? 'The stroke starts and ends with a flat cap, so at the first and last sample the midpoint of the end segment is read.' : 'The stroke is centred on the stored point, so the pixel there carries its colour.' }; },
+                sum_A: function () { var actual = document.getElementById('r-sum').textContent, expected = ds.get('sum_A').toFixed(1) + ' px'; return { what: _t('the visible r-sum readout'), drawn: actual, expected: expected, ok: actual === expected }; },
+                py_sum: function (i) { if (!waves.length) return { what: _t('the sum curve'), drawn: _t('no sum curve: the bench has no waves'), expected: _t('not drawn'), ok: null }; var pt = onStroke(ds.get('py_sum'), i, 0), px = pixelAt(ctx, box, pt.x, pt.y); return { what: _t('screen pixel on the sum curve at sample ') + i + ', (' + Sim.fmt(pt.x, 1) + ', ' + Sim.fmt(pt.y, 1) + _t(') css px'), drawn: rgbText(px), expected: _t('the dark ink of the 2.3 px sum stroke'), ok: px[3] > 0 && lum(px) < 150, note: pt.end ? _t('The stroke starts and ends with a flat cap, so at the first and last sample the midpoint of the end segment is read.') : _t('The stroke is centred on the stored point, so the pixel there carries its colour.') }; },
                 py_comp: function (q) {
                     var wi = waveOf(q), i = sampleOf(q), MP = ds.get('M') + 1, Y = ds.get('py_comp'), pt = onStroke(Y, i, wi * MP), px = pixelAt(ctx, box, pt.x, pt.y), ok = false;
                     if (px[3] > 0) {
@@ -954,14 +954,14 @@
                             if (Math.abs(other.y - pt.y) <= 2 && Math.abs(px[0] - parseInt(colour.slice(1, 3), 16)) < 35 && Math.abs(px[1] - parseInt(colour.slice(3, 5), 16)) < 35 && Math.abs(px[2] - parseInt(colour.slice(5, 7), 16)) < 35) ok = true;
                         }
                     }
-                    return { what: 'screen pixel on wave ' + (wi + 1) + ' at sample ' + i, drawn: rgbText(px), expected: 'the wave colour, or the colour of a wave crossing within 2 css px', ok: ok, note: 'Alpha is checked first. A crossing colour is accepted only where its stored curve passes this point.' };
+                    return { what: _t('screen pixel on wave ') + (wi + 1) + _t(' at sample ') + i, drawn: rgbText(px), expected: _t('the wave colour, or the colour of a wave crossing within 2 css px'), ok: ok, note: _t('Alpha is checked first. A crossing colour is accepted only where its stored curve passes this point.') };
                 },
-                y_line: function (li) { var px = pixelAt(sctx, spec, ds.get('x_line')[li], ds.get('y_line')[li]); return { what: 'screen pixel at the top of spectrum line ' + li + ' (the dot)', drawn: rgbText(px), expected: 'a filled dot in the line colour', ok: px[3] > 0 && lum(px) < 200, note: 'The dot has radius 4.5 px, so the pixel at the stored top is the fill colour.' }; }
+                y_line: function (li) { var px = pixelAt(sctx, spec, ds.get('x_line')[li], ds.get('y_line')[li]); return { what: _t('screen pixel at the top of spectrum line ') + li + _t(' (the dot)'), drawn: rgbText(px), expected: _t('a filled dot in the line colour'), ok: px[3] > 0 && lum(px) < 200, note: _t('The dot has radius 4.5 px, so the pixel at the stored top is the fill colour.') }; }
             },
-            round: { time: 't', length: benchRound, label: function () { var L = benchRound(); return (L < 20 ? 'one repeat of the pattern, ' : 'twenty seconds of the pattern, ') + Sim.fmt(L, 2) + ' s'; },
+            round: { time: 't', length: benchRound, label: function () { var L = benchRound(); return (L < 20 ? _t('one repeat of the pattern, ') : _t('twenty seconds of the pattern, ')) + Sim.fmt(L, 2) + ' s'; },
                 columns: ['sum_A', 'peak', 'ratio', 'y_sum_400', 'y1_400'], point: function () { return { kind: 'sum', i: Math.round(ds.get('M') / 2) }; } },
             play: function () { clk.set(true); },
-            about: 'The curves are drawn with one sample per screen pixel column, M + 1 points, so what you see is exactly the stored arrays joined by straight segments; the canvas then smooths each stroke to fractions of a pixel. The spectrum groups waves with the same ν = f·s into one line whose height is the magnitude of their phasor sum, as stored in A_line. The readouts under the figure refresh every 8th frame; the store refreshes every frame.'
+            about: _t('The curves are drawn with one sample per screen pixel column, M + 1 points, so what you see is exactly the stored arrays joined by straight segments; the canvas then smooths each stroke to fractions of a pixel. The spectrum groups waves with the same ν = f·s into one line whose height is the magnitude of their phasor sum, as stored in A_line. The readouts under the figure refresh every 8th frame; the store refreshes every frame.')
         };
 
         add({ A: 20, f: 1 });

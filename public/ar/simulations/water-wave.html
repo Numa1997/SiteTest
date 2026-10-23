@@ -1,0 +1,890 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline' https://v2.appdeploy.ai https://unpkg.com/@khmyznikov/pwa-install@0.6.3/dist/pwa-install.bundle.js; style-src 'self' 'unsafe-inline'; img-src 'self' data: blob: https://appdeploy.ai; font-src 'self' data:; connect-src 'self' https://api-v2.appdeploy.ai; worker-src 'self'; manifest-src 'self'; object-src 'none'; base-uri 'self'; form-action 'self'; upgrade-insecure-requests">
+    <meta name="referrer" content="strict-origin-when-cross-origin">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>أمواج الماء والمدارات الدائرية · نعمة سائر قدسية</title>
+    <meta name="description" content="موجة تفاعلية في الماء العميق: جسيمات الماء ترسم مدارات دائرية تصغر مع العمق، ويأخذ السطح شكلاً تروكويدياً.">
+    <meta name="theme-color" content="#f5f1ea">
+    <link rel="stylesheet" href="../../styles/sim.rtl.css">
+    <link rel="stylesheet" href="../../styles/data.rtl.css">
+    <link rel="stylesheet" href="../../styles/fold.rtl.css"><link rel="stylesheet" href="../../styles/i18n.css"><script src="../../scripts/flip.js"></script><link rel="alternate" hreflang="en" href="https://phyeinusul.com/simulations/water-wave.html" /><link rel="alternate" hreflang="de" href="https://phyeinusul.com/de/simulations/water-wave.html" /><link rel="alternate" hreflang="ar" href="https://phyeinusul.com/ar/simulations/water-wave.html" /><link rel="alternate" hreflang="x-default" href="https://phyeinusul.com/simulations/water-wave.html" />
+    <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='12' fill='%237a1f2b'/%3E%3Ctext x='32' y='45' text-anchor='middle' font-family='Georgia,serif' font-size='38' fill='%23f5f1ea'%3EN%3C/text%3E%3C/svg%3E">
+
+    <link rel="stylesheet" href="../../fonts/arabic.css" />
+    <script src="../../scripts/i18n/strings-ar.js"></script>
+    <meta name="translated-from" content="English public/simulations/water-wave.html, commit 59cd5c7" />
+  </head>
+<body>
+    <header class="sim-top">
+        <span style="display:inline-flex;align-items:center;gap:14px"><a href="../index.html" aria-label="Phyein Usul، الصفحة الرئيسية" style="display:inline-block;line-height:0"><img src="../../images/phyein-usul-mark.svg" alt="Phyein Usul" width="87" height="48" /></a><a href="../simulations.html">→ كل المحاكيات</a></span>
+        <nav class="sim-nav" aria-label="المحاكيات">
+            <span>الشكل</span>
+            <a href="Circular Wave Interference Visualization.html">1</a>
+            <a href="Double Pendulum.html">2</a>
+            <a href="Interactive Double-Slit Experiment Visualization.html">3</a>
+            <a href="Transverse and longitudinal waves.html">4</a>
+            <a href="water-wave.html" aria-current="page">5</a>
+            <a href="wave-interference.html">6</a>
+            <a href="phasor-sums.html">7</a>
+            <a href="draw-decompose.html">8</a>
+            <a href="driven-oscillator.html">9</a>
+            <a href="wind-turbine.html">10</a>
+        </nav><span class="lang-switch" role="group" aria-label="اللغة" translate="no"><a href="../../simulations/water-wave.html" hreflang="en" lang="en">English</a> · <a href="../../de/simulations/water-wave.html" hreflang="de" lang="de">Deutsch</a> · <a href="../../ar/simulations/water-wave.html" hreflang="ar" lang="ar" dir="rtl" aria-current="page">العربية</a></span>
+    </header>
+
+    <main class="sim">
+        <noscript><p class="sim-error"><b>تحتاج هذه المحاكاة إلى JavaScript.</b> <a href="../simulations.html">العودة إلى المحاكيات</a></p></noscript>
+        <div class="sim__head">
+            <p class="sim__num">الشكل 5 · ديناميك الموائع · حركة الجسيمات</p>
+            <h1>أمواج الماء والمدارات الدائرية<span class="dot">.</span></h1>
+            <p class="sim__lede">حين تمرّ قمّة موجة، يرسم كل جسيم من الماء دائرة صغيرة ويعود إلى المكان الذي بدأ منه. وتصغر الدوائر بسرعة كلّما تعمّقنا.</p>
+        </div>
+
+        <div class="sim__grid">
+            <figure class="stage">
+                <div class="stage__canvas" id="stage" style="--ar: 16 / 7.6; --ar-m: 1 / 0.95;">
+                    <canvas id="water" aria-label="جسيمات ماء على مدارات دائرية تحت موجة سطحية متنقّلة"></canvas>
+                </div>
+                <figcaption class="stage__cap">
+                    <span><b>الشكل 5</b> · موجة ماء خطّية في الماء العميق · مدارات نصف قطرها <span class="tx">\(a\,e^{kz}\)</span></span>
+                    <span id="cap-c"><i>c</i> = —</span>
+                </figcaption>
+            </figure>
+
+            <aside class="panel" aria-label="عناصر التحكم">
+                <div class="panel__group">
+                    <p class="panel__label">تشغيل</p>
+                    <div class="actions">
+                        <button type="button" class="btn" id="play">إيقاف مؤقت</button>
+                    </div>
+                    <label class="switch"><span>إظهار المدارات</span><input type="checkbox" id="orbits" checked></label>
+                    <label class="switch"><span>علاقة التشتّت في الماء العميق ω² = gk</span><input type="checkbox" id="disp" checked></label>
+                </div>
+
+                <div class="panel__group">
+                    <p class="panel__label">الموجة</p>
+                    <label class="ctl">
+                        <span class="ctl__row"><span>السعة a (نصف قطر المدار)</span><output id="amp-out" for="amp"></output></span>
+                        <input type="range" id="amp" min="5" max="50" step="1" value="24">
+                    </label>
+                    <label class="ctl">
+                        <span class="ctl__row"><span>طول الموجة λ</span><output id="lambda-out" for="lambda"></output></span>
+                        <input type="range" id="lambda" min="120" max="400" step="5" value="260">
+                    </label>
+                    <label class="ctl">
+                        <span class="ctl__row"><span>التردد f</span><output id="freq-out" for="freq"></output></span>
+                        <input type="range" id="freq" min="0.1" max="1.5" step="0.01" value="0.5">
+                    </label>
+                </div>
+
+                <div class="panel__group">
+                    <p class="panel__label">الماء</p>
+                    <label class="ctl">
+                        <span class="ctl__row"><span>عدد الجسيمات في كل طبقة</span><output id="count-out" for="count"></output></span>
+                        <input type="range" id="count" min="8" max="36" step="1" value="18">
+                    </label>
+                    <label class="ctl">
+                        <span class="ctl__row"><span>عدد طبقات العمق</span><output id="layers-out" for="layers"></output></span>
+                        <input type="range" id="layers" min="1" max="5" step="1" value="5">
+                    </label>
+                </div>
+
+                <dl class="readouts">
+                    <div><dt>سرعة الطور c</dt><dd id="r-c">—</dd></div>
+                    <div><dt>الدور T</dt><dd id="r-t">—</dd></div>
+                    <div><dt>الانحدار ak</dt><dd id="r-ak">—</dd></div>
+                    <div><dt>أعمق مدار</dt><dd id="r-deep">—</dd></div>
+                </dl>
+
+                <ul class="legend">
+                    <li><span class="sw"></span>السطح</li>
+                    <li><span class="sw sw--dot sw--ink"></span>جسيم ماء</li>
+                    <li><span class="sw sw--dot"></span>العمود المتتبَّع</li>
+                    <li><span class="sw sw--dash"></span>المدار</li>
+                </ul>
+            </aside>
+        </div>
+
+        <article class="paper" id="paper" aria-labelledby="paper-title">
+            <header class="paper__head">
+                <p class="paper__kicker">مذكّرة المحاضرة · الشكل 5 · ديناميك الموائع</p>
+                <h2 class="paper__title" id="paper-title">أمواج الماء العميق: البحر يتحرّك في دوائر</h2>
+                <p class="paper__by">نعمة سائر قدسية · لطلاب المدارس وطلاب السنتين الأولى والثانية في الجامعة</p>
+                <div class="paper__abstract"><b>ملخّص.</b> نورسة مستقرّة على سطح البحر ترتفع وتنخفض، وتنزلق إلى الأمام ثم إلى الخلف، ولا تحملها الأمواج بعيداً. تشرح هذه المذكّرة هذه الحركة انطلاقاً من ثلاث خصائص للماء: إنه لا ينضغط، وليس فيه احتكاك يُذكر، ولا يدور. ومنها تنتج معادلة لابلاس للجريان، والشروط التي يجب أن يحققها الجريان عند السطح، وعلاقة التشتّت في الماء العميق \(\omega^2 = gk\)، وهي سبب سبق الأمواج الطويلة للأمواج القصيرة. ثم نتتبّع جسيمات ماء منفردة تدور في دوائر تصغر مع العمق وفق \(e^{kz}\)، ونقيس انجراف ستوكس البطيء إلى الأمام الذي تخفيه هذه الدوائر، ونبيّن كيف تحوّل الصفحة الصيغ إلى الصورة المتحركة أعلاه. وكل الأرقام في هذه المذكّرة حُسبت من صيغ الصفحة وإعداداتها الافتراضية. أما الأقسام المعلَّمة بالنجمة ★ ففيها رياضيات أثقل، ويمكن تخطّيها في القراءة الأولى دون أن يضيع خيط الفكرة.</div>
+            </header>
+            <div class="paper__grid">
+                <nav class="paper__toc" aria-label="المحتويات">
+                    <p>المحتويات</p>
+                    <ol>
+                        <li><a href="#p-gull"><span>1</span>نورسة على التموّج</a></li>
+                        <li><a href="#p-model"><span>2</span>النموذج</a></li>
+                        <li><a href="#p-laplace"><span>3</span>الجريان الكموني</a></li>
+                        <li><a href="#p-edges"><span>4</span>الشروط عند الحواف&nbsp;★</a></li>
+                        <li><a href="#p-dispersion"><span>5</span>الجاذبية تحدّد الإيقاع</a></li>
+                        <li><a href="#p-orbits"><span>6</span>كل جسيم يدور في دائرة</a></li>
+                        <li><a href="#p-drift"><span>7</span>انجراف ستوكس&nbsp;★</a></li>
+                        <li><a href="#p-method"><span>8</span>حساب الصورة</a></li>
+                        <li><a href="#p-screen"><span>9</span>من الأمتار إلى البكسلات</a></li>
+                        <li><a href="#p-limits"><span>10</span>ما يهمله النموذج</a></li>
+                    </ol>
+                </nav>
+                <div class="paper__body">
+                    <section class="psec" id="p-gull">
+                        <h3><span class="psec__n">01</span>نورسة على التموّج</h3>
+                        <p class="psec__lead">راقب نورسة مستقرّة على سطح البحر وراء منطقة تكسّر الأمواج. يرفعها تموّج، ويحملها قليلاً إلى الأمام، ثم يخفضها إلى القاع ويعيدها إلى الخلف. وحين تكون الموجة قد مرّت تكون النورسة تقريباً في المكان نفسه الذي كانت فيه.</p>
+                        <p>الزجاجة الطافية تفعل الشيء نفسه، والماء نفسه كذلك. فالموجة التي تتّجه نحو الشاطئ نمط من الحركة ينتقل من ماء إلى ماء، وليست تياراً. فلو كانت تياراً لتكدّس البحر على كل شاطئ. وما تحمله الموجة فعلاً هو الطاقة: طاقة أودعتها في البحر عاصفةٌ على بعد مئات أو آلاف الكيلومترات.</p>
+                        <p>وهناك حقيقتان أخريان يعرفهما كل من يسبح أو يغوص. فالغوّاص على عمق خمسة أمتار بالكاد يلاحظ الأمواج القصيرة المتلاطمة فوقه، ومع ذلك يشعر بالاندفاع البطيء ذهاباً وإياباً لتموّج محيطي طويل. والأمواج الطويلة سريعة: فبعد عاصفة بعيدة تصل إلى الساحل أولاً أطول الأمواج، وهي الأطول دوراً، وتتبعها الأقصر بعد ساعات أو أيام.</p>
+                        <p>تنتج الحقائق الثلاث كلها عن نموذج واحد: ماء بلا احتكاك تحرّكه الجاذبية وحدها، في أمواج ارتفاعها صغير مقارنةً بطولها. تبني هذه المذكّرة النموذج وتحلّه، وتتبعه حتى النقاط الدوّارة في الشكل أعلاه، حيث تمثّل كل نقطة جسيماً من الماء، ويتتبّع العمود العنّابي خطاً شاقولياً من الجسيمات يمتد من السطح إلى الأعماق.</p>
+                    </section>
+
+                    <section class="psec" id="p-model">
+                        <h3><span class="psec__n">02</span>النموذج</h3>
+                        <p>لنفترض أن قمم الموجات طويلة ومستقيمة، مثل تموّج يتدحرج في خطوط متوازية، بحيث لا يتغيّر شيء على امتدادها. يكفي حينها إحداثيان: \(x\) أفقي، في اتجاه انتشار الموجة، و\(z\) شاقولي نحو الأعلى، مع \(z = 0\) عند السطح الساكن. يملأ الماء المنطقة \(z &lt; \eta(x,t)\)، حيث \(\eta\) ارتفاع السطح فوق مستواه الساكن (الشكل 1). وسرعة الماء عند نقطة هي \(\mathbf{u} = (u, w)\)، مع \(u\) أفقية و\(w\) شاقولية.</p>
+                        <p>توصف الموجة بطول موجتها \(\lambda\)، وهو المسافة من قمة إلى قمة، وسعتها \(a\)، وهي ارتفاع القمة فوق المستوى الساكن. ومن المناسب استخدام العدد الموجي \(k = 2\pi/\lambda\) بدلاً من \(\lambda\)، والتردد الزاوي \(\omega = 2\pi f = 2\pi/T\) بدلاً من التردد \(f\) أو الدور \(T\). للموجة الافتراضية في الصفحة \(\lambda = 260\ \mathrm{px} = 2.6\ \mathrm{m}\) (يستخدم الرسم المقياس \(100\ \mathrm{px} = 1\ \mathrm{m}\))، ومنه \(k = 2.42\ \mathrm{rad/m}\)، و\(a = 24\ \mathrm{px} = 0.24\ \mathrm{m}\). وتسارع الجاذبية \(g = 9.81\ \mathrm{m/s^2}\). ولا يحتفظ النموذج إلا بما يهمّ الأمواج من هذا الحجم:</p>
+                        <ul>
+                            <li>الماء غير قابل للانضغاط: كثافته \(\rho\) واحدة في كل مكان.</li>
+                            <li>الماء غير لزج: ليس فيه احتكاك داخلي.</li>
+                            <li>الجريان غير دوّامي: لا يدور أيّ جسيم صغير من الماء (يبيّن القسم 03 السبب).</li>
+                            <li>الموجة صغيرة: \(a\) أصغر بكثير من \(\lambda\)، أي \(ak \ll 1\). وهذه هي النظرية الخطّية، وتسمّى أيضاً نظرية آيري.</li>
+                            <li>الماء عميق: القاع يقع على عمق يزيد على نصف طول موجة تقريباً.</li>
+                            <li>القوى الوحيدة هي الجاذبية والضغط: لا توتّر سطحي، ولا رياح، ولا تيار.</li>
+                        </ul>
+                        <figure class="pfig">
+                            <div class="pfig__plate">
+                                    <svg viewBox="0 0 720 360" role="img" aria-label="The model: a travelling surface wave of wavelength lambda and amplitude a above water at rest level z = 0; under it, water parcels move on circles whose radius a e to the k z0 shrinks with depth; the parcel under a crest moves forward, the one under a trough backward.">
+                                    <rect x="0" y="0" width="720" height="360" fill="#fff"/>
+                                    <path d="M28.6 155.6 L31.7 156.0 L34.8 156.4 L37.9 156.8 L41.0 157.1 L44.2 157.4 L47.3 157.6 L50.5 157.8 L53.7 157.9 L56.8 158.0 L60.0 158.0 L63.2 158.0 L66.3 157.9 L69.5 157.8 L72.7 157.6 L75.8 157.4 L79.0 157.1 L82.1 156.8 L85.2 156.4 L88.3 156.0 L91.4 155.6 L94.4 155.1 L97.5 154.5 L100.5 154.0 L103.5 153.3 L106.5 152.7 L109.4 151.9 L112.3 151.2 L115.2 150.4 L118.0 149.6 L120.8 148.7 L123.6 147.8 L126.3 146.9 L129.0 146.0 L131.6 145.0 L134.2 144.0 L136.8 143.0 L139.3 141.9 L141.8 140.9 L144.2 139.8 L146.6 138.7 L149.0 137.5 L151.3 136.4 L153.5 135.2 L155.7 134.1 L157.8 132.9 L159.9 131.8 L162.0 130.6 L164.0 129.4 L165.9 128.2 L167.8 127.1 L169.7 125.9 L171.5 124.8 L173.3 123.6 L175.0 122.5 L176.6 121.3 L178.2 120.2 L179.8 119.1 L181.3 118.1 L182.8 117.0 L184.2 116.0 L185.6 115.0 L187.0 114.0 L188.3 113.1 L189.6 112.2 L190.8 111.3 L192.0 110.4 L193.2 109.6 L194.3 108.8 L195.4 108.1 L196.5 107.3 L197.5 106.7 L198.5 106.0 L199.5 105.5 L200.4 104.9 L201.4 104.4 L202.3 104.0 L203.2 103.6 L204.1 103.2 L205.0 102.9 L205.8 102.6 L206.7 102.4 L207.5 102.2 L208.3 102.1 L209.2 102.0 L210.0 102.0 L210.8 102.0 L211.7 102.1 L212.5 102.2 L213.3 102.4 L214.2 102.6 L215.0 102.9 L215.9 103.2 L216.8 103.6 L217.7 104.0 L218.6 104.4 L219.6 104.9 L220.5 105.5 L221.5 106.0 L222.5 106.7 L223.5 107.3 L224.6 108.1 L225.7 108.8 L226.8 109.6 L228.0 110.4 L229.2 111.3 L230.4 112.2 L231.7 113.1 L233.0 114.0 L234.4 115.0 L235.8 116.0 L237.2 117.0 L238.7 118.1 L240.2 119.1 L241.8 120.2 L243.4 121.3 L245.0 122.5 L246.7 123.6 L248.5 124.8 L250.3 125.9 L252.2 127.1 L254.1 128.2 L256.0 129.4 L258.0 130.6 L260.1 131.8 L262.2 132.9 L264.3 134.1 L266.5 135.2 L268.7 136.4 L271.0 137.5 L273.4 138.7 L275.8 139.8 L278.2 140.9 L280.7 141.9 L283.2 143.0 L285.8 144.0 L288.4 145.0 L291.0 146.0 L293.7 146.9 L296.4 147.8 L299.2 148.7 L302.0 149.6 L304.8 150.4 L307.7 151.2 L310.6 151.9 L313.5 152.7 L316.5 153.3 L319.5 154.0 L322.5 154.5 L325.6 155.1 L328.6 155.6 L331.7 156.0 L334.8 156.4 L337.9 156.8 L341.0 157.1 L344.2 157.4 L347.3 157.6 L350.5 157.8 L353.7 157.9 L356.8 158.0 L360.0 158.0 L363.2 158.0 L366.3 157.9 L369.5 157.8 L372.7 157.6 L375.8 157.4 L379.0 157.1 L382.1 156.8 L385.2 156.4 L388.3 156.0 L391.4 155.6 L394.4 155.1 L397.5 154.5 L400.5 154.0 L403.5 153.3 L406.5 152.7 L409.4 151.9 L412.3 151.2 L415.2 150.4 L418.0 149.6 L420.8 148.7 L423.6 147.8 L426.3 146.9 L429.0 146.0 L431.6 145.0 L434.2 144.0 L436.8 143.0 L439.3 141.9 L441.8 140.9 L444.2 139.8 L446.6 138.7 L449.0 137.5 L451.3 136.4 L453.5 135.2 L455.7 134.1 L457.8 132.9 L459.9 131.8 L462.0 130.6 L464.0 129.4 L465.9 128.2 L467.8 127.1 L469.7 125.9 L471.5 124.8 L473.3 123.6 L475.0 122.5 L476.6 121.3 L478.2 120.2 L479.8 119.1 L481.3 118.1 L482.8 117.0 L484.2 116.0 L485.6 115.0 L487.0 114.0 L488.3 113.1 L489.6 112.2 L490.8 111.3 L492.0 110.4 L493.2 109.6 L494.3 108.8 L495.4 108.1 L496.5 107.3 L497.5 106.7 L498.5 106.0 L499.5 105.5 L500.4 104.9 L501.4 104.4 L502.3 104.0 L503.2 103.6 L504.1 103.2 L505.0 102.9 L505.8 102.6 L506.7 102.4 L507.5 102.2 L508.3 102.1 L509.2 102.0 L510.0 102.0 L510.8 102.0 L511.7 102.1 L512.5 102.2 L513.3 102.4 L514.2 102.6 L515.0 102.9 L515.9 103.2 L516.8 103.6 L517.7 104.0 L518.6 104.4 L519.6 104.9 L520.5 105.5 L521.5 106.0 L522.5 106.7 L523.5 107.3 L524.6 108.1 L525.7 108.8 L526.8 109.6 L528.0 110.4 L529.2 111.3 L530.4 112.2 L531.7 113.1 L533.0 114.0 L534.4 115.0 L535.8 116.0 L537.2 117.0 L538.7 118.1 L540.2 119.1 L541.8 120.2 L543.4 121.3 L545.0 122.5 L546.7 123.6 L548.5 124.8 L550.3 125.9 L552.2 127.1 L554.1 128.2 L556.0 129.4 L558.0 130.6 L560.1 131.8 L562.2 132.9 L564.3 134.1 L566.5 135.2 L568.7 136.4 L571.0 137.5 L573.4 138.7 L575.8 139.8 L578.2 140.9 L580.7 141.9 L583.2 143.0 L585.8 144.0 L588.4 145.0 L591.0 146.0 L593.7 146.9 L596.4 147.8 L599.2 148.7 L602.0 149.6 L604.8 150.4 L607.7 151.2 L610.6 151.9 L613.5 152.7 L616.5 153.3 L619.5 154.0 L622.5 154.5 L625.6 155.1 L628.6 155.6 L631.7 156.0 L634.8 156.4 L637.9 156.8 L641.0 157.1 L644.2 157.4 L647.3 157.6 L650.5 157.8 L653.7 157.9 L656.8 158.0 L660.0 158.0 L663.2 158.0 L666.3 157.9 L669.5 157.8 L672.7 157.6 L675.8 157.4 L679.0 157.1 L682.1 156.8 L685.2 156.4 L688.3 156.0 L691.4 155.6 L694.4 155.1 L697.5 154.5 L697.5 344 L28.6 344 Z" fill="#e2a2aa" fill-opacity="0.16"/>
+                                    <line x1="28" y1="130.0" x2="700" y2="130.0" stroke="#8b8079" stroke-width="1.2" stroke-dasharray="5 5"/>
+                                    <line x1="28" y1="180.0" x2="196" y2="180.0" stroke="#cdc1ae" stroke-width="1" stroke-dasharray="3 4"/>
+                                    <line x1="28" y1="230.0" x2="196" y2="230.0" stroke="#cdc1ae" stroke-width="1" stroke-dasharray="3 4"/>
+                                    <circle cx="210.0" cy="130.0" r="28.00" fill="none" stroke="#8b8079" stroke-width="1" stroke-dasharray="2 3"/>
+                                    <circle cx="210.0" cy="130.0" r="1.6" fill="#8b8079"/>
+                                    <circle cx="210.0" cy="102.0" r="5.2" fill="#7a1f2b"/>
+                                    <circle cx="210.0" cy="180.0" r="9.83" fill="none" stroke="#8b8079" stroke-width="1" stroke-dasharray="2 3"/>
+                                    <circle cx="210.0" cy="180.0" r="1.6" fill="#8b8079"/>
+                                    <circle cx="210.0" cy="170.2" r="3.0" fill="#4a413d"/>
+                                    <circle cx="210.0" cy="230.0" r="3.45" fill="none" stroke="#8b8079" stroke-width="1" stroke-dasharray="2 3"/>
+                                    <circle cx="210.0" cy="230.0" r="1.6" fill="#8b8079"/>
+                                    <circle cx="210.0" cy="226.6" r="2.2" fill="#4a413d"/>
+                                    <circle cx="285.0" cy="130.0" r="28.00" fill="none" stroke="#8b8079" stroke-width="1" stroke-dasharray="2 3"/>
+                                    <circle cx="285.0" cy="130.0" r="1.6" fill="#8b8079"/>
+                                    <circle cx="257.0" cy="130.0" r="5.2" fill="#7a1f2b"/>
+                                    <circle cx="285.0" cy="180.0" r="9.83" fill="none" stroke="#8b8079" stroke-width="1" stroke-dasharray="2 3"/>
+                                    <circle cx="285.0" cy="180.0" r="1.6" fill="#8b8079"/>
+                                    <circle cx="275.2" cy="180.0" r="3.0" fill="#4a413d"/>
+                                    <circle cx="285.0" cy="230.0" r="3.45" fill="none" stroke="#8b8079" stroke-width="1" stroke-dasharray="2 3"/>
+                                    <circle cx="285.0" cy="230.0" r="1.6" fill="#8b8079"/>
+                                    <circle cx="281.6" cy="230.0" r="2.2" fill="#4a413d"/>
+                                    <circle cx="360.0" cy="130.0" r="28.00" fill="none" stroke="#8b8079" stroke-width="1" stroke-dasharray="2 3"/>
+                                    <circle cx="360.0" cy="130.0" r="1.6" fill="#8b8079"/>
+                                    <circle cx="360.0" cy="158.0" r="5.2" fill="#7a1f2b"/>
+                                    <circle cx="360.0" cy="180.0" r="9.83" fill="none" stroke="#8b8079" stroke-width="1" stroke-dasharray="2 3"/>
+                                    <circle cx="360.0" cy="180.0" r="1.6" fill="#8b8079"/>
+                                    <circle cx="360.0" cy="189.8" r="3.0" fill="#4a413d"/>
+                                    <circle cx="360.0" cy="230.0" r="3.45" fill="none" stroke="#8b8079" stroke-width="1" stroke-dasharray="2 3"/>
+                                    <circle cx="360.0" cy="230.0" r="1.6" fill="#8b8079"/>
+                                    <circle cx="360.0" cy="233.4" r="2.2" fill="#4a413d"/>
+                                    <circle cx="435.0" cy="130.0" r="28.00" fill="none" stroke="#8b8079" stroke-width="1" stroke-dasharray="2 3"/>
+                                    <circle cx="435.0" cy="130.0" r="1.6" fill="#8b8079"/>
+                                    <circle cx="463.0" cy="130.0" r="5.2" fill="#7a1f2b"/>
+                                    <circle cx="435.0" cy="180.0" r="9.83" fill="none" stroke="#8b8079" stroke-width="1" stroke-dasharray="2 3"/>
+                                    <circle cx="435.0" cy="180.0" r="1.6" fill="#8b8079"/>
+                                    <circle cx="444.8" cy="180.0" r="3.0" fill="#4a413d"/>
+                                    <circle cx="435.0" cy="230.0" r="3.45" fill="none" stroke="#8b8079" stroke-width="1" stroke-dasharray="2 3"/>
+                                    <circle cx="435.0" cy="230.0" r="1.6" fill="#8b8079"/>
+                                    <circle cx="438.4" cy="230.0" r="2.2" fill="#4a413d"/>
+                                    <path d="M28.6 155.6 L31.7 156.0 L34.8 156.4 L37.9 156.8 L41.0 157.1 L44.2 157.4 L47.3 157.6 L50.5 157.8 L53.7 157.9 L56.8 158.0 L60.0 158.0 L63.2 158.0 L66.3 157.9 L69.5 157.8 L72.7 157.6 L75.8 157.4 L79.0 157.1 L82.1 156.8 L85.2 156.4 L88.3 156.0 L91.4 155.6 L94.4 155.1 L97.5 154.5 L100.5 154.0 L103.5 153.3 L106.5 152.7 L109.4 151.9 L112.3 151.2 L115.2 150.4 L118.0 149.6 L120.8 148.7 L123.6 147.8 L126.3 146.9 L129.0 146.0 L131.6 145.0 L134.2 144.0 L136.8 143.0 L139.3 141.9 L141.8 140.9 L144.2 139.8 L146.6 138.7 L149.0 137.5 L151.3 136.4 L153.5 135.2 L155.7 134.1 L157.8 132.9 L159.9 131.8 L162.0 130.6 L164.0 129.4 L165.9 128.2 L167.8 127.1 L169.7 125.9 L171.5 124.8 L173.3 123.6 L175.0 122.5 L176.6 121.3 L178.2 120.2 L179.8 119.1 L181.3 118.1 L182.8 117.0 L184.2 116.0 L185.6 115.0 L187.0 114.0 L188.3 113.1 L189.6 112.2 L190.8 111.3 L192.0 110.4 L193.2 109.6 L194.3 108.8 L195.4 108.1 L196.5 107.3 L197.5 106.7 L198.5 106.0 L199.5 105.5 L200.4 104.9 L201.4 104.4 L202.3 104.0 L203.2 103.6 L204.1 103.2 L205.0 102.9 L205.8 102.6 L206.7 102.4 L207.5 102.2 L208.3 102.1 L209.2 102.0 L210.0 102.0 L210.8 102.0 L211.7 102.1 L212.5 102.2 L213.3 102.4 L214.2 102.6 L215.0 102.9 L215.9 103.2 L216.8 103.6 L217.7 104.0 L218.6 104.4 L219.6 104.9 L220.5 105.5 L221.5 106.0 L222.5 106.7 L223.5 107.3 L224.6 108.1 L225.7 108.8 L226.8 109.6 L228.0 110.4 L229.2 111.3 L230.4 112.2 L231.7 113.1 L233.0 114.0 L234.4 115.0 L235.8 116.0 L237.2 117.0 L238.7 118.1 L240.2 119.1 L241.8 120.2 L243.4 121.3 L245.0 122.5 L246.7 123.6 L248.5 124.8 L250.3 125.9 L252.2 127.1 L254.1 128.2 L256.0 129.4 L258.0 130.6 L260.1 131.8 L262.2 132.9 L264.3 134.1 L266.5 135.2 L268.7 136.4 L271.0 137.5 L273.4 138.7 L275.8 139.8 L278.2 140.9 L280.7 141.9 L283.2 143.0 L285.8 144.0 L288.4 145.0 L291.0 146.0 L293.7 146.9 L296.4 147.8 L299.2 148.7 L302.0 149.6 L304.8 150.4 L307.7 151.2 L310.6 151.9 L313.5 152.7 L316.5 153.3 L319.5 154.0 L322.5 154.5 L325.6 155.1 L328.6 155.6 L331.7 156.0 L334.8 156.4 L337.9 156.8 L341.0 157.1 L344.2 157.4 L347.3 157.6 L350.5 157.8 L353.7 157.9 L356.8 158.0 L360.0 158.0 L363.2 158.0 L366.3 157.9 L369.5 157.8 L372.7 157.6 L375.8 157.4 L379.0 157.1 L382.1 156.8 L385.2 156.4 L388.3 156.0 L391.4 155.6 L394.4 155.1 L397.5 154.5 L400.5 154.0 L403.5 153.3 L406.5 152.7 L409.4 151.9 L412.3 151.2 L415.2 150.4 L418.0 149.6 L420.8 148.7 L423.6 147.8 L426.3 146.9 L429.0 146.0 L431.6 145.0 L434.2 144.0 L436.8 143.0 L439.3 141.9 L441.8 140.9 L444.2 139.8 L446.6 138.7 L449.0 137.5 L451.3 136.4 L453.5 135.2 L455.7 134.1 L457.8 132.9 L459.9 131.8 L462.0 130.6 L464.0 129.4 L465.9 128.2 L467.8 127.1 L469.7 125.9 L471.5 124.8 L473.3 123.6 L475.0 122.5 L476.6 121.3 L478.2 120.2 L479.8 119.1 L481.3 118.1 L482.8 117.0 L484.2 116.0 L485.6 115.0 L487.0 114.0 L488.3 113.1 L489.6 112.2 L490.8 111.3 L492.0 110.4 L493.2 109.6 L494.3 108.8 L495.4 108.1 L496.5 107.3 L497.5 106.7 L498.5 106.0 L499.5 105.5 L500.4 104.9 L501.4 104.4 L502.3 104.0 L503.2 103.6 L504.1 103.2 L505.0 102.9 L505.8 102.6 L506.7 102.4 L507.5 102.2 L508.3 102.1 L509.2 102.0 L510.0 102.0 L510.8 102.0 L511.7 102.1 L512.5 102.2 L513.3 102.4 L514.2 102.6 L515.0 102.9 L515.9 103.2 L516.8 103.6 L517.7 104.0 L518.6 104.4 L519.6 104.9 L520.5 105.5 L521.5 106.0 L522.5 106.7 L523.5 107.3 L524.6 108.1 L525.7 108.8 L526.8 109.6 L528.0 110.4 L529.2 111.3 L530.4 112.2 L531.7 113.1 L533.0 114.0 L534.4 115.0 L535.8 116.0 L537.2 117.0 L538.7 118.1 L540.2 119.1 L541.8 120.2 L543.4 121.3 L545.0 122.5 L546.7 123.6 L548.5 124.8 L550.3 125.9 L552.2 127.1 L554.1 128.2 L556.0 129.4 L558.0 130.6 L560.1 131.8 L562.2 132.9 L564.3 134.1 L566.5 135.2 L568.7 136.4 L571.0 137.5 L573.4 138.7 L575.8 139.8 L578.2 140.9 L580.7 141.9 L583.2 143.0 L585.8 144.0 L588.4 145.0 L591.0 146.0 L593.7 146.9 L596.4 147.8 L599.2 148.7 L602.0 149.6 L604.8 150.4 L607.7 151.2 L610.6 151.9 L613.5 152.7 L616.5 153.3 L619.5 154.0 L622.5 154.5 L625.6 155.1 L628.6 155.6 L631.7 156.0 L634.8 156.4 L637.9 156.8 L641.0 157.1 L644.2 157.4 L647.3 157.6 L650.5 157.8 L653.7 157.9 L656.8 158.0 L660.0 158.0 L663.2 158.0 L666.3 157.9 L669.5 157.8 L672.7 157.6 L675.8 157.4 L679.0 157.1 L682.1 156.8 L685.2 156.4 L688.3 156.0 L691.4 155.6 L694.4 155.1 L697.5 154.5" fill="none" stroke="#7a1f2b" stroke-width="2.4" stroke-linejoin="round"/>
+                                    <line x1="217.0" y1="102.0" x2="236.0" y2="102.0" stroke="#1c1518" stroke-width="1.8"/>
+                                    <path d="M244.0 102.0 L236.0 105.6 L236.0 98.4 Z" fill="#1c1518"/>
+                                    <line x1="257.0" y1="123.0" x2="257.0" y2="104.0" stroke="#1c1518" stroke-width="1.8"/>
+                                    <path d="M257.0 96.0 L260.6 104.0 L253.4 104.0 Z" fill="#1c1518"/>
+                                    <line x1="353.0" y1="158.0" x2="334.0" y2="158.0" stroke="#1c1518" stroke-width="1.8"/>
+                                    <path d="M326.0 158.0 L334.0 154.4 L334.0 161.6 Z" fill="#1c1518"/>
+                                    <line x1="463.0" y1="137.0" x2="463.0" y2="156.0" stroke="#1c1518" stroke-width="1.8"/>
+                                    <path d="M463.0 164.0 L459.4 156.0 L466.6 156.0 Z" fill="#1c1518"/>
+                                    <text class="m" x="216.0" y="88.0">aω</text>
+                                    <text class="lbl" x="210.0" y="210.0" text-anchor="middle">crest</text>
+                                    <text class="lbl" x="360.0" y="210.0" text-anchor="middle">trough</text>
+                                    <line x1="210.0" y1="96.0" x2="210.0" y2="54.0" stroke="#cdc1ae" stroke-width="1"/>
+                                    <line x1="510.0" y1="96.0" x2="510.0" y2="54.0" stroke="#cdc1ae" stroke-width="1"/>
+                                    <line x1="346.0" y1="62.0" x2="219.0" y2="62.0" stroke="#4a413d" stroke-width="1.3"/>
+                                    <path d="M212.0 62.0 L219.0 58.9 L219.0 65.2 Z" fill="#4a413d"/>
+                                    <line x1="374.0" y1="62.0" x2="501.0" y2="62.0" stroke="#4a413d" stroke-width="1.3"/>
+                                    <path d="M508.0 62.0 L501.0 65.2 L501.0 58.9 Z" fill="#4a413d"/>
+                                    <text class="m" x="360.0" y="68.0" text-anchor="middle">λ</text>
+                                    <line x1="514.0" y1="102.0" x2="556.0" y2="102.0" stroke="#8b8079" stroke-width="1" stroke-dasharray="2 3"/>
+                                    <line x1="550.0" y1="116.0" x2="550.0" y2="109.0" stroke="#4a413d" stroke-width="1.3"/>
+                                    <path d="M550.0 103.0 L552.7 109.0 L547.3 109.0 Z" fill="#4a413d"/>
+                                    <line x1="550.0" y1="116.0" x2="550.0" y2="123.0" stroke="#4a413d" stroke-width="1.3"/>
+                                    <path d="M550.0 129.0 L547.3 123.0 L552.7 123.0 Z" fill="#4a413d"/>
+                                    <text class="m" x="558.0" y="122.0">a</text>
+                                    <text class="m" x="98.0" y="96.0">η<tspan class="mu">(</tspan>x<tspan class="mu">, </tspan>t<tspan class="mu">)</tspan></text>
+                                    <text class="m" x="32" y="123.0">z<tspan class="mu"> = 0</tspan></text>
+                                    <text class="m" x="32" y="173.0">z<tspan class="mu"> = </tspan>z<tspan class="mu" style="font-size:12px" dy="4">0</tspan></text>
+                                    <line x1="446.8" y1="182.0" x2="479.0" y2="198.0" stroke="#8b8079" stroke-width="1"/>
+                                    <text class="m" x="483.0" y="204.0">r<tspan class="mu"> = </tspan>a<tspan class="mu"> </tspan>e<tspan style="font-size:12.5px" dy="-8">kz</tspan><tspan class="mu" style="font-size:9.5px" dy="3">0</tspan></text>
+                                    <line x1="586.0" y1="36.0" x2="651.0" y2="36.0" stroke="#7a1f2b" stroke-width="2"/>
+                                    <path d="M660.0 36.0 L651.0 40.0 L651.0 31.9 Z" fill="#7a1f2b"/>
+                                    <text class="m" x="668" y="42">c</text>
+                                    <text class="lbl" x="586" y="24">the wave travels</text>
+                                    <line x1="684.0" y1="168.0" x2="684.0" y2="219.0" stroke="#1c1518" stroke-width="2"/>
+                                    <path d="M684.0 228.0 L680.0 219.0 L688.0 219.0 Z" fill="#1c1518"/>
+                                    <text class="m" x="694" y="204">g</text>
+                                    <text class="m" x="560" y="262">∇<tspan class="mu" style="font-size:11px" dx="1" dy="-8">2</tspan><tspan dx="1" dy="8">φ</tspan><tspan class="mu"> = 0</tspan></text>
+                                    <text class="lbl" x="560" y="282">in the water</text>
+                                    <text class="m" x="404" y="332">∇φ<tspan class="mu"> → 0  as  </tspan>z<tspan class="mu"> → −∞</tspan></text>
+                                    <line x1="44" y1="326" x2="96" y2="326" stroke="#8b8079" stroke-width="1.4"/>
+                                    <path d="M92 322 L100 326 L92 330 Z" fill="#8b8079"/>
+                                    <line x1="44" y1="326" x2="44" y2="276" stroke="#8b8079" stroke-width="1.4"/>
+                                    <path d="M40 280 L44 272 L48 280 Z" fill="#8b8079"/>
+                                    <text class="m" x="104" y="331">x</text>
+                                    <text class="m" x="38" y="266">z</text>
+                                    </svg>
+                            </div>
+                            <figcaption><span class="pfig__n">الشكل 1</span>النموذج. تنتقل الموجة إلى اليمين بسرعة \(c\)؛ والسطح الساكن هو الخط \(z = 0\)، والسطح المتحرك هو \(\eta(x,t)\). الدوائر المتقطّعة مسارات جسيمات الماء على ثلاثة أعماق، في أربعة أعمدة يفصل بينها ربع طول موجة؛ والنقاط تبيّن مواضع الجسيمات في هذه اللحظة، والأسهم كيف تتحرك جسيمات السطح: إلى الأمام تحت القمة، وإلى الخلف تحت القاع، وإلى الأعلى أمام القمة، وإلى الأسفل خلفها. وكل خطوة قدرها \(\lambda/6\) في العمق تصغّر الدوائر بعامل \(e^{\pi/3} = 2.85\). رُسم السطح كما ترسمه الصفحة، عند \(ak = 0.59\)، قريباً من الإعداد الافتراضي للصفحة. والعبارتان المكتوبتان في الماء هما معادلة لابلاس (4) وشرط الماء العميق (9)، وسنتعرّف عليهما في القسمين 03 و04.</figcaption>
+                        </figure>
+                        <p>تنبيه قبل الرياضيات. الدوائر في الشكل 1 وفي الصفحة هي ما تعطيه نظرية الأمواج الصغيرة هذه في التقريب الأول: فالتأرجحان الأفقي والشاقولي للجسيم بينهما فرق ربع دورة، ويكوّنان معاً دائرة نصف قطرها \(a e^{kz_0}\)، حيث \(z_0\) هو الارتفاع الذي يستقرّ عنده الجسيم في الماء الساكن، وهو سالب تحت السطح (يشتقّه القسم 06). وانحدار الصفحة الافتراضي \(ak = 0.58\) ليس صغيراً على الإطلاق؛ فهو يضخّم الحركة كي تراها. وللحصول على أرقام تُقارَن بالبحر، أبقِ \(ak \ll 1\). ويضيف القسم 07 الانجراف البطيء إلى الأمام الذي تهمله الدوائر المغلقة، ويقارن القسم 6.2 بموجة غيرستنر الدقيقة، التي يدور ماؤها.</p><p>هناك مجهولان: شكل السطح \(\eta(x,t)\)، والجريان تحته \(\mathbf{u}(x,z,t)\). ويجب إيجادهما معاً، لأن الجريان يحرّك السطح، والسطح بوزنه يدفع الجريان.</p>
+                    </section>
+
+                    <section class="psec" id="p-laplace">
+                        <h3><span class="psec__n">03</span>الجريان الكموني: معادلة لابلاس</h3>
+                        <p>خاصّيتان للماء تحوّلان الجريان إلى معادلة واحدة جيّدة السلوك.</p>
+                        <p>الأولى هي عدم الانضغاط. تخيّل صندوقاً صغيراً في الماء عرضه \(\delta x\) وارتفاعه \(\delta z\). يدخل الماء من بعض أوجهه ويخرج من أوجه أخرى؛ ولأن الماء لا يُخزَّن ولا يُضغط، يجب أن يكون صافي التدفّق الخارج صفراً. يتجاوز التدفق الخارج من الوجه الأيمن التدفّق الداخل من الوجه الأيسر بمقدار \(\tfrac{\partial u}{\partial x}\,\delta x\,\delta z\) لكل وحدة طول من القمة، ويسهم الوجهان العلوي والسفلي بمقدار \(\tfrac{\partial w}{\partial z}\,\delta x\,\delta z\)، إذن</p>
+                        \[ \frac{\partial u}{\partial x} + \frac{\partial w}{\partial z} = 0 . \tag{1} \]
+                        <p>الثانية هي غياب الدوران. يُقاس دوران جسيم صغير من الماء بدوّاميّته \(\partial u/\partial z - \partial w/\partial x\)، وهي ضعف سرعته الزاوية (والإشارة تتبع توجيه المحورين \(x\) و\(z\)). فكّر فيما يمكن أن يجعل جسيماً يدور. يؤثّر الضغط في كل جزء من سطحه عمودياً نحو الداخل؛ وحين تكون الكثافة واحدة في كل مكان، تمرّ محصّلة الدفع بمركز ثقل الجسيم فلا تُديره. والجاذبية تشدّ من المركز نفسه. لا شيء يمكن أن يلويه سوى الاحتكاك بين الجسيمات المتجاورة، والمائع غير اللزج لا احتكاك فيه. فالجسيم الذي لا يدور لا يكتسب دوراناً. وهذه مبرهنة كلفن في الجولان: في مائع ثابت الكثافة لا لزوجة فيه، تحت قوة مشتقّة من كمون مثل الجاذبية، يبقى الجولان حول أي حلقة مغلقة من جسيمات الماء على حاله. فالبحر الذي كان ساكناً قبل وصول الموجة يبقى بلا دوران ما دام الجريان سلساً، وهذا يؤدي إلى</p>
+                        \[ \frac{\partial u}{\partial z} - \frac{\partial w}{\partial x} = 0 . \tag{2} \]
+                        <p>تتحقق المعادلة (2) تلقائياً إذا كانت مركبتا السرعة مشتقّتين جزئيتين لدالة واحدة \(\phi(x,z,t)\)، هي <em>كمون السرعة</em>:</p>
+                        \[ u = \frac{\partial\phi}{\partial x}, \qquad w = \frac{\partial\phi}{\partial z} , \tag{3} \]
+                        <p>لأن \(\partial u/\partial z\) و\(\partial w/\partial x\) يساويان عندها كلاهما \(\partial^2\phi/\partial x\,\partial z\). وتتجه السرعة في اتجاه أسرع تزايد لـ\(\phi\)، ومقدارها هو معدّل هذا التزايد. وبالتعويض بـ(3) في (1) نحصل على معادلة لابلاس:</p>
+                        \[ \frac{\partial^2\phi}{\partial x^2} + \frac{\partial^2\phi}{\partial z^2} = 0 \qquad \text{for } z &lt; \eta(x,t) . \tag{4} \]
+                        <p>صارت دالة مجهولة واحدة تحلّ محلّ اثنتين، وهي تخضع للمعادلة نفسها التي يخضع لها الكمون الكهربائي في الفراغ، أو درجة الحرارة في لوح تسري فيه الحرارة سرياناً مستقراً. وحلول معادلة لابلاس أنعم ما يمكن أن تكون عليه الدوال: فقيمة \(\phi\) عند أي نقطة هي متوسط قيمها على أي دائرة نرسمها حول تلك النقطة داخل الماء. فالجريان الذي يحقّق (4) لا نتوءات خفيّة فيه؛ وكل ما في داخل الماء يتحدّد بما يحدث على حوافه.</p>
+                    </section>
+
+                    <section class="psec" id="p-edges">
+                        <h3><span class="psec__n">04</span>ثلاثة شروط على الحواف<span class="star" title="heavier mathematics">★</span>                       <p>تسمح معادلة لابلاس وحدها بعدد لا يُحصى من الجريانات. أما السطح المتحرك والماء الساكن بعيداً في الأعماق فيحدّدان الجريان الذي يناسب الموجة، وهنا يدخل كل ما للجاذبية من أثر في المسألة.</p>
+                        <h4><span class="psub__n">4.1</span>السطح يتحرّك مع الماء</h4>
+                        <p>السطح مكوَّن من الماء، لذلك يبقى الجسيم الذي على السطح على السطح. ولذلك يجب أن يتغيّر ارتفاعه وارتفاع السطح الواقع تحته بالمعدّل نفسه. يرتفع الجسيم بسرعة \(w\). ويرتفع السطح تحته بمعدّل \(\partial\eta/\partial t\)، مضافاً إليه \(u\,\partial\eta/\partial x\)، لأن الجسيم ينزلق أيضاً جانبياً على المنحدر. وهذا هو <em>الشرط الحركي</em>:</p>
+                        \[ \frac{\partial\eta}{\partial t} + u\,\frac{\partial\eta}{\partial x} = w \qquad \text{at } z = \eta . \tag{5} \]
+                        <p>في الموجة الصغيرة يُسمح بتبسيطين. الحدّ \(u\,\partial\eta/\partial x\) هو جداء سرعة جسيم، من رتبة \(a\omega\)، في ميل، من رتبة \(ak\)؛ وهو أصغر بعامل \(ak\) من \(\partial\eta/\partial t\)، الذي من رتبة \(a\omega\)، فنهمله. ويمكن أخذ \(w\) عند المستوى الساكن \(z = 0\) بدلاً من السطح المتحرك: فبحسب مبرهنة تايلور \(w(\eta) = w(0) + \eta\,\partial w/\partial z + \dots\)، والتصحيح أيضاً أصغر بعامل \(ak\). ومع (3) يبقى</p>
+                        \[ \frac{\partial\eta}{\partial t} = \frac{\partial\phi}{\partial z} \qquad \text{at } z = 0 . \tag{6} \]
+                        <h4><span class="psub__n">4.2</span>الضغط عند السطح هو ضغط الهواء</h4>
+                        <p>قانون نيوتن الثاني للماء، لكل وحدة حجم، هو \(\rho\,\mathrm{D}\mathbf{u}/\mathrm{D}t = -\nabla p - \rho g\,\hat{\mathbf{z}}\): يدفع الضغط \(p\) من حيث يكون مرتفعاً إلى حيث يكون منخفضاً، وتشدّ الجاذبية إلى الأسفل. و\(\mathrm{D}/\mathrm{D}t = \partial/\partial t + \mathbf{u}\cdot\nabla\) هنا هو معدّل التغيّر كما يراه جسيم متحرّك. وفي الجريان غير الدوّامي تتحقق المتطابقة \((\mathbf{u}\cdot\nabla)\,\mathbf{u} = \nabla\bigl(\tfrac12|\mathbf{u}|^2\bigr)\)، ومع \(\mathbf{u} = \nabla\phi\) يصبح كل حدّ تدرّجاً:</p>
+                        \[ \nabla\left[ \frac{\partial\phi}{\partial t} + \tfrac12|\nabla\phi|^2 + \frac{p}{\rho} + g z \right] = 0 . \tag{7} \]
+                        <p>إذن تأخذ العبارة بين القوسين القيمة نفسها في كل مكان من الماء في لحظة معيّنة. وهذه معادلة برنولي للجريان غير المستقر. وقد تتعلّق قيمتها بالزمن، لكن يمكن دمج هذا التعلّق في \(\phi\) دون أن تتغيّر أيّ سرعة. وعند السطح يكون الضغط ضغط الهواء، ونعدّه ثابتاً وندمجه بالطريقة نفسها. ونُسقط الحدّ الصغير \(\tfrac12|\nabla\phi|^2\)، من رتبة \((a\omega)^2\)، وننقل الشرط مرة أخرى من \(z = \eta\) إلى \(z = 0\) (تؤخذ العبارة عند السطح، فيصبح حدّها \(gz\) هو \(g\eta\))، فيبقى <em>الشرط الديناميكي</em></p>
+                        \[ \frac{\partial\phi}{\partial t} + g\,\eta = 0 \qquad \text{at } z = 0 . \tag{8} \]
+                        <p>وهنا تدخل الجاذبية: فالسطح المرتفع يعني ثقلاً إضافياً على الماء الواقع تحته.</p>
+                        <h4><span class="psub__n">4.3</span>الماء العميق يبقى ساكناً</h4>
+                        <p>لا شيء يحرّك الماء بعيداً تحت السطح، لذلك يجب أن يتلاشى الجريان مع العمق في الماء العميق:</p>
+                        \[ \nabla\phi \to 0 \qquad \text{as } z \to -\infty . \tag{9} \]
+                        <p>عملياً يعني «لانهائي العمق» أعمق من نصف طول موجة تقريباً؛ ويقيس القسم 10 مدى صحّة هذا التقريب.</p>
+                    </section>
+
+                    <section class="psec" id="p-dispersion">
+                        <h3><span class="psec__n">05</span>الجاذبية تحدّد الإيقاع: علاقة التشتّت</h3>
+                        <h4><span class="psub__n">5.1</span>موجة متنقّلة</h4>
+                        <p>ابحث عن موجة ذات طول موجة واحد تنتقل دون أن يتغيّر شكلها:</p>
+                        \[ \eta = a\cos(kx - \omega t) . \tag{10} \]
+                        <p>تقع قمة عند \(kx - \omega t = 0\)، أي عند \(x = (\omega/k)\,t\)، فتتحرك القمم بسرعة \(\omega/k\). ويتطلّب الشرط (6) أن يتغيّر \(\partial\phi/\partial z\) كما يتغيّر \(\partial\eta/\partial t\)، وهو يتناسب مع \(\sin(kx - \omega t)\)، لذلك نجرّب \(\phi = Z(z)\sin(kx - \omega t)\). ثم تتطلّب معادلة لابلاس (4) أن يكون \(Z'' - k^2 Z = 0\)، وحلولها هي</p>
+                        \[ Z(z) = C\,e^{kz} + D\,e^{-kz} . \tag{11} \]
+                        <p>تحت السطح يكون \(z\) سالباً، فيتزايد \(e^{-kz}\) بلا حدّ مع العمق؛ والشرط (9) يمنع ذلك، إذن \(D = 0\). والشرط الحركي (6) يصبح \(a\omega\sin(kx - \omega t) = kC\sin(kx - \omega t)\)، إذن \(C = a\omega/k\) ويكون</p>
+                        \[ \phi = \frac{a\omega}{k}\,e^{kz}\sin(kx - \omega t) . \tag{12} \]
+                        <p>لم نُدخِل العامل \(e^{kz}\) يدوياً، بل معادلة لابلاس هي التي تفرضه: فالنمط الذي يتكرّر كل \(\lambda\) على امتداد \(x\) يجب أن يتلاشى على عمق نحو \(\lambda/2\pi\).</p>
+                        <h4><span class="psub__n">5.2</span>علاقة التشتّت</h4>
+                        <p>لم يبقَ سوى الشرط الديناميكي (8). عند \(z = 0\) يكون \(\partial\phi/\partial t = -(a\omega^2/k)\cos(kx - \omega t)\)، ويصبح (8) \(\left(g - \omega^2/k\right)a\cos(kx - \omega t) = 0\) لكل \(x\) و\(t\). ولا توجد الموجة إلا إذا انعدمت العبارة بين القوسين.</p>
+                        <div class="pbox"><span class="pbox__t">علاقة التشتّت في الماء العميق</span> \[ \omega^2 = g k . \tag{13} \] <p>التردد وطول الموجة ليسا مستقلين: فالجاذبية تحدّد مدى سرعة اهتزاز موجة ذات طول معيّن، والسعة لا تدخل في ذلك. ومن أجل طول الموجة الافتراضي في الصفحة \(\lambda = 2.6\ \mathrm{m}\) يكون \(\omega = 4.87\ \mathrm{rad/s}\) و\(f = 0.775\ \mathrm{Hz}\).</p></div>
+                        <p>وراء (13) صورة بسيطة. تحت القمة يحمل الماء وزن الانتفاخ الذي فوقه؛ وتحت القاع يحمل وزناً أقل. فالضغط ينخفض من القمة إلى القاع، وبحسب (7) و(8) فإن الدفع الأفقي الذي يؤثّر به في الماء عند السطح يساوي، لكل كيلوغرام، \(g\) مضروباً في ميل السطح، أي \(g\,ak\) على الأكثر. وهذا الدفع يُبقي ماء السطح متحرّكاً على دائرته التي نصف قطرها \(a\) (القسم 06)، وهذا يتطلّب تسارعاً قدره \(a\omega^2\). وبمساواة \(a\omega^2 = g\,ak\) نحصل على (13). وعند الإعداد الافتراضي \(ak = 0.58\) يتسارع ماء السطح بمقدار \(0.58\,g\).</p>
+                        <h4><span class="psub__n">5.3</span>الأمواج الطويلة سريعة</h4>
+                        <p>من (13) تكون سرعة القمم والدور:</p>
+                        \[ \begin{aligned} c &amp;= \frac{\omega}{k} = \sqrt{\frac{g}{k}} = \sqrt{\frac{g\lambda}{2\pi}}, \\ T &amp;= \frac{2\pi}{\omega} = \sqrt{\frac{2\pi\lambda}{g}} . \end{aligned} \tag{14} \]
+                        <p>الأمواج التي تتعلّق سرعتها بطول موجتها تسمّى <em>متشتّتة</em>: فخليط من أطوال الموجة يتفرّق أثناء سيره، ويترتّب بحسب الطول. والأمواج في الماء العميق شديدة التشتّت. والموجة الافتراضية للصفحة، \(\lambda = 2.6\ \mathrm{m}\)، تسير بسرعة \(c = 2.01\ \mathrm{m/s}\) ودورها \(T = 1.29\ \mathrm{s}\)؛ أما تموّج محيطي طوله \(100\ \mathrm{m}\) فيسير بسرعة \(12.5\ \mathrm{m/s}\) ودوره \(8.0\ \mathrm{s}\).</p>
+                        <p>لا تسير الطاقة بسرعة \(c\). فقطار الموجات الحقيقي مجموعة: بضع قمم تكبر ثم تصغر. وأبسط مجموعة هي موجتان متساويتان في الارتفاع، عدداهما الموجيان مختلفان قليلاً، \(k \pm \delta k\)، وتردّداهما \(\omega \pm \delta\omega\). وبجمعهما نحصل على \(2a\cos(\delta k\,x - \delta\omega\,t)\,\cos(kx - \omega t)\): العامل الثاني يمثّل القمم، وهي تسير بسرعة \(\omega/k\)؛ أما الأول فغلاف بطيء ينتفخ ويخبو على طول القطار، ويسير بسرعة \(\delta\omega/\delta k\). وإذا جعلنا الموجتين تقتربان إحداهما من الأخرى أكثر فأكثر صارت هذه النسبة مشتقّة: فالمجموعة، ومعها الطاقة التي تتركّز حيث تكون الموجات عالية، تتحرّك بـ<em>سرعة المجموعة</em></p>
+                        \[ c_g = \frac{\mathrm{d}\omega}{\mathrm{d}k} = \frac12\sqrt{\frac{g}{k}} = \frac{c}{2} . \tag{15} \]
+                        <p>وبذلك تعبر كلّ قمة مجموعتها بضعف سرعة المجموعة: تظهر في مؤخّرتها، وتكبر وهي تتقدّم، ثم تخبو عند مقدّمتها. كما تحدّد سرعة المجموعة أوقات الوصول بعد العاصفة. فمن عاصفة تبعد \(2000\ \mathrm{km}\)، يسير تموّج دوره \(16\ \mathrm{s}\) (\(\lambda = 400\ \mathrm{m}\)) بسرعة \(c_g = 12.5\ \mathrm{m/s}\) ويصل بعد نحو 44 ساعة؛ ويسير تموّج دوره \(8\ \mathrm{s}\) (\(\lambda = 100\ \mathrm{m}\)) بسرعة \(6.25\ \mathrm{m/s}\) ويحتاج إلى نحو 89 ساعة. فالتموّج الطويل ذو الإيقاع البطيء يصل أولاً. ويجمع الجدول هذه السرعات، وكلها مستخرجة من (14) و(15).</p>
+                        <table class="ptab">
+                            <thead><tr><th>موجة</th><th>\(\lambda\) (m)</th><th>\(T\) (s)</th><th>\(c\) (m/s)</th><th>\(c_g\) (m/s)</th></tr></thead>
+                            <tbody>
+                                <tr><td>الصفحة، الأقصر</td><td>1.2</td><td>0.88</td><td>1.37</td><td>0.68</td></tr>
+                                <tr><td>الصفحة، الافتراضية</td><td>2.6</td><td>1.29</td><td>2.01</td><td>1.01</td></tr>
+                                <tr><td>الصفحة، الأطول</td><td>4.0</td><td>1.60</td><td>2.50</td><td>1.25</td></tr>
+                                <tr><td>أمواج الرياح</td><td>10</td><td>2.53</td><td>3.95</td><td>1.98</td></tr>
+                                <tr><td>تموّج المحيط</td><td>100</td><td>8.00</td><td>12.5</td><td>6.25</td></tr>
+                                <tr><td>تموّج طويل</td><td>400</td><td>16.0</td><td>25.0</td><td>12.5</td></tr>
+                            </tbody>
+                        </table>
+                        <figure class="pfig">
+                            <div class="pfig__plate">
+                                    <svg viewBox="0 0 720 346" role="img" xmlns="http://www.w3.org/2000/svg">
+                                    <defs><clipPath id="f5clip1"><rect x="64.0" y="18.0" width="634.0" height="256.0"/></clipPath></defs>
+                                    <line x1="64.0" x2="698.0" y1="274.0" y2="274.0" stroke="#eee6d9" stroke-width="1"/>
+                                    <text class="tick" x="56.0" y="278.0" text-anchor="end">0</text>
+                                    <line x1="64.0" x2="698.0" y1="188.7" y2="188.7" stroke="#eee6d9" stroke-width="1"/>
+                                    <text class="tick" x="56.0" y="192.7" text-anchor="end">1</text>
+                                    <line x1="64.0" x2="698.0" y1="103.3" y2="103.3" stroke="#eee6d9" stroke-width="1"/>
+                                    <text class="tick" x="56.0" y="107.3" text-anchor="end">2</text>
+                                    <line x1="64.0" x2="698.0" y1="18.0" y2="18.0" stroke="#eee6d9" stroke-width="1"/>
+                                    <text class="tick" x="56.0" y="22.0" text-anchor="end">3</text>
+                                    <line x1="64.0" x2="64.0" y1="274.0" y2="279.0" stroke="#8b8079"/>
+                                    <text class="tick" x="64.0" y="293.0" text-anchor="middle">0</text>
+                                    <line x1="201.8" x2="201.8" y1="274.0" y2="279.0" stroke="#8b8079"/>
+                                    <text class="tick" x="201.8" y="293.0" text-anchor="middle">1</text>
+                                    <line x1="339.7" x2="339.7" y1="274.0" y2="279.0" stroke="#8b8079"/>
+                                    <text class="tick" x="339.7" y="293.0" text-anchor="middle">2</text>
+                                    <line x1="477.5" x2="477.5" y1="274.0" y2="279.0" stroke="#8b8079"/>
+                                    <text class="tick" x="477.5" y="293.0" text-anchor="middle">3</text>
+                                    <line x1="615.3" x2="615.3" y1="274.0" y2="279.0" stroke="#8b8079"/>
+                                    <text class="tick" x="615.3" y="293.0" text-anchor="middle">4</text>
+                                    <line x1="64.0" x2="698.0" y1="274.0" y2="274.0" stroke="#8b8079"/>
+                                    <line x1="64.0" x2="64.0" y1="18.0" y2="274.0" stroke="#8b8079"/>
+                                    <text class="lbl" x="698.0" y="312.0" text-anchor="end">wavelength (m)</text>
+                                    <text class="lbl" x="70.0" y="31.0">speed (m/s)</text>
+                                    <g clip-path="url(#f5clip1)">
+                                    <line x1="229.4" x2="229.4" y1="18.0" y2="274.0" stroke="#8b8079" stroke-width="1.4" stroke-dasharray="4 4"/>
+                                    <line x1="615.3" x2="615.3" y1="18.0" y2="274.0" stroke="#8b8079" stroke-width="1.4" stroke-dasharray="4 4"/>
+                                    <path d="M66.8 258.9 L68.3 255.1 L69.9 251.9 L71.5 249.1 L73.1 246.6 L74.7 244.3 L76.2 242.2 L77.8 240.2 L79.4 238.3 L81.0 236.6 L82.6 234.9 L84.2 233.2 L85.7 231.7 L87.3 230.1 L88.9 228.7 L90.5 227.3 L92.1 225.9 L93.7 224.5 L95.2 223.2 L96.8 222.0 L98.4 220.7 L100.0 219.5 L101.6 218.3 L103.1 217.2 L104.7 216.0 L106.3 214.9 L107.9 213.8 L109.5 212.8 L111.1 211.7 L112.6 210.7 L114.2 209.6 L115.8 208.6 L117.4 207.6 L119.0 206.7 L120.5 205.7 L122.1 204.8 L123.7 203.8 L125.3 202.9 L126.9 202.0 L128.5 201.1 L130.0 200.2 L131.6 199.3 L133.2 198.4 L134.8 197.6 L136.4 196.7 L137.9 195.9 L139.5 195.1 L141.1 194.2 L142.7 193.4 L144.3 192.6 L145.9 191.8 L147.4 191.0 L149.0 190.3 L150.6 189.5 L152.2 188.7 L153.8 187.9 L155.4 187.2 L156.9 186.4 L158.5 185.7 L160.1 185.0 L161.7 184.2 L163.3 183.5 L164.8 182.8 L166.4 182.1 L168.0 181.4 L169.6 180.7 L171.2 180.0 L172.8 179.3 L174.3 178.6 L175.9 177.9 L177.5 177.2 L179.1 176.6 L180.7 175.9 L182.2 175.2 L183.8 174.6 L185.4 173.9 L187.0 173.3 L188.6 172.6 L190.2 172.0 L191.7 171.3 L193.3 170.7 L194.9 170.1 L196.5 169.5 L198.1 168.8 L199.6 168.2 L201.2 167.6 L202.8 167.0 L204.4 166.4 L206.0 165.8 L207.6 165.2 L209.1 164.6 L210.7 164.0 L212.3 163.4 L213.9 162.8 L215.5 162.2 L217.1 161.6 L218.6 161.1 L220.2 160.5 L221.8 159.9 L223.4 159.3 L225.0 158.8 L226.5 158.2 L228.1 157.6 L229.7 157.1 L231.3 156.5 L232.9 156.0 L234.5 155.4 L236.0 154.9 L237.6 154.3 L239.2 153.8 L240.8 153.2 L242.4 152.7 L243.9 152.2 L245.5 151.6 L247.1 151.1 L248.7 150.6 L250.3 150.0 L251.9 149.5 L253.4 149.0 L255.0 148.5 L256.6 148.0 L258.2 147.4 L259.8 146.9 L261.4 146.4 L262.9 145.9 L264.5 145.4 L266.1 144.9 L267.7 144.4 L269.3 143.9 L270.8 143.4 L272.4 142.9 L274.0 142.4 L275.6 141.9 L277.2 141.4 L278.8 140.9 L280.3 140.4 L281.9 139.9 L283.5 139.4 L285.1 139.0 L286.7 138.5 L288.2 138.0 L289.8 137.5 L291.4 137.0 L293.0 136.6 L294.6 136.1 L296.2 135.6 L297.7 135.1 L299.3 134.7 L300.9 134.2 L302.5 133.7 L304.1 133.3 L305.6 132.8 L307.2 132.4 L308.8 131.9 L310.4 131.4 L312.0 131.0 L313.6 130.5 L315.1 130.1 L316.7 129.6 L318.3 129.2 L319.9 128.7 L321.5 128.3 L323.1 127.8 L324.6 127.4 L326.2 126.9 L327.8 126.5 L329.4 126.0 L331.0 125.6 L332.5 125.2 L334.1 124.7 L335.7 124.3 L337.3 123.9 L338.9 123.4 L340.5 123.0 L342.0 122.6 L343.6 122.1 L345.2 121.7 L346.8 121.3 L348.4 120.8 L349.9 120.4 L351.5 120.0 L353.1 119.6 L354.7 119.1 L356.3 118.7 L357.9 118.3 L359.4 117.9 L361.0 117.5 L362.6 117.1 L364.2 116.6 L365.8 116.2 L367.3 115.8 L368.9 115.4 L370.5 115.0 L372.1 114.6 L373.7 114.2 L375.3 113.8 L376.8 113.4 L378.4 113.0 L380.0 112.5 L381.6 112.1 L383.2 111.7 L384.8 111.3 L386.3 110.9 L387.9 110.5 L389.5 110.1 L391.1 109.7 L392.7 109.3 L394.2 109.0 L395.8 108.6 L397.4 108.2 L399.0 107.8 L400.6 107.4 L402.2 107.0 L403.7 106.6 L405.3 106.2 L406.9 105.8 L408.5 105.4 L410.1 105.0 L411.6 104.7 L413.2 104.3 L414.8 103.9 L416.4 103.5 L418.0 103.1 L419.6 102.7 L421.1 102.4 L422.7 102.0 L424.3 101.6 L425.9 101.2 L427.5 100.8 L429.0 100.5 L430.6 100.1 L432.2 99.7 L433.8 99.3 L435.4 99.0 L437.0 98.6 L438.5 98.2 L440.1 97.9 L441.7 97.5 L443.3 97.1 L444.9 96.8 L446.5 96.4 L448.0 96.0 L449.6 95.6 L451.2 95.3 L452.8 94.9 L454.4 94.6 L455.9 94.2 L457.5 93.8 L459.1 93.5 L460.7 93.1 L462.3 92.7 L463.9 92.4 L465.4 92.0 L467.0 91.7 L468.6 91.3 L470.2 91.0 L471.8 90.6 L473.3 90.2 L474.9 89.9 L476.5 89.5 L478.1 89.2 L479.7 88.8 L481.3 88.5 L482.8 88.1 L484.4 87.8 L486.0 87.4 L487.6 87.1 L489.2 86.7 L490.7 86.4 L492.3 86.0 L493.9 85.7 L495.5 85.3 L497.1 85.0 L498.7 84.6 L500.2 84.3 L501.8 84.0 L503.4 83.6 L505.0 83.3 L506.6 82.9 L508.2 82.6 L509.7 82.2 L511.3 81.9 L512.9 81.6 L514.5 81.2 L516.1 80.9 L517.6 80.6 L519.2 80.2 L520.8 79.9 L522.4 79.5 L524.0 79.2 L525.6 78.9 L527.1 78.5 L528.7 78.2 L530.3 77.9 L531.9 77.5 L533.5 77.2 L535.0 76.9 L536.6 76.5 L538.2 76.2 L539.8 75.9 L541.4 75.6 L543.0 75.2 L544.5 74.9 L546.1 74.6 L547.7 74.2 L549.3 73.9 L550.9 73.6 L552.5 73.3 L554.0 72.9 L555.6 72.6 L557.2 72.3 L558.8 72.0 L560.4 71.7 L561.9 71.3 L563.5 71.0 L565.1 70.7 L566.7 70.4 L568.3 70.0 L569.9 69.7 L571.4 69.4 L573.0 69.1 L574.6 68.8 L576.2 68.5 L577.8 68.1 L579.3 67.8 L580.9 67.5 L582.5 67.2 L584.1 66.9 L585.7 66.6 L587.3 66.2 L588.8 65.9 L590.4 65.6 L592.0 65.3 L593.6 65.0 L595.2 64.7 L596.7 64.4 L598.3 64.1 L599.9 63.7 L601.5 63.4 L603.1 63.1 L604.7 62.8 L606.2 62.5 L607.8 62.2 L609.4 61.9 L611.0 61.6 L612.6 61.3 L614.2 61.0 L615.7 60.7 L617.3 60.4 L618.9 60.1 L620.5 59.7 L622.1 59.4 L623.6 59.1 L625.2 58.8 L626.8 58.5 L628.4 58.2 L630.0 57.9 L631.6 57.6 L633.1 57.3 L634.7 57.0 L636.3 56.7 L637.9 56.4 L639.5 56.1 L641.0 55.8 L642.6 55.5 L644.2 55.2 L645.8 54.9 L647.4 54.6 L649.0 54.3 L650.5 54.0 L652.1 53.7 L653.7 53.4 L655.3 53.2 L656.9 52.9 L658.4 52.6 L660.0 52.3 L661.6 52.0 L663.2 51.7 L664.8 51.4 L666.4 51.1 L667.9 50.8 L669.5 50.5 L671.1 50.2 L672.7 49.9 L674.3 49.6 L675.9 49.3 L677.4 49.1 L679.0 48.8 L680.6 48.5 L682.2 48.2 L683.8 47.9 L685.3 47.6 L686.9 47.3 L688.5 47.0 L690.1 46.7 L691.7 46.5 L693.3 46.2 L694.8 45.9 L696.4 45.6 L698.0 45.3" fill="none" stroke="#7a1f2b" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/>
+                                    <path d="M66.8 266.5 L68.3 264.5 L69.9 263.0 L71.5 261.6 L73.1 260.3 L74.7 259.2 L76.2 258.1 L77.8 257.1 L79.4 256.2 L81.0 255.3 L82.6 254.4 L84.2 253.6 L85.7 252.8 L87.3 252.1 L88.9 251.3 L90.5 250.6 L92.1 249.9 L93.7 249.3 L95.2 248.6 L96.8 248.0 L98.4 247.4 L100.0 246.8 L101.6 246.2 L103.1 245.6 L104.7 245.0 L106.3 244.5 L107.9 243.9 L109.5 243.4 L111.1 242.8 L112.6 242.3 L114.2 241.8 L115.8 241.3 L117.4 240.8 L119.0 240.3 L120.5 239.9 L122.1 239.4 L123.7 238.9 L125.3 238.4 L126.9 238.0 L128.5 237.5 L130.0 237.1 L131.6 236.7 L133.2 236.2 L134.8 235.8 L136.4 235.4 L137.9 234.9 L139.5 234.5 L141.1 234.1 L142.7 233.7 L144.3 233.3 L145.9 232.9 L147.4 232.5 L149.0 232.1 L150.6 231.7 L152.2 231.4 L153.8 231.0 L155.4 230.6 L156.9 230.2 L158.5 229.9 L160.1 229.5 L161.7 229.1 L163.3 228.8 L164.8 228.4 L166.4 228.0 L168.0 227.7 L169.6 227.3 L171.2 227.0 L172.8 226.6 L174.3 226.3 L175.9 226.0 L177.5 225.6 L179.1 225.3 L180.7 225.0 L182.2 224.6 L183.8 224.3 L185.4 224.0 L187.0 223.6 L188.6 223.3 L190.2 223.0 L191.7 222.7 L193.3 222.4 L194.9 222.0 L196.5 221.7 L198.1 221.4 L199.6 221.1 L201.2 220.8 L202.8 220.5 L204.4 220.2 L206.0 219.9 L207.6 219.6 L209.1 219.3 L210.7 219.0 L212.3 218.7 L213.9 218.4 L215.5 218.1 L217.1 217.8 L218.6 217.5 L220.2 217.2 L221.8 217.0 L223.4 216.7 L225.0 216.4 L226.5 216.1 L228.1 215.8 L229.7 215.5 L231.3 215.3 L232.9 215.0 L234.5 214.7 L236.0 214.4 L237.6 214.2 L239.2 213.9 L240.8 213.6 L242.4 213.4 L243.9 213.1 L245.5 212.8 L247.1 212.5 L248.7 212.3 L250.3 212.0 L251.9 211.8 L253.4 211.5 L255.0 211.2 L256.6 211.0 L258.2 210.7 L259.8 210.5 L261.4 210.2 L262.9 209.9 L264.5 209.7 L266.1 209.4 L267.7 209.2 L269.3 208.9 L270.8 208.7 L272.4 208.4 L274.0 208.2 L275.6 207.9 L277.2 207.7 L278.8 207.5 L280.3 207.2 L281.9 207.0 L283.5 206.7 L285.1 206.5 L286.7 206.2 L288.2 206.0 L289.8 205.8 L291.4 205.5 L293.0 205.3 L294.6 205.0 L296.2 204.8 L297.7 204.6 L299.3 204.3 L300.9 204.1 L302.5 203.9 L304.1 203.6 L305.6 203.4 L307.2 203.2 L308.8 202.9 L310.4 202.7 L312.0 202.5 L313.6 202.3 L315.1 202.0 L316.7 201.8 L318.3 201.6 L319.9 201.4 L321.5 201.1 L323.1 200.9 L324.6 200.7 L326.2 200.5 L327.8 200.2 L329.4 200.0 L331.0 199.8 L332.5 199.6 L334.1 199.4 L335.7 199.1 L337.3 198.9 L338.9 198.7 L340.5 198.5 L342.0 198.3 L343.6 198.1 L345.2 197.8 L346.8 197.6 L348.4 197.4 L349.9 197.2 L351.5 197.0 L353.1 196.8 L354.7 196.6 L356.3 196.4 L357.9 196.2 L359.4 195.9 L361.0 195.7 L362.6 195.5 L364.2 195.3 L365.8 195.1 L367.3 194.9 L368.9 194.7 L370.5 194.5 L372.1 194.3 L373.7 194.1 L375.3 193.9 L376.8 193.7 L378.4 193.5 L380.0 193.3 L381.6 193.1 L383.2 192.9 L384.8 192.7 L386.3 192.5 L387.9 192.3 L389.5 192.1 L391.1 191.9 L392.7 191.7 L394.2 191.5 L395.8 191.3 L397.4 191.1 L399.0 190.9 L400.6 190.7 L402.2 190.5 L403.7 190.3 L405.3 190.1 L406.9 189.9 L408.5 189.7 L410.1 189.5 L411.6 189.3 L413.2 189.1 L414.8 188.9 L416.4 188.8 L418.0 188.6 L419.6 188.4 L421.1 188.2 L422.7 188.0 L424.3 187.8 L425.9 187.6 L427.5 187.4 L429.0 187.2 L430.6 187.0 L432.2 186.9 L433.8 186.7 L435.4 186.5 L437.0 186.3 L438.5 186.1 L440.1 185.9 L441.7 185.7 L443.3 185.6 L444.9 185.4 L446.5 185.2 L448.0 185.0 L449.6 184.8 L451.2 184.6 L452.8 184.5 L454.4 184.3 L455.9 184.1 L457.5 183.9 L459.1 183.7 L460.7 183.6 L462.3 183.4 L463.9 183.2 L465.4 183.0 L467.0 182.8 L468.6 182.7 L470.2 182.5 L471.8 182.3 L473.3 182.1 L474.9 181.9 L476.5 181.8 L478.1 181.6 L479.7 181.4 L481.3 181.2 L482.8 181.1 L484.4 180.9 L486.0 180.7 L487.6 180.5 L489.2 180.4 L490.7 180.2 L492.3 180.0 L493.9 179.8 L495.5 179.7 L497.1 179.5 L498.7 179.3 L500.2 179.2 L501.8 179.0 L503.4 178.8 L505.0 178.6 L506.6 178.5 L508.2 178.3 L509.7 178.1 L511.3 178.0 L512.9 177.8 L514.5 177.6 L516.1 177.4 L517.6 177.3 L519.2 177.1 L520.8 176.9 L522.4 176.8 L524.0 176.6 L525.6 176.4 L527.1 176.3 L528.7 176.1 L530.3 175.9 L531.9 175.8 L533.5 175.6 L535.0 175.4 L536.6 175.3 L538.2 175.1 L539.8 174.9 L541.4 174.8 L543.0 174.6 L544.5 174.5 L546.1 174.3 L547.7 174.1 L549.3 174.0 L550.9 173.8 L552.5 173.6 L554.0 173.5 L555.6 173.3 L557.2 173.1 L558.8 173.0 L560.4 172.8 L561.9 172.7 L563.5 172.5 L565.1 172.3 L566.7 172.2 L568.3 172.0 L569.9 171.9 L571.4 171.7 L573.0 171.5 L574.6 171.4 L576.2 171.2 L577.8 171.1 L579.3 170.9 L580.9 170.8 L582.5 170.6 L584.1 170.4 L585.7 170.3 L587.3 170.1 L588.8 170.0 L590.4 169.8 L592.0 169.7 L593.6 169.5 L595.2 169.3 L596.7 169.2 L598.3 169.0 L599.9 168.9 L601.5 168.7 L603.1 168.6 L604.7 168.4 L606.2 168.3 L607.8 168.1 L609.4 167.9 L611.0 167.8 L612.6 167.6 L614.2 167.5 L615.7 167.3 L617.3 167.2 L618.9 167.0 L620.5 166.9 L622.1 166.7 L623.6 166.6 L625.2 166.4 L626.8 166.3 L628.4 166.1 L630.0 166.0 L631.6 165.8 L633.1 165.7 L634.7 165.5 L636.3 165.4 L637.9 165.2 L639.5 165.1 L641.0 164.9 L642.6 164.8 L644.2 164.6 L645.8 164.5 L647.4 164.3 L649.0 164.2 L650.5 164.0 L652.1 163.9 L653.7 163.7 L655.3 163.6 L656.9 163.4 L658.4 163.3 L660.0 163.1 L661.6 163.0 L663.2 162.8 L664.8 162.7 L666.4 162.5 L667.9 162.4 L669.5 162.3 L671.1 162.1 L672.7 162.0 L674.3 161.8 L675.9 161.7 L677.4 161.5 L679.0 161.4 L680.6 161.2 L682.2 161.1 L683.8 160.9 L685.3 160.8 L686.9 160.7 L688.5 160.5 L690.1 160.4 L691.7 160.2 L693.3 160.1 L694.8 159.9 L696.4 159.8 L698.0 159.7" fill="none" stroke="#4a413d" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/>
+                                    <path d="M422.3 102.1 L422.3 188.0" fill="none" stroke="#7a1f2b" stroke-width="0" stroke-linecap="round" stroke-linejoin="round"/>
+                                    <circle cx="422.3" cy="102.1" r="3" fill="#fff" stroke="#7a1f2b" stroke-width="1.6"/>
+                                    <circle cx="422.3" cy="188.0" r="3" fill="#fff" stroke="#7a1f2b" stroke-width="1.6"/>
+                                    </g>
+                                    <text class="lbl" x="239.0" y="35.1" text-anchor="start" style="fill:#8b8079">the page’s slider range, 1.2–4.0 m</text>
+                                    <text class="lbl" x="430.6" y="119.1" text-anchor="start" style="fill:#7a1f2b">default 2.6 m: 2.01 m/s</text>
+                                    <text class="lbl" x="430.6" y="205.1" text-anchor="start" style="fill:#4a413d">1.01 m/s</text>
+                                    <line x1="64" x2="698" y1="318.0" y2="318.0" stroke="#eee6d9"/>
+                                    <line x1="64.0" x2="86.0" y1="334.0" y2="334.0" stroke="#7a1f2b" stroke-width="2.2" stroke-linecap="round"/>
+                                    <text class="lbl" x="94.0" y="338.0">phase speed c, crests</text>
+                                    <line x1="255.2" x2="277.2" y1="334.0" y2="334.0" stroke="#4a413d" stroke-width="2.2" stroke-linecap="round"/>
+                                    <text class="lbl" x="285.2" y="338.0">group speed, energy</text>
+                                    </svg>
+                            </div>
+                            <figcaption><span class="pfig__n">الشكل 2</span>سرعة الطور \(c = \sqrt{g\lambda/2\pi}\) وسرعة المجموعة \(c_g = c/2\) من علاقة التشتّت (13)، محسوبتان عند 400 طول موجة من \(0.02\) إلى \(4.6\ \mathrm{m}\) مع \(g = 9.81\ \mathrm{m/s^2}\). تبيّن الخطوط المتقطّعة مدى منزلق <em>طول الموجة</em> في الصفحة، وتبيّن النقاط إعدادها الافتراضي. وتنمو السرعة مثل \(\sqrt\lambda\): أربعة أضعاف طول الموجة تعطي ضعف السرعة.</figcaption>
+                        </figure>
+                        <p>ترسم الصفحة موجة واحدة لا تنتهي أبداً، لذلك لا توجد لها مجموعات: يظهر \(c_g\) في لوحة بياناتها كتنبّؤ، لا كشيء يمكن رؤيته يتحرّك. وعند إيقاف مفتاح التشتّت يصبح التردد ما تضبطه أنت، وتكفّ الموجة عن أن تكون موجة ماء، ولا ينطبق \(c_g = c/2\) بعد ذلك.</p>
+                        <div class="pbox pbox--ex">
+                            <span class="pbox__t">التمرين 5.1 · على الشكل أعلاه</span>
+                            <p>أبقِ <em>علاقة التشتّت في الماء العميق \(\omega^2 = gk\)</em> مفعّلة، وحرّك <em>طول الموجة \(\lambda\)</em> من \(120\ \mathrm{px}\) إلى \(400\ \mathrm{px}\)، أي من \(1.2\) إلى \(4.0\ \mathrm{m}\). ترتفع قراءة <em>سرعة الطور \(c\)</em> من \(1.37\) إلى \(2.50\ \mathrm{m/s}\)، أي بعامل 1.83، وهو \(\sqrt{400/120}\)؛ ويرتفع <em>الدور \(T\)</em> من \(0.88\) إلى \(1.60\ \mathrm{s}\) بالعامل نفسه، ويتبع منزلق <em>التردد \(f\)</em> ذلك من تلقاء نفسه. والآن أوقف التشتّت، وأعد طول الموجة إلى \(260\ \mathrm{px}\)، واضبط <em>التردد \(f\)</em> على \(0.50\ \mathrm{Hz}\). تسير الموجة الآن بسرعة \(1.30\ \mathrm{m/s}\). الصورة ما زالت تتحرّك، لكن لا يمكن لأي موجة ماء أن تتحرّك هكذا: فموجة طولها \(2.6\ \mathrm{m}\) في الماء العميق يجب أن تهتزّ بتردد \(0.77\ \mathrm{Hz}\).</p>
+                        </div>
+                    </section>
+
+                    <section class="psec" id="p-orbits">
+                        <h3><span class="psec__n">06</span>كل جسيم يدور في دائرة</h3>
+                        <p>تُستخرج سرعة الماء من (3) و(12):</p>
+                        \[ \begin{aligned} u &amp;= a\omega\,e^{kz}\cos(kx - \omega t), \\ w &amp;= a\omega\,e^{kz}\sin(kx - \omega t) . \end{aligned} \tag{16} \]
+                        <p>نتتبّع الآن جسيماً واحداً. ليكن \((x_0, z_0)\) موضع سكونه، أي المكان الذي يستقرّ فيه عندما يكون البحر ساكناً. وهو لا يبتعد عنه كثيراً مقارنةً بـ\(\lambda\)، لذلك يجوز أن نحسب (16) عند \((x_0, z_0)\) بدلاً من موضعه الفعلي. وهذه الخطوة هي ما يعرّف النظرية الخطّية: فالخطأ الذي ترتكبه أصغر بعامل إضافي هو \(ak\)، ويُظهر القسم 07 ما تخفيه. وبالتكامل بالنسبة إلى الزمن، مع \(\tfrac{\mathrm{d}}{\mathrm{d}t}\sin(kx_0 - \omega t) = -\omega\cos(kx_0 - \omega t)\) و\(\tfrac{\mathrm{d}}{\mathrm{d}t}\cos(kx_0 - \omega t) = \omega\sin(kx_0 - \omega t)\)،</p>
+                        \[ \begin{aligned} x &amp;= x_0 - a\,e^{kz_0}\sin(kx_0 - \omega t), \\ z &amp;= z_0 + a\,e^{kz_0}\cos(kx_0 - \omega t) . \end{aligned} \tag{17} \]
+                        <p>وبتربيع السطرين في (17) وجمعهما نحصل على \((x - x_0)^2 + (z - z_0)^2 = a^2 e^{2kz_0}\): يتحرّك كل جسيم على دائرة حول موضع سكونه، نصف قطرها</p>
+                        \[ r(z_0) = a\,e^{kz_0} , \tag{18} \]
+                        <p>مرة في كل دور، بسرعة ثابتة \(r\omega\). تحت قمة الموجة، حيث الطور \(kx_0 - \omega t\) يساوي صفراً، يكون الجسيم في أعلى دائرته ويتحرّك مع الموجة إلى الأمام؛ وتحت القاع يكون في أسفلها ويتحرّك إلى الخلف؛ وأمام القمة يرتفع، وخلفها يهبط. ولأن الموجة تتجه إلى اليمين فالدوران باتجاه عقارب الساعة. وهذه هي النورسة في القسم 01.</p>
+                        <p>عند السطح تكون سرعة الجسيم \(a\omega\)، وهي تساوي \(ak\) مضروباً في سرعة الموجة \(c\). وعند الإعداد الافتراضي تكون \(a\omega = 1.17\ \mathrm{m/s}\) مقابل \(c = 2.01\ \mathrm{m/s}\): فالماء يتحرك، لكن النمط يتحرّك أسرع.</p>
+                        <h4><span class="psub__n">6.1</span>التناقص مع العمق</h4>
+                        <p>ينقص نصف القطر (18) بعامل \(e\) مع كل عمق قدره \(\lambda/2\pi\). وعلى عمق نصف طول موجة يكون \(e^{-\pi} = 4.3\ \%\) من قيمته عند السطح، وعلى عمق طول موجة كامل \(e^{-2\pi} = 0.19\ \%\)، أي جزء واحد من 535. ويبيّن الشكل 3 ذلك لأقصر طول موجة وللإعداد الافتراضي ولأطول طول موجة تسمح به الصفحة.</p>
+                        <figure class="pfig">
+                            <div class="pfig__plate">
+                                    <svg viewBox="0 0 720 346" role="img" xmlns="http://www.w3.org/2000/svg">
+                                    <defs><clipPath id="f5clip2"><rect x="64.0" y="18.0" width="634.0" height="256.0"/></clipPath></defs>
+                                    <line x1="64.0" x2="698.0" y1="274.0" y2="274.0" stroke="#eee6d9" stroke-width="1"/>
+                                    <text class="tick" x="56.0" y="278.0" text-anchor="end">0</text>
+                                    <line x1="64.0" x2="698.0" y1="218.3" y2="218.3" stroke="#eee6d9" stroke-width="1"/>
+                                    <text class="tick" x="56.0" y="222.3" text-anchor="end">25</text>
+                                    <line x1="64.0" x2="698.0" y1="162.7" y2="162.7" stroke="#eee6d9" stroke-width="1"/>
+                                    <text class="tick" x="56.0" y="166.7" text-anchor="end">50</text>
+                                    <line x1="64.0" x2="698.0" y1="107.0" y2="107.0" stroke="#eee6d9" stroke-width="1"/>
+                                    <text class="tick" x="56.0" y="111.0" text-anchor="end">75</text>
+                                    <line x1="64.0" x2="698.0" y1="51.4" y2="51.4" stroke="#eee6d9" stroke-width="1"/>
+                                    <text class="tick" x="56.0" y="55.4" text-anchor="end">100</text>
+                                    <line x1="64.0" x2="64.0" y1="274.0" y2="279.0" stroke="#8b8079"/>
+                                    <text class="tick" x="64.0" y="293.0" text-anchor="middle">0</text>
+                                    <line x1="206.0" x2="206.0" y1="274.0" y2="279.0" stroke="#8b8079"/>
+                                    <text class="tick" x="206.0" y="293.0" text-anchor="middle">0.56</text>
+                                    <line x1="348.0" x2="348.0" y1="274.0" y2="279.0" stroke="#8b8079"/>
+                                    <text class="tick" x="348.0" y="293.0" text-anchor="middle">1.12</text>
+                                    <line x1="490.0" x2="490.0" y1="274.0" y2="279.0" stroke="#8b8079"/>
+                                    <text class="tick" x="490.0" y="293.0" text-anchor="middle">1.68</text>
+                                    <line x1="632.1" x2="632.1" y1="274.0" y2="279.0" stroke="#8b8079"/>
+                                    <text class="tick" x="632.1" y="293.0" text-anchor="middle">2.24</text>
+                                    <line x1="64.0" x2="698.0" y1="274.0" y2="274.0" stroke="#8b8079"/>
+                                    <line x1="64.0" x2="64.0" y1="18.0" y2="274.0" stroke="#8b8079"/>
+                                    <text class="lbl" x="698.0" y="312.0" text-anchor="end">depth below the calm surface (m)</text>
+                                    <text class="lbl" x="70.0" y="31.0">orbit radius (% of the surface orbit)</text>
+                                    <g clip-path="url(#f5clip2)">
+                                    <path d="M64.0 51.4 L65.6 58.6 L67.2 65.5 L68.8 72.3 L70.4 78.8 L71.9 85.1 L73.5 91.2 L75.1 97.1 L76.7 102.8 L78.3 108.3 L79.9 113.7 L81.5 118.8 L83.1 123.8 L84.7 128.7 L86.2 133.4 L87.8 137.9 L89.4 142.3 L91.0 146.6 L92.6 150.7 L94.2 154.6 L95.8 158.5 L97.4 162.2 L99.0 165.8 L100.5 169.3 L102.1 172.7 L103.7 176.0 L105.3 179.1 L106.9 182.2 L108.5 185.2 L110.1 188.0 L111.7 190.8 L113.3 193.5 L114.8 196.1 L116.4 198.6 L118.0 201.0 L119.6 203.4 L121.2 205.7 L122.8 207.9 L124.4 210.0 L126.0 212.1 L127.6 214.1 L129.1 216.0 L130.7 217.9 L132.3 219.7 L133.9 221.4 L135.5 223.1 L137.1 224.8 L138.7 226.4 L140.3 227.9 L141.9 229.4 L143.4 230.8 L145.0 232.2 L146.6 233.6 L148.2 234.9 L149.8 236.1 L151.4 237.4 L153.0 238.5 L154.6 239.7 L156.2 240.8 L157.7 241.9 L159.3 242.9 L160.9 243.9 L162.5 244.9 L164.1 245.8 L165.7 246.7 L167.3 247.6 L168.9 248.5 L170.5 249.3 L172.1 250.1 L173.6 250.9 L175.2 251.6 L176.8 252.3 L178.4 253.0 L180.0 253.7 L181.6 254.4 L183.2 255.0 L184.8 255.6 L186.4 256.2 L187.9 256.8 L189.5 257.3 L191.1 257.9 L192.7 258.4 L194.3 258.9 L195.9 259.4 L197.5 259.9 L199.1 260.3 L200.7 260.7 L202.2 261.2 L203.8 261.6 L205.4 262.0 L207.0 262.4 L208.6 262.8 L210.2 263.1 L211.8 263.5 L213.4 263.8 L215.0 264.1 L216.5 264.5 L218.1 264.8 L219.7 265.1 L221.3 265.4 L222.9 265.6 L224.5 265.9 L226.1 266.2 L227.7 266.4 L229.3 266.7 L230.8 266.9 L232.4 267.1 L234.0 267.3 L235.6 267.6 L237.2 267.8 L238.8 268.0 L240.4 268.2 L242.0 268.4 L243.6 268.5 L245.1 268.7 L246.7 268.9 L248.3 269.0 L249.9 269.2 L251.5 269.4 L253.1 269.5 L254.7 269.7 L256.3 269.8 L257.9 269.9 L259.4 270.1 L261.0 270.2 L262.6 270.3 L264.2 270.4 L265.8 270.5 L267.4 270.7 L269.0 270.8 L270.6 270.9 L272.2 271.0 L273.7 271.1 L275.3 271.2 L276.9 271.3 L278.5 271.3 L280.1 271.4 L281.7 271.5 L283.3 271.6 L284.9 271.7 L286.5 271.7 L288.0 271.8 L289.6 271.9 L291.2 272.0 L292.8 272.0 L294.4 272.1 L296.0 272.1 L297.6 272.2 L299.2 272.3 L300.8 272.3 L302.3 272.4 L303.9 272.4 L305.5 272.5 L307.1 272.5 L308.7 272.6 L310.3 272.6 L311.9 272.7 L313.5 272.7 L315.1 272.8 L316.6 272.8 L318.2 272.8 L319.8 272.9 L321.4 272.9 L323.0 272.9 L324.6 273.0 L326.2 273.0 L327.8 273.0 L329.4 273.1 L330.9 273.1 L332.5 273.1 L334.1 273.2 L335.7 273.2 L337.3 273.2 L338.9 273.2 L340.5 273.3 L342.1 273.3 L343.7 273.3 L345.2 273.3 L346.8 273.4 L348.4 273.4 L350.0 273.4 L351.6 273.4 L353.2 273.4 L354.8 273.5 L356.4 273.5 L358.0 273.5 L359.5 273.5 L361.1 273.5 L362.7 273.5 L364.3 273.5 L365.9 273.6 L367.5 273.6 L369.1 273.6 L370.7 273.6 L372.3 273.6 L373.8 273.6 L375.4 273.6 L377.0 273.7 L378.6 273.7 L380.2 273.7 L381.8 273.7 L383.4 273.7 L385.0 273.7 L386.6 273.7 L388.2 273.7 L389.7 273.7 L391.3 273.7 L392.9 273.7 L394.5 273.8 L396.1 273.8 L397.7 273.8 L399.3 273.8 L400.9 273.8 L402.5 273.8 L404.0 273.8 L405.6 273.8 L407.2 273.8 L408.8 273.8 L410.4 273.8 L412.0 273.8 L413.6 273.8 L415.2 273.8 L416.8 273.8 L418.3 273.9 L419.9 273.9 L421.5 273.9 L423.1 273.9 L424.7 273.9 L426.3 273.9 L427.9 273.9 L429.5 273.9 L431.1 273.9 L432.6 273.9 L434.2 273.9 L435.8 273.9 L437.4 273.9 L439.0 273.9 L440.6 273.9 L442.2 273.9 L443.8 273.9 L445.4 273.9 L446.9 273.9 L448.5 273.9 L450.1 273.9 L451.7 273.9 L453.3 273.9 L454.9 273.9 L456.5 273.9 L458.1 273.9 L459.7 273.9 L461.2 273.9 L462.8 273.9 L464.4 273.9 L466.0 273.9 L467.6 273.9 L469.2 273.9 L470.8 273.9 L472.4 274.0 L474.0 274.0 L475.5 274.0 L477.1 274.0 L478.7 274.0 L480.3 274.0 L481.9 274.0 L483.5 274.0 L485.1 274.0 L486.7 274.0 L488.3 274.0 L489.8 274.0 L491.4 274.0 L493.0 274.0 L494.6 274.0 L496.2 274.0 L497.8 274.0 L499.4 274.0 L501.0 274.0 L502.6 274.0 L504.1 274.0 L505.7 274.0 L507.3 274.0 L508.9 274.0 L510.5 274.0 L512.1 274.0 L513.7 274.0 L515.3 274.0 L516.9 274.0 L518.4 274.0 L520.0 274.0 L521.6 274.0 L523.2 274.0 L524.8 274.0 L526.4 274.0 L528.0 274.0 L529.6 274.0 L531.2 274.0 L532.7 274.0 L534.3 274.0 L535.9 274.0 L537.5 274.0 L539.1 274.0 L540.7 274.0 L542.3 274.0 L543.9 274.0 L545.5 274.0 L547.0 274.0 L548.6 274.0 L550.2 274.0 L551.8 274.0 L553.4 274.0 L555.0 274.0 L556.6 274.0 L558.2 274.0 L559.8 274.0 L561.3 274.0 L562.9 274.0 L564.5 274.0 L566.1 274.0 L567.7 274.0 L569.3 274.0 L570.9 274.0 L572.5 274.0 L574.1 274.0 L575.6 274.0 L577.2 274.0 L578.8 274.0 L580.4 274.0 L582.0 274.0 L583.6 274.0 L585.2 274.0 L586.8 274.0 L588.4 274.0 L589.9 274.0 L591.5 274.0 L593.1 274.0 L594.7 274.0 L596.3 274.0 L597.9 274.0 L599.5 274.0 L601.1 274.0 L602.7 274.0 L604.3 274.0 L605.8 274.0 L607.4 274.0 L609.0 274.0 L610.6 274.0 L612.2 274.0 L613.8 274.0 L615.4 274.0 L617.0 274.0 L618.6 274.0 L620.1 274.0 L621.7 274.0 L623.3 274.0 L624.9 274.0 L626.5 274.0 L628.1 274.0 L629.7 274.0 L631.3 274.0 L632.9 274.0 L634.4 274.0 L636.0 274.0 L637.6 274.0 L639.2 274.0 L640.8 274.0 L642.4 274.0 L644.0 274.0 L645.6 274.0 L647.2 274.0 L648.7 274.0 L650.3 274.0 L651.9 274.0 L653.5 274.0 L655.1 274.0 L656.7 274.0 L658.3 274.0 L659.9 274.0 L661.5 274.0 L663.0 274.0 L664.6 274.0 L666.2 274.0 L667.8 274.0 L669.4 274.0 L671.0 274.0 L672.6 274.0 L674.2 274.0 L675.8 274.0 L677.3 274.0 L678.9 274.0 L680.5 274.0 L682.1 274.0 L683.7 274.0 L685.3 274.0 L686.9 274.0 L688.5 274.0 L690.1 274.0 L691.6 274.0 L693.2 274.0 L694.8 274.0 L696.4 274.0 L698.0 274.0" fill="none" stroke="#c9707e" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/>
+                                    <path d="M64.0 51.4 L65.6 54.7 L67.2 58.0 L68.8 61.3 L70.4 64.5 L71.9 67.6 L73.5 70.7 L75.1 73.8 L76.7 76.8 L78.3 79.8 L79.9 82.7 L81.5 85.5 L83.1 88.4 L84.7 91.2 L86.2 93.9 L87.8 96.6 L89.4 99.3 L91.0 101.9 L92.6 104.5 L94.2 107.0 L95.8 109.6 L97.4 112.0 L99.0 114.5 L100.5 116.9 L102.1 119.2 L103.7 121.5 L105.3 123.8 L106.9 126.1 L108.5 128.3 L110.1 130.5 L111.7 132.7 L113.3 134.8 L114.8 136.9 L116.4 138.9 L118.0 141.0 L119.6 143.0 L121.2 144.9 L122.8 146.9 L124.4 148.8 L126.0 150.7 L127.6 152.5 L129.1 154.3 L130.7 156.1 L132.3 157.9 L133.9 159.7 L135.5 161.4 L137.1 163.1 L138.7 164.7 L140.3 166.4 L141.9 168.0 L143.4 169.6 L145.0 171.2 L146.6 172.7 L148.2 174.2 L149.8 175.7 L151.4 177.2 L153.0 178.7 L154.6 180.1 L156.2 181.5 L157.7 182.9 L159.3 184.3 L160.9 185.6 L162.5 186.9 L164.1 188.2 L165.7 189.5 L167.3 190.8 L168.9 192.1 L170.5 193.3 L172.1 194.5 L173.6 195.7 L175.2 196.9 L176.8 198.0 L178.4 199.2 L180.0 200.3 L181.6 201.4 L183.2 202.5 L184.8 203.6 L186.4 204.6 L187.9 205.7 L189.5 206.7 L191.1 207.7 L192.7 208.7 L194.3 209.7 L195.9 210.7 L197.5 211.6 L199.1 212.5 L200.7 213.5 L202.2 214.4 L203.8 215.3 L205.4 216.2 L207.0 217.0 L208.6 217.9 L210.2 218.7 L211.8 219.6 L213.4 220.4 L215.0 221.2 L216.5 222.0 L218.1 222.8 L219.7 223.5 L221.3 224.3 L222.9 225.0 L224.5 225.8 L226.1 226.5 L227.7 227.2 L229.3 227.9 L230.8 228.6 L232.4 229.3 L234.0 230.0 L235.6 230.6 L237.2 231.3 L238.8 231.9 L240.4 232.5 L242.0 233.2 L243.6 233.8 L245.1 234.4 L246.7 235.0 L248.3 235.6 L249.9 236.1 L251.5 236.7 L253.1 237.3 L254.7 237.8 L256.3 238.4 L257.9 238.9 L259.4 239.4 L261.0 239.9 L262.6 240.5 L264.2 241.0 L265.8 241.5 L267.4 242.0 L269.0 242.4 L270.6 242.9 L272.2 243.4 L273.7 243.8 L275.3 244.3 L276.9 244.7 L278.5 245.2 L280.1 245.6 L281.7 246.0 L283.3 246.5 L284.9 246.9 L286.5 247.3 L288.0 247.7 L289.6 248.1 L291.2 248.5 L292.8 248.8 L294.4 249.2 L296.0 249.6 L297.6 250.0 L299.2 250.3 L300.8 250.7 L302.3 251.0 L303.9 251.4 L305.5 251.7 L307.1 252.1 L308.7 252.4 L310.3 252.7 L311.9 253.0 L313.5 253.3 L315.1 253.7 L316.6 254.0 L318.2 254.3 L319.8 254.6 L321.4 254.8 L323.0 255.1 L324.6 255.4 L326.2 255.7 L327.8 256.0 L329.4 256.2 L330.9 256.5 L332.5 256.8 L334.1 257.0 L335.7 257.3 L337.3 257.5 L338.9 257.8 L340.5 258.0 L342.1 258.3 L343.7 258.5 L345.2 258.7 L346.8 259.0 L348.4 259.2 L350.0 259.4 L351.6 259.6 L353.2 259.9 L354.8 260.1 L356.4 260.3 L358.0 260.5 L359.5 260.7 L361.1 260.9 L362.7 261.1 L364.3 261.3 L365.9 261.5 L367.5 261.7 L369.1 261.8 L370.7 262.0 L372.3 262.2 L373.8 262.4 L375.4 262.6 L377.0 262.7 L378.6 262.9 L380.2 263.1 L381.8 263.2 L383.4 263.4 L385.0 263.5 L386.6 263.7 L388.2 263.9 L389.7 264.0 L391.3 264.2 L392.9 264.3 L394.5 264.5 L396.1 264.6 L397.7 264.7 L399.3 264.9 L400.9 265.0 L402.5 265.2 L404.0 265.3 L405.6 265.4 L407.2 265.5 L408.8 265.7 L410.4 265.8 L412.0 265.9 L413.6 266.0 L415.2 266.2 L416.8 266.3 L418.3 266.4 L419.9 266.5 L421.5 266.6 L423.1 266.7 L424.7 266.8 L426.3 266.9 L427.9 267.1 L429.5 267.2 L431.1 267.3 L432.6 267.4 L434.2 267.5 L435.8 267.6 L437.4 267.7 L439.0 267.8 L440.6 267.8 L442.2 267.9 L443.8 268.0 L445.4 268.1 L446.9 268.2 L448.5 268.3 L450.1 268.4 L451.7 268.5 L453.3 268.5 L454.9 268.6 L456.5 268.7 L458.1 268.8 L459.7 268.9 L461.2 268.9 L462.8 269.0 L464.4 269.1 L466.0 269.2 L467.6 269.2 L469.2 269.3 L470.8 269.4 L472.4 269.5 L474.0 269.5 L475.5 269.6 L477.1 269.7 L478.7 269.7 L480.3 269.8 L481.9 269.8 L483.5 269.9 L485.1 270.0 L486.7 270.0 L488.3 270.1 L489.8 270.2 L491.4 270.2 L493.0 270.3 L494.6 270.3 L496.2 270.4 L497.8 270.4 L499.4 270.5 L501.0 270.5 L502.6 270.6 L504.1 270.6 L505.7 270.7 L507.3 270.7 L508.9 270.8 L510.5 270.8 L512.1 270.9 L513.7 270.9 L515.3 271.0 L516.9 271.0 L518.4 271.1 L520.0 271.1 L521.6 271.2 L523.2 271.2 L524.8 271.2 L526.4 271.3 L528.0 271.3 L529.6 271.4 L531.2 271.4 L532.7 271.4 L534.3 271.5 L535.9 271.5 L537.5 271.6 L539.1 271.6 L540.7 271.6 L542.3 271.7 L543.9 271.7 L545.5 271.7 L547.0 271.8 L548.6 271.8 L550.2 271.8 L551.8 271.9 L553.4 271.9 L555.0 271.9 L556.6 272.0 L558.2 272.0 L559.8 272.0 L561.3 272.1 L562.9 272.1 L564.5 272.1 L566.1 272.1 L567.7 272.2 L569.3 272.2 L570.9 272.2 L572.5 272.2 L574.1 272.3 L575.6 272.3 L577.2 272.3 L578.8 272.4 L580.4 272.4 L582.0 272.4 L583.6 272.4 L585.2 272.4 L586.8 272.5 L588.4 272.5 L589.9 272.5 L591.5 272.5 L593.1 272.6 L594.7 272.6 L596.3 272.6 L597.9 272.6 L599.5 272.6 L601.1 272.7 L602.7 272.7 L604.3 272.7 L605.8 272.7 L607.4 272.7 L609.0 272.8 L610.6 272.8 L612.2 272.8 L613.8 272.8 L615.4 272.8 L617.0 272.9 L618.6 272.9 L620.1 272.9 L621.7 272.9 L623.3 272.9 L624.9 272.9 L626.5 273.0 L628.1 273.0 L629.7 273.0 L631.3 273.0 L632.9 273.0 L634.4 273.0 L636.0 273.0 L637.6 273.1 L639.2 273.1 L640.8 273.1 L642.4 273.1 L644.0 273.1 L645.6 273.1 L647.2 273.1 L648.7 273.2 L650.3 273.2 L651.9 273.2 L653.5 273.2 L655.1 273.2 L656.7 273.2 L658.3 273.2 L659.9 273.2 L661.5 273.3 L663.0 273.3 L664.6 273.3 L666.2 273.3 L667.8 273.3 L669.4 273.3 L671.0 273.3 L672.6 273.3 L674.2 273.3 L675.8 273.3 L677.3 273.4 L678.9 273.4 L680.5 273.4 L682.1 273.4 L683.7 273.4 L685.3 273.4 L686.9 273.4 L688.5 273.4 L690.1 273.4 L691.6 273.4 L693.2 273.4 L694.8 273.5 L696.4 273.5 L698.0 273.5" fill="none" stroke="#7a1f2b" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/>
+                                    <path d="M64.0 51.4 L65.6 53.6 L67.2 55.7 L68.8 57.9 L70.4 60.0 L71.9 62.1 L73.5 64.2 L75.1 66.2 L76.7 68.2 L78.3 70.3 L79.9 72.3 L81.5 74.2 L83.1 76.2 L84.7 78.1 L86.2 80.0 L87.8 81.9 L89.4 83.8 L91.0 85.7 L92.6 87.5 L94.2 89.4 L95.8 91.2 L97.4 93.0 L99.0 94.7 L100.5 96.5 L102.1 98.2 L103.7 99.9 L105.3 101.7 L106.9 103.3 L108.5 105.0 L110.1 106.7 L111.7 108.3 L113.3 109.9 L114.8 111.5 L116.4 113.1 L118.0 114.7 L119.6 116.3 L121.2 117.8 L122.8 119.3 L124.4 120.9 L126.0 122.4 L127.6 123.8 L129.1 125.3 L130.7 126.8 L132.3 128.2 L133.9 129.6 L135.5 131.0 L137.1 132.4 L138.7 133.8 L140.3 135.2 L141.9 136.6 L143.4 137.9 L145.0 139.2 L146.6 140.6 L148.2 141.9 L149.8 143.2 L151.4 144.4 L153.0 145.7 L154.6 147.0 L156.2 148.2 L157.7 149.4 L159.3 150.7 L160.9 151.9 L162.5 153.1 L164.1 154.3 L165.7 155.4 L167.3 156.6 L168.9 157.7 L170.5 158.9 L172.1 160.0 L173.6 161.1 L175.2 162.2 L176.8 163.3 L178.4 164.4 L180.0 165.5 L181.6 166.5 L183.2 167.6 L184.8 168.6 L186.4 169.7 L187.9 170.7 L189.5 171.7 L191.1 172.7 L192.7 173.7 L194.3 174.7 L195.9 175.7 L197.5 176.6 L199.1 177.6 L200.7 178.5 L202.2 179.4 L203.8 180.4 L205.4 181.3 L207.0 182.2 L208.6 183.1 L210.2 184.0 L211.8 184.9 L213.4 185.7 L215.0 186.6 L216.5 187.5 L218.1 188.3 L219.7 189.1 L221.3 190.0 L222.9 190.8 L224.5 191.6 L226.1 192.4 L227.7 193.2 L229.3 194.0 L230.8 194.8 L232.4 195.6 L234.0 196.3 L235.6 197.1 L237.2 197.9 L238.8 198.6 L240.4 199.3 L242.0 200.1 L243.6 200.8 L245.1 201.5 L246.7 202.2 L248.3 202.9 L249.9 203.6 L251.5 204.3 L253.1 205.0 L254.7 205.7 L256.3 206.3 L257.9 207.0 L259.4 207.7 L261.0 208.3 L262.6 209.0 L264.2 209.6 L265.8 210.2 L267.4 210.8 L269.0 211.5 L270.6 212.1 L272.2 212.7 L273.7 213.3 L275.3 213.9 L276.9 214.5 L278.5 215.0 L280.1 215.6 L281.7 216.2 L283.3 216.8 L284.9 217.3 L286.5 217.9 L288.0 218.4 L289.6 219.0 L291.2 219.5 L292.8 220.0 L294.4 220.6 L296.0 221.1 L297.6 221.6 L299.2 222.1 L300.8 222.6 L302.3 223.1 L303.9 223.6 L305.5 224.1 L307.1 224.6 L308.7 225.1 L310.3 225.6 L311.9 226.1 L313.5 226.5 L315.1 227.0 L316.6 227.5 L318.2 227.9 L319.8 228.4 L321.4 228.8 L323.0 229.2 L324.6 229.7 L326.2 230.1 L327.8 230.5 L329.4 231.0 L330.9 231.4 L332.5 231.8 L334.1 232.2 L335.7 232.6 L337.3 233.0 L338.9 233.4 L340.5 233.8 L342.1 234.2 L343.7 234.6 L345.2 235.0 L346.8 235.4 L348.4 235.8 L350.0 236.1 L351.6 236.5 L353.2 236.9 L354.8 237.2 L356.4 237.6 L358.0 238.0 L359.5 238.3 L361.1 238.7 L362.7 239.0 L364.3 239.4 L365.9 239.7 L367.5 240.0 L369.1 240.4 L370.7 240.7 L372.3 241.0 L373.8 241.3 L375.4 241.7 L377.0 242.0 L378.6 242.3 L380.2 242.6 L381.8 242.9 L383.4 243.2 L385.0 243.5 L386.6 243.8 L388.2 244.1 L389.7 244.4 L391.3 244.7 L392.9 245.0 L394.5 245.3 L396.1 245.5 L397.7 245.8 L399.3 246.1 L400.9 246.4 L402.5 246.6 L404.0 246.9 L405.6 247.2 L407.2 247.4 L408.8 247.7 L410.4 248.0 L412.0 248.2 L413.6 248.5 L415.2 248.7 L416.8 249.0 L418.3 249.2 L419.9 249.4 L421.5 249.7 L423.1 249.9 L424.7 250.2 L426.3 250.4 L427.9 250.6 L429.5 250.9 L431.1 251.1 L432.6 251.3 L434.2 251.5 L435.8 251.7 L437.4 252.0 L439.0 252.2 L440.6 252.4 L442.2 252.6 L443.8 252.8 L445.4 253.0 L446.9 253.2 L448.5 253.4 L450.1 253.6 L451.7 253.8 L453.3 254.0 L454.9 254.2 L456.5 254.4 L458.1 254.6 L459.7 254.8 L461.2 255.0 L462.8 255.2 L464.4 255.4 L466.0 255.5 L467.6 255.7 L469.2 255.9 L470.8 256.1 L472.4 256.3 L474.0 256.4 L475.5 256.6 L477.1 256.8 L478.7 256.9 L480.3 257.1 L481.9 257.3 L483.5 257.4 L485.1 257.6 L486.7 257.8 L488.3 257.9 L489.8 258.1 L491.4 258.2 L493.0 258.4 L494.6 258.5 L496.2 258.7 L497.8 258.8 L499.4 259.0 L501.0 259.1 L502.6 259.3 L504.1 259.4 L505.7 259.6 L507.3 259.7 L508.9 259.9 L510.5 260.0 L512.1 260.1 L513.7 260.3 L515.3 260.4 L516.9 260.5 L518.4 260.7 L520.0 260.8 L521.6 260.9 L523.2 261.1 L524.8 261.2 L526.4 261.3 L528.0 261.4 L529.6 261.6 L531.2 261.7 L532.7 261.8 L534.3 261.9 L535.9 262.0 L537.5 262.1 L539.1 262.3 L540.7 262.4 L542.3 262.5 L543.9 262.6 L545.5 262.7 L547.0 262.8 L548.6 262.9 L550.2 263.0 L551.8 263.2 L553.4 263.3 L555.0 263.4 L556.6 263.5 L558.2 263.6 L559.8 263.7 L561.3 263.8 L562.9 263.9 L564.5 264.0 L566.1 264.1 L567.7 264.2 L569.3 264.3 L570.9 264.4 L572.5 264.5 L574.1 264.5 L575.6 264.6 L577.2 264.7 L578.8 264.8 L580.4 264.9 L582.0 265.0 L583.6 265.1 L585.2 265.2 L586.8 265.3 L588.4 265.4 L589.9 265.4 L591.5 265.5 L593.1 265.6 L594.7 265.7 L596.3 265.8 L597.9 265.8 L599.5 265.9 L601.1 266.0 L602.7 266.1 L604.3 266.2 L605.8 266.2 L607.4 266.3 L609.0 266.4 L610.6 266.5 L612.2 266.5 L613.8 266.6 L615.4 266.7 L617.0 266.8 L618.6 266.8 L620.1 266.9 L621.7 267.0 L623.3 267.0 L624.9 267.1 L626.5 267.2 L628.1 267.2 L629.7 267.3 L631.3 267.4 L632.9 267.4 L634.4 267.5 L636.0 267.6 L637.6 267.6 L639.2 267.7 L640.8 267.7 L642.4 267.8 L644.0 267.9 L645.6 267.9 L647.2 268.0 L648.7 268.0 L650.3 268.1 L651.9 268.2 L653.5 268.2 L655.1 268.3 L656.7 268.3 L658.3 268.4 L659.9 268.4 L661.5 268.5 L663.0 268.6 L664.6 268.6 L666.2 268.7 L667.8 268.7 L669.4 268.8 L671.0 268.8 L672.6 268.9 L674.2 268.9 L675.8 269.0 L677.3 269.0 L678.9 269.1 L680.5 269.1 L682.1 269.2 L683.7 269.2 L685.3 269.3 L686.9 269.3 L688.5 269.3 L690.1 269.4 L691.6 269.4 L693.2 269.5 L694.8 269.5 L696.4 269.6 L698.0 269.6" fill="none" stroke="#4a413d" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/>
+                                    <path d="M64.0 51.4 L206.0 216.5 L348.0 259.1 L490.0 270.2 L632.1 273.0" fill="none" stroke="#7a1f2b" stroke-width="0" stroke-linecap="round" stroke-linejoin="round"/>
+                                    <circle cx="64.0" cy="51.4" r="3" fill="#fff" stroke="#7a1f2b" stroke-width="1.6"/>
+                                    <circle cx="206.0" cy="216.5" r="3" fill="#fff" stroke="#7a1f2b" stroke-width="1.6"/>
+                                    <circle cx="348.0" cy="259.1" r="3" fill="#fff" stroke="#7a1f2b" stroke-width="1.6"/>
+                                    <circle cx="490.0" cy="270.2" r="3" fill="#fff" stroke="#7a1f2b" stroke-width="1.6"/>
+                                    <circle cx="632.1" cy="273.0" r="3" fill="#fff" stroke="#7a1f2b" stroke-width="1.6"/>
+                                    </g>
+                                    <line x1="64" x2="698" y1="318.0" y2="318.0" stroke="#eee6d9"/>
+                                    <line x1="64.0" x2="86.0" y1="334.0" y2="334.0" stroke="#c9707e" stroke-width="2.2" stroke-linecap="round"/>
+                                    <text class="lbl" x="94.0" y="338.0"><tspan class="m">λ</tspan> = 1.2 m</text>
+                                    <line x1="168.8" x2="190.8" y1="334.0" y2="334.0" stroke="#7a1f2b" stroke-width="2.2" stroke-linecap="round"/>
+                                    <text class="lbl" x="198.8" y="338.0"><tspan class="m">λ</tspan> = 2.6 m</text>
+                                    <line x1="273.6" x2="295.6" y1="334.0" y2="334.0" stroke="#4a413d" stroke-width="2.2" stroke-linecap="round"/>
+                                    <text class="lbl" x="303.6" y="338.0"><tspan class="m">λ</tspan> = 4.0 m</text>
+                                    </svg>
+                            </div>
+                            <figcaption><span class="pfig__n">الشكل 3</span>نصف قطر المدار مقابل العمق، \(r/a = e^{kz_0}\) من (18)، محسوباً عند 400 عمق من 0 إلى \(2.5\ \mathrm{m}\) من أجل \(\lambda = 1.2\)، و\(2.6\)، و\(4.0\ \mathrm{m}\) (\(k = 5.24\)، و\(2.42\)، و\(1.57\ \mathrm{rad/m}\)). النقاط هي الطبقات الخمس في الصفحة عند الطول الافتراضي: 100، و25.8، و6.7، و1.7، و⁦0.45 %⁩. ولكل طول موجة مقياس عمق خاص به، هو \(\lambda/2\pi\)؛ فالموجات القصيرة تترك الماء ساكناً على عمق قريب.</figcaption>
+                        </figure>
+                        <p>تبعد الطبقات في الصفحة بعضها عن بعض \(56\ \mathrm{px} = 0.56\ \mathrm{m}\)، لذلك يساوي نصف قطر كل مدار عند طول الموجة الافتراضي \(e^{-k \cdot 0.56\ \mathrm{m}} = 0.258\) من نصف قطر المدار الذي فوقه: فأنصاف الأقطار هي 24 و6.2 و1.6 و0.41 و0.11 بكسل. أما الطبقة الخامسة، على عمق \(2.24\ \mathrm{m}\)، فتتحرك على دائرة حجمها ⁦0.45 %⁩ من دائرة السطح؛ وتقرّب قراءة <em>أعمق مدار</em> هذه القيمة إلى ⁦0.4 %⁩. ولا يدخل في (18) إلا \(z_0/\lambda\)، لذلك تروي المنحنيات نفسها قصة الغوّاص. فعلى عمق خمسة أمتار تحت أمواج متلاطمة طولها \(10\ \mathrm{m}\) يكون \(z_0/\lambda = -0.5\)، ولا يتحرّك الماء إلا ⁦4.3 %⁩ من المسافة التي يتحرّكها عند السطح. وعلى عمق خمسة أمتار تحت تموّج طوله \(100\ \mathrm{m}\) تبقى الدوائر ⁦73 %⁩ من دوائر السطح، ويحتاج الغوّاص إلى النزول \(50\ \mathrm{m}\) ليصل إلى ⁦4.3 %⁩.</p>
+                        <div class="pbox pbox--ex">
+                            <span class="pbox__t">التمرين 6.1 · على الشكل أعلاه</span>
+                            <p>اضبط <em>عدد طبقات العمق</em> على 5، وراقب قراءة <em>أعمق مدار</em> وأنت تحرّك <em>طول الموجة \(\lambda\)</em>. عند \(400\ \mathrm{px}\) ما زالت الطبقة الأعمق، على عمق \(2.24\ \mathrm{m}\)، تدور بنصف قطر قدره ⁦3.0 %⁩ من \(a\)؛ وعند \(120\ \mathrm{px}\) تُظهر القراءة ⁦0.0 %⁩، لأن \(e^{-2\pi \cdot 2.24/1.2} = 8 \times 10^{-6}\). فعّل <em>إظهار المدارات</em> وعُدّ عند كل طول موجة الطبقات التي ترى دوائرها، وقارن ذلك بالشكل 3. وتكفّ الصفحة عن رسم الدائرة متى انخفض نصف قطرها دون 1.2 بكسل شاشة.</p>
+                        </div>
+                        <h4><span class="psub__n">6.2</span>شكل السطح</h4>
+                        <p>السطح هو الصف العلوي من الجسيمات، \(z_0 = 0\). ومن (17)، مع \(\theta = kx_0 - \omega t\)، هو المنحنى الذي يرسمه</p>
+                        \[ \begin{aligned} x &amp;= x_0 - a\sin\theta, \\ \eta &amp;= a\cos\theta , \end{aligned} \tag{19} \]
+                        <p>حين يمسح موضع السكون \(x_0\) امتداد البحر.</p>
+                        <p>هذا <em>تروكويد</em>، أي المنحنى الذي ترسمه نقطة على شعاع عجلة متدحرجة. قرب قمة الموجة تتزاحم جسيمات السطح، وقرب القاع تتباعد، فتكون القمم أحدّ والقيعان أكثر تسطّحاً من منحنى الجيب (10)؛ ويتطابق الاثنان عندما \(ak \to 0\). وعند الإعداد الافتراضي \(ak = 0.58\) تشغل القمة، وهي الجزء من السطح الواقع فوق خط مراكز المدارات، نسبة \(\tfrac12 - ak/\pi = 31.5\ \%\) من كل طول موجة، ويقع متوسط السطح على امتداد \(x\) تحت ذلك الخط بمقدار \(\tfrac12 a^2 k = 7.0\ \mathrm{px}\). والخط المتقطّع في الشكل يحدّد مراكز المدارات، لا هذا المتوسط.</p>
+                        <p>وبحسب (19) يكون \(\mathrm{d}x/\mathrm{d}x_0 = 1 - ak\cos\theta\). عند \(ak = 1\) ينعدم هذا المقدار عند القمة، فتصير القمة رأساً حادّاً؛ وبعد ذلك يلتفّ المنحنى على نفسه. وعند النقطة نفسها يتحرّك ماء السطح عند القمة بسرعة القمة نفسها، \(a\omega = c\). لذلك تحدّ الصفحة السعة بـ\(a = 0.9/k\)، بحيث يكون \(ak \le 0.9\). ارفع <em>السعة \(a\) (نصف قطر المدار)</em> إلى \(50\ \mathrm{px}\) عند \(\lambda = 260\ \mathrm{px}\): يكون الانحدار المطلوب 1.21، فيُثبّت الحدّ السعة عند \(37.2\ \mathrm{px}\)، وتُظهر قراءة <em>الانحدار ak</em> القيمة 0.90 (الحدّ الأقصى)، وتصير القمم ضيّقة بينما تتسطّح القيعان. لكن الأمواج الحقيقية تنكسر قبل ذلك بكثير: فأشدّ موجة انحداراً يستطيع الماء أن يحملها يبلغ ارتفاعها من القاع إلى القمة نحو 0.14 من طول الموجة، فيكون \(ak = \pi H/\lambda \approx 0.44\) مع \(H = 2a\). وانحدار الصفحة الافتراضي \(ak = 0.58\) أشدّ من انحدار أي موجة بحرية حقيقية؛ وقد اختير لتكون الدوائر كبيرة بما يكفي لرؤيتها. والتروكويد هو أيضاً الشكل الدقيق لموجة غيرستنر، وهي حلّ لاخطّي مداراته دائرية تماماً؛ لكن الماء في موجة غيرستنر يدور، لذلك فهي ليست الجريان الكموني الذي اشتققناه هنا.</p>
+                    </section>
+
+                    <section class="psec" id="p-drift">
+                        <h3><span class="psec__n">07</span>انجراف ستوكس: الدوائر لا تُغلق تماماً<span class="star" title="heavier mathematics">★</span>                       <p class="psec__lead">تعود النورسة في القسم 01 تقريباً، لكن ليس تماماً، إلى المكان الذي بدأت منه. تُخفي النظرية الخطّية الفرق؛ وحدّ آخر من الحساب يعيده إلى الظهور.</p>
+                        <p>تستخدم الدوائر (17) السرعة عند موضع السكون. أما الجسيم الحقيقي فيتأثّر بالسرعة حيث يوجد فعلاً، أي في موضع مُزاح عن \((x_0, z_0)\) بمقدار \(\xi = -r\sin\theta\) أفقياً و\(\zeta = r\cos\theta\) شاقولياً، مع \(r = a\,e^{kz_0}\) و\(\theta = kx_0 - \omega t\). وبنشر السرعة الأفقية (16) حتى الرتبة الأولى في الإزاحة،</p>
+                        \[ \begin{aligned} u(x_0 + \xi,\ z_0 + \zeta) &amp;\approx u + \xi\,\frac{\partial u}{\partial x} + \zeta\,\frac{\partial u}{\partial z}, \\ \xi\,\frac{\partial u}{\partial x} &amp;= (-r\sin\theta)\,(-a\omega k\,e^{kz_0}\sin\theta) \\ &amp;= a^2\omega k\,e^{2kz_0}\sin^2\theta, \\ \zeta\,\frac{\partial u}{\partial z} &amp;= (r\cos\theta)\,(a\omega k\,e^{kz_0}\cos\theta) \\ &amp;= a^2\omega k\,e^{2kz_0}\cos^2\theta . \end{aligned} \tag{20} \]
+                        <p>الحدّ الأول، \(u\) عند موضع السكون، متوسّطه على دور كامل صفر. أما التصحيحان فمجموعهما ثابت، لأن \(\sin^2\theta + \cos^2\theta = 1\). فالجسيم ينجرف إذن إلى الأمام في المتوسط، بـ<em>سرعة انجراف ستوكس</em></p>
+                        \[ U_S = a^2\omega k\,e^{2kz_0} = c\,(ak)^2\,e^{2kz_0} . \tag{21} \]
+                        <p>الصورة هي هذه. تحت قمة الموجة يكون الجسيم في أعلى دائرته، حيث يكون الجريان نحو الأمام أقوى قليلاً لأن \(e^{kz}\) أكبر؛ وتحت القاع يكون في أسفلها، حيث الجريان نحو الخلف أضعف قليلاً. هذا هو النصف \(\cos^2\theta\) من (20). أما النصف \(\sin^2\theta\) فالقصة نفسها من الجانب: فبينما يصعد الجسيم أو يهبط، على جانب دائرته، يُزاح نحو أقرب قمة، حيث يجري الماء أيضاً إلى الأمام. فتغلب الحركة إلى الأمام، وتنتهي كل حلقة متقدّمة قليلاً عن نقطة بدايتها. وفي دور واحد يتقدّم الجسيم مسافة \(U_S T = (ak)^2 e^{2kz_0}\lambda\)، لأن \(cT = \lambda\). والانجراف من الرتبة الثانية في الانحدار، ويتلاشى مع العمق وفق \(e^{2kz_0}\)، أي أسرع بمرّتين من تلاشي الدوائر. ومن أجل \(\lambda = 2.6\ \mathrm{m}\) وانحدار معتدل \(ak = 0.2\) (\(a = 8.3\ \mathrm{cm}\)) تعطي (21) عند السطح \(U_S = 0.081\ \mathrm{m/s}\): أي \(10.4\ \mathrm{cm}\)، أو ⁦4 %⁩ من طول الموجة، في كل دور.</p>
+                        <figure class="pfig">
+                            <div class="pfig__plate">
+                                    <svg viewBox="0 0 720 346" role="img" xmlns="http://www.w3.org/2000/svg">
+                                    <defs><clipPath id="f5clip3"><rect x="64.0" y="18.0" width="634.0" height="256.0"/></clipPath></defs>
+                                    <line x1="64.0" x2="698.0" y1="251.7" y2="251.7" stroke="#eee6d9" stroke-width="1"/>
+                                    <text class="tick" x="56.0" y="255.7" text-anchor="end">−0.100</text>
+                                    <line x1="64.0" x2="698.0" y1="198.8" y2="198.8" stroke="#eee6d9" stroke-width="1"/>
+                                    <text class="tick" x="56.0" y="202.8" text-anchor="end">−0.050</text>
+                                    <line x1="64.0" x2="698.0" y1="146.0" y2="146.0" stroke="#eee6d9" stroke-width="1"/>
+                                    <text class="tick" x="56.0" y="150.0" text-anchor="end">0</text>
+                                    <line x1="64.0" x2="698.0" y1="93.2" y2="93.2" stroke="#eee6d9" stroke-width="1"/>
+                                    <text class="tick" x="56.0" y="97.2" text-anchor="end">0.050</text>
+                                    <line x1="64.0" x2="698.0" y1="40.3" y2="40.3" stroke="#eee6d9" stroke-width="1"/>
+                                    <text class="tick" x="56.0" y="44.3" text-anchor="end">0.100</text>
+                                    <line x1="85.1" x2="85.1" y1="274.0" y2="279.0" stroke="#8b8079"/>
+                                    <text class="tick" x="85.1" y="293.0" text-anchor="middle">−0.1</text>
+                                    <line x1="190.8" x2="190.8" y1="274.0" y2="279.0" stroke="#8b8079"/>
+                                    <text class="tick" x="190.8" y="293.0" text-anchor="middle">0</text>
+                                    <line x1="296.5" x2="296.5" y1="274.0" y2="279.0" stroke="#8b8079"/>
+                                    <text class="tick" x="296.5" y="293.0" text-anchor="middle">0.1</text>
+                                    <line x1="402.1" x2="402.1" y1="274.0" y2="279.0" stroke="#8b8079"/>
+                                    <text class="tick" x="402.1" y="293.0" text-anchor="middle">0.2</text>
+                                    <line x1="507.8" x2="507.8" y1="274.0" y2="279.0" stroke="#8b8079"/>
+                                    <text class="tick" x="507.8" y="293.0" text-anchor="middle">0.3</text>
+                                    <line x1="613.5" x2="613.5" y1="274.0" y2="279.0" stroke="#8b8079"/>
+                                    <text class="tick" x="613.5" y="293.0" text-anchor="middle">0.4</text>
+                                    <line x1="64.0" x2="698.0" y1="274.0" y2="274.0" stroke="#8b8079"/>
+                                    <line x1="64.0" x2="64.0" y1="18.0" y2="274.0" stroke="#8b8079"/>
+                                    <text class="lbl" x="698.0" y="312.0" text-anchor="end">horizontal position x (m)</text>
+                                    <text class="lbl" x="70.0" y="31.0">height z (m)</text>
+                                    <g clip-path="url(#f5clip3)">
+                                    <path d="M190.8 58.5 L192.6 58.6 L194.5 58.6 L196.3 58.7 L198.1 58.9 L200.0 59.0 L201.8 59.2 L203.6 59.5 L205.4 59.8 L207.2 60.1 L209.0 60.5 L210.8 60.9 L212.6 61.3 L214.4 61.8 L216.2 62.3 L217.9 62.9 L219.7 63.4 L221.4 64.1 L223.1 64.7 L224.8 65.4 L226.5 66.2 L228.2 66.9 L229.8 67.7 L231.4 68.6 L233.1 69.4 L234.7 70.3 L236.2 71.3 L237.8 72.3 L239.3 73.3 L240.9 74.3 L242.4 75.4 L243.8 76.5 L245.3 77.6 L246.7 78.7 L248.1 79.9 L249.5 81.2 L250.8 82.4 L252.1 83.7 L253.4 85.0 L254.7 86.3 L256.0 87.7 L257.2 89.0 L258.3 90.5 L259.5 91.9 L260.6 93.3 L261.7 94.8 L262.8 96.3 L263.8 97.8 L264.8 99.4 L265.8 101.0 L266.7 102.5 L267.6 104.1 L268.4 105.8 L269.3 107.4 L270.1 109.1 L270.8 110.7 L271.5 112.4 L272.2 114.1 L272.9 115.9 L273.5 117.6 L274.1 119.3 L274.6 121.1 L275.1 122.8 L275.6 124.6 L276.0 126.4 L276.4 128.2 L276.8 130.0 L277.1 131.8 L277.4 133.6 L277.6 135.5 L277.8 137.3 L278.0 139.1 L278.1 140.9 L278.2 142.8 L278.2 144.6 L278.2 146.5 L278.2 148.3 L278.2 150.1 L278.0 152.0 L277.9 153.8 L277.7 155.6 L277.5 157.5 L277.2 159.3 L276.9 161.1 L276.6 162.9 L276.2 164.7 L275.8 166.5 L275.4 168.3 L274.9 170.0 L274.4 171.8 L273.8 173.5 L273.2 175.3 L272.6 177.0 L271.9 178.7 L271.2 180.4 L270.5 182.1 L269.7 183.8 L268.9 185.4 L268.0 187.0 L267.1 188.7 L266.2 190.3 L265.3 191.8 L264.3 193.4 L263.3 194.9 L262.2 196.4 L261.2 197.9 L260.1 199.4 L258.9 200.8 L257.8 202.3 L256.6 203.6 L255.3 205.0 L254.1 206.4 L252.8 207.7 L251.5 209.0 L250.2 210.2 L248.8 211.5 L247.4 212.7 L246.0 213.8 L244.6 215.0 L243.1 216.1 L241.6 217.2 L240.1 218.2 L238.6 219.3 L237.0 220.2 L235.5 221.2 L233.9 222.1 L232.3 223.0 L230.6 223.9 L229.0 224.7 L227.3 225.5 L225.6 226.2 L223.9 226.9 L222.2 227.6 L220.5 228.2 L218.8 228.9 L217.0 229.4 L215.3 230.0 L213.5 230.5 L211.7 230.9 L209.9 231.3 L208.1 231.7 L206.3 232.1 L204.5 232.4 L202.7 232.6 L200.9 232.9 L199.1 233.1 L197.2 233.2 L195.4 233.3 L193.6 233.4 L191.7 233.4 L189.9 233.4 L188.0 233.4 L186.2 233.3 L184.4 233.2 L182.5 233.1 L180.7 232.9 L178.9 232.6 L177.1 232.4 L175.3 232.1 L173.5 231.7 L171.7 231.3 L169.9 230.9 L168.1 230.5 L166.3 230.0 L164.6 229.4 L162.8 228.9 L161.1 228.2 L159.4 227.6 L157.7 226.9 L156.0 226.2 L154.3 225.5 L152.6 224.7 L151.0 223.9 L149.3 223.0 L147.7 222.1 L146.1 221.2 L144.6 220.2 L143.0 219.3 L141.5 218.2 L140.0 217.2 L138.5 216.1 L137.0 215.0 L135.6 213.8 L134.2 212.7 L132.8 211.5 L131.4 210.2 L130.1 209.0 L128.8 207.7 L127.5 206.4 L126.3 205.0 L125.0 203.6 L123.8 202.3 L122.7 200.8 L121.5 199.4 L120.4 197.9 L119.4 196.4 L118.3 194.9 L117.3 193.4 L116.3 191.8 L115.4 190.3 L114.5 188.7 L113.6 187.0 L112.7 185.4 L111.9 183.8 L111.1 182.1 L110.4 180.4 L109.7 178.7 L109.0 177.0 L108.4 175.3 L107.8 173.5 L107.2 171.8 L106.7 170.0 L106.2 168.3 L105.8 166.5 L105.4 164.7 L105.0 162.9 L104.7 161.1 L104.4 159.3 L104.1 157.5 L103.9 155.6 L103.7 153.8 L103.6 152.0 L103.4 150.1 L103.4 148.3 L103.4 146.5 L103.4 144.6 L103.4 142.8 L103.5 140.9 L103.6 139.1 L103.8 137.3 L104.0 135.5 L104.2 133.6 L104.5 131.8 L104.8 130.0 L105.2 128.2 L105.6 126.4 L106.0 124.6 L106.5 122.8 L107.0 121.1 L107.5 119.3 L108.1 117.6 L108.7 115.9 L109.4 114.1 L110.1 112.4 L110.8 110.7 L111.5 109.1 L112.3 107.4 L113.2 105.8 L114.0 104.1 L114.9 102.5 L115.8 101.0 L116.8 99.4 L117.8 97.8 L118.8 96.3 L119.9 94.8 L121.0 93.3 L122.1 91.9 L123.3 90.5 L124.4 89.0 L125.6 87.7 L126.9 86.3 L128.2 85.0 L129.5 83.7 L130.8 82.4 L132.1 81.2 L133.5 79.9 L134.9 78.7 L136.3 77.6 L137.8 76.5 L139.2 75.4 L140.7 74.3 L142.3 73.3 L143.8 72.3 L145.4 71.3 L146.9 70.3 L148.5 69.4 L150.2 68.6 L151.8 67.7 L153.4 66.9 L155.1 66.2 L156.8 65.4 L158.5 64.7 L160.2 64.1 L161.9 63.4 L163.7 62.9 L165.4 62.3 L167.2 61.8 L169.0 61.3 L170.8 60.9 L172.6 60.5 L174.4 60.1 L176.2 59.8 L178.0 59.5 L179.8 59.2 L181.6 59.0 L183.5 58.9 L185.3 58.7 L187.1 58.6 L189.0 58.6 L190.8 58.5" fill="none" stroke="#1c1518" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" stroke-dasharray="5 4"/>
+                                    <path d="M190.8 58.5 L192.5 58.6 L194.2 58.6 L195.8 58.6 L197.5 58.7 L199.2 58.8 L200.9 58.9 L202.5 59.0 L204.2 59.2 L205.9 59.4 L207.5 59.5 L209.2 59.8 L210.8 60.0 L212.5 60.2 L214.1 60.5 L215.8 60.8 L217.4 61.1 L219.1 61.4 L220.7 61.8 L222.3 62.1 L223.9 62.5 L225.6 62.9 L227.2 63.3 L228.8 63.8 L230.4 64.2 L231.9 64.7 L233.5 65.2 L235.1 65.7 L236.6 66.2 L238.2 66.8 L239.7 67.4 L241.3 68.0 L242.8 68.6 L244.3 69.2 L245.8 69.8 L247.3 70.5 L248.8 71.2 L250.3 71.8 L251.7 72.6 L253.2 73.3 L254.6 74.0 L256.1 74.8 L257.5 75.6 L258.9 76.4 L260.3 77.2 L261.7 78.0 L263.0 78.8 L264.4 79.7 L265.7 80.5 L267.0 81.4 L268.3 82.3 L269.6 83.3 L270.9 84.2 L272.2 85.1 L273.4 86.1 L274.7 87.1 L275.9 88.0 L277.1 89.0 L278.3 90.1 L279.5 91.1 L280.6 92.1 L281.8 93.2 L282.9 94.2 L284.0 95.3 L285.1 96.4 L286.2 97.5 L287.2 98.6 L288.3 99.7 L289.3 100.8 L290.3 102.0 L291.3 103.1 L292.3 104.3 L293.2 105.5 L294.1 106.7 L295.1 107.9 L295.9 109.1 L296.8 110.3 L297.7 111.5 L298.5 112.7 L299.3 113.9 L300.1 115.2 L300.9 116.4 L301.7 117.7 L302.4 119.0 L303.1 120.2 L303.8 121.5 L304.5 122.8 L305.2 124.1 L305.8 125.4 L306.4 126.7 L307.0 128.0 L307.6 129.3 L308.2 130.6 L308.7 131.9 L309.2 133.2 L309.7 134.5 L310.2 135.9 L310.6 137.2 L311.1 138.5 L311.5 139.9 L311.9 141.2 L312.2 142.5 L312.6 143.9 L312.9 145.2 L313.2 146.5 L313.5 147.9 L313.8 149.2 L314.0 150.6 L314.2 151.9 L314.4 153.2 L314.6 154.6 L314.8 155.9 L314.9 157.2 L315.0 158.6 L315.1 159.9 L315.2 161.2 L315.2 162.6 L315.3 163.9 L315.3 165.2 L315.3 166.5 L315.3 167.8 L315.2 169.1 L315.1 170.4 L315.0 171.7 L314.9 173.0 L314.8 174.3 L314.7 175.6 L314.5 176.8 L314.3 178.1 L314.1 179.4 L313.9 180.6 L313.6 181.8 L313.3 183.1 L313.0 184.3 L312.7 185.5 L312.4 186.7 L312.1 187.9 L311.7 189.1 L311.3 190.3 L310.9 191.5 L310.5 192.7 L310.1 193.8 L309.6 194.9 L309.1 196.1 L308.6 197.2 L308.1 198.3 L307.6 199.4 L307.1 200.5 L306.5 201.6 L305.9 202.6 L305.3 203.7 L304.7 204.7 L304.1 205.7 L303.5 206.7 L302.8 207.7 L302.1 208.7 L301.4 209.7 L300.7 210.6 L300.0 211.6 L299.3 212.5 L298.5 213.4 L297.8 214.3 L297.0 215.2 L296.2 216.1 L295.4 216.9 L294.6 217.7 L293.8 218.6 L292.9 219.4 L292.1 220.2 L291.2 220.9 L290.3 221.7 L289.4 222.4 L288.5 223.1 L287.6 223.8 L286.7 224.5 L285.8 225.2 L284.8 225.8 L283.9 226.5 L282.9 227.1 L281.9 227.7 L280.9 228.2 L279.9 228.8 L278.9 229.3 L277.9 229.8 L276.9 230.3 L275.9 230.8 L274.9 231.3 L273.8 231.7 L272.8 232.2 L271.7 232.6 L270.7 232.9 L269.6 233.3 L268.5 233.7 L267.5 234.0 L266.4 234.3 L265.3 234.6 L264.2 234.8 L263.1 235.1 L262.0 235.3 L260.9 235.5 L259.8 235.7 L258.7 235.9 L257.6 236.0 L256.5 236.1 L255.4 236.2 L254.2 236.3 L253.1 236.4 L252.0 236.4 L250.9 236.5 L249.8 236.5 L248.7 236.4 L247.5 236.4 L246.4 236.4 L245.3 236.3 L244.2 236.2 L243.1 236.1 L242.0 235.9 L240.9 235.8 L239.8 235.6 L238.7 235.4 L237.6 235.2 L236.5 234.9 L235.4 234.7 L234.3 234.4 L233.2 234.1 L232.1 233.8 L231.1 233.4 L230.0 233.1 L228.9 232.7 L227.9 232.3 L226.8 231.9 L225.8 231.4 L224.8 231.0 L223.7 230.5 L222.7 230.0 L221.7 229.5 L220.7 228.9 L219.7 228.4 L218.7 227.8 L217.8 227.2 L216.8 226.6 L215.8 226.0 L214.9 225.4 L213.9 224.7 L213.0 224.0 L212.1 223.3 L211.2 222.6 L210.3 221.9 L209.4 221.1 L208.5 220.4 L207.7 219.6 L206.8 218.8 L206.0 218.0 L205.2 217.2 L204.4 216.3 L203.6 215.5 L202.8 214.6 L202.0 213.7 L201.3 212.8 L200.6 211.9 L199.8 210.9 L199.1 210.0 L198.4 209.0 L197.8 208.0 L197.1 207.0 L196.4 206.0 L195.8 205.0 L195.2 204.0 L194.6 202.9 L194.0 201.9 L193.5 200.8 L192.9 199.7 L192.4 198.6 L191.9 197.5 L191.4 196.4 L190.9 195.3 L190.4 194.1 L190.0 193.0 L189.6 191.8 L189.2 190.7 L188.8 189.5 L188.4 188.3 L188.0 187.1 L187.7 185.9 L187.4 184.7 L187.1 183.4 L186.8 182.2 L186.6 181.0 L186.3 179.7 L186.1 178.5 L185.9 177.2 L185.8 175.9 L185.6 174.7 L185.5 173.4 L185.3 172.1 L185.2 170.8 L185.2 169.5 L185.1 168.2 L185.1 166.9 L185.1 165.6 L185.1 164.3 L185.1 162.9 L185.2 161.6 L185.2 160.3 L185.3 159.0 L185.4 157.6 L185.6 156.3 L185.7 155.0 L185.9 153.6 L186.1 152.3 L186.3 151.0 L186.5 149.6 L186.8 148.3 L187.1 146.9 L187.4 145.6 L187.7 144.3 L188.0 142.9 L188.4 141.6 L188.8 140.2 L189.2 138.9 L189.6 137.6 L190.1 136.3 L190.5 134.9 L191.0 133.6 L191.5 132.3 L192.0 131.0 L192.6 129.7 L193.2 128.3 L193.8 127.0 L194.4 125.7 L195.0 124.4 L195.7 123.2 L196.3 121.9 L197.0 120.6 L197.7 119.3 L198.5 118.1 L199.2 116.8 L200.0 115.5 L200.8 114.3 L201.6 113.1 L202.4 111.8 L203.3 110.6 L204.2 109.4 L205.0 108.2 L205.9 107.0 L206.9 105.8 L207.8 104.6 L208.8 103.5 L209.8 102.3 L210.8 101.2 L211.8 100.0 L212.8 98.9 L213.9 97.8 L214.9 96.7 L216.0 95.6 L217.1 94.5 L218.2 93.5 L219.4 92.4 L220.5 91.4 L221.7 90.3 L222.9 89.3 L224.1 88.3 L225.3 87.3 L226.5 86.4 L227.8 85.4 L229.1 84.5 L230.3 83.5 L231.6 82.6 L232.9 81.7 L234.3 80.8 L235.6 79.9 L236.9 79.1 L238.3 78.2 L239.7 77.4 L241.1 76.6 L242.5 75.8 L243.9 75.0 L245.3 74.2 L246.7 73.5 L248.2 72.8 L249.7 72.1 L251.1 71.4 L252.6 70.7 L254.1 70.0 L255.6 69.4 L257.1 68.7 L258.6 68.1 L260.2 67.5 L261.7 67.0 L263.3 66.4 L264.8 65.9 L266.4 65.3 L268.0 64.8 L269.5 64.4 L271.1 63.9 L272.7 63.5 L274.3 63.0 L275.9 62.6 L277.6 62.2 L279.2 61.9 L280.8 61.5 L282.5 61.2 L284.1 60.9 L285.7 60.6 L287.4 60.3 L289.0 60.0 L290.7 59.8 L292.3 59.6 L294.0 59.4 L295.7 59.2 L297.3 59.1 L299.0 58.9 L300.7 58.8 L302.4 58.7 L304.0 58.7 L305.7 58.6 L307.4 58.6 L309.1 58.6 L310.7 58.6 L312.4 58.6 L314.1 58.6 L315.8 58.7 L317.5 58.8 L319.1 58.9 L320.8 59.0 L322.5 59.1 L324.1 59.3 L325.8 59.5 L327.5 59.7 L329.1 59.9 L330.8 60.2 L332.4 60.4 L334.1 60.7 L335.7 61.0 L337.4 61.3 L339.0 61.7 L340.6 62.0 L342.2 62.4 L343.8 62.8 L345.5 63.2 L347.1 63.6 L348.6 64.1 L350.2 64.6 L351.8 65.1 L353.4 65.6 L354.9 66.1 L356.5 66.6 L358.1 67.2 L359.6 67.8 L361.1 68.4 L362.6 69.0 L364.1 69.6 L365.6 70.3 L367.1 71.0 L368.6 71.6 L370.1 72.3 L371.5 73.1 L373.0 73.8 L374.4 74.6 L375.8 75.3 L377.2 76.1 L378.6 76.9 L380.0 77.7 L381.4 78.6 L382.7 79.4 L384.1 80.3 L385.4 81.2 L386.7 82.1 L388.0 83.0 L389.3 83.9 L390.6 84.8 L391.8 85.8 L393.1 86.8 L394.3 87.8 L395.5 88.7 L396.7 89.8 L397.9 90.8 L399.1 91.8 L400.2 92.9 L401.3 93.9 L402.5 95.0 L403.6 96.1 L404.6 97.2 L405.7 98.3 L406.7 99.4 L407.8 100.5 L408.8 101.7 L409.8 102.8 L410.7 104.0 L411.7 105.1 L412.6 106.3 L413.6 107.5 L414.4 108.7 L415.3 109.9 L416.2 111.1 L417.0 112.4 L417.9 113.6 L418.7 114.8 L419.4 116.1 L420.2 117.3 L421.0 118.6 L421.7 119.9 L422.4 121.1 L423.1 122.4 L423.7 123.7 L424.4 125.0 L425.0 126.3 L425.6 127.6 L426.2 128.9 L426.8 130.2 L427.3 131.5 L427.8 132.8 L428.3 134.2 L428.8 135.5 L429.3 136.8 L429.7 138.1 L430.1 139.5 L430.5 140.8 L430.9 142.1 L431.2 143.5 L431.6 144.8 L431.9 146.2 L432.2 147.5 L432.4 148.8 L432.7 150.2 L432.9 151.5 L433.1 152.9 L433.3 154.2 L433.5 155.5 L433.6 156.9 L433.7 158.2 L433.8 159.5 L433.9 160.9 L434.0 162.2 L434.0 163.5 L434.0 164.8 L434.0 166.1 L434.0 167.4 L434.0 168.7 L433.9 170.0 L433.8 171.3 L433.7 172.6 L433.6 173.9 L433.5 175.2 L433.3 176.5 L433.1 177.7 L432.9 179.0 L432.7 180.2 L432.4 181.5 L432.2 182.7 L431.9 184.0 L431.6 185.2 L431.3 186.4 L430.9 187.6 L430.6 188.8 L430.2 190.0 L429.8 191.1 L429.4 192.3 L429.0 193.5 L428.5 194.6 L428.0 195.7 L427.5 196.9 L427.0 198.0 L426.5 199.1 L426.0 200.2 L425.4 201.3 L424.9 202.3 L424.3 203.4 L423.7 204.4 L423.0 205.4 L422.4 206.5 L421.8 207.5 L421.1 208.4 L420.4 209.4 L419.7 210.4 L419.0 211.3 L418.3 212.2 L417.5 213.2 L416.8 214.1 L416.0 214.9 L415.2 215.8 L414.4 216.7 L413.6 217.5 L412.8 218.3 L411.9 219.1 L411.1 219.9 L410.2 220.7 L409.3 221.5 L408.4 222.2 L407.5 222.9 L406.6 223.6 L405.7 224.3 L404.8 225.0 L403.8 225.6 L402.9 226.3 L401.9 226.9 L401.0 227.5 L400.0 228.1 L399.0 228.6 L398.0 229.2 L397.0 229.7 L396.0 230.2 L394.9 230.7 L393.9 231.2 L392.9 231.6 L391.8 232.0 L390.8 232.4 L389.7 232.8 L388.7 233.2 L387.6 233.6 L386.5 233.9 L385.4 234.2 L384.4 234.5 L383.3 234.8 L382.2 235.0 L381.1 235.3 L380.0 235.5 L378.9 235.7 L377.8 235.8 L376.7 236.0 L375.6 236.1 L374.4 236.2 L373.3 236.3 L372.2 236.4 L371.1 236.4 L370.0 236.5 L368.9 236.5 L367.7 236.5 L366.6 236.4 L365.5 236.4 L364.4 236.3 L363.3 236.2 L362.2 236.1 L361.1 236.0 L360.0 235.8 L358.9 235.6 L357.8 235.4 L356.7 235.2 L355.6 235.0 L354.5 234.7 L353.4 234.5 L352.3 234.2 L351.2 233.8 L350.1 233.5 L349.1 233.2 L348.0 232.8 L347.0 232.4 L345.9 232.0 L344.9 231.5 L343.8 231.1 L342.8 230.6 L341.8 230.1 L340.8 229.6 L339.8 229.1 L338.8 228.6 L337.8 228.0 L336.8 227.4 L335.8 226.8 L334.9 226.2 L333.9 225.6 L333.0 224.9 L332.0 224.2 L331.1 223.5 L330.2 222.8 L329.3 222.1 L328.4 221.4 L327.6 220.6 L326.7 219.8 L325.8 219.0 L325.0 218.2 L324.2 217.4 L323.4 216.6 L322.6 215.7 L321.8 214.8 L321.0 213.9 L320.3 213.0 L319.5 212.1 L318.8 211.2 L318.1 210.2 L317.4 209.3 L316.7 208.3 L316.0 207.3 L315.4 206.3 L314.8 205.3 L314.1 204.3 L313.5 203.2 L312.9 202.2 L312.4 201.1 L311.8 200.0 L311.3 198.9 L310.8 197.8 L310.3 196.7 L309.8 195.6 L309.3 194.5 L308.9 193.3 L308.4 192.2 L308.0 191.0 L307.6 189.8 L307.3 188.6 L306.9 187.4 L306.6 186.2 L306.2 185.0 L305.9 183.8 L305.7 182.6 L305.4 181.3 L305.2 180.1 L304.9 178.8 L304.7 177.6 L304.6 176.3 L304.4 175.0 L304.3 173.8 L304.1 172.5 L304.0 171.2 L304.0 169.9 L303.9 168.6 L303.9 167.3 L303.8 166.0 L303.8 164.6 L303.9 163.3 L303.9 162.0 L304.0 160.7 L304.0 159.4 L304.1 158.0 L304.3 156.7 L304.4 155.4 L304.6 154.0 L304.8 152.7 L305.0 151.3 L305.2 150.0 L305.5 148.7 L305.7 147.3 L306.0 146.0 L306.3 144.6 L306.7 143.3 L307.0 142.0 L307.4 140.6 L307.8 139.3 L308.2 138.0 L308.7 136.6 L309.1 135.3 L309.6 134.0 L310.1 132.7 L310.7 131.3 L311.2 130.0 L311.8 128.7 L312.3 127.4 L313.0 126.1 L313.6 124.8 L314.2 123.5 L314.9 122.2 L315.6 121.0 L316.3 119.7 L317.0 118.4 L317.8 117.2 L318.5 115.9 L319.3 114.7 L320.1 113.4 L320.9 112.2 L321.8 111.0 L322.7 109.8 L323.5 108.6 L324.4 107.4 L325.4 106.2 L326.3 105.0 L327.3 103.8 L328.2 102.7 L329.2 101.5 L330.2 100.4 L331.3 99.2 L332.3 98.1 L333.4 97.0 L334.5 95.9 L335.6 94.9 L336.7 93.8 L337.8 92.7 L339.0 91.7 L340.1 90.6 L341.3 89.6 L342.5 88.6 L343.7 87.6 L344.9 86.6 L346.2 85.7 L347.5 84.7 L348.7 83.8 L350.0 82.9 L351.3 82.0 L352.6 81.1 L354.0 80.2 L355.3 79.3 L356.7 78.5 L358.0 77.6 L359.4 76.8 L360.8 76.0 L362.2 75.2 L363.7 74.5 L365.1 73.7 L366.5 73.0 L368.0 72.3 L369.5 71.6 L370.9 70.9 L372.4 70.2 L373.9 69.6 L375.4 68.9 L377.0 68.3 L378.5 67.7 L380.0 67.1 L381.6 66.6 L383.1 66.0 L384.7 65.5 L386.3 65.0 L387.8 64.5 L389.4 64.0 L391.0 63.6 L392.6 63.1 L394.2 62.7 L395.9 62.3 L397.5 62.0 L399.1 61.6 L400.7 61.3 L402.4 61.0 L404.0 60.7 L405.7 60.4 L407.3 60.1 L409.0 59.9 L410.6 59.7 L412.3 59.5 L414.0 59.3 L415.6 59.1 L417.3 59.0 L419.0 58.9 L420.6 58.8 L422.3 58.7 L424.0 58.6 L425.7 58.6 L427.3 58.6 L429.0 58.6 L430.7 58.6 L432.4 58.6 L434.1 58.7 L435.7 58.7 L437.4 58.8 L439.1 59.0 L440.7 59.1 L442.4 59.3 L444.1 59.4 L445.7 59.6 L447.4 59.8 L449.1 60.1 L450.7 60.3 L452.4 60.6 L454.0 60.9 L455.6 61.2 L457.3 61.6 L458.9 61.9 L460.5 62.3 L462.1 62.7 L463.7 63.1 L465.3 63.5 L466.9 64.0 L468.5 64.4 L470.1 64.9 L471.7 65.4 L473.3 65.9 L474.8 66.5 L476.4 67.0 L477.9 67.6 L479.4 68.2 L481.0 68.8 L482.5 69.4 L484.0 70.1 L485.5 70.8 L486.9 71.4 L488.4 72.1 L489.9 72.9 L491.3 73.6 L492.7 74.3 L494.2 75.1 L495.6 75.9 L497.0 76.7 L498.4 77.5 L499.7 78.3 L501.1 79.2 L502.5 80.0 L503.8 80.9 L505.1 81.8 L506.4 82.7 L507.7 83.6 L509.0 84.6 L510.2 85.5 L511.5 86.5 L512.7 87.5 L513.9 88.5 L515.1 89.5 L516.3 90.5 L517.5 91.5 L518.6 92.6 L519.8 93.6 L520.9 94.7 L522.0 95.8 L523.1 96.8 L524.1 98.0 L525.2 99.1 L526.2 100.2 L527.2 101.3 L528.2 102.5 L529.2 103.6 L530.2 104.8 L531.1 106.0 L532.0 107.2 L532.9 108.4 L533.8 109.6 L534.7 110.8 L535.5 112.0 L536.4 113.2 L537.2 114.5 L538.0 115.7 L538.7 117.0 L539.5 118.2 L540.2 119.5 L540.9 120.8 L541.6 122.0 L542.3 123.3 L543.0 124.6 L543.6 125.9 L544.2 127.2 L544.8 128.5 L545.3 129.8 L545.9 131.1 L546.4 132.4 L546.9 133.8 L547.4 135.1 L547.9 136.4 L548.3 137.8 L548.7 139.1 L549.2 140.4 L549.5 141.8 L549.9 143.1 L550.2 144.4 L550.5 145.8 L550.8 147.1 L551.1 148.4 L551.4 149.8 L551.6 151.1 L551.8 152.5 L552.0 153.8 L552.2 155.1 L552.3 156.5 L552.5 157.8 L552.6 159.1 L552.7 160.5 L552.7 161.8 L552.8 163.1 L552.8 164.4 L552.8 165.7 L552.8 167.1 L552.8 168.4 L552.7 169.7 L552.6 171.0 L552.5 172.3 L552.4 173.5 L552.3 174.8 L552.1 176.1 L551.9 177.4 L551.7 178.6 L551.5 179.9 L551.3 181.1 L551.0 182.4 L550.7 183.6 L550.4 184.8 L550.1 186.0 L549.8 187.2 L549.4 188.4 L549.1 189.6 L548.7 190.8 L548.3 192.0 L547.8 193.1 L547.4 194.3 L546.9 195.4 L546.4 196.5 L546.0 197.7 L545.4 198.8 L544.9 199.9 L544.4 200.9 L543.8 202.0 L543.2 203.1 L542.6 204.1 L542.0 205.1 L541.3 206.2 L540.7 207.2 L540.0 208.2 L539.4 209.1 L538.7 210.1 L538.0 211.0 L537.2 212.0 L536.5 212.9 L535.7 213.8 L535.0 214.7 L534.2 215.6 L533.4 216.4 L532.6 217.3 L531.8 218.1 L530.9 218.9 L530.1 219.7 L529.2 220.5 L528.3 221.2 L527.5 222.0 L526.6 222.7 L525.7 223.4 L524.7 224.1 L523.8 224.8 L522.9 225.4 L521.9 226.1 L521.0 226.7 L520.0 227.3 L519.0 227.9 L518.0 228.5 L517.0 229.0 L516.0 229.5 L515.0 230.1 L514.0 230.5 L513.0 231.0 L511.9 231.5 L510.9 231.9 L509.8 232.3 L508.8 232.7 L507.7 233.1 L506.7 233.5 L505.6 233.8 L504.5 234.1 L503.4 234.4 L502.3 234.7 L501.3 234.9 L500.2 235.2 L499.1 235.4 L498.0 235.6 L496.9 235.8 L495.7 235.9 L494.6 236.1 L493.5 236.2 L492.4 236.3 L491.3 236.4 L490.2 236.4 L489.1 236.5 L487.9 236.5 L486.8 236.5 L485.7 236.4 L484.6 236.4 L483.5 236.3 L482.4 236.2 L481.3 236.1 L480.1 236.0 L479.0 235.9 L477.9 235.7 L476.8 235.5 L475.7 235.3 L474.6 235.1 L473.5 234.8 L472.5 234.5 L471.4 234.3 L470.3 233.9 L469.2 233.6 L468.1 233.3 L467.1 232.9 L466.0 232.5 L465.0 232.1 L463.9 231.7 L462.9 231.2 L461.9 230.8 L460.8 230.3 L459.8 229.8 L458.8 229.3 L457.8 228.7 L456.8 228.2 L455.8 227.6 L454.9 227.0 L453.9 226.4 L452.9 225.7 L452.0 225.1 L451.1 224.4 L450.1 223.7 L449.2 223.0 L448.3 222.3 L447.4 221.6 L446.6 220.8 L445.7 220.1 L444.9 219.3 L444.0 218.5 L443.2 217.6 L442.4 216.8 L441.6 216.0 L440.8 215.1 L440.0 214.2 L439.2 213.3 L438.5 212.4 L437.8 211.5 L437.1 210.5 L436.3 209.6 L435.7 208.6 L435.0 207.6 L434.3 206.6 L433.7 205.6 L433.1 204.6 L432.5 203.5 L431.9 202.5 L431.3 201.4 L430.7 200.4 L430.2 199.3 L429.7 198.2 L429.2 197.1 L428.7 195.9 L428.2 194.8 L427.8 193.7 L427.3 192.5 L426.9 191.3 L426.5 190.2 L426.1 189.0 L425.8 187.8 L425.4 186.6 L425.1 185.4 L424.8 184.2 L424.5 182.9 L424.2 181.7 L424.0 180.4 L423.8 179.2 L423.6 177.9 L423.4 176.7 L423.2 175.4 L423.1 174.1 L422.9 172.8 L422.8 171.6 L422.7 170.3 L422.7 169.0 L422.6 167.7 L422.6 166.3 L422.6 165.0 L422.6 163.7 L422.6 162.4 L422.7 161.1 L422.8 159.7 L422.9 158.4 L423.0 157.1 L423.1 155.7 L423.3 154.4 L423.5 153.1 L423.7 151.7 L423.9 150.4 L424.2 149.1 L424.4 147.7 L424.7 146.4 L425.0 145.0 L425.3 143.7 L425.7 142.4 L426.1 141.0 L426.5 139.7 L426.9 138.4 L427.3 137.0 L427.8 135.7 L428.2 134.4 L428.7 133.0 L429.3 131.7 L429.8 130.4 L430.4 129.1 L430.9 127.8 L431.5 126.5 L432.2 125.2 L432.8 123.9 L433.5 122.6 L434.1 121.3 L434.8 120.1 L435.6 118.8 L436.3 117.5 L437.1 116.3 L437.8 115.0 L438.6 113.8 L439.5 112.6 L440.3 111.3 L441.2 110.1 L442.0 108.9 L442.9 107.7 L443.9 106.5 L444.8 105.3 L445.7 104.2 L446.7 103.0 L447.7 101.8 L448.7 100.7 L449.7 99.6 L450.8 98.5 L451.8 97.3 L452.9 96.2 L454.0 95.2 L455.1 94.1 L456.2 93.0 L457.4 92.0 L458.5 90.9 L459.7 89.9 L460.9 88.9 L462.1 87.9 L463.3 86.9 L464.6 86.0 L465.8 85.0 L467.1 84.1 L468.4 83.1 L469.7 82.2 L471.0 81.3 L472.3 80.4 L473.7 79.6 L475.0 78.7 L476.4 77.9 L477.8 77.1 L479.2 76.3 L480.6 75.5 L482.0 74.7 L483.4 73.9 L484.9 73.2 L486.3 72.5 L487.8 71.8 L489.3 71.1 L490.7 70.4 L492.2 69.7 L493.8 69.1 L495.3 68.5 L496.8 67.9 L498.3 67.3 L499.9 66.7 L501.4 66.2 L503.0 65.6 L504.6 65.1 L506.1 64.6 L507.7 64.2 L509.3 63.7 L510.9 63.3 L512.5 62.9 L514.1 62.5 L515.8 62.1 L517.4 61.7 L519.0 61.4 L520.7 61.0 L522.3 60.7 L523.9 60.5 L525.6 60.2 L527.2 59.9 L528.9 59.7 L530.6 59.5 L532.2 59.3 L533.9 59.2 L535.6 59.0 L537.2 58.9 L538.9 58.8 L540.6 58.7 L542.3 58.6 L543.9 58.6 L545.6 58.6 L547.3 58.5 L549.0 58.6 L550.6 58.6 L552.3 58.6 L554.0 58.7 L555.7 58.8 L557.3 58.9 L559.0 59.1 L560.7 59.2 L562.4 59.4 L564.0 59.6 L565.7 59.8 L567.3 60.0 L569.0 60.3 L570.6 60.5 L572.3 60.8 L573.9 61.1 L575.6 61.5 L577.2 61.8 L578.8 62.2 L580.4 62.6 L582.0 63.0 L583.6 63.4 L585.2 63.8 L586.8 64.3 L588.4 64.8 L590.0 65.3 L591.6 65.8 L593.1 66.3" fill="none" stroke="#7a1f2b" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/>
+                                    <path d="M190.8 58.5 L309.4 58.5 L428.3 58.5 L547.0 58.5" fill="none" stroke="#7a1f2b" stroke-width="0" stroke-linecap="round" stroke-linejoin="round"/>
+                                    <circle cx="190.8" cy="58.5" r="3" fill="#fff" stroke="#7a1f2b" stroke-width="1.6"/>
+                                    <circle cx="309.4" cy="58.5" r="3" fill="#fff" stroke="#7a1f2b" stroke-width="1.6"/>
+                                    <circle cx="428.3" cy="58.5" r="3" fill="#fff" stroke="#7a1f2b" stroke-width="1.6"/>
+                                    <circle cx="547.0" cy="58.5" r="3" fill="#fff" stroke="#7a1f2b" stroke-width="1.6"/>
+                                    </g>
+                                    <line x1="64" x2="698" y1="318.0" y2="318.0" stroke="#eee6d9"/>
+                                    <line x1="64.0" x2="86.0" y1="334.0" y2="334.0" stroke="#1c1518" stroke-width="2.2" stroke-linecap="round" stroke-dasharray="5 4"/>
+                                    <text class="lbl" x="94.0" y="338.0">first-order circle, as drawn on the page</text>
+                                    <line x1="392.0" x2="414.0" y1="334.0" y2="334.0" stroke="#7a1f2b" stroke-width="2.2" stroke-linecap="round"/>
+                                    <text class="lbl" x="422.0" y="338.0">path in the full linear velocity field</text>
+                                    </svg>
+                            </div>
+                            <figcaption><span class="pfig__n">الشكل 4</span>مسار جسيم من السطح خلال 3.2 دور، من أجل \(\lambda = 2.6\ \mathrm{m}\) و\(ak = 0.2\)، محسوباً بحل \(\mathrm{d}x/\mathrm{d}t = u\) و\(\mathrm{d}z/\mathrm{d}t = w\) مع أخذ السرعة (16) حيث يوجد الجسيم فعلاً؛ بطريقة رونغه–كوتا من المرتبة الرابعة مع 2000 خطوة لكل دور، وتنصيفُ الخطوة يغيّر المواضع بأقل من \(10^{-12}\ \mathrm{m}\). يبدأ الجسيم من أعلى دائرته، تحت قمة موجة. الخط المتقطّع: الدائرة المغلقة (17) التي ترسمها الصفحة. النقاط: قمم الحلقات المتتالية، يفصل بينها \(11.2\ \mathrm{cm}\). وللمحورين المقياس نفسه.</figcaption>
+                        </figure>
+                        <p>يختبر الشكل 4 المعادلة (21). فالحلقات لا تنغلق. تدوم كل حلقة \(1.043\,T\)، أي أطول قليلاً من دور واحد لأن الجسيم يسير مع الموجة، وتنتهي أبعد إلى الأمام بمقدار \(11.2\ \mathrm{cm}\)، لذلك يكون متوسط السرعة نحو الأمام \(0.0835\ \mathrm{m/s}\)، أي أكبر بـ⁦3.6 %⁩ مما تعطيه (21). وهذا الفرق هو الحدّ التالي في المتسلسلة: فالحساب نفسه يعطي ⁦0.93 %⁩ عند \(ak = 0.1\) و⁦0.24 %⁩ عند \(ak = 0.05\)، فيصغر الفرق نحو أربع مرات كلما انخفض \(ak\) إلى النصف، كما ينبغي لتصحيح من رتبة \((ak)^2\). وعند \(z_0 = -0.56\ \mathrm{m}\)، وهي أول طبقة تحت السطح في الصفحة، يكون الانجراف المحسوب \(5.39\ \mathrm{mm/s}\)، والمعادلة (21) تعطي \(5.38\ \mathrm{mm/s}\).</p>
+                        <p>ترسم الصفحة الدوائر المغلقة (17) وتُسقط الانجراف عمداً؛ فلوحة بياناتها تخزّن \(U_S\) من (21) بوصفه نظرية، لا بوصفه حركة. وعند الانحدار الافتراضي تعطي (21) \(0.68\ \mathrm{m/s}\)، أي ثلث \(c\)، وهذا بعيد جداً عن مجال \(ak\) الصغيرة الذي تصلح فيه الصيغة. أما موجة غيرستنر في القسم 6.2 فمداراتها مغلقة ولا انجراف فيها؛ والانجراف خاصّية الأمواج غير الدوّامية مثل التي اشتققناها هنا. وفي البحر الحقيقي هو إحدى الآليات التي تُحمَل بها الأجسام العائمة، من الزجاجات إلى بقع الزيت، ببطء في اتجاه انتشار الأمواج.</p>
+                    </section>
+
+                    <section class="psec" id="p-method">
+                        <h3><span class="psec__n">08</span>حساب الصورة</h3>
+                        <p>المواضع (17) معروفة بصيغة مغلقة، لذلك لا تحلّ الصفحة أي معادلة تفاضلية خطوةً خطوة في الزمن: فكل إطار يعيد حساب الصيغ من جديد. ولا يُراكَم إلا الطور، انطلاقاً من الزمن \(\Delta t\) بين إطارين متتاليين، وهو محدود بـ\(0.05\ \mathrm{s}\) حتى لا تقفز الموجة إذا توقّف التبويب أو أُخفي (وبعد توقّف كهذا تتأخّر الصورة عن الساعة):</p>
+                        \[ \begin{aligned} \omega t &amp;\;\leftarrow\; \omega t + 2\pi f\,\Delta t, \\ f &amp;= \frac{\sqrt{g\,k_\mathrm{m}}}{2\pi}, \qquad k_\mathrm{m} = 100\,k . \end{aligned} \tag{22} \]
+                        <p>تقيس الصفحة \(\lambda\) بالبكسل، لذا فإن \(k = 2\pi/\lambda\) بالراديان لكل بكسل، و\(k_\mathrm{m}\) هو العدد الموجي نفسه بالراديان لكل متر. وعند تفعيل <em>علاقة التشتّت في الماء العميق</em> يأتي \(f\) من (13) بدقة كاملة؛ أما منزلق <em>التردد \(f\)</em> فيعرضه فقط، مقرّباً إلى \(0.01\ \mathrm{Hz}\). وعند إيقاف المفتاح يكون \(f\) هو قيمة المنزلق. وجمع الطور إطاراً بعد إطار، بدلاً من حساب \(\omega t\) من الساعة، يُبقي الحركة سلسة عندما يتغيّر \(f\). ثم يحسب كل إطار، لكل طبقة \(j\) ولكل جسيم \(i\) فيها:</p>
+                        <ul>
+                            <li>موضع السكون \(X_0 = 30 + (W_\mathrm{field}-60)\,i/(N - 1)\) بكسل، والعمق \(z_0 = -56\,j\) بكسل، حيث يحدّد \(N\) المنزلقُ <em>عدد الجسيمات في كل طبقة</em>، و\(W_\mathrm{field}\) عرض الحقل المرسوم، أي \(800\ \mathrm{px}\) أو \(400\ \mathrm{px}\) على لوحة رسم ضيّقة (القسم 09)؛</li>
+                            <li>ونصف قطر المدار \(r = a\,e^{kz_0}\)، والطور \(\theta = kX_0 - \omega t\)؛</li>
+                            <li>والإزاحة \(\xi = -r\sin\theta\)، \(\zeta = r\cos\theta\)، والسرعة \(u = r\omega\cos\theta\)، \(w = r\omega\sin\theta\).</li>
+                        </ul>
+                        <p>عند الإعدادات الافتراضية يكون ذلك 90 جسيماً، وتُكتب كل قيمة من قيمها في مخزن بيانات الصفحة عند السطر الذي يحسبها؛ ومنه تقرأ لوحة البيانات. ويضيف خط السطح 307 نقاط على لوحة رسم واسعة أو 174 على لوحة ضيقة، وهي تُرسَم ولا تُخزَّن (القسم 09). ولا يُكامَل أيّ شيء، فلا يتراكم خطأ: فالمواضع دقيقة إلى حدود التقريب في حساب الفاصلة العائمة مضاعفة الدقة، مهما طال تشغيل الصفحة. والسعة المستخدمة هي \(a = \min(A, 0.9/k)\)، حيث \(A\) قيمة منزلق <em>السعة</em>.</p>
+                    </section>
+
+                    <section class="psec" id="p-screen">
+                        <h3><span class="psec__n">09</span>من الأمتار إلى البكسلات</h3>
+                        <p>عرض الحقل في الرسم \(W_\mathrm{field}=800\ \mathrm{px}=8\ \mathrm{m}\)، أو \(400\ \mathrm{px}=4\ \mathrm{m}\) عندما تكون لوحة الرسم أضيق من 560 بكسل شاشة، مع \(100\ \mathrm{px} = 1\ \mathrm{m}\) في كل الأحوال، ويُكبَّر الرسم أو يُصغَّر ليملأ عرض لوحة الرسم \(W\) على شاشتك. ولوحة رسم ارتفاعها \(H\) بكسل تضع جسيماً من الطبقة \(j\) عند</p>
+                        \[ \begin{aligned} s &amp;= W/W_\mathrm{field}, \\ y_s &amp;= \max(a s + 34,\ 0.28\,H), \\ x_\text{screen} &amp;= (X_0 + \xi)\,s, \\ y_\text{screen} &amp;= y_s + 56\,j\,s - \zeta\,s . \end{aligned} \tag{23} \]
+                        <p>حيث \(s\) عدد بكسلات الشاشة لكل بكسل من الحقل، و\(y_s\) ارتفاع السطح الساكن، مقاساً نزولاً من أعلى لوحة الرسم؛ فإحداثي الشاشة \(y\) يتجه نحو الأسفل، ولذلك يُطرح \(\zeta\). ويقع المستوى الساكن عند ⁦28 %⁩ من الارتفاع، أو أخفض إذا كانت القمم ستقترب من أعلى اللوحة لأقل من 34 بكسل شاشة. وتبعد الطبقات \(0.56\ \mathrm{m}\) عن بعضها وتُكتب عليها أعماقها.</p>
+                        <ul>
+                            <li>السطح خط باللون المميِّز يمرّ بجسيمات السطح من (19)، جسيمٍ لكل \(3\ \mathrm{px}\) من موضع السكون، من \(-60\) إلى \(W_\mathrm{field}+60\ \mathrm{px}\)، بحيث تقع نهايتاه خارج الإطار. ويحدّد خط متقطّع المستوى الساكن، أي مراكز مدارات السطح.</li>
+                            <li>يُلوَّن الماء تحت السطح بلون وردي، من عتامة ⁦36 %⁩ عند ارتفاع القمة إلى ⁦5 %⁩ عند أسفل لوحة الرسم.</li>
+                            <li>كل جسيم نقطة نصف قطرها \(3.8\ \mathrm{px}\) عند السطح و\(3.1\ \mathrm{px}\) تحته. والعمود المتتبَّع هو العمود الأوسط (\(i = 8\)، مع العدّ من الصفر، عند \(X_0 = 378.2\ \mathrm{px}\) على الحقل الواسع أو \(190\ \mathrm{px}\) على الحقل الضيق، عند 18 جسيماً في كل طبقة): عنّابي اللون، بنقاط أكبر وخطّ من مركز كل مدار إلى جسيمه.</li>
+                            <li>عند تفعيل <em>إظهار المدارات</em> يكون كل مدار دائرة منقطة، ومتصلة للعمود المتتبَّع، ولا يُرسم إلا إذا تجاوز نصف قطره 1.2 بكسل شاشة.</li>
+                        </ul>
+                        <p>يختلف الرسم عن الأرقام المخزّنة في ثلاثة أمور صغيرة. يمرّ خط السطح بنقاط كل \(3\ \mathrm{px}\) ليست جسيمات مخزّنة؛ وتلوّن لوحة الرسم على شبكة بكسلاتها الخاصة، فتوزّع الموضع الذي يقع بين البكسلات على بكسلات الحافة (تنعيم الحواف)؛ والطبقات التي تقع تحت الحافة السفلى للوحة تُحسَب وتُخزَّن لكنها لا تُرسَم.</p>
+                    </section>
+
+                    <section class="psec" id="p-limits">
+                        <h3><span class="psec__n">10</span>ما يهمله النموذج</h3>
+                        <ul>
+                            <li><b>انجراف ستوكس</b> (القسم 07) غير مرسوم: الدوائر على الشاشة تُغلق تماماً.</li>
+                            <li><b>عمق محدود.</b> فوق قاع على عمق \(h\) تصبح علاقة التشتّت \(\omega^2 = gk\tanh(kh)\)، وتتفلطح الدوائر فتصير قطوعاً ناقصة؛ وعند القاع نفسه لا يفعل الماء سوى الانزلاق ذهاباً وإياباً. وعند \(h = \lambda/2\) يكون \(\tanh(kh) = \tanh\pi = 0.9963\)، والموجة أبطأ بنسبة ⁦0.19 %⁩ فقط منها في ماء لا نهائي العمق؛ ولهذا يُعدّ عمق نصف طول الموجة عميقاً. وفي الماء الضحل جداً يكون \(c \to \sqrt{gh}\) لكل طول موجة، وتكفّ الموجات عن أن تكون متشتّتة.</li>
+                            <li><b>التوتّر السطحي</b> يضيف قوة إرجاع خاصة به: \(\omega^2 = gk + \sigma k^3/\rho\)، مع \(\sigma = 0.0728\ \mathrm{N/m}\) للماء النقي عند \(20\ ^\circ\mathrm{C}\). وهو الغالب دون \(\lambda = 2\pi\sqrt{\sigma/(\rho g)} = 1.71\ \mathrm{cm}\)، حيث تصير التموّجات الصغيرة أمواجاً شعرية، ولا توجد موجة في الماء العميق أبطأ من \(0.231\ \mathrm{m/s}\)، وهي السرعة عند طول الموجة هذا.</li>
+                            <li><b>الموجات شديدة الانحدار</b> لم تعد جيبية: تحتدّ قممها، وتزداد سرعتها بعامل يقارب \(1 + \tfrac12(ak)^2\)، أي بنسبة ⁦2 %⁩ عند \(ak = 0.2\). وتنكسر الأمواج الحقيقية عند \(ak \approx 0.44\) تقريباً؛ والصفحة تسمح بقيم حتى 0.9.</li>
+                            <li><b>اللزوجة</b> تُخمِد السعة وفق \(e^{-2\nu k^2 t}\)، حيث اللزوجة الحركية للماء \(\nu = 1.0 \times 10^{-6}\ \mathrm{m^2/s}\). وبالنسبة إلى الموجة الافتراضية التي طولها \(2.6\ \mathrm{m}\)، يحتاج تناقص السعة بعامل \(e\) إلى 24 ساعة: فعلى مدى بضعة أدوار يكون الاحتكاك مهملاً فعلاً.</li>
+                            <li><b>الرياح والتيارات والتكسّر</b> غائبة، وكذلك الخليط العشوائي من الأطوال والاتجاهات الذي يكوّن البحر الحقيقي.</li>
+                        </ul>
+                        <h4><span class="psub__n">10.1</span>قراءة إضافية</h4>
+                        <ol class="prefs">
+                            <li>ر. ب. فاينمان، ر. ب. ليتون، وم. ساندز، <em>The Feynman Lectures on Physics</em>، المجلد الأول، Addison-Wesley، 1963: الفصل 51، القسم 51-4، “Surface waves”، وهو عرض أول قصير وواضح (<a href="https://www.feynmanlectures.caltech.edu/I_51.html">نسخة إلكترونية مجانية</a>).</li>
+                            <li>د. ج. أتشيسون، <em>Elementary Fluid Dynamics</em>، دار نشر جامعة أكسفورد، 1990: الفصل 3 (الأمواج): أمواج الماء والتشتّت وسرعة المجموعة، انطلاقاً من مجموعة أمواج تعبر بركةً وتجري قممها خلال المجموعة (<a href="https://global.oup.com/academic/product/elementary-fluid-dynamics-9780198596790">صفحة الناشر</a>، <a href="https://academic.oup.com/book/53981/chapter/422202143">ملخّص الفصل</a>).</li>
+                            <li>ب. ك. كوندو، إ. م. كوهين ود. ر. داولينغ، <em>Fluid Mechanics</em>، الطبعة 6، Academic Press، 2016: الفصل 8 (أمواج الجاذبية)، ويشمل التوتّر السطحي وسرعة المجموعة والأمواج اللاخطّية (<a href="https://www.sciencedirect.com/science/chapter/monograph/pii/B9780124059351000083">صفحة الفصل</a>).</li>
+                            <li>ل. د. لانداو وإ. م. ليفشيتس، <em>Fluid Mechanics</em>، الطبعة 2، Pergamon، 1987: §12 (أمواج الجاذبية) و§25 (تخامد أمواج الجاذبية بفعل اللزوجة)؛ <a href="https://shop.elsevier.com/books/fluid-mechanics/landau/978-0-08-033933-7">صفحة الناشر مع الفهرس</a>.</li>
+                        </ol>
+                    </section>
+                </div>
+            </div>
+        </article>
+
+        <section class="walk" id="walk" data-walk="water" aria-label="من الرموز إلى الشيفرة"></section>
+    </main>
+
+    <footer class="sim-foot">
+        <span>© 2026 نعمة سائر قدسية</span>
+        <span><a href="../simulations.html">كل المحاكيات ↑</a> · <a href="../index.html">الصفحة الرئيسية</a></span>
+    </footer>
+
+    <script src="../../scripts/fold.js"></script>
+    <script src="../../scripts/sim.js"></script>
+    <script src="../../scripts/dataset.js"></script>
+    <script>
+    (function () {
+        'use strict';
+        var T = Sim.theme;
+        var WORLD_W = 800, DZ = 56, PX_PER_M = 100, G = 9.81;
+
+        var stage = document.getElementById('stage');
+        var box = Sim.canvas2d(document.getElementById('water')), ctx = box.ctx;
+        var orbitsBox = document.getElementById('orbits'), dispBox = document.getElementById('disp');
+        var omegaT = 0, fps = 0, frames = 0;
+
+        /* ---------- the store: every number this page computes is written here, where it is computed (scripts/dataset.js) ---------- */
+        var ds = Sim.dataset({ title: 'Water waves', attrs: { figure: 5, page: 'water-wave.html', WORLD_W: '800 px, or 400 px on a canvas narrower than 560 css px', DZ: DZ, PX_PER_M: PX_PER_M, g: G, length_unit: 'px of the field (800 px wide, 400 px on a narrow screen); 100 px = 1 m' } });
+        ds.var('amp', [], 'float', { symbol: 'A', units: 'px', long_name: 'requested amplitude', computed_in: 'amp slider', digits: 0 });
+        ds.var('lambda', [], 'float', { symbol: 'λ', units: 'px', long_name: 'wavelength; 100 px = 1 m', computed_in: 'lambda slider', digits: 0 });
+        ds.var('lambda_m', [], 'float', { symbol: 'λ', units: 'm', long_name: 'the same wavelength in metres', computed_in: 'readouts()', formula: 'λ / 100', digits: 2 });
+        ds.var('f', [], 'float', { symbol: 'f', units: 'Hz', long_name: 'frequency; set by ω² = gk while dispersion is on', computed_in: 'f(), in readouts()', formula: 'dispersion on: √(g k) / 2π; off: the slider', digits: 4 });
+        ds.var('dispersion', [], 'bool', { symbol: 'dispersion', long_name: 'the deep-water law ω² = gk ties f to λ', computed_in: 'the dispersion switch', source: 'The state of the switch.' });
+        ds.var('N', [], 'int', { symbol: 'N', long_name: 'parcels per layer', computed_in: 'count slider', digits: 0 });
+        ds.var('layers', [], 'int', { symbol: 'layers', long_name: 'rows of parcels', computed_in: 'layers slider', digits: 0 });
+        ds.var('layers_drawn', [], 'int', { symbol: 'layers drawn', long_name: 'rows that fit on the canvas', computed_in: 'draw()', digits: 0, source: 'Every row is computed and stored; only rows whose centres fit above the bottom margin are drawn.' });
+        ds.var('k', [], 'float', { symbol: 'k', units: 'rad/px', long_name: 'wave number', computed_in: 'k(), in readouts()', formula: 'k = 2π / λ', digits: 5 });
+        ds.var('k_m', [], 'float', { symbol: 'k', units: 'rad/m', long_name: 'the same in metres', computed_in: 'readouts()', formula: 'k · 100', digits: 4 });
+        ds.var('omega', [], 'float', { symbol: 'ω', units: 'rad/s', long_name: 'angular frequency', computed_in: 'readouts()', formula: 'ω = 2π f', digits: 4 });
+        ds.var('T', [], 'float', { symbol: 'T', units: 's', long_name: 'period', computed_in: 'readouts()', formula: 'T = 1 / f', digits: 3 });
+        ds.var('c', [], 'float', { symbol: 'c', units: 'm/s', long_name: 'phase speed', computed_in: 'readouts()', formula: 'c = f λ / 100', digits: 4 });
+        ds.var('c_deep', [], 'float', { symbol: '√(g/k)', units: 'm/s', long_name: 'deep-water phase speed; equals c while dispersion is on', computed_in: 'readouts()', formula: '√(g / k)', digits: 4 });
+        ds.var('cg', [], 'float', { symbol: 'c<sub>g</sub>', units: 'm/s', long_name: 'group speed in deep water', computed_in: 'readouts()', formula: 'c / 2', digits: 4 });
+        ds.var('a', [], 'float', { symbol: 'a', units: 'px', long_name: 'amplitude used, capped so the surface never folds', computed_in: 'a(), in readouts()', formula: 'min(A, 0.9 / k)', digits: 2 });
+        ds.var('cap', [], 'bool', { symbol: 'cap active', long_name: 'the amplitude is capped', computed_in: 'readouts()', formula: 'a < A' });
+        ds.var('ak', [], 'float', { symbol: 'ak', long_name: 'steepness', computed_in: 'readouts()', formula: 'a k', digits: 4 });
+        ds.var('stokes', [], 'float', { symbol: 'u<sub>S</sub>', units: 'm/s', long_name: 'Stokes drift at the surface: theory, not drawn, the orbits here are closed', computed_in: 'readouts()', formula: 'ω k a² in metres', digits: 4 });
+        ds.var('deep', [], 'float', { symbol: 'e<sup>−k|z|</sup> deepest', long_name: 'orbit radius of the deepest layer as a fraction of a', computed_in: 'readouts()', formula: 'exp(−k · 56 px · (layers − 1))', digits: 4 });
+        ds.var('r1', [], 'float', { symbol: 'r<sub>1</sub>', units: 'px', long_name: 'orbit radius one layer down', computed_in: 'readouts()', formula: 'a e<sup>−k · 56 px</sup>', digits: 2 });
+        ds.var('z_deep_px', [], 'float', { symbol: 'z<sub>deep</sub>', units: 'px', long_name: 'depth of the deepest layer', computed_in: 'readouts()', formula: '56 (layers − 1)', digits: 0 });
+        ds.var('t', [], 'float', { symbol: 't', units: 's', long_name: 'play time since the page opened', computed_in: 'Sim.clock', digits: 2, source: 'The clock adds each frame’s Δt while playing.' });
+        ds.var('omegaT', [], 'float', { symbol: 'ωt', units: 'rad', long_name: 'phase', computed_in: 'Sim.clock callback', formula: 'ωt ← ωt + 2π f Δt', digits: 3, source: 'Accumulated frame by frame.' });
+        ds.var('periods', [], 'float', { symbol: 'ωt / 2π', long_name: 'periods completed', computed_in: 'Sim.clock callback', formula: 'ωt / 2π', digits: 2 });
+        ds.var('follow', [], 'int', { symbol: 'i<sub>follow</sub>', long_name: 'index of the followed parcel, the middle one', computed_in: 'draw()', formula: 'floor((N − 1) / 2)', digits: 0 });
+        ds.dim('p', 0);
+        ds.coord('X0', 'p', Float64Array, { symbol: 'X<sub>0</sub>', units: 'px', long_name: 'orbit centre of each parcel column', computed_in: 'draw()', formula: '30 + i (W − 60) / (N − 1)', digits: 1, updates: 'every frame' });
+        ds.dim('z', 0);
+        ds.coord('depth', 'z', Float64Array, { symbol: 'depth', units: 'm', long_name: 'depth of each layer', computed_in: 'draw()', formula: 'j · 56 px / 100', digits: 2, updates: 'every frame' });
+        ds.var('r_z', ['z'], Float64Array, { symbol: 'r', units: 'px', long_name: 'orbit radius of each layer', computed_in: 'draw()', formula: 'a e<sup>k z</sup>, z = −j · 56 px', digits: 3, updates: 'every frame' });
+        ds.var('cy_px', ['z'], Float64Array, { symbol: 'y<sub>centre</sub> px', units: 'css px', long_name: 'screen height of each layer’s orbit centres', computed_in: 'draw()', formula: 'y<sub>s</sub> + j · 56 · s', digits: 1, updates: 'every frame' });
+        ds.var('theta', ['z', 'p'], Float64Array, { symbol: 'θ', units: 'rad', long_name: 'phase of each parcel', computed_in: 'draw(), parcel loop', formula: 'θ = k X<sub>0</sub> − ωt', digits: 3, updates: 'every frame' });
+        ds.var('xi', ['z', 'p'], Float64Array, { symbol: 'ξ', units: 'px', long_name: 'horizontal displacement of each parcel from its orbit centre', computed_in: 'draw(), parcel loop', formula: 'ξ = −r sin θ', digits: 2, updates: 'every frame' });
+        ds.var('zeta', ['z', 'p'], Float64Array, { symbol: 'ζ', units: 'px', long_name: 'vertical displacement, upwards; on the top row this is the surface height η', computed_in: 'draw(), parcel loop', formula: 'ζ = r cos θ', digits: 2, updates: 'every frame' });
+        ds.var('u', ['z', 'p'], Float64Array, { symbol: 'u', units: 'px/s', long_name: 'horizontal velocity of each parcel', computed_in: 'draw(), parcel loop', formula: 'u = r ω cos θ', digits: 2, updates: 'every frame' });
+        ds.var('w', ['z', 'p'], Float64Array, { symbol: 'w', units: 'px/s', long_name: 'vertical velocity of each parcel', computed_in: 'draw(), parcel loop', formula: 'w = r ω sin θ', digits: 2, updates: 'every frame' });
+        ds.var('px', ['z', 'p'], Float64Array, { symbol: 'x px', units: 'css px', long_name: 'screen position of each parcel, from the left', computed_in: 'draw(), parcel loop', formula: '(X<sub>0</sub> + ξ) s', digits: 1, updates: 'every frame' });
+        ds.var('py', ['z', 'p'], Float64Array, { symbol: 'y px', units: 'css px', long_name: 'screen position of each parcel, from the top', computed_in: 'draw(), parcel loop', formula: 'y<sub>centre</sub> − ζ s', digits: 1, updates: 'every frame' });
+        ds.var('world_w', [], 'int', { symbol: 'W', units: 'px', long_name: 'width of the field shown: 800 px (8 m), or 400 px (4 m) on a narrow screen, so the wave is not drawn tiny on a phone', computed_in: 'draw()', formula: '800 if box.w ≥ 560, else 400', digits: 0 });
+        ds.var('s_px', [], 'float', { symbol: 's', long_name: 'screen pixels per field pixel', computed_in: 'draw()', formula: 'box.w / W', digits: 4 });
+        ds.var('ys', [], 'float', { symbol: 'y<sub>s</sub>', units: 'css px', long_name: 'the still-water line on screen', computed_in: 'draw()', formula: 'max(a s + 34, 0.28 box.h)', digits: 1 });
+        ds.var('box_w', [], 'int', { symbol: 'box.w', units: 'css px', long_name: 'canvas width on your screen', computed_in: 'draw()', digits: 0, source: 'Measured from the page layout.' });
+        ds.var('box_h', [], 'int', { symbol: 'box.h', units: 'css px', long_name: 'canvas height on your screen', computed_in: 'draw()', digits: 0, source: 'Measured from the page layout.' });
+        ds.var('orbits', [], 'bool', { symbol: 'orbits drawn', long_name: 'the dotted circles', computed_in: 'the Show orbits switch', source: 'The state of the switch.' });
+        ds.var('dt', [], 'float', { symbol: 'Δt', units: 's', long_name: 'time between the last two frames', computed_in: 'Sim.clock', digits: 4, source: 'Measured by the clock.' });
+        ds.var('fps', [], 'float', { symbol: 'frame rate', units: 'Hz', long_name: 'smoothed over about ten frames', computed_in: 'Sim.clock callback', digits: 1, source: 'A running average of 1/Δt.' });
+        ds.var('frames', [], 'int', { symbol: 'frames', long_name: 'playing frames so far; paused draws are not counted', computed_in: 'Sim.clock callback', digits: 0, source: 'Counted frame by frame.' });
+        ds.var('playing', [], 'bool', { symbol: 'playing', long_name: 'the clock runs', computed_in: 'Sim.clock', source: 'The state of the Play button.' });
+
+        var amp = Sim.slider('amp', { format: function (v) { return v + ' px'; }, onInput: readouts });
+        var lambda = Sim.slider('lambda', { format: function (v) { return v + ' px'; }, onInput: couple });
+        var freq = Sim.slider('freq', { format: function (v) { return v.toFixed(2) + ' Hz'; }, onInput: readouts });
+        var count = Sim.slider('count', { format: String });
+        var layers = Sim.slider('layers', { format: String, onInput: readouts });
+
+        function k() { return 2 * Math.PI / lambda.value; }
+        /* exact deep-water frequency; the slider only displays it in 0.01 Hz steps */
+        function f() {
+            return dispBox.checked ? Math.sqrt(G * k() * PX_PER_M) / (2 * Math.PI) : freq.value;
+        }
+        function a() { return Math.min(amp.value, 0.9 / k()); }
+
+        function couple() {
+            if (dispBox.checked) {
+                var km = 2 * Math.PI / (lambda.value / PX_PER_M);
+                freq.set(Math.sqrt(G * km) / (2 * Math.PI));
+            }
+            freq.el.disabled = dispBox.checked;
+            readouts();
+        }
+        dispBox.addEventListener('change', couple);
+
+        function readouts() {
+            var c = f() * lambda.value / PX_PER_M;
+            document.getElementById('r-c').textContent = c.toFixed(2) + ' m/s';
+            document.getElementById('cap-c').innerHTML = '<i>c</i> = ' + c.toFixed(2) + ' m/s';
+            document.getElementById('r-t').textContent = (1 / f()).toFixed(2) + ' s';
+            document.getElementById('r-ak').textContent = (a() * k()).toFixed(2) + (a() < amp.value ? _t(' (cap)') : '');
+            var deep = Math.exp(-k() * DZ * (layers.value - 1));
+            document.getElementById('r-deep').textContent = (deep * 100).toFixed(deep < 0.1 ? 1 : 0) + ' % of a';
+            var kk = k(), ff = f(), aa = a(), om = 2 * Math.PI * ff, am = aa / PX_PER_M;
+            ds.set('amp', amp.value); ds.set('lambda', lambda.value); ds.set('lambda_m', lambda.value / PX_PER_M); ds.set('f', ff); ds.set('dispersion', dispBox.checked);
+            ds.set('N', count.value); ds.set('layers', layers.value);
+            ds.set('k', kk); ds.set('k_m', kk * PX_PER_M); ds.set('omega', om); ds.set('T', 1 / ff); ds.set('c', c); ds.set('c_deep', Math.sqrt(G / (kk * PX_PER_M))); ds.set('cg', c / 2);
+            ds.set('a', aa); ds.set('cap', aa < amp.value); ds.set('ak', aa * kk); ds.set('stokes', om * kk * PX_PER_M * am * am);
+            ds.set('deep', deep); ds.set('r1', aa * Math.exp(-kk * DZ)); ds.set('z_deep_px', DZ * (layers.value - 1));
+        }
+
+        /* a depth label: z in maths italic, the value upright, on a pale ground the width of the text */
+        function depthLabel(rest, x, y) {
+            var o = { size: 14, baseline: 'middle', color: T.ink3 || T.muted }, w1 = Sim.tex(ctx, 'z', 0, 0, { size: 14, measure: true }) + 4;
+            var w2 = Sim.tex(ctx, rest, 0, 0, { size: 14, upright: true, measure: true });
+            ctx.fillStyle = 'rgba(255, 252, 247, 0.82)';
+            ctx.fillRect(x - 3, y - 10, w1 + w2 + 6, 20);
+            Sim.tex(ctx, 'z', x, y, o);
+            o.upright = true;
+            Sim.tex(ctx, rest, x + w1, y, o);
+        }
+        function draw() {
+            WORLD_W = box.w < 560 ? 400 : 800;
+            var w = box.w, h = box.h, s = w / WORLD_W, kk = k(), A = a();
+            var ys = Math.max(A * s + 34, h * 0.28), X, th;
+            var NP = count.value, NL = layers.value, om = 2 * Math.PI * f(), q;
+            ds.dim('z', NL); ds.dim('p', NP);
+            var X0A = ds.alloc('X0'), rL = ds.alloc('r_z'), zL = ds.alloc('depth'), cyL = ds.alloc('cy_px');
+            var thM = ds.alloc('theta'), xiM = ds.alloc('xi'), zeM = ds.alloc('zeta'), uM = ds.alloc('u'), wM = ds.alloc('w'), pxM = ds.alloc('px'), pyM = ds.alloc('py');
+            ds.set('N', NP); ds.set('layers', NL); ds.set('world_w', WORLD_W); ds.set('s_px', s); ds.set('ys', ys); ds.set('box_w', w); ds.set('box_h', h); ds.set('orbits', orbitsBox.checked); ds.set('follow', Math.floor((NP - 1) / 2));
+            ctx.clearRect(0, 0, w, h);
+
+            // water body under the trochoidal surface
+            ctx.beginPath();
+            for (X = -60; X <= WORLD_W + 60; X += 3) {
+                th = kk * X - omegaT;
+                var sx = (X - A * Math.sin(th)) * s, sy = ys - A * Math.cos(th) * s;
+                if (X === -60) ctx.moveTo(sx, sy); else ctx.lineTo(sx, sy);
+            }
+            ctx.save();
+            var fill = ctx.createLinearGradient(0, ys - A * s, 0, h);
+            fill.addColorStop(0, 'rgba(226, 162, 170, 0.36)');
+            fill.addColorStop(1, 'rgba(226, 162, 170, 0.05)');
+            ctx.lineTo(w + 60, h);
+            ctx.lineTo(-60, h);
+            ctx.closePath();
+            ctx.fillStyle = fill;
+            ctx.fill();
+            ctx.restore();
+
+            ctx.beginPath();
+            for (X = -60; X <= WORLD_W + 60; X += 3) {
+                th = kk * X - omegaT;
+                var ux = (X - A * Math.sin(th)) * s, uy = ys - A * Math.cos(th) * s;
+                if (X === -60) ctx.moveTo(ux, uy); else ctx.lineTo(ux, uy);
+            }
+            ctx.strokeStyle = T.accent;
+            ctx.lineWidth = 2.2;
+            ctx.lineJoin = 'round';
+            ctx.stroke();
+
+            // rest level
+            ctx.setLineDash([5, 6]);
+            ctx.strokeStyle = 'rgba(90, 80, 75, 0.35)';
+            ctx.lineWidth = 1;
+            ctx.beginPath();
+            ctx.moveTo(0, ys);
+            ctx.lineTo(w, ys);
+            ctx.stroke();
+            ctx.setLineDash([]);
+
+            // parcels on their orbits, layer by layer
+            var N = count.value, L = layers.value, follow = Math.floor((N - 1) / 2);
+            ctx.font = T.mono;
+            ctx.textAlign = 'right';
+            ctx.textBaseline = 'middle';
+            var drawn = 0;
+            for (var j = 0; j < L; j++) {
+                var z0 = -j * DZ, r = A * Math.exp(kk * z0), cy = ys - z0 * s;
+                rL[j] = r; zL[j] = -z0 / PX_PER_M; cyL[j] = cy;
+                var visible = cy <= h - 8;
+                if (visible) drawn++;
+                for (var i = 0; i < N; i++) {
+                    var X0 = 30 + i * (WORLD_W - 60) / (N - 1), cx = X0 * s;
+                    th = kk * X0 - omegaT;
+                    var px = (X0 - r * Math.sin(th)) * s, py = cy - r * Math.cos(th) * s;
+                    q = j * N + i;
+                    X0A[i] = X0; thM[q] = th; xiM[q] = -r * Math.sin(th); zeM[q] = r * Math.cos(th); uM[q] = r * om * Math.cos(th); wM[q] = r * om * Math.sin(th); pxM[q] = px; pyM[q] = py;
+                    if (!visible) continue;
+                    var isF = i === follow;
+                    if (orbitsBox.checked && r * s > 1.2) {
+                        ctx.strokeStyle = isF ? 'rgba(122, 31, 43, 0.45)' : 'rgba(90, 80, 75, 0.24)';
+                        ctx.lineWidth = 1;
+                        ctx.setLineDash(isF ? [] : [2, 3]);
+                        ctx.beginPath();
+                        ctx.arc(cx, cy, r * s, 0, Math.PI * 2);
+                        ctx.stroke();
+                        ctx.setLineDash([]);
+                    }
+                    if (isF) {
+                        ctx.strokeStyle = T.accent;
+                        ctx.lineWidth = 1.4;
+                        ctx.beginPath();
+                        ctx.moveTo(cx, cy);
+                        ctx.lineTo(px, py);
+                        ctx.stroke();
+                    }
+                    ctx.beginPath();
+                    ctx.arc(px, py, isF ? (j === 0 ? 6 : 5) : (j === 0 ? 3.8 : 3.1), 0, Math.PI * 2);
+                    ctx.fillStyle = isF ? T.accent : T.ink2;
+                    ctx.fill();
+                    if (isF) { ctx.lineWidth = 2; ctx.strokeStyle = T.card; ctx.stroke(); }
+                }
+                if (visible && j > 0) depthLabel('= −' + zL[j].toFixed(2) + ' m', 8, cy - Math.max(14, r * s + 10));
+            }
+            ds.set('layers_drawn', drawn);
+            ds.touch('X0'); ds.touch('r_z'); ds.touch('depth'); ds.touch('cy_px');
+            ds.touch('theta'); ds.touch('xi'); ds.touch('zeta'); ds.touch('u'); ds.touch('w'); ds.touch('px'); ds.touch('py');
+        }
+
+        /* live values for the walkthrough: read from the store, nothing recomputed */
+        Sim.live = function () {
+            var i = ds.get('follow'), th = ds.get('theta')[i], red = Math.atan2(Math.sin(th), Math.cos(th)), dp = ds.get('deep');
+            return {
+                lam: ds.get('lambda') + ' px = ' + ds.get('lambda_m').toFixed(2) + ' m', k: Sim.fmt(ds.get('k'), 5) + ' rad/px',
+                km: Sim.fmt(ds.get('k_m'), 4) + ' rad/m', f: ds.get('f').toFixed(4) + ' Hz', c: ds.get('c').toFixed(4) + ' m/s',
+                T: ds.get('T').toFixed(4) + ' s', cg: ds.get('cg').toFixed(4) + ' m/s',
+                X0: Sim.fmt(ds.get('X0')[i], 1) + ' px', th: Sim.fmt(red, 3) + _t(' rad'), px: Sim.fmt(ds.get('xi')[i], 2) + ' px', pz: Sim.fmt(ds.get('zeta')[i], 2) + ' px',
+                r: Sim.fmt(ds.get('r_z')[0], 2) + ' px', r1: Sim.fmt(ds.get('r1'), 2) + ' px', z0: '−' + ds.get('z_deep_px') + ' px',
+                deep: (dp * 100).toFixed(dp < 0.1 ? 2 : 1) + ' %', eta: Sim.fmt(ds.get('zeta')[i], 2) + ' px',
+                a: Sim.fmt(ds.get('a'), 2) + ' px', A: ds.get('amp') + ' px', ak: Sim.fmt(ds.get('ak'), 4),
+                wt: Sim.fmt(ds.get('omegaT'), 2) + _t(' rad'), s: Sim.fmt(ds.get('s_px'), 4), ys: Sim.fmt(ds.get('ys'), 1) + ' px'
+            };
+        };
+        var clk = Sim.clock(function (dt, t) {
+            omegaT += 2 * Math.PI * f() * dt;
+            if (dt > 0) { frames++; fps = fps ? fps + (1 / dt - fps) * 0.1 : 1 / dt; }
+            ds.set('omegaT', omegaT); ds.set('periods', omegaT / (2 * Math.PI)); ds.set('t', t); ds.set('dt', dt); ds.set('fps', fps); ds.set('frames', frames); ds.set('playing', clk ? clk.playing : true);
+            draw();
+        });
+        Sim.playButton(document.getElementById('play'), clk);
+
+        /* ---------- the data panel (scripts/datalog.js) reads the store; these hooks only say where things are drawn and how to test a value ---------- */
+        function sliderCheck(input, label) { return { formula: _t('read from the ') + _t(label) + _t(' slider now'), inputs: [[_t('slider'), input.value, '']], value: parseFloat(input.value) }; }
+        function at(q) { return { x: ds.get('px')[q], y: ds.get('py')[q] }; }
+        function parcelPixel(q) {
+            var p = at(q), px = ctx.getImageData(Math.round(p.x * box.dpr), Math.round(p.y * box.dpr), 1, 1).data, lum = 0.2126 * px[0] + 0.7152 * px[1] + 0.0722 * px[2];
+            var N = ds.get('N'), j = Math.floor(q / N), i = q % N;
+            if (j >= ds.get('layers_drawn')) return { what: _t('parcel (layer ') + j + _t(', column ') + i + ')', drawn: 'nothing', expected: 'nothing', ok: true, note: _t('This layer lies below the bottom of the canvas, so the page does not draw it; its numbers are still computed and stored.') };
+            return { what: _t('screen pixel at parcel (layer ') + j + _t(', column ') + i + '), (' + Sim.fmt(p.x, 1) + ', ' + Sim.fmt(p.y, 1) + _t(') css px'), drawn: px[3] === 0 ? _t('nothing (transparent)') : 'rgb(' + px[0] + ', ' + px[1] + ', ' + px[2] + ')', expected: _t('a dark parcel: ink rgb(58, 50, 46) or burgundy rgb(122, 31, 43) on the pink water'), ok: px[3] > 0 && lum < 130,
+                note: _t('The parcels are filled discs of radius 3 to 6 px, so the pixel at the stored centre is the fill colour.') };
+        }
+        function qInputs(q) { var N = ds.get('N'), j = Math.floor(q / N), i = q % N; return [['layer j', j, '', 0], ['column i', i, '', 0], ['r', ds.get('r_z')[j], 'px', 4], ['θ', ds.get('theta')[q], 'rad', 4]]; }
+        Sim.data = {
+            ds: ds, kicker: _t('Fig. 5 · data'), file: 'fig5-water-waves',
+            playing: function () { return clk.playing; },
+            groups: [
+                { title: _t('Physical parameters'), note: _t('fixed constants are in the dataset attributes; these you set'), vars: ['amp', 'lambda', 'lambda_m', 'f', 'dispersion', 'N', 'layers', 'layers_drawn'] },
+                { title: _t('Derived physics'), note: _t('computed by the page from the parameters'), vars: ['k', 'k_m', 'omega', 'T', 'c', 'c_deep', 'cg', 'a', 'cap', 'ak', 'stokes', 'deep', 'r1', 'z_deep_px'] },
+                { title: _t('Time'), note: _t('advances only while it plays'), vars: ['t', 'omegaT', 'periods'] },
+                { title: _t('Layers and parcels'), note: _t('rows are layers, columns are parcels; point at a cell to find it in the figure'), vars: ['follow', 'X0', 'depth', 'r_z', 'cy_px', 'theta', 'xi', 'zeta', 'u', 'w', 'px', 'py'] },
+                { title: _t('Drawing'), note: _t('how the picture is laid out'), vars: ['world_w', 's_px', 'ys', 'box_w', 'box_h', 'orbits', 'dt', 'fps', 'frames', 'playing'] }
+            ],
+            rowLabel: { z: function (j) { return 'z' + j; } },
+            colour: { xi: function (v) { return Sim.colourMap(v, ds.get('a')); }, zeta: function (v) { return Sim.colourMap(v, ds.get('a')); }, u: function (v) { return Sim.colourMap(v, ds.get('a') * ds.get('omega')); }, w: function (v) { return Sim.colourMap(v, ds.get('a') * ds.get('omega')); } },
+            probe: function (x, y) {
+                var N = ds.get('N') || 0, L = ds.get('layers_drawn') || 0, px = ds.get('px'), py = ds.get('py'), best = -1, bd = 14;
+                for (var q = 0; q < N * L; q++) { var d = Math.hypot(x - px[q], y - py[q]); if (d < bd) { bd = d; best = q; } }
+                return best < 0 ? null : { q: best };
+            },
+            inspect: function (ref) {
+                var q = ref.q, N = ds.get('N'), j = Math.floor(q / N), i = q % N;
+                return { title: _t('parcel · layer ') + j + _t(', column ') + i + (j === 0 && i === ds.get('follow') ? _t(' · the followed one') : ''), at: at(q),
+                    rows: [['X<sub>0</sub>', ds.get('X0')[i], 'px', 'X0', i], ['depth', ds.get('depth')[j], 'm', 'depth', j], ['r', ds.get('r_z')[j], 'px', 'r_z', j], ['θ', ds.get('theta')[q], 'rad', 'theta', q], ['ξ', ds.get('xi')[q], 'px', 'xi', q], ['ζ', ds.get('zeta')[q], 'px', 'zeta', q], ['u', ds.get('u')[q], 'px/s', 'u', q], ['w', ds.get('w')[q], 'px/s', 'w', q]] };
+            },
+            locate: function (name, idx) {
+                var v = ds.vars[name], N = ds.get('N');
+                if (v.dims.length === 2) return at(idx);
+                if (v.dims[0] === 'p') return at(idx);
+                if (v.dims[0] === 'z') return idx < ds.get('layers_drawn') ? at(idx * N + ds.get('follow')) : null;
+                return null;
+            },
+            check: {
+                amp: function () { return sliderCheck(amp.el, 'amplitude'); },
+                lambda: function () { return sliderCheck(lambda.el, 'wavelength'); },
+                lambda_m: function () { return { formula: 'λ / 100', inputs: [['λ', ds.get('lambda'), 'px', 0]], value: ds.get('lambda') / PX_PER_M }; },
+                f: function () { return ds.get('dispersion') ? { formula: '√(g k) / 2π with k in rad/m', inputs: [['g', G, 'm/s²', 2], ['k', ds.get('k_m'), 'rad/m', 4]], value: Math.sqrt(G * ds.get('k_m')) / (2 * Math.PI) } : sliderCheck(freq.el, 'frequency'); },
+                N: function () { return sliderCheck(count.el, 'parcel count'); },
+                layers: function () { return sliderCheck(layers.el, 'layer count'); },
+                k: function () { return { formula: 'k = 2π / λ', inputs: [['λ', ds.get('lambda'), 'px', 0]], value: 2 * Math.PI / ds.get('lambda') }; },
+                k_m: function () { return { formula: 'k · 100', inputs: [['k', ds.get('k'), 'rad/px', 5]], value: ds.get('k') * PX_PER_M }; },
+                omega: function () { return { formula: 'ω = 2π f', inputs: [['f', ds.get('f'), 'Hz', 4]], value: 2 * Math.PI * ds.get('f') }; },
+                T: function () { return { formula: 'T = 1 / f', inputs: [['f', ds.get('f'), 'Hz', 4]], value: 1 / ds.get('f') }; },
+                c: function () { return { formula: 'c = f λ / 100', inputs: [['f', ds.get('f'), 'Hz', 4], ['λ', ds.get('lambda'), 'px', 0]], value: ds.get('f') * ds.get('lambda') / PX_PER_M }; },
+                c_deep: function () { return { formula: '√(g / k)', inputs: [['g', G, 'm/s²', 2], ['k', ds.get('k_m'), 'rad/m', 4]], value: Math.sqrt(G / ds.get('k_m')) }; },
+                cg: function () { return { formula: 'c / 2', inputs: [['c', ds.get('c'), 'm/s', 4]], value: ds.get('c') / 2 }; },
+                a: function () { return { formula: 'min(A, 0.9 / k)', inputs: [['A', ds.get('amp'), 'px', 0], ['k', ds.get('k'), 'rad/px', 5]], value: Math.min(ds.get('amp'), 0.9 / ds.get('k')) }; },
+                cap: function () { return { formula: 'a < A', inputs: [['a', ds.get('a'), 'px', 2], ['A', ds.get('amp'), 'px', 0]], value: ds.get('a') < ds.get('amp') }; },
+                ak: function () { return { formula: 'a k', inputs: [['a', ds.get('a'), 'px', 2], ['k', ds.get('k'), 'rad/px', 5]], value: ds.get('a') * ds.get('k') }; },
+                stokes: function () { var am = ds.get('a') / PX_PER_M; return { formula: 'ω k a² with k in rad/m and a in m', inputs: [['ω', ds.get('omega'), 'rad/s', 4], ['k', ds.get('k_m'), 'rad/m', 4], ['a', am, 'm', 4]], value: ds.get('omega') * ds.get('k_m') * am * am }; },
+                deep: function () { return { formula: 'exp(−k · 56 · (layers − 1))', inputs: [['k', ds.get('k'), 'rad/px', 5], ['layers', ds.get('layers'), '', 0]], value: Math.exp(-ds.get('k') * DZ * (ds.get('layers') - 1)) }; },
+                r1: function () { return { formula: 'a e<sup>−k · 56</sup>', inputs: [['a', ds.get('a'), 'px', 2], ['k', ds.get('k'), 'rad/px', 5]], value: ds.get('a') * Math.exp(-ds.get('k') * DZ) }; },
+                z_deep_px: function () { return { formula: '56 (layers − 1)', inputs: [['layers', ds.get('layers'), '', 0]], value: DZ * (ds.get('layers') - 1) }; },
+                periods: function () { return { formula: 'ωt / 2π', inputs: [['ωt', ds.get('omegaT'), 'rad', 4]], value: ds.get('omegaT') / (2 * Math.PI) }; },
+                follow: function () { return { formula: 'floor((N − 1) / 2)', inputs: [['N', ds.get('N'), '', 0]], value: Math.floor((ds.get('N') - 1) / 2) }; },
+                X0: function (i) { return { formula: '30 + i (W − 60) / (N − 1)', inputs: [['i', i, '', 0], ['W', ds.get('world_w'), 'px', 0], ['N', ds.get('N'), '', 0]], value: 30 + i * (ds.get('world_w') - 60) / (ds.get('N') - 1) }; },
+                depth: function (j) { return { formula: 'j · 56 / 100', inputs: [['j', j, '', 0]], value: j * DZ / PX_PER_M }; },
+                r_z: function (j) { return { formula: 'a e<sup>−k j · 56</sup>', inputs: [['a', ds.get('a'), 'px', 2], ['k', ds.get('k'), 'rad/px', 5], ['j', j, '', 0]], value: ds.get('a') * Math.exp(-ds.get('k') * j * DZ) }; },
+                cy_px: function (j) { return { formula: 'y<sub>s</sub> + j · 56 · s', inputs: [['y<sub>s</sub>', ds.get('ys'), 'css px', 1], ['j', j, '', 0], ['s', ds.get('s_px'), '', 4]], value: ds.get('ys') + j * DZ * ds.get('s_px') }; },
+                theta: function (q) { var i = q % ds.get('N'); return { formula: 'θ = k X<sub>0</sub> − ωt', inputs: [['X<sub>0</sub>', ds.get('X0')[i], 'px', 2], ['k', ds.get('k'), 'rad/px', 5], ['ωt', ds.get('omegaT'), 'rad', 4]], value: ds.get('k') * ds.get('X0')[i] - ds.get('omegaT') }; },
+                xi: function (q) { var j = Math.floor(q / ds.get('N')); return { formula: 'ξ = −r sin θ', inputs: qInputs(q), value: -ds.get('r_z')[j] * Math.sin(ds.get('theta')[q]) }; },
+                zeta: function (q) { var j = Math.floor(q / ds.get('N')); return { formula: 'ζ = r cos θ', inputs: qInputs(q), value: ds.get('r_z')[j] * Math.cos(ds.get('theta')[q]) }; },
+                u: function (q) { var j = Math.floor(q / ds.get('N')); return { formula: 'u = r ω cos θ', inputs: qInputs(q).concat([['ω', ds.get('omega'), 'rad/s', 4]]), value: ds.get('r_z')[j] * ds.get('omega') * Math.cos(ds.get('theta')[q]) }; },
+                w: function (q) { var j = Math.floor(q / ds.get('N')); return { formula: 'w = r ω sin θ', inputs: qInputs(q).concat([['ω', ds.get('omega'), 'rad/s', 4]]), value: ds.get('r_z')[j] * ds.get('omega') * Math.sin(ds.get('theta')[q]) }; },
+                px: function (q) { var i = q % ds.get('N'); return { formula: '(X<sub>0</sub> + ξ) s', inputs: [['X<sub>0</sub>', ds.get('X0')[i], 'px', 2], ['ξ', ds.get('xi')[q], 'px', 3], ['s', ds.get('s_px'), '', 4]], value: (ds.get('X0')[i] + ds.get('xi')[q]) * ds.get('s_px') }; },
+                py: function (q) { var j = Math.floor(q / ds.get('N')); return { formula: 'y<sub>centre</sub> − ζ s', inputs: [['y<sub>centre</sub>', ds.get('cy_px')[j], 'css px', 2], ['ζ', ds.get('zeta')[q], 'px', 3], ['s', ds.get('s_px'), '', 4]], value: ds.get('cy_px')[j] - ds.get('zeta')[q] * ds.get('s_px') }; },
+                world_w: function () { return { formula: '800 if box.w ≥ 560, else 400', inputs: [['box.w', box.w, 'css px', 0]], value: box.w < 560 ? 400 : 800 }; },
+                s_px: function () { return { formula: 'box.w / W', inputs: [['box.w', box.w, 'css px', 0], ['W', ds.get('world_w'), 'px', 0]], value: box.w / ds.get('world_w') }; },
+                ys: function () { return { formula: 'max(a s + 34, 0.28 box.h)', inputs: [['a', ds.get('a'), 'px', 2], ['s', ds.get('s_px'), '', 4], ['box.h', box.h, 'css px', 0]], value: Math.max(ds.get('a') * ds.get('s_px') + 34, box.h * 0.28) }; }
+            },
+            drawn: { px: parcelPixel, py: parcelPixel, xi: parcelPixel, zeta: parcelPixel },
+            round: { time: 't', label: function () { return _t('one period, T = ') + Sim.fmt(ds.get('T'), 3) + ' s'; }, length: function () { return ds.get('T'); },
+                columns: ['omegaT'], point: function () { return { q: ds.get('follow') }; } },
+            play: function () { clk.set(true); },
+            about: _t('Here every parcel is drawn at its stored screen position, rounded to the pixel by the canvas. The surface line is drawn through extra points every 3 px that are not parcels and are not stored; at a top-row parcel the stored ζ is that surface height.')
+        };
+        couple();
+        draw();
+        Sim.onResize(stage, function () { box.fit(); });
+    })();
+    </script>
+    <script src="../../scripts/datalog.js"></script>
+</body>
+</html>
+

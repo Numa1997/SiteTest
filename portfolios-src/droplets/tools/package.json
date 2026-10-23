@@ -1,0 +1,6 @@
+{
+  "name": "droplets-tools",
+  "private": true,
+  "description": "Build-time math rendering for the droplet study (KaTeX, rendered once, no script at run time).",
+  "dependencies": { "katex": "0.16.11" }
+}

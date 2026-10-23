@@ -1,0 +1,161 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    {{HEAD}}
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+    <title>Droplet Collection · Numa Koudsie</title>
+    <meta name="description" content="How a warm cloud of small droplets grows drizzle by gravitational collection, built one effect at a time from first principles: lecture notes with every equation derived, a solver of the collection equation, an exact stochastic simulation, and the ice question of the thesis." />
+    <style>
+:root {
+  --bg: #ece3d2; --panel: #f8f2e6; --paper: #fcf8f0; --ink: #23160f; --muted: #6f5b4c; --line: #3f2c23; --rule: #dccdb4;
+  --wine: #7d1d2f; --wine-deep: #5a0f21; --wine-soft: #f3dfdb; --blue: #33627f; --blue-soft: #e1ebf0; --green: #3c6a46; --green-soft: #e3ece2;
+  --f-display: "Instrument Serif", "Times New Roman", Georgia, serif;
+  --f-text: "IBM Plex Sans", "Helvetica Neue", Arial, system-ui, sans-serif;
+  --f-mono: "IBM Plex Mono", ui-monospace, Menlo, Consolas, monospace;
+  color-scheme: light;
+}
+* { box-sizing: border-box; }
+html { background: var(--bg); scroll-padding-top: 20px; }
+body { margin: 0; color: var(--ink); font-family: var(--f-text); font-size: 16.5px; line-height: 1.68; background: var(--bg); }
+.progress { position: fixed; inset: 0 0 auto; height: 3px; z-index: 10; }
+.progress span { display: block; height: 3px; width: 0; background: var(--wine); }
+.wrap { max-width: 1240px; margin: 0 auto; padding: 18px max(16px, env(safe-area-inset-right, 0px)) 70px max(16px, env(safe-area-inset-left, 0px)); }
+.topbar { margin-bottom: 18px; }
+.back { font-size: 13.5px; color: var(--muted); text-decoration: none; }
+.back:hover { color: var(--wine); text-decoration: underline; }
+.eyebrow { font: 600 11.5px/1.2 var(--f-text); letter-spacing: 0.14em; text-transform: uppercase; color: var(--wine); }
+header.hero { display: grid; gap: 10px; margin-bottom: 20px; max-width: 920px; }
+h1 { font-family: var(--f-display); font-weight: 400; font-size: clamp(42px, 7.6vw, 80px); line-height: 0.95; margin: 0; color: var(--wine-deep); letter-spacing: -0.01em; }
+h1 em { color: var(--wine); }
+.lede { margin: 0; color: var(--muted); font-size: 17.5px; max-width: 70ch; }
+.chips { display: flex; flex-wrap: wrap; gap: 8px; }
+.chip { font: 500 12.5px/1.2 var(--f-mono); border: 1px solid var(--rule); background: var(--paper); border-radius: 999px; padding: 5px 11px; }
+.chip b { color: var(--wine); font-weight: 500; }
+nav.tabs { display: flex; flex-wrap: wrap; gap: 8px; margin: 6px 0 22px; position: sticky; top: 0; z-index: 5; background: var(--bg); padding: 8px 0; border-bottom: 1.5px solid var(--rule); }
+nav.tabs button { font: 600 14px/1 var(--f-text); color: var(--ink); background: var(--paper); border: 1.5px solid var(--line); border-radius: 999px; padding: 10px 16px; min-height: 40px; cursor: pointer; }
+nav.tabs button[aria-selected="true"] { background: var(--wine); border-color: var(--wine); color: #fbf3e8; }
+nav.tabs button:focus-visible, .ctl button:focus-visible, .ctl select:focus-visible, .ctl input:focus-visible { outline: 2.5px solid var(--blue); outline-offset: 2px; }
+.tab[hidden] { display: none; }
+.layout { display: grid; grid-template-columns: 250px minmax(0, 1fr); gap: 34px; align-items: start; }
+@media (max-width: 980px) { .layout { grid-template-columns: minmax(0, 1fr); } }
+nav.toc { position: sticky; top: 76px; max-height: calc(100vh - 96px); overflow: auto; background: var(--panel); border: 1.5px solid var(--line); border-radius: 10px; padding: 14px 10px 14px 14px; font-size: 13.5px; }
+nav.toc ol { list-style: none; margin: 0; padding: 0; display: grid; gap: 1px; }
+nav.toc li.part-li { margin-top: 10px; font: 600 10.5px var(--f-text); letter-spacing: 0.12em; text-transform: uppercase; color: var(--muted); }
+nav.toc a { display: grid; grid-template-columns: 24px minmax(0, 1fr); gap: 4px; padding: 3px 6px; border-radius: 6px; color: var(--ink); text-decoration: none; line-height: 1.35; }
+nav.toc a .n { font-family: var(--f-mono); color: var(--muted); font-size: 12px; }
+nav.toc a:hover { background: #f1e6d2; }
+details.toc-m { display: none; }
+@media (max-width: 980px) {
+  nav.toc { display: none; }
+  details.toc-m { display: block; background: var(--panel); border: 1.5px solid var(--line); border-radius: 10px; padding: 10px 14px; margin-bottom: 18px; }
+  details.toc-m summary { cursor: pointer; font-weight: 600; min-height: 36px; display: flex; align-items: center; }
+  details.toc-m ol { list-style: none; padding: 0; margin: 8px 0 0; display: grid; gap: 2px; font-size: 14px; }
+  details.toc-m a { color: var(--ink); display: block; padding-block: 8px; }
+}
+main { min-width: 0; }
+.chapter, .card { background: var(--panel); border: 1.5px solid var(--line); border-radius: 12px; padding: clamp(16px, 3vw, 34px); margin-bottom: 20px; }
+.chapter > * { max-width: 74ch; }
+.chapter > .eqn, .chapter > figure, .chapter > .tblw, .chapter > .press, .chapter > .callout, .chapter > .picture, .chapter > .check { max-width: 86ch; }
+h2 { font-family: var(--f-display); font-weight: 400; font-size: clamp(30px, 4vw, 40px); line-height: 1.05; margin: 0 0 14px; color: var(--wine-deep); display: flex; gap: 14px; align-items: baseline; }
+.chn { font: 500 15px/1 var(--f-mono); color: #fbf3e8; background: var(--wine); border-radius: 999px; padding: 6px 11px; transform: translateY(-6px); }
+h3 { font-family: var(--f-display); font-weight: 400; font-size: 25px; line-height: 1.15; margin: 28px 0 8px; color: var(--wine-deep); }
+p { margin: 0 0 12px; }
+ol, ul { padding-left: 22px; } li { margin-bottom: 6px; }
+a { color: var(--wine); }
+.mono { font-family: var(--f-mono); font-size: 0.92em; }
+.part { display: flex; flex-wrap: wrap; align-items: baseline; gap: 6px 16px; margin: 34px 0 16px; padding: 18px 4px 8px; border-top: 2px solid var(--line); }
+.part-n { font: 600 12px var(--f-text); letter-spacing: 0.16em; text-transform: uppercase; color: var(--wine); }
+.part-t { font: 400 clamp(26px, 3.4vw, 34px)/1.1 var(--f-display); color: var(--ink); }
+.nobr { white-space: nowrap; }
+.eqn { display: grid; grid-template-columns: minmax(0, 1fr) auto; align-items: center; gap: 12px; margin: 14px 0 16px; padding: 12px 14px; background: var(--paper); border: 1px solid var(--rule); border-radius: 10px; overflow-x: auto; }
+.eqs { display: flex; flex-wrap: wrap; justify-content: center; align-items: center; column-gap: 1.5em; row-gap: 4px; min-width: 0; }
+.ki .katex { font-size: 1.06em; }
+.kd { min-width: 0; max-width: 100%; overflow-x: auto; overflow-y: hidden; }
+.kd .katex-display { margin: 0; padding: 4px 2px; }
+.kd .katex { font-size: 1.12em; }
+.eqn.boxed { border: 2px solid var(--wine); background: #fffaf3; }
+.eqno { font: 500 13px var(--f-mono); color: var(--muted); white-space: nowrap; }
+@media (max-width: 640px) { .eqn { grid-template-columns: minmax(0, 1fr); gap: 2px; padding: 10px; } .eqno { justify-self: end; } .kd .katex { font-size: 1.02em; } }
+.picture, .check, .press, .callout { border-radius: 10px; padding: 12px 15px; margin: 14px 0; border: 1px solid var(--rule); }
+.picture { background: #f6ecdc; }
+.check { background: var(--green-soft); border-color: #c4d6c2; }
+.press { background: var(--wine-soft); border-color: #e6c3bd; }
+.callout { background: var(--blue-soft); border-color: #c7d8e1; }
+.ctag { font: 600 11px var(--f-text); letter-spacing: 0.12em; text-transform: uppercase; color: var(--wine); margin-bottom: 2px; }
+.check .ctag { color: var(--green); } .callout .ctag { color: var(--blue); }
+figure.fig { margin: 18px 0; background: var(--paper); border: 1px solid var(--rule); border-radius: 10px; padding: 12px; }
+figure.fig svg { display: block; width: 100%; max-width: 620px; height: auto; margin: 0 auto; }
+/* On a phone the charts keep a readable text size (about 10 px) and scroll sideways inside their own box */
+@media (max-width: 620px) {
+  figure.fig .figscroll, .plot { overflow-x: auto; -webkit-overflow-scrolling: touch; }
+  figure.fig svg, .plot svg { min-width: 560px; }
+  figure.fig .figscroll + figcaption::before { content: "Swipe the chart sideways to see all of it. "; font-style: italic; }
+}
+input[type=range] { accent-color: var(--wine); }
+figure.fig figcaption { font-size: 13.5px; color: var(--muted); margin-top: 8px; }
+svg .tick { font: 11px var(--f-mono); fill: #4a3a30; } svg .axl { font: 12.5px var(--f-text); fill: var(--ink); } svg .leg { font: 12px var(--f-text); fill: var(--ink); }
+.tblw { overflow-x: auto; margin: 12px 0; }
+table.mt { border-collapse: collapse; font-size: 14px; background: var(--paper); border: 1px solid var(--rule); width: 100%; }
+table.mt th, table.mt td { padding: 5px 9px; border-bottom: 1px solid var(--rule); text-align: left; white-space: nowrap; }
+table.mt td.wrap { white-space: normal; }
+table.mt th { background: #f3eadb; color: var(--muted); font-weight: 600; }
+details.prob { background: var(--panel); border: 1.5px solid var(--line); border-radius: 12px; margin-bottom: 14px; padding: 4px 18px; }
+details.prob > summary { cursor: pointer; padding: 12px 0; font-weight: 600; min-height: 44px; }
+details.prob > summary .pn { font-family: var(--f-mono); color: var(--wine); margin-right: 8px; }
+details.prob[open] > summary { border-bottom: 1px solid var(--rule); margin-bottom: 12px; }
+.head { font-family: var(--f-display); font-size: 22px; color: var(--wine-deep); margin: 6px 0 8px; }
+/* simulation panels */
+.simgrid { display: grid; grid-template-columns: minmax(0, 300px) minmax(0, 1fr); gap: 22px; align-items: start; }
+@media (max-width: 860px) { .simgrid { grid-template-columns: minmax(0, 1fr); } }
+.ctl { display: grid; gap: 12px; }
+.ctl label { display: grid; gap: 4px; font-size: 13.5px; color: var(--muted); }
+.ctl select, .ctl input[type=range] { font: 14px var(--f-text); width: 100%; min-height: 36px; }
+.ctl select { padding: 6px 8px; border: 1.5px solid var(--line); border-radius: 8px; background: var(--paper); color: var(--ink); }
+.ctl button, .btn { font: 600 14px/1 var(--f-text); background: var(--wine); color: #fbf3e8; border: 0; border-radius: 999px; padding: 11px 18px; min-height: 42px; cursor: pointer; }
+.ctl button.ghost, .btn.ghost { background: var(--paper); color: var(--ink); border: 1.5px solid var(--line); }
+.readout { font: 13.5px/1.5 var(--f-mono); background: var(--paper); border: 1px solid var(--rule); border-radius: 8px; padding: 10px 12px; }
+.readout b { color: var(--wine); font-weight: 500; }
+.plot { background: #fff; border: 1px solid var(--rule); border-radius: 8px; padding: 6px; }
+.plot svg { display: block; width: 100%; height: auto; }
+.plots { display: grid; gap: 14px; }
+.note { font-size: 13.5px; color: var(--muted); }
+.status { font: 13px var(--f-mono); color: var(--muted); min-height: 1.4em; }
+    </style>
+  </head>
+  <body>
+    <div class="progress" aria-hidden="true"><span></span></div>
+    <div class="wrap">
+      <div class="topbar">{{BACK}}</div>
+      <header class="hero">
+        <div class="eyebrow">Cloud physics · lecture notes · bachelor thesis remodelled</div>
+        <h1>Droplet <em>Collection</em></h1>
+        <p class="lede">How a warm cloud of small droplets grows its first drizzle by gravitational collection, built one effect at a time:
+          one drop sweeping a cloud, the drag that sets its speed, the air that steers droplets around it, the bookkeeping of a whole
+          population, and the luck of the first drops. Every curve and every number on these pages comes from the model, except measured data and quoted yields, which name their source.</p>
+        <div class="chips">{{STATS}}</div>
+      </header>
+      <nav class="tabs" role="tablist" aria-label="Sections">
+        <button role="tab" id="t-sim" aria-controls="sim" aria-selected="true">Simulation</button>
+        <button role="tab" id="t-book" aria-controls="book" aria-selected="false">Lecture notes</button>
+        <button role="tab" id="t-problems" aria-controls="problems" aria-selected="false">Problems</button>
+        <button role="tab" id="t-checks" aria-controls="checks" aria-selected="false">Checks</button>
+      </nav>
+      <section id="sim" class="tab" role="tabpanel" aria-labelledby="t-sim">{{SIM}}</section>
+      <section id="book" class="tab" role="tabpanel" aria-labelledby="t-book" hidden>
+        <details class="toc-m"><summary>Contents</summary><ol>{{TOC_MOBILE}}</ol></details>
+        <div class="layout">
+          <nav class="toc" aria-label="Contents"><div class="eyebrow">Contents</div><ol>{{TOC}}</ol></nav>
+          <main>{{BOOK}}</main>
+        </div>
+      </section>
+      <section id="problems" class="tab" role="tabpanel" aria-labelledby="t-problems" hidden>{{PROBLEMS}}</section>
+      <section id="checks" class="tab" role="tabpanel" aria-labelledby="t-checks" hidden>{{CHECKS}}</section>
+    </div>
+    <script>
+{{PHYSICS}}
+{{CHART}}
+var DATA = {{DATA_JSON}};
+{{APP}}
+    </script>
+  </body>
+</html>

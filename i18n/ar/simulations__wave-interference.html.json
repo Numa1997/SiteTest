@@ -1,0 +1,586 @@
+{
+ "0436b85fb607": {
+  "src": "Fig. 6 · superposition · Fourier analysis",
+  "tr": "الشكل 6 · التراكب · تحليل فورييه"
+ },
+ "060b42cf8509": {
+  "src": "1 wave",
+  "tr": "1 موجة"
+ },
+ "09bc0084f3fb": {
+  "src": "Square wave",
+  "tr": "موجة مربّعة"
+ },
+ "0b6086eb0023": {
+  "src": "<span>4</span>Beats",
+  "tr": "<span>4</span>الضربات"
+ },
+ "12aafda0ef58": {
+  "src": "Beats",
+  "tr": "الضربات"
+ },
+ "1379c57d17af": {
+  "src": "That slow pulsing is called a <em>beat</em>. If one string vibrates 110 times a second and the other 111 times, they fall out of step and back into step once every second, and you hear one swell per second. The air does nothing clever: each string sends out its own wave, and at your ear the air simply moves by the sum of the two.",
+  "tr": "يُسمّى هذا النبض البطيء <em>الضربةَ</em>. إذا اهتزّ وتر 110 مرات في الثانية، والآخر 111 مرة، فإنهما يختلفان في الطور ثم يتّفقان مرة واحدة في كلّ ثانية، فتسمع تعاظمًا واحدًا للصوت في كلّ ثانية. وليس في سلوك الهواء أيّ حيلة: كلّ وتر يُرسل موجته الخاصّة، وعند أذنك يتحرّك الهواء ببساطة بمقدار مجموع الموجتين."
+ },
+ "14a2f9ce51c5": {
+  "src": "Numa Koudsie · for school students and first- and second-year undergraduates",
+  "tr": "نعمة سائر قدسية · لطلاب المدارس وطلاب السنتين الأولى والثانية في الجامعة"
+ },
+ "18d1343c8b22": {
+  "src": "<b>Fig. 6b</b> · amplitude spectrum · one line per frequency <span class=\"tx\">\\(\\nu = f s\\)</span>",
+  "tr": "<b>الشكل 6b</b> · طيف السعات · خطٌّ واحد لكلّ تردّد <span class=\"tx\">\\(\\nu = f s\\)</span>"
+ },
+ "19b242b80632": {
+  "src": "The page draws the sum by adding the curves point by point. That is allowed because the equation the waves obey is linear.",
+  "tr": "ترسم الصفحة المجموع بجمع المنحنيات نقطةً نقطة. وهذا مسموح لأنّ المعادلة التي تتبعها الأمواج خطّيّة."
+ },
+ "1a2262d76e7a": {
+  "src": "where \\(y_\\text{mid}\\) is the panel’s axis and \\(h\\) its height in screen pixels (with \\(R_\\text{c}\\) in place of \\(R\\) for the components). The sum’s range is the ceiling (19) rounded up to the next \\(10\\ \\mathrm{px},\\) so the sum can never leave its panel. The two directions have different scales. For the <em>Square wave</em> preset in the wide window, \\(R = 60\\ \\mathrm{px}\\) and \\(h = 220.1\\) screen pixels, so \\(1\\ \\mathrm{px}\\) of displacement is drawn 1.83 pixels tall, while \\(1\\ \\mathrm{px}\\) along the medium is 0.89 pixels wide: the curves look about twice as steep as they are.",
+  "tr": "حيث \\(y_\\text{mid}\\) محور الجزء و\\(h\\) ارتفاعه ببكسلات الشاشة (مع \\(R_\\text{c}\\) بدلًا من \\(R\\) للمكوّنات). ومدى المجموع هو السقف (19) مقرّبًا إلى الأعلى إلى أقرب مضاعف لـ \\(10\\ \\mathrm{px},\\) فلا يستطيع المجموع أن يخرج من جزئه أبدًا. وللاتّجاهين مقياسان مختلفان. فبالنسبة إلى الإعداد الجاهز <em>موجة مربّعة</em> في النافذة العريضة، \\(R = 60\\ \\mathrm{px}\\) و\\(h = 220.1\\) بكسلًا من بكسلات الشاشة، فيُرسم \\(1\\ \\mathrm{px}\\) من الإزاحة بارتفاع 1.83 بكسل، بينما يكون \\(1\\ \\mathrm{px}\\) على امتداد الوسط بعرض 0.89 بكسل: فالمنحنيات تبدو أشدّ انحدارًا بنحو الضعف مما هي عليه."
+ },
+ "1c0da5946d67": {
+  "src": "Give both waves the same amplitude \\(A\\) and write their phases as \\(a = k_1X - \\omega_1 t + \\varphi_1\\) and \\(b = k_2X - \\omega_2 t + \\varphi_2.\\) The sum-to-product identity of trigonometry turns the sum into a product,",
+  "tr": "لتكن للموجتين السعة نفسها \\(A\\)، ولنكتب طوريهما \\(a = k_1X - \\omega_1 t + \\varphi_1\\) و\\(b = k_2X - \\omega_2 t + \\varphi_2.\\) إنّ متطابقة حساب المثلّثات التي تحوّل مجموع جيبين إلى جداء تجعل هذا المجموع جداءً،"
+ },
+ "1fb5e3e1331f": {
+  "src": "In step, \\(\\varphi_1 = \\varphi_2,\\) the amplitudes add: \\(C = A_1 + A_2.\\) Half a turn apart, \\(\\varphi_2 - \\varphi_1 = \\pi,\\) they subtract: \\(C = |A_1 - A_2|,\\) and two equal waves cancel completely. That is the noise-cancelling headphone, and you can build one on the page. Press <em>One wave</em>, then <em>Add wave +</em>. The new wave is a copy of the first (Amplitude \\(20\\ \\mathrm{px},\\) Frequency 1.00, Speed 1×), the sum doubles to \\(40\\ \\mathrm{px},\\) and the spectrum shows a single stem of \\(40\\ \\mathrm{px}.\\) Now drag the <em>Phase</em> of Wave 2 to \\(1.00\\,\\pi.\\) The slider moves in steps of \\(0.05\\ \\mathrm{rad},\\) and its nearest step to \\(\\pi,\\) \\(3.15\\ \\mathrm{rad},\\) misses by \\(0.0084\\ \\mathrm{rad}.\\) By (6) the sum is then a wave of amplitude \\(0.17\\ \\mathrm{px},\\) and <em>Peak |y| on screen</em> reads \\(0.2\\ \\mathrm{px}.\\) A real headphone meets the same limit: it cancels only as well as it can match the phase.",
+  "tr": "إذا كانت الموجتان متّفقتين في الطور، \\(\\varphi_1 = \\varphi_2,\\) جُمعت السعتان: \\(C = A_1 + A_2.\\) وإذا كانتا على بُعد نصف دورة، \\(\\varphi_2 - \\varphi_1 = \\pi,\\) طُرحت إحداهما من الأخرى: \\(C = |A_1 - A_2|,\\) فتُلغي موجتان متساويتان إحداهما الأخرى تمامًا. وهذا هو مبدأ سمّاعة الرأس المانعة للضجيج، ويمكنك أن تبني واحدة منها على هذه الصفحة. اضغط <em>موجة واحدة</em>، ثم <em>أضف موجة +</em>. الموجة الجديدة نسخة من الأولى (السعة \\(20\\ \\mathrm{px},\\) التردد 1.00، السرعة 1×)، فيتضاعف المجموع إلى \\(40\\ \\mathrm{px},\\) ويُظهر الطيف ساقًا واحدة بارتفاع \\(40\\ \\mathrm{px}.\\) والآن اسحب <em>الطور</em> للموجة 2 حتى \\(1.00\\,\\pi.\\) يتحرّك المنزلق بخطوات مقدارها \\(0.05\\ \\mathrm{rad},\\) وأقرب خطوة له إلى \\(\\pi,\\) وهي \\(3.15\\ \\mathrm{rad},\\) تخطئها بمقدار \\(0.0084\\ \\mathrm{rad}.\\) وعندئذ يصبح المجموع، بحسب (6)، موجةً سعتها \\(0.17\\ \\mathrm{px},\\) وتُظهر <em>القيمة القصوى لـ |y| على الشاشة</em> القيمة \\(0.2\\ \\mathrm{px}.\\) وسمّاعة الرأس الحقيقية تواجه الحدّ نفسه: فهي لا تُلغي الضجيج إلّا بقدر ما تستطيع مطابقة الطور."
+ },
+ "26a3c7059c01": {
+  "src": "3 (no Wave 4)",
+  "tr": "3 (بلا الموجة 4)"
+ },
+ "2e7f7fd2d878": {
+  "src": "<span>6</span>The spectrum",
+  "tr": "<span>6</span>الطيف"
+ },
+ "2fbdb5352b6a": {
+  "src": "The upper panel of the plot, \\(56\\ \\%\\) of the height left after the margins, shows the sum in ink with a soft burgundy fill down to the axis; the lower panel shows each wave in its own colour. Sample \\(j\\) sits in screen column \\(44 + j,\\) so the \\(800\\ \\mathrm{px}\\) of the medium always fill the plot width. Vertically each panel has its own range, \\(\\pm R\\) for the sum and \\(\\pm R_\\text{c}\\) for the components, and a displacement \\(y\\) is drawn at the screen height",
+  "tr": "يُظهر الجزء العلوي من الرسم، وهو \\(56\\ \\%\\) من الارتفاع المتبقّي بعد الهوامش، المجموعَ بلون الحبر مع تعبئة عنّابية خفيفة حتى المحور؛ ويُظهر الجزء السفلي كلّ موجة بلونها. وتقع العيّنة \\(j\\) في عمود الشاشة \\(44 + j,\\) فتملأ \\(800\\ \\mathrm{px}\\) من الوسط عرضَ الرسم دائمًا. وفي الاتّجاه الرأسي لكلّ جزء مداه الخاصّ: \\(\\pm R\\) للمجموع و\\(\\pm R_\\text{c}\\) للمكوّنات، وتُرسم الإزاحة \\(y\\) على ارتفاع الشاشة"
+ },
+ "33bd5a5dddcd": {
+  "src": "© 2026 Numa Koudsie",
+  "tr": "© 2026 نعمة سائر قدسية"
+ },
+ "340283176253": {
+  "src": "Figure 4 shows the partial sums. One term is a plain sine whose crest stands \\(6.4\\ \\mathrm{px}\\) above the plateau, \\(13.7\\ \\%\\) of the jump. Four terms, the preset, already have flat tops with small ripples; ten terms follow the square wave closely except right next to each jump, where every partial sum overshoots. The overshoot gets narrower as terms are added, but from three terms on hardly lower: it settles at \\(8.95\\ \\%\\) of the jump, \\(4.22\\ \\mathrm{px}\\) above the plateau of the page’s square wave (Section 5.2).",
+  "tr": "يُظهر الشكل 4 المجاميع الجزئية. حدّ واحد هو جيب بسيط ترتفع قمّته \\(6.4\\ \\mathrm{px}\\) فوق الهضبة، أي \\(13.7\\ \\%\\) من القفزة. وأربعة حدود، وهي الإعداد الجاهز، لها قمم مسطّحة مع تموّجات صغيرة؛ أمّا عشرة حدود فتتبع الموجة المربّعة عن قرب، إلّا بجوار كلّ قفزة مباشرةً، حيث يتجاوز كلّ مجموع جزئي مستوى الهضبة. ويضيق هذا التجاوز مع زيادة الحدود، لكنّه ابتداءً من ثلاثة حدود بالكاد ينخفض: فيستقرّ عند \\(8.95\\ \\%\\) من القفزة، أي \\(4.22\\ \\mathrm{px}\\) فوق هضبة الموجة المربّعة في الصفحة (القسم 5.2)."
+ },
+ "35ab2bdbf0f0": {
+  "src": "<span class=\"psub__n\">5.2</span>The overshoot that never shrinks<span class=\"star\" title=\"heavier mathematics\">★</span>",
+  "tr": "<span class=\"psub__n\">5.2</span>التجاوز الذي لا ينكمش<span class=\"star\" title=\"heavier mathematics\">★</span>"
+ },
+ "3824b0b0c157": {
+  "src": "This is the wave equation. For a string it says that each small piece accelerates in proportion to how sharply the string is bent there: Newton’s second law, with the tension supplying the force. When all the waves have the same speed \\(v,\\) they obey the same equation, \\(\\mathcal{L}y = 0\\) with \\(\\mathcal{L} = \\partial_t^2 - v^2\\,\\partial_X^2.\\) The derivative of a sum is the sum of the derivatives, so for any numbers \\(a\\) and \\(b\\)",
+  "tr": "هذه هي معادلة الموجة. فهي تقول، في حالة الوتر، إنّ كلّ قطعة صغيرة منه تتسارع بما يتناسب مع شدّة انحناء الوتر عندها: إنه قانون نيوتن الثاني، والشدّ هو الذي يوفّر القوّة. وإذا كانت لكلّ الأمواج السرعة نفسها \\(v,\\) فإنها تخضع للمعادلة نفسها، \\(\\mathcal{L}y = 0\\) مع \\(\\mathcal{L} = \\partial_t^2 - v^2\\,\\partial_X^2.\\) ومشتقّة المجموع هي مجموع المشتقّات، فلأيّ عددين \\(a\\) و\\(b\\)"
+ },
+ "3ae50b8776e3": {
+  "src": "A stem that stands alone has the height of its wave’s amplitude. Two equal waves in step give a stem twice as tall; half a turn apart, no stem at all. A wave with Speed 0 does not oscillate: it adds the constant height \\(A_i\\sin\\varphi_i\\) at \\(X = 0,\\) and the stem at \\(\\nu = 0\\) shows \\(\\big|\\sum A_i\\sin\\varphi_i\\big|.\\)",
+  "tr": "الساق المنفردة ارتفاعها سعة موجتها. وموجتان متساويتان متّفقتان في الطور تعطيان ساقًا ضعف الارتفاع؛ وإذا كانتا على بُعد نصف دورة، فلا تظهر ساق البتّة. والموجة ذات السرعة 0 لا تهتزّ، بل تضيف الارتفاع الثابت \\(A_i\\sin\\varphi_i\\) عند \\(X = 0,\\) والساق عند \\(\\nu = 0\\) تُظهر \\(\\big|\\sum A_i\\sin\\varphi_i\\big|.\\)"
+ },
+ "3b4132d0a3ae": {
+  "src": "This is Parseval’s theorem: the mean square of a wave is the sum of the mean squares of its frequencies. For the <em>Square wave</em> preset it gives \\(\\tfrac12\\,(30^2 + 10^2 + 6^2 + 4.3^2)\\ \\mathrm{px^2} = 527.2\\ \\mathrm{px^2}.\\) The square wave it imitates sits at \\(\\pm H\\) all the time, so its mean square is \\(H^2 = 555.2\\ \\mathrm{px^2}{:}\\) four terms already carry about \\(95\\ \\%\\) of the ideal square wave’s mean square; the rest lives in the sharp corners, which need the higher harmonics. That is a measure of the signal’s size, not automatically of its energy.",
+  "tr": "هذه مبرهنة بارسيفال: متوسّط مربّع الموجة هو مجموع متوسّطات مربّعات مركّباتها الترددية. وبالنسبة إلى الإعداد الجاهز <em>موجة مربّعة</em> تعطي \\(\\tfrac12\\,(30^2 + 10^2 + 6^2 + 4.3^2)\\ \\mathrm{px^2} = 527.2\\ \\mathrm{px^2}.\\) أمّا الموجة المربّعة التي يحاكيها فتبقى عند \\(\\pm H\\) طوال الوقت، فمتوسّط مربّعها \\(H^2 = 555.2\\ \\mathrm{px^2}{:}\\) فأربعة حدود تحمل بالفعل نحو \\(95\\ \\%\\) من متوسّط مربّع الموجة المربّعة المثالية؛ أمّا الباقي فيكمن في الزوايا الحادّة التي تحتاج إلى التوافقيات العليا. وهذا مقياس لحجم الإشارة، لا لطاقتها بالضرورة."
+ },
+ "3b6ef1d7bb50": {
+  "src": "Sum of the waves above, individual waves below",
+  "tr": "مجموع الأمواج في الأعلى، والأمواج المفردة في الأسفل"
+ },
+ "3c92c52319b0": {
+  "src": "The <em>Sum of amplitudes</em> readout is this ceiling, and <em>Peak |y| on screen</em> reaches it only where all the crests coincide. In the square wave they never do, since \\(\\sin 3x = -1\\) wherever \\(\\sin x = 1;\\) its peak, \\(27.9\\ \\mathrm{px},\\) stays well below the ceiling of \\(50.3\\ \\mathrm{px}.\\)",
+  "tr": "القراءة <em>مجموع السعات</em> هي هذا السقف، و<em>القيمة القصوى لـ |y| على الشاشة</em> لا تبلغه إلّا حيث تتطابق كلّ القمم. وفي الموجة المربّعة لا يحدث ذلك أبدًا، لأنّ \\(\\sin 3x = -1\\) حيثما كان \\(\\sin x = 1;\\) وقمّتها \\(27.9\\ \\mathrm{px},\\) تبقى أدنى كثيرًا من السقف البالغ \\(50.3\\ \\mathrm{px}.\\)"
+ },
+ "3e341c4dd3fe": {
+  "src": "The square wave has the wavelength of its fundamental, \\(200/0.4 = 500\\ \\mathrm{px},\\) so 1.6 of them fit in the view, and at a fixed point it repeats every \\(2.5\\ \\mathrm{s}.\\) The preset stops at four terms because the next one, \\(n = 9,\\) would need a Frequency of 3.6, above the slider’s top value of 3.",
+  "tr": "للموجة المربّعة طولُ موجة توافقيّتها الأساسية، \\(200/0.4 = 500\\ \\mathrm{px},\\) فيتّسع المشهد لـ 1.6 طول موجة منها، وعند موضع ثابت تتكرّر كلّ \\(2.5\\ \\mathrm{s}.\\) ويتوقّف الإعداد الجاهز عند أربعة حدود، لأنّ الحدّ التالي، \\(n = 9,\\) يحتاج إلى تردّد 3.6، وهو فوق القيمة العليا للمنزلق، 3."
+ },
+ "4012e36e4f4f": {
+  "src": "<span>3</span>Waves simply add",
+  "tr": "<span>3</span>الأمواج تُجمع ببساطة"
+ },
+ "415fcd807151": {
+  "src": "Peak |y| on screen",
+  "tr": "القيمة القصوى لـ |y| على الشاشة"
+ },
+ "41bd0e3ab024": {
+  "src": "Differentiate (1) twice. A sine differentiated twice comes back as minus itself, times \\(\\omega_i^2\\) if we differentiate in time and \\(k_i^2\\) if we differentiate in space, so",
+  "tr": "نشتقّ (1) مرّتين. الجيب إذا اشتُقّ مرّتين يعود بإشارة معكوسة، مضروبًا في \\(\\omega_i^2\\) إذا اشتقَقنا بالنسبة إلى الزمن، وفي \\(k_i^2\\) إذا اشتقَقنا بالنسبة إلى المكان، فيكون"
+ },
+ "43a781ba8de6": {
+  "src": "R. P. Feynman, R. B. Leighton and M. Sands, <em>The Feynman Lectures on Physics</em>, Volume I, Addison-Wesley, 1963: chapters <a href=\"https://www.feynmanlectures.caltech.edu/I_48.html\">48 (Beats)</a> and <a href=\"https://www.feynmanlectures.caltech.edu/I_50.html\">50 (Harmonics)</a>, free in the Caltech online edition.",
+  "tr": "R. P. Feynman وR. B. Leighton وM. Sands، <em>The Feynman Lectures on Physics</em>، المجلّد الأوّل، Addison-Wesley، 1963: الفصلان <a href=\"https://www.feynmanlectures.caltech.edu/I_48.html\">48 (Beats)</a> و<a href=\"https://www.feynmanlectures.caltech.edu/I_50.html\">50 (Harmonics)</a>، متاحان مجّانًا في النسخة الإلكترونية من Caltech."
+ },
+ "45a873ee4dd4": {
+  "src": "Fourier’s theorem",
+  "tr": "مبرهنة فورييه"
+ },
+ "45e1421c7238": {
+  "src": "Stand next to a guitarist tuning up. Two strings that should give the same note are plucked together, and the sound swells and fades, slower and slower as the peg is turned, until it holds steady.",
+  "tr": "قف بجوار عازف غيتار وهو يضبط آلته. تُنقر معًا وترانِ يُفترض أن يعطيا النغمة نفسها، فيتضخّم الصوت ثم يخفت، أبطأ فأبطأ كلّما أُدير المفتاح، إلى أن يثبت."
+ },
+ "46e4cc1f7f74": {
+  "src": "Suppose a function \\(F(x)\\) of period \\(2\\pi\\) can be written as the series in the box. To find one coefficient, say \\(b_m,\\) we need a way to make all the other terms disappear, and the sines and cosines provide it. Over a full period, for whole numbers \\(m, n \\ge 1,\\)",
+  "tr": "لنفترض أنّ دالّة \\(F(x)\\) ذات الدور \\(2\\pi\\) يمكن كتابتها على صورة المتسلسلة في الإطار. ولإيجاد معامل واحد، لنقل \\(b_m,\\) نحتاج إلى وسيلة تُفني كلّ الحدود الأخرى، والجيوب وجيوب التمام توفّرها. وعلى دورة كاملة، من أجل أعداد صحيحة \\(m, n \\ge 1,\\)"
+ },
+ "483998def219": {
+  "src": "In the spectrum, a stem at frequency \\(\\nu\\) stands \\(44 + (\\nu/6\\ \\mathrm{Hz})\\,(w - 58)\\) screen pixels from the left edge, where \\(w\\) is the panel width, and its height is \\(C_\\nu\\) scaled so that \\(40\\ \\mathrm{px},\\) or the tallest stem if that is taller, fills the panel. The axis runs from 0 to \\(6\\ \\mathrm{Hz}\\) because \\(\\nu = f s\\) can reach \\(3 \\times 2 = 6\\ \\mathrm{Hz};\\) the caption beneath the panel states this 0–6 Hz range. Each wave keeps one colour for its card, its sliders, its curve and its stem, and a stem shared by several waves is drawn in ink.",
+  "tr": "في الطيف، تقع الساقُ عند التردد \\(\\nu\\) على بُعد \\(44 + (\\nu/6\\ \\mathrm{Hz})\\,(w - 58)\\) بكسلًا من بكسلات الشاشة عن الحافة اليسرى، حيث \\(w\\) عرض الجزء، وارتفاعها \\(C_\\nu\\) بمقياسٍ يجعل \\(40\\ \\mathrm{px},\\) أو أطولَ ساق إن كانت أطول، يملأ الجزء. ويمتدّ المحور من 0 إلى \\(6\\ \\mathrm{Hz}\\) لأنّ \\(\\nu = f s\\) قد يبلغ \\(3 \\times 2 = 6\\ \\mathrm{Hz};\\) والتعليق تحت الجزء يذكر هذا المدى من 0 إلى 6 هرتز. ولكلّ موجة لون واحد في بطاقتها ومنزلقاتها ومنحناها وساقها، والساق المشتركة بين عدّة موجات تُرسم بلون الحبر."
+ },
+ "4a59e9e8e553": {
+  "src": "With equal speeds, \\(s_1 = s_2 = s,\\) both reduce to \\(200\\,s\\ \\mathrm{px/s}{:}\\) envelope and carrier move together and the whole pattern slides along unchanged. With different speeds they part company, and the envelope can even run backwards (Exercise 4.1). In the limit of close frequencies, \\(\\Delta\\omega/\\Delta k\\) becomes the derivative \\(v_\\text{g} = \\mathrm{d}\\omega/\\mathrm{d}k,\\) the <em>group velocity</em>. It is the speed of a long, slowly varying envelope, built from a narrow band of wavelengths, in a medium whose dispersion relation \\(\\omega(k)\\) fixes the frequency of each wavelength; for waves that lose no energy it is also the speed at which the energy, and any slow signal, travels. On this bench, though, there is no medium: you choose each wave’s speed by hand, nothing carries energy, and the envelope’s speed follows only from the two pairs \\((k, \\omega)\\) you set. That is why it can run backwards faster than either wave. A real medium could show the same envelope only if its \\(\\omega(k)\\) fell with \\(k\\) there, and then the energy would travel backwards with it. On deep water, for example, \\(\\omega = \\sqrt{gk}\\) with \\(g = 9.81\\ \\mathrm{m/s^2},\\) so \\(v_\\text{g}\\) is exactly half the phase speed: in a group of ocean swell, new crests appear at the back, run forward through the group and die out at the front.",
+  "tr": "عند تساوي السرعات، \\(s_1 = s_2 = s,\\) تؤول كلتا السرعتين إلى \\(200\\,s\\ \\mathrm{px/s}{:}\\) فالمغلّف والحامل يتحرّكان معًا، وينزلق النمط كلّه دون تغيير. أمّا عند اختلاف السرعات فيفترقان، بل قد يسير المغلّف إلى الخلف (التمرين 4.1). وفي حدّ الترددات المتقاربة يصبح \\(\\Delta\\omega/\\Delta k\\) المشتقّةَ \\(v_\\text{g} = \\mathrm{d}\\omega/\\mathrm{d}k,\\) وهي <em>سرعة المجموعة</em>. وهي سرعة مغلّفٍ طويل بطيء التغيّر، مبنيّ من نطاق ضيّق من أطوال الموجات، في وسط تحدّد علاقةُ التشتّت \\(\\omega(k)\\) فيه تردّدَ كلّ طول موجة؛ وبالنسبة إلى الأمواج التي لا تفقد طاقة، هي أيضًا السرعة التي تنتقل بها الطاقة وأيّ إشارة بطيئة. لكن لا وسط على هذه المنضدة: فأنت تختار سرعة كلّ موجة بيدك، ولا شيء يحمل الطاقة، وسرعة المغلّف تتحدّد بالزوجين \\((k, \\omega)\\) اللذين تضبطهما وحدهما. ولهذا يمكن أن يسير إلى الخلف أسرع من أيٍّ من الموجتين. ولا يمكن لوسط حقيقي أن يُظهر المغلّف نفسه إلا إذا تناقص \\(\\omega(k)\\) فيه مع \\(k\\) في ذلك المجال، وعندئذ تنتقل الطاقة معه إلى الخلف. وعلى الماء العميق مثلًا، \\(\\omega = \\sqrt{gk}\\) مع \\(g = 9.81\\ \\mathrm{m/s^2},\\) فتكون \\(v_\\text{g}\\) نصف سرعة الطور تمامًا: في مجموعة من أمواج المحيط تظهر قمم جديدة في مؤخّرتها، وتسير إلى الأمام عبرها ثم تتلاشى عند مقدّمتها."
+ },
+ "4a81ec85f9b8": {
+  "src": "<span>9</span>What the model leaves out",
+  "tr": "<span>9</span>ما يغفله النموذج"
+ },
+ "50aa21524b2b": {
+  "src": "<span class=\"psub__n\">3.1</span>Two waves of one frequency make one wave",
+  "tr": "<span class=\"psub__n\">3.1</span>موجتان من تردد واحد تكوّنان موجةً واحدة"
+ },
+ "566d8906db35": {
+  "src": "The stems tell how the mean-square displacement is shared: square the height at a fixed point and average over a long time, written \\(\\overline{y^2}.\\) Squaring a sum of sines gives squares, each of which averages to half its amplitude squared, and cross terms such as \\(\\sin(2\\pi\\nu_1 t + \\alpha)\\,\\sin(2\\pi\\nu_2 t + \\beta),\\) which average to zero when \\(\\nu_1 \\ne \\nu_2.\\) For a spectrum with no stem at \\(\\nu = 0,\\) therefore,",
+  "tr": "تُبيّن السيقان كيف يتوزّع متوسّط مربّع الإزاحة: يُربَّع الارتفاع عند موضع ثابت ثم يؤخذ متوسّطه على زمن طويل، ويُكتب \\(\\overline{y^2}.\\) وتربيع مجموع جيوب يعطي مربّعات، متوسّط كلٍّ منها نصف مربّع سعته، وحدودًا مختلطة مثل \\(\\sin(2\\pi\\nu_1 t + \\alpha)\\,\\sin(2\\pi\\nu_2 t + \\beta),\\) متوسّطها صفر عندما \\(\\nu_1 \\ne \\nu_2.\\) لذلك، وبالنسبة إلى طيف لا ساق فيه عند \\(\\nu = 0,\\) فإنّ"
+ },
+ "576aaafcc319": {
+  "src": "Stand at the left edge of the view, \\(X = 0,\\) and listen. By (1), wave \\(i\\) arrives there as \\(A_i\\sin(\\varphi_i - 2\\pi\\nu_i t),\\) an oscillation of frequency \\(\\nu_i = f_i s_i.\\) The panel draws one vertical line, a stem, for each different frequency, placed at \\(\\nu\\) on the horizontal axis. Waves that share a frequency merge into one oscillation by (5), so the stem’s height is the length of their summed phasor,",
+  "tr": "قِف عند الحافة اليسرى للمشهد، \\(X = 0,\\) واستمع. وبحسب (1) تصل الموجة \\(i\\) إلى هناك بالصورة \\(A_i\\sin(\\varphi_i - 2\\pi\\nu_i t),\\) أي اهتزازًا تردده \\(\\nu_i = f_i s_i.\\) ويرسم هذا الجزء خطًّا رأسيًّا، هو الساق، لكلّ تردّد مختلف، في الموضع \\(\\nu\\) على المحور الأفقي. والموجات التي تشترك في تردد تندمج في اهتزاز واحد بحسب (5)، فيكون ارتفاع الساق طولَ مجموعِ طوريّاتها،"
+ },
+ "5ab07c8cc6f5": {
+  "src": "<span class=\"pfig__n\">Figure 2</span>Adding two waves of the same frequency, equation (5). Each wave is an arrow whose length is its amplitude and whose angle is its phase. The second arrow starts at the tip of the first, and the arrow \\(C\\) from the start to the end is the sum. As time passes the whole picture turns rigidly, at the angular frequency \\(\\omega,\\) and the height of each tip, read off on the right, is a displacement: heights add because arrows add.",
+  "tr": "<span class=\"pfig__n\">الشكل 2</span>جمع موجتين من التردد نفسه، المعادلة (5). كلّ موجة سهم طوله سعتها وزاويته طورها. والسهم الثاني يبدأ من رأس الأول، والسهم \\(C\\) من البداية إلى النهاية هو المجموع. ومع مرور الزمن يدور الشكل كلّه كقطعة واحدة بالتردد الزاوي \\(\\omega,\\) وارتفاع كلّ رأس، المقروء على اليمين، هو إزاحة: فالارتفاعات تُجمع لأنّ الأسهم تُجمع."
+ },
+ "5b9266d412c2": {
+  "src": "Lecture note · Fig. 6 · superposition · Fourier analysis",
+  "tr": "مذكّرة المحاضرة · الشكل 6 · التراكب · تحليل فورييه"
+ },
+ "5bdb46045e49": {
+  "src": "<span class=\"psec__n\">04</span>Beats",
+  "tr": "<span class=\"psec__n\">04</span>الضربات"
+ },
+ "5c5b05f8ee34": {
+  "src": "where \\(\\delta_{mn}\\) is 1 if \\(m = n\\) and 0 otherwise. To see the first, write \\(\\sin mx\\,\\sin nx = \\tfrac12\\left[ \\cos(m-n)x - \\cos(m+n)x \\right].\\) A cosine that makes a nonzero whole number of oscillations in the period averages to zero, and only for \\(m = n\\) does the first term become the constant \\(\\tfrac12,\\) which contributes \\(\\pi.\\) The second integral vanishes because its integrand is odd. Functions with this property are called <em>orthogonal</em>, by analogy with perpendicular vectors, whose dot product is zero. Multiply the series by \\(\\sin mx\\) and integrate over a period: every term but one drops out, and",
+  "tr": "حيث \\(\\delta_{mn}\\) تساوي 1 إذا كان \\(m = n\\)، وتساوي 0 في غير ذلك. ولرؤية العلاقة الأولى، اكتب \\(\\sin mx\\,\\sin nx = \\tfrac12\\left[ \\cos(m-n)x - \\cos(m+n)x \\right].\\) فجيب التمام الذي يصنع عددًا صحيحًا غير صفري من الاهتزازات في الدورة متوسّطه صفر، ولا يصير الحدّ الأول ثابتًا إلّا عندما \\(m = n\\)، فيصبح \\(\\tfrac12,\\) ويُسهم بمقدار \\(\\pi.\\) والتكامل الثاني ينعدم لأنّ الدالّة المكامَلة فيه فردية. وتُسمّى الدوال التي لها هذه الخاصية <em>متعامدة</em>، قياسًا على المتّجهات المتعامدة التي جداؤها السلّمي صفر. اضرب المتسلسلة في \\(\\sin mx\\) وكامل على دورة واحدة: تسقط الحدود كلّها عدا واحدًا، و"
+ },
+ "6093e32cc623": {
+  "src": "The same rule explains things that seem to have nothing in common. A noise-cancelling headphone listens to the outside noise with a small microphone and plays the same wave turned upside down; the two add to almost nothing, which works best for steady low hums such as an aircraft engine. An additive synthesizer works the other way round: it mixes pure sine tones at whole-number multiples of a note’s frequency, each with its own loudness, and the mixture can sound like an organ, a clarinet or a violin. The bowed string of a violin pulls on the bridge with a force shaped roughly like a sawtooth, which contains every multiple of the note, the \\(n\\)th one with a strength proportional to \\(1/n.\\) The low notes of a clarinet are dominated by the odd multiples, which is why a square wave, built from odd multiples alone, sounds hollow, a little like a clarinet.",
+  "tr": "والقاعدة نفسها تفسّر أشياء تبدو وكأنه لا رابط بينها. تُصغي سمّاعة الرأس المانعة للضجيج عبر ميكروفون صغير إلى الضجيج الخارجي، ثم تبثّ الموجة نفسها مقلوبة، فيكاد مجموعهما يكون صفرًا، وهذا أنجح ما يكون مع الهمهمات المنخفضة الثابتة مثل هدير محرّك الطائرة. أمّا المُركِّب الصوتي الجمعي فيعمل بالعكس: يمزج نغمات جيبية نقيّة عند مضاعفات صحيحة لتردّد نغمة ما، لكلّ منها شدّتها، فيمكن للمزيج أن يُشبه صوت الأورغن أو الكلارينيت أو الكمان. ووتر الكمان المعزوف بالقوس يشدّ الفَرَس (الجسر) بقوّة تشبه في شكلها أسنان المنشار تقريبًا، وهي تحوي كلّ مضاعفات النغمة، والمضاعف ذو الرتبة \\(n\\) بشدّة تتناسب مع \\(1/n.\\) وتهيمن المضاعفاتُ الفردية على النغمات المنخفضة للكلارينيت، ولذلك يبدو صوت الموجة المربّعة، المبنية من المضاعفات الفردية وحدها، أجوفَ، يشبه الكلارينيت قليلًا."
+ },
+ "61a0f3fe6d49": {
+  "src": "The workbench above lets you play all of these games with up to six waves. The lower half of the plot shows the ingredients, the upper half their sum, and the spectrum below lists what is in the mix.",
+  "tr": "تتيح لك المنضدة أعلاه أن تجرّب كلّ هذه الألعاب بما يصل إلى ستّ موجات. يُظهر النصف السفلي من الرسم المكوّنات، والنصف العلوي مجموعها، والطيف أسفله يسرد ما في الخليط."
+ },
+ "6205c61dd83c": {
+  "src": "Exercise 6.1 · on the figure above",
+  "tr": "التمرين 6.1 · على الشكل أعلاه"
+ },
+ "620a2113787d": {
+  "src": "<span class=\"psec__n\">06</span>The spectrum",
+  "tr": "<span class=\"psec__n\">06</span>الطيف"
+ },
+ "65d41b3794e3": {
+  "src": "<span class=\"pfig__n\">Figure 3</span>The <em>Beats</em> preset as heard at one point, the centre of the view, \\(X = 400\\ \\mathrm{px}{:}\\) the two waves of equation (1) summed every \\(0.01\\ \\mathrm{s}\\) from \\(t = 0\\) to \\(8\\ \\mathrm{s}.\\) The dashed envelope \\(\\pm 36\\,|\\cos(\\pi(t-2)/4)|\\ \\mathrm{px},\\) from (7), encloses the sum at every instant. It falls to zero at \\(t = 0,\\) 4 and \\(8\\ \\mathrm{s},\\) where the two waves are exactly out of step, and reaches \\(2A = 36\\ \\mathrm{px}\\) halfway between.",
+  "tr": "<span class=\"pfig__n\">الشكل 3</span>إعداد <em>الضربات</em> كما يُسمع عند نقطة واحدة، هي وسط المشهد، \\(X = 400\\ \\mathrm{px}{:}\\) الموجتان من المعادلة (1) مجموعتان كلّ \\(0.01\\ \\mathrm{s}\\) من \\(t = 0\\) إلى \\(8\\ \\mathrm{s}.\\) والمغلّف المتقطّع \\(\\pm 36\\,|\\cos(\\pi(t-2)/4)|\\ \\mathrm{px},\\) المأخوذ من (7)، يحيط بالمجموع في كلّ لحظة. ويهبط إلى الصفر عند \\(t = 0,\\) و4 و\\(8\\ \\mathrm{s},\\) حيث تكون الموجتان متعاكستين في الطور تمامًا، ويبلغ \\(2A = 36\\ \\mathrm{px}\\) في منتصف المسافة بين هذه اللحظات."
+ },
+ "6b8ca8943b99": {
+  "src": "Amplitude spectrum of the waves",
+  "tr": "طيف السعات للأمواج"
+ },
+ "6bc74cfa4903": {
+  "src": "highest \\(n\\)",
+  "tr": "أعلى \\(n\\)"
+ },
+ "6c29d9e9621e": {
+  "src": "Adding waves: beats, square waves and the spectrum",
+  "tr": "جمع الأمواج: الضربات والموجات المربّعة والطيف"
+ },
+ "6db8077fc02e": {
+  "src": "The phase speed \\(v_i = 200\\,s_i\\ \\mathrm{px/s}\\) is set by the <em>Speed</em> slider alone; the <em>Frequency</em> slider does not change it.",
+  "tr": "سرعة الطور \\(v_i = 200\\,s_i\\ \\mathrm{px/s}\\) يحدّدها مُنزلق <em>السرعة</em> وحده، أمّا مُنزلق <em>التردد</em> فلا يغيّرها."
+ },
+ "702b201c4b40": {
+  "src": "Phyein Usul",
+  "tr": "Phyein Usul"
+ },
+ "717c2865a07e": {
+  "src": "peak (px)",
+  "tr": "القمّة (px)"
+ },
+ "726f517f2235": {
+  "src": "Waves",
+  "tr": "الأمواج"
+ },
+ "768e873d2c52": {
+  "src": "The <em>Square wave</em> preset adds four waves with Frequencies 0.4, 1.2, 2.0 and 2.8, the first, third, fifth and seventh multiples of 0.4, and Amplitudes \\(30/n\\ \\mathrm{px}\\) for \\(n = 1, 3, 5, 7{:}\\) 30, 10, 6 and \\(4.3\\ \\mathrm{px},\\) the last rounded from \\(30/7 = 4.29.\\) All four have Phase 0 and Speed 1×. The result is a flat-topped wave that jumps between two levels, and the reason is Fourier’s series for the square wave \\(\\operatorname{sq}(x),\\) which equals \\(+1\\) for \\(0 < x < \\pi\\) and \\(-1\\) for \\(-\\pi < x < 0\\) and repeats every \\(2\\pi{:}\\)",
+  "tr": "يضمّ إعداد <em>موجة مربّعة</em> أربع موجات تردّداتها 0.4 و1.2 و2.0 و2.8، وهي المضاعفات الأولى والثالثة والخامسة والسابعة للعدد 0.4، وسعاتها \\(30/n\\ \\mathrm{px}\\) حيث \\(n = 1, 3, 5, 7{:}\\) 30 و10 و6 و\\(4.3\\ \\mathrm{px},\\) والأخيرة مقرّبة من \\(30/7 = 4.29.\\) وطور الأربع جميعًا 0 وسرعتها 1×. والناتج موجة ذات قمم مسطّحة تقفز بين مستويين، والسبب هو متسلسلة فورييه للموجة المربّعة \\(\\operatorname{sq}(x),\\) وهي \\(+1\\) عندما \\(0 < x < \\pi\\) و\\(-1\\) عندما \\(-\\pi < x < 0\\) وتتكرّر كلّ \\(2\\pi{:}\\)"
+ },
+ "781961bc81c2": {
+  "src": "Pause",
+  "tr": "إيقاف مؤقّت"
+ },
+ "7d252cd594b3": {
+  "src": "All simulations ↑",
+  "tr": "جميع المحاكاة ↑"
+ },
+ "7f0c857fd102": {
+  "src": "Energy counts the harmonics differently. A stretched string with mass \\(\\mu\\) per length and tension \\(F\\) stores kinetic energy \\(\\tfrac12\\mu\\,(\\partial y/\\partial t)^2\\) and stretching energy \\(\\tfrac12 F\\,(\\partial y/\\partial X)^2\\) per length. For a wave running one way, \\(\\partial y/\\partial t = -v\\,\\partial y/\\partial X\\) and \\(F = \\mu v^2,\\) so the two are equal. A harmonic swings each point with a velocity of amplitude \\(\\omega_n A_n,\\) so its mean kinetic energy per length is \\(\\tfrac14\\mu\\,\\omega_n^2 A_n^2\\) and its total twice that; the cross terms average away as in (18), and the mean energy per length is \\(\\overline e = \\tfrac12\\mu\\sum_n \\omega_n^2 A_n^2.\\) The fast harmonics weigh more because they move faster. For a square wave \\(A_n \\propto 1/n\\) and \\(\\omega_n \\propto n,\\) so every odd harmonic carries the same energy (in the preset too, to within \\(0.7\\ \\%\\)) and the endless sum diverges: a string with true vertical steps would hold infinite energy in this small-slope model, though its mean square is only \\(H^2.\\) The \\(95\\ \\%\\) above says how close the preset’s shape comes to the square wave, not what share of a string’s energy it would carry.",
+  "tr": "أمّا الطاقة فتَزِن التوافقيات بطريقة أخرى. يخزّن وترٌ مشدودٌ كتلتُه \\(\\mu\\) لكلّ وحدة طول وقوّةُ شدّه \\(F\\) طاقةً حركيةً \\(\\tfrac12\\mu\\,(\\partial y/\\partial t)^2\\) وطاقةَ تمدّدٍ \\(\\tfrac12 F\\,(\\partial y/\\partial X)^2\\) لكلّ وحدة طول. وبالنسبة إلى موجة تسير في اتّجاه واحد، \\(\\partial y/\\partial t = -v\\,\\partial y/\\partial X\\) و\\(F = \\mu v^2,\\) فتتساوى الطاقتان. والتوافقية تحرّك كلّ نقطة بسرعة سعتُها \\(\\omega_n A_n,\\) فمتوسّط طاقتها الحركية لكلّ وحدة طول \\(\\tfrac14\\mu\\,\\omega_n^2 A_n^2\\) وطاقتها الكلّية ضعف ذلك؛ ومتوسّط الحدود المختلطة صفر كما في (18)، ومتوسّط الطاقة لكلّ وحدة طول هو \\(\\overline e = \\tfrac12\\mu\\sum_n \\omega_n^2 A_n^2.\\) فللتوافقيات السريعة وزن أكبر لأنّها تتحرّك أسرع. وبالنسبة إلى الموجة المربّعة \\(A_n \\propto 1/n\\) و\\(\\omega_n \\propto n,\\) فتحمل كلّ توافقية فردية الطاقةَ نفسها (وكذلك في الإعداد الجاهز، في حدود \\(0.7\\ \\%\\))، ويتباعد المجموع اللانهائي: فالوتر الذي فيه قفزات رأسية حقيقية يحمل، في هذا النموذج ذي الميول الصغيرة، طاقةً لا نهائية، مع أنّ متوسّط مربّعه لا يتجاوز \\(H^2.\\) أمّا نسبة \\(95\\ \\%\\) المذكورة أعلاه فتدلّ على مدى قرب شكل الإعداد الجاهز من الموجة المربّعة، لا على الحصّة التي يحملها من طاقة الوتر."
+ },
+ "7f1ea7ae3415": {
+  "src": "<span class=\"psub__n\">4.1</span>The speed of the envelope<span class=\"star\" title=\"heavier mathematics\">★</span>",
+  "tr": "<span class=\"psub__n\">4.1</span>سرعة المغلّف<span class=\"star\" title=\"heavier mathematics\">★</span>"
+ },
+ "803f20699aef": {
+  "src": "<span>5</span>A square wave from sines",
+  "tr": "<span>5</span>موجة مربّعة من الجيوب"
+ },
+ "819de9cf83ab": {
+  "src": "<span>1</span>Many sounds, one eardrum",
+  "tr": "<span>1</span>أصوات كثيرة، طبلة أذن واحدة"
+ },
+ "82890f2b7ba4": {
+  "src": "Each wave is evaluated exactly at every sample, and the sum is accumulated at the same points. The code calls the sine three times per wave and sample, twice for the component curve and once for the sum: \\(3N(M+1)\\) calls, \\(8\\,556\\) per frame for the <em>Square wave</em> preset in the wide window, plus two per wave, one for the stored values at the centre of the view and one for the spectrum.",
+  "tr": "تُحسب كلّ موجة حسابًا دقيقًا عند كلّ عيّنة، ويُراكَم المجموع عند النقاط نفسها. وتستدعي الشيفرة دالّة الجيب ثلاث مرّات لكلّ موجة وعيّنة: مرّتين للمنحنى الجزئي ومرّة للمجموع، أي \\(3N(M+1)\\) استدعاءً، و\\(8\\,556\\) في كلّ إطار للإعداد الجاهز <em>موجة مربّعة</em> في النافذة العريضة، إضافةً إلى استدعاءين لكلّ موجة: واحد للقيم المخزّنة في وسط المشهد وواحد للطيف."
+ },
+ "850899604011": {
+  "src": "Beats come from two frequencies that are almost equal. Harmonics are the opposite case: frequencies that are exact whole-number multiples of one fundamental. Added with the right strengths, they can build almost any repeating shape.",
+  "tr": "تنشأ الضربات من ترددين متقاربين جدًّا. أمّا التوافقيات فهي الحالة المعاكسة: ترددات هي مضاعفات صحيحة دقيقة لتردّد أساسيّ واحد. وإذا جُمعت بالشدّات المناسبة، أمكنها أن تبني أيّ شكل متكرّر تقريبًا."
+ },
+ "85b76337411d": {
+  "src": "Your ear does the reverse of a synthesizer. Along the basilar membrane, a thin strip inside the snail-shaped cochlea of the inner ear, each place responds most strongly to one frequency, high near the entrance and low at the far end. The ear therefore takes the sum apart again and reports which frequencies are present and how strong each one is. That list is the <em>spectrum</em>, and it is what the panel below the plot, Fig. 6b, draws.",
+  "tr": "تفعل أذنك عكسَ ما يفعله المُركِّب الصوتي. فعلى طول الغشاء القاعدي، وهو شريط رقيق داخل القوقعة الحلزونية في الأذن الداخلية، يستجيب كلّ موضع بأقوى ما يكون لتردّد واحد: التردّدات العالية قرب المدخل، والمنخفضة عند الطرف البعيد. فتفكّك الأذنُ المجموعَ من جديد وتُبلّغ عن الترددات الموجودة وشدّة كلٍّ منها. وتلك القائمة هي <em>الطيف</em>، وهي ما يرسمه الجزء الواقع أسفل الرسم، الشكل 6b."
+ },
+ "8615e651d62f": {
+  "src": "The square wave is odd, \\(\\operatorname{sq}(-x) = -\\operatorname{sq}(x),\\) so all its cosine coefficients vanish, and the integrand in (13) is even, so the integral is twice that from 0 to \\(\\pi,\\) where \\(\\operatorname{sq} = 1{:}\\)",
+  "tr": "الموجة المربّعة فردية، \\(\\operatorname{sq}(-x) = -\\operatorname{sq}(x),\\) فتتلاشى كلّ معاملات جيب التمام فيها، والمُكامل في (13) زوجي، فيكون التكامل ضعفَ التكامل من 0 إلى \\(\\pi,\\) حيث \\(\\operatorname{sq} = 1{:}\\)"
+ },
+ "8716854255ac": {
+  "src": "<i>ν</i> from 0 to 6 Hz",
+  "tr": "<i>ν</i> من 0 إلى 6 هرتز"
+ },
+ "89e74b6c95aa": {
+  "src": "Each term \\(A e^{\\mathrm{i}\\varphi}\\) is an arrow, a <em>phasor</em>, of length \\(A\\) at angle \\(\\varphi.\\) Adding waves of one frequency is adding arrows tip to tail (Figure 2), and the length of the result follows from the cosine rule. The angle inside the triangle, at the joint, is \\(\\pi - (\\varphi_2 - \\varphi_1),\\) and \\(\\cos(\\pi - \\alpha) = -\\cos\\alpha\\) turns the rule’s minus into a plus:",
+  "tr": "كلّ حدّ \\(A e^{\\mathrm{i}\\varphi}\\) سهمٌ يُسمّى <em>الطوريّ</em>، طوله \\(A\\) وزاويته \\(\\varphi.\\) وجمع أمواج التردد الواحد هو جمع أسهم يبدأ كلٌّ منها من رأس سابقه (الشكل 2)، ويُستنتج طول المحصّلة من قانون جيب التمام. والزاوية داخل المثلّث عند نقطة الوصل هي \\(\\pi - (\\varphi_2 - \\varphi_1),\\) و\\(\\cos(\\pi - \\alpha) = -\\cos\\alpha\\) تحوّل إشارة الناقص في القانون إلى زائد:"
+ },
+ "8a55b52cd3d1": {
+  "src": "One wave",
+  "tr": "موجة واحدة"
+ },
+ "8afc6052baf0": {
+  "src": "<span class=\"pfig__n\">Figure 4</span>Partial sums of (11) at \\(t = 0\\) over one wavelength, \\(0 \\le X \\le 500\\ \\mathrm{px},\\) evaluated every \\(1\\ \\mathrm{px}{:}\\) one term \\((n = 1);\\) the four terms of the <em>Square wave</em> preset with its amplitudes 30, 10, 6 and \\(4.3\\ \\mathrm{px};\\) and ten terms \\((n = 1, 3, \\dots, 19,\\) amplitudes \\(30/n\\ \\mathrm{px}),\\) which the page cannot show because \\(n \\ge 9\\) lies above its Frequency range. The dashed line is the square wave of height \\(H = 23.56\\ \\mathrm{px},\\) the dotted lines the limit of the overshoot for many terms, \\(\\pm 27.78\\ \\mathrm{px}.\\) As terms are added the ripples crowd towards the jumps, while the crest next to each jump keeps nearly the same height.",
+  "tr": "<span class=\"pfig__n\">الشكل 4</span>المجاميع الجزئية للمعادلة (11) عند \\(t = 0\\) عبر طول موجة واحد، \\(0 \\le X \\le 500\\ \\mathrm{px},\\) تُحسب كلّ \\(1\\ \\mathrm{px}{:}\\) حدّ واحد \\((n = 1);\\) والحدود الأربعة للإعداد الجاهز <em>موجة مربّعة</em> بسعاتها 30 و10 و6 و\\(4.3\\ \\mathrm{px};\\) وعشرة حدود \\((n = 1, 3, \\dots, 19,\\) بسعات \\(30/n\\ \\mathrm{px}),\\) وهي ما لا تستطيع الصفحة عرضه، لأنّ \\(n \\ge 9\\) يقع فوق نطاق ترددها. والخطّ المتقطّع هو الموجة المربّعة التي ارتفاعها \\(H = 23.56\\ \\mathrm{px},\\) والخطوط المنقّطة حدّ التجاوز عند كثرة الحدود، \\(\\pm 27.78\\ \\mathrm{px}.\\) ومع إضافة الحدود تتزاحم التموّجات نحو القفزات، بينما تحافظ القمّة المجاورة لكلّ قفزة على ارتفاعها تقريبًا."
+ },
+ "8f5fc61edca2": {
+  "src": "A workbench for adding waves. Give each one its own amplitude, frequency, phase and speed, and watch the sum take shape.",
+  "tr": "منضدة لجمع الأمواج. أعطِ كلّ موجة سعتها وترددها وطورها وسرعتها، وشاهد كيف يتشكّل مجموعها."
+ },
+ "9377b21a7822": {
+  "src": "<span>8</span>From the medium to the screen",
+  "tr": "<span>8</span>من الوسط إلى الشاشة"
+ },
+ "93a8161c11f4": {
+  "src": "Back to the simulations",
+  "tr": "العودة إلى المحاكاة"
+ },
+ "9521dba25709": {
+  "src": "Home page",
+  "tr": "الصفحة الرئيسية"
+ },
+ "973432ed78e5": {
+  "src": "Section 5.1 derives it. With \\(x = 2\\pi \\times 0.4\\,(X/200 - t),\\) the term \\(\\sin nx\\) is exactly the page’s wave of Frequency \\(0.4\\,n,\\) and the amplitudes \\(30/n\\) are those of (10) multiplied by a height \\(H\\) with \\(4H/\\pi = 30\\ \\mathrm{px}{:}\\)",
+  "tr": "يشتقّ القسم 5.1 ذلك. مع \\(x = 2\\pi \\times 0.4\\,(X/200 - t),\\) يكون الحدّ \\(\\sin nx\\) تمامًا موجةَ الصفحة ذات التردد \\(0.4\\,n,\\) والسعات \\(30/n\\) هي سعات (10) مضروبةً في ارتفاع \\(H\\) حيث \\(4H/\\pi = 30\\ \\mathrm{px}{:}\\)"
+ },
+ "97ec8ab1959a": {
+  "src": "<b>Abstract.</b> Every sound that reaches your ear is many waves at once, and the air carries them by simply adding them up. This note shows why adding is allowed and what sums of sines can build: the slow throb of beats that guitarists tune by, the near-silence inside a noise-cancelling headphone, and a square wave assembled from odd harmonics, with an overshoot at its corners that no number of terms removes. It then explains the spectrum below the plot, the list of frequencies a wave contains, which is also how your inner ear takes a sound apart, and how the page computes and draws every curve. Subsections marked ★ carry the heavier mathematics and can be skipped on a first reading without losing the thread.",
+  "tr": "<b>الملخّص.</b> كلّ صوت يصل إلى أذنك هو أمواج كثيرة في آن واحد، والهواء ينقلها بأن يجمعها ببساطة. تبيّن هذه المذكّرة لماذا يُسمح بالجمع، وما الذي يمكن أن تبنيه مجاميع الجيوب: الخفقان البطيء للضربات التي يضبط عليها عازفو الغيتار آلاتهم، والصمت شبه التام داخل سمّاعة الرأس المانعة للضجيج، وموجة مربّعة تُبنى من توافقيات فردية، مع تجاوز عند زواياها لا يُزيله أيّ عدد من الحدود. ثم تشرح الطيف الموجود أسفل الرسم، أي قائمة الترددات التي تحويها الموجة، وهو أيضًا ما تفعله أذنك الداخلية حين تفكّك الصوت، وكيف تحسب الصفحة كلّ منحنًى وترسمه. الأقسام المعلّمة بـ ★ تحوي الرياضيات الأثقل، ويمكن تخطّيها عند القراءة الأولى دون أن يضيع تسلسل الأفكار."
+ },
+ "98ac15eeb354": {
+  "src": "The view is \\(800\\ \\mathrm{px}\\) wide, so it always holds \\(4 f_i\\) wavelengths: four for the default Frequency 1, whatever the size of your screen.",
+  "tr": "عرض المشهد \\(800\\ \\mathrm{px}\\)، فهو يحوي دائمًا \\(4 f_i\\) من أطوال الموجة: أربعة عند التردد الافتراضي 1، مهما كان حجم شاشتك."
+ },
+ "9ae6cd1c64c2": {
+  "src": "Call \\(S_N(x)\\) the sum of the first \\(N\\) terms of (10), up to \\(n = 2N - 1.\\) Its slope is a sum of cosines, and the sum telescopes: since \\(2\\sin x\\,\\cos(2k-1)x = \\sin 2kx - \\sin(2k-2)x,\\) adding these for \\(k = 1, \\dots, N\\) leaves only \\(\\sin 2Nx,\\) and",
+  "tr": "لنسمِّ \\(S_N(x)\\) مجموع أوّل \\(N\\) حدًّا من (10)، حتى \\(n = 2N - 1.\\) وميله مجموع جيوب تمام، والمجموع يتقلّص تلسكوبيًّا: إذ \\(2\\sin x\\,\\cos(2k-1)x = \\sin 2kx - \\sin(2k-2)x,\\) وبجمع هذه من أجل \\(k = 1, \\dots, N\\) لا يبقى إلّا \\(\\sin 2Nx,\\) و"
+ },
+ "9af3736c4028": {
+  "src": "Exercise 4.1 · on the figure above",
+  "tr": "التمرين 4.1 · على الشكل أعلاه"
+ },
+ "9b79113fea4d": {
+  "src": "There is no differential equation to solve step by step: (1) gives every wave at every place and time directly, so the page simply evaluates it. Each frame does the following.",
+  "tr": "لا توجد معادلة تفاضلية تُحلّ خطوةً بخطوة: فالمعادلة (1) تعطي كلّ موجة في كلّ موضع وزمن مباشرةً، فتكتفي الصفحة بحساب قيمتها. وفي كلّ إطار يجري ما يلي."
+ },
+ "9c48a3d4ea47": {
+  "src": "The beat frequency is the full difference \\(|\\nu_1 - \\nu_2|,\\) not half of it: for the two guitar strings, \\(111 - 110 = 1\\) beat per second. The <em>Beats</em> preset uses Amplitude \\(18\\ \\mathrm{px}\\) and Speed 1× for both waves, with Frequencies 1.00 and 1.25. Then \\(\\lambda_\\text{beat} = 200/0.25 = 800\\ \\mathrm{px},\\) exactly one beat across the view, and at any fixed point the sum swells and fades every \\(1/0.25 = 4\\ \\mathrm{s}\\) (Figure 3). The carrier has the mean frequency \\(1.125\\ \\mathrm{Hz},\\) so nine carrier oscillations fit into two beats.",
+  "tr": "وتردد الضربات هو الفرق الكامل \\(|\\nu_1 - \\nu_2|,\\) لا نصفه: فبالنسبة إلى وتري الغيتار، \\(111 - 110 = 1\\) ضربة في الثانية. ويستعمل الإعداد الجاهز <em>الضربات</em> السعة \\(18\\ \\mathrm{px}\\) والسرعة 1× للموجتين معًا، والتردّدين 1.00 و1.25. عندئذ يكون \\(\\lambda_\\text{beat} = 200/0.25 = 800\\ \\mathrm{px},\\) أي ضربة واحدة بالضبط عبر المشهد كلّه، وعند أيّ موضع ثابت يتعاظم المجموع ثم يخفت كلّ \\(1/0.25 = 4\\ \\mathrm{s}\\) (الشكل 3). وتردّد الحامل هو التردد المتوسّط \\(1.125\\ \\mathrm{Hz},\\) فتتّسع تسع اهتزازات للحامل في ضربتين."
+ },
+ "9dead516148c": {
+  "src": "The spectrum is computed from the list of waves at \\(X = 0,\\) not measured. Two waves with the same \\(\\nu\\) but different wavelengths are merged with their relative phase at \\(X = 0;\\) at another point that phase differs, and so would the merged stem.",
+  "tr": "يُحسب الطيف من قائمة الموجات عند \\(X = 0,\\) ولا يُقاس. وتُدمج موجتان لهما \\(\\nu\\) نفسه وطولا موجة مختلفان بحسب طورهما النسبي عند \\(X = 0;\\) وعند نقطة أخرى يختلف ذلك الطور، وتختلف معه الساق المدمجة أيضًا."
+ },
+ "a273f7a52b47": {
+  "src": "The second factor is a wave with the average wavenumber and the average frequency of the two, the <em>carrier</em>. The first changes slowly, because \\(a - b = \\Delta k\\,X - \\Delta\\omega\\,t + \\Delta\\varphi\\) contains only the differences \\(\\Delta k = k_1 - k_2\\) and \\(\\Delta\\omega = \\omega_1 - \\omega_2.\\) It acts as a slowly varying amplitude, the <em>envelope</em>. Loudness depends on the size of the envelope, not its sign, and \\(|\\cos|\\) repeats every \\(\\pi,\\) not every \\(2\\pi.\\) The beat therefore repeats whenever \\((a-b)/2\\) grows by \\(\\pi{:}\\)",
+  "tr": "والعامل الثاني موجة عددها الموجي متوسّط العددين الموجيين للموجتين، وترددها متوسّط تردّديهما، وهي <em>الحامل</em>. أمّا الأوّل فيتغيّر ببطء، لأنّ \\(a - b = \\Delta k\\,X - \\Delta\\omega\\,t + \\Delta\\varphi\\) لا يحوي إلّا الفرقين \\(\\Delta k = k_1 - k_2\\) و\\(\\Delta\\omega = \\omega_1 - \\omega_2.\\) وهو يؤدّي دور سعة متغيّرة ببطء، هي <em>المغلّف</em>. وعلوّ الصوت يتعلّق بمقدار المغلّف لا بإشارته، و\\(|\\cos|\\) يتكرّر كلّ \\(\\pi,\\) لا كلّ \\(2\\pi.\\) ولذلك تتكرّر الضربة كلّما ازداد \\((a-b)/2\\) بمقدار \\(\\pi{:}\\)"
+ },
+ "a28272643323": {
+  "src": "<span class=\"psec__n\">02</span>The model",
+  "tr": "<span class=\"psec__n\">02</span>النموذج"
+ },
+ "a4ce3a9be794": {
+  "src": "← All simulations",
+  "tr": "→ جميع المحاكاة"
+ },
+ "a4ea10c6f220": {
+  "src": "Now take two waves of slightly different frequency. Their crests drift in and out of step, and the sum swells and fades: the guitarist’s beat.",
+  "tr": "والآن خذ موجتين مختلفتي التردد قليلًا. تخرج قممهما عن التوافق ثم تعود إليه، فيتعاظم المجموع ثم يخفت: إنّها الضربات التي يسمعها عازف الغيتار."
+ },
+ "a871b6bfd19e": {
+  "src": "A real analyser, or an ear, listens for a finite time \\(T\\) and cannot separate frequencies closer than about \\(1/T,\\) so its lines have a width that these stems do not.",
+  "tr": "المحلّل الحقيقي، أو الأذن، يُصغي زمنًا محدودًا \\(T\\) ولا يستطيع أن يفصل ترددين أقرب من نحو \\(1/T,\\) فلخطوطه عرضٌ لا تملكه هذه السيقان."
+ },
+ "a98e826879fe": {
+  "src": "M. L. Boas, <em>Mathematical Methods in the Physical Sciences</em>, 3rd edition, Wiley, 2006: chapter 7 (Fourier series and transforms, with Parseval’s theorem in Section 7.11); <a href=\"https://www.wiley.com/en-us/mathematical-methods-in-the-physical-sciences-3rd-edition-p-9780471198260\">publisher’s page</a> with the contents.",
+  "tr": "M. L. Boas، <em>Mathematical Methods in the Physical Sciences</em>، الطبعة 3، Wiley، 2006: الفصل 7 (متسلسلات فورييه وتحويلاتها، مع مبرهنة بارسيفال في القسم 7.11)؛ <a href=\"https://www.wiley.com/en-us/mathematical-methods-in-the-physical-sciences-3rd-edition-p-9780471198260\">صفحة الناشر</a> مع فهرس المحتويات."
+ },
+ "aa4819c5e5cd": {
+  "src": "Wave Interference Simulator · Numa Koudsie",
+  "tr": "منضدة تراكب الأمواج · نعمة سائر قدسية"
+ },
+ "adeb098956e0": {
+  "src": "<span class=\"psec__n\">01</span>Many sounds, one eardrum",
+  "tr": "<span class=\"psec__n\">01</span>أصوات كثيرة، طبلة أذن واحدة"
+ },
+ "b1b392607dea": {
+  "src": "Run",
+  "tr": "تشغيل"
+ },
+ "b1cae58cd4ff": {
+  "src": "A simpler bound holds at every instant. No sine exceeds its amplitude, so by the triangle inequality",
+  "tr": "وهناك حدّ أبسط يصحّ في كلّ لحظة. فلا يتجاوز أيّ جيب سعته، ولذلك وبحسب متباينة المثلّث"
+ },
+ "b352c4ff0ab0": {
+  "src": "Here \\(k_i\\) is the wavenumber, \\(\\lambda_i\\) the wavelength, \\(\\omega_i\\) the angular frequency, \\(\\nu_i\\) the frequency you would measure at a fixed point, that is the number of crests passing it per second, and \\(v_i\\) the phase speed at which every crest moves. Three facts follow, and they are worth keeping in mind on the page.",
+  "tr": "هنا \\(k_i\\) العدد الموجي، و\\(\\lambda_i\\) طول الموجة، و\\(\\omega_i\\) التردد الزاوي، و\\(\\nu_i\\) التردد الذي تقيسه عند موضع ثابت، أي عدد القمم التي تمرّ به في الثانية، و\\(v_i\\) سرعة الطور التي تتحرّك بها كلّ قمّة. ويترتّب على ذلك ثلاث حقائق تستحقّ أن تبقى في ذهنك على هذه الصفحة."
+ },
+ "b6f83a66d5a6": {
+  "src": "The clock adds the real time since the last frame, \\(\\Delta t,\\) to \\(t,\\) so the waves move at their stated speeds on any screen. \\(\\Delta t\\) is capped at \\(0.05\\ \\mathrm{s}{:}\\) if the browser manages fewer than 20 frames a second, the motion slows down instead of jumping. <em>Pause</em> stops the clock.",
+  "tr": "تضيف الساعة الزمنَ الحقيقي منذ الإطار الأخير، \\(\\Delta t,\\) إلى \\(t,\\) فتتحرّك الأمواج بسرعاتها المعلنة على أيّ شاشة. و\\(\\Delta t\\) لا تتجاوز \\(0.05\\ \\mathrm{s}{:}\\) فإذا رسم المتصفّح أقلّ من 20 إطارًا في الثانية، تبطؤ الحركة بدل أن تقفز. وزرّ <em>إيقاف مؤقّت</em> يوقف الساعة."
+ },
+ "b81fb1fd011d": {
+  "src": "<span class=\"psub__n\">5.1</span>Fourier’s recipe for the amplitudes<span class=\"star\" title=\"heavier mathematics\">★</span>",
+  "tr": "<span class=\"psub__n\">5.1</span>وصفة فورييه للسعات<span class=\"star\" title=\"heavier mathematics\">★</span>"
+ },
+ "bbbb04f518d3": {
+  "src": "The medium is infinite, uniform and lossless. The \\(800\\ \\mathrm{px}\\) view is a window onto it, and lengths are in pixels of that window rather than metres.",
+  "tr": "الوسط لا نهائي ومتجانس وعديم الفقد. والمشهد البالغ \\(800\\ \\mathrm{px}\\) نافذةٌ تُطلّ عليه، والأطوال تُقاس ببكسلات هذه النافذة لا بالأمتار."
+ },
+ "beda57e16b2a": {
+  "src": "What the spectrum leaves out is just as instructive. The stems record amplitudes, not phases, and to a good approximation the ear does the same for a steady tone, a rule known as Ohm’s acoustic law. Two waves with the same spectrum but different phases sound nearly alike, even when their shapes look nothing alike.",
+  "tr": "وما يغفله الطيف لا يقلّ دلالة. فالسيقان تسجّل السعات لا الأطوار، والأذن تفعل الشيء نفسه بتقريب جيّد مع النغمة الثابتة، وهي قاعدة تُعرف بقانون أوم الصوتي. فموجتان لهما الطيف نفسه وأطوار مختلفة تُسمعان متشابهتين تقريبًا، حتى وإن بدا شكلاهما مختلفين تمامًا."
+ },
+ "bee75ca77f75": {
+  "src": "Controls",
+  "tr": "أدوات التحكّم"
+ },
+ "c59c013b2e92": {
+  "src": "overshoot (%)",
+  "tr": "التجاوز (%)"
+ },
+ "c7877b24d736": {
+  "src": "<span class=\"psec__n\">08</span>From the medium to the screen",
+  "tr": "<span class=\"psec__n\">08</span>من الوسط إلى الشاشة"
+ },
+ "cad2dda3032c": {
+  "src": "heavier mathematics",
+  "tr": "رياضيات أعمق"
+ },
+ "cbe28c0effec": {
+  "src": "<span class=\"psec__n\">09</span>What the model leaves out",
+  "tr": "<span class=\"psec__n\">09</span>ما يغفله النموذج"
+ },
+ "cd1395d44717": {
+  "src": "<em>Peak |y| on screen</em> is the largest \\(|y|\\) among the samples of the current frame. The readouts are rewritten every eighth frame, 7.5 times a second at 60 frames a second.",
+  "tr": "<em>القيمة القصوى لـ |y| على الشاشة</em> هي أكبر \\(|y|\\) بين عيّنات الإطار الحالي. وتُعاد كتابة القراءات مرّةً كلّ ثمانية إطارات، أي 7.5 مرّة في الثانية عند 60 إطارًا في الثانية."
+ },
+ "ce620d674988": {
+  "src": "terms",
+  "tr": "الحدود"
+ },
+ "d1622a8321e0": {
+  "src": "Phyein Usul, home page",
+  "tr": "Phyein Usul، الصفحة الرئيسية"
+ },
+ "d39d692127da": {
+  "src": "Press <em>Square wave</em>; <em>Peak |y| on screen</em> reads \\(27.9\\ \\mathrm{px}.\\) Remove Wave 4 with its × button: three terms remain, the corners round off, the ripples widen, and the peak becomes \\(28.0\\ \\mathrm{px},\\) which is exactly \\(30\\cdot\\tfrac12 + 10 + 6\\cdot\\tfrac12,\\) the value at \\(x = \\pi/6.\\) Press <em>Square wave</em> again and set the <em>Phase</em> of Wave 2 to \\(1.00\\,\\pi.\\) The flat tops vanish and the peak jumps to \\(41.7\\ \\mathrm{px},\\) yet no stem in the spectrum moves, because no amplitude has changed. Played as sound at an audible pitch, the two shapes would sound very nearly the same.",
+  "tr": "اضغط <em>موجة مربّعة</em>؛ فتُظهر <em>القيمة القصوى لـ |y| على الشاشة</em> القيمة \\(27.9\\ \\mathrm{px}.\\) أزِل الموجة 4 بزرّ × الخاص بها: تبقى ثلاثة حدود، وتستدير الزوايا، وتتّسع التموّجات، وتصبح القيمة القصوى \\(28.0\\ \\mathrm{px},\\) وهي بالضبط \\(30\\cdot\\tfrac12 + 10 + 6\\cdot\\tfrac12,\\) أي القيمة عند \\(x = \\pi/6.\\) واضغط <em>موجة مربّعة</em> مرّة أخرى، واضبط <em>الطور</em> للموجة 2 على \\(1.00\\,\\pi.\\) تختفي القمم المسطّحة، وتقفز القيمة القصوى إلى \\(41.7\\ \\mathrm{px},\\) ومع ذلك لا تتحرّك أيّ ساق في الطيف، لأنّه لم تتغيّر أيّ سعة. ولو عُزف الشكلان صوتًا بدرجة مسموعة، لكان صوتاهما متماثلين تقريبًا."
+ },
+ "d3cd068500dc": {
+  "src": "Just after the jump at \\(x = 0\\) the slope stays positive until \\(2Nx = \\pi,\\) so the first and highest crest sits at \\(x = \\pi/(2N),\\) which is \\(X = 125/N\\ \\mathrm{px}\\) after the jump on the page’s scale. Its height is the integral of the slope up to there. Substitute \\(u = 2Nx\\) and use \\(\\sin x \\approx x\\) for the small \\(x\\) involved, which becomes exact as \\(N\\) grows:",
+  "tr": "مباشرةً بعد القفزة عند \\(x = 0\\) يبقى الميل موجبًا حتى \\(2Nx = \\pi,\\) فتقع أوّل قمّة وأعلاها عند \\(x = \\pi/(2N),\\) وهذا يساوي \\(X = 125/N\\ \\mathrm{px}\\) بعد القفزة على مقياس الصفحة. وارتفاعها هو تكامل الميل حتى هناك. ضع \\(u = 2Nx\\) واستعمل \\(\\sin x \\approx x\\) من أجل \\(x\\) الصغيرة المعنيّة، وهو تقريب يصير تامًّا كلّما كبر \\(N\\):"
+ },
+ "d4dd5a8bbcb6": {
+  "src": "The <em>Frequency</em> slider is labelled in hertz, and it is the frequency in hertz only at Speed 1×. In general it counts wavelengths per \\(200\\ \\mathrm{px},\\) and the frequency at a fixed point is \\(\\nu_i = f_i s_i.\\) A wave with Speed 0 stands still and has \\(\\nu_i = 0.\\)",
+  "tr": "مُنزلق <em>التردد</em> مُعلَّم بالهرتز، لكنّه لا يساوي التردد بالهرتز إلّا عند السرعة 1×. وهو عمومًا يعدّ أطوال الموجة في كلّ \\(200\\ \\mathrm{px},\\) والتردد عند موضع ثابت هو \\(\\nu_i = f_i s_i.\\) والموجة ذات السرعة 0 تقف ساكنة ولها \\(\\nu_i = 0.\\)"
+ },
+ "d67be5c7f560": {
+  "src": "Any weighted sum of solutions is again a solution. This is the <em>superposition principle</em>: each wave passes through the others as if they were not there, and the medium carries their sum. With equal speeds the sum also travels at \\(v\\) without changing shape; such a medium is called <em>non-dispersive</em>, and air is very nearly one for sound. When you give the waves different Speeds, each obeys its own equation and the page adds them anyway. That imitates a <em>dispersive</em> medium, in which waves of different frequency travel at different speeds, and the sum then changes shape as it goes.",
+  "tr": "كلّ مجموع موزون لحلول هو حلّ أيضًا. وهذا هو <em>مبدأ التراكب</em>: تمرّ كلّ موجة عبر الأمواج الأخرى كأنّها غير موجودة، ويحمل الوسط مجموعها. وعند تساوي السرعات تنتقل المحصّلة أيضًا بسرعة \\(v\\) دون أن يتغيّر شكلها، ويُسمّى مثل هذا الوسط <em>غيرَ مُشتِّت</em>، والهواء بالنسبة إلى الصوت قريب جدًّا من ذلك. أمّا إذا أعطيتَ الأمواج سرعاتٍ مختلفة، فكلّ منها يخضع لمعادلته الخاصّة، والصفحة تجمعها مع ذلك. وهذا يحاكي وسطًا <em>مُشتِّتًا</em>، تنتقل فيه الأمواج المختلفة التردد بسرعات مختلفة، فيتغيّر شكل المجموع مع انتقاله."
+ },
+ "d89fd485d5b8": {
+  "src": "Press <em>Beats</em> and watch one point of the upper plot: it swells and fades every \\(4\\ \\mathrm{s}.\\) Now tune Wave 2 like a guitar string. Set its <em>Frequency</em> to 1.10 and the beat slows to one every \\(10\\ \\mathrm{s}\\) and stretches to \\(2000\\ \\mathrm{px},\\) two and a half times the view; at 1.00 it stops. Return it to 1.25 and set its <em>Speed</em> to 0.50×. Both waves still move to the right, at 200 and \\(100\\ \\mathrm{px/s},\\) yet by (9) the envelope now runs to the left at \\(300\\ \\mathrm{px/s},\\) while the carrier moves to the right at \\(144\\ \\mathrm{px/s}.\\) Check both against what you see; the Data panel lists the envelope speed as \\(v_\\text{env}.\\)",
+  "tr": "اضغط <em>الضربات</em> وراقب نقطة واحدة من الرسم العلوي: يتعاظم اهتزازها ثم يخفت كلّ \\(4\\ \\mathrm{s}.\\) والآن اضبط الموجة 2 كما يُضبط وتر الغيتار: اجعل <em>التردد</em> فيها 1.10، فتبطؤ الضربات إلى ضربة كلّ \\(10\\ \\mathrm{s}\\)، وتتمدّد إلى \\(2000\\ \\mathrm{px},\\) أي مرّتين ونصفًا قدرَ عرض المشهد؛ وعند 1.00 تتوقّف. أعِدها إلى 1.25 واجعل <em>السرعة</em> فيها 0.50×. ما زالت الموجتان تتحرّكان نحو اليمين، بسرعتي 200 و\\(100\\ \\mathrm{px/s},\\) لكنّ المغلّف، بحسب (9)، يسير الآن نحو اليسار بسرعة \\(300\\ \\mathrm{px/s},\\) بينما يتحرّك الحامل نحو اليمين بسرعة \\(144\\ \\mathrm{px/s}.\\) قارن كلتا القيمتين بما تراه؛ فلوحة البيانات تعرض سرعة المغلّف باسم \\(v_\\text{env}.\\)"
+ },
+ "d8e64e44bb86": {
+  "src": "One detail can puzzle. The Amplitude slider moves in whole pixels, so the \\(4.3\\ \\mathrm{px}\\) of the preset’s Wave 4 appears on its card as \\(4\\ \\mathrm{px},\\) while the wave itself, the <em>Sum of amplitudes</em> of \\(50.3\\ \\mathrm{px}\\) and the stored data keep \\(4.3\\ \\mathrm{px}.\\)",
+  "tr": "قد يحيّر تفصيلٌ واحد. فمُنزلق السعة يتحرّك بخطوات بكسل كاملة، لذلك تظهر السعة \\(4.3\\ \\mathrm{px}\\) للموجة 4 في الإعداد الجاهز على بطاقتها بوصفها \\(4\\ \\mathrm{px},\\) بينما تُبقي الموجةُ نفسها، و<em>مجموعُ السعات</em> البالغ \\(50.3\\ \\mathrm{px}\\)، والبيانات المخزّنة، القيمةَ \\(4.3\\ \\mathrm{px}.\\)"
+ },
+ "d929322e4b16": {
+  "src": "Fig.",
+  "tr": "الشكل"
+ },
+ "d94c8e0a6fcd": {
+  "src": "<span class=\"psec__n\">03</span>Waves simply add",
+  "tr": "<span class=\"psec__n\">03</span>الأمواج تُجمع ببساطة"
+ },
+ "db051fac8022": {
+  "src": "Wave Interference Simulator<span class=\"dot\">.</span>",
+  "tr": "منضدة تراكب الأمواج<span class=\"dot\">.</span>"
+ },
+ "db3fb39ebd31": {
+  "src": "E. Hecht, <em>Optics</em>, 5th edition, Pearson, 2017: chapter 7 (the superposition of waves); <a href=\"https://www.pearson.com/en-us/subject-catalog/p/optics/P200000006793\">publisher’s page</a> with the contents.",
+  "tr": "E. Hecht، <em>Optics</em>، الطبعة 5، Pearson، 2017: الفصل 7 (تراكب الأمواج)؛ <a href=\"https://www.pearson.com/en-us/subject-catalog/p/optics/P200000006793\">صفحة الناشر</a> مع فهرس المحتويات."
+ },
+ "db7deff843b6": {
+  "src": "Any repeating wave of reasonable shape, with period \\(2\\pi\\) in \\(x,\\) is a sum of sines and cosines at whole-number multiples of its fundamental frequency, \\(F(x) = \\tfrac12 a_0 + \\sum_{n\\ge1}\\left( a_n\\cos nx + b_n\\sin nx \\right),\\) and each amplitude is found by one integral, equation (13). The list of amplitudes is the wave’s spectrum. A synthesizer uses the theorem forwards, building a tone from its spectrum; your ear uses it backwards.",
+  "tr": "كلّ موجة متكرّرة ذات شكل معقول، دورها \\(2\\pi\\) في \\(x,\\) هي مجموع جيوب وجيوب تمام عند مضاعفات صحيحة لتردّدها الأساسي، \\(F(x) = \\tfrac12 a_0 + \\sum_{n\\ge1}\\left( a_n\\cos nx + b_n\\sin nx \\right),\\) وتُحسب كلّ سعة بتكامل واحد، المعادلة (13). وقائمة السعات هي طيف الموجة. والمُركِّب الصوتي يستعمل المبرهنة في اتّجاهها المباشر فيبني نغمة من طيفها، أمّا أذنك فتستعملها في الاتّجاه المعاكس."
+ },
+ "dec10feacdff": {
+  "src": "Different Speeds imitate dispersion, but each wave’s speed is chosen by hand. In a real medium a dispersion relation \\(\\omega(k)\\) fixes it, as \\(\\omega = \\sqrt{gk}\\) does on deep water.",
+  "tr": "السرعات المختلفة تحاكي التشتّت، لكنّ سرعة كلّ موجة تُختار يدويًّا. وفي وسط حقيقي تحدّدها علاقة تشتّت \\(\\omega(k)\\)، كما تفعل \\(\\omega = \\sqrt{gk}\\) على الماء العميق."
+ },
+ "e06a1d24dbd2": {
+  "src": "4 (preset)",
+  "tr": "4 (الإعداد الجاهز)"
+ },
+ "e0bbc31df62e": {
+  "src": "<span class=\"pfig__n\">Figure 1</span>One component, equation (1). The amplitude \\(A_i\\) is the height of a crest above the axis, the wavelength \\(\\lambda_i\\) the distance from crest to crest, and the phase \\(\\varphi_i\\) fixes the height \\(A_i\\sin\\varphi_i\\) at \\(X = 0.\\) A moment later (pale curve) the whole shape has moved to the right, unchanged, at the phase speed \\(v_i = 200\\,s_i\\ \\mathrm{px/s}.\\)",
+  "tr": "<span class=\"pfig__n\">الشكل 1</span>مركّبة واحدة، المعادلة (1). السعة \\(A_i\\) هي ارتفاع القمّة فوق المحور، وطول الموجة \\(\\lambda_i\\) المسافة من قمّة إلى قمّة، والطور \\(\\varphi_i\\) يحدّد الارتفاع \\(A_i\\sin\\varphi_i\\) عند \\(X = 0.\\) وبعد لحظة (المنحنى الباهت) انزاحت الصورة كلّها نحو اليمين دون تغيير، بسرعة الطور \\(v_i = 200\\,s_i\\ \\mathrm{px/s}.\\)"
+ },
+ "e13b587879b0": {
+  "src": "<span>2</span>The model",
+  "tr": "<span>2</span>النموذج"
+ },
+ "e1ab2237833e": {
+  "src": "The waves are exactly linear. Very loud sound is not: its compressions travel slightly faster than its rarefactions, the wave steepens as it goes, and harmonics appear that were not in the mix.",
+  "tr": "الأمواج خطّيّة تمامًا. أمّا الصوت الشديد جدًّا فليس كذلك: إذ تنتقل تضاغطاته أسرع قليلًا من تخلخلاته، وتزداد الموجة انحدارًا كلّما مضت، وتظهر توافقيات لم تكن في الخليط."
+ },
+ "e1d329a7394b": {
+  "src": "From symbols to code",
+  "tr": "من الرموز إلى الشيفرة"
+ },
+ "e58734c4c29b": {
+  "src": "<span class=\"psec__n\">07</span>Computing the curves",
+  "tr": "<span class=\"psec__n\">07</span>حساب المنحنيات"
+ },
+ "e709e76ff542": {
+  "src": "Presets",
+  "tr": "إعدادات جاهزة"
+ },
+ "e7aee4ab90fa": {
+  "src": "<span>7</span>Computing the curves",
+  "tr": "<span>7</span>حساب المنحنيات"
+ },
+ "e843c24d5523": {
+  "src": "Checked by averaging \\(y^2\\) of the preset at \\(X = 0\\) over one period, \\(2.5\\ \\mathrm{s},\\) on \\(250\\,000\\) points: \\(527.2450\\ \\mathrm{px^2},\\) the value of (18).",
+  "tr": "تحقّقنا منه بحساب متوسّط \\(y^2\\) للإعداد الجاهز عند \\(X = 0\\) على دورة واحدة، \\(2.5\\ \\mathrm{s},\\) باستعمال \\(250\\,000\\) نقطة: \\(527.2450\\ \\mathrm{px^2},\\) وهي قيمة (18)."
+ },
+ "e8dee1c2f6e6": {
+  "src": "The plot is sampled once per screen pixel across its width, at \\(M + 1\\) points \\(X_j = 800\\,j/M\\ \\mathrm{px},\\) \\(j = 0, \\dots, M,\\) where \\(M\\) is the plot width in screen pixels minus 58. Measured in Chromium, a 1440 × 900 window gives a plot 770 pixels wide and \\(M = 712,\\) one sample every \\(1.12\\ \\mathrm{px}\\) of the medium; a phone 390 pixels wide gives \\(M = 298,\\) one sample every \\(2.68\\ \\mathrm{px}.\\)",
+  "tr": "تُؤخذ عيّنات من الرسم مرّة واحدة لكلّ بكسل من الشاشة عبر عرضه، عند \\(M + 1\\) نقطة \\(X_j = 800\\,j/M\\ \\mathrm{px},\\) \\(j = 0, \\dots, M,\\) حيث \\(M\\) عرض الرسم ببكسلات الشاشة مطروحًا منه 58. وبالقياس في Chromium، تعطي نافذة 1440 × 900 رسمًا عرضه 770 بكسلًا و\\(M = 712,\\) عيّنةً كلّ \\(1.12\\ \\mathrm{px}\\) من الوسط؛ وهاتف عرضه 390 بكسلًا يعطي \\(M = 298,\\) عيّنةً كلّ \\(2.68\\ \\mathrm{px}.\\)"
+ },
+ "e903907d59b4": {
+  "src": "Fig. 6",
+  "tr": "الشكل 6"
+ },
+ "ec006d7a8364": {
+  "src": "The phase slides a wave sideways without changing its shape: at \\(X = 0\\) and \\(t = 0\\) the wave starts at the height \\(A_i\\sin\\varphi_i\\) (Figure 1). A phase of \\(2\\pi\\) is a whole wavelength, and the slider covers one full turn, from 0 to about \\(2\\pi.\\)",
+  "tr": "يُزيح الطورُ الموجةَ جانبًا دون أن يغيّر شكلها: عند \\(X = 0\\) و\\(t = 0\\) تبدأ الموجة من الارتفاع \\(A_i\\sin\\varphi_i\\) (الشكل 1). والطور \\(2\\pi\\) يقابل طول موجة كاملًا، والمنزلق يغطّي دورةً كاملة، من 0 إلى نحو \\(2\\pi.\\)"
+ },
+ "ecd78ade0666": {
+  "src": "<span class=\"psec__n\">05</span>A square wave from sines",
+  "tr": "<span class=\"psec__n\">05</span>موجة مربّعة من الجيوب"
+ },
+ "ecfa8e12e51a": {
+  "src": "When two waves share both Frequency and Speed, they share \\(\\theta = kX - \\omega t\\) and differ only in amplitude and phase. Their sum is a single sine of the same frequency. The neatest way to see this uses complex numbers: \\(\\sin\\alpha\\) is the imaginary part of \\(e^{\\mathrm{i}\\alpha} = \\cos\\alpha + \\mathrm{i}\\sin\\alpha,\\) with \\(\\mathrm{i}^2 = -1,\\) so",
+  "tr": "عندما تشترك موجتان في التردد والسرعة معًا، فإنهما تشتركان في \\(\\theta = kX - \\omega t\\) وتختلفان في السعة والطور وحدهما. ومجموعهما جيبٌ واحد بالتردد نفسه. وأبسط طريقة لرؤية ذلك تستعمل الأعداد العقدية: \\(\\sin\\alpha\\) هو الجزء التخيّلي من \\(e^{\\mathrm{i}\\alpha} = \\cos\\alpha + \\mathrm{i}\\sin\\alpha,\\) مع \\(\\mathrm{i}^2 = -1,\\) فيكون"
+ },
+ "ed4ec535c146": {
+  "src": "where \\(f_i\\) and \\(s_i\\) are the plain numbers shown on the sliders. Multiplying out the bracket gives the textbook form \\(A_i\\sin(k_i X - \\omega_i t + \\varphi_i),\\) and its coefficients are",
+  "tr": "حيث \\(f_i\\) و\\(s_i\\) هما العددان المجرّدان المعروضان على المنزلقات. وبفكّ القوس نحصل على الصيغة المعتادة في الكتب \\(A_i\\sin(k_i X - \\omega_i t + \\varphi_i),\\) ومعاملاتها هي"
+ },
+ "eefb0f034626": {
+  "src": "The lower panel, Fig. 6b, is what an ear at one point would report: which frequencies are present there, and how strongly.",
+  "tr": "الجزء السفلي، الشكل 6b، هو ما كانت ستُبلّغ عنه أذنٌ عند نقطة واحدة: الترددات الموجودة هناك، وشدّة كلّ منها."
+ },
+ "f10c3e0aa59e": {
+  "src": "Sum of amplitudes",
+  "tr": "مجموع السعات"
+ },
+ "f199e2e1a4ed": {
+  "src": "<span class=\"psub__n\">9.1</span>Further reading",
+  "tr": "<span class=\"psub__n\">9.1</span>مراجع للاستزادة"
+ },
+ "f3993945745c": {
+  "src": "Each wave on the bench is a sine travelling along a one-dimensional medium, such as a long, taut string, of which \\(800\\ \\mathrm{px}\\) are in view. Wave \\(i\\) carries four numbers, one per slider on its card: the <em>Amplitude</em> \\(A_i\\) in px, the <em>Frequency</em> \\(f_i,\\) the <em>Phase</em> \\(\\varphi_i\\) in radians and the <em>Speed</em> factor \\(s_i.\\) Its displacement at position \\(X,\\) in px from the left edge of the view, and time \\(t,\\) in seconds, is",
+  "tr": "كلّ موجة على المنضدة جيبٌ يسير في وسط أحادي البعد، مثل وترٍ طويل مشدود يظهر منه \\(800\\ \\mathrm{px}\\) في المشهد. الموجة \\(i\\) تحمل أربعة أعداد، عدد واحد لكلّ مُنزلق على بطاقتها: <em>السعة</em> \\(A_i\\) بوحدة px، و<em>التردد</em> \\(f_i,\\) و<em>الطور</em> \\(\\varphi_i\\) بالراديان، وعامل <em>السرعة</em> \\(s_i.\\) وإزاحتها عند الموضع \\(X,\\) مقيسةً بوحدة px من الحافة اليسرى للمشهد، وعند الزمن \\(t,\\) بالثواني، هي"
+ },
+ "f3ff9c83910e": {
+  "src": "Add wave +",
+  "tr": "أضف موجة +"
+ },
+ "f44d1b56331e": {
+  "src": "Follow a point of fixed envelope, for example a quiet spot where \\(\\cos\\frac{a-b}{2} = 0.\\) It keeps \\(\\Delta k\\,X - \\Delta\\omega\\,t\\) constant, so it moves at \\(\\Delta\\omega/\\Delta k.\\) A crest of the carrier keeps \\(a + b\\) constant and moves at \\(\\bar\\omega/\\bar k,\\) the ratio of the averages. With (2),",
+  "tr": "تتبّع نقطةً تبقى عندها قيمة المغلّف ثابتة، مثل موضع هادئ حيث \\(\\cos\\frac{a-b}{2} = 0.\\) إنّها تُبقي \\(\\Delta k\\,X - \\Delta\\omega\\,t\\) ثابتًا، فتتحرّك بسرعة \\(\\Delta\\omega/\\Delta k.\\) وقمّة الحامل تُبقي \\(a + b\\) ثابتًا وتتحرّك بسرعة \\(\\bar\\omega/\\bar k,\\) أي نسبة المتوسّطين. ومع (2)،"
+ },
+ "f4962e86a310": {
+  "src": "Superposition workbench: add travelling waves with their own amplitude, frequency, phase and speed, and watch their sum and spectrum in real time.",
+  "tr": "منضدة التراكب: أضِف أمواجًا متنقّلة بسعتها وترددها وطورها وسرعتها الخاصّة، وتابع مجموعها وطيفها في الزمن الحقيقي."
+ },
+ "f5cbdf6bfb51": {
+  "src": "Contents",
+  "tr": "المحتويات"
+ },
+ "f5ea69a546e1": {
+  "src": "limit (16)",
+  "tr": "القيمة الحدّية (16)"
+ },
+ "f6e7e17036b2": {
+  "src": "Checked by integrating (13) numerically with the trapezoid rule on \\(2\\,000\\,001\\) points: \\(b_1 = 1.273240,\\) \\(b_3 = 0.424413,\\) \\(b_5 = 0.254648,\\) equal to \\(4/\\pi,\\) \\(4/(3\\pi)\\) and \\(4/(5\\pi)\\) to all six decimals, and \\(b_2 = b_4 = 0.\\)",
+  "tr": "تحقّقنا منه بالتكامل العددي للمعادلة (13) بقاعدة شبه المنحرف عند \\(2\\,000\\,001\\) نقطة: \\(b_1 = 1.273240,\\) \\(b_3 = 0.424413,\\) \\(b_5 = 0.254648,\\) وهي تساوي \\(4/\\pi,\\) \\(4/(3\\pi)\\) و\\(4/(5\\pi)\\) على ستّ منازل عشرية، و\\(b_2 = b_4 = 0.\\)"
+ },
+ "f72f0eda6052": {
+  "src": "Simulations",
+  "tr": "المحاكاة"
+ },
+ "f788e34d2a8e": {
+  "src": "The even harmonics are missing because of a symmetry. Shifting the square wave by half a period turns it upside down, \\(\\operatorname{sq}(x + \\pi) = -\\operatorname{sq}(x),\\) while an even harmonic is unchanged by that shift, so it cannot take part.",
+  "tr": "التوافقيات الزوجية غائبة بسبب تماثل. فإزاحة الموجة المربّعة بنصف دورة تقلبها رأسًا على عقب، \\(\\operatorname{sq}(x + \\pi) = -\\operatorname{sq}(x),\\) بينما تبقى التوافقية الزوجية دون تغيير بهذه الإزاحة، فلا تستطيع أن تشارك."
+ },
+ "fb57a7ac8366": {
+  "src": "This simulation needs JavaScript.",
+  "tr": "تحتاج هذه المحاكاة إلى JavaScript."
+ },
+ "fc089f26271a": {
+  "src": "\\(N\\) has dropped out. However many terms are added, the first crest overshoots the plateau at 1 by 0.17898, which is \\(8.95\\ \\%\\) of the jump from \\(-1\\) to \\(+1;\\) only its position, \\(\\pi/(2N),\\) moves in towards the jump. This is the <em>Gibbs phenomenon</em>, named after the American physicist J. Willard Gibbs. On the page’s scale the limit is \\(1.17898 \\times 23.56\\ \\mathrm{px} = 27.78\\ \\mathrm{px}.\\) The table compares it with partial sums of (11) evaluated directly on a grid of \\(0.01\\ \\mathrm{px},\\) giving each peak and its overshoot above \\(H\\) as a percentage of the jump \\(2H = 47.12\\ \\mathrm{px}.\\)",
+  "tr": "\\(N\\) خرج من الحساب. فمهما أُضيف من حدود، تتجاوز أوّلُ قمّة الهضبةَ عند 1 بمقدار 0.17898، أي \\(8.95\\ \\%\\) من القفزة من \\(-1\\) إلى \\(+1;\\) ولا يتحرّك إلّا موضعها، \\(\\pi/(2N),\\) نحو القفزة. وهذه هي <em>ظاهرة غيبس</em>، نسبةً إلى الفيزيائي الأمريكي ج. ويلارد غيبس. وعلى مقياس الصفحة يكون الحدّ \\(1.17898 \\times 23.56\\ \\mathrm{px} = 27.78\\ \\mathrm{px}.\\) ويقارنه الجدول بالمجاميع الجزئية للمعادلة (11) المحسوبة مباشرة على شبكة خطوتها \\(0.01\\ \\mathrm{px},\\) فيعطي كلّ قمّة وتجاوزها فوق \\(H\\) نسبةً مئوية من القفزة \\(2H = 47.12\\ \\mathrm{px}.\\)"
+ },
+ "fe4fe79bf347": {
+  "src": "A. P. French, <em>Vibrations and Waves</em>, W. W. Norton, 1971: chapters 2 (the superposition of periodic motions, including beats) and 6 (normal modes of continuous systems and Fourier analysis); <a href=\"https://archive.org/details/vibrationswaves0000fren\">Internet Archive record</a> with the contents.",
+  "tr": "A. P. French، <em>Vibrations and Waves</em>، W. W. Norton، 1971: الفصلان 2 (تراكب الحركات الدورية، بما فيها الضربات) و6 (الأنماط الطبيعية للأنظمة المتصلة وتحليل فورييه)؛ <a href=\"https://archive.org/details/vibrationswaves0000fren\">سجلّ الكتاب في Internet Archive</a> مع فهرس المحتويات."
+ },
+ "feb42f07f2a3": {
+  "src": "The values themselves are exact to the precision of double-precision arithmetic, about 16 significant digits. The only approximation is in the drawing: the curve is a chain of straight segments between samples, and a chord cuts under a crest by about \\(A k^2\\,\\Delta X^2/8,\\) with \\(\\Delta X\\) the sample spacing. For the shortest wave the sliders allow, Frequency 3 with \\(\\lambda = 66.7\\ \\mathrm{px},\\) at the full amplitude of \\(40\\ \\mathrm{px},\\) that is \\(0.06\\ \\mathrm{px}\\) in the wide window and \\(0.32\\ \\mathrm{px}\\) on the phone, where about 25 samples still cover each wavelength. The same small gap can make the peak readout fall slightly short of the true crest. The spectrum is not measured from the curve at all: it is computed from the slider values with (17). The page writes the quantities used here, among them \\(t,\\) \\(\\Delta t,\\) \\(M,\\) \\(\\Delta X\\) and the peak, into its data store at the line that computes them, and the <em>Data</em> panel at the edge of the screen lists them.",
+  "tr": "القيم نفسها دقيقة ضمن دقّة حساب الفاصلة العائمة المضاعفة الدقّة، أي نحو 16 رقمًا معنويًّا. والتقريب الوحيد يقع في الرسم: فالمنحنى سلسلة من القطع المستقيمة بين العيّنات، وكلّ قطعة منها تمرّ تحت القمّة بنحو \\(A k^2\\,\\Delta X^2/8,\\) حيث \\(\\Delta X\\) تباعد العيّنات. وبالنسبة إلى أقصر موجة تسمح بها المنزلقات، أي التردد 3 مع \\(\\lambda = 66.7\\ \\mathrm{px},\\) عند السعة الكاملة \\(40\\ \\mathrm{px},\\) يبلغ ذلك \\(0.06\\ \\mathrm{px}\\) في النافذة العريضة و\\(0.32\\ \\mathrm{px}\\) على الهاتف، حيث ما زالت نحو 25 عيّنة تغطّي كلّ طول موجة. وقد تجعل الفجوة الصغيرة نفسها قراءةَ القيمة القصوى تقصر قليلًا عن القمّة الحقيقية. ولا يُقاس الطيف من المنحنى أصلًا، بل يُحسب من قيم المنزلقات بالمعادلة (17). وتكتب الصفحة الكمّيات المستعملة هنا، ومنها \\(t,\\) \\(\\Delta t,\\) \\(M,\\) \\(\\Delta X\\) والقيمة القصوى، في مخزن بياناتها عند السطر الذي يحسبها، وتسردها <em>لوحة البيانات</em> عند حافة الشاشة."
+ }
+}

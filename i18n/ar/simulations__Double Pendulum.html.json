@@ -1,0 +1,622 @@
+{
+ "0057d5c071ad": {
+  "src": "Here \\(d\\) is the distance between the two states, treating angles in radians and angular velocities in radians per second as plain numbers. Any other reasonable choice of distance gives the same \\(\\lambda\\), because \\(\\lambda\\) measures a rate of growth, not a size. The order of the two limits matters: first the starting difference is made vanishingly small, so that we measure the growth of truly tiny differences, and only then is the time made long. Done in full for the default start, with the page's equations and step, shrinking the change back every \\(0.1\\ \\mathrm{s}\\) over \\(20\\,000\\ \\mathrm{s}\\) of motion, (12) gives \\(\\lambda \\approx 1.46\\) per second. The 1.4 read off Figure 3, from one stretch of time and two of the four coordinates, was not far off.",
+  "tr": "هنا \\(d\\) المسافة بين الحالتين؛ الزوايا بالراديان، والسرعات الزاوية بالراديان في الثانية، تُعامَل كأعداد مجرّدة. أي اختيار معقول آخر للمسافة يعطي \\(\\lambda\\) نفسه، لأن \\(\\lambda\\) يقيس معدّل نمو لا حجمًا. ترتيب النهايتين مهمّ: أولًا يُجعل الفرق الابتدائي صغيرًا إلى حدّ الانعدام، لكي نقيس نمو فروق صغيرة فعلًا، ثم بعد ذلك تُجعل المدّة طويلة. وإذا أُجري الحساب كاملًا للبداية الافتراضية بمعادلات الصفحة وخطوتها، مع تقليص التغيّر إلى حجمه الأصلي كل \\(0.1\\ \\mathrm{s}\\) على مدى \\(20\\,000\\ \\mathrm{s}\\) من الحركة، أعطت المعادلة (12) \\(\\lambda \\approx 1.46\\) في الثانية. والرقم 1.4 الذي قرأناه من الشكل 3، الآتي من فترة زمنية واحدة ومن إحداثيين من الأربعة، لم يكن بعيدًا."
+ },
+ "0290ce9a0036": {
+  "src": "Example 6.1 · the price of prediction",
+  "tr": "مثال 6.1 · ثمن التنبّؤ"
+ },
+ "08098399ddce": {
+  "src": "With \\(\\lambda = 1.46\\) per second, an error in the starting state is multiplied by \\(e^{1.46} \\approx 4.3\\) every second. To predict ten seconds further with the same final accuracy, we must therefore know the start \\(e^{14.6} \\approx 2\\times10^{6}\\) times more precisely. A starting error of one millimetre would have to shrink to about half a nanometre, the width of a few atoms. This is why no computer, however fast, can follow the double pendulum for long: the limit is our knowledge of the start, not the arithmetic.",
+  "tr": "مع \\(\\lambda = 1.46\\) في الثانية يُضرب الخطأ في الحالة الابتدائية بالعامل \\(e^{1.46} \\approx 4.3\\) في كل ثانية. فلكي نتنبّأ عشر ثوانٍ أبعد بالدقّة النهائية نفسها، يجب أن نعرف البداية بدقّة أكبر بـ \\(e^{14.6} \\approx 2\\times10^{6}\\) مرّة. ويجب أن ينكمش خطأ ابتدائي قدره ميليمتر واحد إلى نحو نصف نانومتر، أي عرض بضع ذرّات. ولهذا لا يستطيع أي حاسوب، مهما بلغت سرعته، أن يتتبّع النوّاس المزدوج زمنًا طويلًا: الحدّ هو معرفتنا بالبداية، لا الحساب نفسه."
+ },
+ "08e834445960": {
+  "src": "<span class=\"sw\"></span>path of m₂",
+  "tr": "<span class=\"sw\"></span>مسار m₂"
+ },
+ "09fc956675ec": {
+  "src": "Double pendulum animation",
+  "tr": "رسوم متحركة للنوّاس المزدوج"
+ },
+ "0b5ce79e3454": {
+  "src": "The <em>fourth-order Runge–Kutta method</em>, RK4 for short, looks at the slope four times per step: once at the start, twice at the middle (each time using the best estimate so far), and once at the end. It then takes a weighted average:",
+  "tr": "<em>طريقة رونغه–كوتا من المرتبة الرابعة</em>، ويُختصر اسمها RK4، تنظر إلى الميل أربع مرات في كل خطوة: مرة في البداية، ومرتين في المنتصف (في كل مرة بأفضل تقدير متاح حتى الآن)، ومرة في النهاية. ثم تأخذ متوسطًا موزونًا:"
+ },
+ "0ec784791586": {
+  "src": "Physics begins by deciding what to leave out, because a description that keeps everything cannot be solved by anybody. A real pendulum has heavy rods, air pushing on it, friction in its joints, and a wobble out of its plane. We keep only what makes the double pendulum a double pendulum. Each mass is a <em>point mass</em>: all its weight sits at a single point, the way a small heavy ball behaves. Each rod is <em>rigid</em>, so it never stretches, and <em>massless</em>, so it only holds its ball at a fixed distance and carries no weight of its own. Everything moves in one vertical plane, with no friction and no air. Section 9 comes back to what these choices cost.",
+  "tr": "تبدأ الفيزياء بتقرير ما نتركه جانبًا، لأن الوصف الذي يحتفظ بكل شيء لا يستطيع أحد حلّه. النوّاس الحقيقي له قضبان ثقيلة، والهواء يدفعه، وفي مفاصله احتكاك، ويترنّح خارج مستواه. نحن نُبقي فقط ما يجعل النوّاس المزدوج نوّاسًا مزدوجًا. كل كتلة <em>نقطة مادّية</em>: كل وزنها في نقطة واحدة، كما تتصرّف كرة صغيرة ثقيلة. وكل قضيب <em>صلب</em> فلا يتمدّد أبدًا، و<em>عديم الكتلة</em> فهو يحفظ كرته على مسافة ثابتة فقط، ولا يحمل وزنًا خاصًّا به. كل الحركة تجري في مستوٍ شاقولي واحد، دون احتكاك ودون هواء. يعود القسم 9 إلى ما تكلّفه هذه الاختيارات."
+ },
+ "0ee00b40e572": {
+  "src": "Equations (9) are too tangled to solve with pencil and paper. Before handing them to the computer, we look at the one case we can solve completely: gentle swings. When an angle is small, its sine is almost equal to the angle itself in radians. At \\(10^\\circ\\), for example, \\(\\theta = 0.1745\\) and \\(\\sin\\theta = 0.1736\\), half a percent apart. In the same way \\(\\cos\\varphi \\approx 1\\), and the terms with \\(\\omega^2\\) are products of two small quantities, far smaller than the rest, so we drop them. With equal masses \\(m\\) and equal lengths \\(l\\), and writing \\(\\ddot\\theta_i\\) for \\(\\alpha_i\\), equation (6) divided by \\(ml\\) becomes \\(2\\ddot\\theta_1 + \\ddot\\theta_2 = -2(g/l)\\,\\theta_1\\), and (7) divided by \\(l\\) becomes \\(\\ddot\\theta_1 + \\ddot\\theta_2 = -(g/l)\\,\\theta_2\\). In matrix form,",
+  "tr": "المعادلات (9) معقّدة أكثر من أن تُحلّ بالقلم والورقة. قبل أن نسلّمها إلى الحاسوب، ننظر في الحالة الوحيدة التي نستطيع حلّها تمامًا: التأرجحات اللطيفة. حين تكون الزاوية صغيرة يقارب جيبها الزاوية نفسها مقدّرةً بالراديان. عند \\(10^\\circ\\) مثلًا تكون \\(\\theta = 0.1745\\) و\\(\\sin\\theta = 0.1736\\)، أي تختلفان بنصف بالمئة تقريبًا. وبالمثل \\(\\cos\\varphi \\approx 1\\)، وحدود \\(\\omega^2\\) هي جداءات كميّتين صغيرتين، أصغر بكثير من البقية، فنُهملها. مع كتلتين متساويتين \\(m\\) وطولين متساويين \\(l\\)، وبكتابة \\(\\ddot\\theta_i\\) بدلًا من \\(\\alpha_i\\)، تصبح المعادلة (6) مقسومةً على \\(ml\\) هي \\(2\\ddot\\theta_1 + \\ddot\\theta_2 = -2(g/l)\\,\\theta_1\\)، وتصبح (7) مقسومةً على \\(l\\) هي \\(\\ddot\\theta_1 + \\ddot\\theta_2 = -(g/l)\\,\\theta_2\\). في صيغة المصفوفة"
+ },
+ "1001cc783526": {
+  "src": "Subtracting, the \\(\\omega_1\\omega_2\\) terms cancel once more, and dividing by \\(m_2 l_2\\) leaves",
+  "tr": "وعند الطرح تتلاشى حدود \\(\\omega_1\\omega_2\\) مرة أخرى، وبقسمة على \\(m_2 l_2\\) نجد"
+ },
+ "12ceced3e745": {
+  "src": "At larger angles the small-angle shortcut breaks down. The sines can no longer be replaced by the angles, and the \\(\\omega^2\\) terms, the outward tugs of the circling balls, become as strong as gravity. Some starts then move chaotically. We recognise chaos not by how wild the motion looks, but by a precise test: <em>sensitive dependence on the starting state</em>. Start two pendulums whose upper angles differ by \\(0.001\\ \\mathrm{rad}\\), about one millimetre at the end of a one-metre rod, and follow the distance \\(d(t)\\) between their lower balls. Figure 3 shows this distance for a gentle start and a wild start, computed with the same equations and the same time step as the page.",
+  "tr": "عند الزوايا الكبيرة يفشل تقريب الزوايا الصغيرة. لم تعد الجيوب تُستبدل بالزوايا، وتصبح حدود \\(\\omega^2\\)، أي الشدّ نحو الخارج الذي تُحدثه الكرتان الدائرتان، قوية بقدر الجاذبية. عندئذ تؤدّي بعض البدايات إلى حركة فوضوية. ولا نتعرّف على الفوضى من مدى جموح الحركة، بل بالاختبار الدقيق: <em>الحساسية للشروط الابتدائية</em>. أطلِق نوّاسين تختلف زاويتاهما العلويتان بمقدار \\(0.001\\ \\mathrm{rad}\\)، أي نحو مليمتر واحد عند طرف قضيب طوله متر، ثم تابع المسافة \\(d(t)\\) بين كرتيهما السفليين. يُظهر الشكل 3 هذه المسافة لبداية لطيفة وأخرى عنيفة، محسوبة بالمعادلات نفسها وبخطوة الزمن نفسها كما في الصفحة."
+ },
+ "15c3d540819e": {
+  "src": "<span class=\"psec__n\">07</span>Solving it step by step",
+  "tr": "<span class=\"psec__n\">07</span>الحلّ خطوة بخطوة"
+ },
+ "1743fc214ff1": {
+  "src": "<b>Fig. 2</b> · double pendulum · RK4, <span class=\"tx\">\\(h = 1/600\\ \\mathrm{s}\\)</span>",
+  "tr": "<b>الشكل 2</b> · النوّاس المزدوج · RK4، <span class=\"tx\">\\(h = 1/600\\ \\mathrm{s}\\)</span>"
+ },
+ "1cadcad9e9d8": {
+  "src": "<b>9.1</b> Follow the three steps of section 4.2 for the lower angle yourself and arrive at (7). Check every sign that comes from \\(\\varphi = \\theta_1 - \\theta_2\\).",
+  "tr": "<b>9.1</b> تتبّع بنفسك الخطوات الثلاث من القسم 4.2 للزاوية السفلى، وصل إلى المعادلة (7). تحقّق من كل إشارة تأتي من \\(\\varphi = \\theta_1 - \\theta_2\\)."
+ },
+ "1f2104108ac9": {
+  "src": "<span class=\"psec__n\">06</span>Chaos",
+  "tr": "<span class=\"psec__n\">06</span>الفوضى"
+ },
+ "224710e4f1e7": {
+  "src": "<span class=\"psec__n\">08</span>From metres to pixels",
+  "tr": "<span class=\"psec__n\">08</span>من الأمتار إلى البكسلات"
+ },
+ "23267aebdb00": {
+  "src": "<span class=\"psec__n\">01</span>A pendulum on a pendulum",
+  "tr": "<span class=\"psec__n\">01</span>نوّاس على نوّاس"
+ },
+ "236cb4119162": {
+  "src": "Keep both ratio sliders at 1 and both angular velocities at 0. Set \\(\\theta_1 = 5^\\circ\\) and \\(\\theta_2 = 7^\\circ\\), close to \\(\\sqrt2\\times 5^\\circ\\): the pendulum swings almost as one piece, with a period near 2.6 s. Now set \\(\\theta_2 = -7^\\circ\\): the arms swing against each other, twice as fast as before and a little more. Time ten swings of each and compare with (11).",
+  "tr": "اجعل مُنزلقَي النسبة على 1، والسرعتين الزاويتين على 0. اضبط \\(\\theta_1 = 5^\\circ\\) و\\(\\theta_2 = 7^\\circ\\)، قريبًا من \\(\\sqrt2\\times 5^\\circ\\): يتأرجح النوّاس تقريبًا كقطعة واحدة، بدور قريب من 2.6 s. ثم اضبط \\(\\theta_2 = -7^\\circ\\): يتأرجح الذراعان متعاكسين، أسرع بنحو الضعف من قبل وأكثر قليلًا. قِس زمن عشر تأرجحات من كل نوع وقارِن بالعلاقة (11)."
+ },
+ "23e3c1ee6918": {
+  "src": "Each of (6) and (7) contains both accelerations, because each rod pushes on the other. A computer stepping forward in time needs each acceleration on its own, so we treat (6) and (7) as two linear equations for the two unknowns \\(\\alpha_1, \\alpha_2\\). In matrix form,",
+  "tr": "كل من (6) و(7) يحتوي التسارعين معًا، لأن كل قضيب يدفع الآخر. والحاسوب الذي يتقدّم في الزمن يحتاج كل تسارع على حدة، لذلك نعامل (6) و(7) معادلتين خطّيتين لمجهولين \\(\\alpha_1, \\alpha_2\\). في صيغة المصفوفة"
+ },
+ "265ef699cbf7": {
+  "src": "Now we write down where each ball is. Put the pivot at the origin, with \\(x\\) pointing right and \\(y\\) pointing up. The first rod, of length \\(l_1\\) and tilted by \\(\\theta_1\\), is the long side of a right triangle: its sideways part is \\(l_1\\sin\\theta_1\\) and its downward part is \\(l_1\\cos\\theta_1\\). Because \\(y\\) points up and the ball hangs below the pivot, its height is negative. The second rod starts where the first one ends, so for the second ball we add its own sideways and downward parts:",
+  "tr": "نكتب الآن موضع كل كرة. نضع نقطة الارتكاز في المبدأ، ويشير المحور \\(x\\) نحو اليمين و\\(y\\) نحو الأعلى. القضيب الأول طوله \\(l_1\\) ويميل بزاوية \\(\\theta_1\\)، وهو الضلع الطويل في مثلث قائم الزاوية: جزؤه الأفقي \\(l_1\\sin\\theta_1\\) وجزؤه الشاقولي \\(l_1\\cos\\theta_1\\). ولأن \\(y\\) يشير إلى الأعلى، والكرة معلّقة تحت نقطة الارتكاز، فارتفاعها سالب. يبدأ القضيب الثاني حيث ينتهي الأول، فنضيف إلى الكرة الثانية جزأيه الأفقي والشاقولي:"
+ },
+ "26d10b9a7f43": {
+  "src": "The last limitation is the computer's, not the model's. After some fifteen to twenty Lyapunov times (\\(1/\\lambda \\approx 0.7\\ \\mathrm{s}\\) each; 10 to 14 s for the default start), the computed path is no longer the exact path from that start: tested against a computation with steps eight times smaller, the page's path is off by a millimetre after 10.9 s and by 10 cm after 14.3 s. It remains a faithful example of how the pendulum can move, just not the one that start would produce. Averages over many swings are usually robust, but they deserve a check too: halve the step, lengthen the run, and see that they stay.",
+  "tr": "القيد الأخير يعود إلى الحاسوب لا إلى النموذج. بعد نحو خمسة عشر إلى عشرين زمنًا من أزمنة ليابونوف (\\(1/\\lambda \\approx 0.7\\ \\mathrm{s}\\) لكل منها؛ من 10 إلى 14 s للبداية الافتراضية)، لم يعد المسار المحسوب هو المسار الدقيق لهذه البداية. وبالمقارنة مع حساب بخطوات أصغر بثماني مرّات، يحيد مسار الصفحة بمقدار مليمتر واحد بعد 10.9 s، وبمقدار 10 cm بعد 14.3 s. ويبقى مثالًا أمينًا لكيفية تحرّك النوّاس، لكنه ليس المسار الذي تنتجه تلك البداية نفسها. والمتوسطات عبر تأرجحات كثيرة متينة في الغالب، لكنها تستحق فحصًا أيضًا: نصِّف الخطوة، وأطِل التشغيل، وتحقّق من أنها تبقى كما هي."
+ },
+ "289222ae85a3": {
+  "src": "Note the factor \\(m_1 + m_2\\) in the first term. When the upper rod tilts, it lifts not only its own ball but the whole lower pendulum with it.",
+  "tr": "لاحظ العامل \\(m_1 + m_2\\) في الحدّ الأول. فحين يميل القضيب العلوي، يرفع لا كرته وحدها، بل النوّاس السفلي كلّه معها."
+ },
+ "2d06a1d9ae1d": {
+  "src": "<span>4</span>From energy to motion",
+  "tr": "<span>4</span>من الطاقة إلى الحركة"
+ },
+ "2f68be0d5568": {
+  "src": "<span class=\"psec__n\">04</span>From energy to motion",
+  "tr": "<span class=\"psec__n\">04</span>من الطاقة إلى الحركة"
+ },
+ "32cfac8cae20": {
+  "src": "<b>9.4</b> Repeat section 5 for equal masses but \\(l_2 = 2\\,l_1\\), and find the two normal-mode frequencies. Then set the length-ratio slider to 2 and compare with the page.",
+  "tr": "<b>9.4</b> كرّر القسم 5 لكتلتين متساويتين لكن \\(l_2 = 2\\,l_1\\)، وأوجد الترددين الطبيعيين. ثم اضبط منزلق نسبة الطول على 2 وقارن بالصفحة."
+ },
+ "33bd5a5dddcd": {
+  "src": "© 2026 Numa Koudsie",
+  "tr": "© 2026 نعمة سائر قدسية"
+ },
+ "376e52bad95d": {
+  "src": "The <em>determinant</em> of the matrix is the product of its diagonal entries minus the product of the other two:",
+  "tr": "<em>محدِّد</em> المصفوفة هو حاصل ضرب عنصريها القطريين ناقص حاصل ضرب العنصرين الآخرين:"
+ },
+ "37e73b7d4a8b": {
+  "src": "<span class=\"psec__n\">03</span>Energy",
+  "tr": "<span class=\"psec__n\">03</span>الطاقة"
+ },
+ "396a4c453f7e": {
+  "src": "The second term contains the rate of change of the wiggle rather than the wiggle itself. Integration by parts, the product rule read backwards, moves the time derivative from the wiggle onto the other factor, at the price of a minus sign and a boundary term. The boundary term is zero because the wiggle vanishes at both ends, and what remains is the wiggle multiplied by a single bracket:",
+  "tr": "الحدّ الثاني يحتوي معدّل تغيّر التموّج لا التموّج نفسه. ويقوم التكامل بالتجزئة، أي قاعدة الجداء مقروءةً بالعكس، بنقل المشتقّة الزمنية من التموّج إلى العامل الآخر، مقابل إشارة سالبة وحدٍّ حدّي. الحدّ الحدّي صفر لأن التموّج يختفي عند الطرفين، ويبقى التموّج مضروبًا في قوس واحد:"
+ },
+ "3a5f9d78da28": {
+  "src": "The last term in (3) carries the whole story of the coupling. The lower ball rides on the upper one, the way a passenger walking down the aisle rides on a moving train: its velocity is its own velocity plus the train's. When the two rods point the same way and turn the same way, \\(\\cos\\varphi = 1\\) and the speeds simply add, \\(v_2 = l_1\\omega_1 + l_2\\omega_2\\), like walking forward in a forward-moving train. When the rods are at right angles, \\(\\cos\\varphi = 0\\), and the two speeds add like the two short sides of a right triangle. Because the rods' directions keep changing, the way the two motions combine keeps changing too. That is the mathematical form of what you felt in your arm: each rod is forever pushing and pulling on the other.",
+  "tr": "الحدّ الأخير في (3) يحمل قصّة الاقتران كلّها. الكرة السفلى محمولة على العليا، كما يُحمَل راكبٌ يمشي في ممرّ قطار متحرّك: سرعته هي سرعته الخاصّة زائد سرعة القطار. حين يشير القضيبان إلى الاتجاه نفسه ويدوران في الاتجاه نفسه، يكون \\(\\cos\\varphi = 1\\)، فتجتمع السرعتان ببساطة: \\(v_2 = l_1\\omega_1 + l_2\\omega_2\\)، كأنك تسير إلى الأمام في قطار يسير إلى الأمام. وحين يكون القضيبان متعامدين، يكون \\(\\cos\\varphi = 0\\)، فتجتمع السرعتان كأنهما الضلعان القصيران لمثلث قائم. ولأن اتجاهي القضيبين يتغيّران باستمرار، تتغيّر طريقة تركيب الحركتين باستمرار أيضًا. هذه هي الصيغة الرياضية لما شعرت به في ذراعك: كل قضيب يشدّ الآخر ويدفعه باستمرار."
+ },
+ "3cedaddac1d9": {
+  "src": "Angle θ<sub>2</sub>",
+  "tr": "الزاوية θ<sub>2</sub>"
+ },
+ "3e3875362eec": {
+  "src": "The period of a swing is the time for one full cycle, \\(2\\pi/\\Omega\\). For the page's equal rods of \\(1\\ \\mathrm{m}\\), the slow mode has period \\(2\\pi/2.397\\ \\mathrm{s} = 2.62\\ \\mathrm{s}\\) and the fast mode \\(2\\pi/5.787\\ \\mathrm{s} = 1.09\\ \\mathrm{s}\\). For comparison, a single pendulum of length \\(1\\ \\mathrm{m}\\) has period \\(2\\pi\\sqrt{l/g} = 2.01\\ \\mathrm{s}\\). Hanging a second pendulum below it splits that one rhythm into a slower one and a faster one.",
+  "tr": "الدور هو الزمن اللازم لتأرجح كامل، \\(2\\pi/\\Omega\\). بالنسبة للقضيبين المتساويين، طول كل منهما \\(1\\ \\mathrm{m}\\)، يكون للنمط البطيء دور \\(2\\pi/2.397\\ \\mathrm{s} = 2.62\\ \\mathrm{s}\\)، وللنمط السريع \\(2\\pi/5.787\\ \\mathrm{s} = 1.09\\ \\mathrm{s}\\). للمقارنة، لنوّاس بسيط طوله \\(1\\ \\mathrm{m}\\) دور قدره \\(2\\pi\\sqrt{l/g} = 2.01\\ \\mathrm{s}\\). وتعليق نوّاس ثانٍ تحته يقسم هذا الإيقاع الواحد إلى إيقاع أبطأ وآخر أسرع."
+ },
+ "3fdb4256ebec": {
+  "src": "Energy is conserved",
+  "tr": "الطاقة محفوظة"
+ },
+ "40582e6c67ed": {
+  "src": "★ RK4 loses energy rather than gaining it, and the simplest oscillation shows why. Apply it to \\(\\ddot x = -\\Omega^2 x\\). One exact step turns the point \\((x, \\dot x/\\Omega)\\) round a circle by the angle \\(\\Omega h\\) and keeps its distance from the centre. One RK4 step turns it by almost the same angle but multiplies the distance by \\(1 - (\\Omega h)^6/144\\), slightly less than one. Every step therefore shaves a tiny amount off the swing, as a very weak friction would. Methods built to avoid this, called <em>symplectic</em> integrators, keep the energy from drifting over long times, though they make other small errors.",
+  "tr": "★ تفقد RK4 الطاقة بدلًا من أن تكسبها، ويوضّح ذلك أبسط تذبذب. طبّقها على \\(\\ddot x = -\\Omega^2 x\\). خطوة دقيقة واحدة تدير النقطة \\((x, \\dot x/\\Omega)\\) على دائرة بالزاوية \\(\\Omega h\\) وتُبقي بُعدها عن المركز كما هو. أما خطوة RK4 فتديرها بالزاوية نفسها تقريبًا، لكنها تضرب البُعد في \\(1 - (\\Omega h)^6/144\\)، وهو أقل من واحد بقليل. فكل خطوة تقتطع من التأرجح مقدارًا صغيرًا، كاحتكاك ضعيف جدًّا. أما الطرق التي تتجنّب ذلك، المسمّاة المكاملات <em>السيمبلكتية</em>، فتحفظ الطاقة من الانجراف على أزمنة طويلة، لكنها تُدخل أخطاءً صغيرة أخرى."
+ },
+ "426c4846bdef": {
+  "src": "Each picture advances the motion by the real time that has passed, multiplied by the <em>Time scale</em> slider, in steps of \\(h\\). A single picture never counts for more than \\(0.05\\ \\mathrm{s}\\), and the Time scale never exceeds 1.5, so at most 45 steps are taken for one picture; the safety limit of 600 steps in the code is never reached. Moving a mass, length, angle or angular-velocity slider restarts the motion from those values; moving the Time scale slider does not.",
+  "tr": "كل صورة تُقدّم الحركة بالزمن الحقيقي الذي مضى، مضروبًا في منزلق <em>مقياس الزمن</em>، بخطوات مقدارها \\(h\\). ولا تُحسب صورة واحدة لأكثر من \\(0.05\\ \\mathrm{s}\\)، ولا يتجاوز مقياس الزمن 1.5 أبدًا، فتُتّخذ كحدّ أقصى 45 خطوة لصورة واحدة؛ ولا يُبلغ حدّ الأمان البالغ 600 خطوة في الشيفرة أبدًا. وتحريك منزلق الكتلة أو الطول أو الزاوية أو السرعة الزاوية يعيد تشغيل الحركة من هذه القيم؛ أما تحريك منزلق مقياس الزمن فلا يفعل ذلك."
+ },
+ "427da12c0cd1": {
+  "src": "Interactive double pendulum integrated with RK4: adjustable masses, lengths and initial conditions, energy check and a chaos twin that starts 0.001 rad away.",
+  "tr": "نوّاس مزدوج تفاعلي يُحسب بطريقة RK4: كتل وأطوال وشروط ابتدائية قابلة للضبط، وفحص للطاقة، وتوأم للفوضى يبدأ على بُعد 0.001 rad."
+ },
+ "44deb33160c7": {
+  "src": "This pairing of exact laws with practically unpredictable outcomes is called <em>deterministic chaos</em>. \"Deterministic\" means that the present fixes the future, with no dice thrown. \"Chaos\" means that the fixing is so delicate that any error in our knowledge of the present grows until it swallows the prediction. The weather behaves in the same way. The air obeys equations we know well, but we can never measure today's atmosphere precisely enough, and forecasts fade after about two weeks.",
+  "tr": "هذا الجمع بين قوانين دقيقة ونتائج لا يمكن التنبّؤ بها عمليًّا يسمّى <em>الفوضى الحتمية</em>. «الحتمية» تعني أن الحاضر يحدّد المستقبل دون رمي نرد. و«الفوضى» تعني أن هذا التحديد حسّاس جدًّا، فأي خطأ في معرفتنا بالحاضر ينمو حتى يبتلع التنبّؤ. الطقس يسلك السلوك نفسه: الهواء يخضع لمعادلات نعرفها جيدًا، لكننا لا نستطيع أبدًا قياس الغلاف الجوي اليوم بدقّة كافية، وتتلاشى التوقّعات بعد نحو أسبوعين."
+ },
+ "4653b1623e9f": {
+  "src": "<span class=\"psub__n\">4.3</span>The equation for the lower angle",
+  "tr": "<span class=\"psub__n\">4.3</span>المعادلة الخاصة بالزاوية السفلى"
+ },
+ "47e0e7aea28c": {
+  "src": "Equations (9) give the accelerations in any state, but no formula gives the angles at a later time directly. The computer therefore does what a hiker does in fog: it looks at the slope where it stands, takes a small step, and looks again. We write the state as \\(s = (\\theta_1,\\theta_2,\\omega_1,\\omega_2)\\) and the laws of motion as \\(\\mathrm{d}s/\\mathrm{d}t = F(s) = (\\omega_1,\\omega_2,\\alpha_1,\\alpha_2)\\): the angles change at the angular velocities, and the angular velocities change at the accelerations (9). The simplest walk, <em>Euler's method</em>, takes \\(s(t+h) = s + h\\,F(s)\\) for a small time step \\(h\\). It is easy to understand and poor in practice, because it uses the slope only at the start of each step, and on a curving path that slope is already wrong halfway along. Applied to a pendulum, Euler's method makes the swing grow a little on every step, as if someone were secretly pushing it.",
+  "tr": "تعطي المعادلات (9) التسارعات في أي حالة، لكن لا توجد صيغة تعطي الزوايا في زمن لاحق مباشرة. لذلك يفعل الحاسوب ما يفعله المتنزّه في الضباب: ينظر إلى الميل الذي يقف عليه، ويخطو خطوة صغيرة، ثم ينظر من جديد. نكتب الحالة بوصفها \\(s = (\\theta_1,\\theta_2,\\omega_1,\\omega_2)\\) وقوانين الحركة بوصفها \\(\\mathrm{d}s/\\mathrm{d}t = F(s) = (\\omega_1,\\omega_2,\\alpha_1,\\alpha_2)\\): تتغيّر الزوايا بالسرعات الزاوية، وتتغيّر السرعات الزاوية بالتسارعات (9). الطريقة الأبسط، وهي <em>طريقة أويلر</em>، تأخذ \\(s(t+h) = s + h\\,F(s)\\) لخطوة زمنية صغيرة \\(h\\). وهي سهلة الفهم وضعيفة في التطبيق، لأنها تستعمل الميل في بداية كل خطوة فقط، وعلى مسار منحنٍ يكون هذا الميل خاطئًا عند منتصف الطريق. وإذا طُبّقت على نوّاس، فإن طريقة أويلر تجعل التأرجح يكبر قليلًا في كل خطوة، كما لو أن أحدًا يدفعه سرًّا."
+ },
+ "4877b4916337": {
+  "src": "Fig. 2 · classical mechanics · chaos",
+  "tr": "الشكل 2 · الميكانيك الكلاسيكي · الفوضى"
+ },
+ "4a81ec85f9b8": {
+  "src": "<span>9</span>What the model leaves out",
+  "tr": "<span>9</span>ما يُغفله النموذج"
+ },
+ "4cc717972faa": {
+  "src": "Multiplying numerator and denominator by \\(\\sqrt2(\\sqrt2 \\mp 1)\\), the denominator becomes \\((\\sqrt2 \\pm 1)(\\sqrt2 \\mp 1) = 1\\), and we obtain",
+  "tr": "بضرب البسط والمقام في \\(\\sqrt2(\\sqrt2 \\mp 1)\\) يصبح المقام \\((\\sqrt2 \\pm 1)(\\sqrt2 \\mp 1) = 1\\)، فنحصل على"
+ },
+ "4d934ad60808": {
+  "src": "★ The page computes the same two numbers in a tidier form. Multiply numerator and denominator by 2 and use \\(2\\sin^2\\varphi = 1-\\cos 2\\varphi\\) in the denominator. In the numerator of \\(\\alpha_1\\), use \\(2\\sin\\theta_2\\cos\\varphi = \\sin\\theta_1 - \\sin(\\theta_1 - 2\\theta_2)\\); in the numerator of \\(\\alpha_2\\), use \\(\\sin\\theta_1\\cos\\varphi - \\sin\\theta_2 = \\cos\\theta_1\\sin\\varphi\\), which follows from expanding \\(\\sin\\theta_2 = \\sin(\\theta_1 - \\varphi)\\) and is where the common factor \\(\\sin\\varphi\\) of \\(\\alpha_2\\) comes from. The result is",
+  "tr": "★ تحسب الصفحة العددين نفسيهما بصيغة أنظف. اضرب البسط والمقام في 2، واستخدم \\(2\\sin^2\\varphi = 1-\\cos 2\\varphi\\) في المقام. وفي بسط \\(\\alpha_1\\) استخدم \\(2\\sin\\theta_2\\cos\\varphi = \\sin\\theta_1 - \\sin(\\theta_1 - 2\\theta_2)\\)؛ وفي بسط \\(\\alpha_2\\) استخدم \\(\\sin\\theta_1\\cos\\varphi - \\sin\\theta_2 = \\cos\\theta_1\\sin\\varphi\\)، وهو ناتج عن نشر \\(\\sin\\theta_2 = \\sin(\\theta_1 - \\varphi)\\)، ومنه يأتي العامل المشترك \\(\\sin\\varphi\\) للمقدار \\(\\alpha_2\\). والنتيجة هي"
+ },
+ "5264220f682d": {
+  "src": "The box in section 3 argued from the rods. Lagrange's method gives a shorter proof. Define the quantity \\(\\mathcal{E} = \\sum_i \\omega_i\\,\\partial L/\\partial\\omega_i - L\\). Differentiating it in time and using (5) to replace \\(\\tfrac{\\mathrm{d}}{\\mathrm{d}t}\\,\\partial L/\\partial\\omega_i\\) by \\(\\partial L/\\partial\\theta_i\\), every term cancels except \\(-\\partial L/\\partial t\\), the part of the change of \\(L\\) that comes from the clock itself. Our \\(L\\) does not contain the time explicitly, so \\(\\mathcal{E}\\) is constant. Every term of \\(T\\) contains exactly two angular velocities, so \\(\\sum_i \\omega_i\\,\\partial T/\\partial\\omega_i = 2T\\), while \\(V\\) contains none. Hence \\(\\mathcal{E} = 2T - (T - V) = T + V\\): the conserved quantity is the total energy.",
+  "tr": "الإطار في القسم 3 استدلّ بالقضبان. ومنهج لاغرانج يعطي برهانًا أقصر. عرّف الكمّية \\(\\mathcal{E} = \\sum_i \\omega_i\\,\\partial L/\\partial\\omega_i - L\\). فاشتقّها زمنيًّا، واستبدل باستخدام المعادلة (5) \\(\\tfrac{\\mathrm{d}}{\\mathrm{d}t}\\,\\partial L/\\partial\\omega_i\\) بـ \\(\\partial L/\\partial\\theta_i\\)؛ عندئذ تتلاشى كل الحدود عدا \\(-\\partial L/\\partial t\\)، أي الجزء من تغيّر \\(L\\) الذي يأتي من الساعة نفسها. و\\(L\\) لا يحتوي الزمن صراحةً، إذن \\(\\mathcal{E}\\) ثابتة. كل حدّ من \\(T\\) يحتوي سرعتين زاويتين بالضبط، لذلك \\(\\sum_i \\omega_i\\,\\partial T/\\partial\\omega_i = 2T\\)، بينما \\(V\\) لا يحتوي أيًّا منهما. ومن هذا يتبيّن أن \\(\\mathcal{E} = 2T - (T - V) = T + V\\): الكمّية المحفوظة هي الطاقة الكلّية."
+ },
+ "529640f3d028": {
+  "src": "<span class=\"psub__n\">4.1</span>The Euler–Lagrange equation&nbsp;★",
+  "tr": "<span class=\"psub__n\">4.1</span>معادلة أويلر–لاغرانج&nbsp;★"
+ },
+ "5444f85f3881": {
+  "src": "<span class=\"pfig__n\">Figure 1</span>The model. Two point masses \\(m_1, m_2\\) on rigid, massless rods of lengths \\(l_1, l_2\\). Each angle is measured from the downward vertical (dashed), counter-clockwise positive. Two numbers, \\(\\theta_1\\) and \\(\\theta_2\\), fix where everything is.",
+  "tr": "<span class=\"pfig__n\">الشكل 1</span>النموذج. كتلتان نقطيتان \\(m_1, m_2\\) على قضيبين صلبين عديمي الكتلة طولاهما \\(l_1, l_2\\). تُقاس كل زاوية من الشاقول الهابط (المتقطّع)، وتكون موجبة عكس اتجاه عقارب الساعة. ويحدّد العددان \\(\\theta_1\\) و\\(\\theta_2\\) موضع كل شيء."
+ },
+ "54faad0f40f1": {
+  "src": "Length ratio l<sub>2</sub>/l<sub>1</sub>",
+  "tr": "نسبة الطولين l<sub>2</sub>/l<sub>1</sub>"
+ },
+ "5571539485d2": {
+  "src": "Two kinds of derivative meet in (5), and we must keep them apart. A <em>partial derivative</em> such as \\(\\partial L/\\partial\\omega_1\\) treats \\(L\\) as a function of four separate numbers \\(\\theta_1, \\theta_2, \\omega_1, \\omega_2\\) and asks how \\(L\\) changes when one of them alone is changed, the other three held still. The time derivative \\(\\mathrm{d}/\\mathrm{d}t\\) then follows the actual motion, in which all four change together. In particular the chain rule gives \\(\\tfrac{\\mathrm{d}}{\\mathrm{d}t}\\cos\\varphi = -\\sin\\varphi\\,(\\omega_1-\\omega_2)\\). The three pieces of (5) for the upper angle are",
+  "tr": "يلتقي نوعان من المشتقّات في المعادلة (5)، ويجب أن نفرّق بينهما. <em>المشتقّة الجزئية</em> مثل \\(\\partial L/\\partial\\omega_1\\) تعامل \\(L\\) دالّةً لأربعة أعداد منفصلة \\(\\theta_1, \\theta_2, \\omega_1, \\omega_2\\)، وتسأل كيف يتغيّر \\(L\\) حين يتغيّر أحدها وحده وتبقى الثلاثة الأخرى ثابتة. أما المشتقّة الزمنية \\(\\mathrm{d}/\\mathrm{d}t\\) فتتبع الحركة الفعلية التي تتغيّر فيها الأعداد الأربعة معًا. وبشكل خاص تعطي قاعدة السلسلة \\(\\tfrac{\\mathrm{d}}{\\mathrm{d}t}\\cos\\varphi = -\\sin\\varphi\\,(\\omega_1-\\omega_2)\\). وأجزاء المعادلة (5) الثلاثة للزاوية العليا هي"
+ },
+ "5888082d0a17": {
+  "src": "Exercise 5.1 · on the figure above",
+  "tr": "تمرين 5.1 · على الشكل أعلاه"
+ },
+ "5a3b1b096c7e": {
+  "src": "<b>9.2</b> Differentiate \\(E = T + V\\) in time, and use (6) and (7) to show that \\(\\mathrm{d}E/\\mathrm{d}t = 0\\).",
+  "tr": "<b>9.2</b> اشتقّ \\(E = T + V\\) بالنسبة للزمن، واستخدم (6) و(7) لتبيّن أن \\(\\mathrm{d}E/\\mathrm{d}t = 0\\)."
+ },
+ "5d07df3df43c": {
+  "src": "For the upper angle the generalised momentum is",
+  "tr": "بالنسبة للزاوية العليا يكون الزخم المعمَّم"
+ },
+ "5d0cbe9b668c": {
+  "src": "<span class=\"psub__n\">3.2</span>The two energies",
+  "tr": "<span class=\"psub__n\">3.2</span>الطاقتان"
+ },
+ "5fce91d8490a": {
+  "src": "<span class=\"psec__n\">05</span>Small swings: two normal modes",
+  "tr": "<span class=\"psec__n\">05</span>التأرجحات الصغيرة: نمطان طبيعيان"
+ },
+ "619ca131f77d": {
+  "src": "<span>8</span>From metres to pixels",
+  "tr": "<span>8</span>من الأمتار إلى البكسلات"
+ },
+ "6205c61dd83c": {
+  "src": "Exercise 6.1 · on the figure above",
+  "tr": "تمرين 6.1 · على الشكل أعلاه"
+ },
+ "62e1f52a1c49": {
+  "src": "Example 3.1 · the energy of the default start",
+  "tr": "مثال 3.1 · طاقة البداية الافتراضية"
+ },
+ "648c6590e619": {
+  "src": "The burgundy trail of the lower ball is drawn on its own transparent layer, one short segment per RK4 step, and dimmed every picture by the factor \\((1-0.008)^{60\\,\\Delta t}\\), where \\(\\Delta t\\) is the real time since the last picture. In principle its brightness halves every \\(\\ln 2/(60\\,|\\ln 0.992|)\\approx 1.4\\ \\mathrm{s}\\). The screen, though, stores transparency in whole steps of 1/255, and the tiny dimming steps get rounded away. On a screen drawing sixty pictures a second, the trail falls to half in about 1.6 s and then stops fading at about a quarter of its strength, leaving a faint haze wherever ball 2 has been until <em>Clear trail</em> or a restart; on faster screens it stops fading sooner. Ball 1 is drawn with a radius of 8 screen pixels. Ball 2 has radius \\(8(m_2/m_1)^{1/3}\\) screen pixels, as for two balls of the same material, whose mass grows with the cube of the radius; it is kept between 4 and 17 pixels.",
+  "tr": "يُرسم الأثر العنّابي للكرة السفلى على طبقة شفّافة خاصّة به، بقطعة قصيرة لكل خطوة RK4، ويُخفَّض لونه في كل صورة بالعامل \\((1-0.008)^{60\\,\\Delta t}\\)، حيث \\(\\Delta t\\) هو الزمن الحقيقي منذ الصورة الأخيرة. من حيث المبدأ ينخفض سطوعه إلى النصف كل \\(\\ln 2/(60\\,|\\ln 0.992|)\\approx 1.4\\ \\mathrm{s}\\). لكن الشاشة تخزّن الشفافية بخطوات كاملة مقدارها 1/255، فتُقرَّب خطوات الإخماد الصغيرة وتضيع. على شاشة ترسم ستين صورة في الثانية، يهبط الأثر إلى النصف خلال نحو 1.6 s، ثم يتوقّف عن الخفوت عند نحو ربع قوّته، فيبقى ضباب خفيف حيث كانت الكرة 2، حتى يُضغط <em>مسح الأثر</em> أو يُعاد التشغيل؛ وعلى الشاشات الأسرع يتوقّف الخفوت باكرًا. وتُرسم الكرة 1 بنصف قطر قدره 8 بكسلات من الشاشة. أما نصف قطر الكرة 2 فهو \\(8(m_2/m_1)^{1/3}\\) بكسل من الشاشة، كما لكرتين من المادّة نفسها كتلتاهما تنموان مع مكعب نصف القطر، ويُحفظ بين 4 و17 بكسلًا."
+ },
+ "670ea0a5c9b1": {
+  "src": "<span class=\"pfig__n\">Figure 3</span>Distance between the lower masses of two pendulums whose upper angles start \\(0.001\\ \\mathrm{rad}\\) apart, on a logarithmic scale. Equal masses and lengths, both at rest at the start, RK4 with \\(h = 1/600\\ \\mathrm{s}\\). At low energy the distance stays below about 1.5 mm for the whole 20 s. At high energy it grows like a straight line on this scale, which means exponentially, until it is as large as the pendulum itself.",
+  "tr": "<span class=\"pfig__n\">الشكل 3</span>المسافة بين الكتلتين السفليين لنوّاسين تبدأ زاويتاهما العلويتان متباعدتين بمقدار \\(0.001\\ \\mathrm{rad}\\)، على مقياس لوغاريتمي. كتلتان وطولان متساويان، وكلاهما ساكن عند البداية، وRK4 بخطوة \\(h = 1/600\\ \\mathrm{s}\\). عند طاقة منخفضة تبقى المسافة دون نحو 1.5 mm طوال 20 s كاملة. وعند طاقة مرتفعة تنمو على هذا المقياس كخط مستقيم، أي أُسّيًّا، حتى تصبح بحجم النوّاس نفسه."
+ },
+ "684936dfa199": {
+  "src": "Double Pendulum<span class=\"dot\">.</span>",
+  "tr": "النوّاس المزدوج<span class=\"dot\">.</span>"
+ },
+ "6b59e7f5d4b6": {
+  "src": "<span>1</span>A pendulum on a pendulum",
+  "tr": "<span>1</span>نوّاس على نوّاس"
+ },
+ "6cdad0d2872a": {
+  "src": "Example 5.1 · the two periods",
+  "tr": "مثال 5.1 · دورا الحركتين"
+ },
+ "6f7180d73245": {
+  "src": "Twin separation · bob 2",
+  "tr": "المسافة بين التوأمين · الثقل 2"
+ },
+ "702b201c4b40": {
+  "src": "Phyein Usul",
+  "tr": "Phyein Usul"
+ },
+ "731726a391f2": {
+  "src": "In the second line the bracket has collapsed by the angle-difference rule of trigonometry, \\(\\cos a\\cos b + \\sin a\\sin b = \\cos(a-b)\\). The new symbol \\(\\varphi = \\theta_1 - \\theta_2\\) is the angle between the two rods; it will appear again and again.",
+  "tr": "في السطر الثاني اختُصرت الأقواس بقاعدة فرق الزاويتين في المثلثات، \\(\\cos a\\cos b + \\sin a\\sin b = \\cos(a-b)\\). والرمز الجديد \\(\\varphi = \\theta_1 - \\theta_2\\) هو الزاوية بين القضيبين، وسيظهر مرارًا وتكرارًا."
+ },
+ "744bf9eaf0ec": {
+  "src": "<span class=\"psub__n\">4.2</span>The equation for the upper angle",
+  "tr": "<span class=\"psub__n\">4.2</span>المعادلة الخاصة بالزاوية العليا"
+ },
+ "74b976092b5d": {
+  "src": "Clear trail",
+  "tr": "مسح الأثر"
+ },
+ "753656ab6a21": {
+  "src": "If the slope depended on time alone, the two middle looks would agree and the weights would become 1, 4, 1, the weights of Simpson's rule for the area under a curve. RK4 is the generalisation of Simpson's rule to a slope that also depends on where we are. The error it makes in one step shrinks like \\(h^5\\), and the error piled up over a fixed stretch of time like \\(h^4\\), so halving the step makes the computed path about sixteen times more accurate. The energy error, which the <em>Drift</em> readout shows, shrinks even faster here: in tests with the page's own code, halving the step from \\(1/600\\ \\mathrm{s}\\) reduced the drift after a minute about 35 times, and halving again about 25 times. The page uses \\(h = 1/600\\ \\mathrm{s}\\). On a screen that draws sixty pictures a second, this fits exactly ten steps into each picture, and it keeps the energy drift of the default start below one part in ten million over twenty seconds, far below anything you could see.",
+  "tr": "إذا كان الميل يعتمد على الزمن وحده، فستتطابق النظرتان في المنتصف وتصير الأوزان 1 و4 و1، أوزان قاعدة سيمبسون لمساحة تحت منحنى. وRK4 هو تعميم قاعدة سيمبسون لميل يعتمد أيضًا على المكان الذي نوجد فيه. الخطأ الذي يرتكبه في خطوة واحدة يتناقص كـ \\(h^5\\)، والخطأ المتراكم على زمن ثابت كـ \\(h^4\\)، لذلك فإن تنصيف الخطوة يجعل المسار المحسوب أدقّ بنحو ست عشرة مرّة. أما خطأ الطاقة الذي تُظهره قراءة <em>انجراف الطاقة</em> فيتناقص هنا أسرع من ذلك: ففي اختبارات أُجريت بشيفرة الصفحة نفسها، قلّص تنصيف الخطوة، ابتداءً من \\(1/600\\ \\mathrm{s}\\)، الانجراف بعد دقيقة نحو 35 مرّة، وقلّصه تنصيف آخر نحو 25 مرّة. وتستعمل الصفحة \\(h = 1/600\\ \\mathrm{s}\\). وعلى شاشة ترسم ستين صورة في الثانية، تتّسع الصورة بالضبط لعشر خطوات، فيبقى انجراف الطاقة للبداية الافتراضية خلال عشرين ثانية دون جزء من عشرة ملايين، أي أدنى بكثير مما يمكن أن تراه."
+ },
+ "753c84593cce": {
+  "src": "We describe each rod by its angle from the straight-down direction, the dashed line in Figure 1, counted positive when the rod turns counter-clockwise. Angles are measured in <em>radians</em>. One radian is the angle at which the arc along a circle is exactly as long as the circle's radius, so a full turn is \\(2\\pi \\approx 6.28\\) radians and \\(1^\\circ \\approx 0.0175\\) radians. Radians are the natural unit for motion on a circle, because the length of an arc is then simply radius times angle.",
+  "tr": "نحدّد كل قضيب بزاويته عن الاتجاه الشاقولي الهابط، أي الخط المتقطّع في الشكل 1، ونعدّها موجبة حين يدور القضيب عكس اتجاه عقارب الساعة. تُقاس الزوايا بـ<em>الراديان</em>. الراديان هو الزاوية التي يكون عندها طول القوس على الدائرة مساويًا تمامًا لنصف قطرها. فدورة كاملة هي \\(2\\pi \\approx 6.28\\) راديانًا، و\\(1^\\circ \\approx 0.0175\\) راديان. والراديان هو الوحدة الطبيعية للحركة على دائرة، لأن طول القوس عندئذٍ هو نصف القطر مضروبًا في الزاوية."
+ },
+ "77f03f065271": {
+  "src": "Numa Koudsie · for readers meeting the subject for the first time, from school to the second year of university",
+  "tr": "نعمة سائر قدسية · لمن يلتقي الموضوع للمرة الأولى، من المدرسة حتى السنة الثانية في الجامعة"
+ },
+ "781961bc81c2": {
+  "src": "Pause",
+  "tr": "إيقاف مؤقّت"
+ },
+ "7b9a68d6240d": {
+  "src": "Hold a pen loosely between two fingers and let it swing. That is a pendulum, and since Galileo, four hundred years ago, we have known how to predict where it will be at any moment. Now hang a second pen from the tip of the first, and the easy prediction is gone.",
+  "tr": "أمسك قلمًا بين إصبعين بخفّة، ودعه يتأرجح. هذا نوّاس، ومنذ غاليليو قبل أربعمئة عام نعرف كيف نتنبّأ بمكانه في أي لحظة. علّق الآن قلمًا ثانيًا من طرف الأول، فيزول التنبّؤ السهل."
+ },
+ "7d2502c47c5f": {
+  "src": "The <em>kinetic energy</em> of a ball, the energy it has because it moves, is \\(\\tfrac12 m v^2\\). It equals the work needed to bring the ball from rest up to the speed \\(v\\), and you feel it as the sting when a fast ball lands in your hand. For both balls together,",
+  "tr": "<em>الطاقة الحركية</em> للكرة، أي الطاقة التي تملكها لأنها تتحرّك، هي \\(\\tfrac12 m v^2\\). وهي تساوي الشغل اللازم لتسريع الكرة من السكون إلى السرعة \\(v\\)، وتشعر بها لسعةً حين تهبط كرة سريعة في كفّك. للكرتين معًا،"
+ },
+ "7d252cd594b3": {
+  "src": "All simulations ↑",
+  "tr": "↑ جميع المحاكاة"
+ },
+ "7ee406df62d3": {
+  "src": "<span class=\"psub__n\">4.4</span>Solving for the accelerations",
+  "tr": "<span class=\"psub__n\">4.4</span>حلّ المعادلتين من أجل التسارعين"
+ },
+ "7f99ede72bf4": {
+  "src": "<span class=\"pfig__n\">Figure 2</span>The two normal modes for equal masses and \\(l = 1\\ \\mathrm{m}\\), with the angles exaggerated so they can be seen. Dark: one turning point; pale: the opposite turning point half a period later.",
+  "tr": "<span class=\"pfig__n\">الشكل 2</span>النمطان الطبيعيان لكتلتين متساويتين و\\(l = 1\\ \\mathrm{m}\\)، مع تضخيم الزوايا كي تُرى. داكن: إحدى نقطتَي الارتداد؛ فاتح: نقطة الارتداد المقابلة بعد نصف دور."
+ },
+ "80892f93543c": {
+  "src": "We repeat the same three steps for \\(\\theta_2\\). Now \\(\\theta_2\\) sits inside \\(\\cos\\varphi\\) with a minus sign, because \\(\\varphi = \\theta_1 - \\theta_2\\), so \\(\\partial\\cos\\varphi/\\partial\\theta_2 = +\\sin\\varphi\\):",
+  "tr": "نكرّر الخطوات الثلاث نفسها لـ \\(\\theta_2\\). الآن يقع \\(\\theta_2\\) داخل \\(\\cos\\varphi\\) بإشارة سالبة، لأن \\(\\varphi = \\theta_1 - \\theta_2\\)، لذا \\(\\partial\\cos\\varphi/\\partial\\theta_2 = +\\sin\\varphi\\):"
+ },
+ "808dabcd714f": {
+  "src": "Coupling",
+  "tr": "الاقتران"
+ },
+ "875cd17f6e93": {
+  "src": "T. Shinbrot, C. Grebogi, J. Wisdom and J. A. Yorke, <a href=\"https://doi.org/10.1119/1.16860\">“Chaos in a double pendulum”</a>, <em>American Journal of Physics</em> 60, 491 (1992): measurements on a real double pendulum, compared with the model of this note.",
+  "tr": "T. Shinbrot، C. Grebogi، J. Wisdom و J. A. Yorke، <a href=\"https://doi.org/10.1119/1.16860\">“Chaos in a double pendulum”</a>، <em>American Journal of Physics</em> 60، 491 (1992): قياسات على نوّاس مزدوج حقيقي، تُقارن بنموذج هذه المذكّرة."
+ },
+ "892f1ba3fb6b": {
+  "src": "<span class=\"psub__n\">3.1</span>How fast the balls move",
+  "tr": "<span class=\"psub__n\">3.1</span>مدى سرعة الكرتين"
+ },
+ "895636984c6e": {
+  "src": "The lower arm feels gravity, \\(-g\\sin\\theta_2\\), and the outward tug of the upper ball's circling, \\(l_1\\omega_1^2\\sin\\varphi\\), which reaches it through the elbow.",
+  "tr": "تشعر الذراع السفلى بالجاذبية، \\(-g\\sin\\theta_2\\)، وبالشدّ الخارجي من دوران الكرة العليا، \\(l_1\\omega_1^2\\sin\\varphi\\)، الذي يصلها عبر المرفق."
+ },
+ "8b4d1f83501c": {
+  "src": "You already own a double pendulum: your arm. Let it hang loose and give it a push from the shoulder. The upper arm turns about the shoulder, the forearm turns about the elbow, and your hand traces a curve that neither joint would draw on its own. You can feel the two parts tugging at each other: when the forearm flicks outward, the upper arm is pulled along, and when the upper arm stops, the forearm keeps going. A gymnast circling the high bar, a nunchaku, and the hook of a crane swinging on its cable are all the same machine: two masses, two rods, and gravity pulling down.",
+  "tr": "ذراعك نفسها نوّاس مزدوج. دعها تتدلّى بخفّة وادفعها من الكتف. يدور العضد حول الكتف، ويدور الساعد حول المرفق، وترسم يدك منحنى لا يرسمه أيٌّ من المفصلين وحده. تشعر بالجزأين يشدّ أحدهما الآخر: حين يندفع الساعد إلى الخارج يُجرّ العضد معه، وحين يتوقّف العضد يواصل الساعد حركته. لاعب الجمباز الذي يدور حول العارضة، وعصا النونشاكو، وخطّاف الرافعة المتأرجح على حبله، كلّها الآلة نفسها: كتلتان وقضيبان، والجاذبية تشدّ نحو الأسفل."
+ },
+ "8cd4e8676580": {
+  "src": "<span>3</span>Energy",
+  "tr": "<span>3</span>الطاقة"
+ },
+ "8d51779d422b": {
+  "src": "The speed follows from Pythagoras, \\(v^2 = \\dot x^2 + \\dot y^2\\). For the upper ball, \\(v_1^2 = l_1^2\\omega_1^2(\\cos^2\\theta_1 + \\sin^2\\theta_1) = l_1^2\\omega_1^2\\). This is what we expect: a ball on a rod of length \\(l_1\\) turning at \\(\\omega_1\\) runs along its circle at the speed \\(l_1\\omega_1\\). For the lower ball, squaring and adding gives one term for each rod and a mixed term from the two together:",
+  "tr": "تنتج السرعة من فيثاغورس: \\(v^2 = \\dot x^2 + \\dot y^2\\). أما للكرة العليا فـ \\(v_1^2 = l_1^2\\omega_1^2(\\cos^2\\theta_1 + \\sin^2\\theta_1) = l_1^2\\omega_1^2\\). وهذا ما نتوقّعه تمامًا: كرة على قضيب طوله \\(l_1\\) تدور بسرعة زاوية \\(\\omega_1\\) تجري على دائرتها بسرعة \\(l_1\\omega_1\\). أما الكرة السفلى فإن التربيع والجمع يعطيان حدًّا لكل قضيب وحدًّا مختلطًا من الاثنين معًا:"
+ },
+ "8e6b86dce8c4": {
+  "src": "Problems",
+  "tr": "مسائل"
+ },
+ "93a8161c11f4": {
+  "src": "Back to the simulations",
+  "tr": "العودة إلى المحاكاة"
+ },
+ "9521dba25709": {
+  "src": "Home page",
+  "tr": "الصفحة الرئيسية"
+ },
+ "983c824e888e": {
+  "src": "<span class=\"psub__n\">9.2</span>Further reading",
+  "tr": "<span class=\"psub__n\">9.2</span>قراءة إضافية"
+ },
+ "99c172d34b78": {
+  "src": "Checked against a direct numerical solve of (8) at 10 000 random states and parameter values: the two agree to rounding error, about one part in \\(10^{13}\\).",
+  "tr": "تم التحقق منها مقابل حلّ عددي مباشر للمعادلة (8) عند 10 000 حالة عشوائية وقيم عشوائية للوسائط، فتتطابق الاثنتان حتى خطأ التقريب، أي نحو جزء من \\(10^{13}\\)."
+ },
+ "9b84fcd970fc": {
+  "src": "<span class=\"psub__n\">4.5</span>Why the energy is conserved&nbsp;★",
+  "tr": "<span class=\"psub__n\">4.5</span>لماذا تُحفظ الطاقة&nbsp;★"
+ },
+ "9e7209135f5a": {
+  "src": "<span class=\"pbox__t\">Key result · the Euler–Lagrange equation</span> \\[ \\frac{\\mathrm{d}}{\\mathrm{d}t}\\frac{\\partial L}{\\partial\\omega_i} - \\frac{\\partial L}{\\partial\\theta_i} = 0 , \\qquad i = 1, 2. \\tag{5} \\] <p>There is one such equation for each angle. Read it as Newton's second law in disguise: the quantity \\(p_i = \\partial L/\\partial\\omega_i\\), called the <em>generalised momentum</em> of \\(\\theta_i\\), changes at the rate \\(\\partial L/\\partial\\theta_i\\), which plays the part of a force.</p>",
+  "tr": "<span class=\"pbox__t\">النتيجة الأساسية · معادلة أويلر–لاغرانج</span> \\[ \\frac{\\mathrm{d}}{\\mathrm{d}t}\\frac{\\partial L}{\\partial\\omega_i} - \\frac{\\partial L}{\\partial\\theta_i} = 0 , \\qquad i = 1, 2. \\tag{5} \\] <p>توجد مثل هذه المعادلة لكل زاوية. اقرأها بوصفها قانون نيوتن الثاني متنكّرًا: الكمّية \\(p_i = \\partial L/\\partial\\omega_i\\)، وهي <em>الزخم المعمَّم</em> للزاوية \\(\\theta_i\\)، تتغيّر بمعدّل \\(\\partial L/\\partial\\theta_i\\) الذي يلعب دور القوة.</p>"
+ },
+ "a0765de3ed83": {
+  "src": "Switch on the <em>Chaos twin</em>, a second pendulum started with \\(\\theta_1\\) larger by \\(0.001\\ \\mathrm{rad}\\). From \\(10^\\circ, 10^\\circ\\) its separation readout stays near \\(10^{-3}\\ \\mathrm{m}\\). From \\(120^\\circ, 150^\\circ\\) the pale twin peels away within a few seconds. Find the smallest starting angles at which you can see the two pendulums separate within 20 s.",
+  "tr": "فعّل <em>توأم الفوضى</em>، وهو نوّاس ثانٍ يبدأ بـ \\(\\theta_1\\) أكبر بمقدار \\(0.001\\ \\mathrm{rad}\\). عند \\(10^\\circ, 10^\\circ\\) تبقى قراءة المسافة قريبة من \\(10^{-3}\\ \\mathrm{m}\\). وعند \\(120^\\circ, 150^\\circ\\) يبتعد التوأم الفاتح خلال ثوانٍ قليلة. أوجِد أصغر الزوايا الابتدائية التي ترى عندها النوّاسين يفترقان خلال 20 s."
+ },
+ "a12cd1b3cd32": {
+  "src": "The default start has both balls at rest, so \\(T = 0\\), and \\(\\theta_1 = 120^\\circ\\), \\(\\theta_2 = 150^\\circ\\) with \\(m_1 = m_2 = 1\\ \\mathrm{kg}\\) and \\(l_1 = l_2 = 1\\ \\mathrm{m}\\). Equation (4) gives \\(V = -2\\times 9.81\\times\\cos 120^\\circ - 9.81\\times\\cos 150^\\circ = 9.81 + 8.50 = 18.31\\ \\mathrm{J}\\). Hanging straight down, the pendulum would have \\(V = -3\\times 9.81 = -29.43\\ \\mathrm{J}\\), so the default start carries \\(47.7\\ \\mathrm{J}\\) more than the resting pendulum. Standing the whole pendulum on its head, both rods straight up, would need \\(V = +29.43\\ \\mathrm{J}\\), more than the \\(18.31\\ \\mathrm{J}\\) available, so the upper rod can never reach the top. The lower rod alone, though, can swing over the top while the upper one hangs low: with \\(\\theta_1 = 0\\) and \\(\\theta_2 = 180^\\circ\\), \\(V = -19.62 + 9.81 = -9.81\\ \\mathrm{J}\\), well within reach. This is exactly what you see on the page: the lower arm flips over again and again, the upper arm never does.",
+  "tr": "البداية الافتراضية تجعل الكرتين ساكنتين، فـ \\(T = 0\\)؛ والزاويتان \\(\\theta_1 = 120^\\circ\\) و\\(\\theta_2 = 150^\\circ\\)، والكتلتان \\(m_1 = m_2 = 1\\ \\mathrm{kg}\\)، والطولان \\(l_1 = l_2 = 1\\ \\mathrm{m}\\). تعطي المعادلة (4) \\(V = -2\\times 9.81\\times\\cos 120^\\circ - 9.81\\times\\cos 150^\\circ = 9.81 + 8.50 = 18.31\\ \\mathrm{J}\\). لو تدلّى النوّاس شاقوليًّا إلى الأسفل لكانت له طاقة وضع \\(V = -3\\times 9.81 = -29.43\\ \\mathrm{J}\\)، فتكون البداية الافتراضية تحمل \\(47.7\\ \\mathrm{J}\\) زيادةً على النوّاس الساكن. ولو أوقفنا النوّاس كلّه على رأسه، قضيباه مستقيمان إلى الأعلى، لاحتاج \\(V = +29.43\\ \\mathrm{J}\\)، وهو أكبر من \\(18.31\\ \\mathrm{J}\\) المتاحة، فلا يستطيع القضيب العلوي أن يبلغ القمّة أبدًا. أما القضيب السفلي وحده فيستطيع أن يتجاوز القمّة بينما يتدلّى العلوي: عند \\(\\theta_1 = 0\\) و\\(\\theta_2 = 180^\\circ\\) تكون \\(V = -19.62 + 9.81 = -9.81\\ \\mathrm{J}\\)، وهي في متناول اليد بسهولة. وهذا بالضبط ما تراه على الصفحة: الذراع السفلى تنقلب مرارًا وتكرارًا، والذراع العليا لا تنقلب أبدًا."
+ },
+ "a28272643323": {
+  "src": "<span class=\"psec__n\">02</span>The model",
+  "tr": "<span class=\"psec__n\">02</span>النموذج"
+ },
+ "a2ee048fe6f5": {
+  "src": "Real rods have mass and spread it along their length. A double pendulum made of two solid bars obeys equations of the same kind as ours, with different numbers in front of the terms, because each bar then has its own moment of inertia about its pivot. Real joints and air also take a little energy on every swing. A real double pendulum therefore slows down, its tumbling calms into small regular swings, and these die away; the model, without friction, keeps its energy for ever. In the model the balls may also pass through each other and through the pivot, where real rods would collide.",
+  "tr": "القضبان الحقيقية لها كتلة توزّعها على طولها. ونوّاس مزدوج مصنوع من قضيبين مُصمتين يخضع لمعادلات من النوع نفسه كمعادلاتنا، مع معاملات عددية مختلفة أمام الحدود، لأن كل قضيب حينئذ له عزم عطالة خاص به حول نقطة ارتكازه. والمفاصل الحقيقية والهواء يأخذان أيضًا قدرًا من الطاقة في كل تأرجح. لذلك يتباطأ النوّاس المزدوج الحقيقي، ويهدأ تقلّبه إلى تأرجحات صغيرة منتظمة، ثم تخمد هذه التأرجحات؛ أما النموذج، بلا احتكاك، فيحتفظ بطاقته إلى الأبد. وفي النموذج قد تعبر الكرات بعضها خلال بعض ومن خلال نقطة الارتكاز، حيث كانت القضبان الحقيقية ستصطدم."
+ },
+ "a2fb44ffbfc8": {
+  "src": "Every term has a meaning you can feel. On the right, \\(-(m_1+m_2)g\\sin\\theta_1\\) is gravity pulling the whole tilted pendulum back towards the bottom, harder the further it is from straight down. The term with \\(\\omega_2^2\\) is the lower ball circling round the elbow and tugging outward on the end of the upper rod, the same tug you feel in your hand when you whirl a stone on a string. On the left, the term with \\(\\alpha_2\\) says that whenever the lower arm speeds up or slows down, it jerks the upper arm.",
+  "tr": "لكل حدّ معنى تستشعره. على اليمين، \\(-(m_1+m_2)g\\sin\\theta_1\\): الجاذبية تشدّ النوّاس المائل كلّه إلى أسفل، وتشتدّ كلّما ابتعد عن الشاقول الهابط. الحدّ الذي فيه \\(\\omega_2^2\\) هو الكرة السفلى تدور حول المرفق وتشدّ طرف القضيب العلوي إلى الخارج، وهو الشدّ نفسه الذي تشعر به في يدك حين تدير حجرًا على خيط. وعلى اليسار، الحدّ الذي فيه \\(\\alpha_2\\) يقول: كلّما تسارعت الذراع السفلى أو تباطأت، هزّت الذراع العليا."
+ },
+ "a4ce3a9be794": {
+  "src": "← All simulations",
+  "tr": "→ جميع المحاكاة"
+ },
+ "b134bd555a2f": {
+  "src": "Restart",
+  "tr": "إعادة التشغيل"
+ },
+ "b16c86aa3ad6": {
+  "src": "Chaos twin · θ<sub>1</sub> + 0.001 rad",
+  "tr": "توأم الفوضى · θ<sub>1</sub> + 0.001 rad"
+ },
+ "b1b392607dea": {
+  "src": "Run",
+  "tr": "تشغيل"
+ },
+ "b1e742131317": {
+  "src": "J. R. Taylor, <a href=\"https://books.google.com/books/about/Classical_Mechanics.html?id=P1kCtNr-pJsC\"><em>Classical Mechanics</em></a>, University Science Books, 2005: chapters 7 (Lagrange’s equations), 11 (coupled oscillators and normal modes) and 12 (nonlinear mechanics and chaos).",
+  "tr": "J. R. Taylor، <a href=\"https://books.google.com/books/about/Classical_Mechanics.html?id=P1kCtNr-pJsC\"><em>Classical Mechanics</em></a>، University Science Books، 2005: الفصول 7 (معادلات لاغرانج)، 11 (الاهتزازات المقترنة والأنماط الطبيعية) و12 (الميكانيك غير الخطّي والفوضى)."
+ },
+ "b3d01fc78540": {
+  "src": "Angle θ<sub>1</sub>",
+  "tr": "الزاوية θ<sub>1</sub>"
+ },
+ "b555231ad587": {
+  "src": "<b>Abstract.</b> Hang one pendulum from the end of another and you get the simplest machine whose future we can write down exactly and still cannot predict. In this note we start from what you can feel in your own arm, build the equations of motion from energy alone with Lagrange's method, solve the case of small swings completely, measure how fast two almost identical starts drift apart, and follow the page as it turns the equations into the moving picture above. Every new word is explained where it first appears, and every result is checked with the page's own numbers in a worked example. Paragraphs marked ★ carry extra mathematics; you can skip them and still follow every later step, because the results they lead to are restated without the star.",
+  "tr": "<b>الملخّص.</b> علّق نوّاسًا في طرف نوّاس آخر، فتحصل على أبسط آلة نستطيع أن نكتب قوانين مستقبلها بدقّة، ومع ذلك لا نستطيع التنبّؤ به. نبدأ في هذه المذكّرة مما تشعر به في ذراعك، ونبني معادلات الحركة من الطاقة وحدها بطريقة لاغرانج، ونحلّ حالة التأرجحات الصغيرة حلًّا كاملًا، ونقيس مدى سرعة ابتعاد حالتين ابتدائيتين متشابهتين جدًّا، ونتابع كيف تحوّل الصفحة المعادلات إلى الصورة المتحركة أعلاه. تُشرح كل كلمة جديدة عند أول ظهورها، ويُتحقَّق من كل نتيجة في مثال محلول بأرقام الصفحة نفسها. الفقرات المعلَّمة بنجمة ★ تحمل رياضيات إضافية؛ يمكنك تخطّيها وتبقى قادرًا على متابعة كل الخطوات اللاحقة، لأن النتائج التي تقود إليها تُذكر من جديد بلا نجمة."
+ },
+ "b69dd9ddec59": {
+  "src": "L. D. Landau and E. M. Lifshitz, <a href=\"https://shop.elsevier.com/books/mechanics/landau/978-0-08-050347-9\"><em>Mechanics</em></a>, 3rd edition, Pergamon, 1976: §5, problem 1, the plane double pendulum.",
+  "tr": "L. D. Landau و E. M. Lifshitz، <a href=\"https://shop.elsevier.com/books/mechanics/landau/978-0-08-050347-9\"><em>Mechanics</em></a>، الطبعة 3، Pergamon، 1976: §5، المسألة 1، النوّاس المزدوج المستوي."
+ },
+ "b6cde3d07af9": {
+  "src": "This is an angular momentum about the pivot, but not simply \\(m_1 l_1^2\\omega_1\\): it already contains the lower ball, because when the upper rod turns, it carries the lower ball along.",
+  "tr": "وهذا زخم زاوي حول نقطة الارتكاز، لكنه ليس ببساطة \\(m_1 l_1^2\\omega_1\\): إنه يحتوي الكرة السفلى أصلًا، لأن القضيب العلوي حين يدور يحمل الكرة السفلى معه."
+ },
+ "ba89fefaf689": {
+  "src": "The obvious way to find the motion is Newton's: add up the forces on each ball and set force equal to mass times acceleration. For the double pendulum this is hard work, because each rod pulls or pushes on its balls with a force we do not know in advance. That force changes in strength and direction at every instant, and it is always exactly as large as it must be to keep the rod's length fixed. There is a cleverer road that never needs these rod forces. It goes through energy, of which there are two kinds here: the energy of motion and the energy of height.",
+  "tr": "الطريق البديهي إلى الحركة هو طريق نيوتن: نجمع القوى المؤثّرة في كل كرة ونساوي القوة بحاصل ضرب الكتلة في التسارع. وهذا شاقّ في النوّاس المزدوج، لأن كل قضيب يشدّ كرتيه أو يدفعهما بقوة لا نعرفها مسبقًا. تتغيّر هذه القوة في الشدّة والاتجاه في كل لحظة، وهي دائمًا بالقدر الذي يلزم لإبقاء طول القضيب ثابتًا. وهناك طريق أذكى لا يحتاج أبدًا إلى قوى القضبان هذه. يمرّ عبر الطاقة، وهي هنا نوعان: طاقة الحركة وطاقة الارتفاع."
+ },
+ "bbd9f3a55293": {
+  "src": "Energy E",
+  "tr": "الطاقة E"
+ },
+ "bc350d2bb6b8": {
+  "src": "The vertical scale of Figure 3 is <em>logarithmic</em>: each step up multiplies the distance by ten. On such a scale anything that grows by the same factor every second, like money earning compound interest, climbs as a straight line. In small swings the equations are linear, so the difference between two motions is itself a small swing and keeps its size: the low-energy curve rises and falls in arches but never grows. In large swings the lower arm is carried again and again to near the top, where it balances like a pencil standing on its tip. A hair's difference then decides whether it tips over or falls back, and once the two pendulums choose differently, they are on different roads. Each such moment magnifies the gap. Measured with the page's own equations for the default start, the gap grows almost twice as fast while the lower rod is more than \\(120^\\circ\\) from straight down as at other times.",
+  "tr": "المقياس الرأسي في الشكل 3 <em>لوغاريتمي</em>: كل درجة إلى الأعلى تضرب المسافة في عشرة. على مثل هذا المقياس، يصعد كل ما يتضاعف بالعامل نفسه في كل ثانية، كالمال الذي ينمو بالفوائد المركّبة، كخط مستقيم. في التأرجحات الصغيرة المعادلات خطّية، فالفرق بين حركتين هو نفسه تأرجح صغير ويحتفظ بحجمه: فالمنحنى عند الطاقة المنخفضة يصعد ويهبط في أقواس لكنه لا ينمو أبدًا. أما في التأرجحات الكبيرة فتُحمَل الذراع السفلى مرارًا إلى قرب القمّة، حيث تتوازن كقلم رصاص على رأسه. عندها يحسم فرق ضئيل جدًّا ما إذا كانت ستنقلب أم ستعود، وحين يختار النوّاسان اختيارين مختلفين فإنهما يسلكان طريقين مختلفين. كل لحظة من هذا النوع تكبّر الفجوة. وحين قيس ذلك بمعادلات الصفحة نفسها للبداية الافتراضية، وُجد أن الفجوة تنمو بسرعة تقارب ضعف سرعتها في أوقات أخرى، وذلك حين يكون القضيب السفلي أبعد من \\(120^\\circ\\) عن الشاقول الهابط."
+ },
+ "bd3a617d8e75": {
+  "src": "A long formula deserves suspicion, and physicists have two quick tests for it. The first is <em>units</em>. An angular acceleration has units of \\(1/\\mathrm{s^2}\\), so every term of (9) must too, and it does: \\(g\\) divided by a length gives \\(1/\\mathrm{s^2}\\), \\(\\omega^2 l\\) divided by a length gives \\(1/\\mathrm{s^2}\\), and the masses appear above and below the fraction line and cancel. The second test is an <em>extreme case</em> whose answer we already know. Make the lower ball so light that it hardly exists, \\(m_2 \\to 0\\). The upper arm then carries nothing and must swing like an ordinary single pendulum. Setting \\(m_2 = 0\\) in (9), every term with \\(m_2\\) drops out, the numerator of \\(\\alpha_1\\) becomes \\(-2m_1 g\\sin\\theta_1\\), the denominator becomes \\(2m_1 l_1\\), and \\(\\alpha_1 = -(g/l_1)\\sin\\theta_1\\), exactly the law of a simple pendulum of length \\(l_1\\). A formula that failed either test would be wrong somewhere; this one passes both.",
+  "tr": "المعادلة الطويلة تستحق الشكّ، ولدى الفيزيائيين اختباران سريعان لها. الأول هو <em>الوحدات</em>. التسارع الزاوي وحدته \\(1/\\mathrm{s^2}\\)، فيجب أن يكون لكل حدّ في (9) الوحدة نفسها، وهو كذلك: \\(g\\) مقسومًا على طول يعطي \\(1/\\mathrm{s^2}\\)، و\\(\\omega^2 l\\) مقسومًا على طول يعطي \\(1/\\mathrm{s^2}\\)، والكتلتان تظهران فوق خط الكسر وتحته فتُختصران. والثاني اختبار <em>حالة قصوى</em> نعرف نتيجتها مسبقًا. لنجعل الكرة السفلى خفيفة إلى حدّ أنها تكاد لا توجد، \\(m_2 \\to 0\\). فالذراع العليا لا تحمل شيئًا، ويجب أن تتأرجح كنوّاس بسيط عادي. نضع \\(m_2 = 0\\) في المعادلة (9): تسقط كل الحدود التي فيها \\(m_2\\)، ويصبح بسط \\(\\alpha_1\\) مساويًا \\(-2m_1 g\\sin\\theta_1\\)، ومقامه \\(2m_1 l_1\\)، و\\(\\alpha_1 = -(g/l_1)\\sin\\theta_1\\)، وهو قانون النوّاس البسيط الذي طوله \\(l_1\\) تمامًا. أي صيغة تفشل في أحد الاختبارين تكون خاطئة في مكان ما؛ وهذه تجتازهما معًا."
+ },
+ "bee75ca77f75": {
+  "src": "Controls",
+  "tr": "أدوات التحكّم"
+ },
+ "bf8f03a787e5": {
+  "src": "There is no friction and no air in the model, so the total energy \\(E = T + V\\) never changes: the pendulum can only trade height for speed and back, like a ball rolling up and down the sides of a valley. Gravity changes the speeds, but only by taking from the height or giving to it. The rods do no net work. The upper rod pulls its ball towards the pivot, at right angles to the ball's circular path, so it neither speeds the ball up nor slows it down. The lower rod is subtler: it can push the upper ball forward and the lower ball back, or the other way round, and so it does work on each ball separately. But because its length cannot change, both ends of it move along the rod at the same rate, and the work it does on one ball is exactly the work it takes from the other, like a rigid pole held between two skaters. Section 4.5 gives the formal proof. This conservation gives the simulation a built-in check: the <em>Drift</em> readout above shows how far the computed energy wanders from its starting value, and any wandering is an error of the computation, never of the physics.",
+  "tr": "لا احتكاك ولا هواء في النموذج، لذلك لا تتغيّر الطاقة الكلّية \\(E = T + V\\) أبدًا: فالنوّاس لا يستطيع إلا أن يبادل الارتفاع بالسرعة وبالعكس، كما تتدحرج كرة صعودًا ونزولًا على جانبي وادٍ. الجاذبية تغيّر السرعات، لكن بأن تأخذ من الارتفاع أو تعطيه. والقضبان لا تبذل شغلًا صافيًا. القضيب العلوي يسحب كرته نحو نقطة الارتكاز، عموديًّا على مسار الكرة الدائري، فلا يسرّعها ولا يبطّئها. أما القضيب السفلي فأدقّ: يستطيع أن يدفع الكرة العليا إلى الأمام والسفلى إلى الخلف أو العكس، فيبذل شغلًا على كل كرة على حدة. لكن لأن طوله لا يتغيّر، يتحرّك طرفاه على امتداد القضيب بالمعدّل نفسه، والشغل الذي يبذله على إحدى الكرتين هو بالضبط الشغل الذي ينزعه من الأخرى، مثل قضيب صلب يحمله متزلّجان. يعطي القسم 4.5 البرهان الصوري. وهذه الحفظيّة تمنح المحاكاة فحصًا مدمجًا: تُظهر قراءة <em>انجراف الطاقة</em> أعلاه مدى ابتعاد الطاقة المحسوبة عن قيمتها الابتدائية، وكل ابتعاد هو خطأ في الحساب، لا في الفيزياء أبدًا."
+ },
+ "c0c7b7411daf": {
+  "src": "Double Pendulum Chaos · Numa Koudsie",
+  "tr": "الفوضى في النوّاس المزدوج · نعمة سائر قدسية"
+ },
+ "c154447eebde": {
+  "src": "<span>7</span>Solving it step by step",
+  "tr": "<span>7</span>الحلّ خطوة بخطوة"
+ },
+ "c21d0648d749": {
+  "src": "Start the double pendulum with a small push and it rocks gently, mixing two steady rhythms that we will find in section 5. Start it high, as in the simulation above, and the lower arm whips over the top, stops, reverses, and tumbles in a pattern that never seems to repeat. Nothing random is involved. The laws we are about to derive fix the entire future once the starting angles and speeds are given, and the computer follows them so faithfully that in the first twenty seconds the total energy changes by less than one part in ten million. Yet two starts that differ by a thousandth of a radian, about one millimetre at the end of a one-metre rod, end up in completely unrelated places within five seconds.",
+  "tr": "أطلِق النوّاس المزدوج بدفعة صغيرة فيتأرجح برفق، ممازجًا بين إيقاعين ثابتين سنجدهما في القسم 5. وإن بدأته عاليًا، كما في المحاكاة أعلاه، انطلقت الذراع السفلى فوق القمّة، ثم توقّفت وارتدّت وتقلّبت في نمط لا يبدو أنه يتكرّر. لا شيء عشوائيًّا هنا: القوانين التي سنشتقّها تحدّد المستقبل كلّه متى أُعطيت الزوايا الابتدائية وسرعاتها الزاوية، والحاسوب يتبعها بأمانة، حتى إن الطاقة الكلّية تتغيّر في أول عشرين ثانية بأقل من جزء من عشرة ملايين. ومع ذلك فإن بدايتين تختلفان بجزء من ألف من الراديان، أي نحو مليمتر واحد عند طرف قضيب طوله متر، تنتهيان خلال خمس ثوانٍ إلى مكانين لا علاقة لأحدهما بالآخر."
+ },
+ "c2c36026c6f8": {
+  "src": "The <em>potential energy</em> is energy stored in height. Lifting a mass \\(m\\) through a height \\(\\Delta y\\) costs the work \\(m g\\,\\Delta y\\), and the mass gives that work back when it falls. Measuring heights from the pivot, each ball has potential energy \\(mgy\\), negative because the balls hang below the pivot. Only differences of potential energy ever matter, so the choice of zero is ours. From (1),",
+  "tr": "<em>طاقة الوضع</em> هي الطاقة المخزّنة بسبب الارتفاع. رفع كتلة \\(m\\) عبر ارتفاع \\(\\Delta y\\) يكلّف الشغل \\(m g\\,\\Delta y\\)، والكتلة تعيد هذا الشغل حين تسقط. وبقياس الارتفاعات من نقطة الارتكاز، لكل كرة طاقة وضع \\(mgy\\)، وهي سالبة لأن الكرتين معلّقتان تحت نقطة الارتكاز. لا يهمّ إلا فرق طاقة الوضع، فاختيار الصفر أمر متروك لنا. ومن المعادلة (1) نستخرج"
+ },
+ "c3c42e3f00f1": {
+  "src": "<span>6</span>Chaos",
+  "tr": "<span>6</span>الفوضى"
+ },
+ "c477d49c9769": {
+  "src": "Velocity is the rate of change of position, so we take the time derivative of each line of (1). The lengths never change; only the angles do. When an angle changes at the rate \\(\\omega\\), the chain rule says that \\(\\sin\\theta\\) changes at the rate \\(\\omega\\cos\\theta\\) and \\(\\cos\\theta\\) at the rate \\(-\\omega\\sin\\theta\\). Therefore",
+  "tr": "السرعة هي معدّل تغيّر الموضع، لذلك نأخذ المشتقّة الزمنية لكل سطر من المعادلة (1). الأطوال لا تتغيّر أبدًا، والذي يتغيّر هو الزوايا فقط. حين تتغيّر زاوية بالمعدّل \\(\\omega\\)، تقول قاعدة السلسلة إن \\(\\sin\\theta\\) يتغيّر بالمعدّل \\(\\omega\\cos\\theta\\)، و\\(\\cos\\theta\\) يتغيّر بالمعدّل \\(-\\omega\\sin\\theta\\). لذلك نجد"
+ },
+ "c5151b03cf0c": {
+  "src": "<span class=\"sw sw--dot\"></span>masses m₁, m₂",
+  "tr": "<span class=\"sw sw--dot\"></span>الكتلتان m₁، m₂"
+ },
+ "c7386df0890c": {
+  "src": "Mass ratio m<sub>2</sub>/m<sub>1</sub>",
+  "tr": "نسبة الكتلتين m<sub>2</sub>/m<sub>1</sub>"
+ },
+ "cbe28c0effec": {
+  "src": "<span class=\"psec__n\">09</span>What the model leaves out",
+  "tr": "<span class=\"psec__n\">09</span>ما يُغفله النموذج"
+ },
+ "ccad3b29f623": {
+  "src": "The step is not equally good everywhere. Put the mass ratio at its top value of 10. Each time the rods pass within about ten degrees of a straight line, the heavy lower ball gives the light upper rod a sharp kick, with angular accelerations up to about \\(1300\\ \\mathrm{rad/s^2}\\), against \\(75\\ \\mathrm{rad/s^2}\\) for equal masses. Steps of \\(h\\) are then too coarse to follow the kick, and the drift reaches \\(-3.6\\times10^{-4}\\) within 20 s.",
+  "tr": "الخطوة ليست جيّدة بالتساوي في كل مكان. اجعل نسبة الكتلتين عند أعلى قيمة لها وهي 10. في كل مرّة يقترب القضيبان من خط مستقيم إلى ما يقارب عشر درجات، تعطي الكرة السفلى الثقيلة القضيب العلوي الخفيف دفعة حادّة، بتسارعات زاوية تبلغ نحو \\(1300\\ \\mathrm{rad/s^2}\\)، مقابل \\(75\\ \\mathrm{rad/s^2}\\) عند الكتلتين المتساويتين. عندئذ تكون خطوات \\(h\\) خشنة أكثر من اللازم لتتبّع الدفعة، ويبلغ الانجراف \\(-3.6\\times10^{-4}\\) خلال 20 s."
+ },
+ "cd056547925a": {
+  "src": "This always has the trivial solution \\(u_1 = u_2 = 0\\), the pendulum hanging still. It has a non-trivial solution only if its two equations say the same thing, which happens exactly when the determinant of the bracket is zero:",
+  "tr": "هذا يملك دائمًا الحلّ التافه \\(u_1 = u_2 = 0\\)، أي أن النوّاس يبقى ساكنًا. ولا يملك حلًّا غير تافه إلا إذا كانت معادلتاه تقولان الشيء نفسه، وهذا يحدث تمامًا حين يكون محدّد القوس صفرًا:"
+ },
+ "cd0a0ce12128": {
+  "src": "twin off",
+  "tr": "التوأم متوقّف"
+ },
+ "cf735779ed92": {
+  "src": "Energy drift",
+  "tr": "انجراف الطاقة"
+ },
+ "d0b40ba30a24": {
+  "src": "Angular velocity ω<sub>2</sub>",
+  "tr": "السرعة الزاوية ω<sub>2</sub>"
+ },
+ "d1622a8321e0": {
+  "src": "Phyein Usul, home page",
+  "tr": "Phyein Usul، الصفحة الرئيسية"
+ },
+ "d44541835075": {
+  "src": "S. H. Strogatz, <a href=\"https://books.google.com/books/about/Nonlinear_Dynamics_and_Chaos.html?id=aNHPswEACAAJ\"><em>Nonlinear Dynamics and Chaos</em></a>, 2nd edition, Westview Press, 2015.",
+  "tr": "S. H. Strogatz، <a href=\"https://books.google.com/books/about/Nonlinear_Dynamics_and_Chaos.html?id=aNHPswEACAAJ\"><em>Nonlinear Dynamics and Chaos</em></a>، الطبعة 2، Westview Press، 2015."
+ },
+ "d64f945fa4e9": {
+  "src": "The double pendulum: exact laws, unpredictable motion",
+  "tr": "النوّاس المزدوج: قوانين دقيقة وحركة لا يمكن التنبّؤ بها"
+ },
+ "d77fa4bbba3a": {
+  "src": "A straight line on a logarithmic scale means <em>exponential growth</em>, \\(d(t) \\approx d_0\\,e^{\\lambda t}\\), where \\(d_0\\) is the starting distance and \\(\\lambda\\) (lambda) is the growth rate per second. For the high-energy start of Figure 3 the curve wobbles, but a straight line laid through it, up to the moment the distance reaches \\(0.1\\ \\mathrm{m}\\) after \\(4.1\\ \\mathrm{s}\\), gives \\(\\lambda \\approx 1.4\\) per second: the distance doubles roughly every half second. The careful way to measure \\(\\lambda\\) follows a tiny change of the whole state, both angles and both angular velocities, shrinks it back whenever it has grown, and averages the logarithm of its growth over a very long time. The limit of that average is the <em>largest Lyapunov exponent</em>, named after the Russian mathematician Aleksandr Lyapunov:",
+  "tr": "خط مستقيم على مقياس لوغاريتمي يعني <em>نموًّا أُسّيًّا</em>، \\(d(t) \\approx d_0\\,e^{\\lambda t}\\)، حيث \\(d_0\\) هي المسافة الابتدائية، و\\(\\lambda\\) (لامبدا) هي معدّل النمو في الثانية. أما بالنسبة لبداية الطاقة العالية في الشكل 3، فالمنحنى يتذبذب، لكن خطًّا مستقيمًا يمرّ به حتى اللحظة التي تبلغ فيها المسافة \\(0.1\\ \\mathrm{m}\\) بعد \\(4.1\\ \\mathrm{s}\\)، يعطي \\(\\lambda \\approx 1.4\\) في الثانية: تتضاعف المسافة تقريبًا كل نصف ثانية. والطريقة الدقيقة لقياس \\(\\lambda\\) تتبع تغيّرًا صغيرًا جدًّا في الحالة كلها، الزاويتين والسرعتين الزاويتين معًا، فتُقلّصه كلما نما، وتأخذ متوسط لوغاريتم نموّه على زمن طويل جدًّا. نهاية هذا المتوسّط هي <em>أُسّ ليابونوف الأكبر</em>، نسبةً إلى عالم الرياضيات الروسي ألكسندر ليابونوف:"
+ },
+ "d91ec338a8b5": {
+  "src": "Two rigid rods, two point masses, one gravitational field. Deterministic, and yet a change of a thousandth of a radian in the start sends it somewhere else entirely.",
+  "tr": "قضيبان صلبان، وكتلتان نقطيتان، ومجال جاذبية واحد. حتميّ، ومع ذلك يكفي تغيّرٌ في الزاوية الابتدائية بمقدار جزء من ألف من الراديان ليأخذ النوّاس إلى مكان آخر تمامًا."
+ },
+ "d929322e4b16": {
+  "src": "Fig.",
+  "tr": "الشكل"
+ },
+ "d957d6637288": {
+  "src": "Chaos is not noise, since nothing random enters, and it is not a failure of energy conservation: the energy stays fixed while the motion wanders over much of what that energy allows. For the same reason, a small energy drift in the computer proves no more than itself. Countless different paths share the same energy, so a drift of a few parts in \\(10^{8}\\) shows that the computation is sound, not that its positions are the true ones beyond the horizon of predictability.",
+  "tr": "الفوضى ليست ضوضاء، لأنه لا يدخل فيها أي عشوائية، وليست فشلًا في حفظ الطاقة: فالطاقة تبقى ثابتة بينما تتجوّل الحركة فوق معظم ما تسمح به هذه الطاقة. ولهذا السبب نفسه، لا يثبت انجراف صغير في الطاقة داخل الحاسوب إلا نفسه. فمسارات مختلفة لا تُحصى تتقاسم الطاقة نفسها، لذلك يدلّ انجراف قدره بضعة أجزاء من \\(10^{8}\\) على أن الحساب سليم، لا على أن مواضعه هي الحقيقية وراء أفق إمكانية التنبّؤ."
+ },
+ "dd1e8c7f8a31": {
+  "src": "We turn the principle into an equation. Take the true path and bend one angle by a tiny amount \\(\\delta\\theta_i(t)\\), a small wiggle that is zero at the start and at the end, because the start and end shapes are fixed. (Here, and only here, \\(\\delta\\) means \"a small change of\".) The angular velocity then changes by the rate of change of the wiggle, \\(\\delta\\omega_i = \\mathrm{d}(\\delta\\theta_i)/\\mathrm{d}t\\). To first order the action changes by how fast \\(L\\) responds to each change, times the change:",
+  "tr": "نحوّل المبدأ إلى معادلة. خذ المسار الحقيقي وغيّر زاوية واحدة بمقدار صغير \\(\\delta\\theta_i(t)\\)، وهو تموّج صغير يساوي صفرًا عند البداية والنهاية، لأن شكل البداية والنهاية ثابت. (هنا، وهنا فقط، تعني \\(\\delta\\) «تغيّرًا صغيرًا في».) ثم تتغيّر السرعة الزاوية بمعدّل تغيّر التموّج، \\(\\delta\\omega_i = \\mathrm{d}(\\delta\\theta_i)/\\mathrm{d}t\\). في الرتبة الأولى يتغيّر الفعل بمقدار سرعة استجابة \\(L\\) لكل تغيّر، مضروبةً في التغيّر:"
+ },
+ "dd72bcdc5e74": {
+  "src": "<span class=\"pbox__t\">Key result · the equations of motion, as the page computes them</span> \\[ \\begin{aligned} \\alpha_1 &= \\frac{\\begin{gathered} -g\\,(2m_1+m_2)\\sin\\theta_1 - m_2\\,g\\sin(\\theta_1-2\\theta_2) \\\\ {} - 2\\,m_2\\sin\\varphi\\,\\left(\\omega_2^2\\,l_2 + \\omega_1^2\\,l_1\\cos\\varphi\\right) \\end{gathered}}{l_1\\,(2m_1+m_2-m_2\\cos 2\\varphi)}, \\\\[4pt] \\alpha_2 &= \\frac{\\begin{gathered} 2\\sin\\varphi\\,\\bigl(\\omega_1^2\\,l_1\\,(m_1+m_2) + g\\,(m_1+m_2)\\cos\\theta_1 \\\\ {} + \\omega_2^2\\,l_2\\,m_2\\cos\\varphi\\bigr) \\end{gathered}}{l_2\\,(2m_1+m_2-m_2\\cos 2\\varphi)} . \\end{aligned} \\tag{9} \\] <p>Given the state \\((\\theta_1, \\theta_2, \\omega_1, \\omega_2)\\) at any moment, (9) gives the two angular accelerations at that moment. Everything that follows uses only this.</p>",
+  "tr": "<span class=\"pbox__t\">النتيجة الأساسية · معادلات الحركة كما تحسبها الصفحة</span> \\[ \\begin{aligned} \\alpha_1 &= \\frac{\\begin{gathered} -g\\,(2m_1+m_2)\\sin\\theta_1 - m_2\\,g\\sin(\\theta_1-2\\theta_2) \\\\ {} - 2\\,m_2\\sin\\varphi\\,\\left(\\omega_2^2\\,l_2 + \\omega_1^2\\,l_1\\cos\\varphi\\right) \\end{gathered}}{l_1\\,(2m_1+m_2-m_2\\cos 2\\varphi)}, \\\\[4pt] \\alpha_2 &= \\frac{\\begin{gathered} 2\\sin\\varphi\\,\\bigl(\\omega_1^2\\,l_1\\,(m_1+m_2) + g\\,(m_1+m_2)\\cos\\theta_1 \\\\ {} + \\omega_2^2\\,l_2\\,m_2\\cos\\varphi\\bigr) \\end{gathered}}{l_2\\,(2m_1+m_2-m_2\\cos 2\\varphi)} . \\end{aligned} \\tag{9} \\] <p>إذا أُعطيت الحالة \\((\\theta_1, \\theta_2, \\omega_1, \\omega_2)\\) في أي لحظة، تعطي المعادلة (9) التسارعين الزاويين في تلك اللحظة. كل ما يلي لا يستخدم إلا هذا.</p>"
+ },
+ "df77e69992af": {
+  "src": "using \\(1-\\cos^2\\varphi = \\sin^2\\varphi\\). It is always positive, because \\(m_1\\) is. A non-zero determinant means the two equations never contradict each other and never say the same thing twice, so there is always exactly one answer. <em>Cramer's rule</em> writes it down: each unknown is a ratio whose denominator is \\(D\\) and whose numerator is the determinant of the matrix with that unknown's column replaced by the right-hand side,",
+  "tr": "باستخدام \\(1-\\cos^2\\varphi = \\sin^2\\varphi\\). وهو موجب دائمًا لأن \\(m_1\\) موجب. والمحدِّد غير الصفري يعني أن المعادلتين لا تتناقضان ولا تقولان الشيء نفسه مرتين، فيوجد دائمًا حلّ واحد بالضبط. <em>قاعدة كرامر</em> تكتب هذا الحلّ: كل مجهول نسبة مقامها \\(D\\) وبسطها محدِّد المصفوفة التي يُستبدل فيها عمود ذلك المجهول بالطرف الأيمن."
+ },
+ "dfa73ac0d42b": {
+  "src": "Time scale",
+  "tr": "مقياس الزمن"
+ },
+ "e13b587879b0": {
+  "src": "<span>2</span>The model",
+  "tr": "<span>2</span>النموذج"
+ },
+ "e17c91444b36": {
+  "src": "Knowing where the balls are is not enough to know where they go next: a ball at the bottom of its swing could be at rest or rushing through. We also need how fast each angle is changing, the <em>angular velocity</em> \\(\\omega_i = \\mathrm{d}\\theta_i/\\mathrm{d}t\\), measured in radians per second, and later the rate at which that changes, the <em>angular acceleration</em> \\(\\alpha_i = \\mathrm{d}\\omega_i/\\mathrm{d}t = \\ddot\\theta_i\\). Throughout this note a dot over a letter means its rate of change in time. The four numbers \\((\\theta_1, \\theta_2, \\omega_1, \\omega_2)\\) together are the <em>state</em>: hand them to the laws of motion and the whole future follows. On the page the upper ball and rod are fixed at \\(m_1 = 1\\ \\mathrm{kg}\\) and \\(l_1 = 1\\ \\mathrm{m}\\), gravity is \\(g = 9.81\\ \\mathrm{m/s^2}\\), and the sliders set the lower ball's mass and rod as multiples of the upper ones, \\(m_2/m_1\\) and \\(l_2/l_1\\). The default start is \\(\\theta_1 = 120^\\circ\\), \\(\\theta_2 = 150^\\circ\\), both at rest, with equal masses and lengths.",
+  "tr": "معرفة مكان الكرتين لا تكفي لمعرفة وجهتهما التالية: كرة في أخفض نقطة من تأرجحها قد تكون ساكنة أو مندفعة بسرعة. نحتاج أيضًا إلى مدى سرعة تغيّر كل زاوية، أي <em>السرعة الزاوية</em> \\(\\omega_i = \\mathrm{d}\\theta_i/\\mathrm{d}t\\)، مقاسة بالراديان في الثانية، ولاحقًا معدّل تغيّرها، أي <em>التسارع الزاوي</em> \\(\\alpha_i = \\mathrm{d}\\omega_i/\\mathrm{d}t = \\ddot\\theta_i\\). في هذه المذكّرة تعني النقطة فوق الحرف معدّل تغيّره الزمني. الأعداد الأربعة \\((\\theta_1, \\theta_2, \\omega_1, \\omega_2)\\) معًا تشكّل <em>الحالة</em>: إذا أُعطيت لقوانين الحركة، تحدّد المستقبل كلّه. على الصفحة، الكرة العليا وقضيبها مثبّتان عند \\(m_1 = 1\\ \\mathrm{kg}\\) و\\(l_1 = 1\\ \\mathrm{m}\\)، والجاذبية \\(g = 9.81\\ \\mathrm{m/s^2}\\)، والمنزلقات تضبط كتلة الكرة السفلى وطول قضيبها بوصفهما مضاعفاتٍ لكتلة العليا وطولها، أي \\(m_2/m_1\\) و\\(l_2/l_1\\). البداية الافتراضية هي \\(\\theta_1 = 120^\\circ\\) و\\(\\theta_2 = 150^\\circ\\)، وكلاهما ساكن، والكتلتان والطولان متساويان."
+ },
+ "e1d329a7394b": {
+  "src": "From symbols to code",
+  "tr": "من الرموز إلى الشيفرة"
+ },
+ "e7d4fd1f32d6": {
+  "src": "In the third line the first term comes from \\(T\\), where \\(\\theta_1\\) hides inside \\(\\cos\\varphi\\), and the second from \\(-V\\). Subtracting the third line from the second, as (5) requires, the two terms containing \\(\\omega_1\\omega_2\\) cancel exactly, and dividing by \\(l_1\\) leaves",
+  "tr": "في السطر الثالث، يأتي الحدّ الأول من \\(T\\)، حيث يختبئ \\(\\theta_1\\) داخل \\(\\cos\\varphi\\)، ويأتي الثاني من \\(-V\\). وبطرح السطر الثالث من الثاني، كما تقتضي المعادلة (5)، يُلغي الحدّان اللذان يحتويان \\(\\omega_1\\omega_2\\) أحدهما الآخر تمامًا، وبقسمة على \\(l_1\\) نجد"
+ },
+ "e810ac455e01": {
+  "src": "This must be zero for every possible wiggle. If the bracket were positive at some moment, we could choose a wiggle that is positive just there and zero everywhere else, and the action would change. So the bracket itself must vanish at every moment.",
+  "tr": "هذا يجب أن يكون صفرًا لكل تموّج ممكن. فإن كان القوس موجبًا عند لحظة ما، أمكننا اختيار تموّج موجب هناك فقط وصفر في كل مكان آخر، فيتغيّر الفعل. إذن يجب أن ينعدم القوس نفسه في كل لحظة."
+ },
+ "e82b8de4d8a1": {
+  "src": "Angular velocity ω<sub>1</sub>",
+  "tr": "السرعة الزاوية ω<sub>1</sub>"
+ },
+ "e8d61fffabf4": {
+  "src": "RK4 does not keep the energy exactly constant, which is why the <em>Drift</em> readout is there. It shows the change \\(E - E_0\\) from the starting energy divided by \\(E_\\text{scale} = (m_1+m_2)\\,g\\,l_1 + m_2\\,g\\,l_2\\), the energy needed to lift both balls from their lowest position to the height of the pivot, rather than by \\(E_0\\) itself, which can be close to zero. Over the first 20 s of the default start the drift stays within about \\(\\pm 5\\times10^{-8}\\); its largest value, \\(+5.0\\times10^{-8}\\), comes at \\(t \\approx 8.7\\ \\mathrm{s}\\). The page's data store records about \\(+4.7\\times10^{-8}\\) for that picture, but the readout text is rewritten only every sixth picture, so you will usually not catch the peak on screen. After that the drift creeps downward almost in a straight line, by about \\(7\\times10^{-8}\\) a minute: after ten minutes it reads about \\(-7\\times10^{-7}\\).",
+  "tr": "لا تُبقي RK4 الطاقة ثابتةً تمامًا، ولذلك توجد قراءة <em>انجراف الطاقة</em>. وهي تُظهر التغيّر \\(E - E_0\\) عن الطاقة الابتدائية مقسومًا على \\(E_\\text{scale} = (m_1+m_2)\\,g\\,l_1 + m_2\\,g\\,l_2\\)، وهي الطاقة اللازمة لرفع الكرتين من أخفض موضع لهما إلى ارتفاع نقطة الارتكاز، لا مقسومًا على \\(E_0\\) نفسه، الذي قد يكون قريبًا من الصفر. في أول 20 s من البداية الافتراضية يبقى الانجراف ضمن نحو \\(\\pm 5\\times10^{-8}\\)؛ وأكبر قيمة له، \\(+5.0\\times10^{-8}\\)، تأتي عند \\(t \\approx 8.7\\ \\mathrm{s}\\). وتسجّل بيانات الصفحة نحو \\(+4.7\\times10^{-8}\\) لتلك الصورة، لكن نص القراءة يُعاد كتابته كل صورة سادسة فقط، ولذلك لن تلتقط الذروة على الشاشة في الغالب. بعد ذلك ينزلق الانجراف إلى الأسفل بخطّ يكاد يكون مستقيمًا، بنحو \\(7\\times10^{-8}\\) في الدقيقة؛ وبعد عشر دقائق يقرأ نحو \\(-7\\times10^{-7}\\)."
+ },
+ "eab045af57a2": {
+  "src": "Initial conditions",
+  "tr": "الشروط الابتدائية"
+ },
+ "ebb60db74f13": {
+  "src": "These equations are <em>linear</em>: the angles appear only to the first power. For linear equations, the sum of two solutions is again a solution, so we can look for the simplest solutions first and build every other small motion out of them. A single pendulum swings as \\(\\cos\\Omega t\\), so we try the same for both arms together, swinging at one common angular frequency \\(\\Omega\\) with fixed sizes \\(u_1, u_2\\): \\(\\theta_i = u_i\\cos\\Omega t\\). (We write \\(\\Omega\\) for this frequency to keep it apart from the angular velocities \\(\\omega_i\\).) Each second derivative brings down a factor \\(-\\Omega^2\\), and (10) becomes",
+  "tr": "هذه المعادلات <em>خطّية</em>: الزوايا تظهر بالأسّ الأول فقط. ومجموع حلّين لمعادلة خطّية هو حلّ آخر، لذلك نبحث أولًا عن أبسط الحلول ونبني منها كل حركة صغيرة أخرى. النوّاس الواحد يتأرجح كـ \\(\\cos\\Omega t\\)، لذلك نجرّب الشيء نفسه للذراعين معًا، بتردّد زاوي مشترك \\(\\Omega\\) وسعتين ثابتتين \\(u_1, u_2\\): \\(\\theta_i = u_i\\cos\\Omega t\\). (نكتب \\(\\Omega\\) لهذا التردّد كي نميّزه عن السرعات الزاوية \\(\\omega_i\\).) كل مشتقة ثانية تُخرج عاملًا هو \\(-\\Omega^2\\)، فتصبح المعادلة (10) على الشكل"
+ },
+ "edb9cda74da0": {
+  "src": "<span class=\"sw sw--rose\"></span>twin",
+  "tr": "<span class=\"sw sw--rose\"></span>التوأم"
+ },
+ "f0d51762c701": {
+  "src": "The computer knows the angles; the screen needs dots. The pivot \\((x_0, y_0)\\) sits at the centre of the picture, which is \\(W\\) pixels wide and \\(H\\) high, and the scale is chosen so that the fully stretched pendulum just fits: \\(\\sigma = (\\min(W, H)/2 - 34)/(l_1 + l_2)\\) pixels per metre. On a screen, \\(y\\) is counted downward from the top, the opposite of our convention, so the minus signs of (1) turn into plus signs: ball 1 is drawn at \\((x_0 + \\sigma l_1\\sin\\theta_1,\\ y_0 + \\sigma l_1\\cos\\theta_1)\\), and ball 2 a further \\((\\sigma l_2\\sin\\theta_2,\\ \\sigma l_2\\cos\\theta_2)\\) beyond it. The protractor marks the angle every \\(30^\\circ\\) from the downward vertical, on a faint circle of radius \\(\\sigma(l_1 + l_2)\\), the farthest ball 2 can reach; the dashed circle inside it, of radius \\(\\sigma l_1\\), is the track of ball 1.",
+  "tr": "الحاسوب يعرف الزوايا، والشاشة تحتاج إلى نقاط. تقع نقطة الارتكاز \\((x_0, y_0)\\) في مركز الصورة، وهي \\(W\\) بكسلًا عرضًا و\\(H\\) ارتفاعًا، ويُختار المقياس بحيث يتّسع النوّاس المفرود تمامًا: \\(\\sigma = (\\min(W, H)/2 - 34)/(l_1 + l_2)\\) بكسل لكل متر. وعلى الشاشة يُعدّ \\(y\\) من الأعلى إلى الأسفل، أي عكس اتفاقنا، فتتحوّل إشارات الطرح في المعادلة (1) إلى إشارات جمع: تُرسم الكرة 1 عند \\((x_0 + \\sigma l_1\\sin\\theta_1,\\ y_0 + \\sigma l_1\\cos\\theta_1)\\)، والكرة 2 أبعد منها بمقدار \\((\\sigma l_2\\sin\\theta_2,\\ \\sigma l_2\\cos\\theta_2)\\). وتُعلِّم المنقلةُ الزوايا كل \\(30^\\circ\\) من الشاقول الهابط، على دائرة خافتة نصف قطرها \\(\\sigma(l_1 + l_2)\\)، أبعد نقطة تصلها الكرة 2؛ والدائرة المتقطّعة داخلها، نصف قطرها \\(\\sigma l_1\\)، هي مسار الكرة 1."
+ },
+ "f5cbdf6bfb51": {
+  "src": "Contents",
+  "tr": "المحتويات"
+ },
+ "f72f0eda6052": {
+  "src": "Simulations",
+  "tr": "المحاكاة"
+ },
+ "f7411070acb2": {
+  "src": "<span>5</span>Small swings",
+  "tr": "<span>5</span>التأرجحات الصغيرة"
+ },
+ "f7836003183e": {
+  "src": "We now have the two energies. To get from them to the motion without ever meeting the unknown rod forces, we use the method found by Lagrange in the 1780s and given its deepest form by Hamilton in the 1830s. Form the difference of the two energies, the <em>Lagrangian</em> \\(L = T - V\\). Imagine every conceivable way the two angles could get from a given starting shape to a given final shape in a given time: the real path, and also all the wrong ones that dawdle, rush or wobble. For each path, add up \\(L\\) moment by moment; this total, \\(S = \\int L\\,\\mathrm{d}t\\), is called the <em>action</em> of the path. <em>Hamilton's principle</em> states that the path nature takes is the one whose action does not change, to first order, when the path is bent slightly. It is like standing at the bottom of a valley: take one small step to the side and your height does not change at first. The rod forces never enter, because, as we saw in the box on energy, they do no net work on any motion the rods allow.",
+  "tr": "صارت لدينا الطاقتان. ولكي ننتقل منهما إلى الحركة دون أن نلتقي أبدًا بقوى القضبان المجهولة، نستخدم الطريقة التي وجدها لاغرانج في سنوات الـ1780، وصاغها هاملتون في صورتها الأعمق في سنوات الـ1830. كوّن الفرق بين الطاقتين، أي <em>اللاغرانجيان</em> \\(L = T - V\\). تخيّل كل الطرق الممكنة التي يمكن أن تنتقل بها الزاويتان من شكل ابتدائي معيّن إلى شكل نهائي معيّن في زمن معيّن: الطريق الحقيقي، وكذلك كل الطرق الخاطئة التي تتباطأ أو تسرع أو تتمايل. لكل طريق، اجمع \\(L\\) لحظةً بعد لحظة؛ هذا المجموع، \\(S = \\int L\\,\\mathrm{d}t\\)، يُسمّى <em>فعلَ</em> الطريق. ينصّ <em>مبدأ هاملتون</em> على أن الطريق الذي تسلكه الطبيعة هو الذي لا يتغيّر فعله عند انحناء الطريق قليلًا، بالمرتبة الأولى. مثل وقوفك في قاع وادٍ: خطوة صغيرة جانبًا لا تغيّر ارتفاعك في البداية. لا تظهر قوى القضبان أبدًا، لأنها، كما رأينا في الإطار الخاص بالطاقة، لا تبذل شغلًا صافيًا في أي حركة تسمح بها القضبان."
+ },
+ "f85b8136c52e": {
+  "src": "Lecture note · Fig. 2 · classical mechanics",
+  "tr": "مذكّرة المحاضرة · الشكل 2 · الميكانيك الكلاسيكي"
+ },
+ "f96d395d1890": {
+  "src": "We can test (1) against intuition. At \\(\\theta_1 = 0\\) the first ball hangs straight down at \\(y_1 = -l_1\\); at \\(\\theta_1 = 90^\\circ\\) it sticks straight out sideways, at \\(x_1 = l_1\\), \\(y_1 = 0\\). Two angles fix the shape completely, so the system has two <em>degrees of freedom</em>, two independent ways to move.",
+  "tr": "نختبر المعادلة (1) بالحدس. عند \\(\\theta_1 = 0\\) تتدلّى الكرة الأولى شاقوليًّا إلى الأسفل عند \\(y_1 = -l_1\\)؛ وعند \\(\\theta_1 = 90^\\circ\\) تبرز أفقيًّا عند \\(x_1 = l_1\\)، \\(y_1 = 0\\). زاويتان تحدّدان الشكل كليًّا، فللنظام إذن <em>درجتا حرية</em>، أي طريقتان مستقلّتان للحركة."
+ },
+ "fa6659a73565": {
+  "src": "<span class=\"pbox__t\">Key result · the two normal-mode frequencies</span> \\[ \\Omega_\\mp^2 = \\left(2\\mp\\sqrt2\\right)\\frac{g}{l}, \\quad \\Omega_- = 2.40\\ \\mathrm{rad/s},\\quad \\Omega_+ = 5.79\\ \\mathrm{rad/s} \\;\\; (l = 1\\ \\mathrm{m}). \\tag{11} \\]",
+  "tr": "<span class=\"pbox__t\">النتيجة الأساسية · الترددان الطبيعيان</span> \\[ \\Omega_\\mp^2 = \\left(2\\mp\\sqrt2\\right)\\frac{g}{l}, \\quad \\Omega_- = 2.40\\ \\mathrm{rad/s},\\quad \\Omega_+ = 5.79\\ \\mathrm{rad/s} \\;\\; (l = 1\\ \\mathrm{m}). \\tag{11} \\]"
+ },
+ "fb57a7ac8366": {
+  "src": "This simulation needs JavaScript.",
+  "tr": "هذه المحاكاة تحتاج إلى JavaScript."
+ },
+ "fc5b8cf90a9c": {
+  "src": "<b>9.3</b> Let the upper mass become very heavy, \\(m_1 \\to \\infty\\), in (9). Show that the upper rod then swings as a simple pendulum, \\(\\alpha_1 = -(g/l_1)\\sin\\theta_1\\), and describe in words what the lower pendulum feels.",
+  "tr": "<b>9.3</b> اجعل الكتلة العليا ثقيلة جدًّا، \\(m_1 \\to \\infty\\)، في المعادلة (9). بيّن أن القضيب العلوي يتأرجح عندئذ كنوّاس بسيط، \\(\\alpha_1 = -(g/l_1)\\sin\\theta_1\\)، وصف بالكلمات ما يشعر به النوّاس السفلي."
+ },
+ "fd9c4c2fe08d": {
+  "src": "Each frequency comes with its own shape of motion, fixed by the first row of the bracket: \\(u_2/u_1 = 2\\,(g/l-\\Omega^2)/\\Omega^2\\). For the slow frequency this ratio is \\(+\\sqrt2 \\approx 1.41\\): both arms swing the same way, the lower one about 1.4 times as far, and the pendulum moves almost as one piece. For the fast frequency it is \\(-\\sqrt2\\): the arms swing against each other, the elbow going one way while the hand goes the other (Figure 2). These two motions are the <em>normal modes</em> of the pendulum, the two ways it can swing in which every part keeps step with every other at a single frequency. Any small motion is a mixture of the two. The ratio of the frequencies is \\(\\Omega_+/\\Omega_- = 1 + \\sqrt2 \\approx 2.41\\), an irrational number, so the mixture never repeats exactly; yet it stays perfectly regular and perfectly predictable. There is no chaos in small swings.",
+  "tr": "لكل تردّد شكل حركة خاص به يحدّده الصفّ الأول من القوس: \\(u_2/u_1 = 2\\,(g/l-\\Omega^2)/\\Omega^2\\). بالنسبة للتردّد البطيء تكون هذه النسبة \\(+\\sqrt2 \\approx 1.41\\): يتأرجح الذراعان في الاتجاه نفسه، والسفلى أبعد بنحو 1.4 مرّة، ويتحرّك النوّاس تقريبًا كقطعة واحدة. وبالنسبة للتردّد السريع تكون \\(-\\sqrt2\\): يتأرجح الذراعان متعاكسين، والمرفق يذهب في اتجاه واليد في الاتجاه الآخر (الشكل 2). هاتان الحركتان هما <em>النمطان الطبيعيان</em> للنوّاس، أي الطريقتان للتأرجح اللتان يتابع فيهما كل جزء كل جزء آخر بتردّد واحد. وأي حركة صغيرة هي خليط من الاثنين. نسبة الترددين هي \\(\\Omega_+/\\Omega_- = 1 + \\sqrt2 \\approx 2.41\\)، وهي عدد غير نسبي، لذلك لا يتكرّر الخليط بالضبط؛ ومع ذلك يبقى منتظمًا تمامًا ويمكن التنبّؤ به تمامًا. لا توجد فوضى في التأرجحات الصغيرة."
+ }
+}

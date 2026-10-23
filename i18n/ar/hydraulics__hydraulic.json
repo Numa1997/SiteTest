@@ -1,0 +1,458 @@
+{
+ "060956bec023": {
+  "src": "top of right column",
+  "tr": "أعلى العمود الأيمن"
+ },
+ "07985f13c37b": {
+  "src": "bottom of left column",
+  "tr": "قاع العمود الأيسر"
+ },
+ "08a919c3bd0a": {
+  "src": "The page checks W = K + V + E<sub>lost</sub> at every recorded instant.",
+  "tr": "تتحقّق الصفحة من W = K + V + E<sub>lost</sub> عند كل لحظة مسجّلة."
+ },
+ "0cdb65d14aca": {
+  "src": "Put your thumb over the nozzle of a syringe full of water and press: the plunger hardly moves. In this model oil behaves the same way, because its density is fixed. Every cubic centimetre the input piston pushes out of the left cylinder has to reappear in the right one. If the input piston moves down by x₁ it sweeps out the volume A₁x₁, so the output piston rises by x₂ with",
+  "tr": "ضع إبهامك على فوّهة محقنة مملوءة بالماء واضغط: لا يكاد المكبس يتحرّك. في هذا النموذج يسلك الزيت السلوك نفسه، لأن كثافته ثابتة. كلّ سنتيمتر مكعّب يدفعه مكبس الإدخال خارج الأسطوانة اليسرى لا بدّ أن يظهر من جديد في اليمنى. إذا تحرّك مكبس الإدخال إلى الأسفل مسافة x₁ أزاح حجمًا قدره A₁x₁، لذلك يرتفع مكبس الإخراج مسافة x₂ وفق"
+ },
+ "0cf5fc6453c8": {
+  "src": "Ideal Hydraulic Press",
+  "tr": "المكبس الهيدروليكي المثالي"
+ },
+ "1281ec316d4c": {
+  "src": "bottom of right column",
+  "tr": "قاع العمود الأيمن"
+ },
+ "18d21a6968dc": {
+  "src": "p₂·A₂ on output piston",
+  "tr": "p₂·A₂ على مكبس الإخراج"
+ },
+ "192f594ae674": {
+  "src": "pipe inlet",
+  "tr": "مدخل الأنبوب"
+ },
+ "1bd85457c48d": {
+  "src": "The stops are perfectly rigid and perfectly inelastic: the velocity jumps to zero in zero time.",
+  "tr": "المصدّات صلبة تمامًا وعديمة المرونة تمامًا: تهبط السرعة إلى الصفر في زمنٍ قدره صفر."
+ },
+ "21d266a396c9": {
+  "src": "The oil carries no air, and all pressures are gauge pressures (atmosphere = 0). g = 9.81 m/s² everywhere.",
+  "tr": "لا يحوي الزيت هواءً، وجميع الضغوط ضغوطٌ مقيسة (الضغط الجوّي = 0). g = 9.81 m/s² في كل مكان."
+ },
+ "24e32e1c4d5c": {
+  "src": "Pressure and force",
+  "tr": "الضغط والقوّة"
+ },
+ "2545bd038408": {
+  "src": "W work in, ∫F₁dx",
+  "tr": "W الشغل المبذول، ∫F₁dx"
+ },
+ "2588aeea63dc": {
+  "src": "Bernoulli: speeding the oil up costs pressure",
+  "tr": "برنولي: تسريع الزيت يكلّف ضغطًا"
+ },
+ "25e63f25287d": {
+  "src": "As x grows, oil leaves the fast left column and joins the slow right column, so the moving mass shrinks (μ′ &lt; 0 when r &lt; 1). The ½μ′ẋ² term accounts for that exchange, like a chain sliding off the edge of a table. The page integrates this equation with fourth-order Runge–Kutta (RK4), a step of 10⁻⁴ s, and a recorded frame every 1 ms. The force ramps linearly from 0 to F₁ over τ.",
+  "tr": "كلّما ازداد x انتقل الزيت من العمود الأيسر السريع إلى العمود الأيمن البطيء، فتتناقص الكتلة المتحرّكة (μ′ &lt; 0 عندما r &lt; 1). ويأخذ الحدّ ½μ′ẋ² هذا التبادل في الحسبان، كما في سلسلةٍ تنزلق عن حافّة طاولة. تُكامِل الصفحة هذه المعادلة بطريقة رونغه–كوتا من المرتبة الرابعة (RK4)، بخطوة 10⁻⁴ s، وتسجّل إطارًا كل 1 ms. وتتزايد القوّة خطّيًا من 0 إلى F₁ خلال الزمن τ."
+ },
+ "27ad1672d8c9": {
+  "src": "rest",
+  "tr": "السكون"
+ },
+ "2a09959b83b5": {
+  "src": "V potential",
+  "tr": "V الكامنة"
+ },
+ "2abf3f6aa374": {
+  "src": "The press to true scale, and its dials",
+  "tr": "المكبس بالمقياس الحقيقي ومؤشّراته"
+ },
+ "2b219918c53e": {
+  "src": "μ effective mass (the pipe oil counts (A₁/A_p)² times)",
+  "tr": "μ الكتلة الفعّالة (زيت الأنبوب يُحسب بعامل (A₁/A_p)²)"
+ },
+ "2b655dad559a": {
+  "src": "Cylinders, pipe, pistons and stops are drawn to true scale; the load block's size is symbolic. The white dots are material points of oil: each keeps the oil volume between itself and the input piston, so in the pipe they run A₁/A_p times faster. The chart under the drawing walks the same pressure field from piston to piston against true path length: the vertical steps are Bernoulli, the slopes are weight and inertia (theory, chapter 5). Click or tap the oil to read the pressure there and its parts (a click outside the oil removes the reading): the push of the piston, the weight of the oil above, and the force that accelerates the oil.",
+  "tr": "تُرسم الأسطوانات والأنبوب والمكابس والمصدّات بالمقياس الحقيقي؛ أمّا حجم كتلة الحمل فرمزيّ. النقاط البيضاء نقاطٌ مادّية من الزيت: يبقى حجم الزيت بين كلّ نقطة ومكبس الإدخال ثابتًا، فتسير النقاط في الأنبوب أسرع بـ A₁/A_p مرّة. ويتتبّع المخطّط أسفل الرسم حقل الضغط نفسه من مكبس إلى مكبس بدلالة طول المسار الحقيقي: القفزات الرأسية أثرُ برنولي، والأجزاء المائلة أثرُ الوزن والعطالة (النظرية، الفصل 5). انقر على الزيت أو المسه لقراءة الضغط هناك ومكوّناته (النقر خارج الزيت يزيل القراءة): دفع المكبس، ووزن الزيت الذي فوقه، والقوّة التي تُسرّع الزيت."
+ },
+ "2b819e251784": {
+  "src": "A_1x_1 = A_2x_2 \\quad\\Rightarrow\\quad x_2 = r\\,x_1,\\qquad r = \\frac{A_1}{A_2} = \\left(\\frac{d_1}{d_2}\\right)^2",
+  "tr": "A_1x_1 = A_2x_2 \\quad\\Rightarrow\\quad x_2 = r\\,x_1,\\qquad r = \\frac{A_1}{A_2} = \\left(\\frac{d_1}{d_2}\\right)^2"
+ },
+ "2cc431c77e1b": {
+  "src": "If the load falls back to x = 0 with v &lt; 0, the same inelastic stop applies and the press returns to rest.",
+  "tr": "إذا عاد الحمل إلى x = 0 بسرعة v &lt; 0، ينطبق المصدّ عديم المرونة نفسه، ويعود المكبس الهيدروليكي إلى السكون."
+ },
+ "322970f4948c": {
+  "src": "Live readings",
+  "tr": "القراءات الآنيّة"
+ },
+ "334460037081": {
+  "src": "Scene",
+  "tr": "المشهد"
+ },
+ "34edf7159153": {
+  "src": "<b>rest</b>: the load sits on its lower stop until F₁(t) &gt; F₁,min. The oil is static: p₁ = (F₁+m₁g)/A₁ and p₂ = p₁ + ρg(h₁−h₂). The stop carries the rest of the load.",
+  "tr": "<b>السكون</b>: يستقرّ الحمل على مصدّه السفلي حتى يصبح F₁(t) &gt; F₁,min. الزيت ساكن: p₁ = (F₁+m₁g)/A₁ وp₂ = p₁ + ρg(h₁−h₂). يحمل المصدّ باقي الحمل."
+ },
+ "3505aaebfded": {
+  "src": "7 · What “ideal” leaves out",
+  "tr": "7 · ما الذي يُغفله «المثالي»"
+ },
+ "35d39cf3004f": {
+  "src": "The turns from the columns into the pipe are ignored, and the pipe lies horizontal at the base of the columns.",
+  "tr": "تُهمل الانعطافات من العمودين إلى الأنبوب، ويقع الأنبوب أفقيًا عند قاعدة العمودين."
+ },
+ "3b7c4175a3df": {
+  "src": "Readouts",
+  "tr": "القراءات"
+ },
+ "3d88bd8c2b24": {
+  "src": "V(x) = -m_1g\\,x + (m_2 + M)\\,g\\,r\\,x + \\tfrac12\\rho gA_1(1 + r)\\,x^2",
+  "tr": "V(x) = -m_1g\\,x + (m_2 + M)\\,g\\,r\\,x + \\tfrac12\\rho gA_1(1 + r)\\,x^2"
+ },
+ "3e5b3be0af25": {
+  "src": "Time traces",
+  "tr": "المنحنيات الزمنية"
+ },
+ "403f153bc117": {
+  "src": "With d₁ = 4 cm and d₂ = 12 cm, r = 1/9: the full 30 cm input stroke lifts the load by only 3.33 cm. The same rule fixes every speed in the oil. The left column moves at ẋ, the right column at r·ẋ, and the pipe at (A₁/A<sub>p</sub>)·ẋ = 16·ẋ, because the pipe's cross-section is 16 times smaller than the input bore. That is why the dots race through the pipe.",
+  "tr": "عندما d₁ = 4 cm وd₂ = 12 cm يكون r = 1/9: فشوط الإدخال الكامل البالغ 30 cm لا يرفع الحمل إلا 3.33 cm. وتحدّد القاعدة نفسها كلّ سرعة في الزيت. يتحرّك العمود الأيسر بسرعة ẋ، والعمود الأيمن بسرعة r·ẋ، والزيت في الأنبوب بسرعة (A₁/A<sub>p</sub>)·ẋ = 16·ẋ، لأن مقطع الأنبوب أصغر 16 مرّة من مقطع أسطوانة الإدخال. ولهذا تندفع النقاط مسرعةً عبر الأنبوب."
+ },
+ "4213b083f954": {
+  "src": "Knobs",
+  "tr": "المقابض"
+ },
+ "4335be7694b1": {
+  "src": "4 · One coordinate, one Lagrangian",
+  "tr": "4 · إحداثيّ واحد، ولاغرانجيان واحد"
+ },
+ "437bcb151127": {
+  "src": "Energy",
+  "tr": "الطاقة"
+ },
+ "44c57abd888a": {
+  "src": "Reset",
+  "tr": "إعادة الضبط"
+ },
+ "4728fb6fa386": {
+  "src": "Phases of the run; select one to jump to it",
+  "tr": "مراحل المحاكاة؛ اختر مرحلةً للانتقال إليها"
+ },
+ "4734b7154f95": {
+  "src": "Recorded every millisecond",
+  "tr": "تُسجَّل كل ميلي ثانية"
+ },
+ "49c2afb5e5ec": {
+  "src": "There is no viscosity: no friction loss along the pipe (Hagen–Poiseuille) and no damping.",
+  "tr": "لا لزوجة هنا: لا فقد احتكاكي على طول الأنبوب (هاغن–بوازوي)، ولا تخامد."
+ },
+ "4cee3a37cd01": {
+  "src": "6 · What a run does",
+  "tr": "6 · ما تفعله المحاكاة"
+ },
+ "58b271cef8dd": {
+  "src": "The short version. Every step is derived in full in <a href=\"hydraulic_theory.html\">Hydraulics from First Principles</a>, Part I.",
+  "tr": "النسخة المختصرة. تُشتقّ كلّ خطوة كاملةً في <a href=\"hydraulic_theory.html\">الهيدروليك من المبادئ الأولى</a>، الجزء الأول."
+ },
+ "5966faa83062": {
+  "src": "Two cylinders joined by a pipe, filled with oil. Push the small piston and watch the oil carry the push to the large one. One generalized coordinate, one Lagrangian, integrated with RK4 and drawn to true scale; the oil is coloured by its pressure field and the dots are real material points.",
+  "tr": "أسطوانتان متّصلتان بأنبوب ومملوءتان بالزيت. ادفع المكبس الصغير وشاهد الزيت ينقل الدفع إلى المكبس الكبير. إحداثيّ معمّم واحد، ولاغرانجيان واحد، يُكامَل بطريقة RK4 ويُرسم بالمقياس الحقيقي؛ يُلوَّن الزيت بحسب حقل ضغطه، والنقاط نقاط مادّية حقيقية."
+ },
+ "59b826a9d801": {
+  "src": "\\begin{array}{lll} \\text{bottom of left column} & p_{b1} = p_1 + \\rho(g - a)\\,h_1 & \\text{weight of the column, less what its downward acceleration needs}\\\\ \\text{pipe inlet} & p_{\\mathrm{in}} = p_{b1} + \\tfrac12\\rho\\left(v^2 - v_p^2\\right) & \\text{Bernoulli: speeding the oil up costs pressure}\\\\ \\text{pipe outlet} & p_{\\mathrm{out}} = p_{\\mathrm{in}} - \\rho\\,\\dfrac{A_1}{A_p}\\,a\\,L_p & \\text{the force that accelerates the oil plug in the pipe}\\\\ \\text{bottom of right column} & p_{b2} = p_{\\mathrm{out}} + \\tfrac12\\rho\\left(v_p^2 - r^2v^2\\right) & \\text{slowing down gives the pressure back (lossless here)}\\\\ \\text{top of right column} & p_{b2} - \\rho(g + ra)\\,h_2 = p_2 & \\text{must agree with the output piston} \\end{array}",
+  "tr": "\\begin{array}{lll} \\text{قاع العمود الأيسر} & p_{b1} = p_1 + \\rho(g - a)\\,h_1 & \\text{وزن العمود، مطروحًا منه ما يتطلّبه تسارعه نحو الأسفل}\\\\ \\text{مدخل الأنبوب} & p_{\\mathrm{in}} = p_{b1} + \\tfrac12\\rho\\left(v^2 - v_p^2\\right) & \\text{برنولي: تسريع الزيت يكلّف ضغطًا}\\\\ \\text{مخرج الأنبوب} & p_{\\mathrm{out}} = p_{\\mathrm{in}} - \\rho\\,\\dfrac{A_1}{A_p}\\,a\\,L_p & \\text{القوّة التي تسرّع سدادة الزيت في الأنبوب}\\\\ \\text{قاع العمود الأيمن} & p_{b2} = p_{\\mathrm{out}} + \\tfrac12\\rho\\left(v_p^2 - r^2v^2\\right) & \\text{التباطؤ يردّ الضغط (بلا فقد هنا)}\\\\ \\text{أعلى العمود الأيمن} & p_{b2} - \\rho(g + ra)\\,h_2 = p_2 & \\text{يجب أن يتطابق مع مكبس الإخراج} \\end{array}"
+ },
+ "5a5725935967": {
+  "src": "▶ Play",
+  "tr": "▶ تشغيل"
+ },
+ "5cb3fa8488ff": {
+  "src": "input stroke x₁",
+  "tr": "شوط الإدخال x₁"
+ },
+ "5efd49ecd716": {
+  "src": "The oil is incompressible (infinite bulk modulus), and the walls and pistons are rigid.",
+  "tr": "الزيت غير قابل للانضغاط (معامل المرونة الحجمي لا نهائي)، والجدران والمكابس صلبة."
+ },
+ "5f667280fef1": {
+  "src": "The press multiplies force by 9 and divides distance by 9, so the product does not change, just as with a lever:",
+  "tr": "يضاعف المكبس القوّة بعامل 9 ويقسم المسافة على 9، فلا يتغيّر حاصل ضربهما، تمامًا كما في الرافعة:"
+ },
+ "613026ac11dc": {
+  "src": "Ideal Hydraulic <em>Press</em>",
+  "tr": "<em>المكبس</em> الهيدروليكي المثالي"
+ },
+ "61a6df4f178d": {
+  "src": "1 · The syringe picture",
+  "tr": "1 · صورة المحقنة"
+ },
+ "6656f0efc2ef": {
+  "src": "Volume conservation leaves a single degree of freedom: x, the downward displacement of the input piston. The column heights are h₁ = H₀ − x and h₂ = H₀ + r·x. Adding the kinetic energies of the parts, with plug flow:",
+  "tr": "يترك حفظُ الحجم درجةَ حرّية واحدة: x، وهي إزاحة مكبس الإدخال نحو الأسفل. ارتفاعا العمودين h₁ = H₀ − x وh₂ = H₀ + r·x. وبجمع الطاقات الحركية للأجزاء، على فرض جريان السدادة، نحصل على:"
+ },
+ "68e877b10a69": {
+  "src": "In oil at rest, the pressure is the same at all points at the same height. A pressure p pushes on a piston of area A with a force p·A. Push the small piston with F₁ and the oil carries p = F₁/A₁ to the large piston, which feels",
+  "tr": "في الزيت الساكن يكون الضغط واحدًا عند جميع النقاط المتساوية الارتفاع. يدفع الضغط p مكبسًا مساحته A بقوّة مقدارها p·A. ادفع المكبس الصغير بالقوّة F₁ فينقل الزيت الضغط p = F₁/A₁ إلى المكبس الكبير، فتؤثّر فيه قوّة مقدارها"
+ },
+ "69ebb422b227": {
+  "src": "p₁ under input piston",
+  "tr": "p₁ تحت مكبس الإدخال"
+ },
+ "6bb48432e172": {
+  "src": "\\begin{aligned} T &= \\tfrac12m_1\\dot{x}^2 + \\tfrac12(m_2 + M)(r\\dot{x})^2 + \\tfrac12\\rho A_1h_1\\dot{x}^2\\\\ &\\quad + \\tfrac12\\rho A_pL_p\\left(\\frac{A_1}{A_p}\\dot{x}\\right)^2 + \\tfrac12\\rho A_2h_2(r\\dot{x})^2 = \\tfrac12\\,\\mu(x)\\,\\dot{x}^2\\\\ \\mu(x) &= m_1 + (m_2 + M)\\,r^2 + \\rho A_1\\left[(H_0 - x) + r\\,(H_0 + rx) + L_p\\,\\frac{A_1}{A_p}\\right] \\end{aligned}",
+  "tr": "\\begin{aligned} T &= \\tfrac12m_1\\dot{x}^2 + \\tfrac12(m_2 + M)(r\\dot{x})^2 + \\tfrac12\\rho A_1h_1\\dot{x}^2\\\\ &\\quad + \\tfrac12\\rho A_pL_p\\left(\\frac{A_1}{A_p}\\dot{x}\\right)^2 + \\tfrac12\\rho A_2h_2(r\\dot{x})^2 = \\tfrac12\\,\\mu(x)\\,\\dot{x}^2\\\\ \\mu(x) &= m_1 + (m_2 + M)\\,r^2 + \\rho A_1\\left[(H_0 - x) + r\\,(H_0 + rx) + L_p\\,\\frac{A_1}{A_p}\\right] \\end{aligned}"
+ },
+ "6c82e6dd8680": {
+  "src": "Time",
+  "tr": "الزمن"
+ },
+ "6dfc7d281b36": {
+  "src": "the potential energy V(x): the load is lifted, the input piston is lowered, and oil is moved from the top of the left column to the top of the right one;",
+  "tr": "الطاقة الكامنة V(x): يُرفع الحمل، ويُخفض مكبس الإدخال، ويُنقل الزيت من أعلى العمود الأيسر إلى أعلى العمود الأيمن؛"
+ },
+ "6e097543e5df": {
+  "src": "the energy lost when a stop halts a moving piston instantly.",
+  "tr": "الطاقة المفقودة حين يوقف مصدٌّ مكبسًا متحرّكًا في الحال."
+ },
+ "6fc3e04d0b10": {
+  "src": "Any change recomputes the whole run from t = 0.",
+  "tr": "أيّ تغيير يعيد حساب المحاكاة كاملةً من t = 0."
+ },
+ "6ff42b75c926": {
+  "src": "Playback speed",
+  "tr": "سرعة التشغيل"
+ },
+ "737873b16083": {
+  "src": "Energies",
+  "tr": "الطاقات"
+ },
+ "7525e61a31e3": {
+  "src": "the force that accelerates the oil plug in the pipe",
+  "tr": "القوّة التي تسرّع سدادة الزيت في الأنبوب"
+ },
+ "75e038c29768": {
+  "src": "Now follow the oil from the input piston to the output piston, with v = ẋ and v<sub>p</sub> = (A₁/A<sub>p</sub>)·v:",
+  "tr": "نتتبّع الآن الزيت من مكبس الإدخال إلى مكبس الإخراج، مع v = ẋ وv<sub>p</sub> = (A₁/A<sub>p</sub>)·v:"
+ },
+ "788d34374de1": {
+  "src": "Hover a plot to read every curve at one instant; press or drag in it to move the animation there.",
+  "tr": "مرِّر المؤشّر فوق المخطّط لقراءة كل المنحنيات عند لحظة واحدة؛ واضغط داخله أو اسحب لنقل الرسم المتحرّك إلى تلك اللحظة."
+ },
+ "798c12c57040": {
+  "src": "lost at stops",
+  "tr": "مفقودة عند المصدّات"
+ },
+ "79ee791147d8": {
+  "src": "F₁ applied now",
+  "tr": "F₁ المؤثّرة الآن"
+ },
+ "84b23bf4aa92": {
+  "src": "must agree with the output piston",
+  "tr": "يجب أن يتطابق مع مكبس الإخراج"
+ },
+ "85acc5081c30": {
+  "src": "slowing down gives the pressure back (lossless here)",
+  "tr": "التباطؤ يردّ الضغط (بلا فقد هنا)"
+ },
+ "8720f140fd91": {
+  "src": "Oil gauge pressure",
+  "tr": "ضغط الزيت المقيس"
+ },
+ "8dc2a6624f2c": {
+  "src": "<span class=\"swatch\" aria-hidden=\"true\"></span> below 0",
+  "tr": "<span class=\"swatch\" aria-hidden=\"true\"></span> أقل من 0"
+ },
+ "902e9077bc99": {
+  "src": "K kinetic, ½μẋ²",
+  "tr": "K الحركية، ½μẋ²"
+ },
+ "91589e4c1a23": {
+  "src": "The last term has a simple picture. A slab of oil of volume A₁x leaves the top of the left column, where its centre was at H₀ − x/2, and is laid on top of the right column, where its centre is at H₀ + r·x/2. It rises by (1+r)·x/2, so it acts as a spring of stiffness k = ρgA₁(1+r) = 11.9 N/m. Lagrange's equation with the generalized force F₁(t):",
+  "tr": "للحدّ الأخير صورة بسيطة. شريحة من الزيت حجمها A₁x تغادر أعلى العمود الأيسر، حيث كان مركزها عند H₀ − x/2، وتوضع فوق العمود الأيمن، حيث يقع مركزها عند H₀ + r·x/2. ترتفع مسافة (1+r)·x/2، فتسلك سلوك نابض صلابته k = ρgA₁(1+r) = 11.9 N/m. معادلة لاغرانج مع القوّة المعمّمة F₁(t):"
+ },
+ "919ee4eeb925": {
+  "src": "Pascal · Bernoulli · Lagrange · interactive study",
+  "tr": "باسكال · برنولي · لاغرانج · دراسة تفاعلية"
+ },
+ "91fa743062a5": {
+  "src": "the kinetic energy K = ½μẋ² of everything that moves;",
+  "tr": "الطاقة الحركية K = ½μẋ² لكل ما يتحرّك؛"
+ },
+ "958bcc0d42bf": {
+  "src": "In the moving press, the work you put in, W = ∫F₁ dx, goes to three places:",
+  "tr": "في المكبس الهيدروليكي المتحرّك يتوزّع الشغل الذي تبذله، W = ∫F₁ dx، على ثلاثة أوجه:"
+ },
+ "96b6180545f8": {
+  "src": "Physics",
+  "tr": "الفيزياء"
+ },
+ "96ea48b292d4": {
+  "src": "Newton's law for each piston gives the pressure under it (a = ẍ):",
+  "tr": "يعطي قانون نيوتن، مطبَّقًا على كلّ مكبس، الضغطَ تحته (a = ẍ):"
+ },
+ "98b9a3925d4c": {
+  "src": "<b>stalled</b>: if F₁ never exceeds F₁,min, the run ends 1 s after the ramp.",
+  "tr": "<b>متعطّل</b>: إن لم تتجاوز F₁ القيمة F₁,min أبدًا، تنتهي المحاكاة بعد 1 s من نهاية تصاعد القوّة."
+ },
+ "99b1aaf7c1f3": {
+  "src": "Area changes are lossless: Bernoulli holds at the contraction and at the expansion, with no Borda–Carnot loss where the jet leaves the pipe.",
+  "tr": "تغيّرات المساحة بلا فقد: تنطبق معادلة برنولي عند التضيّق وعند التوسّع، من دون فقد بوردا–كارنو حيث يخرج النفث من الأنبوب."
+ },
+ "99f548a9a9df": {
+  "src": "Related pages",
+  "tr": "صفحات ذات صلة"
+ },
+ "9a5f89e3d8cc": {
+  "src": "3 · Energy: what you gain in force you pay in distance",
+  "tr": "3 · الطاقة: ما تكسبه في القوّة تدفع ثمنه في المسافة"
+ },
+ "9c7f732592c6": {
+  "src": "Plots",
+  "tr": "المخطّطات"
+ },
+ "9d5c76f774e9": {
+  "src": "<b>end</b>: the input piston hits its stop after a 30 cm stroke. Its velocity drops to 0 at once, the kinetic energy is recorded as lost, and the static pressures p₂ = (m₂+M)g/A₂ and p₁ = p₂ + ρg(h₂−h₁) are shown for 0.6 s.",
+  "tr": "<b>النهاية</b>: يصطدم مكبس الإدخال بمصدّه بعد شوط مقداره 30 cm. تهبط سرعته إلى 0 فورًا، وتُسجَّل الطاقة الحركية على أنها مفقودة، وتُعرض الضغوط الساكنة p₂ = (m₂+M)g/A₂ وp₁ = p₂ + ρg(h₂−h₁) مدّة 0.6 s."
+ },
+ "a324fa042a25": {
+  "src": "weight of the column, less what its downward acceleration needs",
+  "tr": "وزن العمود، مطروحًا منه ما يتطلّبه تسارعه نحو الأسفل"
+ },
+ "a62c370098d1": {
+  "src": "Theory in brief",
+  "tr": "النظرية في إيجاز"
+ },
+ "a77676b02e88": {
+  "src": "The last line is a self-test. The value at the end of the chain has to equal the p₂ that the output piston needs, and check_physics.py proves it symbolically. The oil is coloured by this pressure, pale amber at 0 and deep wine at the maximum of the run. Gauge pressure is pressure above the atmosphere. Below zero the oil is under suction, and a real press would draw in air or release dissolved gas there; near −100 kPa gauge the oil would boil (cavitate). The page warns as soon as any gauge pressure drops below 0.",
+  "tr": "السطر الأخير اختبار ذاتي. يجب أن تساوي القيمة في نهاية السلسلة الضغط p₂ الذي يحتاجه مكبس الإخراج، ويُثبت ذلك check_physics.py رمزيًا. يُلوَّن الزيت بحسب هذا الضغط: كهرماني شاحب عند 0، وأحمر نبيذي داكن عند أعلى قيمة في المحاكاة. الضغط المقيس هو الضغط الزائد على الضغط الجوّي. تحت الصفر يكون الزيت في حالة شفط، وقد يسحب مكبس هيدروليكي حقيقي الهواء هناك أو يطلق الغازات المذابة؛ وعند ضغطٍ مقيس قريب من −100 kPa يغلي الزيت (يتكهّف). تحذّر الصفحة فور انخفاض أي ضغط مقيس إلى ما دون 0."
+ },
+ "ab8b22940f7b": {
+  "src": "Gauges",
+  "tr": "المقاييس"
+ },
+ "ad611c7f2528": {
+  "src": "pipe outlet",
+  "tr": "مخرج الأنبوب"
+ },
+ "af10ef20dd90": {
+  "src": "in",
+  "tr": "in"
+ },
+ "afaea2449192": {
+  "src": "There is no friction at the piston seals and there are no leaks.",
+  "tr": "لا احتكاك عند حشوات المكابس، ولا تسرّب."
+ },
+ "afe00e5aea98": {
+  "src": "load lift x₂",
+  "tr": "رفع الحمل x₂"
+ },
+ "b04a5de6d9c2": {
+  "src": "Pressures",
+  "tr": "الضغوط"
+ },
+ "b81110fc51e6": {
+  "src": "Read the derivations →",
+  "tr": "← اقرأ الاشتقاقات"
+ },
+ "bbf4fcc26677": {
+  "src": "The servo-hydraulic press →",
+  "tr": "← المكبس الهيدروليكي المؤازَر"
+ },
+ "bc0305685e20": {
+  "src": "Back to defaults",
+  "tr": "العودة إلى القيم الافتراضية"
+ },
+ "bcdbab4d741d": {
+  "src": "With the defaults this gives 170 N × 9 = 1530 N. The load and its piston weigh (m₂+M)·g = 160 kg × 9.81 m/s² = 1569.6 N, so 170 N on its own would not lift them. The 2 kg input piston tips the balance: its weight of 19.6 N also presses on the oil, and the threshold is F₁,min = (m₂+M)·g·r − m₁·g = 154.78 N. Height matters too. In still oil, pressure rises by ρg = 8.53 kPa per metre of depth, and once the press moves the two columns are no longer equally tall.",
+  "tr": "بالقيم الافتراضية يعطي هذا 170 N × 9 = 1530 N. يزن الحمل ومكبسه (m₂+M)·g = 160 kg × 9.81 m/s² = 1569.6 N، لذلك لا تكفي 170 N وحدها لرفعهما. يرجّح مكبس الإدخال، الذي كتلته 2 kg، كفّة الميزان، فوزنه البالغ 19.6 N يضغط على الزيت أيضًا، وعتبة البدء هي F₁,min = (m₂+M)·g·r − m₁·g = 154.78 N. وللارتفاع أهمّية كذلك. ففي الزيت الساكن يرتفع الضغط بمقدار ρg = 8.53 kPa لكل متر من العمق، ومتى تحرّك المكبس الهيدروليكي لم يعد العمودان متساويي الارتفاع."
+ },
+ "bee75ca77f75": {
+  "src": "Controls",
+  "tr": "عناصر التحكّم"
+ },
+ "c1bb0da7dbef": {
+  "src": "p₂ under output piston",
+  "tr": "p₂ تحت مكبس الإخراج"
+ },
+ "c5113e319b95": {
+  "src": "<b>moving</b>: the equation of motion is integrated.",
+  "tr": "<b>الحركة</b>: تُكامَل معادلة الحركة."
+ },
+ "c63d95fc491d": {
+  "src": "Pressure along the oil path",
+  "tr": "الضغط على طول مسار الزيت"
+ },
+ "c6884bb6f205": {
+  "src": "Animated hydraulic press",
+  "tr": "رسم متحرّك للمكبس الهيدروليكي"
+ },
+ "c77f1f0a4817": {
+  "src": "The pipe term dominates. The pipe holds only 55 g of oil, but that oil moves 16 times faster than the piston, so its kinetic energy counts 16² = 256 times over. It contributes 14.0 kg of the 18.5 kg you feel through the piston.",
+  "tr": "يهيمن حدّ الأنبوب. لا يحتوي الأنبوب إلا على 55 g من الزيت، لكن هذا الزيت يتحرّك أسرع من المكبس 16 مرّة، فتُحسب طاقته الحركية 16² = 256 مرّة. وهو يسهم بـ 14.0 kg من الـ 18.5 kg التي تشعر بها عبر المكبس."
+ },
+ "c7f73bb54d92": {
+  "src": "Settings",
+  "tr": "الإعدادات"
+ },
+ "c8e308704911": {
+  "src": "Playback",
+  "tr": "التشغيل"
+ },
+ "cc39db213018": {
+  "src": "time t",
+  "tr": "الزمن t"
+ },
+ "d0f50b3d3ec2": {
+  "src": "5 · The pressure field inside the oil",
+  "tr": "5 · حقل الضغط داخل الزيت"
+ },
+ "d171e96eea63": {
+  "src": "F_2 = p\\,A_2 = F_1\\,\\frac{A_2}{A_1}",
+  "tr": "F_2 = p\\,A_2 = F_1\\,\\frac{A_2}{A_1}"
+ },
+ "da55cb17cc57": {
+  "src": "Plug flow: one speed across each cross-section.",
+  "tr": "جريان السدادة: سرعة واحدة عبر كل مقطع عرضي."
+ },
+ "db153dbb00ab": {
+  "src": "\\begin{aligned} &\\frac{d}{dt}\\frac{\\partial T}{\\partial\\dot{x}} - \\frac{\\partial T}{\\partial x} + \\frac{\\partial V}{\\partial x} = F_1(t)\\\\ \\Rightarrow\\quad &\\mu(x)\\,\\ddot{x} + \\tfrac12\\,\\mu'\\dot{x}^2 = F_1(t) - V'(x),\\qquad \\mu' = \\frac{d\\mu}{dx} = \\rho A_1(r^2 - 1) \\end{aligned}",
+  "tr": "\\begin{aligned} &\\frac{d}{dt}\\frac{\\partial T}{\\partial\\dot{x}} - \\frac{\\partial T}{\\partial x} + \\frac{\\partial V}{\\partial x} = F_1(t)\\\\ \\Rightarrow\\quad &\\mu(x)\\,\\ddot{x} + \\tfrac12\\,\\mu'\\dot{x}^2 = F_1(t) - V'(x),\\qquad \\mu' = \\frac{d\\mu}{dx} = \\rho A_1(r^2 - 1) \\end{aligned}"
+ },
+ "e01c25fb83ad": {
+  "src": "Displacements",
+  "tr": "الإزاحات"
+ },
+ "e035943e2cf2": {
+  "src": "F₁,min to start",
+  "tr": "F₁,min لبدء الحركة"
+ },
+ "e040db2b7f13": {
+  "src": "Motion",
+  "tr": "الحركة"
+ },
+ "e1181aef0554": {
+  "src": "2 · Pascal's principle",
+  "tr": "2 · مبدأ باسكال"
+ },
+ "e9c4bd2b937e": {
+  "src": "speed v = ẋ",
+  "tr": "السرعة v = ẋ"
+ },
+ "ee0b739c9894": {
+  "src": "Pascal, static F₁·A₂/A₁",
+  "tr": "باسكال، في السكون: F₁·A₂/A₁"
+ },
+ "f4800df8d1bc": {
+  "src": "out",
+  "tr": "out"
+ },
+ "f77b9fda4ff3": {
+  "src": "<b>time limit</b>: any other run ends at t = τ + 10 s. With a force that only ramps up, the energy function h = K + V − F₁(t)·x can only decrease, because dh/dt = −Ḟ₁·x ≤ 0. So the load can never come back to x = 0 with v &lt; 0. If the force is too small to reach the stroke stop, the load swings between two turning points forever, and the run needs a limit.",
+  "tr": "<b>الحدّ الزمني</b>: تنتهي أي محاكاة أخرى عند t = τ + 10 s. وما دامت القوّة لا تتناقص أبدًا، لا يمكن لدالّة الطاقة h = K + V − F₁(t)·x إلا أن تتناقص، لأن dh/dt = −Ḟ₁·x ≤ 0. لذلك لا يمكن للحمل أن يعود أبدًا إلى x = 0 بسرعة v &lt; 0. وإذا كانت القوّة أصغر من أن تبلغ مصدّ الشوط، يتأرجح الحمل بين نقطتَي ارتداد إلى الأبد، فتحتاج المحاكاة إلى حدّ زمني."
+ },
+ "fb0ac464aee1": {
+  "src": "\\begin{aligned} m_1a &= F_1 + m_1g - p_1A_1 &&\\Rightarrow\\quad p_1 = \\frac{F_1 + m_1g - m_1a}{A_1}\\\\ (m_2 + M)\\,r\\,a &= p_2A_2 - (m_2 + M)\\,g &&\\Rightarrow\\quad p_2 = \\frac{(m_2 + M)(g + ra)}{A_2} \\end{aligned}",
+  "tr": "\\begin{aligned} m_1a &= F_1 + m_1g - p_1A_1 &&\\Rightarrow\\quad p_1 = \\frac{F_1 + m_1g - m_1a}{A_1}\\\\ (m_2 + M)\\,r\\,a &= p_2A_2 - (m_2 + M)\\,g &&\\Rightarrow\\quad p_2 = \\frac{(m_2 + M)(g + ra)}{A_2} \\end{aligned}"
+ }
+}

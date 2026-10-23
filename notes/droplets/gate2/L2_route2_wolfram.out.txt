@@ -1,0 +1,23 @@
+(transcribed from the Wolfram evaluator 15.0.1; the code is in L2_route2.wl)
+roots: {(-1 - Sqrt[1 - 12 St])/(2 St), (-1 + Sqrt[1 - 12 St])/(2 St)}   printed form difference: {0, 0}
+discriminant zero at St = {{St -> 1/12}}
+linear equation (3.3), slaved start eta(0)=1, eta'(0)=-3 (closed form from DSolve):
+ St = 0.05 : eta = 1.0534 (-0.0506917 e^(3.67544 s) + e^(16.3246 s)) / e^(20 s)   min over (0,60) = 1.5e-9 > 0, no zero
+ St = 0.08 : eta = 1.8 (-0.444444 e^(5 s) + e^(7.5 s)) / e^(12.5 s)               min = 1.9e-61 > 0, no zero
+ St = 1/12 : eta = 3 (0.333333 + s) / e^(6 s)                                     min = 1.0e-62 > 0, no zero (critical: double root -6)
+ St = 0.09 : eta = (cos(1.57135 s) + 1.62635 sin(1.57135 s)) / e^(5.55556 s)       first zero s = 3.64776, min = -2.1e-5 (crosses zero)
+ St = 0.2  : eta = (cos(2.95804 s) - 0.169031 sin(2.95804 s)) / e^(2.5 s)          first zero s = 2.59852, min = -0.1135 (crosses)
+nonlinear potential-flow axis equation (log variables, start 29 radii from the surface with the air velocity), end of the solution domain
+(0 to 400 means no blow-up = the partner never reaches the surface; shorter means u -> -infinity = it reaches the surface):
+ St = 0.07   domain {0, 400}   no hit
+ St = 0.08   domain {0, 400}   no hit
+ St = 0.0825 domain {0, 400}   no hit
+ St = 0.0830 domain {0, 400}   no hit
+ St = 0.0832 domain {0, 400}   no hit
+ St = 0.0834 domain {0, 48.0638}   HIT      (event location warning at the end: u diverges)
+ St = 0.0836 domain {0, 38.8176}   HIT
+ St = 0.0840 domain {0, 35.423}    HIT
+ St = 0.0842 domain {0, 34.7051}   HIT
+ St = 0.09   domain {0, 31.4038}   HIT
+ St = 0.10   domain {0, 30.6745}   HIT
+ => threshold between 0.0832 and 0.0834; 1/12 = 0.083333

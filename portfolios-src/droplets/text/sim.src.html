@@ -1,0 +1,54 @@
+<div class="card" id="box">
+<div class="eyebrow">Panel 1 · the collection equation</div>
+<h2>A cloud in a box</h2>
+<p>300 droplets of about 8 µm and one collector of about 40 µm per cm³, 10 °C, 850 hPa. Choose the ingredients of the kernel and the
+bookkeeping, and solve 30 minutes of growth (4 bins per doubling of mass, 1 s steps). The dashed curves are the two stored reference runs
+(8 bins per doubling). Lecture notes, <a href="#ch5">chapter 5</a>.</p>
+<div class="simgrid">
+<div class="ctl">
+<label>Fall speed <select id="bx-speed"><option value="beard">drag balance (chapter 2)</option><option value="stokes">Stokes' law</option></select></label>
+<label>Collision efficiency <select id="bx-eff"><option value="table">droplet trajectories (chapter 3)</option><option value="hall">Hall's 1980 table</option><option value="one">every droplet in the tube (E = 1)</option></select></label>
+<label>Coalescence <select id="bx-coal"><option value="law">energy law (chapter 4)</option><option value="one">every touch merges</option></select></label>
+<label>Bookkeeping <select id="bx-book"><option value="sce">every drop meets every drop (SCE)</option><option value="gce">collectors sweep droplets (thesis, GCE)</option></select></label>
+<button id="bx-run" type="button">Solve 30 minutes</button>
+<div class="status" id="bx-status" aria-live="polite"></div>
+<div class="readout" id="bx-out">Press Solve. A run takes a few seconds.</div>
+<label>Spectrum at <span id="bx-tlab">0 min</span><input id="bx-time" type="range" min="0" max="30" step="1" value="0" disabled /></label>
+</div>
+<div class="plots"><div class="plot" id="bx-f40"></div><div class="plot" id="bx-spec"></div></div>
+</div>
+</div>
+
+<div class="card" id="traj">
+<div class="eyebrow">Panel 2 · collision efficiency</div>
+<h2>A droplet meets a collector</h2>
+<p>Paths of droplets around a collector, seen from the collector: the air rises past it, the droplets come from below. Paths that touch
+are drawn in wine. The efficiency is computed by the same solver that made the table of <a href="#ch3">chapter 3</a>.</p>
+<div class="simgrid">
+<div class="ctl">
+<label>Collector radius R: <span id="tj-Rl">40 µm</span><input id="tj-R" type="range" min="15" max="150" step="1" value="40" /></label>
+<label>Droplet radius r: <span id="tj-rl">8 µm</span><input id="tj-r" type="range" min="2" max="30" step="1" value="8" /></label>
+<label>Air flow drawn <select id="tj-flow"><option value="stokes">creeping flow (Re → 0)</option><option value="potential">potential flow (Re → ∞)</option></select></label>
+<div class="readout" id="tj-out"></div>
+<p class="note">The drawing updates when you release a slider.</p>
+</div>
+<div class="plot" id="tj-svg"></div>
+</div>
+</div>
+
+<div class="card" id="luck">
+<div class="eyebrow">Panel 3 · the stochastic process</div>
+<h2>Lucky drops</h2>
+<p>An exact simulation of every merger in a small volume of the same cloud (modes cut at three standard deviations,
+<a href="#ch6">chapter 6</a>). The chart shows when the first drop of 100 µm appeared in the stored runs, against the prediction (6.1)
+from the collection equation (dashed). Run your own volume to see one history.</p>
+<div class="simgrid">
+<div class="ctl">
+<label>Volume <select id="lk-V"><option value="10">10 cm³ (3010 drops)</option><option value="100">100 cm³ (30 100 drops)</option><option value="1">1 cm³ (301 drops)</option></select></label>
+<button id="lk-run" type="button">Run one volume for 30 minutes</button>
+<div class="status" id="lk-status" aria-live="polite"></div>
+<div class="readout" id="lk-out">Each run draws new drops and a new random history.</div>
+</div>
+<div class="plots"><div class="plot" id="lk-cdf"></div><div class="plot" id="lk-rmax"></div></div>
+</div>
+</div>
