@@ -241,9 +241,9 @@ def alternates(served, lang, site='https://phyeinusul.com/'):
     return ''.join(f'<link rel="alternate" hreflang="{l}" href="{site}{"" if l == "en" else l + "/"}{served}" />' for l in ('en', 'de', 'ar')) + \
         f'<link rel="alternate" hreflang="x-default" href="{site}{served}" />'
 
-def build(lang, src_file, served, report):
-    src = open(os.path.join(ROOT, src_file), encoding='utf-8').read()
-    tpath, T = table(lang, served)
+def translate(src, lang, T):
+    """The text of one HTML source with every piece replaced from table T; returns (html, missing, number of pieces).
+    Used for the site's pages (build) and for studies with their own builders (hydraulics.py)."""
     pieces, attrs = cut(src)
     edits = []      # (start, end, replacement)
     missing = []
@@ -264,7 +264,15 @@ def build(lang, src_file, served, report):
     # apply from the end; an attribute edit and a piece never overlap (attributes sit in start tags, pieces in contents)
     out = src
     for a, b, r in sorted(edits, key=lambda e: e[0], reverse=True): out = out[:a] + r + out[b:]
+    return out, missing, len(pieces) + len(attrs)
+
+def build(lang, src_file, served, report):
+    src = open(os.path.join(ROOT, src_file), encoding='utf-8').read()
+    tpath, T = table(lang, served)
+    out, missing, npieces = translate(src, lang, T)
     out = rebase(out, served, lang)
+    # a study that has its own page in this language opens in it (the explicit English link, hreflang="en", stays English)
+    out = re.sub(r'href="([^"]*portfolios/impact/)index\.html"(?! hreflang="en")', lambda m: 'href="' + m.group(1) + lang + '.html"', out)
     if lang == 'ar': out = re.sub(r'(href="[^"]*styles/)(' + '|'.join(RTL_STYLES) + r')\.css"', r'\1\2.rtl.css"', out)
     out = re.sub(r'<html lang="en"', f'<html lang="{lang}" dir="{"rtl" if lang == "ar" else "ltr"}"', out, count=1)
     out = re.sub(r'<!--I18N-SWITCH-->.*?<!--/I18N-SWITCH-->', lambda m: switcher(served, lang), out, flags=re.S)
@@ -277,7 +285,7 @@ def build(lang, src_file, served, report):
     dst = os.path.join(ROOT, 'public', lang, served)
     os.makedirs(os.path.dirname(dst), exist_ok=True)
     open(dst, 'w', encoding='utf-8').write(out)
-    report.append((lang, served, len(pieces) + len(attrs), missing))
+    report.append((lang, served, npieces, missing))
 
 def english(src_file, served):
     """The English page itself gets the switch and the alternates too (they are written into the source, between markers)."""

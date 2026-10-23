@@ -48,3 +48,12 @@ html[dir='rtl'] .proj__tally dt { direction: ltr; unicode-bidi: isolate; text-al
 html[dir='rtl'] canvas, html[dir='rtl'] svg, html[dir='rtl'] .stage__canvas, html[dir='rtl'] .legend, html[dir='rtl'] .m,
 html[dir='rtl'] .readouts output, html[dir='rtl'] .readouts b { direction: ltr; unicode-bidi: isolate; }
 .sim-top .lang-switch { margin-inline-start: 14px; }
+
+/* ---------- the turn on a language switch (scripts/flip.js decides when) ---------- */
+@view-transition { navigation: auto; }
+::view-transition-group(root) { animation-duration: 0.56s; }
+::view-transition-old(root) { animation: lang-turn-out 0.28s cubic-bezier(.55, 0, .9, .45) both; transform-origin: 50% 50%; backface-visibility: hidden; }
+::view-transition-new(root) { animation: lang-turn-in 0.28s cubic-bezier(.1, .55, .45, 1) 0.28s both; transform-origin: 50% 50%; backface-visibility: hidden; }
+@keyframes lang-turn-out { from { transform: perspective(1800px) rotateY(0deg); } to { transform: perspective(1800px) rotateY(90deg); } }
+@keyframes lang-turn-in { from { transform: perspective(1800px) rotateY(-90deg); } to { transform: perspective(1800px) rotateY(0deg); } }
+@media (prefers-reduced-motion: reduce) { @view-transition { navigation: none; } }

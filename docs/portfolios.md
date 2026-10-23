@@ -276,6 +276,7 @@ lists every file) by `python3 portfolios-src/impact/build.py --site`. Never edit
 |---|---|
 | `impact/index.html` | The study in English: two balls of 1 kg, iron and cotton, dropped from 10 m onto a head drawn as a plate on a spring and damper, which is also the scale. A peak-hold force gauge and a digital panel under each ball, force curves, energy books, seven sections of derivations and a table of every parameter. |
 | `impact/ar.html` | The same study written in Arabic, right to left, set in Amiri and Noto Naskh Arabic ([assets.md](assets.md#arabic-faces-added-22-october-2026-on-numas-request)). |
+| `impact/de.html` | The same study in German (`text_de.py`, since 23 October 2026), house fonts; its sitebar links English · Deutsch · العربية and the German Portfolios page. |
 | `impact/fig/01_impact.webp` … `04_weight.webp` | The four plates of the Portfolios entry, screenshots of the English page. |
 
 **How a page works.** The model (`physics.js`, copied into the page between `/*PHYSICS-BEGIN*/` and `/*PHYSICS-END*/`) runs once
