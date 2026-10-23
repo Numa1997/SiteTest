@@ -4,6 +4,7 @@
     python3 tools/i18n/hydraulics.py            write public/portfolios/hydraulics/de.html and ar.html
     python3 tools/i18n/hydraulics.py --check    the same, and exit 1 if anything is untranslated
     python3 tools/i18n/hydraulics.py --todo de  print, as JSON, what German still lacks
+    python3 tools/i18n/hydraulics.py --ingest de job.json de_job.py   store a checked translation job
 
 The study's English source (portfolios-src/hydraulics/) is never changed. For each language the generator copies that folder to a
 temporary place, translates there the two simulation pages and the four theory sources (pieces cut exactly as for the site's pages,
@@ -119,8 +120,25 @@ def build(lang):
     shutil.rmtree(tmp)
     return missing
 
+def ingest(lang, job, trfile):
+    """Store a checked job: job.json is {key: English} (pieces of one file, or strings keyed by the English), trfile defines TR."""
+    import importlib.util
+    spec = importlib.util.spec_from_file_location('tr', trfile); m = importlib.util.module_from_spec(spec); spec.loader.exec_module(m)
+    src = json.load(open(job, encoding='utf-8')); name = re.sub(r'_\d+$', '', os.path.basename(job)[:-5])
+    if name == 'strings':
+        p, S = load(lang, 'hydraulics_strings.json')
+        for en in src: S[en] = m.TR[en]
+        json.dump(S, open(p, 'w', encoding='utf-8'), ensure_ascii=False, indent=1, sort_keys=True); return len(src)
+    f = [x for x in PAGES + THEORY if os.path.basename(x).replace('.src.html', '').replace('.html', '') == name][0]
+    p, T = load(lang, tname(f))
+    for k, en in src.items(): T[k] = {'src': en, 'tr': m.TR[k]}
+    os.makedirs(os.path.dirname(p), exist_ok=True)
+    json.dump(dict(sorted(T.items())), open(p, 'w', encoding='utf-8'), ensure_ascii=False, indent=1); return len(src)
+
 def main():
     a = sys.argv[1:]
+    if a[:1] == ['--ingest']:
+        print(a[1], os.path.basename(a[2]), ingest(a[1], a[2], a[3]), 'stored'); return
     if a[:1] == ['--todo']:
         print(json.dumps(todo(a[1]), ensure_ascii=False, indent=1)); return
     bad = 0

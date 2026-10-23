@@ -1,0 +1,922 @@
+{
+ "0027034d8a10": {
+  "src": "$\\rho$",
+  "tr": "$\\rho$"
+ },
+ "012af753ff5e": {
+  "src": "cap chamber pressure, at its far end from the hose",
+  "tr": "Druck in der Bodenkammer, am vom Schlauch abgewandten Ende"
+ },
+ "0137ccdc1034": {
+  "src": "$K_{\\mathrm{vel}}$",
+  "tr": "$K_{\\mathrm{vel}}$"
+ },
+ "02037ab9ff10": {
+  "src": "normalized spool travel, x/x<sub>max</sub>",
+  "tr": "normierter Ventilschieberweg, x/x<sub>max</sub>"
+ },
+ "0240c4e74351": {
+  "src": "Pa·s",
+  "tr": "Pa·s"
+ },
+ "02d3d04af88e": {
+  "src": "downward displacement of the input piston (generalized coordinate); reused as spool travel in ch. 8",
+  "tr": "Abwärtsverschiebung des Eingangskolbens (verallgemeinerte Koordinate); in Kap. 8 als Ventilschieberweg wiederverwendet"
+ },
+ "03a45952f811": {
+  "src": "$\\eta$",
+  "tr": "$\\eta$"
+ },
+ "0684f39bd31c": {
+  "src": "laminar (Hagen–Poiseuille) flow resistance",
+  "tr": "Widerstand der laminaren Strömung (Hagen–Poiseuille)"
+ },
+ "09abd6d25928": {
+  "src": "$K_{ce}$",
+  "tr": "$K_{ce}$"
+ },
+ "09d4c7f101e2": {
+  "src": "chapter",
+  "tr": "Kapitel"
+ },
+ "0b3cc6d2eea9": {
+  "src": "spool natural angular frequency, 2π f<sub>v</sub>",
+  "tr": "Eigenkreisfrequenz des Ventilschiebers, 2π f<sub>v</sub>"
+ },
+ "0bf6380b9530": {
+  "src": "$\\zeta_h$",
+  "tr": "$\\zeta_h$"
+ },
+ "0db78855023d": {
+  "src": "60 Hz, 0.7",
+  "tr": "60 Hz, 0.7"
+ },
+ "0e44c8b638ba": {
+  "src": "Further reading",
+  "tr": "Weiterführende Literatur"
+ },
+ "10f32377ac67": {
+  "src": "$\\alpha$",
+  "tr": "$\\alpha$"
+ },
+ "11a50e9d9825": {
+  "src": "laminar leakage coefficient, Q<sub>L</sub> = K<sub>L</sub> Δp",
+  "tr": "laminarer Leckagekoeffizient, Q<sub>L</sub> = K<sub>L</sub> Δp"
+ },
+ "12f0fd0746f7": {
+  "src": "force on the input piston",
+  "tr": "Kraft auf den Eingangskolben"
+ },
+ "1389845b02c0": {
+  "src": "kg",
+  "tr": "kg"
+ },
+ "13f3690a5d22": {
+  "src": "energy function $T + V - F_1x$, which can only fall while the push ramps up",
+  "tr": "Energiefunktion $T + V - F_1x$, die nur fallen kann, während die Antriebskraft anwächst"
+ },
+ "15afd0596eb8": {
+  "src": "bottom stop contact force (stop law implied, not defined as a symbol)",
+  "tr": "Kontaktkraft am unteren Anschlag (das Anschlaggesetz ist vorausgesetzt, aber nicht als Symbol definiert)"
+ },
+ "1729fa249d8b": {
+  "src": "leakage coefficient across the piston",
+  "tr": "Leckagebeiwert über den Kolben"
+ },
+ "1843a5169dbe": {
+  "src": "$\\mathrm{GM}$",
+  "tr": "$\\mathrm{GM}$"
+ },
+ "1a7f6d82ea38": {
+  "src": "1 mm/s, 5 mm/s",
+  "tr": "1 mm/s, 5 mm/s"
+ },
+ "1ac7b1ce8ba1": {
+  "src": "$\\omega_h$",
+  "tr": "$\\omega_h$"
+ },
+ "1bae98eea24e": {
+  "src": "$V_\\ell$",
+  "tr": "$V_\\ell$"
+ },
+ "1ce908681faf": {
+  "src": "minimum input force that lifts the load off its stop",
+  "tr": "minimale Eingangskraft, die die Last von ihrem Anschlag abhebt"
+ },
+ "1d37e9cd595d": {
+  "src": "derivative filter time constant, 2 ms",
+  "tr": "Zeitkonstante des Differenzierfilters, 2 ms"
+ },
+ "1e35947b01da": {
+  "src": "cap chamber volume",
+  "tr": "Volumen der Bodenkammer"
+ },
+ "1e420c85a88f": {
+  "src": "√Pa",
+  "tr": "√Pa"
+ },
+ "1ebf39fcd568": {
+  "src": "$F_c,\\ k_{\\mathrm{st}},\\ b_v$",
+  "tr": "$F_c,\\ k_{\\mathrm{st}},\\ b_v$"
+ },
+ "208a0bc36cab": {
+  "src": "control error, y<sub>ref</sub> − y",
+  "tr": "Regelabweichung, y<sub>ref</sub> − y"
+ },
+ "21b44f7a0fc2": {
+  "src": "output matrix, picks the measured position",
+  "tr": "Ausgangsmatrix, wählt die gemessene Position aus"
+ },
+ "2451b898a065": {
+  "src": "$\\omega_v$",
+  "tr": "$\\omega_v$"
+ },
+ "252b6a7aed2f": {
+  "src": "G. F. Franklin, J. D. Powell and M. Workman, <i>Digital Control of Dynamic Systems</i>, 3rd ed., Addison-Wesley, 1998: chapters 16 to 18.",
+  "tr": "G. F. Franklin, J. D. Powell und M. Workman, <i>Digital Control of Dynamic Systems</i>, 3. Aufl., Addison-Wesley, 1998: Kapitel 16 bis 18."
+ },
+ "25b9010f12a2": {
+  "src": "flow-pressure coefficient, minus partial of Q<sub>A</sub> with respect to p<sub>a</sub>",
+  "tr": "Durchfluss-Druck-Koeffizient, negative partielle Ableitung von Q<sub>A</sub> nach p<sub>a</sub>"
+ },
+ "2705cc3d313a": {
+  "src": "Ideal press",
+  "tr": "Ideale Presse"
+ },
+ "2954e50ac2fa": {
+  "src": "cap area, the full bore, πD²/4",
+  "tr": "Fläche der Bodenseite, volle Bohrung, πD²/4"
+ },
+ "29d9f584ee09": {
+  "src": "1 ms",
+  "tr": "1 ms"
+ },
+ "2ae637aab873": {
+  "src": "$K_{pF}$",
+  "tr": "$K_{pF}$"
+ },
+ "2b5234e343df": {
+  "src": "M. Jelali and A. Kroll, <i>Hydraulic Servo-systems: Modelling, Identification and Control</i>, Springer, 2003.",
+  "tr": "M. Jelali und A. Kroll, <i>Hydraulic Servo-systems: Modelling, Identification and Control</i>, Springer, 2003."
+ },
+ "2c1916edadec": {
+  "src": "oil outflow from a chamber",
+  "tr": "Ölabfluss aus einer Kammer"
+ },
+ "2c7b5b23f7e7": {
+  "src": "$\\beta_{\\mathrm{oil}}$",
+  "tr": "$\\beta_{\\mathrm{oil}}$"
+ },
+ "2cef55f237bd": {
+  "src": "volume flow",
+  "tr": "Volumenstrom"
+ },
+ "2e91bbbe6d9d": {
+  "src": "$\\alpha_0$",
+  "tr": "$\\alpha_0$"
+ },
+ "2e9ca295ea32": {
+  "src": "$v_s,\\ v_{\\mathrm{str}}$",
+  "tr": "$v_s,\\ v_{\\mathrm{str}}$"
+ },
+ "2efdb93f8c3c": {
+  "src": "Linear model",
+  "tr": "Lineares Modell"
+ },
+ "2efdf1305aa1": {
+  "src": "angular frequency of a command sinusoid, u = û e^{jωt}",
+  "tr": "Kreisfrequenz des sinusförmigen Stellsignals, u = û e^{jωt}"
+ },
+ "315981440018": {
+  "src": "$F_{\\mathrm{stop}}$",
+  "tr": "$F_{\\mathrm{stop}}$"
+ },
+ "31e6ea3d9c40": {
+  "src": "Coulomb friction force",
+  "tr": "Coulombsche Reibungskraft"
+ },
+ "324a57423a1e": {
+  "src": "polytropic exponent of the air",
+  "tr": "Polytropenexponent der Luft"
+ },
+ "32b65482ec36": {
+  "src": "position PID",
+  "tr": "PID-Lageregler"
+ },
+ "33571266edd3": {
+  "src": "potential energy as a function of x",
+  "tr": "potentielle Energie als Funktion von x"
+ },
+ "33b7e2bb2e9d": {
+  "src": "mass of the output piston",
+  "tr": "Masse des Ausgangskolbens"
+ },
+ "3558f48b17d4": {
+  "src": "$p_{\\mathrm{abs}}$",
+  "tr": "$p_{\\mathrm{abs}}$"
+ },
+ "36a0f1ab2bf0": {
+  "src": "Sampling and control",
+  "tr": "Abtastung und Regelung"
+ },
+ "3ba30d6ac8a2": {
+  "src": "viscous friction of the ram in the textbook model",
+  "tr": "viskose Reibung des Stößels im Lehrbuchmodell"
+ },
+ "3c147412e1ab": {
+  "src": "$v_{\\mathrm{str}}$",
+  "tr": "$v_{\\mathrm{str}}$"
+ },
+ "3cf2d9a7efd8": {
+  "src": "Ram and specimen",
+  "tr": "Stößel und Probe"
+ },
+ "3d9fad0c0b3c": {
+  "src": "Darcy friction factor",
+  "tr": "Rohrreibungszahl nach Darcy"
+ },
+ "3e19cf40d881": {
+  "src": "speed over which the Stribeck bump dies away, 5 mm/s",
+  "tr": "Geschwindigkeitsbereich, über den der Stribeck-Buckel abklingt, 5 mm/s"
+ },
+ "4084c0f3de3d": {
+  "src": "100 L/min, 7 MPa",
+  "tr": "100 L/min, 7 MPa"
+ },
+ "416d6d32d68c": {
+  "src": "kg/m⁴",
+  "tr": "kg/m⁴"
+ },
+ "423cb1e5e725": {
+  "src": "hydraulic damping ratio",
+  "tr": "hydraulischer Dämpfungsgrad"
+ },
+ "459abf6a01d0": {
+  "src": "feed-forward gain from speed reference to command",
+  "tr": "Vorsteuerverstärkung von der Geschwindigkeitsvorgabe zum Stellsignal"
+ },
+ "4766b2cc3bd2": {
+  "src": "$\\hat{x}$",
+  "tr": "$\\hat{x}$"
+ },
+ "479bc2fe55be": {
+  "src": "spool bandwidth frequency, 60 Hz",
+  "tr": "Bandbreitenfrequenz des Ventilschiebers, 60 Hz"
+ },
+ "493ac9457c0b": {
+  "src": "Valve and orifice",
+  "tr": "Ventil und Blende"
+ },
+ "4bc59c0c578f": {
+  "src": "break-away factor (Stribeck effect)",
+  "tr": "Losbrechfaktor (Stribeck-Effekt)"
+ },
+ "4c6d256b8faf": {
+  "src": "pressure at valve port A, at the valve end of the hose",
+  "tr": "Druck am Ventilanschluss A, am ventilseitigen Ende des Schlauchs"
+ },
+ "4ee1fd1ac23c": {
+  "src": "effective bulk modulus of oil with entrained air",
+  "tr": "effektiver Kompressionsmodul des Öls mit mitgerissener Luft"
+ },
+ "50a332e23bbd": {
+  "src": "hydraulic resonance frequency of the ram on its oil springs",
+  "tr": "hydraulische Eigenfrequenz des Stößels auf seinen Ölfedern"
+ },
+ "51cb231946b0": {
+  "src": "total cylinder volume, two equal chambers of V<sub>t</sub>/2",
+  "tr": "Gesamtvolumen des Zylinders, zwei gleiche Kammern mit je V<sub>t</sub>/2"
+ },
+ "546bc5db8c39": {
+  "src": "valve rated flow and pressure drop",
+  "tr": "Nenndurchfluss und Druckabfall des Ventils"
+ },
+ "54d7d48553f4": {
+  "src": "$\\omega$",
+  "tr": "$\\omega$"
+ },
+ "54f54d866143": {
+  "src": "viscous friction coefficient of the seals",
+  "tr": "Koeffizient der viskosen Reibung der Dichtungen"
+ },
+ "5613085e74fc": {
+  "src": "bulk modulus: pressure to squeeze oil volume by a given fraction",
+  "tr": "Kompressionsmodul: Druck, der das Ölvolumen um einen gegebenen Bruchteil verkleinert"
+ },
+ "5b7143c93280": {
+  "src": "load mass",
+  "tr": "Lastmasse"
+ },
+ "5c8ad1de5914": {
+  "src": "$K_L,\\ p_{\\mathrm{tr}}$",
+  "tr": "$K_L,\\ p_{\\mathrm{tr}}$"
+ },
+ "5d72e89f8aef": {
+  "src": "gravitational acceleration, 9.81 m/s²",
+  "tr": "Fallbeschleunigung, 9.81 m/s²"
+ },
+ "5e7d6efc9447": {
+  "src": "oil column height at rest, 0.40 m",
+  "tr": "Höhe der Ölsäule im Ruhezustand, 0.40 m"
+ },
+ "5f13b8685639": {
+  "src": "specimen damping, 5 % of critical",
+  "tr": "Dämpfung der Probe, 5 % der kritischen Dämpfung"
+ },
+ "6264827dca77": {
+  "src": "root regularization pressure, 0.1 MPa",
+  "tr": "Druck der Wurzelregularisierung, 0.1 MPa"
+ },
+ "6312380c511a": {
+  "src": "power dissipated as heat in the valve jets",
+  "tr": "als Wärme dissipierte Leistung in den Strömungsstrahlen des Ventils"
+ },
+ "631576d1507b": {
+  "src": "$g(\\Delta p)$",
+  "tr": "$g(\\Delta p)$"
+ },
+ "6344ebb989ac": {
+  "src": "SI unit",
+  "tr": "SI-Einheit"
+ },
+ "643d53e928bf": {
+  "src": "spool bandwidth and damping",
+  "tr": "Bandbreite und Dämpfung des Ventilschiebers"
+ },
+ "671dac9203b4": {
+  "src": "m³/(s·√Pa)",
+  "tr": "m³/(s·√Pa)"
+ },
+ "6741ee626394": {
+  "src": "bore, rod, stroke",
+  "tr": "Zylinderbohrung, Kolbenstange, Hub"
+ },
+ "69d53ed4d66b": {
+  "src": "gas-to-liquid volume ratio V<sub>g</sub>/V<sub>ℓ</sub> at pressure p",
+  "tr": "Verhältnis Gas- zu Flüssigkeitsvolumen V<sub>g</sub>/V<sub>ℓ</sub> bei dem Druck p"
+ },
+ "6ac936a49f62": {
+  "src": "$K_{iF}$",
+  "tr": "$K_{iF}$"
+ },
+ "6bfc1fa4c2f5": {
+  "src": "kinetic energy of the moving press",
+  "tr": "kinetische Energie der bewegten Presse"
+ },
+ "6ca9bfe38081": {
+  "src": "flow through the hose",
+  "tr": "Durchfluss durch den Schlauch"
+ },
+ "6ce5e08bdf3f": {
+  "src": "pressure downstream of the orifice, at the vena contracta",
+  "tr": "Druck stromabwärts der Blende, an der Vena contracta"
+ },
+ "6d016551f561": {
+  "src": "piston (ram) position, moving out at speed ẏ",
+  "tr": "Position des Kolbens (Stößels), ausfahrend mit der Geschwindigkeit ẏ"
+ },
+ "6d05ff48872f": {
+  "src": "liquid volume in the oil–air mixture",
+  "tr": "Flüssigkeitsvolumen im Öl-Luft-Gemisch"
+ },
+ "6d355b28577e": {
+  "src": "$\\mathrm{PM}$",
+  "tr": "$\\mathrm{PM}$"
+ },
+ "6da368c94097": {
+  "src": "velocity gain, ram speed per metre of position error",
+  "tr": "Geschwindigkeitsverstärkung, Stößelgeschwindigkeit je Meter Lagefehler"
+ },
+ "6f410b47568c": {
+  "src": "inertance of the oil slug in the hose, ρL<sub>h</sub>/A<sub>h</sub>",
+  "tr": "hydraulische Trägheit der Ölsäule im Schlauch, ρL<sub>h</sub>/A<sub>h</sub>"
+ },
+ "703714781829": {
+  "src": "$Q_{\\mathrm{in}}$",
+  "tr": "$Q_{\\mathrm{in}}$"
+ },
+ "703b3b3404e9": {
+  "src": "Geometry and fluid",
+  "tr": "Geometrie und Fluid"
+ },
+ "71054f128f04": {
+  "src": "height of the right oil column, H<sub>0</sub> + rx",
+  "tr": "Höhe der rechten Ölsäule, H<sub>0</sub> + rx"
+ },
+ "720a8feb0370": {
+  "src": "discrete input matrix, ∫ e^{Aσ} dσ B",
+  "tr": "diskrete Eingangsmatrix, ∫ e^{Aσ} dσ B"
+ },
+ "72fd7572d422": {
+  "src": "absolute pressure, p + p<sub>0</sub>",
+  "tr": "Absolutdruck, p + p<sub>0</sub>"
+ },
+ "73f7f4c0c5f0": {
+  "src": "pipe length, 0.8 m",
+  "tr": "Rohrlänge, 0.8 m"
+ },
+ "741cfaadf254": {
+  "src": "load pressure, p<sub>1</sub> − p<sub>2</sub>",
+  "tr": "Lastdruck, p<sub>1</sub> − p<sub>2</sub>"
+ },
+ "7434b503d463": {
+  "src": "flow drawn from the pump",
+  "tr": "von der Pumpe entnommener Volumenstrom"
+ },
+ "744bd73d8b5a": {
+  "src": "atmospheric pressure, 101.325 kPa",
+  "tr": "Atmosphärendruck, 101.325 kPa"
+ },
+ "74d69eb4b344": {
+  "src": "area of the output piston",
+  "tr": "Fläche des Ausgangskolbens"
+ },
+ "75e741031e05": {
+  "src": "normalized spool position, positive opens P to A",
+  "tr": "normierte Ventilschieberlage, positiv öffnet P nach A"
+ },
+ "7606fa7cba4f": {
+  "src": "pressure upstream of the orifice",
+  "tr": "Druck stromaufwärts der Blende"
+ },
+ "772068842744": {
+  "src": "$p_{\\mathrm{tr}}$",
+  "tr": "$p_{\\mathrm{tr}}$"
+ },
+ "774f32899017": {
+  "src": "oil density, 870 kg/m³ (constant, incompressible at first)",
+  "tr": "Öldichte, 870 kg/m³ (zunächst konstant und inkompressibel)"
+ },
+ "77904f139cf1": {
+  "src": "150, 300, 200 cm³",
+  "tr": "150, 300, 200 cm³"
+ },
+ "77ef85f4b883": {
+  "src": "Coulomb friction, break-away factor, viscous",
+  "tr": "Coulomb-Reibung, Losbrechfaktor, viskose Reibung"
+ },
+ "7c8481ef116e": {
+  "src": "2.0 m, 12 mm",
+  "tr": "2.0 m, 12 mm"
+ },
+ "7df422c95e19": {
+  "src": "m³/(s·Pa)",
+  "tr": "m³/(s·Pa)"
+ },
+ "7fbc7d93b12e": {
+  "src": "120 mm, 20 MN/m",
+  "tr": "120 mm, 20 MN/m"
+ },
+ "802795d34e1f": {
+  "src": "m³/Pa",
+  "tr": "m³/Pa"
+ },
+ "803c55570579": {
+  "src": "25 %/mm, 125 %/(mm·s), 0",
+  "tr": "25 %/mm, 125 %/(mm·s), 0"
+ },
+ "808759caa013": {
+  "src": "seal friction force",
+  "tr": "Reibungskraft der Dichtungen"
+ },
+ "833985197a32": {
+  "src": "force on the output piston",
+  "tr": "Kraft auf den Ausgangskolben"
+ },
+ "835503052f9b": {
+  "src": "$K_{\\mathrm{coil}},\\ b_s,\\ m_s$",
+  "tr": "$K_{\\mathrm{coil}},\\ b_s,\\ m_s$"
+ },
+ "837547c663d6": {
+  "src": "specimen stiffness, 20 MN/m",
+  "tr": "Steifigkeit der Probe, 20 MN/m"
+ },
+ "891a1c189682": {
+  "src": "leakage flow through the clearance gap (reused as load flow in ch. 15)",
+  "tr": "Leckagestrom durch den Spalt (in Kap. 15 als Lastvolumenstrom wiederverwendet)"
+ },
+ "8a0c3f145061": {
+  "src": "integral state of the force law, loaded with the last command at the switch",
+  "tr": "Integralzustand des Kraftgesetzes, beim Umschalten mit dem letzten Stellsignal vorbelegt"
+ },
+ "8b17221914b9": {
+  "src": "area of the input piston",
+  "tr": "Fläche des Eingangskolbens"
+ },
+ "8cd3caeb8486": {
+  "src": "discrete loop gain, K(z) z^{-1} G(z)",
+  "tr": "diskrete Schleifenverstärkung, K(z) z^{-1} G(z)"
+ },
+ "8e51d5126350": {
+  "src": "hydraulic capacitance, V/β (same symbol as output matrix C in ch. 14)",
+  "tr": "hydraulische Kapazität, V/β (dasselbe Symbol wie die Ausgangsmatrix C in Kap. 14)"
+ },
+ "913e49ea63c6": {
+  "src": "$\\Gamma$",
+  "tr": "$\\Gamma$"
+ },
+ "93af770ae1ca": {
+  "src": "discharge coefficient, about 0.6 to 0.7",
+  "tr": "Durchflussbeiwert, etwa 0.6 bis 0.7"
+ },
+ "94b5284d8e74": {
+  "src": "$\\zeta_v$",
+  "tr": "$\\zeta_v$"
+ },
+ "95ccc6dd0cd4": {
+  "src": "hose length",
+  "tr": "Schlauchlänge"
+ },
+ "9792a85e029d": {
+  "src": "position integral gain",
+  "tr": "Integralverstärkung der Lageregelung"
+ },
+ "97aaf5bb4065": {
+  "src": "Hz",
+  "tr": "Hz"
+ },
+ "9adb13dc180b": {
+  "src": "turbulent friction factor, fitting losses",
+  "tr": "Reibungszahl der turbulenten Strömung, Armaturenverluste"
+ },
+ "9cd576a2999e": {
+  "src": "supply pressure from the pump, at port P",
+  "tr": "Versorgungsdruck von der Pumpe, am Anschluss P"
+ },
+ "9ceaaa4c7e34": {
+  "src": "Every symbol in order of first appearance, grouped by topic, with its SI unit and the chapter that defines it (the number links there). Matrix symbols of the state-space chapters carry mixed units and show “?”. A few letters serve twice; the meaning column says where.",
+  "tr": "Jedes Symbol in der Reihenfolge seines ersten Auftretens, nach Themen gruppiert, mit seiner SI-Einheit und dem Kapitel, in dem es definiert wird (die Nummer führt dorthin). Die Matrixsymbole der Zustandsraum-Kapitel tragen gemischte Einheiten und zeigen „?“. Einige Buchstaben werden zweimal verwendet; die Spalte Bedeutung gibt an, wo."
+ },
+ "9df029e3894c": {
+  "src": "valve flow coefficient, Q = K<sub>v</sub> x̂ √Δp",
+  "tr": "Durchflusskoeffizient des Ventils, Q = K<sub>v</sub> x̂ √Δp"
+ },
+ "9ecec2c846a5": {
+  "src": "smoothing speed, Stribeck speed",
+  "tr": "Glättungsgeschwindigkeit, Stribeck-Geschwindigkeit"
+ },
+ "a1375f782ce1": {
+  "src": "rod-side annulus area",
+  "tr": "Ringfläche auf der Stangenseite"
+ },
+ "a1b7eaaee3cb": {
+  "src": "mass of the input piston",
+  "tr": "Masse des Eingangskolbens"
+ },
+ "a4223ebb8c81": {
+  "src": "rad/s",
+  "tr": "rad/s"
+ },
+ "a5e4fdb26227": {
+  "src": "F. M. White, <i>Fluid Mechanics</i>, McGraw-Hill: Bernoulli, pipe friction, orifices.",
+  "tr": "F. M. White, <i>Fluid Mechanics</i>, McGraw-Hill: Bernoulli, Rohrreibung, Blenden."
+ },
+ "a6768dcb7ec1": {
+  "src": "$F_{1,\\min}$",
+  "tr": "$F_{1,\\min}$"
+ },
+ "a7e3dad3bb13": {
+  "src": "N/A, N·s/m, kg",
+  "tr": "N/A, N·s/m, kg"
+ },
+ "a8179b9b9b3f": {
+  "src": "1.5 %/kN, 10 %/(kN·s)",
+  "tr": "1.5 %/kN, 10 %/(kN·s)"
+ },
+ "a846a87dc616": {
+  "src": "160 kg",
+  "tr": "160 kg"
+ },
+ "ab635ffb0bc3": {
+  "src": "$f_v,\\ \\zeta_v$",
+  "tr": "$f_v,\\ \\zeta_v$"
+ },
+ "abd78ddb9559": {
+  "src": "bulk modulus of the oil alone",
+  "tr": "Kompressionsmodul des reinen Öls"
+ },
+ "abe164fb9051": {
+  "src": "flow gain, partial of Q<sub>A</sub> with respect to x<sub>v</sub>",
+  "tr": "Durchflussverstärkung, partielle Ableitung von Q<sub>A</sub> nach x<sub>v</sub>"
+ },
+ "ac339b37813e": {
+  "src": "$k_{\\mathrm{st}}$",
+  "tr": "$k_{\\mathrm{st}}$"
+ },
+ "ad5645b20401": {
+  "src": "position proportional gain",
+  "tr": "Proportionalverstärkung der Lageregelung"
+ },
+ "af92fd5e956b": {
+  "src": "H. E. Merritt, <i>Hydraulic Control Systems</i>, Wiley, 1967: the classic source of chapter 15.",
+  "tr": "H. E. Merritt, <i>Hydraulic Control Systems</i>, Wiley, 1967: die klassische Quelle zu Kapitel 15."
+ },
+ "b1b4dd69b3c2": {
+  "src": "gas volume in the oil–air mixture",
+  "tr": "Gasvolumen im Öl-Luft-Gemisch"
+ },
+ "b271df55dc4d": {
+  "src": "kinematic viscosity of the oil",
+  "tr": "kinematische Viskosität des Öls"
+ },
+ "b334d2e0331b": {
+  "src": "spool damping ratio",
+  "tr": "Dämpfungsgrad des Ventilschiebers"
+ },
+ "b74e98c0c4c0": {
+  "src": "$K_{\\mathrm{ff}}$",
+  "tr": "$K_{\\mathrm{ff}}$"
+ },
+ "b85bbfb165b8": {
+  "src": "$\\Phi$",
+  "tr": "$\\Phi$"
+ },
+ "b8ee13d0016e": {
+  "src": "oil volume of the hose, A<sub>h</sub>L<sub>h</sub>; half is counted with each end",
+  "tr": "Ölvolumen des Schlauchs, A<sub>h</sub>L<sub>h</sub>; die Hälfte wird an jedem Ende gezählt"
+ },
+ "b912d9a2e4c8": {
+  "src": "force integral gain",
+  "tr": "Integralverstärkung der Kraftregelung"
+ },
+ "b9e8a35574b6": {
+  "src": "Pa·s/m³",
+  "tr": "Pa·s/m³"
+ },
+ "ba7523871b75": {
+  "src": "$\\mathcal{E}$",
+  "tr": "$\\mathcal{E}$"
+ },
+ "bbdc770aad36": {
+  "src": "rod chamber volume",
+  "tr": "Volumen der Stangenkammer"
+ },
+ "bc3c0854c5d9": {
+  "src": "contact force from the specimen",
+  "tr": "Kontaktkraft von der Probe"
+ },
+ "bc3c7fb30ee9": {
+  "src": "pressure wave speed, √(β/ρ)",
+  "tr": "Geschwindigkeit der Druckwelle, √(β/ρ)"
+ },
+ "c049d0f2d962": {
+  "src": "spool force per ampere, spool damping, spool mass (single-stage valve)",
+  "tr": "Kraft am Ventilschieber je Ampere, Dämpfung des Ventilschiebers, Masse des Ventilschiebers (einstufiges Ventil)"
+ },
+ "c17f649232dd": {
+  "src": "flow out of valve port B",
+  "tr": "Volumenstrom aus dem Ventilanschluss B"
+ },
+ "c18e117a84b7": {
+  "src": "$\\mu(x)$",
+  "tr": "$\\mu(x)$"
+ },
+ "c1feb6b8dfb1": {
+  "src": "$\\beta_{\\mathrm{eff}}$",
+  "tr": "$\\beta_{\\mathrm{eff}}$"
+ },
+ "c2211315e0bb": {
+  "src": "dead volumes",
+  "tr": "Totvolumina"
+ },
+ "c227dd456f1d": {
+  "src": "orifice opening area, w x",
+  "tr": "Öffnungsfläche der Blende, w x"
+ },
+ "c255c05388e9": {
+  "src": "$R_{\\mathrm{lam}}$",
+  "tr": "$R_{\\mathrm{lam}}$"
+ },
+ "c3ed59f62eb2": {
+  "src": "area ratio A<sub>1</sub>/A<sub>2</sub>, equal to (d<sub>1</sub>/d<sub>2</sub>)²",
+  "tr": "Flächenverhältnis A<sub>1</sub>/A<sub>2</sub>, gleich (d<sub>1</sub>/d<sub>2</sub>)²"
+ },
+ "c7369a8db1b4": {
+  "src": "fitting (minor) loss coefficient",
+  "tr": "Verlustbeiwert für Formstücke (Einzelverluste)"
+ },
+ "c743b10d78de": {
+  "src": "tank pressure",
+  "tr": "Tankdruck"
+ },
+ "c891b2a74879": {
+  "src": "Pa",
+  "tr": "Pa"
+ },
+ "c9285b144757": {
+  "src": "kg/m⁷",
+  "tr": "kg/m⁷"
+ },
+ "ca9602a06f18": {
+  "src": "position derivative gain",
+  "tr": "Differentialverstärkung der Lageregelung"
+ },
+ "caf9aa84a33b": {
+  "src": "$C_{tp}$",
+  "tr": "$C_{tp}$"
+ },
+ "cd107b18b1d2": {
+  "src": "supply pressure",
+  "tr": "Versorgungsdruck"
+ },
+ "cdb96b2f59ef": {
+  "src": "turbulent friction coefficient, Δp = K<sub>t</sub> Q|Q|",
+  "tr": "Reibungsbeiwert der turbulenten Strömung, Δp = K<sub>t</sub> Q|Q|"
+ },
+ "ce49798c4bbe": {
+  "src": "1.5 GPa, 0.5 %, 1.4",
+  "tr": "1.5 GPa, 0.5 %, 1.4"
+ },
+ "cfc038acd0c5": {
+  "src": "Lagrangian, T − V",
+  "tr": "Lagrange-Funktion, T − V"
+ },
+ "d07705035dc9": {
+  "src": "discrete state matrix, e^{AT<sub>s</sub>}",
+  "tr": "diskrete Zustandsmatrix, e^{AT<sub>s</sub>}"
+ },
+ "d0beacab5df9": {
+  "src": "force PI",
+  "tr": "PI-Kraftregler"
+ },
+ "d12b8fddaa02": {
+  "src": "phase margin at the crossover frequency",
+  "tr": "Phasenreserve bei der Durchtrittsfrequenz"
+ },
+ "d18cf29d15b7": {
+  "src": "gain margin at the −180° frequency, in decibels",
+  "tr": "Amplitudenreserve bei der Frequenz mit −180° Phase, in Dezibel"
+ },
+ "d1b7520d8c7a": {
+  "src": "leakage conductance, root regularization",
+  "tr": "Leckageleitwert, Wurzelregularisierung"
+ },
+ "d2e529b5fbc4": {
+  "src": "linearized input matrix, ∂f/∂u",
+  "tr": "linearisierte Eingangsmatrix, ∂f/∂u"
+ },
+ "d3dc7064c524": {
+  "src": "hose length and bore",
+  "tr": "Schlauchlänge und Innendurchmesser"
+ },
+ "d56f9b171dc0": {
+  "src": "sample period, t<sub>k</sub> = kT<sub>s</sub>",
+  "tr": "Abtastperiode, t<sub>k</sub> = kT<sub>s</sub>"
+ },
+ "d6a7ccf879c4": {
+  "src": "$\\nu$",
+  "tr": "$\\nu$"
+ },
+ "d7d060a1fabb": {
+  "src": "2·10⁻¹³ m³/(s·Pa), 0.1 MPa",
+  "tr": "2·10⁻¹³ m³/(s·Pa), 0.1 MPa"
+ },
+ "d7e74e8a7ed5": {
+  "src": "pipe cross-section area, 0.785 cm²",
+  "tr": "Querschnittsfläche des Rohres, 0.785 cm²"
+ },
+ "d9fff6e4e930": {
+  "src": "reference (set) position",
+  "tr": "Sollposition"
+ },
+ "daaaabc1739b": {
+  "src": "<span class=\"chn\">B</span> List of symbols",
+  "tr": "<span class=\"chn\">B</span> Symbolverzeichnis"
+ },
+ "db67888f9c4c": {
+  "src": "height of the left oil column, H<sub>0</sub> − x",
+  "tr": "Höhe der linken Ölsäule, H<sub>0</sub> − x"
+ },
+ "db813234d0f8": {
+  "src": "linearized state matrix, ∂f/∂x (cylinder area A in ch. 15)",
+  "tr": "linearisierte Zustandsmatrix, ∂f/∂x (Zylinderfläche A in Kap. 15)"
+ },
+ "dd3438fc4963": {
+  "src": "platen height at which the specimen is first touched",
+  "tr": "Höhe der Druckplatte, bei der die Probe zum ersten Mal berührt wird"
+ },
+ "dd7dbd1bb9e4": {
+  "src": "pressure at valve port B, equal to the rod-chamber pressure",
+  "tr": "Druck am Ventilanschluss B, gleich dem Druck in der Stangenkammer"
+ },
+ "de21e7091fc7": {
+  "src": "moving mass (10 kg + tooling 150 kg)",
+  "tr": "bewegte Masse (10 kg + Werkzeug 150 kg)"
+ },
+ "de4bd0d3e89d": {
+  "src": "soft oil spring stiffness of the moving press",
+  "tr": "Steifigkeit der weichen Ölfeder der bewegten Presse"
+ },
+ "df71860297a4": {
+  "src": "120 mm, 80 mm, 200 mm",
+  "tr": "120 mm, 80 mm, 200 mm"
+ },
+ "e001c435e5c1": {
+  "src": "kg/m³",
+  "tr": "kg/m³"
+ },
+ "e0c008bab7d4": {
+  "src": "oil inflow into a chamber",
+  "tr": "Ölzufluss in eine Kammer"
+ },
+ "e2eadf30ed8b": {
+  "src": "$Q_{\\mathrm{out}}$",
+  "tr": "$Q_{\\mathrm{out}}$"
+ },
+ "e37bf8e5ebce": {
+  "src": "effective mass, the mass felt at the input piston",
+  "tr": "effektive Masse, die am Eingangskolben wirksame Masse"
+ },
+ "e44622ef8add": {
+  "src": "dB",
+  "tr": "dB"
+ },
+ "e4711164be57": {
+  "src": "sample period",
+  "tr": "Abtastperiode"
+ },
+ "e4c83e221840": {
+  "src": "flow out of valve port A",
+  "tr": "Volumenstrom aus dem Ventilanschluss A"
+ },
+ "e6cd66074269": {
+  "src": "total flow-pressure coefficient, K<sub>c</sub> + C<sub>tp</sub>",
+  "tr": "gesamter Durchfluss-Druck-Beiwert, K<sub>c</sub> + C<sub>tp</sub>"
+ },
+ "e789aacfad44": {
+  "src": "$\\Delta p_f$",
+  "tr": "$\\Delta p_f$"
+ },
+ "e8baed30dc2b": {
+  "src": "valve command input, normalized, clipped to [−1, 1]",
+  "tr": "Stellsignal des Ventils, normiert, auf [−1, 1] begrenzt"
+ },
+ "e9b23ba51faa": {
+  "src": "$y_{\\mathrm{ref}}$",
+  "tr": "$y_{\\mathrm{ref}}$"
+ },
+ "ed9ab37728d5": {
+  "src": "valve-port volume, including half the hose",
+  "tr": "Volumen am Ventilanschluss, einschließlich der Hälfte des Schlauchs"
+ },
+ "ee7ffb869265": {
+  "src": "Hose and chambers",
+  "tr": "Schlauch und Kammern"
+ },
+ "eec4a67954b5": {
+  "src": "regularized flow function, linear near zero and square-root far away",
+  "tr": "regularisierte Durchflussfunktion, nahe null linear, weit davon eine Wurzelfunktion"
+ },
+ "eee9cc43e6ea": {
+  "src": "air volume fraction at atmospheric pressure",
+  "tr": "Volumenanteil der Luft bei Atmosphärendruck"
+ },
+ "ef5b051cb73f": {
+  "src": "$Q_N,\\ \\Delta p_N$",
+  "tr": "$Q_N,\\ \\Delta p_N$"
+ },
+ "f0b37956de2d": {
+  "src": "moving mass of the ram",
+  "tr": "bewegte Masse des Stößels"
+ },
+ "f1482c8f8257": {
+  "src": "$P_{\\mathrm{valve}}$",
+  "tr": "$P_{\\mathrm{valve}}$"
+ },
+ "f16e5f828577": {
+  "src": "gauge pressure, measured above the atmosphere",
+  "tr": "Überdruck, gegen den Atmosphärendruck gemessen"
+ },
+ "f3001759ca29": {
+  "src": "speed over which the Coulomb jump is smoothed, 1 mm/s",
+  "tr": "Geschwindigkeitsbereich, über den der Coulombsche Sprung geglättet wird, 1 mm/s"
+ },
+ "f34bc9fe30ec": {
+  "src": "contact height, specimen stiffness",
+  "tr": "Kontakthöhe, Steifigkeit der Probe"
+ },
+ "f3f43cb21ca5": {
+  "src": "dynamic viscosity of the oil, η = ρν",
+  "tr": "dynamische Viskosität des Öls, η = ρν"
+ },
+ "f5ecda6d5bba": {
+  "src": "$K_{pF},\\ K_{iF}$",
+  "tr": "$K_{pF},\\ K_{iF}$"
+ },
+ "f8f6be697241": {
+  "src": "friction pressure drop in the hose",
+  "tr": "Reibungsdruckabfall im Schlauch"
+ },
+ "f92975f707d3": {
+  "src": "12 MPa",
+  "tr": "12 MPa"
+ },
+ "fd93d173beba": {
+  "src": "force proportional gain",
+  "tr": "Proportionalverstärkung der Kraftregelung"
+ },
+ "fdb63b9e51ab": {
+  "src": "$\\beta$",
+  "tr": "$\\beta$"
+ }
+}
