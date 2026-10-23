@@ -1,0 +1,366 @@
+{
+ "045b4900cad5": {
+  "src": "Take a tiny wedge of fluid at rest: a right-angled prism with a vertical face of height $dy$, a horizontal face of width $dx$, and a sloping face of length $ds$ at angle $\\theta$, all of depth $dz$ into the page. The geometry gives $dx = ds\\cos\\theta$ and $dy = ds\\sin\\theta$. Call the pressures on the three faces $p_x$, $p_y$ and $p_n$. A fluid is, by definition, a material that keeps deforming for as long as a shear stress acts on it, however small; a solid settles at a new shape. So a fluid at rest can carry no shear at all, and every force on a face of the wedge is normal to it.",
+  "tr": "خذ إسفينًا صغيرًا جدًّا من مائع ساكن: منشورًا قائم الزاوية، وجهه الرأسي ارتفاعه $dy$، ووجهه الأفقي عرضه $dx$، ووجهه المائل الذي طوله $ds$ ويميل بزاوية $\\theta$، وكلّه بعمق $dz$ داخل الصفحة. تعطي الهندسة $dx = ds\\cos\\theta$ و $dy = ds\\sin\\theta$. نسمّي الضغوط على الأوجه الثلاثة $p_x$ و $p_y$ و $p_n$. المائع، بالتعريف، مادّةٌ تستمرّ في التشوّه ما دام يؤثّر فيها إجهاد قصّ، مهما كان صغيرًا؛ أمّا الجسم الصلب فيستقرّ على شكل جديد. لذلك لا يستطيع المائع الساكن أن يحمل أيّ قصّ البتّة، وكلّ قوّة على وجه من وجوه الإسفين عمودية عليه."
+ },
+ "086252e48513": {
+  "src": "Divide by $A_1$: this is exactly (5.9) with $p_{\\mathrm{top}} = p_2$. The pressure walk and the Lagrangian agree, term by term. The page uses $p_{\\mathrm{top}} = p_2$ as a live self-test; the error stays below $10^{-10}$ Pa.",
+  "tr": "اقسِم على $A_1$: هذه بالضبط المعادلة (5.9) مع $p_{\\mathrm{top}} = p_2$. يتّفق مسار الضغط واللاغرانجيان حدًّا بحدّ. وتستعمل الصفحة $p_{\\mathrm{top}} = p_2$ اختبارًا ذاتيًّا حيًّا؛ ويبقى الخطأ أدنى من $10^{-10}$ Pa."
+ },
+ "094260e8a560": {
+  "src": "<span class=\"chn\">2</span> Continuity: oil cannot be lost",
+  "tr": "<span class=\"chn\">2</span> الاستمرارية: الزيت لا يمكن أن يضيع"
+ },
+ "0e586e655656": {
+  "src": "derive Pascal's force multiplier from the hydrostatic balance (1.3) and continuity (2.1);",
+  "tr": "تستنتج مُضاعِف القوّة عند باسكال من التوازن الهيدروستاتيكي (1.3) والاستمرارية (2.1)؛"
+ },
+ "118af6ca2f40": {
+  "src": "4.7 An energy function, and why the load never falls back",
+  "tr": "4.7 دالّة للطاقة، ولماذا لا يعود الحمل إلى حاجزه أبدًا"
+ },
+ "124772b35c9f": {
+  "src": "The forces along $s$ are the pressure difference across its two ends, $-\\frac{\\partial p}{\\partial s}\\,ds\\,dA$, and the component of its weight, $-\\rho g\\,dA\\,ds\\,\\frac{\\partial z}{\\partial s}$. Newton's second law, divided by $dA\\,ds$:",
+  "tr": "القوى على طول $s$ هي فرق الضغط عبر طرفيه، $-\\frac{\\partial p}{\\partial s}\\,ds\\,dA$، ومركّبة وزنه، $-\\rho g\\,dA\\,ds\\,\\frac{\\partial z}{\\partial s}$. قانون نيوتن الثاني، مقسومًا على $dA\\,ds$:"
+ },
+ "1904d8d62274": {
+  "src": "5.1 Newton's law for a fluid particle",
+  "tr": "5.1 قانون نيوتن لجسيم من المائع"
+ },
+ "1972b7a3754b": {
+  "src": "Divide by $A\\,dz$ and let $dz \\to 0$:",
+  "tr": "اقسِم على $A\\,dz$ ودَع $dz \\to 0$:"
+ },
+ "1b58f5131feb": {
+  "src": "Equation (1.3) says that pressure differences in a fluid at rest depend only on height differences. Raise the pressure at one point by $\\Delta p$, wait for the fluid to settle, and the pressure everywhere rises by the same $\\Delta p$, because every difference in (1.3) is fixed by heights alone. That is Pascal's principle, the “machine for multiplying forces” of section 0.1. Put a piston of area $A_1$ on one side and a piston of area $A_2$ on the other, at the same height:",
+  "tr": "تقول المعادلة (1.3) إنّ فروق الضغط في مائع ساكن تعتمد على فروق الارتفاع وحدها. ارفع الضغط عند نقطة بمقدار $\\Delta p$، وانتظر حتى يستقرّ المائع، فيرتفع الضغط في كل مكان بالمقدار نفسه $\\Delta p$، لأنّ كل فرق في (1.3) يتحدّد بالارتفاعات وحدها. هذا هو مبدأ باسكال، و«آلة لمضاعفة القوى» المذكورة في القسم 0.1. ضع مكبسًا مساحته $A_1$ في جانب، ومكبسًا مساحته $A_2$ في الجانب الآخر، على الارتفاع نفسه:"
+ },
+ "1fc000982d56": {
+  "src": "<b>Along the pipe.</b> The speed is the same everywhere, $\\partial v_p/\\partial t = (A_1/A_p)\\,a$, and the pipe is level: $$p_{\\mathrm{out}} = p_{\\mathrm{in}} - \\rho\\,\\frac{A_1}{A_p}\\,a\\,L_p. \\tag{5.5}$$",
+  "tr": "<b>على طول الأنبوب.</b> السرعة واحدة في كل مكان، $\\partial v_p/\\partial t = (A_1/A_p)\\,a$، والأنبوب أفقي: $$p_{\\mathrm{out}} = p_{\\mathrm{in}} - \\rho\\,\\frac{A_1}{A_p}\\,a\\,L_p. \\tag{5.5}$$"
+ },
+ "21438bddae15": {
+  "src": "say what an ideal model leaves out, and estimate the size of what it leaves out.",
+  "tr": "تقول ما الذي يُغفله النموذج المثالي، وتقدّر حجم ما يُغفله."
+ },
+ "23f374102414": {
+  "src": "Balance the horizontal forces. The vertical face pushes with $p_x\\,dy\\,dz$; the sloping face pushes back with the horizontal part of $p_n\\,ds\\,dz$:",
+  "tr": "وازِن القوى الأفقية. يدفع الوجه الرأسي بمقدار $p_x\\,dy\\,dz$، ويدفع الوجه المائل في الاتجاه المعاكس بالجزء الأفقي من $p_n\\,ds\\,dz$:"
+ },
+ "2609b6e4f17d": {
+  "src": "Replace $F_1$ with the equation of motion (4.5), $F_1 = \\mu a + \\tfrac12\\mu' v^2 + V'$, where",
+  "tr": "استبدل $F_1$ بمعادلة الحركة (4.5)، $F_1 = \\mu a + \\tfrac12\\mu' v^2 + V'$، حيث"
+ },
+ "2c049677ac90": {
+  "src": "Insert into (4.4):",
+  "tr": "عوّض في (4.4):"
+ },
+ "2db1f1c6df73": {
+  "src": "Every term is proportional to $\\dot{x}^2$, so we can factor it out. Use $A_2 r^2 = A_1 r$ in the last term and $A_p (A_1/A_p)^2 = A_1 (A_1/A_p)$ in the pipe term:",
+  "tr": "كل حدٍّ يتناسب مع $\\dot{x}^2$، فنستطيع إخراجه عاملًا مشتركًا. استعمِل $A_2 r^2 = A_1 r$ في الحدّ الأخير، و$A_p (A_1/A_p)^2 = A_1 (A_1/A_p)$ في حدّ الأنبوب:"
+ },
+ "2e8c74452692": {
+  "src": "At rest both oil columns stand $H_0 = 0.40\\ \\mathrm{m}$ high. The input piston can travel 0.30 m before it reaches its stop.",
+  "tr": "في حالة السكون يقف عمودا الزيت كلاهما على ارتفاع $H_0 = 0.40\\ \\mathrm{m}$. ويستطيع مكبس الدخل أن يقطع 0.30 m قبل أن يبلغ حاجزه."
+ },
+ "37adaaaaffe1": {
+  "src": "because $A_2 r = A_1$ makes the linear terms cancel. Therefore",
+  "tr": "لأنّ $A_2 r = A_1$ يجعل الحدود الخطّية تتلاشى. ومن ثَمّ"
+ },
+ "38df0f234412": {
+  "src": "At rest, $x = 0$ and $\\dot{x} = 0$, (4.5) gives $\\mu\\ddot{x} = F_1 - V'(0)$. The load leaves its stop only if this is positive:",
+  "tr": "في حالة السكون، $x = 0$ و $\\dot{x} = 0$، تعطي (4.5) $\\mu\\ddot{x} = F_1 - V'(0)$. ولا يفارق الحمل حاجزه إلا إذا كان هذا موجبًا:"
+ },
+ "40e0f61cabe5": {
+  "src": "<span class=\"lbl\">answers with</span>the motion $x(t)$, and from it every pressure (chapter 5)",
+  "tr": "<span class=\"lbl\">يُعطي</span>الحركةَ $x(t)$، ومنها كلَّ ضغط (الفصل 5)"
+ },
+ "43bd422e5550": {
+  "src": "This is Euler's equation along a streamline. Note $v\\,\\partial v/\\partial s = \\partial(\\tfrac12 v^2)/\\partial s$. Integrate from point 1 to point 2:",
+  "tr": "هذه معادلة أويلر على طول خطّ الجريان. لاحِظ أنّ $v\\,\\partial v/\\partial s = \\partial(\\tfrac12 v^2)/\\partial s$. كامِل من النقطة 1 إلى النقطة 2:"
+ },
+ "47e00d0f9ffa": {
+  "src": "Why Lagrange and not Newton? Newton would need every force between every part: the pressure of the oil on each piston, of each column on the pipe, of the walls on the oil. These are constraint forces. In a virtual displacement $\\delta x$ that respects the constraints, with the oil moving as continuity demands, they do no net work, because the oil of Part I is incompressible and frictionless (chapters 2 and 6), so it can neither store energy nor turn it into heat: the oil passes force from one piston to the other without storing or losing any energy. So they drop out, and only the forces that do work remain: gravity, through $V$, and the applied push. That is d’Alembert’s principle, and Lagrange’s equations are its consequence. The push $F_1(t)$ is not derived from a potential, so it enters as a generalized force: in a virtual displacement $\\delta x$ it does work $F_1\\,\\delta x$. Lagrange's equation with $L = T - V$ reads",
+  "tr": "لماذا لاغرانج لا نيوتن؟ نيوتن يحتاج إلى كل قوّة بين كل جزأين: ضغط الزيت على كل مكبس، وضغط كل عمود على الأنبوب، وضغط الجدران على الزيت. وهذه قوى القيد. في إزاحة افتراضية $\\delta x$ تحترم القيود، ويتحرّك فيها الزيت وفق الاستمرارية، لا تنجز هذه القوى شغلًا صافيًا، لأنّ الزيت في الجزء الأول غير قابل للانضغاط وخالٍ من الاحتكاك (الفصلان 2 و 6)، فلا يستطيع أن يخزّن طاقة ولا أن يحوّلها إلى حرارة: فالزيت ينقل القوّة من مكبس إلى الآخر دون أن يخزّن طاقة أو يفقدها. فتسقط هذه القوى من الحساب، ولا يبقى إلا القوى التي تنجز شغلًا: قوّة الجاذبية عبر $V$، والدفعة المطبَّقة. وهذا هو مبدأ دالمبير، ومعادلات لاغرانج نتيجةٌ له. والقوّة $F_1(t)$ لا تُشتقّ من كمون، فتدخل بوصفها قوّة معمَّمة: في إزاحة افتراضية $\\delta x$ تنجز شغلًا قدره $F_1\\,\\delta x$. ومعادلة لاغرانج مع $L = T - V$ هي"
+ },
+ "48b66c5331ad": {
+  "src": "For a Lagrangian with a time-dependent force, define $\\mathcal{E} = T + V - F_1(t)\\,x$. Differentiate along a solution and use (4.5):",
+  "tr": "بالنسبة إلى اللاغرانجيان ذي القوّة المعتمدة على الزمن، نعرّف $\\mathcal{E} = T + V - F_1(t)\\,x$. فاشتقّ على طول حلّ، واستعمِل (4.5):"
+ },
+ "4968f219b1b1": {
+  "src": "1.3 Pascal's principle and the force multiplier",
+  "tr": "1.3 مبدأ باسكال ومُضاعِف القوّة"
+ },
+ "4e3d7759b21f": {
+  "src": "Follow a small cylinder of fluid of cross-section $dA$ and length $ds$ along a streamline (a line that is everywhere tangent to the flow velocity), with $s$ measured along the flow. Its mass is $\\rho\\,dA\\,ds$. Its acceleration is the rate of change of its speed $v(s,t)$ as it moves, which has two parts: the speed changes in time at a fixed place, and the particle moves to a place where the speed is different:",
+  "tr": "تتبّع أسطوانةً صغيرة من المائع مساحة مقطعها $dA$ وطولها $ds$ على طول خطّ جريان (خطٌّ يماسّ متّجهَ السرعة في كل نقطة)، مع قياس $s$ على طول الجريان. كتلتها $\\rho\\,dA\\,ds$. وتسارعها هو معدّل تغيّر سرعتها $v(s,t)$ أثناء حركتها، وله جزءان: تتغيّر السرعة مع الزمن عند مكان ثابت، والجسيم ينتقل إلى مكان تختلف فيه السرعة:"
+ },
+ "514a6c390672": {
+  "src": "<b>Into the pipe.</b> Over a very short contraction the speed rises from $v$ to $v_p$; the time-derivative and height terms vanish as the length goes to zero: $$p_{\\mathrm{in}} = p_{b1} + \\tfrac12\\rho\\left(v^2 - v_p^2\\right). \\tag{5.4}$$",
+  "tr": "<b>داخل الأنبوب.</b> عبر تضيّقٍ قصيرٍ جدًّا ترتفع السرعة من $v$ إلى $v_p$؛ وتتلاشى حدود المشتقّة الزمنية والارتفاع حين يؤول الطول إلى الصفر: $$p_{\\mathrm{in}} = p_{b1} + \\tfrac12\\rho\\left(v^2 - v_p^2\\right). \\tag{5.4}$$"
+ },
+ "527e6f475503": {
+  "src": "4.2 Kinetic energy, part by part",
+  "tr": "4.2 طاقة الحركة، جزءًا جزءًا"
+ },
+ "5468b6510fce": {
+  "src": "Force is multiplied by 9 and distance divided by 9. An ideal hydraulic press is a lever made of oil: it trades distance for force and never creates energy. In the moving press the input work goes three places: kinetic energy, potential energy, and the losses at the stops. The page checks that bookkeeping at every frame.",
+  "tr": "تُضاعَف القوّة بعامل 9 ويُقسَم المسار على 9. المكبس الهيدروليكي المثالي رافعةٌ من زيت: يبادل المسافة بالقوّة، ولا يخلق طاقة أبدًا. وفي المكبس المتحرّك يذهب الشغل الداخل إلى ثلاثة مواضع: طاقة الحركة، وطاقة الوضع، والخسائر عند الحواجز. وتتحقّق الصفحة من هذا الحساب في كل إطار."
+ },
+ "54971e4c4abd": {
+  "src": "This is the unsteady Bernoulli equation. The first term is the push needed to accelerate the fluid between the two points, the second the push needed to speed it up, the third the weight.",
+  "tr": "هذه معادلة برنولي غير المستقرّة. الحدّ الأول هو الضغط اللازم لتسريع المائع بين النقطتين، والثاني هو الضغط اللازم لزيادة سرعته، والثالث هو الوزن."
+ },
+ "554e7b7549ad": {
+  "src": "The pistons give two more equations. Newton for the input piston, pushed down by $F_1$ and its weight, pushed up by $p_1 A_1$: $m_1 a = F_1 + m_1 g - p_1 A_1$. Newton for the output piston and load, rising with acceleration $ra$: $(m_2+M)\\,r a = p_2 A_2 - (m_2+M)g$. So",
+  "tr": "تعطي المكابس معادلتين إضافيتين. قانون نيوتن لمكبس الدخل، يدفعه إلى أسفل $F_1$ ووزنه، ويدفعه إلى أعلى $p_1 A_1$: $m_1 a = F_1 + m_1 g - p_1 A_1$. وقانون نيوتن لمكبس الخرج والحمل، الصاعد بتسارع $ra$: $(m_2+M)\\,r a = p_2 A_2 - (m_2+M)g$. إذن"
+ },
+ "566019b16792": {
+  "src": "Shrink the wedge to a point: $dy \\to 0$, so $p_y = p_n$. The weight is a volume force (third order in size) and loses to the surface forces (second order). Since the angle $\\theta$ was arbitrary, the pressure at a point is the same in every direction: it is a scalar.",
+  "tr": "قلّص الإسفين إلى نقطة: $dy \\to 0$، فيكون $p_y = p_n$. الوزن قوّة حجمية (من الرتبة الثالثة في الحجم)، وهو مهمل أمام القوى السطحية (من الرتبة الثانية). ولأنّ الزاوية $\\theta$ كانت اختيارية، يكون الضغط عند نقطة واحدة هو نفسه في كل اتجاه: إنّه كمية قياسية."
+ },
+ "573c956b34fb": {
+  "src": "<b>Down the left column</b>, from the piston face to the bottom. Measure $s$ downward along the column. The oil moves down at speed $v$ and accelerates at $a$ everywhere in it, so $\\int\\partial v/\\partial t\\,ds = a h_1$; the speed is the same at both ends, so the Bernoulli term vanishes; and going down, $z_2 - z_1 = -h_1$. Then (5.2) gives $p_{b1} - p_1 = -\\rho a h_1 + \\rho g h_1$: $$p_{b1} = p_1 + \\rho\\,(g - a)\\,h_1. \\tag{5.3}$$",
+  "tr": "<b>أسفل العمود الأيسر</b>، من وجه المكبس إلى القاع. نقيس $s$ نحو الأسفل على طول العمود. ينزل الزيت بالسرعة $v$ ويتسارع بتسارع $a$ في كل نقطة منه، فيكون $\\int\\partial v/\\partial t\\,ds = a h_1$؛ والسرعة واحدة عند الطرفين، فيسقط حدّ برنولي؛ وعند النزول يكون $z_2 - z_1 = -h_1$. ثم تعطي (5.2): $p_{b1} - p_1 = -\\rho a h_1 + \\rho g h_1$: $$p_{b1} = p_1 + \\rho\\,(g - a)\\,h_1. \\tag{5.3}$$"
+ },
+ "57a8fa78210c": {
+  "src": "5.3 The field closes on both pistons",
+  "tr": "5.3 يكتمل الحقل عند المكبسين"
+ },
+ "5bb14c4da764": {
+  "src": "<span class=\"chn\">4</span> The moving press: one coordinate, one Lagrangian",
+  "tr": "<span class=\"chn\">4</span> المكبس المتحرّك: إحداثي واحد، ولاغرانجيان واحد"
+ },
+ "5bb6b0599a15": {
+  "src": "<span class=\"chn\">6</span> What “ideal” leaves out",
+  "tr": "<span class=\"chn\">6</span> ما الذي يُغفله «المثالي»"
+ },
+ "5ca0ae9c3e01": {
+  "src": "4.3 Potential energy",
+  "tr": "4.3 طاقة الوضع"
+ },
+ "5ca542829950": {
+  "src": "Add up $\\tfrac12 m v^2$ for every moving mass, using the speeds of (2.2). Each oil column of height $h$ and area $A$ has mass $\\rho A h$:",
+  "tr": "اجمع $\\tfrac12 m v^2$ لكل كتلة متحرّكة، مستعملًا السرعات الواردة في (2.2). ولكل عمود زيت ارتفاعه $h$ ومساحته $A$ كتلةٌ قدرها $\\rho A h$:"
+ },
+ "5fe9320468e1": {
+  "src": "Cut a horizontal slab of area $A$ and thickness $dz$ out of the fluid, as in Figure 1. It does not move, so the three vertical forces cancel:",
+  "tr": "اقطع من المائع شريحةً أفقية مساحتها $A$ وسمكها $dz$، كما في الشكل 1. وهي لا تتحرّك، فتتعادل القوى الرأسية الثلاث:"
+ },
+ "6065b3ff2459": {
+  "src": "Two vertical cylinders stand on a horizontal pipe, all full of oil of density $\\rho = 870\\ \\mathrm{kg/m^3}$, with $g = 9.81\\ \\mathrm{m/s^2}$. The numbers are the defaults of the first animation.",
+  "tr": "أسطوانتان رأسيّتان تقفان على أنبوب أفقي، وكلّ منهما مملوءة بزيت كثافته $\\rho = 870\\ \\mathrm{kg/m^3}$، مع $g = 9.81\\ \\mathrm{m/s^2}$. والأرقام هي القيم الافتراضية للرسم المتحرّك الأول."
+ },
+ "6437ae899b71": {
+  "src": "Put your thumb over the nozzle of a syringe full of water and push: the plunger hardly moves. Water, and nearly so oil, refuses to change volume. Whatever volume you push in somewhere must come out somewhere else.",
+  "tr": "ضع إبهامك على فوهة حقنة مملوءة بالماء وادفع: المكبس بالكاد يتحرّك. الماء، وكذلك الزيت تقريبًا، يرفض أن يغيّر حجمه. فأيّ حجم تدفعه في مكان ما يجب أن يخرج من مكان آخر."
+ },
+ "64be215ff356": {
+  "src": "Push slowly, so that the oil is always nearly at rest and the pressure is the same everywhere. The work done by the input piston on the oil, as it moves by $dx_1$ against pressure $p$, is $dW_1 = F_1\\,dx_1 = p\\,A_1\\,dx_1 = p\\,dV$. The work the oil does on the output piston is $dW_2 = p\\,A_2\\,dx_2 = p\\,dV$, with the same $dV$ by (2.1). So",
+  "tr": "ادفع ببطء، حتى يبقى الزيت دائمًا قريبًا من السكون ويكون الضغط واحدًا في كل مكان. الشغل الذي يبذله مكبس الدخل في الزيت وهو يتحرّك بمقدار $dx_1$ ضد الضغط $p$ هو $dW_1 = F_1\\,dx_1 = p\\,A_1\\,dx_1 = p\\,dV$. والشغل الذي يبذله الزيت في مكبس الخرج هو $dW_2 = p\\,A_2\\,dx_2 = p\\,dV$، بالحجم $dV$ نفسه وفق (2.1). إذن"
+ },
+ "6abfae0c7c61": {
+  "src": "Add (5.3) to (5.7). The Bernoulli terms combine to $\\tfrac12\\rho(v^2 - r^2v^2)$ and the heights to $-\\rho g (h_2 - h_1) = -\\rho g(1+r)x$:",
+  "tr": "أضِف (5.3) إلى (5.7). تتجمّع حدود برنولي لتعطي $\\tfrac12\\rho(v^2 - r^2v^2)$، وتتجمّع الارتفاعات لتعطي $-\\rho g (h_2 - h_1) = -\\rho g(1+r)x$:"
+ },
+ "6ad195b530d1": {
+  "src": "<div class=\"ctag\">In our press</div>With a 5 mm pipe, $A_1/A_p = 64$ and the oil in the pipe reaches 23.4 m/s just before the stop. The Bernoulli drop $\\tfrac12\\rho v_p^2 \\approx 240\\ \\mathrm{kPa}$ is larger than the 150 kPa in the oil, and the gauge pressure at the pipe outlet falls to −96 kPa: the oil there is under suction, which is why the page warns about cavitation. Cavitation is what happens when the absolute pressure falls to the vapour pressure of the oil: dissolved air and vapour come out as bubbles, which collapse violently where the pressure recovers and pit the metal.",
+  "tr": "<div class=\"ctag\">في مكبسنا</div>مع أنبوب قطره 5 mm يكون $A_1/A_p = 64$، ويصل الزيت في الأنبوب إلى 23.4 m/s قبل الحاجز مباشرة. وانخفاض برنولي $\\tfrac12\\rho v_p^2 \\approx 240\\ \\mathrm{kPa}$ أكبر من 150 kPa الموجودة في الزيت، وينخفض ضغط المقياس عند مخرج الأنبوب إلى −96 kPa: فالزيت هناك واقع تحت شفط، ولهذا تحذّر الصفحة من التكهّف. والتكهّف هو ما يحدث حين ينخفض الضغط المطلق إلى ضغط بخار الزيت: فالهواء المذاب والبخار يخرجان على شكل فقاعات، تنهار بعنف حيث يستعيد الضغط قيمته، فتنقر المعدن."
+ },
+ "6cc2649b3ccc": {
+  "src": "<div class=\"ctag\">In our press</div>$r = 1/9$: the full 30 cm stroke lifts the load by 3.33 cm. The 1 cm pipe has $A_1/A_p = 16$, so the oil in the pipe runs 16 times faster than the piston. That is why the tracer dots race through it.",
+  "tr": "<div class=\"ctag\">في مكبسنا</div>$r = 1/9$: الشوط الكامل البالغ 30 cm يرفع الحمل بمقدار 3.33 cm. أمّا الأنبوب الذي قطره 1 cm فله $A_1/A_p = 16$، فيجري الزيت فيه أسرع من المكبس بـ 16 مرة. ولهذا تنطلق نقاط التتبّع عبره بسرعة."
+ },
+ "6dacf45da1d1": {
+  "src": "The term $\\tfrac12\\mu'\\dot{x}^2$ appears because the effective mass changes as the press moves. As $x$ grows, oil leaves the left column, where it moved at speed $v$, and joins the right column, where it moves at only $rv$. With $r < 1$ the moving mass shrinks: $\\mu' < 0$. Each bit of oil that changes columns gives up momentum, and the term accounts for that exchange. A chain sliding off the edge of a table obeys an equation of the same form.",
+  "tr": "يظهر الحدّ $\\tfrac12\\mu'\\dot{x}^2$ لأنّ الكتلة الفعّالة تتغيّر مع حركة المكبس. فعندما يكبر $x$ يغادر الزيتُ العمودَ الأيسر، حيث كان يجري بالسرعة $v$، ويدخل العمودَ الأيمن، حيث يجري بالسرعة $rv$ فقط. ومع $r < 1$ تتقلّص الكتلة المتحرّكة: $\\mu' < 0$. وكلّ قطعة من الزيت تغيّر عمودها تفقد زخمًا، والحدّ يحسب هذا التبادل. وسلسلةٌ تنزلق عن حافّة طاولة تخضع لمعادلة من الشكل نفسه."
+ },
+ "6db57a17c45a": {
+  "src": "Output cylinder: bore $d_2 = 12\\ \\mathrm{cm}$, area $A_2 = 113.1\\ \\mathrm{cm^2}$. Its piston has mass $m_2 = 10\\ \\mathrm{kg}$ and carries the load $M = 150\\ \\mathrm{kg}$.",
+  "tr": "أسطوانة الخرج: قطر التجويف $d_2 = 12\\ \\mathrm{cm}$، والمساحة $A_2 = 113.1\\ \\mathrm{cm^2}$. ولمكبسها كتلة $m_2 = 10\\ \\mathrm{kg}$، ويحمل الحمولةَ $M = 150\\ \\mathrm{kg}$."
+ },
+ "76d867e5f1b9": {
+  "src": "1.1 Pressure has no direction",
+  "tr": "1.1 الضغط ليس له اتجاه"
+ },
+ "76d90a7235cd": {
+  "src": "Balance the vertical forces. Now the weight of the wedge, $\\tfrac12\\rho g\\,dx\\,dy\\,dz$, also appears:",
+  "tr": "وازِن القوى الرأسية. يظهر الآن أيضًا وزن الإسفين، $\\tfrac12\\rho g\\,dx\\,dy\\,dz$:"
+ },
+ "7d895d1a0aa9": {
+  "src": "4.5 What the strange term means",
+  "tr": "4.5 ماذا يعني الحدّ الغريب"
+ },
+ "81e128e49913": {
+  "src": "<b>Up the right column</b>, speed $rv$, acceleration $ra$, rising by $h_2$: $$p_{\\mathrm{top}} = p_{b2} - \\rho\\,(g + r a)\\,h_2. \\tag{5.7}$$",
+  "tr": "<b>صعودًا في العمود الأيمن</b>، بالسرعة $rv$ والتسارع $ra$، مرتفعًا بمقدار $h_2$: $$p_{\\mathrm{top}} = p_{b2} - \\rho\\,(g + r a)\\,h_2. \\tag{5.7}$$"
+ },
+ "83884a3fb922": {
+  "src": "The ramp only increases ($\\dot{F}_1 \\ge 0$) and $x \\ge 0$, so $\\mathcal{E}$ can only decrease. It is zero while the load rests on its stop, so it is zero at lift-off and negative afterwards. At $x = 0$ we have $\\mathcal{E} = T \\ge 0$, which is only possible with $T = 0$. The load can come back to its stop, at best, with zero speed: it never falls back onto it. If the force is too small to reach the stroke stop, the load swings forever between two turning points. That is why the page needs a time limit.",
+  "tr": "لا ينقص المنحدر أبدًا ($\\dot{F}_1 \\ge 0$)، و $x \\ge 0$، لذلك لا يمكن لـ $\\mathcal{E}$ إلا أن يتناقص. وهي صفر ما دام الحمل مستقرًّا على حاجزه، فتكون صفرًا عند لحظة انفصاله، وتصبح سالبة بعدها. وعند $x = 0$ يكون $\\mathcal{E} = T \\ge 0$، وهذا لا يكون ممكنًا إلا مع $T = 0$. يستطيع الحمل أن يعود إلى حاجزه، في أحسن الأحوال، بسرعة صفرية: لا يسقط عليه أبدًا. وإذا كانت القوّة أصغر من أن تبلغ حاجز نهاية الشوط، فإن الحمل يتأرجح إلى ما لا نهاية بين نقطتي انعكاس. ولهذا تحتاج الصفحة إلى حدٍّ زمني."
+ },
+ "86896ac802a6": {
+  "src": "After Part I you can",
+  "tr": "بعد الجزء الأول تستطيع أن"
+ },
+ "8a38fd53c4fb": {
+  "src": "Treat the oil as incompressible: its density $\\rho$ is a constant. Mass conservation then becomes volume conservation. When the input piston moves down by $dx_1$ it sweeps the volume $A_1\\,dx_1$; the only place for it is under the output piston, which must rise by $dx_2$:",
+  "tr": "عامِل الزيت على أنه غير قابل للانضغاط: كثافته $\\rho$ ثابتة. عندئذٍ يصبح حفظ الكتلة حفظًا للحجم. عندما ينزل مكبس الدخل بمقدار $dx_1$ فإنه يمسح الحجم $A_1\\,dx_1$، ولا مكان لهذا الحجم إلا تحت مكبس الخرج، الذي يجب أن يرتفع بمقدار $dx_2$:"
+ },
+ "8b0d053d0b30": {
+  "src": "5.2 Walking through the press",
+  "tr": "5.2 جولة عبر المكبس"
+ },
+ "8c22705251a2": {
+  "src": "The stops in the first animation are perfectly rigid and perfectly inelastic: the speed drops to zero in zero time and the kinetic energy $\\tfrac12\\mu v^2$ disappears. That needs an infinite force. With real oil of bulk modulus $\\beta$ (the pressure it takes to squeeze a volume by a given fraction, chapter 7) the stop is a stiff spring; Part II builds exactly that. A rough estimate of the pressure spike: the moving mass $\\mu$ hitting an oil spring of stiffness $k_o = \\beta A_1^2/V_{\\mathrm{oil}}$ carries $\\tfrac12\\mu v^2 = \\tfrac12 k_o \\delta^2$ into it, so the peak force is $v\\sqrt{k_o\\mu}$ and",
+  "tr": "الحواجز في الرسم المتحرّك الأول صلبةٌ تمامًا وغيرُ مرنةٍ تمامًا: تهبط السرعة إلى الصفر في زمن صفري، وتزول طاقة الحركة $\\tfrac12\\mu v^2$. وهذا يتطلّب قوّةً لا نهائية. ومع زيت حقيقي معامل انضغاطه الحجمي $\\beta$ (الضغط اللازم لضغط حجم بنسبة معيّنة، الفصل 7) يصبح الحاجز نابضًا قاسيًا؛ والجزء الثاني يبني هذا بالضبط. وتقدير تقريبي لذروة الضغط: الكتلة المتحرّكة $\\mu$ حين تصطدم بنابض زيتي صلابته $k_o = \\beta A_1^2/V_{\\mathrm{oil}}$ تنقل إليه $\\tfrac12\\mu v^2 = \\tfrac12 k_o \\delta^2$، فتكون القوّة القصوى $v\\sqrt{k_o\\mu}$، و"
+ },
+ "8c4f6d220b27": {
+  "src": "<span class=\"chn\">5</span> The pressure field inside a moving fluid",
+  "tr": "<span class=\"chn\">5</span> حقل الضغط داخل مائع متحرّك"
+ },
+ "8c7bf3414ce3": {
+  "src": "Work out each piece. From (4.2), $\\partial T/\\partial\\dot{x} = \\mu\\dot{x}$. Its time derivative needs the chain rule, because $\\mu$ depends on $x$ and $x$ on $t$:",
+  "tr": "احسب كل جزء على حدة. من (4.2) نجد $\\partial T/\\partial\\dot{x} = \\mu\\dot{x}$. ومشتقّته الزمنية تحتاج إلى قاعدة السلسلة، لأنّ $\\mu$ يعتمد على $x$، و $x$ يعتمد على $t$:"
+ },
+ "8d6c4124d190": {
+  "src": "Measure heights from the pipe. The input piston face sits at $h_1$ and the output piston face at $h_2$. An oil column of height $h$ has its centre of mass at $h/2$, so its potential energy is $\\rho A h\\,g\\,h/2$. The oil in the horizontal pipe does not change height. Collect everything and subtract the value at $x = 0$:",
+  "tr": "قِس الارتفاعات من الأنبوب. يقع وجه مكبس الدخل على الارتفاع $h_1$، ووجه مكبس الخرج على $h_2$. ولعمود الزيت الذي ارتفاعه $h$ مركزُ كتلة عند $h/2$، فطاقة وضعه $\\rho A h\\,g\\,h/2$. والزيت في الأنبوب الأفقي لا يتغيّر ارتفاعه. اجمع كل شيء، واطرح القيمة عند $x = 0$:"
+ },
+ "933700b2fdaf": {
+  "src": "Figure 1. Forces on a horizontal slab of fluid at rest.",
+  "tr": "الشكل 1. القوى المؤثّرة في شريحة أفقية من مائع ساكن."
+ },
+ "93ed1c4a40dd": {
+  "src": "<b>Out of the pipe</b>, slowing from $v_p$ to $rv$ without loss: $$p_{b2} = p_{\\mathrm{out}} + \\tfrac12\\rho\\left(v_p^2 - r^2 v^2\\right). \\tag{5.6}$$",
+  "tr": "<b>خارج الأنبوب</b>، إذ تتباطأ السرعة من $v_p$ إلى $rv$ دون خسارة: $$p_{b2} = p_{\\mathrm{out}} + \\tfrac12\\rho\\left(v_p^2 - r^2 v^2\\right). \\tag{5.6}$$"
+ },
+ "94621d471575": {
+  "src": "1.2 Hydrostatics: pressure grows with depth",
+  "tr": "1.2 الهيدروستاتيكا: الضغط يتزايد مع العمق"
+ },
+ "9610bae3dbe8": {
+  "src": "Part I",
+  "tr": "الجزء الأول"
+ },
+ "967e9e371a05": {
+  "src": "Input cylinder: bore $d_1 = 4\\ \\mathrm{cm}$, area $A_1 = \\pi d_1^2/4 = 12.57\\ \\mathrm{cm^2}$. Its piston has mass $m_1 = 2\\ \\mathrm{kg}$ and is pushed down by the force $F_1$, which rises to 170 N over $\\tau = 0.3\\ \\mathrm{s}$.",
+  "tr": "أسطوانة الدخل: قطر التجويف $d_1 = 4\\ \\mathrm{cm}$، والمساحة $A_1 = \\pi d_1^2/4 = 12.57\\ \\mathrm{cm^2}$. ولمكبسها كتلة $m_1 = 2\\ \\mathrm{kg}$، ويدفعه إلى أسفل القوّةُ $F_1$ التي تزداد إلى 170 N خلال $\\tau = 0.3\\ \\mathrm{s}$."
+ },
+ "985d5cc2f08b": {
+  "src": "Take all 5.1 L of oil as the spring volume $V_{\\mathrm{oil}}$, $\\beta = 1.5\\ \\mathrm{GPa}$ and the impact speed $v = 0.67\\ \\mathrm{m/s}$: this is about 1.5 MPa, ten times the working pressure, ringing at $\\sqrt{k_o/\\mu}/2\\pi \\approx 25\\ \\mathrm{Hz}$. Two more losses are missing. Where the jet leaves the pipe into the wide column it does not slow down gently: it mixes, and the Borda–Carnot loss of a sudden widening (chapter 8 treats the jet that causes it), $\\tfrac12\\rho(v_p - rv)^2$ per unit volume, the kinetic energy of the speed the jet has to shed, is burnt as heat. And viscosity resists every flow; chapter 11 derives how much.",
+  "tr": "خذ كلّ 5.1 L من الزيت حجمًا للنابض $V_{\\mathrm{oil}}$، و $\\beta = 1.5\\ \\mathrm{GPa}$، وسرعة الاصطدام $v = 0.67\\ \\mathrm{m/s}$: فيكون ذلك نحو 1.5 MPa، أي عشرة أضعاف ضغط التشغيل، ويتذبذب بتردد $\\sqrt{k_o/\\mu}/2\\pi \\approx 25\\ \\mathrm{Hz}$. وتغيب خسارتان أخريان. فحيث يخرج الجريان من الأنبوب إلى العمود العريض لا يتباطأ برفق: بل يختلط، وتذهب خسارة بوردا–كارنو للتوسّع المفاجئ (يعالج الفصل 8 الجريان الذي يسبّبه)، $\\tfrac12\\rho(v_p - rv)^2$ لكل وحدة حجم، أي الطاقة الحركية لفرق السرعة الذي يجب على الجريان أن يتخلّص منه، تتحوّل إلى حرارة. واللزوجة تقاوم كل جريان؛ ويستنتج الفصل 11 مقدارها."
+ },
+ "991781e8b215": {
+  "src": "<span class=\"lbl\">given</span>the push $F_1(t)$ on the input piston",
+  "tr": "<span class=\"lbl\">المعطى</span>القوّةُ الدافعة $F_1(t)$ على مكبس الدخل"
+ },
+ "9d355b29bab0": {
+  "src": "Divide by $dt$ to get the speeds. The same rule fixes the speed everywhere in the oil if we assume <i>plug flow</i>, one speed across each cross-section. With $v = \\dot{x}_1$:",
+  "tr": "اقسِم على $dt$ لتحصل على السرعات. وتحدّد القاعدة نفسها السرعة في كل مكان من الزيت إذا افترضنا <i>الجريان السدادي</i>، أي سرعة واحدة عبر كل مقطع عرضي. ومع $v = \\dot{x}_1$:"
+ },
+ "9f24b804ba2e": {
+  "src": "The ideal press, in symbols",
+  "tr": "المكبس المثالي بالرموز"
+ },
+ "a25b9731c46d": {
+  "src": "<div class=\"ctag\">Check</div>Units: $\\mathrm{kg/m^3}\\cdot\\mathrm{m/s^2} = \\mathrm{N/m^3} = \\mathrm{Pa/m}$, a pressure per metre. Sign: going up ($z$ increasing) the pressure falls, as it should.",
+  "tr": "<div class=\"ctag\">التحقّق</div>الوحدات: $\\mathrm{kg/m^3}\\cdot\\mathrm{m/s^2} = \\mathrm{N/m^3} = \\mathrm{Pa/m}$، أي ضغطٌ لكل متر. الإشارة: عند الصعود ($z$ يتزايد) ينخفض الضغط، كما ينبغي."
+ },
+ "a3e0c0268bfb": {
+  "src": "walk the pressure field through a moving fluid with the unsteady Bernoulli equation (5.2) and check it against Newton for each piston;",
+  "tr": "تتبّع حقل الضغط عبر مائع متحرّك بمعادلة برنولي غير المستقرّة (5.2)، وتتحقّق منه مقابل قانون نيوتن لكل مكبس؛"
+ },
+ "a5d70f0f4f7c": {
+  "src": "Connecting pipe: bore $d_p = 1\\ \\mathrm{cm}$, area $A_p = 0.785\\ \\mathrm{cm^2}$, length $L_p = 0.8\\ \\mathrm{m}$.",
+  "tr": "الأنبوب الواصل: قطر التجويف $d_p = 1\\ \\mathrm{cm}$، والمساحة $A_p = 0.785\\ \\mathrm{cm^2}$، والطول $L_p = 0.8\\ \\mathrm{m}$."
+ },
+ "a9477f3b01c7": {
+  "src": "The piston weights cancel, and so do the piston masses inside $\\mu$:",
+  "tr": "تتلاشى أوزان المكابس، وكذلك كتل المكابس الداخلة في $\\mu$:"
+ },
+ "a9f39d82a4dc": {
+  "src": "Press your palm flat into a bathtub and then turn it sideways: the push of the water on your palm does not change with its orientation, only with how deep it is.",
+  "tr": "ادفع كفّك المفرودة في حوض استحمام، ثم أدِرها على جانبها: الضغط الذي يمارسه الماء على كفّك لا يتغيّر باتجاه الكفّ، بل بعمقها وحده."
+ },
+ "abc348188a81": {
+  "src": "<span class=\"chn\">3</span> Energy: the hydraulic lever",
+  "tr": "<span class=\"chn\">3</span> الطاقة: الرافعة الهيدروليكية"
+ },
+ "b95de74a2a75": {
+  "src": "<span class=\"chn\">1</span> Pressure, and why it spreads",
+  "tr": "<span class=\"chn\">1</span> الضغط، ولماذا ينتشر"
+ },
+ "bce239de581d": {
+  "src": "<div class=\"ctag\">In our press</div>$d_1 = 4\\ \\mathrm{cm}$ and $d_2 = 12\\ \\mathrm{cm}$ give $A_2/A_1 = 9$. A push of 170 N becomes 1530 N. The load and its piston weigh $160\\times 9.81 = 1569.6\\ \\mathrm{N}$, so the push alone would not lift them; the 19.6 N weight of the input piston tips the balance, see (4.6).",
+  "tr": "<div class=\"ctag\">في مكبسنا</div>يعطي $d_1 = 4\\ \\mathrm{cm}$ و $d_2 = 12\\ \\mathrm{cm}$ النسبة $A_2/A_1 = 9$. ويتحوّل الدفع البالغ 170 N إلى 1530 N. ووزن الحمل ومكبسه $160\\times 9.81 = 1569.6\\ \\mathrm{N}$، فالدفع وحده لا يرفعهما؛ أمّا ما يرجّح الميزان فهو وزن مكبس الدخل البالغ 19.6 N، انظر (4.6)."
+ },
+ "bd0635ed0839": {
+  "src": "<div class=\"ctag\">In our press</div>$$\\begin{aligned} F_{1,\\min} &= \\frac{160\\times 9.81}{9} - 2\\times 9.81\\\\ &= 174.40 - 19.62 = 154.78\\ \\mathrm{N}. \\end{aligned}$$",
+  "tr": "<div class=\"ctag\">في مكبسنا</div>$$\\begin{aligned} F_{1,\\min} &= \\frac{160\\times 9.81}{9} - 2\\times 9.81\\\\ &= 174.40 - 19.62 = 154.78\\ \\mathrm{N}. \\end{aligned}$$"
+ },
+ "be189b8aa0bc": {
+  "src": "write the kinetic and potential energy of a constrained fluid system and get its equation of motion from Lagrange (4.5);",
+  "tr": "تكتب الطاقة الحركية والطاقة الوضعية لنظام مائعٍ مقيَّد، وتستخرج معادلة حركته من لاغرانج (4.5)؛"
+ },
+ "c0044b1b2911": {
+  "src": "This is the equation the first animation integrates, with fourth-order Runge–Kutta and a step of $10^{-4}$ s (chapter 20 explains the method).",
+  "tr": "هذه هي المعادلة التي يكاملها الرسم المتحرّك الأول، بطريقة رونغه–كوتا من المرتبة الرابعة وخطوةٍ زمنية قدرها $10^{-4}$ s (يشرح الفصل 20 الطريقة)."
+ },
+ "c1bf2d98c9e2": {
+  "src": "Expand with $h_1 = H_0 - x$ and $h_2 = H_0 + r x$. The pistons give $-m_1 g x + (m_2+M) g r x$. The columns give",
+  "tr": "انشُر بالتعويض عن $h_1 = H_0 - x$ و $h_2 = H_0 + r x$. تعطي المكابس $-m_1 g x + (m_2+M) g r x$. وتعطي الأعمدة"
+ },
+ "c7790d082f09": {
+  "src": "4.6 When does the load start to move?",
+  "tr": "4.6 متى يبدأ الحمل بالتحرّك؟"
+ },
+ "c95dfc5e3fdd": {
+  "src": "Continuity ties every moving part to the input piston. Choose $x$, the downward displacement of the input piston, as the single generalized coordinate. Everything else follows from (2.1) and (2.2): the output piston rises by $r x$; the left column height is $h_1 = H_0 - x$; the right column height is $h_2 = H_0 + r x$.",
+  "tr": "تربط الاستمرارية كلَّ جزء متحرّك بمكبس الدخل. اختَر $x$، وهو الإزاحة الهابطة لمكبس الدخل، إحداثيًّا معمَّمًا وحيدًا. وكلُّ ما عداه يتبع من (2.1) و (2.2): يرتفع مكبس الخرج بمقدار $r x$؛ وارتفاع العمود الأيسر $h_1 = H_0 - x$؛ وارتفاع العمود الأيمن $h_2 = H_0 + r x$."
+ },
+ "c99eb4841801": {
+  "src": "$\\mu$ is the <i>effective mass</i>: the mass you would feel in your hand if you pushed the input piston.",
+  "tr": "$\\mu$ هي <i>الكتلة الفعّالة</i>: الكتلة التي تشعر بها في يدك لو دفعتَ مكبس الدخل."
+ },
+ "cbcded2253f4": {
+  "src": "Is this the same as what the pistons demand? Subtract the two equations (5.8), using $p_2 A_1 = p_2 A_2 r$:",
+  "tr": "هل هذا هو نفسه ما تقتضيه المكابس؟ اطرح المعادلتين (5.8)، مستعملًا $p_2 A_1 = p_2 A_2 r$:"
+ },
+ "cec4825287c6": {
+  "src": "4.1 One degree of freedom",
+  "tr": "4.1 درجة حرية واحدة"
+ },
+ "d0e2f1612f6f": {
+  "src": "The last term has a simple picture: a slab of oil of volume $A_1 x$ is taken from the top of the left column, where its centre was at $H_0 - x/2$, and laid on top of the right column, where its centre is at $H_0 + rx/2$. It rises by $(1+r)x/2$. The oil acts as a soft spring of stiffness $k = \\rho g A_1(1+r) = 11.9\\ \\mathrm{N/m}$.",
+  "tr": "للحدّ الأخير صورة بسيطة: شريحة من الزيت حجمها $A_1 x$ تُؤخذ من أعلى العمود الأيسر، حيث كان مركز كتلتها عند $H_0 - x/2$، وتُوضع فوق العمود الأيمن، حيث يصبح مركزها عند $H_0 + rx/2$. فترتفع بمقدار $(1+r)x/2$. ويعمل الزيت كنابض لين صلابته $k = \\rho g A_1(1+r) = 11.9\\ \\mathrm{N/m}$."
+ },
+ "d284a9d2b073": {
+  "src": "The ideal press: Pascal, Bernoulli, Lagrange",
+  "tr": "المكبس المثالي: باسكال، برنولي، لاغرانج"
+ },
+ "d342ea5cbe3d": {
+  "src": "the ideal press<small>one coordinate $x$, mass $\\mu(x)$, potential $V(x)$</small>",
+  "tr": "المكبس المثالي<small>إحداثي واحد $x$، والكتلة $\\mu(x)$، والكمون $V(x)$</small>"
+ },
+ "d42125fd8364": {
+  "src": "<div class=\"ctag\">In our press</div>For oil of $\\rho = 870\\ \\mathrm{kg/m^3}$, $\\rho g = 8.53\\ \\mathrm{kPa}$ per metre of depth. The 0.40 m columns of the ideal press add only 3.4 kPa at their base, against about 150 kPa under the input piston: at rest $(F_1 + m_1 g)/A_1$, that is 189.6 N spread over $12.57\\ \\mathrm{cm^2}$, or 151 kPa.",
+  "tr": "<div class=\"ctag\">في مكبسنا</div>بالنسبة لزيت كثافته $\\rho = 870\\ \\mathrm{kg/m^3}$، تكون $\\rho g = 8.53\\ \\mathrm{kPa}$ لكل متر من العمق. أمّا عمودا الزيت في المكبس المثالي، وارتفاع كلٍّ منهما 0.40 m، فلا يضيفان عند قاعدتيهما إلا 3.4 kPa، في مقابل نحو 150 kPa تحت مكبس الدخل: في حالة السكون $(F_1 + m_1 g)/A_1$، أي 189.6 N موزّعة على $12.57\\ \\mathrm{cm^2}$، أو 151 kPa."
+ },
+ "d68dcdd78084": {
+  "src": "<div class=\"ctag\">In our press</div>The pipe holds only $\\rho A_p L_p = 55\\ \\mathrm{g}$ of oil, but it moves 16 times faster than the piston, and kinetic energy goes with the square of speed. It counts $16^2 = 256$ times: 14.0 kg of the total $\\mu = 18.5\\ \\mathrm{kg}$. Narrow pipes make heavy machines.",
+  "tr": "<div class=\"ctag\">في مكبسنا</div>لا يحتوي الأنبوب إلا على $\\rho A_p L_p = 55\\ \\mathrm{g}$ من الزيت، لكنه يتحرّك بسرعة تفوق سرعة المكبس بـ 16 مرة، وطاقة الحركة تتناسب مع مربّع السرعة. وهو يُحسب بعامل $16^2 = 256$، فيساهم بـ 14.0 kg من الكتلة الكلية $\\mu = 18.5\\ \\mathrm{kg}$. الأنابيب الضيّقة تجعل الآلات ثقيلة."
+ },
+ "eb36efdf159e": {
+  "src": "Part I is Pascal’s machine with nothing left out except what makes it hard: the oil cannot be squeezed, nothing leaks, nothing rubs. Chapters 1 to 3 explain why it multiplies force. Chapter 4 makes it move and finds its single equation of motion. Chapter 5 follows the pressure through the moving oil and shows that it agrees with that equation, term by term. Chapter 6 lists what this ideal picture leaves out, which is the programme of Part II.",
+  "tr": "الجزء الأول هو آلة باسكال، ولا يُحذف منها إلا ما يجعلها صعبة: الزيتُ لا يُضغط، ولا يتسرّب شيء، ولا يحتكّ شيء. تشرح الفصول من 1 إلى 3 لماذا تُضاعِف القوّةَ. ويجعلها الفصل 4 تتحرّك، ويستخرج معادلة حركتها الوحيدة. ويتتبّع الفصل 5 الضغط عبر الزيت المتحرّك، ويبيّن أنه يتّفق مع تلك المعادلة حدًّا بحدّ. ويعدّد الفصل 6 ما تُغفله هذه الصورة المثالية، وذلك هو برنامج الجزء الثاني."
+ },
+ "ef2e0f127270": {
+  "src": "4.4 The equation of motion",
+  "tr": "4.4 معادلة الحركة"
+ },
+ "fe314398957f": {
+  "src": "Apply (5.2) to each stretch of oil, with $v = \\dot{x}$, $a = \\ddot{x}$ and $v_p = (A_1/A_p)\\,v$.",
+  "tr": "طبّق (5.2) على كل جزء من الزيت، مع $v = \\dot{x}$ و $a = \\ddot{x}$ و $v_p = (A_1/A_p)\\,v$."
+ }
+}

@@ -187,6 +187,10 @@
   "src": "Golovin test: numerical spectra against the exact solution.",
   "tr": "Golovin-Test: numerische Spektren gegenüber der exakten Lösung."
  },
+ "4fbd312c6706": {
+  "src": "An interactive study · English, German and Arabic · 2026",
+  "tr": "Eine interaktive Studie · Englisch, Deutsch und Arabisch · 2026"
+ },
  "508340303282": {
   "src": "<b>Chaos does not help.</b> 2 of 54 scanned double pendula are chaotic; at matched forcing the regular orbit harvests about 0.379 W, the chaotic one about 0.24–0.25 W. The catch is force, not power: a fast rotor’s pivot sits in 18–215 g, beyond a ±8 g accelerometer.",
   "tr": "<b>Chaos hilft nicht.</b> 2 von 54 untersuchten Doppelpendeln sind chaotisch; bei gleicher Anregung erntet die reguläre Bahn etwa 0.379 W, die chaotische etwa 0.24–0.25 W. Der Haken ist die Kraft, nicht die Leistung: Bei einem schnellen Rotor liegt der Drehpunkt bei 18–215 g, jenseits eines Beschleunigungssensors für ±8 g."
@@ -626,6 +630,10 @@
  "f7e315e89890": {
   "src": "<b>Approach.</b> From 0.1 s the position law moves the ram up along a smooth path, the spool opening to 94 % on the way; at 1.1 s it slows to a 10 mm/s creep for the last 2 mm.",
   "tr": "<b>Anfahren.</b> Ab 0.1 s bewegt das Lagegesetz den Stößel auf einer glatten Bahn nach oben, wobei sich der Ventilschieber unterwegs auf 94 % öffnet; bei 1.1 s bremst es den Stößel für die letzten 2 mm auf ein Schleichtempo von 10 mm/s ab."
+ },
+ "f81819b58fe6": {
+  "src": "Research projects by Numa Koudsie, each with its derivations, solver and results: Droplet Collection, the remodel of a Bachelor thesis on how cloud droplets become rain; Rotor Pendula, a corrected study of whether a pendulum on a turbine blade can power a sensor; the Hydraulic Press Study, a servo-hydraulic press under digital control, built from first principles; and Iron, Cotton and the Head, why an iron ball hurts and a cotton ball of the same mass does not, in English, German and Arabic.",
+  "tr": "Forschungsprojekte von Numa Koudsie, jedes mit Herleitungen, Löser und Ergebnissen: Droplet Collection, die Neumodellierung einer Bachelorarbeit darüber, wie aus Wolkentröpfchen Regen wird; Rotor Pendula, eine korrigierte Studie zur Frage, ob ein Pendel an einem Turbinenblatt einen Sensor versorgen kann; die Studie einer hydraulischen Presse, einer servohydraulischen Presse unter digitaler Regelung, aus ersten Prinzipien aufgebaut; und Eisen, Baumwolle und der Kopf, warum eine Eisenkugel wehtut und eine Baumwollkugel derselben Masse nicht, auf Englisch, Deutsch und Arabisch."
  },
  "f94fb36e0cb1": {
   "src": "An interactive study · English and Arabic · 2026",

@@ -39,7 +39,7 @@
                from the picture, with the agreement stated.
    Save        a zip of NumPy .npy files, dataset.json, the recorded rounds as CSV and a README. */
 (function () {
-    'use strict';
+    'use strict'; var T = window.T || function (s) { return s; };   /* the panel's words on a translated page (sim.js) */
     var Sim = window.Sim, spec = Sim && Sim.data, ds = spec && spec.ds;
     if (!spec || !ds) return;
 
@@ -84,7 +84,7 @@
     function digitsOf(n) { var d = A(n).digits; return d === undefined ? 4 : d; }
     function unitOf(n) { return A(n).units || ''; }
     function kindOf(n) { var k = V(n).dims.length; return k === 0 ? 'scalar' : k === 1 ? 'vector' : 'matrix'; }
-    function typeLabel(n) { return V(n).dims.length ? 'array of ' + ds.dtype(n) : V(n).type; }
+    function typeLabel(n) { return V(n).dims.length ? T('array of ') + ds.dtype(n) : V(n).type; }
     function shapeLabel(n) {
         var v = V(n);
         if (!v.dims.length) return 'scalar';
@@ -119,7 +119,7 @@
     tab.type = 'button';
     tab.className = 'dp-tab'; tab.lang = 'en'; tab.dir = 'ltr';   /* the panel's words are English, also on a page in another language */
     tab.setAttribute('aria-controls', 'data-panel');
-    tab.innerHTML = ICON + '<span>Data</span>';
+    tab.innerHTML = ICON + T('<span>Data</span>');
     /* on a phone the pill floats over the page: it steps aside while the reader scrolls down, and comes back on any scroll up */
     var lastY = window.scrollY;
     window.addEventListener('scroll', function () {
@@ -132,37 +132,37 @@
     var panel = document.createElement('aside');
     panel.className = 'dp';
     panel.id = 'data-panel'; panel.lang = 'en'; panel.dir = 'ltr';
-    panel.setAttribute('aria-label', 'Simulation data');
+    panel.setAttribute('aria-label', T('Simulation data'));
     panel.innerHTML =
-        '<header class="dp__head"><div class="dp__bar"><p class="dp__kicker">' + esc(spec.kicker || ds.title) + '</p>' +
+        '<header class="dp__head"><div class="dp__bar"><p class="dp__kicker">' + esc(T(spec.kicker || ds.title)) + '</p>' +
         '<div class="dp__tools"><span class="dp__state" data-state></span>' +
         '<button type="button" class="dp__icon" data-save title="Save the data: NumPy .npy files in a zip" aria-label="Save the data">' + SAVE + '</button>' +
         '<button type="button" class="dp__icon dp__close" aria-label="Close the data panel">' +
         '<svg width="13" height="13" viewBox="0 0 12 12" aria-hidden="true"><path d="M1.5 1.5l9 9M10.5 1.5l-9 9" stroke="currentColor" stroke-width="1.5"/></svg></button></div></div>' +
-        '<h2 class="dp__title">' + esc(ds.title) + '<span class="dp__dot">.</span></h2>' +
-        '<p class="dp__sub">Every number the simulation computes lands in one store. Nothing is recorded until you ask.</p></header>' +
-        '<section class="dp-rec" aria-live="polite"><div class="dp-rec__txt"><p class="dp-rec__k">Record one round</p><p class="dp-rec__what"></p>' +
+        '<h2 class="dp__title">' + esc(T(ds.title)) + '<span class="dp__dot">.</span></h2>' +
+        T('<p class="dp__sub">Every number the simulation computes lands in one store. Nothing is recorded until you ask.</p></header>') +
+        T('<section class="dp-rec" aria-live="polite"><div class="dp-rec__txt"><p class="dp-rec__k">Record one round</p><p class="dp-rec__what"></p>') +
         '<div class="dp-rec__prog" hidden><div class="dp-rec__bar"><i></i></div><p class="dp-rec__st"></p></div></div>' +
-        '<button type="button" class="dp-rec__go" data-rec><span class="dp-rec__dot" aria-hidden="true"></span><span data-rec-label>Record</span></button></section>' +
+        T('<button type="button" class="dp-rec__go" data-rec><span class="dp-rec__dot" aria-hidden="true"></span><span data-rec-label>Record</span></button></section>') +
         '<div class="dp__tabs" role="tablist" aria-label="Data views">' +
-        '<button type="button" role="tab" data-tab="vars">Variables <span class="dp__count">' + vars.length + '</span></button>' +
-        '<button type="button" role="tab" data-tab="rounds">Rounds <span class="dp__count" data-round-count>0</span></button></div>' +
+        T('<button type="button" role="tab" data-tab="vars">Variables <span class="dp__count">') + vars.length + '</span></button>' +
+        T('<button type="button" role="tab" data-tab="rounds">Rounds <span class="dp__count" data-round-count>0</span></button></div>') +
         '<div class="dp__body">' +
         '<section class="dp__pane" data-pane="vars">' +
         '<div class="dp-instant"><p class="dp-instant__t"></p><div class="dp-instant__tools">' +
-        '<button type="button" class="dp-btn" data-catch>' + REDO + ' Catch now</button>' +
-        '<label class="dp-live"><input type="checkbox" data-live><span>Live</span></label></div></div>' +
-        '<div class="dp-probe"><p class="dp-probe__label">Pinned point</p>' +
-        '<p class="dp-probe__hint">Switch on <b>Read values</b> under the figure, then ' + (TOUCH ? 'tap' : 'click') + ' a point to pin it. Its values appear here and under the figure.</p>' +
+        '<button type="button" class="dp-btn" data-catch>' + REDO + T(' Catch now</button>') +
+        T('<label class="dp-live"><input type="checkbox" data-live><span>Live</span></label></div></div>') +
+        T('<div class="dp-probe"><p class="dp-probe__label">Pinned point</p>') +
+        T('<p class="dp-probe__hint">Switch on <b>Read values</b> under the figure, then ') + (TOUCH ? 'tap' : 'click') + T(' a point to pin it. Its values appear here and under the figure.</p>') +
         '<div class="dp-probe__body" hidden><p class="dp-probe__title"></p><table class="dp-probe__table"><tbody></tbody></table></div></div>' +
         '<div class="dp-vars"></div></section>' +
         '<section class="dp__pane dp-arr" data-pane="array" hidden></section>' +
         '<section class="dp__pane dp-check" data-pane="check" hidden></section>' +
         '<section class="dp__pane dp-rounds" data-pane="rounds" hidden></section></div>' +
-        '<details class="dp-about"><summary>How the numbers and the picture are tied</summary><div class="dp-about__body">' +
-        '<p>The simulation keeps its numbers in one named store, a dataset with dimensions, coordinates, variables and units, the same shape of record as a NetCDF or HDF5 file. It writes a value into the store at the moment it computes it, every frame, overwriting the previous frame: the store holds one instant, so it never grows. The picture is drawn from the same numbers.</p>' +
-        '<p>This panel reads the store only when you ask. Opening it catches one instant; Catch now catches another; Live repaints every frame, which costs the most. Read values pins one point of the figure and shows its values in a strip under the figure, four times a second. Recording a round copies the scalars and the pinned point at every frame of that round, at most 600 samples, then stops.</p>' +
-        '<p>What can still differ, and why: the table rounds to a few decimals, the store keeps the full number. ' + (spec.about || '') + ' Press the check mark beside any value to see the stored number, the formula recomputed from the stored inputs, and the read-back from the picture.</p>' +
+        T('<details class="dp-about"><summary>How the numbers and the picture are tied</summary><div class="dp-about__body">') +
+        T('<p>The simulation keeps its numbers in one named store, a dataset with dimensions, coordinates, variables and units, the same shape of record as a NetCDF or HDF5 file. It writes a value into the store at the moment it computes it, every frame, overwriting the previous frame: the store holds one instant, so it never grows. The picture is drawn from the same numbers.</p>') +
+        T('<p>This panel reads the store only when you ask. Opening it catches one instant; Catch now catches another; Live repaints every frame, which costs the most. Read values pins one point of the figure and shows its values in a strip under the figure, four times a second. Recording a round copies the scalars and the pinned point at every frame of that round, at most 600 samples, then stops.</p>') +
+        T('<p>What can still differ, and why: the table rounds to a few decimals, the store keeps the full number. ') + T(spec.about || '') + T(' Press the check mark beside any value to see the stored number, the formula recomputed from the stored inputs, and the read-back from the picture.</p>') +
         '</div></details>';
 
     document.body.appendChild(tab);
@@ -189,13 +189,13 @@
     spec.groups.forEach(function (g, gi) {
         var items = g.vars.filter(function (n) { return V(n); });
         if (!items.length) return;
-        html += '<section class="dp-sec"><header class="dp-sec__hd"><span class="dp-sec__n">' + (gi + 1 < 10 ? '0' : '') + (gi + 1) + '</span><div><h3>' + esc(g.title) + '</h3>' + (g.note ? '<p>' + g.note + '</p>' : '') + '</div></header>';
+        html += '<section class="dp-sec"><header class="dp-sec__hd"><span class="dp-sec__n">' + (gi + 1 < 10 ? '0' : '') + (gi + 1) + '</span><div><h3>' + esc(T(g.title)) + '</h3>' + (g.note ? '<p>' + T(g.note) + '</p>' : '') + '</div></header>';
         items.forEach(function (n) {
             var opens = kindOf(n) !== 'scalar', a = A(n), t = opens ? 'array' : (V(n).type || 'float').replace(/[^a-z]/gi, '');
-            html += '<div class="dp-item' + (opens ? ' dp-item--arr' : '') + '" data-v="' + esc(n) + '"' + (opens ? ' tabindex="0" role="button" aria-label="Open ' + esc(plain(sym(n))) + ' as a table"' : '') + '>' +
-                '<div class="dp-item__id"><span class="dp-sym">' + sym(n) + '</span>' + (a.long_name ? '<span class="dp-item__name">' + a.long_name + '</span>' : '') + '</div>' +
+            html += '<div class="dp-item' + (opens ? T(' dp-item--arr') : '') + '" data-v="' + esc(n) + '"' + (opens ? T(' tabindex="0" role="button" aria-label="Open ') + esc(plain(sym(n))) + T(' as a table"') : '') + '>' +
+                '<div class="dp-item__id"><span class="dp-sym">' + sym(n) + '</span>' + (a.long_name ? '<span class="dp-item__name">' + T(a.long_name) + '</span>' : '') + '</div>' +
                 '<div class="dp-item__val">' + (opens ? '<canvas class="dp-thumb" aria-hidden="true"></canvas>' : '') + '<span class="dp-item__v"></span></div>' +
-                '<div class="dp-item__act">' + (opens ? '<span class="dp-more" aria-hidden="true">›</span>' : '<button type="button" class="dp-chk" data-check="' + esc(n) + '" aria-label="Check ' + esc(plain(sym(n))) + '" title="Check this value">' + CHK + '</button>') + '</div>' +
+                '<div class="dp-item__act">' + (opens ? '<span class="dp-more" aria-hidden="true">›</span>' : '<button type="button" class="dp-chk" data-check="' + esc(n) + T('" aria-label="Check ') + esc(plain(sym(n))) + '" title="Check this value">' + CHK + '</button>') + '</div>' +
                 '<div class="dp-item__meta"><span class="dp-type dp-type--' + t + '">' + esc(typeLabel(n)) + '</span><span class="dp-item__shape"></span>' +
                 '<code>' + esc(n) + (a.computed_in ? ' · ' + esc(a.computed_in) : '') + '</code></div></div>';
         });
@@ -293,12 +293,12 @@
     var caught = { t: NaN, why: '' };
     function paintInstant() {
         var t = liveOn ? timeNow() : caught.t, txt;
-        if (liveOn) txt = '<b>Live</b> · ' + timeHTML(t) + ' · repainted every frame';
-        else txt = '<b>Values at ' + timeHTML(t) + '</b> · caught ' + esc(caught.why);
+        if (liveOn) txt = T('<b>Live</b> · ') + timeHTML(t) + T(' · repainted every frame');
+        else txt = T('<b>Values at ') + timeHTML(t) + T('</b> · caught ') + esc(caught.why);
         if (txt !== instantEl._h) { instantEl.innerHTML = txt; instantEl._h = txt; }
     }
     function catchNow(why) {
-        caught = { t: timeNow(), why: why || 'now, ' + clock() };
+        caught = { t: timeNow(), why: why || T('now, ') + clock() };
         if (view === 'array' && current) { snap = takeSnap(current); paintArray(); }
         if (view === 'check' && checking) runCheck();
         paint(true);
@@ -384,7 +384,7 @@
         return { min: k ? lo : NaN, max: k ? hi : NaN, mean: k ? sum / k : NaN };
     }
     function checkButton(n, idx) {
-        return '<button type="button" class="dp-chk dp-chk--text" data-check="' + esc(n) + '" data-idx="' + idx + '">' + CHK + ' Check</button>';
+        return '<button type="button" class="dp-chk dp-chk--text" data-check="' + esc(n) + '" data-idx="' + idx + '">' + CHK + T(' Check</button>');
     }
     function gridSource(n) {
         var v = V(n), d = digitsOf(n);
@@ -424,13 +424,13 @@
         var n = current, h, d = digitsOf(n);
         if (kindOf(n) === 'matrix') {
             var st = snapStats(n);
-            h = '<div><dt>shape</dt><dd>' + snap.R + ' × ' + snap.C + '</dd></div><div><dt>min</dt><dd>' + num(st.min, d) + '</dd></div>' +
-                '<div><dt>max</dt><dd>' + num(st.max, d) + '</dd></div><div><dt>mean</dt><dd>' + num(st.mean, d) + '</dd></div>';
+            h = T('<div><dt>shape</dt><dd>') + snap.R + ' × ' + snap.C + T('</dd></div><div><dt>min</dt><dd>') + num(st.min, d) + '</dd></div>' +
+                T('<div><dt>max</dt><dd>') + num(st.max, d) + T('</dd></div><div><dt>mean</dt><dd>') + num(st.mean, d) + '</dd></div>';
         } else {
-            h = '<div><dt>length</dt><dd>' + snap.R + '</dd></div><div class="wide"><dt>variables along ' + esc(V(n).dims[0]) + '</dt><dd>' + snap.names.map(sym).join(', ') + '</dd></div>';
+            h = T('<div><dt>length</dt><dd>') + snap.R + T('</dd></div><div class="wide"><dt>variables along ') + esc(V(n).dims[0]) + '</dt><dd>' + snap.names.map(sym).join(', ') + '</dd></div>';
         }
         if (h !== statsEl._h) { statsEl.innerHTML = h; statsEl._h = h; }
-        var st2 = liveOn ? '<b>Live</b> · ' + timeHTML(snap.t) : '<b>Copied at ' + timeHTML(snap.t) + '</b> · every cell shows this one frame';
+        var st2 = liveOn ? T('<b>Live</b> · ') + timeHTML(snap.t) : T('<b>Copied at ') + timeHTML(snap.t) + T('</b> · every cell shows this one frame');
         if (st2 !== snapEl._h) { snapEl.innerHTML = st2; snapEl._h = st2; }
         if (grid) safe(grid.paint);
     }
@@ -440,12 +440,12 @@
         snap = takeSnap(n);
         var a = A(n);
         panes.array.innerHTML =
-            '<div class="dp-arr__top"><button type="button" class="dp-back">← All variables</button>' +
+            T('<div class="dp-arr__top"><button type="button" class="dp-back">← All variables</button>') +
             '<div class="dp-arr__title"><span class="dp-sym">' + sym(n) + '</span><span class="dp-type dp-type--array">' + esc(typeLabel(n)) + '</span></div>' +
-            (a.long_name ? '<p class="dp-arr__mean">' + a.long_name + (a.formula ? ' · <em>' + a.formula + '</em>' : '') + '</p>' : '') +
-            '<dl class="dp-arr__stats"></dl><div class="dp-arr__snap"><p class="dp-arr__when"></p><button type="button" class="dp-btn" data-catch>' + REDO + ' Copy again</button></div></div>' +
+            (a.long_name ? '<p class="dp-arr__mean">' + T(a.long_name) + (a.formula ? ' · <em>' + a.formula + '</em>' : '') + '</p>' : '') +
+            '<dl class="dp-arr__stats"></dl><div class="dp-arr__snap"><p class="dp-arr__when"></p><button type="button" class="dp-btn" data-catch>' + REDO + T(' Copy again</button></div></div>') +
             '<div class="dg" tabindex="0" aria-label="' + esc(n) + ' as a table"></div>' +
-            '<p class="dp-arr__probe">' + (TOUCH ? 'Tap a cell to read its index and value, and to find it in the figure.' : 'Point at a cell to read its index and value, and to find it in the figure.') + '</p>';
+            '<p class="dp-arr__probe">' + (TOUCH ? T('Tap a cell to read its index and value, and to find it in the figure.') : T('Point at a cell to read its index and value, and to find it in the figure.')) + '</p>';
         statsEl = panes.array.querySelector('.dp-arr__stats');
         snapEl = panes.array.querySelector('.dp-arr__when');
         panes.array.querySelector('.dp-back').addEventListener('click', function () { show('vars'); });
@@ -479,8 +479,8 @@
     var checking = null;
     function openCheck(n, idx) {
         checking = { name: n, idx: idx || 0 };
-        panes.check.innerHTML = '<div class="dp-arr__top dp-check__top"><button type="button" class="dp-back">← Back</button>' +
-            '<button type="button" class="dp-btn" data-recheck>' + REDO + ' Check again</button></div><div class="dp-check__body"></div>';
+        panes.check.innerHTML = T('<div class="dp-arr__top dp-check__top"><button type="button" class="dp-back">← Back</button>') +
+            '<button type="button" class="dp-btn" data-recheck>' + REDO + T(' Check again</button></div><div class="dp-check__body"></div>');
         panes.check.querySelector('.dp-back').addEventListener('click', function () { show(kindOf(n) === 'scalar' ? 'vars' : (current ? 'array' : 'vars')); });
         panes.check.querySelector('[data-recheck]').addEventListener('click', runCheck);
         show('check');
@@ -488,11 +488,11 @@
     }
     function agreement(stored, value, dtype) {
         if (typeof stored !== 'number' || typeof value !== 'number') return { ok: String(stored) === String(value), text: String(stored) === String(value) ? 'identical' : 'differ' };
-        if (!isFinite(stored) || !isFinite(value)) return { ok: String(stored) === String(value), diff: 0, text: String(stored) === String(value) ? 'both undefined now (not applicable)' : 'DIFFER: one is undefined' };
+        if (!isFinite(stored) || !isFinite(value)) return { ok: String(stored) === String(value), diff: 0, text: String(stored) === String(value) ? T('both undefined now (not applicable)') : T('DIFFER: one is undefined') };
         var diff = Math.abs(stored - value), scale = Math.max(Math.abs(stored), Math.abs(value), 1e-300);
         var tol = (dtype === 'float32' ? 2e-6 : 1e-9) * Math.max(scale, 1e-12) + (dtype === 'float32' ? 1e-7 : 1e-12);
         var ok = diff <= tol, figs = diff === 0 ? '∞' : String(Math.max(0, Math.floor(-Math.log10(diff / scale))));
-        return { ok: ok, diff: diff, text: ok ? (diff === 0 ? 'identical' : 'agree to ' + figs + ' significant figures; the rest is ' + (dtype === 'float32' ? 'float32 storage' : 'rounding') + ', difference ' + sci(diff)) : 'DIFFER by ' + sci(diff) };
+        return { ok: ok, diff: diff, text: ok ? (diff === 0 ? 'identical' : T('agree to ') + figs + T(' significant figures; the rest is ') + (dtype === 'float32' ? 'float32 storage' : 'rounding') + T(', difference ') + sci(diff)) : T('DIFFER by ') + sci(diff) };
     }
     function runCheck() {
         if (!checking) return;
@@ -500,15 +500,15 @@
         var stored = v.dims.length ? v.data[idx] : v.data, where = '', t = timeNow();
         if (v.dims.length === 2) { var c = cols2(n); where = '[' + Math.floor(idx / c) + ', ' + (idx % c) + ']'; }
         else if (v.dims.length === 1) where = '[' + idx + ']';
-        var h = '<div class="dp-check__hd"><span class="dp-sym">' + sym(n) + esc(where) + '</span>' + (a.long_name ? '<p>' + a.long_name + '</p>' : '') +
-            '<p class="dp-check__when">Checked at ' + timeHTML(t) + ', ' + clock() + '. All three answers below come from this one frame.</p></div>';
-        h += '<section class="dp-check__sec"><h4><span>1</span>Stored in the dataset</h4><p class="dp-check__big">' + esc(num(stored, d)) + (unitOf(n) ? ' <span class="dp-u">' + unitOf(n) + '</span>' : '') + '</p>' +
-            '<dl class="dp-check__meta"><div><dt>variable</dt><dd>' + esc(n) + ' ' + esc(where) + '</dd></div><div><dt>type</dt><dd>' + esc(typeLabel(n)) + '</dd></div>' +
-            (a.computed_in ? '<div><dt>computed in</dt><dd>' + esc(a.computed_in) + '</dd></div>' : '') +
-            (a.updates ? '<div><dt>updates</dt><dd>' + esc(a.updates) + '</dd></div>' : '') +
-            (a.formula ? '<div class="wide"><dt>formula</dt><dd>' + a.formula + '</dd></div>' : '') + '</dl></section>';
+        var h = '<div class="dp-check__hd"><span class="dp-sym">' + sym(n) + esc(where) + '</span>' + (a.long_name ? '<p>' + T(a.long_name) + '</p>' : '') +
+            T('<p class="dp-check__when">Checked at ') + timeHTML(t) + ', ' + clock() + T('. All three answers below come from this one frame.</p></div>');
+        h += T('<section class="dp-check__sec"><h4><span>1</span>Stored in the dataset</h4><p class="dp-check__big">') + esc(num(stored, d)) + (unitOf(n) ? ' <span class="dp-u">' + unitOf(n) + '</span>' : '') + '</p>' +
+            T('<dl class="dp-check__meta"><div><dt>variable</dt><dd>') + esc(n) + ' ' + esc(where) + T('</dd></div><div><dt>type</dt><dd>') + esc(typeLabel(n)) + '</dd></div>' +
+            (a.computed_in ? T('<div><dt>computed in</dt><dd>') + esc(a.computed_in) + '</dd></div>' : '') +
+            (a.updates ? T('<div><dt>updates</dt><dd>') + esc(a.updates) + '</dd></div>' : '') +
+            (a.formula ? T('<div class="wide"><dt>formula</dt><dd>') + a.formula + '</dd></div>' : '') + '</dl></section>';
         var chk = spec.check && spec.check[n], r = chk ? safe(function () { return chk(idx); }, null) : null;
-        h += '<section class="dp-check__sec"><h4><span>2</span>Recomputed now, from the stored inputs</h4>';
+        h += T('<section class="dp-check__sec"><h4><span>2</span>Recomputed now, from the stored inputs</h4>');
         if (r) {
             var ag = agreement(stored, r.value, ds.dtype(n));
             h += (r.formula ? '<p class="dp-check__formula">' + r.formula + '</p>' : '') +
@@ -516,20 +516,20 @@
                     return '<tr><th>' + row[0] + '</th><td>' + esc(typeof row[1] === 'number' ? num(row[1], row[3] === undefined ? 4 : row[3]) : String(row[1])) + '</td><td>' + (row[2] || '') + '</td></tr>';
                 }).join('') + '</tbody></table>' +
                 '<p class="dp-check__big">' + esc(num(r.value, Math.max(d, 6))) + '</p>' +
-                '<p class="dp-check__verdict ' + (ag.ok ? 'is-ok' : 'is-bad') + '">' + (ag.ok ? CHK + ' Stored and recomputed ' : '✕ Stored and recomputed ') + esc(ag.text) + '</p>';
+                '<p class="dp-check__verdict ' + (ag.ok ? 'is-ok' : 'is-bad') + '">' + (ag.ok ? CHK + T(' Stored and recomputed ') : T('✕ Stored and recomputed ')) + esc(ag.text) + '</p>';
         } else {
-            h += '<p class="dp-check__note">' + (a.source ? esc(a.source) : 'No independent formula for this value: it is an input, read from the control.') + '</p>';
+            h += '<p class="dp-check__note">' + (a.source ? esc(a.source) : T('No independent formula for this value: it is an input, read from the control.')) + '</p>';
         }
         h += '</section>';
         var dr = spec.drawn && spec.drawn[n], rd = dr ? safe(function () { return dr(idx); }, null) : null;
-        h += '<section class="dp-check__sec"><h4><span>3</span>Read back from the picture</h4>';
+        h += T('<section class="dp-check__sec"><h4><span>3</span>Read back from the picture</h4>');
         if (rd) {
             h += '<dl class="dp-check__meta"><div class="wide"><dt>' + esc(rd.what) + '</dt><dd>' + esc(rd.drawn) + '</dd></div>' +
-                '<div class="wide"><dt>expected from the store</dt><dd>' + esc(rd.expected) + '</dd></div></dl>' +
-                '<p class="dp-check__verdict ' + (rd.ok === null ? 'is-na' : rd.ok ? 'is-ok' : 'is-bad') + '">' + (rd.ok === null ? '' : rd.ok ? CHK + ' ' : '✕ ') + esc(rd.ok === null ? 'Not in the picture at the moment, so there is nothing to read back.' : rd.ok ? 'The picture shows this value.' : 'The picture does not match.') + '</p>' +
+                T('<div class="wide"><dt>expected from the store</dt><dd>') + esc(rd.expected) + '</dd></div></dl>' +
+                '<p class="dp-check__verdict ' + (rd.ok === null ? 'is-na' : rd.ok ? 'is-ok' : 'is-bad') + '">' + (rd.ok === null ? '' : rd.ok ? CHK + ' ' : '✕ ') + esc(rd.ok === null ? T('Not in the picture at the moment, so there is nothing to read back.') : rd.ok ? T('The picture shows this value.') : T('The picture does not match.')) + '</p>' +
                 (rd.note ? '<p class="dp-check__note">' + rd.note + '</p>' : '');
         } else {
-            h += '<p class="dp-check__note">' + (a.drawn_note ? a.drawn_note : 'This value is not drawn directly; it enters the picture through the arrays computed from it.') + '</p>';
+            h += '<p class="dp-check__note">' + (a.drawn_note ? a.drawn_note : T('This value is not drawn directly; it enters the picture through the arrays computed from it.')) + '</p>';
         }
         h += '</section>';
         body.innerHTML = h;
@@ -558,7 +558,7 @@
         probe.on = on;
         probe.pinned = false; probe.dragging = false; probe.preview = null; probe.empty = false;
         clearTimeout(probe.dwell);
-        if (readBtn) { readBtn.setAttribute('aria-pressed', on ? 'true' : 'false'); readBtn.lastChild.textContent = on ? ' Reading · stop' : ' Read values'; }
+        if (readBtn) { readBtn.setAttribute('aria-pressed', on ? 'true' : 'false'); readBtn.lastChild.textContent = on ? T(' Reading · stop') : T(' Read values'); }
         if (stage) stage.classList.toggle('dp-reading', on);
         if (strip) strip.hidden = !on;
         paintStrip();
@@ -575,7 +575,7 @@
         strip.className = 'dp-read'; strip.lang = 'en'; strip.dir = 'ltr';
         strip.hidden = true;
         strip.setAttribute('aria-live', 'polite');
-        strip.innerHTML = '<p class="dp-read__hint">' + (TOUCH ? 'Tap a point in the figure to pin it; drag to move the pin.' : 'Click a point in the figure to pin it; drag to move the pin. Esc stops reading.') + '</p>' +
+        strip.innerHTML = '<p class="dp-read__hint">' + (TOUCH ? T('Tap a point in the figure to pin it; drag to move the pin.') : T('Click a point in the figure to pin it; drag to move the pin. Esc stops reading.')) + '</p>' +
             '<div class="dp-read__pin" hidden><p class="dp-read__title"></p><div class="dp-read__vals"></div></div>';
         stage.insertAdjacentElement('afterend', strip);
         stripHint = strip.querySelector('.dp-read__hint'); stripPin = strip.querySelector('.dp-read__pin');
@@ -584,8 +584,8 @@
         readBtn.type = 'button';
         readBtn.className = 'dp-readbtn'; readBtn.lang = 'en';
         readBtn.setAttribute('aria-pressed', 'false');
-        readBtn.title = 'Pin a point of the figure and read its values';
-        readBtn.innerHTML = CROSS + '<span> Read values</span>';
+        readBtn.title = T('Pin a point of the figure and read its values');
+        readBtn.innerHTML = CROSS + T('<span> Read values</span>');
         var cap = stage.parentNode && stage.parentNode.querySelector('.stage__cap');
         if (cap) cap.appendChild(readBtn); else strip.insertAdjacentElement('beforebegin', readBtn);
         readBtn.addEventListener('click', function () { setRead(!probe.on); });
@@ -694,16 +694,16 @@
             var showPin = probe.pinned && info;
             stripPin.hidden = !showPin;
             stripHint.hidden = !!showPin;
-            if (!showPin && probe.empty) stripHint.textContent = 'Nothing to pin there. ' + (TOUCH ? 'Tap' : 'Click') + ' on something drawn in the figure.';
-            else if (!showPin) stripHint.textContent = TOUCH ? 'Tap a point in the figure to pin it; drag to move the pin.' : 'Click a point in the figure to pin it; drag to move the pin. Esc stops reading.';
+            if (!showPin && probe.empty) stripHint.textContent = T('Nothing to pin there. ') + (TOUCH ? T('Tap') : T('Click')) + T(' on something drawn in the figure.');
+            else if (!showPin) stripHint.textContent = TOUCH ? T('Tap a point in the figure to pin it; drag to move the pin.') : T('Click a point in the figure to pin it; drag to move the pin. Esc stops reading.');
             if (showPin) {
-                var th = info.title + ' <span>· ' + t + '</span>';
+                var th = T(info.title) + ' <span>· ' + t + '</span>';
                 if (th !== stripTitle._h) { stripTitle.innerHTML = th; stripTitle._h = th; }
                 var key = rowsKey(info.rows);
                 if (key !== stripVals._k) {
                     stripVals.innerHTML = info.rows.map(function (row) {
                         var n = row[3], ok = n && V(n);
-                        return '<' + (ok ? 'button type="button" data-check="' + esc(n) + '" data-idx="' + (row[4] || 0) + '" title="Check this value"' : 'span') + ' class="dp-read__v"><i>' + row[0] + '</i><b></b>' + (row[2] ? '<u>' + row[2] + '</u>' : '') + '</' + (ok ? 'button' : 'span') + '>';
+                        return '<' + (ok ? T('button type="button" data-check="') + esc(n) + '" data-idx="' + (row[4] || 0) + T('" title="Check this value"') : 'span') + ' class="dp-read__v"><i>' + row[0] + '</i><b></b>' + (row[2] ? '<u>' + row[2] + '</u>' : '') + '</' + (ok ? 'button' : 'span') + '>';
                     }).join('');
                     stripVals._k = key;
                     stripVals._v = Array.prototype.slice.call(stripVals.querySelectorAll('b'));
@@ -717,7 +717,7 @@
         if (info && isOpen) {
             probeHint.hidden = true;
             probeBody.hidden = false;
-            var ph = info.title + ' <span>· ' + t + (probe.on && probe.pinned ? '' : ' · last pinned') + '</span>';
+            var ph = T(info.title) + ' <span>· ' + t + (probe.on && probe.pinned ? '' : T(' · last pinned')) + '</span>';
             if (ph !== probeTitle._h) { probeTitle.innerHTML = ph; probeTitle._h = ph; }
             var k2 = rowsKey(info.rows);
             if (k2 !== probeRows._k) {
@@ -749,16 +749,16 @@
     function describeRound() {
         if (rec) return;
         var lab = safe(R.label, '') || 'ten seconds of play';
-        var txt = 'One round = <b>' + lab + '</b>.<span class="dp-more-txt"> Every frame of it is caught' + (spec.inspect ? ', with ' + (held.ref ? 'the point you pinned' : 'a point the page chooses; pin another with Read values') : '') + '; then the recording stops by itself.</span>';
+        var txt = T('One round = <b>') + lab + T('</b>.<span class="dp-more-txt"> Every frame of it is caught') + (spec.inspect ? T(', with ') + (held.ref ? 'the point you pinned' : T('a point the page chooses; pin another with Read values')) : '') + T('; then the recording stops by itself.</span>');
         var why = R.blocked ? safe(R.blocked, null) : null;
-        if (why) txt += ' <span class="dp-rec__why"><b>Not now.</b> ' + esc(why) + '</span>';
+        if (why) txt += T(' <span class="dp-rec__why"><b>Not now.</b> ') + esc(why) + '</span>';
         if (txt !== recWhat._h) { recWhat.innerHTML = txt; recWhat._h = txt; }
     }
     function scalarNames() { return ds.order.filter(isNumScalar); }
     function startRound() {
         if (rec) { finishRound('stopped early'); return; }
         var why = R.blocked ? safe(R.blocked, null) : null;
-        if (why) { recWhat.innerHTML = '<b>Not now.</b> ' + esc(why); recWhat._h = null; return; }
+        if (why) { recWhat.innerHTML = T('<b>Not now.</b> ') + esc(why); recWhat._h = null; return; }
         if (spec.play && spec.playing && !safe(spec.playing, true)) safe(spec.play);
         var ref = held.ref || (R.point ? safe(R.point, null) : null), info = ref ? safe(function () { return spec.inspect(ref); }, null) : null;
         var names = scalarNames();
@@ -772,9 +772,9 @@
         rec.pointRows.forEach(function (pr, k) { rec.buf['__p' + k] = []; });
         rec.interval = rec.mode === 'change' ? 0 : rec.len / MAXS;
         recBox.classList.add('is-rec');
-        recLab.textContent = 'Stop';
+        recLab.textContent = T('Stop');
         recProg.hidden = false;
-        recWhat.innerHTML = 'Recording <b>round ' + rec.no + '</b>: ' + esc(rec.label) + (rec.pointTitle ? '<span class="dp-more-txt">, following ' + rec.pointTitle + '</span>' : '') + '.';
+        recWhat.innerHTML = T('Recording <b>round ') + rec.no + '</b>: ' + esc(rec.label) + (rec.pointTitle ? T('<span class="dp-more-txt">, following ') + rec.pointTitle + '</span>' : '') + '.';
         recWhat._h = null;
         progress(0, 0);
         kick();
@@ -783,9 +783,9 @@
         recBar.style.width = (100 * Math.max(0, Math.min(1, frac))) + '%';
         var paused = spec.playing && !safe(spec.playing, true) && rec && rec.mode !== 'change';
         var blocked = rec && R.blocked ? safe(R.blocked, null) : null;
-        recSt.innerHTML = blocked ? '<b>Waiting.</b> ' + esc(blocked) : paused ? '<b>Paused.</b> Press Play: the round goes on when the simulation does.' :
-            rec.mode === 'change' ? num(el, 1) + ' of ' + num(rec.len, 0) + ' s · ' + rec.n + ' changes caught · move a slider' :
-            num(el, 2) + ' of ' + num(rec.len, 2) + (timeUnit() ? ' ' + timeUnit() : '') + ' · ' + rec.n + ' samples';
+        recSt.innerHTML = blocked ? T('<b>Waiting.</b> ') + esc(blocked) : paused ? T('<b>Paused.</b> Press Play: the round goes on when the simulation does.') :
+            rec.mode === 'change' ? num(el, 1) + T(' of ') + num(rec.len, 0) + ' s · ' + rec.n + T(' changes caught · move a slider') :
+            num(el, 2) + T(' of ') + num(rec.len, 2) + (timeUnit() ? ' ' + timeUnit() : '') + ' · ' + rec.n + T(' samples');
     }
     function recordFrame() {
         if (!rec) return;
@@ -822,16 +822,16 @@
         var r = rec;
         rec = null;
         recBox.classList.remove('is-rec');
-        recLab.textContent = 'Record';
+        recLab.textContent = T('Record');
         recProg.hidden = true;
         recWhat._h = null;
-        if (!r || r.n < 2) { describeRound(); if (r) recWhat.innerHTML += ' <b>The last round caught fewer than two samples' + (why ? ' (' + esc(why) + ')' : '') + '.</b>'; return; }
+        if (!r || r.n < 2) { describeRound(); if (r) recWhat.innerHTML += T(' <b>The last round caught fewer than two samples') + (why ? ' (' + esc(why) + ')' : '') + '.</b>'; return; }
         roundNo = r.no;
         var F = function (a) { return Float64Array.from(a); };
         var series = [{ key: TV || 't', label: timeSym(), units: timeUnit(), digits: TV ? Math.max(2, digitsOf(TV)) : 3, data: F(r.buf.__t), time: true }];
         roundCols.forEach(function (n) { series.push({ key: n, label: sym(n), units: unitOf(n), digits: digitsOf(n), data: F(r.buf[n]) }); });
         r.pointRows.forEach(function (pr, k) {
-            series.push({ key: (pr.name || 'point_' + k) + (pr.idx !== undefined ? '_' + pr.idx : '') + '_at_point', label: pr.label, units: pr.units, digits: pr.name && V(pr.name) ? digitsOf(pr.name) : 4, data: F(r.buf['__p' + k]), point: true });
+            series.push({ key: (pr.name || 'point_' + k) + (pr.idx !== undefined ? '_' + pr.idx : '') + T('_at_point'), label: pr.label, units: pr.units, digits: pr.name && V(pr.name) ? digitsOf(pr.name) : 4, data: F(r.buf['__p' + k]), point: true });
         });
         var all = {};
         r.names.forEach(function (n) { all[n] = F(r.buf[n]); });
@@ -840,7 +840,7 @@
         sel = rounds.length - 1;
         roundCount.textContent = rounds.length;
         describeRound();
-        catchNow('at the end of round ' + r.no);
+        catchNow(T('at the end of round ') + r.no);
         if (!isOpen) setOpen(true, false);
         show('rounds');
         panes.rounds.scrollTop = 0;
@@ -859,7 +859,7 @@
         c.setTransform(dpr, 0, 0, dpr, 0, 0);
         c.clearRect(0, 0, W, H);
         var rg = seriesRange(s), lo = rg[0], hi = rg[1], n = s.data.length;
-        if (!(lo === lo)) { c.fillStyle = P.muted; c.font = '12px ' + getComputedStyle(cv).fontFamily; c.fillText('not defined during this round', 8, H / 2 + 4); return; }
+        if (!(lo === lo)) { c.fillStyle = P.muted; c.font = T('12px ') + getComputedStyle(cv).fontFamily; c.fillText('not defined during this round', 8, H / 2 + 4); return; }
         var span = Math.max(hi - lo, 0.02 * Math.max(Math.abs(hi), Math.abs(lo)), 1e-12), mid = (hi + lo) / 2;
         lo = mid - span / 2; hi = mid + span / 2;
         var x0 = x[0], x1 = x[n - 1] > x0 ? x[n - 1] : x0 + 1, pad = 6;
@@ -886,19 +886,19 @@
     function renderRounds() {
         var host = panes.rounds;
         if (!rounds.length) {
-            host.innerHTML = '<div class="dp-empty"><p class="dp-empty__k">No round yet</p><h3>Record one round of the simulation.</h3>' +
-                '<p>Press <b>Record</b> above. The simulation keeps running exactly as before; for one round (' + esc(safe(R.label, '') || 'ten seconds') + ') every frame’s numbers are copied here, then the recording stops by itself.</p>' +
-                '<p>You get one chart per quantity, a table of every sample, and a file you can open in Python. ' + 'Pin a point with <b>Read values</b> under the figure first, and its values are recorded too.</p></div>';
+            host.innerHTML = T('<div class="dp-empty"><p class="dp-empty__k">No round yet</p><h3>Record one round of the simulation.</h3>') +
+                T('<p>Press <b>Record</b> above. The simulation keeps running exactly as before; for one round (') + esc(safe(R.label, '') || 'ten seconds') + T(') every frame’s numbers are copied here, then the recording stops by itself.</p>') +
+                T('<p>You get one chart per quantity, a table of every sample, and a file you can open in Python. ') + T('Pin a point with <b>Read values</b> under the figure first, and its values are recorded too.</p></div>');
             return;
         }
         var r = rounds[sel], x = r.elapsed;
-        var chips = rounds.map(function (q, k) { return '<button type="button" class="dp-chip' + (k === sel ? ' is-on' : '') + '" data-round="' + k + '">Round ' + q.no + '</button>'; }).join('');
+        var chips = rounds.map(function (q, k) { return '<button type="button" class="dp-chip' + (k === sel ? T(' is-on') : '') + '" data-round="' + k + T('">Round ') + q.no + '</button>'; }).join('');
         var params = r.params.map(function (p) { return '<span><i>' + sym(p[0]) + '</i> ' + esc(num(p[1], digitsOf(p[0]))) + (unitOf(p[0]) ? ' ' + unitOf(p[0]) : '') + '</span>'; }).join('');
         var h = '<div class="dp-rd">' + (rounds.length > 1 ? '<div class="dp-rd__chips">' + chips + '</div>' : '') +
-            '<header class="dp-rd__hd"><div class="dp-rd__top"><h3>Round ' + r.no + '<span class="dp__dot">.</span></h3>' +
-            '<div class="dp-rd__tools"><button type="button" class="dp-btn dp-btn--solid" data-round-save>' + SAVE + ' Save<span class="dp-more-txt"> this round</span></button>' +
-            '<button type="button" class="dp-btn" data-round-csv>CSV</button></div></div>' +
-            '<p class="dp-rd__sum">' + esc(r.label) + ' · ' + r.n + ' samples from ' + r.frames + ' frames · caught at ' + esc(r.at) + (r.why ? ' · ' + esc(r.why) : '') + '</p>' +
+            T('<header class="dp-rd__hd"><div class="dp-rd__top"><h3>Round ') + r.no + '<span class="dp__dot">.</span></h3>' +
+            '<div class="dp-rd__tools"><button type="button" class="dp-btn dp-btn--solid" data-round-save>' + SAVE + T(' Save<span class="dp-more-txt"> this round</span></button>') +
+            T('<button type="button" class="dp-btn" data-round-csv>CSV</button></div></div>') +
+            '<p class="dp-rd__sum">' + esc(r.label) + ' · ' + r.n + T(' samples from ') + r.frames + T(' frames · caught at ') + esc(r.at) + (r.why ? ' · ' + esc(r.why) : '') + '</p>' +
             (params ? '<p class="dp-rd__par">' + params + '</p>' : '') + '</header>' +
             '<p class="dp-rd__read" aria-live="polite"></p><div class="dp-rd__charts">';
         /* a quantity that does not change during the round, or is not defined in it, gets one line, not a flat chart */
@@ -908,21 +908,21 @@
             var rg = seriesRange(s);
             if (!(rg[0] === rg[0])) { undef.push(s); return; }
             if (rg[1] - rg[0] <= 1e-12 * Math.max(1, Math.abs(rg[1]))) { still.push([s, rg[0]]); return; }
-            h += '<figure class="dp-ch' + (s.point ? ' dp-ch--pt' : '') + '"><figcaption><span class="dp-sym">' + s.label + '</span>' + (s.units ? '<span class="dp-u">' + s.units + '</span>' : '') +
-                (s.point ? '<em>at the point</em>' : '') + '<b>' + esc(num(rg[0], s.digits)) + ' … ' + esc(num(rg[1], s.digits)) + '</b></figcaption><canvas data-series="' + k + '"></canvas></figure>';
+            h += '<figure class="dp-ch' + (s.point ? T(' dp-ch--pt') : '') + '"><figcaption><span class="dp-sym">' + s.label + '</span>' + (s.units ? '<span class="dp-u">' + s.units + '</span>' : '') +
+                (s.point ? T('<em>at the point</em>') : '') + '<b>' + esc(num(rg[0], s.digits)) + ' … ' + esc(num(rg[1], s.digits)) + '</b></figcaption><canvas data-series="' + k + '"></canvas></figure>';
         });
-        h += '</div>' + (still.length ? '<p class="dp-rd__still"><b>Constant during the round</b>' + still.map(function (q) { return '<span><i>' + q[0].label + '</i> ' + esc(num(q[1], q[0].digits)) + (q[0].units ? ' ' + q[0].units : '') + (q[0].point ? ' <em>at the point</em>' : '') + '</span>'; }).join('') + '</p>' : '') +
-            (undef.length ? '<p class="dp-rd__still"><b>Not defined during the round</b>' + undef.map(function (q) { return '<span><i>' + q.label + '</i></span>'; }).join('') + '</p>' : '') +
-            (r.pointTitle ? '<p class="dp-rd__note">Black lines follow ' + r.pointTitle + ', the point followed when the round began.</p>' : '') +
-            '<details class="dp-rd__tbl"><summary>Every sample · ' + r.n + ' rows × ' + r.series.length + ' columns</summary><div class="dp-rd__wrap"><table><thead><tr><th>#</th>' +
+        h += '</div>' + (still.length ? T('<p class="dp-rd__still"><b>Constant during the round</b>') + still.map(function (q) { return '<span><i>' + q[0].label + '</i> ' + esc(num(q[1], q[0].digits)) + (q[0].units ? ' ' + q[0].units : '') + (q[0].point ? T(' <em>at the point</em>') : '') + '</span>'; }).join('') + '</p>' : '') +
+            (undef.length ? T('<p class="dp-rd__still"><b>Not defined during the round</b>') + undef.map(function (q) { return '<span><i>' + q.label + '</i></span>'; }).join('') + '</p>' : '') +
+            (r.pointTitle ? T('<p class="dp-rd__note">Black lines follow ') + r.pointTitle + T(', the point followed when the round began.</p>') : '') +
+            T('<details class="dp-rd__tbl"><summary>Every sample · ') + r.n + T(' rows × ') + r.series.length + T(' columns</summary><div class="dp-rd__wrap"><table><thead><tr><th>#</th>') +
             r.series.map(function (s) { return '<th><span class="dp-sym">' + s.label + '</span>' + (s.units ? '<small>' + s.units + '</small>' : '') + '</th>'; }).join('') + '</tr></thead><tbody>';
         for (var i = 0; i < r.n; i++) h += '<tr><th>' + (i + 1) + '</th>' + r.series.map(function (s) { return '<td>' + esc(num(s.data[i], s.digits)) + '</td>'; }).join('') + '</tr>';
         h += '</tbody></table></div></details></div>';
         host.innerHTML = h;
-        var canv = Array.prototype.slice.call(host.querySelectorAll('canvas[data-series]'));
+        var canv = Array.prototype.slice.call(host.querySelectorAll(T('canvas[data-series]')));
         var readEl = host.querySelector('.dp-rd__read');
         function readout(i) {
-            var head = i === null ? (TOUCH ? 'Touch a chart to read one sample.' : 'Point at a chart to read every quantity at one sample.') : '<b>Sample ' + (i + 1) + ' of ' + r.n + '</b> · ' + timeSym() + ' = ' + esc(num(r.series[0].data[i], r.series[0].digits)) + (timeUnit() ? ' ' + timeUnit() : '') + ' · ' + esc(num(x[i], 3)) + (timeUnit() ? ' ' + esc(timeUnit()) : '') + ' into the round';
+            var head = i === null ? (TOUCH ? T('Touch a chart to read one sample.') : T('Point at a chart to read every quantity at one sample.')) : T('<b>Sample ') + (i + 1) + T(' of ') + r.n + '</b> · ' + timeSym() + ' = ' + esc(num(r.series[0].data[i], r.series[0].digits)) + (timeUnit() ? ' ' + timeUnit() : '') + ' · ' + esc(num(x[i], 3)) + (timeUnit() ? ' ' + esc(timeUnit()) : '') + T(' into the round');
             readEl.innerHTML = head;
         }
         function drawAll(cur) { canv.forEach(function (cv) { drawChart(cv, r.series[+cv.getAttribute('data-series')], x, cur); }); }
@@ -930,7 +930,7 @@
         readout(null);
         var chartsEl = host.querySelector('.dp-rd__charts');
         function pick(e) {
-            var cv = e.target.closest && e.target.closest('canvas[data-series]');
+            var cv = e.target.closest && e.target.closest(T('canvas[data-series]'));
             if (!cv) return;
             var rc = cv.getBoundingClientRect(), f = Math.max(0, Math.min(1, (e.clientX - rc.left) / rc.width)), target = x[0] + f * (x[r.n - 1] - x[0]), best = 0;
             for (var i = 1; i < r.n; i++) if (Math.abs(x[i] - target) < Math.abs(x[best] - target)) best = i;
@@ -965,33 +965,33 @@
         if (b) { sel = +b.getAttribute('data-round'); renderRounds(); return; }
         var r = rounds[sel];
         if (!r) return;
-        if (e.target.closest('[data-round-csv]')) { download(new Blob([roundCsv(r)], { type: 'text/csv' }), (spec.file || 'dataset') + '-round-' + r.no + '-' + stamp() + '.csv'); return; }
+        if (e.target.closest('[data-round-csv]')) { download(new Blob([roundCsv(r)], { type: T('text/csv') }), (spec.file || 'dataset') + T('-round-') + r.no + '-' + stamp() + '.csv'); return; }
         if (e.target.closest('[data-round-save]')) {
-            var rd = Sim.dataset({ title: ds.title + ' · round ' + r.no, attrs: { page: location.pathname.split('/').pop(), round: r.label, samples: r.n, frames: r.frames, caught_at: r.at, time_variable: TV || 'wall clock', point: plain(r.pointTitle || '') } });
+            var rd = Sim.dataset({ title: ds.title + T(' · round ') + r.no, attrs: { page: location.pathname.split('/').pop(), round: r.label, samples: r.n, frames: r.frames, caught_at: r.at, time_variable: TV || 'wall clock', point: plain(r.pointTitle || '') } });
             r.params.forEach(function (p) { rd.attrs['start_' + p[0]] = p[1]; });
             rd.dim('sample', r.n);
             rd.coord('time_into_round', 'sample', Float64Array, { units: timeUnit(), long_name: 'time since the round began' });
             rd.set('time_into_round', r.elapsed);
-            r.series.forEach(function (s) { if (!rd.has(s.key)) { rd.var(s.key, ['sample'], Float64Array, { symbol: plain(s.label), units: s.units, long_name: s.point ? plain(s.label) + ' at ' + plain(r.pointTitle) : (V(s.key) ? plain(A(s.key).long_name || '') : '') }); rd.set(s.key, s.data); } });
+            r.series.forEach(function (s) { if (!rd.has(s.key)) { rd.var(s.key, ['sample'], Float64Array, { symbol: plain(s.label), units: s.units, long_name: s.point ? plain(s.label) + T(' at ') + plain(r.pointTitle) : (V(s.key) ? plain(A(s.key).long_name || '') : '') }); rd.set(s.key, s.data); } });
             Object.keys(r.all).forEach(function (n) { if (!rd.has(n)) { rd.var(n, ['sample'], Float64Array, { symbol: plain(sym(n)), units: unitOf(n), long_name: plain(A(n).long_name || '') }); rd.set(n, r.all[n]); } });
-            var filename = (spec.file || 'dataset') + '-round-' + r.no + '-' + stamp() + '.zip';
-            download(rd.npz([{ name: 'round.csv', bytes: roundCsv(r) }, { name: 'README.txt', bytes: readme('round ' + r.no, filename) }]), filename);
+            var filename = (spec.file || 'dataset') + T('-round-') + r.no + '-' + stamp() + '.zip';
+            download(rd.npz([{ name: T('round.csv'), bytes: roundCsv(r) }, { name: T('README.txt'), bytes: readme(T('round ') + r.no, filename) }]), filename);
         }
     });
 
     /* ---------- Save ---------- */
     function readme(what, filename) {
         return [
-            ds.title + ' · ' + what + ' saved from ' + location.href.replace(/[#?].*$/, ''),
-            'Saved ' + new Date().toISOString(),
+            ds.title + ' · ' + what + T(' saved from ') + location.href.replace(/[#?].*$/, ''),
+            T('Saved ') + new Date().toISOString(),
             '',
             'Each array variable is a NumPy .npy file; dataset.json lists every variable with its dimensions, dtype,',
             'units and attributes, and holds the scalars. Recorded rounds, if any, are CSV files with one row per sample.',
             '',
-            'Python:',
+            T('Python:'),
             '    import json, zipfile, numpy as np',
             '    z = zipfile.ZipFile(' + JSON.stringify(filename) + ')',
-            "    meta = json.load(z.open('dataset.json'))",
+            "    meta = json.load(z.open(T('dataset.json')))",
             "    arrays = {k: np.load(z.open(v['file'])) for k, v in meta['data_vars'].items() if 'file' in v}",
             "    scalars = {k: v['value'] for k, v in meta['data_vars'].items() if 'value' in v}",
             '',
@@ -1004,7 +1004,7 @@
     panel.querySelector('[data-save]').addEventListener('click', function () {
         var filename = (spec.file || 'dataset') + '-' + stamp() + '.zip';
         var extra = rounds.map(function (r) { return { name: 'round-' + r.no + '.csv', bytes: roundCsv(r) }; });
-        extra.push({ name: 'README.txt', bytes: readme('the store at ' + timeText(timeNow()).replace(/<[^>]+>/g, ''), filename) });
+        extra.push({ name: T('README.txt'), bytes: readme(T('the store at ') + timeText(timeNow()).replace(/<[^>]+>/g, ''), filename) });
         download(ds.npz(extra), filename);
     });
 
@@ -1044,7 +1044,7 @@
     liveBox.addEventListener('change', function () {
         liveOn = liveBox.checked;
         store('live', liveOn ? '1' : '0');
-        if (!liveOn) catchNow('when Live was switched off');
+        if (!liveOn) catchNow(T('when Live was switched off'));
         paint(true);
         kick();
     });

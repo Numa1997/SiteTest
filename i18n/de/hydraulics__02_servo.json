@@ -1,0 +1,606 @@
+{
+ "0172f8e5dd88": {
+  "src": "<span class=\"lbl\">answers with</span>the flow along it, $Q_h$",
+  "tr": "<span class=\"lbl\">liefert</span>den Durchfluss darin, $Q_h$"
+ },
+ "02027d933cc0": {
+  "src": "with $p_{\\mathrm{tr}} = 0.1\\ \\mathrm{MPa}$. Both limits follow from the denominator. When $|\\Delta p| \\ll p_{\\mathrm{tr}}$, $(\\Delta p^2 + p_{\\mathrm{tr}}^2)^{1/4} \\to p_{\\mathrm{tr}}^{1/2}$, so $g \\to \\Delta p/\\sqrt{p_{\\mathrm{tr}}}$: a straight line, like laminar flow. When $|\\Delta p| \\gg p_{\\mathrm{tr}}$, $(\\Delta p^2)^{1/4} = |\\Delta p|^{1/2}$, so $g \\to \\Delta p/\\sqrt{|\\Delta p|} = \\operatorname{sign}(\\Delta p)\\sqrt{|\\Delta p|}$. At $\\Delta p = p_{\\mathrm{tr}}$ the two meet, and $g$ is $2^{-1/4} = 0.84$ of the pure square root. The function is smooth everywhere and handles reverse flow through the sign of $\\Delta p$. It is a modelling choice, not a law of nature: it buys a well-behaved equation at the price of a small error in a range of pressure differences the press passes through quickly.",
+  "tr": "mit $p_{\\mathrm{tr}} = 0.1\\ \\mathrm{MPa}$. Beide Grenzfälle folgen aus dem Nenner. Ist $|\\Delta p| \\ll p_{\\mathrm{tr}}$, so gilt $(\\Delta p^2 + p_{\\mathrm{tr}}^2)^{1/4} \\to p_{\\mathrm{tr}}^{1/2}$, also $g \\to \\Delta p/\\sqrt{p_{\\mathrm{tr}}}$: eine Gerade wie bei laminarer Strömung. Ist $|\\Delta p| \\gg p_{\\mathrm{tr}}$, so gilt $(\\Delta p^2)^{1/4} = |\\Delta p|^{1/2}$, also $g \\to \\Delta p/\\sqrt{|\\Delta p|} = \\operatorname{sign}(\\Delta p)\\sqrt{|\\Delta p|}$. Bei $\\Delta p = p_{\\mathrm{tr}}$ treffen die beiden Näherungen aufeinander, und $g$ beträgt dort $2^{-1/4} = 0.84$ der reinen Quadratwurzel. Die Funktion ist überall glatt und behandelt die Rückströmung über das Vorzeichen von $\\Delta p$. Sie ist eine Modellierungswahl, kein Naturgesetz: Man erkauft sich eine gutartige Gleichung um den Preis eines kleinen Fehlers in einem Bereich von Druckdifferenzen, den die Presse rasch durchläuft."
+ },
+ "045a4879ca65": {
+  "src": "Figure 3. A sharp-edged orifice. The jet narrows downstream of the edge, then loses its kinetic energy in turbulence.",
+  "tr": "Abbildung 3. Eine scharfkantige Blende. Der Strahl verengt sich hinter der Kante und verliert dann seine kinetische Energie in turbulenten Wirbeln."
+ },
+ "046d49225488": {
+  "src": "Every edge of the valve is an orifice: a sharp-edged opening that the spool makes larger or smaller. This chapter derives how much oil flows through one, given the pressures on its two sides. It is the law of the “valve edges” box on the map.",
+  "tr": "Jede Steuerkante des Ventils ist eine Blende: eine scharfkantige Öffnung, die der Schieber größer oder kleiner macht. Dieses Kapitel leitet her, wie viel Öl durch eine davon fließt, wenn die Drücke auf ihren beiden Seiten gegeben sind. Es ist das Gesetz des Kastens „Steuerkanten“ auf der Karte."
+ },
+ "0681dbd6bdbb": {
+  "src": "<span class=\"lbl\">given</span>the pressures at its two ends, $p_a$ and $p_A$",
+  "tr": "<span class=\"lbl\">gegeben</span>die Drücke an seinen beiden Enden, $p_a$ und $p_A$"
+ },
+ "086a9a468f0b": {
+  "src": "9.1 Where the power goes",
+  "tr": "9.1 Wohin die Leistung fließt"
+ },
+ "0cf88634ea79": {
+  "src": "Put the blocks of the map together. What does the model have to remember from one instant to the next? Exactly one number for each form of stored energy, because energy cannot jump: the spool stores kinetic energy in its speed and spring energy in its position; each of the three volumes of oil stores compression energy in its pressure; the hose slug stores kinetic energy in its flow; the ram stores kinetic energy in its speed, and potential energy, in gravity and in the specimen, in its position. That makes eight, and they are the <i>state</i>:",
+  "tr": "Setzen Sie die Blöcke des Übersichtsbildes zusammen. Was muss das Modell von einem Augenblick zum nächsten behalten? Genau eine Zahl für jede Form gespeicherter Energie, denn Energie kann nicht springen: Der Ventilschieber speichert kinetische Energie in seiner Geschwindigkeit und Federenergie in seiner Lage; jedes der drei Ölvolumina speichert Kompressionsenergie in seinem Druck; die Ölsäule im Schlauch speichert kinetische Energie in ihrem Durchfluss; der Stößel speichert kinetische Energie in seiner Geschwindigkeit und potentielle Energie in seiner Lage, in der Schwerkraft und in der Probe. Das macht acht, und sie bilden den <i>Zustand</i>:"
+ },
+ "0edddda6981f": {
+  "src": "Now the cylinder. Its two chambers are volumes of oil, so chapter 7 gives their laws at once. The ram between them is a mass, so Newton gives its law. What remains is to say honestly what pushes on the ram besides the oil: its own weight, the drag of its seals, and the specimen once it touches.",
+  "tr": "Nun der Zylinder. Seine beiden Kammern sind Ölvolumina, daher liefert Kapitel 7 ihre Gesetze sofort. Der Stößel zwischen ihnen ist eine Masse, daher liefert Newton sein Gesetz. Es bleibt, ehrlich zu sagen, was außer dem Öl auf den Stößel drückt: sein eigenes Gewicht, die Reibung seiner Dichtungen und die Probe, sobald sie berührt wird."
+ },
+ "0eff98d237dc": {
+  "src": "Push a heavy box across a floor: it refuses to move until you push hard enough, jerks loose, then slides with less effort. Piston seals do the same.",
+  "tr": "Schieben Sie eine schwere Kiste über den Boden: Sie bewegt sich nicht, bis Sie fest genug drücken, ruckt dann los und gleitet danach mit weniger Kraft. Kolbendichtungen tun dasselbe."
+ },
+ "116a64bcc988": {
+  "src": "12.1 The three pressure equations",
+  "tr": "12.1 Die drei Druckgleichungen"
+ },
+ "1291f11ddc99": {
+  "src": "<span class=\"lbl\">answers with</span>the spool position $x_v$",
+  "tr": "<span class=\"lbl\">liefert</span>die Schieberstellung $x_v$"
+ },
+ "148be98dbdfa": {
+  "src": "out of B: $-K_v x^+ g(p_B - p_T)$ in $Q_B$",
+  "tr": "aus B heraus: $-K_v x^+ g(p_B - p_T)$ in $Q_B$"
+ },
+ "153cc934f83f": {
+  "src": "Part I treated oil as incompressible, and for a hand press that is fine. A servo press is different: its oil is squeezed by 12 MPa and asked to respond within milliseconds, and at that scale the oil’s small give becomes a spring that the whole machine bounces on. This chapter finds the law of that spring. It is the law of every chamber on the map of chapter 0.",
+  "tr": "Teil I behandelte Öl als inkompressibel, und für eine Handpresse ist das in Ordnung. Eine Servopresse ist anders: Ihr Öl wird mit 12 MPa zusammengedrückt und soll innerhalb von Millisekunden reagieren. In diesem Maßstab wird das kleine Nachgeben des Öls zu einer Feder, auf der die ganze Maschine federt. Dieses Kapitel findet das Gesetz dieser Feder. Es ist das Gesetz jeder Kammer auf der Karte aus Kapitel 0."
+ },
+ "18dc03a39dad": {
+  "src": "<span class=\"chn\">10</span> The spool and its torque motor",
+  "tr": "<span class=\"chn\">10</span> Der Ventilschieber und sein Drehmomentmotor"
+ },
+ "19b8b8ec5754": {
+  "src": "Bernoulli along a streamline into the jet gives $p_u - p_d = \\tfrac12\\rho v_j^2$. Substitute:",
+  "tr": "Bernoulli entlang einer Stromlinie in den Strahl hinein liefert $p_u - p_d = \\tfrac12\\rho v_j^2$. Setzen Sie ein:"
+ },
+ "1df600921d63": {
+  "src": "That is the wave equation, and $c$ is the speed of sound in oil. (A rubber hose bulges as a wave passes and slows it somewhat, the Korteweg correction; the model ignores that.) A 2 m hose rings like an organ pipe at about $c/2L \\approx 330\\ \\mathrm{Hz}$ and above. One rigid slug is a good model only well below that. The servo loop crosses over near 10 Hz (its loop gain falls through 1 there; chapter 18), so the lumped model is good where the controller works. The 174 Hz mode it predicts, the slug bouncing between the port volume and the cap chamber (worked solution 2 on the Servo-Hydraulic Press page evaluates it with the volumes of (12.1)), is however already halfway to the first wave mode, so treat its exact frequency with care.",
+  "tr": "Das ist die Wellengleichung, und $c$ ist die Schallgeschwindigkeit im Öl. (Ein Gummischlauch bläht sich auf, wenn eine Welle hindurchläuft, und verlangsamt sie etwas, die Korteweg-Korrektur; das Modell vernachlässigt sie.) Ein 2 m langer Schlauch klingt wie eine Orgelpfeife bei etwa $c/2L \\approx 330\\ \\mathrm{Hz}$ und darüber. Eine starre Säule ist nur weit darunter ein gutes Modell. Der Servokreis hat seine Durchtrittsfrequenz nahe 10 Hz (dort fällt seine Schleifenverstärkung durch 1; Kapitel 18), daher ist das konzentrierte Modell dort gut, wo der Regler arbeitet. Die vorhergesagte Schwingung mit 174 Hz, bei der die Säule zwischen dem Anschlussvolumen und der Bodenkammer schwingt (durchgerechnete Lösung 2 auf der Seite Servohydraulische Presse berechnet sie mit den Volumina aus (12.1)), liegt jedoch schon auf halbem Weg zur ersten Wellenmode; behandeln Sie ihre genaue Frequenz daher mit Vorsicht."
+ },
+ "1e368359cd95": {
+  "src": "Apply the build-up equation (7.2) three times. The small volume at the valve port, $V_a$, which includes half the hose, receives $Q_A$ and sends $Q_h$ down the hose. The cap chamber receives $Q_h$ and grows as the ram rises. The rod chamber receives $Q_B$ and shrinks as the ram rises. The hose holds the volume $V_h = A_hL_h$; half of it is counted with each end. That split is the usual way to lump a line: the slug of chapter 11 carries the hose’s mass, and its compressibility, spread along its length, is shared between the two volumes it joins. Mind the case of the subscripts: $p_a$ is the pressure at the valve end of the hose, $p_A$ the pressure in the cap chamber at its far end.",
+  "tr": "Wenden Sie die Druckaufbaugleichung (7.2) dreimal an. Das kleine Volumen am Ventilanschluss, $V_a$, das die Hälfte des Schlauchs enthält, nimmt $Q_A$ auf und schickt $Q_h$ den Schlauch hinab. Die Bodenkammer nimmt $Q_h$ auf und wächst, wenn der Stößel steigt. Die Stangenkammer nimmt $Q_B$ auf und schrumpft, wenn der Stößel steigt. Der Schlauch enthält das Volumen $V_h = A_hL_h$; die Hälfte davon wird jedem Ende zugerechnet. Diese Aufteilung ist die übliche Art, eine Leitung zu konzentrieren: Die Ölsäule aus Kapitel 11 trägt die Masse des Schlauchs, und seine Kompressibilität, entlang der Länge verteilt, wird auf die beiden Volumina aufgeteilt, die er verbindet. Achten Sie auf die Groß- und Kleinschreibung der Indizes: $p_a$ ist der Druck am Ventilende des Schlauchs, $p_A$ der Druck in der Bodenkammer an ihrem fernen Ende."
+ },
+ "1ea52bdfa3ad": {
+  "src": "Put four orifices of chapter 8 into one bore, all opened and closed by one spool, and you have the valve that steers the press. This chapter writes down the flow through each of its edges, adds them into the flows at its ports, and finds the two numbers, $K_q$ and $K_c$, that summarise how the valve answers small changes.",
+  "tr": "Bringen Sie die vier Blenden aus Kapitel 8 in eine einzige Bohrung, die ein einziger Schieber öffnet und schließt, und Sie haben das Ventil, das die Presse steuert. Dieses Kapitel schreibt den Durchfluss durch jede seiner Kanten auf, addiert ihn zu den Durchflüssen an den Anschlüssen und ermittelt die beiden Zahlen $K_q$ und $K_c$, die zusammenfassen, wie das Ventil auf kleine Änderungen reagiert."
+ },
+ "2084551bf6cd": {
+  "src": "$I$ is the <i>inertance</i>, the hydraulic analogue of an inductor. It grows as the bore shrinks, $I\\propto 1/d_h^2$: a narrow hose is a heavy hose.",
+  "tr": "$I$ ist die <i>hydraulische Trägheit</i>, das hydraulische Analogon zu einer Induktivität. Sie wächst, wenn die Bohrung enger wird, $I\\propto 1/d_h^2$: Ein enger Schlauch ist ein schwerer Schlauch."
+ },
+ "22c332743c1a": {
+  "src": "That is the 0.61 measured in practice. The two cases bracket reality: a re-entrant tube contracts the jet most ($C_c = 0.5$), a sharp edge in a flat wall less (0.611), a rounded entry hardly at all (close to 1). A valve edge, with oil arriving along the spool rather than head-on, behaves much the same, which is why $C_d \\approx 0.6$ to $0.7$ is the working value.",
+  "tr": "Das ist der in der Praxis gemessene Wert 0.61. Die beiden Fälle umschließen die Wirklichkeit: Ein einragendes Rohr zieht den Strahl am stärksten zusammen ($C_c = 0.5$), eine scharfe Kante in einer ebenen Wand weniger (0.611), ein gerundeter Einlauf kaum (nahe 1). Eine Ventilkante, an der das Öl entlang des Schiebers statt frontal ankommt, verhält sich ganz ähnlich; deshalb ist $C_d \\approx 0.6$ bis $0.7$ der Arbeitswert."
+ },
+ "23aafbf79a37": {
+  "src": "Treat the oil in a hose of length $L_h$ and cross-section $A_h$ as one rigid slug of mass $\\rho A_h L_h$, moving at speed $Q_h/A_h$. The pressure at the inlet pushes it forward with $p_a A_h$, the pressure at the outlet pushes it back with $p_A A_h$, and friction costs a pressure drop $\\Delta p_f$. Newton's second law:",
+  "tr": "Behandeln Sie das Öl in einem Schlauch der Länge $L_h$ und mit dem Querschnitt $A_h$ als eine starre Ölsäule der Masse $\\rho A_h L_h$, die sich mit der Geschwindigkeit $Q_h/A_h$ bewegt. Der Druck am Eingang schiebt sie mit $p_a A_h$ voran, der Druck am Ausgang drückt sie mit $p_A A_h$ zurück, und die Reibung kostet einen Druckabfall $\\Delta p_f$. Newtons zweites Gesetz:"
+ },
+ "2582002618ef": {
+  "src": "11.1 Inertance",
+  "tr": "11.1 Hydraulische Trägheit"
+ },
+ "25db783989f5": {
+  "src": "9.2 The two valve coefficients",
+  "tr": "9.2 Die beiden Ventilkoeffizienten"
+ },
+ "2622c4b727b6": {
+  "src": "7.3 Air in the oil",
+  "tr": "7.3 Luft im Öl"
+ },
+ "27e33a47d6b0": {
+  "src": "Divide by $m_s$ and name the two combinations that appear: the undamped natural frequency $\\omega_v = \\sqrt{k/m_s}$ and the damping ratio $\\zeta_v = b_s/(2\\sqrt{k m_s})$, so that $k/m_s = \\omega_v^2$ and $b_s/m_s = 2\\zeta_v\\omega_v$. Measure the travel as a fraction of full stroke, $x_v = x/x_{\\max}$, and the command as a fraction of the current that holds the spool at full stroke, $u = K_{\\mathrm{coil}} i/(k\\,x_{\\max})$. Then",
+  "tr": "Dividieren Sie durch $m_s$ und benennen Sie die beiden Kombinationen, die dabei auftreten: die ungedämpfte Eigenfrequenz $\\omega_v = \\sqrt{k/m_s}$ und den Dämpfungsgrad $\\zeta_v = b_s/(2\\sqrt{k m_s})$, sodass $k/m_s = \\omega_v^2$ und $b_s/m_s = 2\\zeta_v\\omega_v$. Messen Sie den Weg als Bruchteil des vollen Hubs, $x_v = x/x_{\\max}$, und den Befehl als Bruchteil des Stroms, der den Ventilschieber im vollen Hub hält, $u = K_{\\mathrm{coil}} i/(k\\,x_{\\max})$. Dann"
+ },
+ "287ad6a81253": {
+  "src": "out of A: $+K_v x^- g(p_a - p_T)$ in $Q_A$, negative since $x^- < 0$",
+  "tr": "aus A heraus: $+K_v x^- g(p_a - p_T)$ in $Q_A$, negativ, da $x^- < 0$"
+ },
+ "28a669cd4f69": {
+  "src": "Squeeze a garden hose with your thumb and the water shoots out fast: pressure turned into speed. In the valve, the speed is then lost in a turbulent swirl, and the pressure difference becomes heat.",
+  "tr": "Drücken Sie einen Gartenschlauch mit dem Daumen zusammen, dann schießt das Wasser schnell heraus: Druck wird zu Geschwindigkeit. Im Ventil geht diese Geschwindigkeit danach in einem turbulenten Wirbel verloren, und der Druckunterschied wird zu Wärme."
+ },
+ "2f206e947f44": {
+  "src": "7.2 The pressure build-up equation",
+  "tr": "7.2 Die Gleichung des Druckaufbaus"
+ },
+ "2f6ea60daa87": {
+  "src": "Integrate twice with the oil at rest on both walls, $u(0) = u(c) = 0$, and add up the flow across the gap:",
+  "tr": "Integrieren Sie zweimal, mit dem Öl in Ruhe an beiden Wänden, $u(0) = u(c) = 0$, und bilden Sie dann den Durchfluss über den gesamten Spalt:"
+ },
+ "33558fb480fb": {
+  "src": "<span class=\"chn\">7</span> Oil is a stiff spring",
+  "tr": "<span class=\"chn\">7</span> Öl ist eine steife Feder"
+ },
+ "36ae371fa43c": {
+  "src": "Command a sine, $u = \\hat{u}\\,e^{j\\omega t}$. Once the start-up transient has died away the spool moves at the same frequency, $x_v = \\hat{x}\\,e^{j\\omega t}$, so each time derivative brings down a factor $j\\omega$. Substitute into (10.1): $(-\\omega^2 + 2j\\zeta_v\\omega_v\\omega + \\omega_v^2)\\,\\hat{x} = \\omega_v^2\\,\\hat{u}$. Divide by $\\omega_v^2\\hat{u}$ to get the ratio of output to input, a complex number whose size is the gain and whose angle is the phase:",
+  "tr": "Geben Sie eine Sinusschwingung als Befehl vor, $u = \\hat{u}\\,e^{j\\omega t}$. Wenn der Einschwingvorgang abgeklungen ist, bewegt sich der Ventilschieber mit derselben Frequenz, $x_v = \\hat{x}\\,e^{j\\omega t}$, sodass jede Zeitableitung einen Faktor $j\\omega$ liefert. Setzen Sie in (10.1) ein: $(-\\omega^2 + 2j\\zeta_v\\omega_v\\omega + \\omega_v^2)\\,\\hat{x} = \\omega_v^2\\,\\hat{u}$. Dividieren Sie durch $\\omega_v^2\\hat{u}$, um das Verhältnis von Ausgang zu Eingang zu erhalten, eine komplexe Zahl, deren Betrag die Verstärkung und deren Winkel die Phase ist:"
+ },
+ "37f09ec6401e": {
+  "src": "<span class=\"lbl\">given</span>the spool position $x_v$; the pressures $p_s$, $p_T$ and the port pressures $p_a$, $p_B$",
+  "tr": "<span class=\"lbl\">gegeben</span>die Schieberstellung $x_v$; die Drücke $p_s$, $p_T$ sowie die Anschlussdrücke $p_a$, $p_B$"
+ },
+ "3aa1ab2ac896": {
+  "src": "<span class=\"lbl\">answers with</span>the force $F$ it pushes back with",
+  "tr": "<span class=\"lbl\">liefert</span>die Kraft $F$, mit der sie zurückdrückt"
+ },
+ "3ac4d540f95d": {
+  "src": "Figure 6. Laminar flow in a pipe: a parabola, zero at the wall.",
+  "tr": "Abbildung 6. Laminare Strömung im Rohr: ein Parabelprofil, null an der Wand."
+ },
+ "3c94de6edef6": {
+  "src": "The flow through the opening is the jet speed times the jet’s area at the vena contracta, and that area is smaller than the hole: a fraction $C_c$ of the opening $A_o$, the <i>contraction coefficient</i>. Why the jet contracts at all, and by how much, is the subject of the next section. A little friction also slows the jet, by a factor $C_v \\approx 0.98$. Both factors are lumped into a <i>discharge coefficient</i> $C_d = C_cC_v \\approx 0.6$ to $0.7$:",
+  "tr": "Der Durchfluss durch die Öffnung ist die Strahlgeschwindigkeit mal die Fläche des Strahls an der Vena contracta, und diese Fläche ist kleiner als das Loch: ein Anteil $C_c$ der Öffnung $A_o$, der <i>Kontraktionskoeffizient</i>. Warum sich der Strahl überhaupt zusammenzieht und wie stark, ist Thema des nächsten Abschnitts. Außerdem bremst etwas Reibung den Strahl um einen Faktor $C_v \\approx 0.98$. Beide Faktoren fasst man zu einem <i>Durchflussbeiwert</i> $C_d = C_cC_v \\approx 0.6$ bis $0.7$ zusammen:"
+ },
+ "3d0e4bf8fc2e": {
+  "src": "<span class=\"lbl\">given</span>the opening $A_o$ and the pressures $p_u$ upstream and $p_d$ downstream",
+  "tr": "<span class=\"lbl\">gegeben</span>die Öffnung $A_o$ sowie die Drücke $p_u$ stromaufwärts und $p_d$ stromabwärts"
+ },
+ "403ccf651ec5": {
+  "src": "the specimen<small>a spring and a damper</small>",
+  "tr": "die Probe<small>eine Feder und ein Dämpfer</small>"
+ },
+ "44081c4b9c98": {
+  "src": "model a hose as an inertance with laminar and turbulent friction (11.1)–(11.3), and say when that lumped model holds;",
+  "tr": "einen Schlauch als hydraulische Trägheit mit laminarer und turbulenter Reibung modellieren (11.1)–(11.3) und angeben, wann dieses konzentrierte Modell gilt;"
+ },
+ "456df62eae8c": {
+  "src": "Leakage adds a laminar path from the pump into each port and from each port to the tank, all with the conductance $K_L$ of section 8.3. For port A that is",
+  "tr": "Die Leckage fügt von der Pumpe zu jedem Anschluss und von jedem Anschluss zum Tank einen laminaren Pfad hinzu, alle mit dem Leitwert $K_L$ aus Abschnitt 8.3. Für Anschluss A ist das"
+ },
+ "47c3f1a140cd": {
+  "src": "a volume of oil<small>capacitor, $C = V/\\beta$</small>",
+  "tr": "ein Ölvolumen<small>Kondensator, $C = V/\\beta$</small>"
+ },
+ "47e025ab31e5": {
+  "src": "Take a mixture of a liquid volume $V_\\ell$ and a gas volume $V_g$. When the pressure rises by $dp$ both shrink. The liquid follows (7.1): $dV_\\ell = -V_\\ell\\,dp/\\beta_{\\mathrm{oil}}$. The gas follows a polytropic law $p_{\\mathrm{abs}}V_g^n = \\text{const}$, whose differential is $n\\,p_{\\mathrm{abs}}V_g^{n-1}dV_g + V_g^n\\,dp = 0$, so $dV_g = -V_g\\,dp/(n\\,p_{\\mathrm{abs}})$. The compliances add:",
+  "tr": "Nehmen Sie ein Gemisch aus einem Flüssigkeitsvolumen $V_\\ell$ und einem Gasvolumen $V_g$. Steigt der Druck um $dp$, schrumpfen beide. Die Flüssigkeit folgt (7.1): $dV_\\ell = -V_\\ell\\,dp/\\beta_{\\mathrm{oil}}$. Das Gas folgt einem polytropen Gesetz $p_{\\mathrm{abs}}V_g^n = \\text{const}$, dessen Differential $n\\,p_{\\mathrm{abs}}V_g^{n-1}dV_g + V_g^n\\,dp = 0$ ist, also $dV_g = -V_g\\,dp/(n\\,p_{\\mathrm{abs}})$. Die Nachgiebigkeiten addieren sich:"
+ },
+ "484fbca24606": {
+  "src": "A steady command gives $x_v = u$: the spool goes where it is told, once it has had time. In a two-stage valve the torque motor moves a flapper that steers a small pilot flow, and the pilot flow pushes the main spool; there are more parts and more equations, but measured responses of good two-stage valves are close to (10.1) over the band where they are used, so manufacturers quote $f_v$ and $\\zeta_v$ and the model uses the same form.",
+  "tr": "Ein stationärer Befehl ergibt $x_v = u$: Der Ventilschieber geht dorthin, wohin man ihn schickt, sobald er Zeit gehabt hat. Bei einem zweistufigen Ventil bewegt der Drehmomentmotor eine Klappe, die einen kleinen Vorsteuerstrom lenkt, und dieser Vorsteuerstrom schiebt den Hauptschieber. Es gibt mehr Teile und mehr Gleichungen, doch gemessene Antworten guter zweistufiger Ventile liegen im Einsatzbereich nahe bei (10.1). Deshalb geben Hersteller $f_v$ und $\\zeta_v$ an, und das Modell verwendet dieselbe Form."
+ },
+ "4b93b94d151f": {
+  "src": "Even a closed edge leaks. Between each land and the bore there is a radial clearance $c$ of micrometres, and oil creeps through it along the land, a length $L$, from the high-pressure side to the low. The gap is so thin that the flow is laminar. Unroll the ring into a flat slit of width $w = \\pi d$ for a spool of diameter $d$. Take a thin layer of oil between heights $z$ and $z + dz$ across the gap. The pressure difference pushes it along with $\\Delta p\\,w\\,dz$; the shear stress $\\tau = \\eta\\,du/dz$ of its neighbours acts on its top and bottom faces, of area $wL$. In steady flow the forces balance:",
+  "tr": "Selbst eine geschlossene Kante leckt. Zwischen jedem Steg und der Bohrung liegt ein radiales Spiel $c$ von wenigen Mikrometern, und Öl kriecht durch dieses Spiel entlang des Stegs über eine Länge $L$ von der Hochdruck- zur Niederdruckseite. Der Spalt ist so dünn, dass die Strömung laminar ist. Wickeln Sie den Ring in Gedanken zu einem ebenen Schlitz der Breite $w = \\pi d$ ab, für einen Schieber mit dem Durchmesser $d$. Betrachten Sie eine dünne Schicht Öl zwischen den Höhen $z$ und $z + dz$ über dem Spalt. Der Druckunterschied schiebt sie mit $\\Delta p\\,w\\,dz$ voran; die Schubspannung $\\tau = \\eta\\,du/dz$ ihrer Nachbarn wirkt auf ihre Ober- und Unterseite, die jeweils die Fläche $wL$ haben. Bei stationärer Strömung halten sich die Kräfte im Gleichgewicht:"
+ },
+ "4d8c5081d61e": {
+  "src": "The jet has half the area of the hole, exactly. Momentum demands it: Bernoulli turns the pressure difference into a speed, but the same pressure difference acting on the hole can only supply half the momentum that a full-bore jet at that speed would carry.",
+  "tr": "Der Strahl hat genau die halbe Fläche des Lochs. Der Impuls verlangt es: Bernoulli macht aus der Druckdifferenz eine Geschwindigkeit, aber dieselbe Druckdifferenz, die auf das Loch wirkt, kann nur die Hälfte des Impulses liefern, den ein Strahl mit vollem Querschnitt bei dieser Geschwindigkeit trüge."
+ },
+ "4feaa29995a7": {
+  "src": "10.2 How the spool lags a sine",
+  "tr": "10.2 Wie der Ventilschieber einer Sinusschwingung nacheilt"
+ },
+ "510666f2b9a3": {
+  "src": "<div class=\"ctag\">In our press</div>Over one cycle the pump does 26.3 kJ of work and the valve burns 24.4 kJ of it: 93 %. A valve throttling a constant-pressure supply is a brake. Industrial presses use variable pumps or accumulators to waste less.",
+  "tr": "<div class=\"ctag\">In unserer Presse</div>In einem Zyklus verrichtet die Pumpe 26.3 kJ Arbeit, und das Ventil setzt davon 24.4 kJ in Wärme um: 93 %. Ein Ventil, das eine Versorgung mit konstantem Druck drosselt, wirkt wie eine Bremse. Industriepressen setzen Verstellpumpen oder Druckspeicher ein, um weniger zu verschwenden."
+ },
+ "539f49f92688": {
+  "src": "Equations (10.1), (12.1), (11.1) and (12.2), with the valve flows (9.1), friction (12.3) and contact (12.4), form a system $\\dot{\\mathbf{x}} = \\mathbf{f}(\\mathbf{x}, u)$ of eight first-order nonlinear differential equations driven by one input, the command $u$. Every other quantity, the valve flows, the friction, the specimen force, is computed from the state at each instant: these are the dissipating blocks, the resistors, which store nothing. That is all the servo press is. The page integrates it with fourth-order Runge–Kutta at 100 steps per controller sample, and integrates seven more quantities alongside to keep the energy books (chapter 19).",
+  "tr": "Die Gleichungen (10.1), (12.1), (11.1) und (12.2) bilden zusammen mit den Ventilströmen (9.1), der Reibung (12.3) und dem Kontakt (12.4) ein System $\\dot{\\mathbf{x}} = \\mathbf{f}(\\mathbf{x}, u)$ aus acht nichtlinearen Differentialgleichungen erster Ordnung, das von einer einzigen Eingangsgröße angetrieben wird, dem Befehl $u$. Jede andere Größe – die Ventilströme, die Reibung, die Probenkraft – wird in jedem Augenblick aus dem Zustand berechnet: Das sind die dissipierenden Blöcke, die Widerstände, die nichts speichern. Mehr ist die Servopresse nicht. Die Seite integriert sie mit dem Runge-Kutta-Verfahren vierter Ordnung bei 100 Schritten je Reglerabtastung und integriert sieben weitere Größen mit, um die Energiebilanz zu führen (Kapitel 19)."
+ },
+ "54030d02e904": {
+  "src": "Seal a syringe full of oil and lean on the plunger with all your weight: it moves by a hair. The oil is not incompressible, only very stiff.",
+  "tr": "Verschließen Sie eine mit Öl gefüllte Spritze und lehnen Sie sich mit Ihrem ganzen Gewicht auf den Kolben: Er bewegt sich nur um ein Haar. Das Öl ist nicht inkompressibel, nur sehr steif."
+ },
+ "5427012bcc27": {
+  "src": "Seal friction is not derived from first principles here, because nobody can: it depends on the rubber, the oil film and the surface finish. What can be explained is its shape. In 1902 Richard Stribeck measured the friction in lubricated bearings as a function of speed and found that it falls as speed rises from zero, reaches a minimum, and then grows again (Stribeck, <i>Zeitschrift des Vereines deutscher Ingenieure</i> 46, 1902). At rest and at crawling speed the seal touches the rod through a broken oil film, and solid friction dominates. As speed rises, the oil is dragged into the contact and lifts the seal off, so friction falls. At higher speed the film is complete and its viscous shear grows with speed.",
+  "tr": "Die Dichtungsreibung wird hier nicht aus ersten Prinzipien abgeleitet, weil das niemand kann: Sie hängt vom Gummi, vom Ölfilm und von der Oberflächenbeschaffenheit ab. Erklärbar ist ihre Form. 1902 maß Richard Stribeck die Reibung in geschmierten Lagern als Funktion der Geschwindigkeit und fand, dass sie mit steigender Geschwindigkeit von null an fällt, ein Minimum erreicht und dann wieder wächst (Stribeck, <i>Zeitschrift des Vereines deutscher Ingenieure</i> 46, 1902). Im Stillstand und bei kriechender Geschwindigkeit berührt die Dichtung die Stange durch einen unterbrochenen Ölfilm, und die Festkörperreibung dominiert. Mit steigender Geschwindigkeit wird das Öl in den Kontakt gezogen und hebt die Dichtung ab, sodass die Reibung fällt. Bei höherer Geschwindigkeit ist der Film vollständig, und seine viskose Scherung wächst mit der Geschwindigkeit."
+ },
+ "57c9ea1bd91d": {
+  "src": "10.1 Newton for the spool",
+  "tr": "10.1 Newton für den Ventilschieber"
+ },
+ "583389584619": {
+  "src": "assemble a complete nonlinear state model of a valve-controlled actuator (13.1).",
+  "tr": "ein vollständiges nichtlineares Zustandsmodell eines ventilgesteuerten Stellglieds (13.1) aufstellen."
+ },
+ "5a30dd133789": {
+  "src": "<span class=\"lbl\">given</span>the net flow into it, $Q_{\\mathrm{in}} - Q_{\\mathrm{out}}$, and the speed of its moving wall, $\\dot V$",
+  "tr": "<span class=\"lbl\">gegeben</span>der Nettozufluss in sie, $Q_{\\mathrm{in}} - Q_{\\mathrm{out}}$, und die Geschwindigkeit ihrer bewegten Wand, $\\dot V$"
+ },
+ "5acac8cb5905": {
+  "src": "The slug model assumes that a push at one end of the hose moves all of its oil at once. It does not: a push travels as a pressure wave. Follow a short piece of the oil column, $dx$ long, as a small pressure disturbance $p(x,t)$ and speed $u(x,t)$ pass through. Mass conservation for the piece, with (7.1), says that oil piling up raises the pressure: $\\partial p/\\partial t = -\\beta\\,\\partial u/\\partial x$. Newton for the piece says that a pressure gradient accelerates it: $\\rho\\,\\partial u/\\partial t = -\\partial p/\\partial x$. Differentiate the first in time, the second in space, and eliminate $u$:",
+  "tr": "Das Säulenmodell setzt voraus, dass ein Stoß an einem Ende des Schlauchs das gesamte Öl auf einmal bewegt. Das tut er nicht: Ein Stoß läuft als Druckwelle. Verfolgen Sie ein kurzes Stück der Ölsäule der Länge $dx$, während eine kleine Druckstörung $p(x,t)$ und die Geschwindigkeit $u(x,t)$ hindurchlaufen. Die Massenerhaltung für das Stück sagt mit (7.1), dass angestautes Öl den Druck erhöht: $\\partial p/\\partial t = -\\beta\\,\\partial u/\\partial x$. Newton für das Stück sagt, dass ein Druckgradient es beschleunigt: $\\rho\\,\\partial u/\\partial t = -\\partial p/\\partial x$. Differenzieren Sie die erste nach der Zeit, die zweite nach dem Ort, und eliminieren Sie $u$:"
+ },
+ "5c2938120bcd": {
+  "src": "the ram<small>a mass</small>",
+  "tr": "der Stößel<small>eine Masse</small>"
+ },
+ "624e995814aa": {
+  "src": "<div class=\"ctag\">In our press</div>$Q_N = 100\\ \\mathrm{L/min}$ at 7 MPa gives $K_v = 8.91\\times10^{-7}\\ \\mathrm{m^3/(s\\sqrt{Pa})}$. With $C_d = 0.62$ that is a full opening $w\\,x_{\\max} = 30\\ \\mathrm{mm^2}$: a 10 mm diameter port ring opened by about 1 mm.",
+  "tr": "<div class=\"ctag\">In unserer Presse</div>$Q_N = 100\\ \\mathrm{L/min}$ bei 7 MPa ergibt $K_v = 8.91\\times10^{-7}\\ \\mathrm{m^3/(s\\sqrt{Pa})}$. Mit $C_d = 0.62$ ist das eine volle Öffnung $w\\,x_{\\max} = 30\\ \\mathrm{mm^2}$: ein Anschlussring mit 10 mm Durchmesser, der um etwa 1 mm geöffnet ist."
+ },
+ "6279813401bc": {
+  "src": "The model adds the two, $\\Delta p_f = R_{\\mathrm{lam}}Q + K_t Q|Q|$: the laminar term dominates at small flow, the turbulent term at large flow. The form $Q|Q|$ keeps the sign of the loss opposite to the flow.",
+  "tr": "Das Modell addiert beide, $\\Delta p_f = R_{\\mathrm{lam}}Q + K_t Q|Q|$: Der laminare Term überwiegt bei kleinem Durchfluss, der turbulente bei großem Durchfluss. Die Form $Q|Q|$ sorgt dafür, dass das Vorzeichen des Verlusts der Strömung entgegengesetzt ist."
+ },
+ "63a8afc0eed9": {
+  "src": "In a spool valve a stepped rod, the <i>spool</i>, slides in a close-fitting bore. Its wide sections, the <i>lands</i>, cover and uncover slots cut in the wall of the bore. The opening is such a slot: $A_o = w\\,x$, with $w$ the circumferential width of the port (the <i>area gradient</i>) and $x$ the spool travel. Normalize the travel to $\\hat{x} = x/x_{\\max} \\in [-1, 1]$ and collect the constants into one valve coefficient:",
+  "tr": "In einem Schieberventil gleitet eine abgesetzte Stange, der <i>Ventilschieber</i>, in einer eng anliegenden Bohrung. Seine breiten Abschnitte, die <i>Stege</i>, decken Schlitze in der Bohrungswand ab und legen sie wieder frei. Die Öffnung ist so ein Schlitz: $A_o = w\\,x$, mit $w$ der Umfangsbreite des Anschlusses (dem <i>Flächengradienten</i>) und $x$ dem Schieberweg. Normieren Sie den Weg auf $\\hat{x} = x/x_{\\max} \\in [-1, 1]$ und fassen Sie die Konstanten zu einem Ventilkoeffizienten zusammen:"
+ },
+ "64c6561c79dc": {
+  "src": "Take the simplest servo valve, a single-stage one, in which the torque motor pushes the spool directly. The coil current $i$ produces a force $K_{\\mathrm{coil}}\\,i$ on the spool. Centring springs of stiffness $k$ pull it back to the middle, oil films and the motor’s eddy currents damp it with a force $b_s\\,\\dot{x}$, and the spool has mass $m_s$. Newton:",
+  "tr": "Nehmen Sie das einfachste Servoventil, ein einstufiges, bei dem der Drehmomentmotor den Ventilschieber direkt verschiebt. Der Spulenstrom $i$ erzeugt eine Kraft $K_{\\mathrm{coil}}\\,i$ auf den Schieber. Zentrierfedern der Steifigkeit $k$ ziehen ihn in die Mitte zurück, Ölfilme und die Wirbelströme des Motors dämpfen ihn mit einer Kraft $b_s\\,\\dot{x}$, und der Schieber hat die Masse $m_s$. Die Newton-Gleichung:"
+ },
+ "66c708aeead2": {
+  "src": "Expand the left side with the product rule, and use (7.1) to replace $\\dot{\\rho}$ by $(\\rho/\\beta)\\dot{p}$:",
+  "tr": "Entwickeln Sie die linke Seite mit der Produktregel und ersetzen Sie mit Hilfe von (7.1) $\\dot{\\rho}$ durch $(\\rho/\\beta)\\dot{p}$:"
+ },
+ "680d323a1d1f": {
+  "src": "Add up the flow through thin rings of area $2\\pi r\\,dr$:",
+  "tr": "Summieren Sie den Durchfluss durch dünne Ringe der Fläche $2\\pi r\\,dr$:"
+ },
+ "6d807687b6fd": {
+  "src": "torque motor and spool<small>a mass on a damped spring</small>",
+  "tr": "Drehmomentmotor und Ventilschieber<small>eine Masse an einer gedämpften Feder</small>"
+ },
+ "6dd539947b5f": {
+  "src": "Divide by $\\rho$:",
+  "tr": "Dividieren Sie durch $\\rho$:"
+ },
+ "6e682c8ea390": {
+  "src": "Figure 4. Spool shifted to positive $x_v$: the pump P feeds port A, port B drains to the tank T. Negative $x_v$ swaps the roles.",
+  "tr": "Abbildung 4. Schieber in positiver Stellung $x_v$: Die Pumpe P speist Anschluss A, Anschluss B leitet zum Tank T ab. Ein negatives $x_v$ tauscht die Rollen."
+ },
+ "7018ce81fdeb": {
+  "src": "Hang a weight from a spring in a jar of honey and tug the top of the spring: the weight follows, a moment late and without bouncing much. The spool is that weight.",
+  "tr": "Hängen Sie ein Gewicht an eine Feder in einem Glas Honig und ziehen Sie ruckartig am oberen Ende der Feder: Das Gewicht folgt mit kurzem Zeitverzug und ohne stark zu schwingen. Der Ventilschieber ist dieses Gewicht."
+ },
+ "71e349211942": {
+  "src": "The pump delivers hydraulic power $p_s Q_S$. The ports deliver $p_a Q_A + p_B Q_B$ to the actuator, and the tank receives $p_T(Q_S - Q_A - Q_B)$. The difference is lost in the jets as heat:",
+  "tr": "Die Pumpe liefert die hydraulische Leistung $p_s Q_S$. Die Anschlüsse geben $p_a Q_A + p_B Q_B$ an den Arbeitszylinder ab, und der Tank nimmt $p_T(Q_S - Q_A - Q_B)$ auf. Die Differenz geht in den Strahlen als Wärme verloren:"
+ },
+ "72fc482d2182": {
+  "src": "In slow, steady flow the layers of oil slide over each other. Take a cylinder of oil of radius $r$ and length $L$, coaxial with the pipe. The pressure difference pushes its ends with $\\Delta p\\,\\pi r^2$. On its curved surface the shear stress $\\tau = -\\eta\\,du/dr$ of the slower outer oil holds it back, where $\\eta = \\rho\\nu$ is the dynamic viscosity (written $\\eta$ here because $\\mu$ is already the effective mass of Part I) with $\\tau\\,2\\pi r L$. In steady flow these balance:",
+  "tr": "Bei langsamer, stationärer Strömung gleiten die Ölschichten aneinander vorbei. Betrachten Sie einen Ölzylinder mit Radius $r$ und Länge $L$, koaxial zum Rohr. Die Druckdifferenz drückt auf seine Stirnflächen mit $\\Delta p\\,\\pi r^2$. Auf seiner Mantelfläche hält die Schubspannung $\\tau = -\\eta\\,du/dr$ des langsameren äußeren Öls ihn zurück, wobei $\\eta = \\rho\\nu$ die dynamische Viskosität ist (hier als $\\eta$ geschrieben, weil $\\mu$ schon die effektive Masse aus Teil I bezeichnet); die Schubkraft ist $\\tau\\,2\\pi r L$. Bei stationärer Strömung halten sich diese Kräfte das Gleichgewicht:"
+ },
+ "77290afb87b6": {
+  "src": "12.4 The specimen and the stop",
+  "tr": "12.4 Die Probe und der Anschlag"
+ },
+ "78e8fc17e87c": {
+  "src": "<span class=\"lbl\">answers with</span>its position $y$ and speed $\\dot y$",
+  "tr": "<span class=\"lbl\">liefert</span>seine Lage $y$ und seine Geschwindigkeit $\\dot y$"
+ },
+ "791c74cca78d": {
+  "src": "The exponent $n$ is 1 for a slow, isothermal squeeze, where heat has time to leave, and $\\gamma = 1.4$ for a fast, adiabatic one. Air at atmospheric pressure has $\\beta_{\\mathrm{gas}} = 0.10$ to $0.14\\ \\mathrm{MPa}$, ten thousand times softer than oil. That contrast is the whole story of section 7.3.",
+  "tr": "Der Exponent $n$ ist 1 bei einem langsamen, isothermen Zusammendrücken, bei dem die Wärme Zeit hat zu entweichen, und $\\gamma = 1.4$ bei einem schnellen, adiabaten. Luft bei Atmosphärendruck hat $\\beta_{\\mathrm{gas}} = 0.10$ bis $0.14\\ \\mathrm{MPa}$, also zehntausendmal weicher als Öl. Dieser Gegensatz ist das eigentliche Thema von Abschnitt 7.3."
+ },
+ "7a80860062ee": {
+  "src": "The term $K_c$ acts like a resistor that bleeds flow when the pressure rises; it supplies most of the damping of an open valve.",
+  "tr": "Der Term $K_c$ wirkt wie ein Widerstand, der bei steigendem Druck einen Teil des Stroms ableitet; er liefert den größten Teil der Dämpfung eines offenen Ventils."
+ },
+ "7adbf054bd65": {
+  "src": "Whether the flow stays laminar depends on the Reynolds number $Re = \\bar{u}\\,d/\\nu$, the ratio of inertial to viscous forces. Above about 2300 the flow becomes turbulent. Eddies then carry momentum across the pipe far more effectively than viscosity does, and the wall stress no longer depends on the viscosity but on the density and the speed. Dimensional analysis then fixes the form: the only pressure that can be built from $\\rho$ and $\\bar{u}$ is $\\tfrac12\\rho\\bar{u}^2$, and the drop must grow in proportion to the length per diameter, $L/d$. The dimensionless factor in front, the <i>friction factor</i> $f$, is measured. Adding the losses in fittings and bends, $K_m$, gives the Darcy–Weisbach law:",
+  "tr": "Ob die Strömung laminar bleibt, hängt von der Reynolds-Zahl $Re = \\bar{u}\\,d/\\nu$ ab, dem Verhältnis von Trägheits- zu Zähigkeitskräften. Oberhalb von etwa 2300 wird die Strömung turbulent. Wirbel tragen den Impuls dann weit wirksamer quer durch das Rohr als die Zähigkeit, und die Wandschubspannung hängt nicht mehr von der Zähigkeit ab, sondern von der Dichte und der Geschwindigkeit. Die Dimensionsanalyse legt dann die Form fest: Der einzige Druck, der sich aus $\\rho$ und $\\bar{u}$ bilden lässt, ist $\\tfrac12\\rho\\bar{u}^2$, und der Abfall muss proportional zur Länge je Durchmesser, $L/d$, wachsen. Der dimensionslose Faktor davor, die <i>Rohrreibungszahl</i> $f$, wird gemessen. Fügt man die Verluste in Armaturen und Krümmern $K_m$ hinzu, erhält man das Darcy-Weisbach-Gesetz:"
+ },
+ "8048c0979662": {
+  "src": "Integrate with the no-slip condition $u(R) = 0$ at the wall:",
+  "tr": "Integrieren Sie mit der Haftbedingung $u(R) = 0$ an der Wand:"
+ },
+ "818ff6af20b2": {
+  "src": "12.3 Seal friction",
+  "tr": "12.3 Dichtungsreibung"
+ },
+ "832f94bf5aec": {
+  "src": "opening",
+  "tr": "Öffnung"
+ },
+ "834131e75b14": {
+  "src": "Two metres of hose join the valve to the cylinder. The oil in it weighs only 0.2 kg, but it has to be pushed back and forth every time the valve changes its mind, and through a 12 mm bore that takes a surprising pressure. This chapter finds that pressure, the friction on the way, and the limit beyond which a hose stops behaving like one lump of oil.",
+  "tr": "Zwei Meter Schlauch verbinden das Ventil mit dem Zylinder. Das Öl darin wiegt nur 0.2 kg, muss aber bei jedem Richtungswechsel des Ventils hin und her gedrückt werden, und bei 12 mm Innendurchmesser braucht das einen überraschend hohen Druck. Dieses Kapitel bestimmt diesen Druck, die Reibung auf dem Weg und die Grenze, jenseits derer ein Schlauch nicht mehr wie eine einzige starre Ölmasse wirkt."
+ },
+ "84e8f0bbb157": {
+  "src": "four-way valve<small>four orifices on one spool</small>",
+  "tr": "Vierwegeventil<small>vier Blenden auf einem Schieber</small>"
+ },
+ "86f7fb5b0bf9": {
+  "src": "<div class=\"ctag\">In our press</div>$f_v = 60\\ \\mathrm{Hz}$, $\\zeta_v = 0.7$. At 10 Hz the spool lags by 13°, at 38 Hz already by 56°: the valve alone eats a good part of the phase a feedback loop can afford.",
+  "tr": "<div class=\"ctag\">In unserer Presse</div>$f_v = 60\\ \\mathrm{Hz}$, $\\zeta_v = 0.7$. Bei 10 Hz eilt der Ventilschieber um 13° nach, bei 38 Hz schon um 56°: Das Ventil allein verbraucht einen guten Teil des Phasenbudgets, das sich ein Regelkreis leisten kann."
+ },
+ "872bc1b89820": {
+  "src": "<span class=\"lbl\">answers with</span>the flow $Q$",
+  "tr": "<span class=\"lbl\">liefert</span>den Durchfluss $Q$"
+ },
+ "89956f7f47ee": {
+  "src": "The cap area is the full bore, $A_A = \\pi D^2/4$; the rod side has the annulus $A_B = \\pi(D^2 - d_r^2)/4$. Each chamber carries its own $\\beta(p)$ from (7.3), because each sits at its own pressure.",
+  "tr": "Die Bodenfläche ist die volle Bohrung, $A_A = \\pi D^2/4$; die Stangenseite hat die Ringfläche $A_B = \\pi(D^2 - d_r^2)/4$. Jede Kammer trägt ihr eigenes $\\beta(p)$ aus (7.3), weil jede bei ihrem eigenen Druck liegt."
+ },
+ "8a88d954f298": {
+  "src": "8.3 Leakage",
+  "tr": "8.3 Leckage"
+ },
+ "8bbd0bbd49cb": {
+  "src": "Watch a bath drain or a tap fill a glass: the stream narrows just after it leaves the opening. Oil arriving from the sides cannot turn the corner at the edge instantly; it keeps some sideways speed and squeezes the jet.",
+  "tr": "Beobachten Sie, wie eine Badewanne abläuft oder ein Wasserhahn ein Glas füllt: Der Strahl verengt sich gleich nach dem Austritt aus der Öffnung. Öl, das von den Seiten herankommt, kann an der Kante nicht sofort um die Ecke biegen; es behält etwas Seitengeschwindigkeit und drückt den Strahl zusammen."
+ },
+ "8c5121af283e": {
+  "src": "The minus sign makes $\\beta$ positive, since volume falls as pressure rises. The second form follows because the mass $\\rho V$ of a sealed sample is fixed: $d(\\rho V) = V\\,d\\rho + \\rho\\,dV = 0$, so $d\\rho/\\rho = -dV/V$. Mineral hydraulic oil has $\\beta \\approx 1.5\\ \\mathrm{GPa}$: squeezing it by 1 % takes 15 MPa.",
+  "tr": "Das Minuszeichen macht $\\beta$ positiv, weil das Volumen mit steigendem Druck abnimmt. Die zweite Form folgt daraus, dass die Masse $\\rho V$ einer abgeschlossenen Probe konstant ist: $d(\\rho V) = V\\,d\\rho + \\rho\\,dV = 0$, also $d\\rho/\\rho = -dV/V$. Hydrauliköl auf Mineralölbasis hat $\\beta \\approx 1.5\\ \\mathrm{GPa}$: Wird es um 1 % zusammengedrückt, braucht man dafür 15 MPa."
+ },
+ "8d14376f1d6f": {
+  "src": "Each line is built edge by edge. A port gains oil through the edge that connects it to the pump and loses oil through the edge that connects it to the tank; each edge passes $K_v\\,|\\text{opening}|\\,g(\\text{pressure drop across it})$ from (8.2) and (8.3):",
+  "tr": "Jeder Anschlussdurchfluss wird Kante für Kante aufgebaut. Ein Anschluss gewinnt Öl über die Kante, die ihn mit der Pumpe verbindet, und verliert Öl über die Kante, die ihn mit dem Tank verbindet; jede Kante führt $K_v\\,|\\text{opening}|\\,g(\\text{pressure drop across it})$ nach (8.2) und (8.3) hindurch:"
+ },
+ "8e0c18826e07": {
+  "src": "11.4 When is one slug enough?",
+  "tr": "11.4 Wann genügt eine einzige Ölsäule?"
+ },
+ "91857dd5b947": {
+  "src": "<span class=\"chn\">11</span> The hose: a slug of oil",
+  "tr": "<span class=\"chn\">11</span> Der Schlauch: eine Ölsäule"
+ },
+ "9a34a209027f": {
+  "src": "Part II",
+  "tr": "Teil II"
+ },
+ "9e3a2f16e67e": {
+  "src": "<span class=\"lbl\">answers with</span>its pressure $p$",
+  "tr": "<span class=\"lbl\">liefert</span>ihren Druck $p$"
+ },
+ "a0743a21106d": {
+  "src": "Manufacturers quote a rated flow $Q_N$ at a rated drop $\\Delta p_N$ across the whole valve, which is two metering edges in series, each taking $\\Delta p_N/2$. Hence $K_v = Q_N/\\sqrt{\\Delta p_N/2}$.",
+  "tr": "Hersteller geben einen Nenndurchfluss $Q_N$ bei einem Nenndruckabfall $\\Delta p_N$ über das ganze Ventil an. Dieses besteht aus zwei hintereinandergeschalteten Steuerkanten, von denen jede $\\Delta p_N/2$ aufnimmt. Daher ist $K_v = Q_N/\\sqrt{\\Delta p_N/2}$."
+ },
+ "a0f2c69a18ea": {
+  "src": "edge",
+  "tr": "Kante"
+ },
+ "a21bebd8cafb": {
+  "src": "Read it as a budget: the net flow into the chamber either moves the boundary ($\\dot V$) or compresses the oil already there ($V\\dot p/\\beta$). The ratio $C = V/\\beta$ is the <i>hydraulic capacitance</i>; it plays the role of a capacitor, with pressure as voltage and flow as current. Every chamber of the servo press obeys (7.2).",
+  "tr": "Lesen Sie sie als Bilanz: Der Nettozufluss in die Kammer bewegt entweder die Grenze ($\\dot V$) oder komprimiert das bereits vorhandene Öl ($V\\dot p/\\beta$). Das Verhältnis $C = V/\\beta$ ist die <i>hydraulische Kapazität</i>; sie spielt die Rolle eines Kondensators, mit dem Druck als Spannung und dem Durchfluss als Strom. Jede Kammer der Servopresse gehorcht (7.2)."
+ },
+ "a2bd77b79d48": {
+  "src": "After Part II you can",
+  "tr": "Nach Teil II können Sie"
+ },
+ "a33c9be28cf9": {
+  "src": "Figure 5. The hose slug bouncing between two oil springs: the slosh mode of worked solution 2 on the Servo-Hydraulic Press page.",
+  "tr": "Abbildung 5. Die Ölsäule im Schlauch schwingt zwischen zwei Ölfedern: die Schwappschwingung der durchgerechneten Lösung 2 auf der Seite Servohydraulische Presse."
+ },
+ "a391476c7b3e": {
+  "src": "cap and rod chambers<small>two capacitors</small>",
+  "tr": "Boden- und Stangenkammer<small>zwei Kapazitäten</small>"
+ },
+ "a44dd6c8ec34": {
+  "src": "The square root has an infinite slope at $\\Delta p = 0$, which a linear analysis and a numerical integrator both dislike. Real orifices also become laminar at tiny flows, where $Q \\propto \\Delta p$. The model uses",
+  "tr": "Die Quadratwurzel hat bei $\\Delta p = 0$ eine unendliche Steigung, was eine lineare Analyse ebenso wie ein numerischer Integrator schlecht verträgt. Echte Blenden werden bei winzigen Strömen zudem laminar, wo $Q \\propto \\Delta p$ gilt. Das Modell verwendet"
+ },
+ "a5e261b12a88": {
+  "src": "The gas volume itself shrinks with pressure, while the liquid volume, used as the reference in $\\alpha = V_g/V_\\ell$, is taken at its unsqueezed value: at 12 MPa the oil itself shrinks by only $p/\\beta_{\\mathrm{oil}} \\approx 0.8\\,\\%$, and that compression is already counted in (7.3) through its $1/\\beta_{\\mathrm{oil}}$ term. If the air makes up a fraction $\\alpha_0$ of the total volume at atmospheric pressure $p_0$, its volume there is $V_{g0}$ with $V_{g0}/(V_\\ell + V_{g0}) = \\alpha_0$, so $V_{g0}/V_\\ell = \\alpha_0/(1-\\alpha_0)$. The polytropic law carries the bubble from $p_0$ to $p_{\\mathrm{abs}}$, $p_{\\mathrm{abs}}V_g^n = p_0 V_{g0}^n$, so $V_g = V_{g0}\\,(p_0/p_{\\mathrm{abs}})^{1/n}$. Divide by $V_\\ell$:",
+  "tr": "Das Gasvolumen selbst schrumpft mit dem Druck, während das Flüssigkeitsvolumen, das als Bezugsgröße in $\\alpha = V_g/V_\\ell$ dient, im unkomprimierten Zustand angesetzt wird: Bei 12 MPa schrumpft das Öl selbst nur um $p/\\beta_{\\mathrm{oil}} \\approx 0.8\\,\\%$, und diese Kompression ist in (7.3) bereits durch den Term $1/\\beta_{\\mathrm{oil}}$ erfasst. Macht die Luft einen Anteil $\\alpha_0$ des Gesamtvolumens bei Atmosphärendruck $p_0$ aus, so beträgt ihr Volumen dort $V_{g0}$ mit $V_{g0}/(V_\\ell + V_{g0}) = \\alpha_0$, also $V_{g0}/V_\\ell = \\alpha_0/(1-\\alpha_0)$. Das polytrope Gesetz führt die Blase von $p_0$ auf $p_{\\mathrm{abs}}$, $p_{\\mathrm{abs}}V_g^n = p_0 V_{g0}^n$, also $V_g = V_{g0}\\,(p_0/p_{\\mathrm{abs}})^{1/n}$. Dividieren Sie durch $V_\\ell$:"
+ },
+ "a8aed62b98fe": {
+  "src": "The cap pressure pushes up on the full bore, the rod pressure pushes down on the annulus, gravity pulls down, and three contact forces remain.",
+  "tr": "Der Bodendruck drückt auf die volle Bohrung nach oben, der Stangendruck drückt auf die Ringfläche nach unten, die Schwerkraft zieht nach unten, und drei Kontaktkräfte bleiben zu berücksichtigen."
+ },
+ "abaf9d6857b4": {
+  "src": "For a sharp edge in a flat wall, the wall next to the edge does feel the moving oil, so the momentum balance no longer closes on its own. The free-streamline theory of Helmholtz and Kirchhoff solves that case with conformal mapping, and von Mises worked it out for many shapes in 1917; the derivation is beyond this text, so take the result as cited. For a long two-dimensional slot, the case of a valve edge, it gives",
+  "tr": "Bei einer scharfen Kante in einer ebenen Wand spürt die Wand neben der Kante das bewegte Öl, sodass die Impulsbilanz allein nicht mehr aufgeht. Die Freistrahltheorie von Helmholtz und Kirchhoff löst diesen Fall mit konformer Abbildung, und von Mises hat ihn 1917 für viele Formen durchgerechnet; die Herleitung liegt außerhalb dieses Textes, daher übernehmen Sie das Ergebnis mit dem Verweis auf seine Quelle. Für einen langen, zweidimensionalen Schlitz, den Fall einer Ventilkante, ergibt sich"
+ },
+ "abfc650096c8": {
+  "src": "and likewise for B; the pump feeds both leaks into the ports, $K_L(p_s - p_a) + K_L(p_s - p_B)$.",
+  "tr": "und ebenso für B; die Pumpe speist beide Leckagen in die Anschlüsse, $K_L(p_s - p_a) + K_L(p_s - p_B)$."
+ },
+ "aca3e54c3430": {
+  "src": "The servo press: building the model from the parts",
+  "tr": "Die Servopresse: das Modell aus seinen Teilen aufbauen"
+ },
+ "adf1248a3f9e": {
+  "src": "<span class=\"lbl\">given</span>flows $Q_h$ into the cap side and $Q_B$ into the rod side; the ram speed $\\dot y$",
+  "tr": "<span class=\"lbl\">gegeben</span>die Zuflüsse $Q_h$ zur Bodenseite und $Q_B$ zur Stangenseite; die Stößelgeschwindigkeit $\\dot y$"
+ },
+ "b174fbc9cd2b": {
+  "src": "11.2 Laminar friction: Hagen–Poiseuille",
+  "tr": "11.2 Laminare Reibung: Hagen–Poiseuille"
+ },
+ "b3ea6af14c1b": {
+  "src": "From here on $x_v$ is the normalized spool travel $\\hat{x}$ of (8.2), between −1 and 1. The pump holds the supply pressure $p_s$ at port P, and the tank pressure $p_T$ (zero here) sits at port T. Port A feeds the long hose, and its pressure is $p_a$; port B feeds the rod chamber through a short rigid line, so its pressure is the rod-chamber pressure $p_B$. A four-way valve has four metering edges. For $x_v > 0$ the edges P→A and B→T open; for $x_v < 0$ the edges P→B and A→T open. The valve is <i>critically lapped</i>: each land is exactly as wide as the slot it covers, with neither overlap nor gap, so at $x_v = 0$ all four edges are exactly closed and only leakage flows. Writing $x^+ = \\max(\\hat{x}, 0)$ and $x^- = \\min(\\hat{x}, 0)$, the flows out of the ports are",
+  "tr": "Von nun an ist $x_v$ der normierte Schieberweg $\\hat{x}$ aus (8.2), zwischen −1 und 1. Die Pumpe hält den Versorgungsdruck $p_s$ am Anschluss P, und der Tankdruck $p_T$ (hier null) liegt am Anschluss T. Anschluss A speist den langen Schlauch, dessen Druck $p_a$ ist; Anschluss B speist die Stangenkammer über eine kurze, starre Leitung, sodass sein Druck der Stangenkammerdruck $p_B$ ist. Ein Vierwegeventil hat vier Steuerkanten. Für $x_v > 0$ öffnen die Kanten P→A und B→T; für $x_v < 0$ öffnen die Kanten P→B und A→T. Das Ventil ist <i>nullüberdeckt</i>: Jeder Steg ist genau so breit wie der Schlitz, den er abdeckt, ohne Überlappung und ohne Spalt. Daher sind bei $x_v = 0$ alle vier Kanten genau geschlossen, und nur Leckage fließt. Mit $x^+ = \\max(\\hat{x}, 0)$ und $x^- = \\min(\\hat{x}, 0)$ lauten die Durchflüsse aus den Anschlüssen"
+ },
+ "b93127ea6074": {
+  "src": "<span class=\"lbl\">answers with</span>the port flows $Q_A$, $Q_B$ and the pump flow $Q_S$",
+  "tr": "<span class=\"lbl\">liefert</span>die Anschlussdurchflüsse $Q_A$, $Q_B$ und den Pumpendurchfluss $Q_S$"
+ },
+ "b9b8a4ace1ef": {
+  "src": "8.2 Taming the square root",
+  "tr": "8.2 Die Wurzel zähmen"
+ },
+ "ba467fe47408": {
+  "src": "The specimen is a spring $k_w$ with a damper $c_w$ in parallel (a Kelvin–Voigt solid); the damper is set to 5 % of critical. <i>Critical</i> damping is the value that separates bouncing from creeping: for a mass $m$ on a spring $k$ with damper $c$, the motion $m\\ddot{\\delta} + c\\dot{\\delta} + k\\delta = 0$ goes as $e^{\\lambda t}$ with $m\\lambda^2 + c\\lambda + k = 0$, whose roots are real, so the motion does not oscillate, once $c^2 \\ge 4mk$. The boundary is $c_{\\mathrm{crit}} = 2\\sqrt{km}$, and here $c_w = 0.05\\cdot 2\\sqrt{k_w m}$, with $m = 160\\ \\mathrm{kg}$ the ram that presses on the specimen: a lightly damped specimen, as a steel part is. It is only touched when the platen has climbed past $y_c$, and it can push but not pull:",
+  "tr": "Die Probe ist eine Feder $k_w$ mit einem Dämpfer $c_w$ parallel geschaltet (ein Kelvin-Voigt-Körper); der Dämpfer ist auf 5 % der kritischen Dämpfung eingestellt. <i>Kritische</i> Dämpfung ist der Wert, der das Schwingen vom Kriechen trennt: Für eine Masse $m$ an einer Feder $k$ mit Dämpfer $c$ gilt $m\\ddot{\\delta} + c\\dot{\\delta} + k\\delta = 0$. Mit dem Ansatz $e^{\\lambda t}$ folgt $m\\lambda^2 + c\\lambda + k = 0$, deren Wurzeln reell sind, sodass die Bewegung nicht schwingt, sobald $c^2 \\ge 4mk$. Die Grenze ist $c_{\\mathrm{crit}} = 2\\sqrt{km}$, und hier gilt $c_w = 0.05\\cdot 2\\sqrt{k_w m}$, mit $m = 160\\ \\mathrm{kg}$ für den Stößel, der auf die Probe drückt: eine schwach gedämpfte Probe, wie ein Stahlteil es ist. Sie wird erst berührt, wenn die Druckplatte über $y_c$ gestiegen ist, und sie kann drücken, aber nicht ziehen:"
+ },
+ "bb02512be4cf": {
+  "src": "<span class=\"lbl\">given</span>the ram position $y$ and speed $\\dot y$, once in contact",
+  "tr": "<span class=\"lbl\">gegeben</span>die Stößellage $y$ und die Geschwindigkeit $\\dot y$, sobald Kontakt besteht"
+ },
+ "bbf7d5eac14a": {
+  "src": "11.3 Turbulent friction",
+  "tr": "11.3 Turbulente Reibung"
+ },
+ "bd21389cf19b": {
+  "src": "A few bubbles turn the stiff spring into a soft one. Bubbles are springs that stiffen as you squeeze them: crush them to a fortieth of their size and they barely matter.",
+  "tr": "Wenige Blasen machen die steife Feder zu einer weichen. Blasen sind Federn, die beim Zusammendrücken steifer werden: Drückt man sie auf ein Vierzigstel ihrer Größe zusammen, fallen sie kaum noch ins Gewicht."
+ },
+ "bfbedaf7a00e": {
+  "src": "<span class=\"lbl\">answers with</span>the pressures $p_A$ and $p_B$",
+  "tr": "<span class=\"lbl\">liefert</span>die Drücke $p_A$ und $p_B$"
+ },
+ "c1694e97aca2": {
+  "src": "Swing the end of a garden hose full of water: the water lags behind, then pushes back. The column has mass, and a narrow bore makes it hard to get moving, because every litre per second must run fast.",
+  "tr": "Schwenken Sie das Ende eines mit Wasser gefüllten Gartenschlauchs hin und her: Das Wasser bleibt zurück und drückt dann dagegen. Die Säule hat Masse, und eine enge Bohrung macht es schwer, sie in Gang zu setzen, weil jeder Liter pro Sekunde schnell hindurch muss."
+ },
+ "c1e6bf06afc3": {
+  "src": "a sharp-edged orifice<small>nonlinear resistor</small>",
+  "tr": "eine scharfkantige Blende<small>nichtlinearer Widerstand</small>"
+ },
+ "c43f9cf80103": {
+  "src": "For small changes around a steady operating point, expand $Q_A(x_v, p_a)$ to first order:",
+  "tr": "Für kleine Änderungen um einen stationären Arbeitspunkt entwickeln wir $Q_A(x_v, p_a)$ bis zur ersten Ordnung:"
+ },
+ "c5822c358bd2": {
+  "src": "The bottom stop is the same law with a very stiff spring, $k_s = 2\\times10^8\\ \\mathrm{N/m}$, acting when $y < 0$.",
+  "tr": "Der untere Anschlag folgt demselben Gesetz mit einer sehr steifen Feder, $k_s = 2\\times10^8\\ \\mathrm{N/m}$, die wirkt, wenn $y < 0$ ist."
+ },
+ "c589b97292b7": {
+  "src": "<span class=\"chn\">13</span> The complete model",
+  "tr": "<span class=\"chn\">13</span> Das vollständige Modell"
+ },
+ "c5f2cd998332": {
+  "src": "<div class=\"ctag\">Check</div>The fourth power is brutal: halve the bore and the resistance rises sixteen times. Units: $\\mathrm{Pa\\,s\\cdot m}/\\mathrm{m^4} = \\mathrm{Pa\\,s/m^3}$, a pressure per flow.",
+  "tr": "<div class=\"ctag\">Probe</div>Die vierte Potenz ist gnadenlos: Halbiert man die Bohrung, steigt der Widerstand auf das Sechzehnfache. Einheiten: $\\mathrm{Pa\\,s\\cdot m}/\\mathrm{m^4} = \\mathrm{Pa\\,s/m^3}$, ein Druck je Durchfluss."
+ },
+ "c7f69aeca6cb": {
+  "src": "<span class=\"lbl\">given</span>the chamber pressures, the specimen force, friction and gravity",
+  "tr": "<span class=\"lbl\">gegeben</span>die Kammerdrücke, die Probenkraft, die Reibung und die Schwerkraft"
+ },
+ "ca526d3aca9d": {
+  "src": "Why so stiff? In a liquid the molecules already touch; squeezing it means pushing electron clouds into each other, and they resist hard. Water, at 2.2 GPa, is stiffer still. A gas is the opposite: its molecules are far apart and the pressure comes only from their impacts. For an ideal gas compressed as $pV^n = \\text{const}$, differentiating gives $V^n\\,dp + n p V^{n-1}dV = 0$, so",
+  "tr": "Warum so steif? In einer Flüssigkeit berühren sich die Moleküle schon; sie zusammenzudrücken heißt, Elektronenwolken ineinanderzuschieben, und diese wehren sich heftig. Wasser ist mit 2.2 GPa noch steifer. Ein Gas ist das Gegenteil: Seine Moleküle liegen weit auseinander, und der Druck kommt nur von ihren Stößen. Für ein ideales Gas, das nach $pV^n = \\text{const}$ komprimiert wird, ergibt das Differenzieren $V^n\\,dp + n p V^{n-1}dV = 0$, also"
+ },
+ "cfe25a02795c": {
+  "src": "derive the orifice law (8.1) from Bernoulli and turn a valve data sheet into a flow coefficient;",
+  "tr": "das Blendengesetz (8.1) aus Bernoulli herleiten und ein Ventildatenblatt in einen Durchflussbeiwert umrechnen;"
+ },
+ "d1aff8bb2b49": {
+  "src": "<div class=\"ctag\">In our press</div>2 m of 12 mm hose: $I = 1.54\\times10^{7}\\ \\mathrm{kg/m^4}$. To accelerate the flow by 10 L/min in 10 ms takes $$I\\,\\dot{Q} = 1.54\\times10^7\\times\\frac{1.67\\times10^{-4}}{0.01} = 0.26\\ \\mathrm{MPa}.$$",
+  "tr": "<div class=\"ctag\">In unserer Presse</div>2 m Schlauch mit 12 mm Innendurchmesser: $I = 1.54\\times10^{7}\\ \\mathrm{kg/m^4}$. Um den Durchfluss in 10 ms um 10 L/min zu beschleunigen, braucht man $$I\\,\\dot{Q} = 1.54\\times10^7\\times\\frac{1.67\\times10^{-4}}{0.01} = 0.26\\ \\mathrm{MPa}.$$"
+ },
+ "d2e2b78df999": {
+  "src": "7.1 The bulk modulus",
+  "tr": "7.1 Der Kompressionsmodul"
+ },
+ "d311c6f291ba": {
+  "src": "drop across it",
+  "tr": "Druckabfall über sie"
+ },
+ "d3545662fbb6": {
+  "src": "The smoothing makes the equations integrable with a fixed step. Its price is that at rest the friction behaves like an enormous damper of slope $F_c k_{\\mathrm{st}}/v_s \\approx 10^6\\ \\mathrm{N\\,s/m}$; worked solution 4 on the Servo-Hydraulic Press page shows how that misleads a linear analysis.",
+  "tr": "Die Glättung macht die Gleichungen mit festem Schritt integrierbar. Ihr Preis ist, dass sich die Reibung im Stillstand wie ein gewaltiger Dämpfer mit der Steigung $F_c k_{\\mathrm{st}}/v_s \\approx 10^6\\ \\mathrm{N\\,s/m}$ verhält; die durchgerechnete Lösung 4 auf der Seite Servohydraulische Presse zeigt, wie das eine lineare Analyse in die Irre führt."
+ },
+ "d59a57255b93": {
+  "src": "<span class=\"chn\">12</span> Chambers, ram, friction, contact",
+  "tr": "<span class=\"chn\">12</span> Kammern, Stößel, Reibung, Kontakt"
+ },
+ "ddcc31e4c435": {
+  "src": "Upstream of the opening the oil is almost still at pressure $p_u$. It accelerates through the gap and the jet keeps contracting a little beyond the edge, to its narrowest section, the <i>vena contracta</i>, where the streamlines are parallel and the pressure equals the downstream pressure $p_d$. Apply steady Bernoulli, (5.2) without the time term, between a point upstream and the vena contracta:",
+  "tr": "Stromaufwärts der Öffnung ist das Öl bei dem Druck $p_u$ nahezu in Ruhe. Es beschleunigt sich durch die Öffnung, und der Strahl zieht sich noch ein Stück hinter der Kante zusammen, bis zu seinem engsten Querschnitt, der <i>Vena contracta</i>; dort verlaufen die Stromlinien parallel, und der Druck ist gleich dem stromabwärtigen Druck $p_d$. Wenden Sie die stationäre Bernoulli-Gleichung (5.2) ohne das Zeitglied an, und zwar zwischen einem Punkt stromaufwärts und der Vena contracta:"
+ },
+ "df21e851d10a": {
+  "src": "into A: $+K_v x^+ g(p_s - p_a)$ in $Q_A$ and $Q_S$",
+  "tr": "in A hinein: $+K_v x^+ g(p_s - p_a)$ in $Q_A$ und $Q_S$"
+ },
+ "e0e5d3ed22ad": {
+  "src": "<span class=\"chn\">8</span> Flow through a sharp-edged orifice",
+  "tr": "<span class=\"chn\">8</span> Durchfluss durch eine scharfkantige Blende"
+ },
+ "e2badf74fc2c": {
+  "src": "The model captures that curve with three terms. A Coulomb force $F_c$ opposes sliding; at low speeds a higher break-away force $k_{\\mathrm{st}}F_c$ (the Stribeck effect) has to be overcome; and a viscous term $b_v\\dot{y}$ grows with speed. The jump of the Coulomb force at $\\dot{y} = 0$ is smoothed with a hyperbolic tangent over a speed $v_s = 1\\ \\mathrm{mm/s}$, and the Stribeck bump dies away over $v_{\\mathrm{str}} = 5\\ \\mathrm{mm/s}$:",
+  "tr": "Das Modell erfasst diese Kurve mit drei Termen. Eine Coulombsche Reibungskraft $F_c$ wirkt dem Gleiten entgegen; bei kleinen Geschwindigkeiten muss eine größere Losbrechkraft $k_{\\mathrm{st}}F_c$ (der Stribeck-Effekt) überwunden werden; und ein viskoser Term $b_v\\dot{y}$ wächst mit der Geschwindigkeit. Der Sprung der Coulombschen Reibungskraft bei $\\dot{y} = 0$ wird mit einem hyperbolischen Tangens über eine Geschwindigkeit $v_s = 1\\ \\mathrm{mm/s}$ geglättet, und der Stribeck-Buckel klingt über $v_{\\mathrm{str}} = 5\\ \\mathrm{mm/s}$ ab:"
+ },
+ "e5323863b714": {
+  "src": "its flow, as a term of (9.1)",
+  "tr": "ihr Durchfluss als Glied in (9.1)"
+ },
+ "e5ae5ed709dc": {
+  "src": "The bulk modulus measures how much pressure it takes to squeeze a volume $V$ by a fraction $dV/V$:",
+  "tr": "Der Kompressionsmodul misst, wie viel Druck nötig ist, um ein Volumen $V$ um einen Bruchteil $dV/V$ zusammenzudrücken:"
+ },
+ "e70d45901b3a": {
+  "src": "<div class=\"ctag\">In our press</div>At 60 L/min in the 12 mm hose the mean speed is 8.8 m/s and $Re \\approx 3300$: turbulent. $R_{\\mathrm{lam}} = 1.09\\times10^8\\ \\mathrm{Pa\\,s/m^3}$, $K_t = 1.64\\times10^{11}\\ \\mathrm{kg/m^7}$ with $f = 0.02$ and $K_m = 1.5$. Be warned that $f = 0.02$ is on the low side: Blasius’s correlation for smooth pipes, $f = 0.316\\,Re^{-1/4}$, gives 0.042 at this Reynolds number, The pipe term $fL/d$ is 3.3 with the model’s value and 7.0 with Blasius’s, against $K_m = 1.5$ for the fittings, so the model’s turbulent loss in the hose, proportional to $fL/d + K_m$, is about 40 % low (4.8 against 8.5). Hose friction is a few hundred kilopascals at full flow, small beside the megapascals burnt in the valve (chapter 9), so the conclusions do not change.",
+  "tr": "<div class=\"ctag\">In unserer Presse</div>Bei 60 L/min im 12-mm-Schlauch beträgt die mittlere Geschwindigkeit 8.8 m/s und $Re \\approx 3300$: turbulent. $R_{\\mathrm{lam}} = 1.09\\times10^8\\ \\mathrm{Pa\\,s/m^3}$, $K_t = 1.64\\times10^{11}\\ \\mathrm{kg/m^7}$ mit $f = 0.02$ und $K_m = 1.5$. Vorsicht: $f = 0.02$ ist eher niedrig angesetzt. Die Blasius-Beziehung für glatte Rohre, $f = 0.316\\,Re^{-1/4}$, ergibt bei dieser Reynolds-Zahl 0.042. Der Rohranteil $fL/d$ beträgt 3.3 mit dem Modellwert und 7.0 mit Blasius, gegenüber $K_m = 1.5$ für die Armaturen. Daher ist der turbulente Verlust im Schlauch im Modell, proportional zu $fL/d + K_m$, etwa 40 % zu niedrig (4.8 gegenüber 8.5). Die Schlauchreibung beträgt bei vollem Durchfluss einige hundert Kilopascal; sie ist klein gegenüber den Megapascal, die im Ventil verloren gehen (Kapitel 9), sodass sich die Schlussfolgerungen nicht ändern."
+ },
+ "e908dcc9a036": {
+  "src": "derive the pressure build-up equation (7.2) for any chamber and the effective bulk modulus of oil with air (7.3);",
+  "tr": "die Druckaufbaugleichung (7.2) für jede Kammer herleiten sowie den effektiven Kompressionsmodul von Öl mit Luft (7.3);"
+ },
+ "eb5869edbf55": {
+  "src": "With $R = d/2$:",
+  "tr": "Mit $R = d/2$:"
+ },
+ "ecafdb0f7e07": {
+  "src": "At $\\omega = \\omega_v$ the real part of the denominator vanishes and the response is $1/(2j\\zeta_v)$: the spool lags by exactly 90°, whatever the damping. That is how $f_v$ is measured. Here $\\operatorname{atan2}(b, a)$ is the angle of the complex number $a + jb$, so the phase runs smoothly from 0 through −90° at $\\omega_v$ towards −180°. The plain form $\\varphi = -\\arctan(b/a)$ would be wrong above resonance, where $a < 0$: at 100 Hz it gives +52.7° instead of −127.3°.",
+  "tr": "Bei $\\omega = \\omega_v$ verschwindet der Realteil des Nenners, und die Antwort ist $1/(2j\\zeta_v)$: Der Ventilschieber eilt genau 90° nach, unabhängig von der Dämpfung. So wird $f_v$ gemessen. Dabei ist $\\operatorname{atan2}(b, a)$ der Winkel der komplexen Zahl $a + jb$; die Phase verläuft also stetig von 0 über −90° bei $\\omega_v$ gegen −180°. Die einfache Form $\\varphi = -\\arctan(b/a)$ wäre oberhalb der Resonanz falsch, wo $a < 0$ ist: Bei 100 Hz ergäbe sie +52.7° statt −127.3°."
+ },
+ "ed856c1d1ce3": {
+  "src": "Figure 2. A control volume whose boundary moves.",
+  "tr": "Abbildung 2. Ein Kontrollvolumen, dessen Grenze sich bewegt."
+ },
+ "edc66f456e6a": {
+  "src": "open when",
+  "tr": "offen, wenn"
+ },
+ "efff3f1433c6": {
+  "src": "the oil in the hose<small>an inductor and a resistor in series</small>",
+  "tr": "das Öl im Schlauch<small>eine Induktivität und ein Widerstand in Reihe</small>"
+ },
+ "f24b4877860b": {
+  "src": "<div class=\"ctag\">In our press</div> <table class=\"mt\"><tr><th>gauge pressure</th><th>0</th><th>0.1 MPa</th><th>0.5 MPa</th><th>1 MPa</th><th>2 MPa</th><th>4.4 MPa</th><th>7.8 MPa</th><th>12 MPa</th></tr> <tr><td>$\\beta_{\\mathrm{eff}}$, 0.5 % air</td><td>28 MPa</td><td>87 MPa</td><td>428 MPa</td><td>795 MPa</td><td>1.16 GPa</td><td>1.39 GPa</td><td>1.46 GPa</td><td>1.48 GPa</td></tr> <tr><td>$\\beta_{\\mathrm{eff}}$, 2 % air</td><td>7.1 MPa</td><td>23 MPa</td><td>135 MPa</td><td>327 MPa</td><td>686 MPa</td><td>1.13 GPa</td><td>1.34 GPa</td><td>1.42 GPa</td></tr></table> The model uses $n = 1.4$: the pressure in a press cycle changes in milliseconds, too fast for the bubbles to exchange much heat. At zero gauge pressure half a percent of air makes the oil fifty times softer. Near vacuum ($p_{\\mathrm{abs}}\\to 0$) the effective modulus goes to zero, which in the model also stops the pressure from falling below absolute zero.",
+  "tr": "<div class=\"ctag\">In unserer Presse</div> <table class=\"mt\"><tr><th>Überdruck</th><th>0</th><th>0.1 MPa</th><th>0.5 MPa</th><th>1 MPa</th><th>2 MPa</th><th>4.4 MPa</th><th>7.8 MPa</th><th>12 MPa</th></tr> <tr><td>$\\beta_{\\mathrm{eff}}$, 0.5 % Luft</td><td>28 MPa</td><td>87 MPa</td><td>428 MPa</td><td>795 MPa</td><td>1.16 GPa</td><td>1.39 GPa</td><td>1.46 GPa</td><td>1.48 GPa</td></tr> <tr><td>$\\beta_{\\mathrm{eff}}$, 2 % Luft</td><td>7.1 MPa</td><td>23 MPa</td><td>135 MPa</td><td>327 MPa</td><td>686 MPa</td><td>1.13 GPa</td><td>1.34 GPa</td><td>1.42 GPa</td></tr></table> Das Modell verwendet $n = 1.4$: Der Druck ändert sich in einem Zyklus der Presse in Millisekunden, zu schnell, als dass die Blasen viel Wärme austauschen könnten. Bei Überdruck null macht ein halbes Prozent Luft das Öl fünfzigmal weicher. Nahe am Vakuum ($p_{\\mathrm{abs}}\\to 0$) geht der effektive Modul gegen null, wodurch das Modell zugleich verhindert, dass der absolute Druck unter null sinkt."
+ },
+ "f2edf03d3ca2": {
+  "src": "The flow is proportional to the pressure difference, and to the <i>cube</i> of the clearance. The model uses $K_L = 2\\times10^{-13}\\ \\mathrm{m^3/(s\\,Pa)}$ for each leakage path. On a 10 mm spool with 1 mm of land and $\\eta = 27.8\\ \\mathrm{mPa\\,s}$, that is a radial clearance of 13 µm; halve the clearance and the leakage falls eightfold, which is why servo spools are lapped into their bores.",
+  "tr": "Der Durchfluss ist proportional zum Druckunterschied und zur <i>dritten Potenz</i> des Spiels. Das Modell verwendet $K_L = 2\\times10^{-13}\\ \\mathrm{m^3/(s\\,Pa)}$ für jeden Leckpfad. Bei einem Schieber mit 10 mm Durchmesser, 1 mm breitem Steg und $\\eta = 27.8\\ \\mathrm{mPa\\,s}$ ergibt sich ein radiales Spiel von 13 µm; halbiert man das Spiel, sinkt die Leckage auf ein Achtel, weshalb Servoschieber in ihre Bohrungen eingeläppt werden."
+ },
+ "f2f52b381685": {
+  "src": "$K_q$ is the <i>flow gain</i>: how much more oil the port delivers per unit of spool travel. $K_c$ is the <i>flow-pressure coefficient</i>: how much less it delivers per pascal of back-pressure. For $x_v > 0$ and $|\\Delta p| \\gg p_{\\mathrm{tr}}$ only the P→A edge and the leaks matter, $Q_A = K_v x_v\\sqrt{p_s - p_a} + K_L(p_s - 2p_a + p_T)$, and differentiating gives",
+  "tr": "$K_q$ ist die <i>Durchflussverstärkung</i>: um wie viel mehr Öl der Anschluss je Einheit Schieberweg liefert. $K_c$ ist der <i>Durchfluss-Druck-Koeffizient</i>: um wie viel weniger er je Pascal Gegendruck liefert. Für $x_v > 0$ und $|\\Delta p| \\gg p_{\\mathrm{tr}}$ zählen nur die Steuerkante P→A und die Leckagen, $Q_A = K_v x_v\\sqrt{p_s - p_a} + K_L(p_s - 2p_a + p_T)$, und Differenzieren ergibt"
+ },
+ "f33a95c42332": {
+  "src": "<div class=\"ctag\">Check</div>Units: $\\mathrm{m^3/Pa}\\cdot\\mathrm{Pa/s} = \\mathrm{m^3/s}$. Limit $\\beta\\to\\infty$: the left side vanishes and $Q_{\\mathrm{in}} - Q_{\\mathrm{out}} = \\dot{V}$, the incompressible continuity of chapter 2.",
+  "tr": "<div class=\"ctag\">Prüfung</div>Einheiten: $\\mathrm{m^3/Pa}\\cdot\\mathrm{Pa/s} = \\mathrm{m^3/s}$. Grenzfall $\\beta\\to\\infty$: Die linke Seite verschwindet, und $Q_{\\mathrm{in}} - Q_{\\mathrm{out}} = \\dot{V}$ ist die Kontinuitätsgleichung inkompressibler Strömung aus Kapitel 2."
+ },
+ "f37e5d4da17d": {
+  "src": "<span class=\"chn\">9</span> The four-way valve",
+  "tr": "<span class=\"chn\">9</span> Das Vierwegeventil"
+ },
+ "f42b449befb0": {
+  "src": "This is the most important equation in hydraulics. Take a chamber whose volume $V(t)$ can change because a piston of area $A$ moves out at speed $\\dot{y}$, so $\\dot{V} = A\\dot{y}$. Oil flows in at $Q_{\\mathrm{in}}$ and out at $Q_{\\mathrm{out}}$ (Figure 2). The mass inside is $m = \\rho V$. Mass is conserved, so it changes only through the flows:",
+  "tr": "Dies ist die wichtigste Gleichung der Hydraulik. Betrachten Sie eine Kammer, deren Volumen $V(t)$ sich ändern kann, weil sich ein Kolben der Fläche $A$ mit der Geschwindigkeit $\\dot{y}$ nach außen bewegt, also $\\dot{V} = A\\dot{y}$. Öl fließt mit $Q_{\\mathrm{in}}$ hinein und mit $Q_{\\mathrm{out}}$ hinaus (Abbildung 2). Die Masse darin ist $m = \\rho V$. Die Masse bleibt erhalten, sie ändert sich daher nur durch die Zu- und Abflüsse:"
+ },
+ "f48c5bde95a4": {
+  "src": "<div class=\"ctag\">In our press</div>Cruising up at 0.1 m/s, the spool is 40.6 % open with $p_s - p_a = 9.75\\ \\mathrm{MPa}$: $K_q = 2.8\\times10^{-3}\\ \\mathrm{m^3/s}$ per unit spool and $K_c = 5.8\\times10^{-11}\\ \\mathrm{m^3/(s\\,Pa)}$, about 290 times the leakage conductance $K_L$.",
+  "tr": "<div class=\"ctag\">In unserer Presse</div>Beim Aufwärtsfahren mit 0.1 m/s ist der Ventilschieber zu 40.6 % offen, bei $p_s - p_a = 9.75\\ \\mathrm{MPa}$: $K_q = 2.8\\times10^{-3}\\ \\mathrm{m^3/s}$ je Einheit Schieberweg und $K_c = 5.8\\times10^{-11}\\ \\mathrm{m^3/(s\\,Pa)}$, etwa 290-mal so groß wie der Leckageleitwert $K_L$."
+ },
+ "f4add7a7304c": {
+  "src": "12.2 Newton for the ram",
+  "tr": "12.2 Newton für den Stößel"
+ },
+ "f6c5fb78bbaa": {
+  "src": "One case can be solved exactly from momentum alone. Let a tank drain through a short tube that pokes <i>into</i> the tank, a “Borda mouthpiece”. Far from the tube’s mouth the oil is almost still, so the pressure on every part of the tank wall is the hydrostatic value, with one exception: the patch of wall opposite the mouth, of area $A_o$, has no wall facing it on the other side. Take the oil in the tank as a control volume and balance momentum along the tube axis. The only unbalanced force is the pressure excess $(p_u - p_d)$ on that missing patch, and it must supply the momentum carried out by the jet each second:",
+  "tr": "Ein Fall lässt sich allein aus dem Impuls exakt lösen. Stellen Sie sich einen Tank vor, der sich durch ein kurzes Rohr entleert, das <i>in</i> den Tank hineinragt, ein sogenanntes „Borda-Mundstück“. Weit von der Rohrmündung entfernt ist das Öl nahezu in Ruhe, sodass der Druck auf jedes Stück der Tankwand der hydrostatische Wert ist, mit einer Ausnahme: Das Wandstück gegenüber der Mündung mit der Fläche $A_o$ hat auf der anderen Seite keine Wand, die ihm gegenübersteht. Betrachten Sie das Öl im Tank als Kontrollvolumen und bilanzieren Sie den Impuls in Richtung der Rohrachse. Die einzige unausgeglichene Kraft ist der Drucküberschuss $(p_u - p_d)$ auf diesem fehlenden Wandstück, und er muss den Impuls liefern, den der Strahl jede Sekunde hinausträgt:"
+ },
+ "f6cc8c22b34d": {
+  "src": "into B: $-K_v x^- g(p_s - p_B)$ in $Q_B$ and $Q_S$",
+  "tr": "in B hinein: $-K_v x^- g(p_s - p_B)$ in $Q_B$ und $Q_S$"
+ },
+ "f6fe3cb5f5f7": {
+  "src": "The controller’s command is a small electric current. Something has to turn it into a spool position, and that something has inertia and springs, so it cannot follow the command instantly. This chapter derives how it lags.",
+  "tr": "Der Befehl des Reglers ist ein kleiner elektrischer Strom. Irgendetwas muss ihn in eine Schieberstellung umsetzen, und dieses Etwas hat Trägheit und Federn, kann dem Befehl also nicht sofort folgen. Dieses Kapitel leitet her, wie es nacheilt."
+ },
+ "fc492f885325": {
+  "src": "Apply the definition (7.1) to the mixture, $\\beta_{\\mathrm{eff}} = -(V_\\ell + V_g)/(dV/dp)$, and divide top and bottom by $V_\\ell$, writing $\\alpha = V_g/V_\\ell$:",
+  "tr": "Wenden Sie die Definition (7.1) auf das Gemisch an, $\\beta_{\\mathrm{eff}} = -(V_\\ell + V_g)/(dV/dp)$, und dividieren Sie Zähler und Nenner durch $V_\\ell$ und schreiben $\\alpha = V_g/V_\\ell$:"
+ },
+ "fc5cb75f6612": {
+  "src": "<span class=\"lbl\">given</span>the command $u$, a coil current",
+  "tr": "<span class=\"lbl\">gegeben</span>der Befehl $u$, ein Spulenstrom"
+ },
+ "fe9b8928a37e": {
+  "src": "8.1 Why the jet is narrower than the hole",
+  "tr": "8.1 Warum der Strahl enger ist als das Loch"
+ },
+ "ff578a746b0d": {
+  "src": "Part II takes the servo press of the map in chapter 0 apart and derives the law inside each block, in the order the oil meets them: the oil itself as a spring (chapter 7), the orifice and the valve built from four of them (8 and 9), the spool that moves them (10), the hose (11), and the cylinder, ram and specimen (12). Chapter 13 puts the blocks back together into eight equations.",
+  "tr": "Teil II zerlegt die Servopresse der Karte aus Kapitel 0 und leitet das Gesetz in jedem Block her, in der Reihenfolge, in der das Öl auf die Blöcke trifft: das Öl selbst als Feder (Kapitel 7), die Blende und das Ventil, das aus vier solchen Blenden besteht (Kapitel 8 und 9), den Schieber, der sie bewegt (Kapitel 10), den Schlauch (Kapitel 11) sowie den Zylinder, den Stößel und die Probe (Kapitel 12). Kapitel 13 setzt die Blöcke wieder zusammen zu acht Gleichungen."
+ }
+}

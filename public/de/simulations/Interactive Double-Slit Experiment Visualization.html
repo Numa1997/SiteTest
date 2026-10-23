@@ -1,0 +1,946 @@
+<!DOCTYPE html>
+<html lang="de" dir="ltr">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline' https://v2.appdeploy.ai https://unpkg.com/@khmyznikov/pwa-install@0.6.3/dist/pwa-install.bundle.js; style-src 'self' 'unsafe-inline'; img-src 'self' data: blob: https://appdeploy.ai; font-src 'self' data:; connect-src 'self' https://api-v2.appdeploy.ai; worker-src 'self'; manifest-src 'self'; object-src 'none'; base-uri 'self'; form-action 'self'; upgrade-insecure-requests">
+    <meta name="referrer" content="strict-origin-when-cross-origin">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Interferenz am Doppelspalt · Numa Koudsie</title>
+    <meta name="description" content="Interaktive Doppelspalt-Geometrie: der Gangunterschied von zwei Spalten zu einem Punkt, seine Fernfeldnäherung b sin α und das daraus folgende Interferenzmuster.">
+    <meta name="theme-color" content="#f5f1ea">
+    <link rel="stylesheet" href="../../styles/sim.css">
+    <link rel="stylesheet" href="../../styles/data.css">
+    <link rel="stylesheet" href="../../styles/fold.css"><link rel="stylesheet" href="../../styles/i18n.css"><script src="../../scripts/flip.js"></script><link rel="alternate" hreflang="en" href="https://phyeinusul.com/simulations/Interactive Double-Slit Experiment Visualization.html" /><link rel="alternate" hreflang="de" href="https://phyeinusul.com/de/simulations/Interactive Double-Slit Experiment Visualization.html" /><link rel="alternate" hreflang="ar" href="https://phyeinusul.com/ar/simulations/Interactive Double-Slit Experiment Visualization.html" /><link rel="alternate" hreflang="x-default" href="https://phyeinusul.com/simulations/Interactive Double-Slit Experiment Visualization.html" />
+    <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='12' fill='%237a1f2b'/%3E%3Ctext x='32' y='45' text-anchor='middle' font-family='Georgia,serif' font-size='38' fill='%23f5f1ea'%3EN%3C/text%3E%3C/svg%3E">
+    <style>
+        .svg-lbl { font-family: var(--tex); font-style: italic; font-size: 19px; fill: var(--ink); }
+        .svg-lbl--acc { fill: var(--accent); }
+        .svg-mono { font-family: var(--mono); font-size: 12px; letter-spacing: .06em; fill: var(--muted); }
+        /* symbols in a chart are set in Latin Modern, like the captions and the notes; tick numbers stay in mono */
+        .svg-num { font-family: var(--tex); font-size: 15px; fill: var(--ink-3); }
+        .svg-m { font-family: var(--tex); font-style: italic; }
+        @media (max-width: 560px) {
+            .svg-lbl { font-size: 27px; }
+            .svg-mono { font-size: 19px; }
+            .svg-num { font-size: 22px; }
+        }
+        .verdict { font-family: var(--tex); font-style: italic; font-size: 17px; color: var(--accent); margin: 0; }
+    </style>
+
+    <script src="../../scripts/i18n/strings-de.js"></script>
+    <meta name="translated-from" content="English public/simulations/Interactive Double-Slit Experiment Visualization.html, commit cf6212d" />
+  </head>
+<body>
+    <header class="sim-top">
+        <span style="display:inline-flex;align-items:center;gap:14px"><a href="../index.html" aria-label="Phyein Usul, Startseite" style="display:inline-block;line-height:0"><img src="../../images/phyein-usul-mark.svg" alt="Phyein Usul" width="87" height="48" /></a><a href="../simulations.html">← Alle Simulationen</a></span>
+        <nav class="sim-nav" aria-label="Simulationen">
+            <span>Abb.</span>
+            <a href="Circular Wave Interference Visualization.html">1</a>
+            <a href="Double Pendulum.html">2</a>
+            <a href="Interactive Double-Slit Experiment Visualization.html" aria-current="page">3</a>
+            <a href="Transverse and longitudinal waves.html">4</a>
+            <a href="water-wave.html">5</a>
+            <a href="wave-interference.html">6</a>
+            <a href="phasor-sums.html">7</a>
+            <a href="draw-decompose.html">8</a>
+            <a href="driven-oscillator.html">9</a>
+            <a href="wind-turbine.html">10</a>
+        </nav><span class="lang-switch" role="group" aria-label="Sprache" translate="no"><a href="../../simulations/Interactive Double-Slit Experiment Visualization.html" hreflang="en" lang="en">English</a> · <a href="../../de/simulations/Interactive Double-Slit Experiment Visualization.html" hreflang="de" lang="de" aria-current="page">Deutsch</a> · <a href="../../ar/simulations/Interactive Double-Slit Experiment Visualization.html" hreflang="ar" lang="ar" dir="rtl">العربية</a></span>
+    </header>
+
+    <main class="sim">
+        <noscript><p class="sim-error"><b>Diese Simulation benötigt JavaScript.</b> <a href="../simulations.html">Zurück zu den Simulationen</a></p></noscript>
+        <div class="sim__head">
+            <p class="sim__num">Abb. 3 · Wellenoptik · Welle-Teilchen-Dualismus</p>
+            <h1>Interferenz am Doppelspalt<span class="dot">.</span></h1>
+            <p class="sim__lede">Zwei Spalte, ein Punkt P. Die beiden Wege zu P unterscheiden sich um δs, und dieser kleine Unterschied entscheidet, ob P hell oder dunkel ist.</p>
+        </div>
+
+        <div class="sim__grid">
+            <div class="stack">
+                <figure class="stage">
+                    <div class="stage__canvas" id="stage" style="--ar: 600 / 440;">
+                        <svg id="geo" viewBox="0 0 600 440" preserveAspectRatio="xMidYMid meet" role="img" aria-label="Geometry of the double slit and the path difference to the point P">
+                            <defs>
+                                <clipPath id="above"><rect x="0" y="0" width="600" height="370"></rect></clipPath>
+                            </defs>
+                            <g id="waves"></g>
+                            <g id="shapes"></g>
+                        </svg>
+                    </div>
+                    <figcaption class="stage__cap">
+                        <span><b>Abb. 3</b> · Spalte <span class="tx">\(S_1, S_2\)</span> · Punkt <span class="tx">\(P\)</span> im Abstand <span class="tx">\(d\)</span>, Winkel <span class="tx">\(\alpha\)</span></span>
+                        <span id="cap-ds"><i>δs</i> = —</span>
+                    </figcaption>
+                </figure>
+                <figure class="stage">
+                    <div class="stage__canvas" style="--ar: 600 / 180;">
+                        <svg id="pattern" viewBox="0 0 600 180" preserveAspectRatio="xMidYMid meet" role="img" aria-label="Far-field intensity as a function of angle"></svg>
+                    </div>
+                    <figcaption class="stage__cap">
+                        <span><b>Abb. 3b</b> · Intensität im Fernfeld <span class="tx">\(I(\theta)/I_0 = \cos^2(\pi b \sin\theta / \lambda)\)</span></span>
+                        <span>burgunderrot: Fernfeld · gestrichelt: exakt bei <i>d</i></span>
+                    </figcaption>
+                </figure>
+            </div>
+
+            <aside class="panel" aria-label="Regler">
+                <div class="panel__group">
+                    <p class="panel__label">Geometrie</p>
+                    <label class="ctl">
+                        <span class="ctl__row"><span>Abstand d</span><output id="d-out" for="d"></output></span>
+                        <input type="range" id="d" min="100" max="300" step="1" value="200">
+                    </label>
+                    <label class="ctl">
+                        <span class="ctl__row"><span>Winkel α</span><output id="alpha-out" for="alpha"></output></span>
+                        <input type="range" id="alpha" min="0" max="30" step="0.5" value="20">
+                    </label>
+                    <label class="ctl">
+                        <span class="ctl__row"><span>Spaltabstand b</span><output id="b-out" for="b"></output></span>
+                        <input type="range" id="b" min="20" max="80" step="1" value="40">
+                    </label>
+                </div>
+
+                <div class="panel__group">
+                    <p class="panel__label">Licht</p>
+                    <label class="ctl">
+                        <span class="ctl__row"><span>Wellenlänge λ</span><output id="lambda-out" for="lambda"></output></span>
+                        <input type="range" id="lambda" min="8" max="40" step="0.5" value="13.5">
+                    </label>
+                    <label class="switch"><span>Elementarwellen animieren</span><input type="checkbox" id="anim" checked></label>
+                </div>
+
+                <dl class="readouts">
+                    <div><dt>Weg S₁P</dt><dd id="r-l1">—</dd></div>
+                    <div><dt>Weg S₂P</dt><dd id="r-l2">—</dd></div>
+                    <div><dt>δs exakt</dt><dd id="r-ds" class="is-accent">—</dd></div>
+                    <div><dt>b sin α</dt><dd id="r-ff">—</dd></div>
+                    <div><dt>δs / λ</dt><dd id="r-m">—</dd></div>
+                    <div><dt>Phase Δφ</dt><dd id="r-phi">—</dd></div>
+                </dl>
+                <p class="verdict" id="verdict">—</p>
+
+                <ul class="legend">
+                    <li><span class="sw sw--ink"></span>Wege</li>
+                    <li><span class="sw"></span>Gangunterschied δs</li>
+                    <li><span class="sw sw--rose"></span>Elementarwellen</li>
+                    <li><span class="sw sw--dash"></span>Hilfslinien</li>
+                </ul>
+            </aside>
+        </div>
+
+        <article class="paper" id="paper" aria-labelledby="paper-title">
+            <header class="paper__head">
+                <p class="paper__kicker">Skript · Abb. 3 · Wellenoptik · Welle-Teilchen-Dualismus</p>
+                <h2 class="paper__title" id="paper-title">Zwei Spalte, eine Welle: wie ein Gangunterschied Hell und Dunkel erzeugt</h2>
+                <p class="paper__by">Numa Koudsie · für Schülerinnen und Schüler sowie Studierende im ersten und zweiten Studienjahr</p>
+                <div class="paper__abstract"><b>Zusammenfassung.</b> Licht, das durch zwei schmale Spalte fällt, erzeugt auf einem Schirm nicht zwei helle Linien, sondern eine Folge heller und dunkler Streifen. Dieses Skript erklärt die Streifen mit einer Idee: Die beiden Wellen, die sich in einem Punkt treffen, haben verschiedene Wege zurückgelegt, und dieser Unterschied, in Wellenlängen gezählt, entscheidet, ob sie sich verstärken oder auslöschen. Wir berechnen den Unterschied genau, prüfen, wann die aus dem Lehrbuch bekannte Näherung \(b\sin\alpha\) gut genug ist, addieren die beiden Wellen, um die Helligkeit \(\cos^2(\pi\,\delta s/\lambda),\) zu erhalten, zeigen, was Spalte endlicher Breite ändern, und schließen mit der Quantenfassung des Versuchs, in der einzelne Photonen oder Elektronen dasselbe Muster Punkt für Punkt aufbauen. Die letzten Abschnitte beschreiben, wie die Seite all dies berechnet und zeichnet. Abschnitte mit ★ enthalten die schwierigere Mathematik und können beim ersten Lesen übersprungen werden, ohne den Faden zu verlieren.</div>
+            </header>
+            <div class="paper__grid">
+                <nav class="paper__toc" aria-label="Inhalt">
+                    <p>Inhalt</p>
+                    <ol>
+                        <li><a href="#p-picture"><span>1</span>Hell und dunkel aus einer Quelle</a></li>
+                        <li><a href="#p-model"><span>2</span>Das Modell</a></li>
+                        <li><a href="#p-exact"><span>3</span>Der genaue Gangunterschied</a></li>
+                        <li><a href="#p-far"><span>4</span>Das Fernfeld</a></li>
+                        <li><a href="#p-adding"><span>5</span>Addition der beiden Wellen</a></li>
+                        <li><a href="#p-width"><span>6</span>Spalte mit Breite&nbsp;★</a></li>
+                        <li><a href="#p-quantum"><span>7</span>Ein Teilchen nach dem anderen</a></li>
+                        <li><a href="#p-method"><span>8</span>Wie die Seite rechnet</a></li>
+                        <li><a href="#p-screen"><span>9</span>Von Längen zu Bildpunkten</a></li>
+                        <li><a href="#p-limits"><span>10</span>Was das Modell weglässt</a></li>
+                    </ol>
+                </nav>
+                <div class="paper__body">
+                    <section class="psec" id="p-picture">
+                        <h3><span class="psec__n">01</span>Hell und dunkel aus einer Quelle</h3>
+                        <p class="psec__lead">Stellen Sie sich zwischen zwei Lautsprecher, die denselben gleichbleibenden Ton abspielen, und gehen Sie langsam durch den Raum. Der Klang schwillt an und ebbt ab, laut, leise, wieder laut, obwohl sich an den Lautsprechern nichts geändert hat.</p>
+                        <p>Die lauten Stellen liegen dort, wo ein Wellenberg des einen Lautsprechers zusammen mit einem Wellenberg des anderen ankommt; die leisen Stellen dort, wo ein Wellenberg des einen mit einem Wellental des anderen zusammentrifft. Welcher der beiden Fälle eintritt, hängt nur davon ab, um wie viel weiter der Schall von dem einen Lautsprecher gekommen ist als von dem anderen. In Luft bei \(20\ {}^\circ\mathrm{C}\) läuft der Schall mit etwa \(343\ \mathrm{m/s},\) so hat ein Ton von \(343\ \mathrm{Hz}\) eine Wellenlänge von \(1\ \mathrm{m},\) und die lauten und leisen Stellen liegen weit genug auseinander, um sie zu durchschreiten.</p>
+                        <p>Das Licht macht dasselbe auf einer mehr als millionenfach feineren Skala. Die Farben einer Seifenhaut entstehen aus zwei Reflexionen, eine an der Vorderseite der Haut und eine an der Rückseite, die leicht verschiedene Strecken zurücklegen; wo der zusätzliche Weg zu einer Farbe passt, wird diese Farbe verstärkt und die anderen werden geschwächt. Der Regenbogen einer CD stammt von ihren Spuren, die \(1.6\ \mu\mathrm{m}\) voneinander entfernt sind: Das Licht, das benachbarte Spuren streuen, addiert sich nur in bestimmten Richtungen gleichphasig, und diese Richtungen sind für jede Farbe verschieden.</p>
+                        <p>Zwischen 1801 und 1803 nutzte Thomas Young Effekte dieser Art, um in Vorlesungen vor der Royal Society zu begründen, dass Licht eine Welle ist. In einem Versuch ließ er Sonnenlicht durch ein kleines Loch in einem Fensterladen herein und hielt in den Strahl einen Kartonstreifen von etwa \(0.85\ \mathrm{mm}\) Breite. Im Schatten des Kartons, wo sich das Licht an beiden Kanten überlagert, sah er eine Reihe von Streifen, wobei die Mitte des Schattens stets hell blieb. Als er das Licht an einer Kante blockierte, verschwanden die Streifen im Schatten. Zwei Öffnungen für das Licht ergeben ein Muster; eine Öffnung ergibt keines. Der Doppelspalt ist die sauberste Form dieses Versuchs, und genau sie zeigt die Abbildung oben.</p>
+                        <p>Ein weiterer Schritt machte den Versuch berühmt. Man schwäche das Licht so stark ab, dass es den Schirm einzeln als Photon erreicht, und jedes Photon hinterlässt einen einzigen Punkt. Die Punkte treffen zufällig ein, und doch sind nach Tausenden von ihnen die Streifen wieder da. Elektronen, Atome und sogar große Moleküle verhalten sich genauso. Abschnitt 7 kommt darauf zurück; zuerst berechnen wir, wo die Streifen liegen.</p>
+                    </section>
+
+                    <section class="psec" id="p-model">
+                        <h3><span class="psec__n">02</span>Das Modell</h3>
+                        <p>Eine ebene Lichtwelle der Wellenlänge \(\lambda\) kommt von unten und trifft auf eine Wand mit zwei schmalen Spalten, \(S_1\) und \(S_2,\) im Abstand \(b\) voneinander. Jeder Spalt lässt einen kleinen Teil der Welle hindurch und wird zur Quelle einer neuen Kreiswelle. Derselbe Wellenberg erreicht beide Spalte im selben Augenblick, daher beginnen die beiden neuen Wellen gleichphasig. Wir beobachten einen Punkt \(P\) jenseits der Wand (Abb. 1).</p>
+                        <p>Wir legen den Ursprung in den Punkt \(M\) in der Mitte zwischen den Spalten, mit \(x\) entlang der Wand und \(y\) von ihr weg zeigend. Der Punkt \(P\) liegt im Abstand \(d\) von der Wand, in einer Richtung, die den Winkel \(\alpha\) mit der Normalen zur Wand bildet; wie auf der Seite nehmen wir \(P\) auf der Seite von \(S_1.\) Mit \(r\) als Abstand von \(M\) zu \(P,\)</p>
+                        \[ \begin{aligned} S_1 &= \left(-\tfrac{b}{2},\ 0\right), \qquad S_2 = \left(\tfrac{b}{2},\ 0\right), \\ P &= (-d\tan\alpha,\ d) = (-r\sin\alpha,\ r\cos\alpha), \\ r &= \frac{d}{\cos\alpha} . \end{aligned} \tag{1} \]
+                        <p>Das Modell behält nur, was über hell oder dunkel entscheidet:</p>
+                        <ul>
+                            <li>Das Licht hat eine einzige Wellenlänge, und die beiden Spalte halten eine feste Phasenbeziehung ein: Das Licht ist <em>monochromatisch</em> und <em>kohärent</em>.</li>
+                            <li>Jeder Spalt ist ein Punkt, der in jede Richtung dieselbe Welle aussendet. Abschnitt 6 gibt den Spalten eine Breite.</li>
+                            <li>Die beiden Wellen erreichen \(P\) mit gleicher Amplitude; ihre Abschwächung mit dem Abstand wird vernachlässigt.</li>
+                            <li>Die Welle ist an jedem Punkt eine einzige Zahl, eine <em>skalare</em> Welle; die Polarisation des Lichts wird vernachlässigt.</li>
+                        </ul>
+                        <p>Eine Welle ändert ihre Phase über jede Wellenlänge um \(2\pi\), also ändert sie sich über eine Strecke \(L\) um \(kL,\) mit der <em>Wellenzahl</em> \(k = 2\pi/\lambda.\) Auf der Seite wird jede Länge in Bildpunkten der Zeichnung gemessen: Der Regler <em>Abstand</em> \(d\) läuft von \(100\) bis \(300\ \mathrm{px},\) <em>Spaltabstand</em> \(b\) von \(20\) bis \(80\ \mathrm{px},\) <em>Wellenlänge</em> \(\lambda\) von \(8\) bis \(40\ \mathrm{px},\) und <em>Winkel</em> \(\alpha\) von \(0^\circ\) bis \(30^\circ.\) Nur die Verhältnisse \(b/\lambda\) und \(d/b\) und der Winkel zählen, daher kürzt sich die Einheit aus jedem Ergebnis heraus (Abschnitt 9).</p>
+                        <figure class="pfig">
+                            <div class="pfig__plate">
+                                <svg viewBox="0 0 720 390" role="img" aria-label="Left: the two slits S1 and S2 a distance b apart in a wall, the point P at distance d from the wall in the direction alpha, the two paths L1 and L2, and the circle about P through S1 that cuts the longer path at Q, leaving the stretch S2Q equal to the path difference. Right: far away the two paths are parallel and the extra length is b sin alpha.">
+                                <rect x="0" y="0" width="720" height="390" fill="#fff"/>
+                                <text class="lbl" x="40.0" y="30.0">near the slits: the exact construction</text>
+                                <line x1="40.0" y1="80.0" x2="420.0" y2="80.0" stroke="#cdc1ae" stroke-width="1.2" stroke-dasharray="6 5"/>
+                                <line x1="250.0" y1="300.0" x2="250.0" y2="80.0" stroke="#8b8079" stroke-width="1.2" stroke-dasharray="4 4"/>
+                                <line x1="40.0" y1="346.0" x2="420.0" y2="346.0" stroke="#e2a2aa" stroke-width="1.4"/>
+                                <line x1="40.0" y1="362.0" x2="420.0" y2="362.0" stroke="#e2a2aa" stroke-width="1.4"/>
+                                <line x1="40.0" y1="378.0" x2="420.0" y2="378.0" stroke="#e2a2aa" stroke-width="1.4"/>
+                                <line x1="40.0" y1="300.0" x2="184.0" y2="300.0" stroke="#1c1518" stroke-width="5"/>
+                                <line x1="196.0" y1="300.0" x2="304.0" y2="300.0" stroke="#1c1518" stroke-width="5"/>
+                                <line x1="316.0" y1="300.0" x2="420.0" y2="300.0" stroke="#1c1518" stroke-width="5"/>
+                                <line x1="190.0" y1="300.0" x2="152.0" y2="80.0" stroke="#4a413d" stroke-width="1.6"/>
+                                <line x1="310.0" y1="300.0" x2="152.0" y2="80.0" stroke="#4a413d" stroke-width="1.6"/>
+                                <path d="M190.0 300.0 A223.2 223.2 0 0 0 282.3 261.4" fill="none" stroke="#6f655f" stroke-width="1.2" stroke-dasharray="3 4"/>
+                                <line x1="310.0" y1="300.0" x2="282.3" y2="261.4" stroke="#7a1f2b" stroke-width="5" stroke-linecap="round"/>
+                                <line x1="250.0" y1="300.0" x2="152.0" y2="80.0" stroke="#7a1f2b" stroke-width="1.2" stroke-dasharray="2 3" opacity="0.8"/>
+                                <path d="M226.4 247.0 A58.0 58.0 0 0 1 250.0 242.0" fill="none" stroke="#7a1f2b" stroke-width="1.5"/>
+                                <text class="m acc" x="234.6" y="233.6" text-anchor="middle">α</text>
+                                <line x1="190.0" y1="320.0" x2="310.0" y2="320.0" stroke="#4a413d" stroke-width="1"/>
+                                <line x1="190.0" y1="314.0" x2="190.0" y2="326.0" stroke="#4a413d" stroke-width="1"/>
+                                <line x1="310.0" y1="314.0" x2="310.0" y2="326.0" stroke="#4a413d" stroke-width="1"/>
+                                <text class="m" x="250.0" y="338.0" text-anchor="middle">b</text>
+                                <line x1="56.0" y1="300.0" x2="56.0" y2="80.0" stroke="#4a413d" stroke-width="1"/>
+                                <line x1="50.0" y1="300.0" x2="62.0" y2="300.0" stroke="#4a413d" stroke-width="1"/>
+                                <line x1="50.0" y1="80.0" x2="62.0" y2="80.0" stroke="#4a413d" stroke-width="1"/>
+                                <text class="m" x="64.0" y="196.0">d</text>
+                                <circle cx="190.0" cy="300.0" r="4.5" fill="#7a1f2b" stroke="#fff" stroke-width="1.5"/>
+                                <circle cx="310.0" cy="300.0" r="4.5" fill="#7a1f2b" stroke="#fff" stroke-width="1.5"/>
+                                <circle cx="250.0" cy="300.0" r="3" fill="#4a413d" stroke="#fff" stroke-width="1.5"/>
+                                <circle cx="282.3" cy="261.4" r="3.5" fill="#7a1f2b" stroke="#fff" stroke-width="1.5"/>
+                                <circle cx="152.0" cy="80.0" r="6" fill="#7a1f2b" stroke="#fff" stroke-width="2"/>
+                                <text class="m" x="152.0" y="66.0" text-anchor="middle">P</text>
+                                <text class="m" x="168.0" y="322.0" text-anchor="middle">S<tspan class="mu" font-size="12" dy="4">1</tspan></text>
+                                <text class="m" x="334.0" y="322.0" text-anchor="middle">S<tspan class="mu" font-size="12" dy="4">2</tspan></text>
+                                <text class="m" x="260.0" y="292.0">M</text>
+                                <text class="m" x="291.3" y="257.4">Q</text>
+                                <text class="m" x="149.0" y="194.0" text-anchor="middle">L<tspan class="mu" font-size="12" dy="4">1</tspan></text>
+                                <text class="m" x="222.3" y="159.0">L<tspan class="mu" font-size="12" dy="4">2</tspan></text>
+                                <text class="m acc" x="308.1" y="282.7">δs</text>
+                                <text class="lbl" x="420.0" y="72.0" text-anchor="end">observation line</text>
+                                <line x1="96.0" y1="262.0" x2="123.6" y2="262.0" stroke="#8b8079" stroke-width="1.4"/><path d="M130.0 262.0 L122.0 265.4 L122.0 258.6 Z" fill="#8b8079"/>
+                                <line x1="96.0" y1="262.0" x2="96.0" y2="234.4" stroke="#8b8079" stroke-width="1.4"/><path d="M96.0 228.0 L99.4 236.0 L92.6 236.0 Z" fill="#8b8079"/>
+                                <text class="m" x="134.0" y="267.0">x</text>
+                                <text class="m" x="92.0" y="222.0">y</text>
+                                <line x1="448.0" y1="20.0" x2="448.0" y2="370.0" stroke="#eee6d9" stroke-width="1"/>
+                                <text class="lbl" x="470.0" y="30.0">far away: the two paths are parallel</text>
+                                <line x1="470.0" y1="300.0" x2="554.0" y2="300.0" stroke="#1c1518" stroke-width="5"/>
+                                <line x1="566.0" y1="300.0" x2="654.0" y2="300.0" stroke="#1c1518" stroke-width="5"/>
+                                <line x1="666.0" y1="300.0" x2="712.0" y2="300.0" stroke="#1c1518" stroke-width="5"/>
+                                <line x1="470.0" y1="346.0" x2="712.0" y2="346.0" stroke="#e2a2aa" stroke-width="1.4"/>
+                                <line x1="470.0" y1="362.0" x2="712.0" y2="362.0" stroke="#e2a2aa" stroke-width="1.4"/>
+                                <line x1="470.0" y1="378.0" x2="712.0" y2="378.0" stroke="#e2a2aa" stroke-width="1.4"/>
+                                <line x1="560.0" y1="300.0" x2="482.8" y2="126.6" stroke="#4a413d" stroke-width="1.6"/><path d="M479.9 120.0 L487.0 126.7 L480.1 129.8 Z" fill="#4a413d"/>
+                                <line x1="660.0" y1="300.0" x2="560.5" y2="76.6" stroke="#4a413d" stroke-width="1.6"/><path d="M557.6 70.0 L564.7 76.7 L557.8 79.8 Z" fill="#4a413d"/>
+                                <line x1="560.0" y1="300.0" x2="643.5" y2="262.8" stroke="#6f655f" stroke-width="1.2" stroke-dasharray="3 4"/>
+                                <line x1="660.0" y1="300.0" x2="643.5" y2="262.8" stroke="#7a1f2b" stroke-width="5" stroke-linecap="round"/>
+                                <path d="M636.1 266.1 L639.4 273.4 L646.7 270.2" fill="none" stroke="#6f655f" stroke-width="1"/>
+                                <path d="M600.2 282.1 A44.0 44.0 0 0 1 604.0 300.0" fill="none" stroke="#7a1f2b" stroke-width="1.5"/>
+                                <text class="m acc" x="612.9" y="295.2">α</text>
+                                <line x1="660.0" y1="300.0" x2="660.0" y2="150.0" stroke="#8b8079" stroke-width="1.2" stroke-dasharray="4 4"/>
+                                <path d="M631.5 236.1 A70.0 70.0 0 0 1 660.0 230.0" fill="none" stroke="#7a1f2b" stroke-width="1.5"/>
+                                <text class="m acc" x="647.4" y="221.5" text-anchor="middle">α</text>
+                                <circle cx="560.0" cy="300.0" r="4.5" fill="#7a1f2b" stroke="#fff" stroke-width="1.5"/>
+                                <circle cx="660.0" cy="300.0" r="4.5" fill="#7a1f2b" stroke="#fff" stroke-width="1.5"/>
+                                <text class="m" x="540.0" y="322.0" text-anchor="middle">S<tspan class="mu" font-size="12" dy="4">1</tspan></text>
+                                <text class="m" x="684.0" y="322.0" text-anchor="middle">S<tspan class="mu" font-size="12" dy="4">2</tspan></text>
+                                <line x1="560.0" y1="320.0" x2="660.0" y2="320.0" stroke="#4a413d" stroke-width="1"/>
+                                <line x1="560.0" y1="314.0" x2="560.0" y2="326.0" stroke="#4a413d" stroke-width="1"/>
+                                <line x1="660.0" y1="314.0" x2="660.0" y2="326.0" stroke="#4a413d" stroke-width="1"/>
+                                <text class="m" x="610.0" y="338.0" text-anchor="middle">b</text>
+                                <text class="m acc" x="626.0" y="250.0" text-anchor="end">b<tspan class="mu" style="fill:#7a1f2b"> sin </tspan>α</text>
+                                <text class="lbl" x="481.9" y="110.0">to <tspan class="m" font-size="15">P</tspan></text>
+                                <text class="lbl" x="559.6" y="60.0">to <tspan class="m" font-size="15">P</tspan></text>
+                                </svg>
+                            </div>
+                            <figcaption><span class="pfig__n">Abb. 1</span>Das Modell, mit übertrieben gezeichnetem Spaltabstand. Links: die beiden Wege \(L_1 = |S_1P|\) und \(L_2 = |S_2P|.\) Der gestrichelte Kreis um \(P\) durch \(S_1\) schneidet den längeren Weg bei \(Q,\) sodass \(|PQ| = L_1\) gilt, und die burgunderrote Strecke \(S_2Q\) ist der Gangunterschied \(\delta s;\) die Seite zeichnet dieselbe Konstruktion. Rechts: Wenn \(P\) sehr weit entfernt ist, verlaufen die beiden Wege nahezu parallel, und die zusätzliche Länge ist eine Seite eines kleinen rechtwinkligen Dreiecks, \(b\sin\alpha.\) Die rosafarbenen Linien unterhalb der Wand sind Wellenberge des einfallenden Lichts.</figcaption>
+                        </figure>
+                    </section>
+
+                    <section class="psec" id="p-exact">
+                        <h3><span class="psec__n">03</span>Der genaue Gangunterschied</h3>
+                        <p>Der Satz des Pythagoras, auf die Koordinaten (1) angewendet, liefert die beiden Weglängen:</p>
+                        \[ \begin{aligned} L_1 &= \sqrt{\left(d\tan\alpha - \tfrac{b}{2}\right)^2 + d^2}, \\ L_2 &= \sqrt{\left(d\tan\alpha + \tfrac{b}{2}\right)^2 + d^2} . \end{aligned} \tag{2} \]
+                        <p>Der <em>Gangunterschied</em> \(\delta s = L_2 - L_1\) ist, um wie viel weiter die Welle von \(S_2\) gelaufen ist. Die Differenz zweier Quadratwurzeln ist unbequem, aber die Differenz ihrer Quadrate ist einfach: In \(L_2^2 - L_1^2\) heben sich \(d^2\) und \(b^2/4\) auf, und \((d\tan\alpha + \tfrac b2)^2 - (d\tan\alpha - \tfrac b2)^2 = 2bd\tan\alpha.\) Da \(L_2^2 - L_1^2 = (L_2 - L_1)(L_2 + L_1),\)</p>
+                        \[ \begin{aligned} \delta s = L_2 - L_1 &= \frac{L_2^2 - L_1^2}{L_1 + L_2} \\ &= \frac{2\,b\,d\tan\alpha}{L_1 + L_2} . \end{aligned} \tag{3} \]
+                        <p>Es wurde keine Näherung gemacht. Das Ergebnis ist null für \(\alpha = 0,\) wo \(P\) auf der Mittellinie liegt und von beiden Spalten gleich weit entfernt ist, und positiv für \(\alpha > 0,\) wo \(S_2\) der weiter entfernte Spalt ist. Bei den Standardwerten der Seite, \(d = 200\ \mathrm{px},\) \(\alpha = 20^\circ\) und \(b = 40\ \mathrm{px},\) ergibt es \(L_1 = 206.85\ \mathrm{px},\) \(L_2 = 220.48\ \mathrm{px}\) und \(\delta s = 13.6277\ \mathrm{px};\) die Anzeigen <em>Weg \(S_1P\)</em>, <em>Weg \(S_2P\)</em> und <em>\(\delta s\) exakt</em> zeigen diese Zahlen gerundet.</p>
+                        <p>Die Seite berechnet \(\delta s\) aus der rechten Seite von (3), nicht als \(L_2 - L_1.\) Nahe der Mittellinie sind die beiden Längen fast gleich, und wenn man zwei nahezu gleiche Zahlen am Computer subtrahiert, gehen signifikante Stellen verloren. Die Form (3) hat bei \(\alpha = 0\) eine exakte Null und behält ihre relative Genauigkeit für winzige Gangunterschiede. Über alle Kombinationen der Reglerwerte unterscheiden sich die beiden Wege um höchstens \(1.4\times10^{-13}\ \mathrm{px},\) hier ist die Umformung also eine gute Gewohnheit und keine sichtbare Verbesserung.</p>
+                    </section>
+
+                    <section class="psec" id="p-far">
+                        <h3><span class="psec__n">04</span>Das Fernfeld</h3>
+                        <p class="psec__lead">Aus großer Entfernung gesehen verschmelzen die beiden Spalte zu einem Punkt, und die beiden Wege verlaufen nahezu parallel.</p>
+                        <p>Wenn \(P\) weit von den Spalten entfernt ist, verglichen mit ihrem Abstand, liegen beide Wege nahe bei \(r,\) also gilt \(L_1 + L_2 \approx 2r = 2d/\cos\alpha.\) Setzt man dies in (3) ein,</p>
+                        \[ \delta s \approx \frac{2\,b\,d\tan\alpha\,\cos\alpha}{2d} = b\sin\alpha . \tag{4} \]
+                        <p>Die rechte Hälfte von Abb. 1 zeigt dasselbe Ergebnis ohne Rechnung. Man fälle das Lot von \(S_1\) auf den Weg von \(S_2.\) Jenseits des Lotfußpunkts sind die beiden Wege gleich lang, also ist die zusätzliche Länge die kurze Kathete des rechtwinkligen Dreiecks mit der Hypotenuse \(b;\) das Lot ist um denselben Winkel \(\alpha\) gegen die Wand gedreht, um den die Wege gegen die Normale gedreht sind, daher ist diese Kathete \(b\sin\alpha.\) Dies ist die <em>Fernfeld</em>- oder <em>Fraunhofer</em>-Näherung, und die Seite zeigt sie in der Anzeige <em>\(b\sin\alpha\)</em>, neben dem exakten Wert.</p>
+                        <h4><span class="psub__n">4.1</span>Der Fehler schrumpft mit dem Quadrat des Abstands<span class="star" title="heavier mathematics">★</span>★</span></h4>
+                        <p>Aus (1) folgt \(L_{1,2}^2 = r^2 \mp b\,r\sin\alpha + b^2/4,\) also \(L_{1,2} = r\sqrt{1+u}\) mit \(u = \mp\varepsilon + \eta,\) \(\varepsilon = b\sin\alpha/r\) und \(\eta = b^2/(4r^2).\) Entwickelt man \(\sqrt{1+u} = 1 + \tfrac12 u - \tfrac18 u^2 + \tfrac1{16}u^3 - \dots\) Ein Wechsel des Vorzeichens von \(\varepsilon\) vertauscht die beiden Wege, daher bleiben in der Differenz nur ungerade Potenzen von \(\varepsilon\) übrig; bis zur dritten Ordnung in \(b/r\) sind sie \(r\left(\varepsilon - \tfrac12\varepsilon\eta + \tfrac18\varepsilon^3\right),\) was</p>
+                        \[ \delta s = b\sin\alpha\left[\,1 - \frac{b^2\cos^2\alpha}{8\,r^2} + O\!\left(\frac{b^4}{r^4}\right)\right] . \tag{5} \]
+                        <p>Die Näherung (4) ist immer ein wenig zu lang, und zwar um den Bruchteil \(b^2\cos^2\alpha/(8r^2)\): Verdoppelt man den Abstand, so fällt der Fehler auf ein Viertel. Bei den Standardwerten ergibt die Näherung \(13.6808\ \mathrm{px},\) also \(0.39\,\%\) mehr als der genaue Wert \(13.6277\ \mathrm{px};\) die korrigierte Form (5) ergibt \(13.6275\ \mathrm{px}.\) In Wellenlängen gemessen beträgt der Fehler der Näherung \(0.0039\,\lambda,\) viel zu klein, um Hell in Dunkel zu verwandeln. Abb. 2 verfolgt den Fehler, während sich \(P\) den Spalten nähert.</p>
+                        <figure class="pfig">
+                            <div class="pfig__plate">
+                                <svg viewBox="0 0 720 346" role="img" aria-label="Chart: the exact path difference rises from zero next to the slits towards the constant far-field value b sin alpha = 13.68 px as the distance d grows to 300 px; the corrected approximation follows the exact curve closely beyond about 40 px." xmlns="http://www.w3.org/2000/svg">
+                                <defs><clipPath id="clip1"><rect x="64.0" y="18.0" width="634.0" height="256.0"/></clipPath></defs>
+                                <line x1="64.0" x2="698.0" y1="274.0" y2="274.0" stroke="#eee6d9" stroke-width="1"/>
+                                <text class="tick" x="56.0" y="278.0" text-anchor="end">0</text>
+                                <line x1="64.0" x2="698.0" y1="188.7" y2="188.7" stroke="#eee6d9" stroke-width="1"/>
+                                <text class="tick" x="56.0" y="192.7" text-anchor="end">5</text>
+                                <line x1="64.0" x2="698.0" y1="103.3" y2="103.3" stroke="#eee6d9" stroke-width="1"/>
+                                <text class="tick" x="56.0" y="107.3" text-anchor="end">10</text>
+                                <line x1="64.0" x2="698.0" y1="18.0" y2="18.0" stroke="#eee6d9" stroke-width="1"/>
+                                <text class="tick" x="56.0" y="22.0" text-anchor="end">15</text>
+                                <line x1="64.0" x2="64.0" y1="274.0" y2="279.0" stroke="#8b8079"/>
+                                <text class="tick" x="64.0" y="293.0" text-anchor="middle">0</text>
+                                <line x1="169.7" x2="169.7" y1="274.0" y2="279.0" stroke="#8b8079"/>
+                                <text class="tick" x="169.7" y="293.0" text-anchor="middle">50</text>
+                                <line x1="275.3" x2="275.3" y1="274.0" y2="279.0" stroke="#8b8079"/>
+                                <text class="tick" x="275.3" y="293.0" text-anchor="middle">100</text>
+                                <line x1="381.0" x2="381.0" y1="274.0" y2="279.0" stroke="#8b8079"/>
+                                <text class="tick" x="381.0" y="293.0" text-anchor="middle">150</text>
+                                <line x1="486.7" x2="486.7" y1="274.0" y2="279.0" stroke="#8b8079"/>
+                                <text class="tick" x="486.7" y="293.0" text-anchor="middle">200</text>
+                                <line x1="592.3" x2="592.3" y1="274.0" y2="279.0" stroke="#8b8079"/>
+                                <text class="tick" x="592.3" y="293.0" text-anchor="middle">250</text>
+                                <line x1="698.0" x2="698.0" y1="274.0" y2="279.0" stroke="#8b8079"/>
+                                <text class="tick" x="698.0" y="293.0" text-anchor="middle">300</text>
+                                <line x1="64.0" x2="698.0" y1="274.0" y2="274.0" stroke="#8b8079"/>
+                                <line x1="64.0" x2="64.0" y1="18.0" y2="274.0" stroke="#8b8079"/>
+                                <text class="lbl" x="698.0" y="312.0" text-anchor="end">distance <tspan class="m">d</tspan> of <tspan class="m">P</tspan> from the wall (px)</text>
+                                <text class="lbl" x="70.0" y="31.0">path difference (px)</text>
+                                <g clip-path="url(#clip1)">
+                                <line x1="275.3" x2="275.3" y1="18.0" y2="274.0" stroke="#cdc1ae" stroke-width="1.4" stroke-dasharray="4 4"/>
+                                <path d="M64.0 274.0 L66.1 261.6 L68.2 249.3 L70.3 237.1 L72.5 225.3 L74.6 213.8 L76.7 202.6 L78.8 192.0 L80.9 181.8 L83.0 172.2 L85.1 163.2 L87.2 154.7 L89.4 146.8 L91.5 139.4 L93.6 132.6 L95.7 126.2 L97.8 120.4 L99.9 115.0 L102.0 110.0 L104.2 105.4 L106.3 101.2 L108.4 97.4 L110.5 93.8 L112.6 90.5 L114.7 87.5 L116.8 84.7 L118.9 82.2 L121.1 79.8 L123.2 77.6 L125.3 75.6 L127.4 73.7 L129.5 71.9 L131.6 70.3 L133.7 68.8 L135.9 67.4 L138.0 66.1 L140.1 64.9 L142.2 63.8 L144.3 62.7 L146.4 61.7 L148.5 60.8 L150.6 59.9 L152.8 59.1 L154.9 58.3 L157.0 57.6 L159.1 56.9 L161.2 56.3 L163.3 55.7 L165.4 55.1 L167.6 54.5 L169.7 54.0 L171.8 53.5 L173.9 53.1 L176.0 52.6 L178.1 52.2 L180.2 51.8 L182.3 51.4 L184.5 51.1 L186.6 50.7 L188.7 50.4 L190.8 50.1 L192.9 49.8 L195.0 49.5 L197.1 49.3 L199.3 49.0 L201.4 48.8 L203.5 48.5 L205.6 48.3 L207.7 48.1 L209.8 47.9 L211.9 47.7 L214.0 47.5 L216.2 47.3 L218.3 47.1 L220.4 46.9 L222.5 46.8 L224.6 46.6 L226.7 46.5 L228.8 46.3 L231.0 46.2 L233.1 46.0 L235.2 45.9 L237.3 45.8 L239.4 45.7 L241.5 45.5 L243.6 45.4 L245.7 45.3 L247.9 45.2 L250.0 45.1 L252.1 45.0 L254.2 44.9 L256.3 44.8 L258.4 44.7 L260.5 44.6 L262.7 44.5 L264.8 44.5 L266.9 44.4 L269.0 44.3 L271.1 44.2 L273.2 44.2 L275.3 44.1 L277.4 44.0 L279.6 44.0 L281.7 43.9 L283.8 43.8 L285.9 43.8 L288.0 43.7 L290.1 43.6 L292.2 43.6 L294.4 43.5 L296.5 43.5 L298.6 43.4 L300.7 43.4 L302.8 43.3 L304.9 43.3 L307.0 43.2 L309.1 43.2 L311.3 43.1 L313.4 43.1 L315.5 43.1 L317.6 43.0 L319.7 43.0 L321.8 42.9 L323.9 42.9 L326.1 42.9 L328.2 42.8 L330.3 42.8 L332.4 42.7 L334.5 42.7 L336.6 42.7 L338.7 42.6 L340.8 42.6 L343.0 42.6 L345.1 42.6 L347.2 42.5 L349.3 42.5 L351.4 42.5 L353.5 42.4 L355.6 42.4 L357.8 42.4 L359.9 42.4 L362.0 42.3 L364.1 42.3 L366.2 42.3 L368.3 42.3 L370.4 42.2 L372.5 42.2 L374.7 42.2 L376.8 42.2 L378.9 42.1 L381.0 42.1 L383.1 42.1 L385.2 42.1 L387.3 42.1 L389.5 42.0 L391.6 42.0 L393.7 42.0 L395.8 42.0 L397.9 42.0 L400.0 41.9 L402.1 41.9 L404.2 41.9 L406.4 41.9 L408.5 41.9 L410.6 41.9 L412.7 41.8 L414.8 41.8 L416.9 41.8 L419.0 41.8 L421.2 41.8 L423.3 41.8 L425.4 41.8 L427.5 41.7 L429.6 41.7 L431.7 41.7 L433.8 41.7 L435.9 41.7 L438.1 41.7 L440.2 41.7 L442.3 41.6 L444.4 41.6 L446.5 41.6 L448.6 41.6 L450.7 41.6 L452.9 41.6 L455.0 41.6 L457.1 41.6 L459.2 41.5 L461.3 41.5 L463.4 41.5 L465.5 41.5 L467.6 41.5 L469.8 41.5 L471.9 41.5 L474.0 41.5 L476.1 41.5 L478.2 41.5 L480.3 41.4 L482.4 41.4 L484.6 41.4 L486.7 41.4 L488.8 41.4 L490.9 41.4 L493.0 41.4 L495.1 41.4 L497.2 41.4 L499.3 41.4 L501.5 41.4 L503.6 41.4 L505.7 41.3 L507.8 41.3 L509.9 41.3 L512.0 41.3 L514.1 41.3 L516.3 41.3 L518.4 41.3 L520.5 41.3 L522.6 41.3 L524.7 41.3 L526.8 41.3 L528.9 41.3 L531.0 41.3 L533.2 41.3 L535.3 41.2 L537.4 41.2 L539.5 41.2 L541.6 41.2 L543.7 41.2 L545.8 41.2 L548.0 41.2 L550.1 41.2 L552.2 41.2 L554.3 41.2 L556.4 41.2 L558.5 41.2 L560.6 41.2 L562.7 41.2 L564.9 41.2 L567.0 41.2 L569.1 41.1 L571.2 41.1 L573.3 41.1 L575.4 41.1 L577.5 41.1 L579.7 41.1 L581.8 41.1 L583.9 41.1 L586.0 41.1 L588.1 41.1 L590.2 41.1 L592.3 41.1 L594.4 41.1 L596.6 41.1 L598.7 41.1 L600.8 41.1 L602.9 41.1 L605.0 41.1 L607.1 41.1 L609.2 41.1 L611.4 41.1 L613.5 41.1 L615.6 41.0 L617.7 41.0 L619.8 41.0 L621.9 41.0 L624.0 41.0 L626.1 41.0 L628.3 41.0 L630.4 41.0 L632.5 41.0 L634.6 41.0 L636.7 41.0 L638.8 41.0 L640.9 41.0 L643.1 41.0 L645.2 41.0 L647.3 41.0 L649.4 41.0 L651.5 41.0 L653.6 41.0 L655.7 41.0 L657.8 41.0 L660.0 41.0 L662.1 41.0 L664.2 41.0 L666.3 41.0 L668.4 41.0 L670.5 41.0 L672.6 41.0 L674.8 40.9 L676.9 40.9 L679.0 40.9 L681.1 40.9 L683.2 40.9 L685.3 40.9 L687.4 40.9 L689.5 40.9 L691.7 40.9 L693.8 40.9 L695.9 40.9 L698.0 40.9" fill="none" stroke="#7a1f2b" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/>
+                                <path d="M64.0 40.5 L66.1 40.5 L68.2 40.5 L70.3 40.5 L72.5 40.5 L74.6 40.5 L76.7 40.5 L78.8 40.5 L80.9 40.5 L83.0 40.5 L85.1 40.5 L87.2 40.5 L89.4 40.5 L91.5 40.5 L93.6 40.5 L95.7 40.5 L97.8 40.5 L99.9 40.5 L102.0 40.5 L104.2 40.5 L106.3 40.5 L108.4 40.5 L110.5 40.5 L112.6 40.5 L114.7 40.5 L116.8 40.5 L118.9 40.5 L121.1 40.5 L123.2 40.5 L125.3 40.5 L127.4 40.5 L129.5 40.5 L131.6 40.5 L133.7 40.5 L135.9 40.5 L138.0 40.5 L140.1 40.5 L142.2 40.5 L144.3 40.5 L146.4 40.5 L148.5 40.5 L150.6 40.5 L152.8 40.5 L154.9 40.5 L157.0 40.5 L159.1 40.5 L161.2 40.5 L163.3 40.5 L165.4 40.5 L167.6 40.5 L169.7 40.5 L171.8 40.5 L173.9 40.5 L176.0 40.5 L178.1 40.5 L180.2 40.5 L182.3 40.5 L184.5 40.5 L186.6 40.5 L188.7 40.5 L190.8 40.5 L192.9 40.5 L195.0 40.5 L197.1 40.5 L199.3 40.5 L201.4 40.5 L203.5 40.5 L205.6 40.5 L207.7 40.5 L209.8 40.5 L211.9 40.5 L214.0 40.5 L216.2 40.5 L218.3 40.5 L220.4 40.5 L222.5 40.5 L224.6 40.5 L226.7 40.5 L228.8 40.5 L231.0 40.5 L233.1 40.5 L235.2 40.5 L237.3 40.5 L239.4 40.5 L241.5 40.5 L243.6 40.5 L245.7 40.5 L247.9 40.5 L250.0 40.5 L252.1 40.5 L254.2 40.5 L256.3 40.5 L258.4 40.5 L260.5 40.5 L262.7 40.5 L264.8 40.5 L266.9 40.5 L269.0 40.5 L271.1 40.5 L273.2 40.5 L275.3 40.5 L277.4 40.5 L279.6 40.5 L281.7 40.5 L283.8 40.5 L285.9 40.5 L288.0 40.5 L290.1 40.5 L292.2 40.5 L294.4 40.5 L296.5 40.5 L298.6 40.5 L300.7 40.5 L302.8 40.5 L304.9 40.5 L307.0 40.5 L309.1 40.5 L311.3 40.5 L313.4 40.5 L315.5 40.5 L317.6 40.5 L319.7 40.5 L321.8 40.5 L323.9 40.5 L326.1 40.5 L328.2 40.5 L330.3 40.5 L332.4 40.5 L334.5 40.5 L336.6 40.5 L338.7 40.5 L340.8 40.5 L343.0 40.5 L345.1 40.5 L347.2 40.5 L349.3 40.5 L351.4 40.5 L353.5 40.5 L355.6 40.5 L357.8 40.5 L359.9 40.5 L362.0 40.5 L364.1 40.5 L366.2 40.5 L368.3 40.5 L370.4 40.5 L372.5 40.5 L374.7 40.5 L376.8 40.5 L378.9 40.5 L381.0 40.5 L383.1 40.5 L385.2 40.5 L387.3 40.5 L389.5 40.5 L391.6 40.5 L393.7 40.5 L395.8 40.5 L397.9 40.5 L400.0 40.5 L402.1 40.5 L404.2 40.5 L406.4 40.5 L408.5 40.5 L410.6 40.5 L412.7 40.5 L414.8 40.5 L416.9 40.5 L419.0 40.5 L421.2 40.5 L423.3 40.5 L425.4 40.5 L427.5 40.5 L429.6 40.5 L431.7 40.5 L433.8 40.5 L435.9 40.5 L438.1 40.5 L440.2 40.5 L442.3 40.5 L444.4 40.5 L446.5 40.5 L448.6 40.5 L450.7 40.5 L452.9 40.5 L455.0 40.5 L457.1 40.5 L459.2 40.5 L461.3 40.5 L463.4 40.5 L465.5 40.5 L467.6 40.5 L469.8 40.5 L471.9 40.5 L474.0 40.5 L476.1 40.5 L478.2 40.5 L480.3 40.5 L482.4 40.5 L484.6 40.5 L486.7 40.5 L488.8 40.5 L490.9 40.5 L493.0 40.5 L495.1 40.5 L497.2 40.5 L499.3 40.5 L501.5 40.5 L503.6 40.5 L505.7 40.5 L507.8 40.5 L509.9 40.5 L512.0 40.5 L514.1 40.5 L516.3 40.5 L518.4 40.5 L520.5 40.5 L522.6 40.5 L524.7 40.5 L526.8 40.5 L528.9 40.5 L531.0 40.5 L533.2 40.5 L535.3 40.5 L537.4 40.5 L539.5 40.5 L541.6 40.5 L543.7 40.5 L545.8 40.5 L548.0 40.5 L550.1 40.5 L552.2 40.5 L554.3 40.5 L556.4 40.5 L558.5 40.5 L560.6 40.5 L562.7 40.5 L564.9 40.5 L567.0 40.5 L569.1 40.5 L571.2 40.5 L573.3 40.5 L575.4 40.5 L577.5 40.5 L579.7 40.5 L581.8 40.5 L583.9 40.5 L586.0 40.5 L588.1 40.5 L590.2 40.5 L592.3 40.5 L594.4 40.5 L596.6 40.5 L598.7 40.5 L600.8 40.5 L602.9 40.5 L605.0 40.5 L607.1 40.5 L609.2 40.5 L611.4 40.5 L613.5 40.5 L615.6 40.5 L617.7 40.5 L619.8 40.5 L621.9 40.5 L624.0 40.5 L626.1 40.5 L628.3 40.5 L630.4 40.5 L632.5 40.5 L634.6 40.5 L636.7 40.5 L638.8 40.5 L640.9 40.5 L643.1 40.5 L645.2 40.5 L647.3 40.5 L649.4 40.5 L651.5 40.5 L653.6 40.5 L655.7 40.5 L657.8 40.5 L660.0 40.5 L662.1 40.5 L664.2 40.5 L666.3 40.5 L668.4 40.5 L670.5 40.5 L672.6 40.5 L674.8 40.5 L676.9 40.5 L679.0 40.5 L681.1 40.5 L683.2 40.5 L685.3 40.5 L687.4 40.5 L689.5 40.5 L691.7 40.5 L693.8 40.5 L695.9 40.5 L698.0 40.5" fill="none" stroke="#1c1518" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" stroke-dasharray="6 5"/>
+                                <path d="M116.8 98.8 L118.9 94.4 L121.1 90.5 L123.2 87.0 L125.3 83.8 L127.4 81.0 L129.5 78.4 L131.6 76.1 L133.7 73.9 L135.9 72.0 L138.0 70.2 L140.1 68.6 L142.2 67.1 L144.3 65.7 L146.4 64.5 L148.5 63.3 L150.6 62.2 L152.8 61.2 L154.9 60.2 L157.0 59.3 L159.1 58.5 L161.2 57.7 L163.3 57.0 L165.4 56.3 L167.6 55.7 L169.7 55.1 L171.8 54.5 L173.9 54.0 L176.0 53.5 L178.1 53.0 L180.2 52.6 L182.3 52.1 L184.5 51.7 L186.6 51.3 L188.7 51.0 L190.8 50.6 L192.9 50.3 L195.0 50.0 L197.1 49.7 L199.3 49.4 L201.4 49.1 L203.5 48.9 L205.6 48.6 L207.7 48.4 L209.8 48.2 L211.9 47.9 L214.0 47.7 L216.2 47.5 L218.3 47.3 L220.4 47.2 L222.5 47.0 L224.6 46.8 L226.7 46.7 L228.8 46.5 L231.0 46.3 L233.1 46.2 L235.2 46.1 L237.3 45.9 L239.4 45.8 L241.5 45.7 L243.6 45.6 L245.7 45.4 L247.9 45.3 L250.0 45.2 L252.1 45.1 L254.2 45.0 L256.3 44.9 L258.4 44.8 L260.5 44.7 L262.7 44.6 L264.8 44.5 L266.9 44.5 L269.0 44.4 L271.1 44.3 L273.2 44.2 L275.3 44.2 L277.4 44.1 L279.6 44.0 L281.7 43.9 L283.8 43.9 L285.9 43.8 L288.0 43.8 L290.1 43.7 L292.2 43.6 L294.4 43.6 L296.5 43.5 L298.6 43.5 L300.7 43.4 L302.8 43.4 L304.9 43.3 L307.0 43.3 L309.1 43.2 L311.3 43.2 L313.4 43.1 L315.5 43.1 L317.6 43.0 L319.7 43.0 L321.8 43.0 L323.9 42.9 L326.1 42.9 L328.2 42.8 L330.3 42.8 L332.4 42.8 L334.5 42.7 L336.6 42.7 L338.7 42.7 L340.8 42.6 L343.0 42.6 L345.1 42.6 L347.2 42.5 L349.3 42.5 L351.4 42.5 L353.5 42.5 L355.6 42.4 L357.8 42.4 L359.9 42.4 L362.0 42.3 L364.1 42.3 L366.2 42.3 L368.3 42.3 L370.4 42.2 L372.5 42.2 L374.7 42.2 L376.8 42.2 L378.9 42.2 L381.0 42.1 L383.1 42.1 L385.2 42.1 L387.3 42.1 L389.5 42.0 L391.6 42.0 L393.7 42.0 L395.8 42.0 L397.9 42.0 L400.0 42.0 L402.1 41.9 L404.2 41.9 L406.4 41.9 L408.5 41.9 L410.6 41.9 L412.7 41.9 L414.8 41.8 L416.9 41.8 L419.0 41.8 L421.2 41.8 L423.3 41.8 L425.4 41.8 L427.5 41.7 L429.6 41.7 L431.7 41.7 L433.8 41.7 L435.9 41.7 L438.1 41.7 L440.2 41.7 L442.3 41.7 L444.4 41.6 L446.5 41.6 L448.6 41.6 L450.7 41.6 L452.9 41.6 L455.0 41.6 L457.1 41.6 L459.2 41.6 L461.3 41.5 L463.4 41.5 L465.5 41.5 L467.6 41.5 L469.8 41.5 L471.9 41.5 L474.0 41.5 L476.1 41.5 L478.2 41.5 L480.3 41.5 L482.4 41.4 L484.6 41.4 L486.7 41.4 L488.8 41.4 L490.9 41.4 L493.0 41.4 L495.1 41.4 L497.2 41.4 L499.3 41.4 L501.5 41.4 L503.6 41.4 L505.7 41.3 L507.8 41.3 L509.9 41.3 L512.0 41.3 L514.1 41.3 L516.3 41.3 L518.4 41.3 L520.5 41.3 L522.6 41.3 L524.7 41.3 L526.8 41.3 L528.9 41.3 L531.0 41.3 L533.2 41.3 L535.3 41.2 L537.4 41.2 L539.5 41.2 L541.6 41.2 L543.7 41.2 L545.8 41.2 L548.0 41.2 L550.1 41.2 L552.2 41.2 L554.3 41.2 L556.4 41.2 L558.5 41.2 L560.6 41.2 L562.7 41.2 L564.9 41.2 L567.0 41.2 L569.1 41.2 L571.2 41.1 L573.3 41.1 L575.4 41.1 L577.5 41.1 L579.7 41.1 L581.8 41.1 L583.9 41.1 L586.0 41.1 L588.1 41.1 L590.2 41.1 L592.3 41.1 L594.4 41.1 L596.6 41.1 L598.7 41.1 L600.8 41.1 L602.9 41.1 L605.0 41.1 L607.1 41.1 L609.2 41.1 L611.4 41.1 L613.5 41.1 L615.6 41.0 L617.7 41.0 L619.8 41.0 L621.9 41.0 L624.0 41.0 L626.1 41.0 L628.3 41.0 L630.4 41.0 L632.5 41.0 L634.6 41.0 L636.7 41.0 L638.8 41.0 L640.9 41.0 L643.1 41.0 L645.2 41.0 L647.3 41.0 L649.4 41.0 L651.5 41.0 L653.6 41.0 L655.7 41.0 L657.8 41.0 L660.0 41.0 L662.1 41.0 L664.2 41.0 L666.3 41.0 L668.4 41.0 L670.5 41.0 L672.6 41.0 L674.8 41.0 L676.9 40.9 L679.0 40.9 L681.1 40.9 L683.2 40.9 L685.3 40.9 L687.4 40.9 L689.5 40.9 L691.7 40.9 L693.8 40.9 L695.9 40.9 L698.0 40.9" fill="none" stroke="#4a413d" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" stroke-dasharray="2 4"/>
+                                <path d="M486.7 41.4" fill="none" stroke="#7a1f2b" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/>
+                                <circle cx="486.7" cy="41.4" r="3" fill="#fff" stroke="#7a1f2b" stroke-width="1.6"/>
+                                </g>
+                                <text class="lbl" x="281.7" y="253.5" text-anchor="start" style="fill:#6f655f">slider range of <tspan class="m">d</tspan> →</text>
+                                <text class="lbl" x="493.0" y="62.4" text-anchor="start" style="fill:#7a1f2b">default, <tspan class="m">d</tspan> = 200 px</text>
+                                <line x1="64" x2="698" y1="318.0" y2="318.0" stroke="#eee6d9"/>
+                                <line x1="64.0" x2="86.0" y1="334.0" y2="334.0" stroke="#7a1f2b" stroke-width="2.2" stroke-linecap="round"/>
+                                <text class="lbl" x="94.0" y="338.0">exact, equation (3)</text>
+                                <line x1="240.8" x2="262.8" y1="334.0" y2="334.0" stroke="#1c1518" stroke-width="2.2" stroke-linecap="round" stroke-dasharray="6 5"/>
+                                <text class="lbl" x="270.8" y="338.0">far field <tspan class="m">b</tspan> sin <tspan class="m">α</tspan></text>
+                                <line x1="403.2" x2="425.2" y1="334.0" y2="334.0" stroke="#4a413d" stroke-width="2.2" stroke-linecap="round" stroke-dasharray="2 4"/>
+                                <text class="lbl" x="433.2" y="338.0">with the correction of equation (5)</text>
+                                </svg>
+                            </div>
+                            <figcaption><span class="pfig__n">Abb. 2</span>Der genaue Gangunterschied (3) und die Näherung \(b\sin\alpha\), während \(P\) entlang der Richtung \(\alpha = 20^\circ\) auf die Spalte zuwandert, für \(b = 40\ \mathrm{px},\) berechnet an jedem ganzen Bildpunkt von \(d\) von \(0\) bis \(300\ \mathrm{px}.\) Die punktierte Linie fügt die Korrektur aus (5) hinzu, gezeichnet ab \(d = 25\ \mathrm{px}.\) In der Ferne fallen die Kurven zusammen: Die Näherung liegt innerhalb von \(1\,\%\) des exakten Wertes jenseits von \(d = 125\ \mathrm{px},\) etwa 3.3 Spaltabstände von \(M,\) entfernt, und am unteren Ende des Reglers ist sie noch \(1.6\,\%\) zu hoch, bei \(d = 100\ \mathrm{px}.\) Nahe der Wand fällt der exakte Gangunterschied auf null, weil \(P\) dann \(M,\) den von beiden Spalten gleich weit entfernten Punkt, nahe kommt.</figcaption>
+                        </figure>
+                        <div class="pbox pbox--ex">
+                            <span class="pbox__t">Übung 4.1 · zur Abbildung oben</span>
+                            <p>Stellen Sie <em>Spaltabstand</em> \(b\) auf \(80\ \mathrm{px},\) <em>Abstand</em> \(d\) auf \(100\ \mathrm{px}\) und <em>Winkel</em> \(\alpha\) auf \(30^\circ.\) Die Anzeigen zeigen \(\delta s\) exakt \(= 38.27\ \mathrm{px}\) gegenüber \(b\sin\alpha = 40.00\ \mathrm{px}\): Die Näherung ist \(4.5\,\%\) zu lang. Verschieben Sie nun <em>Abstand</em> \(d\) auf \(300\ \mathrm{px}.\) Der exakte Wert steigt auf \(39.80\ \mathrm{px},\) und der Fehler fällt von \(1.73\ \mathrm{px}\) auf \(0.20\ \mathrm{px},\) das ist um den Faktor 8.7. Gl. (5) sagt bei dreimal größerem Abstand einen Rückgang um den Faktor neun voraus; der Unterschied kommt von den Termen der Ordnung \(b^4/r^4\), die Gl. (5) weglässt und die nicht klein sind, wenn \(b/r = 0.69.\)</p>
+                        </div>
+                    </section>
+
+                    <section class="psec" id="p-adding">
+                        <h3><span class="psec__n">05</span>Addition der beiden Wellen</h3>
+                        <p class="psec__lead">Ein Gangunterschied ist eine Länge. Um daraus Helligkeit zu machen, ist ein Schritt mehr nötig: Man addiert die beiden Wellen und quadriert dann.</p>
+                        <p>In \(P\) lässt jede Welle das Feld schwingen; bei Licht ist das Feld das elektrische Feld. Seine Amplitude sei \(E_0\) und seine Kreisfrequenz \(\omega = 2\pi f.\) Die Welle von \(S_j\) hat \(L_j,\) durchlaufen und kommt daher mit der Phase \(kL_j\) an: \(E_j = E_0\cos(kL_j - \omega t).\) Die beiden Felder addieren sich einfach, und die Identität \(\cos A + \cos B = 2\cos\tfrac{A-B}{2}\cos\tfrac{A+B}{2}\) verwandelt die Summe in eine einzige Schwingung,</p>
+                        \[ \begin{aligned} E &= E_0\cos(kL_1 - \omega t) + E_0\cos(kL_2 - \omega t) \\ &= 2E_0\cos\!\left(\tfrac{\Delta\varphi}{2}\right)\cos\!\left(k\bar L - \omega t\right), \\ \Delta\varphi &= k\,\delta s = \frac{2\pi\,\delta s}{\lambda} , \end{aligned} \tag{6} \]
+                        <p>mit \(\bar L = (L_1 + L_2)/2.\) Der Punkt \(P\) schwingt weiterhin mit der Frequenz des Lichts, aber mit der Amplitude \(2E_0\cos(\Delta\varphi/2),\) die allein von der <em>Phasendifferenz</em> abhängt, nämlich \(\Delta\varphi.\) Kein Auge und keine Kamera kann \(5\times10^{14}\) Schwingungen pro Sekunde folgen; sie erfassen die <em>Intensität</em>, den zeitlichen Mittelwert von \(E^2.\) Das Quadrat steht da, weil die Energie, die eine Welle trägt, mit dem Quadrat ihres Ausschlags wächst, so wie ein Pendel, das doppelt so weit schwingt, die vierfache Energie trägt. Der Mittelwert von \(\cos^2\) über eine Periode ist \(\tfrac12,\) also</p>
+                        \[ \begin{aligned} I &\propto \langle E^2\rangle = 2E_0^2\cos^2\frac{\Delta\varphi}{2}, \\ \frac{I}{I_0} &= \cos^2\!\left(\frac{\pi\,\delta s}{\lambda}\right) . \end{aligned} \tag{7} \]
+                        <p>Dabei ist \(I_0\) die Intensität, bei der die beiden Wellen gleichphasig ankommen. Sie ist viermal so groß wie das, was jeder Spalt allein liefert, \(2E_0^2\) gegenüber \(\tfrac12E_0^2.\) Über einen Streifen gemittelt ergibt \(\cos^2\) den Wert \(\tfrac12,\) also liefern zwei Spalte im Mittel das doppelte Licht eines einzelnen: Es wird keine Energie erzeugt, sie wird von den dunklen Stellen zu den hellen verschoben.</p>
+                        <div class="pbox"><span class="pbox__t">Der Gangunterschied bestimmt die Helligkeit</span> <p>Der Punkt \(P\) ist hell, wenn der Gangunterschied eine ganze Zahl von Wellenlängen ist, und dunkel, wenn er eine ganze Zahl und eine halbe ist:</p> \[ \begin{aligned} \delta s &= m\lambda & &\text{bright}, \\ \delta s &= \left(m + \tfrac12\right)\lambda & &\text{dark}, \end{aligned} \tag{8} \] <p>Dabei ist \(m = 0, 1, 2, \dots\) die <em>Ordnung</em>, die Anzahl der zusätzlichen Wellenlängen. \(\theta\) bezeichnet eine beliebige Richtung, gemessen von der Normalen zur Wand, wie im Diagramm unter der Abbildung; \(\alpha\) ist die eine Richtung, die auf \(P.\) zeigt. Im Fernfeld gilt \(\delta s = b\sin\theta,\) also liegen die hellen Richtungen bei \(\sin\theta_m = m\lambda/b.\)</p></div>
+                        <p>Auf einem flachen Schirm im großen Abstand \(D,\) liegen die hellen Linien kleiner Ordnung bei \(y_m = D\tan\theta_m \approx m\lambda D/b,\) sie sind also gleichmäßig voneinander entfernt, und zwar um</p>
+                        \[ \Delta y = \frac{\lambda D}{b} . \tag{9} \]
+                        <p>Es wurden zwei Näherungen gemacht, in dieser Reihenfolge: Zuerst das Fernfeld, \(b \ll r,\) das \(\delta s\) in \(b\sin\theta;\) überführte; erst danach erlaubten kleine Winkel \(\sin\theta \approx \tan\theta \approx \theta.\) Für rotes Licht eines Helium-Neon-Lasers, \(\lambda = 633\ \mathrm{nm},\) Spalte \(b = 0.25\ \mathrm{mm}\) auseinander und ein Schirm bei \(D = 1\ \mathrm{m},\) ergibt Gl. (9) \(\Delta y = 2.53\ \mathrm{mm}.\) Bei den Standardwerten der Seite ergibt sie \(\lambda d/b = 67.5\ \mathrm{px}\) entlang der Beobachtungslinie; dort liegt der erste helle Streifen aber schon bei \(19.8^\circ,\) außerhalb des Bereichs kleiner Winkel, und der genaue Gangunterschied (3) setzt ihn \(72\ \mathrm{px}\) von der Mittellinie entfernt, dort, wo der Standardpunkt \(P\) sitzt.</p>
+                        <p>Die Reihenfolge der Schritte ist wichtig: erst die Felder, dann das Quadrat. Würde man die beiden Intensitäten addieren, ergäbe sich \(\tfrac12E_0^2 + \tfrac12E_0^2 = E_0^2\) überall, ganz ohne Streifen. Das passiert, wenn die beiden Spalte von zwei unabhängigen Lampen beleuchtet werden. Da \(2\cos^2(\Delta\varphi/2) = 1 + \cos\Delta\varphi,\) lautet der Mittelwert (7) \(\langle E^2\rangle = E_0^2 + E_0^2\cos\Delta\varphi\): die Summe der beiden Intensitäten plus einen <em>Kreuzterm</em>. Bei zwei Lampen wandert die Phasendifferenz zufällig, der Kreuzterm mittelt sich zu null, und nur die Summe der Intensitäten bleibt übrig. Abb. 3 zeigt die Addition der Felder als Zeiger. In der Sprache der komplexen Zahlen ist jede Welle \(E_0e^{i(kL_j-\omega t)},\) die Summe ist \(E_0e^{i(kL_1-\omega t)}(1 + e^{i\Delta\varphi}),\) und \(|1 + e^{i\Delta\varphi}|^2 = 2 + 2\cos\Delta\varphi = 4\cos^2(\Delta\varphi/2),\) das gleiche Ergebnis.</p>
+                        <figure class="pfig">
+                            <div class="pfig__plate">
+                                <svg viewBox="0 0 720 230" role="img" aria-label="Adding the two waves as arrows: in step they give an arrow twice as long; a third of a turn apart they give an arrow as long as one; half a turn apart they cancel.">
+                                <rect x="0" y="0" width="720" height="230" fill="#fff"/>
+                                <line x1="55.0" y1="150.0" x2="127.0" y2="150.0" stroke="#4a413d" stroke-width="2.2"/><path d="M135.0 150.0 L125.0 154.2 L125.0 145.8 Z" fill="#4a413d"/>
+                                <line x1="135.0" y1="150.0" x2="207.0" y2="150.0" stroke="#b0485a" stroke-width="2.2"/><path d="M215.0 150.0 L205.0 154.2 L205.0 145.8 Z" fill="#b0485a"/>
+                                <line x1="55.0" y1="166.0" x2="205.4" y2="166.0" stroke="#7a1f2b" stroke-width="3.2"/><path d="M215.0 166.0 L203.0 171.0 L203.0 161.0 Z" fill="#7a1f2b"/>
+                                <text class="m" x="55.0" y="44.0"><tspan class="mu">Δ</tspan>φ<tspan class="mu"> = 0</tspan></text>
+                                <text class="m" x="55.0" y="196.0"><tspan class="mu">|</tspan>E<tspan class="mu">|</tspan><tspan class="mu"> = 2</tspan>E<tspan class="mu" font-size="12" dy="4">0</tspan></text>
+                                <text class="lbl" x="55.0" y="218.0">bright</text>
+                                <line x1="300.0" y1="150.0" x2="372.0" y2="150.0" stroke="#4a413d" stroke-width="2.2"/><path d="M380.0 150.0 L370.0 154.2 L370.0 145.8 Z" fill="#4a413d"/>
+                                <line x1="380.0" y1="150.0" x2="344.0" y2="87.6" stroke="#b0485a" stroke-width="2.2"/><path d="M340.0 80.7 L348.6 87.3 L341.4 91.5 Z" fill="#b0485a"/>
+                                <line x1="300.0" y1="150.0" x2="335.2" y2="89.0" stroke="#7a1f2b" stroke-width="3.2"/><path d="M340.0 80.7 L338.4 93.6 L329.6 88.6 Z" fill="#7a1f2b"/>
+                                <path d="M406.0 150.0 A26 26 0 0 0 367.0 127.5" fill="none" stroke="#6f655f" stroke-width="1.2"/>
+                                <line x1="380.0" y1="150.0" x2="414.0" y2="150.0" stroke="#cdc1ae" stroke-width="1" stroke-dasharray="3 3"/>
+                                <text class="m" x="410.0" y="130.0"><tspan class="mu">Δ</tspan>φ</text>
+                                <text class="m" x="300.0" y="44.0"><tspan class="mu">Δ</tspan>φ<tspan class="mu"> = 2</tspan>π<tspan class="mu">/3</tspan></text>
+                                <text class="m" x="300.0" y="196.0"><tspan class="mu">|</tspan>E<tspan class="mu">|</tspan><tspan class="mu"> = </tspan>E<tspan class="mu" font-size="12" dy="4">0</tspan></text>
+                                <text class="lbl" x="300.0" y="218.0">one quarter of the peak intensity</text>
+                                <line x1="540.0" y1="150.0" x2="612.0" y2="150.0" stroke="#4a413d" stroke-width="2.2"/><path d="M620.0 150.0 L610.0 154.2 L610.0 145.8 Z" fill="#4a413d"/>
+                                <line x1="620.0" y1="138.0" x2="548.0" y2="138.0" stroke="#b0485a" stroke-width="2.2"/><path d="M540.0 138.0 L550.0 133.8 L550.0 142.2 Z" fill="#b0485a"/>
+                                <circle cx="540.0" cy="164.0" r="5" fill="#7a1f2b"/>
+                                <text class="m" x="540.0" y="44.0"><tspan class="mu">Δ</tspan>φ<tspan class="mu"> = </tspan>π</text>
+                                <text class="m" x="540.0" y="196.0"><tspan class="mu">|</tspan>E<tspan class="mu">|</tspan><tspan class="mu"> = 0</tspan></text>
+                                <text class="lbl" x="540.0" y="218.0">dark</text>
+                                </svg>
+                            </div>
+                            <figcaption><span class="pfig__n">Abb. 3</span>Die beiden Wellen in \(P\) als Pfeile (Zeiger) der Länge \(E_0,\) wobei der zweite um die Phasendifferenz \(\Delta\varphi;\) gedreht ist; der burgunderrote Pfeil ist ihre Summe, der Länge \(2E_0|\cos(\Delta\varphi/2)|.\) Gleichphasig liegen die Pfeile in einer Linie, und die Summe ist \(2E_0\): hell. Ein Drittel einer Umdrehung auseinander ergibt die Summe \(E_0\) und die Intensität ein Viertel des Maximums. Eine halbe Umdrehung auseinander heben sie sich auf: dunkel.</figcaption>
+                        </figure>
+                        <div class="pbox pbox--ex">
+                            <span class="pbox__t">Übung 5.1 · zur Abbildung oben</span>
+                            <p>Belassen Sie <em>Spaltabstand</em> \(b = 40\ \mathrm{px},\) <em>Wellenlänge</em> \(\lambda = 13.5\ \mathrm{px}\) und <em>Abstand</em> \(d = 200\ \mathrm{px}.\) Erhöhen Sie den <em>Winkel</em> \(\alpha\) von \(0^\circ\) aus und beobachten Sie die Anzeige <em>\(\delta s/\lambda\)</em> und das Urteil unter den Anzeigen. Zwischen \(9.5^\circ\) und \(10.0^\circ\) geht die Anzeige von 0.49 auf 0.51, und das Urteil lautet <em>Destruktiv</em>; zwischen \(19.5^\circ\) und \(20.0^\circ\) geht sie von 0.99 auf 1.01, und das Urteil lautet <em>Konstruktiv · heller Streifen, m = 1</em>. Nach (8) liegen diese Streifen in der Fernfeldnäherung bei \(9.72^\circ\) und \(19.72^\circ;\) der genaue Gangunterschied bei \(d = 200\ \mathrm{px}\) setzt sie auf \(9.76^\circ\) und \(19.81^\circ.\) Setzen Sie dann \(d = 100\ \mathrm{px}\) und finden Sie den hellen Streifen wieder: Er ist hinausgewandert bis \(20.04^\circ.\)</p>
+                        </div>
+                    </section>
+
+                    <section class="psec" id="p-width">
+                        <h3><span class="psec__n">06</span>Spalte mit Breite<span class="star" title="heavier mathematics">★</span>★</span></h3>
+                        <p>Reale Spalte sind keine Punkte. Ein Spalt der Breite \(w\) ist eine Reihe von Punktquellen nebeneinander, und die Wellen aller dieser Quellen müssen addiert werden, genau wie die der beiden Spalte. Messen Sie die Position \(x'\) quer über einen Spalt von seiner Mitte aus. Von einem weit entfernten Punkt in der Richtung \(\theta,\) gesehen, hat die Welle von \(x'\) einen um \(x'\sin\theta\) längeren Weg als die Welle aus der Mitte, nach dem Argument von (4). Addiert man alle diese Wellen mit der komplexen Schreibweise von Abschnitt 5,</p>
+                        \[ \begin{aligned} E(\theta) &\propto \int_{-w/2}^{w/2} e^{ikx'\sin\theta}\,\mathrm{d}x' = w\,\frac{\sin\beta}{\beta}, \\ \beta &= \frac{\pi w\sin\theta}{\lambda} . \end{aligned} \tag{10} \]
+                        <p>Beide Spalte tragen denselben Faktor, der deshalb vor die Summe der beiden Spalte gezogen werden kann; diese Summe bleibt unverändert. Die Intensität eines Spaltpaares der Breite \(w\) ist das Zweispalt-Muster (7), multipliziert mit einem Einzelspalt-Faktor:</p>
+                        \[ \frac{I(\theta)}{I_0} = \cos^2\!\left(\frac{\pi b\sin\theta}{\lambda}\right)\left(\frac{\sin\beta}{\beta}\right)^{2} . \tag{11} \]
+                        <p>Der zweite Faktor ist die <em>Einzelspalt-Einhüllende</em>. Sie ist gleich 1 geradeaus und fällt auf null, wo \(w\sin\theta = n\lambda,\) \(n = 1, 2, \dots\) Fällt eine Nullstelle der Einhüllenden auf einen hellen Streifen, so fehlt dieser Streifen. Abb. 4 zeigt dies für Spalte von \(20\ \mathrm{px}\) Breite bei den Standardwerten der Seite: Die erste Nullstelle der Einhüllenden, \(\sin\theta = \lambda/w = 0.675,\) fällt mit dem zweiten hellen Streifen zusammen, \(\sin\theta_2 = 2\lambda/b = 0.675,\) bei \(\theta = 42.45^\circ.\) Wann immer \(b = 2w,\) gilt, verschwinden alle <em>von null verschiedenen</em> geraden Ordnungen; das Zentralmaximum bleibt, weil \(\sin\beta/\beta\to1\) bei \(\beta=0\) gilt.</p>
+                        <p>Die Seite zeichnet jeden Spalt als Lücke von \(8\ \mathrm{px}\), behandelt ihn aber als Punkt. Eine so schmale Lücke, schmaler als die Wellenlänge, hat in ihrer Einhüllenden überhaupt keine Nullstelle: Nach (11) fällt die Einhüllende nur auf 0.74 bei \(30^\circ\) und auf 0.26 bei \(90^\circ,\) und sie würde den ersten hellen Streifen von 1 auf 0.88 senken. Innerhalb der eigenen Darstellung der Seite, die bei \(30^\circ,\) endet, sind Punktspalte ein gutes Bild der Zeichnung.</p>
+                        <figure class="pfig">
+                            <div class="pfig__plate">
+                                <svg viewBox="0 0 720 346" role="img" aria-label="Chart: far-field intensity from 0 to 90 degrees for point slits and for slits 20 px wide; the single-slit envelope lowers the fringes and removes the second-order bright fringe at 42.45 degrees." xmlns="http://www.w3.org/2000/svg">
+                                <defs><clipPath id="clip2"><rect x="64.0" y="18.0" width="634.0" height="256.0"/></clipPath></defs>
+                                <line x1="64.0" x2="698.0" y1="274.0" y2="274.0" stroke="#eee6d9" stroke-width="1"/>
+                                <text class="tick" x="56.0" y="278.0" text-anchor="end">0</text>
+                                <line x1="64.0" x2="698.0" y1="218.8" y2="218.8" stroke="#eee6d9" stroke-width="1"/>
+                                <text class="tick" x="56.0" y="222.8" text-anchor="end">0.25</text>
+                                <line x1="64.0" x2="698.0" y1="163.7" y2="163.7" stroke="#eee6d9" stroke-width="1"/>
+                                <text class="tick" x="56.0" y="167.7" text-anchor="end">0.50</text>
+                                <line x1="64.0" x2="698.0" y1="108.5" y2="108.5" stroke="#eee6d9" stroke-width="1"/>
+                                <text class="tick" x="56.0" y="112.5" text-anchor="end">0.75</text>
+                                <line x1="64.0" x2="698.0" y1="53.3" y2="53.3" stroke="#eee6d9" stroke-width="1"/>
+                                <text class="tick" x="56.0" y="57.3" text-anchor="end">1.00</text>
+                                <line x1="64.0" x2="64.0" y1="274.0" y2="279.0" stroke="#8b8079"/>
+                                <text class="tick" x="64.0" y="293.0" text-anchor="middle">0</text>
+                                <line x1="134.4" x2="134.4" y1="274.0" y2="279.0" stroke="#8b8079"/>
+                                <text class="tick" x="134.4" y="293.0" text-anchor="middle">10</text>
+                                <line x1="204.9" x2="204.9" y1="274.0" y2="279.0" stroke="#8b8079"/>
+                                <text class="tick" x="204.9" y="293.0" text-anchor="middle">20</text>
+                                <line x1="275.3" x2="275.3" y1="274.0" y2="279.0" stroke="#8b8079"/>
+                                <text class="tick" x="275.3" y="293.0" text-anchor="middle">30</text>
+                                <line x1="345.8" x2="345.8" y1="274.0" y2="279.0" stroke="#8b8079"/>
+                                <text class="tick" x="345.8" y="293.0" text-anchor="middle">40</text>
+                                <line x1="416.2" x2="416.2" y1="274.0" y2="279.0" stroke="#8b8079"/>
+                                <text class="tick" x="416.2" y="293.0" text-anchor="middle">50</text>
+                                <line x1="486.7" x2="486.7" y1="274.0" y2="279.0" stroke="#8b8079"/>
+                                <text class="tick" x="486.7" y="293.0" text-anchor="middle">60</text>
+                                <line x1="557.1" x2="557.1" y1="274.0" y2="279.0" stroke="#8b8079"/>
+                                <text class="tick" x="557.1" y="293.0" text-anchor="middle">70</text>
+                                <line x1="627.6" x2="627.6" y1="274.0" y2="279.0" stroke="#8b8079"/>
+                                <text class="tick" x="627.6" y="293.0" text-anchor="middle">80</text>
+                                <line x1="698.0" x2="698.0" y1="274.0" y2="279.0" stroke="#8b8079"/>
+                                <text class="tick" x="698.0" y="293.0" text-anchor="middle">90</text>
+                                <line x1="64.0" x2="698.0" y1="274.0" y2="274.0" stroke="#8b8079"/>
+                                <line x1="64.0" x2="64.0" y1="18.0" y2="274.0" stroke="#8b8079"/>
+                                <text class="lbl" x="698.0" y="312.0" text-anchor="end">direction <tspan class="m">θ</tspan> (degrees)</text>
+                                <text class="lbl" x="70.0" y="31.0">intensity <tspan class="m">I</tspan> / <tspan class="m">I</tspan><tspan font-size="10" dy="3">0</tspan></text>
+                                <g clip-path="url(#clip2)">
+                                <line x1="275.3" x2="275.3" y1="18.0" y2="274.0" stroke="#cdc1ae" stroke-width="1.4" stroke-dasharray="4 4"/>
+                                <path d="M64.0 53.3 L65.4 53.5 L66.8 54.2 L68.2 55.4 L69.6 57.0 L71.0 59.1 L72.5 61.6 L73.9 64.5 L75.3 67.9 L76.7 71.6 L78.1 75.8 L79.5 80.3 L80.9 85.2 L82.3 90.4 L83.7 95.9 L85.1 101.7 L86.5 107.7 L88.0 114.0 L89.4 120.5 L90.8 127.2 L92.2 134.0 L93.6 140.9 L95.0 148.0 L96.4 155.1 L97.8 162.2 L99.2 169.4 L100.6 176.5 L102.0 183.5 L103.4 190.5 L104.9 197.4 L106.3 204.1 L107.7 210.6 L109.1 217.0 L110.5 223.1 L111.9 229.0 L113.3 234.6 L114.7 239.9 L116.1 244.9 L117.5 249.5 L118.9 253.8 L120.4 257.7 L121.8 261.2 L123.2 264.3 L124.6 267.0 L126.0 269.3 L127.4 271.1 L128.8 272.5 L130.2 273.4 L131.6 273.9 L133.0 274.0 L134.4 273.5 L135.9 272.7 L137.3 271.4 L138.7 269.6 L140.1 267.4 L141.5 264.8 L142.9 261.8 L144.3 258.4 L145.7 254.6 L147.1 250.5 L148.5 245.9 L149.9 241.1 L151.4 236.0 L152.8 230.5 L154.2 224.8 L155.6 218.9 L157.0 212.8 L158.4 206.4 L159.8 199.9 L161.2 193.3 L162.6 186.5 L164.0 179.7 L165.4 172.8 L166.8 165.8 L168.3 158.9 L169.7 152.0 L171.1 145.1 L172.5 138.3 L173.9 131.7 L175.3 125.1 L176.7 118.8 L178.1 112.5 L179.5 106.6 L180.9 100.8 L182.3 95.3 L183.8 90.0 L185.2 85.1 L186.6 80.4 L188.0 76.1 L189.4 72.1 L190.8 68.5 L192.2 65.2 L193.6 62.3 L195.0 59.8 L196.4 57.7 L197.8 56.0 L199.3 54.7 L200.7 53.9 L202.1 53.4 L203.5 53.3 L204.9 53.7 L206.3 54.5 L207.7 55.6 L209.1 57.2 L210.5 59.2 L211.9 61.5 L213.3 64.3 L214.8 67.3 L216.2 70.8 L217.6 74.5 L219.0 78.6 L220.4 83.0 L221.8 87.7 L223.2 92.6 L224.6 97.8 L226.0 103.2 L227.4 108.8 L228.8 114.6 L230.2 120.6 L231.7 126.7 L233.1 133.0 L234.5 139.3 L235.9 145.7 L237.3 152.2 L238.7 158.7 L240.1 165.2 L241.5 171.7 L242.9 178.1 L244.3 184.5 L245.7 190.8 L247.2 197.0 L248.6 203.1 L250.0 209.0 L251.4 214.8 L252.8 220.4 L254.2 225.8 L255.6 230.9 L257.0 235.9 L258.4 240.6 L259.8 245.0 L261.2 249.1 L262.7 253.0 L264.1 256.5 L265.5 259.8 L266.9 262.7 L268.3 265.3 L269.7 267.6 L271.1 269.5 L272.5 271.1 L273.9 272.4 L275.3 273.3 L276.7 273.8 L278.2 274.0 L279.6 273.9 L281.0 273.4 L282.4 272.5 L283.8 271.4 L285.2 269.9 L286.6 268.0 L288.0 265.9 L289.4 263.5 L290.8 260.7 L292.2 257.7 L293.6 254.4 L295.1 250.8 L296.5 247.0 L297.9 242.9 L299.3 238.7 L300.7 234.2 L302.1 229.5 L303.5 224.6 L304.9 219.6 L306.3 214.4 L307.7 209.1 L309.1 203.6 L310.6 198.1 L312.0 192.5 L313.4 186.8 L314.8 181.0 L316.2 175.3 L317.6 169.5 L319.0 163.7 L320.4 157.9 L321.8 152.2 L323.2 146.5 L324.6 140.8 L326.1 135.3 L327.5 129.8 L328.9 124.4 L330.3 119.2 L331.7 114.1 L333.1 109.1 L334.5 104.3 L335.9 99.6 L337.3 95.1 L338.7 90.9 L340.1 86.8 L341.6 82.9 L343.0 79.2 L344.4 75.8 L345.8 72.6 L347.2 69.6 L348.6 66.8 L350.0 64.3 L351.4 62.1 L352.8 60.1 L354.2 58.4 L355.6 56.9 L357.0 55.6 L358.5 54.7 L359.9 54.0 L361.3 53.5 L362.7 53.3 L364.1 53.4 L365.5 53.7 L366.9 54.2 L368.3 55.0 L369.7 56.1 L371.1 57.4 L372.5 58.9 L374.0 60.6 L375.4 62.6 L376.8 64.7 L378.2 67.1 L379.6 69.7 L381.0 72.4 L382.4 75.4 L383.8 78.5 L385.2 81.8 L386.6 85.2 L388.0 88.8 L389.5 92.5 L390.9 96.4 L392.3 100.4 L393.7 104.5 L395.1 108.7 L396.5 113.0 L397.9 117.3 L399.3 121.8 L400.7 126.3 L402.1 130.8 L403.5 135.4 L405.0 140.1 L406.4 144.7 L407.8 149.4 L409.2 154.1 L410.6 158.8 L412.0 163.4 L413.4 168.1 L414.8 172.7 L416.2 177.3 L417.6 181.9 L419.0 186.4 L420.4 190.8 L421.9 195.2 L423.3 199.5 L424.7 203.7 L426.1 207.9 L427.5 211.9 L428.9 215.9 L430.3 219.7 L431.7 223.5 L433.1 227.1 L434.5 230.6 L435.9 234.0 L437.4 237.3 L438.8 240.5 L440.2 243.5 L441.6 246.4 L443.0 249.1 L444.4 251.7 L445.8 254.2 L447.2 256.5 L448.6 258.7 L450.0 260.7 L451.4 262.6 L452.9 264.4 L454.3 266.0 L455.7 267.4 L457.1 268.7 L458.5 269.9 L459.9 270.9 L461.3 271.8 L462.7 272.5 L464.1 273.1 L465.5 273.5 L466.9 273.8 L468.4 274.0 L469.8 274.0 L471.2 273.9 L472.6 273.6 L474.0 273.3 L475.4 272.8 L476.8 272.2 L478.2 271.4 L479.6 270.6 L481.0 269.6 L482.4 268.5 L483.8 267.3 L485.3 266.0 L486.7 264.6 L488.1 263.2 L489.5 261.6 L490.9 259.9 L492.3 258.1 L493.7 256.3 L495.1 254.3 L496.5 252.3 L497.9 250.3 L499.3 248.1 L500.8 245.9 L502.2 243.6 L503.6 241.3 L505.0 238.9 L506.4 236.5 L507.8 234.0 L509.2 231.5 L510.6 228.9 L512.0 226.3 L513.4 223.6 L514.8 221.0 L516.3 218.3 L517.7 215.5 L519.1 212.8 L520.5 210.0 L521.9 207.3 L523.3 204.5 L524.7 201.7 L526.1 198.9 L527.5 196.0 L528.9 193.2 L530.3 190.4 L531.8 187.6 L533.2 184.8 L534.6 182.0 L536.0 179.3 L537.4 176.5 L538.8 173.7 L540.2 171.0 L541.6 168.3 L543.0 165.6 L544.4 162.9 L545.8 160.3 L547.2 157.6 L548.7 155.0 L550.1 152.5 L551.5 149.9 L552.9 147.4 L554.3 144.9 L555.7 142.5 L557.1 140.1 L558.5 137.7 L559.9 135.4 L561.3 133.0 L562.7 130.8 L564.2 128.5 L565.6 126.4 L567.0 124.2 L568.4 122.1 L569.8 120.0 L571.2 118.0 L572.6 116.0 L574.0 114.0 L575.4 112.1 L576.8 110.2 L578.2 108.4 L579.7 106.6 L581.1 104.8 L582.5 103.1 L583.9 101.5 L585.3 99.8 L586.7 98.2 L588.1 96.7 L589.5 95.2 L590.9 93.7 L592.3 92.3 L593.7 90.9 L595.2 89.5 L596.6 88.2 L598.0 86.9 L599.4 85.7 L600.8 84.4 L602.2 83.3 L603.6 82.1 L605.0 81.0 L606.4 80.0 L607.8 78.9 L609.2 77.9 L610.6 77.0 L612.1 76.0 L613.5 75.1 L614.9 74.2 L616.3 73.4 L617.7 72.6 L619.1 71.8 L620.5 71.0 L621.9 70.3 L623.3 69.6 L624.7 68.9 L626.1 68.3 L627.6 67.7 L629.0 67.1 L630.4 66.5 L631.8 65.9 L633.2 65.4 L634.6 64.9 L636.0 64.4 L637.4 63.9 L638.8 63.5 L640.2 63.0 L641.6 62.6 L643.1 62.2 L644.5 61.9 L645.9 61.5 L647.3 61.2 L648.7 60.8 L650.1 60.5 L651.5 60.2 L652.9 60.0 L654.3 59.7 L655.7 59.4 L657.1 59.2 L658.6 59.0 L660.0 58.8 L661.4 58.5 L662.8 58.4 L664.2 58.2 L665.6 58.0 L667.0 57.8 L668.4 57.7 L669.8 57.5 L671.2 57.4 L672.6 57.3 L674.0 57.2 L675.5 57.1 L676.9 57.0 L678.3 56.9 L679.7 56.8 L681.1 56.7 L682.5 56.6 L683.9 56.6 L685.3 56.5 L686.7 56.5 L688.1 56.4 L689.5 56.4 L691.0 56.4 L692.4 56.3 L693.8 56.3 L695.2 56.3 L696.6 56.3 L698.0 56.3" fill="none" stroke="#4a413d" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/>
+                                <path d="M64.0 53.3 L65.4 53.6 L66.8 54.3 L68.2 55.6 L69.6 57.3 L71.0 59.6 L72.5 62.3 L73.9 65.4 L75.3 69.0 L76.7 73.1 L78.1 77.5 L79.5 82.4 L80.9 87.6 L82.3 93.1 L83.7 98.9 L85.1 105.1 L86.5 111.4 L88.0 118.0 L89.4 124.8 L90.8 131.8 L92.2 138.8 L93.6 146.0 L95.0 153.2 L96.4 160.5 L97.8 167.8 L99.2 175.0 L100.6 182.1 L102.0 189.2 L103.4 196.1 L104.9 202.9 L106.3 209.4 L107.7 215.8 L109.1 221.9 L110.5 227.8 L111.9 233.4 L113.3 238.6 L114.7 243.6 L116.1 248.2 L117.5 252.4 L118.9 256.3 L120.4 259.8 L121.8 263.0 L123.2 265.7 L124.6 268.1 L126.0 270.0 L127.4 271.6 L128.8 272.8 L130.2 273.5 L131.6 273.9 L133.0 274.0 L134.4 273.6 L135.9 272.9 L137.3 271.9 L138.7 270.6 L140.1 268.9 L141.5 267.0 L142.9 264.8 L144.3 262.3 L145.7 259.7 L147.1 256.8 L148.5 253.7 L149.9 250.4 L151.4 247.1 L152.8 243.6 L154.2 240.0 L155.6 236.3 L157.0 232.6 L158.4 228.9 L159.8 225.1 L161.2 221.4 L162.6 217.8 L164.0 214.2 L165.4 210.6 L166.8 207.2 L168.3 203.9 L169.7 200.7 L171.1 197.7 L172.5 194.8 L173.9 192.1 L175.3 189.6 L176.7 187.3 L178.1 185.2 L179.5 183.3 L180.9 181.6 L182.3 180.2 L183.8 179.0 L185.2 178.0 L186.6 177.2 L188.0 176.7 L189.4 176.4 L190.8 176.4 L192.2 176.5 L193.6 176.9 L195.0 177.5 L196.4 178.3 L197.8 179.4 L199.3 180.6 L200.7 181.9 L202.1 183.5 L203.5 185.2 L204.9 187.1 L206.3 189.1 L207.7 191.3 L209.1 193.5 L210.5 195.9 L211.9 198.3 L213.3 200.9 L214.8 203.5 L216.2 206.2 L217.6 208.9 L219.0 211.6 L220.4 214.4 L221.8 217.2 L223.2 219.9 L224.6 222.7 L226.0 225.5 L227.4 228.2 L228.8 230.9 L230.2 233.5 L231.7 236.1 L233.1 238.6 L234.5 241.0 L235.9 243.4 L237.3 245.7 L238.7 247.9 L240.1 250.1 L241.5 252.1 L242.9 254.0 L244.3 255.9 L245.7 257.6 L247.2 259.3 L248.6 260.8 L250.0 262.3 L251.4 263.7 L252.8 264.9 L254.2 266.1 L255.6 267.1 L257.0 268.1 L258.4 269.0 L259.8 269.8 L261.2 270.5 L262.7 271.2 L264.1 271.7 L265.5 272.2 L266.9 272.6 L268.3 273.0 L269.7 273.3 L271.1 273.5 L272.5 273.7 L273.9 273.8 L275.3 273.9 L276.7 274.0 L278.2 274.0 L279.6 274.0 L281.0 273.9 L282.4 273.9 L283.8 273.8 L285.2 273.7 L286.6 273.6 L288.0 273.5 L289.4 273.3 L290.8 273.2 L292.2 273.0 L293.6 272.9 L295.1 272.8 L296.5 272.6 L297.9 272.5 L299.3 272.4 L300.7 272.3 L302.1 272.2 L303.5 272.1 L304.9 272.0 L306.3 271.9 L307.7 271.9 L309.1 271.8 L310.6 271.8 L312.0 271.8 L313.4 271.8 L314.8 271.8 L316.2 271.8 L317.6 271.8 L319.0 271.9 L320.4 271.9 L321.8 272.0 L323.2 272.0 L324.6 272.1 L326.1 272.2 L327.5 272.3 L328.9 272.4 L330.3 272.5 L331.7 272.6 L333.1 272.7 L334.5 272.8 L335.9 272.9 L337.3 273.0 L338.7 273.0 L340.1 273.1 L341.6 273.2 L343.0 273.3 L344.4 273.4 L345.8 273.5 L347.2 273.6 L348.6 273.6 L350.0 273.7 L351.4 273.8 L352.8 273.8 L354.2 273.9 L355.6 273.9 L357.0 273.9 L358.5 274.0 L359.9 274.0 L361.3 274.0 L362.7 274.0 L364.1 274.0 L365.5 274.0 L366.9 274.0 L368.3 274.0 L369.7 273.9 L371.1 273.9 L372.5 273.9 L374.0 273.8 L375.4 273.8 L376.8 273.7 L378.2 273.7 L379.6 273.6 L381.0 273.6 L382.4 273.5 L383.8 273.5 L385.2 273.4 L386.6 273.4 L388.0 273.3 L389.5 273.3 L390.9 273.2 L392.3 273.1 L393.7 273.1 L395.1 273.0 L396.5 273.0 L397.9 272.9 L399.3 272.9 L400.7 272.9 L402.1 272.8 L403.5 272.8 L405.0 272.8 L406.4 272.8 L407.8 272.7 L409.2 272.7 L410.6 272.7 L412.0 272.7 L413.4 272.7 L414.8 272.7 L416.2 272.7 L417.6 272.7 L419.0 272.7 L420.4 272.8 L421.9 272.8 L423.3 272.8 L424.7 272.8 L426.1 272.9 L427.5 272.9 L428.9 272.9 L430.3 273.0 L431.7 273.0 L433.1 273.1 L434.5 273.1 L435.9 273.2 L437.4 273.2 L438.8 273.3 L440.2 273.3 L441.6 273.4 L443.0 273.4 L444.4 273.5 L445.8 273.5 L447.2 273.6 L448.6 273.6 L450.0 273.7 L451.4 273.7 L452.9 273.7 L454.3 273.8 L455.7 273.8 L457.1 273.8 L458.5 273.9 L459.9 273.9 L461.3 273.9 L462.7 274.0 L464.1 274.0 L465.5 274.0 L466.9 274.0 L468.4 274.0 L469.8 274.0 L471.2 274.0 L472.6 274.0 L474.0 274.0 L475.4 274.0 L476.8 273.9 L478.2 273.9 L479.6 273.9 L481.0 273.8 L482.4 273.8 L483.8 273.8 L485.3 273.7 L486.7 273.7 L488.1 273.6 L489.5 273.5 L490.9 273.5 L492.3 273.4 L493.7 273.3 L495.1 273.2 L496.5 273.1 L497.9 273.1 L499.3 273.0 L500.8 272.9 L502.2 272.8 L503.6 272.7 L505.0 272.6 L506.4 272.5 L507.8 272.3 L509.2 272.2 L510.6 272.1 L512.0 272.0 L513.4 271.9 L514.8 271.7 L516.3 271.6 L517.7 271.5 L519.1 271.4 L520.5 271.2 L521.9 271.1 L523.3 271.0 L524.7 270.8 L526.1 270.7 L527.5 270.6 L528.9 270.4 L530.3 270.3 L531.8 270.1 L533.2 270.0 L534.6 269.9 L536.0 269.7 L537.4 269.6 L538.8 269.5 L540.2 269.3 L541.6 269.2 L543.0 269.0 L544.4 268.9 L545.8 268.8 L547.2 268.7 L548.7 268.5 L550.1 268.4 L551.5 268.3 L552.9 268.1 L554.3 268.0 L555.7 267.9 L557.1 267.8 L558.5 267.7 L559.9 267.5 L561.3 267.4 L562.7 267.3 L564.2 267.2 L565.6 267.1 L567.0 267.0 L568.4 266.9 L569.8 266.8 L571.2 266.7 L572.6 266.6 L574.0 266.5 L575.4 266.4 L576.8 266.3 L578.2 266.2 L579.7 266.1 L581.1 266.0 L582.5 265.9 L583.9 265.9 L585.3 265.8 L586.7 265.7 L588.1 265.6 L589.5 265.6 L590.9 265.5 L592.3 265.4 L593.7 265.4 L595.2 265.3 L596.6 265.2 L598.0 265.2 L599.4 265.1 L600.8 265.1 L602.2 265.0 L603.6 265.0 L605.0 264.9 L606.4 264.9 L607.8 264.8 L609.2 264.8 L610.6 264.7 L612.1 264.7 L613.5 264.6 L614.9 264.6 L616.3 264.6 L617.7 264.5 L619.1 264.5 L620.5 264.5 L621.9 264.4 L623.3 264.4 L624.7 264.4 L626.1 264.4 L627.6 264.3 L629.0 264.3 L630.4 264.3 L631.8 264.3 L633.2 264.3 L634.6 264.2 L636.0 264.2 L637.4 264.2 L638.8 264.2 L640.2 264.2 L641.6 264.2 L643.1 264.1 L644.5 264.1 L645.9 264.1 L647.3 264.1 L648.7 264.1 L650.1 264.1 L651.5 264.1 L652.9 264.1 L654.3 264.1 L655.7 264.1 L657.1 264.0 L658.6 264.0 L660.0 264.0 L661.4 264.0 L662.8 264.0 L664.2 264.0 L665.6 264.0 L667.0 264.0 L668.4 264.0 L669.8 264.0 L671.2 264.0 L672.6 264.0 L674.0 264.0 L675.5 264.0 L676.9 264.0 L678.3 264.0 L679.7 264.0 L681.1 264.0 L682.5 264.0 L683.9 264.0 L685.3 264.0 L686.7 264.0 L688.1 264.0 L689.5 264.0 L691.0 264.0 L692.4 264.0 L693.8 264.0 L695.2 264.0 L696.6 264.0 L698.0 264.0" fill="none" stroke="#7a1f2b" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/>
+                                <path d="M64.0 53.3 L65.4 53.3 L66.8 53.4 L68.2 53.5 L69.6 53.6 L71.0 53.8 L72.5 54.0 L73.9 54.3 L75.3 54.5 L76.7 54.9 L78.1 55.2 L79.5 55.6 L80.9 56.1 L82.3 56.6 L83.7 57.1 L85.1 57.6 L86.5 58.2 L88.0 58.9 L89.4 59.5 L90.8 60.2 L92.2 61.0 L93.6 61.7 L95.0 62.5 L96.4 63.4 L97.8 64.2 L99.2 65.2 L100.6 66.1 L102.0 67.1 L103.4 68.1 L104.9 69.1 L106.3 70.2 L107.7 71.3 L109.1 72.4 L110.5 73.6 L111.9 74.8 L113.3 76.0 L114.7 77.2 L116.1 78.5 L117.5 79.8 L118.9 81.1 L120.4 82.5 L121.8 83.9 L123.2 85.3 L124.6 86.7 L126.0 88.2 L127.4 89.7 L128.8 91.2 L130.2 92.7 L131.6 94.2 L133.0 95.8 L134.4 97.4 L135.9 99.0 L137.3 100.6 L138.7 102.2 L140.1 103.9 L141.5 105.6 L142.9 107.2 L144.3 109.0 L145.7 110.7 L147.1 112.4 L148.5 114.1 L149.9 115.9 L151.4 117.7 L152.8 119.5 L154.2 121.2 L155.6 123.0 L157.0 124.8 L158.4 126.7 L159.8 128.5 L161.2 130.3 L162.6 132.2 L164.0 134.0 L165.4 135.8 L166.8 137.7 L168.3 139.6 L169.7 141.4 L171.1 143.3 L172.5 145.1 L173.9 147.0 L175.3 148.9 L176.7 150.7 L178.1 152.6 L179.5 154.4 L180.9 156.3 L182.3 158.1 L183.8 160.0 L185.2 161.8 L186.6 163.7 L188.0 165.5 L189.4 167.3 L190.8 169.2 L192.2 171.0 L193.6 172.8 L195.0 174.6 L196.4 176.4 L197.8 178.2 L199.3 180.0 L200.7 181.7 L202.1 183.5 L203.5 185.2 L204.9 186.9 L206.3 188.7 L207.7 190.4 L209.1 192.1 L210.5 193.7 L211.9 195.4 L213.3 197.1 L214.8 198.7 L216.2 200.3 L217.6 201.9 L219.0 203.5 L220.4 205.1 L221.8 206.7 L223.2 208.2 L224.6 209.8 L226.0 211.3 L227.4 212.8 L228.8 214.3 L230.2 215.7 L231.7 217.2 L233.1 218.6 L234.5 220.0 L235.9 221.4 L237.3 222.8 L238.7 224.1 L240.1 225.5 L241.5 226.8 L242.9 228.1 L244.3 229.3 L245.7 230.6 L247.2 231.8 L248.6 233.1 L250.0 234.3 L251.4 235.4 L252.8 236.6 L254.2 237.7 L255.6 238.8 L257.0 239.9 L258.4 241.0 L259.8 242.1 L261.2 243.1 L262.7 244.1 L264.1 245.1 L265.5 246.1 L266.9 247.1 L268.3 248.0 L269.7 249.0 L271.1 249.9 L272.5 250.7 L273.9 251.6 L275.3 252.4 L276.7 253.3 L278.2 254.1 L279.6 254.9 L281.0 255.6 L282.4 256.4 L283.8 257.1 L285.2 257.8 L286.6 258.5 L288.0 259.2 L289.4 259.8 L290.8 260.5 L292.2 261.1 L293.6 261.7 L295.1 262.3 L296.5 262.8 L297.9 263.4 L299.3 263.9 L300.7 264.4 L302.1 264.9 L303.5 265.4 L304.9 265.9 L306.3 266.3 L307.7 266.8 L309.1 267.2 L310.6 267.6 L312.0 268.0 L313.4 268.4 L314.8 268.7 L316.2 269.1 L317.6 269.4 L319.0 269.7 L320.4 270.0 L321.8 270.3 L323.2 270.6 L324.6 270.9 L326.1 271.1 L327.5 271.4 L328.9 271.6 L330.3 271.8 L331.7 272.0 L333.1 272.2 L334.5 272.4 L335.9 272.5 L337.3 272.7 L338.7 272.9 L340.1 273.0 L341.6 273.1 L343.0 273.2 L344.4 273.4 L345.8 273.4 L347.2 273.5 L348.6 273.6 L350.0 273.7 L351.4 273.8 L352.8 273.8 L354.2 273.9 L355.6 273.9 L357.0 273.9 L358.5 274.0 L359.9 274.0 L361.3 274.0 L362.7 274.0 L364.1 274.0 L365.5 274.0 L366.9 274.0 L368.3 274.0 L369.7 273.9 L371.1 273.9 L372.5 273.9 L374.0 273.8 L375.4 273.8 L376.8 273.7 L378.2 273.7 L379.6 273.6 L381.0 273.5 L382.4 273.5 L383.8 273.4 L385.2 273.3 L386.6 273.3 L388.0 273.2 L389.5 273.1 L390.9 273.0 L392.3 272.9 L393.7 272.8 L395.1 272.7 L396.5 272.6 L397.9 272.5 L399.3 272.4 L400.7 272.3 L402.1 272.2 L403.5 272.1 L405.0 272.0 L406.4 271.9 L407.8 271.8 L409.2 271.6 L410.6 271.5 L412.0 271.4 L413.4 271.3 L414.8 271.2 L416.2 271.1 L417.6 270.9 L419.0 270.8 L420.4 270.7 L421.9 270.6 L423.3 270.5 L424.7 270.3 L426.1 270.2 L427.5 270.1 L428.9 270.0 L430.3 269.9 L431.7 269.7 L433.1 269.6 L434.5 269.5 L435.9 269.4 L437.4 269.3 L438.8 269.2 L440.2 269.0 L441.6 268.9 L443.0 268.8 L444.4 268.7 L445.8 268.6 L447.2 268.5 L448.6 268.4 L450.0 268.2 L451.4 268.1 L452.9 268.0 L454.3 267.9 L455.7 267.8 L457.1 267.7 L458.5 267.6 L459.9 267.5 L461.3 267.4 L462.7 267.3 L464.1 267.2 L465.5 267.1 L466.9 267.0 L468.4 266.9 L469.8 266.8 L471.2 266.7 L472.6 266.6 L474.0 266.5 L475.4 266.5 L476.8 266.4 L478.2 266.3 L479.6 266.2 L481.0 266.1 L482.4 266.0 L483.8 266.0 L485.3 265.9 L486.7 265.8 L488.1 265.7 L489.5 265.7 L490.9 265.6 L492.3 265.5 L493.7 265.5 L495.1 265.4 L496.5 265.3 L497.9 265.3 L499.3 265.2 L500.8 265.1 L502.2 265.1 L503.6 265.0 L505.0 265.0 L506.4 264.9 L507.8 264.9 L509.2 264.8 L510.6 264.7 L512.0 264.7 L513.4 264.6 L514.8 264.6 L516.3 264.6 L517.7 264.5 L519.1 264.5 L520.5 264.4 L521.9 264.4 L523.3 264.3 L524.7 264.3 L526.1 264.3 L527.5 264.2 L528.9 264.2 L530.3 264.2 L531.8 264.1 L533.2 264.1 L534.6 264.1 L536.0 264.0 L537.4 264.0 L538.8 264.0 L540.2 264.0 L541.6 263.9 L543.0 263.9 L544.4 263.9 L545.8 263.9 L547.2 263.9 L548.7 263.8 L550.1 263.8 L551.5 263.8 L552.9 263.8 L554.3 263.8 L555.7 263.8 L557.1 263.7 L558.5 263.7 L559.9 263.7 L561.3 263.7 L562.7 263.7 L564.2 263.7 L565.6 263.7 L567.0 263.7 L568.4 263.6 L569.8 263.6 L571.2 263.6 L572.6 263.6 L574.0 263.6 L575.4 263.6 L576.8 263.6 L578.2 263.6 L579.7 263.6 L581.1 263.6 L582.5 263.6 L583.9 263.6 L585.3 263.6 L586.7 263.6 L588.1 263.6 L589.5 263.6 L590.9 263.6 L592.3 263.6 L593.7 263.6 L595.2 263.6 L596.6 263.6 L598.0 263.6 L599.4 263.6 L600.8 263.6 L602.2 263.6 L603.6 263.6 L605.0 263.6 L606.4 263.6 L607.8 263.6 L609.2 263.6 L610.6 263.6 L612.1 263.6 L613.5 263.6 L614.9 263.6 L616.3 263.6 L617.7 263.6 L619.1 263.6 L620.5 263.6 L621.9 263.6 L623.3 263.7 L624.7 263.7 L626.1 263.7 L627.6 263.7 L629.0 263.7 L630.4 263.7 L631.8 263.7 L633.2 263.7 L634.6 263.7 L636.0 263.7 L637.4 263.7 L638.8 263.7 L640.2 263.7 L641.6 263.7 L643.1 263.7 L644.5 263.7 L645.9 263.7 L647.3 263.7 L648.7 263.7 L650.1 263.8 L651.5 263.8 L652.9 263.8 L654.3 263.8 L655.7 263.8 L657.1 263.8 L658.6 263.8 L660.0 263.8 L661.4 263.8 L662.8 263.8 L664.2 263.8 L665.6 263.8 L667.0 263.8 L668.4 263.8 L669.8 263.8 L671.2 263.8 L672.6 263.8 L674.0 263.8 L675.5 263.8 L676.9 263.8 L678.3 263.8 L679.7 263.8 L681.1 263.8 L682.5 263.8 L683.9 263.8 L685.3 263.8 L686.7 263.8 L688.1 263.8 L689.5 263.8 L691.0 263.8 L692.4 263.8 L693.8 263.8 L695.2 263.8 L696.6 263.8 L698.0 263.8" fill="none" stroke="#1c1518" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" stroke-dasharray="6 5"/>
+                                </g>
+                                <text class="lbl" x="282.4" y="35.7" text-anchor="start" style="fill:#6f655f">← the page plots 0–30°</text>
+                                <text class="lbl" x="363.0" y="247.5" text-anchor="middle" style="fill:#7a1f2b"><tspan class="m" font-size="14" style="fill:#7a1f2b">m</tspan> = 2 missing</text>
+                                <line x1="64" x2="698" y1="318.0" y2="318.0" stroke="#eee6d9"/>
+                                <line x1="64.0" x2="86.0" y1="334.0" y2="334.0" stroke="#4a413d" stroke-width="2.2" stroke-linecap="round"/>
+                                <text class="lbl" x="94.0" y="338.0">point slits</text>
+                                <line x1="183.2" x2="205.2" y1="334.0" y2="334.0" stroke="#7a1f2b" stroke-width="2.2" stroke-linecap="round"/>
+                                <text class="lbl" x="213.2" y="338.0">slits 20 px wide</text>
+                                <line x1="338.4" x2="360.4" y1="334.0" y2="334.0" stroke="#1c1518" stroke-width="2.2" stroke-linecap="round" stroke-dasharray="6 5"/>
+                                <text class="lbl" x="368.4" y="338.0">single-slit envelope, 20 px</text>
+                                </svg>
+                            </div>
+                            <figcaption><span class="pfig__n">Abb. 4</span>Intensität im Fernfeld (11) bei den Standardwerten der Seite \(b = 40\ \mathrm{px}\) und \(\lambda = 13.5\ \mathrm{px},\) berechnet alle \(0.2^\circ\) von \(0^\circ\) bis \(90^\circ.\) Dünne dunkle Linie: Punktspalte, das Modell der Seite. Burgunderrot: Spalte von \(20\ \mathrm{px}\) Breite. Gestrichelt: ihre Einzelspalt-Einhüllende, die die Streifen multipliziert. Der erste helle Streifen bei \(19.72^\circ,\) ist auf 0.41 seiner Höhe bei Punktspalten gekürzt; der zweite bei \(42.45^\circ,\) fällt auf eine Nullstelle der Einhüllenden und verschwindet. Das eigene Diagramm der Seite reicht bis zur dünnen Linie bei \(30^\circ.\)</figcaption>
+                        </figure>
+                    </section>
+
+                    <section class="psec" id="p-quantum">
+                        <h3><span class="psec__n">07</span>Ein Teilchen nach dem anderen</h3>
+                        <p class="psec__lead">Dreht man das Licht weit genug herunter, so zerfällt das glatte Muster in Punkte.</p>
+                        <p>Licht gibt seine Energie in Körnchen ab, den <em>Photonen</em>, von denen jedes die Energie \(hf,\) trägt, wobei \(f\) die Frequenz und \(h = 6.626\times10^{-34}\ \mathrm{J\,s}\) das Plancksche Wirkungsquantum ist. Eine empfindliche Kamera hinter den Spalten erfasst jedes Photon als einen Punkt an einer Stelle. Wohin der nächste Punkt fällt, lässt sich nicht vorhersagen. Wohin Punkte wahrscheinlich fallen, lässt sich vorhersagen: Die Wahrscheinlichkeit für einen Punkt nahe einer Richtung \(\theta\) ist proportional zur Intensität (7) dort,</p>
+                        \[ p(\theta)\,\mathrm{d}\theta \propto \cos^2\!\left(\frac{\pi b\sin\theta}{\lambda}\right)\mathrm{d}\theta . \tag{12} \]
+                        <p>Abb. 5 zeichnet Punkte zufällig nach dieser Regel. Zwanzig Punkte wirken wie Rauschen; zweitausend zeigen die Streifen. Von diesen 2000 Punkten landen 140 innerhalb von \(1^\circ\) um die Mitte und nur 3 innerhalb von \(1^\circ\) um die beiden dunklen Richtungen bei \(\pm 9.72^\circ;\) die Regel (12) erwartet 131 und 2.2.</p>
+                        <figure class="pfig">
+                            <div class="pfig__plate">
+                                <svg viewBox="0 0 720 294" role="img" xmlns="http://www.w3.org/2000/svg" aria-label="Three detector strips with 20, 200 and 2000 simulated single-particle arrivals; the fringes appear only as the dots accumulate.">
+                                <rect x="0" y="0" width="720" height="294" fill="#fff"/>
+                                <rect x="92" y="14" width="606" height="64" fill="none" stroke="#cdc1ae"/>
+                                <text class="tick" x="84" y="50" text-anchor="end">20 dots</text>
+                                <path d="M402.2 54.2h0M593.6 58.3h0M425.1 64.8h0M548.6 33.8h0M173.2 30.1h0M215.3 53.8h0M546.7 63.1h0M420.0 72.0h0M189.4 26.4h0M404.7 45.0h0M370.4 68.1h0M451.3 41.7h0M601.0 51.0h0M401.6 19.4h0M181.6 55.7h0M208.1 69.5h0M207.9 64.3h0M610.3 67.6h0M623.2 55.0h0M258.1 31.8h0" stroke="#7a1f2b" stroke-width="3.2" stroke-linecap="round" fill="none"/>
+                                <rect x="92" y="94" width="606" height="64" fill="none" stroke="#cdc1ae"/>
+                                <text class="tick" x="84" y="130" text-anchor="end">200 dots</text>
+                                <path d="M557.7 104.4h0M595.8 105.1h0M592.2 152.6h0M332.1 144.0h0M251.1 144.3h0M156.2 150.3h0M617.6 151.8h0M583.0 120.0h0M421.5 140.2h0M247.7 133.9h0M363.7 129.4h0M158.5 136.0h0M571.4 115.9h0M221.0 146.3h0M398.7 120.8h0M410.5 106.3h0M167.4 98.6h0M205.8 133.8h0M408.0 111.0h0M551.5 151.5h0M545.4 108.9h0M606.5 115.7h0M580.5 153.1h0M169.3 127.1h0M432.6 149.6h0M571.7 141.8h0M613.9 104.7h0M456.7 110.1h0M566.4 119.7h0M419.2 147.3h0M412.7 116.7h0M188.1 123.9h0M185.5 124.9h0M179.3 116.2h0M259.4 142.0h0M119.9 101.1h0M208.2 110.7h0M660.9 144.2h0M163.6 132.5h0M249.8 126.7h0M266.7 118.7h0M459.5 105.3h0M186.7 123.6h0M223.2 153.3h0M283.9 131.3h0M592.7 130.3h0M548.5 153.4h0M172.1 147.6h0M345.8 154.0h0M162.7 151.4h0M374.4 135.4h0M191.2 115.1h0M131.6 133.2h0M429.8 117.5h0M599.5 143.4h0M131.6 105.7h0M220.1 123.9h0M688.2 145.1h0M313.7 123.5h0M133.5 131.7h0M580.1 103.5h0M544.0 114.0h0M580.6 151.5h0M199.8 134.8h0M211.2 118.4h0M391.4 126.9h0M382.3 141.4h0M221.2 142.1h0M404.2 144.4h0M197.7 114.2h0M394.1 111.3h0M596.9 133.8h0M593.5 127.5h0M189.3 129.6h0M358.3 110.0h0M215.6 115.8h0M421.2 140.1h0M211.6 118.1h0M243.6 140.4h0M380.8 100.6h0M338.0 151.2h0M585.2 109.7h0M257.6 124.8h0M463.9 149.6h0M147.6 112.2h0M618.0 110.7h0M250.0 153.2h0M415.2 148.6h0M378.5 127.8h0M619.1 101.4h0M155.1 131.9h0M175.1 112.1h0M439.6 110.0h0M610.7 150.2h0M192.9 132.7h0M187.3 122.9h0M580.0 101.5h0M639.8 118.8h0M632.4 146.4h0M252.5 114.9h0M217.7 116.1h0M621.3 132.0h0M571.8 112.1h0M347.5 129.2h0M193.8 141.0h0M142.9 114.1h0M630.0 124.5h0M377.7 130.3h0M175.6 118.3h0M416.2 110.5h0M533.5 104.4h0M569.8 129.7h0M228.9 150.5h0M199.4 99.1h0M198.4 146.5h0M137.1 151.9h0M405.8 128.4h0M410.1 152.2h0M392.9 137.5h0M655.7 128.5h0M569.1 124.0h0M420.7 124.1h0M634.2 136.2h0M393.3 111.1h0M589.8 138.1h0M235.4 125.5h0M229.1 135.8h0M396.4 150.7h0M154.1 111.1h0M610.7 120.6h0M552.5 113.4h0M212.9 100.9h0M224.7 132.8h0M413.1 133.2h0M223.8 154.0h0M151.3 131.7h0M380.3 120.2h0M443.2 148.5h0M162.9 98.9h0M576.3 115.0h0M244.5 140.1h0M523.3 107.0h0M657.3 118.2h0M590.1 145.5h0M239.7 117.3h0M172.5 111.6h0M598.4 147.9h0M362.2 102.3h0M353.0 146.0h0M579.4 115.7h0M180.7 109.6h0M354.2 125.3h0M671.4 125.1h0M113.4 152.0h0M572.8 140.1h0M539.5 123.8h0M193.8 129.3h0M371.3 115.8h0M614.8 153.0h0M139.3 119.6h0M204.3 147.6h0M577.3 134.7h0M362.0 149.3h0M421.3 117.9h0M444.7 121.3h0M178.0 118.7h0M588.3 144.3h0M653.2 151.4h0M589.4 144.2h0M577.5 123.3h0M577.7 144.4h0M135.2 138.9h0M640.3 127.1h0M207.4 108.3h0M579.0 111.3h0M332.5 137.4h0M559.0 109.1h0M396.7 129.4h0M386.6 143.0h0M600.4 134.6h0M680.6 132.1h0M355.9 112.4h0M173.0 104.7h0M459.2 99.9h0M343.4 100.6h0M201.7 111.0h0M117.3 129.2h0M406.4 121.7h0M609.9 109.4h0M608.5 115.0h0M213.5 123.8h0M252.9 142.7h0M314.7 134.7h0M357.6 100.3h0M240.3 125.0h0M377.5 108.4h0M613.0 145.9h0M237.4 147.6h0M220.6 129.1h0M421.7 139.2h0" stroke="#7a1f2b" stroke-width="3.2" stroke-linecap="round" fill="none"/>
+                                <rect x="92" y="174" width="606" height="64" fill="none" stroke="#cdc1ae"/>
+                                <text class="tick" x="84" y="210" text-anchor="end">2000 dots</text>
+                                <path d="M261.0 192.7h0M231.3 182.4h0M421.8 184.7h0M546.6 228.6h0M229.4 198.4h0M157.2 202.8h0M213.3 190.0h0M186.2 186.1h0M569.9 220.9h0M218.9 189.7h0M374.2 183.5h0M550.5 196.2h0M420.2 184.1h0M397.3 194.7h0M216.1 207.9h0M467.3 186.1h0M385.9 210.1h0M181.2 210.7h0M572.2 204.5h0M516.4 193.3h0M209.4 219.4h0M609.2 225.5h0M356.1 195.8h0M664.0 180.6h0M384.5 232.2h0M214.6 223.1h0M570.4 228.0h0M212.9 213.9h0M394.0 179.6h0M415.8 204.6h0M665.5 180.6h0M427.4 187.7h0M568.5 181.4h0M609.6 203.8h0M406.2 203.0h0M183.7 186.7h0M616.9 227.3h0M407.8 197.1h0M388.8 228.2h0M617.9 198.5h0M376.7 233.4h0M429.5 178.1h0M601.3 209.3h0M190.7 229.2h0M350.1 218.5h0M357.2 215.0h0M565.3 233.0h0M190.2 185.5h0M626.7 185.7h0M276.7 194.3h0M554.3 223.9h0M362.3 194.7h0M183.9 218.4h0M392.2 215.1h0M295.6 210.3h0M220.9 179.4h0M427.2 187.6h0M375.6 230.6h0M612.3 180.4h0M426.1 193.9h0M147.2 182.6h0M568.8 198.6h0M406.8 186.9h0M537.1 204.0h0M188.2 229.0h0M230.5 214.5h0M235.5 231.5h0M556.0 184.0h0M216.0 210.6h0M140.8 223.0h0M155.2 213.0h0M143.0 206.3h0M428.5 183.7h0M377.6 196.3h0M597.4 232.1h0M559.1 205.1h0M386.4 183.3h0M179.3 213.8h0M365.0 181.6h0M366.8 186.0h0M415.5 190.9h0M180.8 182.4h0M609.4 188.5h0M535.4 187.7h0M400.8 205.5h0M181.1 193.5h0M225.9 230.6h0M244.2 201.8h0M625.3 205.2h0M409.5 218.4h0M597.3 198.1h0M172.4 224.4h0M570.5 204.4h0M590.8 190.0h0M240.8 193.2h0M362.6 217.4h0M163.8 232.2h0M404.8 206.2h0M525.4 225.3h0M126.1 198.3h0M156.7 192.3h0M438.8 214.7h0M168.6 191.2h0M574.5 182.5h0M192.7 203.7h0M142.9 178.0h0M360.3 200.4h0M642.2 212.8h0M218.6 191.1h0M352.4 178.9h0M228.2 207.0h0M213.0 226.6h0M161.2 217.4h0M409.1 220.7h0M179.1 221.1h0M590.4 194.4h0M164.8 226.8h0M456.3 203.3h0M183.7 231.5h0M356.1 190.1h0M381.8 182.1h0M628.6 206.0h0M247.8 206.6h0M197.7 230.0h0M124.5 210.6h0M661.6 211.2h0M629.6 207.2h0M563.9 178.1h0M268.3 233.2h0M402.4 198.2h0M602.9 198.9h0M460.9 222.2h0M220.4 226.3h0M670.3 183.7h0M562.0 185.2h0M181.7 217.0h0M216.9 220.2h0M443.4 184.5h0M416.6 186.7h0M421.7 210.5h0M142.4 213.0h0M451.7 189.1h0M578.1 226.7h0M227.3 196.9h0M172.0 198.9h0M646.6 193.7h0M201.3 218.0h0M353.0 208.6h0M158.1 219.1h0M412.2 211.7h0M583.4 182.7h0M369.6 213.5h0M457.0 186.9h0M351.0 188.8h0M391.2 209.2h0M590.3 207.3h0M199.5 196.9h0M430.0 215.4h0M190.8 194.6h0M223.3 183.2h0M430.7 196.5h0M403.7 200.3h0M538.1 207.9h0M613.5 190.8h0M582.1 221.8h0M350.4 231.6h0M411.0 183.6h0M194.4 231.0h0M399.3 192.5h0M646.5 199.8h0M590.0 216.7h0M593.1 194.1h0M219.0 194.3h0M192.7 180.6h0M603.5 218.2h0M573.1 202.1h0M199.3 224.2h0M428.1 233.6h0M209.3 229.4h0M166.7 205.2h0M604.2 220.1h0M577.0 195.9h0M202.4 227.0h0M425.5 184.1h0M402.2 206.6h0M632.7 206.1h0M175.9 230.7h0M388.1 224.4h0M422.5 224.4h0M190.2 226.7h0M664.2 220.3h0M517.3 204.9h0M176.1 187.2h0M605.6 191.7h0M619.1 200.0h0M390.8 209.6h0M366.6 231.9h0M575.1 179.6h0M376.4 228.9h0M584.5 199.0h0M210.8 206.0h0M457.0 217.7h0M589.1 180.4h0M423.9 192.9h0M381.0 220.0h0M441.0 190.3h0M582.0 182.8h0M569.1 187.7h0M154.7 178.8h0M400.3 228.0h0M448.0 208.5h0M674.4 217.3h0M164.5 180.8h0M398.2 222.5h0M404.0 202.9h0M626.0 190.4h0M620.2 222.5h0M560.2 195.3h0M417.3 179.8h0M579.1 185.9h0M264.2 186.6h0M158.9 197.0h0M337.1 193.3h0M193.8 180.5h0M603.7 185.1h0M423.3 232.8h0M615.7 232.7h0M644.4 229.1h0M171.8 222.0h0M447.7 187.7h0M405.6 216.8h0M433.1 194.6h0M394.9 184.0h0M394.2 181.3h0M391.9 189.3h0M189.7 217.7h0M196.6 185.6h0M341.8 219.8h0M665.4 232.5h0M252.1 205.3h0M603.4 214.0h0M429.4 226.8h0M516.7 192.8h0M407.2 228.3h0M196.3 212.9h0M414.4 203.4h0M389.3 207.0h0M133.8 186.1h0M652.2 216.4h0M632.9 226.9h0M449.7 212.0h0M626.8 200.3h0M261.1 200.8h0M236.4 183.4h0M612.0 220.5h0M188.5 194.3h0M243.1 179.0h0M205.4 228.4h0M206.4 188.1h0M368.0 202.2h0M392.3 183.5h0M590.0 231.1h0M427.1 220.9h0M373.8 221.5h0M321.6 206.2h0M358.2 217.9h0M160.5 199.3h0M409.7 225.3h0M155.1 187.0h0M201.1 197.2h0M595.5 184.7h0M536.9 201.3h0M173.9 226.3h0M151.3 218.3h0M340.9 232.2h0M148.4 232.3h0M563.5 231.0h0M403.8 216.0h0M162.7 187.2h0M432.8 196.9h0M177.7 227.2h0M682.7 215.8h0M589.3 189.6h0M400.1 196.3h0M429.7 212.0h0M190.7 196.1h0M225.8 184.3h0M330.6 196.3h0M259.7 221.9h0M410.2 222.6h0M559.1 214.3h0M142.7 228.4h0M202.8 181.5h0M609.2 182.4h0M634.6 211.3h0M606.3 191.3h0M425.6 205.6h0M246.4 233.4h0M549.5 190.6h0M581.0 185.1h0M245.9 218.2h0M366.3 227.3h0M233.6 186.6h0M515.7 178.4h0M580.5 197.8h0M370.1 183.3h0M394.4 200.0h0M216.4 192.3h0M266.1 217.4h0M623.0 202.9h0M579.8 233.6h0M590.9 180.0h0M332.4 185.2h0M233.0 181.6h0M379.8 214.9h0M250.2 201.8h0M423.9 188.4h0M598.9 201.0h0M570.7 190.9h0M398.3 212.4h0M625.2 205.5h0M137.1 179.8h0M187.9 181.6h0M354.8 188.1h0M239.5 208.0h0M200.2 227.2h0M325.5 182.8h0M342.1 201.1h0M428.6 202.2h0M504.9 214.5h0M630.5 198.5h0M607.0 204.9h0M376.7 207.3h0M165.8 224.1h0M386.4 224.3h0M573.5 213.7h0M562.9 233.4h0M591.6 200.5h0M197.6 178.7h0M412.8 226.7h0M468.7 219.8h0M132.9 201.8h0M647.9 194.8h0M598.7 209.3h0M615.4 178.7h0M220.0 178.1h0M647.5 218.6h0M588.2 204.9h0M455.9 213.5h0M607.6 186.8h0M367.9 231.1h0M445.0 186.2h0M383.3 185.9h0M381.5 202.1h0M394.4 205.3h0M608.4 207.3h0M599.5 214.7h0M411.2 225.8h0M473.6 233.0h0M570.2 203.1h0M195.6 203.7h0M649.6 191.1h0M435.6 217.1h0M184.8 206.8h0M163.8 203.3h0M136.4 197.1h0M143.9 204.4h0M665.4 212.8h0M368.0 224.2h0M382.7 211.2h0M336.2 219.5h0M542.1 200.4h0M633.0 210.4h0M215.3 229.0h0M589.3 204.6h0M615.5 187.0h0M402.8 221.1h0M199.0 210.2h0M606.5 195.0h0M548.8 189.3h0M148.2 192.0h0M172.3 224.1h0M557.0 214.0h0M580.0 207.3h0M553.7 188.6h0M616.5 222.1h0M533.4 205.6h0M437.0 194.3h0M416.1 215.6h0M618.5 216.6h0M224.1 187.3h0M388.7 226.4h0M563.5 200.1h0M582.1 190.6h0M144.1 194.3h0M453.0 230.6h0M404.1 203.6h0M214.0 214.4h0M245.3 206.5h0M616.1 233.7h0M211.8 218.7h0M209.3 224.5h0M171.6 197.3h0M583.3 229.5h0M423.5 221.9h0M352.4 219.7h0M614.8 225.0h0M186.2 203.9h0M142.8 215.4h0M374.6 226.6h0M205.1 194.6h0M619.2 226.3h0M570.1 222.5h0M434.9 223.7h0M393.8 215.6h0M634.7 199.9h0M439.4 211.6h0M347.6 228.6h0M142.4 220.5h0M160.3 209.5h0M365.7 191.5h0M374.4 227.4h0M156.6 207.1h0M356.6 190.2h0M349.1 197.6h0M583.0 199.6h0M125.9 210.8h0M585.3 179.0h0M187.6 190.7h0M633.5 182.5h0M412.9 231.3h0M246.7 200.6h0M153.1 202.1h0M197.8 217.6h0M392.6 212.2h0M579.4 210.4h0M623.4 209.3h0M458.8 194.6h0M175.5 214.9h0M652.7 198.6h0M575.7 223.6h0M518.2 195.4h0M662.7 206.2h0M620.9 180.6h0M162.5 181.3h0M403.7 212.3h0M680.1 181.1h0M349.8 231.3h0M427.6 191.1h0M665.1 208.0h0M109.8 197.5h0M411.9 178.7h0M172.4 224.8h0M355.9 215.3h0M409.9 178.1h0M376.1 199.2h0M381.1 219.9h0M225.2 211.3h0M375.9 210.5h0M261.8 185.8h0M231.9 182.7h0M222.5 230.5h0M593.0 196.0h0M159.4 192.4h0M617.2 196.1h0M120.9 211.8h0M436.9 201.9h0M175.8 203.4h0M188.1 196.3h0M538.3 194.3h0M163.0 214.5h0M597.9 194.6h0M444.5 209.3h0M390.9 212.9h0M598.3 205.6h0M150.9 225.5h0M383.2 232.6h0M582.1 205.1h0M149.7 202.7h0M454.4 230.0h0M630.3 203.2h0M154.5 211.6h0M154.8 219.7h0M449.4 186.7h0M339.7 218.0h0M395.8 222.2h0M158.3 199.3h0M579.8 216.6h0M343.8 221.7h0M439.3 195.2h0M632.3 215.0h0M580.7 191.9h0M663.7 212.8h0M592.1 189.2h0M282.1 210.5h0M149.5 191.6h0M149.4 188.2h0M174.7 232.4h0M164.4 182.2h0M600.0 207.4h0M248.1 209.8h0M566.7 222.1h0M204.9 190.6h0M588.7 233.8h0M438.2 233.3h0M587.7 206.1h0M115.4 212.3h0M160.0 198.8h0M165.7 194.8h0M591.6 209.7h0M588.1 190.1h0M356.4 207.7h0M588.4 205.7h0M210.9 195.5h0M190.3 183.2h0M552.9 210.8h0M618.2 231.3h0M184.8 225.1h0M602.3 185.3h0M263.8 194.5h0M167.4 204.1h0M647.2 212.9h0M435.6 205.7h0M403.9 215.8h0M178.6 179.7h0M202.6 209.4h0M632.3 216.1h0M399.5 229.9h0M367.7 191.8h0M571.6 180.8h0M163.2 209.0h0M406.9 208.4h0M267.7 213.4h0M360.6 185.9h0M366.7 194.8h0M616.9 230.3h0M656.0 226.8h0M514.7 216.4h0M123.9 222.9h0M340.5 199.0h0M199.3 229.4h0M160.0 181.2h0M347.7 186.3h0M196.5 181.6h0M399.9 187.6h0M645.3 223.8h0M152.0 226.3h0M345.2 216.4h0M354.2 211.9h0M337.9 220.6h0M153.7 217.2h0M403.9 230.9h0M332.7 228.4h0M185.0 188.3h0M530.7 216.6h0M584.6 222.0h0M554.7 219.0h0M146.2 224.6h0M370.1 217.9h0M186.7 224.1h0M374.4 216.4h0M448.4 205.4h0M577.4 197.1h0M188.2 226.7h0M222.0 181.5h0M440.0 205.1h0M442.2 187.1h0M551.6 183.1h0M396.7 193.4h0M263.5 203.2h0M182.9 226.8h0M527.7 213.8h0M162.9 186.5h0M597.5 233.3h0M170.9 186.6h0M215.1 214.3h0M202.4 210.6h0M623.8 193.6h0M133.0 233.6h0M191.1 206.2h0M609.1 210.1h0M252.0 218.0h0M159.0 179.3h0M239.7 192.3h0M622.4 210.3h0M408.4 195.0h0M590.9 190.8h0M182.5 208.7h0M417.1 196.4h0M386.5 220.7h0M143.2 215.5h0M372.0 213.8h0M626.0 178.9h0M364.5 200.2h0M385.0 179.2h0M322.7 213.0h0M601.6 182.0h0M567.0 229.9h0M217.5 184.1h0M334.9 219.8h0M624.6 218.2h0M601.9 203.0h0M387.5 196.5h0M135.7 219.8h0M594.6 216.4h0M591.4 180.0h0M639.9 205.4h0M543.1 194.3h0M611.5 192.6h0M378.0 220.2h0M419.6 211.3h0M167.5 223.1h0M453.0 204.5h0M416.4 204.5h0M573.2 202.6h0M208.0 206.6h0M383.0 179.3h0M439.2 181.9h0M205.0 185.4h0M411.5 210.8h0M616.4 223.4h0M164.9 195.9h0M154.0 202.2h0M684.5 190.7h0M634.2 211.9h0M220.0 180.7h0M213.7 186.3h0M347.0 223.4h0M184.4 197.7h0M238.8 233.4h0M628.9 212.8h0M395.7 194.3h0M208.0 213.6h0M590.6 231.8h0M154.2 179.8h0M603.5 229.9h0M623.4 220.8h0M396.9 230.0h0M547.6 222.5h0M157.7 233.3h0M546.6 187.7h0M238.2 217.5h0M420.5 183.0h0M662.3 204.2h0M674.3 230.2h0M188.7 227.3h0M450.9 212.1h0M365.1 201.5h0M641.0 225.9h0M405.9 201.1h0M437.2 179.1h0M250.2 190.4h0M611.6 208.9h0M395.7 203.8h0M175.6 232.1h0M561.8 200.9h0M519.2 205.9h0M623.9 194.3h0M323.4 191.7h0M165.1 180.5h0M250.2 186.4h0M595.5 231.3h0M427.8 199.1h0M386.5 190.5h0M209.2 208.9h0M378.9 204.6h0M406.5 217.6h0M408.9 232.6h0M534.2 191.6h0M564.0 209.3h0M611.0 196.6h0M353.1 226.5h0M417.9 190.5h0M420.8 215.6h0M636.6 195.4h0M129.9 225.7h0M437.8 181.2h0M611.4 220.4h0M437.7 215.7h0M345.6 227.3h0M172.6 179.0h0M663.6 197.6h0M559.0 184.0h0M657.5 219.6h0M555.0 228.6h0M323.8 212.3h0M165.0 179.2h0M554.1 216.0h0M405.3 214.9h0M251.9 217.3h0M414.2 208.3h0M442.5 230.6h0M347.7 181.1h0M634.4 222.5h0M424.7 211.2h0M624.7 227.6h0M586.3 215.6h0M421.3 178.4h0M240.1 223.0h0M619.1 214.1h0M169.9 185.7h0M217.7 212.0h0M169.9 209.2h0M397.3 227.7h0M406.6 224.9h0M152.5 231.8h0M655.5 226.7h0M615.1 199.2h0M624.9 215.3h0M162.8 179.6h0M577.3 222.6h0M111.2 214.3h0M338.7 233.5h0M573.4 192.9h0M571.4 181.2h0M373.5 187.8h0M384.5 231.6h0M450.5 222.0h0M617.0 194.9h0M630.2 231.5h0M262.0 232.8h0M173.3 221.7h0M622.8 210.9h0M335.9 191.9h0M177.8 213.3h0M170.1 187.6h0M198.6 183.5h0M449.1 185.4h0M437.9 179.2h0M591.4 188.7h0M441.5 217.6h0M389.9 217.6h0M352.8 224.3h0M283.3 191.8h0M645.0 181.0h0M465.3 208.9h0M367.9 217.9h0M429.8 196.7h0M602.0 216.4h0M152.9 231.3h0M127.7 185.3h0M602.5 208.6h0M579.2 209.5h0M638.0 181.4h0M401.0 229.9h0M449.0 179.2h0M140.7 228.5h0M369.6 198.6h0M419.5 227.8h0M127.7 213.9h0M532.3 230.0h0M622.7 211.5h0M440.9 183.2h0M606.2 198.5h0M400.8 199.1h0M366.1 209.4h0M195.3 180.7h0M346.4 215.7h0M592.2 233.7h0M159.1 197.8h0M228.2 218.1h0M197.1 226.6h0M359.2 194.4h0M369.4 214.8h0M556.7 198.4h0M138.6 229.2h0M540.8 189.2h0M365.5 213.8h0M190.9 179.0h0M600.7 204.6h0M527.2 187.2h0M193.8 191.6h0M406.4 214.7h0M661.3 184.6h0M212.5 196.1h0M219.7 204.1h0M184.6 180.4h0M382.1 189.5h0M555.6 214.4h0M384.1 218.3h0M609.8 210.4h0M372.8 196.0h0M558.4 200.3h0M618.3 206.0h0M442.1 213.0h0M451.6 223.5h0M542.4 200.4h0M412.4 196.5h0M430.1 190.5h0M572.4 218.9h0M213.5 229.1h0M624.4 215.3h0M603.9 215.3h0M518.7 186.9h0M218.1 196.8h0M514.9 209.0h0M600.3 224.0h0M198.4 220.7h0M338.1 182.5h0M184.5 205.6h0M635.3 198.9h0M404.4 230.6h0M556.7 180.3h0M361.7 200.3h0M570.5 221.5h0M420.5 199.0h0M407.7 188.6h0M325.3 179.2h0M593.7 188.9h0M223.4 205.0h0M208.3 194.6h0M385.5 203.3h0M538.9 203.1h0M417.2 232.7h0M381.5 178.0h0M400.4 180.7h0M186.3 215.2h0M684.7 233.7h0M643.0 179.3h0M413.7 226.9h0M163.4 183.0h0M112.0 184.8h0M154.9 191.2h0M647.4 180.6h0M176.7 205.2h0M191.8 212.9h0M618.2 185.4h0M229.0 218.6h0M383.8 232.9h0M442.7 202.8h0M566.5 178.6h0M239.7 187.5h0M624.1 214.2h0M165.5 233.3h0M235.4 188.6h0M413.4 181.9h0M576.6 203.1h0M549.5 218.6h0M639.7 218.6h0M230.4 192.7h0M218.2 196.8h0M425.3 213.4h0M373.3 184.9h0M583.7 223.5h0M235.2 202.3h0M427.4 183.0h0M389.3 190.9h0M559.8 181.7h0M327.6 205.6h0M193.5 200.0h0M159.0 196.8h0M342.1 225.1h0M600.4 182.2h0M623.9 206.1h0M167.1 206.2h0M188.6 226.0h0M452.1 194.4h0M239.3 189.8h0M470.8 215.0h0M585.1 191.3h0M423.0 179.5h0M133.4 182.4h0M331.1 184.0h0M582.9 207.0h0M398.7 210.6h0M396.8 223.1h0M365.0 223.1h0M539.9 180.3h0M185.8 196.2h0M552.4 197.8h0M390.7 187.6h0M123.8 221.5h0M253.5 203.3h0M148.6 182.8h0M566.7 219.0h0M535.4 217.5h0M452.8 197.6h0M589.3 216.7h0M399.9 181.6h0M582.5 183.7h0M189.7 211.6h0M669.7 183.0h0M581.3 212.0h0M554.1 205.2h0M418.3 225.4h0M408.4 178.4h0M420.0 183.3h0M518.5 189.1h0M155.4 194.1h0M584.7 233.8h0M403.9 179.5h0M374.8 219.0h0M421.1 184.9h0M461.3 189.4h0M543.1 184.5h0M179.9 199.6h0M404.9 195.6h0M418.5 184.3h0M163.4 224.3h0M164.8 226.9h0M202.3 200.7h0M149.0 186.3h0M119.4 180.2h0M211.4 188.7h0M224.0 219.2h0M458.9 229.1h0M572.4 200.0h0M543.4 210.8h0M562.7 217.7h0M613.5 205.3h0M412.4 215.0h0M588.3 204.3h0M426.8 212.9h0M177.1 184.7h0M436.7 221.6h0M239.6 208.9h0M271.5 189.4h0M585.9 202.4h0M252.3 221.5h0M671.1 203.2h0M161.3 213.4h0M561.8 184.5h0M172.9 195.9h0M376.5 205.0h0M249.3 210.0h0M537.3 179.8h0M657.2 186.1h0M166.6 224.2h0M355.1 196.9h0M544.0 216.4h0M602.9 196.9h0M168.7 182.2h0M337.9 187.3h0M621.5 179.5h0M573.6 199.5h0M436.1 189.0h0M596.3 222.1h0M530.7 181.0h0M420.7 218.0h0M362.7 215.6h0M421.2 205.5h0M163.3 204.4h0M247.3 188.1h0M601.5 196.4h0M434.1 221.5h0M550.7 188.8h0M244.2 213.0h0M197.2 219.8h0M380.5 230.1h0M368.2 180.7h0M382.7 208.2h0M442.3 183.3h0M610.8 227.6h0M377.6 231.4h0M248.4 181.1h0M141.0 183.6h0M192.8 203.6h0M433.9 221.4h0M197.2 212.5h0M210.5 196.6h0M381.9 211.4h0M575.7 222.7h0M343.7 229.6h0M222.2 185.7h0M574.6 225.2h0M520.3 214.3h0M627.8 208.0h0M607.5 202.7h0M391.5 206.6h0M317.8 203.7h0M446.7 215.6h0M557.6 229.1h0M161.1 191.3h0M643.1 178.1h0M590.7 179.4h0M171.3 229.1h0M95.2 230.0h0M609.5 227.0h0M606.3 210.6h0M580.7 210.8h0M442.3 200.6h0M416.4 196.9h0M223.4 230.3h0M159.5 207.7h0M595.1 193.4h0M568.1 214.8h0M246.5 183.1h0M401.0 216.3h0M339.4 193.3h0M589.9 216.9h0M434.1 205.0h0M255.5 226.2h0M234.9 220.4h0M376.2 233.1h0M570.1 210.5h0M390.1 224.3h0M433.5 214.9h0M579.0 219.3h0M663.7 228.1h0M642.6 195.5h0M180.1 222.6h0M185.7 229.9h0M549.9 233.4h0M143.5 186.2h0M584.3 193.7h0M362.5 201.8h0M160.1 199.3h0M388.1 230.5h0M210.2 179.4h0M555.8 228.2h0M188.5 182.8h0M427.7 230.5h0M172.6 229.6h0M618.0 205.0h0M218.4 187.8h0M563.0 188.7h0M183.6 192.5h0M178.8 225.5h0M268.8 208.3h0M399.7 227.0h0M376.5 220.3h0M146.5 232.2h0M556.6 215.0h0M569.2 187.5h0M180.5 208.6h0M583.5 219.4h0M162.0 198.0h0M420.1 234.0h0M536.3 190.2h0M596.5 229.9h0M363.7 205.4h0M144.9 225.3h0M217.7 207.8h0M544.5 208.8h0M248.1 217.6h0M159.7 207.3h0M583.5 203.1h0M409.4 184.7h0M584.3 215.7h0M359.9 231.8h0M604.5 230.8h0M619.5 180.6h0M610.3 202.5h0M202.2 211.4h0M637.4 183.5h0M364.4 217.8h0M414.1 202.3h0M614.6 185.3h0M185.6 189.9h0M432.3 179.0h0M589.5 190.9h0M361.0 217.2h0M604.9 205.6h0M202.4 191.1h0M380.3 192.2h0M655.4 204.5h0M144.6 219.1h0M433.7 232.8h0M662.0 205.9h0M407.5 202.8h0M352.8 199.2h0M460.4 224.0h0M667.8 210.3h0M176.2 229.3h0M208.2 208.7h0M358.2 189.1h0M603.6 183.9h0M365.3 208.1h0M246.6 188.7h0M360.7 217.1h0M212.6 221.8h0M374.6 221.5h0M192.5 200.7h0M141.6 208.8h0M575.6 190.7h0M597.3 207.1h0M382.4 223.8h0M576.8 213.8h0M611.3 215.4h0M411.0 231.5h0M409.9 194.1h0M618.8 214.4h0M413.0 227.5h0M403.9 196.6h0M150.1 180.8h0M405.0 194.5h0M428.7 194.2h0M403.8 194.1h0M438.6 207.4h0M406.7 209.5h0M525.3 199.6h0M564.8 196.0h0M243.3 207.3h0M571.0 218.9h0M584.7 179.8h0M616.1 224.2h0M575.1 185.4h0M567.2 228.8h0M403.0 205.6h0M182.8 209.6h0M360.7 232.9h0M404.3 228.2h0M532.3 202.9h0M536.7 189.3h0M613.3 211.4h0M415.7 180.3h0M268.5 181.8h0M198.0 190.7h0M430.7 201.4h0M456.5 216.8h0M170.0 183.5h0M602.5 225.9h0M189.7 203.2h0M520.1 188.9h0M441.2 226.4h0M126.7 216.7h0M328.4 226.2h0M225.2 232.0h0M603.0 223.9h0M191.4 197.2h0M187.9 233.3h0M568.8 220.2h0M479.5 223.9h0M220.7 198.4h0M383.8 211.4h0M137.8 212.9h0M212.2 193.5h0M186.1 204.8h0M133.4 193.2h0M423.8 194.1h0M580.1 214.6h0M413.8 179.1h0M124.9 220.5h0M215.9 205.2h0M162.2 185.0h0M418.3 205.0h0M231.4 199.0h0M158.7 226.9h0M185.7 215.7h0M590.7 190.6h0M611.7 229.3h0M595.4 226.5h0M386.3 208.4h0M610.7 182.3h0M254.3 215.1h0M196.2 201.7h0M110.6 213.1h0M205.9 183.5h0M649.6 184.4h0M220.4 186.4h0M181.1 208.7h0M375.9 218.4h0M618.7 197.4h0M183.9 183.2h0M651.2 187.2h0M196.0 195.9h0M487.2 215.7h0M396.1 196.9h0M419.7 217.8h0M233.2 228.4h0M357.6 195.7h0M607.7 202.0h0M626.4 202.1h0M399.1 201.8h0M408.0 212.5h0M402.3 224.3h0M161.7 210.1h0M191.0 200.1h0M631.4 210.7h0M428.4 228.7h0M430.4 189.7h0M150.5 201.9h0M121.9 217.5h0M564.2 205.6h0M200.9 179.5h0M596.3 195.2h0M383.5 199.7h0M405.8 207.2h0M457.4 201.7h0M550.8 217.1h0M390.3 212.9h0M528.4 216.0h0M394.6 188.4h0M615.8 229.9h0M403.2 211.5h0M650.5 193.5h0M609.7 228.5h0M357.0 213.7h0M643.0 231.5h0M364.6 204.9h0M610.5 217.3h0M248.7 202.7h0M198.8 195.2h0M623.5 217.3h0M563.4 192.0h0M549.6 206.4h0M163.1 207.6h0M563.1 207.6h0M594.5 189.3h0M353.9 227.1h0M571.4 211.8h0M522.5 202.9h0M313.6 220.4h0M164.6 193.6h0M420.9 214.8h0M388.2 199.1h0M175.1 201.5h0M437.3 198.0h0M391.3 207.9h0M384.4 218.1h0M366.7 193.5h0M395.0 202.9h0M550.0 210.6h0M427.1 196.6h0M187.6 191.7h0M189.5 232.6h0M460.2 213.2h0M430.8 222.2h0M356.3 187.6h0M382.2 209.1h0M212.7 188.8h0M412.0 207.9h0M435.7 206.9h0M169.6 190.8h0M570.5 189.3h0M522.4 229.7h0M163.2 225.8h0M364.9 200.6h0M614.4 185.7h0M351.4 195.7h0M425.9 208.0h0M212.5 205.4h0M649.4 215.2h0M432.3 186.7h0M436.3 212.9h0M559.7 215.2h0M151.7 212.1h0M623.3 197.2h0M589.2 231.1h0M621.9 183.5h0M166.6 220.4h0M675.5 201.0h0M595.5 227.6h0M564.8 186.1h0M462.1 229.4h0M424.2 183.1h0M586.6 201.6h0M597.4 184.3h0M319.2 229.7h0M328.2 195.2h0M645.1 209.5h0M368.8 230.8h0M204.4 207.6h0M584.8 179.0h0M637.9 222.2h0M625.8 179.7h0M211.7 196.3h0M255.7 190.4h0M171.2 192.5h0M644.3 192.8h0M245.3 221.5h0M583.0 202.3h0M438.9 195.5h0M439.2 194.0h0M122.7 217.5h0M615.8 219.6h0M363.0 206.6h0M213.1 219.1h0M555.0 226.4h0M562.3 205.0h0M619.3 190.5h0M416.8 227.8h0M554.2 227.3h0M359.3 204.8h0M583.5 190.9h0M636.9 189.7h0M622.2 196.1h0M407.5 208.6h0M416.2 233.7h0M628.3 227.1h0M352.9 192.8h0M213.5 184.5h0M540.5 202.4h0M164.8 211.8h0M110.7 227.0h0M168.9 188.9h0M403.3 186.5h0M597.6 207.8h0M443.3 192.0h0M371.9 221.8h0M532.9 224.7h0M636.0 231.3h0M684.5 210.7h0M565.6 208.4h0M330.8 188.9h0M112.8 190.3h0M108.7 219.0h0M624.5 194.3h0M388.3 211.0h0M411.9 188.9h0M175.9 199.9h0M171.5 233.7h0M555.5 204.1h0M560.1 192.3h0M246.0 232.1h0M405.8 228.0h0M425.4 219.8h0M612.0 223.4h0M566.8 182.9h0M363.3 187.7h0M234.2 178.5h0M590.9 186.5h0M625.1 224.2h0M166.4 210.2h0M261.9 202.3h0M426.2 198.0h0M406.0 184.2h0M630.6 203.3h0M235.6 192.9h0M403.7 224.6h0M242.7 219.8h0M574.2 220.8h0M425.7 231.1h0M431.5 232.4h0M377.7 212.7h0M252.0 206.6h0M164.3 196.4h0M564.4 194.4h0M133.1 209.1h0M395.0 206.8h0M583.2 223.8h0M596.8 223.2h0M632.8 195.2h0M632.3 185.7h0M260.2 186.1h0M180.5 190.3h0M132.3 217.0h0M161.4 182.3h0M184.3 225.0h0M656.1 218.4h0M240.3 232.4h0M636.3 197.5h0M626.7 212.9h0M566.3 202.3h0M227.9 185.4h0M348.3 206.6h0M594.6 217.0h0M615.4 193.4h0M134.2 219.9h0M153.9 226.8h0M609.1 220.2h0M233.8 194.6h0M246.9 230.7h0M618.3 203.5h0M137.9 211.2h0M384.2 226.4h0M182.5 194.0h0M168.9 194.6h0M216.6 230.4h0M641.1 212.8h0M168.3 222.7h0M183.9 214.7h0M205.9 185.2h0M633.0 179.3h0M384.1 197.1h0M425.0 209.3h0M238.3 216.2h0M544.9 222.7h0M576.4 198.0h0M594.5 231.5h0M392.0 210.6h0M428.9 198.6h0M594.2 188.3h0M360.2 219.5h0M526.6 214.0h0M220.4 202.3h0M658.1 201.9h0M402.2 181.6h0M200.8 187.4h0M417.0 225.2h0M528.2 195.7h0M140.1 184.2h0M548.6 191.6h0M628.0 191.2h0M383.2 222.7h0M451.9 216.9h0M364.7 181.7h0M382.2 223.5h0M570.6 229.2h0M551.5 231.7h0M606.5 182.3h0M463.2 206.7h0M580.8 219.2h0M594.7 190.0h0M595.5 227.4h0M160.7 188.8h0M402.0 207.4h0M221.5 221.8h0M213.3 212.8h0M556.4 206.5h0M520.8 213.9h0M407.0 225.9h0M545.1 205.3h0M384.9 180.5h0M634.6 229.0h0M226.6 196.6h0M416.2 191.8h0M479.8 218.3h0M357.7 211.8h0M596.9 204.3h0M202.6 219.8h0M167.9 202.8h0M365.8 202.2h0M397.6 189.5h0M441.6 210.5h0M422.5 200.3h0M411.8 190.1h0M226.8 209.7h0M594.7 185.0h0M378.3 211.2h0M555.9 204.7h0M425.7 224.0h0M658.0 196.4h0M646.4 229.8h0M315.0 206.7h0M449.2 200.4h0M372.6 220.9h0M372.9 207.7h0M222.6 179.2h0M160.4 228.1h0M181.3 201.9h0M534.4 186.7h0M398.1 208.8h0M615.2 198.0h0M364.5 222.1h0M211.9 187.4h0M589.1 230.1h0M221.5 201.8h0M226.8 199.4h0M224.1 200.7h0M108.8 198.6h0M145.1 229.1h0M579.0 224.4h0M391.0 227.1h0M581.5 218.7h0M208.3 205.6h0M355.2 201.7h0M590.5 233.3h0M210.4 203.4h0M586.6 217.9h0M597.2 223.6h0M144.7 226.6h0M374.9 215.8h0M173.8 198.2h0M261.3 203.1h0M222.2 224.6h0M626.2 205.3h0M428.6 229.3h0M204.9 179.2h0M385.6 226.9h0M590.7 212.6h0M384.0 224.0h0M526.7 195.4h0M408.2 215.7h0M198.8 221.2h0M151.5 231.3h0M378.7 233.8h0M576.1 201.4h0M388.0 198.5h0M418.0 229.8h0M168.6 233.9h0M452.9 225.4h0M540.4 226.8h0M203.4 226.0h0M376.4 208.8h0M602.4 216.4h0M222.9 217.2h0M553.7 219.7h0M410.7 209.2h0M577.8 181.9h0M348.5 222.7h0M388.4 205.9h0M362.0 179.7h0M388.3 212.4h0M174.0 202.6h0M409.1 216.1h0M401.2 182.1h0M149.2 199.1h0M573.1 228.9h0M559.7 209.3h0M445.7 184.3h0M397.8 225.3h0M261.1 228.3h0M411.8 231.2h0M187.8 229.0h0M575.1 188.4h0M212.8 222.4h0M223.6 223.8h0M379.0 199.0h0M163.6 178.1h0M205.4 192.3h0M377.4 233.1h0M183.1 182.4h0M437.6 232.4h0M256.2 187.0h0M182.8 180.9h0M142.2 190.3h0M193.7 185.1h0M233.2 192.5h0M343.4 190.8h0M200.6 189.5h0M580.6 204.8h0M226.8 208.7h0M583.3 181.2h0M411.1 216.1h0M643.3 186.4h0M270.6 227.6h0M620.1 181.9h0M634.5 224.3h0M616.3 217.8h0M207.2 229.9h0M562.7 183.4h0M627.6 182.4h0M151.5 220.1h0M166.0 211.4h0M138.3 198.5h0M221.4 181.6h0M251.1 181.1h0M406.5 205.6h0M231.3 199.9h0M222.4 186.3h0M396.9 181.6h0M369.6 184.4h0M595.9 208.6h0M536.8 197.7h0M237.6 228.9h0M396.2 195.9h0M182.1 180.5h0M431.6 193.0h0M274.4 196.1h0M349.6 214.7h0M409.3 200.9h0M236.0 182.6h0M412.7 183.0h0M660.1 206.9h0M589.9 223.1h0M262.5 214.8h0M355.5 209.5h0M128.7 209.5h0M616.4 219.7h0M360.8 227.9h0M548.3 224.8h0M444.4 228.8h0M408.5 221.5h0M432.1 193.7h0M353.6 200.8h0M527.7 220.2h0M608.8 184.4h0M526.6 180.1h0M167.2 225.3h0M220.0 200.3h0M223.1 219.9h0M421.2 216.5h0M625.4 225.7h0M381.0 233.7h0M386.8 192.7h0M590.7 204.6h0M397.7 208.7h0M203.4 223.1h0M641.0 230.2h0M597.4 193.6h0M361.6 208.5h0M442.3 232.2h0M345.3 185.5h0M227.8 216.4h0M399.7 212.7h0M587.8 215.8h0M574.8 222.0h0M137.7 230.7h0M588.3 191.3h0M233.8 214.3h0M631.6 233.6h0M191.6 223.9h0M570.7 208.3h0M384.3 232.8h0M570.0 181.0h0M201.7 221.1h0M339.4 191.2h0M201.6 179.9h0M196.3 213.4h0M619.8 228.2h0M132.5 186.5h0M583.2 198.8h0M413.4 221.1h0M363.8 204.9h0M607.2 210.7h0M384.0 215.9h0M647.5 202.5h0M345.0 231.9h0M413.4 215.1h0M392.3 201.3h0M609.0 231.3h0M449.7 181.7h0M352.7 223.4h0M169.2 181.2h0M204.7 178.3h0M644.7 189.7h0M390.3 179.9h0M362.3 182.7h0M203.3 190.7h0M426.7 199.1h0M373.8 226.0h0M667.5 228.1h0M176.7 218.5h0M577.9 201.2h0M532.5 211.2h0M399.5 221.9h0M247.3 197.0h0M535.5 221.2h0M425.3 200.2h0M378.5 184.8h0M355.9 206.0h0M190.6 231.4h0M349.9 217.5h0M396.9 214.9h0M520.6 186.4h0M193.5 202.9h0M561.8 192.1h0M439.8 201.6h0M603.1 215.8h0M134.3 182.1h0M196.4 218.7h0M554.5 222.9h0M541.8 207.5h0M585.1 192.4h0M668.7 193.1h0M210.9 222.2h0M260.1 209.1h0M572.6 184.0h0M344.6 224.6h0M149.0 204.4h0M263.4 202.9h0M555.0 229.8h0M396.9 180.0h0M237.1 218.9h0M339.8 186.7h0M583.5 226.3h0M551.6 199.1h0M586.3 199.7h0M195.8 199.4h0M664.5 192.7h0M171.1 215.0h0M686.5 222.4h0M545.9 226.7h0M366.5 213.1h0M563.6 227.1h0M341.3 225.9h0M570.7 217.7h0M260.9 211.1h0M587.6 201.5h0M193.8 197.2h0M268.5 233.6h0M159.2 180.8h0M646.4 225.1h0M415.0 182.0h0M585.6 194.0h0M205.4 184.6h0M419.1 193.1h0M221.8 208.0h0M235.1 191.7h0M424.7 185.0h0M561.7 203.8h0M579.1 210.4h0M248.9 229.2h0M621.4 187.9h0M223.6 216.4h0M586.0 185.6h0M428.9 221.5h0M181.2 180.9h0M576.6 208.7h0M392.0 223.4h0M378.2 193.9h0M386.8 184.4h0M356.4 209.4h0M179.1 192.7h0M589.1 204.3h0M357.0 229.3h0M197.8 193.4h0M635.0 224.9h0M165.2 209.7h0M337.7 232.7h0M251.0 208.0h0M421.3 208.6h0M438.1 184.4h0M596.5 220.0h0M190.9 230.9h0M524.6 178.1h0M464.5 206.5h0M247.6 181.5h0M538.5 178.3h0M165.1 181.5h0M609.1 231.8h0M374.8 192.0h0M166.0 193.3h0M139.4 218.8h0M235.9 191.7h0M271.4 213.8h0M417.7 218.0h0M364.5 215.2h0M661.7 193.2h0M162.6 183.3h0M593.9 215.7h0M133.2 191.5h0M403.7 232.7h0M340.7 217.2h0M262.1 211.1h0M546.0 199.0h0M208.3 205.2h0M167.8 184.8h0M412.4 204.1h0M225.1 185.6h0M290.5 189.0h0M521.4 233.1h0M371.8 180.8h0M385.7 182.7h0M569.5 191.6h0M210.1 222.1h0M560.2 212.9h0M507.5 231.2h0M382.6 216.5h0M592.5 186.8h0M514.0 184.1h0M624.2 219.9h0M441.9 208.6h0M367.1 226.6h0M367.6 223.5h0M379.9 206.1h0M166.0 211.5h0M211.8 220.2h0M578.8 189.1h0M236.3 181.8h0M397.5 179.0h0M594.9 189.1h0M153.4 189.5h0M366.2 187.9h0M509.0 207.7h0M604.7 222.5h0M587.8 206.8h0M628.5 193.8h0M646.8 224.7h0M259.5 194.5h0M145.7 198.7h0M378.8 188.5h0M205.1 193.0h0M259.8 179.3h0M195.8 219.0h0M564.7 180.1h0M405.0 202.5h0M570.9 209.5h0M165.7 199.6h0M204.1 225.4h0M606.6 200.1h0M367.7 194.3h0M209.4 228.4h0M127.7 203.0h0M189.9 230.6h0M412.7 215.8h0M224.9 210.7h0M219.7 196.0h0M370.7 204.8h0M219.3 179.7h0M211.5 233.7h0M198.1 232.2h0M183.5 196.3h0M633.8 197.6h0M604.4 211.1h0M265.3 220.5h0M555.7 201.7h0M235.4 209.7h0M553.7 186.3h0M243.0 178.2h0M608.8 190.5h0M553.8 206.3h0M389.0 213.7h0M446.7 199.3h0M394.8 214.5h0M586.7 232.4h0M169.8 209.2h0M219.1 203.6h0M446.9 206.4h0M513.4 186.9h0M576.2 200.3h0M605.5 198.2h0M379.0 184.3h0M230.5 192.6h0M631.2 215.8h0M375.8 203.7h0M564.0 220.5h0M205.4 191.2h0M605.1 180.2h0M368.1 189.1h0M357.0 198.8h0M385.5 184.1h0M578.3 213.8h0M125.0 204.3h0M647.9 201.2h0M351.0 198.8h0M533.4 227.6h0M398.9 219.1h0M241.6 220.5h0M164.9 220.5h0M521.7 192.7h0M580.1 195.1h0M165.6 185.5h0M385.4 192.4h0M193.5 191.5h0M181.8 217.5h0M367.8 196.0h0M106.5 210.6h0M652.7 212.5h0M192.3 179.7h0M569.2 221.7h0M447.6 207.0h0M578.7 187.9h0M569.6 215.2h0M155.0 198.9h0M195.2 180.9h0M435.5 180.5h0M199.2 208.7h0M351.6 210.5h0M188.6 218.8h0M393.8 189.3h0M662.6 209.1h0M593.7 205.6h0M368.7 196.0h0M407.1 220.1h0M164.5 213.7h0M362.8 233.0h0M172.8 195.3h0M192.9 218.4h0M360.8 212.3h0M248.7 185.4h0M583.2 190.3h0M625.1 233.7h0M627.8 215.7h0M586.5 198.1h0M174.4 185.9h0M383.8 191.8h0M563.6 216.6h0M553.1 195.4h0M150.3 203.7h0M413.0 233.7h0M401.5 231.4h0M187.3 233.1h0M174.3 191.3h0M363.7 188.4h0M557.2 194.7h0M362.4 197.1h0M178.4 201.8h0M525.0 233.1h0M243.0 212.0h0M682.1 187.3h0M410.0 210.7h0M228.9 227.9h0M170.0 188.7h0M643.0 189.7h0M175.0 204.0h0M129.9 211.9h0M244.7 212.7h0M131.2 214.5h0M189.3 227.5h0M628.9 205.3h0M418.3 190.7h0M667.9 192.3h0M192.9 189.7h0M583.7 209.2h0M228.2 223.2h0M224.9 208.9h0M654.4 179.8h0M662.4 179.2h0M239.5 181.1h0M591.5 202.3h0M446.0 211.0h0M582.8 201.1h0M428.3 225.4h0M600.0 224.3h0M627.2 192.8h0M403.0 215.4h0M199.7 198.5h0M564.0 199.3h0M161.9 221.3h0M616.2 180.3h0M144.0 191.0h0M567.7 204.4h0M379.9 226.4h0M221.7 216.5h0M153.0 221.9h0M215.4 228.7h0M558.6 221.2h0M549.8 204.7h0M341.3 191.7h0M235.6 184.3h0M429.0 198.6h0M209.1 192.5h0M163.1 227.9h0M391.8 207.8h0M394.9 231.3h0M446.6 189.8h0M592.5 205.2h0M186.4 224.7h0M218.6 207.0h0M411.3 231.3h0M320.6 188.4h0M222.8 212.0h0M133.0 232.9h0M128.3 183.8h0M396.7 211.7h0M617.4 192.1h0M367.3 233.9h0M159.4 179.1h0M179.4 178.3h0M352.1 211.0h0M330.2 186.4h0M412.9 203.8h0M405.1 230.6h0M360.3 212.8h0M426.8 194.9h0M611.4 195.3h0M666.1 198.6h0M149.9 197.9h0M341.1 220.1h0M364.9 207.1h0M170.0 227.9h0M625.5 191.0h0M558.7 222.0h0M167.5 193.5h0M141.3 206.9h0M609.1 212.9h0M657.6 205.6h0M259.0 207.0h0M180.9 200.5h0M580.1 217.1h0M385.0 204.2h0M392.8 190.0h0M599.7 233.2h0M400.8 226.0h0M218.1 182.2h0M262.4 194.8h0M511.7 213.4h0M422.0 209.4h0M562.9 188.9h0M592.2 196.8h0M387.3 189.5h0M624.9 180.9h0M387.2 229.1h0M598.9 200.5h0M394.7 181.6h0M211.0 203.7h0M391.4 205.2h0M181.4 220.5h0M464.3 207.4h0M600.5 215.7h0M168.7 186.1h0M398.6 212.0h0M228.2 204.3h0M591.5 222.6h0M578.0 232.5h0M151.1 210.6h0M539.0 198.0h0M244.1 188.1h0M142.9 181.0h0M401.3 181.4h0M391.2 194.8h0M356.2 215.8h0M131.7 215.4h0M370.3 187.1h0M223.1 184.5h0M379.6 215.9h0M574.7 181.3h0M565.1 226.9h0M275.0 212.3h0M401.2 203.2h0M669.1 219.3h0M400.9 190.3h0M160.9 213.1h0M181.4 232.0h0M595.9 184.9h0M613.3 203.3h0M387.9 201.0h0M181.0 230.1h0M529.7 233.4h0M128.2 210.8h0M158.4 192.1h0M420.2 214.3h0M590.9 182.3h0M136.5 194.1h0M227.4 199.2h0M188.0 228.8h0M429.8 203.0h0M361.9 218.3h0" stroke="#7a1f2b" stroke-width="2.4" stroke-linecap="round" fill="none"/>
+                                <line x1="92.0" x2="92.0" y1="238" y2="243" stroke="#8b8079"/>
+                                <text class="tick" x="92.0" y="257" text-anchor="middle">−30°</text>
+                                <line x1="193.0" x2="193.0" y1="238" y2="243" stroke="#8b8079"/>
+                                <text class="tick" x="193.0" y="257" text-anchor="middle">−20°</text>
+                                <line x1="294.0" x2="294.0" y1="238" y2="243" stroke="#8b8079"/>
+                                <text class="tick" x="294.0" y="257" text-anchor="middle">−10°</text>
+                                <line x1="395.0" x2="395.0" y1="238" y2="243" stroke="#8b8079"/>
+                                <text class="tick" x="395.0" y="257" text-anchor="middle">0°</text>
+                                <line x1="496.0" x2="496.0" y1="238" y2="243" stroke="#8b8079"/>
+                                <text class="tick" x="496.0" y="257" text-anchor="middle">10°</text>
+                                <line x1="597.0" x2="597.0" y1="238" y2="243" stroke="#8b8079"/>
+                                <text class="tick" x="597.0" y="257" text-anchor="middle">20°</text>
+                                <line x1="698.0" x2="698.0" y1="238" y2="243" stroke="#8b8079"/>
+                                <text class="tick" x="698.0" y="257" text-anchor="middle">30°</text>
+                                <text class="lbl" x="698" y="274" text-anchor="end">direction <tspan class="m">θ</tspan> on the detector (degrees)</text>
+                                </svg>
+                            </div>
+                            <figcaption><span class="pfig__n">Abb. 5</span>Simulierte Ankünfte einzelner Teilchen bei den Standardwerten der Seite \(b = 40\ \mathrm{px},\) \(\lambda = 13.5\ \mathrm{px}.\) Jeder Punkt ist eine Richtung \(\theta\) zwischen \(-30^\circ\) und \(30^\circ,\) zufällig gezogen mit der Wahrscheinlichkeit (12) durch Verwerfungsverfahren (Zufallsgenerator von NumPy, Startwert 1); die Höhe eines Punktes innerhalb seines Streifens trägt keine Information. Von oben nach unten 20, 200 und 2000 Punkte. Helle Bänder entstehen bei \(0^\circ\) und \(\pm 19.72^\circ,\) und die dunklen Richtungen bei \(\pm 9.72^\circ\) bleiben nahezu leer, obwohl kein einzelner Punkt irgendein Muster zeigt.</figcaption>
+                        </figure>
+                        <p>Das Muster braucht beide Spalte für jedes einzelne Photon. Schließt man einen Spalt oder stellt man einen Detektor auf, der registriert, durch welchen Spalt jedes Photon ging, so verschwindet der Kreuzterm \(\cos\Delta\varphi\): Die Punkte häufen sich dann als ein Einzelspalt-Muster bzw. mit Detektor als Summe zweier solcher Muster, ohne Streifen. Die Photonen sind also keine Menge, die sich gegenseitig stört. Jedes Photon hat für sich zwei Wege zum Schirm, und solange nichts in der Apparatur registriert, welchen Weg es nahm, addieren sich die beiden Wege so, wie sich Wellen addieren. Die Quantenmechanik ordnet jedem Weg eine komplexe Zahl zu, eine <em>Wahrscheinlichkeitsamplitude</em>, und die Wahrscheinlichkeit eines Punktes bei \(\theta\) ist das Betragsquadrat ihrer Summe. Das Feld \(E\) aus Abschnitt 5 ist nicht diese Amplitude; es beschreibt Licht aus sehr vielen Photonen. Dennoch sagt es dieselben Streifen voraus, weil beide die beiden Wege addieren, und zwar mit derselben Phasendifferenz \(k\,\delta s.\) Dies gilt für jede Anordnung von Spalten, nicht nur für zwei: Für ein einzelnes Photon ist die Chance für einen Auftreffpunkt an einer Stelle proportional zur klassischen Intensität dort.</p><p>Ein Vorbehalt zu den Punkten: Abb. 5 zeichnet sie mit einer Wahrscheinlichkeit pro Winkeleinheit, nach Regel (12). Ein flacher Schirm im Abstand \(D\) zählt dagegen Punkte pro Längeneinheit, und das ist ein anderes Maß: Ein Schritt \(\mathrm{d}\theta\) im Winkel überdeckt auf dem Schirm einen Schritt \(\mathrm{d}y = D\sec^2\theta\,\mathrm{d}\theta\),  der seitlich länger ist; die Dichte pro Längeneinheit ist daher \(p(\theta)/(D\sec^2\theta)\), gegenüber der Richtung geradeaus um den Faktor \(3/4\) kleiner, und zwar bei \(30^\circ\). Abb. 5 zeigt, wie ein Streifenmuster Punkt für Punkt entsteht; es ist kein vollständiges Modell eines Zählexperiments.</p>
+                        <p>Materie verhält sich genauso. 1924 schlug Louis de Broglie vor, dass ein Teilchen mit dem Impuls \(p\) die Wellenlänge hat, \(\lambda = h/p.\) Ein Elektron, das aus der Ruhe durch eine Spannung \(V\) beschleunigt wird, hat \(p = \sqrt{2m_e eV},\) wobei \(m_e\) seine Masse und \(e\) seine Ladung ist, also</p>
+                        \[ \begin{aligned} \lambda &= \frac{h}{\sqrt{2\,m_e\,e\,V}}, \\ V = 100\ \mathrm{V}:\quad \lambda &= 0.123\ \mathrm{nm} . \end{aligned} \tag{13} \]
+                        <p>Das ist etwa 4500-mal kürzer als grünes Licht von \(550\ \mathrm{nm},\) daher müssen die Spalte für Elektronen entsprechend feiner sein. Mit geeigneten Spalten zeigen Elektronen, Neutronen, Atome und Moleküle aus sechzig Kohlenstoffatomen alle dieselben Streifen; sie kommen einzeln an und bauen das Muster der Abb. 5 Punkt für Punkt auf.</p>
+                    </section>
+
+                    <section class="psec" id="p-method">
+                        <h3><span class="psec__n">08</span>Wie die Seite rechnet</h3>
+                        <p>Auf dieser Seite wird nichts in der Zeit weitergeschaltet. Jede Größe hat eine geschlossene Formel und wird neu berechnet, sobald sich ein Regler bewegt:</p>
+                        <ul>
+                            <li>Die Spalte und \(P\) werden durch (1) festgelegt; \(L_1\) und \(L_2\) sind die Abstände von den Spalten zu \(P;\) \(\delta s\) ergibt sich aus (3). Der Punkt \(Q\) aus Abb. 1 ist \(P + L_1\hat u,\) mit \(\hat u\) dem Einheitsvektor von \(P\) in Richtung \(S_2.\)</li>
+                            <li>Die Anzeigen zeigen \(L_1,\) \(L_2,\) das exakte \(\delta s,\) die Näherung \(b\sin\alpha,\) die Ordnung \(\delta s/\lambda\) und die Phase \(\Delta\varphi\) in Einheiten von \(\pi.\)</li>
+                            <li>Das Urteil nutzt den Bruchteil \(f = \delta s/\lambda - \lfloor\delta s/\lambda\rfloor\): <em>Konstruktiv</em>, wenn \(f < 0.08\) oder \(f > 0.92,\) ist, <em>Destruktiv</em>, wenn \(|f - \tfrac12| < 0.08,\) ist, sonst <em>Teilweise</em> mit \(I/I_0\) aus (7). Eine Toleranz von 0.08 Wellenlängen bedeutet, dass <em>Konstruktiv</em> Intensitäten von 0.94 bis 1 umfasst und <em>Destruktiv</em> von 0 bis 0.06.</li>
+                            <li>Das Intensitätsdiagramm unter der Abbildung tastet 301 Richtungen ab, von \(0^\circ\) bis \(30^\circ,\) eine alle \(0.1^\circ.\) Die burgunderrote Kurve ist das Fernfeldgesetz \(\cos^2(\pi b\sin\theta/\lambda).\) Die gestrichelte Kurve verwendet den exakten Gangunterschied (3) für den Punkt der Beobachtungslinie in der Richtung \(\theta,\) im Abstand \(d\tan\theta\) von der Mittellinie; dort, wo sich die beiden Kurven trennen, versagt das Fernfeld. Selbst für die feinsten Streifen, die die Regler zulassen, \(b = 80\ \mathrm{px}\) und \(\lambda = 8\ \mathrm{px},\) umspannt ein Streifen 57 Abtastwerte.</li>
+                            <li>Die Berechnungen verwenden die Gleitkommazahlen mit doppelter Genauigkeit von JavaScript, also etwa 16 signifikante Stellen; Abschnitt 3 zeigt, dass das weit mehr ist, als die Zeichnung braucht.</li>
+                        </ul>
+                        <p>Nur die Elementarwellen bewegen sich. Bei jedem Bild des Browsers wächst die Phase der Animation um \(0.8\,\Delta t\) Perioden, wobei \(\Delta t\) die Zeit seit dem vorigen Bild ist, und die Bögen werden neu gezeichnet; die Geometrie und die Anzeigen ändern sich nicht. Das Datenpanel der Seite speichert jede hier genannte Zahl in der Zeile, die sie berechnet, einschließlich der direkten Differenz \(L_2 - L_1\) und der Länge des gezeichneten Balkens \(S_2Q,\) sodass die drei Wege zu \(\delta s\) nebeneinander verglichen werden können.</p>
+                    </section>
+
+                    <section class="psec" id="p-screen">
+                        <h3><span class="psec__n">09</span>Von Längen zu Bildpunkten</h3>
+                        <p>Die Abbildung ist eine Vektorzeichnung, \(600 \times 440\) Einheiten groß, die mit der Seite skaliert, sodass Linien bei jeder Größe scharf bleiben; Positionen sind auf zwei Dezimalstellen angegeben. Die Wand liegt bei \(y = 370\) mit der Spaltmitte bei \(x = 300,\) und \(y\) zeigt auf dem Bild nach unten, sodass \(P\) bei \((300 - d\tan\alpha,\ 370 - d)\) gezeichnet wird: Gleichung (1) gespiegelt und verschoben. Die Wand ist eine 5 Einheiten dicke Linie mit einer \(8\)-Einheiten-Lücke an jedem Spalt. Die beiden Wege werden in Schwarz gezeichnet, der Balken \(S_2Q\) burgunderrot, die Hilfslinien gestrichelt; der gestrichelte Bogen und der Balken erscheinen nur, wenn \(\delta s > 0.05\ \mathrm{px},\) ist, und der Bogen, der \(\alpha\) markiert, nur wenn \(\alpha > 0.2^\circ.\)</p>
+                        <p>Die rosafarbenen Bögen sind die Elementarwellen: Halbkreise mit dem Radius \(r_n = (n + \phi)\lambda\) um jeden Spalt, bis \(430\ \mathrm{px},\) wobei \(\phi\) die Phase der Animation ist, ein Bruchteil einer Periode. Ihre Deckkraft fällt als \(0.55\,(1 - r/430)\), um die Abschwächung jeder Elementarwelle anzudeuten. Unterhalb der Wand sind gerade rosafarbene Linien im Abstand einer Wellenlänge die einfallende ebene Welle; sie bewegen sich im Takt mit den Bögen mit \(0.8\lambda\) pro Sekunde, \(10.8\ \mathrm{px/s}\) bei den Standardwerten. Echtes grünes Licht schwingt \(5.5\times10^{14}\)-mal pro Sekunde, daher ist die Animation verlangsamt um etwa den Faktor \(7\times10^{14}.\)</p>
+                        <p>Da nur Verhältnisse zählen, ist der Bildpunkt keine echte Längeneinheit. Der Standard \(b = 40\ \mathrm{px}\) mit \(\lambda = 13.5\ \mathrm{px}\) ist ein Spaltpaar mit 2.96 Wellenlängen Abstand, was für rotes Laserlicht Spalte von \(1.88\ \mu\mathrm{m}\) Abstand bedeutete. Laborspalte sind meist weiter auseinander, \(0.25\ \mathrm{mm}\) oder 395 Wellenlängen, und ihr erster heller Streifen liegt nur \(0.145^\circ\) von der Mitte. Die Seite vergrößert die Wellenlänge, damit die Winkel sichtbar werden. Im Intensitätsdiagramm läuft \(\theta\) von \(0^\circ\) bis \(30^\circ\) über 500 Einheiten, und \(I/I_0\) von 0 bis 1 über 118 Einheiten; der Punkt markiert die exakte Intensität bei \(\alpha,\) und die Beschriftungen \(m = 0, 1, \dots\) markieren die hellen Richtungen der Fernfeldnäherung.</p>
+                    </section>
+
+                    <section class="psec" id="p-limits">
+                        <h3><span class="psec__n">10</span>Was das Modell weglässt</h3>
+                        <ul>
+                            <li>Spalte haben eine Breite; sie multipliziert die Streifen mit der Einhüllenden aus Abschnitt 6.</li>
+                            <li>Die Amplituden werden als gleich angenommen. In der Zeichenebene schwächt sich die Welle eines langen Spalts wie \(1/\sqrt L.\) ab. Am dunklen Streifen bei den Standardwerten sind \(L_1 = 200.52\ \mathrm{px}\) und \(L_2 = 207.27\ \mathrm{px},\) also unterscheiden sich die Amplituden um \(1.6\,\%\), und der dunkle Streifen behält \(7\times10^{-5}\) der maximalen Intensität: unsichtbar.</li>
+                            <li>Polarisation und der vektorielle Charakter des Lichts werden vernachlässigt. Für Licht, das längs der Spalte polarisiert ist, ändert sich nichts. Bei der anderen Polarisation zeigt jedes Feld quer zu seinem eigenen Weg, sodass sich die beiden Felder in \(P\) um den Winkel \(\gamma\) zwischen den beiden Wegen gegeneinander neigen, \(11^\circ\) am dunklen Streifen bei den Standardwerten. Zwei gleiche Felder mit entgegengesetzter Phase, aber um \(\gamma\) geneigt, heben sich nicht ganz auf: Sie lassen einen Rest \(2E_0\sin(\gamma/2),\) sodass dieser dunkle Streifen \(\sin^2(\gamma/2) = 0.9\,\%\) ausmacht, bezogen auf \(I_0.\) Weit von den Spalten werden die Wege parallel, \(\gamma\) geht gegen null, und das skalare Bild ist wieder exakt.</li>
+                            <li>Das Licht ist vollkommen kohärent und einfarbig. Weißes Licht, wie in Youngs Versuch, ergibt einen weißen zentralen Streifen und farbige Streifen, die nach wenigen Ordnungen verwaschen, weil jede Farbe einen eigenen Abstand hat (9).</li>
+                            <li>Die Zeichnung ist ein zweidimensionaler Schnitt durch Spalte, die in der dritten Richtung lang sind.</li>
+                            <li>Die Geschwindigkeit der Elementarwellen dient nur der Veranschaulichung.</li>
+                        </ul>
+                        <h4><span class="psub__n">10.1</span>Weiterführende Literatur</h4>
+                        <ol class="prefs">
+                            <li>E. Hecht, <a href="https://www.pearson.com/en-us/subject-catalog/p/Hecht-Optics-5th-Edition/P200000006793"><em>Optics</em></a>, 5. Auflage, Pearson, 2017: Kapitel 9 (Interferenz) und 10 (Beugung).</li>
+                            <li>D. Halliday, R. Resnick und J. Walker, <a href="https://www.wiley.com/en-gb/fundamentals-of-physics-extended-10th-edition-p-9781118547878"><em>Fundamentals of Physics</em></a>, 10. Auflage, Wiley, 2014: Kapitel 35 (Interferenz) und 36 (Beugung).</li>
+                            <li>R. P. Feynman, R. B. Leighton und M. Sands, <em>The Feynman Lectures on Physics</em>, Addison-Wesley, 1963–1965, mit Verweisen auf die Online-Ausgabe des Caltech: Band I, Kapitel <a href="https://www.feynmanlectures.caltech.edu/I_29.html">29</a> (Interferenz) und <a href="https://www.feynmanlectures.caltech.edu/I_30.html">30</a> (Beugung); Band III, Kapitel <a href="https://www.feynmanlectures.caltech.edu/III_01.html">1</a> (Quantenverhalten).</li> <li>T. Young, <a href="https://doi.org/10.1098/rstl.1804.0001">“The Bakerian Lecture: Experiments and calculations relative to physical optics”</a>, <em>Philosophical Transactions of the Royal Society of London</em> 94, 1–16 (1804), gelesen am 24. November 1803. Sein Abschnitt I ist der Versuch mit dem Kartonstreifen aus Abschnitt 1.</li>
+                        </ol>
+                    </section>
+                </div>
+            </div>
+        </article>
+
+        <section class="walk" id="walk" data-walk="slit" aria-label="Von den Symbolen zum Code"></section>
+    </main>
+
+    <footer class="sim-foot">
+        <span>© 2026 Numa Koudsie</span>
+        <span><a href="../simulations.html">Alle Simulationen ↑</a> · <a href="../index.html">Startseite</a></span>
+    </footer>
+
+    <script src="../../scripts/fold.js"></script>
+    <script src="../../scripts/sim.js"></script>
+    <script src="../../scripts/dataset.js"></script>
+    <script>
+    (function () {
+        'use strict';
+        var T = Sim.theme;
+        var X0 = 300, Y0 = 370, LEFT = 40, RIGHT = 560, DEG = Math.PI / 180;
+        var gWaves = document.getElementById('waves');
+        var gShapes = document.getElementById('shapes');
+        var pattern = document.getElementById('pattern');
+        var anim = document.getElementById('anim');
+        var geo = null, phase = 0, fps = 0;
+
+        /* ---------- the store: every number this page computes is written here, where it is computed (scripts/dataset.js) ---------- */
+        var ds = Sim.dataset({ title: 'Double-slit interference', attrs: { figure: 3, page: 'Interactive Double-Slit Experiment Visualization.html', X0: X0, Y0: Y0, length_unit: 'px of the 600 × 440 figure; y runs downwards', pattern_axes: 'x0 = 56, x1 = 556, yb = 142, yt = 24, 0° to 30°' } });
+        ds.var('d', [], 'float', { symbol: 'd', units: 'px', long_name: 'distance from the barrier to the observation line', computed_in: 'd slider', digits: 0 });
+        ds.var('alpha_deg', [], 'float', { symbol: 'α', units: '°', long_name: 'direction of P from the slit midpoint', computed_in: 'alpha slider', digits: 1 });
+        ds.var('alpha', [], 'float', { symbol: 'α', units: 'rad', long_name: 'the same angle in radians', computed_in: 'compute()', formula: 'α = slider · π / 180', digits: 5 });
+        ds.var('b', [], 'float', { symbol: 'b', units: 'px', long_name: 'distance between the slits', computed_in: 'b slider', digits: 0 });
+        ds.var('lambda', [], 'float', { symbol: 'λ', units: 'px', long_name: 'wavelength', computed_in: 'lambda slider', digits: 1 });
+        ds.dim('pt', 5);
+        ds.var('pt_x', ['pt'], Float64Array, { symbol: 'x', units: 'px', long_name: 'the five construction points S₁, S₂, M, P, Q: x', computed_in: 'compute()', formula: 'S₁ = X₀ − b/2, S₂ = X₀ + b/2, M = X₀, P = X₀ − d tan α, Q = P + u L₁', digits: 3, updates: 'when a slider moves' });
+        ds.var('pt_y', ['pt'], Float64Array, { symbol: 'y', units: 'px', long_name: 'the five construction points: y, downwards', computed_in: 'compute()', formula: 'slits and M at Y₀; P at Y₀ − d; Q = P + u L₁', digits: 3, updates: 'when a slider moves' });
+        ds.var('L1', [], 'float', { symbol: 'L<sub>1</sub>', units: 'px', long_name: 'path length S₁ → P', computed_in: 'compute()', formula: '|P − S₁|', digits: 4 });
+        ds.var('L2', [], 'float', { symbol: 'L<sub>2</sub>', units: 'px', long_name: 'path length S₂ → P', computed_in: 'compute()', formula: '|P − S₂|', digits: 4 });
+        ds.var('ux', [], 'float', { symbol: 'u<sub>x</sub>', long_name: 'unit vector from P towards S₂, x', computed_in: 'compute()', formula: '(S₂ − P)<sub>x</sub> / L₂', digits: 5 });
+        ds.var('uy', [], 'float', { symbol: 'u<sub>y</sub>', long_name: 'unit vector from P towards S₂, y', computed_in: 'compute()', formula: '(S₂ − P)<sub>y</sub> / L₂', digits: 5 });
+        ds.var('ds', [], 'float', { symbol: 'δs', units: 'px', long_name: 'exact path difference', computed_in: 'compute()', formula: 'δs = 2 b d tan α / (L₁ + L₂)', digits: 4 });
+        ds.var('ds_direct', [], 'float', { symbol: 'L<sub>2</sub> − L<sub>1</sub>', units: 'px', long_name: 'the same number by direct subtraction', computed_in: 'storeDerived(), in compute()', formula: 'L₂ − L₁', digits: 4 });
+        ds.var('S2Q', [], 'float', { symbol: '|S<sub>2</sub>Q|', units: 'px', long_name: 'the same number read off the construction', computed_in: 'storeDerived(), in compute()', formula: '|Q − S₂|', digits: 4 });
+        ds.var('b_sin_a', [], 'float', { symbol: 'b sin α', units: 'px', long_name: 'far-field approximation of δs', computed_in: 'storeDerived(), in compute()', formula: 'b sin α', digits: 4 });
+        ds.var('ds_err', [], 'float', { symbol: 'δs − b sin α', units: 'px', long_name: 'error of the far-field approximation at this distance', computed_in: 'storeDerived(), in compute()', formula: 'δs − b sin α', digits: 4 });
+        ds.var('ratio', [], 'float', { symbol: 'δs / λ', long_name: 'path difference in wavelengths', computed_in: 'storeDerived(), in compute()', formula: 'δs / λ', digits: 4 });
+        ds.var('frac', [], 'float', { symbol: 'fractional part', long_name: 'near 0: bright; near ½: dark', computed_in: 'storeDerived(), in compute()', formula: 'δs/λ − floor(δs/λ)', digits: 3 });
+        ds.var('phi', [], 'float', { symbol: 'Δφ', units: 'rad', long_name: 'phase difference', computed_in: 'storeDerived(), in compute()', formula: '2π δs / λ', digits: 4 });
+        ds.var('I', [], 'float', { symbol: 'I/I₀', long_name: 'intensity at P, two equal waves', computed_in: 'storeDerived(), in compute()', formula: 'cos²(Δφ / 2)', digits: 4 });
+        ds.var('I_far_P', [], 'float', { symbol: 'I/I₀ far field', long_name: 'with b sin α in place of δs', computed_in: 'storeDerived(), in compute()', formula: 'cos²(π b sin α / λ)', digits: 4 });
+        ds.var('verdict', [], 'str', { symbol: 'verdict', long_name: 'the sentence under the readouts', computed_in: 'storeDerived(), in compute()', source: 'Chosen from the fractional part: within 0.08 of 0 bright, of ½ dark, else partial.' });
+        ds.var('sin_theta1', [], 'float', { symbol: 'sin θ₁', units: '', long_name: 'λ / b', computed_in: 'storeDerived(), in compute()', formula: 'λ / b', digits: 4 });
+        ds.var('theta1', [], 'float', { symbol: 'θ₁', units: '°', long_name: 'asin(λ / b); NaN if λ > b', computed_in: 'storeDerived(), in compute()', formula: 'asin(λ / b); NaN if λ > b', digits: 4 });
+        ds.var('phi_pi', [], 'float', { symbol: 'Δφ / π', units: '', long_name: 'Δφ / π', computed_in: 'storeDerived(), in compute()', formula: 'Δφ / π', digits: 4 });
+        ds.dim('th', 301);
+        ds.coord('theta', 'th', Float64Array, { symbol: 'θ', units: '°', long_name: 'direction, 301 steps from 0° to 30°', computed_in: 'drawPattern()', formula: 'θ = 30° · i / 300', digits: 2 });
+        ds.var('I_far', ['th'], Float64Array, { symbol: 'I far', long_name: 'the solid curve: far-field intensity', computed_in: 'drawPattern()', formula: 'cos²(π b sin θ / λ)', digits: 4, updates: 'when a slider moves' });
+        ds.var('I_exact', ['th'], Float64Array, { symbol: 'I exact', long_name: 'the dashed curve: with the exact path difference at distance d', computed_in: 'drawPattern()', formula: 'cos²(π δs(θ) / λ), δs(θ) = 2 b x / (l₁ + l₂), x = d tan θ', digits: 4, updates: 'when a slider moves' });
+        ds.var('I_diff', ['th'], Float64Array, { symbol: 'exact − far', long_name: 'how much the far-field curve is off at this distance', computed_in: 'drawPattern()', formula: 'I exact − I far', digits: 4, updates: 'when a slider moves' });
+        ds.dim('m', 0);
+        ds.coord('m_sin', 'm', Float64Array, { symbol: 'sin θ<sub>m</sub>', long_name: 'bright fringes in the far field, one per order m', computed_in: 'drawPattern()', formula: 'm λ / b', digits: 4, updates: 'when b or λ moves' });
+        ds.var('m_theta', ['m'], Float64Array, { symbol: 'θ<sub>m</sub>', units: '°', long_name: 'direction of order m', computed_in: 'drawPattern()', formula: 'asin(m λ / b)', digits: 2, updates: 'when b or λ moves' });
+        ds.var('m_x', ['m'], Float64Array, { symbol: 'x<sub>m</sub>', units: 'px', long_name: 'where order m meets the observation line', computed_in: 'drawPattern()', formula: 'd tan θ<sub>m</sub>', digits: 1, updates: 'when b or λ moves' });
+        ds.var('m_max', [], 'int', { symbol: 'm<sub>max</sub>', long_name: 'highest order within 30°', computed_in: 'drawPattern()', formula: 'floor(b sin 30° / λ)', digits: 0 });
+        ds.var('fringe_px', [], 'float', { symbol: 'λd/b', units: 'px', long_name: 'fringe spacing near the centre, small angles', computed_in: 'storeDerived(), in compute()', formula: 'λ d / b', digits: 2 });
+        ds.dim('ring', 0);
+        ds.var('ring_r', ['ring'], Float64Array, { symbol: 'r', units: 'px', long_name: 'radii of the wavelet arcs drawn around each slit', computed_in: 'drawWaves()', formula: 'r = (phase + q) λ, skipping r < 1', digits: 2, updates: 'every frame while animating' });
+        ds.var('n_rings', [], 'int', { symbol: 'rings', long_name: 'arcs per slit', computed_in: 'drawWaves()', digits: 0, source: 'Counted while drawing.' });
+        ds.var('phase', [], 'float', { symbol: 'phase', long_name: 'fraction of a period, 0 to 1', computed_in: 'Sim.clock callback', formula: 'phase ← (phase + 0.8 Δt) mod 1', digits: 3, source: 'Accumulated frame by frame.' });
+        ds.var('ring_speed', [], 'float', { symbol: 'ring speed', units: 'px/s', long_name: 'how fast the arcs grow', computed_in: 'storeDerived(), in compute()', formula: '0.8 λ', digits: 1 });
+        ds.var('animate', [], 'bool', { symbol: 'animate', long_name: 'the wavelets move', computed_in: 'the Animate switch', source: 'The state of the switch.' });
+        ds.var('clock_t', [], 'float', { symbol: 't', units: 's', long_name: 'animation time', computed_in: 'Sim.clock', digits: 2, source: 'The clock adds each frame’s Δt while animating.' });
+        ds.var('wall', [], 'float', { symbol: 'wall', units: 's', long_name: 'seconds since the page opened', computed_in: 'Sim.clock callback', digits: 1, source: 'performance.now() / 1000.' });
+        ds.var('fps', [], 'float', { symbol: 'frame rate', units: 'Hz', long_name: 'smoothed over about ten frames', computed_in: 'Sim.clock callback', digits: 1, source: 'A running average of 1/Δt.' });
+
+        var dS = Sim.slider('d', { format: function (v) { return v + ' px'; }, onInput: update });
+        var aS = Sim.slider('alpha', { format: function (v) { return v.toFixed(1) + '°'; }, onInput: update });
+        var bS = Sim.slider('b', { format: function (v) { return v + ' px'; }, onInput: update });
+        var lS = Sim.slider('lambda', { format: function (v) { return v.toFixed(1) + ' px'; }, onInput: update });
+
+        function n(v) { return v.toFixed(2); }
+        function dist(p, q) { return Math.hypot(p.x - q.x, p.y - q.y); }
+        function line(a, b, attrs) { return '<line x1="' + n(a.x) + '" y1="' + n(a.y) + '" x2="' + n(b.x) + '" y2="' + n(b.y) + '" ' + attrs + '/>'; }
+        function dot(p, r, fill, stroke) { return '<circle cx="' + n(p.x) + '" cy="' + n(p.y) + '" r="' + r + '" fill="' + fill + '"' + (stroke ? ' stroke="' + stroke + '" stroke-width="2"' : '') + '/>'; }
+        function text(x, y, s, cls, anchor) { return '<text x="' + n(x) + '" y="' + n(y) + '" class="' + cls + '" text-anchor="' + (anchor || 'middle') + '">' + s + '</text>'; }
+
+        function compute() {
+            var d = dS.value, a = aS.value * DEG, b = bS.value;
+            var S1 = { x: X0 - b / 2, y: Y0 }, S2 = { x: X0 + b / 2, y: Y0 };
+            var P = { x: X0 - d * Math.tan(a), y: Y0 - d };
+            var L1 = dist(S1, P), L2 = dist(S2, P);
+            ds.set('L1', L1); ds.set('L2', L2);
+            var deltaS = 2 * b * d * Math.tan(a) / (L1 + L2);
+            ds.set('ds', deltaS);
+            var ux = (S2.x - P.x) / L2, uy = (S2.y - P.y) / L2;
+            var Q = { x: P.x + ux * L1, y: P.y + uy * L1 };
+            ds.set('ux', ux); ds.set('uy', uy);
+            var G = { d: d, a: a, b: b, lambda: lS.value, S1: S1, S2: S2, P: P, L1: L1, L2: L2, Q: Q, ds: deltaS };
+            storeDerived(G);
+            return G;
+        }
+
+        function drawShapes() {
+            var G = geo, s = '', M = { x: X0, y: Y0 };
+            // observation line through P and the centre normal
+            s += line({ x: LEFT, y: G.P.y }, { x: RIGHT, y: G.P.y }, 'stroke="' + T.rule + '" stroke-width="1.5" stroke-dasharray="6 5"');
+            s += line(M, { x: X0, y: G.P.y }, 'stroke="' + T.muted + '" stroke-width="1" stroke-dasharray="4 4"');
+            // barrier with two slits
+            var gap = 4;
+            [[LEFT, G.S1.x - gap], [G.S1.x + gap, G.S2.x - gap], [G.S2.x + gap, RIGHT]].forEach(function (seg) {
+                s += line({ x: seg[0], y: Y0 }, { x: seg[1], y: Y0 }, 'stroke="' + T.ink + '" stroke-width="5"');
+            });
+            // the two paths
+            s += line(G.S1, G.P, 'stroke="' + T.ink2 + '" stroke-width="1.6"');
+            s += line(G.S2, G.P, 'stroke="' + T.ink2 + '" stroke-width="1.6"');
+            // construction arc: circle around P through S1, meeting S2P at Q
+            var cross = (G.S1.x - G.P.x) * (G.Q.y - G.P.y) - (G.S1.y - G.P.y) * (G.Q.x - G.P.x);
+            if (G.ds > 0.05) {
+                s += '<path d="M ' + n(G.S1.x) + ' ' + n(G.S1.y) + ' A ' + n(G.L1) + ' ' + n(G.L1) + ' 0 0 ' + (cross > 0 ? 1 : 0) + ' ' + n(G.Q.x) + ' ' + n(G.Q.y) + '" fill="none" stroke="' + T.muted + '" stroke-width="1.2" stroke-dasharray="3 4"/>';
+                s += line(G.S2, G.Q, 'stroke="' + T.accent + '" stroke-width="5" stroke-linecap="round"');
+                s += text(Math.max(G.S2.x, G.Q.x) + 22, Math.min(G.S2.y, G.Q.y) - 4, 'δs', 'svg-lbl svg-lbl--acc', 'start');
+            }
+            // angle α at the midpoint
+            if (G.a > 0.2 * DEG) {
+                var r = 64, dir = { x: (G.P.x - X0) / dist(G.P, M), y: (G.P.y - Y0) / dist(G.P, M) };
+                var E = { x: X0 + dir.x * r, y: Y0 + dir.y * r };
+                s += '<path d="M ' + X0 + ' ' + (Y0 - r) + ' A ' + r + ' ' + r + ' 0 0 0 ' + n(E.x) + ' ' + n(E.y) + '" fill="none" stroke="' + T.accent + '" stroke-width="1.5"/>';
+                var mid = -Math.PI / 2 - G.a / 2;
+                s += text(X0 + 84 * Math.cos(mid), Y0 + 84 * Math.sin(mid) + 6, 'α', 'svg-lbl svg-lbl--acc');
+            }
+            s += line(M, G.P, 'stroke="' + T.accent + '" stroke-width="1.2" stroke-dasharray="2 3" opacity="0.7"');
+            // dimension b under the barrier
+            s += line({ x: G.S1.x, y: Y0 + 22 }, { x: G.S2.x, y: Y0 + 22 }, 'stroke="' + T.ink3 + '" stroke-width="1"');
+            s += line({ x: G.S1.x, y: Y0 + 16 }, { x: G.S1.x, y: Y0 + 28 }, 'stroke="' + T.ink3 + '" stroke-width="1"');
+            s += line({ x: G.S2.x, y: Y0 + 16 }, { x: G.S2.x, y: Y0 + 28 }, 'stroke="' + T.ink3 + '" stroke-width="1"');
+            s += text(X0, Y0 + 50, 'b', 'svg-lbl');
+            // dimension d at the left
+            s += line({ x: LEFT + 10, y: Y0 }, { x: LEFT + 10, y: G.P.y }, 'stroke="' + T.ink3 + '" stroke-width="1"');
+            s += line({ x: LEFT + 4, y: G.P.y }, { x: LEFT + 16, y: G.P.y }, 'stroke="' + T.ink3 + '" stroke-width="1"');
+            s += line({ x: LEFT + 4, y: Y0 }, { x: LEFT + 16, y: Y0 }, 'stroke="' + T.ink3 + '" stroke-width="1"');
+            s += text(LEFT + 26, (Y0 + G.P.y) / 2 + 6, 'd', 'svg-lbl', 'start');
+            // points and labels
+            s += dot(G.S1, 4, T.accent, T.card) + dot(G.S2, 4, T.accent, T.card) + dot(M, 3, T.ink3);
+            if (G.ds > 0.05) s += dot(G.Q, 3, T.accent);
+            s += dot(G.P, 6, T.accent, T.card);
+            s += text(G.P.x, G.P.y - 16, 'P', 'svg-lbl');
+            s += text(G.S1.x - 20, Y0 + 30, 'S₁', 'svg-lbl');
+            s += text(G.S2.x + 20, Y0 + 30, 'S₂', 'svg-lbl');
+            s += text(RIGHT, G.P.y - 10, 'observation line', 'svg-mono', 'end');
+            gShapes.innerHTML = s;
+        }
+
+        function drawWaves() {
+            var G = geo, lam = G.lambda, s = '<g clip-path="url(#above)">', maxR = 430, rr = [];
+            [G.S1, G.S2].forEach(function (S) {
+                for (var r = phase * lam; r < maxR; r += lam) {
+                    if (r < 1) continue;
+                    if (S === G.S1) rr.push(r);
+                    var op = (0.55 * (1 - r / maxR)).toFixed(3);
+                    s += '<path d="M ' + n(S.x - r) + ' ' + Y0 + ' A ' + n(r) + ' ' + n(r) + ' 0 0 1 ' + n(S.x + r) + ' ' + Y0 + '" fill="none" stroke="' + T.rose + '" stroke-width="1.3" opacity="' + op + '"/>';
+                }
+            });
+            s += '</g>';
+            ds.dim('ring', rr.length);
+            var ra = ds.alloc('ring_r');
+            for (var q = 0; q < rr.length; q++) ra[q] = rr[q];
+            ds.touch('ring_r'); ds.set('n_rings', rr.length); ds.set('phase', phase);
+            // incoming plane wave below the barrier
+            for (var y = Y0 + (1 - phase) * lam; y < 440; y += lam) {
+                s += line({ x: LEFT, y: y }, { x: RIGHT, y: y }, 'stroke="' + T.rose + '" stroke-width="1.3" opacity="0.5"');
+            }
+            gWaves.innerHTML = s;
+        }
+
+        function drawPattern() {
+            var G = geo, x0 = 56, x1 = 556, yb = 142, yt = 24, amax = 30 * DEG;
+            var X = function (th) { return x0 + (th / amax) * (x1 - x0); };
+            var Y = function (I) { return yb - I * (yb - yt); };
+            var I = function (th) { var c = Math.cos(Math.PI * G.b * Math.sin(th) / G.lambda); return c * c; };
+            /* exact path difference for a point at distance d in direction th */
+            var Iexact = function (th) {
+                var x = G.d * Math.tan(th), l1 = Math.hypot(x - G.b / 2, G.d), l2 = Math.hypot(x + G.b / 2, G.d);
+                var c = Math.cos(Math.PI * (2 * G.b * x / (l1 + l2)) / G.lambda);
+                return c * c;
+            };
+            var s = '', pts = [], ex = [], thA = ds.alloc('theta'), IfA = ds.alloc('I_far'), IeA = ds.alloc('I_exact'), IdA = ds.alloc('I_diff');
+            for (var i = 0; i <= 300; i++) {
+                var th = amax * i / 300, If = I(th), Ie = Iexact(th);
+                thA[i] = th / DEG; IfA[i] = If; IeA[i] = Ie; IdA[i] = Ie - If;
+                pts.push(n(X(th)) + ' ' + n(Y(If)));
+                ex.push(n(X(th)) + ' ' + n(Y(Ie)));
+            }
+            ds.touch('theta'); ds.touch('I_far'); ds.touch('I_exact'); ds.touch('I_diff');
+            s += line({ x: x0, y: yt }, { x: x1, y: yt }, 'stroke="' + T.ruleSoft + '" stroke-width="1"');
+            s += '<path d="M ' + x0 + ' ' + yb + ' L ' + pts.join(' L ') + ' L ' + x1 + ' ' + yb + ' Z" fill="' + T.rose + '" opacity="0.28"/>';
+            s += '<path d="M ' + pts.join(' L ') + '" fill="none" stroke="' + T.accent + '" stroke-width="2"/>';
+            s += '<path d="M ' + ex.join(' L ') + '" fill="none" stroke="' + T.ink + '" stroke-width="1.3" stroke-dasharray="5 4"/>';
+            s += line({ x: x0, y: yb }, { x: x1, y: yb }, 'stroke="' + T.ink3 + '" stroke-width="1"');
+            for (var dgr = 0; dgr <= 30; dgr += 10) {
+                s += line({ x: X(dgr * DEG), y: yb }, { x: X(dgr * DEG), y: yb + 5 }, 'stroke="' + T.ink3 + '" stroke-width="1"');
+                s += text(X(dgr * DEG), yb + 22, dgr + '°', 'svg-mono');
+            }
+            var nm = Math.floor(Math.sin(amax) * G.b / G.lambda + 1e-9) + 1;
+            ds.dim('m', nm);
+            var mS = ds.alloc('m_sin'), mT = ds.alloc('m_theta'), mX = ds.alloc('m_x');
+            for (var m = 0; m < nm; m++) {
+                var tm = Math.asin(m * G.lambda / G.b);
+                if (m < nm) { mS[m] = m * G.lambda / G.b; mT[m] = tm / DEG; mX[m] = G.d * Math.tan(tm); }
+                /* the order m in maths italic; m = 0 sits on the axis, so its label starts right of it, clear of the tick label 1 */
+                s += text(X(tm) + (m === 0 ? 6 : 0), yt - 9, '<tspan class="svg-m">m</tspan> = ' + m, 'svg-num', m === 0 ? 'start' : 'middle');
+            }
+            ds.touch('m_sin'); ds.touch('m_theta'); ds.touch('m_x'); ds.set('m_max', nm - 1);
+            s += text(x0 - 10, yt + 5, '1', 'svg-mono', 'end') + text(x0 - 10, yb + 4, '0', 'svg-mono', 'end');
+            var xa = X(G.a);
+            s += line({ x: xa, y: yt }, { x: xa, y: yb }, 'stroke="' + T.ink + '" stroke-width="1.2" stroke-dasharray="4 3"');
+            s += dot({ x: xa, y: Y(Iexact(G.a)) }, 5.5, T.accent, T.card);
+            s += text(xa + (xa > 480 ? -8 : 8), yb - 8, 'α', 'svg-lbl', xa > 480 ? 'end' : 'start');
+            pattern.innerHTML = s;
+        }
+
+        function storeDerived(G) {
+            var ratio = G.ds / G.lambda, phi = 2 * Math.PI * ratio;
+            var ff = G.b * Math.sin(G.a);
+            var f = ratio - Math.floor(ratio), verdict;
+            if (f < 0.08 || f > 0.92) verdict = _t('Constructive · bright fringe, m = ') + Math.round(ratio);
+            else if (Math.abs(f - 0.5) < 0.08) verdict = _t('Destructive · dark fringe between m = ') + Math.floor(ratio) + _t(' and ') + (Math.floor(ratio) + 1);
+            else verdict = _t('Partial · I/I₀ = ') + Math.pow(Math.cos(phi / 2), 2).toFixed(2);
+            var px = ds.alloc('pt_x'), py = ds.alloc('pt_y'), P5 = [G.S1, G.S2, { x: X0, y: Y0 }, G.P, G.Q];
+            for (var q = 0; q < 5; q++) { px[q] = P5[q].x; py[q] = P5[q].y; }
+            ds.touch('pt_x'); ds.touch('pt_y');
+            ds.set('d', G.d); ds.set('alpha_deg', aS.value); ds.set('alpha', G.a); ds.set('b', G.b); ds.set('lambda', G.lambda);
+            ds.set('ds_direct', G.L2 - G.L1); ds.set('S2Q', dist(G.S2, G.Q));
+            ds.set('b_sin_a', ff); ds.set('ds_err', G.ds - ff); ds.set('ratio', ratio); ds.set('frac', f); ds.set('phi', phi);
+            ds.set('I', Math.pow(Math.cos(phi / 2), 2)); ds.set('I_far_P', Math.pow(Math.cos(Math.PI * ff / G.lambda), 2)); ds.set('verdict', verdict);
+            ds.set('phi_pi', phi / Math.PI);
+            var sl = G.lambda / G.b;
+            ds.set('sin_theta1', sl); ds.set('theta1', sl <= 1 ? Math.asin(sl) / DEG : NaN);
+            ds.set('fringe_px', G.lambda * G.d / G.b); ds.set('ring_speed', 0.8 * G.lambda);
+        }
+
+        function readouts() {
+            document.getElementById('r-l1').textContent = ds.get('L1').toFixed(1) + ' px';
+            document.getElementById('r-l2').textContent = ds.get('L2').toFixed(1) + ' px';
+            document.getElementById('r-ds').textContent = ds.get('ds').toFixed(2) + ' px';
+            document.getElementById('r-ff').textContent = ds.get('b_sin_a').toFixed(2) + ' px';
+            document.getElementById('r-m').textContent = ds.get('ratio').toFixed(2) + '';
+            document.getElementById('r-phi').textContent = ds.get('phi_pi').toFixed(2) + ' π';
+            document.getElementById('cap-ds').innerHTML = '<i>δs</i> = ' + ds.get('ds').toFixed(2) + ' px';
+            document.getElementById('verdict').textContent = ds.get('verdict');
+        }
+
+        function update() {
+            geo = compute();
+            drawShapes();
+            drawWaves();
+            drawPattern();
+            readouts();
+        }
+
+        /* live values for the walkthrough: read from the store, nothing recomputed */
+        Sim.live = function () {
+            var px = ds.get('pt_x'), py = ds.get('pt_y'), f = ds.get('frac');
+            function pt(q) { return '(' + px[q].toFixed(1) + ', ' + py[q].toFixed(1) + ')'; }
+            var sl = ds.get('sin_theta1');
+            return {
+                d: ds.get('d') + ' px', a: ds.get('alpha_deg').toFixed(1) + '°', b: ds.get('b') + ' px', P: pt(3), S1: pt(0),
+                L1: ds.get('L1').toFixed(3) + ' px', L2: ds.get('L2').toFixed(3) + ' px', ds: ds.get('ds').toFixed(4) + ' px',
+                dsid: ds.get('ds_direct').toFixed(4) + ' px',
+                u: '(' + ds.get('ux').toFixed(4) + ', ' + ds.get('uy').toFixed(4) + ')', Q: pt(4), S2Q: ds.get('S2Q').toFixed(4) + ' px',
+                lam: ds.get('lambda').toFixed(1) + ' px', m: ds.get('ratio').toFixed(4), phi: ds.get('phi_pi').toFixed(3) + ' π',
+                I: ds.get('I').toFixed(4), ff: ds.get('b_sin_a').toFixed(4) + ' px', Iff: ds.get('I_far_P').toFixed(4),
+                sinm: sl.toFixed(4), t1: sl <= 1 ? ds.get('theta1').toFixed(2) + '°' : _t('none (λ > b)'),
+                fr: f.toFixed(3), verdict: ds.get('verdict')
+            };
+        };
+        var clk = Sim.clock(function (dt, t) {
+            if (dt > 0) {
+                phase = (phase + dt * 0.8) % 1;
+                drawWaves();
+                fps = fps ? fps + (1 / dt - fps) * 0.1 : 1 / dt;
+            }
+            ds.set('clock_t', t); ds.set('wall', performance.now() / 1000); ds.set('fps', fps); ds.set('animate', clk ? clk.playing : true);
+        });
+        anim.addEventListener('change', function () { clk.set(anim.checked); });
+
+        /* ---------- the data panel (scripts/datalog.js) reads the store; these hooks only say where things are drawn and how to test a value ---------- */
+        var PN = ['S₁', 'S₂', 'M', 'P', 'Q'], stageEl = document.getElementById('stage'), geoSvg = document.getElementById('geo');
+        function toSvg(x, y) { var r = stageEl.getBoundingClientRect(), pt = geoSvg.createSVGPoint(); pt.x = r.left + x; pt.y = r.top + y; var q = pt.matrixTransform(geoSvg.getScreenCTM().inverse()); return { x: q.x, y: q.y }; }
+        function toCss(X, Y) { var r = stageEl.getBoundingClientRect(), pt = geoSvg.createSVGPoint(); pt.x = X; pt.y = Y; var q = pt.matrixTransform(geoSvg.getScreenCTM()); return { x: q.x - r.left, y: q.y - r.top }; }
+        function sliderCheck(input, label) { return { formula: _t('read from the ') + label + _t(' slider now'), inputs: [['slider', input.value, '']], value: parseFloat(input.value) }; }
+        function pointCheck(q, which) {
+            var d = ds.get('d'), a = ds.get('alpha'), b = ds.get('b'), L1 = ds.get('L1'), ux = ds.get('ux'), uy = ds.get('uy');
+            var xs = [X0 - b / 2, X0 + b / 2, X0, X0 - d * Math.tan(a), X0 - d * Math.tan(a) + ux * L1], ys = [Y0, Y0, Y0, Y0 - d, Y0 - d + uy * L1];
+            return { formula: ds.vars[which].attrs.formula, inputs: [['d', d, 'px', 0], ['α', a, 'rad', 5], ['b', b, 'px', 0], ['L₁', L1, 'px', 4], ['u', ux.toFixed(4) + ', ' + uy.toFixed(4), '']], value: which === 'pt_x' ? xs[q] : ys[q] };
+        }
+        function P() { var px = ds.get('pt_x'), py = ds.get('pt_y'); return { x: px[3], y: py[3] }; }
+        function S(q) { var px = ds.get('pt_x'), py = ds.get('pt_y'); return { x: px[q], y: py[q] }; }
+        function exactAt(th) {
+            var d = ds.get('d'), b = ds.get('b'), lam = ds.get('lambda'), x = d * Math.tan(th), l1 = Math.hypot(x - b / 2, d), l2 = Math.hypot(x + b / 2, d), dsq = 2 * b * x / (l1 + l2), c = Math.cos(Math.PI * dsq / lam);
+            return { value: c * c, inputs: [['θ', th / DEG, '°', 2], ['x = d tan θ', x, 'px', 3], ['l₁', l1, 'px', 3], ['l₂', l2, 'px', 3], ['δs(θ)', dsq, 'px', 4], ['λ', lam, 'px', 1]] };
+        }
+        function circleCheck(q) {
+            var px = ds.get('pt_x'), py = ds.get('pt_y'), best = null, bd = Infinity;
+            Array.prototype.forEach.call(gShapes.querySelectorAll('circle'), function (c) { var d = Math.hypot(+c.getAttribute('cx') - px[q], +c.getAttribute('cy') - py[q]); if (d < bd) { bd = d; best = c; } });
+            var ok = best && bd < 0.02;
+            return { what: PN[q] + _t(' as drawn: the nearest circle in the SVG'), drawn: best ? '(' + best.getAttribute('cx') + ', ' + best.getAttribute('cy') + '), r = ' + best.getAttribute('r') : _t('no circle'), expected: '(' + px[q].toFixed(2) + ', ' + py[q].toFixed(2) + ')', ok: !!ok,
+                note: q === 4 && !ok ? _t('Q is only drawn when δs > 0.05 px.') : _t('SVG coordinates are written with two decimals, so the picture carries positions to 0.01 px.') };
+        }
+        function firstFringeReadback(sine) {
+            var label = Array.prototype.find.call(pattern.querySelectorAll('text'), function (el) { return el.textContent === 'm = 1'; });
+            if (!label) return { what: _t('the first bright-fringe label'), drawn: _t('outside the 0°–30° plot'), expected: _t('not drawn'), ok: null };
+            var angle = (Number(label.getAttribute('x')) - 56) / 500 * 30;
+            var actual = sine ? Math.sin(angle * DEG) : angle, expected = ds.get(sine ? 'sin_theta1' : 'theta1');
+            return { what: _t('first bright fringe, read from its SVG x coordinate'), drawn: actual.toFixed(4), expected: expected.toFixed(4), ok: Math.abs(actual - expected) < 0.001 };
+        }
+        Sim.data = {
+            ds: ds, kicker: _t('Fig. 3 · data'), file: 'fig3-double-slit',
+            playing: function () { return clk.playing; },
+            groups: [
+                { title: _t('Physical parameters'), note: _t('what you set with the sliders'), vars: ['d', 'alpha_deg', 'alpha', 'b', 'lambda'] },
+                { title: _t('Geometry'), note: _t('points in figure coordinates: x to the right, y downwards'), vars: ['pt_x', 'pt_y', 'L1', 'L2', 'ux', 'uy'] },
+                { title: _t('Path difference and phase'), note: _t('what decides bright or dark'), vars: ['ds', 'ds_direct', 'S2Q', 'b_sin_a', 'ds_err', 'ratio', 'frac', 'phi', 'phi_pi', 'sin_theta1', 'theta1'] },
+                { title: _t('Intensity'), note: _t('two equal waves: I/I₀ = cos²(Δφ/2)'), vars: ['I', 'I_far_P', 'verdict', 'theta', 'I_far', 'I_exact', 'I_diff'] },
+                { title: _t('Bright fringes'), note: _t('far field: b sin θ<sub>m</sub> = mλ'), vars: ['m_max', 'fringe_px', 'm_sin', 'm_theta', 'm_x'] },
+                { title: _t('Animation'), note: _t('the wavelets only; the geometry does not move'), vars: ['phase', 'ring_speed', 'ring_r', 'n_rings', 'animate', 'clock_t', 'wall', 'fps'] }
+            ],
+            rowLabel: { pt: function (j) { return PN[j]; }, m: function (j) { return 'm = ' + j; } },
+            colour: { I_far: function (v) { return Sim.colourMap(v, 1); }, I_exact: function (v) { return Sim.colourMap(v, 1); } },
+            probe: function (x, y) {
+                var q = toSvg(x, y), px = ds.get('pt_x'), py = ds.get('pt_y'), best = -1, bd = 22;
+                for (var i = 0; i < 5; i++) { var d = Math.hypot(q.x - px[i], q.y - py[i]); if (d < bd) { bd = d; best = i; } }
+                return best < 0 ? null : { pt: best };
+            },
+            inspect: function (ref) {
+                var q = ref.pt, px = ds.get('pt_x'), py = ds.get('pt_y'), rows = [['x', px[q], 'px', 'pt_x', q], ['y', py[q], 'px', 'pt_y', q]];
+                if (q === 3) rows.push(['L<sub>1</sub>', ds.get('L1'), 'px', 'L1'], ['L<sub>2</sub>', ds.get('L2'), 'px', 'L2'], ['δs', ds.get('ds'), 'px', 'ds'], ['δs/λ', ds.get('ratio'), '', 'ratio'], ['Δφ', ds.get('phi'), 'rad', 'phi'], ['I/I₀', ds.get('I'), '', 'I']);
+                if (q === 0) rows.push(['L<sub>1</sub> to P', ds.get('L1'), 'px', 'L1']);
+                if (q === 1) rows.push(['L<sub>2</sub> to P', ds.get('L2'), 'px', 'L2'], ['|S<sub>2</sub>Q|', ds.get('S2Q'), 'px', 'S2Q']);
+                if (q === 4) rows.push(['|S<sub>2</sub>Q| = δs', ds.get('S2Q'), 'px', 'S2Q']);
+                if (q === 2) rows.push(['b', ds.get('b'), 'px', 'b'], ['α', ds.get('alpha_deg'), '°', 'alpha_deg']);
+                return { title: PN[q] + (q === 3 ? _t(' · the observed point') : q === 2 ? _t(' · midpoint of the slits') : ''), at: toCss(px[q], py[q]), rows: rows };
+            },
+            locate: function (name, idx) {
+                if (name === 'pt_x' || name === 'pt_y') return toCss(ds.get('pt_x')[idx], ds.get('pt_y')[idx]);
+                if (name === 'ring_r') { var px = ds.get('pt_x'), py = ds.get('pt_y'); return toCss(px[0], py[0] - ds.get('ring_r')[idx]); }
+                return null;
+            },
+            check: {
+                sin_theta1: function () { return { formula: 'λ / b', inputs: [['λ', ds.get('lambda'), 'px'], ['b', ds.get('b'), 'px']], value: ds.get('lambda') / ds.get('b') }; },
+                theta1: function () { var sl = ds.get('sin_theta1'); return { formula: 'asin(sin θ₁) / DEG', inputs: [['sin θ₁', sl, '']], value: sl <= 1 ? Math.asin(sl) / DEG : NaN }; },
+                phi_pi: function () { return { formula: 'Δφ / π', inputs: [['Δφ', ds.get('phi'), 'rad']], value: ds.get('phi') / Math.PI }; },
+                d: function () { return sliderCheck(dS.el, 'distance'); },
+                alpha_deg: function () { return sliderCheck(aS.el, 'angle'); },
+                alpha: function () { return { formula: 'α = slider · π / 180', inputs: [['α', ds.get('alpha_deg'), '°', 1]], value: ds.get('alpha_deg') * DEG }; },
+                b: function () { return sliderCheck(bS.el, 'slit separation'); },
+                lambda: function () { return sliderCheck(lS.el, 'wavelength'); },
+                pt_x: function (q) { return pointCheck(q, 'pt_x'); },
+                pt_y: function (q) { return pointCheck(q, 'pt_y'); },
+                L1: function () { var p = P(), s1 = S(0); return { formula: '|P − S₁|', inputs: [['P', p.x.toFixed(3) + ', ' + p.y.toFixed(3), 'px'], ['S₁', s1.x.toFixed(3) + ', ' + s1.y.toFixed(3), 'px']], value: Math.hypot(p.x - s1.x, p.y - s1.y) }; },
+                L2: function () { var p = P(), s2 = S(1); return { formula: '|P − S₂|', inputs: [['P', p.x.toFixed(3) + ', ' + p.y.toFixed(3), 'px'], ['S₂', s2.x.toFixed(3) + ', ' + s2.y.toFixed(3), 'px']], value: Math.hypot(p.x - s2.x, p.y - s2.y) }; },
+                ux: function () { var p = P(), s2 = S(1); return { formula: '(S₂ − P)<sub>x</sub> / L₂', inputs: [['S₂x − Px', s2.x - p.x, 'px', 4], ['L₂', ds.get('L2'), 'px', 4]], value: (s2.x - p.x) / ds.get('L2') }; },
+                uy: function () { var p = P(), s2 = S(1); return { formula: '(S₂ − P)<sub>y</sub> / L₂', inputs: [['S₂y − Py', s2.y - p.y, 'px', 4], ['L₂', ds.get('L2'), 'px', 4]], value: (s2.y - p.y) / ds.get('L2') }; },
+                ds: function () { var d = ds.get('d'), a = ds.get('alpha'), b = ds.get('b'); return { formula: 'δs = 2 b d tan α / (L₁ + L₂)', inputs: [['b', b, 'px', 0], ['d', d, 'px', 0], ['α', a, 'rad', 5], ['L₁', ds.get('L1'), 'px', 4], ['L₂', ds.get('L2'), 'px', 4]], value: 2 * b * d * Math.tan(a) / (ds.get('L1') + ds.get('L2')) }; },
+                ds_direct: function () { return { formula: 'L₂ − L₁', inputs: [['L₂', ds.get('L2'), 'px', 4], ['L₁', ds.get('L1'), 'px', 4]], value: ds.get('L2') - ds.get('L1') }; },
+                S2Q: function () { var s2 = S(1), q = S(4); return { formula: '|Q − S₂|', inputs: [['Q', q.x.toFixed(3) + ', ' + q.y.toFixed(3), 'px'], ['S₂', s2.x.toFixed(3) + ', ' + s2.y.toFixed(3), 'px']], value: Math.hypot(q.x - s2.x, q.y - s2.y) }; },
+                b_sin_a: function () { return { formula: 'b sin α', inputs: [['b', ds.get('b'), 'px', 0], ['α', ds.get('alpha'), 'rad', 5]], value: ds.get('b') * Math.sin(ds.get('alpha')) }; },
+                ds_err: function () { return { formula: 'δs − b sin α', inputs: [['δs', ds.get('ds'), 'px', 4], ['b sin α', ds.get('b_sin_a'), 'px', 4]], value: ds.get('ds') - ds.get('b_sin_a') }; },
+                ratio: function () { return { formula: 'δs / λ', inputs: [['δs', ds.get('ds'), 'px', 4], ['λ', ds.get('lambda'), 'px', 1]], value: ds.get('ds') / ds.get('lambda') }; },
+                frac: function () { return { formula: 'δs/λ − floor(δs/λ)', inputs: [['δs/λ', ds.get('ratio'), '', 4]], value: ds.get('ratio') - Math.floor(ds.get('ratio')) }; },
+                phi: function () { return { formula: '2π δs / λ', inputs: [['δs/λ', ds.get('ratio'), '', 4]], value: 2 * Math.PI * ds.get('ratio') }; },
+                I: function () { return { formula: 'cos²(Δφ / 2)', inputs: [['Δφ', ds.get('phi'), 'rad', 4]], value: Math.pow(Math.cos(ds.get('phi') / 2), 2) }; },
+                I_far_P: function () { return { formula: 'cos²(π b sin α / λ)', inputs: [['b sin α', ds.get('b_sin_a'), 'px', 4], ['λ', ds.get('lambda'), 'px', 1]], value: Math.pow(Math.cos(Math.PI * ds.get('b_sin_a') / ds.get('lambda')), 2) }; },
+                theta: function (i) { return { formula: 'θ = 30° · i / 300', inputs: [['i', i, '', 0]], value: 30 * i / 300 }; },
+                I_far: function (i) { var th = ds.get('theta')[i] * DEG; return { formula: 'cos²(π b sin θ / λ)', inputs: [['θ', th / DEG, '°', 2], ['b', ds.get('b'), 'px', 0], ['λ', ds.get('lambda'), 'px', 1]], value: Math.pow(Math.cos(Math.PI * ds.get('b') * Math.sin(th) / ds.get('lambda')), 2) }; },
+                I_exact: function (i) { var r = exactAt(ds.get('theta')[i] * DEG); r.formula = 'cos²(π δs(θ) / λ) with the exact δs at distance d'; return r; },
+                I_diff: function (i) { return { formula: 'I exact − I far', inputs: [['I exact', ds.get('I_exact')[i], '', 4], ['I far', ds.get('I_far')[i], '', 4]], value: ds.get('I_exact')[i] - ds.get('I_far')[i] }; },
+                m_sin: function (m) { return { formula: 'm λ / b', inputs: [['m', m, '', 0], ['λ', ds.get('lambda'), 'px', 1], ['b', ds.get('b'), 'px', 0]], value: m * ds.get('lambda') / ds.get('b') }; },
+                m_theta: function (m) { return { formula: 'asin(m λ / b)', inputs: [['sin θ<sub>m</sub>', ds.get('m_sin')[m], '', 4]], value: Math.asin(ds.get('m_sin')[m]) / DEG }; },
+                m_x: function (m) { return { formula: 'd tan θ<sub>m</sub>', inputs: [['d', ds.get('d'), 'px', 0], ['θ<sub>m</sub>', ds.get('m_theta')[m], '°', 2]], value: ds.get('d') * Math.tan(ds.get('m_theta')[m] * DEG) }; },
+                m_max: function () { return { formula: 'floor(b sin 30° / λ)', inputs: [['b', ds.get('b'), 'px', 0], ['λ', ds.get('lambda'), 'px', 1]], value: Math.floor(Math.sin(30 * DEG) * ds.get('b') / ds.get('lambda') + 1e-9) }; },
+                fringe_px: function () { return { formula: 'λ d / b', inputs: [['λ', ds.get('lambda'), 'px', 1], ['d', ds.get('d'), 'px', 0], ['b', ds.get('b'), 'px', 0]], value: ds.get('lambda') * ds.get('d') / ds.get('b') }; },
+                ring_r: function (q) { var ph = ds.get('phase'), lam = ds.get('lambda'), skip = ph * lam < 1 ? 1 : 0; return { formula: 'r = (phase + q + skip) λ, skip = 1 when phase · λ < 1', inputs: [['phase', ph, '', 4], ['q', q, '', 0], ['λ', lam, 'px', 1], ['skip', skip, '', 0]], value: (ph + q + skip) * lam }; },
+                ring_speed: function () { return { formula: '0.8 λ', inputs: [['λ', ds.get('lambda'), 'px', 1]], value: 0.8 * ds.get('lambda') }; }
+            },
+            drawn: {
+                sin_theta1: function () { return firstFringeReadback(true); },
+                theta1: function () { return firstFringeReadback(false); },
+                L1: function () { var actual = document.getElementById('r-l1').textContent, expected = ds.get('L1').toFixed(1) + ' px'; return { what: _t('the visible r-l1 readout'), drawn: actual, expected: expected, ok: actual === expected }; },
+                L2: function () { var actual = document.getElementById('r-l2').textContent, expected = ds.get('L2').toFixed(1) + ' px'; return { what: _t('the visible r-l2 readout'), drawn: actual, expected: expected, ok: actual === expected }; },
+                phi_pi: function () { var actual = document.getElementById('r-phi').textContent, expected = ds.get('phi_pi').toFixed(2) + ' π'; return { what: _t('the visible r-phi readout'), drawn: actual, expected: expected, ok: actual === expected }; },
+                pt_x: circleCheck, pt_y: circleCheck,
+                I: function () {
+                    var c = pattern.querySelector('circle[r="5.5"]'), cy = c ? +c.getAttribute('cy') : NaN, val = (142 - cy) / (142 - 24);
+                    return { what: _t('the dot on the intensity plot: its height read back as I/I₀'), drawn: isFinite(val) ? val.toFixed(4) + ' (cy = ' + cy + ')' : _t('no dot'), expected: ds.get('I').toFixed(4), ok: Math.abs(val - ds.get('I')) < 2e-3,
+                        note: _t('The dot is placed from the exact intensity at α; SVG coordinates carry two decimals, so the plot resolves I to about 1 part in 10 000.') };
+                },
+                ds: function () {
+                    var ok = false, bar = null;
+                    Array.prototype.forEach.call(gShapes.querySelectorAll('line'), function (l) { if (l.getAttribute('stroke-width') === '5' && l.getAttribute('stroke') !== T.ink) bar = l; });
+                    var len = bar ? Math.hypot(+bar.getAttribute('x2') - +bar.getAttribute('x1'), +bar.getAttribute('y2') - +bar.getAttribute('y1')) : NaN;
+                    ok = Math.abs(len - ds.get('ds')) < 0.03;
+                    return { what: _t('the burgundy bar S₂Q: its length in the SVG'), drawn: isFinite(len) ? len.toFixed(3) + ' px' : _t('no bar (δs ≤ 0.05 px)'), expected: ds.get('ds').toFixed(3) + ' px', ok: ok };
+                }
+            },
+            round: { time: 'wall', mode: 'change', label: function () { return _t('ten seconds of slider changes: move a slider while it records'); }, length: function () { return 10; },
+                columns: ['d', 'alpha_deg', 'b', 'lambda', 'L1', 'L2', 'ds', 'ratio', 'I'], point: function () { return { pt: 3 }; } },
+            about: _t('Here nothing is sampled on a grid: the figure is drawn as SVG shapes from the stored points, with coordinates written to two decimals. The intensity plot samples 301 directions; the pattern is drawn as a smooth line through them. The wavelets are decoration: their radii are stored, but they carry no physics beyond λ.')
+        };
+        update();
+    })();
+    </script>
+    <script src="../../scripts/datalog.js"></script>
+</body>
+</html>
+

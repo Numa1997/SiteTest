@@ -187,6 +187,10 @@
   "src": "Golovin test: numerical spectra against the exact solution.",
   "tr": "اختبار غولوفين: الأطياف العددية مقابل الحلّ الدقيق."
  },
+ "4fbd312c6706": {
+  "src": "An interactive study · English, German and Arabic · 2026",
+  "tr": "دراسة تفاعلية · بالإنجليزية والألمانية والعربية · 2026"
+ },
  "508340303282": {
   "src": "<b>Chaos does not help.</b> 2 of 54 scanned double pendula are chaotic; at matched forcing the regular orbit harvests about 0.379 W, the chaotic one about 0.24–0.25 W. The catch is force, not power: a fast rotor’s pivot sits in 18–215 g, beyond a ±8 g accelerometer.",
   "tr": "<b>الفوضى لا تساعد.</b> 2 من 54 نوّاسًا مزدوجًا مفحوصًا فوضويّان؛ وعند قسرٍ متطابق يحصد المدار المنتظم نحو 0.379 W والفوضوي نحو 0.24–0.25 W. والعقبة هي القوّة لا القدرة: محور الدوّار السريع يتعرّض لـ18–215 g، وهذا أبعد من مدى مقياس تسارع يقيس ±8 g."
@@ -626,6 +630,10 @@
  "f7e315e89890": {
   "src": "<b>Approach.</b> From 0.1 s the position law moves the ram up along a smooth path, the spool opening to 94 % on the way; at 1.1 s it slows to a 10 mm/s creep for the last 2 mm.",
   "tr": "<b>الاقتراب.</b> من 0.1 s يحرّك قانونُ الموضع المِدكَّ إلى الأعلى على مسار ناعم، ويُفتح المِزلاج في الطريق حتى 94 %؛ وعند 1.1 s يبطئ إلى زحفٍ بسرعة 10 mm/s في آخر 2 mm."
+ },
+ "f81819b58fe6": {
+  "src": "Research projects by Numa Koudsie, each with its derivations, solver and results: Droplet Collection, the remodel of a Bachelor thesis on how cloud droplets become rain; Rotor Pendula, a corrected study of whether a pendulum on a turbine blade can power a sensor; the Hydraulic Press Study, a servo-hydraulic press under digital control, built from first principles; and Iron, Cotton and the Head, why an iron ball hurts and a cotton ball of the same mass does not, in English, German and Arabic.",
+  "tr": "مشاريع بحثية لـنعمة سائر قدسية، لكلٍّ منها اشتقاقاته وحلّاله ونتائجه: Droplet Collection، إعادة نمذجة رسالة بكالوريوس عن تحوّل قُطيرات الغيمة إلى مطر؛ وRotor Pendula، دراسة مصحَّحة عن قدرة نوّاس على شفرة عنفة على تغذية حسّاس؛ ودراسة المكبس الهيدروليكي، مكبس هيدروليكي مؤازَر بتحكّم رقمي، مبنيّ من المبادئ الأولى؛ والحديد والقطن والرأس، لماذا تؤلم كرة الحديد ولا تؤلم كرة القطن ذات الكتلة نفسها، بالإنجليزية والألمانية والعربية."
  },
  "f94fb36e0cb1": {
   "src": "An interactive study · English and Arabic · 2026",

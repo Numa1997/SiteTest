@@ -1,0 +1,490 @@
+{
+ "01c0f20dc3dc": {
+  "src": "The swing has a rhythm of its own, and your hand is a second rhythm that the swing does not control. Everything interesting about driven systems comes from the meeting of these two rhythms. A washing machine shakes hardest for a few seconds while its drum speeds up through one particular rate of turning. A loudspeaker cone follows the music only because it was designed so that its own rhythm lies far from the notes it plays. London’s Millennium Bridge swayed on its opening day in 2000 because thousands of footsteps fed its sideways motion.",
+  "tr": "للأرجوحة إيقاع خاصّ بها، ويدك إيقاع ثانٍ لا تتحكّم فيه الأرجوحة. وكل ما هو مثير في الأنظمة المقسورة يأتي من التقاء هذين الإيقاعين. تهتزّ الغسّالة بأشدّ ما يكون لبضع ثوانٍ بينما تتسارع أسطوانتها مارّةً بسرعة دوران معيّنة. ولا يتبع مخروط مكبّر الصوت الموسيقى إلّا لأنه صُمّم بحيث يقع إيقاعه الخاصّ بعيدًا عن النغمات التي يُصدرها. وتأرجح جسر الألفية في لندن يوم افتتاحه عام 2000 لأن آلاف الخطوات غذّت حركته الجانبية."
+ },
+ "0247f71c6533": {
+  "src": "<span class=\"sw sw--ink\"></span>x(t), played",
+  "tr": "<span class=\"sw sw--ink\"></span>x(t)، معروضة"
+ },
+ "09c5fee32110": {
+  "src": "<span class=\"psec__n\">10</span>What the model leaves out",
+  "tr": "<span class=\"psec__n\">10</span>ما يغفله النموذج"
+ },
+ "0a035b3f30d1": {
+  "src": "Three forces act along the floor. The spring pulls back in proportion to the stretch, \\(-kx\\) (Hooke’s law). The damper, a piston in oil, resists in proportion to the speed, \\(-c\\dot x\\). The driver pushes with \\(F(t)\\). Newton’s second law adds them:",
+  "tr": "تؤثّر ثلاث قوى على طول الأرضية. يسحب النابض إلى الخلف بتناسب مع الاستطالة، \\(-kx\\) (قانون هوك). ويقاوم المخمّد، وهو مكبس في زيت، بتناسب مع السرعة، \\(-c\\dot x\\). ويدفع المحرّك بالقوّة \\(F(t)\\). ويجمعها قانون نيوتن الثاني:"
+ },
+ "0a77f2efcae6": {
+  "src": "Formula (4) contains the whole of Figure 2. Drive slowly, \\(\\Omega \\ll \\omega_0\\), and the block simply follows the force, stretched by the static amount \\(F_0/k\\). Drive fast, \\(\\Omega \\gg \\omega_0\\), and the block hardly moves: its inertia wins. In between, near \\(\\Omega = \\omega_0\\), the spring term and the inertia term in (3) cancel, only the small damping term is left to limit the motion, and the amplitude soars. This is <em>resonance</em>.",
+  "tr": "تحتوي المعادلة (4) على الشكل 2 كلّه. إذا كان تردد القوّة الدافعة منخفضًا، \\(\\Omega \\ll \\omega_0\\)، تتبع الكتلة القوّة ببساطة، وتنزاح بمقدار الاستطالة الساكنة \\(F_0/k\\). وإذا كان تردد القوّة الدافعة مرتفعًا، \\(\\Omega \\gg \\omega_0\\)، تكاد الكتلة لا تتحرّك: فالقصور الذاتي يغلب. وفيما بين ذلك، قرب \\(\\Omega = \\omega_0\\)، يلغي حدّ النابض وحدّ القصور الذاتي في (3) بعضهما، ولا يبقى إلّا حدّ التخامد الصغير ليحدّ الحركة، فترتفع السعة ارتفاعًا كبيرًا. هذا هو <em>الرنين</em>."
+ },
+ "0b38bea50d13": {
+  "src": "R. P. Feynman, R. B. Leighton and M. Sands, <em>The Feynman Lectures on Physics</em>, Vol. I, online edition: <a href=\"https://www.feynmanlectures.caltech.edu/I_23.html\">chapter 23, Resonance</a> (the complex-number method of Section 3.1) and <a href=\"https://www.feynmanlectures.caltech.edu/I_24.html\">chapter 24, Transients</a> (the mean power of Section 7 and the dying free motion of Section 3.2).",
+  "tr": "R. P. Feynman، R. B. Leighton وM. Sands، <em>The Feynman Lectures on Physics</em>، المجلّد I، النسخة الإلكترونية: <a href=\"https://www.feynmanlectures.caltech.edu/I_23.html\">الفصل 23، Resonance</a> (طريقة الأعداد المركّبة في القسم 3.1)، و<a href=\"https://www.feynmanlectures.caltech.edu/I_24.html\">الفصل 24، Transients</a> (متوسّط القدرة في القسم 7، والحركة الحرّة المتلاشية في القسم 3.2)."
+ },
+ "0b66e7e06b1d": {
+  "src": "Driven oscillations: how a system answers a push it does not control",
+  "tr": "الاهتزازات القسرية: كيف يستجيب النظام لدفعة لا يتحكّم فيها"
+ },
+ "0c31f7c8f547": {
+  "src": "The amplitude is largest where this is smallest, where the bracket vanishes: \\(\\Omega_r = \\omega_0\\sqrt{1-2\\zeta^2}\\), that is \\(f_r = 0.4987\\ \\mathrm{Hz}\\) for the defaults. For \\(\\zeta \\ge 1/\\sqrt2\\) the bracket cannot vanish for any drive; the denominator is then smallest at \\(\\Omega = 0\\), the amplitude only falls as the drive speeds up, and there is no peak at all.",
+  "tr": "تكون السعة أكبر ما تكون حيث يكون هذا المقدار أصغر، أي حيث ينعدم القوس: \\(\\Omega_r = \\omega_0\\sqrt{1-2\\zeta^2}\\)، أي \\(f_r = 0.4987\\ \\mathrm{Hz}\\) بالقيم الافتراضية. أمّا عند \\(\\zeta \\ge 1/\\sqrt2\\) فلا يمكن للقوس أن ينعدم عند أيّ تردد دافع؛ فيكون المقام أصغر ما يكون عند \\(\\Omega = 0\\)، وتتناقص السعة باستمرار كلّما ازداد تردد القوّة الدافعة، ولا توجد قمّة البتّة."
+ },
+ "0f6afc311439": {
+  "src": "Lecture note · Fig. 9 · control systems",
+  "tr": "مذكّرة المحاضرة · الشكل 9 · أنظمة التحكّم"
+ },
+ "0f6b2fae480b": {
+  "src": "Notice what sets this equation apart from the double pendulum of Fig. 2: the time \\(t\\) appears on its own, inside \\(\\cos\\Omega t\\). The future depends not only on where the block is, but also on the clock, because the clock belongs to someone else.",
+  "tr": "لاحظ ما يميّز هذه المعادلة عن النوّاس المزدوج في الشكل 2: الزمن \\(t\\) يظهر صراحةً داخل \\(\\cos\\Omega t\\). فالمستقبل لا يتوقّف على موضع الكتلة وحده، بل على الساعة أيضًا، لأن الساعة ملك لغيرنا."
+ },
+ "11fff8b85b1f": {
+  "src": "<span>3</span>The exact solution&nbsp;★",
+  "tr": "<span>3</span>الحلّ الدقيق&nbsp;★"
+ },
+ "1416004c7fbb": {
+  "src": "<b>Abstract.</b> Almost every machine is pushed by something outside it: a car body by the road, a building by the wind, a loudspeaker cone by the amplifier. This note studies the simplest such system, a mass on a spring with a damper, driven by a force \\(F_0\\cos\\Omega t\\) that someone else decides. We write down its equation of motion, solve it exactly, and use the exact answer to grade the numerical solution the page stores. Along the way we meet resonance, phase lag and the quality factor, and we translate everything into the language of control engineering: input, output, transfer function and Bode plot. Sections marked ★ carry the heavier mathematics and can be skipped on a first reading.",
+  "tr": "<b>الملخّص.</b> ما من آلة تقريبًا إلّا وتُدفع من الخارج: هيكل السيّارة بالطريق، والمبنى بالرياح، ومخروط مكبّر الصوت بالمضخّم. تدرس هذه المذكّرة أبسط نظام من هذا النوع، كتلة على نابض مع مخمّد، تؤثّر فيها قوّة \\(F_0\\cos\\Omega t\\) يقرّرها شخص آخر. نكتب معادلة حركته، ونحلّها حلًّا دقيقًا، ونستخدم الحلّ الدقيق لتقييم الحلّ العددي الذي تخزّنه الصفحة. وفي الطريق نلتقي بالرنين وتأخّر الطور ومعامل الجودة، ونترجم كل ذلك إلى لغة هندسة التحكّم: الدخل والخرج ودالّة التحويل ومخطّط بودي. تحمل الأقسام المعلّمة بـ ★ الرياضيات الأثقل، ويمكن تخطّيها في القراءة الأولى."
+ },
+ "14a2f9ce51c5": {
+  "src": "Numa Koudsie · for school students and first- and second-year undergraduates",
+  "tr": "نعمة سائر قدسية · لطلبة المدارس وطلبة السنتين الأولى والثانية في الجامعة"
+ },
+ "1a1b7209c5ef": {
+  "src": "<span class=\"psub__n\">10.1</span>Further reading",
+  "tr": "<span class=\"psub__n\">10.1</span>مراجع للاستزادة"
+ },
+ "1a85c7c3e0d4": {
+  "src": "It is tidier to describe the plant by two numbers with a direct meaning. The <em>natural frequency</em> \\(\\omega_0 = \\sqrt{k/m}\\) is the angular frequency at which the block would ring with no damper; the <em>damping ratio</em> \\(\\zeta = c/(2\\sqrt{km})\\) says how quickly the ringing dies, from \\(\\zeta = 0\\) (forever) to \\(\\zeta = 1\\) (no ringing at all). Dividing (1) by \\(m\\),",
+  "tr": "من الأوضح وصف المنظومة بعددين لهما معنى مباشر. <em>التردد الطبيعي</em> \\(\\omega_0 = \\sqrt{k/m}\\) هو التردد الزاوي الذي كانت الكتلة ستهتزّ به بلا مخمّد؛ و<em>نسبة التخامد</em> \\(\\zeta = c/(2\\sqrt{km})\\) تبيّن سرعة اضمحلال الاهتزاز، من \\(\\zeta = 0\\) (لا يضمحلّ أبدًا) إلى \\(\\zeta = 1\\) (لا اهتزاز البتّة). بقسمة (1) على \\(m\\)،"
+ },
+ "21a29dad7f0c": {
+  "src": "Lower the damping ratio to 0.01 and press <em>Solve</em>. The beats now last for the whole minute. Count the time between two swells and compare with \\(1/|f - f_0|\\). Then set \\(f = 0.20\\ \\mathrm{Hz}\\), far from resonance. There are no slow beats now, but the block’s own ringing rides on the slow drive; use \\(C_1\\) in equation (5) to explain why it starts as large as the steady motion. (The force switches on at full strength at \\(t = 0\\).)",
+  "tr": "خفّض نسبة التخامد إلى 0.01 واضغط <em>احسب</em>. تدوم الضربات الآن الدقيقة كلّها. قِس الزمن بين قمّتين متتاليتين وقارنه بـ\\(1/|f - f_0|\\). ثم اضبط \\(f = 0.20\\ \\mathrm{Hz}\\)، بعيدًا عن الرنين. لا توجد الآن ضربات بطيئة، لكن الاهتزاز الخاصّ بالكتلة يركب على الحركة البطيئة التي تفرضها القوّة الدافعة؛ استخدم \\(C_1\\) في المعادلة (5) لتفسّر لماذا يبدأ بسعة تساوي سعة الحركة المستقرّة. (تُشغَّل القوّة بكامل شدّتها عند \\(t = 0\\).)"
+ },
+ "235fe4e6ecc4": {
+  "src": "<span>7</span>Where the energy goes",
+  "tr": "<span>7</span>أين تذهب الطاقة"
+ },
+ "2a3f36511b2c": {
+  "src": "<span class=\"pfig__n\">Figure 3</span>The same system as a block diagram. There is no arrow back from \\(x\\) to \\(F\\): the driver acts without looking. Adding such an arrow is what turns a driven system into a controlled one.",
+  "tr": "<span class=\"pfig__n\">الشكل 3</span>المنظومة نفسها في صورة مخطّط كتلي. لا يوجد سهم عائد من \\(x\\) إلى \\(F\\): فالمحرّك يؤثّر دون أن ينظر. وإضافة هذا السهم هي ما يحوّل المنظومة المقسورة إلى منظومة مُتحكَّم بها."
+ },
+ "2b3c0b5a6cf4": {
+  "src": "Drive frequency f",
+  "tr": "تردد القوّة الدافعة f"
+ },
+ "2e4144e0b2f8": {
+  "src": "Measured, last 10 s",
+  "tr": "مقيسة، آخر 10 s"
+ },
+ "3062d1a59b99": {
+  "src": "The zeros of the denominator, the <em>poles</em> \\(s = -\\zeta\\omega_0 \\pm i\\omega_d\\), are the plant’s own rhythm in disguise: their real part is the decay rate with a minus sign, \\(-1/\\tau\\), their imaginary part the ringing frequency \\(\\omega_d\\). Both lie in the left half of the complex plane, which is what makes the plant <em>stable</em>: left alone, it returns to rest.",
+  "tr": "أصفار المقام، أي <em>الأقطاب</em> \\(s = -\\zeta\\omega_0 \\pm i\\omega_d\\)، هي إيقاع المنظومة الخاصّ متنكّرًا: جزؤها الحقيقي هو معدّل الاضمحلال بإشارة سالبة، \\(-1/\\tau\\)، وجزؤها التخيّلي هو تردد الاهتزاز \\(\\omega_d\\). ويقع الاثنان في النصف الأيسر من المستوى المركّب، وهذا ما يجعل المنظومة <em>مستقرّة</em>: إن تُركت وحدها عادت إلى السكون."
+ },
+ "315593132908": {
+  "src": "The block rests near the middle of the canvas, and every run is drawn at its own scale: its largest swing always spans about a fifth of the width, whatever the amplitude in metres. The ruler under the block gives the metres, so to compare two runs read the ruler, not the size of the swing. The burgundy arrow on the block has a length proportional to \\(F/F_0\\). The dial at the top right is the driver: its arm turns at \\(\\Omega\\), and its horizontal shadow is proportional to the force. Below, a window of the stored run follows the present sample: \\(x(t)\\) dark up to it and pale after it, \\(F(t)/k\\) dashed in burgundy and the steady amplitude \\(\\pm X\\) dashed in rose. The window spans four drive periods, but never less than 6 s or more than 20 s (8.9 s with the defaults). Under it, a thin strip shows the whole 60 s, with the window shaded. The Bode plot marks the present drive frequency with a filled dot (equation (4)) and the amplitude measured from the last 10 s of the run with a ring around it: when the run has settled, the two coincide.",
+  "tr": "تستقرّ الكتلة قرب وسط اللوحة، ويُرسم كل حلّ بمقياسه الخاصّ: يمتدّ أكبر تأرجح له دائمًا نحو خُمس العرض تقريبًا، أيًّا كانت السعة بالأمتار. والمسطرة تحت الكتلة تعطي الأمتار، فلمقارنة حلّين اقرأ المسطرة لا حجم التأرجح. ويتناسب طول السهم العنّابي على الكتلة مع \\(F/F_0\\). والقرص الدوّار أعلى اليمين هو المحرّك: يدور ذراعه بـ\\(\\Omega\\)، وظلّه الأفقي يتناسب مع القوّة. وفي الأسفل تتابع نافذة من الحلّ المخزَّن العيّنة الحالية: \\(x(t)\\) داكنًا حتى نقطتها وباهتًا بعدها، و\\(F(t)/k\\) متقطّعًا بالعنّابي، والسعة المستقرّة \\(\\pm X\\) متقطّعة بالوردي. وتمتدّ النافذة على أربعة أدوار للقوّة الدافعة، لكن لا تقلّ عن 6 s ولا تزيد على 20 s (8.9 s بالقيم الافتراضية). وتحتها شريط رفيع يعرض الحلّ كلّه الممتدّ على 60 s، والنافذة مظلّلة فيه. ويعلّم مخطّط بودي تردد القوّة الدافعة الحالي بنقطة ممتلئة (المعادلة (4))، والسعة المقاسة من آخر 10 s من الحلّ بحلقة حولها: وعندما يستقرّ الحلّ تتطابق النقطة مع الحلقة."
+ },
+ "33bd5a5dddcd": {
+  "src": "© 2026 Numa Koudsie",
+  "tr": "© 2026 نعمة سائر قدسية"
+ },
+ "35589f3beb32": {
+  "src": "Steady amplitude X",
+  "tr": "السعة المستقرّة X"
+ },
+ "378e627eaeab": {
+  "src": "Engineers compress everything above into one function. Take the Laplace transform of (1) with the block starting at rest: each time derivative becomes a factor \\(s\\), and the output is the input multiplied by the <em>transfer function</em> \\(G(s)\\). Here \\(X(s)\\) and \\(F(s)\\) are the transforms of \\(x(t)\\) and \\(F(t)\\), not the amplitude \\(X\\) of (4):",
+  "tr": "يختصر المهندسون كل ما سبق في دالّة واحدة. نأخذ تحويل لابلاس للمعادلة (1) والكتلة ساكنة عند البداية: يصبح كل مشتقّ زمني عاملًا \\(s\\)، ويكون الخرج هو الدخل مضروبًا في <em>دالّة التحويل</em> \\(G(s)\\). وهنا \\(X(s)\\) و\\(F(s)\\) هما تحويلا \\(x(t)\\) و\\(F(t)\\)، لا السعة \\(X\\) في (4):"
+ },
+ "381456db687d": {
+  "src": "Real springs obey Hooke’s law only for small stretches; at large amplitude the restoring force stops being proportional to \\(x\\), and the resonance peak bends and can jump.",
+  "tr": "لا تطيع النوابض الحقيقية قانون هوك إلّا عند الاستطالات الصغيرة؛ فعند السعة الكبيرة تكفّ قوّة الاسترجاع عن أن تكون متناسبة مع \\(x\\)، فتنحني قمّة الرنين وقد تقفز."
+ },
+ "3d4ea8e5e317": {
+  "src": "A. P. French, <a href=\"https://www.routledge.com/Vibrations-and-Waves/French/p/book/9780748744473\"><em>Vibrations and Waves</em></a>, W. W. Norton, 1971 (now CRC Press): chapter 4, forced vibrations and resonance.",
+  "tr": "A. P. French، <a href=\"https://www.routledge.com/Vibrations-and-Waves/French/p/book/9780748744473\"><em>Vibrations and Waves</em></a>، W. W. Norton، 1971 (صار الناشر اليوم CRC Press): الفصل 4، الاهتزازات القسرية والرنين."
+ },
+ "3d6a01b092c6": {
+  "src": "2 store",
+  "tr": "2 خزّن"
+ },
+ "403ffd60686b": {
+  "src": "Quality factor Q",
+  "tr": "معامل الجودة Q"
+ },
+ "472f64a46f7e": {
+  "src": "<span class=\"sw sw--dash\" style=\"border-top-color: var(--accent-rose);\"></span>±X steady",
+  "tr": "<span class=\"sw sw--dash\" style=\"border-top-color: var(--accent-rose);\"></span>±X مستقرّة"
+ },
+ "4cad8cc0bd88": {
+  "src": "When you move a slider after solving, the page says so and keeps playing the old run until you solve again: the data on screen always belong to the settings named in the status line.",
+  "tr": "عند تحريك منزلق بعد الحساب، تُنبّه الصفحة إلى ذلك وتواصل عرض الحلّ القديم حتى تحسب من جديد: فالبيانات المعروضة تنتمي دائمًا إلى الإعدادات المذكورة في شريط الحالة."
+ },
+ "4d04e391631c": {
+  "src": "Unlike the earlier figures, this page does not integrate while you watch. Because the driver’s force is known for all time in advance, the whole future is fixed the moment you press <em>Solve</em>. The page uses that.",
+  "tr": "على خلاف الأشكال السابقة، لا تحسب هذه الصفحة أثناء مشاهدتك. ولأن قوّة المحرّك معروفة مقدّمًا لكل الأزمنة، يتحدّد المستقبل كلّه لحظة ضغطك على <em>احسب</em>. وتستفيد الصفحة من ذلك."
+ },
+ "4d54920cbdcb": {
+  "src": "<span>9</span>On screen",
+  "tr": "<span>9</span>على الشاشة"
+ },
+ "501a9cf85f0d": {
+  "src": "The driver is ideal: it delivers \\(F_0\\cos\\Omega t\\) whatever the block does. A real motor slows down when the load is heavy, and at resonance the load is heaviest.",
+  "tr": "المحرّك هنا مثالي: يوفّر \\(F_0\\cos\\Omega t\\) مهما فعلت الكتلة. أمّا المحرّك الحقيقي فيتباطأ حين يثقل الحمل، وعند الرنين يكون الحمل أثقل ما يكون."
+ },
+ "54f4ded56c4f": {
+  "src": "<span class=\"psec__n\">03</span>The exact solution<span class=\"star\" title=\"heavier mathematics\">★</span>",
+  "tr": "<span class=\"psec__n\">03</span>الحلّ الدقيق<span class=\"star\" title=\"heavier mathematics\">★</span>"
+ },
+ "55a1af08a9cb": {
+  "src": "A block on a spring and a damper, pushed by the force F(t); below, the stored displacement x(t) of the whole run with a cursor at the frame being shown.",
+  "tr": "كتلة على نابض ومخمّد، يدفعها المحرّك بالقوّة F(t)؛ وتحتها الإزاحة المخزّنة x(t) للحلّ كلّه، مع مؤشّر عند الإطار المعروض."
+ },
+ "55f8b1caf4a6": {
+  "src": "For the free equation, try \\(x = e^{st}\\). Each derivative brings down a factor \\(s\\), so \\(s^2 + 2\\zeta\\omega_0 s + \\omega_0^2 = 0\\), and \\(s = -\\zeta\\omega_0 \\pm i\\,\\omega_0\\sqrt{1-\\zeta^2}\\). The real part makes the motion die away with the time constant \\(\\tau = 1/(\\zeta\\omega_0)\\); the imaginary part makes it ring at the damped frequency \\(\\omega_d = \\omega_0\\sqrt{1-\\zeta^2}\\). At \\(\\zeta = 1\\) the imaginary part reaches zero and there is nothing left to ring: the damping ratio measures the damper against the one, \\(c = 2\\sqrt{km}\\), that just stops the ringing. Adding such a ringing, \\(e^{-t/\\tau}(C_1\\cos\\omega_d t + C_2\\sin\\omega_d t),\\) to the steady state and demanding \\(x(0) = \\dot x(0) = 0\\) fixes its two constants: at \\(t = 0\\) the two conditions read \\(X\\cos\\varphi + C_1 = 0\\) and \\(X\\Omega\\sin\\varphi - \\zeta\\omega_0 C_1 + \\omega_d C_2 = 0\\), so",
+  "tr": "للمعادلة الحرّة نجرّب \\(x = e^{st}\\). يُخرج كل مشتقّ عاملًا \\(s\\)، فتصبح \\(s^2 + 2\\zeta\\omega_0 s + \\omega_0^2 = 0\\)، و\\(s = -\\zeta\\omega_0 \\pm i\\,\\omega_0\\sqrt{1-\\zeta^2}\\). يجعل الجزء الحقيقي الحركة تتلاشى بثابت الزمن \\(\\tau = 1/(\\zeta\\omega_0)\\)، ويجعل الجزء التخيّلي الحركة تهتزّ بالتردد المتخامد \\(\\omega_d = \\omega_0\\sqrt{1-\\zeta^2}\\). وعند \\(\\zeta = 1\\) يصل الجزء التخيّلي إلى الصفر ولا يبقى ما يهتزّ: فنسبة التخامد تقيس المخمّد مقارنةً بالقيمة \\(c = 2\\sqrt{km}\\) التي تكفي بالكاد لإيقاف الاهتزاز. وبإضافة مثل هذا الاهتزاز، \\(e^{-t/\\tau}(C_1\\cos\\omega_d t + C_2\\sin\\omega_d t),\\) إلى الحالة المستقرّة، وفرض \\(x(0) = \\dot x(0) = 0\\)، يتعيّن ثابتاه: عند \\(t = 0\\) يصبح الشرطان \\(X\\cos\\varphi + C_1 = 0\\) و\\(X\\Omega\\sin\\varphi - \\zeta\\omega_0 C_1 + \\omega_d C_2 = 0\\)، لذلك"
+ },
+ "58670d9bddef": {
+  "src": "<strong>Store.</strong> Every tenth state is written into the page’s dataset, together with \\(F\\), \\(E\\), \\(P_\\text{in}\\) and \\(P_\\text{loss}\\): 6 001 rows, one every \\(10\\ \\mathrm{ms}\\). The exact solution (5) is stored next to it only to measure the error. With the defaults the largest difference over the run is \\(5\\times10^{-12}\\ \\mathrm{m}\\), the <em>RK4 vs exact</em> readout.",
+  "tr": "<strong>خزّن.</strong> تُكتب كل حالة عاشرة في مجموعة بيانات الصفحة مع \\(F\\) و\\(E\\) و\\(P_\\text{in}\\) و\\(P_\\text{loss}\\): 6 001 صفّ، صفّ كل \\(10\\ \\mathrm{ms}\\). ويُخزَّن الحلّ الدقيق (5) بجانبها فقط لقياس الخطأ. وبالقيم الافتراضية يكون أكبر فرق على مدى الحلّ \\(5\\times10^{-12}\\ \\mathrm{m}\\)، وهي قراءة <em>RK4 مقابل الحلّ الدقيق</em>."
+ },
+ "597813219795": {
+  "src": "Driver · F(t) = F₀ cos Ωt",
+  "tr": "المُحرِّك · F(t) = F₀ cos Ωt"
+ },
+ "59b1022ea272": {
+  "src": "Guess that, once things settle, the block moves at the driver’s own frequency. Complex numbers make the guess painless: write the driving term \\(F_0\\cos\\Omega t/m\\) as the real part of \\(\\tfrac{F_0}{m}e^{i\\Omega t}\\) and try \\(x = \\operatorname{Re}\\,Z e^{i\\Omega t}\\). Each time derivative becomes a factor \\(i\\Omega\\), and (2) turns into algebra:",
+  "tr": "نخمّن أنّه بعد أن تهدأ الأمور تتحرّك الكتلة بتردد المحرّك نفسه. تجعل الأعداد المركّبة التخمين سهلًا: نكتب حدّ القوّة \\(F_0\\cos\\Omega t/m\\) على أنه الجزء الحقيقي من \\(\\tfrac{F_0}{m}e^{i\\Omega t}\\)، ونجرّب \\(x = \\operatorname{Re}\\,Z e^{i\\Omega t}\\). يصبح كل مشتقّ زمني عاملًا \\(i\\Omega\\)، فتتحوّل (2) إلى جبر:"
+ },
+ "5d066b95c4cc": {
+  "src": "Force amplitude F₀",
+  "tr": "سعة القوّة F₀"
+ },
+ "60f8686f6f6b": {
+  "src": "<span>5</span>The control engineer’s view&nbsp;★",
+  "tr": "<span>5</span>نظرة مهندس التحكّم&nbsp;★"
+ },
+ "6205c61dd83c": {
+  "src": "Exercise 6.1 · on the figure above",
+  "tr": "تمرين 6.1 · على الشكل أعلاه"
+ },
+ "62e63a3f846a": {
+  "src": "Phase lag φ",
+  "tr": "تأخّر الطور φ"
+ },
+ "67b7724f11a3": {
+  "src": "Solve",
+  "tr": "احسب"
+ },
+ "6ad54d990f07": {
+  "src": "<span class=\"psub__n\">3.2</span>The transient",
+  "tr": "<span class=\"psub__n\">3.2</span>الحالة العابرة"
+ },
+ "6c36792e21d4": {
+  "src": "<b>Fig. 9</b> · <span class=\"tx\">\\(m\\ddot x + c\\dot x + kx = F_0 \\cos \\Omega t\\)</span> · played from the stored run",
+  "tr": "<b>الشكل 9</b> · <span class=\"tx\">\\(m\\ddot x + c\\dot x + kx = F_0 \\cos \\Omega t\\)</span> · يُعرض من الحلّ المخزَّن"
+ },
+ "6cb24c4f4af5": {
+  "src": "Bode plot: steady-state amplitude per newton and phase lag against the drive frequency, with the present drive marked.",
+  "tr": "مخطّط بودي: السعة المستقرّة لكل نيوتن وتأخّر الطور بدلالة تردد القوّة الدافعة، مع تعليم تردد القوّة الدافعة الحالي."
+ },
+ "6d07cfbe6339": {
+  "src": "<span class=\"psub__n\">3.1</span>The steady state",
+  "tr": "<span class=\"psub__n\">3.1</span>الحالة المستقرّة"
+ },
+ "6fecf821e85b": {
+  "src": "so the <em>quality factor</em> \\(Q\\) is the amplification at resonance. The default \\(\\zeta = 0.05\\) gives \\(Q = 10\\): a force that would stretch the spring by \\(0.101\\ \\mathrm{m}\\) if applied slowly moves the block \\(1.01\\ \\mathrm{m}\\) at resonance. The true maximum sits slightly below \\(\\omega_0\\). To find it, look at the square of the denominator of (4) as a function of \\(\\Omega^2\\) and complete the square:",
+  "tr": "إذن <em>معامل الجودة</em> \\(Q\\) هو مقدار التضخيم عند الرنين. والقيمة الافتراضية \\(\\zeta = 0.05\\) تعطي \\(Q = 10\\): قوّة تمدّ النابض بمقدار \\(0.101\\ \\mathrm{m}\\) لو طُبّقت ببطء، تحرّك الكتلة \\(1.01\\ \\mathrm{m}\\) عند الرنين. وتقع القيمة العظمى الحقيقية قليلًا تحت \\(\\omega_0\\). ولإيجاده ننظر إلى مربّع مقام (4) بوصفه دالّة في \\(\\Omega^2\\)، ونكمل المربّع:"
+ },
+ "6ff42b75c926": {
+  "src": "Playback speed",
+  "tr": "سرعة التشغيل"
+ },
+ "702b201c4b40": {
+  "src": "Phyein Usul",
+  "tr": "Phyein Usul"
+ },
+ "727a32c83ddc": {
+  "src": "<span class=\"psec__n\">04</span>Resonance and phase",
+  "tr": "<span class=\"psec__n\">04</span>الرنين والطور"
+ },
+ "72d7cc865810": {
+  "src": "Position in the stored run",
+  "tr": "الموضع في الحلّ المخزَّن"
+ },
+ "7310093c6c9e": {
+  "src": "<span>6</span>The start: beats and decay",
+  "tr": "<span>6</span>البداية: الضربات والاضمحلال"
+ },
+ "781961bc81c2": {
+  "src": "Pause",
+  "tr": "إيقاف مؤقّت"
+ },
+ "7d252cd594b3": {
+  "src": "All simulations ↑",
+  "tr": "جميع المحاكاة ↑"
+ },
+ "7d6d5a1d6837": {
+  "src": "Damping ratio ζ",
+  "tr": "نسبة التخامد ζ"
+ },
+ "7de9c134306d": {
+  "src": "J. R. Taylor, <a href=\"https://books.google.com/books/about/Classical_Mechanics.html?id=P1kCtNr-pJsC\"><em>Classical Mechanics</em></a>, University Science Books, 2005: chapter 5, oscillations, driven damped oscillators and resonance.",
+  "tr": "J. R. Taylor، <a href=\"https://books.google.com/books/about/Classical_Mechanics.html?id=P1kCtNr-pJsC\"><em>Classical Mechanics</em></a>، University Science Books، 2005: الفصل 5، الاهتزازات، والمهتزّات القسرية المتخامدة، والرنين."
+ },
+ "7e0d3d8ade7f": {
+  "src": "Driven Oscillator<span class=\"dot\">.</span>",
+  "tr": "المهتزّ القسري<span class=\"dot\">.</span>"
+ },
+ "7f309319b7a8": {
+  "src": "Driven Oscillator · Numa Koudsie",
+  "tr": "المهتزّ القسري · نعمة سائر قدسية"
+ },
+ "80b744952bb3": {
+  "src": "The page covers the underdamped range \\(\\zeta \\le 0.9\\) only, where the exact solution (5) applies; \\(\\zeta \\ge 1\\) needs a different form of the transient.",
+  "tr": "تغطّي الصفحة مجال التخامد دون الحرج \\(\\zeta \\le 0.9\\) فقط، حيث ينطبق الحلّ الدقيق (5)؛ أمّا \\(\\zeta \\ge 1\\) فتحتاج صيغة أخرى للحالة العابرة."
+ },
+ "810130d126d9": {
+  "src": "In the first two cases a system with its own natural frequency is driven by a force that depends on time and on nothing else: the driver does not care where the system is. That is the idealisation of this page. The bridge shows its limit: the walkers adjusted their steps to the sway, so the force depended on the very motion it was driving, a feedback loop that needs a larger model. In control engineering this force is the <em>input</em>, the motion is the <em>output</em>, and the system in between is the <em>plant</em>. Our plant is the simplest one with a rhythm of its own (Figure 1).",
+  "tr": "في الحالتين الأوليين يُقسَر نظام له تردده الطبيعي بقوّة تعتمد على الزمن وحده لا على شيء آخر: فالمحرّك لا يهتمّ أين يقع النظام. هذا هو التبسيط المثالي لهذه الصفحة. ويُظهر الجسر حدود هذا التبسيط: فقد عدّل المشاة خطواتهم وفق التأرجح، فصارت القوّة تعتمد على الحركة نفسها التي تقودها، وهي حلقة تغذية راجعة تحتاج إلى نموذج أكبر. في هندسة التحكّم تُسمّى هذه القوّة <em>الدخل</em>، وتُسمّى الحركة <em>الخرج</em>، والنظام الذي بينهما <em>المنظومة</em>. ومنظومتنا هي أبسط منظومة لها إيقاع خاصّ بها (الشكل 1)."
+ },
+ "85619c9a9990": {
+  "src": "Equation (2) is linear, so its solutions add. The general solution is one particular solution that keeps pace with the driver plus any solution of the free equation (right-hand side zero), chosen to satisfy the starting conditions.",
+  "tr": "المعادلة (2) خطّية، لذلك يمكن جمع حلولها. الحلّ العامّ هو حلّ خاصّ يواكب المحرّك، مضافًا إليه أيّ حلّ للمعادلة الحرّة (الطرف الأيمن صفر)، يُختار بحيث يحقّق الشروط الابتدائية."
+ },
+ "85680cfd7ada": {
+  "src": "<span class=\"pfig__n\">Figure 2</span>Steady amplitude, in units of the static stretch \\(F_0/k\\), and phase lag against the drive frequency, from equation (4) for four damping ratios. The lighter the damping, the taller and narrower the peak, and the more sudden the jump of the phase from \\(0^\\circ\\) to \\(180^\\circ\\).",
+  "tr": "<span class=\"pfig__n\">الشكل 2</span>السعة المستقرّة، بوحدات الاستطالة الساكنة \\(F_0/k\\)، وتأخّر الطور بدلالة تردد القوّة الدافعة، من المعادلة (4) لأربع نسب تخامد. كلّما قلّ التخامد زاد ارتفاع القمّة وضاق عرضها، وكان قفز الطور من \\(0^\\circ\\) إلى \\(180^\\circ\\) أشدّ فجأة."
+ },
+ "87d64c270663": {
+  "src": "K. J. Åström and R. M. Murray, <em>Feedback Systems: An Introduction for Scientists and Engineers</em>, Princeton University Press, 2008: chapter 8, transfer functions, frequency response and Bode plots. <a href=\"http://www.cds.caltech.edu/~murray/books/AM08/pdf/am08-complete_22Feb09.pdf\">The authors’ free electronic edition</a>.",
+  "tr": "K. J. Åström وR. M. Murray، <em>Feedback Systems: An Introduction for Scientists and Engineers</em>، Princeton University Press، 2008: الفصل 8، دوال التحويل، والاستجابة الترددية، ومخطّطات بودي. <a href=\"http://www.cds.caltech.edu/~murray/books/AM08/pdf/am08-complete_22Feb09.pdf\">النسخة الإلكترونية المجانية للمؤلّفين</a>."
+ },
+ "8fc78cde5646": {
+  "src": "<span>4</span>Resonance and phase",
+  "tr": "<span>4</span>الرنين والطور"
+ },
+ "930ccbc0599e": {
+  "src": "Read (5) as a story in two acts. At first the block rings at its own frequency, because a sudden push excites its own rhythm. That ringing dies within a few \\(\\tau\\), and afterwards only the driver’s rhythm remains. With the defaults, \\(\\tau = 6.37\\ \\mathrm{s}\\), \\(X = 0.482\\ \\mathrm{m}\\) and \\(\\varphi = 25.3^\\circ\\).",
+  "tr": "اقرأ (5) كقصّة من فصلين. في البداية تهتزّ الكتلة بترددها الخاصّ، لأن الدفعة المفاجئة تُثير إيقاعها الخاصّ. ويضمحلّ هذا الاهتزاز خلال بضعة \\(\\tau\\)، ثم لا يبقى سوى إيقاع المحرّك. وبالقيم الافتراضية يكون \\(\\tau = 6.37\\ \\mathrm{s}\\) و\\(X = 0.482\\ \\mathrm{m}\\) و\\(\\varphi = 25.3^\\circ\\)."
+ },
+ "93a8161c11f4": {
+  "src": "Back to the simulations",
+  "tr": "العودة إلى المحاكاة"
+ },
+ "9521dba25709": {
+  "src": "Home page",
+  "tr": "الصفحة الرئيسية"
+ },
+ "96af3c790373": {
+  "src": "<span>1</span>A push from outside",
+  "tr": "<span>1</span>دفعة من الخارج"
+ },
+ "9af3736c4028": {
+  "src": "Exercise 4.1 · on the figure above",
+  "tr": "تمرين 4.1 · على الشكل أعلاه"
+ },
+ "9eef2aeb85ee": {
+  "src": "<span class=\"psec__n\">07</span>Where the energy goes",
+  "tr": "<span class=\"psec__n\">07</span>أين تذهب الطاقة"
+ },
+ "a28272643323": {
+  "src": "<span class=\"psec__n\">02</span>The model",
+  "tr": "<span class=\"psec__n\">02</span>النموذج"
+ },
+ "a2bf03561cb4": {
+  "src": "Push a child on a swing. Push at the wrong moments and the swing barely moves; push in time with it and, with gentle pushes, it soon flies high.",
+  "tr": "ادفع طفلًا على أرجوحة. إن دفعت في اللحظات الخاطئة لم تكد الأرجوحة تتحرّك؛ وإن دفعت متناغمًا مع إيقاعها، فبدفعات لطيفة تعلو سريعًا."
+ },
+ "a2f6c06c1737": {
+  "src": "From t = 0",
+  "tr": "من t = 0"
+ },
+ "a4ce3a9be794": {
+  "src": "← All simulations",
+  "tr": "→ جميع المحاكاة"
+ },
+ "a9b75cb42bf9": {
+  "src": "<span class=\"sw\"></span>now",
+  "tr": "<span class=\"sw\"></span>الآن"
+ },
+ "ab4b3a30cd23": {
+  "src": "Set the drive frequency equal to the natural frequency, \\(f = f_0 = 0.50\\ \\mathrm{Hz}\\), and press <em>Solve</em>. Wait until the transient has died, then compare <em>Measured, last 10 s</em> with \\(Q F_0/k\\) from (6), and read <em>Phase lag φ</em>. Now raise the damping ratio to 0.2, repeat, and find the factor by which the amplitude fell.",
+  "tr": "اضبط تردد القوّة الدافعة على التردد الطبيعي، \\(f = f_0 = 0.50\\ \\mathrm{Hz}\\)، واضغط <em>احسب</em>. انتظر حتى تضمحلّ الحالة العابرة، ثم قارن <em>مقيسة، آخر 10 s</em> مع \\(Q F_0/k\\) من (6)، واقرأ <em>تأخّر الطور φ</em>. ثم ارفع نسبة التخامد إلى 0.2 وكرّر، واحسب العامل الذي انخفضت به السعة."
+ },
+ "abf72a4db1e6": {
+  "src": "The denominator has a plain reading. Multiplied by \\(m\\) it is \\(k - m\\Omega^2 + ic\\Omega\\), one term for each part of the plant. The spring gives \\(k\\). The mass gives \\(-m\\Omega^2\\): at the drive frequency the acceleration is \\(-\\Omega^2\\) times the displacement, so inertia acts like a spring with negative stiffness. The damper gives \\(ic\\Omega\\), a push a quarter cycle out of step with the displacement. Near \\(\\Omega = \\omega_0\\) the first two cancel, and only the damper is left to hold the motion back.",
+  "tr": "للمقام معنى بسيط. إذا ضُرب في \\(m\\) صار \\(k - m\\Omega^2 + ic\\Omega\\)، وهو حدّ لكل جزء من المنظومة. يعطي النابض \\(k\\). وتعطي الكتلة \\(-m\\Omega^2\\): عند تردد القوّة الدافعة يساوي التسارعُ الإزاحةَ مضروبةً في \\(-\\Omega^2\\)، فيعمل القصور الذاتي كنابض ذي صلابة سالبة. ويعطي المخمّد \\(ic\\Omega\\)، أي دفعة يفصلها عن الإزاحة فرقُ طورٍ قدره ربع دورة. وقرب \\(\\Omega = \\omega_0\\) يلغي الحدّان الأوّلان بعضهما، ولا يبقى سوى المخمّد ليكبح الحركة."
+ },
+ "b2fcac220201": {
+  "src": "Figure 4 is the run the page stores with its default settings. The drive at \\(0.45\\ \\mathrm{Hz}\\) is close to the natural \\(0.50\\ \\mathrm{Hz}\\), so during the first seconds two nearby rhythms are present at once: the driver’s, and the block’s own ringing from equation (5). Like two guitar strings slightly out of tune, they drift in and out of step once every \\(1/|f-f_d| = 20.25\\ \\mathrm{s}\\), where \\(f_d = \\omega_d/2\\pi = 0.499\\ \\mathrm{Hz}\\) is the damped ringing frequency (with \\(f_0\\) in its place the estimate is 20 s, close enough at this weak damping). The amplitude swells and shrinks with that rhythm; the first swell reaches \\(0.596\\ \\mathrm{m}\\) at \\(t = 8.0\\ \\mathrm{s}\\). Because the ringing decays with \\(\\tau = 6.4\\ \\mathrm{s}\\), the second beat is already weak, and after half a minute only the steady oscillation at \\(\\pm X = \\pm 0.482\\ \\mathrm{m}\\) is left.",
+  "tr": "الشكل 4 هو الحلّ الذي تخزّنه الصفحة بإعداداتها الافتراضية. تردد القوّة الدافعة \\(0.45\\ \\mathrm{Hz}\\) قريب من التردد الطبيعي \\(0.50\\ \\mathrm{Hz}\\)، فيوجد في الثواني الأولى إيقاعان متقاربان معًا: إيقاع المحرّك، وذلك الاهتزاز الخاصّ بالكتلة من المعادلة (5). ومثل وترَي غيتار غير متوافقين تمامًا في الدوزان، يتباعدان ويتقاربان في الإيقاع مرّة كل \\(1/|f-f_d| = 20.25\\ \\mathrm{s}\\)، حيث \\(f_d = \\omega_d/2\\pi = 0.499\\ \\mathrm{Hz}\\) هو تردد الاهتزاز المتخامد (وباستخدام \\(f_0\\) مكانه يكون التقدير 20 s، وهو دقيق بما يكفي عند هذا التخامد الضعيف). تكبر السعة وتصغر مع هذا الإيقاع؛ وتبلغ القمّة الأولى \\(0.596\\ \\mathrm{m}\\) عند \\(t = 8.0\\ \\mathrm{s}\\). ولأن الاهتزاز يضمحلّ بثابت زمن \\(\\tau = 6.4\\ \\mathrm{s}\\)، تكون الضربة الثانية ضعيفة أصلًا، وبعد نصف دقيقة لا يبقى سوى الاهتزاز المستقرّ عند \\(\\pm X = \\pm 0.482\\ \\mathrm{m}\\)."
+ },
+ "b7a5b228d7b5": {
+  "src": "Setting \\(s = i\\Omega\\) gives the response to a steady sinusoidal input, and comparing with (3), \\(G(i\\Omega) = X e^{-i\\varphi}/F_0\\). Plotting \\(|G(i\\Omega)|\\) and \\(\\varphi\\) against the drive frequency on logarithmic axes gives the <em>Bode plot</em>, the second figure on this page. It is the plant’s identity card: from it an engineer reads how strongly each frequency gets through and how late it arrives. Designing a controller, a device that measures \\(x\\) and adds a correcting force, means reshaping this card. Fig. 10 does that for a wind turbine.",
+  "tr": "بوضع \\(s = i\\Omega\\) نحصل على الاستجابة لدخل جيبي مستقرّ، وبالمقارنة مع (3) يكون \\(G(i\\Omega) = X e^{-i\\varphi}/F_0\\). ورسم \\(|G(i\\Omega)|\\) و\\(\\varphi\\) بدلالة تردد القوّة الدافعة على محورين لوغاريتميّين يعطي <em>مخطّط بودي</em>، وهو الشكل الثاني في هذه الصفحة. إنه بطاقة هوية المنظومة: منه يقرأ المهندس مقدار ما ينفذ من كل تردد، ومدى تأخّره في الوصول. وتصميم متحكّم، أي جهاز يقيس \\(x\\) ويضيف قوّة تصحيح، يعني إعادة تشكيل هذه البطاقة. ويفعل الشكل 10 ذلك لتوربين رياح."
+ },
+ "ba6696e36205": {
+  "src": "A mass on a spring with damping, driven by an outside force F(t) = F0 cos Ωt. The motion is solved first with RK4 and stored, then played back from the data; resonance, phase lag and the Bode plot of the system.",
+  "tr": "كتلة على نابض مع تخامد، تؤثّر فيها قوّة خارجية F(t) = F0 cos Ωt. تُحلّ الحركة أوّلًا بطريقة RK4 وتُخزَّن، ثم تُعرض من البيانات؛ الرنين وتأخّر الطور ومخطّط بودي للمنظومة."
+ },
+ "bee75ca77f75": {
+  "src": "Controls",
+  "tr": "عناصر التحكّم"
+ },
+ "c01b14d3c569": {
+  "src": "In the steady state the stored energy only sloshes between spring and block, so on average every joule the driver puts in is lost in the damper. The speed swings with amplitude \\(\\Omega X\\), and the square of a sine averages to one half over a period, so \\(\\langle P_\\text{in}\\rangle = \\langle P_\\text{loss}\\rangle = \\tfrac12 c\\,\\Omega^2 X^2\\), which is \\(0.292\\ \\mathrm{W}\\) for the defaults. Over the full 60 s run the page finds \\(W_\\text{in} = 19.03\\ \\mathrm{J}\\), \\(W_\\text{loss} = 17.93\\ \\mathrm{J}\\) and \\(E(T) - E(0) = 1.11\\ \\mathrm{J}\\). Equation (8) then holds to \\(1.3\\times10^{-12}\\) of \\(W_\\text{in}\\): this is the <em>Energy balance</em> readout, a test of the whole computation.",
+  "tr": "في الحالة المستقرّة تتأرجح الطاقة المخزونة بين النابض والكتلة فقط، فيضيع في المخمّد في المتوسّط كل جول يدخل من المحرّك. تتأرجح السرعة بسعة \\(\\Omega X\\)، ومتوسّط مربّع الجيب على دورة كاملة يساوي النصف، فيكون \\(\\langle P_\\text{in}\\rangle = \\langle P_\\text{loss}\\rangle = \\tfrac12 c\\,\\Omega^2 X^2\\)، أي \\(0.292\\ \\mathrm{W}\\) بالقيم الافتراضية. وعلى مدى الحلّ الكامل الممتدّ على 60 s تجد الصفحة \\(W_\\text{in} = 19.03\\ \\mathrm{J}\\) و\\(W_\\text{loss} = 17.93\\ \\mathrm{J}\\) و\\(E(T) - E(0) = 1.11\\ \\mathrm{J}\\). فتتحقّق المعادلة (8) بدقّة \\(1.3\\times10^{-12}\\) من \\(W_\\text{in}\\): وهذه هي قراءة <em>توازن الطاقة</em>، وهي اختبار للحساب كلّه."
+ },
+ "c1b34a6a31df": {
+  "src": "<span class=\"psec__n\">06</span>The start: beats and decay",
+  "tr": "<span class=\"psec__n\">06</span>البداية: الضربات والاضمحلال"
+ },
+ "c4e8624d3f89": {
+  "src": "<span class=\"pfig__n\">Figure 4</span>The default run, \\(f_0 = 0.5\\ \\mathrm{Hz}\\), \\(\\zeta = 0.05\\), \\(F_0 = 1\\ \\mathrm{N}\\), \\(f = 0.45\\ \\mathrm{Hz}\\), computed with the page’s own RK4 (\\(h = 1\\ \\mathrm{ms}\\)) and plotted every 50 ms. The dashed burgundy curve is \\(F(t)/k\\), the stretch the force would cause if applied slowly; the motion lags it by \\(\\varphi = 25.3^\\circ\\) and is \\(4.76\\) times larger.",
+  "tr": "<span class=\"pfig__n\">الشكل 4</span>الحلّ الافتراضي، \\(f_0 = 0.5\\ \\mathrm{Hz}\\)، \\(\\zeta = 0.05\\)، \\(F_0 = 1\\ \\mathrm{N}\\)، \\(f = 0.45\\ \\mathrm{Hz}\\)، محسوب بطريقة RK4 الخاصّة بالصفحة (\\(h = 1\\ \\mathrm{ms}\\))، ومرسوم كل 50 ms. المنحنى المتقطّع باللون العنّابي هو \\(F(t)/k\\)، أي الاستطالة التي كانت ستسبّبها القوّة لو طُبّقت ببطء؛ والحركة تتأخّر عنه بمقدار \\(\\varphi = 25.3^\\circ\\) وهي أكبر منه \\(4.76\\) مرّة."
+ },
+ "c6fa6d971887": {
+  "src": "Dividing by a complex number divides by its length and turns back by its angle. So \\(X\\) is \\(F_0/m\\) divided by the length of the denominator, and the phase lag \\(\\varphi\\) is the angle of the denominator, somewhere between \\(0^\\circ\\) and \\(180^\\circ\\) because its imaginary part \\(2\\zeta\\omega_0\\Omega\\) is positive; \\(\\operatorname{atan2}(y, x)\\) is simply the name, in code, for the angle of the point \\((x, y)\\). All the coefficients in (2) are real, so the real part of the complex solution solves the real problem, and the steady motion is \\(x_\\text{p}(t) = \\operatorname{Re}\\,X e^{i(\\Omega t - \\varphi)} = X\\cos(\\Omega t - \\varphi)\\), with",
+  "tr": "القسمة على عدد مركّب تقسم على طوله وتدير بزاويته إلى الخلف. فـ\\(X\\) هو \\(F_0/m\\) مقسومًا على طول المقام، وتأخّر الطور \\(\\varphi\\) هو زاوية المقام، وتقع بين \\(0^\\circ\\) و\\(180^\\circ\\) لأن جزأه التخيّلي \\(2\\zeta\\omega_0\\Omega\\) موجب؛ و\\(\\operatorname{atan2}(y, x)\\) ليس إلّا اسمًا، في الشيفرة، لزاوية النقطة \\((x, y)\\). جميع معاملات (2) حقيقية، فالجزء الحقيقي من الحلّ المركّب يحلّ المسألة الحقيقية، وتكون الحركة المستقرّة \\(x_\\text{p}(t) = \\operatorname{Re}\\,X e^{i(\\Omega t - \\varphi)} = X\\cos(\\Omega t - \\varphi)\\)، مع"
+ },
+ "c9a6e4eabc20": {
+  "src": "<span class=\"psec__n\">01</span>A push from outside",
+  "tr": "<span class=\"psec__n\">01</span>دفعة من الخارج"
+ },
+ "cad2dda3032c": {
+  "src": "heavier mathematics",
+  "tr": "الرياضيات الأثقل"
+ },
+ "cca9cf7c52e3": {
+  "src": "The driver does work at the rate \\(P_\\text{in} = F\\dot x\\); the damper turns energy into heat at the rate \\(P_\\text{loss} = c\\dot x^2\\). The energy stored in the oscillator, \\(E = \\tfrac12 m\\dot x^2 + \\tfrac12 kx^2\\), changes by the difference:",
+  "tr": "يبذل المحرّك شغلًا بمعدّل \\(P_\\text{in} = F\\dot x\\)، ويحوّل المخمّد الطاقة إلى حرارة بمعدّل \\(P_\\text{loss} = c\\dot x^2\\). والطاقة المخزونة في المهتزّ، \\(E = \\tfrac12 m\\dot x^2 + \\tfrac12 kx^2\\)، تتغيّر بمقدار الفرق:"
+ },
+ "cf1167a72a6d": {
+  "src": "Real friction is often dry rather than viscous: it does not grow with speed. The linear damper is the version that keeps the equation solvable.",
+  "tr": "الاحتكاك الحقيقي غالبًا جافّ لا لزج: فهو لا يزداد مع السرعة. والمخمّد الخطّي هو النسخة التي تُبقي المعادلة قابلة للحلّ."
+ },
+ "d1622a8321e0": {
+  "src": "Phyein Usul, home page",
+  "tr": "Phyein Usul، الصفحة الرئيسية"
+ },
+ "d1fb2aadcc81": {
+  "src": "<span>8</span>Solve first, then play",
+  "tr": "<span>8</span>احسب أوّلًا، ثم شغّل"
+ },
+ "d2f4d4801561": {
+  "src": "<span class=\"psec__n\">05</span>The control engineer’s view<span class=\"star\" title=\"heavier mathematics\">★</span>",
+  "tr": "<span class=\"psec__n\">05</span>نظرة مهندس التحكّم<span class=\"star\" title=\"heavier mathematics\">★</span>"
+ },
+ "d7a410fac291": {
+  "src": "<strong>Play.</strong> Each frame converts the playback time into the nearest stored row, \\(n = \\operatorname{round}(t_\\text{play}/10\\,\\mathrm{ms})\\), and draws that row as it is. Nothing is interpolated or recomputed, so the picture and the data panel always show the same numbers, and the <em>Stored run</em> slider can jump to any instant.",
+  "tr": "<strong>شغّل.</strong> يحوّل كل إطار زمن التشغيل إلى أقرب صفّ مخزّن، \\(n = \\operatorname{round}(t_\\text{play}/10\\,\\mathrm{ms})\\)، ويرسم ذلك الصفّ كما هو. لا يجري أيّ استيفاء أو إعادة حساب، فالصورة ولوحة البيانات تعرضان دائمًا الأرقام نفسها، ويستطيع منزلق <em>الحلّ المخزَّن</em> القفز إلى أيّ لحظة."
+ },
+ "d85eba7b2b37": {
+  "src": "1 solve",
+  "tr": "1 احسب"
+ },
+ "d929322e4b16": {
+  "src": "Fig.",
+  "tr": "الشكل"
+ },
+ "d9b536988a01": {
+  "src": "Fig. 9 · control systems · forced oscillations",
+  "tr": "الشكل 9 · أنظمة التحكّم · الاهتزازات القسرية"
+ },
+ "db367cf88021": {
+  "src": "What the page does",
+  "tr": "ماذا تفعل الصفحة"
+ },
+ "dc12ac9dc18f": {
+  "src": "<span class=\"psec__n\">09</span>On screen",
+  "tr": "<span class=\"psec__n\">09</span>على الشاشة"
+ },
+ "dfd65cc1196a": {
+  "src": "Stored run",
+  "tr": "الحلّ المخزَّن"
+ },
+ "e13b587879b0": {
+  "src": "<span>2</span>The model",
+  "tr": "<span>2</span>النموذج"
+ },
+ "e1d329a7394b": {
+  "src": "From symbols to code",
+  "tr": "من الرموز إلى الشيفرة"
+ },
+ "e30929b698e7": {
+  "src": "<span class=\"pfig__n\">Figure 1</span>The plant. A block of mass \\(m\\), held by a spring of stiffness \\(k\\) and slowed by a damper with coefficient \\(c\\), is pushed by an outside force \\(F(t)\\). The coordinate \\(x\\) measures how far the block is from where it would rest without the force.",
+  "tr": "<span class=\"pfig__n\">الشكل 1</span>المنظومة. كتلة \\(m\\) يمسكها نابض صلابته \\(k\\) ويبطّئها مخمّد معامله \\(c\\)، وتدفعها قوّة خارجية \\(F(t)\\). يقيس الإحداثي \\(x\\) مقدار بُعد الكتلة عن الموضع الذي كانت ستستقرّ فيه لو غابت القوّة."
+ },
+ "e74c0422b6ce": {
+  "src": "<strong>Solve.</strong> The fourth-order Runge–Kutta method advances \\((x, \\dot x)\\) from \\(t = 0\\) to \\(60\\ \\mathrm{s}\\) in 60 000 steps of \\(h = 1\\ \\mathrm{ms}\\), carrying \\(W_\\text{in}\\) and \\(W_\\text{loss}\\) along in the same steps. Measured in headless Chromium, the default solve took 9.5–12.4 ms; the time depends on the machine.",
+  "tr": "<strong>احسب.</strong> تقدّم طريقة رونغه–كوتا من المرتبة الرابعة \\((x, \\dot x)\\) من \\(t = 0\\) إلى \\(60\\ \\mathrm{s}\\) في 60 000 خطوة طول كلّ منها \\(h = 1\\ \\mathrm{ms}\\)، وتحمل معها \\(W_\\text{in}\\) و\\(W_\\text{loss}\\) في الخطوات نفسها. وقد استغرق الحلّ الافتراضي، مقيسًا في Chromium بلا واجهة، من 9.5 إلى 12.4 ms؛ والزمن يتوقّف على الحاسوب."
+ },
+ "e84f8e95c93c": {
+  "src": "A mass on a spring, pushed by a force that someone else controls. The equation of motion is solved first and the whole run is stored; the animation then plays the stored data back, one row per frame.",
+  "tr": "كتلة على نابض، تدفعها قوّة يتحكّم فيها شخص آخر. تُحلّ معادلة الحركة أوّلًا ويُخزَّن الحلّ كلّه؛ ثم تعرض الرسوم المتحرّكة البيانات المخزّنة، صفًّا لكل إطار."
+ },
+ "ec1cf294a370": {
+  "src": "<span>10</span>What the model leaves out",
+  "tr": "<span>10</span>ما يغفله النموذج"
+ },
+ "edaa1909c0cf": {
+  "src": "On the page \\(m = 1\\ \\mathrm{kg}\\) and the sliders set \\(f_0 = \\omega_0/2\\pi\\), \\(\\zeta\\), \\(F_0\\) and the drive frequency \\(f = \\Omega/2\\pi\\). With the defaults, \\(f_0 = 0.5\\ \\mathrm{Hz}\\) and \\(\\zeta = 0.05\\), so \\(k = 9.87\\ \\mathrm{N/m}\\) and \\(c = 0.314\\ \\mathrm{kg/s}\\). The block starts at rest in its rest position, \\(x(0) = 0\\), \\(\\dot x(0) = 0\\).",
+  "tr": "في الصفحة \\(m = 1\\ \\mathrm{kg}\\)، وتضبط المنزلقات \\(f_0 = \\omega_0/2\\pi\\)، و\\(\\zeta\\)، و\\(F_0\\)، وتردد القوّة الدافعة \\(f = \\Omega/2\\pi\\). وبالقيم الافتراضية يكون \\(f_0 = 0.5\\ \\mathrm{Hz}\\) و\\(\\zeta = 0.05\\)، فيكون \\(k = 9.87\\ \\mathrm{N/m}\\) و\\(c = 0.314\\ \\mathrm{kg/s}\\). تبدأ الكتلة من السكون عند موضع سكونها، \\(x(0) = 0\\)، \\(\\dot x(0) = 0\\)."
+ },
+ "ee176ab43bb9": {
+  "src": "The phase tells the swing story in numbers. Below resonance the block moves with the force (\\(\\varphi \\approx 0\\)). At resonance it lags by exactly a quarter period, \\(\\varphi = 90^\\circ\\): the force is largest when the block is fastest, which is precisely when a push does the most work. Far above resonance the block moves against the force (\\(\\varphi \\to 180^\\circ\\)).",
+  "tr": "يروي الطور قصّة الأرجوحة بالأرقام. دون الرنين تتحرّك الكتلة مع القوّة (\\(\\varphi \\approx 0\\)). وعند الرنين تتأخّر بالضبط بربع دورة، \\(\\varphi = 90^\\circ\\): تكون القوّة أكبر ما تكون حين تكون الكتلة أسرع ما تكون، أي تمامًا حين تبذل الدفعة أكبر شغل. وفوق الرنين بكثير تتحرّك الكتلة عكس القوّة (\\(\\varphi \\to 180^\\circ\\))."
+ },
+ "eed28eec00a4": {
+  "src": "Solve, then play",
+  "tr": "احسب، ثم شغّل"
+ },
+ "ef3948e18856": {
+  "src": "Oscillator · m = 1 kg",
+  "tr": "المهتزّ · m = 1 kg"
+ },
+ "f570ac8b3e84": {
+  "src": "<span class=\"psec__n\">08</span>Solve first, then play",
+  "tr": "<span class=\"psec__n\">08</span>احسب أوّلًا، ثم شغّل"
+ },
+ "f5cbdf6bfb51": {
+  "src": "Contents",
+  "tr": "المحتويات"
+ },
+ "f65fb847106a": {
+  "src": "RK4 vs exact",
+  "tr": "RK4 مقابل الحلّ الدقيق"
+ },
+ "f72f0eda6052": {
+  "src": "Simulations",
+  "tr": "المحاكاة"
+ },
+ "f7327a7d088c": {
+  "src": "Natural frequency f₀",
+  "tr": "التردد الطبيعي f₀"
+ },
+ "f8033b444ece": {
+  "src": "Energy balance",
+  "tr": "توازن الطاقة"
+ },
+ "fb4f4e6883c5": {
+  "src": "The height of the peak measures how weakly damped the plant is. At \\(\\Omega = \\omega_0\\) exactly, (4) gives",
+  "tr": "يقيس ارتفاع القمّة مدى ضعف تخامد المنظومة. عند \\(\\Omega = \\omega_0\\) تمامًا تعطي (4)"
+ },
+ "fb57a7ac8366": {
+  "src": "This simulation needs JavaScript.",
+  "tr": "تحتاج هذه المحاكاة إلى JavaScript."
+ },
+ "fb991a52429b": {
+  "src": "<b>Bode plot</b> · <span class=\"tx\">\\(|G(i\\Omega)| = X/F_0\\)</span> and phase lag <span class=\"tx\">\\(\\varphi\\)</span> against the drive frequency <span class=\"tx\">\\(f\\)</span>",
+  "tr": "<b>مخطّط بودي</b> · <span class=\"tx\">\\(|G(i\\Omega)| = X/F_0\\)</span> وتأخّر الطور <span class=\"tx\">\\(\\varphi\\)</span> بدلالة تردد القوّة الدافعة <span class=\"tx\">\\(f\\)</span>"
+ },
+ "ffee58552336": {
+  "src": "3 play",
+  "tr": "3 شغّل"
+ }
+}
