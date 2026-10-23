@@ -33,6 +33,13 @@ def _sub(mt):
         raise SystemExit(f'unknown {kind} key: {key}')
     return store[key]
 body = re.sub(r'\{\{(n|table):([A-Za-z0-9_]+)\}\}', _sub, body)
+# keep a number with its unit, and the groups of a long number, on one line: a no-break space, outside maths and tags only
+_UNITS = r'(?:%|mW|µW|W|kW|MW|mV|V|mA|A|Ω|mm|cm|m|km|kg|g|rpm|Hz|ms|s|rad|mrad|N m|N|°)'
+def _nb(seg):
+    seg = re.sub(r'(\d) (?=' + _UNITS + r'(?![A-Za-z]))', '\\1\u00a0', seg)
+    return re.sub(r'(\d) (?=\d{3}(?!\d))', '\\1\u00a0', seg)
+_parts = re.split(r'(\$\$.*?\$\$|\$[^$]*\$|<[^>]+>)', body, flags=re.S)
+body = ''.join(p_ if i % 2 else _nb(p_) for i, p_ in enumerate(_parts))
 eq_ids = set()
 jobs = []          # formulas to typeset: (tex, display)
 

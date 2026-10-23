@@ -21,7 +21,7 @@ TYPED = {
     '18': SOL, '36': 'def: count, 18 mountings x 2 pendula', '400': SOL, '200': SOL, '30': SOL, '90': SOL,
     '1.3': ('calc', 'r(400)', 0.03, 'smallest rotor radius'), '5.3': ('calc', 'r(100)', 0.03, ''),
     '27': ('calc', 'r(20)', 0.03, ''), '67': ('calc', 'r(8)', 0.03, ''),
-    '9.80665': 'input: standard gravity',
+    '9.80665': 'input: standard gravity', '41.9': ('calc', '400*2*math.pi/60', 0.002, ''), '1.34': ('calc', 'r(400)', 0.005, ''),
 },
 '01': {
     '67': ('calc', 'r(8)', 0.03, ''), '30': SOL, '1.3': ('calc', 'r(400)', 0.03, ''), '400': SOL, '90': SOL, '18': SOL,
@@ -46,10 +46,10 @@ TYPED = {
     '9.07': ('calc', 'json.load(open(D/"L2_run_nrel.json"))["Om0"]*60/(2*math.pi)', 0.002, 'rotor speed at 8 m/s'),
     '61400': 'def: standard number', '1.86': ('calc', '0.16*(0.75*8 + 5.6)', 0.01, 'IEC sigma_1, class A, 8 m/s'),
     '10 000': 'def: unit (parts in 10 000)', '30': 'def: pivot fraction', '60': 'def: pivot fraction', '90': 'def: pivot fraction',
-    '63': NREL, '61.5': NREL, '20': 'input: chosen tip shaking level', '100': 'input: chosen tip shaking level',
+    '63': NREL, '61.5': NREL, '8.98': ('calc', '871.0/97', 0.002, 'region 1.5/2 boundary, generator 871 rpm through the 97:1 gearbox'), '20': 'input: chosen tip shaking level', '100': 'input: chosen tip shaking level',
     '280': ('calc', '0.9*63.0/0.2', 0.02, 'R at 90 % of the 63 m rotor'),
     '2.4': ('calc', 'math.sqrt(0.9*63.0/0.2)*0.9494/(2*math.pi)/1.0793', 0.03, 'rod frequency over blade frequency'),
-    '0.5': 'input: blade damping chosen (0.5 and 3 %)', '2.3': NREL + ' (chord near the root)',
+    '0.5': 'input: blade damping chosen (0.5 and 3 %)', '45': ('calc', 'math.degrees(math.atan(1))', 1e-9, 'lag at the best brake (2.4)'), '2.3': NREL + ' (chord near the root)',
 },
 '05': {
     '0.12': ('calc', '0.186e-3/1.53*1e3', 0.02, 'L/R of the coil, ms'), '25': GEN, '20': GEN, '24': GEN, '339152': GEN,

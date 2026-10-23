@@ -39,7 +39,7 @@ N['Gam_min'] = f(min(x['Gam'] for x in rows), 2); N['Gam_max'] = f(max(x['Gam'] 
 N['P_sol_min'] = f(min(x['Ps'] for x in rows)*1e3, 2); N['P_sol_max'] = f(max(x['Ps'] for x in rows)*1e3, 1)
 N['ratio_min'] = f(min(x['ratio'] for x in rows), 3); N['ratio_max'] = f(max(x['ratio'] for x in rows), 3)
 N['Th_min'] = f(min(x['Th'] for x in rows), 3); N['Th_max'] = f(max(x['Th'] for x in rows), 2)
-N['Th_max_deg'] = f(math.degrees(max(x['Th'] for x in rows)), 0)
+N['Th_max_deg'] = f(math.degrees(max(x['Th'] for x in rows)), 1)
 N['lin_err_max'] = f(max(abs(x['Pstar']/x['Ps'] - 1) for x in rows)*100, 2)
 N['share_max'] = f'{max(x["share"] for x in rows)*1e5:.1f}'
 N['torque_star'] = f(m*g*L/math.sqrt(2), 4)
@@ -49,11 +49,11 @@ N['ratio_f_min'] = f(min(x['R'] for x in rows)**0.5, 2)
 N['ratio_f_max'] = f(max(x['R'] for x in rows)**0.5, 1)
 N['sensor_uW'] = '37.6'
 N['margin_min'] = f'{min(x["Ps"] for x in rows)/(2*37.6e-6):.0f}'      # mechanical power over twice the sensor need
-tr = ['<p class="tcap">Table 1. Sol\'s 18 mountings. ¹ At these two mountings Sol\'s brake is the best one found by a nonlinear search, not $\\kappa^*$.</p><table class="mt"><thead><tr><th>rotor</th><th>pivot</th><th>$R$</th><th>$G$</th><th>$\\Gamma$</th>'
-      '<th>$\\Theta^*$ (rad)</th><th>$P^*$ (2.5), mW</th><th>full model, mW</th><th>double, mW</th><th>double ÷ single</th></tr></thead><tbody>']
+tr = ['<p class="tcap">Table 1. Sol\'s 18 mountings ($\\Gamma = R/G$); full: the full nonlinear model; ratio: double ÷ single. ¹ At these two mountings Sol\'s brake is the best one found by a nonlinear search, not $\\kappa^*$.</p><table class="mt"><thead><tr><th>rotor</th><th>pivot</th><th>$R$</th><th>$G$</th>'
+      '<th>$\\Theta^*$ (rad)</th><th>$P^*$ (2.5), mW</th><th>full, mW</th><th>double, mW</th><th>ratio</th></tr></thead><tbody>']
 for x in rows:
     tr.append(f'<tr><td>{x["rpm"]} rpm, {x["Rrot"]:.2f} m</td><td>{x["pct"]} %, {x["rp"]:.3f} m</td><td>{x["R"]:.2f}</td>'
-              f'<td>{x["G"]:.3g}</td><td>{x["Gam"]:.3g}</td><td>{x["Th"]:.3f}</td><td>{x["Pstar"]*1e3:.2f}</td>'
+              f'<td>{x["G"]:.3g}</td><td>{x["Th"]:.3f}</td><td>{x["Pstar"]*1e3:.2f}</td>'
               f'<td>{x["Ps"]*1e3:.2f}{"¹" if x["rpm"] in (8, 14) and x["pct"] == 30 else ""}</td><td>{x["Pd"]*1e3:.2f}</td><td>{x["ratio"]:.3f}</td></tr>')
 tr.append('</tbody></table>')
 T['mountings'] = '\n'.join(tr)
@@ -87,19 +87,23 @@ for key, R in (('fast', min(x['R'] for x in rows)), ('slow', max(x['R'] for x in
     N[f'tilt_{key}'] = f(math.degrees(a), 1)
     N[f'tilt_sens_{key}'] = f(abs(-R*math.sin(a) - math.sin(2*a)), 0 if R > 10 else 1)
 
+N['R_res_double'] = f(Ip/(Mlc*0.2), 2)                     # locked double: M l_c r_p = I_p, in units of the reach 0.2 m
 # ---- Sol's chaos group ---------------------------------------------------------------------------------------------
 ch = json.load(open(D / 'L1_chaos.json'))
-tr = ['<table class="mt"><thead><tr><th>$c$ (N m s)</th><th>$\\kappa$</th><th>chaotic starts</th><th>mean power, mW</th>'
+tr = ['<p class="tcap">Table 2. Sol\'s group at $R = 1$ (pivot 0.2 m from the hub, rotor at 4 rad/s), each brake run from several starts: how many starts end in chaos, the mean power, and the largest Lyapunov exponent.</p><table class="mt"><thead><tr><th>$c$ (N m s)</th><th>$\\kappa$</th><th>chaotic starts</th><th>mean power, mW</th>'
       '<th>largest Lyapunov exponent $\\Lambda$, s⁻¹</th></tr></thead><tbody>']
 for gr in ch['groups']:
     P = np.array(gr['P'])*1e3; lam = np.array(gr['lyap'])
     nch = int(np.sum(lam > 0.01*ch['Om']))
     ps = f'{P.mean():.1f}' if P.std() < 0.05 else f'{P.min():.0f}–{P.max():.0f}'
     ls = f'{lam.mean():.3f}' if lam.std() < 1e-3 else f'{lam.min():.2f} to {lam.max():.2f}'
+    ls = ls.replace('-', '−')
     tr.append(f'<tr><td>{gr["c"]:.3f}</td><td>{gr["c"]/(0.1*0.04*ch["Om"]):.3f}</td><td>{nch} of {len(P)}</td><td>{ps}</td><td>{ls}</td></tr>')
     N[f'chaos_P_{int(round(gr["c"]*1000))}'] = ps
 tr.append('</tbody></table>')
 T['chaos'] = '\n'.join(tr)
+allP = np.concatenate([np.array(gr['P']) for gr in ch['groups']])
+N['chaos_times_min'] = f(allP.min()/max(x['Ps'] for x in rows), 1); N['chaos_times_max'] = f(allP.max()/max(x['Ps'] for x in rows), 1)
 N['chaos_thr'] = f(0.01*ch['Om'], 2); N['chaos_Om'] = f(ch['Om'], 0)
 N['chaos_nic'] = str(len(ch['groups'][0]['P'])); N['chaos_turns'] = str(ch['MEAS'])
 
@@ -116,7 +120,7 @@ for gr in mp['groups']:
             cells.setdefault((gr['R'], mb['G']), []).append(mb)
 assert all(math.isfinite(mb['lyap']) for v in cells.values() for mb in v)
 Gs = sorted({k[1] for k in cells}); Rs = sorted({k[0] for k in cells})
-tr = ['<table class="mt"><thead><tr><th>$R$ \\ $G$</th>' + ''.join(f'<th>{G:g}</th>' for G in Gs) + '</tr></thead><tbody>']
+tr = ['<p class="tcap">Table 3. The double pendulum over a grid of $R$ and $G$: chaotic runs among the 16 in each cell (8 starts, at the best brake and at a tenth of it).</p><table class="mt"><thead><tr><th>$R$ \\ $G$</th>' + ''.join(f'<th>{G:g}</th>' for G in Gs) + '</tr></thead><tbody>']
 for R in Rs:
     tds = []
     for G in Gs:
@@ -221,6 +225,9 @@ for k, fr in ((30, 0.3), (60, 0.6), (90, 0.9)):
     N[f'sag_rng_{k}'] = f'{lo:+.1f}' if abs(hi - lo) < 0.05 else f'{lo:+.1f} to {hi:+.1f}'
 G90 = 9.80665*math.cos(math.radians(5.0))/(0.9494**2*0.9*63.0)
 N['tu_mod_pct'] = f(G90/2*100, 1)                       # gravity's 1P stiffness modulation of a rod at 90 %: +-G/(2R), any length
+smd = json.load(open(D / 'L3_shake_model.json'))
+N['sh_mb'] = f(smd['m_e'], 0); N['sh_phi'] = f(smd['Phi_p'], 2); N['sh_dphi'] = f(smd['dPhi_p']*1e3, 1)
+N['sh_c_sol'] = f(pick(0.005, 0.005, 'Sol')['c'], 3); N['sh_cstar_sol'] = f(m*0.2**2*0.9494*(0.9*63.0/0.2 - 1), 2)
 N['tu_L'] = f(0.9*63.0*0.9494**2/(2*math.pi*1.0793)**2, 2)
 N['zeta_struct'] = '0.48'
 gt = 9.80665*math.cos(math.radians(5.0)); Om5 = 0.9494; rp9 = 0.9*63.0
@@ -243,7 +250,7 @@ N['Nneed_min'] = str(math.ceil(math.sqrt(min(cst)/(KT*KE/RC)))); N['Nneed_max'] 
 N['j_33'] = f((JM + 0.8e-7)*33**2/(m*L**2), 2); N['j_51'] = f((JM + 0.7e-7)*51**2/(m*L**2), 2); N['j_111'] = f((JM + 0.7e-7)*111**2/(m*L**2), 2)
 N['T0_mNm'] = f(T0*1e3, 2); N['mgL'] = f(mgL, 3)
 N['fric_51'] = f(51*T0/0.70, 3); N['fricG_51'] = f(51*T0/0.70/mgL*100, 0); N['fricG_111'] = f(111*T0/0.70/mgL*100, 0)
-N['Njam'] = str(int(0.70*mgL/T0))
+N['Njam'] = str(int(0.70*mgL/T0)); N['Njam4'] = str(int(0.60*mgL/T0))
 N['ceiling_frac'] = f(math.pi/(4*math.sqrt(2)), 2)
 N['half_play'] = f(HALF_PLAY, 4)
 big = [r for r in g4 if r['rpm'] <= 20]; fast = [r for r in g4 if r['rpm'] >= 100]
@@ -276,9 +283,9 @@ b2 = max(rv2['brake'], key=lambda q: q['P_load'] if q['Theta'] <= 0.5 else -1)
 N['res_s'] = f(rv2['R1'] - rv2['j'], 4); N['res_v2_load'] = f(b2['P_load']*1e3, 0); N['res_v2_times'] = f(b2['P_load']/rv2['Pstar'], 1)
 ss = json.load(open(D / 'sim_solutions.json'))['n']    # version 3 at the same mounting, from the simulation page's physics block
 N['res_v3_load'] = ss['s6_b51_load']; N['res_v3_RL'] = ss['s6_b51_RL']
-tr = ['<p class="tcap">Table 2. The maxon RE 25 motor with a GP 32 C gearhead at each mounting: the catalogue ratio and load resistor that give the load the most power in the full equation (7.4), with the gear loss on every flow; the swing, the power the rotor pays and the power at the load by the full equation; the formula (7.7) at the same setting; and the load as a share of $P^*$. Mounting: rotor speed, pivot as a fraction of the blade. † swing below the gearhead\'s half play of 0.5°: the teeth may never engage; ‡ swing less than six times the half play: the numbers are rough.</p>'
+tr = ['<p class="tcap">Table 4. The maxon RE 25 motor with a GP 32 C gearhead at each mounting: the catalogue ratio and load resistor that give the load the most power in the full equation (7.4), with the gear loss on every flow; the swing, the power the rotor pays and the power at the load by the full equation; the formula (7.7) at the same setting; and the load as a share of $P^*$ (the rotor can pay more than $P^*$ when the gearbox\'s inertia brings the rod nearer resonance, section 7.5). Mounting: rotor speed, pivot as a fraction of the blade. † swing below the gearhead\'s half play of 0.5°: the teeth may never engage; ‡ swing less than six times the half play: the numbers are rough.</p>'
       '<table class="mt"><thead><tr><th>mounting</th><th>$P^*$, mW</th><th>$N$</th><th>$R_L$, Ω</th><th>swing, rad</th>'
-      '<th>rotor pays, mW</th><th>load by (7.7), mW</th><th>load, full, mW</th><th>÷ $P^*$</th></tr></thead><tbody>']
+      '<th>rotor pays, mW</th><th>load by (7.7), mW</th><th>load, full, mW</th><th>load ÷ $P^*$</th></tr></thead><tbody>']
 for r in g4:
     mark = '†' if r['Theta'] < HALF_PLAY else ('‡' if r['Theta'] < 6*HALF_PLAY else '')
     tr.append(f'<tr><td>{r["rpm"]} rpm, {int(round(r["frac"]*100))} %{mark}</td><td>{r["Pstar"]*1e3:.2f}</td><td>{r["N"]}</td><td>{r["R_load"]:.1f}</td>'
