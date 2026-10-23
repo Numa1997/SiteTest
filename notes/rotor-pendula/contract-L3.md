@@ -95,3 +95,8 @@ Derived (SymPy): the moving-pivot Lagrangian, its linearisation, the coupled mat
   code check; m5 the shaking model covers the asymmetric edgewise mode only; m6 1P aerodynamic in-plane loads (~3 % of the gravity
   root moment by the skeptic's estimate) are left out; m2 the OpenFAST regression output for the shaking level was not opened in
   this session; the range stays a stated range.
+
+## Round 3 (minor points of skeptic-G1-L3-r2.md)
+
+The tip sag is quoted as 43 to 47 cm across the shape models; the tuned rod's 0.26 rad swing is called "at the edge of what a
+linear model can describe", not "small enough".

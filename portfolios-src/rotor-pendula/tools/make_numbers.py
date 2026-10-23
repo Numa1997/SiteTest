@@ -198,7 +198,8 @@ N['jensen'] = f(0.103**2/2*100, 2); N['sigOm'] = '10.3'
 
 # ---- L3 sag ---------------------------------------------------------------------------------------------------------
 sag = json.load(open(D / 'L3_sag.json'))
-N['sag_tip_cm'] = f(sag[0]['x_tip']*100, 0)
+_tips = [sag[0]['x_tip']] + [x['tip'] for x in json.load(open(D / 'L3_sag_static.json'))]
+N['sag_tip_cm'] = f'{min(_tips)*100:.0f} to {max(_tips)*100:.0f}'
 for sg in sag:
     k = int(round(sg['frac']*100))
     N[f'sag_w_{k}'] = f(sg['w']*1000, 0); N[f'sag_only_{k}'] = f(sg['sag_only'], 1); N[f'sag_tot_{k}'] = f'{sg["total"]:+.1f}'
@@ -265,8 +266,9 @@ gap = lambda r: r['P_load']/r['P_load_formula'] - 1
 N['df_gap_big'] = f(max(abs(gap(r)) for r in big)*100, 0)
 N['df_gap_fast_min'] = f(min(gap(r) for r in fast)*100, 0); N['df_gap_fast_max'] = f(max(gap(r) for r in fast)*100, 0)
 # voltage at the load on the large rotors: peak EMF k_e N thetadot_max, of which the load keeps R_L/(R_c + R_L); swing taken sinusoidal
-V = [KE*r['N']*r['Theta']*r['rpm']*2*math.pi/60*r['R_load']/(r['R_load'] + RC) for r in big]
-N['V_min'] = f(min(V)*1e3, 0); N['V_max'] = f(max(V)*1e3, 0)
+stk = [x for x in json.load(open(D / 'L4_stick.json')) if x['rpm'] <= 20]   # full equation: peak load voltage, time stopped
+N['V_min'] = f(min(x['V_load_peak'] for x in stk)*1e3, 0); N['V_max'] = f(max(x['V_load_peak'] for x in stk)*1e3, 0)
+N['stuck_min'] = f(min(x['stuck'] for x in stk)*100, 0); N['stuck_max'] = f(max(x['stuck'] for x in stk)*100, 0)
 N['f_turn_min'] = f(8/60, 2); N['f_turn_max'] = f(20/60, 2)
 sens = json.load(open(D / 'L4_sensitivity.json'))
 for key, mult, eb in (('x2', 2, None), ('x3', 3, None), ('e5', 1, 0.5), ('x2e5', 2, 0.5)):

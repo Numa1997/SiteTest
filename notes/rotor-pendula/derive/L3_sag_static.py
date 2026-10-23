@@ -33,7 +33,7 @@ for lab,comp in (('edge only',1/EIe),('twist-projected',np.cos(tw)**2/EIe+np.sin
         def P(Gf,b):
             B=-b; A=(-Gf+k*1j*B)/(R-1+1j*k); return k*abs(A-B)**2/2
         P0=P(G,0); P1=P(G+2*wi/L,0); P2=P(G+2*wi/L,si)
-        res.append(dict(model=lab, frac=frac, w=float(wi), wp=float(si), sag_only=float(P1/P0-1), total=float(P2/P0-1)))
+        res.append(dict(model=lab, tip=float(w[-1]), frac=frac, w=float(wi), wp=float(si), sag_only=float(P1/P0-1), total=float(P2/P0-1)))
         print(f'  {frac}: w {wi*1e3:.1f} mm slope {si*1e3:.2f} mrad  w\'r/w {si*rp/wi:.2f}; sag only {(P1/P0-1)*100:+.2f} %, total {(P2/P0-1)*100:+.2f} %')
 j=json.load(open(D+'/L3_sag.json'))
 for e in j: print('modal', e['frac'], round(e['w']*1e3,1),'mm', round(e['wp']*1e3,2),'mrad', 'w\'r/w', round(e['wp']*e['frac']*63/e['w'],2))

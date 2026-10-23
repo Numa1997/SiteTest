@@ -93,3 +93,10 @@ able to resist 0.14 N m at the pivot), the backdriven efficiency, the friction e
   adopted) measures the time stopped; the 2000/4000-step runs agree within 1 %, so the smoothed model resolves the averages.
 - **M5 (predictions after the runs).** Accepted; P1 was nevertheless at risk under M1's sensitivity and survived (worst 10×).
 - **Minor.** `L4_converge.py` failed on the old JSON keys; the version-3 check files use the keys it reads.
+
+## Round 3 (minor points of skeptic-G1-L4-r2.md)
+
+The load voltage is now quoted from the full equation (L4_stick.json, large rotors: 130–553 mV peak), not from a sinusoidal
+estimate; §7.4 states that the rod stands nearly still for 25–29 % of each turn; the jamming ratios are marked "at the
+catalogue's friction"; chapter 0 carries "before the losses of the sensor's own electronics". The maxon support article on
+graphite brushes was not read in this session, so the note does not cite it and says only that the brushes need a test.
