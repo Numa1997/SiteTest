@@ -1,0 +1,40 @@
+<section id="brake" class="chapter">
+<h2><span class="chn">2</span> The best brake, and how much it gives</h2>
+<p>Equation (1.5) cannot be solved in closed form. For small swings it can, and the answer contains the whole design rule.</p>
+
+<h3 id="brake-small">2.1 Small swings: a driven, braked oscillator</h3>
+<div class="picture">Hold a stiff spring vertically with a weight on it and move your hand slowly up and down, far below the spring's own bounce. The weight simply follows your hand, a little late. Put the weight in honey and it lags further. It never bounces, because you never push at its rhythm.</div>
+<p>Let $\theta$ be small: $\sin\theta \approx \theta$ and $\cos(\varphi+\theta) \approx \cos\varphi - \theta\sin\varphi$. The last term changes the spring's stiffness slightly once per turn. Compared with the centrifugal stiffness $R\theta$ it is of relative size $G/R = 1/\Gamma$, and its effect on the harvested power is smaller still: it shifts the swing to frequencies 0 and 2, which carry no power at first order (chapter 3 checks this against the full equation). Drop it, and (1.5) becomes</p>
+$$\theta'' + \kappa\,\theta' + R\,\theta = -G\cos\varphi. \tag{2.1}$$
+<p>This is the textbook driven, damped oscillator: a spring of stiffness $R$ (natural frequency $\sqrt R$ per turn), a damper $\kappa$, and a push of amplitude $G$ at frequency 1 per turn.</p>
+
+<h3 id="brake-response">2.2 The swing</h3>
+<p>After the start-up has died away the rod swings at the frequency of the push. Try $\theta = \Theta\cos(\varphi - \delta)$, or better, its complex form $\theta = \mathrm{Re}\,[A\,e^{i\varphi}]$ with $\theta' \to iA$ and $\theta'' \to -A$. Then (2.1) gives one line of algebra:</p>
+$$(R - 1 + i\kappa)A = -G \quad\Rightarrow\quad \Theta = |A| = \frac{G}{\sqrt{(R-1)^2 + \kappa^2}}, \qquad \tan\delta = \frac{\kappa}{R-1}. \tag{2.2}$$
+<p>With no brake ($\kappa = 0$) the rod leans exactly in step with the push and swings $G/(R-1)$; the brake reduces the swing and makes it lag.</p>
+
+<h3 id="brake-power">2.3 The harvested power</h3>
+<p>The generator takes the power $c\dot\theta^2$. Averaged over a turn, $\langle\dot\theta^2\rangle = \Omega^2\langle\theta'^2\rangle = \Omega^2\Theta^2/2$, so</p>
+$$\bar P = \tfrac12 c\,\Omega^2\Theta^2 = mL^2\Omega^3\,\frac{\kappa\,G^2}{2\left[(R-1)^2 + \kappa^2\right]}. \tag{2.3}$$
+<p>Read it as a contest. A weak brake ($\kappa \to 0$) lets the rod swing freely but takes nothing from it. A strong brake ($\kappa \to \infty$) locks the rod to the blade, so nothing moves and again nothing is taken. In between lies a best brake. Set $d\bar P/d\kappa = 0$:</p>
+$$(R-1)^2 + \kappa^2 - 2\kappa^2 = 0 \quad\Rightarrow\quad \kappa^* = |R - 1|. \tag{2.4}$$
+<p>The best brake equals the net stiffness. At that setting $\tan\delta = 1$: the rod lags gravity's push by exactly 45°. Put $\kappa^*$ back into (2.3) and return to physical units with $G = g/(\Omega^2L)$ and $R = r_p/L$:</p>
+$$\boxed{P^* = \frac{m\,L\,g^2}{4\,\Omega\,|r_p - L|}.} \tag{2.5}$$
+{{table:fig_brake}}
+<div class="picture">A loudspeaker gets the most power from an amplifier when its resistance matches the amplifier's: too low and the current is wasted in the amplifier, too high and too little current flows. The best brake is the same kind of match, between the generator's resistance to motion and the stiffness the rod already has.</div>
+<div class="check"><div class="ctag">Check</div>Units: kg · m · (m/s²)² / (s⁻¹ · m) = kg m²/s³ = W. Limits: no gravity ($g \to 0$) gives no power, as it must, since nothing then pushes the rod off the blade's line. At $r_p = L$ the formula diverges. That is resonance: the rod's own frequency $\sqrt R$ equals the push. Small-swing theory breaks down there, and the swing is limited by the nonlinear terms we dropped; no real mounting is near it. The derivation of (2.2) to (2.5) is checked symbolically in SymPy.</div>
+<p>Two consequences are worth a second look. First, the generator's torque at the optimum has the amplitude
+$$c^*\Omega\,\Theta^* = mL^2\Omega^2(R-1)\cdot\frac{G}{\sqrt2\,(R-1)} \quad=\quad \frac{mgL}{\sqrt2},$$
+the same {{n:torque_star}} N m at every mounting, whatever the rotor. That is the torque the generator must be built to resist. Second, on a large rotor ($r_p \gg L$) the power is almost independent of how fast the rotor turns. At a fixed fraction $f$ of the blade, $\Omega r_p = f\lambda_T v$, so</p>
+$$P^* \approx \frac{mLg^2}{4\,\Omega r_p} = \frac{mLg^2}{4 f\lambda_T v}. \tag{2.6}$$
+
+<h3 id="brake-blade">2.4 On our blade</h3>
+<div class="press"><div class="ctag">On our blade</div>(2.6) gives {{n:flat_30}}, {{n:flat_60}} and {{n:flat_90}} mW at 30, 60 and 90 % of the blade; the full nonlinear runs on the three large rotors give {{n:flat_runs_30}}, {{n:flat_runs_60}} and {{n:flat_runs_90}} mW. Inboard is better: power falls as $1/r_p$, because the centrifugal spring stiffens outboard and the same gravity push then moves the rod less. The table gives all 18 mountings: the swing $\Theta^*$ of (2.2) at the best brake, $P^*$ from (2.5), and the full nonlinear model of chapter 3 at Sol's brake setting, which is $\kappa^*$ except at the two slowest 30 % mountings, where Sol found the best brake by a nonlinear search; the last two columns are the double pendulum of chapter 3.
+{{table:mountings}}
+The closed form (2.5) is within {{n:lin_err_max}} % of the full model everywhere, although the swing reaches {{n:Th_max}} rad ({{n:Th_max_deg}}°) on the slowest rotor. The 400 rpm mounting at 90 % is not buildable as drawn: the bob, lying along the blade, reaches past the blade tip.</div>
+
+<h3 id="brake-tilt">2.5 Could we tune it to resonance?</h3>
+<p>The rod is never at resonance, because its own frequency $\sqrt R$ is always above the push. Resonance would give far more power, so it is fair to ask whether we can bring it down to 1. One way is to tilt the hinge: turn its axis from the rotor shaft towards the blade by an angle $\alpha$. The rod then swings partly out of the rotor plane, where the centrifugal pull holds it less firmly. Working through the same Lagrangian (checked in SymPy) gives, for small swings,</p>
+$$x'' + \left(R\cos\alpha - \sin^2\alpha - G\cos\alpha\sin\varphi\right)x = -G\cos\varphi. \tag{2.7}$$
+<p>Gravity's push is unchanged, and the stiffness $R\cos\alpha - \sin^2\alpha$ can be set to 1. On the fastest rotor that needs $\alpha = {{n:tilt_fast}}°$, and the stiffness changes by {{n:tilt_sens_fast}} per radian of tilt error: forgiving. On the slowest rotor it needs $\alpha = {{n:tilt_slow}}°$, with the rod almost parallel to the shaft, and the stiffness changes by {{n:tilt_sens_slow}} per radian: a tilt error of a tenth of a degree moves the stiffness by half its value, and the resonance is lost. The blade's pitch, which the turbine changes in strong wind, tilts the hinge too. So resonance is a real option on a small, fast rotor and an impractical one on a large turbine; these notes keep Sol's straight pendulum.</p>
+</section>

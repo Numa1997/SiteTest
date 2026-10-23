@@ -1,0 +1,32 @@
+<div class="part"><span class="part-n">Part II</span><span class="part-t">Randomness: shaking and gusts</span></div>
+<section id="shaking" class="chapter">
+<h2><span class="chn">4</span> A ceiling on random shaking</h2>
+<p>Wind is gusty, and a blade in gusty wind shakes. Could a pendulum, perhaps a chaotic one, turn that randomness into extra power? Before any model of the wind, one exact result sets the limit.</p>
+
+<h3 id="shaking-kicks">4.1 Random kicks add energy through their square</h3>
+<div class="picture">Stand on a bus over a rough road with a cup of coffee. Every jolt kicks the coffee, sometimes with its slosh and sometimes against it. On average the "with" and "against" cancel, yet the coffee still sloshes harder the rougher the road: a kick adds kinetic energy even when it is equally likely to help or oppose the motion, because energy goes as the square of velocity.</div>
+<p>Shake the pivot along a fixed direction $\hat e$ with acceleration $a(t)$. In the pivot's frame each mass $m_i$ feels an extra force $-m_i a(t)\hat e$. For a pendulum (or a chain of pendula) with angles $q_k$, that force enters Lagrange's equations as a generalised force</p>
+$$Q_k = -a(t)\,b_k(q), \qquad b_k = \sum_i m_i\,\hat e\cdot\frac{\partial \mathbf x_i}{\partial q_k}. \tag{4.1}$$
+<p>Let the shaking be white noise of strength $S$: kicks so quick and so uncorrelated that $\langle a(t)a(t')\rangle = S\,\delta(t - t')$. In a short time $dt$ the momenta $p$ receive a random kick $\Delta p = -b\,\sqrt{S}\,dW$, where $dW$ is a random number of mean zero and variance $dt$. The kinetic energy is $K = \tfrac12 p^{\mathsf T}M^{-1}p$, with $M(q)$ the mass matrix. Expand to second order in the kick:</p>
+$$\Delta K = \dot q\cdot\Delta p + \tfrac12\,\Delta p^{\mathsf T}M^{-1}\Delta p.$$
+<p>The first term averages to zero: the kick is as likely to help as to oppose. The second does not: its average is $\tfrac12 S\,b^{\mathsf T}M^{-1}b\,dt$. So on average the shaking feeds in the power</p>
+$$\boxed{P_{\rm in} = \frac S2\,\big\langle m_{\rm eff}\big\rangle, \qquad m_{\rm eff} = b^{\mathsf T}M^{-1}b.} \tag{4.2}$$
+<p>Nothing else entered: not the stiffness, not the damping, not gravity, not whether the motion is regular or chaotic. In a steady state everything fed in is dissipated, and the generator is where it is dissipated. (The step from $\Delta K$ to its average is Itô's rule. Because the kick depends only on the angles and not on the velocities, the Itô and Stratonovich readings of the noise agree here, so there is no hidden subtlety. The algebra is checked in SymPy for the single and the double pendulum.)</p>
+
+<h3 id="shaking-meff">4.2 The effective mass never exceeds the real mass</h3>
+<p>$m_{\rm eff}$ measures how much of the pendulum's mass the shaking can grab. For a single pendulum $m_{\rm eff} = m\,(\hat e\cdot\hat t)^2$, where $\hat t$ is the direction the bob can move: the full mass when the bob can move along the shaking, none when the rod points along it. In general $m_{\rm eff}$ is a mass-weighted projection, so</p>
+$$m_{\rm eff} \le M_{\rm total}, \qquad P_{\rm in} \le \frac S2\,M_{\rm total}. \tag{4.3}$$
+<p>The ceiling is reached only when the pendulum can move all of its mass along $\hat e$ at once. For a double pendulum that happens whenever its <i>top</i> rod is perpendicular to the shaking: turning the top rod while the lower rod keeps its direction carries both bobs along together. On a blade at rest both rods lie along the blade, and edgewise shaking is across it, so a single and a double pendulum start with the same full effective mass. Any wandering, chaotic or not, can only lower it.</p>
+<div class="check"><div class="ctag">Check</div>A computer experiment: shake a single and a double pendulum (same mass and reach) with white noise, gently and violently, 1000 runs each, and compare the generator's power with $\tfrac S2\langle m_{\rm eff}\rangle$. They agree within {{n:mc_dev_min}} to {{n:mc_dev_max}} %, at statistical errors of about half a per cent. When the shaking is violent enough for the rods to turn over, $\langle m_{\rm eff}\rangle$ falls to {{n:meff_single_large}} of the total mass for the single and {{n:meff_double_chaos}} for the chaotic double.</div>
+<p>So chaos cannot beat white noise's ceiling; it can only fall below it. What remains open is shaking that is <i>not</i> white: a real blade shakes mostly near its own edgewise frequency, about 1.08 Hz on a 5 MW turbine. Then what matters is whether the pendulum's response overlaps that narrow band, and that is the question of the chapters still to come.</p>
+</section>
+
+<section id="next" class="chapter">
+<h2><span class="chn">5</span> What is still being worked out</h2>
+<p>Three pieces are in progress, and are kept out of the numbers above until they are right.</p>
+<ul>
+<li><b>Gusts and the rotor speed.</b> In gusty wind (the IEC turbulence model at 8 m/s, on the NREL 5 MW reference turbine) the rotor speeds up and slows down by about 10 % over tens of seconds. The pendulum does not care much: over {{n:l2_records}} ten-minute records, the wandering changes its power by only +{{n:wander_min}} to +{{n:wander_max}} %, because its own frequency and gravity's push both scale with the rotor speed. A larger effect, a shift of the turbine's average speed, turned out to come from a kink in the turbine's controller rather than from the wind, and is being redone.</li>
+<li><b>The blade shakes and sags.</b> Under its own weight a 61.5 m blade bends edgewise by about half a metre at its tip, once per turn and in step with gravity; at 90 % of the blade that adds a few per cent to gravity's push. Gusts add a random shaking near 1.08 Hz whose size no source we could open has measured, so its effect will be shown across a range.</li>
+<li><b>From swing to watts.</b> A real generator has a coil resistance, a gearbox and its own inertia; at the best brake it must resist {{n:torque_star}} N m. That chapter turns mechanical power into the electrical power the sensor actually gets.</li>
+</ul>
+</section>

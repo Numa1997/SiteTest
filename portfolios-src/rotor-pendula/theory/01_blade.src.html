@@ -1,0 +1,38 @@
+<section id="blade" class="chapter">
+<h2><span class="chn">1</span> Sitting on the blade</h2>
+<p>Before any equation, ride along. Everything the pendulum does follows from two pulls it feels in the blade's own frame: one outwards, one that turns round.</p>
+
+<h3 id="blade-pulls">1.1 Two pulls</h3>
+<div class="picture">On a fast roundabout you are pressed outwards against the rail, and the faster it turns the harder you are pressed. Gravity still pulls you down, but the roundabout turns under you, so as seen from your seat "down" sweeps round once per turn: towards the centre at the top of a vertical wheel, outwards at the bottom, sideways in between.</div>
+<p>A turbine rotor turns in a vertical plane. A pivot fixed at distance $r_p$ from the hub moves on a circle at angular speed $\Omega$. Seen from the blade, a mass there feels a <b>centrifugal pull</b> $\Omega^2 r_p$ per kilogram, straight out along the blade, and <b>gravity</b> $g$ per kilogram, whose direction turns once per turn. The ratio of the two,</p>
+$$\Gamma = \frac{\Omega^2 r_p}{g},$$
+<p>says which wins. On Sol's mountings $\Gamma$ runs from {{n:Gam_min}} (a 67 m rotor at 8 rpm, pivot at 30 %) to {{n:Gam_max}} (a 1.3 m rotor at 400 rpm, pivot at 90 %): the outward pull always wins, from barely to overwhelmingly. Add the two pulls and you get an <b>apparent gravity</b> that points almost straight out along the blade and tilts a little to one side, then to the other, once per turn. A rod hung from the pivot behaves like a weathervane in that apparent wind: it lies along the blade, and leans a little with the tilt.</p>
+
+<h3 id="blade-coords">1.2 Coordinates</h3>
+<p>Put the hub at the origin, with $y$ pointing up. The rotor's angle is $\varphi(t)$, so the pivot sits at $r_p(\cos\varphi, \sin\varphi)$. A bob of mass $m$ hangs on a massless rigid rod of length $L$; let $\theta$ be the rod's angle from the blade's outward direction, so the rod points along the absolute angle $\varphi + \theta$. The bob is at</p>
+$$x = r_p\cos\varphi + L\cos(\varphi+\theta), \qquad y = r_p\sin\varphi + L\sin(\varphi+\theta). \tag{1.1}$$
+<p>We leave $\varphi(t)$ free for now, so the same equations will hold later when gusts make the rotor speed up and slow down.</p>
+
+<h3 id="blade-lagrange">1.3 The Lagrangian and the generator</h3>
+<p>Why Lagrange and not Newton? Newton would need the force in the rod and the force at the pivot, which we do not know and do not want. The rod's constraint forces do no work in any displacement that respects the constraint, so Lagrange's equations, written in the one coordinate the bob is free to move in, never need them.</p>
+<p>Differentiate (1.1) and square. The kinetic energy is</p>
+$$T = \tfrac12 m\left[r_p^2\dot\varphi^2 + L^2(\dot\varphi+\dot\theta)^2 + 2r_pL\,\dot\varphi(\dot\varphi+\dot\theta)\cos\theta\right]. \tag{1.2}$$
+<p>Read it as a sum: the pivot's motion, the bob's motion about the pivot, and a cross term that couples them through the angle between the rod and the blade. The potential energy is $V = mgy$.</p>
+<p>The generator's stator is fixed to the blade and its rotor to the rod, so it brakes only the rod's motion <i>relative to the blade</i>, with torque $-c\dot\theta$. An ideal generator feeding a resistor does exactly this, with $c$ set by its winding and its load. Rayleigh's dissipation function packs it into the same formalism:</p>
+$$\mathcal F = \tfrac12 c\,\dot\theta^2, \qquad \frac{d}{dt}\frac{\partial \mathcal L}{\partial\dot\theta} - \frac{\partial\mathcal L}{\partial\theta} = -\frac{\partial\mathcal F}{\partial\dot\theta}, \qquad \mathcal L = T - V.$$
+<p>Work out the derivatives with (1.2) and divide nothing yet:</p>
+$$mL^2(\ddot\theta+\ddot\varphi) + mr_pL\left(\ddot\varphi\cos\theta + \dot\varphi^2\sin\theta\right) + mgL\cos(\varphi+\theta) + c\,\dot\theta = 0. \tag{1.3}$$
+<p>Every term has a meaning. $mL^2\ddot\theta$ is the bob's inertia about the pivot. $mr_pL\dot\varphi^2\sin\theta$ is the centrifugal pull trying to bring the rod back along the blade: a restoring torque, like a spring. $mgL\cos(\varphi+\theta)$ is gravity's torque, which turns with the rotor. The two terms with $\ddot\varphi$ appear only when the rotor speeds up or slows down. $c\dot\theta$ is the generator.</p>
+<div class="check"><div class="ctag">Check</div>Units: every term is a torque, kg m²/s² = N m. Limit: stop the rotor ($\dot\varphi = \ddot\varphi = 0$) with the blade pointing along $\varphi_0$. Then (1.3) is $mL^2\ddot\theta + mgL\cos(\varphi_0+\theta) + c\dot\theta = 0$: an ordinary damped pendulum, at rest where $\cos(\varphi_0+\theta) = 0$ with the rod hanging straight down, and swinging at $\omega^2 = g/L$ about it. The derivation was done twice, by Lagrange in SymPy and by Newton's law in the blade's frame with its centrifugal, Coriolis and Euler forces; the two agree to rounding error.</div>
+
+<h3 id="blade-pays">1.4 Who pays</h3>
+<p>Take the energy of the bob, $E = T + V$, and follow it in time using (1.3). After the algebra (done in SymPy) only two terms survive:</p>
+$$\frac{dE}{dt} = \tau_{\rm rot}\,\dot\varphi - c\,\dot\theta^2. \tag{1.4}$$
+<p>Here $\tau_{\rm rot}$ is the torque the rotor must apply to keep the pivot on its path. The first term is the work the rotor does on the pendulum; the second is the power the generator takes. In a steady swing $E$ returns to the same value every turn, so over a turn the two balance: <b>the rotor pays for every joule the generator harvests.</b> Gravity does no net work over a turn, since the bob comes back to the same height. Seen from the blade, gravity is the hand that pushes the rod; seen from the ground, it only steers energy that the rotor supplies.</p>
+
+<h3 id="blade-time">1.5 The rotor as a clock</h3>
+<p>Now let the rotor turn steadily, $\dot\varphi = \Omega$. A natural clock is the rotor's own angle: one turn is $2\pi$. Write $\theta' = d\theta/d\varphi = \dot\theta/\Omega$ and divide (1.3) by $mL^2\Omega^2$:</p>
+$$\boxed{\theta'' + \kappa\,\theta' + R\sin\theta + G\cos(\varphi+\theta) = 0,} \qquad R = \frac{r_p}{L},\quad G = \frac{g}{\Omega^2L},\quad \kappa = \frac{c}{mL^2\Omega}. \tag{1.5}$$
+<p>Three numbers say everything. $R$ is the stiffness of the centrifugal spring: for small swings the rod oscillates $\sqrt R$ times per turn. $G$ is the strength of gravity's push. $\kappa$ is the generator. Their ratio $R/G$ is the $\Gamma$ of section 1.1. Two pendula with the same $R$, $G$ and $\kappa$ do exactly the same thing, turn for turn, whatever their size.</p>
+<div class="press"><div class="ctag">On our blade</div>Across Sol's 18 mountings $R$ runs from {{n:R_min}} to {{n:R_max}} and $G$ from {{n:G_min}} to {{n:G_max}}. The rod's own frequency is therefore {{n:ratio_f_min}} to {{n:ratio_f_max}} times the once-per-turn push of gravity: always above it, never at it.</div>
+</section>
