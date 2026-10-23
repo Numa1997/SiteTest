@@ -10,7 +10,7 @@
     <meta name="theme-color" content="#f5f1ea">
     <link rel="stylesheet" href="../styles/sim.css">
     <link rel="stylesheet" href="../styles/data.css">
-    <link rel="stylesheet" href="../styles/fold.css">
+    <link rel="stylesheet" href="../styles/fold.css"><link rel="stylesheet" href="../styles/i18n.css"><!--I18N-ALTERNATES--><!--/I18N-ALTERNATES-->
     <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='12' fill='%237a1f2b'/%3E%3Ctext x='32' y='45' text-anchor='middle' font-family='Georgia,serif' font-size='38' fill='%23f5f1ea'%3EN%3C/text%3E%3C/svg%3E">
     <style>
         #field { cursor: crosshair; }
@@ -31,7 +31,7 @@
             <a href="draw-decompose.html">8</a>
             <a href="driven-oscillator.html">9</a>
             <a href="wind-turbine.html">10</a>
-        </nav>
+        </nav><span class="lang-switch" role="group" aria-label="Language" translate="no"><!--I18N-SWITCH--><!--/I18N-SWITCH--></span>
     </header>
 
     <main class="sim">
@@ -705,8 +705,8 @@
 
         function readouts() {
             var n = sources.length;
-            document.getElementById('r-n').textContent = n + (n === MAX_SOURCES ? T(' (max)') : '');
-            document.getElementById('cap-count').textContent = n === 0 ? T('no sources · click the field') : n + (n === 1 ? T(' source') : ' sources');
+            document.getElementById('r-n').textContent = n + (n === MAX_SOURCES ? _t(' (max)') : '');
+            document.getElementById('cap-count').textContent = n === 0 ? _t('no sources · click the field') : n + (n === 1 ? _t(' source') : _t(' sources'));
             ds.set('lambda', lambda.value); ds.set('f', freq.value); ds.set('damp', damp.value);
             ds.set('v', freq.value * lambda.value); ds.set('omega', 2 * Math.PI * freq.value); ds.set('T', 1 / freq.value);
             document.getElementById('r-v').textContent = Math.round(ds.get('v')) + ' px/s';
@@ -740,13 +740,13 @@
                 lam: ds.get('lambda') + ' px', k: Sim.fmt(ds.get('k'), 4) + ' rad/px', g: Sim.fmt(ds.get('g'), 5) + ' /px', N: String(ds.get('N')), norm: Sim.fmt(ds.get('norm'), 4),
                 dx: Sim.fmt(ds.get('dx'), 3) + ' px', grid: cols + ' × ' + rows, C: Sim.fmt(sumC[pc], 4), S: Sim.fmt(sumS[pc], 4),
                 c: Sim.fmt(ds.get('cos_wt'), 4), s: Sim.fmt(ds.get('sin_wt'), 4), psi: Sim.fmt(ds.get('psi_c'), 4), f: ds.get('f').toFixed(2) + ' Hz',
-                wt: Sim.fmt(ds.get('omegaT'), 2) + ' rad', v: Math.round(ds.get('v')) + ' px/s',
+                wt: Sim.fmt(ds.get('omegaT'), 2) + _t(' rad'), v: Math.round(ds.get('v')) + ' px/s',
                 idx: String(ds.get('n_c')), rgb: rgb ? 'rgb(' + rgb[0] + ', ' + rgb[1] + ', ' + rgb[2] + ')' : '—'
             };
             if (ds.get('N')) {
                 out.r = Sim.fmt(r1[pc], 2) + ' px';
                 out.a = Sim.fmt(a1[pc], 4);
-                out.ph = Sim.fmt(ph1[pc], 3) + ' rad';
+                out.ph = Sim.fmt(ph1[pc], 3) + _t(' rad');
             } else {
                 out.r = out.a = out.ph = 'no sources';
             }
@@ -771,7 +771,7 @@
         function cellIndex(j, i) { return j * cols + i; }
         function cellCentre(j, i) { return { x: (i + 0.5) / cols * box.w, y: (j + 0.5) / rows * box.h }; }
         function lut(v) { var n = Math.round(Math.max(-1, Math.min(1, v)) * 127.5 + 127.5) * 3; return [LUT[n], LUT[n + 1], LUT[n + 2]]; }
-        function sliderCheck(input, label) { return { formula: 'read from the ' + label + ' slider now', inputs: [['slider', input.value, '']], value: parseFloat(input.value) }; }
+        function sliderCheck(input, label) { return { formula: _t('read from the ') + label + _t(' slider now'), inputs: [['slider', input.value, '']], value: parseFloat(input.value) }; }
         /* self-test: the sum over sources at one cell, written out again from the stored inputs */
         function sumAt(p, trig) {
             var j = Math.floor(p / cols), i = p % cols, k = ds.get('k'), g = ds.get('g'), norm = ds.get('norm'), xs = ds.get('x_s'), ys = ds.get('y_s');
@@ -782,7 +782,7 @@
                 total += Math.exp(-g * r) * norm * trig(k * r);
                 if (q < 3) inputs.push(['r<sub>' + (q + 1) + '</sub>', r, 'px', 2]);
             }
-            if (xs.length > 3) inputs.push(['…', xs.length + ' sources in all', '']);
+            if (xs.length > 3) inputs.push(['…', xs.length + _t(' sources in all'), '']);
             return { inputs: inputs, value: total };
         }
         /* self-test: the pixel of the drawn image at a cell against the colour table row for the stored ψ */
@@ -791,20 +791,20 @@
             var px = octx.getImageData(i, j, 1, 1).data, exp = [LUT[n * 3], LUT[n * 3 + 1], LUT[n * 3 + 2]];
             var ok = px[0] === exp[0] && px[1] === exp[1] && px[2] === exp[2];
             var cc = cellCentre(j, i), sp = ctx.getImageData(Math.round(cc.x * box.dpr), Math.round(cc.y * box.dpr), 1, 1).data;
-            return { what: 'pixel (i = ' + i + ', j = ' + j + ') of the drawn image', drawn: 'rgb(' + px[0] + ', ' + px[1] + ', ' + px[2] + ')',
-                expected: 'LUT row ' + n + ' = rgb(' + exp.join(', ') + ') for ψ = ' + Sim.fmt(v, 4), ok: ok,
-                note: 'The image has one pixel per cell and is scaled to the canvas with smoothing. The screen pixel at this cell’s centre is rgb(' + sp[0] + ', ' + sp[1] + ', ' + sp[2] + '): the same colour away from cell edges, a blend of neighbours near them. One colour step is Δψ = 2/255 ≈ 0.008.' };
+            return { what: _t('pixel (i = ') + i + ', j = ' + j + _t(') of the drawn image'), drawn: 'rgb(' + px[0] + ', ' + px[1] + ', ' + px[2] + ')',
+                expected: _t('LUT row ') + n + ' = rgb(' + exp.join(', ') + ') for ψ = ' + Sim.fmt(v, 4), ok: ok,
+                note: _t('The image has one pixel per cell and is scaled to the canvas with smoothing. The screen pixel at this cell’s centre is rgb(') + sp[0] + ', ' + sp[1] + ', ' + sp[2] + _t('): the same colour away from cell edges, a blend of neighbours near them. One colour step is Δψ = 2/255 ≈ 0.008.') };
         }
         Sim.data = {
-            ds: ds, kicker: 'Fig. 1 · data', file: 'fig1-wave-interference',
+            ds: ds, kicker: _t('Fig. 1 · data'), file: 'fig1-wave-interference',
             playing: function () { return clk.playing; },
             groups: [
-                { title: 'Physical parameters', note: 'what you set with the sliders, buttons and clicks', vars: ['lambda', 'f', 'damp', 'N', 'u', 'x_s', 'y_s'] },
-                { title: 'Derived physics', note: 'computed by the page from the parameters', vars: ['k', 'omega', 'T', 'v', 'g', 'norm'] },
-                { title: 'Time', note: 'advances only while it plays', vars: ['t', 'omegaT', 'cos_wt', 'sin_wt'] },
-                { title: 'Centre of the field', note: 'the cell the walkthrough below reads', vars: ['j_c', 'i_c', 'psi_c', 'n_c', 'rgb_c'] },
-                { title: 'Arrays: the whole field', note: 'click a row to open it as a table; point at a cell to find it in the figure', vars: ['C', 'S', 'psi', 'A', 'r1', 'a1', 'ph1', 'x', 'y', 'LUT'] },
-                { title: 'Grid and drawing', note: 'how the picture is computed and drawn', vars: ['cols', 'rows', 'P', 'dx', 'dy', 'worldH', 'box_w', 'box_h', 'dpr', 'dt', 'fps', 'frames', 'playing', 'builds', 'build_ms', 'trig_calls', 'renders', 'draw_ms'] }
+                { title: _t('Physical parameters'), note: _t('what you set with the sliders, buttons and clicks'), vars: ['lambda', 'f', 'damp', 'N', 'u', 'x_s', 'y_s'] },
+                { title: _t('Derived physics'), note: _t('computed by the page from the parameters'), vars: ['k', 'omega', 'T', 'v', 'g', 'norm'] },
+                { title: _t('Time'), note: _t('advances only while it plays'), vars: ['t', 'omegaT', 'cos_wt', 'sin_wt'] },
+                { title: _t('Centre of the field'), note: _t('the cell the walkthrough below reads'), vars: ['j_c', 'i_c', 'psi_c', 'n_c', 'rgb_c'] },
+                { title: _t('Arrays: the whole field'), note: _t('click a row to open it as a table; point at a cell to find it in the figure'), vars: ['C', 'S', 'psi', 'A', 'r1', 'a1', 'ph1', 'x', 'y', 'LUT'] },
+                { title: _t('Grid and drawing'), note: _t('how the picture is computed and drawn'), vars: ['cols', 'rows', 'P', 'dx', 'dy', 'worldH', 'box_w', 'box_h', 'dpr', 'dt', 'fps', 'frames', 'playing', 'builds', 'build_ms', 'trig_calls', 'renders', 'draw_ms'] }
             ],
             colour: {
                 psi: lut, C: lut, S: lut,
@@ -813,7 +813,7 @@
                 LUT: function (v, j) { return [LUT[j * 3], LUT[j * 3 + 1], LUT[j * 3 + 2]]; }
             },
             colLabel: { LUT: function (i) { return ['R', 'G', 'B'][i]; } },
-            at: { LUT: function (j) { return 'for ψ = ' + Sim.fmt(j / 127.5 - 1, 4); } },
+            at: { LUT: function (j) { return _t('for ψ = ') + Sim.fmt(j / 127.5 - 1, 4); } },
             probe: function (x, y) {
                 var i = Math.floor(x / box.w * cols), j = Math.floor(y / box.h * rows);
                 if (i < 0 || j < 0 || i >= cols || j >= rows) return null;
@@ -823,7 +823,7 @@
                 var p = cellIndex(ref.j, ref.i);
                 var list = [['ψ', psi[p], '', 'psi', p], ['C', sumC[p], '', 'C', p], ['S', sumS[p], '', 'S', p], ['A', ampl[p], '', 'A', p]];
                 if (ds.get('N')) list.push(['r<sub>1</sub>', r1[p], 'px', 'r1', p], ['a<sub>1</sub>', a1[p], '', 'a1', p], ['φ<sub>1</sub>', ph1[p], 'rad', 'ph1', p]);
-                return { title: 'cell (j = ' + ref.j + ', i = ' + ref.i + ') · x = ' + Sim.fmt(ds.get('x')[ref.i], 1) + ' px, y = ' + Sim.fmt(ds.get('y')[ref.j], 1) + ' px', at: cellCentre(ref.j, ref.i), rows: list };
+                return { title: _t('cell (j = ') + ref.j + ', i = ' + ref.i + ') · x = ' + Sim.fmt(ds.get('x')[ref.i], 1) + ' px, y = ' + Sim.fmt(ds.get('y')[ref.j], 1) + ' px', at: cellCentre(ref.j, ref.i), rows: list };
             },
             locate: function (name, idx) {
                 var v = ds.vars[name];
@@ -881,19 +881,19 @@
                 i_c: function () { return { formula: 'floor(cols / 2)', inputs: [['cols', cols, '', 0]], value: Math.floor(cols / 2) }; }
             },
             drawn: {
-                v: function () { var actual = document.getElementById('r-v').textContent, expected = Math.round(ds.get('v')) + ' px/s'; return { what: 'the visible r-v readout', drawn: actual, expected: expected, ok: actual === expected }; },
+                v: function () { var actual = document.getElementById('r-v').textContent, expected = Math.round(ds.get('v')) + ' px/s'; return { what: _t('the visible r-v readout'), drawn: actual, expected: expected, ok: actual === expected }; },
                 psi: pixelCheck,
                 psi_c: function () { return pixelCheck(cellIndex(ds.get('j_c'), ds.get('i_c'))); },
                 u: function (q) {
                     var x = Math.round(sources[q] * box.w * box.dpr), y = Math.round((box.h - SOURCE_LIFT * box.w / WORLD_W) * box.dpr), px = ctx.getImageData(x, y, 1, 1).data;
                     var ok = px[3] > 0 && Math.abs(px[0] - 122) < 30 && Math.abs(px[1] - 31) < 30 && Math.abs(px[2] - 43) < 30;
-                    return { what: 'screen pixel at the source dot, (' + Math.round(sources[q] * box.w) + ', ' + Math.round(box.h - SOURCE_LIFT * box.w / WORLD_W) + ') css px', drawn: 'rgb(' + px[0] + ', ' + px[1] + ', ' + px[2] + ')', expected: 'the burgundy dot, rgb(122, 31, 43)', ok: ok };
+                    return { what: _t('screen pixel at the source dot, (') + Math.round(sources[q] * box.w) + ', ' + Math.round(box.h - SOURCE_LIFT * box.w / WORLD_W) + _t(') css px'), drawn: 'rgb(' + px[0] + ', ' + px[1] + ', ' + px[2] + ')', expected: _t('the burgundy dot, rgb(122, 31, 43)'), ok: ok };
                 }
             },
-            round: { time: 't', label: function () { return 'one period of the sources, T = ' + Sim.fmt(ds.get('T'), 3) + ' s'; }, length: function () { return ds.get('T'); },
+            round: { time: 't', label: function () { return _t('one period of the sources, T = ') + Sim.fmt(ds.get('T'), 3) + ' s'; }, length: function () { return ds.get('T'); },
                 columns: ['omegaT', 'cos_wt', 'sin_wt', 'psi_c'], point: function () { return { j: Math.floor(ds.dims.j / 2), i: Math.floor(ds.dims.i * 0.72) }; } },
             play: function () { clk.set(true); },
-            about: 'Here ψ reaches the screen through a colour table of 256 steps, so the picture carries ψ to one part in 128 while the store keeps float32, about seven significant figures. The image has one pixel per grid cell and the browser scales it up with smoothing, so a screen pixel between two cells shows a blend of both.'
+            about: _t('Here ψ reaches the screen through a colour table of 256 steps, so the picture carries ψ to one part in 128 while the store keeps float32, about seven significant figures. The image has one pixel per grid cell and the browser scales it up with smoothing, so a screen pixel between two cells shows a blend of both.')
         };
 
         resize();

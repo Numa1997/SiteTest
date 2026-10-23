@@ -10,7 +10,7 @@
     <meta name="theme-color" content="#f5f1ea">
     <link rel="stylesheet" href="../styles/sim.css">
     <link rel="stylesheet" href="../styles/data.css">
-    <link rel="stylesheet" href="../styles/fold.css">
+    <link rel="stylesheet" href="../styles/fold.css"><link rel="stylesheet" href="../styles/i18n.css"><!--I18N-ALTERNATES--><!--/I18N-ALTERNATES-->
     <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='12' fill='%237a1f2b'/%3E%3Ctext x='32' y='45' text-anchor='middle' font-family='Georgia,serif' font-size='38' fill='%23f5f1ea'%3EN%3C/text%3E%3C/svg%3E">
     <style>
         .solve { display: grid; gap: 10px; }
@@ -42,7 +42,7 @@
             <a href="draw-decompose.html">8</a>
             <a href="driven-oscillator.html">9</a>
             <a href="wind-turbine.html" aria-current="page">10</a>
-        </nav>
+        </nav><span class="lang-switch" role="group" aria-label="Language" translate="no"><!--I18N-SWITCH--><!--/I18N-SWITCH--></span>
     </header>
 
     <main class="sim">
@@ -633,7 +633,7 @@
         ds.var('fps', [], 'float', { symbol: 'frame rate', units: 'Hz', long_name: 'smoothed over about ten frames', computed_in: 'the clock', digits: 1, source: 'A running average of 1/Δt.' });
         ds.var('playing', [], 'bool', { symbol: 'playing', long_name: 'the playback runs', computed_in: 'Sim.clock', source: 'The state of the Play button.' });
 
-        var rpm = Sim.slider('rpm', { format: function (v) { return v.toFixed(1) + ' rpm'; }, onInput: markStale });
+        var rpm = Sim.slider('rpm', { format: function (v) { return v.toFixed(1) + _t(' rpm'); }, onInput: markStale });
         var v0 = Sim.slider('v0', { format: function (v) { return v.toFixed(1) + ' m/s'; }, onInput: markStale });
         var dv = Sim.slider('dv', { format: function (v) { return v.toFixed(1) + ' m/s'; }, onInput: markStale });
         var speed = Sim.slider('speed', { format: function (v) { return v.toFixed(1) + '×'; } });
@@ -748,14 +748,14 @@
             if (!solved) return;
             statusEl.classList.toggle('is-stale', ds.get('stale'));
             statusEl.textContent = ds.get('stale')
-                ? 'A control changed. The run below is still the one for ' + NAMES[solved.ctrl] + ', ' + NAMES[solved.prof] + ' wind, v₀ = ' + solved.v0.toFixed(1) + ' m/s. Press Solve to compute the new one.'
-                : 'Solved ' + Sim.fmt(ds.get('steps'), 0) + ' RK4 steps in ' + ds.get('solve_ms').toFixed(1) + ' ms and stored ' + NS + ' samples, one every ' + (EVERY * H * 1000).toFixed(0) + ' ms. Every frame shows one stored sample.';
+                ? _t('A control changed. The run below is still the one for ') + NAMES[solved.ctrl] + ', ' + NAMES[solved.prof] + ' wind, v₀ = ' + solved.v0.toFixed(1) + _t(' m/s. Press Solve to compute the new one.')
+                : _t('Solved ') + Sim.fmt(ds.get('steps'), 0) + _t(' RK4 steps in ') + ds.get('solve_ms').toFixed(1) + _t(' ms and stored ') + NS + _t(' samples, one every ') + (EVERY * H * 1000).toFixed(0) + _t(' ms. Every frame shows one stored sample.');
             ['st-solve', 'st-store'].forEach(function (id) { document.getElementById(id).classList.toggle('is-done', !ds.get('stale')); });
         }
         function readouts() {
             document.getElementById('r-P').textContent = Sim.fmt(ds.get('P_mean') / 1000, 0) + ' kW';
             document.getElementById('r-E').textContent = Sim.fmt(ds.get('Eg_end') / 3.6e6, 2) + ' kWh';
-            document.getElementById('r-rpm').textContent = Sim.fmt(ds.get('rpm_min'), 1) + '–' + Sim.fmt(ds.get('rpm_max'), 1) + ' rpm';
+            document.getElementById('r-rpm').textContent = Sim.fmt(ds.get('rpm_min'), 1) + '–' + Sim.fmt(ds.get('rpm_max'), 1) + _t(' rpm');
             document.getElementById('r-eff').textContent = Sim.fmt(ds.get('captured_pct'), 1) + ' %';
             document.getElementById('r-bal').textContent = ds.get('balance').toExponential(1).replace('-', '−');
             document.getElementById('r-ms').textContent = Sim.fmt(ds.get('solve_ms'), 1) + ' ms';
@@ -838,7 +838,7 @@
             // what the controller sees and does, from the stored sample
             var rows = g.narrow
                 ? [['λ', Sim.fmt(ds.get('lam')[i], 2)], ['c_{p}', Sim.fmt(ds.get('cpv')[i], 3)], ['τ_{aero}', Sim.fmt(ds.get('ta')[i] / 1000, 0) + ' kN m'], ['τ_{gen}', Sim.fmt(ds.get('tg')[i] / 1000, 0) + ' kN m']]
-                : [['n_{rot}', Sim.fmt(ds.get('rpm')[i], 2) + ' rpm'], ['v_{tip}', Sim.fmt(ds.get('vtip')[i], 1) + ' m/s'], ['λ = v_{tip}/v', Sim.fmt(ds.get('lam')[i], 2)], ['c_{p}', Sim.fmt(ds.get('cpv')[i], 3)],
+                : [['n_{rot}', Sim.fmt(ds.get('rpm')[i], 2) + _t(' rpm')], ['v_{tip}', Sim.fmt(ds.get('vtip')[i], 1) + ' m/s'], ['λ = v_{tip}/v', Sim.fmt(ds.get('lam')[i], 2)], ['c_{p}', Sim.fmt(ds.get('cpv')[i], 3)],
                     ['τ_{aero}', Sim.fmt(ds.get('ta')[i] / 1000, 0) + ' kN m'], ['τ_{gen}', Sim.fmt(ds.get('tg')[i] / 1000, 0) + ' kN m'], ['P_{gen}', Sim.fmt(ds.get('Pg')[i] / 1000, 0) + ' kW']];
             var bw = g.narrow ? 138 : 196, rh = 19, bh = rows.length * rh + 14, bx = w - bw - (g.narrow ? 8 : 14), by = 10;
             c.fillStyle = 'rgba(255, 250, 243, 0.94)'; c.strokeStyle = T.rule; c.lineWidth = 1;
@@ -880,7 +880,7 @@
             label(c, title, ' (' + unit + ')', p.L, p.top - 9, 'left', T.ink2, 14);
             c.font = T.mono; c.fillStyle = BURG; c.textAlign = 'right'; c.textBaseline = 'alphabetic';
             c.fillText(Sim.fmt(a[i] / scale, digits).replace(/-/g, '−') + ' ' + unit, p.R, p.top - 9);
-            if (name === 'rpm' && ds.get('ctrl') === 'pi') { c.fillStyle = T.muted; c.textAlign = 'right'; c.fillText(T('target ') + Sim.fmt(ds.get('rpm_ref'), 1), p.R - (g.narrow ? 96 : 120), p.top - 9); }
+            if (name === 'rpm' && ds.get('ctrl') === 'pi') { c.fillStyle = T.muted; c.textAlign = 'right'; c.fillText(_t('target ') + Sim.fmt(ds.get('rpm_ref'), 1), p.R - (g.narrow ? 96 : 120), p.top - 9); }
             if (name === 'Pg') {
                 var kx = p.R - (g.narrow ? 100 : 126);
                 c.strokeStyle = ROSE; c.lineWidth = 1.3; c.beginPath(); c.moveTo(kx - 58, p.top - 13); c.lineTo(kx - 40, p.top - 13); c.stroke();
@@ -927,9 +927,9 @@
             c.fillStyle = BURG; c.beginPath(); c.arc(X(lam[i]), Y(cpv[i]), 6, 0, Math.PI * 2); c.fill();
             c.restore();
             c.font = T.mono; c.fillStyle = T.muted; c.textAlign = 'right'; c.textBaseline = 'alphabetic';
-            c.fillText(T('Betz limit 16/27'), G.R - 6, Y(ds.get('cp_betz')) - 6);
+            c.fillText(_t('Betz limit 16/27'), G.R - 6, Y(ds.get('cp_betz')) - 6);
             Sim.tex(c, 'λ_{opt} = ' + Sim.fmt(ds.get('lam_opt'), 2), X(ds.get('lam_opt')) + 6, G.bot - 10, { size: 14, color: T.muted });
-            document.getElementById('cap-op').innerHTML = '<i>λ</i> = ' + Sim.fmt(lam[i], 2) + ' · <i>c</i><sub>p</sub> = ' + Sim.fmt(cpv[i], 3) + ' · optimum ' + Sim.fmt(ds.get('cp_max'), 3) + ' at <i>λ</i> = ' + Sim.fmt(ds.get('lam_opt'), 2);
+            document.getElementById('cap-op').innerHTML = '<i>λ</i> = ' + Sim.fmt(lam[i], 2) + ' · <i>c</i><sub>p</sub> = ' + Sim.fmt(cpv[i], 3) + _t(' · optimum ') + Sim.fmt(ds.get('cp_max'), 3) + ' at <i>λ</i> = ' + Sim.fmt(ds.get('lam_opt'), 2);
         }
 
         /* live values for the walkthrough: read from the store, nothing recomputed */
@@ -940,7 +940,7 @@
                 Kopt: Sim.fmt(ds.get('K_opt') / 1000, 1) + ' kN m s²', v: Sim.fmt(ds.get('vw')[i], 3) + ' m/s', w: Sim.fmt(ds.get('om')[i], 5) + ' rad/s',
                 ta: Sim.fmt(ds.get('ta')[i] / 1000, 2) + ' kN m', tg: Sim.fmt(ds.get('tg')[i] / 1000, 2) + ' kN m', Pg: Sim.fmt(ds.get('Pg')[i] / 1000, 1) + ' kW',
                 wref: Sim.fmt(ds.get('w_ref'), 4) + ' rad/s', Kp: Sim.fmt(ds.get('Kp') / 1e6, 3) + ' MN m s', Ki: Sim.fmt(ds.get('Ki') / 1e6, 3) + ' MN m', dtd: Sim.fmt(ds.get('dtau_dw') / 1000, 1) + ' kN m s',
-                n: String(i), t: Sim.fmt(ds.get('t_play'), 2) + ' s', th: Sim.fmt(ds.get('th')[i], 3) + ' rad', Eg: Sim.fmt(ds.get('Eg')[i] / 3.6e6, 3) + ' kWh', bal: ds.get('balance').toExponential(2)
+                n: String(i), t: Sim.fmt(ds.get('t_play'), 2) + ' s', th: Sim.fmt(ds.get('th')[i], 3) + _t(' rad'), Eg: Sim.fmt(ds.get('Eg')[i] / 3.6e6, 3) + ' kWh', bal: ds.get('balance').toExponential(2)
             };
         };
 
@@ -1015,32 +1015,32 @@
             if (!replayAll || replayAll.key !== key) { replayAll = rk4Replay(NS - 1); replayAll.key = key; }
             return replayAll;
         }
-        function at(name) { return function () { var n = ds.get('i_now'); return { formula: name + '<sub>n</sub> at n = n<sub>now</sub>', inputs: [['n<sub>now</sub>', n, '', 0]], value: ds.get(name)[n] }; }; }
+        function at(name) { return function () { var n = ds.get('i_now'); return { formula: name + _t('<sub>n</sub> at n = n<sub>now</sub>'), inputs: [['n<sub>now</sub>', n, '', 0]], value: ds.get(name)[n] }; }; }
         function maxOf(name) { var a = ds.get(name), m = -Infinity; for (var n = 0; n < NS; n++) m = Math.max(m, a[n]); return m; }
         function minOf(name) { var a = ds.get(name), m = Infinity; for (var n = 0; n < NS; n++) m = Math.min(m, a[n]); return m; }
         function neutralInk(c) { return c[3] > 25 && c[0] < 100 && c[1] < 100 && c[2] < 100 && Math.abs(c[0] - c[2]) < 30; }
         function isRose(c) { return c[3] > 60 && c[0] > 150 && c[0] - c[1] > 35 && c[0] - c[2] > 25; }
         function readBack(b, what, pt, r, test, expected, note) {
             var q = Sim.readPixel(b, pt.x, pt.y, r, test);
-            return { what: what + ', (' + Sim.fmt(pt.x, 1) + ', ' + Sim.fmt(pt.y, 1) + ') css px', drawn: q.text, expected: expected, ok: q.found, note: note };
+            return { what: what + ', (' + Sim.fmt(pt.x, 1) + ', ' + Sim.fmt(pt.y, 1) + _t(') css px'), drawn: q.text, expected: expected, ok: q.found, note: note };
         }
         function bladePixel() {
             var a = ds.get('th_now'), g = geom();
             var x = g.cx + Math.cos(a) * K * g.r * 0.6, y = g.cy - Math.sin(a) * g.r * 0.6;
             return readBack(box, 'screen pixel 60 % along the burgundy blade', { x: x, y: y }, 0, Sim.isBurgundy, 'the burgundy blade',
-                'Blade 1 is drawn in burgundy at the stored angle θ, the other two 120° and 240° on. The point is on the blade’s span line, about ' + Sim.fmt(0.06 * g.r, 0) + ' px from its edges.');
+                _t('Blade 1 is drawn in burgundy at the stored angle θ, the other two 120° and 240° on. The point is on the blade’s span line, about ') + Sim.fmt(0.06 * g.r, 0) + _t(' px from its edges.'));
         }
         function stripDot(name, label) {
             return function () {
                 var n = ds.get('i_now'), p = stripPos(name, n);
-                return readBack(box, 'the dot on the ' + label + ' chart', p, 1, Sim.isBurgundy, 'the burgundy dot', 'The dot marks the stored sample on screen now.');
+                return readBack(box, _t('the dot on the ') + label + _t(' chart'), p, 1, Sim.isBurgundy, 'the burgundy dot', 'The dot marks the stored sample on screen now.');
             };
         }
         function stripCurve(name, label) {
             return function (n) {
                 var p = stripPos(name, n), test = name === 'Pa' ? isRose : neutralInk;
-                return readBack(box, label + ' at sample n on its chart', p, 2, test, name === 'Pa' ? T('the rose curve') : 'the dark curve: solid where played, faint where still to come',
-                    'Each chart draws every ' + Math.max(1, Math.floor(NS / ((geom().strips.vw.R - geom().strips.vw.L) * 2))) + '-th stored sample, about two per screen pixel, joined by straight lines.');
+                return readBack(box, label + _t(' at sample n on its chart'), p, 2, test, name === 'Pa' ? _t('the rose curve') : _t('the dark curve: solid where played, faint where still to come'),
+                    _t('Each chart draws every ') + Math.max(1, Math.floor(NS / ((geom().strips.vw.R - geom().strips.vw.L) * 2))) + _t('-th stored sample, about two per screen pixel, joined by straight lines.'));
             };
         }
         function airPixel() {
@@ -1052,17 +1052,17 @@
                 'The dashes are 16 px long with 22 px gaps and are shifted by s<sub>air</sub> · px/m, so they travel with the stored distance the air has moved; each line starts 15 px further into its pattern than the one above, so the dashes do not line up.');
         }
         Sim.data = {
-            ds: ds, kicker: 'Fig. 10 · data', file: 'fig10-wind-turbine',
+            ds: ds, kicker: _t('Fig. 10 · data'), file: 'fig10-wind-turbine',
             playing: function () { return clk.playing; },
             groups: [
-                { title: 'Turbine', note: 'fixed for this rotor', vars: ['rho', 'R', 'J', 'lam_opt', 'cp_max', 'cp_betz', 'K_opt'] },
-                { title: 'Settings', note: 'what you chose, as used by the last solve', vars: ['ctrl', 'profile', 'v0', 'dv', 'w_ref', 'rpm_ref'] },
-                { title: 'Controller', note: 'the speed controller’s gains, tuned at the target speed', vars: ['dtau_dw', 'Kp', 'Ki', 'tau0'] },
-                { title: 'Stored run', note: 'one row per stored sample, every 20 ms of the 120 s', vars: ['ts', 'vw', 'om', 'rpm', 'vtip', 'th', 'lam', 'cpv', 'ta', 'tg', 'Ictl', 'Pa', 'Pg', 'Eg', 'sw'] },
-                { title: 'Energy', note: 'over the whole run', vars: ['h', 'steps', 'rpm_min', 'rpm_max', 'captured_pct', 'Ea', 'Ew', 'Eg_end', 'P_mean', 'balance', 'solve_ms', 'stale'] },
-                { title: 'Playback', note: 'the sample on screen now', vars: ['i_now', 't_play', 'v_now', 'rpm_now', 'P_now', 'lam_now', 'cp_now', 'th_now'] },
-                { title: 'Power curve', note: 'the curve of the second figure', vars: ['lamL', 'cpL'] },
-                { title: 'Drawing', note: 'how stored values become pixels', vars: ['v_hi', 'rpm_lo', 'rpm_hi', 'P_hi', 'px_per_m_air', 'hub_x', 'hub_y', 'r_px', 'box_w', 'box_h', 'fps', 'playing'] }
+                { title: _t('Turbine'), note: _t('fixed for this rotor'), vars: ['rho', 'R', 'J', 'lam_opt', 'cp_max', 'cp_betz', 'K_opt'] },
+                { title: _t('Settings'), note: _t('what you chose, as used by the last solve'), vars: ['ctrl', 'profile', 'v0', 'dv', 'w_ref', 'rpm_ref'] },
+                { title: _t('Controller'), note: _t('the speed controller’s gains, tuned at the target speed'), vars: ['dtau_dw', 'Kp', 'Ki', 'tau0'] },
+                { title: _t('Stored run'), note: _t('one row per stored sample, every 20 ms of the 120 s'), vars: ['ts', 'vw', 'om', 'rpm', 'vtip', 'th', 'lam', 'cpv', 'ta', 'tg', 'Ictl', 'Pa', 'Pg', 'Eg', 'sw'] },
+                { title: _t('Energy'), note: _t('over the whole run'), vars: ['h', 'steps', 'rpm_min', 'rpm_max', 'captured_pct', 'Ea', 'Ew', 'Eg_end', 'P_mean', 'balance', 'solve_ms', 'stale'] },
+                { title: _t('Playback'), note: _t('the sample on screen now'), vars: ['i_now', 't_play', 'v_now', 'rpm_now', 'P_now', 'lam_now', 'cp_now', 'th_now'] },
+                { title: _t('Power curve'), note: _t('the curve of the second figure'), vars: ['lamL', 'cpL'] },
+                { title: _t('Drawing'), note: _t('how stored values become pixels'), vars: ['v_hi', 'rpm_lo', 'rpm_hi', 'P_hi', 'px_per_m_air', 'hub_x', 'hub_y', 'r_px', 'box_w', 'box_h', 'fps', 'playing'] }
             ],
             probe: function (x, y) {
                 if (Math.hypot((x - ds.get('hub_x')) / K, y - ds.get('hub_y')) < ds.get('r_px')) return { what: 'rotor' };
@@ -1075,7 +1075,7 @@
             inspect: function (ref) {
                 var n = ref.what === 'rotor' ? ds.get('i_now') : ref.n;
                 var rows = [['t', ds.get('ts')[n], 's', 'ts', n], ['v', ds.get('vw')[n], 'm/s', 'vw', n], ['ω', ds.get('om')[n], 'rad/s', 'om', n], ['n<sub>rot</sub>', ds.get('rpm')[n], 'rpm', 'rpm', n], ['λ', ds.get('lam')[n], '', 'lam', n], ['c<sub>p</sub>', ds.get('cpv')[n], '', 'cpv', n], ['τ<sub>aero</sub>', ds.get('ta')[n], 'N m', 'ta', n], ['τ<sub>gen</sub>', ds.get('tg')[n], 'N m', 'tg', n], ['P<sub>gen</sub>', ds.get('Pg')[n], 'W', 'Pg', n]];
-                return { title: ref.what === 'rotor' ? 'the rotor, sample ' + n : 'stored sample ' + n, at: ref.what === 'rotor' ? { x: ds.get('hub_x'), y: ds.get('hub_y') } : stripPos(ref.strip || 'rpm', n), rows: rows };
+                return { title: ref.what === 'rotor' ? _t('the rotor, sample ') + n : _t('stored sample ') + n, at: ref.what === 'rotor' ? { x: ds.get('hub_x'), y: ds.get('hub_y') } : stripPos(ref.strip || 'rpm', n), rows: rows };
             },
             locate: function (name, idx) {
                 var v = ds.vars[name];
@@ -1103,7 +1103,7 @@
                 Ki: function () { return { formula: 'J ω<sub>n</sub>²', inputs: [['J', J, 'kg m²', 0], ['ω<sub>n</sub>', WN, 'rad/s', 2]], value: J * WN * WN }; },
                 tau0: function () { var c = { prof: ds.get('profile'), v0: ds.get('v0'), dv: ds.get('dv') }; return { formula: 'τ<sub>aero</sub>(ω<sub>ref</sub>, v(0))', inputs: [['ω<sub>ref</sub>', ds.get('w_ref'), 'rad/s', 6], ['v(0)', wind(0, c), 'm/s', 4]], value: tauAero(ds.get('w_ref'), wind(0, c)) }; },
                 ts: function (n) { return { formula: 'n · 2h', inputs: [['n', n, '', 0], ['h', H, 's', 3]], value: n * EVERY * H }; },
-                vw: function (n) { return { formula: 'the ' + ds.get('profile') + ' profile at t<sub>n</sub>', inputs: [['t<sub>n</sub>', ds.get('ts')[n], 's', 2], ['v<sub>0</sub>', ds.get('v0'), 'm/s', 1], ['Δv', ds.get('dv'), 'm/s', 1]], value: wind(ds.get('ts')[n], { prof: ds.get('profile'), v0: ds.get('v0'), dv: ds.get('dv') }) }; },
+                vw: function (n) { return { formula: _t('the ') + ds.get('profile') + _t(' profile at t<sub>n</sub>'), inputs: [['t<sub>n</sub>', ds.get('ts')[n], 's', 2], ['v<sub>0</sub>', ds.get('v0'), 'm/s', 1], ['Δv', ds.get('dv'), 'm/s', 1]], value: wind(ds.get('ts')[n], { prof: ds.get('profile'), v0: ds.get('v0'), dv: ds.get('dv') }) }; },
                 om: function (n) { return { formula: 'the same RK4, rerun from t = 0 to sample n', inputs: [['n', n, '', 0], ['h', H, 's', 3]], value: rk4Replay(n).w }; },
                 Ictl: function (n) { return { formula: 'the same RK4, rerun from t = 0 to sample n', inputs: [['n', n, '', 0], ['h', H, 's', 3]], value: rk4Replay(n).I }; },
                 rpm: function (n) { return { formula: 'ω · 60 / 2π', inputs: [['ω', ds.get('om')[n], 'rad/s', 6]], value: ds.get('om')[n] * 60 / (2 * Math.PI) }; },
@@ -1113,7 +1113,7 @@
                 lam: function (n) { return { formula: 'ω R / v', inputs: [['ω', ds.get('om')[n], 'rad/s', 6], ['R', R, 'm', 1], ['v', ds.get('vw')[n], 'm/s', 4]], value: ds.get('om')[n] * R / ds.get('vw')[n] }; },
                 cpv: function (n) { return { formula: 'c<sub>1</sub>(c<sub>2</sub>/λ<sub>i</sub> − c<sub>4</sub>) e<sup>−c₅/λᵢ</sup> + c<sub>6</sub> λ', inputs: [['λ', ds.get('lam')[n], '', 5]], value: cp(ds.get('lam')[n]) }; },
                 ta: function (n) { return { formula: '½ ρ A v³ c<sub>p</sub>(λ) / ω', inputs: [['v', ds.get('vw')[n], 'm/s', 4], ['ω', ds.get('om')[n], 'rad/s', 6], ['c<sub>p</sub>', ds.get('cpv')[n], '', 5]], value: tauAero(ds.get('om')[n], ds.get('vw')[n]) }; },
-                tg: function (n) { var c = { ctrl: ds.get('ctrl'), tau0: ds.get('tau0'), Kp: ds.get('Kp'), Ki: ds.get('Ki'), wref: ds.get('w_ref') }; return { formula: ds.get('ctrl') === 'opt' ? T('K<sub>opt</sub> ω², at most τ<sub>max</sub>') : 'τ<sub>0</sub> + K<sub>p</sub>(ω − ω<sub>ref</sub>) + K<sub>i</sub> I, kept between 0 and τ<sub>max</sub>', inputs: [['ω', ds.get('om')[n], 'rad/s', 6], ['I', ds.get('Ictl')[n], 'rad', 6]], value: tauGen(ds.get('om')[n], ds.get('Ictl')[n], c) }; },
+                tg: function (n) { var c = { ctrl: ds.get('ctrl'), tau0: ds.get('tau0'), Kp: ds.get('Kp'), Ki: ds.get('Ki'), wref: ds.get('w_ref') }; return { formula: ds.get('ctrl') === 'opt' ? _t('K<sub>opt</sub> ω², at most τ<sub>max</sub>') : _t('τ<sub>0</sub> + K<sub>p</sub>(ω − ω<sub>ref</sub>) + K<sub>i</sub> I, kept between 0 and τ<sub>max</sub>'), inputs: [['ω', ds.get('om')[n], 'rad/s', 6], ['I', ds.get('Ictl')[n], 'rad', 6]], value: tauGen(ds.get('om')[n], ds.get('Ictl')[n], c) }; },
                 Pg: function (n) { return { formula: 'τ<sub>gen</sub> ω', inputs: [['τ<sub>gen</sub>', ds.get('tg')[n], 'N m', 1], ['ω', ds.get('om')[n], 'rad/s', 6]], value: ds.get('tg')[n] * ds.get('om')[n] }; },
                 Pa: function (n) { return { formula: 'τ<sub>aero</sub> ω', inputs: [['τ<sub>aero</sub>', ds.get('ta')[n], 'N m', 1], ['ω', ds.get('om')[n], 'rad/s', 6]], value: ds.get('ta')[n] * ds.get('om')[n] }; },
                 Eg: function (n) { return { formula: 'the same RK4, rerun: ∫ τ<sub>gen</sub> ω dt', inputs: [['n', n, '', 0]], value: rk4Replay(n).y[0] }; },
@@ -1133,11 +1133,11 @@
                 px_per_m_air: function () { return { formula: 'the constant AIRPX in the code', inputs: [], value: AIRPX }; }
             },
             drawn: {
-                h: function () { var m = statusEl.textContent.match(/one every (\d+) ms/), actual = m ? Number(m[1]) / 1000 / EVERY : NaN; return { what: 'step inferred from the visible sampling interval and EVERY = 2', drawn: isFinite(actual) ? actual + ' s' : 'status asks for a new solve', expected: ds.get('h') + ' s', ok: m ? actual === ds.get('h') : null }; },
-                steps: function () { var expected = Sim.fmt(ds.get('steps'), 0) + ' RK4 steps', actual = statusEl.textContent; return { what: 'the solved-run status', drawn: actual, expected: expected, ok: ds.get('stale') ? null : actual.indexOf(expected) >= 0, note: ds.get('stale') ? T('The status currently asks for a new solve.') : '' }; },
-                rpm_min: function () { var actual = document.getElementById('r-rpm').textContent, expected = Sim.fmt(ds.get('rpm_min'), 1) + '–' + Sim.fmt(ds.get('rpm_max'), 1) + ' rpm'; return { what: 'the visible r-rpm readout', drawn: actual, expected: expected, ok: actual === expected }; },
-                rpm_max: function () { var actual = document.getElementById('r-rpm').textContent, expected = Sim.fmt(ds.get('rpm_min'), 1) + '–' + Sim.fmt(ds.get('rpm_max'), 1) + ' rpm'; return { what: 'the visible r-rpm readout', drawn: actual, expected: expected, ok: actual === expected }; },
-                captured_pct: function () { var actual = document.getElementById('r-eff').textContent, expected = Sim.fmt(ds.get('captured_pct'), 1) + ' %'; return { what: 'the visible r-eff readout', drawn: actual, expected: expected, ok: actual === expected }; },
+                h: function () { var m = statusEl.textContent.match(/one every (\d+) ms/), actual = m ? Number(m[1]) / 1000 / EVERY : NaN; return { what: _t('step inferred from the visible sampling interval and EVERY = 2'), drawn: isFinite(actual) ? actual + ' s' : _t('status asks for a new solve'), expected: ds.get('h') + ' s', ok: m ? actual === ds.get('h') : null }; },
+                steps: function () { var expected = Sim.fmt(ds.get('steps'), 0) + _t(' RK4 steps'), actual = statusEl.textContent; return { what: _t('the solved-run status'), drawn: actual, expected: expected, ok: ds.get('stale') ? null : actual.indexOf(expected) >= 0, note: ds.get('stale') ? _t('The status currently asks for a new solve.') : '' }; },
+                rpm_min: function () { var actual = document.getElementById('r-rpm').textContent, expected = Sim.fmt(ds.get('rpm_min'), 1) + '–' + Sim.fmt(ds.get('rpm_max'), 1) + _t(' rpm'); return { what: _t('the visible r-rpm readout'), drawn: actual, expected: expected, ok: actual === expected }; },
+                rpm_max: function () { var actual = document.getElementById('r-rpm').textContent, expected = Sim.fmt(ds.get('rpm_min'), 1) + '–' + Sim.fmt(ds.get('rpm_max'), 1) + _t(' rpm'); return { what: _t('the visible r-rpm readout'), drawn: actual, expected: expected, ok: actual === expected }; },
+                captured_pct: function () { var actual = document.getElementById('r-eff').textContent, expected = Sim.fmt(ds.get('captured_pct'), 1) + ' %'; return { what: _t('the visible r-eff readout'), drawn: actual, expected: expected, ok: actual === expected }; },
                 th_now: function () { return bladePixel(); },
                 v_now: stripDot('vw', 'wind'),
                 rpm_now: stripDot('rpm', 'rotor-speed'),
@@ -1151,11 +1151,11 @@
                 cp_now: function () { var G = cpGeom(); return readBack(cbox, 'the operating point on the c<sub>p</sub> chart', { x: G.X(ds.get('lam_now')), y: G.Y(ds.get('cp_now')) }, 1, Sim.isBurgundy, 'the burgundy dot', 'The dot sits at the stored λ and c<sub>p</sub> of the sample on screen now.'); },
                 cpL: function (j) { var G = cpGeom(); return readBack(cbox, 'c<sub>p</sub>(λ<sub>j</sub>) on its curve', { x: G.X(ds.get('lamL')[j]), y: G.Y(ds.get('cpL')[j]) }, 2, neutralInk, 'the dark curve', 'x ∝ λ from 0 to 14, y ∝ c<sub>p</sub> from 0 to 0.65.'); }
             },
-            round: { time: 't_play', label: function () { return 'one turn of the rotor at the present speed, ' + Sim.fmt(60 / ds.get('rpm_now'), 2) + ' s of the stored run'; }, length: function () { return 60 / ds.get('rpm_now'); },
+            round: { time: 't_play', label: function () { return _t('one turn of the rotor at the present speed, ') + Sim.fmt(60 / ds.get('rpm_now'), 2) + _t(' s of the stored run'); }, length: function () { return 60 / ds.get('rpm_now'); },
                 columns: ['v_now', 'rpm_now', 'P_now', 'lam_now', 'cp_now', 'th_now'], point: function () { return { what: 'rotor' }; },
-                blocked: function () { return ds.get('t_play') + 60 / ds.get('rpm_now') > TEND ? T('the stored run ends before one more turn; press From t = 0') : null; } },
+                blocked: function () { return ds.get('t_play') + 60 / ds.get('rpm_now') > TEND ? _t('the stored run ends before one more turn; press From t = 0') : null; } },
             play: function () { clk.set(true); },
-            about: 'Nothing on this page is computed while you watch. The two minutes are solved once with RK4 at h = 10 ms, and every second state is stored, together with the controller’s integral I, the tip speed, the torques, the powers, the energies and the distance the air has travelled. Each frame draws the stored sample nearest to the playback time, without interpolation; the only arithmetic in the drawing turns metres, seconds, radians and watts into pixels, with the scales listed under Drawing. The blades are drawn at the stored rotor angle θ; the dashes of the air move by the stored travel ∫ v dt at 5 px per metre; the wind arrow is 6 px + 3.2 px per m/s long. The rotor disc is drawn as seen from the side at an angle, its horizontal shortened to half, so that both the turning and the wind can be seen. The charts draw about two stored samples per screen pixel.'
+            about: _t('Nothing on this page is computed while you watch. The two minutes are solved once with RK4 at h = 10 ms, and every second state is stored, together with the controller’s integral I, the tip speed, the torques, the powers, the energies and the distance the air has travelled. Each frame draws the stored sample nearest to the playback time, without interpolation; the only arithmetic in the drawing turns metres, seconds, radians and watts into pixels, with the scales listed under Drawing. The blades are drawn at the stored rotor angle θ; the dashes of the air move by the stored travel ∫ v dt at 5 px per metre; the wind arrow is 6 px + 3.2 px per m/s long. The rotor disc is drawn as seen from the side at an angle, its horizontal shortened to half, so that both the turning and the wind can be seen. The charts draw about two stored samples per screen pixel.')
         };
 
         optimum();

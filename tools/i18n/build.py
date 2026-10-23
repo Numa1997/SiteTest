@@ -110,7 +110,7 @@ def wanted():
     out = {}
     for f in SCRIPTS:
         src = open(os.path.join(ROOT, f), encoding='utf-8').read()
-        for m in re.finditer(r"\bT\('((?:[^'\\]|\\.)*)'", src): out.setdefault(m.group(1).replace("\\'", "'"), f)
+        for m in re.finditer(r"(?<![\w$.])(?:_t|T)\('((?:[^'\\]|\\.)*)'", src): out.setdefault(m.group(1).replace("\\'", "'"), f)
         if f.startswith('public/simulations/'):
             for m in re.finditer(PANEL_KEYS, src):
                 if re.search(r'[A-Za-z]{2,}', re.sub(r'<[^>]+>', ' ', m.group(1))): out.setdefault(m.group(1).replace("\\'", "'"), f + ' (data panel)')

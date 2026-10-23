@@ -10,7 +10,7 @@
     <meta name="theme-color" content="#f5f1ea">
     <link rel="stylesheet" href="../styles/sim.css">
     <link rel="stylesheet" href="../styles/data.css">
-    <link rel="stylesheet" href="../styles/fold.css">
+    <link rel="stylesheet" href="../styles/fold.css"><link rel="stylesheet" href="../styles/i18n.css"><!--I18N-ALTERNATES--><!--/I18N-ALTERNATES-->
     <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='12' fill='%237a1f2b'/%3E%3Ctext x='32' y='45' text-anchor='middle' font-family='Georgia,serif' font-size='38' fill='%23f5f1ea'%3EN%3C/text%3E%3C/svg%3E">
 </head>
 <body>
@@ -28,7 +28,7 @@
             <a href="draw-decompose.html">8</a>
             <a href="driven-oscillator.html">9</a>
             <a href="wind-turbine.html">10</a>
-        </nav>
+        </nav><span class="lang-switch" role="group" aria-label="Language" translate="no"><!--I18N-SWITCH--><!--/I18N-SWITCH--></span>
     </header>
 
     <main class="sim">
@@ -655,7 +655,7 @@
             document.getElementById('r-c').textContent = c.toFixed(2) + ' m/s';
             document.getElementById('cap-c').innerHTML = '<i>c</i> = ' + c.toFixed(2) + ' m/s';
             document.getElementById('r-t').textContent = (1 / f()).toFixed(2) + ' s';
-            document.getElementById('r-ak').textContent = (a() * k()).toFixed(2) + (a() < amp.value ? T(' (cap)') : '');
+            document.getElementById('r-ak').textContent = (a() * k()).toFixed(2) + (a() < amp.value ? _t(' (cap)') : '');
             var deep = Math.exp(-k() * DZ * (layers.value - 1));
             document.getElementById('r-deep').textContent = (deep * 100).toFixed(deep < 0.1 ? 1 : 0) + ' % of a';
             var kk = k(), ff = f(), aa = a(), om = 2 * Math.PI * ff, am = aa / PX_PER_M;
@@ -782,11 +782,11 @@
                 lam: ds.get('lambda') + ' px = ' + ds.get('lambda_m').toFixed(2) + ' m', k: Sim.fmt(ds.get('k'), 5) + ' rad/px',
                 km: Sim.fmt(ds.get('k_m'), 4) + ' rad/m', f: ds.get('f').toFixed(4) + ' Hz', c: ds.get('c').toFixed(4) + ' m/s',
                 T: ds.get('T').toFixed(4) + ' s', cg: ds.get('cg').toFixed(4) + ' m/s',
-                X0: Sim.fmt(ds.get('X0')[i], 1) + ' px', th: Sim.fmt(red, 3) + ' rad', px: Sim.fmt(ds.get('xi')[i], 2) + ' px', pz: Sim.fmt(ds.get('zeta')[i], 2) + ' px',
+                X0: Sim.fmt(ds.get('X0')[i], 1) + ' px', th: Sim.fmt(red, 3) + _t(' rad'), px: Sim.fmt(ds.get('xi')[i], 2) + ' px', pz: Sim.fmt(ds.get('zeta')[i], 2) + ' px',
                 r: Sim.fmt(ds.get('r_z')[0], 2) + ' px', r1: Sim.fmt(ds.get('r1'), 2) + ' px', z0: '−' + ds.get('z_deep_px') + ' px',
                 deep: (dp * 100).toFixed(dp < 0.1 ? 2 : 1) + ' %', eta: Sim.fmt(ds.get('zeta')[i], 2) + ' px',
                 a: Sim.fmt(ds.get('a'), 2) + ' px', A: ds.get('amp') + ' px', ak: Sim.fmt(ds.get('ak'), 4),
-                wt: Sim.fmt(ds.get('omegaT'), 2) + ' rad', s: Sim.fmt(ds.get('s_px'), 4), ys: Sim.fmt(ds.get('ys'), 1) + ' px'
+                wt: Sim.fmt(ds.get('omegaT'), 2) + _t(' rad'), s: Sim.fmt(ds.get('s_px'), 4), ys: Sim.fmt(ds.get('ys'), 1) + ' px'
             };
         };
         var clk = Sim.clock(function (dt, t) {
@@ -798,25 +798,25 @@
         Sim.playButton(document.getElementById('play'), clk);
 
         /* ---------- the data panel (scripts/datalog.js) reads the store; these hooks only say where things are drawn and how to test a value ---------- */
-        function sliderCheck(input, label) { return { formula: 'read from the ' + label + ' slider now', inputs: [['slider', input.value, '']], value: parseFloat(input.value) }; }
+        function sliderCheck(input, label) { return { formula: _t('read from the ') + label + _t(' slider now'), inputs: [['slider', input.value, '']], value: parseFloat(input.value) }; }
         function at(q) { return { x: ds.get('px')[q], y: ds.get('py')[q] }; }
         function parcelPixel(q) {
             var p = at(q), px = ctx.getImageData(Math.round(p.x * box.dpr), Math.round(p.y * box.dpr), 1, 1).data, lum = 0.2126 * px[0] + 0.7152 * px[1] + 0.0722 * px[2];
             var N = ds.get('N'), j = Math.floor(q / N), i = q % N;
-            if (j >= ds.get('layers_drawn')) return { what: 'parcel (layer ' + j + ', column ' + i + ')', drawn: 'nothing', expected: 'nothing', ok: true, note: 'This layer lies below the bottom of the canvas, so the page does not draw it; its numbers are still computed and stored.' };
-            return { what: 'screen pixel at parcel (layer ' + j + ', column ' + i + '), (' + Sim.fmt(p.x, 1) + ', ' + Sim.fmt(p.y, 1) + ') css px', drawn: px[3] === 0 ? T('nothing (transparent)') : 'rgb(' + px[0] + ', ' + px[1] + ', ' + px[2] + ')', expected: 'a dark parcel: ink rgb(58, 50, 46) or burgundy rgb(122, 31, 43) on the pink water', ok: px[3] > 0 && lum < 130,
-                note: 'The parcels are filled discs of radius 3 to 6 px, so the pixel at the stored centre is the fill colour.' };
+            if (j >= ds.get('layers_drawn')) return { what: _t('parcel (layer ') + j + _t(', column ') + i + ')', drawn: 'nothing', expected: 'nothing', ok: true, note: _t('This layer lies below the bottom of the canvas, so the page does not draw it; its numbers are still computed and stored.') };
+            return { what: _t('screen pixel at parcel (layer ') + j + _t(', column ') + i + '), (' + Sim.fmt(p.x, 1) + ', ' + Sim.fmt(p.y, 1) + _t(') css px'), drawn: px[3] === 0 ? _t('nothing (transparent)') : 'rgb(' + px[0] + ', ' + px[1] + ', ' + px[2] + ')', expected: _t('a dark parcel: ink rgb(58, 50, 46) or burgundy rgb(122, 31, 43) on the pink water'), ok: px[3] > 0 && lum < 130,
+                note: _t('The parcels are filled discs of radius 3 to 6 px, so the pixel at the stored centre is the fill colour.') };
         }
         function qInputs(q) { var N = ds.get('N'), j = Math.floor(q / N), i = q % N; return [['layer j', j, '', 0], ['column i', i, '', 0], ['r', ds.get('r_z')[j], 'px', 4], ['θ', ds.get('theta')[q], 'rad', 4]]; }
         Sim.data = {
-            ds: ds, kicker: 'Fig. 5 · data', file: 'fig5-water-waves',
+            ds: ds, kicker: _t('Fig. 5 · data'), file: 'fig5-water-waves',
             playing: function () { return clk.playing; },
             groups: [
-                { title: 'Physical parameters', note: 'fixed constants are in the dataset attributes; these you set', vars: ['amp', 'lambda', 'lambda_m', 'f', 'dispersion', 'N', 'layers', 'layers_drawn'] },
-                { title: 'Derived physics', note: 'computed by the page from the parameters', vars: ['k', 'k_m', 'omega', 'T', 'c', 'c_deep', 'cg', 'a', 'cap', 'ak', 'stokes', 'deep', 'r1', 'z_deep_px'] },
-                { title: 'Time', note: 'advances only while it plays', vars: ['t', 'omegaT', 'periods'] },
-                { title: 'Layers and parcels', note: 'rows are layers, columns are parcels; point at a cell to find it in the figure', vars: ['follow', 'X0', 'depth', 'r_z', 'cy_px', 'theta', 'xi', 'zeta', 'u', 'w', 'px', 'py'] },
-                { title: 'Drawing', note: 'how the picture is laid out', vars: ['world_w', 's_px', 'ys', 'box_w', 'box_h', 'orbits', 'dt', 'fps', 'frames', 'playing'] }
+                { title: _t('Physical parameters'), note: _t('fixed constants are in the dataset attributes; these you set'), vars: ['amp', 'lambda', 'lambda_m', 'f', 'dispersion', 'N', 'layers', 'layers_drawn'] },
+                { title: _t('Derived physics'), note: _t('computed by the page from the parameters'), vars: ['k', 'k_m', 'omega', 'T', 'c', 'c_deep', 'cg', 'a', 'cap', 'ak', 'stokes', 'deep', 'r1', 'z_deep_px'] },
+                { title: _t('Time'), note: _t('advances only while it plays'), vars: ['t', 'omegaT', 'periods'] },
+                { title: _t('Layers and parcels'), note: _t('rows are layers, columns are parcels; point at a cell to find it in the figure'), vars: ['follow', 'X0', 'depth', 'r_z', 'cy_px', 'theta', 'xi', 'zeta', 'u', 'w', 'px', 'py'] },
+                { title: _t('Drawing'), note: _t('how the picture is laid out'), vars: ['world_w', 's_px', 'ys', 'box_w', 'box_h', 'orbits', 'dt', 'fps', 'frames', 'playing'] }
             ],
             rowLabel: { z: function (j) { return 'z' + j; } },
             colour: { xi: function (v) { return Sim.colourMap(v, ds.get('a')); }, zeta: function (v) { return Sim.colourMap(v, ds.get('a')); }, u: function (v) { return Sim.colourMap(v, ds.get('a') * ds.get('omega')); }, w: function (v) { return Sim.colourMap(v, ds.get('a') * ds.get('omega')); } },
@@ -827,7 +827,7 @@
             },
             inspect: function (ref) {
                 var q = ref.q, N = ds.get('N'), j = Math.floor(q / N), i = q % N;
-                return { title: 'parcel · layer ' + j + ', column ' + i + (j === 0 && i === ds.get('follow') ? T(' · the followed one') : ''), at: at(q),
+                return { title: _t('parcel · layer ') + j + _t(', column ') + i + (j === 0 && i === ds.get('follow') ? _t(' · the followed one') : ''), at: at(q),
                     rows: [['X<sub>0</sub>', ds.get('X0')[i], 'px', 'X0', i], ['depth', ds.get('depth')[j], 'm', 'depth', j], ['r', ds.get('r_z')[j], 'px', 'r_z', j], ['θ', ds.get('theta')[q], 'rad', 'theta', q], ['ξ', ds.get('xi')[q], 'px', 'xi', q], ['ζ', ds.get('zeta')[q], 'px', 'zeta', q], ['u', ds.get('u')[q], 'px/s', 'u', q], ['w', ds.get('w')[q], 'px/s', 'w', q]] };
             },
             locate: function (name, idx) {
@@ -876,10 +876,10 @@
                 ys: function () { return { formula: 'max(a s + 34, 0.28 box.h)', inputs: [['a', ds.get('a'), 'px', 2], ['s', ds.get('s_px'), '', 4], ['box.h', box.h, 'css px', 0]], value: Math.max(ds.get('a') * ds.get('s_px') + 34, box.h * 0.28) }; }
             },
             drawn: { px: parcelPixel, py: parcelPixel, xi: parcelPixel, zeta: parcelPixel },
-            round: { time: 't', label: function () { return 'one period, T = ' + Sim.fmt(ds.get('T'), 3) + ' s'; }, length: function () { return ds.get('T'); },
+            round: { time: 't', label: function () { return _t('one period, T = ') + Sim.fmt(ds.get('T'), 3) + ' s'; }, length: function () { return ds.get('T'); },
                 columns: ['omegaT'], point: function () { return { q: ds.get('follow') }; } },
             play: function () { clk.set(true); },
-            about: 'Here every parcel is drawn at its stored screen position, rounded to the pixel by the canvas. The surface line is drawn through extra points every 3 px that are not parcels and are not stored; at a top-row parcel the stored ζ is that surface height.'
+            about: _t('Here every parcel is drawn at its stored screen position, rounded to the pixel by the canvas. The surface line is drawn through extra points every 3 px that are not parcels and are not stored; at a top-row parcel the stored ζ is that surface height.')
         };
         couple();
         draw();
