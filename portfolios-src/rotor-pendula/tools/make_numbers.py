@@ -49,12 +49,12 @@ N['ratio_f_min'] = f(min(x['R'] for x in rows)**0.5, 2)
 N['ratio_f_max'] = f(max(x['R'] for x in rows)**0.5, 1)
 N['sensor_uW'] = '37.6'
 N['margin_min'] = f'{min(x["Ps"] for x in rows)/(2*37.6e-6):.0f}'      # mechanical power over twice the sensor need
-tr = ['<table class="mt"><thead><tr><th>rotor</th><th>pivot</th><th>$R$</th><th>$G$</th><th>$\\Gamma$</th>'
+tr = ['<p class="tcap">Table 1. Sol\'s 18 mountings. ¹ At these two mountings Sol\'s brake is the best one found by a nonlinear search, not $\\kappa^*$.</p><table class="mt"><thead><tr><th>rotor</th><th>pivot</th><th>$R$</th><th>$G$</th><th>$\\Gamma$</th>'
       '<th>$\\Theta^*$ (rad)</th><th>$P^*$ (2.5), mW</th><th>full model, mW</th><th>double, mW</th><th>double ÷ single</th></tr></thead><tbody>']
 for x in rows:
     tr.append(f'<tr><td>{x["rpm"]} rpm, {x["Rrot"]:.2f} m</td><td>{x["pct"]} %, {x["rp"]:.3f} m</td><td>{x["R"]:.2f}</td>'
               f'<td>{x["G"]:.3g}</td><td>{x["Gam"]:.3g}</td><td>{x["Th"]:.3f}</td><td>{x["Pstar"]*1e3:.2f}</td>'
-              f'<td>{x["Ps"]*1e3:.2f}</td><td>{x["Pd"]*1e3:.2f}</td><td>{x["ratio"]:.3f}</td></tr>')
+              f'<td>{x["Ps"]*1e3:.2f}{"¹" if x["rpm"] in (8, 14) and x["pct"] == 30 else ""}</td><td>{x["Pd"]*1e3:.2f}</td><td>{x["ratio"]:.3f}</td></tr>')
 tr.append('</tbody></table>')
 T['mountings'] = '\n'.join(tr)
 
@@ -90,7 +90,7 @@ for key, R in (('fast', min(x['R'] for x in rows)), ('slow', max(x['R'] for x in
 # ---- Sol's chaos group ---------------------------------------------------------------------------------------------
 ch = json.load(open(D / 'L1_chaos.json'))
 tr = ['<table class="mt"><thead><tr><th>$c$ (N m s)</th><th>$\\kappa$</th><th>chaotic starts</th><th>mean power, mW</th>'
-      '<th>largest Lyapunov exponent, s⁻¹</th></tr></thead><tbody>']
+      '<th>largest Lyapunov exponent $\\Lambda$, s⁻¹</th></tr></thead><tbody>']
 for gr in ch['groups']:
     P = np.array(gr['P'])*1e3; lam = np.array(gr['lyap'])
     nch = int(np.sum(lam > 0.01*ch['Om']))
@@ -100,6 +100,7 @@ for gr in ch['groups']:
     N[f'chaos_P_{int(round(gr["c"]*1000))}'] = ps
 tr.append('</tbody></table>')
 T['chaos'] = '\n'.join(tr)
+N['chaos_thr'] = f(0.01*ch['Om'], 2); N['chaos_Om'] = f(ch['Om'], 0)
 N['chaos_nic'] = str(len(ch['groups'][0]['P'])); N['chaos_turns'] = str(ch['MEAS'])
 
 # ---- chaos map -----------------------------------------------------------------------------------------------------
@@ -124,6 +125,8 @@ for R in Rs:
     tr.append(f'<tr><th>{R:g}</th>' + ''.join(tds) + '</tr>')
 tr.append('</tbody></table>')
 T['chaosmap'] = '\n'.join(tr)
+N['map_kstar_R1'] = f(next(g_['kappa_star'] for g_ in mp['groups'] if g_['R'] == 1), 3)
+N['chaos_kappa_30'] = f(0.030/(0.1*0.04*4.0), 3)
 N['map_members'] = str(sum(len(v) for v in cells.values()))
 N['map_chaotic'] = str(sum(mb['lyap'] > 0.01 for v in cells.values() for mb in v))
 
@@ -162,6 +165,57 @@ T['fig_brake'] = (f'<figure class="fig"><svg viewBox="0 0 {W_} {H_}" role="img" 
     f'<figcaption>Figure 2. The harvested power (2.3) over its maximum (2.5), against the brake over the best brake (2.4): '
     f'$\\bar P/P^* = 2x/(1+x^2)$ with $x = \\kappa/\\kappa^*$, the same curve at every mounting. The top is flat: a brake '
     f'{2-math.sqrt(3):.2f} times the best, or {2+math.sqrt(3):.1f} times it, still gives half the power ($x = 2 \\mp \\sqrt3$).</figcaption></figure>')
+
+# ---- turbine power for the share (Sol's assumptions) and the trail identity ---------------------------------------
+N['tilt_max_deg'] = f(math.degrees(math.asin(1/min(x['Gam'] for x in rows))), 0)
+N['tilt_min_deg'] = f(math.degrees(1/max(x['Gam'] for x in rows)), 2)
+N['invG_max'] = f(1/min(x['Gam'] for x in rows), 2)
+N['cp_sol'] = '0.45'; N['rho'] = '1.225'
+bestshare = max(rows, key=lambda x: x['share'])
+N['share_where'] = f'{bestshare["rpm"]} rpm, pivot at {bestshare["pct"]} %'
+
+# ---- L2 both torque laws ------------------------------------------------------------------------------------------
+for law in ('nrel', 'k2'):
+    d2 = json.load(open(D / f'L2_run_{law}.json'))
+    tot = []; wnd = []; msh = []
+    for mt in d2['mountings']:
+        pt, pn, pu = np.array(mt['P_turb']), np.array(mt['P_noeuler']), np.array(mt['P_unif'])
+        tot.append(np.mean((pt - mt['P0'])/mt['P0'])*100); wnd.append(np.mean((pn - pu)/mt['P0'])*100)
+        msh.append(np.mean((pu - mt['P0'])/mt['P0'])*100)
+    N[f'l2_{law}_tot_min'] = f(min(tot), 2); N[f'l2_{law}_tot_max'] = f(max(tot), 2)
+    N[f'l2_{law}_wnd_min'] = f(min(wnd), 2); N[f'l2_{law}_wnd_max'] = f(max(wnd), 2)
+    N[f'l2_{law}_msh_min'] = f(min(msh), 2); N[f'l2_{law}_msh_max'] = f(max(msh), 2)
+N['jensen'] = f(0.103**2/2*100, 2); N['sigOm'] = '10.3'
+
+# ---- L3 sag ---------------------------------------------------------------------------------------------------------
+sag = json.load(open(D / 'L3_sag.json'))
+N['sag_tip_cm'] = f(sag[0]['x_tip']*100, 0)
+for sg in sag:
+    k = int(round(sg['frac']*100))
+    N[f'sag_w_{k}'] = f(sg['w']*1000, 0); N[f'sag_only_{k}'] = f(sg['sag_only'], 1); N[f'sag_tot_{k}'] = f'{sg["total"]:+.1f}'
+
+# ---- L3 shaking (two-way) -------------------------------------------------------------------------------------------
+sh = json.load(open(D / 'L3_shake2.json'))
+def pick(z, sgm, dev):
+    return next(r for r in sh if r['zeta'] == z and r['sig_tip'] == sgm and r['device'].startswith(dev))
+for sgm, key in ((0.005, '5'), (0.02, '20'), (0.1, '100')):
+    a = pick(0.005, sgm, 'Sol'); b = pick(0.005, sgm, 'double')
+    N[f'sh_sol_{key}'] = f'{a["P"]*1e3:.3g}'; N[f'sh_dbl_{key}'] = f'{b["P"]*1e3:.3g}'
+    N[f'sh_in_{key}'] = f'{a["P_in"]:.3g}'
+N['sh_ratio'] = f(pick(0.005, 0.1, 'double')['P']/pick(0.005, 0.1, 'Sol')['P'], 2)
+for z, key in ((0.005, 'lo'), (0.03, 'hi')):
+    tnd = pick(z, 0.005, 'tuned')
+    N[f'tu_P_{key}'] = f(tnd['P']*1e3, 1); N[f'tu_Pw_{key}'] = f(tnd['P_wander']*1e3, 1)
+    N[f'tu_share_{key}'] = f(tnd['P']/tnd['P_in']*100, 0); N[f'tu_q_{key}'] = f(tnd['q_rms'], 2)
+    N[f'tu_tipcut_{key}'] = f((1 - tnd['x_rms']/0.005)*100, 0)
+    N[f'tu_q20_{key}'] = f(pick(z, 0.02, 'tuned')['q_rms'], 2)
+N['tu_L'] = f(0.9*63.0*0.9494**2/(2*math.pi*1.0793)**2, 2)
+N['zeta_struct'] = '0.48'
+gt = 9.80665*math.cos(math.radians(5.0)); Om5 = 0.9494; rp9 = 0.9*63.0
+N['grav_sol90'] = f(m*0.2*gt**2/(4*Om5*(rp9 - 0.2))*1e3, 1)
+Lt = rp9*Om5**2/(2*math.pi*1.0793)**2
+N['grav_tuned90'] = f(m*Lt*gt**2/(4*Om5*(rp9 - Lt))*1e3, 0)
+N['tu_len_ratio'] = f(Lt/0.2, 1)
 
 (ROOT / 'numbers.json').write_text(json.dumps({'n': N, 'table': T}, ensure_ascii=False, indent=1))
 print(f'wrote numbers.json: {len(N)} numbers, {len(T)} tables')

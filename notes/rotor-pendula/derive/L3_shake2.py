@@ -79,6 +79,8 @@ def gen_power(dev, c, Om, sig_tip, zeta, ws, both=True):
     P = np.trapezoid(S0*vrel, ws)
     Pin = np.trapezoid(S0*np.real(1j*ws*H[:, 0]), ws)       # power the turbulent force feeds in: <F x'>
     xrms = math.sqrt(np.trapezoid(S0*np.abs(H[:, 0])**2, ws))
+    qrms = math.sqrt(np.trapezoid(S0*np.abs(H[:, 1])**2, ws))      # rms of the (first) rod angle from the shaking
+    gen_power.qrms = qrms
     return P, Pin, xrms
 
 if __name__ == '__main__':
@@ -96,11 +98,13 @@ if __name__ == '__main__':
                 c = math.exp(r.x); P, Pin, xr = gen_power(dev, c, OM0, sig, zeta, ws)
                 Oms = OM0*(1 + 0.103*np.linspace(-3, 3, 25)); wts = np.exp(-0.5*np.linspace(-3, 3, 25)**2); wts /= wts.sum()
                 Pw = float(np.sum(wts*np.array([gen_power(dev, c, O, sig, zeta, ws)[0] for O in Oms])))
+                gen_power(dev, c, OM0, sig, zeta, ws)
                 ok = P <= Pin*(1 + 1e-6)
                 fails += not ok
                 print(f"{'PASS' if ok else 'FAIL'} zeta {zeta*100:.1f} %, tip rms {sig:.3f} m, {name}: shaking harvest {P*1e3:9.3f} mW "
                       f"of {Pin*1e3:9.1f} mW fed into the blade; tip rms with device {xr*1e3:.2f} mm; with speed wander "
                       f"{Pw*1e3:9.3f} mW", flush=True)
-                out.append(dict(zeta=zeta, sig_tip=sig, device=name, c=c, P=P, P_in=Pin, x_rms=xr, P_wander=Pw))
+                out.append(dict(zeta=zeta, sig_tip=sig, device=name, c=c, P=P, P_in=Pin, x_rms=xr, P_wander=Pw, q_rms=gen_power.qrms))
+                print(f'      rod swing rms {gen_power.qrms:.3f} rad')
     json.dump(out, open(os.path.join(os.path.dirname(os.path.abspath(__file__)), 'L3_shake2.json'), 'w'), indent=1)
     print('ALL PASS' if fails == 0 else f'{fails} FAIL')

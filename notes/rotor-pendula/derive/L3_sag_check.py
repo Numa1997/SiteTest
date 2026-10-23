@@ -29,6 +29,7 @@ ph = T5.edge_shape(x); m_e = np.trapezoid(mu*ph**2, x*Lb); g_e = np.trapezoid(mu
 om_e = 2*math.pi*T5.F_EDGE_SYS; x_tip = g_e*gg/(m_e*om_e**2)/(1 - (Om/om_e)**2)
 dshape = lambda xx: sum(cc*(k + 2)*xx**(k + 1) for k, cc in enumerate(T5.EDGE_SHAPE))
 fails = 0
+out = []
 for frac in (0.3, 0.6, 0.9):
     rpv = frac*T5.R_TIP; xs = (rpv - T5.R_HUB)/Lb
     wv = T5.edge_shape(xs)*x_tip; wpv = dshape(xs)*x_tip/Lb
@@ -46,6 +47,8 @@ for frac in (0.3, 0.6, 0.9):
     d_sag = (res[1]/res[0] - 1)*100; d_tot = (res[2]/res[0] - 1)*100
     ok = abs(d_sag - lin[frac][1]) < 0.3 and abs(d_tot - lin[frac][0]) < 0.3
     fails += not ok
+    out.append(dict(frac=frac, w=wv, wp=wpv, sag_only=d_sag, total=d_tot, P_rigid=res[0], x_tip=x_tip))
     print(f"{'PASS' if ok else 'FAIL'} pivot {frac*100:.0f} %: nonlinear sag only {d_sag:+.2f} % (linear {lin[frac][1]:+.2f}), "
           f"with section rotation {d_tot:+.2f} % (linear {lin[frac][0]:+.2f}); rigid-blade power {res[0]*1e3:.3f} mW")
+import json; json.dump(out, open(os.path.join(os.path.dirname(os.path.abspath(__file__)), 'L3_sag.json'), 'w'), indent=1)
 print('ALL PASS' if fails == 0 else f'{fails} FAIL'); sys.exit(1 if fails else 0)
