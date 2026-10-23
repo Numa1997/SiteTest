@@ -85,7 +85,7 @@ def gen_power(dev, c, Om, sig_tip, zeta, ws, both=True):
 
 if __name__ == '__main__':
     L_t = RP*OM0**2/W_E**2
-    devs = {'Sol single (0.2 m)': device('single', 0.2), 'double (0.2 m)': device('double', 0.2),
+    devs = {'single (0.2 m)': device('single', 0.2), 'double (0.2 m)': device('double', 0.2),
             f'tuned single ({L_t:.2f} m)': device('single', L_t)}
     print(f'pivot at 90 %: Phi = {PHI:.4f}, slope {PHID:.4f} /m; blade modal mass {M_E:.0f} kg; tuned rod {L_t:.3f} m')
     out = []; fails = 0

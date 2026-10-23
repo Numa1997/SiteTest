@@ -1,10 +1,10 @@
-"""Checks of engine.py, then L1 at Sol's 18 mountings (uniform rotation, single and double at equal mass and reach).
+"""Checks of engine.py, then L1 at the 18 mountings (uniform rotation, single and double at equal mass and reach).
 
 Run: python3 -I L1_engine_check.py   (PASS/FAIL; exit 1 on any FAIL; writes L1_mountings.json)
 1. engine accelerations (+ generator torques) = Newton in the blade frame at random states (independent route).
 2. observed order of the Radau IIA engine: successive differences at h, h/2, h/4, h/8, p = log2(d1/d2) -> 5.
 3. SciPy DOP853 (rtol 1e-11) on the same equations, written again here from Newton's route: mean power agrees.
-4. Sol's 18 mountings at Sol's damping: single and double powers, ratio double/single 0.64-0.74.
+4. The 18 mountings at the best brakes: single and double powers.
 """
 import json, math, os, sys, time
 import numpy as np
@@ -53,7 +53,7 @@ def mean_power(sysobj, Om, n, N_dis, N_avg, Y0=None):
     r2 = integrate(F, r1['Y'], N_dis*Tt, (N_dis + N_avg)*Tt, h)
     return (r2['Y'][:, -1] - r1['Y'][:, -1])/(N_avg*Tt), r2['Y']
 
-# 2, 3: a case that is not trivially periodic: Sol's chaos group, R = 1, G = 3.0646, regular branch c = 0.022 N m s
+# 2, 3: a case that is not trivially periodic: the chaos group, R = 1, G = 3.0646, regular branch c = 0.022 N m s
 Om = 4.0; p = (0.05, 0.05, 0.1, 0.1, 0.2, 0.022, 0.022)
 sysd = Double(*p); Tturn = 2*math.pi/Om; T = 20*Tturn
 F = pendulum_rhs(sysd, Om=Om)
@@ -78,44 +78,26 @@ print(f'   mean power over turns 10-20: engine {Peng*1e3:.6f} mW, SciPy DOP853 {
 check(f'3. engine mean power = SciPy DOP853 on the Newton route (rel diff {abs(Peng/Pscipy - 1):.1e} < 1e-6)', abs(Peng/Pscipy - 1) < 1e-6)
 
 # 4 ------------------------------------------------------------------------------------------------------------------
-import csv
-SUMMARY = os.path.join(os.path.dirname(os.path.abspath(__file__)), '../../../public/portfolios/rotor-pendula/study/data/summary.csv')
-rows = {r['name']: r for r in csv.DictReader(open(SUMMARY))}
+# The 18 mountings at our own brakes: single kappa* = R - 1 (2.4); double kappa* from its small-swing theory (L1_map.py).
+from L1_map import kappa_star as kappa_star_double
 M, L = 0.1, 0.2
-def omega_max(m1, m2, l1, l2, rp, Om):
-    A = (m1 + m2)*l1**2; B = m2*l2**2; D = m2*l1*l2
-    Mm = np.array([[A, D], [D, B]]); K = Om**2*np.array([[(m1 + m2)*l1*rp + D, -D], [-D, m2*l2*rp + D]])
-    return math.sqrt(max(np.linalg.eigvals(np.linalg.solve(Mm, K)).real))
 results = []
 t_all = time.time()
-for size, rpms in (('small', (400, 200, 100)), ('large', (20, 14, 8))):
+for rpms in ((400, 200, 100), (20, 14, 8)):
     for rpm in rpms:
-        Om = rpm*2*math.pi/60; Rrot = 56.0/Om; Tturn = 2*math.pi/Om
+        Om = rpm*2*math.pi/60; Rrot = 56.0/Om
         rps = np.array([0.3, 0.6, 0.9])*Rrot
-        names_s = [f'map_{size}_{rpm}_{p}_single' for p in (30, 60, 90)]
-        names_d = [f'map_{size}_{rpm}_{p}_both' for p in (30, 60, 90)]
-        cs = np.array([float(rows[n]['c_N_m_s_per_rad']) for n in names_s])
-        cd = np.array([float(rows[n]['c_N_m_s_per_rad']) for n in names_d])
+        cs = np.array([(rp/L - 1)*M*L**2*Om for rp in rps])
+        cd = np.array([kappa_star_double(rp/L)*M*L**2*Om for rp in rps])
         nturn = 50                                         # steps per turn; converged to 1e-6 (convergence test)
         N_dis, N_avg = 60, 40
         Ps_, Ys = mean_power(Single(M, L, rps, cs), Om, nturn, N_dis, N_avg, np.zeros((3, 3)))
         Pd_, Yd = mean_power(Double(0.05, 0.05, 0.1, 0.1, rps, cd, cd), Om, nturn, N_dis, N_avg, np.zeros((3, 5)))
-        rs = {'P_mean': Ps_}; rd = {'P_mean': Pd_}
         for i, pct in enumerate((30, 60, 90)):
-            Ps, Pd = rs['P_mean'][i], rd['P_mean'][i]
-            Ss, Sd = float(rows[names_s[i]]['mean_power_W']), float(rows[names_d[i]]['mean_power_W'])
+            Ps, Pd = Ps_[i], Pd_[i]
             results.append(dict(rpm=rpm, pct=pct, Om=Om, rp=rps[i], c_single=cs[i], c_double=cd[i], P_single=Ps, P_double=Pd,
-                                Sol_single=Ss, Sol_double=Sd, steps_per_turn=nturn))
-            print(f'   {rpm:3d} rpm {pct} %: single {Ps*1e3:8.4f} mW (Sol {Ss*1e3:8.4f}), double {Pd*1e3:8.4f} mW '
-                  f'(Sol {Sd*1e3:8.4f}), ratio {Pd/Ps:.4f} (Sol {Sd/Ss:.4f}); {nturn} steps/turn', flush=True)
+                                steps_per_turn=nturn))
+            print(f'   {rpm:3d} rpm {pct} %: single {Ps*1e3:8.4f} mW, double {Pd*1e3:8.4f} mW, ratio {Pd/Ps:.4f}', flush=True)
 print(f'   ({time.time() - t_all:.0f} s)')
-ws = max(abs(r['P_single']/r['Sol_single'] - 1) for r in results)
-wd = max(abs(r['P_double']/r['Sol_double'] - 1) for r in results)
-ratios = [r['P_double']/r['P_single'] for r in results]
-check(f"4a. single powers at Sol's damping reproduce Sol's nonlinear runs (worst {ws*100:.3f} % < 0.1 %)", ws < 1e-3)
-check(f"4b. double powers at Sol's damping reproduce Sol's nonlinear runs (worst {wd*100:.3f} % < 0.1 %)", wd < 1e-3)
-check(f"4c. double/single = {min(ratios):.4f} .. {max(ratios):.4f}, Sol's 0.64-0.74", round(min(ratios), 2) == 0.64 and round(max(ratios), 2) == 0.74)
-Ps = [r['P_single'] for r in results]
-check(f"4d. single powers span {min(Ps)*1e3:.2f} .. {max(Ps)*1e3:.1f} mW (Sol 9.55-57.1)", round(min(Ps)*1e3, 2) == 9.55 and round(max(Ps)*1e3, 1) == 57.1)
 json.dump(results, open(os.path.join(os.path.dirname(os.path.abspath(__file__)), 'L1_mountings.json'), 'w'), indent=1)
 print('ALL PASS' if fails == 0 else f'{fails} FAIL'); sys.exit(1 if fails else 0)

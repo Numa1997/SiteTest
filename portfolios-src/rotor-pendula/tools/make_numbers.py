@@ -36,7 +36,7 @@ for r in sorted(runs, key=lambda r: (-r['rpm'], r['pct'])):
 N['R_min'] = f(min(x['R'] for x in rows), 2); N['R_max'] = f(max(x['R'] for x in rows), 0)
 N['G_min'] = f(min(x['G'] for x in rows), 3); N['G_max'] = f(max(x['G'] for x in rows), 1)
 N['Gam_min'] = f(min(x['Gam'] for x in rows), 2); N['Gam_max'] = f(max(x['Gam'] for x in rows), 0)
-N['P_sol_min'] = f(min(x['Ps'] for x in rows)*1e3, 2); N['P_sol_max'] = f(max(x['Ps'] for x in rows)*1e3, 1)
+N['P_min'] = f(min(x['Ps'] for x in rows)*1e3, 2); N['P_max'] = f(max(x['Ps'] for x in rows)*1e3, 1)
 N['ratio_min'] = f(min(x['ratio'] for x in rows), 3); N['ratio_max'] = f(max(x['ratio'] for x in rows), 3)
 N['Th_min'] = f(min(x['Th'] for x in rows), 3); N['Th_max'] = f(max(x['Th'] for x in rows), 2)
 N['Th_max_deg'] = f(math.degrees(max(x['Th'] for x in rows)), 1)
@@ -49,12 +49,12 @@ N['ratio_f_min'] = f(min(x['R'] for x in rows)**0.5, 2)
 N['ratio_f_max'] = f(max(x['R'] for x in rows)**0.5, 1)
 N['sensor_uW'] = '37.6'                                       # input: sensor budget from the ADXL362 and CC2652R datasheets (section 8.3)
 N['margin_min'] = f'{min(x["Ps"] for x in rows)/(2*37.6e-6):.0f}'      # mechanical power over twice the sensor need
-tr = ['<p class="tcap">Table 1. The 18 mountings ($\\Gamma = R/G$); full: the full nonlinear model; ratio: double ÷ single. ¹ At these two mountings the brake is the best one found by a nonlinear search, not $\\kappa^*$.</p><table class="mt"><thead><tr><th>rotor</th><th>pivot</th><th>$R$</th><th>$G$</th>'
+tr = ['<p class="tcap">Table 1. The 18 mountings ($\\Gamma = R/G$); full: the full nonlinear model; ratio: double ÷ single.</p><table class="mt"><thead><tr><th>rotor</th><th>pivot</th><th>$R$</th><th>$G$</th>'
       '<th>$\\Theta^*$ (rad)</th><th>$P^*$ (2.5), mW</th><th>full, mW</th><th>double, mW</th><th>ratio</th></tr></thead><tbody>']
 for x in rows:
     tr.append(f'<tr><td>{x["rpm"]} rpm, {x["Rrot"]:.2f} m</td><td>{x["pct"]} %, {x["rp"]:.3f} m</td><td>{x["R"]:.2f}</td>'
               f'<td>{x["G"]:.3g}</td><td>{x["Th"]:.3f}</td><td>{x["Pstar"]*1e3:.2f}</td>'
-              f'<td>{x["Ps"]*1e3:.2f}{"¹" if x["rpm"] in (8, 14) and x["pct"] == 30 else ""}</td><td>{x["Pd"]*1e3:.2f}</td><td>{x["ratio"]:.3f}</td></tr>')
+              f'<td>{x["Ps"]*1e3:.2f}</td><td>{x["Pd"]*1e3:.2f}</td><td>{x["ratio"]:.3f}</td></tr>')
 tr.append('</tbody></table>')
 T['mountings'] = '\n'.join(tr)
 
@@ -179,7 +179,7 @@ T['fig_brake'] = (f'<figure class="fig"><svg viewBox="0 0 {W_} {H_}" role="img" 
 N['tilt_max_deg'] = f(math.degrees(math.asin(1/min(x['Gam'] for x in rows))), 0)
 N['tilt_min_deg'] = f(math.degrees(1/max(x['Gam'] for x in rows)), 2)
 N['invG_max'] = f(1/min(x['Gam'] for x in rows), 2)
-N['cp_sol'] = '0.45'; N['rho'] = '1.225'
+N['cp_used'] = '0.45'; N['rho'] = '1.225'
 bestshare = max(rows, key=lambda x: x['share'])
 N['share_where'] = f'{bestshare["rpm"]} rpm, pivot at {bestshare["pct"]} %'
 
@@ -210,10 +210,10 @@ sh = json.load(open(D / 'L3_shake2.json'))
 def pick(z, sgm, dev):
     return next(r for r in sh if r['zeta'] == z and r['sig_tip'] == sgm and r['device'].startswith(dev))
 for sgm, key in ((0.005, '5'), (0.02, '20'), (0.1, '100')):
-    a = pick(0.005, sgm, 'Sol'); b = pick(0.005, sgm, 'double')
-    N[f'sh_sol_{key}'] = f'{a["P"]*1e3:.3g}'; N[f'sh_dbl_{key}'] = f'{b["P"]*1e3:.3g}'
+    a = pick(0.005, sgm, 'single'); b = pick(0.005, sgm, 'double')
+    N[f'sh_one_{key}'] = f'{a["P"]*1e3:.3g}'; N[f'sh_dbl_{key}'] = f'{b["P"]*1e3:.3g}'
     N[f'sh_in_{key}'] = f'{a["P_in"]:.3g}'
-N['sh_ratio'] = f(pick(0.005, 0.1, 'double')['P']/pick(0.005, 0.1, 'Sol')['P'], 2)
+N['sh_ratio'] = f(pick(0.005, 0.1, 'double')['P']/pick(0.005, 0.1, 'single')['P'], 2)
 for z, key in ((0.005, 'lo'), (0.03, 'hi')):
     tnd = pick(z, 0.005, 'tuned')
     N[f'tu_P_{key}'] = f(tnd['P']*1e3, 1); N[f'tu_Pw_{key}'] = f(tnd['P_wander']*1e3, 1)
@@ -229,11 +229,11 @@ G90 = 9.80665*math.cos(math.radians(5.0))/(0.9494**2*0.9*63.0)
 N['tu_mod_pct'] = f(G90/2*100, 1)                       # gravity's 1P stiffness modulation of a rod at 90 %: +-G/(2R), any length
 smd = json.load(open(D / 'L3_shake_model.json'))
 N['sh_mb'] = f(smd['m_e'], 0); N['sh_phi'] = f(smd['Phi_p'], 2); N['sh_dphi'] = f(smd['dPhi_p']*1e3, 1)
-N['sh_c_sol'] = f(pick(0.005, 0.005, 'Sol')['c'], 3); N['sh_cstar_sol'] = f(m*0.2**2*0.9494*(0.9*63.0/0.2 - 1), 2)
+N['sh_c_one'] = f(pick(0.005, 0.005, 'single')['c'], 3); N['sh_cstar_one'] = f(m*0.2**2*0.9494*(0.9*63.0/0.2 - 1), 2)
 N['tu_L'] = f(0.9*63.0*0.9494**2/(2*math.pi*1.0793)**2, 2)
 N['zeta_struct'] = '0.48'
 gt = 9.80665*math.cos(math.radians(5.0)); Om5 = 0.9494; rp9 = 0.9*63.0
-N['grav_sol90'] = f(m*0.2*gt**2/(4*Om5*(rp9 - 0.2))*1e3, 1)
+N['grav_one90'] = f(m*0.2*gt**2/(4*Om5*(rp9 - 0.2))*1e3, 1)
 Lt = rp9*Om5**2/(2*math.pi*1.0793)**2
 N['grav_tuned90'] = f(m*Lt*gt**2/(4*Om5*(rp9 - Lt))*1e3, 0)
 N['tu_len_ratio'] = f(Lt/0.2, 1)

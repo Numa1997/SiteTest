@@ -7,9 +7,12 @@
   "chk_measure": "40",
   "chk_runs": "36",
   "chk_geared_steps": "1200",
-  "chk_geared_sentence": "."
+  "chk_geared_sentence": ". For the geared generator it runs the settings of the Python check L4_check_2000.json (2000 steps per turn): the load power differs by at most 3.3·10⁻³ % and the power the rotor pays by at most 2.3·10⁻³ %."
  },
- "worst": 1.2732111587254735e-8,
+ "worst": 1.2732052079300615e-8,
  "pass": true,
- "geared": null
+ "geared": {
+  "load": 0.000033204686715415654,
+  "paid": 0.00002302963056688423
+ }
 }
