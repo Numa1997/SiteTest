@@ -1,0 +1,386 @@
+{
+ "06c1cf0d627d": {
+  "src": "<b>Load cell.</b> Measures the specimen force F for the controller.",
+  "tr": "<b>خليّة الحمل.</b> تقيس قوّة العيّنة F للمتحكّم."
+ },
+ "0706025b2bbc": {
+  "src": "max",
+  "tr": "max"
+ },
+ "0e5c5eb62e4f": {
+  "src": "The compact version. Every equation here is derived step by step in <a href=\"hydraulic_theory.html\">Hydraulics from First Principles</a>, Parts II and III.",
+  "tr": "النسخة المختصرة. كل معادلة هنا مُشتقّة خطوةً خطوةً في <a href=\"hydraulic_theory.html\">الهيدروليك من المبادئ الأولى</a>، في الجزأين الثاني والثالث."
+ },
+ "0eaf307449ea": {
+  "src": "1 · What you are looking at",
+  "tr": "1 · ما تنظر إليه"
+ },
+ "16cd8e27b7c9": {
+  "src": "Loop analysis",
+  "tr": "تحليل حلقة التحكّم"
+ },
+ "1773412c1a61": {
+  "src": "set-point y_ref",
+  "tr": "القيمة المرجعية y_ref"
+ },
+ "1f841a6d0d2c": {
+  "src": "stored in motion, height, oil",
+  "tr": "مخزَّنة في الحركة والارتفاع والزيت"
+ },
+ "22ad664e9eb9": {
+  "src": "Symbols",
+  "tr": "الرموز"
+ },
+ "259890c5e0a0": {
+  "src": "Operating point",
+  "tr": "نقطة التشغيل"
+ },
+ "27e90dfa57c3": {
+  "src": "at",
+  "tr": "عند"
+ },
+ "2a6e00ec22c4": {
+  "src": "Energy since t = 0",
+  "tr": "الطاقة منذ t = 0"
+ },
+ "322970f4948c": {
+  "src": "Live readings",
+  "tr": "القراءات الحيّة"
+ },
+ "3c854622886c": {
+  "src": "<b>LVDT.</b> Position sensor; measures the ram position y.",
+  "tr": "<b>LVDT.</b> حسّاس للموضع؛ يقيس موضع المِدكّ y."
+ },
+ "3e315a644163": {
+  "src": "The ideal press →",
+  "tr": "المِكبس المثالي →"
+ },
+ "3e5b3be0af25": {
+  "src": "Time traces",
+  "tr": "منحنيات الزمن"
+ },
+ "4213b083f954": {
+  "src": "Knobs",
+  "tr": "المقابض"
+ },
+ "4281b713882a": {
+  "src": "<b>Dashed wine lines.</b> Electrical signals: u to the valve, F and y back to the controller.",
+  "tr": "<b>الخطوط المتقطّعة الخمرية.</b> إشارات كهربائية: u إلى الصمّام، و F و y عائدةٌ إلى المتحكّم."
+ },
+ "44bc25bda28f": {
+  "src": "<b>Rod and platen.</b> Moving mass m; the platen carries the tooling M and presses the specimen.",
+  "tr": "<b>ساق المكبس ولوح الضغط.</b> كتلة متحرّكة m؛ يحمل لوح الضغط القالب M ويضغط العيّنة."
+ },
+ "44c57abd888a": {
+  "src": "Reset",
+  "tr": "إعادة الضبط"
+ },
+ "45d05ec45d3e": {
+  "src": "hose flow Q_h",
+  "tr": "تدفّق الخرطوم Q_h"
+ },
+ "4bafe595f753": {
+  "src": "<b>Pump with relief valve.</b> Holds the supply line at the constant pressure p<sub>s</sub>.",
+  "tr": "<b>مضخّة مع صمّام تحديد الضغط.</b> تُبقي خطّ التغذية عند الضغط الثابت p<sub>s</sub>."
+ },
+ "4cdff9cf3870": {
+  "src": "<b>Torque motor.</b> Turns the electrical command u into spool motion; its armature (wine bar) tilts with u, and the spool follows with bandwidth f<sub>v</sub>.",
+  "tr": "<b>محرّك العزم.</b> يحوّل أمر التحكّم الكهربائي u إلى حركة للمِزلاج؛ ذراعه المتحرّك (القضيب الخمري) يميل مع u، والمِزلاج يتبعه بعرض النطاق الترددي f<sub>v</sub>."
+ },
+ "513f2a7f25ed": {
+  "src": "The press and its gauge panel",
+  "tr": "المِكبس ولوحة مقاييسه"
+ },
+ "54b0cf859255": {
+  "src": "ram speed ẏ",
+  "tr": "سرعة المِدكّ ẏ"
+ },
+ "5846955db6be": {
+  "src": "Legend",
+  "tr": "مفتاح الرسم"
+ },
+ "5935cae6935f": {
+  "src": "2 · The servo valve",
+  "tr": "2 · الصمّام المؤازر"
+ },
+ "5a5725935967": {
+  "src": "▶ Play",
+  "tr": "▶ تشغيل"
+ },
+ "5b1e898fc07d": {
+  "src": "Theory",
+  "tr": "النظرية"
+ },
+ "5e17c8a62ecf": {
+  "src": "Position loop: cruising up at 0.1 m/s, y = 60 mm",
+  "tr": "حلقة التحكّم في الموضع: صعود بسرعة 0.1 m/s، و y = 60 mm"
+ },
+ "5f4e24f86607": {
+  "src": "3 · Oil that is not quite incompressible",
+  "tr": "3 · زيت ليس عديم الانضغاط تمامًا"
+ },
+ "65a703187e59": {
+  "src": "Hydraulic servo control · interactive study",
+  "tr": "التحكّم الهيدروليكي المؤازر · دراسة تفاعلية"
+ },
+ "6ddf481b238a": {
+  "src": "A pump, a four-way servo valve, two metres of hose and a differential cylinder pressing a specimen. A digital controller drives the ram to the specimen in position control, switches to force control, holds, releases and retracts. Every curve comes from the nonlinear model; the analysis panel linearizes it and asks whether the loop survives.",
+  "tr": "مضخّة، وصمّام مؤازر رباعي المنافذ، وخرطوم طوله مترانِ، وأسطوانة تفاضلية تضغط عيّنة. يقود متحكّم رقمي المِدكّ نحو العيّنة في التحكّم في الموضع، ثم ينتقل إلى التحكّم في القوّة فيُثبّت القوّة، ثم يُرخي الحمل ويسحب المِدكّ إلى الخلف. كل منحنى يأتي من النموذج اللاخطّي؛ ولوحة التحليل تُجري له تقريبًا خطّيًا وتسأل هل تبقى حلقة التحكّم مستقرّة."
+ },
+ "704ace423028": {
+  "src": "<b>Gauge panel dials.</b> Pressures p_a, p_A, p_B, the specimen force F and the spool x_v. The wine arc fills up to the reading; on the spool dial the thin blue needle is the command u, so you can see the spool lag behind it.",
+  "tr": "<b>أقراص لوحة المقاييس.</b> الضغوط p_a و p_A و p_B، وقوّة العيّنة F، ومشوار المِزلاج x_v. القوس الخمري يمتلئ حتى القراءة؛ وفي قرص المِزلاج تكون الإبرة الزرقاء الرفيعة هي أمر التحكّم u، فترى المِزلاج يتأخّر خلفها."
+ },
+ "75522e5a7561": {
+  "src": "<b>Blue oil.</b> Gauge pressure below 0: suction, risk of air release and cavitation.",
+  "tr": "<b>الزيت الأزرق.</b> ضغط مقيس أقل من 0: سحب، وخطر انفصال الهواء والتكهّف."
+ },
+ "7793e10f12fa": {
+  "src": "The loop gain is L(z) = K(z)·z⁻¹·G(z): G is the zero-order-hold discretization of the plant linearized at the operating point, z⁻¹ the one-sample computation delay, K the discrete controller. Stability is decided by the closed-loop eigenvalues (all |z| &lt; 1); the margins and the Nyquist curve say how close it is.",
+  "tr": "كسب الحلقة هو L(z) = K(z)·z⁻¹·G(z): G هو التقطيع بماسك من الرتبة الصفرية للمنظومة بعد تقريبها خطّيًا عند نقطة التشغيل، و z⁻¹ تأخّر الحساب بفترة معاينة واحدة، و K المتحكّم المتقطّع. يحسم الاستقرارَ موضعُ القيم الذاتية للحلقة المغلقة (كلها |z| &lt; 1)؛ وتبيّن الهوامش ومنحنى نايكويست مدى قربها من هذا الحدّ."
+ },
+ "796a828e6ef5": {
+  "src": "cap chamber p_A",
+  "tr": "حجرة الغطاء p_A"
+ },
+ "7b9070057c51": {
+  "src": "The spool is a second-order system driven by the command u ∈ [−1, 1]. Each metering edge is a sharp-edged orifice, so the flow grows with the square root of the pressure drop; a small regularization (p<sub>tr</sub> = 0.1 MPa) removes the infinite slope at zero drop. The valve is critically lapped: at x<sub>v</sub> = 0 only the internal leakage K<sub>L</sub> flows.",
+  "tr": "المِزلاج منظومة من الدرجة الثانية يقودها أمر التحكّم u ∈ [−1, 1]. كل حافّة تحكّم هي فتحة ذات حافّة حادّة، لذا يتناسب السريان مع الجذر التربيعي لهبوط الضغط؛ وتزيل تسويةٌ صغيرة (p<sub>tr</sub> = 0.1 MPa) الميلَ اللانهائي عند انعدام هبوط الضغط. الصمّام ذو تغطية صفرية: عند x<sub>v</sub> = 0 لا يسري إلا التسرّب الداخلي K<sub>L</sub>."
+ },
+ "7c148e457725": {
+  "src": "Key to the drawing",
+  "tr": "شرح الرسم"
+ },
+ "7fc9d4e2361b": {
+  "src": "<b>Flow arrow.</b> Points the way the oil moves; it grows with the flow rate.",
+  "tr": "<b>سهم السريان.</b> يشير إلى الاتجاه الذي يتحرّك فيه الزيت، ويكبر مع معدّل السريان."
+ },
+ "81e9209e64bd": {
+  "src": "sign",
+  "tr": "sign"
+ },
+ "82451b41fd78": {
+  "src": "abs",
+  "tr": "abs"
+ },
+ "8617db601848": {
+  "src": "Force loop: holding the set force on the specimen",
+  "tr": "حلقة التحكّم في القوّة: تُبقي القوّة المرجعية على العيّنة"
+ },
+ "8720f140fd91": {
+  "src": "Oil gauge pressure",
+  "tr": "ضغط الزيت المقيس"
+ },
+ "875467cc7fbf": {
+  "src": "Any change re-runs the whole cycle and the loop analysis.",
+  "tr": "كل تغيير يعيد تشغيل الدورة كاملة وتحليل حلقة التحكّم."
+ },
+ "8dc2a6624f2c": {
+  "src": "<span class=\"swatch\" aria-hidden=\"true\"></span> below 0",
+  "tr": "<span class=\"swatch\" aria-hidden=\"true\"></span> أقل من 0"
+ },
+ "8ea2d54dcb81": {
+  "src": "Hover the plots: the Bode plot reads gain and phase at any frequency (at the 0 dB crossing, “to −180°” is the phase margin); the Nyquist plot gives the distance from the curve to −1; each pole in the z-plane gives its frequency and damping ratio.",
+  "tr": "حوّم بالمؤشّر فوق المخطّطات: مخطّط بودي يقرأ الكسب والطور عند أي تردد (عند نقطة عبور 0 dB، «حتى −180°» هي هامش الطور)؛ ومخطّط نايكويست يعطي المسافة بين المنحنى والنقطة −1؛ وكل قطب في المستوى z يعطي تردده ونسبة التخامد."
+ },
+ "8ed00db02c12": {
+  "src": "specimen force F",
+  "tr": "قوّة العيّنة F"
+ },
+ "8f7d03302106": {
+  "src": "<b>Tank.</b> Oil returns here at atmospheric pressure, p<sub>T</sub> = 0.",
+  "tr": "<b>الخزّان.</b> يعود الزيت إلى هنا عند الضغط الجوّي، p<sub>T</sub> = 0."
+ },
+ "928facd980a0": {
+  "src": "Entrained air of volume fraction α₀ at atmospheric pressure p₀ is squeezed polytropically (n = 1.4). Mixing the compliances of oil and air gives",
+  "tr": "الهواء المحبوس ذو كسر الحجم α₀ عند الضغط الجوّي p₀ يُعصَر عصرًا بوليتروبيًّا (n = 1.4). وبخلط مطاوعتَي الزيت والهواء نحصل على"
+ },
+ "949fe56a12be": {
+  "src": "spool x_v / command u",
+  "tr": "مشوار المِزلاج x_v / أمر التحكّم u"
+ },
+ "95b96b5cba20": {
+  "src": "Shaded bands mark the controller mode: settle, approach, creep, press, release, retract, done. Hover a plot to read every curve at one instant; press or drag in it to move the animation there.",
+  "tr": "الأشرطة المظلّلة تبيّن وضع المتحكّم: الاستقرار، والاقتراب، والزحف، والكبس، والإرخاء، والتراجع، والانتهاء. حوّم بالمؤشّر فوق المخطّط لقراءة كل المنحنيات عند لحظة واحدة؛ واضغط فيه أو اسحب لتنقل الرسم المتحرّك إلى تلك اللحظة."
+ },
+ "9b5489d54ef8": {
+  "src": "pump work",
+  "tr": "شغل المضخّة"
+ },
+ "9c5f3bb9b451": {
+  "src": "The model, equation by equation",
+  "tr": "النموذج، معادلةً بعد معادلة"
+ },
+ "9d328152ebc9": {
+  "src": "<b>Cylinder.</b> Cap chamber below the piston (p<sub>A</sub>, pushes up), rod chamber above it (p<sub>B</sub>, pushes down). Drawn to scale.",
+  "tr": "<b>الأسطوانة.</b> حجرة الغطاء تحت المكبس (p<sub>A</sub>، تدفع إلى الأعلى)، وحجرة الساق فوقه (p<sub>B</sub>، تدفع إلى الأسفل). مرسومة بمقياس رسم حقيقي."
+ },
+ "9e3a6ddd4754": {
+  "src": "valve port p_a",
+  "tr": "منفذ الصمّام p_a"
+ },
+ "9f3163ffda0d": {
+  "src": "Notation",
+  "tr": "الترميز"
+ },
+ "a45efcc044cf": {
+  "src": "ram position y",
+  "tr": "موضع المِدكّ y"
+ },
+ "a4ab4f21160c": {
+  "src": "clamp",
+  "tr": "clamp"
+ },
+ "a5f58c39cc52": {
+  "src": "oil",
+  "tr": "الزيت"
+ },
+ "a644edf89223": {
+  "src": "Small-signal stability",
+  "tr": "الاستقرار عند الإشارات الصغيرة"
+ },
+ "a9e11aee948d": {
+  "src": "L/min",
+  "tr": "L/min"
+ },
+ "ab8b22940f7b": {
+  "src": "Gauges",
+  "tr": "المقاييس"
+ },
+ "adb8cacd9f02": {
+  "src": "rod chamber p_B",
+  "tr": "حجرة الساق p_B"
+ },
+ "af6a5e32e765": {
+  "src": "At 10 MPa the air is crushed and β<sub>eff</sub> ≈ 1.47 GPa; near zero gauge pressure it collapses to tens of MPa, and towards vacuum it goes to zero, which also keeps the pressure from falling below absolute zero.",
+  "tr": "عند 10 MPa يُسحَق الهواء ويصبح β<sub>eff</sub> ≈ 1.47 GPa؛ وقرب الضغط المقيس صفر ينهار إلى عشرات MPa، وباتجاه الفراغ يؤول إلى الصفر، وهذا يمنع أيضًا هبوط الضغط تحت الصفر المطلق."
+ },
+ "b24b52e7bb0a": {
+  "src": "<b>Oil colour.</b> Pale amber at 0, deep wine at p<sub>s</sub>; chambers, hose and lines are all coloured by their pressure.",
+  "tr": "<b>لون الزيت.</b> كهرماني فاتح عند 0، وخمري غامق عند p<sub>s</sub>؛ تُلوَّن الحجرات والخرطوم والخطوط كلّها حسب ضغطها."
+ },
+ "b5e76048f0bc": {
+  "src": "<b>Controller panel.</b> Current mode, set-point, measurement and command u (the value applied now lags one sample).",
+  "tr": "<b>لوحة المتحكّم.</b> الوضع الحالي، والقيمة المرجعية، والقيمة المقاسة، والأمر u (القيمة المطبّقة الآن تتأخّر بفترة معاينة واحدة)."
+ },
+ "b6c935d4f3c7": {
+  "src": "min",
+  "tr": "min"
+ },
+ "b7824598aa8f": {
+  "src": "oil stiffness β_eff(p_A)",
+  "tr": "صلابة الزيت β_eff(p_A)"
+ },
+ "b81110fc51e6": {
+  "src": "Read the derivations →",
+  "tr": "اقرأ الاشتقاقات →"
+ },
+ "bc0305685e20": {
+  "src": "Back to defaults",
+  "tr": "العودة إلى القيم الافتراضية"
+ },
+ "be6f2379431d": {
+  "src": "Cylinder, rod, platen and specimen are drawn to scale; valve, pump and hose route are schematic. The dots in the hose ride with the oil and wrap round at the ends. Spool travel is exaggerated. Moving dashes on the signal lines show which way the information flows.",
+  "tr": "الأسطوانة وساق المكبس ولوح الضغط والعيّنة مرسومة بمقياس رسم حقيقي؛ أمّا الصمّام والمضخّة ومسار الخرطوم فتخطيطيّة. النقاط في الخرطوم تسير مع الزيت وتلتفّ عند الطرفين. مشوار المِزلاج مُبالَغ فيه. الشرطات المتحرّكة على خطوط الإشارة تبيّن اتجاه تدفّق المعلومات."
+ },
+ "c7f73bb54d92": {
+  "src": "Settings",
+  "tr": "الإعدادات"
+ },
+ "c891b2a74879": {
+  "src": "Pa",
+  "tr": "Pa"
+ },
+ "caa97f26834a": {
+  "src": "<b>Mode stepper.</b> The row above the drawing: green dots are finished modes, the wine pill is the active one. Select a mode to jump to its start.",
+  "tr": "<b>شريط الأوضاع.</b> الصفّ فوق الرسم: النقاط الخضراء أوضاع منتهية، والكبسولة الخمرية هي الوضع النشط. اختر وضعًا للقفز إلى بدايته."
+ },
+ "cbe637c8ee43": {
+  "src": "<b>Servo valve, in section.</b> The four grey lands are the spool. Each metering land is exactly as wide as the groove under its port, so at x<sub>v</sub> = 0 every edge is just closed. Moving the spool opens P→A and B→T (x<sub>v</sub> &gt; 0) or P→B and A→T (x<sub>v</sub> &lt; 0). Chambers are coloured by pressure; the white streaks are the jets through the open edges and move with the flow. Travel is exaggerated.",
+  "tr": "<b>صمّام مؤازر، مقطع عرضي.</b> الأكتاف الرمادية الأربعة هي المِزلاج. عرض كل كتف يساوي عرض الأخدود تحت منفذه بالضبط، فعند x<sub>v</sub> = 0 تكون كل حافّة تحكّم مغلقة تمامًا. تحريك المِزلاج يفتح P→A و B→T (x<sub>v</sub> &gt; 0)، أو P→B و A→T (x<sub>v</sub> &lt; 0). تُلوَّن الحجرات حسب الضغط؛ والخطوط البيضاء هي النفّاثات عبر الحوافّ المفتوحة، وتتحرّك مع السريان. مشوار المِزلاج مُبالَغ فيه."
+ },
+ "cc39db213018": {
+  "src": "time t",
+  "tr": "الزمن t"
+ },
+ "cfc1ec38f2a5": {
+  "src": "Recorded every sample",
+  "tr": "تُسجَّل عند كل معاينة"
+ },
+ "d0a238d4995e": {
+  "src": "<b>Frame.</b> Base plate, two columns and the crosshead that holds the specimen and load cell.",
+  "tr": "<b>الإطار.</b> اللوح الأساسي، وعمودان، والرأس العرضي الذي يحمل العيّنة وخليّة الحمل."
+ },
+ "d0b13ffaed5b": {
+  "src": "burnt in hose + seals",
+  "tr": "تحوّل إلى حرارة في الخرطوم والحشوات"
+ },
+ "d41c7beb8d71": {
+  "src": "set-point F_ref",
+  "tr": "القيمة المرجعية F_ref"
+ },
+ "d424af29a8c5": {
+  "src": "settle",
+  "tr": "الاستقرار"
+ },
+ "d6f18fa68583": {
+  "src": "Hydraulics",
+  "tr": "الهيدروليك"
+ },
+ "d9e83874d260": {
+  "src": "tr",
+  "tr": "tr"
+ },
+ "dcb491d93684": {
+  "src": "Pick up a garden hose full of water and swing one end: the water lags, then pushes back. Two metres of oil in a 12 mm hose weigh about 0.2 kg, but squeezed through that narrow bore they behave like a heavy slug. Inertance I = ρL<sub>h</sub>/A<sub>h</sub> ≈ 1.5·10⁷ kg/m⁴ sits between two springs made of oil: the small volume at the valve port and the cap chamber of the cylinder. Oil is stiff (β ≈ 1.5 GPa) only when it is free of air. Half a percent of entrained air at atmospheric pressure turns it into something closer to a stiff rubber: β<sub>eff</sub> drops to about 28 MPa at zero gauge pressure. The ram, 160 kg, rides on these springs. The controller sees all of it through a position sensor, a load cell and a 1 ms clock.",
+  "tr": "أمسِك خرطوم حديقة مملوءًا بالماء وأرجِح أحد طرفيه: يتأخّر الماء ثم يدفع إلى الخلف. مترانِ من الزيت في خرطوم قطره 12 mm يزن نحو 0.2 kg، لكنه حين يُعصَر عبر تلك الفوّهة الضيّقة يسلك سلوك كتلة ثقيلة. تقع الحثيّة الهيدروليكية I = ρL<sub>h</sub>/A<sub>h</sub> ≈ 1.5·10⁷ kg/m⁴ بين نابضين مصنوعين من الزيت: الحجم الصغير عند منفذ الصمّام، وحجرة الغطاء في الأسطوانة. الزيت صلب (β ≈ 1.5 GPa) فقط إذا خلا من الهواء. نصف بالمئة من الهواء المحبوس عند الضغط الجوّي يحوّله إلى شيء أقرب إلى مطاط صلب: إذ يهبط β<sub>eff</sub> إلى نحو 28 MPa عند ضغط مقيس صفر. ويرتكز المِدكّ، وكتلته 160 kg، على هذين النابضين. ويرى المتحكّم كل ذلك عبر حسّاس للموضع وخليّة حمل وساعة توقيت بخطوة 1 ms."
+ },
+ "e03358eed7e6": {
+  "src": "4 · Volumes, the hose, and the ram",
+  "tr": "4 · الحجوم والخرطوم والمِدكّ"
+ },
+ "e4182f7d5c98": {
+  "src": "Servo-Hydraulic Press",
+  "tr": "المِكبس الهيدروليكي المؤازر"
+ },
+ "e43721e1fcf2": {
+  "src": "Servo-Hydraulic <em>Press</em>",
+  "tr": "<em>المِكبس</em> الهيدروليكي المؤازر"
+ },
+ "e4e949046268": {
+  "src": "MPa",
+  "tr": "MPa"
+ },
+ "e6e49b714dad": {
+  "src": "eff",
+  "tr": "eff"
+ },
+ "ea04a18a13db": {
+  "src": "<b>Specimen.</b> The part being pressed, contact at y<sub>c</sub> = 120 mm; it reddens as the force rises.",
+  "tr": "<b>العيّنة.</b> القطعة التي تُكبَس؛ التماس عند y<sub>c</sub> = 120 mm، وتحمرّ كلما ازدادت القوّة."
+ },
+ "ecf9a16a1b18": {
+  "src": "net work into specimen and stop",
+  "tr": "الشغل الصافي الواصل إلى العيّنة والمِصدّ"
+ },
+ "ed733fa14b4b": {
+  "src": "Every symbol on this page, what it means, and its value with the current settings. Values marked “live” change during the cycle; read them in the gauges and time traces.",
+  "tr": "كل رمز في هذه الصفحة، وما يعنيه، وقيمته مع الإعدادات الحالية. القيم المعلَّمة بـ«حيّ» تتغيّر أثناء الدورة؛ اقرأها في المقاييس ومنحنيات الزمن."
+ },
+ "ef0cdd83d6b2": {
+  "src": "burnt in the valve",
+  "tr": "تحوّل إلى حرارة في الصمّام"
+ },
+ "f1017b86804b": {
+  "src": "Notice what this does to a linear analysis: opening the valve towards the cap side meters against p<sub>s</sub> − p<sub>a</sub>, closing it meters against p<sub>a</sub>. The flow gain on the two sides of x<sub>v</sub> = 0 differs, and the model is not differentiable there.",
+  "tr": "لاحظ ما يفعله هذا بالتحليل الخطّي: فتح الصمّام نحو جهة الغطاء يُنظّم السريان مقابل p<sub>s</sub> − p<sub>a</sub>، أمّا إغلاقه فيُنظّمه مقابل p<sub>a</sub>. يختلف كسب السريان على جانبي x<sub>v</sub> = 0، والنموذج غير قابل للاشتقاق هناك."
+ },
+ "f342c4d1a760": {
+  "src": "<b>Hose and its dots.</b> Two metres of hose, drawn shortened; the white dots ride with the oil (they wrap round at the ends).",
+  "tr": "<b>الخرطوم ونقاطه.</b> مترانِ من الخرطوم، مرسومٌ مُقصَّرًا؛ النقاط البيضاء تسير مع الزيت (وتلتفّ عند الطرفين)."
+ },
+ "fbef447c2869": {
+  "src": "Motion and force",
+  "tr": "الحركة والقوّة"
+ }
+}

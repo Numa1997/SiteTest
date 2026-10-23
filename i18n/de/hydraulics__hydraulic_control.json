@@ -1,0 +1,386 @@
+{
+ "06c1cf0d627d": {
+  "src": "<b>Load cell.</b> Measures the specimen force F for the controller.",
+  "tr": "<b>Kraftmessdose.</b> Misst die Probenkraft F für den Regler."
+ },
+ "0706025b2bbc": {
+  "src": "max",
+  "tr": "max"
+ },
+ "0e5c5eb62e4f": {
+  "src": "The compact version. Every equation here is derived step by step in <a href=\"hydraulic_theory.html\">Hydraulics from First Principles</a>, Parts II and III.",
+  "tr": "Die knappe Fassung. Jede Gleichung hier wird Schritt für Schritt in <a href=\"hydraulic_theory.html\">Hydraulik aus den Grundprinzipien</a>, Teil II und III, hergeleitet."
+ },
+ "0eaf307449ea": {
+  "src": "1 · What you are looking at",
+  "tr": "1 · Was Sie hier sehen"
+ },
+ "16cd8e27b7c9": {
+  "src": "Loop analysis",
+  "tr": "Regelkreisanalyse"
+ },
+ "1773412c1a61": {
+  "src": "set-point y_ref",
+  "tr": "Sollwert y_ref"
+ },
+ "1f841a6d0d2c": {
+  "src": "stored in motion, height, oil",
+  "tr": "gespeichert in Bewegung, Höhe, Öl"
+ },
+ "22ad664e9eb9": {
+  "src": "Symbols",
+  "tr": "Symbole"
+ },
+ "259890c5e0a0": {
+  "src": "Operating point",
+  "tr": "Arbeitspunkt"
+ },
+ "27e90dfa57c3": {
+  "src": "at",
+  "tr": "bei"
+ },
+ "2a6e00ec22c4": {
+  "src": "Energy since t = 0",
+  "tr": "Energie seit t = 0"
+ },
+ "322970f4948c": {
+  "src": "Live readings",
+  "tr": "Live-Messwerte"
+ },
+ "3c854622886c": {
+  "src": "<b>LVDT.</b> Position sensor; measures the ram position y.",
+  "tr": "<b>LVDT.</b> Positionssensor; misst die Stößelposition y."
+ },
+ "3e315a644163": {
+  "src": "The ideal press →",
+  "tr": "Die ideale Presse →"
+ },
+ "3e5b3be0af25": {
+  "src": "Time traces",
+  "tr": "Zeitverläufe"
+ },
+ "4213b083f954": {
+  "src": "Knobs",
+  "tr": "Knöpfe"
+ },
+ "4281b713882a": {
+  "src": "<b>Dashed wine lines.</b> Electrical signals: u to the valve, F and y back to the controller.",
+  "tr": "<b>Gestrichelte weinrote Linien.</b> Elektrische Signale: u zum Ventil, F und y zurück zum Regler."
+ },
+ "44bc25bda28f": {
+  "src": "<b>Rod and platen.</b> Moving mass m; the platen carries the tooling M and presses the specimen.",
+  "tr": "<b>Kolbenstange und Pressplatte.</b> Bewegte Masse m; die Pressplatte trägt das Werkzeug M und drückt auf die Probe."
+ },
+ "44c57abd888a": {
+  "src": "Reset",
+  "tr": "Zurücksetzen"
+ },
+ "45d05ec45d3e": {
+  "src": "hose flow Q_h",
+  "tr": "Schlauchdurchfluss Q_h"
+ },
+ "4bafe595f753": {
+  "src": "<b>Pump with relief valve.</b> Holds the supply line at the constant pressure p<sub>s</sub>.",
+  "tr": "<b>Pumpe mit Druckbegrenzungsventil.</b> Hält die Versorgungsleitung auf dem konstanten Druck p<sub>s</sub>."
+ },
+ "4cdff9cf3870": {
+  "src": "<b>Torque motor.</b> Turns the electrical command u into spool motion; its armature (wine bar) tilts with u, and the spool follows with bandwidth f<sub>v</sub>.",
+  "tr": "<b>Drehmomentmotor.</b> Wandelt die elektrische Stellgröße u in eine Schieberbewegung um; sein Anker (der weinrote Balken) kippt mit u, und der Schieber folgt mit der Bandbreite f<sub>v</sub>."
+ },
+ "513f2a7f25ed": {
+  "src": "The press and its gauge panel",
+  "tr": "Die Presse und ihre Instrumententafel"
+ },
+ "54b0cf859255": {
+  "src": "ram speed ẏ",
+  "tr": "Stößelgeschwindigkeit ẏ"
+ },
+ "5846955db6be": {
+  "src": "Legend",
+  "tr": "Legende"
+ },
+ "5935cae6935f": {
+  "src": "2 · The servo valve",
+  "tr": "2 · Das Servoventil"
+ },
+ "5a5725935967": {
+  "src": "▶ Play",
+  "tr": "▶ Abspielen"
+ },
+ "5b1e898fc07d": {
+  "src": "Theory",
+  "tr": "Theorie"
+ },
+ "5e17c8a62ecf": {
+  "src": "Position loop: cruising up at 0.1 m/s, y = 60 mm",
+  "tr": "Lageregelkreis: Aufwärtsfahrt mit 0.1 m/s, y = 60 mm"
+ },
+ "5f4e24f86607": {
+  "src": "3 · Oil that is not quite incompressible",
+  "tr": "3 · Öl, das nicht ganz inkompressibel ist"
+ },
+ "65a703187e59": {
+  "src": "Hydraulic servo control · interactive study",
+  "tr": "Hydraulische Servoregelung · interaktive Studie"
+ },
+ "6ddf481b238a": {
+  "src": "A pump, a four-way servo valve, two metres of hose and a differential cylinder pressing a specimen. A digital controller drives the ram to the specimen in position control, switches to force control, holds, releases and retracts. Every curve comes from the nonlinear model; the analysis panel linearizes it and asks whether the loop survives.",
+  "tr": "Eine Pumpe, ein Vierwege-Servoventil, zwei Meter Schlauch und ein Differentialzylinder, der eine Probe presst. Ein digitaler Regler fährt den Stößel in Lageregelung an die Probe heran, schaltet auf Kraftregelung um, hält, entlastet und fährt zurück. Jede Kurve stammt aus dem nichtlinearen Modell; das Analysepanel linearisiert es und prüft, ob der Regelkreis stabil bleibt."
+ },
+ "704ace423028": {
+  "src": "<b>Gauge panel dials.</b> Pressures p_a, p_A, p_B, the specimen force F and the spool x_v. The wine arc fills up to the reading; on the spool dial the thin blue needle is the command u, so you can see the spool lag behind it.",
+  "tr": "<b>Zifferblätter der Instrumententafel.</b> Drücke p_a, p_A, p_B, die Probenkraft F und der Schieberweg x_v. Der weinrote Bogen füllt sich bis zum abgelesenen Wert; auf dem Schieberweg-Zifferblatt ist die dünne blaue Nadel die Stellgröße u, sodass man sieht, wie der Schieber ihr nachhinkt."
+ },
+ "75522e5a7561": {
+  "src": "<b>Blue oil.</b> Gauge pressure below 0: suction, risk of air release and cavitation.",
+  "tr": "<b>Blaues Öl.</b> Überdruck unter 0: Unterdruck, Gefahr der Luftausscheidung und Kavitation."
+ },
+ "7793e10f12fa": {
+  "src": "The loop gain is L(z) = K(z)·z⁻¹·G(z): G is the zero-order-hold discretization of the plant linearized at the operating point, z⁻¹ the one-sample computation delay, K the discrete controller. Stability is decided by the closed-loop eigenvalues (all |z| &lt; 1); the margins and the Nyquist curve say how close it is.",
+  "tr": "Die Schleifenverstärkung ist L(z) = K(z)·z⁻¹·G(z): G ist die Diskretisierung mit Halteglied nullter Ordnung der im Arbeitspunkt linearisierten Strecke, z⁻¹ die Rechenverzögerung um eine Abtastperiode, K der diskrete Regler. Über die Stabilität entscheiden die Eigenwerte des geschlossenen Kreises (alle |z| &lt; 1); die Reserven und die Nyquist-Kurve zeigen, wie nah der Kreis daran ist."
+ },
+ "796a828e6ef5": {
+  "src": "cap chamber p_A",
+  "tr": "Bodenkammer p_A"
+ },
+ "7b9070057c51": {
+  "src": "The spool is a second-order system driven by the command u ∈ [−1, 1]. Each metering edge is a sharp-edged orifice, so the flow grows with the square root of the pressure drop; a small regularization (p<sub>tr</sub> = 0.1 MPa) removes the infinite slope at zero drop. The valve is critically lapped: at x<sub>v</sub> = 0 only the internal leakage K<sub>L</sub> flows.",
+  "tr": "Der Ventilschieber ist ein System zweiter Ordnung, angetrieben von der Stellgröße u ∈ [−1, 1]. Jede Steuerkante ist eine scharfkantige Blende, daher wächst der Durchfluss mit der Wurzel aus dem Druckabfall; eine kleine Regularisierung (p<sub>tr</sub> = 0.1 MPa) beseitigt die unendliche Steigung bei null Druckabfall. Das Ventil hat Nullüberdeckung: bei x<sub>v</sub> = 0 fließt nur die innere Leckage K<sub>L</sub>."
+ },
+ "7c148e457725": {
+  "src": "Key to the drawing",
+  "tr": "Erklärung zur Zeichnung"
+ },
+ "7fc9d4e2361b": {
+  "src": "<b>Flow arrow.</b> Points the way the oil moves; it grows with the flow rate.",
+  "tr": "<b>Strömungspfeil.</b> Zeigt die Richtung, in die sich das Öl bewegt; er wird mit dem Volumenstrom größer."
+ },
+ "81e9209e64bd": {
+  "src": "sign",
+  "tr": "sign"
+ },
+ "82451b41fd78": {
+  "src": "abs",
+  "tr": "abs"
+ },
+ "8617db601848": {
+  "src": "Force loop: holding the set force on the specimen",
+  "tr": "Kraftregelkreis: hält die Sollkraft auf der Probe"
+ },
+ "8720f140fd91": {
+  "src": "Oil gauge pressure",
+  "tr": "Öl-Überdruck"
+ },
+ "875467cc7fbf": {
+  "src": "Any change re-runs the whole cycle and the loop analysis.",
+  "tr": "Jede Änderung startet den ganzen Zyklus und die Regelkreisanalyse neu."
+ },
+ "8dc2a6624f2c": {
+  "src": "<span class=\"swatch\" aria-hidden=\"true\"></span> below 0",
+  "tr": "<span class=\"swatch\" aria-hidden=\"true\"></span> unter 0"
+ },
+ "8ea2d54dcb81": {
+  "src": "Hover the plots: the Bode plot reads gain and phase at any frequency (at the 0 dB crossing, “to −180°” is the phase margin); the Nyquist plot gives the distance from the curve to −1; each pole in the z-plane gives its frequency and damping ratio.",
+  "tr": "Fahren Sie mit dem Mauszeiger über die Diagramme: Das Bode-Diagramm liest Verstärkung und Phase bei jeder Frequenz ab (am 0-dB-Durchtritt ist „bis −180°“ die Phasenreserve); das Nyquist-Diagramm gibt den Abstand der Kurve zu −1 an; jeder Pol in der z-Ebene liefert seine Frequenz und seinen Dämpfungsgrad."
+ },
+ "8ed00db02c12": {
+  "src": "specimen force F",
+  "tr": "Probenkraft F"
+ },
+ "8f7d03302106": {
+  "src": "<b>Tank.</b> Oil returns here at atmospheric pressure, p<sub>T</sub> = 0.",
+  "tr": "<b>Tank.</b> Das Öl fließt hier bei Atmosphärendruck zurück, p<sub>T</sub> = 0."
+ },
+ "928facd980a0": {
+  "src": "Entrained air of volume fraction α₀ at atmospheric pressure p₀ is squeezed polytropically (n = 1.4). Mixing the compliances of oil and air gives",
+  "tr": "Mitgerissene Luft mit dem Volumenanteil α₀ bei Atmosphärendruck p₀ wird polytrop komprimiert (n = 1.4). Mischt man die Nachgiebigkeiten von Öl und Luft, erhält man"
+ },
+ "949fe56a12be": {
+  "src": "spool x_v / command u",
+  "tr": "Schieberweg x_v / Stellgröße u"
+ },
+ "95b96b5cba20": {
+  "src": "Shaded bands mark the controller mode: settle, approach, creep, press, release, retract, done. Hover a plot to read every curve at one instant; press or drag in it to move the animation there.",
+  "tr": "Farbige Bänder markieren die Betriebsart des Reglers: einschwingen, annähern, kriechen, pressen, entlasten, zurückfahren, fertig. Fahren Sie mit dem Mauszeiger über ein Diagramm, um alle Kurven zu einem Zeitpunkt abzulesen; klicken oder ziehen Sie darin, um die Animation dorthin zu bewegen."
+ },
+ "9b5489d54ef8": {
+  "src": "pump work",
+  "tr": "Pumpenarbeit"
+ },
+ "9c5f3bb9b451": {
+  "src": "The model, equation by equation",
+  "tr": "Das Modell, Gleichung für Gleichung"
+ },
+ "9d328152ebc9": {
+  "src": "<b>Cylinder.</b> Cap chamber below the piston (p<sub>A</sub>, pushes up), rod chamber above it (p<sub>B</sub>, pushes down). Drawn to scale.",
+  "tr": "<b>Zylinder.</b> Bodenkammer unter dem Kolben (p<sub>A</sub>, drückt nach oben), Ringkammer darüber (p<sub>B</sub>, drückt nach unten). Maßstabsgetreu gezeichnet."
+ },
+ "9e3a6ddd4754": {
+  "src": "valve port p_a",
+  "tr": "Ventilanschluss p_a"
+ },
+ "9f3163ffda0d": {
+  "src": "Notation",
+  "tr": "Bezeichnungen"
+ },
+ "a45efcc044cf": {
+  "src": "ram position y",
+  "tr": "Stößelposition y"
+ },
+ "a4ab4f21160c": {
+  "src": "clamp",
+  "tr": "clamp"
+ },
+ "a5f58c39cc52": {
+  "src": "oil",
+  "tr": "Öl"
+ },
+ "a644edf89223": {
+  "src": "Small-signal stability",
+  "tr": "Kleinsignalstabilität"
+ },
+ "a9e11aee948d": {
+  "src": "L/min",
+  "tr": "L/min"
+ },
+ "ab8b22940f7b": {
+  "src": "Gauges",
+  "tr": "Anzeigen"
+ },
+ "adb8cacd9f02": {
+  "src": "rod chamber p_B",
+  "tr": "Ringkammer p_B"
+ },
+ "af6a5e32e765": {
+  "src": "At 10 MPa the air is crushed and β<sub>eff</sub> ≈ 1.47 GPa; near zero gauge pressure it collapses to tens of MPa, and towards vacuum it goes to zero, which also keeps the pressure from falling below absolute zero.",
+  "tr": "Bei 10 MPa ist die Luft zusammengedrückt, und β<sub>eff</sub> ≈ 1.47 GPa; nahe null Überdruck bricht es auf einige zehn MPa ein, und zum Vakuum hin geht es gegen null, was zugleich verhindert, dass der Druck unter den absoluten Nullpunkt fällt."
+ },
+ "b24b52e7bb0a": {
+  "src": "<b>Oil colour.</b> Pale amber at 0, deep wine at p<sub>s</sub>; chambers, hose and lines are all coloured by their pressure.",
+  "tr": "<b>Ölfarbe.</b> Hellbernstein bei 0, tiefes Weinrot bei p<sub>s</sub>; Kammern, Schlauch und Leitungen sind alle nach ihrem Druck gefärbt."
+ },
+ "b5e76048f0bc": {
+  "src": "<b>Controller panel.</b> Current mode, set-point, measurement and command u (the value applied now lags one sample).",
+  "tr": "<b>Reglertafel.</b> Aktuelle Betriebsart, Sollwert, Messwert und Stellgröße u (der jetzt angelegte Wert hinkt um eine Abtastperiode hinterher)."
+ },
+ "b6c935d4f3c7": {
+  "src": "min",
+  "tr": "min"
+ },
+ "b7824598aa8f": {
+  "src": "oil stiffness β_eff(p_A)",
+  "tr": "Ölsteifigkeit β_eff(p_A)"
+ },
+ "b81110fc51e6": {
+  "src": "Read the derivations →",
+  "tr": "Die Herleitungen lesen →"
+ },
+ "bc0305685e20": {
+  "src": "Back to defaults",
+  "tr": "Auf Standardwerte zurücksetzen"
+ },
+ "be6f2379431d": {
+  "src": "Cylinder, rod, platen and specimen are drawn to scale; valve, pump and hose route are schematic. The dots in the hose ride with the oil and wrap round at the ends. Spool travel is exaggerated. Moving dashes on the signal lines show which way the information flows.",
+  "tr": "Zylinder, Kolbenstange, Pressplatte und Probe sind maßstabsgetreu gezeichnet; Ventil, Pumpe und Schlauchführung sind schematisch. Die Punkte im Schlauch wandern mit dem Öl und laufen an den Enden um. Der Schieberweg ist übertrieben dargestellt. Die wandernden Striche auf den Signalleitungen zeigen, in welche Richtung die Information fließt."
+ },
+ "c7f73bb54d92": {
+  "src": "Settings",
+  "tr": "Einstellungen"
+ },
+ "c891b2a74879": {
+  "src": "Pa",
+  "tr": "Pa"
+ },
+ "caa97f26834a": {
+  "src": "<b>Mode stepper.</b> The row above the drawing: green dots are finished modes, the wine pill is the active one. Select a mode to jump to its start.",
+  "tr": "<b>Betriebsartenleiste.</b> Die Reihe über der Zeichnung: grüne Punkte sind abgeschlossene Betriebsarten, die weinrote Kapsel ist die aktive. Wählen Sie eine Betriebsart, um zu deren Anfang zu springen."
+ },
+ "cbe637c8ee43": {
+  "src": "<b>Servo valve, in section.</b> The four grey lands are the spool. Each metering land is exactly as wide as the groove under its port, so at x<sub>v</sub> = 0 every edge is just closed. Moving the spool opens P→A and B→T (x<sub>v</sub> &gt; 0) or P→B and A→T (x<sub>v</sub> &lt; 0). Chambers are coloured by pressure; the white streaks are the jets through the open edges and move with the flow. Travel is exaggerated.",
+  "tr": "<b>Servoventil, im Schnitt.</b> Die vier grauen Stege sind der Ventilschieber. Jeder Steuersteg ist genau so breit wie die Nut unter seinem Anschluss, sodass bei x<sub>v</sub> = 0 jede Steuerkante gerade geschlossen ist. Verschiebt man den Schieber, öffnen sich P→A und B→T (x<sub>v</sub> &gt; 0) bzw. P→B und A→T (x<sub>v</sub> &lt; 0). Die Kammern sind nach Druck gefärbt; die weißen Streifen sind die Strahlen durch die offenen Kanten und wandern mit dem Strom. Der Schieberweg ist übertrieben dargestellt."
+ },
+ "cc39db213018": {
+  "src": "time t",
+  "tr": "Zeit t"
+ },
+ "cfc1ec38f2a5": {
+  "src": "Recorded every sample",
+  "tr": "Bei jeder Abtastung aufgezeichnet"
+ },
+ "d0a238d4995e": {
+  "src": "<b>Frame.</b> Base plate, two columns and the crosshead that holds the specimen and load cell.",
+  "tr": "<b>Rahmen.</b> Grundplatte, zwei Säulen und die Traverse, die Probe und Kraftmessdose halten."
+ },
+ "d0b13ffaed5b": {
+  "src": "burnt in hose + seals",
+  "tr": "in Schlauch + Dichtungen in Wärme umgesetzt"
+ },
+ "d41c7beb8d71": {
+  "src": "set-point F_ref",
+  "tr": "Sollwert F_ref"
+ },
+ "d424af29a8c5": {
+  "src": "settle",
+  "tr": "einschwingen"
+ },
+ "d6f18fa68583": {
+  "src": "Hydraulics",
+  "tr": "Hydraulik"
+ },
+ "d9e83874d260": {
+  "src": "tr",
+  "tr": "tr"
+ },
+ "dcb491d93684": {
+  "src": "Pick up a garden hose full of water and swing one end: the water lags, then pushes back. Two metres of oil in a 12 mm hose weigh about 0.2 kg, but squeezed through that narrow bore they behave like a heavy slug. Inertance I = ρL<sub>h</sub>/A<sub>h</sub> ≈ 1.5·10⁷ kg/m⁴ sits between two springs made of oil: the small volume at the valve port and the cap chamber of the cylinder. Oil is stiff (β ≈ 1.5 GPa) only when it is free of air. Half a percent of entrained air at atmospheric pressure turns it into something closer to a stiff rubber: β<sub>eff</sub> drops to about 28 MPa at zero gauge pressure. The ram, 160 kg, rides on these springs. The controller sees all of it through a position sensor, a load cell and a 1 ms clock.",
+  "tr": "Nehmen Sie einen Gartenschlauch voller Wasser und schwingen Sie ein Ende: Das Wasser hinkt nach und drückt dann zurück. Zwei Meter Öl in einem Schlauch mit 12 mm wiegen etwa 0.2 kg, doch durch die enge Bohrung gepresst verhält es sich wie ein schwerer Pfropfen. Die Inertanz I = ρL<sub>h</sub>/A<sub>h</sub> ≈ 1.5·10⁷ kg/m⁴ liegt zwischen zwei Federn aus Öl: dem kleinen Volumen am Ventilanschluss und der Bodenkammer des Zylinders. Öl ist nur dann steif (β ≈ 1.5 GPa), wenn es frei von Luft ist. Ein halbes Prozent mitgerissene Luft bei Atmosphärendruck macht es eher zu einem steifen Gummi: β<sub>eff</sub> sinkt bei null Überdruck auf etwa 28 MPa. Der Stößel mit 160 kg ruht auf diesen Federn. Die Steuerung erfasst all das über einen Positionssensor, eine Kraftmessdose und einen Takt von 1 ms."
+ },
+ "e03358eed7e6": {
+  "src": "4 · Volumes, the hose, and the ram",
+  "tr": "4 · Volumina, Schlauch und Stößel"
+ },
+ "e4182f7d5c98": {
+  "src": "Servo-Hydraulic Press",
+  "tr": "Servohydraulische Presse"
+ },
+ "e43721e1fcf2": {
+  "src": "Servo-Hydraulic <em>Press</em>",
+  "tr": "Servohydraulische <em>Presse</em>"
+ },
+ "e4e949046268": {
+  "src": "MPa",
+  "tr": "MPa"
+ },
+ "e6e49b714dad": {
+  "src": "eff",
+  "tr": "eff"
+ },
+ "ea04a18a13db": {
+  "src": "<b>Specimen.</b> The part being pressed, contact at y<sub>c</sub> = 120 mm; it reddens as the force rises.",
+  "tr": "<b>Probe.</b> Das Teil, das gepresst wird; Kontakt bei y<sub>c</sub> = 120 mm; sie rötet sich, wenn die Kraft steigt."
+ },
+ "ecf9a16a1b18": {
+  "src": "net work into specimen and stop",
+  "tr": "Nettoarbeit an Probe und Anschlag"
+ },
+ "ed733fa14b4b": {
+  "src": "Every symbol on this page, what it means, and its value with the current settings. Values marked “live” change during the cycle; read them in the gauges and time traces.",
+  "tr": "Jedes Symbol auf dieser Seite, was es bedeutet und welchen Wert es bei den aktuellen Einstellungen hat. Werte, die als „live“ markiert sind, ändern sich während des Zyklus; lesen Sie sie in den Anzeigen und Zeitverläufen ab."
+ },
+ "ef0cdd83d6b2": {
+  "src": "burnt in the valve",
+  "tr": "im Ventil in Wärme umgesetzt"
+ },
+ "f1017b86804b": {
+  "src": "Notice what this does to a linear analysis: opening the valve towards the cap side meters against p<sub>s</sub> − p<sub>a</sub>, closing it meters against p<sub>a</sub>. The flow gain on the two sides of x<sub>v</sub> = 0 differs, and the model is not differentiable there.",
+  "tr": "Beachten Sie, was das für die lineare Analyse bedeutet: Öffnet man das Ventil zur Bodenseite hin, dosiert es gegen den Druck p<sub>s</sub> − p<sub>a</sub>; schließt man es, dosiert es gegen p<sub>a</sub>. Die Durchflussverstärkung auf den beiden Seiten von x<sub>v</sub> = 0 ist verschieden, und das Modell ist dort nicht differenzierbar."
+ },
+ "f342c4d1a760": {
+  "src": "<b>Hose and its dots.</b> Two metres of hose, drawn shortened; the white dots ride with the oil (they wrap round at the ends).",
+  "tr": "<b>Schlauch und seine Punkte.</b> Zwei Meter Schlauch, verkürzt gezeichnet; die weißen Punkte wandern mit dem Öl (sie laufen an den Enden um)."
+ },
+ "fbef447c2869": {
+  "src": "Motion and force",
+  "tr": "Bewegung und Kraft"
+ }
+}
