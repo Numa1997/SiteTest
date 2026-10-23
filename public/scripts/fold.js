@@ -11,7 +11,7 @@
    low is brought into view; a section closed from deep inside keeps its pinned header where it is.
    Without JavaScript the pages read as before, everything open. */
 (function () {
-    'use strict';
+    'use strict'; var T = function (s, v) { var d = window.I18N, r = d && d[s]; if (typeof r !== 'string') r = s; return v ? r.replace(/\{(\w+)\}/g, function (m, k) { return k in v ? v[k] : m; }) : r; };   /* a page's words, from scripts/i18n/strings-<lang>.js on a translated page */
 
     var doc = document, root = doc.documentElement;
     var motion = function () { return !window.matchMedia('(prefers-reduced-motion: reduce)').matches; };
@@ -109,7 +109,7 @@
         var btn = node.querySelector(':scope > .fs-head .fs-toggle');
         if (btn) {
             btn.setAttribute('aria-expanded', String(open));
-            btn.setAttribute('aria-label', (open ? 'Collapse ' : 'Expand ') + btn.getAttribute('data-label'));
+            btn.setAttribute('aria-label', T(open ? 'Collapse {x}' : 'Expand {x}', { x: btn.getAttribute('data-label') }));
         }
     }
 
@@ -212,8 +212,8 @@
         if (f) { f.setAttribute('data-open', open ? '1' : '0'); if (open) f.removeAttribute('inert'); else f.setAttribute('inert', ''); }
         if (b) {
             b.setAttribute('aria-expanded', String(open));
-            b.firstChild.textContent = open ? 'Less' : 'More';
-            b.setAttribute('aria-label', open ? 'Hide details' : 'Show details');
+            b.firstChild.textContent = open ? T('Less') : T('More');
+            b.setAttribute('aria-label', open ? T('Hide details') : T('Show details'));
         }
     }
     doc.addEventListener('click', function (e) {
@@ -228,8 +228,8 @@
         if (!host || doc.querySelector('.fold-tools')) return;
         var t = el('div', 'fold-tools');
         t.setAttribute('role', 'group');
-        t.setAttribute('aria-label', 'Open or close all sections');
-        var a = el('button', 'fold-tool', 'Expand all'), b = el('button', 'fold-tool', 'Collapse all');
+        t.setAttribute('aria-label', T('Open or close all sections'));
+        var a = el('button', 'fold-tool', T('Expand all')), b = el('button', 'fold-tool', T('Collapse all'));
         a.type = b.type = 'button';
         a.addEventListener('click', function () { all(true); });
         b.addEventListener('click', function () { all(false); });
@@ -303,7 +303,7 @@
         if (doc.readyState === 'loading') doc.addEventListener('DOMContentLoaded', watchBars); else watchBars();
     }
 
-    var plural = function (n, one, many) { return n + ' ' + (n === 1 ? one : many); };
+    var plural = function (n, one, many) { var d = window.I18N, r = d && d[many]; if (r && typeof r === 'object') { r = r[new Intl.PluralRules(root.lang).select(n)] || r.other; return r.indexOf('{n}') >= 0 ? r.replace('{n}', n) : n + ' ' + r; } return n + ' ' + (n === 1 ? one : many); };
     var count = function (scope, sel) { return scope.querySelectorAll(sel).length; };
     var join = function (parts) { return parts.filter(Boolean).join(' · '); };
 
@@ -343,7 +343,7 @@
         if (!host || host.hasAttribute('data-fold-level')) return;
         var h2 = host.querySelector('.walk__head h2');
         var steps = count(host, '.walk__steps > li');
-        make(host, { level: 1, head: [h2], counts: join([steps && plural(steps, 'step', 'steps'), 'each formula beside the code that computes it and its value now']), label: 'From symbols to code' });
+        make(host, { level: 1, head: [h2], counts: join([steps && plural(steps, 'step', 'steps'), T('each formula beside the code that computes it and its value now')]), label: T('From symbols to code') });
         var t = doc.querySelector('.fold-tools');
         if (!t) { var p = doc.querySelector('.paper__head'); tools(p || host, p ? 'append' : 'before'); }
         if (location.hash) openTo(targetOf(location.hash), false);

@@ -11,7 +11,7 @@
       content="Interactive physics simulations with lecture notes: mechanics, waves, fluids, wave optics, mathematical methods and control systems. Each figure comes with its model, derivation, numerical method and every number it draws."
     />
     <meta name="author" content="Numa Koudsie" />
-    <meta name="theme-color" content="#f5f1ea" />
+    <meta name="theme-color" content="#f5f1ea" /><!--I18N-ALTERNATES--><link rel="alternate" hreflang="en" href="https://phyeinusul.com/simulations.html" /><link rel="alternate" hreflang="de" href="https://phyeinusul.com/de/simulations.html" /><link rel="alternate" hreflang="ar" href="https://phyeinusul.com/ar/simulations.html" /><link rel="alternate" hreflang="x-default" href="https://phyeinusul.com/simulations.html" /><!--/I18N-ALTERNATES-->
     <link rel="stylesheet" href="styles/site.css" />
     <link rel="stylesheet" href="vendor/katex/katex.min.css" />
     <link rel="stylesheet" href="styles/paper.css" />
@@ -35,7 +35,7 @@
         <a href="index.html#positions">Positions</a>
         <a href="index.html#research">Research</a>
         <a href="portfolios.html">Portfolios</a>
-        <a href="index.html#skills">Skills</a>
+        <a href="index.html#skills">Skills</a><span class="lang-switch" role="group" aria-label="Language" translate="no"><!--I18N-SWITCH--><a href="simulations.html" hreflang="en" lang="en" aria-current="page">English</a> · <a href="de/simulations.html" hreflang="de" lang="de">Deutsch</a> · <a href="ar/simulations.html" hreflang="ar" lang="ar" dir="rtl">العربية</a><!--/I18N-SWITCH--></span>
       </nav>
     </header>
 
@@ -125,12 +125,12 @@
     <script src="vendor/katex/katex.min.js"></script>
     <script>
       (function () {
-        'use strict';
+        'use strict'; var T = function (s, v) { var d = window.I18N, r = d && d[s]; if (typeof r !== 'string') r = s; return v ? r.replace(/\{(\w+)\}/g, function (m, k) { return k in v ? v[k] : m; }) : r; };   // words of a translated page: scripts/i18n/strings-<lang>.js
         var SIMS = (window.SIMULATIONS || []).slice();
         var FIELDS = window.SIM_FIELDS || [];
         var STAGES = [
-          { id: '1', name: 'First year' },
-          { id: '2', name: 'Second year' }
+          { id: '1', name: T('First year') },
+          { id: '2', name: T('Second year') }
         ];
 
         var $ = function (id) { return document.getElementById(id); };
@@ -155,9 +155,9 @@
           for (var i = 0; i < FIELDS.length; i++) if (FIELDS[i].id === id) return FIELDS[i];
           return { id: id, name: id, blurb: '' };
         }
-        SIMS.forEach(function (s) {
-          s._hay = fold([s.title, 'fig ' + s.fig, 'fig. ' + s.fig, s.subject, s.summary, s.model, s.method,
-            s.controls, (s.concepts || []).join(' '), fieldOf(s.field).name].join(' \n '));
+        SIMS.forEach(function (s) {   // a translated page shows its own words and still finds the English ones
+          s._hay = fold([s.title, 'fig ' + s.fig, 'fig. ' + s.fig, s.subject, s.summary, s.model, s.method, s.controls, (s.concepts || []).join(' '), fieldOf(s.field).name, T('Fig. {n}', { n: s.fig }),
+            T(s.title), T(s.subject), T(s.summary), T(s.model), T(s.method), T(s.controls), (s.concepts || []).map(function (c) { return T(c); }).join(' '), T(fieldOf(s.field).name)].join(' \n '));
         });
         // The catalog runs in figure order; the field chips do the grouping.
         SIMS.sort(function (a, b) { return a.fig - b.fig; });
@@ -177,9 +177,9 @@
           SIMS.forEach(function (s) { fields[s.field] = 1; stages[s.stage] = 1; });
           var nStages = Object.keys(stages).length;
           $('stats').innerHTML =
-            '<li><b>' + SIMS.length + '</b><span>simulations</span></li>' +
-            '<li><b>' + Object.keys(fields).length + '</b><span>fields</span></li>' +
-            '<li><b>' + nStages + '</b><span>course ' + (nStages === 1 ? 'year' : 'years') + '</span></li>';
+            '<li><b>' + SIMS.length + '</b><span>' + T('simulations') + '</span></li>' +
+            '<li><b>' + Object.keys(fields).length + '</b><span>' + T('fields') + '</span></li>' +
+            '<li><b>' + nStages + '</b><span>' + (nStages === 1 ? T('course year') : T('course years')) + '</span></li>';
         }
         function chips(el, items, key, all) {
           el.innerHTML = '';
@@ -188,7 +188,7 @@
             b.type = 'button';
             b.className = 'chip';
             b.setAttribute('data-' + key, it.id);
-            b.innerHTML = esc(it.name) + '<small></small>';
+            b.innerHTML = esc(T(it.name)) + '<small></small>';
             b.addEventListener('click', function () {
               state[key] = state[key] === it.id ? '' : it.id;
               render(true);
@@ -198,32 +198,32 @@
         }
 
         function entry(s) {
-          var href = encodeURI(s.file);
-          var stage = s.stage === 1 ? 'first year' : s.stage === 2 ? 'second year' : s.stage ? 'year ' + s.stage : '';
+          var href = (window.I18N_HAVE && !I18N_HAVE[s.file] ? I18N_ROOT : '') + encodeURI(s.file);   // a page not yet translated opens in English
+          var stage = s.stage === 1 ? T('first year') : s.stage === 2 ? T('second year') : s.stage ? T('year {n}', { n: s.stage }) : '';
           return (
             '<article class="entry" id="sim-' + esc(s.id) + '" data-card data-sim="' + esc(s.id) + '" data-collapsed="' + (openCards[s.id] ? '0' : '1') + '">' +
             '<a class="entry__fig" href="' + href + '" tabindex="-1" aria-hidden="true"><span class="entry__plate">' +
-            '<span class="entry__ph">Fig. ' + s.fig + '</span>' +
-            '<img src="images/sims/' + esc(s.id) + '.webp" width="800" height="500" loading="lazy" decoding="async" alt=""></span></a>' +
-            '<p class="entry__cap"><b>Figure ' + s.fig + '</b>' + esc(s.subject.charAt(0).toUpperCase() + s.subject.slice(1)) + '.</p>' +
+            '<span class="entry__ph">' + T('Fig. {n}', { n: s.fig }) + '</span>' +
+            '<img src="' + (window.I18N_ROOT || '') + 'images/sims/' + esc(s.id) + '.webp" width="800" height="500" loading="lazy" decoding="async" alt=""></span></a>' +
+            '<p class="entry__cap"><b>' + T('Figure {n}', { n: s.fig }) + '</b>' + esc(T(s.subject).charAt(0).toUpperCase() + T(s.subject).slice(1)) + '.</p>' +
             '<div class="entry__body">' +
-            '<p class="entry__kicker">' + esc(fieldOf(s.field).name) + (stage ? ' · ' + stage : '') + '</p>' +
-            '<h3><a href="' + href + '">' + esc(s.title) + '</a></h3>' +
-            '<p class="entry__abs">' + esc(s.summary) + '</p>' +
+            '<p class="entry__kicker">' + esc(T(fieldOf(s.field).name)) + (stage ? ' · ' + stage : '') + '</p>' +
+            '<h3><a href="' + href + '">' + esc(T(s.title)) + '</a></h3>' +
+            '<p class="entry__abs">' + esc(T(s.summary)) + '</p>' +
             '<div class="entry__eq" data-tex="' + esc(s.equation) + '"></div>' +
             '<div class="fold" data-open="' + (openCards[s.id] ? '1' : '0') + '"' + (openCards[s.id] ? '' : ' inert') + '><div class="fold-i"><div class="entry__more">' +
             '<dl class="entry__facts">' +
-            '<dt>model</dt><dd>' + esc(s.model) + '</dd>' +
-            '<dt>method</dt><dd>' + esc(s.method) + '</dd>' +
-            '<dt>you set</dt><dd>' + esc(s.controls) + '</dd>' +
+            '<dt>' + T('model') + '</dt><dd>' + esc(T(s.model)) + '</dd>' +
+            '<dt>' + T('method') + '</dt><dd>' + esc(T(s.method)) + '</dd>' +
+            '<dt>' + T('you set') + '</dt><dd>' + esc(T(s.controls)) + '</dd>' +
             '</dl>' +
-            '<ul class="entry__tags" aria-label="Concepts">' +
-            (s.concepts || []).slice(0, 6).map(function (c) { return '<li>' + esc(c) + '</li>'; }).join('') +
+            '<ul class="entry__tags" aria-label="' + T('Concepts') + '">' +
+            (s.concepts || []).slice(0, 6).map(function (c) { return '<li>' + esc(T(c)) + '</li>'; }).join('') +
             '</ul></div></div></div>' +
             '<div class="entry__foot">' +
-            '<a class="entry__open" href="' + href + '">Open Fig. ' + s.fig + '</a>' +
-            '<a class="entry__note" href="' + href + '#paper">Read the lecture note</a>' +
-            '<button type="button" class="fs-more" aria-expanded="' + (openCards[s.id] ? 'true' : 'false') + '" aria-label="' + (openCards[s.id] ? 'Hide details' : 'Show details') + '">' + (openCards[s.id] ? 'Less' : 'More') + '<svg class=\"chev\" viewBox=\"0 0 14 14\" width=\"12\" height=\"12\" aria-hidden=\"true\"><path d=\"M3 5l4 4 4-4\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"1.8\" stroke-linecap=\"round\" stroke-linejoin=\"round\"/></svg></button>' +
+            '<a class="entry__open" href="' + href + '">' + T('Open Fig. {n}', { n: s.fig }) + '</a>' +
+            '<a class="entry__note" href="' + href + '#paper">' + T('Read the lecture note') + '</a>' +
+            '<button type="button" class="fs-more" aria-expanded="' + (openCards[s.id] ? 'true' : 'false') + '" aria-label="' + (openCards[s.id] ? T('Hide details') : T('Show details')) + '">' + (openCards[s.id] ? T('Less') : T('More')) + '<svg class=\"chev\" viewBox=\"0 0 14 14\" width=\"12\" height=\"12\" aria-hidden=\"true\"><path d=\"M3 5l4 4 4-4\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"1.8\" stroke-linecap=\"round\" stroke-linejoin=\"round\"/></svg></button>' +
             '</div></div></article>'
           );
         }
@@ -233,8 +233,8 @@
            changing what the reader opened or closed. (Sorting into fields and years can come back once the library is large.) */
         function cards(shown) {
           return shown.map(function (s) {
-            return '<section class="simfold" id="simulation-' + esc(s.id) + '" data-counts="' + esc(s.subject) + '" data-label="' + esc(s.title) + '">' +
-              '<h2 class="fs-title"><span class="fs-num">' + String(s.fig).padStart(2, '0') + '</span>' + esc(s.title) + '</h2>' +
+            return '<section class="simfold" id="simulation-' + esc(s.id) + '" data-counts="' + esc(T(s.subject)) + '" data-label="' + esc(T(s.title)) + '">' +
+              '<h2 class="fs-title"><span class="fs-num">' + String(s.fig).padStart(2, '0') + '</span>' + esc(T(s.title)) + '</h2>' +
               entry(s) + '</section>';
           }).join('');
         }
@@ -280,11 +280,11 @@
             b.querySelector('small').textContent = n;
           });
 
-          count.textContent = shown.length === SIMS.length ? SIMS.length + ' shown' : shown.length + ' of ' + SIMS.length + ' shown';
+          count.textContent = shown.length === SIMS.length ? T('{n} shown', { n: SIMS.length }) : T('{n} of {m} shown', { n: shown.length, m: SIMS.length });
           empty.hidden = shown.length > 0;
           $('empty-q').textContent = [state.q ? '“' + state.q + '”' : '',
-            state.field ? 'in ' + fieldOf(state.field).name : '',
-            state.stage ? 'for the ' + (state.stage === '1' ? 'first' : 'second') + ' year' : ''].filter(Boolean).join(' ');
+            state.field ? T('in {x}', { x: T(fieldOf(state.field).name) }) : '',
+            state.stage ? (state.stage === '1' ? T('for the first year') : T('for the second year')) : ''].filter(Boolean).join(' ');
           if (fromUser) save();
         }
 
@@ -336,8 +336,8 @@
 
         var used = {}, usedStage = {};
         SIMS.forEach(function (s) { used[s.field] = 1; usedStage[s.stage] = 1; });
-        chips($('fields'), FIELDS.filter(function (f) { return used[f.id]; }), 'field', 'All fields');
-        chips($('stages'), STAGES.filter(function (s) { return usedStage[s.id]; }), 'stage', 'Any year');
+        chips($('fields'), FIELDS.filter(function (f) { return used[f.id]; }), 'field', T('All fields'));
+        chips($('stages'), STAGES.filter(function (s) { return usedStage[s.id]; }), 'stage', T('Any year'));
         if (window.Fold) {
           Fold.onCard = function (card) { openCards[card.getAttribute('data-sim')] = card.getAttribute('data-collapsed') === '0'; };
           Fold.onAll = function (open) { SIMS.forEach(function (s) { openCards[s.id] = open; }); };

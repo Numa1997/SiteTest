@@ -1,0 +1,562 @@
+{
+ "01084a174e96": {
+  "src": "Web Audio API",
+  "tr": "Web Audio API"
+ },
+ "01cab6d863f6": {
+  "src": "Arabic <span class=\"lvl\">native</span> · English <span class=\"lvl\">C1</span> · German <span class=\"lvl\">B2</span>",
+  "tr": "العربية <span class=\"lvl\">اللغة الأم</span> · الإنجليزية <span class=\"lvl\">C1</span> · الألمانية <span class=\"lvl\">B2</span>"
+ },
+ "0a4470d64e9d": {
+  "src": "Skip to content",
+  "tr": "انتقل إلى المحتوى"
+ },
+ "11826f821795": {
+  "src": "Fig. 3",
+  "tr": "الشكل 3"
+ },
+ "11f84af620e1": {
+  "src": "Building AND/OR gates operations to specify component-wise power consumption of the system",
+  "tr": "بناء منطق بوّابات AND/OR لتفصيل استهلاك النظام للطاقة بحسب مكوّناته"
+ },
+ "142cd31b719b": {
+  "src": "<b>Fig. 0</b> · double pendulum · RK4 · live",
+  "tr": "<b>الشكل 0</b> · نوّاس مزدوج · RK4 · مباشر"
+ },
+ "1497a320cba1": {
+  "src": "Wave Interference – Multiple Sources",
+  "tr": "تداخل الأمواج – مصادر متعدّدة"
+ },
+ "19300c13439d": {
+  "src": "Portfolios ↗",
+  "tr": "الملفّات ↗"
+ },
+ "1b0699dd1971": {
+  "src": "Completed projects, rebuilt in full with their derivations, solver and checks, are on the <a href=\"portfolios.html\">Portfolios page</a>: the Bachelor thesis on how cloud droplets become rain, a corrected study of whether a pendulum on a turbine blade can power a sensor, a servo-hydraulic press under digital control, built from first principles, and a study, in English and Arabic, of why an iron ball hurts and a cotton ball of the same mass does not.",
+  "tr": "المشاريع المكتملة، بعد إعادة بنائها كاملةً مع اشتقاقاتها وحلّالاتها واختباراتها، موجودة في <a href=\"portfolios.html\">صفحة الملفّات</a>: أطروحة البكالوريوس عن كيف تصير قطيرات السحاب مطرًا، ودراسة مصحَّحة عمّا إذا كان نوّاسٌ على شفرة توربين قادرًا على تغذية حسّاس، ومكبس هيدروليكي مؤازَر بتحكّم رقمي مبنيّ من المبادئ الأولى، ودراسة، بالإنجليزية والعربية، عن سبب إيلام كرة الحديد وعدم إيلام كرة القطن ذات الكتلة نفسها."
+ },
+ "1cb8d7de8274": {
+  "src": "Data &amp; Web Management",
+  "tr": "إدارة البيانات والموقع الإلكتروني"
+ },
+ "1da4c927a185": {
+  "src": "02.2023 – present <span class=\"tag\">current</span> <span class=\"tag tag--soft\">minijob</span>",
+  "tr": "02.2023 – حتى الآن <span class=\"tag\">حاليًّا</span> <span class=\"tag tag--soft\">عمل جزئي</span>"
+ },
+ "22b8e2294018": {
+  "src": "Pandas, NumPy, SciPy, TensorFlow, PyTorch",
+  "tr": "Pandas، NumPy، SciPy، TensorFlow، PyTorch"
+ },
+ "22dd3c7d585b": {
+  "src": "Model Developer",
+  "tr": "تطوير النماذج"
+ },
+ "2365a132b4ee": {
+  "src": "Fig. 2",
+  "tr": "الشكل 2"
+ },
+ "24e8db21fed4": {
+  "src": "Draw any closed shape; a discrete Fourier transform turns it into spinning circles that redraw it, with Parseval's theorem checking the error live.",
+  "tr": "ارسم أيّ شكل مغلق؛ يحوّله تحويل فورييه المتقطّع إلى دوائر دوّارة تعيد رسمه، وتتحقّق مبرهنة بارسيفال من الخطأ لحظةً بلحظة."
+ },
+ "24ec25845d4d": {
+  "src": "Fourier analysis",
+  "tr": "تحليل فورييه"
+ },
+ "276d2c34f015": {
+  "src": "Water particles tracing circular orbits as the crest passes through, with the orbits shrinking quickly with depth.",
+  "tr": "جسيمات الماء ترسم مدارات دائرية عند مرور القمّة، وتصغر هذه المدارات بسرعة مع العمق."
+ },
+ "28cde6369fc9": {
+  "src": "117 CP",
+  "tr": "117 ساعة معتمدة (CP)"
+ },
+ "29193e373178": {
+  "src": "Computational physics, numerical modeling, dashboards, quality control, database architecture",
+  "tr": "الفيزياء الحاسوبية، النمذجة العددية، لوحات المتابعة، ضبط الجودة، هندسة قواعد البيانات"
+ },
+ "2a72a62fd10b": {
+  "src": "Open the simulations",
+  "tr": "افتح المحاكاة"
+ },
+ "3006b416f6fa": {
+  "src": "Faiveley Transport",
+  "tr": "Faiveley Transport"
+ },
+ "31069064dd63": {
+  "src": "Serving and waiting customers and tables respectively",
+  "tr": "خدمة الزبائن والطاولات"
+ },
+ "33bd5a5dddcd": {
+  "src": "© 2026 Numa Koudsie",
+  "tr": "© 2026 Numa Koudsie"
+ },
+ "358f84705075": {
+  "src": "Lemur Behavior Analysis",
+  "tr": "تحليل سلوك الليمور"
+ },
+ "37a21c2b6b0e": {
+  "src": "Research Assistant",
+  "tr": "مساعدة بحثية"
+ },
+ "3829f25f04bf": {
+  "src": "Systems Analyst",
+  "tr": "تحليل الأنظمة"
+ },
+ "38e5f1a1def8": {
+  "src": "Cellular Mechanics",
+  "tr": "ميكانيكا الخلية"
+ },
+ "3ab7190fa092": {
+  "src": "Analysis and report generation based on several different datasets",
+  "tr": "تحليلات وتقارير مبنيّة على عدّة مجموعات بيانات مختلفة"
+ },
+ "3e5aa58f3a51": {
+  "src": "The classic experiment, step by step. Adjust slit separation and viewing angle to see how the path difference builds the interference pattern.",
+  "tr": "التجربة الكلاسيكية خطوةً بخطوة. اضبط المسافة بين الشقّين وزاوية الرصد لترى كيف يبني فرقُ المسار نمطَ التداخل."
+ },
+ "3eae19a4b117": {
+  "src": "Circular Water Waves",
+  "tr": "أمواج الماء الدائرية"
+ },
+ "42cf35eb30f2": {
+  "src": "Database, dashboard, and report development, building, and generation respectively for test results",
+  "tr": "بناء قاعدة بيانات ولوحة متابعة وتقارير لنتائج الاختبارات"
+ },
+ "42f78557323a": {
+  "src": "Portfolios →",
+  "tr": "الملفّات ←"
+ },
+ "439d34518406": {
+  "src": "Fig. 8",
+  "tr": "الشكل 8"
+ },
+ "46ece4595914": {
+  "src": "Physics graduate with expertise in data analysis, modeling, and software development, and experience in the production of energy storage and distribution systems.",
+  "tr": "إجازة في الفيزياء (بكالوريوس) بتخصّصٍ في تحليل البيانات والنمذجة وتطوير البرمجيات، مع خبرةٍ في إنتاج أنظمة تخزين الطاقة وتوزيعها."
+ },
+ "4ad48a02590f": {
+  "src": "Launch",
+  "tr": "افتح"
+ },
+ "4ba6974e530c": {
+  "src": "Vanilla JavaScript",
+  "tr": "JavaScript خالصة"
+ },
+ "4c4756e00c3e": {
+  "src": "Constructive and destructive interference from several point sources. Click to add sources and watch circular waves combine into straight wavefronts.",
+  "tr": "تداخل بنّاء وهدّام من عدّة مصادر نقطية. انقر لإضافة مصادر، وشاهد الأمواج الدائرية تتّحد في جبهات موجية مستقيمة."
+ },
+ "4d1f996aa178": {
+  "src": "React",
+  "tr": "React"
+ },
+ "4f4c9b155e91": {
+  "src": "Saxony International School Reinsdorf",
+  "tr": "Saxony International School، راينسدورف"
+ },
+ "4f7826be5ba7": {
+  "src": "University of Leipzig",
+  "tr": "جامعة لايبزيغ"
+ },
+ "4fa8cc860c52": {
+  "src": "Tools",
+  "tr": "الأدوات"
+ },
+ "4ff4e073fcf4": {
+  "src": "Double Pendulum Chaos",
+  "tr": "الفوضى في النوّاس المزدوج"
+ },
+ "50fce6d02899": {
+  "src": "SVG",
+  "tr": "SVG"
+ },
+ "5352ea16f04e": {
+  "src": "Leipzig, Germany",
+  "tr": "لايبزيغ، ألمانيا"
+ },
+ "53c6634a8a05": {
+  "src": "during studies",
+  "tr": "أثناء الدراسة"
+ },
+ "5cf5911bdad4": {
+  "src": "Transverse &amp; Longitudinal Waves",
+  "tr": "الأمواج المستعرضة والطولية"
+ },
+ "64472dd0fbfb": {
+  "src": "Visualizations of wave mechanics, classical mechanics, and interference, written in vanilla JavaScript, React, and HTML5 Canvas. Each plate opens the live simulation in a new tab. The <a href=\"simulations.html\">simulations page</a> lists them all by field, with the question each one answers and a search.",
+  "tr": "تصوّرات لميكانيكا الأمواج والميكانيكا الكلاسيكية والتداخل، مكتوبة بلغة JavaScript الخالصة وReact وHTML5 Canvas. كلّ لوحة تفتح المحاكاة الحيّة في تبويب جديد. و<a href=\"simulations.html\">صفحة المحاكاة</a> تعرضها كلّها بحسب المجال، مع السؤال الذي تجيب عنه كلٌّ منها، وأداةٍ للبحث."
+ },
+ "6d18c7faff29": {
+  "src": "Automated inventory tracking, website development",
+  "tr": "تتبّع آليّ للمخزون، وتطوير الموقع الإلكتروني"
+ },
+ "6dd53b0cb240": {
+  "src": "Skeleton Technologies Superfactory, Markranstädt",
+  "tr": "Skeleton Technologies Superfactory، ماركرانشتيت"
+ },
+ "6ee41b557a20": {
+  "src": "Erasmus+ Program",
+  "tr": "برنامج Erasmus+"
+ },
+ "6f532f511731": {
+  "src": "Development of web react elements and simulations of basic physical phenomena",
+  "tr": "تطوير عناصر React للويب ومحاكاةٍ لظواهر فيزيائية أساسية"
+ },
+ "6fa887c4b945": {
+  "src": "Live double pendulum drawing",
+  "tr": "رسم حيّ لنوّاس مزدوج"
+ },
+ "702b201c4b40": {
+  "src": "Phyein Usul",
+  "tr": "Phyein Usul"
+ },
+ "73b4aa6f7d16": {
+  "src": "Back to top ↑",
+  "tr": "إلى الأعلى ↑"
+ },
+ "73ce68c730dd": {
+  "src": "Rotating complex numbers added tip to tail. Roses, beats and spirographs from a few circles, with live period and symmetry readouts; an audio file can make the arms dance.",
+  "tr": "أعداد مركّبة دوّارة تُجمع رأسًا إلى ذيل. ورود ونبضات ورسوم سبيروغراف من بضع دوائر، مع قراءة حيّة للدور والتناظر؛ ويمكن لملفّ صوتي أن يجعل الأذرع ترقص."
+ },
+ "76cadb7bc66e": {
+  "src": "Step-strain protocols for complex modulus estimation",
+  "tr": "بروتوكولات الانفعال القفزي لتقدير المعامل المركّب"
+ },
+ "7a1b5cbf43eb": {
+  "src": "Chaos theory",
+  "tr": "نظرية الفوضى"
+ },
+ "7c1ff947231c": {
+  "src": "System energy optimization for equilibrium modeling",
+  "tr": "تحسين طاقة النظام لنمذجة حالة التوازن"
+ },
+ "7e315f1450ba": {
+  "src": "Research portfolios",
+  "tr": "ملفّات الأبحاث"
+ },
+ "7f3b61e60922": {
+  "src": "Python simulations for water/ice particle coalescence; synthetic data analysis",
+  "tr": "محاكاة بلغة Python لالتحام جسيمات الماء والجليد؛ وتحليل بيانات اصطناعية"
+ },
+ "7ff5a6dafd80": {
+  "src": "Sections",
+  "tr": "الأقسام"
+ },
+ "807b8185ce6a": {
+  "src": "Double-Slit Interference",
+  "tr": "تداخل الشقّ المزدوج"
+ },
+ "81c04f86a4de": {
+  "src": "<b style=\"font-weight:600\">Phyein Usul</b> · φύειν أصول, roots that grow. A personal website and an archive: my work, notes and simulations kept in one place, the older pieces beside what grew from them.",
+  "tr": "<b style=\"font-weight:600\">Phyein Usul</b> · φύειν أصول، جذورٌ تنمو. موقعٌ شخصيّ وأرشيف: أعمالي وملاحظاتي ومحاكاتي في مكانٍ واحد، والقطع القديمة إلى جانب ما نما منها."
+ },
+ "82d4a085e86b": {
+  "src": "Fig. 7",
+  "tr": "الشكل 7"
+ },
+ "83be90f42b14": {
+  "src": "Production line coordination, personnel and machinery supervision",
+  "tr": "تنسيق خطّ الإنتاج، والإشراف على العاملين والآلات"
+ },
+ "84f9bee9475a": {
+  "src": "A multi-wave workbench. Add waves with different frequencies, amplitudes, and phases and watch the resulting sum in real time.",
+  "tr": "منضدة لعدّة أمواج. أضف أمواجًا بتردّدات وسعات وأطوار مختلفة، وشاهد مجموعها لحظةً بلحظة."
+ },
+ "8590ab7e80d1": {
+  "src": "Numa Koudsie · Notebook",
+  "tr": "Numa Koudsie · دفتر"
+ },
+ "8aa7881300c3": {
+  "src": "Laser-Induced Breakdown Spectroscopy (LIBS) on lake sediments; atomic emission spectra analysis",
+  "tr": "مطيافية الانهيار المحرَّض بالليزر (LIBS) على رواسب البحيرات؛ وتحليل أطياف الإصدار الذرّي"
+ },
+ "8eaecb2b9802": {
+  "src": "Dhillons Irish Pub and Grill",
+  "tr": "Dhillons Irish Pub and Grill"
+ },
+ "8f8c63d75e8d": {
+  "src": "Stochastic differential equations for viscoelastic properties",
+  "tr": "معادلات تفاضلية عشوائية للخواصّ اللزجة المرنة"
+ },
+ "9233728e6188": {
+  "src": "Real-time plotting",
+  "tr": "رسم لحظي"
+ },
+ "926819f4f001": {
+  "src": "Fig. 1",
+  "tr": "الشكل 1"
+ },
+ "93424259ad3d": {
+  "src": "github.com/Numa1997",
+  "tr": "github.com/Numa1997"
+ },
+ "94b8082643fc": {
+  "src": "Fig. 4",
+  "tr": "الشكل 4"
+ },
+ "9a51b18b8ef2": {
+  "src": "Fig. 5",
+  "tr": "الشكل 5"
+ },
+ "9a75b493d439": {
+  "src": "Georg-August-Universität Göttingen",
+  "tr": "جامعة غوتنغن (Georg-August-Universität)"
+ },
+ "9ca132558c37": {
+  "src": "HTML5 Canvas",
+  "tr": "HTML5 Canvas"
+ },
+ "a024c68075c4": {
+  "src": "Discrete Fourier transform",
+  "tr": "تحويل فورييه المتقطّع"
+ },
+ "a05c647b4254": {
+  "src": "Python, SQL, MATLAB, Julia, HTML/CSS/JS",
+  "tr": "Python، SQL، MATLAB، Julia، HTML/CSS/JS"
+ },
+ "a07f01da81b4": {
+  "src": "Autodesk Inventor, SolidWorks, AutoCAD, DIAdem",
+  "tr": "Autodesk Inventor، SolidWorks، AutoCAD، DIAdem"
+ },
+ "a0d641b3f1af": {
+  "src": "Domains",
+  "tr": "المجالات"
+ },
+ "a169f1e8b869": {
+  "src": "Research projects",
+  "tr": "مشاريع بحثية"
+ },
+ "a3f80b87a456": {
+  "src": "Canvas",
+  "tr": "Canvas"
+ },
+ "a412873cd464": {
+  "src": "Current focus: pattern recognition in social behaviors",
+  "tr": "التركيز الحالي: التعرّف على الأنماط في السلوك الاجتماعي"
+ },
+ "a4d4c1cc16f7": {
+  "src": "Particle motion",
+  "tr": "حركة الجسيمات"
+ },
+ "a65d6c82a98e": {
+  "src": "Cooling system analysis (R134a, R290); DIAdem integration for automated data processing",
+  "tr": "تحليل أنظمة التبريد (R134a، R290)؛ ودمج DIAdem في المعالجة الآلية للبيانات"
+ },
+ "a8b07b7fabe8": {
+  "src": "University of Leipzig &amp; TROPOS",
+  "tr": "جامعة لايبزيغ و TROPOS"
+ },
+ "aa7166e8175b": {
+  "src": "Phasor Sums – Epicycles &amp; Roses",
+  "tr": "مجاميع الطوريّات – الدوائر التدويرية والورود"
+ },
+ "aaf87fe57ae6": {
+  "src": "Education",
+  "tr": "التعليم"
+ },
+ "ab6077217544": {
+  "src": "Draw &amp; Decompose – Fourier Epicycles",
+  "tr": "ارسم وفكّك – دوائر فورييه التدويرية"
+ },
+ "acc39d31c283": {
+  "src": "Quality tests for cross checking the physical tolerances imposed on products coming out of the line",
+  "tr": "اختبارات الجودة: مطابقة المنتجات الخارجة من خطّ الإنتاج للتفاوتات الفيزيائية المسموح بها"
+ },
+ "adbe9df55ba8": {
+  "src": "Completed · computational",
+  "tr": "مكتمل · حاسوبي"
+ },
+ "ae45f5043e3a": {
+  "src": "Teaching Assistant",
+  "tr": "مساعدة تدريس"
+ },
+ "ae83a7188ea3": {
+  "src": "numakoudsie@gmail.com",
+  "tr": "numakoudsie@gmail.com"
+ },
+ "b0cf34cfb377": {
+  "src": "CAD &amp; analysis",
+  "tr": "التصميم بالحاسوب والتحليل"
+ },
+ "b60b20f0f1ab": {
+  "src": "SVG animation",
+  "tr": "تحريك SVG"
+ },
+ "b795817627df": {
+  "src": "Synthetic data generation for lemur interactions",
+  "tr": "توليد بيانات اصطناعية لتفاعلات الليمور"
+ },
+ "be601df25eea": {
+  "src": "Research",
+  "tr": "الأبحاث"
+ },
+ "bf067e21ddbe": {
+  "src": "Git, Jupyter, VS Code, Linux",
+  "tr": "Git، Jupyter، VS Code، Linux"
+ },
+ "bf0cade71443": {
+  "src": "All simulations →",
+  "tr": "كلّ المحاكاة ←"
+ },
+ "bfe63e506aa2": {
+  "src": "Plotly, Matplotlib, D3.js, HTML5 Canvas",
+  "tr": "Plotly، Matplotlib، D3.js، HTML5 Canvas"
+ },
+ "c010a2efff03": {
+  "src": "Parseval's theorem",
+  "tr": "مبرهنة بارسيفال"
+ },
+ "c2a080d36cf8": {
+  "src": "GRU networks for behavior prediction (lemurs); tensor-based data organization",
+  "tr": "شبكات GRU للتنبّؤ بالسلوك (الليمور)؛ وتنظيم البيانات على هيئة موتّرات"
+ },
+ "c2df9b932637": {
+  "src": "Index",
+  "tr": "الفهرس"
+ },
+ "c32da6cd1988": {
+  "src": "RK4 integration",
+  "tr": "تكامل RK4"
+ },
+ "c7080a85a336": {
+  "src": "Huygens' principle",
+  "tr": "مبدأ هويغنز"
+ },
+ "c73d272e6489": {
+  "src": "See positions",
+  "tr": "الخبرات المهنية"
+ },
+ "cd4683fadf70": {
+  "src": "Positions",
+  "tr": "الخبرات"
+ },
+ "cd6c43c05742": {
+  "src": "Engineering Physics",
+  "tr": "الفيزياء الهندسية"
+ },
+ "ce1c474416c0": {
+  "src": "Mathematical framework: V<sub>i</sub>* = C<sub>ij</sub> V<sub >j</sub >",
+  "tr": "الإطار الرياضي: V<sub>i</sub>* = C<sub>ij</sub> V<sub >j</sub >"
+ },
+ "d1622a8321e0": {
+  "src": "Phyein Usul, home page",
+  "tr": "Phyein Usul، الصفحة الرئيسية"
+ },
+ "d175985b87dd": {
+  "src": "Visualization",
+  "tr": "التصوير البياني"
+ },
+ "d1a946bf8b2f": {
+  "src": "Programming",
+  "tr": "البرمجة"
+ },
+ "d422148d76f5": {
+  "src": "Wave Interference Simulator",
+  "tr": "منضدة تداخل الأمواج"
+ },
+ "d51b87f95972": {
+  "src": "GRU neural networks for behavioral sequences",
+  "tr": "شبكات عصبية من نوع GRU لتسلسلات السلوك"
+ },
+ "d64b45b3fb9c": {
+  "src": "Oscillations",
+  "tr": "الاهتزازات"
+ },
+ "d94389502fbb": {
+  "src": "reset ↻",
+  "tr": "إعادة ↻"
+ },
+ "db07be184479": {
+  "src": "Languages",
+  "tr": "اللغات"
+ },
+ "df4ea2d706c4": {
+  "src": "Carl von Ossietzky University of Oldenburg",
+  "tr": "جامعة كارل فون أوسيتسكي في أولدنبورغ"
+ },
+ "e09212c7d3ea": {
+  "src": "Skills",
+  "tr": "المهارات"
+ },
+ "e1589bdf46b3": {
+  "src": "Compare the two kinds of wave propagation side by side. Adjust amplitude, frequency, and wavelength to see how each property shapes the motion.",
+  "tr": "قارن نوعي انتشار الأمواج جنبًا إلى جنب. اضبط السعة والتردّد وطول الموجة لترى كيف تشكّل كلُّ خاصّيةٍ الحركة."
+ },
+ "e23ab8427ba2": {
+  "src": "<b>Ongoing</b> · computational",
+  "tr": "<b>جارٍ</b> · حاسوبي"
+ },
+ "e3eef1f8c910": {
+  "src": "Team Coordinator",
+  "tr": "تنسيق فريق العمل"
+ },
+ "e7137ce08df4": {
+  "src": "Focus: computational physics",
+  "tr": "التخصّص: الفيزياء الحاسوبية"
+ },
+ "e84ef0bf0497": {
+  "src": "Drop Population Dynamics",
+  "tr": "ديناميكا تعداد القطرات"
+ },
+ "e8f91b18f228": {
+  "src": "B.Sc. Physics",
+  "tr": "بكالوريوس في الفيزياء"
+ },
+ "e903907d59b4": {
+  "src": "Fig. 6",
+  "tr": "الشكل 6"
+ },
+ "ea58ddcdd6e2": {
+  "src": "Numa",
+  "tr": "Numa"
+ },
+ "eb552463266d": {
+  "src": "Chaotic dynamics with adjustable mass ratios, lengths, and initial conditions. Tiny changes in the starting angles produce completely different trajectories.",
+  "tr": "ديناميكا فوضوية بنسب كتل وأطوال وشروط ابتدائية قابلة للضبط. تغييرات ضئيلة في زوايا البدء تُنتج مسارات مختلفة تمامًا."
+ },
+ "ed92a8d62940": {
+  "src": "Interactive physics simulations",
+  "tr": "محاكاة فيزيائية تفاعلية"
+ },
+ "ed9d90ec7f5e": {
+  "src": "Skills &amp; languages",
+  "tr": "المهارات واللغات"
+ },
+ "f037aaacfa82": {
+  "src": "Data-driven sales analysis",
+  "tr": "تحليل المبيعات اعتمادًا على البيانات"
+ },
+ "f1623fbbcdc6": {
+  "src": "Bilingual instruction of classes 6, 8, 9, 10, and 12 in Physics and natural sciences",
+  "tr": "تدريس الفيزياء والعلوم الطبيعية بلغتين للصفوف 6 و8 و9 و10 و12"
+ },
+ "f34f870654be": {
+  "src": "Koudsie<span class=\"dot\">.</span>",
+  "tr": "Koudsie<span class=\"dot\">.</span>"
+ },
+ "f4df3869f83c": {
+  "src": "Complex phasors",
+  "tr": "الطوريّات المركّبة"
+ },
+ "f5ea17dba1dc": {
+  "src": "Wave–particle duality",
+  "tr": "ازدواجية الموجة والجسيم"
+ },
+ "f72f0eda6052": {
+  "src": "Simulations",
+  "tr": "المحاكاة"
+ },
+ "f8e064a838dd": {
+  "src": "University of Groningen",
+  "tr": "جامعة خرونينغن"
+ },
+ "ff5d03c7680b": {
+  "src": "Numa Koudsie — physics graduate with expertise in data analysis, modeling, and software development. Positions, education, research projects, interactive physics simulations, and skills.",
+  "tr": "Numa Koudsie – فيزياء (بكالوريوس)، تخصّص تحليل البيانات والنمذجة وتطوير البرمجيات. الخبرات والتعليم والمشاريع البحثية والمحاكاة الفيزيائية التفاعلية والمهارات."
+ },
+ "ff91c2bef0a9": {
+  "src": "Data analysis",
+  "tr": "تحليل البيانات"
+ }
+}
