@@ -13,11 +13,14 @@ c that gives it. Secondary: the swing amplitude Θ, the peak generator torque, a
 
 ## 2. Picture and formal mechanism
 
-**Picture.** Sit on the blade and turn with it. You feel a strong pull outwards along the blade (the centrifugal pull,
-Ω² r_p per unit mass, 1.4 to 215 times g on the 18 mountings) and a weaker pull of gravity that, seen from the blade, turns
-round once per turn. The rod lies along the blade like a weathervane in a steady wind; gravity leans on it, first to one side,
-then the other, once per turn: a child on a swing pushed once per pass, by a hand that cannot be refused. The generator is a
-spoon in honey at the pivot: it takes energy only while the rod moves relative to the blade.
+**Picture (round 2).** Sit on the blade and turn with it. You feel a strong pull outwards along the blade (the centrifugal pull,
+Ω² r_p per unit mass, Γ = 1.4 to 215 times g on the 18 mountings) and gravity, which seen from the blade turns round once per
+turn. Their sum is an apparent gravity that points almost straight out along the blade and tilts by about ±1/Γ radian once per
+turn. The rod is a stiff weathervane in that apparent wind: its own frequency is √R = 1.4–17 times the tilting, so it is never
+in resonance; it simply follows the tilt, a little late. The generator is a spoon in honey at the pivot. The best spoon makes
+the rod lag the tilt by 45°: damping equal to the net stiffness, κ* = R − 1. Seen from the blade, gravity does the work on the
+rod; seen from the ground, gravity's work over a turn is zero and the rotor supplies every joule: gravity steers the energy,
+the rotor pays for it.
 
 **Formal mechanism.** Hamilton's principle for the bob with the rotor angle φ(t) imposed (a rheonomic constraint), plus
 Rayleigh's dissipation function F = ½ c θ̇² for the generator. With φ as the clock (blade-angle time, ′ = d/dφ):
@@ -33,9 +36,9 @@ P̂ = κ⟨θ′²⟩ = κG²/(2[(R−1)² + κ²]) (in units of m L² Ω³) is 
 **Who pays.** The energy book (SymPy, L0.2): d(T + V)/dt = τ_rot φ̇ − c θ̇². Over a turn the stored energy returns to its value,
 so the rotor's mean extra torque times Ω equals the generator's mean power: the rotor pays for every joule.
 
-**Order tuning.** In blade-angle time the equation contains only R, G, κ. R is fixed by the geometry, so the ratio of the
-pendulum's own frequency to the push frequency (√R) does not change with Ω: a slow change of rotor speed cannot detune the
-pendulum from gravity's push (it changes G and κ, which L2 measures).
+**Order tuning (round 2).** In blade-angle time the equation contains only R, G, κ. The ratio of the pendulum's own frequency
+to the push, √R, does not change with Ω. The pendulum is detuned, not tuned, and its detuning is fixed by geometry: a slow
+change of rotor speed changes G and κ, not √R (L2 measures the effect: 0.35–0.57 %).
 
 ## 3. Model
 
@@ -96,3 +99,34 @@ load, c = k_t k_e/(R_coil + R_load); L4 replaces it). Point bob, massless rigid 
   approximation and μ = 0.0015 for deep-groove ball bearings (SKF rolling bearings catalogue; to be opened before it enters the
   text); NREL 5-MW shaft tilt 5° (dossier-turbine, pending).
 - Chosen, with price: viscous generator (L4 pays); rotor plane vertical (A8, −0.76 % on the real turbine); point bob (A7).
+
+
+## Answers to skeptic round 1 (`skeptic-G1-L0-r1.md`: 0 fatal, 7 must fix, 11 minor)
+
+1. Picture: replaced (section 2): stiff weathervane in a tilting apparent gravity, 45° lag at κ*; "order tuning" restated as a
+   fixed detuning. Accepted.
+2. Order-1 tuning: accepted as a missing alternative and checked (`derive/L0_r2.py`, PASS: tilted hinge gives
+   x″ + (R cos α − sin²α − G cos α sin φ)x = −G cos φ). Stiffness 1 needs α = 43.0° at 400 rpm 30 % (sensitivity −2.4 per rad)
+   but 89.6° at 8 rpm 90 % (−301 per rad): a 0.1° error detunes the large-rotor device by 0.5 of its stiffness, and blade pitch
+   moves α. Decision: it becomes one section of the lecture note ("could we tune it to resonance?") with its bound and its
+   tolerance; the studied device stays Sol's straight pendulum. Logged for Numa (D2). Prior art to be opened before it is cited:
+   Gu & Livermore 2010 (APL 97:081904); centrifugal pendulum absorbers (Sharif-Bakhtiar & Shaw 1992).
+3. Generator inertia: accepted. A9 now: L0's P* holds for j = J_gen N²/(mL²) ≪ R − 1; with j it becomes P* (R − 1)/|R − 1 − j|.
+   L4 sizes J and N from a datasheet and reports j; until then P* is the ideal-generator value, stated as such.
+4. Blade sag: accepted, found independently (`nrel5mw.py`: tip sag 0.446 m, NREL 5-MW modal tables). It is first order:
+   it belongs to L3, where it is computed exactly; A4 now reads "rigid blade; 1P sag enters at first order, L3".
+5. P1 was already answered by Sol's data: demoted to a reproduction check (PASS, worst −0.675 %). New prediction made and tested
+   before writing: the rod's mean lean at second order, θ̄ = −G²/(4R(R−1)): −0.1226 rad against −0.1283 integrated at the most
+   nonlinear mounting (4.4 %, PASS within 10 %). The cancellation is shown term by term (skeptic's split: parametric +0.15,
+   quadratic −0.25, cubic +0.06, net −0.037, times 1/Γ²); the lecture note shows it, it is not asserted.
+6. Admissibility: accepted. 400 rpm 90 % puts the bob 66 mm past the tip (Sol's own audit says so); it stays in the
+   reproduction of Sol's table, marked not buildable. In-shell drag: 0.36 µW = 4 × 10⁻⁵ of P* (skeptic's number, to be rerun in
+   the check script). Envelope check (r_p + L < R_rot, chord) added to the number script's list.
+7. Slider: accepted. k_eff = k − mΩ² (centrifugal softening); rejected because the centrifugal load sits on the track:
+   Coulomb friction μ_lin Γ against the pendulum's ½ μ Γ d/L, roughly 100 times larger.
+8–18 (minor): out-of-plane swing is pumped parametrically, Floquet-stable at all 18 mountings (stated); A7 uses the first
+   moment m_r/(2m); A3 quotes εR/G = 0.043 and the L2 result; SKF μ opened before use or bounded ×5 (≤ 3.6 %); limits Γ → 1
+   (rod tumbles) and R = 1 (linear model breaks, not infinite power) added; frames stated (answer 1); inherited choices listed
+   (m, L, λ = 7, v = 8 m/s, C_p = 0.45); one g everywhere (9.80665, scripts to be aligned); test threshold aligned; Hill and
+   closed form compared at Sol's damping (0.44 % against 11.6 %); readability fixes go into the lecture note; pitch × cos²β noted
+   for region 3.

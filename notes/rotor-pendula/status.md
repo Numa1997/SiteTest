@@ -90,5 +90,8 @@ acceleration at the pivot approaches g; chaos spreads the mobility over a wide b
 
 ## Decisions for Numa
 
+- D2 (default in force): order-1 tuning by tilting the hinge (resonant, ×1.4–180 in power, but a 0.1° error ruins it on a large
+  rotor) is one explained section of the lecture note, not the studied device.
+
 - D1 (default in force): the portfolio has two parts, Sol's uniform-rotation study (Part I, reproduced and checked) and the
   turbulent-wind study (Part II, new).

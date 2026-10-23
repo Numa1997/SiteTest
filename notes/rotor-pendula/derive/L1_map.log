@@ -16,3 +16,12 @@ R = 100: kappa* = 83.8475, 184 steps/turn, 80 members, 264 s, chaotic 0
   a1 = (self.B*f1 - M12*f2)/det; a2 = (self.A*f2 - M12*f1)/det
 /home/user/SiteTest/notes/rotor-pendula/derive/engine.py:62: RuntimeWarning: overflow encountered in square
   return np.stack([a1, a2], axis=-1), self.c0*w1**2 + self.c1*(w2 - w1)**2
+R = 300: kappa* = 252.9740, 288 steps/turn, 80 members, 432 s, chaotic 0
+/home/user/SiteTest/notes/rotor-pendula/derive/engine.py:56: RuntimeWarning: overflow encountered in square
+  f1 = (-D*sd*(Om + w2)**2 - Mt*l1*(Om**2*rp*np.sin(q1) + g*np.cos(phi + q1))
+/home/user/SiteTest/notes/rotor-pendula/derive/engine.py:58: RuntimeWarning: overflow encountered in square
+  f2 = (D*sd*(Om + w1)**2 - m2*l2*(Om**2*rp*np.sin(q2) + g*np.cos(phi + q2))
+/home/user/SiteTest/notes/rotor-pendula/derive/engine.py:61: RuntimeWarning: invalid value encountered in subtract
+  a1 = (self.B*f1 - M12*f2)/det; a2 = (self.A*f2 - M12*f1)/det
+/home/user/SiteTest/notes/rotor-pendula/derive/engine.py:62: RuntimeWarning: overflow encountered in square
+  return np.stack([a1, a2], axis=-1), self.c0*w1**2 + self.c1*(w2 - w1)**2
