@@ -1,7 +1,15 @@
 {
+ "03bb464503d2": {
+  "src": "How it is checked",
+  "tr": "Wie es geprüft wird"
+ },
  "04e22db50e7d": {
   "src": "Why an iron ball hurts and a cotton ball of the same mass does not",
   "tr": "Warum eine Eisenkugel wehtut und eine Baumwollkugel derselben Masse nicht"
+ },
+ "08b7fea08119": {
+  "src": "<b>Ice.</b> At \\(-10\\,{}^{\\circ}\\mathrm{C}\\) rime splintering is off, ice–ice breakup of the thesis’s small ice spheres makes almost nothing, and only the shattering of freezing drops could matter, between none and a few new particles per cm³ and minute: the measurements scatter that much.",
+  "tr": "<b>Eis.</b> Bei \\(-10\\,{}^{\\circ}\\mathrm{C}\\) ist die Splitterbildung beim Bereifen abgeschaltet, das Zerbrechen der kleinen Eiskugeln der Arbeit bei Eis-Eis-Stößen erzeugt fast nichts, und nur das Zerspringen gefrierender Tropfen könnte zählen, zwischen null und einigen neuen Teilchen pro cm³ und Minute: So weit streuen die Messungen."
  },
  "08f373f3b44d": {
   "src": "The servo press drawn in section during the press phase: the controller panel, the pump, the servo valve, the hose and the cylinder pressing the specimen, with the oil coloured by pressure.",
@@ -35,6 +43,10 @@
   "src": "The 18 mountings, one rod against two, chaos, and the sensor.",
   "tr": "Die 18 Befestigungen, eine Stange gegen zwei, Chaos und der Sensor."
  },
+ "117d71b35d3d": {
+  "src": "The collection equation, the droplet trajectories and an exact random cloud, running in your browser.",
+  "tr": "Die Koaleszenzgleichung, die Bahnen der Tröpfchen und eine exakte Zufallswolke, in Ihrem Browser."
+ },
  "11c756067811": {
   "src": "How cloud droplets become rain",
   "tr": "Wie aus Wolkentröpfchen Regen wird"
@@ -42,6 +54,14 @@
  "127b982c0ef1": {
   "src": "A large drop falls faster than a small one and sweeps it up; that is how a cloud of tiny droplets can turn into rain within minutes. Numa Koudsie’s Bachelor thesis, <em>Collisional Ice Multiplication Processes in Clouds</em> (Leipzig, 2022), modelled this collection and the ice splinters it can produce, with Stokes’ law for the fall speed and the geometric cross-section for the chance of a hit. The remodel replaces each ingredient with physics that holds at the sizes that matter: a drag balance for the fall speed, collision efficiencies from the trajectory of the small droplet in the air flow around the large one, and the full stochastic collection equation for the bookkeeping. Every step is derived on the theory page and tested on the checks page, and the solver runs in your browser.",
   "tr": "Ein großer Tropfen fällt schneller als ein kleiner und sammelt ihn ein; so kann eine Wolke aus winzigen Tröpfchen binnen Minuten zu Regen werden. Numa Koudsies Bachelorarbeit, <em>Collisional Ice Multiplication Processes in Clouds</em> (Leipzig, 2022), modellierte dieses Einsammeln und die Eissplitter, die dabei entstehen können, mit dem Stokesschen Gesetz für die Fallgeschwindigkeit und dem geometrischen Querschnitt für die Trefferwahrscheinlichkeit. Die Neumodellierung ersetzt jeden Baustein durch Physik, die bei den entscheidenden Größen gilt: ein Kräftegleichgewicht mit Luftwiderstand für die Fallgeschwindigkeit, Kollisionseffizienzen aus der Bahn des kleinen Tröpfchens in der Luftströmung um den großen Tropfen und die vollständige stochastische Koaleszenzgleichung für die Buchführung. Jeder Schritt wird auf der Theorieseite hergeleitet und auf der Prüfseite getestet, und der Löser läuft in Ihrem Browser."
+ },
+ "13bb82abac9f": {
+  "src": "A cloud droplet is ten micrometres across and sinks a centimetre a second; a raindrop holds a million of them. Gravity gathers them: a drop a little larger than its neighbours falls a little faster, overtakes the droplets below it and swallows some of them. These lecture notes rebuild Numa Koudsie’s Bachelor thesis, <em>Collisional Ice Multiplication Processes in Clouds</em> (Leipzig, 2022), from first principles, one physical effect at a time: Stokes’ drag derived from the stream function, a drag balance for every size, droplet trajectories around a falling drop, the energy that decides whether touching drops merge, the collection equation for a whole population, the exact random process behind it, turbulence, and ice. Every number not attributed to a source is computed by the model that runs in the page, and checked.",
+  "tr": "Ein Wolkentröpfchen ist zehn Mikrometer groß und sinkt einen Zentimeter pro Sekunde; ein Regentropfen enthält eine Million davon. Die Schwerkraft sammelt sie ein: Ein Tropfen, der etwas größer ist als seine Nachbarn, fällt etwas schneller, holt die Tröpfchen unter sich ein und verschluckt einige von ihnen. Dieses Vorlesungsskript baut Numa Koudsies Bachelorarbeit, <em>Collisional Ice Multiplication Processes in Clouds</em> (Leipzig, 2022), aus ersten Prinzipien neu auf, einen physikalischen Effekt nach dem anderen: der Stokes-Widerstand, hergeleitet aus der Stromfunktion, eine Widerstandsbilanz für jede Größe, die Bahnen der Tröpfchen um einen fallenden Tropfen, die Energie, die entscheidet, ob sich berührende Tropfen verschmelzen, die Koaleszenzgleichung für eine ganze Population, der exakte Zufallsprozess dahinter, Turbulenz und Eis. Jede Zahl, die keiner Quelle zugeschrieben ist, berechnet das Modell, das auf der Seite läuft, und sie wird geprüft."
+ },
+ "13e899a9f70a": {
+  "src": "less new ice from ice–ice collisions than the thesis’s rule assumed",
+  "tr": "weniger neues Eis aus Eis-Eis-Stößen, als die Regel der Arbeit annahm"
  },
  "154563309bcc": {
   "src": "A static copy of the Droplet Collection app. Its saved-runs list is left out: every run is computed fresh in your browser, and nothing is stored.",
@@ -143,6 +163,10 @@
   "src": "Run a pendulum",
   "tr": "Ein Pendel rechnen lassen"
  },
+ "3d1f9d4a0fa5": {
+  "src": "<span class=\"pfig__n\">Figure 4</span>The first drizzle: exact runs against the Poisson prediction from the collection equation (chapter 6).",
+  "tr": "<span class=\"pfig__n\">Abbildung 4</span>Der erste Niesel: exakte Läufe gegen die Poisson-Vorhersage aus der Koaleszenzgleichung (Kapitel 6)."
+ },
  "40acd8393970": {
   "src": "Fall speed, collision efficiency, critical Stokes numbers and the Golovin test.",
   "tr": "Fallgeschwindigkeit, Kollisionseffizienz, kritische Stokes-Zahlen und der Golovin-Test."
@@ -199,6 +223,18 @@
   "src": "Checks",
   "tr": "Prüfungen"
  },
+ "51c92936b23c": {
+  "src": "Ten chapters and an appendix, from one drop to ice: 22 numbered equations, each with its picture, its derivation and the model’s own numbers.",
+  "tr": "Zehn Kapitel und ein Anhang, von einem Tropfen bis zum Eis: 22 nummerierte Gleichungen, jede mit ihrem Bild, ihrer Herleitung und den eigenen Zahlen des Modells."
+ },
+ "52ec4d95e62a": {
+  "src": "<span class=\"pfig__n\">Figure 2</span>Which droplets touch: collision efficiency from trajectories, against Hall’s (1980) table (chapter 3).",
+  "tr": "<span class=\"pfig__n\">Abbildung 2</span>Welche Tröpfchen treffen: Kollisionseffizienz aus den Bahnen, verglichen mit der Tabelle von Hall (1980) (Kapitel 3)."
+ },
+ "550f358eec15": {
+  "src": "Bachelor thesis, Leipzig 2022 · rebuilt as lecture notes",
+  "tr": "Bachelorarbeit, Leipzig 2022 · als Vorlesungsskript neu aufgebaut"
+ },
  "55312aa6e492": {
   "src": "<span class=\"psub__n\">4.2</span>What the model keeps",
   "tr": "<span class=\"psub__n\">4.2</span>Was das Modell enthält"
@@ -219,6 +255,10 @@
   "src": "<span class=\"pfig__n\">Figure 4</span>At rest: both scales read 9.81 N, 1.000 kg, and keep their very different peaks.",
   "tr": "<span class=\"pfig__n\">Abbildung 4</span>In Ruhe: Beide Waagen zeigen 9.81 N, 1.000 kg, und behalten ihre sehr verschiedenen Spitzenwerte."
  },
+ "5a364ae6e6c3": {
+  "src": "Five worked problems with the model’s numbers.",
+  "tr": "Fünf durchgerechnete Aufgaben mit den Zahlen des Modells."
+ },
  "5b1e898fc07d": {
   "src": "Theory",
   "tr": "Theorie"
@@ -226,6 +266,10 @@
  "5b6825d3c67a": {
   "src": "Site",
   "tr": "Website"
+ },
+ "5ba7d18d1c32": {
+  "src": "<span class=\"psub__n\">1.1</span>The cloud and the three questions",
+  "tr": "<span class=\"psub__n\">1.1</span>Die Wolke und die drei Fragen"
  },
  "5d1c1481d224": {
   "src": "<span class=\"pfig__n\">Figure 2</span>One cycle in six traces: position, force, pressures, valve, energy and tracking error, shaded by phase.",
@@ -327,6 +371,10 @@
   "src": "<span class=\"psub__n\">1.1</span>The warm cloud",
   "tr": "<span class=\"psub__n\">1.1</span>Die warme Wolke"
  },
+ "76c203ba7d40": {
+  "src": "Collision efficiency against collector radius from droplet trajectories, with Hall’s compiled values.",
+  "tr": "Kollisionseffizienz über dem Radius des Sammeltropfens, aus den Bahnen der Tröpfchen, mit den von Hall zusammengestellten Werten."
+ },
  "7827699eb8b3": {
   "src": "Start from Pascal",
   "tr": "Bei Pascal beginnen"
@@ -355,9 +403,21 @@
   "src": "Fall speed against drop size for the two models and the measurements of Gunn and Kinzer, and the error of the drag balance.",
   "tr": "Fallgeschwindigkeit gegen Tropfengröße für die beiden Modelle und die Messungen von Gunn und Kinzer, und der Fehler des Kräftegleichgewichts."
  },
+ "811917fe5504": {
+  "src": "to the first drizzle drop in a cubic metre, ten times sooner than half the water: luck",
+  "tr": "bis zum ersten Nieseltropfen in einem Kubikmeter, zehnmal früher als die Hälfte des Wassers: Glück"
+ },
  "82868e56791b": {
   "src": "Pascal’s press from one Lagrangian, drawn to scale, with a probe that reads the pressure anywhere in the oil.",
   "tr": "Pascals Presse aus einer Lagrange-Funktion, maßstabsgetreu gezeichnet, mit einer Sonde, die den Druck an jeder Stelle im Öl abliest."
+ },
+ "8373958aa734": {
+  "src": "<b>Fall speed.</b> Stokes’ law breaks its own assumption at \\(41\\ \\mathrm{\\mu m}\\), where its Reynolds number reaches 1. A drag balance through the Davies number matches the measurements of Gunn and Kinzer within 2.1 % from 0.3 mm up, and in the full population it slows growth by a factor 1.76, far more than for a single drop.",
+  "tr": "<b>Fallgeschwindigkeit.</b> Das Stokes-Gesetz verletzt seine eigene Annahme bei \\(41\\ \\mathrm{\\mu m}\\), wo seine Reynolds-Zahl 1 erreicht. Eine Widerstandsbilanz über die Davies-Zahl trifft die Messungen von Gunn und Kinzer ab 0.3 mm auf 2.1 % genau, und in der ganzen Population bremst sie das Wachstum um den Faktor 1.76, weit mehr als bei einem einzelnen Tropfen."
+ },
+ "86ac000bebfe": {
+  "src": "Share of volumes holding a drop of 100 µm against time: exact runs and the Poisson prediction.",
+  "tr": "Anteil der Volumina, die einen Tropfen von 100 µm enthalten, über der Zeit: exakte Läufe und die Poisson-Vorhersage."
  },
  "88763ced3fa4": {
   "src": "to 50 / 90 % of the mass above 40 µm, extended kernel",
@@ -379,9 +439,21 @@
   "src": "Energy bars for each ball: the energy given by the fall above, and below it where it went, almost all heat in the head for iron and almost all heat in the cotton for cotton.",
   "tr": "Energiebalken für jede Kugel: oben die Energie, die der Fall liefert, darunter, wohin sie ging, beim Eisen fast alles Wärme im Kopf, bei der Baumwolle fast alles Wärme in der Baumwolle."
  },
+ "8e34943c353e": {
+  "src": "Simulation",
+  "tr": "Simulation"
+ },
+ "8e6b86dce8c4": {
+  "src": "Problems",
+  "tr": "Aufgaben"
+ },
  "8ec3509b5ead": {
   "src": "best harvest, single pendulum, 100 g on 20 cm",
   "tr": "beste Ausbeute, Einzelpendel, 100 g an 20 cm"
+ },
+ "905358f85cc7": {
+  "src": "<span class=\"psub__n\">1.2</span>What the rebuild found, one line each",
+  "tr": "<span class=\"psub__n\">1.2</span>Was der Neuaufbau fand, je eine Zeile"
  },
  "90d693ebefa6": {
   "src": "Twelve chapters from the encounter to the evidence map, 62 numbered equations, worked examples, and each correction where it occurs.",
@@ -398,6 +470,10 @@
  "95c604566848": {
   "src": "Simulate",
   "tr": "Simulieren"
+ },
+ "95d105a70c43": {
+  "src": "to half and nine tenths of the water in drops above 40 µm; with the collision efficiency’s uncertainty, nine tenths at 10.5 to 13.5 min",
+  "tr": "bis die Hälfte und neun Zehntel des Wassers in Tropfen über 40 µm stecken; mit der Unsicherheit der Kollisionseffizienz neun Zehntel bei 10.5 bis 13.5 min"
  },
  "9af48c962762": {
   "src": "<span class=\"pfig__n\">Figure 1</span>The iron ball’s peak, 1.447 s: its scale holds 639 N while the cotton has only begun to press.",
@@ -423,6 +499,10 @@
   "src": "Research projects",
   "tr": "Forschungsprojekte"
  },
+ "a1a7a7e5b52b": {
+  "src": "<span class=\"pfig__n\">Figure 3</span>The whole cloud: water in drops of 40 µm or more, for two kernels and two kinds of bookkeeping (chapter 5).",
+  "tr": "<span class=\"pfig__n\">Abbildung 3</span>Die ganze Wolke: Wasser in Tropfen von 40 µm und mehr, für zwei Kerne und zwei Arten der Buchführung (Kapitel 5)."
+ },
  "a27650cb8d41": {
   "src": "<b>Where the energy goes.</b> The pump does 26.3 kJ of work; the valve turns 24.4 kJ of it into heat, because a valve throttling a constant-pressure supply is a brake. The energy books close to \\(2\\times10^{-14}\\) of the pump’s work.",
   "tr": "<b>Wohin die Energie geht.</b> Die Pumpe verrichtet 26.3 kJ Arbeit; das Ventil macht daraus 24.4 kJ Wärme, denn ein Ventil, das eine Versorgung mit konstantem Druck drosselt, ist eine Bremse. Die Energiebilanz schließt auf \\(2\\times10^{-14}\\) der Pumpenarbeit."
@@ -438,6 +518,14 @@
  "a6c936642021": {
   "src": "mass error against Golovin’s exact solution",
   "tr": "Massenfehler gegenüber Golovins exakter Lösung"
+ },
+ "a74052263561": {
+  "src": "Read the lecture notes",
+  "tr": "Das Vorlesungsskript lesen"
+ },
+ "aa670fc16828": {
+  "src": "<b>Luck.</b> The exact random process, sampled drop by drop in volumes up to a litre, makes the first \\(100\\ \\mathrm{\\mu m}\\) drop through mergers of collectors with each other, in every one of 230 runs; a Poisson argument carries it to a cubic metre.",
+  "tr": "<b>Glück.</b> Der exakte Zufallsprozess, Tropfen für Tropfen in Volumina bis zu einem Liter abgetastet, bildet den ersten \\(100\\ \\mathrm{\\mu m}\\)-Tropfen durch Verschmelzen von Sammeltropfen untereinander, in jedem einzelnen von 230 Läufen; ein Poisson-Argument trägt das Ergebnis bis zu einem Kubikmeter."
  },
  "acd3f7630174": {
   "src": "<span class=\"pfig__n\">Figure 3</span>The energy books at the end: iron heats the head, cotton heats itself.",
@@ -463,13 +551,29 @@
   "src": "min",
   "tr": "min"
  },
+ "b6e987cabfc2": {
+  "src": "The test case is the thesis’s warm cloud: \\(300\\ \\mathrm{cm^{-3}}\\) droplets around \\(8\\ \\mathrm{\\mu m}\\) and \\(1\\ \\mathrm{cm^{-3}}\\) collectors around \\(40\\ \\mathrm{\\mu m}\\), at \\(10\\,{}^{\\circ}\\mathrm{C}\\) and \\(850\\ \\mathrm{hPa}\\), in a closed, well-mixed box. The notes ask how long until most of the water sits in large drops, how long until the very first drizzle drop appears in a given volume, and whether collisions in a cold cloud make new ice. A ladder of models answers them, each rung adding one effect with a computed number that shows it matters.",
+  "tr": "Der Testfall ist die warme Wolke der Arbeit: \\(300\\ \\mathrm{cm^{-3}}\\) Tröpfchen um \\(8\\ \\mathrm{\\mu m}\\) und \\(1\\ \\mathrm{cm^{-3}}\\) Sammeltropfen um \\(40\\ \\mathrm{\\mu m}\\), bei \\(10\\,{}^{\\circ}\\mathrm{C}\\) und \\(850\\ \\mathrm{hPa}\\), in einem geschlossenen, gut durchmischten Kasten. Das Skript fragt, wie lange es dauert, bis der größte Teil des Wassers in großen Tropfen steckt, wie lange, bis in einem gegebenen Volumen der allererste Nieseltropfen erscheint, und ob Stöße in einer kalten Wolke neues Eis erzeugen. Eine Leiter von Modellen beantwortet diese Fragen; jede Sprosse fügt einen Effekt hinzu, mit einer berechneten Zahl, die zeigt, dass er zählt."
+ },
  "b8a15ac3e90f": {
   "src": "<span class=\"pfig__n\">Figure 3</span>Left: the matched group, power against damping. Right: all 54 scanned cases; the vertical line alone is not the chaos test.",
   "tr": "<span class=\"pfig__n\">Abbildung 3</span>Links: die abgeglichene Gruppe, Leistung gegen Dämpfung. Rechts: alle 54 untersuchten Fälle; die senkrechte Linie allein ist nicht der Chaostest."
  },
+ "ba3efd9a831f": {
+  "src": "<span class=\"psub__n\">1.3</span>Four figures from the notes",
+  "tr": "<span class=\"psub__n\">1.3</span>Vier Abbildungen aus dem Skript"
+ },
+ "ba57e5a41fe2": {
+  "src": "Lecture notes",
+  "tr": "Vorlesungsskript"
+ },
  "bc545b6211bb": {
   "src": "<span class=\"pfig__n\">Figure 2</span>Mean harvested power at the 18 mountings, single and double pendulum; lines only join the sampled points.",
   "tr": "<span class=\"pfig__n\">Abbildung 2</span>Mittlere geerntete Leistung an den 18 Befestigungen, Einzel- und Doppelpendel; die Linien verbinden nur die berechneten Punkte."
+ },
+ "bd49944ca656": {
+  "src": "Share of the water in drops of 40 µm or more against time, for the thesis kernel and the extended kernel.",
+  "tr": "Anteil des Wassers in Tropfen von 40 µm und mehr über der Zeit, für den Kern der Arbeit und den erweiterten Kern."
  },
  "be51bfd3ca95": {
   "src": "<span class=\"psub__n\">1.4</span>The project’s own pages",
@@ -482,6 +586,10 @@
  "be7e88229796": {
   "src": "Servo press",
   "tr": "Servopresse"
+ },
+ "befe6eed6e7e": {
+  "src": "<b>Collision efficiency.</b> Only a third of the droplets in a \\(40\\ \\mathrm{\\mu m}\\) drop’s path touch it (\\(E = 0.344\\)); the rest ride round on the air it pushes aside. The trajectory solver reproduces the critical Stokes numbers \\(1/12\\) and \\(1.21194\\). The efficiency is the largest single change of the ladder, and the least certain: it moves the time to nine tenths of the water from 13.5 to 10.5 min.",
+  "tr": "<b>Kollisionseffizienz.</b> Nur ein Drittel der Tröpfchen auf der Bahn eines \\(40\\ \\mathrm{\\mu m}\\)-Tropfens berührt ihn (\\(E = 0.344\\)); die übrigen reiten auf der Luft um ihn herum, die er beiseiteschiebt. Der Bahnlöser reproduziert die kritischen Stokes-Zahlen \\(1/12\\) und \\(1.21194\\). Die Effizienz ist die größte einzelne Änderung der Leiter und die unsicherste: Sie verschiebt die Zeit bis zu neun Zehnteln des Wassers von 13.5 auf 10.5 min."
  },
  "bf48642c413a": {
   "src": "Both balls at rest on their plates after 9 s; both gauges read a weight of 9.81 N and a mass of 1.000 kg, with peaks of 639 N and 188 N kept by the peak-hold pointers.",
@@ -522,6 +630,10 @@
  "d1622a8321e0": {
   "src": "Phyein Usul, home page",
   "tr": "Phyein Usul, Startseite"
+ },
+ "d24aa1d379cb": {
+  "src": "Exact solutions, independent recomputations in Python, and a script that finds every quoted number in the text.",
+  "tr": "Exakte Lösungen, unabhängige Nachrechnungen in Python und ein Skript, das jede im Text zitierte Zahl findet."
  },
  "d54d2d82e37e": {
   "src": "An independent model, written from scratch, re-ran all 36 mapping cases and all 54 chaos cases; every headline number reproduced, to about one part in \\(10^{11}\\). Eight things in the report needed correcting, and none changes a conclusion. The main ones: the turbine-size formula is \\(56\\ \\mathrm{m/s}/\\Omega\\), not mm/s; the centrifugal factor \\(\\Gamma\\) rises with rotor speed, not falls; the chaotic power’s error bar is about \\(\\pm0.01\\ \\mathrm{W}\\), not \\(\\pm0.003\\ \\mathrm{W}\\); one mounting puts the bob 66 mm past the blade tip; and one figure is blurred by single-precision storage. The project shows each correction where it occurs, with its evidence.",
@@ -579,6 +691,10 @@
   "src": "<span class=\"psub__n\">2.1</span>The answer in four lines",
   "tr": "<span class=\"psub__n\">2.1</span>Die Antwort in vier Zeilen"
  },
+ "e4529b013369": {
+  "src": "<span class=\"pfig__n\">Figure 1</span>How fast a drop falls: Stokes’ law runs away above 40 µm; the drag balance follows the measurements (chapter 2).",
+  "tr": "<span class=\"pfig__n\">Abbildung 1</span>Wie schnell ein Tropfen fällt: Das Stokes-Gesetz läuft oberhalb von 40 µm davon; die Widerstandsbilanz folgt den Messungen (Kapitel 2)."
+ },
  "e4e201469918": {
   "src": "Key figures",
   "tr": "Kennzahlen"
@@ -635,6 +751,10 @@
   "src": "Research projects by Numa Koudsie, each with its derivations, solver and results: Droplet Collection, the remodel of a Bachelor thesis on how cloud droplets become rain; Rotor Pendula, a corrected study of whether a pendulum on a turbine blade can power a sensor; the Hydraulic Press Study, a servo-hydraulic press under digital control, built from first principles; and Iron, Cotton and the Head, why an iron ball hurts and a cotton ball of the same mass does not, in English, German and Arabic.",
   "tr": "Forschungsprojekte von Numa Koudsie, jedes mit Herleitungen, Löser und Ergebnissen: Droplet Collection, die Neumodellierung einer Bachelorarbeit darüber, wie aus Wolkentröpfchen Regen wird; Rotor Pendula, eine korrigierte Studie zur Frage, ob ein Pendel an einem Turbinenblatt einen Sensor versorgen kann; die Studie einer hydraulischen Presse, einer servohydraulischen Presse unter digitaler Regelung, aus ersten Prinzipien aufgebaut; und Eisen, Baumwolle und der Kopf, warum eine Eisenkugel wehtut und eine Baumwollkugel derselben Masse nicht, auf Englisch, Deutsch und Arabisch."
  },
+ "f887939b2eee": {
+  "src": "<b>Coalescence.</b> For cloud droplets the collision energy is \\(10^{-5}\\) of the surface energy, so touching drops merge; with Stokes speeds, large drops hit so hard that the thesis kernel stops merging them below a millimetre.",
+  "tr": "<b>Koaleszenz.</b> Für Wolkentröpfchen beträgt die Stoßenergie \\(10^{-5}\\) der Oberflächenenergie, also verschmelzen sich berührende Tropfen; mit Stokes-Geschwindigkeiten treffen große Tropfen so hart, dass der Kern der Arbeit sie unterhalb eines Millimeters nicht mehr verschmelzen lässt."
+ },
  "f94fb36e0cb1": {
   "src": "An interactive study · English and Arabic · 2026",
   "tr": "Eine interaktive Studie · Englisch und Arabisch · 2026"
@@ -650,6 +770,10 @@
  "fbc3ef47fb9f": {
   "src": "The two balls side by side at the instant of the iron ball’s peak: the iron lattice pressing its plate down, the cotton tangle just touching its plate, and below each a force gauge, iron reading 639 N at peak, cotton 35 N.",
   "tr": "Die beiden Kugeln nebeneinander im Augenblick der Spitze der Eisenkugel: das Eisengitter drückt seine Platte hinunter, das Baumwollgewirr berührt seine Platte gerade, und unter jeder ein Kraftmesser, Eisen mit 639 N an der Spitze, Baumwolle mit 35 N."
+ },
+ "fc382d968d5d": {
+  "src": "Terminal speed of water drops against size: Stokes’ law, the drag balance and the measurements of Gunn and Kinzer.",
+  "tr": "Endgeschwindigkeit von Wassertropfen über ihrer Größe: das Stokes-Gesetz, die Widerstandsbilanz und die Messungen von Gunn und Kinzer."
  },
  "fc5e8979c3c5": {
   "src": "<span class=\"pfig__n\">Figure 3</span>Evolution of the mass spectrum in the warm cloud, stochastic collection equation, thesis kernel (left) and new kernel (right).",

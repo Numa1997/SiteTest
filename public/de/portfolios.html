@@ -28,7 +28,7 @@
     </script>
   
     <script src="../scripts/i18n/strings-de.js"></script>
-    <meta name="translated-from" content="English public/portfolios.html, commit cf6212d" />
+    <meta name="translated-from" content="English public/portfolios.html, commit 8b8d504" />
   </head>
 
   <body>
@@ -56,7 +56,7 @@
       <article class="proj" id="droplet-collection" aria-labelledby="dc-title">
         <div class="proj__band">
           <span class="proj__num">01</span>
-          <p>Bachelorarbeit, Leipzig 2022 · neu modelliert</p>
+          <p>Bachelorarbeit, Leipzig 2022 · als Vorlesungsskript neu aufgebaut</p>
           <span>Wolkenphysik · stochastische Koaleszenz · numerische Methoden</span>
         </div>
         <div class="proj__body">
@@ -64,55 +64,55 @@
             <div>
               <h2 id="dc-title">Droplet Collection</h2>
               <p class="proj__sub">Wie aus Wolkentröpfchen Regen wird</p>
-              <p class="proj__abs">Ein großer Tropfen fällt schneller als ein kleiner und sammelt ihn ein; so kann eine Wolke aus winzigen Tröpfchen binnen Minuten zu Regen werden. Numa Koudsies Bachelorarbeit, <em>Collisional Ice Multiplication Processes in Clouds</em> (Leipzig, 2022), modellierte dieses Einsammeln und die Eissplitter, die dabei entstehen können, mit dem Stokesschen Gesetz für die Fallgeschwindigkeit und dem geometrischen Querschnitt für die Trefferwahrscheinlichkeit. Die Neumodellierung ersetzt jeden Baustein durch Physik, die bei den entscheidenden Größen gilt: ein Kräftegleichgewicht mit Luftwiderstand für die Fallgeschwindigkeit, Kollisionseffizienzen aus der Bahn des kleinen Tröpfchens in der Luftströmung um den großen Tropfen und die vollständige stochastische Koaleszenzgleichung für die Buchführung. Jeder Schritt wird auf der Theorieseite hergeleitet und auf der Prüfseite getestet, und der Löser läuft in Ihrem Browser.</p>
+              <p class="proj__abs">Ein Wolkentröpfchen ist zehn Mikrometer groß und sinkt einen Zentimeter pro Sekunde; ein Regentropfen enthält eine Million davon. Die Schwerkraft sammelt sie ein: Ein Tropfen, der etwas größer ist als seine Nachbarn, fällt etwas schneller, holt die Tröpfchen unter sich ein und verschluckt einige von ihnen. Dieses Vorlesungsskript baut Numa Koudsies Bachelorarbeit, <em>Collisional Ice Multiplication Processes in Clouds</em> (Leipzig, 2022), aus ersten Prinzipien neu auf, einen physikalischen Effekt nach dem anderen: der Stokes-Widerstand, hergeleitet aus der Stromfunktion, eine Widerstandsbilanz für jede Größe, die Bahnen der Tröpfchen um einen fallenden Tropfen, die Energie, die entscheidet, ob sich berührende Tropfen verschmelzen, die Koaleszenzgleichung für eine ganze Population, der exakte Zufallsprozess dahinter, Turbulenz und Eis. Jede Zahl, die keiner Quelle zugeschrieben ist, berechnet das Modell, das auf der Seite läuft, und sie wird geprüft.</p>
               <div class="proj__actions">
-                <a class="proj__btn" href="../portfolios/droplet-collection/index.html">Projekt öffnen</a>
-                <a class="proj__btn proj__btn--ghost" href="../portfolios/droplet-collection/index.html#/theory">Die Herleitungen lesen</a>
-                <a class="proj__btn proj__btn--ghost" href="../portfolios/droplet-collection/index.html#/simulate">Die Wolke rechnen lassen</a>
+                <a class="proj__btn" href="../portfolios/droplet-collection/index.html#book">Das Vorlesungsskript lesen</a>
+                <a class="proj__btn proj__btn--ghost" href="../portfolios/droplet-collection/index.html#sim">Die Wolke rechnen lassen</a>
+                <a class="proj__btn proj__btn--ghost" href="../portfolios/droplet-collection/index.html#checks">Wie es geprüft wird</a>
               </div>
             </div>
             <dl class="proj__tally" aria-label="Kennzahlen">
-              <div><dt class="is-new">6 / 14<small>min</small></dt><dd>bis 50 / 90 % der Masse über 40 µm, erweiterter Kern</dd></div>
-              <div><dt>3 / 5<small>min</small></dt><dd>dasselbe, Kern der Abschlussarbeit</dd></div>
+              <div><dt class="is-new">5.8 / 13.5<small>min</small></dt><dd>bis die Hälfte und neun Zehntel des Wassers in Tropfen über 40 µm stecken; mit der Unsicherheit der Kollisionseffizienz neun Zehntel bei 10.5 bis 13.5 min</dd></div>
+              <div><dt>1<small>min</small></dt><dd>bis zum ersten Nieseltropfen in einem Kubikmeter, zehnmal früher als die Hälfte des Wassers: Glück</dd></div>
+              <div><dt>50–1600<small>×</small></dt><dd>weniger neues Eis aus Eis-Eis-Stößen, als die Regel der Arbeit annahm</dd></div>
               <div><dt>2.1<small> %</small></dt><dd>größter Fehler der Fallgeschwindigkeit gegenüber Messungen, ab 0.3 mm</dd></div>
-              <div><dt>10<sup>−7</sup></dt><dd>Massenfehler gegenüber Golovins exakter Lösung</dd></div>
             </dl>
           </div>
 
           <section class="proj__part" aria-labelledby="dc-cloud">
-            <h3 id="dc-cloud"><span class="psub__n">1.1</span>Die warme Wolke</h3>
-            <p>Der Testfall ist eine warme Wolke aus \(300\ \mathrm{cm^{-3}}\) Tröpfchen mit dem Radius \(8\ \mathrm{\mu m}\) und \(1\ \mathrm{cm^{-3}}\) Sammlern von \(40\ \mathrm{\mu m}\), bei \(10\,{}^{\circ}\mathrm{C}\) und \(850\ \mathrm{hPa}\). Das Wachstum wird am Massenanteil in Tropfen mit dem Radius \(r \ge 40\ \mathrm{\mu m}\) gemessen: ein Maß für das Wachstum, keine Niederschlagsvorhersage. Mit dem Kern der Abschlussarbeit staut sich die Masse bei etwa \(500\ \mathrm{\mu m}\) und bleibt stehen, weil die mit Stokes-Geschwindigkeiten berechnete Weber-Zahl die Koaleszenz abschaltet; mit dem erweiterten Kern wachsen die Tropfen weiter bis zu Millimetern. Der Kern zählt mehr als die Buchführung.</p>
+            <h3 id="dc-cloud"><span class="psub__n">1.1</span>Die Wolke und die drei Fragen</h3>
+            <p>Der Testfall ist die warme Wolke der Arbeit: \(300\ \mathrm{cm^{-3}}\) Tröpfchen um \(8\ \mathrm{\mu m}\) und \(1\ \mathrm{cm^{-3}}\) Sammeltropfen um \(40\ \mathrm{\mu m}\), bei \(10\,{}^{\circ}\mathrm{C}\) und \(850\ \mathrm{hPa}\), in einem geschlossenen, gut durchmischten Kasten. Das Skript fragt, wie lange es dauert, bis der größte Teil des Wassers in großen Tropfen steckt, wie lange, bis in einem gegebenen Volumen der allererste Nieseltropfen erscheint, und ob Stöße in einer kalten Wolke neues Eis erzeugen. Eine Leiter von Modellen beantwortet diese Fragen; jede Sprosse fügt einen Effekt hinzu, mit einer berechneten Zahl, die zeigt, dass er zählt.</p>
           </section>
 
           <section class="proj__part" aria-labelledby="dc-changes">
-            <h3 id="dc-changes"><span class="psub__n">1.2</span>Was sich geändert hat, je eine Zeile</h3>
+            <h3 id="dc-changes"><span class="psub__n">1.2</span>Was der Neuaufbau fand, je eine Zeile</h3>
             <ol class="proj__changes">
-              <li><b>Fallgeschwindigkeit.</b> Für einen Tropfen von \(200\ \mathrm{\mu m}\) liefert das Stokessche Gesetz \(\mathrm{Re}\approx 150\), außerhalb seines eigenen Gültigkeitsbereichs. Ein Kräftegleichgewicht mit Beards Widerstandsbeiwert \(C_D(\mathrm{Re})\), gelöst über die Davies-Zahl, gibt die Messungen von Gunn und Kinzer ab 0.3 mm auf 2.1 % genau wieder.</li>
-              <li><b>Kollisionseffizienz.</b> Das kleine Tröpfchen gehorcht in der Strömung um den Sammler der Gleichung \(\tau\,\dot{\mathbf v} = \mathbf u - \mathbf v - \tau g^{*}\mathbf e_z\); mit \(R\) und \(U\) skaliert, ist das die Stokes-Zahl \(\mathrm{St} = \tau U/R\). Die streifende Bahn ergibt \(E\); der Löser reproduziert die kritischen Stokes-Zahlen \(1/12\) und \(1.21\).</li>
-              <li><b>Buchführung.</b> Aus den zwei festen Populationen der Abschlussarbeit wird ein einziges Spektrum, das der Smoluchowski-Koaleszenzgleichung gehorcht; die Gleichungen der Abschlussarbeit ergeben sich daraus als Grenzfall seltener Sammler.</li>
-              <li><b>Numerik.</b> Ein logarithmisches Massengitter, an Ort und Stelle berechnete Paarflüsse, eine Verteilung, die Anzahl und Masse erhält, und ein Begrenzer, der hergeleitet statt geraten ist; getestet an Golovins exakter Lösung, mit einem Massenfehler von \(10^{-7}\) und einem Spektrumsfehler von 5 % bei 8 Klassen pro Massenverdopplung.</li>
-              <li><b>Eis.</b> Splitterfragmente treten der wechselwirkenden Population bei. Die Fragmentierung der App ist ereignisbasiert: ein fester Massenanteil \(\lambda\) pro Eis-Eis-Kollision und eine feste Fragmentmasse. Der Code der Abschlussarbeit entzieht stattdessen Masse mit einer zufälligen Rate pro Sekunde, also prüfen die kalten Läufe den Ansatz der App, nicht das Modell der Abschlussarbeit. Mit den Fragmenten im Rennen wächst die Eisanzahl in einer Stunde von 167 auf 1 700–2 100 cm⁻³, und die Masse über 40 µm fällt auf 0.2–4 %: Dieses Ergebnis treibt der Ansatz, nicht der Löser.</li>
+              <li><b>Fallgeschwindigkeit.</b> Das Stokes-Gesetz verletzt seine eigene Annahme bei \(41\ \mathrm{\mu m}\), wo seine Reynolds-Zahl 1 erreicht. Eine Widerstandsbilanz über die Davies-Zahl trifft die Messungen von Gunn und Kinzer ab 0.3 mm auf 2.1 % genau, und in der ganzen Population bremst sie das Wachstum um den Faktor 1.76, weit mehr als bei einem einzelnen Tropfen.</li>
+              <li><b>Kollisionseffizienz.</b> Nur ein Drittel der Tröpfchen auf der Bahn eines \(40\ \mathrm{\mu m}\)-Tropfens berührt ihn (\(E = 0.344\)); die übrigen reiten auf der Luft um ihn herum, die er beiseiteschiebt. Der Bahnlöser reproduziert die kritischen Stokes-Zahlen \(1/12\) und \(1.21194\). Die Effizienz ist die größte einzelne Änderung der Leiter und die unsicherste: Sie verschiebt die Zeit bis zu neun Zehnteln des Wassers von 13.5 auf 10.5 min.</li>
+              <li><b>Koaleszenz.</b> Für Wolkentröpfchen beträgt die Stoßenergie \(10^{-5}\) der Oberflächenenergie, also verschmelzen sich berührende Tropfen; mit Stokes-Geschwindigkeiten treffen große Tropfen so hart, dass der Kern der Arbeit sie unterhalb eines Millimeters nicht mehr verschmelzen lässt.</li>
+              <li><b>Glück.</b> Der exakte Zufallsprozess, Tropfen für Tropfen in Volumina bis zu einem Liter abgetastet, bildet den ersten \(100\ \mathrm{\mu m}\)-Tropfen durch Verschmelzen von Sammeltropfen untereinander, in jedem einzelnen von 230 Läufen; ein Poisson-Argument trägt das Ergebnis bis zu einem Kubikmeter.</li>
+              <li><b>Eis.</b> Bei \(-10\,{}^{\circ}\mathrm{C}\) ist die Splitterbildung beim Bereifen abgeschaltet, das Zerbrechen der kleinen Eiskugeln der Arbeit bei Eis-Eis-Stößen erzeugt fast nichts, und nur das Zerspringen gefrierender Tropfen könnte zählen, zwischen null und einigen neuen Teilchen pro cm³ und Minute: So weit streuen die Messungen.</li>
             </ol>
           </section>
 
           <section class="proj__part" aria-labelledby="dc-figs">
-            <h3 id="dc-figs"><span class="psub__n">1.3</span>Vier Abbildungen aus dem Projekt</h3>
+            <h3 id="dc-figs"><span class="psub__n">1.3</span>Vier Abbildungen aus dem Skript</h3>
             <div class="proj__figs">
               <figure>
-                <a class="pfig__plate" href="../portfolios/droplet-collection/index.html#/theory"><img src="../portfolios/droplet-collection/fig/fallspeed_gk.svg" width="636" height="300" loading="lazy" alt="Fallgeschwindigkeit gegen Tropfengröße für die beiden Modelle und die Messungen von Gunn und Kinzer, und der Fehler des Kräftegleichgewichts."></a>
-                <figcaption><span class="pfig__n">Abbildung 1</span>Links: die beiden Modelle der Fallgeschwindigkeit gegenüber Gunn und Kinzer. Rechts: der Fehler des Kräftegleichgewichts, höchstens 2.07 % bei den aufgeführten Größen ab 0.3 mm und −7.57 % bei 0.1 mm.</figcaption>
+                <a class="pfig__plate" href="../portfolios/droplet-collection/index.html#fig-2-1"><img src="../portfolios/droplet-collection/fig/plate-fallspeed.svg" width="545" height="300" loading="lazy" alt="Endgeschwindigkeit von Wassertropfen über ihrer Größe: das Stokes-Gesetz, die Widerstandsbilanz und die Messungen von Gunn und Kinzer."></a>
+                <figcaption><span class="pfig__n">Abbildung 1</span>Wie schnell ein Tropfen fällt: Das Stokes-Gesetz läuft oberhalb von 40 µm davon; die Widerstandsbilanz folgt den Messungen (Kapitel 2).</figcaption>
               </figure>
               <figure>
-                <a class="pfig__plate" href="../portfolios/droplet-collection/index.html#/theory"><img src="../portfolios/droplet-collection/fig/ecoll_map.svg" width="419" height="300" loading="lazy" alt="Karte der Kollisionseffizienz über den Radien des Sammlers und des gesammelten Tröpfchens."></a>
-                <figcaption><span class="pfig__n">Abbildung 2</span>Kollisionseffizienz für Wasser auf Wasser bei \(10\,{}^{\circ}\mathrm{C}\) und \(850\ \mathrm{hPa}\), auf dem \(45 \times 40\)-Gitter, das der Löser verwendet.</figcaption>
+                <a class="pfig__plate" href="../portfolios/droplet-collection/index.html#fig-3-2"><img src="../portfolios/droplet-collection/fig/plate-efficiency.svg" width="545" height="300" loading="lazy" alt="Kollisionseffizienz über dem Radius des Sammeltropfens, aus den Bahnen der Tröpfchen, mit den von Hall zusammengestellten Werten."></a>
+                <figcaption><span class="pfig__n">Abbildung 2</span>Welche Tröpfchen treffen: Kollisionseffizienz aus den Bahnen, verglichen mit der Tabelle von Hall (1980) (Kapitel 3).</figcaption>
               </figure>
               <figure>
-                <a class="pfig__plate" href="../portfolios/droplet-collection/index.html#/results"><img src="../portfolios/droplet-collection/fig/w2_spectra.svg" width="580" height="300" loading="lazy" alt="Massenspektren der warmen Wolke zu mehreren Zeitpunkten, für den Kern der Abschlussarbeit und den neuen Kern."></a>
-                <figcaption><span class="pfig__n">Abbildung 3</span>Entwicklung des Massenspektrums in der warmen Wolke, stochastische Koaleszenzgleichung, Kern der Abschlussarbeit (links) und neuer Kern (rechts).</figcaption>
+                <a class="pfig__plate" href="../portfolios/droplet-collection/index.html#fig-5-2"><img src="../portfolios/droplet-collection/fig/plate-warm.svg" width="545" height="300" loading="lazy" alt="Anteil des Wassers in Tropfen von 40 µm und mehr über der Zeit, für den Kern der Arbeit und den erweiterten Kern."></a>
+                <figcaption><span class="pfig__n">Abbildung 3</span>Die ganze Wolke: Wasser in Tropfen von 40 µm und mehr, für zwei Kerne und zwei Arten der Buchführung (Kapitel 5).</figcaption>
               </figure>
               <figure>
-                <a class="pfig__plate" href="../portfolios/droplet-collection/index.html#/checks"><img src="../portfolios/droplet-collection/fig/golovin.svg" width="470" height="300" loading="lazy" alt="Golovin-Test: numerische Spektren gegenüber der exakten Lösung."></a>
-                <figcaption><span class="pfig__n">Abbildung 4</span>Golovin-Test mit 8 Klassen pro Massenverdopplung: numerisch (durchgezogen) gegenüber exakt (gestrichelt).</figcaption>
+                <a class="pfig__plate" href="../portfolios/droplet-collection/index.html#fig-6-1"><img src="../portfolios/droplet-collection/fig/plate-first.svg" width="545" height="300" loading="lazy" alt="Anteil der Volumina, die einen Tropfen von 100 µm enthalten, über der Zeit: exakte Läufe und die Poisson-Vorhersage."></a>
+                <figcaption><span class="pfig__n">Abbildung 4</span>Der erste Niesel: exakte Läufe gegen die Poisson-Vorhersage aus der Koaleszenzgleichung (Kapitel 6).</figcaption>
               </figure>
             </div>
           </section>
@@ -120,13 +120,11 @@
           <section class="proj__part" aria-labelledby="dc-pages">
             <h3 id="dc-pages"><span class="psub__n">1.4</span>Die Seiten des Projekts</h3>
             <ul class="proj__pages">
-              <li><a href="../portfolios/droplet-collection/index.html#/"><b>Überblick</b><span>Die Frage, die warme Wolke in zwei Bildern und die fallenden Tröpfchen.</span></a></li>
-              <li><a href="../portfolios/droplet-collection/index.html#/theory"><b>Theorie</b><span>Zwölf Kapitel von der Begegnung bis zur Übersicht der Belege, 62 nummerierte Gleichungen, durchgerechnete Beispiele und jede Korrektur an der Stelle, an der sie auftritt.</span></a></li>
-              <li><a href="../portfolios/droplet-collection/index.html#/results"><b>Ergebnisse</b><span>Warme und kalte Wolken, vier Modelle desselben Spektrums.</span></a></li>
-              <li><a href="../portfolios/droplet-collection/index.html#/simulate"><b>Simulieren</b><span>Der Löser der Koaleszenzgleichung, in Ihrem Browser.</span></a></li>
-              <li><a href="../portfolios/droplet-collection/index.html#/checks"><b>Prüfungen</b><span>Fallgeschwindigkeit, Kollisionseffizienz, kritische Stokes-Zahlen und der Golovin-Test.</span></a></li>
+              <li><a href="../portfolios/droplet-collection/index.html#sim"><b>Simulation</b><span>Die Koaleszenzgleichung, die Bahnen der Tröpfchen und eine exakte Zufallswolke, in Ihrem Browser.</span></a></li>
+              <li><a href="../portfolios/droplet-collection/index.html#book"><b>Vorlesungsskript</b><span>Zehn Kapitel und ein Anhang, von einem Tropfen bis zum Eis: 22 nummerierte Gleichungen, jede mit ihrem Bild, ihrer Herleitung und den eigenen Zahlen des Modells.</span></a></li>
+              <li><a href="../portfolios/droplet-collection/index.html#problems"><b>Aufgaben</b><span>Fünf durchgerechnete Aufgaben mit den Zahlen des Modells.</span></a></li>
+              <li><a href="../portfolios/droplet-collection/index.html#checks"><b>Prüfungen</b><span>Exakte Lösungen, unabhängige Nachrechnungen in Python und ein Skript, das jede im Text zitierte Zahl findet.</span></a></li>
             </ul>
-            <p class="proj__note">Eine statische Kopie der App Droplet Collection; die App selbst ist auf Englisch. Ihre Liste gespeicherter Läufe fehlt: Jeder Lauf wird frisch in Ihrem Browser berechnet, und nichts wird gespeichert.</p>
           </section>
         </div>
       </article>
