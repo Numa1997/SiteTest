@@ -1,0 +1,28 @@
+<section id="ch6" class="chapter">
+<h2><span class="chn">6</span> Luck: the first drizzle</h2>
+<p>The collection equation follows the average cloud. Rain begins with the luckiest drops.</p>
+<div class="picture">Two identical collectors start side by side. One happens to meet a droplet early, grows a little, falls a little
+faster and meets the next droplet sooner; the other waits. Like savings started a few days apart, the early lead never closes. Among a
+million collectors, a few are lucky several times over, and they are the first drizzle.</div>
+
+<h3>6.1 The process behind the equation</h3>
+<p>In a well-mixed volume $V$, each pair of drops $(i, j)$ merges in the next $dt$ with probability $K(r_i, r_j)\,dt/V$, whatever happened before. The cloud is a random process that jumps from one list of drop sizes to the next. The probability of every possible list obeys a master equation; its average obeys (5.1) only if the counts in different size classes are uncorrelated, which becomes exact as $V \to \infty$ (Gillespie 1972). In a small volume it is not: when one drop gets lucky, it has also used up droplets that its neighbours can no longer have.</p> <h3>6.2 Sampling the process exactly</h3> <p>Gillespie (1975) showed how to draw the history of such a process without any time step. If the total rate of all pairs is $a_0$, the waiting time to the next merger is exponential, $\tau = -\ln u_1/a_0$ with $u_1$ uniform on (0, 1], and the pair is chosen in proportion to its rate. Computing all $N^2/2$ pair rates after every merger is too slow for a million drops, so we use his second device, <em>thinning</em>: propose pairs at a larger rate that is easy to compute, and accept each with the probability true rate over proposed rate. We sort drops into size classes and give each pair of classes an upper bound $K^*$ on the kernel. Proposals then arrive at the rate $\sum K^* n_an_b/V$; a proposed pair is accepted with probability $K/K^*$. The accepted events are exactly the coalescence process, because a Poisson process thinned with probability $K/K^*$ is a Poisson process of rate $K/V$ for each pair.</p> <div class="check"><div class="ctag">Check</div>The bound is checked at every proposal (zero violations in 430 runs); about 55 % of proposals are accepted. Each run conserves water exactly. Section 6.4 compares the averages with the collection equation.</div> <p>The drops are drawn from the two lognormal modes, but cut at three standard deviations ($\sigma_g^3$): no collector starts above 69 µm. Without the cut, the lognormal tail itself would put 0.23 drops of 100 µm in every m³ at the start, and in a large volume the first drizzle would be decided by the initial spectrum, which comes from aerosol and condensation physics outside these notes.</p> <h3>6.3 The first 100 µm drop</h3> <p>Run the process many times in volumes of 1, 10, 100 and 1000 cm³ (200, 100, 100 and 30 runs) and note when the first drop reaches 100 µm.</p> <div class="press"><div class="ctag">In our cloud</div>In 1 cm³ (one collector and 300 droplets) no drop ever reaches 100 µm: there is not enough water. The median time to the first 100 µm drop is 605 s in 10 cm³, 286 s in 100 cm³ and 175 s in 1000 cm³. In every one of the 230 runs that made one, the drop got there by merging with another drop of 30 µm or more: collectors meeting collectors, not droplet capture alone, make the first drizzle here.</div> <p>The larger the volume, the sooner its luckiest drop arrives. To reach a cubic metre, which we cannot simulate drop by drop, use the collection equation's tail. A drop above 100 µm stays above 100 µm, so the first one has arrived by time $t$ if the volume holds at least one. If such drops are rare and independent, their number in $V$ is Poisson-distributed with mean $V n_{100}(t)$, where $n_{100}$ is
+the concentration of drops above 100 µm in the mean field:</p>
+$$P(\text{no 100 µm drop in } V \text{ by } t) = e^{-V n_{100}(t)},\qquad \text{median: } V n_{100} = \ln 2. \tag{6.1}$$
+<figure class="fig" id="fig-6-1">{{FIG:first}}<figcaption>Figure 6.1. Share of volumes that hold a drop of 100 µm or more: exact runs (solid) against (6.1) with the
+collection equation's tail (dashed).</figcaption></figure>
+<div class="press"><div class="ctag">In our cloud</div>(6.1) predicts medians of 280 s in 100 cm³ and 175 s in 1000 cm³; the exact runs gave
+286 and 175 s. Trusting it for a cubic metre: the first 100 µm drop in 1 m³ appears after about 60 s, the first 1 mm drop after about
+18 min. Half of the water is in drops above 100 µm only after 585 s.</div>
+<p>So in a cubic metre the first drizzle drop appears about ten times earlier than the time at which half the water has become drizzle.
+That is Telford's (1955) point, and Kostinski and Shaw (2005) estimate the same factor of about ten for the luckiest one-in-a-million
+collectors. Note what carried the luck: the collection equation's tail already contains it, because (5.1) moves drops one merger at a
+time. What does not contain it is the smooth-growth bookkeeping of the thesis (5.2), in which identical collectors grow identically.</p>
+
+<h3>6.4 Small volumes</h3>
+<figure class="fig" id="fig-6-2">{{FIG:luckF40}}<figcaption>Figure 6.2. Average share of water in drops above 40 µm in volumes of 1 to 1000 cm³, against the collection
+equation.</figcaption></figure>
+<div class="press"><div class="ctag">In our cloud</div>After 10 min the average share above 40 µm is 0.52 in 1 cm³, 0.70 in 10 cm³, 0.73 in
+100 cm³ and 0.74 in 1000 cm³. Small volumes grow more slowly than the mean field, as Dziekan and Pawlowska (2017) found: a lucky drop has
+used up its own neighbourhood.</div>
+</section>
