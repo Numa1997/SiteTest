@@ -1,0 +1,880 @@
+
+<div class="page page-theory">
+<p>A guided derivation · geometry → events → spectra</p>
+<div class="titlerow">
+<h1>From encounters to an evolving cloud spectrum</h1>
+</div>
+<p>Written for a physics Bachelor’s reader with a background in theory and numerics. Cloud-specific terms are introduced as needed; symbols, assumptions and changes from the thesis are explicit.</p>
+<div class="reading-start">
+<p><strong>First reading:</strong> follow chapters 1–8 to establish the model. Chapters 9–10 explain the solver and ice; 11–12 explain what the results support.</p>
+<p><strong>Already know the collection picture?</strong> Start with , or jump to . Worked examples and longer calculations are expandable.</p>
+</div>
+<div class="theory-layout">
+<div class="reading-nav">
+<div class="desktop-contents">
+<h2>Reading route</h2>
+</div>
+<details>
+<summary>Jump to a chapter</summary>
+</details>
+</div>
+<div class="theory">
+<div class="lesson">
+    Chapter 01
+<h1>The question before the equations</h1>
+<p>What grows, what multiplies, and what can this particular model explain?</p>
+<p>Look at a window after a light drizzle. Small beads of water sit still on the glass. Then one bead grows heavy enough to slide. As it runs down, it touches the beads in its path and swallows them. It gets bigger, so it runs faster, so it meets more beads. A cloud does the same thing in three dimensions, with air instead of glass.</p>
+<p>A cloud is mostly air. Its visible part is a crowd of water droplets, a few hundred per cubic centimetre, each about ten micrometres (µm) in radius. Each falls, slowly. Computed With the app’s fall-speed law, a droplet of radius 10 µm settles at 1.24 cm/s at 10 °C and 850 hPa; a drop of radius 1 mm falls at 6.9 m/s and holds the water of a million droplets. Something has to gather them.</p>
+<p>Gravity gathers them. A fast drop overtakes the slow droplets below it, touches some, and merges with some of those: gravitational collection. The thesis asks the same for ice. When ice particles collide, small pieces can break off, each a new particle. Collisions can then multiply particles as well as merge them, the “collisional ice multiplication” of the thesis title.</p>
+<p>So three things must be kept apart: how big the particles are, how many there are, and how much condensed water they hold. A merger lowers the number and keeps the mass. A break-up raises the number and also keeps the mass. More ice particles does not mean more ice. Each quantity needs its own balance.</p>
+<p>The thesis (Numa Koudsie, <em>Collisional Ice Multiplication Processes in Clouds</em>, Leipzig 2022) follows one large particle, the collector, through a pool of smaller ones and derives its mass gain from the volume it sweeps out. This app keeps that construction and asks how the whole size distribution changes when every particle may collect or be collected. The first question gives a gravitational collection equation (GCE); the second, the stochastic collection equation (SCE) in its mean-field form. The app also changes the thesis’s fall speed, collision efficiency and ice-fragment rule; each change is marked where it enters.</p>
+<h2>The little cloud background we actually need</h2>
+<p><strong>Condensed water and vapour.</strong> The visible particles are condensed water, liquid or ice, suspended in air. Water vapour is a separate gas mixed into the air. The app evolves the condensed particles only. Nothing creates or feeds droplets, so a pool of small droplets can be used up.</p>
+<p><strong>Supercooled water.</strong> A droplet can stay liquid below 0 °C; it is then supercooled. Freezing needs a trigger, such as contact with ice. Assumed The app freezes a droplet completely and at once when it merges with ice, and ignores the heat released.</p>
+<p><strong>Surface tension.</strong> New water surface costs energy, as stretching a rubber sheet does. Surface tension $\sigma$ is that energy per added area, $dE_s=\sigma\,dA$, in J/m², the same as N/m. At fixed volume the sphere has the least area, so surface tension pulls a small drop round. It decides, in chapter 6, whether two drops that touch stay together.</p>
+<p><strong>Terminal speed.</strong> A falling particle speeds up until air drag balances its weight less its buoyancy, then falls steadily (chapter 4).</p>
+<div class="model-note">
+<h3>The boundary of this calculation</h3>
+<p>The app treats a homogeneous box of cloud at fixed temperature and pressure. Particles are spheres, and they meet only because they fall at different speeds. The model leaves out condensation and evaporation, turbulence, electric charge, the break-up of large raindrops, transport through space, any updraft, and the heat of freezing. Its curves are conditional collection calculations, not predictions of when a real cloud rains.</p>
+</div>
+<p>The chain of the argument is <strong>an encounter volume → a fall speed → a collision and a merger → an event rate → a population balance → conserved moments → a numerical grid → ice reaction channels → a defined diagnostic</strong>. Each chapter is one link. Where mechanics does not fix an input, the text says it is an adopted closure.</p>
+<p>Tags mark the kind of claim. Derived: algebra from stated assumptions. Computed: a number from running the app’s own code or read from its stored data, every one recomputed for this page. Assumed: a modelling choice, fitted law or scenario. Where this page corrects the thesis or the earlier remodel write-up (the previous long version of this page), a boxed note says so in place.</p>
+</div>
+<div class="lesson">
+    Chapter 02
+<h1>Distributions and notation</h1>
+<p>What does a size distribution count, and why does every change of variable need its Jacobian?</p>
+<p>Sort marbles into jars by size. A jar for 1.1 to 1.3 cm holds more than one for 1.0 to 1.1 cm simply because it is twice as wide; to compare jars fairly, divide each count by the jar’s width. The result is a density, marbles per unit of size. A size distribution is exactly that, per cubic metre of air.</p>
+<p>Let $r$ be a particle’s radius (m), $d=2r$ its diameter, $m$ its mass (kg) and $\rho_p$ the density of its material (kg/m³): $\rho_w=1000$ kg/m³ for water and $\rho_i=900$ kg/m³ for ice in the app. In an encounter, $R$ is the larger radius. “Collector” names a role in one encounter, not a separate kind of particle. For a sphere,</p>
+<div class="equation">
+$$m(r)=\frac{4\pi}{3}\rho_pr^3,\qquad \frac{dm}{dr}=4\pi\rho_pr^2.\tag{1}$$
+<p>Mass grows as the cube of the radius. Equal masses of ice and water have different radii.</p>
+</div>
+<p>Computed A water droplet of radius 10 µm has mass $4.19\times10^{-12}$ kg; a drop of radius 1 mm, a million times more. The app’s grid runs from a 1 µm to a 2 mm water sphere, a span of $2000^3=8\times10^9$ in mass. Only a logarithmic axis can show that.</p>
+<p>Write $n_r(r,t)\,dr$ for the number of particles per cubic metre of air with radius between $r$ and $r+dr$ at time $t$ (s). Its unit is m⁻⁴: three lengths for the volume of air, one for the width of the radius interval. In mass coordinates, $n_m(m,t)\,dm$ counts the same particles, in kg⁻¹ m⁻³. The densities differ because a radius interval $dr$ maps onto a mass interval of a different width:</p>
+<div class="equation">
+$$n_m(m,t)\,dm=n_r(r,t)\,dr,\qquad n_m=\frac{n_r}{dm/dr}=\frac{n_r}{4\pi\rho_pr^2}.\tag{2}$$
+<p>Same particles, same count; the density changes by the stretch factor $dm/dr$, the Jacobian of the change of variable.</p>
+</div>
+<p>Two integrals matter most: the number concentration $\mathcal N$ (m⁻³) counts particles, and the condensed-water mass concentration $L$ (kg/m³) weighs them:</p>
+<div class="equation">
+$$\mathcal N=\int_0^\infty n_m\,dm,\qquad L=\int_0^\infty m\,n_m\,dm.\tag{3}$$
+<p>The zeroth and first moments in mass. A merger lowers $\mathcal N$ and keeps $L$.</p>
+</div>
+<p>Sizes span decades, so the app plots against $\ln r$, read as $\ln(r/r_*)$ for a fixed reference $r_*$; the step $d\ln r=dr/r$ does not depend on $r_*$. Since $dm/d\ln r=3m$, one more Jacobian gives the densities per unit $\ln r$:</p>
+<div class="equation">
+$$\frac{d\mathcal N}{d\ln r}=r\,n_r=3m\,n_m,\qquad G_r\equiv\frac{dL}{d\ln r}=m\frac{d\mathcal N}{d\ln r}=3m^2n_m.\tag{4}$$
+<p>On a logarithmic radius axis the area under $G_r$ is the water mass and the area under $d\mathcal N/d\ln r$ the number. Only on these curves does the eye read areas correctly.</p>
+</div>
+<p>$G_r$ has the unit kg/m³, because $\ln r$ is a pure number. The solver calls it <code>g</code> and the charts label it “g = dM/d ln r” in g/m³. It is a mass spectrum, not gravity; on this page gravity is $g_0$, and Assumed the code uses $g_0=9.81$ m/s².</p>
+<details>
+<summary>Worked example: number and mass are different moments</summary>
+<p>The app’s reference cloud has two modes (chapter 9): 300 droplets per cm³ around radius 8 µm and 1 drop per cm³ around 40 µm. Computed On the grid the first carries 0.805 g/m³ of water, the second 0.311 g/m³. The collector mode is 1 particle in 301, yet it holds 28 % of the water. A chart of number hides the collectors; a chart of mass shows them as a second hump. Neither is wrong; they answer different questions.</p>
+</details>
+<p>Every other symbol is defined where it first appears, with its unit. Inputs in µm, hPa and cm⁻³ are converted to SI before any calculation.</p>
+</div>
+<div class="lesson">
+    Chapter 03
+<h1>The encounter kernel</h1>
+<p>How does a swept volume become a rate, and why are contact and merger kept apart?</p>
+<p>Walk through falling snow holding an umbrella flat. The umbrella sweeps a column of air and catches the flakes in it. Walk faster and you sweep more air per second; carry a bigger umbrella and the column is wider. A falling drop is that umbrella. Its walk is its speed relative to the smaller droplets, and what it sweeps is a tube of air.</p>
+<p>Start with straight paths, seen from the collector. Two spheres touch when their centres come within $R+r$, so the collector catches every partner whose <em>centre</em> enters a tube of radius $R+r$, not $R$. In a time $dt$ the partners advance $\Delta v\,dt$, with $\Delta v=|v_t(R)-v_t(r)|$ the difference of the fall speeds. Multiply the tube volume by the partners per volume in $dr$:</p>
+<figure>
+[SVG The geometrical encounter tube]
+<figcaption>Figure 1. Side view of the straight-path geometry, as in figure 4 of the thesis. The tube counts partner centres, so its radius is R + r. Airflow bends the paths; chapter 5 adds that.</figcaption>
+</figure>
+<div class="equation">
+$$dN_{\rm geom}=\pi(R+r)^2\,\Delta v\;n_r(r,t)\,dr\,dt.\tag{5}$$
+<p>Tube area, times the length it advances, times the partners per volume: the partners one collector touches in $dt$.</p>
+</div>
+<p>Two things spoil this count. Air flows around the collector and carries light partners around it; the fraction that still touch is the collision efficiency $E_{\rm coll}$ (chapter 5). And two drops that touch can bounce apart on a cushion of air; the fraction of contacts that end in a lasting merger is the coalescence efficiency $E_{\rm coal}$ (chapter 6). It is a probability <em>given</em> contact, so the two multiply:</p>
+<div class="equation">
+$$K(R,r)=\pi(R+r)^2\,\Delta v\,E_{\rm coll}(R,r)\,E_{\rm coal}(R,r),\qquad dN_{\rm merge}=K\,n_r\,dr\,dt.\tag{6}$$
+<p>The kernel is the volume of air one collector effectively clears of partners per second.</p>
+</div>
+<p>$K$ is in m³/s. Assumed The thesis’s equations (9)–(10) use the geometric area and a coalescence factor, with no collision efficiency; the airflow efficiency is the app’s extension. The app’s “thesis kernel” keeps Stokes fall speeds, $E_{\rm coll}=1$ and the thesis’s $E_{\rm coal}$; its “new kernel” uses the drag-balance speeds of chapter 4 and the stored efficiencies of chapter 5.</p>
+<p>For a fixed pair of sizes, doubling the partner concentration doubles one collector’s merger rate. Doubling both populations quadruples the events per volume, equation (8) below. The kernel itself stays the same: it describes how the pair moves and interacts; concentrations say how often such pairs are available.</p>
+<p>Each merger adds the partner’s mass $m(r)$ to the collector. Summing over partners gives the collector’s mass gain, and (1) turns it into radius growth:</p>
+<div class="equation">
+$$\dot M=\int m(r)\,K(R,r)\,n_r(r,t)\,dr,\qquad \dot R=\frac{\dot M}{4\pi\rho_pR^2}.\tag{7}$$
+<p>Partner mass, times the rate of meeting such partners, summed over partners: the thesis’s equation (10).</p>
+</div>
+<p>If the collectors themselves have a density $n_R(R,t)$, the mergers per cubic metre per second between two size classes are the per-collector rate times the number of collectors:</p>
+<div class="equation">
+$$d\mathcal C=K(R,r)\,n_R(R,t)\,n_r(r,t)\,dR\,dr\,dt.\tag{8}$$
+<p>Events per volume grow with the product of the two concentrations, as in a chemical reaction between two species.</p>
+</div>
+<details>
+<summary>Worked example: one kernel value, from the app’s own code</summary>
+<p>Air at 10 °C and 850 hPa, a collector of radius $R=40$ µm and a partner of $r=8$ µm. Computed The drag-balance speeds of chapter 4 are 0.1771 and 0.00796 m/s, so $\Delta v=0.1691$ m/s. The geometric rate is $\pi(48\times10^{-6})^2\times0.1691=1.224\times10^{-9}$ m³/s. The stored collision efficiency is $E_{\rm coll}=0.343$ and $E_{\rm coal}=0.99998$, so $K=4.20\times10^{-10}$ m³/s.</p>
+<p>If all 300 cloud droplets per cm³ ($3\times10^8$ m⁻³) had radius 8 µm, the collector would merge with one every $1/(KN)=7.9$ s, gaining $2.7\times10^{-13}$ kg/s; by (7) its radius would grow at 0.013 µm/s. With the real spread of sizes in the reference cloud mode, the code gives 0.131 events per second and 0.022 µm/s. The thesis kernel for the same pair is 3.3 times larger: Stokes makes the collector fall 11 % faster, and $E_{\rm coll}=1$ counts every droplet in the tube.</p>
+<p>Keep three numbers apart: $K$ (m³/s) is a volume rate; $Kn_r\,dr$ (s⁻¹) is one collector’s event rate; $Kn_Rn_r\,dR\,dr$ (m⁻³ s⁻¹) is the event rate per volume of air.</p>
+</details>
+<p>A larger drop usually sweeps a wider tube and overtakes small droplets faster. That can reinforce growth, as on the window pane, but it does not prove that $\dot R$ always rises with $R$. Radius growth divides the mass gain by $4\pi\rho_pR^2$, and the efficiencies and available partners also change. For partners much smaller than the collector, the $R^2$ of the swept tube cancels this $R^2$: $\dot R\approx E\,v_t(R)\,L/(4\rho_p)$, with $E$ the collection efficiency and $L$ the water content of the partners, so the radius grows faster only because the drop falls faster and collects more efficiently. In particular, fast encounters can merge less readily. And two identical liquid spheres fall at the same speed: $\Delta v=0$, and gravity never brings them together. Derived In the code such a pair gets $K=0$; turbulence or electric forces, which could join them, are outside this model.</p>
+</div>
+<div class="lesson">
+    Chapter 04
+<h1>The fall speed</h1>
+<p>Start with forces, derive the creeping-flow law, check where it holds, and see what replaces it.</p>
+<p>Every encounter depends on a difference of fall speeds. Air resists a moving sphere in two ways. It sticks to the surface, so layers of air must slide past each other, like honey round a slowly drawn spoon. And the sphere must push air out of its way, like a hand held out of a car window. Which of the two wins decides the law of fall.</p>
+<h2>Newton’s law and terminal settling</h2>
+<figure>
+[SVG Forces on a falling drop]
+<figcaption>Figure 2. A drop falling at speed v. Its weight is fixed; buoyancy is the weight of the air it displaces; drag grows with speed until the three forces balance.</figcaption>
+</figure>
+<p>Take the downward speed $v$ (m/s) of a sphere of radius $R$. Its weight less buoyancy is $(4\pi/3)R^3(\rho_p-\rho_a)g_0$; the buoyancy uses the density of the surrounding air, not the cloud’s water content. With Stokes’ creeping-flow drag $6\pi\mu_aRv$, derived below, Newton’s second law reads</p>
+<div class="equation">
+$$m\dot v=\frac{4\pi}{3}R^3(\rho_p-\rho_a)g_0-6\pi\mu_aRv,\qquad \tau_p=\frac{m}{6\pi\mu_aR}=\frac{2\rho_pR^2}{9\mu_a}.\tag{9}$$
+<p>Mass times acceleration equals a fixed push down minus a drag that grows with speed. $\tau_p$ (s) is the time the drag needs to change the speed appreciably.</p>
+</div>
+<p>Divided by $m$, this is $\dot v=(v_t-v)/\tau_p$: the speed relaxes toward a constant $v_t$ with time constant $\tau_p$. Setting $\dot v=0$ gives the terminal speed, the thesis’s equation (19):</p>
+<div class="equation">
+$$v_t^S=\frac{2(\rho_p-\rho_a)\,g_0R^2}{9\mu_a}.\tag{10}$$
+<p>A weight growing as $R^3$ balances a drag growing as $Rv$, so $v\propto R^2$: double the radius, four times the speed.</p>
+</div>
+<details>
+<summary>Worked example: how quickly a droplet forgets its starting speed</summary>
+<p>The solution of (9) is</p>
+<div class="equation">
+$$v(t)=v_t+\big[v(0)-v_t\big]\,e^{-t/\tau_p}.\tag{11}$$
+<p>Whatever speed the sphere starts with, it forgets it exponentially and settles at $v_t$.</p>
+</div>
+<p>Computed At 10 °C the app’s viscosity is $\mu_a=1.771\times10^{-5}$ Pa s. A water droplet of radius 10 µm has $\tau_p=2\times1000\times(10^{-5})^2/(9\times1.771\times10^{-5})=1.26$ ms and falls at 1.24 cm/s, so in one relaxation time it travels 16 µm, less than its own diameter. A droplet of radius 50 µm has $\tau_p=31$ ms and travels 8 mm. Collection changes sizes over seconds to minutes, so taking $v=v_t(R)$ at every moment is safe here.</p>
+</details>
+<h2>Two kinds of resistance, and their ratio</h2>
+<p>Estimate both. Viscous stress is of order $\mu_av/R$, a speed difference $v$ across a distance $R$; over an area $R^2$ it gives a force of order $\mu_aRv$. Pushing air aside is a momentum flow: each second the sphere meets air of mass $\rho_a\pi R^2v$ and gives it a speed of order $v$, a force of order $\rho_aR^2v^2$. Their ratio is the Reynolds number:</p>
+<div class="equation">
+$$\frac{F_{\rm inert}}{F_{\rm visc}}\sim\frac{\rho_aRv}{\mu_a},\qquad \mathrm{Re}\equiv\frac{2R\,\rho_a\,v}{\mu_a}.\tag{12}$$
+<p>Small Re: viscosity wins and drag is linear in speed. Large Re: pushing air aside wins. By custom Re uses the diameter.</p>
+</div>
+<details>
+<summary>Derivation detail: the factor 6π in Stokes’ drag</summary>
+<p>The steady inertia term in the flow equations is of order $\rho_aU^2/R$, the viscous term $\mu_aU/R^2$. For $\mathrm{Re}\ll1$ the first is dropped, and incompressible air obeys $\nabla\cdot\mathbf u=0$, $\nabla p=\mu_a\nabla^2\mathbf u$. Hold the sphere at the origin and let air stream past at $U$ along $+\mathbf e_z$. In spherical coordinates, $\varrho$ is the distance from the centre, $q=\varrho/R$, and $\theta$ the angle from $+\mathbf e_z$, the direction the air flows. Stokes’ solution, with no slip at the surface, is</p>
+<div class="equation">
+$$\begin{aligned}\psi_S&amp;=\tfrac12UR^2q^2\sin^2\theta\Big(1-\frac{3}{2q}+\frac{1}{2q^3}\Big),\\ u_\varrho&amp;=U\cos\theta\Big(1-\frac{3}{2q}+\frac{1}{2q^3}\Big),\\ u_\theta&amp;=-U\sin\theta\Big(1-\frac{3}{4q}-\frac{1}{4q^3}\Big).\end{aligned}\tag{13}$$
+<p>Far away, uniform flow. The $1/q$ term is the slow, long-range disturbance of the force the sphere exerts; the $1/q^3$ term makes the velocity vanish on the surface.</p>
+</div>
+<p>$2\pi\psi_S$ is the volume of air per second through the circle traced by rotating a point about the axis, with $u_\varrho=\partial_\theta\psi/(\varrho^2\sin\theta)$ and $u_\theta=-\partial_\varrho\psi/(\varrho\sin\theta)$. At $q=1$ both brackets vanish. The pressure is $p-p_\infty=-\tfrac32\mu_aU\cos\theta/(Rq^2)$. On the surface $\partial_\varrho u_\varrho=0$, so the normal viscous stress vanishes and only the shear $\mu_a\partial_\varrho u_\theta$ survives:</p>
+<div class="equation">
+$$p-p_\infty=-\frac{3\mu_aU}{2R}\cos\theta,\qquad \tau_{\varrho\theta}=-\frac{3\mu_aU}{2R}\sin\theta.\tag{14}$$
+<p>Higher pressure on the upstream face, lower downstream, and a shear dragging the surface along with the flow.</p>
+</div>
+<p>Along $\mathbf e_z$ the pressure contributes $-(p-p_\infty)\cos\theta$ per unit area and the shear $-\tau_{\varrho\theta}\sin\theta$: $3\mu_aU/(2R)$ times $\cos^2\theta$ and $\sin^2\theta$. Their sum is uniform over the sphere. Integrate over $4\pi R^2$; the constant $p_\infty$ integrates to zero:</p>
+<div class="equation">
+$$F=\underbrace{\frac{3\mu_aU}{2R}\cdot\frac{4\pi R^2}{3}}_{\text{pressure}}+\underbrace{\frac{3\mu_aU}{2R}\cdot\frac{8\pi R^2}{3}}_{\text{shear}}=2\pi\mu_aRU+4\pi\mu_aRU=6\pi\mu_aRU.\tag{15}$$
+<p>One third of Stokes’ drag is pressure, two thirds skin friction. Dimensions give $\mu_aRU$; only solving the flow gives the $6\pi$.</p>
+</div>
+</details>
+<h2>Self-consistency comes before extrapolation</h2>
+<p>Stokes’ law assumes $\mathrm{Re}\ll1$. Check it with the speed the law itself predicts, (10) in (12):</p>
+<div class="equation">
+$$\mathrm{Re}(v_t^S)=\frac{2R\rho_a}{\mu_a}\cdot\frac{2(\rho_p-\rho_a)g_0R^2}{9\mu_a}=\frac{4\rho_a(\rho_p-\rho_a)g_0}{9\mu_a^2}\,R^3.\tag{16}$$
+<p>The Reynolds number of Stokes’ own speed grows as $R^3$: the law undermines itself as drops grow.</p>
+</div>
+<table>
+  <caption>Computed Reynolds number of the Stokes speed (16) for water spheres, with the app’s air properties.</caption>
+  <thead>
+<tr><th>air</th><th>Re = 1 at R</th><th>Re at 40 µm</th><th>Re at 200 µm</th></tr>
+</thead>
+  <tbody>
+<tr><td>0 °C, 1000 hPa</td><td>37.6 µm</td><td>1.20</td><td>150</td></tr>
+<tr><td>10 °C, 850 hPa</td><td>41.0 µm</td><td>0.93</td><td>116</td></tr>
+<tr><td>−10 °C, 600 hPa</td><td>43.2 µm</td><td>0.79</td><td>99</td></tr>
+<tr><td>20 °C, 1013 hPa</td><td>39.8 µm</td><td>1.01</td><td>127</td></tr>
+  </tbody>
+</table>
+<p>The thesis’s collectors run from 40 µm (§5.2) to 200 µm (table 5.2). Over that whole interval Re is near 1 or far above it, so Stokes’ speed is not self-consistent there. Smooth, laminar flow is not enough: laminar flow can still have strong inertia. Derived The criterion is $\mathrm{Re}\ll1$, and it fails.</p>
+<h2>A general drag balance</h2>
+<p>The drag can depend on $R$, $v$, $\rho_a$ and $\mu_a$: with the force, five quantities in three base units, so by Buckingham’s theorem exactly two pure numbers. One is Re. The other is the drag in units of the dynamic pressure $\tfrac12\rho_av^2$ times the cross-section $\pi R^2$: the drag coefficient $C_D$. So the general law is $F_d=\tfrac12\rho_av^2\pi R^2C_D(\mathrm{Re})$. Balance it against weight less buoyancy:</p>
+<div class="equation">
+$$\frac43\pi R^3(\rho_p-\rho_a)\,g_0=\frac12\rho_a\,\pi R^2\,v_t^2\,C_D(\mathrm{Re})\quad\Longrightarrow\quad C_D=\frac83\,\frac{R(\rho_p-\rho_a)g_0}{\rho_av_t^2}.\tag{17}$$
+<p>The unknown speed sits on both sides: once in plain view, once hidden inside $C_D(\mathrm{Re})$.</p>
+</div>
+<p>Multiply by $\mathrm{Re}^2=4R^2v_t^2\rho_a^2/\mu_a^2$, and $v_t^2$ cancels:</p>
+<div class="equation">
+$$X\equiv C_D\,\mathrm{Re}^2=\frac{32\,\rho_a(\rho_p-\rho_a)\,g_0}{3\mu_a^2}\,R^3=\frac{4\rho_a(\rho_p-\rho_a)g_0}{3\mu_a^2}\,d^3,\qquad v_t=\frac{\mu_a\,\mathrm{Re}}{2R\,\rho_a}.\tag{18}$$
+<p>The Davies number $X$ (also called the Best number) holds only the sphere and the air. Find the Re that matches it, then read off the speed.</p>
+</div>
+<p>Check the recipe with Stokes’ drag: $6\pi\mu_aRv=\tfrac12\rho_av^2\pi R^2C_D$ gives</p>
+<div class="equation">
+$$C_D=\frac{24}{\mathrm{Re}}\quad\Longleftrightarrow\quad X=24\,\mathrm{Re}\quad\Longleftrightarrow\quad \ln\mathrm{Re}=\ln X-3.178.\tag{19}$$
+<p>With Stokes’ drag the chain returns (10) exactly. Any other drag law is a different function $\mathrm{Re}(X)$.</p>
+</div>
+<p>Derived Dimensional analysis does not supply $C_D(\mathrm{Re})$. Between Re of about 1 and 1000 the flow equations around a sphere have no closed-form solution, so this step rests on measurement.</p>
+<h2>The empirical closure the app uses</h2>
+<p>Assumed The app adopts piecewise fits attributed to Beard (1976), with coefficients as in the open-source <code>disdrodb</code> implementation: below a diameter of 19 µm, Stokes’ law with a slip correction; from 19 µm to 1.07 mm, a fitted curve $\mathrm{Re}(X)$; above 1.07 mm, for liquid only, a fit that lets surface tension flatten the drop. Ice continues the middle fit to the top of the grid, an extrapolation. The slip correction enters the first two regimes. A droplet a few hundred molecular free paths across no longer sees smooth air; molecules slip past it and it falls a little faster:</p>
+<div class="equation">
+$$v_t=\frac{(\rho_p-\rho_a)\,g_0\,d^2}{18\,\mu_a}\,C_{\rm sc}\ \ (d\lt19\ \mu\text{m}),\qquad C_{\rm sc}=1+\frac{2.51\,\ell_a}{d},\qquad \ell_a=\frac{\mu_a}{p}\sqrt{\frac{\pi R_dT}{2}}.\tag{20}$$
+<p>Stokes’ speed in terms of the diameter, times a slip factor built on the mean free path $\ell_a$ of air molecules. It matters only for the smallest droplets.</p>
+</div>
+<p>Here $R_d=287.05$ J/(kg K) is the gas constant of dry air and $T$ is in kelvin. Computed At 10 °C and 850 hPa, $\ell_a=0.074$ µm; the slip factor is 1.0098 at $d=19$ µm and 1.093 at 2 µm.</p>
+<details>
+<summary>Technical detail: the fitted regimes, their coefficients, and the air</summary>
+<p><strong>19 µm ≤ $d\lt1.07$ mm, and all ice above 19 µm.</strong> A sixth-order polynomial for $\ln\mathrm{Re}$ in $\ln X$, times the slip factor:</p>
+<div class="equation">
+$$\mathrm{Re}=C_{\rm sc}\exp\Big(\sum_{n=0}^{6}b_n(\ln X)^n\Big),\qquad \begin{aligned}&amp;b_0=-3.18657,\ b_1=0.992696,\ b_2=-1.53193\times10^{-3},\\ &amp;b_3=-9.87059\times10^{-4},\ b_4=-5.78878\times10^{-4},\\ &amp;b_5=8.55176\times10^{-5},\ b_6=-3.27815\times10^{-6}.\end{aligned}\tag{21}$$
+<p>The first two coefficients are close to Stokes’ $-3.178$ and 1 in (19); the higher powers carry the measured inertial correction.</p>
+</div>
+<p>Computed At $X=0.1$ and 1 the fit’s Re is 0.990 and 0.992 of Stokes’ $X/24$; at $X=10^4$ it is 0.23 of it, at $10^5$ 0.10.</p>
+<p><strong>Liquid drops with $d\ge1.07$ mm.</strong> Surface tension enters through a Bond number, which compares weight with surface tension, and a property number $N_P$ of air and water:</p>
+<div class="equation">
+$$\mathrm{Bo}=\frac{4(\rho_p-\rho_a)g_0d^2}{3\sigma},\quad N_P=\frac{\sigma^3\rho_a^2}{\mu_a^4(\rho_p-\rho_a)g_0},\quad \mathrm{Re}=N_P^{1/6}\exp\Big(\sum_{n=0}^{5}c_nY^n\Big),\quad Y=\ln\big(\mathrm{Bo}\,N_P^{1/6}\big).\tag{22}$$
+<p>The fit for flattened drops. Its coefficients $c_0\ldots c_5$ are −5.00015, 5.23778, −2.04914, 0.475294, −0.0542819, 0.00238449.</p>
+</div>
+<p><strong>The air.</strong> Every regime uses the ideal-gas density and Sutherland’s viscosity, the thesis’s equation (20):</p>
+<div class="equation">
+$$\rho_a=\frac{p}{R_dT},\qquad \mu_a=1.72\times10^{-5}\Big(\frac{T}{273}\Big)^{3/2}\frac{273+120}{T+120}\ \text{Pa s}.\tag{23}$$
+<p>Thinner air at lower pressure; slightly more viscous air when warmer. Temperature and pressure are scenario inputs.</p>
+</div>
+</details>
+<p>Assumed The air enters every regime through two closures, the ideal-gas density and Sutherland’s viscosity (the thesis’s equation 20), written out in the detail above. Temperature and pressure are scenario inputs.</p>
+<details>
+<summary>Worked example: the fall speed of a 0.2 mm drop, step by step</summary>
+<p>A water drop of diameter $d=0.2$ mm at 20 °C and 1013 hPa, as in the stored check against Gunn and Kinzer (1949). Computed From (23), $\rho_a=1.2038$ kg/m³ and $\mu_a=1.8206\times10^{-5}$ Pa s; from (20), $\ell_a=0.0653$ µm.</p>
+<p>Step 1, the Davies number (18): $X=4\times1.2038\times998.8\times9.81\times(2\times10^{-4})^3/(3\times(1.8206\times10^{-5})^2)=379.6$, so $\ln X=5.939$.</p>
+<p>Step 2, the polynomial (21). Its seven terms are $-3.187$, $5.896$, $-0.054$, $-0.207$, $-0.720$, $0.632$, $-0.144$; they sum to $\ln\mathrm{Re}=2.216$, so $e^{2.216}=9.172$. The slip factor is 1.0008, and $\mathrm{Re}=9.180$.</p>
+<p>Step 3, the speed: $v_t=\mu_a\mathrm{Re}/(\rho_ad)=1.8206\times10^{-5}\times9.180/(1.2038\times2\times10^{-4})=0.694$ m/s. Gunn and Kinzer measured 0.72 m/s: 3.6 % low. Stokes gives 1.196 m/s, 66 % high.</p>
+<p>Here $C_D=X/\mathrm{Re}^2=4.5$, against Stokes’ $24/\mathrm{Re}=2.6$: at Re of 9 the air’s inertia already adds about 70 % to the drag. The large, cancelling higher terms show a fitted curve, not a physical series; it should not be used outside its range.</p>
+</details>
+<figure>
+<img src="./fig/fallspeed_gk.svg" alt="Left: terminal speed against diameter, Stokes law rising steeply, the drag balance following the Gunn and Kinzer measurements. Right: percentage error of the drag balance, about minus 7.6 percent at 0.1 mm, within about 2 percent from 0.3 mm on.">
+<figcaption>Figure 3. Left: the two fall-speed laws against Gunn and Kinzer (1949), 20 °C, 1013 hPa. Right: the error of the drag balance. The largest error, at 0.1 mm, is not at a joint between the fitted regimes.</figcaption>
+</figure>
+<details>
+<summary>The numbers behind figure 3</summary>
+<table>
+  <caption>Computed Terminal speed of water drops at 20 °C and 1013 hPa: Gunn and Kinzer (1949) against Stokes (10) and the drag balance. Selected rows of the stored check table (20 diameters on the Checks page); the app’s code reproduces every listed balance and Stokes value.</caption>
+  <thead>
+<tr><th>d (mm)</th><th>measured (m/s)</th><th>Stokes (m/s)</th><th>balance (m/s)</th><th>error of balance</th><th>Re of balance</th></tr>
+</thead>
+  <tbody>
+<tr><td>0.1</td><td>0.27</td><td>0.299</td><td>0.2496</td><td>−7.57 %</td><td>1.65</td></tr>
+<tr><td>0.2</td><td>0.72</td><td>1.196</td><td>0.6941</td><td>−3.60 %</td><td>9.18</td></tr>
+<tr><td>0.4</td><td>1.62</td><td>4.784</td><td>1.5864</td><td>−2.07 %</td><td>42.0</td></tr>
+<tr><td>1.0</td><td>4.03</td><td>29.90</td><td>4.0084</td><td>−0.54 %</td><td>265</td></tr>
+<tr><td>2.0</td><td>6.49</td><td>119.6</td><td>6.5114</td><td>+0.33 %</td><td>861</td></tr>
+<tr><td>4.0</td><td>8.83</td><td>478.4</td><td>8.8190</td><td>−0.12 %</td><td>2333</td></tr>
+  </tbody>
+</table>
+</details>
+<p>Computed Among the 20 stored diameters, those at or above 0.3 mm deviate by at most 2.07 %; at 0.1 mm it is −7.57 %, at 0.2 mm −3.60 %. That is one comparison at one temperature and pressure, not a universal accuracy.</p>
+<div class="model-note correction">
+<h3>Correction to the earlier write-up</h3>
+<p>The earlier remodel write-up blamed the error at 0.1 mm on “the joint between Beard’s two regimes”. The code’s joints are at $d=19$ µm and 1.07 mm. Computed The fitted speed jumps there by only −0.17 % and −0.005 % (10 °C, 850 hPa). The 0.1 mm error belongs to the fit itself.</p>
+</div>
+<h2>What the Stokes speed does to the kernel</h2>
+<p>The kernel (6) is proportional to the speed difference, and for a collector among small droplets $\Delta v\approx v_t(R)$. Computed At 0 °C and 1000 hPa a drop of radius 200 µm falls at 5.06 m/s by Stokes and 1.59 m/s by the balance, 3.2 times too fast; at 500 µm, 31.6 against 3.98 m/s, a factor 8.0. These factors are the overstatement of the <em>geometric encounter rate</em>. For partners much smaller than the collector they carry straight through to the kernel: the coalescence efficiency stays close to 1 even at Stokes speeds (0.995 for a 500 µm drop and an 8 µm droplet, chapter 6), so at a fixed collision efficiency the kernel is overstated by about the same factor. For partners of comparable size the larger speed difference also raises the energy ratio $W_E$ of chapter 6 quadratically and suppresses coalescence; there the two effects compete, and the Stokes kernel can even come out smaller.</p>
+<div class="model-note correction">
+<h3>Correction to the earlier write-up</h3>
+<p>The earlier write-up said that at $R=500$ µm “the thesis velocity is 30 times the measured one and We is 900 times too large”. The app’s laws give a factor 8.0 at 0 °C and 1000 hPa (7.2 at the warm reference air), so the energy ratio of chapter 6 is 52 to 63 times too large, not 900. The direction of the effect stands.</p>
+</div>
+<p>Computed Ice spheres, being lighter, fall more slowly than water drops of the same radius: by 10 % below 20 µm and 6.5 % at 500 µm (10 °C, 850 hPa), the Stokes ratio $(\rho_i-\rho_a)/(\rho_w-\rho_a)\approx0.90$ moving toward its square root at higher Re.</p>
+</div>
+<div class="lesson">
+    Chapter 05
+<h1>Collision efficiency</h1>
+<p>Does a partner carried by the air actually touch the collector?</p>
+<p>Drive through heavy rain and every drop in front of the car hits the windscreen. Drive through fine mist and much of it never touches the glass: the air pushed aside carries it around the car. A falling drop does the same to the droplets below it, like a stone in a stream turning leaves aside. Only a droplet heavy enough to keep going while the air turns reaches the surface. That fraction is the collision efficiency $E_{\rm coll}$.</p>
+<figure>
+[SVG Air carries light partners around the collector]
+<figcaption>Figure 4. In the collector’s frame the air rises past it and bends around it. A partner starting a distance b from the axis hits if it has enough inertia; the largest b that still hits is the grazing offset b<sub>c</sub>. Schematic, not computed.</figcaption>
+</figure>
+<h2>The partner’s equation of motion</h2>
+<p>Fix the collector at the origin with $\mathbf e_z$ up. Far away the air rises past it at $U=v_t(R)$ and a partner sinks through that air at $v_t(r)$. Near the collector the air has a velocity field $\mathbf u(\mathbf x)$. The partner, at $\mathbf x$ with velocity $\mathbf v$, feels Stokes drag on its velocity relative to the local air, and its weight less buoyancy:</p>
+<div class="equation">
+$$\dot{\mathbf x}=\mathbf v,\qquad \tau_p\,\dot{\mathbf v}=\mathbf u(\mathbf x)-\mathbf v-\tau_pg^*\mathbf e_z,\qquad g^*=g_0\Big(1-\frac{\rho_a}{\rho_p}\Big).\tag{24}$$
+<p>The partner relaxes toward the local air velocity, shifted down by its own settling speed $\tau_pg^*$, with the relaxation time (9) for radius $r$.</p>
+</div>
+<p>Assumed This Stokes drag concerns the partner’s slip, so its validity rests on the partner’s Reynolds number. Computed With the balance speed as slip, it reaches 1 at $r=42.7$ µm (10 °C, 850 hPa). The tables run to $r/R=0.6$ for collectors up to 2 mm, partners of 1.2 mm, where it is about 1100: there the trajectory model is outside its range.</p>
+<h2>Scale it, and one number appears</h2>
+<p>Measure lengths in $R$, speeds in $U$, and time in $R/U$, the time the air takes to pass the collector: $\mathbf y=\mathbf x/R$, $\mathbf w=\mathbf v/U$, $s=tU/R$, $\mathbf a=\mathbf u/U$. Then</p>
+<div class="equation">
+$$\frac{d\mathbf y}{ds}=\mathbf w,\qquad \mathrm{St}\,\frac{d\mathbf w}{ds}=\mathbf a(\mathbf y)-\mathbf w-S\,\mathbf e_z,\qquad \mathrm{St}=\frac{\tau_pU}{R},\quad S=\frac{v_t(r)}{U}.\tag{25}$$
+<p>The Stokes number St compares the partner’s memory time with the time the air needs to turn around the collector; $S$ is the partner’s own settling, in collector speeds.</p>
+</div>
+<div class="model-note">
+<h3>One approximation in the trajectory equation</h3>
+<p>Equation (24) uses linear Stokes drag. Strictly, its settling speed is $\tau_pg^*=v_t^S(r)$, the Stokes speed of (10), so that is the value of $S\,U$ that (24) gives when (25) is derived. Using the app’s fitted speed $v_t(r)$ in $S$ while keeping the same relaxation time is a hybrid approximation, not an exact rescaling of (24). The browser reads stored efficiency tables; their generating code is unavailable, so this page cannot establish which choice it used. The trajectory argument explains the mechanism without proving the tables valid at every size.</p>
+</div>
+<p>When $\mathrm{St}\to0$ the partner follows the air, shifted by its settling, and touches only by interception: its radius reaches the surface while its centre rides past. When $\mathrm{St}\to\infty$ it goes straight, and every partner in the tube hits. Contact is at $|\mathbf y|=1+r/R$. Computed At 10 °C and 850 hPa an 8 µm partner has $\mathrm{St}=1.9$ with a 20 µm collector and 3.6 with a 40 µm one; a 10 µm partner of a 100 µm collector has 9.1.</p>
+<h2>Two model flows around the collector</h2>
+<p>The air field depends on the collector’s Reynolds number, with exact solutions only in the limits. Creeping flow ($\mathrm{Re}\to0$) is Stokes’ field (13): the air sticks to the surface and its disturbance decays slowly, as $1/q$, deflecting droplets many radii upstream. Potential flow ($\mathrm{Re}\to\infty$, no boundary layer) lets the air slip along the surface; its disturbance decays as $1/q^3$, so droplets are deflected only close by and more of them hit. Neither has a wake, so the two are model limits, not proven bounds.</p>
+<details>
+<summary>Technical detail: the potential-flow field</summary>
+<div class="equation">
+$$\psi_P=\tfrac12UR^2q^2\sin^2\theta\Big(1-\frac{1}{q^3}\Big),\qquad a_\varrho=\cos\theta\,(1-q^{-3}),\qquad a_\theta=-\sin\theta\,\Big(1+\frac{1}{2q^3}\Big).\tag{26}$$
+<p>Uniform flow plus a dipole. Only the normal velocity vanishes on the surface. The disturbance decays as $1/q^3$, so droplets are deflected only close by, and more of them hit.</p>
+</div>
+</details>
+<h2>The critical Stokes number: a point droplet on the axis</h2>
+<p>Take a point partner ($r/R\to0$) that does not settle ($S\to0$), on the axis straight below the collector. In potential flow the air on this axis approaches the surface and stops there. Let $\eta=q-1$ be the distance from the surface in collector radii. On the upstream axis $\cos\theta=-1$, so the air moves toward the surface at $1-(1+\eta)^{-3}\approx3\eta$. Near the surface the partner obeys, with primes for derivatives in the scaled time $s$,</p>
+<div class="equation">
+$$\mathrm{St}\,\eta''+\eta'+3\eta=0,\qquad \eta\propto e^{\kappa s},\quad \kappa=\frac{-1\pm\sqrt{1-12\,\mathrm{St}}}{2\,\mathrm{St}}.\tag{27}$$
+<p>A damped oscillator. If $12\,\mathrm{St}\gt1$ it overshoots zero and the partner reaches the surface; if not, it creeps toward the surface for ever.</p>
+</div>
+<p>Derived So in potential flow $\mathrm{St}_c=1/12$ exactly, radius-based (1/24 with the collector’s diameter). In creeping flow the air sticks, its approach speed vanishes as $\eta^2$, and the linear argument fails; the threshold needs the whole axis. The literature value (Phillips and Kaye 1999, as cited in arXiv:1708.03198) is $\mathrm{St}_c\approx1.21$ (0.605 diameter-based): a heavier partner is needed to reach a surface the air itself never quite reaches.</p>
+<table>
+  <caption>Computed Critical Stokes numbers from the earlier trajectory solver, as stored in the app’s check data.</caption>
+  <thead>
+<tr><th>flow</th><th>computed</th><th>reference</th><th>error</th></tr>
+</thead>
+  <tbody>
+<tr><td>potential flow</td><td>0.08425</td><td>1/12 = 0.08333</td><td>1.10 %</td></tr>
+<tr><td>creeping (Stokes) flow</td><td>1.21194</td><td>1.21</td><td>0.16 %</td></tr>
+  </tbody>
+</table>
+<div class="model-note correction">
+<h3>Correction to the earlier write-up</h3>
+<p>The earlier write-up put the potential-flow value within 1.4 %. The stored data give 0.08425 against 0.08333, 1.10 %. These thresholds test the trajectory solver against a stated convention; they are not thresholds for every cloud particle.</p>
+</div>
+<h2>From the grazing trajectory to the efficiency</h2>
+<p>Start the partner far below at a sideways offset $b$, moving with the far-field velocity, integrate (25), and see whether it touches. Search for the grazing offset $b_c$: inside it partners hit, outside they miss. If hits fill one disc and far-upstream partners are spread evenly and move at one speed $\Delta v$, the hit rate is $\pi b_c^2\Delta v$ times the concentration. Divide by the straight-path rate of chapter 3:</p>
+<div class="equation">
+$$E_{\rm coll}=\frac{\pi b_c^2\,\Delta v}{\pi(R+r)^2\,\Delta v}=\frac{b_c^2}{(R+r)^2}.\tag{28}$$
+<p>The real capture area over the geometric one. Below 1 means the air steered partners out of the tube.</p>
+</div>
+<details>
+<summary>Technical detail: starting at a finite distance</summary>
+<p>The cancellation needs equal speeds and concentrations in both counts, true only infinitely far upstream. A real calculation starts at a finite distance $Z$ (in units of $R$). The earlier write-up counted partners through the starting disc with the air’s stream function (in units of $UR^2$), less the partners’ own settling through it:</p>
+<div class="equation">
+$$\Phi(b)=2\pi\Big[\psi(b,-Z)-\tfrac12S\,b^2\Big],\qquad E_{\rm coll}=\frac{2\big[\psi(b_c,-Z)-\tfrac12S\,b_c^2\big]}{(1-S)(1+r/R)^2}.\tag{29}$$
+<p>Partner flux through the start disc over the geometric flux. Far upstream $\psi\to\tfrac12b^2$ and this becomes (28).</p>
+</div>
+<p>The stream function is conserved along air streamlines, but an inertial partner does not follow them, so this alone does not make the result independent of $Z$. The earlier write-up reports a convergence test ($Z=30\,\mathrm{St}$; doubling $Z$ changed no efficiency by more than $10^{-3}$) and a time-step test (largest change $10^{-4}$). The program that made the tables is not in the app, so neither test can be rerun here.</p>
+</details>
+<p>Assumed For collectors at intermediate Reynolds number, the earlier implementation blended the two flows’ efficiencies with a weight attributed to Langmuir (1948):</p>
+<div class="equation">
+$$E_{\rm coll}=\frac{E_S+E_P\,\mathrm{Re}/60}{1+\mathrm{Re}/60}.\tag{30}$$
+<p>Creeping-flow efficiency $E_S$ for collector Re well below 60, potential-flow $E_P$ well above, a smooth blend between.</p>
+</div>
+<p>This blend is an adopted closure. Neither the interpolation nor its value 60 follows from the trajectory equations. Solving the airflow at each Reynolds number would remove this particular interpolation, but particle shape, mutual disturbance and the particle-drag model would still need to be specified. It plays the same role as the thesis’s fitted coalescence law (35).</p>
+<h2>What the app actually stores</h2>
+<p>The browser neither integrates trajectories nor applies (30) itself. It interpolates precomputed tables, attributed to such calculations, on 45 collector radii from 1 µm to 2 mm and 40 size ratios $p=r/R$ from 0.0005 to 0.6, both evenly spaced in the logarithm. One set serves air at or above 273.15 K: water on water. Another serves colder air, adding ice on ice, water collecting ice and ice collecting water, computed with ice densities and fall speeds. The efficiencies therefore jump at 0 °C rather than varying with temperature and pressure. The files record no air conditions (the Checks page attributes the warm table to 10 °C and 850 hPa), and the program that made them is not in the app.</p>
+<details>
+<summary>Technical detail: the interpolation</summary>
+<div class="equation">
+$$E(R,p)=(1-\alpha)(1-\beta)E_{ij}+\alpha(1-\beta)E_{i+1,j}+(1-\alpha)\beta E_{i,j+1}+\alpha\beta E_{i+1,j+1},\quad \alpha=\frac{\ln(R/R_i)}{\ln(R_{i+1}/R_i)},\ \beta=\frac{\ln(p/p_j)}{\ln(p_{j+1}/p_j)}.\tag{31}$$
+<p>A weighted average of the four surrounding entries, bilinear in $\ln R$ and $\ln p$. Outside the table $R$ and $p$ are clamped to its edges, so pairs with $r/R\gt0.6$ use the 0.6 column.</p>
+</div>
+</details>
+<table>
+  <caption>Computed Rows of the stored warm table (water on water) at the table’s own collector radii, with each row’s largest entry.</caption>
+  <thead>
+<tr><th>R (µm)</th><th>p = 0.097</th><th>p = 0.20</th><th>p = 0.42</th><th>p = 0.60</th><th>largest E (at p)</th></tr>
+</thead>
+  <tbody>
+<tr><td>18.9</td><td>0.0007</td><td>0</td><td>0</td><td>0</td><td>0.0007 (0.081)</td></tr>
+<tr><td>22.4</td><td>0.0006</td><td>0</td><td>0.131</td><td>0.022</td><td>0.135 (0.50)</td></tr>
+<tr><td>31.7</td><td>0.003</td><td>0.147</td><td>0.469</td><td>0.468</td><td>0.497 (0.50)</td></tr>
+<tr><td>44.7</td><td>0.039</td><td>0.442</td><td>0.703</td><td>0.706</td><td>0.721 (0.50)</td></tr>
+<tr><td>106</td><td>0.676</td><td>0.871</td><td>0.932</td><td>0.921</td><td>0.932 (0.42)</td></tr>
+<tr><td>178</td><td>0.878</td><td>0.953</td><td>0.971</td><td>0.962</td><td>0.971 (0.42)</td></tr>
+  </tbody>
+</table>
+<figure>
+<img src="./fig/ecoll_map.svg" alt="Map of collision efficiency against collector radius and size ratio: near zero for small collectors, rising steeply between about 20 and 50 micrometres, and above 0.8 for large collectors except at the smallest size ratios.">
+<figcaption>Figure 5. The stored water-on-water efficiencies, attributed to 10 °C and 850 hPa, on their 45 × 40 grid.</figcaption>
+</figure>
+<p>Computed The table holds the warm-rain bottleneck. Below a collector radius of 20 µm no entry exceeds 0.001. Between the rows at 18.9 and 22.4 µm a band opens at size ratios above 0.29; by 31.7 µm every entry is nonzero; above 100 µm, 237 of the 252 entries with $p\ge0.05$ exceed 0.8. The thesis kernel, with $E_{\rm coll}=1$, has no bottleneck. For the pair of chapter 3 (40 and 8 µm) the warm table gives 0.343, the cold water table 0.384; at 100 and 10 µm the cold tables give 0.64 (ice on ice) to 0.68 (water on water).</p>
+<details>
+<summary>Worked example: why small collectors miss</summary>
+<p>Take $R=20$ µm at 10 °C and 850 hPa and ignore the partner’s inertia for a moment. On the upstream axis of the creeping flow (13), the air approaches at $1-\tfrac{3}{2q}+\tfrac{1}{2q^3}$ (in units of $U$), falling to zero at the surface, while the partner sinks through the air at $S$. So an inertia-free partner stops where the two are equal, at a height $\eta^*=q^*-1$ above the surface, and touches only if $\eta^*\lt r/R$.</p>
+<p>Computed For $r/R=0.3$, 0.4 and 0.5 the settling ratios are $S=0.093$, 0.164 and 0.256, and the stopping heights $\eta^*=0.35$, 0.54 and 0.81: above the partner’s reach by 0.05, 0.14 and 0.31. Without inertia nothing touches. With Stokes numbers of 1.1, 1.9 and 3.0, inertia must carry the partner across the gap, and the stored efficiencies there are small, 0.015 to 0.046 after interpolation.</p>
+<p>The earlier write-up gave $\eta^*=0.44$ and a gap of 0.04 at $r/R=0.4$; the axial speed it quotes gives 0.54 and 0.14 with the app’s fall speeds. The reading stands: small collectors miss because the air halts their partners just short of the surface. The single-sphere flow is crude anyway when $r/R$ is not small.</p>
+</details>
+</div>
+<div class="lesson">
+    Chapter 06
+<h1>Coalescence</h1>
+<p>Two drops touch. Do they stay together? Derive the energy ratio, then name the fitted law.</p>
+<p>Watch rain fall on a puddle. Some drops vanish into it at once; others bounce, or skate across on a thin film of air before they sink. Two drops in a cloud face the same choice. A gentle touch lets surface tension pull them into one sphere. A hard hit can deform them so much that they bounce apart or break up again. So compare the energy the collision brings with the energy held in the drops’ surfaces.</p>
+<h2>The energy that can deform the drops</h2>
+<p>Two drops of masses $m_1$, $m_2$ move with velocities $\mathbf v_1$, $\mathbf v_2$. The kinetic energy of their common centre of mass survives the collision whatever happens, because momentum is conserved. Only the rest can squash the drops: the energy of relative motion, carried by the reduced mass $\mu_{\rm red}=m_1m_2/(m_1+m_2)$.</p>
+<details>
+<summary>Derivation detail: splitting off the centre of mass</summary>
+<div class="equation">
+$$\tfrac12m_1v_1^2+\tfrac12m_2v_2^2=\tfrac12(m_1+m_2)V^2+\tfrac12\mu_{\rm red}\,|\mathbf v_1-\mathbf v_2|^2,\qquad \mu_{\rm red}=\frac{m_1m_2}{m_1+m_2}.\tag{32}$$
+<p>Total energy is the energy of the centre of mass, moving at $V$, plus the energy of relative motion, carried by the reduced mass $\mu_{\rm red}$.</p>
+</div>
+<p>Write $\mathbf v_1=\mathbf V+\frac{m_2}{m_1+m_2}\Delta\mathbf v$ and $\mathbf v_2=\mathbf V-\frac{m_1}{m_1+m_2}\Delta\mathbf v$, with $\Delta\mathbf v=\mathbf v_1-\mathbf v_2$ and $\mathbf V=(m_1\mathbf v_1+m_2\mathbf v_2)/(m_1+m_2)$. Square and add with weights $\tfrac12m_1$, $\tfrac12m_2$. The cross terms in $\mathbf V\cdot\Delta\mathbf v$ cancel, because $m_1\frac{m_2}{m_1+m_2}=m_2\frac{m_1}{m_1+m_2}$. What is left is $\tfrac12(m_1+m_2)V^2$ plus $\tfrac12\Delta v^2\,m_1m_2(m_1+m_2)/(m_1+m_2)^2=\tfrac12\mu_{\rm red}\Delta v^2$.</p>
+</details>
+<p>For falling drops $\Delta v$ is the difference of terminal speeds. In terms of the diameters $D\ge d$, with $m=\pi\rho_wD^3/6$:</p>
+<div class="equation">
+$$\Delta E_k=\frac12\,\frac{m_1m_2}{m_1+m_2}\,(\Delta v)^2=\frac{\pi\rho_w}{12}\,\frac{D^3d^3}{D^3+d^3}\,(\Delta v)^2.\tag{33}$$
+<p>The energy of relative motion present before contact. The collision does not create it; it is what the collision can spend.</p>
+</div>
+<h2>The energy held in surfaces</h2>
+<p>Volume is conserved, so the merged drop has diameter $d_f=(D^3+d^3)^{1/3}$. The thesis compares the collision energy with that sphere’s surface energy:</p>
+<div class="equation">
+$$E_s=\pi\sigma d_f^2=\pi\sigma\,(D^3+d^3)^{2/3},\qquad E_{\rm freed}=\pi\sigma\big(D^2+d^2-d_f^2\big)\gt0.\tag{34}$$
+<p>One sphere has less surface than two of the same total volume, so a merger frees surface energy. $E_s$ is the scale against which the thesis measures the hit.</p>
+</div>
+<h2>The ratio and the adopted law</h2>
+<p>The thesis defines an energy-based Weber number as the ratio of the two, and lets the coalescence efficiency fall exponentially with it:</p>
+<div class="equation">
+$$W_E=\frac{\Delta E_k}{\pi\sigma\,(D^3+d^3)^{2/3}},\qquad E_{\rm coal}=\exp(-1.15\,W_E).\tag{35}$$
+<p>Gentle collisions ($W_E\ll1$) almost always merge; hard ones ($W_E\gg1$) almost never.</p>
+</div>
+<p>Derived The ratio follows from energy bookkeeping. Assumed The exponential and its 1.15 are a fitted law, the thesis’s equations (21)–(24) in §4.3.1, not a consequence of energy conservation. Nor is this the common $\rho v^2d/\sigma$ Weber number, so thresholds cannot be moved between the two.</p>
+<details>
+<summary>Technical detail: the surface-tension fit</summary>
+<div class="equation">
+$$\sigma=0.241322\,\tau_T^{1.26}\big(1-0.058\,\tau_T^{1/2}-0.569\,\tau_T\big)\ \text{N/m},\qquad \tau_T=1-\frac{T}{647.096\ \text{K}}.\tag{36}$$
+<p>Surface tension falls as water warms toward its critical temperature. Cold water pulls harder: 0.0772 N/m at −10 °C, 0.0744 at 10 °C.</p>
+</div>
+</details>
+<details>
+<summary>Worked example: two energy ratios, gentle and hard, and the largest on the grid</summary>
+<p>Air at 10 °C and 850 hPa, $\sigma=0.0744$ N/m. Computed</p>
+<p><strong>Radius 100 µm meets 50 µm.</strong> Balance speeds 0.728 and 0.259 m/s, so $\Delta v=0.469$ m/s. The reduced mass is $4.65\times10^{-10}$ kg and $\Delta E_k=5.1\times10^{-11}$ J. The merged drop has $d_f=208$ µm and $E_s=1.01\times10^{-8}$ J, so $W_E=0.0051$ and $E_{\rm coal}=0.994$. The surface energy freed by the merger, $1.6\times10^{-9}$ J, is 31 times the collision energy: a gentle touch. With Stokes speeds, $\Delta v=0.922$ m/s, $W_E=0.020$, $E_{\rm coal}=0.978$.</p>
+<p><strong>Radius 500 µm meets 250 µm.</strong> Balance: $\Delta v=2.12$ m/s, $\Delta E_k=1.31\times10^{-7}$ J, $d_f=1.04$ mm, $E_s=2.53\times10^{-7}$ J, $W_E=0.52$, $E_{\rm coal}=0.55$. Stokes: $\Delta v=23.1$ m/s, $W_E=61$, $E_{\rm coal}=3\times10^{-31}$. With Stokes speeds these two never merge.</p>
+<table>
+  <caption>Computed The largest energy ratio over all liquid pairs whose larger drop is at most a given radius (10 °C, 850 hPa), with the coalescence efficiency that goes with it. With Stokes speeds, $E_{\rm coal}=\exp(-1.15\,W_E)$ is exactly zero in double precision once $W_E$ exceeds about 648, which first happens for collectors of about 0.8 mm.</caption>
+  <thead>
+<tr><th>larger radius up to</th><th>W<sub>E</sub>, balance</th><th>E<sub>coal</sub>, balance</th><th>W<sub>E</sub>, Stokes</th><th>E<sub>coal</sub>, Stokes</th></tr>
+</thead>
+  <tbody>
+<tr><td>100 µm</td><td>0.0051</td><td>0.994</td><td>0.021</td><td>0.976</td></tr>
+<tr><td>200 µm</td><td>0.041</td><td>0.954</td><td>0.66</td><td>0.47</td></tr>
+<tr><td>500 µm</td><td>0.52</td><td>0.55</td><td>66</td><td>≈ 10⁻³³</td></tr>
+<tr><td>1 mm</td><td>1.66</td><td>0.15</td><td>≈ 2 × 10³</td><td>0 (exp underflows)</td></tr>
+<tr><td>2 mm</td><td>3.16</td><td>0.026</td><td>≈ 7 × 10⁴</td><td>0 (exp underflows)</td></tr>
+  </tbody>
+</table>
+</details>
+<div class="model-note correction">
+<h3>Correction to the earlier write-up</h3>
+<p>The earlier write-up said that with the balance speed “We stays below 0.3 for all pairs on the grid and $E_{\rm coal}$ above 0.7”. That holds only while the larger drop is below about 400 µm; over the whole grid the largest ratio is 3.2, for drops near 1.9 mm and 0.84 mm, where $E_{\rm coal}=0.026$. The thesis kernel is still far harsher: for a partner half the collector’s radius, $E_{\rm coal}$ falls below 0.5 from $R=200$ µm with Stokes speeds, but only from 535 µm with the balance speeds.</p>
+</div>
+<p>This explains why, with the thesis kernel, the retained spectrum piles up near half a millimetre and stops. Computed Rerun with the app’s code, its peak after 60 minutes sits at 558 µm. A 500 µm drop still swallows an 8 µm droplet ($E_{\rm coal}=0.995$ with Stokes speeds), but the cloud droplets are gone within ten minutes, and the large drops left almost never merge with each other.</p>
+<p>A change of fall speed thus enters twice, linearly through the encounter rate (6) and quadratically through $W_E$, so a corrected fall speed does not simply rescale a growth curve. Assumed For pairs with ice the app sets $E_{\rm coal}=1$: liquid freezes on contact with ice, and ice sticks to ice.</p>
+</div>
+<div class="lesson">
+    Chapter 07
+<h1>Population balances</h1>
+<p>From one collector to the whole spectrum: the GCE, the SCE, and how one contains the other.</p>
+<p>Keep a ledger with one line per size. A merger of a 10 µm and a 20 µm droplet crosses out an entry on each of their lines and writes one on the line of their combined mass, about 20.8 µm. A population balance is that ledger per unit time and size; chapter 3 gave the rates, and now we add them up without counting anything twice.</p>
+<h2>The thesis’s collector-and-pool construction</h2>
+<p>The thesis splits the particles into two fixed groups: collectors $n_R(R,t)$ and a pool of collected droplets $n_r(r,t)$. A pool droplet disappears when any collector absorbs it. Summing (8) over collectors:</p>
+<div class="equation">
+$$\partial_t n_r(r,t)=-n_r(r,t)\int K(R,r)\,n_R(R,t)\,dR.\tag{37}$$
+<p>Each pool droplet is removed at a rate set by all collectors together. Pool droplets keep their size; they only become fewer.</p>
+</div>
+<p>The minus sign is required by depletion and agrees with the thesis’s equations (28)–(30); the printed equation (12) does not display it. The collectors keep their number and grow, each at the rate $\dot R$ of (7). A crowd that keeps its number but moves along the radius axis obeys a continuity equation, like cars on a road without exits:</p>
+<div class="equation">
+$$\partial_t n_R(R,t)+\partial_R\big(\dot R\,n_R\big)=0,\qquad n_R(R,t)\,dR=n_{R}(R_0,0)\,dR_0.\tag{38}$$
+<p>Collectors between two radii change only by growing in or out. Each carries its share of the count along its growth path from $R_0$.</p>
+</div>
+<details>
+<summary>Derivation detail: why the density changes when the number does not</summary>
+<p>Follow two collectors that start at $R_a(0)$ and $R_b(0)$ and grow at $\dot R(R_a)$ and $\dot R(R_b)$. On a single growth law they cannot overtake each other, so the number between them is fixed: $\frac{d}{dt}\int_{R_a(t)}^{R_b(t)}n_R\,dR=0$. Leibniz’s rule gives $\int_{R_a}^{R_b}\partial_tn_R\,dR+\dot R_bn_R(R_b)-\dot R_an_R(R_a)=0$, and the last two terms are $\int_{R_a}^{R_b}\partial_R(\dot Rn_R)\,dR$. The interval is arbitrary, so the integrand vanishes: (38). Because bigger collectors grow faster, the crowd spreads along the axis; its number is fixed but its density per unit radius falls, as cars thin out when the ones in front speed up.</p>
+</details>
+<p>Three kinds of event are absent here: collectors never collect each other, pool droplets never collect each other, and a pool droplet never becomes a collector. The thesis says so in §5.1: “collectors do not disappear or even cross roads”. That is good for a short time and for collectors far larger than the pool; over tens of minutes the pool coarsens and collectors catch one another.</p>
+<p>Computed The retained “continuous GCE” runs, which start from the reference spectrum with 1 collector per cm³, end after 60 minutes with 1.007 (thesis kernel) and 1.609 (new kernel) particles per cm³: all collectors survive, plus a few pool droplets. The matching SCE runs end with 0.004 and 0.001 per cm³, because there the large drops merged with each other too.</p>
+<h2>Binary events for a single spectrum</h2>
+<p>Now drop the two groups: every particle may collect or be collected. A particle of mass $m$ is created when partners of masses $m'$ and $m-m'$ merge, and disappears when it merges with anything. In a well-mixed box pair rates follow (8). Add every way to make $m$ and subtract every way to lose it:</p>
+<div class="equation">
+$$\partial_tn_m(m,t)=\underbrace{\frac12\int_0^mK(m',m-m')\,n_m(m',t)\,n_m(m-m',t)\,dm'}_{\text{gain}}-\underbrace{n_m(m,t)\int_0^\infty K(m,m')\,n_m(m',t)\,dm'}_{\text{loss}}.\tag{39}$$
+<p>Births from all pairs that add up to $m$, minus deaths of particles of mass $m$ in any merger, with the kernel (6) written in masses.</p>
+</div>
+<p>The one half is there because, as $m'$ runs from 0 to $m$, each unordered pair is met twice; the loss term follows one particular particle, so nothing is doubled there. This is Smoluchowski’s coagulation equation, in cloud physics the stochastic collection equation. “Stochastic” describes the random events; the equation evolves their expected density deterministically, treating pairs as uncorrelated. The app does not draw random merger histories.</p>
+<p>For a concrete entry in the ledger, suppose the only allowed event joins a particle of mass $m_0$ to one of mass $2m_0$. If it happens $C$ times per cubic metre per second, the three populations change at rates $-C$, $-C$ and $+C$. Number falls at rate $C$; the mass change is $-m_0C-2m_0C+3m_0C=0$. The two integrals in (39) apply this same rule to every possible pair. In the gain integral at $m=3m_0$ this pair appears twice, at $m'=m_0$ and at $m'=2m_0$; the ½ counts it once.</p>
+<div class="reading-table">
+<table>
+  <caption>Which events each bookkeeping allows. “Collector” and “pool” are the thesis’s two groups.</caption>
+  <thead>
+<tr><th>Event</th><th>GCE (thesis)</th><th>SCE (app)</th></tr>
+</thead>
+  <tbody>
+<tr><td>collector takes a pool droplet</td><td>yes, as a smooth drift in size</td><td>yes, as discrete jumps</td></tr>
+<tr><td>pool droplet takes a pool droplet</td><td>no</td><td>yes</td></tr>
+<tr><td>collector takes a collector</td><td>no</td><td>yes</td></tr>
+<tr><td>a grown pool droplet acts as a collector</td><td>no</td><td>yes</td></tr>
+<tr><td>number of large drops</td><td>fixed</td><td>falls as they merge</td></tr>
+  </tbody>
+</table>
+</div>
+<h2>The GCE inside the SCE: a jump expansion</h2>
+<p>Two initially equal collectors need not catch the same number of droplets. One catches sooner and moves ahead; another waits longer. The smooth growth law follows their mean motion along the mass axis. A second term is needed to describe the spread around that mean. The thesis’s smooth growth comes back out of (39) in a limit. Keep only collector–pool events, write $f_C(M,t)$ for the collectors, and suppose each jump is small, $m\ll M$. Expanding the gain term in the jump size gives</p>
+<div class="equation">
+$$\partial_tf_C=-\partial_M\big(A\,f_C\big)+\tfrac12\,\partial_M^2\big(B\,f_C\big)-\cdots,\qquad A(M)=\int m\,K(M,m)\,n_m\,dm,\quad B(M)=\int m^2K(M,m)\,n_m\,dm.\tag{40}$$
+<p>A drift along the mass axis at speed $A$, plus a spreading at rate $B$, because the jumps are discrete and random in timing.</p>
+</div>
+<details>
+<summary>Derivation detail: the expansion</summary>
+<p>A collector of mass $M$ is born when one of mass $M-m$ swallows a pool droplet of mass $m$, and lost when a collector of mass $M$ swallows anything:</p>
+<div class="equation">
+$$\partial_tf_C(M)=\int K(M-m,m)\,f_C(M-m)\,n_m(m)\,dm-f_C(M)\int K(M,m)\,n_m(m)\,dm.\tag{41}$$
+<p>Collectors jump up the mass axis by the mass of each droplet they swallow: gain from below, loss from here.</p>
+</div>
+<p>Write $h(M)=K(M,m)\,f_C(M)$ for fixed $m$ and expand $h(M-m)=h-m\,\partial_Mh+\tfrac12m^2\partial_M^2h-\cdots$. Integrate with weight $n_m(m)$. The first term is exactly the loss. The second gives $-\partial_M(Af_C)$, the third $\tfrac12\partial_M^2(Bf_C)$. Units: $A$ is kg/s, $B$ kg²/s, and one derivative of $Af_C$ or two of $Bf_C$ have the units of $\partial_tf_C$. Multiply the drift term by $M$ and integrate by parts: the mean collector mass grows at $A$, the GCE rate (7). Dropping the higher terms needs small jumps; it is not an identity.</p>
+</details>
+<p>Derived So the thesis’s equations are the SCE with two classes of event removed and the collectors’ gains and losses collapsed into a drift. Comparing the two changes two things at once: which events are allowed, and how growth is represented.</p>
+<details>
+<summary>Worked example: how large is the spread the drift leaves out?</summary>
+<p>A collector of radius 40.3 µm (a grid bin; $M=2.745\times10^{-10}$ kg) in the reference cloud mode at 10 °C and 850 hPa, new kernel. Computed Summing over the cloud mode, $A=4.43\times10^{-13}$ kg/s and $B=2.24\times10^{-24}$ kg²/s. It merges 0.131 times per second, and its mean catch is 1.2 % of its own mass. If these initial rates stayed fixed, the collector would gain its own mass $M$ again, that is, double, in $M/A=620$ s, after about 81 mergers. In that constant-rate illustration one collector’s mass has variance $Bt$, giving a standard deviation $\sqrt{BM/A}=3.7\times10^{-11}$ kg, 14 % of the starting mass. The difference of two independent collectors has $\sqrt2$ times that standard deviation, $5.3\times10^{-11}$ kg or 19 % of $M$. Actual growth changes $A$, $B$ and the pool, so this is a scale estimate, not a predicted distribution at the doubling. It shows what a single mean growth path leaves out.</p>
+</details>
+<table>
+  <caption>Computed First recorded minute at which the in-grid mass at radius ≥ 40 µm reaches 50 % and 90 % of the initial mass, from the retained warm runs (10 °C, 850 hPa; 300 cm⁻³ at 8 µm plus 1 cm⁻³ at 40 µm). The app’s code reproduces both SCE rows to the minute.</caption>
+  <thead>
+<tr><th>bookkeeping</th><th>kernel</th><th>t<sub>50</sub> (min)</th><th>t<sub>90</sub> (min)</th></tr>
+</thead>
+  <tbody>
+<tr><td>continuous GCE</td><td>thesis</td><td>3</td><td>7</td></tr>
+<tr><td>SCE</td><td>thesis</td><td>3</td><td>5</td></tr>
+<tr><td>continuous GCE</td><td>new</td><td>7</td><td>19</td></tr>
+<tr><td>SCE</td><td>new</td><td>6</td><td>14</td></tr>
+  </tbody>
+</table>
+<p>For this one spectrum, changing the kernel moves the 90 % time from 5–7 to 14–19 minutes; changing the bookkeeping shortens it by about a quarter (7 → 5, 19 → 14). Both matter; here the kernel matters more. Chapter 11 says what these thresholds mean.</p>
+</div>
+<div class="lesson">
+    Chapter 08
+<h1>Conservation</h1>
+<p>Mass and number are different moments. Derive what each event does to them before looking at any chart.</p>
+<p>Push two piles of coins together: one pile fewer, not one coin fewer. Merging drops is the same: number goes down, mass stays. Splintering ice is the reverse: number goes up, mass still stays. To make this exact for the whole spectrum, take moments of the SCE.</p>
+<h2>Moments of the collection equation</h2>
+<p>Multiply (39) by a weight $\phi(m)$ and integrate. In the gain term change variables to the two incoming masses; in the loss term use the symmetry $K(m,m')=K(m',m)$ to share the term between partners. For one phase,</p>
+<div class="equation">
+$$\frac{d}{dt}\int\phi(m)\,n_m(m)\,dm=\frac12\iint K(m,m')\,n_m(m)\,n_m(m')\,\big[\phi(m+m')-\phi(m)-\phi(m')\big]\,dm\,dm'.\tag{42}$$
+<p>Every merger replaces $\phi(m)+\phi(m')$ by $\phi(m+m')$. The bracket is that change, event by event; the rest counts events.</p>
+</div>
+<details>
+<summary>Derivation detail: from (39) to (42)</summary>
+<p>Gain: $\frac12\int_0^\infty\phi(m)\int_0^mK(m',m-m')n(m')n(m-m')\,dm'\,dm$. Put $m''=m-m'$; the region $0\lt m'\lt m$ becomes all $m',m''\gt0$ with Jacobian 1, so the gain is $\frac12\iint\phi(m'+m'')K(m',m'')n(m')n(m'')\,dm'\,dm''$. Loss: $\iint\phi(m)K(m,m')n(m)n(m')\,dm\,dm'$; swap $m\leftrightarrow m'$ and average the two forms to get $\frac12\iint[\phi(m)+\phi(m')]Kn\,n'$. Subtract, rename $m''\to m'$, and (42) follows.</p>
+</details>
+<p>Now choose the weight:</p>
+<div class="equation">
+$$\begin{aligned}\phi=m:&amp;\quad \frac{dL}{dt}=0,\\ \phi=1:&amp;\quad \frac{d\mathcal N}{dt}=-\frac12\iint K\,n_m\,n_m'\,dm\,dm'\le0,\\ \phi=m^2:&amp;\quad \frac{d}{dt}\int m^2n_m\,dm=\iint K\,m\,m'\,n_m\,n_m'\,dm\,dm'\ge0.\end{aligned}\tag{43}$$
+<p>Mass is conserved event by event; number falls by one per merger; the second moment grows, since $(m+m')^2-m^2-m'^2=2mm'$: merging always builds bigger particles.</p>
+</div>
+<p>Derived Collection conserves mass and lowers number. “The scheme conserves number” can only mean that a fixed set of products is placed on the grid without changing their count (chapter 9), never that merging keeps the number. For the sum kernel $K=b\,(m+m')$, with $b$ in m³ kg⁻¹ s⁻¹, the number integral can be finished: it is $\frac12b\,(L\mathcal N+\mathcal NL)$, so</p>
+<div class="equation">
+$$\frac{d\mathcal N}{dt}=-bL\mathcal N\quad\Longrightarrow\quad \mathcal N(t)=\mathcal N_0\,e^{-bLt}.\tag{44}$$
+<p>With the sum kernel the number decays exponentially at a rate set by the conserved mass: an exact test used in chapter 9.</p>
+</div>
+<h2>Phases and reservoirs</h2>
+<p>Freezing moves mass from the liquid to the ice spectrum; splintering moves part of a particle’s mass into fragments. Neither creates mass. On a finite grid two more places can hold mass: products heavier than the last bin go to an overflow store, and passive fragments to a passive store. Neither interacts again. The complete inventory is</p>
+<div class="equation">
+$$L_{\rm liq}(t)+L_{\rm ice}(t)+L_{\rm over}(t)+L_{\rm pass}(t)=L_0.\tag{45}$$
+<p>In-grid liquid, in-grid ice, overflow and passive fragments add up to the initial mass. Leave out a reservoir and mass seems to vanish.</p>
+</div>
+<p>Computed In the reference reruns at 8 bins per doubling, the largest departure from (45) over 60 minutes is $1.3\times10^{-13}$ (warm, new kernel), $2.8\times10^{-13}$ (warm, thesis kernel) and $4$–$5\times10^{-11}$ (cold, with splintering); the earlier write-up’s bound of $10^{-11}$ holds for the warm runs. The reservoirs are not small: overflow holds 5.2 % of the mass after 60 minutes in the warm run with the new kernel, and with $\lambda=0.001$ and passive fragments the passive store holds 23 % after 10 minutes, 61 % after 20 and 90 % after 60.</p>
+<div class="model-note">
+<h3>Verification in a useful order</h3>
+<p>Check units and limits first; then that no density goes negative; then the inventory with every reservoir; then convergence in time step and grid; last, independent exact or measured results. A rounding-level mass residual is compatible with a badly resolved spectrum, a wrong kernel or an unphysical fragment law. Conservation is necessary; it is not validation.</p>
+</div>
+</div>
+<div class="lesson">
+    Chapter 09
+<h1>The numerical scheme</h1>
+<p>What each bin stores, what one time step does, what the scheme preserves, and how it fares against an exact solution.</p>
+<p>A computer cannot hold a continuous distribution. It holds a row of boxes, one per size class, and moves mass between them. Two choices decide the quality: how the boxes are spaced, and what happens when a merger makes a particle whose mass falls between two boxes. The app spaces them logarithmically and splits each product between two boxes so that both its number and its mass are kept.</p>
+<h2>The grid and what it stores</h2>
+<div class="equation">
+$$x_k=x_0\,2^{k/s},\quad k=0,\ldots,N-1,\qquad \Delta=\ln\frac{r_{k+1}}{r_k}=\frac{\ln2}{3s}.\tag{46}$$
+<p>Each bin is a fixed factor heavier than the last: $s$ bins per doubling of mass. Since $m\propto r^3$, the bins are evenly spaced in $\ln r$, with step $\Delta$.</p>
+</div>
+<p>$x_0=4.19\times10^{-15}$ kg is the mass of a 1 µm water sphere, and the grid ends at the first bin that reaches a 2 mm water sphere. The same ice mass has a radius 3.6 % larger.</p>
+<table>
+  <caption>Computed The app’s grid for each resolution offered on the Simulate page.</caption>
+  <thead>
+<tr><th>bins per doubling s</th><th>bins N</th><th>Δ</th><th>neighbour radius ratio</th><th>top radius (water)</th></tr>
+</thead>
+  <tbody>
+<tr><td>2</td><td>67</td><td>0.1155</td><td>1.122</td><td>2.048 mm</td></tr>
+<tr><td>4</td><td>133</td><td>0.0578</td><td>1.059</td><td>2.048 mm</td></tr>
+<tr><td>8 (reference)</td><td>265</td><td>0.0289</td><td>1.029</td><td>2.048 mm</td></tr>
+  </tbody>
+</table>
+<div class="model-note correction">
+<h3>Correction to the earlier write-up</h3>
+<p>The earlier write-up gave $N=297$ bins at $s=8$. The app’s grid from 1 µm to 2 mm has 265. The retained reference runs used $s=8$: their initial fraction of mass at radius ≥ 40 µm, 0.20086, is what the 265-bin grid gives (0.2009); the 133-bin grid gives 0.2083.</p>
+</div>
+<p>Each bin stores the mass spectrum $G_r$ of (4) at its grid mass, not a number density:</p>
+<div class="equation">
+$$G_k=3x_k^2\,n_m(x_k),\qquad L_k=G_k\,\Delta,\qquad N_k=\frac{G_k\,\Delta}{x_k}.\tag{47}$$
+<p>Mass per unit $\ln r$, times the bin width, is the bin’s mass per cubic metre; divided by one particle’s mass, its number per cubic metre.</p>
+</div>
+<p>Storing mass makes the total $L=\Delta\sum_kG_k$ a plain sum, the quantity the scheme must keep exactly. The charts show $G_r$ in g/m³, the code computes in kg/m³: a unit change, not a different normalisation.</p>
+<h2>One pair and one time step</h2>
+<p>Take bins $i\le j$ and a time step $\Delta t$ (1 s in the app). Each particle of bin $j$ clears the volume $K_{ij}\Delta t$ of bin-$i$ particles, giving $C_{ij}$ mergers per cubic metre. Each removes a particle of mass $x_i$ from bin $i$ and one of mass $x_j$ from bin $j$. In the stored variable:</p>
+<div class="equation">
+$$\begin{aligned}C_{ij}&amp;=K_{ij}\,N_i\,N_j\,\Delta t,\\ Q_{ij}&amp;=K_{ij}\,\Delta t\,\Delta\,G_i\,G_j=\frac{C_{ij}\,x_i\,x_j}{\Delta},\\ \delta G_i&amp;=-\frac{Q_{ij}}{x_j},\qquad \delta G_j=-\frac{Q_{ij}}{x_i}.\end{aligned}\tag{48}$$
+<p>$C_{ij}$ counts events per cubic metre in the step; $Q_{ij}$ (kg² m⁻³) is a convenient intermediate. Bin $i$ loses $C_{ij}x_i/\Delta$, bin $j$ loses $C_{ij}x_j/\Delta$.</p>
+</div>
+<p>The code visits every pair once per step, smaller bin first, and updates in place, so a bin drained by one pair offers less to the next; pair order and $\Delta t$ therefore matter a little, and both are tested. A pair within one bin uses half the rate and removes two particles per event; with gravity alone equal sizes have $K_{ii}=0$, so that branch serves test kernels.</p>
+<h2>Deposit a product and keep two moments</h2>
+<figure>
+[SVG Splitting a product between two bins]
+<figcaption>Figure 6. A product of mass x* between two grid masses. Most of its particles go to the nearer bin; the split keeps both the number and the mass of the products.</figcaption>
+</figure>
+<p>The product mass $x_*=x_i+x_j$ almost never lands on a grid mass; it lies between some $x_k$ and $x_{k+1}$. Of the $\nu=C_{ij}$ products per cubic metre, put $\nu_k$ in bin $k$ and $\nu_{k+1}$ in bin $k+1$, and demand that their number and their mass both come out right:</p>
+<div class="equation">
+$$\nu_k+\nu_{k+1}=\nu,\qquad x_k\nu_k+x_{k+1}\nu_{k+1}=x_*\nu\quad\Longrightarrow\quad \nu_{k+1}=f\nu,\ \ \nu_k=(1-f)\nu,\ \ f=\frac{x_*-x_k}{x_{k+1}-x_k}.\tag{49}$$
+<p>Two conditions, two unknowns: a lever rule. The nearer bin gets the larger share.</p>
+</div>
+<p>Derived This keeps the number of <em>products</em> and their mass. It still replaces particles of one mass by a mixture of two neighbouring masses, so the spectrum is smeared a little. Mass conservation and spectral accuracy are separate tests.</p>
+<h2>A limiter that keeps every bin non-negative</h2>
+<p>An explicit step can ask a bin for more than it holds. The smaller partner’s bin loses $Q/x_j$, so $Q\le G_ix_j$. For the larger partner the guard $Q\le G_jx_i$ is too strict when the product stays in its bin, the usual case for a big drop swallowing a small one: $(1-f)$ of the loss comes straight back, and the net loss is $fQ/x_i$. So</p>
+<div class="equation">
+$$Q_{ij}\le G_i\,x_j,\qquad Q_{ij}\le\begin{cases}G_j\,x_i/f,&amp;x_*\lt x_{j+1}\ \ (\text{product stays in bin }j),\\ G_j\,x_i,&amp;\text{otherwise.}\end{cases}\tag{50}$$
+<p>Never take from a bin more than it can give, counting what the product returns to it.</p>
+</div>
+<p>Rounding leftovers below zero are set to zero and counted (zero in the warm reruns, $10^{-48}$ of the mass in the cold). The limiter prevents negative densities; it cannot prove the step accurate.</p>
+<details>
+<summary>Worked example: one real pair in one step</summary>
+<p>The reference warm spectrum at 8 bins per doubling, 10 °C, 850 hPa, new kernel. Bin $i=72$: radius 8.00 µm, $x_i=2.145\times10^{-12}$ kg. Bin $j=128$: radius 40.32 µm, $x_j=2.745\times10^{-10}$ kg. Computed</p>
+<p>$K_{ij}=4.344\times10^{-10}$ m³/s, $N_i=1.549\times10^7$ m⁻³ (15.5 per cm³) and $N_j=6.31\times10^4$ m⁻³. In $\Delta t=1$ s, (48) gives $C_{ij}=424.8$ mergers per cubic metre: 0.67 % of the bin-$j$ drops each catch one bin-$i$ droplet. Then $Q_{ij}=8.66\times10^{-18}$ kg² m⁻³, $\delta G_i=-3.16\times10^{-8}$ and $\delta G_j=-4.04\times10^{-6}$ kg/m³.</p>
+<p>The product, $x_*=2.767\times10^{-10}$ kg, is only 0.8 % above $x_j$: it stays in bin 128 with $f=0.0863$. So 388.1 products per cubic metre return to bin 128 and 36.7 move to bin 129. The mass taken, $1.175\times10^{-7}$ kg/m³, equals the mass deposited to every printed digit. The collector cap of (50), $G_jx_i/f=1.49\times10^{-14}$, is far above $Q$: the limiter is idle here.</p>
+</details>
+<p>Computed The time-step test, rerun with the app’s code (warm reference, new kernel, 8 bins per doubling): with (50), the mass fraction at radius ≥ 40 µm after 30 minutes is 0.999474 at $\Delta t=2$ s and 0.999473 at 1, 0.5 and 0.25 s. With the naive guard $Q\le G_jx_i$, which allows $C_{ij}\le N_j$, one catch per partner bin per step, it is 0.951, 0.985, 0.998 and 0.9993. The earlier write-up reported this fault and its fix; the rerun confirms both.</p>
+<h2>Initial data also define the experiment</h2>
+<p>Each initial mode is a lognormal number distribution, a bell curve in $\ln r$, with geometric median radius $r_g$, geometric standard deviation $\sigma_g$ (a pure number above 1) and number concentration $\mathcal N_0$:</p>
+<div class="equation">
+$$\frac{d\mathcal N}{d\ln r}=\frac{\mathcal N_0}{\sqrt{2\pi}\,\ln\sigma_g}\exp\Big[-\frac{\ln^2(r/r_g)}{2\ln^2\sigma_g}\Big],\qquad L_0=\frac{4\pi\rho_p}{3}\,\mathcal N_0\,r_g^3\,e^{\frac92\ln^2\sigma_g}.\tag{51}$$
+<p>Half the particles are smaller than $r_g$. The mass is the third moment: a wider mode holds more water at the same number and median.</p>
+</div>
+<details>
+<summary>Derivation detail: the third moment of a lognormal</summary>
+<p>Put $y=\ln(r/r_g)$ and $\beta=\ln\sigma_g$. Then $r^3=r_g^3e^{3y}$, and $\int e^{3y}e^{-y^2/(2\beta^2)}dy/(\sqrt{2\pi}\beta)$ is the moment-generating function of a normal variable at 3, $e^{9\beta^2/2}$. Multiply by $\tfrac43\pi\rho_p\mathcal N_0r_g^3$.</p>
+</details>
+<p>Computed The reference cloud mode (300 cm⁻³, $r_g=8$ µm, $\sigma_g=1.25$) holds 0.8050 g/m³ and the collector mode (1 cm⁻³, 40 µm, 1.2) 0.3113 g/m³; the grid sums agree to six digits. The thesis specifies its populations by size ranges (table 5.2), and its figures 11 and 14 use normal distributions in radius, so the app’s reference condition is an illustrative replacement, not a rerun of those figures.</p>
+<h2>An exact test: the Golovin solution</h2>
+<p>No exact solution exists for the gravitational kernel, but one does for the artificial sum kernel $K=b\,(m+m')$ with an exponential start, $n_m(m,0)=(\mathcal N_0/\bar m)\,e^{-m/\bar m}$. It tests the whole spectrum, not just its mass. The Laplace transform $F(q,t)=\int_0^\infty e^{-qm}n_m\,dm$ turns the convolution in the gain term into a product, and leads (derivation below) to Golovin’s spectrum:</p>
+<div class="equation">
+$$n_m(m,t)=\frac{\mathcal N_0}{\bar m}\,\frac{1-\zeta}{u\sqrt\zeta}\,I_1\big(2u\sqrt\zeta\big)\,e^{-(1+\zeta)u},\qquad u=\frac{m}{\bar m},\quad \zeta=1-e^{-bLt}.\tag{52}$$
+<p>As $\zeta\to0$ it returns the exponential start; as $\zeta\to1$ the mass moves to ever larger particles. $I_1$ is a modified Bessel function.</p>
+</div>
+<details>
+<summary>Derivation detail: the transform, the characteristics and the inverse</summary>
+<p><strong>Transform.</strong> With $K=b(m'+m'')$ and $e^{-q(m'+m'')}=e^{-qm'}e^{-qm''}$, the gain becomes $\tfrac12b\cdot2\int m'n'e^{-qm'}dm'\int n''e^{-qm''}dm''=-bF\partial_qF$. The loss is $-b\int e^{-qm}n\,[m\mathcal N+L]\,dm=b\mathcal N\partial_qF-bLF$. Together:</p>
+<div class="equation">
+$$\partial_tF=b\,(\mathcal N-F)\,\partial_qF-bLF.\tag{53}$$
+<p>A first-order equation for the transform; mass stays $L=\mathcal N_0\bar m$ and the number follows (44).</p>
+</div>
+<p><strong>Rescale.</strong> Put $z=q\bar m$, $\zeta=1-e^{-bLt}$ and $H=F/\mathcal N$. The term $-bLF$ cancels against $H\,d\mathcal N/dt$, leaving $\partial_tH=b\mathcal N\bar m\,(1-H)\,\partial_zH$. Since $\mathcal N\bar m=Le^{-bLt}$ and $d\zeta/dt=bLe^{-bLt}$, the time derivative becomes a derivative in $\zeta$:</p>
+<div class="equation">
+$$\partial_\zeta H=(1-H)\,\partial_zH,\qquad H(z,0)=\frac{1}{1+z}.\tag{54}$$
+<p>$H$ is carried unchanged along the characteristics $z=z_0+(H-1)\zeta$.</p>
+</div>
+<p><strong>Solve.</strong> Along a characteristic $H=1/(1+z_0)$, so $z_0=1/H-1$. Insert into $z=z_0+(H-1)\zeta$ and multiply by $H$:</p>
+<div class="equation">
+$$\zeta H^2-(1+z+\zeta)\,H+1=0,\qquad H=\frac{(1+z+\zeta)-\sqrt{(1+z+\zeta)^2-4\zeta}}{2\zeta}.\tag{55}$$
+<p>Choose the root that stays finite as $\zeta\to0$; it returns $1/(1+z)$ there.</p>
+</div>
+<p><strong>Invert.</strong> The identity $\int_0^\infty e^{-Au}I_1(Bu)\,du/u=\big(A-\sqrt{A^2-B^2}\big)/B$, for $A\gt|B|$, with $A=1+z+\zeta$ and $B=2\sqrt\zeta$, shows that this root is the transform of (52). Here $I_1(a)=\sum_{k\ge0}(a/2)^{2k+1}/[k!\,(k+1)!]$.</p>
+</details>
+<p>Assumed The test uses Bott’s (1998) parameters: $b=1.5$ m³ kg⁻¹ s⁻¹, mean radius 10 µm ($\bar m=4.19\times10^{-12}$ kg), $L=1$ g/m³, so $\mathcal N_0=238.7$ cm⁻³. After 60 minutes $\zeta=0.99548$: 99.5 % of the particles have merged away and the mass peak has moved from about 13 µm to about 0.5 mm. The error $\varepsilon$ sums the absolute mass differences between the numerical and exact spectra, then divides by $L$. A deficit in one region and its matching excess elsewhere both count.</p>
+<details>
+<summary>Technical detail: the error measure on the grid</summary>
+<div class="equation">
+$$\varepsilon=\frac{1}{L}\int\big|G_{\rm num}-G_{\rm exact}\big|\,d\ln r\approx\frac{\Delta}{L}\sum_k\big|G_k-G_{\rm exact}(x_k)\big|.\tag{56}$$
+<p>Zero is perfect. If both spectra contain the mass $L$, mass that sits in the wrong place is counted twice, once where it is missing and once where it has turned up; so when the two totals agree, the deficit and the excess are equal, each $\varepsilon L/2$, and $\varepsilon/2$ is the smallest fraction of the mass that must be moved to turn one spectrum into the other. Two spectra with no overlap at all give $\varepsilon=2$.</p>
+</div>
+</details>
+<table>
+  <caption>Computed Golovin test after 60 minutes. “Stored” is the app’s retained check data from the earlier Python solver; “rerun” is the browser’s own <code>step()</code>, run for this page with the same parameters. Mass and number errors are relative to the exact $L$ and $\mathcal N(t)$.</caption>
+  <thead>
+<tr><th>s</th><th>Δt</th><th>ε stored</th><th>ε rerun</th><th>mass error (both)</th><th>number error stored / rerun</th></tr>
+</thead>
+  <tbody>
+<tr><td>2</td><td>1 s</td><td>0.4279</td><td>0.4252</td><td>−3.46 × 10⁻⁷</td><td>−0.0021 / −0.0017</td></tr>
+<tr><td>4</td><td>1 s</td><td>0.1504</td><td>0.1504</td><td>−4.18 × 10⁻⁷</td><td>−0.0020 / −0.0020</td></tr>
+<tr><td>8</td><td>1 s</td><td>0.0511</td><td>0.0511</td><td>−4.58 × 10⁻⁷</td><td>−0.0018 / −0.0018</td></tr>
+<tr><td>8</td><td>0.5 s</td><td>0.0497</td><td>0.0497</td><td>−4.58 × 10⁻⁷</td><td>−0.0014 / −0.0014</td></tr>
+  </tbody>
+</table>
+<p>The browser reproduces the stored values to every printed digit at 4 and 8 bins per doubling. At 2 bins they differ in the third digit; there 0.2 % of the mass reaches the overflow store, and the two codes may treat the grid’s top differently.</p>
+<details>
+<summary>Worked example: reading one Golovin error</summary>
+<p>At 8 bins per doubling and $\Delta t=1$ s, after 60 minutes: Computed $\varepsilon=0.0511$, a 5.11 % normalised absolute mismatch. By the reading of (56), about 2.56 % of the mass is in the wrong place, not 5.11 %. The numerical peak of $G$ is in the bin at 470 µm, the exact one at 456 µm: the scheme runs slightly ahead and broadens the peak. The number is 1.076 cm⁻³ against the exact 1.078. The mass error, $-4.58\times10^{-7}$, is fixed at the start: the grid begins at 1 µm and the exponential has about $5\times10^{-7}$ of its mass below that. During the hour the scheme itself changes the mass by $1.5\times10^{-13}$. Halving the step lowers $\varepsilon$ only to 0.0497, so the remaining error comes from the bins, not the steps.</p>
+</details>
+<figure>
+<img src="./fig/golovin.svg" alt="Golovin test: numerical mass spectra at 0, 20, 40 and 60 minutes lying on the exact dashed curves, the peak moving from about 13 micrometres to about half a millimetre.">
+<figcaption>Figure 7. Golovin test at 8 bins per doubling: numerical spectra (solid) against the exact solution (dashed), from the earlier solver’s stored figure.</figcaption>
+</figure>
+<div class="model-note correction">
+<h3>Correction to the earlier write-up</h3>
+<p>The earlier write-up observed that the error falls by about three per doubling of resolution and called the scheme “first-order accurate in the bin width”. First order would mean a factor two. The factors are $0.4252/0.1504=2.83$ and $0.1504/0.0511=2.94$, an observed order of $\log_2 2.9\approx1.5$ in this test: better than first order, and a property of this benchmark, not a proven rate for cloud kernels.</p>
+</div>
+<p>A variant with Bott’s exponential sub-grid flux, also in the stored data, has a smaller spectrum error at 8 bins (0.0394) but number errors up to +0.047; the app keeps the split (49), which keeps the number of products exactly. A Golovin comparison probes spectral transport and conservation; it does not validate a cloud collision kernel.</p>
+</div>
+<div class="lesson">
+    Chapter 10
+<h1>Ice and fragmentation</h1>
+<p>Follow the mass through every reaction channel, then see what the fragment rule assumes and what it does.</p>
+<p>Shake ice cubes in a glass and small chips break off. Each chip is a new piece of ice made from old ice: the number of pieces goes up, the mass of ice does not. That is collisional ice multiplication. The hard part is the rule for how much breaks off, and how often.</p>
+<h2>Two phases on one grid</h2>
+<p>The app keeps a liquid and an ice spectrum on the same mass grid (46); the same mass has a larger radius as ice. Assumed In cold mode the initial spectrum is split bin by bin into liquid and ice with one fraction, the thesis’s fit for the supercooled liquid fraction (thesis equation 1):</p>
+<div class="equation">
+$$F(T_C)=\sum_{j=0}^{5}a_j\,T_C^{\,j}\ \ (\%),\qquad a_j=(98.9,\ 4.291,\ -0.318,\ -0.02623,\ -6.398\times10^{-4},\ -5.279\times10^{-6}).\tag{57}$$
+<p>A fitted curve in the Celsius temperature $T_C$, for −40 to 0 °C. Colder clouds start with less liquid.</p>
+</div>
+<p>Computed $F=94.3$ % at −1 °C, 44.55 % at −10 °C, 10.2 % at −20 °C; at −40 °C the polynomial gives −0.14 %, and the app clamps the fraction to 0–1. The cold reference cloud (−10 °C, 600 hPa) starts with 134.1 liquid and 166.9 ice particles per cm³: a prescribed split, not a freezing rate. Warm mode starts all liquid.</p>
+<h2>The reaction channels</h2>
+<div class="reading-table">
+<table>
+  <caption>What each pair event does in the app. Each kernel is (6) with the fall speeds of the two phases.</caption>
+  <thead>
+<tr><th>Pair</th><th>Efficiencies</th><th>Product</th><th>Number</th></tr>
+</thead>
+  <tbody>
+<tr><td>liquid + liquid</td><td>$E_{\rm coll}$ water-on-water table; $E_{\rm coal}$ from (35)</td><td>one liquid drop</td><td>−1 per event</td></tr>
+<tr><td>liquid + ice</td><td>$E_{\rm coll}$ from the table for whichever is larger; $E_{\rm coal}=1$</td><td>one ice particle: the liquid freezes at once, completely</td><td>−1 per event</td></tr>
+<tr><td>ice + ice</td><td>$E_{\rm coll}$ ice-on-ice table; $E_{\rm coal}=1$</td><td>one ice remnant plus fragments if $\lambda\gt0$</td><td>$\nu_f-1$ per event</td></tr>
+  </tbody>
+</table>
+</div>
+<p>Assumed Spherical ice of fixed density, complete freezing on contact, perfect sticking and no latent heat are modelling choices. Real ice comes as plates, columns and aggregates that fall and collide differently; the results are for the thesis’s “ice spheres”.</p>
+<h2>The fragment rule</h2>
+<figure>
+[SVG An ice–ice event with fragments]
+<figcaption>Figure 8. The app’s ice–ice event. The larger incoming particle gives up the fraction λ of its mass as fragments of fixed mass; the rest merges with the smaller one.</figcaption>
+</figure>
+<p>Assumed In an ice–ice event with $m_b\ge m_a$, the app removes a fixed fraction $\lambda$ of $m_b$ and turns it into fragments of mass $m_f$, that of a 5 µm ice sphere ($4.71\times10^{-13}$ kg). The rest merges:</p>
+<div class="equation">
+$$m_a+m_b\longrightarrow m_{\rm rem}+\nu_f\,m_f,\qquad m_{\rm rem}=m_a+(1-\lambda)\,m_b,\qquad \nu_f=\frac{\lambda\,m_b}{m_f}.\tag{58}$$
+<p>Mass in equals mass out. The number changes by $\nu_f-1$: two particles in, one remnant and $\nu_f$ fragments out. $\nu_f$ is an expected number, so it need not be whole.</p>
+</div>
+<details>
+<summary>Technical detail: the same rule on the grid</summary>
+<p>For bins $i\le j$ with $x_*=x_i+x_j$, the code splits the mass taken in an ice–ice step between remnant and fragments:</p>
+<div class="equation">
+$$\phi_f=\frac{\lambda\,x_j}{x_i+x_j},\qquad \text{remnant at }x_*(1-\phi_f)\text{ with share }1-\phi_f,\qquad \text{fragments at }m_f\text{ with share }\phi_f.\tag{59}$$
+<p>The remnant is deposited by (49) at its own, smaller mass; the fragments go to the bin of $m_f$ or to the passive store.</p>
+</div>
+</details>
+<p>Two consequences follow from (58). Derived An event raises the number only when $\nu_f\gt1$, that is when the larger particle exceeds $5\ \mu\text{m}\times\lambda^{-1/3}$: 50 µm for $\lambda=0.001$, 29 µm for 0.005, 23 µm for 0.01. A 100 µm ice sphere at $\lambda=0.001$ sheds 8 fragments per event. And an event <em>shrinks</em> the larger particle when it gains less than it sheds, $m_a\lt\lambda m_b$: for $\lambda=0.001$, whenever the partner’s radius is below a tenth of its own. Most partners are cloud-sized, so here large ice is ground down by its own collisions. A toy shows how fast. If a particle neither grows nor meets a changing population, and loses $\lambda$ in each of $n$ events,</p>
+<div class="equation">
+$$\frac{m_n}{m_0}=(1-\lambda)^n\approx e^{-\lambda n}.\tag{60}$$
+<p>The fraction kept falls exponentially in $\lambda n$, the fraction per event times the number of events.</p>
+</div>
+<details>
+<summary>Worked example: how many ice–ice events does a 100 µm ice sphere have?</summary>
+<p>The cold reference cloud at −10 °C and 600 hPa at the first moment, 8 bins per doubling, new kernel. Computed An ice particle in the bin at 99.3 µm has 2.39 ice–ice events per second, 143 per minute, plus 1.94 liquid–ice events per second. In the toy (60), one minute would leave 0.87 of its mass at $\lambda=0.001$, 0.49 at 0.005 and 0.24 at 0.01; ten minutes would leave 0.24, $7.5\times10^{-4}$ and $5\times10^{-7}$. The toy ignores what the particle collects and the thinning of its partners, so it is not the full history. It shows the scale: at hundreds of events per minute, a tenth of a percent per event is not small.</p>
+</details>
+<div class="model-note correction">
+<h3>Correction: this is not the thesis’s loss rule</h3>
+<p>The thesis discusses random fractional loss and passive fragments in §5.1 (pp. 17–18), and its appendix (p. 45) implements <code>dMminus = M × random_fraction × dt</code>, a drain in time. The app removes a fixed $\lambda$ per ice–ice event into fragments of fixed mass. A fraction per collision is not a rate per second; the two agree only for a constant, known collision rate. The earlier remodel write-up called the app’s rule “as assumed in §5.1 of the thesis”. The cold reference curves test the app’s event-based closure, not the thesis’s random time-based model.</p>
+</div>
+<h2>Active and passive fragments</h2>
+<p>Fragments <strong>in the race</strong> enter the ice spectrum at the bin of $m_f$ and collide like any ice. <strong>Passive</strong> fragments, as in the thesis, go to a separate store and are not counted in the ice number. Computed A 5 µm ice fragment relaxes in 0.30 ms at −10 °C and settles at 3.0 mm/s, about 11 m per hour, so passivity is not a consequence of slow settling. It is a population assumption.</p>
+<h2>What the rule does in the reference runs</h2>
+<table>
+  <caption>Computed Cold reference cloud (−10 °C, 600 hPa, 44.55 % liquid, new kernel, 8 bins per doubling), from the retained arrays. Where rerun (λ = 0 and 0.001), the app’s code reproduces the stored ice numbers to their stored digits.</caption>
+  <thead>
+<tr><th>λ</th><th>fragments</th><th>ice cm⁻³ at 0 / 20 / 60 min</th><th>largest F<sub>40</sub> (minute)</th><th>F<sub>40</sub> at 60 min</th></tr>
+</thead>
+  <tbody>
+<tr><td>0</td><td>—</td><td>166.9 / 2.0 / 0.0005</td><td>1.000 (48)</td><td>1.000</td></tr>
+<tr><td>0.001</td><td>race</td><td>166.9 / 1642 / 2143</td><td>0.474 (7)</td><td>0.041</td></tr>
+<tr><td>0.005</td><td>race</td><td>166.9 / 1391 / 1870</td><td>0.312 (5)</td><td>0.022</td></tr>
+<tr><td>0.01</td><td>race</td><td>166.9 / 1272 / 1729</td><td>0.241 (3)</td><td>0.002</td></tr>
+<tr><td>0.001</td><td>passive</td><td>166.9 / 24.8 / 4.3</td><td>0.514 (9)</td><td>0.093</td></tr>
+<tr><td>0.005</td><td>passive</td><td>166.9 / 54.1 / 16.9</td><td>0.354 (8)</td><td>0.101</td></tr>
+<tr><td>0.01</td><td>passive</td><td>166.9 / 74.4 / 29.5</td><td>0.273 (8)</td><td>0.114</td></tr>
+  </tbody>
+</table>
+<p>Without splintering, ice collects liquid and itself, the ice number falls, and 99.4 % of the mass is at radius ≥ 40 µm after 20 minutes. With splintering the picture turns over. In the race runs the ice number rises eight- to tenfold by 20 minutes and keeps rising slowly; the mass fraction at radius ≥ 40 µm peaks in the first ten minutes and then falls almost to nothing. Computed After 60 minutes, ice of radius 6 µm or less holds 90 %, 77 % and 71 % of the condensed mass for $\lambda=0.001$, 0.005 and 0.01; with passive fragments the passive store holds 90 %, 86 % and 80 %. Most of the water ends up as fragments.</p>
+<div class="model-note correction">
+<h3>Correction to the earlier write-up</h3>
+<p>The earlier write-up said the ice number rises “to about 2000 cm⁻³ in 20 minutes for all three λ and stays there”. The retained arrays give 1272–1642 cm⁻³ at 20 minutes, still rising to 1729–2143 at 60. It also said that with passive fragments “the rain fraction behaves the same way”. Early on it does; after an hour the passive runs keep 9–11 % of the mass at radius ≥ 40 µm, against 0.2–4 % in the race runs, where fragments keep feeding ice–ice events.</p>
+</div>
+<p>The passive choice hides the multiplication in the ice number but not its cause. A fixed fraction per event, whatever the partner’s size, drives these results. A yield scaling with the collision energy or the partner’s mass would be a different closure needing physical evidence; conservation cannot choose between them, and the machinery would take either.</p>
+</div>
+<div class="lesson">
+    Chapter 11
+<h1>Interpreting outputs</h1>
+<p>Define the observable, its denominator and its exclusions before reading a curve.</p>
+<p>A thermometer reading means nothing until you know where the thermometer hangs. Each output is a definite sum over the grid, with a definite denominator, and each leaves something out. Read the definition first.</p>
+<div class="reading-table">
+<table>
+  <caption>The app’s displayed outputs and their actual definitions.</caption>
+  <thead>
+<tr><th>Output</th><th>Definition</th><th>Meaning and limits</th></tr>
+</thead>
+  <tbody>
+<tr><td>mass spectrum</td><td>$G_r$ per unit $\ln r$, liquid and ice separately, in g/m³</td><td>The area under it is in-grid mass, not number.</td></tr>
+<tr><td>number concentration</td><td>$\Delta\sum_kG_k/x_k$, per phase, in cm⁻³</td><td>Interacting particles only; passive fragments and overflow excluded.</td></tr>
+<tr><td>40 µm threshold fraction $F_{40}$</td><td>in-grid mass at radius ≥ 40 µm over the initial total mass</td><td>A chosen size diagnostic, not a rain rate.</td></tr>
+<tr><td>$t_{50},\ t_{90}$</td><td>first recorded minute with $F_{40}\ge0.5$ or $0.9$</td><td>Depends on initial spectrum, kernel, closures, grid and sampling.</td></tr>
+<tr><td>mass-balance drift</td><td>largest $|$(in-grid + overflow + passive)$/L_0-1|$</td><td>Checks bookkeeping; says nothing about spectral or physical error.</td></tr>
+  </tbody>
+</table>
+</div>
+<h2>The 40 µm threshold</h2>
+<div class="equation">
+$$F_{40}(t)=\frac{\Delta}{L_0}\sum_{k}\Big[G^{\rm liq}_k(t)\,\mathbb 1\{r_w(x_k)\ge40\ \mu\text{m}\}+G^{\rm ice}_k(t)\,\mathbb 1\{r_i(x_k)\ge40\ \mu\text{m}\}\Big].\tag{61}$$
+<p>Mass in bins whose particles are at least 40 µm in radius, as water or as ice, over the starting mass. $\mathbb 1\{\cdot\}$ is 1 when the condition holds, else 0.</p>
+</div>
+<div class="equation">
+$$t_{50}=\min\{t\in\{0,1,2,\ldots\}\ \text{min}:F_{40}(t)\ge0.5\},\qquad t_{90}=\min\{t:F_{40}(t)\ge0.9\}.\tag{62}$$
+<p>The fraction is recorded once a minute, so threshold times are whole minutes, rounded up to the next record.</p>
+</div>
+<p>A rise of $F_{40}$ means that more of the initial water mass sits in the selected large-particle bins. It need not mean that more large particles exist: a few large drops can hold the same mass as many smaller ones. Nor does a falling curve necessarily mean droplets shrank; mass can also leave through the grid’s top edge, as the section of that name below shows.</p>
+<p>The solver calls $F_{40}$ “rain”. Its radius of 40 µm is a diameter of 80 µm, a drizzle-sized drop. The model has no updraft and no cloud depth, so it cannot say whether such drops reach the ground. The interface calls it the 40 µm growth threshold; the stored values keep exactly this definition.</p>
+<p>Computed $F_{40}$ does not start at zero: 0.2009 in the warm reference cloud on the 8-bins grid, because the collector mode is mostly above 40 µm, and 0.2087 in the cold one, where ice has a 3.6 % larger radius. The start depends on the grid too: 0.2226, 0.2083 and 0.2009 at 2, 4 and 8 bins per doubling. Simulate defaults to 4 and Results shows 8, so the two do not match exactly.</p>
+<h2>The grid’s top edge</h2>
+<p>Products heavier than the last bin go to overflow. $F_{40}$ leaves overflow out while the inventory (45) keeps it, so a late fall of $F_{40}$ can be a grid-edge effect with mass conserved. Computed In the warm run with the new kernel, $F_{40}$ is 0.9995 at 30 minutes and 0.994, 0.985, 0.970, 0.948 at 45, 50, 55, 60 minutes, while overflow grows from $6\times10^{-6}$ to 0.006, 0.015, 0.030 and 0.052. At 60 minutes $0.9476+0.0524=1.0000$: the biggest drops passed 2 mm. Enlarge the grid or watch the overflow before calling such a fall physical.</p>
+<h2>Comparing models fairly</h2>
+<p>The kernel changes encounter speeds and efficiencies; the population equation changes which events are allowed. Match the initial data and change one ingredient at a time, as chapter 7 does. The retained arrays are snapshots of the earlier solver; rerun with the app’s code, the SCE runs give $F_{40}$ within $5\times10^{-6}$ of the stored values at every minute. They do not certify conclusions for other clouds.</p>
+<p>The earlier write-up also quoted a single-mode benchmark, “W1”, in which the thesis kernel reached the threshold in 11 minutes and the new kernel in 43. Its data are not among the app’s retained arrays and its initial spectrum is not specified fully enough to rerun, so this page does not repeat those numbers.</p>
+</div>
+<div class="lesson">
+    Chapter 12
+<h1>Evidence map and sources</h1>
+<p>What is derived, what is computed, what is assumed, and where each piece comes from.</p>
+<div class="reading-table">
+<table>
+  <caption>A map of the evidence behind each part of the argument. Equation numbers refer to this page.</caption>
+  <thead>
+<tr><th>Ingredient</th><th>Status</th><th>Where</th></tr>
+</thead>
+  <tbody>
+<tr><td>Homogeneous box, spheres, encounters by settling only; no condensation, turbulence, charge, break-up, updraft or latent heat</td><td>Assumed model boundary</td><td>Chapter 1</td></tr>
+<tr><td>Densities, Jacobians and moments</td><td>Derived</td><td>Chapter 2, (1)–(4)</td></tr>
+<tr><td>Encounter tube, kernel, growth rate, pair rate</td><td>Derived; thesis §3, eqs (3)–(10)</td><td>Chapter 3, (5)–(8)</td></tr>
+<tr><td>Stokes drag and its 6π, relaxation, Reynolds self-check, Davies-number balance</td><td>Derived for creeping flow; thesis §4.2, eqs (14)–(20)</td><td>Chapter 4, (9)–(19)</td></tr>
+<tr><td>Beard’s three-regime fit, slip factor, Sutherland viscosity, ideal-gas air</td><td>Assumed closures; within 2.07 % of Gunn and Kinzer for d ≥ 0.3 mm, −7.57 % at 0.1 mm</td><td>Chapter 4, (20)–(23)</td></tr>
+<tr><td>Partner equation, Stokes number, St<sub>c</sub> = 1/12 in potential flow, efficiency from the grazing trajectory</td><td>Derived; St<sub>c</sub> ≈ 1.21 in creeping flow quoted from the literature</td><td>Chapter 5, (24)–(28)</td></tr>
+<tr><td>Finite-start flux, Langmuir blend and the stored collision-efficiency tables</td><td>Assumed; precomputed input without its generator or air conditions</td><td>Chapter 5, (29)–(31)</td></tr>
+<tr><td>Relative kinetic energy and surface energy</td><td>Derived</td><td>Chapter 6, (32)–(34)</td></tr>
+<tr><td>E<sub>coal</sub> = exp(−1.15 W<sub>E</sub>) and the surface-tension fit</td><td>Assumed; thesis §4.3.1, eqs (21)–(24), and eq (13)</td><td>Chapter 6, (35)–(36)</td></tr>
+<tr><td>GCE, SCE, jump expansion recovering the GCE</td><td>Derived balances; the expansion is a controlled approximation</td><td>Chapter 7, (37)–(41)</td></tr>
+<tr><td>Moment identities and the mass inventory</td><td>Derived; closes to 10⁻¹³–5 × 10⁻¹¹ in the reruns</td><td>Chapter 8, (42)–(45)</td></tr>
+<tr><td>Grid, pair update, two-moment deposit, limiter</td><td>Derived; accuracy computed (Golovin ε = 0.0511 at s = 8, order about 1.5; time-step test)</td><td>Chapter 9, (46)–(50), (52)–(56)</td></tr>
+<tr><td>Lognormal initial modes</td><td>Assumed scenario, replacing the thesis’s populations</td><td>Chapter 9, (51)</td></tr>
+<tr><td>Supercooled liquid fraction, freezing on contact, ice spheres</td><td>Assumed; thesis equation (1)</td><td>Chapter 10, (57)</td></tr>
+<tr><td>Fixed fraction λ per ice–ice event, 5 µm fragments, race or passive</td><td>Assumed app closure; differs from the thesis appendix (p. 45)</td><td>Chapter 10, (58)–(60)</td></tr>
+<tr><td>Warm and cold reference arrays</td><td>Computed earlier; SCE runs reproduced to 5 × 10⁻⁶ in F<sub>40</sub></td><td>Chapters 7, 10 and 11</td></tr>
+<tr><td>40 µm threshold and the times t<sub>50</sub>, t<sub>90</sub></td><td>Assumed diagnostic</td><td>Chapter 11, (61)–(62)</td></tr>
+  </tbody>
+</table>
+</div>
+<h2>What the model supports</h2>
+<p>Derived Stokes’ law is not self-consistent above a radius of about 40 µm. Computed At 200 µm it is 3.2 times too fast, and the error enters coalescence squared; collectors below 20 µm collect with efficiencies under 0.001, a bottleneck absent from the thesis kernel; the SCE reaches the 90 % threshold about a quarter sooner than the GCE with either kernel, while the kernel moves it more. Assumed The ice results follow the adopted fragment rule, which grinds large ice down and puts most of the water into fragments within an hour; a different rule would give different curves on the same machinery.</p>
+<div class="model-note">
+<h3>A defensible statement of a result</h3>
+<p>State the initial spectrum, the model, the observable and the check, then the narrow conclusion. This is supported: “For a homogeneous box at 10 °C and 850 hPa holding 300 droplets per cm³ at 8 µm and 1 per cm³ at 40 µm, with the drag-balance fall speed, the stored collision efficiencies and the thesis’s coalescence law, the SCE on 8 bins per doubling first puts 50 % of the initial mass in particles of radius ≥ 40 µm at minute 6 and 90 % at minute 14; the thesis kernel gives minutes 3 and 5. The mass inventory closes to $10^{-13}$.”</p>
+<p>These are not supported by this model: “a warm cloud rains after 14 minutes”, which needs cloud dynamics, condensation and observations; “ice splintering multiplies ice tenfold in real clouds”, which rests on the adopted fragment rule; and “the thesis’s growth times were three times too short in nature”, which compares two models, not a model with a cloud.</p>
+</div>
+<h2>Sources</h2>
+<p><strong>Primary local reference.</strong> Numa Koudsie, <em>Collisional Ice Multiplication Processes in Clouds</em>, Bachelor thesis, Leipzig University / TROPOS, dated 15 December 2022. Page references use the printed numbering of the 53-page PDF. It provides the definitions, derivations and original assumptions; it is not republished here.</p>
+<p><strong>The app’s own code and data.</strong> Every Computed number on this page was obtained on 14 October 2026 by running the app’s TypeScript physics (<code>props.ts</code>, <code>fallspeed.ts</code>, <code>kernel.ts</code>, <code>sce.ts</code> and the logic of <code>worker.ts</code>) under Node, or read from its stored data (<code>etab_warm.json</code>, <code>etab_cold.json</code>, <code>reference.json</code>, <code>checks.json</code>). Values attributed to the earlier solver are those stored data; the program that made the collision tables is not part of the app.</p>
+<p><strong>Inherited attributions.</strong> The earlier implementation attributes ingredients to the following works. These attributions identify inherited inputs; this page did not re-audit the papers.</p>
+<ul>
+<li>Beard, K. V. (1976). Terminal velocity and shape of cloud and precipitation drops aloft. <em>J. Atmos. Sci.</em> 33, 851–864. Coefficients as implemented in <code>disdrodb</code> (disdrodb.readthedocs.io).</li>
+<li>Gunn, R., Kinzer, G. D. (1949). The terminal velocity of fall for water droplets in stagnant air. <em>J. Meteorol.</em> 6, 243–248.</li>
+<li>Langmuir, I. (1948). The production of rain by a chain reaction in cumulus clouds at temperatures above freezing. <em>J. Meteorol.</em> 5, 175–192.</li>
+<li>Bott, A. (1998). A flux method for the numerical solution of the stochastic collection equation. <em>J. Atmos. Sci.</em> 55, 2284–2293.</li>
+<li>Golovin, A. M. (1963). The solution of the coagulation equation for cloud droplets in a rising air current. <em>Izv. Geophys. Ser.</em> 5, 482–487.</li>
+<li>Critical Stokes numbers: Phillips, C. G., Kaye, S. R. (1999), as quoted in arXiv:1708.03198.</li>
+</ul>
+<p>The argument is now closed. Geometry gives an encounter volume; fall speed, airflow and surface energy decide which encounters become mergers; counting events gives the population balances, whose moments show what is conserved; the grid approximates them with a measured accuracy; the ice channels add a fragment rule whose consequences are computed; the diagnostics are defined sums over the grid. What remains uncertain belongs to the adopted closures and the omitted physics, not to hidden steps.</p>
+</div>
+</div>
+</div>
+</div>
+<p>Built on the Bachelor thesis <em>Collisional Ice Multiplication Processes in Clouds</em> (N. Koudsie, Leipzig 2022).</p>
+<p>Model: homogeneous collection box · SCE with two-bin remapping · empirical fall-speed closure and stored collision efficiencies. The 40 µm cutoff is a size diagnostic.</p>
