@@ -43,7 +43,7 @@ Thermal noise: surface energy of a 10 µm drop 9.0 × 10⁻¹¹ J = 2.3 × 10¹�
 3. [x] Gate 3: round 1 failed honest/sourced/readable (32 objections); all answered (`gate3-answers-r1.md`); round 2 PASS on all six
        thresholds (`skeptic-G3-r1.md`, Round 2), its five minor items and the one partial fix applied after.
 4. [x] Old app bundle `static/` removed (2.2 MB); old `fig/` kept for the German and Arabic pages.
-5. [ ] Open the PR into main (NOT merged).
+5. [x] PR https://github.com/Numa1997/SiteTest/pull/33 open, not merged (follow-up to #32, which Numa merged at 184f3bf).
 
 ## Done, with evidence
 
