@@ -168,6 +168,50 @@ regenerated automatically; retake them when the pictures change.
 **Verified on 21 October 2026**, with the copy served from this repository's build under its own policy: 33 of 33 browser
 checks, 52 of 52 theory numbers, no request outside the site, the tab bar in the site's own Instrument Serif and IBM Plex Sans.
 
+### The data panel of the two simulations (since 23 October 2026)
+
+The ideal press and the servo press each carry the site's data panel ([scripts/datalog.md](scripts/datalog.md)), the same one as
+the ten simulations and Iron, Cotton and the Head. Each page is its own source, so the store and the panel's hooks are written into
+it, after the page's user-interface code: `declareStore()`, `storeRun()` (and on the servo page `storeAnalysis()`), `setNow()` and
+`Sim.data`.
+
+**Loading the shared files from inside a frame.** Each page sits in an `iframe srcdoc`, whose address for relative links is the
+study's own (`portfolios/hydraulics/index.html`), so `../../scripts/…` reaches the site's `sim.js`, `dataset.js`, `datalog.js` and
+`../../styles/…` its `paper.css` and `data.css`. A three-line loader in each page chooses the folder: two levels up when the
+address ends in `/portfolios/hydraulics/…`, `../../public/` when the page is opened from `portfolios-src/hydraulics/` on disk, and
+nothing elsewhere (the `blob:` fallback frame), where the page runs as before without a panel. The scripts are written into the page
+with `document.write` while it is being read, so they keep their order: `sim.js`, `dataset.js`, the page, `datalog.js`. `sim.js`
+loads a walkthrough only for an element that names one in `data-walk`, so the ideal press's chart `canvas#walk` (the pressure walk)
+no longer makes it request `walk/null.js`.
+
+**What is stored.** Ideal press (92 variables): the seven sliders, the eleven constants of `CONST`, ten numbers of `makeModel()`
+(areas, the lever $r$, $F_{1,\min}$, the level stiffness $k$, $\mu'$, $\mu(0)$), the run's results (outcome, departure, stroke stop,
+impact speed and lost energy, highest and lowest pressure, the two self-tests), the 18 recorded series over one sample per 1 ms plus
+$x_2 = r x$, $F_2 = p_2 A_2$ and Pascal's $F_1/r$, the sample on screen, and the drawing (scale, origin, piston rows, dial radius,
+centres, full scales and the five needle angles). Servo press: the sixteen sliders, the constants of `C0`, thirteen numbers of
+`makePlant()`, the cycle's results, the 28 recorded series per controller sample plus the two summed losses shown in the tiles, and for
+each loop the margins, the operating point, the frequency response (500 frequencies: $|L|$, dB, phase, Nyquist real and imaginary
+parts) and the open- and closed-loop poles with their frequencies and damping ratios, the sample on screen and the drawing (scale,
+dial centres, radius, full scales, the five needle angles).
+
+**What reads it.** The scene, the dials, the plots, the readouts, the status lines and chips, and on the servo page the Bode and Nyquist
+plots and the tables of margins and poles read the store's arrays and values (the z-plane plot draws the same closed-loop poles from
+the analysis result the store was filled from); the arithmetic left in the drawing turns metres, pascals and
+newtons into pixels and display units. The servo page's nine worked solutions compute their own small figures when opened; those
+numbers are not in the store, and the panel's paragraph says so.
+
+**Check.** A slider value against the slider; a constant against the code; a derived value from its formula with the stored inputs;
+every recorded series and every result by running `simulate()` again from the stored parameters (ideal press: a few milliseconds;
+servo press: the whole cycle and both analyses on this page, 1.6 s in Node, cached by the parameters); the drawing numbers from the
+layout formula and the stored inputs. **Read-back:** the five needles of each dial strip (a dark pixel 0.45 r from the hub along the
+stored angle) and, on the ideal press, the lower edges of both pistons at their stored rows. **Read values:** a click on a dial pins
+its value and needle angle, on a piston (ideal) or the ram and platen (servo) pins the motion, pressures and forces of the sample on
+screen, on the oil (ideal) pins the pressure there and its parts. **One round** is one run (ideal) or one press cycle (servo), from
+$t = 0$; Record plays it from the start.
+
+**The ideal press's pressure probe now needs a click.** It used to follow the mouse across the running figure, against the site's rule
+that nothing on a running figure reacts to a pointer merely crossing it; a click or tap places it, a click outside the oil removes it.
+
 ## How to update a copy of an app
 
 1. Change the project in its own app (`droplet-collection-yl7l26` or `rotor-pendula-gafw0f`) and check it there.

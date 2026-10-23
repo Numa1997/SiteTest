@@ -140,14 +140,14 @@ h1 em { color: var(--wine); }
 .chips { display: flex; flex-wrap: wrap; gap: 8px; }
 .chip { font: 500 12.5px/1.2 var(--f-mono); border: 1px solid var(--rule); background: var(--paper); border-radius: 999px; padding: 5px 11px; white-space: nowrap; }
 .chip b { color: var(--wine); font-weight: 500; }
-h2 { font-family: var(--f-display); font-weight: 400; font-size: 30px; line-height: 1.05; margin: 2px 0 0; color: var(--wine-deep); text-wrap: balance; }
-h3 { font-family: var(--f-display); font-weight: 400; font-size: 23px; margin: 24px 0 6px; color: var(--wine-deep); }
+:where(h2:not(.dp *)) { font-family: var(--f-display); font-weight: 400; font-size: 30px; line-height: 1.05; margin: 2px 0 0; color: var(--wine-deep); text-wrap: balance; }
+:where(h3:not(.dp *)) { font-family: var(--f-display); font-weight: 400; font-size: 23px; margin: 24px 0 6px; color: var(--wine-deep); }
 .box { background: var(--panel); border: 1.5px solid var(--line); border-radius: var(--radius); padding: 16px; min-width: 0; box-shadow: var(--shadow); }
 .box-head { display: flex; justify-content: space-between; align-items: flex-end; gap: 10px 16px; flex-wrap: wrap; margin-bottom: 12px; }
 .grid { display: grid; gap: 18px; grid-template-columns: minmax(0, 1.8fr) minmax(0, 1fr); align-items: start; }
 .col { display: grid; gap: 18px; min-width: 0; }
 @media (max-width: 980px) { .grid { grid-template-columns: minmax(0, 1fr); } }
-canvas { display: block; width: 100%; }
+:where(canvas:not(.dp *):not(.dp-overlay)) { display: block; width: 100%; }
 .num, .mono { font-family: var(--f-mono); font-variant-numeric: tabular-nums; }
 .note { font-size: 13px; color: var(--muted); margin: 8px 0 0; }
 
@@ -163,7 +163,7 @@ canvas { display: block; width: 100%; }
 .stepper button.now { background: var(--wine); border-color: var(--wine-deep); color: #fbf3e8; }
 .stepper button.now::before { background: #fbf3e8; box-shadow: 0 0 0 3px rgba(251, 243, 232, 0.35); }
 .stepper button:hover { border-color: var(--line); }
-#scene { border: 1px solid var(--line); border-radius: 8px; background: var(--paper); }
+#scene { display: block; width: 100%; background: var(--paper); }
 .legend { display: flex; flex-wrap: wrap; align-items: center; gap: 6px 12px; margin-top: 10px; font-size: 13px; color: var(--muted); }
 .cbar { width: 150px; height: 10px; border-radius: 999px; border: 1px solid var(--line); background: linear-gradient(90deg, rgb(246,232,196), rgb(222,146,70) 45%, rgb(92,14,34)); }
 .swatch { display: inline-block; width: 14px; height: 10px; border-radius: 3px; border: 1px solid var(--line); vertical-align: -1px; background: rgb(62,104,135); }
@@ -173,9 +173,9 @@ canvas { display: block; width: 100%; }
 
 /* transport */
 .transport { display: flex; flex-wrap: wrap; align-items: center; gap: 10px 12px; }
-button, select { font: 500 14px var(--f-text); color: var(--ink); background: var(--paper); border: 1.5px solid var(--line); border-radius: 999px; padding: 7px 15px; cursor: pointer; }
+:where(button:not(.dp *):not(.dp-read *):not(.dp-readbtn):not(.dp-tab), select:not(.dp *)) { font: 500 14px var(--f-text); color: var(--ink); background: var(--paper); border: 1.5px solid var(--line); border-radius: 999px; padding: 7px 15px; cursor: pointer; }
 select { border-radius: 8px; max-width: 100%; }
-button:hover { background: #f1e6d2; }
+:where(button:not(.dp *):not(.dp-read *):not(.dp-readbtn):not(.dp-tab)):hover { background: #f1e6d2; }
 button:focus-visible, input:focus-visible, select:focus-visible { outline: 2px solid var(--wine); outline-offset: 2px; }
 button.primary { background: var(--wine); color: #fbf3e8; border-color: var(--wine-deep); min-width: 92px; }
 button.primary:hover { background: var(--wine-deep); }
@@ -283,7 +283,23 @@ input[type=range]::-moz-range-thumb { width: 13px; height: 13px; border-radius: 
   .crosslinks a { padding-block: 9px; }
 }
 
+
+/* the tokens of the site's data panel (styles/data.css), in this study's colours; the element rules above are kept off the panel */
+:root { --accent: var(--wine); --accent-dark: var(--wine-deep); --accent-rose: #e2a2aa; --card: var(--paper); --card-soft: var(--panel); --ink-2: #3f2c23; --ink-3: #5c4839;
+  --rule-soft: #e8dcc6; --tan: #efe4c8; --tan-ink: #7a4b12; --sans: var(--f-text); --mono: var(--f-mono); --serif: var(--f-display); }
+#stage { position: relative; border: 1px solid var(--line); border-radius: 8px; overflow: hidden; background: var(--paper); }
+#stage > #scene { border: 0; border-radius: 0; }
+#stage > canvas.dp-overlay { position: absolute; inset: 0; width: 100%; height: 100%; display: block; pointer-events: none; z-index: 5; }
+#stage.dp-reading { cursor: crosshair; touch-action: none; user-select: none; -webkit-user-select: none; }
+.stage__cap { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 6px 14px; margin: 6px 0 0; font-size: 13px; color: var(--muted); }
 </style>
+<script>
+/* The site's shared data panel: scripts/sim.js, dataset.js, datalog.js and styles/paper.css, data.css.
+   Served from the website (portfolios/hydraulics/, also inside the study's frames, whose address is the study's) they are two
+   folders up; opened from portfolios-src/hydraulics/ on disk they are in ../../public/. Elsewhere the page runs without the panel. */
+window.SHARED = /\/portfolios\/hydraulics\/[^/]*$/.test(document.baseURI.split(/[?#]/)[0]) ? '../../' : /\/portfolios-src\/hydraulics\/[^/]*$/.test(document.baseURI.split(/[?#]/)[0]) ? '../../public/' : null;
+if (window.SHARED) document.write('<link rel="stylesheet" href="' + SHARED + 'styles/paper.css"><link rel="stylesheet" href="' + SHARED + 'styles/data.css">');
+</script>
 </head>
 <body>
 <div class="wrap">
@@ -302,7 +318,8 @@ input[type=range]::-moz-range-thumb { width: 13px; height: 13px; border-radius: 
     <div class="col">
       <section class="box" aria-label="Plant">
         <ol class="stepper" id="stepper" aria-label="Controller modes; select one to jump to it"></ol>
-        <canvas id="scene" aria-label="Animated servo-hydraulic press"></canvas>
+        <div id="stage"><canvas id="scene" aria-label="Animated servo-hydraulic press"></canvas></div>
+        <p class="stage__cap"><span>The press and its gauge panel</span></p>
         <div class="legend">
           <span>Oil gauge pressure</span><span class="num">0</span><span class="cbar" aria-hidden="true"></span><span class="num" id="psLbl">–</span>
           <span><span class="swatch" aria-hidden="true"></span> below 0</span>
@@ -787,6 +804,7 @@ M834 80h400000v40h-400000z"/></svg></span></span></span><span class="vlist-s">�
   </section>
 </div>
 
+<script>if (window.SHARED) document.write('<script src="' + SHARED + 'scripts/sim.js"><\/script><script src="' + SHARED + 'scripts/dataset.js"><\/script>');</script>
 <script>
 /*PHYSICS-BEGIN*/
 // Servo-hydraulic press: nonlinear plant, sampled-data controller with supervisor, and loop analysis.
@@ -1506,6 +1524,7 @@ async function recompute() {
   if (job !== latestCycle) return;             // a newer setting superseded this result
   run = { ...res.run, P: Pjob, plant: makePlant(Pjob) };
   anPos = res.anPos; anForce = res.anForce;
+  storeRun(); storeAnalysis();
   an = loopSel === 'position' ? anPos : anForce;
   $('busy').textContent = noteAfter || `Computed in ${fmt((performance.now() - t0) / 1000, 2)} s${worker ? ' in the background' : ''}.`;
   noteAfter = null;
@@ -1527,14 +1546,14 @@ function updateStatus() {
   const R = run.rec, parts = [];
   const press = run.events.find(e => e.mode === 'press');
   if (run.outcome === 'complete') {
-    parts.push(`<div>Cycle complete in <span class="num">${fmt(run.tEnd, 3)} s</span>. Contact at t = <span class="num">${press ? fmt(press.t, 3) : '–'} s</span>; peak force <span class="num">${fmt(Math.max(...R.F) / 1000, 2)} kN</span> for a target of <span class="num">${fmt(P.Fref / 1000, 0)} kN</span>.</div>`);
+    parts.push(`<div>Cycle complete in <span class="num">${fmt(run.tEnd, 3)} s</span>. Contact at t = <span class="num">${press ? fmt(press.t, 3) : '–'} s</span>; peak force <span class="num">${fmt((HAS_DS ? ds.get('r_Fpeak') : Math.max(...R.F)) / 1000, 2)} kN</span> for a target of <span class="num">${fmt(P.Fref / 1000, 0)} kN</span>.</div>`);
   } else {
     parts.push(`<div class="warn">The cycle did not finish within ${C0.tMax} s (stuck in “${MODES[R.mode[R.mode.length - 1]]}”). The loop is probably unstable or saturated; see the loop analysis.</div>`);
   }
-  const satFrac = R.uCmd.filter(u => Math.abs(u) >= 1).length / R.uCmd.length;
+  const satFrac = HAS_DS ? ds.get('r_satFrac') : R.uCmd.filter(u => Math.abs(u) >= 1).length / R.uCmd.length;
   if (satFrac > 0) parts.push(`<div class="warn">The valve command is saturated for ${fmt(100 * satFrac, 1)} % of the cycle.</div>`);
   if (run.pMin < 0) parts.push(`<div class="warn">Gauge pressure falls to <span class="num">${fmt(run.pMin / 1e6, 3)} MPa</span> in the ${run.pMinWhere} at t = <span class="num">${fmt(run.pMinT, 3)} s</span>: suction, air release, risk of cavitation.</div>`);
-  const rel = run.closureMax / Math.max(1, Math.abs(R.W[R.W.length - 1]));
+  const rel = HAS_DS ? ds.get('r_closureRel') : run.closureMax / Math.max(1, Math.abs(R.W[R.W.length - 1]));
   parts.push(`<div>Energy audit: max |W_pump − stored − losses − work on specimen and stop| = <span class="num">${run.closureMax.toExponential(2)} J</span> (${rel.toExponential(1)} of the pump work) ${rel < 1e-6 ? '✓' : '✗'} · ${run.substeps} RK4 steps per sample.</div>`);
   $('status').innerHTML = parts.join('');
 }
@@ -1542,7 +1561,7 @@ function updateChips() {
   const m = a => `${Number.isFinite(a.margins.pm) ? fmt(a.margins.pm, 0) : '–'}° · ${Number.isFinite(a.margins.gm) ? fmt(a.margins.gm, 1) : '–'} dB`;
   const chips = [
     ['cycle', `${fmt(run.tEnd, 2)} s`],
-    ['peak force', `${fmt(Math.max(...run.rec.F) / 1000, 1)} kN`],
+    ['peak force', `${fmt((HAS_DS ? ds.get('r_Fpeak') : Math.max(...run.rec.F)) / 1000, 1)} kN`],
     ['position loop', anPos.stable ? m(anPos) : 'unstable'],
     ['force loop', anForce.stable ? m(anForce) : 'unstable'],
     ['valve heat', `${fmt(100 * run.rec.Lv[run.rec.Lv.length - 1] / run.rec.W[run.rec.W.length - 1], 0)} % of pump work`]
@@ -2113,6 +2132,7 @@ function drawDial(c, cx, cy, r, d, fs) {
     c.beginPath(); c.moveTo(cx - 0.12 * r * Math.cos(a), cy - 0.12 * r * Math.sin(a)); c.lineTo(cx + len * r * Math.cos(a), cy + len * r * Math.sin(a)); c.stroke();
   };
   if (d.second !== undefined) needle(d.second, COL.blue, 1.5, 0.62);
+  if (HAS_DS && d.j !== undefined) { ds.get('needle')[d.j] = ang(d.value); ds.touch('needle'); }
   needle(d.value, COL.ink, 2.2, 0.72);
   c.fillStyle = COL.ink; c.beginPath(); c.arc(cx, cy, r * 0.08, 0, 2 * Math.PI); c.fill();
   c.textAlign = 'center'; c.textBaseline = 'middle';
@@ -2143,7 +2163,8 @@ function drawGaugePanel(c, L, R, i) {
     { label: 'F specimen', value: R.F[i] / 1e3, min: 0, max: fmax / 1e3, text: `${fmt(R.F[i] / 1e3, 1)} kN` },
     { label: 'x_v (u blue)', value: 100 * R.xv[i], second: 100 * R.uApp[i], min: -100, max: 100, text: `${fmt(100 * R.xv[i], 1)} %` }
   ];
-  dials.forEach((d, j) => drawDial(c, cl.xs[j], cl.cy, cl.r, d, fs));
+  if (HAS_DS) { ds.set('d_dial_pmax', pmax / 1e6); ds.set('d_dial_fmax', fmax / 1e3); ds.set('d_dial_r', cl.r * G.s); ds.set('d_dial_cy', cl.cy * G.s); const dx = ds.get('dial_x'); for (let j = 0; j < 5; j++) dx[j] = cl.xs[j] * G.s; ds.touch('dial_x'); }
+  dials.forEach((d, j) => drawDial(c, cl.xs[j], cl.cy, cl.r, Object.assign(d, { j }), fs));
   drawContactWindow(c, cl.xs[5], cl.cy, cl.r, R.y[i], R.F[i], fs);
 }
 /** Contact window: an 8 mm tall view of the platen and the specimen's lower face, magnified against the main
@@ -2189,6 +2210,7 @@ function layout() {
   scene.style.height = cssH + 'px';
   scene.width = Math.round(cssW * dpr); scene.height = Math.round(cssH * dpr);
   G = { L, s: cssW / L.W, dpr, cssW, cssH };
+  if (HAS_DS) { ds.set('d_cssW', cssW); ds.set('d_cssH', cssH); ds.set('d_dpr', dpr); ds.set('d_s', G.s); }
   for (const p of PLOTS) { p.cv.width = Math.round(p.cv.clientWidth * dpr); p.cv.height = Math.round(p.cv.clientHeight * dpr); }
   buildPlots();
   dirty = true;
@@ -2530,7 +2552,7 @@ function drawBode() {
   const ml = 54, mr = 12, gap = 30, mt = 26, mb = 26, pw = W - ml - mr, phh = (H - mt - mb - gap) / 2;
   const lf0 = Math.log10(f[0]), lf1 = Math.log10(f[f.length - 1]);
   const px = fr => ml + pw * (Math.log10(fr) - lf0) / (lf1 - lf0);
-  const dB = mag.map(m => 20 * Math.log10(m));
+  const dB = an.freq.dB || mag.map(m => 20 * Math.log10(m));
   let d0 = Math.max(-80, Math.min(...dB)), d1 = Math.min(120, Math.max(...dB));
   d0 = Math.floor(d0 / 20) * 20; d1 = Math.ceil(d1 / 20) * 20; if (d1 - d0 < 40) d1 = d0 + 40;
   let p0 = Math.floor(Math.min(...ph) / 90) * 90, p1 = Math.ceil(Math.max(...ph) / 90) * 90; if (p1 - p0 < 180) p1 = p0 + 180;
@@ -2626,31 +2648,34 @@ function poleRowsS(poles) {
   }).filter(p => p.im >= -1e-9).sort((a, b) => a.f - b.f);
 }
 function drawTables() {
-  const m = an.margins, T = P.Ts;
+  const Ls = loopSel === 'position' ? 'pos' : 'frc', sv = k => ds.get(Ls + '_' + k);
+  const m = HAS_DS ? { pm: sv('pm'), fc: sv('fc'), gm: sv('gm'), fg: sv('fg') } : an.margins, T = HAS_DS ? ds.get('Ts') : P.Ts;
   const ok = an.stable;
   $('anVerdict').textContent = ok ? `Closed loop stable (max |z| = ${fmt(an.maxAbsZ, 4)})` : `Closed loop UNSTABLE (max |z| = ${fmt(an.maxAbsZ, 4)})`;
   $('anVerdict').className = `verdict ${ok ? 'good' : 'bad'}`;
-  const e = an.eq;
+  const e = HAS_DS ? { y: sv('eq_y'), v: sv('eq_v'), xv: sv('eq_xv'), pA: sv('eq_pA'), pB: sv('eq_pB') } : an.eq;
   $('tMargins').innerHTML = `<caption>Operating point and margins</caption>
     <tr><th>quantity</th><th>value</th></tr>
     <tr><td style="text-align:left">y₀ [mm], ẏ₀ [mm/s]</td><td>${fmt(e.y * 1000, 2)}, ${fmt(e.v * 1000, 1)}</td></tr>
     <tr><td style="text-align:left">x_v₀ [%]</td><td>${fmt(100 * e.xv, 3)}</td></tr>
     <tr><td style="text-align:left">p_A₀, p_B₀ [MPa]</td><td>${fmt(e.pA / 1e6, 3)}, ${fmt(e.pB / 1e6, 3)}</td></tr>
-    <tr><td style="text-align:left">β_eff(p_A₀) [GPa]</td><td>${fmt(run.plant.beta(e.pA) / 1e9, 3)}</td></tr>
+    <tr><td style="text-align:left">β_eff(p_A₀) [GPa]</td><td>${fmt((HAS_DS ? sv('eq_beta') : run.plant.beta(e.pA)) / 1e9, 3)}</td></tr>
     <tr><td style="text-align:left">phase margin [°] at [Hz]</td><td>${Number.isFinite(m.pm) ? fmt(m.pm, 1) : '–'} at ${Number.isFinite(m.fc) ? fmt(m.fc, 2) : '–'}</td></tr>
     <tr><td style="text-align:left">gain margin [dB] at [Hz]</td><td>${Number.isFinite(m.gm) ? fmt(m.gm, 1) : '–'} at ${Number.isFinite(m.fg) ? fmt(m.fg, 1) : '–'}</td></tr>
     <tr><td style="text-align:left">max |z| closed loop</td><td>${fmt(an.maxAbsZ, 5)}</td></tr>`;
-  const ol = poleRowsS(an.olPoles);
+  const L_ = loopSel === 'position' ? 'pos' : 'frc', st = k => ds.get(L_ + '_' + k);
+  const ol = HAS_DS ? Array.from(st('olRe'), (re, k) => ({ re, im: st('olIm')[k], f: st('olF')[k], zeta: st('olZeta')[k] })).filter(p => p.im >= -1e-9).sort((a, b) => a.f - b.f) : poleRowsS(an.olPoles);
   $('tOL').innerHTML = `<caption>Open-loop plant poles (continuous, s)</caption><tr><th>Re s [1/s]</th><th>Im s [rad/s]</th><th>f [Hz]</th><th>ζ</th></tr>` +
     ol.map(p => `<tr><td>${fmt(p.re, 1)}</td><td>${fmt(p.im, 1)}</td><td>${fmt(p.f, 2)}</td><td>${Number.isFinite(p.zeta) ? fmt(p.zeta, 3) : '–'}</td></tr>`).join('');
   const cl = poleRowsS(an.clPoles.map(([re, im]) => { const r = Math.hypot(re, im); return r > 0 ? [Math.log(r) / T, Math.atan2(im, re) / T] : [-Infinity, 0]; }))
     .map((p, k) => p);
-  const zs = an.clPoles.filter(([, im]) => im >= -1e-12);
+  const zs = HAS_DS ? null : an.clPoles.filter(([, im]) => im >= -1e-12);
+  const clRows = HAS_DS ? Array.from(st('clRe'), (re, k) => ({ im: st('clIm')[k], r: st('clR')[k], ang: st('clAng')[k], f: st('clF')[k], zeta: st('clZeta')[k] })).filter(p => p.im >= -1e-12) : null;
   $('tCL').innerHTML = `<caption>Closed-loop poles (z and s = ln z / T_s)</caption><tr><th>|z|</th><th>∠z [°]</th><th>f [Hz]</th><th>ζ</th></tr>` +
-    zs.map(([re, im]) => {
+    (clRows || zs.map(([re, im]) => {
       const r = Math.hypot(re, im), s = r > 0 ? [Math.log(r) / T, Math.atan2(im, re) / T] : [-Infinity, 0], wn = Math.hypot(s[0], s[1]);
       return { r, ang: Math.atan2(im, re) * 180 / Math.PI, f: Number.isFinite(wn) ? wn / (2 * Math.PI) : Infinity, zeta: Number.isFinite(wn) && wn > 0 ? -s[0] / wn : NaN };
-    }).sort((a, b) => b.r - a.r).map(p => `<tr${p.r >= 1 ? ' style="color: var(--wine); font-weight: 600"' : ''}><td>${fmt(p.r, 5)}</td><td>${fmt(p.ang, 2)}</td><td>${Number.isFinite(p.f) ? fmt(p.f, 2) : '∞'}</td><td>${Number.isFinite(p.zeta) ? fmt(p.zeta, 3) : '–'}</td></tr>`).join('');
+    })).sort((a, b) => b.r - a.r).map(p => `<tr${p.r >= 1 ? ' style="color: var(--wine); font-weight: 600"' : ''}><td>${fmt(p.r, 5)}</td><td>${fmt(p.ang, 2)}</td><td>${Number.isFinite(p.f) ? fmt(p.f, 2) : '∞'}</td><td>${Number.isFinite(p.zeta) ? fmt(p.zeta, 3) : '–'}</td></tr>`).join('');
   void cl;
 }
 function drawAnalysis() { drawBode(); drawNyquist(); drawZplane(); drawTables(); }
@@ -2773,12 +2798,12 @@ function updateReadouts(i) {
   set('r_xv', `${fmt(100 * R.xv[i], 1)} / ${fmt(100 * R.uCmd[i], 1)}`, '%');
   set('r_W', fmt(R.W[i] / 1000, 2), 'kJ');
   set('r_Lv', fmt(R.Lv[i] / 1000, 2), 'kJ');
-  set('r_Lh', fmt((R.Lh[i] + R.Lf[i]) / 1000, 3), 'kJ');
+  set('r_Lh', fmt((R.LhLf ? R.LhLf[i] : R.Lh[i] + R.Lf[i]) / 1000, 3), 'kJ');
   set('r_St', fmt(R.stored[i] / 1000, 3), 'kJ');
-  set('r_Ws', fmt((R.Ws[i] + R.Wst[i]) / 1000, 4), 'kJ');
+  set('r_Ws', fmt((R.WsWst ? R.WsWst[i] : R.Ws[i] + R.Wst[i]) / 1000, 4), 'kJ');
   $('tLbl').textContent = `${fmt(R.t[i], 3)} s`;
 }
-function render() { const i = frameIndex(tView); drawScene(i); drawPlots(); updateReadouts(i); updateStepper(i); }
+function render() { const i = frameIndex(tView); setNow(i); drawScene(i); drawPlots(); updateReadouts(i); updateStepper(i); }
 function loop(ts) {
   if (playing && run) {
     if (lastTs !== null) tView += (ts - lastTs) / 1000 * speed;
@@ -2792,7 +2817,7 @@ function loop(ts) {
 $('play').addEventListener('click', () => {
   if (playing) { playing = false; $('play').textContent = '▶ Play'; return; }
   if (tView >= run.tEnd) tView = 0;
-  playing = true; $('play').textContent = '❚❚ Pause';
+  playing = true; lastTs = null; $('play').textContent = '❚❚ Pause';
 });
 $('reset').addEventListener('click', () => { playing = false; $('play').textContent = '▶ Play'; tView = 0; $('scrub').value = 0; setFill($('scrub')); dirty = true; });
 $('scrub').addEventListener('input', e => { tView = Number(e.target.value); setFill(e.target); dirty = true; });
@@ -2960,6 +2985,224 @@ for (const id of ['bode', 'nyq', 'zpl']) {
   cv.addEventListener('pointerleave', () => { if (SNAP[id]) fromSnapshot(cv); });
 }
 
+// ================================================================= the store and the data panel
+// Every number of a cycle is written into one dataset (the site's scripts/dataset.js) by storeRun() and storeAnalysis(), the moment the
+// Web Worker hands the computed cycle to this page; the drawing, the gauges, the readouts, the plots and the loop tables read the
+// store. The site's data panel (scripts/datalog.js) shows the store, checks it three ways and saves it. Without the site's scripts
+// (a blob: frame, or the page opened from disk without the website beside it) the page runs as before and has no panel.
+const HAS_DS = !!(window.Sim && Sim.dataset);
+const ds = HAS_DS ? Sim.dataset({ title: 'Servo-hydraulic press', attrs: { study: 'portfolios/hydraulics', page: 'hydraulic_control.html',
+  model: 'eight-state nonlinear plant (valve spool, hose, two chambers, ram) under a sampled PID controller with a supervisor; RK4', start: 'at the equilibrium with the ram on its stop' } }) : null;
+const RA = { t: ['t<sub>n</sub>', 's', 'time of each stored sample (every controller sample)', 4], mode: ['mode', '', '0 settle, 1 approach, 2 creep, 3 press, 4 release, 5 retract, 6 done', 0],
+  yr: ['y<sub>r</sub>', 'm', 'position reference', 6], Fr: ['F<sub>r</sub>', 'N', 'force reference', 1], force: ['force', '', '1 while the force loop is in charge', 0], y: ['y', 'm', 'ram position', 7],
+  yd: ['ẏ', 'm/s', 'ram speed', 6], xv: ['x<sub>v</sub>', '', 'spool position, fraction of full opening', 5], uCmd: ['u', '', 'valve command computed this sample', 5], uApp: ['u<sub>applied</sub>', '', 'command applied (computed one sample ago)', 5],
+  pa: ['p<sub>a</sub>', 'Pa', 'pressure at valve port A (hose inlet)', 1], Qh: ['Q<sub>h</sub>', 'm³/s', 'flow in the hose', 9], pA: ['p<sub>A</sub>', 'Pa', 'cap chamber pressure', 1], pB: ['p<sub>B</sub>', 'Pa', 'rod chamber pressure', 1],
+  F: ['F', 'N', 'force on the specimen (load cell)', 2], QA: ['Q<sub>A</sub>', 'm³/s', 'valve flow into port A', 9], QB: ['Q<sub>B</sub>', 'm³/s', 'valve flow into port B', 9], betaA: ['β<sub>eff</sub>(p<sub>A</sub>)', 'Pa', 'effective bulk modulus in the cap chamber', 0],
+  W: ['W<sub>pump</sub>', 'J', 'work done by the pump', 3], Lv: ['L<sub>valve</sub>', 'J', 'heat in the valve', 3], Lh: ['L<sub>hose</sub>', 'J', 'heat in the hose', 4], Lf: ['L<sub>seal</sub>', 'J', 'heat in the seals', 4],
+  Ws: ['W<sub>spec</sub>', 'J', 'work into the specimen', 4], Wst: ['W<sub>stop</sub>', 'J', 'work into the bottom stop', 4], Ec: ['E<sub>c</sub>', 'J', 'energy stored by compressing the oil', 4],
+  stored: ['E<sub>stored</sub>', 'J', 'kinetic, height and compression energy', 4], closure: ['δ', 'J', 'energy audit: pump work minus everything it went into', 12], Vh: ['V<sub>h</sub>', 'm³', 'oil volume through the hose so far', 9] };
+const LOOPS = [['pos', 'position'], ['frc', 'force']];
+function declareStore() {
+  const v = (n, dims, type, a) => ds.var(n, dims, type, a);
+  const units = { ps: 'Pa', betaOil: 'Pa', alpha0: '', Lh: 'm', dh: 'm', fv: 'Hz', M: 'kg', Fc: 'N', kw: 'N/m', Fref: 'N', Ts: 's', Kp: '1/m', Ki: '1/(m·s)', Kd: 's/m', KpF: '1/N', KiF: '1/(N·s)' };
+  for (const s of SLIDERS) if (s.key) v(s.key, [], 'float', { symbol: s.label.split(' ')[0].replace(/_(\w+)/, '<sub>$1</sub>'), units: units[s.key] || '', long_name: s.label.replace(/^\S+\s/, ''), computed_in: s.key + ' slider', digits: 6 });
+  for (const k in C0) v('c_' + k, [], 'float', { symbol: k, long_name: 'the constant C0.' + k, computed_in: 'C0', digits: 6 });
+  for (const k of ['m', 'AA', 'AB', 'Ah', 'Vh', 'I', 'Rlam', 'Kt', 'Kv', 'wv', 'cw', 'cs', 'Va'])
+    v('pl_' + k, [], 'float', { symbol: { m: 'm', AA: 'A<sub>A</sub>', AB: 'A<sub>B</sub>', Ah: 'A<sub>h</sub>', Vh: 'V<sub>h</sub>', I: 'I<sub>h</sub>', Rlam: 'R<sub>lam</sub>', Kt: 'K<sub>t</sub>', Kv: 'K<sub>v</sub>', wv: 'ω<sub>v</sub>', cw: 'c<sub>w</sub>', cs: 'c<sub>s</sub>', Va: 'V<sub>a</sub>' }[k],
+      units: { m: 'kg', AA: 'm²', AB: 'm²', Ah: 'm²', Vh: 'm³', I: 'kg/m⁴', Rlam: 'Pa·s/m³', Kt: 'kg/m⁷', Kv: 'm³/(s·√Pa)', wv: 'rad/s', cw: 'N·s/m', cs: 'N·s/m', Va: 'm³' }[k],
+      long_name: { m: 'moving mass, ram plus load', AA: 'cap area', AB: 'annulus area', Ah: 'hose bore area', Vh: 'hose volume', I: 'hose inertance ρL/A', Rlam: 'laminar hose resistance', Kt: 'turbulent hose coefficient',
+        Kv: 'valve flow coefficient', wv: 'valve natural angular frequency', cw: 'specimen damping', cs: 'stop damping', Va: 'oil volume at port A' }[k], computed_in: 'makePlant()', digits: 9 });
+  for (const [k, sy, u, ln, dg] of [['tEnd', 't<sub>end</sub>', 's', 'end of the cycle', 4], ['closureMax', 'max |δ|', 'J', 'energy audit, largest gap over the cycle', 12], ['closureRel', 'max |δ| / W<sub>pump</sub>', '', 'the same, relative to the pump work', 12],
+    ['pMin', 'p<sub>min</sub>', 'Pa', 'lowest gauge pressure', 1], ['pMinT', 't(p<sub>min</sub>)', 's', 'when', 4], ['Fpeak', 'F<sub>peak</sub>', 'N', 'peak force on the specimen', 2], ['satFrac', 'saturated', '', 'share of samples with |u| ≥ 1', 6],
+    ['tPress', 't<sub>press</sub>', 's', 'contact: the press mode begins', 4], ['substeps', 'N<sub>sub</sub>', '', 'RK4 steps per controller sample', 0]])
+    v('r_' + k, [], k === 'substeps' ? 'int' : 'float', { symbol: sy, units: u, long_name: ln, computed_in: k === 'closureRel' || k === 'Fpeak' || k === 'satFrac' ? 'storeRun()' : 'simulate()', digits: dg });
+  v('r_outcome', [], 'str', { symbol: 'outcome', long_name: 'complete, or time limit', computed_in: 'simulate()', digits: 0 });
+  v('r_pMinWhere', [], 'str', { symbol: 'where', long_name: 'where the lowest pressure occurs', computed_in: 'simulate()', digits: 0 });
+  ds.dim('n', 1);
+  ds.coord('t', 'n', Float64Array, { symbol: RA.t[0], units: 's', long_name: RA.t[2], computed_in: 'simulate()', formula: 'n T<sub>s</sub>', digits: 4 });
+  for (const k of REC_KEYS) if (k !== 't') v(k, ['n'], Float64Array, { symbol: RA[k][0], units: RA[k][1], long_name: RA[k][2], computed_in: 'simulate()', digits: RA[k][3] });
+  v('LhLf', ['n'], Float64Array, { symbol: 'L<sub>hose</sub> + L<sub>seal</sub>', units: 'J', long_name: 'heat in the hose and the seals', computed_in: 'storeRun()', formula: 'L<sub>hose</sub> + L<sub>seal</sub>', digits: 4 });
+  v('WsWst', ['n'], Float64Array, { symbol: 'W<sub>spec</sub> + W<sub>stop</sub>', units: 'J', long_name: 'net work into specimen and stop', computed_in: 'storeRun()', formula: 'W<sub>spec</sub> + W<sub>stop</sub>', digits: 5 });
+  for (const [L, name] of LOOPS) {
+    for (const [k, sy, u, ln, dg] of [['pm', 'φ<sub>m</sub>', '°', 'phase margin', 3], ['fc', 'f<sub>c</sub>', 'Hz', 'gain crossover', 4], ['gm', 'g<sub>m</sub>', 'dB', 'gain margin', 3], ['fg', 'f<sub>g</sub>', 'Hz', 'phase crossover', 4],
+      ['maxAbsZ', 'max |z|', '', 'largest closed-loop pole radius', 6], ['eq_y', 'y<sub>0</sub>', 'm', 'operating point: position', 6], ['eq_v', 'ẏ<sub>0</sub>', 'm/s', 'operating point: speed', 6], ['eq_xv', 'x<sub>v0</sub>', '', 'operating point: spool', 6],
+      ['eq_pA', 'p<sub>A0</sub>', 'Pa', 'operating point: cap pressure', 1], ['eq_pB', 'p<sub>B0</sub>', 'Pa', 'operating point: rod pressure', 1], ['eq_beta', 'β<sub>eff</sub>(p<sub>A0</sub>)', 'Pa', 'bulk modulus at the operating point', 0]])
+      v(L + '_' + k, [], 'float', { symbol: sy, units: u, long_name: name + ' loop: ' + ln, computed_in: 'analyse(P, \'' + name + '\')', digits: dg });
+    v(L + '_stable', [], 'bool', { symbol: 'stable', long_name: name + ' loop: max |z| < 1', computed_in: 'analyse()', digits: 0 });
+    ds.dim(L + '_f', 500);
+    ds.coord(L + '_freq', L + '_f', Float64Array, { symbol: 'f', units: 'Hz', long_name: name + ' loop: frequencies of the response, log-spaced to just below Nyquist', computed_in: 'analyse()', digits: 4 });
+    for (const [k, sy, u, ln, dg] of [['mag', '|L|', '', 'loop gain magnitude', 6], ['dB', '|L| in dB', 'dB', 'the same in decibels', 3], ['ph', '∠L', '°', 'loop phase, unwrapped', 3], ['Lre', 'Re L', '', 'Nyquist: real part', 6], ['Lim', 'Im L', '', 'Nyquist: imaginary part', 6]])
+      v(L + '_' + k, [L + '_f'], Float64Array, { symbol: sy, units: u, long_name: name + ' loop: ' + ln, computed_in: k === 'dB' ? 'storeAnalysis()' : 'analyse()', formula: k === 'dB' ? '20 log<sub>10</sub>|L|' : undefined, digits: dg });
+    ds.dim(L + '_ol', 1); ds.dim(L + '_cl', 1);
+    for (const [k, d, sy, u, ln] of [['olRe', '_ol', 'Re s', '1/s', 'open-loop plant poles, real part'], ['olIm', '_ol', 'Im s', 'rad/s', 'open-loop plant poles, imaginary part'], ['olF', '_ol', 'f', 'Hz', 'open-loop poles: |s|/2π'], ['olZeta', '_ol', 'ζ', '', 'open-loop poles: −Re s/|s|'],
+      ['clRe', '_cl', 'Re z', '', 'closed-loop poles, real part'], ['clIm', '_cl', 'Im z', '', 'closed-loop poles, imaginary part'], ['clR', '_cl', '|z|', '', 'closed-loop poles: radius'], ['clAng', '_cl', '∠z', '°', 'closed-loop poles: angle'], ['clF', '_cl', 'f', 'Hz', 'closed-loop poles: |ln z|/(2π T<sub>s</sub>)'], ['clZeta', '_cl', 'ζ', '', 'closed-loop poles: −Re(ln z)/|ln z|']])
+      v(L + '_' + k, [L + d], Float64Array, { symbol: sy, units: u, long_name: name + ' loop: ' + ln, computed_in: /F|Zeta|R$|Ang/.test(k) ? 'storeAnalysis()' : 'analyse()', digits: 5 });
+  }
+  v('loopSel', [], 'str', { symbol: 'loop', long_name: 'the loop shown in the analysis', computed_in: 'loop selector', digits: 0, source: 'The loop selector.' });
+  v('tView', [], 'float', { symbol: 't<sub>view</sub>', units: 's', long_name: 'playback time', computed_in: 'the clock', digits: 4, source: 'Advanced by the clock from the wall time between frames.' });
+  v('i_now', [], 'int', { symbol: 'n<sub>now</sub>', long_name: 'stored sample shown', computed_in: 'frameIndex()', formula: 'last n with t<sub>n</sub> ≤ t<sub>view</sub>', digits: 0 });
+  v('playing', [], 'bool', { symbol: 'playing', long_name: 'the playback runs', computed_in: 'Play button', digits: 0, source: 'The state of the Play button.' });
+  v('speed', [], 'float', { symbol: 'speed', long_name: 'playback speed', computed_in: 'speed buttons', digits: 2, source: 'The pressed speed button.' });
+  for (const k of ['y', 'yd', 'F', 'pa', 'pA', 'pB', 'xv', 'uCmd', 'uApp', 'W']) v(k + '_now', [], 'float', { symbol: RA[k][0], units: RA[k][1], long_name: RA[k][2] + ', shown now (a stored sample)', computed_in: 'the clock', formula: k + '<sub>n</sub>, n = n<sub>now</sub>', digits: RA[k][3] });
+  for (const [k, sy, u, ln, dg, src] of [['cssW', 'W', 'css px', 'canvas width', 1, 'Measured from the page layout.'], ['cssH', 'H', 'css px', 'canvas height', 1, 'W times the layout\'s aspect ratio.'], ['dpr', 'dpr', '', 'device pixels per css px', 2, 'window.devicePixelRatio.'],
+    ['s', 's', 'css px per layout unit', 'drawing scale', 5, null], ['dial_r', 'r<sub>dial</sub>', 'css px', 'dial radius', 2, null], ['dial_cy', 'y<sub>dial</sub>', 'css px', 'dial centres', 2, null], ['dial_pmax', 'p<sub>FS</sub>', 'MPa', 'full scale of the pressure dials', 0, null], ['dial_fmax', 'F<sub>FS</sub>', 'kN', 'full scale of the force dial', 0, null]])
+    v('d_' + k, [], 'float', { symbol: sy, units: u, long_name: ln, computed_in: k.startsWith('dial') ? 'drawGaugePanel()' : 'layout()', digits: dg, source: src || undefined });
+  ds.dim('dial', 5);
+  v('dial_x', ['dial'], Float64Array, { symbol: 'x<sub>dial</sub>', units: 'css px', long_name: 'dial centres: p_a, p_A, p_B, F, x_v', computed_in: 'drawGaugePanel()', digits: 2 });
+  v('needle', ['dial'], Float64Array, { symbol: 'θ', units: 'rad', long_name: 'black needle angles, clockwise from the right', computed_in: 'drawDial()', formula: '¾π + 1.5π (value − min)/(max − min)', digits: 4 });
+}
+function storeRun() {
+  if (!HAS_DS) return;
+  const R = run.rec, pl = run.plant, N = R.t.length;
+  for (const s of SLIDERS) if (s.key) ds.set(s.key, run.P[s.key]);
+  for (const k in C0) ds.set('c_' + k, C0[k]);
+  for (const k of ['m', 'AA', 'AB', 'Ah', 'Vh', 'I', 'Rlam', 'Kt', 'Kv', 'wv', 'cw', 'cs', 'Va']) ds.set('pl_' + k, pl[k]);
+  ds.dim('n', N);
+  const out = {};
+  for (const k of REC_KEYS) { const a = ds.alloc(k); for (let i = 0; i < N; i++) a[i] = R[k][i]; out[k] = a; }
+  const a1 = ds.alloc('LhLf'), a2 = ds.alloc('WsWst');
+  for (let i = 0; i < N; i++) { a1[i] = out.Lh[i] + out.Lf[i]; a2[i] = out.Ws[i] + out.Wst[i]; }
+  out.LhLf = a1; out.WsWst = a2;
+  let Fp = -Infinity, sat = 0; for (let i = 0; i < N; i++) { if (out.F[i] > Fp) Fp = out.F[i]; if (Math.abs(out.uCmd[i]) >= 1) sat++; }
+  const press = run.events.find(e => e.mode === 'press');
+  for (const [k, val] of [['tEnd', run.tEnd], ['closureMax', run.closureMax], ['closureRel', run.closureMax / Math.max(1, Math.abs(out.W[N - 1]))], ['pMin', run.pMin], ['pMinT', run.pMinT],
+    ['Fpeak', Fp], ['satFrac', sat / N], ['tPress', press ? press.t : NaN], ['substeps', run.substeps]]) ds.set('r_' + k, val);
+  ds.set('r_outcome', run.outcome); ds.set('r_pMinWhere', run.pMinWhere || '');
+  run.rec = out;                    // from here on the drawing reads the store's arrays
+}
+function storeAnalysis() {
+  if (!HAS_DS) return;
+  for (const [L, name] of LOOPS) {
+    const a = name === 'position' ? anPos : anForce, T = run.P.Ts;
+    for (const k of ['pm', 'fc', 'gm', 'fg']) ds.set(L + '_' + k, a.margins[k]);
+    ds.set(L + '_maxAbsZ', a.maxAbsZ); ds.set(L + '_stable', a.stable);
+    ds.set(L + '_eq_y', a.eq.y); ds.set(L + '_eq_v', a.eq.v); ds.set(L + '_eq_xv', a.eq.xv); ds.set(L + '_eq_pA', a.eq.pA); ds.set(L + '_eq_pB', a.eq.pB); ds.set(L + '_eq_beta', run.plant.beta(a.eq.pA));
+    const fq = a.freq, nf = fq.f.length; ds.dim(L + '_f', nf);
+    const put = (k, src) => { const arr = ds.alloc(L + '_' + k); for (let i = 0; i < nf; i++) arr[i] = src(i); return arr; };
+    a.freq = { f: put('freq', i => fq.f[i]), mag: put('mag', i => fq.mag[i]), ph: put('ph', i => fq.ph[i]), Lre: put('Lre', i => fq.Lre[i]), Lim: put('Lim', i => fq.Lim[i]) };
+    a.freq.dB = put('dB', i => 20 * Math.log10(a.freq.mag[i]));
+    ds.dim(L + '_ol', a.olPoles.length); ds.dim(L + '_cl', a.clPoles.length);
+    const ol = (k, f) => { const arr = ds.alloc(L + '_' + k); a.olPoles.forEach((p, i) => { arr[i] = f(p); }); };
+    ol('olRe', p => p[0]); ol('olIm', p => p[1]); ol('olF', p => Math.hypot(p[0], p[1]) / (2 * Math.PI)); ol('olZeta', p => { const wn = Math.hypot(p[0], p[1]); return wn > 1e-6 ? -p[0] / wn : NaN; });
+    const sOf = p => { const r = Math.hypot(p[0], p[1]); return r > 0 ? [Math.log(r) / T, Math.atan2(p[1], p[0]) / T] : [-Infinity, 0]; };
+    const cl = (k, f) => { const arr = ds.alloc(L + '_' + k); a.clPoles.forEach((p, i) => { arr[i] = f(p); }); };
+    cl('clRe', p => p[0]); cl('clIm', p => p[1]); cl('clR', p => Math.hypot(p[0], p[1])); cl('clAng', p => Math.atan2(p[1], p[0]) * 180 / Math.PI);
+    cl('clF', p => { const s = sOf(p), wn = Math.hypot(s[0], s[1]); return Number.isFinite(wn) ? wn / (2 * Math.PI) : Infinity; });
+    cl('clZeta', p => { const s = sOf(p), wn = Math.hypot(s[0], s[1]); return Number.isFinite(wn) && wn > 0 ? -s[0] / wn : NaN; });
+  }
+  ds.set('loopSel', loopSel);
+}
+function setNow(i) {
+  if (!HAS_DS) return;
+  ds.set('tView', tView); ds.set('i_now', i); ds.set('playing', playing); ds.set('speed', speed); ds.set('loopSel', loopSel);
+  for (const k of ['y', 'yd', 'F', 'pa', 'pA', 'pB', 'xv', 'uCmd', 'uApp', 'W']) ds.set(k + '_now', run.rec[k][i]);
+}
+if (HAS_DS) declareStore();
+if (HAS_DS) {
+  const G_ = n => ds.get(n), I = (sy, v, u, d) => [sy, v, u || '', d === undefined ? 6 : d];
+  const params = () => { const p = {}; for (const s of SLIDERS) if (s.key) p[s.key] = G_(s.key); return p; };
+  let again = null;                                  // the whole cycle and both analyses computed again from the stored parameters, cached by them
+  const rerun = () => { const p = params(), key = JSON.stringify(p); if (!again || again.key !== key) { again = window.__computeHere('cycle', p); again.key = key; again.plant = makePlant(p); } return again; };
+  const how = 'the cycle computed again on this page from the stored parameters (about a second)';
+  const check = {};
+  for (const s of SLIDERS) if (s.key) check[s.key] = () => ({ formula: 'the slider, as used by the last cycle', inputs: [I('slider now', P[s.key], '', 6)], value: P[s.key] });
+  for (const k in C0) check['c_' + k] = () => ({ formula: 'the constant C0.' + k, inputs: [], value: C0[k] });
+  for (const k of ['m', 'AA', 'AB', 'Ah', 'Vh', 'I', 'Rlam', 'Kt', 'Kv', 'wv', 'cw', 'cs', 'Va']) check['pl_' + k] = () => ({ formula: 'makePlant() run again from the stored parameters', inputs: [], value: makePlant(params())[k] });
+  for (const k of REC_KEYS) check[k] = i => ({ formula: how, inputs: [I('n', i, '', 0)], value: rerun().run.rec[k][i] });
+  Object.assign(check, {
+    LhLf: i => ({ formula: 'L<sub>hose</sub> + L<sub>seal</sub>', inputs: [I('L<sub>hose</sub>', G_('Lh')[i], 'J', 6), I('L<sub>seal</sub>', G_('Lf')[i], 'J', 6)], value: G_('Lh')[i] + G_('Lf')[i] }),
+    WsWst: i => ({ formula: 'W<sub>spec</sub> + W<sub>stop</sub>', inputs: [I('W<sub>spec</sub>', G_('Ws')[i], 'J', 6), I('W<sub>stop</sub>', G_('Wst')[i], 'J', 6)], value: G_('Ws')[i] + G_('Wst')[i] }),
+    r_tEnd: () => ({ formula: how, inputs: [], value: rerun().run.tEnd }), r_closureMax: () => ({ formula: how, inputs: [], value: rerun().run.closureMax }),
+    r_pMin: () => ({ formula: how, inputs: [], value: rerun().run.pMin }), r_pMinT: () => ({ formula: how, inputs: [], value: rerun().run.pMinT }), r_substeps: () => ({ formula: how, inputs: [], value: rerun().run.substeps }),
+    r_outcome: () => ({ formula: how, inputs: [], value: rerun().run.outcome }), r_pMinWhere: () => ({ formula: how, inputs: [], value: rerun().run.pMinWhere || '' }),
+    r_tPress: () => { const e = rerun().run.events.find(e => e.mode === 'press'); return { formula: how + ': the first press event', inputs: [], value: e ? e.t : NaN }; },
+    r_closureRel: () => { const W = G_('W'); return { formula: 'max |δ| / max(1 J, |W<sub>pump</sub>| at the end)', inputs: [I('max |δ|', G_('r_closureMax'), 'J', 12), I('W<sub>pump</sub>', W[W.length - 1], 'J', 3)], value: G_('r_closureMax') / Math.max(1, Math.abs(W[W.length - 1])) }; },
+    r_Fpeak: () => { let m = -Infinity; for (const x of G_('F')) m = Math.max(m, x); return { formula: 'max F<sub>n</sub>, from the stored array', inputs: [I('samples', G_('F').length, '', 0)], value: m }; },
+    r_satFrac: () => { const u = G_('uCmd'); let k = 0; for (const x of u) if (Math.abs(x) >= 1) k++; return { formula: 'share of stored samples with |u| ≥ 1', inputs: [I('samples', u.length, '', 0)], value: k / u.length }; },
+    i_now: () => ({ formula: 'last n with t<sub>n</sub> ≤ t<sub>view</sub>', inputs: [I('t<sub>view</sub>', G_('tView'), 's', 4)], value: frameIndex(G_('tView')) })
+  });
+  for (const k of ['y', 'yd', 'F', 'pa', 'pA', 'pB', 'xv', 'uCmd', 'uApp', 'W']) check[k + '_now'] = () => ({ formula: k + '<sub>n</sub> at n = n<sub>now</sub>', inputs: [I('n<sub>now</sub>', G_('i_now'), '', 0)], value: G_(k)[G_('i_now')] });
+  for (const [L, name] of LOOPS) {
+    const A = () => name === 'position' ? rerun().anPos : rerun().anForce, ha = 'analyse(P, \'' + name + '\') run again from the stored parameters';
+    for (const k of ['pm', 'fc', 'gm', 'fg']) check[L + '_' + k] = () => ({ formula: ha, inputs: [], value: A().margins[k] });
+    check[L + '_maxAbsZ'] = () => ({ formula: ha, inputs: [], value: A().maxAbsZ }); check[L + '_stable'] = () => ({ formula: ha, inputs: [], value: A().stable });
+    for (const k of ['y', 'v', 'xv', 'pA', 'pB']) check[L + '_eq_' + k] = () => ({ formula: ha, inputs: [], value: A().eq[k] });
+    check[L + '_eq_beta'] = () => ({ formula: 'β<sub>eff</sub> of makePlant() at the stored p<sub>A0</sub>', inputs: [I('p<sub>A0</sub>', G_(L + '_eq_pA'), 'Pa', 1)], value: makePlant(params()).beta(G_(L + '_eq_pA')) });
+    check[L + '_freq'] = i => ({ formula: ha, inputs: [I('i', i, '', 0)], value: A().freq.f[i] });
+    for (const k of ['mag', 'ph', 'Lre', 'Lim']) check[L + '_' + k] = i => ({ formula: ha, inputs: [I('i', i, '', 0)], value: A().freq[k][i] });
+    check[L + '_dB'] = i => ({ formula: '20 log<sub>10</sub>|L|', inputs: [I('|L|', G_(L + '_mag')[i], '', 6)], value: 20 * Math.log10(G_(L + '_mag')[i]) });
+    check[L + '_olRe'] = i => ({ formula: ha, inputs: [I('pole', i, '', 0)], value: A().olPoles[i][0] }); check[L + '_olIm'] = i => ({ formula: ha, inputs: [I('pole', i, '', 0)], value: A().olPoles[i][1] });
+    check[L + '_clRe'] = i => ({ formula: ha, inputs: [I('pole', i, '', 0)], value: A().clPoles[i][0] }); check[L + '_clIm'] = i => ({ formula: ha, inputs: [I('pole', i, '', 0)], value: A().clPoles[i][1] });
+    const re = (k, i) => G_(L + '_' + k)[i];
+    check[L + '_olF'] = i => ({ formula: '|s| / 2π', inputs: [I('Re s', re('olRe', i), '1/s', 3), I('Im s', re('olIm', i), 'rad/s', 3)], value: Math.hypot(re('olRe', i), re('olIm', i)) / (2 * Math.PI) });
+    check[L + '_olZeta'] = i => { const wn = Math.hypot(re('olRe', i), re('olIm', i)); return { formula: '−Re s / |s|', inputs: [I('Re s', re('olRe', i), '1/s', 3)], value: wn > 1e-6 ? -re('olRe', i) / wn : NaN }; };
+    check[L + '_clR'] = i => ({ formula: '|z|', inputs: [I('Re z', re('clRe', i), '', 6), I('Im z', re('clIm', i), '', 6)], value: Math.hypot(re('clRe', i), re('clIm', i)) });
+    check[L + '_clAng'] = i => ({ formula: 'atan2(Im z, Re z) in degrees', inputs: [I('Re z', re('clRe', i), '', 6), I('Im z', re('clIm', i), '', 6)], value: Math.atan2(re('clIm', i), re('clRe', i)) * 180 / Math.PI });
+    const sOf = i => { const r = Math.hypot(re('clRe', i), re('clIm', i)), T = G_('Ts'); return r > 0 ? [Math.log(r) / T, Math.atan2(re('clIm', i), re('clRe', i)) / T] : [-Infinity, 0]; };
+    check[L + '_clF'] = i => { const s = sOf(i), wn = Math.hypot(s[0], s[1]); return { formula: '|ln z| / (2π T<sub>s</sub>)', inputs: [I('T<sub>s</sub>', G_('Ts'), 's', 4)], value: Number.isFinite(wn) ? wn / (2 * Math.PI) : Infinity }; };
+    check[L + '_clZeta'] = i => { const s = sOf(i), wn = Math.hypot(s[0], s[1]); return { formula: '−Re(ln z) / |ln z|', inputs: [I('T<sub>s</sub>', G_('Ts'), 's', 4)], value: Number.isFinite(wn) && wn > 0 ? -s[0] / wn : NaN }; };
+  }
+  // drawing
+  const LAY = () => sceneLayout(G_('d_cssW') < 480);
+  Object.assign(check, {
+    d_s: () => ({ formula: 'W / W<sub>layout</sub>', inputs: [I('W', G_('d_cssW'), 'css px', 1), I('W<sub>layout</sub>', LAY().W, '', 0)], value: G_('d_cssW') / LAY().W }),
+    d_dial_r: () => ({ formula: 's r<sub>layout</sub>', inputs: [I('s', G_('d_s'), '', 5)], value: G_('d_s') * LAY().cluster.r }),
+    d_dial_cy: () => ({ formula: 's y<sub>layout</sub>', inputs: [I('s', G_('d_s'), '', 5)], value: G_('d_s') * LAY().cluster.cy }),
+    d_dial_pmax: () => ({ formula: '⌈p<sub>s</sub>/2 MPa⌉ · 2 MPa', inputs: [I('p<sub>s</sub>', G_('ps'), 'Pa', 0)], value: Math.ceil(G_('ps') / 2e6) * 2 }),
+    d_dial_fmax: () => ({ formula: 'max(20, ⌈1.25 F<sub>ref</sub>/10 kN⌉ · 10) kN', inputs: [I('F<sub>ref</sub>', G_('Fref'), 'N', 0)], value: Math.max(20e3, Math.ceil(1.25 * G_('Fref') / 1e4) * 1e4) / 1e3 }),
+    dial_x: j => ({ formula: 's x<sub>layout</sub>', inputs: [I('dial', j, '', 0), I('s', G_('d_s'), '', 5)], value: G_('d_s') * LAY().cluster.xs[j] })
+  });
+  const DIALS = [['pa_now', 1e-6, () => 0, () => G_('d_dial_pmax')], ['pA_now', 1e-6, () => 0, () => G_('d_dial_pmax')], ['pB_now', 1e-6, () => 0, () => G_('d_dial_pmax')], ['F_now', 1e-3, () => 0, () => G_('d_dial_fmax')], ['xv_now', 100, () => -100, () => 100]];
+  check.needle = j => { const [k, f, lo, hi] = DIALS[j], v = G_(k) * f; return { formula: '¾π + 1.5π (value − min)/(max − min), clipped to the scale', inputs: [I('value', v, '', 4), I('min', lo(), '', 1), I('max', hi(), '', 1)], value: 0.75 * Math.PI + 1.5 * Math.PI * (Math.max(lo(), Math.min(hi(), v)) - lo()) / (hi() - lo()) }; };
+  const box = { canvas: scene, ctx: sctx, get dpr() { return G.dpr; } };
+  const dark = c => c[3] > 200 && c[0] < 110 && c[1] < 110 && c[2] < 110;
+  const dialAt = (j, frac) => { const r = G_('d_dial_r'), a = G_('needle')[j]; return { x: G_('dial_x')[j] + frac * r * Math.cos(a), y: G_('d_dial_cy') + frac * r * Math.sin(a) }; };
+  const needleBack = j => () => { const pt = dialAt(j, 0.45), q = Sim.readPixel(box, pt.x, pt.y, 1, dark);
+    return { what: 'black needle of dial ' + (j + 1) + ', 0.45 r from the hub, (' + Sim.fmt(pt.x, 1) + ', ' + Sim.fmt(pt.y, 1) + ') css px', drawn: q.text, expected: 'the dark needle', ok: q.found, note: 'Each dial sweeps 270° from ¾π, clockwise; on the x<sub>v</sub> dial a blue needle shows the applied command.' }; };
+  const drawn = { needle: j => needleBack(j)() };
+  DIALS.forEach(([k], j) => { drawn[k] = needleBack(j); });
+  // what lies at a point of the figure
+  function probeAt(x, y) {
+    const r = G_('d_dial_r'), cy = G_('d_dial_cy'), xs = G_('dial_x');
+    for (let j = 0; j < 5; j++) if (Math.hypot(x - xs[j], y - cy) <= 1.1 * r) return { what: 'dial', j };
+    const Lr = LAY(), s = G_('d_s'), g = pressGeometry(G_('y_now')), X = xm => (Lr.axis + Lr.k * xm) * s, Z = z => (Lr.base - Lr.k * z) * s;
+    if (x >= X(-0.15) && x <= X(0.15) && y >= Z(g.zPlatenTop) - 3 && y <= Z(g.zPlatenTop - 0.04) + 3) return { what: 'ram' };
+    if (x >= X(-g.Rr) - 3 && x <= X(g.Rr) + 3 && y >= Z(g.zRodTop) && y <= Z(g.zPist + g.tPist)) return { what: 'ram' };
+    return null;
+  }
+  function inspectRef(ref) {
+    const i = G_('i_now'), t = ['t', G_('t')[i], 's', 't', i];
+    if (ref.what === 'dial') { const k = DIALS[ref.j][0], base = k.replace('_now', ''); return { title: 'dial ' + (ref.j + 1) + ' of the gauge panel', at: dialAt(ref.j, 0), rows: [t, [ds.vars[k].attrs.symbol, G_(k), ds.vars[k].attrs.units, k, null], ['θ', G_('needle')[ref.j], 'rad', 'needle', ref.j]] }; }
+    const Lr = LAY(), s = G_('d_s'), g = pressGeometry(G_('y_now'));
+    return { title: 'the ram and platen', at: { x: (Lr.axis) * s, y: (Lr.base - Lr.k * (g.zPlatenTop - 0.02)) * s },
+      rows: [t, ['y', G_('y_now'), 'm', 'y_now', null], ['ẏ', G_('yd_now'), 'm/s', 'yd_now', null], ['F', G_('F_now'), 'N', 'F_now', null], ['p<sub>A</sub>', G_('pA_now'), 'Pa', 'pA_now', null], ['p<sub>B</sub>', G_('pB_now'), 'Pa', 'pB_now', null]] };
+  }
+  Sim.data = {
+    ds, kicker: 'Hydraulic Press Study · servo press · data', file: 'hydraulics-servo-press',
+    playing: () => playing, play: () => { if (!run) return; tView = 0; playing = true; lastTs = null; $('play').textContent = '❚❚ Pause'; },
+    groups: [
+      { title: 'Parameters', note: 'the sliders, as used by the last cycle', vars: SLIDERS.filter(s => s.key).map(s => s.key) },
+      { title: 'Constants', note: 'C0 in the model', vars: Object.keys(C0).map(k => 'c_' + k) },
+      { title: 'Plant', note: 'computed by makePlant() from the parameters', vars: ['pl_m', 'pl_AA', 'pl_AB', 'pl_Ah', 'pl_Vh', 'pl_I', 'pl_Rlam', 'pl_Kt', 'pl_Kv', 'pl_wv', 'pl_cw', 'pl_cs', 'pl_Va'] },
+      { title: 'Results of the cycle', note: 'what simulate() found', vars: ['r_outcome', 'r_tEnd', 'r_tPress', 'r_Fpeak', 'r_satFrac', 'r_pMin', 'r_pMinT', 'r_pMinWhere', 'r_closureMax', 'r_closureRel', 'r_substeps'] },
+      { title: 'Stored cycle', note: 'one row per controller sample, every T<sub>s</sub>', vars: REC_KEYS.concat(['LhLf', 'WsWst']) },
+      { title: 'Position loop', note: 'analyse(P, \'position\'): linearised at the approach', vars: ['pos_pm', 'pos_fc', 'pos_gm', 'pos_fg', 'pos_maxAbsZ', 'pos_stable', 'pos_eq_y', 'pos_eq_v', 'pos_eq_xv', 'pos_eq_pA', 'pos_eq_pB', 'pos_eq_beta', 'pos_freq', 'pos_mag', 'pos_dB', 'pos_ph', 'pos_Lre', 'pos_Lim', 'pos_olRe', 'pos_olIm', 'pos_olF', 'pos_olZeta', 'pos_clRe', 'pos_clIm', 'pos_clR', 'pos_clAng', 'pos_clF', 'pos_clZeta'] },
+      { title: 'Force loop', note: 'analyse(P, \'force\'): linearised in the press phase', vars: ['frc_pm', 'frc_fc', 'frc_gm', 'frc_fg', 'frc_maxAbsZ', 'frc_stable', 'frc_eq_y', 'frc_eq_v', 'frc_eq_xv', 'frc_eq_pA', 'frc_eq_pB', 'frc_eq_beta', 'frc_freq', 'frc_mag', 'frc_dB', 'frc_ph', 'frc_Lre', 'frc_Lim', 'frc_olRe', 'frc_olIm', 'frc_olF', 'frc_olZeta', 'frc_clRe', 'frc_clIm', 'frc_clR', 'frc_clAng', 'frc_clF', 'frc_clZeta'] },
+      { title: 'Playback', note: 'the sample on screen now', vars: ['tView', 'i_now', 'playing', 'speed', 'loopSel', 'y_now', 'yd_now', 'F_now', 'pa_now', 'pA_now', 'pB_now', 'xv_now', 'uCmd_now', 'uApp_now', 'W_now'] },
+      { title: 'Drawing', note: 'how stored values become pixels', vars: ['d_cssW', 'd_cssH', 'd_dpr', 'd_s', 'd_dial_r', 'd_dial_cy', 'd_dial_pmax', 'd_dial_fmax', 'dial_x', 'needle'] }
+    ],
+    rowLabel: { n: j => 't = ' + Sim.fmt(G_('t')[j], 3) + ' s' },
+    probe: probeAt, inspect: inspectRef,
+    locate: (name, idx) => { const j = DIALS.findIndex(d => d[0] === name || d[0] === name + '_now'); return j >= 0 && (ds.vars[name].dims.length === 0 || idx === G_('i_now')) ? dialAt(j, 0) : null; },
+    check, drawn,
+    round: { time: 'tView', label: () => 'one press cycle, t = 0 to ' + Sim.fmt(G_('r_tEnd'), 3) + ' s', length: () => G_('r_tEnd'), columns: ['y_now', 'yd_now', 'F_now', 'pA_now', 'pB_now', 'xv_now'],
+      point: () => ({ what: 'ram' }), blocked: () => !run ? 'the first cycle is still being computed' : playing && tView > 0.02 ? 'the cycle is playing; when it ends, Record plays it again from t = 0' : null },
+    about: 'Nothing here is computed while you watch: each change of a setting computes the whole cycle once (RK4, 100 steps per 1 ms controller sample, in a Web Worker) and both loop analyses, and the page stores everything it gets back. Each frame shows the last stored sample at or before the playback time. ' +
+      'Cylinder, rod, platen and specimen are drawn to scale; valve, pump and hose are schematic and the spool travel is exaggerated; the dots in the hose are material points placed from the stored hose volume, not stored themselves. The oil colour is the stored pressure on a scale from 0 to p<sub>s</sub>. ' +
+      'The dials clip at full scale. Check reruns the whole cycle on this page (about a second, longer on a phone). The nine worked solutions below the page compute their own small figures when opened; those numbers are not in this store.'
+  };
+}
+
 PLOTS.forEach(wirePlot);
 buildControls();
 drawPlaceholder();
@@ -2969,5 +3212,6 @@ drawSolutionFigures();
 requestAnimationFrame(loop);
 if (document.fonts && document.fonts.ready) document.fonts.ready.then(() => { drawSolutionFigures(); if (run) { buildPlots(); drawAnalysis(); dirty = true; } });
 </script>
+<script>if (window.SHARED) document.write('<script src="' + SHARED + 'scripts/datalog.js"><\/script>');</script>
 </body>
 </html>
