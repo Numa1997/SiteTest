@@ -15,10 +15,6 @@
   "src": "In a treatise written in 1653 and printed in 1663, a year after his death, Blaise Pascal drew a sealed vessel full of water with two openings, each closed by a piston, and gave the figure a title: <i>Nouvelle sorte de Machine pour multiplier les forces</i>, a new kind of machine for multiplying forces. His text explains it in one sentence:",
   "tr": "في رسالةٍ كتبها عام 1653 وطُبعت عام 1663، أي بعد وفاته بعام، رسم بليز باسكال وعاءً مغلقًا من كل جهة، مملوءًا بالماء، وله فتحتان يُغلَق كلٌّ منهما بمكبس، وأعطى الشكل عنوانًا: <i>Nouvelle sorte de Machine pour multiplier les forces</i>، أي «آلة من نوع جديد لمضاعفة القوى». ويشرحها نصُّه في جملة واحدة:"
  },
- "0eaeb027afbe": {
-  "src": "Why oil, and why not a lever? Because a fluid carries force <i>around corners</i>, through a pipe of any length and shape, and because it carries a great deal of it in a small space. At the 12 MPa of the servo press in Parts II and III, every square centimetre of piston feels 1.2 kN, the weight of a small car. The 12 cm piston of that press pushes with 136 kN, while the pipe that feeds it is 12 mm across. No gear train or cable of that size comes close.",
-  "tr": "لماذا الزيت، ولماذا لا نستعمل رافعة؟ لأنّ المائع ينقل القوّة <i>حول المنعطفات</i>، عبر أنبوب أيًّا كان طوله وشكله، ولأنّه ينقل منها قدرًا كبيرًا في حيّز صغير. وعند ضغط 12 MPa في المكبس المؤازر في الجزأين الثاني والثالث، يشعر كلّ سنتيمتر مربّع من سطح المكبس بقوّة 1.2 kN، أي وزن سيّارة صغيرة. ومكبس هذه الآلة الذي قطره 12 cm يدفع بقوّة 136 kN، بينما الأنبوب الذي يغذّيه قطره 12 mm. ولا تقترب من ذلك أيّ مجموعة تروس أو أيّ كبل بهذا الحجم."
- },
  "1294c59a2c59": {
   "src": "cap chamber",
   "tr": "حجرة الغطاء"
@@ -278,6 +274,10 @@
  "bcdf4114ad55": {
   "src": "a motor-driven pump; the relief valve spills what is not needed back to the tank",
   "tr": "مضخّة تُدار بمحرّك؛ ويعيد صمّام تحديد الضغط ما لا حاجة إليه إلى الخزّان"
+ },
+ "c3d3aa7531c7": {
+  "src": "Why oil, and why not a lever? Because a fluid carries force <i>around corners</i>, through a pipe of any length and shape, and because it carries a great deal of it in a small space. At the 12 MPa of the servo press in Parts II and III, every square centimetre of piston feels 1.2 kN, the weight of two adults standing on a fingertip. The 12 cm piston of that press pushes with 136 kN, while the pipe that feeds it is 12 mm across. No gear train or cable of that size comes close.",
+  "tr": "لماذا الزيت، ولماذا لا نستعمل رافعة؟ لأنّ المائع ينقل القوّة <i>حول المنعطفات</i>، عبر أنبوب أيًّا كان طوله وشكله، ولأنّه ينقل منها قدرًا كبيرًا في حيّز صغير. وعند ضغط 12 MPa في المكبس المؤازر في الجزأين الثاني والثالث، يشعر كلّ سنتيمتر مربّع من سطح المكبس بقوّة 1.2 kN، أي وزن شخصين بالغين يقفان على رأس إصبع. ومكبس هذه الآلة الذي قطره 12 cm يدفع بقوّة 136 kN، بينما الأنبوب الذي يغذّيه قطره 12 mm. ولا تقترب من ذلك أيّ مجموعة تروس أو أيّ كبل بهذا الحجم."
  },
  "c75c33a07a06": {
   "src": "The map of the servo press. Each box is a block with a law inside it; each arrow leaves the block that computes a quantity and enters the block that is given it. Solid arrows run with the oil, from the pump towards the ram: flows and forces. Dashed arrows run back: the pressure or speed with which a block answers its neighbour. Every hydraulic link is a pressure–flow pair, every mechanical link a force–speed pair. Blue arrows are signals: they carry information, not power. On a narrow screen, scroll the figure sideways.",
