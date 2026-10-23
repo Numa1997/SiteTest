@@ -26,3 +26,7 @@ R = 300: kappa* = 252.9740, 288 steps/turn, 80 members, 432 s, chaotic 0
 /home/user/SiteTest/notes/rotor-pendula/derive/engine.py:62: RuntimeWarning: overflow encountered in square
   return np.stack([a1, a2], axis=-1), self.c0*w1**2 + self.c1*(w2 - w1)**2
 R = 5: kappa* = 3.5118, 108 steps/turn, 80 members, 368 s, chaotic 0
+R = 2: kappa* = 0.9733, 104 steps/turn, 80 members, 333 s, chaotic 0
+R = 1: kappa* = 0.1283, 100 steps/turn, 80 members, 237 s, chaotic 16
+total 669 s
+EXIT 0
