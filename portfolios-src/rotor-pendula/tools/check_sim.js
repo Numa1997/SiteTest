@@ -31,7 +31,11 @@ for (const r of L1) {
 console.log(`Largest relative difference: ${pct(worst)} (${worstAt}); limit ${pct(LIMIT)}. ${((Date.now() - t0) / 1000).toFixed(1)} s for 36 runs.`);
 const pass = worst <= LIMIT;
 console.log(pass ? 'PASS' : 'FAIL');
+const SUP = { '-': '⁻', 0: '⁰', 1: '¹', 2: '²', 3: '³', 4: '⁴', 5: '⁵', 6: '⁶', 7: '⁷', 8: '⁸', 9: '⁹' };
+const sci = (x, d = 1) => { const [m, e] = x.toExponential(d).split('e'); return `${m}·10${String(+e).split('').map(c => SUP[c]).join('')}`; };
 
+
+let wl = null, wp = null;
 const L4 = path.join(ROOT, '..', '..', 'notes', 'rotor-pendula', 'derive', 'L4_check_2000.json');
 if (!process.argv.includes('--no-geared') && fs.existsSync(L4)) {
   const rows = JSON.parse(fs.readFileSync(L4, 'utf8'));
@@ -40,7 +44,7 @@ if (!process.argv.includes('--no-geared') && fs.existsSync(L4)) {
   } else {
     console.log(`\nGeared generator against L4_check_2000.json (Python, 2000 steps per turn, 100 + 20 turns), page at ${DEFAULTS.stepsGeared} steps per turn, ${DEFAULTS.settleGeared} + ${DEFAULTS.measureGeared} turns:`);
     console.log('rpm  pivot   N   R_L (ohm)   load page / L4 (mW)        diff     paid page / L4 (mW)       diff    swing page / L4');
-    let wl = 0, wp = 0;
+    wl = 0; wp = 0;
     for (const r of rows) {
       const bandScale = r.Theta != null ? Math.max(r.Theta, 1e-2) : null;
       const out = simulate({ rpm: r.rpm, frac: r.frac, pend: 'single', gen: 'geared', N: r.N, ce: r.c_e, bandScale });
@@ -54,4 +58,10 @@ if (!process.argv.includes('--no-geared') && fs.existsSync(L4)) {
     console.log(`Largest relative difference: load ${pct(wl)}, paid ${pct(wp)}.`);
   }
 }
+// the result, for the page's physics section (tools/build_sim.py reads it)
+const summary = { chk_worst: sci(worst), chk_at: worstAt, chk_steps: String(DEFAULTS.steps), chk_settle: String(DEFAULTS.settle),
+  chk_measure: String(DEFAULTS.measure), chk_runs: String(2 * L1.length), chk_geared_steps: String(DEFAULTS.stepsGeared),
+  chk_geared_sentence: wl == null ? '.'
+    : `. For the geared generator it runs the settings of the Python check L4_check_2000.json (2000 steps per turn): the load power differs by at most ${sci(wl * 100)} % and the power the rotor pays by at most ${sci(wp * 100)} %.` };
+fs.writeFileSync(path.join(ROOT, 'data', 'sim_check.json'), JSON.stringify({ n: summary, worst, pass, geared: wl == null ? null : { load: wl, paid: wp } }, null, 1));
 process.exit(pass ? 0 : 1);

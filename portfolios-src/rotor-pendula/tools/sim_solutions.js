@@ -17,6 +17,8 @@ const sig = (x, k = 3) => {                       // k significant figures, plai
   return f(x, d);
 };
 const deg = r => r * 180 / Math.PI;
+const SUP = { '-': '⁻', 0: '⁰', 1: '¹', 2: '²', 3: '³', 4: '⁴', 5: '⁵', 6: '⁶', 7: '⁷', 8: '⁸', 9: '⁹' };
+const sci = (x, d = 1) => { const [m, e] = x.toExponential(d).split('e'); return `${m}·10${String(+e).split('').map(c => SUP[c]).join('')}`; };
 /** First harmonic of the recorded swing over whole turns: theta ~ a cos(phi) + b sin(phi) + mean = -Theta cos(phi - delta). */
 function lagOf(rec) {
   const nn = rec.framesPerTurn * rec.turns;
@@ -50,14 +52,14 @@ const T0 = Date.now();
   const p03 = sweep[0].P, p3 = sweep[sweep.length - 1].P;
   const half = sweep.filter(s => s.P >= 0.9 * peak.P_mean);
   Object.assign(n, {
-    s1_R: sig(md.R, 4), s1_Rm1: sig(md.R - 1, 4), s1_kstar: sig(md.kappaStar, 4), s1_cstar: sig(md.kappaStar * md.cUnit, 3),
+    s1_R: sig(md.R, 4), s1_rtip: sig(md.rTip, 3), s1_Rm1: sig(md.R - 1, 4), s1_kstar: sig(md.kappaStar, 4), s1_cstar: sig(md.kappaStar * md.cUnit, 3),
     s1_Om: sig(md.Om, 4), s1_rp: sig(md.rp, 3), s1_G: sig(md.G, 3), s1_Pstar: sig(mW(md.Pstar), 4),
     s1_peak_mult: f(Math.exp(lm), 2), s1_peak_kappa: sig(Math.exp(lm) * md.kappaStar, 3), s1_peak_P: sig(mW(peak.P_mean), 4),
     s1_P1: sig(mW(at1.P_mean), 4), s1_gain: sig((peak.P_mean / at1.P_mean - 1) * 100, 2),
     s1_P03: sig(mW(p03), 3), s1_P3: sig(mW(p3), 3), s1_P03_pct: f(p03 / peak.P_mean * 100, 0), s1_P3_pct: f(p3 / peak.P_mean * 100, 0),
     s1_band_lo: f(half[0].m, 2), s1_band_hi: f(half[half.length - 1].m, 2),
     s1_lag: f(deg(lag.delta), 1), s1_Theta: sig(at1.Theta, 3), s1_Theta_lin: sig(md.G / Math.hypot(md.R - 1, md.kappaStar), 3),
-    s1_full_vs_star: sig((at1.P_mean / md.Pstar - 1) * 100, 2),
+    s1_below_star: sig(Math.abs(at1.P_mean / md.Pstar - 1) * 100, 2),
   });
   t.s1 = sweep.filter((s, i) => i % 4 === 0 || i === sweep.length - 1).map(s =>
     `<tr><td>${f(s.m, 2)} κ*</td><td>${sig(mW(s.Pf), 4)} mW</td><td>${sig(mW(s.P), 4)} mW</td></tr>`).join('');
@@ -71,13 +73,15 @@ const T0 = Date.now();
   const { m, L } = CONST.single;
   const Pbill = -m * md.rp * L * md.Om ** 3 * o.trail;
   const trailTheory = -(md.G ** 2) / (4 * md.R * (md.R - 1));
+  const Pexact = -m * md.rp * L * md.Om ** 3 * o.trailSin;          // the same identity with <sin theta>: exact for a steady motion
   Object.assign(n, {
     s2_Om: sig(md.Om, 4), s2_rp: sig(md.rp, 4), s2_R: sig(md.R, 4), s2_G: sig(md.G, 3),
-    s2_trail: sig(o.trail, 3), s2_trail_deg: f(deg(o.trail), 1), s2_trail_theory: sig(trailTheory, 3),
+    s2_trail: sig(o.trail, 3), s2_trail_deg: f(deg(o.trail), 1), s2_trail_deg_abs: f(Math.abs(deg(o.trail)), 1), s2_trail_theory: sig(trailTheory, 3),
     s2_P: sig(mW(o.P_mean), 4), s2_Pbill: sig(mW(Pbill), 4), s2_diff: sig(Math.abs(Pbill / o.P_mean - 1) * 100, 2),
     s2_Theta: sig(o.Theta, 3), s2_mrpLO3: sig(m * md.rp * L * md.Om ** 3, 4),
+    s2_sin: sig(o.trailSin, 3), s2_Pexact: sig(mW(Pexact), 4), s2_exact_diff: sci(Math.abs(Pexact / o.P_mean - 1)),
   });
-  raw.s2 = { trail: o.trail, P: o.P_mean, Pbill, trailTheory };
+  raw.s2 = { trail: o.trail, trailSin: o.trailSin, P: o.P_mean, Pbill, Pexact, trailTheory };
 }
 
 // ---- 3. One rod or two: the 3/4 rule -------------------------------------------------------------------------------------
@@ -114,7 +118,7 @@ const T0 = Date.now();
   const big = rows.filter(r => r.rpm !== 400), Ps = big.map(r => r.P);
   const { m, L } = CONST.single, g = CONST.g, V = 0.3 * CONST.tipSpeed;
   Object.assign(n, {
-    s4_Pmin: sig(mW(Math.min(...Ps)), 4), s4_Pmax: sig(mW(Math.max(...Ps)), 4),
+    s4_Pmin: sig(mW(Math.min(...Ps)), 4), s4_Pmax: sig(mW(Math.max(...Ps)), 4), s4_Pmin3: sig(mW(Math.min(...Ps)), 3), s4_Pmax3: sig(mW(Math.max(...Ps)), 3),
     s4_spread: sig((Math.max(...Ps) / Math.min(...Ps) - 1) * 100, 2), s4_V: f(V, 1),
     s4_Plimit: sig(mW(m * L * g * g / (4 * V)), 4), s4_P400: sig(mW(rows[3].P), 4),
   });
@@ -131,7 +135,7 @@ const T0 = Date.now();
       load: o.P_load, paid: o.P_paid, fric: o.P_fric, Th: o.thetaAbsMax, eta: md.eta });
   }
   t.s5 = rows.map(r => r.jammed
-    ? `<tr><td>${r.N}</td><td>–</td><td>${sig(r.j, 3)}</td><td>${f(r.fG * 100, 0)} %</td><td colspan="4">jams: friction above gravity's largest torque</td></tr>`
+    ? `<tr><td>${r.N}</td><td>–</td><td>${sig(r.j, 3)}</td><td>${f(r.fG * 100, 0)} %</td><td colspan="4" class="wrap">jams: friction above gravity's largest torque</td></tr>`
     : `<tr><td>${r.N}</td><td>${sig(r.RL, 3)}</td><td>${sig(r.j, 3)}</td><td>${f(r.fG * 100, 0)} %</td><td>${sig(mW(r.load), 3)}</td><td>${sig(mW(r.paid), 3)}</td><td>${f(r.fric / r.paid * 100, 0)} %</td><td>${f(r.Th, 3)}</td></tr>`).join('');
   const b = rows.reduce((p, q) => (q.load > p.load ? q : p));
   const r51 = rows.find(r => r.N === 51), r190 = rows.find(r => r.N === 190);
@@ -155,7 +159,7 @@ const T0 = Date.now();
   // the best load resistor for the ratio 51 in the full equation (golden section in log R_L)
   const lr = goldenMax(x => simulate({ ...base, N: 51, RL: Math.exp(x) }).P_load, Math.log(3), Math.log(1000), 0.02);
   const b51 = simulate({ ...base, N: 51, RL: Math.exp(lr) }), pb = parts(b51);
-  const near = [0.29, 0.31].map(fr => simulate({ rpm: 400, frac: fr, gen: 'geared', N: 51, RL: md51.RL }));
+  const near = [0.29, 0.31].map(fr => simulate({ rpm: 400, frac: fr, gen: 'geared', N: 51 }));      // each with its own best R_L by the formula
   const ideal = simulate({ rpm: 400, frac: 0.3 });
   Object.assign(n, {
     s6_Rm1: f(md51.R - 1, 3), s6_j51: f(md51.j, 3), s6_j33: f(md33.j, 3), s6_net51: f(md51.R - 1 - md51.j, 4), s6_net33: f(md33.R - 1 - md33.j, 3),
@@ -167,7 +171,7 @@ const T0 = Date.now();
     s6_33_Th: sig(o33.thetaAbsMax, 3), s6_33_share: f(o33.P_load / md33.Pstar * 100, 0),
     s6_b51_RL: sig(Math.exp(lr), 2), s6_b51_load: sig(mW(b51.P_load), 3), s6_b51_paid: sig(mW(b51.P_paid), 3), s6_b51_gear: sig(mW(pb.gear), 3),
     s6_b51_Th: sig(b51.thetaAbsMax, 3),
-    s6_29_load: sig(mW(near[0].P_load), 3), s6_31_load: sig(mW(near[1].P_load), 3),
+    s6_29_load: sig(mW(near[0].P_load), 3), s6_31_load: sig(mW(near[1].P_load), 3), s6_29_RL: f(near[0].model.RL, 0), s6_31_RL: f(near[1].model.RL, 0),
   });
   t.s6 = [
     ['33', md33.RL, o33, p33], ['51', md51.RL, o51, p51], ['51', Math.exp(lr), b51, pb],

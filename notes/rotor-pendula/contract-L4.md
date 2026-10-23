@@ -77,3 +77,19 @@ counts if steady (halves agree to 1 %), swing ≤ 0.5 rad, motor ≤ 8000 rpm (g
 Derived: the brake constant, the load share, the reflected inertia, the describing function, the implicit full equation.
 Cited: maxon catalogue pages 153 (RE 25, part 339152), 430–431 (GP 32 C). Chosen: the RE 25 + GP 32 C pair (a catalogue part
 able to resist 0.14 N m at the pivot), the backdriven efficiency, the friction estimate.
+
+## Round 2: answers to skeptic-G1-L4-r1.md
+
+- **M1 (gearhead drag missing).** Accepted. `derive/L4_sensitivity.py` (the skeptic's script, adopted, extended to the nine
+  large-rotor mountings): with the friction doubled the load gets 0.89–5.4 mW, tripled 0.48–2.5 mW, with η = 0.5 1.03–5.4 mW, with
+  both twice the friction and η = 0.5 0.41–2.0 mW; the worst is about 10 times the sensor's need, so P1 holds across this range.
+  The jamming ratio scales as 1/(friction multiple): 164 at the sheet's value, 82 at twice. The note quotes these.
+- **M2 (voltage, brushes).** Accepted as a stated limit. The load voltage peaks at 88–326 mV (large rotors) and alternates once
+  per turn (0.13–0.33 Hz). The note now says that converting it is an electronics problem these notes do not solve and that the
+  brushes at such small, slow currents need a test; all margins are quoted "before the electronics".
+- **M3 (backlash).** Accepted. Table 2 marks the two fast mountings whose swing is below the half play (0.0087 rad) with † and the
+  seven whose swing is under six times it with ‡; the headline numbers come from the large rotors only (swing ≥ 0.06 rad).
+- **M4 (sticking).** Accepted: "the swing never sticks" was false and is withdrawn. `derive/L4_stick.py` (the skeptic's script,
+  adopted) measures the time stopped; the 2000/4000-step runs agree within 1 %, so the smoothed model resolves the averages.
+- **M5 (predictions after the runs).** Accepted; P1 was nevertheless at risk under M1's sensitivity and survived (worst 10×).
+- **Minor.** `L4_converge.py` failed on the old JSON keys; the version-3 check files use the keys it reads.

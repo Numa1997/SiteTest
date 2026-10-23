@@ -76,3 +76,22 @@ frequency-domain response to a modal force that is white near ω_e; power c∫S_
 
 Derived (SymPy): the moving-pivot Lagrangian, its linearisation, the coupled matrices. Cited: Jonkman et al. 2009
 (NREL/TP-500-38060); OpenFAST r-test NREL 5-MW blade file. Chosen: the shaking range, ζ_e = 0.5 % and 3 %, pivot at 90 %.
+
+## Round 2: answers to skeptic-G1-L3-r1.md
+
+- **M1 (sag shape).** Accepted. `derive/L3_sag_static.py` (the skeptic's integration of the static bend, adopted and rerun) gives
+  −0.26/+0.09/+1.99 % (edgewise stiffness) and −0.28/+0.06/+2.06 % (twist-projected) at 30/60/90 %, against the modal shape's
+  −0.4/−0.8/+0.5 % (`L3_sag.json`). The notes now quote the spread across the shape models, −0.4 to −0.3, −0.8 to +0.1 and +0.5 to
+  +2.1 %, and say why it depends on the shape (a difference of two large numbers). P1 (< 2 %) sits on its line at 90 %; it is
+  reported as such, not rescued.
+- **M2 (tuned rod, gravity's 1P modulation).** Accepted, not computed. The note now states the third catch: gravity changes the
+  rod's stiffness by ±G/2R = ±9.6 % of its frequency every turn at 90 %, whatever its length, against a resonance 0.5–3 % wide, so
+  the tuned rod's gains are not established and may be several times too high; the short answers say the tuned rod is not shown
+  to work. Observable (c) and P3 are withdrawn. The time-domain run with gravity kept whole is listed as open work.
+- **M3 (predictions after the runs).** Accepted. Fresh prediction, registered before any run: in a time-domain run of the tuned rod
+  with gravity kept whole (5 mm tip rms, ζ_e = 0.5 %, uniform Ω), the rod's harvest will be below half the linear 19 mW. Not run
+  in this session.
+- Minor: m1 (A5) the tuned rod swings 0.26 rad rms at ζ_e = 0.5 % and 0.17 rad at 3 % (`L3_shake2.json`); m3 the energy bound is a
+  code check; m5 the shaking model covers the asymmetric edgewise mode only; m6 1P aerodynamic in-plane loads (~3 % of the gravity
+  root moment by the skeptic's estimate) are left out; m2 the OpenFAST regression output for the shaking level was not opened in
+  this session; the range stays a stated range.
