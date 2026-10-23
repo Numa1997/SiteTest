@@ -1,0 +1,23 @@
+<div class="card">
+<div class="eyebrow">How the numbers are tested</div>
+<h2>Checks</h2>
+<p>The model is one block of JavaScript that runs in this page and in Node. Three kinds of test stand behind every number in the notes:
+exact solutions the model must reproduce, independent recomputations in Python (constants typed again, integrations by SciPy, derivations by
+SymPy), and a script that recomputes every number quoted in the notes and finds it in the text.</p>
+<div class="tblw"><table class="mt">
+<tr><th>test</th><th>result</th></tr>
+<tr><td class="wrap">Stokes drag from the stream function: $E^4\psi = 0$, no slip, pressure and shear (SymPy)</td><td class="wrap">$2\pi\mu aU + 4\pi\mu aU = 6\pi\mu aU$</td></tr>
+<tr><td class="wrap">One collector: (1.4) against a numerical integration</td><td>9.9554 min both ways</td></tr>
+<tr><td class="wrap">Fall speed against Gunn and Kinzer (1949), d ≥ 0.3 mm</td><td>largest gap 2.07 %</td></tr>
+<tr><td class="wrap">Critical Stokes numbers, point droplet on the axis</td><td class="wrap">0.08333 (exact 1/12); 1.21194 (Michael and Norey 1970: 1.21194)</td></tr>
+<tr><td class="wrap">Point-droplet efficiencies against Langmuir's (1948) Table 1, K ≥ 5</td><td>within 3.2 %</td></tr>
+<tr><td class="wrap">Golovin's exact solution, 60 min, 8 bins per doubling</td><td class="wrap">spectrum error 0.051; mass error −4.58 × 10⁻⁷ (grid truncation); scheme drift 2 × 10⁻¹³</td></tr>
+<tr><td class="wrap">Water conservation in every collection-equation run</td><td>to 3.4 × 10⁻¹³</td></tr>
+<tr><td class="wrap">Exact stochastic runs: kernel bound violated</td><td>0 times in 430 runs</td></tr>
+<tr><td class="wrap">First 100 µm drop, exact runs against the Poisson prediction (6.1)</td><td class="wrap">medians 286 s and 175 s against 280 s and 175 s</td></tr>
+<tr><td class="wrap">Old study's warm-cloud times, recorded to the minute</td><td class="wrap">3 / 5, 3 / 7, 6 / 14, 7 / 19 min reproduced</td></tr>
+</table></div>
+<p class="note">The source of the study, its derivations and its check scripts are in the website's repository, folder
+<span class="mono">portfolios-src/droplets/</span>; the record of how each level was built and attacked is in
+<span class="mono">notes/droplets/</span>.</p>
+</div>

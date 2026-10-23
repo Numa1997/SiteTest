@@ -1,0 +1,30 @@
+<section id="ch0" class="chapter">
+<h2><span class="chn">0</span> The question</h2>
+<p>Look at a summer cumulus. It is made of water, but nothing falls out of it: its droplets are about ten micrometres across, and they
+sink through the air at about a centimetre per second, slower than the air rises in the cloud. Twenty minutes later the same cloud
+may rain. Raindrops are a hundred times wider than cloud droplets and hold a million times more water each. Something has to gather
+a million droplets into one drop, and it has to do it in minutes.</p>
+<p>Gravity does it. A drop that is a little larger than its neighbours falls a little faster, overtakes the droplets below it and
+swallows some of them; it grows, falls faster still and swallows more. These notes build that process from first principles, one
+physical effect at a time, and ask three questions of it:</p>
+<ol>
+<li>How long does it take until most of the water sits in large drops? (Observable 1.)</li>
+<li>How long until the very first drizzle drop appears in a given volume of cloud, and how much does that time vary from one volume to
+the next? (Observable 2.)</li>
+<li>If the cloud is cold and holds ice, do collisions make new ice particles? (Observable 3, the question of the thesis these notes
+grew from: N. Koudsie, <em>Collisional Ice Multiplication Processes in Clouds</em>, Bachelor thesis, Leipzig 2022.)</li>
+</ol>
+
+<h3>The cloud we study</h3>
+<p>The test case is the thesis's warm cloud at 10 °C and 850 hPa: 300 droplets per cm³ with radii spread around 8 µm, and one larger
+drop per cm³ around 40 µm, which we call a <em>collector</em>. Collector is a role, not a kind of particle: in any encounter the larger
+drop is the collector. Both groups are given as lognormal size distributions (section 5.1). The droplets hold 0.805 g of water per m³
+of air, the collectors 0.311 g/m³. The cloud is a closed, well-mixed box: no air rises, nothing condenses, nothing falls out. That
+isolates collection, at the price of everything else a real cloud does (chapter 9 says what).</p>
+<p>A word on size names, all radii: cloud droplets are below 20 µm; drizzle drops have r ≥ 100 µm and fall about 0.7 m/s; raindrops
+have r ≥ 250 µm. Observable 1 counts the water in drops of radius r ≥ 40 µm, the fraction $F_{40}(t)$, and the times $t_{50}$ and $t_{90}$ at which it reaches one half and nine tenths. It is a measure of growth, not a rain gauge: the box has no ground.</p> <h3>An estimate before any model</h3> <p>A collector of radius $R$ falling at speed $v$ sweeps a cylinder of air of volume $\pi R^2 v$ per second. With the simplest fall-speed law (Stokes, chapter 2) a 40 µm drop falls at 0.197 m/s, so it sweeps $9.9\times10^{-10}$ m³ each second. One million collectors per m³ sweep $9.9\times10^{-4}$ of the air per second: if every droplet they met stuck, the droplet water would be cleared on a time scale of 17 min. Growth speeds this up, a collision efficiency below one slows it down: expect a few minutes to ten minutes for $t_{50}$. Every later result is checked against this estimate.</p> <div class="callout"><div class="ctag">Conventions</div> <ul> <li>SI units; radii in µm in the text. $r$ is a radius, $d = 2r$ a diameter, $R$ the larger radius in a pair.</li> <li>Air at 10 °C and 850 hPa unless stated: density $\rho_a = 1.0458$ kg/m³ (ideal gas), viscosity $\mu = 1.771\times10^{-5}$ Pa s (Sutherland's law with the thesis's constants), water density $\rho_w = 1000$ kg/m³, $g = 9.81$ m/s².</li>
+<li>"In our cloud" boxes give numbers computed by the model on this page; the Checks tab says how each is tested.</li>
+<li>The notes climb a ladder: L0 (chapter 1) is the simplest model, and each later chapter adds one effect, with a number that shows
+it matters.</li>
+</ul></div>
+</section>
