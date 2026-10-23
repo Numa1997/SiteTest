@@ -10,6 +10,11 @@ turn while the queue has an item I can act on; `send_later` "Resume from notes/r
 and understandable, I am fine." Rule from here: every computation must earn a figure or a sentence a student reads; no
 exhaustive scans; the ladder stays, but each level is as small as its question allows.
 
+## Numa, 23 Oct (second message): the deliverable is the LECTURE NOTE (a notebook/portfolio), now
+
+Stop gating everything like a paper. Write the note from what is checked (L0, L1, power theorem), build it, show screenshots.
+Turbulence (L2, after its controller fix) and blade vibration (L3) are added as chapters when right.
+
 ## Page 1. Fermi estimates of observable 1, before any model (23 October 2026)
 
 Computed by `derive/scales.py` and `derive/fermi.py`; (prov) = provisional turbine value until the scouts' dossiers arrive.
