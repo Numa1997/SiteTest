@@ -71,6 +71,15 @@ acceleration at the pivot approaches g; chaos spreads the mobility over a wide b
 - C_p(λ): ROSCO `Cp_Ct_Cq.NREL5MW.txt` (NREL/ROSCO GitHub, written Jan 2022, CCBlade): peak 0.466 at λ = 7.5, β = 0; Jonkman's
   report says 0.482 at 7.55 (FAST). 3.4 % apart; ROSCO used for the curve's shape.
 
+- L2 skeptic round 1 (`skeptic-G1-L2-r1.md`): 1 fatal, 11 must fix, 13 minor. FATAL accepted: the −2 % total change (P3) is a
+  controller artefact: the region 1.5 kink sits 0.9 % below Ω₀; with a pure kΩ² law the shift is +0.09 % and the pendulum's
+  change becomes about +0.8 %. P3 withdrawn. Robust: wander term +0.35..+0.57 % (skeptic +0.45..+0.53 %), Euler < 2e-4.
+  To do: contract L2 round 2 (run both torque laws; overdamped picture, ζ = 4.5–8.4; dynamic inflow 15 s; σ₁ is the IEC 90 %
+  quantile; C_p 0.482 vs 0.466; unresolved-variance torque rectification ~5.7 % of Q₀).
+- L1 map (`L1_map.json`): chaos only at R = 1 (G = 1, 16/16 members); none at R ≥ 2; 10 members diverged numerically, all at
+  G = 70 with R ≤ 5 (no real mounting): rerun them with more steps before quoting.
+- External review prompt for Numa's ChatGPT agent: `review-prompt.md` (given 23 Oct, study unfinished).
+
 ## Found along the way
 
 - **Brief 4.3 corrected:** a double pendulum reaches m_eff = M_total whenever its TOP rod is perpendicular to e, whatever the
