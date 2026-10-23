@@ -1,0 +1,176 @@
+
+<div class="page page-checks">
+<p>Verification · this site, the study and an independent audit</p>
+<div class="utility"></div>
+<div class="titlerow">
+<h1>Checks</h1>
+<div class="tally"><b>1e-9</b>largest gap, this solver vs the study<b>9e-10</b>energy books, worst run<b>12 / 14</b>corrections fully done</div>
+</div>
+<p>Three layers of checking. This page re-runs the study's own cases in your browser and compares them with the stored results, now. An independent audit rebuilt the model from scratch and recomputed every headline number. And the audit lists, with evidence, what in the report is wrong. The derivations behind each check are in <a href="#/theory">Theory</a> chapter 11.</p>
+<div class="sections">
+<div class="cat">
+<div class="head-main">
+<h2>01This solver against the study's stored runs</h2>
+<p>computed in your browser · RK4 · the study's start states</p>
+</div>
+<div class="head-side"></div>
+<div class="fold">
+<div class="fold-i">
+<div class="sec-body">
+<p>Each row starts from the study's own initial state, leaves out the same number of rotor turns, and averages over the same window. The harvest and the rotor's work are integrated alongside the motion, so the mean powers are exact integrals, not sums of samples. "Books" is (rotor input − harvest − change of stored energy) ÷ rotor input over the window.</p>
+<div class="table-scroll stack">
+<table><caption>This solver against the study</caption><thead>
+<tr><th>run</th><th>pendulum</th><th>study (W)</th><th>this browser (W)</th><th>gap</th><th>rotor power gap</th><th>books</th><th>steps per turn</th><th>time</th></tr>
+</thead><tbody>
+<tr><td>map small 400 30 single</td><td>single</td><td>0.05708639281</td><td>0.05708639288</td><td>1.3e-9</td><td>5.8e-10</td><td>-6.8e-10</td><td>512</td><td>0.12 s</td></tr>
+<tr><td>map small 400 30 both</td><td>double</td><td>0.03625707309</td><td>0.03625707311</td><td>7.3e-10</td><td>3.0e-10</td><td>-4.3e-10</td><td>576</td><td>0.11 s</td></tr>
+<tr><td>map small 100 60 single</td><td>single</td><td>0.01526198699</td><td>0.01526198700</td><td>9.9e-10</td><td>2.4e-10</td><td>-7.5e-10</td><td>512</td><td>0.07 s</td></tr>
+<tr><td>map large 8 30 single</td><td>single</td><td>0.02871538394</td><td>0.02871538395</td><td>1.2e-10</td><td>6.1e-10</td><td>-7.3e-10</td><td>1136</td><td>0.09 s</td></tr>
+<tr><td>map large 20 90 single</td><td>single</td><td>0.009617592950</td><td>0.009617592951</td><td>3.2e-11</td><td>1.9e-11</td><td>-8.7e-12</td><td>1504</td><td>0.12 s</td></tr>
+<tr><td>geometry m0.1 l0.316227766</td><td>double</td><td>0.06513037120</td><td>0.06513037121</td><td>2.5e-10</td><td>1.4e-10</td><td>-5.8e-11</td><td>912</td><td>0.15 s</td></tr>
+<tr><td>topology single</td><td>single</td><td>0.02714356973</td><td>0.02714356975</td><td>1.0e-9</td><td>3.2e-10</td><td>-6.8e-10</td><td>512</td><td>0.05 s</td></tr>
+<tr><td>topology pivot</td><td>double</td><td>0.01412808693</td><td>0.01412808695</td><td>1.0e-9</td><td>3.2e-10</td><td>-7.0e-10</td><td>512</td><td>0.08 s</td></tr>
+<tr><td>small o0 r0 single opt</td><td>single</td><td>0.1518010576</td><td>0.1518010578</td><td>1.2e-9</td><td>3.8e-10</td><td>-8.7e-10</td><td>512</td><td>0.05 s</td></tr>
+<tr><td>chaos matched refine c1</td><td>double</td><td>0.3789203067</td><td>0.3789203067</td><td>1.4e-11</td><td>6.6e-12</td><td>-7.7e-12</td><td>816</td><td>0.21 s</td></tr>
+<tr><td>chaos o0 r0 c5</td><td>double</td><td>0.04000943993</td><td>0.04000943993</td><td>2.3e-14</td><td>7.1e-14</td><td>6.9e-14</td><td>736</td><td>0.16 s</td></tr>
+</tbody></table>
+</div>
+<p>The two heavily damped double pendula on slow rotors need 44,320 and 59,200 RK4 steps per turn to stay stable (Theory chapter 11), about ten seconds each. </p>
+<p>What agreement to expect: the study integrated with an adaptive eighth-order method (DOP853, relative tolerance 10⁻¹⁰), this page with fixed-step RK4. Gaps of 10⁻¹⁰ to 10⁻⁹ are the two integrators' own errors.</p>
+</div>
+</div>
+</div>
+</div>
+<div class="cat">
+<div class="head-main">
+<h2>02Linear theory against the full equations</h2>
+<p>18 single-pendulum mountings · both from the study's data</p>
+</div>
+<div class="head-side"></div>
+<div class="fold">
+<div class="fold-i">
+<div class="sec-body">
+<p>Linear theory (Theory chapter 5) assumes small swings. Where the swing stays small it should match the full nonlinear result; the study counts it valid below 0.3 rad (17°) and a 2 % power gap.</p>
+<div class="table-scroll stack">
+<table><caption>Linear against nonlinear power</caption><thead>
+<tr><th>rotor</th><th>pivot</th><th>nonlinear (mW)</th><th>linear (mW)</th><th>gap</th><th>largest swing</th><th>linear valid</th></tr>
+</thead><tbody>
+<tr><td>400 rpm</td><td>30 %</td><td>57.0864</td><td>57.0919</td><td>-0.0096 %</td><td>1.1°</td><td>yes</td></tr>
+<tr><td>400 rpm</td><td>60 %</td><td>19.0644</td><td>19.0645</td><td>-0.00036 %</td><td>0.4°</td><td>yes</td></tr>
+<tr><td>400 rpm</td><td>90 %</td><td>11.4427</td><td>11.4427</td><td>-0.000095 %</td><td>0.2°</td><td>yes</td></tr>
+<tr><td>200 rpm</td><td>30 %</td><td>38.1267</td><td>38.1289</td><td>-0.0057 %</td><td>1.5°</td><td>yes</td></tr>
+<tr><td>200 rpm</td><td>60 %</td><td>16.3491</td><td>16.3493</td><td>-0.00076 %</td><td>0.6°</td><td>yes</td></tr>
+<tr><td>200 rpm</td><td>90 %</td><td>10.4055</td><td>10.4055</td><td>-0.00032 %</td><td>0.4°</td><td>yes</td></tr>
+<tr><td>100 rpm</td><td>30 %</td><td>32.6946</td><td>32.6985</td><td>-0.012 %</td><td>2.6°</td><td>yes</td></tr>
+<tr><td>100 rpm</td><td>60 %</td><td>15.2620</td><td>15.2624</td><td>-0.0029 %</td><td>1.2°</td><td>yes</td></tr>
+<tr><td>100 rpm</td><td>90 %</td><td>9.9542</td><td>9.9544</td><td>-0.0013 %</td><td>0.8°</td><td>yes</td></tr>
+<tr><td>20 rpm</td><td>30 %</td><td>29.2754</td><td>29.3540</td><td>-0.27 %</td><td>12.3°</td><td>yes</td></tr>
+<tr><td>20 rpm</td><td>60 %</td><td>14.4814</td><td>14.4917</td><td>-0.071 %</td><td>5.9°</td><td>yes</td></tr>
+<tr><td>20 rpm</td><td>90 %</td><td>9.6176</td><td>9.6207</td><td>-0.032 %</td><td>3.9°</td><td>yes</td></tr>
+<tr><td>14 rpm</td><td>30 %</td><td>28.9928</td><td>29.1200</td><td>-0.44 %</td><td>18.0°</td><td>no</td></tr>
+<tr><td>14 rpm</td><td>60 %</td><td>14.4164</td><td>14.4371</td><td>-0.14 %</td><td>8.5°</td><td>yes</td></tr>
+<tr><td>14 rpm</td><td>90 %</td><td>9.5903</td><td>9.5965</td><td>-0.065 %</td><td>5.6°</td><td>yes</td></tr>
+<tr><td>8 rpm</td><td>30 %</td><td>28.7154</td><td>28.7650</td><td>-0.17 %</td><td>34.9°</td><td>no</td></tr>
+<tr><td>8 rpm</td><td>60 %</td><td>14.3245</td><td>14.3828</td><td>-0.40 %</td><td>15.3°</td><td>yes</td></tr>
+<tr><td>8 rpm</td><td>90 %</td><td>9.5541</td><td>9.5725</td><td>-0.19 %</td><td>10.0°</td><td>yes</td></tr>
+</tbody></table>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div class="cat">
+<div class="head-main">
+<h2>03The independent audit: headline numbers</h2>
+<p>own model, written from scratch · SymPy equations · DOP853</p>
+</div>
+<div class="head-side"></div>
+<div class="fold">
+<div class="fold-i">
+<div class="sec-body">
+<p>The audit did not reuse the study's code. It wrote the positions of the masses in an inertial frame, let SymPy derive the equations of motion, and integrated them with a different method and different variables. It also re-ran the study's own code on seven cases; they reproduced bit for bit.</p>
+<div class="table-scroll stack">
+<table><caption>Headline numbers</caption><thead>
+<tr><th>quantity</th><th>study</th><th>audit</th><th>difference</th></tr>
+</thead><tbody>
+<tr><td>Best harvest (400 rpm, pivot at 30 %)</td><td>0.05708639 W</td><td>0.0570863928 W (own model); linear theory 0.0570919 W</td><td>2.8 × 10⁻¹² relative</td></tr>
+<tr><td>Double ÷ single, 18 mountings</td><td>0.6351–0.7354</td><td>0.635126–0.735376</td><td>&lt; 10⁻¹¹</td></tr>
+<tr><td>All 36 mapping powers</td><td>summary.csv</td><td>own model, every run</td><td>at most 2.8 × 10⁻¹² relative</td></tr>
+<tr><td>Largest share of turbine output</td><td>7.20436 × 10⁻⁵</td><td>7.204359 × 10⁻⁵</td><td>none</td></tr>
+<tr><td>Rotor radius and output at 10.472 rad/s</td><td>5.347606 m, 12 678.190 W</td><td>5.347606088 m, 12 678.190075 W</td><td>none</td></tr>
+<tr><td>Centrifugal load Γ, all mountings</td><td>1.435–215.277 g</td><td>1.435183–215.277415 g</td><td>none</td></tr>
+<tr><td>Chaotic cases in the scan</td><td>2 of 54</td><td>2 of 54, the same two; all 54 labels agree</td><td>none</td></tr>
+<tr><td>Chaotic power, 200 turns (c = 0.030)</td><td>0.253 ± 0.003 W</td><td>0.2530 W or 0.2439 W (Sol's code, two back ends); 0.2470 ± 0.0084 W (own)</td><td>spread 0.009 W, three times the quoted error</td></tr>
+<tr><td>Chaotic power, 800 turns</td><td>0.244 ± 0.002 W</td><td>0.2476 ± 0.0024 W (own)</td><td>+0.0033 W</td></tr>
+<tr><td>Chaotic ÷ regular, 800 turns</td><td>0.6448</td><td>0.6535 (own)</td><td>+0.009</td></tr>
+<tr><td>Regular matched orbit</td><td>0.3789 W</td><td>0.3789203067 W, three starts</td><td>&lt; 10⁻¹³</td></tr>
+<tr><td>Sensor reference load</td><td>37.58436 µW</td><td>37.58436 µW, datasheet values verified</td><td>none</td></tr>
+<tr><td>RK4 at 2048 against 4096 steps per turn, two runs</td><td>4.61 × 10⁻¹², 3.21 × 10⁻¹²</td><td>same; and the audit's own DOP853 against RK4 at 4096 steps: 1.7 × 10⁻¹³, 4.0 × 10⁻¹³</td><td>none</td></tr>
+<tr><td>Every number in report.tex</td><td>536 numbers</td><td>528 match the data, 6 are stated inputs, 2 are not results</td><td>none wrong</td></tr>
+</tbody></table>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div class="cat">
+<div class="head-main">
+<h2>04The 14 requested corrections</h2>
+<p>12 done · 2 partly · from the first version of the study</p>
+</div>
+<div class="head-side"></div>
+<div class="fold">
+<div class="fold-i">
+<div class="sec-body">
+<div class="table-scroll stack">
+<table><caption>Corrections</caption><thead>
+<tr><th></th><th>correction</th><th>verdict</th><th>evidence</th></tr>
+</thead><tbody>
+<tr><td>C1</td><td>Delivery size</td><td>done</td><td>181 files, 2.8 MB unpacked; only two trajectories kept, in single precision.</td></tr>
+<tr><td>C2</td><td>Turbine size from the tip-speed ratio</td><td>done</td><td>R_rot = 56 m/s ÷ Ω and P_T recomputed; every run carries its turbine output.</td></tr>
+<tr><td>C3</td><td>Pivot inside the rotor</td><td>partly</td><td>Every pivot is inside, but at 400 rpm and 90 % the bob reaches 66 mm past the tip.</td></tr>
+<tr><td>C4</td><td>Sensor acceleration range</td><td>done</td><td>Γ spans 1.435–215.3 g against the accelerometer's ±8 g; gravity's share included.</td></tr>
+<tr><td>C5</td><td>Unfinished Lyapunov exponents</td><td>done</td><td>Five legacy values stay "not measured", openly.</td></tr>
+<tr><td>C6</td><td>A stated chaos criterion</td><td>done</td><td>Λ̂ &gt; 0.002 with all four blocks positive; "regular" means only "test not met".</td></tr>
+<tr><td>C7</td><td>Honest precision</td><td>partly</td><td>The chaotic power moves by 0.009 W with the integrator alone; ±0.003 W is too small.</td></tr>
+<tr><td>C8</td><td>The regular orbit checked</td><td>done</td><td>0.3789203067 W over 800 turns and from two other starts.</td></tr>
+<tr><td>C9</td><td>An RK4 accuracy threshold</td><td>done</td><td>Halving the step changes the power by 4.6 and 3.2 × 10⁻¹², against a stated 10⁻⁸.</td></tr>
+<tr><td>C10</td><td>Coverage of rotor sizes</td><td>done</td><td>3 speeds × 3 blade positions per turbine class, called a sampling, not a search.</td></tr>
+<tr><td>C11</td><td>Sensor budget from datasheets</td><td>done</td><td>Every current and page reference checked; 37.58436 µW.</td></tr>
+<tr><td>C12</td><td>The middle joint</td><td>done</td><td>Linearisation reproduces every printed digit of the relative-amplitude table.</td></tr>
+<tr><td>C13</td><td>Labels on every table</td><td>done</td><td>One gap: the similarity line omits its R = 2.5, G = 0.4471.</td></tr>
+<tr><td>C14</td><td>Similarity test</td><td>done</td><td>Power ratio 6.000000000000 in the independent model.</td></tr>
+</tbody></table>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div class="cat">
+<div class="head-main">
+<h2>05What in the report is wrong</h2>
+<p>none changes a conclusion · ranked by severity</p>
+</div>
+<div class="head-side"></div>
+<div class="fold">
+<div class="fold-i">
+<div class="sec-body">
+<ol>
+<li>moderate Eq. 17 prints the rotor radius as 56 mm/s ÷ Ω. It is 56 m/s ÷ Ω: a lost "\r" in "\rm" turned the unit into millimetres. Every number that uses the formula is right.</li>
+<li>moderate The chaotic power's error bar, ±0.003 W, is the spread inside one run. Three valid integrations of the same run give 0.2439, 0.2470 and 0.2530 W. Honest statements: about 0.25 ± 0.01 W over 200 turns, 0.245 ± 0.005 W over 800, ratio to the regular orbit 0.65 ± 0.01. The conclusion, chaos gives less, stands.</li>
+<li>low One sentence says Γ "decreases with angular speed" at a fixed blade position. Γ = (r_p/R_rot) λ_T v Ω / g grows with Ω: 1.435 at 0.838 rad/s, 71.8 at 41.9 rad/s.</li>
+<li>low The abstract calls all 18 mountings physically admissible. At 400 rpm with the pivot at 90 %, the pendulum reaches 1.403 m on a 1.337 m blade: 66 mm past the tip.</li>
+<li>low The best harvest, 57.1 mW, sits at the edge of the sampled grid (fastest rotor, pivot nearest the hub). Linear theory grows as 1/|r_p − L| there, so it is the best sampled point, not an optimum.</li>
+<li>low The regular panel of the Poincaré figure is smeared by 0.97 mrad because angles were stored in single precision; the caption says it collapses to a point. The motion itself repeats.</li>
+<li>low Peak swing angles were read from 16 samples per turn; the continuous peaks are up to 1.5 % larger. No validity flag changes.</li>
+<li>low CHANGES.md labels the old short-window ratio 0.6436 as the old long-window one.</li>
+</ol>
+<p>This site corrects all of these where it states the results; the Theory page marks each correction where it occurs.</p>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+<p>Built on the corrected study <em>Wind-driven rotor pendula</em> (Sol, for N. Koudsie, 14 October 2026), with an independent audit and corrections.</p>
+<p>Model: point masses on rigid massless rods, a planar rotor at constant angular speed, viscous generators at the joints · solver: classical RK4 in your browser.</p>

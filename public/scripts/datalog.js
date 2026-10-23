@@ -117,7 +117,7 @@
 
     var tab = document.createElement('button');
     tab.type = 'button';
-    tab.className = 'dp-tab';
+    tab.className = 'dp-tab'; tab.lang = 'en'; tab.dir = 'ltr';   /* the panel's words are English, also on a page in another language */
     tab.setAttribute('aria-controls', 'data-panel');
     tab.innerHTML = ICON + '<span>Data</span>';
     /* on a phone the pill floats over the page: it steps aside while the reader scrolls down, and comes back on any scroll up */
@@ -131,7 +131,7 @@
 
     var panel = document.createElement('aside');
     panel.className = 'dp';
-    panel.id = 'data-panel';
+    panel.id = 'data-panel'; panel.lang = 'en'; panel.dir = 'ltr';
     panel.setAttribute('aria-label', 'Simulation data');
     panel.innerHTML =
         '<header class="dp__head"><div class="dp__bar"><p class="dp__kicker">' + esc(spec.kicker || ds.title) + '</p>' +
@@ -572,7 +572,7 @@
         octx = overlay.getContext('2d');
         /* the strip lives under the figure, between it and its caption, so it never covers what it describes */
         strip = document.createElement('div');
-        strip.className = 'dp-read';
+        strip.className = 'dp-read'; strip.lang = 'en'; strip.dir = 'ltr';
         strip.hidden = true;
         strip.setAttribute('aria-live', 'polite');
         strip.innerHTML = '<p class="dp-read__hint">' + (TOUCH ? 'Tap a point in the figure to pin it; drag to move the pin.' : 'Click a point in the figure to pin it; drag to move the pin. Esc stops reading.') + '</p>' +
@@ -582,7 +582,7 @@
         stripTitle = strip.querySelector('.dp-read__title'); stripVals = strip.querySelector('.dp-read__vals');
         readBtn = document.createElement('button');
         readBtn.type = 'button';
-        readBtn.className = 'dp-readbtn';
+        readBtn.className = 'dp-readbtn'; readBtn.lang = 'en';
         readBtn.setAttribute('aria-pressed', 'false');
         readBtn.title = 'Pin a point of the figure and read its values';
         readBtn.innerHTML = CROSS + '<span> Read values</span>';
@@ -764,7 +764,7 @@
         var names = scalarNames();
         rec = {
             no: roundNo + 1, len: roundLength(), label: safe(R.label, '') || 'ten seconds of play', mode: R.mode, ref: info ? ref : null,
-            pointTitle: info ? info.title : '', pointRows: info ? info.rows.map(function (row) { return { label: row[0], units: row[2] || '', name: row[3], idx: row[4], key: row[0] + '|' + row[3] + '|' + row[4] }; }) : [],
+            pointTitle: info ? info.title : '', pointRows: info ? info.rows.map(function (row) { return { label: row[0], units: row[2] || '', name: row[3], idx: row[4], key: row[0] + '|' + row[3] }; }) : [],   /* the key leaves out the index: a followed point moves through a stored run */
             names: names, t0: null, lastEl: -Infinity, key: null, n: 0, frames: 0, wall0: performance.now(),
             buf: { __t: [], __el: [] }, params: (spec.groups[0] ? spec.groups[0].vars : []).filter(isNumScalar).map(function (n) { return [n, ds.get(n)]; })
         };
@@ -806,7 +806,7 @@
             if (rec.pointRows.length) {
                 var info = safe(function () { return spec.inspect(rec.ref); }, null), rows = info ? info.rows : [];
                 rec.pointRows.forEach(function (pr, k) {
-                    var row = rows[k], ok = row && (row[0] + '|' + row[3] + '|' + row[4]) === pr.key;
+                    var row = rows[k], ok = row && (row[0] + '|' + row[3]) === pr.key;
                     rec.buf['__p' + k].push(ok && typeof row[1] === 'number' ? row[1] : NaN);
                 });
             }

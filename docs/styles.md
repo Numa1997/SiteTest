@@ -92,6 +92,11 @@ Three consequences:
 - `paper.css`, `catalog.css`, `portfolio.css`, `data.css` and `fold.css` define almost no colours of their own: they read the
   tokens of `site.css` or `sim.css`.
 
+`i18n.css` comes after `fold.css` on the three English pages and on every German and Arabic page: the language switch, the
+Arabic fonts and the few right-to-left rules. Arabic pages load mirrored copies (`site.rtl.css`, `fold.rtl.css`,
+`catalog.rtl.css`, `portfolio.rtl.css`, `paper.rtl.css`, `sim.rtl.css`, `data.rtl.css`) in place of the originals, made by
+`tools/i18n/build.py` with rtlcss; edit the original and run the generator, never the copy ([i18n.md](i18n.md#right-to-left)).
+
 ## Design tokens
 
 CSS custom properties, all on `:root` unless noted.

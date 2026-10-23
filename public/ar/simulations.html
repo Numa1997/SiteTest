@@ -1,0 +1,344 @@
+<!doctype html>
+<html lang="ar" dir="rtl" class="no-js">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline' https://v2.appdeploy.ai https://unpkg.com/@khmyznikov/pwa-install@0.6.3/dist/pwa-install.bundle.js; style-src 'self' 'unsafe-inline'; img-src 'self' data: blob: https://appdeploy.ai; font-src 'self' data:; connect-src 'self' https://api-v2.appdeploy.ai; worker-src 'self'; manifest-src 'self'; object-src 'none'; base-uri 'self'; form-action 'self'; upgrade-insecure-requests" />
+    <meta name="referrer" content="strict-origin-when-cross-origin" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>المحاكاة · نعمة سائر قدسية</title>
+    <meta
+      name="description"
+      content="محاكاة فيزيائية تفاعلية مع مذكّرات محاضرات: الميكانيك، والأمواج، والموائع، والبصريات الموجية، والطرائق الرياضية، وأنظمة التحكم. يرافق كلَّ شكلٍ نموذجُه واشتقاقه وطريقته العددية وكلُّ عددٍ يرسمه."
+    />
+    <meta name="author" content="نعمة سائر قدسية" />
+    <meta name="theme-color" content="#f5f1ea" /><link rel="alternate" hreflang="en" href="https://phyeinusul.com/simulations.html" /><link rel="alternate" hreflang="de" href="https://phyeinusul.com/de/simulations.html" /><link rel="alternate" hreflang="ar" href="https://phyeinusul.com/ar/simulations.html" /><link rel="alternate" hreflang="x-default" href="https://phyeinusul.com/simulations.html" />
+    <link rel="stylesheet" href="../styles/site.rtl.css" />
+    <link rel="stylesheet" href="../vendor/katex/katex.min.css" />
+    <link rel="stylesheet" href="../styles/paper.rtl.css" />
+    <link rel="stylesheet" href="../styles/catalog.rtl.css" />
+    <link rel="stylesheet" href="../styles/fold.rtl.css" /><link rel="stylesheet" href="../styles/i18n.css" />
+    <link
+      rel="icon"
+      href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='12' fill='%237a1f2b'/%3E%3Ctext x='32' y='45' text-anchor='middle' font-family='Georgia,serif' font-size='34' font-weight='700' fill='%23fff'%3ENK%3C/text%3E%3C/svg%3E"
+    />
+    <script>
+      document.documentElement.className = 'js';
+    </script>
+  
+    <link rel="stylesheet" href="../fonts/arabic.css" />
+    <script src="../scripts/i18n/strings-ar.js"></script>
+    <meta name="translated-from" content="English public/simulations.html, commit aa642f4" />
+  </head>
+
+  <body>
+    <a class="skip-link" href="#catalog">انتقل إلى المحاكاة</a>
+
+    <header class="cat-top">
+      <span style="display:inline-flex;align-items:center;gap:14px"><a href="index.html" aria-label="Phyein Usul، الصفحة الرئيسية" style="display:inline-block;line-height:0"><img src="../images/phyein-usul-mark.svg" alt="Phyein Usul" width="87" height="48" /></a><a href="index.html">→ نعمة سائر قدسية</a></span>
+      <nav aria-label="الموقع">
+        <a href="index.html#positions">الخبرات</a>
+        <a href="index.html#research">الأبحاث</a>
+        <a href="portfolios.html">الملفّات</a>
+        <a href="index.html#skills">المهارات</a><span class="lang-switch" role="group" aria-label="اللغة" translate="no"><a href="../simulations.html" hreflang="en" lang="en">English</a> · <a href="../de/simulations.html" hreflang="de" lang="de">Deutsch</a> · <a href="../ar/simulations.html" hreflang="ar" lang="ar" dir="rtl" aria-current="page">العربية</a></span>
+      </nav>
+    </header>
+
+    <main class="cat">
+      <div class="cat__head">
+        <div>
+          <p class="cat__kicker">فيزياء تفاعلية · محاكاة ومذكّرات محاضرات</p>
+          <h1>المحاكاة<span class="dot">.</span></h1>
+          <p class="cat__lede">كلّ شكلٍ مختبرٌ صغير تحته مذكّرة محاضرته: الصورة الفيزيائية، والنموذج، والاشتقاق، والطريقة العددية، وكلّ عددٍ تُرسَم منه الصورة.</p>
+        </div>
+        <ul class="cat__stats" id="stats" aria-label="الفهرس بالأرقام"></ul>
+      </div>
+
+      <div class="cat__bar" role="search" data-fold-bar>
+        <div class="cat__search">
+          <label for="q" class="visually-hidden">ابحث في المحاكاة</label>
+          <svg viewBox="0 0 16 16" width="15" height="15" aria-hidden="true">
+            <circle cx="7" cy="7" r="5" fill="none" stroke="currentColor" stroke-width="1.6" />
+            <path d="M11 11l3.5 3.5" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" />
+          </svg>
+          <input id="q" type="search" placeholder="ابحث: فوضى، فورييه، رنين…" autocomplete="off" spellcheck="false" />
+          <kbd aria-hidden="true">/</kbd>
+        </div>
+        <div class="cat__filters">
+          <div class="cat__chips" id="fields" role="group" aria-label="المجال"></div>
+          <div class="cat__chips" id="stages" role="group" aria-label="السنة الدراسية"></div>
+        </div>
+        <p class="cat__count" id="count" aria-live="polite"></p>
+      </div>
+
+      <noscript>
+        <p class="cat-error"><b>يحتاج هذا الفهرس إلى JavaScript.</b> المحاكاة مدرجة أيضًا في <a href="index.html#simulations">الصفحة الرئيسية</a>.</p>
+      </noscript>
+
+      <div class="cat__list cat__list--sorted" id="catalog"></div>
+
+      <p class="cat__empty" id="empty" hidden>لا توجد محاكاة تطابق <b id="empty-q"></b>. <button type="button" id="clear">اعرض كلّ المحاكاة</button></p>
+
+      <section class="cat__anatomy" aria-labelledby="anatomy-title">
+        <h2 id="anatomy-title">لكلّ محاكاة الأجزاءُ الأربعة نفسها</h2>
+        <p>افتح أيَّ شكلٍ تجد الترتيب نفسه، فما تتعلّمه في صفحةٍ ينتقل معك إلى التالية.</p>
+        <ol class="cat__parts">
+          <li>
+            <b>01 · الشكل</b>
+            <h3>غيِّر وراقب</h3>
+            <p>المزالق والنقرات تضبط الفيزياء: الأطوال، والترددات، والكتل، والشروط الابتدائية، والريح. وتستجيب الصورة فورًا، أو، حيث يُحَلّ التشغيل كلّه أوّلًا، حالما تضغط «حُلّ».</p>
+          </li>
+          <li>
+            <b>02 · مذكّرة المحاضرة</b>
+            <h3>الفيزياء مكتوبةً</h3>
+            <p>صورة تمهيدية، والنموذج، والاشتقاق، والطريقة العددية، وما يظهر على الشاشة وما يُغفله النموذج، مع معادلات وأشكال وتمارين مرقّمة.</p>
+          </li>
+          <li>
+            <b>03 · من الرموز إلى الشيفرة</b>
+            <h3>الجولة</h3>
+            <p>كلّ صيغة بجانب سطر الشيفرة في الصفحة نفسها الذي يحسبها، وبجانبها قيمتها الحيّة.</p>
+          </li>
+          <li>
+            <b>04 · لوحة البيانات</b>
+            <h3>الأعداد</h3>
+            <p>كلّ متغيّر يرسمه الشكل، مع وحداته. ثبّت نقطة بـ«قراءة القيم»، وسجّل دورة واحدة جدولًا، وتحقّق من قيمةٍ بثلاث طرق، واحفظها بصيغة .npz أو CSV.</p>
+          </li>
+        </ol>
+      </section>
+    </main>
+
+    <footer>
+      <span>© 2026 نعمة سائر قدسية</span>
+      <span><a href="index.html">الصفحة الرئيسية</a> · <a href="portfolios.html">الملفّات</a> · <a href="#top" id="to-top">إلى الأعلى ↑</a></span>
+    </footer>
+
+    <script src="../scripts/fold.js"></script>
+    <script src="../scripts/catalog.js"></script>
+    <script src="../vendor/katex/katex.min.js"></script>
+    <script>
+      (function () {
+        'use strict'; var T = function (s, v) { var d = window.I18N, r = d && d[s]; if (typeof r !== 'string') r = s; return v ? r.replace(/\{(\w+)\}/g, function (m, k) { return k in v ? v[k] : m; }) : r; };   // words of a translated page: scripts/i18n/strings-<lang>.js
+        var SIMS = (window.SIMULATIONS || []).slice();
+        var FIELDS = window.SIM_FIELDS || [];
+        var STAGES = [
+          { id: '1', name: T('First year') },
+          { id: '2', name: T('Second year') }
+        ];
+
+        var $ = function (id) { return document.getElementById(id); };
+        var q = $('q'), list = $('catalog'), count = $('count'), empty = $('empty');
+        var state = { q: '', field: '', stage: '' };
+        // which cards show their details (model, method, what you set, concepts); kept while the list redraws
+        var openCards = {};
+
+        function esc(s) {
+          return String(s).replace(/[&<>"']/g, function (c) {
+            return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c];
+          });
+        }
+        // Lower case, accents and Greek letters folded, so "Huygens" finds "Huygens’" and "lambda" finds "λ".
+        var GREEK = { 'λ': ' lambda ', 'θ': ' theta ', 'ω': ' omega ', 'φ': ' phi ', 'ψ': ' psi ', 'α': ' alpha ', 'γ': ' gamma ', 'δ': ' delta ', 'ζ': ' zeta ', 'σ': ' sigma ', 'τ': ' tau ', '∇': ' nabla ' };
+        function fold(s) {
+          s = String(s).toLowerCase().replace(/[λθωφψαγδζστ∇]/g, function (c) { return GREEK[c]; });
+          if (s.normalize) s = s.normalize('NFD').replace(/[̀-ͯ]/g, '');
+          return s.replace(/[’']/g, '').replace(/[–—]/g, '-');
+        }
+        function fieldOf(id) {
+          for (var i = 0; i < FIELDS.length; i++) if (FIELDS[i].id === id) return FIELDS[i];
+          return { id: id, name: id, blurb: '' };
+        }
+        SIMS.forEach(function (s) {   // a translated page shows its own words and still finds the English ones
+          s._hay = fold([s.title, 'fig ' + s.fig, 'fig. ' + s.fig, s.subject, s.summary, s.model, s.method, s.controls, (s.concepts || []).join(' '), fieldOf(s.field).name, T('Fig. {n}', { n: s.fig }),
+            T(s.title), T(s.subject), T(s.summary), T(s.model), T(s.method), T(s.controls), (s.concepts || []).map(function (c) { return T(c); }).join(' '), T(fieldOf(s.field).name)].join(' \n '));
+        });
+        // The catalog runs in figure order; the field chips do the grouping.
+        SIMS.sort(function (a, b) { return a.fig - b.fig; });
+
+        function matches(s, terms, ignore) {
+          if (ignore !== 'field' && state.field && s.field !== state.field) return false;
+          if (ignore !== 'stage' && state.stage && String(s.stage) !== state.stage) return false;
+          for (var i = 0; i < terms.length; i++) if (s._hay.indexOf(terms[i]) < 0) return false;
+          return true;
+        }
+        function terms() {
+          return fold(state.q).split(/\s+/).filter(Boolean);
+        }
+
+        function stats() {
+          var fields = {}, stages = {};
+          SIMS.forEach(function (s) { fields[s.field] = 1; stages[s.stage] = 1; });
+          var nStages = Object.keys(stages).length;
+          $('stats').innerHTML =
+            '<li><b>' + SIMS.length + '</b><span>' + T('simulations') + '</span></li>' +
+            '<li><b>' + Object.keys(fields).length + '</b><span>' + T('fields') + '</span></li>' +
+            '<li><b>' + nStages + '</b><span>' + (nStages === 1 ? T('course year') : T('course years')) + '</span></li>';
+        }
+        function chips(el, items, key, all) {
+          el.innerHTML = '';
+          [{ id: '', name: all }].concat(items).forEach(function (it) {
+            var b = document.createElement('button');
+            b.type = 'button';
+            b.className = 'chip';
+            b.setAttribute('data-' + key, it.id);
+            b.innerHTML = esc(T(it.name)) + '<small></small>';
+            b.addEventListener('click', function () {
+              state[key] = state[key] === it.id ? '' : it.id;
+              render(true);
+            });
+            el.appendChild(b);
+          });
+        }
+
+        function entry(s) {
+          var href = (window.I18N_HAVE && !I18N_HAVE[s.file] ? I18N_ROOT : '') + encodeURI(s.file);   // a page not yet translated opens in English
+          var stage = s.stage === 1 ? T('first year') : s.stage === 2 ? T('second year') : s.stage ? T('year {n}', { n: s.stage }) : '';
+          return (
+            '<article class="entry" id="sim-' + esc(s.id) + '" data-card data-sim="' + esc(s.id) + '" data-collapsed="' + (openCards[s.id] ? '0' : '1') + '">' +
+            '<a class="entry__fig" href="' + href + '" tabindex="-1" aria-hidden="true"><span class="entry__plate">' +
+            '<span class="entry__ph">' + T('Fig. {n}', { n: s.fig }) + '</span>' +
+            '<img src="' + (window.I18N_ROOT || '') + 'images/sims/' + esc(s.id) + '.webp" width="800" height="500" loading="lazy" decoding="async" alt=""></span></a>' +
+            '<p class="entry__cap"><b>' + T('Figure {n}', { n: s.fig }) + '</b>' + esc(T(s.subject).charAt(0).toUpperCase() + T(s.subject).slice(1)) + '.</p>' +
+            '<div class="entry__body">' +
+            '<p class="entry__kicker">' + esc(T(fieldOf(s.field).name)) + (stage ? ' · ' + stage : '') + '</p>' +
+            '<h3><a href="' + href + '">' + esc(T(s.title)) + '</a></h3>' +
+            '<p class="entry__abs">' + esc(T(s.summary)) + '</p>' +
+            '<div class="entry__eq" data-tex="' + esc(s.equation) + '"></div>' +
+            '<div class="fold" data-open="' + (openCards[s.id] ? '1' : '0') + '"' + (openCards[s.id] ? '' : ' inert') + '><div class="fold-i"><div class="entry__more">' +
+            '<dl class="entry__facts">' +
+            '<dt>' + T('model') + '</dt><dd>' + esc(T(s.model)) + '</dd>' +
+            '<dt>' + T('method') + '</dt><dd>' + esc(T(s.method)) + '</dd>' +
+            '<dt>' + T('you set') + '</dt><dd>' + esc(T(s.controls)) + '</dd>' +
+            '</dl>' +
+            '<ul class="entry__tags" aria-label="' + T('Concepts') + '">' +
+            (s.concepts || []).slice(0, 6).map(function (c) { return '<li>' + esc(T(c)) + '</li>'; }).join('') +
+            '</ul></div></div></div>' +
+            '<div class="entry__foot">' +
+            '<a class="entry__open" href="' + href + '">' + T('Open Fig. {n}', { n: s.fig }) + '</a>' +
+            '<a class="entry__note" href="' + href + '#paper">' + T('Read the lecture note') + '</a>' +
+            '<button type="button" class="fs-more" aria-expanded="' + (openCards[s.id] ? 'true' : 'false') + '" aria-label="' + (openCards[s.id] ? T('Hide details') : T('Show details')) + '">' + (openCards[s.id] ? T('Less') : T('More')) + '<svg class=\"chev\" viewBox=\"0 0 14 14\" width=\"12\" height=\"12\" aria-hidden=\"true\"><path d=\"M3 5l4 4 4-4\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"1.8\" stroke-linecap=\"round\" stroke-linejoin=\"round\"/></svg></button>' +
+            '</div></div></article>'
+          );
+        }
+
+        /* One card per simulation, titled with its name and numbered by its figure, in figure order: the page opens as a column
+           of titles, and each opens to show its figure, abstract and links. A search or a chip opens what it finds, without
+           changing what the reader opened or closed. (Sorting into fields and years can come back once the library is large.) */
+        function cards(shown) {
+          return shown.map(function (s) {
+            return '<section class="simfold" id="simulation-' + esc(s.id) + '" data-counts="' + esc(T(s.subject)) + '" data-label="' + esc(T(s.title)) + '">' +
+              '<h2 class="fs-title"><span class="fs-num">' + String(s.fig).padStart(2, '0') + '</span>' + esc(T(s.title)) + '</h2>' +
+              entry(s) + '</section>';
+          }).join('');
+        }
+        function folds(filtering) {
+          if (!window.Fold) return;
+          Array.prototype.forEach.call(list.querySelectorAll('.simfold'), function (c) {
+            Fold.make(c, { level: 1, head: [c.querySelector('.fs-title')], counts: c.getAttribute('data-counts'), label: c.getAttribute('data-label'), defaultOpen: false, forceOpen: filtering });
+          });
+        }
+
+        function typeset() {
+          Array.prototype.forEach.call(list.querySelectorAll('.entry__eq'), function (el) {
+            if (window.katex) {
+              try { window.katex.render(el.getAttribute('data-tex'), el, { displayMode: true, throwOnError: false }); }
+              catch (e) { el.textContent = el.getAttribute('data-tex'); }
+            } else {
+              el.textContent = el.getAttribute('data-tex');
+            }
+            el.classList.add('is-typeset');
+          });
+        }
+
+        function render(fromUser) {
+          var t = terms();
+          var shown = SIMS.filter(function (s) { return matches(s, t); });
+          list.innerHTML = cards(shown);
+          folds(!!(state.q || state.field || state.stage));
+          typeset();
+          Array.prototype.forEach.call(list.querySelectorAll('.entry__plate img'), function (img) {
+            img.addEventListener('error', function () { img.remove(); });
+          });
+
+          Array.prototype.forEach.call(document.querySelectorAll('#fields .chip'), function (b) {
+            var id = b.getAttribute('data-field');
+            var n = SIMS.filter(function (s) { return matches(s, t, 'field') && (!id || s.field === id); }).length;
+            b.setAttribute('aria-pressed', state.field === id ? 'true' : 'false');
+            b.querySelector('small').textContent = n;
+          });
+          Array.prototype.forEach.call(document.querySelectorAll('#stages .chip'), function (b) {
+            var id = b.getAttribute('data-stage');
+            var n = SIMS.filter(function (s) { return matches(s, t, 'stage') && (!id || String(s.stage) === id); }).length;
+            b.setAttribute('aria-pressed', state.stage === id ? 'true' : 'false');
+            b.querySelector('small').textContent = n;
+          });
+
+          count.textContent = shown.length === SIMS.length ? T('{n} shown', { n: SIMS.length }) : T('{n} of {m} shown', { n: shown.length, m: SIMS.length });
+          empty.hidden = shown.length > 0;
+          $('empty-q').textContent = [state.q ? '“' + state.q + '”' : '',
+            state.field ? T('in {x}', { x: T(fieldOf(state.field).name) }) : '',
+            state.stage ? (state.stage === '1' ? T('for the first year') : T('for the second year')) : ''].filter(Boolean).join(' ');
+          if (fromUser) save();
+        }
+
+        /* ---------- address bar: ?q=…&field=…&stage=… ---------- */
+        function load() {
+          var p;
+          try { p = new URLSearchParams(location.search); } catch (e) { return; }
+          state.q = p.get('q') || '';
+          state.field = p.get('field') || '';
+          state.stage = p.get('stage') || '';
+          if (!FIELDS.some(function (f) { return f.id === state.field; })) state.field = '';
+          if (!STAGES.some(function (s) { return s.id === state.stage; })) state.stage = '';
+          q.value = state.q;
+        }
+        function save() {
+          if (!window.history || !history.replaceState) return;
+          var p = [];
+          if (state.q) p.push('q=' + encodeURIComponent(state.q));
+          if (state.field) p.push('field=' + state.field);
+          if (state.stage) p.push('stage=' + state.stage);
+          history.replaceState(null, '', location.pathname + (p.length ? '?' + p.join('&') : '') + location.hash);
+        }
+
+        var timer = 0;
+        q.addEventListener('input', function () {
+          clearTimeout(timer);
+          timer = setTimeout(function () { state.q = q.value.trim(); render(true); }, 120);
+        });
+        q.addEventListener('keydown', function (e) {
+          if (e.key === 'Escape' && q.value) { q.value = ''; state.q = ''; render(true); }
+        });
+        document.addEventListener('keydown', function (e) {
+          if (e.key !== '/' || e.ctrlKey || e.metaKey || e.altKey) return;
+          var a = document.activeElement;
+          if (a && (a.tagName === 'INPUT' || a.tagName === 'TEXTAREA' || a.isContentEditable)) return;
+          e.preventDefault();
+          q.focus();
+        });
+        $('clear').addEventListener('click', function () {
+          state = { q: '', field: '', stage: '' };
+          q.value = '';
+          render(true);
+          q.focus();
+        });
+        $('to-top').addEventListener('click', function (e) {
+          e.preventDefault();
+          window.scrollTo(0, 0);
+        });
+
+        var used = {}, usedStage = {};
+        SIMS.forEach(function (s) { used[s.field] = 1; usedStage[s.stage] = 1; });
+        chips($('fields'), FIELDS.filter(function (f) { return used[f.id]; }), 'field', T('All fields'));
+        chips($('stages'), STAGES.filter(function (s) { return usedStage[s.id]; }), 'stage', T('Any year'));
+        if (window.Fold) {
+          Fold.onCard = function (card) { openCards[card.getAttribute('data-sim')] = card.getAttribute('data-collapsed') === '0'; };
+          Fold.onAll = function (open) { SIMS.forEach(function (s) { openCards[s.id] = open; }); };
+          Fold.tools(list, 'before');
+        }
+        stats();
+        load();
+        render(false);
+        window.__catalog = { count: SIMS.length, state: state, render: render };
+      })();
+    </script>
+  </body>
+</html>

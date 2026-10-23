@@ -1,0 +1,85 @@
+
+<div class="page page-home">
+<p>A corrected study · read it, run it, check it</p>
+<div class="titlerow">
+<h1>Can a swinging weight on a turbine blade power a sensor?</h1>
+<div class="tally"><b>57.1 mW</b>best harvest, single pendulum, 100 g on 20 cm<b>37.6 µW</b>a blade sensor node needs (datasheet typical)<b>0.64–0.74</b>double ÷ single, same mass and reach</div>
+</div>
+<div class="intro">
+<p>Hang a 100 g weight on a 20 cm rod from a point on a turning blade. Each time the blade goes round, gravity pulls the weight first one way and then the other, so it swings once per turn, like a child on a swing pushed once per pass. A generator at the pivot brakes that swing and turns it into electrical energy. This site asks three things: how much power that gives, what it costs the rotor, and whether it is enough for a small sensor on the blade.</p>
+<p>The short answer: on the 18 mountings studied, the generator takes 9.6 mW to 57.1 mW from the swing; a sensor node needs about 0.04 mW. The power is not free: the rotor pays for every milliwatt, so the turbine's output drops by exactly what the pendulum harvests. Start with the <a href="#/theory">guided theory</a>, which builds everything from the pendulum's Lagrangian; the <a href="#/simulate">solver</a> runs the same equations in your browser.</p>
+<div class="actions-row"><a href="#/simulate">Run a pendulum</a><a href="#/theory">Read the derivation</a><a href="#/results">See the results</a><a href="#/report">Read Sol’s report</a></div>
+<div class="card rotorcard">
+<div class="card-top">best mounting400 rpm rotor · pivot at 30 % of the blade</div>
+<div class="cap">t = 15.108 s · harvest now 36.4 mW · mean 57.1 mWslowed 27×: one turn takes 4 s here, 0.150 s in reality</div>
+</div>
+</div>
+<div class="sections">
+<div class="cat">
+<div class="head-main">
+<h2>01What the study finds</h2>
+<p>four results · each tagged with how it is known</p>
+</div>
+<div class="head-side"></div>
+<div class="fold">
+<div class="fold-i">
+<div class="sec-body">
+<ol>
+<li>Computed <b>There is enough power.</b> Every one of the 18 mountings gives at least 9.6 mW, more than a hundred times the 37.6 µW a low-duty sensor node draws, even after an assumed 50 % loss in the electronics.</li>
+<li>Derived <b>The rotor pays for it.</b> At fixed rotor speed, the energy the generator removes is replaced by the rotor's drive. The pendulum cannot raise the turbine's net output; it takes at most 0.0072 % of it.</li>
+<li>Computed <b>One rod beats two.</b> With the same mass and the same total reach, a double pendulum gives 0.64–0.74 times the single one's power, at every mounting.</li>
+<li>Computed <b>Chaos does not help.</b> Of 54 double-pendulum cases scanned, 2 are chaotic; in the matched comparison the chaotic motion harvests less than the regular one.</li>
+</ol>
+<p>The catch is not power but force: on a fast rotor the pendulum sits in 18–215 g of centrifugal acceleration, far beyond a ±8 g accelerometer. See Theory chapter 10.</p>
+</div>
+</div>
+</div>
+</div>
+<div class="cat">
+<div class="head-main">
+<h2>02Where to understand each step</h2>
+<p>the theory page, chapter by chapter</p>
+</div>
+<div class="head-side"></div>
+<div class="fold">
+<div class="fold-i">
+<div class="sec-body">
+<ol>
+<li><b>The setup.</b> What a pendulum on a moving pivot is, and what this model leaves out. Chapter 1.</li>
+<li><b>The equations.</b> Positions, kinetic and potential energy, the generators as friction, and the equations of motion. Chapters 2–3.</li>
+<li><b>Where the power comes from.</b> The energy books: the rotor pays. Chapter 4.</li>
+<li><b>How much, and when most.</b> The linear swing as a driven, damped oscillator; resonance and the best generator setting. Chapter 5.</li>
+<li><b>Real turbines.</b> Rotor sizes from the tip-speed ratio; the 18 mountings. Chapter 6.</li>
+<li><b>Two rods, chaos, scaling.</b> Why the single wins, what chaos does, and how results scale. Chapters 7–9.</li>
+<li><b>The sensor and the checks.</b> The power budget, the acceleration limit, and how every number was verified. Chapters 10–12.</li>
+</ol>
+</div>
+</div>
+</div>
+</div>
+<div class="cat">
+<div class="head-main">
+<h2>03Corrections made to the study</h2>
+<p>found by an independent audit · the numbers stand</p>
+</div>
+<div class="head-side"></div>
+<div class="fold">
+<div class="fold-i">
+<div class="sec-body">
+<p>An independent model, written from scratch, re-ran all 36 mapping cases and all 54 chaos cases; every headline number reproduces. Five things in the report needed correcting:</p>
+<ul>
+<li>Eq. 17 prints the turbine size as 56 mm/s ÷ Ω; it is <b>56 m/s</b> ÷ Ω (the numbers used the right value).</li>
+<li>The text says the centrifugal factor Γ falls with rotor speed at a fixed blade fraction; it <b>rises</b> (Γ ∝ Ω).</li>
+<li>The chaotic power's error bar, ±0.003 W, is too small: the same run gives 0.244 or 0.253 W depending only on the integrator.</li>
+<li>At 400 rpm with the pivot at 90 % of the blade, the bob reaches <b>66 mm past the blade tip</b>: that mounting cannot be built as drawn.</li>
+<li>One panel of the Poincaré figure is blurred by single-precision storage, though its caption says it shrinks to a point.</li>
+</ul>
+<p>Each is shown with its evidence on the <a href="#/checks">checks page</a>.</p>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+<p>Built on the corrected study <em>Wind-driven rotor pendula</em> (Sol, for N. Koudsie, 14 October 2026), with an independent audit and corrections.</p>
+<p>Model: point masses on rigid massless rods, a planar rotor at constant angular speed, viscous generators at the joints · solver: classical RK4 in your browser.</p>

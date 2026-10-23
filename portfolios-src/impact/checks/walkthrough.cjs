@@ -9,7 +9,7 @@ const { chromium } = require('playwright');
   await p.waitForTimeout(1500);
   const sim=await p.$('#sim');
   await p.screenshot({path:`${tag}-${w}-0open.png`});
-  await p.waitForFunction(()=>computed>=NF,null,{timeout:120000});
+  await p.waitForFunction(()=>computed>=NF,null,{timeout:300000});
   await p.evaluate(()=>{setSpeed(1)});await p.click('#drop');
   await p.waitForFunction(()=>tPlay>0.8,null,{timeout:20000});await sim.screenshot({path:`${tag}-${w}-1fall.png`});
   await p.evaluate(()=>{setSpeed(20)});
@@ -17,8 +17,8 @@ const { chromium } = require('playwright');
   await p.evaluate(()=>{setSpeed(1)});
   await p.waitForFunction(()=>!playing,null,{timeout:60000});await p.waitForTimeout(200);
   await sim.screenshot({path:`${tag}-${w}-3end.png`});
-  const r=await p.evaluate(()=>{const k=NF-1;window._w=[wAvg(S.iron,kOf(6.5)),wAvg(S.cot,kOf(6.5))];return {ti:S.iron.tImpact,tc:S.cot.tImpact,Fi:S.iron.Fmax[k],Fc:S.cot.Fmax[k],wi:wAvg(S.iron,k),wc:wAvg(S.cot,k),
-   books:[S.iron,S.cot].map(st=>{const E=st.E.subarray(k*7,k*7+7);return +(E[0]+E[2]+E[3]+E[4]+E[5]-(E[6]-E[1])).toFixed(3)}),heat:[S.iron,S.cot].map(st=>[st.E[k*7+4].toFixed(1),st.E[k*7+5].toFixed(1)]),
+  const r=await p.evaluate(()=>{const k=NF-1,d=s=>ds.get(s);window._w=[d('W_iron')[kOf(6.5)],d('W_cot')[kOf(6.5)]];return {ti:d('t_touch_iron'),tc:d('t_touch_cot'),Fi:d('Fpeak_iron'),Fc:d('Fpeak_cot'),wi:d('W_end_iron'),wc:d('W_end_cot'),
+   books:['iron','cot'].map(s=>+d('books_'+s)[k].toFixed(3)),heat:['iron','cot'].map(s=>[d('Qb_'+s)[k].toFixed(1),d('Qh_'+s)[k].toFixed(1)]),
    w65:window._w,sw:document.documentElement.scrollWidth,cw:document.documentElement.clientWidth}});
   console.log(w,JSON.stringify(r),'errors',errs);
   await (await p.$('#en')).screenshot({path:`${tag}-${w}-4energy.png`});

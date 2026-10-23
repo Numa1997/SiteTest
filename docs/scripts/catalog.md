@@ -78,6 +78,7 @@ The inline script ([simulations.html:126-351](../../public/simulations.html#L126
    `fig N`, `fig. N`, subject, summary, model, method, controls, concepts and field name ([L129](../../public/simulations.html#L129),
    [L158-L161](../../public/simulations.html#L158-L161)). The copy is shallow, so `_hay` is written onto the shared entry objects.
    It sorts by `fig` ([L163](../../public/simulations.html#L163)).
+   On a German or Arabic page `_hay` also holds the translated words (`T(s.title)` and so on), so a search finds both.
 2. **Search text folding.** `fold(s)` ([L148-L153](../../public/simulations.html#L148-L153)) lowers the case, replaces the Greek
    letters λ θ ω φ ψ α γ δ ζ σ τ and ∇ by their names, strips accents (Unicode NFD, then the combining marks U+0300 to U+036F),
    drops apostrophes ’ and ', and turns en and em dashes into hyphens. So "lambda" finds "λ" and "Huygens" finds "Huygens’". The

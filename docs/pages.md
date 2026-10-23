@@ -52,6 +52,13 @@ finished DOM. What a reader opens or closes is stored in `localStorage` under `f
 `fold:/simulations.html`. On phyeinusul.com the path has no `.html` (see above), so the catalog's key there is
 `fold:/simulations`; the two hosts are different origins and never share stored choices anyway.
 
+**German and Arabic.** Each of the three pages also exists at `de/…` and `ar/…`, generated from it by `tools/i18n/build.py`
+([i18n.md](i18n.md)). In the English source this adds two things, each on a line that already existed so no line number above
+moves: the `hreflang` alternates after the `theme-color` meta (line 14) and the language switch (English · Deutsch · العربية),
+in the home page after the skip link (line 27, top right) and on the catalog and Portfolios pages at the end of the top-bar nav
+(lines 38 and 40), both filled in between `<!--I18N-…-->` markers by the generator; and `styles/i18n.css` after `fold.css`.
+Words that the inline scripts write go through `T('…')` and `i18n/<lang>/strings.json`.
+
 ---
 
 ## 1. `index.html` · the home page
