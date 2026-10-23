@@ -1,0 +1,71 @@
+
+<div class="page page-home">
+<p>A physics and numerics reading route · based on the thesis</p>
+<div class="titlerow">
+<h1>How collisions change a cloud spectrum</h1>
+<div class="tally"><b>6 / 14 min</b>to 50 / 90 % above 40 µm, extended kernel<b>3 / 5 min</b>the same, thesis kernel<b>12 chapters</b>from geometry to a numerical spectrum</div>
+</div>
+<div class="intro">
+<p>The question is how encounters transfer mass between sizes, and how ice collisions can change particle number without creating mass. Start with the <a href="#/theory">guided theory</a>: the cloud context, notation and encounter geometry are introduced before the forces, population balances and numerical scheme. The <a href="#/simulate">solver</a> explores a prescribed homogeneous box. Its size threshold and model assumptions are explicit; the curves are not a prediction of rainfall from a real cloud.</p>
+<div class="actions-row"><a href="#/simulate">Run the cloud</a><a href="#/theory">Read the derivations</a><a href="#/results">See the results</a></div>
+<div class="card droplets">
+<div class="card-top">new kernel1 cm³ of the warm cloud</div>
+<div class="cap">droplets drawn from the solved spectrum at· ×200 slow motion · radii ×15</div>
+</div>
+</div>
+<div class="sections">
+<div class="cat">
+<div class="head-main">
+<h2>01The warm cloud in two pictures</h2>
+<p>300 cm⁻³ cloud droplets (8 µm) + 1 cm⁻³ collectors (40 µm) · 10 °C · 850 hPa</p>
+</div>
+<div class="head-side"></div>
+<div class="fold">
+<div class="fold-i">
+<div class="sec-body">
+<div class="card">
+<h3>In-grid mass above radius 40 µm</h3>
+<p>Retained reference calculation with a prescribed initial spectrum. Colour changes the kernel; line style changes the population description. The 40 µm cutoff is a size diagnostic.</p>
+<div class="chart">[SVG SCE, thesis kernel; continuous GCE, thesis kernel; SCE, new kernel; continuous GCE, new kernel. time (min); mass fraction.]
+<div class="tip"></div>
+<div class="chart-legend">SCE, thesis kernelcontinuous GCE, thesis kernelSCE, new kernelcontinuous GCE, new kernel</div>
+</div>
+</div>
+<div class="card">
+<h3>Mass spectrum g = dM / d ln r</h3>
+<p>These retained spectra illustrate how the adopted kernel changes growth. The fitted coalescence closure and grid boundary also influence the result; this is not a universal outcome for clouds.</p>
+<div class="chart">[SVG initial; thesis kernel, 10 min; new kernel, 10 min. radius (µm); g m⁻³.]
+<div class="tip"></div>
+<div class="chart-legend">initialthesis kernel, 10 minnew kernel, 10 min</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div class="cat">
+<div class="head-main">
+<h2>02The model changes and where to understand them</h2>
+<p>derived equations · adopted closures · conditional results</p>
+</div>
+<div class="head-side"></div>
+<div class="fold">
+<div class="fold-i">
+<div class="sec-body">
+<div class="changes">
+<ol>
+<li><b>Forces and speed.</b> Derive terminal settling, check the Reynolds number, then distinguish the finite-Reynolds empirical fit from a first-principles result. Chapters 3–4.</li>
+<li><b>Encounter and merger.</b> Airflow deflection and liquid coalescence are different processes. The Stokes and energy ratios are defined before the efficiencies. Chapters 5–6.</li>
+<li><b>Populations.</b> Derive the SCE from binary gains and losses, and recover collector drift through a small-jump expansion. Chapters 7–8.</li>
+<li><b>Numerics.</b> Define the logarithmic mass spectrum, derive the two-bin deposition and limiter, and distinguish conserving moments from resolving the spectrum. Chapter 9.</li>
+<li><b>Ice and interpretation.</b> The app uses event-based fragmentation, while the thesis appendix implements time-based loss. Define the size diagnostic and reservoirs before reading the curves. Chapters 10–12.</li>
+</ol>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+<p>Built on the Bachelor thesis <em>Collisional Ice Multiplication Processes in Clouds</em> (N. Koudsie, Leipzig 2022).</p>
+<p>Model: homogeneous collection box · SCE with two-bin remapping · empirical fall-speed closure and stored collision efficiencies. The 40 µm cutoff is a size diagnostic.</p>

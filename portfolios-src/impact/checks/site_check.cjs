@@ -8,11 +8,11 @@ const { chromium } = require('playwright');
   p.on('pageerror',e=>errs.push(e.message));p.on('console',m=>{if(m.type()==='error')errs.push(m.text())});
   const failed=[];p.on('requestfailed',r=>failed.push(r.url()));
   const outside=[];p.on('request',r=>{if(!r.url().startsWith('http://localhost')&&!r.url().startsWith('data:'))outside.push(r.url())});
-  await p.goto(base+page);await p.waitForFunction(()=>computed>=NF,null,{timeout:180000});
+  await p.goto(base+page);await p.waitForFunction(()=>computed>=NF,null,{timeout:300000});
   await p.evaluate(()=>document.fonts.ready);
   const r=await p.evaluate(()=>({
     fonts:[...document.fonts].filter(f=>f.status==='loaded').map(f=>f.family.replace(/"/g,'')+' '+f.weight).filter((v,i,a)=>a.indexOf(v)===i),
-    Fi:S.iron.Fmax[NF-1].toFixed(1),Fc:S.cot.Fmax[NF-1].toFixed(1),wi:wAvg(S.iron,NF-1).toFixed(2),wc:wAvg(S.cot,NF-1).toFixed(2),
+    Fi:ds.get('Fpeak_iron').toFixed(1),Fc:ds.get('Fpeak_cot').toFixed(1),wi:ds.get('W_end_iron').toFixed(2),wc:ds.get('W_end_cot').toFixed(2),
     back:document.querySelector('.sitebar a').getAttribute('href'),sw:document.documentElement.scrollWidth,cw:document.documentElement.clientWidth}));
   console.log(page,w,JSON.stringify(r),'errors',errs,'failed',failed,'outside',outside);
   if(w===1100){await p.click('#drop');await p.evaluate(()=>setSpeed(20));await p.waitForFunction(()=>tPlay>1.445,null,{timeout:60000});

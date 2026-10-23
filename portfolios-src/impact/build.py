@@ -4,7 +4,8 @@
     python3 build.py --site     -> ../../public/portfolios/impact/index.html (English) and ar.html (Arabic):
                                    the site's security policy and referrer rule, the site's own fonts, a back link
                                    to the Portfolios page and a language switch.
-The physics is physics.js (between PHYSICS-BEGIN/END), the page is template.html, the words are text_en.py / text_ar.py.
+The physics is physics.js (between PHYSICS-BEGIN/END), the page is template.html, the words are text_en.py / text_ar.py,
+the data panel's hooks are datahooks.js. The pages load the site's shared sim.js, dataset.js, datalog.js, paper.css and data.css.
 """
 import json, re, sys, os, importlib
 HERE = os.path.dirname(os.path.abspath(__file__))
@@ -43,10 +44,13 @@ def build(lang):
     tpl = open(os.path.join(HERE, 'template.html'), encoding='utf-8').read()
     phys = open(os.path.join(HERE, 'physics.js'), encoding='utf-8').read()
     phys = phys[phys.index('/*PHYSICS-BEGIN*/'):phys.index('/*PHYSICS-END*/') + len('/*PHYSICS-END*/')]
+    hooks = open(os.path.join(HERE, 'datahooks.js'), encoding='utf-8').read()
     out = (tpl.replace('{{LANG}}', lang).replace('{{DIR}}', 'rtl' if lang == 'ar' else 'ltr').replace('{{TITLE}}', T['title_tag'])
            .replace('{{FONTS}}', GF[lang]).replace('{{CSSLANG}}', CSS_AR if lang == 'ar' else CSS_EN).replace('{{PHYSICS}}', phys)
            .replace('{{TEXT_JSON}}', json.dumps(T, ensure_ascii=False)).replace('{{RTL}}', 'true' if lang == 'ar' else 'false')
-           .replace('{{CANVAS_FONTS}}', json.dumps(CF_AR if lang == 'ar' else CF_EN)))
+           .replace('{{CANVAS_FONTS}}', json.dumps(CF_AR if lang == 'ar' else CF_EN))
+           .replace('{{DATAHOOKS}}', hooks).replace('{{PAGE}}', 'index.html' if lang == 'en' else 'ar.html')
+           .replace('{{BASE}}', '../../' if SITE else '../../../public/'))
     if not SITE:
         out = out.replace('{{SITEBAR}}', '')
         os.makedirs(os.path.join(HERE, 'out'), exist_ok=True)
@@ -63,6 +67,7 @@ def build(lang):
         head_old, body = out[:body_start], out[body_start:]
         style = re.search(r'<style>.*?</style>', head_old, re.S).group(0)
         fonts = '<link rel="stylesheet" href="../../fonts/instrument-plex.css" />' + ('\n    <link rel="stylesheet" href="../../fonts/arabic.css" />' if lang == 'ar' else '')
+        fonts += '\n    <link rel="stylesheet" href="../../styles/paper.css" />\n    <link rel="stylesheet" href="../../styles/data.css" />'
         desc = T['lede'] if lang == 'en' else 'دراسة تفاعلية: كرة حديد وكرة قطن متساويتان في الكتلة تسقطان عشرة أمتار على رأس.'
         desc = re.sub(r'<[^>]+>', '', desc).replace('"', '&quot;')
         head = ('<!doctype html>\n<html lang="%s" dir="%s">\n  <head>\n    <meta charset="UTF-8" />\n    %s\n'

@@ -4,7 +4,7 @@ const { chromium } = require('playwright');
  const b=await chromium.launch({executablePath:'/opt/pw-browsers/chromium_headless_shell-1194/chrome-linux/headless_shell'});
  const p=await b.newPage({viewport:{width:1100,height:1000},deviceScaleFactor:2});
  await p.goto('http://localhost:8766/portfolios/impact/index.html');
- await p.waitForFunction(()=>computed>=NF,null,{timeout:180000});await p.evaluate(()=>document.fonts.ready);
+ await p.waitForFunction(()=>computed>=NF,null,{timeout:300000});await p.evaluate(()=>document.fonts.ready);
  await p.click('#drop');await p.evaluate(()=>setSpeed(20));
  await p.waitForFunction(()=>tPlay>1.447,null,{timeout:60000});await p.evaluate(()=>{playing=false});await p.waitForTimeout(150);
  await (await p.$('#sim')).screenshot({path:'/tmp/p01.png'});

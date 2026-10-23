@@ -1,0 +1,137 @@
+
+<div class="page page-checks">
+<p>Verification · each ingredient against an independent result</p>
+<div class="utility"></div>
+<div class="titlerow">
+<h1>Checks</h1>
+<div class="tally"><b>2.1 %</b>fall speed vs. Gunn &amp; Kinzer, d ≥ 0.3 mm<b>1.1 %</b>critical Stokes numbers<b>5 %</b>Golovin spectrum error, 8 bins / doubling</div>
+</div>
+<p>Retained benchmark data from the earlier implementation. Each comparison tests a particular model and parameter range; conservation, convergence and physical validation are distinct. The guided Theory page explains what these checks can establish.</p>
+<div class="sections">
+<div class="cat">
+<div class="head-main">
+<h2>01Terminal speed of water drops</h2>
+<p>20 diameters · 20 °C · 1013 hPa · Gunn &amp; Kinzer (1949)</p>
+</div>
+<div class="head-side"></div>
+<div class="fold">
+<div class="fold-i">
+<div class="sec-body">
+<div class="card">
+<h3>Speed against diameter</h3>
+<p>Among the listed diameters at or above 0.3 mm, the largest speed deviation is 2.07 %. At 0.1 mm it is −7.57 %; that diameter is not a coded fit boundary, so the earlier boundary explanation was unsupported. These numbers apply to the listed liquid-water comparison at 20 °C and 1013 hPa.</p>
+<div class="chart">[SVG Stokes (thesis eq. 19); drag balance; Gunn & Kinzer 1949. diameter (mm); m/s.]
+<div class="tip"></div>
+<div class="chart-legend">Stokes (thesis eq. 19)drag balanceGunn &amp; Kinzer 1949</div>
+</div>
+</div>
+<div class="card">
+<h3>The numbers</h3>
+<div class="table-scroll">
+<table><thead>
+<tr><th>d (mm)</th><th>measured (m/s)</th><th>Stokes</th><th>balance</th><th>error</th><th>Re</th></tr>
+</thead><tbody>
+<tr><td>0.1</td><td>0.27</td><td>0.30</td><td>0.250</td><td>-7.6 %</td><td>2</td></tr>
+<tr><td>0.2</td><td>0.72</td><td>1.20</td><td>0.694</td><td>-3.6 %</td><td>9</td></tr>
+<tr><td>0.3</td><td>1.17</td><td>2.69</td><td>1.146</td><td>-2.1 %</td><td>23</td></tr>
+<tr><td>0.4</td><td>1.62</td><td>4.78</td><td>1.586</td><td>-2.1 %</td><td>42</td></tr>
+<tr><td>0.5</td><td>2.06</td><td>7.47</td><td>2.018</td><td>-2.0 %</td><td>67</td></tr>
+<tr><td>0.6</td><td>2.47</td><td>10.76</td><td>2.442</td><td>-1.1 %</td><td>97</td></tr>
+<tr><td>0.7</td><td>2.87</td><td>14.65</td><td>2.856</td><td>-0.5 %</td><td>132</td></tr>
+<tr><td>0.8</td><td>3.27</td><td>19.14</td><td>3.258</td><td>-0.4 %</td><td>172</td></tr>
+<tr><td>0.9</td><td>3.67</td><td>24.22</td><td>3.644</td><td>-0.7 %</td><td>217</td></tr>
+<tr><td>1.0</td><td>4.03</td><td>29.90</td><td>4.008</td><td>-0.5 %</td><td>265</td></tr>
+<tr><td>1.2</td><td>4.64</td><td>43.06</td><td>4.632</td><td>-0.2 %</td><td>368</td></tr>
+<tr><td>1.4</td><td>5.17</td><td>58.60</td><td>5.165</td><td>-0.1 %</td><td>478</td></tr>
+<tr><td>1.6</td><td>5.65</td><td>76.54</td><td>5.651</td><td>0.0 %</td><td>598</td></tr>
+<tr><td>1.8</td><td>6.09</td><td>96.88</td><td>6.098</td><td>0.1 %</td><td>726</td></tr>
+<tr><td>2.0</td><td>6.49</td><td>119.60</td><td>6.511</td><td>0.3 %</td><td>861</td></tr>
+<tr><td>2.4</td><td>7.27</td><td>172.22</td><td>7.232</td><td>-0.5 %</td><td>1148</td></tr>
+<tr><td>2.8</td><td>7.82</td><td>234.41</td><td>7.812</td><td>-0.1 %</td><td>1447</td></tr>
+<tr><td>3.0</td><td>8.06</td><td>269.10</td><td>8.052</td><td>-0.1 %</td><td>1598</td></tr>
+<tr><td>3.4</td><td>8.44</td><td>345.64</td><td>8.438</td><td>-0.0 %</td><td>1897</td></tr>
+<tr><td>4.0</td><td>8.83</td><td>478.40</td><td>8.819</td><td>-0.1 %</td><td>2333</td></tr>
+</tbody></table>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div class="cat">
+<div class="head-main">
+<h2>02Collision efficiency, water on water</h2>
+<p>from droplet trajectories · 10 °C · 850 hPa</p>
+</div>
+<div class="head-side"></div>
+<div class="fold">
+<div class="fold-i">
+<div class="sec-body">
+<div class="card">
+<p>These stored efficiencies are attributed to creeping- and potential-flow trajectory calculations with an adopted interpolation. They indicate suppressed gravitational encounters for small collectors in this closure. The table generator and atmosphere metadata are absent from the deployed snapshot; the curve is not a complete warm-cloud prediction.</p>
+<div class="heatmap">[SVG Collision efficiency. collector radius R (µm); size ratio r/R.]
+<div class="tip"></div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div class="cat">
+<div class="head-main">
+<h2>03Critical Stokes numbers</h2>
+<p>a point droplet on the axis hits only above this Stokes number</p>
+</div>
+<div class="head-side"></div>
+<div class="fold">
+<div class="fold-i">
+<div class="sec-body">
+<div class="card">
+<p>Radius-based Stokes number. References: 1/12 for potential flow, 1.21 for creeping flow.</p>
+<div class="table-scroll">
+<table><thead>
+<tr><th>flow</th><th>computed</th><th>reference</th><th>error</th></tr>
+</thead><tbody>
+<tr><td>potential flow</td><td>0.0843</td><td>0.0833</td><td>1.10 %</td></tr>
+<tr><td>creeping (Stokes) flow</td><td>1.2119</td><td>1.2100</td><td>0.16 %</td></tr>
+</tbody></table>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div class="cat">
+<div class="head-main">
+<h2>04Golovin test, error after 60 minutes</h2>
+<p>sum kernel K = b(m + m′) against its exact solution</p>
+</div>
+<div class="head-side"></div>
+<div class="fold">
+<div class="fold-i">
+<div class="sec-body">
+<div class="card">
+<p>The spectrum moves from 10 µm to 0.5 mm in an hour. Spectrum error is ∫|g − g<sub>exact</sub>| d ln r / L; it falls by about 3× per doubling of resolution.</p>
+<div class="table-scroll">
+<table><thead>
+<tr><th>scheme</th><th>bins / doubling</th><th>dt (s)</th><th>mass error</th><th>spectrum error</th><th>number error</th></tr>
+</thead><tbody>
+<tr><td>split</td><td>2</td><td>1.0</td><td>-3.5e-7</td><td>0.428</td><td>-0.0021</td></tr>
+<tr><td>split</td><td>4</td><td>1.0</td><td>-4.2e-7</td><td>0.150</td><td>-0.0020</td></tr>
+<tr><td>split</td><td>8</td><td>1.0</td><td>-4.6e-7</td><td>0.051</td><td>-0.0018</td></tr>
+<tr><td>split</td><td>8</td><td>0.5</td><td>-4.6e-7</td><td>0.050</td><td>-0.0014</td></tr>
+<tr><td>Bott flux</td><td>2</td><td>1.0</td><td>-3.5e-7</td><td>0.353</td><td>0.0471</td></tr>
+<tr><td>Bott flux</td><td>4</td><td>1.0</td><td>-4.2e-7</td><td>0.121</td><td>0.0116</td></tr>
+<tr><td>Bott flux</td><td>8</td><td>1.0</td><td>-4.6e-7</td><td>0.039</td><td>0.0020</td></tr>
+</tbody></table>
+</div>
+<figure><img src="./fig/golovin.svg" alt="Golovin test spectra: numerical solution against the exact solution at 0, 20, 40 and 60 minutes"></figure>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+<p>Built on the Bachelor thesis <em>Collisional Ice Multiplication Processes in Clouds</em> (N. Koudsie, Leipzig 2022).</p>
+<p>Model: homogeneous collection box · SCE with two-bin remapping · empirical fall-speed closure and stored collision efficiencies. The 40 µm cutoff is a size diagnostic.</p>
