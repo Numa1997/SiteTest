@@ -1,0 +1,622 @@
+{
+ "0057d5c071ad": {
+  "src": "Here \\(d\\) is the distance between the two states, treating angles in radians and angular velocities in radians per second as plain numbers. Any other reasonable choice of distance gives the same \\(\\lambda\\), because \\(\\lambda\\) measures a rate of growth, not a size. The order of the two limits matters: first the starting difference is made vanishingly small, so that we measure the growth of truly tiny differences, and only then is the time made long. Done in full for the default start, with the page's equations and step, shrinking the change back every \\(0.1\\ \\mathrm{s}\\) over \\(20\\,000\\ \\mathrm{s}\\) of motion, (12) gives \\(\\lambda \\approx 1.46\\) per second. The 1.4 read off Figure 3, from one stretch of time and two of the four coordinates, was not far off.",
+  "tr": "Hier ist \\(d\\) der Abstand zwischen den beiden Zuständen; Winkel werden im Bogenmaß und Winkelgeschwindigkeiten in Radiant pro Sekunde als reine Zahlen behandelt. Jede andere vernünftige Wahl des Abstands ergibt dasselbe \\(\\lambda\\), weil \\(\\lambda\\) eine Wachstumsrate misst, keine Größe. Die Reihenfolge der beiden Grenzwerte ist wichtig: Zuerst wird der Startunterschied verschwindend klein gemacht, damit wir das Wachstum wirklich winziger Unterschiede messen, und erst dann wird die Zeit lang gemacht. Vollständig für den Standardstart durchgerechnet, mit den Gleichungen und dem Schritt der Seite und mit Zurückschrumpfen der Änderung alle \\(0.1\\ \\mathrm{s}\\) über einen Zeitraum von \\(20\\,000\\ \\mathrm{s}\\) Bewegung, ergibt Gl. (12) \\(\\lambda \\approx 1.46\\) pro Sekunde. Die Zahl 1.4, die wir aus Abbildung 3 abgelesen haben, stammt aus einem Zeitabschnitt und zwei der vier Koordinaten und lag nicht weit daneben."
+ },
+ "0290ce9a0036": {
+  "src": "Example 6.1 · the price of prediction",
+  "tr": "Beispiel 6.1 · der Preis der Vorhersage"
+ },
+ "08098399ddce": {
+  "src": "With \\(\\lambda = 1.46\\) per second, an error in the starting state is multiplied by \\(e^{1.46} \\approx 4.3\\) every second. To predict ten seconds further with the same final accuracy, we must therefore know the start \\(e^{14.6} \\approx 2\\times10^{6}\\) times more precisely. A starting error of one millimetre would have to shrink to about half a nanometre, the width of a few atoms. This is why no computer, however fast, can follow the double pendulum for long: the limit is our knowledge of the start, not the arithmetic.",
+  "tr": "Mit \\(\\lambda = 1.46\\) pro Sekunde wird ein Fehler im Anfangszustand in jeder Sekunde mit dem Faktor \\(e^{1.46} \\approx 4.3\\) multipliziert. Um zehn Sekunden weiter mit derselben Endgenauigkeit vorherzusagen, müssen wir den Anfang deshalb \\(e^{14.6} \\approx 2\\times10^{6}\\)-mal genauer kennen. Ein Anfangsfehler von einem Millimeter müsste auf etwa einen halben Nanometer schrumpfen, die Breite von wenigen Atomen. Deshalb kann kein Rechner, so schnell er auch ist, das Doppelpendel lange verfolgen: Die Grenze ist unser Wissen über den Anfang, nicht die Rechenarbeit."
+ },
+ "08e834445960": {
+  "src": "<span class=\"sw\"></span>path of m₂",
+  "tr": "<span class=\"sw\"></span>Bahn von m₂"
+ },
+ "09fc956675ec": {
+  "src": "Double pendulum animation",
+  "tr": "Animation des Doppelpendels"
+ },
+ "0b5ce79e3454": {
+  "src": "The <em>fourth-order Runge–Kutta method</em>, RK4 for short, looks at the slope four times per step: once at the start, twice at the middle (each time using the best estimate so far), and once at the end. It then takes a weighted average:",
+  "tr": "Das <em>Runge-Kutta-Verfahren vierter Ordnung</em>, kurz RK4, betrachtet die Steigung viermal pro Schritt: einmal am Anfang, zweimal in der Mitte (jedes Mal mit der besten bisherigen Schätzung) und einmal am Ende. Dann bildet es einen gewichteten Mittelwert:"
+ },
+ "0ec784791586": {
+  "src": "Physics begins by deciding what to leave out, because a description that keeps everything cannot be solved by anybody. A real pendulum has heavy rods, air pushing on it, friction in its joints, and a wobble out of its plane. We keep only what makes the double pendulum a double pendulum. Each mass is a <em>point mass</em>: all its weight sits at a single point, the way a small heavy ball behaves. Each rod is <em>rigid</em>, so it never stretches, and <em>massless</em>, so it only holds its ball at a fixed distance and carries no weight of its own. Everything moves in one vertical plane, with no friction and no air. Section 9 comes back to what these choices cost.",
+  "tr": "Die Physik beginnt damit, dass sie festlegt, was man weglässt, denn eine Beschreibung, die alles behält, kann niemand lösen. Ein wirkliches Pendel hat schwere Stäbe, Luft drückt auf es, in den Gelenken gibt es Reibung, und es wackelt aus seiner Ebene heraus. Wir behalten nur, was das Doppelpendel zum Doppelpendel macht. Jede Masse ist eine <em>Punktmasse</em>: Ihr ganzes Gewicht sitzt in einem einzigen Punkt, so wie sich eine kleine schwere Kugel verhält. Jeder Stab ist <em>starr</em>, dehnt sich also nie, und <em>masselos</em>, er hält seine Kugel nur auf festem Abstand und trägt kein eigenes Gewicht. Alles bewegt sich in einer senkrechten Ebene, ohne Reibung und ohne Luft. Abschnitt 9 kommt darauf zurück, was diese Entscheidungen kosten."
+ },
+ "0ee00b40e572": {
+  "src": "Equations (9) are too tangled to solve with pencil and paper. Before handing them to the computer, we look at the one case we can solve completely: gentle swings. When an angle is small, its sine is almost equal to the angle itself in radians. At \\(10^\\circ\\), for example, \\(\\theta = 0.1745\\) and \\(\\sin\\theta = 0.1736\\), half a percent apart. In the same way \\(\\cos\\varphi \\approx 1\\), and the terms with \\(\\omega^2\\) are products of two small quantities, far smaller than the rest, so we drop them. With equal masses \\(m\\) and equal lengths \\(l\\), and writing \\(\\ddot\\theta_i\\) for \\(\\alpha_i\\), equation (6) divided by \\(ml\\) becomes \\(2\\ddot\\theta_1 + \\ddot\\theta_2 = -2(g/l)\\,\\theta_1\\), and (7) divided by \\(l\\) becomes \\(\\ddot\\theta_1 + \\ddot\\theta_2 = -(g/l)\\,\\theta_2\\). In matrix form,",
+  "tr": "Die Gleichungen (9) sind zu verwickelt, um sie mit Bleistift und Papier zu lösen. Bevor wir sie dem Rechner übergeben, betrachten wir den einen Fall, den wir vollständig lösen können: sanfte Schwingungen. Ist ein Winkel klein, ist sein Sinus fast gleich dem Winkel im Bogenmaß. Bei \\(10^\\circ\\) etwa ist \\(\\theta = 0.1745\\) und \\(\\sin\\theta = 0.1736\\), also um ein halbes Prozent verschieden. Ebenso gilt \\(\\cos\\varphi \\approx 1\\), und die Terme mit \\(\\omega^2\\) sind Produkte zweier kleiner Größen, viel kleiner als die übrigen, also lassen wir sie weg. Mit gleichen Massen \\(m\\) und gleichen Längen \\(l\\), und mit \\(\\ddot\\theta_i\\) für \\(\\alpha_i\\), wird Gl. (6) geteilt durch \\(ml\\) zu \\(2\\ddot\\theta_1 + \\ddot\\theta_2 = -2(g/l)\\,\\theta_1\\), und Gl. (7) geteilt durch \\(l\\) wird zu \\(\\ddot\\theta_1 + \\ddot\\theta_2 = -(g/l)\\,\\theta_2\\). In Matrixform"
+ },
+ "1001cc783526": {
+  "src": "Subtracting, the \\(\\omega_1\\omega_2\\) terms cancel once more, and dividing by \\(m_2 l_2\\) leaves",
+  "tr": "Beim Subtrahieren heben sich die Terme mit \\(\\omega_1\\omega_2\\) wieder auf, und die Division durch \\(m_2 l_2\\) ergibt"
+ },
+ "12ceced3e745": {
+  "src": "At larger angles the small-angle shortcut breaks down. The sines can no longer be replaced by the angles, and the \\(\\omega^2\\) terms, the outward tugs of the circling balls, become as strong as gravity. Some starts then move chaotically. We recognise chaos not by how wild the motion looks, but by a precise test: <em>sensitive dependence on the starting state</em>. Start two pendulums whose upper angles differ by \\(0.001\\ \\mathrm{rad}\\), about one millimetre at the end of a one-metre rod, and follow the distance \\(d(t)\\) between their lower balls. Figure 3 shows this distance for a gentle start and a wild start, computed with the same equations and the same time step as the page.",
+  "tr": "Bei größeren Winkeln versagt die Kleinwinkelnäherung. Die Sinusfunktionen lassen sich nicht mehr durch die Winkel ersetzen, und die \\(\\omega^2\\)-Terme, also die nach außen gerichteten Züge der kreisenden Kugeln, werden so stark wie die Schwerkraft. Manche Starts bewegen sich dann chaotisch. Chaos erkennen wir nicht daran, wie wild die Bewegung aussieht, sondern an einem genauen Test: <em>sensitive Abhängigkeit vom Anfangszustand</em>. Starten Sie zwei Pendel, deren obere Winkel sich um \\(0.001\\ \\mathrm{rad}\\) unterscheiden, etwa einen Millimeter am Ende eines einen Meter langen Stabes, und verfolgen Sie den Abstand \\(d(t)\\) zwischen ihren unteren Kugeln. Abbildung 3 zeigt diesen Abstand für einen sanften und einen wilden Start, berechnet mit denselben Gleichungen und demselben Zeitschritt wie auf der Seite."
+ },
+ "15c3d540819e": {
+  "src": "<span class=\"psec__n\">07</span>Solving it step by step",
+  "tr": "<span class=\"psec__n\">07</span>Schritt für Schritt gelöst"
+ },
+ "1743fc214ff1": {
+  "src": "<b>Fig. 2</b> · double pendulum · RK4, <span class=\"tx\">\\(h = 1/600\\ \\mathrm{s}\\)</span>",
+  "tr": "<b>Abb. 2</b> · Doppelpendel · RK4, <span class=\"tx\">\\(h = 1/600\\ \\mathrm{s}\\)</span>"
+ },
+ "1cadcad9e9d8": {
+  "src": "<b>9.1</b> Follow the three steps of section 4.2 for the lower angle yourself and arrive at (7). Check every sign that comes from \\(\\varphi = \\theta_1 - \\theta_2\\).",
+  "tr": "<b>9.1</b> Verfolgen Sie die drei Schritte aus Abschnitt 4.2 für den unteren Winkel selbst und kommen Sie zu Gl. (7). Prüfen Sie jedes Vorzeichen, das von \\(\\varphi = \\theta_1 - \\theta_2\\) herrührt."
+ },
+ "1f2104108ac9": {
+  "src": "<span class=\"psec__n\">06</span>Chaos",
+  "tr": "<span class=\"psec__n\">06</span>Chaos"
+ },
+ "224710e4f1e7": {
+  "src": "<span class=\"psec__n\">08</span>From metres to pixels",
+  "tr": "<span class=\"psec__n\">08</span>Von Metern zu Pixeln"
+ },
+ "23267aebdb00": {
+  "src": "<span class=\"psec__n\">01</span>A pendulum on a pendulum",
+  "tr": "<span class=\"psec__n\">01</span>Ein Pendel am Pendel"
+ },
+ "236cb4119162": {
+  "src": "Keep both ratio sliders at 1 and both angular velocities at 0. Set \\(\\theta_1 = 5^\\circ\\) and \\(\\theta_2 = 7^\\circ\\), close to \\(\\sqrt2\\times 5^\\circ\\): the pendulum swings almost as one piece, with a period near 2.6 s. Now set \\(\\theta_2 = -7^\\circ\\): the arms swing against each other, twice as fast as before and a little more. Time ten swings of each and compare with (11).",
+  "tr": "Stellen Sie beide Verhältnisschieber auf 1 und beide Winkelgeschwindigkeiten auf 0. Setzen Sie \\(\\theta_1 = 5^\\circ\\) und \\(\\theta_2 = 7^\\circ\\), nahe bei \\(\\sqrt2\\times 5^\\circ\\): Das Pendel schwingt fast als ein Stück, mit einer Periode nahe 2.6 s. Setzen Sie nun \\(\\theta_2 = -7^\\circ\\): Die Arme schwingen gegeneinander, etwa doppelt so schnell wie vorher und ein wenig mehr. Stoppen Sie je zehn Schwingungen und vergleichen Sie mit Gl. (11)."
+ },
+ "23e3c1ee6918": {
+  "src": "Each of (6) and (7) contains both accelerations, because each rod pushes on the other. A computer stepping forward in time needs each acceleration on its own, so we treat (6) and (7) as two linear equations for the two unknowns \\(\\alpha_1, \\alpha_2\\). In matrix form,",
+  "tr": "Jede der Gleichungen (6) und (7) enthält beide Beschleunigungen, weil jeder Stab auf den anderen drückt. Ein Rechner, der die Zeit schrittweise vorangeht, braucht jede Beschleunigung für sich allein, daher behandeln wir (6) und (7) als zwei lineare Gleichungen für die zwei Unbekannten \\(\\alpha_1, \\alpha_2\\). In Matrixform"
+ },
+ "265ef699cbf7": {
+  "src": "Now we write down where each ball is. Put the pivot at the origin, with \\(x\\) pointing right and \\(y\\) pointing up. The first rod, of length \\(l_1\\) and tilted by \\(\\theta_1\\), is the long side of a right triangle: its sideways part is \\(l_1\\sin\\theta_1\\) and its downward part is \\(l_1\\cos\\theta_1\\). Because \\(y\\) points up and the ball hangs below the pivot, its height is negative. The second rod starts where the first one ends, so for the second ball we add its own sideways and downward parts:",
+  "tr": "Nun halten wir fest, wo sich jede Kugel befindet. Der Drehpunkt liege im Ursprung, \\(x\\) zeige nach rechts und \\(y\\) nach oben. Der erste Stab der Länge \\(l_1\\), geneigt um \\(\\theta_1\\), ist die lange Seite eines rechtwinkligen Dreiecks: Sein seitlicher Anteil ist \\(l_1\\sin\\theta_1\\), sein senkrechter Anteil \\(l_1\\cos\\theta_1\\). Weil \\(y\\) nach oben zeigt und die Kugel unterhalb des Drehpunkts hängt, ist ihre Höhe negativ. Der zweite Stab beginnt dort, wo der erste endet; für die zweite Kugel addieren wir daher seine eigenen seitlichen und senkrechten Anteile:"
+ },
+ "26d10b9a7f43": {
+  "src": "The last limitation is the computer's, not the model's. After some fifteen to twenty Lyapunov times (\\(1/\\lambda \\approx 0.7\\ \\mathrm{s}\\) each; 10 to 14 s for the default start), the computed path is no longer the exact path from that start: tested against a computation with steps eight times smaller, the page's path is off by a millimetre after 10.9 s and by 10 cm after 14.3 s. It remains a faithful example of how the pendulum can move, just not the one that start would produce. Averages over many swings are usually robust, but they deserve a check too: halve the step, lengthen the run, and see that they stay.",
+  "tr": "Die letzte Einschränkung liegt beim Rechner, nicht beim Modell. Nach etwa fünfzehn bis zwanzig Ljapunow-Zeiten (\\(1/\\lambda \\approx 0.7\\ \\mathrm{s}\\) je; 10 bis 14 s beim Standardstart) ist der berechnete Weg nicht mehr der genaue Weg von diesem Start. Verglichen mit einer Rechnung mit achtmal kleineren Schritten weicht der Weg der Seite nach 10.9 s um einen Millimeter ab und nach 14.3 s um 10 cm. Er bleibt ein getreues Beispiel dafür, wie sich das Pendel bewegen kann, nur nicht der Weg, den dieser Start erzeugen würde. Mittelwerte über viele Schwingungen sind meist robust, verdienen aber trotzdem eine Prüfung: Halbieren Sie den Schritt, verlängern Sie den Lauf und prüfen Sie, ob sie gleich bleiben."
+ },
+ "289222ae85a3": {
+  "src": "Note the factor \\(m_1 + m_2\\) in the first term. When the upper rod tilts, it lifts not only its own ball but the whole lower pendulum with it.",
+  "tr": "Beachten Sie den Faktor \\(m_1 + m_2\\) im ersten Term. Wenn der obere Stab sich neigt, hebt er nicht nur seine eigene Kugel, sondern das ganze untere Pendel mit an."
+ },
+ "2d06a1d9ae1d": {
+  "src": "<span>4</span>From energy to motion",
+  "tr": "<span>4</span>Von der Energie zur Bewegung"
+ },
+ "2f68be0d5568": {
+  "src": "<span class=\"psec__n\">04</span>From energy to motion",
+  "tr": "<span class=\"psec__n\">04</span>Von der Energie zur Bewegung"
+ },
+ "32cfac8cae20": {
+  "src": "<b>9.4</b> Repeat section 5 for equal masses but \\(l_2 = 2\\,l_1\\), and find the two normal-mode frequencies. Then set the length-ratio slider to 2 and compare with the page.",
+  "tr": "<b>9.4</b> Wiederholen Sie Abschnitt 5 für gleiche Massen, aber \\(l_2 = 2\\,l_1\\), und bestimmen Sie die beiden Eigenfrequenzen. Stellen Sie danach den Schieber für das Längenverhältnis auf 2 und vergleichen Sie mit der Seite."
+ },
+ "33bd5a5dddcd": {
+  "src": "© 2026 Numa Koudsie",
+  "tr": "© 2026 Numa Koudsie"
+ },
+ "376e52bad95d": {
+  "src": "The <em>determinant</em> of the matrix is the product of its diagonal entries minus the product of the other two:",
+  "tr": "Die <em>Determinante</em> der Matrix ist das Produkt der Diagonalelemente minus dem Produkt der beiden anderen:"
+ },
+ "37e73b7d4a8b": {
+  "src": "<span class=\"psec__n\">03</span>Energy",
+  "tr": "<span class=\"psec__n\">03</span>Energie"
+ },
+ "396a4c453f7e": {
+  "src": "The second term contains the rate of change of the wiggle rather than the wiggle itself. Integration by parts, the product rule read backwards, moves the time derivative from the wiggle onto the other factor, at the price of a minus sign and a boundary term. The boundary term is zero because the wiggle vanishes at both ends, and what remains is the wiggle multiplied by a single bracket:",
+  "tr": "Der zweite Term enthält die Änderungsrate der Störung statt der Störung selbst. Die partielle Integration, also die Produktregel rückwärts gelesen, verschiebt die Zeitableitung von der Störung auf den anderen Faktor, um den Preis eines Minuszeichens und eines Randterms. Der Randterm ist null, weil die Störung an beiden Enden verschwindet, und übrig bleibt die Störung multipliziert mit einer einzigen Klammer:"
+ },
+ "3a5f9d78da28": {
+  "src": "The last term in (3) carries the whole story of the coupling. The lower ball rides on the upper one, the way a passenger walking down the aisle rides on a moving train: its velocity is its own velocity plus the train's. When the two rods point the same way and turn the same way, \\(\\cos\\varphi = 1\\) and the speeds simply add, \\(v_2 = l_1\\omega_1 + l_2\\omega_2\\), like walking forward in a forward-moving train. When the rods are at right angles, \\(\\cos\\varphi = 0\\), and the two speeds add like the two short sides of a right triangle. Because the rods' directions keep changing, the way the two motions combine keeps changing too. That is the mathematical form of what you felt in your arm: each rod is forever pushing and pulling on the other.",
+  "tr": "Der letzte Term in Gl. (3) trägt die ganze Geschichte der Kopplung. Die untere Kugel reitet auf der oberen, wie ein Fahrgast, der im fahrenden Zug den Gang entlanggeht und dessen Geschwindigkeit die eigene plus die des Zuges ist. Zeigen beide Stäbe in dieselbe Richtung und drehen sie sich gleich, dann gilt \\(\\cos\\varphi = 1\\), und die Geschwindigkeiten addieren sich einfach, \\(v_2 = l_1\\omega_1 + l_2\\omega_2\\), wie wenn Sie in einem vorwärts fahrenden Zug nach vorn gehen. Stehen die Stäbe rechtwinklig zueinander, ist \\(\\cos\\varphi = 0\\), und die beiden Geschwindigkeiten addieren sich wie die beiden kurzen Seiten eines rechtwinkligen Dreiecks. Weil sich die Richtungen der Stäbe ständig ändern, ändert sich auch die Art, wie sich die beiden Bewegungen zusammensetzen, ständig. Das ist die mathematische Form dessen, was Sie in Ihrem Arm gespürt haben: Jeder Stab zieht und drückt ständig am anderen."
+ },
+ "3cedaddac1d9": {
+  "src": "Angle θ<sub>2</sub>",
+  "tr": "Winkel θ<sub>2</sub>"
+ },
+ "3e3875362eec": {
+  "src": "The period of a swing is the time for one full cycle, \\(2\\pi/\\Omega\\). For the page's equal rods of \\(1\\ \\mathrm{m}\\), the slow mode has period \\(2\\pi/2.397\\ \\mathrm{s} = 2.62\\ \\mathrm{s}\\) and the fast mode \\(2\\pi/5.787\\ \\mathrm{s} = 1.09\\ \\mathrm{s}\\). For comparison, a single pendulum of length \\(1\\ \\mathrm{m}\\) has period \\(2\\pi\\sqrt{l/g} = 2.01\\ \\mathrm{s}\\). Hanging a second pendulum below it splits that one rhythm into a slower one and a faster one.",
+  "tr": "Die Periode einer Schwingung ist die Zeit für einen vollen Zyklus, \\(2\\pi/\\Omega\\). Für die gleichen Stäbe von \\(1\\ \\mathrm{m}\\) hat die langsame Eigenschwingung die Periode \\(2\\pi/2.397\\ \\mathrm{s} = 2.62\\ \\mathrm{s}\\) und die schnelle \\(2\\pi/5.787\\ \\mathrm{s} = 1.09\\ \\mathrm{s}\\). Zum Vergleich: Ein einzelnes Pendel der Länge \\(1\\ \\mathrm{m}\\) hat die Periode \\(2\\pi\\sqrt{l/g} = 2.01\\ \\mathrm{s}\\). Hängt man ein zweites Pendel darunter, so spaltet sich dieser eine Rhythmus in einen langsameren und einen schnelleren auf."
+ },
+ "3fdb4256ebec": {
+  "src": "Energy is conserved",
+  "tr": "Energie bleibt erhalten"
+ },
+ "40582e6c67ed": {
+  "src": "★ RK4 loses energy rather than gaining it, and the simplest oscillation shows why. Apply it to \\(\\ddot x = -\\Omega^2 x\\). One exact step turns the point \\((x, \\dot x/\\Omega)\\) round a circle by the angle \\(\\Omega h\\) and keeps its distance from the centre. One RK4 step turns it by almost the same angle but multiplies the distance by \\(1 - (\\Omega h)^6/144\\), slightly less than one. Every step therefore shaves a tiny amount off the swing, as a very weak friction would. Methods built to avoid this, called <em>symplectic</em> integrators, keep the energy from drifting over long times, though they make other small errors.",
+  "tr": "★ RK4 verliert Energie, statt sie zu gewinnen, und die einfachste Schwingung zeigt warum. Wenden Sie es auf \\(\\ddot x = -\\Omega^2 x\\) an. Ein exakter Schritt dreht den Punkt \\((x, \\dot x/\\Omega)\\) um einen Kreis um den Winkel \\(\\Omega h\\) und behält seinen Abstand zum Mittelpunkt. Ein RK4-Schritt dreht ihn um fast denselben Winkel, multipliziert aber den Abstand mit \\(1 - (\\Omega h)^6/144\\), etwas weniger als eins. Jeder Schritt nimmt der Schwingung daher einen winzigen Betrag weg, wie eine sehr schwache Reibung. Verfahren, die das vermeiden, die sogenannten <em>symplektischen</em> Integratoren, halten die Energie über lange Zeiten frei von Drift, machen aber andere kleine Fehler."
+ },
+ "426c4846bdef": {
+  "src": "Each picture advances the motion by the real time that has passed, multiplied by the <em>Time scale</em> slider, in steps of \\(h\\). A single picture never counts for more than \\(0.05\\ \\mathrm{s}\\), and the Time scale never exceeds 1.5, so at most 45 steps are taken for one picture; the safety limit of 600 steps in the code is never reached. Moving a mass, length, angle or angular-velocity slider restarts the motion from those values; moving the Time scale slider does not.",
+  "tr": "Jedes Bild bringt die Bewegung um die tatsächlich vergangene Zeit weiter, multipliziert mit dem Schieber <em>Zeitmaßstab</em>, in Schritten von \\(h\\). Ein einzelnes Bild zählt nie mehr als \\(0.05\\ \\mathrm{s}\\), und der Zeitmaßstab übersteigt nie 1.5, daher werden für ein Bild höchstens 45 Schritte gemacht; die Sicherheitsgrenze von 600 Schritten im Code wird nie erreicht. Wird ein Schieber für Masse, Länge, Winkel oder Winkelgeschwindigkeit bewegt, startet die Bewegung von diesen Werten neu; das Bewegen des Schiebers Zeitmaßstab tut das nicht."
+ },
+ "427da12c0cd1": {
+  "src": "Interactive double pendulum integrated with RK4: adjustable masses, lengths and initial conditions, energy check and a chaos twin that starts 0.001 rad away.",
+  "tr": "Interaktives Doppelpendel, mit RK4 berechnet: einstellbare Massen, Längen und Anfangsbedingungen, Energiekontrolle und ein Chaos-Zwilling, der 0.001 rad entfernt startet."
+ },
+ "44deb33160c7": {
+  "src": "This pairing of exact laws with practically unpredictable outcomes is called <em>deterministic chaos</em>. \"Deterministic\" means that the present fixes the future, with no dice thrown. \"Chaos\" means that the fixing is so delicate that any error in our knowledge of the present grows until it swallows the prediction. The weather behaves in the same way. The air obeys equations we know well, but we can never measure today's atmosphere precisely enough, and forecasts fade after about two weeks.",
+  "tr": "Diese Verbindung exakter Gesetze mit praktisch unvorhersagbarem Ausgang heißt <em>deterministisches Chaos</em>. „Deterministisch“ bedeutet, dass die Gegenwart die Zukunft festlegt, ohne dass gewürfelt wird. „Chaos“ bedeutet, dass diese Festlegung so empfindlich ist, dass jeder Fehler in unserer Kenntnis der Gegenwart wächst, bis er die Vorhersage verschluckt. Das Wetter verhält sich genauso. Die Luft gehorcht Gleichungen, die wir gut kennen, doch wir können die heutige Atmosphäre nie genau genug messen, und Vorhersagen verblassen nach etwa zwei Wochen."
+ },
+ "4653b1623e9f": {
+  "src": "<span class=\"psub__n\">4.3</span>The equation for the lower angle",
+  "tr": "<span class=\"psub__n\">4.3</span>Die Gleichung für den unteren Winkel"
+ },
+ "47e0e7aea28c": {
+  "src": "Equations (9) give the accelerations in any state, but no formula gives the angles at a later time directly. The computer therefore does what a hiker does in fog: it looks at the slope where it stands, takes a small step, and looks again. We write the state as \\(s = (\\theta_1,\\theta_2,\\omega_1,\\omega_2)\\) and the laws of motion as \\(\\mathrm{d}s/\\mathrm{d}t = F(s) = (\\omega_1,\\omega_2,\\alpha_1,\\alpha_2)\\): the angles change at the angular velocities, and the angular velocities change at the accelerations (9). The simplest walk, <em>Euler's method</em>, takes \\(s(t+h) = s + h\\,F(s)\\) for a small time step \\(h\\). It is easy to understand and poor in practice, because it uses the slope only at the start of each step, and on a curving path that slope is already wrong halfway along. Applied to a pendulum, Euler's method makes the swing grow a little on every step, as if someone were secretly pushing it.",
+  "tr": "Die Gleichungen (9) liefern die Beschleunigungen in jedem Zustand, aber keine Formel gibt die Winkel zu einem späteren Zeitpunkt direkt an. Der Rechner tut daher, was ein Wanderer im Nebel tut: Er betrachtet die Neigung, auf der er steht, macht einen kleinen Schritt und schaut erneut. Wir schreiben den Zustand als \\(s = (\\theta_1,\\theta_2,\\omega_1,\\omega_2)\\) und die Bewegungsgesetze als \\(\\mathrm{d}s/\\mathrm{d}t = F(s) = (\\omega_1,\\omega_2,\\alpha_1,\\alpha_2)\\): Die Winkel ändern sich mit den Winkelgeschwindigkeiten, und die Winkelgeschwindigkeiten ändern sich mit den Beschleunigungen (9). Das einfachste Verfahren, das <em>Euler-Verfahren</em>, nimmt \\(s(t+h) = s + h\\,F(s)\\) für einen kleinen Zeitschritt \\(h\\). Es ist leicht zu verstehen und in der Praxis schwach, weil es die Steigung nur am Anfang jedes Schrittes benutzt, und auf einem gekrümmten Weg ist diese Steigung schon auf halbem Weg falsch. Auf ein Pendel angewandt, lässt das Euler-Verfahren die Schwingung bei jedem Schritt ein wenig anwachsen, als würde jemand es heimlich anstoßen."
+ },
+ "4877b4916337": {
+  "src": "Fig. 2 · classical mechanics · chaos",
+  "tr": "Abb. 2 · klassische Mechanik · Chaos"
+ },
+ "4a81ec85f9b8": {
+  "src": "<span>9</span>What the model leaves out",
+  "tr": "<span>9</span>Was das Modell weglässt"
+ },
+ "4cc717972faa": {
+  "src": "Multiplying numerator and denominator by \\(\\sqrt2(\\sqrt2 \\mp 1)\\), the denominator becomes \\((\\sqrt2 \\pm 1)(\\sqrt2 \\mp 1) = 1\\), and we obtain",
+  "tr": "Wenn man Zähler und Nenner mit \\(\\sqrt2(\\sqrt2 \\mp 1)\\) multipliziert, wird der Nenner zu \\((\\sqrt2 \\pm 1)(\\sqrt2 \\mp 1) = 1\\), und wir erhalten"
+ },
+ "4d934ad60808": {
+  "src": "★ The page computes the same two numbers in a tidier form. Multiply numerator and denominator by 2 and use \\(2\\sin^2\\varphi = 1-\\cos 2\\varphi\\) in the denominator. In the numerator of \\(\\alpha_1\\), use \\(2\\sin\\theta_2\\cos\\varphi = \\sin\\theta_1 - \\sin(\\theta_1 - 2\\theta_2)\\); in the numerator of \\(\\alpha_2\\), use \\(\\sin\\theta_1\\cos\\varphi - \\sin\\theta_2 = \\cos\\theta_1\\sin\\varphi\\), which follows from expanding \\(\\sin\\theta_2 = \\sin(\\theta_1 - \\varphi)\\) and is where the common factor \\(\\sin\\varphi\\) of \\(\\alpha_2\\) comes from. The result is",
+  "tr": "★ Die Seite berechnet dieselben beiden Zahlen in einer übersichtlicheren Form. Multiplizieren Sie Zähler und Nenner mit 2 und verwenden Sie im Nenner \\(2\\sin^2\\varphi = 1-\\cos 2\\varphi\\). Im Zähler von \\(\\alpha_1\\) verwenden Sie \\(2\\sin\\theta_2\\cos\\varphi = \\sin\\theta_1 - \\sin(\\theta_1 - 2\\theta_2)\\); im Zähler von \\(\\alpha_2\\) verwenden Sie \\(\\sin\\theta_1\\cos\\varphi - \\sin\\theta_2 = \\cos\\theta_1\\sin\\varphi\\), was aus der Entwicklung von \\(\\sin\\theta_2 = \\sin(\\theta_1 - \\varphi)\\) folgt und woher der gemeinsame Faktor \\(\\sin\\varphi\\) von \\(\\alpha_2\\) stammt. Das Ergebnis lautet"
+ },
+ "5264220f682d": {
+  "src": "The box in section 3 argued from the rods. Lagrange's method gives a shorter proof. Define the quantity \\(\\mathcal{E} = \\sum_i \\omega_i\\,\\partial L/\\partial\\omega_i - L\\). Differentiating it in time and using (5) to replace \\(\\tfrac{\\mathrm{d}}{\\mathrm{d}t}\\,\\partial L/\\partial\\omega_i\\) by \\(\\partial L/\\partial\\theta_i\\), every term cancels except \\(-\\partial L/\\partial t\\), the part of the change of \\(L\\) that comes from the clock itself. Our \\(L\\) does not contain the time explicitly, so \\(\\mathcal{E}\\) is constant. Every term of \\(T\\) contains exactly two angular velocities, so \\(\\sum_i \\omega_i\\,\\partial T/\\partial\\omega_i = 2T\\), while \\(V\\) contains none. Hence \\(\\mathcal{E} = 2T - (T - V) = T + V\\): the conserved quantity is the total energy.",
+  "tr": "Das Argument im Kasten zu Abschnitt 3 stützte sich auf die Stäbe. Lagranges Verfahren liefert einen kürzeren Beweis. Definieren Sie die Größe \\(\\mathcal{E} = \\sum_i \\omega_i\\,\\partial L/\\partial\\omega_i - L\\). Bilden Sie ihre zeitliche Ableitung und ersetzen Sie mit Hilfe von Gl. (5) \\(\\tfrac{\\mathrm{d}}{\\mathrm{d}t}\\,\\partial L/\\partial\\omega_i\\) durch \\(\\partial L/\\partial\\theta_i\\); dann heben sich alle Terme auf bis auf \\(-\\partial L/\\partial t\\), den Teil der Änderung von \\(L\\), der von der Uhr selbst kommt. Unser \\(L\\) enthält die Zeit nicht explizit, also ist \\(\\mathcal{E}\\) konstant. Jeder Term von \\(T\\) enthält genau zwei Winkelgeschwindigkeiten, also gilt \\(\\sum_i \\omega_i\\,\\partial T/\\partial\\omega_i = 2T\\), während \\(V\\) keine enthält. Daraus folgt \\(\\mathcal{E} = 2T - (T - V) = T + V\\): Die erhaltene Größe ist die Gesamtenergie."
+ },
+ "529640f3d028": {
+  "src": "<span class=\"psub__n\">4.1</span>The Euler–Lagrange equation&nbsp;★",
+  "tr": "<span class=\"psub__n\">4.1</span>Die Euler-Lagrange-Gleichung&nbsp;★"
+ },
+ "5444f85f3881": {
+  "src": "<span class=\"pfig__n\">Figure 1</span>The model. Two point masses \\(m_1, m_2\\) on rigid, massless rods of lengths \\(l_1, l_2\\). Each angle is measured from the downward vertical (dashed), counter-clockwise positive. Two numbers, \\(\\theta_1\\) and \\(\\theta_2\\), fix where everything is.",
+  "tr": "<span class=\"pfig__n\">Abbildung 1</span>Das Modell. Zwei Punktmassen \\(m_1, m_2\\) an masselosen, starren Stäben der Längen \\(l_1, l_2\\). Jeder Winkel wird von der nach unten weisenden Senkrechten (gestrichelt) aus gemessen, gegen den Uhrzeigersinn positiv. Zwei Zahlen, \\(\\theta_1\\) und \\(\\theta_2\\), legen die Lage aller Teile fest."
+ },
+ "54faad0f40f1": {
+  "src": "Length ratio l<sub>2</sub>/l<sub>1</sub>",
+  "tr": "Längenverhältnis l<sub>2</sub>/l<sub>1</sub>"
+ },
+ "5571539485d2": {
+  "src": "Two kinds of derivative meet in (5), and we must keep them apart. A <em>partial derivative</em> such as \\(\\partial L/\\partial\\omega_1\\) treats \\(L\\) as a function of four separate numbers \\(\\theta_1, \\theta_2, \\omega_1, \\omega_2\\) and asks how \\(L\\) changes when one of them alone is changed, the other three held still. The time derivative \\(\\mathrm{d}/\\mathrm{d}t\\) then follows the actual motion, in which all four change together. In particular the chain rule gives \\(\\tfrac{\\mathrm{d}}{\\mathrm{d}t}\\cos\\varphi = -\\sin\\varphi\\,(\\omega_1-\\omega_2)\\). The three pieces of (5) for the upper angle are",
+  "tr": "Zwei Arten von Ableitung treffen in Gl. (5) aufeinander, und wir müssen sie auseinanderhalten. Eine <em>partielle Ableitung</em> wie \\(\\partial L/\\partial\\omega_1\\) behandelt \\(L\\) als Funktion von vier getrennten Zahlen \\(\\theta_1, \\theta_2, \\omega_1, \\omega_2\\) und fragt, wie sich \\(L\\) ändert, wenn nur eine davon geändert wird, während die anderen drei festgehalten werden. Die Zeitableitung \\(\\mathrm{d}/\\mathrm{d}t\\) folgt dann der wirklichen Bewegung, bei der sich alle vier zugleich ändern. Insbesondere liefert die Kettenregel \\(\\tfrac{\\mathrm{d}}{\\mathrm{d}t}\\cos\\varphi = -\\sin\\varphi\\,(\\omega_1-\\omega_2)\\). Die drei Teile von Gl. (5) für den oberen Winkel sind"
+ },
+ "5888082d0a17": {
+  "src": "Exercise 5.1 · on the figure above",
+  "tr": "Übung 5.1 · zur Abbildung oben"
+ },
+ "5a3b1b096c7e": {
+  "src": "<b>9.2</b> Differentiate \\(E = T + V\\) in time, and use (6) and (7) to show that \\(\\mathrm{d}E/\\mathrm{d}t = 0\\).",
+  "tr": "<b>9.2</b> Leiten Sie \\(E = T + V\\) nach der Zeit ab und verwenden Sie (6) und (7), um zu zeigen, dass \\(\\mathrm{d}E/\\mathrm{d}t = 0\\) ist."
+ },
+ "5d07df3df43c": {
+  "src": "For the upper angle the generalised momentum is",
+  "tr": "Für den oberen Winkel ist der verallgemeinerte Impuls"
+ },
+ "5d0cbe9b668c": {
+  "src": "<span class=\"psub__n\">3.2</span>The two energies",
+  "tr": "<span class=\"psub__n\">3.2</span>Die beiden Energien"
+ },
+ "5fce91d8490a": {
+  "src": "<span class=\"psec__n\">05</span>Small swings: two normal modes",
+  "tr": "<span class=\"psec__n\">05</span>Kleine Auslenkungen: zwei Eigenschwingungen"
+ },
+ "619ca131f77d": {
+  "src": "<span>8</span>From metres to pixels",
+  "tr": "<span>8</span>Von Metern zu Pixeln"
+ },
+ "6205c61dd83c": {
+  "src": "Exercise 6.1 · on the figure above",
+  "tr": "Übung 6.1 · zur Abbildung oben"
+ },
+ "62e1f52a1c49": {
+  "src": "Example 3.1 · the energy of the default start",
+  "tr": "Beispiel 3.1 · die Energie des Standardstarts"
+ },
+ "648c6590e619": {
+  "src": "The burgundy trail of the lower ball is drawn on its own transparent layer, one short segment per RK4 step, and dimmed every picture by the factor \\((1-0.008)^{60\\,\\Delta t}\\), where \\(\\Delta t\\) is the real time since the last picture. In principle its brightness halves every \\(\\ln 2/(60\\,|\\ln 0.992|)\\approx 1.4\\ \\mathrm{s}\\). The screen, though, stores transparency in whole steps of 1/255, and the tiny dimming steps get rounded away. On a screen drawing sixty pictures a second, the trail falls to half in about 1.6 s and then stops fading at about a quarter of its strength, leaving a faint haze wherever ball 2 has been until <em>Clear trail</em> or a restart; on faster screens it stops fading sooner. Ball 1 is drawn with a radius of 8 screen pixels. Ball 2 has radius \\(8(m_2/m_1)^{1/3}\\) screen pixels, as for two balls of the same material, whose mass grows with the cube of the radius; it is kept between 4 and 17 pixels.",
+  "tr": "Die Spur des unteren Balls wird auf einer eigenen durchsichtigen Ebene gezeichnet, mit einem kurzen Segment pro RK4-Schritt, und bei jedem Bild um den Faktor \\((1-0.008)^{60\\,\\Delta t}\\) abgedunkelt, wobei \\(\\Delta t\\) die reale Zeit seit dem letzten Bild ist. Im Prinzip halbiert sich ihre Helligkeit alle \\(\\ln 2/(60\\,|\\ln 0.992|)\\approx 1.4\\ \\mathrm{s}\\). Der Bildschirm speichert die Transparenz jedoch nur in ganzen Schritten von 1/255, und die winzigen Abdunkelungsschritte werden weggerundet. Auf einem Bildschirm mit sechzig Bildern pro Sekunde fällt die Spur in etwa 1.6 s auf die Hälfte und hört dann bei etwa einem Viertel ihrer Stärke auf zu verblassen, sodass überall dort, wo Kugel 2 war, ein blasser Schleier bleibt, bis <em>Spur löschen</em> oder ein Neustart erfolgt; auf schnelleren Bildschirmen hört das Verblassen früher auf. Kugel 1 wird mit einem Radius von 8 Bildschirmpixeln gezeichnet. Kugel 2 hat den Radius \\(8(m_2/m_1)^{1/3}\\) Bildschirmpixel, wie bei zwei Kugeln aus demselben Material, deren Masse mit der dritten Potenz des Radius wächst; er wird zwischen 4 und 17 Pixeln gehalten."
+ },
+ "670ea0a5c9b1": {
+  "src": "<span class=\"pfig__n\">Figure 3</span>Distance between the lower masses of two pendulums whose upper angles start \\(0.001\\ \\mathrm{rad}\\) apart, on a logarithmic scale. Equal masses and lengths, both at rest at the start, RK4 with \\(h = 1/600\\ \\mathrm{s}\\). At low energy the distance stays below about 1.5 mm for the whole 20 s. At high energy it grows like a straight line on this scale, which means exponentially, until it is as large as the pendulum itself.",
+  "tr": "<span class=\"pfig__n\">Abbildung 3</span>Abstand zwischen den unteren Massen zweier Pendel, deren obere Winkel um \\(0.001\\ \\mathrm{rad}\\) auseinander beginnen, in logarithmischer Skala. Gleiche Massen und Längen, beide zu Beginn in Ruhe, RK4 mit \\(h = 1/600\\ \\mathrm{s}\\). Bei niedriger Energie bleibt der Abstand während der ganzen 20 s unter etwa 1.5 mm. Bei hoher Energie wächst er auf dieser Skala wie eine gerade Linie, also exponentiell, bis er so groß ist wie das Pendel selbst."
+ },
+ "684936dfa199": {
+  "src": "Double Pendulum<span class=\"dot\">.</span>",
+  "tr": "Doppelpendel<span class=\"dot\">.</span>"
+ },
+ "6b59e7f5d4b6": {
+  "src": "<span>1</span>A pendulum on a pendulum",
+  "tr": "<span>1</span>Ein Pendel am Pendel"
+ },
+ "6cdad0d2872a": {
+  "src": "Example 5.1 · the two periods",
+  "tr": "Beispiel 5.1 · die beiden Perioden"
+ },
+ "6f7180d73245": {
+  "src": "Twin separation · bob 2",
+  "tr": "Abstand der Zwillinge · Pendelkörper 2"
+ },
+ "702b201c4b40": {
+  "src": "Phyein Usul",
+  "tr": "Phyein Usul"
+ },
+ "731726a391f2": {
+  "src": "In the second line the bracket has collapsed by the angle-difference rule of trigonometry, \\(\\cos a\\cos b + \\sin a\\sin b = \\cos(a-b)\\). The new symbol \\(\\varphi = \\theta_1 - \\theta_2\\) is the angle between the two rods; it will appear again and again.",
+  "tr": "Im zweiten Zeilenschritt ist die Klammer nach dem Additionstheorem der Trigonometrie zusammengezogen, \\(\\cos a\\cos b + \\sin a\\sin b = \\cos(a-b)\\). Das neue Symbol \\(\\varphi = \\theta_1 - \\theta_2\\) ist der Winkel zwischen den beiden Stäben; es wird immer wieder auftauchen."
+ },
+ "744bf9eaf0ec": {
+  "src": "<span class=\"psub__n\">4.2</span>The equation for the upper angle",
+  "tr": "<span class=\"psub__n\">4.2</span>Die Gleichung für den oberen Winkel"
+ },
+ "74b976092b5d": {
+  "src": "Clear trail",
+  "tr": "Spur löschen"
+ },
+ "753656ab6a21": {
+  "src": "If the slope depended on time alone, the two middle looks would agree and the weights would become 1, 4, 1, the weights of Simpson's rule for the area under a curve. RK4 is the generalisation of Simpson's rule to a slope that also depends on where we are. The error it makes in one step shrinks like \\(h^5\\), and the error piled up over a fixed stretch of time like \\(h^4\\), so halving the step makes the computed path about sixteen times more accurate. The energy error, which the <em>Drift</em> readout shows, shrinks even faster here: in tests with the page's own code, halving the step from \\(1/600\\ \\mathrm{s}\\) reduced the drift after a minute about 35 times, and halving again about 25 times. The page uses \\(h = 1/600\\ \\mathrm{s}\\). On a screen that draws sixty pictures a second, this fits exactly ten steps into each picture, and it keeps the energy drift of the default start below one part in ten million over twenty seconds, far below anything you could see.",
+  "tr": "Hängt die Steigung nur von der Zeit ab, würden die beiden mittleren Blicke übereinstimmen, und die Gewichte wären 1, 4, 1, die Gewichte der Simpson-Regel für die Fläche unter einer Kurve. RK4 ist die Verallgemeinerung der Simpson-Regel auf eine Steigung, die auch davon abhängt, wo wir sind. Der Fehler, den es in einem Schritt macht, schrumpft wie \\(h^5\\), und der über eine feste Zeitspanne angesammelte Fehler wie \\(h^4\\); halbiert man den Schritt, so wird der berechnete Weg etwa sechzehnmal genauer. Der Energiefehler, den die Anzeige <em>Energiedrift</em> zeigt, schrumpft hier sogar noch schneller: In Tests mit dem eigenen Code der Seite verringerte das Halbieren des Schritts von \\(1/600\\ \\mathrm{s}\\) die Drift nach einer Minute etwa 35-fach, und ein weiteres Halbieren etwa 25-fach. Die Seite verwendet \\(h = 1/600\\ \\mathrm{s}\\). Auf einem Bildschirm, der sechzig Bilder pro Sekunde zeigt, passen genau zehn Schritte in jedes Bild, und damit bleibt die Energiedrift des Standardstarts über zwanzig Sekunden unter einem Zehnmillionstel, weit unter dem, was Sie sehen könnten."
+ },
+ "753c84593cce": {
+  "src": "We describe each rod by its angle from the straight-down direction, the dashed line in Figure 1, counted positive when the rod turns counter-clockwise. Angles are measured in <em>radians</em>. One radian is the angle at which the arc along a circle is exactly as long as the circle's radius, so a full turn is \\(2\\pi \\approx 6.28\\) radians and \\(1^\\circ \\approx 0.0175\\) radians. Radians are the natural unit for motion on a circle, because the length of an arc is then simply radius times angle.",
+  "tr": "Wir beschreiben jeden Stab durch seinen Winkel zur geraden Abwärtsrichtung, der gestrichelten Linie in Abbildung 1, und zählen ihn positiv, wenn der Stab sich gegen den Uhrzeigersinn dreht. Winkel werden in <em>Radiant</em> gemessen. Ein Radiant ist der Winkel, bei dem der Bogen auf einem Kreis genau so lang ist wie der Radius. Eine volle Drehung sind \\(2\\pi \\approx 6.28\\) Radiant, und für einen Grad gilt \\(1^\\circ \\approx 0.0175\\) Radiant. Das Radiant ist die natürliche Einheit für Bewegung auf einem Kreis, weil die Länge eines Bogens dann einfach Radius mal Winkel ist."
+ },
+ "77f03f065271": {
+  "src": "Numa Koudsie · for readers meeting the subject for the first time, from school to the second year of university",
+  "tr": "Numa Koudsie · für Leserinnen und Leser, die dem Thema zum ersten Mal begegnen, von der Schule bis zum zweiten Studienjahr"
+ },
+ "781961bc81c2": {
+  "src": "Pause",
+  "tr": "Pause"
+ },
+ "7b9a68d6240d": {
+  "src": "Hold a pen loosely between two fingers and let it swing. That is a pendulum, and since Galileo, four hundred years ago, we have known how to predict where it will be at any moment. Now hang a second pen from the tip of the first, and the easy prediction is gone.",
+  "tr": "Halten Sie einen Stift locker zwischen zwei Fingern und lassen Sie ihn schwingen. Das ist ein Pendel, und seit Galilei, vor vierhundert Jahren, wissen wir, wie sich vorhersagen lässt, wo es sich zu jedem Zeitpunkt befindet. Hängen Sie nun einen zweiten Stift an die Spitze des ersten, und die einfache Vorhersage ist dahin."
+ },
+ "7d2502c47c5f": {
+  "src": "The <em>kinetic energy</em> of a ball, the energy it has because it moves, is \\(\\tfrac12 m v^2\\). It equals the work needed to bring the ball from rest up to the speed \\(v\\), and you feel it as the sting when a fast ball lands in your hand. For both balls together,",
+  "tr": "Die <em>kinetische Energie</em> einer Kugel, also die Energie, die sie wegen ihrer Bewegung besitzt, ist \\(\\tfrac12 m v^2\\). Sie entspricht der Arbeit, die nötig ist, um die Kugel aus der Ruhe auf die Geschwindigkeit \\(v\\) zu bringen, und Sie spüren sie als Stich, wenn ein schneller Ball in Ihrer Hand landet. Für beide Kugeln zusammen"
+ },
+ "7d252cd594b3": {
+  "src": "All simulations ↑",
+  "tr": "↑ Alle Simulationen"
+ },
+ "7ee406df62d3": {
+  "src": "<span class=\"psub__n\">4.4</span>Solving for the accelerations",
+  "tr": "<span class=\"psub__n\">4.4</span>Auflösen nach den Beschleunigungen"
+ },
+ "7f99ede72bf4": {
+  "src": "<span class=\"pfig__n\">Figure 2</span>The two normal modes for equal masses and \\(l = 1\\ \\mathrm{m}\\), with the angles exaggerated so they can be seen. Dark: one turning point; pale: the opposite turning point half a period later.",
+  "tr": "<span class=\"pfig__n\">Abbildung 2</span>Die beiden Eigenschwingungen für gleiche Massen und \\(l = 1\\ \\mathrm{m}\\), mit übertriebenen Winkeln, damit man sie sehen kann. Dunkel: ein Umkehrpunkt; hell: der gegenüberliegende Umkehrpunkt eine halbe Periode später."
+ },
+ "80892f93543c": {
+  "src": "We repeat the same three steps for \\(\\theta_2\\). Now \\(\\theta_2\\) sits inside \\(\\cos\\varphi\\) with a minus sign, because \\(\\varphi = \\theta_1 - \\theta_2\\), so \\(\\partial\\cos\\varphi/\\partial\\theta_2 = +\\sin\\varphi\\):",
+  "tr": "Wir wiederholen dieselben drei Schritte für \\(\\theta_2\\). Nun steckt \\(\\theta_2\\) mit einem Minuszeichen in \\(\\cos\\varphi\\), weil \\(\\varphi = \\theta_1 - \\theta_2\\), also \\(\\partial\\cos\\varphi/\\partial\\theta_2 = +\\sin\\varphi\\):"
+ },
+ "808dabcd714f": {
+  "src": "Coupling",
+  "tr": "Kopplung"
+ },
+ "875cd17f6e93": {
+  "src": "T. Shinbrot, C. Grebogi, J. Wisdom and J. A. Yorke, <a href=\"https://doi.org/10.1119/1.16860\">“Chaos in a double pendulum”</a>, <em>American Journal of Physics</em> 60, 491 (1992): measurements on a real double pendulum, compared with the model of this note.",
+  "tr": "T. Shinbrot, C. Grebogi, J. Wisdom und J. A. Yorke, <a href=\"https://doi.org/10.1119/1.16860\">“Chaos in a double pendulum”</a>, <em>American Journal of Physics</em> 60, 491 (1992): Messungen an einem echten Doppelpendel, verglichen mit dem Modell dieses Skripts."
+ },
+ "892f1ba3fb6b": {
+  "src": "<span class=\"psub__n\">3.1</span>How fast the balls move",
+  "tr": "<span class=\"psub__n\">3.1</span>Wie schnell sich die Kugeln bewegen"
+ },
+ "895636984c6e": {
+  "src": "The lower arm feels gravity, \\(-g\\sin\\theta_2\\), and the outward tug of the upper ball's circling, \\(l_1\\omega_1^2\\sin\\varphi\\), which reaches it through the elbow.",
+  "tr": "Der untere Arm spürt die Schwerkraft, \\(-g\\sin\\theta_2\\), und den nach außen gerichteten Zug aus dem Kreisen der oberen Kugel, \\(l_1\\omega_1^2\\sin\\varphi\\), der über den Ellbogen zu ihm gelangt."
+ },
+ "8b4d1f83501c": {
+  "src": "You already own a double pendulum: your arm. Let it hang loose and give it a push from the shoulder. The upper arm turns about the shoulder, the forearm turns about the elbow, and your hand traces a curve that neither joint would draw on its own. You can feel the two parts tugging at each other: when the forearm flicks outward, the upper arm is pulled along, and when the upper arm stops, the forearm keeps going. A gymnast circling the high bar, a nunchaku, and the hook of a crane swinging on its cable are all the same machine: two masses, two rods, and gravity pulling down.",
+  "tr": "Ihren Arm besitzen Sie bereits, als Doppelpendel. Lassen Sie ihn locker herabhängen und geben Sie ihm vom Schultergelenk aus einen Stoß. Der Oberarm dreht sich um die Schulter, der Unterarm um den Ellbogen, und Ihre Hand beschreibt eine Kurve, die keines der beiden Gelenke allein zeichnen würde. Sie spüren, wie die beiden Teile aneinander zerren: Schnellt der Unterarm nach außen, wird der Oberarm mitgezogen, und wenn der Oberarm anhält, läuft der Unterarm weiter. Eine Turnerin am Reck, die sich um die Stange schwingt, ein Nunchaku und der Haken eines Krans, der an seinem Seil pendelt, sind dieselbe Maschine: zwei Massen, zwei Stäbe und die Schwerkraft, die nach unten zieht."
+ },
+ "8cd4e8676580": {
+  "src": "<span>3</span>Energy",
+  "tr": "<span>3</span>Energie"
+ },
+ "8d51779d422b": {
+  "src": "The speed follows from Pythagoras, \\(v^2 = \\dot x^2 + \\dot y^2\\). For the upper ball, \\(v_1^2 = l_1^2\\omega_1^2(\\cos^2\\theta_1 + \\sin^2\\theta_1) = l_1^2\\omega_1^2\\). This is what we expect: a ball on a rod of length \\(l_1\\) turning at \\(\\omega_1\\) runs along its circle at the speed \\(l_1\\omega_1\\). For the lower ball, squaring and adding gives one term for each rod and a mixed term from the two together:",
+  "tr": "Die Geschwindigkeit folgt aus dem Satz des Pythagoras, \\(v^2 = \\dot x^2 + \\dot y^2\\). Für die obere Kugel gilt \\(v_1^2 = l_1^2\\omega_1^2(\\cos^2\\theta_1 + \\sin^2\\theta_1) = l_1^2\\omega_1^2\\). Das ist genau, was wir erwarten: Eine Kugel an einem Stab der Länge \\(l_1\\), die sich mit \\(\\omega_1\\) dreht, läuft auf ihrem Kreis mit der Geschwindigkeit \\(l_1\\omega_1\\). Für die untere Kugel ergibt das Quadrieren und Addieren einen Term für jeden Stab und einen gemischten Term aus beiden:"
+ },
+ "8e6b86dce8c4": {
+  "src": "Problems",
+  "tr": "Aufgaben"
+ },
+ "93a8161c11f4": {
+  "src": "Back to the simulations",
+  "tr": "Zurück zu den Simulationen"
+ },
+ "9521dba25709": {
+  "src": "Home page",
+  "tr": "Startseite"
+ },
+ "983c824e888e": {
+  "src": "<span class=\"psub__n\">9.2</span>Further reading",
+  "tr": "<span class=\"psub__n\">9.2</span>Weiterführende Literatur"
+ },
+ "99c172d34b78": {
+  "src": "Checked against a direct numerical solve of (8) at 10 000 random states and parameter values: the two agree to rounding error, about one part in \\(10^{13}\\).",
+  "tr": "Geprüft gegen eine direkte numerische Lösung von Gl. (8) bei 10 000 zufälligen Zuständen und Parameterwerten: Beide stimmen bis auf Rundungsfehler überein, etwa auf einen Teil in \\(10^{13}\\)."
+ },
+ "9b84fcd970fc": {
+  "src": "<span class=\"psub__n\">4.5</span>Why the energy is conserved&nbsp;★",
+  "tr": "<span class=\"psub__n\">4.5</span>Warum die Energie erhalten bleibt&nbsp;★"
+ },
+ "9e7209135f5a": {
+  "src": "<span class=\"pbox__t\">Key result · the Euler–Lagrange equation</span> \\[ \\frac{\\mathrm{d}}{\\mathrm{d}t}\\frac{\\partial L}{\\partial\\omega_i} - \\frac{\\partial L}{\\partial\\theta_i} = 0 , \\qquad i = 1, 2. \\tag{5} \\] <p>There is one such equation for each angle. Read it as Newton's second law in disguise: the quantity \\(p_i = \\partial L/\\partial\\omega_i\\), called the <em>generalised momentum</em> of \\(\\theta_i\\), changes at the rate \\(\\partial L/\\partial\\theta_i\\), which plays the part of a force.</p>",
+  "tr": "<span class=\"pbox__t\">Kernergebnis · die Euler-Lagrange-Gleichung</span> \\[ \\frac{\\mathrm{d}}{\\mathrm{d}t}\\frac{\\partial L}{\\partial\\omega_i} - \\frac{\\partial L}{\\partial\\theta_i} = 0 , \\qquad i = 1, 2. \\tag{5} \\] <p>Es gibt eine solche Gleichung für jeden Winkel. Lesen Sie sie als Newtons zweites Gesetz in Verkleidung: Die Größe \\(p_i = \\partial L/\\partial\\omega_i\\), der <em>verallgemeinerte Impuls</em> von \\(\\theta_i\\), ändert sich mit der Rate \\(\\partial L/\\partial\\theta_i\\), die die Rolle einer Kraft spielt.</p>"
+ },
+ "a0765de3ed83": {
+  "src": "Switch on the <em>Chaos twin</em>, a second pendulum started with \\(\\theta_1\\) larger by \\(0.001\\ \\mathrm{rad}\\). From \\(10^\\circ, 10^\\circ\\) its separation readout stays near \\(10^{-3}\\ \\mathrm{m}\\). From \\(120^\\circ, 150^\\circ\\) the pale twin peels away within a few seconds. Find the smallest starting angles at which you can see the two pendulums separate within 20 s.",
+  "tr": "Schalten Sie den <em>Chaos-Zwilling</em> ein, ein zweites Pendel, dessen \\(\\theta_1\\) um \\(0.001\\ \\mathrm{rad}\\) größer beginnt. Bei \\(10^\\circ, 10^\\circ\\) bleibt die Abstandsanzeige nahe \\(10^{-3}\\ \\mathrm{m}\\). Bei \\(120^\\circ, 150^\\circ\\) löst sich der helle Zwilling innerhalb weniger Sekunden. Finden Sie die kleinsten Startwinkel, bei denen Sie die beiden Pendel innerhalb von 20 s auseinanderlaufen sehen."
+ },
+ "a12cd1b3cd32": {
+  "src": "The default start has both balls at rest, so \\(T = 0\\), and \\(\\theta_1 = 120^\\circ\\), \\(\\theta_2 = 150^\\circ\\) with \\(m_1 = m_2 = 1\\ \\mathrm{kg}\\) and \\(l_1 = l_2 = 1\\ \\mathrm{m}\\). Equation (4) gives \\(V = -2\\times 9.81\\times\\cos 120^\\circ - 9.81\\times\\cos 150^\\circ = 9.81 + 8.50 = 18.31\\ \\mathrm{J}\\). Hanging straight down, the pendulum would have \\(V = -3\\times 9.81 = -29.43\\ \\mathrm{J}\\), so the default start carries \\(47.7\\ \\mathrm{J}\\) more than the resting pendulum. Standing the whole pendulum on its head, both rods straight up, would need \\(V = +29.43\\ \\mathrm{J}\\), more than the \\(18.31\\ \\mathrm{J}\\) available, so the upper rod can never reach the top. The lower rod alone, though, can swing over the top while the upper one hangs low: with \\(\\theta_1 = 0\\) and \\(\\theta_2 = 180^\\circ\\), \\(V = -19.62 + 9.81 = -9.81\\ \\mathrm{J}\\), well within reach. This is exactly what you see on the page: the lower arm flips over again and again, the upper arm never does.",
+  "tr": "Beim Standardstart ruhen beide Kugeln, also ist \\(T = 0\\); die Winkel sind \\(\\theta_1 = 120^\\circ\\) und \\(\\theta_2 = 150^\\circ\\), die Massen \\(m_1 = m_2 = 1\\ \\mathrm{kg}\\) und die Längen \\(l_1 = l_2 = 1\\ \\mathrm{m}\\). Gl. (4) ergibt \\(V = -2\\times 9.81\\times\\cos 120^\\circ - 9.81\\times\\cos 150^\\circ = 9.81 + 8.50 = 18.31\\ \\mathrm{J}\\). Senkrecht nach unten hängend hätte das Pendel \\(V = -3\\times 9.81 = -29.43\\ \\mathrm{J}\\), sodass der Standardstart \\(47.7\\ \\mathrm{J}\\) mehr besitzt als das ruhende Pendel. Das ganze Pendel auf den Kopf zu stellen, beide Stäbe senkrecht nach oben, bräuchte \\(V = +29.43\\ \\mathrm{J}\\), mehr als die verfügbaren \\(18.31\\ \\mathrm{J}\\); daher kann der obere Stab nie den höchsten Punkt erreichen. Der untere Stab allein dagegen kann über den Scheitelpunkt schwingen, während der obere tief hängt: Mit \\(\\theta_1 = 0\\) und \\(\\theta_2 = 180^\\circ\\) ist \\(V = -19.62 + 9.81 = -9.81\\ \\mathrm{J}\\), also gut in Reichweite. Genau das sehen Sie auf der Seite: Der untere Arm überschlägt sich immer wieder, der obere nie."
+ },
+ "a28272643323": {
+  "src": "<span class=\"psec__n\">02</span>The model",
+  "tr": "<span class=\"psec__n\">02</span>Das Modell"
+ },
+ "a2ee048fe6f5": {
+  "src": "Real rods have mass and spread it along their length. A double pendulum made of two solid bars obeys equations of the same kind as ours, with different numbers in front of the terms, because each bar then has its own moment of inertia about its pivot. Real joints and air also take a little energy on every swing. A real double pendulum therefore slows down, its tumbling calms into small regular swings, and these die away; the model, without friction, keeps its energy for ever. In the model the balls may also pass through each other and through the pivot, where real rods would collide.",
+  "tr": "Echte Stäbe haben Masse und verteilen sie über ihre Länge. Ein Doppelpendel aus zwei massiven Stangen gehorcht Gleichungen derselben Art wie unsere, mit anderen Zahlen vor den Termen, weil jede Stange dann ihr eigenes Trägheitsmoment um den Drehpunkt hat. Echte Gelenke und die Luft nehmen bei jeder Schwingung auch ein wenig Energie weg. Ein echtes Doppelpendel wird daher langsamer, sein Taumeln beruhigt sich zu kleinen regelmäßigen Schwingungen, und diese klingen ab; das Modell behält ohne Reibung seine Energie für immer. Im Modell dürfen die Kugeln außerdem einander und den Drehpunkt durchdringen, wo echte Stäbe zusammenstoßen würden."
+ },
+ "a2fb44ffbfc8": {
+  "src": "Every term has a meaning you can feel. On the right, \\(-(m_1+m_2)g\\sin\\theta_1\\) is gravity pulling the whole tilted pendulum back towards the bottom, harder the further it is from straight down. The term with \\(\\omega_2^2\\) is the lower ball circling round the elbow and tugging outward on the end of the upper rod, the same tug you feel in your hand when you whirl a stone on a string. On the left, the term with \\(\\alpha_2\\) says that whenever the lower arm speeds up or slows down, it jerks the upper arm.",
+  "tr": "Jeder Term hat eine Bedeutung, die Sie spüren können. Rechts steht \\(-(m_1+m_2)g\\sin\\theta_1\\): die Schwerkraft zieht das ganze geneigte Pendel zurück zum Tiefpunkt, umso stärker, je weiter es von der Senkrechten nach unten entfernt ist. Der Term mit \\(\\omega_2^2\\) ist die untere Kugel, die um den Ellbogen kreist und dabei das Ende des oberen Stabes nach außen zieht, derselbe Zug, den Sie in der Hand spüren, wenn Sie einen Stein an einer Schnur im Kreis schwingen. Links besagt der Term mit \\(\\alpha_2\\): Immer wenn der untere Arm schneller wird oder langsamer, stößt er den oberen Arm an."
+ },
+ "a4ce3a9be794": {
+  "src": "← All simulations",
+  "tr": "← Alle Simulationen"
+ },
+ "b134bd555a2f": {
+  "src": "Restart",
+  "tr": "Neustart"
+ },
+ "b16c86aa3ad6": {
+  "src": "Chaos twin · θ<sub>1</sub> + 0.001 rad",
+  "tr": "Chaos-Zwilling · θ<sub>1</sub> + 0.001 rad"
+ },
+ "b1b392607dea": {
+  "src": "Run",
+  "tr": "Start"
+ },
+ "b1e742131317": {
+  "src": "J. R. Taylor, <a href=\"https://books.google.com/books/about/Classical_Mechanics.html?id=P1kCtNr-pJsC\"><em>Classical Mechanics</em></a>, University Science Books, 2005: chapters 7 (Lagrange’s equations), 11 (coupled oscillators and normal modes) and 12 (nonlinear mechanics and chaos).",
+  "tr": "J. R. Taylor, <a href=\"https://books.google.com/books/about/Classical_Mechanics.html?id=P1kCtNr-pJsC\"><em>Classical Mechanics</em></a>, University Science Books, 2005: Kapitel 7 (Lagrange-Gleichungen), 11 (gekoppelte Schwingungen und Eigenschwingungen) und 12 (nichtlineare Mechanik und Chaos)."
+ },
+ "b3d01fc78540": {
+  "src": "Angle θ<sub>1</sub>",
+  "tr": "Winkel θ<sub>1</sub>"
+ },
+ "b555231ad587": {
+  "src": "<b>Abstract.</b> Hang one pendulum from the end of another and you get the simplest machine whose future we can write down exactly and still cannot predict. In this note we start from what you can feel in your own arm, build the equations of motion from energy alone with Lagrange's method, solve the case of small swings completely, measure how fast two almost identical starts drift apart, and follow the page as it turns the equations into the moving picture above. Every new word is explained where it first appears, and every result is checked with the page's own numbers in a worked example. Paragraphs marked ★ carry extra mathematics; you can skip them and still follow every later step, because the results they lead to are restated without the star.",
+  "tr": "<b>Zusammenfassung.</b> Hängen Sie ein Pendel an das Ende eines anderen, und Sie erhalten die einfachste Maschine, deren Zukunft wir exakt angeben können und die wir dennoch nicht vorhersagen können. In diesem Skript gehen wir von dem aus, was Sie in Ihrem eigenen Arm spüren, leiten die Bewegungsgleichungen allein aus der Energie nach Lagranges Verfahren her, lösen den Fall kleiner Auslenkungen vollständig, messen, wie schnell sich zwei fast gleiche Anfänge voneinander entfernen, und zeigen, wie die Seite die Gleichungen in das bewegte Bild oben verwandelt. Jedes neue Wort wird an der Stelle erklärt, an der es zum ersten Mal auftaucht, und jedes Ergebnis wird an einem Rechenbeispiel mit den Zahlen der Seite nachgeprüft. Absätze mit ★ enthalten zusätzliche Mathematik; Sie können sie überspringen und dennoch allen späteren Schritten folgen, denn die Ergebnisse, zu denen sie führen, werden ohne den Stern noch einmal genannt."
+ },
+ "b69dd9ddec59": {
+  "src": "L. D. Landau and E. M. Lifshitz, <a href=\"https://shop.elsevier.com/books/mechanics/landau/978-0-08-050347-9\"><em>Mechanics</em></a>, 3rd edition, Pergamon, 1976: §5, problem 1, the plane double pendulum.",
+  "tr": "L. D. Landau und E. M. Lifshitz, <a href=\"https://shop.elsevier.com/books/mechanics/landau/978-0-08-050347-9\"><em>Mechanics</em></a>, 3. Auflage, Pergamon, 1976: §5, Aufgabe 1, das ebene Doppelpendel."
+ },
+ "b6cde3d07af9": {
+  "src": "This is an angular momentum about the pivot, but not simply \\(m_1 l_1^2\\omega_1\\): it already contains the lower ball, because when the upper rod turns, it carries the lower ball along.",
+  "tr": "Das ist ein Drehimpuls um den Drehpunkt, aber nicht einfach \\(m_1 l_1^2\\omega_1\\): Er enthält bereits die untere Kugel, denn wenn sich der obere Stab dreht, nimmt er die untere Kugel mit."
+ },
+ "ba89fefaf689": {
+  "src": "The obvious way to find the motion is Newton's: add up the forces on each ball and set force equal to mass times acceleration. For the double pendulum this is hard work, because each rod pulls or pushes on its balls with a force we do not know in advance. That force changes in strength and direction at every instant, and it is always exactly as large as it must be to keep the rod's length fixed. There is a cleverer road that never needs these rod forces. It goes through energy, of which there are two kinds here: the energy of motion and the energy of height.",
+  "tr": "Der naheliegende Weg zur Bewegung ist der von Newton: Man addiert die Kräfte auf jede Kugel und setzt Kraft gleich Masse mal Beschleunigung. Für das Doppelpendel ist das mühsam, denn jeder Stab zieht oder drückt seine Kugeln mit einer Kraft, die man im Voraus nicht kennt. Diese Kraft ändert Stärke und Richtung in jedem Augenblick und ist stets genau so groß, wie sie sein muss, um die Stablänge konstant zu halten. Es gibt einen klügeren Weg, der nie diese Stabkräfte braucht. Er führt über die Energie, von der es hier zwei Arten gibt: die Energie der Bewegung und die Energie der Höhe."
+ },
+ "bbd9f3a55293": {
+  "src": "Energy E",
+  "tr": "Energie E"
+ },
+ "bc350d2bb6b8": {
+  "src": "The vertical scale of Figure 3 is <em>logarithmic</em>: each step up multiplies the distance by ten. On such a scale anything that grows by the same factor every second, like money earning compound interest, climbs as a straight line. In small swings the equations are linear, so the difference between two motions is itself a small swing and keeps its size: the low-energy curve rises and falls in arches but never grows. In large swings the lower arm is carried again and again to near the top, where it balances like a pencil standing on its tip. A hair's difference then decides whether it tips over or falls back, and once the two pendulums choose differently, they are on different roads. Each such moment magnifies the gap. Measured with the page's own equations for the default start, the gap grows almost twice as fast while the lower rod is more than \\(120^\\circ\\) from straight down as at other times.",
+  "tr": "Die vertikale Skala von Abbildung 3 ist <em>logarithmisch</em>: Jeder Schritt nach oben multipliziert den Abstand mit zehn. Auf einer solchen Skala erscheint alles, was sich in jeder Sekunde um denselben Faktor vergrößert, wie ein Kapital mit Zinseszins, als gerade Linie. Bei kleinen Schwingungen sind die Gleichungen linear, daher ist der Unterschied zweier Bewegungen selbst eine kleine Schwingung und behält seine Größe: Die Kurve bei niedriger Energie steigt und fällt in Bögen, wächst aber nie. Bei großen Schwingungen wird der untere Arm immer wieder fast bis zum Scheitelpunkt getragen, wo er wie ein Bleistift auf seiner Spitze balanciert. Ein winziger Unterschied entscheidet dann, ob er umkippt oder zurückfällt, und sobald sich die beiden Pendel verschieden entscheiden, sind sie auf verschiedenen Wegen. Jeder solche Moment vergrößert die Lücke. Mit den Gleichungen der Seite für den Standardstart gemessen, wächst die Lücke fast doppelt so schnell, wenn der untere Stab mehr als \\(120^\\circ\\) von der Senkrechten nach unten entfernt ist, als zu anderen Zeiten."
+ },
+ "bd3a617d8e75": {
+  "src": "A long formula deserves suspicion, and physicists have two quick tests for it. The first is <em>units</em>. An angular acceleration has units of \\(1/\\mathrm{s^2}\\), so every term of (9) must too, and it does: \\(g\\) divided by a length gives \\(1/\\mathrm{s^2}\\), \\(\\omega^2 l\\) divided by a length gives \\(1/\\mathrm{s^2}\\), and the masses appear above and below the fraction line and cancel. The second test is an <em>extreme case</em> whose answer we already know. Make the lower ball so light that it hardly exists, \\(m_2 \\to 0\\). The upper arm then carries nothing and must swing like an ordinary single pendulum. Setting \\(m_2 = 0\\) in (9), every term with \\(m_2\\) drops out, the numerator of \\(\\alpha_1\\) becomes \\(-2m_1 g\\sin\\theta_1\\), the denominator becomes \\(2m_1 l_1\\), and \\(\\alpha_1 = -(g/l_1)\\sin\\theta_1\\), exactly the law of a simple pendulum of length \\(l_1\\). A formula that failed either test would be wrong somewhere; this one passes both.",
+  "tr": "Ein langer Ausdruck verdient Misstrauen, und Physiker haben dafür zwei schnelle Tests. Der erste ist die <em>Einheitenprobe</em>. Eine Winkelbeschleunigung hat die Einheit \\(1/\\mathrm{s^2}\\), also muss jeder Term von Gl. (9) dieselbe Einheit haben, und das hat er: \\(g\\) geteilt durch eine Länge ergibt \\(1/\\mathrm{s^2}\\), \\(\\omega^2 l\\) geteilt durch eine Länge ergibt \\(1/\\mathrm{s^2}\\), und die Massen stehen oberhalb und unterhalb des Bruchstrichs und kürzen sich heraus. Der zweite Test ist ein <em>Extremfall</em>, dessen Ergebnis wir schon kennen. Machen wir die untere Kugel so leicht, dass sie praktisch nicht existiert, \\(m_2 \\to 0\\). Der obere Arm trägt dann nichts und muss wie ein gewöhnliches einfaches Pendel schwingen. Setzt man \\(m_2 = 0\\) in Gl. (9), fallen alle Terme mit \\(m_2\\) weg, der Zähler von \\(\\alpha_1\\) wird zu \\(-2m_1 g\\sin\\theta_1\\), der Nenner zu \\(2m_1 l_1\\), und \\(\\alpha_1 = -(g/l_1)\\sin\\theta_1\\) ist genau das Gesetz eines einfachen Pendels der Länge \\(l_1\\). Eine Formel, die einen der beiden Tests nicht bestünde, wäre irgendwo falsch; diese besteht beide."
+ },
+ "bee75ca77f75": {
+  "src": "Controls",
+  "tr": "Bedienung"
+ },
+ "bf8f03a787e5": {
+  "src": "There is no friction and no air in the model, so the total energy \\(E = T + V\\) never changes: the pendulum can only trade height for speed and back, like a ball rolling up and down the sides of a valley. Gravity changes the speeds, but only by taking from the height or giving to it. The rods do no net work. The upper rod pulls its ball towards the pivot, at right angles to the ball's circular path, so it neither speeds the ball up nor slows it down. The lower rod is subtler: it can push the upper ball forward and the lower ball back, or the other way round, and so it does work on each ball separately. But because its length cannot change, both ends of it move along the rod at the same rate, and the work it does on one ball is exactly the work it takes from the other, like a rigid pole held between two skaters. Section 4.5 gives the formal proof. This conservation gives the simulation a built-in check: the <em>Drift</em> readout above shows how far the computed energy wanders from its starting value, and any wandering is an error of the computation, never of the physics.",
+  "tr": "Im Modell gibt es weder Reibung noch Luft, deshalb ändert sich die Gesamtenergie \\(E = T + V\\) nie: Das Pendel kann nur Höhe gegen Geschwindigkeit tauschen und zurück, wie eine Kugel, die an den Hängen eines Tals hinauf- und hinunterrollt. Die Schwerkraft ändert die Geschwindigkeiten, aber nur, indem sie der Höhe etwas nimmt oder gibt. Die Stäbe leisten keine Nettoarbeit. Der obere Stab zieht seine Kugel zum Drehpunkt hin, im rechten Winkel zur Kreisbahn der Kugel, daher beschleunigt oder bremst er sie nicht. Der untere Stab ist subtiler: Er kann die obere Kugel vorwärts und die untere rückwärts schieben oder umgekehrt, und so leistet er auf jede Kugel für sich Arbeit. Aber weil seine Länge sich nicht ändern kann, bewegen sich beide Enden mit gleicher Rate entlang des Stabes, und die Arbeit, die er an der einen Kugel leistet, ist genau die Arbeit, die er der anderen entzieht, wie eine starre Stange zwischen zwei Schlittschuhläufern. Abschnitt 4.5 gibt den formalen Beweis. Diese Erhaltung gibt der Simulation eine eingebaute Kontrolle: Die Anzeige <em>Energiedrift</em> oben zeigt, wie weit die berechnete Energie von ihrem Anfangswert abweicht, und jede Abweichung ist ein Fehler der Rechnung, nie der Physik."
+ },
+ "c0c7b7411daf": {
+  "src": "Double Pendulum Chaos · Numa Koudsie",
+  "tr": "Chaos am Doppelpendel · Numa Koudsie"
+ },
+ "c154447eebde": {
+  "src": "<span>7</span>Solving it step by step",
+  "tr": "<span>7</span>Schritt für Schritt gelöst"
+ },
+ "c21d0648d749": {
+  "src": "Start the double pendulum with a small push and it rocks gently, mixing two steady rhythms that we will find in section 5. Start it high, as in the simulation above, and the lower arm whips over the top, stops, reverses, and tumbles in a pattern that never seems to repeat. Nothing random is involved. The laws we are about to derive fix the entire future once the starting angles and speeds are given, and the computer follows them so faithfully that in the first twenty seconds the total energy changes by less than one part in ten million. Yet two starts that differ by a thousandth of a radian, about one millimetre at the end of a one-metre rod, end up in completely unrelated places within five seconds.",
+  "tr": "Stoßen Sie das Doppelpendel leicht an, dann schwingt es sanft und mischt dabei zwei gleichmäßige Rhythmen, die wir in Abschnitt 5 finden werden. Starten Sie es hoch, wie in der Simulation oben, dann schlägt der untere Arm über den Scheitelpunkt, hält an, kehrt um und taumelt in einem Muster, das sich nie zu wiederholen scheint. Dabei ist nichts Zufälliges im Spiel. Die Gesetze, die wir gleich herleiten, legen die ganze Zukunft fest, sobald die Anfangswinkel und Geschwindigkeiten gegeben sind, und der Rechner folgt ihnen so treu, dass sich die Gesamtenergie in den ersten zwanzig Sekunden um weniger als ein Zehnmillionstel ändert. Und doch enden zwei Starts, die sich um ein Tausendstel Radiant unterscheiden – am Ende eines einen Meter langen Stabes etwa ein Millimeter – binnen fünf Sekunden an völlig unverwandten Orten."
+ },
+ "c2c36026c6f8": {
+  "src": "The <em>potential energy</em> is energy stored in height. Lifting a mass \\(m\\) through a height \\(\\Delta y\\) costs the work \\(m g\\,\\Delta y\\), and the mass gives that work back when it falls. Measuring heights from the pivot, each ball has potential energy \\(mgy\\), negative because the balls hang below the pivot. Only differences of potential energy ever matter, so the choice of zero is ours. From (1),",
+  "tr": "Die <em>potentielle Energie</em> ist die in der Höhe gespeicherte Energie. Eine Masse \\(m\\) um eine Höhe \\(\\Delta y\\) anzuheben kostet die Arbeit \\(m g\\,\\Delta y\\), und die Masse gibt diese Arbeit beim Fallen zurück. Mit Höhen vom Drehpunkt aus gemessen hat jede Kugel die potentielle Energie \\(mgy\\), negativ, weil die Kugeln unterhalb des Drehpunkts hängen. Nur Unterschiede der potentiellen Energie zählen; die Wahl des Nullpunkts ist also unsere Sache. Aus Gl. (1) folgt"
+ },
+ "c3c42e3f00f1": {
+  "src": "<span>6</span>Chaos",
+  "tr": "<span>6</span>Chaos"
+ },
+ "c477d49c9769": {
+  "src": "Velocity is the rate of change of position, so we take the time derivative of each line of (1). The lengths never change; only the angles do. When an angle changes at the rate \\(\\omega\\), the chain rule says that \\(\\sin\\theta\\) changes at the rate \\(\\omega\\cos\\theta\\) and \\(\\cos\\theta\\) at the rate \\(-\\omega\\sin\\theta\\). Therefore",
+  "tr": "Die Geschwindigkeit ist die Änderungsrate der Lage, also bilden wir die Zeitableitung jeder Zeile von Gl. (1). Die Längen ändern sich nie, nur die Winkel tun es. Ändert sich ein Winkel mit der Rate \\(\\omega\\), so ändert sich nach der Kettenregel \\(\\sin\\theta\\) mit der Rate \\(\\omega\\cos\\theta\\) und \\(\\cos\\theta\\) mit der Rate \\(-\\omega\\sin\\theta\\). Daher gilt"
+ },
+ "c5151b03cf0c": {
+  "src": "<span class=\"sw sw--dot\"></span>masses m₁, m₂",
+  "tr": "<span class=\"sw sw--dot\"></span>Massen m₁, m₂"
+ },
+ "c7386df0890c": {
+  "src": "Mass ratio m<sub>2</sub>/m<sub>1</sub>",
+  "tr": "Massenverhältnis m<sub>2</sub>/m<sub>1</sub>"
+ },
+ "cbe28c0effec": {
+  "src": "<span class=\"psec__n\">09</span>What the model leaves out",
+  "tr": "<span class=\"psec__n\">09</span>Was das Modell weglässt"
+ },
+ "ccad3b29f623": {
+  "src": "The step is not equally good everywhere. Put the mass ratio at its top value of 10. Each time the rods pass within about ten degrees of a straight line, the heavy lower ball gives the light upper rod a sharp kick, with angular accelerations up to about \\(1300\\ \\mathrm{rad/s^2}\\), against \\(75\\ \\mathrm{rad/s^2}\\) for equal masses. Steps of \\(h\\) are then too coarse to follow the kick, and the drift reaches \\(-3.6\\times10^{-4}\\) within 20 s.",
+  "tr": "Der Schritt ist nicht überall gleich gut. Setzen Sie das Massenverhältnis auf seinen Höchstwert 10. Jedes Mal, wenn die Stäbe sich bis auf etwa zehn Grad einer geraden Linie nähern, versetzt die schwere untere Kugel dem leichten oberen Stab einen scharfen Stoß, mit Winkelbeschleunigungen bis etwa \\(1300\\ \\mathrm{rad/s^2}\\), gegenüber \\(75\\ \\mathrm{rad/s^2}\\) bei gleichen Massen. Schritte von \\(h\\) sind dann zu grob, um dem Stoß zu folgen, und die Drift erreicht innerhalb von 20 s den Wert \\(-3.6\\times10^{-4}\\)."
+ },
+ "cd056547925a": {
+  "src": "This always has the trivial solution \\(u_1 = u_2 = 0\\), the pendulum hanging still. It has a non-trivial solution only if its two equations say the same thing, which happens exactly when the determinant of the bracket is zero:",
+  "tr": "Dies hat immer die triviale Lösung \\(u_1 = u_2 = 0\\), das Pendel hängt also still. Eine nichttriviale Lösung gibt es nur, wenn seine beiden Gleichungen dasselbe besagen, und das geschieht genau dann, wenn die Determinante der Klammer null ist:"
+ },
+ "cd0a0ce12128": {
+  "src": "twin off",
+  "tr": "Zwilling aus"
+ },
+ "cf735779ed92": {
+  "src": "Energy drift",
+  "tr": "Energiedrift"
+ },
+ "d0b40ba30a24": {
+  "src": "Angular velocity ω<sub>2</sub>",
+  "tr": "Winkelgeschwindigkeit ω<sub>2</sub>"
+ },
+ "d1622a8321e0": {
+  "src": "Phyein Usul, home page",
+  "tr": "Phyein Usul, Startseite"
+ },
+ "d44541835075": {
+  "src": "S. H. Strogatz, <a href=\"https://books.google.com/books/about/Nonlinear_Dynamics_and_Chaos.html?id=aNHPswEACAAJ\"><em>Nonlinear Dynamics and Chaos</em></a>, 2nd edition, Westview Press, 2015.",
+  "tr": "S. H. Strogatz, <a href=\"https://books.google.com/books/about/Nonlinear_Dynamics_and_Chaos.html?id=aNHPswEACAAJ\"><em>Nonlinear Dynamics and Chaos</em></a>, 2. Auflage, Westview Press, 2015."
+ },
+ "d64f945fa4e9": {
+  "src": "The double pendulum: exact laws, unpredictable motion",
+  "tr": "Das Doppelpendel: exakte Gesetze, unvorhersagbare Bewegung"
+ },
+ "d77fa4bbba3a": {
+  "src": "A straight line on a logarithmic scale means <em>exponential growth</em>, \\(d(t) \\approx d_0\\,e^{\\lambda t}\\), where \\(d_0\\) is the starting distance and \\(\\lambda\\) (lambda) is the growth rate per second. For the high-energy start of Figure 3 the curve wobbles, but a straight line laid through it, up to the moment the distance reaches \\(0.1\\ \\mathrm{m}\\) after \\(4.1\\ \\mathrm{s}\\), gives \\(\\lambda \\approx 1.4\\) per second: the distance doubles roughly every half second. The careful way to measure \\(\\lambda\\) follows a tiny change of the whole state, both angles and both angular velocities, shrinks it back whenever it has grown, and averages the logarithm of its growth over a very long time. The limit of that average is the <em>largest Lyapunov exponent</em>, named after the Russian mathematician Aleksandr Lyapunov:",
+  "tr": "Eine gerade Linie auf einer logarithmischen Skala bedeutet <em>exponentielles Wachstum</em>, \\(d(t) \\approx d_0\\,e^{\\lambda t}\\), wobei \\(d_0\\) der Anfangsabstand ist und \\(\\lambda\\) (Lambda) die Wachstumsrate pro Sekunde. Für den Hochenergiestart aus Abbildung 3 wackelt die Kurve, doch eine Gerade durch sie, bis zu dem Moment, in dem der Abstand \\(0.1\\ \\mathrm{m}\\) nach \\(4.1\\ \\mathrm{s}\\) erreicht, ergibt \\(\\lambda \\approx 1.4\\) pro Sekunde: Der Abstand verdoppelt sich etwa alle eine halbe Sekunde. Die sorgfältige Art, \\(\\lambda\\) zu messen, verfolgt eine winzige Änderung des ganzen Zustands, beide Winkel und beide Winkelgeschwindigkeiten zusammen, lässt sie wieder schrumpfen, wann immer sie gewachsen ist, und mittelt den Logarithmus ihres Wachstums über eine sehr lange Zeit. Der Grenzwert dieses Mittels ist der <em>größte Ljapunow-Exponent</em>, benannt nach dem russischen Mathematiker Alexander Ljapunow:"
+ },
+ "d91ec338a8b5": {
+  "src": "Two rigid rods, two point masses, one gravitational field. Deterministic, and yet a change of a thousandth of a radian in the start sends it somewhere else entirely.",
+  "tr": "Zwei starre Stäbe, zwei Punktmassen, ein Schwerefeld. Deterministisch, und doch führt schon eine Änderung des Anfangswinkels um ein Tausendstel Radiant das Pendel völlig woanders hin."
+ },
+ "d929322e4b16": {
+  "src": "Fig.",
+  "tr": "Abb."
+ },
+ "d957d6637288": {
+  "src": "Chaos is not noise, since nothing random enters, and it is not a failure of energy conservation: the energy stays fixed while the motion wanders over much of what that energy allows. For the same reason, a small energy drift in the computer proves no more than itself. Countless different paths share the same energy, so a drift of a few parts in \\(10^{8}\\) shows that the computation is sound, not that its positions are the true ones beyond the horizon of predictability.",
+  "tr": "Chaos ist kein Rauschen, denn es geht kein Zufall ein, und es ist kein Versagen der Energieerhaltung: Die Energie bleibt fest, während die Bewegung über einen großen Teil dessen wandert, was diese Energie erlaubt. Aus demselben Grund beweist eine kleine Energiedrift im Rechner nur sich selbst. Unzählige verschiedene Wege teilen dieselbe Energie, daher zeigt eine Drift von wenigen Teilen in \\(10^{8}\\), dass die Rechnung sauber ist, nicht dass ihre Positionen jenseits des Horizonts der Vorhersagbarkeit die wahren sind."
+ },
+ "dd1e8c7f8a31": {
+  "src": "We turn the principle into an equation. Take the true path and bend one angle by a tiny amount \\(\\delta\\theta_i(t)\\), a small wiggle that is zero at the start and at the end, because the start and end shapes are fixed. (Here, and only here, \\(\\delta\\) means \"a small change of\".) The angular velocity then changes by the rate of change of the wiggle, \\(\\delta\\omega_i = \\mathrm{d}(\\delta\\theta_i)/\\mathrm{d}t\\). To first order the action changes by how fast \\(L\\) responds to each change, times the change:",
+  "tr": "Wir machen aus dem Prinzip eine Gleichung. Nehmen Sie den wahren Weg und verbiegen Sie einen Winkel um einen winzigen Betrag \\(\\delta\\theta_i(t)\\), eine kleine Störung, die am Anfang und am Ende null ist, weil die Anfangs- und Endform festliegen. (Hier, und nur hier, bedeutet \\(\\delta\\) „eine kleine Änderung von“.) Die Winkelgeschwindigkeit ändert sich dann um die Änderungsrate der Störung, \\(\\delta\\omega_i = \\mathrm{d}(\\delta\\theta_i)/\\mathrm{d}t\\). In erster Ordnung ändert sich die Wirkung um die Rate, mit der \\(L\\) auf jede Änderung reagiert, multipliziert mit der Änderung:"
+ },
+ "dd72bcdc5e74": {
+  "src": "<span class=\"pbox__t\">Key result · the equations of motion, as the page computes them</span> \\[ \\begin{aligned} \\alpha_1 &= \\frac{\\begin{gathered} -g\\,(2m_1+m_2)\\sin\\theta_1 - m_2\\,g\\sin(\\theta_1-2\\theta_2) \\\\ {} - 2\\,m_2\\sin\\varphi\\,\\left(\\omega_2^2\\,l_2 + \\omega_1^2\\,l_1\\cos\\varphi\\right) \\end{gathered}}{l_1\\,(2m_1+m_2-m_2\\cos 2\\varphi)}, \\\\[4pt] \\alpha_2 &= \\frac{\\begin{gathered} 2\\sin\\varphi\\,\\bigl(\\omega_1^2\\,l_1\\,(m_1+m_2) + g\\,(m_1+m_2)\\cos\\theta_1 \\\\ {} + \\omega_2^2\\,l_2\\,m_2\\cos\\varphi\\bigr) \\end{gathered}}{l_2\\,(2m_1+m_2-m_2\\cos 2\\varphi)} . \\end{aligned} \\tag{9} \\] <p>Given the state \\((\\theta_1, \\theta_2, \\omega_1, \\omega_2)\\) at any moment, (9) gives the two angular accelerations at that moment. Everything that follows uses only this.</p>",
+  "tr": "<span class=\"pbox__t\">Kernergebnis · die Bewegungsgleichungen, wie die Seite sie berechnet</span> \\[ \\begin{aligned} \\alpha_1 &= \\frac{\\begin{gathered} -g\\,(2m_1+m_2)\\sin\\theta_1 - m_2\\,g\\sin(\\theta_1-2\\theta_2) \\\\ {} - 2\\,m_2\\sin\\varphi\\,\\left(\\omega_2^2\\,l_2 + \\omega_1^2\\,l_1\\cos\\varphi\\right) \\end{gathered}}{l_1\\,(2m_1+m_2-m_2\\cos 2\\varphi)}, \\\\[4pt] \\alpha_2 &= \\frac{\\begin{gathered} 2\\sin\\varphi\\,\\bigl(\\omega_1^2\\,l_1\\,(m_1+m_2) + g\\,(m_1+m_2)\\cos\\theta_1 \\\\ {} + \\omega_2^2\\,l_2\\,m_2\\cos\\varphi\\bigr) \\end{gathered}}{l_2\\,(2m_1+m_2-m_2\\cos 2\\varphi)} . \\end{aligned} \\tag{9} \\] <p>Gegeben den Zustand \\((\\theta_1, \\theta_2, \\omega_1, \\omega_2)\\) zu jedem Zeitpunkt, liefert Gl. (9) die beiden Winkelbeschleunigungen in diesem Augenblick. Alles, was folgt, benutzt nur diese.</p>"
+ },
+ "df77e69992af": {
+  "src": "using \\(1-\\cos^2\\varphi = \\sin^2\\varphi\\). It is always positive, because \\(m_1\\) is. A non-zero determinant means the two equations never contradict each other and never say the same thing twice, so there is always exactly one answer. <em>Cramer's rule</em> writes it down: each unknown is a ratio whose denominator is \\(D\\) and whose numerator is the determinant of the matrix with that unknown's column replaced by the right-hand side,",
+  "tr": "unter Verwendung von \\(1-\\cos^2\\varphi = \\sin^2\\varphi\\). Sie ist immer positiv, weil \\(m_1\\) positiv ist. Eine von null verschiedene Determinante bedeutet, dass sich die beiden Gleichungen nie widersprechen und nie dasselbe zweimal sagen, also gibt es immer genau eine Lösung. Die <em>Cramersche Regel</em> schreibt sie auf: Jede Unbekannte ist ein Bruch, dessen Nenner \\(D\\) ist und dessen Zähler die Determinante der Matrix ist, in der die Spalte der jeweiligen Unbekannten durch die rechte Seite ersetzt wird."
+ },
+ "dfa73ac0d42b": {
+  "src": "Time scale",
+  "tr": "Zeitmaßstab"
+ },
+ "e13b587879b0": {
+  "src": "<span>2</span>The model",
+  "tr": "<span>2</span>Das Modell"
+ },
+ "e17c91444b36": {
+  "src": "Knowing where the balls are is not enough to know where they go next: a ball at the bottom of its swing could be at rest or rushing through. We also need how fast each angle is changing, the <em>angular velocity</em> \\(\\omega_i = \\mathrm{d}\\theta_i/\\mathrm{d}t\\), measured in radians per second, and later the rate at which that changes, the <em>angular acceleration</em> \\(\\alpha_i = \\mathrm{d}\\omega_i/\\mathrm{d}t = \\ddot\\theta_i\\). Throughout this note a dot over a letter means its rate of change in time. The four numbers \\((\\theta_1, \\theta_2, \\omega_1, \\omega_2)\\) together are the <em>state</em>: hand them to the laws of motion and the whole future follows. On the page the upper ball and rod are fixed at \\(m_1 = 1\\ \\mathrm{kg}\\) and \\(l_1 = 1\\ \\mathrm{m}\\), gravity is \\(g = 9.81\\ \\mathrm{m/s^2}\\), and the sliders set the lower ball's mass and rod as multiples of the upper ones, \\(m_2/m_1\\) and \\(l_2/l_1\\). The default start is \\(\\theta_1 = 120^\\circ\\), \\(\\theta_2 = 150^\\circ\\), both at rest, with equal masses and lengths.",
+  "tr": "Zu wissen, wo die Kugeln sind, genügt nicht, um zu wissen, wohin sie als Nächstes gehen: Eine Kugel am Tiefpunkt ihrer Schwingung könnte ruhen oder gerade schnell durchschwingen. Wir brauchen also auch, wie schnell sich jeder Winkel ändert, die <em>Winkelgeschwindigkeit</em> \\(\\omega_i = \\mathrm{d}\\theta_i/\\mathrm{d}t\\), gemessen in Radiant pro Sekunde, und später, wie schnell sich diese ändert, die <em>Winkelbeschleunigung</em> \\(\\alpha_i = \\mathrm{d}\\omega_i/\\mathrm{d}t = \\ddot\\theta_i\\). In dieser Notiz bedeutet ein Punkt über einem Buchstaben seine zeitliche Änderungsrate. Die vier Zahlen \\((\\theta_1, \\theta_2, \\omega_1, \\omega_2)\\) zusammen bilden den <em>Zustand</em>: Gibt man sie den Bewegungsgesetzen vor, folgt daraus die ganze Zukunft. Auf der Seite sind die obere Kugel und ihr Stab fest auf \\(m_1 = 1\\ \\mathrm{kg}\\) und \\(l_1 = 1\\ \\mathrm{m}\\) eingestellt, die Erdbeschleunigung ist \\(g = 9.81\\ \\mathrm{m/s^2}\\), und die Schieber setzen Masse und Länge der unteren Kugel als Vielfache der oberen, \\(m_2/m_1\\) und \\(l_2/l_1\\). Der Standardstart ist \\(\\theta_1 = 120^\\circ\\) und \\(\\theta_2 = 150^\\circ\\), beide in Ruhe, mit gleichen Massen und Längen."
+ },
+ "e1d329a7394b": {
+  "src": "From symbols to code",
+  "tr": "Von den Symbolen zum Code"
+ },
+ "e7d4fd1f32d6": {
+  "src": "In the third line the first term comes from \\(T\\), where \\(\\theta_1\\) hides inside \\(\\cos\\varphi\\), and the second from \\(-V\\). Subtracting the third line from the second, as (5) requires, the two terms containing \\(\\omega_1\\omega_2\\) cancel exactly, and dividing by \\(l_1\\) leaves",
+  "tr": "Im dritten Zeilenschritt stammt der erste Term von \\(T\\), wobei \\(\\theta_1\\) in \\(\\cos\\varphi\\) steckt, und der zweite von \\(-V\\). Zieht man die dritte Zeile von der zweiten ab, wie es Gl. (5) verlangt, heben sich die beiden Terme mit \\(\\omega_1\\omega_2\\) genau auf, und die Division durch \\(l_1\\) ergibt"
+ },
+ "e810ac455e01": {
+  "src": "This must be zero for every possible wiggle. If the bracket were positive at some moment, we could choose a wiggle that is positive just there and zero everywhere else, and the action would change. So the bracket itself must vanish at every moment.",
+  "tr": "Das Ergebnis muss für jede mögliche Störung null sein. Wäre die Klammer an irgendeinem Zeitpunkt positiv, könnten wir eine Störung wählen, die nur dort positiv und sonst überall null ist, und die Wirkung würde sich ändern. Also muss die Klammer selbst in jedem Augenblick verschwinden."
+ },
+ "e82b8de4d8a1": {
+  "src": "Angular velocity ω<sub>1</sub>",
+  "tr": "Winkelgeschwindigkeit ω<sub>1</sub>"
+ },
+ "e8d61fffabf4": {
+  "src": "RK4 does not keep the energy exactly constant, which is why the <em>Drift</em> readout is there. It shows the change \\(E - E_0\\) from the starting energy divided by \\(E_\\text{scale} = (m_1+m_2)\\,g\\,l_1 + m_2\\,g\\,l_2\\), the energy needed to lift both balls from their lowest position to the height of the pivot, rather than by \\(E_0\\) itself, which can be close to zero. Over the first 20 s of the default start the drift stays within about \\(\\pm 5\\times10^{-8}\\); its largest value, \\(+5.0\\times10^{-8}\\), comes at \\(t \\approx 8.7\\ \\mathrm{s}\\). The page's data store records about \\(+4.7\\times10^{-8}\\) for that picture, but the readout text is rewritten only every sixth picture, so you will usually not catch the peak on screen. After that the drift creeps downward almost in a straight line, by about \\(7\\times10^{-8}\\) a minute: after ten minutes it reads about \\(-7\\times10^{-7}\\).",
+  "tr": "RK4 bewahrt die Energie nicht genau, weshalb es die Anzeige <em>Energiedrift</em> gibt. Sie zeigt die Änderung \\(E - E_0\\) gegenüber der Anfangsenergie, geteilt durch \\(E_\\text{scale} = (m_1+m_2)\\,g\\,l_1 + m_2\\,g\\,l_2\\), die Energie, die nötig ist, um beide Kugeln aus ihrer tiefsten Lage auf die Höhe des Drehpunkts zu heben, und nicht durch \\(E_0\\) selbst, das nahe null liegen kann. Über die ersten 20 s des Standardstarts bleibt die Drift innerhalb von etwa \\(\\pm 5\\times10^{-8}\\); ihr größter Wert, \\(+5.0\\times10^{-8}\\), tritt bei \\(t \\approx 8.7\\ \\mathrm{s}\\) auf. Der Datenspeicher der Seite verzeichnet für dieses Bild etwa \\(+4.7\\times10^{-8}\\), aber der Text der Anzeige wird nur jedes sechste Bild neu geschrieben, sodass Sie den Gipfel auf dem Bildschirm meist nicht erwischen. Danach kriecht die Drift fast geradlinig nach unten, um etwa \\(7\\times10^{-8}\\) pro Minute; nach zehn Minuten zeigt sie etwa \\(-7\\times10^{-7}\\)."
+ },
+ "eab045af57a2": {
+  "src": "Initial conditions",
+  "tr": "Anfangsbedingungen"
+ },
+ "ebb60db74f13": {
+  "src": "These equations are <em>linear</em>: the angles appear only to the first power. For linear equations, the sum of two solutions is again a solution, so we can look for the simplest solutions first and build every other small motion out of them. A single pendulum swings as \\(\\cos\\Omega t\\), so we try the same for both arms together, swinging at one common angular frequency \\(\\Omega\\) with fixed sizes \\(u_1, u_2\\): \\(\\theta_i = u_i\\cos\\Omega t\\). (We write \\(\\Omega\\) for this frequency to keep it apart from the angular velocities \\(\\omega_i\\).) Each second derivative brings down a factor \\(-\\Omega^2\\), and (10) becomes",
+  "tr": "Diese Gleichungen sind <em>linear</em>: Die Winkel treten nur in der ersten Potenz auf. Für lineare Gleichungen ist die Summe zweier Lösungen wieder eine Lösung, deshalb suchen wir zuerst nach den einfachsten Lösungen und bauen jede andere kleine Bewegung daraus auf. Ein einzelnes Pendel schwingt wie \\(\\cos\\Omega t\\), daher probieren wir dasselbe für beide Arme zusammen, mit einer gemeinsamen Kreisfrequenz \\(\\Omega\\) und festen Amplituden \\(u_1, u_2\\): \\(\\theta_i = u_i\\cos\\Omega t\\). (Wir schreiben \\(\\Omega\\) für diese Frequenz, um sie von den Winkelgeschwindigkeiten \\(\\omega_i\\) zu unterscheiden.) Jede zweite Ableitung bringt einen Faktor \\(-\\Omega^2\\) herunter, und Gl. (10) wird zu"
+ },
+ "edb9cda74da0": {
+  "src": "<span class=\"sw sw--rose\"></span>twin",
+  "tr": "<span class=\"sw sw--rose\"></span>Zwilling"
+ },
+ "f0d51762c701": {
+  "src": "The computer knows the angles; the screen needs dots. The pivot \\((x_0, y_0)\\) sits at the centre of the picture, which is \\(W\\) pixels wide and \\(H\\) high, and the scale is chosen so that the fully stretched pendulum just fits: \\(\\sigma = (\\min(W, H)/2 - 34)/(l_1 + l_2)\\) pixels per metre. On a screen, \\(y\\) is counted downward from the top, the opposite of our convention, so the minus signs of (1) turn into plus signs: ball 1 is drawn at \\((x_0 + \\sigma l_1\\sin\\theta_1,\\ y_0 + \\sigma l_1\\cos\\theta_1)\\), and ball 2 a further \\((\\sigma l_2\\sin\\theta_2,\\ \\sigma l_2\\cos\\theta_2)\\) beyond it. The protractor marks the angle every \\(30^\\circ\\) from the downward vertical, on a faint circle of radius \\(\\sigma(l_1 + l_2)\\), the farthest ball 2 can reach; the dashed circle inside it, of radius \\(\\sigma l_1\\), is the track of ball 1.",
+  "tr": "Der Rechner kennt die Winkel; der Bildschirm braucht Punkte. Der Drehpunkt \\((x_0, y_0)\\) liegt in der Mitte des Bildes, das \\(W\\) Pixel breit und \\(H\\) hoch ist, und der Maßstab ist so gewählt, dass das ganz gestreckte Pendel gerade hineinpasst: \\(\\sigma = (\\min(W, H)/2 - 34)/(l_1 + l_2)\\) Pixel pro Meter. Auf dem Bildschirm wird \\(y\\) von oben nach unten gezählt, also umgekehrt zu unserer Konvention, und die Minuszeichen von Gl. (1) werden zu Pluszeichen: Kugel 1 wird bei \\((x_0 + \\sigma l_1\\sin\\theta_1,\\ y_0 + \\sigma l_1\\cos\\theta_1)\\) gezeichnet, und Kugel 2 ein Stück weiter, um \\((\\sigma l_2\\sin\\theta_2,\\ \\sigma l_2\\cos\\theta_2)\\). Der Winkelmesser markiert den Winkel alle \\(30^\\circ\\) von der nach unten weisenden Senkrechten, auf einem schwachen Kreis mit dem Radius \\(\\sigma(l_1 + l_2)\\), dem weitesten Punkt, den Kugel 2 erreichen kann; der gestrichelte Kreis darin, mit dem Radius \\(\\sigma l_1\\), ist die Bahn von Kugel 1."
+ },
+ "f5cbdf6bfb51": {
+  "src": "Contents",
+  "tr": "Inhalt"
+ },
+ "f72f0eda6052": {
+  "src": "Simulations",
+  "tr": "Simulationen"
+ },
+ "f7411070acb2": {
+  "src": "<span>5</span>Small swings",
+  "tr": "<span>5</span>Kleine Auslenkungen"
+ },
+ "f7836003183e": {
+  "src": "We now have the two energies. To get from them to the motion without ever meeting the unknown rod forces, we use the method found by Lagrange in the 1780s and given its deepest form by Hamilton in the 1830s. Form the difference of the two energies, the <em>Lagrangian</em> \\(L = T - V\\). Imagine every conceivable way the two angles could get from a given starting shape to a given final shape in a given time: the real path, and also all the wrong ones that dawdle, rush or wobble. For each path, add up \\(L\\) moment by moment; this total, \\(S = \\int L\\,\\mathrm{d}t\\), is called the <em>action</em> of the path. <em>Hamilton's principle</em> states that the path nature takes is the one whose action does not change, to first order, when the path is bent slightly. It is like standing at the bottom of a valley: take one small step to the side and your height does not change at first. The rod forces never enter, because, as we saw in the box on energy, they do no net work on any motion the rods allow.",
+  "tr": "Wir haben nun die beiden Energien. Um von ihnen zur Bewegung zu gelangen, ohne die unbekannten Stabkräfte je zu treffen, verwenden wir die Methode, die Lagrange in den 1780er-Jahren fand und die Hamilton in den 1830er-Jahren in ihrer tiefsten Form gab. Bilden Sie die Differenz der beiden Energien, die <em>Lagrange-Funktion</em> \\(L = T - V\\). Stellen Sie sich alle denkbaren Wege vor, auf denen die beiden Winkel in gegebener Zeit von einer gegebenen Anfangsform zu einer gegebenen Endform gelangen könnten: den wirklichen Weg und auch alle falschen, die trödeln, eilen oder wackeln. Für jeden Weg summieren Sie \\(L\\) Augenblick für Augenblick; diese Summe, \\(S = \\int L\\,\\mathrm{d}t\\), heißt die <em>Wirkung</em> des Weges. Das <em>Hamiltonsche Prinzip</em> besagt, dass der Weg, den die Natur wählt, derjenige ist, dessen Wirkung sich bei einer leichten Verbiegung des Weges nicht ändert, bis zur ersten Ordnung. Es ist wie beim Stehen auf dem Grund eines Tals: Machen Sie einen kleinen Schritt zur Seite, dann ändert sich Ihre Höhe zunächst nicht. Die Stabkräfte treten nie auf, denn wie wir im Kasten zur Energie gesehen haben, leisten sie bei jeder zugelassenen Bewegung keine Nettoarbeit."
+ },
+ "f85b8136c52e": {
+  "src": "Lecture note · Fig. 2 · classical mechanics",
+  "tr": "Skript · Abb. 2 · klassische Mechanik"
+ },
+ "f96d395d1890": {
+  "src": "We can test (1) against intuition. At \\(\\theta_1 = 0\\) the first ball hangs straight down at \\(y_1 = -l_1\\); at \\(\\theta_1 = 90^\\circ\\) it sticks straight out sideways, at \\(x_1 = l_1\\), \\(y_1 = 0\\). Two angles fix the shape completely, so the system has two <em>degrees of freedom</em>, two independent ways to move.",
+  "tr": "Wir prüfen Gl. (1) an der Anschauung. Für \\(\\theta_1 = 0\\) hängt die erste Kugel senkrecht nach unten, bei \\(y_1 = -l_1\\); für \\(\\theta_1 = 90^\\circ\\) ragt sie waagerecht zur Seite, bei \\(x_1 = l_1\\) und \\(y_1 = 0\\). Zwei Winkel legen die Form vollständig fest, das System hat also zwei <em>Freiheitsgrade</em>, zwei unabhängige Möglichkeiten, sich zu bewegen."
+ },
+ "fa6659a73565": {
+  "src": "<span class=\"pbox__t\">Key result · the two normal-mode frequencies</span> \\[ \\Omega_\\mp^2 = \\left(2\\mp\\sqrt2\\right)\\frac{g}{l}, \\quad \\Omega_- = 2.40\\ \\mathrm{rad/s},\\quad \\Omega_+ = 5.79\\ \\mathrm{rad/s} \\;\\; (l = 1\\ \\mathrm{m}). \\tag{11} \\]",
+  "tr": "<span class=\"pbox__t\">Kernergebnis · die beiden Eigenfrequenzen</span> \\[ \\Omega_\\mp^2 = \\left(2\\mp\\sqrt2\\right)\\frac{g}{l}, \\quad \\Omega_- = 2.40\\ \\mathrm{rad/s},\\quad \\Omega_+ = 5.79\\ \\mathrm{rad/s} \\;\\; (l = 1\\ \\mathrm{m}). \\tag{11} \\]"
+ },
+ "fb57a7ac8366": {
+  "src": "This simulation needs JavaScript.",
+  "tr": "Diese Simulation benötigt JavaScript."
+ },
+ "fc5b8cf90a9c": {
+  "src": "<b>9.3</b> Let the upper mass become very heavy, \\(m_1 \\to \\infty\\), in (9). Show that the upper rod then swings as a simple pendulum, \\(\\alpha_1 = -(g/l_1)\\sin\\theta_1\\), and describe in words what the lower pendulum feels.",
+  "tr": "<b>9.3</b> Lassen Sie die obere Masse sehr schwer werden, \\(m_1 \\to \\infty\\), in Gl. (9). Zeigen Sie, dass der obere Stab dann wie ein einfaches Pendel schwingt, \\(\\alpha_1 = -(g/l_1)\\sin\\theta_1\\), und beschreiben Sie mit Worten, was das untere Pendel spürt."
+ },
+ "fd9c4c2fe08d": {
+  "src": "Each frequency comes with its own shape of motion, fixed by the first row of the bracket: \\(u_2/u_1 = 2\\,(g/l-\\Omega^2)/\\Omega^2\\). For the slow frequency this ratio is \\(+\\sqrt2 \\approx 1.41\\): both arms swing the same way, the lower one about 1.4 times as far, and the pendulum moves almost as one piece. For the fast frequency it is \\(-\\sqrt2\\): the arms swing against each other, the elbow going one way while the hand goes the other (Figure 2). These two motions are the <em>normal modes</em> of the pendulum, the two ways it can swing in which every part keeps step with every other at a single frequency. Any small motion is a mixture of the two. The ratio of the frequencies is \\(\\Omega_+/\\Omega_- = 1 + \\sqrt2 \\approx 2.41\\), an irrational number, so the mixture never repeats exactly; yet it stays perfectly regular and perfectly predictable. There is no chaos in small swings.",
+  "tr": "Jede Frequenz kommt mit einer eigenen Bewegungsform, die durch die erste Zeile der Klammer festgelegt ist: \\(u_2/u_1 = 2\\,(g/l-\\Omega^2)/\\Omega^2\\). Für die langsame Frequenz ist dieses Verhältnis \\(+\\sqrt2 \\approx 1.41\\): Beide Arme schwingen in dieselbe Richtung, der untere etwa 1.4-mal so weit, und das Pendel bewegt sich fast als ein Stück. Für die schnelle Frequenz ist es \\(-\\sqrt2\\): Die Arme schwingen gegeneinander, der Ellbogen in die eine Richtung, die Hand in die andere (Abbildung 2). Diese beiden Bewegungen sind die <em>Eigenschwingungen</em> des Pendels, die zwei Arten zu schwingen, bei denen jeder Teil im selben Takt wie jeder andere bei einer einzigen Frequenz schwingt. Jede kleine Bewegung ist eine Mischung aus beiden. Das Verhältnis der Frequenzen ist \\(\\Omega_+/\\Omega_- = 1 + \\sqrt2 \\approx 2.41\\), eine irrationale Zahl, daher wiederholt sich die Mischung nie genau; und doch bleibt sie vollkommen regelmäßig und vollkommen vorhersagbar. In kleinen Schwingungen gibt es kein Chaos."
+ }
+}

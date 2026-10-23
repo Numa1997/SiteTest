@@ -1,0 +1,1117 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline' https://v2.appdeploy.ai https://unpkg.com/@khmyznikov/pwa-install@0.6.3/dist/pwa-install.bundle.js; style-src 'self' 'unsafe-inline'; img-src 'self' data: blob: https://appdeploy.ai; font-src 'self' data:; connect-src 'self' https://api-v2.appdeploy.ai; worker-src 'self'; manifest-src 'self'; object-src 'none'; base-uri 'self'; form-action 'self'; upgrade-insecure-requests">
+    <meta name="referrer" content="strict-origin-when-cross-origin">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>المتذبذب المُجبَر · نعمة سائر قدسية</title>
+    <meta name="description" content="كتلة على نابض مع تخامد، تقودها قوّة خارجية F(t) = F0 cos Ωt. تُحلّ الحركة أوّلًا بطريقة RK4 وتُخزَّن، ثم تُعرض من البيانات؛ الرنين وتأخّر الطور ومخطّط بود للمنظومة.">
+    <meta name="theme-color" content="#f5f1ea">
+    <link rel="stylesheet" href="../../styles/sim.rtl.css">
+    <link rel="stylesheet" href="../../styles/data.rtl.css">
+    <link rel="stylesheet" href="../../styles/fold.rtl.css"><link rel="stylesheet" href="../../styles/i18n.css"><link rel="alternate" hreflang="en" href="https://phyeinusul.com/simulations/driven-oscillator.html" /><link rel="alternate" hreflang="de" href="https://phyeinusul.com/de/simulations/driven-oscillator.html" /><link rel="alternate" hreflang="ar" href="https://phyeinusul.com/ar/simulations/driven-oscillator.html" /><link rel="alternate" hreflang="x-default" href="https://phyeinusul.com/simulations/driven-oscillator.html" />
+    <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='12' fill='%237a1f2b'/%3E%3Ctext x='32' y='45' text-anchor='middle' font-family='Georgia,serif' font-size='38' fill='%23f5f1ea'%3EN%3C/text%3E%3C/svg%3E">
+    <style>
+        .solve { display: grid; gap: 10px; }
+        .solve__steps { display: flex; gap: 6px; margin: 0; padding: 0; list-style: none; font-family: var(--mono); font-size: 11px; color: var(--muted); }
+        .solve__steps li { flex: 1; padding: 6px 8px; border: 1px solid var(--rule); border-radius: 6px; text-align: center; }
+        .solve__steps li.is-done { color: var(--accent); border-color: var(--accent); }
+        .solve__status { margin: 0; font-size: 13px; line-height: 1.5; color: var(--ink-2); }
+        .solve__status.is-stale { color: var(--accent); }
+        .seek { display: grid; gap: 4px; }
+        .seek__row { display: flex; justify-content: space-between; font-family: var(--mono); font-size: 11px; color: var(--muted); }
+    </style>
+
+    <link rel="stylesheet" href="../../fonts/arabic.css" />
+    <script src="../../scripts/i18n/strings-ar.js"></script>
+    <meta name="translated-from" content="English public/simulations/driven-oscillator.html, commit 5307bda+" />
+  </head>
+<body>
+    <header class="sim-top">
+        <span style="display:inline-flex;align-items:center;gap:14px"><a href="../index.html" aria-label="Phyein Usul، الصفحة الرئيسية" style="display:inline-block;line-height:0"><img src="../../images/phyein-usul-mark.svg" alt="Phyein Usul" width="87" height="48" /></a><a href="../simulations.html">→ جميع المحاكاة</a></span>
+        <nav class="sim-nav" aria-label="المحاكاة">
+            <span>الشكل</span>
+            <a href="Circular Wave Interference Visualization.html">1</a>
+            <a href="Double Pendulum.html">2</a>
+            <a href="Interactive Double-Slit Experiment Visualization.html">3</a>
+            <a href="Transverse and longitudinal waves.html">4</a>
+            <a href="water-wave.html">5</a>
+            <a href="wave-interference.html">6</a>
+            <a href="phasor-sums.html">7</a>
+            <a href="draw-decompose.html">8</a>
+            <a href="driven-oscillator.html" aria-current="page">9</a>
+            <a href="wind-turbine.html">10</a>
+        </nav><span class="lang-switch" role="group" aria-label="اللغة" translate="no"><a href="../../simulations/driven-oscillator.html" hreflang="en" lang="en">English</a> · <a href="../../de/simulations/driven-oscillator.html" hreflang="de" lang="de">Deutsch</a> · <a href="../../ar/simulations/driven-oscillator.html" hreflang="ar" lang="ar" dir="rtl" aria-current="page">العربية</a></span>
+    </header>
+
+    <main class="sim">
+        <noscript><p class="sim-error"><b>تحتاج هذه المحاكاة إلى JavaScript.</b> <a href="../simulations.html">العودة إلى المحاكاة</a></p></noscript>
+        <div class="sim__head">
+            <p class="sim__num">الشكل 9 · أنظمة التحكّم · الاهتزازات القسرية</p>
+            <h1>المتذبذب المُجبَر<span class="dot">.</span></h1>
+            <p class="sim__lede">كتلة معلّقة بنابض، تدفعها قوّة يتحكّم فيها شخص آخر. تُحلّ معادلة الحركة أوّلًا ويُخزَّن التشغيل كلّه؛ ثم تعرض الرسوم المتحرّكة البيانات المخزّنة، صفًّا لكل إطار.</p>
+        </div>
+
+        <div class="sim__grid">
+            <div>
+                <figure class="stage">
+                    <div class="stage__canvas" id="stage" style="--ar: 16 / 11.5; --ar-m: 1 / 1.45;">
+                        <canvas id="osc" aria-label="كتلة على نابض ومخمّد، يدفعها المحرّك بالقوّة F(t)؛ وتحتها الإزاحة المخزّنة x(t) للتشغيل كلّه، مع مؤشّر عند الإطار المعروض."></canvas>
+                    </div>
+                    <figcaption class="stage__cap">
+                        <span><b>الشكل 9</b> · <span class="tx">\(m\ddot x + c\dot x + kx = F_0 \cos \Omega t\)</span> · يُعرض من التشغيل المخزّن</span>
+                        <span id="cap-t"><i>t</i> = —</span>
+                    </figcaption>
+                </figure>
+                <figure class="stage" style="margin-top: 16px;">
+                    <div class="stage__canvas" id="stage-bode" style="--ar: 16 / 6.2; --ar-m: 1 / 1.05;">
+                        <canvas id="bode" aria-label="مخطّط بود: السعة المستقرّة لكل نيوتن وتأخّر الطور بدلالة تردد القوّة الدافعة، مع تعليم القيادة الحالية."></canvas>
+                    </div>
+                    <figcaption class="stage__cap">
+                        <span><b>مخطّط بود</b> · <span class="tx">\(|G(i\Omega)| = X/F_0\)</span> وتأخّر الطور <span class="tx">\(\varphi\)</span> بدلالة تردد القوّة الدافعة <span class="tx">\(f\)</span></span>
+                        <span id="cap-res"><i>f</i><sub>r</sub> = —</span>
+                    </figcaption>
+                </figure>
+            </div>
+
+            <aside class="panel" aria-label="عناصر التحكّم">
+                <div class="panel__group solve">
+                    <p class="panel__label">احسب، ثم شغّل</p>
+                    <ol class="solve__steps" aria-label="ماذا تفعل الصفحة">
+                        <li id="st-solve">1 احسب</li>
+                        <li id="st-store">2 خزّن</li>
+                        <li id="st-play">3 شغّل</li>
+                    </ol>
+                    <div class="actions">
+                        <button type="button" class="btn" id="solve">احسب</button>
+                        <button type="button" class="btn btn--ghost" id="play">إيقاف مؤقّت</button>
+                        <button type="button" class="btn btn--ghost" id="restart">من t = 0</button>
+                    </div>
+                    <p class="solve__status" id="status" aria-live="polite">—</p>
+                    <label class="seek">
+                        <span class="seek__row"><span>التشغيل المخزّن</span><output id="seek-out" for="seek"></output></span>
+                        <input type="range" id="seek" min="0" max="6000" step="1" value="0" aria-label="الموضع في التشغيل المخزّن">
+                    </label>
+                    <label class="ctl">
+                        <span class="ctl__row"><span>سرعة التشغيل</span><output id="speed-out" for="speed"></output></span>
+                        <input type="range" id="speed" min="0.25" max="4" step="0.25" value="1">
+                    </label>
+                </div>
+
+                <div class="panel__group">
+                    <p class="panel__label">المتذبذب · m = ⁦1 kg⁩</p>
+                    <label class="ctl">
+                        <span class="ctl__row"><span>التردد الطبيعي f₀</span><output id="f0-out" for="f0"></output></span>
+                        <input type="range" id="f0" min="0.2" max="1.5" step="0.01" value="0.5">
+                    </label>
+                    <label class="ctl">
+                        <span class="ctl__row"><span>نسبة التخامد ζ</span><output id="zeta-out" for="zeta"></output></span>
+                        <input type="range" id="zeta" min="0.01" max="0.9" step="0.01" value="0.05">
+                    </label>
+                </div>
+
+                <div class="panel__group">
+                    <p class="panel__label">المُحرِّك · F(t) = F₀ cos Ωt</p>
+                    <label class="ctl">
+                        <span class="ctl__row"><span>سعة القوّة F₀</span><output id="F0-out" for="F0"></output></span>
+                        <input type="range" id="F0" min="0" max="5" step="0.1" value="1">
+                    </label>
+                    <label class="ctl">
+                        <span class="ctl__row"><span>تردد القوّة الدافعة f</span><output id="fd-out" for="fd"></output></span>
+                        <input type="range" id="fd" min="0.05" max="1.5" step="0.01" value="0.45">
+                    </label>
+                </div>
+
+                <dl class="readouts">
+                    <div><dt>السعة المستقرّة X</dt><dd id="r-X">—</dd></div>
+                    <div><dt>مقيسة، آخر ⁦10 s⁩</dt><dd id="r-Xm">—</dd></div>
+                    <div><dt>تأخّر الطور φ</dt><dd id="r-phi">—</dd></div>
+                    <div><dt>معامل الجودة Q</dt><dd id="r-Q">—</dd></div>
+                    <div><dt>RK4 مقابل الحلّ الدقيق</dt><dd id="r-err">—</dd></div>
+                    <div><dt>توازن الطاقة</dt><dd id="r-bal">—</dd></div>
+                </dl>
+
+                <ul class="legend">
+                    <li><span class="sw sw--ink"></span>x(t)، معروضة</li>
+                    <li><span class="sw sw--dash" style="border-top-color: var(--accent);"></span>F(t)/k</li>
+                    <li><span class="sw sw--dash" style="border-top-color: var(--accent-rose);"></span>±X مستقرّة</li>
+                    <li><span class="sw"></span>الآن</li>
+                </ul>
+            </aside>
+        </div>
+
+        <article class="paper" id="paper" aria-labelledby="paper-title">
+            <header class="paper__head">
+                <p class="paper__kicker">مذكّرة المحاضرة · الشكل 9 · أنظمة التحكّم</p>
+                <h2 class="paper__title" id="paper-title">الاهتزازات القسرية: كيف يستجيب النظام لدفعة لا يتحكّم فيها</h2>
+                <p class="paper__by">نعمة سائر قدسية · لطلبة المدارس وطلبة السنتين الأولى والثانية في الجامعة</p>
+                <div class="paper__abstract"><b>الملخّص.</b> ما من آلة تقريبًا إلّا وتُدفع من الخارج: هيكل السيّارة بالطريق، والمبنى بالرياح، ومخروط مكبّر الصوت بالمضخّم. تدرس هذه المذكّرة أبسط نظام من هذا النوع، كتلة على نابض مع مخمّد، تقودها قوّة \(F_0\cos\Omega t\) يقرّرها شخص آخر. نكتب معادلة حركته، ونحلّها حلًّا دقيقًا، ونستخدم الحلّ الدقيق لتقييم الحلّ العددي الذي تخزّنه الصفحة. وفي الطريق نلتقي بالرنين وتأخّر الطور ومعامل الجودة، ونترجم كل ذلك إلى لغة هندسة التحكّم: الدخل والخرج ودالّة التحويل ومخطّط بود. تحمل الأقسام المعلّمة بـ ★ الرياضيات الأثقل، ويمكن تخطّيها في القراءة الأولى.</div>
+            </header>
+            <div class="paper__grid">
+                <nav class="paper__toc" aria-label="المحتويات">
+                    <p>المحتويات</p>
+                    <ol>
+                        <li><a href="#p-push"><span>1</span>دفعة من الخارج</a></li>
+                        <li><a href="#p-model"><span>2</span>النموذج</a></li>
+                        <li><a href="#p-exact"><span>3</span>الحلّ الدقيق&nbsp;★</a></li>
+                        <li><a href="#p-resonance"><span>4</span>الرنين والطور</a></li>
+                        <li><a href="#p-control"><span>5</span>نظرة مهندس التحكّم&nbsp;★</a></li>
+                        <li><a href="#p-start"><span>6</span>البداية: الضربات والتخامد</a></li>
+                        <li><a href="#p-energy"><span>7</span>أين تذهب الطاقة</a></li>
+                        <li><a href="#p-solve"><span>8</span>احسب أوّلًا، ثم شغّل</a></li>
+                        <li><a href="#p-screen"><span>9</span>على الشاشة</a></li>
+                        <li><a href="#p-limits"><span>10</span>ما يغفله النموذج</a></li>
+                    </ol>
+                </nav>
+                <div class="paper__body">
+                    <section class="psec" id="p-push">
+                        <h3><span class="psec__n">01</span>دفعة من الخارج</h3>
+                        <p class="psec__lead">ادفع طفلًا على أرجوحة. إن دفعت في اللحظات الخاطئة لم تتحرّك الأرجوحة تقريبًا؛ وإن دفعت في توقيتها، فبدفعات لطيفة تعلو سريعًا.</p>
+                        <p>للأرجوحة إيقاع خاصّ بها، ويدك إيقاع ثانٍ لا تتحكّم فيه الأرجوحة. وكل ما هو مثير في الأنظمة المقسورة يأتي من التقاء هذين الإيقاعين. تهتزّ الغسّالة بأشدّ ما يكون لبضع ثوانٍ بينما يسرع طبلها عبر معدّل دوران معيّن. ولا يتبع مخروط مكبّر الصوت الموسيقى إلّا لأنه صُمّم بحيث يقع إيقاعه الخاصّ بعيدًا عن النغمات التي يعزفها. وتأرجح جسر الألفية في لندن يوم افتتاحه عام 2000 لأن آلاف الخطوات غذّت حركته الجانبية.</p>
+                        <p>في الحالتين الأوليين يُقسَر نظام له تردده الطبيعي بقوّة تعتمد على الزمن وحده لا على شيء آخر: فالمحرّك لا يهتمّ أين يقع النظام. هذا هو التبسيط المثالي لهذه الصفحة. ويُظهر الجسر حدود هذا التبسيط: فقد عدّل المشاة خطواتهم وفق التأرجح، فصارت القوّة تعتمد على الحركة نفسها التي تقودها، وهي حلقة تغذية راجعة تحتاج إلى نموذج أكبر. في هندسة التحكّم تُسمّى هذه القوّة <em>الدخل</em>، وتُسمّى الحركة <em>الخرج</em>، والنظام الذي بينهما <em>المنظومة</em>. ومنظومتنا هي أبسط منظومة لها إيقاع خاصّ بها (الشكل 1).</p>
+                        <figure class="pfig">
+                            <div class="pfig__plate">
+                                <svg viewBox="0 0 720 250" role="img" aria-label="A block of mass m on a floor, joined to a wall by a spring k and a damper c; a force F(t) pushes it; x measures its displacement from rest.">
+                                    <rect x="0" y="0" width="720" height="250" fill="#fff"/>
+                                    <line x1="60" y1="190" x2="680" y2="190" stroke="#1c1518" stroke-width="2"/>
+                                    <line x1="60" y1="190" x2="60" y2="70" stroke="#1c1518" stroke-width="2"/>
+                                    <g stroke="#cdc1ae"><line x1="60" y1="80" x2="50" y2="70"/><line x1="60" y1="100" x2="50" y2="90"/><line x1="60" y1="120" x2="50" y2="110"/><line x1="60" y1="140" x2="50" y2="130"/><line x1="60" y1="160" x2="50" y2="150"/><line x1="60" y1="180" x2="50" y2="170"/></g>
+                                    <polyline points="60,122 80,122 92,108 108,136 124,108 140,136 156,108 172,136 188,108 204,136 220,108 236,136 252,108 264,122 300,122" fill="none" stroke="#1c1518" stroke-width="2"/>
+                                    <line x1="60" y1="166" x2="120" y2="166" stroke="#1c1518" stroke-width="2"/>
+                                    <rect x="120" y="154" width="90" height="24" fill="none" stroke="#1c1518" stroke-width="2"/>
+                                    <line x1="180" y1="158" x2="180" y2="174" stroke="#1c1518" stroke-width="3"/>
+                                    <line x1="180" y1="166" x2="300" y2="166" stroke="#1c1518" stroke-width="2"/>
+                                    <rect x="300" y="104" width="90" height="86" fill="#4a413d"/>
+                                    <text class="m" x="336" y="154" style="fill:#fff">m</text>
+                                    <line x1="398" y1="140" x2="490" y2="140" stroke="#7a1f2b" stroke-width="3.5"/>
+                                    <path d="M488 132 L504 140 L488 148 Z" fill="#7a1f2b"/>
+                                    <text class="m" x="512" y="146" style="fill:#7a1f2b">F(t) = F<tspan class="mu" font-size="12" dy="4" style="fill:#7a1f2b">0</tspan><tspan dy="-4" style="fill:#7a1f2b"> cos Ω t</tspan></text>
+                                    <text class="m" x="168" y="98">k</text>
+                                    <text class="m" x="158" y="206">c</text>
+                                    <line x1="345" y1="196" x2="345" y2="232" stroke="#8b8079" stroke-dasharray="4 4"/>
+                                    <line x1="345" y1="222" x2="430" y2="222" stroke="#8b8079" stroke-width="1.4"/>
+                                    <path d="M426 218 L434 222 L426 226 Z" fill="#8b8079"/>
+                                    <text class="m" x="440" y="228">x</text>
+                                    <text class="lbl" x="352" y="244">rest position</text>
+                                    <text class="lbl" x="88" y="64">spring</text>
+                                    <text class="lbl" x="114" y="146">damper</text>
+                                </svg>
+                            </div>
+                            <figcaption><span class="pfig__n">الشكل 1</span>المنظومة. كتلة \(m\) يمسكها نابض صلابته \(k\) ويبطّئها مخمّد معامله \(c\)، وتدفعها قوّة خارجية \(F(t)\). يقيس الإحداثي \(x\) مقدار بُعد الكتلة عن الموضع الذي كانت ستستقرّ فيه لو غابت القوّة.</figcaption>
+                        </figure>
+                    </section>
+
+                    <section class="psec" id="p-model">
+                        <h3><span class="psec__n">02</span>النموذج</h3>
+                        <p>تؤثّر ثلاث قوى على طول الأرضية. يسحب النابض إلى الخلف بتناسب مع الاستطالة، \(-kx\) (قانون هوك). ويقاوم المخمّد، وهو مكبس في زيت، بتناسب مع السرعة، \(-c\dot x\). ويدفع المحرّك بالقوّة \(F(t)\). ويجمعها قانون نيوتن الثاني:</p>
+                        \[ m\ddot x + c\dot x + kx = F_0\cos\Omega t . \tag{1} \]
+                        <p>من الأوضح وصف المنظومة بعددين لهما معنى مباشر. <em>التردد الطبيعي</em> \(\omega_0 = \sqrt{k/m}\) هو التردد الزاوي الذي كانت الكتلة ستهتزّ به بلا مخمّد؛ و<em>نسبة التخامد</em> \(\zeta = c/(2\sqrt{km})\) تبيّن سرعة اضمحلال الاهتزاز، من \(\zeta = 0\) (إلى الأبد) إلى \(\zeta = 1\) (لا اهتزاز البتّة). بقسمة (1) على \(m\)،</p>
+                        \[ \ddot x + 2\zeta\omega_0\,\dot x + \omega_0^2\,x = \frac{F_0}{m}\cos\Omega t . \tag{2} \]
+                        <p>في الصفحة \(m = 1\ \mathrm{kg}\)، وتضبط المنزلقات \(f_0 = \omega_0/2\pi\)، و\(\zeta\)، و\(F_0\)، وتردد القوّة الدافعة \(f = \Omega/2\pi\). وبالقيم الافتراضية يكون \(f_0 = 0.5\ \mathrm{Hz}\) و\(\zeta = 0.05\)، فيكون \(k = 9.87\ \mathrm{N/m}\) و\(c = 0.314\ \mathrm{kg/s}\). تبدأ الكتلة من السكون عند موضع راحتها، \(x(0) = 0\)، \(\dot x(0) = 0\).</p>
+                        <p>لاحظ ما يميّز هذه المعادلة عن البندول المزدوج في الشكل 2: الزمن \(t\) يظهر وحده داخل \(\cos\Omega t\). فالمستقبل لا يتوقّف على موضع الكتلة وحده، بل على الساعة أيضًا، لأن الساعة ملك لغيرنا.</p>
+                    </section>
+
+                    <section class="psec" id="p-exact">
+                        <h3><span class="psec__n">03</span>الحلّ الدقيق<span class="star" title="heavier mathematics">★</span>3>
+                        <p>المعادلة (2) خطّية، لذلك تتجمّع حلولها. الحلّ العامّ هو حلّ خاصّ يواكب المحرّك، مضافًا إليه أيّ حلّ للمعادلة الحرّة (الطرف الأيمن صفر)، يُختار بحيث يحقّق شروط البداية.</p>
+                        <h4><span class="psub__n">3.1</span>الحالة المستقرّة</h4>
+                        <p>نخمّن أنّه بعد أن تهدأ الأمور تتحرّك الكتلة بتردد المحرّك نفسه. تجعل الأعداد المركّبة التخمين سهلًا: نكتب حدّ القوّة \(F_0\cos\Omega t/m\) على أنه الجزء الحقيقي من \(\tfrac{F_0}{m}e^{i\Omega t}\)، ونجرّب \(x = \operatorname{Re}\,Z e^{i\Omega t}\). يصبح كل مشتقّ زمني عاملًا \(i\Omega\)، فتتحوّل (2) إلى جبر:</p>
+                        \[ \begin{gathered} \left(\omega_0^2 - \Omega^2 + 2i\zeta\omega_0\Omega\right) Z = \frac{F_0}{m} \\ \Longrightarrow\quad Z = \frac{F_0/m}{\omega_0^2 - \Omega^2 + 2i\zeta\omega_0\Omega} = X e^{-i\varphi} . \end{gathered} \tag{3} \]
+                        <p>للمقام معنى بسيط. إذا ضُرب في \(m\) صار \(k - m\Omega^2 + ic\Omega\)، وهو حدّ لكل جزء من المنظومة. يعطي النابض \(k\). وتعطي الكتلة \(-m\Omega^2\): عند تردد القوّة الدافعة يكون التسارع \(-\Omega^2\) مرّة قدر الإزاحة، فيعمل القصور الذاتي كنابض ذي صلابة سالبة. ويعطي المخمّد \(ic\Omega\)، أي دفعة متأخّرة عن الإزاحة بربع دورة. وقرب \(\Omega = \omega_0\) يلغي الحدّان الأوّلان بعضهما، ولا يبقى سوى المخمّد ليكبح الحركة.</p>
+                        <p>القسمة على عدد مركّب تقسم على طوله وتدير بزاويته إلى الخلف. فـ\(X\) هو \(F_0/m\) مقسومًا على طول المقام، وتأخّر الطور \(\varphi\) هو زاوية المقام، وتقع بين \(0^\circ\) و\(180^\circ\) لأن جزأه التخيّلي \(2\zeta\omega_0\Omega\) موجب؛ و\(\operatorname{atan2}(y, x)\) ليس إلّا اسمًا، في الشيفرة، لزاوية النقطة \((x, y)\). جميع معاملات (2) حقيقية، فالجزء الحقيقي من الحلّ المركّب يحلّ المسألة الحقيقية، وتكون الحركة المستقرّة \(x_\text{p}(t) = \operatorname{Re}\,X e^{i(\Omega t - \varphi)} = X\cos(\Omega t - \varphi)\)، مع</p>
+                        \[ X = \frac{F_0/m}{\sqrt{\left(\omega_0^2-\Omega^2\right)^2 + \left(2\zeta\omega_0\Omega\right)^2}}, \qquad \varphi = \operatorname{atan2}\!\left(2\zeta\omega_0\Omega,\ \omega_0^2-\Omega^2\right) . \tag{4} \]
+                        <h4><span class="psub__n">3.2</span>الحالة العابرة</h4>
+                        <p>للمعادلة الحرّة نجرّب \(x = e^{st}\). يُخرج كل مشتقّ عاملًا \(s\)، فتصبح \(s^2 + 2\zeta\omega_0 s + \omega_0^2 = 0\)، و\(s = -\zeta\omega_0 \pm i\,\omega_0\sqrt{1-\zeta^2}\). يجعل الجزء الحقيقي الحركة تتلاشى بثابت الزمن \(\tau = 1/(\zeta\omega_0)\)، ويجعل الجزء التخيّلي الحركة تهتزّ بالتردد المتخامد \(\omega_d = \omega_0\sqrt{1-\zeta^2}\). وعند \(\zeta = 1\) يصل الجزء التخيّلي إلى الصفر ولا يبقى ما يهتزّ: فنسبة التخامد تقيس المخمّد مقارنةً بالقيمة \(c = 2\sqrt{km}\) التي توقف الاهتزاز تمامًا. وبإضافة مثل هذا الاهتزاز، \(e^{-t/\tau}(C_1\cos\omega_d t + C_2\sin\omega_d t),\) إلى الحالة المستقرّة، وفرض \(x(0) = \dot x(0) = 0\)، تتعيّن ثابتاه: عند \(t = 0\) يصبح الشرطان \(X\cos\varphi + C_1 = 0\) و\(X\Omega\sin\varphi - \zeta\omega_0 C_1 + \omega_d C_2 = 0\)، لذلك</p>
+                        \[ \begin{aligned} x(t) &= X\cos(\Omega t-\varphi) + e^{-t/\tau}\left(C_1\cos\omega_d t + C_2\sin\omega_d t\right), \\ C_1 &= -X\cos\varphi, \qquad C_2 = \frac{\zeta\omega_0\,C_1 - X\Omega\sin\varphi}{\omega_d} . \end{aligned} \tag{5} \]
+                        <p>اقرأ (5) كقصّة من فصلين. في البداية تهتزّ الكتلة بترددها الخاصّ، لأن الدفعة المفاجئة تهيّج إيقاعها الخاصّ. ويضمحلّ هذا الاهتزاز خلال بضعة \(\tau\)، ثم لا يبقى سوى إيقاع المحرّك. وبالقيم الافتراضية يكون \(\tau = 6.37\ \mathrm{s}\) و\(X = 0.482\ \mathrm{m}\) و\(\varphi = 25.3^\circ\).</p>
+                    </section>
+
+                    <section class="psec" id="p-resonance">
+                        <h3><span class="psec__n">04</span>الرنين والطور</h3>
+                        <p>تحتوي المعادلة (4) على الشكل 2 كلّه. إذا قُدْتَ ببطء، \(\Omega \ll \omega_0\)، تتبع الكتلة القوّة ببساطة، وتستطيل بالمقدار الساكن \(F_0/k\). وإذا قُدْتَ بسرعة، \(\Omega \gg \omega_0\)، تكاد الكتلة لا تتحرّك: فالقصور الذاتي يغلب. وفيما بين ذلك، قرب \(\Omega = \omega_0\)، يلغي حدّ النابض وحدّ القصور الذاتي في (3) بعضهما، ولا يبقى إلّا حدّ التخامد الصغير ليحدّ الحركة، فترتفع السعة ارتفاعًا كبيرًا. هذا هو <em>الرنين</em>.</p>
+                        <figure class="pfig">
+                            <div class="pfig__plate">
+                                <svg viewBox="0 0 720 326" role="img" xmlns="http://www.w3.org/2000/svg">
+                                <defs><clipPath id="f9c1"><rect x="64.0" y="18.0" width="634.0" height="236.0"/></clipPath></defs>
+                                <line x1="64.0" x2="698.0" y1="254.0" y2="254.0" stroke="#eee6d9" stroke-width="1"/>
+                                <text class="tick" x="56.0" y="258.0" text-anchor="end">10⁻²</text>
+                                <line x1="64.0" x2="698.0" y1="182.5" y2="182.5" stroke="#eee6d9" stroke-width="1"/>
+                                <text class="tick" x="56.0" y="186.5" text-anchor="end">10⁻¹</text>
+                                <line x1="64.0" x2="698.0" y1="111.0" y2="111.0" stroke="#eee6d9" stroke-width="1"/>
+                                <text class="tick" x="56.0" y="115.0" text-anchor="end">10⁰</text>
+                                <line x1="64.0" x2="698.0" y1="39.5" y2="39.5" stroke="#eee6d9" stroke-width="1"/>
+                                <text class="tick" x="56.0" y="43.5" text-anchor="end">10¹</text>
+                                <line x1="64.0" x2="64.0" y1="254.0" y2="259.0" stroke="#8b8079"/>
+                                <text class="tick" x="64.0" y="273.0" text-anchor="middle">0.1</text>
+                                <line x1="222.5" x2="222.5" y1="254.0" y2="259.0" stroke="#8b8079"/>
+                                <text class="tick" x="222.5" y="273.0" text-anchor="middle">0.32</text>
+                                <line x1="381.0" x2="381.0" y1="254.0" y2="259.0" stroke="#8b8079"/>
+                                <text class="tick" x="381.0" y="273.0" text-anchor="middle">1</text>
+                                <line x1="539.5" x2="539.5" y1="254.0" y2="259.0" stroke="#8b8079"/>
+                                <text class="tick" x="539.5" y="273.0" text-anchor="middle">3.2</text>
+                                <line x1="698.0" x2="698.0" y1="254.0" y2="259.0" stroke="#8b8079"/>
+                                <text class="tick" x="698.0" y="273.0" text-anchor="middle">10</text>
+                                <line x1="64.0" x2="698.0" y1="254.0" y2="254.0" stroke="#8b8079"/>
+                                <line x1="64.0" x2="64.0" y1="18.0" y2="254.0" stroke="#8b8079"/>
+                                <text class="lbl" x="698.0" y="292.0" text-anchor="end">drive frequency f / f₀ (log scale)</text>
+                                <text class="lbl" x="70.0" y="31.0">amplitude X / (F₀/k)</text>
+                                <g clip-path="url(#f9c1)">
+                                <path d="M64.0 110.7 L65.6 110.7 L67.2 110.7 L68.8 110.7 L70.4 110.7 L71.9 110.7 L73.5 110.7 L75.1 110.6 L76.7 110.6 L78.3 110.6 L79.9 110.6 L81.5 110.6 L83.1 110.6 L84.7 110.6 L86.2 110.6 L87.8 110.6 L89.4 110.6 L91.0 110.6 L92.6 110.5 L94.2 110.5 L95.8 110.5 L97.4 110.5 L99.0 110.5 L100.5 110.5 L102.1 110.5 L103.7 110.5 L105.3 110.4 L106.9 110.4 L108.5 110.4 L110.1 110.4 L111.7 110.4 L113.3 110.4 L114.8 110.4 L116.4 110.3 L118.0 110.3 L119.6 110.3 L121.2 110.3 L122.8 110.3 L124.4 110.3 L126.0 110.2 L127.6 110.2 L129.1 110.2 L130.7 110.2 L132.3 110.2 L133.9 110.1 L135.5 110.1 L137.1 110.1 L138.7 110.1 L140.3 110.1 L141.9 110.0 L143.4 110.0 L145.0 110.0 L146.6 110.0 L148.2 109.9 L149.8 109.9 L151.4 109.9 L153.0 109.9 L154.6 109.8 L156.2 109.8 L157.7 109.8 L159.3 109.8 L160.9 109.7 L162.5 109.7 L164.1 109.7 L165.7 109.6 L167.3 109.6 L168.9 109.6 L170.5 109.5 L172.1 109.5 L173.6 109.5 L175.2 109.4 L176.8 109.4 L178.4 109.3 L180.0 109.3 L181.6 109.3 L183.2 109.2 L184.8 109.2 L186.4 109.1 L187.9 109.1 L189.5 109.0 L191.1 109.0 L192.7 108.9 L194.3 108.9 L195.9 108.8 L197.5 108.8 L199.1 108.7 L200.7 108.7 L202.2 108.6 L203.8 108.6 L205.4 108.5 L207.0 108.4 L208.6 108.4 L210.2 108.3 L211.8 108.3 L213.4 108.2 L215.0 108.1 L216.5 108.0 L218.1 108.0 L219.7 107.9 L221.3 107.8 L222.9 107.7 L224.5 107.7 L226.1 107.6 L227.7 107.5 L229.3 107.4 L230.8 107.3 L232.4 107.2 L234.0 107.1 L235.6 107.0 L237.2 106.9 L238.8 106.8 L240.4 106.7 L242.0 106.6 L243.6 106.5 L245.1 106.4 L246.7 106.3 L248.3 106.2 L249.9 106.0 L251.5 105.9 L253.1 105.8 L254.7 105.7 L256.3 105.5 L257.9 105.4 L259.4 105.2 L261.0 105.1 L262.6 104.9 L264.2 104.8 L265.8 104.6 L267.4 104.4 L269.0 104.3 L270.6 104.1 L272.2 103.9 L273.7 103.7 L275.3 103.5 L276.9 103.3 L278.5 103.1 L280.1 102.9 L281.7 102.7 L283.3 102.5 L284.9 102.3 L286.5 102.0 L288.0 101.8 L289.6 101.5 L291.2 101.3 L292.8 101.0 L294.4 100.7 L296.0 100.4 L297.6 100.1 L299.2 99.8 L300.8 99.5 L302.3 99.2 L303.9 98.9 L305.5 98.5 L307.1 98.1 L308.7 97.8 L310.3 97.4 L311.9 97.0 L313.5 96.6 L315.1 96.1 L316.6 95.7 L318.2 95.2 L319.8 94.8 L321.4 94.3 L323.0 93.7 L324.6 93.2 L326.2 92.6 L327.8 92.0 L329.4 91.4 L330.9 90.8 L332.5 90.1 L334.1 89.4 L335.7 88.7 L337.3 87.9 L338.9 87.1 L340.5 86.3 L342.1 85.4 L343.7 84.5 L345.2 83.5 L346.8 82.5 L348.4 81.4 L350.0 80.2 L351.6 79.0 L353.2 77.7 L354.8 76.3 L356.4 74.9 L358.0 73.3 L359.5 71.6 L361.1 69.8 L362.7 67.9 L364.3 65.8 L365.9 63.5 L367.5 61.0 L369.1 58.4 L370.7 55.5 L372.3 52.5 L373.8 49.3 L375.4 46.1 L377.0 43.1 L378.6 40.7 L380.2 39.5 L381.8 39.9 L383.4 41.8 L385.0 44.9 L386.6 48.6 L388.2 52.5 L389.7 56.4 L391.3 60.2 L392.9 63.7 L394.5 67.1 L396.1 70.3 L397.7 73.3 L399.3 76.1 L400.9 78.8 L402.5 81.3 L404.0 83.7 L405.6 86.0 L407.2 88.2 L408.8 90.3 L410.4 92.3 L412.0 94.2 L413.6 96.1 L415.2 97.9 L416.8 99.6 L418.3 101.3 L419.9 103.0 L421.5 104.6 L423.1 106.1 L424.7 107.6 L426.3 109.1 L427.9 110.6 L429.5 112.0 L431.1 113.4 L432.6 114.7 L434.2 116.1 L435.8 117.4 L437.4 118.6 L439.0 119.9 L440.6 121.1 L442.2 122.3 L443.8 123.5 L445.4 124.7 L446.9 125.9 L448.5 127.0 L450.1 128.2 L451.7 129.3 L453.3 130.4 L454.9 131.5 L456.5 132.6 L458.1 133.6 L459.7 134.7 L461.2 135.7 L462.8 136.7 L464.4 137.8 L466.0 138.8 L467.6 139.8 L469.2 140.8 L470.8 141.8 L472.4 142.7 L474.0 143.7 L475.5 144.7 L477.1 145.6 L478.7 146.6 L480.3 147.5 L481.9 148.4 L483.5 149.4 L485.1 150.3 L486.7 151.2 L488.3 152.1 L489.8 153.0 L491.4 153.9 L493.0 154.8 L494.6 155.7 L496.2 156.6 L497.8 157.4 L499.4 158.3 L501.0 159.2 L502.6 160.1 L504.1 160.9 L505.7 161.8 L507.3 162.6 L508.9 163.5 L510.5 164.3 L512.1 165.2 L513.7 166.0 L515.3 166.8 L516.9 167.7 L518.4 168.5 L520.0 169.3 L521.6 170.2 L523.2 171.0 L524.8 171.8 L526.4 172.6 L528.0 173.4 L529.6 174.2 L531.2 175.0 L532.7 175.9 L534.3 176.7 L535.9 177.5 L537.5 178.3 L539.1 179.1 L540.7 179.9 L542.3 180.6 L543.9 181.4 L545.5 182.2 L547.0 183.0 L548.6 183.8 L550.2 184.6 L551.8 185.4 L553.4 186.1 L555.0 186.9 L556.6 187.7 L558.2 188.5 L559.8 189.3 L561.3 190.0 L562.9 190.8 L564.5 191.6 L566.1 192.3 L567.7 193.1 L569.3 193.9 L570.9 194.6 L572.5 195.4 L574.1 196.2 L575.6 196.9 L577.2 197.7 L578.8 198.5 L580.4 199.2 L582.0 200.0 L583.6 200.7 L585.2 201.5 L586.8 202.2 L588.4 203.0 L589.9 203.7 L591.5 204.5 L593.1 205.2 L594.7 206.0 L596.3 206.7 L597.9 207.5 L599.5 208.2 L601.1 209.0 L602.7 209.7 L604.3 210.5 L605.8 211.2 L607.4 212.0 L609.0 212.7 L610.6 213.5 L612.2 214.2 L613.8 214.9 L615.4 215.7 L617.0 216.4 L618.6 217.2 L620.1 217.9 L621.7 218.6 L623.3 219.4 L624.9 220.1 L626.5 220.9 L628.1 221.6 L629.7 222.3 L631.3 223.1 L632.9 223.8 L634.4 224.5 L636.0 225.3 L637.6 226.0 L639.2 226.7 L640.8 227.5 L642.4 228.2 L644.0 228.9 L645.6 229.7 L647.2 230.4 L648.7 231.1 L650.3 231.9 L651.9 232.6 L653.5 233.3 L655.1 234.1 L656.7 234.8 L658.3 235.5 L659.9 236.3 L661.5 237.0 L663.0 237.7 L664.6 238.4 L666.2 239.2 L667.8 239.9 L669.4 240.6 L671.0 241.4 L672.6 242.1 L674.2 242.8 L675.8 243.5 L677.3 244.3 L678.9 245.0 L680.5 245.7 L682.1 246.4 L683.7 247.2 L685.3 247.9 L686.9 248.6 L688.5 249.3 L690.1 250.1 L691.6 250.8 L693.2 251.5 L694.8 252.2 L696.4 253.0 L698.0 253.7" fill="none" stroke="#7a1f2b" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/>
+                                <path d="M64.0 110.7 L65.6 110.7 L67.2 110.7 L68.8 110.7 L70.4 110.7 L71.9 110.7 L73.5 110.7 L75.1 110.7 L76.7 110.6 L78.3 110.6 L79.9 110.6 L81.5 110.6 L83.1 110.6 L84.7 110.6 L86.2 110.6 L87.8 110.6 L89.4 110.6 L91.0 110.6 L92.6 110.5 L94.2 110.5 L95.8 110.5 L97.4 110.5 L99.0 110.5 L100.5 110.5 L102.1 110.5 L103.7 110.5 L105.3 110.5 L106.9 110.4 L108.5 110.4 L110.1 110.4 L111.7 110.4 L113.3 110.4 L114.8 110.4 L116.4 110.4 L118.0 110.3 L119.6 110.3 L121.2 110.3 L122.8 110.3 L124.4 110.3 L126.0 110.3 L127.6 110.2 L129.1 110.2 L130.7 110.2 L132.3 110.2 L133.9 110.2 L135.5 110.1 L137.1 110.1 L138.7 110.1 L140.3 110.1 L141.9 110.1 L143.4 110.0 L145.0 110.0 L146.6 110.0 L148.2 110.0 L149.8 109.9 L151.4 109.9 L153.0 109.9 L154.6 109.9 L156.2 109.8 L157.7 109.8 L159.3 109.8 L160.9 109.7 L162.5 109.7 L164.1 109.7 L165.7 109.7 L167.3 109.6 L168.9 109.6 L170.5 109.6 L172.1 109.5 L173.6 109.5 L175.2 109.4 L176.8 109.4 L178.4 109.4 L180.0 109.3 L181.6 109.3 L183.2 109.2 L184.8 109.2 L186.4 109.2 L187.9 109.1 L189.5 109.1 L191.1 109.0 L192.7 109.0 L194.3 108.9 L195.9 108.9 L197.5 108.8 L199.1 108.8 L200.7 108.7 L202.2 108.7 L203.8 108.6 L205.4 108.5 L207.0 108.5 L208.6 108.4 L210.2 108.4 L211.8 108.3 L213.4 108.2 L215.0 108.2 L216.5 108.1 L218.1 108.0 L219.7 108.0 L221.3 107.9 L222.9 107.8 L224.5 107.7 L226.1 107.6 L227.7 107.6 L229.3 107.5 L230.8 107.4 L232.4 107.3 L234.0 107.2 L235.6 107.1 L237.2 107.0 L238.8 106.9 L240.4 106.8 L242.0 106.7 L243.6 106.6 L245.1 106.5 L246.7 106.4 L248.3 106.3 L249.9 106.1 L251.5 106.0 L253.1 105.9 L254.7 105.8 L256.3 105.6 L257.9 105.5 L259.4 105.3 L261.0 105.2 L262.6 105.1 L264.2 104.9 L265.8 104.7 L267.4 104.6 L269.0 104.4 L270.6 104.2 L272.2 104.1 L273.7 103.9 L275.3 103.7 L276.9 103.5 L278.5 103.3 L280.1 103.1 L281.7 102.9 L283.3 102.7 L284.9 102.5 L286.5 102.2 L288.0 102.0 L289.6 101.7 L291.2 101.5 L292.8 101.2 L294.4 101.0 L296.0 100.7 L297.6 100.4 L299.2 100.1 L300.8 99.8 L302.3 99.5 L303.9 99.2 L305.5 98.9 L307.1 98.5 L308.7 98.2 L310.3 97.8 L311.9 97.4 L313.5 97.0 L315.1 96.6 L316.6 96.2 L318.2 95.7 L319.8 95.3 L321.4 94.8 L323.0 94.3 L324.6 93.8 L326.2 93.3 L327.8 92.8 L329.4 92.2 L330.9 91.6 L332.5 91.0 L334.1 90.3 L335.7 89.7 L337.3 89.0 L338.9 88.3 L340.5 87.5 L342.1 86.7 L343.7 85.9 L345.2 85.1 L346.8 84.2 L348.4 83.2 L350.0 82.3 L351.6 81.2 L353.2 80.2 L354.8 79.1 L356.4 77.9 L358.0 76.7 L359.5 75.4 L361.1 74.1 L362.7 72.8 L364.3 71.4 L365.9 69.9 L367.5 68.5 L369.1 67.1 L370.7 65.7 L372.3 64.3 L373.8 63.1 L375.4 62.1 L377.0 61.4 L378.6 61.0 L380.2 60.9 L381.8 61.3 L383.4 62.0 L385.0 63.2 L386.6 64.6 L388.2 66.4 L389.7 68.3 L391.3 70.3 L392.9 72.4 L394.5 74.6 L396.1 76.7 L397.7 78.9 L399.3 81.0 L400.9 83.1 L402.5 85.1 L404.0 87.1 L405.6 89.0 L407.2 90.9 L408.8 92.7 L410.4 94.5 L412.0 96.2 L413.6 97.9 L415.2 99.6 L416.8 101.2 L418.3 102.8 L419.9 104.3 L421.5 105.8 L423.1 107.3 L424.7 108.7 L426.3 110.1 L427.9 111.5 L429.5 112.8 L431.1 114.2 L432.6 115.5 L434.2 116.8 L435.8 118.0 L437.4 119.3 L439.0 120.5 L440.6 121.7 L442.2 122.9 L443.8 124.1 L445.4 125.2 L446.9 126.3 L448.5 127.5 L450.1 128.6 L451.7 129.7 L453.3 130.8 L454.9 131.8 L456.5 132.9 L458.1 133.9 L459.7 135.0 L461.2 136.0 L462.8 137.0 L464.4 138.0 L466.0 139.0 L467.6 140.0 L469.2 141.0 L470.8 142.0 L472.4 143.0 L474.0 143.9 L475.5 144.9 L477.1 145.8 L478.7 146.8 L480.3 147.7 L481.9 148.6 L483.5 149.5 L485.1 150.4 L486.7 151.4 L488.3 152.3 L489.8 153.2 L491.4 154.1 L493.0 154.9 L494.6 155.8 L496.2 156.7 L497.8 157.6 L499.4 158.4 L501.0 159.3 L502.6 160.2 L504.1 161.0 L505.7 161.9 L507.3 162.7 L508.9 163.6 L510.5 164.4 L512.1 165.3 L513.7 166.1 L515.3 166.9 L516.9 167.8 L518.4 168.6 L520.0 169.4 L521.6 170.2 L523.2 171.1 L524.8 171.9 L526.4 172.7 L528.0 173.5 L529.6 174.3 L531.2 175.1 L532.7 175.9 L534.3 176.7 L535.9 177.5 L537.5 178.3 L539.1 179.1 L540.7 179.9 L542.3 180.7 L543.9 181.5 L545.5 182.3 L547.0 183.1 L548.6 183.8 L550.2 184.6 L551.8 185.4 L553.4 186.2 L555.0 187.0 L556.6 187.7 L558.2 188.5 L559.8 189.3 L561.3 190.1 L562.9 190.8 L564.5 191.6 L566.1 192.4 L567.7 193.1 L569.3 193.9 L570.9 194.7 L572.5 195.4 L574.1 196.2 L575.6 197.0 L577.2 197.7 L578.8 198.5 L580.4 199.2 L582.0 200.0 L583.6 200.8 L585.2 201.5 L586.8 202.3 L588.4 203.0 L589.9 203.8 L591.5 204.5 L593.1 205.3 L594.7 206.0 L596.3 206.8 L597.9 207.5 L599.5 208.3 L601.1 209.0 L602.7 209.8 L604.3 210.5 L605.8 211.2 L607.4 212.0 L609.0 212.7 L610.6 213.5 L612.2 214.2 L613.8 215.0 L615.4 215.7 L617.0 216.4 L618.6 217.2 L620.1 217.9 L621.7 218.7 L623.3 219.4 L624.9 220.1 L626.5 220.9 L628.1 221.6 L629.7 222.3 L631.3 223.1 L632.9 223.8 L634.4 224.6 L636.0 225.3 L637.6 226.0 L639.2 226.8 L640.8 227.5 L642.4 228.2 L644.0 229.0 L645.6 229.7 L647.2 230.4 L648.7 231.2 L650.3 231.9 L651.9 232.6 L653.5 233.3 L655.1 234.1 L656.7 234.8 L658.3 235.5 L659.9 236.3 L661.5 237.0 L663.0 237.7 L664.6 238.5 L666.2 239.2 L667.8 239.9 L669.4 240.6 L671.0 241.4 L672.6 242.1 L674.2 242.8 L675.8 243.5 L677.3 244.3 L678.9 245.0 L680.5 245.7 L682.1 246.4 L683.7 247.2 L685.3 247.9 L686.9 248.6 L688.5 249.3 L690.1 250.1 L691.6 250.8 L693.2 251.5 L694.8 252.2 L696.4 253.0 L698.0 253.7" fill="none" stroke="#b0485a" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/>
+                                <path d="M64.0 110.7 L65.6 110.7 L67.2 110.7 L68.8 110.7 L70.4 110.7 L71.9 110.7 L73.5 110.7 L75.1 110.7 L76.7 110.7 L78.3 110.7 L79.9 110.7 L81.5 110.6 L83.1 110.6 L84.7 110.6 L86.2 110.6 L87.8 110.6 L89.4 110.6 L91.0 110.6 L92.6 110.6 L94.2 110.6 L95.8 110.6 L97.4 110.5 L99.0 110.5 L100.5 110.5 L102.1 110.5 L103.7 110.5 L105.3 110.5 L106.9 110.5 L108.5 110.5 L110.1 110.5 L111.7 110.4 L113.3 110.4 L114.8 110.4 L116.4 110.4 L118.0 110.4 L119.6 110.4 L121.2 110.4 L122.8 110.3 L124.4 110.3 L126.0 110.3 L127.6 110.3 L129.1 110.3 L130.7 110.3 L132.3 110.2 L133.9 110.2 L135.5 110.2 L137.1 110.2 L138.7 110.2 L140.3 110.1 L141.9 110.1 L143.4 110.1 L145.0 110.1 L146.6 110.1 L148.2 110.0 L149.8 110.0 L151.4 110.0 L153.0 110.0 L154.6 109.9 L156.2 109.9 L157.7 109.9 L159.3 109.9 L160.9 109.8 L162.5 109.8 L164.1 109.8 L165.7 109.7 L167.3 109.7 L168.9 109.7 L170.5 109.6 L172.1 109.6 L173.6 109.6 L175.2 109.5 L176.8 109.5 L178.4 109.5 L180.0 109.4 L181.6 109.4 L183.2 109.4 L184.8 109.3 L186.4 109.3 L187.9 109.2 L189.5 109.2 L191.1 109.2 L192.7 109.1 L194.3 109.1 L195.9 109.0 L197.5 109.0 L199.1 108.9 L200.7 108.9 L202.2 108.8 L203.8 108.8 L205.4 108.7 L207.0 108.7 L208.6 108.6 L210.2 108.5 L211.8 108.5 L213.4 108.4 L215.0 108.4 L216.5 108.3 L218.1 108.2 L219.7 108.2 L221.3 108.1 L222.9 108.0 L224.5 108.0 L226.1 107.9 L227.7 107.8 L229.3 107.7 L230.8 107.6 L232.4 107.6 L234.0 107.5 L235.6 107.4 L237.2 107.3 L238.8 107.2 L240.4 107.1 L242.0 107.0 L243.6 106.9 L245.1 106.8 L246.7 106.7 L248.3 106.6 L249.9 106.5 L251.5 106.4 L253.1 106.3 L254.7 106.2 L256.3 106.0 L257.9 105.9 L259.4 105.8 L261.0 105.7 L262.6 105.5 L264.2 105.4 L265.8 105.3 L267.4 105.1 L269.0 105.0 L270.6 104.8 L272.2 104.7 L273.7 104.5 L275.3 104.3 L276.9 104.2 L278.5 104.0 L280.1 103.8 L281.7 103.6 L283.3 103.4 L284.9 103.2 L286.5 103.0 L288.0 102.8 L289.6 102.6 L291.2 102.4 L292.8 102.2 L294.4 102.0 L296.0 101.7 L297.6 101.5 L299.2 101.2 L300.8 101.0 L302.3 100.7 L303.9 100.4 L305.5 100.2 L307.1 99.9 L308.7 99.6 L310.3 99.3 L311.9 99.0 L313.5 98.6 L315.1 98.3 L316.6 98.0 L318.2 97.6 L319.8 97.3 L321.4 96.9 L323.0 96.5 L324.6 96.1 L326.2 95.7 L327.8 95.3 L329.4 94.9 L330.9 94.5 L332.5 94.0 L334.1 93.6 L335.7 93.1 L337.3 92.6 L338.9 92.1 L340.5 91.6 L342.1 91.1 L343.7 90.6 L345.2 90.1 L346.8 89.5 L348.4 89.0 L350.0 88.4 L351.6 87.9 L353.2 87.3 L354.8 86.8 L356.4 86.2 L358.0 85.7 L359.5 85.1 L361.1 84.6 L362.7 84.1 L364.3 83.7 L365.9 83.3 L367.5 82.9 L369.1 82.5 L370.7 82.3 L372.3 82.1 L373.8 82.0 L375.4 81.9 L377.0 82.0 L378.6 82.1 L380.2 82.4 L381.8 82.8 L383.4 83.2 L385.0 83.8 L386.6 84.4 L388.2 85.2 L389.7 86.0 L391.3 86.9 L392.9 87.9 L394.5 89.0 L396.1 90.1 L397.7 91.2 L399.3 92.4 L400.9 93.6 L402.5 94.8 L404.0 96.1 L405.6 97.3 L407.2 98.6 L408.8 99.9 L410.4 101.1 L412.0 102.4 L413.6 103.7 L415.2 104.9 L416.8 106.2 L418.3 107.4 L419.9 108.7 L421.5 109.9 L423.1 111.1 L424.7 112.3 L426.3 113.5 L427.9 114.7 L429.5 115.9 L431.1 117.0 L432.6 118.2 L434.2 119.3 L435.8 120.5 L437.4 121.6 L439.0 122.7 L440.6 123.8 L442.2 124.9 L443.8 125.9 L445.4 127.0 L446.9 128.1 L448.5 129.1 L450.1 130.1 L451.7 131.2 L453.3 132.2 L454.9 133.2 L456.5 134.2 L458.1 135.2 L459.7 136.2 L461.2 137.2 L462.8 138.1 L464.4 139.1 L466.0 140.1 L467.6 141.0 L469.2 142.0 L470.8 142.9 L472.4 143.8 L474.0 144.8 L475.5 145.7 L477.1 146.6 L478.7 147.5 L480.3 148.4 L481.9 149.3 L483.5 150.2 L485.1 151.1 L486.7 152.0 L488.3 152.9 L489.8 153.7 L491.4 154.6 L493.0 155.5 L494.6 156.4 L496.2 157.2 L497.8 158.1 L499.4 158.9 L501.0 159.8 L502.6 160.6 L504.1 161.5 L505.7 162.3 L507.3 163.1 L508.9 164.0 L510.5 164.8 L512.1 165.6 L513.7 166.5 L515.3 167.3 L516.9 168.1 L518.4 168.9 L520.0 169.7 L521.6 170.6 L523.2 171.4 L524.8 172.2 L526.4 173.0 L528.0 173.8 L529.6 174.6 L531.2 175.4 L532.7 176.2 L534.3 177.0 L535.9 177.8 L537.5 178.6 L539.1 179.3 L540.7 180.1 L542.3 180.9 L543.9 181.7 L545.5 182.5 L547.0 183.3 L548.6 184.0 L550.2 184.8 L551.8 185.6 L553.4 186.4 L555.0 187.1 L556.6 187.9 L558.2 188.7 L559.8 189.5 L561.3 190.2 L562.9 191.0 L564.5 191.8 L566.1 192.5 L567.7 193.3 L569.3 194.0 L570.9 194.8 L572.5 195.6 L574.1 196.3 L575.6 197.1 L577.2 197.8 L578.8 198.6 L580.4 199.4 L582.0 200.1 L583.6 200.9 L585.2 201.6 L586.8 202.4 L588.4 203.1 L589.9 203.9 L591.5 204.6 L593.1 205.4 L594.7 206.1 L596.3 206.9 L597.9 207.6 L599.5 208.3 L601.1 209.1 L602.7 209.8 L604.3 210.6 L605.8 211.3 L607.4 212.1 L609.0 212.8 L610.6 213.5 L612.2 214.3 L613.8 215.0 L615.4 215.8 L617.0 216.5 L618.6 217.2 L620.1 218.0 L621.7 218.7 L623.3 219.5 L624.9 220.2 L626.5 220.9 L628.1 221.7 L629.7 222.4 L631.3 223.1 L632.9 223.9 L634.4 224.6 L636.0 225.3 L637.6 226.1 L639.2 226.8 L640.8 227.5 L642.4 228.3 L644.0 229.0 L645.6 229.7 L647.2 230.5 L648.7 231.2 L650.3 231.9 L651.9 232.7 L653.5 233.4 L655.1 234.1 L656.7 234.8 L658.3 235.6 L659.9 236.3 L661.5 237.0 L663.0 237.8 L664.6 238.5 L666.2 239.2 L667.8 239.9 L669.4 240.7 L671.0 241.4 L672.6 242.1 L674.2 242.8 L675.8 243.6 L677.3 244.3 L678.9 245.0 L680.5 245.7 L682.1 246.5 L683.7 247.2 L685.3 247.9 L686.9 248.6 L688.5 249.4 L690.1 250.1 L691.6 250.8 L693.2 251.5 L694.8 252.3 L696.4 253.0 L698.0 253.7" fill="none" stroke="#c9707e" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/>
+                                <path d="M64.0 110.9 L65.6 110.9 L67.2 110.9 L68.8 110.8 L70.4 110.8 L71.9 110.8 L73.5 110.8 L75.1 110.8 L76.7 110.8 L78.3 110.8 L79.9 110.8 L81.5 110.8 L83.1 110.8 L84.7 110.8 L86.2 110.8 L87.8 110.8 L89.4 110.8 L91.0 110.8 L92.6 110.8 L94.2 110.8 L95.8 110.8 L97.4 110.8 L99.0 110.8 L100.5 110.8 L102.1 110.7 L103.7 110.7 L105.3 110.7 L106.9 110.7 L108.5 110.7 L110.1 110.7 L111.7 110.7 L113.3 110.7 L114.8 110.7 L116.4 110.7 L118.0 110.7 L119.6 110.7 L121.2 110.7 L122.8 110.7 L124.4 110.6 L126.0 110.6 L127.6 110.6 L129.1 110.6 L130.7 110.6 L132.3 110.6 L133.9 110.6 L135.5 110.6 L137.1 110.6 L138.7 110.6 L140.3 110.6 L141.9 110.5 L143.4 110.5 L145.0 110.5 L146.6 110.5 L148.2 110.5 L149.8 110.5 L151.4 110.5 L153.0 110.5 L154.6 110.4 L156.2 110.4 L157.7 110.4 L159.3 110.4 L160.9 110.4 L162.5 110.4 L164.1 110.4 L165.7 110.3 L167.3 110.3 L168.9 110.3 L170.5 110.3 L172.1 110.3 L173.6 110.3 L175.2 110.3 L176.8 110.2 L178.4 110.2 L180.0 110.2 L181.6 110.2 L183.2 110.2 L184.8 110.1 L186.4 110.1 L187.9 110.1 L189.5 110.1 L191.1 110.1 L192.7 110.0 L194.3 110.0 L195.9 110.0 L197.5 110.0 L199.1 110.0 L200.7 109.9 L202.2 109.9 L203.8 109.9 L205.4 109.9 L207.0 109.8 L208.6 109.8 L210.2 109.8 L211.8 109.7 L213.4 109.7 L215.0 109.7 L216.5 109.7 L218.1 109.6 L219.7 109.6 L221.3 109.6 L222.9 109.5 L224.5 109.5 L226.1 109.5 L227.7 109.4 L229.3 109.4 L230.8 109.4 L232.4 109.3 L234.0 109.3 L235.6 109.3 L237.2 109.2 L238.8 109.2 L240.4 109.2 L242.0 109.1 L243.6 109.1 L245.1 109.0 L246.7 109.0 L248.3 109.0 L249.9 108.9 L251.5 108.9 L253.1 108.8 L254.7 108.8 L256.3 108.7 L257.9 108.7 L259.4 108.6 L261.0 108.6 L262.6 108.5 L264.2 108.5 L265.8 108.4 L267.4 108.4 L269.0 108.3 L270.6 108.3 L272.2 108.2 L273.7 108.2 L275.3 108.1 L276.9 108.1 L278.5 108.0 L280.1 108.0 L281.7 107.9 L283.3 107.9 L284.9 107.8 L286.5 107.8 L288.0 107.7 L289.6 107.6 L291.2 107.6 L292.8 107.5 L294.4 107.5 L296.0 107.4 L297.6 107.4 L299.2 107.3 L300.8 107.3 L302.3 107.2 L303.9 107.2 L305.5 107.1 L307.1 107.1 L308.7 107.0 L310.3 107.0 L311.9 106.9 L313.5 106.9 L315.1 106.8 L316.6 106.8 L318.2 106.7 L319.8 106.7 L321.4 106.7 L323.0 106.6 L324.6 106.6 L326.2 106.6 L327.8 106.6 L329.4 106.6 L330.9 106.6 L332.5 106.5 L334.1 106.5 L335.7 106.6 L337.3 106.6 L338.9 106.6 L340.5 106.6 L342.1 106.6 L343.7 106.7 L345.2 106.7 L346.8 106.8 L348.4 106.9 L350.0 106.9 L351.6 107.0 L353.2 107.1 L354.8 107.2 L356.4 107.3 L358.0 107.5 L359.5 107.6 L361.1 107.8 L362.7 108.0 L364.3 108.1 L365.9 108.3 L367.5 108.6 L369.1 108.8 L370.7 109.0 L372.3 109.3 L373.8 109.6 L375.4 109.9 L377.0 110.2 L378.6 110.5 L380.2 110.8 L381.8 111.2 L383.4 111.6 L385.0 112.0 L386.6 112.4 L388.2 112.8 L389.7 113.2 L391.3 113.7 L392.9 114.2 L394.5 114.6 L396.1 115.2 L397.7 115.7 L399.3 116.2 L400.9 116.7 L402.5 117.3 L404.0 117.9 L405.6 118.5 L407.2 119.1 L408.8 119.7 L410.4 120.3 L412.0 120.9 L413.6 121.6 L415.2 122.2 L416.8 122.9 L418.3 123.5 L419.9 124.2 L421.5 124.9 L423.1 125.6 L424.7 126.3 L426.3 127.0 L427.9 127.7 L429.5 128.4 L431.1 129.1 L432.6 129.9 L434.2 130.6 L435.8 131.3 L437.4 132.1 L439.0 132.8 L440.6 133.6 L442.2 134.3 L443.8 135.1 L445.4 135.8 L446.9 136.6 L448.5 137.3 L450.1 138.1 L451.7 138.9 L453.3 139.6 L454.9 140.4 L456.5 141.2 L458.1 141.9 L459.7 142.7 L461.2 143.5 L462.8 144.2 L464.4 145.0 L466.0 145.8 L467.6 146.5 L469.2 147.3 L470.8 148.1 L472.4 148.9 L474.0 149.6 L475.5 150.4 L477.1 151.2 L478.7 151.9 L480.3 152.7 L481.9 153.5 L483.5 154.3 L485.1 155.0 L486.7 155.8 L488.3 156.6 L489.8 157.3 L491.4 158.1 L493.0 158.9 L494.6 159.6 L496.2 160.4 L497.8 161.2 L499.4 161.9 L501.0 162.7 L502.6 163.5 L504.1 164.2 L505.7 165.0 L507.3 165.8 L508.9 166.5 L510.5 167.3 L512.1 168.0 L513.7 168.8 L515.3 169.6 L516.9 170.3 L518.4 171.1 L520.0 171.8 L521.6 172.6 L523.2 173.3 L524.8 174.1 L526.4 174.8 L528.0 175.6 L529.6 176.4 L531.2 177.1 L532.7 177.9 L534.3 178.6 L535.9 179.4 L537.5 180.1 L539.1 180.9 L540.7 181.6 L542.3 182.4 L543.9 183.1 L545.5 183.8 L547.0 184.6 L548.6 185.3 L550.2 186.1 L551.8 186.8 L553.4 187.6 L555.0 188.3 L556.6 189.1 L558.2 189.8 L559.8 190.5 L561.3 191.3 L562.9 192.0 L564.5 192.8 L566.1 193.5 L567.7 194.2 L569.3 195.0 L570.9 195.7 L572.5 196.4 L574.1 197.2 L575.6 197.9 L577.2 198.7 L578.8 199.4 L580.4 200.1 L582.0 200.9 L583.6 201.6 L585.2 202.3 L586.8 203.1 L588.4 203.8 L589.9 204.5 L591.5 205.3 L593.1 206.0 L594.7 206.7 L596.3 207.5 L597.9 208.2 L599.5 208.9 L601.1 209.7 L602.7 210.4 L604.3 211.1 L605.8 211.8 L607.4 212.6 L609.0 213.3 L610.6 214.0 L612.2 214.8 L613.8 215.5 L615.4 216.2 L617.0 217.0 L618.6 217.7 L620.1 218.4 L621.7 219.1 L623.3 219.9 L624.9 220.6 L626.5 221.3 L628.1 222.0 L629.7 222.8 L631.3 223.5 L632.9 224.2 L634.4 224.9 L636.0 225.7 L637.6 226.4 L639.2 227.1 L640.8 227.8 L642.4 228.6 L644.0 229.3 L645.6 230.0 L647.2 230.7 L648.7 231.5 L650.3 232.2 L651.9 232.9 L653.5 233.6 L655.1 234.4 L656.7 235.1 L658.3 235.8 L659.9 236.5 L661.5 237.3 L663.0 238.0 L664.6 238.7 L666.2 239.4 L667.8 240.1 L669.4 240.9 L671.0 241.6 L672.6 242.3 L674.2 243.0 L675.8 243.8 L677.3 244.5 L678.9 245.2 L680.5 245.9 L682.1 246.6 L683.7 247.4 L685.3 248.1 L686.9 248.8 L688.5 249.5 L690.1 250.2 L691.6 251.0 L693.2 251.7 L694.8 252.4 L696.4 253.1 L698.0 253.8" fill="none" stroke="#8b8079" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/>
+                                </g>
+                                <line x1="64" x2="698" y1="298.0" y2="298.0" stroke="#eee6d9"/>
+                                <line x1="64.0" x2="86.0" y1="314.0" y2="314.0" stroke="#7a1f2b" stroke-width="2.2" stroke-linecap="round"/>
+                                <text class="lbl" x="94.0" y="318.0">ζ = 0.05</text>
+                                <line x1="161.6" x2="183.6" y1="314.0" y2="314.0" stroke="#b0485a" stroke-width="2.2" stroke-linecap="round"/>
+                                <text class="lbl" x="191.6" y="318.0">ζ = 0.1</text>
+                                <line x1="252.0" x2="274.0" y1="314.0" y2="314.0" stroke="#c9707e" stroke-width="2.2" stroke-linecap="round"/>
+                                <text class="lbl" x="282.0" y="318.0">ζ = 0.2</text>
+                                <line x1="342.4" x2="364.4" y1="314.0" y2="314.0" stroke="#8b8079" stroke-width="2.2" stroke-linecap="round"/>
+                                <text class="lbl" x="372.4" y="318.0">ζ = 0.5</text>
+                                </svg>
+                            </div>
+                            <div class="pfig__plate" style="margin-top: 12px;">
+                                <svg viewBox="0 0 720 286" role="img" xmlns="http://www.w3.org/2000/svg">
+                                <defs><clipPath id="f9c2"><rect x="64.0" y="18.0" width="634.0" height="196.0"/></clipPath></defs>
+                                <line x1="64.0" x2="698.0" y1="214.0" y2="214.0" stroke="#eee6d9" stroke-width="1"/>
+                                <text class="tick" x="56.0" y="218.0" text-anchor="end">0</text>
+                                <line x1="64.0" x2="698.0" y1="165.0" y2="165.0" stroke="#eee6d9" stroke-width="1"/>
+                                <text class="tick" x="56.0" y="169.0" text-anchor="end">45</text>
+                                <line x1="64.0" x2="698.0" y1="116.0" y2="116.0" stroke="#eee6d9" stroke-width="1"/>
+                                <text class="tick" x="56.0" y="120.0" text-anchor="end">90</text>
+                                <line x1="64.0" x2="698.0" y1="67.0" y2="67.0" stroke="#eee6d9" stroke-width="1"/>
+                                <text class="tick" x="56.0" y="71.0" text-anchor="end">135</text>
+                                <line x1="64.0" x2="698.0" y1="18.0" y2="18.0" stroke="#eee6d9" stroke-width="1"/>
+                                <text class="tick" x="56.0" y="22.0" text-anchor="end">180</text>
+                                <line x1="64.0" x2="64.0" y1="214.0" y2="219.0" stroke="#8b8079"/>
+                                <text class="tick" x="64.0" y="233.0" text-anchor="middle">0.1</text>
+                                <line x1="222.5" x2="222.5" y1="214.0" y2="219.0" stroke="#8b8079"/>
+                                <text class="tick" x="222.5" y="233.0" text-anchor="middle">0.32</text>
+                                <line x1="381.0" x2="381.0" y1="214.0" y2="219.0" stroke="#8b8079"/>
+                                <text class="tick" x="381.0" y="233.0" text-anchor="middle">1</text>
+                                <line x1="539.5" x2="539.5" y1="214.0" y2="219.0" stroke="#8b8079"/>
+                                <text class="tick" x="539.5" y="233.0" text-anchor="middle">3.2</text>
+                                <line x1="698.0" x2="698.0" y1="214.0" y2="219.0" stroke="#8b8079"/>
+                                <text class="tick" x="698.0" y="233.0" text-anchor="middle">10</text>
+                                <line x1="64.0" x2="698.0" y1="214.0" y2="214.0" stroke="#8b8079"/>
+                                <line x1="64.0" x2="64.0" y1="18.0" y2="214.0" stroke="#8b8079"/>
+                                <text class="lbl" x="698.0" y="252.0" text-anchor="end">drive frequency f / f₀ (log scale)</text>
+                                <text class="lbl" x="70.0" y="31.0">phase lag φ (°)</text>
+                                <g clip-path="url(#f9c2)">
+                                <path d="M64.0 213.4 L65.6 213.4 L67.2 213.4 L68.8 213.3 L70.4 213.3 L71.9 213.3 L73.5 213.3 L75.1 213.3 L76.7 213.3 L78.3 213.3 L79.9 213.3 L81.5 213.3 L83.1 213.3 L84.7 213.3 L86.2 213.3 L87.8 213.2 L89.4 213.2 L91.0 213.2 L92.6 213.2 L94.2 213.2 L95.8 213.2 L97.4 213.2 L99.0 213.2 L100.5 213.2 L102.1 213.2 L103.7 213.2 L105.3 213.1 L106.9 213.1 L108.5 213.1 L110.1 213.1 L111.7 213.1 L113.3 213.1 L114.8 213.1 L116.4 213.1 L118.0 213.1 L119.6 213.0 L121.2 213.0 L122.8 213.0 L124.4 213.0 L126.0 213.0 L127.6 213.0 L129.1 213.0 L130.7 213.0 L132.3 212.9 L133.9 212.9 L135.5 212.9 L137.1 212.9 L138.7 212.9 L140.3 212.9 L141.9 212.9 L143.4 212.9 L145.0 212.8 L146.6 212.8 L148.2 212.8 L149.8 212.8 L151.4 212.8 L153.0 212.8 L154.6 212.7 L156.2 212.7 L157.7 212.7 L159.3 212.7 L160.9 212.7 L162.5 212.7 L164.1 212.7 L165.7 212.6 L167.3 212.6 L168.9 212.6 L170.5 212.6 L172.1 212.6 L173.6 212.5 L175.2 212.5 L176.8 212.5 L178.4 212.5 L180.0 212.5 L181.6 212.4 L183.2 212.4 L184.8 212.4 L186.4 212.4 L187.9 212.4 L189.5 212.3 L191.1 212.3 L192.7 212.3 L194.3 212.3 L195.9 212.3 L197.5 212.2 L199.1 212.2 L200.7 212.2 L202.2 212.2 L203.8 212.1 L205.4 212.1 L207.0 212.1 L208.6 212.1 L210.2 212.0 L211.8 212.0 L213.4 212.0 L215.0 211.9 L216.5 211.9 L218.1 211.9 L219.7 211.9 L221.3 211.8 L222.9 211.8 L224.5 211.8 L226.1 211.7 L227.7 211.7 L229.3 211.7 L230.8 211.6 L232.4 211.6 L234.0 211.6 L235.6 211.5 L237.2 211.5 L238.8 211.5 L240.4 211.4 L242.0 211.4 L243.6 211.3 L245.1 211.3 L246.7 211.3 L248.3 211.2 L249.9 211.2 L251.5 211.1 L253.1 211.1 L254.7 211.0 L256.3 211.0 L257.9 210.9 L259.4 210.9 L261.0 210.8 L262.6 210.8 L264.2 210.7 L265.8 210.7 L267.4 210.6 L269.0 210.6 L270.6 210.5 L272.2 210.4 L273.7 210.4 L275.3 210.3 L276.9 210.2 L278.5 210.2 L280.1 210.1 L281.7 210.0 L283.3 210.0 L284.9 209.9 L286.5 209.8 L288.0 209.7 L289.6 209.6 L291.2 209.5 L292.8 209.5 L294.4 209.4 L296.0 209.3 L297.6 209.2 L299.2 209.1 L300.8 209.0 L302.3 208.8 L303.9 208.7 L305.5 208.6 L307.1 208.5 L308.7 208.3 L310.3 208.2 L311.9 208.1 L313.5 207.9 L315.1 207.8 L316.6 207.6 L318.2 207.4 L319.8 207.2 L321.4 207.0 L323.0 206.8 L324.6 206.6 L326.2 206.4 L327.8 206.2 L329.4 205.9 L330.9 205.7 L332.5 205.4 L334.1 205.1 L335.7 204.8 L337.3 204.4 L338.9 204.0 L340.5 203.6 L342.1 203.2 L343.7 202.8 L345.2 202.3 L346.8 201.7 L348.4 201.1 L350.0 200.5 L351.6 199.8 L353.2 199.0 L354.8 198.1 L356.4 197.1 L358.0 196.0 L359.5 194.7 L361.1 193.3 L362.7 191.6 L364.3 189.6 L365.9 187.4 L367.5 184.6 L369.1 181.4 L370.7 177.4 L372.3 172.4 L373.8 166.2 L375.4 158.4 L377.0 148.7 L378.6 136.8 L380.2 123.2 L381.8 108.8 L383.4 95.2 L385.0 83.3 L386.6 73.6 L388.2 65.8 L389.7 59.6 L391.3 54.6 L392.9 50.6 L394.5 47.4 L396.1 44.6 L397.7 42.4 L399.3 40.4 L400.9 38.7 L402.5 37.3 L404.0 36.0 L405.6 34.9 L407.2 33.9 L408.8 33.0 L410.4 32.2 L412.0 31.5 L413.6 30.9 L415.2 30.3 L416.8 29.7 L418.3 29.2 L419.9 28.8 L421.5 28.4 L423.1 28.0 L424.7 27.6 L426.3 27.2 L427.9 26.9 L429.5 26.6 L431.1 26.3 L432.6 26.1 L434.2 25.8 L435.8 25.6 L437.4 25.4 L439.0 25.2 L440.6 25.0 L442.2 24.8 L443.8 24.6 L445.4 24.4 L446.9 24.2 L448.5 24.1 L450.1 23.9 L451.7 23.8 L453.3 23.7 L454.9 23.5 L456.5 23.4 L458.1 23.3 L459.7 23.2 L461.2 23.0 L462.8 22.9 L464.4 22.8 L466.0 22.7 L467.6 22.6 L469.2 22.5 L470.8 22.5 L472.4 22.4 L474.0 22.3 L475.5 22.2 L477.1 22.1 L478.7 22.0 L480.3 22.0 L481.9 21.9 L483.5 21.8 L485.1 21.8 L486.7 21.7 L488.3 21.6 L489.8 21.6 L491.4 21.5 L493.0 21.4 L494.6 21.4 L496.2 21.3 L497.8 21.3 L499.4 21.2 L501.0 21.2 L502.6 21.1 L504.1 21.1 L505.7 21.0 L507.3 21.0 L508.9 20.9 L510.5 20.9 L512.1 20.8 L513.7 20.8 L515.3 20.7 L516.9 20.7 L518.4 20.7 L520.0 20.6 L521.6 20.6 L523.2 20.5 L524.8 20.5 L526.4 20.5 L528.0 20.4 L529.6 20.4 L531.2 20.4 L532.7 20.3 L534.3 20.3 L535.9 20.3 L537.5 20.2 L539.1 20.2 L540.7 20.2 L542.3 20.1 L543.9 20.1 L545.5 20.1 L547.0 20.1 L548.6 20.0 L550.2 20.0 L551.8 20.0 L553.4 19.9 L555.0 19.9 L556.6 19.9 L558.2 19.9 L559.8 19.8 L561.3 19.8 L562.9 19.8 L564.5 19.8 L566.1 19.7 L567.7 19.7 L569.3 19.7 L570.9 19.7 L572.5 19.7 L574.1 19.6 L575.6 19.6 L577.2 19.6 L578.8 19.6 L580.4 19.6 L582.0 19.5 L583.6 19.5 L585.2 19.5 L586.8 19.5 L588.4 19.5 L589.9 19.4 L591.5 19.4 L593.1 19.4 L594.7 19.4 L596.3 19.4 L597.9 19.3 L599.5 19.3 L601.1 19.3 L602.7 19.3 L604.3 19.3 L605.8 19.3 L607.4 19.3 L609.0 19.2 L610.6 19.2 L612.2 19.2 L613.8 19.2 L615.4 19.2 L617.0 19.2 L618.6 19.1 L620.1 19.1 L621.7 19.1 L623.3 19.1 L624.9 19.1 L626.5 19.1 L628.1 19.1 L629.7 19.1 L631.3 19.0 L632.9 19.0 L634.4 19.0 L636.0 19.0 L637.6 19.0 L639.2 19.0 L640.8 19.0 L642.4 19.0 L644.0 18.9 L645.6 18.9 L647.2 18.9 L648.7 18.9 L650.3 18.9 L651.9 18.9 L653.5 18.9 L655.1 18.9 L656.7 18.9 L658.3 18.8 L659.9 18.8 L661.5 18.8 L663.0 18.8 L664.6 18.8 L666.2 18.8 L667.8 18.8 L669.4 18.8 L671.0 18.8 L672.6 18.8 L674.2 18.8 L675.8 18.7 L677.3 18.7 L678.9 18.7 L680.5 18.7 L682.1 18.7 L683.7 18.7 L685.3 18.7 L686.9 18.7 L688.5 18.7 L690.1 18.7 L691.6 18.7 L693.2 18.7 L694.8 18.6 L696.4 18.6 L698.0 18.6" fill="none" stroke="#7a1f2b" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/>
+                                <path d="M64.0 212.7 L65.6 212.7 L67.2 212.7 L68.8 212.7 L70.4 212.7 L71.9 212.7 L73.5 212.6 L75.1 212.6 L76.7 212.6 L78.3 212.6 L79.9 212.6 L81.5 212.6 L83.1 212.5 L84.7 212.5 L86.2 212.5 L87.8 212.5 L89.4 212.5 L91.0 212.5 L92.6 212.4 L94.2 212.4 L95.8 212.4 L97.4 212.4 L99.0 212.4 L100.5 212.3 L102.1 212.3 L103.7 212.3 L105.3 212.3 L106.9 212.3 L108.5 212.2 L110.1 212.2 L111.7 212.2 L113.3 212.2 L114.8 212.2 L116.4 212.1 L118.0 212.1 L119.6 212.1 L121.2 212.1 L122.8 212.0 L124.4 212.0 L126.0 212.0 L127.6 212.0 L129.1 211.9 L130.7 211.9 L132.3 211.9 L133.9 211.9 L135.5 211.8 L137.1 211.8 L138.7 211.8 L140.3 211.8 L141.9 211.7 L143.4 211.7 L145.0 211.7 L146.6 211.6 L148.2 211.6 L149.8 211.6 L151.4 211.6 L153.0 211.5 L154.6 211.5 L156.2 211.5 L157.7 211.4 L159.3 211.4 L160.9 211.4 L162.5 211.3 L164.1 211.3 L165.7 211.3 L167.3 211.2 L168.9 211.2 L170.5 211.2 L172.1 211.1 L173.6 211.1 L175.2 211.1 L176.8 211.0 L178.4 211.0 L180.0 210.9 L181.6 210.9 L183.2 210.9 L184.8 210.8 L186.4 210.8 L187.9 210.7 L189.5 210.7 L191.1 210.6 L192.7 210.6 L194.3 210.6 L195.9 210.5 L197.5 210.5 L199.1 210.4 L200.7 210.4 L202.2 210.3 L203.8 210.3 L205.4 210.2 L207.0 210.2 L208.6 210.1 L210.2 210.1 L211.8 210.0 L213.4 210.0 L215.0 209.9 L216.5 209.8 L218.1 209.8 L219.7 209.7 L221.3 209.7 L222.9 209.6 L224.5 209.5 L226.1 209.5 L227.7 209.4 L229.3 209.4 L230.8 209.3 L232.4 209.2 L234.0 209.1 L235.6 209.1 L237.2 209.0 L238.8 208.9 L240.4 208.8 L242.0 208.8 L243.6 208.7 L245.1 208.6 L246.7 208.5 L248.3 208.4 L249.9 208.4 L251.5 208.3 L253.1 208.2 L254.7 208.1 L256.3 208.0 L257.9 207.9 L259.4 207.8 L261.0 207.7 L262.6 207.6 L264.2 207.5 L265.8 207.4 L267.4 207.3 L269.0 207.1 L270.6 207.0 L272.2 206.9 L273.7 206.8 L275.3 206.7 L276.9 206.5 L278.5 206.4 L280.1 206.2 L281.7 206.1 L283.3 206.0 L284.9 205.8 L286.5 205.6 L288.0 205.5 L289.6 205.3 L291.2 205.1 L292.8 205.0 L294.4 204.8 L296.0 204.6 L297.6 204.4 L299.2 204.2 L300.8 204.0 L302.3 203.7 L303.9 203.5 L305.5 203.3 L307.1 203.0 L308.7 202.8 L310.3 202.5 L311.9 202.2 L313.5 201.9 L315.1 201.6 L316.6 201.3 L318.2 201.0 L319.8 200.6 L321.4 200.3 L323.0 199.9 L324.6 199.5 L326.2 199.0 L327.8 198.6 L329.4 198.1 L330.9 197.6 L332.5 197.1 L334.1 196.5 L335.7 195.9 L337.3 195.3 L338.9 194.6 L340.5 193.8 L342.1 193.1 L343.7 192.2 L345.2 191.3 L346.8 190.3 L348.4 189.3 L350.0 188.1 L351.6 186.9 L353.2 185.5 L354.8 184.0 L356.4 182.3 L358.0 180.5 L359.5 178.5 L361.1 176.3 L362.7 173.8 L364.3 171.0 L365.9 167.9 L367.5 164.5 L369.1 160.6 L370.7 156.2 L372.3 151.3 L373.8 145.9 L375.4 140.0 L377.0 133.5 L378.6 126.7 L380.2 119.6 L381.8 112.4 L383.4 105.3 L385.0 98.5 L386.6 92.0 L388.2 86.1 L389.7 80.7 L391.3 75.8 L392.9 71.4 L394.5 67.5 L396.1 64.1 L397.7 61.0 L399.3 58.2 L400.9 55.7 L402.5 53.5 L404.0 51.5 L405.6 49.7 L407.2 48.0 L408.8 46.5 L410.4 45.1 L412.0 43.9 L413.6 42.7 L415.2 41.7 L416.8 40.7 L418.3 39.8 L419.9 38.9 L421.5 38.2 L423.1 37.4 L424.7 36.7 L426.3 36.1 L427.9 35.5 L429.5 34.9 L431.1 34.4 L432.6 33.9 L434.2 33.4 L435.8 33.0 L437.4 32.5 L439.0 32.1 L440.6 31.7 L442.2 31.4 L443.8 31.0 L445.4 30.7 L446.9 30.4 L448.5 30.1 L450.1 29.8 L451.7 29.5 L453.3 29.2 L454.9 29.0 L456.5 28.7 L458.1 28.5 L459.7 28.3 L461.2 28.0 L462.8 27.8 L464.4 27.6 L466.0 27.4 L467.6 27.2 L469.2 27.0 L470.8 26.9 L472.4 26.7 L474.0 26.5 L475.5 26.4 L477.1 26.2 L478.7 26.0 L480.3 25.9 L481.9 25.8 L483.5 25.6 L485.1 25.5 L486.7 25.3 L488.3 25.2 L489.8 25.1 L491.4 25.0 L493.0 24.9 L494.6 24.7 L496.2 24.6 L497.8 24.5 L499.4 24.4 L501.0 24.3 L502.6 24.2 L504.1 24.1 L505.7 24.0 L507.3 23.9 L508.9 23.8 L510.5 23.7 L512.1 23.6 L513.7 23.6 L515.3 23.5 L516.9 23.4 L518.4 23.3 L520.0 23.2 L521.6 23.2 L523.2 23.1 L524.8 23.0 L526.4 22.9 L528.0 22.9 L529.6 22.8 L531.2 22.7 L532.7 22.6 L534.3 22.6 L535.9 22.5 L537.5 22.5 L539.1 22.4 L540.7 22.3 L542.3 22.3 L543.9 22.2 L545.5 22.2 L547.0 22.1 L548.6 22.0 L550.2 22.0 L551.8 21.9 L553.4 21.9 L555.0 21.8 L556.6 21.8 L558.2 21.7 L559.8 21.7 L561.3 21.6 L562.9 21.6 L564.5 21.5 L566.1 21.5 L567.7 21.4 L569.3 21.4 L570.9 21.4 L572.5 21.3 L574.1 21.3 L575.6 21.2 L577.2 21.2 L578.8 21.1 L580.4 21.1 L582.0 21.1 L583.6 21.0 L585.2 21.0 L586.8 20.9 L588.4 20.9 L589.9 20.9 L591.5 20.8 L593.1 20.8 L594.7 20.8 L596.3 20.7 L597.9 20.7 L599.5 20.7 L601.1 20.6 L602.7 20.6 L604.3 20.6 L605.8 20.5 L607.4 20.5 L609.0 20.5 L610.6 20.4 L612.2 20.4 L613.8 20.4 L615.4 20.4 L617.0 20.3 L618.6 20.3 L620.1 20.3 L621.7 20.2 L623.3 20.2 L624.9 20.2 L626.5 20.2 L628.1 20.1 L629.7 20.1 L631.3 20.1 L632.9 20.1 L634.4 20.0 L636.0 20.0 L637.6 20.0 L639.2 20.0 L640.8 19.9 L642.4 19.9 L644.0 19.9 L645.6 19.9 L647.2 19.8 L648.7 19.8 L650.3 19.8 L651.9 19.8 L653.5 19.8 L655.1 19.7 L656.7 19.7 L658.3 19.7 L659.9 19.7 L661.5 19.7 L663.0 19.6 L664.6 19.6 L666.2 19.6 L667.8 19.6 L669.4 19.6 L671.0 19.5 L672.6 19.5 L674.2 19.5 L675.8 19.5 L677.3 19.5 L678.9 19.5 L680.5 19.4 L682.1 19.4 L683.7 19.4 L685.3 19.4 L686.9 19.4 L688.5 19.4 L690.1 19.3 L691.6 19.3 L693.2 19.3 L694.8 19.3 L696.4 19.3 L698.0 19.3" fill="none" stroke="#b0485a" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/>
+                                <path d="M64.0 211.5 L65.6 211.5 L67.2 211.4 L68.8 211.4 L70.4 211.4 L71.9 211.3 L73.5 211.3 L75.1 211.3 L76.7 211.2 L78.3 211.2 L79.9 211.2 L81.5 211.1 L83.1 211.1 L84.7 211.1 L86.2 211.0 L87.8 211.0 L89.4 211.0 L91.0 210.9 L92.6 210.9 L94.2 210.8 L95.8 210.8 L97.4 210.8 L99.0 210.7 L100.5 210.7 L102.1 210.7 L103.7 210.6 L105.3 210.6 L106.9 210.5 L108.5 210.5 L110.1 210.4 L111.7 210.4 L113.3 210.4 L114.8 210.3 L116.4 210.3 L118.0 210.2 L119.6 210.2 L121.2 210.1 L122.8 210.1 L124.4 210.0 L126.0 210.0 L127.6 209.9 L129.1 209.9 L130.7 209.8 L132.3 209.8 L133.9 209.7 L135.5 209.7 L137.1 209.6 L138.7 209.6 L140.3 209.5 L141.9 209.5 L143.4 209.4 L145.0 209.4 L146.6 209.3 L148.2 209.2 L149.8 209.2 L151.4 209.1 L153.0 209.1 L154.6 209.0 L156.2 208.9 L157.7 208.9 L159.3 208.8 L160.9 208.8 L162.5 208.7 L164.1 208.6 L165.7 208.6 L167.3 208.5 L168.9 208.4 L170.5 208.3 L172.1 208.3 L173.6 208.2 L175.2 208.1 L176.8 208.0 L178.4 208.0 L180.0 207.9 L181.6 207.8 L183.2 207.7 L184.8 207.7 L186.4 207.6 L187.9 207.5 L189.5 207.4 L191.1 207.3 L192.7 207.2 L194.3 207.1 L195.9 207.1 L197.5 207.0 L199.1 206.9 L200.7 206.8 L202.2 206.7 L203.8 206.6 L205.4 206.5 L207.0 206.4 L208.6 206.3 L210.2 206.2 L211.8 206.1 L213.4 206.0 L215.0 205.8 L216.5 205.7 L218.1 205.6 L219.7 205.5 L221.3 205.4 L222.9 205.3 L224.5 205.1 L226.1 205.0 L227.7 204.9 L229.3 204.8 L230.8 204.6 L232.4 204.5 L234.0 204.3 L235.6 204.2 L237.2 204.1 L238.8 203.9 L240.4 203.8 L242.0 203.6 L243.6 203.5 L245.1 203.3 L246.7 203.1 L248.3 203.0 L249.9 202.8 L251.5 202.6 L253.1 202.5 L254.7 202.3 L256.3 202.1 L257.9 201.9 L259.4 201.7 L261.0 201.5 L262.6 201.3 L264.2 201.1 L265.8 200.9 L267.4 200.7 L269.0 200.5 L270.6 200.2 L272.2 200.0 L273.7 199.7 L275.3 199.5 L276.9 199.2 L278.5 199.0 L280.1 198.7 L281.7 198.4 L283.3 198.2 L284.9 197.9 L286.5 197.6 L288.0 197.3 L289.6 196.9 L291.2 196.6 L292.8 196.3 L294.4 195.9 L296.0 195.6 L297.6 195.2 L299.2 194.8 L300.8 194.4 L302.3 194.0 L303.9 193.6 L305.5 193.2 L307.1 192.7 L308.7 192.2 L310.3 191.7 L311.9 191.2 L313.5 190.7 L315.1 190.2 L316.6 189.6 L318.2 189.0 L319.8 188.4 L321.4 187.7 L323.0 187.1 L324.6 186.3 L326.2 185.6 L327.8 184.8 L329.4 184.0 L330.9 183.2 L332.5 182.3 L334.1 181.4 L335.7 180.4 L337.3 179.4 L338.9 178.3 L340.5 177.2 L342.1 176.0 L343.7 174.7 L345.2 173.4 L346.8 172.0 L348.4 170.5 L350.0 168.9 L351.6 167.3 L353.2 165.5 L354.8 163.7 L356.4 161.7 L358.0 159.6 L359.5 157.4 L361.1 155.1 L362.7 152.6 L364.3 150.1 L365.9 147.3 L367.5 144.5 L369.1 141.5 L370.7 138.4 L372.3 135.2 L373.8 131.9 L375.4 128.4 L377.0 124.9 L378.6 121.4 L380.2 117.8 L381.8 114.2 L383.4 110.6 L385.0 107.1 L386.6 103.6 L388.2 100.1 L389.7 96.8 L391.3 93.6 L392.9 90.5 L394.5 87.5 L396.1 84.7 L397.7 81.9 L399.3 79.4 L400.9 76.9 L402.5 74.6 L404.0 72.4 L405.6 70.3 L407.2 68.3 L408.8 66.5 L410.4 64.7 L412.0 63.1 L413.6 61.5 L415.2 60.0 L416.8 58.6 L418.3 57.3 L419.9 56.0 L421.5 54.8 L423.1 53.7 L424.7 52.6 L426.3 51.6 L427.9 50.6 L429.5 49.7 L431.1 48.8 L432.6 48.0 L434.2 47.2 L435.8 46.4 L437.4 45.7 L439.0 44.9 L440.6 44.3 L442.2 43.6 L443.8 43.0 L445.4 42.4 L446.9 41.8 L448.5 41.3 L450.1 40.8 L451.7 40.3 L453.3 39.8 L454.9 39.3 L456.5 38.8 L458.1 38.4 L459.7 38.0 L461.2 37.6 L462.8 37.2 L464.4 36.8 L466.0 36.4 L467.6 36.1 L469.2 35.7 L470.8 35.4 L472.4 35.1 L474.0 34.7 L475.5 34.4 L477.1 34.1 L478.7 33.8 L480.3 33.6 L481.9 33.3 L483.5 33.0 L485.1 32.8 L486.7 32.5 L488.3 32.3 L489.8 32.0 L491.4 31.8 L493.0 31.5 L494.6 31.3 L496.2 31.1 L497.8 30.9 L499.4 30.7 L501.0 30.5 L502.6 30.3 L504.1 30.1 L505.7 29.9 L507.3 29.7 L508.9 29.5 L510.5 29.4 L512.1 29.2 L513.7 29.0 L515.3 28.9 L516.9 28.7 L518.4 28.5 L520.0 28.4 L521.6 28.2 L523.2 28.1 L524.8 27.9 L526.4 27.8 L528.0 27.7 L529.6 27.5 L531.2 27.4 L532.7 27.2 L534.3 27.1 L535.9 27.0 L537.5 26.9 L539.1 26.7 L540.7 26.6 L542.3 26.5 L543.9 26.4 L545.5 26.3 L547.0 26.2 L548.6 26.0 L550.2 25.9 L551.8 25.8 L553.4 25.7 L555.0 25.6 L556.6 25.5 L558.2 25.4 L559.8 25.3 L561.3 25.2 L562.9 25.1 L564.5 25.0 L566.1 24.9 L567.7 24.9 L569.3 24.8 L570.9 24.7 L572.5 24.6 L574.1 24.5 L575.6 24.4 L577.2 24.3 L578.8 24.3 L580.4 24.2 L582.0 24.1 L583.6 24.0 L585.2 24.0 L586.8 23.9 L588.4 23.8 L589.9 23.7 L591.5 23.7 L593.1 23.6 L594.7 23.5 L596.3 23.4 L597.9 23.4 L599.5 23.3 L601.1 23.2 L602.7 23.2 L604.3 23.1 L605.8 23.1 L607.4 23.0 L609.0 22.9 L610.6 22.9 L612.2 22.8 L613.8 22.8 L615.4 22.7 L617.0 22.6 L618.6 22.6 L620.1 22.5 L621.7 22.5 L623.3 22.4 L624.9 22.4 L626.5 22.3 L628.1 22.3 L629.7 22.2 L631.3 22.2 L632.9 22.1 L634.4 22.1 L636.0 22.0 L637.6 22.0 L639.2 21.9 L640.8 21.9 L642.4 21.8 L644.0 21.8 L645.6 21.7 L647.2 21.7 L648.7 21.6 L650.3 21.6 L651.9 21.6 L653.5 21.5 L655.1 21.5 L656.7 21.4 L658.3 21.4 L659.9 21.3 L661.5 21.3 L663.0 21.3 L664.6 21.2 L666.2 21.2 L667.8 21.2 L669.4 21.1 L671.0 21.1 L672.6 21.0 L674.2 21.0 L675.8 21.0 L677.3 20.9 L678.9 20.9 L680.5 20.9 L682.1 20.8 L683.7 20.8 L685.3 20.8 L686.9 20.7 L688.5 20.7 L690.1 20.7 L691.6 20.6 L693.2 20.6 L694.8 20.6 L696.4 20.5 L698.0 20.5" fill="none" stroke="#c9707e" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/>
+                                <path d="M64.0 207.7 L65.6 207.6 L67.2 207.6 L68.8 207.5 L70.4 207.4 L71.9 207.3 L73.5 207.3 L75.1 207.2 L76.7 207.1 L78.3 207.0 L79.9 206.9 L81.5 206.9 L83.1 206.8 L84.7 206.7 L86.2 206.6 L87.8 206.5 L89.4 206.4 L91.0 206.3 L92.6 206.2 L94.2 206.2 L95.8 206.1 L97.4 206.0 L99.0 205.9 L100.5 205.8 L102.1 205.7 L103.7 205.6 L105.3 205.5 L106.9 205.4 L108.5 205.3 L110.1 205.2 L111.7 205.1 L113.3 205.0 L114.8 204.8 L116.4 204.7 L118.0 204.6 L119.6 204.5 L121.2 204.4 L122.8 204.3 L124.4 204.2 L126.0 204.1 L127.6 203.9 L129.1 203.8 L130.7 203.7 L132.3 203.6 L133.9 203.4 L135.5 203.3 L137.1 203.2 L138.7 203.1 L140.3 202.9 L141.9 202.8 L143.4 202.7 L145.0 202.5 L146.6 202.4 L148.2 202.2 L149.8 202.1 L151.4 201.9 L153.0 201.8 L154.6 201.7 L156.2 201.5 L157.7 201.3 L159.3 201.2 L160.9 201.0 L162.5 200.9 L164.1 200.7 L165.7 200.6 L167.3 200.4 L168.9 200.2 L170.5 200.1 L172.1 199.9 L173.6 199.7 L175.2 199.5 L176.8 199.3 L178.4 199.2 L180.0 199.0 L181.6 198.8 L183.2 198.6 L184.8 198.4 L186.4 198.2 L187.9 198.0 L189.5 197.8 L191.1 197.6 L192.7 197.4 L194.3 197.2 L195.9 197.0 L197.5 196.8 L199.1 196.6 L200.7 196.3 L202.2 196.1 L203.8 195.9 L205.4 195.6 L207.0 195.4 L208.6 195.2 L210.2 194.9 L211.8 194.7 L213.4 194.4 L215.0 194.2 L216.5 193.9 L218.1 193.7 L219.7 193.4 L221.3 193.1 L222.9 192.9 L224.5 192.6 L226.1 192.3 L227.7 192.0 L229.3 191.7 L230.8 191.4 L232.4 191.1 L234.0 190.8 L235.6 190.5 L237.2 190.2 L238.8 189.9 L240.4 189.5 L242.0 189.2 L243.6 188.9 L245.1 188.5 L246.7 188.2 L248.3 187.8 L249.9 187.4 L251.5 187.1 L253.1 186.7 L254.7 186.3 L256.3 185.9 L257.9 185.5 L259.4 185.1 L261.0 184.7 L262.6 184.3 L264.2 183.9 L265.8 183.4 L267.4 183.0 L269.0 182.6 L270.6 182.1 L272.2 181.6 L273.7 181.2 L275.3 180.7 L276.9 180.2 L278.5 179.7 L280.1 179.2 L281.7 178.6 L283.3 178.1 L284.9 177.6 L286.5 177.0 L288.0 176.4 L289.6 175.9 L291.2 175.3 L292.8 174.7 L294.4 174.1 L296.0 173.4 L297.6 172.8 L299.2 172.1 L300.8 171.5 L302.3 170.8 L303.9 170.1 L305.5 169.4 L307.1 168.7 L308.7 167.9 L310.3 167.2 L311.9 166.4 L313.5 165.6 L315.1 164.8 L316.6 164.0 L318.2 163.2 L319.8 162.3 L321.4 161.5 L323.0 160.6 L324.6 159.7 L326.2 158.8 L327.8 157.8 L329.4 156.9 L330.9 155.9 L332.5 154.9 L334.1 153.9 L335.7 152.8 L337.3 151.8 L338.9 150.7 L340.5 149.6 L342.1 148.5 L343.7 147.3 L345.2 146.2 L346.8 145.0 L348.4 143.8 L350.0 142.6 L351.6 141.4 L353.2 140.1 L354.8 138.8 L356.4 137.5 L358.0 136.2 L359.5 134.9 L361.1 133.6 L362.7 132.2 L364.3 130.9 L365.9 129.5 L367.5 128.1 L369.1 126.7 L370.7 125.3 L372.3 123.9 L373.8 122.5 L375.4 121.0 L377.0 119.6 L378.6 118.2 L380.2 116.7 L381.8 115.3 L383.4 113.8 L385.0 112.4 L386.6 111.0 L388.2 109.5 L389.7 108.1 L391.3 106.7 L392.9 105.3 L394.5 103.9 L396.1 102.5 L397.7 101.1 L399.3 99.8 L400.9 98.4 L402.5 97.1 L404.0 95.8 L405.6 94.5 L407.2 93.2 L408.8 91.9 L410.4 90.6 L412.0 89.4 L413.6 88.2 L415.2 87.0 L416.8 85.8 L418.3 84.7 L419.9 83.5 L421.5 82.4 L423.1 81.3 L424.7 80.2 L426.3 79.2 L427.9 78.1 L429.5 77.1 L431.1 76.1 L432.6 75.1 L434.2 74.2 L435.8 73.2 L437.4 72.3 L439.0 71.4 L440.6 70.5 L442.2 69.7 L443.8 68.8 L445.4 68.0 L446.9 67.2 L448.5 66.4 L450.1 65.6 L451.7 64.8 L453.3 64.1 L454.9 63.3 L456.5 62.6 L458.1 61.9 L459.7 61.2 L461.2 60.5 L462.8 59.9 L464.4 59.2 L466.0 58.6 L467.6 57.9 L469.2 57.3 L470.8 56.7 L472.4 56.1 L474.0 55.6 L475.5 55.0 L477.1 54.4 L478.7 53.9 L480.3 53.4 L481.9 52.8 L483.5 52.3 L485.1 51.8 L486.7 51.3 L488.3 50.8 L489.8 50.4 L491.4 49.9 L493.0 49.4 L494.6 49.0 L496.2 48.6 L497.8 48.1 L499.4 47.7 L501.0 47.3 L502.6 46.9 L504.1 46.5 L505.7 46.1 L507.3 45.7 L508.9 45.3 L510.5 44.9 L512.1 44.6 L513.7 44.2 L515.3 43.8 L516.9 43.5 L518.4 43.1 L520.0 42.8 L521.6 42.5 L523.2 42.1 L524.8 41.8 L526.4 41.5 L528.0 41.2 L529.6 40.9 L531.2 40.6 L532.7 40.3 L534.3 40.0 L535.9 39.7 L537.5 39.4 L539.1 39.1 L540.7 38.9 L542.3 38.6 L543.9 38.3 L545.5 38.1 L547.0 37.8 L548.6 37.6 L550.2 37.3 L551.8 37.1 L553.4 36.8 L555.0 36.6 L556.6 36.4 L558.2 36.1 L559.8 35.9 L561.3 35.7 L562.9 35.4 L564.5 35.2 L566.1 35.0 L567.7 34.8 L569.3 34.6 L570.9 34.4 L572.5 34.2 L574.1 34.0 L575.6 33.8 L577.2 33.6 L578.8 33.4 L580.4 33.2 L582.0 33.0 L583.6 32.8 L585.2 32.7 L586.8 32.5 L588.4 32.3 L589.9 32.1 L591.5 31.9 L593.1 31.8 L594.7 31.6 L596.3 31.4 L597.9 31.3 L599.5 31.1 L601.1 31.0 L602.7 30.8 L604.3 30.7 L605.8 30.5 L607.4 30.3 L609.0 30.2 L610.6 30.1 L612.2 29.9 L613.8 29.8 L615.4 29.6 L617.0 29.5 L618.6 29.3 L620.1 29.2 L621.7 29.1 L623.3 28.9 L624.9 28.8 L626.5 28.7 L628.1 28.6 L629.7 28.4 L631.3 28.3 L632.9 28.2 L634.4 28.1 L636.0 27.9 L637.6 27.8 L639.2 27.7 L640.8 27.6 L642.4 27.5 L644.0 27.4 L645.6 27.3 L647.2 27.2 L648.7 27.0 L650.3 26.9 L651.9 26.8 L653.5 26.7 L655.1 26.6 L656.7 26.5 L658.3 26.4 L659.9 26.3 L661.5 26.2 L663.0 26.1 L664.6 26.0 L666.2 25.9 L667.8 25.8 L669.4 25.8 L671.0 25.7 L672.6 25.6 L674.2 25.5 L675.8 25.4 L677.3 25.3 L678.9 25.2 L680.5 25.1 L682.1 25.1 L683.7 25.0 L685.3 24.9 L686.9 24.8 L688.5 24.7 L690.1 24.7 L691.6 24.6 L693.2 24.5 L694.8 24.4 L696.4 24.4 L698.0 24.3" fill="none" stroke="#8b8079" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/>
+                                </g>
+                                <line x1="64" x2="698" y1="258.0" y2="258.0" stroke="#eee6d9"/>
+                                <line x1="64.0" x2="86.0" y1="274.0" y2="274.0" stroke="#7a1f2b" stroke-width="2.2" stroke-linecap="round"/>
+                                <text class="lbl" x="94.0" y="278.0">ζ = 0.05</text>
+                                <line x1="161.6" x2="183.6" y1="274.0" y2="274.0" stroke="#b0485a" stroke-width="2.2" stroke-linecap="round"/>
+                                <text class="lbl" x="191.6" y="278.0">ζ = 0.1</text>
+                                <line x1="252.0" x2="274.0" y1="274.0" y2="274.0" stroke="#c9707e" stroke-width="2.2" stroke-linecap="round"/>
+                                <text class="lbl" x="282.0" y="278.0">ζ = 0.2</text>
+                                <line x1="342.4" x2="364.4" y1="274.0" y2="274.0" stroke="#8b8079" stroke-width="2.2" stroke-linecap="round"/>
+                                <text class="lbl" x="372.4" y="278.0">ζ = 0.5</text>
+                                </svg>
+                            </div>
+                            <figcaption><span class="pfig__n">الشكل 2</span>السعة المستقرّة، بوحدات الاستطالة الساكنة \(F_0/k\)، وتأخّر الطور بدلالة تردد القوّة الدافعة، من المعادلة (4) لأربع نسب تخامد. كلّما قلّ التخامد زاد ارتفاع القمّة وضاق عرضها، وكان قفز الطور من \(0^\circ\) إلى \(180^\circ\) أشدّ فجأة.</figcaption>
+                        </figure>
+                        <p>يقيس ارتفاع القمّة مدى ضعف تخامد المنظومة. عند \(\Omega = \omega_0\) تمامًا تعطي (4)</p>
+                        \[ X(\omega_0) = \frac{F_0}{2\zeta k} = Q\,\frac{F_0}{k}, \qquad Q = \frac{1}{2\zeta}, \tag{6} \]
+                        <p>إذن <em>معامل الجودة</em> \(Q\) هو مقدار التضخيم عند الرنين. والقيمة الافتراضية \(\zeta = 0.05\) تعطي \(Q = 10\): قوّة تمدّ النابض بمقدار \(0.101\ \mathrm{m}\) لو طُبّقت ببطء، تحرّك الكتلة \(1.01\ \mathrm{m}\) عند الرنين. ويقع الحدّ الأعلى الحقيقي قليلًا تحت \(\omega_0\). ولإيجاده ننظر إلى مربّع مقام (4) بوصفه دالّة في \(\Omega^2\)، ونكمل المربّع:</p>
+                        \[ \left(\omega_0^2-\Omega^2\right)^2 + \left(2\zeta\omega_0\Omega\right)^2 = \left[\Omega^2 - \omega_0^2\left(1-2\zeta^2\right)\right]^2 + 4\zeta^2\left(1-\zeta^2\right)\omega_0^4 . \tag{6a} \]
+                        <p>تكون السعة أكبر ما تكون حيث يكون هذا المقدار أصغر، أي حيث ينعدم القوس: \(\Omega_r = \omega_0\sqrt{1-2\zeta^2}\)، أي \(f_r = 0.4987\ \mathrm{Hz}\) بالقيم الافتراضية. أمّا عند \(\zeta \ge 1/\sqrt2\) فلا يمكن للقوس أن ينعدم لأيّ قيادة؛ فيكون المقام أصغر ما يكون عند \(\Omega = 0\)، وتهبط السعة كلّما أسرعت القيادة، ولا توجد قمّة البتّة.</p>
+                        <p>يروي الطور قصّة الأرجوحة بالأرقام. دون الرنين تتحرّك الكتلة مع القوّة (\(\varphi \approx 0\)). وعند الرنين تتأخّر بالضبط بربع دورة، \(\varphi = 90^\circ\): تكون القوّة أكبر ما تكون حين تكون الكتلة أسرع ما تكون، أي تمامًا حين تبذل الدفعة أكبر شغل. وفوق الرنين بكثير تتحرّك الكتلة عكس القوّة (\(\varphi \to 180^\circ\)).</p>
+                        <div class="pbox pbox--ex">
+                            <span class="pbox__t">تمرين 4.1 · على الشكل أعلاه</span>
+                            <p>اضبط تردد القوّة الدافعة على التردد الطبيعي، \(f = f_0 = 0.50\ \mathrm{Hz}\)، واضغط <em>احسب</em>. انتظر حتى يضمحلّ الاهتزاز الانتقالي، ثم قارن <em>مقيسة، آخر ⁦10 s⁩</em> مع \(Q F_0/k\) من (6)، واقرأ <em>تأخّر الطور φ</em>. ثم ارفع نسبة التخامد إلى 0.2 وكرّر، واحسب العامل الذي انخفضت به السعة.</p>
+                        </div>
+                    </section>
+
+                    <section class="psec" id="p-control">
+                        <h3><span class="psec__n">05</span>نظرة مهندس التحكّم<span class="star" title="heavier mathematics">★</span>3>
+                        <p>يختصر المهندسون كل ما سبق في دالّة واحدة. نأخذ تحويل لابلاس للمعادلة (1) والكتلة ساكنة عند البداية: يصبح كل مشتقّ زمني عاملًا \(s\)، ويكون الخرج هو الدخل مضروبًا في <em>دالّة التحويل</em> \(G(s)\). وهنا \(X(s)\) و\(F(s)\) هما تحويلا \(x(t)\) و\(F(t)\)، لا السعة \(X\) في (4):</p>
+                        \[ X(s) = G(s)\,F(s), \qquad G(s) = \frac{1}{ms^2 + cs + k} . \tag{7} \]
+                        <p>أصفار المقام، أي <em>الأقطاب</em> \(s = -\zeta\omega_0 \pm i\omega_d\)، هي إيقاع المنظومة الخاصّ متنكّرًا: جزؤها الحقيقي هو معدّل الاضمحلال بإشارة سالبة، \(-1/\tau\)، وجزؤها التخيّلي هو تردد الاهتزاز \(\omega_d\). ويقع الاثنان في النصف الأيسر من المستوى المركّب، وهذا ما يجعل المنظومة <em>مستقرّة</em>: إن تُركت وحدها عادت إلى السكون.</p>
+                        <p>بوضع \(s = i\Omega\) نحصل على الاستجابة لدخل جيبي مستقرّ، وبالمقارنة مع (3) يكون \(G(i\Omega) = X e^{-i\varphi}/F_0\). ورسم \(|G(i\Omega)|\) و\(\varphi\) بدلالة تردد القوّة الدافعة على محورين لوغاريتميّين يعطي <em>مخطّط بود</em>، وهو الشكل الثاني في هذه الصفحة. إنه بطاقة هوية المنظومة: منه يقرأ المهندس مقدار ما ينفذ من كل تردد، ومدى تأخّره في الوصول. وتصميم متحكّم، أي جهاز يقيس \(x\) ويضيف قوّة تصحيح، يعني إعادة تشكيل هذه البطاقة. ويفعل الشكل 10 ذلك لتوربين رياح.</p>
+                        <figure class="pfig">
+                            <div class="pfig__plate">
+                                <svg viewBox="0 0 720 120" role="img" aria-label="Block diagram: the input F(t) enters the plant G(s), which outputs x(t).">
+                                    <rect x="0" y="0" width="720" height="120" fill="#fff"/>
+                                    <line x1="90" y1="60" x2="262" y2="60" stroke="#7a1f2b" stroke-width="2.4"/>
+                                    <path d="M258 53 L272 60 L258 67 Z" fill="#7a1f2b"/>
+                                    <rect x="274" y="22" width="240" height="76" rx="6" fill="#fbf6ee" stroke="#1c1518" stroke-width="2"/>
+                                    <text class="mu" x="296" y="56">plant</text>
+                                    <text class="m" x="296" y="82">G(s) = 1 / (ms² + cs + k)</text>
+                                    <line x1="514" y1="60" x2="618" y2="60" stroke="#1c1518" stroke-width="2.4"/>
+                                    <path d="M614 53 L628 60 L614 67 Z" fill="#1c1518"/>
+                                    <text class="lbl" x="92" y="44">input, set by the driver</text>
+                                    <text class="m" x="120" y="88" style="fill:#7a1f2b">F(t)</text>
+                                    <text class="lbl" x="526" y="44">output, the motion</text>
+                                    <text class="m" x="550" y="88">x(t)</text>
+                                </svg>
+                            </div>
+                            <figcaption><span class="pfig__n">الشكل 3</span>المنظومة نفسها في صورة مخطّط كتلي. لا يوجد سهم عائد من \(x\) إلى \(F\): فالمحرّك يؤثّر دون أن ينظر. وإضافة هذا السهم هي ما يحوّل المنظومة المقسورة إلى منظومة مُتحكَّم بها.</figcaption>
+                        </figure>
+                    </section>
+
+                    <section class="psec" id="p-start">
+                        <h3><span class="psec__n">06</span>البداية: الضربات والتخامد</h3>
+                        <p>الشكل 4 هو التشغيل الذي تخزّنه الصفحة بإعداداتها الافتراضية. قيادة \(0.45\ \mathrm{Hz}\) قريبة من التردد الطبيعي \(0.50\ \mathrm{Hz}\)، فيوجد في الثواني الأولى إيقاعان متقاربان معًا: إيقاع المحرّك، وذلك الاهتزاز الخاصّ بالكتلة من المعادلة (5). ومثل وترين لغيتار مختلفين قليلًا في الطبقة، يتباعدان ويتقاربان في الإيقاع مرّة كل \(1/|f-f_d| = 20.25\ \mathrm{s}\)، حيث \(f_d = \omega_d/2\pi = 0.499\ \mathrm{Hz}\) هو تردد الاهتزاز المتخامد (وباستخدام \(f_0\) مكانه يكون التقدير ⁦20 s⁩، وهو دقيق بما يكفي عند هذا التخامد الضعيف). تنتفخ السعة وتنكمش مع هذا الإيقاع؛ ويبلغ الانتفاخ الأول \(0.596\ \mathrm{m}\) عند \(t = 8.0\ \mathrm{s}\). ولأن الاهتزاز يضمحلّ بـ\(\tau = 6.4\ \mathrm{s}\)، يكون الضرب الثاني ضعيفًا، وبعد نصف دقيقة لا يبقى سوى الاهتزاز المستقرّ عند \(\pm X = \pm 0.482\ \mathrm{m}\).</p>
+                        <figure class="pfig">
+                            <div class="pfig__plate">
+                                <svg viewBox="0 0 720 326" role="img" xmlns="http://www.w3.org/2000/svg">
+                                <defs><clipPath id="f9c3"><rect x="64.0" y="18.0" width="634.0" height="236.0"/></clipPath></defs>
+                                <line x1="64.0" x2="698.0" y1="230.4" y2="230.4" stroke="#eee6d9" stroke-width="1"/>
+                                <text class="tick" x="56.0" y="234.4" text-anchor="end">−0.60</text>
+                                <line x1="64.0" x2="698.0" y1="183.2" y2="183.2" stroke="#eee6d9" stroke-width="1"/>
+                                <text class="tick" x="56.0" y="187.2" text-anchor="end">−0.30</text>
+                                <line x1="64.0" x2="698.0" y1="136.0" y2="136.0" stroke="#eee6d9" stroke-width="1"/>
+                                <text class="tick" x="56.0" y="140.0" text-anchor="end">0</text>
+                                <line x1="64.0" x2="698.0" y1="88.8" y2="88.8" stroke="#eee6d9" stroke-width="1"/>
+                                <text class="tick" x="56.0" y="92.8" text-anchor="end">0.30</text>
+                                <line x1="64.0" x2="698.0" y1="41.6" y2="41.6" stroke="#eee6d9" stroke-width="1"/>
+                                <text class="tick" x="56.0" y="45.6" text-anchor="end">0.60</text>
+                                <line x1="64.0" x2="64.0" y1="254.0" y2="259.0" stroke="#8b8079"/>
+                                <text class="tick" x="64.0" y="273.0" text-anchor="middle">0</text>
+                                <line x1="169.7" x2="169.7" y1="254.0" y2="259.0" stroke="#8b8079"/>
+                                <text class="tick" x="169.7" y="273.0" text-anchor="middle">10</text>
+                                <line x1="275.3" x2="275.3" y1="254.0" y2="259.0" stroke="#8b8079"/>
+                                <text class="tick" x="275.3" y="273.0" text-anchor="middle">20</text>
+                                <line x1="381.0" x2="381.0" y1="254.0" y2="259.0" stroke="#8b8079"/>
+                                <text class="tick" x="381.0" y="273.0" text-anchor="middle">30</text>
+                                <line x1="486.7" x2="486.7" y1="254.0" y2="259.0" stroke="#8b8079"/>
+                                <text class="tick" x="486.7" y="273.0" text-anchor="middle">40</text>
+                                <line x1="592.3" x2="592.3" y1="254.0" y2="259.0" stroke="#8b8079"/>
+                                <text class="tick" x="592.3" y="273.0" text-anchor="middle">50</text>
+                                <line x1="698.0" x2="698.0" y1="254.0" y2="259.0" stroke="#8b8079"/>
+                                <text class="tick" x="698.0" y="273.0" text-anchor="middle">60</text>
+                                <line x1="64.0" x2="698.0" y1="254.0" y2="254.0" stroke="#8b8079"/>
+                                <line x1="64.0" x2="64.0" y1="18.0" y2="254.0" stroke="#8b8079"/>
+                                <text class="lbl" x="698.0" y="292.0" text-anchor="end">time t (s)</text>
+                                <text class="lbl" x="70.0" y="31.0">displacement x (m)</text>
+                                <g clip-path="url(#f9c3)">
+                                <path d="M64.0 136.0 L64.5 135.8 L65.1 135.2 L65.6 134.3 L66.1 133.1 L66.6 131.6 L67.2 130.0 L67.7 128.3 L68.2 126.6 L68.8 125.0 L69.3 123.6 L69.8 122.4 L70.3 121.6 L70.9 121.2 L71.4 121.2 L71.9 121.8 L72.5 122.9 L73.0 124.6 L73.5 126.8 L74.0 129.5 L74.6 132.7 L75.1 136.3 L75.6 140.2 L76.2 144.3 L76.7 148.6 L77.2 152.8 L77.7 157.0 L78.3 160.9 L78.8 164.4 L79.3 167.4 L79.8 169.9 L80.4 171.7 L80.9 172.7 L81.4 172.8 L82.0 172.1 L82.5 170.4 L83.0 167.9 L83.5 164.5 L84.1 160.2 L84.6 155.2 L85.1 149.5 L85.7 143.3 L86.2 136.6 L86.7 129.6 L87.2 122.6 L87.8 115.6 L88.3 108.8 L88.8 102.4 L89.4 96.5 L89.9 91.4 L90.4 87.1 L90.9 83.8 L91.5 81.6 L92.0 80.6 L92.5 80.8 L93.1 82.3 L93.6 85.0 L94.1 89.0 L94.6 94.1 L95.2 100.3 L95.7 107.5 L96.2 115.5 L96.8 124.1 L97.3 133.2 L97.8 142.5 L98.3 151.9 L98.9 161.2 L99.4 170.0 L99.9 178.3 L100.5 185.8 L101.0 192.4 L101.5 197.8 L102.0 201.9 L102.6 204.7 L103.1 206.0 L103.6 205.7 L104.2 203.9 L104.7 200.5 L105.2 195.7 L105.7 189.5 L106.3 182.0 L106.8 173.3 L107.3 163.8 L107.9 153.4 L108.4 142.6 L108.9 131.5 L109.4 120.3 L110.0 109.3 L110.5 98.7 L111.0 88.9 L111.5 80.0 L112.1 72.1 L112.6 65.6 L113.1 60.6 L113.7 57.2 L114.2 55.4 L114.7 55.4 L115.2 57.2 L115.8 60.7 L116.3 65.8 L116.8 72.6 L117.4 80.8 L117.9 90.3 L118.4 100.8 L118.9 112.2 L119.5 124.2 L120.0 136.6 L120.5 149.0 L121.1 161.3 L121.6 173.1 L122.1 184.2 L122.6 194.3 L123.2 203.3 L123.7 210.8 L124.2 216.7 L124.8 221.0 L125.3 223.4 L125.8 224.0 L126.3 222.7 L126.9 219.5 L127.4 214.4 L127.9 207.7 L128.5 199.4 L129.0 189.6 L129.5 178.7 L130.0 166.8 L130.6 154.2 L131.1 141.1 L131.6 127.9 L132.2 114.8 L132.7 102.1 L133.2 90.1 L133.7 79.0 L134.3 69.1 L134.8 60.6 L135.3 53.7 L135.9 48.5 L136.4 45.2 L136.9 43.8 L137.4 44.4 L138.0 46.9 L138.5 51.4 L139.0 57.7 L139.6 65.6 L140.1 75.1 L140.6 85.9 L141.1 97.8 L141.7 110.5 L142.2 123.7 L142.7 137.3 L143.2 150.8 L143.8 164.1 L144.3 176.7 L144.8 188.5 L145.4 199.2 L145.9 208.6 L146.4 216.5 L146.9 222.6 L147.5 226.9 L148.0 229.3 L148.5 229.7 L149.1 228.2 L149.6 224.6 L150.1 219.3 L150.6 212.1 L151.2 203.4 L151.7 193.2 L152.2 181.8 L152.8 169.5 L153.3 156.5 L153.8 143.0 L154.3 129.4 L154.9 116.0 L155.4 103.0 L155.9 90.7 L156.5 79.3 L157.0 69.2 L157.5 60.5 L158.0 53.3 L158.6 48.0 L159.1 44.4 L159.6 42.8 L160.2 43.2 L160.7 45.4 L161.2 49.6 L161.7 55.6 L162.3 63.2 L162.8 72.4 L163.3 82.8 L163.9 94.4 L164.4 106.7 L164.9 119.7 L165.4 133.0 L166.0 146.3 L166.5 159.4 L167.0 171.9 L167.6 183.7 L168.1 194.4 L168.6 203.9 L169.1 212.0 L169.7 218.5 L170.2 223.2 L170.7 226.2 L171.3 227.2 L171.8 226.4 L172.3 223.7 L172.8 219.2 L173.4 213.0 L173.9 205.2 L174.4 196.0 L174.9 185.6 L175.5 174.2 L176.0 162.1 L176.5 149.4 L177.1 136.6 L177.6 123.8 L178.1 111.2 L178.6 99.2 L179.2 88.0 L179.7 77.9 L180.2 68.9 L180.8 61.4 L181.3 55.5 L181.8 51.2 L182.3 48.6 L182.9 47.9 L183.4 48.9 L183.9 51.8 L184.5 56.3 L185.0 62.5 L185.5 70.1 L186.0 79.0 L186.6 89.1 L187.1 100.1 L187.6 111.8 L188.2 123.9 L188.7 136.2 L189.2 148.5 L189.7 160.5 L190.3 171.9 L190.8 182.5 L191.3 192.2 L191.9 200.6 L192.4 207.8 L192.9 213.4 L193.4 217.5 L194.0 219.9 L194.5 220.5 L195.0 219.5 L195.6 216.8 L196.1 212.5 L196.6 206.6 L197.1 199.3 L197.7 190.8 L198.2 181.3 L198.7 170.8 L199.3 159.7 L199.8 148.2 L200.3 136.4 L200.8 124.7 L201.4 113.3 L201.9 102.4 L202.4 92.2 L203.0 82.9 L203.5 74.8 L204.0 67.9 L204.5 62.4 L205.1 58.3 L205.6 55.9 L206.1 55.1 L206.7 55.9 L207.2 58.2 L207.7 62.2 L208.2 67.6 L208.8 74.3 L209.3 82.3 L209.8 91.2 L210.3 101.1 L210.9 111.6 L211.4 122.5 L211.9 133.7 L212.5 144.9 L213.0 155.8 L213.5 166.3 L214.0 176.2 L214.6 185.2 L215.1 193.3 L215.6 200.1 L216.2 205.7 L216.7 209.8 L217.2 212.5 L217.7 213.7 L218.3 213.3 L218.8 211.3 L219.3 207.9 L219.9 203.1 L220.4 197.0 L220.9 189.6 L221.4 181.3 L222.0 172.1 L222.5 162.2 L223.0 151.8 L223.6 141.1 L224.1 130.4 L224.6 119.8 L225.1 109.5 L225.7 99.8 L226.2 90.9 L226.7 82.9 L227.3 75.9 L227.8 70.2 L228.3 65.7 L228.8 62.7 L229.4 61.1 L229.9 61.0 L230.4 62.4 L231.0 65.2 L231.5 69.4 L232.0 74.9 L232.5 81.6 L233.1 89.3 L233.6 98.0 L234.1 107.3 L234.7 117.3 L235.2 127.5 L235.7 137.9 L236.2 148.3 L236.8 158.3 L237.3 168.0 L237.8 176.9 L238.4 185.1 L238.9 192.3 L239.4 198.3 L239.9 203.1 L240.5 206.6 L241.0 208.7 L241.5 209.4 L242.0 208.6 L242.6 206.4 L243.1 202.8 L243.6 198.0 L244.2 191.9 L244.7 184.7 L245.2 176.6 L245.7 167.6 L246.3 158.1 L246.8 148.2 L247.3 138.0 L247.9 127.8 L248.4 117.8 L248.9 108.1 L249.4 99.0 L250.0 90.6 L250.5 83.2 L251.0 76.7 L251.6 71.5 L252.1 67.5 L252.6 64.9 L253.1 63.6 L253.7 63.8 L254.2 65.4 L254.7 68.4 L255.3 72.7 L255.8 78.2 L256.3 84.9 L256.8 92.6 L257.4 101.1 L257.9 110.4 L258.4 120.1 L259.0 130.1 L259.5 140.2 L260.0 150.3 L260.5 160.1 L261.1 169.4 L261.6 178.0 L262.1 185.8 L262.7 192.7 L263.2 198.4 L263.7 202.9 L264.2 206.1 L264.8 207.9 L265.3 208.3 L265.8 207.2 L266.4 204.8 L266.9 201.0 L267.4 195.9 L267.9 189.7 L268.5 182.3 L269.0 174.1 L269.5 165.1 L270.1 155.6 L270.6 145.6 L271.1 135.5 L271.6 125.3 L272.2 115.4 L272.7 105.9 L273.2 96.9 L273.7 88.7 L274.3 81.5 L274.8 75.3 L275.3 70.3 L275.9 66.6 L276.4 64.3 L276.9 63.4 L277.4 63.9 L278.0 65.9 L278.5 69.2 L279.0 73.9 L279.6 79.7 L280.1 86.8 L280.6 94.7 L281.1 103.6 L281.7 113.0 L282.2 122.9 L282.7 133.1 L283.3 143.4 L283.8 153.5 L284.3 163.3 L284.8 172.5 L285.4 181.1 L285.9 188.7 L286.4 195.3 L287.0 200.8 L287.5 204.9 L288.0 207.7 L288.5 209.1 L289.1 209.1 L289.6 207.5 L290.1 204.6 L290.7 200.3 L291.2 194.7 L291.7 188.0 L292.2 180.2 L292.8 171.5 L293.3 162.1 L293.8 152.2 L294.4 141.9 L294.9 131.6 L295.4 121.3 L295.9 111.2 L296.5 101.7 L297.0 92.8 L297.5 84.8 L298.1 77.8 L298.6 72.0 L299.1 67.4 L299.6 64.1 L300.2 62.3 L300.7 62.0 L301.2 63.1 L301.8 65.7 L302.3 69.7 L302.8 75.0 L303.3 81.5 L303.9 89.2 L304.4 97.7 L304.9 107.1 L305.4 117.0 L306.0 127.3 L306.5 137.8 L307.0 148.3 L307.6 158.5 L308.1 168.3 L308.6 177.4 L309.1 185.8 L309.7 193.1 L310.2 199.4 L310.7 204.3 L311.3 207.9 L311.8 210.1 L312.3 210.8 L312.8 210.0 L313.4 207.8 L313.9 204.1 L314.4 199.0 L315.0 192.7 L315.5 185.2 L316.0 176.7 L316.5 167.5 L317.1 157.5 L317.6 147.2 L318.1 136.6 L318.7 126.0 L319.2 115.6 L319.7 105.6 L320.2 96.2 L320.8 87.5 L321.3 79.9 L321.8 73.3 L322.4 68.0 L322.9 64.1 L323.4 61.6 L323.9 60.5 L324.5 61.0 L325.0 63.0 L325.5 66.4 L326.1 71.3 L326.6 77.4 L327.1 84.7 L327.6 93.1 L328.2 102.3 L328.7 112.1 L329.2 122.5 L329.8 133.2 L330.3 143.9 L330.8 154.4 L331.3 164.6 L331.9 174.2 L332.4 183.1 L332.9 191.1 L333.4 197.9 L334.0 203.5 L334.5 207.7 L335.0 210.6 L335.6 211.9 L336.1 211.7 L336.6 210.0 L337.1 206.8 L337.7 202.2 L338.2 196.3 L338.7 189.1 L339.3 180.9 L339.8 171.8 L340.3 162.0 L340.8 151.6 L341.4 141.0 L341.9 130.2 L342.4 119.5 L343.0 109.2 L343.5 99.4 L344.0 90.3 L344.5 82.1 L345.1 75.0 L345.6 69.2 L346.1 64.6 L346.7 61.5 L347.2 59.9 L347.7 59.8 L348.2 61.2 L348.8 64.2 L349.3 68.5 L349.8 74.2 L350.4 81.2 L350.9 89.3 L351.4 98.2 L351.9 108.0 L352.5 118.3 L353.0 129.0 L353.5 139.8 L354.1 150.5 L354.6 161.0 L355.1 170.9 L355.6 180.2 L356.2 188.5 L356.7 195.9 L357.2 202.0 L357.8 206.8 L358.3 210.2 L358.8 212.1 L359.3 212.5 L359.9 211.3 L360.4 208.7 L360.9 204.5 L361.5 199.1 L362.0 192.3 L362.5 184.4 L363.0 175.6 L363.6 166.0 L364.1 155.7 L364.6 145.1 L365.1 134.3 L365.7 123.5 L366.2 113.0 L366.7 102.9 L367.3 93.5 L367.8 84.9 L368.3 77.4 L368.8 71.0 L369.4 66.0 L369.9 62.3 L370.4 60.1 L371.0 59.5 L371.5 60.3 L372.0 62.7 L372.5 66.5 L373.1 71.8 L373.6 78.3 L374.1 86.0 L374.7 94.6 L375.2 104.1 L375.7 114.3 L376.2 124.8 L376.8 135.6 L377.3 146.4 L377.8 157.0 L378.4 167.2 L378.9 176.7 L379.4 185.5 L379.9 193.2 L380.5 199.8 L381.0 205.1 L381.5 209.0 L382.1 211.5 L382.6 212.5 L383.1 211.9 L383.6 209.8 L384.2 206.3 L384.7 201.3 L385.2 195.0 L385.8 187.6 L386.3 179.1 L386.8 169.8 L387.3 159.8 L387.9 149.3 L388.4 138.5 L388.9 127.7 L389.5 117.1 L390.0 106.9 L390.5 97.2 L391.0 88.3 L391.6 80.4 L392.1 73.5 L392.6 68.0 L393.2 63.8 L393.7 61.0 L394.2 59.7 L394.7 60.0 L395.3 61.7 L395.8 65.0 L396.3 69.7 L396.9 75.7 L397.4 82.9 L397.9 91.1 L398.4 100.3 L399.0 110.2 L399.5 120.5 L400.0 131.2 L400.5 142.0 L401.1 152.7 L401.6 163.0 L402.1 172.8 L402.7 181.8 L403.2 190.0 L403.7 197.0 L404.2 202.8 L404.8 207.3 L405.3 210.4 L405.8 212.0 L406.4 212.0 L406.9 210.6 L407.4 207.7 L407.9 203.3 L408.5 197.6 L409.0 190.6 L409.5 182.6 L410.1 173.6 L410.6 163.9 L411.1 153.7 L411.6 143.1 L412.2 132.3 L412.7 121.6 L413.2 111.2 L413.8 101.3 L414.3 92.1 L414.8 83.8 L415.3 76.5 L415.9 70.5 L416.4 65.7 L416.9 62.3 L417.5 60.4 L418.0 60.0 L418.5 61.1 L419.0 63.7 L419.6 67.8 L420.1 73.2 L420.6 79.9 L421.2 87.7 L421.7 96.4 L422.2 105.9 L422.7 116.1 L423.3 126.6 L423.8 137.3 L424.3 148.0 L424.9 158.5 L425.4 168.5 L425.9 177.8 L426.4 186.3 L427.0 193.8 L427.5 200.2 L428.0 205.3 L428.5 208.9 L429.1 211.2 L429.6 211.9 L430.1 211.1 L430.7 208.9 L431.2 205.1 L431.7 200.0 L432.2 193.6 L432.8 186.1 L433.3 177.6 L433.8 168.2 L434.4 158.2 L434.9 147.8 L435.4 137.1 L435.9 126.4 L436.5 115.9 L437.0 105.8 L437.5 96.3 L438.1 87.6 L438.6 79.9 L439.1 73.2 L439.6 67.9 L440.2 63.9 L440.7 61.3 L441.2 60.2 L441.8 60.7 L442.3 62.6 L442.8 66.0 L443.3 70.8 L443.9 76.9 L444.4 84.2 L444.9 92.5 L445.5 101.7 L446.0 111.5 L446.5 121.9 L447.0 132.5 L447.6 143.2 L448.1 153.7 L448.6 163.9 L449.2 173.6 L449.7 182.5 L450.2 190.4 L450.7 197.3 L451.3 202.9 L451.8 207.3 L452.3 210.2 L452.9 211.6 L453.4 211.5 L453.9 209.9 L454.4 206.8 L455.0 202.3 L455.5 196.5 L456.0 189.5 L456.6 181.5 L457.1 172.5 L457.6 162.8 L458.1 152.5 L458.7 142.0 L459.2 131.3 L459.7 120.7 L460.2 110.4 L460.8 100.6 L461.3 91.5 L461.8 83.3 L462.4 76.2 L462.9 70.3 L463.4 65.6 L463.9 62.4 L464.5 60.7 L465.0 60.4 L465.5 61.6 L466.1 64.4 L466.6 68.5 L467.1 74.0 L467.6 80.8 L468.2 88.6 L468.7 97.4 L469.2 107.0 L469.8 117.1 L470.3 127.6 L470.8 138.3 L471.3 148.9 L471.9 159.3 L472.4 169.2 L472.9 178.5 L473.5 186.9 L474.0 194.2 L474.5 200.5 L475.0 205.4 L475.6 209.0 L476.1 211.1 L476.6 211.7 L477.2 210.8 L477.7 208.4 L478.2 204.5 L478.7 199.3 L479.3 192.9 L479.8 185.3 L480.3 176.7 L480.9 167.3 L481.4 157.3 L481.9 146.8 L482.4 136.2 L483.0 125.5 L483.5 115.0 L484.0 105.0 L484.6 95.6 L485.1 87.0 L485.6 79.3 L486.1 72.8 L486.7 67.6 L487.2 63.7 L487.7 61.3 L488.3 60.3 L488.8 60.9 L489.3 62.9 L489.8 66.5 L490.4 71.4 L490.9 77.6 L491.4 84.9 L492.0 93.3 L492.5 102.5 L493.0 112.4 L493.5 122.8 L494.1 133.4 L494.6 144.1 L495.1 154.6 L495.6 164.8 L496.2 174.4 L496.7 183.2 L497.2 191.0 L497.8 197.8 L498.3 203.4 L498.8 207.6 L499.3 210.3 L499.9 211.6 L500.4 211.4 L500.9 209.7 L501.5 206.5 L502.0 201.9 L502.5 196.0 L503.0 188.9 L503.6 180.7 L504.1 171.6 L504.6 161.9 L505.2 151.6 L505.7 141.0 L506.2 130.3 L506.7 119.7 L507.3 109.5 L507.8 99.7 L508.3 90.7 L508.9 82.6 L509.4 75.6 L509.9 69.7 L510.4 65.2 L511.0 62.1 L511.5 60.5 L512.0 60.4 L512.6 61.8 L513.1 64.6 L513.6 68.9 L514.1 74.6 L514.7 81.4 L515.2 89.4 L515.7 98.2 L516.3 107.9 L516.8 118.1 L517.3 128.6 L517.8 139.3 L518.4 149.9 L518.9 160.3 L519.4 170.2 L520.0 179.4 L520.5 187.7 L521.0 195.0 L521.5 201.1 L522.1 205.9 L522.6 209.3 L523.1 211.3 L523.6 211.7 L524.2 210.7 L524.7 208.1 L525.2 204.2 L525.8 198.8 L526.3 192.2 L526.8 184.5 L527.3 175.8 L527.9 166.3 L528.4 156.2 L528.9 145.8 L529.5 135.1 L530.0 124.4 L530.5 114.0 L531.0 104.0 L531.6 94.6 L532.1 86.1 L532.6 78.5 L533.2 72.1 L533.7 67.0 L534.2 63.3 L534.7 61.0 L535.3 60.2 L535.8 60.9 L536.3 63.1 L536.9 66.8 L537.4 71.9 L537.9 78.2 L538.4 85.7 L539.0 94.2 L539.5 103.5 L540.0 113.5 L540.6 123.9 L541.1 134.6 L541.6 145.2 L542.1 155.8 L542.7 165.9 L543.2 175.4 L543.7 184.1 L544.3 191.9 L544.8 198.6 L545.3 204.0 L545.8 208.0 L546.4 210.7 L546.9 211.8 L547.4 211.4 L548.0 209.5 L548.5 206.2 L549.0 201.4 L549.5 195.3 L550.1 188.1 L550.6 179.8 L551.1 170.6 L551.7 160.8 L552.2 150.5 L552.7 139.8 L553.2 129.1 L553.8 118.5 L554.3 108.3 L554.8 98.6 L555.4 89.7 L555.9 81.7 L556.4 74.8 L556.9 69.1 L557.5 64.7 L558.0 61.8 L558.5 60.3 L559.0 60.4 L559.6 61.9 L560.1 65.0 L560.6 69.4 L561.2 75.2 L561.7 82.2 L562.2 90.3 L562.7 99.3 L563.3 109.0 L563.8 119.2 L564.3 129.8 L564.9 140.5 L565.4 151.2 L565.9 161.5 L566.4 171.3 L567.0 180.4 L567.5 188.6 L568.0 195.8 L568.6 201.8 L569.1 206.4 L569.6 209.7 L570.1 211.5 L570.7 211.8 L571.2 210.6 L571.7 207.8 L572.3 203.7 L572.8 198.2 L573.3 191.4 L573.8 183.6 L574.4 174.8 L574.9 165.2 L575.4 155.1 L576.0 144.5 L576.5 133.8 L577.0 123.2 L577.5 112.8 L578.1 102.8 L578.6 93.5 L579.1 85.1 L579.7 77.7 L580.2 71.4 L580.7 66.5 L581.2 62.9 L581.8 60.8 L582.3 60.2 L582.8 61.0 L583.4 63.4 L583.9 67.3 L584.4 72.5 L584.9 79.0 L585.5 86.6 L586.0 95.2 L586.5 104.6 L587.0 114.6 L587.6 125.1 L588.1 135.8 L588.6 146.5 L589.2 157.0 L589.7 167.0 L590.2 176.5 L590.7 185.1 L591.3 192.8 L591.8 199.3 L592.3 204.5 L592.9 208.4 L593.4 210.9 L593.9 211.8 L594.4 211.3 L595.0 209.2 L595.5 205.7 L596.0 200.8 L596.6 194.6 L597.1 187.2 L597.6 178.8 L598.1 169.5 L598.7 159.6 L599.2 149.2 L599.7 138.6 L600.3 127.9 L600.8 117.3 L601.3 107.2 L601.8 97.6 L602.4 88.7 L602.9 80.8 L603.4 74.1 L604.0 68.5 L604.5 64.3 L605.0 61.5 L605.5 60.2 L606.1 60.5 L606.6 62.2 L607.1 65.4 L607.7 70.0 L608.2 76.0 L608.7 83.1 L609.2 91.3 L609.8 100.3 L610.3 110.1 L610.8 120.4 L611.4 131.1 L611.9 141.8 L612.4 152.4 L612.9 162.6 L613.5 172.4 L614.0 181.4 L614.5 189.5 L615.1 196.5 L615.6 202.4 L616.1 206.9 L616.6 210.0 L617.2 211.6 L617.7 211.7 L618.2 210.3 L618.8 207.4 L619.3 203.1 L619.8 197.5 L620.3 190.6 L620.9 182.6 L621.4 173.7 L621.9 164.1 L622.4 153.9 L623.0 143.3 L623.5 132.6 L624.0 122.0 L624.6 111.6 L625.1 101.7 L625.6 92.5 L626.1 84.2 L626.7 76.9 L627.2 70.8 L627.7 66.0 L628.3 62.6 L628.8 60.6 L629.3 60.2 L629.8 61.3 L630.4 63.8 L630.9 67.8 L631.4 73.2 L632.0 79.8 L632.5 87.5 L633.0 96.2 L633.5 105.7 L634.1 115.8 L634.6 126.3 L635.1 137.0 L635.7 147.7 L636.2 158.1 L636.7 168.1 L637.2 177.5 L637.8 186.0 L638.3 193.5 L638.8 199.9 L639.4 205.0 L639.9 208.8 L640.4 211.0 L640.9 211.8 L641.5 211.1 L642.0 208.9 L642.5 205.2 L643.1 200.1 L643.6 193.8 L644.1 186.3 L644.6 177.8 L645.2 168.4 L645.7 158.5 L646.2 148.0 L646.8 137.4 L647.3 126.7 L647.8 116.2 L648.3 106.1 L648.9 96.5 L649.4 87.8 L649.9 80.0 L650.5 73.4 L651.0 68.0 L651.5 63.9 L652.0 61.3 L652.6 60.2 L653.1 60.6 L653.6 62.5 L654.1 65.9 L654.7 70.6 L655.2 76.7 L655.7 84.0 L656.3 92.3 L656.8 101.4 L657.3 111.3 L657.8 121.6 L658.4 132.2 L658.9 143.0 L659.4 153.5 L660.0 163.7 L660.5 173.4 L661.0 182.3 L661.5 190.3 L662.1 197.2 L662.6 202.9 L663.1 207.3 L663.7 210.2 L664.2 211.7 L664.7 211.6 L665.2 210.0 L665.8 207.0 L666.3 202.5 L666.8 196.7 L667.4 189.7 L667.9 181.7 L668.4 172.7 L668.9 163.0 L669.5 152.7 L670.0 142.1 L670.5 131.4 L671.1 120.8 L671.6 110.5 L672.1 100.7 L672.6 91.6 L673.2 83.4 L673.7 76.2 L674.2 70.2 L674.8 65.6 L675.3 62.3 L675.8 60.5 L676.3 60.3 L676.9 61.5 L677.4 64.2 L677.9 68.4 L678.5 73.9 L679.0 80.6 L679.5 88.4 L680.0 97.2 L680.6 106.8 L681.1 117.0 L681.6 127.5 L682.1 138.2 L682.7 148.8 L683.2 159.2 L683.7 169.2 L684.3 178.5 L684.8 186.9 L685.3 194.3 L685.8 200.5 L686.4 205.5 L686.9 209.1 L687.4 211.2 L688.0 211.8 L688.5 210.9 L689.0 208.5 L689.5 204.7 L690.1 199.5 L690.6 193.0 L691.1 185.4 L691.7 176.8 L692.2 167.4 L692.7 157.3 L693.2 146.9 L693.8 136.2 L694.3 125.5 L694.8 115.0 L695.4 105.0 L695.9 95.5 L696.4 86.9 L696.9 79.3 L697.5 72.7 L698.0 67.5" fill="none" stroke="#1c1518" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/>
+                                <path d="M64.0 60.2 L698.0 60.2" fill="none" stroke="#e2a2aa" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" stroke-dasharray="5 4"/>
+                                <path d="M64.0 211.8 L698.0 211.8" fill="none" stroke="#e2a2aa" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" stroke-dasharray="5 4"/>
+                                <path d="M64.0 120.1 L65.1 120.7 L66.1 122.5 L67.2 125.5 L68.2 129.2 L69.3 133.5 L70.3 138.0 L71.4 142.3 L72.5 146.2 L73.5 149.2 L74.6 151.2 L75.6 151.9 L76.7 151.4 L77.7 149.7 L78.8 146.9 L79.8 143.2 L80.9 139.0 L82.0 134.5 L83.0 130.1 L84.1 126.2 L85.1 123.1 L86.2 121.0 L87.2 120.1 L88.3 120.4 L89.4 122.0 L90.4 124.7 L91.5 128.3 L92.5 132.5 L93.6 137.0 L94.6 141.4 L95.7 145.4 L96.8 148.6 L97.8 150.8 L98.9 151.9 L99.9 151.7 L101.0 150.2 L102.0 147.6 L103.1 144.1 L104.2 140.0 L105.2 135.5 L106.3 131.1 L107.3 127.0 L108.4 123.7 L109.4 121.4 L110.5 120.2 L111.5 120.3 L112.6 121.6 L113.7 124.0 L114.7 127.5 L115.8 131.6 L116.8 136.0 L117.9 140.4 L118.9 144.5 L120.0 148.0 L121.1 150.4 L122.1 151.7 L123.2 151.8 L124.2 150.6 L125.3 148.3 L126.3 145.0 L127.4 140.9 L128.5 136.5 L129.5 132.0 L130.6 127.9 L131.6 124.4 L132.7 121.8 L133.7 120.3 L134.8 120.1 L135.9 121.2 L136.9 123.4 L138.0 126.6 L139.0 130.6 L140.1 135.0 L141.1 139.5 L142.2 143.7 L143.2 147.3 L144.3 150.0 L145.4 151.6 L146.4 151.9 L147.5 151.0 L148.5 148.9 L149.6 145.8 L150.6 141.9 L151.7 137.5 L152.8 133.0 L153.8 128.8 L154.9 125.1 L155.9 122.3 L157.0 120.6 L158.0 120.1 L159.1 120.8 L160.2 122.8 L161.2 125.8 L162.3 129.7 L163.3 134.0 L164.4 138.5 L165.4 142.8 L166.5 146.5 L167.6 149.5 L168.6 151.3 L169.7 151.9 L170.7 151.3 L171.8 149.5 L172.8 146.5 L173.9 142.8 L174.9 138.5 L176.0 134.0 L177.1 129.7 L178.1 125.8 L179.2 122.8 L180.2 120.8 L181.3 120.1 L182.3 120.6 L183.4 122.3 L184.5 125.1 L185.5 128.8 L186.6 133.0 L187.6 137.5 L188.7 141.9 L189.7 145.8 L190.8 148.9 L191.9 151.0 L192.9 151.9 L194.0 151.6 L195.0 150.0 L196.1 147.3 L197.1 143.7 L198.2 139.5 L199.3 135.0 L200.3 130.6 L201.4 126.6 L202.4 123.4 L203.5 121.2 L204.5 120.1 L205.6 120.3 L206.7 121.8 L207.7 124.4 L208.8 127.9 L209.8 132.0 L210.9 136.5 L211.9 140.9 L213.0 145.0 L214.0 148.3 L215.1 150.6 L216.2 151.8 L217.2 151.7 L218.3 150.4 L219.3 148.0 L220.4 144.5 L221.4 140.4 L222.5 136.0 L223.6 131.6 L224.6 127.5 L225.7 124.0 L226.7 121.6 L227.8 120.3 L228.8 120.2 L229.9 121.4 L231.0 123.7 L232.0 127.0 L233.1 131.1 L234.1 135.5 L235.2 140.0 L236.2 144.1 L237.3 147.6 L238.4 150.2 L239.4 151.7 L240.5 151.9 L241.5 150.8 L242.6 148.6 L243.6 145.4 L244.7 141.4 L245.7 137.0 L246.8 132.5 L247.9 128.3 L248.9 124.7 L250.0 122.0 L251.0 120.4 L252.1 120.1 L253.1 121.0 L254.2 123.1 L255.3 126.2 L256.3 130.1 L257.4 134.5 L258.4 139.0 L259.5 143.2 L260.5 146.9 L261.6 149.7 L262.7 151.4 L263.7 151.9 L264.8 151.2 L265.8 149.2 L266.9 146.2 L267.9 142.3 L269.0 138.0 L270.1 133.5 L271.1 129.2 L272.2 125.5 L273.2 122.5 L274.3 120.7 L275.3 120.1 L276.4 120.7 L277.4 122.5 L278.5 125.5 L279.6 129.2 L280.6 133.5 L281.7 138.0 L282.7 142.3 L283.8 146.2 L284.8 149.2 L285.9 151.2 L287.0 151.9 L288.0 151.4 L289.1 149.7 L290.1 146.9 L291.2 143.2 L292.2 139.0 L293.3 134.5 L294.4 130.1 L295.4 126.2 L296.5 123.1 L297.5 121.0 L298.6 120.1 L299.6 120.4 L300.7 122.0 L301.8 124.7 L302.8 128.3 L303.9 132.5 L304.9 137.0 L306.0 141.4 L307.0 145.4 L308.1 148.6 L309.1 150.8 L310.2 151.9 L311.3 151.7 L312.3 150.2 L313.4 147.6 L314.4 144.1 L315.5 140.0 L316.5 135.5 L317.6 131.1 L318.7 127.0 L319.7 123.7 L320.8 121.4 L321.8 120.2 L322.9 120.3 L323.9 121.6 L325.0 124.0 L326.1 127.5 L327.1 131.6 L328.2 136.0 L329.2 140.4 L330.3 144.5 L331.3 148.0 L332.4 150.4 L333.4 151.7 L334.5 151.8 L335.6 150.6 L336.6 148.3 L337.7 145.0 L338.7 140.9 L339.8 136.5 L340.8 132.0 L341.9 127.9 L343.0 124.4 L344.0 121.8 L345.1 120.3 L346.1 120.1 L347.2 121.2 L348.2 123.4 L349.3 126.6 L350.4 130.6 L351.4 135.0 L352.5 139.5 L353.5 143.7 L354.6 147.3 L355.6 150.0 L356.7 151.6 L357.8 151.9 L358.8 151.0 L359.9 148.9 L360.9 145.8 L362.0 141.9 L363.0 137.5 L364.1 133.0 L365.1 128.8 L366.2 125.1 L367.3 122.3 L368.3 120.6 L369.4 120.1 L370.4 120.8 L371.5 122.8 L372.5 125.8 L373.6 129.7 L374.7 134.0 L375.7 138.5 L376.8 142.8 L377.8 146.5 L378.9 149.5 L379.9 151.3 L381.0 151.9 L382.1 151.3 L383.1 149.5 L384.2 146.5 L385.2 142.8 L386.3 138.5 L387.3 134.0 L388.4 129.7 L389.5 125.8 L390.5 122.8 L391.6 120.8 L392.6 120.1 L393.7 120.6 L394.7 122.3 L395.8 125.1 L396.9 128.8 L397.9 133.0 L399.0 137.5 L400.0 141.9 L401.1 145.8 L402.1 148.9 L403.2 151.0 L404.2 151.9 L405.3 151.6 L406.4 150.0 L407.4 147.3 L408.5 143.7 L409.5 139.5 L410.6 135.0 L411.6 130.6 L412.7 126.6 L413.8 123.4 L414.8 121.2 L415.9 120.1 L416.9 120.3 L418.0 121.8 L419.0 124.4 L420.1 127.9 L421.2 132.0 L422.2 136.5 L423.3 140.9 L424.3 145.0 L425.4 148.3 L426.4 150.6 L427.5 151.8 L428.5 151.7 L429.6 150.4 L430.7 148.0 L431.7 144.5 L432.8 140.4 L433.8 136.0 L434.9 131.6 L435.9 127.5 L437.0 124.0 L438.1 121.6 L439.1 120.3 L440.2 120.2 L441.2 121.4 L442.3 123.7 L443.3 127.0 L444.4 131.1 L445.5 135.5 L446.5 140.0 L447.6 144.1 L448.6 147.6 L449.7 150.2 L450.7 151.7 L451.8 151.9 L452.9 150.8 L453.9 148.6 L455.0 145.4 L456.0 141.4 L457.1 137.0 L458.1 132.5 L459.2 128.3 L460.2 124.7 L461.3 122.0 L462.4 120.4 L463.4 120.1 L464.5 121.0 L465.5 123.1 L466.6 126.2 L467.6 130.1 L468.7 134.5 L469.8 139.0 L470.8 143.2 L471.9 146.9 L472.9 149.7 L474.0 151.4 L475.0 151.9 L476.1 151.2 L477.2 149.2 L478.2 146.2 L479.3 142.3 L480.3 138.0 L481.4 133.5 L482.4 129.2 L483.5 125.5 L484.6 122.5 L485.6 120.7 L486.7 120.1 L487.7 120.7 L488.8 122.5 L489.8 125.5 L490.9 129.2 L492.0 133.5 L493.0 138.0 L494.1 142.3 L495.1 146.2 L496.2 149.2 L497.2 151.2 L498.3 151.9 L499.3 151.4 L500.4 149.7 L501.5 146.9 L502.5 143.2 L503.6 139.0 L504.6 134.5 L505.7 130.1 L506.7 126.2 L507.8 123.1 L508.9 121.0 L509.9 120.1 L511.0 120.4 L512.0 122.0 L513.1 124.7 L514.1 128.3 L515.2 132.5 L516.3 137.0 L517.3 141.4 L518.4 145.4 L519.4 148.6 L520.5 150.8 L521.5 151.9 L522.6 151.7 L523.6 150.2 L524.7 147.6 L525.8 144.1 L526.8 140.0 L527.9 135.5 L528.9 131.1 L530.0 127.0 L531.0 123.7 L532.1 121.4 L533.2 120.2 L534.2 120.3 L535.3 121.6 L536.3 124.0 L537.4 127.5 L538.4 131.6 L539.5 136.0 L540.6 140.4 L541.6 144.5 L542.7 148.0 L543.7 150.4 L544.8 151.7 L545.8 151.8 L546.9 150.6 L548.0 148.3 L549.0 145.0 L550.1 140.9 L551.1 136.5 L552.2 132.0 L553.2 127.9 L554.3 124.4 L555.4 121.8 L556.4 120.3 L557.5 120.1 L558.5 121.2 L559.6 123.4 L560.6 126.6 L561.7 130.6 L562.7 135.0 L563.8 139.5 L564.9 143.7 L565.9 147.3 L567.0 150.0 L568.0 151.6 L569.1 151.9 L570.1 151.0 L571.2 148.9 L572.3 145.8 L573.3 141.9 L574.4 137.5 L575.4 133.0 L576.5 128.8 L577.5 125.1 L578.6 122.3 L579.7 120.6 L580.7 120.1 L581.8 120.8 L582.8 122.8 L583.9 125.8 L584.9 129.7 L586.0 134.0 L587.0 138.5 L588.1 142.8 L589.2 146.5 L590.2 149.5 L591.3 151.3 L592.3 151.9 L593.4 151.3 L594.4 149.5 L595.5 146.5 L596.6 142.8 L597.6 138.5 L598.7 134.0 L599.7 129.7 L600.8 125.8 L601.8 122.8 L602.9 120.8 L604.0 120.1 L605.0 120.6 L606.1 122.3 L607.1 125.1 L608.2 128.8 L609.2 133.0 L610.3 137.5 L611.4 141.9 L612.4 145.8 L613.5 148.9 L614.5 151.0 L615.6 151.9 L616.6 151.6 L617.7 150.0 L618.8 147.3 L619.8 143.7 L620.9 139.5 L621.9 135.0 L623.0 130.6 L624.0 126.6 L625.1 123.4 L626.1 121.2 L627.2 120.1 L628.3 120.3 L629.3 121.8 L630.4 124.4 L631.4 127.9 L632.5 132.0 L633.5 136.5 L634.6 140.9 L635.7 145.0 L636.7 148.3 L637.8 150.6 L638.8 151.8 L639.9 151.7 L640.9 150.4 L642.0 148.0 L643.1 144.5 L644.1 140.4 L645.2 136.0 L646.2 131.6 L647.3 127.5 L648.3 124.0 L649.4 121.6 L650.5 120.3 L651.5 120.2 L652.6 121.4 L653.6 123.7 L654.7 127.0 L655.7 131.1 L656.8 135.5 L657.8 140.0 L658.9 144.1 L660.0 147.6 L661.0 150.2 L662.1 151.7 L663.1 151.9 L664.2 150.8 L665.2 148.6 L666.3 145.4 L667.4 141.4 L668.4 137.0 L669.5 132.5 L670.5 128.3 L671.6 124.7 L672.6 122.0 L673.7 120.4 L674.8 120.1 L675.8 121.0 L676.9 123.1 L677.9 126.2 L679.0 130.1 L680.0 134.5 L681.1 139.0 L682.1 143.2 L683.2 146.9 L684.3 149.7 L685.3 151.4 L686.4 151.9 L687.4 151.2 L688.5 149.2 L689.5 146.2 L690.6 142.3 L691.7 138.0 L692.7 133.5 L693.8 129.2 L694.8 125.5 L695.9 122.5 L696.9 120.7 L698.0 120.1" fill="none" stroke="#7a1f2b" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round" stroke-dasharray="5 4"/>
+                                </g>
+                                <line x1="64" x2="698" y1="298.0" y2="298.0" stroke="#eee6d9"/>
+                                <line x1="64.0" x2="86.0" y1="314.0" y2="314.0" stroke="#1c1518" stroke-width="2.2" stroke-linecap="round"/>
+                                <text class="lbl" x="94.0" y="318.0">x(t), RK4</text>
+                                <line x1="168.8" x2="190.8" y1="314.0" y2="314.0" stroke="#e2a2aa" stroke-width="2.2" stroke-linecap="round" stroke-dasharray="5 4"/>
+                                <text class="lbl" x="198.8" y="318.0">±X, steady state</text>
+                                <line x1="324.0" x2="346.0" y1="314.0" y2="314.0" stroke="#7a1f2b" stroke-width="2.2" stroke-linecap="round" stroke-dasharray="5 4"/>
+                                <text class="lbl" x="354.0" y="318.0">F(t)/k</text>
+                                </svg>
+                            </div>
+                            <figcaption><span class="pfig__n">الشكل 4</span>التشغيل الافتراضي، \(f_0 = 0.5\ \mathrm{Hz}\)، \(\zeta = 0.05\)، \(F_0 = 1\ \mathrm{N}\)، \(f = 0.45\ \mathrm{Hz}\)، محسوب بطريقة RK4 الخاصّة بالصفحة (\(h = 1\ \mathrm{ms}\))، ومرسوم كل ⁦50 ms⁩. المنحنى المتقطّع بلون العنّابي هو \(F(t)/k\)، أي الاستطالة التي كانت ستسبّبها القوّة لو طُبّقت ببطء؛ والحركة تتأخّر عنه بمقدار \(\varphi = 25.3^\circ\) وتبلغ \(4.76\) مرّة أكبر.</figcaption>
+                        </figure>
+                        <div class="pbox pbox--ex">
+                            <span class="pbox__t">تمرين 6.1 · على الشكل أعلاه</span>
+                            <p>خفّض نسبة التخامد إلى 0.01 واضغط <em>احسب</em>. تدوم الضربات الآن الدقيقة كلّها. عدّ الزمن بين انتفاختين وقارنه بـ\(1/|f - f_0|\). ثم اضبط \(f = 0.20\ \mathrm{Hz}\)، بعيدًا عن الرنين. لا توجد الآن ضربات بطيئة، لكن الاهتزاز الخاصّ بالكتلة يركب على القيادة البطيئة؛ استخدم \(C_1\) في المعادلة (5) لتفسّر لماذا يبدأ بنفس حجم الحركة المستقرّة. (تُشغَّل القوّة بكامل قوّتها عند \(t = 0\).)</p>
+                        </div>
+                    </section>
+
+                    <section class="psec" id="p-energy">
+                        <h3><span class="psec__n">07</span>أين تذهب الطاقة</h3>
+                        <p>يبذل المحرّك شغلًا بمعدّل \(P_\text{in} = F\dot x\)، ويحوّل المخمّد الطاقة إلى حرارة بمعدّل \(P_\text{loss} = c\dot x^2\). والطاقة المخزونة في المتذبذب، \(E = \tfrac12 m\dot x^2 + \tfrac12 kx^2\)، تتغيّر بمقدار الفرق:</p>
+                        \[ E(T) - E(0) = \underbrace{\int_0^T F\dot x\,\mathrm{d}t}_{W_\text{in}} - \underbrace{\int_0^T c\,\dot x^2\,\mathrm{d}t}_{W_\text{loss}} . \tag{8} \]
+                        <p>في الحالة المستقرّة تتأرجح الطاقة المخزونة بين النابض والكتلة فقط، فيضيع في المخمّد في المتوسّط كل جول يدخل من المحرّك. تتأرجح السرعة بسعة \(\Omega X\)، ومربّع الجيب يتوسّط إلى النصف على دورة كاملة، فيكون \(\langle P_\text{in}\rangle = \langle P_\text{loss}\rangle = \tfrac12 c\,\Omega^2 X^2\)، أي \(0.292\ \mathrm{W}\) بالقيم الافتراضية. وعلى مدى التشغيل الكامل البالغ ⁦60 s⁩ تجد الصفحة \(W_\text{in} = 19.03\ \mathrm{J}\) و\(W_\text{loss} = 17.93\ \mathrm{J}\) و\(E(T) - E(0) = 1.11\ \mathrm{J}\). فتتحقّق المعادلة (8) بدقّة \(1.3\times10^{-12}\) من \(W_\text{in}\): وهذه هي قراءة <em>توازن الطاقة</em>، وهي اختبار للحساب كلّه.</p>
+                    </section>
+
+                    <section class="psec" id="p-solve">
+                        <h3><span class="psec__n">08</span>احسب أوّلًا، ثم شغّل</h3>
+                        <p>على خلاف الأشكال السابقة، لا تحسب هذه الصفحة أثناء مشاهدتك. ولأن قوّة المحرّك معروفة مقدّمًا لكل الأزمنة، يتحدّد المستقبل كلّه لحظة ضغطك على <em>احسب</em>. وتستفيد الصفحة من ذلك.</p>
+                        <ol>
+                            <li><strong>احسب.</strong> تقدّم طريقة رونغه–كوتا من المرتبة الرابعة \((x, \dot x)\) من \(t = 0\) إلى \(60\ \mathrm{s}\) في 60 000 خطوة طول كلّ منها \(h = 1\ \mathrm{ms}\)، وتحمل معها \(W_\text{in}\) و\(W_\text{loss}\) في الخطوات نفسها. وقد استغرق الحلّ الافتراضي، مقيسًا في Chromium بلا واجهة، من 9.5 إلى ⁦12.4 ms⁩؛ والزمن يتوقّف على الحاسوب.</li>
+                            <li><strong>خزّن.</strong> تُكتب كل حالة عاشرة في مجموعة بيانات الصفحة مع \(F\) و\(E\) و\(P_\text{in}\) و\(P_\text{loss}\): 6 001 صفّ، صفّ كل \(10\ \mathrm{ms}\). ويُخزَّن الحلّ الدقيق (5) بجانبها فقط لقياس الخطأ. وبالقيم الافتراضية يكون أكبر فرق على مدى التشغيل \(5\times10^{-12}\ \mathrm{m}\)، وهي قراءة <em>RK4 مقابل الحلّ الدقيق</em>.</li>
+                            <li><strong>شغّل.</strong> يحوّل كل إطار زمن التشغيل إلى أقرب صفّ مخزّن، \(n = \operatorname{round}(t_\text{play}/10\,\mathrm{ms})\)، ويرسم ذلك الصفّ كما هو. لا يجري أيّ استيفاء أو إعادة حساب، فالصورة ولوحة البيانات تعرضان دائمًا الأرقام نفسها، ويستطيع منزلق <em>التشغيل المخزّن</em> القفز إلى أيّ لحظة.</li>
+                        </ol>
+                        <p>عند تحريك منزلق بعد الحساب، تُنبّه الصفحة إلى ذلك وتواصل تشغيل التشغيل القديم حتى تحسب من جديد: فالبيانات المعروضة تنتمي دائمًا إلى الإعدادات المذكورة في شريط الحالة.</p>
+                    </section>
+
+                    <section class="psec" id="p-screen">
+                        <h3><span class="psec__n">09</span>على الشاشة</h3>
+                        <p>تستقرّ الكتلة قرب وسط اللوحة، ويُرسم كل تشغيل بمقياسه الخاصّ: يمتدّ أكبر ترنّح له دائمًا نحو خُمس العرض تقريبًا، أيًّا كانت السعة بالأمتار. والمسطرة تحت الكتلة تعطي الأمتار، فلمقارنة تشغيلين اقرأ المسطرة لا حجم الترنّح. ويتناسب طول السهم العنّابي على الكتلة مع \(F/F_0\). والمؤشّر الدائري أعلى اليمين هو المحرّك: يدور ذراعه بـ\(\Omega\)، وظلّه الأفقي يتناسب مع القوّة. وفي الأسفل تتابع نافذة من التشغيل المخزّن العيّنة الحالية: \(x(t)\) داكنًا حتى نقطتها وباهتًا بعدها، و\(F(t)/k\) متقطّعًا بالعنّابي، والسعة المستقرّة \(\pm X\) متقطّعة بالوردي. وتمتدّ النافذة على أربع دورات للقيادة، لكن لا تقلّ عن ⁦6 s⁩ ولا تزيد على ⁦20 s⁩ (⁦8.9 s⁩ بالقيم الافتراضية). وتحتها شريط رفيع يعرض التشغيل كلّه البالغ ⁦60 s⁩، والنافذة مظلّلة فيه. ويعلّم مخطّط بود تردد القوّة الدافعة الحالي بنقطة ممتلئة (المعادلة (4))، والسعة المقاسة من آخر ⁦10 s⁩ من التشغيل بحلقة حولها: وعندما يستقرّ التشغيل تتطابق النقطة مع الحلقة.</p>
+                    </section>
+
+                    <section class="psec" id="p-limits">
+                        <h3><span class="psec__n">10</span>ما يغفله النموذج</h3>
+                        <ul>
+                            <li>لا تطيع النوابض الحقيقية قانون هوك إلّا عند الاستطالات الصغيرة؛ فعند السعة الكبيرة تكفّ قوّة الاسترجاع عن أن تكون متناسبة مع \(x\)، فينحني قمّة الرنين وقد يقفز.</li>
+                            <li>الاحتكاك الحقيقي غالبًا جافّ لا لزج: فهو لا يزداد مع السرعة. والمخمّد الخطّي هو النسخة التي تُبقي المعادلة قابلة للحلّ.</li>
+                            <li>المحرّك المثالي يوفّر \(F_0\cos\Omega t\) مهما فعلت الكتلة. والمحرّك الحقيقي يتباطأ حين يثقل الحمل، وعند الرنين يكون الحمل أثقل ما يكون.</li>
+                            <li>تغطّي الصفحة المدى الأقلّ تخامدًا \(\zeta \le 0.9\) فقط، حيث تنطبق الحلّ الدقيق (5)؛ أمّا \(\zeta \ge 1\) فتحتاج صيغة أخرى للحالة العابرة.</li>
+                        </ul>
+                        <h4><span class="psub__n">10.1</span>مراجع للاستزادة</h4>
+                        <ol class="prefs">
+                            <li>J. R. Taylor، <a href="https://books.google.com/books/about/Classical_Mechanics.html?id=P1kCtNr-pJsC"><em>Classical Mechanics</em></a>، University Science Books، 2005: الفصل 5، الاهتزازات، والمتذبذبات المقسورة المخمّدة، والرنين.</li>
+                            <li>A. P. French، <a href="https://www.routledge.com/Vibrations-and-Waves/French/p/book/9780748744473"><em>Vibrations and Waves</em></a>، W. W. Norton، 1971 (صار الناشر اليوم CRC Press): الفصل 4، الاهتزازات القسرية والرنين.</li>
+                            <li>K. J. Åström وR. M. Murray، <em>Feedback Systems: An Introduction for Scientists and Engineers</em>، Princeton University Press، 2008: الفصل 8، دوال التحويل، والاستجابة الترددية، ومخطّطات بود. <a href="http://www.cds.caltech.edu/~murray/books/AM08/pdf/am08-complete_22Feb09.pdf">النسخة الإلكترونية المجانية للمؤلّفين</a>.</li>
+                            <li>R. P. Feynman، R. B. Leighton وM. Sands، <em>The Feynman Lectures on Physics</em>، المجلّد I، النسخة الإلكترونية: <a href="https://www.feynmanlectures.caltech.edu/I_23.html">الفصل 23، Resonance</a> (طريقة الأعداد المركّبة في القسم 3.1)، و<a href="https://www.feynmanlectures.caltech.edu/I_24.html">الفصل 24، Transients</a> (متوسّط القدرة في القسم 7، والحركة الحرّة المتلاشية في القسم 3.2).</li>
+                        </ol>
+                    </section>
+                </div>
+            </div>
+        </article>
+
+        <section class="walk" id="walk" data-walk="driven" aria-label="من الرموز إلى الشيفرة"></section>
+    </main>
+
+    <footer class="sim-foot">
+        <span>© 2026 نعمة سائر قدسية</span>
+        <span><a href="../simulations.html">جميع المحاكاة ↑</a> · <a href="../index.html">الصفحة الرئيسية</a></span>
+    </footer>
+
+    <script src="../../scripts/fold.js"></script>
+    <script src="../../scripts/sim.js"></script>
+    <script src="../../scripts/dataset.js"></script>
+    <script>
+    (function () {
+        'use strict';
+        var T = Sim.theme;
+        var M = 1, H = 0.001, TEND = 60, EVERY = 10, NS = TEND / H / EVERY + 1;
+
+        var stage = document.getElementById('stage'), bodeStage = document.getElementById('stage-bode');
+        var box = Sim.canvas2d(document.getElementById('osc')), ctx = box.ctx;
+        var bbox = Sim.canvas2d(document.getElementById('bode')), bctx = bbox.ctx;
+        var statusEl = document.getElementById('status');
+        var playT = 0, iNow = 0, fps = 0, solved = null;
+
+        /* ---------- the store: every number this page computes is written here, where it is computed (scripts/dataset.js) ---------- */
+        var ds = Sim.dataset({ title: 'Driven oscillator', attrs: { figure: 9, page: 'driven-oscillator.html', equation: 'm x″ + c x′ + k x = F0 cos(Ω t)', start: 'x(0) = 0, v(0) = 0' } });
+        ds.var('m', [], 'float', { symbol: 'm', units: 'kg', long_name: 'mass', computed_in: 'constant M', digits: 1 });
+        ds.var('f0', [], 'float', { symbol: 'f<sub>0</sub>', units: 'Hz', long_name: 'natural frequency', computed_in: 'f0 slider', digits: 2 });
+        ds.var('zeta', [], 'float', { symbol: 'ζ', long_name: 'damping ratio', computed_in: 'zeta slider', digits: 2 });
+        ds.var('F0', [], 'float', { symbol: 'F<sub>0</sub>', units: 'N', long_name: 'force amplitude', computed_in: 'F0 slider', digits: 1 });
+        ds.var('fd', [], 'float', { symbol: 'f', units: 'Hz', long_name: 'drive frequency', computed_in: 'fd slider', digits: 2 });
+        ds.var('omega0', [], 'float', { symbol: 'ω<sub>0</sub>', units: 'rad/s', long_name: 'natural angular frequency', computed_in: 'solve()', formula: 'ω<sub>0</sub> = 2π f<sub>0</sub>', digits: 4 });
+        ds.var('k', [], 'float', { symbol: 'k', units: 'N/m', long_name: 'spring constant', computed_in: 'solve()', formula: 'k = m ω<sub>0</sub>²', digits: 4 });
+        ds.var('c', [], 'float', { symbol: 'c', units: 'kg/s', long_name: 'damping coefficient', computed_in: 'solve()', formula: 'c = 2 ζ m ω<sub>0</sub>', digits: 4 });
+        ds.var('Omega', [], 'float', { symbol: 'Ω', units: 'rad/s', long_name: 'drive angular frequency', computed_in: 'solve()', formula: 'Ω = 2π f', digits: 4 });
+        ds.var('tau', [], 'float', { symbol: 'τ', units: 's', long_name: 'decay time of the free motion', computed_in: 'solve()', formula: 'τ = 1 / (ζ ω<sub>0</sub>)', digits: 3 });
+        ds.var('Q', [], 'float', { symbol: 'Q', long_name: 'quality factor', computed_in: 'solve()', formula: 'Q = 1 / (2ζ)', digits: 2 });
+        ds.var('X', [], 'float', { symbol: 'X', units: 'm', long_name: 'steady-state amplitude, exact', computed_in: 'steady()', formula: '(F<sub>0</sub>/m) / √((ω<sub>0</sub>² − Ω²)² + (2ζω<sub>0</sub>Ω)²)', digits: 5 });
+        ds.var('phi', [], 'float', { symbol: 'φ', units: 'rad', long_name: 'phase lag of x behind F, exact', computed_in: 'steady()', formula: 'atan2(2ζω<sub>0</sub>Ω, ω<sub>0</sub>² − Ω²)', digits: 5 });
+        ds.var('fr', [], 'float', { symbol: 'f<sub>r</sub>', units: 'Hz', long_name: 'drive frequency of largest amplitude', computed_in: 'solve()', formula: 'f<sub>0</sub> √(1 − 2ζ²), when ζ < 1/√2', digits: 4 });
+        ds.var('h', [], 'float', { symbol: 'h', units: 's', long_name: 'RK4 step', computed_in: 'constant H', digits: 4 });
+        ds.var('steps', [], 'int', { symbol: 'steps', long_name: 'RK4 steps in one solve', computed_in: 'solve()', formula: 'T<sub>end</sub> / h', digits: 0 });
+        ds.var('solve_ms', [], 'float', { symbol: 'solve time', units: 'ms', long_name: 'time the browser took to solve and store the run', computed_in: 'solve()', digits: 2, source: 'Measured with performance.now().' });
+        ds.var('stale', [], 'bool', { symbol: 'stale', long_name: 'a slider moved since the last solve', computed_in: 'markStale()' });
+        ds.dim('n', NS);
+        ds.coord('ts', 'n', Float64Array, { symbol: 't<sub>n</sub>', units: 's', long_name: 'time of each stored sample', computed_in: 'solve()', formula: 'n · 10 h', digits: 2 });
+        ds.var('xs', ['n'], Float64Array, { symbol: 'x<sub>n</sub>', units: 'm', long_name: 'displacement, RK4', computed_in: 'solve()', formula: 'RK4 from x = v = 0, step h', digits: 6 });
+        ds.var('vs', ['n'], Float64Array, { symbol: 'v<sub>n</sub>', units: 'm/s', long_name: 'velocity, RK4', computed_in: 'solve()', formula: 'RK4 from x = v = 0, step h', digits: 6 });
+        ds.var('Fs', ['n'], Float64Array, { symbol: 'F<sub>n</sub>', units: 'N', long_name: 'drive force at each sample', computed_in: 'solve()', formula: 'F<sub>0</sub> cos(Ω t<sub>n</sub>)', digits: 6 });
+        ds.var('Es', ['n'], Float64Array, { symbol: 'E<sub>n</sub>', units: 'J', long_name: 'energy of the oscillator', computed_in: 'solve()', formula: '½ m v<sub>n</sub>² + ½ k x<sub>n</sub>²', digits: 6 });
+        ds.var('Pin', ['n'], Float64Array, { symbol: 'P<sub>in</sub>', units: 'W', long_name: 'power the driver delivers', computed_in: 'solve()', formula: 'F<sub>n</sub> v<sub>n</sub>', digits: 6 });
+        ds.var('Ploss', ['n'], Float64Array, { symbol: 'P<sub>loss</sub>', units: 'W', long_name: 'power the damper turns into heat', computed_in: 'solve()', formula: 'c v<sub>n</sub>²', digits: 6 });
+        ds.var('xex', ['n'], Float64Array, { symbol: 'x<sub>exact</sub>', units: 'm', long_name: 'exact solution at each sample', computed_in: 'exact(), in solve()', formula: 'X cos(Ωt − φ) + e<sup>−ζω₀t</sup>(C₁ cos ω<sub>d</sub>t + C₂ sin ω<sub>d</sub>t)', digits: 6 });
+        ds.var('xqs', ['n'], Float64Array, { symbol: 'F<sub>n</sub>/k', units: 'm', long_name: 'the stretch the force would cause if applied slowly', computed_in: 'solve()', formula: 'F<sub>n</sub> / k', digits: 6 });
+        ds.var('ph', ['n'], Float64Array, { symbol: 'Ωt<sub>n</sub>', units: 'rad', long_name: 'phase of the drive, the angle of the driver’s dial', computed_in: 'solve()', formula: 'Ω t<sub>n</sub> mod 2π', digits: 5 });
+        ds.var('ylim', [], 'float', { symbol: 'y<sub>lim</sub>', units: 'm', long_name: 'half-height of the charts: 1.1 × the largest |x| or |F/k| of the run', computed_in: 'solve()', formula: '1.1 · max(|x<sub>n</sub>|, |F<sub>n</sub>/k|)', digits: 5 });
+        ds.var('G_drive', [], 'float', { symbol: '|G(iΩ)|', units: 'm/N', long_name: 'steady amplitude per newton at the drive frequency, exact', computed_in: 'solve()', formula: '1 / (m √((ω<sub>0</sub>² − Ω²)² + (2ζω<sub>0</sub>Ω)²))', digits: 6 });
+        ds.var('Gm_drive', [], 'float', { symbol: 'X<sub>measured</sub>/F<sub>0</sub>', units: 'm/N', long_name: 'measured amplitude per newton, last 10 s of the run', computed_in: 'solve()', formula: 'X<sub>measured</sub> / F<sub>0</sub>', digits: 6 });
+        ds.var('phi_deg', [], 'float', { symbol: 'φ', units: '°', long_name: 'phase lag in degrees, exact', computed_in: 'solve()', formula: 'φ · 180/π', digits: 3 });
+        ds.var('err_max', [], 'float', { symbol: 'max |x − x<sub>exact</sub>|', units: 'm', long_name: 'largest RK4 error over the stored run', computed_in: 'solve()', digits: 12 });
+        ds.var('Xm', [], 'float', { symbol: 'X<sub>measured</sub>', units: 'm', long_name: 'largest |x| in the last 10 s of the run', computed_in: 'solve()', formula: 'max |x<sub>n</sub>|, t<sub>n</sub> ≥ 50 s', digits: 5 });
+        ds.var('Win', [], 'float', { symbol: 'W<sub>in</sub>', units: 'J', long_name: 'work done by the driver over the run', computed_in: 'solve(), integrated with RK4', formula: '∫ F v dt', digits: 6 });
+        ds.var('Wloss', [], 'float', { symbol: 'W<sub>loss</sub>', units: 'J', long_name: 'heat made by the damper over the run', computed_in: 'solve(), integrated with RK4', formula: '∫ c v² dt', digits: 6 });
+        ds.var('balance', [], 'float', { symbol: 'balance', long_name: 'energy balance error, relative to W<sub>in</sub>', computed_in: 'solve()', formula: '|E(T) − E(0) − (W<sub>in</sub> − W<sub>loss</sub>)| / W<sub>in</sub>', digits: 12 });
+        ds.var('i_now', [], 'int', { symbol: 'n<sub>now</sub>', long_name: 'stored sample shown in this frame', computed_in: 'the clock', formula: 'round(t<sub>play</sub> / 10h)', digits: 0 });
+        ds.var('t_play', [], 'float', { symbol: 't<sub>play</sub>', units: 's', long_name: 'playback time in the stored run', computed_in: 'the clock', formula: 't<sub>play</sub> ← t<sub>play</sub> + speed · Δt', digits: 3 });
+        ds.var('x_now', [], 'float', { symbol: 'x', units: 'm', long_name: 'displacement shown now (a stored sample)', computed_in: 'the clock', formula: 'x<sub>n</sub>, n = n<sub>now</sub>', digits: 5 });
+        ds.var('v_now', [], 'float', { symbol: 'v', units: 'm/s', long_name: 'velocity shown now (a stored sample)', computed_in: 'the clock', formula: 'v<sub>n</sub>, n = n<sub>now</sub>', digits: 5 });
+        ds.var('F_now', [], 'float', { symbol: 'F', units: 'N', long_name: 'drive force shown now (a stored sample)', computed_in: 'the clock', formula: 'F<sub>n</sub>, n = n<sub>now</sub>', digits: 5 });
+        ds.var('E_now', [], 'float', { symbol: 'E', units: 'J', long_name: 'energy shown now (a stored sample)', computed_in: 'the clock', formula: 'E<sub>n</sub>, n = n<sub>now</sub>', digits: 5 });
+        ds.var('ph_now', [], 'float', { symbol: 'Ωt', units: 'rad', long_name: 'drive phase shown now (a stored sample)', computed_in: 'the clock', formula: 'Ωt<sub>n</sub>, n = n<sub>now</sub>', digits: 5 });
+        ds.var('Pin_now', [], 'float', { symbol: 'P<sub>in</sub>', units: 'W', long_name: 'driver power now (a stored sample)', computed_in: 'the clock', formula: 'P<sub>in, n</sub>, n = n<sub>now</sub>', digits: 5 });
+        ds.var('xmax', [], 'float', { symbol: 'max |x|', units: 'm', long_name: 'largest displacement in the run, sets the drawing scale', computed_in: 'solve()', digits: 5 });
+        ds.var('px_per_m', [], 'float', { symbol: 'px/m', units: 'css px', long_name: 'drawing scale of the block', computed_in: 'geom()', formula: 'A<sub>px</sub> / max |x|', digits: 3 });
+        ds.var('amp_px', [], 'float', { symbol: 'A<sub>px</sub>', units: 'css px', long_name: 'how far the block may travel on screen either side of rest', computed_in: 'geom()', formula: '0.11 × the width between wall and right margin', digits: 1 });
+        ds.var('F_px', [], 'float', { symbol: 'F arrow', units: 'css px', long_name: 'length of the force arrow on screen', computed_in: 'draw()', formula: 'F<sub>now</sub> / F<sub>0</sub> · L<sub>F</sub>', digits: 1 });
+        ds.var('Fmax_px', [], 'float', { symbol: 'L<sub>F</sub>', units: 'css px', long_name: 'arrow length that stands for F<sub>0</sub>', computed_in: 'geom()', formula: 'min(88, 0.12 box.w)', digits: 1 });
+        ds.var('win_t0', [], 'float', { symbol: 't<sub>window</sub>', units: 's', long_name: 'left edge of the window chart', computed_in: 'draw()', formula: 'clamp(t<sub>play</sub> − 0.7 T<sub>window</sub>, 0, 60 s − T<sub>window</sub>)', digits: 3 });
+        ds.var('win_T', [], 'float', { symbol: 'T<sub>window</sub>', units: 's', long_name: 'width of the window chart', computed_in: 'draw()', formula: 'clamp(4/f, 6 s, 20 s)', digits: 3 });
+        ds.var('block_px', [], 'float', { symbol: 'x<sub>block</sub> px', units: 'css px', long_name: 'screen position of the block centre', computed_in: 'draw()', formula: 'x<sub>eq</sub> + x · px/m', digits: 1 });
+        ds.var('eq_px', [], 'float', { symbol: 'x<sub>eq</sub> px', units: 'css px', long_name: 'screen position of the block centre at rest', computed_in: 'geom()', formula: 'wall + 0.42 × usable width + half the block', digits: 1 });
+        ds.var('block_y', [], 'float', { symbol: 'y<sub>block</sub> px', units: 'css px', long_name: 'screen height of the block centre', computed_in: 'geom()', digits: 1 });
+        ds.var('box_w', [], 'int', { symbol: 'box.w', units: 'css px', long_name: 'canvas width on your screen', computed_in: 'draw()', digits: 0, source: 'Measured from the page layout.' });
+        ds.var('box_h', [], 'int', { symbol: 'box.h', units: 'css px', long_name: 'canvas height on your screen', computed_in: 'draw()', digits: 0, source: 'Measured from the page layout.' });
+        ds.var('fps', [], 'float', { symbol: 'frame rate', units: 'Hz', long_name: 'smoothed over about ten frames', computed_in: 'the clock', digits: 1, source: 'A running average of 1/Δt.' });
+        ds.var('playing', [], 'bool', { symbol: 'playing', long_name: 'the playback runs', computed_in: 'Sim.clock', source: 'The state of the Play button.' });
+        ds.dim('b', 241);
+        ds.coord('fb', 'b', Float64Array, { symbol: 'f<sub>b</sub>', units: 'Hz', long_name: 'drive frequencies of the Bode plot, log-spaced', computed_in: 'bode()', formula: '0.05 · 40<sup>j/240</sup>', digits: 4 });
+        ds.var('Gmag', ['b'], Float64Array, { symbol: '|G(iΩ)|', units: 'm/N', long_name: 'steady amplitude per newton', computed_in: 'bode()', formula: '1 / (m √((ω<sub>0</sub>² − Ω²)² + (2ζω<sub>0</sub>Ω)²))', digits: 6 });
+        ds.var('Gphase', ['b'], Float64Array, { symbol: 'φ(Ω)', units: '°', long_name: 'phase lag', computed_in: 'bode()', formula: 'atan2(2ζω<sub>0</sub>Ω, ω<sub>0</sub>² − Ω²) in degrees', digits: 3 });
+
+        var f0 = Sim.slider('f0', { format: function (v) { return v.toFixed(2) + ' Hz'; }, onInput: markStale });
+        var zeta = Sim.slider('zeta', { format: function (v) { return v.toFixed(2); }, onInput: markStale });
+        var F0 = Sim.slider('F0', { format: function (v) { return v.toFixed(1) + ' N'; }, onInput: markStale });
+        var fd = Sim.slider('fd', { format: function (v) { return v.toFixed(2) + ' Hz'; }, onInput: markStale });
+        var speed = Sim.slider('speed', { format: function (v) { return v.toFixed(2) + '×'; } });
+        var seek = Sim.slider('seek', { format: function (v) { return 't = ' + (v * EVERY * H).toFixed(1) + ' s of ' + TEND + ' s'; }, onInput: function (v) { playT = v * EVERY * H; frame(); } });
+
+        /* ---------- the exact solution, used only to measure the RK4 error ---------- */
+        function steady(w0, z, W, F) {
+            var X = (F / M) / Math.sqrt(Math.pow(w0 * w0 - W * W, 2) + Math.pow(2 * z * w0 * W, 2));
+            return { X: X, phi: Math.atan2(2 * z * w0 * W, w0 * w0 - W * W) };
+        }
+        function exact(t, w0, z, W, st) {
+            var wd = w0 * Math.sqrt(1 - z * z), C1 = -st.X * Math.cos(st.phi), C2 = (z * w0 * C1 - st.X * W * Math.sin(st.phi)) / wd;
+            return st.X * Math.cos(W * t - st.phi) + Math.exp(-z * w0 * t) * (C1 * Math.cos(wd * t) + C2 * Math.sin(wd * t));
+        }
+
+        /* ---------- 1 solve, 2 store: the whole run, before anything is drawn ---------- */
+        function accel(t, x, v, p) {
+            return (p.F0 * Math.cos(p.W * t) - p.c * v - p.k * x) / M;
+        }
+        function solve() {
+            var start = performance.now();
+            var w0 = 2 * Math.PI * f0.value, p = { k: M * w0 * w0, c: 2 * zeta.value * M * w0, W: 2 * Math.PI * fd.value, F0: F0.value };
+            var ts = ds.alloc('ts'), xs = ds.alloc('xs'), vs = ds.alloc('vs'), Fs = ds.alloc('Fs'), Es = ds.alloc('Es');
+            var Pin = ds.alloc('Pin'), Ploss = ds.alloc('Ploss'), xex = ds.alloc('xex');
+            var t = 0, x = 0, v = 0, win = 0, wloss = 0, n = 0, step;
+            for (step = 0; step <= TEND / H; step++) {
+                if (step % EVERY === 0) {
+                    ts[n] = t; xs[n] = x; vs[n] = v; Fs[n] = p.F0 * Math.cos(p.W * t);
+                    Es[n] = 0.5 * M * v * v + 0.5 * p.k * x * x; Pin[n] = Fs[n] * v; Ploss[n] = p.c * v * v;
+                    n++;
+                }
+                if (step === TEND / H) break;
+                // RK4 on (x, v, W_in, W_loss)
+                var a1 = accel(t, x, v, p), x2 = x + 0.5 * H * v, v2 = v + 0.5 * H * a1;
+                var a2 = accel(t + 0.5 * H, x2, v2, p), x3 = x + 0.5 * H * v2, v3 = v + 0.5 * H * a2;
+                var a3 = accel(t + 0.5 * H, x3, v3, p), x4 = x + H * v3, v4 = v + H * a3;
+                var a4 = accel(t + H, x4, v4, p);
+                var Fa = p.F0 * Math.cos(p.W * t), Fm = p.F0 * Math.cos(p.W * (t + 0.5 * H)), Fb = p.F0 * Math.cos(p.W * (t + H));
+                win += H / 6 * (Fa * v + 2 * Fm * v2 + 2 * Fm * v3 + Fb * v4);
+                wloss += H / 6 * p.c * (v * v + 2 * v2 * v2 + 2 * v3 * v3 + v4 * v4);
+                x += H / 6 * (v + 2 * v2 + 2 * v3 + v4);
+                v += H / 6 * (a1 + 2 * a2 + 2 * a3 + a4);
+                t = (step + 1) * H;
+            }
+            var st = steady(w0, zeta.value, p.W, p.F0), err = 0, xm = 0, xmax = 1e-9;
+            for (n = 0; n < NS; n++) {
+                xex[n] = exact(ts[n], w0, zeta.value, p.W, st);
+                err = Math.max(err, Math.abs(xs[n] - xex[n]));
+                xmax = Math.max(xmax, Math.abs(xs[n]));
+                if (ts[n] >= TEND - 10) xm = Math.max(xm, Math.abs(xs[n]));
+            }
+            var xqs = ds.alloc('xqs'), ph = ds.alloc('ph'), ylim = 1e-9;
+            for (n = 0; n < NS; n++) {
+                xqs[n] = Fs[n] / p.k;
+                ph[n] = (p.W * ts[n]) % (2 * Math.PI);
+                ylim = Math.max(ylim, Math.abs(xs[n]), Math.abs(xqs[n]));
+            }
+            ['ts', 'xs', 'vs', 'Fs', 'Es', 'Pin', 'Ploss', 'xex', 'xqs', 'ph'].forEach(function (name) { ds.touch(name); });
+            ds.set('m', M); ds.set('f0', f0.value); ds.set('zeta', zeta.value); ds.set('F0', F0.value); ds.set('fd', fd.value);
+            ds.set('omega0', w0); ds.set('k', p.k); ds.set('c', p.c); ds.set('Omega', p.W); ds.set('tau', 1 / (zeta.value * w0)); ds.set('Q', 1 / (2 * zeta.value));
+            ds.set('X', st.X); ds.set('phi', st.phi); ds.set('fr', zeta.value < Math.SQRT1_2 ? f0.value * Math.sqrt(1 - 2 * zeta.value * zeta.value) : 0);
+            ds.set('h', H); ds.set('steps', TEND / H); ds.set('err_max', err); ds.set('Xm', xm); ds.set('xmax', xmax); ds.set('ylim', 1.1 * ylim);
+            ds.set('G_drive', 1 / (M * Math.sqrt(Math.pow(w0 * w0 - p.W * p.W, 2) + Math.pow(2 * zeta.value * w0 * p.W, 2))));
+            ds.set('Gm_drive', p.F0 > 0 ? xm / p.F0 : NaN); ds.set('phi_deg', st.phi * 180 / Math.PI);
+            ds.set('Win', win); ds.set('Wloss', wloss);
+            ds.set('balance', win > 0 ? Math.abs(Es[NS - 1] - Es[0] - (win - wloss)) / win : 0);
+            ds.set('solve_ms', performance.now() - start); ds.set('stale', false);
+            solved = { f0: f0.value, zeta: zeta.value, F0: F0.value, fd: fd.value };
+            bode();
+            readouts();
+            playT = 0;
+            clk.set(true);
+        }
+
+        function bode() {
+            var w0 = ds.get('omega0'), z = ds.get('zeta');
+            var fb = ds.alloc('fb'), G = ds.alloc('Gmag'), P = ds.alloc('Gphase');
+            for (var j = 0; j < 241; j++) {
+                var f = 0.05 * Math.pow(40, j / 240), W = 2 * Math.PI * f;
+                fb[j] = f;
+                G[j] = 1 / (M * Math.sqrt(Math.pow(w0 * w0 - W * W, 2) + Math.pow(2 * z * w0 * W, 2)));
+                P[j] = Math.atan2(2 * z * w0 * W, w0 * w0 - W * W) * 180 / Math.PI;
+            }
+            ds.touch('fb'); ds.touch('Gmag'); ds.touch('Gphase');
+            drawBode();
+        }
+
+        function markStale() {
+            var s = !solved || solved.f0 !== f0.value || solved.zeta !== zeta.value || solved.F0 !== F0.value || solved.fd !== fd.value;
+            ds.set('stale', s);
+            status();
+        }
+        function status() {
+            if (!solved) return;
+            statusEl.classList.toggle('is-stale', ds.get('stale'));
+            statusEl.textContent = ds.get('stale')
+                ? _t('A slider moved. The run below is still the one for f₀ = ') + solved.f0.toFixed(2) + ' Hz, ζ = ' + solved.zeta.toFixed(2) + ', F₀ = ' + solved.F0.toFixed(1) + ' N, f = ' + solved.fd.toFixed(2) + _t(' Hz. Press Solve to compute the new one.')
+                : _t('Solved ') + Sim.fmt(ds.get('steps'), 0) + _t(' RK4 steps in ') + ds.get('solve_ms').toFixed(1) + _t(' ms and stored ') + NS + _t(' samples, one every ') + (EVERY * H * 1000).toFixed(0) + _t(' ms. Every frame shows one stored sample.');
+            ['st-solve', 'st-store'].forEach(function (id) { document.getElementById(id).classList.toggle('is-done', !ds.get('stale')); });
+        }
+        function readouts() {
+            document.getElementById('r-X').textContent = Sim.fmt(ds.get('X'), 3) + ' m';
+            document.getElementById('r-Xm').textContent = Sim.fmt(ds.get('Xm'), 3) + ' m';
+            document.getElementById('r-phi').textContent = Sim.fmt(ds.get('phi_deg'), 1) + '°';
+            document.getElementById('r-Q').textContent = Sim.fmt(ds.get('Q'), 1);
+            document.getElementById('r-err').textContent = ds.get('err_max').toExponential(1).replace('-', '−') + ' m';
+            document.getElementById('r-bal').textContent = ds.get('balance').toExponential(1).replace('-', '−');
+            document.getElementById('cap-res').innerHTML = ds.get('fr') > 0 ? '<i>f</i><sub>r</sub> = ' + Sim.fmt(ds.get('fr'), 3) + ' Hz' : _t('no resonance peak (<i>ζ</i> ≥ 0.71)');
+            status();
+        }
+
+        /* ---------- 3 play: each frame draws stored samples. The only arithmetic below turns metres, seconds and newtons into pixels. ---------- */
+        var BURG = T.accent, FAINT = 'rgba(28, 21, 24, 0.24)';
+        function geom() {
+            // the layout of the figure, from the canvas size and the stored run; draw() and the data panel both use it
+            var w = box.w, h = box.h, narrow = w < 560;
+            var mechH = Math.round(h * (narrow ? 0.38 : 0.37)), ovH = Math.max(34, Math.round(h * 0.1));
+            var L = narrow ? 48 : 62, R = w - (narrow ? 12 : 20);
+            var g = { w: w, h: h, narrow: narrow, mechH: mechH,
+                win: { L: L, R: R, top: mechH + 34, bot: h - ovH - 64 },
+                ov: { L: L, R: R, top: h - ovH - 26, bot: h - 26 } };
+            var floorY = mechH - (narrow ? 50 : 56), wallX = narrow ? 24 : 36, W0 = w - wallX - (narrow ? 18 : 30);
+            var bw = Math.round(Math.max(44, Math.min(80, w * 0.094))), bh = Math.round(bw * 0.66), wr = Math.max(3.5, Math.round(bh * 0.1));
+            g.m = { floorY: floorY, wallX: wallX, W0: W0, bw: bw, bh: bh, wr: wr, by: floorY - 2 * wr - bh / 2, gap0: 0.42 * W0, amp: 0.11 * W0,
+                fmax: Math.min(88, 0.12 * w) };
+            g.m.eqX = wallX + g.m.gap0 + bw / 2;
+            g.m.sc = g.m.amp / ds.get('xmax');
+            g.dial = { r: Math.round(Math.max(15, Math.min(26, mechH * 0.14))) };
+            g.dial.cx = w - g.dial.r - (narrow ? 14 : 24); g.dial.cy = g.dial.r + 16;
+            var t0 = ds.get('win_t0'), Tw = ds.get('win_T'), yl = ds.get('ylim');
+            g.wx = function (t) { return g.win.L + (t - t0) / Tw * (g.win.R - g.win.L); };
+            g.wy = function (x) { return (g.win.top + g.win.bot) / 2 - x / yl * (g.win.bot - g.win.top) / 2; };
+            g.ox = function (t) { return g.ov.L + t / TEND * (g.ov.R - g.ov.L); };
+            g.oy = function (x) { return (g.ov.top + g.ov.bot) / 2 - x / yl * (g.ov.bot - g.ov.top) / 2; };
+            g.inWin = function (t) { return t >= t0 - 1e-9 && t <= t0 + Tw + 1e-9; };
+            return g;
+        }
+        function arrow(c, x0, y0, x1, y1, width, head) {
+            var a = Math.atan2(y1 - y0, x1 - x0), hx = x1 - head * Math.cos(a), hy = y1 - head * Math.sin(a);
+            c.lineWidth = width; c.lineCap = 'butt';
+            c.beginPath(); c.moveTo(x0, y0); c.lineTo(hx, hy); c.stroke();
+            c.beginPath(); c.moveTo(x1, y1);
+            c.lineTo(hx + head * 0.45 * Math.sin(a), hy - head * 0.45 * Math.cos(a));
+            c.lineTo(hx - head * 0.45 * Math.sin(a), hy + head * 0.45 * Math.cos(a));
+            c.closePath(); c.fill();
+        }
+        function spring(c, x0, x1, y, coils, amp) {
+            var lead = Math.min(10, (x1 - x0) * 0.12), len = x1 - x0 - 2 * lead;
+            c.beginPath(); c.moveTo(x0, y); c.lineTo(x0 + lead, y);
+            for (var q = 0; q < coils * 2; q++) c.lineTo(x0 + lead + len * (q + 0.5) / (coils * 2), y + (q % 2 ? amp : -amp));
+            c.lineTo(x1 - lead, y); c.lineTo(x1, y);
+            c.stroke();
+        }
+        function label(c, sym, value, x, y, align, colour) {
+            // a symbol set like the lecture note, then its value in the mono face of the page
+            value = value.replace(/-/g, '−');
+            c.font = T.mono;
+            var vw = c.measureText(value).width;
+            var sw = Sim.tex(c, sym, 0, 0, { size: 15, measure: true });
+            var x0 = align === 'right' ? x - sw - vw : align === 'center' ? x - (sw + vw) / 2 : x;
+            Sim.tex(c, sym, x0, y, { size: 15, color: colour || T.ink });
+            c.font = T.mono; c.fillStyle = colour || T.ink; c.textAlign = 'left'; c.textBaseline = 'alphabetic';
+            c.fillText(value, x0 + sw, y);
+        }
+        function drawMechanism(c, g, i, bx, fpx) {
+            var m = g.m, w = g.w, xs = ds.get('xs'), Fs = ds.get('Fs'), q, top = m.by - m.bh * 0.95;
+            // wall and floor, hatched on the side of the ground
+            c.strokeStyle = T.muted; c.lineWidth = 1;
+            for (q = top + 4; q < m.floorY; q += 7) { c.beginPath(); c.moveTo(m.wallX, q); c.lineTo(m.wallX - 8, q + 8); c.stroke(); }
+            for (q = m.wallX + 2; q < w - 10; q += 9) { c.beginPath(); c.moveTo(q, m.floorY); c.lineTo(q - 8, m.floorY + 8); c.stroke(); }
+            c.strokeStyle = T.ink2; c.lineWidth = 1.6;
+            c.beginPath(); c.moveTo(m.wallX, top); c.lineTo(m.wallX, m.floorY); c.lineTo(w - 10, m.floorY); c.stroke();
+            // rest position of the block centre
+            c.setLineDash([3, 4]); c.strokeStyle = T.muted; c.lineWidth = 1;
+            c.beginPath(); c.moveTo(m.eqX, m.floorY + 3); c.lineTo(m.eqX, m.by - m.bh / 2 - 4); c.stroke(); c.setLineDash([]);
+            // the spring, above
+            c.strokeStyle = T.ink; c.lineWidth = 1.5; c.lineJoin = 'round';
+            spring(c, m.wallX, bx - m.bw / 2, m.by - m.bh * 0.22, 10, Math.min(8, m.bh * 0.17));
+            // the damper, below: a cylinder fixed to the wall, a piston fixed to the block by a rigid rod
+            var yd = m.by + m.bh * 0.24, ch = Math.min(14, m.bh * 0.36), xc1 = m.wallX + 8, xc2 = m.wallX + m.gap0 - m.amp - 12;
+            var rod = m.wallX + m.gap0 - (xc1 + xc2) / 2, xp = bx - m.bw / 2 - rod;
+            c.fillStyle = 'rgba(239, 228, 200, 0.8)'; c.fillRect(xc1, yd - ch / 2, xc2 - xc1, ch);
+            c.strokeStyle = T.ink; c.lineWidth = 1.5;
+            c.beginPath(); c.moveTo(m.wallX, yd); c.lineTo(xc1, yd);
+            c.moveTo(xc2, yd - ch / 2); c.lineTo(xc1, yd - ch / 2); c.lineTo(xc1, yd + ch / 2); c.lineTo(xc2, yd + ch / 2); c.stroke();
+            c.lineWidth = 2.4; c.beginPath(); c.moveTo(xp, yd - ch / 2 + 2.5); c.lineTo(xp, yd + ch / 2 - 2.5); c.stroke();
+            c.lineWidth = 1.5; c.beginPath(); c.moveTo(xp, yd); c.lineTo(bx - m.bw / 2, yd); c.stroke();
+            // the block on two wheels
+            c.fillStyle = T.card; c.strokeStyle = T.ink2; c.lineWidth = 1.2;
+            [-0.27, 0.27].forEach(function (f) { c.beginPath(); c.arc(bx + f * m.bw, m.floorY - m.wr, m.wr, 0, Math.PI * 2); c.fill(); c.stroke(); });
+            c.fillStyle = BURG; c.strokeStyle = T.accentDark; c.lineWidth = 1;
+            c.beginPath();
+            if (c.roundRect) c.roundRect(bx - m.bw / 2, m.by - m.bh / 2, m.bw, m.bh, 3); else c.rect(bx - m.bw / 2, m.by - m.bh / 2, m.bw, m.bh);
+            c.fill(); c.stroke();
+            Sim.tex(c, 'm', bx, m.by + m.bh * 0.17, { size: Math.round(m.bh * 0.5), align: 'center', color: T.card });
+            // the outside force, an arrow above the block: its length is F/F₀ of the arrow for F₀
+            var ay = m.by - m.bh / 2 - 15;
+            c.strokeStyle = BURG; c.fillStyle = BURG;
+            if (Math.abs(fpx) >= 2) arrow(c, bx, ay, bx + fpx, ay, 3, Math.min(9, Math.abs(fpx)));
+            label(c, 'F', ' = ' + Sim.fmt(Fs[i], 2) + ' N', Math.max(60, Math.min(w - 60, bx)), ay - 11, 'center', BURG);
+            // the displacement, on a ruler under the floor
+            var ry = m.floorY + 22, xmax = ds.get('xmax');
+            c.strokeStyle = T.muted; c.lineWidth = 1;
+            c.beginPath(); c.moveTo(m.eqX - m.amp, ry); c.lineTo(m.eqX + m.amp, ry);
+            [-1, 0, 1].forEach(function (f) { c.moveTo(m.eqX + f * m.amp, ry - 4); c.lineTo(m.eqX + f * m.amp, ry + 4); });
+            c.stroke();
+            c.font = T.mono; c.fillStyle = T.muted; c.textBaseline = 'alphabetic'; c.textAlign = 'center';
+            c.fillText('−' + Sim.fmt(xmax, 2), m.eqX - m.amp, ry + 17); c.fillText('0', m.eqX, ry + 17); c.fillText('+' + Sim.fmt(xmax, 2) + ' m', m.eqX + m.amp + (g.narrow ? 6 : 0), ry + 17);
+            c.strokeStyle = BURG; c.fillStyle = BURG;
+            if (Math.abs(bx - m.eqX) >= 2) arrow(c, m.eqX, ry, bx, ry, 2.5, Math.min(8, Math.abs(bx - m.eqX)));
+            label(c, 'x', ' = ' + Sim.fmt(xs[i], 3) + ' m', g.narrow ? m.eqX : m.eqX + m.amp + 16, g.narrow ? ry + 34 : ry + 5, g.narrow ? 'center' : 'left', BURG);
+            // the driver: an arm turning at Ω; its shadow on the horizontal is cos Ωt = F/F₀
+            var d = g.dial, a = ds.get('ph')[i], tx = d.cx + d.r * Math.cos(a), ty = d.cy - d.r * Math.sin(a);
+            c.strokeStyle = T.rule; c.lineWidth = 1.2; c.beginPath(); c.arc(d.cx, d.cy, d.r, 0, Math.PI * 2); c.stroke();
+            c.strokeStyle = T.ruleSoft; c.beginPath(); c.moveTo(d.cx - d.r, d.cy); c.lineTo(d.cx + d.r, d.cy); c.stroke();
+            c.setLineDash([2, 3]); c.strokeStyle = BURG; c.lineWidth = 1; c.beginPath(); c.moveTo(tx, ty); c.lineTo(tx, d.cy); c.stroke(); c.setLineDash([]);
+            c.lineWidth = 2; c.beginPath(); c.moveTo(d.cx, d.cy); c.lineTo(tx, ty); c.stroke();
+            c.fillStyle = BURG; c.beginPath(); c.arc(tx, d.cy, 3, 0, Math.PI * 2); c.fill();
+            c.font = T.mono; c.fillStyle = T.muted; c.textAlign = 'right'; c.textBaseline = 'middle';
+            c.fillText('drive', d.cx - d.r - 8, d.cy - 7);
+            Sim.tex(c, 'Ωt', d.cx - d.r - 8, d.cy + 12, { size: 14, align: 'right', color: T.muted });
+        }
+        function drawWindow(c, g, i) {
+            var p = g.win, ts = ds.get('ts'), xs = ds.get('xs'), xq = ds.get('xqs'), yl = ds.get('ylim'), t0 = ds.get('win_t0'), Tw = ds.get('win_T'), X = ds.get('X'), n;
+            var n0 = Math.max(0, Math.floor(t0 / (EVERY * H))), n1 = Math.min(NS - 1, Math.ceil((t0 + Tw) / (EVERY * H)));
+            var yt = Sim.ticks(-yl, yl, g.narrow ? 3 : 4), tt = Sim.ticks(t0, t0 + Tw, g.narrow ? 4 : 7);
+            c.font = T.mono; c.lineWidth = 1;
+            yt.values.forEach(function (v) {
+                c.strokeStyle = v === 0 ? T.rule : T.ruleSoft; c.beginPath(); c.moveTo(p.L, g.wy(v)); c.lineTo(p.R, g.wy(v)); c.stroke();
+                c.fillStyle = T.muted; c.textAlign = 'right'; c.textBaseline = 'middle'; c.fillText(v === 0 ? '0' : Sim.fmt(v, yt.digits).replace('-', '−'), p.L - 7, g.wy(v));
+            });
+            tt.values.forEach(function (v) {
+                c.strokeStyle = T.ruleSoft; c.beginPath(); c.moveTo(g.wx(v), p.top); c.lineTo(g.wx(v), p.bot); c.stroke();
+                if (g.wx(v) < p.R - 34) { c.fillStyle = T.muted; c.textAlign = 'center'; c.textBaseline = 'alphabetic'; c.fillText(Sim.fmt(v, tt.digits), g.wx(v), p.bot + 16); }
+            });
+            c.fillStyle = T.muted; c.textAlign = 'right'; c.textBaseline = 'alphabetic'; c.fillText('t (s)', p.R, p.bot + 16);
+            c.strokeStyle = T.rule; c.strokeRect(p.L, p.top, p.R - p.L, p.bot - p.top);
+            c.save(); c.beginPath(); c.rect(p.L, p.top, p.R - p.L, p.bot - p.top); c.clip();
+            c.setLineDash([6, 4]); c.strokeStyle = T.rose; c.lineWidth = 1.3;
+            c.beginPath(); c.moveTo(p.L, g.wy(X)); c.lineTo(p.R, g.wy(X)); c.moveTo(p.L, g.wy(-X)); c.lineTo(p.R, g.wy(-X)); c.stroke();
+            c.strokeStyle = 'rgba(122, 31, 43, 0.85)'; c.lineWidth = 1.4;
+            c.beginPath(); for (n = n0; n <= n1; n++) { if (n === n0) c.moveTo(g.wx(ts[n]), g.wy(xq[n])); else c.lineTo(g.wx(ts[n]), g.wy(xq[n])); } c.stroke();
+            c.setLineDash([]); c.lineJoin = 'round';
+            c.strokeStyle = FAINT; c.lineWidth = 1.8;
+            c.beginPath(); for (n = Math.max(i, n0); n <= n1; n++) { if (n === Math.max(i, n0)) c.moveTo(g.wx(ts[n]), g.wy(xs[n])); else c.lineTo(g.wx(ts[n]), g.wy(xs[n])); } c.stroke();
+            c.strokeStyle = T.ink; c.lineWidth = 2.2;
+            c.beginPath(); for (n = n0; n <= Math.min(i, n1); n++) { if (n === n0) c.moveTo(g.wx(ts[n]), g.wy(xs[n])); else c.lineTo(g.wx(ts[n]), g.wy(xs[n])); } c.stroke();
+            c.restore();
+            var cx = g.wx(ts[i]);
+            c.strokeStyle = 'rgba(122, 31, 43, 0.55)'; c.lineWidth = 1; c.beginPath(); c.moveTo(cx, p.top); c.lineTo(cx, p.bot); c.stroke();
+            c.fillStyle = T.card; c.strokeStyle = BURG; c.lineWidth = 1.5; c.beginPath(); c.arc(cx, g.wy(xq[i]), 3.5, 0, Math.PI * 2); c.fill(); c.stroke();
+            c.fillStyle = BURG; c.beginPath(); c.arc(cx, g.wy(xs[i]), 4.5, 0, Math.PI * 2); c.fill();
+            // titles: the quantity on the left, the key on the right
+            label(c, 'x', ' (m)', p.L, p.top - 12, 'left', T.ink2);
+            var kx = p.R;
+            [['±X', T.rose, [6, 4], 1.3], ['F(t)/k', 'rgba(122, 31, 43, 0.85)', [6, 4], 1.4], ['x(t)', T.ink, [], 2.2]].forEach(function (k) {
+                var tw = Sim.tex(c, k[0], 0, 0, { size: 14, measure: true });
+                Sim.tex(c, k[0], kx, p.top - 12, { size: 14, align: 'right', color: T.ink2 });
+                kx -= tw + 6;
+                c.setLineDash(k[2]); c.strokeStyle = k[1]; c.lineWidth = k[3]; c.beginPath(); c.moveTo(kx - 18, p.top - 16); c.lineTo(kx, p.top - 16); c.stroke(); c.setLineDash([]);
+                kx -= 18 + (g.narrow ? 10 : 16);
+            });
+        }
+        function drawOverview(c, g, i) {
+            var p = g.ov, ts = ds.get('ts'), xs = ds.get('xs'), xq = ds.get('xqs'), t0 = ds.get('win_t0'), Tw = ds.get('win_T'), n;
+            var stride = Math.max(1, Math.floor(NS / ((p.R - p.L) * 2)));
+            c.fillStyle = 'rgba(122, 31, 43, 0.07)'; c.fillRect(g.ox(t0), p.top, g.ox(t0 + Tw) - g.ox(t0), p.bot - p.top);
+            c.strokeStyle = T.rule; c.lineWidth = 1; c.strokeRect(p.L, p.top, p.R - p.L, p.bot - p.top);
+            c.strokeStyle = 'rgba(122, 31, 43, 0.45)'; c.beginPath(); c.moveTo(g.ox(t0), p.top); c.lineTo(g.ox(t0), p.bot); c.moveTo(g.ox(t0 + Tw), p.top); c.lineTo(g.ox(t0 + Tw), p.bot); c.stroke();
+            c.save(); c.beginPath(); c.rect(p.L, p.top, p.R - p.L, p.bot - p.top); c.clip();
+            c.strokeStyle = 'rgba(122, 31, 43, 0.5)'; c.lineWidth = 1;
+            c.beginPath(); for (n = 0; n < NS; n += stride) { if (n) c.lineTo(g.ox(ts[n]), g.oy(xq[n])); else c.moveTo(g.ox(ts[n]), g.oy(xq[n])); } c.stroke();
+            c.strokeStyle = FAINT; c.lineWidth = 1;
+            c.beginPath(); for (n = 0; n < NS; n += stride) { if (n) c.lineTo(g.ox(ts[n]), g.oy(xs[n])); else c.moveTo(g.ox(ts[n]), g.oy(xs[n])); } c.stroke();
+            c.strokeStyle = T.ink; c.lineWidth = 1.3;
+            c.beginPath(); for (n = 0; n <= i; n += stride) { if (n) c.lineTo(g.ox(ts[n]), g.oy(xs[n])); else c.moveTo(g.ox(ts[n]), g.oy(xs[n])); } c.lineTo(g.ox(ts[i]), g.oy(xs[i])); c.stroke();
+            c.restore();
+            c.strokeStyle = BURG; c.lineWidth = 1; c.beginPath(); c.moveTo(g.ox(ts[i]), p.top); c.lineTo(g.ox(ts[i]), p.bot); c.stroke();
+            c.font = T.mono; c.fillStyle = T.muted; c.textBaseline = 'alphabetic';
+            c.textAlign = 'left'; c.fillText(g.narrow ? _t('the whole run') : _t('the whole run · the shaded band is the window above'), p.L, p.top - 7);
+            c.textAlign = 'center'; for (var t = 0; t < TEND; t += 10) c.fillText(String(t), g.ox(t), p.bot + 15);
+            c.textAlign = 'right'; c.fillText(TEND + ' s', p.R, p.bot + 15);
+        }
+        function draw() {
+            var i = iNow, ts = ds.get('ts'), xs = ds.get('xs'), Fs = ds.get('Fs');
+            var Tw = Math.min(20, Math.max(6, 4 / ds.get('fd'))), t0 = Math.min(TEND - Tw, Math.max(0, ts[i] - 0.7 * Tw));
+            ds.set('win_T', Tw); ds.set('win_t0', t0);
+            var g = geom(), m = g.m;
+            var bx = m.eqX + xs[i] * m.sc;
+            var fpx = ds.get('F0') > 0 ? Fs[i] / ds.get('F0') * m.fmax : 0;
+            ds.set('px_per_m', m.sc); ds.set('amp_px', m.amp); ds.set('eq_px', m.eqX); ds.set('block_px', bx); ds.set('block_y', m.by);
+            ds.set('Fmax_px', m.fmax); ds.set('F_px', fpx); ds.set('box_w', g.w); ds.set('box_h', g.h);
+            ctx.clearRect(0, 0, g.w, g.h);
+            drawMechanism(ctx, g, i, bx, fpx);
+            drawWindow(ctx, g, i);
+            drawOverview(ctx, g, i);
+        }
+
+        function bodeGeom() {
+            var w = bbox.w, h = bbox.h, narrow = w < 560, top = 36, bot = h - 30, G = ds.get('Gmag'), gmax = 0;
+            for (var j = 0; j < 241; j++) gmax = Math.max(gmax, G[j]);
+            var lgTop = Math.ceil(Math.log10(gmax * 1.05) * 2) / 2, lgBot = lgTop - 3;
+            var panels = narrow
+                ? [{ L: 58, R: w - 14, top: top, bot: top + (bot - top) / 2 - 26 }, { L: 58, R: w - 14, top: top + (bot - top) / 2 + 26, bot: bot }]
+                : [{ L: 64, R: w / 2 - 20, top: top, bot: bot }, { L: w / 2 + 62, R: w - 18, top: top, bot: bot }];
+            return { w: w, h: h, narrow: narrow, panels: panels, lgTop: lgTop, lgBot: lgBot,
+                X: function (p, f) { return p.L + Math.log(f / 0.05) / Math.log(40) * (p.R - p.L); },
+                Ym: function (p, gv) { return p.top + (lgTop - Math.log10(Math.max(gv, 1e-12))) / (lgTop - lgBot) * (p.bot - p.top); },
+                Yp: function (p, d) { return p.top + d / 180 * (p.bot - p.top); } };
+        }
+        function drawBode() {
+            var B = bodeGeom(), c = bctx, G = ds.get('Gmag'), P = ds.get('Gphase'), fb = ds.get('fb'), j;
+            c.clearRect(0, 0, B.w, B.h);
+            B.panels.forEach(function (p, k) {
+                c.font = T.mono; c.lineWidth = 1;
+                [0.05, 0.1, 0.2, 0.5, 1, 2].forEach(function (f) {
+                    c.strokeStyle = T.ruleSoft; c.beginPath(); c.moveTo(B.X(p, f), p.top); c.lineTo(B.X(p, f), p.bot); c.stroke();
+                    if (B.X(p, f) < p.R - 62) { c.fillStyle = T.muted; c.textAlign = 'center'; c.textBaseline = 'alphabetic'; c.fillText(String(f), B.X(p, f), p.bot + 16); }
+                });
+                c.fillStyle = T.muted; c.textAlign = 'right'; c.textBaseline = 'alphabetic'; c.fillText('f (Hz)', p.R, p.bot + 16);
+                c.textBaseline = 'middle';
+                if (k === 0) for (var e = Math.ceil(B.lgBot); e <= B.lgTop; e++) { c.strokeStyle = T.ruleSoft; c.beginPath(); c.moveTo(p.L, B.Ym(p, Math.pow(10, e))); c.lineTo(p.R, B.Ym(p, Math.pow(10, e))); c.stroke(); Sim.tex(c, '10^{' + String(e).replace('-', '−') + '}', p.L - 7, B.Ym(p, Math.pow(10, e)) + 5, { size: 14, align: 'right', color: T.muted }); }
+                else [0, 45, 90, 135, 180].forEach(function (d) { c.strokeStyle = T.ruleSoft; c.beginPath(); c.moveTo(p.L, B.Yp(p, d)); c.lineTo(p.R, B.Yp(p, d)); c.stroke(); c.fillText(d + '°', p.L - 7, B.Yp(p, d)); });
+                c.strokeStyle = T.rule; c.strokeRect(p.L, p.top, p.R - p.L, p.bot - p.top);
+                if (k === 0) label(c, '|G(iΩ)| = X/F_{0}', ' (m/N)', p.L, p.top - 13, 'left', T.ink2);
+                else label(c, 'φ', ' (°)', p.L, p.top - 13, 'left', T.ink2);
+                c.save(); c.beginPath(); c.rect(p.L, p.top, p.R - p.L, p.bot - p.top); c.clip();
+                c.setLineDash([4, 4]); c.strokeStyle = T.muted; c.lineWidth = 1;
+                c.beginPath(); c.moveTo(B.X(p, ds.get('f0')), p.top); c.lineTo(B.X(p, ds.get('f0')), p.bot); c.stroke(); c.setLineDash([]);
+                Sim.tex(c, 'f_{0}', B.X(p, ds.get('f0')) + 5, p.top + 16, { size: 14, color: T.muted });
+                c.strokeStyle = T.ink; c.lineWidth = 2; c.lineJoin = 'round';
+                c.beginPath();
+                for (j = 0; j < 241; j++) { var y = k === 0 ? B.Ym(p, G[j]) : B.Yp(p, P[j]); if (j) c.lineTo(B.X(p, fb[j]), y); else c.moveTo(B.X(p, fb[j]), y); }
+                c.stroke();
+                var fx = B.X(p, ds.get('fd')), fy = k === 0 ? B.Ym(p, ds.get('G_drive')) : B.Yp(p, ds.get('phi_deg'));
+                if (k === 0 && isFinite(ds.get('Gm_drive'))) { c.strokeStyle = BURG; c.lineWidth = 1.6; c.beginPath(); c.arc(fx, B.Ym(p, ds.get('Gm_drive')), 9, 0, Math.PI * 2); c.stroke(); }
+                c.fillStyle = BURG; c.beginPath(); c.arc(fx, fy, 5, 0, Math.PI * 2); c.fill();
+                c.restore();
+            });
+        }
+
+        /* live values for the walkthrough: read from the store, nothing recomputed */
+        Sim.live = function () {
+            return {
+                k: Sim.fmt(ds.get('k'), 3) + ' N/m', c: Sim.fmt(ds.get('c'), 4) + ' kg/s', W: Sim.fmt(ds.get('Omega'), 4) + ' rad/s', w0: Sim.fmt(ds.get('omega0'), 4) + ' rad/s',
+                h: ds.get('h') + ' s', steps: Sim.fmt(ds.get('steps'), 0), n: String(ds.get('i_now')), t: Sim.fmt(ds.get('t_play'), 2) + ' s',
+                x: Sim.fmt(ds.get('x_now'), 5) + ' m', v: Sim.fmt(ds.get('v_now'), 5) + ' m/s', F: Sim.fmt(ds.get('F_now'), 4) + ' N', E: Sim.fmt(ds.get('E_now'), 5) + ' J',
+                X: Sim.fmt(ds.get('X'), 5) + ' m', phi: Sim.fmt(ds.get('phi_deg'), 2) + '°', err: ds.get('err_max').toExponential(2) + ' m',
+                Win: Sim.fmt(ds.get('Win'), 4) + ' J', Wloss: Sim.fmt(ds.get('Wloss'), 4) + ' J', bal: ds.get('balance').toExponential(2),
+                bx: Sim.fmt(ds.get('block_px'), 1) + ' px', sc: Sim.fmt(ds.get('px_per_m'), 2) + ' px/m'
+            };
+        };
+
+        function frame() {
+            var i = Math.min(NS - 1, Math.max(0, Math.round(playT / (EVERY * H))));
+            iNow = i;
+            ds.set('i_now', i); ds.set('t_play', playT);
+            ds.set('x_now', ds.get('xs')[i]); ds.set('v_now', ds.get('vs')[i]); ds.set('F_now', ds.get('Fs')[i]);
+            ds.set('E_now', ds.get('Es')[i]); ds.set('Pin_now', ds.get('Pin')[i]); ds.set('ph_now', ds.get('ph')[i]);
+            seek.set(i);
+            document.getElementById('cap-t').innerHTML = '<i>t</i> = ' + ds.get('ts')[i].toFixed(2) + ' s of ' + TEND + ' s';
+            draw();
+        }
+        var clk = Sim.clock(function (dt) {
+            if (!solved) return;
+            if (dt > 0) { fps = fps ? fps + (1 / dt - fps) * 0.1 : 1 / dt; }
+            playT += speed.value * dt;
+            if (playT > TEND) { playT = TEND; clk.set(false); }
+            ds.set('fps', fps); ds.set('playing', clk.playing);
+            document.getElementById('st-play').classList.toggle('is-done', clk.playing);
+            frame();
+        });
+        Sim.playButton(document.getElementById('play'), clk);
+        document.getElementById('solve').addEventListener('click', solve);
+        document.getElementById('restart').addEventListener('click', function () { playT = 0; clk.set(true); });
+
+        /* ---------- the data panel (scripts/datalog.js) reads the store; these hooks only say where things are drawn and how to test a value ---------- */
+        function chartPos(n) {
+            var g = geom(), t = ds.get('ts')[n], x = ds.get('xs')[n];
+            return g.inWin(t) ? { x: g.wx(t), y: g.wy(x), where: 'the window chart' } : { x: g.ox(t), y: g.oy(x), where: 'the strip of the whole run' };
+        }
+        function chartPosQ(n) {
+            var g = geom(), t = ds.get('ts')[n], x = ds.get('xqs')[n];
+            return g.inWin(t) ? { x: g.wx(t), y: g.wy(x), where: 'the window chart' } : { x: g.ox(t), y: g.oy(x), where: 'the strip of the whole run' };
+        }
+        function rk4Replay(n) {
+            // the same integrator, rerun from t = 0 to sample n, with the driver's work and the damper's heat carried along:
+            // the check of a stored ODE solution and of the energy integrals
+            var p = { k: ds.get('k'), c: ds.get('c'), W: ds.get('Omega'), F0: ds.get('F0') };
+            var t = 0, x = 0, v = 0, win = 0, wloss = 0;
+            for (var step = 0; step < n * EVERY; step++) {
+                var a1 = accel(t, x, v, p), x2 = x + 0.5 * H * v, v2 = v + 0.5 * H * a1;
+                var a2 = accel(t + 0.5 * H, x2, v2, p), x3 = x + 0.5 * H * v2, v3 = v + 0.5 * H * a2;
+                var a3 = accel(t + 0.5 * H, x3, v3, p), x4 = x + H * v3, v4 = v + H * a3;
+                var a4 = accel(t + H, x4, v4, p);
+                var Fa = p.F0 * Math.cos(p.W * t), Fm = p.F0 * Math.cos(p.W * (t + 0.5 * H)), Fb = p.F0 * Math.cos(p.W * (t + H));
+                win += H / 6 * (Fa * v + 2 * Fm * v2 + 2 * Fm * v3 + Fb * v4);
+                wloss += H / 6 * p.c * (v * v + 2 * v2 * v2 + 2 * v3 * v3 + v4 * v4);
+                x += H / 6 * (v + 2 * v2 + 2 * v3 + v4);
+                v += H / 6 * (a1 + 2 * a2 + 2 * a3 + a4);
+                t = (step + 1) * H;
+            }
+            return { x: x, v: v, win: win, wloss: wloss };
+        }
+        var replayAll = null;
+        function fullReplay() {
+            // one rerun of the whole 60 s serves every check of a run-wide integral; it is redone when the run changes
+            var key = [ds.get('f0'), ds.get('zeta'), ds.get('F0'), ds.get('fd')].join();
+            if (!replayAll || replayAll.key !== key) { replayAll = rk4Replay(NS - 1); replayAll.key = key; }
+            return replayAll;
+        }
+        function sliderCheck(input, label) { return { formula: _t('read from the ') + label + _t(' slider at the last solve'), inputs: [['slider now', input.value, '']], value: ds.get('stale') ? NaN : parseFloat(input.value) }; }
+        function at(name) { return function () { var n = ds.get('i_now'); return { formula: name + _t('<sub>n</sub> at n = n<sub>now</sub>'), inputs: [['n<sub>now</sub>', n, '', 0]], value: ds.get(name)[n] }; }; }
+        function neutralInk(c) { return c[3] > 25 && c[0] < 100 && c[1] < 100 && c[2] < 100 && Math.abs(c[0] - c[2]) < 30; }
+        function readBack(b, what, pt, r, test, expected, note) {
+            var q = Sim.readPixel(b, pt.x, pt.y, r, test);
+            return { what: what + ', (' + Sim.fmt(pt.x, 1) + ', ' + Sim.fmt(pt.y, 1) + _t(') css px'), drawn: q.text, expected: expected, ok: q.found, note: note };
+        }
+        function blockPixel() {
+            var g = geom(), x = ds.get('block_px') - 0.32 * g.m.bw, y = ds.get('block_y');
+            return readBack(box, 'screen pixel inside the block, left of the letter m', { x: x, y: y }, 0, Sim.isBurgundy, 'the burgundy block fill',
+                'The block is drawn centred on x<sub>block</sub> = x<sub>eq</sub> + x · px/m; this pixel lies 0.32 block widths left of that centre, clear of the letter m.');
+        }
+        Sim.data = {
+            ds: ds, kicker: _t('Fig. 9 · data'), file: 'fig9-driven-oscillator',
+            playing: function () { return clk.playing; },
+            groups: [
+                { title: _t('Parameters'), note: _t('what you set with the sliders, as used by the last solve'), vars: ['m', 'f0', 'zeta', 'F0', 'fd'] },
+                { title: _t('Derived physics'), note: _t('computed from the parameters by solve()'), vars: ['omega0', 'k', 'c', 'Omega', 'tau', 'Q', 'X', 'phi', 'phi_deg', 'G_drive', 'fr'] },
+                { title: _t('Solver'), note: _t('how the run was computed, and what it measured'), vars: ['h', 'steps', 'solve_ms', 'err_max', 'Xm', 'Gm_drive', 'Win', 'Wloss', 'balance', 'stale'] },
+                { title: _t('Stored run'), note: _t('one row per stored sample, every 10 ms of the 60 s'), vars: ['ts', 'xs', 'vs', 'Fs', 'xqs', 'ph', 'Es', 'Pin', 'Ploss', 'xex'] },
+                { title: _t('Playback'), note: _t('the sample on screen now'), vars: ['i_now', 't_play', 'x_now', 'v_now', 'F_now', 'ph_now', 'E_now', 'Pin_now'] },
+                { title: _t('Bode plot'), note: _t('the curves of the second figure'), vars: ['fb', 'Gmag', 'Gphase'] },
+                { title: _t('Drawing'), note: _t('how stored values become pixels'), vars: ['xmax', 'ylim', 'amp_px', 'px_per_m', 'eq_px', 'block_px', 'block_y', 'Fmax_px', 'F_px', 'win_t0', 'win_T', 'box_w', 'box_h', 'fps', 'playing'] }
+            ],
+            colour: { xs: function (v) { return Sim.colourMap(v, ds.get('xmax')); }, Fs: function (v) { return Sim.colourMap(v, Math.max(ds.get('F0'), 1e-9)); } },
+            probe: function (x, y) {
+                if (Math.abs(x - ds.get('block_px')) < 40 && Math.abs(y - ds.get('block_y')) < 34) return { what: 'block' };
+                var g = geom(), ts = ds.get('ts'), best = null, bd = 16;
+                for (var n = 0; n < NS; n++) {
+                    if (!g.inWin(ts[n]) && n % 5) continue;
+                    var p = chartPos(n), d = Math.hypot(x - p.x, y - p.y);
+                    if (d < bd) { bd = d; best = { what: 'sample', n: n }; }
+                }
+                return best;
+            },
+            inspect: function (ref) {
+                var n = ref.what === 'block' ? ds.get('i_now') : ref.n;
+                var rows = [['n', n, '', 'i_now', null], ['t', ds.get('ts')[n], 's', 'ts', n], ['x', ds.get('xs')[n], 'm', 'xs', n], ['v', ds.get('vs')[n], 'm/s', 'vs', n], ['F', ds.get('Fs')[n], 'N', 'Fs', n], ['F/k', ds.get('xqs')[n], 'm', 'xqs', n], ['E', ds.get('Es')[n], 'J', 'Es', n], ['P<sub>in</sub>', ds.get('Pin')[n], 'W', 'Pin', n], ['x<sub>exact</sub>', ds.get('xex')[n], 'm', 'xex', n]];
+                return { title: ref.what === 'block' ? _t('the block, sample ') + n : _t('stored sample ') + n, at: ref.what === 'block' ? { x: ds.get('block_px'), y: ds.get('block_y') } : chartPos(n), rows: rows };
+            },
+            locate: function (name, idx) {
+                var v = ds.vars[name];
+                if (name === 'xqs') return chartPosQ(idx);
+                if (v.dims[0] === 'n') return chartPos(idx);
+                if (name === 'x_now' || name === 'block_px') return { x: ds.get('block_px'), y: ds.get('block_y') };
+                return null;
+            },
+            check: {
+                f0: function () { return sliderCheck(f0.el, 'natural frequency'); },
+                zeta: function () { return sliderCheck(zeta.el, 'damping ratio'); },
+                F0: function () { return sliderCheck(F0.el, 'force amplitude'); },
+                fd: function () { return sliderCheck(fd.el, 'drive frequency'); },
+                m: function () { return { formula: 'the constant M in the code', inputs: [], value: M }; },
+                omega0: function () { return { formula: 'ω<sub>0</sub> = 2π f<sub>0</sub>', inputs: [['f<sub>0</sub>', ds.get('f0'), 'Hz', 2]], value: 2 * Math.PI * ds.get('f0') }; },
+                k: function () { return { formula: 'k = m ω<sub>0</sub>²', inputs: [['m', ds.get('m'), 'kg', 1], ['ω<sub>0</sub>', ds.get('omega0'), 'rad/s', 6]], value: ds.get('m') * ds.get('omega0') * ds.get('omega0') }; },
+                c: function () { return { formula: 'c = 2 ζ m ω<sub>0</sub>', inputs: [['ζ', ds.get('zeta'), '', 2], ['m', ds.get('m'), 'kg', 1], ['ω<sub>0</sub>', ds.get('omega0'), 'rad/s', 6]], value: 2 * ds.get('zeta') * ds.get('m') * ds.get('omega0') }; },
+                Omega: function () { return { formula: 'Ω = 2π f', inputs: [['f', ds.get('fd'), 'Hz', 2]], value: 2 * Math.PI * ds.get('fd') }; },
+                tau: function () { return { formula: 'τ = 1 / (ζ ω<sub>0</sub>)', inputs: [['ζ', ds.get('zeta'), '', 2], ['ω<sub>0</sub>', ds.get('omega0'), 'rad/s', 6]], value: 1 / (ds.get('zeta') * ds.get('omega0')) }; },
+                Q: function () { return { formula: 'Q = 1 / (2ζ)', inputs: [['ζ', ds.get('zeta'), '', 2]], value: 1 / (2 * ds.get('zeta')) }; },
+                X: function () { return { formula: '(F<sub>0</sub>/m) / √((ω<sub>0</sub>² − Ω²)² + (2ζω<sub>0</sub>Ω)²)', inputs: [['F<sub>0</sub>', ds.get('F0'), 'N', 1], ['ω<sub>0</sub>', ds.get('omega0'), 'rad/s', 6], ['Ω', ds.get('Omega'), 'rad/s', 6], ['ζ', ds.get('zeta'), '', 2]], value: steady(ds.get('omega0'), ds.get('zeta'), ds.get('Omega'), ds.get('F0')).X }; },
+                phi: function () { return { formula: 'atan2(2ζω<sub>0</sub>Ω, ω<sub>0</sub>² − Ω²)', inputs: [['ω<sub>0</sub>', ds.get('omega0'), 'rad/s', 6], ['Ω', ds.get('Omega'), 'rad/s', 6], ['ζ', ds.get('zeta'), '', 2]], value: steady(ds.get('omega0'), ds.get('zeta'), ds.get('Omega'), ds.get('F0')).phi }; },
+                phi_deg: function () { return { formula: 'φ · 180/π', inputs: [['φ', ds.get('phi'), 'rad', 6]], value: ds.get('phi') * 180 / Math.PI }; },
+                G_drive: function () { var w0 = ds.get('omega0'), W = ds.get('Omega'), z = ds.get('zeta'); return { formula: '1 / (m √((ω<sub>0</sub>² − Ω²)² + (2ζω<sub>0</sub>Ω)²))', inputs: [['ω<sub>0</sub>', w0, 'rad/s', 6], ['Ω', W, 'rad/s', 6], ['ζ', z, '', 2]], value: 1 / (M * Math.sqrt(Math.pow(w0 * w0 - W * W, 2) + Math.pow(2 * z * w0 * W, 2))) }; },
+                fr: function () { var z = ds.get('zeta'); return { formula: 'f<sub>0</sub> √(1 − 2ζ²) when ζ < 1/√2, else 0 (no peak)', inputs: [['f<sub>0</sub>', ds.get('f0'), 'Hz', 2], ['ζ', z, '', 2]], value: z < Math.SQRT1_2 ? ds.get('f0') * Math.sqrt(1 - 2 * z * z) : 0 }; },
+                h: function () { return { formula: 'the constant H in the code', inputs: [], value: H }; },
+                steps: function () { return { formula: 'T<sub>end</sub> / h', inputs: [['T<sub>end</sub>', TEND, 's', 0], ['h', H, 's', 4]], value: TEND / H }; },
+                err_max: function () { var xs = ds.get('xs'), xe = ds.get('xex'), e = 0; for (var n = 0; n < NS; n++) e = Math.max(e, Math.abs(xs[n] - xe[n])); return { formula: 'max over n of |x<sub>n</sub> − x<sub>exact, n</sub>|, from the stored arrays', inputs: [['samples', NS, '', 0]], value: e }; },
+                Xm: function () { var xs = ds.get('xs'), ts = ds.get('ts'), e = 0; for (var n = 0; n < NS; n++) if (ts[n] >= TEND - 10) e = Math.max(e, Math.abs(xs[n])); return { formula: 'max |x<sub>n</sub>| over t<sub>n</sub> ≥ 50 s, from the stored array', inputs: [['samples', NS, '', 0]], value: e }; },
+                Gm_drive: function () { return { formula: 'X<sub>measured</sub> / F<sub>0</sub>', inputs: [['X<sub>measured</sub>', ds.get('Xm'), 'm', 6], ['F<sub>0</sub>', ds.get('F0'), 'N', 1]], value: ds.get('F0') > 0 ? ds.get('Xm') / ds.get('F0') : NaN }; },
+                Win: function () { return { formula: 'the same RK4, rerun over the whole run, carrying ∫ F v dt', inputs: [['steps', TEND / H, '', 0]], value: fullReplay().win }; },
+                Wloss: function () { return { formula: 'the same RK4, rerun over the whole run, carrying ∫ c v² dt', inputs: [['steps', TEND / H, '', 0]], value: fullReplay().wloss }; },
+                balance: function () { var E = ds.get('Es'), wi = ds.get('Win'), wl = ds.get('Wloss'); return { formula: '|E(T) − E(0) − (W<sub>in</sub> − W<sub>loss</sub>)| / W<sub>in</sub>', inputs: [['E(T)', E[NS - 1], 'J', 6], ['E(0)', E[0], 'J', 6], ['W<sub>in</sub>', wi, 'J', 6], ['W<sub>loss</sub>', wl, 'J', 6]], value: wi > 0 ? Math.abs(E[NS - 1] - E[0] - (wi - wl)) / wi : 0 }; },
+                ts: function (n) { return { formula: 'n · 10 h', inputs: [['n', n, '', 0], ['h', H, 's', 4]], value: n * EVERY * H }; },
+                xs: function (n) { return { formula: 'the same RK4, rerun from t = 0 to sample n', inputs: [['n', n, '', 0], ['h', H, 's', 4]], value: rk4Replay(n).x }; },
+                vs: function (n) { return { formula: 'the same RK4, rerun from t = 0 to sample n', inputs: [['n', n, '', 0], ['h', H, 's', 4]], value: rk4Replay(n).v }; },
+                Fs: function (n) { return { formula: 'F<sub>0</sub> cos(Ω t<sub>n</sub>)', inputs: [['F<sub>0</sub>', ds.get('F0'), 'N', 1], ['Ω', ds.get('Omega'), 'rad/s', 6], ['t<sub>n</sub>', ds.get('ts')[n], 's', 3]], value: ds.get('F0') * Math.cos(ds.get('Omega') * ds.get('ts')[n]) }; },
+                xqs: function (n) { return { formula: 'F<sub>n</sub> / k', inputs: [['F<sub>n</sub>', ds.get('Fs')[n], 'N', 6], ['k', ds.get('k'), 'N/m', 4]], value: ds.get('Fs')[n] / ds.get('k') }; },
+                ph: function (n) { return { formula: 'Ω t<sub>n</sub> mod 2π', inputs: [['Ω', ds.get('Omega'), 'rad/s', 6], ['t<sub>n</sub>', ds.get('ts')[n], 's', 3]], value: (ds.get('Omega') * ds.get('ts')[n]) % (2 * Math.PI) }; },
+                Es: function (n) { return { formula: '½ m v<sub>n</sub>² + ½ k x<sub>n</sub>²', inputs: [['v<sub>n</sub>', ds.get('vs')[n], 'm/s', 6], ['x<sub>n</sub>', ds.get('xs')[n], 'm', 6], ['k', ds.get('k'), 'N/m', 4]], value: 0.5 * M * ds.get('vs')[n] * ds.get('vs')[n] + 0.5 * ds.get('k') * ds.get('xs')[n] * ds.get('xs')[n] }; },
+                Pin: function (n) { return { formula: 'F<sub>n</sub> v<sub>n</sub>', inputs: [['F<sub>n</sub>', ds.get('Fs')[n], 'N', 6], ['v<sub>n</sub>', ds.get('vs')[n], 'm/s', 6]], value: ds.get('Fs')[n] * ds.get('vs')[n] }; },
+                Ploss: function (n) { return { formula: 'c v<sub>n</sub>²', inputs: [['c', ds.get('c'), 'kg/s', 4], ['v<sub>n</sub>', ds.get('vs')[n], 'm/s', 6]], value: ds.get('c') * ds.get('vs')[n] * ds.get('vs')[n] }; },
+                xex: function (n) { return { formula: 'X cos(Ωt − φ) + e<sup>−ζω₀t</sup>(C₁ cos ω<sub>d</sub>t + C₂ sin ω<sub>d</sub>t)', inputs: [['t<sub>n</sub>', ds.get('ts')[n], 's', 3], ['X', ds.get('X'), 'm', 6], ['φ', ds.get('phi'), 'rad', 6]], value: exact(ds.get('ts')[n], ds.get('omega0'), ds.get('zeta'), ds.get('Omega'), { X: ds.get('X'), phi: ds.get('phi') }) }; },
+                i_now: function () { return { formula: 'round(t<sub>play</sub> / 10h), at most 6000', inputs: [['t<sub>play</sub>', ds.get('t_play'), 's', 4]], value: Math.min(NS - 1, Math.max(0, Math.round(ds.get('t_play') / (EVERY * H)))) }; },
+                x_now: at('xs'), v_now: at('vs'), F_now: at('Fs'), ph_now: at('ph'), E_now: at('Es'), Pin_now: at('Pin'),
+                xmax: function () { var xs = ds.get('xs'), e = 1e-9; for (var n = 0; n < NS; n++) e = Math.max(e, Math.abs(xs[n])); return { formula: 'max |x<sub>n</sub>| over the run, from the stored array', inputs: [['samples', NS, '', 0]], value: e }; },
+                ylim: function () { var xs = ds.get('xs'), q = ds.get('xqs'), e = 1e-9; for (var n = 0; n < NS; n++) e = Math.max(e, Math.abs(xs[n]), Math.abs(q[n])); return { formula: '1.1 · max(|x<sub>n</sub>|, |F<sub>n</sub>/k|), from the stored arrays', inputs: [['samples', NS, '', 0]], value: 1.1 * e }; },
+                px_per_m: function () { return { formula: 'A<sub>px</sub> / max |x|', inputs: [['A<sub>px</sub>', ds.get('amp_px'), 'css px', 2], ['max |x|', ds.get('xmax'), 'm', 6]], value: ds.get('amp_px') / ds.get('xmax') }; },
+                block_px: function () { return { formula: 'x<sub>eq</sub> + x · px/m', inputs: [['x<sub>eq</sub>', ds.get('eq_px'), 'css px', 1], ['x', ds.get('x_now'), 'm', 6], ['px/m', ds.get('px_per_m'), '', 4]], value: ds.get('eq_px') + ds.get('x_now') * ds.get('px_per_m') }; },
+                F_px: function () { return { formula: 'F<sub>now</sub> / F<sub>0</sub> · L<sub>F</sub>', inputs: [['F<sub>now</sub>', ds.get('F_now'), 'N', 6], ['F<sub>0</sub>', ds.get('F0'), 'N', 1], ['L<sub>F</sub>', ds.get('Fmax_px'), 'css px', 1]], value: ds.get('F0') > 0 ? ds.get('F_now') / ds.get('F0') * ds.get('Fmax_px') : 0 }; },
+                win_T: function () { return { formula: 'clamp(4/f, 6 s, 20 s)', inputs: [['f', ds.get('fd'), 'Hz', 2]], value: Math.min(20, Math.max(6, 4 / ds.get('fd'))) }; },
+                win_t0: function () { var Tw = ds.get('win_T'), t = ds.get('ts')[ds.get('i_now')]; return { formula: 'clamp(t<sub>n</sub> − 0.7 T<sub>window</sub>, 0, 60 s − T<sub>window</sub>)', inputs: [['t<sub>n</sub>', t, 's', 3], ['T<sub>window</sub>', Tw, 's', 3]], value: Math.min(TEND - Tw, Math.max(0, t - 0.7 * Tw)) }; },
+                fb: function (j) { return { formula: '0.05 · 40<sup>j/240</sup> Hz', inputs: [['j', j, '', 0]], value: 0.05 * Math.pow(40, j / 240) }; },
+                Gmag: function (j) { var W = 2 * Math.PI * ds.get('fb')[j], w0 = ds.get('omega0'), z = ds.get('zeta'); return { formula: '1 / (m √((ω<sub>0</sub>² − Ω²)² + (2ζω<sub>0</sub>Ω)²))', inputs: [['f<sub>b</sub>', ds.get('fb')[j], 'Hz', 5], ['ω<sub>0</sub>', w0, 'rad/s', 6], ['ζ', z, '', 2]], value: 1 / (M * Math.sqrt(Math.pow(w0 * w0 - W * W, 2) + Math.pow(2 * z * w0 * W, 2))) }; },
+                Gphase: function (j) { var W = 2 * Math.PI * ds.get('fb')[j], w0 = ds.get('omega0'), z = ds.get('zeta'); return { formula: 'atan2(2ζω<sub>0</sub>Ω, ω<sub>0</sub>² − Ω²) in degrees', inputs: [['f<sub>b</sub>', ds.get('fb')[j], 'Hz', 5], ['ω<sub>0</sub>', w0, 'rad/s', 6], ['ζ', z, '', 2]], value: Math.atan2(2 * z * w0 * W, w0 * w0 - W * W) * 180 / Math.PI }; }
+            },
+            drawn: {
+                x_now: function () { return blockPixel(); },
+                block_px: function () { return blockPixel(); },
+                F_now: function () {
+                    var g = geom(), fpx = ds.get('F_px'), y = ds.get('block_y') - g.m.bh / 2 - 15, x = ds.get('block_px') + fpx / 2;
+                    if (Math.abs(fpx) < 2) {
+                        var none = Sim.readPixel(box, x, y, 1, Sim.isBurgundy);
+                        return { what: _t('where the force arrow would start, (') + Sim.fmt(x, 1) + ', ' + Sim.fmt(y, 1) + _t(') css px'), drawn: none.found ? none.text : _t('no burgundy pixel'), expected: _t('no arrow: |F| is below 2 px of the arrow scale'), ok: !none.found, note: _t('The arrow is drawn only when it is at least 2 px long.') };
+                    }
+                    return readBack(box, 'screen pixel half-way along the force arrow', { x: x, y: y }, 1, Sim.isBurgundy, 'the burgundy arrow', 'The arrow starts at the block centre and is F/F<sub>0</sub> · L<sub>F</sub> pixels long, to the right for F > 0.');
+                },
+                ph_now: function () {
+                    var g = geom(), a = ds.get('ph_now'), d = g.dial;
+                    return readBack(box, 'screen pixel half-way along the driver’s arm', { x: d.cx + 0.5 * d.r * Math.cos(a), y: d.cy - 0.5 * d.r * Math.sin(a) }, 1, Sim.isBurgundy, 'the burgundy arm', 'The arm points at the stored angle Ωt, counted anticlockwise from the right.');
+                },
+                xs: function (n) {
+                    var p = chartPos(n);
+                    return readBack(box, 'x<sub>n</sub> on ' + p.where, p, 2, neutralInk, 'the dark curve of x(t): solid where played, faint where still to come',
+                        _t('The window draws every stored sample between its edges; the strip of the whole run draws every ') + Math.max(1, Math.floor(NS / ((geom().ov.R - geom().ov.L) * 2))) + _t('-th, about two per screen pixel.'));
+                },
+                xqs: function (n) {
+                    var p = chartPosQ(n);
+                    return readBack(box, 'F<sub>n</sub>/k on ' + p.where, p, 3, Sim.isBurgundy, 'the burgundy curve of F/k', 'In the window the curve is dashed, so the search reaches 3 px along it to land on a dash.');
+                },
+                Gmag: function (j) {
+                    var B = bodeGeom(), p = B.panels[0];
+                    return readBack(bbox, '|G| at f<sub>b, j</sub> on the Bode plot', { x: B.X(p, ds.get('fb')[j]), y: B.Ym(p, ds.get('Gmag')[j]) }, 2, neutralInk, 'the dark curve', 'Logarithmic axes: x ∝ log f, y ∝ log |G|.');
+                },
+                Gphase: function (j) {
+                    var B = bodeGeom(), p = B.panels[1];
+                    return readBack(bbox, 'φ at f<sub>b, j</sub> on the Bode plot', { x: B.X(p, ds.get('fb')[j]), y: B.Yp(p, ds.get('Gphase')[j]) }, 2, neutralInk, 'the dark curve', 'x ∝ log f, y ∝ φ from 0° at the top to 180° at the bottom.');
+                },
+                G_drive: function () {
+                    var B = bodeGeom(), p = B.panels[0];
+                    return readBack(bbox, 'the drive frequency on the Bode plot', { x: B.X(p, ds.get('fd')), y: B.Ym(p, ds.get('G_drive')) }, 1, Sim.isBurgundy, 'the burgundy dot', 'The dot sits at f and |G(iΩ)|; the ring around it is the amplitude measured in the stored run, per newton.');
+                },
+                phi_deg: function () {
+                    var B = bodeGeom(), p = B.panels[1];
+                    return readBack(bbox, 'the drive frequency on the phase plot', { x: B.X(p, ds.get('fd')), y: B.Yp(p, ds.get('phi_deg')) }, 1, Sim.isBurgundy, 'the burgundy dot', 'The dot sits at f and φ.');
+                }
+            },
+            round: { time: 't_play', label: function () { return _t('one drive period, 1/f = ') + Sim.fmt(1 / ds.get('fd'), 3) + _t(' s of the stored run'); }, length: function () { return 1 / ds.get('fd'); },
+                columns: ['x_now', 'v_now', 'F_now', 'E_now', 'Pin_now'], point: function () { return { what: 'block' }; },
+                blocked: function () { return ds.get('t_play') + 1 / ds.get('fd') > TEND ? _t('the stored run ends before one more drive period; press From t = 0') : null; } },
+            play: function () { clk.set(true); },
+            about: _t('Nothing on this page is computed while you watch. The run is solved once, with RK4 at h = 1 ms, and every tenth state is stored together with the force F, the stretch F/k, the drive phase Ωt, the energy, the two powers and the exact solution. Each frame draws the stored sample nearest to the playback time, without interpolation; the only arithmetic in the drawing turns metres, seconds and newtons into pixels, with the scales listed under Drawing. The window chart draws every stored sample between its edges; the strip of the whole run draws about two samples per screen pixel. The block travels A<sub>px</sub> pixels either side of rest at the largest swing of the run, so the drawing scale px/m changes when the run changes; the ruler under the floor gives that swing in metres.')
+        };
+
+        solve();
+        Sim.onResize(stage, function () { box.fit(); frame(); });
+        Sim.onResize(bodeStage, function () { bbox.fit(); drawBode(); });
+        if (document.fonts && document.fonts.ready) document.fonts.ready.then(function () { frame(); drawBode(); });
+    })();
+    </script>
+    <script src="../../scripts/datalog.js"></script>
+</body>
+</html>
+

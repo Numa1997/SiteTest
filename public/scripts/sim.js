@@ -1,7 +1,7 @@
 /* Numa Koudsie · simulations
    Shared helpers: the site palette, crisp high-DPI canvases, styled sliders and a pausable clock. */
 (function () {
-    'use strict'; window.T = window.T || function (s, v) { var d = window.I18N, r = d && d[s]; if (typeof r !== 'string') r = s; return v ? r.replace(/\{(\w+)\}/g, function (m, k) { return k in v ? v[k] : m; }) : r; };   /* a page's words: scripts/i18n/strings-<lang>.js on a translated page */
+    'use strict'; window._t = window.T = window.T || function (s, v) { var d = window.I18N, r = d && d[s]; if (typeof r !== 'string') r = s; return v ? r.replace(/\{(\w+)\}/g, function (m, k) { return k in v ? v[k] : m; }) : r; };   /* a page's words: scripts/i18n/strings-<lang>.js on a translated page */
 
     var theme = {
         paper: '#f5f1ea',
@@ -198,7 +198,7 @@
 
     function playButton(button, clk) {
         function paint(p) {
-            button.textContent = p ? 'Pause' : 'Play';
+            button.textContent = p ? T('Pause') : T('Play');
             button.setAttribute('aria-pressed', p ? 'false' : 'true');
         }
         button.addEventListener('click', clk.toggle);
@@ -222,9 +222,9 @@
         el.className = 'sim-error';
         el.setAttribute('role', 'alert');
         var b = document.createElement('b');
-        b.textContent = 'This simulation stopped. ';
+        b.textContent = T('This simulation stopped. ');
         el.appendChild(b);
-        el.appendChild(document.createTextNode(String(message || 'Unknown error.') + ' Reload the page to try again.'));
+        el.appendChild(document.createTextNode(String(message || T('Unknown error.')) + T(' Reload the page to try again.')));
         host.insertBefore(el, host.firstChild);
     }
     window.addEventListener('error', function (e) { showError(e.message); });
@@ -325,9 +325,9 @@
         if (!host || !data) return;
         var cur = 0, held = false;
         host.innerHTML =
-            '<div class="walk__head"><h2>From symbols to code</h2><p>' + data.intro + '</p>' +
-            '<label class="switch walk__hold"><span>Hold the numbers</span><input type="checkbox"></label></div>' +
-            '<div class="walk__frame"><ol class="walk__steps" role="tablist" aria-label="Steps"></ol>' +
+            T('<div class="walk__head"><h2>From symbols to code</h2><p>') + data.intro + '</p>' +
+            T('<label class="switch walk__hold"><span>Hold the numbers</span><input type="checkbox"></label></div>') +
+            T('<div class="walk__frame"><ol class="walk__steps" role="tablist" aria-label="Steps"></ol>') +
             '<div class="walk__card" role="tabpanel"></div></div>';
         var list = host.querySelector('.walk__steps'), card = host.querySelector('.walk__card');
         var snap = null;
@@ -368,15 +368,15 @@
                     '</code></td><td class="walk__val" data-v="' + r[0] + '">—</td><td>' + r[3] + '</td></tr>';
             }).join('');
             card.innerHTML =
-                '<div class="walk__top"><p class="walk__num">Step ' + (i + 1) + ' of ' + data.steps.length + '</p>' +
+                '<div class="walk__top"><p class="walk__num">' + T('Step {i} of {n}', { i: i + 1, n: data.steps.length }) + '</p>' +
                 '<h3>' + st.title + '</h3><p class="walk__where">' + esc(st.where) + '</p></div>' +
-                '<div class="walk__cols"><div class="walk__math"><p class="walk__label">Algebra</p>' +
+                T('<div class="walk__cols"><div class="walk__math"><p class="walk__label">Algebra</p>') +
                 '<div class="eq walk__eq">' + algebra(st.math) + '</div><p class="walk__note">' + st.note + '</p></div>' +
-                '<div class="walk__code"><p class="walk__label">Code · as written in this page</p><pre><code>' + markup(st.code, true) + '</code></pre></div></div>' +
-                '<div class="walk__tablewrap"><table class="walk__table"><thead><tr><th>Symbol</th><th>In code</th><th class="now">Now</th><th>Meaning</th></tr></thead>' +
+                T('<div class="walk__code"><p class="walk__label">Code · as written in this page</p><pre><code>') + markup(st.code, true) + '</code></pre></div></div>' +
+                '<div class="walk__tablewrap"><table class="walk__table"><thead><tr>' + T('<th>Symbol</th><th>In code</th><th class="now">Now</th><th>Meaning</th>') + '</tr></thead>' +
                 '<tbody>' + rows + '</tbody></table></div>' +
-                '<div class="walk__nav"><button type="button" class="btn btn--ghost" data-go="-1"' + (i === 0 ? ' disabled' : '') + '>← Previous</button>' +
-                '<button type="button" class="btn" data-go="1"' + (i === data.steps.length - 1 ? ' disabled' : '') + '>Next →</button></div>';
+                '<div class="walk__nav"><button type="button" class="btn btn--ghost" data-go="-1"' + (i === 0 ? ' disabled' : '') + '>' + T('← Previous') + '</button>' +
+                '<button type="button" class="btn" data-go="1"' + (i === data.steps.length - 1 ? ' disabled' : '') + '>' + T('Next →') + '</button></div>';
             Array.prototype.forEach.call(card.querySelectorAll('[data-go]'), function (b) {
                 b.addEventListener('click', function () { show(cur + parseInt(b.getAttribute('data-go'), 10)); });
             });
@@ -422,7 +422,7 @@
         var skip = document.createElement('a');
         skip.className = 'skip-link';
         skip.href = '#' + (papers[0].id || 'paper');
-        skip.textContent = 'Skip to the lecture note';
+        skip.textContent = T('Skip to the lecture note');
         document.body.insertBefore(skip, document.body.firstChild);
         function show() {
             Array.prototype.forEach.call(papers, function (p) { p.classList.add('is-typeset'); });

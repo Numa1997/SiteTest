@@ -97,6 +97,9 @@ RULES = [
     (r'portfolios-src/rotor-pendula/tools/(.+)', lambda m: 'Build and check tool of the Rotor Pendula notes, adapted from the Hydraulic Press Study\'s tools: ' + m.group(1) + '.', None),
     # the site in German and Arabic (docs/i18n.md): English pages are the source, everything below is made from them
     (r'tools/i18n/build\.py', 'Writes the German and Arabic pages, the script strings and the mirrored stylesheets from the English pages and the tables; --check fails on anything untranslated.', 'docs/i18n.md'),
+    (r'tools/i18n/ingest\.py', 'Stores checked translations made outside the tables (page pieces, script strings, walkthrough prose).', 'docs/i18n.md'),
+    (r'i18n/(de|ar)/walk\.json', lambda m: {'de': 'German', 'ar': 'Arabic'}[m.group(1)] + ' prose of the ten walkthroughs, keyed by the English.', 'docs/i18n.md'),
+    (r'public/scripts/walk/(de|ar)/([a-z]+)\.js', lambda m: {'de': 'German', 'ar': 'Arabic'}[m.group(1)] + ' walkthrough ' + m.group(2) + ', generated from the English one; do not edit.', 'docs/i18n.md'),
     (r'tools/i18n/fill\.py', 'Stores translations into a page table, recording the English each one was made from.', 'docs/i18n.md'),
     (r'i18n/(de|ar)/strings\.json', lambda m: {'de': 'German', 'ar': 'Arabic'}[m.group(1)] + ' words of the scripts and of the catalog, with plural forms.', 'docs/i18n.md'),
     (r'i18n/(de|ar)/(.+)\.json', lambda m: {'de': 'German', 'ar': 'Arabic'}[m.group(1)] + ' table of ' + m.group(2) + ': per piece, the English it was translated from and the translation.', 'docs/i18n.md'),

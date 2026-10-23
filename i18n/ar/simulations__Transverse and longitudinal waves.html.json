@@ -1,0 +1,550 @@
+{
+ "00cf65af925b": {
+  "src": "The medium responds linearly, twice the push, twice the displacement, as a real one does while the displacements are small.",
+  "tr": "يستجيب الوسط خطيًا: ضعف الدفعة يعطي ضعف الإزاحة، كما يفعل الوسط الحقيقي ما دامت الإزاحات صغيرة."
+ },
+ "02174ae1b172": {
+  "src": "Fig. 4 · oscillations · wave kinematics",
+  "tr": "الشكل 4 · الاهتزازات · حركية الموجة"
+ },
+ "028fdbe91227": {
+  "src": "Both rows share one medium \\(640\\ \\mathrm{px}\\) long, stretched across the canvas between margins of \\(22\\ \\mathrm{px}.\\) With \\(W\\) the canvas width in screen pixels, the scale \\(s\\) and the horizontal screen positions of a particle in the two rows are",
+  "tr": "يتشارك الصفّان وسطًا واحدًا طوله \\(640\\ \\mathrm{px}\\)، ممدودًا عبر لوحة الرسم بين هامشين قدرهما \\(22\\ \\mathrm{px}.\\) وإذا كان \\(W\\) عرض لوحة الرسم بالبكسلات الشاشية، فإن المقياس \\(s\\) والمواضع الأفقية للجسيم على الشاشة في الصفّين هي"
+ },
+ "02a04bfb4e66": {
+  "src": "Lengths are pixels of the drawing and speeds pixels per second. Only the ratio \\(A/\\lambda\\) fixes the shape.",
+  "tr": "الأطوال بالبكسلات في الرسم، والسرع بالبكسل في الثانية. ولا تحدّد الشكلَ إلا النسبة \\(A/\\lambda\\)."
+ },
+ "043236bae3c2": {
+  "src": "Follow one particle",
+  "tr": "تتبّع جسيم واحد"
+ },
+ "048859a96e6b": {
+  "src": "S. Stein and M. Wysession, <em>An Introduction to Seismology, Earthquakes, and Earth Structure</em>, Blackwell, 2003: chapters 2 (basic seismological theory, beginning with waves on a string) and 3 (seismology and Earth structure). <a href=\"https://www.wiley.com/en-us/An+Introduction+to+Seismology%2C+Earthquakes%2C+and+Earth+Structure-p-9780865420786\">Publisher’s page</a>.",
+  "tr": "S. Stein و M. Wysession، <em>An Introduction to Seismology, Earthquakes, and Earth Structure</em>، Blackwell، 2003: الفصلان 2 (النظرية الزلزالية الأساسية، بدءًا بالموجات على وتر) و3 (علم الزلازل وبنية الأرض). <a href=\"https://www.wiley.com/en-us/An+Introduction+to+Seismology%2C+Earthquakes%2C+and+Earth+Structure-p-9780865420786\">صفحة الناشر</a>."
+ },
+ "06a92ff3ba92": {
+  "src": "Wavenumber k",
+  "tr": "العدد الموجي k"
+ },
+ "07cdbcdc6e4f": {
+  "src": "Particles",
+  "tr": "الجسيمات"
+ },
+ "08419457f95c": {
+  "src": "The exact density in (10) carries a warning. If \\(A_\\mathrm{L}k\\) reached 1, the spacing \\(1 + \\partial\\xi/\\partial X\\) would drop to zero at the compression centres and then turn negative: particles would pass through their neighbours, which no real medium allows. By (3) this is the same as saying that no particle may move forward faster than the wave itself. The page therefore caps the amplitude of the lower row,",
+  "tr": "والكثافة الدقيقة في (10) تحمل تحذيرًا. فلو بلغ \\(A_\\mathrm{L}k\\) القيمة 1، لانخفض التباعد \\(1 + \\partial\\xi/\\partial X\\) إلى الصفر عند مراكز التضاغط ثم لصار سالبًا: فتنفذ الجسيمات عبر جاراتها، وهذا ما لا يسمح به أي وسط حقيقي. وبحسب (3) فإن هذا يعني أن لا يتحرك أي جسيم إلى الأمام أسرع من الموجة نفسها. لذلك تحدّ الصفحة سعة الصف السفلي،"
+ },
+ "0880b8ccc492": {
+  "src": "Equation (1) is a function of two variables, and there are two natural ways to look at it. Freeze the time and you get a <em>snapshot</em>: \\(\\xi\\) against \\(X,\\) a sine curve that repeats every wavelength \\(\\lambda.\\) This is what the upper row shows at each instant. Fix the place instead and you get a <em>history</em>: the displacement of one particle against time, a sine curve that repeats every period \\(T = 1/f.\\) This is what the burgundy particle traces out. Figure 2 shows both, computed from (1) with the default sliders.",
+  "tr": "المعادلة (1) دالّة في متغيّرين، ولها طريقتان طبيعيتان للنظر فيها. إن جمّدنا الزمن حصلنا على <em>لقطة</em>: \\(\\xi\\) بدلالة \\(X,\\) منحنى جيبي تتكرّر دورته كل مسافة قدرها \\(\\lambda.\\) وهذا ما يُظهره الصف العلوي في كل لحظة. وإن ثبّتنا المكان بدلًا من ذلك حصلنا على <em>سجلٍّ زمني</em>: إزاحة جسيم واحد بدلالة الزمن، منحنى جيبي دوره \\(T = 1/f.\\) وهذا ما يرسمه الجسيم العنابي. ويُظهر الشكل 2 الاثنين، محسوبين من (1) بالمنزلقات الافتراضية."
+ },
+ "0a0a6f35efc2": {
+  "src": "No damping, no reflections at the ends, no dispersion. Water waves, the subject of Fig. 5, are dispersive: their speed depends on their wavelength.",
+  "tr": "لا تخامد، ولا انعكاس عند الأطراف، ولا تشتّت. أما أمواج الماء، موضوع الشكل 5، فهي متشتّتة: تتعلّق سرعتها بطول موجتها."
+ },
+ "0bbe499b7216": {
+  "src": "<b>Fig. 4</b> · <span class=\"tx\">\\(\\xi(x, t) = A \\sin(kx - \\omega t)\\)</span> · both waves travel to the right",
+  "tr": "<b>الشكل 4</b> · <span class=\"tx\">\\(\\xi(x, t) = A \\sin(kx - \\omega t)\\)</span> · تنتشر الموجتان نحو اليمين"
+ },
+ "14a2f9ce51c5": {
+  "src": "Numa Koudsie · for school students and first- and second-year undergraduates",
+  "tr": "نعمة سائر قدسية · لطلاب المدارس وطلاب السنتين الأولى والثانية في الجامعة"
+ },
+ "1526fbe34b07": {
+  "src": "The same wave, twice. Above, the particles move across the direction of travel; below, along it. In both, each particle only oscillates in place while the pattern moves on.",
+  "tr": "الموجة نفسها مرتين. في الأعلى تتحرك الجسيمات متعامدةً على اتجاه الانتشار، وفي الأسفل على امتداده. وفي الحالتين لا يفعل كل جسيم سوى أن يتذبذب في مكانه، بينما يمضي النمط إلى الأمام."
+ },
+ "1cf5c35d5192": {
+  "src": "Take a string stretched with tension \\(F,\\) a force in newtons, with mass \\(\\mu\\) per metre. Look at a short piece between \\(X\\) and \\(X + \\mathrm{d}X,\\) displaced sideways by \\(\\xi.\\) The tension pulls along the string at each end. Where the string is tilted by a small angle \\(\\theta,\\) the pull has a small sideways part, \\(F\\sin\\theta \\approx F\\,\\partial\\xi/\\partial X.\\) The two ends pull in opposite directions, so the net sideways force is set by the difference between the slopes at the two ends, and that difference is not zero where the string is curved. Newton’s second law for the piece reads",
+  "tr": "خذ وترًا مشدودًا بشدّ \\(F,\\) وهو قوة بالنيوتن، وكتلته \\(\\mu\\) لكل متر. انظر إلى قطعة قصيرة بين \\(X\\) و\\(X + \\mathrm{d}X,\\) مُزاحةً جانبيًا بمقدار \\(\\xi.\\) يشدّ الشدُّ الوترَ عند كل طرف على امتداده. وإذا مال الوتر بزاوية صغيرة \\(\\theta,\\) فيكون لشدّه جزء جانبي صغير، \\(F\\sin\\theta \\approx F\\,\\partial\\xi/\\partial X.\\) ويشدّ الطرفان في اتجاهين متعاكسين، فتتحدّد القوة الجانبية المحصّلة بفرق الميلين عند الطرفين، وهذا الفرق لا يساوي الصفر حيث ينحني الوتر. ويكتب قانون نيوتن الثاني للقطعة هكذا"
+ },
+ "1e4cfe856d52": {
+  "src": "<span class=\"pfig__n\">Figure 4</span>Density of the lower row relative to rest, against rest position, at the first frame (\\(\\omega t = 0\\)) with the default sliders, sampled every \\(1\\ \\mathrm{px}\\): the exact expression of equation (10) (solid) and its linearised form (dashed). The dots are the values at the 26 particles. The exact density peaks at 3.88 in the compressions and falls to 0.574 in the rarefactions; the linear form would put the peaks at 1.74 and the troughs at 0.26. Both curves cross the rest density, 1, at the same places.",
+  "tr": "<span class=\"pfig__n\">الشكل 4</span>كثافة الصف السفلي نسبةً إلى كثافة السكون، بدلالة موضع السكون، عند الإطار الأول (\\(\\omega t = 0\\)) بالمنزلقات الافتراضية، وبأخذ عيّنات كل \\(1\\ \\mathrm{px}\\): التعبير الدقيق للمعادلة (10) (متصلًا) وصورته الخطية (متقطعًا). والنقاط هي القيم عند الجسيمات الـ26. وتبلغ الكثافة الدقيقة ذروتها 3.88 في التضاغطات، وتهبط إلى 0.574 في التخلخلات؛ أما الصورة الخطية فتضع الذرى عند 1.74 والقيعان عند 0.26. ويتقاطع المنحنيان مع كثافة السكون 1 في المواضع نفسها."
+ },
+ "21ec57c412d5": {
+  "src": "<span>1</span>The pattern travels, the medium stays",
+  "tr": "<span>1</span>النمط ينتقل والوسط يبقى"
+ },
+ "22a49b059ffc": {
+  "src": "<span class=\"psec__n\">01</span>The pattern travels, the medium stays",
+  "tr": "<span class=\"psec__n\">01</span>النمط ينتقل والوسط يبقى"
+ },
+ "2313c2f4cf0e": {
+  "src": "Physics begins by deciding what to keep. We keep a line of particles, the <em>medium</em>, and describe a wave by how far each particle has moved from where it rests. Label every particle by its rest position \\(X,\\) the place where it sits when there is no wave. Its <em>displacement</em> \\(\\xi(X,t)\\) is how far it has moved at time \\(t\\): sideways in the transverse row, and along the line in the longitudinal row, where the particle is then found at \\(x = X + \\xi.\\) The simulation uses the simplest travelling wave,",
+  "tr": "تبدأ الفيزياء بتحديد ما نُبقيه. نُبقي على خطّ من الجسيمات، هو <em>الوسط</em>، ونصف الموجة بمقدار ابتعاد كل جسيم عن موضع سكونه. نسمّي كل جسيم بموضع سكونه \\(X,\\) وهو المكان الذي يقف فيه عند غياب الموجة. و<em>إزاحته</em> \\(\\xi(X,t)\\) هي مقدار ما ابتعد به عند الزمن \\(t\\): جانبيًا في الصف المستعرض، وعلى امتداد الخط في الصف الطولي، حيث يكون الجسيم عندئذٍ عند \\(x = X + \\xi.\\) وتستخدم المحاكاة أبسط موجة متنقّلة،"
+ },
+ "23d7346392ad": {
+  "src": "R. P. Feynman, R. B. Leighton and M. Sands, <em>The Feynman Lectures on Physics</em>, Vol. I, chapter 47, “Sound. The wave equation”: the wave equation for sound from Newton’s laws, and why the squeezes are adiabatic. <a href=\"https://www.feynmanlectures.caltech.edu/I_47.html\">Free online edition</a>, Caltech.",
+  "tr": "R. P. Feynman، R. B. Leighton و M. Sands، <em>The Feynman Lectures on Physics</em>، المجلد I، الفصل 47، «Sound. The wave equation»: معادلة الموجة للصوت من قوانين نيوتن، ولماذا تكون التضاغطات بلا تبادل حراري. <a href=\"https://www.feynmanlectures.caltech.edu/I_47.html\">نسخة إلكترونية مجانية</a>، Caltech."
+ },
+ "2443e1b6d734": {
+  "src": "<span class=\"psec__n\">04</span>Where the wave equation comes from<span class=\"star\" title=\"heavier mathematics\">★</span>",
+  "tr": "<span class=\"psec__n\">04</span>من أين تأتي معادلة الموجة<span class=\"star\" title=\"heavier mathematics\">★</span>"
+ },
+ "27d109bfa96f": {
+  "src": "Transverse and longitudinal waves: the pattern travels, the medium stays",
+  "tr": "الموجات المستعرضة والطولية: النمط ينتقل والوسط يبقى"
+ },
+ "2aa013e11371": {
+  "src": "Keep the default sliders. The burgundy particle in the upper row takes \\(2\\ \\mathrm{s}\\) to go up and down once, the value in the <em>Period</em> readout, while a crest triangle needs \\(640/110 = 5.8\\ \\mathrm{s}\\) to cross the whole row. Set <em>Frequency</em> to \\(1.00\\ \\mathrm{Hz}\\): the period halves and the <em>Speed</em> readout doubles to \\(220\\ \\mathrm{px/s}.\\) That is the page handing you a new medium in which waves run twice as fast; in a real medium the speed is fixed, and doubling the frequency halves the wavelength instead (Section 4.4). Now set <em>Wavelength</em> to \\(110\\ \\mathrm{px}.\\) The speed falls back to \\(110\\ \\mathrm{px/s},\\) while the particle still swings once a second. Check with equation (3) that the wavelength changes the pattern but neither the period nor the top speed of any particle in the upper row. The lower row differs here: at \\(110\\ \\mathrm{px}\\) the cap of Section 5 lowers its amplitude to \\(14\\ \\mathrm{px},\\) as the <em>Longit. A</em> readout shows.",
+  "tr": "أبقِ المنزلقات على وضعها الافتراضي. يحتاج الجسيم العنابي في الصف العلوي إلى \\(2\\ \\mathrm{s}\\) ليصعد وينزل مرة واحدة، وهي القيمة في قراءة <em>الدور</em>، بينما يحتاج مثلث القمّة إلى \\(640/110 = 5.8\\ \\mathrm{s}\\) ليقطع الصف كله. اضبط <em>التردد</em> على \\(1.00\\ \\mathrm{Hz}\\): ينصف الدور، وتتضاعف قراءة <em>السرعة</em> إلى \\(220\\ \\mathrm{px/s}.\\) وهذا يعني أن الصفحة تعطيك وسطًا جديدًا تسير فيه الموجات ضعف السرعة؛ ففي الوسط الحقيقي تكون السرعة ثابتة، ويؤدي مضاعفة التردد إلى تنصيف طول الموجة بدلًا من ذلك (القسم 4.4). والآن اضبط <em>طول الموجة</em> على \\(110\\ \\mathrm{px}.\\) تعود السرعة إلى \\(110\\ \\mathrm{px/s},\\) بينما يتأرجح الجسيم مرة في الثانية كما كان. تحقّق بالمعادلة (3) أن طول الموجة يغيّر النمط، لكنه لا يغيّر الدور ولا أقصى سرعة لأي جسيم في الصف العلوي. أما الصف السفلي فيختلف هنا: فعند \\(110\\ \\mathrm{px}\\) تخفض الحدّ الوارد في القسم 5 سعته إلى \\(14\\ \\mathrm{px},\\) كما تبيّن قراءة <em>A الطولية</em>."
+ },
+ "2e5c8b8d0fd3": {
+  "src": "The acceleration of each bit of string is proportional to how sharply the string is bent there. A tighter string carries waves faster and a heavier one slower: that is how a guitarist tunes a string, and why the thick strings sound low.",
+  "tr": "يتناسب تسارع كل قطعة من الوتر طرديًا مع مدى انحناء الوتر عندها. والوتر الأشدّ شدًّا ينقل الموجات أسرع، والأثقل أبطأ: وبهذا يضبط عازف الغيتار أوتاره، ولهذا تُصدر الأوتار السميكة نغمات أخفض."
+ },
+ "30e8391215ff": {
+  "src": "The particles are samples of a continuous medium, not masses joined by springs. A chain of masses a distance \\(a\\) apart is dispersive, \\(\\omega \\propto \\lvert\\sin(ka/2)\\rvert;\\) with the default spacing \\(a = 25.6\\ \\mathrm{px}\\) and \\(\\lambda = 220\\ \\mathrm{px},\\) such a chain would carry the wave \\(2.2\\,\\%\\) more slowly than the continuous medium.",
+  "tr": "الجسيمات عيّنات من وسط متصل، وليست كتلًا مربوطة بنوابض. وسلسلة من كتل تبعد \\(a\\) عن بعضها تكون متشتّتة، \\(\\omega \\propto \\lvert\\sin(ka/2)\\rvert;\\) وبالتباعد الافتراضي \\(a = 25.6\\ \\mathrm{px}\\) و\\(\\lambda = 220\\ \\mathrm{px},\\) تنقل مثل هذه السلسلة الموجة أبطأ بنسبة \\(2.2\\,\\%\\) من الوسط المتصل."
+ },
+ "31da9fe676c4": {
+  "src": "One speed for both rows. The page gives the two rows the same \\(v\\) so that they can be compared side by side. In a solid the longitudinal wave is faster, equation (8); on a stretched wire the longitudinal wave, set by the stiffness of the metal, is faster than the transverse one, set by the tension.",
+  "tr": "سرعة واحدة للصفّين. تعطي الصفحة الصفّين السرعة \\(v\\) نفسها كي يُقارَنا جنبًا إلى جنب. وفي الجسم الصلب تكون الموجة الطولية أسرع، المعادلة (8)؛ وعلى سلك مشدود تكون الموجة الطولية، التي تحدّدها صلابة المعدن، أسرع من المستعرضة التي تحدّدها الشدّ."
+ },
+ "324f210915c5": {
+  "src": "<span class=\"pfig__n\">Figure 1</span>The two rows at the first frame of the simulation, \\(\\omega t = 0,\\) drawn to scale for the default sliders: one unit of the drawing is one pixel of the medium. Above, each particle is lifted by \\(\\xi\\) from its rest position \\(X\\) (pale ticks); the triangles mark the crests, \\(\\lambda = 220\\ \\mathrm{px}\\) apart, and the burgundy particle is rising with velocity \\(u = \\partial\\xi/\\partial t.\\) Below, the same displacements are applied along the row. The particles bunch into compressions (triangles) and spread out into rarefactions, and each compression sits \\(\\lambda/4 = 55\\ \\mathrm{px}\\) ahead of a crest. The tint under the lower row is the page’s compression shading.",
+  "tr": "<span class=\"pfig__n\">الشكل 1</span>الصفّان عند الإطار الأول من المحاكاة، \\(\\omega t = 0,\\) مرسومان بمقياس رسم حقيقي للمنزلقات الافتراضية: وحدة الرسم الواحدة هي بكسل واحد من الوسط. في الأعلى يُرفع كل جسيم بمقدار \\(\\xi\\) عن موضع سكونه \\(X\\) (الخطوط الباهتة)؛ والمثلثات تعلّم القمم، وتبعد \\(\\lambda = 220\\ \\mathrm{px}\\) عن بعضها، والجسيم العنابي صاعد بالسرعة \\(u = \\partial\\xi/\\partial t.\\) وفي الأسفل تُطبَّق الإزاحات نفسها على امتداد الصف. تتجمع الجسيمات في تضاغطات (مثلثات) وتتفرّق في تخلخلات، ويقع كل تضاغط على بُعد \\(\\lambda/4 = 55\\ \\mathrm{px}\\) أمام قمّة. والتظليل تحت الصف السفلي هو تظليل التضاغط في الصفحة."
+ },
+ "3332d7bb61a2": {
+  "src": "<span class=\"sw sw--dot sw--ink\"></span>particle",
+  "tr": "<span class=\"sw sw--dot sw--ink\"></span>الجسيم"
+ },
+ "33bd5a5dddcd": {
+  "src": "© 2026 Numa Koudsie",
+  "tr": "© 2026 نعمة سائر قدسية"
+ },
+ "3434d96a4087": {
+  "src": "Different physics, the same equation. That is why one function \\(\\xi(X,t)\\) can drive both rows of the simulation.",
+  "tr": "فيزياء مختلفة، ومعادلة واحدة. ولهذا تستطيع دالة واحدة \\(\\xi(X,t)\\) أن تحرّك الصفّين في المحاكاة معًا."
+ },
+ "3560a1ac4a55": {
+  "src": "<span class=\"psec__n\">06</span>Energy carried<span class=\"star\" title=\"heavier mathematics\">★</span>",
+  "tr": "<span class=\"psec__n\">06</span>الطاقة المحمولة<span class=\"star\" title=\"heavier mathematics\">★</span>"
+ },
+ "361224814de2": {
+  "src": "In each frame the page computes, for every one of the \\(N\\) particles, the rest position \\(X_i = i \\cdot 640/(N - 1)\\) and the phase; \\(\\xi\\) and \\(u\\) for the upper row; and the displacement, position, velocity, density (10) and shading for the lower row. Each number is written into the page’s data store at the line that computes it; the <em>Data</em> panel reads it from there and recomputes nothing.",
+  "tr": "في كل إطار تحسب الصفحة، لكل جسيم من الجسيمات \\(N\\)، موضع السكون \\(X_i = i \\cdot 640/(N - 1)\\) والطور؛ و\\(\\xi\\) و\\(u\\) للصف العلوي؛ والإزاحة والموضع والسرعة والكثافة (10) والتظليل للصف السفلي. ويُكتب كل عدد في مخزن بيانات الصفحة عند السطر الذي يحسبه؛ و<em>لوحة البيانات</em> تقرأه من هناك ولا تعيد حسابه شيئًا."
+ },
+ "362a28e2b23e": {
+  "src": "<span class=\"psub__n\">4.3</span>Shear needs a solid",
+  "tr": "<span class=\"psub__n\">4.3</span>القصّ يحتاج إلى مادة صلبة"
+ },
+ "371e668d6fba": {
+  "src": "Transverse wave above, longitudinal wave below",
+  "tr": "موجة مستعرضة في الأعلى، وموجة طولية في الأسفل"
+ },
+ "38af3f4ef234": {
+  "src": "Speed v = fλ",
+  "tr": "السرعة v = fλ"
+ },
+ "3a3f80374f41": {
+  "src": "The two pictures are tied together. A crest is the place where the phase equals \\(\\pi/2,\\) and every feature of the wave is a place of fixed phase. Keeping \\(kX - \\omega t\\) fixed while \\(t\\) grows forces \\(X\\) to grow, at the rate",
+  "tr": "الصورتان مرتبطتان ببعضهما. فالقمّة هي الموضع الذي يساوي فيه الطور \\(\\pi/2,\\) وكل سمة من سمات الموجة موضع ذو طور ثابت. وإبقاء \\(kX - \\omega t\\) ثابتًا بينما يزداد \\(t\\) يُلزم \\(X\\) بالازدياد، وبالمعدّل"
+ },
+ "3cec94bb81cf": {
+  "src": "Multiply the wave equation \\(\\mu\\,\\partial^2\\xi/\\partial t^2 = F\\,\\partial^2\\xi/\\partial X^2\\) by \\(\\partial\\xi/\\partial t\\) and use the product rule. The result is a local conservation law, the same shape as the continuity equation for electric charge:",
+  "tr": "نضرب معادلة الموجة \\(\\mu\\,\\partial^2\\xi/\\partial t^2 = F\\,\\partial^2\\xi/\\partial X^2\\) في \\(\\partial\\xi/\\partial t\\) ونستعمل قاعدة الجداء. والنتيجة قانون حفظ موضعي، بالشكل نفسه كمعادلة الاستمرار للشحنة الكهربائية:"
+ },
+ "411e7537ba0b": {
+  "src": "While paused, \\(\\Delta t = 0\\) and the phase stands still. A frame that takes longer than \\(0.05\\ \\mathrm{s}\\) is counted as \\(0.05\\ \\mathrm{s},\\) so after a stall the wave resumes instead of leaping ahead; at the top frequency, \\(2\\ \\mathrm{Hz},\\) this limits the step to \\(2\\pi \\times 2 \\times 0.05 = 0.63\\ \\mathrm{rad}\\) per frame.",
+  "tr": "عند الإيقاف المؤقت تكون \\(\\Delta t = 0\\) وتبقى الطور ساكنًا. والإطار الذي يستغرق أكثر من \\(0.05\\ \\mathrm{s}\\) يُحسب كأنه \\(0.05\\ \\mathrm{s},\\) فبعد التوقّف تستأنف الموجة سيرها بدل أن تقفز إلى الأمام؛ وعند أعلى تردد، \\(2\\ \\mathrm{Hz},\\) يحدّ هذا الخطوة بـ\\(2\\pi \\times 2 \\times 0.05 = 0.63\\ \\mathrm{rad}\\) في كل إطار."
+ },
+ "4213bd6a3565": {
+  "src": "A solid resists not only being squeezed but also being sheared, one layer slid sideways past the next; its shear modulus \\(G\\) measures how strongly. A sideways displacement that changes along the direction of travel shears the material, and the argument of 4.2 with \\(G\\) in place of \\(E\\) gives a transverse wave. In a large block, which cannot bulge sideways as a thin rod can, the two speeds are",
+  "tr": "والمادة الصلبة لا تقاوم الضغط وحده، بل تقاوم القصّ أيضًا، أي انزلاق طبقة جانبيًا فوق التي تليها؛ ويقيس معامل القصّ \\(G\\) مدى هذه المقاومة. فالإزاحة الجانبية التي تتغيّر على امتداد اتجاه الانتشار تقصّ المادة، ويعطي الاستدلال في القسم 4.2 مع \\(G\\) بدل \\(E\\) موجةً مستعرضة. وفي كتلة كبيرة لا تستطيع الانتفاخ جانبيًا كما يفعل القضيب الرفيع، تكون السرعتان"
+ },
+ "43f4b1b78165": {
+  "src": "<span>4</span>Where the wave equation comes from&nbsp;★",
+  "tr": "<span>4</span>من أين تأتي معادلة الموجة&nbsp;★"
+ },
+ "47fd8260ebe9": {
+  "src": "An earthquake sends both kinds through rock. The longitudinal ones, called P waves (primary), are faster and arrive first; the transverse ones, S waves (secondary, or shear), arrive later. Solid rock resists shear, so it carries both. Seismometers on the far side of the Earth from an earthquake record P waves that have crossed the deep interior, but no S waves along those paths. Something deep inside stops the shear waves, and the material that does that is one with no resistance to shear at all: a liquid. This is how we know that the Earth’s outer core is liquid metal.",
+  "tr": "يرسل الزلزال النوعين عبر الصخر. أما الموجات الطولية، وتُسمّى موجات P (الأولية)، فهي أسرع وتصل أولًا؛ أما المستعرضة، وتُسمّى موجات S (الثانوية أو موجات القص)، فتصل لاحقًا. والصخر الصلب يقاوم القص، لذلك يحمل النوعين معًا. وتسجّل مقاييس الزلازل على الجانب الآخر من الأرض، بعيدًا عن الزلزال، موجات P التي عبرت الباطن العميق، لكنها لا تسجّل موجات S على تلك المسارات. ثمة شيء عميق في الداخل يوقف موجات القص، والمادة التي تفعل ذلك لا تقاوم القص البتة: إنها سائل. وبهذا نعرف أن اللبّ الخارجي للأرض معدن سائل."
+ },
+ "48a351c6d698": {
+  "src": "Upper row: discs of radius \\(4.5\\ \\mathrm{px}\\) (\\(6.5\\ \\mathrm{px}\\) for the followed particle), a rose line from the rest line to each disc, and pale ticks at the rest positions when <em>Equilibrium positions</em> is on. A thin burgundy curve runs through 215 points of (1), one every \\(3\\ \\mathrm{px}\\) of the medium and the last at its end, \\(X = 640\\ \\mathrm{px}.\\) The crest triangles sit \\(8\\ \\mathrm{px}\\) above the highest point, \\(sA.\\)",
+  "tr": "الصف العلوي: أقراص نصف قطرها \\(4.5\\ \\mathrm{px}\\) (و\\(6.5\\ \\mathrm{px}\\) للجسيم المتتبَّع)، وخط وردي من خط السكون إلى كل قرص، وخطوط باهتة عند مواضع السكون حين يكون <em>أوضاع التوازن</em> مفعّلًا. ويمرّ منحنى عنابي رفيع بـ215 نقطة من (1)، واحدة كل \\(3\\ \\mathrm{px}\\) من الوسط، والأخيرة عند نهايته \\(X = 640\\ \\mathrm{px}.\\) وتقع مثلثات القمم على بُعد \\(8\\ \\mathrm{px}\\) فوق أعلى نقطة، أي \\(sA.\\)"
+ },
+ "4a81ec85f9b8": {
+  "src": "<span>9</span>What the model leaves out",
+  "tr": "<span>9</span>ما يغفله النموذج"
+ },
+ "53171668732c": {
+  "src": "Lecture note · Fig. 4 · oscillations · wave kinematics",
+  "tr": "مذكّرة المحاضرة · الشكل 4 · الاهتزازات · حركية الموجة"
+ },
+ "54fdc4d9ace2": {
+  "src": "Frequency f",
+  "tr": "التردد f"
+ },
+ "55bf8b7b1959": {
+  "src": "each compression is a quarter wavelength ahead of a crest of the same \\(\\xi,\\) in the direction of travel. This detail is easy to get wrong and easy to see in the simulation: the triangles above the lower row are shifted to the right of those above the upper row by \\(55\\ \\mathrm{px}\\) of the medium. Equation (3) adds a second way to read the lower row, since the strain is \\(\\partial\\xi/\\partial X = -u/v.\\) Where the medium is compressed the particles move with the wave; where it is stretched they move against it.",
+  "tr": "كل تضاغط يبعد عن قمّة لها \\(\\xi,\\) نفسها بمقدار ربع طول موجة، في اتجاه الانتشار. وهذه التفاصيل سهلة الخطأ وسهلة الرؤية في المحاكاة: فمثلثات الصف السفلي مُزاحة إلى اليمين عن مثلثات الصف العلوي بمقدار \\(55\\ \\mathrm{px}\\) من الوسط. وتقدّم المعادلة (3) طريقة ثانية لقراءة الصف السفلي، فالانفعال هو \\(\\partial\\xi/\\partial X = -u/v.\\) فحيث يُضغط الوسط تتحرك الجسيمات مع الموجة، وحيث يُمدّ تتحرك ضدها."
+ },
+ "5779132c887a": {
+  "src": "\\(P\\) is the power flowing past the point \\(X,\\) in watts: the energy of a piece of string changes only by flowing in at one end or out at the other. For a wave moving to the right, (3) gives \\(\\partial\\xi/\\partial X = -u/v,\\) so \\(P = (F/v)\\,u^2 = \\mu v\\,u^2 \\ge 0\\): the energy flows in the direction of travel at every instant. The same substitution shows that the two terms of (13) are equal at every point and every moment. Averaged over a period, \\(u^2 = A^2\\omega^2\\cos^2(kX - \\omega t)\\) gives \\(\\tfrac12 A^2\\omega^2,\\) so",
+  "tr": "\\(P\\) هي القدرة المارّة عبر النقطة \\(X,\\) بالواط: فطاقة قطعة الوتر لا تتغيّر إلا بالتدفّق إليها من أحد طرفيها أو منها عبر الطرف الآخر. وبالنسبة إلى موجة تنتقل نحو اليمين، تعطي (3) \\(\\partial\\xi/\\partial X = -u/v,\\) فيكون \\(P = (F/v)\\,u^2 = \\mu v\\,u^2 \\ge 0\\): تنساب الطاقة في اتجاه الانتشار في كل لحظة. والتعويض نفسه يبيّن أن الحدّين في (13) متساويان عند كل نقطة وفي كل لحظة. ومتوسط ذلك على دور، فإن \\(u^2 = A^2\\omega^2\\cos^2(kX - \\omega t)\\) يعطي \\(\\tfrac12 A^2\\omega^2,\\) إذن"
+ },
+ "584eeebeda4d": {
+  "src": "<span>7</span>How the page computes a frame",
+  "tr": "<span>7</span>كيف تحسب الصفحة الإطار"
+ },
+ "5888082d0a17": {
+  "src": "Exercise 5.1 · on the figure above",
+  "tr": "تمرين 5.1 · على الشكل أعلاه"
+ },
+ "5af2ccbd3b62": {
+  "src": "<span class=\"psub__n\">4.1</span>A string under tension",
+  "tr": "<span class=\"psub__n\">4.1</span>وترٌ تحت الشدّ"
+ },
+ "5bbd47e48fd0": {
+  "src": "A wave carries energy without carrying matter: the energy of the stadium wave is in the moving spectators, and it travels round the stands while they stay put. On the string, each piece has kinetic energy from its sideways motion and potential energy from being stretched by its tilt: a piece of rest length \\(\\mathrm{d}X\\) tilted to the slope \\(\\partial\\xi/\\partial X\\) is \\(\\mathrm{d}X\\sqrt{1 + (\\partial\\xi/\\partial X)^2} \\approx \\mathrm{d}X\\,[1 + \\tfrac12(\\partial\\xi/\\partial X)^2]\\) long, and the tension did work \\(F\\) times that extra length to stretch it. Per unit length,",
+  "tr": "تحمل الموجة طاقةً دون أن تحمل مادةً: فطاقة موجة الملعب موجودة في المتفرّجين المتحركين، وهي تدور حول المدرجات بينما يبقون في أماكنهم. وعلى الوتر، لكل قطعة طاقة حركية من حركتها الجانبية، وطاقة كامنة من كونها مشدودة بسبب ميلها: فقطعة طولها الأصلي \\(\\mathrm{d}X\\) مائلة بميل \\(\\partial\\xi/\\partial X\\) يصبح طولها \\(\\mathrm{d}X\\sqrt{1 + (\\partial\\xi/\\partial X)^2} \\approx \\mathrm{d}X\\,[1 + \\tfrac12(\\partial\\xi/\\partial X)^2]\\)، وقد أنجز الشدّ شغلًا قدره \\(F\\) مضروبًا في هذا الطول الإضافي لكي يمدّها. ولكل وحدة طول،"
+ },
+ "5d3db5d4d794": {
+  "src": "The energy travels at the wave speed, and the power grows with the square of both the amplitude and the frequency: double the frequency at the same amplitude and the string carries four times the power. For a rod, put \\(\\rho S\\) in place of \\(\\mu\\) and \\(ES\\) in place of \\(F;\\) the result is the same.",
+  "tr": "تنتقل الطاقة بسرعة الموجة، وتنمو القدرة بمربع السعة ومربع التردد معًا: فمضاعفة التردد مع بقاء السعة تجعل الوتر ينقل أربعة أمثال القدرة. وبالنسبة إلى القضيب يوضع \\(\\rho S\\) مكان \\(\\mu\\) و\\(ES\\) مكان \\(F;\\) والنتيجة هي نفسها."
+ },
+ "5d935eb9d6de": {
+  "src": "Exercise 3.1 · on the figure above",
+  "tr": "تمرين 3.1 · على الشكل أعلاه"
+ },
+ "5e2a2448b8ff": {
+  "src": "The simulation shows one and the same wave both ways. In the upper row each particle moves up and down; in the lower row each moves left and right. In both rows the pattern runs to the right and no particle goes anywhere. The burgundy particle in the middle of each row makes that visible.",
+  "tr": "تُظهر المحاكاة موجةً واحدةً بعينها بالطريقتين. في الصف العلوي يتحرك كل جسيم صعودًا وهبوطًا، وفي الصف السفلي يتحرك كل جسيم يمينًا ويسارًا. وفي الصفّين يمضي النمط نحو اليمين، ولا ينتقل أيّ جسيم إلى مكان آخر. والجسيم العنابي في وسط كل صفّ يجعل ذلك واضحًا."
+ },
+ "627c1ff2faea": {
+  "src": "<span class=\"psub__n\">4.4</span>Every shape travels",
+  "tr": "<span class=\"psub__n\">4.4</span>كل شكل ينتقل"
+ },
+ "62e11cf11c63": {
+  "src": "A gas has no Young’s modulus, but it pushes back when squeezed: a strain \\(\\partial\\xi/\\partial X\\) changes the pressure by \\(\\delta p = -B\\,\\partial\\xi/\\partial X,\\) with \\(B\\) the bulk modulus, and the same steps give \\(v = \\sqrt{B/\\rho}.\\) A sound wave squeezes and releases the air too quickly for heat to flow. For such adiabatic changes \\(pV^\\gamma\\) stays fixed, with \\(\\gamma\\) the ratio of the two heat capacities of the gas, so squeezing the volume by a small fraction \\(-\\mathrm{d}V/V\\) raises the pressure by \\(\\mathrm{d}p = -\\gamma p\\,\\mathrm{d}V/V\\): that is \\(B = \\gamma p.\\) For dry air at \\(20\\ {}^\\circ\\mathrm{C},\\) with \\(\\gamma = 1.40,\\) \\(p = 101\\,325\\ \\mathrm{Pa}\\) and \\(\\rho = 1.204\\ \\mathrm{kg/m^3},\\)",
+  "tr": "لا يملك الغاز معامل يونغ، لكنه يقاوم عند ضغطه: فالانفعال \\(\\partial\\xi/\\partial X\\) يغيّر الضغط بمقدار \\(\\delta p = -B\\,\\partial\\xi/\\partial X,\\) حيث \\(B\\) معامل الانضغاطية الحجمية، وتعطي الخطوات نفسها \\(v = \\sqrt{B/\\rho}.\\) وموجة الصوت تضغط الهواء وتتركه بسرعة أكبر من أن تنتقل فيها الحرارة. وفي التغيّرات التي لا يتبادل فيها الغاز الحرارة مع محيطه يبقى \\(pV^\\gamma\\) ثابتًا، حيث \\(\\gamma\\) نسبة السعتين الحراريتين للغاز، فضغط الحجم بجزء صغير \\(-\\mathrm{d}V/V\\) يرفع الضغط بمقدار \\(\\mathrm{d}p = -\\gamma p\\,\\mathrm{d}V/V\\): أي إن \\(B = \\gamma p.\\) وللهواء الجاف عند \\(20\\ {}^\\circ\\mathrm{C},\\) مع \\(\\gamma = 1.40,\\) \\(p = 101\\,325\\ \\mathrm{Pa}\\) و\\(\\rho = 1.204\\ \\mathrm{kg/m^3},\\)"
+ },
+ "648ab26ec2dc": {
+  "src": "<span>8</span>From medium pixels to screen pixels",
+  "tr": "<span>8</span>من بكسلات الوسط إلى بكسلات الشاشة"
+ },
+ "64973d0018a7": {
+  "src": "In the lower row the displacement is along the line, so neighbouring particles can come closer together or move further apart. Two particles that rest \\(\\mathrm{d}X\\) apart are found at \\(X + \\xi(X)\\) and \\(X + \\mathrm{d}X + \\xi(X + \\mathrm{d}X),\\) a distance \\(\\mathrm{d}X\\,(1 + \\partial\\xi/\\partial X)\\) apart. The material between them is the same, so its density changes in inverse proportion:",
+  "tr": "في الصف السفلي تكون الإزاحة على امتداد الخط، فيمكن للجسيمات المجاورة أن تقترب من بعضها أو تبتعد. والجسيمان اللذان يبعد أحدهما عن الآخر \\(\\mathrm{d}X\\) عند السكون يُوجدان عند \\(X + \\xi(X)\\) و\\(X + \\mathrm{d}X + \\xi(X + \\mathrm{d}X),\\) أي على مسافة \\(\\mathrm{d}X\\,(1 + \\partial\\xi/\\partial X)\\). والمادة بينهما هي نفسها، فتتغيّر كثافتها تناسبًا عكسيًا:"
+ },
+ "66437af85ed6": {
+  "src": "A guitar string vibrates sideways, so the wave running along the string between its fixed ends is transverse. The sound that reaches your ear is longitudinal: the vibrating body of the guitar pushes on the air, the air is squeezed and released, and those compressions spread outwards at the speed of sound. Air can carry only this kind. It resists being squeezed, but it does not resist one layer sliding sideways past the next, so a sideways shake has nothing with which to drag the neighbouring air along.",
+  "tr": "تهتزّ وترُ الغيتار جانبيًا، فالموجة التي تسري على طوله بين طرفيه الثابتين مستعرضة. أما الصوت الذي يصل إلى أذنك فطولي: فجسم الغيتار المهتزّ يدفع الهواء، فيُضغط الهواء ثم يُترك، وتنتشر هذه التضاغطات إلى الخارج بسرعة الصوت. ولا يحمل الهواء إلا هذا النوع. فهو يقاوم الضغط، لكنه لا يقاوم أن تنزلق طبقة منه جانبيًا على التي تليها، لذلك لا يجد الاهتزاز الجانبي ما يجرّ الهواء المجاور به."
+ },
+ "6a658f5c6457": {
+  "src": "with \\(K\\) the bulk modulus of the solid. The \\(\\tfrac43 G\\) is the price of not bulging. A strain \\(\\varepsilon\\) along the line, with none across it, splits into two simpler strains. One is \\(\\varepsilon/3\\) in all three directions at once: it changes only the volume, by the fraction \\(\\varepsilon,\\) and the medium resists it with a stress \\(K\\varepsilon.\\) The rest, \\(2\\varepsilon/3\\) along the line and \\(-\\varepsilon/3\\) in each direction across it, changes only the shape, and the medium resists that with \\(2G\\) times its strain along the line, \\(2G \\cdot 2\\varepsilon/3 = \\tfrac43 G\\varepsilon.\\) The longitudinal P wave is always the faster of the two, which is why it reaches a seismometer first. In a liquid or a gas \\(G = 0\\): there is no S wave at all, and only the longitudinal kind travels through the bulk. The S waves missing on the far side of the Earth are equation (8) at work in the outer core.",
+  "tr": "مع \\(K\\) معامل الانضغاطية الحجمية للمادة الصلبة. و\\(\\tfrac43 G\\) هو ثمن عدم الانتفاخ. والانفعال \\(\\varepsilon\\) على امتداد الخط، مع عدم وجود انفعال عبره، ينقسم إلى انفعالين أبسط. الأول هو \\(\\varepsilon/3\\) في الاتجاهات الثلاثة معًا: إنه يغيّر الحجم وحده، بالكسر \\(\\varepsilon,\\) والوسط يقاومه بإجهاد \\(K\\varepsilon.\\) والباقي، \\(2\\varepsilon/3\\) على امتداد الخط و\\(-\\varepsilon/3\\) في كل اتجاه عبره، يغيّر الشكل وحده، ويقاومه الوسط بـ\\(2G\\) مضروبًا في انفعاله على امتداد الخط، \\(2G \\cdot 2\\varepsilon/3 = \\tfrac43 G\\varepsilon.\\) وتكون الموجة الطولية P دائمًا الأسرع من الاثنتين، ولذلك تصل أولًا إلى مقياس الزلازل. وفي السائل أو الغاز \\(G = 0\\): لا توجد موجة S البتّة، ولا ينتقل في الكتلة إلا النوع الطولي. أما موجات S المفقودة على الجانب البعيد من الأرض فهي المعادلة (8) وهي تعمل في اللبّ الخارجي."
+ },
+ "6c28ecb36be1": {
+  "src": "<b>Abstract.</b> A wave carries a pattern and energy from one place to another, while the material it travels through only shakes about where it was. This note follows one formula, \\(\\xi = A\\sin(kX - \\omega t),\\) through both kinds of wave in the simulation above: across the direction of travel, as on a rope, and along it, as in sound. It shows how the speed \\(v = f\\lambda\\) follows from the formula alone; derives the wave equation for a string, a rod and a gas from Newton’s second law; explains where the compressions of the lower row come from and why they sit a quarter wavelength ahead of the crests; and works out the energy a wave carries. It ends with what the page computes in each frame and how the numbers become dots. Sections marked ★ carry the heavier mathematics and can be skipped on a first reading without losing the thread.",
+  "tr": "<b>الملخّص.</b> تحمل الموجة نمطًا وطاقةً من مكان إلى آخر، بينما لا تفعل المادة التي تنتقل عبرها سوى أن تهتز قليلًا حول موضعها. تتتبّع هذه المذكّرة صيغةً واحدة، \\(\\xi = A\\sin(kX - \\omega t),\\) عبر النوعين من الموجات في المحاكاة أعلاه: مستعرضةً، أي عموديةً على اتجاه الانتشار، كما في الحبل، وطوليةً، أي على امتداده، كما في الصوت. وتبيّن كيف تنتج السرعة \\(v = f\\lambda\\) من الصيغة وحدها؛ وتشتقّ معادلة الموجة للوتر والقضيب والغاز من قانون نيوتن الثاني؛ وتشرح من أين تأتي التضاغطات في الصف السفلي، ولماذا تقع أمام القمم بربع طول موجة؛ وتحسب الطاقة التي تحملها الموجة. وتختم بما تحسبه الصفحة في كل إطار، وكيف تتحول الأرقام إلى نقاط. والأقسام المعلّمة بـ★ تحوي الرياضيات الأثقل، ويمكن تخطّيها في القراءة الأولى دون أن يضيع الخيط."
+ },
+ "6c50a0418afc": {
+  "src": "One direction of displacement. In three dimensions a transverse wave can shake in either of two directions across its path, its polarisation; a longitudinal wave has only one. That is why light, a transverse wave, can be polarised and sound cannot.",
+  "tr": "اتجاه واحد للإزاحة. ففي ثلاثة أبعاد يمكن أن تهتزّ الموجة المستعرضة في أيٍّ من اتجاهين عموديين على مسارها، وهذا هو استقطابها؛ أما الموجة الطولية فلها اتجاه واحد فقط. ولهذا يمكن استقطاب الضوء، وهو موجة مستعرضة، ولا يمكن استقطاب الصوت."
+ },
+ "6fe54e29a48c": {
+  "src": "<span class=\"pfig__n\">Figure 2</span>Left: snapshots of equation (1) at \\(t = 0\\) and \\(t = 0.5\\ \\mathrm{s},\\) a quarter period later, for \\(A = 26\\ \\mathrm{px},\\) \\(f = 0.50\\ \\mathrm{Hz},\\) \\(\\lambda = 220\\ \\mathrm{px},\\) sampled every \\(2.5\\ \\mathrm{px};\\) the dots are the 26 particles at \\(t = 0.\\) The whole curve has moved \\(55\\ \\mathrm{px}\\) to the right without changing its shape. Right: histories of the followed particle, \\(X = 307.2\\ \\mathrm{px},\\) and of the particle two places further on, \\(X = 358.4\\ \\mathrm{px},\\) over \\(4\\ \\mathrm{s}\\) in steps of \\(0.025\\ \\mathrm{s}.\\) Both repeat every \\(T = 2\\ \\mathrm{s};\\) the second lags behind by \\(51.2/110 = 0.47\\ \\mathrm{s},\\) the time the pattern needs to cover the distance between them.",
+  "tr": "<span class=\"pfig__n\">الشكل 2</span>يسارًا: لقطات من المعادلة (1) عند \\(t = 0\\) و\\(t = 0.5\\ \\mathrm{s},\\) أي بعد ربع دور، من أجل \\(A = 26\\ \\mathrm{px},\\) \\(f = 0.50\\ \\mathrm{Hz},\\) \\(\\lambda = 220\\ \\mathrm{px},\\) وبأخذ عيّنات كل \\(2.5\\ \\mathrm{px};\\) والنقاط هي الجسيمات الـ26 عند \\(t = 0.\\) وقد انتقل المنحنى كله \\(55\\ \\mathrm{px}\\) نحو اليمين دون أن يتغيّر شكله. ويمينًا: المنحنيان الزمنيان للجسيم المتتبَّع عند \\(X = 307.2\\ \\mathrm{px},\\) وللجسيم الذي يقع بعده بجسيمين عند \\(X = 358.4\\ \\mathrm{px},\\) على مدى \\(4\\ \\mathrm{s}\\) بخطوات \\(0.025\\ \\mathrm{s}.\\) ويتكرر الاثنان كل \\(T = 2\\ \\mathrm{s};\\) ويتأخر الثاني بمقدار \\(51.2/110 = 0.47\\ \\mathrm{s},\\) وهي المدة التي يحتاجها النمط ليقطع المسافة بينهما."
+ },
+ "702b201c4b40": {
+  "src": "Phyein Usul",
+  "tr": "Phyein Usul"
+ },
+ "724df73e9f21": {
+  "src": "Leave <em>Wavelength</em> at \\(220\\ \\mathrm{px}\\) and raise <em>Amplitude</em> from \\(26\\ \\mathrm{px}.\\) The <em>Longit. A</em> readout follows up to \\(28\\ \\mathrm{px};\\) at \\(29\\ \\mathrm{px}\\) it reads “28 px (cap)” while the upper row keeps growing. Now lower <em>Wavelength</em> to \\(100\\ \\mathrm{px}.\\) The cap falls to \\(0.8\\times 100\\ \\mathrm{px}/2\\pi = 12.7\\ \\mathrm{px}\\) and the readout shows “13 px (cap)”. In the lower row the bars crowd at the compressions but never cross; set <em>Particles</em> to 40 and the closest two come within \\(3.9\\ \\mathrm{px}\\) of each other, against a rest spacing of \\(16.4\\ \\mathrm{px}.\\) In the upper row, at the same settings, the steepest slope is \\(Ak = 29\\times 2\\pi/100 = 1.82\\): far beyond the small slopes that equation (4) assumed.",
+  "tr": "أبقِ <em>طول الموجة</em> عند \\(220\\ \\mathrm{px}\\)، وارفع <em>السعة</em> من \\(26\\ \\mathrm{px}.\\) تتبع قراءة <em>A الطولية</em> القيمة حتى \\(28\\ \\mathrm{px};\\) وعند \\(29\\ \\mathrm{px}\\) تقرأ «28 px (cap)» بينما يواصل الصف العلوي نموّه. والآن اخفض <em>طول الموجة</em> إلى \\(100\\ \\mathrm{px}.\\) ينخفض الحدّ إلى \\(0.8\\times 100\\ \\mathrm{px}/2\\pi = 12.7\\ \\mathrm{px}\\) وتعرض القراءة «13 px (cap)». وفي الصف السفلي تتزاحم الأعمدة عند التضاغطات لكنها لا تتقاطع أبدًا؛ اضبط <em>الجسيمات</em> على 40، فيقترب أقرب جسيمين إلى \\(3.9\\ \\mathrm{px}\\) من بعضهما، مقابل تباعد سكون قدره \\(16.4\\ \\mathrm{px}.\\) أما في الصف العلوي، وبالإعدادات نفسها، فأشدّ ميل هو \\(Ak = 29\\times 2\\pi/100 = 1.82\\): وهذا بعيد جدًا عن الميول الصغيرة التي افترضتها المعادلة (4)."
+ },
+ "747edb0b5bc3": {
+  "src": "On a device set to reduce motion, the clock starts paused.",
+  "tr": "على جهاز ضُبط على تقليل الحركة، تبدأ الساعة متوقفة."
+ },
+ "74925336dcec": {
+  "src": "A. P. French, <em>Vibrations and Waves</em>, M.I.T. Introductory Physics Series, W. W. Norton, 1971: chapter 7 (progressive waves). <a href=\"https://www.routledge.com/Vibrations-and-Waves/French/p/book/9780748744473\">Publisher’s page</a> (now CRC Press); <a href=\"https://archive.org/details/vibrationswaves0000fren\">a lending copy of the 1971 edition</a> at the Internet Archive.",
+  "tr": "A. P. French، <em>Vibrations and Waves</em>، سلسلة M.I.T. Introductory Physics، W. W. Norton، 1971: الفصل 7 (الموجات المتنقّلة). <a href=\"https://www.routledge.com/Vibrations-and-Waves/French/p/book/9780748744473\">صفحة الناشر</a> (وهو اليوم CRC Press)؛ <a href=\"https://archive.org/details/vibrationswaves0000fren\">نسخة للإعارة من طبعة 1971</a> في أرشيف الإنترنت."
+ },
+ "781961bc81c2": {
+  "src": "Pause",
+  "tr": "إيقاف مؤقت"
+ },
+ "78a4efd00b40": {
+  "src": "<strong>Where the picture and the stored numbers differ.</strong> The tint is a guide to where the compressions are, not a plot of the density. It follows \\(\\max(0,\\,{-\\cos(kX - \\omega t)}),\\) which is symmetric and stops at an opacity of 0.23, whereas the stored density (10) is lopsided: 3.88 at the compression centres and 0.574 in the rarefactions for the defaults (Figure 4). The tint is laid out by rest position \\(X\\) and the particles by \\(X + \\xi;\\) the two agree at the compression centres, where \\(\\xi = 0.\\) The faithful picture of the density is the crowding of the bars themselves. The burgundy curve and the tint are drawn through extra sample points that are not particles and are not stored, while every particle is drawn at exactly the screen position stored for it.",
+  "tr": "<strong>حين يختلف الرسم عن الأرقام المخزّنة.</strong> التظليل دليل على مواضع التضاغطات، وليس رسمًا للكثافة. وهو يتبع \\(\\max(0,\\,{-\\cos(kX - \\omega t)}),\\) وهو متماثل ويتوقف عند عتامة 0.23، بينما الكثافة المخزّنة (10) غير متماثلة: 3.88 عند مراكز التضاغط و0.574 في التخلخلات بالإعدادات الافتراضية (الشكل 4). ويُرسم التظليل بحسب موضع السكون \\(X\\) وتُرسم الجسيمات بحسب \\(X + \\xi;\\) ويتفقان عند مراكز التضاغط حيث \\(\\xi = 0.\\) والصورة الأمينة للكثافة هي تزاحم الأعمدة نفسها. ويُرسم المنحنى العنابي والتظليل عبر نقاط عيّنة إضافية ليست جسيمات ولا تُخزَّن، أما كل جسيم فيُرسم عند الموضع الشاشي المخزّن له بالضبط."
+ },
+ "7a889ae23868": {
+  "src": "Both rows carry the same phase \\(kX - \\omega t\\) and therefore travel at the same speed. Real media do not oblige (Section 9).",
+  "tr": "يحمل الصفان الطور نفسه \\(kX - \\omega t\\) ولذلك يسيران بالسرعة نفسها. والأوساط الحقيقية لا تلتزم بذلك (القسم 9)."
+ },
+ "7abfedd9af24": {
+  "src": "The particles move quite differently. Differentiating (1) at fixed \\(X\\) gives the velocity \\(u\\) of a particle; differentiating at fixed \\(t\\) gives the slope of the snapshot:",
+  "tr": "تتحرك الجسيمات بطريقة مختلفة تمامًا. فاشتقاق (1) بثبات \\(X\\) يعطي سرعة الجسيم \\(u\\)؛ أما الاشتقاق بثبات \\(t\\) فيعطي ميل اللقطة:"
+ },
+ "7d252cd594b3": {
+  "src": "All simulations ↑",
+  "tr": "جميع المحاكاة ↑"
+ },
+ "7e1a0998d229": {
+  "src": "Lower row: each particle is a disc of radius \\(4\\ \\mathrm{px}\\) on a vertical bar \\(56\\ \\mathrm{px}\\) tall, so that crowding reads as density. With <em>Follow one particle</em> and <em>Equilibrium positions</em> both on, a rose line joins the followed particle to its rest tick.",
+  "tr": "الصف السفلي: كل جسيم قرص نصف قطره \\(4\\ \\mathrm{px}\\) على عمود رأسي ارتفاعه \\(56\\ \\mathrm{px}\\)، ليُقرأ التزاحم بوصفه كثافة. وحين يكون <em>تتبّع جسيم واحد</em> و<em>أوضاع التوازن</em> مفعّلين معًا، يصل خطٌّ وردي الجسيم المتتبَّع بخط سكونه."
+ },
+ "81899d12c9bc": {
+  "src": "Because the solution (1) is known exactly, the page solves nothing step by step. Each frame evaluates the formula afresh at every particle, so no error builds up in the shape of the wave; what remains is the rounding of double-precision arithmetic. The one quantity carried from frame to frame is the phase of the source,",
+  "tr": "لأن الحلّ (1) معلوم بدقة، فالصفحة لا تحلّ شيئًا خطوة بخطوة. وكل إطار يحسب الصيغة من جديد عند كل جسيم، فلا يتراكم خطأ في شكل الموجة؛ ولا يبقى إلا تقريب حساب الفاصلة العائمة ذات الدقة المضاعفة. والكمية الوحيدة التي تُحمل من إطار إلى آخر هي طور المصدر،"
+ },
+ "83ad9570709d": {
+  "src": "Here \\(A\\) is the amplitude, the largest displacement; \\(\\lambda\\) is the wavelength, the distance from one crest to the next; \\(f\\) is the frequency, the number of times per second each particle swings back and forth. The wavenumber \\(k\\) and the angular frequency \\(\\omega\\) count the same cycles in radians: \\(k\\) is the phase gained per pixel of distance, \\(\\omega\\) the phase gained per second. The combination \\(\\varphi = kX - \\omega t\\) is the <em>phase</em>. It says where in its cycle the particle at \\(X\\) is at time \\(t.\\)",
+  "tr": "هنا \\(A\\) السعة، أي أكبر إزاحة؛ و\\(\\lambda\\) طول الموجة، أي المسافة بين قمّة وأخرى؛ و\\(f\\) التردد، أي عدد المرات في الثانية التي يتأرجح فيها كل جسيم ذهابًا وإيابًا. ويعدّ العدد الموجي \\(k\\) والتردد الزاوي \\(\\omega\\) الدورات نفسها مقيسةً بالراديان: فـ\\(k\\) هو الطور الذي يكتسبه الجسيم لكل بكسل من المسافة، و\\(\\omega\\) هو الطور الذي يكتسبه في كل ثانية. والتركيب \\(\\varphi = kX - \\omega t\\) هو <em>الطور</em>. وهو يبيّن أين يقع الجسيم عند \\(X\\) من دورته في الزمن \\(t.\\)"
+ },
+ "8638c9099c46": {
+  "src": "Period T",
+  "tr": "الدور T"
+ },
+ "86447724e1aa": {
+  "src": "The page simply draws formula (1). That is how a real string or column of air moves while the wave is small, and the equations below are derived for that case. The default wave is large on purpose, so that the bunching in the lower row can be seen: there the amplitude \\(A_{\\rm L}\\) equals \\(A\\) at the default settings (Section 5 gives the rule), \\(A_{\\rm L}k\\approx0.743,\\) and at the compressions neighbours close to about a quarter of their rest spacing. A real medium pushed that hard would no longer move exactly like (1) (Section 9).",
+  "tr": "تتبع الصفحة الصيغة (1) ببساطة. وهكذا تتحرك وترٌ حقيقي أو عمود من الهواء ما دامت الموجة صغيرة، والمعادلات أدناه مستمدّة لهذه الحالة. والموجة الافتراضية كبيرة عن قصد، حتى يمكن رؤية تكدّس الصف السفلي: فهناك تساوي السعة \\(A_{\\rm L}\\) السعة \\(A\\) عند الإعدادات الافتراضية (يعطي القسم 5 القاعدة)، و\\(A_{\\rm L}k\\approx0.743,\\) وعند التضاغطات تقترب الجسيمات المجاورة من نحو ربع تباعدها عند السكون. أما وسط حقيقي يُدفع إلى هذا الحد فلن يتحرك تمامًا كما في (1) (القسم 9)."
+ },
+ "8837a4805773": {
+  "src": "<span class=\"pfig__n\">Figure 3</span>Paths of the lower row through time: the position \\(x = X + A_\\mathrm{L}\\sin(kX - \\omega t)\\) of each of the 26 particles for the default sliders, over two periods, \\(0 \\le t \\le 4\\ \\mathrm{s}\\) in steps of \\(0.025\\ \\mathrm{s},\\) with time running upwards. Each particle swings about its rest position and goes nowhere; the followed particle is in burgundy. Where the lines crowd together there is a compression. The crowding climbs the diagram along the dashed lines \\(x = (\\pi + \\omega t)/k + n\\lambda,\\) which advance \\(110\\ \\mathrm{px}\\) every second: the compressions travel at \\(v,\\) the particles do not.",
+  "tr": "<span class=\"pfig__n\">الشكل 3</span>مسارات الصف السفلي عبر الزمن: موضع \\(x = X + A_\\mathrm{L}\\sin(kX - \\omega t)\\) لكل جسيم من الجسيمات الـ26 بالمنزلقات الافتراضية، عبر دورين، \\(0 \\le t \\le 4\\ \\mathrm{s}\\) بخطوات \\(0.025\\ \\mathrm{s},\\) والزمن يتصاعد إلى الأعلى. يتأرجح كل جسيم حول موضع سكونه ولا يذهب إلى مكان؛ والجسيم المتتبَّع عنابي اللون. وحيث تتزاحم الخطوط يوجد تضاغط. ويصعد التزاحم في الرسم على امتداد الخطوط المتقطعة \\(x = (\\pi + \\omega t)/k + n\\lambda,\\) التي تتقدّم \\(110\\ \\mathrm{px}\\) كل ثانية: فالتضاغطات تسير بالسرعة \\(v,\\) أما الجسيمات فلا تسير."
+ },
+ "8ab81043ea7b": {
+  "src": "Transverse &amp; Longitudinal<span class=\"dot\">.</span>",
+  "tr": "المستعرضة والطولية<span class=\"dot\">.</span>"
+ },
+ "8ae8b67be987": {
+  "src": "Equation (1) describes the wave; it does not say why a rope or the air should carry it, or how fast. For that we need forces. For both kinds of wave the answer turns out to be the same equation.",
+  "tr": "المعادلة (1) تصف الموجة، لكنها لا تقول لماذا يحملها حبل أو هواء، ولا بأي سرعة. لذلك نحتاج إلى القوى. وتتبيّن أن الجواب للنوعين من الموجات معادلةٌ واحدة بعينها."
+ },
+ "9045bba496d1": {
+  "src": "Now let the particles move along the line. A piece of rest length \\(\\mathrm{d}X\\) has its ends displaced by \\(\\xi(X)\\) and \\(\\xi(X + \\mathrm{d}X),\\) so its new length is \\(\\mathrm{d}X\\,(1 + \\partial\\xi/\\partial X).\\) The fractional change of length, the <em>strain</em>, is \\(\\partial\\xi/\\partial X.\\) In a thin rod Hooke’s law turns strain into stress, force per area: \\(\\sigma = E\\,\\partial\\xi/\\partial X,\\) with \\(E\\) the Young’s modulus. The net force on the piece is the difference of the stress across it times the cross-section \\(S,\\) and its mass is \\(\\rho\\,S\\,\\mathrm{d}X,\\) with \\(\\rho\\) the density. Dividing by \\(S\\,\\mathrm{d}X,\\)",
+  "tr": "والآن نجعل الجسيمات تتحرك على امتداد الخط. فقطعة طولها الأصلي \\(\\mathrm{d}X\\) تُزاح نهايتاها بمقدار \\(\\xi(X)\\) و\\(\\xi(X + \\mathrm{d}X),\\) فيصبح طولها الجديد \\(\\mathrm{d}X\\,(1 + \\partial\\xi/\\partial X).\\) والتغيّر النسبي في الطول، أي <em>الانفعال</em>، هو \\(\\partial\\xi/\\partial X.\\) وفي القضيب الرفيع يحوّل قانون هوك الانفعال إلى إجهاد، أي قوة لكل وحدة مساحة: \\(\\sigma = E\\,\\partial\\xi/\\partial X,\\) حيث \\(E\\) معامل يونغ. والقوة المحصّلة على القطعة هي فرق الإجهاد عبرها مضروبًا في مساحة المقطع \\(S,\\) وكتلتها \\(\\rho\\,S\\,\\mathrm{d}X,\\) حيث \\(\\rho\\) الكثافة. وبالقسمة على \\(S\\,\\mathrm{d}X,\\)"
+ },
+ "934b335681de": {
+  "src": "Every feature of the pattern moves at \\(v = f\\lambda = \\omega/k,\\) in both rows. Every particle only swings about its rest position, with amplitude \\(A,\\) frequency \\(f\\) and a speed of at most \\(A\\omega.\\) The two speeds are different things: the first belongs to the pattern, the second to the matter.",
+  "tr": "كل سمة من سمات النمط تتحرك بالسرعة \\(v = f\\lambda = \\omega/k,\\) في الصفّين. وكل جسيم لا يتأرجح إلا حول موضع سكونه، بسعة \\(A,\\) وتردد \\(f\\) وبسرعة لا تتجاوز \\(A\\omega.\\) والسرعتان شيئان مختلفان: الأولى للنمط، والثانية للمادة."
+ },
+ "93a8161c11f4": {
+  "src": "Back to the simulations",
+  "tr": "العودة إلى المحاكاة"
+ },
+ "9517f9094dd8": {
+  "src": "No damping and no dispersion: the wave never fades, and every wavelength travels at the same speed.",
+  "tr": "لا تخامد ولا تشتّت: فلا تضمحل الموجة أبدًا، وتنتقل كل أطوال الموجة بالسرعة نفسها."
+ },
+ "9521dba25709": {
+  "src": "Home page",
+  "tr": "الصفحة الرئيسية"
+ },
+ "98ff66856a14": {
+  "src": "Amplitude A",
+  "tr": "السعة A"
+ },
+ "9d7fb4bb904c": {
+  "src": "In a stadium a wave runs right round the stands, and yet every spectator ends up exactly where they started: in their own seat.",
+  "tr": "في الملعب تدور موجةٌ حول المدرجات كلها، ومع ذلك يعود كل متفرّج في النهاية إلى المكان الذي بدأ منه: إلى مقعده."
+ },
+ "a141d636025a": {
+  "src": "Transverse &amp; Longitudinal Waves · Numa Koudsie",
+  "tr": "الأمواج المستعرضة والطولية · نعمة سائر قدسية"
+ },
+ "a24d601189fb": {
+  "src": "Wave",
+  "tr": "الموجة"
+ },
+ "a25d99bc4ff2": {
+  "src": "with \\(\\Delta t\\) the real time since the previous frame. Adding up the phase, rather than computing \\(2\\pi f t\\) from the clock, keeps the wave continuous when you move the <em>Frequency</em> slider: only the rate at which the phase grows changes. With \\(2\\pi f t\\) every particle’s phase would jump by \\(2\\pi\\,\\Delta f\\,t,\\) a jump that grows with the time already played. Moving the <em>Wavelength</em> slider, by contrast, changes \\(k\\) at once. The pattern then redraws stretched about the left end of the row, \\(X = 0,\\) whose phase \\(-\\omega t\\) does not depend on \\(k.\\)",
+  "tr": "مع \\(\\Delta t\\) الزمن الحقيقي منذ الإطار السابق. وإن جُمع الطور تراكميًا، بدلًا من حسابه \\(2\\pi f t\\) من الساعة، بقيت الموجة متصلة عند تحريك منزلق <em>التردد</em>: فلا يتغيّر إلا معدل نمو الطور. ولو حُسبت \\(2\\pi f t\\) لقفز طور كل جسيم بمقدار \\(2\\pi\\,\\Delta f\\,t,\\) وهي قفزة تكبر مع الزمن الذي مضى. أما تحريك منزلق <em>طول الموجة</em> فيغيّر \\(k\\) فورًا. ثم يُعاد رسم النمط ممدودًا حول الطرف الأيسر للصف، \\(X = 0,\\) الذي لا يتعلّق طوره \\(-\\omega t\\) بـ\\(k.\\)"
+ },
+ "a28272643323": {
+  "src": "<span class=\"psec__n\">02</span>The model",
+  "tr": "<span class=\"psec__n\">02</span>النموذج"
+ },
+ "a4ce3a9be794": {
+  "src": "← All simulations",
+  "tr": "← جميع المحاكاة"
+ },
+ "a72bb44b4eba": {
+  "src": "<span class=\"sw sw--tan\"></span>crest · compression",
+  "tr": "<span class=\"sw sw--tan\"></span>قمّة · تضاغط"
+ },
+ "a7520b10a1d5": {
+  "src": "Longit. A",
+  "tr": "A الطولية"
+ },
+ "a7eeac48e59f": {
+  "src": "In words: in one period the pattern moves on by one wavelength. With the defaults \\(v = 0.50\\ \\mathrm{Hz}\\times 220\\ \\mathrm{px} = 110\\ \\mathrm{px/s},\\) the value in the <em>Speed</em> readout and under the figure. The minus sign in \\(kX - \\omega t\\) is what sends the wave to the right; with a plus sign it would travel to the left. The crest triangles above the upper row sit at \\(X_\\mathrm{c} = (\\pi/2 + \\omega t)/k,\\) plus whole wavelengths, and so they move at \\(v.\\)",
+  "tr": "بعبارة أخرى: في دورة واحدة يتقدّم النمط بمقدار طول موجة واحد. وبالإعدادات الافتراضية \\(v = 0.50\\ \\mathrm{Hz}\\times 220\\ \\mathrm{px} = 110\\ \\mathrm{px/s},\\) وهي القيمة في قراءة <em>السرعة</em> وتحت الشكل. وإشارة الطرح في \\(kX - \\omega t\\) هي التي ترسل الموجة نحو اليمين؛ ولو كانت إشارة جمع لسارت نحو اليسار. وتقع مثلثات القمم فوق الصف العلوي عند \\(X_\\mathrm{c} = (\\pi/2 + \\omega t)/k,\\) مضافًا إليها أطوال موجة كاملة، فهي تتحرك إذن بالسرعة \\(v.\\)"
+ },
+ "ab494e569432": {
+  "src": "Wave speed and particle speed",
+  "tr": "سرعة الموجة وسرعة الجسيم"
+ },
+ "ac17bc6fb9e7": {
+  "src": "Even so, the default wave is far from small: \\(A_\\mathrm{L}k = 0.743.\\) Figure 3 follows the 26 particles of the lower row for two periods, and Figure 4 shows the density they make. At the compression centres the density is \\(1/(1 - 0.743) = 3.88\\) times the rest density, in the rarefactions only \\(1/(1 + 0.743) = 0.574\\) times; the linear approximation in (10) would give 1.74 and 0.26. The compressions are narrow and crowded, the rarefactions broad and thin: the denser half of the particles fills only \\(1/2 - A_\\mathrm{L}k/\\pi = 26\\,\\%\\) of the length. At rest that half, the particles with phases between \\(\\pi/2\\) and \\(3\\pi/2,\\) spans half a wavelength; but the rearmost of them is pushed forward by \\(A_\\mathrm{L}\\) and the foremost pulled back by \\(A_\\mathrm{L},\\) so together they fit into \\(\\lambda/2 - 2A_\\mathrm{L}.\\) At the first frame the gaps between neighbours range from \\(7.0\\ \\mathrm{px}\\) to \\(44.1\\ \\mathrm{px},\\) around a rest spacing of \\(25.6\\ \\mathrm{px}.\\)",
+  "tr": "ومع ذلك فالموجة الافتراضية بعيدة جدًا عن أن تكون صغيرة: \\(A_\\mathrm{L}k = 0.743.\\) ويتتبّع الشكل 3 الجسيمات الـ26 للصف السفلي عبر دورين، ويُظهر الشكل 4 الكثافة التي تكوّنها. فعند مراكز التضاغط تبلغ الكثافة \\(1/(1 - 0.743) = 3.88\\) من كثافة السكون، وفي التخلخلات لا تتجاوز \\(1/(1 + 0.743) = 0.574\\)؛ أما التقريب الخطي في (10) فيعطي 1.74 و0.26. والتضاغطات ضيقة متزاحمة، والتخلخلات عريضة رقيقة: فالنصف الأكثف من الجسيمات لا يملأ سوى \\(1/2 - A_\\mathrm{L}k/\\pi = 26\\,\\%\\) من الطول. ففي السكون يمتد ذلك النصف، أي الجسيمات ذات الأطوار بين \\(\\pi/2\\) و\\(3\\pi/2,\\) مسافة نصف طول موجة؛ غير أن آخرها يُدفع إلى الأمام بمقدار \\(A_\\mathrm{L}\\) وأولها يُسحب إلى الخلف بمقدار \\(A_\\mathrm{L},\\) فتتّسع لهم معًا مسافة \\(\\lambda/2 - 2A_\\mathrm{L}.\\) وعند الإطار الأول تتراوح الفجوات بين الجيران من \\(7.0\\ \\mathrm{px}\\) إلى \\(44.1\\ \\mathrm{px},\\) حول تباعد سكون قدره \\(25.6\\ \\mathrm{px}.\\)"
+ },
+ "b1b392607dea": {
+  "src": "Run",
+  "tr": "تشغيل"
+ },
+ "b23f121b95cf": {
+  "src": "<span>6</span>Energy carried&nbsp;★",
+  "tr": "<span>6</span>الطاقة المحمولة&nbsp;★"
+ },
+ "b4f8e695f7f5": {
+  "src": "The medium has no ends, so nothing reflects from the edges of the picture.",
+  "tr": "ليس للوسط أطراف، فلا ينعكس شيء عن حواف الصورة."
+ },
+ "b96b4ff05e37": {
+  "src": "Density from the ideal-gas law with molar mass 28.97 g/mol at 293.15 K: 1.2043 kg/m³. Then √(1.40 × 101 325 / 1.204) = 343.2 m/s.",
+  "tr": "الكثافة من قانون الغاز المثالي، بكتلة مولية 28.97 g/mol عند 293.15 K: 1.2043 kg/m³. ثم √(1.40 × 101 325 / 1.204) = 343.2 m/s."
+ },
+ "bb0feba16a5b": {
+  "src": "Any function of \\(X - vt\\) solves (5): by the chain rule its second derivative in time is \\(v^2\\) times its second derivative in space. The same holds for any function of \\(X + vt.\\) This is d’Alembert’s solution,",
+  "tr": "أي دالة لـ\\(X - vt\\) تحقّق (5): فبقاعدة السلسلة تكون مشتقتها الزمنية الثانية \\(v^2\\) مضروبة في مشتقتها المكانية الثانية. وينطبق الأمر نفسه على أي دالة لـ\\(X + vt.\\) وهذا هو حلّ دالمبير،"
+ },
+ "bee75ca77f75": {
+  "src": "Controls",
+  "tr": "أدوات التحكم"
+ },
+ "c64ebd442a82": {
+  "src": "H. D. Young and R. A. Freedman, <em>University Physics with Modern Physics</em>, 15th edition, Pearson, 2020: chapters 15 (mechanical waves) and 16 (sound and hearing). <a href=\"https://www.pearson.com/en-us/subject-catalog/p/university-physics-with-modern-physics/P200000006855/9780135216125\">Publisher’s page</a>.",
+  "tr": "H. D. Young و R. A. Freedman، <em>University Physics with Modern Physics</em>، الطبعة 15، Pearson، 2020: الفصلان 15 (الموجات الميكانيكية) و16 (الصوت والسمع). <a href=\"https://www.pearson.com/en-us/subject-catalog/p/university-physics-with-modern-physics/P200000006855/9780135216125\">صفحة الناشر</a>."
+ },
+ "c8c2d1bc6e1a": {
+  "src": "Dividing by \\(\\mu\\,\\mathrm{d}X\\) gives the <em>wave equation</em>,",
+  "tr": "وبالقسمة على \\(\\mu\\,\\mathrm{d}X\\) نحصل على <em>معادلة الموجة</em>،"
+ },
+ "ca4759d2b294": {
+  "src": "<span class=\"psec__n\">07</span>How the page computes a frame",
+  "tr": "<span class=\"psec__n\">07</span>كيف تحسب الصفحة الإطار"
+ },
+ "cad2dda3032c": {
+  "src": "heavier mathematics",
+  "tr": "رياضيات أثقل"
+ },
+ "cbe28c0effec": {
+  "src": "<span class=\"psec__n\">09</span>What the model leaves out",
+  "tr": "<span class=\"psec__n\">09</span>ما يغفله النموذج"
+ },
+ "cfaa0edbb773": {
+  "src": "<span class=\"psub__n\">4.2</span>A rod and a column of gas",
+  "tr": "<span class=\"psub__n\">4.2</span>قضيب وعمود من الغاز"
+ },
+ "d1622a8321e0": {
+  "src": "Phyein Usul, home page",
+  "tr": "Phyein Usul، الصفحة الرئيسية"
+ },
+ "d67855baa92d": {
+  "src": "<span class=\"psec__n\">03</span>One formula, two pictures",
+  "tr": "<span class=\"psec__n\">03</span>صيغة واحدة وصورتان"
+ },
+ "d6cc5fcc2132": {
+  "src": "<span class=\"sw sw--rose\"></span>displacement",
+  "tr": "<span class=\"sw sw--rose\"></span>الإزاحة"
+ },
+ "d6cc84d9aa86": {
+  "src": "Behind the lower row lies a band \\(68\\ \\mathrm{px}\\) tall, tinted burgundy with opacity \\(0.03 + 0.2\\max(0,\\,{-\\cos(kX - \\omega t)}),\\) set at 65 points, one every \\(10\\ \\mathrm{px}\\) of the medium, and blended linearly between them. The compression triangles sit above the band.",
+  "tr": "خلف الصف السفلي شريط ارتفاعه \\(68\\ \\mathrm{px}\\)، مصبوغ بلون عنابي بعتامة \\(0.03 + 0.2\\max(0,\\,{-\\cos(kX - \\omega t)}),\\) ويُحدَّد عند 65 نقطة، واحدة كل \\(10\\ \\mathrm{px}\\) من الوسط، ويُمزج خطيًا بينها. وتقع مثلثات التضاغط فوق الشريط."
+ },
+ "d6dfa262b96a": {
+  "src": "Lengths on the page are pixels of a medium \\(640\\ \\mathrm{px}\\) long; time is real time in seconds. At the start the sliders stand at \\(A = 26\\ \\mathrm{px},\\) \\(f = 0.50\\ \\mathrm{Hz},\\) \\(\\lambda = 220\\ \\mathrm{px}\\) and 26 particles, spaced \\(640/25 = 25.6\\ \\mathrm{px}\\) apart. The followed particle is number 12, counting from 0, at \\(X = 307.2\\ \\mathrm{px}.\\) Only the ratio \\(A/\\lambda\\) fixes the shape of the wave; the pixel is just a convenient ruler.",
+  "tr": "أطوال الصفحة هي بكسلات لوسط طوله \\(640\\ \\mathrm{px}\\) والزمن هو الزمن الحقيقي بالثواني. تبدأ المنزلقات عند \\(A = 26\\ \\mathrm{px},\\) و\\(f = 0.50\\ \\mathrm{Hz},\\) و\\(\\lambda = 220\\ \\mathrm{px}\\)، وفيه 26 جسيمًا متباعدةً بمقدار \\(640/25 = 25.6\\ \\mathrm{px}\\). والجسيم المتتبَّع هو الجسيم رقم 12، مع احتساب البداية من 0، عند \\(X = 307.2\\ \\mathrm{px}.\\) ولا تحدّد الشكلَ سوى النسبة \\(A/\\lambda\\)؛ أما البكسل فليس إلا مسطرةً مناسبة."
+ },
+ "d929322e4b16": {
+  "src": "Fig.",
+  "tr": "الشكل"
+ },
+ "d94d9873f6c2": {
+  "src": "<span class=\"sw sw--dot\"></span>followed particle",
+  "tr": "<span class=\"sw sw--dot\"></span>الجسيم المتتبَّع"
+ },
+ "d9813df3cc30": {
+  "src": "<span class=\"psec__n\">05</span>Compressions and rarefactions",
+  "tr": "<span class=\"psec__n\">05</span>التضاغطات والتخلخلات"
+ },
+ "ddca3f390894": {
+  "src": "so that the tightest spacing is \\(20\\,\\%\\) of the rest spacing and the densest point 5 times the rest density. The <em>Longit. A</em> readout shows \\(A_\\mathrm{L}\\) and adds “(cap)” when the cap acts. With the defaults the cap is \\(28.0\\ \\mathrm{px},\\) above \\(A = 26\\ \\mathrm{px},\\) so both rows have the same amplitude.",
+  "tr": "حتى يكون أضيق تباعد \\(20\\,\\%\\) من تباعد السكون، وأكثر النقاط كثافةً 5 أضعاف كثافة السكون. وتُظهر قراءة <em>A الطولية</em> \\(A_\\mathrm{L}\\) وتضيف «(cap)» حين يعمل الحدّ. وبالإعدادات الافتراضية يكون الحدّ \\(28.0\\ \\mathrm{px},\\) أعلى من \\(A = 26\\ \\mathrm{px},\\) فيكون للصفّين السعة نفسها."
+ },
+ "ddeb0d6a3372": {
+  "src": "The particle speed is at most \\(A\\omega,\\) which is \\(81.7\\ \\mathrm{px/s}\\) for the defaults. It depends on the amplitude and the frequency but not on the wavelength. Its ratio to the wave speed is \\(A\\omega/v = Ak = 0.743\\): here the particles move more slowly than the pattern, and on average they go nowhere at all. The last relation in (3) holds for any shape that moves to the right without changing, not only for a sine. Where the curve falls towards the right, the higher part behind a particle is about to arrive, so the particle is rising.",
+  "tr": "سرعة الجسيم لا تتجاوز \\(A\\omega,\\) وهي \\(81.7\\ \\mathrm{px/s}\\) بالإعدادات الافتراضية. وتعتمد على السعة والتردد لا على طول الموجة. ونسبتها إلى سرعة الموجة هي \\(A\\omega/v = Ak = 0.743\\): فالجسيمات هنا أبطأ من النمط، وفي المتوسط لا تذهب إلى أي مكان البتّة. والعلاقة الأخيرة في (3) تصحّ لأي شكل يتحرك نحو اليمين دون أن يتغيّر، لا للجيب وحده. وحيث ينحدر المنحنى نحو اليمين، يكون الجزء الأعلى خلف الجسيم على وشك الوصول، فالجسيم إذن صاعد."
+ },
+ "e13b587879b0": {
+  "src": "<span>2</span>The model",
+  "tr": "<span>2</span>النموذج"
+ },
+ "e1d329a7394b": {
+  "src": "From symbols to code",
+  "tr": "من الرموز إلى الشيفرة"
+ },
+ "e3becde40511": {
+  "src": "<span>3</span>One formula, two pictures",
+  "tr": "<span>3</span>صيغة واحدة وصورتان"
+ },
+ "e481bb928b5e": {
+  "src": "<span>5</span>Compressions and rarefactions",
+  "tr": "<span>5</span>التضاغطات والتخلخلات"
+ },
+ "e54c02e78abf": {
+  "src": "where \\(\\rho_0\\) is the density at rest and \\(A_\\mathrm{L}\\) the amplitude of the lower row, defined below. The medium is densest where \\(\\cos(kX - \\omega t) = -1,\\) at phase \\(\\pi.\\) There the displacement \\(A_\\mathrm{L}\\sin\\pi\\) is zero: the particles just behind have been pushed forward and those just ahead pulled back, so both crowd towards the centre. By (3), the particles at the centre move forward at full speed. A compression centre therefore sits at \\(X_\\mathrm{p} = (\\pi + \\omega t)/k,\\) and",
+  "tr": "حيث \\(\\rho_0\\) الكثافة عند السكون، و\\(A_\\mathrm{L}\\) سعة الصف السفلي، وسنعرّفها أدناه. وأكثر ما يكون الوسط كثافةً حيث \\(\\cos(kX - \\omega t) = -1,\\) عند الطور \\(\\pi.\\) وهناك تكون الإزاحة \\(A_\\mathrm{L}\\sin\\pi\\) صفرًا: فالجسيمات التي خلفها دُفعت إلى الأمام، والتي أمامها سُحبت إلى الخلف، فيتزاحم الجميع نحو المركز. وبحسب (3) تتحرك جسيمات المركز إلى الأمام بأقصى سرعة. ومن ثَمّ يقع مركز التضاغط عند \\(X_\\mathrm{p} = (\\pi + \\omega t)/k,\\) و"
+ },
+ "e8c0ab61e15f": {
+  "src": "a shape moving to the right plus a shape moving to the left, each keeping its form. The sine wave (1) is the case \\(g(z) = A\\sin kz,\\) \\(h = 0\\): writing \\(kX - \\omega t = k\\,(X - vt)\\) requires \\(\\omega = vk,\\) which is equation (2) again. Here the physics adds something the kinematics alone could not. On a real string \\(v\\) is fixed by \\(F\\) and \\(\\mu;\\) the source fixes the frequency, and the wavelength has no choice, \\(\\lambda = v/f.\\) On the page both \\(f\\) and \\(\\lambda\\) are sliders and \\(v\\) follows from them, which amounts to choosing a new medium every time you move one.",
+  "tr": "شكل يتحرك نحو اليمين مضافًا إليه شكل يتحرك نحو اليسار، ويحتفظ كل منهما بهيئته. والموجة الجيبية (1) هي الحالة \\(g(z) = A\\sin kz,\\) \\(h = 0\\): وبكتابة \\(kX - \\omega t = k\\,(X - vt)\\) يلزم \\(\\omega = vk,\\) وهي المعادلة (2) من جديد. وهنا تضيف الفيزياء شيئًا لم تستطع الحركة وحدها أن تقدّمه. ففي الوتر الحقيقي تتحدّد \\(v\\) بـ\\(F\\) و\\(\\mu;\\) والمصدر يحدّد التردد، وطول الموجة لا خيار له، \\(\\lambda = v/f.\\) أما في الصفحة فإن \\(f\\) و\\(\\lambda\\) كلاهما منزلق، و\\(v\\) يتبع منهما، وهذا بمثابة اختيار وسط جديد في كل مرة تحرّك أيًّا منهما."
+ },
+ "ea37fcbd5441": {
+  "src": "<span class=\"psec__n\">08</span>From medium pixels to screen pixels",
+  "tr": "<span class=\"psec__n\">08</span>من بكسلات الوسط إلى بكسلات الشاشة"
+ },
+ "eba286997294": {
+  "src": "That is the whole idea of a wave. Each spectator only stands up and sits down again, a moment after their neighbour; what travels round the stadium is the pattern “stand up now”. The people move up and down while the wave moves sideways along the stands. The motion of the medium is <em>across</em> the direction of travel, and such a wave is called <em>transverse</em>.",
+  "tr": "هذه هي الفكرة كلها للموجة. كل متفرّج لا يفعل سوى أن يقف ثم يجلس من جديد، بعد لحظة من جاره؛ وما يسير حول الملعب هو النمط «قفوا الآن». يتحرك الناس صعودًا وهبوطًا، بينما تمضي الموجة جانبيًا على امتداد المدرجات. وحركة الوسط تكون <em>عمودية</em> على اتجاه الانتشار، ويُسمّى مثل هذه الموجة <em>مستعرضةً</em>."
+ },
+ "ebdeff9a20c3": {
+  "src": "Equilibrium positions",
+  "tr": "أوضاع التوازن"
+ },
+ "ef58b230ead6": {
+  "src": "Interactive comparison of a transverse and a longitudinal wave with the same amplitude, frequency and wavelength.",
+  "tr": "مقارنة تفاعلية بين موجة مستعرضة وموجة طولية لهما السعة نفسها والتردد نفسه وطول الموجة نفسه."
+ },
+ "f199e2e1a4ed": {
+  "src": "<span class=\"psub__n\">9.1</span>Further reading",
+  "tr": "<span class=\"psub__n\">9.1</span>قراءات إضافية"
+ },
+ "f5cbdf6bfb51": {
+  "src": "Contents",
+  "tr": "المحتويات"
+ },
+ "f72f0eda6052": {
+  "src": "Simulations",
+  "tr": "المحاكاة"
+ },
+ "f80ceb3a399d": {
+  "src": "Small amplitudes. The defaults are not small: the steepest slope of the upper row, \\(Ak = 0.743,\\) is an angle of \\(36.6^\\circ,\\) and a real string tilted that far stretches and changes its tension. Sound of large amplitude steepens as it travels, because the compressed parts move slightly faster than the rarefied ones, until the front becomes a shock.",
+  "tr": "سعات صغيرة. الإعدادات الافتراضية ليست صغيرة: فأشدّ ميل في الصف العلوي، \\(Ak = 0.743,\\) هو زاوية قدرها \\(36.6^\\circ,\\) والوتر الحقيقي المائل إلى هذا الحد يتمدد ويتغيّر شدّه. والصوت ذو السعة الكبيرة تشتدّ حدّة جبهته كلما انتقل، لأن الأجزاء المضغوطة تتحرك أسرع قليلًا من المتخلخلة، حتى تصير الجبهة صدمة."
+ },
+ "f8329eb1a2fe": {
+  "src": "A slinky on a table shows both kinds. Shake one end sideways and a kink runs along it: transverse again. Push the end in and out along the slinky and something different runs along it: a group of coils bunched together, a <em>compression</em>, followed by a stretch where the coils are spread apart, a <em>rarefaction</em>. Every coil moves only back and forth, along the direction in which the pattern travels. This is a <em>longitudinal</em> wave.",
+  "tr": "يُظهر نابض لولبي (سلنكي) على الطاولة النوعين معًا. إذا هززنا أحد طرفيه جانبيًا، سار على طوله التواء: موجة مستعرضة مرة أخرى. وإذا دفعنا الطرف إلى الداخل والخارج على امتداد النابض، سار عليه شيء مختلف: مجموعة من اللفّات متلاصقة، وهي <em>التضاغط</em>، تليها مسافة تتباعد فيها اللفّات، وهي <em>التخلخل</em>. تتحرك كل لفّة ذهابًا وإيابًا فقط، على اتجاه سير النمط. وهذه موجة <em>طولية</em>."
+ },
+ "f94cddac6777": {
+  "src": "Measured in headless Chromium, the canvas is \\(770 \\times 481\\) px in a \\(1440\\ \\mathrm{px}\\) wide window, so \\(s = 1.134,\\) and \\(356 \\times 374\\) px on a \\(390\\ \\mathrm{px}\\) wide phone, so \\(s = 0.4875.\\) The rest line of the upper row, \\(y_\\mathrm{T},\\) lies at \\(30\\,\\%\\) of the canvas height and the lower row at \\(77\\,\\%.\\) A transverse particle is drawn at height \\(y_\\mathrm{T} - s\\,\\xi,\\) with a minus sign because screen \\(y\\) points down.",
+  "tr": "مقيسةً في Chromium بلا واجهة، تكون لوحة الرسم \\(770 \\times 481\\) px في نافذة عرضها \\(1440\\ \\mathrm{px}\\)، فيكون \\(s = 1.134,\\) وتكون \\(356 \\times 374\\) px على هاتف عرضه \\(390\\ \\mathrm{px}\\)، فيكون \\(s = 0.4875.\\) ويقع خط السكون للصف العلوي، \\(y_\\mathrm{T},\\) عند \\(30\\,\\%\\) من ارتفاع لوحة الرسم، والصف السفلي عند \\(77\\,\\%.\\) والجسيم العرضي يُرسم عند الارتفاع \\(y_\\mathrm{T} - s\\,\\xi,\\) بإشارة ناقصة لأن محور \\(y\\) في الشاشة يتجه نحو الأسفل."
+ },
+ "fb194e991a8e": {
+  "src": "Wavelength λ",
+  "tr": "طول الموجة λ"
+ },
+ "fb57a7ac8366": {
+  "src": "This simulation needs JavaScript.",
+  "tr": "هذه المحاكاة تحتاج إلى جافاسكربت."
+ }
+}

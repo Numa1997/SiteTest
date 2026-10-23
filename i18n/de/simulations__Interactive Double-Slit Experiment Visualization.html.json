@@ -1,0 +1,538 @@
+{
+ "00dc93e1c8c6": {
+  "src": "The calculations use JavaScript’s double-precision numbers, about 16 significant digits; Section 3 shows that this is far more than the drawing needs.",
+  "tr": "Die Berechnungen verwenden die Gleitkommazahlen mit doppelter Genauigkeit von JavaScript, also etwa 16 signifikante Stellen; Abschnitt 3 zeigt, dass das weit mehr ist, als die Zeichnung braucht."
+ },
+ "05476d85d5be": {
+  "src": "<span class=\"sw\"></span>path difference δs",
+  "tr": "<span class=\"sw\"></span>Gangunterschied δs"
+ },
+ "057ecf8b693d": {
+  "src": "<span class=\"psec__n\">06</span>Slits with a width<span class=\"star\" title=\"heavier mathematics\">★</span>",
+  "tr": "<span class=\"psec__n\">06</span>Spalte mit Breite<span class=\"star\" title=\"heavier mathematics\">★</span>"
+ },
+ "06d5516cb1ec": {
+  "src": "Polarisation and the vector nature of light are ignored. For light polarised along the slits nothing changes. For the other polarisation each field points across its own path, so at \\(P\\) the two fields are tilted against each other by the angle \\(\\gamma\\) between the two paths, \\(11^\\circ\\) at the dark fringe for the defaults. Two equal fields in opposite phase but tilted by \\(\\gamma\\) do not quite cancel: they leave a remainder \\(2E_0\\sin(\\gamma/2),\\) so that dark fringe keeps \\(\\sin^2(\\gamma/2) = 0.9\\,\\%\\) of \\(I_0.\\) Far from the slits the paths become parallel, \\(\\gamma\\) goes to zero, and the scalar picture is exact again.",
+  "tr": "Polarisation und der vektorielle Charakter des Lichts werden vernachlässigt. Für Licht, das längs der Spalte polarisiert ist, ändert sich nichts. Bei der anderen Polarisation zeigt jedes Feld quer zu seinem eigenen Weg, sodass sich die beiden Felder in \\(P\\) um den Winkel \\(\\gamma\\) zwischen den beiden Wegen gegeneinander neigen, \\(11^\\circ\\) am dunklen Streifen bei den Standardwerten. Zwei gleiche Felder mit entgegengesetzter Phase, aber um \\(\\gamma\\) geneigt, heben sich nicht ganz auf: Sie lassen einen Rest \\(2E_0\\sin(\\gamma/2),\\) sodass dieser dunkle Streifen \\(\\sin^2(\\gamma/2) = 0.9\\,\\%\\) ausmacht, bezogen auf \\(I_0.\\) Weit von den Spalten werden die Wege parallel, \\(\\gamma\\) geht gegen null, und das skalare Bild ist wieder exakt."
+ },
+ "09c5fee32110": {
+  "src": "<span class=\"psec__n\">10</span>What the model leaves out",
+  "tr": "<span class=\"psec__n\">10</span>Was das Modell weglässt"
+ },
+ "0a77f3212e1b": {
+  "src": "Turn the light down far enough and the smooth pattern breaks up into dots.",
+  "tr": "Dreht man das Licht weit genug herunter, so zerfällt das glatte Muster in Punkte."
+ },
+ "0db452d40163": {
+  "src": "Figure 5 draws dots at random according to this rule. Twenty dots look like noise; two thousand show the fringes. Of those 2000 dots, 140 land within \\(1^\\circ\\) of the centre and only 3 within \\(1^\\circ\\) of the two dark directions at \\(\\pm 9.72^\\circ;\\) the rule (12) expects 131 and 2.2.",
+  "tr": "Abb. 5 zeichnet Punkte zufällig nach dieser Regel. Zwanzig Punkte wirken wie Rauschen; zweitausend zeigen die Streifen. Von diesen 2000 Punkten landen 140 innerhalb von \\(1^\\circ\\) um die Mitte und nur 3 innerhalb von \\(1^\\circ\\) um die beiden dunklen Richtungen bei \\(\\pm 9.72^\\circ;\\) die Regel (12) erwartet 131 und 2.2."
+ },
+ "0e327b7fd749": {
+  "src": "Keep <em>Slit separation</em> \\(b = 40\\ \\mathrm{px},\\) <em>Wavelength</em> \\(\\lambda = 13.5\\ \\mathrm{px}\\) and <em>Distance</em> \\(d = 200\\ \\mathrm{px}.\\) Step <em>Angle</em> \\(\\alpha\\) up from \\(0^\\circ\\) and watch the readout <em>\\(\\delta s/\\lambda\\)</em> and the verdict under the readouts. Between \\(9.5^\\circ\\) and \\(10.0^\\circ\\) the readout passes from 0.49 to 0.51 and the verdict says <em>Destructive</em>; between \\(19.5^\\circ\\) and \\(20.0^\\circ\\) it passes from 0.99 to 1.01 and the verdict says <em>Constructive · bright fringe, m = 1</em>. In the far field, (8) puts these fringes at \\(9.72^\\circ\\) and \\(19.72^\\circ;\\) the exact path difference at \\(d = 200\\ \\mathrm{px}\\) puts them at \\(9.76^\\circ\\) and \\(19.81^\\circ.\\) Then set \\(d = 100\\ \\mathrm{px}\\) and find the bright fringe again: it has moved out to \\(20.04^\\circ.\\)",
+  "tr": "Belassen Sie <em>Spaltabstand</em> \\(b = 40\\ \\mathrm{px},\\) <em>Wellenlänge</em> \\(\\lambda = 13.5\\ \\mathrm{px}\\) und <em>Abstand</em> \\(d = 200\\ \\mathrm{px}.\\) Erhöhen Sie den <em>Winkel</em> \\(\\alpha\\) von \\(0^\\circ\\) aus und beobachten Sie die Anzeige <em>\\(\\delta s/\\lambda\\)</em> und das Urteil unter den Anzeigen. Zwischen \\(9.5^\\circ\\) und \\(10.0^\\circ\\) geht die Anzeige von 0.49 auf 0.51, und das Urteil lautet <em>Destruktiv</em>; zwischen \\(19.5^\\circ\\) und \\(20.0^\\circ\\) geht sie von 0.99 auf 1.01, und das Urteil lautet <em>Konstruktiv · heller Streifen, m = 1</em>. Nach (8) liegen diese Streifen in der Fernfeldnäherung bei \\(9.72^\\circ\\) und \\(19.72^\\circ;\\) der genaue Gangunterschied bei \\(d = 200\\ \\mathrm{px}\\) setzt sie auf \\(9.76^\\circ\\) und \\(19.81^\\circ.\\) Setzen Sie dann \\(d = 100\\ \\mathrm{px}\\) und finden Sie den hellen Streifen wieder: Er ist hinausgewandert bis \\(20.04^\\circ.\\)"
+ },
+ "116ea2997c09": {
+  "src": "The verdict uses the fractional part \\(f = \\delta s/\\lambda - \\lfloor\\delta s/\\lambda\\rfloor\\): <em>Constructive</em> when \\(f < 0.08\\) or \\(f > 0.92,\\) <em>Destructive</em> when \\(|f - \\tfrac12| < 0.08,\\) otherwise <em>Partial</em> with \\(I/I_0\\) from (7). A tolerance of 0.08 wavelengths means that <em>Constructive</em> covers intensities from 0.94 to 1 and <em>Destructive</em> from 0 to 0.06.",
+  "tr": "Das Urteil nutzt den Bruchteil \\(f = \\delta s/\\lambda - \\lfloor\\delta s/\\lambda\\rfloor\\): <em>Konstruktiv</em>, wenn \\(f < 0.08\\) oder \\(f > 0.92,\\) ist, <em>Destruktiv</em>, wenn \\(|f - \\tfrac12| < 0.08,\\) ist, sonst <em>Teilweise</em> mit \\(I/I_0\\) aus (7). Eine Toleranz von 0.08 Wellenlängen bedeutet, dass <em>Konstruktiv</em> Intensitäten von 0.94 bis 1 umfasst und <em>Destruktiv</em> von 0 bis 0.06."
+ },
+ "14a2f9ce51c5": {
+  "src": "Numa Koudsie · for school students and first- and second-year undergraduates",
+  "tr": "Numa Koudsie · für Schülerinnen und Schüler sowie Studierende im ersten und zweiten Studienjahr"
+ },
+ "17e60c7a7296": {
+  "src": "The shortcut (4) is always a little too long, by a fraction \\(b^2\\cos^2\\alpha/(8r^2)\\): double the distance and the error falls four times. At the defaults the shortcut gives \\(13.6808\\ \\mathrm{px},\\) \\(0.39\\,\\%\\) more than the exact \\(13.6277\\ \\mathrm{px};\\) the corrected form (5) gives \\(13.6275\\ \\mathrm{px}.\\) Measured in wavelengths, the error of the shortcut is \\(0.0039\\,\\lambda,\\) far too small to change bright into dark. Figure 2 follows the error as \\(P\\) moves in towards the slits.",
+  "tr": "Die Näherung (4) ist immer ein wenig zu lang, und zwar um den Bruchteil \\(b^2\\cos^2\\alpha/(8r^2)\\): Verdoppelt man den Abstand, so fällt der Fehler auf ein Viertel. Bei den Standardwerten ergibt die Näherung \\(13.6808\\ \\mathrm{px},\\) also \\(0.39\\,\\%\\) mehr als der genaue Wert \\(13.6277\\ \\mathrm{px};\\) die korrigierte Form (5) ergibt \\(13.6275\\ \\mathrm{px}.\\) In Wellenlängen gemessen beträgt der Fehler der Näherung \\(0.0039\\,\\lambda,\\) viel zu klein, um Hell in Dunkel zu verwandeln. Abb. 2 verfolgt den Fehler, während sich \\(P\\) den Spalten nähert."
+ },
+ "198ff88aca4f": {
+  "src": "The drawing is a two-dimensional slice through slits that are long in the third direction.",
+  "tr": "Die Zeichnung ist ein zweidimensionaler Schnitt durch Spalte, die in der dritten Richtung lang sind."
+ },
+ "1a1b7209c5ef": {
+  "src": "<span class=\"psub__n\">10.1</span>Further reading",
+  "tr": "<span class=\"psub__n\">10.1</span>Weiterführende Literatur"
+ },
+ "1c51afa5ca55": {
+  "src": "Double-Slit Interference<span class=\"dot\">.</span>",
+  "tr": "Interferenz am Doppelspalt<span class=\"dot\">.</span>"
+ },
+ "1c7832a1de9b": {
+  "src": "<span class=\"pfig__n\">Figure 5</span>Simulated arrivals of single particles at the page’s defaults \\(b = 40\\ \\mathrm{px},\\) \\(\\lambda = 13.5\\ \\mathrm{px}.\\) Each dot is one direction \\(\\theta\\) between \\(-30^\\circ\\) and \\(30^\\circ,\\) drawn at random with probability (12) by rejection sampling (NumPy random generator, seed 1); the height of a dot within its strip carries no information. From top to bottom, 20, 200 and 2000 dots. Bright bands form at \\(0^\\circ\\) and \\(\\pm 19.72^\\circ,\\) and the dark directions at \\(\\pm 9.72^\\circ\\) stay almost empty, although no single dot shows any pattern.",
+  "tr": "<span class=\"pfig__n\">Abb. 5</span>Simulierte Ankünfte einzelner Teilchen bei den Standardwerten der Seite \\(b = 40\\ \\mathrm{px},\\) \\(\\lambda = 13.5\\ \\mathrm{px}.\\) Jeder Punkt ist eine Richtung \\(\\theta\\) zwischen \\(-30^\\circ\\) und \\(30^\\circ,\\) zufällig gezogen mit der Wahrscheinlichkeit (12) durch Verwerfungsverfahren (Zufallsgenerator von NumPy, Startwert 1); die Höhe eines Punktes innerhalb seines Streifens trägt keine Information. Von oben nach unten 20, 200 und 2000 Punkte. Helle Bänder entstehen bei \\(0^\\circ\\) und \\(\\pm 19.72^\\circ,\\) und die dunklen Richtungen bei \\(\\pm 9.72^\\circ\\) bleiben nahezu leer, obwohl kein einzelner Punkt irgendein Muster zeigt."
+ },
+ "1e0a05a7c954": {
+  "src": "<span class=\"psec__n\">05</span>Adding the two waves",
+  "tr": "<span class=\"psec__n\">05</span>Addition der beiden Wellen"
+ },
+ "1fc03a7a47e3": {
+  "src": "Two approximations were made, in this order: first the far field, \\(b \\ll r,\\) turned \\(\\delta s\\) into \\(b\\sin\\theta;\\) only then did small angles allow \\(\\sin\\theta \\approx \\tan\\theta \\approx \\theta.\\) For red light from a helium–neon laser, \\(\\lambda = 633\\ \\mathrm{nm},\\) slits \\(b = 0.25\\ \\mathrm{mm}\\) apart and a screen at \\(D = 1\\ \\mathrm{m},\\) equation (9) gives \\(\\Delta y = 2.53\\ \\mathrm{mm}.\\) At the page’s defaults it gives \\(\\lambda d/b = 67.5\\ \\mathrm{px}\\) along the observation line; but there the first bright fringe already lies at \\(19.8^\\circ,\\) outside the small-angle range, and the exact path difference (3) puts it \\(72\\ \\mathrm{px}\\) from the centre line, where the default \\(P\\) sits.",
+  "tr": "Es wurden zwei Näherungen gemacht, in dieser Reihenfolge: Zuerst das Fernfeld, \\(b \\ll r,\\) das \\(\\delta s\\) in \\(b\\sin\\theta;\\) überführte; erst danach erlaubten kleine Winkel \\(\\sin\\theta \\approx \\tan\\theta \\approx \\theta.\\) Für rotes Licht eines Helium-Neon-Lasers, \\(\\lambda = 633\\ \\mathrm{nm},\\) Spalte \\(b = 0.25\\ \\mathrm{mm}\\) auseinander und ein Schirm bei \\(D = 1\\ \\mathrm{m},\\) ergibt Gl. (9) \\(\\Delta y = 2.53\\ \\mathrm{mm}.\\) Bei den Standardwerten der Seite ergibt sie \\(\\lambda d/b = 67.5\\ \\mathrm{px}\\) entlang der Beobachtungslinie; dort liegt der erste helle Streifen aber schon bei \\(19.8^\\circ,\\) außerhalb des Bereichs kleiner Winkel, und der genaue Gangunterschied (3) setzt ihn \\(72\\ \\mathrm{px}\\) von der Mittellinie entfernt, dort, wo der Standardpunkt \\(P\\) sitzt."
+ },
+ "2324446bcb27": {
+  "src": "<span class=\"psec__n\">03</span>The exact path difference",
+  "tr": "<span class=\"psec__n\">03</span>Der genaue Gangunterschied"
+ },
+ "2741740843c7": {
+  "src": "The second factor is the <em>single-slit envelope</em>. It equals 1 straight ahead and falls to zero where \\(w\\sin\\theta = n\\lambda,\\) \\(n = 1, 2, \\dots\\) If a zero of the envelope falls on a bright fringe, that fringe is missing. Figure 4 shows this for slits \\(20\\ \\mathrm{px}\\) wide at the page’s defaults: the first zero of the envelope, \\(\\sin\\theta = \\lambda/w = 0.675,\\) coincides with the second bright fringe, \\(\\sin\\theta_2 = 2\\lambda/b = 0.675,\\) at \\(\\theta = 42.45^\\circ.\\) Whenever \\(b = 2w,\\) every <em>nonzero</em> even order disappears; the central maximum remains because \\(\\sin\\beta/\\beta\\to1\\) at \\(\\beta=0\\).",
+  "tr": "Der zweite Faktor ist die <em>Einzelspalt-Einhüllende</em>. Sie ist gleich 1 geradeaus und fällt auf null, wo \\(w\\sin\\theta = n\\lambda,\\) \\(n = 1, 2, \\dots\\) Fällt eine Nullstelle der Einhüllenden auf einen hellen Streifen, so fehlt dieser Streifen. Abb. 4 zeigt dies für Spalte von \\(20\\ \\mathrm{px}\\) Breite bei den Standardwerten der Seite: Die erste Nullstelle der Einhüllenden, \\(\\sin\\theta = \\lambda/w = 0.675,\\) fällt mit dem zweiten hellen Streifen zusammen, \\(\\sin\\theta_2 = 2\\lambda/b = 0.675,\\) bei \\(\\theta = 42.45^\\circ.\\) Wann immer \\(b = 2w,\\) gilt, verschwinden alle <em>von null verschiedenen</em> geraden Ordnungen; das Zentralmaximum bleibt, weil \\(\\sin\\beta/\\beta\\to1\\) bei \\(\\beta=0\\) gilt."
+ },
+ "292c27e58546": {
+  "src": "Path S₁P",
+  "tr": "Weg S₁P"
+ },
+ "2d2ab694414f": {
+  "src": "<span>4</span>The far field",
+  "tr": "<span>4</span>Das Fernfeld"
+ },
+ "2f80d81ad5e9": {
+  "src": "The page draws each slit as a gap of \\(8\\ \\mathrm{px}\\) but treats it as a point. A gap that narrow, narrower than the wavelength, has no zero in its envelope at all: by (11) the envelope falls only to 0.74 at \\(30^\\circ\\) and to 0.26 at \\(90^\\circ,\\) and it would lower the first bright fringe from 1 to 0.88. Within the page’s own plot, which ends at \\(30^\\circ,\\) point slits are a fair picture of the drawing.",
+  "tr": "Die Seite zeichnet jeden Spalt als Lücke von \\(8\\ \\mathrm{px}\\), behandelt ihn aber als Punkt. Eine so schmale Lücke, schmaler als die Wellenlänge, hat in ihrer Einhüllenden überhaupt keine Nullstelle: Nach (11) fällt die Einhüllende nur auf 0.74 bei \\(30^\\circ\\) und auf 0.26 bei \\(90^\\circ,\\) und sie würde den ersten hellen Streifen von 1 auf 0.88 senken. Innerhalb der eigenen Darstellung der Seite, die bei \\(30^\\circ,\\) endet, sind Punktspalte ein gutes Bild der Zeichnung."
+ },
+ "337877d04cd9": {
+  "src": "<b>Fig. 3</b> · slits <span class=\"tx\">\\(S_1, S_2\\)</span> · point <span class=\"tx\">\\(P\\)</span> at distance <span class=\"tx\">\\(d\\)</span>, angle <span class=\"tx\">\\(\\alpha\\)</span>",
+  "tr": "<b>Abb. 3</b> · Spalte <span class=\"tx\">\\(S_1, S_2\\)</span> · Punkt <span class=\"tx\">\\(P\\)</span> im Abstand <span class=\"tx\">\\(d\\)</span>, Winkel <span class=\"tx\">\\(\\alpha\\)</span>"
+ },
+ "33bd5a5dddcd": {
+  "src": "© 2026 Numa Koudsie",
+  "tr": "© 2026 Numa Koudsie"
+ },
+ "358a5491c394": {
+  "src": "<span>9</span>From lengths to pixels",
+  "tr": "<span>9</span>Von Längen zu Bildpunkten"
+ },
+ "3704f9b5a374": {
+  "src": "Real slits are not points. A slit of width \\(w\\) is a row of point sources side by side, and the waves from all of them must be added, just as the two slits were. Measure the position \\(x'\\) across one slit from its centre. Seen from a far-away point in the direction \\(\\theta,\\) the wave from \\(x'\\) has a path longer by \\(x'\\sin\\theta\\) than the wave from the centre, by the argument of (4). Adding all these waves with the complex notation of Section 5,",
+  "tr": "Reale Spalte sind keine Punkte. Ein Spalt der Breite \\(w\\) ist eine Reihe von Punktquellen nebeneinander, und die Wellen aller dieser Quellen müssen addiert werden, genau wie die der beiden Spalte. Messen Sie die Position \\(x'\\) quer über einen Spalt von seiner Mitte aus. Von einem weit entfernten Punkt in der Richtung \\(\\theta,\\) gesehen, hat die Welle von \\(x'\\) einen um \\(x'\\sin\\theta\\) längeren Weg als die Welle aus der Mitte, nach dem Argument von (4). Addiert man alle diese Wellen mit der komplexen Schreibweise von Abschnitt 5,"
+ },
+ "39af6408cb2a": {
+  "src": "The page computes \\(\\delta s\\) from the right-hand side of (3), not as \\(L_2 - L_1.\\) Near the centre line the two lengths are almost equal, and subtracting two nearly equal numbers on a computer throws away significant digits. The form (3) has an exact zero at \\(\\alpha = 0\\) and keeps its relative precision for tiny path differences. Over every combination of slider values the two ways differ by at most \\(1.4\\times10^{-13}\\ \\mathrm{px},\\) so here the rearrangement is a good habit rather than a visible improvement.",
+  "tr": "Die Seite berechnet \\(\\delta s\\) aus der rechten Seite von (3), nicht als \\(L_2 - L_1.\\) Nahe der Mittellinie sind die beiden Längen fast gleich, und wenn man zwei nahezu gleiche Zahlen am Computer subtrahiert, gehen signifikante Stellen verloren. Die Form (3) hat bei \\(\\alpha = 0\\) eine exakte Null und behält ihre relative Genauigkeit für winzige Gangunterschiede. Über alle Kombinationen der Reglerwerte unterscheiden sich die beiden Wege um höchstens \\(1.4\\times10^{-13}\\ \\mathrm{px},\\) hier ist die Umformung also eine gute Gewohnheit und keine sichtbare Verbesserung."
+ },
+ "3a6fceaca137": {
+  "src": "Double-Slit Interference · Numa Koudsie",
+  "tr": "Interferenz am Doppelspalt · Numa Koudsie"
+ },
+ "3b40a2fc6fd0": {
+  "src": "The figure is a vector drawing, \\(600 \\times 440\\) units, that scales with the page, so lines stay sharp at any size; positions are written to two decimals. The wall lies at \\(y = 370\\) with the slit midpoint at \\(x = 300,\\) and screen \\(y\\) points down, so \\(P\\) is drawn at \\((300 - d\\tan\\alpha,\\ 370 - d)\\): equation (1) flipped and shifted. The wall is a 5-unit-thick line with an \\(8\\)-unit gap at each slit. The two paths are drawn in ink, the bar \\(S_2Q\\) in burgundy, the construction dashed; the dashed arc and the bar appear only when \\(\\delta s > 0.05\\ \\mathrm{px},\\) and the arc that marks \\(\\alpha\\) only when \\(\\alpha > 0.2^\\circ.\\)",
+  "tr": "Die Abbildung ist eine Vektorzeichnung, \\(600 \\times 440\\) Einheiten groß, die mit der Seite skaliert, sodass Linien bei jeder Größe scharf bleiben; Positionen sind auf zwei Dezimalstellen angegeben. Die Wand liegt bei \\(y = 370\\) mit der Spaltmitte bei \\(x = 300,\\) und \\(y\\) zeigt auf dem Bild nach unten, sodass \\(P\\) bei \\((300 - d\\tan\\alpha,\\ 370 - d)\\) gezeichnet wird: Gleichung (1) gespiegelt und verschoben. Die Wand ist eine 5 Einheiten dicke Linie mit einer \\(8\\)-Einheiten-Lücke an jedem Spalt. Die beiden Wege werden in Schwarz gezeichnet, der Balken \\(S_2Q\\) burgunderrot, die Hilfslinien gestrichelt; der gestrichelte Bogen und der Balken erscheinen nur, wenn \\(\\delta s > 0.05\\ \\mathrm{px},\\) ist, und der Bogen, der \\(\\alpha\\) markiert, nur wenn \\(\\alpha > 0.2^\\circ.\\)"
+ },
+ "3c723171cf6b": {
+  "src": "Matter behaves the same way. In 1924 Louis de Broglie proposed that a particle of momentum \\(p\\) has the wavelength \\(\\lambda = h/p.\\) An electron accelerated from rest through a voltage \\(V\\) has \\(p = \\sqrt{2m_e eV},\\) where \\(m_e\\) is its mass and \\(e\\) its charge, so",
+  "tr": "Materie verhält sich genauso. 1924 schlug Louis de Broglie vor, dass ein Teilchen mit dem Impuls \\(p\\) die Wellenlänge hat, \\(\\lambda = h/p.\\) Ein Elektron, das aus der Ruhe durch eine Spannung \\(V\\) beschleunigt wird, hat \\(p = \\sqrt{2m_e eV},\\) wobei \\(m_e\\) seine Masse und \\(e\\) seine Ladung ist, also"
+ },
+ "412db7fcde67": {
+  "src": "Seen from far away, the two slits merge into one point and the two paths run almost parallel.",
+  "tr": "Aus großer Entfernung gesehen verschmelzen die beiden Spalte zu einem Punkt, und die beiden Wege verlaufen nahezu parallel."
+ },
+ "44a22fc948f3": {
+  "src": "Fig. 3 · wave optics · wave–particle duality",
+  "tr": "Abb. 3 · Wellenoptik · Welle-Teilchen-Dualismus"
+ },
+ "46e7c485175e": {
+  "src": "Here \\(I_0\\) is the intensity where the two waves arrive in step. It is four times what either slit gives alone, \\(2E_0^2\\) against \\(\\tfrac12E_0^2.\\) Averaged across a fringe, \\(\\cos^2\\) gives \\(\\tfrac12,\\) so on average two slits give twice the light of one: no energy is created, it is moved from the dark places to the bright ones.",
+  "tr": "Dabei ist \\(I_0\\) die Intensität, bei der die beiden Wellen gleichphasig ankommen. Sie ist viermal so groß wie das, was jeder Spalt allein liefert, \\(2E_0^2\\) gegenüber \\(\\tfrac12E_0^2.\\) Über einen Streifen gemittelt ergibt \\(\\cos^2\\) den Wert \\(\\tfrac12,\\) also liefern zwei Spalte im Mittel das doppelte Licht eines einzelnen: Es wird keine Energie erzeugt, sie wird von den dunklen Stellen zu den hellen verschoben."
+ },
+ "474bbe6e7428": {
+  "src": "<span>6</span>Slits with a width&nbsp;★",
+  "tr": "<span>6</span>Spalte mit Breite&nbsp;★"
+ },
+ "48a75f542d67": {
+  "src": "<span>3</span>The exact path difference",
+  "tr": "<span>3</span>Der genaue Gangunterschied"
+ },
+ "48b4560dac4d": {
+  "src": "Slits have a width, which multiplies the fringes by the envelope of Section 6.",
+  "tr": "Spalte haben eine Breite; sie multipliziert die Streifen mit der Einhüllenden aus Abschnitt 6."
+ },
+ "4bbe631d137a": {
+  "src": "Light delivers its energy in grains, <em>photons</em>, each carrying the energy \\(hf,\\) where \\(f\\) is the frequency and \\(h = 6.626\\times10^{-34}\\ \\mathrm{J\\,s}\\) is Planck’s constant. A sensitive camera behind the slits records each photon as one dot at one place. Where the next dot will land cannot be predicted. Where dots are likely to land can: the probability of a dot near a direction \\(\\theta\\) is proportional to the intensity (7) there,",
+  "tr": "Licht gibt seine Energie in Körnchen ab, den <em>Photonen</em>, von denen jedes die Energie \\(hf,\\) trägt, wobei \\(f\\) die Frequenz und \\(h = 6.626\\times10^{-34}\\ \\mathrm{J\\,s}\\) das Plancksche Wirkungsquantum ist. Eine empfindliche Kamera hinter den Spalten erfasst jedes Photon als einen Punkt an einer Stelle. Wohin der nächste Punkt fällt, lässt sich nicht vorhersagen. Wohin Punkte wahrscheinlich fallen, lässt sich vorhersagen: Die Wahrscheinlichkeit für einen Punkt nahe einer Richtung \\(\\theta\\) ist proportional zur Intensität (7) dort,"
+ },
+ "4dd540714c02": {
+  "src": "The slits and \\(P\\) are placed by (1); \\(L_1\\) and \\(L_2\\) are the distances from the slits to \\(P;\\) \\(\\delta s\\) comes from (3). The point \\(Q\\) of Figure 1 is \\(P + L_1\\hat u,\\) with \\(\\hat u\\) the unit vector from \\(P\\) towards \\(S_2.\\)",
+  "tr": "Die Spalte und \\(P\\) werden durch (1) festgelegt; \\(L_1\\) und \\(L_2\\) sind die Abstände von den Spalten zu \\(P;\\) \\(\\delta s\\) ergibt sich aus (3). Der Punkt \\(Q\\) aus Abb. 1 ist \\(P + L_1\\hat u,\\) mit \\(\\hat u\\) dem Einheitsvektor von \\(P\\) in Richtung \\(S_2.\\)"
+ },
+ "4ebb61a294d3": {
+  "src": "Light does the same on a scale more than a million times finer. The colours of a soap film come from two reflections, one at the front surface of the film and one at the back, which travel slightly different distances; where the extra distance suits one colour, that colour is reinforced and the others are weakened. The rainbow on a CD comes from its tracks, \\(1.6\\ \\mu\\mathrm{m}\\) apart: the light scattered by neighbouring tracks adds up in step only in certain directions, and those directions are different for each colour.",
+  "tr": "Das Licht macht dasselbe auf einer mehr als millionenfach feineren Skala. Die Farben einer Seifenhaut entstehen aus zwei Reflexionen, eine an der Vorderseite der Haut und eine an der Rückseite, die leicht verschiedene Strecken zurücklegen; wo der zusätzliche Weg zu einer Farbe passt, wird diese Farbe verstärkt und die anderen werden geschwächt. Der Regenbogen einer CD stammt von ihren Spuren, die \\(1.6\\ \\mu\\mathrm{m}\\) voneinander entfernt sind: Das Licht, das benachbarte Spuren streuen, addiert sich nur in bestimmten Richtungen gleichphasig, und diese Richtungen sind für jede Farbe verschieden."
+ },
+ "4f588b28c1eb": {
+  "src": "A flat wave of light of wavelength \\(\\lambda\\) arrives from below and meets a wall with two narrow slits, \\(S_1\\) and \\(S_2,\\) a distance \\(b\\) apart. Each slit lets through a little of the wave and becomes the source of a new circular wave. The same crest reaches both slits at the same moment, so the two new waves start in step. We watch one point \\(P\\) beyond the wall (Figure 1).",
+  "tr": "Eine ebene Lichtwelle der Wellenlänge \\(\\lambda\\) kommt von unten und trifft auf eine Wand mit zwei schmalen Spalten, \\(S_1\\) und \\(S_2,\\) im Abstand \\(b\\) voneinander. Jeder Spalt lässt einen kleinen Teil der Welle hindurch und wird zur Quelle einer neuen Kreiswelle. Derselbe Wellenberg erreicht beide Spalte im selben Augenblick, daher beginnen die beiden neuen Wellen gleichphasig. Wir beobachten einen Punkt \\(P\\) jenseits der Wand (Abb. 1)."
+ },
+ "5142325d7ed0": {
+  "src": "D. Halliday, R. Resnick and J. Walker, <a href=\"https://www.wiley.com/en-gb/fundamentals-of-physics-extended-10th-edition-p-9781118547878\"><em>Fundamentals of Physics</em></a>, 10th edition, Wiley, 2014: chapters 35 (interference) and 36 (diffraction).",
+  "tr": "D. Halliday, R. Resnick und J. Walker, <a href=\"https://www.wiley.com/en-gb/fundamentals-of-physics-extended-10th-edition-p-9781118547878\"><em>Fundamentals of Physics</em></a>, 10. Auflage, Wiley, 2014: Kapitel 35 (Interferenz) und 36 (Beugung)."
+ },
+ "5341a72936c3": {
+  "src": "One caution about the dots. Figure 5 draws them with a probability per unit angle, the rule (12). A flat screen at distance \\(D\\) counts dots per unit length instead, and that is a different measure: a step \\(\\mathrm{d}\\theta\\) in angle covers a step \\(\\mathrm{d}y = D\\sec^2\\theta\\,\\mathrm{d}\\theta\\) on the screen, longer out to the sides, so the density per unit length is \\(p(\\theta)/(D\\sec^2\\theta)\\), smaller than straight ahead by a factor \\(3/4\\) at \\(30^\\circ\\). Figure 5 shows how a fringe pattern builds up dot by dot; it is not a full model of a counting experiment.",
+  "tr": "Ein Vorbehalt zu den Punkten: Abb. 5 zeichnet sie mit einer Wahrscheinlichkeit pro Winkeleinheit, nach Regel (12). Ein flacher Schirm im Abstand \\(D\\) zählt dagegen Punkte pro Längeneinheit, und das ist ein anderes Maß: Ein Schritt \\(\\mathrm{d}\\theta\\) im Winkel überdeckt auf dem Schirm einen Schritt \\(\\mathrm{d}y = D\\sec^2\\theta\\,\\mathrm{d}\\theta\\),  der seitlich länger ist; die Dichte pro Längeneinheit ist daher \\(p(\\theta)/(D\\sec^2\\theta)\\), gegenüber der Richtung geradeaus um den Faktor \\(3/4\\) kleiner, und zwar bei \\(30^\\circ\\). Abb. 5 zeigt, wie ein Streifenmuster Punkt für Punkt entsteht; es ist kein vollständiges Modell eines Zählexperiments."
+ },
+ "53ea4a665ee6": {
+  "src": "with \\(\\bar L = (L_1 + L_2)/2.\\) The point \\(P\\) still oscillates at the frequency of the light, but with the amplitude \\(2E_0\\cos(\\Delta\\varphi/2),\\) which depends only on the <em>phase difference</em> \\(\\Delta\\varphi.\\) No eye or camera can follow \\(5\\times10^{14}\\) oscillations a second; they record the <em>intensity</em>, the time average of \\(E^2.\\) The square is there because the energy a wave carries grows as the square of its swing, just as a pendulum swinging twice as wide carries four times the energy. The average of \\(\\cos^2\\) over a period is \\(\\tfrac12,\\) so",
+  "tr": "mit \\(\\bar L = (L_1 + L_2)/2.\\) Der Punkt \\(P\\) schwingt weiterhin mit der Frequenz des Lichts, aber mit der Amplitude \\(2E_0\\cos(\\Delta\\varphi/2),\\) die allein von der <em>Phasendifferenz</em> abhängt, nämlich \\(\\Delta\\varphi.\\) Kein Auge und keine Kamera kann \\(5\\times10^{14}\\) Schwingungen pro Sekunde folgen; sie erfassen die <em>Intensität</em>, den zeitlichen Mittelwert von \\(E^2.\\) Das Quadrat steht da, weil die Energie, die eine Welle trägt, mit dem Quadrat ihres Ausschlags wächst, so wie ein Pendel, das doppelt so weit schwingt, die vierfache Energie trägt. Der Mittelwert von \\(\\cos^2\\) über eine Periode ist \\(\\tfrac12,\\) also"
+ },
+ "543e8152f035": {
+  "src": "Put the origin at the point \\(M\\) midway between the slits, with \\(x\\) along the wall and \\(y\\) pointing away from it. The point \\(P\\) lies at distance \\(d\\) from the wall, in a direction that makes the angle \\(\\alpha\\) with the normal to the wall; as on the page, we take \\(P\\) on the side of \\(S_1.\\) With \\(r\\) the distance from \\(M\\) to \\(P,\\)",
+  "tr": "Wir legen den Ursprung in den Punkt \\(M\\) in der Mitte zwischen den Spalten, mit \\(x\\) entlang der Wand und \\(y\\) von ihr weg zeigend. Der Punkt \\(P\\) liegt im Abstand \\(d\\) von der Wand, in einer Richtung, die den Winkel \\(\\alpha\\) mit der Normalen zur Wand bildet; wie auf der Seite nehmen wir \\(P\\) auf der Seite von \\(S_1.\\) Mit \\(r\\) als Abstand von \\(M\\) zu \\(P,\\)"
+ },
+ "5888082d0a17": {
+  "src": "Exercise 5.1 · on the figure above",
+  "tr": "Übung 5.1 · zur Abbildung oben"
+ },
+ "599f6c3ae394": {
+  "src": "Pythagoras’ theorem applied to the coordinates (1) gives the two path lengths:",
+  "tr": "Der Satz des Pythagoras, auf die Koordinaten (1) angewendet, liefert die beiden Weglängen:"
+ },
+ "5ac8310e6735": {
+  "src": "R. P. Feynman, R. B. Leighton and M. Sands, <em>The Feynman Lectures on Physics</em>, Addison-Wesley, 1963–1965, chapters linked to Caltech’s online edition: volume I, chapters <a href=\"https://www.feynmanlectures.caltech.edu/I_29.html\">29</a> (interference) and <a href=\"https://www.feynmanlectures.caltech.edu/I_30.html\">30</a> (diffraction); volume III, chapter <a href=\"https://www.feynmanlectures.caltech.edu/III_01.html\">1</a> (quantum behaviour).",
+  "tr": "R. P. Feynman, R. B. Leighton und M. Sands, <em>The Feynman Lectures on Physics</em>, Addison-Wesley, 1963–1965, mit Verweisen auf die Online-Ausgabe des Caltech: Band I, Kapitel <a href=\"https://www.feynmanlectures.caltech.edu/I_29.html\">29</a> (Interferenz) und <a href=\"https://www.feynmanlectures.caltech.edu/I_30.html\">30</a> (Beugung); Band III, Kapitel <a href=\"https://www.feynmanlectures.caltech.edu/III_01.html\">1</a> (Quantenverhalten)."
+ },
+ "5cd310f48aa6": {
+  "src": "<span class=\"pfig__n\">Figure 2</span>The exact path difference (3) and the shortcut \\(b\\sin\\alpha\\) as \\(P\\) moves along the direction \\(\\alpha = 20^\\circ\\) towards the slits, for \\(b = 40\\ \\mathrm{px},\\) computed at every whole pixel of \\(d\\) from \\(0\\) to \\(300\\ \\mathrm{px}.\\) The dotted line adds the correction of (5), drawn from \\(d = 25\\ \\mathrm{px}.\\) Far away the curves merge: the shortcut is within \\(1\\,\\%\\) of the exact value beyond \\(d = 125\\ \\mathrm{px},\\) about 3.3 slit separations from \\(M,\\) and still \\(1.6\\,\\%\\) too long at the slider’s lower end, \\(d = 100\\ \\mathrm{px}.\\) Close to the wall the exact path difference falls to zero, because \\(P\\) then approaches \\(M,\\) which is equally far from both slits.",
+  "tr": "<span class=\"pfig__n\">Abb. 2</span>Der genaue Gangunterschied (3) und die Näherung \\(b\\sin\\alpha\\), während \\(P\\) entlang der Richtung \\(\\alpha = 20^\\circ\\) auf die Spalte zuwandert, für \\(b = 40\\ \\mathrm{px},\\) berechnet an jedem ganzen Bildpunkt von \\(d\\) von \\(0\\) bis \\(300\\ \\mathrm{px}.\\) Die punktierte Linie fügt die Korrektur aus (5) hinzu, gezeichnet ab \\(d = 25\\ \\mathrm{px}.\\) In der Ferne fallen die Kurven zusammen: Die Näherung liegt innerhalb von \\(1\\,\\%\\) des exakten Wertes jenseits von \\(d = 125\\ \\mathrm{px},\\) etwa 3.3 Spaltabstände von \\(M,\\) entfernt, und am unteren Ende des Reglers ist sie noch \\(1.6\\,\\%\\) zu hoch, bei \\(d = 100\\ \\mathrm{px}.\\) Nahe der Wand fällt der exakte Gangunterschied auf null, weil \\(P\\) dann \\(M,\\) den von beiden Spalten gleich weit entfernten Punkt, nahe kommt."
+ },
+ "61965073f034": {
+  "src": "The right half of Figure 1 shows the same result without algebra. Drop a perpendicular from \\(S_1\\) onto the path from \\(S_2.\\) Beyond the foot of the perpendicular the two paths are equally long, so the extra length is the short side of the right-angled triangle with hypotenuse \\(b;\\) the perpendicular is turned from the wall by the same angle \\(\\alpha\\) by which the paths are turned from the normal, so that side is \\(b\\sin\\alpha.\\) This is the <em>far-field</em> or <em>Fraunhofer</em> approximation, and the page shows it in the readout <em>\\(b\\sin\\alpha\\)</em>, next to the exact value.",
+  "tr": "Die rechte Hälfte von Abb. 1 zeigt dasselbe Ergebnis ohne Rechnung. Man fälle das Lot von \\(S_1\\) auf den Weg von \\(S_2.\\) Jenseits des Lotfußpunkts sind die beiden Wege gleich lang, also ist die zusätzliche Länge die kurze Kathete des rechtwinkligen Dreiecks mit der Hypotenuse \\(b;\\) das Lot ist um denselben Winkel \\(\\alpha\\) gegen die Wand gedreht, um den die Wege gegen die Normale gedreht sind, daher ist diese Kathete \\(b\\sin\\alpha.\\) Dies ist die <em>Fernfeld</em>- oder <em>Fraunhofer</em>-Näherung, und die Seite zeigt sie in der Anzeige <em>\\(b\\sin\\alpha\\)</em>, neben dem exakten Wert."
+ },
+ "642a2b4e4409": {
+  "src": "Between 1801 and 1803 Thomas Young used effects of this kind to argue, in lectures to the Royal Society, that light is a wave. In one experiment he let sunlight in through a small hole in a window shutter and held in the beam a slip of card about \\(0.85\\ \\mathrm{mm}\\) wide. Inside the card’s shadow, where light passing the two edges overlaps, he saw a row of bands, with the middle of the shadow always bright. When he blocked the light passing one edge, the bands inside the shadow vanished. Two openings for the light give a pattern; one opening gives none. The double slit is the cleanest form of that experiment, and it is what the figure above draws.",
+  "tr": "Zwischen 1801 und 1803 nutzte Thomas Young Effekte dieser Art, um in Vorlesungen vor der Royal Society zu begründen, dass Licht eine Welle ist. In einem Versuch ließ er Sonnenlicht durch ein kleines Loch in einem Fensterladen herein und hielt in den Strahl einen Kartonstreifen von etwa \\(0.85\\ \\mathrm{mm}\\) Breite. Im Schatten des Kartons, wo sich das Licht an beiden Kanten überlagert, sah er eine Reihe von Streifen, wobei die Mitte des Schattens stets hell blieb. Als er das Licht an einer Kante blockierte, verschwanden die Streifen im Schatten. Zwei Öffnungen für das Licht ergeben ein Muster; eine Öffnung ergibt keines. Der Doppelspalt ist die sauberste Form dieses Versuchs, und genau sie zeigt die Abbildung oben."
+ },
+ "67fb07408136": {
+  "src": "Each slit is a point that sends the same wave in every direction. Section 6 gives the slits a width.",
+  "tr": "Jeder Spalt ist ein Punkt, der in jede Richtung dieselbe Welle aussendet. Abschnitt 6 gibt den Spalten eine Breite."
+ },
+ "6b4098fb4fd6": {
+  "src": "Two slits, one point P. The two paths to P differ by δs, and that small difference decides whether P is bright or dark.",
+  "tr": "Zwei Spalte, ein Punkt P. Die beiden Wege zu P unterscheiden sich um δs, und dieser kleine Unterschied entscheidet, ob P hell oder dunkel ist."
+ },
+ "6dd4da920b97": {
+  "src": "<span>8</span>How the page computes",
+  "tr": "<span>8</span>Wie die Seite rechnet"
+ },
+ "702b201c4b40": {
+  "src": "Phyein Usul",
+  "tr": "Phyein Usul"
+ },
+ "73f5d9024f15": {
+  "src": "<span class=\"pfig__n\">Figure 4</span>Far-field intensity (11) at the page’s defaults \\(b = 40\\ \\mathrm{px}\\) and \\(\\lambda = 13.5\\ \\mathrm{px},\\) computed every \\(0.2^\\circ\\) from \\(0^\\circ\\) to \\(90^\\circ.\\) Thin dark line: point slits, the page’s model. Burgundy: slits \\(20\\ \\mathrm{px}\\) wide. Dashed: their single-slit envelope, which multiplies the fringes. The first bright fringe, at \\(19.72^\\circ,\\) is cut to 0.41 of its point-slit height; the second, at \\(42.45^\\circ,\\) falls on a zero of the envelope and disappears. The page’s own plot covers the range left of the faint line at \\(30^\\circ.\\)",
+  "tr": "<span class=\"pfig__n\">Abb. 4</span>Intensität im Fernfeld (11) bei den Standardwerten der Seite \\(b = 40\\ \\mathrm{px}\\) und \\(\\lambda = 13.5\\ \\mathrm{px},\\) berechnet alle \\(0.2^\\circ\\) von \\(0^\\circ\\) bis \\(90^\\circ.\\) Dünne dunkle Linie: Punktspalte, das Modell der Seite. Burgunderrot: Spalte von \\(20\\ \\mathrm{px}\\) Breite. Gestrichelt: ihre Einzelspalt-Einhüllende, die die Streifen multipliziert. Der erste helle Streifen bei \\(19.72^\\circ,\\) ist auf 0.41 seiner Höhe bei Punktspalten gekürzt; der zweite bei \\(42.45^\\circ,\\) fällt auf eine Nullstelle der Einhüllenden und verschwindet. Das eigene Diagramm der Seite reicht bis zur dünnen Linie bei \\(30^\\circ.\\)"
+ },
+ "761ed73a9327": {
+  "src": "<b>Fig. 3b</b> · far-field intensity <span class=\"tx\">\\(I(\\theta)/I_0 = \\cos^2(\\pi b \\sin\\theta / \\lambda)\\)</span>",
+  "tr": "<b>Abb. 3b</b> · Intensität im Fernfeld <span class=\"tx\">\\(I(\\theta)/I_0 = \\cos^2(\\pi b \\sin\\theta / \\lambda)\\)</span>"
+ },
+ "7717ea771237": {
+  "src": "The readouts show \\(L_1,\\) \\(L_2,\\) the exact \\(\\delta s,\\) the shortcut \\(b\\sin\\alpha,\\) the order \\(\\delta s/\\lambda\\) and the phase \\(\\Delta\\varphi\\) in units of \\(\\pi.\\)",
+  "tr": "Die Anzeigen zeigen \\(L_1,\\) \\(L_2,\\) das exakte \\(\\delta s,\\) die Näherung \\(b\\sin\\alpha,\\) die Ordnung \\(\\delta s/\\lambda\\) und die Phase \\(\\Delta\\varphi\\) in Einheiten von \\(\\pi.\\)"
+ },
+ "7abde4316e11": {
+  "src": "The light has one wavelength and the two slits keep a fixed phase relation: the light is <em>monochromatic</em> and <em>coherent</em>.",
+  "tr": "Das Licht hat eine einzige Wellenlänge, und die beiden Spalte halten eine feste Phasenbeziehung ein: Das Licht ist <em>monochromatisch</em> und <em>kohärent</em>."
+ },
+ "7d252cd594b3": {
+  "src": "All simulations ↑",
+  "tr": "Alle Simulationen ↑"
+ },
+ "7e50566a7fe5": {
+  "src": "Lecture note · Fig. 3 · wave optics · wave–particle duality",
+  "tr": "Skript · Abb. 3 · Wellenoptik · Welle-Teilchen-Dualismus"
+ },
+ "7fed0bcde751": {
+  "src": "<span class=\"pfig__n\">Figure 1</span>The model, with the slit separation exaggerated. Left: the two paths \\(L_1 = |S_1P|\\) and \\(L_2 = |S_2P|.\\) The dashed circle about \\(P\\) through \\(S_1\\) cuts the longer path at \\(Q,\\) so \\(|PQ| = L_1\\) and the burgundy stretch \\(S_2Q\\) is the path difference \\(\\delta s;\\) the page draws the same construction. Right: when \\(P\\) is very far away the two paths are almost parallel, and the extra length is one side of a small right-angled triangle, \\(b\\sin\\alpha.\\) The rose lines below the wall are crests of the incoming light.",
+  "tr": "<span class=\"pfig__n\">Abb. 1</span>Das Modell, mit übertrieben gezeichnetem Spaltabstand. Links: die beiden Wege \\(L_1 = |S_1P|\\) und \\(L_2 = |S_2P|.\\) Der gestrichelte Kreis um \\(P\\) durch \\(S_1\\) schneidet den längeren Weg bei \\(Q,\\) sodass \\(|PQ| = L_1\\) gilt, und die burgunderrote Strecke \\(S_2Q\\) ist der Gangunterschied \\(\\delta s;\\) die Seite zeichnet dieselbe Konstruktion. Rechts: Wenn \\(P\\) sehr weit entfernt ist, verlaufen die beiden Wege nahezu parallel, und die zusätzliche Länge ist eine Seite eines kleinen rechtwinkligen Dreiecks, \\(b\\sin\\alpha.\\) Die rosafarbenen Linien unterhalb der Wand sind Wellenberge des einfallenden Lichts."
+ },
+ "8166bc414a25": {
+  "src": "<span class=\"psec__n\">08</span>How the page computes",
+  "tr": "<span class=\"psec__n\">08</span>Wie die Seite rechnet"
+ },
+ "846b833c9103": {
+  "src": "A path difference is a length. Turning it into brightness takes one more step: add the two waves, then square.",
+  "tr": "Ein Gangunterschied ist eine Länge. Um daraus Helligkeit zu machen, ist ein Schritt mehr nötig: Man addiert die beiden Wellen und quadriert dann."
+ },
+ "85d5a924bc48": {
+  "src": "<span class=\"pfig__n\">Figure 3</span>The two waves at \\(P\\) drawn as arrows (phasors) of length \\(E_0,\\) the second turned by the phase difference \\(\\Delta\\varphi;\\) the burgundy arrow is their sum, of length \\(2E_0|\\cos(\\Delta\\varphi/2)|.\\) In step, the arrows line up and the sum is \\(2E_0\\): bright. A third of a turn apart, the sum is \\(E_0\\) and the intensity a quarter of the peak. Half a turn apart, they cancel: dark.",
+  "tr": "<span class=\"pfig__n\">Abb. 3</span>Die beiden Wellen in \\(P\\) als Pfeile (Zeiger) der Länge \\(E_0,\\) wobei der zweite um die Phasendifferenz \\(\\Delta\\varphi;\\) gedreht ist; der burgunderrote Pfeil ist ihre Summe, der Länge \\(2E_0|\\cos(\\Delta\\varphi/2)|.\\) Gleichphasig liegen die Pfeile in einer Linie, und die Summe ist \\(2E_0\\): hell. Ein Drittel einer Umdrehung auseinander ergibt die Summe \\(E_0\\) und die Intensität ein Viertel des Maximums. Eine halbe Umdrehung auseinander heben sie sich auf: dunkel."
+ },
+ "86b17d1a85ec": {
+  "src": "Animate wavelets",
+  "tr": "Elementarwellen animieren"
+ },
+ "896cf9a00c3f": {
+  "src": "At \\(P\\) each wave makes the field oscillate; for light the field is the electric field. Call its amplitude \\(E_0\\) and its angular frequency \\(\\omega = 2\\pi f.\\) The wave from \\(S_j\\) has travelled \\(L_j,\\) so it arrives with the phase \\(kL_j\\): \\(E_j = E_0\\cos(kL_j - \\omega t).\\) The two fields simply add, and the identity \\(\\cos A + \\cos B = 2\\cos\\tfrac{A-B}{2}\\cos\\tfrac{A+B}{2}\\) turns the sum into one oscillation,",
+  "tr": "In \\(P\\) lässt jede Welle das Feld schwingen; bei Licht ist das Feld das elektrische Feld. Seine Amplitude sei \\(E_0\\) und seine Kreisfrequenz \\(\\omega = 2\\pi f.\\) Die Welle von \\(S_j\\) hat \\(L_j,\\) durchlaufen und kommt daher mit der Phase \\(kL_j\\) an: \\(E_j = E_0\\cos(kL_j - \\omega t).\\) Die beiden Felder addieren sich einfach, und die Identität \\(\\cos A + \\cos B = 2\\cos\\tfrac{A-B}{2}\\cos\\tfrac{A+B}{2}\\) verwandelt die Summe in eine einzige Schwingung,"
+ },
+ "90ef02305606": {
+  "src": "E. Hecht, <a href=\"https://www.pearson.com/en-us/subject-catalog/p/Hecht-Optics-5th-Edition/P200000006793\"><em>Optics</em></a>, 5th edition, Pearson, 2017: chapters 9 (interference) and 10 (diffraction).",
+  "tr": "E. Hecht, <a href=\"https://www.pearson.com/en-us/subject-catalog/p/Hecht-Optics-5th-Edition/P200000006793\"><em>Optics</em></a>, 5. Auflage, Pearson, 2017: Kapitel 9 (Interferenz) und 10 (Beugung)."
+ },
+ "93a8161c11f4": {
+  "src": "Back to the simulations",
+  "tr": "Zurück zu den Simulationen"
+ },
+ "94a94dbdc7bd": {
+  "src": "Because only ratios matter, the pixel is no real unit of length. The default \\(b = 40\\ \\mathrm{px}\\) with \\(\\lambda = 13.5\\ \\mathrm{px}\\) is a slit pair 2.96 wavelengths apart, which for red laser light would mean slits \\(1.88\\ \\mu\\mathrm{m}\\) apart. Laboratory slits are usually wider apart, \\(0.25\\ \\mathrm{mm}\\) or 395 wavelengths, and their first bright fringe lies only \\(0.145^\\circ\\) from the centre. The page enlarges the wavelength so that the angles can be seen. In the intensity plot, \\(\\theta\\) runs from \\(0^\\circ\\) to \\(30^\\circ\\) over 500 units, and \\(I/I_0\\) from 0 to 1 over 118 units; the dot marks the exact intensity at \\(\\alpha,\\) and the labels \\(m = 0, 1, \\dots\\) mark the far-field bright directions.",
+  "tr": "Da nur Verhältnisse zählen, ist der Bildpunkt keine echte Längeneinheit. Der Standard \\(b = 40\\ \\mathrm{px}\\) mit \\(\\lambda = 13.5\\ \\mathrm{px}\\) ist ein Spaltpaar mit 2.96 Wellenlängen Abstand, was für rotes Laserlicht Spalte von \\(1.88\\ \\mu\\mathrm{m}\\) Abstand bedeutete. Laborspalte sind meist weiter auseinander, \\(0.25\\ \\mathrm{mm}\\) oder 395 Wellenlängen, und ihr erster heller Streifen liegt nur \\(0.145^\\circ\\) von der Mitte. Die Seite vergrößert die Wellenlänge, damit die Winkel sichtbar werden. Im Intensitätsdiagramm läuft \\(\\theta\\) von \\(0^\\circ\\) bis \\(30^\\circ\\) über 500 Einheiten, und \\(I/I_0\\) von 0 bis 1 über 118 Einheiten; der Punkt markiert die exakte Intensität bei \\(\\alpha,\\) und die Beschriftungen \\(m = 0, 1, \\dots\\) markieren die hellen Richtungen der Fernfeldnäherung."
+ },
+ "9521dba25709": {
+  "src": "Home page",
+  "tr": "Startseite"
+ },
+ "958800539619": {
+  "src": "<span>5</span>Adding the two waves",
+  "tr": "<span>5</span>Addition der beiden Wellen"
+ },
+ "9860b6a398fd": {
+  "src": "<span class=\"sw sw--dash\"></span>construction",
+  "tr": "<span class=\"sw sw--dash\"></span>Hilfslinien"
+ },
+ "986878851fca": {
+  "src": "Two slits, one wave: how a path difference draws light and dark",
+  "tr": "Zwei Spalte, eine Welle: wie ein Gangunterschied Hell und Dunkel erzeugt"
+ },
+ "98c148288c56": {
+  "src": "<span class=\"pbox__t\">Path difference decides the brightness</span> <p>The point \\(P\\) is bright when the path difference is a whole number of wavelengths and dark when it is a whole number and a half:</p> \\[ \\begin{aligned} \\delta s &= m\\lambda & &\\text{bright}, \\\\ \\delta s &= \\left(m + \\tfrac12\\right)\\lambda & &\\text{dark}, \\end{aligned} \\tag{8} \\] <p>Here \\(m = 0, 1, 2, \\dots\\) is the <em>order</em>, the number of extra wavelengths. Write \\(\\theta\\) for any direction measured from the normal to the wall, as the plot under the figure does; \\(\\alpha\\) is the one direction that points at \\(P.\\) In the far field \\(\\delta s = b\\sin\\theta,\\) so the bright directions are \\(\\sin\\theta_m = m\\lambda/b.\\)</p>",
+  "tr": "<span class=\"pbox__t\">Der Gangunterschied bestimmt die Helligkeit</span> <p>Der Punkt \\(P\\) ist hell, wenn der Gangunterschied eine ganze Zahl von Wellenlängen ist, und dunkel, wenn er eine ganze Zahl und eine halbe ist:</p> \\[ \\begin{aligned} \\delta s &= m\\lambda & &\\text{bright}, \\\\ \\delta s &= \\left(m + \\tfrac12\\right)\\lambda & &\\text{dark}, \\end{aligned} \\tag{8} \\] <p>Dabei ist \\(m = 0, 1, 2, \\dots\\) die <em>Ordnung</em>, die Anzahl der zusätzlichen Wellenlängen. \\(\\theta\\) bezeichnet eine beliebige Richtung, gemessen von der Normalen zur Wand, wie im Diagramm unter der Abbildung; \\(\\alpha\\) ist die eine Richtung, die auf \\(P.\\) zeigt. Im Fernfeld gilt \\(\\delta s = b\\sin\\theta,\\) also liegen die hellen Richtungen bei \\(\\sin\\theta_m = m\\lambda/b.\\)</p>"
+ },
+ "9af3736c4028": {
+  "src": "Exercise 4.1 · on the figure above",
+  "tr": "Übung 4.1 · zur Abbildung oben"
+ },
+ "9c2d5560b7c3": {
+  "src": "The order of the steps matters: fields first, then square. Adding the two intensities instead would give \\(\\tfrac12E_0^2 + \\tfrac12E_0^2 = E_0^2\\) everywhere, with no fringes at all. That is what happens when the two slits are lit by two unrelated lamps. Since \\(2\\cos^2(\\Delta\\varphi/2) = 1 + \\cos\\Delta\\varphi,\\) the average (7) reads \\(\\langle E^2\\rangle = E_0^2 + E_0^2\\cos\\Delta\\varphi\\): the sum of the two intensities plus a <em>cross term</em>. With two lamps the phase difference wanders at random, the cross term averages to zero, and only the sum of intensities is left. Figure 3 shows the addition of fields as arrows. In the language of complex numbers each wave is \\(E_0e^{i(kL_j-\\omega t)},\\) the sum is \\(E_0e^{i(kL_1-\\omega t)}(1 + e^{i\\Delta\\varphi}),\\) and \\(|1 + e^{i\\Delta\\varphi}|^2 = 2 + 2\\cos\\Delta\\varphi = 4\\cos^2(\\Delta\\varphi/2),\\) the same result.",
+  "tr": "Die Reihenfolge der Schritte ist wichtig: erst die Felder, dann das Quadrat. Würde man die beiden Intensitäten addieren, ergäbe sich \\(\\tfrac12E_0^2 + \\tfrac12E_0^2 = E_0^2\\) überall, ganz ohne Streifen. Das passiert, wenn die beiden Spalte von zwei unabhängigen Lampen beleuchtet werden. Da \\(2\\cos^2(\\Delta\\varphi/2) = 1 + \\cos\\Delta\\varphi,\\) lautet der Mittelwert (7) \\(\\langle E^2\\rangle = E_0^2 + E_0^2\\cos\\Delta\\varphi\\): die Summe der beiden Intensitäten plus einen <em>Kreuzterm</em>. Bei zwei Lampen wandert die Phasendifferenz zufällig, der Kreuzterm mittelt sich zu null, und nur die Summe der Intensitäten bleibt übrig. Abb. 3 zeigt die Addition der Felder als Zeiger. In der Sprache der komplexen Zahlen ist jede Welle \\(E_0e^{i(kL_j-\\omega t)},\\) die Summe ist \\(E_0e^{i(kL_1-\\omega t)}(1 + e^{i\\Delta\\varphi}),\\) und \\(|1 + e^{i\\Delta\\varphi}|^2 = 2 + 2\\cos\\Delta\\varphi = 4\\cos^2(\\Delta\\varphi/2),\\) das gleiche Ergebnis."
+ },
+ "9d1226717c2f": {
+  "src": "Geometry",
+  "tr": "Geometrie"
+ },
+ "a1096467bf0a": {
+  "src": "Slit separation b",
+  "tr": "Spaltabstand b"
+ },
+ "a28272643323": {
+  "src": "<span class=\"psec__n\">02</span>The model",
+  "tr": "<span class=\"psec__n\">02</span>Das Modell"
+ },
+ "a36ef8aba229": {
+  "src": "Light",
+  "tr": "Licht"
+ },
+ "a4ce3a9be794": {
+  "src": "← All simulations",
+  "tr": "← Alle Simulationen"
+ },
+ "a5398bb69f06": {
+  "src": "The amplitudes are taken as equal. In the plane of the drawing, the wave from a long slit weakens as \\(1/\\sqrt L.\\) At the dark fringe for the defaults, \\(L_1 = 200.52\\ \\mathrm{px}\\) and \\(L_2 = 207.27\\ \\mathrm{px},\\) so the amplitudes differ by \\(1.6\\,\\%\\) and the dark fringe keeps \\(7\\times10^{-5}\\) of the peak intensity: invisible.",
+  "tr": "Die Amplituden werden als gleich angenommen. In der Zeichenebene schwächt sich die Welle eines langen Spalts wie \\(1/\\sqrt L.\\) ab. Am dunklen Streifen bei den Standardwerten sind \\(L_1 = 200.52\\ \\mathrm{px}\\) und \\(L_2 = 207.27\\ \\mathrm{px},\\) also unterscheiden sich die Amplituden um \\(1.6\\,\\%\\), und der dunkle Streifen behält \\(7\\times10^{-5}\\) der maximalen Intensität: unsichtbar."
+ },
+ "a676991491a8": {
+  "src": "The wave is a single number at each point, a <em>scalar</em> wave; the polarisation of light is ignored.",
+  "tr": "Die Welle ist an jedem Punkt eine einzige Zahl, eine <em>skalare</em> Welle; die Polarisation des Lichts wird vernachlässigt."
+ },
+ "ae2d2463c3b7": {
+  "src": "Set <em>Slit separation</em> \\(b\\) to \\(80\\ \\mathrm{px},\\) <em>Distance</em> \\(d\\) to \\(100\\ \\mathrm{px}\\) and <em>Angle</em> \\(\\alpha\\) to \\(30^\\circ.\\) The readouts show \\(\\delta s\\) exact \\(= 38.27\\ \\mathrm{px}\\) against \\(b\\sin\\alpha = 40.00\\ \\mathrm{px}\\): the shortcut is \\(4.5\\,\\%\\) too long. Now move <em>Distance</em> \\(d\\) to \\(300\\ \\mathrm{px}.\\) The exact value rises to \\(39.80\\ \\mathrm{px},\\) and the error falls from \\(1.73\\ \\mathrm{px}\\) to \\(0.20\\ \\mathrm{px},\\) an 8.7-fold drop. Equation (5) predicts a nine-fold drop for a three times larger distance; the difference comes from the terms of order \\(b^4/r^4\\) that (5) leaves out, which are not small when \\(b/r = 0.69.\\)",
+  "tr": "Stellen Sie <em>Spaltabstand</em> \\(b\\) auf \\(80\\ \\mathrm{px},\\) <em>Abstand</em> \\(d\\) auf \\(100\\ \\mathrm{px}\\) und <em>Winkel</em> \\(\\alpha\\) auf \\(30^\\circ.\\) Die Anzeigen zeigen \\(\\delta s\\) exakt \\(= 38.27\\ \\mathrm{px}\\) gegenüber \\(b\\sin\\alpha = 40.00\\ \\mathrm{px}\\): Die Näherung ist \\(4.5\\,\\%\\) zu lang. Verschieben Sie nun <em>Abstand</em> \\(d\\) auf \\(300\\ \\mathrm{px}.\\) Der exakte Wert steigt auf \\(39.80\\ \\mathrm{px},\\) und der Fehler fällt von \\(1.73\\ \\mathrm{px}\\) auf \\(0.20\\ \\mathrm{px},\\) das ist um den Faktor 8.7. Gl. (5) sagt bei dreimal größerem Abstand einen Rückgang um den Faktor neun voraus; der Unterschied kommt von den Termen der Ordnung \\(b^4/r^4\\), die Gl. (5) weglässt und die nicht klein sind, wenn \\(b/r = 0.69.\\)"
+ },
+ "afbad8f88287": {
+  "src": "The speed of the wavelets is illustrative only.",
+  "tr": "Die Geschwindigkeit der Elementarwellen dient nur der Veranschaulichung."
+ },
+ "b25798321558": {
+  "src": "Both slits carry the same factor, so it comes out of the two-slit sum, which is unchanged; the intensity of a pair of slits of width \\(w\\) is the two-slit pattern (7) multiplied by a single-slit factor:",
+  "tr": "Beide Spalte tragen denselben Faktor, der deshalb vor die Summe der beiden Spalte gezogen werden kann; diese Summe bleibt unverändert. Die Intensität eines Spaltpaares der Breite \\(w\\) ist das Zweispalt-Muster (7), multipliziert mit einem Einzelspalt-Faktor:"
+ },
+ "b45ef0814493": {
+  "src": "b sin α",
+  "tr": "b sin α"
+ },
+ "b49ac4d19a13": {
+  "src": "Path S₂P",
+  "tr": "Weg S₂P"
+ },
+ "b4c94907a666": {
+  "src": "Nothing on this page is stepped forward in time. Every quantity has a closed formula and is recomputed whenever a slider moves:",
+  "tr": "Auf dieser Seite wird nichts in der Zeit weitergeschaltet. Jede Größe hat eine geschlossene Formel und wird neu berechnet, sobald sich ein Regler bewegt:"
+ },
+ "b796df5a0bb6": {
+  "src": "On a flat screen at a large distance \\(D,\\) the bright lines of small order sit at \\(y_m = D\\tan\\theta_m \\approx m\\lambda D/b,\\) so they are evenly spaced by",
+  "tr": "Auf einem flachen Schirm im großen Abstand \\(D,\\) liegen die hellen Linien kleiner Ordnung bei \\(y_m = D\\tan\\theta_m \\approx m\\lambda D/b,\\) sie sind also gleichmäßig voneinander entfernt, und zwar um"
+ },
+ "b8c469133579": {
+  "src": "<span class=\"sw sw--ink\"></span>paths",
+  "tr": "<span class=\"sw sw--ink\"></span>Wege"
+ },
+ "bbe3328d614c": {
+  "src": "Phase Δφ",
+  "tr": "Phase Δφ"
+ },
+ "bbfa1206a214": {
+  "src": "<span>1</span>Bright and dark from one source",
+  "tr": "<span>1</span>Hell und dunkel aus einer Quelle"
+ },
+ "bee75ca77f75": {
+  "src": "Controls",
+  "tr": "Regler"
+ },
+ "bef54249e35b": {
+  "src": "When \\(P\\) is far from the slits compared with their separation, both paths are close to \\(r,\\) so \\(L_1 + L_2 \\approx 2r = 2d/\\cos\\alpha.\\) Putting this into (3),",
+  "tr": "Wenn \\(P\\) weit von den Spalten entfernt ist, verglichen mit ihrem Abstand, liegen beide Wege nahe bei \\(r,\\) also gilt \\(L_1 + L_2 \\approx 2r = 2d/\\cos\\alpha.\\) Setzt man dies in (3) ein,"
+ },
+ "bfea7d18506c": {
+  "src": "A wave changes its phase by \\(2\\pi\\) over each wavelength, so over a distance \\(L\\) it changes by \\(kL,\\) with the <em>wavenumber</em> \\(k = 2\\pi/\\lambda.\\) On the page every length is measured in pixels of the drawing: the slider <em>Distance</em> \\(d\\) runs from \\(100\\) to \\(300\\ \\mathrm{px},\\) <em>Slit separation</em> \\(b\\) from \\(20\\) to \\(80\\ \\mathrm{px},\\) <em>Wavelength</em> \\(\\lambda\\) from \\(8\\) to \\(40\\ \\mathrm{px},\\) and <em>Angle</em> \\(\\alpha\\) from \\(0^\\circ\\) to \\(30^\\circ.\\) Only the ratios \\(b/\\lambda\\) and \\(d/b\\) and the angle matter, so the unit drops out of every result (Section 9).",
+  "tr": "Eine Welle ändert ihre Phase über jede Wellenlänge um \\(2\\pi\\), also ändert sie sich über eine Strecke \\(L\\) um \\(kL,\\) mit der <em>Wellenzahl</em> \\(k = 2\\pi/\\lambda.\\) Auf der Seite wird jede Länge in Bildpunkten der Zeichnung gemessen: Der Regler <em>Abstand</em> \\(d\\) läuft von \\(100\\) bis \\(300\\ \\mathrm{px},\\) <em>Spaltabstand</em> \\(b\\) von \\(20\\) bis \\(80\\ \\mathrm{px},\\) <em>Wellenlänge</em> \\(\\lambda\\) von \\(8\\) bis \\(40\\ \\mathrm{px},\\) und <em>Winkel</em> \\(\\alpha\\) von \\(0^\\circ\\) bis \\(30^\\circ.\\) Nur die Verhältnisse \\(b/\\lambda\\) und \\(d/b\\) und der Winkel zählen, daher kürzt sich die Einheit aus jedem Ergebnis heraus (Abschnitt 9)."
+ },
+ "c2621bff2d20": {
+  "src": "One more step made the experiment famous. Make the light so faint that it reaches the screen one photon at a time, and each photon leaves a single dot. The dots land at random, yet after thousands of them the bands are back. Electrons, atoms and even large molecules do the same. Section 7 returns to this; first we work out where the bands are.",
+  "tr": "Ein weiterer Schritt machte den Versuch berühmt. Man schwäche das Licht so stark ab, dass es den Schirm einzeln als Photon erreicht, und jedes Photon hinterlässt einen einzigen Punkt. Die Punkte treffen zufällig ein, und doch sind nach Tausenden von ihnen die Streifen wieder da. Elektronen, Atome und sogar große Moleküle verhalten sich genauso. Abschnitt 7 kommt darauf zurück; zuerst berechnen wir, wo die Streifen liegen."
+ },
+ "c95d8e24fa43": {
+  "src": "<span class=\"psec__n\">01</span>Bright and dark from one source",
+  "tr": "<span class=\"psec__n\">01</span>Hell und dunkel aus einer Quelle"
+ },
+ "c9f41eed80e4": {
+  "src": "The loud places are where a crest from one speaker arrives together with a crest from the other; the quiet places are where a crest from one arrives with a trough from the other. Which of the two happens depends only on how much further the sound has come from one speaker than from the other. In air at \\(20\\ {}^\\circ\\mathrm{C}\\) sound travels at about \\(343\\ \\mathrm{m/s},\\) so a tone of \\(343\\ \\mathrm{Hz}\\) has a wavelength of \\(1\\ \\mathrm{m},\\) and the loud and quiet places lie far enough apart to walk through.",
+  "tr": "Die lauten Stellen liegen dort, wo ein Wellenberg des einen Lautsprechers zusammen mit einem Wellenberg des anderen ankommt; die leisen Stellen dort, wo ein Wellenberg des einen mit einem Wellental des anderen zusammentrifft. Welcher der beiden Fälle eintritt, hängt nur davon ab, um wie viel weiter der Schall von dem einen Lautsprecher gekommen ist als von dem anderen. In Luft bei \\(20\\ {}^\\circ\\mathrm{C}\\) läuft der Schall mit etwa \\(343\\ \\mathrm{m/s},\\) so hat ein Ton von \\(343\\ \\mathrm{Hz}\\) eine Wellenlänge von \\(1\\ \\mathrm{m},\\) und die lauten und leisen Stellen liegen weit genug auseinander, um sie zu durchschreiten."
+ },
+ "cad2dda3032c": {
+  "src": "heavier mathematics",
+  "tr": "anspruchsvollere Mathematik"
+ },
+ "cf26e5404520": {
+  "src": "The rose arcs are the wavelets: semicircles of radius \\(r_n = (n + \\phi)\\lambda\\) about each slit, out to \\(430\\ \\mathrm{px},\\) where \\(\\phi\\) is the animation phase, a fraction of a period. Their opacity falls as \\(0.55\\,(1 - r/430)\\) to suggest the weakening of each wavelet. Below the wall, straight rose lines one wavelength apart are the incoming plane wave, moving in step with the arcs at \\(0.8\\lambda\\) per second, \\(10.8\\ \\mathrm{px/s}\\) at the defaults. Real green light oscillates \\(5.5\\times10^{14}\\) times a second, so the animation is slowed down by a factor of about \\(7\\times10^{14}.\\)",
+  "tr": "Die rosafarbenen Bögen sind die Elementarwellen: Halbkreise mit dem Radius \\(r_n = (n + \\phi)\\lambda\\) um jeden Spalt, bis \\(430\\ \\mathrm{px},\\) wobei \\(\\phi\\) die Phase der Animation ist, ein Bruchteil einer Periode. Ihre Deckkraft fällt als \\(0.55\\,(1 - r/430)\\), um die Abschwächung jeder Elementarwelle anzudeuten. Unterhalb der Wand sind gerade rosafarbene Linien im Abstand einer Wellenlänge die einfallende ebene Welle; sie bewegen sich im Takt mit den Bögen mit \\(0.8\\lambda\\) pro Sekunde, \\(10.8\\ \\mathrm{px/s}\\) bei den Standardwerten. Echtes grünes Licht schwingt \\(5.5\\times10^{14}\\)-mal pro Sekunde, daher ist die Animation verlangsamt um etwa den Faktor \\(7\\times10^{14}.\\)"
+ },
+ "cf4ef3096e79": {
+  "src": "T. Young, <a href=\"https://doi.org/10.1098/rstl.1804.0001\">“The Bakerian Lecture: Experiments and calculations relative to physical optics”</a>, <em>Philosophical Transactions of the Royal Society of London</em> 94, 1–16 (1804), read on 24 November 1803. Its Section I is the experiment with the slip of card told in Section 1.",
+  "tr": "T. Young, <a href=\"https://doi.org/10.1098/rstl.1804.0001\">“The Bakerian Lecture: Experiments and calculations relative to physical optics”</a>, <em>Philosophical Transactions of the Royal Society of London</em> 94, 1–16 (1804), gelesen am 24. November 1803. Sein Abschnitt I ist der Versuch mit dem Kartonstreifen aus Abschnitt 1."
+ },
+ "cf672c3a3fef": {
+  "src": "Angle α",
+  "tr": "Winkel α"
+ },
+ "d1622a8321e0": {
+  "src": "Phyein Usul, home page",
+  "tr": "Phyein Usul, Startseite"
+ },
+ "d60a7d755f3a": {
+  "src": "Only the wavelets move. At each frame of the browser, the phase of the animation advances by \\(0.8\\,\\Delta t\\) periods, with \\(\\Delta t\\) the time since the previous frame, and the arcs are redrawn; the geometry and the readouts do not change. The page’s data panel stores every number named here at the line that computes it, including the direct difference \\(L_2 - L_1\\) and the length of the drawn bar \\(S_2Q,\\) so the three ways of getting \\(\\delta s\\) can be compared side by side.",
+  "tr": "Nur die Elementarwellen bewegen sich. Bei jedem Bild des Browsers wächst die Phase der Animation um \\(0.8\\,\\Delta t\\) Perioden, wobei \\(\\Delta t\\) die Zeit seit dem vorigen Bild ist, und die Bögen werden neu gezeichnet; die Geometrie und die Anzeigen ändern sich nicht. Das Datenpanel der Seite speichert jede hier genannte Zahl in der Zeile, die sie berechnet, einschließlich der direkten Differenz \\(L_2 - L_1\\) und der Länge des gezeichneten Balkens \\(S_2Q,\\) sodass die drei Wege zu \\(\\delta s\\) nebeneinander verglichen werden können."
+ },
+ "d62a8b826ff5": {
+  "src": "The intensity plot under the figure samples 301 directions from \\(0^\\circ\\) to \\(30^\\circ,\\) one every \\(0.1^\\circ.\\) The burgundy curve is the far-field law \\(\\cos^2(\\pi b\\sin\\theta/\\lambda).\\) The dashed curve uses the exact path difference (3) for the point of the observation line in the direction \\(\\theta,\\) a distance \\(d\\tan\\theta\\) from the centre line; where the two curves part, the far field is failing. Even for the finest fringes the sliders allow, \\(b = 80\\ \\mathrm{px}\\) and \\(\\lambda = 8\\ \\mathrm{px},\\) one fringe spans 57 samples.",
+  "tr": "Das Intensitätsdiagramm unter der Abbildung tastet 301 Richtungen ab, von \\(0^\\circ\\) bis \\(30^\\circ,\\) eine alle \\(0.1^\\circ.\\) Die burgunderrote Kurve ist das Fernfeldgesetz \\(\\cos^2(\\pi b\\sin\\theta/\\lambda).\\) Die gestrichelte Kurve verwendet den exakten Gangunterschied (3) für den Punkt der Beobachtungslinie in der Richtung \\(\\theta,\\) im Abstand \\(d\\tan\\theta\\) von der Mittellinie; dort, wo sich die beiden Kurven trennen, versagt das Fernfeld. Selbst für die feinsten Streifen, die die Regler zulassen, \\(b = 80\\ \\mathrm{px}\\) und \\(\\lambda = 8\\ \\mathrm{px},\\) umspannt ein Streifen 57 Abtastwerte."
+ },
+ "d81173b104eb": {
+  "src": "The pattern needs both slits for every single photon. Close one slit, or place a detector that records which slit each photon passed, and the cross term \\(\\cos\\Delta\\varphi\\) disappears: the dots then pile up as one single-slit pattern, or, with the detector, as the sum of two, without fringes. So the photons are not a crowd interfering with one another. Each photon, on its own, has two ways of reaching the screen, and as long as nothing in the apparatus records which way it took, the two ways add the way waves add. Quantum mechanics gives each way a complex number, a <em>probability amplitude</em>, and the probability of a dot at \\(\\theta\\) is the squared modulus of their sum. The field \\(E\\) of Section 5 is not this amplitude; it describes light made of very many photons. Yet it predicts the same fringes, because both add the two paths with the same phase difference \\(k\\,\\delta s.\\) This holds for any arrangement of slits, not only two: for a single photon, the chance of a click at a place is proportional to the classical intensity there.",
+  "tr": "Das Muster braucht beide Spalte für jedes einzelne Photon. Schließt man einen Spalt oder stellt man einen Detektor auf, der registriert, durch welchen Spalt jedes Photon ging, so verschwindet der Kreuzterm \\(\\cos\\Delta\\varphi\\): Die Punkte häufen sich dann als ein Einzelspalt-Muster bzw. mit Detektor als Summe zweier solcher Muster, ohne Streifen. Die Photonen sind also keine Menge, die sich gegenseitig stört. Jedes Photon hat für sich zwei Wege zum Schirm, und solange nichts in der Apparatur registriert, welchen Weg es nahm, addieren sich die beiden Wege so, wie sich Wellen addieren. Die Quantenmechanik ordnet jedem Weg eine komplexe Zahl zu, eine <em>Wahrscheinlichkeitsamplitude</em>, und die Wahrscheinlichkeit eines Punktes bei \\(\\theta\\) ist das Betragsquadrat ihrer Summe. Das Feld \\(E\\) aus Abschnitt 5 ist nicht diese Amplitude; es beschreibt Licht aus sehr vielen Photonen. Dennoch sagt es dieselben Streifen voraus, weil beide die beiden Wege addieren, und zwar mit derselben Phasendifferenz \\(k\\,\\delta s.\\) Dies gilt für jede Anordnung von Spalten, nicht nur für zwei: Für ein einzelnes Photon ist die Chance für einen Auftreffpunkt an einer Stelle proportional zur klassischen Intensität dort."
+ },
+ "d929322e4b16": {
+  "src": "Fig.",
+  "tr": "Abb."
+ },
+ "df55deb90ee3": {
+  "src": "Stand between two loudspeakers that play the same steady tone and walk slowly across the room. The sound swells and fades, loud, quiet, loud again, although nothing about the speakers has changed.",
+  "tr": "Stellen Sie sich zwischen zwei Lautsprecher, die denselben gleichbleibenden Ton abspielen, und gehen Sie langsam durch den Raum. Der Klang schwillt an und ebbt ab, laut, leise, wieder laut, obwohl sich an den Lautsprechern nichts geändert hat."
+ },
+ "dfaf138f49a6": {
+  "src": "<span class=\"psub__n\">4.1</span>The error shrinks with the square of the distance<span class=\"star\" title=\"heavier mathematics\">★</span>",
+  "tr": "<span class=\"psub__n\">4.1</span>Der Fehler schrumpft mit dem Quadrat des Abstands<span class=\"star\" title=\"heavier mathematics\">★</span>"
+ },
+ "e05eed1307fd": {
+  "src": "Distance d",
+  "tr": "Abstand d"
+ },
+ "e0ae752a2d85": {
+  "src": "From (1), \\(L_{1,2}^2 = r^2 \\mp b\\,r\\sin\\alpha + b^2/4,\\) so \\(L_{1,2} = r\\sqrt{1+u}\\) with \\(u = \\mp\\varepsilon + \\eta,\\) \\(\\varepsilon = b\\sin\\alpha/r\\) and \\(\\eta = b^2/(4r^2).\\) Expand \\(\\sqrt{1+u} = 1 + \\tfrac12 u - \\tfrac18 u^2 + \\tfrac1{16}u^3 - \\dots\\) Changing the sign of \\(\\varepsilon\\) swaps the two paths, so only odd powers of \\(\\varepsilon\\) survive in the difference; to third order in \\(b/r\\) they are \\(r\\left(\\varepsilon - \\tfrac12\\varepsilon\\eta + \\tfrac18\\varepsilon^3\\right),\\) which is",
+  "tr": "Aus (1) folgt \\(L_{1,2}^2 = r^2 \\mp b\\,r\\sin\\alpha + b^2/4,\\) also \\(L_{1,2} = r\\sqrt{1+u}\\) mit \\(u = \\mp\\varepsilon + \\eta,\\) \\(\\varepsilon = b\\sin\\alpha/r\\) und \\(\\eta = b^2/(4r^2).\\) Entwickelt man \\(\\sqrt{1+u} = 1 + \\tfrac12 u - \\tfrac18 u^2 + \\tfrac1{16}u^3 - \\dots\\) Ein Wechsel des Vorzeichens von \\(\\varepsilon\\) vertauscht die beiden Wege, daher bleiben in der Differenz nur ungerade Potenzen von \\(\\varepsilon\\) übrig; bis zur dritten Ordnung in \\(b/r\\) sind sie \\(r\\left(\\varepsilon - \\tfrac12\\varepsilon\\eta + \\tfrac18\\varepsilon^3\\right),\\) was"
+ },
+ "e13b587879b0": {
+  "src": "<span>2</span>The model",
+  "tr": "<span>2</span>Das Modell"
+ },
+ "e1d329a7394b": {
+  "src": "From symbols to code",
+  "tr": "Von den Symbolen zum Code"
+ },
+ "e24c472348bc": {
+  "src": "No approximation has been made. The result is zero for \\(\\alpha = 0,\\) where \\(P\\) lies on the centre line and is equally far from both slits, and positive for \\(\\alpha > 0,\\) where \\(S_2\\) is the further slit. At the page’s defaults, \\(d = 200\\ \\mathrm{px},\\) \\(\\alpha = 20^\\circ\\) and \\(b = 40\\ \\mathrm{px},\\) it gives \\(L_1 = 206.85\\ \\mathrm{px},\\) \\(L_2 = 220.48\\ \\mathrm{px}\\) and \\(\\delta s = 13.6277\\ \\mathrm{px};\\) the readouts <em>Path \\(S_1P\\)</em>, <em>Path \\(S_2P\\)</em> and <em>\\(\\delta s\\) exact</em> show these numbers rounded.",
+  "tr": "Es wurde keine Näherung gemacht. Das Ergebnis ist null für \\(\\alpha = 0,\\) wo \\(P\\) auf der Mittellinie liegt und von beiden Spalten gleich weit entfernt ist, und positiv für \\(\\alpha > 0,\\) wo \\(S_2\\) der weiter entfernte Spalt ist. Bei den Standardwerten der Seite, \\(d = 200\\ \\mathrm{px},\\) \\(\\alpha = 20^\\circ\\) und \\(b = 40\\ \\mathrm{px},\\) ergibt es \\(L_1 = 206.85\\ \\mathrm{px},\\) \\(L_2 = 220.48\\ \\mathrm{px}\\) und \\(\\delta s = 13.6277\\ \\mathrm{px};\\) die Anzeigen <em>Weg \\(S_1P\\)</em>, <em>Weg \\(S_2P\\)</em> und <em>\\(\\delta s\\) exakt</em> zeigen diese Zahlen gerundet."
+ },
+ "e28e5c21dee6": {
+  "src": "Interactive double-slit geometry: the path difference from two slits to a point, its far-field approximation b sin α, and the resulting interference pattern.",
+  "tr": "Interaktive Doppelspalt-Geometrie: der Gangunterschied von zwei Spalten zu einem Punkt, seine Fernfeldnäherung b sin α und das daraus folgende Interferenzmuster."
+ },
+ "e4ebf6099dd7": {
+  "src": "burgundy: far field · dashed: exact at <i>d</i>",
+  "tr": "burgunderrot: Fernfeld · gestrichelt: exakt bei <i>d</i>"
+ },
+ "e89647451beb": {
+  "src": "<span class=\"psec__n\">04</span>The far field",
+  "tr": "<span class=\"psec__n\">04</span>Das Fernfeld"
+ },
+ "ec1cf294a370": {
+  "src": "<span>10</span>What the model leaves out",
+  "tr": "<span>10</span>Was das Modell weglässt"
+ },
+ "f0ea5a09568c": {
+  "src": "<span>7</span>One particle at a time",
+  "tr": "<span>7</span>Ein Teilchen nach dem anderen"
+ },
+ "f141448226b7": {
+  "src": "The model keeps only what decides bright or dark:",
+  "tr": "Das Modell behält nur, was über hell oder dunkel entscheidet:"
+ },
+ "f31156501e1e": {
+  "src": "The light is perfectly coherent and of one colour. White light, as in Young’s experiment, gives a white central fringe and coloured fringes that wash out after a few orders, because each colour has its own spacing (9).",
+  "tr": "Das Licht ist vollkommen kohärent und einfarbig. Weißes Licht, wie in Youngs Versuch, ergibt einen weißen zentralen Streifen und farbige Streifen, die nach wenigen Ordnungen verwaschen, weil jede Farbe einen eigenen Abstand hat (9)."
+ },
+ "f3f50ef03288": {
+  "src": "<span class=\"psec__n\">07</span>One particle at a time",
+  "tr": "<span class=\"psec__n\">07</span>Ein Teilchen nach dem anderen"
+ },
+ "f5cbdf6bfb51": {
+  "src": "Contents",
+  "tr": "Inhalt"
+ },
+ "f72f0eda6052": {
+  "src": "Simulations",
+  "tr": "Simulationen"
+ },
+ "f832a95bf362": {
+  "src": "δs exact",
+  "tr": "δs exakt"
+ },
+ "f97963f6ce10": {
+  "src": "That is about 4500 times shorter than green light of \\(550\\ \\mathrm{nm},\\) so the slits for electrons must be correspondingly finer. With suitable slits, electrons, neutrons, atoms and molecules of sixty carbon atoms all show the same fringes, arriving one at a time and building the pattern of Figure 5 dot by dot.",
+  "tr": "Das ist etwa 4500-mal kürzer als grünes Licht von \\(550\\ \\mathrm{nm},\\) daher müssen die Spalte für Elektronen entsprechend feiner sein. Mit geeigneten Spalten zeigen Elektronen, Neutronen, Atome und Moleküle aus sechzig Kohlenstoffatomen alle dieselben Streifen; sie kommen einzeln an und bauen das Muster der Abb. 5 Punkt für Punkt auf."
+ },
+ "fb194e991a8e": {
+  "src": "Wavelength λ",
+  "tr": "Wellenlänge λ"
+ },
+ "fb57a7ac8366": {
+  "src": "This simulation needs JavaScript.",
+  "tr": "Diese Simulation benötigt JavaScript."
+ },
+ "fb740fa3a187": {
+  "src": "<span class=\"psec__n\">09</span>From lengths to pixels",
+  "tr": "<span class=\"psec__n\">09</span>Von Längen zu Bildpunkten"
+ },
+ "fc5afb9b1aa8": {
+  "src": "The <em>path difference</em> \\(\\delta s = L_2 - L_1\\) is how much further the wave from \\(S_2\\) has travelled. Subtracting two square roots is awkward, but subtracting their squares is easy: in \\(L_2^2 - L_1^2\\) the \\(d^2\\) and the \\(b^2/4\\) cancel, and \\((d\\tan\\alpha + \\tfrac b2)^2 - (d\\tan\\alpha - \\tfrac b2)^2 = 2bd\\tan\\alpha.\\) Since \\(L_2^2 - L_1^2 = (L_2 - L_1)(L_2 + L_1),\\)",
+  "tr": "Der <em>Gangunterschied</em> \\(\\delta s = L_2 - L_1\\) ist, um wie viel weiter die Welle von \\(S_2\\) gelaufen ist. Die Differenz zweier Quadratwurzeln ist unbequem, aber die Differenz ihrer Quadrate ist einfach: In \\(L_2^2 - L_1^2\\) heben sich \\(d^2\\) und \\(b^2/4\\) auf, und \\((d\\tan\\alpha + \\tfrac b2)^2 - (d\\tan\\alpha - \\tfrac b2)^2 = 2bd\\tan\\alpha.\\) Da \\(L_2^2 - L_1^2 = (L_2 - L_1)(L_2 + L_1),\\)"
+ },
+ "fdf6c4916106": {
+  "src": "<b>Abstract.</b> Light that passes through two narrow slits does not make two bright lines on a screen; it makes a row of bright and dark bands. This note explains the bands with one idea: the two waves that meet at a point have travelled different distances, and that difference, counted in wavelengths, decides whether they reinforce or cancel. We compute the difference exactly, find out when the textbook shortcut \\(b\\sin\\alpha\\) is good enough, add the two waves to get the brightness \\(\\cos^2(\\pi\\,\\delta s/\\lambda),\\) see what real slits of finite width change, and end with the quantum version of the experiment, in which single photons or electrons build the same pattern one dot at a time. The last sections describe how the page computes and draws all of this. Sections marked ★ carry the heavier mathematics and can be skipped on a first reading without losing the thread.",
+  "tr": "<b>Zusammenfassung.</b> Licht, das durch zwei schmale Spalte fällt, erzeugt auf einem Schirm nicht zwei helle Linien, sondern eine Folge heller und dunkler Streifen. Dieses Skript erklärt die Streifen mit einer Idee: Die beiden Wellen, die sich in einem Punkt treffen, haben verschiedene Wege zurückgelegt, und dieser Unterschied, in Wellenlängen gezählt, entscheidet, ob sie sich verstärken oder auslöschen. Wir berechnen den Unterschied genau, prüfen, wann die aus dem Lehrbuch bekannte Näherung \\(b\\sin\\alpha\\) gut genug ist, addieren die beiden Wellen, um die Helligkeit \\(\\cos^2(\\pi\\,\\delta s/\\lambda),\\) zu erhalten, zeigen, was Spalte endlicher Breite ändern, und schließen mit der Quantenfassung des Versuchs, in der einzelne Photonen oder Elektronen dasselbe Muster Punkt für Punkt aufbauen. Die letzten Abschnitte beschreiben, wie die Seite all dies berechnet und zeichnet. Abschnitte mit ★ enthalten die schwierigere Mathematik und können beim ersten Lesen übersprungen werden, ohne den Faden zu verlieren."
+ },
+ "ff8e445fcd53": {
+  "src": "<span class=\"sw sw--rose\"></span>wavelets",
+  "tr": "<span class=\"sw sw--rose\"></span>Elementarwellen"
+ },
+ "ffc1aa2636ce": {
+  "src": "The two waves reach \\(P\\) with equal amplitudes; their weakening with distance is ignored.",
+  "tr": "Die beiden Wellen erreichen \\(P\\) mit gleicher Amplitude; ihre Abschwächung mit dem Abstand wird vernachlässigt."
+ }
+}

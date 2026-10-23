@@ -1,0 +1,742 @@
+{
+ "016863e3e12c": {
+  "src": "Differentiating (6) term by term, with \\(\\mathrm{d}e^{i\\omega t}/\\mathrm{d}t = i\\omega\\,e^{i\\omega t}\\) from (2),",
+  "tr": "Durch gliedweises Ableiten von (6), mit \\(\\mathrm{d}e^{i\\omega t}/\\mathrm{d}t = i\\omega\\,e^{i\\omega t}\\) aus (2),"
+ },
+ "01d7d0ced8ce": {
+  "src": "The period readout assumes that every \\(\\omega\\) is a whole multiple of \\(0.01\\ \\mathrm{rad/s}\\), which the sliders guarantee. Truly incommensurate frequencies never close, but a screen can only ever show finitely many points of such a curve.",
+  "tr": "Die Anzeige der Periode setzt voraus, dass jedes \\(\\omega\\) ein ganzes Vielfaches von \\(0.01\\ \\mathrm{rad/s}\\) ist, was die Regler garantieren. Wirklich inkommensurable Frequenzen schließen sich nie, aber ein Bildschirm kann von einer solchen Kurve immer nur endlich viele Punkte zeigen."
+ },
+ "035ceddf410d": {
+  "src": "Lecture note · Fig. 7 · complex analysis",
+  "tr": "Skript · Abb. 7 · komplexe Analysis"
+ },
+ "037a35380ed8": {
+  "src": "<span class=\"pfig__n\">Figure 5</span>Squared distance of the pen from the centre for the <em>Star</em> preset over one period, computed from (6) on \\(10^6\\) equal steps. Burgundy: \\(|z(t)|^2\\), swinging between 0.1024 and 2.8224. Grey: its running average \\(\\frac1t\\int_0^t |z|^2\\,\\mathrm{d}t'\\). Dashed: \\(\\sum A_k^2 = 1.2824\\) from (15). The running average lands exactly on 1.2824 at every multiple of \\(2\\pi/5 = 1.26\\ \\mathrm{s}\\) (thin dashed lines), where every cosine in (14) has completed whole cycles.",
+  "tr": "<span class=\"pfig__n\">Abbildung 5</span>Quadrierter Abstand des Stifts vom Mittelpunkt für die Voreinstellung <em>Stern</em> über eine Periode, berechnet aus (6) mit \\(10^6\\) gleichen Schritten. Burgunderrot: \\(|z(t)|^2\\), das zwischen 0.1024 und 2.8224 schwankt. Grau: sein laufender Mittelwert \\(\\frac1t\\int_0^t |z|^2\\,\\mathrm{d}t'\\). Gestrichelt: \\(\\sum A_k^2 = 1.2824\\) aus (15). Der laufende Mittelwert trifft genau 1.2824 bei jedem Vielfachen von \\(2\\pi/5 = 1.26\\ \\mathrm{s}\\) (dünne gestrichelte Linien), wo jeder Kosinus in (14) ganze Perioden durchlaufen hat."
+ },
+ "060d6ddf5fab": {
+  "src": "Each circle card on the page holds one triple \\((A_k, \\omega_k, \\varphi_k)\\): <em>Radius</em> \\(A\\) from 0 to 2, <em>Angular frequency</em> \\(\\omega\\) from \\(-32\\) to \\(32\\ \\mathrm{rad/s}\\) and <em>Phase</em> \\(\\varphi\\) from 0 to \\(6.28\\ \\mathrm{rad}\\), all in steps of 0.01. Lengths carry no unit, because the picture is scaled to fit (section 8): only their ratios matter. The <em>Current formula</em> box prints (6) with the stored numbers.",
+  "tr": "Jede Kreiskarte auf der Seite enthält ein Tripel \\((A_k, \\omega_k, \\varphi_k)\\): <em>Radius</em> \\(A\\) von 0 bis 2, <em>Kreisfrequenz</em> \\(\\omega\\) von \\(-32\\) bis \\(32\\ \\mathrm{rad/s}\\) und <em>Phase</em> \\(\\varphi\\) von 0 bis \\(6.28\\ \\mathrm{rad}\\), alles in Schritten von 0.01. Längen tragen keine Einheit, weil das Bild passend skaliert wird (Abschnitt 8): nur ihre Verhältnisse zählen. Das Kästchen <em>Aktuelle Formel</em> gibt (6) mit den gespeicherten Zahlen aus."
+ },
+ "06fbc3fa9279": {
+  "src": "Add circle",
+  "tr": "Kreis hinzufügen"
+ },
+ "0addd7f1a34d": {
+  "src": "This is <em>Euler’s formula</em>. It packs a turn through the angle \\(\\theta\\) into a single number and turns rotation into multiplication: \\(e^{ia}\\,e^{ib} = e^{i(a+b)}\\), so multiplying any arrow by \\(e^{ib}\\) turns it by the angle \\(b\\).",
+  "tr": "Das ist die <em>Eulersche Formel</em>. Sie fasst eine Drehung um den Winkel \\(\\theta\\) in eine einzige Zahl und verwandelt Drehung in Multiplikation: \\(e^{ia}\\,e^{ib} = e^{i(a+b)}\\), also dreht die Multiplikation eines beliebigen Pfeils mit \\(e^{ib}\\) ihn um den Winkel \\(b\\)."
+ },
+ "0c674f1ce739": {
+  "src": "A beat is declared when the raw bass level is more than 35 % above the previous frame’s, exceeds 0.22, and at least \\(280\\ \\mathrm{ms}\\) have passed since the last beat. All radii are then multiplied by \\(1 + 0.9\\,d_\\text{burst}\\) on the beat frame, with \\(d_\\text{burst}\\) the <em>Beat burst</em>, and the factor falls by \\(0.1\\,d_\\text{burst}\\) each frame, back to 1 on the tenth. The tempo shown is \\(60\\,000\\) divided by the median of the last 8 intervals between beats in milliseconds.",
+  "tr": "Ein Schlag wird gemeldet, wenn der rohe Bass-Pegel mehr als 35 % über dem des vorigen Bildes liegt, 0.22 übersteigt und seit dem letzten Schlag mindestens \\(280\\ \\mathrm{ms}\\) vergangen sind. Im Bild des Schlags werden alle Radien mit \\(1 + 0.9\\,d_\\text{burst}\\) multipliziert, wobei \\(d_\\text{burst}\\) der <em>Schlag-Impuls</em> ist; der Faktor fällt bei jedem Bild um \\(0.1\\,d_\\text{burst}\\) ab, bis er am zehnten Bild wieder 1 ist. Das angezeigte Tempo ist \\(60\\,000\\) geteilt durch den Median der letzten 8 Abstände zwischen den Schlägen in Millisekunden."
+ },
+ "0c79823a6464": {
+  "src": "<span class=\"psec__n\">05</span>When the curve closes<span class=\"star\" title=\"heavier mathematics\">★</span>",
+  "tr": "<span class=\"psec__n\">05</span>Wann sich die Kurve schließt<span class=\"star\" title=\"heavier mathematics\">★</span>"
+ },
+ "0cd793fad67c": {
+  "src": "<span>1</span>Circles riding on circles",
+  "tr": "<span>1</span>Kreise, die auf Kreisen reiten"
+ },
+ "0dad04ffd952": {
+  "src": "Circles · one card per phasor",
+  "tr": "Kreise · eine Karte pro Zeiger"
+ },
+ "0e8ef89a5ee4": {
+  "src": "Period 2π/g",
+  "tr": "Periode 2π/g"
+ },
+ "0efb4239f8a3": {
+  "src": "The traced curve is burgundy and 1.8&nbsp;px wide. In the Live view it is drawn in twelve pieces whose opacity rises from 0.25 for the oldest to 1 for the newest, so the trail fades behind the pen. Each arm, with a dot of radius 3&nbsp;px at its tip, has the colour of the swatch on its circle card; each arm’s circle is a thin rose line around the joint it turns about; the pen is a burgundy dot of radius 5.5&nbsp;px. The <em>Final shape</em> view draws the sampled curve as a 1.8&nbsp;px burgundy line over a 6&nbsp;px pale-rose band. Two thin lines through the centre are the real and imaginary axes.",
+  "tr": "Die gezeichnete Kurve ist burgunderrot und 1.8&nbsp;px breit. In der Live-Ansicht wird sie in zwölf Stücken gezeichnet, deren Deckkraft vom ältesten mit 0.25 bis zum neuesten mit 1 ansteigt, sodass die Spur hinter dem Stift verblasst. Jeder Arm hat mit einem Punkt vom Radius 3&nbsp;px an seiner Spitze die Farbe des Farbfelds auf seiner Kreiskarte; der Kreis jedes Arms ist eine dünne rosafarbene Linie um das Gelenk, um das er sich dreht; der Stift ist ein burgunderroter Punkt vom Radius 5.5&nbsp;px. Die Ansicht <em>Endform</em> zeichnet die abgetastete Kurve als 1.8&nbsp;px breite burgunderrote Linie über einem 6&nbsp;px breiten blassrosa Band. Zwei dünne Linien durch den Mittelpunkt sind die reelle und die imaginäre Achse."
+ },
+ "0fd0942e69f7": {
+  "src": "Multiplying by \\(i\\) is a geometric act: it turns the arrow a quarter turn counter-clockwise. With the single rule \\(i^2 = -1\\),",
+  "tr": "Die Multiplikation mit \\(i\\) ist eine geometrische Handlung: Sie dreht den Pfeil um eine Viertelumdrehung gegen den Uhrzeigersinn. Mit der einen Regel \\(i^2 = -1\\),"
+ },
+ "115ce519b2f8": {
+  "src": "<span class=\"psub__n\">4.2</span>The same direction: beats",
+  "tr": "<span class=\"psub__n\">4.2</span>In dieselbe Richtung: Schwebungen"
+ },
+ "134cc88aa97b": {
+  "src": "Readers who know the series \\(e^x = 1 + x + x^2/2! + x^3/3! + \\dots\\) can confirm (3) directly. Put \\(x = i\\theta\\), use \\(i^2 = -1\\), \\(i^3 = -i\\), \\(i^4 = 1\\), and collect the real and the imaginary terms:",
+  "tr": "Wer die Reihe \\(e^x = 1 + x + x^2/2! + x^3/3! + \\dots\\) kennt, kann (3) direkt bestätigen. Setzen Sie \\(x = i\\theta\\), nutzen Sie \\(i^2 = -1\\), \\(i^3 = -i\\), \\(i^4 = 1\\) und sortieren Sie die reellen und die imaginären Glieder:"
+ },
+ "14683f46a59a": {
+  "src": "The last step is (3) used twice: \\(e^{iu} + e^{-iu} = 2\\cos u\\). Read (8) as an arrow that turns at the average rate \\(\\bar\\omega\\) while its length \\(2A\\cos(\\Delta\\omega\\,t/2)\\) swells and shrinks. The cosine itself runs at half the difference rate, but its size peaks twice in each of its cycles, at crest and at trough, so the length rises and falls at the full difference rate. Which of the two motions is the fast one decides what you see.",
+  "tr": "Der letzte Schritt ist (3) zweimal angewandt: \\(e^{iu} + e^{-iu} = 2\\cos u\\). Lesen Sie (8) als einen Pfeil, der mit der mittleren Rate \\(\\bar\\omega\\) umläuft, während seine Länge \\(2A\\cos(\\Delta\\omega\\,t/2)\\) anschwillt und abnimmt. Der Kosinus selbst läuft mit der halben Differenzrate, doch sein Betrag erreicht in jeder Periode zweimal ein Maximum, bei Wellenberg und Wellental, sodass die Länge mit der vollen Differenzrate steigt und fällt. Welche der beiden Bewegungen die schnelle ist, entscheidet, was man sieht."
+ },
+ "14a2f9ce51c5": {
+  "src": "Numa Koudsie · for school students and first- and second-year undergraduates",
+  "tr": "Numa Koudsie · für Schülerinnen und Schüler sowie Studierende im ersten und zweiten Studienjahr"
+ },
+ "194e900f464d": {
+  "src": "Trefoil",
+  "tr": "Kleeblatt"
+ },
+ "1a5894339f89": {
+  "src": "Import JSON",
+  "tr": "JSON importieren"
+ },
+ "1c54132b8e5a": {
+  "src": "Record",
+  "tr": "Aufnehmen"
+ },
+ "1f5a37bcafc4": {
+  "src": "<em>Star</em> has \\(\\omega = 1, -4, 6\\ \\mathrm{rad/s}\\): the differences are \\(-5\\) and \\(5\\), so \\(M = 5\\) and \\(\\omega_1/M = 1/5\\), five-fold. The 3-petal rose has \\(M = 6\\) and \\(\\omega_1/M = 4/6 = 2/3\\), three-fold (Figure 4). The phases enter neither \\(M\\) nor \\(q\\): moving a <em>Phase</em> slider reshapes or turns the curve but leaves its symmetry alone.",
+  "tr": "Der <em>Stern</em> hat \\(\\omega = 1, -4, 6\\ \\mathrm{rad/s}\\): Die Differenzen sind \\(-5\\) und \\(5\\), also \\(M = 5\\) und \\(\\omega_1/M = 1/5\\), fünffach. Die 3-blättrige Rose hat \\(M = 6\\) und \\(\\omega_1/M = 4/6 = 2/3\\), dreifach (Abbildung 4). Die Phasen gehen weder in \\(M\\) noch in \\(q\\) ein: Ein Verschieben des Reglers <em>Phase</em> formt die Kurve um oder dreht sie, lässt ihre Symmetrie aber unverändert."
+ },
+ "247d18609f63": {
+  "src": "Arms spinning on the tips of other arms. Add rotating complex numbers tip to tail and the last tip draws roses, beats and flowers; play a song and the bass makes the arms breathe.",
+  "tr": "Arme, die sich auf den Spitzen anderer Arme drehen. Fügt man rotierende komplexe Zahlen Spitze an Schwanz hinzu, zeichnet die letzte Spitze Rosen, Schwebungen und Blumen; spielt man ein Lied, lässt der Bass die Arme atmen."
+ },
+ "24bbe168cad7": {
+  "src": "<span class=\"psub__n\">4.1</span>Opposite directions: the rose",
+  "tr": "<span class=\"psub__n\">4.1</span>Entgegengesetzte Richtungen: die Rose"
+ },
+ "25169b0f1677": {
+  "src": "<span class=\"pfig__n\">Figure 2</span>The model, drawn for the <em>Spirograph</em> preset at \\(t = 0.30\\ \\mathrm{s}\\): \\(A = 1, 0.62, 0.34\\), \\(\\omega = 1, 7, -13\\ \\mathrm{rad/s}\\), \\(\\varphi = 0, 0, 0.5\\ \\mathrm{rad}\\). Arm \\(k\\) has length \\(A_k\\) and points at the angle \\(\\theta_k = \\omega_k t + \\varphi_k\\), measured from the real direction (dashed) at the joint it turns about. The joints \\(z_1, z_2\\) are partial sums of (6); the pen \\(z(t)\\) is the whole sum, and over one period, \\(2\\pi\\ \\mathrm{s}\\), it draws the burgundy curve.",
+  "tr": "<span class=\"pfig__n\">Abbildung 2</span>Das Modell, gezeichnet für die Voreinstellung <em>Spirograph</em> zur Zeit \\(t = 0.30\\ \\mathrm{s}\\): \\(A = 1, 0.62, 0.34\\), \\(\\omega = 1, 7, -13\\ \\mathrm{rad/s}\\), \\(\\varphi = 0, 0, 0.5\\ \\mathrm{rad}\\). Der Arm \\(k\\) hat die Länge \\(A_k\\) und zeigt in den Winkel \\(\\theta_k = \\omega_k t + \\varphi_k\\), gemessen von der reellen Richtung (gestrichelt) am Gelenk, um das er sich dreht. Die Gelenke \\(z_1, z_2\\) sind Teilsummen von (6); der Stift \\(z(t)\\) ist die gesamte Summe, und über eine Periode \\(2\\pi\\ \\mathrm{s}\\) zeichnet er die burgunderrote Kurve."
+ },
+ "2b37a51ba3c1": {
+  "src": "Chain of rotating phasors and the curve traced by the last tip.",
+  "tr": "Kette rotierender Zeiger und die Kurve, die die letzte Spitze zeichnet."
+ },
+ "2ca7b0b07171": {
+  "src": "So \\(|z|\\) swings between \\(|A_1 - A_2|\\) and \\(A_1 + A_2\\), and it reaches zero only when the arms are equal. The <em>Trefoil</em>, with arms 1 and 0.5, stays between 0.5 and 1.5 from the centre.",
+  "tr": "Also schwankt \\(|z|\\) zwischen \\(|A_1 - A_2|\\) und \\(A_1 + A_2\\), und es wird nur dann null, wenn die Arme gleich lang sind. Das <em>Kleeblatt</em> mit den Armen 1 und 0.5 bleibt zwischen 0.5 und 1.5 vom Mittelpunkt entfernt."
+ },
+ "2d2cb022bc3d": {
+  "src": "Speed",
+  "tr": "Geschwindigkeit"
+ },
+ "2e8314e67e3a": {
+  "src": "Each cosine swings evenly about zero, so over one period, or over a long time, it averages to zero, provided its frequency \\(\\omega_j - \\omega_k\\) is not zero. Only the squares survive:",
+  "tr": "Jeder Kosinus schwingt gleichmäßig um null, daher mittelt er sich über eine Periode oder über eine lange Zeit zu null, sofern seine Frequenz \\(\\omega_j - \\omega_k\\) nicht null ist. Nur die Quadrate bleiben übrig:"
+ },
+ "305a8c0152c1": {
+  "src": "<span>5</span>When the curve closes&nbsp;★",
+  "tr": "<span>5</span>Wann sich die Kurve schließt&nbsp;★"
+ },
+ "30f1168f9f12": {
+  "src": "Audio · Auto Dance",
+  "tr": "Audio · Auto-Tanz"
+ },
+ "33612df0f53f": {
+  "src": "After \\(m\\) frames the gap has shrunk by \\((1-\\alpha)^m\\). This is a first-order low-pass filter with a time constant of \\(-1/\\ln(1-\\alpha)\\) frames: 12.0 frames, \\(0.20\\ \\mathrm{s}\\) at 60 frames per second, for \\(\\alpha = 0.08\\), and the gap falls below 1 % after 56 frames. The curves drawn in between are point-by-point blends of the old and the new curve. For a change of radius they are exactly the curves of in-between radii, because (6) is linear in each \\(A_k\\); for a change of frequency or phase they are blends that no in-between setting would draw. If the number of samples changes there is nothing to blend, and the new curve appears at once. With <em>Smooth morphing</em> off, \\(\\alpha = 1\\) and every change is immediate.",
+  "tr": "Nach \\(m\\) Bildern ist die Lücke um \\((1-\\alpha)^m\\) geschrumpft. Das ist ein Tiefpassfilter erster Ordnung mit einer Zeitkonstante von \\(-1/\\ln(1-\\alpha)\\) Bildern: 12.0 Bilder, \\(0.20\\ \\mathrm{s}\\) bei 60 Bildern pro Sekunde, für \\(\\alpha = 0.08\\), und die Lücke fällt nach 56 Bildern unter 1 %. Die dazwischen gezeichneten Kurven sind punktweise Mischungen der alten und der neuen Kurve. Bei einer Änderung des Radius sind sie genau die Kurven der dazwischenliegenden Radien, weil (6) in jedem \\(A_k\\) linear ist; bei einer Änderung von Frequenz oder Phase sind es Mischungen, die keine dazwischenliegende Einstellung zeichnen würde. Ändert sich die Anzahl der Stützpunkte, gibt es nichts zu mischen, und die neue Kurve erscheint sofort. Ist <em>Sanftes Überblenden</em> ausgeschaltet, ist \\(\\alpha = 1\\), und jede Änderung wirkt sofort."
+ },
+ "33bd5a5dddcd": {
+  "src": "© 2026 Numa Koudsie",
+  "tr": "© 2026 Numa Koudsie"
+ },
+ "341bc107acc0": {
+  "src": "Draw one full period",
+  "tr": "Eine volle Periode zeichnen"
+ },
+ "372ad5bd26e3": {
+  "src": "<span class=\"psec__n\">04</span>Two arms: roses and beats",
+  "tr": "<span class=\"psec__n\">04</span>Zwei Arme: Rosen und Schwebungen"
+ },
+ "3883a5f38a31": {
+  "src": "3-petal rose",
+  "tr": "3-blättrige Rose"
+ },
+ "38a5fa4a1aca": {
+  "src": "The condition in (15) matters. With two equal frequencies, as at the end of Exercise 4.1, the cross term in (14) does not oscillate at all. The readout still shows \\(\\sum A_k^2 = 2.42\\), but the pen stays at \\(|z| = 2.197\\) from the centre, whose square is \\(4.828\\).",
+  "tr": "Die Bedingung in (15) ist wichtig. Bei zwei gleichen Frequenzen, wie am Ende von Übung 4.1, oszilliert der Kreuzterm in (14) überhaupt nicht. Die Anzeige zeigt weiterhin \\(\\sum A_k^2 = 2.42\\), aber der Stift bleibt bei \\(|z| = 2.197\\) vom Mittelpunkt, dessen Quadrat \\(4.828\\) ist."
+ },
+ "39c2e2bfe1a3": {
+  "src": "<span class=\"psec__n\">02</span>A turning arrow: Euler’s formula",
+  "tr": "<span class=\"psec__n\">02</span>Ein sich drehender Pfeil: Eulersche Formel"
+ },
+ "39f4e13ca542": {
+  "src": "<em>Period and symmetry</em>: integer gcds of \\(\\mathrm{round}(100\\,\\omega_k)\\) by Euclid’s algorithm, recomputed whenever a card changes. Circles with \\(A = 0\\) are left out, since they draw nothing.",
+  "tr": "<em>Periode und Symmetrie</em>: ganzzahlige größte gemeinsame Teiler von \\(\\mathrm{round}(100\\,\\omega_k)\\) nach dem euklidischen Algorithmus, neu berechnet, sobald sich eine Karte ändert. Kreise mit \\(A = 0\\) bleiben weg, da sie nichts zeichnen."
+ },
+ "3b079b63943f": {
+  "src": "This is the <em>rose</em>, or rhodonea. For a whole number \\(n\\) it has \\(n\\) petals if \\(n\\) is odd and \\(2n\\) if \\(n\\) is even; a negative \\(r\\) is drawn on the opposite side of the centre, which is how an odd \\(n\\) manages with \\(n\\) petals: since \\(\\cos n(\\theta+\\pi) = (-1)^n\\cos n\\theta,\\) for odd \\(n\\) the second half-turn retraces the petals of the first, and for even \\(n\\) it adds \\(n\\) new ones. The three rose presets are built from (9). <em>3-petal rose</em> has \\(\\omega = 4\\) and \\(-2\\ \\mathrm{rad/s}\\), so \\(\\bar\\omega = 1\\), \\(\\Delta\\omega = 6\\) and \\(n = 3\\). <em>4-petal rose</em> has \\(\\omega = 3, -1\\), so \\(n = 2\\) and four petals. <em>8-petal rose</em> has \\(\\omega = 5, -3\\), so \\(n = 4\\) and eight petals. Their phases, \\(-\\pi/2\\) and \\(+\\pi/2\\), change the cosine in (8) into a sine, which only turns the rose by \\(\\pi/(2n)\\) about the centre. The pen passes through the centre once for every petal.",
+  "tr": "Das ist die <em>Rose</em>, oder Rhodonea. Für eine ganze Zahl \\(n\\) hat sie \\(n\\) Blütenblätter, wenn \\(n\\) ungerade ist, und \\(2n\\), wenn \\(n\\) gerade ist; ein negatives \\(r\\) wird auf der gegenüberliegenden Seite des Mittelpunkts gezeichnet, und so kommt ein ungerades \\(n\\) mit \\(n\\) Blütenblättern aus: Da \\(\\cos n(\\theta+\\pi) = (-1)^n\\cos n\\theta,\\) wiederholt für ungerades \\(n\\) der zweite Halbumlauf die Blütenblätter des ersten, und für gerades \\(n\\) fügt er \\(n\\) neue hinzu. Die drei Rosen-Voreinstellungen sind aus (9) aufgebaut. <em>3-blättrige Rose</em> hat \\(\\omega = 4\\) und \\(-2\\ \\mathrm{rad/s}\\), also \\(\\bar\\omega = 1\\), \\(\\Delta\\omega = 6\\) und \\(n = 3\\). <em>4-blättrige Rose</em> hat \\(\\omega = 3, -1\\), also \\(n = 2\\) und vier Blütenblätter. <em>8-blättrige Rose</em> hat \\(\\omega = 5, -3\\), also \\(n = 4\\) und acht Blütenblätter. Ihre Phasen \\(-\\pi/2\\) und \\(+\\pi/2\\) verwandeln den Kosinus in (8) in einen Sinus, der die Rose nur um \\(\\pi/(2n)\\) um den Mittelpunkt dreht. Der Stift durchläuft den Mittelpunkt einmal für jedes Blütenblatt."
+ },
+ "3cbd3dd898b3": {
+  "src": "Drop an audio file here, or click to choose",
+  "tr": "Audiodatei hier ablegen oder klicken, um eine Datei auszuwählen"
+ },
+ "3e3bef1dbc35": {
+  "src": "rises and falls once every \\(2\\pi/|\\Delta\\omega| = 6.28\\ \\mathrm{s}\\). Figure 3 shows the shadow \\(\\mathrm{Re}\\,z(t)\\), which is what an oscilloscope would show, inside this envelope. Two tuning forks at \\(440\\) and \\(442\\ \\mathrm{Hz}\\) do the same with sound: the air pressure at your ear is the sum of two oscillations, and the loudness swells and dies twice a second, at the difference of the two frequencies. Musicians tune by slowing the beats until they vanish.",
+  "tr": "steigt und fällt einmal in \\(2\\pi/|\\Delta\\omega| = 6.28\\ \\mathrm{s}\\). Abbildung 3 zeigt den Schatten \\(\\mathrm{Re}\\,z(t)\\), also das, was ein Oszilloskop anzeigen würde, innerhalb dieser Hüllkurve. Zwei Stimmgabeln mit \\(440\\) und \\(442\\ \\mathrm{Hz}\\) leisten mit Schall dasselbe: Der Luftdruck an Ihrem Ohr ist die Summe zweier Schwingungen, und die Lautstärke schwillt zweimal in der Sekunde an und ab, und zwar mit der Differenz der beiden Frequenzen. Musiker stimmen, indem sie die Schwebungen verlangsamen, bis sie verschwinden."
+ },
+ "405f39ad18dd": {
+  "src": "Now let an arrow of length 1 move so that its velocity is always the arrow itself turned by a quarter turn,",
+  "tr": "Nun lassen wir einen Pfeil der Länge 1 so laufen, dass seine Geschwindigkeit stets der um eine Viertelumdrehung gedrehte Pfeil selbst ist,"
+ },
+ "41d7a6efd802": {
+  "src": "<span>8</span>From the plane to pixels",
+  "tr": "<span>8</span>Von der Ebene zu Pixeln, und vom Klang zu Radien"
+ },
+ "43d8a7ea90fe": {
+  "src": "<span class=\"psub__n\">3.1</span>Velocity, and where the pen stops",
+  "tr": "<span class=\"psub__n\">3.1</span>Geschwindigkeit und Stellen, an denen der Stift hält"
+ },
+ "4460b83ed7a5": {
+  "src": "When a slider moves while the <em>Final shape</em> view is open, the page computes the new exact samples \\(q_i\\) at once but draws points \\(p_i\\) that move, each frame, the fraction \\(\\alpha\\) of the remaining way, with \\(\\alpha\\) the <em>Morph rate</em> (0.02 to 0.35, default 0.08):",
+  "tr": "Bewegt man einen Regler, während die Ansicht <em>Endform</em> offen ist, berechnet die Seite die neuen genauen Stützpunkte \\(q_i\\) sofort, zeichnet aber Punkte \\(p_i\\), die sich bei jedem Bild um den Anteil \\(\\alpha\\) des verbleibenden Weges bewegen, wobei \\(\\alpha\\) die <em>Überblendrate</em> ist (0.02 bis 0.35, Voreinstellung 0.08):"
+ },
+ "44a3e6984625": {
+  "src": "Tip-to-tail vectors",
+  "tr": "Vektoren Spitze an Schwanz"
+ },
+ "45338da4827d": {
+  "src": "4-petal rose",
+  "tr": "4-blättrige Rose"
+ },
+ "457847895245": {
+  "src": "<span class=\"pfig__n\">Figure 1</span>Euler’s formula as a picture. Left: the arrow \\(e^{i\\theta}\\) of length 1 at the angle \\(\\theta\\), here \\(50^\\circ\\), reaches \\(\\cos\\theta\\) to the right and \\(\\sin\\theta\\) up. Right: as \\(\\theta\\) grows the arrow turns, and the height of its tip, carried across by the dashed line, draws the sine wave (burgundy). Its reach to the right draws the cosine (dashed), the same wave a quarter turn earlier.",
+  "tr": "<span class=\"pfig__n\">Abbildung 1</span>Eulersche Formel als Bild. Links: der Pfeil \\(e^{i\\theta}\\) der Länge 1 unter dem Winkel \\(\\theta\\), hier \\(50^\\circ\\), reicht nach rechts bis \\(\\cos\\theta\\) und nach oben bis \\(\\sin\\theta\\). Rechts: Während \\(\\theta\\) wächst, dreht sich der Pfeil, und die Höhe seiner Spitze, die über die gestrichelte Linie hinübergetragen wird, zeichnet die Sinuswelle (burgunderrot). Seine Reichweite nach rechts zeichnet den Kosinus (gestrichelt), dieselbe Welle, eine Vierteldrehung früher."
+ },
+ "4590e934b869": {
+  "src": "Span (if not one period)",
+  "tr": "Zeitspanne (falls nicht eine Periode)"
+ },
+ "4956ae9ee484": {
+  "src": "The file stays in your browser; nothing is uploaded. The music only rescales the radii on screen: the stored A, ω and φ are never overwritten.",
+  "tr": "Die Datei bleibt in Ihrem Browser; nichts wird hochgeladen. Die Musik verändert nur die Radien auf dem Bildschirm: die gespeicherten A, ω und φ werden nie überschrieben."
+ },
+ "4a81ec85f9b8": {
+  "src": "<span>9</span>What the model leaves out",
+  "tr": "<span>9</span>Was das Modell weglässt"
+ },
+ "4d489f63a077": {
+  "src": "Press <em>3-petal rose</em>: the <em>Period</em> readout shows 3.14 s and <em>Symmetry</em> 3-fold. Click the <em>Angular frequency</em> slider of Circle 2 and press the left arrow key ten times, to \\(-2.10\\). Predict both readouts from (12) and from \\(\\omega_1/M\\) before you look; then press <em>Final shape</em>. The curve is a rose with 61 petals that closes after \\(62.83\\ \\mathrm{s}\\), drawn from 7000 samples. Repeat with \\(-2.50\\) (13 petals in \\(12.57\\ \\mathrm{s}\\)) and \\(-3.00\\) (7 petals in \\(6.28\\ \\mathrm{s}\\)), and check each petal count against \\(|\\omega_1 - \\omega_2|/g\\).",
+  "tr": "Drücken Sie <em>3-blättrige Rose</em>: Die Anzeige <em>Periode</em> zeigt 3.14 s und <em>Symmetrie</em> 3-fach. Klicken Sie auf den Regler <em>Kreisfrequenz</em> von Kreis 2 und drücken Sie zehnmal die Taste für den Linkspfeil, bis \\(-2.10\\) erreicht ist. Sagen Sie beide Anzeigen aus (12) und aus \\(\\omega_1/M\\) voraus, bevor Sie hinschauen; drücken Sie dann <em>Endform</em>. Die Kurve ist eine Rose mit 61 Blütenblättern, die sich nach \\(62.83\\ \\mathrm{s}\\) schließt und aus 7000 Stützpunkten gezeichnet wird. Wiederholen Sie dies mit \\(-2.50\\) (13 Blütenblätter in \\(12.57\\ \\mathrm{s}\\)) und \\(-3.00\\) (7 Blütenblätter in \\(6.28\\ \\mathrm{s}\\)), und prüfen Sie jede Blütenblattzahl gegen \\(|\\omega_1 - \\omega_2|/g\\)."
+ },
+ "500b9b26f73e": {
+  "src": "Bass drive",
+  "tr": "Bass-Antrieb"
+ },
+ "51266bf4cf9f": {
+  "src": "An audio file you choose stays in your browser and is played through the Web Audio analyser. Its fast Fourier transform of 2048 samples gives 1024 frequency bins, each \\(21.5\\ \\mathrm{Hz}\\) wide at a sampling rate of \\(44.1\\ \\mathrm{kHz}\\). The analyser does the opposite of this page: it takes a sound and finds the phasors in it. It reports each bin on a decibel scale and smooths it over time with a constant of 0.8. The page averages the bins in three bands, bass \\(20\\)–\\(150\\ \\mathrm{Hz}\\) (bins 1 to 7 at \\(44.1\\ \\mathrm{kHz}\\)), mid \\(150\\)–\\(4000\\ \\mathrm{Hz}\\) and high \\(4\\)–\\(16\\ \\mathrm{kHz}\\), divides by 255 so that each level lies between 0 and 1, and smooths each level once more per frame, \\(e \\leftarrow e + 0.15\\,(e_\\text{raw} - e)\\).",
+  "tr": "Eine Audiodatei, die Sie wählen, bleibt in Ihrem Browser und wird über den Web-Audio-Analysator abgespielt. Ihre schnelle Fourier-Transformation aus 2048 Abtastwerten ergibt 1024 Frequenzbänder, jedes \\(21.5\\ \\mathrm{Hz}\\) breit bei einer Abtastrate von \\(44.1\\ \\mathrm{kHz}\\). Der Analysator tut das Gegenteil dieser Seite: Er nimmt einen Klang und findet darin die Zeiger. Er gibt jedes Band auf einer Dezibelskala aus und glättet es über die Zeit mit einer Konstante von 0.8. Die Seite mittelt die Bänder in drei Gruppen, Bass \\(20\\)–\\(150\\ \\mathrm{Hz}\\) (Bänder 1 bis 7 bei \\(44.1\\ \\mathrm{kHz}\\)), Mitten \\(150\\)–\\(4000\\ \\mathrm{Hz}\\) und Höhen \\(4\\)–\\(16\\ \\mathrm{kHz}\\), teilt durch 255, sodass jeder Pegel zwischen 0 und 1 liegt, und glättet jeden Pegel pro Bild noch einmal, \\(e \\leftarrow e + 0.15\\,(e_\\text{raw} - e)\\)."
+ },
+ "51400ad21cb1": {
+  "src": "Epicycle",
+  "tr": "Epizykel"
+ },
+ "548733d72f2a": {
+  "src": "Current formula",
+  "tr": "Aktuelle Formel"
+ },
+ "54abc8b22242": {
+  "src": "Phasor Sums<span class=\"dot\">.</span>",
+  "tr": "Phasor Sums<span class=\"dot\">.</span>"
+ },
+ "553cd1e02097": {
+  "src": "<b>Abstract.</b> Bolt a small spinning arm to the tip of a larger spinning arm, and the end of the small one draws loops, petals and stars. This note describes each arm as a complex number that turns at a steady rate, a <em>phasor</em>, and explains Euler’s formula with a picture. It adds the arms tip to tail; shows that two equal arms draw a rose when they turn in opposite directions and beats when they turn the same way at nearly the same rate; finds when the curve closes and how many times its pattern repeats around the centre; and explains how the page computes and draws every point, and how a song can make the arms breathe. Sections marked ★ carry the heavier mathematics and can be skipped on a first reading without losing the thread.",
+  "tr": "<b>Zusammenfassung.</b> Man befestigt einen kleinen, sich drehenden Arm an der Spitze eines größeren; dann beschreibt das Ende des kleinen Arms Schleifen, Blütenblätter und Sterne. Diese Notiz beschreibt jeden Arm als komplexe Zahl, die sich mit gleichbleibender Rate dreht, als <em>Zeiger</em>, und erklärt die Eulersche Formel mit einer Abbildung. Sie fügt die Arme Spitze an Schwanz zusammen; sie zeigt, dass zwei gleich lange Arme eine Rose zeichnen, wenn sie sich in entgegengesetzte Richtungen drehen, und Schwebungen, wenn sie sich in dieselbe Richtung und fast gleich schnell drehen; sie findet heraus, wann sich die Kurve schließt und wie oft sich ihr Muster um den Mittelpunkt wiederholt; und sie erklärt, wie die Seite jeden Punkt berechnet und zeichnet und wie ein Lied die Arme atmen lassen kann. Mit ★ markierte Abschnitte enthalten die schwierigere Mathematik und können beim ersten Lesen übersprungen werden, ohne den Faden zu verlieren."
+ },
+ "5888082d0a17": {
+  "src": "Exercise 5.1 · on the figure above",
+  "tr": "Übung 5.1 · zur Abbildung oben"
+ },
+ "5d12bd53552c": {
+  "src": "Play",
+  "tr": "Abspielen"
+ },
+ "5ddc159084ae": {
+  "src": "The mid band speeds up time: \\(\\Delta t\\) is multiplied by \\(1 + \\text{mid}\\cdot d_\\text{speed}\\), with \\(d_\\text{speed}\\) the <em>Speed drive</em>.",
+  "tr": "Das Mitten-Band beschleunigt die Zeit: \\(\\Delta t\\) wird mit \\(1 + \\text{mid}\\cdot d_\\text{speed}\\) multipliziert, wobei \\(d_\\text{speed}\\) der <em>Tempo-Antrieb</em> ist."
+ },
+ "5f12e48622fc": {
+  "src": "R. P. Feynman, R. B. Leighton and M. Sands, <em>The Feynman Lectures on Physics</em>, Vol. I, Addison-Wesley, 1963: chapters 22 (Algebra, which ends with Euler’s formula) and 48 (Beats); free online edition: <a href=\"https://www.feynmanlectures.caltech.edu/I_22.html\">chapter 22</a>, <a href=\"https://www.feynmanlectures.caltech.edu/I_48.html\">chapter 48</a>.",
+  "tr": "R. P. Feynman, R. B. Leighton und M. Sands, <em>The Feynman Lectures on Physics</em>, Bd. I, Addison-Wesley, 1963: Kapitel 22 (Algebra, das mit der Eulerschen Formel endet) und 48 (Schwebungen); kostenlose Online-Ausgabe: <a href=\"https://www.feynmanlectures.caltech.edu/I_22.html\">Kapitel 22</a>, <a href=\"https://www.feynmanlectures.caltech.edu/I_48.html\">Kapitel 48</a>."
+ },
+ "5ff43bcd9f0f": {
+  "src": "Two equal arms make a single arrow that turns at \\(\\bar\\omega\\) and has length \\(2A\\cos(\\Delta\\omega\\,t/2)\\). If the arms turn in opposite directions, \\(\\bar\\omega\\) is small and \\(\\Delta\\omega\\) large: the length oscillates quickly while the direction turns slowly, and the pen draws a <em>rose</em>. If they turn the same way at nearly the same rate, \\(\\bar\\omega\\) is large and \\(\\Delta\\omega\\) small: the direction spins quickly while the length changes slowly, and the pen draws <em>beats</em>.",
+  "tr": "Zwei gleich lange Arme ergeben einen einzigen Pfeil, der mit \\(\\bar\\omega\\) umläuft und die Länge \\(2A\\cos(\\Delta\\omega\\,t/2)\\) hat. Drehen sich die Arme in entgegengesetzte Richtungen, so ist \\(\\bar\\omega\\) klein und \\(\\Delta\\omega\\) groß: Die Länge schwingt schnell, während sich die Richtung langsam dreht, und der Stift zeichnet eine <em>Rose</em>. Drehen sie sich in dieselbe Richtung und fast gleich schnell, so ist \\(\\bar\\omega\\) groß und \\(\\Delta\\omega\\) klein: Die Richtung dreht sich schnell, während sich die Länge langsam ändert, und der Stift zeichnet <em>Schwebungen</em>."
+ },
+ "60a96747d8cf": {
+  "src": "The partial sums \\(z_k = \\sum_{m \\le k} A_m\\,e^{i(\\omega_m t + \\varphi_m)}\\) are the joints of the chain (Figure 2), and the pen is the last one, \\(z = z_N\\). Addition does not care about order, so swapping two cards changes the chain but not the pen: the curve depends only on the list of triples. The page prescribes each arm’s angle, \\(\\theta = \\omega t + \\varphi\\), and simply draws where the pen ends up. Real rods joined at their ends would push and pull on one another and could not keep these independent rates. Everything on the screen is <em>kinematics</em>, geometry in motion, without forces.",
+  "tr": "Die Teilsummen \\(z_k = \\sum_{m \\le k} A_m\\,e^{i(\\omega_m t + \\varphi_m)}\\) sind die Gelenke der Kette (Abbildung 2), und der Stift ist der letzte, \\(z = z_N\\). Die Addition kümmert sich nicht um die Reihenfolge; das Vertauschen zweier Karten ändert also die Kette, aber nicht den Stift: Die Kurve hängt nur von der Liste der Tripel ab. Die Seite schreibt jedem Arm seinen Winkel \\(\\theta = \\omega t + \\varphi\\) vor und zeichnet einfach, wohin der Stift gelangt. Echte Stäbe, die an ihren Enden verbunden sind, würden einander drücken und ziehen und könnten diese unabhängigen Drehgeschwindigkeiten nicht halten. Alles auf dem Bildschirm ist <em>Kinematik</em>, Geometrie in Bewegung, ohne Kräfte."
+ },
+ "613d55f832f9": {
+  "src": "<span class=\"psub__n\">2.2</span>A check with power series<span class=\"star\" title=\"heavier mathematics\">★</span>",
+  "tr": "<span class=\"psub__n\">2.2</span>Eine Kontrolle mit Potenzreihen<span class=\"star\" title=\"heavier mathematics\">★</span>"
+ },
+ "61d650baa09e": {
+  "src": "The pen returns to its start, and from then on retraces the same curve, if there is a time \\(T\\) with \\(z(t + T) = z(t)\\) for every \\(t\\). A common repeat time for all arms is obtained by requiring \\(e^{i\\omega_k T} = 1\\) for every arm at once, so every \\(\\omega_k T\\) must be a whole multiple of \\(2\\pi\\). If all the frequencies are whole multiples of one largest common frequency \\(g\\), the shortest time that repeats every listed active arm is",
+  "tr": "Der Stift kehrt zu seinem Anfang zurück und zeichnet von da an dieselbe Kurve nach, falls es eine Zeit \\(T\\) mit \\(z(t + T) = z(t)\\) für jedes \\(t\\) gibt. Eine gemeinsame Wiederholungszeit für alle Arme erhält man, indem man für alle Arme zugleich \\(e^{i\\omega_k T} = 1\\) verlangt; daher muss jedes \\(\\omega_k T\\) ein ganzes Vielfaches von \\(2\\pi\\) sein. Wenn alle Frequenzen ganze Vielfache einer größten gemeinsamen Frequenz \\(g\\) sind, ist die kürzeste Zeit, die jeden aufgelisteten aktiven Arm wiederholt, die folgende:"
+ },
+ "621ee068db69": {
+  "src": "Final shape",
+  "tr": "Endform"
+ },
+ "62abc4b47858": {
+  "src": "bass",
+  "tr": "Bass"
+ },
+ "63c904559993": {
+  "src": "Performance",
+  "tr": "Aufführung"
+ },
+ "643dec423e4a": {
+  "src": "<span class=\"psub__n\">7.1</span>Morphing is a low-pass filter",
+  "tr": "<span class=\"psub__n\">7.1</span>Überblenden ist ein Tiefpassfilter"
+ },
+ "6530f775b974": {
+  "src": "<em>Live trail</em>: the pen position at the end of each frame, the newest <em>Trail length</em> of them (100 to 6000, default 2400, which is \\(40\\ \\mathrm{s}\\) at 60 frames per second). The trail joins them with straight segments. For the 3-petal rose at speed 1.00× and 60 frames per second the segments stray at most \\(0.0007\\) from the true curve, 0.035 % of its radius; at 4.00× speed, sixteen times more, \\(0.011\\).",
+  "tr": "<em>Live-Spur</em>: die Stiftposition am Ende jedes Bildes; die Spur zeigt die jeweils letzten Punkte, deren Anzahl die <em>Spurlänge</em> angibt (100 bis 6000, Voreinstellung 2400; das sind \\(40\\ \\mathrm{s}\\) bei 60 Bildern pro Sekunde). Die Spur verbindet sie durch gerade Strecken. Bei der 3-blättrigen Rose, Geschwindigkeit 1.00× und 60 Bildern pro Sekunde weichen die Strecken höchstens um \\(0.0007\\) von der wahren Kurve ab, das sind 0.035 % ihres Radius; bei 4.00× Geschwindigkeit, sechzehnmal mehr, \\(0.011\\)."
+ },
+ "65c821a596ce": {
+  "src": "Live",
+  "tr": "Live"
+ },
+ "681c0c1d17b5": {
+  "src": "<span class=\"psec__n\">01</span>Circles riding on circles",
+  "tr": "<span class=\"psec__n\">01</span>Kreise, die auf Kreisen reiten"
+ },
+ "69bd4ef9fbd0": {
+  "src": "View",
+  "tr": "Ansicht"
+ },
+ "6bdb5557b422": {
+  "src": "where \\(\\gcd\\) is the largest \\(g\\) for which every \\(\\omega_k/g\\) is a whole number. The 3-petal rose has \\(g = \\gcd(4, 2) = 2\\ \\mathrm{rad/s}\\) and closes after \\(\\pi\\ \\mathrm{s} = 3.14\\ \\mathrm{s}\\); every other preset has \\(g = 1\\ \\mathrm{rad/s}\\) and closes after \\(6.28\\ \\mathrm{s}\\). If two frequencies have an irrational ratio, such as \\(1\\) and \\(\\sqrt2\\ \\mathrm{rad/s}\\), no \\(T\\) exists: the curve never closes, and with two arms it passes, given time, as close as you like to every point of the ring between \\(|A_1 - A_2|\\) and \\(A_1 + A_2\\).",
+  "tr": "wobei \\(\\gcd\\) das größte \\(g\\) ist, für das jedes \\(\\omega_k/g\\) eine ganze Zahl ist. Die 3-blättrige Rose hat \\(g = \\gcd(4, 2) = 2\\ \\mathrm{rad/s}\\) und schließt sich nach \\(\\pi\\ \\mathrm{s} = 3.14\\ \\mathrm{s}\\); jede andere Voreinstellung hat \\(g = 1\\ \\mathrm{rad/s}\\) und schließt sich nach \\(6.28\\ \\mathrm{s}\\). Haben zwei Frequenzen ein irrationales Verhältnis, etwa \\(1\\) und \\(\\sqrt2\\ \\mathrm{rad/s}\\), so existiert kein \\(T\\): Die Kurve schließt sich nie, und mit zwei Armen kommt sie bei genügend Zeit jedem Punkt des Rings zwischen \\(|A_1 - A_2|\\) und \\(A_1 + A_2\\) beliebig nahe."
+ },
+ "6c697caae5e6": {
+  "src": "Spirograph",
+  "tr": "Spirograph"
+ },
+ "6da90ee781b9": {
+  "src": "Shift time by \\(\\tau\\). Each term of (6) picks up its own factor \\(e^{i\\omega_k\\tau}\\):",
+  "tr": "Man verschiebe die Zeit um \\(\\tau\\). Jeder Summand aus (6) erhält seinen eigenen Faktor \\(e^{i\\omega_k\\tau}\\):"
+ },
+ "6e22edbfc3c2": {
+  "src": "Now let both arms turn the same way at nearly the same rate. The <em>Beating pair</em> preset has \\(A = 1.1\\), \\(\\omega = 5\\) and \\(6\\ \\mathrm{rad/s}\\), and phases \\(0\\) and \\(0.1\\ \\mathrm{rad}\\). Its arrow spins at \\(\\bar\\omega = 5.5\\ \\mathrm{rad/s}\\), once every \\(1.14\\ \\mathrm{s}\\), while its length, by (8) with the phases put back,",
+  "tr": "Nun lassen wir beide Arme in dieselbe Richtung und fast gleich schnell umlaufen. Die Voreinstellung <em>Schwebendes Paar</em> hat \\(A = 1.1\\), \\(\\omega = 5\\) und \\(6\\ \\mathrm{rad/s}\\) und die Phasen \\(0\\) und \\(0.1\\ \\mathrm{rad}\\). Ihr Pfeil dreht sich mit \\(\\bar\\omega = 5.5\\ \\mathrm{rad/s}\\), einmal in \\(1.14\\ \\mathrm{s}\\), während seine Länge nach (8), mit den wieder eingesetzten Phasen,"
+ },
+ "6ffeca30a21c": {
+  "src": "T. S. Kuhn, <em>The Copernican Revolution</em>, Harvard University Press, 1957 (<a href=\"https://www.hup.harvard.edu/books/9780674171039\">publisher’s page</a>): chapter 2 (the problem of the planets: deferents and epicycles).",
+  "tr": "T. S. Kuhn, <em>The Copernican Revolution</em>, Harvard University Press, 1957 (<a href=\"https://www.hup.harvard.edu/books/9780674171039\">Seite des Verlags</a>): Kapitel 2 (das Problem der Planeten: Deferenten und Epizykel)."
+ },
+ "702b201c4b40": {
+  "src": "Phyein Usul",
+  "tr": "Phyein Usul"
+ },
+ "710bff312d6a": {
+  "src": "The time (12) brings every arm back to where it started, so it surely brings the pen back; but the pen can come back sooner when arms cancel. Two arms with the same frequency act as a single arm, their sum, and if that sum is zero they draw nothing at all. For example, \\(e^{it} - e^{it} + e^{2it} = e^{2it}\\) repeats after \\(\\pi\\ \\mathrm{s}\\), although its listed frequencies, \\(1\\) and \\(2\\ \\mathrm{rad/s}\\), give \\(T = 2\\pi\\ \\mathrm{s}\\). So to find the pen’s own shortest period, first add up the arms that share a frequency and drop any sum that vanishes. The <em>Period</em> readout skips this step: it uses every listed arm with \\(A &gt; 0\\).",
+  "tr": "Die Zeit aus (12) bringt jeden Arm an seinen Ausgangspunkt zurück, also bringt sie sicher auch den Stift zurück; der Stift kann aber früher zurückkehren, wenn sich Arme gegenseitig aufheben. Zwei Arme mit derselben Frequenz wirken wie ein einziger Arm, nämlich ihre Summe, und ist diese Summe null, zeichnen sie überhaupt nichts. Zum Beispiel wiederholt sich \\(e^{it} - e^{it} + e^{2it} = e^{2it}\\) nach \\(\\pi\\ \\mathrm{s}\\), obwohl seine aufgelisteten Frequenzen \\(1\\) und \\(2\\ \\mathrm{rad/s}\\) \\(T = 2\\pi\\ \\mathrm{s}\\) ergeben. Um die eigene kürzeste Periode des Stifts zu finden, addiert man daher zuerst die Arme mit gleicher Frequenz und streicht jede Summe, die verschwindet. Die Anzeige <em>Periode</em> überspringt diesen Schritt: Sie verwendet jeden aufgelisteten Arm mit \\(A &gt; 0\\)."
+ },
+ "71cbcadb3062": {
+  "src": "This is a <em>phasor</em>. The radius \\(A \\ge 0\\) is its length. The angular frequency \\(\\omega\\), in \\(\\mathrm{rad/s}\\), is how fast it turns, counter-clockwise for \\(\\omega > 0\\) and clockwise for \\(\\omega &lt; 0\\); one turn takes \\(2\\pi/|\\omega|\\). The phase \\(\\varphi\\) is its angle at \\(t = 0\\). Seen edge-on, the turning arrow is an oscillation: its shadow on the real axis, \\(A\\cos(\\omega t + \\varphi)\\), moves back and forth like a mass on a spring. That is why a single phasor can stand for an alternating voltage, a sound wave or a swinging pendulum: the circle carries the oscillation, plus a copy a quarter period behind it in the imaginary part.",
+  "tr": "Das ist ein <em>Zeiger</em>. Der Radius \\(A \\ge 0\\) ist seine Länge. Die Kreisfrequenz \\(\\omega\\) in \\(\\mathrm{rad/s}\\) gibt an, wie schnell er sich dreht: gegen den Uhrzeigersinn für \\(\\omega > 0\\) und im Uhrzeigersinn für \\(\\omega &lt; 0\\); eine Umdrehung dauert \\(2\\pi/|\\omega|\\). Die Phase \\(\\varphi\\) ist sein Winkel bei \\(t = 0\\). Von der Seite gesehen ist der sich drehende Pfeil eine Schwingung: Sein Schatten auf der reellen Achse, \\(A\\cos(\\omega t + \\varphi)\\), bewegt sich hin und her wie eine Masse an einer Feder. Deshalb kann ein einziger Zeiger eine Wechselspannung, eine Schallwelle oder ein schwingendes Pendel darstellen: Der Kreis trägt die Schwingung, dazu eine Kopie, die um eine Viertelperiode im Imaginärteil hinterherläuft."
+ },
+ "71d1444dcabb": {
+  "src": "Two arms of equal length \\(A\\) already show both main behaviours. Take the phases zero for the moment, write \\(\\bar\\omega = \\tfrac12(\\omega_1 + \\omega_2)\\) for the average rate and \\(\\Delta\\omega = \\omega_1 - \\omega_2\\) for the difference, and factor out the average rotation:",
+  "tr": "Zwei Arme gleicher Länge \\(A\\) zeigen bereits beide Hauptverhaltensweisen. Setzen wir die Phasen vorerst null, schreiben \\(\\bar\\omega = \\tfrac12(\\omega_1 + \\omega_2)\\) für die mittlere Rate und \\(\\Delta\\omega = \\omega_1 - \\omega_2\\) für die Differenz, und klammern die mittlere Drehung aus:"
+ },
+ "73076f4da95b": {
+  "src": "Here \\(w\\) and \\(h\\) are the canvas size in CSS pixels and \\(R\\) is the farthest anything is drawn from the origin. In the Live view \\(R\\) is the larger of \\(\\sum_k A'_k\\), the arm lengths as drawn, and the farthest point still on the trail. By the triangle inequality no joint and no circle edge lies further out than \\(\\sum_k A'_k\\), so nothing leaves the figure. \\(R\\) grows at once when something would leave and shrinks back with a time constant of \\(0.6\\ \\mathrm{s}\\), so the picture neither spills over nor jitters. In the <em>Final shape</em> view \\(R\\) is the largest \\(|z|\\) on the curve as drawn. <em>Zoom</em> only zooms out, from \\(1\\times\\) to \\(0.3\\times\\). On a screen 1440&nbsp;px wide the canvas measures \\(770 \\times 601\\) CSS pixels, so the 3-petal rose, with \\(R = 2\\), is drawn at \\(132\\) pixels per unit and the trail’s straight segments miss the curve by \\(0.09\\ \\mathrm{px}\\) at speed 1.00× and \\(1.5\\ \\mathrm{px}\\) at 4.00×. On a phone 390&nbsp;px wide the canvas is \\(356 \\times 356\\)&nbsp;px.",
+  "tr": "Hier sind \\(w\\) und \\(h\\) die Größe der Zeichenfläche in CSS-Pixeln, und \\(R\\) ist der am weitesten vom Ursprung entfernte gezeichnete Punkt. In der Live-Ansicht ist \\(R\\) das Größere von \\(\\sum_k A'_k\\), den gezeichneten Armlängen, und dem am weitesten entfernten Punkt, der noch auf der Spur liegt. Nach der Dreiecksungleichung liegt kein Gelenk und kein Kreisrand weiter außen als \\(\\sum_k A'_k\\), sodass nichts die Abbildung verlässt. \\(R\\) wächst sofort, wenn etwas hinauszufallen droht, und schrumpft mit einer Zeitkonstante von \\(0.6\\ \\mathrm{s}\\) zurück, sodass das Bild weder überläuft noch zittert. In der Ansicht <em>Endform</em> ist \\(R\\) das größte \\(|z|\\) auf der Kurve, wie sie gezeichnet ist. <em>Zoom</em> zoomt nur heraus, von \\(1\\times\\) bis \\(0.3\\times\\). Auf einem 1440&nbsp;px breiten Bildschirm misst die Zeichenfläche \\(770 \\times 601\\) CSS-Pixel; daher wird die 3-blättrige Rose mit \\(R = 2\\) mit \\(132\\) Pixeln pro Einheit gezeichnet, und die geraden Strecken der Spur verfehlen die Kurve um \\(0.09\\ \\mathrm{px}\\) bei Geschwindigkeit 1.00× und um \\(1.5\\ \\mathrm{px}\\) bei 4.00×. Auf einem 390&nbsp;px breiten Telefon ist die Zeichenfläche \\(356 \\times 356\\)&nbsp;px."
+ },
+ "73d28ee32b7c": {
+  "src": "Auto Dance",
+  "tr": "Auto-Tanz"
+ },
+ "73f8788b82a0": {
+  "src": "<span class=\"pfig__n\">Figure 3</span>The <em>Beating pair</em> preset (\\(A_1 = A_2 = 1.1\\), \\(\\omega = 5, 6\\ \\mathrm{rad/s}\\), \\(\\varphi = 0, 0.1\\ \\mathrm{rad}\\)), computed from (6) for \\(0 \\le t \\le 20\\ \\mathrm{s}\\) in steps of \\(0.025\\ \\mathrm{s}\\). Grey: the real part \\(\\mathrm{Re}\\,z\\), the pen’s shadow on the horizontal axis. Burgundy: \\(\\pm|z(t)|\\), which agrees with (10) to \\(2\\times10^{-14}\\). The fast oscillation inside has the period \\(2\\pi/\\bar\\omega = 1.14\\ \\mathrm{s}\\); the envelope repeats every \\(6.28\\ \\mathrm{s}\\), and the pen passes through the centre at \\(t = 3.04\\), \\(9.32\\) and \\(15.61\\ \\mathrm{s}\\) (dashed), when the two arms point in opposite directions.",
+  "tr": "<span class=\"pfig__n\">Abbildung 3</span>Die Voreinstellung <em>Schwebendes Paar</em> (\\(A_1 = A_2 = 1.1\\), \\(\\omega = 5, 6\\ \\mathrm{rad/s}\\), \\(\\varphi = 0, 0.1\\ \\mathrm{rad}\\)), berechnet aus (6) für \\(0 \\le t \\le 20\\ \\mathrm{s}\\) in Schritten von \\(0.025\\ \\mathrm{s}\\). Grau: der Realteil \\(\\mathrm{Re}\\,z\\), der Schatten des Stifts auf der waagerechten Achse. Burgunderrot: \\(\\pm|z(t)|\\), was mit (10) auf \\(2\\times10^{-14}\\) übereinstimmt. Die schnelle Schwingung im Inneren hat die Periode \\(2\\pi/\\bar\\omega = 1.14\\ \\mathrm{s}\\); die Hüllkurve wiederholt sich alle \\(6.28\\ \\mathrm{s}\\), und der Stift durchläuft den Mittelpunkt bei \\(t = 3.04\\), \\(9.32\\) und \\(15.61\\ \\mathrm{s}\\) (gestrichelt), wenn die beiden Arme in entgegengesetzte Richtungen zeigen."
+ },
+ "74b976092b5d": {
+  "src": "Clear trail",
+  "tr": "Spur löschen"
+ },
+ "75d95664a782": {
+  "src": "Phasor Sums · Numa Koudsie",
+  "tr": "Phasor Sums · Numa Koudsie"
+ },
+ "781961bc81c2": {
+  "src": "Pause",
+  "tr": "Pause"
+ },
+ "7b0cd4a3a14f": {
+  "src": "<span class=\"pfig__n\">Figure 4</span>Two presets traced over exactly one period, computed from (6) at the times the page’s <em>Final shape</em> view uses, \\(t_i = iT/n\\) with \\(n = 1500\\). The <em>3-petal rose</em>, \\(\\omega = 4, -2\\ \\mathrm{rad/s}\\), \\(T = \\pi\\ \\mathrm{s}\\), is three-fold. The <em>Star</em>, \\(A = 1, 0.5, 0.18\\), \\(\\omega = 1, -4, 6\\ \\mathrm{rad/s}\\), \\(T = 2\\pi\\ \\mathrm{s}\\), is five-fold. The open dot is the start \\(z(0)\\); the end point \\(z(T)\\) lands on it to within \\(3\\times10^{-15}\\), which is rounding error.",
+  "tr": "<span class=\"pfig__n\">Abbildung 4</span>Zwei Voreinstellungen, über genau eine Periode gezeichnet, berechnet aus (6) zu den Zeiten, die die Ansicht <em>Endform</em> der Seite verwendet, \\(t_i = iT/n\\) mit \\(n = 1500\\). Die <em>3-blättrige Rose</em>, \\(\\omega = 4, -2\\ \\mathrm{rad/s}\\), \\(T = \\pi\\ \\mathrm{s}\\), ist dreifach. Der <em>Stern</em>, \\(A = 1, 0.5, 0.18\\), \\(\\omega = 1, -4, 6\\ \\mathrm{rad/s}\\), \\(T = 2\\pi\\ \\mathrm{s}\\), ist fünffach. Der offene Punkt ist der Anfang \\(z(0)\\); der Endpunkt \\(z(T)\\) fällt darauf bis auf \\(3\\times10^{-15}\\), was Rundungsfehler ist."
+ },
+ "7c207ef1d01f": {
+  "src": "With unequal lengths the two arms and the line from the centre to the pen form a triangle. Its angle at the joint is \\(\\pi\\) minus the angle between the arms, and \\(\\cos(\\pi - \\alpha) = -\\cos\\alpha\\) turns the law of cosines’ minus into a plus:",
+  "tr": "Bei ungleichen Längen bilden die beiden Arme und die Linie vom Mittelpunkt zum Stift ein Dreieck. Sein Winkel am Gelenk ist \\(\\pi\\) minus den Winkel zwischen den Armen, und \\(\\cos(\\pi - \\alpha) = -\\cos\\alpha\\) verwandelt das Minus des Kosinussatzes in ein Plus:"
+ },
+ "7cc6755be08a": {
+  "src": "The sliders move in steps of \\(0.01\\ \\mathrm{rad/s}\\), so \\(100\\,\\omega_k\\) is a whole number and the page finds \\(g\\) exactly, with Euclid’s algorithm on these integers. Small changes can make the period long. Changing the second arm of the 3-petal rose from \\(-2\\) to \\(-2.1\\ \\mathrm{rad/s}\\) gives \\(g = 0.1\\ \\mathrm{rad/s}\\) and \\(T = 62.83\\ \\mathrm{s}\\); changing it to \\(-2.01\\) gives \\(g = 0.01\\ \\mathrm{rad/s}\\) and \\(T = 628.32\\ \\mathrm{s}\\). For two arms the number of petals in one period, the times \\(|z|\\) swings out and back, is \\(|\\omega_1 - \\omega_2|/g\\): 3 for the 3-petal rose, 61 for \\(-2.1\\).",
+  "tr": "Die Regler bewegen sich in Schritten von \\(0.01\\ \\mathrm{rad/s}\\), daher ist \\(100\\,\\omega_k\\) eine ganze Zahl, und die Seite findet \\(g\\) genau, mit dem euklidischen Algorithmus auf diesen ganzen Zahlen. Kleine Änderungen können die Periode lang machen. Ändert man den zweiten Arm der 3-blättrigen Rose von \\(-2\\) auf \\(-2.1\\ \\mathrm{rad/s}\\), ergibt sich \\(g = 0.1\\ \\mathrm{rad/s}\\) und \\(T = 62.83\\ \\mathrm{s}\\); ändert man ihn auf \\(-2.01\\), ergibt sich \\(g = 0.01\\ \\mathrm{rad/s}\\) und \\(T = 628.32\\ \\mathrm{s}\\). Bei zwei Armen ist die Anzahl der Blütenblätter in einer Periode – also wie oft \\(|z|\\) hinaus- und zurückschwingt – gleich \\(|\\omega_1 - \\omega_2|/g\\): 3 bei der 3-blättrigen Rose, 61 bei \\(-2.1\\)."
+ },
+ "7d252cd594b3": {
+  "src": "All simulations ↑",
+  "tr": "Alle Simulationen ↑"
+ },
+ "7d3297a89fcd": {
+  "src": "<span class=\"sw sw--rose\"></span>circle of one arm",
+  "tr": "<span class=\"sw sw--rose\"></span>Kreis eines Arms"
+ },
+ "7eb1a64c2972": {
+  "src": "Faster arms follow the treble: \\(A' = A\\,(1 + \\text{high}\\cdot d_\\text{high})\\), with \\(d_\\text{high}\\) the <em>High drive</em>.",
+  "tr": "Schnellere Arme folgen den Höhen: \\(A' = A\\,(1 + \\text{high}\\cdot d_\\text{high})\\), mit \\(d_\\text{high}\\) dem <em>Höhen-Antrieb</em>."
+ },
+ "81a11b6df84a": {
+  "src": "High drive",
+  "tr": "Höhen-Antrieb"
+ },
+ "826380bc8294": {
+  "src": "Randomise",
+  "tr": "Zufällig wählen"
+ },
+ "82d4a085e86b": {
+  "src": "Fig. 7",
+  "tr": "Abb. 7"
+ },
+ "8382e17b2419": {
+  "src": "<span class=\"psub__n\">2.1</span>The arrow that turns at a steady rate",
+  "tr": "<span class=\"psub__n\">2.1</span>Der Pfeil, der sich gleichmäßig dreht"
+ },
+ "85a7de6e2705": {
+  "src": "Star",
+  "tr": "Stern"
+ },
+ "87b57f218e41": {
+  "src": "Mark a point in the plane by the arrow that reaches it from the origin, and write the arrow as one number, \\(z = x + iy\\): \\(x\\) is how far it reaches to the right, \\(y\\) how far up, and the symbol \\(i\\) labels the upward direction. Adding two such numbers adds the arrows tip to tail, exactly as one adds two displacements or two forces.",
+  "tr": "Man kennzeichnet einen Punkt der Ebene durch den Pfeil, der vom Ursprung zu ihm führt, und schreibt den Pfeil als eine einzige Zahl, \\(z = x + iy\\): \\(x\\) ist, wie weit er nach rechts reicht, \\(y\\), wie weit nach oben, und das Symbol \\(i\\) bezeichnet die Richtung nach oben. Zwei solche Zahlen zu addieren heißt, die Pfeile Spitze an Schwanz zu addieren, genau so, wie man zwei Verschiebungen oder zwei Kräfte addiert."
+ },
+ "8944a5e9e68c": {
+  "src": "Choose an audio file",
+  "tr": "Audiodatei auswählen"
+ },
+ "8e92d226bbf9": {
+  "src": "Interactive simulation: rotating complex phasors added tip to tail trace roses, beats and epicycles. An audio file can drive the radii.",
+  "tr": "Interaktive Simulation: rotierende komplexe Zeiger, Spitze an Schwanz addiert, zeichnen Rosen, Schwebungen und Epizykel. Eine Audiodatei kann die Radien steuern."
+ },
+ "90bd85dced12": {
+  "src": "E. Hecht, <em>Optics</em>, 5th edition, Pearson, 2017 (<a href=\"https://www.pearson.com/en-ca/subject-catalog/p/optics/P200000006793\">publisher’s page</a>): chapter 7 (the superposition of waves: adding phasors in 7.1, waves of different frequency in 7.2).",
+  "tr": "E. Hecht, <em>Optics</em>, 5. Auflage, Pearson, 2017 (<a href=\"https://www.pearson.com/en-ca/subject-catalog/p/optics/P200000006793\">Seite des Verlags</a>): Kapitel 7 (die Überlagerung von Wellen: Zeiger addieren in 7.1, Wellen verschiedener Frequenz in 7.2)."
+ },
+ "91a753a5bae1": {
+  "src": "<em>Final shape</em>: the curve sampled at \\(n + 1\\) equally spaced times \\(t_i = i\\,T_\\text{span}/n\\), with 700 samples per \\(2\\pi\\ \\mathrm{s}\\), clamped to between 1500 and 12 000. With <em>Draw one full period</em> on, the span is the period (12), but at most \\(60\\times 2\\pi\\ \\mathrm{s} = 377\\ \\mathrm{s}\\), so a period of \\(628\\ \\mathrm{s}\\) is drawn only in part; with it off, the span is the <em>Span</em> slider, 1 to 24, times \\(2\\pi\\ \\mathrm{s}\\). Every preset gets \\(n = 1500\\).",
+  "tr": "<em>Endform</em>: die Kurve an \\(n + 1\\) gleichmäßig verteilten Zeitpunkten \\(t_i = i\\,T_\\text{span}/n\\) abgetastet, mit 700 Stützpunkten pro \\(2\\pi\\ \\mathrm{s}\\), begrenzt auf den Bereich zwischen 1500 und 12 000. Ist <em>Eine volle Periode zeichnen</em> eingeschaltet, ist die Zeitspanne die Periode (12), höchstens aber \\(60\\times 2\\pi\\ \\mathrm{s} = 377\\ \\mathrm{s}\\), sodass eine Periode von \\(628\\ \\mathrm{s}\\) nur teilweise gezeichnet wird; ist sie ausgeschaltet, ist die Zeitspanne der Regler <em>Zeitspanne</em>, 1 bis 24, mal \\(2\\pi\\ \\mathrm{s}\\). Jede Voreinstellung erhält \\(n = 1500\\)."
+ },
+ "9204f3f04055": {
+  "src": "<span class=\"sw\"></span>traced curve",
+  "tr": "<span class=\"sw\"></span>gezeichnete Kurve"
+ },
+ "92114cd3121c": {
+  "src": "Component circles",
+  "tr": "Komponentenkreise"
+ },
+ "9235afd3e988": {
+  "src": "high",
+  "tr": "Höhen"
+ },
+ "92eedcde0d0c": {
+  "src": "Trail length",
+  "tr": "Spurlänge"
+ },
+ "93a8161c11f4": {
+  "src": "Back to the simulations",
+  "tr": "Zurück zu den Simulationen"
+ },
+ "947d116e6748": {
+  "src": "Circles",
+  "tr": "Kreise"
+ },
+ "9521dba25709": {
+  "src": "Home page",
+  "tr": "Startseite"
+ },
+ "95423e01333c": {
+  "src": "The figure above is this machine with as many arms as you add. Each circle card sets one arm: how long it is, how fast it turns and where it starts. The arms are joined tip to tail, and the tip of the last one, the <em>pen</em>, leaves the burgundy trail. The same mathematics run backwards takes any closed drawing apart into circles; that is Fig. 8.",
+  "tr": "Die Abbildung oben ist diese Maschine mit so vielen Armen, wie Sie hinzufügen. Jede Kreiskarte legt einen Arm fest: wie lang er ist, wie schnell er sich dreht und wo er beginnt. Die Arme sind Spitze an Schwanz verbunden, und die Spitze des letzten, der <em>Stift</em>, hinterlässt die burgunderrote Spur. Dieselbe Mathematik rückwärts angewandt zerlegt jede geschlossene Zeichnung in Kreise; das ist Abb. 8."
+ },
+ "9aa907b8b68f": {
+  "src": "In polar coordinates the pen is at the angle \\(\\theta = \\bar\\omega t\\) and the distance \\(r = 2A\\cos(\\Delta\\omega\\,t/2)\\) from the centre. Eliminating \\(t\\),",
+  "tr": "In Polarkoordinaten steht der Stift beim Winkel \\(\\theta = \\bar\\omega t\\) und im Abstand \\(r = 2A\\cos(\\Delta\\omega\\,t/2)\\) vom Mittelpunkt. Wenn wir \\(t\\) eliminieren,"
+ },
+ "9af3736c4028": {
+  "src": "Exercise 4.1 · on the figure above",
+  "tr": "Übung 4.1 · zur Abbildung oben"
+ },
+ "9b3cbed5c490": {
+  "src": "Zoom",
+  "tr": "Zoom"
+ },
+ "9b9c5384990b": {
+  "src": "Beating pair",
+  "tr": "Schwebendes Paar"
+ },
+ "9cfefe392b1b": {
+  "src": "and the arrow to \\((-y, x)\\) is the arrow to \\((x, y)\\) turned by \\(90^\\circ\\). Two quarter turns make a half turn, which points the arrow backwards: that is all \\(i^2 = -1\\) says.",
+  "tr": "und der Pfeil zu \\((-y, x)\\) ist der Pfeil zu \\((x, y)\\), um \\(90^\\circ\\) gedreht. Zwei Vierteldrehungen ergeben eine halbe Drehung, die den Pfeil rückwärts zeigen lässt: Mehr sagt \\(i^2 = -1\\) nicht."
+ },
+ "9e253470c876": {
+  "src": "Stop",
+  "tr": "Stopp"
+ },
+ "9f99d9963e76": {
+  "src": "Let the angle grow steadily in time, \\(\\theta = \\omega t + \\varphi\\), and stretch the arrow to a length \\(A\\):",
+  "tr": "Lassen Sie den Winkel gleichmäßig mit der Zeit wachsen, \\(\\theta = \\omega t + \\varphi\\), und strecken Sie den Pfeil auf die Länge \\(A\\):"
+ },
+ "9fb09d8581e2": {
+  "src": "8-petal rose",
+  "tr": "8-blättrige Rose"
+ },
+ "a30db73bdbd5": {
+  "src": "Symmetry",
+  "tr": "Symmetrie"
+ },
+ "a4ce3a9be794": {
+  "src": "← All simulations",
+  "tr": "← Alle Simulationen"
+ },
+ "a5da676a06bc": {
+  "src": "Watch a fairground ride whose cars spin on the ends of a turning arm. Each rider’s head draws a big, slow circle with small, fast loops wound around it.",
+  "tr": "Betrachten Sie ein Jahrmarktskarussell, dessen Wagen auf den Enden eines sich drehenden Arms kreisen. Der Kopf jedes Fahrgasts beschreibt einen großen, langsamen Kreis, um den sich kleine, schnelle Schleifen winden."
+ },
+ "a7bf92870302": {
+  "src": "If all these factors are equal, say to \\(e^{i\\beta}\\), the shifted curve is the old one turned by the angle \\(\\beta\\). They are equal when every difference \\((\\omega_j - \\omega_k)\\,\\tau\\) is a multiple of \\(2\\pi\\), which first happens at \\(\\tau = 2\\pi/M\\) with \\(M = \\gcd(\\omega_2 - \\omega_1, \\dots, \\omega_N - \\omega_1)\\). The turn is then \\(\\beta = \\omega_1\\tau = 2\\pi\\,\\omega_1/M\\). Write \\(\\omega_1/M = p/q\\) as a fraction in lowest terms: each shift turns the curve by \\(2\\pi p/q\\), and since \\(p\\) and \\(q\\) share no factor, repeated shifts reach every multiple of \\(2\\pi/q\\). The curve maps onto itself under these turns: it has \\(q\\)-<em>fold symmetry</em>, which the <em>Symmetry</em> readout shows.",
+  "tr": "Sind alle diese Faktoren gleich, etwa \\(e^{i\\beta}\\), so ist die verschobene Kurve die alte, um den Winkel \\(\\beta\\) gedreht. Sie sind gleich, wenn jede Differenz \\((\\omega_j - \\omega_k)\\,\\tau\\) ein Vielfaches von \\(2\\pi\\) ist; das geschieht erstmals bei \\(\\tau = 2\\pi/M\\) mit \\(M = \\gcd(\\omega_2 - \\omega_1, \\dots, \\omega_N - \\omega_1)\\). Die Drehung beträgt dann \\(\\beta = \\omega_1\\tau = 2\\pi\\,\\omega_1/M\\). Schreiben wir \\(\\omega_1/M = p/q\\) als Bruch in gekürzter Form: Jede Verschiebung dreht die Kurve um \\(2\\pi p/q\\), und da \\(p\\) und \\(q\\) keinen gemeinsamen Teiler haben, erreichen wiederholte Verschiebungen jedes Vielfache von \\(2\\pi/q\\). Die Kurve bildet sich bei diesen Drehungen auf sich selbst ab: Sie hat eine \\(q\\)-<em>fache Symmetrie</em>, die die Anzeige <em>Symmetrie</em> zeigt."
+ },
+ "a835d8d68d99": {
+  "src": "<span class=\"psub__n\">2.3</span>Phasors",
+  "tr": "<span class=\"psub__n\">2.3</span>Zeiger"
+ },
+ "aa4e47544be5": {
+  "src": "However tangled the curve, its average squared distance from the centre is simple. Write \\(|z|^2 = z\\bar z\\), where \\(\\bar z\\) is \\(z\\) reflected in the real axis, and multiply out the two sums of (6). The terms with the same arm twice give \\(A_k^2\\); each pair of different arms gives a cosine, as in (11):",
+  "tr": "Wie verschlungen die Kurve auch ist, das mittlere Quadrat ihres Abstands vom Mittelpunkt ist einfach. Schreiben Sie \\(|z|^2 = z\\bar z\\), wobei \\(\\bar z\\) das an der reellen Achse gespiegelte \\(z\\) ist, und multiplizieren Sie die beiden Summen aus (6) aus. Die Terme, in denen derselbe Arm zweimal vorkommt, ergeben \\(A_k^2\\); jedes Paar verschiedener Arme ergibt einen Kosinus, wie in (11):"
+ },
+ "aa5d727326a5": {
+  "src": "<span>4</span>Two arms: roses and beats",
+  "tr": "<span>4</span>Zwei Arme: Rosen und Schwebungen"
+ },
+ "ac81468fdc6a": {
+  "src": "Flower",
+  "tr": "Blume"
+ },
+ "ad975fd418e7": {
+  "src": "Fig. 7 · complex analysis · epicycles",
+  "tr": "Abb. 7 · komplexe Analysis · Epizykel"
+ },
+ "ae70a1a22e11": {
+  "src": "The picture is far older than the fairground. For about fourteen centuries, from Ptolemy of Alexandria around 150 CE until Kepler replaced the circles by ellipses in 1609, astronomers described each planet as riding on a small circle, the <em>epicycle</em>, whose centre runs round a large circle, the <em>deferent</em>. Seen from the Earth, such a planet moves mostly one way against the stars, but now and then it stops, runs backwards for some weeks and turns forward again, just as Mars does. Each mismatch with the observations could be repaired with one more circle, which is why the scheme lasted so long.",
+  "tr": "Das Bild ist weit älter als der Jahrmarkt. Rund vierzehn Jahrhunderte lang, von Ptolemäus von Alexandria um 150 n. Chr. bis Kepler 1609 die Kreise durch Ellipsen ersetzte, beschrieben Astronomen jeden Planeten als einen Körper, der auf einem kleinen Kreis reitet, dem <em>Epizykel</em>, dessen Mittelpunkt auf einem großen Kreis läuft, dem <em>Deferenten</em>. Von der Erde aus gesehen bewegt sich ein solcher Planet meist in einer Richtung gegen die Sterne, bleibt aber hin und wieder stehen, läuft einige Wochen rückwärts und dreht dann wieder vorwärts, so wie es der Mars tut. Jede Abweichung von den Beobachtungen ließ sich mit einem weiteren Kreis beheben; deshalb hielt sich das Schema so lange."
+ },
+ "af1f7e8d89cc": {
+  "src": "— BPM",
+  "tr": "— BPM"
+ },
+ "b02b940e79be": {
+  "src": "<span class=\"psec__n\">06</span>The average size of the curve",
+  "tr": "<span class=\"psec__n\">06</span>Die mittlere Größe der Kurve"
+ },
+ "b1a5062803c6": {
+  "src": "This is the readout \\(\\langle|z|^2\\rangle = \\Sigma A^2\\) at the foot of the controls. In the language of waves it says that the power of a mixture of different frequencies is the sum of their separate powers. It is Parseval’s theorem, which Fig. 8 uses from the other side, to take a drawing apart into circles. For the Star, \\(1^2 + 0.5^2 + 0.18^2 = 1.2824\\), and by (14) \\(|z|^2 = 1.2824 + 1.36\\cos 5t + 0.18\\cos 10t\\) (Figure 5).",
+  "tr": "Das ist die Anzeige \\(\\langle|z|^2\\rangle = \\Sigma A^2\\) unten am Regler. In der Sprache der Wellen besagt es, dass die Leistung einer Mischung verschiedener Frequenzen die Summe ihrer einzelnen Leistungen ist. Es ist der Satz von Parseval, den Abb. 8 von der anderen Seite nutzt, um eine Zeichnung in Kreise zu zerlegen. Für den Stern gilt \\(1^2 + 0.5^2 + 0.18^2 = 1.2824\\), und nach (14) ist \\(|z|^2 = 1.2824 + 1.36\\cos 5t + 0.18\\cos 10t\\) (Abbildung 5)."
+ },
+ "b2808611b13b": {
+  "src": "The origin sits at the centre of the figure with the imaginary axis pointing up, so a point \\(z = x + iy\\) is drawn at the pixel \\((c_x + s\\,x,\\ c_y - s\\,y)\\), with \\((c_x, c_y)\\) the centre of the canvas and the scale",
+  "tr": "Der Ursprung liegt in der Mitte der Abbildung, wobei die imaginäre Achse nach oben zeigt; daher wird ein Punkt \\(z = x + iy\\) am Pixel \\((c_x + s\\,x,\\ c_y - s\\,y)\\) gezeichnet, mit \\((c_x, c_y)\\) als Mitte der Zeichenfläche und dem Maßstab"
+ },
+ "b4d85d1ead11": {
+  "src": "The music rescales only copies \\(A'_k\\) of the radii: the stored \\(A_k\\), \\(\\omega_k\\) and \\(\\varphi_k\\) are never changed, so switching Auto Dance off returns the exact curve. <em>Record</em> stores the whole list against the audio time on the first frame at least \\(50\\ \\mathrm{ms}\\) after the last snapshot: at 60 frames per second that is every third or fourth frame, \\(58\\ \\mathrm{ms}\\) apart on average. <em>Replay</em> moves each value, every frame, the fraction \\(\\Delta t/(50\\ \\mathrm{ms})\\) of the way toward the stored list.",
+  "tr": "Die Musik skaliert nur Kopien \\(A'_k\\) der Radien neu: Die gespeicherten \\(A_k\\), \\(\\omega_k\\) und \\(\\varphi_k\\) werden nie verändert, daher gibt das Ausschalten von Auto-Tanz die exakte Kurve zurück. <em>Aufnehmen</em> speichert die ganze Liste zur Audiozeit beim ersten Bild, das mindestens \\(50\\ \\mathrm{ms}\\) nach der letzten Momentaufnahme liegt: Bei 60 Bildern pro Sekunde ist das jedes dritte oder vierte Bild, im Mittel \\(58\\ \\mathrm{ms}\\) auseinander. <em>Wiedergabe</em> bewegt bei jedem Bild jeden Wert um den Anteil \\(\\Delta t/(50\\ \\mathrm{ms})\\) des Weges hin zur gespeicherten Liste."
+ },
+ "b5f99781c228": {
+  "src": "Because (6) gives the pen’s position at any time directly, nothing is integrated. Every frame the clock advances \\(t\\) by \\(\\Delta t \\cdot s\\), where \\(\\Delta t\\) is the real time since the previous frame, capped at \\(50\\ \\mathrm{ms}\\) so that a tab coming back from the background does not jump, and \\(s\\) is the <em>Speed</em> slider, from 0 to 4, multiplied by a factor from the music when Auto Dance is on (section 8). The page then evaluates \\(N\\) cosines and \\(N\\) sines. No error builds up from frame to frame: every point drawn is the exact \\(z(t)\\) up to rounding, and the rounding of an angle \\(\\omega_k t\\) stays below \\(10^{-11}\\ \\mathrm{rad}\\) even for \\(\\omega = 32\\ \\mathrm{rad/s}\\) after \\(1000\\ \\mathrm{s}\\).",
+  "tr": "Da (6) die Lage des Stifts zu jeder Zeit unmittelbar liefert, wird nichts integriert. Bei jedem Bild schreitet die Uhr \\(t\\) um \\(\\Delta t \\cdot s\\) voran, wobei \\(\\Delta t\\) die reale Zeit seit dem vorigen Bild ist, begrenzt auf \\(50\\ \\mathrm{ms}\\), damit ein Tab, der aus dem Hintergrund zurückkehrt, nicht springt, und \\(s\\) der Regler <em>Geschwindigkeit</em> ist, von 0 bis 4, multipliziert mit einem Faktor aus der Musik, wenn Auto-Tanz eingeschaltet ist (Abschnitt 8). Die Seite wertet dann \\(N\\) Kosinusse und \\(N\\) Sinusse aus. Von Bild zu Bild baut sich kein Fehler auf: Jeder gezeichnete Punkt ist bis auf Rundung das exakte \\(z(t)\\), und die Rundung eines Winkels \\(\\omega_k t\\) bleibt unter \\(10^{-11}\\ \\mathrm{rad}\\), selbst für \\(\\omega = 32\\ \\mathrm{rad/s}\\) nach \\(1000\\ \\mathrm{s}\\)."
+ },
+ "b7496a5574a5": {
+  "src": "Mount a second arm on the tip of the first, a third on the tip of the second, and so on up to \\(N\\) arms. Mounting an arm on a moving tip means adding its arrow to the position of that tip, so the pen sits at",
+  "tr": "Setzen Sie einen zweiten Arm auf die Spitze des ersten, einen dritten auf die Spitze des zweiten und so weiter bis zu \\(N\\) Armen. Einen Arm auf eine bewegte Spitze zu setzen heißt, seinen Pfeil zur Lage dieser Spitze zu addieren, sodass der Stift bei"
+ },
+ "b7a618d88bd7": {
+  "src": "<span class=\"psec__n\">03</span>The model: arms joined tip to tail",
+  "tr": "<span class=\"psec__n\">03</span>Das Modell: Arme Spitze an Schwanz verbunden"
+ },
+ "bc399052d420": {
+  "src": "Export JSON",
+  "tr": "JSON exportieren"
+ },
+ "be0513f702a2": {
+  "src": "Press <em>Beating pair</em> and leave <em>Speed</em> at 1.00×, so that one second of phasor time is one second on the clock. The \\(|z(t)|\\) readout starts at 2.197, falls to zero near \\(t = 3.04\\ \\mathrm{s}\\) (the caption under the figure shows \\(t\\)) and is back near 2.2 at \\(6.18\\ \\mathrm{s}\\). Now set the <em>Angular frequency</em> of Circle 2 to 5.50. Predict the new beat period from (10), then time it with the clock in the caption: \\(12.57\\ \\mathrm{s}\\). Finally set it to 5.00, equal to Circle 1. The beats vanish, \\(|z|\\) stays at 2.197 and the pen runs round a plain circle; section 6 explains why the \\(\\langle|z|^2\\rangle\\) readout is now wrong.",
+  "tr": "Drücken Sie <em>Schwebendes Paar</em> und lassen Sie <em>Geschwindigkeit</em> auf 1.00×, damit eine Sekunde Zeigerzeit einer Sekunde auf der Uhr entspricht. Die Anzeige \\(|z(t)|\\) beginnt bei 2.197, fällt bei \\(t = 3.04\\ \\mathrm{s}\\) nahe null (die Bildunterschrift unter der Abbildung zeigt \\(t\\)) und liegt bei \\(6.18\\ \\mathrm{s}\\) wieder nahe 2.2. Stellen Sie nun die <em>Kreisfrequenz</em> von Kreis 2 auf 5.50. Sagen Sie die neue Schwebungsperiode aus (10) voraus und messen Sie sie dann mit der Uhr in der Bildunterschrift: \\(12.57\\ \\mathrm{s}\\). Stellen Sie schließlich 5.00 ein, gleich wie Kreis 1. Die Schwebungen verschwinden, \\(|z|\\) bleibt bei 2.197, und der Stift läuft auf einem glatten Kreis um; Abschnitt 6 erklärt, warum die Anzeige \\(\\langle|z|^2\\rangle\\) jetzt falsch ist."
+ },
+ "be984fa50528": {
+  "src": "<span class=\"sw sw--ink\"></span>phasor arm",
+  "tr": "<span class=\"sw sw--ink\"></span>Zeigerarm"
+ },
+ "bee75ca77f75": {
+  "src": "Controls",
+  "tr": "Regler"
+ },
+ "bee81bad42c3": {
+  "src": "Smooth morphing",
+  "tr": "Sanftes Überblenden"
+ },
+ "c0f85d667973": {
+  "src": "Replay",
+  "tr": "Wiedergabe"
+ },
+ "c1b8c8b7befd": {
+  "src": "<span class=\"psec__n\">07</span>How the page computes it",
+  "tr": "<span class=\"psec__n\">07</span>Wie die Seite es berechnet"
+ },
+ "c4000dd1ba3a": {
+  "src": "Speed drive",
+  "tr": "Tempo-Antrieb"
+ },
+ "c45d8826d4d9": {
+  "src": "The beat detector is a threshold rule, not a tempo tracker: it misses soft beats and can count a busy bass line twice.",
+  "tr": "Der Schlagerkenner ist eine Schwellenregel und kein Tempo-Verfolger: Er übersieht leise Schläge und kann eine dichte Bassline doppelt zählen."
+ },
+ "c73ee0cdaec6": {
+  "src": "The band levels are smoothed per frame, so on a \\(120\\ \\mathrm{Hz}\\) screen the meters respond twice as fast as on a \\(60\\ \\mathrm{Hz}\\) screen.",
+  "tr": "Die Bandpegel werden pro Bild geglättet, daher reagieren die Anzeigen auf einem Bildschirm mit \\(120\\ \\mathrm{Hz}\\) doppelt so schnell wie auf einem mit \\(60\\ \\mathrm{Hz}\\)."
+ },
+ "c7d07eaa2077": {
+  "src": "It is pure kinematics: the arms have no mass and exert no forces on each other. For a chain of arms that does push and pull, see the double pendulum, Fig. 2.",
+  "tr": "Es ist reine Kinematik: Die Arme haben keine Masse und üben keine Kräfte aufeinander aus. Für eine Kette von Armen, die schiebt und zieht, siehe das Doppelpendel, Abb. 2."
+ },
+ "cad2dda3032c": {
+  "src": "heavier mathematics",
+  "tr": "anspruchsvollere Mathematik"
+ },
+ "cb8315e9282f": {
+  "src": "<span class=\"psub__n\">8.1</span>Auto Dance: sound into radii",
+  "tr": "<span class=\"psub__n\">8.1</span>Auto-Tanz: vom Klang zu Radien"
+ },
+ "cbe28c0effec": {
+  "src": "<span class=\"psec__n\">09</span>What the model leaves out",
+  "tr": "<span class=\"psec__n\">09</span>Was das Modell weglässt"
+ },
+ "cfff4927e511": {
+  "src": "Circles on circles can describe any closed orbit, as Fig. 8 shows, but they do not explain one. Ptolemy’s epicycles reproduced where the planets appear without the law of gravity that puts them there; Kepler’s ellipses and Newton’s gravity need far fewer numbers.",
+  "tr": "Kreise auf Kreisen können jede geschlossene Bahn beschreiben, wie Abb. 8 zeigt, aber sie erklären keine. Die Epizykel des Ptolemäus gaben wieder, wo die Planeten erscheinen, ohne das Gravitationsgesetz, das sie dorthin setzt; Keplers Ellipsen und Newtons Gravitation brauchen weit weniger Zahlen."
+ },
+ "d023b87a50a7": {
+  "src": "Phasor sums: circles riding on circles",
+  "tr": "Phasor Sums: Kreise, die auf Kreisen reiten"
+ },
+ "d1622a8321e0": {
+  "src": "Phyein Usul, home page",
+  "tr": "Phyein Usul, Startseite"
+ },
+ "d4c9df7dd426": {
+  "src": "<span>3</span>The model",
+  "tr": "<span>3</span>Das Modell"
+ },
+ "d6fdef573d73": {
+  "src": "<span>2</span>A turning arrow: Euler’s formula",
+  "tr": "<span>2</span>Ein sich drehender Pfeil: die Eulersche Formel"
+ },
+ "d929322e4b16": {
+  "src": "Fig.",
+  "tr": "Abb."
+ },
+ "dccdd63d9c21": {
+  "src": "A Spirograph does the same with gears. A toothed wheel rolls round inside a ring: its centre goes slowly round one way while the wheel turns quickly the other way about its centre, and the pen in one of its holes adds the two motions. Electrical engineers use the idea every day. The voltage at a European socket is the shadow of an arrow \\(325\\ \\mathrm{V}\\) long that turns fifty times a second; they call the arrow a <em>phasor</em>, and adding two alternating voltages means adding two such arrows tip to tail. The three phases of the mains are three equal arrows a third of a turn apart, and their sum is zero at every instant.",
+  "tr": "Ein Spirograph tut dasselbe mit Zahnrädern. Ein gezahntes Rad rollt innen in einem Ring ab: Sein Mittelpunkt wandert langsam in die eine Richtung, während sich das Rad schnell in der anderen Richtung um seinen Mittelpunkt dreht, und der Stift in einem seiner Löcher addiert beide Bewegungen. Elektrotechniker nutzen die Idee täglich. Die Spannung an einer europäischen Steckdose ist der Schatten eines Pfeils von \\(325\\ \\mathrm{V}\\) Länge, der fünfzigmal pro Sekunde umläuft; sie nennen den Pfeil einen <em>Zeiger</em>, und das Addieren zweier Wechselspannungen heißt, zwei solche Pfeile Spitze an Schwanz zu addieren. Die drei Phasen des Netzes sind drei gleich lange Pfeile, die um ein Drittel einer Umdrehung versetzt sind, und ihre Summe ist zu jedem Augenblick null."
+ },
+ "dd14216ff363": {
+  "src": "One formula, two pictures",
+  "tr": "Eine Formel, zwei Bilder"
+ },
+ "dd7ba51f68d4": {
+  "src": "<span>6</span>The average size",
+  "tr": "<span>6</span>Die mittlere Größe der Kurve"
+ },
+ "de3735e6a1b3": {
+  "src": "While Auto Dance is on, the radii change during the drawing, so the live trail is no longer one closed curve.",
+  "tr": "Solange Auto-Tanz eingeschaltet ist, ändern sich die Radien während des Zeichnens, daher ist die Live-Spur nicht mehr eine einzige geschlossene Kurve."
+ },
+ "e1d329a7394b": {
+  "src": "From symbols to code",
+  "tr": "Von den Symbolen zum Code"
+ },
+ "e30d1e9f4028": {
+  "src": "live construction",
+  "tr": "Aufbau live"
+ },
+ "e35614747f58": {
+  "src": "<span class=\"psub__n\">5.1</span>Rotational symmetry",
+  "tr": "<span class=\"psub__n\">5.1</span>Drehsymmetrie"
+ },
+ "e585db3f8b3c": {
+  "src": "Each arm adds a velocity of size \\(A_k|\\omega_k|\\) at right angles to itself. The pen stops, \\(\\dot z = 0\\), only at moments when these velocities cancel. For two arms that takes two things: equal tip speeds, \\(A_1|\\omega_1| = A_2|\\omega_2|\\), and a moment at which the two velocities point in opposite directions. For distinct frequencies such a moment comes round once each time the angle between the arms changes by \\(2\\pi\\). Where the pen stops it usually draws a <em>cusp</em>, a sharp point, but not always: \\(z = e^{it} + e^{-it} = 2\\cos t\\) stops at each end of a straight segment and simply runs back along it. The <em>Trefoil</em> preset is built this way: \\(A = 1, 0.5\\) and \\(\\omega = 1, -2\\ \\mathrm{rad/s}\\), so both tip speeds are 1. The angle between its arms grows at \\(|\\omega_1 - \\omega_2| = 3\\ \\mathrm{rad/s}\\), and in each period of \\(2\\pi\\ \\mathrm{s}\\) the pen stops three times, \\(2\\pi/3\\ \\mathrm{s}\\) apart. The curve is the three-cusped <em>deltoid</em>, the one a Spirograph wheel draws with the pen on its rim when it rolls inside a ring three times its radius.",
+  "tr": "Jeder Arm fügt eine Geschwindigkeit der Größe \\(A_k|\\omega_k|\\) senkrecht zu sich selbst hinzu. Der Stift hält, \\(\\dot z = 0\\), nur in Augenblicken, in denen sich diese Geschwindigkeiten aufheben. Bei zwei Armen braucht es dafür zwei Dinge: gleich schnelle Spitzen, \\(A_1|\\omega_1| = A_2|\\omega_2|\\), und einen Augenblick, in dem die beiden Geschwindigkeiten in entgegengesetzte Richtungen zeigen. Bei verschiedenen Frequenzen kehrt ein solcher Augenblick jedes Mal wieder, wenn sich der Winkel zwischen den Armen um \\(2\\pi\\) ändert. Wo der Stift hält, zeichnet er meist eine <em>Spitze</em>, einen scharfen Punkt, aber nicht immer: \\(z = e^{it} + e^{-it} = 2\\cos t\\) hält an beiden Enden einer geraden Strecke und läuft einfach auf ihr zurück. Die Voreinstellung <em>Kleeblatt</em> ist so aufgebaut: \\(A = 1, 0.5\\) und \\(\\omega = 1, -2\\ \\mathrm{rad/s}\\), sodass beide Spitzengeschwindigkeiten 1 sind. Der Winkel zwischen ihren Armen wächst mit \\(|\\omega_1 - \\omega_2| = 3\\ \\mathrm{rad/s}\\), und in jeder Periode \\(2\\pi\\ \\mathrm{s}\\) hält der Stift dreimal an, im Abstand \\(2\\pi/3\\ \\mathrm{s}\\). Die Kurve ist die dreispitzige <em>Deltoide</em>, diejenige, die ein Spirograph-Rad mit dem Stift an seinem Rand zeichnet, wenn es in einem Ring mit dem dreifachen Radius rollt."
+ },
+ "e709e76ff542": {
+  "src": "Presets",
+  "tr": "Voreinstellungen"
+ },
+ "e9d5f3253e3a": {
+  "src": "Nothing recorded. Snapshots every 50 ms while recording.",
+  "tr": "Nichts aufgenommen. Während der Aufnahme wird alle 50 ms eine Momentaufnahme gespeichert."
+ },
+ "eabd21235cff": {
+  "src": "Circles N",
+  "tr": "Anzahl Kreise N"
+ },
+ "ed05e9cfab43": {
+  "src": "<span class=\"psec__n\">08</span>From the plane to pixels, and from sound to radii",
+  "tr": "<span class=\"psec__n\">08</span>Von der Ebene zu Pixeln, und vom Klang zu Radien"
+ },
+ "ee90f0ba61b5": {
+  "src": "Arms whose \\(|\\omega|\\) is at or below the median of all the \\(|\\omega_k|\\) breathe with the bass: \\(A' = A\\,\\big[1 + \\mathrm{ease}(\\text{bass})\\, d_\\text{bass}\\,(1 - 0.7\\,|\\omega|/|\\omega|_\\text{max})\\big]\\), where ease is the <em>Bounce curve</em> chosen on the card and \\(d_\\text{bass}\\) the <em>Bass drive</em>. Slow arms swing most.",
+  "tr": "Arme, deren \\(|\\omega|\\) höchstens dem Median aller \\(|\\omega_k|\\) entspricht, atmen mit dem Bass: \\(A' = A\\,\\big[1 + \\mathrm{ease}(\\text{bass})\\, d_\\text{bass}\\,(1 - 0.7\\,|\\omega|/|\\omega|_\\text{max})\\big]\\), wobei ease die auf der Karte gewählte <em>Bounce-Kurve</em> und \\(d_\\text{bass}\\) der <em>Bass-Antrieb</em> ist. Langsame Arme schwingen am stärksten."
+ },
+ "f115dc669a64": {
+  "src": "Morph rate α",
+  "tr": "Überblendrate α"
+ },
+ "f199e2e1a4ed": {
+  "src": "<span class=\"psub__n\">9.1</span>Further reading",
+  "tr": "<span class=\"psub__n\">9.1</span>Weiterführende Literatur"
+ },
+ "f235f22d8e81": {
+  "src": "mid",
+  "tr": "Mitten"
+ },
+ "f3d353eb1eaf": {
+  "src": "<span>7</span>How the page computes it",
+  "tr": "<span>7</span>Wie die Seite es berechnet"
+ },
+ "f52419abb364": {
+  "src": "Beat burst",
+  "tr": "Schlag-Impuls"
+ },
+ "f5cbdf6bfb51": {
+  "src": "Contents",
+  "tr": "Inhalt"
+ },
+ "f69ff6e8d889": {
+  "src": "Galaxy",
+  "tr": "Galaxie"
+ },
+ "f72f0eda6052": {
+  "src": "Simulations",
+  "tr": "Simulationen"
+ },
+ "f7cf84400fc6": {
+  "src": "When every active circle has the same \\(\\omega\\), the curve is a single circle, and the <em>Symmetry</em> readout shows 0-fold: with no difference of frequencies to take a gcd of, the code writes 0, although a circle is in fact mapped onto itself by every turn.",
+  "tr": "Wenn jeder aktive Kreis dasselbe \\(\\omega\\) hat, ist die Kurve ein einziger Kreis, und die Anzeige <em>Symmetrie</em> zeigt 0-fach: Da es keine Differenz von Frequenzen gibt, aus der ein größter gemeinsamer Teiler zu bilden wäre, schreibt der Code 0, obwohl ein Kreis tatsächlich durch jede Drehung auf sich selbst abgebildet wird."
+ },
+ "fb57a7ac8366": {
+  "src": "This simulation needs JavaScript.",
+  "tr": "Diese Simulation benötigt JavaScript."
+ },
+ "fb7605e4bad5": {
+  "src": "where \\(\\theta\\) plays the part of time. This is a stone whirled on a string: its velocity is always at right angles to the string, so it comes no closer and moves no further away, and its speed equals its distance from the centre, 1. After a time \\(\\theta\\) it has travelled a distance \\(\\theta\\) round the unit circle, which is an angle of \\(\\theta\\) radians, so it sits at \\(\\cos\\theta + i\\sin\\theta\\) (Figure 1). On the other hand, a quantity whose rate of change is a fixed number \\(k\\) times itself is the exponential \\(e^{k\\theta}\\), as a savings account that earns a fixed fraction per year grows exponentially. With \\(k = i\\) the two descriptions of the same motion must agree:",
+  "tr": "wobei \\(\\theta\\) die Rolle der Zeit spielt. Das ist ein Stein, der an einer Schnur im Kreis geschwungen wird: Seine Geschwindigkeit steht stets senkrecht zur Schnur, daher kommt er weder näher noch entfernt er sich weiter, und seine Geschwindigkeit ist gleich seinem Abstand vom Mittelpunkt, also 1. Nach der Zeit \\(\\theta\\) hat er auf dem Einheitskreis eine Strecke \\(\\theta\\) zurückgelegt, das ist ein Winkel von \\(\\theta\\) Radiant; er befindet sich daher bei \\(\\cos\\theta + i\\sin\\theta\\) (Abbildung 1). Andererseits ist eine Größe, deren Änderungsrate das feste Vielfache \\(k\\) ihrer selbst ist, die Exponentialfunktion \\(e^{k\\theta}\\), so wie ein Sparkonto, das jährlich einen festen Anteil verzinst, exponentiell wächst. Mit \\(k = i\\) müssen die beiden Beschreibungen derselben Bewegung übereinstimmen:"
+ },
+ "fe3be79d634c": {
+  "src": "T. Needham, <em>Visual Complex Analysis</em>, Oxford University Press, 1997; 25th anniversary edition, 2023 (<a href=\"https://global.oup.com/academic/product/visual-complex-analysis-9780192868923\">publisher’s page</a>): chapter 1 (geometry and complex arithmetic, with Euler’s formula as rotation).",
+  "tr": "T. Needham, <em>Visual Complex Analysis</em>, Oxford University Press, 1997; 25-jährige Jubiläumsausgabe, 2023 (<a href=\"https://global.oup.com/academic/product/visual-complex-analysis-9780192868923\">Seite des Verlags</a>): Kapitel 1 (Geometrie und komplexe Arithmetik, mit der Eulerschen Formel als Drehung)."
+ }
+}

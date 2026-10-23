@@ -1,0 +1,538 @@
+{
+ "00dc93e1c8c6": {
+  "src": "The calculations use JavaScript’s double-precision numbers, about 16 significant digits; Section 3 shows that this is far more than the drawing needs.",
+  "tr": "تستعمل الحسابات أعداد JavaScript ذات الدقّة المضاعفة، أي نحو 16 رقمًا معنويًّا؛ ويُظهر القسم 3 أنّ هذا يفوق ما تحتاجه الرسمة بكثير."
+ },
+ "05476d85d5be": {
+  "src": "<span class=\"sw\"></span>path difference δs",
+  "tr": "<span class=\"sw\"></span>فرق المسار δs"
+ },
+ "057ecf8b693d": {
+  "src": "<span class=\"psec__n\">06</span>Slits with a width<span class=\"star\" title=\"heavier mathematics\">★</span>",
+  "tr": "<span class=\"psec__n\">06</span>الشقوق ذات العرض<span class=\"star\" title=\"heavier mathematics\">★</span>"
+ },
+ "06d5516cb1ec": {
+  "src": "Polarisation and the vector nature of light are ignored. For light polarised along the slits nothing changes. For the other polarisation each field points across its own path, so at \\(P\\) the two fields are tilted against each other by the angle \\(\\gamma\\) between the two paths, \\(11^\\circ\\) at the dark fringe for the defaults. Two equal fields in opposite phase but tilted by \\(\\gamma\\) do not quite cancel: they leave a remainder \\(2E_0\\sin(\\gamma/2),\\) so that dark fringe keeps \\(\\sin^2(\\gamma/2) = 0.9\\,\\%\\) of \\(I_0.\\) Far from the slits the paths become parallel, \\(\\gamma\\) goes to zero, and the scalar picture is exact again.",
+  "tr": "يُهمَل استقطاب الضوء والطبيعة المتّجهية له. للضوء المستقطب على طول الشقوق لا يتغيّر شيء. أمّا للاستقطاب الآخر فيشير كلّ حقل عبر مساره، فيميل الحقلان عند \\(P\\) أحدهما عن الآخر بالزاوية \\(\\gamma\\) بين المسارين، أي \\(11^\\circ\\) عند الهدب المظلم في القيم الافتراضية. ويتّفق حقلان متساويان في السعة متعاكسان في الطور لكنّهما مائلان بالزاوية \\(\\gamma\\)، فلا يُلغي أحدهما الآخر تمامًا: يبقى منهما \\(2E_0\\sin(\\gamma/2),\\) فيحتفظ هذا الهدب المظلم بـ\\(\\sin^2(\\gamma/2) = 0.9\\,\\%\\) من \\(I_0.\\) وعلى بُعد كبير من الشقوق يصير المساران متوازيين، فيتلاشى \\(\\gamma\\)، وتعود الصورة القياسية دقيقة مرةً أخرى."
+ },
+ "09c5fee32110": {
+  "src": "<span class=\"psec__n\">10</span>What the model leaves out",
+  "tr": "<span class=\"psec__n\">10</span>ما يهمله النموذج"
+ },
+ "0a77f3212e1b": {
+  "src": "Turn the light down far enough and the smooth pattern breaks up into dots.",
+  "tr": "إذا خفّضنا شدّة الضوء بما يكفي تفكّك النمط الملساء إلى نقاط."
+ },
+ "0db452d40163": {
+  "src": "Figure 5 draws dots at random according to this rule. Twenty dots look like noise; two thousand show the fringes. Of those 2000 dots, 140 land within \\(1^\\circ\\) of the centre and only 3 within \\(1^\\circ\\) of the two dark directions at \\(\\pm 9.72^\\circ;\\) the rule (12) expects 131 and 2.2.",
+  "tr": "يرسم الشكل 5 نقاطًا عشوائيًّا وفق هذه القاعدة. عشرون نقطة تبدو كالضجيج، وألفان تُظهر الأهداب. ومن هذه الـ2000 نقطة يقع 140 منها ضمن \\(1^\\circ\\) من المركز، و3 فقط ضمن \\(1^\\circ\\) من الاتجاهين المظلمين عند \\(\\pm 9.72^\\circ;\\) والقاعدة (12) تتوقّع 131 و2.2."
+ },
+ "0e327b7fd749": {
+  "src": "Keep <em>Slit separation</em> \\(b = 40\\ \\mathrm{px},\\) <em>Wavelength</em> \\(\\lambda = 13.5\\ \\mathrm{px}\\) and <em>Distance</em> \\(d = 200\\ \\mathrm{px}.\\) Step <em>Angle</em> \\(\\alpha\\) up from \\(0^\\circ\\) and watch the readout <em>\\(\\delta s/\\lambda\\)</em> and the verdict under the readouts. Between \\(9.5^\\circ\\) and \\(10.0^\\circ\\) the readout passes from 0.49 to 0.51 and the verdict says <em>Destructive</em>; between \\(19.5^\\circ\\) and \\(20.0^\\circ\\) it passes from 0.99 to 1.01 and the verdict says <em>Constructive · bright fringe, m = 1</em>. In the far field, (8) puts these fringes at \\(9.72^\\circ\\) and \\(19.72^\\circ;\\) the exact path difference at \\(d = 200\\ \\mathrm{px}\\) puts them at \\(9.76^\\circ\\) and \\(19.81^\\circ.\\) Then set \\(d = 100\\ \\mathrm{px}\\) and find the bright fringe again: it has moved out to \\(20.04^\\circ.\\)",
+  "tr": "أبقِ <em>المسافة بين الشقّين</em> \\(b = 40\\ \\mathrm{px},\\) و<em>طول الموجة</em> \\(\\lambda = 13.5\\ \\mathrm{px}\\) و<em>البعد</em> \\(d = 200\\ \\mathrm{px}.\\) ارفع <em>الزاوية</em> \\(\\alpha\\) بدءًا من \\(0^\\circ\\) وراقب الخانة <em>\\(\\delta s/\\lambda\\)</em> والحكم أسفل الخانات. بين \\(9.5^\\circ\\) و\\(10.0^\\circ\\) تنتقل الخانة من 0.49 إلى 0.51، ويقول الحكم <em>هدّام</em>؛ وبين \\(19.5^\\circ\\) و\\(20.0^\\circ\\) تنتقل من 0.99 إلى 1.01، ويقول الحكم <em>بنّاء · هدب مضيء، m = 1</em>. وفي الحقل البعيد تضع المعادلة (8) هذين الهدبين عند \\(9.72^\\circ\\) و\\(19.72^\\circ;\\) ويضعهما فرق المسار الدقيق عند \\(d = 200\\ \\mathrm{px}\\) عند \\(9.76^\\circ\\) و\\(19.81^\\circ.\\) ثم اضبط \\(d = 100\\ \\mathrm{px}\\) وابحث عن الهدب المضيء من جديد: لقد تحرّك حتى \\(20.04^\\circ.\\)"
+ },
+ "116ea2997c09": {
+  "src": "The verdict uses the fractional part \\(f = \\delta s/\\lambda - \\lfloor\\delta s/\\lambda\\rfloor\\): <em>Constructive</em> when \\(f < 0.08\\) or \\(f > 0.92,\\) <em>Destructive</em> when \\(|f - \\tfrac12| < 0.08,\\) otherwise <em>Partial</em> with \\(I/I_0\\) from (7). A tolerance of 0.08 wavelengths means that <em>Constructive</em> covers intensities from 0.94 to 1 and <em>Destructive</em> from 0 to 0.06.",
+  "tr": "يستعمل الحكم الجزء الكسري \\(f = \\delta s/\\lambda - \\lfloor\\delta s/\\lambda\\rfloor\\): <em>بنّاء</em> حين يكون \\(f < 0.08\\) أو \\(f > 0.92,\\) و<em>هدّام</em> حين يكون \\(|f - \\tfrac12| < 0.08,\\) وفي غير ذلك <em>جزئي</em> مع \\(I/I_0\\) من (7). وتعني سماحية 0.08 من الطول الموجي أنّ <em>البنّاء</em> يشمل الشدّات من 0.94 إلى 1، و<em>الهدّام</em> من 0 إلى 0.06."
+ },
+ "14a2f9ce51c5": {
+  "src": "Numa Koudsie · for school students and first- and second-year undergraduates",
+  "tr": "نعمة سائر قدسية · لطلاب المدارس وطلاب السنة الأولى والسنة الثانية الجامعية"
+ },
+ "17e60c7a7296": {
+  "src": "The shortcut (4) is always a little too long, by a fraction \\(b^2\\cos^2\\alpha/(8r^2)\\): double the distance and the error falls four times. At the defaults the shortcut gives \\(13.6808\\ \\mathrm{px},\\) \\(0.39\\,\\%\\) more than the exact \\(13.6277\\ \\mathrm{px};\\) the corrected form (5) gives \\(13.6275\\ \\mathrm{px}.\\) Measured in wavelengths, the error of the shortcut is \\(0.0039\\,\\lambda,\\) far too small to change bright into dark. Figure 2 follows the error as \\(P\\) moves in towards the slits.",
+  "tr": "الاختصار (4) دائمًا أطول قليلًا، بكسر قدره \\(b^2\\cos^2\\alpha/(8r^2)\\): إذا ضوعفت المسافة هبط الخطأ إلى الربع. وعند القيم الافتراضية يعطي الاختصار \\(13.6808\\ \\mathrm{px},\\) أي \\(0.39\\,\\%\\) أكثر من القيمة الدقيقة \\(13.6277\\ \\mathrm{px};\\) أمّا الصيغة المصحّحة (5) فتعطي \\(13.6275\\ \\mathrm{px}.\\) وإذا قيس الخطأ بالأطوال الموجية كان \\(0.0039\\,\\lambda,\\) وهو أصغر بكثير من أن يحوّل الإضاءة إلى ظلام. ويتتبّع الشكل 2 الخطأ حين تقترب \\(P\\) من الشقّين."
+ },
+ "198ff88aca4f": {
+  "src": "The drawing is a two-dimensional slice through slits that are long in the third direction.",
+  "tr": "الرسمة مقطع ثنائي البعد عبر شقوق طويلة في الاتجاه الثالث."
+ },
+ "1a1b7209c5ef": {
+  "src": "<span class=\"psub__n\">10.1</span>Further reading",
+  "tr": "<span class=\"psub__n\">10.1</span>قراءات إضافية"
+ },
+ "1c51afa5ca55": {
+  "src": "Double-Slit Interference<span class=\"dot\">.</span>",
+  "tr": "التداخل في تجربة الشقّين<span class=\"dot\">.</span>"
+ },
+ "1c7832a1de9b": {
+  "src": "<span class=\"pfig__n\">Figure 5</span>Simulated arrivals of single particles at the page’s defaults \\(b = 40\\ \\mathrm{px},\\) \\(\\lambda = 13.5\\ \\mathrm{px}.\\) Each dot is one direction \\(\\theta\\) between \\(-30^\\circ\\) and \\(30^\\circ,\\) drawn at random with probability (12) by rejection sampling (NumPy random generator, seed 1); the height of a dot within its strip carries no information. From top to bottom, 20, 200 and 2000 dots. Bright bands form at \\(0^\\circ\\) and \\(\\pm 19.72^\\circ,\\) and the dark directions at \\(\\pm 9.72^\\circ\\) stay almost empty, although no single dot shows any pattern.",
+  "tr": "<span class=\"pfig__n\">الشكل 5</span>وصول جسيمات مفردة محاكى عند القيم الافتراضية للصفحة \\(b = 40\\ \\mathrm{px},\\) \\(\\lambda = 13.5\\ \\mathrm{px}.\\) كل نقطة تمثّل اتجاهًا \\(\\theta\\) بين \\(-30^\\circ\\) و\\(30^\\circ,\\) رُسمت عشوائيًّا باحتمال (12) بطريقة الرفض (مولّد الأعداد العشوائية في NumPy، البذرة 1)؛ وارتفاع النقطة داخل شريطها لا يحمل أيّ معلومة. من الأعلى إلى الأسفل: 20 نقطة، ثم 200، ثم 2000 نقطة. تتشكّل أشرطة مضيئة عند \\(0^\\circ\\) و\\(\\pm 19.72^\\circ,\\) وتبقى الاتجاهات المظلمة عند \\(\\pm 9.72^\\circ\\) شبه خالية، مع أنّ أيّ نقطة منفردة لا تُظهر أيّ نمط."
+ },
+ "1e0a05a7c954": {
+  "src": "<span class=\"psec__n\">05</span>Adding the two waves",
+  "tr": "<span class=\"psec__n\">05</span>جمع الموجتين"
+ },
+ "1fc03a7a47e3": {
+  "src": "Two approximations were made, in this order: first the far field, \\(b \\ll r,\\) turned \\(\\delta s\\) into \\(b\\sin\\theta;\\) only then did small angles allow \\(\\sin\\theta \\approx \\tan\\theta \\approx \\theta.\\) For red light from a helium–neon laser, \\(\\lambda = 633\\ \\mathrm{nm},\\) slits \\(b = 0.25\\ \\mathrm{mm}\\) apart and a screen at \\(D = 1\\ \\mathrm{m},\\) equation (9) gives \\(\\Delta y = 2.53\\ \\mathrm{mm}.\\) At the page’s defaults it gives \\(\\lambda d/b = 67.5\\ \\mathrm{px}\\) along the observation line; but there the first bright fringe already lies at \\(19.8^\\circ,\\) outside the small-angle range, and the exact path difference (3) puts it \\(72\\ \\mathrm{px}\\) from the centre line, where the default \\(P\\) sits.",
+  "tr": "أُجريت تقريبان، بهذا الترتيب: أوّلًا الحقل البعيد، \\(b \\ll r,\\) الذي حوّل \\(\\delta s\\) إلى \\(b\\sin\\theta;\\) ثم سمحت الزوايا الصغيرة بأن يكون \\(\\sin\\theta \\approx \\tan\\theta \\approx \\theta.\\) بالنسبة إلى الضوء الأحمر لليزر هيليوم–نيون، \\(\\lambda = 633\\ \\mathrm{nm},\\) والشقّين \\(b = 0.25\\ \\mathrm{mm}\\) المتباعدين، والشاشة على بعد \\(D = 1\\ \\mathrm{m},\\) تعطي المعادلة (9) \\(\\Delta y = 2.53\\ \\mathrm{mm}.\\) وعند القيم الافتراضية للصفحة تعطي \\(\\lambda d/b = 67.5\\ \\mathrm{px}\\) على خطّ الرصد؛ لكن هناك يقع الهدب المضيء الأوّل عند \\(19.8^\\circ,\\) خارج مجال الزوايا الصغيرة، وفرق المسار الدقيق (3) يضعه على بعد \\(72\\ \\mathrm{px}\\) من الخطّ المركزي، أي حيث تقع النقطة الافتراضية \\(P\\)."
+ },
+ "2324446bcb27": {
+  "src": "<span class=\"psec__n\">03</span>The exact path difference",
+  "tr": "<span class=\"psec__n\">03</span>فرق المسار الدقيق"
+ },
+ "2741740843c7": {
+  "src": "The second factor is the <em>single-slit envelope</em>. It equals 1 straight ahead and falls to zero where \\(w\\sin\\theta = n\\lambda,\\) \\(n = 1, 2, \\dots\\) If a zero of the envelope falls on a bright fringe, that fringe is missing. Figure 4 shows this for slits \\(20\\ \\mathrm{px}\\) wide at the page’s defaults: the first zero of the envelope, \\(\\sin\\theta = \\lambda/w = 0.675,\\) coincides with the second bright fringe, \\(\\sin\\theta_2 = 2\\lambda/b = 0.675,\\) at \\(\\theta = 42.45^\\circ.\\) Whenever \\(b = 2w,\\) every <em>nonzero</em> even order disappears; the central maximum remains because \\(\\sin\\beta/\\beta\\to1\\) at \\(\\beta=0\\).",
+  "tr": "العامل الثاني هو <em>غلاف الشقّ المفرد</em>. وهو يساوي 1 في الاتجاه الأمامي، ويهبط إلى الصفر حيث \\(w\\sin\\theta = n\\lambda,\\) \\(n = 1, 2, \\dots\\) فإذا وقع صفر الغلاف على هدب مضيء اختفى ذلك الهدب. يُظهر الشكل 4 هذا عند عرض \\(20\\ \\mathrm{px}\\) للشقوق وفق القيم الافتراضية للصفحة: إذ يقع أوّل صفر للغلاف، \\(\\sin\\theta = \\lambda/w = 0.675,\\) على الهدب المضيء الثاني، \\(\\sin\\theta_2 = 2\\lambda/b = 0.675,\\) عند \\(\\theta = 42.45^\\circ.\\) وكلّما كان \\(b = 2w,\\) تختفي كل الرتب الزوجية <em>غير الصفرية</em>؛ ويبقى الهدب المركزي لأنّ \\(\\sin\\beta/\\beta\\to1\\) عند \\(\\beta=0\\)."
+ },
+ "292c27e58546": {
+  "src": "Path S₁P",
+  "tr": "المسار S₁P"
+ },
+ "2d2ab694414f": {
+  "src": "<span>4</span>The far field",
+  "tr": "<span>4</span>الحقل البعيد"
+ },
+ "2f80d81ad5e9": {
+  "src": "The page draws each slit as a gap of \\(8\\ \\mathrm{px}\\) but treats it as a point. A gap that narrow, narrower than the wavelength, has no zero in its envelope at all: by (11) the envelope falls only to 0.74 at \\(30^\\circ\\) and to 0.26 at \\(90^\\circ,\\) and it would lower the first bright fringe from 1 to 0.88. Within the page’s own plot, which ends at \\(30^\\circ,\\) point slits are a fair picture of the drawing.",
+  "tr": "ترسم الصفحة كل شقّ فجوةً عرضها \\(8\\ \\mathrm{px}\\)، لكنّها تعامله نقطةً. وفجوة بهذا الضيق، أضيق من طول الموجة، لا يوجد لغلافها أيّ صفر: فبحسب (11) يهبط الغلاف إلى 0.74 فقط عند \\(30^\\circ\\)، وإلى 0.26 عند \\(90^\\circ,\\) وكان سيخفّض الهدب المضيء الأوّل من 1 إلى 0.88. وضمن الرسم البياني الخاص بالصفحة، الذي ينتهي عند \\(30^\\circ,\\) تكون الشقوق النقطية تمثيلًا معقولًا للرسمة."
+ },
+ "337877d04cd9": {
+  "src": "<b>Fig. 3</b> · slits <span class=\"tx\">\\(S_1, S_2\\)</span> · point <span class=\"tx\">\\(P\\)</span> at distance <span class=\"tx\">\\(d\\)</span>, angle <span class=\"tx\">\\(\\alpha\\)</span>",
+  "tr": "<b>الشكل 3</b> · الشقّان <span class=\"tx\">\\(S_1, S_2\\)</span> · النقطة <span class=\"tx\">\\(P\\)</span> على البعد <span class=\"tx\">\\(d\\)</span>، والزاوية <span class=\"tx\">\\(\\alpha\\)</span>"
+ },
+ "33bd5a5dddcd": {
+  "src": "© 2026 Numa Koudsie",
+  "tr": "© 2026 نعمة سائر قدسية"
+ },
+ "358a5491c394": {
+  "src": "<span>9</span>From lengths to pixels",
+  "tr": "<span>9</span>من الأطوال إلى البكسلات"
+ },
+ "3704f9b5a374": {
+  "src": "Real slits are not points. A slit of width \\(w\\) is a row of point sources side by side, and the waves from all of them must be added, just as the two slits were. Measure the position \\(x'\\) across one slit from its centre. Seen from a far-away point in the direction \\(\\theta,\\) the wave from \\(x'\\) has a path longer by \\(x'\\sin\\theta\\) than the wave from the centre, by the argument of (4). Adding all these waves with the complex notation of Section 5,",
+  "tr": "الشقوق الحقيقية ليست نقاطًا. الشقّ ذو العرض \\(w\\) صفٌّ من المنابع النقطية المتجاورة، ويجب جمع الموجات الصادرة عنها جميعًا، تمامًا كما جمعنا موجات الشقّين. نقيس الموضع \\(x'\\) عبر أحد الشقوق بدءًا من مركزه. ومن نقطة بعيدة في الاتجاه \\(\\theta,\\) تقطع الموجة القادمة من \\(x'\\) مسافة أطول بمقدار \\(x'\\sin\\theta\\) من الموجة القادمة من المركز، وفق حجّة المعادلة (4). وبجمع كل هذه الموجات بالترميز العقدي من القسم 5،"
+ },
+ "39af6408cb2a": {
+  "src": "The page computes \\(\\delta s\\) from the right-hand side of (3), not as \\(L_2 - L_1.\\) Near the centre line the two lengths are almost equal, and subtracting two nearly equal numbers on a computer throws away significant digits. The form (3) has an exact zero at \\(\\alpha = 0\\) and keeps its relative precision for tiny path differences. Over every combination of slider values the two ways differ by at most \\(1.4\\times10^{-13}\\ \\mathrm{px},\\) so here the rearrangement is a good habit rather than a visible improvement.",
+  "tr": "تحسب الصفحة \\(\\delta s\\) من الطرف الأيمن للمعادلة (3)، لا بوصفه \\(L_2 - L_1.\\) قرب الخطّ المركزي يكون الطولان متساويين تقريبًا، وطرح عددين متقاربين جدًّا في الحاسوب يُسقط الأرقام المعنوية. وللصيغة (3) صفرٌ دقيق عند \\(\\alpha = 0\\) وتحافظ على دقّتها النسبية لفروق المسار الصغيرة جدًّا. على كل توليفات قيم المنزلقات يختلف الطريقان بما لا يزيد على \\(1.4\\times10^{-13}\\ \\mathrm{px},\\) لذلك فإعادة الترتيب عادة جيّدة لا تحسينًا ظاهرًا هنا."
+ },
+ "3a6fceaca137": {
+  "src": "Double-Slit Interference · Numa Koudsie",
+  "tr": "التداخل في تجربة الشقّين · نعمة سائر قدسية"
+ },
+ "3b40a2fc6fd0": {
+  "src": "The figure is a vector drawing, \\(600 \\times 440\\) units, that scales with the page, so lines stay sharp at any size; positions are written to two decimals. The wall lies at \\(y = 370\\) with the slit midpoint at \\(x = 300,\\) and screen \\(y\\) points down, so \\(P\\) is drawn at \\((300 - d\\tan\\alpha,\\ 370 - d)\\): equation (1) flipped and shifted. The wall is a 5-unit-thick line with an \\(8\\)-unit gap at each slit. The two paths are drawn in ink, the bar \\(S_2Q\\) in burgundy, the construction dashed; the dashed arc and the bar appear only when \\(\\delta s > 0.05\\ \\mathrm{px},\\) and the arc that marks \\(\\alpha\\) only when \\(\\alpha > 0.2^\\circ.\\)",
+  "tr": "الرسمة متّجهة بأبعاد \\(600 \\times 440\\) وحدة، تتدرّج مع حجم الصفحة، فتبقى الخطوط حادّة عند أيّ حجم؛ وتُكتب المواضع بمنزلتين عشريتين. يقع الحاجز عند \\(y = 370\\) ومنتصف الشقّين عند \\(x = 300,\\) ويشير \\(y\\) على الرسم إلى الأسفل، فتُرسم \\(P\\) عند \\((300 - d\\tan\\alpha,\\ 370 - d)\\): وهذه المعادلة (1) مقلوبة ومزاحة. الحاجز خطّ سمكه 5 وحدات، به فجوة \\(8\\)-وحدات عند كل شقّ. وتُرسم المسارات باللون الأسود، والشريط \\(S_2Q\\) بالعنّابي، والإنشاءات المساعدة متقطّعة؛ ولا يظهر القوس المتقطّع والشريط إلّا حين يكون \\(\\delta s > 0.05\\ \\mathrm{px},\\) والقوس الذي يبيّن \\(\\alpha\\) لا يظهر إلّا حين يكون \\(\\alpha > 0.2^\\circ.\\)"
+ },
+ "3c723171cf6b": {
+  "src": "Matter behaves the same way. In 1924 Louis de Broglie proposed that a particle of momentum \\(p\\) has the wavelength \\(\\lambda = h/p.\\) An electron accelerated from rest through a voltage \\(V\\) has \\(p = \\sqrt{2m_e eV},\\) where \\(m_e\\) is its mass and \\(e\\) its charge, so",
+  "tr": "وتسلك المادّة السلوك نفسه. في عام 1924 اقترح لويس دي برولي أنّ لجسيم كمّيّة حركة \\(p\\) طولًا موجيًّا هو \\(\\lambda = h/p.\\) ويكون لإلكترون يُسرَّع من السكون عبر جهد \\(V\\) كمّيّة الحركة \\(p = \\sqrt{2m_e eV},\\) حيث \\(m_e\\) كتلته و\\(e\\) شحنته، لذلك"
+ },
+ "412db7fcde67": {
+  "src": "Seen from far away, the two slits merge into one point and the two paths run almost parallel.",
+  "tr": "عند رؤيتهما من بعيد يندمج الشقّان في نقطة واحدة، ويكاد المساران يتوازيان."
+ },
+ "44a22fc948f3": {
+  "src": "Fig. 3 · wave optics · wave–particle duality",
+  "tr": "الشكل 3 · البصريات الموجية · ازدواجية الموجة والجسيم"
+ },
+ "46e7c485175e": {
+  "src": "Here \\(I_0\\) is the intensity where the two waves arrive in step. It is four times what either slit gives alone, \\(2E_0^2\\) against \\(\\tfrac12E_0^2.\\) Averaged across a fringe, \\(\\cos^2\\) gives \\(\\tfrac12,\\) so on average two slits give twice the light of one: no energy is created, it is moved from the dark places to the bright ones.",
+  "tr": "هنا \\(I_0\\) هي الشدّة التي تصل عندها الموجتان متطابقتين في الطور. وهي أربعة أضعاف ما يعطيه أيّ من الشقّين وحده، أي \\(2E_0^2\\) في مقابل \\(\\tfrac12E_0^2.\\) ومتوسّط \\(\\cos^2\\) عبر الهدب يساوي \\(\\tfrac12,\\) فيعطي الشقّان في المتوسّط ضعف ضوء الشقّ الواحد: لم تُخلق طاقة، بل انتقلت من المواضع المظلمة إلى المضيئة."
+ },
+ "474bbe6e7428": {
+  "src": "<span>6</span>Slits with a width&nbsp;★",
+  "tr": "<span>6</span>الشقوق ذات العرض&nbsp;★"
+ },
+ "48a75f542d67": {
+  "src": "<span>3</span>The exact path difference",
+  "tr": "<span>3</span>فرق المسار الدقيق"
+ },
+ "48b4560dac4d": {
+  "src": "Slits have a width, which multiplies the fringes by the envelope of Section 6.",
+  "tr": "للشقوق عرض، وهو يضرب الأهداب في الغلاف الوارد في القسم 6."
+ },
+ "4bbe631d137a": {
+  "src": "Light delivers its energy in grains, <em>photons</em>, each carrying the energy \\(hf,\\) where \\(f\\) is the frequency and \\(h = 6.626\\times10^{-34}\\ \\mathrm{J\\,s}\\) is Planck’s constant. A sensitive camera behind the slits records each photon as one dot at one place. Where the next dot will land cannot be predicted. Where dots are likely to land can: the probability of a dot near a direction \\(\\theta\\) is proportional to the intensity (7) there,",
+  "tr": "يحمل الضوء طاقته في حبّات تسمّى <em>الفوتونات</em>، يحمل كلّ منها الطاقة \\(hf,\\) حيث \\(f\\) التردّد و\\(h = 6.626\\times10^{-34}\\ \\mathrm{J\\,s}\\) ثابت بلانك. يسجّل حسّاس كاميرا خلف الشقّين كلّ فوتون نقطةً واحدةً في موضع واحد. ولا يمكن التنبّؤ بمكان النقطة التالية، أمّا الأماكن المرجّحة لوقوعها فيمكن التنبّؤ بها: احتمال وقوع نقطة قرب الاتجاه \\(\\theta\\) يتناسب مع الشدّة (7) هناك،"
+ },
+ "4dd540714c02": {
+  "src": "The slits and \\(P\\) are placed by (1); \\(L_1\\) and \\(L_2\\) are the distances from the slits to \\(P;\\) \\(\\delta s\\) comes from (3). The point \\(Q\\) of Figure 1 is \\(P + L_1\\hat u,\\) with \\(\\hat u\\) the unit vector from \\(P\\) towards \\(S_2.\\)",
+  "tr": "تتحدّد الشقوق و\\(P\\) بالمعادلة (1)؛ و\\(L_1\\) و\\(L_2\\) هما المسافتان من الشقّين إلى \\(P;\\) ويُحسب \\(\\delta s\\) من (3). النقطة \\(Q\\) من الشكل 1 هي \\(P + L_1\\hat u,\\) حيث \\(\\hat u\\) متّجه الوحدة من \\(P\\) نحو \\(S_2.\\)"
+ },
+ "4ebb61a294d3": {
+  "src": "Light does the same on a scale more than a million times finer. The colours of a soap film come from two reflections, one at the front surface of the film and one at the back, which travel slightly different distances; where the extra distance suits one colour, that colour is reinforced and the others are weakened. The rainbow on a CD comes from its tracks, \\(1.6\\ \\mu\\mathrm{m}\\) apart: the light scattered by neighbouring tracks adds up in step only in certain directions, and those directions are different for each colour.",
+  "tr": "يفعل الضوء الشيء نفسه على مقياس أدقّ بأكثر من مليون مرّة. تأتي ألوان غشاء الصابون من انعكاسين: أحدهما عند السطح الأمامي للغشاء والآخر عند سطحه الخلفي، وهما يقطعان مسافتين مختلفتين قليلًا، فحيثما تناسب المسافة الإضافية لونًا بعينه يتعزّز ذلك اللون وتضعف الألوان الأخرى. أمّا قوس قزح على القرص المدمج فيأتي من مساراته التي تبعد عن بعضها \\(1.6\\ \\mu\\mathrm{m}\\): فالضوء المبعثر عن المسارات المتجاورة لا يتجمّع متطابقًا في الطور إلّا في اتجاهات معيّنة، وهذه الاتجاهات تختلف من لون إلى آخر."
+ },
+ "4f588b28c1eb": {
+  "src": "A flat wave of light of wavelength \\(\\lambda\\) arrives from below and meets a wall with two narrow slits, \\(S_1\\) and \\(S_2,\\) a distance \\(b\\) apart. Each slit lets through a little of the wave and becomes the source of a new circular wave. The same crest reaches both slits at the same moment, so the two new waves start in step. We watch one point \\(P\\) beyond the wall (Figure 1).",
+  "tr": "تسقط موجة ضوئية مستوية طولها الموجي \\(\\lambda\\) من الأسفل على حاجز فيه شقّان ضيّقان، \\(S_1\\) و\\(S_2,\\) تفصل بينهما مسافة \\(b\\). يمرّر كلّ شقّ جزءًا صغيرًا من الموجة ويصبح منبعًا لموجة دائرية جديدة. تصل القمّة نفسها إلى الشقّين في اللحظة نفسها، لذلك تبدأ الموجتان الجديدتان متطابقتين في الطور. نراقب نقطة \\(P\\) خلف الحاجز (الشكل 1)."
+ },
+ "5142325d7ed0": {
+  "src": "D. Halliday, R. Resnick and J. Walker, <a href=\"https://www.wiley.com/en-gb/fundamentals-of-physics-extended-10th-edition-p-9781118547878\"><em>Fundamentals of Physics</em></a>, 10th edition, Wiley, 2014: chapters 35 (interference) and 36 (diffraction).",
+  "tr": "D. Halliday، R. Resnick وJ. Walker، <a href=\"https://www.wiley.com/en-gb/fundamentals-of-physics-extended-10th-edition-p-9781118547878\"><em>Fundamentals of Physics</em></a>، الطبعة 10، Wiley، 2014: الفصلان 35 (التداخل) و36 (الحيود)."
+ },
+ "5341a72936c3": {
+  "src": "One caution about the dots. Figure 5 draws them with a probability per unit angle, the rule (12). A flat screen at distance \\(D\\) counts dots per unit length instead, and that is a different measure: a step \\(\\mathrm{d}\\theta\\) in angle covers a step \\(\\mathrm{d}y = D\\sec^2\\theta\\,\\mathrm{d}\\theta\\) on the screen, longer out to the sides, so the density per unit length is \\(p(\\theta)/(D\\sec^2\\theta)\\), smaller than straight ahead by a factor \\(3/4\\) at \\(30^\\circ\\). Figure 5 shows how a fringe pattern builds up dot by dot; it is not a full model of a counting experiment.",
+  "tr": "تنبيه بشأن النقاط. يرسمها الشكل 5 باحتمال لكل وحدة زاوية، وفق القاعدة (12). أمّا شاشة مستوية على بعد \\(D\\) فتعدّ النقاط لكل وحدة طول، وهذا مقياس مختلف: فخطوة \\(\\mathrm{d}\\theta\\) في الزاوية تغطّي على الشاشة خطوة \\(\\mathrm{d}y = D\\sec^2\\theta\\,\\mathrm{d}\\theta\\)، وهي أطول كلّما اتّجهنا إلى الجانبين؛ لذلك تكون الكثافة لكل وحدة طول \\(p(\\theta)/(D\\sec^2\\theta)\\)، وهي أصغر من قيمتها في الاتجاه الأمامي بعامل \\(3/4\\) عند \\(30^\\circ\\). يوضّح الشكل 5 كيف يتكوّن نمط الأهداب نقطةً نقطة، وليس نموذجًا كاملًا لتجربة عدّ."
+ },
+ "53ea4a665ee6": {
+  "src": "with \\(\\bar L = (L_1 + L_2)/2.\\) The point \\(P\\) still oscillates at the frequency of the light, but with the amplitude \\(2E_0\\cos(\\Delta\\varphi/2),\\) which depends only on the <em>phase difference</em> \\(\\Delta\\varphi.\\) No eye or camera can follow \\(5\\times10^{14}\\) oscillations a second; they record the <em>intensity</em>, the time average of \\(E^2.\\) The square is there because the energy a wave carries grows as the square of its swing, just as a pendulum swinging twice as wide carries four times the energy. The average of \\(\\cos^2\\) over a period is \\(\\tfrac12,\\) so",
+  "tr": "مع \\(\\bar L = (L_1 + L_2)/2.\\) تظلّ \\(P\\) تتذبذب بتردّد الضوء، لكن بسعة \\(2E_0\\cos(\\Delta\\varphi/2),\\) تعتمد على <em>فرق الطور</em> \\(\\Delta\\varphi.\\) ولا تستطيع عين ولا كاميرا متابعة \\(5\\times10^{14}\\) ذبذبة في الثانية، فهما تسجّلان <em>الشدّة</em>، أي متوسّط \\(E^2.\\) ويظهر المربّع لأنّ الطاقة التي تحملها الموجة تزداد مع مربّع اتّساعها، تمامًا كما يحمل نوّاس يتأرجح ضعف الاتّساع أربعة أضعاف الطاقة. ومتوسّط \\(\\cos^2\\) على دورة واحدة هو \\(\\tfrac12,\\) لذلك"
+ },
+ "543e8152f035": {
+  "src": "Put the origin at the point \\(M\\) midway between the slits, with \\(x\\) along the wall and \\(y\\) pointing away from it. The point \\(P\\) lies at distance \\(d\\) from the wall, in a direction that makes the angle \\(\\alpha\\) with the normal to the wall; as on the page, we take \\(P\\) on the side of \\(S_1.\\) With \\(r\\) the distance from \\(M\\) to \\(P,\\)",
+  "tr": "نضع المبدأ عند النقطة \\(M\\) في منتصف المسافة بين الشقّين، مع \\(x\\) على امتداد الحاجز و\\(y\\) مبتعدًا عنه. تقع النقطة \\(P\\) على بعد \\(d\\) من الحاجز، في اتجاه يصنع الزاوية \\(\\alpha\\) مع العمودي على الحاجز؛ وكما في الصفحة نأخذ \\(P\\) في جهة \\(S_1.\\) وليكن \\(r\\) البعد من \\(M\\) إلى \\(P,\\)"
+ },
+ "5888082d0a17": {
+  "src": "Exercise 5.1 · on the figure above",
+  "tr": "تمرين 5.1 · على الشكل أعلاه"
+ },
+ "599f6c3ae394": {
+  "src": "Pythagoras’ theorem applied to the coordinates (1) gives the two path lengths:",
+  "tr": "تعطي مبرهنة فيثاغورس، مطبّقةً على الإحداثيات (1)، طولَي المسارين:"
+ },
+ "5ac8310e6735": {
+  "src": "R. P. Feynman, R. B. Leighton and M. Sands, <em>The Feynman Lectures on Physics</em>, Addison-Wesley, 1963–1965, chapters linked to Caltech’s online edition: volume I, chapters <a href=\"https://www.feynmanlectures.caltech.edu/I_29.html\">29</a> (interference) and <a href=\"https://www.feynmanlectures.caltech.edu/I_30.html\">30</a> (diffraction); volume III, chapter <a href=\"https://www.feynmanlectures.caltech.edu/III_01.html\">1</a> (quantum behaviour).",
+  "tr": "R. P. Feynman، R. B. Leighton وM. Sands، <em>The Feynman Lectures on Physics</em>، Addison-Wesley، 1963–1965، مع فصول مرتبطة بالنسخة الإلكترونية من Caltech: المجلد I، الفصل <a href=\"https://www.feynmanlectures.caltech.edu/I_29.html\">29</a> (التداخل) و<a href=\"https://www.feynmanlectures.caltech.edu/I_30.html\">30</a> (الحيود)؛ والمجلد III، الفصل <a href=\"https://www.feynmanlectures.caltech.edu/III_01.html\">1</a> (السلوك الكمومي)."
+ },
+ "5cd310f48aa6": {
+  "src": "<span class=\"pfig__n\">Figure 2</span>The exact path difference (3) and the shortcut \\(b\\sin\\alpha\\) as \\(P\\) moves along the direction \\(\\alpha = 20^\\circ\\) towards the slits, for \\(b = 40\\ \\mathrm{px},\\) computed at every whole pixel of \\(d\\) from \\(0\\) to \\(300\\ \\mathrm{px}.\\) The dotted line adds the correction of (5), drawn from \\(d = 25\\ \\mathrm{px}.\\) Far away the curves merge: the shortcut is within \\(1\\,\\%\\) of the exact value beyond \\(d = 125\\ \\mathrm{px},\\) about 3.3 slit separations from \\(M,\\) and still \\(1.6\\,\\%\\) too long at the slider’s lower end, \\(d = 100\\ \\mathrm{px}.\\) Close to the wall the exact path difference falls to zero, because \\(P\\) then approaches \\(M,\\) which is equally far from both slits.",
+  "tr": "<span class=\"pfig__n\">الشكل 2</span>فرق المسار الدقيق (3) والتقريب \\(b\\sin\\alpha\\) حين تتحرّك \\(P\\) على طول الاتجاه \\(\\alpha = 20^\\circ\\) نحو الشقّين، من أجل \\(b = 40\\ \\mathrm{px},\\) محسوبين عند كل بكسل صحيح من \\(d\\) بين \\(0\\) و\\(300\\ \\mathrm{px}.\\) تُظهر الخطوط المنقّطة الإضافة التصحيحية من المعادلة (5)، المرسومة ابتداءً من \\(d = 25\\ \\mathrm{px}.\\) وعلى مسافة كبيرة تتطابق المنحنيات: يقع التقريب ضمن \\(1\\,\\%\\) من القيمة الدقيقة وراء \\(d = 125\\ \\mathrm{px},\\) على بعد نحو 3.3 من المسافات بين الشقّين عن \\(M,\\) وما زال أطول بنسبة \\(1.6\\,\\%\\) عند الطرف الأدنى للمنزلق، عند \\(d = 100\\ \\mathrm{px}.\\) وقرب الحاجز يهبط فرق المسار الدقيق إلى الصفر، لأنّ \\(P\\) تقترب حينئذ من \\(M,\\) وهي على البعد نفسه من الشقّين."
+ },
+ "61965073f034": {
+  "src": "The right half of Figure 1 shows the same result without algebra. Drop a perpendicular from \\(S_1\\) onto the path from \\(S_2.\\) Beyond the foot of the perpendicular the two paths are equally long, so the extra length is the short side of the right-angled triangle with hypotenuse \\(b;\\) the perpendicular is turned from the wall by the same angle \\(\\alpha\\) by which the paths are turned from the normal, so that side is \\(b\\sin\\alpha.\\) This is the <em>far-field</em> or <em>Fraunhofer</em> approximation, and the page shows it in the readout <em>\\(b\\sin\\alpha\\)</em>, next to the exact value.",
+  "tr": "يُظهر النصف الأيمن من الشكل 1 النتيجة نفسها دون جبر. أسقِط عمودًا من \\(S_1\\) على المسار القادم من \\(S_2.\\) بعد قدم العمود يكون المساران متساويين في الطول، فالطول الإضافي هو الضلع القصير من المثلّث القائم الذي وتره \\(b;\\) والعمود مائل عن الحاجز بالزاوية نفسها \\(\\alpha\\) التي تميل بها المسارات عن العمودي، لذلك يكون هذا الضلع \\(b\\sin\\alpha.\\) وهذا هو تقريب <em>الحقل البعيد</em> أو تقريب <em>فراونهوفر</em>، وتعرضه الصفحة في الخانة <em>\\(b\\sin\\alpha\\)</em> بجوار القيمة الدقيقة."
+ },
+ "642a2b4e4409": {
+  "src": "Between 1801 and 1803 Thomas Young used effects of this kind to argue, in lectures to the Royal Society, that light is a wave. In one experiment he let sunlight in through a small hole in a window shutter and held in the beam a slip of card about \\(0.85\\ \\mathrm{mm}\\) wide. Inside the card’s shadow, where light passing the two edges overlaps, he saw a row of bands, with the middle of the shadow always bright. When he blocked the light passing one edge, the bands inside the shadow vanished. Two openings for the light give a pattern; one opening gives none. The double slit is the cleanest form of that experiment, and it is what the figure above draws.",
+  "tr": "بين عامَي 1801 و1803 استعمل توماس يونغ تأثيرات من هذا النوع ليحاجّ، في محاضرات ألقاها أمام الجمعية الملكية، بأنّ الضوء موجة. في إحدى تجاربه أدخل ضوء الشمس عبر ثقب صغير في مصراع نافذة، وأمسك في الشعاع شريحة من ورق مقوّى عرضها نحو \\(0.85\\ \\mathrm{mm}\\). داخل ظلّ الشريحة، حيث يتداخل الضوء المار بحافّتيها، رأى صفًّا من الأهداب، وكان مركز الظلّ مضيئًا دائمًا. وحين حجب الضوء المار بإحدى الحافّتين اختفت الأهداب داخل الظلّ. فالفتحتان للضوء تعطيان نمطًا، أمّا فتحة واحدة فلا تعطي شيئًا. والشقّان المزدوجان هما أنقى صورة لهذه التجربة، وهما ما ترسمه الصورة أعلاه."
+ },
+ "67fb07408136": {
+  "src": "Each slit is a point that sends the same wave in every direction. Section 6 gives the slits a width.",
+  "tr": "كلّ شقّ نقطةٌ ترسل الموجة نفسها في كل الاتجاهات. ويمنح القسم 6 الشقوق عرضًا."
+ },
+ "6b4098fb4fd6": {
+  "src": "Two slits, one point P. The two paths to P differ by δs, and that small difference decides whether P is bright or dark.",
+  "tr": "شقّان ونقطة واحدة P. يختلف طريقا الموجتين إلى P بمقدار δs، وهذا الفرق الصغير هو الذي يحدّد هل النقطة P مضيئة أم مظلمة."
+ },
+ "6dd4da920b97": {
+  "src": "<span>8</span>How the page computes",
+  "tr": "<span>8</span>كيف تحسب الصفحة"
+ },
+ "702b201c4b40": {
+  "src": "Phyein Usul",
+  "tr": "Phyein Usul"
+ },
+ "73f5d9024f15": {
+  "src": "<span class=\"pfig__n\">Figure 4</span>Far-field intensity (11) at the page’s defaults \\(b = 40\\ \\mathrm{px}\\) and \\(\\lambda = 13.5\\ \\mathrm{px},\\) computed every \\(0.2^\\circ\\) from \\(0^\\circ\\) to \\(90^\\circ.\\) Thin dark line: point slits, the page’s model. Burgundy: slits \\(20\\ \\mathrm{px}\\) wide. Dashed: their single-slit envelope, which multiplies the fringes. The first bright fringe, at \\(19.72^\\circ,\\) is cut to 0.41 of its point-slit height; the second, at \\(42.45^\\circ,\\) falls on a zero of the envelope and disappears. The page’s own plot covers the range left of the faint line at \\(30^\\circ.\\)",
+  "tr": "<span class=\"pfig__n\">الشكل 4</span>الشدّة في الحقل البعيد (11) عند القيم الافتراضية للصفحة \\(b = 40\\ \\mathrm{px}\\) و\\(\\lambda = 13.5\\ \\mathrm{px},\\) محسوبة كل \\(0.2^\\circ\\) من \\(0^\\circ\\) إلى \\(90^\\circ.\\) الخطّ الرفيع الداكن: الشقوق النقطية، وهو نموذج الصفحة. العنّابي: شقوق عرض كلٍّ منها \\(20\\ \\mathrm{px}\\). المتقطّع: غلافها للشقّ المفرد، وهو الذي يضرب الأهداب. الهدب المضيء الأوّل عند \\(19.72^\\circ,\\) يُختزل إلى 0.41 من ارتفاعه في الشقوق النقطية؛ أمّا الهدب الثاني عند \\(42.45^\\circ,\\) فيقع على صفر الغلاف فيختفي. ويغطّي الرسم البياني الخاص بالصفحة ما يقع على يسار الخطّ الخافت عند \\(30^\\circ.\\)"
+ },
+ "761ed73a9327": {
+  "src": "<b>Fig. 3b</b> · far-field intensity <span class=\"tx\">\\(I(\\theta)/I_0 = \\cos^2(\\pi b \\sin\\theta / \\lambda)\\)</span>",
+  "tr": "<b>الشكل 3b</b> · الشدّة في الحقل البعيد <span class=\"tx\">\\(I(\\theta)/I_0 = \\cos^2(\\pi b \\sin\\theta / \\lambda)\\)</span>"
+ },
+ "7717ea771237": {
+  "src": "The readouts show \\(L_1,\\) \\(L_2,\\) the exact \\(\\delta s,\\) the shortcut \\(b\\sin\\alpha,\\) the order \\(\\delta s/\\lambda\\) and the phase \\(\\Delta\\varphi\\) in units of \\(\\pi.\\)",
+  "tr": "تُظهر الخانات \\(L_1,\\) \\(L_2,\\) و\\(\\delta s,\\) الدقيق، والتقريب \\(b\\sin\\alpha,\\) والترتيب \\(\\delta s/\\lambda\\)، والطور \\(\\Delta\\varphi\\) بوحدات \\(\\pi.\\)"
+ },
+ "7abde4316e11": {
+  "src": "The light has one wavelength and the two slits keep a fixed phase relation: the light is <em>monochromatic</em> and <em>coherent</em>.",
+  "tr": "للضوء طول موجي واحد، والشقّان يحافظان على علاقة طور ثابتة: الضوء <em>أحادي اللون</em> و<em>متماسك</em>."
+ },
+ "7d252cd594b3": {
+  "src": "All simulations ↑",
+  "tr": "جميع المحاكاة ↑"
+ },
+ "7e50566a7fe5": {
+  "src": "Lecture note · Fig. 3 · wave optics · wave–particle duality",
+  "tr": "مذكّرة المحاضرة · الشكل 3 · البصريات الموجية · ازدواجية الموجة والجسيم"
+ },
+ "7fed0bcde751": {
+  "src": "<span class=\"pfig__n\">Figure 1</span>The model, with the slit separation exaggerated. Left: the two paths \\(L_1 = |S_1P|\\) and \\(L_2 = |S_2P|.\\) The dashed circle about \\(P\\) through \\(S_1\\) cuts the longer path at \\(Q,\\) so \\(|PQ| = L_1\\) and the burgundy stretch \\(S_2Q\\) is the path difference \\(\\delta s;\\) the page draws the same construction. Right: when \\(P\\) is very far away the two paths are almost parallel, and the extra length is one side of a small right-angled triangle, \\(b\\sin\\alpha.\\) The rose lines below the wall are crests of the incoming light.",
+  "tr": "<span class=\"pfig__n\">الشكل 1</span>النموذج، والمسافة بين الشقّين مبالغ فيها في الرسم. إلى اليسار: المساران \\(L_1 = |S_1P|\\) و\\(L_2 = |S_2P|.\\) الدائرة المتقطّعة حول \\(P\\) المارّة بـ\\(S_1\\) تقطع المسار الأطول عند \\(Q,\\) فيكون \\(|PQ| = L_1\\)، والقطعة العنّابية \\(S_2Q\\) هي فرق المسار \\(\\delta s;\\) والصفحة ترسم الإنشاء نفسه. إلى اليمين: عندما تكون \\(P\\) بعيدة جدًّا يكون المساران شبه متوازيين، والطول الإضافي ضلع من مثلّث قائم صغير، هو \\(b\\sin\\alpha.\\) الخطوط الورديّة أسفل الحاجز هي قمم الضوء الساقط."
+ },
+ "8166bc414a25": {
+  "src": "<span class=\"psec__n\">08</span>How the page computes",
+  "tr": "<span class=\"psec__n\">08</span>كيف تحسب الصفحة"
+ },
+ "846b833c9103": {
+  "src": "A path difference is a length. Turning it into brightness takes one more step: add the two waves, then square.",
+  "tr": "فرق المسار طول. ولتحويله إلى إضاءة نحتاج خطوة أخرى: نجمع الموجتين ثم نربّع."
+ },
+ "85d5a924bc48": {
+  "src": "<span class=\"pfig__n\">Figure 3</span>The two waves at \\(P\\) drawn as arrows (phasors) of length \\(E_0,\\) the second turned by the phase difference \\(\\Delta\\varphi;\\) the burgundy arrow is their sum, of length \\(2E_0|\\cos(\\Delta\\varphi/2)|.\\) In step, the arrows line up and the sum is \\(2E_0\\): bright. A third of a turn apart, the sum is \\(E_0\\) and the intensity a quarter of the peak. Half a turn apart, they cancel: dark.",
+  "tr": "<span class=\"pfig__n\">الشكل 3</span>الموجتان عند \\(P\\) مرسومتان أسهمًا (طوريّات) طول كلّ منهما \\(E_0,\\) والثاني مُدار بفرق الطور \\(\\Delta\\varphi;\\) أمّا السهم العنّابي فهو مجموعهما، طوله \\(2E_0|\\cos(\\Delta\\varphi/2)|.\\) إذا تطابق الطوران اصطفّت الأسهم، فيكون المجموع \\(2E_0\\): مضيء. وعند فرق قدره ثلث دورة يكون المجموع \\(E_0\\) والشدّة ربع الذروة. وعند فرق قدره نصف دورة تتلاشى: مظلم."
+ },
+ "86b17d1a85ec": {
+  "src": "Animate wavelets",
+  "tr": "تحريك الموجات الثانوية"
+ },
+ "896cf9a00c3f": {
+  "src": "At \\(P\\) each wave makes the field oscillate; for light the field is the electric field. Call its amplitude \\(E_0\\) and its angular frequency \\(\\omega = 2\\pi f.\\) The wave from \\(S_j\\) has travelled \\(L_j,\\) so it arrives with the phase \\(kL_j\\): \\(E_j = E_0\\cos(kL_j - \\omega t).\\) The two fields simply add, and the identity \\(\\cos A + \\cos B = 2\\cos\\tfrac{A-B}{2}\\cos\\tfrac{A+B}{2}\\) turns the sum into one oscillation,",
+  "tr": "عند \\(P\\) يجعل كلّ موجة المجال يتذبذب؛ وفي حالة الضوء يكون المجال هو المجال الكهربائي. لنسمِّ سعته \\(E_0\\) وتردّده الزاوي \\(\\omega = 2\\pi f.\\) الموجة الصادرة عن \\(S_j\\) قطعت \\(L_j,\\) فتصل بالطور \\(kL_j\\): \\(E_j = E_0\\cos(kL_j - \\omega t).\\) يتجمّع الحقلان ببساطة، والمتطابقة \\(\\cos A + \\cos B = 2\\cos\\tfrac{A-B}{2}\\cos\\tfrac{A+B}{2}\\) تحوّل المجموع إلى تذبذب واحد،"
+ },
+ "90ef02305606": {
+  "src": "E. Hecht, <a href=\"https://www.pearson.com/en-us/subject-catalog/p/Hecht-Optics-5th-Edition/P200000006793\"><em>Optics</em></a>, 5th edition, Pearson, 2017: chapters 9 (interference) and 10 (diffraction).",
+  "tr": "E. Hecht، <a href=\"https://www.pearson.com/en-us/subject-catalog/p/Hecht-Optics-5th-Edition/P200000006793\"><em>Optics</em></a>، الطبعة 5، Pearson، 2017: الفصلان 9 (التداخل) و10 (الحيود)."
+ },
+ "93a8161c11f4": {
+  "src": "Back to the simulations",
+  "tr": "العودة إلى المحاكاة"
+ },
+ "94a94dbdc7bd": {
+  "src": "Because only ratios matter, the pixel is no real unit of length. The default \\(b = 40\\ \\mathrm{px}\\) with \\(\\lambda = 13.5\\ \\mathrm{px}\\) is a slit pair 2.96 wavelengths apart, which for red laser light would mean slits \\(1.88\\ \\mu\\mathrm{m}\\) apart. Laboratory slits are usually wider apart, \\(0.25\\ \\mathrm{mm}\\) or 395 wavelengths, and their first bright fringe lies only \\(0.145^\\circ\\) from the centre. The page enlarges the wavelength so that the angles can be seen. In the intensity plot, \\(\\theta\\) runs from \\(0^\\circ\\) to \\(30^\\circ\\) over 500 units, and \\(I/I_0\\) from 0 to 1 over 118 units; the dot marks the exact intensity at \\(\\alpha,\\) and the labels \\(m = 0, 1, \\dots\\) mark the far-field bright directions.",
+  "tr": "ولأنّ النسب وحدها تهمّ، فإنّ البكسل ليس وحدة طول حقيقية. والقيمة الافتراضية \\(b = 40\\ \\mathrm{px}\\) مع \\(\\lambda = 13.5\\ \\mathrm{px}\\) هي زوج من الشقوق متباعد بمقدار 2.96 طول موجي، وهذا يعني للضوء الأحمر لليزر شقّين متباعدين بمقدار \\(1.88\\ \\mu\\mathrm{m}\\). والشقوق المخبرية عادةً أبعد عن بعضها، \\(0.25\\ \\mathrm{mm}\\) أو 395 طولًا موجيًّا، ويقع هدبها المضيء الأوّل على بُعد \\(0.145^\\circ\\) فقط من المركز. وتكبّر الصفحة الطول الموجي كي تُرى الزوايا. وفي مخطّط الشدّة يمتدّ \\(\\theta\\) من \\(0^\\circ\\) إلى \\(30^\\circ\\) على 500 وحدة، ومن 0 إلى 1 لـ\\(I/I_0\\) على 118 وحدة؛ وتعلّم النقطة الشدّة الدقيقة عند \\(\\alpha,\\) وتعلّم التسميات \\(m = 0, 1, \\dots\\) الاتجاهات المضيئة في تقريب الحقل البعيد."
+ },
+ "9521dba25709": {
+  "src": "Home page",
+  "tr": "الصفحة الرئيسية"
+ },
+ "958800539619": {
+  "src": "<span>5</span>Adding the two waves",
+  "tr": "<span>5</span>جمع الموجتين"
+ },
+ "9860b6a398fd": {
+  "src": "<span class=\"sw sw--dash\"></span>construction",
+  "tr": "<span class=\"sw sw--dash\"></span>الإنشاءات المساعدة"
+ },
+ "986878851fca": {
+  "src": "Two slits, one wave: how a path difference draws light and dark",
+  "tr": "شقّان وموجة واحدة: كيف يرسم فرق المسار الضوء والظلام"
+ },
+ "98c148288c56": {
+  "src": "<span class=\"pbox__t\">Path difference decides the brightness</span> <p>The point \\(P\\) is bright when the path difference is a whole number of wavelengths and dark when it is a whole number and a half:</p> \\[ \\begin{aligned} \\delta s &= m\\lambda & &\\text{bright}, \\\\ \\delta s &= \\left(m + \\tfrac12\\right)\\lambda & &\\text{dark}, \\end{aligned} \\tag{8} \\] <p>Here \\(m = 0, 1, 2, \\dots\\) is the <em>order</em>, the number of extra wavelengths. Write \\(\\theta\\) for any direction measured from the normal to the wall, as the plot under the figure does; \\(\\alpha\\) is the one direction that points at \\(P.\\) In the far field \\(\\delta s = b\\sin\\theta,\\) so the bright directions are \\(\\sin\\theta_m = m\\lambda/b.\\)</p>",
+  "tr": "<span class=\"pbox__t\">فرق المسار يحدّد الإضاءة</span> <p>النقطة \\(P\\) مضيئة حين يكون فرق المسار عددًا صحيحًا من الأطوال الموجية، ومظلمة حين يكون عددًا صحيحًا ونصفًا:</p> \\[ \\begin{aligned} \\delta s &= m\\lambda & &\\text{bright}, \\\\ \\delta s &= \\left(m + \\tfrac12\\right)\\lambda & &\\text{dark}, \\end{aligned} \\tag{8} \\] <p>حيث \\(m = 0, 1, 2, \\dots\\) هي <em>الرتبة</em>، أي عدد الأطوال الموجية الإضافية. نرمز بـ\\(\\theta\\) لأيّ اتجاه نقيسه من العمودي على الحاجز، كما في المخطّط أسفل الشكل؛ و\\(\\alpha\\) هي الاتجاه الذي يشير إلى \\(P.\\) في الحقل البعيد يكون \\(\\delta s = b\\sin\\theta,\\) لذلك تقع الاتجاهات المضيئة عند \\(\\sin\\theta_m = m\\lambda/b.\\)</p>"
+ },
+ "9af3736c4028": {
+  "src": "Exercise 4.1 · on the figure above",
+  "tr": "تمرين 4.1 · على الشكل أعلاه"
+ },
+ "9c2d5560b7c3": {
+  "src": "The order of the steps matters: fields first, then square. Adding the two intensities instead would give \\(\\tfrac12E_0^2 + \\tfrac12E_0^2 = E_0^2\\) everywhere, with no fringes at all. That is what happens when the two slits are lit by two unrelated lamps. Since \\(2\\cos^2(\\Delta\\varphi/2) = 1 + \\cos\\Delta\\varphi,\\) the average (7) reads \\(\\langle E^2\\rangle = E_0^2 + E_0^2\\cos\\Delta\\varphi\\): the sum of the two intensities plus a <em>cross term</em>. With two lamps the phase difference wanders at random, the cross term averages to zero, and only the sum of intensities is left. Figure 3 shows the addition of fields as arrows. In the language of complex numbers each wave is \\(E_0e^{i(kL_j-\\omega t)},\\) the sum is \\(E_0e^{i(kL_1-\\omega t)}(1 + e^{i\\Delta\\varphi}),\\) and \\(|1 + e^{i\\Delta\\varphi}|^2 = 2 + 2\\cos\\Delta\\varphi = 4\\cos^2(\\Delta\\varphi/2),\\) the same result.",
+  "tr": "ترتيب الخطوات مهمّ: أوّلًا الحقول ثم المربّع. ولو جمعنا الشدّتين لكان الناتج \\(\\tfrac12E_0^2 + \\tfrac12E_0^2 = E_0^2\\) في كل مكان، دون أهداب أصلًا. وهذا ما يحدث حين يضيء مصدران مستقلّان الشقّين. ولأنّ \\(2\\cos^2(\\Delta\\varphi/2) = 1 + \\cos\\Delta\\varphi,\\) يصبح المتوسّط (7) \\(\\langle E^2\\rangle = E_0^2 + E_0^2\\cos\\Delta\\varphi\\): مجموع الشدّتين مضافًا إليه <em>حدًّا تقاطعيًّا</em>. ومع مصدرين يتغيّر فرق الطور عشوائيًّا، فيتلاشى الحدّ التقاطعي في المتوسّط، ولا يبقى إلّا مجموع الشدّتين. يُظهر الشكل 3 جمع الحقول بوصفها أسهمًا. وبلغة الأعداد العقدية تكون كل موجة \\(E_0e^{i(kL_j-\\omega t)},\\) ويكون المجموع \\(E_0e^{i(kL_1-\\omega t)}(1 + e^{i\\Delta\\varphi}),\\) و\\(|1 + e^{i\\Delta\\varphi}|^2 = 2 + 2\\cos\\Delta\\varphi = 4\\cos^2(\\Delta\\varphi/2),\\) وهي النتيجة نفسها."
+ },
+ "9d1226717c2f": {
+  "src": "Geometry",
+  "tr": "الهندسة"
+ },
+ "a1096467bf0a": {
+  "src": "Slit separation b",
+  "tr": "المسافة بين الشقّين b"
+ },
+ "a28272643323": {
+  "src": "<span class=\"psec__n\">02</span>The model",
+  "tr": "<span class=\"psec__n\">02</span>النموذج"
+ },
+ "a36ef8aba229": {
+  "src": "Light",
+  "tr": "الضوء"
+ },
+ "a4ce3a9be794": {
+  "src": "← All simulations",
+  "tr": "← جميع المحاكاة"
+ },
+ "a5398bb69f06": {
+  "src": "The amplitudes are taken as equal. In the plane of the drawing, the wave from a long slit weakens as \\(1/\\sqrt L.\\) At the dark fringe for the defaults, \\(L_1 = 200.52\\ \\mathrm{px}\\) and \\(L_2 = 207.27\\ \\mathrm{px},\\) so the amplitudes differ by \\(1.6\\,\\%\\) and the dark fringe keeps \\(7\\times10^{-5}\\) of the peak intensity: invisible.",
+  "tr": "تُؤخذ السعات متساوية. ففي مستوى الرسم تضعف موجة الشقّ الطويل كـ\\(1/\\sqrt L.\\) وعند الهدب المظلم في القيم الافتراضية يكون \\(L_1 = 200.52\\ \\mathrm{px}\\) و\\(L_2 = 207.27\\ \\mathrm{px},\\) فتختلف السعتان بنسبة \\(1.6\\,\\%\\)، ويحتفظ الهدب المظلم بـ\\(7\\times10^{-5}\\) من أقصى شدّة، وهذا غير مرئي."
+ },
+ "a676991491a8": {
+  "src": "The wave is a single number at each point, a <em>scalar</em> wave; the polarisation of light is ignored.",
+  "tr": "الموجة عدد واحد عند كل نقطة، أي موجة <em>قياسية</em>؛ ويُهمَل استقطاب الضوء."
+ },
+ "ae2d2463c3b7": {
+  "src": "Set <em>Slit separation</em> \\(b\\) to \\(80\\ \\mathrm{px},\\) <em>Distance</em> \\(d\\) to \\(100\\ \\mathrm{px}\\) and <em>Angle</em> \\(\\alpha\\) to \\(30^\\circ.\\) The readouts show \\(\\delta s\\) exact \\(= 38.27\\ \\mathrm{px}\\) against \\(b\\sin\\alpha = 40.00\\ \\mathrm{px}\\): the shortcut is \\(4.5\\,\\%\\) too long. Now move <em>Distance</em> \\(d\\) to \\(300\\ \\mathrm{px}.\\) The exact value rises to \\(39.80\\ \\mathrm{px},\\) and the error falls from \\(1.73\\ \\mathrm{px}\\) to \\(0.20\\ \\mathrm{px},\\) an 8.7-fold drop. Equation (5) predicts a nine-fold drop for a three times larger distance; the difference comes from the terms of order \\(b^4/r^4\\) that (5) leaves out, which are not small when \\(b/r = 0.69.\\)",
+  "tr": "اضبط <em>المسافة بين الشقّين</em> \\(b\\) على \\(80\\ \\mathrm{px},\\) و<em>البعد</em> \\(d\\) على \\(100\\ \\mathrm{px}\\) و<em>الزاوية</em> \\(\\alpha\\) على \\(30^\\circ.\\) تُظهر الخانات \\(\\delta s\\) الدقيق \\(= 38.27\\ \\mathrm{px}\\) في مقابل \\(b\\sin\\alpha = 40.00\\ \\mathrm{px}\\): فالتقريب أطول بنسبة \\(4.5\\,\\%\\). الآن حرّك <em>البعد</em> \\(d\\) إلى \\(300\\ \\mathrm{px}.\\) تصعد القيمة الدقيقة إلى \\(39.80\\ \\mathrm{px},\\) ويهبط الخطأ من \\(1.73\\ \\mathrm{px}\\) إلى \\(0.20\\ \\mathrm{px},\\) أي بمقدار يقارب 8.7 مرّة. تتنبّأ المعادلة (5) بهبوط إلى التسع عند مسافة ثلاث مرّات أكبر؛ والفرق يأتي من حدود رتبتها \\(b^4/r^4\\) التي تهملها المعادلة (5)، وهي ليست صغيرة حين \\(b/r = 0.69.\\)"
+ },
+ "afbad8f88287": {
+  "src": "The speed of the wavelets is illustrative only.",
+  "tr": "سرعة الموجات الثانوية توضيحية فقط."
+ },
+ "b25798321558": {
+  "src": "Both slits carry the same factor, so it comes out of the two-slit sum, which is unchanged; the intensity of a pair of slits of width \\(w\\) is the two-slit pattern (7) multiplied by a single-slit factor:",
+  "tr": "يحمل الشقّان العامل نفسه، فيخرج قبل مجموع الشقّين، ويبقى ذلك المجموع دون تغيير؛ والشدّة لزوج من الشقّين عرض كلٍّ منهما \\(w\\) هي نمط الشقّين (7) مضروبًا في عامل شقّ مفرد:"
+ },
+ "b45ef0814493": {
+  "src": "b sin α",
+  "tr": "b sin α"
+ },
+ "b49ac4d19a13": {
+  "src": "Path S₂P",
+  "tr": "المسار S₂P"
+ },
+ "b4c94907a666": {
+  "src": "Nothing on this page is stepped forward in time. Every quantity has a closed formula and is recomputed whenever a slider moves:",
+  "tr": "لا يتقدّم شيء في هذه الصفحة عبر الزمن. لكل كمّيّة صيغة مغلقة تُعاد حسابها كلّما تحرّك منزلق:"
+ },
+ "b796df5a0bb6": {
+  "src": "On a flat screen at a large distance \\(D,\\) the bright lines of small order sit at \\(y_m = D\\tan\\theta_m \\approx m\\lambda D/b,\\) so they are evenly spaced by",
+  "tr": "وعلى شاشة مستوية على بعد كبير \\(D,\\) تقع الخطوط المضيئة ذات الرتب الصغيرة عند \\(y_m = D\\tan\\theta_m \\approx m\\lambda D/b,\\) فتتباعد بالتساوي بمقدار"
+ },
+ "b8c469133579": {
+  "src": "<span class=\"sw sw--ink\"></span>paths",
+  "tr": "<span class=\"sw sw--ink\"></span>المسارات"
+ },
+ "bbe3328d614c": {
+  "src": "Phase Δφ",
+  "tr": "الطور Δφ"
+ },
+ "bbfa1206a214": {
+  "src": "<span>1</span>Bright and dark from one source",
+  "tr": "<span>1</span>الضوء والظلام من مصدر واحد"
+ },
+ "bee75ca77f75": {
+  "src": "Controls",
+  "tr": "عناصر التحكّم"
+ },
+ "bef54249e35b": {
+  "src": "When \\(P\\) is far from the slits compared with their separation, both paths are close to \\(r,\\) so \\(L_1 + L_2 \\approx 2r = 2d/\\cos\\alpha.\\) Putting this into (3),",
+  "tr": "عندما تكون \\(P\\) بعيدة عن الشقّين مقارنةً ببعدهما، يقترب المساران كلاهما من \\(r,\\) فيكون \\(L_1 + L_2 \\approx 2r = 2d/\\cos\\alpha.\\) وبوضع هذا في (3)،"
+ },
+ "bfea7d18506c": {
+  "src": "A wave changes its phase by \\(2\\pi\\) over each wavelength, so over a distance \\(L\\) it changes by \\(kL,\\) with the <em>wavenumber</em> \\(k = 2\\pi/\\lambda.\\) On the page every length is measured in pixels of the drawing: the slider <em>Distance</em> \\(d\\) runs from \\(100\\) to \\(300\\ \\mathrm{px},\\) <em>Slit separation</em> \\(b\\) from \\(20\\) to \\(80\\ \\mathrm{px},\\) <em>Wavelength</em> \\(\\lambda\\) from \\(8\\) to \\(40\\ \\mathrm{px},\\) and <em>Angle</em> \\(\\alpha\\) from \\(0^\\circ\\) to \\(30^\\circ.\\) Only the ratios \\(b/\\lambda\\) and \\(d/b\\) and the angle matter, so the unit drops out of every result (Section 9).",
+  "tr": "تتغيّر طور الموجة بمقدار \\(2\\pi\\) عبر كل طول موجي، فتتغيّر عبر مسافة \\(L\\) بمقدار \\(kL,\\) مع <em>العدد الموجي</em> \\(k = 2\\pi/\\lambda.\\) على الصفحة يُقاس كل طول بالبكسلات في الرسم: يتراوح منزلق <em>البعد</em> \\(d\\) بين \\(100\\) و\\(300\\ \\mathrm{px},\\) ويتراوح <em>المسافة بين الشقّين</em> \\(b\\) بين \\(20\\) و\\(80\\ \\mathrm{px},\\) و<em>طول الموجة</em> \\(\\lambda\\) بين \\(8\\) و\\(40\\ \\mathrm{px},\\) و<em>الزاوية</em> \\(\\alpha\\) بين \\(0^\\circ\\) و\\(30^\\circ.\\) لا يهمّ إلّا النسب \\(b/\\lambda\\) و\\(d/b\\) والزاوية، لذلك تختفي الوحدة من كل نتيجة (القسم 9)."
+ },
+ "c2621bff2d20": {
+  "src": "One more step made the experiment famous. Make the light so faint that it reaches the screen one photon at a time, and each photon leaves a single dot. The dots land at random, yet after thousands of them the bands are back. Electrons, atoms and even large molecules do the same. Section 7 returns to this; first we work out where the bands are.",
+  "tr": "خطوة أخرى جعلت التجربة شهيرة. خفّف الضوء حتى يبلغ الشاشة فوتونًا واحدًا في كل مرة، فيترك كلّ فوتون نقطة واحدة. تقع النقاط عشوائيًّا، ومع ذلك فبعد آلاف منها تعود الأهداب. وتفعل الإلكترونات والذرّات بل والجزيئات الكبيرة الشيء نفسه. يعود القسم 7 إلى هذا؛ أمّا الآن فلنحسب أين تقع الأهداب."
+ },
+ "c95d8e24fa43": {
+  "src": "<span class=\"psec__n\">01</span>Bright and dark from one source",
+  "tr": "<span class=\"psec__n\">01</span>الضوء والظلام من مصدر واحد"
+ },
+ "c9f41eed80e4": {
+  "src": "The loud places are where a crest from one speaker arrives together with a crest from the other; the quiet places are where a crest from one arrives with a trough from the other. Which of the two happens depends only on how much further the sound has come from one speaker than from the other. In air at \\(20\\ {}^\\circ\\mathrm{C}\\) sound travels at about \\(343\\ \\mathrm{m/s},\\) so a tone of \\(343\\ \\mathrm{Hz}\\) has a wavelength of \\(1\\ \\mathrm{m},\\) and the loud and quiet places lie far enough apart to walk through.",
+  "tr": "المواضع الصاخبة هي حيث تصل قمّة موجية من أحد المكبّرين مع قمّة من المكبّر الآخر، والمواضع الهادئة هي حيث تصل قمّة من أحدهما مع قاع من الآخر. وأيّ الحالتين تحدث يتوقّف على ما قطعه الصوت من أحد المكبّرين أكثر مما قطعه من الآخر فقط. في الهواء عند \\(20\\ {}^\\circ\\mathrm{C}\\) يسير الصوت بسرعة نحو \\(343\\ \\mathrm{m/s},\\) فنغمة ترددها \\(343\\ \\mathrm{Hz}\\) طولها الموجي \\(1\\ \\mathrm{m},\\) والمواضع الصاخبة والهادئة تبعد عن بعضها بما يكفي لأن نمشي بينها."
+ },
+ "cad2dda3032c": {
+  "src": "heavier mathematics",
+  "tr": "رياضيات أثقل"
+ },
+ "cf26e5404520": {
+  "src": "The rose arcs are the wavelets: semicircles of radius \\(r_n = (n + \\phi)\\lambda\\) about each slit, out to \\(430\\ \\mathrm{px},\\) where \\(\\phi\\) is the animation phase, a fraction of a period. Their opacity falls as \\(0.55\\,(1 - r/430)\\) to suggest the weakening of each wavelet. Below the wall, straight rose lines one wavelength apart are the incoming plane wave, moving in step with the arcs at \\(0.8\\lambda\\) per second, \\(10.8\\ \\mathrm{px/s}\\) at the defaults. Real green light oscillates \\(5.5\\times10^{14}\\) times a second, so the animation is slowed down by a factor of about \\(7\\times10^{14}.\\)",
+  "tr": "الأقواس الورديّة هي الموجات الثانوية: أنصاف دوائر نصف قطرها \\(r_n = (n + \\phi)\\lambda\\) حول كل شقّ، حتى \\(430\\ \\mathrm{px},\\) حيث \\(\\phi\\) طور الحركة، وهو كسر من الدورة. وتتناقص عتامتها كـ\\(0.55\\,(1 - r/430)\\)، لتوحي بضعف كل موجة ثانوية. أسفل الحاجز خطوط وردية مستقيمة تبعد عن بعضها طولًا موجيًّا واحدًا، وهي الموجة المستوية الساقطة، تتحرّك في تزامن مع الأقواس بسرعة \\(0.8\\lambda\\) في الثانية، أي \\(10.8\\ \\mathrm{px/s}\\) عند القيم الافتراضية. والضوء الأخضر الحقيقي يتذبذب \\(5.5\\times10^{14}\\) مرّة في الثانية، لذلك تُبطأ الحركة بعامل نحو \\(7\\times10^{14}.\\)"
+ },
+ "cf4ef3096e79": {
+  "src": "T. Young, <a href=\"https://doi.org/10.1098/rstl.1804.0001\">“The Bakerian Lecture: Experiments and calculations relative to physical optics”</a>, <em>Philosophical Transactions of the Royal Society of London</em> 94, 1–16 (1804), read on 24 November 1803. Its Section I is the experiment with the slip of card told in Section 1.",
+  "tr": "T. Young، <a href=\"https://doi.org/10.1098/rstl.1804.0001\">“The Bakerian Lecture: Experiments and calculations relative to physical optics”</a>، <em>Philosophical Transactions of the Royal Society of London</em> 94، 1–16 (1804)، قُرئت في 24 نوفمبر 1803. قسمه I هو التجربة ذات قطعة الورق المقوّى المذكورة في القسم 1."
+ },
+ "cf672c3a3fef": {
+  "src": "Angle α",
+  "tr": "الزاوية α"
+ },
+ "d1622a8321e0": {
+  "src": "Phyein Usul, home page",
+  "tr": "Phyein Usul، الصفحة الرئيسية"
+ },
+ "d60a7d755f3a": {
+  "src": "Only the wavelets move. At each frame of the browser, the phase of the animation advances by \\(0.8\\,\\Delta t\\) periods, with \\(\\Delta t\\) the time since the previous frame, and the arcs are redrawn; the geometry and the readouts do not change. The page’s data panel stores every number named here at the line that computes it, including the direct difference \\(L_2 - L_1\\) and the length of the drawn bar \\(S_2Q,\\) so the three ways of getting \\(\\delta s\\) can be compared side by side.",
+  "tr": "تتحرّك الموجات الثانوية وحدها. عند كل إطار من المتصفّح يزداد طور الحركة بمقدار \\(0.8\\,\\Delta t\\) دورة، حيث \\(\\Delta t\\) الزمن منذ الإطار السابق، فتُعاد رسم الأقواس؛ أمّا الهندسة والخانات فلا تتغيّر. وتخزّن لوحة البيانات في الصفحة كل عدد يُذكر هنا عند السطر الذي يحسبه، بما في ذلك الفرق المباشر \\(L_2 - L_1\\) وطول الشريط المرسوم \\(S_2Q,\\) حتى يمكن مقارنة الطرق الثلاث إلى \\(\\delta s\\) جنبًا إلى جنب."
+ },
+ "d62a8b826ff5": {
+  "src": "The intensity plot under the figure samples 301 directions from \\(0^\\circ\\) to \\(30^\\circ,\\) one every \\(0.1^\\circ.\\) The burgundy curve is the far-field law \\(\\cos^2(\\pi b\\sin\\theta/\\lambda).\\) The dashed curve uses the exact path difference (3) for the point of the observation line in the direction \\(\\theta,\\) a distance \\(d\\tan\\theta\\) from the centre line; where the two curves part, the far field is failing. Even for the finest fringes the sliders allow, \\(b = 80\\ \\mathrm{px}\\) and \\(\\lambda = 8\\ \\mathrm{px},\\) one fringe spans 57 samples.",
+  "tr": "أسفل الشكل يأخذ مخطّط الشدّة 301 اتّجاه من \\(0^\\circ\\) إلى \\(30^\\circ,\\) واحدًا كل \\(0.1^\\circ.\\) المنحنى العنّابي هو قانون الحقل البعيد \\(\\cos^2(\\pi b\\sin\\theta/\\lambda).\\) ويستعمل المنحنى المتقطّع فرق المسار الدقيق (3) للنقطة على خطّ الرصد في الاتّجاه \\(\\theta,\\) على بعد \\(d\\tan\\theta\\) من الخطّ المركزي؛ وحيث يفترق المنحنيان يفشل الحقل البعيد. وحتى لأدقّ الأهداب التي تسمح بها المنزلقات، \\(b = 80\\ \\mathrm{px}\\) و\\(\\lambda = 8\\ \\mathrm{px},\\) يمتدّ الهدب الواحد على 57 عيّنة."
+ },
+ "d81173b104eb": {
+  "src": "The pattern needs both slits for every single photon. Close one slit, or place a detector that records which slit each photon passed, and the cross term \\(\\cos\\Delta\\varphi\\) disappears: the dots then pile up as one single-slit pattern, or, with the detector, as the sum of two, without fringes. So the photons are not a crowd interfering with one another. Each photon, on its own, has two ways of reaching the screen, and as long as nothing in the apparatus records which way it took, the two ways add the way waves add. Quantum mechanics gives each way a complex number, a <em>probability amplitude</em>, and the probability of a dot at \\(\\theta\\) is the squared modulus of their sum. The field \\(E\\) of Section 5 is not this amplitude; it describes light made of very many photons. Yet it predicts the same fringes, because both add the two paths with the same phase difference \\(k\\,\\delta s.\\) This holds for any arrangement of slits, not only two: for a single photon, the chance of a click at a place is proportional to the classical intensity there.",
+  "tr": "يحتاج النمط إلى الشقّين معًا مع كل فوتون مفرد. فإذا أُغلق أحد الشقّين، أو وُضع كاشف يسجّل أيّ شقّ مرّ منه كل فوتون، يختفي الحدّ التقاطعي \\(\\cos\\Delta\\varphi\\): فتتراكم النقاط حينئذ كنمط شقّ واحد، أو كمجموع نمطين دون أهداب إذا وُجد الكاشف. ليست الفوتونات إذن جمعًا يتداخل بعضه مع بعض. لكلّ فوتون، بمفرده، طريقان للوصول إلى الشاشة، وما دام لا شيء في الجهاز يسجّل أيّ الطريقين سلكه، فإنّ الطريقين يتجمّعان كما تتجمّع الموجات. تُسند ميكانيكا الكمّ إلى كلّ طريق عددًا عقديًّا هو <em>سعة الاحتمال</em>، واحتمال نقطة عند \\(\\theta\\) هو مربّع مقياس مجموعهما. أمّا المجال \\(E\\) من القسم 5 فليس هذه السعة؛ إنّه يصف ضوءًا من فوتونات كثيرة جدًّا. ومع ذلك يتنبّأ بالأهداب نفسها، لأنّ كليهما يجمع الطريقين بفرق الطور نفسه \\(k\\,\\delta s.\\) وهذا صادق لأيّ ترتيب من الشقوق، لا للشقّين وحدهما: فاحتمال أن تسقط نقطة في موضع ما، لفوتون مفرد، يتناسب مع الشدّة الكلاسيكية هناك."
+ },
+ "d929322e4b16": {
+  "src": "Fig.",
+  "tr": "الشكل"
+ },
+ "df55deb90ee3": {
+  "src": "Stand between two loudspeakers that play the same steady tone and walk slowly across the room. The sound swells and fades, loud, quiet, loud again, although nothing about the speakers has changed.",
+  "tr": "قف بين مكبّري صوت يُصدران النغمة الثابتة نفسها، ثم امشِ ببطء في الغرفة. يعلو الصوت ويخفت: عالٍ، ثم خافت، ثم عالٍ من جديد، مع أنّ شيئًا لم يتغيّر في مكبّري الصوت."
+ },
+ "dfaf138f49a6": {
+  "src": "<span class=\"psub__n\">4.1</span>The error shrinks with the square of the distance<span class=\"star\" title=\"heavier mathematics\">★</span>",
+  "tr": "<span class=\"psub__n\">4.1</span>يتناقص الخطأ مع مربّع المسافة<span class=\"star\" title=\"heavier mathematics\">★</span>"
+ },
+ "e05eed1307fd": {
+  "src": "Distance d",
+  "tr": "البعد d"
+ },
+ "e0ae752a2d85": {
+  "src": "From (1), \\(L_{1,2}^2 = r^2 \\mp b\\,r\\sin\\alpha + b^2/4,\\) so \\(L_{1,2} = r\\sqrt{1+u}\\) with \\(u = \\mp\\varepsilon + \\eta,\\) \\(\\varepsilon = b\\sin\\alpha/r\\) and \\(\\eta = b^2/(4r^2).\\) Expand \\(\\sqrt{1+u} = 1 + \\tfrac12 u - \\tfrac18 u^2 + \\tfrac1{16}u^3 - \\dots\\) Changing the sign of \\(\\varepsilon\\) swaps the two paths, so only odd powers of \\(\\varepsilon\\) survive in the difference; to third order in \\(b/r\\) they are \\(r\\left(\\varepsilon - \\tfrac12\\varepsilon\\eta + \\tfrac18\\varepsilon^3\\right),\\) which is",
+  "tr": "من (1) نجد \\(L_{1,2}^2 = r^2 \\mp b\\,r\\sin\\alpha + b^2/4,\\) ومنه \\(L_{1,2} = r\\sqrt{1+u}\\) حيث \\(u = \\mp\\varepsilon + \\eta,\\) و\\(\\varepsilon = b\\sin\\alpha/r\\) و\\(\\eta = b^2/(4r^2).\\) نُنشر \\(\\sqrt{1+u} = 1 + \\tfrac12 u - \\tfrac18 u^2 + \\tfrac1{16}u^3 - \\dots\\) ويؤدّي تغيير إشارة \\(\\varepsilon\\) إلى تبديل المسارين، لذلك لا يبقى في الفرق إلّا القوى الفردية لـ\\(\\varepsilon\\)؛ وحتى الرتبة الثالثة في \\(b/r\\) تكون \\(r\\left(\\varepsilon - \\tfrac12\\varepsilon\\eta + \\tfrac18\\varepsilon^3\\right),\\) وهو ما"
+ },
+ "e13b587879b0": {
+  "src": "<span>2</span>The model",
+  "tr": "<span>2</span>النموذج"
+ },
+ "e1d329a7394b": {
+  "src": "From symbols to code",
+  "tr": "من الرموز إلى الشيفرة"
+ },
+ "e24c472348bc": {
+  "src": "No approximation has been made. The result is zero for \\(\\alpha = 0,\\) where \\(P\\) lies on the centre line and is equally far from both slits, and positive for \\(\\alpha > 0,\\) where \\(S_2\\) is the further slit. At the page’s defaults, \\(d = 200\\ \\mathrm{px},\\) \\(\\alpha = 20^\\circ\\) and \\(b = 40\\ \\mathrm{px},\\) it gives \\(L_1 = 206.85\\ \\mathrm{px},\\) \\(L_2 = 220.48\\ \\mathrm{px}\\) and \\(\\delta s = 13.6277\\ \\mathrm{px};\\) the readouts <em>Path \\(S_1P\\)</em>, <em>Path \\(S_2P\\)</em> and <em>\\(\\delta s\\) exact</em> show these numbers rounded.",
+  "tr": "لم يُجرَ أيّ تقريب. النتيجة صفر عند \\(\\alpha = 0,\\) حيث تقع \\(P\\) على الخطّ المركزي وتبعد عن الشقّين بالمسافة نفسها، وموجبة عندما \\(\\alpha > 0,\\) حيث يكون \\(S_2\\) هو الشقّ الأبعد. عند القيم الافتراضية للصفحة، \\(d = 200\\ \\mathrm{px},\\) \\(\\alpha = 20^\\circ\\) و\\(b = 40\\ \\mathrm{px},\\) تعطي \\(L_1 = 206.85\\ \\mathrm{px},\\) و\\(L_2 = 220.48\\ \\mathrm{px}\\) و\\(\\delta s = 13.6277\\ \\mathrm{px};\\) وتعرض الخانات <em>المسار \\(S_1P\\)</em> و<em>المسار \\(S_2P\\)</em> و<em>\\(\\delta s\\) الدقيق</em> هذه الأرقام مقرَّبة."
+ },
+ "e28e5c21dee6": {
+  "src": "Interactive double-slit geometry: the path difference from two slits to a point, its far-field approximation b sin α, and the resulting interference pattern.",
+  "tr": "هندسة تجربة الشقّين التفاعلية: فرق المسار من الشقّين إلى نقطة، وتقريبه في الحقل البعيد b sin α، ونمط التداخل الناتج عنه."
+ },
+ "e4ebf6099dd7": {
+  "src": "burgundy: far field · dashed: exact at <i>d</i>",
+  "tr": "العنّابي: الحقل البعيد · المتقطّع: القيمة الدقيقة عند <i>d</i>"
+ },
+ "e89647451beb": {
+  "src": "<span class=\"psec__n\">04</span>The far field",
+  "tr": "<span class=\"psec__n\">04</span>الحقل البعيد"
+ },
+ "ec1cf294a370": {
+  "src": "<span>10</span>What the model leaves out",
+  "tr": "<span>10</span>ما يهمله النموذج"
+ },
+ "f0ea5a09568c": {
+  "src": "<span>7</span>One particle at a time",
+  "tr": "<span>7</span>جسيم واحد في كل مرة"
+ },
+ "f141448226b7": {
+  "src": "The model keeps only what decides bright or dark:",
+  "tr": "يحتفظ النموذج بما يقرّر الإضاءة أو الظلام فقط:"
+ },
+ "f31156501e1e": {
+  "src": "The light is perfectly coherent and of one colour. White light, as in Young’s experiment, gives a white central fringe and coloured fringes that wash out after a few orders, because each colour has its own spacing (9).",
+  "tr": "الضوء متماسك تمامًا وأحادي اللون. أمّا الضوء الأبيض، كما في تجربة يونغ، فيعطي هدبًا مركزيًّا أبيض وأهدابًا ملوّنة تتلاشى بعد بضع رتب، لأنّ لكل لون تباعدًا خاصًّا به (9)."
+ },
+ "f3f50ef03288": {
+  "src": "<span class=\"psec__n\">07</span>One particle at a time",
+  "tr": "<span class=\"psec__n\">07</span>جسيم واحد في كل مرة"
+ },
+ "f5cbdf6bfb51": {
+  "src": "Contents",
+  "tr": "المحتويات"
+ },
+ "f72f0eda6052": {
+  "src": "Simulations",
+  "tr": "المحاكاة"
+ },
+ "f832a95bf362": {
+  "src": "δs exact",
+  "tr": "δs الدقيق"
+ },
+ "f97963f6ce10": {
+  "src": "That is about 4500 times shorter than green light of \\(550\\ \\mathrm{nm},\\) so the slits for electrons must be correspondingly finer. With suitable slits, electrons, neutrons, atoms and molecules of sixty carbon atoms all show the same fringes, arriving one at a time and building the pattern of Figure 5 dot by dot.",
+  "tr": "أي أقصر بنحو 4500 مرّة من الضوء الأخضر البالغ طوله \\(550\\ \\mathrm{nm},\\) لذلك يجب أن تكون الشقوق المناسبة للإلكترونات أدقّ بالقدر ذاته. وبشقوق مناسبة تُظهر الإلكترونات والنيوترونات والذرّات والجزيئات المكوّنة من ستّين ذرّة كربون الأهداب نفسها، فتصل واحدًا واحدًا لتبني نمط الشكل 5 نقطةً نقطة."
+ },
+ "fb194e991a8e": {
+  "src": "Wavelength λ",
+  "tr": "طول الموجة λ"
+ },
+ "fb57a7ac8366": {
+  "src": "This simulation needs JavaScript.",
+  "tr": "تحتاج هذه المحاكاة إلى JavaScript."
+ },
+ "fb740fa3a187": {
+  "src": "<span class=\"psec__n\">09</span>From lengths to pixels",
+  "tr": "<span class=\"psec__n\">09</span>من الأطوال إلى البكسلات"
+ },
+ "fc5afb9b1aa8": {
+  "src": "The <em>path difference</em> \\(\\delta s = L_2 - L_1\\) is how much further the wave from \\(S_2\\) has travelled. Subtracting two square roots is awkward, but subtracting their squares is easy: in \\(L_2^2 - L_1^2\\) the \\(d^2\\) and the \\(b^2/4\\) cancel, and \\((d\\tan\\alpha + \\tfrac b2)^2 - (d\\tan\\alpha - \\tfrac b2)^2 = 2bd\\tan\\alpha.\\) Since \\(L_2^2 - L_1^2 = (L_2 - L_1)(L_2 + L_1),\\)",
+  "tr": "<em>فرق المسار</em> \\(\\delta s = L_2 - L_1\\) هو مقدار ما قطعته الموجة الصادرة عن \\(S_2\\) من مسافة أكبر. وطرح جذرين تربيعيّين أمرٌ مزعج، لكن طرح مربّعيهما سهل: ففي \\(L_2^2 - L_1^2\\) يُلغي \\(d^2\\) و\\(b^2/4\\) بعضهما، و\\((d\\tan\\alpha + \\tfrac b2)^2 - (d\\tan\\alpha - \\tfrac b2)^2 = 2bd\\tan\\alpha.\\) وبما أنّ \\(L_2^2 - L_1^2 = (L_2 - L_1)(L_2 + L_1),\\)"
+ },
+ "fdf6c4916106": {
+  "src": "<b>Abstract.</b> Light that passes through two narrow slits does not make two bright lines on a screen; it makes a row of bright and dark bands. This note explains the bands with one idea: the two waves that meet at a point have travelled different distances, and that difference, counted in wavelengths, decides whether they reinforce or cancel. We compute the difference exactly, find out when the textbook shortcut \\(b\\sin\\alpha\\) is good enough, add the two waves to get the brightness \\(\\cos^2(\\pi\\,\\delta s/\\lambda),\\) see what real slits of finite width change, and end with the quantum version of the experiment, in which single photons or electrons build the same pattern one dot at a time. The last sections describe how the page computes and draws all of this. Sections marked ★ carry the heavier mathematics and can be skipped on a first reading without losing the thread.",
+  "tr": "<b>الملخّص.</b> الضوء الذي يمرّ عبر شقّين ضيّقين لا يصنع على الشاشة خطّين مضيئين، بل صفًّا من الأهداب المضيئة والمظلمة. تفسّر هذه المذكّرة الأهداب بفكرة واحدة: الموجتان اللتان تلتقيان في نقطة قطعتا مسافتين مختلفتين، وهذا الفرق، معدودًا بعدد الأطوال الموجية، يقرّر هل تتعزّزان أم تتلاشيان. نحسب الفرق بدقّة، ونتحقّق من الحال التي يكفي فيها التقريب المدرسي \\(b\\sin\\alpha\\)، ثم نجمع الموجتين لنحصل على الإضاءة \\(\\cos^2(\\pi\\,\\delta s/\\lambda),\\) ونرى ما الذي يغيّره الشقّان ذوا العرض المنتهي، وننتهي بالصيغة الكمومية للتجربة، حيث تبني الفوتونات أو الإلكترونات المفردة النمط نفسه نقطةً نقطة. تصف الأقسام الأخيرة كيف تحسب الصفحة كل ذلك وترسمه. الأقسام المعلّمة بـ★ تحوي الرياضيات الأثقل، ويمكن تخطّيها في القراءة الأولى دون أن يضيع الخيط."
+ },
+ "ff8e445fcd53": {
+  "src": "<span class=\"sw sw--rose\"></span>wavelets",
+  "tr": "<span class=\"sw sw--rose\"></span>الموجات الثانوية"
+ },
+ "ffc1aa2636ce": {
+  "src": "The two waves reach \\(P\\) with equal amplitudes; their weakening with distance is ignored.",
+  "tr": "تصل الموجتان إلى \\(P\\) بسعة متساوية، ويُهمَل ضعفهما مع المسافة."
+ }
+}
