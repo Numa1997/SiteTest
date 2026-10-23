@@ -416,10 +416,10 @@ function declare(){
   // solver
   v("CK",[],"int",{symbol:"Δn<sub>ck</sub>",long_name:"samples between two checkpoints",computed_in:"constant CK",digits:0});ds.set("CK",CK);
   v("NF",[],"int",{symbol:"N<sub>s</sub>",long_name:"stored samples",computed_in:"constant NF",formula:"2500 at 1 ms + 3250 at 2 ms + 1",digits:0});ds.set("NF",NF);
-  v("computed",[],"int",{symbol:"n<sub>done</sub>",long_name:"samples computed so far",computed_in:"work()",digits:0});
+  v("computed",[],"int",{symbol:"n<sub>done</sub>",long_name:"samples computed so far",computed_in:"work()",digits:0,source:"Counted by work() as it stores each sample."});
   v("steps",[],"int",{symbol:"steps",long_name:"frame steps of Δt taken so far (each ball)",computed_in:"work()",digits:0});
   v("compute_ms",[],"float",{symbol:"compute time",units:"ms",long_name:"time the browser took to compute and store the run",computed_in:"work()",digits:0,source:"Measured with performance.now()."});
-  v("done",[],"bool",{symbol:"done",long_name:"the whole run is computed",computed_in:"work()"});
+  v("done",[],"bool",{symbol:"done",long_name:"the whole run is computed",computed_in:"work()",digits:0});
   // results of the run, written when it is complete
   for(const s of BALLS){const nm=s==="iron"?"iron":"cotton";
     v("t_touch_"+s,[],"float",{symbol:"t<sub>touch</sub>",units:"s",long_name:nm+": first touch of the plate, in model time",computed_in:"sub(), recorded by record()",digits:4});ds.set("t_touch_"+s,NaN);
@@ -467,11 +467,11 @@ function declare(){
     v("ck_alive_"+s,["c",B],Uint8Array,{symbol:"alive<sub>ck</sub>",long_name:nm+": checkpoint, 1 for each bond still holding",computed_in:"record()",digits:0});
   }
   // playback: the sample on screen, written by the clock from the stored arrays
-  v("t_play",[],"float",{symbol:"t<sub>play</sub>",units:"s",long_name:"playback time in the stored run",computed_in:"the clock",formula:"t<sub>play</sub> ← t<sub>play</sub> + Δt<sub>wall</sub> / slow",digits:3});
+  v("t_play",[],"float",{symbol:"t<sub>play</sub>",units:"s",long_name:"playback time in the stored run",computed_in:"the clock",formula:"t<sub>play</sub> ← t<sub>play</sub> + Δt<sub>wall</sub> / slow",digits:3,source:"Advanced by the clock from the wall time between frames; it has no other source."});
   v("i_now",[],"int",{symbol:"n<sub>now</sub>",long_name:"stored sample shown in this frame",computed_in:"the clock",formula:"nearest n to t<sub>play</sub>, at most n<sub>done</sub> − 1",digits:0});
   v("t_now",[],"float",{symbol:"t",units:"s",long_name:"time of the sample shown",computed_in:"the clock",formula:"t<sub>n</sub>, n = n<sub>now</sub>",digits:3});
   v("slow",[],"int",{symbol:"slow",long_name:"slow-motion factor: 1, 4 or 20",computed_in:"setSpeed()",digits:0});
-  v("playing",[],"bool",{symbol:"playing",long_name:"the drop is playing",computed_in:"the clock"});
+  v("playing",[],"bool",{symbol:"playing",long_name:"the drop is playing",computed_in:"the clock",digits:0,source:"The state of the Drop button."});
   for(const s of BALLS){const nm=s==="iron"?"iron":"cotton";
     for(const [q,sy,u,ln,dg] of [["F","F","N","scale reading shown now",2],["Fmax","F<sub>peak</sub>","N","peak hold shown now",2],["yp","y<sub>p</sub>","m","plate position shown now",6],["KE","K","J","kinetic energy shown now",4],["books","Δ<sub>books</sub>","J","gap in the energy books shown now",4]])
       v(q+"_now_"+s,[],"float",{symbol:sy,units:u,long_name:nm+": "+ln+" (a stored sample)",computed_in:"the clock",formula:sy+"<sub>n</sub>, n = n<sub>now</sub>",digits:dg});
