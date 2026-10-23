@@ -390,7 +390,7 @@ how each model level was argued, attacked by an independent reviewer and checked
 - **The model runs in the page.** The code between `/*PHYSICS-BEGIN*/` and `/*PHYSICS-END*/` of `physics.cjs` is inlined; the
   same code runs in Node for the run tools and the checks. The three panels (collection equation in a box, droplet trajectories,
   an exact random cloud) change only on a click, a slider release or a button; nothing reacts to the pointer crossing a figure.
-- **Every quoted number is checked.** `checks/check_numbers.cjs` recomputes 141 numbers from the model and finds each in the text
+- **Every quoted number is checked.** `checks/check_numbers.cjs` recomputes 157 numbers from the model and finds each in the text
   near its anchor; `checks/check_physics.py` recomputes the physics independently in Python (12 checks); `checks/check_browser.py`
   opens every tab at 360, 390, 1024 and 1440 px and counts KaTeX errors, page errors and horizontal overflow.
 - **The ladder.** L0 one collector (chapter 1); L1 fall speed (2); L2 collision efficiency (3); L3 coalescence (4); L4 the
