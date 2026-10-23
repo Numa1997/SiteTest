@@ -35,15 +35,22 @@ of critical damping against the blade's 0.477 %. At the gravity-optimal damping 
 Expectation (opinion, to be tested, not assumed): gravity dominates; turbulence enters through the blade only if the edgewise
 acceleration at the pivot approaches g; chaos spreads the mobility over a wide band and should lose to a tuned single pendulum.
 
-## Current state (23 Oct, after resume)
+## Current state (23 Oct, evening)
 
-- Lecture note: portfolios-src/rotor-pendula/theory/ (chapters 0-7), numbers from tools/make_numbers.py, built
-  rotor_notes.html clean at 360-1440 px (commit bd71d9e). Revised against referee-note-r1.md (53 findings).
-- Running: second blind reader (referee-note-r2.md); generator scout (dossier-generator.md) for chapter 7 (L4).
-- Results added: L2 both torque laws (wind effect +0.5..+0.75 %; -2 % was the NREL controller); L3 sag (cancels within
-  1 %, two routes), L3 two-way shaking (L3_shake2.py; tuned 1.11 m rod valid only at 5 mm tip shaking).
-- Next: fix r2 findings; chapter 7 (generator) from the dossier; wire rotor_notes.html into the served page with Sol's
-  report kept (build_combined.py); Portfolios article and docs; pull request only when Numa asks.
+- Lecture note complete, chapters 0-8 (theory/*.src.html -> rotor_notes.html): chapter 7 the geared generator (model version 3,
+  gear loss on every power flow; settings chosen in the full equation; Table 4), chapter 8 the ceiling and the answer.
+  Revised against blind reader r3 (referee-note-r3.md; answers in referee-note-r3-answers.md).
+- Gate 1: contracts L0-L4 written; L3 and L4 FAILED round 1 (skeptic-G1-L3-r1.md, skeptic-G1-L4-r1.md), round-2 answers
+  appended to both contracts (sag shape spread, tuned rod withdrawn, gear-drag sensitivity, voltage, backlash, sticking);
+  round 2 not yet re-read by a skeptic.
+- Gate 2: derivation checker on the whole note running (check-note-r1.md).
+- Simulation page rotor_sim.html (physics block validated against the Python engine to 1.3e-8; browser check passes).
+- Served page generated: public/portfolios/rotor-pendula/index.html (notes + simulation tabs), Sol's app kept as sol.html.
+- Checks: tools/check_numbers.py PASS (319 numbers), check_physics.py 17 PASS, check_combined.py ALL PASS at 360-1440 px.
+- Portfolios article, docs/portfolios.md, docs/pages.md, inventory updated.
+- Decision D3 (taken): generator model version 3; version 2's accidental resonance (0.44 W) shown as the counterfactual.
+- Open: Gate 2 result; Gate-1 round 2 re-read; Gate 3 (skeptic on rendered pages); figures for the sag and the motor chain;
+  the tuned rod in time with gravity (prediction registered in contract-L3); a bench test of gear drag and backdriven efficiency.
 
 ## Queue (first open item first)
 
