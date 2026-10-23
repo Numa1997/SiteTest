@@ -1,0 +1,13 @@
+(output of L1_route2.wl, transcribed from the Wolfram evaluator 15.0.1; warnings omitted. The first run had a mistake in the (2.5) Stokes line (extra factor Re); it was corrected and re-run, the corrected result is below and the .wl file holds the corrected line.)
+velocity from (2.1) minus textbook Cartesian form (random point): {-1.38778*10^-17, 2.77556*10^-17, 0.}
+div u = -4.1e-16 (x^2+y^2) z/(x^2+y^2+z^2)^(7/2)   [floating-point residue of a = 1.1: zero to 1e-16]
+Stokes residual grad p - mu lap u at 3 points: {6.9e-18, 2.8e-17, 1.1e-15} {6.7e-16, -2.2e-16, -2.6e-15} {-3.5e-18, -2.2e-19, 1.6e-16}
+Symbolic residual: {0, 0, 0}
+u on the sphere r = a (symbolic): {0, 0, 0}
+Force on r = a (symbolic):       {0, 0, 6 a mu Pi U}
+Force through r = 2a (symbolic):  {0, 0, 6 a mu Pi U}
+pressure part F_p = 2 a mu Pi U   viscous part F_v = 4 a mu Pi U
+(2.3) Solve: {{v -> -2 a^2 g (ra - rw)/(9 mu)}}
+(2.5) C_D Re^2 from (2.4): -32 a^3 g ra (ra - rw)/(3 mu^2)
+(2.5) Stokes: C_D = 24/Re -> v = -2 a^2 g (ra - rw)/(9 mu)   difference from (2.3): 0
+Buckingham null space of dimension matrix for (F,a,v,rho_a,mu): {{-1, 1, 1, 0, 1}, {-1, 2, 2, 1, 0}}

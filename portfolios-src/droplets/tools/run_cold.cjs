@@ -19,8 +19,13 @@ for (const q of use) q.v = P.vBeard(q.r, A, q.rho);
 const ntot = ph => use.filter(q => q.ph === ph).reduce((s, q) => s + q.n, 0);
 console.log(`F_liq(${Tc} C) = ${(Fliq * 100).toFixed(2)} %; liquid ${(ntot('w') / 1e6).toFixed(1)} cm^-3, ice ${(ntot('i') / 1e6).toFixed(1)} cm^-3`);
 const mf = P.massOf(5e-6, 900);
-const PH = { A: 0.428 * 3.78e4 * (1 + 0.0079 * Math.pow(500, 1.5)), g: 0.3 };   // Phillips et al. 2017 type I at -10 C (second-hand coefficients)
-let rime = 0, rime25 = 0, ii = 0, fragHi = 0, fragLo = 0, oldRule = 0;
+// Phillips et al. (2017) breakup law, graupel-graupel coefficients (the nearest category to dense ice spheres), as printed in
+// Sotiropoulou et al. (2021, Appendix B, read): a0 = 3.78e4 (1 + 0.0079 / D^1.5), D (m) the diameter of the smaller particle, fitted for
+// 0.5 mm < D < 5 mm and to be clamped to that range outside it; A = a0 [1/3 + max(2/3 - |T - 258|/9, 0)]; gamma = 0.3;
+// C = 6.3e6 psi with psi = 3.5e-3 (sublimation correction after Vardiman 1978) or 1; at most 100 fragments per collision.
+const fT = 1 / 3 + Math.max(2 / 3 - Math.abs(T - 258) / 9, 0);
+const PH = { A: D => 3.78e4 * (1 + 0.0079 / Math.pow(D, 1.5)) * fT, g: 0.3, Dclamp: D => Math.min(5e-3, Math.max(5e-4, D)) };
+let rime = 0, rime25 = 0, rime25big = 0, ii = 0, fragHi = 0, fragLo = 0, fragTrueD = 0, oldRule = 0; const kev = [];
 for (let i = 0; i < use.length; i++) for (let j = i; j < use.length; j++) {
   const p = use[i], q = use[j];
   if (p.ph === 'w' && q.ph === 'w') continue;
@@ -31,18 +36,24 @@ for (let i = 0; i < use.length; i++) for (let j = i; j < use.length; j++) {
   const rate = K * p.n * q.n * (i === j ? 0.5 : 1);           // events per m^3 per s
   if (p.ph === 'i' && q.ph === 'i') {
     ii += rate;
-    const K0 = 0.5 * p.m * q.m / (p.m + q.m) * dv * dv, alpha = Math.PI * Math.pow(2 * Math.min(p.r, q.r), 2);
-    const N = C => alpha * PH.A * (1 - Math.exp(-Math.pow(C * K0 / (alpha * PH.A), PH.g)));
-    fragHi += rate * N(6.3e6); fragLo += rate * N(2.2e4);
+    const K0 = 0.5 * p.m * q.m / (p.m + q.m) * dv * dv, D = 2 * Math.min(p.r, q.r), alpha = Math.PI * D * D;
+    const N = (C, Dl) => Math.min(100, alpha * PH.A(Dl) * (1 - Math.exp(-Math.pow(C * K0 / (alpha * PH.A(Dl)), PH.g))));
+    fragHi += rate * N(6.3e6, PH.Dclamp(D)); fragLo += rate * N(6.3e6 * 3.5e-3, PH.Dclamp(D)); fragTrueD += rate * N(6.3e6, D);
+    kev.push([K0, rate]);
     oldRule += rate * 0.001 * Math.max(p.m, q.m) / mf;
   } else {
-    rime += rate; const liq = p.ph === 'w' ? p : q; if (liq.r >= 25e-6) rime25 += rate;
+    rime += rate; const liq = p.ph === 'w' ? p : q, ice = liq === p ? q : p; if (liq.r >= 25e-6) { rime25 += rate; if (liq.r > ice.r) rime25big += rate; }
   }
 }
 const perMin = x => (x * 60 / 1e6);                          // per cm^3 per minute
-console.log(`riming events ${perMin(rime).toFixed(3)} cm^-3 min^-1, of which liquid drops >= 25 um radius ${perMin(rime25).toFixed(4)}`);
-console.log(`ice-ice collisions ${perMin(ii).toFixed(3)} cm^-3 min^-1`);
-console.log(`new ice per cm^3 per minute: Hallett-Mossop 0 (measured window -8 to -3 C); drop shattering ${perMin(rime25 * 0.03).toExponential(2)} to ${perMin(rime25 * 1.7).toExponential(2)}; ` +
-  `ice-ice breakup (Phillips, extrapolated) ${perMin(fragLo).toExponential(2)} to ${perMin(fragHi).toExponential(2)}; the old rule (lambda = 0.001 per event, 5 um fragments) ${perMin(oldRule).toExponential(2)}`);
-const out = { T, p: 60000, Fliq, liquid: ntot('w'), ice: ntot('i'), rime, rime25, ii, fragLo, fragHi, oldRule, hm: 0, shatter: [rime25 * 0.03, rime25 * 1.7] };
+kev.sort((x, y) => x[0] - y[0]); const tot = kev.reduce((a, e) => a + e[1], 0);
+const kq = q => { let c = 0; for (const e of kev) { c += e[1]; if (c >= q * tot) return e[0]; } return kev[kev.length - 1][0]; };
+console.log(`F_liq = ${(Fliq * 100).toFixed(2)} %, temperature factor of A ${fT.toFixed(4)}, A at D = 0.5 mm ${PH.A(5e-4).toExponential(3)} m^-2`);
+console.log(`riming events ${perMin(rime).toFixed(3)} cm^-3 min^-1; with liquid drop >= 25 um radius ${perMin(rime25).toFixed(4)}, of which the drop is the larger partner ${perMin(rime25big).toFixed(4)}`);
+console.log(`ice-ice collisions ${perMin(ii).toFixed(3)} cm^-3 min^-1; collision energy (event-weighted) 5/50/95 % = ${kq(0.05).toExponential(1)} / ${kq(0.5).toExponential(1)} / ${kq(0.95).toExponential(1)} J, largest ${kev[kev.length - 1][0].toExponential(1)} J`);
+console.log(`new ice per cm^3 per minute: Hallett-Mossop 0 (stops below about -8 C); drop shattering 0 to ${perMin(rime25 * 1.7).toExponential(2)} (0 to 0.14 x 12 = 1.7 fragments per freezing drop); ` +
+  `ice-ice breakup (Phillips, D clamped to 0.5 mm) ${perMin(fragLo).toExponential(2)} (psi = 3.5e-3) to ${perMin(fragHi).toExponential(2)} (psi = 1), with the true D ${perMin(fragTrueD).toExponential(2)}; ` +
+  `the old rule (lambda = 0.001 per event, 5 um radius fragments) ${perMin(oldRule).toExponential(2)}; old rule / breakup ${(oldRule / fragHi).toExponential(2)} (clamped), ${(oldRule / fragTrueD).toFixed(0)} (true D)`);
+const out = { T, p: 60000, Fliq, liquid: ntot('w'), ice: ntot('i'), rime, rime25, rime25big, ii, fragLo, fragHi, fragTrueD, oldRule, hm: 0, shatter: [0, rime25 * 1.7],
+  K0q: [kq(0.05), kq(0.5), kq(0.95), kev[kev.length - 1][0]], A05: PH.A(5e-4) };
 if (process.argv.includes('--json')) fs.writeFileSync(path.join(__dirname, '..', 'data', 'cold.json'), JSON.stringify(out));

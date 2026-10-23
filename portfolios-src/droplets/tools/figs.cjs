@@ -56,7 +56,7 @@ const effSeries = [];
   const row = hall.E[hall.R.indexOf(Rum)];
   effSeries.push({ x: hall.p.slice(0, 12), y: row.slice(0, 12), color: col, dots: true, r: 2.5 });
 });
-figs.efficiency = C.line({ id: 'f4', w: 600, h: 330, xmin: 0, xmax: 0.6, ymin: 0, ymax: 1.02, xlabel: 'size ratio p = r/R', ylabel: 'collision efficiency E', series: effSeries, legendAt: 'right' });
+figs.efficiency = C.line({ id: 'f4', w: 600, h: 330, xmin: 0, xmax: 0.6, ymin: 0, ymax: 1.02, xlabel: 'size ratio p = r/R', ylabel: 'collision efficiency E', series: effSeries, legendAt: 'bottomright' });
 
 // 5. the warm cloud: F40 against time, two kernels, two bookkeepings, and Hall's efficiencies
 const w = D('warm'), m = t => t.map(s => s / 60);
@@ -99,13 +99,16 @@ sF.push({ x: m(br.t), y: br.F40, label: 'SCE (mean field)', color: '#23160f', da
 figs.luckF40 = C.line({ id: 'f8', w: 600, h: 310, xmin: 0, xmax: 25, ymin: 0, ymax: 1, xlabel: 'time (min)', ylabel: 'mean water in drops r ≥ 40 µm', series: sF, legendAt: 'bottom' });
 
 // 9. first 100 um drop: share of volumes that have one, exact runs against the SCE's Poisson bridge
+// (6.1) with the largest n100 reached so far: later the large drops merge with each other and their number falls, but a volume
+// that once held one has had its first drop
+const nmax = []; br.N100.reduce((mx, N, i) => (nmax[i] = Math.max(mx, N)), 0);
 const sC = [];
 [['10', '#3c6a46'], ['100', '#33627f'], ['1000', '#7d1d2f']].forEach(([V, c]) => {
   const t = st.V[V].map(r => r.t100).filter(x => x !== null).sort((a, b) => a - b), n = st.V[V].length;
   sC.push({ x: [0].concat(t.map(x => x / 60)), y: [0].concat(t.map((_, i) => (i + 1) / n)), label: `${V} cm³, exact (${n} runs)`, color: c });
-  sC.push({ x: m(br.t), y: br.N100.map(N => 1 - Math.exp(-(+V) * 1e-6 * N)), color: c, dash: '4 3', width: 1.5 });
+  sC.push({ x: m(br.t), y: nmax.map(N => 1 - Math.exp(-(+V) * 1e-6 * N)), color: c, dash: '4 3', width: 1.5 });
 });
-sC.push({ x: m(br.t), y: br.N100.map(N => 1 - Math.exp(-N)), label: '1 m³, Poisson bridge from the SCE', color: '#23160f', dash: '4 3', width: 1.5 });
-figs.first = C.line({ id: 'f9', w: 600, h: 310, xmin: 0, xmax: 20, ymin: 0, ymax: 1, xlabel: 'time (min)', ylabel: 'share of volumes with a drop r ≥ 100 µm', series: sC, legendAt: 'right' });
+sC.push({ x: m(br.t), y: nmax.map(N => 1 - Math.exp(-N)), label: '1 m³, Poisson (6.1)', color: '#23160f', dash: '4 3', width: 1.5 });
+figs.first = C.line({ id: 'f9', w: 600, h: 310, xmin: 0, xmax: 20, ymin: 0, ymax: 1, xlabel: 'time (min)', ylabel: 'share of volumes with a drop r ≥ 100 µm', series: sC, legendAt: 'bottomright' });
 
 process.stdout.write(JSON.stringify(figs));

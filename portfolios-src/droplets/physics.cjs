@@ -217,14 +217,18 @@ var PHYS = (function () {
   function makeTable(A, o) {
     o = o || {};
     var nR = o.nR || 64, np = o.np || 40, Rmin = o.Rmin || 2e-6, Rmax = o.Rmax || 4e-3, pmin = o.pmin || 0.002, pmax = o.pmax || 1;
-    var lnR = [], lnp = [], E = [], i, j;
+    var lnR = [], lnp = [], E = [], ES = [], EP = [], ReT = [], i, j;
     for (i = 0; i < nR; i++) lnR.push(Math.log(Rmin) + i * Math.log(Rmax / Rmin) / (nR - 1));
     for (j = 0; j < np; j++) lnp.push(Math.log(pmin) + j * Math.log(pmax / pmin) / (np - 1));
     for (i = 0; i < nR; i++) for (j = 0; j < np; j++) {
       var R = Math.exp(lnR[i]), p = Math.exp(lnp[j]);
-      E.push(p >= 0.999 ? 0 : pairEfficiency(R, p * R, A, o.rhoR, o.rhoP).E);
+      var pe = p >= 0.999 ? { E: 0, ES: 0, EP: 0, Re: 0 } : pairEfficiency(R, p * R, A, o.rhoR, o.rhoP);
+      E.push(pe.E);
+      if (o.split) { ES.push(pe.ES); EP.push(pe.EP); ReT.push(pe.Re); }   // the two flow limits kept apart (crossover studies)
     }
-    return { T: A.T, p: A.p, rhoR: o.rhoR || RHO_W, rhoP: o.rhoP || RHO_W, lnR: lnR, lnp: lnp, E: E, version: 'L2-superposition-1' };
+    var out = { T: A.T, p: A.p, rhoR: o.rhoR || RHO_W, rhoP: o.rhoP || RHO_W, lnR: lnR, lnp: lnp, E: E, version: 'L2-superposition-1' };
+    if (o.split) { out.ES = ES; out.EP = EP; out.Re = ReT; }
+    return out;
   }
   // Bilinear interpolation in (ln R, ln p), clamped at the edges; near: 'clamp' holds p > 0.6 at 0.6,
   // 'one' sets E = 1 above p = 0.6 for collectors of 40 um or more (the near-equal bracket).

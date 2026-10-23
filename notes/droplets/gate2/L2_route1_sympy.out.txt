@@ -1,0 +1,42 @@
+== (3.1)  partner in the collector frame (frame moves at constant velocity: inertial, no extra force)
+  m/(6 pi mu r) = 2*r**2*rho_w/(9*mu)  ; printed Stokes tau = 2 rho_w r^2/(9 mu): difference 0
+  (weight - buoyancy)/(6 pi mu r) = 2*g*r**2*(-rho_a + rho_w)/(9*mu)  = tau0 g* : True   and tau0 g* = v_Stokes(r): True
+  so tau dv/dt = u - v - tau g* e_z with tau = v(r)/g* is (3.1); in still air v -> -tau g* e_z = -v(r) e_z: partner falls at v(r)
+  units  tau = 2 rho_w r^2/(9 mu): s  vs  s  ->  OK
+  units  tau g*: m s^-1  vs  m s^-1  ->  OK
+
+== (3.2)  scaling: x = R y, v = U w, u = U a, t = (R/U) s
+  divided by U: -a + w + gstar*tau/U + U*dw*tau/R
+  coefficient of dw/ds = tau U/R = St ;  settling term tau g*/U = S : True , and with tau = v(r)/g*, S = v(r)/U : True
+  units  St = tau U / R: 1 (dimensionless)  vs  1 (dimensionless)  ->  OK
+  units  S = v(r)/U: 1 (dimensionless)  vs  1 (dimensionless)  ->  OK
+  contact when |x| = R + r  <=>  |y| = 1 + r/R = 1 + p
+
+== two model flows (used in 3.3 and the small-collector paragraph)
+  potential: E2 psi = 0 (0: the stream function of an irrotational flow) ; u_r(r=1) = 0 (no penetration) ; u_th(r=1) = -3*U*sin(theta)/2 (slips)
+  axis below the sphere (th = pi): u_r potential = -U + U/r_**3  ; creeping = -U + 3*U/(2*r_) - U/(2*r_**3)  (negative = toward the sphere)
+  approach speed toward the surface / U: potential 1 - 1/(eta + 1)**3 -> series -6*eta**2 + 3*eta  (text 1-(1+eta)^-3 ~ 3 eta)
+                                          creeping  1 - 3/(2*eta + 2) + 1/(2*(eta + 1)**3) -> series -7*eta**3/2 + 3*eta**2/2  (text: vanishes as 3/2 eta^2)
+  small-collector paragraph: creeping approach at eta = p = 0.2 : 0.039352  (text 0.039) against S = 0.045
+
+== (3.3)  St eta'' + eta' + 3 eta = 0
+  characteristic roots of St k^2 + k + 3 = 0 : [(-sqrt(1 - 12*St) - 1)/(2*St), (sqrt(1 - 12*St) - 1)/(2*St)]  ; printed (-1 +- sqrt(1-12 St))/(2 St):  [0, 0]
+  discriminant 1 - 12 St = 0 at St = [1/12]
+  (3.4) St_c = 1/12 ; at St_c the double root is kappa = -6 = -1/(2 St_c) = -6
+  overdamped, slaved start eta'(0) = -3 eta0 : c1 = eta0*(-k2 - 3)/(k1 - k2) , c2 = eta0*(k1 + 3)/(k1 - k2)
+  general start eta'(0)=v0: c_slow >= 0 <=> v0 >= k_fast*eta0 ; the physical slaved start has v0 = -3 eta0 >= k_fast eta0 whenever |k_fast| >= 3:
+    St = 1/100 : k_fast = -96.9042 (>= 3 in magnitude: True)
+    St = 1/24 : k_fast = -20.4853 (>= 3 in magnitude: True)
+    St = 1/13 : k_fast = -8.3028 (>= 3 in magnitude: True)
+    St = 1/12 : k_fast = -6.0000 (>= 3 in magnitude: True)
+  underdamped (12 St > 1): eta = exp(-s/(2 St)) (A cos(w s) + B sin(w s)), w = sqrt(12*St - 1)/(2*St)  -> zero crossing at s = pi/w - phase (every period): partner reaches the surface
+  units: St eta'' : St dimensionless, eta in R, s in R/U -> all three terms in R (consistent). Limit St -> 0: eta' = -3 eta, eta = eta0 exp(-3 s): approaches but never reaches (inertialess partner)
+
+== (3.5)  E = b_c^2/(1+p)^2
+  hit rate / geometric rate = b_c**2/(p + 1)**2  (the factor n (1-S) U cancels, S enters only through U_rel)
+  creeping  finite start: E = 2 (psi(b) - S b^2/2)/((1-S)(1+p)^2) ; lim Z->oo -> b**2/(p + 1)**2  (= b^2/(1+p)^2)
+  creeping  zero inertia, S=0: b_c^2 = 2 psi(1+p, th=pi/2) -> E_int = (p + 2*(p + 1)**4 - 3*(p + 1)**3 + 1)/(2*(p + 1)**4) ; p=0: 0 ; p=0.2: 0.0393519 ; p=1: 0.312500
+  potential finite start: E = 2 (psi(b) - S b^2/2)/((1-S)(1+p)^2) ; lim Z->oo -> b**2/(p + 1)**2  (= b^2/(1+p)^2)
+  potential zero inertia, S=0: b_c^2 = 2 psi(1+p, th=pi/2) -> E_int = 1 - 1/(p + 1)**3 ; p=0: 0 ; p=0.2: 0.421296 ; p=1: 0.875000
+  limit St -> oo (straight paths): b_c = 1+p, E = 1. Limit p -> 0, St < St_c: E = 0 (no hit). Range 0 <= E <= 1 for the capture area against the geometric area; E can exceed 1 only when the capture area exceeds pi(R+r)^2 (does not happen for one-sided flow)
+  units  E = b_c^2/(1+p)^2: 1 (dimensionless)  vs  1 (dimensionless)  ->  OK

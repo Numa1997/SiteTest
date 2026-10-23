@@ -78,3 +78,19 @@ Gate 1 for L0, round 3: **not passed as written, by one sentence.**
 - Four minor: R3-2 to R3-5, plus N12's one word in `L0_wolfram.md`.
 
 All 13 round-2 objections and round-1 #10 are answered, except N12 (partly, minor). Once R3-1 is fixed, I see no reason for another full round: the gate can pass on a check of that one sentence.
+
+## Round 3 fixes (checked only the changed text)
+
+| # | Fix | Verdict | Evidence |
+|---|---|---|---|
+| R3-1 | §8.1 relabelled: "A known result that L0 explains, not a prediction". It cites the old study's 3 / 5 min and this study's 2.27 / 4.51 min, says both were computed before the paragraph, and says plainly that L0 holds no open prediction about nature, only the code test 8.2. | **answered** | It now matches the baseline row and `book-05`. The Weber-number reason is the one I checked (about 20 for 400 + 200 µm with Stokes speeds). Leftover wording, minor: the §8 heading still reads "Predictions that could come out wrong", and the runaway paragraph is still headed "Prediction for L4", although it is computed. The new last sentence of 8.1 makes the status clear, so I do not hold the gate on it. |
+| R3-2 | Grid dependence stated: 3.51 / 3.65 / 3.72 / 3.86 min against the grid-free 4.0–4.1 min, with the reason. | **answered** | These are my numbers and my reason. |
+| R3-3 | Slip: "applied to both drops it raises Δv(40/8 µm) by 0.20 %". | **answered** | Matches my +0.198 %. |
+| R3-4 | §10 kept as the record of round 2; §11 and §12 supersede it. | **answered** | Acceptable for a contract's history. |
+| R3-5 | 8.2 now gives 4000 runs (seeds 1–4000), pooling until each cell expects at least 5 runs, p > 0.01, and the mean within three standard errors. It now uses the extended kernel (Beard speeds, L2 table). Outcome: 8.246 ± 0.036 against the exact 8.221; χ² = 18.1 on 13 degrees of freedom, p = 0.15. | **answered** | The pooling rule in `checks/check_physics.py` (section 7) is the one stated. It builds the exact chain by matrix exponential from the engine's own rates, which is right for a test of thinning and bookkeeping. My independent exact chain with `physics.cjs` kernel (Beard, L2 table) gives mean 8.222 (s.d. 2.28), against the contract's 8.221. χ² = 18.1 on 13 d.o.f. gives p = 0.154, and \|8.246 − 8.221\| = 0.025 < 3 × 0.036. I did not see the 4000-run outcome line printed: my run of `check_physics.py` was stopped by the pause after its first checks, which passed (including E = 0.3444 at 40/8 µm). So the Monte Carlo outcome is consistent but not reproduced by me. |
+| N12 | `L0_wolfram.md` item 4: "Wolfram's own antiderivative … differentiates back … the printed G of (L0.5) itself is checked by SymPy … not by this item." | **answered** | The file now says exactly what the Wolfram run shows. |
+
+**Final Gate 1 verdict for L0: passed.**
+- No fatal objection and no open must-fix: all of round 1, round 2 and round 3 are answered.
+- Two cosmetic leftovers remain: the §8 heading and the "Prediction for L4" label.
+- One item rests on the contract's report, not my rerun: the 4000-run outcome of 8.2.

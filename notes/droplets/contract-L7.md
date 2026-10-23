@@ -56,3 +56,22 @@ Ice–ice breakup of the thesis's small ice spheres produces at least a thousand
 Derived: the rate formula, the collision energies. Cited: every yield. Chosen: ice spheres of 900 kg/m³, the thesis's liquid fraction,
 E_coal = 1 with ice, the application of free-drop shattering data to captured drops. Price: the only channel that could matter at
 −10 °C rests on an unmeasured geometry, so the study can bound observable 3 but not pin it down; the page says so.
+
+## 8. Answers to round 1 (`skeptic-G1-L3L6L7-r1.md`, L7: PASS with fixes)
+
+Read for this round: Sotiropoulou et al. 2021, Appendix B (PDF, Copernicus), and Korolev and Leisner 2020, Tables 1 and 2.
+
+| # | Answer |
+|---|---|
+| 1 | Confirmed in Sotiropoulou et al. 2021 App. B: a₀ = 3.78 × 10⁴ (1 + 0.0079/D^1.5), D in m, fitted for 0.5–5 mm and clamped to that range; at most 100 fragments per collision. `tools/run_cold.cjs` corrected: A(0.5 mm) = 1.144 × 10⁷ m⁻²; breakup 3.0 × 10⁻⁴ to 1.6 × 10⁻³ cm⁻³ min⁻¹ (ψ = 3.5 × 10⁻³ or 1), 0.050 with the true D. |
+| 2 | Prediction outcome restated: the old rule gives 1.6 × 10³ times more (law as recommended) and 52 times more (true D). "At least a thousand times" holds only for the recommended use; the page gives both. |
+| 3 | Energies from the run: 1.3 × 10⁻¹⁴ / 5.4 × 10⁻¹⁴ / 2.3 × 10⁻¹³ J (5/50/95 %), largest 3.7 × 10⁻¹¹ J; extrapolation of 8 to 12 orders. |
+| 4 | Hallett–Mossop: measured −2 to −16 °C, peak near −5 °C, stops below about −8 °C (Korolev and Leisner Table 2). |
+| 5 | 2.7987 of 2.8028 events cm⁻³ min⁻¹ have the drop larger than the ice: the laboratory geometry (tiny ice crystals nucleating drops). Picture and price rewritten. |
+| 6 | Bracket now 0 to 0.14 × 12 = 1.7 fragments per freezing drop (Brownscombe and Thorndike 1968, 50–90 µm, free fall, maxima over −5 to −15 °C; Table 1 read); new ice 0 to 4.8 cm⁻³ min⁻¹. |
+| 7 | The page says 167 cm⁻³ of ice is the thesis's start, far above observed clouds, and that breakup scales as N_ice², shattering as N_ice. |
+| 8 | Picture split: chips (number rises, mass not) and the freezing drop (mass rises). |
+| 9 | C = 6.3 × 10⁶ ψ, ψ = 3.5 × 10⁻³ (sublimation correction after Vardiman 1978) or 1. |
+| 10 | Table rows separated. |
+| 11 | "5 µm radius". |
+| 12 | "Graupel–graupel coefficients, the nearest category to dense ice spheres". |

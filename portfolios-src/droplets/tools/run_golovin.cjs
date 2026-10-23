@@ -21,6 +21,7 @@ function run(s, dt) {
   return { s, dt, bins: n, eps, massErr: (Mnum + res.overflow.M) / L - 1, massStart: Mstart / L - 1, schemeDrift: (Mnum + res.overflow.M) / Mstart - 1,
     numErr: (Nnum + res.overflow.N) / Nexact - 1, peak: grid.r[kmax] * 1e6, peakExact: grid.r[kmaxE] * 1e6, fixes: res.fixes, over: res.overflow.M / L };
 }
+if (require.main !== module) { module.exports = { run }; return; }
 const rows = [];
 for (const [s, dt] of [[2, 1], [4, 1], [8, 1], [8, 0.5], [16, 1]]) {
   const t0 = Date.now(), r = run(s, dt); rows.push(r);

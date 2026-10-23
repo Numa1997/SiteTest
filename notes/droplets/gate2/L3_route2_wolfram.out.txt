@@ -1,0 +1,8 @@
+(transcribed from the Wolfram evaluator 15.0.1; code in L3_route2.wl)
+(4.1) KE - (M V^2/2 + mu dv^2/2) = 0
+v1 - (V + m2/M dv) = {0, 0, 0}   v2 - (V - m1/M dv) = {0, 0, 0}
+energy lost in a perfect merger minus CKE = 0
+limit m2->Infinity of mu_red: m1
+merged diameter from volume conservation: {{dc -> Root[-d1^3 - d2^3 + #1^3 &, 1]}}   (= (d1^3+d2^3)^(1/3))
+E_coal(0) = 1; limit We->Infinity = 0; derivative = -23/(20 E^(23 We/20)); We for E=1/2: 0.869565 (0.693147 + 6.28319 I C[1]) (real root 0.60274); We=0.52 -> E = 0.54991; We = 61 -> E = 3.422*10^-31
+units of CKE/(Pi sigma d^2): 1
