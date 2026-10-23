@@ -35,11 +35,11 @@ for review in sys.argv[1:]:
             lang = re.search(r'text_(\w+)\.py', rel).group(1)
             open(path, 'w', encoding='utf-8').write('T = {}\n' + ''.join('T[%r] = %s\n' % (k, json.dumps(v, ensure_ascii=False)) for k, v in T.items()))
             continue
-        T = json.load(open(path, encoding='utf-8')); paged = any(isinstance(v, dict) for v in T.values())
+        T = json.load(open(path, encoding='utf-8')); paged = any(isinstance(v, dict) and 'src' in v for v in T.values())
         for k, v in fixes.items():
             if k not in T: bad += 1; print('  rejected', rel, k[:50], ['no such key']); continue
             en = T[k]['src'] if paged else k
-            w = same(en, v)
+            w = [x for f in (v.values() if isinstance(v, dict) else [v]) for x in same(en, f) if x != 'markers' or '{n}' not in f]
             if w: bad += 1; print('  rejected', rel, k[:50], w); continue
             if paged: T[k]['tr'] = v
             else: T[k] = v

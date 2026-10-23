@@ -191,7 +191,7 @@ window.WALK["tl"] = {
      "rho",
      "ρ/ρ<sub>0</sub>",
      "rhoA[i]",
-     "Dichte am verfolgten Teilchen relativ zur Ruhe"
+     "Dichte am verfolgten Teilchen relativ zur Ruhedichte"
     ]
    ]
   },
@@ -217,7 +217,7 @@ window.WALK["tl"] = {
    ]
   },
   {
-   "title": "Gleichung (12): die Begrenzung der unteren Amplitude",
+   "title": "Gleichung (12): die Begrenzung der Amplitude der unteren Reihe",
    "where": "longAmp() und readouts()",
    "math": "⟦AL|A<sub>L</sub>⟧ = min(⟦A|A⟧, 0.8/k) = min(A, 0.8λ/2π)<span style=\"font-style: normal; margin-left: 0.9em\">(12)</span><br>1 + ∂ξ/∂X ≥ 1 − ⟦AkL|A<sub>L</sub>k⟧ ≥ 0.2",
    "note": "Der Abstandsfaktor 1 + ∂ξ/∂X aus Schritt 6 ist an den Verdichtungszentren am kleinsten, wo er 1 − A<sub>L</sub>k beträgt. Erreichte A<sub>L</sub>k den Wert 1, würde er auf null fallen, und darüber würden Teilchen durch ihre Nachbarn hindurchgehen, was kein Medium zulässt; nach (3) ist das dasselbe, wie wenn ein Teilchen schneller nach vorn läuft als die Welle. <code style=\"font-family: var(--mono); font-size: 0.88em\">longAmp()</code> liefert daher das Kleinere aus der am Regler eingestellten Amplitude <code style=\"font-family: var(--mono); font-size: 0.88em\">amp.value</code>, also A in px, und <code style=\"font-family: var(--mono); font-size: 0.88em\">0.8 * lambda.value / (2 * Math.PI)</code>, also 0.8/k in px. Damit überschreitet A<sub>L</sub>k nie 0.8: Der engste Abstand ist 20 % des Ruheabstands, und die dichteste Stelle ist 5-mal so dicht wie die Ruhedichte. <code style=\"font-family: var(--mono); font-size: 0.88em\">readouts()</code> schreibt A<sub>L</sub>, gerundet, in die Anzeige Longit. A und fügt „(Grenze)“ hinzu, wenn <code style=\"font-family: var(--mono); font-size: 0.88em\">al &lt; amp.value</code> gilt, und speichert das Produkt A<sub>L</sub>k als <code style=\"font-family: var(--mono); font-size: 0.88em\">ALk</code>. Im Standardfall liegt die Begrenzung bei 0.8 × 220 px/2π = 28.0 px, über A = 26 px, sodass beide Reihen dieselbe Amplitude haben; bei λ = 110 px liegt die Begrenzung bei 14.0 px, und die Anzeige zeigt „14 px (Grenze)“. Die obere Reihe hat keine solche Grenze.",
@@ -245,7 +245,7 @@ window.WALK["tl"] = {
   },
   {
    "title": "Gleichung (16): die Uhr treibt die Phase voran",
-   "where": "der Rückruf Sim.clock, einmal pro Bildschirmbild",
+   "where": "die Rückruffunktion Sim.clock, einmal pro Bildschirmbild",
    "math": "⟦wt|ωt⟧ ← ωt + 2π⟦f|f⟧ Δt<span style=\"font-style: normal; margin-left: 0.9em\">(16)</span>",
    "note": "Dies ist der einzige Schritt in der Zeit, den die Seite macht. <code style=\"font-family: var(--mono); font-size: 0.88em\">Sim.clock</code> ruft die Funktion einmal pro Bildschirmbild mit <code style=\"font-family: var(--mono); font-size: 0.88em\">dt</code> auf, der reellen Zeit Δt in s seit dem vorigen Bild. Die Zeile addiert 2πf Δt zu <code style=\"font-family: var(--mono); font-size: 0.88em\">omegaT</code>, sodass die Phase ωt mit der Rate ω = 2πf in rad/s wächst; <code style=\"font-family: var(--mono); font-size: 0.88em\">draw()</code> wertet (1) danach an jedem Teilchen neu aus und zeichnet beide Reihen neu. Weil (1) die exakte Lösung ist, baut sich kein Fehler in der Form der Welle auf; übrig bleibt nur das Runden der Gleitkommaarithmetik mit doppelter Genauigkeit. Das Aufsummieren der Phase, statt 2πf t aus der Uhrzeit t zu berechnen, hält die Welle stetig, wenn der Frequenzregler bewegt wird: Nur die Rate ändert sich, nicht die bereits erreichte Phase. Die Uhr in sim.js übergibt <code style=\"font-family: var(--mono); font-size: 0.88em\">dt</code> = 0, solange sie angehalten ist, und nie mehr als 0.05 s, sodass die Welle nach einem Hänger weiterläuft, statt vorauszuspringen; bei der höchsten Frequenz, 2 Hz, sind das höchstens 0.63 rad pro Bild. Auf einem Gerät, auf dem die Reduzierung von Bewegung eingeschaltet ist, startet die Uhr angehalten.",
    "code": "var clk = Sim.clock(function (dt, t) {\n⟦wt|omegaT += 2 * Math.PI * freq.value * dt⟧;\n...\ndraw();",
