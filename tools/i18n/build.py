@@ -82,8 +82,13 @@ def cut(src):
         out.append(p)
     return out, c.attrs
 
-def commit():
-    try: return subprocess.run(['git', 'rev-parse', '--short', 'HEAD'], cwd=ROOT, capture_output=True, text=True).stdout.strip() or 'unknown'
+def commit(path=None):
+    """The last commit that changed the English source (or the repository), with '+' when the file has uncommitted changes."""
+    try:
+        args = ['git', 'log', '-1', '--format=%h'] + (['--', path] if path else [])
+        h = subprocess.run(args, cwd=ROOT, capture_output=True, text=True).stdout.strip() or 'unknown'
+        if path and subprocess.run(['git', 'diff', '--quiet', 'HEAD', '--', path], cwd=ROOT).returncode: h += '+'
+        return h
     except Exception: return 'unknown'
 
 def table(lang, served):
@@ -222,7 +227,7 @@ def build(lang, src_file, served, report):
     extra = ''   # styles/i18n.css comes with the English page
     if lang == 'ar': extra += '\n    <link rel="stylesheet" href="' + '../' * (depth(served) + 1) + 'fonts/arabic.css" />'
     extra += '\n    <script src="' + '../' * (depth(served) + 1) + f'scripts/i18n/strings-{lang}.js"></script>'
-    out = out.replace('</head>', extra + f'\n    <meta name="translated-from" content="English, commit {commit()}" />\n  </head>', 1)
+    out = out.replace('</head>', extra + f'\n    <meta name="translated-from" content="English {src_file}, commit {commit(src_file)}" />\n  </head>', 1)
     dst = os.path.join(ROOT, 'public', lang, served)
     os.makedirs(os.path.dirname(dst), exist_ok=True)
     open(dst, 'w', encoding='utf-8').write(out)
