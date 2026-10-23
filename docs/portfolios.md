@@ -337,8 +337,8 @@ from $n$ itself) to $n$; the first checkpoint is checked by stepping a fresh bui
 start. The step counts by adding the sub-steps $\Delta t/5$ again exactly as the model does. The scale reading as
 $F = -k_h y_p$ from the stored plate position; the bars as $E_\text{in} = E_0 - V_n$ and $E_\text{now} = K + E_\text{el} +
 E_\text{head} + Q_\text{ball} + Q_\text{head}$; the books gap as their difference; the weight as the mean of the stored readings;
-every drawing number from the stored drawing inputs. A rerun takes at most 1250 steps (0.7 s for cotton, 0.1 s for iron in a
-desktop browser).
+every drawing number from the stored drawing inputs. A rerun takes at most 1250 steps (0.67 s for cotton and 0.09 s for iron,
+measured in Node).
 
 **What each read-back reads.** The plate: two columns near its ends are scanned row by row for the plate's fill colour, which must
 begin half the outline below `plate_px`; the black needle: a dark pixel 0.3 R from the hub along the stored angle; the red peak
@@ -360,5 +360,17 @@ shows from 6.5 s.
 **The panel's words are English on the Arabic page too**, set left to right (`lang="en" dir="ltr"` on the panel, the tab, the strip
 and the switch, written by `datalog.js`), until the panel gets its string table.
 
-**Measured** (23 October 2026, headless Chromium, built site): MEASURED_PLACEHOLDER
+**Measured** (23 October 2026, headless Chromium, built site): English page at 1100 and 1600 px, Arabic page at 390 px
+(`portfolios-src/impact/checks/data_panel.cjs`): no script errors, no sideways scroll; 190 variables, each with symbol,
+long name, `computed_in` and digits, each in one of nine groups; Check on every scalar and on six indices of every array: 406
+identical, 34 agreeing to 7 or 8 figures (the float32 positions and speeds), 18 undefined on both sides (the weight before 4 s),
+0 differing, all 458 in 7.1 s; every read-back at the moment of impact (t = 1.452 s) shows its value (atoms, bead, both needles, both
+peak needles, both plates, both curves), and cotton's curve, where the iron curve covers it, reads "not in the picture at the
+moment"; Read values: a pointer swept across the figure paints 0 overlay pixels with the switch off and on, a click pins an atom, a
+bead or a scale, the strip sits directly under the figure (no overlap), its values change 4 times a second (12 batches in 3 s); one
+round, 0 to 9 s, records every frame (349 to 486 samples at real speed) with no undefined value at the followed scale; Save gives a
+51.6 MB zip that `zipfile.testzip()` accepts and NumPy reads (`x_cot` float32 5751 × 612, `F_iron` float64 5751, 73 members,
+units in `dataset.json`); with the panel closed `__dataPanel.running()` is false. The run itself gives the documented numbers: iron
+638.6 N, cotton 188.0 N, weights 9.810 N and 9.810 N, first touch 1.428 s, books closed to 0.21 J and 0.51 J. Computing the run
+takes 9 % longer than before the store (123 s against 113 s in this container's headless Chromium, which has no GPU).
 
