@@ -1,14 +1,14 @@
 # The four research projects: `public/portfolios/`
 
 The Portfolios page ([`public/portfolios.html`](../public/portfolios.html), described in [pages.md](pages.md)) presents four
-research projects; the fourth, Iron, Cotton and the Head, is described [at the end](#iron-cotton-and-the-head-impact). The first two are each their own AppDeploy app with its own source; the third, the Hydraulic Press
+research projects; the fourth, Iron, Cotton and the Head, is described [at the end](#iron-cotton-and-the-head-impact). Droplet Collection is its own AppDeploy app with its own source; Rotor Pendula, since 23 October 2026, is generated from its source in this repository and keeps the copy of Sol's app beside it ([below](#rotor-pendula-rotor-pendula)); the third, the Hydraulic Press
 Study, is generated from its own GitHub repository ([below](#the-hydraulic-press-study-hydraulics)). This website carries only
 a **built copy** of each one, so that a reader can open it here without leaving the site:
 
 | Folder | Built from the app | What it is |
 |---|---|---|
 | [`public/portfolios/droplet-collection/`](../public/portfolios/droplet-collection/) | `droplet-collection-yl7l26` | Numa's Bachelor thesis (Leipzig) on how cloud droplets grow into rain by gravitational collection, remodelled: derivations, a solver of the stochastic collection equation that runs in the browser, results and checks. |
-| [`public/portfolios/rotor-pendula/`](../public/portfolios/rotor-pendula/) | `rotor-pendula-gafw0f` | Sol's corrected study of a pendulum riding on a wind-turbine blade, built as a sensor power supply: derivation from the Lagrangian, an in-browser solver, results, checks, and a Report page whose tables are rebuilt from the study's data. |
+| [`public/portfolios/rotor-pendula/`](../public/portfolios/rotor-pendula/) | its source in [`portfolios-src/rotor-pendula/`](../portfolios-src/rotor-pendula/); `sol.html` and `static/` from the app `rotor-pendula-gafw0f` | A pendulum riding on a wind-turbine blade as a sensor's power supply: lecture notes in nine chapters and a simulation page (`index.html`), built on Sol's corrected study, whose app copy (`sol.html`, with its Report page) and delivery (`study/`) are kept. |
 | [`public/portfolios/hydraulics/`](../public/portfolios/hydraulics/) | its source in [`portfolios-src/hydraulics/`](../portfolios-src/hydraulics/) (not an app) | A servo-hydraulic press under digital control, from first principles: the animated press with its PID controller, loop analysis (Bode, Nyquist, z-plane), Pascal's ideal press, and a 23-chapter text deriving every equation. One self-contained page. |
 
 **The source code of the first two apps is not in this repository.** It lives in their AppDeploy apps (readable there with
@@ -25,12 +25,11 @@ places, the links into it from `portfolios.html` and its one link back out.
    `index.html`, which loads one JavaScript module (`static/index-<hash>.js`). That module draws every view of the project into
    `<div id="root">`. The view to show is chosen by the part of the address after `#`, the **hash route**:
    - Droplet Collection: `#/` (Overview), `#/theory`, `#/results`, `#/simulate`, `#/checks`;
-   - Rotor Pendula: `#/` (Overview), `#/theory`, `#/results`, `#/simulate`, `#/checks`, `#/report`.
+   - Rotor Pendula (Sol's app, now `sol.html`): `#/` (Overview), `#/theory`, `#/results`, `#/simulate`, `#/checks`, `#/report`.
 
    (Found with `grep -o 'path:"/[a-z-]*"' public/portfolios/*/static/index-*.js`.) Hash routes are used because the server
    only ever serves the one file `index.html`; everything after `#` stays in the browser. Links from `portfolios.html` therefore
-   always name the file, as in `portfolios/rotor-pendula/index.html#/report`
-   ([portfolios.html:191](../public/portfolios.html#L191)). The AppDeploy server used to answer a bare folder address such as
+   always name the file, as in `portfolios/rotor-pendula/sol.html#/report`. The AppDeploy server used to answer a bare folder address such as
    `portfolios/rotor-pendula/` with 403 (forbidden). Measured on 20 October 2026, both hosts serve the copy there (AppDeploy
    200; Cloudflare 200, and Cloudflare redirects `…/index.html` to the folder with a 307, the browser keeping the `#/route`), so
    the links that name the file work on both.
@@ -41,7 +40,7 @@ places, the links into it from `portfolios.html` and its one link back out.
 3. **The stylesheet is added by a script.** In both `index.html` files the stylesheet is not a `<link>` tag but a one-line
    script that creates the `<link>` when the page runs
    ([droplet-collection/index.html:14](../public/portfolios/droplet-collection/index.html#L14),
-   [rotor-pendula/index.html:14](../public/portfolios/rotor-pendula/index.html#L14)). The reason is a platform quirk:
+   [rotor-pendula/sol.html:14](../public/portfolios/rotor-pendula/sol.html#L14)). The reason is a platform quirk:
    when AppDeploy deploys an HTML file, it rewrites a relative stylesheet address such as `./static/index-<hash>.css` into an
    address at the site root, where the file does not exist (403), and the copy shows unstyled. The platform does not touch
    scripts, so a script that adds the same link at run time survives. Seen for `./assets/…` and, since October 2026, for
@@ -80,12 +79,14 @@ places, the links into it from `portfolios.html` and its one link back out.
 | `static/KaTeX_*.{woff2,woff,ttf}` | 59 font files of KaTeX, the maths typesetter, each in up to three formats (the bundle names them; the browser picks the first format it supports, in practice woff2). |
 | `fig/c1_ice.svg`, `fig/ecoll_map.svg`, `fig/fallspeed_gk.svg`, `fig/golovin.svg`, `fig/w2_rain.svg`, `fig/w2_spectra.svg` | Vector figures of the project. Four of them also appear as plates on the Portfolios page ([portfolios.html:129–141](../public/portfolios.html#L129-L141)). |
 
-### `rotor-pendula/` (84 files)
+### `rotor-pendula/`
 
 | Path | What it is |
 |---|---|
-| `index.html` | The entry page, as in the other copy. |
-| `static/index-CsGEKbO8.js` | The whole application, including the Report page, minified, 1.01 MB. |
+| `index.html` | **Generated** by `portfolios-src/rotor-pendula/tools/build_combined.py --site` (2.0 MB): a tab bar with the lecture notes (`#notes`) and the simulation (`#sim`), each embedded unchanged in its own frame; described [below](#rotor-pendula-rotor-pendula). |
+| `sol.html` | The entry page of Sol's app copy (until 23 October 2026 this was `index.html`), copied unchanged from `portfolios-src/rotor-pendula/sol/index.html` by the same build. |
+| `LICENSE-fonts.txt` | Licences of the fonts embedded in `index.html` (written by the build). |
+| `static/index-CsGEKbO8.js` | Sol's whole application, including the Report page, minified, 1.01 MB. |
 | `static/index-CNYGhWdg.css` | Its stylesheet (fonts imported as in the other copy), 65 kB. |
 | `static/worker-hcWKavQc.js` | The Web Worker: the pendulum integrator, 4.5 kB. |
 | `static/KaTeX_*` | The same 59 KaTeX font files. |
@@ -212,9 +213,34 @@ $t = 0$; Record plays it from the start.
 **The ideal press's pressure probe now needs a click.** It used to follow the mouse across the running figure, against the site's rule
 that nothing on a running figure reacts to a pointer merely crossing it; a click or tap places it, a click outside the oil removes it.
 
+## Rotor Pendula: `rotor-pendula/`
+
+Since 23 October 2026 the page at `portfolios/rotor-pendula/index.html` is generated, like the Hydraulic Press Study, from its
+source in [`portfolios-src/rotor-pendula/`](../portfolios-src/rotor-pendula/) (its [`README.md`](../portfolios-src/rotor-pendula/README.md)
+gives the commands and checks); the models, model runs and review record are in `notes/rotor-pendula/`. Sol's app copy stays served,
+unchanged, at `sol.html`, with its `static/` and `fig/` files, and his delivery at `study/`.
+
+**What the reader gets.** Two tabs. *Lecture notes* (`#notes`): *Pendula on a Turning Blade*, nine chapters (0–8), 29 numbered
+equations, from the Lagrangian of a pendulum on a turning blade to the best brake, two rods and chaos, a ceiling on random shaking,
+gusts on the NREL 5 MW turbine, the blade's bending, and a real geared generator (maxon RE 25 with a GP 32 C gearhead); every number
+is computed by the study's models (`tools/make_numbers.py`) or listed with its reason (`tools/typed_numbers.py`). *Simulation*
+(`#sim`): choose a rotor, a pivot, one rod or two and an ideal brake or the geared generator; the page solves the full equations
+with a Radau IIA integrator in a Web Worker built from its physics block, then plays the last turns back; six worked solutions.
+Reading a value is a tool: "Read values" on, a click pins a point, and the values show in a strip outside the plots.
+
+**How the page works.** As for the Hydraulic Press Study: each page is embedded as a JSON string and shown in its own `iframe srcdoc`;
+a small script turns links between the two pages into tab switches and opens other links (Sol's report, `sol.html`) outside the frame.
+The page carries the site's security policy with `'unsafe-eval'` in `script-src` and `blob:` in `worker-src` (the simulation's worker).
+
+**Checks** (from `portfolios-src/rotor-pendula/`): `python3 tools/check_numbers.py` (every number computed or explained),
+`python3 -I check_physics.py` (17 independent SymPy and SciPy checks with retyped constants), `node tools/check_sim.js` (the
+simulation's physics block reproduces Sol's 36 runs to 1.3e-8), `node tools/check_sim_browser.js` and, with `public/` served,
+`python3 tools/check_combined.py <url>` (both tabs complete, 0 KaTeX errors, solve, tab links, `sol.html`, no sideways scroll at
+360–1440 px). Verified on 23 October 2026: all pass.
+
 ## How to update a copy of an app
 
-1. Change the project in its own app (`droplet-collection-yl7l26` or `rotor-pendula-gafw0f`) and check it there.
+1. Change the project in its own app (`droplet-collection-yl7l26`, or `rotor-pendula-gafw0f` for Sol's copy, which becomes `sol.html`) and check it there.
 2. Make a website variant of its source, outside the app: remove the Saved runs page, its route and link, and the Save
    button with its server call; add the back link `← Numa Koudsie · Portfolios` to `../../portfolios.html` in the top bar;
    add ` · Numa Koudsie` to the page title. Build that variant with a separate Vite configuration that sets `base: './'` and

@@ -4,7 +4,7 @@ Written by [`tools/inventory.py`](../tools/inventory.py) from the files in the r
 Run `python3 tools/inventory.py` after adding, removing or changing files, and `python3 tools/inventory.py --check`
 to confirm that every file is described. Sizes are those of the files when the list was written.
 
-521 files, 24.5 MB in all. Runs of more than 12 similar files are folded; open them to see each file.
+692 files, 30.3 MB in all. Runs of more than 12 similar files are folded; open them to see each file.
 
 | Folder | Files |
 |---|---|
@@ -20,17 +20,18 @@ to confirm that every file is described. Sizes are those of the files when the l
 | [Thumbnails](#thumbnails) | 10 |
 | [Logo](#logo) | 1 |
 | [Project copy: Droplet Collection](#project-copy-droplet-collection) | 69 |
-| [Project copy: Rotor Pendula](#project-copy-rotor-pendula) | 84 |
+| [Project copy: Rotor Pendula](#project-copy-rotor-pendula) | 86 |
 | [Project copy: Hydraulic Press Study](#project-copy-hydraulic-press-study) | 6 |
 | [Iron, Cotton and the Head](#iron-cotton-and-the-head) | 6 |
 | [Source of the Hydraulic Press Study (not served)](#source-of-the-hydraulic-press-study-not-served) | 37 |
+| [Source of Rotor Pendula (not served)](#source-of-rotor-pendula-not-served) | 58 |
 | [Source of Iron, Cotton and the Head (not served)](#source-of-iron-cotton-and-the-head-not-served) | 18 |
 | [Template sources](#template-sources) | 2 |
 | [Platform tests](#platform-tests) | 1 |
 | [Documentation](#documentation) | 28 |
 | [Tools](#tools) | 2 |
 | [Agents of the lecture-note review](#agents-of-the-lecture-note-review) | 4 |
-| [Record of the lecture-note review](#record-of-the-lecture-note-review) | 116 |
+| [Record of the lecture-note review](#record-of-the-lecture-note-review) | 227 |
 
 ## Repository root
 
@@ -53,7 +54,7 @@ to confirm that every file is described. Sizes are those of the files when the l
 | File | Size | What it is | Explained in |
 |---|---|---|---|
 | [`public/_headers`](../public/_headers) | 516 B | Security response headers Cloudflare sets on every file of phyeinusul.com; read by Cloudflare, never served. | [usul.md](usul.md) |
-| [`public/portfolios.html`](../public/portfolios.html) | 40.2 kB | The Portfolios page: the two research projects. | [pages.md](pages.md) |
+| [`public/portfolios.html`](../public/portfolios.html) | 39.9 kB | The Portfolios page: the two research projects. | [pages.md](pages.md) |
 | [`public/robots.txt`](../public/robots.txt) | 58 B | Instructions for search-engine crawlers. | [pages.md](pages.md) |
 | [`public/simulations.html`](../public/simulations.html) | 18.9 kB | The simulations catalog: one titled fold card per simulation, search and chips. | [pages.md](pages.md) |
 
@@ -343,6 +344,7 @@ to confirm that every file is described. Sizes are those of the files when the l
 
 | File | Size | What it is | Explained in |
 |---|---|---|---|
+| [`public/portfolios/rotor-pendula/LICENSE-fonts.txt`](../public/portfolios/rotor-pendula/LICENSE-fonts.txt) | 8.5 kB | Licences of the fonts embedded in the generated page. | [portfolios.md](portfolios.md) |
 | [`public/portfolios/rotor-pendula/fig/01_geometry.svg`](../public/portfolios/rotor-pendula/fig/01_geometry.svg) | 7.6 kB | A vector figure of the project. | [portfolios.md](portfolios.md) |
 | [`public/portfolios/rotor-pendula/fig/02_mapping_power.svg`](../public/portfolios/rotor-pendula/fig/02_mapping_power.svg) | 33.7 kB | A vector figure of the project. | [portfolios.md](portfolios.md) |
 | [`public/portfolios/rotor-pendula/fig/03_topology.svg`](../public/portfolios/rotor-pendula/fig/03_topology.svg) | 39.7 kB | A vector figure of the project. | [portfolios.md](portfolios.md) |
@@ -350,7 +352,8 @@ to confirm that every file is described. Sizes are those of the files when the l
 | [`public/portfolios/rotor-pendula/fig/05_chaos.svg`](../public/portfolios/rotor-pendula/fig/05_chaos.svg) | 35.5 kB | A vector figure of the project. | [portfolios.md](portfolios.md) |
 | [`public/portfolios/rotor-pendula/fig/06_sections.svg`](../public/portfolios/rotor-pendula/fig/06_sections.svg) | 133.8 kB | A vector figure of the project. | [portfolios.md](portfolios.md) |
 | [`public/portfolios/rotor-pendula/fig/07_sensor_range.svg`](../public/portfolios/rotor-pendula/fig/07_sensor_range.svg) | 23.0 kB | A vector figure of the project. | [portfolios.md](portfolios.md) |
-| [`public/portfolios/rotor-pendula/index.html`](../public/portfolios/rotor-pendula/index.html) | 1.3 kB | Entry page of the project copy: module script and stylesheet loader. | [portfolios.md](portfolios.md) |
+| [`public/portfolios/rotor-pendula/index.html`](../public/portfolios/rotor-pendula/index.html) | 2.01 MB | Generated page: the lecture notes and the simulation in two tabs (portfolios-src/rotor-pendula/tools/build_combined.py). | [portfolios.md](portfolios.md) |
+| [`public/portfolios/rotor-pendula/sol.html`](../public/portfolios/rotor-pendula/sol.html) | 1.3 kB | Entry page of Sol's app copy (formerly index.html), copied unchanged by build_combined.py. | [portfolios.md](portfolios.md) |
 
 <details><summary>59 files: A KaTeX font inside the project build.</summary>
 
@@ -502,6 +505,79 @@ to confirm that every file is described. Sizes are those of the files when the l
 | [`portfolios-src/hydraulics/tools/render_page_math.py`](../portfolios-src/hydraulics/tools/render_page_math.py) | 3.3 kB | Typesets the equation blocks inside the two simulation pages. | [README.md](../portfolios-src/hydraulics/README.md) |
 | [`portfolios-src/hydraulics/tools/theory_template.html`](../portfolios-src/hydraulics/tools/theory_template.html) | 15.9 kB | The page the text is set into. | [README.md](../portfolios-src/hydraulics/README.md) |
 
+## Source of Rotor Pendula (not served)
+
+| File | Size | What it is | Explained in |
+|---|---|---|---|
+| [`portfolios-src/rotor-pendula/README.md`](../portfolios-src/rotor-pendula/README.md) | 4.5 kB | The study's source: what it is, how the served page is generated, the checks. | [README.md](../portfolios-src/rotor-pendula/README.md) |
+| [`portfolios-src/rotor-pendula/check_physics.py`](../portfolios-src/rotor-pendula/check_physics.py) | 6.7 kB | Independent checks: SymPy derivations and SciPy re-integration with retyped constants. | [README.md](../portfolios-src/rotor-pendula/README.md) |
+
+<details><summary>19 files: Model output copied from notes/rotor-pendula/derive/, read by the number script or the simulation build.</summary>
+
+| File | Size | What it is | Explained in |
+|---|---|---|---|
+| [`portfolios-src/rotor-pendula/data/L1_chaos.json`](../portfolios-src/rotor-pendula/data/L1_chaos.json) | 3.5 kB | Model output copied from notes/rotor-pendula/derive/, read by the number script or the simulation build. | [README.md](../portfolios-src/rotor-pendula/README.md) |
+| [`portfolios-src/rotor-pendula/data/L1_map.json`](../portfolios-src/rotor-pendula/data/L1_map.json) | 57.9 kB | Model output copied from notes/rotor-pendula/derive/, read by the number script or the simulation build. | [README.md](../portfolios-src/rotor-pendula/README.md) |
+| [`portfolios-src/rotor-pendula/data/L1_map_g70.json`](../portfolios-src/rotor-pendula/data/L1_map_g70.json) | 6.1 kB | Model output copied from notes/rotor-pendula/derive/, read by the number script or the simulation build. | [README.md](../portfolios-src/rotor-pendula/README.md) |
+| [`portfolios-src/rotor-pendula/data/L1_mountings.json`](../portfolios-src/rotor-pendula/data/L1_mountings.json) | 5.9 kB | Model output copied from notes/rotor-pendula/derive/, read by the number script or the simulation build. | [README.md](../portfolios-src/rotor-pendula/README.md) |
+| [`portfolios-src/rotor-pendula/data/L2_run.json`](../portfolios-src/rotor-pendula/data/L2_run.json) | 10.7 kB | Model output copied from notes/rotor-pendula/derive/, read by the number script or the simulation build. | [README.md](../portfolios-src/rotor-pendula/README.md) |
+| [`portfolios-src/rotor-pendula/data/L2_run_k2.json`](../portfolios-src/rotor-pendula/data/L2_run_k2.json) | 10.7 kB | Model output copied from notes/rotor-pendula/derive/, read by the number script or the simulation build. | [README.md](../portfolios-src/rotor-pendula/README.md) |
+| [`portfolios-src/rotor-pendula/data/L2_run_nrel.json`](../portfolios-src/rotor-pendula/data/L2_run_nrel.json) | 10.8 kB | Model output copied from notes/rotor-pendula/derive/, read by the number script or the simulation build. | [README.md](../portfolios-src/rotor-pendula/README.md) |
+| [`portfolios-src/rotor-pendula/data/L3_sag.json`](../portfolios-src/rotor-pendula/data/L3_sag.json) | 629 B | Model output copied from notes/rotor-pendula/derive/, read by the number script or the simulation build. | [README.md](../portfolios-src/rotor-pendula/README.md) |
+| [`portfolios-src/rotor-pendula/data/L3_sag_static.json`](../portfolios-src/rotor-pendula/data/L3_sag_static.json) | 1.0 kB | Model output copied from notes/rotor-pendula/derive/, read by the number script or the simulation build. | [README.md](../portfolios-src/rotor-pendula/README.md) |
+| [`portfolios-src/rotor-pendula/data/L3_shake2.json`](../portfolios-src/rotor-pendula/data/L3_shake2.json) | 4.7 kB | Model output copied from notes/rotor-pendula/derive/, read by the number script or the simulation build. | [README.md](../portfolios-src/rotor-pendula/README.md) |
+| [`portfolios-src/rotor-pendula/data/L4_check_2000.json`](../portfolios-src/rotor-pendula/data/L4_check_2000.json) | 9.7 kB | Model output copied from notes/rotor-pendula/derive/, read by the number script or the simulation build. | [README.md](../portfolios-src/rotor-pendula/README.md) |
+| [`portfolios-src/rotor-pendula/data/L4_generator.json`](../portfolios-src/rotor-pendula/data/L4_generator.json) | 28.4 kB | Model output copied from notes/rotor-pendula/derive/, read by the number script or the simulation build. | [README.md](../portfolios-src/rotor-pendula/README.md) |
+| [`portfolios-src/rotor-pendula/data/L4_harmonics.json`](../portfolios-src/rotor-pendula/data/L4_harmonics.json) | 798 B | Model output copied from notes/rotor-pendula/derive/, read by the number script or the simulation build. | [README.md](../portfolios-src/rotor-pendula/README.md) |
+| [`portfolios-src/rotor-pendula/data/L4_resonance_v2.json`](../portfolios-src/rotor-pendula/data/L4_resonance_v2.json) | 2.3 kB | Model output copied from notes/rotor-pendula/derive/, read by the number script or the simulation build. | [README.md](../portfolios-src/rotor-pendula/README.md) |
+| [`portfolios-src/rotor-pendula/data/L4_scan.json`](../portfolios-src/rotor-pendula/data/L4_scan.json) | 5.8 kB | Model output copied from notes/rotor-pendula/derive/, read by the number script or the simulation build. | [README.md](../portfolios-src/rotor-pendula/README.md) |
+| [`portfolios-src/rotor-pendula/data/L4_sensitivity.json`](../portfolios-src/rotor-pendula/data/L4_sensitivity.json) | 7.5 kB | Model output copied from notes/rotor-pendula/derive/, read by the number script or the simulation build. | [README.md](../portfolios-src/rotor-pendula/README.md) |
+| [`portfolios-src/rotor-pendula/data/mc_full.log`](../portfolios-src/rotor-pendula/data/mc_full.log) | 2.2 kB | Model output copied from notes/rotor-pendula/derive/, read by the number script or the simulation build. | [README.md](../portfolios-src/rotor-pendula/README.md) |
+| [`portfolios-src/rotor-pendula/data/sim_check.json`](../portfolios-src/rotor-pendula/data/sim_check.json) | 292 B | Model output copied from notes/rotor-pendula/derive/, read by the number script or the simulation build. | [README.md](../portfolios-src/rotor-pendula/README.md) |
+| [`portfolios-src/rotor-pendula/data/sim_solutions.json`](../portfolios-src/rotor-pendula/data/sim_solutions.json) | 10.1 kB | Model output copied from notes/rotor-pendula/derive/, read by the number script or the simulation build. | [README.md](../portfolios-src/rotor-pendula/README.md) |
+
+</details>
+
+| File | Size | What it is | Explained in |
+|---|---|---|---|
+| [`portfolios-src/rotor-pendula/fonts/LICENSE-fonts.txt`](../portfolios-src/rotor-pendula/fonts/LICENSE-fonts.txt) | 8.5 kB | Font subsets and their @font-face rules, embedded by the build scripts. | [README.md](../portfolios-src/rotor-pendula/README.md) |
+| [`portfolios-src/rotor-pendula/fonts/fonts-embedded.css`](../portfolios-src/rotor-pendula/fonts/fonts-embedded.css) | 233.7 kB | Font subsets and their @font-face rules, embedded by the build scripts. | [README.md](../portfolios-src/rotor-pendula/README.md) |
+| [`portfolios-src/rotor-pendula/fonts/fonts-linked.css`](../portfolios-src/rotor-pendula/fonts/fonts-linked.css) | 3.2 kB | Font subsets and their @font-face rules, embedded by the build scripts. | [README.md](../portfolios-src/rotor-pendula/README.md) |
+| [`portfolios-src/rotor-pendula/fonts/ibm-plex-mono-400-normal-latin.woff2`](../portfolios-src/rotor-pendula/fonts/ibm-plex-mono-400-normal-latin.woff2) | 14.7 kB | Font subsets and their @font-face rules, embedded by the build scripts. | [README.md](../portfolios-src/rotor-pendula/README.md) |
+| [`portfolios-src/rotor-pendula/fonts/ibm-plex-mono-500-normal-latin.woff2`](../portfolios-src/rotor-pendula/fonts/ibm-plex-mono-500-normal-latin.woff2) | 14.9 kB | Font subsets and their @font-face rules, embedded by the build scripts. | [README.md](../portfolios-src/rotor-pendula/README.md) |
+| [`portfolios-src/rotor-pendula/fonts/ibm-plex-sans-400-600-normal-greek.woff2`](../portfolios-src/rotor-pendula/fonts/ibm-plex-sans-400-600-normal-greek.woff2) | 19.5 kB | Font subsets and their @font-face rules, embedded by the build scripts. | [README.md](../portfolios-src/rotor-pendula/README.md) |
+| [`portfolios-src/rotor-pendula/fonts/ibm-plex-sans-400-600-normal-latin.woff2`](../portfolios-src/rotor-pendula/fonts/ibm-plex-sans-400-600-normal-latin.woff2) | 45.7 kB | Font subsets and their @font-face rules, embedded by the build scripts. | [README.md](../portfolios-src/rotor-pendula/README.md) |
+| [`portfolios-src/rotor-pendula/fonts/ibm-plex-sans-400-italic-greek.woff2`](../portfolios-src/rotor-pendula/fonts/ibm-plex-sans-400-italic-greek.woff2) | 10.6 kB | Font subsets and their @font-face rules, embedded by the build scripts. | [README.md](../portfolios-src/rotor-pendula/README.md) |
+| [`portfolios-src/rotor-pendula/fonts/ibm-plex-sans-400-italic-latin.woff2`](../portfolios-src/rotor-pendula/fonts/ibm-plex-sans-400-italic-latin.woff2) | 24.4 kB | Font subsets and their @font-face rules, embedded by the build scripts. | [README.md](../portfolios-src/rotor-pendula/README.md) |
+| [`portfolios-src/rotor-pendula/fonts/instrument-serif-400-italic-latin.woff2`](../portfolios-src/rotor-pendula/fonts/instrument-serif-400-italic-latin.woff2) | 22.1 kB | Font subsets and their @font-face rules, embedded by the build scripts. | [README.md](../portfolios-src/rotor-pendula/README.md) |
+| [`portfolios-src/rotor-pendula/fonts/instrument-serif-400-normal-latin.woff2`](../portfolios-src/rotor-pendula/fonts/instrument-serif-400-normal-latin.woff2) | 21.0 kB | Font subsets and their @font-face rules, embedded by the build scripts. | [README.md](../portfolios-src/rotor-pendula/README.md) |
+| [`portfolios-src/rotor-pendula/numbers.json`](../portfolios-src/rotor-pendula/numbers.json) | 17.9 kB | Every computed number and table of the notes, written by tools/make_numbers.py. | [README.md](../portfolios-src/rotor-pendula/README.md) |
+| [`portfolios-src/rotor-pendula/rotor_notes.html`](../portfolios-src/rotor-pendula/rotor_notes.html) | 1.14 MB | Pendula on a Turning Blade, the lecture notes (chapters 0-8); generated by tools/build_theory.py. | [README.md](../portfolios-src/rotor-pendula/README.md) |
+| [`portfolios-src/rotor-pendula/rotor_sim.html`](../portfolios-src/rotor-pendula/rotor_sim.html) | 649.8 kB | The simulation page: physics block, solve-then-playback, Read values, worked solutions. | [README.md](../portfolios-src/rotor-pendula/README.md) |
+| [`portfolios-src/rotor-pendula/sol/index.html`](../portfolios-src/rotor-pendula/sol/index.html) | 1.3 kB | Source copy of the entry page of Sol's app, served as sol.html. | [README.md](../portfolios-src/rotor-pendula/README.md) |
+| [`portfolios-src/rotor-pendula/theory/00_machine.src.html`](../portfolios-src/rotor-pendula/theory/00_machine.src.html) | 6.3 kB | Source of the notes, part 00 (machine): HTML with LaTeX maths and number placeholders. | [README.md](../portfolios-src/rotor-pendula/README.md) |
+| [`portfolios-src/rotor-pendula/theory/01_blade.src.html`](../portfolios-src/rotor-pendula/theory/01_blade.src.html) | 12.1 kB | Source of the notes, part 01 (blade): HTML with LaTeX maths and number placeholders. | [README.md](../portfolios-src/rotor-pendula/README.md) |
+| [`portfolios-src/rotor-pendula/theory/02_brake.src.html`](../portfolios-src/rotor-pendula/theory/02_brake.src.html) | 8.6 kB | Source of the notes, part 02 (brake): HTML with LaTeX maths and number placeholders. | [README.md](../portfolios-src/rotor-pendula/README.md) |
+| [`portfolios-src/rotor-pendula/theory/03_rods.src.html`](../portfolios-src/rotor-pendula/theory/03_rods.src.html) | 10.3 kB | Source of the notes, part 03 (rods): HTML with LaTeX maths and number placeholders. | [README.md](../portfolios-src/rotor-pendula/README.md) |
+| [`portfolios-src/rotor-pendula/theory/04_shaking.src.html`](../portfolios-src/rotor-pendula/theory/04_shaking.src.html) | 14.8 kB | Source of the notes, part 04 (shaking): HTML with LaTeX maths and number placeholders. | [README.md](../portfolios-src/rotor-pendula/README.md) |
+| [`portfolios-src/rotor-pendula/theory/05_watts.src.html`](../portfolios-src/rotor-pendula/theory/05_watts.src.html) | 19.7 kB | Source of the notes, part 05 (watts): HTML with LaTeX maths and number placeholders. | [README.md](../portfolios-src/rotor-pendula/README.md) |
+| [`portfolios-src/rotor-pendula/tools/build_combined.py`](../portfolios-src/rotor-pendula/tools/build_combined.py) | 13.4 kB | Build script: build_combined (see README.md). | [README.md](../portfolios-src/rotor-pendula/README.md) |
+| [`portfolios-src/rotor-pendula/tools/build_fonts.py`](../portfolios-src/rotor-pendula/tools/build_fonts.py) | 9.7 kB | Build script: build_fonts (see README.md). | [README.md](../portfolios-src/rotor-pendula/README.md) |
+| [`portfolios-src/rotor-pendula/tools/build_sim.py`](../portfolios-src/rotor-pendula/tools/build_sim.py) | 3.7 kB | Build script: build_sim (see README.md). | [README.md](../portfolios-src/rotor-pendula/README.md) |
+| [`portfolios-src/rotor-pendula/tools/build_theory.py`](../portfolios-src/rotor-pendula/tools/build_theory.py) | 7.4 kB | Build script: build_theory (see README.md). | [README.md](../portfolios-src/rotor-pendula/README.md) |
+| [`portfolios-src/rotor-pendula/tools/check_combined.py`](../portfolios-src/rotor-pendula/tools/check_combined.py) | 5.5 kB | Check script: check_combined (see README.md). | [README.md](../portfolios-src/rotor-pendula/README.md) |
+| [`portfolios-src/rotor-pendula/tools/check_numbers.py`](../portfolios-src/rotor-pendula/tools/check_numbers.py) | 2.6 kB | Check script: check_numbers (see README.md). | [README.md](../portfolios-src/rotor-pendula/README.md) |
+| [`portfolios-src/rotor-pendula/tools/check_sim.js`](../portfolios-src/rotor-pendula/tools/check_sim.js) | 5.1 kB | Check script: check_sim (see README.md). | [README.md](../portfolios-src/rotor-pendula/README.md) |
+| [`portfolios-src/rotor-pendula/tools/check_sim_browser.js`](../portfolios-src/rotor-pendula/tools/check_sim_browser.js) | 7.5 kB | Check script: check_sim_browser (see README.md). | [README.md](../portfolios-src/rotor-pendula/README.md) |
+| [`portfolios-src/rotor-pendula/tools/katex_render.js`](../portfolios-src/rotor-pendula/tools/katex_render.js) | 613 B | Build helper of the study (KaTeX, physics block, worked solutions, template). | [README.md](../portfolios-src/rotor-pendula/README.md) |
+| [`portfolios-src/rotor-pendula/tools/make_numbers.py`](../portfolios-src/rotor-pendula/tools/make_numbers.py) | 21.5 kB | Computes every number and table of the notes from data/. | [README.md](../portfolios-src/rotor-pendula/README.md) |
+| [`portfolios-src/rotor-pendula/tools/package-lock.json`](../portfolios-src/rotor-pendula/tools/package-lock.json) | 1.1 kB | Build helper of the study (KaTeX, physics block, worked solutions, template). | [README.md](../portfolios-src/rotor-pendula/README.md) |
+| [`portfolios-src/rotor-pendula/tools/package.json`](../portfolios-src/rotor-pendula/tools/package.json) | 207 B | Build helper of the study (KaTeX, physics block, worked solutions, template). | [README.md](../portfolios-src/rotor-pendula/README.md) |
+| [`portfolios-src/rotor-pendula/tools/physics_block.js`](../portfolios-src/rotor-pendula/tools/physics_block.js) | 804 B | Build helper of the study (KaTeX, physics block, worked solutions, template). | [README.md](../portfolios-src/rotor-pendula/README.md) |
+| [`portfolios-src/rotor-pendula/tools/sim_solutions.js`](../portfolios-src/rotor-pendula/tools/sim_solutions.js) | 12.7 kB | Build helper of the study (KaTeX, physics block, worked solutions, template). | [README.md](../portfolios-src/rotor-pendula/README.md) |
+| [`portfolios-src/rotor-pendula/tools/theory_template.html`](../portfolios-src/rotor-pendula/tools/theory_template.html) | 16.4 kB | Build helper of the study (KaTeX, physics block, worked solutions, template). | [README.md](../portfolios-src/rotor-pendula/README.md) |
+| [`portfolios-src/rotor-pendula/tools/typed_numbers.py`](../portfolios-src/rotor-pendula/tools/typed_numbers.py) | 4.8 kB | The numbers typed by hand in the notes, each with its reason, for check_numbers.py. | [README.md](../portfolios-src/rotor-pendula/README.md) |
+
 ## Source of Iron, Cotton and the Head (not served)
 
 | File | Size | What it is | Explained in |
@@ -549,8 +625,8 @@ to confirm that every file is described. Sizes are those of the files when the l
 | [`docs/files.md`](files.md) | this file | This list. Written by tools/inventory.py; do not edit by hand. | [files.md](files.md) |
 | [`docs/minor-issues-report.md`](minor-issues-report.md) | 19.9 kB | Documentation: Minor issues · final verification report. | [minor-issues-report.md](minor-issues-report.md) |
 | [`docs/notes.md`](notes.md) | 3.7 kB | Documentation: The lecture-note review: `notes/` and `.claude/agents/`. | [notes.md](notes.md) |
-| [`docs/pages.md`](pages.md) | 50.8 kB | Documentation: The site's own pages: home, simulations catalog, Portfolios, robots.txt. | [pages.md](pages.md) |
-| [`docs/portfolios.md`](portfolios.md) | 37.0 kB | Documentation: The four research projects: `public/portfolios/`. | [portfolios.md](portfolios.md) |
+| [`docs/pages.md`](pages.md) | 50.9 kB | Documentation: The site's own pages: home, simulations catalog, Portfolios, robots.txt. | [pages.md](pages.md) |
+| [`docs/portfolios.md`](portfolios.md) | 40.2 kB | Documentation: The four research projects: `public/portfolios/`. | [portfolios.md](portfolios.md) |
 | [`docs/research-theory-audit.md`](research-theory-audit.md) | 29.1 kB | Documentation: Readability audit: Droplet Collection and Rotor Pendula. | [research-theory-audit.md](research-theory-audit.md) |
 | [`docs/scripts/catalog.md`](scripts/catalog.md) | 15.0 kB | Documentation: public/scripts/catalog.js. | [catalog.md](scripts/catalog.md) |
 | [`docs/scripts/datalog.md`](scripts/datalog.md) | 48.6 kB | Documentation: public/scripts/datalog.js. | [datalog.md](scripts/datalog.md) |
@@ -575,7 +651,7 @@ to confirm that every file is described. Sizes are those of the files when the l
 
 | File | Size | What it is | Explained in |
 |---|---|---|---|
-| [`tools/inventory.py`](../tools/inventory.py) | 27.7 kB | Writes docs/files.md and checks that every file in the repository is described. | [files.md](files.md) |
+| [`tools/inventory.py`](../tools/inventory.py) | 31.7 kB | Writes docs/files.md and checks that every file in the repository is described. | [files.md](files.md) |
 | [`tools/make_portfolio_copy.py`](../tools/make_portfolio_copy.py) | 4.4 kB | Builds a browser-only website copy of a research app from its source, without changing the app or installing dependencies. | [portfolios.md](portfolios.md) |
 
 ## Agents of the lecture-note review
@@ -594,6 +670,12 @@ to confirm that every file is described. Sizes are those of the files when the l
 | [`notes/.gitignore`](../notes/.gitignore) | 118 B | Keeps the review's screenshots out of the repository. | [notes.md](notes.md) |
 | [`notes/STANDARD.md`](../notes/STANDARD.md) | 8.6 kB | The standard the lecture notes are judged against, and Numa's verdicts. | [notes.md](notes.md) |
 | [`notes/STATUS.md`](../notes/STATUS.md) | 2.3 kB | Status of the lecture-note review, one row per figure. | [notes.md](notes.md) |
+| [`notes/droplets/baseline/checks.html`](../notes/droplets/baseline/checks.html) | 6.8 kB | Text of the Droplet Collection app pages before its study, kept for comparison. | [portfolios.md](portfolios.md) |
+| [`notes/droplets/baseline/overview.html`](../notes/droplets/baseline/overview.html) | 4.2 kB | Text of the Droplet Collection app pages before its study, kept for comparison. | [portfolios.md](portfolios.md) |
+| [`notes/droplets/baseline/results.html`](../notes/droplets/baseline/results.html) | 5.6 kB | Text of the Droplet Collection app pages before its study, kept for comparison. | [portfolios.md](portfolios.md) |
+| [`notes/droplets/baseline/simulate.html`](../notes/droplets/baseline/simulate.html) | 2.0 kB | Text of the Droplet Collection app pages before its study, kept for comparison. | [portfolios.md](portfolios.md) |
+| [`notes/droplets/baseline/theory.html`](../notes/droplets/baseline/theory.html) | 105.7 kB | Text of the Droplet Collection app pages before its study, kept for comparison. | [portfolios.md](portfolios.md) |
+| [`notes/droplets/brief.md`](../notes/droplets/brief.md) | 17.8 kB | The brief of the Droplet Collection study. | [portfolios.md](portfolios.md) |
 | [`notes/fig01/check-out.txt`](../notes/fig01/check-out.txt) | 2.2 kB | Fig. 1: a measuring script of the review, or its saved output. | [notes.md](notes.md) |
 | [`notes/fig01/check.md`](../notes/fig01/check.md) | 23.9 kB | Fig. 1: the derivation checker's table of equations and numbers. | [notes.md](notes.md) |
 | [`notes/fig01/check.py`](../notes/fig01/check.py) | 6.3 kB | Fig. 1: a measuring script of the review, or its saved output. | [notes.md](notes.md) |
@@ -705,5 +787,127 @@ to confirm that every file is described. Sizes are those of the files when the l
 | [`notes/fig10/verify-out.json`](../notes/fig10/verify-out.json) | 855 B | Fig. 10: a measuring script of the review, or its saved output. | [notes.md](notes.md) |
 | [`notes/fig10/verify.cjs`](../notes/fig10/verify.cjs) | 4.9 kB | Fig. 10: a measuring script of the review, or its saved output. | [notes.md](notes.md) |
 | [`notes/fig10/walk.md`](../notes/fig10/walk.md) | 14.7 kB | Fig. 10: the walkthrough check and its proposed fixes. | [notes.md](notes.md) |
+| [`notes/rotor-pendula/baseline/checks.html`](../notes/rotor-pendula/baseline/checks.html) | 14.3 kB | Text of Sol's app pages before this study, kept for comparison. | [portfolios.md](portfolios.md) |
+| [`notes/rotor-pendula/baseline/overview.html`](../notes/rotor-pendula/baseline/overview.html) | 5.7 kB | Text of Sol's app pages before this study, kept for comparison. | [portfolios.md](portfolios.md) |
+| [`notes/rotor-pendula/baseline/report.html`](../notes/rotor-pendula/baseline/report.html) | 70.3 kB | Text of Sol's app pages before this study, kept for comparison. | [portfolios.md](portfolios.md) |
+| [`notes/rotor-pendula/baseline/results.html`](../notes/rotor-pendula/baseline/results.html) | 11.5 kB | Text of Sol's app pages before this study, kept for comparison. | [portfolios.md](portfolios.md) |
+| [`notes/rotor-pendula/baseline/simulate.html`](../notes/rotor-pendula/baseline/simulate.html) | 4.7 kB | Text of Sol's app pages before this study, kept for comparison. | [portfolios.md](portfolios.md) |
+| [`notes/rotor-pendula/baseline/theory.html`](../notes/rotor-pendula/baseline/theory.html) | 83.0 kB | Text of Sol's app pages before this study, kept for comparison. | [portfolios.md](portfolios.md) |
+| [`notes/rotor-pendula/brief.md`](../notes/rotor-pendula/brief.md) | 19.8 kB | Rotor Pendula study record: brief, status, contracts, skeptic and referee reports, dossiers. | [portfolios.md](portfolios.md) |
+| [`notes/rotor-pendula/contract-L0.md`](../notes/rotor-pendula/contract-L0.md) | 11.5 kB | Rotor Pendula study record: brief, status, contracts, skeptic and referee reports, dossiers. | [portfolios.md](portfolios.md) |
+| [`notes/rotor-pendula/contract-L1.md`](../notes/rotor-pendula/contract-L1.md) | 6.5 kB | Rotor Pendula study record: brief, status, contracts, skeptic and referee reports, dossiers. | [portfolios.md](portfolios.md) |
+| [`notes/rotor-pendula/contract-L2.md`](../notes/rotor-pendula/contract-L2.md) | 7.3 kB | Rotor Pendula study record: brief, status, contracts, skeptic and referee reports, dossiers. | [portfolios.md](portfolios.md) |
+| [`notes/rotor-pendula/contract-L3.md`](../notes/rotor-pendula/contract-L3.md) | 7.7 kB | Rotor Pendula study record: brief, status, contracts, skeptic and referee reports, dossiers. | [portfolios.md](portfolios.md) |
+| [`notes/rotor-pendula/contract-L4.md`](../notes/rotor-pendula/contract-L4.md) | 7.8 kB | Rotor Pendula study record: brief, status, contracts, skeptic and referee reports, dossiers. | [portfolios.md](portfolios.md) |
+
+<details><summary>79 files: Rotor Pendula model or model run (L0-L4): script, its output or its log; see the script header.</summary>
+
+| File | Size | What it is | Explained in |
+|---|---|---|---|
+| [`notes/rotor-pendula/derive/L0_r2.py`](../notes/rotor-pendula/derive/L0_r2.py) | 3.4 kB | Rotor Pendula model or model run (L0-L4): script, its output or its log; see the script header. | [portfolios.md](portfolios.md) |
+| [`notes/rotor-pendula/derive/L0_single.py`](../notes/rotor-pendula/derive/L0_single.py) | 4.8 kB | Rotor Pendula model or model run (L0-L4): script, its output or its log; see the script header. | [portfolios.md](portfolios.md) |
+| [`notes/rotor-pendula/derive/L0_table.py`](../notes/rotor-pendula/derive/L0_table.py) | 5.8 kB | Rotor Pendula model or model run (L0-L4): script, its output or its log; see the script header. | [portfolios.md](portfolios.md) |
+| [`notes/rotor-pendula/derive/L1_chaos.json`](../notes/rotor-pendula/derive/L1_chaos.json) | 3.5 kB | Rotor Pendula model or model run (L0-L4): script, its output or its log; see the script header. | [portfolios.md](portfolios.md) |
+| [`notes/rotor-pendula/derive/L1_chaos.log`](../notes/rotor-pendula/derive/L1_chaos.log) | 1.3 kB | Rotor Pendula model or model run (L0-L4): script, its output or its log; see the script header. | [portfolios.md](portfolios.md) |
+| [`notes/rotor-pendula/derive/L1_chaos.py`](../notes/rotor-pendula/derive/L1_chaos.py) | 2.6 kB | Rotor Pendula model or model run (L0-L4): script, its output or its log; see the script header. | [portfolios.md](portfolios.md) |
+| [`notes/rotor-pendula/derive/L1_double.py`](../notes/rotor-pendula/derive/L1_double.py) | 7.5 kB | Rotor Pendula model or model run (L0-L4): script, its output or its log; see the script header. | [portfolios.md](portfolios.md) |
+| [`notes/rotor-pendula/derive/L1_engine_check.log`](../notes/rotor-pendula/derive/L1_engine_check.log) | 3.2 kB | Rotor Pendula model or model run (L0-L4): script, its output or its log; see the script header. | [portfolios.md](portfolios.md) |
+| [`notes/rotor-pendula/derive/L1_engine_check.py`](../notes/rotor-pendula/derive/L1_engine_check.py) | 8.0 kB | Rotor Pendula model or model run (L0-L4): script, its output or its log; see the script header. | [portfolios.md](portfolios.md) |
+| [`notes/rotor-pendula/derive/L1_map.json`](../notes/rotor-pendula/derive/L1_map.json) | 57.9 kB | Rotor Pendula model or model run (L0-L4): script, its output or its log; see the script header. | [portfolios.md](portfolios.md) |
+| [`notes/rotor-pendula/derive/L1_map.log`](../notes/rotor-pendula/derive/L1_map.log) | 2.6 kB | Rotor Pendula model or model run (L0-L4): script, its output or its log; see the script header. | [portfolios.md](portfolios.md) |
+| [`notes/rotor-pendula/derive/L1_map.py`](../notes/rotor-pendula/derive/L1_map.py) | 4.0 kB | Rotor Pendula model or model run (L0-L4): script, its output or its log; see the script header. | [portfolios.md](portfolios.md) |
+| [`notes/rotor-pendula/derive/L1_map_g70.json`](../notes/rotor-pendula/derive/L1_map_g70.json) | 6.1 kB | Rotor Pendula model or model run (L0-L4): script, its output or its log; see the script header. | [portfolios.md](portfolios.md) |
+| [`notes/rotor-pendula/derive/L1_map_g70.py`](../notes/rotor-pendula/derive/L1_map_g70.py) | 1.1 kB | Rotor Pendula model or model run (L0-L4): script, its output or its log; see the script header. | [portfolios.md](portfolios.md) |
+| [`notes/rotor-pendula/derive/L1_mountings.json`](../notes/rotor-pendula/derive/L1_mountings.json) | 5.9 kB | Rotor Pendula model or model run (L0-L4): script, its output or its log; see the script header. | [portfolios.md](portfolios.md) |
+| [`notes/rotor-pendula/derive/L2_run.json`](../notes/rotor-pendula/derive/L2_run.json) | 10.7 kB | Rotor Pendula model or model run (L0-L4): script, its output or its log; see the script header. | [portfolios.md](portfolios.md) |
+| [`notes/rotor-pendula/derive/L2_run.log`](../notes/rotor-pendula/derive/L2_run.log) | 1.1 kB | Rotor Pendula model or model run (L0-L4): script, its output or its log; see the script header. | [portfolios.md](portfolios.md) |
+| [`notes/rotor-pendula/derive/L2_run.py`](../notes/rotor-pendula/derive/L2_run.py) | 5.3 kB | Rotor Pendula model or model run (L0-L4): script, its output or its log; see the script header. | [portfolios.md](portfolios.md) |
+| [`notes/rotor-pendula/derive/L2_run_k2.json`](../notes/rotor-pendula/derive/L2_run_k2.json) | 10.7 kB | Rotor Pendula model or model run (L0-L4): script, its output or its log; see the script header. | [portfolios.md](portfolios.md) |
+| [`notes/rotor-pendula/derive/L2_run_k2.log`](../notes/rotor-pendula/derive/L2_run_k2.log) | 1.2 kB | Rotor Pendula model or model run (L0-L4): script, its output or its log; see the script header. | [portfolios.md](portfolios.md) |
+| [`notes/rotor-pendula/derive/L2_run_nrel.json`](../notes/rotor-pendula/derive/L2_run_nrel.json) | 10.8 kB | Rotor Pendula model or model run (L0-L4): script, its output or its log; see the script header. | [portfolios.md](portfolios.md) |
+| [`notes/rotor-pendula/derive/L2_run_nrel.log`](../notes/rotor-pendula/derive/L2_run_nrel.log) | 1.1 kB | Rotor Pendula model or model run (L0-L4): script, its output or its log; see the script header. | [portfolios.md](portfolios.md) |
+| [`notes/rotor-pendula/derive/L2_scales.py`](../notes/rotor-pendula/derive/L2_scales.py) | 3.4 kB | Rotor Pendula model or model run (L0-L4): script, its output or its log; see the script header. | [portfolios.md](portfolios.md) |
+| [`notes/rotor-pendula/derive/L3_sag.json`](../notes/rotor-pendula/derive/L3_sag.json) | 629 B | Rotor Pendula model or model run (L0-L4): script, its output or its log; see the script header. | [portfolios.md](portfolios.md) |
+| [`notes/rotor-pendula/derive/L3_sag.py`](../notes/rotor-pendula/derive/L3_sag.py) | 3.0 kB | Rotor Pendula model or model run (L0-L4): script, its output or its log; see the script header. | [portfolios.md](portfolios.md) |
+| [`notes/rotor-pendula/derive/L3_sag_check.py`](../notes/rotor-pendula/derive/L3_sag_check.py) | 3.3 kB | Rotor Pendula model or model run (L0-L4): script, its output or its log; see the script header. | [portfolios.md](portfolios.md) |
+| [`notes/rotor-pendula/derive/L3_sag_numbers.py`](../notes/rotor-pendula/derive/L3_sag_numbers.py) | 2.1 kB | Rotor Pendula model or model run (L0-L4): script, its output or its log; see the script header. | [portfolios.md](portfolios.md) |
+| [`notes/rotor-pendula/derive/L3_sag_static.json`](../notes/rotor-pendula/derive/L3_sag_static.json) | 1.0 kB | Rotor Pendula model or model run (L0-L4): script, its output or its log; see the script header. | [portfolios.md](portfolios.md) |
+| [`notes/rotor-pendula/derive/L3_sag_static.py`](../notes/rotor-pendula/derive/L3_sag_static.py) | 2.3 kB | Rotor Pendula model or model run (L0-L4): script, its output or its log; see the script header. | [portfolios.md](portfolios.md) |
+| [`notes/rotor-pendula/derive/L3_shake.json`](../notes/rotor-pendula/derive/L3_shake.json) | 5.2 kB | Rotor Pendula model or model run (L0-L4): script, its output or its log; see the script header. | [portfolios.md](portfolios.md) |
+| [`notes/rotor-pendula/derive/L3_shake.py`](../notes/rotor-pendula/derive/L3_shake.py) | 4.6 kB | Rotor Pendula model or model run (L0-L4): script, its output or its log; see the script header. | [portfolios.md](portfolios.md) |
+| [`notes/rotor-pendula/derive/L3_shake2.json`](../notes/rotor-pendula/derive/L3_shake2.json) | 4.7 kB | Rotor Pendula model or model run (L0-L4): script, its output or its log; see the script header. | [portfolios.md](portfolios.md) |
+| [`notes/rotor-pendula/derive/L3_shake2.py`](../notes/rotor-pendula/derive/L3_shake2.py) | 6.8 kB | Rotor Pendula model or model run (L0-L4): script, its output or its log; see the script header. | [portfolios.md](portfolios.md) |
+| [`notes/rotor-pendula/derive/L4_check.log`](../notes/rotor-pendula/derive/L4_check.log) | 695 B | Rotor Pendula model or model run (L0-L4): script, its output or its log; see the script header. | [portfolios.md](portfolios.md) |
+| [`notes/rotor-pendula/derive/L4_check.py`](../notes/rotor-pendula/derive/L4_check.py) | 4.5 kB | Rotor Pendula model or model run (L0-L4): script, its output or its log; see the script header. | [portfolios.md](portfolios.md) |
+| [`notes/rotor-pendula/derive/L4_check_100.json`](../notes/rotor-pendula/derive/L4_check_100.json) | 3.4 kB | Rotor Pendula model or model run (L0-L4): script, its output or its log; see the script header. | [portfolios.md](portfolios.md) |
+| [`notes/rotor-pendula/derive/L4_check_2000.json`](../notes/rotor-pendula/derive/L4_check_2000.json) | 9.7 kB | Rotor Pendula model or model run (L0-L4): script, its output or its log; see the script header. | [portfolios.md](portfolios.md) |
+| [`notes/rotor-pendula/derive/L4_check_2000.log`](../notes/rotor-pendula/derive/L4_check_2000.log) | 3.5 kB | Rotor Pendula model or model run (L0-L4): script, its output or its log; see the script header. | [portfolios.md](portfolios.md) |
+| [`notes/rotor-pendula/derive/L4_check_2000.time`](../notes/rotor-pendula/derive/L4_check_2000.time) | 44 B | Rotor Pendula model or model run (L0-L4): script, its output or its log; see the script header. | [portfolios.md](portfolios.md) |
+| [`notes/rotor-pendula/derive/L4_check_4000.json`](../notes/rotor-pendula/derive/L4_check_4000.json) | 9.7 kB | Rotor Pendula model or model run (L0-L4): script, its output or its log; see the script header. | [portfolios.md](portfolios.md) |
+| [`notes/rotor-pendula/derive/L4_check_4000.log`](../notes/rotor-pendula/derive/L4_check_4000.log) | 3.5 kB | Rotor Pendula model or model run (L0-L4): script, its output or its log; see the script header. | [portfolios.md](portfolios.md) |
+| [`notes/rotor-pendula/derive/L4_check_4000.time`](../notes/rotor-pendula/derive/L4_check_4000.time) | 44 B | Rotor Pendula model or model run (L0-L4): script, its output or its log; see the script header. | [portfolios.md](portfolios.md) |
+| [`notes/rotor-pendula/derive/L4_converge.py`](../notes/rotor-pendula/derive/L4_converge.py) | 993 B | Rotor Pendula model or model run (L0-L4): script, its output or its log; see the script header. | [portfolios.md](portfolios.md) |
+| [`notes/rotor-pendula/derive/L4_full.py`](../notes/rotor-pendula/derive/L4_full.py) | 3.8 kB | Rotor Pendula model or model run (L0-L4): script, its output or its log; see the script header. | [portfolios.md](portfolios.md) |
+| [`notes/rotor-pendula/derive/L4_generator.json`](../notes/rotor-pendula/derive/L4_generator.json) | 28.4 kB | Rotor Pendula model or model run (L0-L4): script, its output or its log; see the script header. | [portfolios.md](portfolios.md) |
+| [`notes/rotor-pendula/derive/L4_generator.py`](../notes/rotor-pendula/derive/L4_generator.py) | 5.2 kB | Rotor Pendula model or model run (L0-L4): script, its output or its log; see the script header. | [portfolios.md](portfolios.md) |
+| [`notes/rotor-pendula/derive/L4_harmonics.json`](../notes/rotor-pendula/derive/L4_harmonics.json) | 798 B | Rotor Pendula model or model run (L0-L4): script, its output or its log; see the script header. | [portfolios.md](portfolios.md) |
+| [`notes/rotor-pendula/derive/L4_harmonics.log`](../notes/rotor-pendula/derive/L4_harmonics.log) | 1.4 kB | Rotor Pendula model or model run (L0-L4): script, its output or its log; see the script header. | [portfolios.md](portfolios.md) |
+| [`notes/rotor-pendula/derive/L4_harmonics.py`](../notes/rotor-pendula/derive/L4_harmonics.py) | 3.2 kB | Rotor Pendula model or model run (L0-L4): script, its output or its log; see the script header. | [portfolios.md](portfolios.md) |
+| [`notes/rotor-pendula/derive/L4_resonance.json`](../notes/rotor-pendula/derive/L4_resonance.json) | 2.3 kB | Rotor Pendula model or model run (L0-L4): script, its output or its log; see the script header. | [portfolios.md](portfolios.md) |
+| [`notes/rotor-pendula/derive/L4_resonance.log`](../notes/rotor-pendula/derive/L4_resonance.log) | 0 B | Rotor Pendula model or model run (L0-L4): script, its output or its log; see the script header. | [portfolios.md](portfolios.md) |
+| [`notes/rotor-pendula/derive/L4_resonance.py`](../notes/rotor-pendula/derive/L4_resonance.py) | 3.3 kB | Rotor Pendula model or model run (L0-L4): script, its output or its log; see the script header. | [portfolios.md](portfolios.md) |
+| [`notes/rotor-pendula/derive/L4_resonance_v2.json`](../notes/rotor-pendula/derive/L4_resonance_v2.json) | 2.3 kB | Rotor Pendula model or model run (L0-L4): script, its output or its log; see the script header. | [portfolios.md](portfolios.md) |
+| [`notes/rotor-pendula/derive/L4_scan.json`](../notes/rotor-pendula/derive/L4_scan.json) | 5.8 kB | Rotor Pendula model or model run (L0-L4): script, its output or its log; see the script header. | [portfolios.md](portfolios.md) |
+| [`notes/rotor-pendula/derive/L4_scan.log`](../notes/rotor-pendula/derive/L4_scan.log) | 2.8 kB | Rotor Pendula model or model run (L0-L4): script, its output or its log; see the script header. | [portfolios.md](portfolios.md) |
+| [`notes/rotor-pendula/derive/L4_scan.py`](../notes/rotor-pendula/derive/L4_scan.py) | 4.8 kB | Rotor Pendula model or model run (L0-L4): script, its output or its log; see the script header. | [portfolios.md](portfolios.md) |
+| [`notes/rotor-pendula/derive/L4_scan_0.json`](../notes/rotor-pendula/derive/L4_scan_0.json) | 3.1 kB | Rotor Pendula model or model run (L0-L4): script, its output or its log; see the script header. | [portfolios.md](portfolios.md) |
+| [`notes/rotor-pendula/derive/L4_scan_0.log`](../notes/rotor-pendula/derive/L4_scan_0.log) | 1.3 kB | Rotor Pendula model or model run (L0-L4): script, its output or its log; see the script header. | [portfolios.md](portfolios.md) |
+| [`notes/rotor-pendula/derive/L4_scan_1.json`](../notes/rotor-pendula/derive/L4_scan_1.json) | 2.6 kB | Rotor Pendula model or model run (L0-L4): script, its output or its log; see the script header. | [portfolios.md](portfolios.md) |
+| [`notes/rotor-pendula/derive/L4_scan_1.log`](../notes/rotor-pendula/derive/L4_scan_1.log) | 1.3 kB | Rotor Pendula model or model run (L0-L4): script, its output or its log; see the script header. | [portfolios.md](portfolios.md) |
+| [`notes/rotor-pendula/derive/L4_scan_2.json`](../notes/rotor-pendula/derive/L4_scan_2.json) | 2.6 kB | Rotor Pendula model or model run (L0-L4): script, its output or its log; see the script header. | [portfolios.md](portfolios.md) |
+| [`notes/rotor-pendula/derive/L4_scan_2.log`](../notes/rotor-pendula/derive/L4_scan_2.log) | 1.3 kB | Rotor Pendula model or model run (L0-L4): script, its output or its log; see the script header. | [portfolios.md](portfolios.md) |
+| [`notes/rotor-pendula/derive/L4_sensitivity.json`](../notes/rotor-pendula/derive/L4_sensitivity.json) | 7.5 kB | Rotor Pendula model or model run (L0-L4): script, its output or its log; see the script header. | [portfolios.md](portfolios.md) |
+| [`notes/rotor-pendula/derive/L4_sensitivity.log`](../notes/rotor-pendula/derive/L4_sensitivity.log) | 4.9 kB | Rotor Pendula model or model run (L0-L4): script, its output or its log; see the script header. | [portfolios.md](portfolios.md) |
+| [`notes/rotor-pendula/derive/L4_sensitivity.py`](../notes/rotor-pendula/derive/L4_sensitivity.py) | 1.9 kB | Rotor Pendula model or model run (L0-L4): script, its output or its log; see the script header. | [portfolios.md](portfolios.md) |
+| [`notes/rotor-pendula/derive/L4_stick.json`](../notes/rotor-pendula/derive/L4_stick.json) | 2.2 kB | Rotor Pendula model or model run (L0-L4): script, its output or its log; see the script header. | [portfolios.md](portfolios.md) |
+| [`notes/rotor-pendula/derive/L4_stick.log`](../notes/rotor-pendula/derive/L4_stick.log) | 3.5 kB | Rotor Pendula model or model run (L0-L4): script, its output or its log; see the script header. | [portfolios.md](portfolios.md) |
+| [`notes/rotor-pendula/derive/L4_stick.py`](../notes/rotor-pendula/derive/L4_stick.py) | 2.8 kB | Rotor Pendula model or model run (L0-L4): script, its output or its log; see the script header. | [portfolios.md](portfolios.md) |
+| [`notes/rotor-pendula/derive/data/Cp_Ct_Cq.NREL5MW.txt`](../notes/rotor-pendula/derive/data/Cp_Ct_Cq.NREL5MW.txt) | 33.1 kB | Rotor Pendula model or model run (L0-L4): script, its output or its log; see the script header. | [portfolios.md](portfolios.md) |
+| [`notes/rotor-pendula/derive/data/NRELOffshrBsline5MW_Blade.dat`](../notes/rotor-pendula/derive/data/NRELOffshrBsline5MW_Blade.dat) | 8.0 kB | Rotor Pendula model or model run (L0-L4): script, its output or its log; see the script header. | [portfolios.md](portfolios.md) |
+| [`notes/rotor-pendula/derive/engine.py`](../notes/rotor-pendula/derive/engine.py) | 7.6 kB | Rotor Pendula model or model run (L0-L4): script, its output or its log; see the script header. | [portfolios.md](portfolios.md) |
+| [`notes/rotor-pendula/derive/fermi.py`](../notes/rotor-pendula/derive/fermi.py) | 3.1 kB | Rotor Pendula model or model run (L0-L4): script, its output or its log; see the script header. | [portfolios.md](portfolios.md) |
+| [`notes/rotor-pendula/derive/mc_full.log`](../notes/rotor-pendula/derive/mc_full.log) | 2.2 kB | Rotor Pendula model or model run (L0-L4): script, its output or its log; see the script header. | [portfolios.md](portfolios.md) |
+| [`notes/rotor-pendula/derive/mc_quick.log`](../notes/rotor-pendula/derive/mc_quick.log) | 2.2 kB | Rotor Pendula model or model run (L0-L4): script, its output or its log; see the script header. | [portfolios.md](portfolios.md) |
+| [`notes/rotor-pendula/derive/nrel5mw.py`](../notes/rotor-pendula/derive/nrel5mw.py) | 7.3 kB | Rotor Pendula model or model run (L0-L4): script, its output or its log; see the script header. | [portfolios.md](portfolios.md) |
+| [`notes/rotor-pendula/derive/power_theorem.py`](../notes/rotor-pendula/derive/power_theorem.py) | 7.0 kB | Rotor Pendula model or model run (L0-L4): script, its output or its log; see the script header. | [portfolios.md](portfolios.md) |
+| [`notes/rotor-pendula/derive/power_theorem_mc.py`](../notes/rotor-pendula/derive/power_theorem_mc.py) | 6.4 kB | Rotor Pendula model or model run (L0-L4): script, its output or its log; see the script header. | [portfolios.md](portfolios.md) |
+| [`notes/rotor-pendula/derive/scales.py`](../notes/rotor-pendula/derive/scales.py) | 2.7 kB | Rotor Pendula model or model run (L0-L4): script, its output or its log; see the script header. | [portfolios.md](portfolios.md) |
+| [`notes/rotor-pendula/derive/turbulence.py`](../notes/rotor-pendula/derive/turbulence.py) | 5.6 kB | Rotor Pendula model or model run (L0-L4): script, its output or its log; see the script header. | [portfolios.md](portfolios.md) |
+
+</details>
+
+<details><summary>14 files: Rotor Pendula study record: brief, status, contracts, skeptic and referee reports, dossiers.</summary>
+
+| File | Size | What it is | Explained in |
+|---|---|---|---|
+| [`notes/rotor-pendula/done.md`](../notes/rotor-pendula/done.md) | 2.5 kB | Rotor Pendula study record: brief, status, contracts, skeptic and referee reports, dossiers. | [portfolios.md](portfolios.md) |
+| [`notes/rotor-pendula/dossier-edgewise.md`](../notes/rotor-pendula/dossier-edgewise.md) | 33.9 kB | Rotor Pendula study record: brief, status, contracts, skeptic and referee reports, dossiers. | [portfolios.md](portfolios.md) |
+| [`notes/rotor-pendula/dossier-generator.md`](../notes/rotor-pendula/dossier-generator.md) | 15.9 kB | Rotor Pendula study record: brief, status, contracts, skeptic and referee reports, dossiers. | [portfolios.md](portfolios.md) |
+| [`notes/rotor-pendula/dossier-harvesting.md`](../notes/rotor-pendula/dossier-harvesting.md) | 33.8 kB | Rotor Pendula study record: brief, status, contracts, skeptic and referee reports, dossiers. | [portfolios.md](portfolios.md) |
+| [`notes/rotor-pendula/dossier-turbine.md`](../notes/rotor-pendula/dossier-turbine.md) | 54.8 kB | Rotor Pendula study record: brief, status, contracts, skeptic and referee reports, dossiers. | [portfolios.md](portfolios.md) |
+| [`notes/rotor-pendula/handoff-prompt.md`](../notes/rotor-pendula/handoff-prompt.md) | 11.7 kB | Rotor Pendula study record: brief, status, contracts, skeptic and referee reports, dossiers. | [portfolios.md](portfolios.md) |
+| [`notes/rotor-pendula/referee-note-r1.md`](../notes/rotor-pendula/referee-note-r1.md) | 30.9 kB | Rotor Pendula study record: brief, status, contracts, skeptic and referee reports, dossiers. | [portfolios.md](portfolios.md) |
+| [`notes/rotor-pendula/referee-note-r3.md`](../notes/rotor-pendula/referee-note-r3.md) | 28.7 kB | Rotor Pendula study record: brief, status, contracts, skeptic and referee reports, dossiers. | [portfolios.md](portfolios.md) |
+| [`notes/rotor-pendula/review-prompt.md`](../notes/rotor-pendula/review-prompt.md) | 3.6 kB | Rotor Pendula study record: brief, status, contracts, skeptic and referee reports, dossiers. | [portfolios.md](portfolios.md) |
+| [`notes/rotor-pendula/skeptic-G1-L0-r1.md`](../notes/rotor-pendula/skeptic-G1-L0-r1.md) | 17.4 kB | Rotor Pendula study record: brief, status, contracts, skeptic and referee reports, dossiers. | [portfolios.md](portfolios.md) |
+| [`notes/rotor-pendula/skeptic-G1-L2-r1.md`](../notes/rotor-pendula/skeptic-G1-L2-r1.md) | 17.5 kB | Rotor Pendula study record: brief, status, contracts, skeptic and referee reports, dossiers. | [portfolios.md](portfolios.md) |
+| [`notes/rotor-pendula/skeptic-G1-L3-r1.md`](../notes/rotor-pendula/skeptic-G1-L3-r1.md) | 9.7 kB | Rotor Pendula study record: brief, status, contracts, skeptic and referee reports, dossiers. | [portfolios.md](portfolios.md) |
+| [`notes/rotor-pendula/skeptic-G1-L4-r1.md`](../notes/rotor-pendula/skeptic-G1-L4-r1.md) | 14.1 kB | Rotor Pendula study record: brief, status, contracts, skeptic and referee reports, dossiers. | [portfolios.md](portfolios.md) |
+| [`notes/rotor-pendula/status.md`](../notes/rotor-pendula/status.md) | 10.9 kB | Rotor Pendula study record: brief, status, contracts, skeptic and referee reports, dossiers. | [portfolios.md](portfolios.md) |
+
+</details>
+
+| File | Size | What it is | Explained in |
+|---|---|---|---|
 | [`notes/verify.mjs`](../notes/verify.mjs) | 4.5 kB | Checks the ten simulation pages in headless Chromium at desktop and phone size. | [notes.md](notes.md) |
 | [`notes/walkcheck.cjs`](../notes/walkcheck.cjs) | 1.7 kB | Searches every quoted code line of the ten walkthroughs in its page. | [notes.md](notes.md) |
