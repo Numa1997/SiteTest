@@ -54,4 +54,6 @@ print(f'rotor over the measured 10 min: mean Omega {Om2.mean():.4f} rad/s ({Om2.
 print(f'eps = Omega_dot/Omega^2: rms {np.sqrt(np.mean(eps**2)):.4f}, max |eps| {np.max(np.abs(eps)):.4f}')
 print(f'time at rated speed (ideal pitch active): {np.mean(Om2 >= W.OM_RATED - 1e-9)*100:.2f} %; below region 2 (9.0 rpm): '
       f'{np.mean(Om2 < 871/97*2*math.pi/60)*100:.1f} %')
+import json as _json
+_json.dump(dict(sigOm=float(s.mean()), sigOm_sd=float(s.std()), Om_mean=float(Om2.mean())), open(os.path.join(os.path.dirname(os.path.abspath(__file__)), 'L2_scales.json'), 'w'), indent=1)
 print('ALL PASS' if fails == 0 else f'{fails} FAIL'); sys.exit(1 if fails else 0)

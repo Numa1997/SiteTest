@@ -1,25 +1,23 @@
 # The four research projects: `public/portfolios/`
 
 The Portfolios page ([`public/portfolios.html`](../public/portfolios.html), described in [pages.md](pages.md)) presents four
-research projects; the fourth, Iron, Cotton and the Head, is described [at the end](#iron-cotton-and-the-head-impact). The first two are each their own AppDeploy app with its own source; the third, the Hydraulic Press
+research projects; the fourth, Iron, Cotton and the Head, is described [at the end](#iron-cotton-and-the-head-impact). Droplet Collection ([below](#droplet-collection-droplet-collection-since-23-october-2026)) and Rotor Pendula ([below](#rotor-pendula-rotor-pendula)) are, since 23 October 2026, generated from their sources in this repository,  the third, the Hydraulic Press
 Study, is generated from its own GitHub repository ([below](#the-hydraulic-press-study-hydraulics)). This website carries only
 a **built copy** of each one, so that a reader can open it here without leaving the site:
 
 | Folder | Built from the app | What it is |
 |---|---|---|
 | [`public/portfolios/droplet-collection/`](../public/portfolios/droplet-collection/) | its source in [`portfolios-src/droplets/`](../portfolios-src/droplets/) (since 23 October 2026; before, the app `droplet-collection-yl7l26`) | Numa's Bachelor thesis (Leipzig) on how cloud droplets grow into rain, rebuilt as lecture notes: twelve chapters from one drop to ice, energy and entropy, and a cloud with a shape, five simulations running in the browser, worked problems and checks. One self-contained page ([below](#droplet-collection-droplet-collection-since-23-october-2026)). |
-| [`public/portfolios/rotor-pendula/`](../public/portfolios/rotor-pendula/) | `rotor-pendula-gafw0f` | Sol's corrected study of a pendulum riding on a wind-turbine blade, built as a sensor power supply: derivation from the Lagrangian, an in-browser solver, results, checks, and a Report page whose tables are rebuilt from the study's data. |
+| [`public/portfolios/rotor-pendula/`](../public/portfolios/rotor-pendula/) | its source in [`portfolios-src/rotor-pendula/`](../portfolios-src/rotor-pendula/) | A pendulum riding on a wind-turbine blade as a sensor's power supply: lecture notes in nine chapters and a simulation page, one generated page. |
 | [`public/portfolios/hydraulics/`](../public/portfolios/hydraulics/) | its source in [`portfolios-src/hydraulics/`](../portfolios-src/hydraulics/) (not an app) | A servo-hydraulic press under digital control, from first principles: the animated press with its PID controller, loop analysis (Bode, Nyquist, z-plane), Pascal's ideal press, and a 23-chapter text deriving every equation. One self-contained page. |
 
-**The source code of the first two apps is not in this repository.** It lives in their AppDeploy apps (readable there with
-`src_read`). What is here is the output of their build (`vite build`): one HTML file, one JavaScript bundle, one stylesheet,
-one Web Worker, the KaTeX fonts, and the figures and files they link to. Minified bundles are not meant to be read or edited
-by hand: to change a project, change its app, rebuild, and copy the build here again (the procedure is at the end of this page).
+**No app copies remain** (since 23 October 2026 every project here is generated from its source in this repository). The
+sections below on app copies describe how the former copies of Droplet Collection and Rotor Pendula worked.
 
 ## How a copy works
 
-(This section describes the app copies. Rotor Pendula is one; Droplet Collection was one until 23 October 2026, and its mentions
-below describe that former copy. The page it is now is described [at the end](#droplet-collection-droplet-collection-since-23-october-2026).)
+(This section describes the former app copies: Droplet Collection and Rotor Pendula were both copies until 23 October 2026, and
+the mentions below describe those former copies. The page it is now is described [at the end](#droplet-collection-droplet-collection-since-23-october-2026).)
 
 Picture a sealed parcel: everything the project needs is inside its folder, and it touches the rest of the site in only two
 places, the links into it from `portfolios.html` and its one link back out.
@@ -29,12 +27,11 @@ places, the links into it from `portfolios.html` and its one link back out.
    `<div id="root">`. The view to show is chosen by the part of the address after `#`, the **hash route**:
    - (Droplet Collection used `#/`, `#/theory`, `#/results`, `#/simulate`, `#/checks` until 23 October 2026; it is now one
      generated page, described [below](#droplet-collection-droplet-collection-since-23-october-2026).)
-   - Rotor Pendula: `#/` (Overview), `#/theory`, `#/results`, `#/simulate`, `#/checks`, `#/report`.
+   - Rotor Pendula (removed 23 October 2026): `#/` (Overview), `#/theory`, `#/results`, `#/simulate`, `#/checks`, `#/report`.
 
    (Found with `grep -o 'path:"/[a-z-]*"' public/portfolios/*/static/index-*.js`.) Hash routes are used because the server
    only ever serves the one file `index.html`; everything after `#` stays in the browser. Links from `portfolios.html` therefore
-   always name the file, as in `portfolios/rotor-pendula/index.html#/report`
-   ([portfolios.html:191](../public/portfolios.html#L191)). The AppDeploy server used to answer a bare folder address such as
+   always named the file, as in `portfolios/rotor-pendula/index.html#/report` (both copies are gone now). The AppDeploy server used to answer a bare folder address such as
    `portfolios/rotor-pendula/` with 403 (forbidden). Measured on 20 October 2026, both hosts serve the copy there (AppDeploy
    200; Cloudflare 200, and Cloudflare redirects `…/index.html` to the folder with a 307, the browser keeping the `#/route`), so
    the links that name the file work on both.
@@ -45,7 +42,7 @@ places, the links into it from `portfolios.html` and its one link back out.
 3. **The stylesheet is added by a script.** In both `index.html` files the stylesheet is not a `<link>` tag but a one-line
    script that creates the `<link>` when the page runs
    ([droplet-collection/index.html:14](../public/portfolios/droplet-collection/index.html#L14),
-   [rotor-pendula/index.html:14](../public/portfolios/rotor-pendula/index.html#L14)). The reason is a platform quirk:
+   the former rotor-pendula/index.html, line 14). The reason is a platform quirk:
    when AppDeploy deploys an HTML file, it rewrites a relative stylesheet address such as `./static/index-<hash>.css` into an
    address at the site root, where the file does not exist (403), and the copy shows unstyled. The platform does not touch
    scripts, so a script that adds the same link at run time survives. Seen for `./assets/…` and, since October 2026, for
@@ -84,36 +81,14 @@ Since 23 October 2026 the copy is generated from [`portfolios-src/droplets/`](..
 | `fig/plate-fallspeed.svg`, `fig/plate-efficiency.svg`, `fig/plate-warm.svg`, `fig/plate-first.svg` | The four plates of the Portfolios page article, written by the same build from the same figures as the notes. |
 | `fig/c1_ice.svg`, `fig/ecoll_map.svg`, `fig/fallspeed_gk.svg`, `fig/golovin.svg`, `fig/w2_rain.svg`, `fig/w2_spectra.svg` | Left over from the app copy (its `static/` bundle was removed on 23 October 2026, once nothing loaded it). The German and Arabic Portfolios pages still show these old plates until the i18n generator is run again (`tools/i18n/build.py`), so they stay for now. |
 
-### `rotor-pendula/` (84 files)
+### `rotor-pendula/`
 
 | Path | What it is |
 |---|---|
-| `index.html` | The entry page, as in the other copy. |
-| `static/index-CsGEKbO8.js` | The whole application, including the Report page, minified, 1.01 MB. |
-| `static/index-CNYGhWdg.css` | Its stylesheet (fonts imported as in the other copy), 65 kB. |
-| `static/worker-hcWKavQc.js` | The Web Worker: the pendulum integrator, 4.5 kB. |
-| `static/KaTeX_*` | The same 59 KaTeX font files. |
-| `fig/01_geometry.svg` … `fig/07_sensor_range.svg` | Seven vector figures of the study (geometry, power at the 18 mountings, generator topologies, geometry ratios, chaos scan, Poincaré sections, sensor range). |
-| `study/` | Sol's delivered study, offered for download on the Report page; listed below. |
+| `index.html` | **Generated** by `portfolios-src/rotor-pendula/tools/build_combined.py --site` (2.15 MB): a tab bar with the lecture notes (`#notes`) and the simulation (`#sim`), each embedded unchanged in its own frame; described [below](#rotor-pendula-rotor-pendula). |
+| `LICENSE-fonts.txt` | Licences of the fonts embedded in `index.html` (written by the build). |
 
-**`rotor-pendula/study/`** is the study as Sol delivered it, after correction:
-
-| Path | What it is |
-|---|---|
-| `study/report.pdf` | The 14-page corrected report (XeLaTeX), 202 kB. |
-| `study/report.tex` | Its LaTeX source. |
-| `study/wind_pendulum.zip` | The complete delivery, 1.4 MB, 189 entries: code, data (111 nonlinear run metadata files, 49 linear evaluations), figures, fonts, sources, the report. Byte-identical to the file the live app serves. |
-| `study/README.md` | Where to start: the report, then `code/README.md`. |
-| `study/STATUS.md` | What was computed, what was derived, what was *not* measured (five legacy cases), and the stated model limits. |
-| `study/CHANGES.md` | The fourteen corrections C1–C14 to the first delivery, each with old → new values (for example the rotor radius 0.7 m → 5.347606 m). |
-| `study/FILE_INVENTORY.csv` | Every file of the full delivery with its size in bytes (181 rows). |
-| `study/code/README.md` | Exact regeneration: Python 3.12 with numpy, scipy, matplotlib, fontTools; the commands in order, from `anchors.py` to `package.py`. |
-| `study/code/requirements.txt` | The four pinned packages. |
-| `study/data/summary.csv` | One row per computed case (study, rotor speed Ω in rad/s, pivot radius in m, masses in kg, damping c in N m s/rad, mean power in W, Lyapunov exponent in 1/s, regime, dimensionless groups …). The Report page's tables are rebuilt from this and the next two files. |
-| `study/data/all_results.json` | The same 160 cases with their full parameters. |
-| `study/data/audit.json` | The audit numbers: RK4 cross-checks, the C12 topology values, similarity checks, the energy identity, the sensor budget, the unmeasured legacy cases, the historical turbine correction. |
-| `study/sources/README.md` | The two datasheets used for the sensor budget (ADXL362 accelerometer, CC2652R radio chip): addresses, SHA-256 checksums, the pages and values used, and the assumed duty cycle. The PDFs themselves are not included. |
-| `study/sources/access.json` | The same two sources as data: address, bytes, SHA-256, access date, HTTP status. |
+The former app copy (`static/`, `fig/`, the delivered study `study/`) was removed on 23 October 2026.
 
 ## The Hydraulic Press Study: `hydraulics/`
 
@@ -216,9 +191,33 @@ $t = 0$; Record plays it from the start.
 **The ideal press's pressure probe now needs a click.** It used to follow the mouse across the running figure, against the site's rule
 that nothing on a running figure reacts to a pointer merely crossing it; a click or tap places it, a click outside the oil removes it.
 
+## Rotor Pendula: `rotor-pendula/`
+
+Since 23 October 2026 the page at `portfolios/rotor-pendula/index.html` is generated, like the Hydraulic Press Study, from its
+source in [`portfolios-src/rotor-pendula/`](../portfolios-src/rotor-pendula/) (its [`README.md`](../portfolios-src/rotor-pendula/README.md)
+gives the commands and checks); the models, model runs and review record are in `notes/rotor-pendula/`.
+
+**What the reader gets.** Two tabs. *Lecture notes* (`#notes`): *Pendula on a Turning Blade*, nine chapters (0–8), 29 numbered
+equations, from the Lagrangian of a pendulum on a turning blade to the best brake, two rods and chaos, a ceiling on random shaking,
+gusts on the NREL 5 MW turbine, the blade's bending, and a real geared generator (maxon RE 25 with a GP 32 C gearhead); every number
+is computed by the study's models (`tools/make_numbers.py`) or listed with its reason (`tools/typed_numbers.py`). *Simulation*
+(`#sim`): choose a rotor, a pivot, one rod or two and an ideal brake or the geared generator; the page solves the full equations
+with a Radau IIA integrator in a Web Worker built from its physics block, then plays the last turns back; six worked solutions.
+Reading a value is a tool: "Read values" on, a click pins a point, and the values show in a strip outside the plots.
+
+**How the page works.** As for the Hydraulic Press Study: each page is embedded as a JSON string and shown in its own `iframe srcdoc`;
+a small script turns links between the two pages into tab switches and opens other links outside the frame.
+The page carries the site's security policy with `'unsafe-eval'` in `script-src` and `blob:` in `worker-src` (the simulation's worker).
+
+**Checks** (from `portfolios-src/rotor-pendula/`): `python3 tools/check_numbers.py` (every number computed or explained),
+`python3 -I check_physics.py` (17 independent SymPy and SciPy checks with retyped constants), `node tools/check_sim.js` (the
+simulation's physics block reproduces the Python engine's 36 reference runs to 1.3e-8), `node tools/check_sim_browser.js` and, with `public/` served,
+`python3 tools/check_combined.py <url>` (both tabs complete, 0 KaTeX errors, solve, tab links, no sideways scroll at
+360–1440 px). Verified on 23 October 2026: all pass.
+
 ## How to update a copy of an app
 
-1. Change the project in its own app (`droplet-collection-yl7l26` or `rotor-pendula-gafw0f`) and check it there.
+1. Change the project in its own app and check it there.
 2. Make a website variant of its source, outside the app: remove the Saved runs page, its route and link, and the Save
    button with its server call; add the back link `← Numa Koudsie · Portfolios` to `../../portfolios.html` in the top bar;
    add ` · Numa Koudsie` to the page title. Build that variant with a separate Vite configuration that sets `base: './'` and

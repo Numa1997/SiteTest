@@ -151,100 +151,68 @@
       <article class="proj" id="rotor-pendula" aria-labelledby="rp-title">
         <div class="proj__band">
           <span class="proj__num">02</span>
-          <p>A corrected study by Sol · independently audited · 2026</p>
+          <p>Lecture notes and a simulation · from first principles · 2026</p>
           <span>rotating mechanics · energy harvesting · nonlinear dynamics</span>
         </div>
         <div class="proj__body">
           <div class="proj__head">
             <div>
               <h2 id="rp-title">Rotor Pendula</h2>
-              <p class="proj__sub">Can a swinging weight on a turbine blade power a sensor?</p>
+              <p class="proj__sub">Can a swinging weight on a turbine blade power a sensor, and can chaos or the wind help?</p>
               <p class="proj__abs">
                 Hang a 100 g weight on a 20 cm rod from a point on a turning blade. Each
                 time the blade goes round, gravity pulls the weight first one way and then
                 the other, so it swings once per turn, like a child on a swing pushed once
                 per pass; a generator at the pivot brakes that swing and turns it into
-                electricity. The study builds everything from the pendulum’s Lagrangian:
-                the equations of motion, the energy books that say the rotor pays for every
-                milliwatt, the driven-oscillator resonance at \(r_p = L\) with the best
-                generator setting \(\kappa = |R-1|\), real turbine sizes from the tip-speed
-                ratio, the double pendulum, chaos, and a sensor budget from two datasheets.
-                An independent audit rebuilt the model from scratch and reproduced every
-                headline number; the solver runs in your browser. Sol’s whole report is
-                included, word for word, with its nine tables rebuilt from the data and all
-                181 files of the delivery to download.
+                electricity. The lecture notes build everything from the pendulum’s Lagrangian:
+                the best brake \(\kappa = |R-1|\), the rod’s trail that is the rotor’s bill, two rods
+                and chaos, a ceiling on random shaking, gusts on a real 5 MW turbine, the blade’s
+                bending, and a real motor and gearbox from a catalogue. Every number in the notes
+                is computed by the models, and a simulation page solves the full equations in your browser.
               </p>
               <div class="proj__actions">
-                <a class="proj__btn" href="portfolios/rotor-pendula/index.html">Open the project</a>
-                <a class="proj__btn proj__btn--ghost" href="portfolios/rotor-pendula/index.html#/theory">Read the derivation</a>
-                <a class="proj__btn proj__btn--ghost" href="portfolios/rotor-pendula/index.html#/simulate">Run a pendulum</a>
-                <a class="proj__btn proj__btn--ghost" href="portfolios/rotor-pendula/index.html#/report">Read Sol’s report</a>
+                <a class="proj__btn" href="portfolios/rotor-pendula/index.html">Read the lecture notes</a>
+                <a class="proj__btn proj__btn--ghost" href="portfolios/rotor-pendula/index.html#sim">Run a pendulum</a>
               </div>
             </div>
             <dl class="proj__tally" aria-label="Key figures">
-              <div><dt class="is-new">57.1<small> mW</small></dt><dd>best harvest, single pendulum, 100 g on 20 cm</dd></div>
+              <div><dt class="is-new">57.1<small> mW</small></dt><dd>best mechanical harvest, single pendulum, 100 g on 20 cm</dd></div>
+              <div><dt class="is-new">1.8–9.0<small> mW</small></dt><dd>to the wires on a large turbine, with a real motor and gearbox</dd></div>
               <div><dt>37.6<small> µW</small></dt><dd>what a blade sensor node needs</dd></div>
               <div><dt>0.64–0.74</dt><dd>double ÷ single, same mass and reach</dd></div>
-              <div><dt>7.2 × 10<sup>−5</sup></dt><dd>largest share of the turbine’s output, paid by the rotor</dd></div>
             </dl>
           </div>
 
           <section class="proj__part" aria-labelledby="rp-answer">
-            <h3 id="rp-answer"><span class="psub__n">2.1</span>The answer in four lines</h3>
+            <h3 id="rp-answer"><span class="psub__n">2.1</span>The answer in five lines</h3>
             <ol class="proj__changes">
-              <li><b>There is enough power.</b> All 18 studied mountings give 9.55–57.1 mW of mechanical power; after an assumed 50 % conversion that is at least 127 times the 37.6 µW a low-duty sensor node draws.</li>
-              <li><b>The rotor pays for it.</b> At fixed rotor speed the generator’s energy comes from the rotor’s drive; the pendulum cannot raise the turbine’s net output, and costs it at most \(7.2\times10^{-5}\) of it.</li>
-              <li><b>One rod beats two.</b> With the same mass and the same reach, a double pendulum gives 0.64–0.74 of the single one’s power at every mounting: half its mass sits at half the reach.</li>
-              <li><b>Chaos does not help.</b> 2 of 54 scanned double pendula are chaotic; at matched forcing the regular orbit harvests about 0.379 W, the chaotic one about 0.24–0.25 W. The catch is force, not power: a fast rotor’s pivot sits in 18–215 g, beyond a ±8 g accelerometer.</li>
+              <li><b>There is enough power.</b> The 18 mountings give 9.55–57.1 mW of mechanical power, and the rotor pays for every joule, at most \(7.2\times10^{-5}\) of the turbine’s output.</li>
+              <li><b>One rod beats two.</b> With the same mass and reach a double pendulum gives 0.64–0.74 of the single one’s power: its mass sits closer to the pivot, where gravity has less leverage.</li>
+              <li><b>Chaos does not help.</b> The double pendulum is chaotic only near resonance, where no real mounting is, and there the best regular setting beats every chaotic one.</li>
+              <li><b>The wind’s disorder hardly helps.</b> Random shaking has a hard ceiling set by the pendulum’s mass; gusts change the power by a few per cent; the blade’s bending gives a short pendulum almost nothing.</li>
+              <li><b>A real generator still delivers.</b> A catalogue motor behind a 51 : 1 gearhead brings 1.8–9.0 mW to the wires on a large turbine, at least 47 times the sensor’s need, and about 10 times if the gearbox is twice as draggy as its catalogue suggests. Turning that slow, low voltage into a supply is the open problem.</li>
             </ol>
           </section>
 
           <section class="proj__part" aria-labelledby="rp-audit">
-            <h3 id="rp-audit"><span class="psub__n">2.2</span>What the audit corrected</h3>
+            <h3 id="rp-audit"><span class="psub__n">2.2</span>What was checked</h3>
             <p>
-              An independent model, written from scratch, re-ran all 36 mapping cases and all 54 chaos cases; every
-              headline number reproduced, to about one part in \(10^{11}\). Eight things in the report needed
-              correcting, and none changes a conclusion. The main ones: the turbine-size formula is \(56\ \mathrm{m/s}/\Omega\), not
-              mm/s; the centrifugal factor \(\Gamma\) rises with rotor speed, not falls; the chaotic power’s error bar is
-              about \(\pm0.01\ \mathrm{W}\), not \(\pm0.003\ \mathrm{W}\); one mounting puts the bob 66 mm past the
-              blade tip; and one figure is blurred by single-precision storage. The project shows each correction
-              where it occurs, with its evidence.
+              The equations are derived twice, by Lagrange and by Newton in the turning frame, and solved with an implicit
+              solver checked against an independent one. Each step went to a blind skeptic, and the notes say where a model
+              was corrected: a generator model that let the gearbox pass the motor’s back-and-forth power for free was
+              rebuilt, and a tuned-rod idea was withdrawn once a skeptic showed that gravity detunes it every turn. An
+              independent script, with every constant typed again, re-derives the main formulas in SymPy and re-integrates
+              the runs with SciPy.
             </p>
           </section>
 
-          <section class="proj__part" aria-labelledby="rp-figs">
-            <h3 id="rp-figs"><span class="psub__n">2.3</span>Four figures from the study</h3>
-            <div class="proj__figs">
-              <figure>
-                <a class="pfig__plate" href="portfolios/rotor-pendula/index.html#/report"><img src="portfolios/rotor-pendula/fig/01_geometry.svg" width="648" height="300" loading="lazy" alt="The planar model: a pivot on a circle around the hub, an upper rod and a lower rod, and the generators at the two joints."></a>
-                <figcaption><span class="pfig__n">Figure 1</span>The planar model: the pivot rides a circle round the hub; the generators feel relative joint speeds, not absolute rod speeds.</figcaption>
-              </figure>
-              <figure>
-                <a class="pfig__plate" href="portfolios/rotor-pendula/index.html#/results"><img src="portfolios/rotor-pendula/fig/02_mapping_power.svg" width="660" height="300" loading="lazy" alt="Mean harvested power at the 18 mountings against rotor speed, single and double pendulum, small and large rotors."></a>
-                <figcaption><span class="pfig__n">Figure 2</span>Mean harvested power at the 18 mountings, single and double pendulum; lines only join the sampled points.</figcaption>
-              </figure>
-              <figure>
-                <a class="pfig__plate" href="portfolios/rotor-pendula/index.html#/results"><img src="portfolios/rotor-pendula/fig/05_chaos.svg" width="715" height="300" loading="lazy" alt="Left: power against damping for the matched group; right: all 54 scanned cases."></a>
-                <figcaption><span class="pfig__n">Figure 3</span>Left: the matched group, power against damping. Right: all 54 scanned cases; the vertical line alone is not the chaos test.</figcaption>
-              </figure>
-              <figure>
-                <a class="pfig__plate" href="portfolios/rotor-pendula/index.html#/results"><img src="portfolios/rotor-pendula/fig/07_sensor_range.svg" width="655" height="300" loading="lazy" alt="Largest radial specific force at the pivot for each mounting against the accelerometer range."></a>
-                <figcaption><span class="pfig__n">Figure 4</span>The largest radial specific force at the pivot, \(g(\Gamma+1)\), against the accelerometer’s \(\pm8\,g\) range.</figcaption>
-              </figure>
-            </div>
-          </section>
-
           <section class="proj__part" aria-labelledby="rp-pages">
-            <h3 id="rp-pages"><span class="psub__n">2.4</span>The project’s own pages</h3>
+            <h3 id="rp-pages"><span class="psub__n">2.3</span>The project’s own pages</h3>
             <ul class="proj__pages">
-              <li><a href="portfolios/rotor-pendula/index.html#/"><b>Overview</b><span>The question, the answer in three numbers, and the best mounting in motion.</span></a></li>
-              <li><a href="portfolios/rotor-pendula/index.html#/theory"><b>Theory</b><span>Twelve chapters from the Lagrangian to the sensor budget, 38 numbered equations.</span></a></li>
-              <li><a href="portfolios/rotor-pendula/index.html#/results"><b>Results</b><span>The 18 mountings, one rod against two, chaos, and the sensor.</span></a></li>
-              <li><a href="portfolios/rotor-pendula/index.html#/simulate"><b>Simulate</b><span>Any mounting or your own values, solved with RK4 in your browser.</span></a></li>
-              <li><a href="portfolios/rotor-pendula/index.html#/checks"><b>Checks</b><span>The study’s runs recomputed live, the audit’s numbers, and what was corrected.</span></a></li>
-              <li><a href="portfolios/rotor-pendula/index.html#/report"><b>Report</b><span>Sol’s 14-page report in full: 20 equations, 9 tables rebuilt from the data and checked cell by cell, the PDF and all 181 files.</span></a></li>
+              <li><a href="portfolios/rotor-pendula/index.html#notes"><b>Lecture notes</b><span>Nine chapters from the Lagrangian to a real generator, 29 numbered equations, every number computed by the models.</span></a></li>
+              <li><a href="portfolios/rotor-pendula/index.html#sim"><b>Simulation</b><span>Any of six rotors, one rod or two, an ideal brake or a real geared generator, solved in your browser; six worked solutions.</span></a></li>
             </ul>
-            <p class="proj__note">A static copy of the Rotor Pendula app. Its saved-runs list is left out: every run is computed fresh in your browser, and nothing is stored.</p>
+            <p class="proj__note">Everything is computed fresh in your browser, and nothing is stored.</p>
           </section>
         </div>
       </article>

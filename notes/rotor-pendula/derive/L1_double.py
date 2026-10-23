@@ -5,7 +5,7 @@ Run: python3 -I L1_double.py   (PASS/FAIL lines; exit 1 on any FAIL)
 Route 1 (Lagrange, SymPy): inertial positions with the rotor angle phi(t); Rayleigh F = c0 q1dot^2/2 + c1 (q2dot - q1dot)^2/2.
 Route 2 (Newton in the blade frame, numeric): fictitious forces (centrifugal, Coriolis, Euler) plus gravity seen from the blade,
 projected on the virtual displacements (d'Alembert); independent of route 1. Both give the accelerations at random states.
-Checks: route 1 = Sol's equations (eps = 0); route 1 = route 2 at random states with eps != 0; the energy book
+Checks: route 1 = the blade-angle equations as written in the notes (eps = 0); route 1 = route 2 at random states with eps != 0; the energy book
 d(T+V)/dt = tau_rot phidot - 2F; m2 -> 0 reduces to L0; the blade-angle form with eps = Omegadot/Omega^2.
 q1, q2: rod angles measured from the blade's outward radial direction (relative angles to the blade, absolute angle phi + q_i).
 """
@@ -90,7 +90,7 @@ for _ in range(500):
 check(f'route 1 (Lagrange) = route 2 (Newton in the blade frame, Coriolis and Euler forces) at 500 random states, '
       f'Omegadot != 0 (max rel diff {worst:.1e})', worst < 1e-10)
 
-# --- blade-angle form, compare with Sol's equations (eps = 0) and give the eps terms ----------------------------------
+# --- blade-angle form, compare with the equations as written in the notes (eps = 0) and give the eps terms ----------------------------------
 M_, L_ = sp.symbols('M L', positive=True)
 s, Om, Omd = sp.symbols('s Omega Omegadot', real=True)
 Q1, Q2, U1, U2, Q1pp, Q2pp = sp.symbols('Q1 Q2 U1 U2 Q1pp Q2pp', real=True)
@@ -105,13 +105,13 @@ def blade_form(expr):
 a, b, beta = l1/L_, l2/L_, m2/M_
 Ad, Bd, Dd = a**2, beta*b**2, beta*a*b
 d = Q1 - Q2
-sol1 = Ad*Q1pp + Dd*sp.cos(d)*Q2pp + Dd*sp.sin(d)*(1 + U2)**2 + a*(R*sp.sin(Q1) + G*sp.cos(s + Q1)) + k0*U1 - k1*(U2 - U1)
-sol2 = Bd*Q2pp + Dd*sp.cos(d)*Q1pp - Dd*sp.sin(d)*(1 + U1)**2 + beta*b*(R*sp.sin(Q2) + G*sp.cos(s + Q2)) + k1*(U2 - U1)
+eq1 = Ad*Q1pp + Dd*sp.cos(d)*Q2pp + Dd*sp.sin(d)*(1 + U2)**2 + a*(R*sp.sin(Q1) + G*sp.cos(s + Q1)) + k0*U1 - k1*(U2 - U1)
+eq2 = Bd*Q2pp + Dd*sp.cos(d)*Q1pp - Dd*sp.sin(d)*(1 + U1)**2 + beta*b*(R*sp.sin(Q2) + G*sp.cos(s + Q2)) + k1*(U2 - U1)
 rep = {R: rp/L_, G: g/(Om**2*L_), k0: c0/(M_*L_**2*Om), k1: c1/(M_*L_**2*Om)}
 mine = [blade_form(EL[0]), blade_form(EL[1])]
-for i, (mi, so) in enumerate(zip(mine, (sol1, sol2))):
+for i, (mi, so) in enumerate(zip(mine, (eq1, eq2))):
     diff = sp.simplify((mi - so.subs(rep)).subs(Omd, 0).subs(m1, M_ - m2))
-    check(f"blade-angle equation {i+1} at uniform rotation = Sol's dimensionless equation {i+1} (report.tex)", diff == 0)
+    check(f"blade-angle equation {i+1} at uniform rotation = the notes' dimensionless equation {i+1}", diff == 0)
 # the Euler (eps) terms: coefficient of Omegadot, written with eps = Omegadot/Omega^2
 for i, mi in enumerate(mine):
     epsterm = sp.simplify(sp.expand(mi.subs(m1, M_ - m2)).coeff(Omd)*Om**2)

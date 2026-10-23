@@ -1,4 +1,4 @@
-"""Scales and dimensionless groups of Sol's 18 mountings (section 4.2 of the brief), recomputed.
+"""Scales and dimensionless groups of the 18 mountings.
 
 Run: python3 -I scales.py
 Mounting: tip-speed ratio 7 at wind 8 m/s fixes the rotor radius R_rot = 56 m/s / Omega; the pivot sits at 30, 60, 90 %

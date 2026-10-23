@@ -142,8 +142,11 @@ blockquote.quote p { margin: 0 0 8px; font-family: var(--f-display); font-size: 
 blockquote.quote p.tr { font-family: var(--f-text); font-size: 15px; color: var(--ink); font-style: italic; }
 blockquote.quote footer { font-size: 13px; color: var(--muted); }
 figure.fig.wide > svg, figure.fig.wide > .figscroll > svg { max-width: 800px; }
-.figscroll { overflow-x: auto; }
+.figscroll { overflow-x: auto; max-width: 100%; }
+figure.fig { min-width: 0; max-width: 100%; }
+ol.refs a { overflow-wrap: anywhere; }
 @media (max-width: 640px) { figure.fig.wide > svg, figure.fig.wide > .figscroll > svg { min-width: 640px; } }
+@media (max-width: 640px) { figure.fig > .figscroll > svg { min-width: 520px; } }
 .svgb { font: 600 12.5px var(--f-text); fill: var(--ink); }
 .svgs { font: 12px var(--f-mono); fill: var(--ink); }
 .svgc { font: 11px var(--f-mono); fill: var(--muted); }
@@ -189,10 +192,10 @@ footer { color: var(--muted); font-size: 13.5px; margin-top: 30px; }
   <header class="hero">
     <div class="eyebrow">Lecture notes · Lagrange · Rayleigh · chaos · turbulence</div>
     <h1>Pendula on a <em>Turning Blade</em></h1>
-    <p class="lede">A weight on a rod, hung inside a turning wind-turbine blade and braked by a small generator: how much power it gives, who pays for it, and whether a chaotic double pendulum does better. Every equation derived line by line, with a picture to hold in your head for each one and the numbers of the real model beside it. Written for a second- or third-year physics student.</p>
+    <p class="lede">A weight on a rod, hung inside a turning wind-turbine blade and braked by a small generator: how much power it gives, who pays for it, whether a chaotic double pendulum does better, and how much a real generator delivers to a sensor. Every equation derived, line by line where it is short and by computer algebra, named each time, where it is long, with a picture to hold in your head for each one and the numbers of the real model beside it. Written for undergraduates, and for school students who know calculus.</p>
     <div class="chips">{{STATS}}</div>
     <div class="links">
-      <a href="study/report.pdf"><b>Sol's report</b><span>The corrected study this note is built on, word for word.</span></a>
+      <a href="rotor_sim.html"><b>Simulation</b><span>Pick a rotor, a pivot, one rod or two and a generator; the page solves the full equations and plays them back.</span></a>
     </div>
   </header>
   <details class="toc-m"><summary>Contents</summary><ol>{{TOC_MOBILE}}</ol></details>

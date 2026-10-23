@@ -1,0 +1,19 @@
+400 rpm 30 %, N  33, R_L     8.02 ohm: load  48.809 mW (scan, 1000 steps:  48.801), paid  116.30 mW, friction  27.01 mW, swing 0.037 rad; formula: load  41.154 mW (+18.6 %), swing 0.034 rad
+400 rpm 60 %, N  51, R_L     7.06 ohm: load  10.436 mW (scan, 1000 steps:  10.429), paid   35.36 mW, friction  11.83 mW, swing 0.010 rad; formula: load   7.769 mW (+34.3 %), swing 0.009 rad
+400 rpm 90 %, N  51, R_L     3.91 ohm: load   4.410 mW (scan, 1000 steps:   4.399), paid   17.83 mW, friction   6.34 mW, swing 0.006 rad; formula: load   3.164 mW (+39.4 %), swing 0.005 rad
+200 rpm 30 %, N  51, R_L    13.62 ohm: load  23.053 mW (scan, 1000 steps:  23.039), paid   68.91 mW, friction  22.28 mW, swing 0.039 rad; formula: load  17.353 mW (+32.9 %), swing 0.034 rad
+200 rpm 60 %, N  51, R_L     4.94 ohm: load   6.549 mW (scan, 1000 steps:   6.533), paid   23.38 mW, friction   7.79 mW, swing 0.014 rad; formula: load   4.667 mW (+40.3 %), swing 0.013 rad
+200 rpm 90 %, N  51, R_L     3.32 ohm: load   3.158 mW (scan, 1000 steps:   3.150), paid   13.32 mW, friction   4.71 mW, swing 0.008 rad; formula: load   2.303 mW (+37.1 %), swing 0.008 rad
+100 rpm 30 %, N  51, R_L     9.24 ohm: load  14.904 mW (scan, 1000 steps:  14.871), paid   45.19 mW, friction  14.26 mW, swing 0.050 rad; formula: load  10.958 mW (+36.0 %), swing 0.047 rad
+100 rpm 60 %, N  51, R_L     4.35 ohm: load   4.766 mW (scan, 1000 steps:   4.759), paid   17.84 mW, friction   6.05 mW, swing 0.021 rad; formula: load   3.803 mW (+25.3 %), swing 0.022 rad
+100 rpm 90 %, N  51, R_L     3.11 ohm: load   2.370 mW (scan, 1000 steps:   2.367), paid   10.60 mW, friction   3.88 mW, swing 0.014 rad; formula: load   2.002 mW (+18.4 %), swing 0.015 rad
+ 20 rpm 30 %, N  51, R_L     7.41 ohm: load   9.038 mW (scan, 1000 steps:   9.033), paid   29.44 mW, friction   9.70 mW, swing 0.177 rad; formula: load   8.286 mW (+9.1 %), swing 0.191 rad
+ 20 rpm 60 %, N  51, R_L     3.99 ohm: load   3.434 mW (scan, 1000 steps:   3.433), paid   13.93 mW, friction   5.00 mW, swing 0.089 rad; formula: load   3.281 mW (+4.7 %), swing 0.101 rad
+ 20 rpm 90 %, N  51, R_L     2.97 ohm: load   1.840 mW (scan, 1000 steps:   1.840), paid    8.88 mW, friction   3.43 mW, swing 0.061 rad; formula: load   1.801 mW (+2.1 %), swing 0.071 rad
+ 14 rpm 30 %, N  51, R_L     7.31 ohm: load   8.675 mW (scan, 1000 steps:   8.672), paid   28.43 mW, friction   9.41 mW, swing 0.250 rad; formula: load   8.131 mW (+6.7 %), swing 0.268 rad
+ 14 rpm 60 %, N  51, R_L     3.97 ohm: load   3.355 mW (scan, 1000 steps:   3.355), paid   13.69 mW, friction   4.93 mW, swing 0.126 rad; formula: load   3.247 mW (+3.3 %), swing 0.143 rad
+ 14 rpm 90 %, N  51, R_L     2.96 ohm: load   1.808 mW (scan, 1000 steps:   1.808), paid    8.78 mW, friction   3.40 mW, swing 0.086 rad; formula: load   1.788 mW (+1.2 %), swing 0.100 rad
+  8 rpm 30 %, N  51, R_L     7.21 ohm: load   8.340 mW (scan, 1000 steps:   8.338), paid   27.28 mW, friction   8.99 mW, swing 0.446 rad; formula: load   7.981 mW (+4.5 %), swing 0.463 rad
+  8 rpm 60 %, N  51, R_L     3.94 ohm: load   3.295 mW (scan, 1000 steps:   3.295), paid   13.47 mW, friction   4.85 mW, swing 0.222 rad; formula: load   3.213 mW (+2.6 %), swing 0.249 rad
+  8 rpm 90 %, N  51, R_L     2.95 ohm: load   1.786 mW (scan, 1000 steps:   1.786), paid    8.69 mW, friction   3.37 mW, swing 0.151 rad; formula: load   1.774 mW (+0.7 %), swing 0.175 rad
+jam (static argument, friction torque N T0/eta > m g L): N = 190: jams, N = 246: jams, N = 492: jams

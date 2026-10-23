@@ -1,0 +1,18 @@
+turn 0
+turn 10
+turn 20
+turn 30
+turn 40
+turn 50
+turn 60
+turn 70
+turn 80
+turn 90
+turn 100
+turn 110
+400 rpm 90 %: best N 51, factor 1.0, R_L     3.91 ohm: load   4.399 mW, paid   17.80 mW (friction   6.33), swing 0.006 rad, motor   127 rpm; at the formula's setting (N 111)   0.214 mW; better but rejected: 0
+200 rpm 90 %: best N 51, factor 1.0, R_L     3.32 ohm: load   3.150 mW, paid   13.30 mW (friction   4.71), swing 0.008 rad, motor   115 rpm; at the formula's setting (N 51)   3.150 mW; better but rejected: 0
+100 rpm 90 %: best N 51, factor 1.0, R_L     3.11 ohm: load   2.367 mW, paid   10.59 mW (friction   3.88), swing 0.014 rad, motor   103 rpm; at the formula's setting (N 51)   2.367 mW; better but rejected: 0
+ 20 rpm 90 %: best N 51, factor 1.0, R_L     2.97 ohm: load   1.840 mW, paid    8.89 mW (friction   3.43), swing 0.061 rad, motor    90 rpm; at the formula's setting (N 51)   1.840 mW; better but rejected: 0
+ 14 rpm 90 %: best N 51, factor 1.0, R_L     2.96 ohm: load   1.808 mW, paid    8.78 mW (friction   3.40), swing 0.086 rad, motor    92 rpm; at the formula's setting (N 51)   1.808 mW; better but rejected: 0
+  8 rpm 90 %: best N 51, factor 1.0, R_L     2.95 ohm: load   1.786 mW, paid    8.69 mW (friction   3.37), swing 0.151 rad, motor    96 rpm; at the formula's setting (N 51)   1.786 mW; better but rejected: 0
