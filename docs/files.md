@@ -4,7 +4,7 @@ Written by [`tools/inventory.py`](../tools/inventory.py) from the files in the r
 Run `python3 tools/inventory.py` after adding, removing or changing files, and `python3 tools/inventory.py --check`
 to confirm that every file is described. Sizes are those of the files when the list was written.
 
-798 files, 29.4 MB in all. Runs of more than 12 similar files are folded; open them to see each file.
+736 files, 27.3 MB in all. Runs of more than 12 similar files are folded; open them to see each file.
 
 | Folder | Files |
 |---|---|
@@ -21,7 +21,7 @@ to confirm that every file is described. Sizes are those of the files when the l
 | [IBM Plex, Instrument Serif, and the Arabic faces](#ibm-plex-instrument-serif-and-the-arabic-faces) | 61 |
 | [Thumbnails](#thumbnails) | 10 |
 | [Logo](#logo) | 1 |
-| [Project copy: Droplet Collection](#project-copy-droplet-collection) | 73 |
+| [Project copy: Droplet Collection](#project-copy-droplet-collection) | 11 |
 | [Project copy: Rotor Pendula](#project-copy-rotor-pendula) | 84 |
 | [Project copy: Hydraulic Press Study](#project-copy-hydraulic-press-study) | 6 |
 | [Iron, Cotton and the Head](#iron-cotton-and-the-head) | 6 |
@@ -302,79 +302,7 @@ to confirm that every file is described. Sizes are those of the files when the l
 | [`public/portfolios/droplet-collection/fig/plate-warm.svg`](../public/portfolios/droplet-collection/fig/plate-warm.svg) | 24.3 kB | Plate of the Portfolios page article (warm), written by the Droplet Collection build. | [portfolios.md](portfolios.md) |
 | [`public/portfolios/droplet-collection/fig/w2_rain.svg`](../public/portfolios/droplet-collection/fig/w2_rain.svg) | 45.0 kB | A vector figure of the project. | [portfolios.md](portfolios.md) |
 | [`public/portfolios/droplet-collection/fig/w2_spectra.svg`](../public/portfolios/droplet-collection/fig/w2_spectra.svg) | 74.0 kB | A vector figure of the project. | [portfolios.md](portfolios.md) |
-| [`public/portfolios/droplet-collection/index.html`](../public/portfolios/droplet-collection/index.html) | 984.1 kB | Entry page of the project copy: module script and stylesheet loader. | [portfolios.md](portfolios.md) |
-
-<details><summary>59 files: A KaTeX font inside the project build.</summary>
-
-| File | Size | What it is | Explained in |
-|---|---|---|---|
-| [`public/portfolios/droplet-collection/static/KaTeX_AMS-Regular-BQhdFMY1.woff2`](../public/portfolios/droplet-collection/static/KaTeX_AMS-Regular-BQhdFMY1.woff2) | 28.1 kB | A KaTeX font inside the project build. | [portfolios.md](portfolios.md) |
-| [`public/portfolios/droplet-collection/static/KaTeX_AMS-Regular-DMm9YOAa.woff`](../public/portfolios/droplet-collection/static/KaTeX_AMS-Regular-DMm9YOAa.woff) | 33.5 kB | A KaTeX font inside the project build. | [portfolios.md](portfolios.md) |
-| [`public/portfolios/droplet-collection/static/KaTeX_AMS-Regular-DRggAlZN.ttf`](../public/portfolios/droplet-collection/static/KaTeX_AMS-Regular-DRggAlZN.ttf) | 63.6 kB | A KaTeX font inside the project build. | [portfolios.md](portfolios.md) |
-| [`public/portfolios/droplet-collection/static/KaTeX_Caligraphic-Bold-ATXxdsX0.ttf`](../public/portfolios/droplet-collection/static/KaTeX_Caligraphic-Bold-ATXxdsX0.ttf) | 12.4 kB | A KaTeX font inside the project build. | [portfolios.md](portfolios.md) |
-| [`public/portfolios/droplet-collection/static/KaTeX_Caligraphic-Bold-BEiXGLvX.woff`](../public/portfolios/droplet-collection/static/KaTeX_Caligraphic-Bold-BEiXGLvX.woff) | 7.7 kB | A KaTeX font inside the project build. | [portfolios.md](portfolios.md) |
-| [`public/portfolios/droplet-collection/static/KaTeX_Caligraphic-Bold-Dq_IR9rO.woff2`](../public/portfolios/droplet-collection/static/KaTeX_Caligraphic-Bold-Dq_IR9rO.woff2) | 6.9 kB | A KaTeX font inside the project build. | [portfolios.md](portfolios.md) |
-| [`public/portfolios/droplet-collection/static/KaTeX_Caligraphic-Regular-CTRA-rTL.woff`](../public/portfolios/droplet-collection/static/KaTeX_Caligraphic-Regular-CTRA-rTL.woff) | 7.7 kB | A KaTeX font inside the project build. | [portfolios.md](portfolios.md) |
-| [`public/portfolios/droplet-collection/static/KaTeX_Caligraphic-Regular-Di6jR-x-.woff2`](../public/portfolios/droplet-collection/static/KaTeX_Caligraphic-Regular-Di6jR-x-.woff2) | 6.9 kB | A KaTeX font inside the project build. | [portfolios.md](portfolios.md) |
-| [`public/portfolios/droplet-collection/static/KaTeX_Caligraphic-Regular-wX97UBjC.ttf`](../public/portfolios/droplet-collection/static/KaTeX_Caligraphic-Regular-wX97UBjC.ttf) | 12.3 kB | A KaTeX font inside the project build. | [portfolios.md](portfolios.md) |
-| [`public/portfolios/droplet-collection/static/KaTeX_Fraktur-Bold-BdnERNNW.ttf`](../public/portfolios/droplet-collection/static/KaTeX_Fraktur-Bold-BdnERNNW.ttf) | 19.6 kB | A KaTeX font inside the project build. | [portfolios.md](portfolios.md) |
-| [`public/portfolios/droplet-collection/static/KaTeX_Fraktur-Bold-BsDP51OF.woff`](../public/portfolios/droplet-collection/static/KaTeX_Fraktur-Bold-BsDP51OF.woff) | 13.3 kB | A KaTeX font inside the project build. | [portfolios.md](portfolios.md) |
-| [`public/portfolios/droplet-collection/static/KaTeX_Fraktur-Bold-CL6g_b3V.woff2`](../public/portfolios/droplet-collection/static/KaTeX_Fraktur-Bold-CL6g_b3V.woff2) | 11.3 kB | A KaTeX font inside the project build. | [portfolios.md](portfolios.md) |
-| [`public/portfolios/droplet-collection/static/KaTeX_Fraktur-Regular-CB_wures.ttf`](../public/portfolios/droplet-collection/static/KaTeX_Fraktur-Regular-CB_wures.ttf) | 19.6 kB | A KaTeX font inside the project build. | [portfolios.md](portfolios.md) |
-| [`public/portfolios/droplet-collection/static/KaTeX_Fraktur-Regular-CTYiF6lA.woff2`](../public/portfolios/droplet-collection/static/KaTeX_Fraktur-Regular-CTYiF6lA.woff2) | 11.3 kB | A KaTeX font inside the project build. | [portfolios.md](portfolios.md) |
-| [`public/portfolios/droplet-collection/static/KaTeX_Fraktur-Regular-Dxdc4cR9.woff`](../public/portfolios/droplet-collection/static/KaTeX_Fraktur-Regular-Dxdc4cR9.woff) | 13.2 kB | A KaTeX font inside the project build. | [portfolios.md](portfolios.md) |
-| [`public/portfolios/droplet-collection/static/KaTeX_Main-Bold-Cx986IdX.woff2`](../public/portfolios/droplet-collection/static/KaTeX_Main-Bold-Cx986IdX.woff2) | 25.3 kB | A KaTeX font inside the project build. | [portfolios.md](portfolios.md) |
-| [`public/portfolios/droplet-collection/static/KaTeX_Main-Bold-Jm3AIy58.woff`](../public/portfolios/droplet-collection/static/KaTeX_Main-Bold-Jm3AIy58.woff) | 29.9 kB | A KaTeX font inside the project build. | [portfolios.md](portfolios.md) |
-| [`public/portfolios/droplet-collection/static/KaTeX_Main-Bold-waoOVXN0.ttf`](../public/portfolios/droplet-collection/static/KaTeX_Main-Bold-waoOVXN0.ttf) | 51.3 kB | A KaTeX font inside the project build. | [portfolios.md](portfolios.md) |
-| [`public/portfolios/droplet-collection/static/KaTeX_Main-BoldItalic-DxDJ3AOS.woff2`](../public/portfolios/droplet-collection/static/KaTeX_Main-BoldItalic-DxDJ3AOS.woff2) | 16.8 kB | A KaTeX font inside the project build. | [portfolios.md](portfolios.md) |
-| [`public/portfolios/droplet-collection/static/KaTeX_Main-BoldItalic-DzxPMmG6.ttf`](../public/portfolios/droplet-collection/static/KaTeX_Main-BoldItalic-DzxPMmG6.ttf) | 33.0 kB | A KaTeX font inside the project build. | [portfolios.md](portfolios.md) |
-| [`public/portfolios/droplet-collection/static/KaTeX_Main-BoldItalic-SpSLRI95.woff`](../public/portfolios/droplet-collection/static/KaTeX_Main-BoldItalic-SpSLRI95.woff) | 19.4 kB | A KaTeX font inside the project build. | [portfolios.md](portfolios.md) |
-| [`public/portfolios/droplet-collection/static/KaTeX_Main-Italic-3WenGoN9.ttf`](../public/portfolios/droplet-collection/static/KaTeX_Main-Italic-3WenGoN9.ttf) | 33.6 kB | A KaTeX font inside the project build. | [portfolios.md](portfolios.md) |
-| [`public/portfolios/droplet-collection/static/KaTeX_Main-Italic-BMLOBm91.woff`](../public/portfolios/droplet-collection/static/KaTeX_Main-Italic-BMLOBm91.woff) | 19.7 kB | A KaTeX font inside the project build. | [portfolios.md](portfolios.md) |
-| [`public/portfolios/droplet-collection/static/KaTeX_Main-Italic-NWA7e6Wa.woff2`](../public/portfolios/droplet-collection/static/KaTeX_Main-Italic-NWA7e6Wa.woff2) | 17.0 kB | A KaTeX font inside the project build. | [portfolios.md](portfolios.md) |
-| [`public/portfolios/droplet-collection/static/KaTeX_Main-Regular-B22Nviop.woff2`](../public/portfolios/droplet-collection/static/KaTeX_Main-Regular-B22Nviop.woff2) | 26.3 kB | A KaTeX font inside the project build. | [portfolios.md](portfolios.md) |
-| [`public/portfolios/droplet-collection/static/KaTeX_Main-Regular-Dr94JaBh.woff`](../public/portfolios/droplet-collection/static/KaTeX_Main-Regular-Dr94JaBh.woff) | 30.8 kB | A KaTeX font inside the project build. | [portfolios.md](portfolios.md) |
-| [`public/portfolios/droplet-collection/static/KaTeX_Main-Regular-ypZvNtVU.ttf`](../public/portfolios/droplet-collection/static/KaTeX_Main-Regular-ypZvNtVU.ttf) | 53.6 kB | A KaTeX font inside the project build. | [portfolios.md](portfolios.md) |
-| [`public/portfolios/droplet-collection/static/KaTeX_Math-BoldItalic-B3XSjfu4.ttf`](../public/portfolios/droplet-collection/static/KaTeX_Math-BoldItalic-B3XSjfu4.ttf) | 31.2 kB | A KaTeX font inside the project build. | [portfolios.md](portfolios.md) |
-| [`public/portfolios/droplet-collection/static/KaTeX_Math-BoldItalic-CZnvNsCZ.woff2`](../public/portfolios/droplet-collection/static/KaTeX_Math-BoldItalic-CZnvNsCZ.woff2) | 16.4 kB | A KaTeX font inside the project build. | [portfolios.md](portfolios.md) |
-| [`public/portfolios/droplet-collection/static/KaTeX_Math-BoldItalic-iY-2wyZ7.woff`](../public/portfolios/droplet-collection/static/KaTeX_Math-BoldItalic-iY-2wyZ7.woff) | 18.7 kB | A KaTeX font inside the project build. | [portfolios.md](portfolios.md) |
-| [`public/portfolios/droplet-collection/static/KaTeX_Math-Italic-DA0__PXp.woff`](../public/portfolios/droplet-collection/static/KaTeX_Math-Italic-DA0__PXp.woff) | 18.7 kB | A KaTeX font inside the project build. | [portfolios.md](portfolios.md) |
-| [`public/portfolios/droplet-collection/static/KaTeX_Math-Italic-flOr_0UB.ttf`](../public/portfolios/droplet-collection/static/KaTeX_Math-Italic-flOr_0UB.ttf) | 31.3 kB | A KaTeX font inside the project build. | [portfolios.md](portfolios.md) |
-| [`public/portfolios/droplet-collection/static/KaTeX_Math-Italic-t53AETM-.woff2`](../public/portfolios/droplet-collection/static/KaTeX_Math-Italic-t53AETM-.woff2) | 16.4 kB | A KaTeX font inside the project build. | [portfolios.md](portfolios.md) |
-| [`public/portfolios/droplet-collection/static/KaTeX_SansSerif-Bold-CFMepnvq.ttf`](../public/portfolios/droplet-collection/static/KaTeX_SansSerif-Bold-CFMepnvq.ttf) | 24.5 kB | A KaTeX font inside the project build. | [portfolios.md](portfolios.md) |
-| [`public/portfolios/droplet-collection/static/KaTeX_SansSerif-Bold-D1sUS0GD.woff2`](../public/portfolios/droplet-collection/static/KaTeX_SansSerif-Bold-D1sUS0GD.woff2) | 12.2 kB | A KaTeX font inside the project build. | [portfolios.md](portfolios.md) |
-| [`public/portfolios/droplet-collection/static/KaTeX_SansSerif-Bold-DbIhKOiC.woff`](../public/portfolios/droplet-collection/static/KaTeX_SansSerif-Bold-DbIhKOiC.woff) | 14.4 kB | A KaTeX font inside the project build. | [portfolios.md](portfolios.md) |
-| [`public/portfolios/droplet-collection/static/KaTeX_SansSerif-Italic-C3H0VqGB.woff2`](../public/portfolios/droplet-collection/static/KaTeX_SansSerif-Italic-C3H0VqGB.woff2) | 12.0 kB | A KaTeX font inside the project build. | [portfolios.md](portfolios.md) |
-| [`public/portfolios/droplet-collection/static/KaTeX_SansSerif-Italic-DN2j7dab.woff`](../public/portfolios/droplet-collection/static/KaTeX_SansSerif-Italic-DN2j7dab.woff) | 14.1 kB | A KaTeX font inside the project build. | [portfolios.md](portfolios.md) |
-| [`public/portfolios/droplet-collection/static/KaTeX_SansSerif-Italic-YYjJ1zSn.ttf`](../public/portfolios/droplet-collection/static/KaTeX_SansSerif-Italic-YYjJ1zSn.ttf) | 22.4 kB | A KaTeX font inside the project build. | [portfolios.md](portfolios.md) |
-| [`public/portfolios/droplet-collection/static/KaTeX_SansSerif-Regular-BNo7hRIc.ttf`](../public/portfolios/droplet-collection/static/KaTeX_SansSerif-Regular-BNo7hRIc.ttf) | 19.4 kB | A KaTeX font inside the project build. | [portfolios.md](portfolios.md) |
-| [`public/portfolios/droplet-collection/static/KaTeX_SansSerif-Regular-CS6fqUqJ.woff`](../public/portfolios/droplet-collection/static/KaTeX_SansSerif-Regular-CS6fqUqJ.woff) | 12.3 kB | A KaTeX font inside the project build. | [portfolios.md](portfolios.md) |
-| [`public/portfolios/droplet-collection/static/KaTeX_SansSerif-Regular-DDBCnlJ7.woff2`](../public/portfolios/droplet-collection/static/KaTeX_SansSerif-Regular-DDBCnlJ7.woff2) | 10.3 kB | A KaTeX font inside the project build. | [portfolios.md](portfolios.md) |
-| [`public/portfolios/droplet-collection/static/KaTeX_Script-Regular-C5JkGWo-.ttf`](../public/portfolios/droplet-collection/static/KaTeX_Script-Regular-C5JkGWo-.ttf) | 16.6 kB | A KaTeX font inside the project build. | [portfolios.md](portfolios.md) |
-| [`public/portfolios/droplet-collection/static/KaTeX_Script-Regular-D3wIWfF6.woff2`](../public/portfolios/droplet-collection/static/KaTeX_Script-Regular-D3wIWfF6.woff2) | 9.6 kB | A KaTeX font inside the project build. | [portfolios.md](portfolios.md) |
-| [`public/portfolios/droplet-collection/static/KaTeX_Script-Regular-D5yQViql.woff`](../public/portfolios/droplet-collection/static/KaTeX_Script-Regular-D5yQViql.woff) | 10.6 kB | A KaTeX font inside the project build. | [portfolios.md](portfolios.md) |
-| [`public/portfolios/droplet-collection/static/KaTeX_Size1-Regular-C195tn64.woff`](../public/portfolios/droplet-collection/static/KaTeX_Size1-Regular-C195tn64.woff) | 6.5 kB | A KaTeX font inside the project build. | [portfolios.md](portfolios.md) |
-| [`public/portfolios/droplet-collection/static/KaTeX_Size1-Regular-Dbsnue_I.ttf`](../public/portfolios/droplet-collection/static/KaTeX_Size1-Regular-Dbsnue_I.ttf) | 12.2 kB | A KaTeX font inside the project build. | [portfolios.md](portfolios.md) |
-| [`public/portfolios/droplet-collection/static/KaTeX_Size1-Regular-mCD8mA8B.woff2`](../public/portfolios/droplet-collection/static/KaTeX_Size1-Regular-mCD8mA8B.woff2) | 5.5 kB | A KaTeX font inside the project build. | [portfolios.md](portfolios.md) |
-| [`public/portfolios/droplet-collection/static/KaTeX_Size2-Regular-B7gKUWhC.ttf`](../public/portfolios/droplet-collection/static/KaTeX_Size2-Regular-B7gKUWhC.ttf) | 11.5 kB | A KaTeX font inside the project build. | [portfolios.md](portfolios.md) |
-| [`public/portfolios/droplet-collection/static/KaTeX_Size2-Regular-Dy4dx90m.woff2`](../public/portfolios/droplet-collection/static/KaTeX_Size2-Regular-Dy4dx90m.woff2) | 5.2 kB | A KaTeX font inside the project build. | [portfolios.md](portfolios.md) |
-| [`public/portfolios/droplet-collection/static/KaTeX_Size2-Regular-oD1tc_U0.woff`](../public/portfolios/droplet-collection/static/KaTeX_Size2-Regular-oD1tc_U0.woff) | 6.2 kB | A KaTeX font inside the project build. | [portfolios.md](portfolios.md) |
-| [`public/portfolios/droplet-collection/static/KaTeX_Size3-Regular-CTq5MqoE.woff`](../public/portfolios/droplet-collection/static/KaTeX_Size3-Regular-CTq5MqoE.woff) | 4.4 kB | A KaTeX font inside the project build. | [portfolios.md](portfolios.md) |
-| [`public/portfolios/droplet-collection/static/KaTeX_Size3-Regular-DgpXs0kz.ttf`](../public/portfolios/droplet-collection/static/KaTeX_Size3-Regular-DgpXs0kz.ttf) | 7.6 kB | A KaTeX font inside the project build. | [portfolios.md](portfolios.md) |
-| [`public/portfolios/droplet-collection/static/KaTeX_Size4-Regular-BF-4gkZK.woff`](../public/portfolios/droplet-collection/static/KaTeX_Size4-Regular-BF-4gkZK.woff) | 6.0 kB | A KaTeX font inside the project build. | [portfolios.md](portfolios.md) |
-| [`public/portfolios/droplet-collection/static/KaTeX_Size4-Regular-DWFBv043.ttf`](../public/portfolios/droplet-collection/static/KaTeX_Size4-Regular-DWFBv043.ttf) | 10.4 kB | A KaTeX font inside the project build. | [portfolios.md](portfolios.md) |
-| [`public/portfolios/droplet-collection/static/KaTeX_Size4-Regular-Dl5lxZxV.woff2`](../public/portfolios/droplet-collection/static/KaTeX_Size4-Regular-Dl5lxZxV.woff2) | 4.9 kB | A KaTeX font inside the project build. | [portfolios.md](portfolios.md) |
-| [`public/portfolios/droplet-collection/static/KaTeX_Typewriter-Regular-C0xS9mPB.woff`](../public/portfolios/droplet-collection/static/KaTeX_Typewriter-Regular-C0xS9mPB.woff) | 16.0 kB | A KaTeX font inside the project build. | [portfolios.md](portfolios.md) |
-| [`public/portfolios/droplet-collection/static/KaTeX_Typewriter-Regular-CO6r4hn1.woff2`](../public/portfolios/droplet-collection/static/KaTeX_Typewriter-Regular-CO6r4hn1.woff2) | 13.6 kB | A KaTeX font inside the project build. | [portfolios.md](portfolios.md) |
-| [`public/portfolios/droplet-collection/static/KaTeX_Typewriter-Regular-D3Ib7_Hf.ttf`](../public/portfolios/droplet-collection/static/KaTeX_Typewriter-Regular-D3Ib7_Hf.ttf) | 27.6 kB | A KaTeX font inside the project build. | [portfolios.md](portfolios.md) |
-
-</details>
-
-| File | Size | What it is | Explained in |
-|---|---|---|---|
-| [`public/portfolios/droplet-collection/static/index-CGriahzx.css`](../public/portfolios/droplet-collection/static/index-CGriahzx.css) | 60.6 kB | The project's stylesheet, built. | [portfolios.md](portfolios.md) |
-| [`public/portfolios/droplet-collection/static/index-DGIxitSc.js`](../public/portfolios/droplet-collection/static/index-DGIxitSc.js) | 841.3 kB | The whole project application, built and minified. | [portfolios.md](portfolios.md) |
-| [`public/portfolios/droplet-collection/static/worker-ClooJ8Gk.js`](../public/portfolios/droplet-collection/static/worker-ClooJ8Gk.js) | 130.6 kB | The project's Web Worker: its solver, off the main thread. | [portfolios.md](portfolios.md) |
+| [`public/portfolios/droplet-collection/index.html`](../public/portfolios/droplet-collection/index.html) | 984.4 kB | Entry page of the project copy: module script and stylesheet loader. | [portfolios.md](portfolios.md) |
 
 ## Project copy: Rotor Pendula
 
@@ -593,7 +521,7 @@ to confirm that every file is described. Sizes are those of the files when the l
 |---|---|---|---|
 | [`portfolios-src/droplets/.gitignore`](../portfolios-src/droplets/.gitignore) | 5 B | Keeps the stand-alone build (out/) out of git. | [README.md](../portfolios-src/droplets/README.md) |
 | [`portfolios-src/droplets/README.md`](../portfolios-src/droplets/README.md) | 4.1 kB | The study's source: every folder, how the served page is built, the three checks. | [README.md](../portfolios-src/droplets/README.md) |
-| [`portfolios-src/droplets/app.js`](../portfolios-src/droplets/app.js) | 12.6 kB | The page's script: tabs, hash routes, the three simulation panels. | [README.md](../portfolios-src/droplets/README.md) |
+| [`portfolios-src/droplets/app.js`](../portfolios-src/droplets/app.js) | 12.8 kB | The page's script: tabs, hash routes, the three simulation panels. | [README.md](../portfolios-src/droplets/README.md) |
 | [`portfolios-src/droplets/chart.cjs`](../portfolios-src/droplets/chart.cjs) | 7.7 kB | House-style SVG line charts for the figures and the page. | [README.md](../portfolios-src/droplets/README.md) |
 | [`portfolios-src/droplets/checks/check_browser.py`](../portfolios-src/droplets/checks/check_browser.py) | 2.6 kB | Check: check_browser.py (see the README). | [README.md](../portfolios-src/droplets/README.md) |
 | [`portfolios-src/droplets/checks/check_numbers.cjs`](../portfolios-src/droplets/checks/check_numbers.cjs) | 31.9 kB | Check: check_numbers.cjs (see the README). | [README.md](../portfolios-src/droplets/README.md) |
@@ -629,7 +557,7 @@ to confirm that every file is described. Sizes are those of the files when the l
 | [`portfolios-src/droplets/derive/L6_ayala.py`](../portfolios-src/droplets/derive/L6_ayala.py) | 1.1 kB | Derivation or number script behind a Gate 1 contract: L6_ayala.py. | [status.md](../notes/droplets/status.md) |
 | [`portfolios-src/droplets/derive/beard.cjs`](../portfolios-src/droplets/derive/beard.cjs) | 1.4 kB | Derivation or number script behind a Gate 1 contract: beard.cjs. | [status.md](../notes/droplets/status.md) |
 | [`portfolios-src/droplets/physics.cjs`](../portfolios-src/droplets/physics.cjs) | 36.5 kB | The model, L0 to L7: fall speeds, trajectories, kernel, collection equation, exact stochastic process, turbulence (runs in the page and in Node). | [README.md](../portfolios-src/droplets/README.md) |
-| [`portfolios-src/droplets/template.html`](../portfolios-src/droplets/template.html) | 12.8 kB | The page template: house design, tabs, placeholders filled by the build. | [README.md](../portfolios-src/droplets/README.md) |
+| [`portfolios-src/droplets/template.html`](../portfolios-src/droplets/template.html) | 12.9 kB | The page template: house design, tabs, placeholders filled by the build. | [README.md](../portfolios-src/droplets/README.md) |
 | [`portfolios-src/droplets/text/book-00.src.html`](../portfolios-src/droplets/text/book-00.src.html) | 3.9 kB | Lecture notes, chapter 0. | [README.md](../portfolios-src/droplets/README.md) |
 | [`portfolios-src/droplets/text/book-01.src.html`](../portfolios-src/droplets/text/book-01.src.html) | 5.5 kB | Lecture notes, chapter 1. | [README.md](../portfolios-src/droplets/README.md) |
 | [`portfolios-src/droplets/text/book-02.src.html`](../portfolios-src/droplets/text/book-02.src.html) | 7.7 kB | Lecture notes, chapter 2. | [README.md](../portfolios-src/droplets/README.md) |
@@ -644,7 +572,7 @@ to confirm that every file is described. Sizes are those of the files when the l
 | [`portfolios-src/droplets/text/problems.src.html`](../portfolios-src/droplets/text/problems.src.html) | 4.4 kB | Words of the problems tab. | [README.md](../portfolios-src/droplets/README.md) |
 | [`portfolios-src/droplets/text/sim.src.html`](../portfolios-src/droplets/text/sim.src.html) | 3.8 kB | Words of the sim tab. | [README.md](../portfolios-src/droplets/README.md) |
 | [`portfolios-src/droplets/tools/build.py`](../portfolios-src/droplets/tools/build.py) | 10.6 kB | Build or run tool: build.py (see the README). | [README.md](../portfolios-src/droplets/README.md) |
-| [`portfolios-src/droplets/tools/figs.cjs`](../portfolios-src/droplets/tools/figs.cjs) | 10.9 kB | Build or run tool: figs.cjs (see the README). | [README.md](../portfolios-src/droplets/README.md) |
+| [`portfolios-src/droplets/tools/figs.cjs`](../portfolios-src/droplets/tools/figs.cjs) | 11.0 kB | Build or run tool: figs.cjs (see the README). | [README.md](../portfolios-src/droplets/README.md) |
 | [`portfolios-src/droplets/tools/gen_tables.cjs`](../portfolios-src/droplets/tools/gen_tables.cjs) | 1.0 kB | Build or run tool: gen_tables.cjs (see the README). | [README.md](../portfolios-src/droplets/README.md) |
 | [`portfolios-src/droplets/tools/katex_render.cjs`](../portfolios-src/droplets/tools/katex_render.cjs) | 606 B | Build or run tool: katex_render.cjs (see the README). | [README.md](../portfolios-src/droplets/README.md) |
 | [`portfolios-src/droplets/tools/package-lock.json`](../portfolios-src/droplets/tools/package-lock.json) | 1.1 kB | Build or run tool: package-lock.json (see the README). | [README.md](../portfolios-src/droplets/README.md) |
@@ -684,7 +612,7 @@ to confirm that every file is described. Sizes are those of the files when the l
 | [`docs/minor-issues-report.md`](minor-issues-report.md) | 19.9 kB | Documentation: Minor issues · final verification report. | [minor-issues-report.md](minor-issues-report.md) |
 | [`docs/notes.md`](notes.md) | 3.7 kB | Documentation: The lecture-note review: `notes/` and `.claude/agents/`. | [notes.md](notes.md) |
 | [`docs/pages.md`](pages.md) | 51.9 kB | Documentation: The site's own pages: home, simulations catalog, Portfolios, robots.txt. | [pages.md](pages.md) |
-| [`docs/portfolios.md`](portfolios.md) | 39.2 kB | Documentation: The four research projects: `public/portfolios/`. | [portfolios.md](portfolios.md) |
+| [`docs/portfolios.md`](portfolios.md) | 39.5 kB | Documentation: The four research projects: `public/portfolios/`. | [portfolios.md](portfolios.md) |
 | [`docs/research-theory-audit.md`](research-theory-audit.md) | 29.1 kB | Documentation: Readability audit: Droplet Collection and Rotor Pendula. | [research-theory-audit.md](research-theory-audit.md) |
 | [`docs/scripts/catalog.md`](scripts/catalog.md) | 15.1 kB | Documentation: public/scripts/catalog.js. | [catalog.md](scripts/catalog.md) |
 | [`docs/scripts/datalog.md`](scripts/datalog.md) | 48.6 kB | Documentation: public/scripts/datalog.js. | [datalog.md](scripts/datalog.md) |
@@ -903,8 +831,8 @@ to confirm that every file is described. Sizes are those of the files when the l
 | [`notes/droplets/skeptic-G1-L2-r2.md`](../notes/droplets/skeptic-G1-L2-r2.md) | 17.5 kB | Blind skeptic report, gate 1, level L2, round 2. | [status.md](../notes/droplets/status.md) |
 | [`notes/droplets/skeptic-G1-L3L6L7-r1.md`](../notes/droplets/skeptic-G1-L3L6L7-r1.md) | 29.2 kB | Blind skeptic report, gate 1, level L3L6L7, round 1. | [status.md](../notes/droplets/status.md) |
 | [`notes/droplets/skeptic-G1-L4L5-r1.md`](../notes/droplets/skeptic-G1-L4L5-r1.md) | 21.5 kB | Blind skeptic report, gate 1, level L4L5, round 1. | [status.md](../notes/droplets/status.md) |
-| [`notes/droplets/skeptic-G3-r1.md`](../notes/droplets/skeptic-G3-r1.md) | 18.2 kB | Blind skeptic report, gate 3: r1. | [status.md](../notes/droplets/status.md) |
-| [`notes/droplets/status.md`](../notes/droplets/status.md) | 10.7 kB | Status of the Droplet Collection study: Fermi estimate, queue, done list with evidence, decisions for Numa. Read first. | [status.md](../notes/droplets/status.md) |
+| [`notes/droplets/skeptic-G3-r1.md`](../notes/droplets/skeptic-G3-r1.md) | 25.8 kB | Blind skeptic report, gate 3: r1. | [status.md](../notes/droplets/status.md) |
+| [`notes/droplets/status.md`](../notes/droplets/status.md) | 10.8 kB | Status of the Droplet Collection study: Fermi estimate, queue, done list with evidence, decisions for Numa. Read first. | [status.md](../notes/droplets/status.md) |
 
 ## Record of the lecture-note review
 

@@ -120,3 +120,82 @@ Inputs: T = 283.15 K, p = 850 hPa, R_d = 287.05, μ = 1.771×10⁻⁵ (page valu
 | ch 0 fall speed, 10 µm across | ≈ 1 cm/s | **0.31 cm/s** | error, obj. 5 |
 
 Scripts and screenshots: `/tmp/claude-0/-home-user-SiteTest/de75440b-f270-5344-8ae7-923c4f178e24/scratchpad/g3/` (recompute.py, eff.py, stc.py, fontsz.py, hover.py, sim1–3.py, *.png).
+
+---
+
+## Round 2 (rebuilt page, read blind again)
+
+Method as in round 1. I extracted the text of all four tabs with every solution opened, ran all three panels, screenshot all 11 figures
+at 1366 px and 360 px, measured the label sizes, repeated the pointer sweep, and recomputed every new number in Python.
+I read only `gate3-answers-r1.md` from notes/droplets/; I did not open the source folder. The page loaded with no script errors.
+
+### The 32 objections
+
+| # | status | what I found on the page |
+|---|---|---|
+| 1 | fixed | The Panel 3 dashed curves now never fall (0 falling steps in all six polylines). The 10 cm³ curve levels off at 0.32, as in Fig 6.1. |
+| 2 | fixed | Checks now has "Golovin's exact solution", (C.1)–(C.3). I worked each step. The loss term is bn(mN + L). The transform gives ∂F/∂t = −(b/2)∂(F²)/∂p + bN ∂F/∂p − bLF. Setting p = 0 gives dN/dt = −bLN, and G = F − N gives (C.2). The characteristics and G₀ are right. For (C.3), the number and water moments come out as N₀(1−θ) and N₀m̄ to machine precision (θ = 0.6). Chapter 5 now says the inversion is Golovin's. |
+| 3 | fixed | All nine are listed, marked "abstract" or "as cited"; Smoluchowski and Vardiman are added. A small leftover: Low and List is "as cited in Jacobson 2011 and PySDM", but neither is listed, and Golovin 1963 and Michael and Norey 1970 still lack volume and page. |
+| 4 | fixed | At 360 px the chart labels render at 10.3–11.8 px in the notes and 9.9–11.8 px in the panels (measured). Each chart sits in a 560 px box that scrolls sideways; the page itself does not overflow (scrollWidth 360). A new minor point: at 360 px a reader first sees about half of each chart. In Figs 3.2 and 6.1 the legend sits in the hidden half, and nothing signals that the box scrolls. |
+| 5 | fixed | "about ten micrometres in radius". Stokes gives 1.23 cm/s. |
+| 6 | fixed | σ = 0.0742 N/m is given at (4.2). |
+| 7 | fixed | Chapter 3 now states the 8–10 % gap at K = 3–3.6, says that 40/8 sits at St = 3.60, and cites the independent integration (0.3442 against 0.3444). |
+| 8 | **partly** | The header is no longer clipped and the labels sit in bands above and below. In Fig 3.1 and Panel 2, though, the trajectories still run through both bands and cross the label text: "air rises pa\|st the co\|llector", "ca\|rried ro\|und". The paths should be clipped to the drawing area. |
+| 9 | fixed | "Near 100 µm the drag grows as v^1.29: 29 % of the way…". This is consistent with my local exponent, 1.289. |
+| 10 | fixed | Now "0 to 4.7". |
+| 11 | fixed | "all 301 drops per cm³ of both modes". |
+| 12 | fixed | "20.1 % … on the grid (19.7 % for the smooth distributions…)". |
+| 13 | fixed | C_ii = ½K_ii N_i² Δt is written out. |
+| 14 | fixed | Chapter 1 explains 0.643 against 0.805 g/m³ (mean cube 1.25 times larger). |
+| 15 | fixed | ν = μ/ρ_a is defined at first use. e_z is "the unit vector pointing up". The renames to q_k, t_w and û(y) are visible. |
+| 16 | fixed | Problem 1 now gives R^1.33 at 100 µm, roughly R¹ near 0.3 mm, then "about exponential". |
+| 17 | fixed | The appendix gives the slip factor, λ, and b₀…b₆. These are the coefficients I used in round 1. |
+| 18 | fixed | A(D), a₀, C and ψ are now given. I get A = 1.144×10⁷ m⁻² and αA = 9.20×10⁻³. The 0.5 mm and 1 mm ice spheres fall at 2.21 and 4.47 m/s (mine: 2.207 and 4.467), giving K₀ = 1.34×10⁻⁷ J. "Six to seven orders" is really 5.8 to 7.0 (minor). New typo: "(5 % and 95 % of events), Two solid ice spheres…" is a comma splice with a capital T. |
+| 19 | fixed | The header adds "except measured data and quoted yields, which name their source". The chip now reads "every number checked". |
+| 20 | fixed | "shortens t90 by only 1.1 %". |
+| 21 | fixed | "moist adiabat, about 2 g/m³ per km". Mine is 2.06 g/m³ per km. |
+| 22 | fixed | Legends sit below the plots. The inside legends (Figs 3.2 and 6.1) no longer touch curves. |
+| 23 | fixed | The page has only three question marks: the research questions in chapter 0, by design. Chapter 8 has a new title. One mild closer remains ("not one number but its shape"), which is acceptable. |
+| 24 | fixed | Chapter 3 has the crossover table (60/20/6/2 and Hall's E → E(40, 8) → t90). Fig 4.1 is new; I recomputed it: with Stokes speeds and a partner of R/2, E_coal is 0.49 at 0.2 mm and 0.004 at 0.3 mm, matching the caption. Fig 7.1 is new: its range ends at ε = 0.052 m²/s³, where St = 1 (matches the caption), and it reads 28 % at 0.04. |
+| 25 | fixed | The Fig 6.2 caption explains why the curve starts at 0.15. |
+| 26 | fixed | "no drop reached 100 µm within 30 min"; "after 3 mergers with drops of 30 µm or more". |
+| 27 | fixed | "for sea-level air); the lines are for 10 °C and 850 hPa". |
+| 28 | fixed | ε = Σ\|M_k − M_k^exact\|/L is defined, and the folder links to GitHub. |
+| 29 | fixed | Beard and Pruppacher (1969) is named; the unsourced clause is gone. |
+| 30 | fixed | "in every exact run through mergers of collectors with each other". |
+| 31 | fixed | At 40/30, Panel 2 says "Size ratio p = 0.75 is above 0.6 … the collection equation uses E at p = 0.6 instead". |
+| 32 | fixed | Slider accent colour is rgb(125, 29, 47). |
+
+**31 fixed, 1 partly (8).**
+
+### New material checked
+
+- **Panel 1.** Unchanged and consistent: 5.7 / 13.4 min at 4 bins.
+- **Panel 2.** Readout unchanged: 0.337 / 0.838 / 0.344.
+- **Panel 3.** Runs: 1 cm³ made no 100 µm drop; 10 cm³ made one at 6.6 min.
+- **Pointer sweep, repeated.** Across all 11 figures and 5 panel plots: identical pixels and no pointer listeners. Still passes.
+- **New numbers recomputed.**
+  - v_S(10 µm) = 1.23 cm/s.
+  - E_coal (Stokes, R/2) is 0.98 / 0.49 / 0.004 at R = 0.1 / 0.2 / 0.3 mm.
+  - E_coal (drag balance) is 0.95 / 0.86 / 0.55 at R = 0.2 / 0.3 / 0.5 mm.
+  - A(0.5 mm, −10 °C) = 1.144×10⁷ m⁻², from the factor 0.428 a₀.
+  - Ice spheres: speeds 2.207 and 4.467 m/s, K₀ = 1.34×10⁻⁷ J.
+  - St = 1 at ε = 0.0519 m²/s³.
+  - Golovin moments exact.
+- **New minor items.**
+  - (a) Ch 8: the comma splice "…events), Two solid…".
+  - (b) "Six to seven orders" is 5.8–7.0.
+  - (c) At 360 px, the scroll boxes have no cue, and the Fig 3.2 and 6.1 legends start off-screen.
+  - (d) Fig 7.1: the "10⁻⁴" tick crowds the y-axis "0".
+  - (e) Low and List cites Jacobson 2011 and PySDM, which are not in the list.
+
+### Thresholds, round 2
+
+| # | threshold | verdict | reason |
+|---|---|---|---|
+| 1 | Motivated | **PASS** | As in round 1. Chapters 4 and 7 now also have figures. |
+| 2 | Honest | **PASS** | The false cross-reference is replaced by a real derivation. The header claim is limited to model numbers. The Panel 3 curves match Fig 6.1. The Langmuir gap is stated where it bites. |
+| 3 | Derived | **PASS** | All 25 numbered equations follow or are cited. (C.1)–(C.2) are derived correctly, and (C.3) is quoted from Golovin with its moments verified. |
+| 4 | Checked | **PASS** | All of round 1's six slips are corrected. Every new number I recomputed agrees. |
+| 5 | Sourced | **PASS** | The list is complete apart from the minor leftover in objection 3 (Jacobson 2011 and PySDM not listed; Golovin and Michael and Norey lack volume and page). |
+| 6 | Readable | **PASS**, with one partial fix | Phone labels are now 9.9–11.8 px, legends sit off the curves, the walls of numbers are now a table and figures, and the pointer test passes. Still open: trajectories crossing the label bands (objection 8), plus new minors (a), (c) and (d). |

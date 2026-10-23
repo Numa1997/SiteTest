@@ -120,7 +120,7 @@
       var e = PHYS.pairEfficiency(R, r, A), fl = flow === 'blend' ? 'stokes' : flow;
       var bc = Math.sqrt(Math.max(0, (flow === 'potential' ? e.EP : e.ES))) * (1 + p);
       var W = 520, H = 420, sc = 70, cx = W / 2, cz = H * 0.42, parts = ['<svg viewBox="0 0 ' + W + ' ' + (H + 60) + '" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="droplet paths around a collector">',
-        '<rect width="' + W + '" height="' + (H + 60) + '" fill="#fff"/><g transform="translate(0 30)"><rect width="' + W + '" height="' + H + '" fill="#fff" stroke="#ece3d2"/>'];
+        '<rect width="' + W + '" height="' + (H + 60) + '" fill="#fff"/><defs><clipPath id="tjclip"><rect width="' + W + '" height="' + H + '"/></clipPath></defs><g transform="translate(0 30)"><rect width="' + W + '" height="' + H + '" fill="#fff" stroke="#ece3d2"/><g clip-path="url(#tjclip)">'];
       var offs = [0.15, 0.35, 0.55, 0.75, 0.95, 1.15, 1.35, 1.55, 1.75].map(function (f) { return f * (1 + p); });
       offs.forEach(function (b) {
         var q = PHYS.trajPath(fl, St, S, p, b, 6, 3.2), pts = [];
@@ -132,7 +132,7 @@
       });
       parts.push('<circle cx="' + cx + '" cy="' + cz + '" r="' + sc + '" fill="#e1ebf0" stroke="#23160f" stroke-width="1.5"/>');
       parts.push('<circle cx="' + cx + '" cy="' + cz + '" r="' + (sc * (1 + p)) + '" fill="none" stroke="#6f665e" stroke-dasharray="3 3"/>');
-      parts.push('</g><text x="12" y="19" class="tick">air rises past the collector (its frame); droplets enter from below</text>');
+      parts.push('</g></g><text x="12" y="19" class="tick">air rises past the collector (its frame); droplets enter from below</text>');
       parts.push('<text x="12" y="' + (H + 52) + '" class="tick">wine: touches · blue: carried round · dashed: contact at R + r</text></svg>');
       $('tj-svg').innerHTML = parts.join('');
       $('tj-out').innerHTML = 'Stokes number St = τU/R = <b>' + St.toFixed(2) + '</b> · settling ratio S = <b>' + S.toFixed(3) + '</b> · collector Re = <b>' + Re.toFixed(2) +

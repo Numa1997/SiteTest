@@ -18,6 +18,9 @@ by hand: to change a project, change its app, rebuild, and copy the build here a
 
 ## How a copy works
 
+(This section describes the app copies. Rotor Pendula is one; Droplet Collection was one until 23 October 2026, and its mentions
+below describe that former copy. The page it is now is described [at the end](#droplet-collection-droplet-collection-since-23-october-2026).)
+
 Picture a sealed parcel: everything the project needs is inside its folder, and it touches the rest of the site in only two
 places, the links into it from `portfolios.html` and its one link back out.
 
@@ -79,7 +82,7 @@ Since 23 October 2026 the copy is generated from [`portfolios-src/droplets/`](..
 |---|---|
 | `index.html` | The whole project in one file, written by `portfolios-src/droplets/tools/build.py --site`: the lecture notes (maths typeset at build time with KaTeX 0.16.11), the model, the three simulations, the figures as inline SVG. It loads the site's `fonts/instrument-plex.css` and `vendor/katex/katex.min.css`. |
 | `fig/plate-fallspeed.svg`, `fig/plate-efficiency.svg`, `fig/plate-warm.svg`, `fig/plate-first.svg` | The four plates of the Portfolios page article, written by the same build from the same figures as the notes. |
-| `fig/c1_ice.svg`, `fig/ecoll_map.svg`, `fig/fallspeed_gk.svg`, `fig/golovin.svg`, `fig/w2_rain.svg`, `fig/w2_spectra.svg`, `static/` | Left over from the app copy. `index.html` no longer loads `static/`; the German and Arabic Portfolios pages still show the old `fig/` plates until the i18n generator is run again (`tools/i18n/build.py`), so they stay for now. |
+| `fig/c1_ice.svg`, `fig/ecoll_map.svg`, `fig/fallspeed_gk.svg`, `fig/golovin.svg`, `fig/w2_rain.svg`, `fig/w2_spectra.svg` | Left over from the app copy (its `static/` bundle was removed on 23 October 2026, once nothing loaded it). The German and Arabic Portfolios pages still show these old plates until the i18n generator is run again (`tools/i18n/build.py`), so they stay for now. |
 
 ### `rotor-pendula/` (84 files)
 

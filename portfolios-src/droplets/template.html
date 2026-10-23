@@ -89,6 +89,7 @@ figure.fig svg { display: block; width: 100%; max-width: 620px; height: auto; ma
 @media (max-width: 620px) {
   figure.fig .figscroll, .plot { overflow-x: auto; -webkit-overflow-scrolling: touch; }
   figure.fig svg, .plot svg { min-width: 560px; }
+  figure.fig .figscroll + figcaption::before { content: "Swipe the chart sideways to see all of it. "; font-style: italic; }
 }
 input[type=range] { accent-color: var(--wine); }
 figure.fig figcaption { font-size: 13.5px; color: var(--muted); margin-top: 8px; }

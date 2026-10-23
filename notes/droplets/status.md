@@ -40,9 +40,9 @@ Thermal noise: surface energy of a 10 µm drop 9.0 × 10⁻¹¹ J = 2.3 × 10¹�
 1. [x] Gate 1: L0 PASS (r3), L1 PASS (r3), L2 PASS (r3), L3/L6/L7 PASS (fixes check), L4/L5 PASS (fixes check).
 2. [x] Gate 2: `check-L0.md` … `check-L7.md`: all 24 numbered equations right by SymPy and Wolfram (+ SciPy); (4.2)'s 1.15 and
        (8.2)'s coefficients are fits, checked as transcriptions. Scripts in `gate2/`.
-3. [~] Gate 3: round 1 failed honest/sourced/readable (32 objections, `skeptic-G3-r1.md`); all answered (`gate3-answers-r1.md`);
-       round 2 running.
-4. [ ] Remove the old app bundle `static/` (keep old `fig/` for the i18n pages) once Gate 3 passes.
+3. [x] Gate 3: round 1 failed honest/sourced/readable (32 objections); all answered (`gate3-answers-r1.md`); round 2 PASS on all six
+       thresholds (`skeptic-G3-r1.md`, Round 2), its five minor items and the one partial fix applied after.
+4. [x] Old app bundle `static/` removed (2.2 MB); old `fig/` kept for the German and Arabic pages.
 5. [ ] Open the PR into main (NOT merged).
 
 ## Done, with evidence

@@ -286,7 +286,7 @@ expect('book-08', "The old study's rule gave this collision", f(0.001 * mi(40e-6
 expect('book-08', 'the ice–ice collisions in our cloud carry', `$${texSci(C.K0q[0], 1)}$ to $${texSci(C.K0q[2], 1)}$ J`);
 const Kfit = 0.5 * mi(0.5e-3) * mi(0.25e-3) / (mi(0.5e-3) + mi(0.25e-3)) * (vi(0.5e-3) - vi(0.25e-3)) ** 2;
 expect('book-08', 'the smallest particles (8.2) was fitted to, fall at', `${f(vi(0.25e-3), 2)} and ${f(vi(0.5e-3), 2)} m/s and collide with K_0 = ${texSci(Kfit, 1)} J`);
-expect('book-08', 'our collisions carry', 'six to seven orders', `${f(Math.log10(Kfit / C.K0q[2]), 1)} to ${f(Math.log10(Kfit / C.K0q[0]), 1)} orders`);
+expect('book-08', 'our collisions carry', `${f(Math.log10(Kfit / C.K0q[2]), 1)} to ${f(Math.log10(Kfit / C.K0q[0]), 1)} orders of magnitude`);
 expect('book-08', 'with $a_0 = 3.78', `${f(fT, 3)} $a_0$ at −10`);
 expect('book-06', 'The 1 cm³ curve starts lower', `(${f(S.V['1'].reduce((a, q) => a + q.F40[0], 0) / S.V['1'].length, 2)})`);
 expect('book-01', 'with the droplets\' own size, (1.2), already at', `${f(P.L0blowup(40e-6, 8e-6, W8, A) / 60, 1)} min`);
