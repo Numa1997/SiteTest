@@ -149,6 +149,19 @@ lin = sp.series(eom0, u, 0, 2).removeO()
 omega2 = sp.simplify(lin.coeff(u)/I)
 check('Limit Om -> 0: hanging physical pendulum, omega^2 = 3 g/(2 l)', omega2 - 3*g/(2*l))
 
+# --------------------------------------------------------------- 6b. an uneven rotor and a shaking tip (for the gusts and the blade)
+# The rotor's speed varies (phi'' = Omd) and the hinge moves along the blade's tangent by xi (edgewise bending), with xi and xi'
+# small: only its acceleration a_e = xi'' is kept, as in the point-pendulum engine.
+XI = sp.Function('xi')(t)
+nrm = lambda ang: sp.Matrix([-sp.sin(ang), sp.cos(ang)])
+pos2 = rp*e(PH) + XI*nrm(PH) + s*e(PH + TH)
+L2 = sp.integrate((m/l)*pos2.diff(t).dot(pos2.diff(t))/2, (s, 0, l)) - sp.integrate((m/l)*g*pos2[1], (s, 0, l))
+Omd, ae = sp.symbols('Omegadot a_e', real=True)
+eom2 = (sp.diff(L2.diff(TH.diff(t)), t) - L2.diff(TH)).subs({XI.diff(t, 2): ae}).subs({XI.diff(t): 0, XI: 0})
+eom2 = eom2.subs({PH.diff(t, 2): Omd, PH.diff(t): Om, TH.diff(t, 2): a, TH.diff(t): w}).subs({TH: q, PH: ph}) + c*w
+check('Uneven rotor and shaking tip: + Omd (I + (ml/2) r_p cos q) + a_e (ml/2) cos q (engine.py RigidBlade)',
+      eom2 - (eom_page + Omd*(I + mlc*rp*sp.cos(q)) + ae*mlc*sp.cos(q)))
+
 # ------------------------------------------------------------------------------------------------------------- 7. units
 from sympy.physics.units import kilogram, meter, second, newton, watt, joule
 import sympy.physics.units.util

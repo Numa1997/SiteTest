@@ -327,7 +327,7 @@ details.more p { font-size: 14px; }
           <div class="ctl" id="ctl_brake"><label for="brake">Brake, as a multiple of κ*</label><output id="o_brake">–</output>
             <input type="range" id="brake" min="-1" max="1" step="0.01" value="0"></div>
           <div class="ctl geared-only" id="ctl_N" hidden><label for="ratio">Gear ratio (GP 32 C)</label><output id="o_N">–</output>
-            <select id="ratio"><option value="14">14 : 1 · 75 %</option><option value="33">33 : 1 · 75 %</option><option value="51">51 : 1 · 70 %</option><option value="111">111 : 1 · 70 %</option><option value="190">190 : 1 · 70 %</option></select></div>
+            <select id="ratio"><option value="3.7">3.7 : 1 · 80 %</option><option value="14">14 : 1 · 75 %</option><option value="33">33 : 1 · 75 %</option><option value="51">51 : 1 · 70 %</option><option value="111">111 : 1 · 70 %</option><option value="190">190 : 1 · 70 %</option><option value="246">246 : 1 · 60 %</option><option value="492">492 : 1 · 60 %</option></select></div>
           <div class="ctl geared-only" id="ctl_RL" hidden><label for="rl">Load resistor R<sub>L</sub></label><output id="o_RL">–</output>
             <input type="range" id="rl" min="-1" max="3.5" step="0.01" value="1"></div>
           <div class="geared-only" hidden><button type="button" id="bestRL">R<sub>L</sub> best by (7.6)–(7.7)</button></div>
@@ -508,11 +508,11 @@ const CONST = {
   rRot: 63.0, hubRad: 1.5,                        // NREL 5-MW rotor radius and hub radius, m (Jonkman et al. 2009, Table 1-1; ElastoDyn)
   lamStar: 7.55,                                  // tip-speed ratio of peak Cp; region 2 holds it, so Omega = lamStar v / rRot
   winds: [6, 8, 10],                              // steady winds, m/s
-  blade: { m: 10, l: 3 },                         // the second blade, a thin uniform rod: mass (kg), length (m). PROVISIONAL (gate 1)
+  blade: { m: 1, l: 1 },                          // the second blade, a thin uniform rod: mass (kg), length (m); derive/setup.py, design.py
   motor: { kt: 0.0208, ke: 0.02076, Rc: 1.53, J: 1.47e-6, I0: 0.0402, T0: 0.0208 * 0.0402 },   // maxon RE 25, 24 V
   gears: {                                        // GP 32 C: ratio -> maximum efficiency, inertia at the input (kg m^2)
-    14: { eta: 0.75, Jg: 0.8e-7 }, 33: { eta: 0.75, Jg: 0.8e-7 }, 51: { eta: 0.70, Jg: 0.7e-7 },
-    111: { eta: 0.70, Jg: 0.7e-7 }, 190: { eta: 0.70, Jg: 0.7e-7 },
+    3.7: { eta: 0.80, Jg: 1.5e-7 }, 14: { eta: 0.75, Jg: 0.8e-7 }, 33: { eta: 0.75, Jg: 0.8e-7 }, 51: { eta: 0.70, Jg: 0.7e-7 },
+    111: { eta: 0.70, Jg: 0.7e-7 }, 190: { eta: 0.70, Jg: 0.7e-7 }, 246: { eta: 0.60, Jg: 0.7e-7 }, 492: { eta: 0.60, Jg: 0.7e-7 },
   },
 };
 
@@ -521,7 +521,7 @@ const DEFAULTS = {
   brake: 1,                        // ideal brake as a multiple of the best brake kappa*
   c: null,                         // or the brake constant itself, N m s (overrides brake)
   gen: 'ideal',                    // 'ideal' | 'geared'
-  N: 51,                           // gear ratio
+  N: 492,                          // gear ratio: the best for this blade at every wind (derive/L4_generator.py)
   RL: null,                        // load resistor, ohm; null: the best by the formula (7.6)-(7.7)
   ce: null,                        // or the electrical brake c_e itself, N m s (overrides RL)
   band: 1e-3,                      // smoothing band of sgn, as a fraction of the swing scale (epsW) and of the gear's power scale (epsP)
@@ -834,7 +834,7 @@ const v = (n, dims, type, a) => ds.var(n, dims, type, a);
 v('wind', [], 'float', { symbol: 'v', units: 'm/s', long_name: 'steady wind you chose', computed_in: 'Wind buttons, captured by solve()', digits: 0 });
 v('gen', [], 'str', { symbol: 'generator', long_name: 'ideal brake or the maxon RE 25 + GP 32 C (geared)', computed_in: 'Generator buttons, captured by solve()' });
 v('brake', [], 'float', { symbol: 'κ/κ*', long_name: 'ideal brake as a multiple of the best brake', computed_in: 'Brake slider, captured by solve()', digits: 3 });
-v('N', [], 'float', { symbol: 'N', long_name: 'gear ratio (geared generator)', computed_in: 'Gear ratio menu, captured by solve()', digits: 0 });
+v('N', [], 'float', { symbol: 'N', long_name: 'gear ratio (geared generator)', computed_in: 'Gear ratio menu, captured by solve()', digits: 1 });
 v('RL_set', [], 'float', { symbol: 'R<sub>L,set</sub>', units: 'Ω', long_name: 'load resistor you set; empty when the formula’s best is used', computed_in: 'Load resistor slider, captured by solve()', digits: 4 });
 // ---- fixed for this study
 v('g', [], 'float', { symbol: 'g', units: 'm/s²', long_name: 'gravity', computed_in: 'CONST.g', digits: 5 });

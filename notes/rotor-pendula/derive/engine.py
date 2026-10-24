@@ -1,4 +1,6 @@
 """Numerical engine for pendula on a turning blade (L1-L3), vectorised over an ensemble with numpy.
+The study's machine since 24 October 2026 is RigidBlade, the second blade hinged at the tip; Single and Double are the earlier
+point pendula, kept only until the scripts that use them are ported.
 
 Equations (L1_double.py, physical time, relative rod angles q_i from the blade's outward radial direction, absolute angle
 phi + q_i; A = (m1+m2) l1^2, B = m2 l2^2, D = m2 l1 l2, d = q1 - q2):
@@ -41,6 +43,19 @@ class Single:
     def reaction_t(self, q, w, a, phi, Om, Omd, ae):
         """tangential force the bob exerts on the pivot (blade frame), for the blade's edgewise mode (L3)."""
         raise NotImplementedError
+
+class RigidBlade:
+    """The second blade: a thin uniform rod of mass m and length l hinged at radius r_p, brake c on q'.  State block: q, w.
+    I q'' = -(m l/2)[Om^2 r_p sin q + g cos(phi + q)] - Omd (I + (m l/2) r_p cos q) - a_e (m l/2) cos q - c q',  I = m l^2/3
+    (blade.py derives it twice; it is Single with m l^2 -> I and m l -> m l/2)."""
+    n = 1
+    def __init__(self, m, l, rp, c, g=9.80665):
+        self.m, self.l, self.rp, self.c, self.g = m, l, rp, c, g
+        self.I, self.mlc = m*l**2/3, m*l/2
+    def acc(self, q, w, phi, Om, Omd, ae):
+        q1 = q[..., 0]; w1 = w[..., 0]; I, mlc, rp, g = self.I, self.mlc, self.rp, self.g
+        f = (-mlc*(Om**2*rp*np.sin(q1) + g*np.cos(phi + q1)) - Omd*(I + mlc*rp*np.cos(q1)) - ae*mlc*np.cos(q1) - self.c*w1)
+        return (f/I)[..., None], self.c*w1**2
 
 class Double:
     """Double pendulum, generators c0 (pivot, on q1') and c1 (hinge, on q2' - q1').  State block: q1, q2, w1, w2."""
