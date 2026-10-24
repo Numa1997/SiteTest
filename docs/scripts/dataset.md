@@ -166,7 +166,7 @@ None. The file reacts to nothing; it runs only when a page or the data panel cal
   [Fig. 6 L507](../../public/simulations/wave-interference.html#L507),
   [Fig. 7 L710](../../public/simulations/phasor-sums.html#L710),
   [Fig. 8 L638](../../public/simulations/draw-decompose.html#L638),
-  [Fig. 9 L482](../../public/simulations/driven-oscillator.html#L482),
+  [Fig. 9 L538](../../public/simulations/driven-oscillator.html#L538),
   [Fig. 10 L566](../../public/simulations/wind-turbine.html#L566).
 - `datalog.js` builds a second, temporary `Dataset` for a recorded round and saves it with the same `npz`
   ([datalog.js:970-977](../../public/scripts/datalog.js#L970-L977)).
