@@ -20,13 +20,14 @@
         .solve__status { margin: 0; font-size: 13px; line-height: 1.5; color: var(--ink-2); }
         .solve__status.is-stale { color: var(--accent); }
         #solve.is-due { box-shadow: 0 0 0 3px rgba(122, 31, 43, 0.28); }
+        .fr-view { display: inline-flex; }
         .seek { display: grid; gap: 4px; }
         .seek__row { display: flex; justify-content: space-between; font-family: var(--mono); font-size: 11px; color: var(--muted); }
     </style>
 
     <link rel="stylesheet" href="../../fonts/arabic.css" />
     <script src="../../scripts/i18n/strings-ar.js"></script>
-    <meta name="translated-from" content="English public/simulations/driven-oscillator.html, commit 23bcfca" />
+    <meta name="translated-from" content="English public/simulations/driven-oscillator.html, commit 23bcfca+" />
   </head>
 <body>
     <header class="sim-top">
@@ -78,7 +79,8 @@
                         <canvas id="bode" aria-label="الاستجابة الترددية: دالّة السعة A(f) وفرق الطور φ(f) للتأرجح المستقرّ بدلالة تردد القوّة الدافعة، على محورين خطّيين أو في صورة مخطّط بودي، مع تعليم تردد القوّة الدافعة الحالي."></canvas>
                     </div>
                     <figcaption class="stage__cap">
-                        <span><b>الاستجابة الترددية</b> · دالّة السعة <span class="tx">\(A(f)\)</span> وفرق الطور <span class="tx">\(\varphi(f)\)</span> <span class="actions" role="group" aria-label="View of the frequency response" style="display:inline-flex; margin-left:8px;"><button type="button" class="btn btn--ghost" id="view-amp" aria-pressed="true">خطّي</button><button type="button" class="btn btn--ghost" id="view-bode" aria-pressed="false">بودي، لوغاريتمي</button></span>span>
+                        <span><b>الاستجابة الترددية</b> · دالّة السعة <span class="tx">\(A(f)\)</span> وفرق الطور <span class="tx">\(\varphi(f)\)</span></span>
+                        <span class="actions fr-view" role="group" aria-label="طريقة عرض الاستجابة الترددية"><button type="button" class="btn btn--ghost" id="view-amp" aria-pressed="true">خطّي</button><button type="button" class="btn btn--ghost" id="view-bode" aria-pressed="false">بودي، لوغاريتمي</button></span>
                         <span id="cap-res"><i>f</i><sub>r</sub> = —</span>
                     </figcaption>
                 </figure>
@@ -1217,12 +1219,12 @@
         var fbox = Sim.canvas2d(document.getElementById('forces')), fctx = fbox.ctx, forceStage = document.getElementById('stage-force');
         function forceGeom() {
             var w = fbox.w, h = fbox.h, narrow = w < 560, L = narrow ? 48 : 62, R = w - (narrow ? 12 : 20), t0 = ds.get('win_t0'), Tw = ds.get('win_T'), yl = ds.get('fprof');
-            var p = { L: L, R: R, top: 30, bot: h - 26 };
+            var p = { L: L, R: R, top: narrow ? 50 : 30, bot: h - 26 };
             return { w: w, h: h, narrow: narrow, p: p, fx: function (t) { return p.L + (t - t0) / Tw * (p.R - p.L); }, fy: function (F) { return (p.top + p.bot) / 2 - F / yl * (p.bot - p.top) / 2; } };
         }
         function forceCurves() {
             // which stored series the chart draws: the controller's parts only when the controller is on
-            var on = ds.get('ctrl_on'), list = [['Fpush', 'push', T.rose, [6, 4], 1.4], ['Fspr', '−kx', T.ink3, [2, 3], 1.4], ['Fdamp', '−cẋ', T.tanInk, [2, 3], 1.4]];
+            var on = ds.get('ctrl_on'), list = [['Fpush', 'F_{0}cos Ωt', T.rose, [6, 4], 1.4], ['Fspr', '−kx', T.ink3, [2, 3], 1.4], ['Fdamp', '−cẋ', T.tanInk, [2, 3], 1.4]];
             if (on) list = list.concat([['uP', 'u_{P}', T.ink2, [6, 3], 1.3], ['uI', 'u_{I}', '#4a6f8a', [6, 3], 1.3], ['uD', 'u_{D}', T.tanInk, [1, 2.5], 1.6], ['us', 'u', BURG, [], 2.2]]);
             return list;
         }
@@ -1244,12 +1246,14 @@
             var cx = G.fx(ts[i]); c.strokeStyle = 'rgba(122, 31, 43, 0.55)'; c.lineWidth = 1; c.beginPath(); c.moveTo(cx, p.top); c.lineTo(cx, p.bot); c.stroke();
             if (ds.get('ctrl_on')) { c.fillStyle = BURG; c.beginPath(); c.arc(cx, G.fy(ds.get('us')[i]), 4, 0, Math.PI * 2); c.fill(); }
             label(c, 'F', ' (N)', p.L, p.top - 10, 'left', T.ink2);
-            var kx = p.R;
+            // the key, right-aligned; on a narrow screen it wraps onto a second row instead of running into the title
+            var kx = p.R, row = 0, yk = function () { return p.top - 10 - (G.narrow ? (1 - row) * 18 : 0); }, gap = G.narrow ? 6 : 12;
             forceCurves().slice().reverse().forEach(function (q) {
                 var tw = Sim.tex(c, q[1], 0, 0, { size: 13, measure: true });
-                Sim.tex(c, q[1], kx, p.top - 10, { size: 13, align: 'right', color: T.ink2 }); kx -= tw + 5;
-                c.setLineDash(q[3]); c.strokeStyle = q[2]; c.lineWidth = q[4]; c.beginPath(); c.moveTo(kx - 14, p.top - 14); c.lineTo(kx, p.top - 14); c.stroke(); c.setLineDash([]);
-                kx -= 14 + (G.narrow ? 6 : 12);
+                if (G.narrow && row === 0 && kx - tw - 19 < p.L + 44) { row = 1; kx = p.R; }
+                Sim.tex(c, q[1], kx, yk(), { size: 13, align: 'right', color: T.ink2 }); kx -= tw + 5;
+                c.setLineDash(q[3]); c.strokeStyle = q[2]; c.lineWidth = q[4]; c.beginPath(); c.moveTo(kx - 14, yk() - 4); c.lineTo(kx, yk() - 4); c.stroke(); c.setLineDash([]);
+                kx -= 14 + gap;
             });
         }
 

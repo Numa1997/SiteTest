@@ -43,6 +43,10 @@
   "src": "Driven oscillations: how a system answers a push it does not control",
   "tr": "Erzwungene Schwingungen: wie ein System auf einen Antrieb antwortet, den es nicht selbst steuert"
  },
+ "0b7ff306b537": {
+  "src": "<b>Frequency response</b> · amplitude function <span class=\"tx\">\\(A(f)\\)</span> and phase difference <span class=\"tx\">\\(\\varphi(f)\\)</span>",
+  "tr": "<b>Frequenzgang</b> · Amplitudenfunktion <span class=\"tx\">\\(A(f)\\)</span> und Phasendifferenz <span class=\"tx\">\\(\\varphi(f)\\)</span>"
+ },
  "0c31f7c8f547": {
   "src": "The amplitude is largest where this is smallest, where the bracket vanishes: \\(\\Omega_r = \\omega_0\\sqrt{1-2\\zeta^2}\\), that is \\(f_r = 0.4987\\ \\mathrm{Hz}\\) for the defaults. For \\(\\zeta \\ge 1/\\sqrt2\\) the bracket cannot vanish for any drive; the denominator is then smallest at \\(\\Omega = 0\\), the amplitude only falls as the drive speeds up, and there is no peak at all.",
   "tr": "Die Amplitude ist dort am größten, wo dieser Ausdruck am kleinsten ist, nämlich dort, wo die Klammer verschwindet: \\(\\Omega_r = \\omega_0\\sqrt{1-2\\zeta^2}\\), das heißt \\(f_r = 0.4987\\ \\mathrm{Hz}\\) bei den Voreinstellungen. Für \\(\\zeta \\ge 1/\\sqrt2\\) kann die Klammer bei keiner Erregerfrequenz verschwinden; der Nenner ist dann bei \\(\\Omega = 0\\) am kleinsten, die Amplitude nimmt mit steigender Erregerfrequenz nur noch ab, und es gibt gar keinen Gipfel."
@@ -102,6 +106,10 @@
  "21a29dad7f0c": {
   "src": "Lower the damping ratio to 0.01 and press <em>Solve</em>. The beats now last for the whole minute. Count the time between two swells and compare with \\(1/|f - f_0|\\). Then set \\(f = 0.20\\ \\mathrm{Hz}\\), far from resonance. There are no slow beats now, but the block’s own ringing rides on the slow drive; use \\(C_1\\) in equation (5) to explain why it starts as large as the steady motion. (The force switches on at full strength at \\(t = 0\\).)",
   "tr": "Senken Sie den Dämpfungsgrad auf 0.01 und drücken Sie <em>Lösen</em>. Die Schwebungen dauern nun die ganze Minute. Zählen Sie die Zeit zwischen zwei Maxima und vergleichen Sie sie mit \\(1/|f - f_0|\\). Stellen Sie dann \\(f = 0.20\\ \\mathrm{Hz}\\) ein, weit weg von der Resonanz. Langsame Schwebungen gibt es jetzt nicht mehr, doch das eigene Nachschwingen des Blocks überlagert sich der langsamen Erregung; erklären Sie mit \\(C_1\\) aus Gleichung (5), warum es ebenso groß beginnt wie die stationäre Bewegung. (Die Kraft wird bei \\(t = 0\\) mit voller Stärke eingeschaltet.)"
+ },
+ "225f0d71ba4f": {
+  "src": "Bode, log",
+  "tr": "Bode, log"
  },
  "235fe4e6ecc4": {
   "src": "<span>7</span>Where the energy goes",
@@ -506,6 +514,10 @@
  "adf622119af6": {
   "src": "The damper is drawn as what it is, a piston in oil. Its force \\(-c\\dot x\\) always points against the motion, and its oil darkens while it turns energy into heat, by \\(P_\\text{loss} = c\\dot x^2\\) as a fraction of the largest value in the run. The three arrows over the block are the forces on it, the coil’s \\(F\\), the damper’s \\(-c\\dot x\\) and the spring’s \\(-kx\\), each drawn twice as long as the stretch of the spring that would carry it, so they share the length scale of the motion; their sum is \\(m\\ddot x\\). Driven at \\(f_0\\) in the steady state, the spring’s arrow swings about \\(Q\\) times longer than the other two, while the coil’s and the damper’s arrows cancel: the driver only replaces what the damper takes, as §7 says. The bars at the top keep the books of (8): the work \\(W_\\text{in}\\) the coil has done since \\(t = 0\\), the heat \\(W_\\text{loss}\\) the damper has made, and the energy \\(E\\) the oscillator holds now, which is their difference.",
   "tr": "Der Dämpfer ist so gezeichnet, wie er ist: als Kolben in Öl. Seine Kraft \\(-c\\dot x\\) zeigt stets gegen die Bewegung, und sein Öl wird dunkler, während er Energie in Wärme umwandelt, nach Maßgabe von \\(P_\\text{loss} = c\\dot x^2\\) als Bruchteil des größten Werts im Lauf. Die drei Pfeile über dem Block sind die Kräfte auf ihn, die Kraft \\(F\\) der Spule, die Kraft \\(-c\\dot x\\) des Dämpfers und die Kraft \\(-kx\\) der Feder, jede doppelt so lang gezeichnet wie die Dehnung der Feder, die sie tragen würde, sodass sie den Längenmaßstab der Bewegung teilen; ihre Summe ist \\(m\\ddot x\\). Bei Erregung mit \\(f_0\\) im eingeschwungenen Zustand schwingt der Pfeil der Feder etwa \\(Q\\)-mal so lang aus wie die beiden anderen, während sich die Pfeile von Spule und Dämpfer aufheben: Der Erreger ersetzt nur, was der Dämpfer entnimmt, wie §7 sagt. Die Balken oben führen Buch über (8): die Arbeit \\(W_\\text{in}\\), die die Spule seit \\(t = 0\\) verrichtet hat, die Wärme \\(W_\\text{loss}\\), die der Dämpfer erzeugt hat, und die Energie \\(E\\), die der Oszillator jetzt enthält, also ihre Differenz."
+ },
+ "af502f2b37ee": {
+  "src": "Linear",
+  "tr": "Linear"
  },
  "b2fcac220201": {
   "src": "Figure 4 is the run the page stores with its default settings. The drive at \\(0.45\\ \\mathrm{Hz}\\) is close to the natural \\(0.50\\ \\mathrm{Hz}\\), so during the first seconds two nearby rhythms are present at once: the driver’s, and the block’s own ringing from equation (5). Like two guitar strings slightly out of tune, they drift in and out of step once every \\(1/|f-f_d| = 20.25\\ \\mathrm{s}\\), where \\(f_d = \\omega_d/2\\pi = 0.499\\ \\mathrm{Hz}\\) is the damped ringing frequency (with \\(f_0\\) in its place the estimate is 20 s, close enough at this weak damping). The amplitude swells and shrinks with that rhythm; the first swell reaches \\(0.596\\ \\mathrm{m}\\) at \\(t = 8.0\\ \\mathrm{s}\\). Because the ringing decays with \\(\\tau = 6.4\\ \\mathrm{s}\\), the second beat is already weak, and after half a minute only the steady oscillation at \\(\\pm X = \\pm 0.482\\ \\mathrm{m}\\) is left.",

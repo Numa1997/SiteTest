@@ -43,6 +43,10 @@
   "src": "Driven oscillations: how a system answers a push it does not control",
   "tr": "الاهتزازات القسرية: كيف يستجيب النظام لدفعة لا يتحكّم فيها"
  },
+ "0b7ff306b537": {
+  "src": "<b>Frequency response</b> · amplitude function <span class=\"tx\">\\(A(f)\\)</span> and phase difference <span class=\"tx\">\\(\\varphi(f)\\)</span>",
+  "tr": "<b>الاستجابة الترددية</b> · دالّة السعة <span class=\"tx\">\\(A(f)\\)</span> وفرق الطور <span class=\"tx\">\\(\\varphi(f)\\)</span>"
+ },
  "0c31f7c8f547": {
   "src": "The amplitude is largest where this is smallest, where the bracket vanishes: \\(\\Omega_r = \\omega_0\\sqrt{1-2\\zeta^2}\\), that is \\(f_r = 0.4987\\ \\mathrm{Hz}\\) for the defaults. For \\(\\zeta \\ge 1/\\sqrt2\\) the bracket cannot vanish for any drive; the denominator is then smallest at \\(\\Omega = 0\\), the amplitude only falls as the drive speeds up, and there is no peak at all.",
   "tr": "تكون السعة أكبر ما تكون حيث يكون هذا المقدار أصغر، أي حيث ينعدم القوس: \\(\\Omega_r = \\omega_0\\sqrt{1-2\\zeta^2}\\)، أي \\(f_r = 0.4987\\ \\mathrm{Hz}\\) بالقيم الافتراضية. أمّا عند \\(\\zeta \\ge 1/\\sqrt2\\) فلا يمكن للقوس أن ينعدم عند أيّ تردد دافع؛ فيكون المقام أصغر ما يكون عند \\(\\Omega = 0\\)، وتتناقص السعة باستمرار كلّما ازداد تردد القوّة الدافعة، ولا توجد قمّة البتّة."
@@ -102,6 +106,10 @@
  "21a29dad7f0c": {
   "src": "Lower the damping ratio to 0.01 and press <em>Solve</em>. The beats now last for the whole minute. Count the time between two swells and compare with \\(1/|f - f_0|\\). Then set \\(f = 0.20\\ \\mathrm{Hz}\\), far from resonance. There are no slow beats now, but the block’s own ringing rides on the slow drive; use \\(C_1\\) in equation (5) to explain why it starts as large as the steady motion. (The force switches on at full strength at \\(t = 0\\).)",
   "tr": "خفّض نسبة التخامد إلى 0.01 واضغط <em>احسب</em>. تدوم الضربات الآن الدقيقة كلّها. قِس الزمن بين قمّتين متتاليتين وقارنه بـ\\(1/|f - f_0|\\). ثم اضبط \\(f = 0.20\\ \\mathrm{Hz}\\)، بعيدًا عن الرنين. لا توجد الآن ضربات بطيئة، لكن الاهتزاز الخاصّ بالكتلة يركب على الحركة البطيئة التي تفرضها القوّة الدافعة؛ استخدم \\(C_1\\) في المعادلة (5) لتفسّر لماذا يبدأ بسعة تساوي سعة الحركة المستقرّة. (تُشغَّل القوّة بكامل شدّتها عند \\(t = 0\\).)"
+ },
+ "225f0d71ba4f": {
+  "src": "Bode, log",
+  "tr": "بودي، لوغاريتمي"
  },
  "235fe4e6ecc4": {
   "src": "<span>7</span>Where the energy goes",
@@ -506,6 +514,10 @@
  "adf622119af6": {
   "src": "The damper is drawn as what it is, a piston in oil. Its force \\(-c\\dot x\\) always points against the motion, and its oil darkens while it turns energy into heat, by \\(P_\\text{loss} = c\\dot x^2\\) as a fraction of the largest value in the run. The three arrows over the block are the forces on it, the coil’s \\(F\\), the damper’s \\(-c\\dot x\\) and the spring’s \\(-kx\\), each drawn twice as long as the stretch of the spring that would carry it, so they share the length scale of the motion; their sum is \\(m\\ddot x\\). Driven at \\(f_0\\) in the steady state, the spring’s arrow swings about \\(Q\\) times longer than the other two, while the coil’s and the damper’s arrows cancel: the driver only replaces what the damper takes, as §7 says. The bars at the top keep the books of (8): the work \\(W_\\text{in}\\) the coil has done since \\(t = 0\\), the heat \\(W_\\text{loss}\\) the damper has made, and the energy \\(E\\) the oscillator holds now, which is their difference.",
   "tr": "يُرسم المخمّد على حقيقته: مكبس في زيت. قوّته \\(-c\\dot x\\) تتّجه دائمًا عكس الحركة، ويَدكن زيته وهو يحوّل الطاقة إلى حرارة، بقدر \\(P_\\text{loss} = c\\dot x^2\\) منسوبةً إلى أكبر قيمة لها في الحلّ. والأسهم الثلاثة فوق الكتلة هي القوى المؤثّرة فيها: قوّة الملف \\(F\\)، وقوّة المخمّد \\(-c\\dot x\\)، وقوّة النابض \\(-kx\\)، ويُرسم كلٌّ منها بطول يساوي ضعف استطالة النابض التي تحمل تلك القوّة، فتشترك مع الحركة في مقياس الطول نفسه؛ ومجموعها \\(m\\ddot x\\). وعند التحريك بالتردد \\(f_0\\) في الحالة المستقرّة، يتأرجح سهم النابض بطول يبلغ نحو \\(Q\\) مرّة طول كلّ من السهمين الآخرين، بينما يلغي سهما الملف والمخمّد أحدهما الآخر: فالمحرّك لا يفعل سوى تعويض ما يأخذه المخمّد، كما يقول §7. والأشرطة في الأعلى تعرض ميزان (8): الشغل \\(W_\\text{in}\\) الذي بذله الملف منذ \\(t = 0\\)، والحرارة \\(W_\\text{loss}\\) التي ولّدها المخمّد، والطاقة \\(E\\) التي يختزنها المهتزّ الآن، وهي الفرق بينهما."
+ },
+ "af502f2b37ee": {
+  "src": "Linear",
+  "tr": "خطّي"
  },
  "b2fcac220201": {
   "src": "Figure 4 is the run the page stores with its default settings. The drive at \\(0.45\\ \\mathrm{Hz}\\) is close to the natural \\(0.50\\ \\mathrm{Hz}\\), so during the first seconds two nearby rhythms are present at once: the driver’s, and the block’s own ringing from equation (5). Like two guitar strings slightly out of tune, they drift in and out of step once every \\(1/|f-f_d| = 20.25\\ \\mathrm{s}\\), where \\(f_d = \\omega_d/2\\pi = 0.499\\ \\mathrm{Hz}\\) is the damped ringing frequency (with \\(f_0\\) in its place the estimate is 20 s, close enough at this weak damping). The amplitude swells and shrinks with that rhythm; the first swell reaches \\(0.596\\ \\mathrm{m}\\) at \\(t = 8.0\\ \\mathrm{s}\\). Because the ringing decays with \\(\\tau = 6.4\\ \\mathrm{s}\\), the second beat is already weak, and after half a minute only the steady oscillation at \\(\\pm X = \\pm 0.482\\ \\mathrm{m}\\) is left.",
