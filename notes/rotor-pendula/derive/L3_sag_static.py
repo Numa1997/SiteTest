@@ -7,6 +7,7 @@ import math, sys, json
 import numpy as np
 import os; D=os.path.dirname(os.path.abspath(__file__)); sys.path.insert(0,D)
 import nrel5mw as T5
+import setup as S
 tab=T5.blade_table(); Lb=T5.R_TIP-T5.R_HUB
 x=tab[:,0]; tw=np.radians(tab[:,1]); mu=tab[:,2]*T5.ADJ_BL_MS; EIf=tab[:,3]; EIe=tab[:,4]
 r=T5.R_HUB+x*Lb
@@ -29,7 +30,7 @@ for lab,comp in (('edge only',1/EIe),('twist-projected',np.cos(tw)**2/EIe+np.sin
     print(lab,'tip',round(w[-1],4))
     for frac in (0.3,0.6,0.9):
         rp=frac*T5.R_TIP; wi=np.interp(rp,r,w); si=np.interp(rp,r,slope)
-        L=0.2; R=rp/L; G=g/(Om**2*L); k=R-1
+        L=S.L; R=rp/L; G=g/(Om**2*L); k=R-1
         def P(Gf,b):
             B=-b; A=(-Gf+k*1j*B)/(R-1+1j*k); return k*abs(A-B)**2/2
         P0=P(G,0); P1=P(G+2*wi/L,0); P2=P(G+2*wi/L,si)

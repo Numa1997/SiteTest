@@ -2,7 +2,7 @@
 
 Run: python3 -I power_theorem_mc.py [--quick]     (prints PASS/FAIL; exit 1 on any FAIL)
 
-A single pendulum (0.1 kg on 0.2 m) and a double pendulum (0.05 kg + 0.05 kg on 0.1 m + 0.1 m, the same mass and reach)
+The single pendulum of setup.py (0.5 kg on 0.1 m) and its double (two halves of the mass on two halves of the reach)
 hang in gravity (damping ratio 0.2 of the lowest mode); the pivot is shaken horizontally (e = x) with white-noise acceleration a(t) of two-sided intensity S,
 <a(t) a(t')> = S delta(t - t').  Generators brake the pivot joint (and the hinge) viscously.
 
@@ -13,7 +13,9 @@ Per trajectory, time averages over a window after a transient of several damping
   P_diss = c1 psi1dot^2 + c2 (psi2dot - psi1dot)^2,   P_inj = (S/2) m_eff(q),   dE/T = energy change over the window / T.
 Energy book: P_inj - P_diss - dE/T = 0 up to O(dt) and statistics.  The test asked by the brief: |P_diss/P_inj - 1| < 3 %.
 """
-import sys, time
+import os, sys, time
+sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
+import setup as SU
 import numpy as np
 
 g = 9.81
@@ -91,29 +93,29 @@ def verdict(name, ok):
 N = 300 if QUICK else 1000
 t0 = time.time()
 print(f'ensemble N = {N} trajectories per case; seeds 11, 12, 21, 22 (dt), 13, 14, 23, 24 (dt/2)')
-# single: omega0 = 7.0 rad/s, damping ratio 0.05 -> c = 2 zeta omega0 m L^2
-m, L = 0.1, 0.2
+# single: c = 2 zeta omega0 m L^2, omega0 = sqrt(g/L)
+m, L = SU.M, SU.L
 ZETA = 0.2                      # damping ratio: short correlation time, many independent samples per second
 om0 = np.sqrt(g/L); c = 2*ZETA*om0*m*L**2
 Ttr = 5/(ZETA*om0)
-for label, S, dts, seeds in (('single, small swings', 2.8e-2, (2e-4, 1e-4), (11, 13)),
-                             ('single, large swings', 48.0, (1e-4, 5e-5), (12, 14))):
+for label, S, dts, seeds in (('single, small swings', 2.0e-2, (2e-4, 1e-4), (11, 13)),
+                             ('single, large swings', 34.0, (1e-4, 5e-5), (12, 14))):
     res = []
     for dt, sd in zip(dts, seeds):
-        Pd, Pi, dE, rms = run_single(S, c, N, Ttr, 20 if QUICK else 40, dt, sd)
+        Pd, Pi, dE, rms = run_single(S, c, N, Ttr, 20 if QUICK else 40, dt, sd, m=m, L=L)
         res.append(report(f'{label}, dt = {dt:.0e} s, S = {S} m^2/s^3', Pd, Pi, dE, m, S,
                           f'; rms angle {rms:.3f} rad'))
     ratio, sr = res[-1]
     verdict(f'{label}: P_diss = (S/2)<m_eff> within 3 % (finest dt): {abs(ratio - 1)*100:.2f} %', abs(ratio - 1) < 0.03)
-# double: equal masses and rods, total 0.1 kg and 0.2 m; generators at pivot and hinge
-m1 = m2 = 0.05; L1 = L2 = 0.1
+# double: equal masses and rods, the same total mass and reach; generators at pivot and hinge
+m1 = m2 = SU.M/2; L1 = L2 = SU.L/2
 c1 = c2 = 2*ZETA*np.sqrt(g/L1)*m2*L2**2
 Ttr2 = 5/(ZETA*np.sqrt(g/L1)*0.6)
-for label, S, dts, seeds in (('double, small swings', 2.8e-2, (1e-4, 5e-5), (21, 23)),
-                             ('double, large chaotic swings', 48.0, (5e-5, 2.5e-5), (22, 24))):
+for label, S, dts, seeds in (('double, small swings', 2.0e-2, (1e-4, 5e-5), (21, 23)),
+                             ('double, large chaotic swings', 34.0, (5e-5, 2.5e-5), (22, 24))):
     res = []
     for dt, sd in zip(dts, seeds):
-        Pd, Pi, dE, flips = run_double(S, c1, c2, N, Ttr2, 20 if QUICK else 40, dt, sd)
+        Pd, Pi, dE, flips = run_double(S, c1, c2, N, Ttr2, 20 if QUICK else 40, dt, sd, m1=m1, m2=m2, L1=L1, L2=L2)
         res.append(report(f'{label}, dt = {dt:.1e} s, S = {S} m^2/s^3', Pd, Pi, dE, m1 + m2, S,
                           f'; top-rod turns over per trajectory {flips.mean():.1f}'))
     ratio, sr = res[-1]

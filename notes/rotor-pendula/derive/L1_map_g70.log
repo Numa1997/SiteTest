@@ -1,0 +1,7 @@
+R = 1: kappa* = 0.1283, 704 steps/turn, 32 members, 242 s, chaotic 0
+R = 1: 704 steps/turn (was 168), non-finite 0, chaotic 0/32
+R = 2: kappa* = 0.9733, 708 steps/turn, 32 members, 223 s, chaotic 0
+R = 2: 708 steps/turn (was 172), non-finite 0, chaotic 0/32
+R = 5: kappa* = 3.5118, 716 steps/turn, 32 members, 222 s, chaotic 0
+R = 5: 716 steps/turn (was 172), non-finite 0, chaotic 0/32
+EXIT 0

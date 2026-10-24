@@ -1,5 +1,5 @@
 """L4: choose the generator's settings in the full equation (L4_full.py, version 3: the gear loss goes with every power that
-flows through the gearhead, the inertial one included).  For every mounting, the ratios 14, 33, 51 and 111 of the GP 32 C and
+flows through the gearhead, the inertial one included).  For every mounting, every ratio of the GP 32 C that does not jam the pendulum (N T0/eta < m g L) and
 brakes c_e = factor x the formula's best c_e for that ratio (L4_generator.py), all in one batch, 1000 steps per turn, 100 turns
 to settle and 20 to measure.  A setting counts only if the motion is steady (the two halves of the measuring window agree to
 1 %), the swing stays below 0.5 rad and the motor stays below the gearhead's 8000 rpm input limit.
@@ -18,11 +18,12 @@ part = int(sys.argv[1]) if len(sys.argv) > 1 else 0; parts = int(sys.argv[2]) if
 res = json.load(open(os.path.join(HERE, 'L4_generator.json')))
 FACT = [0.25, 0.35, 0.5, 0.7, 1.0, 1.4, 2.0, 2.8, 4.0]
 gear = {N: (eta, Jg) for N, eta, Jg in RATIOS}
+SCAN_N = [N for N, eta, Jg in RATIOS if N*T0/eta < m*g*L]
 rows = []
 for i, r in enumerate(res):
     if i % parts != part:
         continue
-    for N in (14, 33, 51, 111):
+    for N in SCAN_N:
         eta, Jg = gear[N]; c_sc = N**2*KT*KE/RC
         o = minimize_scalar(lambda lc: -powers(r['Om'], r['rp'], N, eta, Jg, math.exp(lc))['P_load'],
                             bounds=(math.log(c_sc) - 16, math.log(c_sc) - 1e-9), method='bounded', options={'xatol': 1e-7})
@@ -60,15 +61,15 @@ for i in sorted(set(q['i'] for q in rows)):
     r = res[i]; idx = [q for q in range(n) if rows[q]['i'] == i]
     good = [q for q in idx if ok[q]]
     b = max(good, key=lambda q: Pl[q])
-    fq = next(q for q in idx if rows[q]['N'] == r['N'] and rows[q]['fac'] == 1.0)
-    out.append(dict(rpm=r['rpm'], frac=r['frac'], N=rows[b]['N'], eta=rows[b]['eta'], Jg=rows[b]['Jg'], c_e=rows[b]['c_e'],
+    fq = next((q for q in idx if rows[q]['N'] == r['N'] and rows[q]['fac'] == 1.0), b)
+    out.append(dict(wind=r['wind'], rpm=r['rpm'], frac=r['frac'], N=rows[b]['N'], eta=rows[b]['eta'], Jg=rows[b]['Jg'], c_e=rows[b]['c_e'],
                     fac=rows[b]['fac'], R_load=rows[b]['N']**2*KT*KE/rows[b]['c_e'] - RC, P_load=float(Pl[b]), P_paid=float(Pp[b]),
                     P_fric=float(Pf[b]), Theta=float(thmax[b]), motor_rpm=float(mrpm[b]), th0=rows[b]['th0'],
                     P_load_formula_setting=float(Pl[fq]), edge=rows[b]['fac'] in (FACT[0], FACT[-1]),
                     rejected=[dict(N=rows[q]['N'], fac=rows[q]['fac'], P_load=float(Pl[q]), Theta=float(thmax[q]), motor_rpm=float(mrpm[q]),
                                    steady=bool(steady[q])) for q in idx if not ok[q] and Pl[q] > Pl[b]]))
     o = out[-1]
-    print(f"{r['rpm']:3d} rpm {r['frac']*100:.0f} %: best N {o['N']}, factor {o['fac']}, R_L {o['R_load']:8.2f} ohm: load {o['P_load']*1e3:7.3f} mW, "
+    print(f"{r['wind']:.0f} m/s {r['frac']*100:.0f} %: best N {o['N']}, factor {o['fac']}, R_L {o['R_load']:8.2f} ohm: load {o['P_load']*1e3:7.3f} mW, "
           f"paid {o['P_paid']*1e3:7.2f} mW (friction {o['P_fric']*1e3:6.2f}), swing {o['Theta']:.3f} rad, motor {o['motor_rpm']:5.0f} rpm"
           f"{' (edge of the scan)' if o['edge'] else ''}; at the formula's setting (N {r['N']}) {o['P_load_formula_setting']*1e3:7.3f} mW; "
           f"better but rejected: {len(o['rejected'])}")

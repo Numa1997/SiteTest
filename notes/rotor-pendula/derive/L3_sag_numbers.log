@@ -1,0 +1,5 @@
+modal mass 1416 kg, f_e 1.0793 Hz, 1P amplification 1.0200: 1P tip sag 0.467 m
+pivot 30 % (r_p 18.9 m): sag w = 31.5 mm, slope 4.24 mrad; drive +0.58 %; power: sag in the drive +1.17 %, with the section rotation -0.31 %
+pivot 60 % (r_p 37.8 m): sag w = 165.3 mm, slope 9.70 mrad; drive +3.05 %; power: sag in the drive +6.19 %, with the section rotation -0.64 %
+pivot 90 % (r_p 56.7 m): sag w = 384.4 mm, slope 12.97 mrad; drive +7.09 %; power: sag in the drive +14.69 %, with the section rotation +0.64 %
+EXIT 0

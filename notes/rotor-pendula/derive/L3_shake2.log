@@ -1,0 +1,39 @@
+pivot at 90 %: Phi = 0.8232, slope 0.0278 /m; blade modal mass 1416 kg; tuned rod 1.111 m
+PASS zeta 0.5 %, tip rms 0.005 m, single (0.1 m): shaking harvest     0.127 mW of     110.2 mW fed into the blade; tip rms with device 5.00 mm; with speed wander     0.129 mW
+      rod swing rms 0.003 rad
+PASS zeta 0.5 %, tip rms 0.005 m, double (0.1 m): shaking harvest     0.092 mW of     110.2 mW fed into the blade; tip rms with device 5.00 mm; with speed wander     0.093 mW
+      rod swing rms 0.003 rad
+PASS zeta 0.5 %, tip rms 0.005 m, tuned single (1.11 m): shaking harvest    41.760 mW of     110.3 mW fed into the blade; tip rms with device 3.94 mm; with speed wander     9.192 mW
+      rod swing rms 0.117 rad
+PASS zeta 0.5 %, tip rms 0.020 m, single (0.1 m): shaking harvest     2.036 mW of    1763.7 mW fed into the blade; tip rms with device 19.99 mm; with speed wander     2.063 mW
+      rod swing rms 0.012 rad
+PASS zeta 0.5 %, tip rms 0.020 m, double (0.1 m): shaking harvest     1.475 mW of    1763.7 mW fed into the blade; tip rms with device 19.99 mm; with speed wander     1.495 mW
+      rod swing rms 0.010 rad
+PASS zeta 0.5 %, tip rms 0.020 m, tuned single (1.11 m): shaking harvest   668.155 mW of    1764.2 mW fed into the blade; tip rms with device 15.77 mm; with speed wander   147.078 mW
+      rod swing rms 0.469 rad
+PASS zeta 0.5 %, tip rms 0.100 m, single (0.1 m): shaking harvest    50.900 mW of   44093.2 mW fed into the blade; tip rms with device 99.94 mm; with speed wander    51.584 mW
+      rod swing rms 0.059 rad
+PASS zeta 0.5 %, tip rms 0.100 m, double (0.1 m): shaking harvest    36.882 mW of   44093.5 mW fed into the blade; tip rms with device 99.96 mm; with speed wander    37.375 mW
+      rod swing rms 0.052 rad
+PASS zeta 0.5 %, tip rms 0.100 m, tuned single (1.11 m): shaking harvest 16703.883 mW of   44104.1 mW fed into the blade; tip rms with device 78.85 mm; with speed wander  3676.940 mW
+      rod swing rms 2.345 rad
+PASS zeta 3.0 %, tip rms 0.005 m, single (0.1 m): shaking harvest     0.130 mW of     658.0 mW fed into the blade; tip rms with device 5.00 mm; with speed wander     0.132 mW
+      rod swing rms 0.003 rad
+PASS zeta 3.0 %, tip rms 0.005 m, double (0.1 m): shaking harvest     0.094 mW of     658.0 mW fed into the blade; tip rms with device 5.00 mm; with speed wander     0.095 mW
+      rod swing rms 0.003 rad
+PASS zeta 3.0 %, tip rms 0.005 m, tuned single (1.11 m): shaking harvest    30.531 mW of     658.2 mW fed into the blade; tip rms with device 4.88 mm; with speed wander    11.781 mW
+      rod swing rms 0.100 rad
+PASS zeta 3.0 %, tip rms 0.020 m, single (0.1 m): shaking harvest     2.081 mW of   10528.5 mW fed into the blade; tip rms with device 20.00 mm; with speed wander     2.109 mW
+      rod swing rms 0.012 rad
+PASS zeta 3.0 %, tip rms 0.020 m, double (0.1 m): shaking harvest     1.506 mW of   10528.6 mW fed into the blade; tip rms with device 20.00 mm; with speed wander     1.527 mW
+      rod swing rms 0.010 rad
+PASS zeta 3.0 %, tip rms 0.020 m, tuned single (1.11 m): shaking harvest   488.496 mW of   10530.6 mW fed into the blade; tip rms with device 19.53 mm; with speed wander   188.501 mW
+      rod swing rms 0.400 rad
+PASS zeta 3.0 %, tip rms 0.100 m, single (0.1 m): shaking harvest    52.013 mW of  263212.1 mW fed into the blade; tip rms with device 99.99 mm; with speed wander    52.731 mW
+      rod swing rms 0.059 rad
+PASS zeta 3.0 %, tip rms 0.100 m, double (0.1 m): shaking harvest    37.662 mW of  263214.0 mW fed into the blade; tip rms with device 99.99 mm; with speed wander    38.178 mW
+      rod swing rms 0.052 rad
+PASS zeta 3.0 %, tip rms 0.100 m, tuned single (1.11 m): shaking harvest 12212.411 mW of  263263.8 mW fed into the blade; tip rms with device 97.67 mm; with speed wander  4712.513 mW
+      rod swing rms 2.002 rad
+ALL PASS
+EXIT 0

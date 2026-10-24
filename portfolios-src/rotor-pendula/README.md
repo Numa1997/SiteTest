@@ -1,7 +1,8 @@
 # Rotor Pendula: the source
 
 Can a pendulum hung inside a turning wind-turbine blade, and braked by a small generator, power a sensor there? Is a chaotic
-double pendulum better, and can the wind's disorder help? This folder is the study's source: a lecture note of nine chapters
+double pendulum better, and can the wind's disorder help? The setup is the NREL 5 MW reference turbine at three steady winds,
+with a 0.5 kg bob on a 0.1 m rod sized by `notes/rotor-pendula/derive/design.py`. This folder is the notes' source: a lecture note of nine chapters
 (0–8) that derives every equation, a simulation page that solves the full equations in the browser, and the scripts that
 compute and check every number. The site serves one page generated from it,
 `public/portfolios/rotor-pendula/index.html` (<https://phyeinusul.com/portfolios/rotor-pendula/index.html>), with two tabs:
@@ -9,7 +10,7 @@ compute and check every number. The site serves one page generated from it,
 | tab | page here | what it is |
 |---|---|---|
 | Lecture notes (`#notes`) | `rotor_notes.html`, built from `theory/*.src.html` | *Pendula on a Turning Blade*: the Lagrangian, the best brake, big swings, two rods and chaos, a ceiling on random shaking, gusts, the bending blade, a real geared generator, and the answer. Every number in the text comes from `tools/make_numbers.py` (`numbers.json`) or is listed with its reason in `tools/typed_numbers.py`. |
-| Simulation (`#sim`) | `rotor_sim.html` | Pick a rotor (six speeds), a pivot, one rod or two, and an ideal brake or the maxon RE 25 + GP 32 C generator; the page solves the full equations (Radau IIA, in a Web Worker built from its physics block) and plays the last turns back. Read values: click a plot to pin a point; the values show outside the figure. Six worked solutions. |
+| Simulation (`#sim`) | `rotor_sim.html` | Pick a wind (6, 8 or 10 m/s), a pivot, one rod or two, and an ideal brake or the maxon RE 25 + GP 32 C generator; the page solves the full equations (Radau IIA, in a Web Worker built from its physics block) and plays the last turns back. Read values: click a plot to pin a point; the values show outside the figure. Six worked solutions. |
 
 The derivations and model runs are in `notes/rotor-pendula/` (`derive/` holds the Python models; `README.md` is the record).
 
@@ -20,7 +21,7 @@ that turns the links between them into tab switches, and writes `public/portfoli
 `LICENSE-fonts.txt`, with the site's security policy (plus `'unsafe-eval'` and `blob:` workers, which the simulation's worker
 needs), the site's fonts for the tab bar, and the back link to Portfolios. Never edit the generated files by hand.
 
-## Changing the study
+## Changing the notes
 
 From this folder:
 
@@ -41,7 +42,7 @@ The data files in `data/` are copied from `notes/rotor-pendula/derive/` after th
 | command (from this folder) | what it proves |
 |---|---|
 | `python3 tools/check_numbers.py` | Every number in the notes' sources is computed, or listed with its reason; derived ones are recomputed. |
-| `python3 -I check_physics.py` | Independent of the study's scripts (constants retyped): SymPy derives (1.5), (2.4), the 45° lag, (2.5), (3.3), (7.1), (7.2); SciPy re-integrates six mountings (agreement about 1e-8) and the geared generator at two (about 2e-5). 17 checks. |
-| `node tools/check_sim.js` | The simulation's physics block reproduces the 36 reference runs of the Python engine (worst 1.3e-8) and the generator runs of `data/L4_check_2000.json`. |
+| `python3 -I check_physics.py` | Independent of the notes' scripts (constants retyped): SymPy derives (1.5), (2.4), the 45° lag, (2.5), (3.3), (7.1), (7.2); SciPy re-integrates six mountings and the geared generator at two. 18 checks. |
+| `node tools/check_sim.js` | The simulation's physics block reproduces the 18 reference runs of the Python engine (worst 4.5e-9) and the generator runs of `data/L4_check_2000.json`. |
 | `node tools/check_sim_browser.js` | The simulation page at 360, 390, 1024, 1440 px: no sideways scroll, no console errors, nothing reacts to the pointer crossing it, Read values pins and updates at about 4 per second. |
 | `python3 tools/check_combined.py <url>` | With `public/` served (`python3 -m http.server 8765` in `public/`): both tabs complete, 0 KaTeX errors, the simulation solves, links switch tabs, no sideways scroll at 360–1440 px. |

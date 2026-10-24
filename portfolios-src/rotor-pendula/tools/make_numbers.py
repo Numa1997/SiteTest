@@ -3,9 +3,10 @@
 
 The theory sources write {{n:key}} for a number and {{table:key}} for a table; tools/build_theory.py substitutes them and
 stops on any key that is not here.  So no number in the text is typed by hand.
-Inputs: the formulas below, and the stored results of the nonlinear runs in data/ (copied from notes/rotor-pendula/derive/:
-L1_mountings.json from L1_engine_check.py, L1_chaos.json, L1_map.json and L1_map_g70.json, mc_full.log from
-power_theorem_mc.py).  Run: python3 tools/make_numbers.py
+Inputs: the formulas below, and the stored results in data/ (copied from notes/rotor-pendula/derive/): setup.json (the
+turbine, the winds, the pendulum: setup.py), sensor.json (sensor.py), design.json (design.py), L1_mountings.json
+(L1_engine_check.py), L1_chaos.json, L1_map.json and L1_map_g70.json, mc_full.log (power_theorem_mc.py), the L2, L3 and L4
+results.  Run: python3 tools/make_numbers.py
 """
 import json, math, pathlib, re
 import numpy as np
@@ -13,98 +14,113 @@ from scipy.optimize import minimize_scalar
 
 ROOT = pathlib.Path(__file__).resolve().parents[1]
 D = ROOT / 'data'
-g = 9.80665                  # standard gravity
-m, L = 0.1, 0.2              # the single pendulum: bob and rod
+SU = json.load(open(D / 'setup.json'))
+g = SU['G0']                 # standard gravity
+m, L = SU['M'], SU['L']      # the single pendulum: bob and rod
+R_ROT = SU['R_ROT']
+NEED = json.load(open(D / 'sensor.json'))['need_uW']*1e-6     # the sensor node's need, W (sensor.py)
 N = {}                       # key -> formatted string
 T = {}                       # key -> HTML table
 
 def f(x, d):
     return f'{x:.{d}f}'
 
-# ---- the 18 mountings -------------------------------------------------------------------------------------------
+# ---- the nine mountings on the NREL 5-MW turbine -------------------------------------------------------------------
 runs = json.load(open(D / 'L1_mountings.json'))
 rows = []
-for r in sorted(runs, key=lambda r: (-r['rpm'], r['pct'])):
-    Om, rp = r['Om'], r['rp']
+for r in sorted(runs, key=lambda r: (r['wind'], r['pct'])):
+    Om, rp, v = r['Om'], r['rp'], r['wind']
     R = rp/L; G = g/(Om**2*L); Gam = R/G
     Pstar = m*L*g**2/(4*Om*abs(rp - L))
     Th = G/(math.sqrt(2)*abs(R - 1))
-    Rrot = 56.0/Om
-    rows.append(dict(rpm=r['rpm'], pct=r['pct'], Rrot=Rrot, rp=rp, R=R, G=G, Gam=Gam, Pstar=Pstar, Th=Th,
+    rows.append(dict(wind=v, rpm=r['rpm'], Om=Om, pct=r['pct'], rp=rp, R=R, G=G, Gam=Gam, Pstar=Pstar, Th=Th,
                      Ps=r['P_single'], Pd=r['P_double'], ratio=r['P_double']/r['P_single'],
-                     share=r['P_single']/(0.5*1.225*math.pi*Rrot**2*8.0**3*0.45)))
-N['R_min'] = f(min(x['R'] for x in rows), 2); N['R_max'] = f(max(x['R'] for x in rows), 0)
-N['G_min'] = f(min(x['G'] for x in rows), 3); N['G_max'] = f(max(x['G'] for x in rows), 1)
-N['Gam_min'] = f(min(x['Gam'] for x in rows), 2); N['Gam_max'] = f(max(x['Gam'] for x in rows), 0)
-N['P_min'] = f(min(x['Ps'] for x in rows)*1e3, 2); N['P_max'] = f(max(x['Ps'] for x in rows)*1e3, 1)
+                     share=r['P_single']/SU['power_W'][str(int(v))]))
+N['M'] = f'{m:g}'; N['L'] = f'{L:g}'; N['M_g'] = f'{m*1000:.0f}'; N['L_cm'] = f'{L*100:.0f}'
+N['Mhalf'] = f'{m/2:g}'; N['Lhalf'] = f'{L/2:g}'
+for v in SU['WINDS']:
+    N[f'rpm_{int(v)}'] = f(SU['rpm'][str(int(v))], 1); N[f'PT_{int(v)}'] = f(SU['power_W'][str(int(v))]/1e6, 2)
+    N[f'Om_{int(v)}'] = f(SU['LAM_STAR']*v/R_ROT, 3)
+for k, fr in zip((30, 60, 90), SU['FRACS']):
+    N[f'rp_{k}'] = f(fr*R_ROT, 1)
+N['R_min'] = f(min(x['R'] for x in rows), 0); N['R_max'] = f(max(x['R'] for x in rows), 0)
+N['G_min'] = f(min(x['G'] for x in rows), 0); N['G_max'] = f(max(x['G'] for x in rows), 0)
+N['Gam_min'] = f(min(x['Gam'] for x in rows), 2); N['Gam_max'] = f(max(x['Gam'] for x in rows), 1)
+N['P_min'] = f(min(x['Ps'] for x in rows)*1e3, 1); N['P_max'] = f(max(x['Ps'] for x in rows)*1e3, 1)
 N['ratio_min'] = f(min(x['ratio'] for x in rows), 3); N['ratio_max'] = f(max(x['ratio'] for x in rows), 3)
 N['Th_min'] = f(min(x['Th'] for x in rows), 3); N['Th_max'] = f(max(x['Th'] for x in rows), 2)
-N['Th_max_deg'] = f(math.degrees(max(x['Th'] for x in rows)), 1)
+N['Th_max_deg'] = f(math.degrees(max(x['Th'] for x in rows)), 0)
+N['push_change'] = f(max(x['Th'] for x in rows)**2/4*100, 0)
 N['lin_err_max'] = f(max(abs(x['Pstar']/x['Ps'] - 1) for x in rows)*100, 2)
-N['share_max'] = f'{max(x["share"] for x in rows)*1e5:.1f}'
-N['torque_star'] = f(m*g*L/math.sqrt(2), 4)
+N['share_max'] = f'{max(x["share"] for x in rows)*1e8:.1f}'
+N['torque_star'] = f(m*g*L/math.sqrt(2), 3)
 best = max(rows, key=lambda x: x['Ps'])
 N['P_best'] = f(best['Ps']*1e3, 1); N['Pstar_best'] = f(best['Pstar']*1e3, 2)
-N['ratio_f_min'] = f(min(x['R'] for x in rows)**0.5, 2)
+N['ratio_f_min'] = f(min(x['R'] for x in rows)**0.5, 1)
 N['ratio_f_max'] = f(max(x['R'] for x in rows)**0.5, 1)
-N['sensor_uW'] = '37.6'                                       # input: sensor budget from the ADXL362 and CC2652R datasheets (section 8.3)
-N['margin_min'] = f'{min(x["Ps"] for x in rows)/(2*37.6e-6):.0f}'      # mechanical power over twice the sensor need
-tr = ['<p class="tcap">Table 1. The 18 mountings ($\\Gamma = R/G$); full: the full nonlinear model; ratio: double ÷ single.</p><table class="mt"><thead><tr><th>rotor</th><th>pivot</th><th>$R$</th><th>$G$</th>'
+SEN = json.load(open(D / 'sensor.json'))
+N['sensor_uW'] = f(SEN['need_uW'], 1); N['sens_acc'] = f(SEN['acc_uW'], 1); N['sens_sb'] = f(SEN['standby_uW'], 2)
+N['sens_burst'] = f(SEN['burst_uW'], 2)
+N['margin_min'] = f'{min(x["Ps"] for x in rows)/(2*NEED):.0f}'      # mechanical power over twice the sensor need
+for k in (30, 60, 90):                                                # power falls as 1/Omega at a fixed pivot
+    sel = [x for x in rows if x['pct'] == k]
+    N[f'Pfix_{k}'] = f'{max(x["Ps"] for x in sel)*1e3:.1f} to {min(x["Ps"] for x in sel)*1e3:.1f}'
+tr = ['<p class="tcap">Table 1. The nine mountings on the NREL 5 MW turbine ($\\Gamma = R/G$): the wind and the rotor speed it gives, the pivot as a fraction of the 63 m rotor radius; full: the full nonlinear model; ratio: double ÷ single.</p><table class="mt"><thead><tr><th>wind, rotor</th><th>pivot</th><th>$R$</th><th>$G$</th>'
       '<th>$\\Theta^*$ (rad)</th><th>$P^*$ (2.5), mW</th><th>full, mW</th><th>double, mW</th><th>ratio</th></tr></thead><tbody>']
 for x in rows:
-    tr.append(f'<tr><td>{x["rpm"]} rpm, {x["Rrot"]:.2f} m</td><td>{x["pct"]} %, {x["rp"]:.3f} m</td><td>{x["R"]:.2f}</td>'
-              f'<td>{x["G"]:.3g}</td><td>{x["Th"]:.3f}</td><td>{x["Pstar"]*1e3:.2f}</td>'
+    tr.append(f'<tr><td>{x["wind"]:.0f} m/s, {x["rpm"]:.1f} rpm</td><td>{x["pct"]} %, {x["rp"]:.1f} m</td><td>{x["R"]:.0f}</td>'
+              f'<td>{x["G"]:.0f}</td><td>{x["Th"]:.3f}</td><td>{x["Pstar"]*1e3:.2f}</td>'
               f'<td>{x["Ps"]*1e3:.2f}</td><td>{x["Pd"]*1e3:.2f}</td><td>{x["ratio"]:.3f}</td></tr>')
 tr.append('</tbody></table>')
 T['mountings'] = '\n'.join(tr)
-
-# ---- large-rotor limit r_p >> L: P* -> m L g^2/(4 f lambda_T v), independent of the rotor speed ----------------------
-for fr in (30, 60, 90):
-    N[f'flat_{fr}'] = f(m*L*g**2/(4*fr/100*56.0)*1e3, 2)
-    big = [x for x in rows if x['pct'] == fr and x['rpm'] <= 20]
-    N[f'flat_runs_{fr}'] = f'{min(x["Ps"] for x in big)*1e3:.2f}–{max(x["Ps"] for x in big)*1e3:.2f}'
+DES = json.load(open(D / 'design.json'))
+N['design_pick'] = f'{DES["pick"]:g}'
+N['design_times'] = f(next(r['times_need'] for r in DES['rows'] if r['m'] == DES['pick']), 0)
+N['design_prev'] = f'{max(r["m"] for r in DES["rows"] if r["m"] < DES["pick"]):g}'
+N['design_prev_times'] = f(next(r['times_need'] for r in DES['rows'] if r['m'] == max(q["m"] for q in DES["rows"] if q["m"] < DES["pick"])), 1)
 
 # ---- the locked double: a rigid body with its centre of mass at 3/4 of the reach -------------------------------------
-Mlc, Ip = 0.05*0.1 + 0.05*0.2, 0.05*0.1**2 + 0.05*0.2**2
-lock = [((Mlc*g)**2/(4*x['rpm']*2*math.pi/60*(Mlc*x['rp'] - Ip)))/x['Pstar'] for x in rows]
+Mlc, Ip = m/2*L/2 + m/2*L, m/2*(L/2)**2 + m/2*L**2
+lock = [((Mlc*g)**2/(4*x['Om']*(Mlc*x['rp'] - Ip)))/x['Pstar'] for x in rows]
 N['lock_min'] = f(min(lock), 3); N['lock_max'] = f(max(lock), 3)
-N['lc_frac'] = f(Mlc/(0.1*L), 2)
+N['lc_frac'] = f(Mlc/(m*L), 2)
 N['flex_cost_max'] = f(max(1 - x['ratio']/l for x, l in zip(rows, lock))*100, 1)
 N['flex_cost_min'] = f(min(1 - x['ratio']/l for x, l in zip(rows, lock))*100, 1)
 
-# ---- mean lean at the most nonlinear mounting ------------------------------------------------------------------------
-w = max(rows, key=lambda x: x['Th'])
-N['lean_theory'] = f(-w['G']**2/(4*w['R']*(w['R'] - 1)), 3)
-N['lean_run'] = f(json.load(open(D / 'L0_r2.json'))['lean_8rpm30'], 3).replace('-', '−')   # integrated, L0_r2.py
-N['lean_deg'] = f(math.degrees(abs(w['G']**2/(4*w['R']*(w['R'] - 1)))), 1)
-leans = sorted(math.degrees(x['G']**2/(4*x['R']*(x['R'] - 1))) for x in rows)
-N['lean_next_deg'] = f(leans[-2], 1)
-N['lean_small_deg'] = f(max(math.degrees(x['G']**2/(4*x['R']*(x['R'] - 1))) for x in rows if x['rpm'] >= 100), 3)
+# ---- mean lean: second-order theory (3.2) against the full model, pivot at 30 % (L0_r2.py) -----------------------------
+ln = json.load(open(D / 'L0_r2.json'))
+for v in ('6', '8', '10'):
+    N[f'lean_th_{v}'] = f(ln[v]['theory'], 3).replace('-', '−'); N[f'lean_run_{v}'] = f(ln[v]['run'], 3).replace('-', '−')
+    N[f'lean_gap_{v}'] = f(abs(ln[v]['run']/ln[v]['theory'] - 1)*100, 0 if abs(ln[v]['run']/ln[v]['theory'] - 1) > 0.05 else 1)
+N['lean_deg'] = f(math.degrees(abs(ln['6']['run'])), 0)
+N['lean_small_deg'] = f(max(math.degrees(x['G']**2/(4*x['R']*(x['R'] - 1))) for x in rows if x['pct'] >= 60), 2)
 
 # ---- tilted hinge --------------------------------------------------------------------------------------------------
-for key, R in (('fast', min(x['R'] for x in rows)), ('slow', max(x['R'] for x in rows))):
+for key, R in (('30', min(x['R'] for x in rows)), ('90', max(x['R'] for x in rows))):
     cs = (-R + math.sqrt(R*R + 8))/2; a = math.acos(cs)
     N[f'tilt_{key}'] = f(math.degrees(a), 1)
-    N[f'tilt_sens_{key}'] = f(abs(-R*math.sin(a) - math.sin(2*a)), 0 if R > 10 else 1)
+    N[f'tilt_sens_{key}'] = f(abs(-R*math.sin(a) - math.sin(2*a)), 0)
+    N[f'tilt_err_{key}'] = f(math.radians(0.1)*abs(-R*math.sin(a) - math.sin(2*a)), 2)
 
-N['R_res_double'] = f(Ip/(Mlc*0.2), 2)                     # locked double: M l_c r_p = I_p, in units of the reach 0.2 m
+N['R_res_double'] = f(Ip/(Mlc*L), 2)                       # locked double: M l_c r_p = I_p, in units of the reach L
 # ---- the chaos group at R = 1 ---------------------------------------------------------------------------------------------
 ch = json.load(open(D / 'L1_chaos.json'))
-tr = ['<p class="tcap">Table 2. The group at $R = 1$ (pivot 0.2 m from the hub, rotor at 4 rad/s), each brake run from several starts: how many starts end in chaos, the mean power, and the largest Lyapunov exponent.</p><table class="mt"><thead><tr><th>$c$ (N m s)</th><th>$\\kappa$</th><th>chaotic starts</th><th>mean power, mW</th>'
+tr = ['<p class="tcap">Table 2. The double pendulum at resonance, $R = 1$, with gravity\'s push $G = ' + f'{ch["G"]:g}' + '$, each brake run from several starts: how many starts end in chaos, the mean power, and the largest Lyapunov exponent.</p><table class="mt"><thead><tr><th>$\\kappa$</th><th>chaotic starts</th><th>mean power, W</th>'
       '<th>largest Lyapunov exponent $\\Lambda$, s⁻¹</th></tr></thead><tbody>']
 for gr in ch['groups']:
-    P = np.array(gr['P'])*1e3; lam = np.array(gr['lyap'])
+    P = np.array(gr['P']); lam = np.array(gr['lyap'])
     nch = int(np.sum(lam > 0.01*ch['Om']))
-    ps = f'{P.mean():.1f}' if P.std() < 0.05 else f'{P.min():.0f}–{P.max():.0f}'
+    ps = f'{P.mean():.2f}' if f'{P.min():.2f}' == f'{P.max():.2f}' else f'{P.min():.2f}–{P.max():.2f}'
     ls = f'{lam.mean():.3f}' if lam.std() < 1e-3 else f'{lam.min():.2f} to {lam.max():.2f}'
     ls = ls.replace('-', '−')
-    tr.append(f'<tr><td>{gr["c"]:.3f}</td><td>{gr["c"]/(0.1*0.04*ch["Om"]):.3f}</td><td>{nch} of {len(P)}</td><td>{ps}</td><td>{ls}</td></tr>')
-    N[f'chaos_P_{int(round(gr["c"]*1000))}'] = ps
+    tr.append(f'<tr><td>{gr["kappa"]:.1f}</td><td>{nch} of {len(P)}</td><td>{ps}</td><td>{ls}</td></tr>')
+    N[f'chaos_P_{int(round(gr["kappa"]*10))}'] = ps
+    N[f'chaos_k_{int(round(gr["kappa"]*10))}'] = f'{gr["kappa"]:.1f}'
 tr.append('</tbody></table>')
 T['chaos'] = '\n'.join(tr)
 allP = np.concatenate([np.array(gr['P']) for gr in ch['groups']])
-N['chaos_times_min'] = f(allP.min()/max(x['Ps'] for x in rows), 1); N['chaos_times_max'] = f(allP.max()/max(x['Ps'] for x in rows), 1)
-N['chaos_thr'] = f(0.01*ch['Om'], 2); N['chaos_Om'] = f(ch['Om'], 0)
+N['chaos_times_min'] = f(allP.min()/max(x['Ps'] for x in rows), 0); N['chaos_times_max'] = f(allP.max()/max(x['Ps'] for x in rows), 0)
+N['chaos_thr'] = f(0.01*ch['Om'], 3); N['chaos_Om'] = f(ch['Om'], 2); N['chaos_G'] = f'{ch["G"]:g}'
 N['chaos_nic'] = str(len(ch['groups'][0]['P'])); N['chaos_turns'] = str(ch['MEAS'])
 
 # ---- chaos map -----------------------------------------------------------------------------------------------------
@@ -112,7 +128,7 @@ mp = json.load(open(D / 'L1_map.json')); fix = {g_['R']: g_ for g_ in json.load(
 cells = {}
 for gr in mp['groups']:
     for mb in gr['members']:
-        if mb['G'] == 70 and gr['R'] in fix:
+        if mb['G'] in (70, 200) and gr['R'] in fix:
             continue
         cells.setdefault((gr['R'], mb['G']), []).append(mb)
     if gr['R'] in fix:
@@ -130,7 +146,7 @@ for R in Rs:
 tr.append('</tbody></table>')
 T['chaosmap'] = '\n'.join(tr)
 N['map_kstar_R1'] = f(next(g_['kappa_star'] for g_ in mp['groups'] if g_['R'] == 1), 3)
-N['chaos_kappa_30'] = f(0.030/(0.1*0.04*4.0), 3)
+N['chaos_kappa_ratio'] = f(next(g_['kappa'] for g_ in ch['groups'] if np.mean(np.array(g_['lyap']) > 0.01*ch['Om']) > 0.5)/next(g_['kappa_star'] for g_ in mp['groups'] if g_['R'] == 1), 0)
 N['map_members'] = str(sum(len(v) for v in cells.values()))
 N['map_chaotic'] = str(sum(mb['lyap'] > 0.01 for v in cells.values() for mb in v))
 
@@ -142,9 +158,14 @@ se = [float(x) for x in re.findall(r'ratio [0-9.]+ \+- ([0-9.]+)', log)][1::2]
 N['mc_se_min'] = f(min(se)*100, 1); N['mc_se_max'] = f(max(se)*100, 1)
 meff = re.findall(r'<m_eff>/M = ([0-9.]+)', log)
 N['meff_single_large'] = f(float(meff[3]), 2); N['meff_double_chaos'] = f(float(meff[7]), 2)
+rms = [float(x) for x in re.findall(r'rms angle ([0-9.]+) rad', log)]
+N['mc_rms_small'] = f(rms[1], 2); N['mc_rms_large'] = f(rms[3], 1)
+N['mc_flips'] = f(float(re.findall(r'turns over per trajectory ([0-9.]+)', log)[-1]), 0)
+Sv = [float(x) for x in re.findall(r'S = ([0-9.e+-]+) m\^2/s\^3', log)]
+N['mc_S_small'] = f'{min(Sv):g}'; N['mc_S_large'] = f'{max(Sv):g}'
 
 # ---- turbulent wind, preliminary (L2): the rotor's wandering, at the same mean rotor speed ---------------------------
-l2 = json.load(open(D / 'L2_run.json'))
+l2 = json.load(open(D / 'L2_run_k2.json'))
 wand = []
 for mt in l2['mountings']:
     pn, pu = np.array(mt['P_noeuler']), np.array(mt['P_unif'])
@@ -176,12 +197,11 @@ T['fig_brake'] = (f'<figure class="fig"><svg viewBox="0 0 {W_} {H_}" role="img" 
     f'{2-math.sqrt(3):.2f} times the best, or {2+math.sqrt(3):.1f} times it, still gives half the power ($x = 2 \\mp \\sqrt3$).</figcaption></figure>')
 
 # ---- turbine power for the share (air density, C_p) and the trail identity ---------------------------------------
-N['tilt_max_deg'] = f(math.degrees(math.asin(1/min(x['Gam'] for x in rows))), 0)
-N['tilt_min_deg'] = f(math.degrees(1/max(x['Gam'] for x in rows)), 2)
+N['tilt_min_deg'] = f(math.degrees(math.asin(1/max(x['Gam'] for x in rows))), 1)
 N['invG_max'] = f(1/min(x['Gam'] for x in rows), 2)
-N['cp_used'] = '0.45'; N['rho'] = '1.225'
+N['cp_used'] = f'{SU["CP_STAR"]:g}'; N['rho'] = f'{SU["RHO"]:g}'; N['lam_star'] = f'{SU["LAM_STAR"]:g}'
 bestshare = max(rows, key=lambda x: x['share'])
-N['share_where'] = f'{bestshare["rpm"]} rpm, pivot at {bestshare["pct"]} %'
+N['share_where'] = f'{bestshare["wind"]:.0f} m/s, pivot at {bestshare["pct"]} %'
 
 # ---- L2 both torque laws ------------------------------------------------------------------------------------------
 for law in ('nrel', 'k2'):
@@ -220,6 +240,7 @@ for z, key in ((0.005, 'lo'), (0.03, 'hi')):
     N[f'tu_share_{key}'] = f(tnd['P']/tnd['P_in']*100, 0); N[f'tu_q_{key}'] = f(tnd['q_rms'], 2)
     N[f'tu_tipcut_{key}'] = f((1 - tnd['x_rms']/0.005)*100, 0)
     N[f'tu_q20_{key}'] = f(pick(z, 0.02, 'tuned')['q_rms'], 2)
+    N[f'tu_x20_{key}'] = f(pick(z, 0.02, 'tuned')['q_rms']*0.9*63.0*0.9494**2/(2*math.pi*1.0793)**2, 1)
 sst = json.load(open(D / 'L3_sag_static.json'))         # second shape model: static bend integrated from the blade table
 for k, fr in ((30, 0.3), (60, 0.6), (90, 0.9)):
     vals = [x['total']*100 for x in sst if abs(x['frac'] - fr) < 1e-9] + [next(sg for sg in sag if abs(sg['frac'] - fr) < 1e-9)['total']]
@@ -229,24 +250,25 @@ G90 = 9.80665*math.cos(math.radians(5.0))/(0.9494**2*0.9*63.0)
 N['tu_mod_pct'] = f(G90/2*100, 1)                       # gravity's 1P stiffness modulation of a rod at 90 %: +-G/(2R), any length
 smd = json.load(open(D / 'L3_shake_model.json'))
 N['sh_mb'] = f(smd['m_e'], 0); N['sh_phi'] = f(smd['Phi_p'], 2); N['sh_dphi'] = f(smd['dPhi_p']*1e3, 1)
-N['sh_c_one'] = f(pick(0.005, 0.005, 'single')['c'], 3); N['sh_cstar_one'] = f(m*0.2**2*0.9494*(0.9*63.0/0.2 - 1), 2)
+N['sh_c_one'] = f(pick(0.005, 0.005, 'single')['c'], 3); N['sh_cstar_one'] = f(m*L**2*0.9494*(0.9*63.0/L - 1), 2)
 N['tu_L'] = f(0.9*63.0*0.9494**2/(2*math.pi*1.0793)**2, 2)
 N['zeta_struct'] = '0.48'
 gt = 9.80665*math.cos(math.radians(5.0)); Om5 = 0.9494; rp9 = 0.9*63.0
-N['grav_one90'] = f(m*0.2*gt**2/(4*Om5*(rp9 - 0.2))*1e3, 1)
+N['grav_one90'] = f(m*L*gt**2/(4*Om5*(rp9 - L))*1e3, 1)
 Lt = rp9*Om5**2/(2*math.pi*1.0793)**2
 N['grav_tuned90'] = f(m*Lt*gt**2/(4*Om5*(rp9 - Lt))*1e3, 0)
-N['tu_len_ratio'] = f(Lt/0.2, 1)
+N['tu_len_ratio'] = f(Lt/L, 0)
+N['freq_ratio_90'] = f(math.sqrt(rp9/L)*Om5/(2*math.pi)/1.0793, 1)      # rod's own frequency over the blade's edgewise 1.0793 Hz
 
 # ---- L4: the geared generator (maxon RE 25 + GP 32 C), chapter 7 ---------------------------------------------------------
 # settings chosen in the full equation (L4_scan.py, model L4_full.py version 3); numbers at those settings with 2000 steps per turn
 # (L4_check_2000.json; 4000 steps agree, L4_converge.py); the formula (7.6)-(7.7) at the same settings beside them;
-# sensitivity to friction and efficiency by the formula on the large rotors (L4_sensitivity.json)
+# sensitivity to friction and efficiency by the formula at the nine mountings (L4_sensitivity.json)
 g4 = json.load(open(D / 'L4_check_2000.json'))
 KT, KE, RC, JM, I0 = 0.0208, 0.02076, 1.53, 1.47e-6, 0.0402
 T0 = KT*I0; mgL = m*g*L; HALF_PLAY = math.radians(0.5)       # GP 32 C average backlash 1.0 deg, so +-0.5 deg about the middle
 N['csc1'] = f'{KT*KE/RC:.5f}'
-cst = [m*L**2*x['rpm']*2*math.pi/60*abs(x['R'] - 1) for x in rows]
+cst = [m*L**2*x['Om']*abs(x['R'] - 1) for x in rows]
 N['cstar_min'] = f(min(cst), 2); N['cstar_max'] = f(max(cst), 2)
 N['cstar_x_min'] = f(round(min(cst)/(KT*KE/RC), -2), 0); N['cstar_x_max'] = f(round(max(cst)/(KT*KE/RC), -2), 0)
 N['Nneed_min'] = str(math.ceil(math.sqrt(min(cst)/(KT*KE/RC)))); N['Nneed_max'] = str(math.ceil(math.sqrt(max(cst)/(KT*KE/RC))))
@@ -254,49 +276,44 @@ N['j_33'] = f((JM + 0.8e-7)*33**2/(m*L**2), 2); N['j_51'] = f((JM + 0.7e-7)*51**
 N['T0_mNm'] = f(T0*1e3, 2); N['mgL'] = f(mgL, 3)
 N['fric_51'] = f(51*T0/0.70, 3); N['fricG_51'] = f(51*T0/0.70/mgL*100, 0); N['fricG_111'] = f(111*T0/0.70/mgL*100, 0)
 N['Njam'] = str(int(0.70*mgL/T0)); N['Njam4'] = str(int(0.60*mgL/T0))
+N['jam_list'] = ', '.join(str(n_) for n_, e_ in ((3.7, .8), (14, .75), (33, .75), (51, .7), (111, .7), (190, .7), (246, .6), (492, .6)) if n_*T0/e_ > mgL)
+N['rated_x'] = f(m*g*L/math.sqrt(2)/0.0304, 0)
 N['ceiling_frac'] = f(math.pi/(4*math.sqrt(2)), 2)
 N['half_play'] = f(HALF_PLAY, 4)
-big = [r for r in g4 if r['rpm'] <= 20]; fast = [r for r in g4 if r['rpm'] >= 100]
+big = g4
 N['g4_big_min'] = f(min(r['P_load'] for r in big)*1e3, 1); N['g4_big_max'] = f(max(r['P_load'] for r in big)*1e3, 1)
-N['g4_margin'] = str(int(min(r['P_load'] for r in big)/37.6e-6))
+N['g4_margin'] = str(int(min(r['P_load'] for r in big)/NEED))
 N['g4_big_share_min'] = f(min(r['P_load']/r['Pstar'] for r in big)*100, 0); N['g4_big_share_max'] = f(max(r['P_load']/r['Pstar'] for r in big)*100, 0)
 N['g4_big_eff_min'] = f(min(r['P_load']/r['P_paid'] for r in big)*100, 0); N['g4_big_eff_max'] = f(max(r['P_load']/r['P_paid'] for r in big)*100, 0)
 N['g4_big_fric_min'] = f(min(r['P_fric']/r['P_paid'] for r in big)*100, 0); N['g4_big_fric_max'] = f(max(r['P_fric']/r['P_paid'] for r in big)*100, 0)
-N['g4_big_th_min'] = f(min(r['Theta'] for r in big), 2); N['g4_fast_th_max'] = f(max(r['Theta'] for r in fast), 3)
-N['ratio_count_51'] = str(sum(r['N'] == 51 for r in g4))
+N['g4_big_th_min'] = f(min(r['Theta'] for r in big), 2); N['g4_big_th_max'] = f(max(r['Theta'] for r in big), 2)
+wins = sorted({r['N'] for r in g4}); N['g4_ratios'] = ' and '.join(str(n_) for n_ in wins)
+top = max(wins, key=lambda n_: sum(r['N'] == n_ for r in g4)); N['g4_top_N'] = str(top); N['g4_top_count'] = str(sum(r['N'] == top for r in g4))
 gap = lambda r: r['P_load']/r['P_load_formula'] - 1
 N['df_gap_big'] = f(max(abs(gap(r)) for r in big)*100, 0)
-N['df_gap_fast_min'] = f(min(gap(r) for r in fast)*100, 0); N['df_gap_fast_max'] = f(max(gap(r) for r in fast)*100, 0)
-# voltage at the load on the large rotors: peak EMF k_e N thetadot_max, of which the load keeps R_L/(R_c + R_L); swing taken sinusoidal
-stk = [x for x in json.load(open(D / 'L4_stick.json')) if x['rpm'] <= 20]   # full equation: peak load voltage, time stopped
+far = max(big, key=lambda r: abs(gap(r))); rest = [r for r in big if r is not far]
+N['df_gap_rest'] = f(max(abs(gap(r)) for r in rest)*100, 1); N['df_far_where'] = f'{far["wind"]:.0f} m/s, pivot at {int(round(far["frac"]*100))} %'
+N['df_far_th'] = f(far['Theta'], 2); N['df_far_gap'] = f(gap(far)*100, 0)
+N['play_x'] = f(min(r['Theta'] for r in big)/HALF_PLAY, 0)
+stk = json.load(open(D / 'L4_stick.json'))               # full equation: peak load voltage, time stopped
 N['V_min'] = f(min(x['V_load_peak'] for x in stk)*1e3, 0); N['V_max'] = f(max(x['V_load_peak'] for x in stk)*1e3, 0)
 N['stuck_min'] = f(min(x['stuck'] for x in stk)*100, 0); N['stuck_max'] = f(max(x['stuck'] for x in stk)*100, 0)
-N['f_turn_min'] = f(8/60, 2); N['f_turn_max'] = f(20/60, 2)
+N['f_turn_min'] = f(min(x['Om'] for x in rows)/(2*math.pi), 2); N['f_turn_max'] = f(max(x['Om'] for x in rows)/(2*math.pi), 2)
 sens = json.load(open(D / 'L4_sensitivity.json'))
 for key, mult, eb in (('x2', 2, None), ('x3', 3, None), ('e5', 1, 0.5), ('x2e5', 2, 0.5)):
     sel = [x for x in sens if x['fric'] == mult and x['eta'] == eb]
     N[f'sens_{key}_min'] = f(min(x['P_load'] for x in sel)*1e3, 2); N[f'sens_{key}_max'] = f(max(x['P_load'] for x in sel)*1e3, 1)
-N['sens_margin'] = str(int(min(x['P_load'] for x in sens)/37.6e-6))
-for key, (rpm, fr) in (('t30', (400, 0.3)), ('t90', (400, 0.9))):
-    r = next(x for x in g4 if x['rpm'] == rpm and abs(x['frac'] - fr) < 1e-9)
-    N[f'{key}_N'] = str(r['N']); N[f'{key}_s0'] = f(r['R'] - 1, 2); N[f'{key}_s1'] = f(r['R'] - 1 - r['j'], 2)
-    N[f'{key}_paid'] = f(r['P_paid']*1e3, 0); N[f'{key}_Pstar'] = f(r['Pstar']*1e3, 1); N[f'{key}_load'] = f(r['P_load']*1e3, 1)
-    N[f'{key}_share'] = f(r['P_load']/r['Pstar']*100, 0); N[f'{key}_th'] = f(r['Theta'], 3)
-rv2 = json.load(open(D / 'L4_resonance_v2.json'))       # version 2 (inertia through the gears without loss), 400 rpm, 30 %, ratio 51
-b2 = max(rv2['brake'], key=lambda q: q['P_load'] if q['Theta'] <= 0.5 else -1)
-N['res_s'] = f(rv2['R1'] - rv2['j'], 4); N['res_v2_load'] = f(b2['P_load']*1e3, 0); N['res_v2_times'] = f(b2['P_load']/rv2['Pstar'], 1)
-ss = json.load(open(D / 'sim_solutions.json'))['n']    # version 3 at the same mounting, from the simulation page's physics block
-N['res_v3_load'] = ss['s6_b51_load']; N['res_v3_RL'] = ss['s6_b51_RL']
-tr = ['<p class="tcap">Table 4. The maxon RE 25 motor with a GP 32 C gearhead at each mounting: the catalogue ratio and load resistor that give the load the most power in the full equation (7.4), with the gear loss on every flow; the swing, the power the rotor pays and the power at the load by the full equation; the formula (7.7) at the same setting; and the load as a share of $P^*$ (the rotor can pay more than $P^*$ when the gearbox\'s inertia brings the rod nearer resonance, section 7.5). Mounting: rotor speed, pivot as a fraction of the blade. † swing below the gearhead\'s half play of 0.5°: the teeth may never engage; ‡ swing less than six times the half play: the numbers are rough.</p>'
+N['sens_margin'] = str(int(min(x['P_load'] for x in sens)/NEED))
+N['n_play'] = str(sum(r['Theta'] < 6*HALF_PLAY for r in g4))
+tr = ['<p class="tcap">Table 4. The maxon RE 25 motor with a GP 32 C gearhead at each mounting: the catalogue ratio and load resistor that give the load the most power in the full equation (7.4), with the gear loss on every flow; the swing, the power the rotor pays and the power at the load by the full equation; the formula (7.7) at the same setting; and the load as a share of $P^*$. Mounting: wind, pivot as a fraction of the rotor radius.</p>'
       '<table class="mt"><thead><tr><th>mounting</th><th>$P^*$, mW</th><th>$N$</th><th>$R_L$, Ω</th><th>swing, rad</th>'
       '<th>rotor pays, mW</th><th>load by (7.7), mW</th><th>load, full, mW</th><th>load ÷ $P^*$</th></tr></thead><tbody>']
 for r in g4:
-    mark = '†' if r['Theta'] < HALF_PLAY else ('‡' if r['Theta'] < 6*HALF_PLAY else '')
-    tr.append(f'<tr><td>{r["rpm"]} rpm, {int(round(r["frac"]*100))} %{mark}</td><td>{r["Pstar"]*1e3:.2f}</td><td>{r["N"]}</td><td>{r["R_load"]:.1f}</td>'
+    mark = ''
+    tr.append(f'<tr><td>{r["wind"]:.0f} m/s, {int(round(r["frac"]*100))} %{mark}</td><td>{r["Pstar"]*1e3:.2f}</td><td>{r["N"]}</td><td>{r["R_load"]:.1f}</td>'
               f'<td>{r["Theta"]:.3f}</td><td>{r["P_paid"]*1e3:.2f}</td><td>{r["P_load_formula"]*1e3:.2f}</td><td>{r["P_load"]*1e3:.2f}</td><td>{r["P_load"]/r["Pstar"]*100:.0f} %</td></tr>')
 tr.append('</tbody></table>')
 T['generator'] = '\n'.join(tr)
-N['n_dagger'] = str(sum(r['Theta'] < HALF_PLAY for r in g4)); N['n_ddagger'] = str(sum(HALF_PLAY <= r['Theta'] < 6*HALF_PLAY for r in g4))
 
 (ROOT / 'numbers.json').write_text(json.dumps({'n': N, 'table': T}, ensure_ascii=False, indent=1))
 print(f'wrote numbers.json: {len(N)} numbers, {len(T)} tables')

@@ -3,23 +3,15 @@ PASS 1. engine accelerations = Newton in the blade frame (Coriolis, Euler, edgew
 PASS 2. observed order of the Radau IIA engine near 5 in the asymptotic range (got 4.90, 4.95)
    mean power over turns 10-20: engine 378.920164 mW, SciPy DOP853 378.920164 mW (9 s)
 PASS 3. engine mean power = SciPy DOP853 on the Newton route (rel diff 6.1e-13 < 1e-6)
-   400 rpm 30 %: single  57.0864 mW, double  36.2571 mW, ratio 0.6351
-   400 rpm 60 %: single  19.0644 mW, double  13.3189 mW, ratio 0.6986
-   400 rpm 90 %: single  11.4427 mW, double   8.1585 mW, ratio 0.7130
-   200 rpm 30 %: single  38.1267 mW, double  26.6368 mW, ratio 0.6986
-   200 rpm 60 %: single  16.3491 mW, double  11.7605 mW, ratio 0.7193
-   200 rpm 90 %: single  10.4055 mW, double   7.5461 mW, ratio 0.7252
-   100 rpm 30 %: single  32.6946 mW, double  23.5184 mW, ratio 0.7193
-   100 rpm 60 %: single  15.2620 mW, double  11.1105 mW, ratio 0.7280
-   100 rpm 90 %: single   9.9542 mW, double   7.2732 mW, ratio 0.7307
-    20 rpm 30 %: single  29.2754 mW, double  21.4526 mW, ratio 0.7328
-    20 rpm 60 %: single  14.4814 mW, double  10.6332 mW, ratio 0.7343
-    20 rpm 90 %: single   9.6176 mW, double   7.0666 mW, ratio 0.7348
-    14 rpm 30 %: single  28.9834 mW, double  21.2665 mW, ratio 0.7337
-    14 rpm 60 %: single  14.4164 mW, double  10.5921 mW, ratio 0.7347
-    14 rpm 90 %: single   9.5903 mW, double   7.0494 mW, ratio 0.7351
-     8 rpm 30 %: single  28.6126 mW, double  21.0246 mW, ratio 0.7348
-     8 rpm 60 %: single  14.3245 mW, double  10.5317 mW, ratio 0.7352
-     8 rpm 90 %: single   9.5541 mW, double   7.0259 mW, ratio 0.7354
-   (50 s)
+   6 m/s (6.87 rpm) 30 %: single  88.6223 mW, double  65.1737 mW, ratio 0.7354
+   6 m/s (6.87 rpm) 60 %: single  44.0205 mW, double  32.3804 mW, ratio 0.7356
+   6 m/s (6.87 rpm) 90 %: single  29.4262 mW, double  21.6458 mW, ratio 0.7356
+   8 m/s (9.16 rpm) 30 %: single  66.1246 mW, double  48.6211 mW, ratio 0.7353
+   8 m/s (9.16 rpm) 60 %: single  33.1671 mW, double  24.3935 mW, ratio 0.7355
+   8 m/s (9.16 rpm) 90 %: single  22.1248 mW, double  16.2739 mW, ratio 0.7355
+   10 m/s (11.44 rpm) 30 %: single  53.1263 mW, double  39.0580 mW, ratio 0.7352
+   10 m/s (11.44 rpm) 60 %: single  26.5759 mW, double  19.5451 mW, ratio 0.7354
+   10 m/s (11.44 rpm) 90 %: single  17.7131 mW, double  13.0286 mW, ratio 0.7355
+PASS 4. 50 against 100 steps per turn agree (worst 4.4e-09 < 1e-4)
+   (75 s)
 ALL PASS

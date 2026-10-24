@@ -7,6 +7,7 @@ import numpy as np, sympy as sp
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 from engine import radau_step
 import nrel5mw as T5
+import setup as S
 t = sp.symbols('t', real=True)
 m, L, rp, g, W, c, w, wp = sp.symbols('m L r_p g Omega c w wp', real=True)
 th = sp.Function('theta')(t)
@@ -22,7 +23,7 @@ acc = sp.solve(e, A)[0]
 pw = (c*(qd - be.diff(t))**2)
 f_acc = sp.lambdify((t, q, qd, m, L, rp, g, W, c, w, wp), acc, 'numpy')
 f_pw = sp.lambdify((t, q, qd, m, L, rp, g, W, c, w, wp), pw, 'numpy')
-gg = 9.80665*math.cos(math.radians(5.0)); mm, LL, Om = 0.1, 0.2, 0.9494
+gg = 9.80665*math.cos(math.radians(5.0)); mm, LL, Om = S.M, S.L, 0.9494
 lin = {0.3: (-0.30, 1.17), 0.6: (-0.63, 6.19), 0.9: (0.66, 14.69)}    # from L3_sag_numbers.py: (with rotation, sag only)
 tab = T5.blade_table(); Lb = T5.R_TIP - T5.R_HUB; x = tab[:, 0]; mu = tab[:, 2]*T5.ADJ_BL_MS
 ph = T5.edge_shape(x); m_e = np.trapezoid(mu*ph**2, x*Lb); g_e = np.trapezoid(mu*ph, x*Lb)

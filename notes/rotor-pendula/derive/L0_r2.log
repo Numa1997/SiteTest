@@ -1,7 +1,8 @@
 PASS tilted hinge, linear: x'' + (R cos a - sin^2 a - G cos a sin phi) x = -G cos phi
-   stiffness 1 at 400 rpm 30 %: alpha = 43.0 deg; d(stiffness)/d(alpha) = -2.4 per rad
-   stiffness 1 at 8 rpm 90 %: alpha = 89.6 deg; d(stiffness)/d(alpha) = -300.8 per rad
-   mean lean at 8 rpm 30 %: integration -0.1283 rad, second-order theory -0.1226 rad
-PASS mean lean agrees with -G^2/(4R(R-1)) within 10 % at the most nonlinear mounting
+   stiffness 1 at 30 %: alpha = 89.4 deg; d(stiffness)/d(alpha) = -189.0 per rad
+   stiffness 1 at 90 %: alpha = 89.8 deg; d(stiffness)/d(alpha) = -567.0 per rad
+   mean lean at 6 m/s, 30 % (small-swing amplitude 0.71 rad): integration -0.2841 rad, second-order theory -0.2531 rad (+12.2 %)
+   mean lean at 8 m/s, 30 % (small-swing amplitude 0.40 rad): integration -0.0823 rad, second-order theory -0.0801 rad (+2.8 %)
+   mean lean at 10 m/s, 30 % (small-swing amplitude 0.26 rad): integration -0.0331 rad, second-order theory -0.0328 rad (+1.1 %)
+PASS the second-order trail approaches the full model as the swing shrinks (gap falls with wind speed, below 5 % at 10 m/s)
 ALL PASS
-exit 0

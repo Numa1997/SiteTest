@@ -1,0 +1,12 @@
+edge only tip 0.4311
+  0.3: w 37.1 mm slope 4.72 mrad  w'r/w 2.40; sag only +1.37 %, total -0.27 %
+  0.6: w 170.3 mm slope 8.94 mrad  w'r/w 1.98; sag only +6.39 %, total +0.07 %
+  0.9: w 362.1 mm slope 10.91 mrad  w'r/w 1.71; sag only +13.81 %, total +1.97 %
+twist-projected tip 0.4449
+  0.3: w 37.9 mm slope 4.86 mrad  w'r/w 2.42; sag only +1.40 %, total -0.29 %
+  0.6: w 175.5 mm slope 9.24 mrad  w'r/w 1.99; sag only +6.58 %, total +0.05 %
+  0.9: w 373.6 mm slope 11.26 mrad  w'r/w 1.71; sag only +14.26 %, total +2.03 %
+modal 0.3 31.5 mm 4.24 mrad w'r/w 2.54
+modal 0.6 165.3 mm 9.7 mrad w'r/w 2.22
+modal 0.9 384.4 mm 12.97 mrad w'r/w 1.91
+EXIT 0

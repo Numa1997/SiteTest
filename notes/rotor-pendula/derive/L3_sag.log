@@ -1,0 +1,8 @@
+linearised equation / (m L^2) = 0 with
+   (Omega**2*r_p/L - g*sin(Omega*t)/L)*theta(t) + Derivative(theta(t), (t, 2)) - Omega**2*u(t)/L + g*cos(Omega*t)/L + Derivative(u(t), (t, 2))/L - c*Derivative(beta(t), t)/(L**2*m) + c*Derivative(theta(t), t)/(L**2*m)
+PASS u = beta = 0 gives L0 (2.1) with its parametric term
+   coefficient of u'': 1/L   coefficient of u: -Omega**2/L
+   total forcing (theta = 0): (L*m*(2*Omega**2*w + g)*cos(Omega*t) - Omega*c*wp*sin(Omega*t))/(L**2*m)
+PASS forcing = (g + 2 Omega^2 w)/L cos(phi) + (c/mL^2) * d(beta)/dt-term: sag adds 2 Omega^2 w to g, section rotation drives through the generator
+ALL PASS
+EXIT 0

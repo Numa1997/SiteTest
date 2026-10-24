@@ -1,18 +1,18 @@
 {
  "n": {
-  "chk_worst": "1.3·10⁻⁸",
-  "chk_at": "400 rpm 30 % single",
+  "chk_worst": "4.5·10⁻⁹",
+  "chk_at": "6 m/s 30 % double",
   "chk_steps": "240",
   "chk_settle": "60",
   "chk_measure": "40",
-  "chk_runs": "36",
+  "chk_runs": "18",
   "chk_geared_steps": "1200",
-  "chk_geared_sentence": ". For the geared generator it runs the settings of the Python check L4_check_2000.json (2000 steps per turn): the load power differs by at most 3.3·10⁻³ % and the power the rotor pays by at most 2.3·10⁻³ %."
+  "chk_geared_sentence": ". For the geared generator it runs the settings of the Python check L4_check_2000.json (2000 steps per turn): the load power differs by at most 1.7·10⁻¹ % and the power the rotor pays by at most 2.2·10⁻¹ %."
  },
- "worst": 1.2732052079300615e-8,
+ "worst": 4.522386354288699e-9,
  "pass": true,
  "geared": {
-  "load": 0.000033204686715415654,
-  "paid": 0.00002302963056688423
+  "load": 0.0016790548918519388,
+  "paid": 0.002171805931187931
  }
 }

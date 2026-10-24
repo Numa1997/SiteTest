@@ -1,0 +1,5 @@
+PASS pivot 30 %: nonlinear sag only +1.03 % (linear +1.17), with section rotation -0.41 % (linear -0.30); rigid-blade power 66.256 mW
+PASS pivot 60 %: nonlinear sag only +6.01 % (linear +6.19), with section rotation -0.79 % (linear -0.63); rigid-blade power 33.236 mW
+PASS pivot 90 %: nonlinear sag only +14.49 % (linear +14.69), with section rotation +0.47 % (linear +0.66); rigid-blade power 22.172 mW
+ALL PASS
+EXIT 0

@@ -3,7 +3,7 @@
 | | |
 |---|---|
 | File | [public/scripts/fold.js](../../public/scripts/fold.js), 414 lines, 24.0 kB (23 973 bytes) |
-| Loaded by | [index.html:625](../../index.html#L625) (the home page); [portfolios.html:333](../../public/portfolios.html#L333); [simulations.html:123](../../public/simulations.html#L123), before `catalog.js`; the ten simulation pages, first of the shared scripts (load-order table in [sim.md](sim.md#load-order-on-the-pages)) |
+| Loaded by | [index.html:625](../../index.html#L625) (the home page); [portfolios.html:415](../../public/portfolios.html#L415); [simulations.html:123](../../public/simulations.html#L123), before `catalog.js`; the ten simulation pages, first of the shared scripts (load-order table in [sim.md](sim.md#load-order-on-the-pages)) |
 | Defines | `window.Fold = { make, walk, all, openTo, setCard, onCard, onAll, tools }` ([fold.js:413](../../public/scripts/fold.js#L413)) |
 | Sets on `<html>` | CSS variables `--fold-open`, `--fold-close`, `--fold-ease` ([fold.js:21-23](../../public/scripts/fold.js#L21-L23)) and `--fold-top` ([fold.js:297](../../public/scripts/fold.js#L297)) |
 | Stores | `localStorage['fold:<path>']` ([fold.js:61](../../public/scripts/fold.js#L61)) |

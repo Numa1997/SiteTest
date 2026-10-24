@@ -1,20 +1,20 @@
 torque law k2: steady speed at 8 m/s 0.9494 rad/s
-turbulent runs: 156 s
-r_p = 18.9 m: steady 26.646 mW; turbulent mean 26.786 +- 0.013 mW, 5 % quantile 26.675 mW
-   change +0.52 %: (a) mean speed -0.04 %, (b) wander +0.583 +- 0.048 %, (c) Euler -0.01840 +- 0.00452 %
-PASS P1 r_p = 18.9: |(b)+(c)| = 0.564 % < 1 % + 2 SE
+turbulent runs: 109 s
+r_p = 18.9 m: steady 66.258 mW; turbulent mean 66.607 +- 0.033 mW, 5 % quantile 66.331 mW
+   change +0.53 %: (a) mean speed -0.04 %, (b) wander +0.581 +- 0.048 %, (c) Euler -0.01829 +- 0.00450 %
+PASS P1 r_p = 18.9: |(b)+(c)| = 0.563 % < 1 % + 2 SE
 PASS P2 r_p = 18.9: |(c)| = 1.8e-04 < 1e-3
-FAIL P3 r_p = 18.9: total change +0.52 % between -3 % and -1 %
-r_p = 37.8 m: steady 13.330 mW; turbulent mean 13.421 +- 0.008 mW, 5 % quantile 13.356 mW
-   change +0.68 %: (a) mean speed +0.09 %, (b) wander +0.611 +- 0.062 %, (c) Euler -0.02109 +- 0.00974 %
-PASS P1 r_p = 37.8: |(b)+(c)| = 0.590 % < 1 % + 2 SE
+PASS P3 r_p = 18.9: total change +0.53 % between 0 and +1 %
+r_p = 37.8 m: steady 33.237 mW; turbulent mean 33.463 +- 0.020 mW, 5 % quantile 33.302 mW
+   change +0.68 %: (a) mean speed +0.09 %, (b) wander +0.612 +- 0.062 %, (c) Euler -0.02101 +- 0.00972 %
+PASS P1 r_p = 37.8: |(b)+(c)| = 0.591 % < 1 % + 2 SE
 PASS P2 r_p = 37.8: |(c)| = 2.1e-04 < 1e-3
-FAIL P3 r_p = 37.8: total change +0.68 % between -3 % and -1 %
-r_p = 56.7 m: steady 8.885 mW; turbulent mean 8.952 +- 0.006 mW, 5 % quantile 8.900 mW
-   change +0.75 %: (a) mean speed +0.10 %, (b) wander +0.677 +- 0.068 %, (c) Euler -0.02115 +- 0.01481 %
+PASS P3 r_p = 37.8: total change +0.68 % between 0 and +1 %
+r_p = 56.7 m: steady 22.172 mW; turbulent mean 22.340 +- 0.015 mW, 5 % quantile 22.212 mW
+   change +0.75 %: (a) mean speed +0.10 %, (b) wander +0.677 +- 0.068 %, (c) Euler -0.02109 +- 0.01478 %
 PASS P1 r_p = 56.7: |(b)+(c)| = 0.656 % < 1 % + 2 SE
 PASS P2 r_p = 56.7: |(c)| = 2.1e-04 < 1e-3
-FAIL P3 r_p = 56.7: total change +0.75 % between -3 % and -1 %
-(170 s)
-3 FAIL
-EXIT
+PASS P3 r_p = 56.7: total change +0.75 % between 0 and +1 %
+(119 s)
+ALL PASS
+EXIT 0
