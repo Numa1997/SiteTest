@@ -24,6 +24,11 @@ then into the tables. Machine tables: [i18n/de/strings.json](../i18n/de/strings.
 | Skills | Kenntnisse | المهارات |
 | first year, second year (course) | erstes, zweites Studienjahr | السنة الأولى، السنة الثانية |
 | solver | Löser | الحلّال |
+| ledger (the data panel's table) | Hauptbuch | السجلّ |
+| the books, a book (a balance in the data panel) | die Bilanzen, eine Bilanz | الموازنات، موازنة |
+| residual | Residuum | المتبقّي |
+| set by you (how a value is obtained) | Ihre Wahl | تضبطه أنت |
+| stored run | gespeicherter Lauf | الحلّ المخزَّن |
 | set-point | Sollwert | القيمة المرجعية |
 
 ## Physics

@@ -17,7 +17,8 @@ and it shows a visible error banner if any script on the page throws.
 ## Load order on the pages
 
 Every simulation page loads the shared scripts at the end of `<body>`, in this order. The page's own inline script sits
-between `dataset.js` and `datalog.js`.
+between `dataset.js` and `datalog.js`; Figs. 9 and 10 load their data panel's ledger (`scripts/ledger/<page>.js`) just
+before `datalog.js`, on the same line.
 
 | Fig. | Page | `fold.js` | `sim.js` | `dataset.js` | page script | `datalog.js` |
 |---|---|---|---|---|---|---|
@@ -29,8 +30,8 @@ between `dataset.js` and `datalog.js`.
 | 6 | [wave-interference.html](../../public/simulations/wave-interference.html#L489) | L489 | L490 | L491 | L492 | L974 |
 | 7 | [phasor-sums.html](../../public/simulations/phasor-sums.html#L660) | L660 | L661 | L662 | L663 | L1476 |
 | 8 | [draw-decompose.html](../../public/simulations/draw-decompose.html#L618) | L618 | L619 | L620 | L621 | L1413 |
-| 9 | [driven-oscillator.html](../../public/simulations/driven-oscillator.html#L598) | L466 | L467 | L468 | L469 | L1110 |
-| 10 | [wind-turbine.html](../../public/simulations/wind-turbine.html#L547) | L547 | L548 | L549 | L550 | L1168 |
+| 9 | [driven-oscillator.html](../../public/simulations/driven-oscillator.html#L598) | L598 | L599 | L600 | L601 | L1930, after `ledger/driven-oscillator.js` on the same line |
+| 10 | [wind-turbine.html](../../public/simulations/wind-turbine.html#L547) | L547 | L548 | L549 | L550 | L1168, after `ledger/wind-turbine.js` on the same line |
 
 The scripts are plain `<script src>` tags at the end of the body, so they run while the document is still loading. That is
 why `sim.js` defers its own start to `DOMContentLoaded` ([sim.js:412](../../public/scripts/sim.js#L412)), and why
@@ -217,9 +218,9 @@ Listeners: `window` `error` ([sim.js:230](../../public/scripts/sim.js#L230)); `D
   ([sim.js:328](../../public/scripts/sim.js#L328), [fold.js:342](../../public/scripts/fold.js#L342)); it listens for
   `typeset` ([fold.js:402](../../public/scripts/fold.js#L402)). See [fold.md](fold.md).
 - **`dataset.js`** adds `Sim.dataset` and **`datalog.js`** adds `Sim.colourMap` to the object made here
-  ([dataset.js:17](../../public/scripts/dataset.js#L17), [datalog.js:71](../../public/scripts/datalog.js#L71)); both must
+  ([dataset.js:17](../../public/scripts/dataset.js#L17), [datalog.js:103](../../public/scripts/datalog.js#L103)); both must
   load after `sim.js`. `datalog.js` uses `Sim.fmt` for every number it prints
-  ([datalog.js:63](../../public/scripts/datalog.js#L63)). See [dataset.md](dataset.md) and [datalog.md](datalog.md).
+  ([datalog.js:86](../../public/scripts/datalog.js#L86)). See [dataset.md](dataset.md) and [datalog.md](datalog.md).
 - **KaTeX** files are self-hosted: [vendor/katex/katex.min.js](../../public/vendor/katex/katex.min.js) and
   [vendor/katex/contrib/auto-render.min.js](../../public/vendor/katex/contrib/auto-render.min.js). The KaTeX stylesheet comes
   through `sim.css` ([sim.css:8](../../public/styles/sim.css#L8)).

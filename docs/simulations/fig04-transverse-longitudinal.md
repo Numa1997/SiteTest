@@ -169,7 +169,7 @@ All functions live in one IIFE ([page:736–1081](../../public/simulations/Trans
 Readouts ([page:83–88](../../public/simulations/Transverse%20and%20longitudinal%20waves.html#L83-L88)): `r-v` ($v$ rounded to
 1 px/s), `r-t` ($T$, 2 decimals), `r-k` ($k$, 4 decimals, "/px"), `r-al` ($A_\mathrm{L}$ rounded, with " (cap)" when
 $A_\mathrm{L} < A$); the caption span `cap-v` repeats $v$ ([page:802–808](../../public/simulations/Transverse%20and%20longitudinal%20waves.html#L802-L808)).
-The data panel adds a "Data" tab and a "Read values" button in the figure caption ([datalog.js:589–590](../../public/scripts/datalog.js#L589-L590));
+The data panel adds a "Data" tab and a "Read values" button in the figure caption ([datalog.js:896–897](../../public/scripts/datalog.js#L896-L897));
 the walkthrough adds "Hold the numbers" ([sim.js:252](../../public/scripts/sim.js#L252)).
 
 ## What the page writes into the data store
@@ -203,10 +203,10 @@ Values at the defaults, read from the store in Chromium: $k$ = 0.02856 rad/px, $
 (the cap $0.8\lambda/2\pi$ is 28.01 px at $\lambda = 220$), `ALk` = 0.7426, followed bead 12 at $X$ = 307.2 px.
 
 **The panel spec** `Sim.data` ([page:996–1077](../../public/simulations/Transverse%20and%20longitudinal%20waves.html#L996-L1077);
-contract at [datalog.js:8–29](../../public/scripts/datalog.js#L8-L29), explained in [datalog.md](../scripts/datalog.md)):
+contract at [datalog.js:9–31](../../public/scripts/datalog.js#L9-L31), explained in [datalog.md](../scripts/datalog.md)):
 `kicker: 'Fig. 4 · data'`, `file: 'fig4-transverse-longitudinal'`, six groups (Physical parameters, Derived physics, Time,
 Particles, Crests and compressions, Drawing), and `colour` maps through `Sim.colourMap`
-([datalog.js:71](../../public/scripts/datalog.js#L71)) for `xi` (scaled by $A$), `sL` (by $A_\mathrm{L}$) and `rho` ($\rho/\rho_0 - 1$
+([datalog.js:103](../../public/scripts/datalog.js#L103)) for `xi` (scaled by $A$), `sL` (by $A_\mathrm{L}$) and `rho` ($\rho/\rho_0 - 1$
 scaled by $A_\mathrm{L}k$). Every `check` recomputes its value from stored inputs, with one exception: the four slider entries
 read the input element now. `s_px`, `yT`, `yL` recompute from the stored `box_w`, `box_h` (Note 4).
 
@@ -217,9 +217,9 @@ In Chromium at both window widths, the followed upper bead read `rgb(122, 31, 43
 
 **One round** (`Sim.data.round`, [page:1073–1074](../../public/simulations/Transverse%20and%20longitudinal%20waves.html#L1073-L1074)):
 one period $T$ of the play time `t`, which advances only while playing. The panel samples it evenly, at most 600 samples
-([datalog.js:744](../../public/scripts/datalog.js#L744), [773](../../public/scripts/datalog.js#L773)); the charted column is
+([datalog.js:1052](../../public/scripts/datalog.js#L1052), [1081](../../public/scripts/datalog.js#L1081)); the charted column is
 `omegaT`; the recorded point is the followed bead of the upper row. If the clock is paused when recording starts, the panel calls
-`Sim.data.play` ([datalog.js:762](../../public/scripts/datalog.js#L762)).
+`Sim.data.play` ([datalog.js:1070](../../public/scripts/datalog.js#L1070)).
 
 **`Sim.live()`** ([page:964–976](../../public/simulations/Transverse%20and%20longitudinal%20waves.html#L964-L976)) returns
 strings for the walkthrough keys `f`, `k`, `wt`, `v`, `T`, `X`, `phase`, `xi`, `yi`, `xc`, `xp`, `AL`, `A`, `xl`, `AkL`, `rho`,
@@ -273,7 +273,7 @@ The walkthrough calls the medium's pixels "world px".
 
 The page says this twice: in Section 8 of the note ([page:700](../../public/simulations/Transverse%20and%20longitudinal%20waves.html#L700))
 and in the panel's About text ([page:1076](../../public/simulations/Transverse%20and%20longitudinal%20waves.html#L1076),
-shown by [datalog.js:165](../../public/scripts/datalog.js#L165)).
+shown by [datalog.js:229](../../public/scripts/datalog.js#L229)).
 
 - **The tint is not the density.** It follows $\max(0, -\cos(kX - \omega t))$, symmetric and capped at opacity 0.23, while the
   stored $\rho/\rho_0$ is lopsided: 3.88 at the compression centres and 0.574 in the rarefactions at the defaults. The tint is laid

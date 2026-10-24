@@ -291,7 +291,7 @@ states; one `frame()` took about 1.5 ms (measured over 200 seek events at a 1 44
 | Proportional gain $K_p$ | `Kp` | 0–60 N/m, step 0.5, default 0 | `p.Kp`; marks stale. |
 | Integral gain $K_i$ | `Ki` | 0–60 N/(m·s), step 0.5, default 0 | `p.Ki`; marks stale. |
 | Derivative gain $K_d$ | `Kd` | 0–12 kg/s, step 0.1, default 0 | `p.Kd`; marks stale. |
-| Read values | added by datalog.js | switch, off | Appended to the first figure caption ([datalog.js:588–590](../../public/scripts/datalog.js#L588-L590)); see [datalog.md](../scripts/datalog.md). |
+| Read values | added by datalog.js | switch, off | Appended to the first figure caption ([datalog.js:895–897](../../public/scripts/datalog.js#L895-L897)); see [datalog.md](../scripts/datalog.md). |
 
 ## What the page writes into the data store
 
@@ -317,14 +317,35 @@ store itself is described in [dataset.md](../scripts/dataset.md). Each variable 
 | Drawing | `xmax`, `need`, `span_before`, `fitted`, `span`, `held`, `ylim`, `amp_px`, `px_per_m`, `px_per_N`, `eq_px`, `block_px`, `block_y`, `ghost_shown`, `ghost_px`, `coil_px`, `Fd_px`, `Fc_px`, `Fk_px`, `r_px`, `xeq_px`, `Wscale`, `uscale`, `Ploss_max`, `win_t0`, `win_T`, `box_w`, `box_h`, `fps`, `playing` | see the function map (`solve()`, `frame()`, `draw()`, `bode()`, `setSpan()`) |
 
 The `*_now` scalars are copies of row `i_now`, so a recorded round has scalar columns to follow.
+
+**The ledger** (24 October 2026). The data panel shows this store as a bookkeeper; its layout is
+[scripts/ledger/driven-oscillator.js](../../public/scripts/ledger/driven-oscillator.js), loaded on the line that loads the panel
+([L1930](../../public/simulations/driven-oscillator.html#L1930)). Headline: $x$, $\dot x$, $F$, $u$, $E$, $W_\text{in}$, $W_\text{loss}$. Sections: what you set (the sliders,
+$k$ among them, and the start your hand gave), what follows from it, the state now, the stored run, the previous run, the curves
+of the figures, the solver and the drawing; the last four start folded. Two books, each balanced by the page and again by the
+panel:
+
+| Book | Rows | Closing line | Residual stored | Measured |
+|---|---|---|---|---|
+| Energy | $E(0) + W_\text{in} - W_\text{loss}$ | $E$ | `bal_now` | about $3\times10^{-13}$ of the flows |
+| Newton’s second law | $F + F_c + F_k$ | $m\,a$ | `fres_now` | 3 to $8\times10^{-5}$ of the flows |
+
+For them the page stores five more numbers, each on a line that already existed, so no line number moved: `as`, the
+acceleration measured from the stored velocities by a central difference, $a_n = (v_{n+1} - v_{n-1})/2\Delta t$, one-sided at
+the two ends (declared [L673](../../public/simulations/driven-oscillator.html#L673), allocated [L935](../../public/simulations/driven-oscillator.html#L935), written [L937](../../public/simulations/driven-oscillator.html#L937)); `E0`, the energy at $t = 0$
+([L968](../../public/simulations/driven-oscillator.html#L968)); and `ma_now`, `bal_now`, `fres_now`, written with the other playback values ([L1541](../../public/simulations/driven-oscillator.html#L1541), declared
+[L703](../../public/simulations/driven-oscillator.html#L703)). The Newton book misses by the error of the central difference, of order $(\Omega\Delta t)^2/6$. While your
+hand holds the block, or after a run that blew up, both books say they are paused instead of giving a verdict. The ledger file
+also adds checks the page lacked: each of the 16 `*_now` numbers against its stored row (or "from the drag" while held), `as`,
+`ma_now`, `E0`, `bal_now`, `fres_now`, `stable` and `fp_kind`; all answer "identical" (measured 24 October 2026).
 `Sim.data.colour` shades the `xs` and `Fs` table cells with `Sim.colourMap`
 ([L1702](../../public/simulations/driven-oscillator.html#L1702), defined in
-[datalog.js:71](../../public/scripts/datalog.js#L71)); this is presentation only.
+[datalog.js:103](../../public/scripts/datalog.js#L103)); this is presentation only.
 
 **One round** (`Sim.data.round`, [L1909–L1911](../../public/simulations/driven-oscillator.html#L1909-L1911)) is one drive
 period, $1/f$ seconds of the stored run, timed by `t_play`. Its columns are `x_now`, `v_now`, `u_now`, `F_now`, `Fc_now`, `Fk_now`, `E_now`, `Pin_now`;
 the default point is the block. Recording is refused when fewer than $1/f$ seconds of the run remain ("press From t = 0").
-The panel samples every frame of the round, at most 600 samples ([datalog.js:744](../../public/scripts/datalog.js#L744)).
+The panel samples every frame of the round, at most 600 samples ([datalog.js:1052](../../public/scripts/datalog.js#L1052)).
 
 **`Sim.live()`** ([L1512–L1526](../../public/simulations/driven-oscillator.html#L1512-L1526)) returns formatted strings read from
 the store, for the keys the walkthrough uses: `k`, `c`, `W`, `w0`, `h`, `steps`, `n`, `t`, `x`, `v`, `F`, `E`, `X`, `phi`,

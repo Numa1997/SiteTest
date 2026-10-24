@@ -98,10 +98,12 @@ def table(lang, served):
 # Scripts whose words go through T('...'): every literal T('...') and every plural(n, 'one', 'many') in them needs an entry in
 # i18n/<lang>/strings.json, and so does every word of the catalog (scripts/catalog.js).
 SCRIPTS = ['public/scripts/fold.js', 'public/simulations.html', 'public/scripts/sim.js', 'public/scripts/datalog.js'] + \
-    ['public/simulations/' + f for f in sorted(os.listdir(os.path.join(ROOT, 'public', 'simulations'))) if f.endswith('.html')]
+    ['public/simulations/' + f for f in sorted(os.listdir(os.path.join(ROOT, 'public', 'simulations'))) if f.endswith('.html')] + \
+    ['public/scripts/ledger/' + f for f in sorted(os.listdir(os.path.join(ROOT, 'public', 'scripts', 'ledger'))) if f.endswith('.js')]
 # The data panel shows what a page declares about its numbers (dataset title, kicker, groups, about, each variable's long_name)
-# through T(), so those literals in the simulation pages are wanted too.
-PANEL_KEYS = r"\b(?:long_name|kicker|about|title|note)\s*:\s*'((?:[^'\\\n]|\\.)*)'"
+# through T(), so those literals in the simulation pages are wanted too, and so are the titles and notes of a page's ledger
+# (scripts/ledger/<page>.js: headline labels, sections, books).
+PANEL_KEYS = r"\b(?:long_name|kicker|about|title|note|short)\s*:\s*'((?:[^'\\\n]|\\.)*)'"
 WALK_FIELDS = ('intro', 'title', 'where', 'note')
 CATALOG = 'public/scripts/catalog.js'
 
@@ -111,7 +113,7 @@ def wanted():
     for f in SCRIPTS:
         src = open(os.path.join(ROOT, f), encoding='utf-8').read()
         for m in re.finditer(r"(?<![\w$.])(?:_t|T)\('((?:[^'\\]|\\.)*)'", src): out.setdefault(m.group(1).replace("\\'", "'"), f)
-        if f.startswith('public/simulations/'):
+        if f.startswith('public/simulations/') or f.startswith('public/scripts/ledger/'):
             for m in re.finditer(PANEL_KEYS, src):
                 if re.search(r'[A-Za-z]{2,}', re.sub(r'<[^>]+>', ' ', m.group(1))): out.setdefault(m.group(1).replace("\\'", "'"), f + ' (data panel)')
         for m in re.finditer(r"\bsliderCheck\([^,()]+, '([^']*[A-Za-z][^']*)'", src): out.setdefault(m.group(1), f + ' (slider name)')

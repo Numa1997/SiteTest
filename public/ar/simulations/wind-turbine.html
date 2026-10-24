@@ -29,7 +29,7 @@
 
     <link rel="stylesheet" href="../../fonts/arabic.css" />
     <script src="../../scripts/i18n/strings-ar.js"></script>
-    <meta name="translated-from" content="English public/simulations/wind-turbine.html, commit 9d31f51" />
+    <meta name="translated-from" content="English public/simulations/wind-turbine.html, commit 9d31f51+" />
   </head>
 <body>
     <header class="sim-top">
@@ -604,12 +604,12 @@
         ds.var('Pa', ['n'], Float64Array, { symbol: 'P<sub>aero</sub>', units: 'W', long_name: 'power the wind gives the rotor', computed_in: 'solve()', formula: 'τ<sub>aero</sub> ω', digits: 0 });
         ds.var('Ictl', ['n'], Float64Array, { symbol: 'I', units: 'rad', long_name: 'the controller’s memory: the speed error integrated over time', computed_in: 'solve(), integrated with RK4', formula: '∫ (ω − ω<sub>ref</sub>) dt, held while the torque is at a limit', digits: 6 });
         ds.var('vtip', ['n'], Float64Array, { symbol: 'v<sub>tip</sub>', units: 'm/s', long_name: 'speed of the blade tips', computed_in: 'solve()', formula: 'ω R', digits: 3 });
-        ds.var('Eg', ['n'], Float64Array, { symbol: 'E<sub>gen</sub>', units: 'J', long_name: 'energy into the generator so far', computed_in: 'solve(), integrated with RK4', formula: '∫ τ<sub>gen</sub> ω dt', digits: 0 });
+        ds.var('Eg', ['n'], Float64Array, { symbol: 'E<sub>gen</sub>', units: 'J', long_name: 'energy into the generator so far', computed_in: 'solve(), integrated with RK4', formula: '∫ τ<sub>gen</sub> ω dt', digits: 0 }); ds.var('Eas', ['n'], Float64Array, { symbol: 'E<sub>aero</sub>', units: 'J', long_name: 'energy the wind has given the rotor so far', computed_in: 'solve(), integrated with RK4', formula: '∫<sub>0</sub><sup>t<sub>n</sub></sup> τ<sub>aero</sub> ω dt', digits: 0, source: 'integrated by RK4 together with ω, so there is no closed formula to recompute it from; the energy book adds it up against the generator and the rotor instead' });
         ds.var('sw', ['n'], Float64Array, { symbol: 's<sub>air</sub>', units: 'm', long_name: 'distance the air has travelled, moves the wind streaks', computed_in: 'solve(), integrated with RK4', formula: '∫ v dt', digits: 3 });
         ds.var('Ea', [], 'float', { symbol: 'E<sub>aero</sub>', units: 'J', long_name: 'energy the wind gave the rotor over the run', computed_in: 'solve(), integrated with RK4', formula: '∫ τ<sub>aero</sub> ω dt', digits: 0 });
         ds.var('Ew', [], 'float', { symbol: 'E<sub>wind</sub>', units: 'J', long_name: 'kinetic energy carried through the rotor disc', computed_in: 'solve(), integrated with RK4', formula: '∫ ½ ρ A v³ dt', digits: 0 });
         ds.var('Eg_end', [], 'float', { symbol: 'E<sub>gen</sub>(T)', units: 'J', long_name: 'energy into the generator over the run', computed_in: 'solve()', digits: 0 });
-        ds.var('balance', [], 'float', { symbol: 'balance', long_name: 'energy balance error, relative to E<sub>aero</sub>', computed_in: 'solve()', formula: '|E<sub>aero</sub> − E<sub>gen</sub> − ΔE<sub>rot</sub>| / E<sub>aero</sub>', digits: 12 });
+        ds.var('balance', [], 'float', { symbol: 'balance', long_name: 'energy balance error, relative to E<sub>aero</sub>', computed_in: 'solve()', formula: '|E<sub>aero</sub> − E<sub>gen</sub> − ΔE<sub>rot</sub>| / E<sub>aero</sub>', digits: 12, sci: true });
         ds.var('P_mean', [], 'float', { symbol: '⟨P<sub>gen</sub>⟩', units: 'W', long_name: 'mean generator power over the run', computed_in: 'solve()', formula: 'E<sub>gen</sub>(T) / T', digits: 0 });
         ds.var('i_now', [], 'int', { symbol: 'n<sub>now</sub>', long_name: 'stored sample shown in this frame', computed_in: 'the clock', formula: 'round(t<sub>play</sub> / 2h)', digits: 0 });
         ds.var('t_play', [], 'float', { symbol: 't<sub>play</sub>', units: 's', long_name: 'playback time in the stored run', computed_in: 'the clock', formula: 't<sub>play</sub> ← t<sub>play</sub> + speed · Δt', digits: 3 });
@@ -618,7 +618,7 @@
         ds.var('P_now', [], 'float', { symbol: 'P<sub>gen</sub>', units: 'W', long_name: 'generator power shown now (a stored sample)', computed_in: 'the clock', digits: 0 });
         ds.var('lam_now', [], 'float', { symbol: 'λ', long_name: 'tip-speed ratio shown now (a stored sample)', computed_in: 'the clock', digits: 4 });
         ds.var('cp_now', [], 'float', { symbol: 'c<sub>p</sub>', long_name: 'power coefficient shown now (a stored sample)', computed_in: 'the clock', digits: 5 });
-        ds.var('th_now', [], 'float', { symbol: 'θ', units: 'rad', long_name: 'rotor angle shown now (a stored sample)', computed_in: 'the clock', digits: 5 });
+        ds.var('th_now', [], 'float', { symbol: 'θ', units: 'rad', long_name: 'rotor angle shown now (a stored sample)', computed_in: 'the clock', digits: 5 }); ds.var('Ea_now', [], 'float', { symbol: 'E<sub>aero</sub>', units: 'J', long_name: 'energy the wind has given the rotor up to now (a stored sample)', computed_in: 'the clock', formula: 'E<sub>aero, n</sub>, n = n<sub>now</sub>', digits: 0 }); ds.var('Eg_now', [], 'float', { symbol: 'E<sub>gen</sub>', units: 'J', long_name: 'energy into the generator up to now (a stored sample)', computed_in: 'the clock', formula: 'E<sub>gen, n</sub>, n = n<sub>now</sub>', digits: 0 }); ds.var('K_now', [], 'float', { symbol: 'K', units: 'J', long_name: 'kinetic energy of the rotor now', computed_in: 'the clock', formula: '½ J ω<sub>n</sub>², n = n<sub>now</sub>', digits: 0 }); ds.var('K0', [], 'float', { symbol: 'K(0)', units: 'J', long_name: 'kinetic energy of the rotor at the start', computed_in: 'solve()', formula: '½ J ω(0)²', digits: 0 }); ds.var('ebal_now', [], 'float', { symbol: 'ε<sub>E</sub>', units: 'J', long_name: 'energy book now: K(0) + E<sub>aero</sub> − E<sub>gen</sub> − K', computed_in: 'the clock', formula: 'K(0) + E<sub>aero</sub> − E<sub>gen</sub> − K', digits: 3, sci: true });
         ds.dim('L', NL);
         ds.coord('lamL', 'L', Float64Array, { symbol: 'λ<sub>j</sub>', long_name: 'tip-speed ratios of the c<sub>p</sub> curve', computed_in: 'optimum()', formula: '0.5 + 0.05 j', digits: 2 });
         ds.var('cpL', ['L'], Float64Array, { symbol: 'c<sub>p</sub>(λ<sub>j</sub>)', long_name: 'the power-coefficient curve', computed_in: 'optimum()', formula: 'c<sub>p</sub>(λ<sub>j</sub>)', digits: 5 });
@@ -700,13 +700,13 @@
             var dtd = (tauAero(c.wref + 1e-4, c.v0) - tauAero(c.wref - 1e-4, c.v0)) / 2e-4;
             c.Kp = 2 * ZC * WN * J + dtd; c.Ki = J * WN * WN;
             var ts = ds.alloc('ts'), vw = ds.alloc('vw'), om = ds.alloc('om'), rp = ds.alloc('rpm'), th = ds.alloc('th'), lam = ds.alloc('lam'), cpv = ds.alloc('cpv');
-            var ta = ds.alloc('ta'), tg = ds.alloc('tg'), Pg = ds.alloc('Pg'), Pa = ds.alloc('Pa'), Eg = ds.alloc('Eg'), sw = ds.alloc('sw'), Ic = ds.alloc('Ictl'), vt = ds.alloc('vtip');
+            var ta = ds.alloc('ta'), tg = ds.alloc('tg'), Pg = ds.alloc('Pg'), Pa = ds.alloc('Pa'), Eg = ds.alloc('Eg'), sw = ds.alloc('sw'), Ic = ds.alloc('Ictl'), vt = ds.alloc('vtip'), Eas = ds.alloc('Eas');
             var t = 0, w = c.ctrl === 'opt' ? ds.get('lam_opt') * wind(0, c) / R : c.wref, I = 0;
             var y = [0, 0, 0, 0, 0], n = 0, KE0 = 0.5 * J * w * w, step, j;
             for (step = 0; step <= TEND / H; step++) {
                 if (step % EVERY === 0) {
                     var v = wind(t, c);
-                    ts[n] = t; vw[n] = v; om[n] = w; rp[n] = w * 60 / (2 * Math.PI); th[n] = y[4]; lam[n] = w * R / v; cpv[n] = cp(lam[n]);
+                    ts[n] = t; vw[n] = v; om[n] = w; rp[n] = w * 60 / (2 * Math.PI); th[n] = y[4]; lam[n] = w * R / v; cpv[n] = cp(lam[n]); Eas[n] = y[1];
                     ta[n] = tauAero(w, v); tg[n] = tauGen(w, I, c); Pg[n] = tg[n] * w; Pa[n] = ta[n] * w; Eg[n] = y[0]; sw[n] = y[3]; Ic[n] = I; vt[n] = w * R;
                     n++;
                 }
@@ -721,7 +721,7 @@
                 for (j = 0; j < 5; j++) y[j] += H / 6 * (k1[j + 2] + 2 * k2[j + 2] + 2 * k3[j + 2] + k4[j + 2]);
                 t = (step + 1) * H;
             }
-            ['ts', 'vw', 'om', 'rpm', 'th', 'lam', 'cpv', 'ta', 'tg', 'Pg', 'Pa', 'Eg', 'sw', 'Ictl', 'vtip'].forEach(function (name) { ds.touch(name); });
+            ['ts', 'vw', 'om', 'rpm', 'th', 'lam', 'cpv', 'ta', 'tg', 'Pg', 'Pa', 'Eg', 'sw', 'Ictl', 'vtip', 'Eas'].forEach(function (name) { ds.touch(name); });
             var nref = rpm.value, vmax = 0, rlo = c.ctrl === 'pi' ? nref : Infinity, rhi = c.ctrl === 'pi' ? nref : 0, pmax = 0;
             for (n = 0; n < NS; n++) { vmax = Math.max(vmax, vw[n]); rlo = Math.min(rlo, rp[n]); rhi = Math.max(rhi, rp[n]); pmax = Math.max(pmax, Pg[n], Pa[n]); }
             ds.set('rpm_ref', nref); ds.set('v_hi', Math.ceil(1.1 * vmax)); ds.set('rpm_lo', Math.floor(rlo - 0.6)); ds.set('rpm_hi', Math.ceil(rhi + 0.6));
@@ -733,7 +733,7 @@
             ds.set('captured_pct', 100 * y[1] / y[2]);
             ds.set('Ea', y[1]); ds.set('Ew', y[2]); ds.set('Eg_end', y[0]); ds.set('P_mean', y[0] / TEND);
             ds.set('balance', Math.abs(y[1] - y[0] - (KE - KE0)) / y[1]);
-            ds.set('solve_ms', performance.now() - start); ds.set('stale', false);
+            ds.set('solve_ms', performance.now() - start); ds.set('stale', false); ds.set('K0', KE0);
             solved = { ctrl: c.ctrl, prof: c.prof, v0: c.v0, dv: c.dv, rpm: rpm.value };
             readouts();
             playT = 0;
@@ -951,7 +951,7 @@
             iNow = i;
             ds.set('i_now', i); ds.set('t_play', playT);
             ds.set('v_now', ds.get('vw')[i]); ds.set('rpm_now', ds.get('rpm')[i]); ds.set('P_now', ds.get('Pg')[i]);
-            ds.set('lam_now', ds.get('lam')[i]); ds.set('cp_now', ds.get('cpv')[i]); ds.set('th_now', ds.get('th')[i]);
+            ds.set('lam_now', ds.get('lam')[i]); ds.set('cp_now', ds.get('cpv')[i]); ds.set('th_now', ds.get('th')[i]); ds.set('Ea_now', ds.get('Eas')[i]); ds.set('Eg_now', ds.get('Eg')[i]); ds.set('K_now', 0.5 * J * ds.get('om')[i] * ds.get('om')[i]); ds.set('ebal_now', ds.get('K0') + ds.get('Ea_now') - ds.get('Eg_now') - ds.get('K_now'));
             seek.set(i);
             document.getElementById('cap-t').innerHTML = '<i>t</i> = ' + ds.get('ts')[i].toFixed(1) + ' s of ' + TEND + ' s';
             draw();
@@ -1060,9 +1060,9 @@
                 { title: _t('Turbine'), note: _t('fixed for this rotor'), vars: ['rho', 'R', 'J', 'lam_opt', 'cp_max', 'cp_betz', 'K_opt'] },
                 { title: _t('Settings'), note: _t('what you chose, as used by the last solve'), vars: ['ctrl', 'profile', 'v0', 'dv', 'w_ref', 'rpm_ref'] },
                 { title: _t('Controller'), note: _t('the speed controller’s gains, tuned at the target speed'), vars: ['dtau_dw', 'Kp', 'Ki', 'tau0'] },
-                { title: _t('Stored run'), note: _t('one row per stored sample, every 20 ms of the 120 s'), vars: ['ts', 'vw', 'om', 'rpm', 'vtip', 'th', 'lam', 'cpv', 'ta', 'tg', 'Ictl', 'Pa', 'Pg', 'Eg', 'sw'] },
+                { title: _t('Stored run'), note: _t('one row per stored sample, every 20 ms of the 120 s'), vars: ['ts', 'vw', 'om', 'rpm', 'vtip', 'th', 'lam', 'cpv', 'ta', 'tg', 'Ictl', 'Pa', 'Pg', 'Eg', 'sw', 'Eas'] },
                 { title: _t('Energy'), note: _t('over the whole run'), vars: ['h', 'steps', 'rpm_min', 'rpm_max', 'captured_pct', 'Ea', 'Ew', 'Eg_end', 'P_mean', 'balance', 'solve_ms', 'stale'] },
-                { title: _t('Playback'), note: _t('the sample on screen now'), vars: ['i_now', 't_play', 'v_now', 'rpm_now', 'P_now', 'lam_now', 'cp_now', 'th_now'] },
+                { title: _t('Playback'), note: _t('the sample on screen now'), vars: ['i_now', 't_play', 'v_now', 'rpm_now', 'P_now', 'lam_now', 'cp_now', 'th_now', 'Ea_now', 'Eg_now', 'K_now', 'K0', 'ebal_now'] },
                 { title: _t('Power curve'), note: _t('the curve of the second figure'), vars: ['lamL', 'cpL'] },
                 { title: _t('Drawing'), note: _t('how stored values become pixels'), vars: ['v_hi', 'rpm_lo', 'rpm_hi', 'P_hi', 'px_per_m_air', 'hub_x', 'hub_y', 'r_px', 'box_w', 'box_h', 'fps', 'playing'] }
             ],
@@ -1167,7 +1167,7 @@
         if (document.fonts && document.fonts.ready) document.fonts.ready.then(function () { frame(); });
     })();
     </script>
-    <script src="../../scripts/datalog.js"></script>
+    <script src="../../scripts/ledger/wind-turbine.js"></script><script src="../../scripts/datalog.js"></script>
 </body>
 </html>
 

@@ -670,7 +670,7 @@
         ds.var('xex', ['n'], Float64Array, { symbol: 'x<sub>exact</sub>', units: 'm', long_name: 'exact solution at each sample', computed_in: 'exact(), or exactClosed() with the controller on, in solve()', formula: '(5); with the controller on x* + X cos(Ωt − φ) + [e<sup>At</sup>(y(0) − y* − y<sub>p</sub>(0))]<sub>x</sub>', digits: 6 });
         ds.var('xqs', ['n'], Float64Array, { symbol: 'F<sub>n</sub>/k', units: 'm', long_name: 'the stretch the force would cause if applied slowly', computed_in: 'solve()', formula: 'F<sub>n</sub> / k', digits: 6 });
         ds.var('Is', ['n'], Float64Array, { symbol: 'I<sub>n</sub>', units: 'A', long_name: 'current in the coil', computed_in: 'solve()', formula: 'F<sub>n</sub> / (Bℓ) = I<sub>0</sub> cos(Ω t<sub>n</sub>)', digits: 6 });
-        ds.var('Fdamp', ['n'], Float64Array, { symbol: 'F<sub>c, n</sub>', units: 'N', long_name: 'force of the damper on the block', computed_in: 'solve()', formula: '−c v<sub>n</sub>', digits: 6 });
+        ds.var('Fdamp', ['n'], Float64Array, { symbol: 'F<sub>c, n</sub>', units: 'N', long_name: 'force of the damper on the block', computed_in: 'solve()', formula: '−c v<sub>n</sub>', digits: 6 }); ds.var('as', ['n'], Float64Array, { symbol: 'a<sub>n</sub>', units: 'm/s²', long_name: 'acceleration, measured from the stored velocities by a central difference', computed_in: 'solve()', formula: '(v<sub>n+1</sub> − v<sub>n−1</sub>) / 2Δt', digits: 6 });
         ds.var('Fspr', ['n'], Float64Array, { symbol: 'F<sub>k, n</sub>', units: 'N', long_name: 'force of the spring on the block', computed_in: 'solve()', formula: '−k x<sub>n</sub>', digits: 6 });
         ds.var('Wc', ['n'], Float64Array, { symbol: 'W<sub>in, n</sub>', units: 'J', long_name: 'work the coil has done on the block since t = 0', computed_in: 'solve(), integrated with RK4', formula: '∫<sub>0</sub><sup>t<sub>n</sub></sup> F v dt', digits: 6 });
         ds.var('Qc', ['n'], Float64Array, { symbol: 'W<sub>loss, n</sub>', units: 'J', long_name: 'heat the damper has made since t = 0', computed_in: 'solve(), integrated with RK4', formula: '∫<sub>0</sub><sup>t<sub>n</sub></sup> c v² dt', digits: 6 });
@@ -684,7 +684,7 @@
         ds.var('Xm', [], 'float', { symbol: 'X<sub>measured</sub>', units: 'm', long_name: 'largest distance from x* in the last 10 s of the run', computed_in: 'solve()', formula: 'max |x<sub>n</sub> − x*|, t<sub>n</sub> ≥ 50 s', digits: 5 });
         ds.var('Win', [], 'float', { symbol: 'W<sub>in</sub>', units: 'J', long_name: 'work done by the driver over the run', computed_in: 'solve(), integrated with RK4', formula: '∫ F v dt', digits: 6 });
         ds.var('Wloss', [], 'float', { symbol: 'W<sub>loss</sub>', units: 'J', long_name: 'heat made by the damper over the run', computed_in: 'solve(), integrated with RK4', formula: '∫ c v² dt', digits: 6 });
-        ds.var('balance', [], 'float', { symbol: 'balance', long_name: 'energy balance error, relative to W<sub>in</sub>', computed_in: 'solve()', formula: '|E(T) − E(0) − (W<sub>in</sub> − W<sub>loss</sub>)| / W<sub>in</sub>', digits: 12 });
+        ds.var('balance', [], 'float', { symbol: 'balance', long_name: 'energy balance error, relative to W<sub>in</sub>', computed_in: 'solve()', formula: '|E(T) − E(0) − (W<sub>in</sub> − W<sub>loss</sub>)| / W<sub>in</sub>', digits: 12, sci: true });
         ds.var('i_now', [], 'int', { symbol: 'n<sub>now</sub>', long_name: 'stored sample shown in this frame', computed_in: 'the clock', formula: 'round(t<sub>play</sub> / 10h)', digits: 0 });
         ds.var('t_play', [], 'float', { symbol: 't<sub>play</sub>', units: 's', long_name: 'playback time in the stored run', computed_in: 'the clock', formula: 't<sub>play</sub> ← t<sub>play</sub> + speed · Δt', digits: 3 });
         ds.var('x_now', [], 'float', { symbol: 'x', units: 'm', long_name: 'displacement shown now (a stored sample)', computed_in: 'the clock', formula: 'x<sub>n</sub>, n = n<sub>now</sub>', digits: 5 });
@@ -700,7 +700,7 @@
         ds.var('Wc_now', [], 'float', { symbol: 'W<sub>in</sub>', units: 'J', long_name: 'work of the coil up to now (a stored sample)', computed_in: 'the clock', formula: 'W<sub>in, n</sub>, n = n<sub>now</sub>', digits: 5 });
         ds.var('Ploss_now', [], 'float', { symbol: 'P<sub>loss</sub>', units: 'W', long_name: 'power the damper turns into heat now (a stored sample)', computed_in: 'the clock', formula: 'P<sub>loss, n</sub>, n = n<sub>now</sub>', digits: 5 });
         ds.var('Ploss_max', [], 'float', { symbol: 'max P<sub>loss</sub>', units: 'W', long_name: 'largest damper power of the run; the oil’s shade is P<sub>loss</sub> / max P<sub>loss</sub>', computed_in: 'solve()', formula: 'max over n of P<sub>loss, n</sub>', digits: 5 });
-        ds.var('Qc_now', [], 'float', { symbol: 'W<sub>loss</sub>', units: 'J', long_name: 'heat of the damper up to now (a stored sample)', computed_in: 'the clock', formula: 'W<sub>loss, n</sub>, n = n<sub>now</sub>', digits: 5 });
+        ds.var('Qc_now', [], 'float', { symbol: 'W<sub>loss</sub>', units: 'J', long_name: 'heat of the damper up to now (a stored sample)', computed_in: 'the clock', formula: 'W<sub>loss, n</sub>, n = n<sub>now</sub>', digits: 5 }); ds.var('E0', [], 'float', { symbol: 'E(0)', units: 'J', long_name: 'energy at the start of the run', computed_in: 'solve()', formula: 'E<sub>0</sub> = ½ m v(0)² + ½ k x(0)²', digits: 5 }); ds.var('ma_now', [], 'float', { symbol: 'm a', units: 'N', long_name: 'mass times the measured acceleration now (a stored sample)', computed_in: 'the clock', formula: 'm a<sub>n</sub>, n = n<sub>now</sub>', digits: 5 }); ds.var('bal_now', [], 'float', { symbol: 'ε<sub>E</sub>', units: 'J', long_name: 'energy book now: E(0) + W<sub>in</sub> − W<sub>loss</sub> − E', computed_in: 'the clock', formula: 'E(0) + W<sub>in</sub> − W<sub>loss</sub> − E', digits: 5, sci: true }); ds.var('fres_now', [], 'float', { symbol: 'ε<sub>F</sub>', units: 'N', long_name: 'force book now: F + F<sub>c</sub> + F<sub>k</sub> − m a', computed_in: 'the clock', formula: 'F + F<sub>c</sub> + F<sub>k</sub> − m a', digits: 5, sci: true });
         ds.var('E_now', [], 'float', { symbol: 'E', units: 'J', long_name: 'energy shown now (a stored sample)', computed_in: 'the clock', formula: 'E<sub>n</sub>, n = n<sub>now</sub>', digits: 5 });
         ds.var('ph_now', [], 'float', { symbol: 'Ωt', units: 'rad', long_name: 'drive phase shown now (a stored sample)', computed_in: 'the clock', formula: 'Ωt<sub>n</sub>, n = n<sub>now</sub>', digits: 5 });
         ds.var('Pin_now', [], 'float', { symbol: 'P<sub>in</sub>', units: 'W', long_name: 'driver power now (a stored sample)', computed_in: 'the clock', formula: 'P<sub>in, n</sub>, n = n<sub>now</sub>', digits: 5 });
@@ -932,15 +932,15 @@
                 if (ts[n] >= TEND - 10) xm = Math.max(xm, Math.abs(xs[n] - xe));
             }
             // the coil: the source drives I = F/(Bℓ) through it; the forces of damper and spring on the block; the bars' energy scale
-            var xqs = ds.alloc('xqs'), ph = ds.alloc('ph'), Is = ds.alloc('Is'), Fdamp = ds.alloc('Fdamp'), Fspr = ds.alloc('Fspr'), wsc = 1e-12, pmax = 0, usc = 1e-12, fpr = 1e-12;
+            var xqs = ds.alloc('xqs'), ph = ds.alloc('ph'), Is = ds.alloc('Is'), Fdamp = ds.alloc('Fdamp'), Fspr = ds.alloc('Fspr'), As = ds.alloc('as'), wsc = 1e-12, pmax = 0, usc = 1e-12, fpr = 1e-12;
             for (n = 0; n < NS; n++) {
-                xqs[n] = Fs[n] / p.k;
+                xqs[n] = Fs[n] / p.k; As[n] = (n === 0 ? 4 * vs[1] - 3 * vs[0] - vs[2] : n === NS - 1 ? 3 * vs[n] - 4 * vs[n - 1] + vs[n - 2] : vs[n + 1] - vs[n - 1]) / (2 * EVERY * H);
                 ph[n] = (p.W * ts[n]) % (2 * Math.PI);
                 Is[n] = Fs[n] / BL; Fdamp[n] = -p.c * vs[n]; Fspr[n] = -p.k * xs[n];
                 wsc = Math.max(wsc, Wc[n], Qc[n], Es[n]); pmax = Math.max(pmax, Ploss[n]); usc = Math.max(usc, Math.abs(us[n]), Math.abs(uP[n]), Math.abs(uI[n]), Math.abs(uD[n]));
                 fpr = Math.max(fpr, Math.abs(us[n]), Math.abs(uP[n]), Math.abs(uI[n]), Math.abs(uD[n]), Math.abs(Fpush[n]), Math.abs(Fspr[n]), Math.abs(Fdamp[n]));
             }
-            ['ts', 'xs', 'vs', 'Fs', 'Es', 'Pin', 'Ploss', 'xex', 'xqs', 'ph', 'Is', 'Fdamp', 'Fspr', 'Wc', 'Qc', 'zs', 'Fpush', 'us', 'uP', 'uI', 'uD'].forEach(function (name) { ds.touch(name); });
+            ['ts', 'xs', 'vs', 'Fs', 'Es', 'Pin', 'Ploss', 'xex', 'xqs', 'ph', 'Is', 'Fdamp', 'Fspr', 'Wc', 'Qc', 'zs', 'Fpush', 'us', 'uP', 'uI', 'uD', 'as'].forEach(function (name) { ds.touch(name); });
             ds.set('m', M); ds.set('f0', f0.value); ds.set('zeta', zeta.value); ds.set('F0', F0.value); ds.set('fd', fd.value);
             ds.set('r', p.r); ds.set('Kp', p.Kp); ds.set('Ki', p.Ki); ds.set('Kd', p.Kd); ds.set('ctrl_on', on);
             ds.set('x0', p.x0); ds.set('v0', p.v0); ds.set('z0', p.z0); ds.set('released', p.x0 !== 0 || p.v0 !== 0 || p.z0 !== 0);
@@ -965,7 +965,7 @@
             ds.set('Gm_drive', p.F0 > 0 ? xm / p.F0 : NaN); ds.set('phi_deg', st.phi * 180 / Math.PI);
             ds.set('Win', win); ds.set('Wloss', wloss);
             ds.set('balance', win > 0 ? Math.abs(Es[NS - 1] - Es[0] - (win - wloss)) / win : 0);
-            ds.set('solve_ms', performance.now() - start); ds.set('stale', false);
+            ds.set('solve_ms', performance.now() - start); ds.set('stale', false); ds.set('E0', Es[0]);
             solved = { f0: f0.value, zeta: zeta.value, F0: F0.value, fd: fd.value, r: rr.value, Kp: Kp.value, Ki: Ki.value, Kd: Kd.value };
             bode();
             readouts();
@@ -1538,7 +1538,7 @@
             ds.set('u_now', ds.get('us')[i]); ds.set('uP_now', ds.get('uP')[i]); ds.set('uI_now', ds.get('uI')[i]); ds.set('uD_now', ds.get('uD')[i]);
             ds.set('Fc_now', ds.get('Fdamp')[i]); ds.set('Fk_now', ds.get('Fspr')[i]); ds.set('Wc_now', ds.get('Wc')[i]); ds.set('Qc_now', ds.get('Qc')[i]); ds.set('Ploss_now', ds.get('Ploss')[i]);
             ds.set('E_now', ds.get('Es')[i]); ds.set('Pin_now', ds.get('Pin')[i]); ds.set('ph_now', ds.get('ph')[i]);
-            seek.set(i);
+            seek.set(i); ds.set('ma_now', M * ds.get('as')[i]); ds.set('bal_now', ds.get('E0') + ds.get('Wc_now') - ds.get('Qc_now') - ds.get('E_now')); ds.set('fres_now', ds.get('F_now') + ds.get('Fc_now') + ds.get('Fk_now') - ds.get('ma_now'));
             document.getElementById('cap-t').innerHTML = '<i>t</i> = ' + ds.get('ts')[i].toFixed(2) + ' s of ' + TEND + ' s';
             draw();
         }
@@ -1697,9 +1697,9 @@
                 { title: _t('Closed loop'), note: _t('what the controller makes of the plant, §10'), vars: ['x_eq', 'F_eq', 'zeta_cl', 'margin', 'stable', 't_blow', 'H_drive'] },
                 { title: _t('Derived physics'), note: _t('computed from the parameters by solve()'), vars: ['omega0', 'k', 'c', 'Omega', 'tau', 'Q', 'BL', 'I0', 'xst', 'X', 'phi', 'phi_deg', 'G_drive', 'fr'] },
                 { title: _t('Solver'), note: _t('how the run was computed, and what it measured'), vars: ['h', 'steps', 'solve_ms', 'err_max', 'Xm', 'Gm_drive', 'Win', 'Wloss', 'balance', 'stale'] },
-                { title: _t('Stored run'), note: _t('one row per stored sample, every 10 ms of the 60 s'), vars: ['ts', 'xs', 'vs', 'zs', 'Fpush', 'us', 'uP', 'uI', 'uD', 'Fs', 'Is', 'Fdamp', 'Fspr', 'xqs', 'ph', 'Es', 'Pin', 'Ploss', 'Wc', 'Qc', 'xex'] },
+                { title: _t('Stored run'), note: _t('one row per stored sample, every 10 ms of the 60 s'), vars: ['ts', 'xs', 'vs', 'zs', 'Fpush', 'us', 'uP', 'uI', 'uD', 'Fs', 'Is', 'Fdamp', 'Fspr', 'xqs', 'ph', 'Es', 'Pin', 'Ploss', 'Wc', 'Qc', 'xex', 'as'] },
                 { title: _t('Previous run'), note: _t('the run before the last Solve, drawn as the outlined block and the dotted curve'), vars: ['has_prev', 'prev_f0', 'prev_zeta', 'prev_F0', 'prev_fd', 'prev_x0', 'prev_v0', 'prev_z0', 'prev_r', 'prev_Kp', 'prev_Ki', 'prev_Kd', 'xs_prev', 'xmax_prev', 'ratio'] },
-                { title: _t('Playback'), note: _t('the sample on screen now'), vars: ['i_now', 't_play', 'x_now', 'v_now', 'u_now', 'uP_now', 'uI_now', 'uD_now', 'F_now', 'I_now', 'Fc_now', 'Fk_now', 'ph_now', 'E_now', 'Pin_now', 'Ploss_now', 'Wc_now', 'Qc_now'] },
+                { title: _t('Playback'), note: _t('the sample on screen now'), vars: ['i_now', 't_play', 'x_now', 'v_now', 'u_now', 'uP_now', 'uI_now', 'uD_now', 'F_now', 'I_now', 'Fc_now', 'Fk_now', 'ph_now', 'E_now', 'Pin_now', 'Ploss_now', 'Wc_now', 'Qc_now', 'E0', 'ma_now', 'bal_now', 'fres_now'] },
                 { title: _t('Frequency response'), note: _t('the curves of the last figure: amplitude function and phase difference, linear or as a Bode plot'), vars: ['view', 'fl', 'Al', 'Pl', 'Acl', 'Pcl', 'Amax', 'fb', 'Gmag', 'Gphase', 'Hmag', 'Hphase'] },
                 { title: _t('Drawing'), note: _t('how stored values become pixels'), vars: ['xmax', 'need', 'span_before', 'fitted', 'span', 'held', 'ylim', 'amp_px', 'px_per_m', 'px_per_N', 'eq_px', 'block_px', 'block_y', 'ghost_shown', 'ghost_px', 'coil_px', 'Fd_px', 'Fc_px', 'Fk_px', 'hand_px', 'r_px', 'xeq_px', 'fprof', 'Wscale', 'uscale', 'Ploss_max', 'win_t0', 'win_T', 'box_w', 'box_h', 'fps', 'playing'] }
             ],
@@ -1927,7 +1927,7 @@
         if (document.fonts && document.fonts.ready) document.fonts.ready.then(function () { frame(); drawBode(); });
     })();
     </script>
-    <script src="../scripts/datalog.js"></script>
+    <script src="../scripts/ledger/driven-oscillator.js"></script><script src="../scripts/datalog.js"></script>
 </body>
 </html>
 

@@ -225,9 +225,9 @@ variables from stored inputs only, including a fresh one-frequency DFT `dftOne()
 ([L1345–1391](../../public/simulations/draw-decompose.html#L1345-L1391)). `drawn` reads pixels back for `tip_px`, `px`,
 `full_x`, `trail_x` on the figure and `spec_y` on the spectrum canvas, alpha first
 ([L1392–1398](../../public/simulations/draw-decompose.html#L1392-L1398)). Read values works on `#stage` only, so the
-spectrum panel is not pinnable ([datalog.js:542](../../public/scripts/datalog.js#L542)). While Read values is on,
+spectrum panel is not pinnable ([datalog.js:849](../../public/scripts/datalog.js#L849)). While Read values is on,
 `datalog.js` stops the canvas's own pointer handlers in the capture phase, so a click pins instead of drawing or panning
-([datalog.js:615–638](../../public/scripts/datalog.js#L615-L638)); the wheel is not intercepted. File base name:
+([datalog.js:924–947](../../public/scripts/datalog.js#L924-L947)); the wheel is not intercepted. File base name:
 `fig8-draw-decompose` ([L1302](../../public/simulations/draw-decompose.html#L1302)).
 
 **`Sim.live()`** ([L1254–1267](../../public/simulations/draw-decompose.html#L1254-L1267)) returns, from the store:
@@ -274,7 +274,7 @@ Figure 5 $|c_k|$ against $|k|$ for four presets ([L494–552](../../public/simul
 ## Where the drawing and the store differ
 
 The page's `about` paragraph ([L1403](../../public/simulations/draw-decompose.html#L1403)), shown in the data panel
-([datalog.js:165](../../public/scripts/datalog.js#L165)), says this; the code adds detail:
+([datalog.js:229](../../public/scripts/datalog.js#L229)), says this; the code adds detail:
 
 - **Dashed original** is the 256 stored samples $z_n$ joined by straight segments and closed
   ([L1115](../../public/simulations/draw-decompose.html#L1115)); the raw stroke `stroke_x/y` is stored but not drawn
