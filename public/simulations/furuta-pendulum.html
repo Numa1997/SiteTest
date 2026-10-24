@@ -115,7 +115,7 @@
                         <canvas id="rig" aria-label="A turntable seen from above at a slant: a DC motor under its centre turns an arm in the horizontal plane; a rod pendulum hangs from the arm's tip and swings in the plane at right angles to the arm. A flag on the rim marks the target angle; bars show the energy books; below, the stored angles of the whole run with a cursor at the frame being shown."></canvas>
                     </div>
                     <figcaption class="stage__cap">
-                        <span><b>Fig. 12</b> · <span class="tx">\(\mathbf M(\alpha)\ddot{\mathbf q} + \mathbf c(\mathbf q, \dot{\mathbf q}) + \nabla U + \mathbf b\,\dot{\mathbf q} = (kI,\,0),\ \ V_m = RI + k\dot\varphi\)</span> · played from the stored run</span>
+                        <span><b>Fig. 12</b> · <span class="tx">\(\mathbf M(\alpha)\,\ddot{\mathbf q} = \mathbf f(\mathbf q, \dot{\mathbf q}) + (\tau, 0)^{\mathsf T},\ \ \tau = \tfrac{k}{R}\left(V_m - k\dot\varphi\right)\)</span> · played from the stored run</span>
                         <span id="cap-t"><i>t</i> = —</span>
                     </figcaption>
                 </figure>
@@ -200,8 +200,223 @@
         <article class="paper" id="paper" aria-labelledby="paper-title">
             <header class="paper__head">
                 <p class="paper__kicker">Lecture note · Fig. 12 · control systems</p>
-                <h2 class="paper__title" id="paper-title">PAPER</h2>
+                <h2 class="paper__title" id="paper-title">A pendulum on a turntable: swinging it up and holding it with one motor</h2>
+                <p class="paper__by">Numa Koudsie · for school students and first- and second-year undergraduates</p>
+                <div class="paper__abstract"><b>Abstract.</b> Our aim is to bring a pendulum from hanging straight down to standing straight up, and to hold it there, using nothing but the voltage across one motor. The pendulum hangs from the tip of an arm, and the motor turns the arm in a horizontal circle: two angles, one motor. We set up the two coordinates, write the kinetic and potential energies, derive the motor's law twice (from Kirchhoff's rule with the Lorentz force, and from an electromechanical Lagrangian), and obtain the equations of motion. We find the rests, linearise at the top, where the pendulum falls away at 9.5 per second, and show by Kalman's test that the motor can reach every motion there, through the coupling that the arm's length provides. The swing-up pumps energy into the swing, like a child on a playground swing, and has its own Lyapunov function; the catch at the top is designed by the linear–quadratic regulator, whose Riccati solution is a second Lyapunov function. We measure the region from which the catch can rescue the pendulum and hand over only inside it. The page solves the whole run first and stores it; the note says how good that stored run is and where the electrical energy goes. Sections marked ★ carry the heavier mathematics; their results are restated after them.</div>
             </header>
+            <div class="paper__grid">
+                <nav class="paper__toc" aria-label="Contents">
+                    <p>Contents</p>
+                    <ol>
+                        <li><a href="#p-broom"><span>1</span>A broom on your palm, a child on a swing</a></li>
+                        <li><a href="#p-rig"><span>2</span>The rig and its coordinates</a></li>
+                        <li><a href="#p-energy"><span>3</span>Energies&nbsp;★</a></li>
+                        <li><a href="#p-motor"><span>4</span>The motor</a></li>
+                        <li><a href="#p-eom"><span>5</span>Equations of motion&nbsp;★</a></li>
+                        <li><a href="#p-rest"><span>6</span>Rests and small swings</a></li>
+                        <li><a href="#p-reach"><span>7</span>Can one motor reach the pendulum?&nbsp;★</a></li>
+                        <li><a href="#p-swing"><span>8</span>Swinging up by pumping energy</a></li>
+                        <li><a href="#p-catch"><span>9</span>The catch at the top</a></li>
+                        <li><a href="#p-phase"><span>10</span>Phase space and the region of rescue</a></li>
+                        <li><a href="#p-solve"><span>11</span>Solve first, then play</a></li>
+                        <li><a href="#p-screen"><span>12</span>On screen</a></li>
+                        <li><a href="#p-limits"><span>13</span>What the model leaves out</a></li>
+                    </ol>
+                </nav>
+                <div class="paper__body">
+                    <section class="psec" id="p-broom">
+                        <h3><span class="psec__n">01</span>A broom on your palm, a child on a swing</h3>
+                        <p class="psec__lead">Stand a broom upright on your open palm. The moment it leans, you move your hand under it, quickly and a little further than the lean, and it rights itself. You never touch the top of the broom; everything happens through the bottom.</p>
+                        <p>Now think of a child on a playground swing who wants to go higher. Nobody pushes. The child leans back and pulls on the chains at one moment of the swing, sits up at another, and each time the swing comes back a little higher. Energy is fed in a little at a time, always in step with the motion. Push at the wrong moment and the swing loses height instead.</p>
+                        <p>Fig. 12 asks a machine to do both. A rod hangs from the tip of a horizontal arm, free to swing in the plane at right angles to the arm. Under the arm sits a DC motor that turns it about a vertical axis. The rod has no motor of its own; the only thing that can be commanded is the voltage across the motor. To bring the rod up, the motor must turn the arm back and forth so that the hinge at its tip moves in step with the swing, as the child does. To hold it at the top, the motor must move the hinge under the rod whenever it leans, as your hand does under the broom. This rig was invented at the Tokyo Institute of Technology in 1992 by Katsuhisa Furuta and his colleagues and is called the <em>Furuta pendulum</em>, or rotary inverted pendulum.</p>
+                        <div class="pbox"><p class="pbox__title">The aim of this page</p><p>With nothing but the motor's voltage, swing the pendulum up from hanging, catch it at the top, and hold it upright with the arm at rest at an angle \(\varphi^*\) you choose, from wherever your hand leaves it. The model says what the motor can do to the pendulum (§3–§6); the test of §7 says whether one motor can reach every motion near the top; §8 designs the swing-up, §9 the catch, and §10 says when one may hand over to the other.</p></div>
+                        <figure class="pfig">
+                            <div class="pfig__plate">
+                                <svg viewBox="0 0 720 380" role="img" aria-label="The rig in an oblique view: a DC motor under a turntable turns an arm of length r in the horizontal plane, at the angle phi from the x axis; at the arm's tip a hinge along the arm carries a rod of length L, leaning at the angle alpha from straight up, in the plane at right angles to the arm.">
+                                    <rect x="0" y="0" width="720" height="380" fill="#fff"/>
+                                    <ellipse cx="330" cy="250" rx="220" ry="78" fill="none" stroke="#d9d0c2" stroke-width="1.2"/>
+                                    <path d="M290 262 L290 345 A40 13 0 0 0 370 345 L370 262" fill="#e6dfd2" stroke="#1c1518" stroke-width="1.5"/>
+                                    <text class="lbl" x="330" y="312" text-anchor="middle">DC motor</text>
+                                    <line x1="370" y1="300" x2="430" y2="300" stroke="#5a504b" stroke-width="1.2"/><line x1="370" y1="318" x2="430" y2="318" stroke="#5a504b" stroke-width="1.2"/>
+                                    <circle cx="440" cy="309" r="11" fill="#fff" stroke="#1c1518" stroke-width="1.2"/><text class="lbl" x="440" y="313" text-anchor="middle">+</text><text class="m" x="458" y="314">V<tspan class="mu" font-size="12" dy="4">m</tspan></text>
+                                    <line x1="330" y1="250" x2="330" y2="80" stroke="#8b8079" stroke-dasharray="4 4"/>
+                                    <text class="m" x="336" y="92">z</text>
+                                    <line x1="330" y1="250" x2="560" y2="250" stroke="#8b8079" stroke-dasharray="4 4"/>
+                                    <text class="m" x="566" y="255">x</text>
+                                    <line x1="330" y1="250" x2="476" y2="282" stroke="#5a504b" stroke-width="7" stroke-linecap="round"/>
+                                    <ellipse cx="330" cy="250" rx="16" ry="6" fill="#fffaf3" stroke="#1c1518" stroke-width="1.5"/>
+                                    <path d="M440 250 A110 38 0 0 1 437 274" fill="none" stroke="#7a1f2b" stroke-width="1.5"/>
+                                    <text class="m" x="446" y="267" style="fill:#7a1f2b">φ</text>
+                                    <text class="m" x="392" y="290">r</text>
+                                    <line x1="476" y1="282" x2="476" y2="128" stroke="#8b8079" stroke-dasharray="4 4"/>
+                                    <line x1="476" y1="282" x2="532" y2="146" stroke="#1c1518" stroke-width="4" stroke-linecap="round"/>
+                                    <circle cx="532" cy="146" r="9" fill="#7a1f2b"/>
+                                    <circle cx="476" cy="282" r="3.5" fill="#1c1518"/>
+                                    <path d="M476 212 A70 70 0 0 1 502 217" fill="none" stroke="#7a1f2b" stroke-width="1.5"/>
+                                    <text class="m" x="484" y="203" style="fill:#7a1f2b">α</text>
+                                    <text class="m" x="516" y="222">L</text>
+                                    <text class="m" x="546" y="142">m<tspan class="mu" font-size="12" dy="4">p</tspan></text>
+                                    <text class="lbl" x="490" y="300">hinge P, axis along the arm</text>
+                                    <path d="M300 236 A34 12 0 1 1 362 238" fill="none" stroke="#7a1f2b" stroke-width="2"/>
+                                    <path d="M356 233 L364 239 L355 243 Z" fill="#7a1f2b"/>
+                                    <text class="m" x="276" y="232" style="fill:#7a1f2b">τ</text>
+                                    <line x1="476" y1="282" x2="520" y2="262" stroke="#7a1f2b" stroke-width="1.5"/>
+                                    <path d="M520 262 L511 262 L515 270 Z" fill="#7a1f2b"/>
+                                    <text class="m" x="524" y="266" style="fill:#7a1f2b;font-size:14px">e<tspan class="mu" font-size="11" dy="4">φ</tspan></text>
+                                    <text class="lbl" x="120" y="40">O, the axis; the arm turns in the plane z = 0</text>
+                                </svg>
+                            </div>
+                            <figcaption><span class="pfig__n">Figure 1</span>The rig. The arm turns about the vertical axis through O; \(\varphi\) is its angle in the horizontal plane, measured from the \(x\) axis. The rod hangs from the hinge \(P\) at the arm's tip, a distance \(r\) from the axis; the hinge's axis lies along the arm, so the rod swings in the plane spanned by \(\mathbf e_\varphi\), the direction in which the tip moves, and the vertical \(\mathbf e_z\). Its angle \(\alpha\) is measured from straight up: \(\alpha = 0\) upright, \(\alpha = \pi\) hanging. The motor drives the arm with the torque \(\tau\) when the voltage \(V_m\) is put across it.</figcaption>
+                        </figure>
+                    </section>
+
+                    <section class="psec" id="p-rig">
+                        <h3><span class="psec__n">02</span>The rig and its coordinates</h3>
+                        <p>Count first. The arm is a rigid body that can only turn about a fixed axis, so one angle fixes it. The rod is a second rigid body, hinged to the arm's tip about an axis that is fixed in the arm, so given the arm, one more angle fixes the rod. The rig has two <em>degrees of freedom</em>, and we choose as <em>generalised coordinates</em> the two angles of Figure 1, \(\mathbf q = (\varphi, \alpha)\). Only one of them, \(\varphi\), is pushed by the motor; the other is reached only through the coupling between the two. A machine with fewer actuators than degrees of freedom is called <em>underactuated</em>, and that is the whole difficulty of this page.</p>
+                        <p>To write positions we use three unit vectors that turn with the arm: \(\mathbf e_r = (\cos\varphi, \sin\varphi, 0)\) along the arm, \(\mathbf e_\varphi = (-\sin\varphi, \cos\varphi, 0)\) across it in the horizontal plane, and \(\mathbf e_z\) up. The hinge sits at \(r\mathbf e_r\). A point of the rod at the distance \(s\) from the hinge, \(0 \le s \le L\), sits at</p>
+                        \[ \mathbf x(s) = r\,\mathbf e_r + s\left(\sin\alpha\,\mathbf e_\varphi + \cos\alpha\,\mathbf e_z\right) . \tag{1} \]
+                        <p>On the page the arm is \(r = 0.16\ \mathrm{m}\) long, a uniform bar of \(m_a = 0.10\ \mathrm{kg}\), and the hub with the motor's rotor adds \(J_h = 2.0\times10^{-4}\ \mathrm{kg\,m^2}\); the rod is uniform, of mass \(m_p = 0.08\ \mathrm{kg}\) and length \(L = 0.30\ \mathrm{m}\). The bearings of the arm and of the hinge have small viscous frictions, \(b_r = 1.0\times10^{-4}\) and \(b_p = 2.0\times10^{-5}\ \mathrm{N\,m\,s}\). These numbers describe a bench rig of our own choosing, not a product; the arm length can be changed with its slider.</p>
+                    </section>
+
+                    <section class="psec" id="p-energy">
+                        <h3><span class="psec__n">03</span>Energies<span class="star" title="heavier mathematics">★</span></h3>
+                        <p>Lagrange's method needs the kinetic and potential energies in terms of \(\mathbf q\) and \(\dot{\mathbf q}\); the constraint forces in the bearings, which do no work, never appear. We differentiate (1) with respect to time. The unit vectors turn with the arm, \(\dot{\mathbf e}_r = \dot\varphi\,\mathbf e_\varphi\) and \(\dot{\mathbf e}_\varphi = -\dot\varphi\,\mathbf e_r\), so</p>
+                        \[ \dot{\mathbf x}(s) = \left(r\dot\varphi + s\cos\alpha\,\dot\alpha\right)\mathbf e_\varphi - s\sin\alpha\,\dot\varphi\,\mathbf e_r - s\sin\alpha\,\dot\alpha\,\mathbf e_z . \]
+                        <p>Each part has a picture. The first is the tip being carried sideways by the arm, plus the rod's own swing in the same direction; the second is the rod, leaning out, being swung round the axis like the rim of a skirt on a dancer; the third is the rod's swing moving the point up or down. Squaring and adding,</p>
+                        \[ |\dot{\mathbf x}|^2 = r^2\dot\varphi^2 + 2rs\cos\alpha\,\dot\varphi\dot\alpha + s^2\left(\dot\alpha^2 + \sin^2\!\alpha\,\dot\varphi^2\right) . \]
+                        <p>A piece \(ds\) of the rod has mass \((m_p/L)\,ds\), and we integrate \(\tfrac12|\dot{\mathbf x}|^2\) over it, using \(\int_0^L s\,ds = L^2/2\) and \(\int_0^L s^2\,ds = L^3/3\). Adding the arm's \(\tfrac12 J_r\dot\varphi^2\), where \(J_r = m_a r^2/3 + J_h\) is the moment of inertia of the arm, hub and rotor about the axis,</p>
+                        \[ \begin{gathered} T = \tfrac12\left(J_0 + J_p\sin^2\!\alpha\right)\dot\varphi^2 + h\cos\alpha\,\dot\varphi\dot\alpha + \tfrac12 J_p\dot\alpha^2, \\ J_0 = J_r + m_p r^2,\qquad J_p = \tfrac13 m_p L^2,\qquad h = \tfrac12 m_p rL . \end{gathered} \tag{2} \]
+                        <p>The height of a piece of the rod above the hinge is \(s\cos\alpha\), so the potential energy is</p>
+                        \[ U = G\cos\alpha, \qquad G = \tfrac12 m_p g L . \tag{3} \]
+                        <p>The constants have plain meanings. \(J_0\) is the arm's inertia with the rod's mass lumped at the tip; \(J_p\) is the rod's inertia about its hinge; \(J_p\sin^2\!\alpha\) is the extra inertia about the axis when the rod leans out, zero when it stands up or hangs down; \(h\) couples the arm to the swing; \(G\) is the rod's weight times the height of its centre above the hinge when it stands upright. With the page's numbers, \(J_r = 1.053\times10^{-3}\), \(J_0 = 3.101\times10^{-3}\), \(J_p = 2.400\times10^{-3}\) and \(h = 1.920\times10^{-3}\ \mathrm{kg\,m^2}\), and \(G = 0.1177\ \mathrm{J}\). SymPy confirms (2) and (3) twice: once by integrating the rod element by element as above, once with the rigid-body tools of <code>sympy.physics.mechanics</code>, a rigid arm and a thin rod with no inertia about its own length.</p>
+                        <div class="pbox"><p class="pbox__title">Key result · the energies</p><p>The kinetic energy (2) has the arm's inertia \(J_0\), the rod's \(J_p\), the leaning rod's extra inertia \(J_p\sin^2\!\alpha\) about the axis, and the coupling \(h\cos\alpha\,\dot\varphi\dot\alpha\). The potential energy (3) is \(G\cos\alpha\): largest at the top, smallest hanging.</p></div>
+                    </section>
+
+                    <section class="psec" id="p-motor">
+                        <h3><span class="psec__n">04</span>The motor</h3>
+                        <p>Inside a permanent-magnet DC motor, a coil of wire on the rotor sits in the field of a magnet, and a sliding contact, the commutator, keeps reversing the coil's connections so that the current always runs the same way relative to the field. Each wire of length \(\ell\) in a field \(B\) carrying the current \(I\) feels the Lorentz force \(B\ell I\), and at its radius \(\rho\) from the axis that is a torque \(B\ell\rho I\). All the wires together give a torque proportional to the current, \(\tau = kI\), with the <em>motor constant</em> \(k\) collecting the field, the number of wires and their geometry. The same wires, moving through the field at the speed \(\rho\dot\varphi\), have a voltage induced along them; added up, this <em>back-emf</em> (electromotive force, a voltage made by motion) is \(k\dot\varphi\), with the same \(k\). Kirchhoff's voltage rule around the circuit, with the winding's resistance \(R\) and inductance \(\Lambda\), reads</p>
+                        \[ V_m = RI + \Lambda\frac{dI}{dt} + k\dot\varphi, \qquad \tau = kI . \tag{4} \]
+                        <p>That the same \(k\) appears twice is energy conservation. Multiply the voltage rule by \(I\): the power delivered, \(V_mI\), splits into the winding's heat \(RI^2\), the rate of change of the magnetic energy \(\tfrac12\Lambda I^2\), and \(k\dot\varphi\, I = \tau\dot\varphi\), exactly the mechanical power the torque delivers to the arm. A motor and a dynamo are one machine; which one it is depends on the sign of \(I\dot\varphi\).</p>
+                        <p>★ The same law follows from one Lagrangian for the mechanics and the circuit together. Let \(q_e\) be the charge that has passed through the winding, so \(\dot q_e = I\). Add to \(T - U\) the magnetic energy and a coupling term, and collect the losses in Rayleigh's dissipation function \(\mathcal D\):</p>
+                        \[ \mathcal L = T - U + \tfrac12\Lambda\dot q_e^2 + k\varphi\dot q_e, \qquad \mathcal D = \tfrac12 R\dot q_e^2 + \tfrac12 b_r\dot\varphi^2 + \tfrac12 b_p\dot\alpha^2 . \tag{5} \]
+                        <p>The Euler–Lagrange equation for \(q_e\), with the source voltage as its generalised force, \(\frac{d}{dt}\partial\mathcal L/\partial\dot q_e - \partial\mathcal L/\partial q_e + \partial\mathcal D/\partial\dot q_e = V_m\), gives \(\Lambda\dot I + k\dot\varphi + RI = V_m\), the voltage rule (4). The equation for \(\varphi\) picks up \(\partial\mathcal L/\partial\varphi = k\dot q_e = kI\), the torque. SymPy checks both.</p>
+                        <p>The inductance matters only on the winding's own time scale, \(\Lambda/R\). With \(\Lambda = 2\ \mathrm{mH}\) and \(R = 4\ \Omega\) this is \(0.5\ \mathrm{ms}\), against \(\sqrt{J_p/G} = 0.143\ \mathrm{s}\) for the pendulum, a ratio of 0.0035. We drop \(\Lambda\); the current then follows the voltage at once, and the torque is</p>
+                        \[ \tau = \frac{k}{R}\left(V_m - k\dot\varphi\right) . \tag{6} \]
+                        <p>This is the motor's torque–speed line. With \(k = 0.10\ \mathrm{N\,m/A}\) (equally \(\mathrm{V\,s}\)) and the amplifier's limit \(|V_m| \le V_\text{max} = 12\ \mathrm V\), the motor gives at most \(kV_\text{max}/R = 0.30\ \mathrm{N\,m}\) when the arm stands still, and no torque at all at \(V_\text{max}/k = 120\ \mathrm{rad/s}\). Even at \(V_m = 0\) the motor acts: (6) then reads \(\tau = -(k^2/R)\dot\varphi\), a brake of \(k^2/R = 0.0025\ \mathrm{N\,m\,s}\), the dynamo short-circuited through its own winding. The preset <em>Off</em> disconnects the amplifier instead, so no current flows and the motor exerts no torque at all.</p>
+                    </section>
+
+                    <section class="psec" id="p-eom">
+                        <h3><span class="psec__n">05</span>Equations of motion<span class="star" title="heavier mathematics">★</span></h3>
+                        <p>The Euler–Lagrange equations \(\frac{d}{dt}\partial\mathcal L/\partial\dot q_i - \partial\mathcal L/\partial q_i + \partial\mathcal D/\partial\dot q_i = Q_i\) for \(\varphi\) and \(\alpha\), with the motor's torque (6) as the generalised force on \(\varphi\), give, in matrix form, with \(\mathbf q = (\varphi, \alpha)\) and \(\mathbf f\) collecting friction, gravity and the speed-dependent terms,</p>
+                        \[ \begin{gathered} \mathbf M(\alpha)\,\ddot{\mathbf q} = \mathbf f(\mathbf q, \dot{\mathbf q}) + \begin{pmatrix} \tau \\ 0 \end{pmatrix}, \qquad \mathbf M = \begin{pmatrix} J_0 + J_p\sin^2\!\alpha & h\cos\alpha \\ h\cos\alpha & J_p \end{pmatrix}, \\ \mathbf f = \begin{pmatrix} - b_r\dot\varphi - 2J_p\sin\alpha\cos\alpha\,\dot\varphi\dot\alpha + h\sin\alpha\,\dot\alpha^2 \\ J_p\sin\alpha\cos\alpha\,\dot\varphi^2 + G\sin\alpha - b_p\dot\alpha \end{pmatrix}. \end{gathered} \tag{7} \]
+                        <p>Read the first row as the angular momentum about the axis, \(\partial T/\partial\dot\varphi = (J_0 + J_p\sin^2\!\alpha)\dot\varphi + h\cos\alpha\,\dot\alpha\), being changed by the motor's torque and the bearing's friction; the terms with \(\dot\varphi\dot\alpha\) and \(\dot\alpha^2\) are what remains when the derivative of the changing inertia and coupling is moved to the right. Read the second row as the torques about the hinge. \(G\sin\alpha\) is gravity, which tips the rod further away from the top. \(J_p\sin\alpha\cos\alpha\,\dot\varphi^2\) is the centrifugal effect: a rod carried round fast leans outwards. And on the left, \(h\cos\alpha\,\ddot\varphi\) is the arm's acceleration acting on the rod through its hinge: accelerate the hinge one way, and the rod, seen from the hinge, feels a push the other way. This one term is the motor's only handle on the pendulum.</p>
+                        <p>Multiplying the rows of (7) by \(\dot\varphi\) and \(\dot\alpha\) and adding gives the energy theorem that the page's books check:</p>
+                        \[ \frac{d}{dt}\left(T + U\right) = \tau\dot\varphi - b_r\dot\varphi^2 - b_p\dot\alpha^2 . \tag{8} \]
+                        <p>The page solves (7) for \(\ddot\varphi\) and \(\ddot\alpha\) in <code>accel()</code> by Cramer's rule. SymPy derives (7) a second time with <code>LagrangesMethod</code>, a torque on the arm and a frictional torque on the rod, and finds the same mass matrix and forcing.</p>
+                        <div class="pbox"><p class="pbox__title">Key result · two coordinates, one input</p><p>The motor's torque acts on the arm alone. It reaches the pendulum only through the coupling \(h\cos\alpha\): an acceleration of the arm pushes the rod, seen from its hinge, the opposite way. The energy changes only by the motor's work and the bearings' friction (8).</p></div>
+                    </section>
+
+                    <section class="psec" id="p-rest">
+                        <h3><span class="psec__n">06</span>Rests and small swings</h3>
+                        <p>A rest, or <em>fixed point</em>, is a state with all speeds and accelerations zero. In (7) this leaves \(\tau = 0\) and \(G\sin\alpha = 0\): the rod hangs, \(\alpha = \pi\), or stands up, \(\alpha = 0\), and the arm can rest at any angle \(\varphi\) at all. That freedom comes from a symmetry: nothing in (2) or (3) depends on \(\varphi\), so turning the whole rig changes nothing. It is why you may choose the angle \(\varphi^*\) where the arm should stop.</p>
+                        <p>Near the top, write the state as \(\mathbf y = (\varphi, \alpha, \dot\varphi, \dot\alpha)\) and its distance from the goal as \(\tilde{\mathbf y} = (\varphi - \varphi^*, \alpha, \dot\varphi, \dot\alpha)\). Keeping only first-order terms in (7) with (6), with \(\Delta = J_0J_p - h^2\) the determinant of the mass matrix at \(\alpha = 0\), gives a linear system \(\dot{\tilde{\mathbf y}} = \mathbf A\tilde{\mathbf y} + \mathbf B V_m\):</p>
+                        \[ \mathbf A = \begin{pmatrix} 0 & 0 & 1 & 0 \\ 0 & 0 & 0 & 1 \\ 0 & -\dfrac{hG}{\Delta} & -\dfrac{J_p b}{\Delta} & \dfrac{h b_p}{\Delta} \\ 0 & \dfrac{J_0 G}{\Delta} & \dfrac{h b}{\Delta} & -\dfrac{J_0 b_p}{\Delta} \end{pmatrix}, \qquad \mathbf B = \frac{k}{R\Delta}\begin{pmatrix} 0 \\ 0 \\ J_p \\ -h \end{pmatrix}, \qquad b = b_r + \frac{k^2}{R} . \tag{9} \]
+                        <p>The motor's brake \(k^2/R\) has joined the bearing's friction in \(b\). The page builds \(\mathbf A\) and \(\mathbf B\) numerically in <code>linearise()</code>, by central differences of the full equations at the goal; they agree with (9).</p>
+                        <p>Without friction and with the motor disconnected, the eigenvalues of \(\mathbf A\) follow from \(\lambda^2\left(\lambda^2 - J_0G/\Delta\right) = 0\):</p>
+                        \[ \lambda = 0,\ 0,\ \pm\sqrt{J_0G/\Delta}\ \ \text{at the top}, \qquad \lambda = 0,\ 0,\ \pm i\sqrt{J_0G/\Delta}\ \ \text{hanging} . \tag{10} \]
+                        <p>The double zero is the arm's freedom to turn: a rig set turning slowly keeps turning. The other pair says that the top is a <em>saddle</em>, falling away at the rate \(\sqrt{J_0G/\Delta} = 9.86\) per second, and the bottom a <em>centre</em>, swinging at \(9.86\ \mathrm{rad/s}\). Had the arm been held still, the rod would swing at \(\sqrt{G/J_p} = 7.00\ \mathrm{rad/s}\). The free arm raises the frequency because it recoils: when the rod swings one way, the arm turns the other, and the rod swings about a point that itself moves, with the smaller effective inertia \(\Delta/J_0 = J_p - h^2/J_0\). The page checks this with <em>Off</em>: from hanging, nudged by 3°, the stored run has 62 turning points in 20 s, \(9.85\ \mathrm{rad/s}\).</p>
+                        <div class="pbox pbox--ex"><span class="pbox__t">Example 6.1 · how fast the top is lost</span><p>With the amplifier at 0 V, the motor's brake adds to the friction, and the page computes the eigenvalues at the top as \(-10.32\), \(-0.83\), \(0\) and \(+9.48\) per second: the braked arm recoils less, and the fall is a little slower than 9.86. A pendulum left 1 mrad from the top has \(e^{9.48t}\) times that after \(t\): it is 1 rad off after \(\ln(1000)/9.48 = 0.73\ \mathrm s\). Any controller must act well within a tenth of a second.</p></div>
+                    </section>
+
+                    <section class="psec" id="p-reach">
+                        <h3><span class="psec__n">07</span>Can one motor reach the pendulum?<span class="star" title="heavier mathematics">★</span></h3>
+                        <p>One voltage must steer four numbers. Kalman's test answers whether it can: the linear system (9) is <em>controllable</em>, meaning that some voltage history carries any state to any other, if and only if the matrix</p>
+                        \[ \mathcal C = \left[\,\mathbf B,\ \mathbf A\mathbf B,\ \mathbf A^2\mathbf B,\ \mathbf A^3\mathbf B\,\right] \tag{11} \]
+                        <p>has full rank, 4. The columns are a chain of influences. \(\mathbf B\) is what a voltage does at once: it accelerates the arm, and through \(-h\) the rod the opposite way. \(\mathbf A\mathbf B\) is what that does a moment later, the speeds becoming angles; the next powers carry it through gravity's term \(G\) to the angles' further changes. Without friction SymPy finds \(\det\mathcal C = -k^4G^2h^2/(R^4\Delta^4)\). It vanishes only if \(k = 0\) (no motor), \(G = 0\) (no gravity) or \(h = 0\), and \(h = \tfrac12 m_prL\) vanishes when the arm has no length. A rod hung on the axis itself would only be spun about its own length by the motor, and no voltage could tip it. The page computes the rank in <code>rankOf()</code> and finds 4.</p>
+                        <p>Controllable is not the same as easy. The determinant grows as \(h^2\), so a short arm gives a weak handle. With the arm shortened to \(r = 0.02\ \mathrm m\) the rank is still 4, but the swing-up of §8 no longer brings the pendulum up within 20 s.</p>
+                        <div class="pbox"><p class="pbox__title">Key result · reach</p><p>Near the top one motor can steer all four numbers, but only through the coupling \(h = \tfrac12 m_p rL\), that is, through the arm's length. On the axis the pendulum cannot be reached at all.</p></div>
+                    </section>
+
+                    <section class="psec" id="p-swing">
+                        <h3><span class="psec__n">08</span>Swinging up by pumping energy</h3>
+                        <p>The linear model of §6 is useless 180° from the top, so the swing-up works with energy instead, following Åström and Furuta. Consider the pendulum's own energy, as if its hinge stood still,</p>
+                        \[ E_p = \tfrac12 J_p\dot\alpha^2 + G\cos\alpha . \tag{12} \]
+                        <p>It is \(-G\) for the pendulum hanging at rest and \(+G\) for the pendulum standing at rest at the top: the swing-up must supply \(2G = 0.235\ \mathrm J\). How does the arm change \(E_p\)? Take the time derivative and use the second row of (7) for \(J_p\ddot\alpha\):</p>
+                        \[ \dot E_p = -h\cos\alpha\,\dot\alpha\,\ddot\varphi + J_p\sin\alpha\cos\alpha\,\dot\varphi^2\dot\alpha - b_p\dot\alpha^2 . \]
+                        <p>The first term is the playground swing in one line. The arm's acceleration \(\ddot\varphi\) feeds energy in when it has the sign of \(-\dot\alpha\cos\alpha\) and takes it out when it has the opposite sign; it does nothing when the rod is horizontal (\(\cos\alpha = 0\)) or momentarily still (\(\dot\alpha = 0\)). So we ask for the arm acceleration</p>
+                        \[ u = \operatorname{sat}_{a_\text{max}}\!\Big[k_E\left(E_p - G\right)\dot\alpha\cos\alpha\Big] - k_\varphi\left(\varphi - \varphi^*\right) - k_\omega\dot\varphi . \tag{13} \]
+                        <p>The bracket pumps: when the energy is short, \(E_p - G < 0\), it accelerates the hinge against \(\dot\alpha\cos\alpha\), and when there is too much it does the reverse. It is clipped at \(a_\text{max} = 30\ \mathrm{rad/s^2}\). The last two terms are a soft spring and damper, \(k_\varphi = 4\ \mathrm{s^{-2}}\) and \(k_\omega = 3\ \mathrm{s^{-1}}\), that keep the arm near \(\varphi^*\) while it pumps. Inserting the bracket alone into \(\dot E_p\), the quantity \(\mathcal V_s = \tfrac12(E_p - G)^2\) changes at the rate</p>
+                        \[ \dot{\mathcal V}_s = -h\,k_E\,(E_p - G)^2\,(\dot\alpha\cos\alpha)^2 \le 0 . \]
+                        <p>So \(\mathcal V_s\) is a <em>Lyapunov function</em> of the swing-up, a bowl in which the state can only go down: the energy error never grows. It may stall where \(\dot\alpha\cos\alpha\) stays zero, and the only such place is the rod at rest, hanging or upright. That is why <em>Solve</em> starts the rod nudged 3° off straight down: from exact rest, (13) would never begin. The centrifugal term, the arm's spring and damper, friction and the clip all disturb this argument, so the page does not rely on it alone: it measures whether the swing-up arrives. With the defaults, \(k_E = 40\ \mathrm{J^{-1}s^{-1}}\), it takes four half-swings, and the catch takes over at \(t = 2.75\ \mathrm s\).</p>
+                        <p>Åström and Furuta found that the swing-up depends on the ratio \(n\) of the largest acceleration of the pivot to \(g\): only for \(n \ge 4/3\) can the pendulum come up in a single swing. Here the hinge's largest acceleration is \(a_\text{max}r = 4.8\ \mathrm{m/s^2}\), \(n = 0.49\), so several swings are needed, as the page shows.</p>
+                        <p>★ The motor does not set an acceleration; it sets a voltage. To turn \(u\) into a voltage, solve the second row of (7) for \(\ddot\alpha\) with \(\ddot\varphi = u\), put it into the first row, and read off the torque that gives the arm exactly the acceleration \(u\):</p>
+                        \[ \begin{aligned} \tau ={}& \left(J_0 + J_p\sin^2\!\alpha - \frac{h^2\cos^2\!\alpha}{J_p}\right)u \\ & + \frac{h\cos\alpha}{J_p}\left(J_p\sin\alpha\cos\alpha\,\dot\varphi^2 + G\sin\alpha - b_p\dot\alpha\right) \\ & + 2J_p\sin\alpha\cos\alpha\,\dot\varphi\dot\alpha - h\sin\alpha\,\dot\alpha^2 + b_r\dot\varphi, \\ V_m ={}& \frac{R\tau}{k} + k\dot\varphi . \end{aligned} \tag{14} \]
+                        <p>This is <em>collocated partial feedback linearisation</em>: the actuated coordinate is made to obey \(\ddot\varphi = u\) exactly, whatever the pendulum does. The bracket in front of \(u\) is the arm's effective inertia with the pendulum riding along. The last step inverts (6). The voltage is then clipped to \(\pm V_\text{max}\), and while it is clipped \(\ddot\varphi\) is no longer \(u\).</p>
+                        <div class="pbox"><p class="pbox__title">Key result · the swing-up</p><p>The arm feeds energy into the swing at the rate \(-h\cos\alpha\,\dot\alpha\,\ddot\varphi\). Asking for \(\ddot\varphi \propto (E_p - G)\,\dot\alpha\cos\alpha\) (13), turned into a voltage by (14), drives the pendulum's energy towards that of the top, and \(\tfrac12(E_p - G)^2\) never increases.</p></div>
+                    </section>
+
+                    <section class="psec" id="p-catch">
+                        <h3><span class="psec__n">09</span>The catch at the top</h3>
+                        <p>Near the top the linear model (9) is good, and the controller can look at the whole state: the voltage is a weighted sum of the four errors, \(V_m = -\mathbf K\tilde{\mathbf y}\), clipped to \(\pm V_\text{max}\), with \(\varphi - \varphi^*\) and \(\alpha\) taken as the nearest angles to the goal. With four gains to choose, the <em>linear–quadratic regulator</em> chooses them as the ones that make a cost smallest,</p>
+                        \[ J = \int_0^\infty\left(\tilde{\mathbf y}^{\mathsf T}\mathbf Q\,\tilde{\mathbf y} + \rho V_m^2\right)dt, \qquad \mathbf Q = \operatorname{diag}\left(q_\varphi,\ q_\alpha,\ 0.5,\ 2\right) . \tag{15} \]
+                        <p>The first term charges for being away from the goal, the second for using voltage. The sliders set the weight \(q_\alpha\) on the pendulum's angle, \(q_\varphi\) on the arm's, and \(\rho\) on the effort; the weights on the two speeds are fixed. The least cost from a start \(\tilde{\mathbf y}_0\) is a quadratic bowl, \(J_\text{min} = \tilde{\mathbf y}_0^{\mathsf T}\mathbf P\tilde{\mathbf y}_0\), where \(\mathbf P\) solves the algebraic <em>Riccati equation</em>, and the best gains follow from it:</p>
+                        \[ \mathbf A^{\mathsf T}\mathbf P + \mathbf P\mathbf A - \rho^{-1}\mathbf P\mathbf B\mathbf B^{\mathsf T}\mathbf P + \mathbf Q = 0, \tag{16} \]
+                        \[ \mathbf K = \rho^{-1}\mathbf B^{\mathsf T}\mathbf P . \tag{17} \]
+                        <p>The page solves (16) in <code>lqr()</code> by the matrix sign function of the \(8\times8\) Hamiltonian matrix, which converges in a few iterations; SciPy's Riccati solver gives the same \(\mathbf P\) to every printed digit. For the defaults, \(q_\varphi = 2\), \(q_\alpha = 40\) and \(\rho = 1\ \mathrm{V^{-2}}\), the gains are \(\mathbf K = (-1.41,\ -34.29,\ -1.42,\ -4.46)\) in \(\mathrm{V/rad}\) and \(\mathrm{V\,s/rad}\). The large gain on \(\alpha\) is your hand under the broom. When the rod leans by 1° along \(\mathbf e_\varphi\), the motor gets \(34.29 \times 0.0175 = 0.60\ \mathrm V\); the arm accelerates in the direction of the lean, and the hinge moves under the rod.</p>
+                        <p>With the catch on, the eigenvalues of \(\mathbf A - \mathbf B\mathbf K\) are \(-24.57\), \(-5.44\), \(-3.52\) and \(-2.36\) per second, all real and negative: the top has become a <em>stable node</em>, approached without ringing, and the slowest rate, 2.36 per second, sets the pace at which the last error dies. The Riccati solution also gives a Lyapunov function. Along every path of the linear closed loop, \(\mathcal V_c = \tilde{\mathbf y}^{\mathsf T}\mathbf P\tilde{\mathbf y}\) falls,</p>
+                        \[ \dot{\mathcal V}_c = -\tilde{\mathbf y}^{\mathsf T}\left(\mathbf Q + \rho\,\mathbf K^{\mathsf T}\mathbf K\right)\tilde{\mathbf y} < 0 \quad\text{for } \tilde{\mathbf y} \ne 0 . \tag{18} \]
+                        <p>Raise \(\rho\) tenfold and the controller pushes more gently: the slowest rate falls to 1.61 per second, and, as §10 measures, the region it can rescue grows.</p>
+                    </section>
+
+                    <section class="psec" id="p-phase">
+                        <h3><span class="psec__n">10</span>Phase space and the region of rescue</h3>
+                        <p>The state is a point in a four-dimensional <em>phase space</em>, and a run is a path through it. The page draws two shadows: the pendulum's angle against its angular speed, and the arm's. The dashed curves in the first are the pendulum's <em>separatrix</em> with its hinge held still, \(\tfrac12J_p\dot\alpha^2 + G\cos\alpha = G\), the motion with exactly the energy of the top. The swing-up of §8 drives the state onto this curve, which leads to the top.</p>
+                        <p>Equation (18) proves that the catch works only near the top. Far from it, the voltage limit and the nonlinear terms of (7) break the proof, and the set of starts from which the catch alone still brings the pendulum home, its <em>region of attraction</em>, has to be measured. The page does this in two ways. On a grid of \(37 \times 31\) starts, \(\alpha\) within \(\pm90^\circ\) and \(\dot\alpha\) within \(\pm15\ \mathrm{rad/s}\), with the arm at \(\varphi^*\) and at rest, it runs the catch alone for 3 s and counts a start as rescued when \(\tilde{\mathbf y}^{\mathsf T}\mathbf P\tilde{\mathbf y}\) has fallen below 0.05, deep inside the linear range. With the defaults, 339 of the 1147 starts are rescued. A pendulum at rest is rescued up to \(\pm30^\circ\) from the top; the region is a slanted band because a pendulum already moving towards the top can be caught from further away than one moving away from it.</p>
+                        <p>The second measurement decides the hand-over. The page places 240 starts evenly over the surface \(\tilde{\mathbf y}^{\mathsf T}\mathbf P\tilde{\mathbf y} = c\) in all four dimensions and finds, by halving the interval twelve times, the largest \(c\) for which every start is rescued: \(c = 9.78\). The supervisor then switches by the rule</p>
+                        \[ \begin{gathered} \text{swing-up} \to \text{catch when } \tilde{\mathbf y}^{\mathsf T}\mathbf P\tilde{\mathbf y} < c_\text{in} = c/2, \\ \text{catch} \to \text{swing-up when } \tilde{\mathbf y}^{\mathsf T}\mathbf P\tilde{\mathbf y} > c_\text{out} = c, \end{gathered} \tag{19} \]
+                        <p>looking at the state once every millisecond. The factor of 2 between the two levels is a margin against what 240 samples can miss, and against switching back and forth on the edge. In the default run the hand-over comes at \(\tilde{\mathbf y}^{\mathsf T}\mathbf P\tilde{\mathbf y} = 4.81\), with \(E_p\) at 97 % of \(G\). With \(\rho\) ten times larger, \(c\) rises to 20.2.</p>
+                    </section>
+
+                    <section class="psec" id="p-solve">
+                        <h3><span class="psec__n">11</span>Solve first, then play</h3>
+                        <p>Nothing is computed while you watch. When you press Solve, choose a preset, release the flag or let go of the pendulum, the page designs the catch, measures \(c\) if the design is new, and integrates (7) with (6), (13), (14) and (19) by the classical fourth-order Runge–Kutta method, step \(h = 1\ \mathrm{ms}\), for 20 s: 20 000 steps. The controller is evaluated at all four stages of each step. Every tenth state, one every 10 ms, is stored with the voltage, the current, the torque, the energies and \(\tilde{\mathbf y}^{\mathsf T}\mathbf P\tilde{\mathbf y}\), and the animation plays the stored samples back.</p>
+                        <p>The step is set by the fastest rate in the loop, 24.6 per second: \(h\lambda = 0.025\), far inside RK4's stability limit of about 2.8. To grade the run, the page solves it a second time with \(h/2\), the supervisor still deciding on the same millisecond clock, and keeps the largest difference: \(5.9\times10^{-5}\) (in rad or rad/s), at \(t = 2.61\ \mathrm s\), just before the catch. The clip in (13) and the voltage limit put kinks into the right-hand side that RK4 steps across, and near the top any small difference grows at 9.5 per second. With the amplifier off, where there are no kinks, the difference is \(5\times10^{-9}\).</p>
+                        <p>The energy books are a second check. The work delivered by the amplifier, \(W_\text{in} = \int V_mI\,dt\), the winding's heat, \(Q_R = \int RI^2\,dt\), and the bearings' heat, \(Q_b = \int(b_r\dot\varphi^2 + b_p\dot\alpha^2)\,dt\), are integrated with the same RK4 weights as the state, and by (4) and (8)</p>
+                        \[ E(0) + W_\text{in} - Q_R - Q_b - E(T) = 0 , \tag{20} \]
+                        <p>where \(E = T + U\). For the default run the left-hand side is \(5.7\times10^{-11}\ \mathrm J\). The books also say where the energy went. The amplifier delivered \(W_\text{in} = 14.15\ \mathrm J\); the winding turned \(13.91\ \mathrm J\) of it into heat, the bearings \(0.004\ \mathrm J\), and the rig's energy rose by \(0.235\ \mathrm J\), the \(2G\) of §8. Less than 2 % of the electrical work lifted the pendulum. A motor that pushes hard while it turns slowly is mostly a heater: by (6) the fraction of \(V_mI\) that becomes work is \(k\dot\varphi/V_m\), small when \(\dot\varphi\) is small.</p>
+                    </section>
+
+                    <section class="psec" id="p-screen">
+                        <h3><span class="psec__n">12</span>On screen</h3>
+                        <p>The rig is drawn in an oblique view that looks down 24° on the turntable, on one scale in pixels per metre that stays the same from run to run. The grey bar is the arm, the dark rod with its burgundy knob the pendulum, and the faint dotted circle the plane in which the rod swings. The burgundy arc round the hub is the motor's torque: it sweeps up to 0.9 of a half-turn at the stall torque \(kV_\text{max}/R\). The pale dashed arm and upright rod are the goal, the flag on the rim marks \(\varphi^*\), and the label at the top right says whether the swing-up pumps or the catch holds. The bars at the top left are the energy books: \(E - E^*\), \(W_\text{in}\), \(Q_R\) and \(Q_b\).</p>
+                        <p>Below the rig, a window of 8 s follows the playback: \(\alpha\) dark and \(\varphi - \varphi^*\) burgundy, dark up to now and pale after. On this chart \(\alpha\) is shown between \(-\pi\) and \(\pi\), so its curve breaks where the hanging rod passes straight down; the stored \(\alpha\) does not jump. The strip under it is the whole run, brown while the swing-up pumps and burgundy once caught, with marks where the motor sits at its voltage limit. The drive profile shows \(V_m\), its limit and the back-emf \(k\dot\varphi\), and below it the two Lyapunov functions on a logarithmic scale, each while its controller acts, with the hand-over level \(c_\text{in}\); values below \(10^{-6}\) are drawn at \(10^{-6}\). In the phase portrait the measured region of rescue is shaded, the hand-over ellipse is the slice of \(\tilde{\mathbf y}^{\mathsf T}\mathbf P\tilde{\mathbf y} = c_\text{in}\) with the arm at \(\varphi^*\) and at rest, and the caption gives the eigenvalues of the catch.</p>
+                    </section>
+
+                    <section class="psec" id="p-limits">
+                        <h3><span class="psec__n">13</span>What the model leaves out</h3>
+                        <ul>
+                            <li>The arm and the rod are rigid, and the rod is thin: its inertia about its own length is dropped. For a rod 6 mm thick that inertia is about \(m_pd^2/8 = 3.6\times10^{-7}\ \mathrm{kg\,m^2}\), against \(J_p = 2.4\times10^{-3}\).</li>
+                            <li>Friction is viscous and small. Real bearings and brushes also have dry friction, a torque that does not vanish at low speed, and the motor's magnets give a cogging torque that varies with the angle. Both leave a small dead zone that the catch must push through.</li>
+                            <li>The winding's inductance is dropped (§4), and the amplifier is ideal up to \(\pm V_\text{max}\). A real amplifier also limits the current, and the winding heats, raising \(R\).</li>
+                            <li>The controller measures all four numbers exactly and at once. A real rig measures the two angles with encoders and estimates the speeds, and every millisecond of delay eats into the margin set by the fall rate of 9.5 per second.</li>
+                            <li>The region of rescue is measured, not proved. Starts between the 240 samples, or between the grid points, can behave differently; the factor of 2 in (19) is a margin, not a guarantee.</li>
+                        </ul>
+                        <div class="pbox pbox--ex"><span class="pbox__t">Problems</span><ol>
+                            <li>Set \(r = 0\) in (2) and (7). Show that the arm and the rod then interact only through \(J_p\sin^2\!\alpha\), that \(\mathbf B\) in (9) has no component on \(\dot\alpha\), and find the rank of (11).</li>
+                            <li>From (4) with \(\Lambda = 0\), show that \(V_mI = RI^2 + \tau\dot\varphi\). Use the readouts \(W_\text{in}\) and \(Q_R\) of a run of your own to find the fraction of the electrical work that became mechanical work.</li>
+                            <li>Show that the pendulum must gain \(2G\) to go from hanging to standing still at the top, and evaluate it for \(m_p = 0.08\ \mathrm{kg}\), \(L = 0.30\ \mathrm m\). Lower \(V_\text{max}\) to 6 V on the page and explain with Åström and Furuta's ratio \(n\) why the swing-up now takes longer or fails.</li>
+                            <li>Set \(\rho\) ten times larger and solve again. How do the gains, the slowest decay and the hand-over level \(c\) change? Explain with (15) why a gentler catch can rescue the pendulum from further away.</li>
+                        </ol></div>
+                        <h4><span class="psub__n">13.1</span>Further reading</h4>
+                        <ol class="prefs">
+                            <li>K. J. Åström and K. Furuta, <a href="https://www.control.utoronto.ca/~broucke/ece1653s/Intro/ast_fur96.pdf"><em>Swinging up a pendulum by energy control</em></a>, IFAC 13th World Congress, San Francisco, 1996 (journal version: Automatica 36, 287–295, 2000): the energy of the pendulum, its rate under a moving pivot, the law that drives it to the energy of the top, and the role of the ratio \(n\) (Section 8).</li>
+                            <li>R. Tedrake, <a href="https://underactuated.csail.mit.edu/acrobot.html"><em>Underactuated Robotics</em>, chapter 3: Acrobots, Cart-Poles, and Quadrotors</a>, MIT course notes, 2024: linearisation at the top, controllability, LQR, collocated partial feedback linearisation and energy-shaping swing-up with its Lyapunov argument (Sections 6–9).</li>
+                            <li>K. J. Åström and R. M. Murray, <em>Feedback Systems: An Introduction for Scientists and Engineers</em>, Princeton University Press, 2008: Section 6.1, reachability and the rank test (Theorem 6.1), and Section 6.3, the linear quadratic regulator and the algebraic Riccati equation (6.26)–(6.27). <a href="http://www.cds.caltech.edu/~murray/books/AM08/pdf/am08-complete_22Feb09.pdf">The authors’ free electronic edition</a>.</li>
+                            <li><a href="https://en.wikipedia.org/wiki/Furuta_pendulum">Furuta pendulum</a>, Wikipedia: the rig's origin at the Tokyo Institute of Technology in 1992, with references to the original papers.</li>
+                        </ol>
+                    </section>
+                </div>
+            </div>
         </article>
 
         <section class="walk" id="walk" data-walk="furuta" aria-label="From symbols to code"></section>
@@ -237,7 +452,7 @@
         var playT = 0, fps = 0, solved = null;
 
         /* ---------- the store: every number this page computes is written here, where it is computed (scripts/dataset.js) ---------- */
-        var ds = Sim.dataset({ title: 'Furuta pendulum', attrs: { figure: 12, page: 'furuta-pendulum.html', equation: 'M(α) q″ + c(q, q′) + ∂U/∂q + b q′ = (k I, 0), V_m = R I + k φ′', coordinates: 'q = (φ, α), α from straight up' } });
+        var ds = Sim.dataset({ title: 'Furuta pendulum', attrs: { figure: 12, page: 'furuta-pendulum.html', equation: 'M(α) q″ = f(q, q′) + (τ, 0), τ = (k/R)(V_m − k φ′)', coordinates: 'q = (φ, α), α from straight up' } });
         ds.var('ma', [], 'float', { symbol: 'm<sub>a</sub>', units: 'kg', long_name: 'mass of the arm, a uniform bar', computed_in: 'constant MA', digits: 2 });
         ds.var('Jh', [], 'float', { symbol: 'J<sub>h</sub>', units: 'kg m²', long_name: 'moment of inertia of the hub and the motor’s rotor about the axis', computed_in: 'constant JH', digits: 6 });
         ds.var('mp', [], 'float', { symbol: 'm<sub>p</sub>', units: 'kg', long_name: 'mass of the pendulum, a uniform rod', computed_in: 'constant MP', digits: 2 });
@@ -268,7 +483,7 @@
         ds.var('w_bot', [], 'float', { symbol: 'ω<sub>bot</sub>', units: 'rad/s', long_name: 'angular frequency of small swings at the bottom with the arm free', computed_in: 'rig()', formula: '√(J<sub>0</sub> G/Δ)', digits: 4 });
         ds.var('w_fix', [], 'float', { symbol: 'ω<sub>fix</sub>', units: 'rad/s', long_name: 'the same with the arm held still', computed_in: 'rig()', formula: '√(G/J<sub>p</sub>)', digits: 4 });
         ds.dim('k', 4);
-        ds.var('Kg', ['k'], Float64Array, { symbol: 'K', long_name: 'LQR gains on (φ − φ*, α, φ̇, α̇): V/rad, V/rad, V s/rad, V s/rad', computed_in: 'lqr()', formula: 'ρ<sup>−1</sup> Bᵀ P, P from the Riccati equation (15)', digits: 4 });
+        ds.var('Kg', ['k'], Float64Array, { symbol: 'K', long_name: 'LQR gains on (φ − φ*, α, φ̇, α̇): V/rad, V/rad, V s/rad, V s/rad', computed_in: 'lqr()', formula: 'ρ<sup>−1</sup> Bᵀ P, P from the Riccati equation (16)', digits: 4 });
         ds.dim('kk', 16);
         ds.var('Pm', ['kk'], Float64Array, { symbol: 'P', long_name: 'solution of the Riccati equation, row by row: the bowl ỹᵀPỹ of the catch', computed_in: 'lqr()', digits: 5 });
         ds.var('lamo_re', ['k'], Float64Array, { symbol: 'Re λ<sub>open</sub>', units: '1/s', long_name: 'eigenvalues of the rig without control at the top, real parts', computed_in: 'eig()', formula: 'roots of det(λI − A)', digits: 5 });
@@ -307,11 +522,11 @@
         ds.var('al', ['n'], Float64Array, { symbol: 'α<sub>n</sub>', units: 'rad', long_name: 'angle of the pendulum from straight up, RK4 (not wrapped)', computed_in: 'solve()', digits: 6 });
         ds.var('wp', ['n'], Float64Array, { symbol: 'φ̇<sub>n</sub>', units: 'rad/s', long_name: 'angular speed of the arm', computed_in: 'solve()', digits: 6 });
         ds.var('wa', ['n'], Float64Array, { symbol: 'α̇<sub>n</sub>', units: 'rad/s', long_name: 'angular speed of the pendulum', computed_in: 'solve()', digits: 6 });
-        ds.var('Vs', ['n'], Float64Array, { symbol: 'V<sub>m, n</sub>', units: 'V', long_name: 'voltage across the motor (with the amplifier off: the back-emf an open circuit shows)', computed_in: 'drive(), in solve()', formula: 'catch: clamp(−K(y − y*), ±V<sub>max</sub>); swing: R τ(u)/k + kφ̇, clamped (12)', digits: 6 });
+        ds.var('Vs', ['n'], Float64Array, { symbol: 'V<sub>m, n</sub>', units: 'V', long_name: 'voltage across the motor (with the amplifier off: the back-emf an open circuit shows)', computed_in: 'drive(), in solve()', formula: 'catch: clamp(−K(y − y*), ±V<sub>max</sub>); swing: R τ(u)/k + kφ̇, clamped (14)', digits: 6 });
         ds.var('Is', ['n'], Float64Array, { symbol: 'I<sub>n</sub>', units: 'A', long_name: 'current in the winding', computed_in: 'drive(), in solve()', formula: '(V<sub>m</sub> − kφ̇)/R; 0 with the amplifier off', digits: 6 });
         ds.var('taus', ['n'], Float64Array, { symbol: 'τ<sub>n</sub>', units: 'N m', long_name: 'torque of the motor on the arm', computed_in: 'solve()', formula: 'k I', digits: 6 });
         ds.var('Es', ['n'], Float64Array, { symbol: 'E<sub>n</sub>', units: 'J', long_name: 'energy of arm and pendulum: kinetic plus gravity, zero with the pendulum’s centre at the hinge’s height', computed_in: 'energy(), in solve()', formula: 'T + U, (2) + (3)', digits: 6 });
-        ds.var('Eps', ['n'], Float64Array, { symbol: 'E<sub>p, n</sub>', units: 'J', long_name: 'energy of the pendulum alone, as if its hinge stood still; G when it rests at the top', computed_in: 'penEnergy(), in solve()', formula: '½ J<sub>p</sub> α̇² + G cos α (10)', digits: 6 });
+        ds.var('Eps', ['n'], Float64Array, { symbol: 'E<sub>p, n</sub>', units: 'J', long_name: 'energy of the pendulum alone, as if its hinge stood still; G when it rests at the top', computed_in: 'penEnergy(), in solve()', formula: '½ J<sub>p</sub> α̇² + G cos α (12)', digits: 6 });
         ds.var('Ly', ['n'], Float64Array, { symbol: 'ỹᵀPỹ<sub>n</sub>', long_name: 'the catch’s bowl at each sample, with φ − φ* and α wrapped to (−π, π]', computed_in: 'lyap(), in solve()', digits: 6 });
         ds.var('Win', ['n'], Float64Array, { symbol: 'W<sub>in, n</sub>', units: 'J', long_name: 'electrical work the amplifier has delivered since t = 0', computed_in: 'solve(), integrated with RK4', formula: '∫ V<sub>m</sub> I dt', digits: 6 });
         ds.var('QR', ['n'], Float64Array, { symbol: 'Q<sub>R, n</sub>', units: 'J', long_name: 'heat in the winding since t = 0', computed_in: 'solve(), integrated with RK4', formula: '∫ R I² dt', digits: 6 });
@@ -368,7 +583,7 @@
         var seek = Sim.slider('seek', { format: function (v) { return _t('t = {t} s of {T} s', { t: (v * EVERY * H).toFixed(1), T: TEND }); }, onInput: function (v) { playT = v * EVERY * H; frame(); } });
         var preset = 'swing';
 
-        /* ---------- the rig: inertias (2), the motor (4), the equations of motion (5), the energies (2) + (3) and (10) ---------- */
+        /* ---------- the rig: inertias (2), the motor (6), the equations of motion (7), the energies (2) + (3) and (12) ---------- */
         function rig() {
             // the parameters of one run, read from the controls at the moment of solving
             var p = { r: ras.value, Vmax: vms.value, phs: phs.value * DEG, mode: preset, qa: qa.value, qp: qp.value, rho: Math.pow(10, rho.value), kE: kEs.value };
@@ -380,7 +595,7 @@
             return p;
         }
         function accel(p, y, I) {
-            // M(α) q̈ = (kI − b_r φ̇ − c_φ, −c_α + G sin α − b_p α̇), solved for q̈ by Cramer's rule (5)
+            // M(α) q̈ = (kI − b_r φ̇ − c_φ, −c_α + G sin α − b_p α̇), solved for q̈ by Cramer's rule (7)
             var s = Math.sin(y[1]), c = Math.cos(y[1]), w = y[2], v = y[3];
             var a11 = p.J0 + p.Jp * s * s, a12 = p.h * c, a22 = p.Jp;
             var r1 = KM * I - BR * w - 2 * p.Jp * s * c * w * v + p.h * s * v * v;
@@ -393,11 +608,11 @@
             var s = Math.sin(y[1]), c = Math.cos(y[1]);
             return 0.5 * (p.J0 + p.Jp * s * s) * y[2] * y[2] + p.h * c * y[2] * y[3] + 0.5 * p.Jp * y[3] * y[3] + p.G * c;
         }
-        function penEnergy(p, y) { return 0.5 * p.Jp * y[3] * y[3] + p.G * Math.cos(y[1]); }   // (10): the pendulum alone, as if its hinge stood still
+        function penEnergy(p, y) { return 0.5 * p.Jp * y[3] * y[3] + p.G * Math.cos(y[1]); }   // (12): the pendulum alone, as if its hinge stood still
         function wrap(a) { return a - 2 * Math.PI * Math.floor((a + Math.PI) / (2 * Math.PI)); }
         function err(p, y) { return [wrap(y[0] - p.phs), wrap(y[1]), y[2], y[3]]; }
 
-        /* ---------- the linear model at the top (7), controllability (8), LQR (13)–(15) and its region of rescue ---------- */
+        /* ---------- the linear model at the top (9), controllability (11), LQR (15)–(17) and its region of rescue (19) ---------- */
         function zeros(n, m) { var A = []; for (var i = 0; i < n; i++) A.push(new Array(m).fill(0)); return A; }
         function mul(A, B) { var n = A.length, m = B[0].length, k = B.length, C = zeros(n, m); for (var i = 0; i < n; i++) for (var j = 0; j < m; j++) { var s = 0; for (var l = 0; l < k; l++) s += A[i][l] * B[l][j]; C[i][j] = s; } return C; }
         function inv(A) {
@@ -545,7 +760,7 @@
             d.c = designCache[key].c; d.cin = 0.5 * d.c; d.cout = d.c; d.ms = designCache[key].ms;
             return d;
         }
-        /* ---------- the drive: what the controller puts across the motor, (11), (12), (16) ---------- */
+        /* ---------- the drive: what the controller puts across the motor, (13), (14), (19) ---------- */
         function decide(p, d, y, caught) {
             // once per step: the swing-up hands over when ỹᵀPỹ < c_in; the catch hands back when it rises above c_out
             if (p.mode === 'catch') return true;
@@ -554,12 +769,12 @@
             return caught ? L <= d.cout : L < d.cin;
         }
         function drive(p, d, y, caught) {
-            // the motor voltage V_m, the current I and whether the amplifier is at its limit
+            // the motor voltage V_m, the current I by (6), and whether the amplifier is at its limit
             if (p.mode === 'off') return { V: KM * y[2], I: 0, sat: 0 };   // amplifier disconnected: no current; a voltmeter would read the back-emf
             var want;
             if (caught) want = catchVolt(p, d, y);
             else {
-                // the swing-up (11): pump energy into the swing, keep the arm near φ*; then the torque that gives the arm that acceleration (12)
+                // the swing-up (13): pump energy into the swing, keep the arm near φ*; then the torque that gives the arm that acceleration (14)
                 var s = Math.sin(y[1]), c = Math.cos(y[1]), w = y[2], v = y[3];
                 var uE = Math.max(-AMAX, Math.min(AMAX, p.kE * (penEnergy(p, y) - p.G) * v * c));
                 var u = uE - KPHI * wrap(y[0] - p.phs) - KW * w;
