@@ -62,11 +62,19 @@
                     </figcaption>
                 </figure>
                 <figure class="stage" style="margin-top: 16px;">
-                    <div class="stage__canvas" id="stage-bode" style="--ar: 16 / 6.2; --ar-m: 1 / 1.05;">
-                        <canvas id="bode" aria-label="Bode plot: steady-state amplitude per newton and phase lag against the drive frequency, with the present drive marked."></canvas>
+                    <div class="stage__canvas" id="stage-force" style="--ar: 16 / 5.6; --ar-m: 1 / 0.95;">
+                        <canvas id="forces" aria-label="The forces on the block over the stored run: the controller’s force u and its proportional, integral and derivative parts, the outside push, the spring force and the damper force, with the cursor at the frame being shown."></canvas>
                     </div>
                     <figcaption class="stage__cap">
-                        <span><b>Bode plot</b> · <span class="tx">\(|G(i\Omega)| = X/F_0\)</span> and phase lag <span class="tx">\(\varphi\)</span> against the drive frequency <span class="tx">\(f\)</span></span>
+                        <span><b>Force profile</b> · <span class="tx">\(u = u_P + u_I + u_D\)</span>, the push, <span class="tx">\(-kx\)</span> and <span class="tx">\(-c\dot x\)</span> over the run</span>
+                    </figcaption>
+                </figure>
+                <figure class="stage" style="margin-top: 16px;">
+                    <div class="stage__canvas" id="stage-bode" style="--ar: 16 / 6.2; --ar-m: 1 / 1.05;">
+                        <canvas id="bode" aria-label="Frequency response: the amplitude function A(f) and the phase difference φ(f) of the steady swing against the drive frequency, on linear axes or as a Bode plot, with the present drive marked."></canvas>
+                    </div>
+                    <figcaption class="stage__cap">
+                        <span><b>Frequency response</b> · amplitude function <span class="tx">\(A(f)\)</span> and phase difference <span class="tx">\(\varphi(f)\)</span> <span class="actions" role="group" aria-label="View of the frequency response" style="display:inline-flex; margin-left:8px;"><button type="button" class="btn btn--ghost" id="view-amp" aria-pressed="true">Linear</button><button type="button" class="btn btn--ghost" id="view-bode" aria-pressed="false">Bode, log</button></span></span>
                         <span id="cap-res"><i>f</i><sub>r</sub> = —</span>
                     </figcaption>
                 </figure>
@@ -100,8 +108,8 @@
                 <div class="panel__group">
                     <p class="panel__label">Oscillator · m = 1 kg</p>
                     <label class="ctl">
-                        <span class="ctl__row"><span>Natural frequency f₀</span><output id="f0-out" for="f0"></output></span>
-                        <input type="range" id="f0" min="0.2" max="1.5" step="0.01" value="0.5">
+                        <span class="ctl__row"><span>Spring constant k</span><output id="kspring-out" for="kspring"></output></span>
+                        <input type="range" id="kspring" min="1.5" max="90" step="0.01" value="9.87">
                     </label>
                     <label class="ctl">
                         <span class="ctl__row"><span>Damping ratio ζ</span><output id="zeta-out" for="zeta"></output></span>
@@ -236,7 +244,7 @@
                         \[ m\ddot x + c\dot x + kx = F_0\cos\Omega t . \tag{1} \]
                         <p>It is tidier to describe the plant by two numbers with a direct meaning. The <em>natural frequency</em> \(\omega_0 = \sqrt{k/m}\) is the angular frequency at which the block would ring with no damper; the <em>damping ratio</em> \(\zeta = c/(2\sqrt{km})\) says how quickly the ringing dies, from \(\zeta = 0\) (forever) to \(\zeta = 1\) (no ringing at all). Dividing (1) by \(m\),</p>
                         \[ \ddot x + 2\zeta\omega_0\,\dot x + \omega_0^2\,x = \frac{F_0}{m}\cos\Omega t . \tag{2} \]
-                        <p>On the page \(m = 1\ \mathrm{kg}\) and the sliders set \(f_0 = \omega_0/2\pi\), \(\zeta\), \(F_0\) and the drive frequency \(f = \Omega/2\pi\). With the defaults, \(f_0 = 0.5\ \mathrm{Hz}\) and \(\zeta = 0.05\), so \(k = 9.87\ \mathrm{N/m}\) and \(c = 0.314\ \mathrm{kg/s}\). The block starts at rest in its rest position, \(x(0) = 0\), \(\dot x(0) = 0\).</p>
+                        <p>On the page \(m = 1\ \mathrm{kg}\), and the sliders set the spring constant \(k\), the damping ratio \(\zeta\), \(F_0\) and the drive frequency \(f = \Omega/2\pi\); the natural frequency follows from the spring, \(f_0 = \sqrt{k/m}/2\pi\), and the damper from both, \(c = 2\zeta\sqrt{km}\). With the defaults, \(k = 9.87\ \mathrm{N/m}\) and \(\zeta = 0.05\), so \(f_0 = 0.5\ \mathrm{Hz}\) and \(c = 0.314\ \mathrm{kg/s}\). After Solve the block starts at rest in its rest position, \(x(0) = 0\), \(\dot x(0) = 0\); §9 shows how to start it anywhere by hand.</p>
                         <p>Notice what sets this equation apart from the double pendulum of Fig. 2: the time \(t\) appears on its own, inside \(\cos\Omega t\). The future depends not only on where the block is, but also on the clock, because the clock belongs to someone else.</p>
                     </section>
 
@@ -485,7 +493,10 @@
                         <p>Read it as a race: the damping available in the loop, times its stiffness, must beat the rate at which the memory accumulates force. The PID preset has \(128.9 > 10\) and is stable; set \(K_p = 5\), \(K_d = 0\), \(K_i = 60\) and the left side is 4.7 against 60: the block’s swings grow until the page stops the solver at \(|x| = 1000\ \mathrm m\), and the readout says so. The outside push still acts through the closed loop. Its steady answer is (3) with the coefficients of (13) and the integral’s term \(K_i/(i\Omega)\):</p>
                         \[ X = \frac{F_0}{\left|\,k + K_p - m\Omega^2 + i\left((c + K_d)\Omega - K_i/\Omega\right)\right|} , \tag{16} \]
                         <p>the block swinging with this amplitude about \(x^*\). The Bode plot draws this closed-loop response \(H(i\Omega)\) in ink, with the bare plant \(G(i\Omega)\) dashed behind it: the controller moves the peak to the new natural frequency, flattens it with \(K_d\), and the integral pushes the response at low frequencies to zero, because a slow push is simply held off. The page grades its RK4 run against the exact closed-loop solution as well: the particular solution of (16) plus the free motion of (13), propagated sample by sample with the exact matrix exponential \(e^{A\,\Delta t}\) of the loop’s state matrix.</p>
-                        <p>The whole mechanism is drawn on one length scale, in pixels per metre. The scale is kept from one Solve to the next, so a run with more damping or a smaller force really swings less on the screen, and the previous run stays in view as an outlined block and a dotted curve. The scale widens only when a new run needs more room, and Fit scale sets it to the present run; the ruler under the floor gives the ends of the range in metres, and with the controller on, the target \(r\) as a dot and the equilibrium \(x^*\) as a rose line. The box at the top right is the controller: the value it reads, its three parts and their sum \(u\), each as a bar, and a dashed command line down to the current source. Watch the force arrow and the block together: at a low drive frequency the block moves with the force, near \(f_0\) it lags a quarter period behind it, and far above \(f_0\) it moves against it, as the phase lag of (4) says. Below, a window of the stored run follows the present sample: \(x(t)\) dark up to it and pale after it, \(F(t)/k\) dashed in burgundy and the steady band \(x^* \pm X\) dashed in rose. The window spans four drive periods, but never less than 6 s or more than 20 s (8.9 s with the defaults). Under it, a thin strip shows the whole 60 s, with the window shaded. The Bode plot marks the present drive frequency with a filled dot and the amplitude measured from the last 10 s of the run with a ring around it: when the run has settled, the two coincide.</p>
+                        <p>Now take the block in your hand. Grab it on the screen and drag it anywhere within the ruler. While you hold it, the page’s clock stops, but the controller keeps working: it reads your hand’s position, pulls against it with \(u\), and its integral keeps adding up the error, \(z = \int (r - x)\,\mathrm dt'\), second by second. A fourth arrow shows the force your hand must give, \(F_\text{hand} = kx + c\dot x - F\), the force that balances spring, damper and coil. Let go, and the page solves (12) again from the state you left behind, \(x(0)\), \(\dot x(0)\) (the speed of your hand, so you can throw the block) and \(z(0)\), and plays the new run from \(t = 0\), the outside push restarting with it. The equilibrium (14) does not depend on where the block starts, so the controller brings it back to \(x^*\) from wherever you left it; with the controller off you see instead the free, damped swing dying away with the decay time \(\tau\) of §3. Hold the block for a few seconds away from the target with the integral on, and the release overshoots far past \(r\): the memory has filled up with error while you held it, and it takes as long again to empty. That is integrator windup, the most common fault of real PI controllers, and the reason real ones limit their integral. The exact solutions need only their constants adjusted to the new start: in (5) they become \(C_1 = x(0) - X\cos\varphi\) and \(C_2 = (\dot x(0) + \zeta\omega_0 C_1 - X\Omega\sin\varphi)/\omega_d\), and in the closed loop the free motion starts from \(x(0)\), \(\dot x(0)\) and \(z(0)\) less the equilibrium and the steady swing. The page grades every released run against them as before.</p>
+                        <p>The force profile under the motion shows who pushes when, in newtons, over the same window of the run: the outside push, the spring’s \(-kx\), the damper’s \(-c\dot x\), and with the controller on its force \(u\) and its three parts. After a release you can watch the division of labour: the proportional part jumps with the error, the derivative part brakes the fast motion, and the integral part rises slowly until it alone carries the spring at \(x^*\).</p>
+                        <p>The last figure is the frequency response of the steady swing. In its linear view, the one used in the teaching laboratory with Pohl’s wheel, the left panel is the amplitude function \(A(f) = F_0\,|G(i\,2\pi f)|\) of (4) in metres, the resonance curve with its peak near \(f_0\) and a width set by \(\zeta\), and the right panel the phase difference \(\varphi(f)\) between push and swing, from \(0^\circ\) for slow pushes through \(90^\circ\) at \(f_0\) to \(180^\circ\) for fast ones. With the controller on, the ink curves are the closed loop (16) and the bare plant is dashed behind them. The Bode view shows the same curves per newton on logarithmic axes, as control engineers draw them.</p>
+                        <p>The whole mechanism is drawn on one length scale, in pixels per metre. The scale is kept from one Solve to the next, so a run with more damping or a smaller force really swings less on the screen, and the previous run stays in view as an outlined block and a dotted curve. The scale widens only when a new run needs more room, and Fit scale sets it to the present run; the ruler under the floor gives the ends of the range in metres, and with the controller on, the target \(r\) as a dot and the equilibrium \(x^*\) as a rose line. The box at the top right is the controller: the value it reads, its three parts and their sum \(u\), each as a bar, and a dashed command line down to the current source. Watch the force arrow and the block together: at a low drive frequency the block moves with the force, near \(f_0\) it lags a quarter period behind it, and far above \(f_0\) it moves against it, as the phase lag of (4) says. Below, a window of the stored run follows the present sample: \(x(t)\) dark up to it and pale after it, \(F(t)/k\) dashed in burgundy and the steady band \(x^* \pm X\) dashed in rose. The window spans four drive periods, but never less than 6 s or more than 20 s (8.9 s with the defaults). Under it, a thin strip shows the whole 60 s, with the window shaded. Both views mark the present drive frequency with a filled dot and the amplitude measured from the last 10 s of the run with a ring around it: when the run has settled, the two coincide.</p>
                     </section>
 
                     <section class="psec" id="p-limits">
@@ -537,7 +548,7 @@
         /* ---------- the store: every number this page computes is written here, where it is computed (scripts/dataset.js) ---------- */
         var ds = Sim.dataset({ title: 'Driven oscillator', attrs: { figure: 9, page: 'driven-oscillator.html', equation: 'm x″ + c x′ + k x = F0 cos(Ω t)', start: 'x(0) = 0, v(0) = 0' } });
         ds.var('m', [], 'float', { symbol: 'm', units: 'kg', long_name: 'mass', computed_in: 'constant M', digits: 1 });
-        ds.var('f0', [], 'float', { symbol: 'f<sub>0</sub>', units: 'Hz', long_name: 'natural frequency', computed_in: 'f0 slider', digits: 2 });
+        ds.var('f0', [], 'float', { symbol: 'f<sub>0</sub>', units: 'Hz', long_name: 'natural frequency, from the spring constant you set', computed_in: 'spring-constant slider', formula: '√(k/m) / 2π', digits: 4 });
         ds.var('zeta', [], 'float', { symbol: 'ζ', long_name: 'damping ratio', computed_in: 'zeta slider', digits: 2 });
         ds.var('F0', [], 'float', { symbol: 'F<sub>0</sub>', units: 'N', long_name: 'force amplitude', computed_in: 'F0 slider', digits: 1 });
         ds.var('fd', [], 'float', { symbol: 'f', units: 'Hz', long_name: 'drive frequency', computed_in: 'fd slider', digits: 2 });
@@ -545,6 +556,13 @@
         ds.var('Kp', [], 'float', { symbol: 'K<sub>p</sub>', units: 'N/m', long_name: 'proportional gain: force per metre of error, a spring the controller adds', computed_in: 'Kp slider', digits: 1 });
         ds.var('Ki', [], 'float', { symbol: 'K<sub>i</sub>', units: 'N/(m·s)', long_name: 'integral gain: force per metre-second of accumulated error', computed_in: 'Ki slider', digits: 1 });
         ds.var('Kd', [], 'float', { symbol: 'K<sub>d</sub>', units: 'kg/s', long_name: 'derivative gain: force per metre per second of measured speed, a damper the controller adds', computed_in: 'Kd slider', digits: 1 });
+        ds.var('x0', [], 'float', { symbol: 'x(0)', units: 'm', long_name: 'where the run starts: 0 after Solve, where your hand let go after a drag', computed_in: 'solve(), from Solve or from the release of a drag', digits: 5 });
+        ds.var('v0', [], 'float', { symbol: 'ẋ(0)', units: 'm/s', long_name: 'speed at the start of the run: 0 after Solve, the speed of your hand at the release', computed_in: 'solve(), from the release of a drag', digits: 5 });
+        ds.var('z0', [], 'float', { symbol: 'z(0)', units: 'm·s', long_name: 'the controller’s memory at the start of the run: 0 after Solve, what it had added up by the release', computed_in: 'solve(), from the release of a drag', digits: 5 });
+        ds.var('released', [], 'bool', { symbol: 'from your hand', long_name: 'the run starts where a drag let go of the block', computed_in: 'solve()' });
+        ds.var('grabbed', [], 'bool', { symbol: 'held', long_name: 'your hand is holding the block now; the clock is stopped', computed_in: 'the drag' });
+        ds.var('hand_now', [], 'float', { symbol: 'F<sub>hand</sub>', units: 'N', long_name: 'force your hand must give to hold the block where it is: it balances spring, damper and coil', computed_in: 'the drag', formula: 'k x + c ẋ − F', digits: 4 });
+        ds.var('hand_px', [], 'float', { symbol: 'F<sub>hand</sub> arrow', units: 'css px', long_name: 'length of the hand-force arrow (positive to the right)', computed_in: 'draw()', formula: 'F<sub>hand</sub> · px/N', digits: 1 });
         ds.var('ctrl_on', [], 'bool', { symbol: 'controller on', long_name: 'at least one gain is above zero', computed_in: 'solve()' });
         ds.var('omega0', [], 'float', { symbol: 'ω<sub>0</sub>', units: 'rad/s', long_name: 'natural angular frequency', computed_in: 'solve()', formula: 'ω<sub>0</sub> = 2π f<sub>0</sub>', digits: 4 });
         ds.var('k', [], 'float', { symbol: 'k', units: 'N/m', long_name: 'spring constant', computed_in: 'solve()', formula: 'k = m ω<sub>0</sub>²', digits: 4 });
@@ -630,6 +648,9 @@
         ds.var('prev_zeta', [], 'float', { symbol: 'ζ<sup>prev</sup>', long_name: 'damping ratio of the previous run', computed_in: 'solve()', digits: 2 });
         ds.var('prev_F0', [], 'float', { symbol: 'F<sub>0</sub><sup>prev</sup>', units: 'N', long_name: 'force amplitude of the previous run', computed_in: 'solve()', digits: 1 });
         ds.var('prev_fd', [], 'float', { symbol: 'f<sup>prev</sup>', units: 'Hz', long_name: 'drive frequency of the previous run', computed_in: 'solve()', digits: 2 });
+        ds.var('prev_x0', [], 'float', { symbol: 'x(0)<sup>prev</sup>', units: 'm', long_name: 'start of the previous run', computed_in: 'solve()', digits: 5 });
+        ds.var('prev_v0', [], 'float', { symbol: 'ẋ(0)<sup>prev</sup>', units: 'm/s', long_name: 'start speed of the previous run', computed_in: 'solve()', digits: 5 });
+        ds.var('prev_z0', [], 'float', { symbol: 'z(0)<sup>prev</sup>', units: 'm·s', long_name: 'start memory of the previous run', computed_in: 'solve()', digits: 5 });
         ds.var('prev_r', [], 'float', { symbol: 'r<sup>prev</sup>', units: 'm', long_name: 'target of the previous run', computed_in: 'solve()', digits: 2 });
         ds.var('prev_Kp', [], 'float', { symbol: 'K<sub>p</sub><sup>prev</sup>', units: 'N/m', long_name: 'proportional gain of the previous run', computed_in: 'solve()', digits: 1 });
         ds.var('prev_Ki', [], 'float', { symbol: 'K<sub>i</sub><sup>prev</sup>', units: 'N/(m·s)', long_name: 'integral gain of the previous run', computed_in: 'solve()', digits: 1 });
@@ -644,6 +665,7 @@
         ds.var('Fd_px', [], 'float', { symbol: 'F arrow', units: 'css px', long_name: 'length of the drive-force arrow (positive to the right)', computed_in: 'draw()', formula: 'F<sub>now</sub> · px/N', digits: 1 });
         ds.var('Fc_px', [], 'float', { symbol: 'F<sub>c</sub> arrow', units: 'css px', long_name: 'length of the damper-force arrow (positive to the right)', computed_in: 'draw()', formula: 'F<sub>c, now</sub> · px/N', digits: 1 });
         ds.var('Fk_px', [], 'float', { symbol: 'F<sub>k</sub> arrow', units: 'css px', long_name: 'length of the spring-force arrow (positive to the right)', computed_in: 'draw()', formula: 'F<sub>k, now</sub> · px/N', digits: 1 });
+        ds.var('fprof', [], 'float', { symbol: 'F<sub>chart</sub>', units: 'N', long_name: 'half-height of the force-profile chart: 1.1 × the largest force of the run', computed_in: 'solve()', formula: '1.1 · max over n of (|u|, |u<sub>P</sub>|, |u<sub>I</sub>|, |u<sub>D</sub>|, |F<sub>push</sub>|, |k x|, |c v|)', digits: 5 });
         ds.var('uscale', [], 'float', { symbol: 'u<sub>bar</sub>', units: 'N', long_name: 'force that fills half a bar of the controller box: the largest of |u|, |u<sub>P</sub>|, |u<sub>I</sub>|, |u<sub>D</sub>| over the run', computed_in: 'solve()', formula: 'max over n of (|u<sub>n</sub>|, |u<sub>P, n</sub>|, |u<sub>I, n</sub>|, |u<sub>D, n</sub>|)', digits: 5 });
         ds.var('Wscale', [], 'float', { symbol: 'W<sub>bar</sub>', units: 'J', long_name: 'energy that fills a bar: the largest of the coil’s work, the heat and the stored energy over the run', computed_in: 'solve()', formula: 'max over n of (W<sub>in, n</sub>, W<sub>loss, n</sub>, E<sub>n</sub>)', digits: 5 });
         ds.var('r_px', [], 'float', { symbol: 'x<sub>r</sub> px', units: 'css px', long_name: 'screen position of the target dot on the ruler', computed_in: 'draw()', formula: 'x<sub>eq</sub> + r · px/m', digits: 1 });
@@ -665,8 +687,18 @@
         ds.var('Hmag', ['b'], Float64Array, { symbol: '|H(iΩ)|', units: 'm/N', long_name: 'closed loop: steady amplitude per newton of the outside push', computed_in: 'bode()', formula: '1 / |k + K<sub>p</sub> − mΩ² + i((c + K<sub>d</sub>)Ω − K<sub>i</sub>/Ω)|', digits: 6 });
         ds.var('Hphase', ['b'], Float64Array, { symbol: 'φ<sub>cl</sub>(Ω)', units: '°', long_name: 'closed loop: phase lag behind the outside push', computed_in: 'bode()', formula: 'atan2((c + K<sub>d</sub>)Ω − K<sub>i</sub>/Ω, k + K<sub>p</sub> − mΩ²) in degrees', digits: 3 });
         ds.var('Gphase', ['b'], Float64Array, { symbol: 'φ(Ω)', units: '°', long_name: 'phase lag', computed_in: 'bode()', formula: 'atan2(2ζω<sub>0</sub>Ω, ω<sub>0</sub>² − Ω²) in degrees', digits: 3 });
+        ds.dim('l', 1281);
+        ds.coord('fl', 'l', Float64Array, { symbol: 'f<sub>l</sub>', units: 'Hz', long_name: 'drive frequencies of the amplitude function, evenly spaced', computed_in: 'bode()', formula: '1.6 Hz · (j + 1) / 1281', digits: 5 });
+        ds.var('Al', ['l'], Float64Array, { symbol: 'A(f)', units: 'm', long_name: 'amplitude function of the plant alone: steady swing for the push F<sub>0</sub>', computed_in: 'bode()', formula: 'F<sub>0</sub> |G(iΩ)|', digits: 6 });
+        ds.var('Pl', ['l'], Float64Array, { symbol: 'φ(f)', units: '°', long_name: 'phase difference of the plant alone: how far the swing lags the push', computed_in: 'bode()', formula: 'atan2(2ζω<sub>0</sub>Ω, ω<sub>0</sub>² − Ω²) in degrees', digits: 3 });
+        ds.var('Acl', ['l'], Float64Array, { symbol: 'A<sub>cl</sub>(f)', units: 'm', long_name: 'amplitude function with the controller on: steady swing about x*', computed_in: 'bode()', formula: 'F<sub>0</sub> |H(iΩ)|', digits: 6 });
+        ds.var('Pcl', ['l'], Float64Array, { symbol: 'φ<sub>cl</sub>(f)', units: '°', long_name: 'phase difference with the controller on', computed_in: 'bode()', formula: 'atan2((c + K<sub>d</sub>)Ω − K<sub>i</sub>/Ω, k + K<sub>p</sub> − mΩ²) in degrees', digits: 3 });
+        ds.var('Amax', [], 'float', { symbol: 'A<sub>top</sub>', units: 'm', long_name: 'top of the amplitude axis: 1.1 × the largest amplitude of the curve the run follows', computed_in: 'bode()', digits: 5 });
+        ds.var('view', [], 'str', { symbol: 'view', long_name: 'how the frequency response is drawn: linear (amplitude function and phase difference) or Bode (log axes)', computed_in: 'the view buttons' });
 
-        var f0 = Sim.slider('f0', { format: function (v) { return v.toFixed(2) + ' Hz'; }, onInput: markStale });
+        // the spring constant is set directly; the natural frequency follows from it, f0 = √(k/m) / 2π
+        var kS = Sim.slider('kspring', { format: function (v) { return v.toFixed(2) + ' N/m · f₀ = ' + (Math.sqrt(v / M) / (2 * Math.PI)).toFixed(3) + ' Hz'; }, onInput: markStale });
+        var f0 = { get value() { return Math.sqrt(kS.value / M) / (2 * Math.PI); }, el: kS.el };
         var zeta = Sim.slider('zeta', { format: function (v) { return v.toFixed(2); }, onInput: markStale });
         var F0 = Sim.slider('F0', { format: function (v) { return v.toFixed(1) + ' N'; }, onInput: markStale });
         var fd = Sim.slider('fd', { format: function (v) { return v.toFixed(2) + ' Hz'; }, onInput: markStale });
@@ -685,8 +717,10 @@
             var X = (F / M) / Math.sqrt(Math.pow(w0 * w0 - W * W, 2) + Math.pow(2 * z * w0 * W, 2));
             return { X: X, phi: Math.atan2(2 * z * w0 * W, w0 * w0 - W * W) };
         }
-        function exact(t, w0, z, W, st) {
-            var wd = w0 * Math.sqrt(1 - z * z), C1 = -st.X * Math.cos(st.phi), C2 = (z * w0 * C1 - st.X * W * Math.sin(st.phi)) / wd;
+        function exact(t, w0, z, W, st, x0, v0) {
+            // (5) from the start x(0) = x0, ẋ(0) = v0 (both 0 after Solve)
+            x0 = x0 || 0; v0 = v0 || 0;
+            var wd = w0 * Math.sqrt(1 - z * z), C1 = x0 - st.X * Math.cos(st.phi), C2 = (v0 + z * w0 * C1 - st.X * W * Math.sin(st.phi)) / wd;
             return st.X * Math.cos(W * t - st.phi) + Math.exp(-z * w0 * t) * (C1 * Math.cos(wd * t) + C2 * Math.sin(wd * t));
         }
 
@@ -720,8 +754,8 @@
             A = [[0, 1], [-(p.k + p.Kp) / M, -(p.c + p.Kd) / M]];
             if (p.Ki > 0) { A = [[0, 1, 0], [-(p.k + p.Kp) / M, -(p.c + p.Kd) / M, p.Ki / M], [-1, 0, 0]]; }
             var X = st.X, ph = st.phi, W = p.W;
-            y = [-xe - X * Math.cos(-ph), W * X * Math.sin(-ph)];
-            if (p.Ki > 0) y.push(-p.k * p.r / p.Ki + (X / W) * Math.sin(-ph));
+            y = [(p.x0 || 0) - xe - X * Math.cos(-ph), (p.v0 || 0) + W * X * Math.sin(-ph)];
+            if (p.Ki > 0) y.push((p.z0 || 0) - p.k * p.r / p.Ki + (X / W) * Math.sin(-ph));
             E = expm(A, EVERY * H);
             for (n = 0; n < ts.length; n++) {
                 out[n] = xe + X * Math.cos(W * ts[n] - ph) + y[0];
@@ -733,18 +767,24 @@
         function accel(t, x, v, u, p) {
             return (p.F0 * Math.cos(p.W * t) + u - p.c * v - p.k * x) / M;
         }
-        function solve() {
-            var start = performance.now();
+        function sliderParams() {
             var w0 = 2 * Math.PI * f0.value, p = { k: M * w0 * w0, c: 2 * zeta.value * M * w0, W: 2 * Math.PI * fd.value, F0: F0.value };
             p.r = rr.value; p.Kp = Kp.value; p.Ki = Ki.value; p.Kd = Kd.value;
+            return p;
+        }
+        function solve(from) {
+            // from: undefined for the Solve button (start at rest), or the state your hand let go of, { x, v, z }
+            var start = performance.now(), w0 = 2 * Math.PI * f0.value, p = sliderParams();
+            from = from && from.x !== undefined ? from : { x: 0, v: 0, z: 0 };
+            p.x0 = from.x; p.v0 = from.v; p.z0 = from.z;
             // keep the run on screen as the previous run, so the new one can be compared with it at the same scale
             var had = !!solved, xprev = ds.alloc('xs_prev'); if (had) xprev.set(ds.get('xs'));
             ds.touch('xs_prev'); ds.set('has_prev', had); ds.set('xmax_prev', had ? ds.get('xmax') : 0);
-            ['f0', 'zeta', 'F0', 'fd', 'r', 'Kp', 'Ki', 'Kd'].forEach(function (q) { ds.set('prev_' + q, had ? ds.get(q) : NaN); });
+            ['f0', 'zeta', 'F0', 'fd', 'r', 'Kp', 'Ki', 'Kd', 'x0', 'v0', 'z0'].forEach(function (q) { ds.set('prev_' + q, had ? ds.get(q) : NaN); });
             var ts = ds.alloc('ts'), xs = ds.alloc('xs'), vs = ds.alloc('vs'), Fs = ds.alloc('Fs'), Es = ds.alloc('Es');
             var Pin = ds.alloc('Pin'), Ploss = ds.alloc('Ploss'), xex = ds.alloc('xex'), Wc = ds.alloc('Wc'), Qc = ds.alloc('Qc');
             var zs = ds.alloc('zs'), Fpush = ds.alloc('Fpush'), us = ds.alloc('us'), uP = ds.alloc('uP'), uI = ds.alloc('uI'), uD = ds.alloc('uD');
-            var t = 0, x = 0, v = 0, z = 0, win = 0, wloss = 0, n = 0, step, blew = NaN;
+            var t = 0, x = p.x0, v = p.v0, z = p.z0, win = 0, wloss = 0, n = 0, step, blew = NaN;
             for (step = 0; step <= TEND / H; step++) {
                 if (step % EVERY === 0) {
                     ts[n] = t; xs[n] = x; vs[n] = v; zs[n] = z; Fpush[n] = p.F0 * Math.cos(p.W * t);
@@ -771,28 +811,30 @@
             var on = p.Kp > 0 || p.Ki > 0 || p.Kd > 0, st = on ? closed(p) : steady(w0, zeta.value, p.W, p.F0), xe = equilibrium(p), err = 0, xm = 0, xmax = 1e-9;
             if (on) exactClosed(p, ts, xex);
             for (n = 0; n < NS; n++) {
-                if (!on) xex[n] = exact(ts[n], w0, zeta.value, p.W, st);
+                if (!on) xex[n] = exact(ts[n], w0, zeta.value, p.W, st, p.x0, p.v0);
                 err = Math.max(err, Math.abs(xs[n] - xex[n]));
                 xmax = Math.max(xmax, Math.abs(xs[n]));
                 if (ts[n] >= TEND - 10) xm = Math.max(xm, Math.abs(xs[n] - xe));
             }
             // the coil: the source drives I = F/(Bℓ) through it; the forces of damper and spring on the block; the bars' energy scale
-            var xqs = ds.alloc('xqs'), ph = ds.alloc('ph'), Is = ds.alloc('Is'), Fdamp = ds.alloc('Fdamp'), Fspr = ds.alloc('Fspr'), wsc = 1e-12, pmax = 0, usc = 1e-12;
+            var xqs = ds.alloc('xqs'), ph = ds.alloc('ph'), Is = ds.alloc('Is'), Fdamp = ds.alloc('Fdamp'), Fspr = ds.alloc('Fspr'), wsc = 1e-12, pmax = 0, usc = 1e-12, fpr = 1e-12;
             for (n = 0; n < NS; n++) {
                 xqs[n] = Fs[n] / p.k;
                 ph[n] = (p.W * ts[n]) % (2 * Math.PI);
                 Is[n] = Fs[n] / BL; Fdamp[n] = -p.c * vs[n]; Fspr[n] = -p.k * xs[n];
                 wsc = Math.max(wsc, Wc[n], Qc[n], Es[n]); pmax = Math.max(pmax, Ploss[n]); usc = Math.max(usc, Math.abs(us[n]), Math.abs(uP[n]), Math.abs(uI[n]), Math.abs(uD[n]));
+                fpr = Math.max(fpr, Math.abs(us[n]), Math.abs(uP[n]), Math.abs(uI[n]), Math.abs(uD[n]), Math.abs(Fpush[n]), Math.abs(Fspr[n]), Math.abs(Fdamp[n]));
             }
             ['ts', 'xs', 'vs', 'Fs', 'Es', 'Pin', 'Ploss', 'xex', 'xqs', 'ph', 'Is', 'Fdamp', 'Fspr', 'Wc', 'Qc', 'zs', 'Fpush', 'us', 'uP', 'uI', 'uD'].forEach(function (name) { ds.touch(name); });
             ds.set('m', M); ds.set('f0', f0.value); ds.set('zeta', zeta.value); ds.set('F0', F0.value); ds.set('fd', fd.value);
             ds.set('r', p.r); ds.set('Kp', p.Kp); ds.set('Ki', p.Ki); ds.set('Kd', p.Kd); ds.set('ctrl_on', on);
+            ds.set('x0', p.x0); ds.set('v0', p.v0); ds.set('z0', p.z0); ds.set('released', p.x0 !== 0 || p.v0 !== 0 || p.z0 !== 0);
             ds.set('x_eq', xe); ds.set('F_eq', p.k * xe); ds.set('t_blow', blew); ds.set('margin', (p.c + p.Kd) * (p.k + p.Kp) - M * p.Ki); ds.set('stable', (p.c + p.Kd) * (p.k + p.Kp) - M * p.Ki > 0);
             ds.set('zeta_cl', (p.c + p.Kd) / (2 * Math.sqrt(M * (p.k + p.Kp)))); ds.set('H_drive', 1 / Math.hypot(p.k + p.Kp - M * p.W * p.W, (p.c + p.Kd) * p.W - p.Ki / p.W));
             ds.set('omega0', w0); ds.set('k', p.k); ds.set('c', p.c); ds.set('Omega', p.W); ds.set('tau', 1 / (zeta.value * w0)); ds.set('Q', 1 / (2 * zeta.value));
             ds.set('X', st.X); ds.set('phi', st.phi); ds.set('fr', zeta.value < Math.SQRT1_2 ? f0.value * Math.sqrt(1 - 2 * zeta.value * zeta.value) : 0);
             ds.set('h', H); ds.set('steps', TEND / H); ds.set('err_max', err); ds.set('Xm', xm); ds.set('xmax', xmax);
-            ds.set('BL', BL); ds.set('I0', p.F0 / BL); ds.set('xst', p.F0 / p.k); ds.set('Wscale', wsc); ds.set('Ploss_max', pmax); ds.set('uscale', usc); ds.set('need', Math.max(xmax, p.F0 / p.k, on ? Math.abs(p.r) : 0)); ds.set('ratio', had && ds.get('xmax_prev') > 0 ? xmax / ds.get('xmax_prev') : NaN);
+            ds.set('BL', BL); ds.set('I0', p.F0 / BL); ds.set('xst', p.F0 / p.k); ds.set('Wscale', wsc); ds.set('Ploss_max', pmax); ds.set('uscale', usc); ds.set('fprof', 1.1 * fpr); ds.set('need', Math.max(xmax, p.F0 / p.k, on ? Math.abs(p.r) : 0)); ds.set('ratio', had && ds.get('xmax_prev') > 0 ? xmax / ds.get('xmax_prev') : NaN);
             var before = had ? ds.get('span') : NaN;
             setSpan(had ? Math.max(before, ds.get('need')) : ds.get('need'), before, false);
             ds.set('G_drive', 1 / (M * Math.sqrt(Math.pow(w0 * w0 - p.W * p.W, 2) + Math.pow(2 * zeta.value * w0 * p.W, 2))));
@@ -827,6 +869,18 @@
                 Hp[j] = Math.atan2((c + kd) * W - ki / W, k + kp - M * W * W) * 180 / Math.PI;
             }
             ds.touch('fb'); ds.touch('Gmag'); ds.touch('Gphase'); ds.touch('Hmag'); ds.touch('Hphase');
+            // the amplitude function on an even grid fine enough for the sharpest peak (ζ = 0.01: half-width 2ζ f0 ≥ 0.004 Hz, grid 0.00125 Hz)
+            var fl = ds.alloc('fl'), Al = ds.alloc('Al'), Pl = ds.alloc('Pl'), Acl = ds.alloc('Acl'), Pcl = ds.alloc('Pcl'), F0v = ds.get('F0'), amax = 0, on = ds.get('ctrl_on');
+            for (j = 0; j < 1281; j++) {
+                var fj = 1.6 * (j + 1) / 1281, Wj = 2 * Math.PI * fj;
+                fl[j] = fj;
+                Al[j] = F0v / (M * Math.sqrt(Math.pow(w0 * w0 - Wj * Wj, 2) + Math.pow(2 * z * w0 * Wj, 2)));
+                Pl[j] = Math.atan2(2 * z * w0 * Wj, w0 * w0 - Wj * Wj) * 180 / Math.PI;
+                Acl[j] = F0v / Math.hypot(k + kp - M * Wj * Wj, (c + kd) * Wj - ki / Wj);
+                Pcl[j] = Math.atan2((c + kd) * Wj - ki / Wj, k + kp - M * Wj * Wj) * 180 / Math.PI;
+                amax = Math.max(amax, on ? Acl[j] : Al[j]);
+            }
+            ds.touch('fl'); ds.touch('Al'); ds.touch('Pl'); ds.touch('Acl'); ds.touch('Pcl'); ds.set('Amax', Math.max(1.1 * amax, 1e-6));
             drawBode();
         }
 
@@ -968,7 +1022,7 @@
             c.fillText('−' + Sim.fmt(span, 2), m.eqX - m.amp, ry + 17); c.fillText('0', m.eqX, ry + 17); c.fillText('+' + Sim.fmt(span, 2) + ' m', m.eqX + m.amp + (g.narrow ? 6 : 0), ry + 17);
             c.strokeStyle = BURG; c.fillStyle = BURG;
             if (Math.abs(bx - m.eqX) >= 2) arrow(c, m.eqX, ry, bx, ry, 2.5, Math.min(8, Math.abs(bx - m.eqX)));
-            label(c, 'x', ' = ' + Sim.fmt(xs[i], 3) + ' m', g.narrow ? m.eqX : m.eqX + m.amp + 16, g.narrow ? ry + 34 : ry + 5, g.narrow ? 'center' : 'left', BURG);
+            label(c, 'x', ' = ' + Sim.fmt(ds.get('x_now'), 3) + ' m', g.narrow ? m.eqX : m.eqX + m.amp + 16, g.narrow ? ry + 34 : ry + 5, g.narrow ? 'center' : 'left', BURG);
             // with the controller on: the target r as a dot on the ruler, and the equilibrium x* it holds as a rose line through the block
             if (ds.get('ctrl_on')) {
                 c.setLineDash([5, 4]); c.strokeStyle = T.rose; c.lineWidth = 1.4; c.beginPath(); c.moveTo(ds.get('xeq_px'), m.floorY); c.lineTo(ds.get('xeq_px'), m.by - m.bh / 2 - 2); c.stroke(); c.setLineDash([]);
@@ -977,7 +1031,7 @@
         }
         function drawCoil(c, g, i, cap) {
             // a moving-coil drive, the loudspeaker principle: a winding in the radial field B of a magnet's gap feels F = Bℓ I along the axis
-            var m = g.m, C = g.coil, y = m.by, I = ds.get('Is')[i], I0 = ds.get('I0'), xw = cap + C.tube - C.cw;
+            var m = g.m, C = g.coil, y = m.by, I = ds.get('I_now'), I0 = ds.get('I0'), xw = cap + C.tube - C.cw;
             c.fillStyle = 'rgba(90, 80, 75, 0.28)'; c.strokeStyle = T.ink3; c.lineWidth = 1;
             [[C.tip, y - C.ao, C.back - C.tip, C.ao - C.ai], [C.tip, y + C.ai, C.back - C.tip, C.ao - C.ai], [C.tip, y - C.ph, C.back - C.tip, 2 * C.ph], [C.back, y - C.ao, C.plate, 2 * C.ao]].forEach(function (r) { c.fillRect(r[0], r[1], r[2], r[3]); c.strokeRect(r[0], r[1], r[2], r[3]); });
             c.strokeStyle = T.ink3; c.lineWidth = 2; c.beginPath(); c.moveTo(C.back + C.plate / 2, y + C.ao); c.lineTo(C.back + C.plate / 2, m.floorY); c.stroke();
@@ -1003,18 +1057,31 @@
             c.fillStyle = T.card; c.strokeStyle = T.ink2; c.lineWidth = 1.3; c.beginPath(); c.arc(C.sx, C.sy, 10, 0, Math.PI * 2); c.fill(); c.stroke();
             c.strokeStyle = BURG; c.lineWidth = 1.4; c.beginPath(); for (var q = 0; q <= 12; q++) { var xx = C.sx - 6 + q, yy = C.sy - 3.5 * Math.sin(q / 12 * 2 * Math.PI); if (q) c.lineTo(xx, yy); else c.moveTo(xx, yy); } c.stroke();
             label(c, 'I', ' = ' + Sim.fmt(I, 3) + ' A', C.sx, C.sy - 16, 'center', BURG);
-            label(c, 'F = BℓI', ' = ' + Sim.fmt(ds.get('Fs')[i], 2) + ' N', C.sx, C.sy - 33, 'center', BURG);
+            label(c, 'F = BℓI', ' = ' + Sim.fmt(ds.get('F_now'), 2) + ' N', C.sx, C.sy - 33, 'center', BURG);
         }
+        function capArrow(len, g) { var L = 1.6 * g.m.amp; return Math.max(-L, Math.min(L, len)); }
         function drawForces(c, g, bx) {
             // the three forces on the block, on one scale: each is drawn twice as long as the stretch of the spring that would carry it
             var m = g.m, top = m.by - m.bh / 2, dy = g.narrow ? 13 : 15, lx = m.eqX - m.bw / 2 - m.amp - 8;
-            [['F', ds.get('F_now'), ds.get('Fd_px'), BURG], ['−cv', ds.get('Fc_now'), ds.get('Fc_px'), T.tanInk], ['−kx', ds.get('Fk_now'), ds.get('Fk_px'), T.ink2]].forEach(function (f, k) {
-                var y = top - 11 - k * dy;
+            var rows = [['F', ds.get('F_now'), ds.get('Fd_px'), BURG], ['−cv', ds.get('Fc_now'), ds.get('Fc_px'), T.tanInk], ['−kx', ds.get('Fk_now'), ds.get('Fk_px'), T.ink2]];
+            if (ds.get('grabbed')) rows.push(['F_{hand}', ds.get('hand_now'), ds.get('hand_px'), T.accentDark]);
+            rows.forEach(function (f, k) {
+                var y = top - 11 - k * dy, len = capArrow(f[2], g);
                 c.strokeStyle = f[3]; c.fillStyle = f[3];
-                if (Math.abs(f[2]) >= 2) arrow(c, bx, y, bx + f[2], y, 2.4, Math.min(7, Math.abs(f[2])));
-                c.beginPath(); c.arc(bx, y, 1.8, 0, Math.PI * 2); c.fill();
+                if (Math.abs(len) >= 2) arrow(c, bx, y, bx + len, y, 2.4, Math.min(7, Math.abs(len)));
+                if (len !== f[2]) { var bk = bx + 0.55 * len; c.lineWidth = 1.2; c.strokeStyle = T.card; c.beginPath(); c.moveTo(bk - 3, y + 5); c.lineTo(bk + 1, y - 5); c.moveTo(bk + 1, y + 5); c.lineTo(bk + 5, y - 5); c.stroke(); }
+                c.fillStyle = f[3]; c.beginPath(); c.arc(bx, y, 1.8, 0, Math.PI * 2); c.fill();
+                c.font = T.mono; var lw = c.measureText(' = ' + Sim.fmt(f[1], 2) + ' N').width + 26;
+                c.fillStyle = 'rgba(255, 250, 243, 0.85)'; c.fillRect(lx - lw - 2, y - 7, lw + 4, 14);
                 label(c, f[0], ' = ' + Sim.fmt(f[1], 2) + ' N', lx, y + 4, 'right', f[3]);
             });
+            if (ds.get('grabbed')) { c.setLineDash([3, 2]); c.strokeStyle = T.accentDark; c.lineWidth = 1.4; c.strokeRect(bx - m.bw / 2 - 3, m.by - m.bh / 2 - 3, m.bw + 6, m.bh + 6); c.setLineDash([]); }
+        }
+        function ctrlScale() {
+            // the bars' scale: the run's largest controller force, or while you hold the block the largest force now
+            var sc = ds.get('uscale');
+            if (ds.get('grabbed')) ['u_now', 'uP_now', 'uI_now', 'uD_now'].forEach(function (k) { sc = Math.max(sc, Math.abs(ds.get(k))); });
+            return sc;
         }
         function ctrlHead(g) {
             // on narrow screens the header is one word, so the box leaves room for the energy bars
@@ -1034,7 +1101,7 @@
             c.fillText(ctrlHead(g), x0 + 6, y0 + 13);
             if (!on) return;
             [['P', ds.get('uP_now'), T.ink2], ['I', ds.get('uI_now'), T.ink3], ['D', ds.get('uD_now'), T.tanInk], ['u', ds.get('u_now'), BURG]].forEach(function (q, k) {
-                var y = y0 + 13 + (k + 1) * rh, len = q[1] / ds.get('uscale') * half;
+                var y = y0 + 13 + (k + 1) * rh, len = q[1] / ctrlScale() * half;
                 c.fillStyle = q[2]; c.fillText(q[0], x0 + 6, y);
                 c.strokeStyle = T.ruleSoft; c.beginPath(); c.moveTo(cx - half, y - 4); c.lineTo(cx + half, y - 4); c.stroke();
                 c.strokeStyle = T.muted; c.beginPath(); c.moveTo(cx, y - 9); c.lineTo(cx, y + 1); c.stroke();
@@ -1053,7 +1120,7 @@
             [['W_{in}', ds.get('Wc_now'), BURG], ['W_{loss}', ds.get('Qc_now'), T.tanInk], ['E', ds.get('E_now'), T.ink2]].forEach(function (e, k) {
                 var y = y0 + k * 16;
                 c.strokeStyle = T.rule; c.lineWidth = 1; c.strokeRect(x0, y, bw, 8);
-                c.fillStyle = e[2]; c.fillRect(x0, y, Math.max(0, e[1] / W) * bw, 8);
+                c.fillStyle = e[2]; c.fillRect(x0, y, Math.max(0, Math.min(1, e[1] / W)) * bw, 8);
                 label(c, e[0], ' = ' + Sim.fmt(e[1], 2) + ' J', x0 + bw + 8, y + 8, 'left', e[2]);
             });
         }
@@ -1127,11 +1194,11 @@
             var Tw = Math.min(20, Math.max(6, 4 / ds.get('fd'))), t0 = Math.min(TEND - Tw, Math.max(0, ts[i] - 0.7 * Tw));
             ds.set('win_T', Tw); ds.set('win_t0', t0);
             var g = geom(), m = g.m;
-            var bx = m.eqX + xs[i] * m.sc;
+            var bx = m.eqX + ds.get('x_now') * m.sc;
             var cap = bx + m.bw / 2 + g.coil.rod;
             var gx = m.eqX + ds.get('xs_prev')[i] * m.sc;
             ds.set('px_per_m', m.sc); ds.set('px_per_N', m.fN); ds.set('amp_px', m.amp); ds.set('eq_px', m.eqX); ds.set('block_px', bx); ds.set('block_y', m.by);
-            ds.set('Fd_px', ds.get('F_now') * m.fN); ds.set('Fc_px', ds.get('Fc_now') * m.fN); ds.set('Fk_px', ds.get('Fk_now') * m.fN);
+            ds.set('Fd_px', ds.get('F_now') * m.fN); ds.set('Fc_px', ds.get('Fc_now') * m.fN); ds.set('Fk_px', ds.get('Fk_now') * m.fN); ds.set('hand_px', ds.get('grabbed') ? ds.get('hand_now') * m.fN : 0);
             ds.set('coil_px', cap); ds.set('ghost_px', gx); ds.set('box_w', g.w); ds.set('box_h', g.h);
             ds.set('r_px', m.eqX + ds.get('r') * m.sc); ds.set('xeq_px', m.eqX + ds.get('x_eq') * m.sc);
             ds.set('ghost_shown', ds.get('has_prev') && Math.abs(ds.get('xs_prev')[i]) <= ds.get('span'));
@@ -1139,6 +1206,47 @@
             drawMechanism(ctx, g, i, bx, cap, gx);
             drawWindow(ctx, g, i);
             drawOverview(ctx, g, i);
+            drawForceProfile(i);
+        }
+
+        /* ---------- the force profile: the same window of the run as the x chart, on its own canvas ---------- */
+        var fbox = Sim.canvas2d(document.getElementById('forces')), fctx = fbox.ctx, forceStage = document.getElementById('stage-force');
+        function forceGeom() {
+            var w = fbox.w, h = fbox.h, narrow = w < 560, L = narrow ? 48 : 62, R = w - (narrow ? 12 : 20), t0 = ds.get('win_t0'), Tw = ds.get('win_T'), yl = ds.get('fprof');
+            var p = { L: L, R: R, top: 30, bot: h - 26 };
+            return { w: w, h: h, narrow: narrow, p: p, fx: function (t) { return p.L + (t - t0) / Tw * (p.R - p.L); }, fy: function (F) { return (p.top + p.bot) / 2 - F / yl * (p.bot - p.top) / 2; } };
+        }
+        function forceCurves() {
+            // which stored series the chart draws: the controller's parts only when the controller is on
+            var on = ds.get('ctrl_on'), list = [['Fpush', 'push', T.rose, [6, 4], 1.4], ['Fspr', '−kx', T.ink3, [2, 3], 1.4], ['Fdamp', '−cẋ', T.tanInk, [2, 3], 1.4]];
+            if (on) list = list.concat([['uP', 'u_{P}', T.ink2, [6, 3], 1.3], ['uI', 'u_{I}', '#4a6f8a', [6, 3], 1.3], ['uD', 'u_{D}', T.tanInk, [1, 2.5], 1.6], ['us', 'u', BURG, [], 2.2]]);
+            return list;
+        }
+        function drawForceProfile(i) {
+            var G = forceGeom(), p = G.p, c = fctx, ts = ds.get('ts'), t0 = ds.get('win_t0'), Tw = ds.get('win_T'), yl = ds.get('fprof'), n;
+            var n0 = Math.max(0, Math.floor(t0 / (EVERY * H))), n1 = Math.min(NS - 1, Math.ceil((t0 + Tw) / (EVERY * H)));
+            c.clearRect(0, 0, G.w, G.h); c.font = T.mono; c.lineWidth = 1;
+            var yt = Sim.ticks(-yl, yl, G.narrow ? 3 : 4), tt = Sim.ticks(t0, t0 + Tw, G.narrow ? 4 : 7);
+            yt.values.forEach(function (v) { c.strokeStyle = v === 0 ? T.rule : T.ruleSoft; c.beginPath(); c.moveTo(p.L, G.fy(v)); c.lineTo(p.R, G.fy(v)); c.stroke(); c.fillStyle = T.muted; c.textAlign = 'right'; c.textBaseline = 'middle'; c.fillText(v === 0 ? '0' : Sim.fmt(v, yt.digits).replace('-', '−'), p.L - 7, G.fy(v)); });
+            tt.values.forEach(function (v) { c.strokeStyle = T.ruleSoft; c.beginPath(); c.moveTo(G.fx(v), p.top); c.lineTo(G.fx(v), p.bot); c.stroke(); if (G.fx(v) < p.R - 40) { c.fillStyle = T.muted; c.textAlign = 'center'; c.textBaseline = 'alphabetic'; c.fillText(Sim.fmt(v, tt.digits), G.fx(v), p.bot + 16); } });
+            c.fillStyle = T.muted; c.textAlign = 'right'; c.textBaseline = 'alphabetic'; c.fillText('t (s)', p.R, p.bot + 16);
+            c.strokeStyle = T.rule; c.strokeRect(p.L, p.top, p.R - p.L, p.bot - p.top);
+            c.save(); c.beginPath(); c.rect(p.L, p.top, p.R - p.L, p.bot - p.top); c.clip(); c.lineJoin = 'round';
+            forceCurves().forEach(function (q) {
+                var a = ds.get(q[0]); c.setLineDash(q[3]); c.strokeStyle = q[2]; c.lineWidth = q[4];
+                c.beginPath(); for (n = n0; n <= n1; n++) { if (n === n0) c.moveTo(G.fx(ts[n]), G.fy(a[n])); else c.lineTo(G.fx(ts[n]), G.fy(a[n])); } c.stroke();
+            });
+            c.restore(); c.setLineDash([]);
+            var cx = G.fx(ts[i]); c.strokeStyle = 'rgba(122, 31, 43, 0.55)'; c.lineWidth = 1; c.beginPath(); c.moveTo(cx, p.top); c.lineTo(cx, p.bot); c.stroke();
+            if (ds.get('ctrl_on')) { c.fillStyle = BURG; c.beginPath(); c.arc(cx, G.fy(ds.get('us')[i]), 4, 0, Math.PI * 2); c.fill(); }
+            label(c, 'F', ' (N)', p.L, p.top - 10, 'left', T.ink2);
+            var kx = p.R;
+            forceCurves().slice().reverse().forEach(function (q) {
+                var tw = Sim.tex(c, q[1], 0, 0, { size: 13, measure: true });
+                Sim.tex(c, q[1], kx, p.top - 10, { size: 13, align: 'right', color: T.ink2 }); kx -= tw + 5;
+                c.setLineDash(q[3]); c.strokeStyle = q[2]; c.lineWidth = q[4]; c.beginPath(); c.moveTo(kx - 14, p.top - 14); c.lineTo(kx, p.top - 14); c.stroke(); c.setLineDash([]);
+                kx -= 14 + (G.narrow ? 6 : 12);
+            });
         }
 
         function bodeGeom() {
@@ -1148,9 +1256,11 @@
             var panels = narrow
                 ? [{ L: 58, R: w - 14, top: top, bot: top + (bot - top) / 2 - 26 }, { L: 58, R: w - 14, top: top + (bot - top) / 2 + 26, bot: bot }]
                 : [{ L: 64, R: w / 2 - 20, top: top, bot: bot }, { L: w / 2 + 62, R: w - 18, top: top, bot: bot }];
-            return { w: w, h: h, narrow: narrow, panels: panels, lgTop: lgTop, lgBot: lgBot,
-                X: function (p, f) { return p.L + Math.log(f / 0.05) / Math.log(40) * (p.R - p.L); },
-                Ym: function (p, gv) { return p.top + (lgTop - Math.log10(Math.max(gv, 1e-12))) / (lgTop - lgBot) * (p.bot - p.top); },
+            var lin = ds.get('view') !== 'bode', Am = ds.get('Amax');
+            return { w: w, h: h, narrow: narrow, panels: panels, lgTop: lgTop, lgBot: lgBot, lin: lin,
+                // linear: f from 0 to 1.6 Hz, A from 0 to A_top in m; Bode: log f from 0.05 to 2 Hz, three decades of |G| in m/N
+                X: lin ? function (p, f) { return p.L + f / 1.6 * (p.R - p.L); } : function (p, f) { return p.L + Math.log(f / 0.05) / Math.log(40) * (p.R - p.L); },
+                Ym: lin ? function (p, A) { return p.bot - A / Am * (p.bot - p.top); } : function (p, gv) { return p.top + (lgTop - Math.log10(Math.max(gv, 1e-12))) / (lgTop - lgBot) * (p.bot - p.top); },
                 pmin: pmin, Yp: function (p, d) { return p.top + (d - pmin) / (180 - pmin) * (p.bot - p.top); } };
         }
         function drawBode() {
@@ -1158,30 +1268,33 @@
             c.clearRect(0, 0, B.w, B.h);
             B.panels.forEach(function (p, k) {
                 c.font = T.mono; c.lineWidth = 1;
-                [0.05, 0.1, 0.2, 0.5, 1, 2].forEach(function (f) {
+                (B.lin ? [0, 0.25, 0.5, 0.75, 1, 1.25, 1.5] : [0.05, 0.1, 0.2, 0.5, 1, 2]).forEach(function (f) {
                     c.strokeStyle = T.ruleSoft; c.beginPath(); c.moveTo(B.X(p, f), p.top); c.lineTo(B.X(p, f), p.bot); c.stroke();
                     if (B.X(p, f) < p.R - 62) { c.fillStyle = T.muted; c.textAlign = 'center'; c.textBaseline = 'alphabetic'; c.fillText(String(f), B.X(p, f), p.bot + 16); }
                 });
                 c.fillStyle = T.muted; c.textAlign = 'right'; c.textBaseline = 'alphabetic'; c.fillText('f (Hz)', p.R, p.bot + 16);
                 c.textBaseline = 'middle';
-                if (k === 0) for (var e = Math.ceil(B.lgBot); e <= B.lgTop; e++) { c.strokeStyle = T.ruleSoft; c.beginPath(); c.moveTo(p.L, B.Ym(p, Math.pow(10, e))); c.lineTo(p.R, B.Ym(p, Math.pow(10, e))); c.stroke(); Sim.tex(c, '10^{' + String(e).replace('-', '−') + '}', p.L - 7, B.Ym(p, Math.pow(10, e)) + 5, { size: 14, align: 'right', color: T.muted }); }
+                if (k === 0 && B.lin) Sim.ticks(0, ds.get('Amax'), 4).values.forEach(function (v) { if (v < 0) return; c.strokeStyle = v === 0 ? T.rule : T.ruleSoft; c.beginPath(); c.moveTo(p.L, B.Ym(p, v)); c.lineTo(p.R, B.Ym(p, v)); c.stroke(); c.fillStyle = T.muted; c.textAlign = 'right'; c.fillText(Sim.fmt(v, 3), p.L - 7, B.Ym(p, v)); });
+                else if (k === 0) for (var e = Math.ceil(B.lgBot); e <= B.lgTop; e++) { c.strokeStyle = T.ruleSoft; c.beginPath(); c.moveTo(p.L, B.Ym(p, Math.pow(10, e))); c.lineTo(p.R, B.Ym(p, Math.pow(10, e))); c.stroke(); Sim.tex(c, '10^{' + String(e).replace('-', '−') + '}', p.L - 7, B.Ym(p, Math.pow(10, e)) + 5, { size: 14, align: 'right', color: T.muted }); }
                 else (B.pmin < 0 ? [-90, 0, 90, 180] : [0, 45, 90, 135, 180]).forEach(function (d) { c.strokeStyle = T.ruleSoft; c.beginPath(); c.moveTo(p.L, B.Yp(p, d)); c.lineTo(p.R, B.Yp(p, d)); c.stroke(); c.fillText(d + '°', p.L - 7, B.Yp(p, d)); });
                 c.strokeStyle = T.rule; c.strokeRect(p.L, p.top, p.R - p.L, p.bot - p.top);
-                if (k === 0) label(c, ds.get('ctrl_on') ? '|H(iΩ)| = X/F_{0}' : '|G(iΩ)| = X/F_{0}', ' (m/N)', p.L, p.top - 13, 'left', T.ink2);
-                else label(c, 'φ', ' (°)', p.L, p.top - 13, 'left', T.ink2);
+                if (k === 0) { if (B.lin) label(c, 'A(f) = F_{0}|' + (ds.get('ctrl_on') ? 'H' : 'G') + '|', ' (m)', p.L, p.top - 13, 'left', T.ink2); else label(c, ds.get('ctrl_on') ? '|H(iΩ)| = X/F_{0}' : '|G(iΩ)| = X/F_{0}', ' (m/N)', p.L, p.top - 13, 'left', T.ink2); }
+                else label(c, 'φ(f)', ' (°)', p.L, p.top - 13, 'left', T.ink2);
                 c.save(); c.beginPath(); c.rect(p.L, p.top, p.R - p.L, p.bot - p.top); c.clip();
                 c.setLineDash([4, 4]); c.strokeStyle = T.muted; c.lineWidth = 1;
                 c.beginPath(); c.moveTo(B.X(p, ds.get('f0')), p.top); c.lineTo(B.X(p, ds.get('f0')), p.bot); c.stroke(); c.setLineDash([]);
                 Sim.tex(c, 'f_{0}', B.X(p, ds.get('f0')) + 5, p.top + 16, { size: 14, color: T.muted });
                 // the plant alone (open loop) in grey when the controller is on; the curve the run follows in ink
                 var on = ds.get('ctrl_on'), Hm = ds.get('Hmag'), Hp = ds.get('Hphase');
-                if (on) { c.strokeStyle = T.muted; c.lineWidth = 1.4; c.setLineDash([5, 4]); c.beginPath(); for (j = 0; j < 241; j++) { var yq = k === 0 ? B.Ym(p, G[j]) : B.Yp(p, P[j]); if (j) c.lineTo(B.X(p, fb[j]), yq); else c.moveTo(B.X(p, fb[j]), yq); } c.stroke(); c.setLineDash([]); }
+                // the same picture from the two grids: Bode reads the log grid fb (per newton), the linear view the even grid fl (in metres)
+                var xs_ = B.lin ? ds.get('fl') : fb, N_ = xs_.length, mag0 = B.lin ? ds.get('Al') : G, ph0 = B.lin ? ds.get('Pl') : P, mag1 = B.lin ? ds.get('Acl') : Hm, ph1 = B.lin ? ds.get('Pcl') : Hp;
+                if (on) { c.strokeStyle = T.muted; c.lineWidth = 1.4; c.setLineDash([5, 4]); c.beginPath(); for (j = 0; j < N_; j++) { var yq = k === 0 ? B.Ym(p, mag0[j]) : B.Yp(p, ph0[j]); if (j) c.lineTo(B.X(p, xs_[j]), yq); else c.moveTo(B.X(p, xs_[j]), yq); } c.stroke(); c.setLineDash([]); }
                 c.strokeStyle = T.ink; c.lineWidth = 2; c.lineJoin = 'round';
                 c.beginPath();
-                for (j = 0; j < 241; j++) { var y = k === 0 ? B.Ym(p, on ? Hm[j] : G[j]) : B.Yp(p, on ? Hp[j] : P[j]); if (j) c.lineTo(B.X(p, fb[j]), y); else c.moveTo(B.X(p, fb[j]), y); }
+                for (j = 0; j < N_; j++) { var y = k === 0 ? B.Ym(p, on ? mag1[j] : mag0[j]) : B.Yp(p, on ? ph1[j] : ph0[j]); if (j) c.lineTo(B.X(p, xs_[j]), y); else c.moveTo(B.X(p, xs_[j]), y); }
                 c.stroke();
-                var fx = B.X(p, ds.get('fd')), fy = k === 0 ? B.Ym(p, on ? ds.get('H_drive') : ds.get('G_drive')) : B.Yp(p, ds.get('phi_deg'));
-                if (k === 0 && isFinite(ds.get('Gm_drive'))) { c.strokeStyle = BURG; c.lineWidth = 1.6; c.beginPath(); c.arc(fx, B.Ym(p, ds.get('Gm_drive')), 9, 0, Math.PI * 2); c.stroke(); }
+                var fx = B.X(p, ds.get('fd')), fy = k === 0 ? (B.lin ? B.Ym(p, ds.get('X')) : B.Ym(p, on ? ds.get('H_drive') : ds.get('G_drive'))) : B.Yp(p, ds.get('phi_deg'));
+                if (k === 0 && isFinite(ds.get('Gm_drive'))) { c.strokeStyle = BURG; c.lineWidth = 1.6; c.beginPath(); c.arc(fx, B.lin ? B.Ym(p, ds.get('Xm')) : B.Ym(p, ds.get('Gm_drive')), 9, 0, Math.PI * 2); c.stroke(); }
                 c.fillStyle = BURG; c.beginPath(); c.arc(fx, fy, 5, 0, Math.PI * 2); c.fill();
                 c.restore();
             });
@@ -1208,6 +1321,7 @@
             var i = Math.min(NS - 1, Math.max(0, Math.round(playT / (EVERY * H))));
             iNow = i;
             ds.set('i_now', i); ds.set('t_play', playT);
+            ds.set('grabbed', false); ds.set('hand_now', 0);
             ds.set('x_now', ds.get('xs')[i]); ds.set('v_now', ds.get('vs')[i]); ds.set('F_now', ds.get('Fs')[i]); ds.set('I_now', ds.get('Is')[i]);
             ds.set('u_now', ds.get('us')[i]); ds.set('uP_now', ds.get('uP')[i]); ds.set('uI_now', ds.get('uI')[i]); ds.set('uD_now', ds.get('uD')[i]);
             ds.set('Fc_now', ds.get('Fdamp')[i]); ds.set('Fk_now', ds.get('Fspr')[i]); ds.set('Wc_now', ds.get('Wc')[i]); ds.set('Qc_now', ds.get('Qc')[i]); ds.set('Ploss_now', ds.get('Ploss')[i]);
@@ -1218,6 +1332,13 @@
         }
         var clk = Sim.clock(function (dt) {
             if (!solved) return;
+            if (drag) {
+                // wall-clock time while held: the speed of your hand, smoothed over about 50 ms, and the controller's memory
+                var now = performance.now(), h = Math.max(1e-3, (now - drag.last) / 1000);
+                drag.v += ((drag.x - drag.lastX) / h - drag.v) * Math.min(1, h / 0.05); drag.lastX = drag.x; drag.last = now;
+                drag.z += (rr.value - drag.x) * h;
+                holdState(); return;
+            }
             if (dt > 0) { fps = fps ? fps + (1 / dt - fps) * 0.1 : 1 / dt; }
             playT += speed.value * dt;
             if (playT > TEND) { playT = TEND; clk.set(false); }
@@ -1225,10 +1346,52 @@
             document.getElementById('st-play').classList.toggle('is-done', clk.playing);
             frame();
         });
+        /* ---------- your hand: grab the block, drag it, let go. While you hold it the clock stops and the controller keeps running ---------- */
+        var drag = null, oscEl = document.getElementById('osc');
+        function pointerX(e) { var r = oscEl.getBoundingClientRect(); return { x: e.clientX - r.left, y: e.clientY - r.top }; }
+        function holdState() {
+            // the block where your hand holds it: the controller reads x and ẋ, its memory keeps adding (r − x); the hand balances the rest
+            var p = sliderParams(), u = control(drag.x, drag.v, drag.z, p), F = drag.Fpush + u;
+            ds.set('x_now', drag.x); ds.set('v_now', drag.v); ds.set('u_now', u);
+            ds.set('uP_now', p.Kp * (p.r - drag.x)); ds.set('uI_now', p.Ki * drag.z); ds.set('uD_now', -p.Kd * drag.v);
+            ds.set('F_now', F); ds.set('I_now', F / BL); ds.set('Fc_now', -p.c * drag.v); ds.set('Fk_now', -p.k * drag.x);
+            ds.set('hand_now', p.k * drag.x + p.c * drag.v - F); ds.set('E_now', 0.5 * M * drag.v * drag.v + 0.5 * p.k * drag.x * drag.x);
+            ds.set('Ploss_now', p.c * drag.v * drag.v); ds.set('grabbed', true);
+            statusEl.classList.remove('is-stale');
+            statusEl.textContent = _t('You hold the block at x = {x} m. The controller pulls with u = {u} N; its memory z = {z} m·s keeps adding up the error while you hold. Let go to solve the motion from here.', { x: Sim.fmt(drag.x, 3), u: Sim.fmt(u, 2), z: Sim.fmt(drag.z, 3) });
+            draw();
+        }
+        oscEl.addEventListener('pointerdown', function (e) {
+            if (!solved) return;
+            var q = pointerX(e), g = geom();
+            if (Math.abs(q.x - ds.get('block_px')) > g.m.bw / 2 + 10 || Math.abs(q.y - ds.get('block_y')) > g.m.bh / 2 + 12) return;
+            e.preventDefault(); oscEl.setPointerCapture(e.pointerId);
+            var i = ds.get('i_now');
+            drag = { id: e.pointerId, x: ds.get('xs')[i], v: 0, z: ds.get('zs')[i], Fpush: ds.get('Fpush')[i], off: q.x - ds.get('block_px'), last: performance.now(), lastX: ds.get('xs')[i] };
+            clk.set(true); holdState();
+        });
+        oscEl.addEventListener('pointermove', function (e) {
+            if (!drag || e.pointerId !== drag.id) return;
+            var q = pointerX(e), sp = ds.get('span');
+            drag.x = Math.max(-sp, Math.min(sp, (q.x - drag.off - ds.get('eq_px')) / ds.get('px_per_m')));
+        });
+        function release(e) {
+            if (!drag || (e && e.pointerId !== drag.id)) return;
+            var from = { x: drag.x, v: drag.v, z: drag.z };
+            drag = null; ds.set('grabbed', false); ds.set('hand_now', 0);
+            solve(from);
+        }
+        oscEl.addEventListener('pointerup', release);
+        oscEl.addEventListener('pointercancel', release);
+        oscEl.style.touchAction = 'pan-y';
         Sim.playButton(document.getElementById('play'), clk);
-        document.getElementById('solve').addEventListener('click', solve);
+        document.getElementById('solve').addEventListener('click', function () { solve(); });
         document.getElementById('restart').addEventListener('click', function () { playT = 0; clk.set(true); });
         document.getElementById('fit').addEventListener('click', fitScale);
+        function setView(v) { ds.set('view', v); document.getElementById('view-amp').setAttribute('aria-pressed', String(v !== 'bode')); document.getElementById('view-bode').setAttribute('aria-pressed', String(v === 'bode')); drawBode(); }
+        document.getElementById('view-amp').addEventListener('click', function () { setView('linear'); });
+        document.getElementById('view-bode').addEventListener('click', function () { setView('bode'); });
+        ds.set('view', 'linear');
 
         /* ---------- the data panel (scripts/datalog.js) reads the store; these hooks only say where things are drawn and how to test a value ---------- */
         function chartPos(n) {
@@ -1239,12 +1402,12 @@
             var g = geom(), t = ds.get('ts')[n], x = ds.get('xqs')[n];
             return g.inWin(t) ? { x: g.wx(t), y: g.wy(x), where: 'the window chart' } : { x: g.ox(t), y: g.oy(x), where: 'the strip of the whole run' };
         }
-        function loopParams() { return { k: ds.get('k'), c: ds.get('c'), W: ds.get('Omega'), F0: ds.get('F0'), r: ds.get('r'), Kp: ds.get('Kp'), Ki: ds.get('Ki'), Kd: ds.get('Kd') }; }
+        function loopParams() { return { k: ds.get('k'), c: ds.get('c'), W: ds.get('Omega'), F0: ds.get('F0'), r: ds.get('r'), Kp: ds.get('Kp'), Ki: ds.get('Ki'), Kd: ds.get('Kd'), x0: ds.get('x0'), v0: ds.get('v0'), z0: ds.get('z0') }; }
         function rk4Replay(n, p) {
             // the same integrator, rerun from t = 0 to sample n, with the controller's memory, the coil's work and the damper's heat carried along:
             // the check of a stored ODE solution and of the energy integrals
             p = p || loopParams();
-            var t = 0, x = 0, v = 0, z = 0, win = 0, wloss = 0;
+            var t = 0, x = p.x0 || 0, v = p.v0 || 0, z = p.z0 || 0, win = 0, wloss = 0;
             for (var step = 0; step < n * EVERY; step++) {
                 if (!isFinite(x) || Math.abs(x) > 1e3) break;
                 var u1 = control(x, v, z, p), a1 = accel(t, x, v, u1, p), x2 = x + 0.5 * H * v, v2 = v + 0.5 * H * a1, z2 = z + 0.5 * H * (p.r - x);
@@ -1264,12 +1427,14 @@
         var replayAll = null;
         function fullReplay() {
             // one rerun of the whole 60 s serves every check of a run-wide integral; it is redone when the run changes
-            var key = [ds.get('f0'), ds.get('zeta'), ds.get('F0'), ds.get('fd'), ds.get('r'), ds.get('Kp'), ds.get('Ki'), ds.get('Kd')].join();
+            var key = [ds.get('f0'), ds.get('zeta'), ds.get('F0'), ds.get('fd'), ds.get('r'), ds.get('Kp'), ds.get('Ki'), ds.get('Kd'), ds.get('x0'), ds.get('v0'), ds.get('z0')].join();
             if (!replayAll || replayAll.key !== key) { replayAll = rk4Replay(NS - 1); replayAll.key = key; }
             return replayAll;
         }
         function sliderCheck(input, label) { return { formula: _t('read from the ') + _t(label) + _t(' slider at the last solve'), inputs: [[_t('slider now'), input.value, '']], value: ds.get('stale') ? NaN : parseFloat(input.value) }; }
-        function at(name) { return function () { var n = ds.get('i_now'); return { formula: name + _t('<sub>n</sub> at n = n<sub>now</sub>'), inputs: [['n<sub>now</sub>', n, '', 0]], value: ds.get(name)[n] }; }; }
+        function at(name) { return function () { var n = ds.get('i_now'), key = { xs: 'x_now', vs: 'v_now', Fs: 'F_now', Is: 'I_now', us: 'u_now', uP: 'uP_now', uI: 'uI_now', uD: 'uD_now', Fdamp: 'Fc_now', Fspr: 'Fk_now', Es: 'E_now', Ploss: 'Ploss_now' }[name];
+            if (ds.get('grabbed') && key) return { formula: _t('set by your hand while you hold the block; the run resumes from it when you let go'), inputs: [], value: ds.get(key) };
+            return { formula: name + _t('<sub>n</sub> at n = n<sub>now</sub>'), inputs: [['n<sub>now</sub>', n, '', 0]], value: ds.get(name)[n] }; }; }
         function neutralInk(c) { return c[3] > 25 && c[0] < 100 && c[1] < 100 && c[2] < 100 && Math.abs(c[0] - c[2]) < 30; }
         function readBack(b, what, pt, r, test, expected, note) {
             var q = Sim.readPixel(b, pt.x, pt.y, r, test);
@@ -1277,7 +1442,7 @@
         }
         function prevParams() {
             var w0 = 2 * Math.PI * ds.get('prev_f0');
-            return { k: M * w0 * w0, c: 2 * ds.get('prev_zeta') * M * w0, W: 2 * Math.PI * ds.get('prev_fd'), F0: ds.get('prev_F0'), r: ds.get('prev_r'), Kp: ds.get('prev_Kp'), Ki: ds.get('prev_Ki'), Kd: ds.get('prev_Kd') };
+            return { k: M * w0 * w0, c: 2 * ds.get('prev_zeta') * M * w0, W: 2 * Math.PI * ds.get('prev_fd'), F0: ds.get('prev_F0'), r: ds.get('prev_r'), Kp: ds.get('prev_Kp'), Ki: ds.get('prev_Ki'), Kd: ds.get('prev_Kd'), x0: ds.get('prev_x0'), v0: ds.get('prev_v0'), z0: ds.get('prev_z0') };
         }
         function mutedInk(c) { return c[3] > 25 && c[0] > 95 && c[0] < 200 && Math.abs(c[0] - c[1]) < 30 && Math.abs(c[0] - c[2]) < 40; }
         function chartPosPrev(n) {
@@ -1285,9 +1450,9 @@
             return g.inWin(t) ? { x: g.wx(t), y: g.wy(x), where: 'the window chart' } : { x: g.ox(t), y: g.oy(x), where: 'the strip of the whole run' };
         }
         function roseInk(c) { return c[3] > 25 && c[0] > 180 && c[1] < 190 && c[0] - c[1] > 25; }
-        function ctrlBar(row, value) { var g = geom(), bw = ctrlWidth(g), x0 = g.w - bw - 10, half = g.narrow ? 22 : 40, cx = x0 + 28 + half, len = value / ds.get('uscale') * half; return { x: cx + len - Math.sign(len) * 1.5, y: 8 + 13 + (row + 1) * 13 - 4, len: len }; }
+        function ctrlBar(row, value) { var g = geom(), bw = ctrlWidth(g), x0 = g.w - bw - 10, half = g.narrow ? 22 : 40, cx = x0 + 28 + half, len = value / ctrlScale() * half; return { x: cx + len - Math.sign(len) * 1.5, y: 8 + 13 + (row + 1) * 13 - 4, len: len }; }
         function tanInk(c) { return c[3] > 25 && c[0] > 90 && c[1] > 45 && c[2] < 70 && c[1] - c[2] > 25; }
-        function arrowPoint(row, len) { var g = geom(); return { x: ds.get('block_px') + len / 2, y: ds.get('block_y') - g.m.bh / 2 - 11 - row * (g.narrow ? 13 : 15) }; }
+        function arrowPoint(row, len) { var g = geom(); len = capArrow(len, g); return { x: ds.get('block_px') + 0.3 * len, y: ds.get('block_y') - g.m.bh / 2 - 11 - row * (g.narrow ? 13 : 15) }; }
         function barPoint(row, value) { var g = geom(), bw = Math.min(120, 0.2 * g.m.W0), len = Math.max(0, value / ds.get('Wscale')) * bw; return { x: g.m.wallX + 6 + len - 1.5, y: 22 + row * 16 + 4, len: len }; }
         function arrowBack(row, len, name, test, colour) {
             var pt = arrowPoint(row, len), title = { 'drive-force': _t('the drive-force arrow'), 'damper-force': _t('the damper-force arrow'), 'spring-force': _t('the spring-force arrow') }[name];
@@ -1304,14 +1469,15 @@
             playing: function () { return clk.playing; },
             groups: [
                 { title: _t('Parameters'), note: _t('what you set with the sliders, as used by the last solve'), vars: ['m', 'f0', 'zeta', 'F0', 'fd', 'r', 'Kp', 'Ki', 'Kd', 'ctrl_on'] },
+                { title: _t('Start of the run'), note: _t('rest after Solve; where your hand let go after a drag'), vars: ['x0', 'v0', 'z0', 'released', 'grabbed', 'hand_now'] },
                 { title: _t('Closed loop'), note: _t('what the controller makes of the plant, §9'), vars: ['x_eq', 'F_eq', 'zeta_cl', 'margin', 'stable', 't_blow', 'H_drive'] },
                 { title: _t('Derived physics'), note: _t('computed from the parameters by solve()'), vars: ['omega0', 'k', 'c', 'Omega', 'tau', 'Q', 'BL', 'I0', 'xst', 'X', 'phi', 'phi_deg', 'G_drive', 'fr'] },
                 { title: _t('Solver'), note: _t('how the run was computed, and what it measured'), vars: ['h', 'steps', 'solve_ms', 'err_max', 'Xm', 'Gm_drive', 'Win', 'Wloss', 'balance', 'stale'] },
                 { title: _t('Stored run'), note: _t('one row per stored sample, every 10 ms of the 60 s'), vars: ['ts', 'xs', 'vs', 'zs', 'Fpush', 'us', 'uP', 'uI', 'uD', 'Fs', 'Is', 'Fdamp', 'Fspr', 'xqs', 'ph', 'Es', 'Pin', 'Ploss', 'Wc', 'Qc', 'xex'] },
-                { title: _t('Previous run'), note: _t('the run before the last Solve, drawn as the outlined block and the dotted curve'), vars: ['has_prev', 'prev_f0', 'prev_zeta', 'prev_F0', 'prev_fd', 'prev_r', 'prev_Kp', 'prev_Ki', 'prev_Kd', 'xs_prev', 'xmax_prev', 'ratio'] },
+                { title: _t('Previous run'), note: _t('the run before the last Solve, drawn as the outlined block and the dotted curve'), vars: ['has_prev', 'prev_f0', 'prev_zeta', 'prev_F0', 'prev_fd', 'prev_x0', 'prev_v0', 'prev_z0', 'prev_r', 'prev_Kp', 'prev_Ki', 'prev_Kd', 'xs_prev', 'xmax_prev', 'ratio'] },
                 { title: _t('Playback'), note: _t('the sample on screen now'), vars: ['i_now', 't_play', 'x_now', 'v_now', 'u_now', 'uP_now', 'uI_now', 'uD_now', 'F_now', 'I_now', 'Fc_now', 'Fk_now', 'ph_now', 'E_now', 'Pin_now', 'Ploss_now', 'Wc_now', 'Qc_now'] },
-                { title: _t('Bode plot'), note: _t('the curves of the second figure'), vars: ['fb', 'Gmag', 'Gphase', 'Hmag', 'Hphase'] },
-                { title: _t('Drawing'), note: _t('how stored values become pixels'), vars: ['xmax', 'need', 'span_before', 'fitted', 'span', 'held', 'ylim', 'amp_px', 'px_per_m', 'px_per_N', 'eq_px', 'block_px', 'block_y', 'ghost_shown', 'ghost_px', 'coil_px', 'Fd_px', 'Fc_px', 'Fk_px', 'r_px', 'xeq_px', 'Wscale', 'uscale', 'Ploss_max', 'win_t0', 'win_T', 'box_w', 'box_h', 'fps', 'playing'] }
+                { title: _t('Frequency response'), note: _t('the curves of the last figure: amplitude function and phase difference, linear or as a Bode plot'), vars: ['view', 'fl', 'Al', 'Pl', 'Acl', 'Pcl', 'Amax', 'fb', 'Gmag', 'Gphase', 'Hmag', 'Hphase'] },
+                { title: _t('Drawing'), note: _t('how stored values become pixels'), vars: ['xmax', 'need', 'span_before', 'fitted', 'span', 'held', 'ylim', 'amp_px', 'px_per_m', 'px_per_N', 'eq_px', 'block_px', 'block_y', 'ghost_shown', 'ghost_px', 'coil_px', 'Fd_px', 'Fc_px', 'Fk_px', 'hand_px', 'r_px', 'xeq_px', 'fprof', 'Wscale', 'uscale', 'Ploss_max', 'win_t0', 'win_T', 'box_w', 'box_h', 'fps', 'playing'] }
             ],
             colour: { xs: function (v) { return Sim.colourMap(v, ds.get('xmax')); }, Fs: function (v) { return Sim.colourMap(v, Math.max(ds.get('F0'), 1e-9)); } },
             probe: function (x, y) {
@@ -1350,7 +1516,7 @@
                 return null;
             },
             check: {
-                f0: function () { return sliderCheck(f0.el, 'natural frequency'); },
+                f0: function () { return { formula: 'f<sub>0</sub> = √(k/m) / 2π, k read from the spring-constant slider at the last solve', inputs: [['k (slider)', parseFloat(kS.el.value), 'N/m', 2], ['m', M, 'kg', 1]], value: ds.get('stale') ? NaN : Math.sqrt(parseFloat(kS.el.value) / M) / (2 * Math.PI) }; },
                 zeta: function () { return sliderCheck(zeta.el, 'damping ratio'); },
                 F0: function () { return sliderCheck(F0.el, 'force amplitude'); },
                 fd: function () { return sliderCheck(fd.el, 'drive frequency'); },
@@ -1359,6 +1525,11 @@
                 Ki: function () { return sliderCheck(Ki.el, 'integral gain'); },
                 Kd: function () { return sliderCheck(Kd.el, 'derivative gain'); },
                 x_eq: function () { return { formula: 'r if K<sub>i</sub> > 0, else K<sub>p</sub> r / (k + K<sub>p</sub>), (14)', inputs: [['r', ds.get('r'), 'm', 2], ['K<sub>p</sub>', ds.get('Kp'), 'N/m', 1], ['K<sub>i</sub>', ds.get('Ki'), 'N/(m·s)', 1], ['k', ds.get('k'), 'N/m', 4]], value: equilibrium({ r: ds.get('r'), Kp: ds.get('Kp'), Ki: ds.get('Ki'), k: ds.get('k') }) }; },
+                x0: function () { return { formula: _t('0 after Solve; the position where your hand let go'), inputs: [], value: ds.get('released') ? ds.get('xs')[0] : 0 }; },
+                v0: function () { return { formula: _t('0 after Solve; the speed of your hand at the release'), inputs: [], value: ds.get('released') ? ds.get('vs')[0] : 0 }; },
+                z0: function () { return { formula: _t('0 after Solve; the memory the controller had added up by the release'), inputs: [], value: ds.get('released') ? ds.get('zs')[0] : 0 }; },
+                hand_now: function () { return { formula: 'k x + c ẋ − F, while held; 0 otherwise', inputs: [['k', ds.get('k'), 'N/m', 4], ['x', ds.get('x_now'), 'm', 6], ['c', ds.get('c'), 'kg/s', 4], ['ẋ', ds.get('v_now'), 'm/s', 6], ['F', ds.get('F_now'), 'N', 6]], value: ds.get('grabbed') ? ds.get('k') * ds.get('x_now') + ds.get('c') * ds.get('v_now') - ds.get('F_now') : 0 }; },
+                hand_px: function () { return { formula: 'F<sub>hand</sub> · px/N', inputs: [['F<sub>hand</sub>', ds.get('hand_now'), 'N', 6], ['px/N', ds.get('px_per_N'), '', 4]], value: ds.get('hand_now') * ds.get('px_per_N') }; },
                 F_eq: function () { return { formula: 'k x*', inputs: [['k', ds.get('k'), 'N/m', 4], ['x*', ds.get('x_eq'), 'm', 6]], value: ds.get('k') * ds.get('x_eq') }; },
                 zeta_cl: function () { return { formula: '(c + K<sub>d</sub>) / (2 √(m (k + K<sub>p</sub>)))', inputs: [['c', ds.get('c'), 'kg/s', 4], ['K<sub>d</sub>', ds.get('Kd'), 'kg/s', 1], ['k', ds.get('k'), 'N/m', 4], ['K<sub>p</sub>', ds.get('Kp'), 'N/m', 1]], value: (ds.get('c') + ds.get('Kd')) / (2 * Math.sqrt(M * (ds.get('k') + ds.get('Kp')))) }; },
                 margin: function () { return { formula: '(c + K<sub>d</sub>)(k + K<sub>p</sub>) − m K<sub>i</sub>, (15)', inputs: [['c', ds.get('c'), 'kg/s', 4], ['K<sub>d</sub>', ds.get('Kd'), 'kg/s', 1], ['k', ds.get('k'), 'N/m', 4], ['K<sub>p</sub>', ds.get('Kp'), 'N/m', 1], ['K<sub>i</sub>', ds.get('Ki'), 'N/(m·s)', 1]], value: (ds.get('c') + ds.get('Kd')) * (ds.get('k') + ds.get('Kp')) - M * ds.get('Ki') }; },
@@ -1372,6 +1543,13 @@
                 uscale: function () { var a = ds.get('us'), b = ds.get('uP'), c = ds.get('uI'), d = ds.get('uD'), e = 1e-12; for (var n = 0; n < NS; n++) e = Math.max(e, Math.abs(a[n]), Math.abs(b[n]), Math.abs(c[n]), Math.abs(d[n])); return { formula: 'max over n of (|u<sub>n</sub>|, |u<sub>P, n</sub>|, |u<sub>I, n</sub>|, |u<sub>D, n</sub>|), from the stored arrays', inputs: [['samples', NS, '', 0]], value: e }; },
                 r_px: function () { return { formula: 'x<sub>eq</sub> + r · px/m', inputs: [['x<sub>eq</sub>', ds.get('eq_px'), 'css px', 1], ['r', ds.get('r'), 'm', 2], ['px/m', ds.get('px_per_m'), '', 4]], value: ds.get('eq_px') + ds.get('r') * ds.get('px_per_m') }; },
                 xeq_px: function () { return { formula: 'x<sub>eq</sub> + x* · px/m', inputs: [['x<sub>eq</sub>', ds.get('eq_px'), 'css px', 1], ['x*', ds.get('x_eq'), 'm', 6], ['px/m', ds.get('px_per_m'), '', 4]], value: ds.get('eq_px') + ds.get('x_eq') * ds.get('px_per_m') }; },
+                fl: function (j) { return { formula: '1.6 Hz · (j + 1) / 1281', inputs: [['j', j, '', 0]], value: 1.6 * (j + 1) / 1281 }; },
+                Al: function (j) { var W = 2 * Math.PI * ds.get('fl')[j], w0 = ds.get('omega0'), z = ds.get('zeta'); return { formula: 'F<sub>0</sub> / (m √((ω<sub>0</sub>² − Ω²)² + (2ζω<sub>0</sub>Ω)²))', inputs: [['F<sub>0</sub>', ds.get('F0'), 'N', 1], ['f<sub>l</sub>', ds.get('fl')[j], 'Hz', 5], ['ω<sub>0</sub>', w0, 'rad/s', 6], ['ζ', z, '', 2]], value: ds.get('F0') / (M * Math.sqrt(Math.pow(w0 * w0 - W * W, 2) + Math.pow(2 * z * w0 * W, 2))) }; },
+                Pl: function (j) { var W = 2 * Math.PI * ds.get('fl')[j], w0 = ds.get('omega0'), z = ds.get('zeta'); return { formula: 'atan2(2ζω<sub>0</sub>Ω, ω<sub>0</sub>² − Ω²) in degrees', inputs: [['f<sub>l</sub>', ds.get('fl')[j], 'Hz', 5], ['ω<sub>0</sub>', w0, 'rad/s', 6], ['ζ', z, '', 2]], value: Math.atan2(2 * z * w0 * W, w0 * w0 - W * W) * 180 / Math.PI }; },
+                Acl: function (j) { var W = 2 * Math.PI * ds.get('fl')[j]; return { formula: 'F<sub>0</sub> / |k + K<sub>p</sub> − mΩ² + i((c + K<sub>d</sub>)Ω − K<sub>i</sub>/Ω)|', inputs: [['F<sub>0</sub>', ds.get('F0'), 'N', 1], ['f<sub>l</sub>', ds.get('fl')[j], 'Hz', 5], ['k + K<sub>p</sub>', ds.get('k') + ds.get('Kp'), 'N/m', 4], ['c + K<sub>d</sub>', ds.get('c') + ds.get('Kd'), 'kg/s', 4], ['K<sub>i</sub>', ds.get('Ki'), 'N/(m·s)', 1]], value: ds.get('F0') / Math.hypot(ds.get('k') + ds.get('Kp') - M * W * W, (ds.get('c') + ds.get('Kd')) * W - ds.get('Ki') / W) }; },
+                Pcl: function (j) { var W = 2 * Math.PI * ds.get('fl')[j]; return { formula: 'atan2((c + K<sub>d</sub>)Ω − K<sub>i</sub>/Ω, k + K<sub>p</sub> − mΩ²) in degrees', inputs: [['f<sub>l</sub>', ds.get('fl')[j], 'Hz', 5], ['k + K<sub>p</sub>', ds.get('k') + ds.get('Kp'), 'N/m', 4], ['c + K<sub>d</sub>', ds.get('c') + ds.get('Kd'), 'kg/s', 4], ['K<sub>i</sub>', ds.get('Ki'), 'N/(m·s)', 1]], value: Math.atan2((ds.get('c') + ds.get('Kd')) * W - ds.get('Ki') / W, ds.get('k') + ds.get('Kp') - M * W * W) * 180 / Math.PI }; },
+                Amax: function () { var a = ds.get(ds.get('ctrl_on') ? 'Acl' : 'Al'), e = 0; for (var j = 0; j < a.length; j++) e = Math.max(e, a[j]); return { formula: 'max(1.1 · max of the amplitude function the run follows, 10<sup>−6</sup> m)', inputs: [['samples', a.length, '', 0]], value: Math.max(1.1 * e, 1e-6) }; },
+                fprof: function () { var e = 1e-12; ['us', 'uP', 'uI', 'uD', 'Fpush', 'Fspr', 'Fdamp'].forEach(function (q) { var a = ds.get(q); for (var n = 0; n < NS; n++) e = Math.max(e, Math.abs(a[n])); }); return { formula: '1.1 · max over n of the seven force series, from the stored arrays', inputs: [['samples', NS, '', 0]], value: 1.1 * e }; },
                 Hmag: function (j) { var W = 2 * Math.PI * ds.get('fb')[j]; return { formula: '1 / |k + K<sub>p</sub> − mΩ² + i((c + K<sub>d</sub>)Ω − K<sub>i</sub>/Ω)|', inputs: [['f<sub>b</sub>', ds.get('fb')[j], 'Hz', 5], ['k + K<sub>p</sub>', ds.get('k') + ds.get('Kp'), 'N/m', 4], ['c + K<sub>d</sub>', ds.get('c') + ds.get('Kd'), 'kg/s', 4], ['K<sub>i</sub>', ds.get('Ki'), 'N/(m·s)', 1]], value: 1 / Math.hypot(ds.get('k') + ds.get('Kp') - M * W * W, (ds.get('c') + ds.get('Kd')) * W - ds.get('Ki') / W) }; },
                 Hphase: function (j) { var W = 2 * Math.PI * ds.get('fb')[j]; return { formula: 'atan2((c + K<sub>d</sub>)Ω − K<sub>i</sub>/Ω, k + K<sub>p</sub> − mΩ²) in degrees', inputs: [['f<sub>b</sub>', ds.get('fb')[j], 'Hz', 5], ['k + K<sub>p</sub>', ds.get('k') + ds.get('Kp'), 'N/m', 4], ['c + K<sub>d</sub>', ds.get('c') + ds.get('Kd'), 'kg/s', 4], ['K<sub>i</sub>', ds.get('Ki'), 'N/(m·s)', 1]], value: Math.atan2((ds.get('c') + ds.get('Kd')) * W - ds.get('Ki') / W, ds.get('k') + ds.get('Kp') - M * W * W) * 180 / Math.PI }; },
                 m: function () { return { formula: 'the constant M in the code', inputs: [], value: M }; },
@@ -1417,7 +1595,7 @@
                 Wc: function (n) { return { formula: 'the same RK4, rerun from t = 0 to sample n, carrying ∫ F v dt', inputs: [['n', n, '', 0], ['h', H, 's', 4]], value: rk4Replay(n).win }; },
                 Qc: function (n) { return { formula: 'the same RK4, rerun from t = 0 to sample n, carrying ∫ c v² dt', inputs: [['n', n, '', 0], ['h', H, 's', 4]], value: rk4Replay(n).wloss }; },
                 Ploss: function (n) { return { formula: 'c v<sub>n</sub>²', inputs: [['c', ds.get('c'), 'kg/s', 4], ['v<sub>n</sub>', ds.get('vs')[n], 'm/s', 6]], value: ds.get('c') * ds.get('vs')[n] * ds.get('vs')[n] }; },
-                xex: function (n) { if (ds.get('ctrl_on')) { var tmp = new Float64Array(n + 1); exactClosed(loopParams(), ds.get('ts').subarray(0, n + 1), tmp); return { formula: 'x* + X cos(Ωt − φ) + [e<sup>At</sup>(y(0) − y* − y<sub>p</sub>(0))]<sub>x</sub>, recomputed with exactClosed() up to sample n', inputs: [['t<sub>n</sub>', ds.get('ts')[n], 's', 3], ['x*', ds.get('x_eq'), 'm', 6], ['X', ds.get('X'), 'm', 6], ['φ', ds.get('phi'), 'rad', 6]], value: tmp[n] }; } return { formula: 'X cos(Ωt − φ) + e<sup>−ζω₀t</sup>(C₁ cos ω<sub>d</sub>t + C₂ sin ω<sub>d</sub>t)', inputs: [['t<sub>n</sub>', ds.get('ts')[n], 's', 3], ['X', ds.get('X'), 'm', 6], ['φ', ds.get('phi'), 'rad', 6]], value: exact(ds.get('ts')[n], ds.get('omega0'), ds.get('zeta'), ds.get('Omega'), { X: ds.get('X'), phi: ds.get('phi') }) }; },
+                xex: function (n) { if (ds.get('ctrl_on')) { var tmp = new Float64Array(n + 1); exactClosed(loopParams(), ds.get('ts').subarray(0, n + 1), tmp); return { formula: 'x* + X cos(Ωt − φ) + [e<sup>At</sup>(y(0) − y* − y<sub>p</sub>(0))]<sub>x</sub>, recomputed with exactClosed() up to sample n', inputs: [['t<sub>n</sub>', ds.get('ts')[n], 's', 3], ['x*', ds.get('x_eq'), 'm', 6], ['X', ds.get('X'), 'm', 6], ['φ', ds.get('phi'), 'rad', 6]], value: tmp[n] }; } return { formula: 'X cos(Ωt − φ) + e<sup>−ζω₀t</sup>(C₁ cos ω<sub>d</sub>t + C₂ sin ω<sub>d</sub>t)', inputs: [['t<sub>n</sub>', ds.get('ts')[n], 's', 3], ['X', ds.get('X'), 'm', 6], ['φ', ds.get('phi'), 'rad', 6]], value: exact(ds.get('ts')[n], ds.get('omega0'), ds.get('zeta'), ds.get('Omega'), { X: ds.get('X'), phi: ds.get('phi') }, ds.get('x0'), ds.get('v0')) }; },
                 i_now: function () { return { formula: 'round(t<sub>play</sub> / 10h), at most 6000', inputs: [['t<sub>play</sub>', ds.get('t_play'), 's', 4]], value: Math.min(NS - 1, Math.max(0, Math.round(ds.get('t_play') / (EVERY * H)))) }; },
                 x_now: at('xs'), v_now: at('vs'), F_now: at('Fs'), I_now: at('Is'), u_now: at('us'), uP_now: at('uP'), uI_now: at('uI'), uD_now: at('uD'), Fc_now: at('Fdamp'), Fk_now: at('Fspr'), ph_now: at('ph'), E_now: at('Es'), Pin_now: at('Pin'), Wc_now: at('Wc'), Qc_now: at('Qc'), Ploss_now: at('Ploss'),
                 Ploss_max: function () { var P = ds.get('Ploss'), e = 0; for (var n = 0; n < NS; n++) e = Math.max(e, P[n]); return { formula: 'max over n of P<sub>loss, n</sub>, from the stored array', inputs: [['samples', NS, '', 0]], value: e }; },
@@ -1448,8 +1626,8 @@
                 u_now: function () { if (!ds.get('ctrl_on')) return { what: _t('the controller box'), drawn: _t('controller off'), expected: _t('no bars'), ok: null, note: '' }; var pt = ctrlBar(3, ds.get('u_now')); return Math.abs(pt.len) < 2 ? { what: _t('the bar of u'), drawn: _t('empty bar'), expected: _t('no fill below 2 px'), ok: true, note: '' } : readBack(box, 'the end of the bar of u in the controller box', pt, 0, Sim.isBurgundy, 'the burgundy bar', 'The bar is u / u<sub>bar</sub> of half the box’s scale, to the right for a positive force.'); },
                 r_px: function () { return ds.get('ctrl_on') ? readBack(box, 'the target dot on the ruler', { x: ds.get('r_px'), y: geom().m.floorY + 22 }, 1, Sim.isBurgundy, 'the burgundy dot', 'The dot sits at x<sub>eq</sub> + r · px/m on the ruler.') : { what: _t('the target dot'), drawn: _t('controller off'), expected: _t('no dot'), ok: null, note: '' }; },
                 xeq_px: function () { return ds.get('ctrl_on') ? readBack(box, 'the equilibrium line under the block', { x: ds.get('xeq_px'), y: geom().m.floorY - 3 }, 2, roseInk, 'the rose dashed line', 'The line stands at x<sub>eq</sub> + x* · px/m from the floor up to the block.') : { what: _t('the equilibrium line'), drawn: _t('controller off'), expected: _t('no line'), ok: null, note: '' }; },
-                H_drive: function () { var B = bodeGeom(), p = B.panels[0]; return ds.get('ctrl_on') ? readBack(bbox, 'the drive frequency on the Bode plot', { x: B.X(p, ds.get('fd')), y: B.Ym(p, ds.get('H_drive')) }, 1, Sim.isBurgundy, 'the burgundy dot', 'The dot sits at f and |H(iΩ)|; the ring around it is the amplitude measured in the stored run, per newton.') : { what: _t('|H| at the drive frequency'), drawn: _t('controller off'), expected: _t('not drawn'), ok: null, note: '' }; },
-                Hmag: function (j) { if (!ds.get('ctrl_on')) return { what: _t('|H| on the Bode plot'), drawn: _t('controller off'), expected: _t('not drawn: the plant’s |G| is shown instead'), ok: null, note: '' }; var B = bodeGeom(), p = B.panels[0]; return readBack(bbox, '|H| at f<sub>b, j</sub> on the Bode plot', { x: B.X(p, ds.get('fb')[j]), y: B.Ym(p, ds.get('Hmag')[j]) }, 2, neutralInk, 'the dark curve', 'With the controller on, the ink curve is the closed loop and the dashed grey curve the bare plant.'); },
+                H_drive: function () { var B = bodeGeom(), p = B.panels[0]; if (B.lin) return { what: _t('|H| at the drive frequency'), drawn: _t('linear view'), expected: _t('the dot marks X = F₀|H| instead'), ok: null, note: '' }; return ds.get('ctrl_on') ? readBack(bbox, 'the drive frequency on the Bode plot', { x: B.X(p, ds.get('fd')), y: B.Ym(p, ds.get('H_drive')) }, 1, Sim.isBurgundy, 'the burgundy dot', 'The dot sits at f and |H(iΩ)|; the ring around it is the amplitude measured in the stored run, per newton.') : { what: _t('|H| at the drive frequency'), drawn: _t('controller off'), expected: _t('not drawn'), ok: null, note: '' }; },
+                Hmag: function (j) { if (bodeGeom().lin) return { what: _t('|H| on the Bode plot'), drawn: _t('linear view'), expected: _t('drawn in the Bode view'), ok: null, note: '' }; if (!ds.get('ctrl_on')) return { what: _t('|H| on the Bode plot'), drawn: _t('controller off'), expected: _t('not drawn: the plant’s |G| is shown instead'), ok: null, note: '' }; var B = bodeGeom(), p = B.panels[0]; return readBack(bbox, '|H| at f<sub>b, j</sub> on the Bode plot', { x: B.X(p, ds.get('fb')[j]), y: B.Ym(p, ds.get('Hmag')[j]) }, 2, neutralInk, 'the dark curve', 'With the controller on, the ink curve is the closed loop and the dashed grey curve the bare plant.'); },
                 xs_prev: function (n) {
                     if (!ds.get('has_prev')) return { what: _t('the previous run'), drawn: _t('none yet'), expected: _t('nothing before the second solve'), ok: null, note: _t('The first run has nothing to compare with.') };
                     var p = chartPosPrev(n);
@@ -1464,18 +1642,24 @@
                     var p = chartPosQ(n);
                     return readBack(box, 'F<sub>n</sub>/k on ' + p.where, p, 3, Sim.isBurgundy, 'the burgundy curve of F/k', 'In the window the curve is dashed, so the search reaches 3 px along it to land on a dash.');
                 },
+                Al: function (j) { var B = bodeGeom(), p = B.panels[0]; if (!B.lin) return { what: _t('the amplitude function'), drawn: _t('Bode view'), expected: _t('drawn in the linear view'), ok: null, note: '' }; var on = ds.get('ctrl_on'); if (B.Ym(p, ds.get('Al')[j]) < p.top) return { what: _t('the plant’s amplitude function'), drawn: _t('above the axis'), expected: _t('clipped: with the controller on the axis is scaled to the closed loop'), ok: null, note: '' }; return readBack(bbox, 'A(f<sub>l, j</sub>) on the amplitude function', { x: B.X(p, ds.get('fl')[j]), y: B.Ym(p, ds.get('Al')[j]) }, on ? 4 : 2, on ? mutedInk : neutralInk, on ? 'the dashed grey curve of the bare plant' : 'the dark curve', 'Linear axes: x ∝ f, y ∝ A in metres.'); },
+                Acl: function (j) { var B = bodeGeom(), p = B.panels[0]; if (!B.lin || !ds.get('ctrl_on')) return { what: _t('the closed-loop amplitude function'), drawn: _t('not shown'), expected: _t('drawn in the linear view with the controller on'), ok: null, note: '' }; return readBack(bbox, 'A<sub>cl</sub>(f<sub>l, j</sub>) on the amplitude function', { x: B.X(p, ds.get('fl')[j]), y: B.Ym(p, ds.get('Acl')[j]) }, 2, neutralInk, 'the dark curve', 'Linear axes: x ∝ f, y ∝ A in metres.'); },
+                us: function (n) { var G = forceGeom(), t = ds.get('ts')[n], t0 = ds.get('win_t0'); if (!ds.get('ctrl_on') || t < t0 || t > t0 + ds.get('win_T')) return { what: _t('u on the force profile'), drawn: _t('outside the window, or controller off'), expected: _t('drawn only inside the window'), ok: null, note: '' }; return readBack(fbox, 'u<sub>n</sub> on the force profile', { x: G.fx(t), y: G.fy(ds.get('us')[n]) }, 2, Sim.isBurgundy, 'the burgundy curve of u', 'Same window as the x chart; y ∝ force in newtons.'); },
                 Gmag: function (j) {
                     var B = bodeGeom(), p = B.panels[0];
+                    if (B.lin) return { what: _t('|G| on the Bode plot'), drawn: _t('linear view'), expected: _t('drawn in the Bode view'), ok: null, note: '' };
                     var on = ds.get('ctrl_on');
                     return readBack(bbox, '|G| at f<sub>b, j</sub> on the Bode plot', { x: B.X(p, ds.get('fb')[j]), y: B.Ym(p, ds.get('Gmag')[j]) }, on ? 4 : 2, on ? mutedInk : neutralInk, on ? 'the dashed grey curve of the bare plant' : 'the dark curve', 'Logarithmic axes: x ∝ log f, y ∝ log |G|. With the controller on the plant’s curve is dashed grey behind the closed loop, so the search reaches 4 px along it.');
                 },
                 Gphase: function (j) {
                     var B = bodeGeom(), p = B.panels[1];
+                    if (B.lin) return { what: _t('φ on the Bode plot'), drawn: _t('linear view'), expected: _t('drawn in the Bode view'), ok: null, note: '' };
                     var on = ds.get('ctrl_on');
                     return readBack(bbox, 'φ at f<sub>b, j</sub> on the Bode plot', { x: B.X(p, ds.get('fb')[j]), y: B.Yp(p, ds.get('Gphase')[j]) }, on ? 4 : 2, on ? mutedInk : neutralInk, on ? 'the dashed grey curve of the bare plant' : 'the dark curve', 'x ∝ log f, y ∝ φ, 180° at the bottom; with integral action the axis starts at −90°.');
                 },
                 G_drive: function () {
                     var B = bodeGeom(), p = B.panels[0];
+                    if (B.lin) return readBack(bbox, 'the drive frequency on the amplitude function', { x: B.X(p, ds.get('fd')), y: B.Ym(p, ds.get('X')) }, 1, Sim.isBurgundy, 'the burgundy dot at X', 'In the linear view the dot sits at f and the steady amplitude X in metres.');
                     if (ds.get('ctrl_on')) return readBack(bbox, 'the drive frequency on the plant’s dashed curve', { x: B.X(p, ds.get('fd')), y: B.Ym(p, ds.get('G_drive')) }, 4, mutedInk, 'the dashed grey curve', 'With the controller on, the dot marks |H(iΩ)| instead; |G(iΩ)| is read on the dashed curve of the bare plant.');
                     return readBack(bbox, 'the drive frequency on the Bode plot', { x: B.X(p, ds.get('fd')), y: B.Ym(p, ds.get('G_drive')) }, 1, Sim.isBurgundy, 'the burgundy dot', 'The dot sits at f and |G(iΩ)|; the ring around it is the amplitude measured in the stored run, per newton.');
                 },
@@ -1488,13 +1672,14 @@
                 columns: ['x_now', 'v_now', 'u_now', 'F_now', 'Fc_now', 'Fk_now', 'E_now', 'Pin_now'], point: function () { return { what: 'block' }; },
                 blocked: function () { return ds.get('t_play') + 1 / ds.get('fd') > TEND ? _t('the stored run ends before one more drive period; press From t = 0') : null; } },
             play: function () { clk.set(true); },
-            about: _t('Nothing on this page is computed while you watch. The run is solved once, with RK4 at h = 1 ms on the state (x, v, z), where z = ∫(r − x) dt is the controller’s memory, and every tenth state is stored together with the outside push, the controller’s three parts and their sum u, the coil’s force F = F<sub>push</sub> + u and its current I = F/(Bℓ), the forces of damper and spring, the energy, the two powers, the coil’s work and the damper’s heat so far, and the exact solution. Each frame draws the stored sample nearest to the playback time, without interpolation; the only arithmetic in the drawing turns metres, seconds, newtons and joules into pixels, with the scales listed under Drawing. The window chart draws every stored sample between its edges; the strip of the whole run draws about two samples per screen pixel. The mechanism has one scale, px/m = A<sub>px</sub> / span, and the force arrows follow it: a force is drawn twice as long as the stretch F/k it would cause, px/N = 2 (px/m)/k. The span is kept from one Solve to the next and widens only when a run needs more room, so a run with more damping or less force swings visibly less than the outlined previous run; Fit scale sets the span to the present run. At instants when the previous run lies outside the span, its outlined block is left out. The oil of the damper is shaded by P<sub>loss</sub> / max P<sub>loss</sub>, the heat it makes at this instant relative to the most it makes in the run. The magnet, the coil’s size and the current source are schematic; the coil’s position is the block’s. The energy bars are scaled to the largest of the three energies over the run, and the controller’s bars to the largest of its forces, so both compare values within a run, not between runs. An unstable loop is solved until |x| passes 1000 m; the rest of the run holds that last state, and the readout names the time.')
+            about: _t('Nothing on this page is computed while you watch. The run is solved once, with RK4 at h = 1 ms on the state (x, v, z), where z = ∫(r − x) dt is the controller’s memory, and every tenth state is stored together with the outside push, the controller’s three parts and their sum u, the coil’s force F = F<sub>push</sub> + u and its current I = F/(Bℓ), the forces of damper and spring, the energy, the two powers, the coil’s work and the damper’s heat so far, and the exact solution. Each frame draws the stored sample nearest to the playback time, without interpolation; the only arithmetic in the drawing turns metres, seconds, newtons and joules into pixels, with the scales listed under Drawing. The window chart draws every stored sample between its edges; the strip of the whole run draws about two samples per screen pixel. The mechanism has one scale, px/m = A<sub>px</sub> / span, and the force arrows follow it: a force is drawn twice as long as the stretch F/k it would cause, px/N = 2 (px/m)/k. The span is kept from one Solve to the next and widens only when a run needs more room, so a run with more damping or less force swings visibly less than the outlined previous run; Fit scale sets the span to the present run. At instants when the previous run lies outside the span, its outlined block is left out. The oil of the damper is shaded by P<sub>loss</sub> / max P<sub>loss</sub>, the heat it makes at this instant relative to the most it makes in the run. The magnet, the coil’s size and the current source are schematic; the coil’s position is the block’s. The energy bars are scaled to the largest of the three energies over the run, and the controller’s bars to the largest of its forces, so both compare values within a run, not between runs. An unstable loop is solved until |x| passes 1000 m; the rest of the run holds that last state, and the readout names the time. While you hold the block, nothing is stored: the values on screen are your hand’s position, its speed smoothed over about 50 ms, the controller’s force for that state and its memory, added up in wall-clock time; the hand’s force leaves out the m ẍ of your hand’s own jerks. When you let go, that state is the start x(0), ẋ(0), z(0) of a new stored run. The force profile draws the same window of the run as the x chart; the frequency response draws the linear view from an even grid of 1281 frequencies (0.00125 Hz apart, fine enough for the sharpest peak, ζ = 0.01) and the Bode view from 241 log-spaced ones.')
 
 
         };
 
         solve();
         Sim.onResize(stage, function () { box.fit(); frame(); });
+        Sim.onResize(forceStage, function () { fbox.fit(); frame(); });
         Sim.onResize(bodeStage, function () { bbox.fit(); drawBode(); });
         if (document.fonts && document.fonts.ready) document.fonts.ready.then(function () { frame(); drawBode(); });
     })();

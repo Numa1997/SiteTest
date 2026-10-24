@@ -17,10 +17,10 @@ window.WALK = window.WALK || {};
                 title: 'The state and the start',
                 where: 'top of the script, the constants; solve(), just before the loop',
                 math: 'state (⟦x|x⟧, ⟦v|v⟧), &nbsp; ⟦v|v⟧ = ẋ, &nbsp; m = 1 ' + up('kg') + '<br>x(0) = 0, &nbsp; ẋ(0) = 0, &nbsp; t = 0 &emsp; ' + up('(§2)'),
-                note: 'The first quoted line fixes the constants of the whole page. M is the mass m = 1 kg, H is the time step h = 1 ms of the solver, TEND is the length of the run, 60 s, EVERY = 10 says that every tenth step is kept for drawing, and NS = 60 / 0.001 / 10 + 1 = 6 001 is the number of stored samples. Equation (1) of the next step is of second order in time, so the block at one instant is described by two numbers: the displacement x in metres, measured from the rest position, and the velocity ẋ, which the code calls v, in metres per second. The second quoted line starts the run as §2 of the note does, with the block at rest in its rest position, x(0) = 0 and ẋ(0) = 0, at the clock time t = 0 s. The same line also sets to zero the two work integrals win and wloss of step 9 and the counter n of stored samples of step 10.',
+                note: 'The first quoted line fixes the constants of the whole page. M is the mass m = 1 kg, H is the time step h = 1 ms of the solver, TEND is the length of the run, 60 s, EVERY = 10 says that every tenth step is kept for drawing, and NS = 60 / 0.001 / 10 + 1 = 6 001 is the number of stored samples. Equation (1) of the next step is of second order in time, so the block at one instant is described by two numbers: the displacement x in metres, measured from the rest position, and the velocity ẋ, which the code calls v, in metres per second. The second quoted line starts the run. After Solve it starts as §2 of the note does, with the block at rest in its rest position, x(0) = 0 and ẋ(0) = 0, at the clock time t = 0 s; after you drag the block and let go, p.x0, p.v0 and p.z0 are the position, the speed of your hand and the controller’s memory at the release (§9). The same line also sets to zero the two work integrals win and wloss of step 9 and the counter n of stored samples of step 10.',
                 code: `var M = 1, ⟦h|H = 0.001⟧, TEND = 60, EVERY = 10, NS = TEND / H / EVERY + 1;
 ...
-var ⟦t|t = 0⟧, ⟦x|x = 0⟧, ⟦v|v = 0⟧, z = 0, win = 0, wloss = 0, n = 0, step, blew = NaN;`,
+var ⟦t|t = 0⟧, ⟦x|x = p.x0⟧, ⟦v|v = p.v0⟧, z = p.z0, win = 0, wloss = 0, n = 0, step, blew = NaN;`,
                 syms: [
                     ['x', 'x', 'x', 'displacement from rest, m; Now: the stored sample on screen'],
                     ['v', 'v = ẋ', 'v', 'velocity, m/s; Now: the stored sample on screen'],
@@ -78,9 +78,9 @@ var on = p.Kp > 0 || p.Ki > 0 || p.Kd > 0, st = on ? closed(p) : steady(⟦w0|w0
                 title: 'Equation (5): the exact motion from rest',
                 where: 'exact(), called for every stored sample in solve()',
                 math: 'x(t) = ⟦X|X⟧ ' + up('cos') + '(⟦W|Ω⟧t − ⟦phi|φ⟧) + e<sup>−t/τ</sup>(C<sub>1</sub> ' + up('cos') + ' ω<sub>d</sub>t + C<sub>2</sub> ' + up('sin') + ' ω<sub>d</sub>t)<br>C<sub>1</sub> = −X ' + up('cos') + ' φ, &nbsp; C<sub>2</sub> = (ζω<sub>0</sub> C<sub>1</sub> − XΩ ' + up('sin') + ' φ) / ω<sub>d</sub>' + tag(5) + '<br>ω<sub>d</sub> = ⟦w0|ω<sub>0</sub>⟧√(1 − ζ²), &nbsp; τ = 1/(ζω<sub>0</sub>)',
-                note: 'Equation (5) adds to the steady motion of (4) a free ringing of the plant, a solution of (2) with the right-hand side set to zero, and chooses the ringing’s two constants so that the block starts at rest, x(0) = ẋ(0) = 0. exact(t, w0, z, W, st) receives the time t in s, ω<sub>0</sub> as w0 in rad/s, ζ as z, Ω as W in rad/s, and st, the X and φ of step 4. The first line computes the damped ringing frequency ω<sub>d</sub> = ω<sub>0</sub>√(1 − ζ²) as wd in rad/s, and the constants C<sub>1</sub> and C<sub>2</sub> of (5), both in metres. The return line is x(t) of (5) in metres: st.X * Math.cos(W * t - st.phi) is the steady part, and Math.exp(-z * w0 * t) is the decay e<sup>−t/τ</sup>, because ζω<sub>0</sub>t = t/τ with τ = 1/(ζω<sub>0</sub>). With the defaults ω<sub>d</sub> = 3.138 rad/s (f<sub>d</sub> = 0.499 Hz), τ = 6.37 s, C<sub>1</sub> = −0.436 m and C<sub>2</sub> = −0.208 m. The page evaluates (5) at the 6 001 stored times only as a ruler for the numerical run of step 8 (the grading is step 10); it never draws (5).',
-                code: `function exact(t, w0, z, W, st) {
-var wd = w0 * Math.sqrt(1 - z * z), C1 = -st.X * Math.cos(st.phi), C2 = (z * w0 * C1 - st.X * W * Math.sin(st.phi)) / wd;
+                note: 'Equation (5) adds to the steady motion of (4) a free ringing of the plant, a solution of (2) with the right-hand side set to zero, and chooses the ringing’s two constants so that the block starts where the run starts, x(0) = x0 and ẋ(0) = v0 (both zero after Solve). exact(t, w0, z, W, st, x0, v0) receives the time t in s, ω<sub>0</sub> as w0 in rad/s, ζ as z, Ω as W in rad/s, and st, the X and φ of step 4. The first line computes the damped ringing frequency ω<sub>d</sub> = ω<sub>0</sub>√(1 − ζ²) as wd in rad/s, and the constants C<sub>1</sub> and C<sub>2</sub> of (5), both in metres. The return line is x(t) of (5) in metres: st.X * Math.cos(W * t - st.phi) is the steady part, and Math.exp(-z * w0 * t) is the decay e<sup>−t/τ</sup>, because ζω<sub>0</sub>t = t/τ with τ = 1/(ζω<sub>0</sub>). With the defaults ω<sub>d</sub> = 3.138 rad/s (f<sub>d</sub> = 0.499 Hz), τ = 6.37 s, C<sub>1</sub> = −0.436 m and C<sub>2</sub> = −0.208 m. The page evaluates (5) at the 6 001 stored times only as a ruler for the numerical run of step 8 (the grading is step 10); it never draws (5).',
+                code: `function exact(t, w0, z, W, st, x0, v0) {
+var wd = w0 * Math.sqrt(1 - z * z), C1 = x0 - st.X * Math.cos(st.phi), C2 = (v0 + z * w0 * C1 - st.X * W * Math.sin(st.phi)) / wd;
 return ⟦X|st.X⟧ * Math.cos(⟦W|W⟧ * t - ⟦phi|st.phi⟧) + Math.exp(-z * w0 * t) * (C1 * Math.cos(wd * t) + C2 * Math.sin(wd * t));
 }`,
                 syms: [
@@ -175,7 +175,7 @@ ds.set('balance', ⟦bal|win > 0 ? Math.abs(Es[NS - 1] - Es[0] - (win - wloss)) 
 }
 ...
 for (n = 0; n < NS; n++) {
-xex[n] = exact(ts[n], w0, zeta.value, p.W, st);
+if (!on) xex[n] = exact(ts[n], w0, zeta.value, p.W, st, p.x0, p.v0);
 ⟦err|err = Math.max(err, Math.abs(xs[n] - xex[n]))⟧;
 ...`,
                 syms: [
@@ -252,7 +252,7 @@ setSpan(had ? Math.max(before, ds.get('need')) : ds.get('need'), before, false);
 ⟦sc|g.m.sc⟧ = g.m.amp / ds.get(⟦span|'span'⟧);
 ⟦fN|g.m.fN⟧ = 2 * g.m.sc / ds.get('k');
 ...
-var ⟦bx|bx⟧ = m.eqX + ⟦x|xs[i]⟧ * ⟦sc|m.sc⟧;
+var ⟦bx|bx⟧ = m.eqX + ⟦x|ds.get('x_now')⟧ * ⟦sc|m.sc⟧;
 ...
 ds.set('Fd_px', ds.get('F_now') * m.fN); ds.set('Fc_px', ds.get('Fc_now') * m.fN); ds.set('Fk_px', ds.get('Fk_now') * m.fN);`,
                 syms: [
@@ -262,7 +262,7 @@ ds.set('Fd_px', ds.get('F_now') * m.fN); ds.set('Fc_px', ds.get('Fc_now') * m.fN
                     ['sc', 'px/m', 'm.sc', 'drawing scale on this screen, css px per m'],
                     ['fN', 'px/N', 'm.fN', 'scale of the force arrows, css px per N'],
                     ['bx', 'x<sub>block</sub>', 'bx', 'centre of the block from the canvas’s left edge, css px'],
-                    ['x', 'x<sub>n</sub>', 'xs[i]', 'displacement shown now, m']
+                    ['x', 'x<sub>n</sub>', "ds.get('x_now')", 'displacement shown now (a stored row, or your hand while you hold the block), m']
                 ]
             },
             {
@@ -276,7 +276,7 @@ var Tw = Math.min(20, Math.max(6, 4 / ds.get('fd'))), t0 = Math.min(TEND - Tw, M
 ...
 [['W_{in}', ds.get('Wc_now'), BURG], ['W_{loss}', ds.get('Qc_now'), T.tanInk], ['E', ds.get('E_now'), T.ink2]].forEach(function (e, k) {
 ...
-c.fillStyle = e[2]; c.fillRect(x0, y, Math.max(0, e[1] / W) * bw, 8);
+c.fillStyle = e[2]; c.fillRect(x0, y, Math.max(0, Math.min(1, e[1] / W)) * bw, 8);
 ...
 c.beginPath(); c.moveTo(p.L, g.wy(xe + ⟦X|X⟧)); c.lineTo(p.R, g.wy(xe + X)); c.moveTo(p.L, g.wy(xe - X)); c.lineTo(p.R, g.wy(xe - X)); c.stroke();`,
                 syms: [
