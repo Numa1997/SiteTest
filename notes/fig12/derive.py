@@ -1,6 +1,6 @@
 """Fig. 12, the Furuta pendulum: every equation of the note, derived twice in SymPy.
 
-Run: python3 notes/fig12/derive.py   (prints PASS/FAIL lines; exit 1 on any FAIL)
+Run: python3 notes/fig12/derive.py   (prints PASS/FAIL lines; exit 1 on any FAIL). Labels are the note's equation numbers.
 
 Coordinates: phi, the arm's angle about the vertical axis; alpha, the pendulum's angle from straight UP
 (alpha = 0 upright, alpha = pi hanging), measured in the plane at right angles to the arm.
@@ -79,14 +79,14 @@ Cvec = sp.Matrix([2 * Jp * sp.sin(al) * sp.cos(al) * phid * ald - h * sp.sin(al)
 grav = sp.Matrix([0, -G * sp.sin(al)])
 fric = sp.Matrix([br * phid, bp * ald])
 lhs = M * sp.Matrix([phidd, aldd]) + Cvec + grav + fric
-check('(5) arm equation: Lagrangian with motor = M qdd + C + dV + friction - (k I, 0)', sp.expand(e_phi - (lhs[0] - k * qed)))
-check('(5) pendulum equation', sp.expand(e_al - lhs[1]))
+check('(7) arm equation from the electromechanical Lagrangian (5): M qdd - f - (k I, 0) = 0', sp.expand(e_phi - (lhs[0] - k * qed)))
+check('(7) pendulum equation', sp.expand(e_al - lhs[1]))
 # route 2 for (5): LagrangesMethod on the mechanical Lagrangian with generalised forces
 LM = LagrangesMethod(Lag, [phi, al], forcelist=[(A, (tau - br * phid) * N.z), (B, -(-bp * ald) * A.x)], frame=N)
 LM.form_lagranges_equations()
 MM = LM.mass_matrix; FF = LM.forcing
-check('(5) mass matrix by LagrangesMethod', sp.simplify(MM - M))
-check('(5) forcing by LagrangesMethod', sp.simplify(FF - (sp.Matrix([tau, 0]) - Cvec - grav - fric)))
+check('(7) mass matrix by LagrangesMethod', sp.simplify(MM - M))
+check('(7) forcing by LagrangesMethod', sp.simplify(FF - (sp.Matrix([tau, 0]) - Cvec - grav - fric)))
 
 # inductance dropped: electrical time Lambda/R; with Lambda -> 0, I = (V - k phid)/R, tau = k (V - k phid)/R
 tau_motor = k * (V - k * phid) / R
@@ -108,46 +108,46 @@ Au_claim = sp.Matrix([[0, 0, 1, 0], [0, 0, 0, 1],
                       [0, -h * G / Delta, -Jp * (br + k**2 / R) / Delta, h * bp / Delta],
                       [0, J0 * G / Delta, h * (br + k**2 / R) / Delta, -J0 * bp / Delta]])
 Bu_claim = sp.Matrix([0, 0, Jp * k / (R * Delta), -h * k / (R * Delta)])
-check('(7) A at the upright rest', Au - Au_claim)
-check('(7) B at the upright rest', Bu - Bu_claim)
+check('(9) A at the upright rest', Au - Au_claim)
+check('(9) B at the upright rest', Bu - Bu_claim)
 # controllability (8): det of [B, AB, A^2 B, A^3 B]
 Af, Bf = Au_claim.subs({br: 0, bp: 0}), Bu_claim
 Cm = sp.Matrix.hstack(Bf, Af * Bf, Af**2 * Bf, Af**3 * Bf)
 detC0 = sp.factor(Cm.det(method='berkowitz'))
-check('(8) without friction det C = -k^4 G^2 h^2 / (R^4 Delta^4)  (zero only when h = 0, i.e. r = 0)', detC0 - (-k**4 * G**2 * h**2 / (R**4 * Delta**4)))
+check('(11) without friction det C = -k^4 G^2 h^2 / (R^4 Delta^4)  (zero only when h = 0, i.e. r = 0)', detC0 - (-k**4 * G**2 * h**2 / (R**4 * Delta**4)))
 # frictionless free swing: the pendulum's growth rate at the top and its frequency at the bottom
 lam = sp.symbols('lambda')
 Au0 = Au_claim.subs({br: 0, bp: 0, k: 0})
 cp = sp.factor((lam * sp.eye(4) - Au0).det())
-check('(9) open loop at the top: eigenvalues 0, 0, +-sqrt(J0 G/Delta)', sp.expand(cp - lam**2 * (lam**2 - J0 * G / Delta)))
+check('(10) open loop at the top: eigenvalues 0, 0, +-sqrt(J0 G/Delta)', sp.expand(cp - lam**2 * (lam**2 - J0 * G / Delta)))
 Ad, Bd = lin(sp.pi)
 Ad0 = Ad.subs({br: 0, bp: 0, k: 0})
 cpd = sp.factor((lam * sp.eye(4) - Ad0).det())
-check('(9) at the bottom: eigenvalues 0, 0, +-i sqrt(J0 G/Delta)', sp.expand(cpd - lam**2 * (lam**2 + J0 * G / Delta)))
+check('(10) at the bottom: eigenvalues 0, 0, +-i sqrt(J0 G/Delta)', sp.expand(cpd - lam**2 * (lam**2 + J0 * G / Delta)))
 
 # ---------- (10) energy of the pendulum alone and its rate: the swing-up law ----------
 Ep = sp.Rational(1, 2) * Jp * ald**2 + G * sp.cos(al)          # pendulum energy, zero speed at the top gives E* = G
 # from the pendulum row of (5): Jp aldd = -h cos(al) phidd + Jp sin cos phid^2 + G sin(al) - bp ald
 aldd_sol = (-h * sp.cos(al) * phidd + Jp * sp.sin(al) * sp.cos(al) * phid**2 + G * sp.sin(al) - bp * ald) / Jp
 dEp = sp.diff(Ep, t).subs(sp.diff(al, t, 2), aldd_sol)
-check('(10) dEp/dt = -h cos(al) ald phidd + Jp sin cos phid^2 ald - bp ald^2',
+check('§8 (12) dEp/dt = -h cos(al) ald phidd + Jp sin cos phid^2 ald - bp ald^2',
       sp.expand(dEp - (-h * sp.cos(al) * ald * phidd + Jp * sp.sin(al) * sp.cos(al) * phid**2 * ald - bp * ald**2)))
 # with phidd = u and u = kE (Ep - G) ald cos(al): dEp/dt = -h kE (Ep - G) (ald cos al)^2 + (centrifugal, friction)
 kE = sp.symbols('k_E', positive=True)
 u = kE * (Ep - G) * ald * sp.cos(al)
 Vly = sp.Rational(1, 2) * (Ep - G)**2
 dV = sp.expand(((Ep - G) * (-h * sp.cos(al) * ald * u)))
-check('(11) Lyapunov function (Ep-G)^2/2 falls: d/dt = -h kE (Ep-G)^2 (ald cos al)^2 (driving part)',
+check('§8 (13) Lyapunov function (Ep-G)^2/2 falls: d/dt = -h kE (Ep-G)^2 (ald cos al)^2 (driving part)',
       dV + h * kE * (Ep - G)**2 * (ald * sp.cos(al))**2)
 
 # ---------- (12) collocated partial feedback linearisation: the torque that gives the arm acceleration u ----------
 uu = sp.symbols('u')
 aldd_u = aldd_sol.subs(phidd, uu)
 tau_pfl = sp.expand(((J0 + Jp * sp.sin(al)**2) * uu + h * sp.cos(al) * aldd_u + Cvec[0] + br * phid))
-check('(12) with tau_pfl the arm row of (5) gives phidd = u exactly',
+check('(14) with tau_pfl the arm row of (5) gives phidd = u exactly',
       sp.simplify((M * sp.Matrix([uu, aldd_u]) + Cvec + grav + fric)[0] - tau_pfl))
 Mbar = sp.simplify(J0 + Jp * sp.sin(al)**2 - h**2 * sp.cos(al)**2 / Jp)
-check('(12) effective inertia of the arm with the pendulum riding along: J0 + Jp sin^2 - h^2 cos^2 / Jp',
+check('(14) effective inertia of the arm with the pendulum riding along: J0 + Jp sin^2 - h^2 cos^2 / Jp',
       sp.simplify(sp.diff(tau_pfl, uu) - Mbar))
 
 # ---------- (13) energy book: d/dt (T + V) = tau phid - br phid^2 - bp ald^2 ; electrical: V I = R I^2 + k I phid ----------
@@ -155,9 +155,18 @@ E = T_claim + G * sp.cos(al)
 sol = sp.Matrix([phidd, aldd]).subs({})  # placeholder to keep names
 accs = M.LUsolve(sp.Matrix([tau, 0]) - Cvec - grav - fric)
 dE = sp.diff(E, t).subs({phidd: accs[0], aldd: accs[1]})
-check('(13) dE/dt = tau phid - br phid^2 - bp ald^2', sp.simplify(dE - (tau * phid - br * phid**2 - bp * ald**2)))
+check('(8) dE/dt = tau phid - br phid^2 - bp ald^2', sp.simplify(dE - (tau * phid - br * phid**2 - bp * ald**2)))
 Ielec = (V - k * phid) / R
-check('(13) electrical power V I = R I^2 + k I phid  (Joule heat + mechanical work)', sp.simplify(V * Ielec - (R * Ielec**2 + k * Ielec * phid)))
+check('(4)/(20) electrical power V I = R I^2 + k I phid  (Joule heat + mechanical work)', sp.simplify(V * Ielec - (R * Ielec**2 + k * Ielec * phid)))
 
+# (16)-(18): the closed-loop rate of yTPy equals -yT(Q + rho KTK)y whenever P solves the Riccati equation and K = BTP/rho
+import numpy as np
+from scipy.linalg import solve_continuous_are
+num = {Jr: 0.10 * 0.16**2 / 3 + 2e-4, mp: 0.08, r: 0.16, L: 0.30, g: 9.81, k: 0.10, R: 4.0, br: 1e-4, bp: 2e-5}
+nA = np.array(Au_claim.subs(num).evalf(), dtype=float); nB = np.array(Bu_claim.subs(num).evalf(), dtype=float)
+nQ = np.diag([2, 40, 0.5, 2.]); rho = 1.0; nP = solve_continuous_are(nA, nB, nQ, np.array([[rho]])); nK = nB.T @ nP / rho
+res = (nA - nB @ nK).T @ nP + nP @ (nA - nB @ nK) + nQ + rho * nK.T @ nK
+good = bool(np.abs(res).max() < 1e-9); ok &= good
+print(('PASS ' if good else 'FAIL ') + '(16)-(18) closed-loop rate of yTPy = -yT(Q + rho KTK)y, residual %.1e; K = %s' % (np.abs(res).max(), np.round(nK.ravel(), 2)))
 print('ALL PASS' if ok else 'SOME FAILED')
 sys.exit(0 if ok else 1)

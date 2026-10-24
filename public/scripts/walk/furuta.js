@@ -77,7 +77,7 @@ var bp = rhs(p, y0, e), bm = rhs(p, y0, -e); for (i = 0; i < 4; i++) B[i][0] = (
                 title: 'Equations (16) and (17): the Riccati equation and the gains',
                 where: 'lqr()',
                 math: 'A<sup>T</sup>P + PA − ρ<sup>−1</sup>PBB<sup>T</sup>P + Q = 0' + tag(16) + '<br>⟦K|K⟧ = ρ<sup>−1</sup>B<sup>T</sup>P' + tag(17),
-                note: 'The Riccati equation is solved through the 8 × 8 Hamiltonian matrix Hm, whose blocks are A, −BBᵀ/ρ, −Q and −Aᵀ (here R in the code is the weight ρ, not the winding’s resistance). The iteration Z ← ½(Z + Z⁻¹) converges to the matrix sign function, and P follows from its blocks by least squares. The last line is (17). The closed-loop eigenvalues, of A − BK, are all real and negative; the slowest is the decay rate in the readouts.',
+                note: 'The Riccati equation is solved through the 8 × 8 Hamiltonian matrix Hm, whose blocks are A, −BBᵀ/ρ, −Q and −Aᵀ (here R in the code is the weight ρ, not the winding’s resistance, and Qd holds the diagonal of Q: w_φ, w_α, 0.5, 2). The iteration Z ← ½(Z + Z⁻¹) converges to the matrix sign function, and P follows from its blocks by least squares. The last line is (17). The closed-loop eigenvalues, of A − BK, are all real and negative; the slowest is the decay rate in the readouts.',
                 code: `Hm[i][j] = A[i][j]; Hm[i][n + j] = -B[i][0] * B[j][0] / R; Hm[n + i][j] = -(i === j ? Qd[i] : 0); Hm[n + i][n + j] = -A[j][i];
 ...
 for (i = 0; i < 2 * n; i++) for (j = 0; j < 2 * n; j++) { Zn[i][j] = 0.5 * (Z[i][j] + Zi[i][j]); dn += Math.abs(Zn[i][j] - Z[i][j]); }
@@ -136,8 +136,8 @@ d.c = designCache[key].c; d.cin = 0.5 * d.c; d.cout = d.c; d.ms = designCache[ke
             {
                 title: 'Equation (20): RK4 and the energy books',
                 where: 'stepRK4(), run() and solve()',
-                math: 'E(0) + W<sub>in</sub> − Q<sub>R</sub> − Q<sub>b</sub> − E(T) = ⟦bal|0⟧' + tag(20) + '<br>W<sub>in</sub> = ∫V<sub>m</sub>I dt, &nbsp; Q<sub>R</sub> = ∫RI² dt, &nbsp; Q<sub>b</sub> = ∫(b<sub>r</sub>φ̇² + b<sub>p</sub>α̇²) dt',
-                note: 'Each RK4 stage evaluates the drive and the accelerations and carries three more rates: the electrical power V_m I, the winding’s heat R I² and the bearings’ heat. They are summed with the same RK4 weights as the state, so the books are integrated as accurately as the motion. run() lets the supervisor decide once a millisecond (per = 1 at h = 1 ms, 2 at h/2). At the end solve() closes the book (20); with the defaults it is a few times 10⁻¹¹ J. The same run with h/2 grades the stored one.',
+                math: 'E(0) + W<sub>in</sub> − H<sub>R</sub> − H<sub>b</sub> − E(t<sub>end</sub>) = ⟦bal|0⟧' + tag(20) + '<br>W<sub>in</sub> = ∫V<sub>m</sub>I dt, &nbsp; H<sub>R</sub> = ∫RI² dt, &nbsp; H<sub>b</sub> = ∫(b<sub>r</sub>φ̇² + b<sub>p</sub>α̇²) dt',
+                note: 'Each RK4 stage evaluates the drive and the accelerations and carries three more rates: the electrical power V_m I, the winding’s heat R I² and the bearings’ heat. They are summed with the same RK4 weights as the state, so the books are integrated as accurately as the motion. run() lets the supervisor decide once a millisecond (per = 1 at δt = 1 ms, 2 at δt/2; in the code the step is h, and H its default). At the end solve() closes the book (20); with the defaults it is a few times 10⁻¹¹ J. The same run with δt/2 grades the stored one.',
                 code: `k.push([ys[2], ys[3], a[0], a[1], dr.V * dr.I, RM * dr.I * dr.I, BR * ys[2] * ys[2] + BP * ys[3] * ys[3]]);
 ...
 var out = []; for (i = 0; i < 4; i++) out.push(y[i] + h / 6 * (k[0][i] + 2 * k[1][i] + 2 * k[2][i] + k[3][i]));
@@ -148,8 +148,8 @@ if ((step - 1) % per === 0) caught = decide(p, d, y, caught);
 ds.set('balance', Es[0] + Win[NS - 1] - QR[NS - 1] - Qb[NS - 1] - Es[NS - 1]);`,
                 syms: [
                     ['bal', 'balance', 'balance', 'the energy book at the end, J'],
-                    ['err', '|y<sub>h</sub> − y<sub>h/2</sub>|', 'err_half', 'largest difference from the half-step run'],
-                    ['h', 'h', 'H', 'RK4 step, s'],
+                    ['err', '|y<sub>δt</sub> − y<sub>δt/2</sub>|', 'err_half', 'largest difference from the half-step run'],
+                    ['h', 'δt', 'H', 'RK4 step, s'],
                     ['steps', 'steps', 'TEND / H', 'RK4 steps in one run']
                 ]
             }

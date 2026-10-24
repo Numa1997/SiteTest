@@ -38,21 +38,24 @@ const server = http.createServer((q, r) => { const p = path.join(root, decodeURI
   }
   // the panel: open it and close it; then Read values: a click on the knob pins it, the strip sits below the figure
   const tabFound = await pg.evaluate(() => { const t = document.querySelector('.dp-tab'); if (t) t.click(); return !!t; }); await pg.waitForTimeout(300);
-  const opened = await pg.evaluate(() => { const d = document.querySelector('.dp'); return d ? d.getBoundingClientRect().width > 100 && getComputedStyle(d).visibility !== 'hidden' : false; });
-  await pg.evaluate(() => { const x = document.querySelector('.dp-x, .dp-tab'); if (x) x.click(); }); await pg.waitForTimeout(300);
+  const opened = await pg.evaluate(() => document.body.classList.contains('dp-open'));
+  await pg.evaluate(() => { const c = document.querySelector('.dp__close'); if (c) c.click(); }); await pg.waitForTimeout(300);
+  const closed = await pg.evaluate(() => !document.body.classList.contains('dp-open'));
   let pinned = null;
   if (await pg.$('.dp-readbtn')) {
     await (await pg.$('.dp-readbtn')).scrollIntoViewIfNeeded(); await pg.click('.dp-readbtn'); await pg.waitForTimeout(200);
     await (await pg.$('#rig')).scrollIntoViewIfNeeded();
     const bb = await (await pg.$('#rig')).boundingBox(); const ex = await pg.evaluate(() => Sim.data.ds.get('end_px')), ey = await pg.evaluate(() => Sim.data.ds.get('end_py'));
+    const under = await pg.evaluate(([x, y]) => { const e = document.elementFromPoint(x, y); return e ? e.tagName + '.' + e.className + '#' + e.id : null; }, [bb.x + ex, bb.y + ey]);
+    if (!/CANVAS/.test(under || '')) console.log('under the knob:', under, 'at', bb.x + ex, bb.y + ey);
     await pg.mouse.click(bb.x + ex, bb.y + ey); await pg.waitForTimeout(600);
     pinned = await pg.evaluate(() => { const s = document.querySelector('.dp-read'), p = document.querySelector('.dp-read__pin'), st = document.getElementById('stage').getBoundingClientRect();
       return s ? { title: (document.querySelector('.dp-read__title') || {}).textContent, shown: p && !p.hidden, below: s.getBoundingClientRect().top >= st.bottom - 1, grabbed: Sim.data.ds.get('grabbed') } : null; });
     await pg.click('.dp-readbtn');
   }
   const running = await pg.evaluate(() => window.__dataPanel ? window.__dataPanel.running() : 'no panel');
-  console.log(JSON.stringify({ W, lang: lang || 'en', s150: out[150], s600: out[600], tabFound, opened, pinned, runningWhenClosed: running, errs }, null, 0));
-  const ok = !out[150].bad.length && !out[600].bad.length && [...out[150].drawn, ...out[600].drawn].every(d => !/:false$|:undefined$/.test(d)) && !errs.length && pinned && pinned.shown && pinned.below && pinned.grabbed === 'nothing';
+  console.log(JSON.stringify({ W, lang: lang || 'en', s150: out[150], s600: out[600], tabFound, opened, closed, pinned, runningWhenClosed: running, errs }, null, 0));
+  const ok = !out[150].bad.length && !out[600].bad.length && [...out[150].drawn, ...out[600].drawn].every(d => !/:false$|:undefined$/.test(d)) && !errs.length && opened && closed && pinned && pinned.shown && pinned.below && pinned.grabbed === 'nothing';
   console.log(ok ? 'PASS every check agrees, every read-back finds ink or is legitimately absent' : 'FAIL');
   await b.close(); server.close(); process.exit(ok ? 0 : 1);
 })();
