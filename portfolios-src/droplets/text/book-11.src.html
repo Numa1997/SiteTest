@@ -1,99 +1,89 @@
 <section id="ch11" class="chapter">
-<h2><span class="chn">11</span> A cloud with a shape</h2>
-<div class="picture">Watch smoke leave a chimney on a windy day. The whole plume leans with the wind, which is the part you could predict. Its edge
-frays into puffs that no one could predict one by one but that behave alike on average: they spread the smoke, and they mix it with the
-clear air around it. A drop in a cloud moves the same way: it falls, it is carried by the cloud's large motion, and it is jostled by eddies
-too small to follow.</div>
-<p>Until now the cloud was a box in which every drop could meet every other, and no drop had a place. A real cloud has a shape and an edge,
-and air outside the edge is dry. This chapter gives the drops positions, lets them move, and asks how much it matters where a drop sits.</p>
+<h2><span class="chn">11</span> Who eats whom</h2>
+<div class="picture">Picture a lottery that draws two names from a hat and merges those two drops. Every draw lowers the free energy, so
+a rule that only asks "does the free energy fall?" accepts every draw. What the cloud becomes then depends entirely on how the hat was
+filled: whether every pair had one ticket, or whether some pairs had thousands.</div>
+<p>Chapter 10 showed that the free energy fixes where a closed cloud is heading but cannot choose which drops meet. This chapter makes that
+precise with three merging rules on the same landscape, then keeps the books of who actually eats whom in the cloud, and finally asks
+whether the cloud's size distribution is the one of greatest entropy.</p>
 
-<h3>11.1 The velocity of a drop: a mean part and a stochastic element</h3>
-<p>A drop moves with the air plus its own fall. Split the air's velocity into a mean part $\mathbf U(\mathbf x)$, the steady motion of the
-cloud as a whole, and the eddies smaller than the scale we resolve, $\mathbf u'$:</p>
-$$\frac{d\mathbf X}{dt} = \mathbf U(\mathbf X) + \mathbf u'(t) - v_T(r)\,\mathbf e_z. \tag{11.1}$$
-<p>The first and last terms are deterministic: $v_T$ is the fall speed of chapter 2, and for $\mathbf U$ we take one overturning cell that fills
-the cloud's extent, rising at $W_0$ = 1 m/s in the middle and sinking at the sides. With the cell's width $L_c$, height $H_c$ and lower left corner
-$(x_1, z_1)$, its stream function $\psi = (W_0L_c/2\pi)\,\sin(2\pi(x - x_1)/L_c)\,\sin(\pi(z - z_1)/H_c)$ gives $U_x = \partial\psi/\partial z$, $U_z = -\partial\psi/\partial x$,
-which has no divergence: air is neither made nor lost.</p>
-<p>The middle term is the stochastic element. We cannot follow each eddy, but we know two things about them from Kolmogorov's theory of
-turbulence: how strong they are and how long they remember. Eddies smaller than our cell size $h$ have a velocity spread per component
-$\sigma^2 = (\varepsilon h)^{2/3}$, and a drop carried by them forgets its velocity after the Lagrangian time $T_L = 2\sigma^2/(C_0\varepsilon)$, with
-$C_0 \approx 6$ the measured Lagrangian constant. The simplest process with exactly that spread and that memory is the Ornstein–Uhlenbeck
-process. Over a step $\Delta t$ each component is updated exactly by</p>
-$$u'(t + \Delta t) = u'(t)\,e^{-\Delta t/T_L} + \sigma\sqrt{1 - e^{-2\Delta t/T_L}}\;\xi + \tfrac12\,\frac{\partial\sigma^2}{\partial x_i}\Big(1 + \frac{u'^2}{\sigma^2}\Big)\Delta t, \tag{11.2}$$
-<p>with $\xi$ a fresh standard normal number. The last term matters only where $\varepsilon$ varies in space: without it, drops would pile up
-where the eddies are weak, like people drifting out of a crowded room into a quiet one. Thomson (1987) showed that this drift is what keeps
-evenly spread air evenly spread.</p>
-<div class="press"><div class="ctag">In our cloud</div>With $h$ = 50 m and $\varepsilon = 10^{-2}$ m²/s³: $\sigma$ = 0.79 m/s, $T_L$ = 21 s, so the
-stochastic element spreads a puff of drops like a diffusion with coefficient $\sigma^2T_L$ = 13 m²/s, about 126 m in ten minutes. At
-$\varepsilon = 10^{-3}$ the numbers are 0.37 m/s and 45 s, at $4\times10^{-2}$ they are 1.26 m/s and 13 s.</div>
-<p>One more piece of physics enters at the edge. Inside the shape the air is saturated and drops neither grow nor shrink by vapour, as in
-the box. Outside it the air holds 80 % of the vapour it could, and a drop evaporates as</p>
-$$\frac{dr^2}{dt} = 2GS,\qquad S = -0.2, \tag{11.3}$$
-<p>where $G = 9.73\times10^{-11}$ m²/s collects heat conduction and vapour diffusion (Rogers and Yau 1989). A 10 µm droplet that leaves the
-cloud is gone in 2.6 s; a 100 µm drizzle drop lasts 257 s, less than the 412 s it needs to fall the 300 m from the cloud base to the
-ground. Only drizzle well above 100 µm reaches the ground.</p>
-
-<h3>11.2 Super-droplets</h3>
-<p>A slice of cloud 2 km wide and 1.5 km high holds about $10^{16}$ drops in its cloudy part; we cannot follow each one. Shima et al. (2009) let one computational
-<em>super-droplet</em> stand for $\xi$ real drops of the same size at the same place. The slice is cut into cells 50 m on a side (and 50 m deep);
-in each cell the super-droplets are shuffled into random pairs, and a pair of multiplicities $\xi_j \ge \xi_k$ merges with probability</p>
-$$p = \xi_j\,K(r_j, r_k)\,\frac{\Delta t}{\Delta V}\,\frac{n(n - 1)/2}{\lfloor n/2\rfloor}, \tag{11.4}$$
-<p>where $n$ is the number of super-droplets in the cell of volume $\Delta V$ and the last factor makes up for testing only $\lfloor n/2\rfloor$ of the
-$n(n-1)/2$ possible pairs. In a merger $\xi_k$ drops of the second kind each swallow one of the first, so the counts stay whole and the water
-is kept exactly. The kernel $K$ is that of chapters 1 to 4: the stochastic element moves drops between cells, but the speed at which two drops
-in a cell approach each other is still set by gravity.</p>
-<div class="check"><div class="ctag">Check: the box, and evenly spread air</div>Switch the motion off and put all super-droplets in one cell:
-the method must reproduce the collection equation. With 10 240 super-droplets the water reaches half and nine tenths above 40 µm at
-5.807 ± 0.046 and 13.657 ± 0.080 min (4 runs), against 5.873 and 13.716 min from the collection equation with the same modes (cut at three
-standard deviations, 16 bins per doubling). With 32 super-droplets per cell the box is about 10 % slow, with 128 within 2 %; the runs below
-use 128. Second check: 7200 air parcels spread evenly, moved for 30 min by the cell and the stochastic element with $\varepsilon$ falling from
-$4\times10^{-2}$ in the core to $10^{-3}$ outside, stay even: the scatter of their counts per region is 0.79 times the scatter of pure chance.</div>
-
-<h3>11.3 What the shape does</h3>
-<figure class="fig" id="fig-11-1">{{FIG:cloudsnap}}<figcaption>Figure 11.1. The cumulus at 20 min (reference case: overturning cell, stochastic element at
-ε = 10⁻² m²/s³). The pale region is the saturated cloud; drizzle falls out of its base in the middle, where the cell's sinking flanks do not reach.</figcaption></figure>
-<p>We ran four shapes of similar size, a cumulus with a flat base and a cauliflower top, a disc, a box and a tall thin tower, each for 45 min
-and three random histories, and for the cumulus we switched pieces of the physics off one at a time.</p>
-<div class="press"><div class="ctag">In our cloud: 45 minutes, mean of 3 runs</div>
+<h3>11.1 Three rules on one landscape</h3>
+<p>The standard way to let energy decide in a simulation is the Metropolis Monte Carlo: propose a change and accept it with probability</p>
+$$P_{\rm accept} = \min\!\big(1,\;e^{-\Delta F/k_BT}\big). \tag{11.1}$$
+<p>For every merger $\Delta F$ is below $-10^{9}\,k_BT$ (problem 6 works out two 10 µm droplets: $-9.8\times10^{9}\,k_BT$), so every proposed merger is
+accepted. The rule therefore does nothing but carry out its proposals. If each pair of drops is proposed equally often, an uninformed
+lottery with one ticket per pair, the result is coalescence with a kernel that is the same for every pair, a <em>constant kernel</em>, with
+time counted in mergers. Two cautions. First, the uniform proposal is an extra assumption, not something energy supplies. Second, no split
+is ever proposed, so this is not Metropolis sampling of an equilibrium state; it is a one-way chain whose whole character comes from its
+proposals. Weight the tickets by the collision rate of chapters 1 to 4 instead, and the same acceptance rule reproduces the real cloud
+exactly: energy accepts whatever gravity proposes.</p>
+<p>A second way to let energy decide is steepest descent: always take the merger that lowers the free energy most. The drop,
+$\sigma\cdot4\pi\,[r_1^2 + r_2^2 - (r_1^3 + r_2^3)^{2/3}]$, grows with both radii, so steepest descent always merges the two largest drops; the
+product is then the largest, and it eats every other drop in order of decreasing size.</p>
+<figure class="fig" id="fig-11-1">{{FIG:rules}}<figcaption>Figure 11.1. The same 100 cm³ of the thesis cloud (30 100 drops) merged under three rules: the collision
+kernel (the exact Monte Carlo of chapter 6, mean of 20 runs), the uninformed lottery (every pair alike, 20 runs), and steepest descent.
+The free-energy landscape is the same for all three; the paths differ.</figcaption></figure>
+<div class="press"><div class="ctag">In our cloud: three rules, one landscape</div>
 <div class="tblw"><table class="mt">
-<tr><th>case</th><th>edge per area (1/km)</th><th>rained out</th><th>evaporated</th><th>first drizzle at the ground</th></tr>
-<tr><td class="wrap">cumulus: cell and stochastic element</td><td>3.90</td><td>32.6 %</td><td>64.4 %</td><td>9.7 min</td></tr>
-<tr><td class="wrap">cumulus, no stochastic element</td><td>3.90</td><td>46.1 %</td><td>48.2 %</td><td>10.1 min</td></tr>
-<tr><td class="wrap">cumulus, still air (eddies only)</td><td>3.90</td><td>23.4 %</td><td>70.4 %</td><td>9.2 min</td></tr>
-<tr><td class="wrap">cumulus, eddies strongest in the core</td><td>3.90</td><td>31.1 %</td><td>66.2 %</td><td>9.2 min</td></tr>
-<tr><td class="wrap">disc</td><td>3.92</td><td>29.5 %</td><td>66.7 %</td><td>9.8 min</td></tr>
-<tr><td class="wrap">box</td><td>4.84</td><td>24.8 %</td><td>70.9 %</td><td>9.2 min</td></tr>
-<tr><td class="wrap">tall tower</td><td>6.06</td><td>22.3 %</td><td>74.9 %</td><td>10.8 min</td></tr>
-</table></div>
-The standard error of the rained share over the three runs is at most 0.4 percentage points. "Edge per area" is the length of the shape's outline per unit of
-its area in the slice.</div>
-<figure class="fig" id="fig-11-2">{{FIG:cloudrain}}<figcaption>Figure 11.2. The share of the cloud's water that has reached the ground, mean of three runs per case.</figcaption></figure>
-<figure class="fig" id="fig-11-3">{{FIG:cloudevap}}<figcaption>Figure 11.3. The share that evaporated after leaving the cloud through its edge or its base.</figcaption></figure>
-<p>The table reads as a competition between two exits. Water leaves either as rain through the ground or as vapour through the edge. The
-stochastic element is what carries drops across the edge: switching it off raises the rain from 32.6 % to 46.1 % without changing when the
-first drizzle lands. The more edge a cloud has for its size, the more water it loses that way: the tower, with 6.06 km of outline per km²,
-rains 22.3 %, the cumulus with 3.90 rains 32.6 %, and the disc, with about the cumulus's outline per area but three quarters of its size, 29.5 %. The overturning cell helps the rain: in still air the drops stay in place while the eddies
-fray the edge, and only 23.4 % rains out. The cell carries drops up the middle, where they grow, and lets the large ones fall out through the
-base, where its updraft fades to zero.</p>
+<tr><th>rule</th><th>surface free energy left when half the drops have merged</th><th>mergers before the first 100 µm drop (median)</th><th>droplet–droplet share of the first half of mergers</th></tr>
+<tr><td class="wrap">collision kernel (the cloud)</td><td>51 %</td><td>6292</td><td>0.008 %</td></tr>
+<tr><td class="wrap">every pair alike</td><td>79 %</td><td>about 29 930</td><td>99 %</td></tr>
+<tr><td class="wrap">largest pair first</td><td>34 %</td><td>5</td><td>0</td></tr>
+</table></div></div>
+<p>The uninformed lottery spends almost all its mergers joining droplets to droplets, because droplets are 300 times more numerous than
+collectors; it makes a 100 µm drop only when nearly every drop has merged. Steepest descent makes one after five mergers, by joining the
+largest collectors, and then lets one drop eat the whole volume. The cloud does neither: its collectors eat droplets. All three end in one
+drop of 0.30 mm holding the water of the 100 cm³. The landscape fixes that end; the path, and with it the clock, belongs to the kernel, to
+geometry, fall speeds and collision efficiencies.</p>
 
-<h3>11.4 Where a drop sits</h3>
-<figure class="fig" id="fig-11-4">{{FIG:cloudwhere}}<figcaption>Figure 11.4. Where super-droplets first reached 100 µm in the reference cumulus (three runs, every passage
-logged when it happened). The dashed lines bound the updraft core, the middle half of the overturning cell.</figcaption></figure>
-<div class="press"><div class="ctag">In our cloud</div>Of 11 508 passages of 100 µm in the three reference runs, 90.2 % happened in the updraft
-core, which is 61.0 % of the cloud's area. The first super-droplet of drizzle appeared after about 2 min in every run.</div>
-<p>Drizzle is born in the core, where the cell recirculates drops and the edge is far away; a droplet near the edge is more likely to be carried
-out by an eddy and evaporate than to be eaten. So the same droplet has a different fate depending on where it sits, and that is the precise
-sense of the phrase: the kernel is the same everywhere in this cloud, but the place decides how long a drop stays among partners.</p>
-<div class="callout"><div class="ctag">What this chapter does not do</div><ul>
-<li><strong>No condensation.</strong> The shape is a fixed saturated region with nothing to resupply it, so the shares above are of a fixed
-start, not the precipitation efficiency of a growing cloud.</li>
-<li><strong>Super-droplets lump drops.</strong> Each stands for about $4\times10^{11}$ droplets or $4\times10^{9}$ collectors, so "the first
-super-droplet of 100 µm" is a group of drops, not the luckiest single drop of chapter 6.</li>
-<li><strong>Two dimensions and one cell.</strong> The mean motion is a single idealised cell. It can be any field given on the grid; a field
-measured from pictures of real clouds, for example by stereo photography of cloud motion, would replace it, and that is the next study, not done here.</li>
-<li><strong>Constants.</strong> $\sigma^2 = (\varepsilon h)^{2/3}$ and $C_0 = 6$ are standard choices, each uncertain by tens of percent; the stochastic
-element moves drops between cells and does not change how fast two drops in one cell approach each other (chapter 7's question).</li>
-<li><strong>Not yet reviewed.</strong> Chapters 10 and 11 were checked by their own scripts but have not yet been read by an independent
-reviewer, as chapters 1 to 9 were.</li></ul></div>
+<h3>11.2 The ledger of the cloud</h3>
+<p>To follow the competition we sort the drops into three populations: droplets ($r$ &lt; 20 µm, the gap between the two starting modes),
+collectors (20 to 100 µm) and drizzle ($r$ ≥ 100 µm). Inside the collection equation's step we keep a ledger of every merger: which population
+ate which, and how much water was eaten. We also tag the water that started in the droplet mode, and the tag rides with the water through
+every merger. The ledger only watches: the run with it reproduces chapter 5 bit for bit.</p>
+<figure class="fig" id="fig-11-2">{{FIG:populations}}<figcaption>Figure 11.2. The three populations' shares of the water in the warm cloud of chapter 5. The
+collectors grow by eating droplets and peak near 5 min; drizzle overtakes both near 8 min.</figcaption></figure>
+<figure class="fig" id="fig-11-3">{{FIG:diet}}<figcaption>Figure 11.3. The diet: water eaten in each channel since the start, as a share of all the water. Water
+can be eaten more than once (a drizzle drop eaten by a larger one carries all its earlier meals), so the drizzle-on-drizzle channel
+passes one.</figcaption></figure>
+<div class="press"><div class="ctag">In our cloud: the ledger</div>
+<div class="tblw"><table class="mt">
+<tr><th>channel</th><th>share of mergers at $t_{50}$ / $t_{90}$</th><th>water eaten by $t_{50}$ / $t_{90}$, share of all water</th></tr>
+<tr><td class="wrap">collectors eat droplets</td><td>91 % / 50 %</td><td>23 % / 34 %</td></tr>
+<tr><td class="wrap">drizzle eats droplets</td><td>8.7 % / 50 %</td><td>2 % / 28 %</td></tr>
+<tr><td class="wrap">collectors eat collectors</td><td>0.36 % / 0.18 %</td><td>9 % / 16 %</td></tr>
+<tr><td class="wrap">drizzle eats collectors</td><td>0.054 % / 0.18 %</td><td>3 % / 35 %</td></tr>
+<tr><td class="wrap">droplets eat droplets</td><td>0.014 % / 0.006 %</td><td>0.002 % / 0.003 %</td></tr>
+</table></div>
+At $t_{90}$ (13.5 min), 70 % of the water in drizzle started in the droplet mode.</div>
+<p>Read the two columns against each other: rare as events, large in water. Collectors eating collectors is one merger in three hundred,
+yet by $t_{90}$ it has moved 16 % of all the water, because each such meal is a whole collector. These are the mergers that start the first
+drizzle in the exact runs of chapter 6; the bulk of drizzle's water is droplets, eaten one at a time. The droplets almost never eat each
+other: two droplets fall at nearly the same speed and their collision efficiency is tiny. So the population holding 93 % of the surface free
+energy, the one an energy rule would merge first, is the one gravity merges last.</p>
+
+<h3>11.3 The distribution of greatest entropy</h3>
+<p>There is a second, different entropy: the entropy of our knowledge of the size distribution (Jaynes 1957). If all we know is the number of
+drops $N$ and their water $M$, the least biased distribution is the one that maximises $H = -\int n\ln n\,dm$ at fixed $N$ and $M$. Setting
+the variation of $H - \alpha N - \beta M$ to zero gives $-\ln n - 1 - \alpha - \beta m = 0$, an exponential:</p>
+$$n(m) = \frac{N^2}{M}\,e^{-Nm/M}. \tag{11.2}$$
+<p>For the constant kernel of section 11.1 this same exponential solves the collection equation (5.1) exactly when the number falls as</p>
+$$N(t) = \frac{N_0}{1 + KN_0t/2}, \tag{11.3}$$
+<p>and in the collection equation every start with finite water approaches it, in the sense that the distribution of $m/\bar m$ tends to the
+exponential's shape as $t \to \infty$ (Menon and Pego 2004, Theorem 5.1, for this kernel). So for the uninformed lottery the shape of greatest
+entropy and the long-time shape coincide. The exponential there comes from the kinetics of the constant kernel; neither energy nor entropy
+enters its dynamics. The real kernel is not constant, and the test is to compare.</p>
+<figure class="fig" id="fig-11-4">{{FIG:maxent}}<figcaption>Figure 11.4. The warm cloud at 6 min (collection equation) against the distributions of greatest
+entropy with the same number and water: the exponential (11.2), and the gamma, which also fixes the mean of ln m.</figcaption></figure>
+<figure class="fig" id="fig-11-5">{{FIG:maxentdist}}<figcaption>Figure 11.5. Distance of the spectrum from the shapes of greatest entropy as the drops merge (the spectrum
+error of chapter 5: 0 for identical shapes, 2 for shapes that do not overlap). With every pair alike, the cloud forgets its start and
+settles on the exponential; with gravity's kernel it never comes close.</figcaption></figure>
+<div class="press"><div class="ctag">In our cloud</div>With every pair alike, starting from the thesis cloud, the spectrum error from (11.2)
+falls to 0.17 when one drop in a hundred is left and to 0.018 at one in a thousand. With the collision kernel it is 1.32 at 6 min and 1.92 at
+$t_{90}$, and the gamma does no better (1.38 and 1.90). The collector hump eating the droplet hump is two populations, and no distribution
+built from the number and the water alone can draw two humps.</div>
+<p>The choice of variable matters too. Maximising entropy with a prior uniform in radius instead of mass gives $n(m)\propto m^{-2/3}e^{-\beta m}$,
+another shape from the same principle. Maximum entropy, used this way, is a hypothesis about shape, and the kernel decides whether it holds.</p>
+<p>Everything so far happened in a box with no place in it: every drop could meet every other. The next chapter gives the cloud a shape,
+a wind and a stochastic element, and asks what changes where a drop sits.</p>
 </section>

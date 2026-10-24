@@ -626,22 +626,77 @@ var PHYS = (function () {
     return out;
   }
 
+  // ---------------------------------------------------------------- L8b: vapour ripening, the gradient descent of surface free energy
+  // In a closed saturated volume drops exchange water through the vapour. A drop of radius r holds its water with chemical potential
+  // (per kg, relative to flat pure water) mu = R_v T (a/r - b/r^3): a = 2 sigma/(rho_w R_v T) the Kelvin length (curvature), b the solute
+  // term (Raoult). Each drop's mass changes as dm/dt = 4 pi rho_w r G f_v (s - a/r + b/r^3), s the supersaturation, which the closed
+  // volume sets so that the water in drops is conserved. That is dm_i/dt = -M_i (mu_i - mu_bar), M_i = 4 pi rho_w r_i G f_v / (R_v T):
+  // a gradient flow of the free energy F = sum (sigma 4 pi r^2 + solute terms) at fixed water, with dF/dt = -sum M_i (mu_i - mu_bar)^2.
+  function ventilation(r, A) {   // Pruppacher and Klett (1997) 13-60, 13-61 with X = Sc^(1/3) Re^(1/2); Sc of vapour in air
+    var Dv = 2.11e-5 * Math.pow(A.T / 273.15, 1.94) * (101325 / A.p), Re = 2 * r * A.rho * vBeard(r, A) / A.mu, X = Math.pow(A.nu / Dv, 1 / 3) * Math.sqrt(Re);
+    return X < 1.4 ? 1 + 0.108 * X * X : 0.78 + 0.308 * X;
+  }
+  function kelvinA(A) { return 2 * sigmaWater(A.T) / (RHO_W * 461.5 * A.T); }
+  function ripen(radii, A, o) {
+    o = o || {};
+    var n = radii.length, r = Float64Array.from(radii), b = new Float64Array(n), a = kelvinA(A), G = growthG(A), i, t = 0, out = [];
+    var bOf = o.b || function () { return 0; }, fv = o.vent === false ? function () { return 1; } : function (rr) { return ventilation(rr, A); };
+    for (i = 0; i < n; i++) b[i] = bOf(i, r[i]);
+    var rmin = o.rmin || 0.05e-6, tEnd = o.tEnd || 86400, recAt = (o.recAt || [0, 600, 3600, 6 * 3600, 21600, 86400]).slice(), M0 = 0, steps = 0;
+    for (i = 0; i < n; i++) M0 += massOf(r[i]);
+    var fvc = new Float64Array(n); for (i = 0; i < n; i++) fvc[i] = fv(r[i]);
+    function F() { var f = 0; for (var k = 0; k < n; k++) if (r[k] > 0) f += sigmaWater(A.T) * 4 * Math.PI * r[k] * r[k]; return f; }
+    function rec() { var alive = 0, m = 0, r3 = 0; for (var k = 0; k < n; k++) if (r[k] > 0) { alive++; m += massOf(r[k]); r3 += r[k] * r[k] * r[k]; }
+      out.push({ t: t, alive: alive, F: F(), M: m / M0, rmean3: Math.cbrt(r3 / Math.max(1, alive)), r: Array.from(r) }); }
+    while (recAt.length && recAt[0] <= 0) { rec(); recAt.shift(); }
+    var dm = new Float64Array(n);
+    while (t < tEnd) {
+      // s from conservation: sum 4 pi rho r G f (s - a/r + b/r^3) = 0
+      var num = 0, den = 0;
+      for (i = 0; i < n; i++) if (r[i] > 0) { var w = r[i] * fvc[i]; num += w * (a / r[i] - b[i] / (r[i] * r[i] * r[i])); den += w; }
+      var sv = num / den, dt = Math.min(o.dtMax || 120, recAt.length ? recAt[0] - t : tEnd - t);
+      for (i = 0; i < n; i++) if (r[i] > 0) {
+        dm[i] = 4 * Math.PI * RHO_W * r[i] * G * fvc[i] * (sv - a / r[i] + b[i] / (r[i] * r[i] * r[i]));
+        if (dm[i] < 0) dt = Math.min(dt, 0.2 * massOf(r[i]) / -dm[i]);
+      }
+      dt = Math.max(dt, 1e-3);
+      var lost = 0;
+      for (i = 0; i < n; i++) if (r[i] > 0) {
+        var mi = massOf(r[i]) + dm[i] * dt;
+        if (mi <= massOf(rmin) && b[i] === 0) { lost += mi; r[i] = 0; } else r[i] = radiusOf(Math.max(mi, 1e-30));
+      }
+      if (lost !== 0) {   // a vanishing drop's last water goes to the vapour and back to the others, in proportion to their uptake
+        var up = 0; for (i = 0; i < n; i++) if (r[i] > 0 && dm[i] > 0) up += dm[i];
+        if (up > 0) for (i = 0; i < n; i++) if (r[i] > 0 && dm[i] > 0) r[i] = radiusOf(massOf(r[i]) + lost * dm[i] / up);
+      }
+      if (++steps % 50 === 0) for (i = 0; i < n; i++) if (r[i] > 0) fvc[i] = fv(r[i]);
+      t += dt;
+      while (recAt.length && t >= recAt[0] - 1e-9) { rec(); recAt.shift(); }
+    }
+    return { rec: out, steps: steps, a: a, G: G };
+  }
+
   // ---------------------------------------------------------------- L10: a cloud with a shape
-  // A vertical slice (x, z) of Lx by Lz metres, cells of side h (depth h), holding super-droplets (Shima et al. 2009): each stands for
-  // xi real drops of one radius at one position. A drop moves with dX/dt = U(X) + u' - v_T(r) e_z: U a steady overturning cell (updraft
-  // W0 in the middle, downdrafts at the sides, divergence-free, filling the cloud's bounding box), v_T the fall speed of chapter 2, and u' the stochastic element, the
-  // velocity of the eddies the cell does not resolve: per component an Ornstein-Uhlenbeck process, variance sig2 = (eps h)^(2/3) (the
-  // Kolmogorov structure function at the cell size), Lagrangian time T_L = 2 sig2/(C0 eps), C0 = 6, with Thomson's (1987) drift
-  // (1/2) d(sig2)/dx_i (1 + u_i'^2/sig2) where eps varies in space, so that a uniform scatter of air parcels stays uniform. Inside the
-  // cloud (the shape) the air is saturated and drops neither grow nor shrink by vapour; outside it they evaporate, dr^2/dt = 2 G S.
-  // In each cell, pairs collide by Shima's random-pair Monte Carlo with the kernel of chapters 1-4 (times Ayala's factor at the local
-  // eps if asked). Drops leaving through the base are rain; the top and the sides reflect.
+  // A vertical slice (x, z) of Lx by Lz metres holding super-droplets (Shima et al. 2009), each standing for xi real drops of one radius at
+  // one place. A drop moves with dX/dt = U(X) + u' - v_T(r) e_z.
+  // U: a steady overturning motion inside the cloud, from a stream function psi that vanishes on the cloud's outline (the mean wind
+  //    never crosses it): grad^2 psi = -omega inside, psi = 0 outside, omega the vorticity of a two-cell overturning (rising in the
+  //    middle), solved on a 25 m grid and interpolated bilinearly, so U = (psi_z, -psi_x) is exactly divergence-free; scaled so that the
+  //    fastest updraft is W0.
+  // u': the stochastic element, the eddies the mean motion does not hold. Per component an Ornstein-Uhlenbeck velocity of variance
+  //    sig2 = (eps Le)^(2/3) (Kolmogorov scaling for eddies up to the size Le, a parameter) and memory T_L = 2 sig2/(C0 eps), C0 = 6,
+  //    with the drift that keeps evenly spread air evenly spread where eps varies (the well-mixed condition in two dimensions):
+  //    a_i = (1/2) d_i sig2 + u'_i ((u' + U) . grad sig2)/(2 sig2).
+  // Inside the cloud the air is saturated; outside it a drop evaporates, dr^2/dt = 2 G S f_v(r), f_v the ventilation factor.
+  // In each 50 m cell, pairs collide by Shima's random-pair Monte Carlo with the kernel of chapters 1-4. Drops falling through the
+  // ground are rain; air reflects at every wall.
   var SHAPE_BOX = { box: [-400, 400, 300, 1100], disc: [-451, 451, 249, 1151], tower: [-225, 225, 300, 1400], cumulus: [-560, 560, 300, 1350] };
-  function shapeFn(name, Lx, Lz) {
+  function shapeFn(name, Lx, Lz, opt) {
     var cx = Lx / 2;
     if (name === 'box') return function (x, z) { return Math.abs(x - cx) < 400 && z > 300 && z < 1100; };
     if (name === 'disc') return function (x, z) { return (x - cx) * (x - cx) + (z - 700) * (z - 700) < 451 * 451; };
     if (name === 'tower') return function (x, z) { return Math.abs(x - cx) < 225 && z > 300 && z < 1400; };
+    if (name === 'random') return randomOutline(Lx, Lz, opt || {}).inside;
     // cumulus: a flat base at 300 m and a cauliflower top, the union of five discs and a slab
     var bumps = [[cx - 330, 620, 230], [cx - 120, 820, 270], [cx + 140, 900, 300], [cx + 360, 680, 220], [cx + 30, 1120, 230]];
     return function (x, z) {
@@ -651,86 +706,167 @@ var PHYS = (function () {
       return false;
     };
   }
+  // An outline drawn by chance: R(theta) = R0 exp(sum_k c_k cos(k theta + phi_k)), k = 2..12, c_k = rough g_k / k (g_k standard normal),
+  // a flat base at zb; R0 chosen so the area is `area`. rough = 0 is a disc cut flat at its base.
+  function randomOutline(Lx, Lz, o) {
+    var u = rng(o.seed || 1), rough = o.rough || 0, area = o.area || 0.64e6, zb = o.zb || 300, cx = Lx / 2, K = [], k;
+    for (k = 2; k <= 12; k++) K.push([k, rough * gaussian(u) / k, 2 * Math.PI * u()]);
+    function rad(th) { var s = 0; for (var i = 0; i < K.length; i++) s += K[i][1] * Math.cos(K[i][0] * th + K[i][2]); return Math.exp(s); }
+    var R0 = 450, zc;
+    function inside0(x, z, R, zcc) { if (z < zb) return false; var dx = x - cx, dz = z - zcc, rr = Math.sqrt(dx * dx + dz * dz); return rr < R * rad(Math.atan2(dz, dx)); }
+    function areaOf(R) { var zcc = zb + 0.55 * R, n = 0; for (var x = 2.5; x < Lx; x += 5) for (var z = 2.5; z < Lz; z += 5) if (inside0(x, z, R, zcc)) n++; return n * 25; }
+    var lo = 100, hi = 900;
+    for (k = 0; k < 30; k++) { var mid = 0.5 * (lo + hi); if (areaOf(mid) < area) lo = mid; else hi = mid; }
+    R0 = 0.5 * (lo + hi); zc = zb + 0.55 * R0;
+    return { inside: function (x, z) { return inside0(x, z, R0, zc); }, R0: R0, zc: zc, perimeter: null };
+  }
+  // Perimeter of any outline by Crofton's formula: L = (1/2) int_0^pi int n(p, theta) dp dtheta, n the crossings of the line (p, theta)
+  function perimeter(inside, Lx, Lz, d) {
+    d = d || 2; var nd = 24, Ltot = 0, D = Math.sqrt(Lx * Lx + Lz * Lz), cx = Lx / 2, cz = Lz / 2, a, p, s;
+    for (a = 0; a < nd; a++) {
+      var th = Math.PI * (a + 0.5) / nd, c = Math.cos(th), sn = Math.sin(th), cross = 0;
+      for (p = -D / 2; p < D / 2; p += d) {
+        var prev = null;
+        for (s = -D / 2; s < D / 2; s += d / 2) {
+          var x = cx + p * c - s * sn, z = cz + p * sn + s * c;
+          var v = x >= 0 && x <= Lx && z >= 0 && z <= Lz && inside(x, z);
+          if (prev !== null && v !== prev) cross++; prev = v;
+        }
+      }
+      Ltot += cross * d;
+    }
+    return 0.5 * Ltot * Math.PI / nd;
+  }
   function growthG(A) {     // G of dr^2/dt = 2 G S (Rogers and Yau 1989, eq. 7.17 with 7.18): heat conduction and vapour diffusion
     var L = 2.477e6, Rv = 461.5, Kt = 2.48e-2, T = A.T, es = 611.2 * Math.exp(17.67 * (T - 273.15) / (T - 29.65));
     var Dv = 2.11e-5 * Math.pow(T / 273.15, 1.94) * (101325 / A.p);
     var Fk = (L / (Rv * T) - 1) * L * RHO_W / (Kt * T), Fd = RHO_W * Rv * T / (Dv * es);
     return 1 / (Fk + Fd);
   }
+  // The mean motion: solve grad^2 psi = -omega on a grid of spacing hg, psi = 0 at nodes outside the cloud (successive over-relaxation)
+  function cellFlow(inside, Lx, Lz, W0, hg) {
+    hg = hg || 25; var nx = Math.round(Lx / hg) + 1, nz = Math.round(Lz / hg) + 1, inn = new Uint8Array(nx * nz), psi = new Float64Array(nx * nz), i, j;
+    var xa = 1e9, xb = -1e9, za = 1e9, zb = -1e9;
+    var raw = new Uint8Array(nx * nz);
+    for (i = 0; i < nx; i++) for (j = 0; j < nz; j++) if (inside(i * hg, j * hg)) raw[i * nz + j] = 1;
+    // psi is free only at nodes whose eight neighbours are all inside: the wind then lives in grid squares that lie wholly in the cloud
+    for (i = 1; i < nx - 1; i++) for (j = 1; j < nz - 1; j++) {
+      var ok = 1; for (var di = -1; di <= 1; di++) for (var dj = -1; dj <= 1; dj++) if (!raw[(i + di) * nz + j + dj]) ok = 0;
+      if (ok) { inn[i * nz + j] = 1; xa = Math.min(xa, i * hg); xb = Math.max(xb, i * hg); za = Math.min(za, j * hg); zb = Math.max(zb, j * hg); }
+    }
+    var Lc = xb - xa, Hc = zb - za, om = new Float64Array(nx * nz);
+    for (i = 0; i < nx; i++) for (j = 0; j < nz; j++) if (inn[i * nz + j]) om[i * nz + j] = Math.sin(2 * Math.PI * (i * hg - xa) / Lc) * Math.sin(Math.PI * (j * hg - za) / Hc);
+    for (var it = 0; it < 4000; it++) {
+      var res = 0;
+      for (i = 1; i < nx - 1; i++) for (j = 1; j < nz - 1; j++) {
+        var q = i * nz + j; if (!inn[q]) continue;
+        var nw = 0.25 * (psi[q - nz] + psi[q + nz] + psi[q - 1] + psi[q + 1] + hg * hg * om[q]), dlt = nw - psi[q];
+        psi[q] += 1.9 * dlt; res = Math.max(res, Math.abs(dlt));
+      }
+      if (res < 1e-10 * hg * hg && it > 50) break;
+    }
+    var wmax = 0;
+    for (i = 1; i < nx; i++) for (j = 0; j < nz; j++) wmax = Math.max(wmax, -(psi[i * nz + j] - psi[(i - 1) * nz + j]) / hg);
+    var sc = W0 > 0 && wmax > 0 ? W0 / wmax : 0;
+    for (i = 0; i < psi.length; i++) psi[i] *= sc;
+    // bilinear psi; U = (d psi/dz, -d psi/dx) inside each grid square: divergence-free, normal velocity continuous across squares
+    function flow(x, z, out) {
+      var fx = x / hg, fz = z / hg, i0 = Math.floor(fx), j0 = Math.floor(fz);
+      if (i0 < 0 || j0 < 0 || i0 >= nx - 1 || j0 >= nz - 1) { out[0] = 0; out[1] = 0; return; }
+      var a = fx - i0, b = fz - j0, p00 = psi[i0 * nz + j0], p10 = psi[(i0 + 1) * nz + j0], p01 = psi[i0 * nz + j0 + 1], p11 = psi[(i0 + 1) * nz + j0 + 1];
+      out[0] = ((1 - a) * (p01 - p00) + a * (p11 - p10)) / hg;
+      out[1] = -((1 - b) * (p10 - p00) + b * (p11 - p01)) / hg;
+    }
+    return { flow: flow, psi: psi, nx: nx, nz: nz, hg: hg, inn: inn, Lc: Lc, Hc: Hc, za: za };
+  }
   function makeCloud(A, kopt, o) {
     o = o || {};
     var Lx = o.Lx || 2000, Lz = o.Lz || 1500, h = o.h || 50, nx = Math.round(Lx / h), nz = Math.round(Lz / h), u = o.u || rng(o.seed || 1);
-    var inside = o.inside || shapeFn(o.shape || 'cumulus', Lx, Lz), W0 = o.W0 === undefined ? 1 : o.W0;
-    var epsC = o.eps === undefined ? 1e-2 : o.eps, epsB = o.epsOut === undefined ? epsC : o.epsOut, peaked = !!o.peaked;
+    var inside = o.inside || shapeFn(o.shape || 'cumulus', Lx, Lz, o.outline), W0 = o.W0 === undefined ? 1 : o.W0;
+    var epsC = o.eps === undefined ? 1e-2 : o.eps, epsB = o.epsOut === undefined ? epsC : o.epsOut, peaked = !!o.peaked, Le = o.Le || 100;
     var cx = Lx / 2, cz = o.cz || 750, Rb = o.Rb || 500;
     var modes = o.modes || [{ N: 300e6, rg: 8e-6, sg: 1.25 }, { N: 1e6, rg: 40e-6, sg: 1.2 }], per = o.perCell || [24, 8];
-    var C0 = 6, dV = h * h * h, G = growthG(A), S = o.S === undefined ? -0.2 : o.S, stoch = o.stochastic !== false;
-    // eps(x, z): uniform, or a smooth bump peaked in the core (eps_core in the middle, eps_out far away)
+    var C0 = 6, dV = h * h * h, G = growthG(A), S = o.S === undefined ? -0.2 : o.S, stoch = o.stochastic !== false, vent = o.vent !== false;
     function epsAt(x, z) { if (!peaked) return epsC; var q = ((x - cx) * (x - cx) + (z - cz) * (z - cz)) / (Rb * Rb); return epsB + (epsC - epsB) * Math.exp(-q); }
-    function sig2At(x, z) { return Math.pow(epsAt(x, z) * h, 2 / 3); }
+    function sig2At(x, z) { return Math.pow(epsAt(x, z) * Le, 2 / 3); }
     function gradSig2(x, z, out) { var d = 1; out[0] = (sig2At(x + d, z) - sig2At(x - d, z)) / (2 * d); out[1] = (sig2At(x, z + d) - sig2At(x, z - d)) / (2 * d); }
-    // the overturning cell fills the cloud's bounding box [x1, x2] x [z1, z2] and is still outside it:
-    // psi = (W0 Lc/2pi) sin(2 pi (x - x1)/Lc) sin(pi (z - z1)/Hc), u = dpsi/dz, w = -dpsi/dx; rising W0 in the middle, sinking at the sides
-    var bb = o.cell || (SHAPE_BOX[o.shape || 'cumulus'] ? [cx + SHAPE_BOX[o.shape || 'cumulus'][0], cx + SHAPE_BOX[o.shape || 'cumulus'][1], SHAPE_BOX[o.shape || 'cumulus'][2], SHAPE_BOX[o.shape || 'cumulus'][3]] : [0, Lx, 0, Lz]);
-    var x1 = bb[0], Lc = bb[1] - bb[0], z1 = bb[2], Hc = bb[3] - bb[2];
-    function flow(x, z, out) {
-      var X = x - x1, Z = z - z1;
-      if (X <= 0 || X >= Lc || Z <= 0 || Z >= Hc) { out[0] = 0; out[1] = 0; return; }
-      out[0] = W0 * Lc / (2 * Hc) * Math.sin(2 * Math.PI * X / Lc) * Math.cos(Math.PI * Z / Hc);
-      out[1] = -W0 * Math.cos(2 * Math.PI * X / Lc) * Math.sin(Math.PI * Z / Hc);
-    }
-    var sd = [];      // super-droplets: {x, z, r, xi, ux, uz, born: radius class at start (0 droplet mode, 1 collector), x100, z100, t100}
-    var ls = modes.map(function (m) { return Math.log(m.sg); }), i, j, k;
+    var CF = o.box ? null : cellFlow(inside, Lx, Lz, W0, 25), flow = CF ? CF.flow : function (x, z, out) { out[0] = 0; out[1] = 0; };
+    // regions on the 25 m grid: 0 updraft core (mean wind rising faster than W0/2), 1 flank, 2 edge band (inside, within 100 m of the
+    // outline), 3 clear air above the base, 4 below the base
+    var hgR = 25, nxR = Math.round(Lx / hgR), nzR = Math.round(Lz / hgR), reg = new Int8Array(nxR * nzR), zbase = 1e9, i, j, k, vv = [0, 0];
+    var insideCells = [], outsideCells = [];
+    for (i = 0; i < nxR; i++) for (j = 0; j < nzR; j++) { var xq = (i + 0.5) * hgR, zq = (j + 0.5) * hgR; if (inside(xq, zq)) { insideCells.push([xq, zq, i * nzR + j]); zbase = Math.min(zbase, zq - hgR / 2); } else outsideCells.push([xq, zq]); }
+    for (i = 0; i < nxR; i++) for (j = 0; j < nzR; j++) { var zq2 = (j + 0.5) * hgR; reg[i * nzR + j] = zq2 < zbase ? 4 : 3; }
+    insideCells.forEach(function (c) {
+      var dmin = 1e9; for (var q = 0; q < outsideCells.length; q++) { var dx = outsideCells[q][0] - c[0], dz = outsideCells[q][1] - c[1]; if (Math.abs(dx) < 140 && Math.abs(dz) < 140) dmin = Math.min(dmin, Math.sqrt(dx * dx + dz * dz)); }
+      flow(c[0], c[1], vv);
+      reg[c[2]] = dmin < 100 + hgR / 2 ? 2 : (vv[1] > 0.5 * W0 && W0 > 0 ? 0 : 1);
+    });
+    function regionAt(x, z) { var a = Math.min(nxR - 1, Math.max(0, Math.floor(x / hgR))), b = Math.min(nzR - 1, Math.max(0, Math.floor(z / hgR))); return reg[a * nzR + b]; }
+    var clsOf = function (r) { return r < 20e-6 ? 0 : r < 100e-6 ? 1 : 2; };
+    var NR = 5, led = { mergers: new Float64Array(NR * 9), eaten: new Float64Array(NR * 9), released: new Float64Array(NR * 9) };
+    var sd = [], ls = modes.map(function (m) { return Math.log(m.sg); }), id = 0;
+    var initR = new Float64Array(3), fate = { rainR: new Float64Array(3), evapR: new Float64Array(3), initC: {}, rainC: {}, evapC: {} };
     for (i = 0; i < nx; i++) for (j = 0; j < nz; j++) {
       var xc = (i + 0.5) * h, zc = (j + 0.5) * h;
-      if (!inside(xc, zc)) continue;
+      if (!o.uniformStart && !inside(xc, zc)) continue;     // uniformStart: fill the whole slice (the well-mixed test)
       for (var mi = 0; mi < modes.length; mi++) for (k = 0; k < per[mi]; k++) {
-        var x, z, tries = 0; do { x = (i + u()) * h; z = (j + u()) * h; tries++; } while (!inside(x, z) && tries < 50);
+        var x, z, tries = 0; do { x = (i + u()) * h; z = (j + u()) * h; tries++; } while (!o.uniformStart && !inside(x, z) && tries < 50);
         var zz; do { zz = gaussian(u); } while (Math.abs(zz) > 3);
-        var s2 = sig2At(x, z), sg = Math.sqrt(s2);
-        sd.push({ x: x, z: z, r: modes[mi].rg * Math.exp(ls[mi] * zz), xi: modes[mi].N * dV / per[mi], ux: stoch ? sg * gaussian(u) : 0, uz: stoch ? sg * gaussian(u) : 0, born: mi, t100: -1 });
+        var s2 = sig2At(x, z), sg = Math.sqrt(s2), r0 = modes[mi].rg * Math.exp(ls[mi] * zz), xi = modes[mi].N * dV / per[mi];
+        var rg0 = Math.min(2, regionAt(x, z)), c100 = Math.floor(x / 100) + ',' + Math.floor(z / 100), tg = {}; tg[c100] = 1;
+        var tr = new Float64Array(3); tr[rg0] = 1; initR[rg0] += xi * massOf(r0); fate.initC[c100] = (fate.initC[c100] || 0) + xi * massOf(r0);
+        sd.push({ id: id++, x: x, z: z, r: r0, xi: xi, ux: stoch ? sg * gaussian(u) : 0, uz: stoch ? sg * gaussian(u) : 0, coll: mi === 1, t100: -1, tagR: tr, tagC: tg });
       }
     }
-    var st = { t: 0, sd: sd, rain: 0, rainN: 0, lostTop: 0, evap: 0, M0: 0, first100: null, Lx: Lx, Lz: Lz, h: h, nx: nx, nz: nz, inside: inside, W0: W0,
-      epsAt: epsAt, sig2At: sig2At, flow: flow, G: G, S: S, stochastic: stoch, collisions: 0, rainLog: [], bornLog: [] };
+    var st = { t: 0, sd: sd, rain: 0, rainN: 0, evap: 0, evapBelow: 0, M0: 0, first100: null, Lx: Lx, Lz: Lz, h: h, nx: nx, nz: nz, inside: inside, W0: W0, Le: Le,
+      epsAt: epsAt, sig2At: sig2At, flow: flow, cell: CF, G: G, S: S, stochastic: stoch, mergers: 0, gamEvents: 0, gamMany: 0, rainLog: [], bornLog: [],
+      led: led, regionAt: regionAt, reg: reg, nxR: nxR, nzR: nzR, zbase: zbase, initR: initR, fate: fate, paths: {} };
     sd.forEach(function (q) { st.M0 += q.xi * massOf(q.r); });
+    if (o.track) o.track.forEach(function (tid) { st.paths[tid] = []; });
     var vf = [0, 0], gr = [0, 0];
+    function addTag(map, tagC, m) { for (var key in tagC) map[key] = (map[key] || 0) + m * tagC[key]; }
+    function move(q, dt) {
+      if (stoch) {
+        var e = epsAt(q.x, q.z), s2 = sig2At(q.x, q.z), TL = 2 * s2 / (C0 * e), a = Math.exp(-dt / TL), b = Math.sqrt(s2 * (1 - a * a));
+        var ax = 0, az = 0;
+        if (peaked && !o.noDrift) { gradSig2(q.x, q.z, gr); flow(q.x, q.z, vf); var proj = ((q.ux + vf[0]) * gr[0] + (q.uz + vf[1]) * gr[1]) / (2 * s2); ax = 0.5 * gr[0] + q.ux * proj; az = 0.5 * gr[1] + q.uz * proj; }
+        q.ux = q.ux * a + b * gaussian(u) + ax * dt; q.uz = q.uz * a + b * gaussian(u) + az * dt;
+      }
+      flow(q.x, q.z, vf);
+      q.x += (vf[0] + q.ux) * dt; q.z += (vf[1] + q.uz) * dt;
+      if (q.x < 0) { q.x = -q.x; q.ux = -q.ux; } if (q.x > Lx) { q.x = 2 * Lx - q.x; q.ux = -q.ux; }
+      if (q.z > Lz) { q.z = 2 * Lz - q.z; q.uz = -q.uz; } if (q.z < 0) { q.z = -q.z; q.uz = -q.uz; }
+      q.z -= vTerminal(q.r, A, kopt.speed) * dt;
+    }
+    st.move = move;
     st.step = function (dt) {
       var q, n = st.sd.length, keep = [], c;
-      // 1. motion: mean flow + stochastic element - fall speed; evaporation outside the shape
       for (c = 0; c < n; c++) {
         q = st.sd[c];
         if (o.box) { keep.push(q); continue; }      // the well-mixed box: no motion (the test against the collection equation)
-        if (stoch) {
-          var e = epsAt(q.x, q.z), s2 = sig2At(q.x, q.z), TL = 2 * s2 / (C0 * e), a = Math.exp(-dt / TL), b = Math.sqrt(s2 * (1 - a * a));
-          gradSig2(q.x, q.z, gr);
-          q.ux = q.ux * a + b * gaussian(u) + 0.5 * gr[0] * (1 + q.ux * q.ux / s2) * dt;
-          q.uz = q.uz * a + b * gaussian(u) + 0.5 * gr[1] * (1 + q.uz * q.uz / s2) * dt;
-        }
-        flow(q.x, q.z, vf);
-        // the air's displacement reflects at every wall (air does not leave the slice); the fall is added after, so only falling
-        // drops leave, through the ground at z = 0
-        q.x += (vf[0] + q.ux) * dt; q.z += (vf[1] + q.uz) * dt;
-        if (q.x < 0) { q.x = -q.x; q.ux = -q.ux; } if (q.x > Lx) { q.x = 2 * Lx - q.x; q.ux = -q.ux; }
-        if (q.z > Lz) { q.z = 2 * Lz - q.z; q.uz = -q.uz; } if (q.z < 0) { q.z = -q.z; q.uz = -q.uz; }
-        q.z -= vTerminal(q.r, A, kopt.speed) * dt;
-        if (q.z < 0) { var m = q.xi * massOf(q.r); st.rain += m; st.rainN += q.xi; st.rainLog.push([st.t, q.x, q.r, q.xi, q.born]); continue; }
+        move(q, dt);
+        if (st.paths[q.id]) st.paths[q.id].push([Math.round(q.x), Math.round(q.z), +(q.r * 1e6).toFixed(1)]);
+        if (q.z < 0) { var m = q.xi * massOf(q.r); st.rain += m; st.rainN += q.xi; st.rainLog.push([st.t, q.x, q.r, q.xi, q.coll ? 1 : 0]);
+          for (k = 0; k < 3; k++) fate.rainR[k] += m * q.tagR[k]; addTag(fate.rainC, q.tagC, m); continue; }
         if (S !== 0 && !inside(q.x, q.z)) {
-          var r2 = q.r * q.r + 2 * G * S * dt;
-          if (r2 < 1e-12) { st.evap += q.xi * massOf(q.r); continue; }
-          var rn = Math.sqrt(r2); st.evap += q.xi * (massOf(q.r) - massOf(rn)); q.r = rn;
+          var r2 = q.r * q.r + 2 * G * S * (vent ? ventilation(q.r, A) : 1) * dt, dm, gone = r2 < 1e-12;
+          dm = q.xi * (massOf(q.r) - (gone ? 0 : massOf(Math.sqrt(r2))));
+          st.evap += dm; if (q.z < st.zbase) st.evapBelow += dm;
+          for (k = 0; k < 3; k++) fate.evapR[k] += dm * q.tagR[k]; addTag(fate.evapC, q.tagC, dm);
+          if (gone) continue;
+          q.r = Math.sqrt(r2);
         }
         keep.push(q);
       }
       st.sd = keep; n = keep.length;
-      // 2. collisions: Shima's random pairs in each cell
       var cells = {};
       for (c = 0; c < n; c++) { q = st.sd[c]; var key = Math.min(nx - 1, Math.floor(q.x / h)) * nz + Math.min(nz - 1, Math.floor(q.z / h)); (cells[key] || (cells[key] = [])).push(q); }
       var dead = false;
       for (var ky in cells) {
         var L = cells[ky], ns = L.length; if (ns < 2) continue;
         for (c = ns - 1; c > 0; c--) { var jj = Math.floor(u() * (c + 1)), tmp = L[c]; L[c] = L[jj]; L[jj] = tmp; }
-        var half = Math.floor(ns / 2), scale = ns * (ns - 1) / 2 / half, cxk = (Math.floor(ky / nz) + 0.5) * h, czk = (ky % nz + 0.5) * h;
+        var half = Math.floor(ns / 2), scale = ns * (ns - 1) / 2 / half, cxk = (Math.floor(ky / nz) + 0.5) * h, czk = (ky % nz + 0.5) * h, rgn = regionAt(cxk, czk);
         var kl = kopt.eps === 'local' ? Object.assign({}, kopt, { eps: epsAt(cxk, czk) }) : kopt;
         for (c = 0; c < half; c++) {
           var p1 = L[2 * c], p2 = L[2 * c + 1];
@@ -739,26 +875,40 @@ var PHYS = (function () {
           var pr = scale * p1.xi * kernel(p1.r, p2.r, A, kl) * dt / dV;
           var gam = Math.floor(pr) + (u() < pr - Math.floor(pr) ? 1 : 0); if (gam === 0) continue;
           gam = Math.min(gam, Math.floor(p1.xi / p2.xi)); if (gam === 0) continue;
-          var rNew = Math.cbrt(gam * p1.r * p1.r * p1.r + p2.r * p2.r * p2.r);
-          if (p1.xi - gam * p2.xi > 0) { p1.xi -= gam * p2.xi; p2.r = rNew; if (p1.born === 1) p2.born = 1; }
-          else { var h2 = Math.floor(p2.xi / 2); p1.xi = h2; p2.xi -= h2; p1.r = rNew; p2.r = rNew; if (p1.xi <= 0) dead = true; }
-          st.collisions += gam * p2.xi;
-          [p1, p2].forEach(function (qq) { if (qq.r >= 100e-6 && qq.t100 < 0) { qq.t100 = st.t + dt; qq.x100 = qq.x; qq.z100 = qq.z; st.bornLog.push([Math.round(qq.x), Math.round(qq.z), st.t + dt]); if (!st.first100) st.first100 = { t: st.t + dt, x: qq.x, z: qq.z }; } });
+          var rNew = Math.cbrt(gam * p1.r * p1.r * p1.r + p2.r * p2.r * p2.r), real = gam * p2.xi;   // real mergers: each p2 drop swallows gam p1 drops
+          st.mergers += real; st.gamEvents++; if (gam > 1) st.gamMany++;
+          var big = Math.max(p1.r, p2.r), sml = Math.min(p1.r, p2.r), ch = rgn * 9 + clsOf(big) * 3 + clsOf(sml);
+          led.mergers[ch] += real; led.eaten[ch] += real * massOf(sml);
+          led.released[ch] += p2.xi * sigmaWater(A.T) * 4 * Math.PI * (gam * p1.r * p1.r + p2.r * p2.r - rNew * rNew);
+          var m1 = gam * massOf(p1.r), m2 = massOf(p2.r), w1 = m1 / (m1 + m2), w2 = 1 - w1, tR = new Float64Array(3), tC = {}, kk;
+          for (kk = 0; kk < 3; kk++) tR[kk] = w1 * p1.tagR[kk] + w2 * p2.tagR[kk];
+          for (kk in p1.tagC) tC[kk] = (tC[kk] || 0) + w1 * p1.tagC[kk];
+          for (kk in p2.tagC) tC[kk] = (tC[kk] || 0) + w2 * p2.tagC[kk];
+          var coll = p1.coll || p2.coll;
+          if (p1.xi - gam * p2.xi > 0) { p1.xi -= gam * p2.xi; p2.r = rNew; p2.tagR = tR; p2.tagC = tC; p2.coll = coll; }
+          else { var h2 = Math.floor(p2.xi / 2); p1.xi = h2; p2.xi -= h2; p1.r = rNew; p2.r = rNew; p1.tagR = tR; p2.tagR = Float64Array.from(tR); p1.tagC = tC; p2.tagC = Object.assign({}, tC); p1.coll = coll; p2.coll = coll; if (p1.xi <= 0) dead = true; }
+          [p1, p2].forEach(function (qq) { if (qq.r >= 100e-6 && qq.t100 < 0 && qq.xi > 0) { qq.t100 = st.t + dt; st.bornLog.push([Math.round(qq.x), Math.round(qq.z), st.t + dt, qq.xi]); if (!st.first100) st.first100 = { t: st.t + dt, x: qq.x, z: qq.z }; } });
         }
       }
       if (dead) st.sd = st.sd.filter(function (qq) { return qq.xi > 0; });
       st.t += dt;
     };
-    st.census = function () {   // water in the cloud (kg per m of slab depth... per cell depth h), above 40 and 100 um, and drop numbers
+    st.census = function () {
       var M = 0, M40 = 0, M100 = 0, Min = 0;
       st.sd.forEach(function (q) { var m = q.xi * massOf(q.r); M += m; if (q.r >= 40e-6) M40 += m; if (q.r >= 100e-6) M100 += m; if (inside(q.x, q.z)) Min += m; });
-      return { t: st.t, M: M, M40: M40, M100: M100, Min: Min, rain: st.rain, evap: st.evap, n: st.sd.length };
+      return { t: st.t, M: M, M40: M40, M100: M100, Min: Min, rain: st.rain, evap: st.evap, evapBelow: st.evapBelow, n: st.sd.length };
+    };
+    st.regionCensus = function () {   // water in each class (droplets, collectors, drizzle) in each region, and each region's spectrum
+      var W = new Float64Array(NR * 3), spec = [];
+      for (var g = 0; g < NR; g++) spec.push({});
+      st.sd.forEach(function (q) { var rg = regionAt(q.x, q.z), m = q.xi * massOf(q.r); W[rg * 3 + clsOf(q.r)] += m; var b = Math.round(Math.log2(massOf(q.r) / massOf(1e-6)) * 8); spec[rg][b] = (spec[rg][b] || 0) + q.xi; });
+      return { W: W, spec: spec };
     };
     return st;
   }
 
   return {
-    shapeFn: shapeFn, growthG: growthG, makeCloud: makeCloud,
+    shapeFn: shapeFn, randomOutline: randomOutline, perimeter: perimeter, cellFlow: cellFlow, growthG: growthG, makeCloud: makeCloud, ventilation: ventilation, kelvinA: kelvinA, ripen: ripen,
     G0: G0, RHO_W: RHO_W, RHO_I: RHO_I, R_D: R_D, K_B: K_B,
     air: air, sigmaWater: sigmaWater, massOf: massOf, radiusOf: radiusOf,
     stokesK: stokesK, vStokes: vStokes, tauP: tauP, reynolds: reynolds,

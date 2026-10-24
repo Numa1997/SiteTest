@@ -1,144 +1,101 @@
 <div class="part"><span class="part-n">Part IV</span><span class="part-t">Energy, chance and place</span></div>
 <section id="ch10" class="chapter">
-<h2><span class="chn">10</span> Energy, entropy and who eats whom</h2>
+<h2><span class="chn">10</span> Energy and entropy of merging</h2>
 <div class="picture">Watch a window in the rain. Drops sit on the glass; two that touch merge at once into one and never split again. If the
 glass could choose, it would hold one big drop, because one drop has less surface than many. Yet nothing happens until drops touch.
 A drop that grows heavy slides down and eats every drop in its track. The order of the meals is set by gravity and by what lies in
 the path, not by the energy. A cloud is the same window without the glass.</div>
-<p>Parts I to III never mentioned energy or entropy. They followed the drops' motion and counted their meetings. This chapter asks
-what the two great principles of physics say about the same cloud: that energy runs downhill, and that entropy grows. Both turn out
-to hold exactly. Both also turn out to say less than one might hope, and the gap between what they say and what the cloud does is
-the most instructive part of the study.</p>
+<p>Parts I to III followed the drops' motion and counted their meetings. They never asked what the two great principles of physics say
+about the same cloud: that free energy runs downhill, and that entropy grows. This chapter asks. Both principles hold exactly. The
+interesting part is how much each one decides, and how fast it can act on its own.</p>
 
-<h3>10.1 Every merger lowers the energy</h3>
-<p>Water's surface costs energy: making a square metre of it takes $\sigma$ = 0.07422 J at 10&nbsp;°C, the surface tension. A drop of mass
-$m$ has radius $r = (3m/4\pi\rho_w)^{1/3}$, so its surface energy is a power of its mass,</p>
-$$\sigma\,4\pi r^2 = \sigma\,(36\pi)^{1/3}\rho_w^{-2/3}\,m^{2/3},\qquad E_s = \sigma\,(36\pi)^{1/3}\rho_w^{-2/3}\sum_{\text{drops}} m_i^{2/3}. \tag{10.1}$$
-<p>$E_s$ is the cloud's surface energy per m³ of air. Put $\phi(m) = m^{2/3}$ into the moment identity (5.2): each merger replaces
-$m^{2/3} + m'^{2/3}$ by $(m + m')^{2/3}$. Write $x = m/(m + m')$ for the share of the product's water brought by the first partner. Then</p>
+<h3>10.1 Every merger lowers the surface free energy</h3>
+<p>Water's surface costs work to make: stretching it by a square metre at fixed temperature takes $\sigma$ = 0.07422 J at 10&nbsp;°C. So
+$\sigma$ is the surface's <em>free energy</em> per square metre (the part of its energy available as work). A drop of mass $m$ has radius
+$r = (3m/4\pi\rho_w)^{1/3}$, and its surface free energy is a power of its mass,</p>
+$$\sigma\,4\pi r^2 = \sigma\,(36\pi)^{1/3}\rho_w^{-2/3}\,m^{2/3},\qquad F_s = \sigma\,(36\pi)^{1/3}\rho_w^{-2/3}\sum_{\text{drops}} m_i^{2/3}. \tag{10.1}$$
+<p>$F_s$ is the surface free energy of the drops in one m³ of air. A merger replaces $m^{2/3} + m'^{2/3}$ by $(m + m')^{2/3}$. Write $x = m/(m + m')$
+for the share of the product's water brought by the first partner:</p>
 $$(m + m')^{2/3} - m^{2/3} - m'^{2/3} = (m + m')^{2/3}\,\big[1 - x^{2/3} - (1 - x)^{2/3}\big]. \tag{10.2}$$
-<p>For $0 < x < 1$ we have $x^{2/3} > x$ (a number below one grows when raised to a power below one), so $x^{2/3} + (1-x)^{2/3} > x + (1 - x) = 1$
-and the bracket is negative. Every merger lowers the surface energy, whatever the two sizes. Inserted into (5.2),</p>
-$$\boxed{\;\frac{dE_s}{dt} = \frac{\sigma(36\pi)^{1/3}}{2\rho_w^{2/3}}\iint K\,n(m)\,n(m')\,\big[(m+m')^{2/3} - m^{2/3} - m'^{2/3}\big]\,dm\,dm' \;\le\; 0.\;} \tag{10.3}$$
-<p>A function that can only fall along every solution is called a Lyapunov function. $E_s$ is one, for the collection equation and also
-along every single history of the exact Monte Carlo of chapter 6, because the statement holds merger by merger, not just on average.</p>
+<p>For $0 < x < 1$ we have $x^{2/3} > x$ (a number below one grows when raised to a power below one), so $x^{2/3} + (1-x)^{2/3} > 1$ and the
+bracket is negative. Every merger lowers $F_s$, whatever the two sizes. Putting (10.2) into the moment identity (5.2) gives</p>
+$$\boxed{\;\frac{dF_s}{dt} = \frac{\sigma(36\pi)^{1/3}}{2\rho_w^{2/3}}\iint K\,n(m)\,n(m')\,\big[(m+m')^{2/3} - m^{2/3} - m'^{2/3}\big]\,dm\,dm' \;\le\; 0.\;} \tag{10.3}$$
+<p>A quantity that can only fall is called a Lyapunov function. $F_s$ is one, for the collection equation and also along every single
+history of the exact Monte Carlo of chapter 6, because the statement holds merger by merger.</p>
 <div class="check"><div class="ctag">Check: the limits of one merger</div>The bracket of (10.2) is deepest at $x = \tfrac12$: two equal drops
 lose $1 - 2^{-1/3}$ = 20.6 % of their joint surface. A large drop of radius $R$ eating a small one of radius $r$ destroys the share
-$1 - \tfrac23(r/R) + \tfrac19(r/R)^4 - \dots$ of the small one's surface: almost all of it. So the surface, and with it the energy, sits mostly
-in the smallest drops, and it is destroyed most efficiently by feeding small drops to large ones.</div>
-<div class="press"><div class="ctag">In our cloud</div>At the start the cloud holds $E_s$ = 0.0214 J per m³ of air, 92.5 % of it in the
-droplets. A 40 µm collector eating an 8 µm droplet releases $5.17\times10^{-11}$ J, 1700 times the kinetic energy of their collision
-($3.04\times10^{-14}$ J). In the collection equation of chapter 5 the surface energy fell at every one of the 3600 one-second steps of the
-hour; the two-bin scheme, by Jensen's inequality for the concave $m^{2/3}$, can only remove a little more surface than the exact
-products, and over the hour it removed 0.1 % more.</div>
+$1 - \tfrac23(r/R) + \tfrac19(r/R)^4 - \dots$ of the small one's surface, almost all of it. So the free energy sits mostly in the smallest drops,
+and it is destroyed most efficiently by feeding small drops to large ones.</div>
+<div class="press"><div class="ctag">In our cloud</div>At the start the drops in a cubic metre hold $F_s$ = 0.021 J, 93 % of it in the droplets.
+A 40 µm collector eating an 8 µm droplet lowers $F_s$ by $5.2\times10^{-11}$ J, 1700 times the kinetic energy of their collision. In the
+collection equation of chapter 5, $F_s$ fell at every one of the 3600 one-second steps of the hour.</div>
 
-<h3>10.2 Where the energy goes, and the entropy it makes</h3>
-<p>The released energy first shakes the merged drop, which wobbles like a struck jelly; water's viscosity stills the wobble in a quarter
-of a millisecond at 40 µm (Lamb's damping time $r^2/5\nu_w$). The drop warms by $4.6\times10^{-5}$ K and passes the heat to the air.
-Heat $\Delta E$ delivered at temperature $T$ is entropy,</p>
-$$\Delta S = \frac{\Delta E_s}{T}, \tag{10.4}$$
-<p>$1.32\times10^{10}\,k_B$ for that one capture ($k_B$ is Boltzmann's constant). To split again, the drop would have to gather that entropy
-back out of the air. Statistical mechanics gives such a fluctuation the weight $e^{-\Delta S/k_B} = e^{-1.32\times10^{10}}$: it never happens.
-This is the exact sense in which the second law governs the cloud. It fixes the <em>direction</em>: fewer, larger drops, never the reverse.</p>
-<figure class="fig" id="fig-10-1">{{FIG:energyflow}}<figcaption>Figure 10.1. Two energy flows in the warm cloud of chapter 5: the surface energy merging
-releases, and the work gravity does on the falling drops, which drag turns into heat. The dashed line is the turbulent dissipation the
-cloud carries at ε = 10⁻² m²/s³. In the closed box the drops never leave, so gravity's work keeps growing as they grow.</figcaption></figure>
-<div class="press"><div class="ctag">In our cloud</div>Over the hour merging releases 0.0212 J per m³, nearly all the surface energy the
-cloud started with, and produces $7.48\times10^{-5}$ J/K of entropy per m³, $1.80\times10^{10}\,k_B$ per merger on average. At its
-largest the release is 1.49 % of the power gravity's drag dissipates. Gravity turns as much energy into heat as all the drops' surfaces
-hold every 28 s.</div>
-<p>So the energy that merging releases is real, but small. The direction it sets is absolute. Its size is irrelevant to the cloud's
-energy budget, which is ruled by gravity, turbulence and, in a real cloud, the latent heat of condensation that these notes leave out
-(chapter 9).</p>
+<h3>10.2 Heat, entropy and the direction of time</h3>
+<p>The free energy released first shakes the merged drop, which wobbles like a struck jelly; water's viscosity stills the wobble in a
+quarter of a millisecond at 40 µm (Lamb's damping time $r^2/5\nu_w$). The heat that appears is more than the free energy lost, because a
+surface also carries entropy: a square metre of surface has entropy $-d\sigma/dT$, and destroying it releases that entropy too. Each
+square metre of surface destroyed gives the heat $u_s = \sigma - T\,d\sigma/dT$ = 0.115 J, 1.56 times $\sigma$. For the capture above that is
+$8.0\times10^{-11}$ J, which warms the merged drop by $7.1\times10^{-5}$ K before the air takes it away. The entropy of the world (drop, surface
+and air) rises by</p>
+$$\Delta S = -\frac{\Delta F_s}{T} = \frac{\sigma\,|\Delta A|}{T}, \tag{10.4}$$
+<p>$1.32\times10^{10}\,k_B$ for that one capture ($k_B$ is Boltzmann's constant, $|\Delta A|$ the surface destroyed). For the merged drop to split
+again by a thermal fluctuation, that entropy would have to come back out of the air, and statistical mechanics gives such a fluctuation the
+weight $e^{-\Delta S/k_B} = e^{-1.32\times10^{10}}$. No thermal fluctuation ever splits a cloud drop. Drops do break, but only when mechanical
+work does it: the collisions of millimetre raindrops, or a drop of several millimetres torn by the air it falls through. Those drops lie
+outside this closed box of small drops, so within it the second law fixes the direction: fewer, larger drops.</p>
+<figure class="fig" id="fig-10-1">{{FIG:energyflow}}<figcaption>Figure 10.1. Two heat sources in the warm cloud of chapter 5: the heat released by merging,
+$u_s|\Delta A|$ per second, and the work gravity does on the falling drops, which drag turns into heat. The dashed line is the turbulent
+dissipation at ε = 10⁻² m²/s³. In the closed box the drops never leave, so gravity's work keeps growing as they grow.</figcaption></figure>
+<div class="press"><div class="ctag">In our cloud</div>Over the hour merging releases 0.033 J of heat per m³ and raises the entropy by
+$7.5\times10^{-5}$ J/K per m³, about $1.8\times10^{10}\,k_B$ per merger. At its largest the heat of merging is 2.3 % of the heat gravity's
+drag makes. Gravity turns as much energy into heat as all the drops' surfaces hold every 28 s.</div>
 
-<h3>10.3 A cloud that only minimises energy</h3>
-<p>Suppose energy decided everything. The standard way to let energy decide is the Metropolis Monte Carlo: propose a change, here
-merging a pair chosen at random, and accept it with probability</p>
-$$P_{\rm accept} = \min\!\big(1,\;e^{-\Delta E/k_BT}\big). \tag{10.5}$$
-<p>For every merger $\Delta E < 0$ by $10^{9}$ to $10^{12}\,k_BT$ (section 10.1), so every proposal is accepted, and every split would be
-refused. The rule then reduces to: pick two drops at random and merge them. That is coalescence with a kernel that is the same for every
-pair, a <em>constant kernel</em>, with time counted in mergers, since the Metropolis rule has no clock. Think of a lottery that draws two
-names from a hat and merges those two drops. The cloud's own lottery is weighted: the kernel of chapters 1 to 4 draws big, fast drops
-far more often than small ones, and two drops of the same size almost never.</p>
-<p>A second way to let energy decide is steepest descent: always take the merger that releases the most energy. The energy released,
-$\sigma\cdot4\pi\,[r_1^2 + r_2^2 - (r_1^3 + r_2^3)^{2/3}]$, grows with both radii, so steepest descent always merges the two largest
-drops; the product is then the largest, and it eats every other drop in order of decreasing size.</p>
-<figure class="fig" id="fig-10-2">{{FIG:rules}}<figcaption>Figure 10.2. The same 100 cm³ of the thesis cloud (30 100 drops) merged under three rules: the kernel
-of chapters 1 to 4 (the exact Monte Carlo of chapter 6, mean of 20 runs), the Metropolis rule (every pair alike, 20 runs), and steepest descent.
-The energy landscape is the same for all three; the paths differ.</figcaption></figure>
-<div class="press"><div class="ctag">In our cloud: three rules, one landscape</div>
-<div class="tblw"><table class="mt">
-<tr><th>rule</th><th>surface energy left when half the drops have merged</th><th>mergers before the first 100 µm drop</th><th>droplet–droplet share of the first half of mergers</th></tr>
-<tr><td class="wrap">kernel of chapters 1–4</td><td>50.95 ± 0.15 %</td><td>6365 (median of 20)</td><td>0.008 %</td></tr>
-<tr><td class="wrap">every pair alike (Metropolis)</td><td>78.87 ± 0.02 %</td><td>29 933 (median of 20)</td><td>99.05 %</td></tr>
-<tr><td class="wrap">largest pair first (steepest descent)</td><td>33.94 %</td><td>5</td><td>0</td></tr>
-</table></div></div>
-<p>Read the table across. The energy-only Monte Carlo spends almost all its mergers joining droplets to droplets, because droplets are
-300 times more numerous than collectors; it makes a 100 µm drop only after 29 933 of the 30 100 drops have merged. Steepest descent makes
-one after five mergers, by merging the largest collectors, and then lets one drop eat the whole volume. The cloud does neither: its
-collectors eat droplets. All three end in the same place, one drop of 0.30 mm holding all the water of the 100 cm³. Energy fixes that end;
-it cannot choose among paths, because every path is downhill. The choice, and with it the clock, belongs to the kernel: to geometry,
-fall speeds and collision efficiencies.</p>
+<h3>10.3 The free energy of the whole cloud</h3>
+<p>Free energy is $F = E - TS$, and the entropy $S$ includes the drops' own: many drops scattered through the air can be arranged in more
+ways than a few. How much is that worth? A drop of 8 µm is a particle of mass $2.1\times10^{-12}$ kg, and the entropy of $N$ such particles
+in a volume $V$ is the ideal-gas value, about $k_B[\ln(V/N\lambda^3) + 5/2]$ per particle, with $\lambda = h/\sqrt{2\pi mk_BT}$ the thermal
+wavelength. For our droplets $\lambda = 2.9\times10^{-18}$ m and this is 104 $k_B$ per drop. A merger destroys one drop's worth of it, 104 $k_B$,
+while releasing $10^{10}\,k_B$ of surface entropy. Minimising $F$ therefore means merging, by a margin of a hundred million to one: the
+free energy of the whole cloud is lowest when all its water sits in as few drops as possible.</p>
+<p>So energy and entropy, written together as the free energy, say exactly where a closed cloud of small drops is heading. They do not
+yet say how it gets there, or how fast. Free energy can drive motion only if something lets water move down its gradient. For collisions,
+nothing does: the drops meet when gravity brings them together, whatever the free energy says. But there is a second channel, through the
+vapour, where the free energy itself drives the water. That channel is the honest version of "a gradient descent that minimises energy".</p>
 
-<h3>10.4 Who eats whom</h3>
-<p>To follow the competition we sort the drops into three populations: droplets ($r$ &lt; 20 µm, the gap between the two starting modes),
-collectors (20 to 100 µm) and drizzle ($r$ ≥ 100 µm). Inside the collection equation's step we keep a ledger of every merger: which
-population ate which, how much water was eaten, how much surface energy was released. We also tag the water that started in the droplet
-mode and let the tag ride with the water through every merger, so that at any time we know what each population is made of. The ledger
-only watches: the run with it reproduces chapter 5 bit for bit.</p>
-<figure class="fig" id="fig-10-3">{{FIG:populations}}<figcaption>Figure 10.3. The three populations' shares of the water in the warm cloud (extended kernel). The
-collectors grow by eating droplets and peak near 5 min; drizzle overtakes both near 8 min.</figcaption></figure>
-<figure class="fig" id="fig-10-4">{{FIG:diet}}<figcaption>Figure 10.4. The diet: water eaten in each channel since the start, as a share of all the water. Water
-can be eaten more than once (a drizzle drop eaten by a larger one carries all its earlier meals), so the drizzle-on-drizzle channel
-passes one.</figcaption></figure>
-<div class="press"><div class="ctag">In our cloud: the ledger</div>
-<div class="tblw"><table class="mt">
-<tr><th>mergers so far, by channel</th><th>at $t_{50}$ (5.8 min)</th><th>at $t_{90}$ (13.5 min)</th><th>after an hour</th></tr>
-<tr><td class="wrap">collectors eat droplets</td><td>90.9 %</td><td>49.8 %</td><td>41.4 %</td></tr>
-<tr><td class="wrap">drizzle eats droplets</td><td>8.7 %</td><td>49.8 %</td><td>58.3 %</td></tr>
-<tr><td class="wrap">collectors eat collectors</td><td>0.36 %</td><td>0.18 %</td><td>0.15 %</td></tr>
-<tr><td class="wrap">droplets eat droplets</td><td>0.014 %</td><td>0.006 %</td><td>0.005 %</td></tr>
-</table></div>
-At $t_{90}$, 69.5 % of the water in drizzle started in the droplet mode: drizzle is mostly eaten droplets wrapped around a collector's
-core. Of the surface energy released over the hour, 87.5 % was released when collectors or drizzle ate droplets.</div>
-<p>The ledger turns chapter 6's lesson into numbers. Collector–collector mergers are rare, a third of a percent of all mergers, yet they
-are how the first drizzle drops start in the exact runs; the bulk of drizzle's water is droplets, eaten one at a time. And the droplets
-almost never eat each other: two droplets fall at nearly the same speed and their efficiency is tiny, so the population that holds 92.5 %
-of the surface energy, the population energy would merge first, is the one gravity merges last.</p>
+<h3>10.4 The gradient descent that nature runs: ripening through the vapour</h3>
+<div class="picture">Leave a glass of beer to stand. The foam coarsens: small bubbles vanish and big ones grow, without any bubble touching
+another, because gas passes through the liquid from the small bubbles, where the curved skin squeezes it harder, to the large ones.
+Ice cream left in a freezer grows coarse crystals the same way.</div>
+<p>A small drop holds its water less tightly than a large one. Its curved surface pushes on the water inside, so the water's tendency to
+escape, its chemical potential, is raised by the curvature (Kelvin's effect). Dissolved salt lowers it (Raoult's effect). Per kilogram of
+water, relative to flat pure water,</p>
+$$\mu = R_vT\Big(\frac{a}{r} - \frac{b}{r^3}\Big),\qquad a = \frac{2\sigma}{\rho_wR_vT} = 1.14\ \text{nm}, \tag{10.5}$$
+<p>with $R_v$ the gas constant of water vapour and $b$ proportional to the salt in the drop. Water diffuses through the vapour from drops of
+high $\mu$ to drops of low $\mu$. With the growth constant $G$ and ventilation factor $f_v$ of chapter 12, (12.4), each drop's mass changes as</p>
+$$\frac{dm_i}{dt} = -M_i\,(\mu_i - \bar\mu),\qquad M_i = \frac{4\pi\rho_wr_iGf_v}{R_vT}, \tag{10.6}$$
+<p>where $\bar\mu$ is set by the vapour so that the total water stays fixed, and $M_i$ is a mobility. Since $\mu_i = \partial F/\partial m_i$, this is
+precisely a gradient descent of the free energy at fixed water, and it lowers $F$ at the rate</p>
+$$\frac{dF}{dt} = \sum_i \mu_i\,\frac{dm_i}{dt} = -\sum_i M_i\,(\mu_i - \bar\mu)^2 \;\le\; 0. \tag{10.7}$$
+<p>We ran it on 10 cm³ of the thesis cloud (3010 drops, three random draws), sealed and saturated, once with pure water and once with every
+drop holding the salt of a 0.05 µm grain of ammonium sulfate.</p>
+<figure class="fig" id="fig-10-2">{{FIG:ripenF}}<figcaption>Figure 10.2. Surface free energy left, against time on a logarithmic axis: ripening through the vapour
+(pure water, and with salt) against collection (chapter 5). Mean of three draws; the two ripening curves lie on top of each other.</figcaption></figure>
+<figure class="fig" id="fig-10-3">{{FIG:ripenSpec}}<figcaption>Figure 10.3. The pure-water cloud ripening: the water's size distribution at the start, after 1 hour and after a
+day. The droplet hump shrinks and the collectors grow; no drop touches another.</figcaption></figure>
+<div class="press"><div class="ctag">In our cloud</div>By the time collection has put nine tenths of the water above 40 µm (13.5 min), it has
+destroyed 82 % of the surface free energy; ripening has destroyed 2.5 %. Ripening needs an hour to remove 13 % and a day to remove 61 %. In
+pure water a third of the drops vanish within the hour; with salt none do: each shrinks only to a haze particle of 0.27 µm, where the
+salt holds it, and the water moved is the same.</div>
+<p>So the competition one might picture, large drops starving small ones by energy alone, is real. Large drops do grow at the expense of small ones, driven by nothing but the free
+energy, exactly as a gradient descent. It is simply slow: it works on a time of hours to days, while gravity's collisions finish the same
+job in minutes. In a real cloud ripening is buried under the much larger vapour changes that rising and sinking air bring, which is why the
+collection equation, which leaves it out, is the right first model of rain.</p>
 
-<h3>10.5 Does the cloud maximise entropy?</h3>
-<p>There is a second, different entropy: the entropy of our <em>knowledge</em> of the size distribution (Jaynes 1957). If all we know is
-the number of drops $N$ and their water $M$, the least biased distribution is the one that maximises $H = -\int n\ln n\,dm$ at fixed
-$N$ and $M$. Setting the variation of $H - \alpha N - \beta M$ to zero gives $-\ln n - 1 - \alpha - \beta m = 0$, an exponential:</p>
-$$n(m) = \frac{N^2}{M}\,e^{-Nm/M}. \tag{10.6}$$
-<p>Is the cloud's distribution this one? For the constant kernel of section 10.3 the answer is yes, and exactly. Substituting (10.6)
-into (5.1) with $K$ constant shows that it is a solution when the number falls as</p>
-$$N(t) = \frac{N_0}{1 + KN_0t/2}, \tag{10.7}$$
-<p>and the exponential is the shape every start with finite water approaches (a theorem of Menon and Pego, 2004). So the two ideas,
-the Monte Carlo that minimises energy and the distribution that maximises entropy, are one model: the cloud with its kernel replaced
-by a constant. The real kernel is not constant, and the test is to compare.</p>
-<figure class="fig" id="fig-10-5">{{FIG:maxent}}<figcaption>Figure 10.5. The warm cloud at 6 min (collection equation, extended kernel) against the maximum-entropy
-distributions with the same number and water: the exponential (10.6), and the gamma, which also fixes the mean of ln m.</figcaption></figure>
-<figure class="fig" id="fig-10-6">{{FIG:maxentdist}}<figcaption>Figure 10.6. Distance of the spectrum from the maximum-entropy shapes, as the number of drops falls. The
-spectrum error of chapter 5 is 0 for identical shapes and 2 for shapes that do not overlap. With every pair alike, the cloud forgets its
-start and settles on the exponential; with gravity's kernel it never comes close.</figcaption></figure>
-<div class="press"><div class="ctag">In our cloud</div>With every pair alike, starting from the thesis cloud, the spectrum error from
-(10.6) falls to 0.170 when one drop in a hundred is left and to 0.018 at one in a thousand. With the kernel of chapters 1 to 4 it is
-1.32 at 6 min and 1.92 at $t_{90}$; the gamma does no better (1.38 and 1.90). The collector hump eating the droplet hump is two
-populations, and no distribution built from the number and the water alone can draw two humps.</div>
-<p>The choice of variable matters too. Maximising entropy with a prior uniform in radius instead of mass gives $n(m)\propto m^{-2/3}e^{-\beta m}$,
-another shape from the same principle. What singles out mass for the constant kernel is the kinetics. Maximum entropy, used this way,
-is a hypothesis about shape, and the kernel decides whether it holds.</p>
-
-<h3>10.6 What energy and entropy decide</h3>
+<h3>10.5 What energy and entropy decide</h3>
 <div class="callout"><div class="ctag">The balance sheet</div><ul>
-<li><strong>Exact:</strong> the surface energy (10.3) only falls, and each merger makes about $10^{10}\,k_B$ of entropy, so merging is
-irreversible. The end state of a closed cloud is one drop.</li>
-<li><strong>Exact, and small:</strong> the energy released is at most 1.5 % of what gravity's drag dissipates; it drives nothing.</li>
-<li><strong>Not decided by energy:</strong> the path and the clock. Three rules on one landscape give three different diets; the cloud's
-is fixed by the kernel.</li>
-<li><strong>Maximum entropy:</strong> the right shape for a cloud in which every pair is alike, and far from the shape of a cloud ruled
-by gravity.</li></ul></div>
-<p>Everything so far happened in a box with no place in it: every drop could meet every other. The next chapter gives the cloud a shape,
-a wind, and a stochastic element, and asks how much it matters where a drop sits.</p>
+<li><strong>Exact:</strong> the surface free energy (10.3) only falls, and each merger raises the entropy by about $10^{10}\,k_B$, so no thermal
+fluctuation undoes it. The free energy of the whole cloud is lowest with all the water in a few drops.</li>
+<li><strong>Exact, and small:</strong> the heat of merging is at most 2.3 % of the heat gravity's drag makes; it drives nothing.</li>
+<li><strong>A real gradient descent:</strong> ripening through the vapour (10.6) lowers the free energy by itself, but over hours to days.</li>
+<li><strong>Not decided by free energy:</strong> which drops collide, and when. That is the subject of the next chapter.</li></ul></div>
 </section>
