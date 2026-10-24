@@ -290,7 +290,7 @@ its caption ([L71–79](../../public/simulations/phasor-sums.html#L71-L79)); the
 ([L221–650](../../public/simulations/phasor-sums.html#L221-L650)); the walkthrough host `#walk`
 (`data-walk="phasors"`, [L652](../../public/simulations/phasor-sums.html#L652)); the footer. `datalog.js` adds the data
 tab, the *Read values* switch in the caption and the reading strip under `#stage`
-([datalog.js:567–590](../../public/scripts/datalog.js#L567-L590)).
+([datalog.js:874–897](../../public/scripts/datalog.js#L874-L897)).
 
 Scripts, in load order: `fold.js`, `sim.js`, `dataset.js` ([L660–662](../../public/simulations/phasor-sums.html#L660-L662)), the page script
 ([L663–1475](../../public/simulations/phasor-sums.html#L663-L1475)), `datalog.js`
@@ -315,7 +315,7 @@ from x = 64 to 699 ([L547](../../public/simulations/phasor-sums.html#L547)), so 
 ## Where the drawing and the store differ
 
 The page states this in its `about` paragraph, shown in the data panel
-([L1467](../../public/simulations/phasor-sums.html#L1467), [datalog.js:165](../../public/scripts/datalog.js#L165)):
+([L1467](../../public/simulations/phasor-sums.html#L1467), [datalog.js:229](../../public/scripts/datalog.js#L229)):
 
 - **Trail.** `trail_x`, `trail_y` are history: the pen at the end of each past frame, spaced by $\Delta t$ times the
   speed, joined by straight segments and faded in 12 chunks. With Auto Dance on, old points were made with old radii.

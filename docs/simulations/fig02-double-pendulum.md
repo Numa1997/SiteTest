@@ -227,9 +227,9 @@ paragraph says what differs between store and picture ([L854](../../public/simul
 
 **One round** (`Sim.data.round`, [L851–852](../../public/simulations/Double%20Pendulum.html#L851-L852)) is ten seconds of simulated time `t`. Columns charted: `th1`, `th2`, `w1`, `w2`,
 `E`, `drift`, `sep`; the recorder also copies every numeric scalar, and follows bob 2 unless another point is pinned. With at most
-600 samples the interval is 10/600 s ([datalog.js:744](../../public/scripts/datalog.js#L744), [datalog.js:773](../../public/scripts/datalog.js#L773)). Every restart sets t back to 0, so moving a
+600 samples the interval is 10/600 s ([datalog.js:1052](../../public/scripts/datalog.js#L1052), [datalog.js:1081](../../public/scripts/datalog.js#L1081)). Every restart sets t back to 0, so moving a
 restarting slider during a round puts t below the round's start and the recorder ends it ("the clock was reset",
-[datalog.js:795](../../public/scripts/datalog.js#L795)).
+[datalog.js:1103](../../public/scripts/datalog.js#L1103)).
 
 **`Sim.live()`** ([L684–696](../../public/simulations/Double%20Pendulum.html#L684-L696)) returns formatted strings under the keys `t1`, `t2`, `o1`, `o2`, `d`, `den`, `m2`, `l2`, `a1`,
 `a2`, `k1`, `h`, `n`, `acc`, `t`, `kin`, `pot`, `E`, `E0`, `drift`, `scale`, `y1`; all read from the store except `h`, the constant
@@ -253,7 +253,7 @@ favicon ([L14](../../public/simulations/Double%20Pendulum.html#L14)). No inline 
 - The figure: `#stage` with aspect ratio 4 : 3, and 1 : 1.05 below 900 px ([L44](../../public/simulations/Double%20Pendulum.html#L44), [sim.css:213–215](../../public/styles/sim.css#L213-L215)); the canvas `#pend`
   ([L45](../../public/simulations/Double%20Pendulum.html#L45)); the caption with `cap-t` ([L47–50](../../public/simulations/Double%20Pendulum.html#L47-L50)). The canvas is transparent where nothing is drawn, so the stage's grid
   background shows through ([L623](../../public/simulations/Double%20Pendulum.html#L623), [sim.css:68](../../public/styles/sim.css#L68)). `datalog.js` adds the Read values switch to the caption and the reading
-  strip under the stage ([datalog.js:567–591](../../public/scripts/datalog.js#L567-L591)).
+  strip under the stage ([datalog.js:874–898](../../public/scripts/datalog.js#L874-L898)).
 - The control panel ([L53–111](../../public/simulations/Double%20Pendulum.html#L53-L111)): Run (buttons, twin switch, time scale), Coupling (two ratios), Initial conditions (four
   sliders), readouts, legend.
 - The lecture note `<article class="paper" id="paper">` ([L114–379](../../public/simulations/Double%20Pendulum.html#L114-L379)).

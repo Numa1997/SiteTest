@@ -53,7 +53,7 @@ $jI + i$. The first dimension is the row.
    raises the version only if the value differs from the stored one ([dataset.js:71-75](../../public/scripts/dataset.js#L71-L75)).
    `set` can also replace a whole array by another array object.
 5. **Read.** `ds.get(name)` returns the scalar or the array itself, not a copy ([dataset.js:76-79](../../public/scripts/dataset.js#L76-L79)).
-   Readers that need one consistent instant copy it themselves (the data panel's table does, [datalog.js:375-380](../../public/scripts/datalog.js#L375-L380)).
+   Readers that need one consistent instant copy it themselves (the data panel's table does, [datalog.js:652-657](../../public/scripts/datalog.js#L652-L657)).
 6. **Describe.** `shape`, `dtype` and `along` answer the questions the panel asks: how big, which NumPy type, which
    variables share a dimension ([dataset.js:82-101](../../public/scripts/dataset.js#L82-L101)).
 7. **Export.** `ds.npz(extra)` writes every array as a `.npy` file and every scalar into `dataset.json`, adds the `extra`
@@ -61,8 +61,8 @@ $jI + i$. The first dimension is the row.
    The byte layout is explained in [datalog.md, "The .npz writer"](datalog.md#the-npz-writer-byte-by-byte).
 
 The version numbers are how readers avoid work: the data panel recomputes min, max and mean of an array and redraws its
-thumbnail only when the version has moved ([datalog.js:213-219](../../public/scripts/datalog.js#L213-L219),
-[datalog.js:286](../../public/scripts/datalog.js#L286)).
+sparkline only when the version has moved ([datalog.js:316-322](../../public/scripts/datalog.js#L316-L322),
+[datalog.js:393](../../public/scripts/datalog.js#L393)).
 
 ### Types
 
@@ -95,18 +95,19 @@ Across the ten pages a grep finds 546 `ds.var` calls: 137 arrays (127 `Float64Ar
 
 | Key | Used for | Count |
 |---|---|---|
-| `symbol` | HTML symbol shown in the panel ([datalog.js:83](../../public/scripts/datalog.js#L83)) | 559 |
-| `long_name` | one-line meaning ([datalog.js:196](../../public/scripts/datalog.js#L196)) | 559 |
-| `computed_in` | function or line that computes it ([datalog.js:200](../../public/scripts/datalog.js#L200)) | 559 |
-| `digits` | decimals shown, default 4 ([datalog.js:84](../../public/scripts/datalog.js#L84)) | 524 |
-| `formula` | formula shown in Check and the array view ([datalog.js:509](../../public/scripts/datalog.js#L509)) | 372 |
-| `units` | SI or pixel unit ([datalog.js:85](../../public/scripts/datalog.js#L85)) | 355 |
-| `source` | Check text when there is no independent formula ([datalog.js:521](../../public/scripts/datalog.js#L521)) | 145 |
-| `updates` | when it changes ([datalog.js:508](../../public/scripts/datalog.js#L508)) | 119 |
+| `symbol` | HTML symbol shown in the panel ([datalog.js:116](../../public/scripts/datalog.js#L116)) | 559 |
+| `long_name` | one-line meaning, the Meaning column of the ledger and the headline's tooltip ([datalog.js:257](../../public/scripts/datalog.js#L257)) | 559 |
+| `computed_in` | function or line that computes it, shown in Check ([datalog.js:814](../../public/scripts/datalog.js#L814)) | 559 |
+| `digits` | decimals shown, default 4 ([datalog.js:117](../../public/scripts/datalog.js#L117)) | 524 |
+| `formula` | formula shown under the meaning in the ledger, in Check and above an open array ([datalog.js:256](../../public/scripts/datalog.js#L256), [datalog.js:816](../../public/scripts/datalog.js#L816)) | 372 |
+| `units` | SI or pixel unit ([datalog.js:118](../../public/scripts/datalog.js#L118)) | 355 |
+| `source` | Check text when there is no independent formula, through `T()` ([datalog.js:828](../../public/scripts/datalog.js#L828)) | 145 |
+| `updates` | when it changes ([datalog.js:815](../../public/scripts/datalog.js#L815)) | 119 |
 | `coordinate` | set by `coord`; coordinates are listed first by `along` and in `dataset.json` | set by 13 `ds.coord` calls |
-| `colour` | `true`: the scalar is an RGB triple, shown as a swatch ([datalog.js:227-230](../../public/scripts/datalog.js#L227-L230)) | 1 |
-| `cw` | column width of the array table ([datalog.js:409](../../public/scripts/datalog.js#L409)) | 2 |
-| `drawn_note` | Check text when nothing is read back ([datalog.js:532](../../public/scripts/datalog.js#L532)) | 0 |
+| `colour` | `true`: the scalar is an RGB triple, shown as a swatch ([datalog.js:326](../../public/scripts/datalog.js#L326)) | 1 |
+| `sci` | `true`: the value is shown in scientific notation, 2.1×10⁻⁹, not as a row of zeros: residuals and relative errors ([datalog.js:327](../../public/scripts/datalog.js#L327)) | 5 (Figs. 9 and 10: `bal_now`, `fres_now`, `ebal_now`, `balance` twice) |
+| `cw` | column width of the array table ([datalog.js:686](../../public/scripts/datalog.js#L686)) | 2 |
+| `drawn_note` | Check text when nothing is read back ([datalog.js:839](../../public/scripts/datalog.js#L839)) | 0 |
 
 ## Public interface
 
@@ -127,7 +128,7 @@ Across the ten pages a grep finds 546 `ds.var` calls: 137 arrays (127 `Float64Ar
 | `ds.npz` | [152-172](../../public/scripts/dataset.js#L152-L172) | `extra = [{ name, bytes }]` (`bytes` a string or `Uint8Array`) | A `Blob` (`application/zip`): one `<name>.npy` per array, `dataset.json`, then the extra files. |
 
 Fields read directly by `datalog.js`: `ds.title`, `ds.dims`, `ds.vars[name]` (its `dims`, `type`, `attrs`, `data`,
-`version`) and `ds.order` ([datalog.js:81](../../public/scripts/datalog.js#L81), [datalog.js:757](../../public/scripts/datalog.js#L757)).
+`version`) and `ds.order` ([datalog.js:114](../../public/scripts/datalog.js#L114), [datalog.js:1065](../../public/scripts/datalog.js#L1065)).
 
 ## Internal functions
 
@@ -169,7 +170,7 @@ None. The file reacts to nothing; it runs only when a page or the data panel cal
   [Fig. 9 L615](../../public/simulations/driven-oscillator.html#L615),
   [Fig. 10 L566](../../public/simulations/wind-turbine.html#L566).
 - `datalog.js` builds a second, temporary `Dataset` for a recorded round and saves it with the same `npz`
-  ([datalog.js:970-977](../../public/scripts/datalog.js#L970-L977)).
+  ([datalog.js:1278-1286](../../public/scripts/datalog.js#L1278-L1286)).
 - Each page's `Sim.live()` reads the store and formats strings for the walkthrough (for example
   [Double Pendulum.html:684-696](../../public/simulations/Double%20Pendulum.html#L684-L696)); see [walk.md](walk.md).
 - Each page's own documentation lists its dimensions, variables and the line where each is written
@@ -197,6 +198,6 @@ None. The file reacts to nothing; it runs only when a page or the data panel cal
 
 1. Fixed on 2026-10-15: unused index, at, size and the Dataset constructor export were removed; shape remains for NPZ export (commit [8982ed3](https://github.com/Numa1997/SiteTest/commit/8982ed35e78161ea7cdd82ae1794f44ccfe39f3c)).
 2. Fixed on 2026-10-15: the scalar type comment includes uint8 (commit [43d8238](https://github.com/Numa1997/SiteTest/commit/43d82383f4294428a1cf027f2727644ccf7dc8a5)).
-3. The attribute `drawn_note`, read at [datalog.js:532](../../public/scripts/datalog.js#L532), is set by no page.
+3. The attribute `drawn_note`, read at [datalog.js:839](../../public/scripts/datalog.js#L839), is set by no page.
 4. `ds.set` on an undeclared name throws a `TypeError` ([dataset.js:73](../../public/scripts/dataset.js#L73)) while
    `ds.get` returns `undefined`. Whether this difference is intended is not determined from the code.
