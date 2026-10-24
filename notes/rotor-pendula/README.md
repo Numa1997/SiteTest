@@ -21,9 +21,15 @@ branch `rotor-second-blade`. The earlier scripts are listed under "Being ported"
 - Generator: maxon RE 25 + GP 32 C, ratios 3.7 to 492 (`dossier-generator.md`). Sensor need 37.6 uW (`sensor.py`,
   `dossier-sensor.md`).
 
-## Decisions for Numa
-- (a) How to size the second blade. Default in use: by the generator (1 kg on 1 m). Options: by the sensor (0.1 kg on 1 m),
-  or a real-size tip blade (3 m, 10 kg) with a larger generator (needs a new primary source).
+## Sizing (decided 24 October 2026; was decision (a))
+The study keeps 1 kg on 1 m, now shown against the range of real tip devices (`derive/sizes.py`, notes section 7.6, Table 5):
+lengths 0.5 to 3 m (retrofit tip extensions, about 3 m with 1 m past the old tip, Vestas US 10 927 809; pivoting tip brakes
+5-20 % of the radius, US 8 403 641) and 1, 3, 10, 30 kg/m (the NREL blade is 10.3 kg/m at its tip, 115 kg in its outer 3 m).
+Over that range P* at 6 m/s runs from 66.7 mW to 74 W, in proportion to m l/2; the swing stays 0.214-0.220 rad (it is
+g/(Omega^2 r_p)/sqrt 2 for any short blade); tau* runs from 0.87 to 936 N m, so the RE 25 + GP 32 C levels off at 94-107 mW
+(6 m/s) above about 0.5 kg m; the heaviest add 8.3 kN at the tip (the blade's own outer 3 m: 10.1 kN). The sensor never
+limits (worst case 311 x its need). So the size is set by the generator and the structure: 1 kg on 1 m is the lightest the
+catalogue generator serves fully.
 
 ## Models, by layer (`derive/`)
 | Layer | What it adds | Scripts | Output |
@@ -32,7 +38,7 @@ branch `rotor-second-blade`. The earlier scripts are listed under "Being ported"
 | L1 | full nonlinear motion, Radau IIA engine (`engine.RigidBlade`), chaos | `engine.py`, `L1_blade.py`, `L1_chaos_blade.py` | `L1_blade.json`, `L1_chaos_blade.json` |
 | L2 | gusts on the NREL 5 MW turbine with its controller | `L2_run.py`, `L2_scales.py`, `turbulence.py` | `L2_run_nrel.json`, `L2_run_k2.json`, `L2_scales.json` |
 | L3 | the blade sags and shakes at the tip; the shaking ceiling | `L3_sag.py`, `L3_sag_tip.py`, `L3_shake2.py`, `power_theorem.py`, `nrel5mw.py` | `L3_sag_tip.json`, `L3_shake2.json` |
-| L4 | real geared generator: losses, friction, reflected inertia | `L4_generator.py`, `L4_full.py`, `L4_check.py`, `L4_converge.py`, `design.py` | `L4_*.json`, `design.json` |
+| L4 | real geared generator: losses, friction, reflected inertia; sizes | `L4_generator.py`, `L4_full.py`, `L4_check.py`, `L4_converge.py`, `design.py`, `sizes.py` | `L4_*.json`, `design.json`, `sizes.json` |
 
 Every script prints PASS/FAIL lines and exits 1 on a failure. A check tests the numerics or a derived prediction; a physical
 outcome (regular or chaotic, a gain or a loss) is printed as a result, never as a pass. Outputs are copied into
@@ -51,7 +57,7 @@ outcome (regular or chaotic, a gain or a loss) is printed as a result, never as 
 - White-noise shaking: a rod draws at most (S/2)(3/4)m, three quarters of a point mass's ceiling.
 
 ## Queue
-1. Pull request #43: Numa's "merge"; then the joint push with the Fig. 11 session.
+1. Pull request for section 7.6 (the range of sizes): Numa's "merge".
 
 The Newton question (closed, 24 October 2026). `L4_check.py` at 2000 steps per turn stops Newton at its cap of 12 in 1939
 of 240000 steps (its log says FAIL). `portfolios-src/rotor-pendula/tools/check_newton.js` reran the 16 settings on the

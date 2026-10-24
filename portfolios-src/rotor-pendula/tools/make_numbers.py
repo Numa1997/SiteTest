@@ -5,7 +5,7 @@ The theory sources write {{n:key}} for a number and {{table:key}} for a table; t
 stops on any key that is not here.  So no number in the text is typed by hand.
 The machine: a second blade (a thin uniform rod of mass m and length l) hinged at the 63 m tip of the NREL 5-MW blade.
 Inputs: the formulas below, and the stored results of the models in data/ (copied from notes/rotor-pendula/derive/):
-setup.json, sensor.json, design.json (the setup and the sizing rule); L1_blade.json, L1_blade_checks.json (the full equation
+setup.json, sensor.json, design.json (the setup and the sizing rule); sizes.json (the range of sizes); L1_blade.json, L1_blade_checks.json (the full equation
 at the three winds, engine checks); L1_chaos_blade.json; L2_scales.json, L2_run_nrel.json, L2_run_k2.json (gusts);
 L3_sag_tip.json, L3_shake2.json (the mother blade's sag and shaking); L4_generator.json, L4_check_2000.json,
 L4_sensitivity.json (the geared generator); mc_full.log (power_theorem_mc.py).  Run: python3 tools/make_numbers.py
@@ -265,6 +265,34 @@ for rr in ds['rows']:
 rows.append('</tbody></table>')
 T['sizing'] = '\n'.join(rows)
 assert ds['pick'] == m, 'design.json picks another mass than setup.json'
+
+# ---- the range of sizes (sizes.json): lengths 0.5 to 3 m, four mass densities ---------------------------------------------
+zz = J('sizes.json'); zr = zz['rows']; mo = zz['mother']
+rows = ['<p class="tcap">Table 5. The second blade over the range of real tip devices: length $l$, mass per length, mass $m$, first moment '
+        '$ml/2$; the best power $P^*$ (2.5) at 6 and 10 m/s; the generator torque $\\tau^* = \\tfrac{ml}{2}g/\\sqrt2$ it must hold; the extra '
+        'pull on the mother blade\'s tip at 10 m/s, $m\\Omega^2(r_p + l/2)$; and what the RE 25 + GP 32 C delivers to its load at 6 m/s. '
+        'The row in bold is the size these notes use.</p>'
+        '<table class="mt"><thead><tr><th>$l$, m</th><th>kg/m</th><th>$m$, kg</th><th>$ml/2$, kg m</th><th>$P^*$ 6 m/s, W</th><th>$P^*$ 10 m/s, W</th>'
+        '<th>$\\tau^*$, N m</th><th>pull, kN</th><th>RE 25, mW</th></tr></thead><tbody>']
+for r in zr:
+    gl = r.get('gen_load_W'); gen = '–' if not gl or gl[0] is None else sig3(gl[0]*1e3)
+    cells = [f"{r['l']:g}", f"{r['kg_per_m']:g}", f"{r['m']:g}", f"{r['m']*r['l']/2:g}", sig3(r['Pstar_W'][0]), sig3(r['Pstar_W'][2]),
+             sig3(r['tau_star']), sig3(r['pull10_N']/1e3), gen]
+    tr = ''.join(f'<td>{c}</td>' for c in cells)
+    rows.append(f'<tr style="font-weight:600">{tr}</tr>' if (r['l'] == l and r['m'] == m) else f'<tr>{tr}</tr>')
+rows.append('</tbody></table>')
+T['sizes'] = '\n'.join(rows)
+assert any(r['l'] == l and r['m'] == m for r in zr), 'sizes.json does not contain the size these notes use'
+P6 = [r['Pstar_W'][0] for r in zr]
+N['sz_P_lo'] = sig3(min(P6)*1e3); N['sz_P_hi'] = sig3(max(P6))
+th = [r['Theta6'] for r in zr]; N['sz_th_lo'] = f(min(th), 3); N['sz_th_hi'] = f(max(th), 3)
+N['sz_th_ref'] = f(g/(Om[6.0]**2*rp)/math.sqrt(2), 3)
+tau = [r['tau_star'] for r in zr]; N['sz_tau_lo'] = sig3(min(tau)); N['sz_tau_hi'] = sig3(max(tau))
+pulls = [r['pull10_N'] for r in zr]; N['sz_pull_max'] = sig3(max(pulls)/1e3); N['sz_pull_ours'] = sig3(next(r['pull10_N'] for r in zr if r['l'] == l and r['m'] == m)/1e3)
+big = [r['gen_load_W'][0] for r in zr if r['m']*r['l']/2 >= 0.5 - 1e-12 and r.get('gen_load_W') and r['gen_load_W'][0] is not None]
+N['sz_plat_lo'] = sig3(min(big)*1e3); N['sz_plat_hi'] = sig3(max(big)*1e3)
+N['sz_min_margin'] = f'{min(x for r in zr if r.get("gen_load_W") for x in r["gen_load_W"] if x)/need:,.0f}'.replace(',', ' ')   # every size, every wind
+N['tip_kgm'] = f(mo['tip_kg_per_m'], 1); N['outer3_kg'] = f(mo['outer3_kg'], 0); N['outer3_pull'] = f(mo['outer3_pull10_N']/1e3, 1)
 
 json.dump({'n': N, 'table': T}, open(ROOT / 'numbers.json', 'w'), indent=1, ensure_ascii=False)
 print(f'{len(N)} numbers and {len(T)} tables written to numbers.json')

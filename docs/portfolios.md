@@ -203,7 +203,8 @@ NREL 5 MW blade, turning in the rotor plane and braked by a generator in the hin
 the turning blade to the best brake κ* = R − 1 and P* = mg²l/[8Ω(r_p − 2l/3)], the trail that is the rotor's bill, where the mass
 sits, chaos (Lyapunov exponents at three winds and three brakes: every start ends on one regular swing), a ceiling on random
 shaking, gusts on the NREL 5 MW turbine, the blade's sag and shaking at its tip, and a real geared generator (maxon RE 25 with a
-GP 32 C gearhead, ratio 492). Air on the second blade is left out and the notes say so. Every number is computed by the study's
+GP 32 C gearhead, ratio 492), and how all of it scales over the sizes of real tip devices, 0.5 to 3 m and up to 90 kg
+(section 7.6). Air on the second blade is left out and the notes say so. Every number is computed by the study's
 models (`tools/make_numbers.py`) or listed with its reason (`tools/typed_numbers.py`). *Simulation* (`#sim`): the same machine;
 choose a steady wind (6, 8 or 10 m/s), the brake and an ideal brake or the geared generator; the page solves the full equations
 with a Radau IIA integrator in a Web Worker built from its physics block, then plays the last turns back. The scene draws the

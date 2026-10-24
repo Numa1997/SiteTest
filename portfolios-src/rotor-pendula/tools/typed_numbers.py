@@ -54,12 +54,14 @@ TYPED = {
 '05': {
     '0.01': 'def: series of masses', '0.02': 'def: series of masses', '0.05': 'def: series of masses', '0.1': 'def: series of masses',
     '0.2': 'def: series of masses', '0.5': 'def: series of masses; and the swing limit chosen for the sizing (rad)',
-    '25': GEN + ' (name and diameter)', '32': GEN + ' (name)', '339152': GEN, '20': GEN + ' (rated power, W)', '24': GEN + ' (winding, V)',
+    '25': GEN + ' (name and diameter)', '32': GEN + ' (name)', '339152': GEN, '20': GEN + ' (rated power, W); and the upper end of 5 to 20 % for tip brakes (US 8 403 641)', '24': GEN + ' (winding, V)',
     '1.53': GEN, '20.8': GEN, '460': GEN, '14.7': GEN, '40.2': GEN, '10 900': GEN, '30.4': GEN, '0.7': GEN, '1.5': GEN,
     '80': GEN, '75': GEN, '70': GEN, '60': GEN + ' (gear efficiency per stage count; and 60 in k_e = 60/(2 pi K_n))',
     '8000': GEN, '492': GEN + ' (largest ratio)', '0.12': GEN + ' (terminal inductance over resistance)',
     '0.02076': ('calc', '60/(2*math.pi*460)', 1e-4, 'k_e from the speed constant'),
     '50': 'input: pessimistic gear efficiency of the sensitivity test (L4_sensitivity.py)',
+    '30': 'input: the heaviest mass density of the range of sizes, kg per metre (sizes.py, section 7.6)',
+    '10 927 809': 'def: US patent number (source list)', '8 403 641': 'def: US patent number (source list)',
     '100': 'def: the largest tip vibration tried in chapter 6 (100 mm)',
 },
 }
