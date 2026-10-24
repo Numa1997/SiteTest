@@ -405,10 +405,14 @@ how each model level was argued, attacked by an independent reviewer and checked
 
 ### The data panel: the bookkeeper (since 24 October 2026)
 
-Panel 4 (a cloud with a shape) carries the site's data panel ([scripts/datalog.md](scripts/datalog.md)), and the panel also keeps the
-exact runs of panel 3 (lucky drops) as an ensemble. The panel is today's (Variables, Read values, Check, Record, Save); the bookkeeper
-layout of the redesign (headline, ledger table, books) is added with `Sim.data.ledger` once that redesign is merged. The design of
-that ledger (headline, sections, books, dependencies) is written in the pull request that added the panel.
+Panel 4 (a cloud with a shape) carries the site's data panel ([scripts/datalog.md](scripts/datalog.md)) as a bookkeeper, and the
+panel also keeps the exact runs of panel 3 (lucky drops) as an ensemble. `Sim.data.ledger`, at the end of `datahooks.js`, declares:
+the headline (share of the water in drizzle drops f₁₀₀, share of the starting drops still in the air N/N₀, cloud time, the first
+drizzle drop, the share rained out, the largest drop); seven sections in causal order (set-up, what follows from it, the state now,
+super-droplets and cells, the ensemble of panel 3, and the solver and drawing, folded); how each number is obtained (the cloud's
+own step is "solver", what `record()` works out from it "formula", panel 3's stored runs "stored run"); the two books; the
+dependencies of the derived constants; and which menu sets which input. Drop counts (about 10¹⁶) and the residuals print as
+2.1×10⁻⁹ (`sci`); the headline prints plain numbers, so it shows N/N₀ rather than N.
 
 - **One store, written where each number is computed.** `app.js` creates the store (`Sim.dataset`, exposed as `Sim.cloudStore`).
   The set-up and the derived constants (air density and viscosity, fall speeds at 10, 20, 40 and 100 µm, collision efficiencies

@@ -89,6 +89,7 @@
     M_air: function () { var R = G('sd_r'), XI = G('sd_xi'); return { formula: 'M = Σ ξ<sub>i</sub> (4/3) π ρ<sub>w</sub> r<sub>i</sub>³', inputs: [['ρ<sub>w</sub>', RHO, 'kg/m³', 0], [T('rows'), R.length, '', 0]], value: sum(function (i) { return XI[i] * mass(R[i]); }) }; },
     M40: function () { var R = G('sd_r'), XI = G('sd_xi'); return { formula: 'M<sub>40</sub> = Σ<sub>r ≥ 40 µm</sub> ξ<sub>i</sub> (4/3) π ρ<sub>w</sub> r<sub>i</sub>³', inputs: [['ρ<sub>w</sub>', RHO, 'kg/m³', 0]], value: sum(function (i) { return R[i] >= 40 ? XI[i] * mass(R[i]) : 0; }) }; },
     M100: function () { var R = G('sd_r'), XI = G('sd_xi'); return { formula: 'M<sub>100</sub> = Σ<sub>r ≥ 100 µm</sub> ξ<sub>i</sub> (4/3) π ρ<sub>w</sub> r<sub>i</sub>³', inputs: [['ρ<sub>w</sub>', RHO, 'kg/m³', 0]], value: sum(function (i) { return R[i] >= 100 ? XI[i] * mass(R[i]) : 0; }) }; },
+    N_share: function () { return { formula: '100 N / N<sub>0</sub>', inputs: [inp('N', 'N_air', '', 0), inp('N<sub>0</sub>', 'N0', '', 0)], value: 100 * G('N_air') / G('N0') }; },
     F_air: function () { return { formula: '100 M / M<sub>0</sub>', inputs: [inp('M', 'M_air', 'kg', 3), inp('M<sub>0</sub>', 'M0', 'kg', 3)], value: 100 * G('M_air') / G('M0') }; },
     F100: function () { return { formula: '100 M<sub>100</sub> / M<sub>0</sub>', inputs: [inp('M<sub>100</sub>', 'M100', 'kg', 3), inp('M<sub>0</sub>', 'M0', 'kg', 3)], value: 100 * G('M100') / G('M0') }; },
     F_rain: function () { return { formula: '100 M<sub>rain</sub> / M<sub>0</sub>', inputs: [inp('M<sub>rain</sub>', 'rain', 'kg', 3), inp('M<sub>0</sub>', 'M0', 'kg', 3)], value: 100 * G('rain') / G('M0') }; },
@@ -185,7 +186,7 @@
       { title: T('Derived constants'), note: T('worked out once from the set-up: the air, fall speeds, collision efficiencies, the kernel, the eddies, the starting cloud'),
         vars: ['rho_air', 'mu_air', 'dV', 'xi1', 'xi2', 'v10', 'v20', 'v40', 'v100', 'E_40_10', 'E_100_20', 'K_40_10', 'etab_lnR', 'etab_lnp', 'etab', 'sigma_u', 'T_L', 'G_grow', 'zbase', 'reg', 'n_sd0', 'M0', 'N0'] },
       { title: T('The state now'), note: T('the cloud at this frame: where its water is, its largest drop, the first drizzle drop'),
-        vars: ['t', 't_min', 'F100', 'F_air', 'F_rain', 'F_evap', 'F_evap_below', 'M_air', 'M40', 'M100', 'M_in', 'N_air', 'n_sd', 'r_max', 't100_first', 'x100', 'z100', 'follow_id', 'follow_r', 'follow_z', 'probe_i', 'probe_j', 'probe_u', 'probe_w', 'probe_reg'] },
+        vars: ['t', 't_min', 'F100', 'F_air', 'F_rain', 'F_evap', 'F_evap_below', 'M_air', 'M40', 'M100', 'M_in', 'N_air', 'N_share', 'n_sd', 'r_max', 't100_first', 'x100', 'z100', 'follow_id', 'follow_r', 'follow_z', 'probe_i', 'probe_j', 'probe_u', 'probe_w', 'probe_reg'] },
       { title: T('The books'), note: T('water: M<sub>0</sub> = M + M<sub>rain</sub> + M<sub>evap</sub> + δM; drops: N<sub>0</sub> = N + N<sub>rain</sub> + N<sub>evap</sub> + N<sub>merge</sub> + δN. The residuals δ should be rounding only.'),
         vars: ['rain', 'evap', 'evap_below', 'book_M_res', 'book_M_rel', 'N_rain', 'N_evap', 'mergers', 'book_N_res', 'book_N_rel'] },
       { title: T('Super-droplets and cells now'), note: T('one row per super-droplet still in the air, and the 40 × 30 collision cells of 50 m'),
@@ -209,5 +210,46 @@
       'Rain, evaporation and mergers are running totals the model adds up step by step; the two books check them against the drops still in the air. ' +
       'The words beside the picture are rewritten from the store about four times a second; the dots every frame. ' +
       'The ensemble of panel 3 is read from the stored exact runs (data/stochastic.json), not rerun here; your own run is a new random history each time.')
+  };
+
+  // ---- the ledger (scripts/datalog.js, Sim.data.ledger): what the panel shows first, the rest in causal order, and the two books.
+  // It only names stored variables; the residuals are stored by app.js at the line that computes them.
+  var ensVars = [], ensRuns = [];
+  VOLS.forEach(function (V) { ensVars.push('ens_n_' + V, 'ens_hit_' + V, 'ens_mean_' + V, 'ens_sd_' + V, 'ens_p10_' + V, 'ens_p50_' + V, 'ens_p90_' + V); ensRuns.push('t100_' + V); });
+  var how = { per_frame: 'set', seed: 'set', kernel: 'constant', etab: 'run', etab_lnR: 'run', etab_lnp: 'run', reg: 'solver', n_sd0: 'solver', M0: 'solver', N0: 'solver', zbase: 'solver',
+    t: 'solver', M_air: 'solver', M40: 'solver', M100: 'solver', M_in: 'solver', t100_first: 'solver', x100: 'solver', z100: 'solver', follow_id: 'set', probe_i: 'set', probe_j: 'set',
+    rain: 'solver', evap: 'solver', evap_below: 'solver', N_rain: 'solver', N_evap: 'solver', mergers: 'solver', lk_V: 'set', lk_seed: 'solver', lk_drops: 'solver', lk_events: 'solver',
+    lk_t100: 'solver', lk_big: 'solver', lk_t: 'solver', lk_rmax: 'solver', lk_rank: 'formula', running: 'set' };
+  ['shape', 'W0', 'stochastic', 'Le'].forEach(function (n) { how[n] = 'set'; });
+  ['sd_id', 'sd_x', 'sd_z', 'sd_r', 'sd_xi'].forEach(function (n) { how[n] = 'solver'; });
+  ensRuns.forEach(function (n) { how[n] = 'run'; }); VOLS.forEach(function (V) { how['ens_n_' + V] = 'run'; });
+  var AIR = ['T_air', 'p_air'];
+  Sim.data.ledger = {
+    headline: [{ v: 'F100', title: T('water in drizzle') }, { v: 'N_share', title: T('drops left') }, { v: 't_min', title: T('cloud time') },
+      { v: 't100_first', title: T('first drizzle drop') }, { v: 'F_rain', title: T('rained out') }, { v: 'r_max', title: T('largest drop') }],
+    sections: [
+      { title: T('Cloud set-up'), note: T('what you choose in panel 4, and what the page fixes: the air, the two drop modes, the slice and its cells'), how: 'constant',
+        vars: ['shape', 'W0', 'stochastic', 'Le', 'per_frame', 'seed', 'kernel', 'T_air', 'p_air', 'N1', 'rg1', 'sg1', 'N2', 'rg2', 'sg2', 'Lx', 'Lz', 'h', 'per1', 'per2', 'S_out', 'eps', 'C0', 'dt'] },
+      { title: T('What follows from it'), note: T('worked out from the set-up before anything moves: the air, fall speeds, collision efficiencies, the kernel, the eddies, the starting cloud'), how: 'formula',
+        vars: ['rho_air', 'mu_air', 'dV', 'xi1', 'xi2', 'v10', 'v20', 'v40', 'v100', 'E_40_10', 'E_100_20', 'K_40_10', 'etab', 'etab_lnR', 'etab_lnp', 'sigma_u', 'T_L', 'G_grow', 'zbase', 'reg', 'n_sd0', 'M0', 'N0'] },
+      { title: T('The state now'), note: T('the cloud at this frame: where its water is, its largest drop, the first drizzle drop, the drop you follow and the probe you pinned'), how: 'formula',
+        vars: ['t', 't_min', 'F100', 'F_air', 'F_rain', 'F_evap', 'F_evap_below', 'M_air', 'M40', 'M100', 'M_in', 'N_air', 'N_share', 'n_sd', 'r_max', 't100_first', 'x100', 'z100', 'follow_id', 'follow_r', 'follow_z', 'probe_i', 'probe_j', 'probe_u', 'probe_w', 'probe_reg'] },
+      { title: T('Super-droplets and cells now'), note: T('one row per super-droplet still in the air (each stands for ξ real drops), and the 40 × 30 collision cells of 50 m'), how: 'formula',
+        vars: ['sd_id', 'sd_x', 'sd_z', 'sd_r', 'sd_xi', 'sd_cls', 'cell_lwc', 'cell_n', 'cell_rmax'] },
+      { title: T('Lucky drops: the exact runs as an ensemble'), note: T('panel 3: the stored exact runs of each volume, their spread, and your own run against them'), how: 'formula',
+        vars: ensVars.concat(ensRuns, ['lk_V', 'lk_seed', 'lk_drops', 'lk_events', 'lk_t100', 'lk_big', 'lk_rank', 'lk_t', 'lk_rmax']) },
+      { title: T('Solver'), note: T('how the cloud is stepped: 1 s steps, super-droplet pairs drawn in each cell'), how: 'solver', folded: true, vars: ['steps', 'step_ms', 'gam_events', 'gam_many', 'running'] },
+      { title: T('Drawing'), note: T('how stored metres become pixels'), how: 'drawing', folded: true, vars: ['W_px', 'H_px', 'dpr', 'px_per_m'] }
+    ],
+    how: how,
+    books: [
+      { title: T('Water'), short: T('water'), note: T('Every gram of water at the start is still in the air, has reached the ground, or has evaporated outside the cloud; merging moves water between drops but never makes or destroys it.'),
+        rows: [[1, 'M0'], [-1, 'rain'], [-1, 'evap']], total: 'M_air', residual: 'book_M_res', tol: 1e-9, paused: function () { return null; } },
+      { title: T('Drops'), short: T('drops'), note: T('Every drop at the start is still in the air, has rained out, has evaporated completely, or was swallowed in a merger: two drops become one, so each merger removes one drop.'),
+        rows: [[1, 'N0'], [-1, 'N_rain'], [-1, 'N_evap'], [-1, 'mergers']], total: 'N_air', residual: 'book_N_res', tol: 1e-12, paused: function () { return null; } }
+    ],
+    deps: { rho_air: AIR, mu_air: AIR, G_grow: AIR, v10: AIR, v20: AIR, v40: AIR, v100: AIR, E_40_10: ['etab'], E_100_20: ['etab'], K_40_10: AIR.concat(['etab']),
+      dV: ['h'], xi1: ['N1', 'h', 'per1'], xi2: ['N2', 'h', 'per2'], sigma_u: ['eps', 'Le'], T_L: ['eps', 'Le', 'C0'], px_per_m: ['W_px'], lk_rank: ['lk_V', 'lk_t100'] },
+    controls: { 'sh-shape': 'shape', 'sh-wind': 'W0', 'sh-stoch': 'stochastic', 'sh-le': 'Le', 'sh-speed': 'per_frame', 'lk-V': 'lk_V' }
   };
 })();

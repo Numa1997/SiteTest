@@ -77,7 +77,7 @@ store and does no work while closed (since 24 October 2026 a bookkeeper, skill `
 numbers the animation is about, live, with sparklines; one table in causal sections (symbol, meaning, value aligned on the decimal
 point, unit, Δ, how obtained, check), its words rewritten at most 4 times a second while the simulation plays, Live on by default;
 the books, each balance with its residual stored by the page and added again by the panel; arrays as rows that open in place into
-tables copied at one instant. A page declares this in `Sim.data.ledger` (Figs. 9 and 10, in `scripts/ledger/<page>.js`); without
+tables copied at one instant. A page declares this in `Sim.data.ledger` (Figs. 9 and 10, in `scripts/ledger/<page>.js`; Droplet Collection, in its `datahooks.js`); without
 it the panel shows the page's `groups` in the same table. Read values:
 a switch in each figure's caption, off by default (a hover readout over the running figure proved disruptive and was removed); while on, a click
 or tap pins the object under it (rings up to 22 px around the point), a drag moves the pin, the page's own pointer actions are held back,

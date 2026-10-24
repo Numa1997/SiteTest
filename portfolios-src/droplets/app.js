@@ -54,16 +54,20 @@
   if (window.Sim) Sim.cloudStore = ds;
   function S(name, value) { return ds.set(name, value); }
   function def(list) { list.forEach(function (d) { ds.var(d[0], d[1], d[2], d[3]); }); }
-  function sc(sym, name, units, digits, how, more) { var a = { symbol: sym, long_name: name, units: units, digits: digits, computed_in: how }; for (var k in more || {}) a[k] = more[k]; return a; }
+  function sc(sym, name, units, digits, how) {     // attributes of one variable; any further objects add to them ({ formula: … }, { sci: true })
+    var a = { symbol: sym, long_name: name, units: units, digits: digits, computed_in: how };
+    for (var j = 5; j < arguments.length; j++) for (var k in arguments[j] || {}) a[k] = arguments[j][k];
+    return a;
+  }
   def([
     ['T_air', [], 'float', sc('T', 'air temperature', 'K', 2, 'set by the page', { source: 'PHYS.air(283.15, 85000) at the top of app.js' })],
     ['p_air', [], 'float', sc('p', 'air pressure', 'Pa', 0, 'set by the page', { source: 'PHYS.air(283.15, 85000)' })],
     ['rho_air', [], 'float', sc('ρ<sub>a</sub>', 'density of the air', 'kg/m³', 4, 'PHYS.air', { formula: 'ρ<sub>a</sub> = p / (R<sub>d</sub> T)' })],
     ['mu_air', [], 'float', sc('μ', 'viscosity of the air', 'µPa·s', 4, 'PHYS.air', { formula: 'Sutherland: μ = 17.2 µPa·s (T/273)<sup>3/2</sup> (393 K)/(T + 120 K)' })],
-    ['N1', [], 'float', sc('N<sub>1</sub>', 'droplet mode: number per cubic metre', 'm⁻³', 0, 'MODES, set by the page')],
+    ['N1', [], 'float', sc('N<sub>1</sub>', 'droplet mode: number per cubic metre', 'm⁻³', 0, 'MODES, set by the page', { sci: true })],
     ['rg1', [], 'float', sc('r<sub>g1</sub>', 'droplet mode: median radius', 'µm', 1, 'MODES')],
     ['sg1', [], 'float', sc('σ<sub>g1</sub>', 'droplet mode: geometric spread', '', 2, 'MODES')],
-    ['N2', [], 'float', sc('N<sub>2</sub>', 'collector mode: number per cubic metre', 'm⁻³', 0, 'MODES')],
+    ['N2', [], 'float', sc('N<sub>2</sub>', 'collector mode: number per cubic metre', 'm⁻³', 0, 'MODES', { sci: true })],
     ['rg2', [], 'float', sc('r<sub>g2</sub>', 'collector mode: median radius', 'µm', 1, 'MODES')],
     ['sg2', [], 'float', sc('σ<sub>g2</sub>', 'collector mode: geometric spread', '', 2, 'MODES')]
   ]);
@@ -277,8 +281,8 @@
       ['C0', [], 'float', sc('C<sub>0</sub>', 'Lagrangian structure-function constant', '', 0, 'PHYS.makeCloud (fixed at 6)')],
       ['dt', [], 'float', sc('Δt', 'model time step', 's', 0, 'cloud.step(1)')],
       ['dV', [], 'float', sc('ΔV', 'volume of one collision cell, h³', 'm³', 0, 'PHYS.makeCloud', { formula: 'ΔV = h³' })],
-      ['xi1', [], 'float', sc('ξ<sub>1</sub>', 'real drops one droplet super-droplet stands for', '', 0, 'PHYS.makeCloud', { formula: 'ξ<sub>1</sub> = N<sub>1</sub> ΔV / n<sub>1</sub>' })],
-      ['xi2', [], 'float', sc('ξ<sub>2</sub>', 'real drops one collector super-droplet stands for', '', 0, 'PHYS.makeCloud', { formula: 'ξ<sub>2</sub> = N<sub>2</sub> ΔV / n<sub>2</sub>' })],
+      ['xi1', [], 'float', sc('ξ<sub>1</sub>', 'real drops one droplet super-droplet stands for', '', 0, 'PHYS.makeCloud', { formula: 'ξ<sub>1</sub> = N<sub>1</sub> ΔV / n<sub>1</sub>' }, { sci: true })],
+      ['xi2', [], 'float', sc('ξ<sub>2</sub>', 'real drops one collector super-droplet stands for', '', 0, 'PHYS.makeCloud', { formula: 'ξ<sub>2</sub> = N<sub>2</sub> ΔV / n<sub>2</sub>' }, { sci: true })],
       ['sigma_u', [], 'float', sc('σ<sub>u</sub>', 'eddy speed, one component', 'm/s', 3, 'cloud.sig2At', { formula: 'σ<sub>u</sub> = (ε L<sub>e</sub>)<sup>1/3</sup>' })],
       ['T_L', [], 'float', sc('T<sub>L</sub>', 'memory of the eddies (Lagrangian time)', 's', 1, 'cloud.move', { formula: 'T<sub>L</sub> = 2σ<sub>u</sub>² / (C<sub>0</sub> ε)' })],
       ['G_grow', [], 'float', sc('G', 'growth constant of dr²/dt = 2 G S (heat and vapour diffusion)', 'µm²/s', 2, 'PHYS.growthG', { formula: 'G = 1 / (F<sub>k</sub> + F<sub>d</sub>), Rogers and Yau 7.17' })],
@@ -292,11 +296,12 @@
       ['zbase', [], 'float', sc('z<sub>base</sub>', 'height of the cloud base', 'm', 0, 'PHYS.makeCloud')],
       ['n_sd0', [], 'int', sc('n<sub>sd,0</sub>', 'super-droplets at the start', '', 0, 'PHYS.makeCloud')],
       ['M0', [], 'float', sc('M<sub>0</sub>', 'water in the slice at the start', 'kg', 3, 'PHYS.makeCloud', { formula: 'M<sub>0</sub> = Σ ξ<sub>i</sub> (4/3) π ρ<sub>w</sub> r<sub>i</sub>³ at t = 0' })],
-      ['N0', [], 'float', sc('N<sub>0</sub>', 'real drops in the slice at the start', '', 0, 'PHYS.makeCloud', { formula: 'N<sub>0</sub> = Σ ξ<sub>i</sub> at t = 0' })],
+      ['N0', [], 'float', sc('N<sub>0</sub>', 'real drops in the slice at the start', '', 0, 'PHYS.makeCloud', { formula: 'N<sub>0</sub> = Σ ξ<sub>i</sub> at t = 0' }, { sci: true })],
       ['t', [], 'float', sc('t', 'cloud time', 's', 0, 'cloud.step')],
       ['t_min', [], 'float', sc('t', 'cloud time in minutes', 'min', 2, 'record()', { formula: 't / 60' })],
       ['n_sd', [], 'int', sc('n<sub>sd</sub>', 'super-droplets still in the air', '', 0, 'record()')],
-      ['N_air', [], 'float', sc('N', 'real drops still in the air', '', 0, 'record()', { formula: 'N = Σ ξ<sub>i</sub>' })],
+      ['N_air', [], 'float', sc('N', 'real drops still in the air', '', 0, 'record()', { formula: 'N = Σ ξ<sub>i</sub>' }, { sci: true })],
+      ['N_share', [], 'float', sc('N/N<sub>0</sub>', 'share of the starting drops still in the air (mergers, rain and evaporation take them)', '%', 2, 'record()', { formula: '100 N / N<sub>0</sub>' })],
       ['M_air', [], 'float', sc('M', 'water still in the air', 'kg', 3, 'cloud.census', { formula: 'M = Σ ξ<sub>i</sub> (4/3) π ρ<sub>w</sub> r<sub>i</sub>³' })],
       ['M40', [], 'float', sc('M<sub>40</sub>', 'water in drops of 40 µm or more', 'kg', 3, 'cloud.census')],
       ['M100', [], 'float', sc('M<sub>100</sub>', 'water in drizzle drops, 100 µm or more', 'kg', 3, 'cloud.census')],
@@ -309,9 +314,9 @@
       ['rain', [], 'float', sc('M<sub>rain</sub>', 'water that reached the ground', 'kg', 3, 'cloud.step', { source: 'added up step by step as drops cross z = 0; the water book checks it' })],
       ['evap', [], 'float', sc('M<sub>evap</sub>', 'water evaporated outside the outline', 'kg', 3, 'cloud.step', { source: 'added up step by step from dr²/dt = 2 G S f<sub>v</sub>; the water book checks it' })],
       ['evap_below', [], 'float', sc('M<sub>evap, base</sub>', 'of it, below the cloud base', 'kg', 3, 'cloud.step')],
-      ['N_rain', [], 'float', sc('N<sub>rain</sub>', 'drops that reached the ground', '', 0, 'cloud.step', { source: 'added up step by step; the number book checks it' })],
-      ['N_evap', [], 'float', sc('N<sub>evap</sub>', 'drops that evaporated completely', '', 0, 'cloud.step', { source: 'added up step by step; the number book checks it' })],
-      ['mergers', [], 'float', sc('N<sub>merge</sub>', 'drops lost to mergers (two become one)', '', 0, 'cloud.step', { source: 'added up step by step: each merger event removes ξ drops; the number book checks it' })],
+      ['N_rain', [], 'float', sc('N<sub>rain</sub>', 'drops that reached the ground', '', 0, 'cloud.step', { source: 'added up step by step; the number book checks it' }, { sci: true })],
+      ['N_evap', [], 'float', sc('N<sub>evap</sub>', 'drops that evaporated completely', '', 0, 'cloud.step', { source: 'added up step by step; the number book checks it' }, { sci: true })],
+      ['mergers', [], 'float', sc('N<sub>merge</sub>', 'drops lost to mergers (two become one)', '', 0, 'cloud.step', { source: 'added up step by step: each merger event removes ξ drops; the number book checks it' }, { sci: true })],
       ['r_max', [], 'float', sc('r<sub>max</sub>', 'largest drop in the air', 'µm', 1, 'record()', { formula: 'max r<sub>i</sub>' })],
       ['t100_first', [], 'float', sc('t<sub>100</sub>', 'first drizzle drop (100 µm) in the slice (empty: not yet)', 'min', 2, 'cloud.step')],
       ['x100', [], 'float', sc('x<sub>100</sub>', 'where it formed, across', 'm', 0, 'cloud.step')],
@@ -319,10 +324,10 @@
       ['follow_id', [], 'int', sc('id<sub>f</sub>', 'super-droplet followed (−1: none)', '', 0, 'Follow one drop')],
       ['follow_r', [], 'float', sc('r<sub>f</sub>', 'radius of the followed drop', 'µm', 1, 'record()')],
       ['follow_z', [], 'float', sc('z<sub>f</sub>', 'height of the followed drop', 'm', 0, 'record()')],
-      ['book_M_res', [], 'float', sc('δM', 'water book: M<sub>0</sub> − M − M<sub>rain</sub> − M<sub>evap</sub>', 'kg', 9, 'record()', { formula: 'δM = M<sub>0</sub> − M − M<sub>rain</sub> − M<sub>evap</sub>' })],
-      ['book_M_rel', [], 'float', sc('δM/M<sub>0</sub>', 'water book, relative residual (tolerance 10⁻⁹)', '', 15, 'record()')],
+      ['book_M_res', [], 'float', sc('δM', 'water book: M<sub>0</sub> − M − M<sub>rain</sub> − M<sub>evap</sub>', 'kg', 9, 'record()', { formula: 'δM = M<sub>0</sub> − M − M<sub>rain</sub> − M<sub>evap</sub>' }, { sci: true })],
+      ['book_M_rel', [], 'float', sc('δM/M<sub>0</sub>', 'water book, relative residual (tolerance 10⁻⁹)', '', 15, 'record()', { sci: true })],
       ['book_N_res', [], 'float', sc('δN', 'number book: N<sub>0</sub> − N − N<sub>rain</sub> − N<sub>evap</sub> − N<sub>merge</sub>', '', 0, 'record()', { formula: 'δN = N<sub>0</sub> − N − N<sub>rain</sub> − N<sub>evap</sub> − N<sub>merge</sub>' })],
-      ['book_N_rel', [], 'float', sc('δN/N<sub>0</sub>', 'number book, relative residual (tolerance 10⁻¹²)', '', 15, 'record()')],
+      ['book_N_rel', [], 'float', sc('δN/N<sub>0</sub>', 'number book, relative residual (tolerance 10⁻¹²)', '', 15, 'record()', { sci: true })],
       ['steps', [], 'int', sc('n<sub>step</sub>', 'model steps done for this cloud', '', 0, 'advance()')],
       ['step_ms', [], 'float', sc('τ<sub>step</sub>', 'wall time of the last frame’s steps', 'ms', 1, 'advance()')],
       ['gam_events', [], 'int', sc('n<sub>γ</sub>', 'merger events between super-droplet pairs', '', 0, 'cloud.step')],
@@ -365,7 +370,7 @@
       ['sd_x', 'sd_z', 'sd_r', 'sd_xi', 'sd_id', 'sd_cls'].forEach(function (k) { S(k, buf[k].subarray(0, n)); });
       ds.touch('cell_lwc'); ds.touch('cell_n'); ds.touch('cell_rmax');
       var z = cloud.census(), M0 = cloud.M0, f = cloud.first100;
-      S('t', cloud.t); S('t_min', cloud.t / 60); S('n_sd', n); S('N_air', Nair); S('M_air', z.M); S('M40', z.M40); S('M100', z.M100); S('M_in', z.Min);
+      S('t', cloud.t); S('t_min', cloud.t / 60); S('n_sd', n); S('N_air', Nair); S('N_share', 100 * Nair / cloud.N0); S('M_air', z.M); S('M40', z.M40); S('M100', z.M100); S('M_in', z.Min);
       S('rain', z.rain); S('evap', z.evap); S('evap_below', z.evapBelow); S('N_rain', cloud.rainN); S('N_evap', cloud.evapN); S('mergers', cloud.mergers);
       S('F_air', 100 * z.M / M0); S('F100', 100 * z.M100 / M0); S('F_rain', 100 * z.rain / M0); S('F_evap', 100 * z.evap / M0); S('F_evap_below', 100 * z.evapBelow / M0);
       S('r_max', rmax * 1e6); S('t100_first', f ? f.t / 60 : NaN); S('x100', f ? f.x : NaN); S('z100', f ? f.z : NaN);

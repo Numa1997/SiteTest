@@ -533,7 +533,7 @@ to confirm that every file is described. Sizes are those of the files when the l
 |---|---|---|---|
 | [`portfolios-src/droplets/.gitignore`](../portfolios-src/droplets/.gitignore) | 5 B | Keeps the stand-alone build (out/) out of git. | [README.md](../portfolios-src/droplets/README.md) |
 | [`portfolios-src/droplets/README.md`](../portfolios-src/droplets/README.md) | 5.1 kB | The study's source: every folder, how the served page is built, the three checks. | [README.md](../portfolios-src/droplets/README.md) |
-| [`portfolios-src/droplets/app.js`](../portfolios-src/droplets/app.js) | 51.8 kB | The page's script: tabs, hash routes, the five simulation panels, and the store (dataset) that panels 3 and 4 write. | [README.md](../portfolios-src/droplets/README.md) |
+| [`portfolios-src/droplets/app.js`](../portfolios-src/droplets/app.js) | 52.4 kB | The page's script: tabs, hash routes, the five simulation panels, and the store (dataset) that panels 3 and 4 write. | [README.md](../portfolios-src/droplets/README.md) |
 | [`portfolios-src/droplets/chart.cjs`](../portfolios-src/droplets/chart.cjs) | 7.8 kB | House-style SVG line charts for the figures and the page. | [README.md](../portfolios-src/droplets/README.md) |
 | [`portfolios-src/droplets/checks/check_browser.py`](../portfolios-src/droplets/checks/check_browser.py) | 2.6 kB | Check: check_browser.py (see the README). | [README.md](../portfolios-src/droplets/README.md) |
 | [`portfolios-src/droplets/checks/check_numbers.cjs`](../portfolios-src/droplets/checks/check_numbers.cjs) | 47.1 kB | Check: check_numbers.cjs (see the README). | [README.md](../portfolios-src/droplets/README.md) |
@@ -565,7 +565,7 @@ to confirm that every file is described. Sizes are those of the files when the l
 | [`portfolios-src/droplets/data/ripening.json`](../portfolios-src/droplets/data/ripening.json) | 292.4 kB | Data written by the model's run tools: ripening.json. | [README.md](../portfolios-src/droplets/README.md) |
 | [`portfolios-src/droplets/data/stochastic.json`](../portfolios-src/droplets/data/stochastic.json) | 399.3 kB | Data written by the model's run tools: stochastic.json. | [README.md](../portfolios-src/droplets/README.md) |
 | [`portfolios-src/droplets/data/warm.json`](../portfolios-src/droplets/data/warm.json) | 158.4 kB | Data written by the model's run tools: warm.json. | [README.md](../portfolios-src/droplets/README.md) |
-| [`portfolios-src/droplets/datahooks.js`](../portfolios-src/droplets/datahooks.js) | 25.8 kB | The data panel's hooks for panels 4 and 3 (Sim.data: Read values, Check, read-back, the books, one round = five cloud-minutes). | [README.md](../portfolios-src/droplets/README.md) |
+| [`portfolios-src/droplets/datahooks.js`](../portfolios-src/droplets/datahooks.js) | 31.3 kB | The data panel's hooks for panels 4 and 3 (Sim.data: Read values, Check, read-back, the books, one round = five cloud-minutes). | [README.md](../portfolios-src/droplets/README.md) |
 | [`portfolios-src/droplets/derive/L0_numbers.py`](../portfolios-src/droplets/derive/L0_numbers.py) | 2.2 kB | Derivation or number script behind a Gate 1 contract: L0_numbers.py. | [status.md](../notes/droplets/status.md) |
 | [`portfolios-src/droplets/derive/L0_population.py`](../portfolios-src/droplets/derive/L0_population.py) | 4.7 kB | Derivation or number script behind a Gate 1 contract: L0_population.py. | [status.md](../notes/droplets/status.md) |
 | [`portfolios-src/droplets/derive/L0_r2.py`](../portfolios-src/droplets/derive/L0_r2.py) | 3.4 kB | Derivation or number script behind a Gate 1 contract: L0_r2.py. | [status.md](../notes/droplets/status.md) |
@@ -655,10 +655,10 @@ to confirm that every file is described. Sizes are those of the files when the l
 | [`docs/minor-issues-report.md`](minor-issues-report.md) | 19.9 kB | Documentation: Minor issues · final verification report. | [minor-issues-report.md](minor-issues-report.md) |
 | [`docs/notes.md`](notes.md) | 3.7 kB | Documentation: The lecture-note review: `notes/` and `.claude/agents/`. | [notes.md](notes.md) |
 | [`docs/pages.md`](pages.md) | 51.6 kB | Documentation: The site's own pages: home, simulations catalog, Portfolios, robots.txt. | [pages.md](pages.md) |
-| [`docs/portfolios.md`](portfolios.md) | 43.5 kB | Documentation: The four research projects: `public/portfolios/`. | [portfolios.md](portfolios.md) |
+| [`docs/portfolios.md`](portfolios.md) | 44.0 kB | Documentation: The four research projects: `public/portfolios/`. | [portfolios.md](portfolios.md) |
 | [`docs/research-theory-audit.md`](research-theory-audit.md) | 29.1 kB | Documentation: Readability audit: Droplet Collection and Rotor Pendula. | [research-theory-audit.md](research-theory-audit.md) |
 | [`docs/scripts/catalog.md`](scripts/catalog.md) | 15.1 kB | Documentation: public/scripts/catalog.js. | [catalog.md](scripts/catalog.md) |
-| [`docs/scripts/datalog.md`](scripts/datalog.md) | 63.5 kB | Documentation: public/scripts/datalog.js. | [datalog.md](scripts/datalog.md) |
+| [`docs/scripts/datalog.md`](scripts/datalog.md) | 63.7 kB | Documentation: public/scripts/datalog.js. | [datalog.md](scripts/datalog.md) |
 | [`docs/scripts/dataset.md`](scripts/dataset.md) | 17.7 kB | Documentation: public/scripts/dataset.js. | [dataset.md](scripts/dataset.md) |
 | [`docs/scripts/fold.md`](scripts/fold.md) | 22.6 kB | Documentation: public/scripts/fold.js. | [fold.md](scripts/fold.md) |
 | [`docs/scripts/sim.md`](scripts/sim.md) | 27.0 kB | Documentation: public/scripts/sim.js. | [sim.md](scripts/sim.md) |
