@@ -43,6 +43,10 @@
   "src": "The 18 mountings, one rod against two, chaos, and the sensor.",
   "tr": "Die 18 Befestigungen, eine Stange gegen zwei, Chaos und der Sensor."
  },
+ "10ec1a05a8ed": {
+  "src": "<b>Chaos does not help.</b> Every start, at every wind and brake tried, ends on one regular swing: the centrifugal spring is 3 to 9 times stronger than gravity’s push, and resonance is out of reach.",
+  "tr": "<b>Chaos hilft nicht.</b> Jeder Start, bei jedem untersuchten Wind und jeder Bremse, endet in einer einzigen regelmäßigen Schwingung: Die Zentrifugalfeder ist 3- bis 9-mal stärker als der Stoß der Schwerkraft, und die Resonanz ist außer Reichweite."
+ },
  "117d71b35d3d": {
   "src": "The collection equation, the droplet trajectories and an exact random cloud, running in your browser.",
   "tr": "Die Koaleszenzgleichung, die Bahnen der Tröpfchen und eine exakte Zufallswolke, in Ihrem Browser."
@@ -70,6 +74,10 @@
  "156798c59fda": {
   "src": "Iron, Cotton and the Head",
   "tr": "Eisen, Baumwolle und der Kopf"
+ },
+ "165bdfbdbdcb": {
+  "src": "<b>There is enough power.</b> The second blade gives 161–267 mW of mechanical power at steady winds of 10 and 6 m/s, more in weak wind, and the rotor pays for every joule through the blade’s trail, at most \\(3.4\\times10^{-7}\\) of the turbine’s output.",
+  "tr": "<b>Es gibt genug Leistung.</b> Das zweite Blatt liefert 161–267 mW mechanische Leistung bei stetigem Wind von 10 und 6 m/s, mehr bei schwachem Wind, und der Rotor bezahlt jedes Joule über das Nachschleppen des Blatts, höchstens \\(3.4\\times10^{-7}\\) der Turbinenleistung."
  },
  "19b1098bb9da": {
   "src": "impact mechanics · interatomic bonds · fibre networks",
@@ -131,6 +139,10 @@
   "src": "cloud physics · stochastic collection · numerical methods",
   "tr": "Wolkenphysik · stochastische Koaleszenz · numerische Methoden"
  },
+ "334b51f12c6f": {
+  "src": "Can a second blade, hinged at the tip of a turbine blade, power a sensor, and can chaos or the wind help?",
+  "tr": "Kann ein zweites Blatt, an der Spitze eines Turbinenblatts angelenkt, einen Sensor versorgen, und helfen Chaos oder der Wind?"
+ },
  "33bd5a5dddcd": {
   "src": "© 2026 Numa Koudsie",
   "tr": "© 2026 Numa Koudsie"
@@ -175,9 +187,17 @@
   "src": "largest share of the turbine’s output, paid by the rotor",
   "tr": "größter Anteil an der Leistung der Turbine, vom Rotor bezahlt"
  },
+ "4214c80d7944": {
+  "src": "mechanical harvest, 1 kg on 1 m, at 10 and 6 m/s",
+  "tr": "mechanische Ernte, 1 kg auf 1 m, bei 10 und 6 m/s"
+ },
  "433b03ed321c": {
   "src": "<span class=\"psub__n\">4.1</span>One drop, 9 seconds",
   "tr": "<span class=\"psub__n\">4.1</span>Ein Fall, 9 Sekunden"
+ },
+ "43d5b098a7af": {
+  "src": "The equations are derived twice, by Lagrange with the kinetic energy integrated along the blade and by Newton summed over it, and solved with an implicit solver that agrees with an independent one to \\(2\\times10^{-12}\\). A referee checked each derivation, and the notes say where a model was corrected: a smoothing band in the geared generator, set on gravity’s scale, was a thousand times too wide and made the power the rotor pays 16 % low; it now sits on the gear’s own power scale. An independent script, with every constant typed again, re-derives the main formulas in SymPy and re-integrates the runs with SciPy.",
+  "tr": "Die Gleichungen werden zweimal hergeleitet, nach Lagrange mit der entlang des Blatts integrierten kinetischen Energie und nach Newton, über das Blatt summiert, und mit einem impliziten Löser gelöst, der mit einem unabhängigen auf \\(2\\times10^{-12}\\) übereinstimmt. Ein Gutachter prüfte jede Herleitung, und das Skript sagt, wo ein Modell korrigiert wurde: Ein Glättungsband im Getriebegenerator, auf die Skala der Schwerkraft gesetzt, war tausendmal zu breit und ließ die Leistung, die der Rotor bezahlt, um 16 % zu niedrig ausfallen; es sitzt jetzt auf der eigenen Leistungsskala des Getriebes. Ein unabhängiges Skript, in dem jede Konstante neu eingetippt ist, leitet die Hauptformeln in SymPy erneut her und integriert die Läufe mit SciPy neu."
  },
  "44cd5b58f613": {
   "src": "<span class=\"pfig__n\">Figure 3</span>The sampled position loop up to the Nyquist frequency of 500 Hz: crossover at 9.7 Hz with 64° of phase margin.",
@@ -186,6 +206,10 @@
  "45ed4c0fb4e6": {
   "src": "<span class=\"pfig__n\">Figure 1</span>Left: the two fall-speed models against Gunn and Kinzer. Right: the error of the drag balance, at most 2.07 % at the listed sizes from 0.3 mm up and −7.57 % at 0.1 mm.",
   "tr": "<span class=\"pfig__n\">Abbildung 1</span>Links: die beiden Modelle der Fallgeschwindigkeit gegenüber Gunn und Kinzer. Rechts: der Fehler des Kräftegleichgewichts, höchstens 2.07 % bei den aufgeführten Größen ab 0.3 mm und −7.57 % bei 0.1 mm."
+ },
+ "47267962edfb": {
+  "src": "<span class=\"psub__n\">2.1</span>The answer in five lines",
+  "tr": "<span class=\"psub__n\">2.1</span>Die Antwort in fünf Zeilen"
  },
  "4ac862ee8e67": {
   "src": "Force on the head against time around the impact: a tall narrow spike for iron reaching 639 N, a low wide hump for cotton reaching 188 N, and the dashed weight line at 9.81 N.",
@@ -227,9 +251,17 @@
   "src": "Ten chapters and an appendix, from one drop to ice: 22 numbered equations, each with its picture, its derivation and the model’s own numbers.",
   "tr": "Zehn Kapitel und ein Anhang, von einem Tropfen bis zum Eis: 22 nummerierte Gleichungen, jede mit ihrem Bild, ihrer Herleitung und den eigenen Zahlen des Modells."
  },
+ "5254b36ee372": {
+  "src": "Research projects by Numa Koudsie, each with its derivations, solver and results: Droplet Collection, the remodel of a Bachelor thesis on how cloud droplets become rain; Rotor Pendula, whether a second blade hinged at the tip of a turbine blade can power a sensor; the Hydraulic Press Study, a servo-hydraulic press under digital control, built from first principles; and Iron, Cotton and the Head, why an iron ball hurts and a cotton ball of the same mass does not, in English, German and Arabic.",
+  "tr": "Forschungsprojekte von Numa Koudsie, jedes mit Herleitungen, Löser und Ergebnissen: Droplet Collection, die Neumodellierung einer Bachelorarbeit darüber, wie aus Wolkentröpfchen Regen wird; Rotor Pendula, die Frage, ob ein zweites Blatt, an der Spitze eines Turbinenblatts angelenkt, einen Sensor versorgen kann; die Studie einer hydraulischen Presse, einer servohydraulischen Presse unter digitaler Regelung, aus ersten Prinzipien aufgebaut; und Eisen, Baumwolle und der Kopf, warum eine Eisenkugel wehtut und eine Baumwollkugel derselben Masse nicht, auf Englisch, Deutsch und Arabisch."
+ },
  "52ec4d95e62a": {
   "src": "<span class=\"pfig__n\">Figure 2</span>Which droplets touch: collision efficiency from trajectories, against Hall’s (1980) table (chapter 3).",
   "tr": "<span class=\"pfig__n\">Abbildung 2</span>Welche Tröpfchen treffen: Kollisionseffizienz aus den Bahnen, verglichen mit der Tabelle von Hall (1980) (Kapitel 3)."
+ },
+ "539b1c7a84fb": {
+  "src": "<b>Where the mass sits matters.</b> The power grows with the second blade’s first moment, its mass times the distance of its centre of mass from the hinge: the same mass in a lump at the end would give 2.0 times as much.",
+  "tr": "<b>Wo die Masse sitzt, zählt.</b> Die Leistung wächst mit dem statischen Moment des zweiten Blatts, seiner Masse mal dem Abstand seines Schwerpunkts vom Gelenk: Dieselbe Masse als Klumpen am Ende gäbe 2.0-mal so viel."
  },
  "550f358eec15": {
   "src": "Bachelor thesis, Leipzig 2022 · rebuilt as lecture notes",
@@ -274,6 +306,10 @@
  "5d1c1481d224": {
   "src": "<span class=\"pfig__n\">Figure 2</span>One cycle in six traces: position, force, pressures, valve, energy and tracking error, shaded by phase.",
   "tr": "<span class=\"pfig__n\">Abbildung 2</span>Ein Zyklus in sechs Verläufen: Lage, Kraft, Drücke, Ventil, Energie und Regelabweichung, nach Phase schattiert."
+ },
+ "5ea2cff00100": {
+  "src": "<span class=\"psub__n\">2.3</span>The project’s own pages",
+  "tr": "<span class=\"psub__n\">2.3</span>Die Seiten des Projekts"
  },
  "5f272a95efff": {
   "src": "double ÷ single, same mass and reach",
@@ -419,6 +455,10 @@
   "src": "Share of volumes holding a drop of 100 µm against time: exact runs and the Poisson prediction.",
   "tr": "Anteil der Volumina, die einen Tropfen von 100 µm enthalten, über der Zeit: exakte Läufe und die Poisson-Vorhersage."
  },
+ "87dfe93c56a4": {
+  "src": "Lecture notes and a simulation · from first principles · 2026",
+  "tr": "Vorlesungsskript und Simulation · aus ersten Prinzipien · 2026"
+ },
  "88763ced3fa4": {
   "src": "to 50 / 90 % of the mass above 40 µm, extended kernel",
   "tr": "bis 50 / 90 % der Masse über 40 µm, erweiterter Kern"
@@ -426,6 +466,10 @@
  "8b2cfada3240": {
   "src": "<span class=\"pfig__n\">Figure 2</span>The same blow twice: iron as a tall spike, cotton as a low, wide hump.",
   "tr": "<span class=\"pfig__n\">Abbildung 2</span>Derselbe Schlag zweimal: Eisen als hohe Spitze, Baumwolle als flacher, breiter Buckel."
+ },
+ "8b94213f22f0": {
+  "src": "Hinge a light second blade, 1 kg and 1 m long, at the 63 m tip of a turning wind-turbine blade, free to turn in the rotor plane. The turning holds it straight out like a stiff spring, and gravity, which seen from the blade goes round once per turn, pushes it first one way and then the other, like a child on a swing pushed once per pass; a generator in the hinge brakes that swing and turns it into electricity. The lecture notes build everything from the second blade’s Lagrangian: the best brake \\(\\kappa^* = R-1\\), the trail that is the rotor’s bill, where the mass sits, chaos, a ceiling on random shaking, gusts on a real 5 MW turbine, the blade’s sag and shaking, and a real motor and gearbox from a catalogue. Every number in the notes is computed by the models, and a simulation page solves the full equations in your browser.",
+  "tr": "Lenken Sie ein leichtes zweites Blatt, 1 kg schwer und 1 m lang, an der Spitze eines drehenden Windturbinenblatts an, 63 m von der Nabe entfernt, frei drehbar in der Rotorebene. Die Drehung hält es wie eine steife Feder gerade nach außen, und die Schwerkraft, die vom Blatt aus gesehen einmal pro Umdrehung herumläuft, drückt es erst in die eine, dann in die andere Richtung, wie ein Kind auf einer Schaukel, das bei jedem Durchgang einmal angestoßen wird; ein Generator im Gelenk bremst diese Schwingung und wandelt sie in Strom um. Das Vorlesungsskript baut alles aus der Lagrange-Funktion des zweiten Blatts auf: die beste Bremse \\(\\kappa^* = R-1\\), das Nachschleppen, das die Rechnung des Rotors ist, wo die Masse sitzt, Chaos, eine Obergrenze für zufälliges Schütteln, Böen an einer realen 5-MW-Turbine, die Durchbiegung und das Schwingen des Blatts sowie einen realen Motor mit Getriebe aus einem Katalog. Jede Zahl im Skript wird von den Modellen berechnet, und eine Simulationsseite löst die vollständigen Gleichungen in Ihrem Browser."
  },
  "8c1f15e14b4f": {
   "src": "Research projects by Numa Koudsie, each with its derivations, solver and results: Droplet Collection, the remodel of a Bachelor thesis on how cloud droplets become rain; Rotor Pendula, a corrected study of whether a pendulum on a turbine blade can power a sensor; the Hydraulic Press Study, a servo-hydraulic press under digital control, built from first principles; and Iron, Cotton and the Head, why an iron ball hurts and a cotton ball of the same mass does not, in English and Arabic.",
@@ -446,6 +490,10 @@
  "8e6b86dce8c4": {
   "src": "Problems",
   "tr": "Aufgaben"
+ },
+ "8e8a9c4b7249": {
+  "src": "the same mass in a lump at the end, against a uniform blade",
+  "tr": "dieselbe Masse als Klumpen am Ende, verglichen mit einem gleichförmigen Blatt"
  },
  "8ec3509b5ead": {
   "src": "best harvest, single pendulum, 100 g on 20 cm",
@@ -483,6 +531,10 @@
   "src": "the same, thesis kernel",
   "tr": "dasselbe, Kern der Abschlussarbeit"
  },
+ "9bd2c4d21f5a": {
+  "src": "Run the second blade",
+  "tr": "Das zweite Blatt laufen lassen"
+ },
  "9dc0150e8b28": {
   "src": "Open the study",
   "tr": "Die Studie öffnen"
@@ -510,6 +562,14 @@
  "a422f5c4ff36": {
   "src": "The animated press with its controller, gauges, every setting, the time traces, the loop analysis and nine worked solutions.",
   "tr": "Die animierte Presse mit Regler, Anzeigen, allen Einstellungen, den Zeitverläufen, der Regelkreisanalyse und neun durchgerechneten Lösungen."
+ },
+ "a4fef23230ba": {
+  "src": "<b>A real generator still delivers.</b> A catalogue motor behind its gearhead’s largest ratio, 492 : 1, brings 57–106 mW to the wires, at least 1 522 times the sensor’s need, and still 811 times if the gearbox is twice as draggy and only 50 % efficient. The air on the second blade, left out of these notes, is the open problem.",
+  "tr": "<b>Ein realer Generator liefert trotzdem.</b> Ein Katalogmotor hinter der größten Übersetzung seines Getriebes, 492 : 1, bringt 57–106 mW an die Klemmen, mindestens das 1 522-Fache des Sensorbedarfs, und noch das 811-Fache, wenn das Getriebe doppelt so schwergängig ist und nur 50 % Wirkungsgrad hat. Die Luft am zweiten Blatt, die dieses Skript auslässt, ist die offene Frage."
+ },
+ "a5e164dcc538": {
+  "src": "Three winds, an ideal brake or a real geared generator, solved in your browser; six worked solutions.",
+  "tr": "Drei Winde, eine ideale Bremse oder ein realer Getriebegenerator, gelöst in Ihrem Browser; sechs durchgerechnete Lösungen."
  },
  "a5f31f472fac": {
   "src": "Run the cloud",
@@ -615,6 +675,10 @@
   "src": "<span class=\"psub__n\">4.3</span>Four figures from the study",
   "tr": "<span class=\"psub__n\">4.3</span>Vier Abbildungen aus der Studie"
  },
+ "cc85fad60dec": {
+  "src": "to the wires, with a real motor and gearbox",
+  "tr": "an den Klemmen, mit realem Motor und Getriebe"
+ },
  "cd4683fadf70": {
   "src": "Positions",
   "tr": "Stationen"
@@ -626,6 +690,14 @@
  "ce5dc750e285": {
   "src": "Every block is a physical law with its own derivation. The valve’s metering edges are sharp-edged orifices whose jet contracts to 0.61 of the opening, as the free-streamline theory of Helmholtz and Kirchhoff predicts; the spool answers the controller as a mass on a spring at 60 Hz. The two metres of hose are a slug of oil with inertia and friction, laminar and turbulent. The oil itself is a spring whose stiffness depends on its pressure, through the 0.5 % of air it carries as bubbles. The cylinder has two chambers of different area, seal friction and end stops; the specimen is a spring with damping. The controller sees the world only once a millisecond, through a zero-order hold, and the model is integrated with fourth-order Runge–Kutta at 10 µs, a hundred steps per sample. An independent Python model, with SciPy for the numbers and SymPy for the derivatives, recomputes the equilibria, the linearization, the closed-loop poles, the margins and the whole nonlinear cycle, and agrees with the page.",
   "tr": "Jeder Block ist ein physikalisches Gesetz mit eigener Herleitung. Die Steuerkanten des Ventils sind scharfkantige Blenden, deren Strahl sich auf 0.61 der Öffnung einschnürt, wie die Theorie der freien Stromlinien von Helmholtz und Kirchhoff vorhersagt; der Ventilschieber antwortet dem Regler wie eine Masse an einer Feder bei 60 Hz. Die zwei Meter Schlauch sind eine Ölsäule mit Trägheit und Reibung, laminar und turbulent. Das Öl selbst ist eine Feder, deren Steifigkeit von seinem Druck abhängt, über die 0.5 % Luft, die es als Bläschen mitführt. Der Zylinder hat zwei Kammern unterschiedlicher Fläche, Dichtungsreibung und Endanschläge; die Probe ist eine gedämpfte Feder. Der Regler sieht die Welt nur einmal pro Millisekunde, über ein Halteglied nullter Ordnung, und das Modell wird mit dem Runge-Kutta-Verfahren vierter Ordnung bei 10 µs integriert, hundert Schritte pro Abtastung. Ein unabhängiges Python-Modell, mit SciPy für die Zahlen und SymPy für die Ableitungen, berechnet die Gleichgewichtslagen, die Linearisierung, die Pole des geschlossenen Kreises, die Reserven und den ganzen nichtlinearen Zyklus neu und stimmt mit der Seite überein."
+ },
+ "cf307312f9a3": {
+  "src": "<span class=\"psub__n\">2.2</span>What was checked",
+  "tr": "<span class=\"psub__n\">2.2</span>Was geprüft wurde"
+ },
+ "cf6dd35f0a42": {
+  "src": "<b>The wind’s disorder hardly helps.</b> Random shaking has a hard ceiling set by the blade’s mass; gusts change the power by a few per cent; the mother blade’s sag at its tip adds 2.2–3.5 %; its shaking adds a little at a tip vibration of 5 mm.",
+  "tr": "<b>Die Unordnung des Winds hilft kaum.</b> Zufälliges Schütteln hat eine harte Obergrenze, die die Masse des Blatts setzt; Böen ändern die Leistung um wenige Prozent; die Durchbiegung des Mutterblatts an seiner Spitze bringt 2.2–3.5 %; sein Schwingen bringt bei einer Schwingung der Spitze von 5 mm ein wenig."
  },
  "d1622a8321e0": {
   "src": "Phyein Usul, home page",
@@ -675,9 +747,17 @@
   "src": "Twelve chapters from the Lagrangian to the sensor budget, 38 numbered equations.",
   "tr": "Zwölf Kapitel von der Lagrange-Funktion bis zum Sensorbudget, 38 nummerierte Gleichungen."
  },
+ "de2db7662cd7": {
+  "src": "Everything is computed fresh in your browser, and nothing is stored.",
+  "tr": "Alles wird frisch in Ihrem Browser berechnet, und nichts wird gespeichert."
+ },
  "e09212c7d3ea": {
   "src": "Skills",
   "tr": "Kenntnisse"
+ },
+ "e1fb99194062": {
+  "src": "Nine chapters from the Lagrangian to a real generator, 29 numbered equations, every number computed by the models.",
+  "tr": "Neun Kapitel von der Lagrange-Funktion bis zu einem realen Generator, 29 nummerierte Gleichungen, jede Zahl von den Modellen berechnet."
  },
  "e20bd846f6ee": {
   "src": "<span class=\"pfig__n\">Figure 2</span>Collision efficiency for water on water at \\(10\\,{}^{\\circ}\\mathrm{C}\\), \\(850\\ \\mathrm{hPa}\\), on the \\(45 \\times 40\\) grid used by the solver.",

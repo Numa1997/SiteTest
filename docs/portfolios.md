@@ -197,12 +197,19 @@ Since 23 October 2026 the page at `portfolios/rotor-pendula/index.html` is gener
 source in [`portfolios-src/rotor-pendula/`](../portfolios-src/rotor-pendula/) (its [`README.md`](../portfolios-src/rotor-pendula/README.md)
 gives the commands and checks); the models, model runs and review record are in `notes/rotor-pendula/`.
 
-**What the reader gets.** Two tabs. *Lecture notes* (`#notes`): *Pendula on a Turning Blade*, nine chapters (0–8), 29 numbered
-equations, from the Lagrangian of a pendulum on a turning blade to the best brake, two rods and chaos, a ceiling on random shaking,
-gusts on the NREL 5 MW turbine, the blade's bending, and a real geared generator (maxon RE 25 with a GP 32 C gearhead); every number
-is computed by the study's models (`tools/make_numbers.py`) or listed with its reason (`tools/typed_numbers.py`). *Simulation*
-(`#sim`): choose a rotor, a pivot, one rod or two and an ideal brake or the geared generator; the page solves the full equations
-with a Radau IIA integrator in a Web Worker built from its physics block, then plays the last turns back; six worked solutions.
+**What the reader gets.** Two tabs. *Lecture notes* (`#notes`): *A Second Blade on a Turning Blade*, nine chapters (0–8), 29
+numbered equations. The machine: a second, lighter blade (a thin uniform rod, m = 1 kg, l = 1 m) hinged at the 63 m tip of the
+NREL 5 MW blade, turning in the rotor plane and braked by a generator in the hinge. The notes run from the Lagrangian of the rod on
+the turning blade to the best brake κ* = R − 1 and P* = mg²l/[8Ω(r_p − 2l/3)], the trail that is the rotor's bill, where the mass
+sits, chaos (Lyapunov exponents at three winds and three brakes: every start ends on one regular swing), a ceiling on random
+shaking, gusts on the NREL 5 MW turbine, the blade's sag and shaking at its tip, and a real geared generator (maxon RE 25 with a
+GP 32 C gearhead, ratio 492). Air on the second blade is left out and the notes say so. Every number is computed by the study's
+models (`tools/make_numbers.py`) or listed with its reason (`tools/typed_numbers.py`). *Simulation* (`#sim`): the same machine;
+choose a steady wind (6, 8 or 10 m/s), the brake and an ideal brake or the geared generator; the page solves the full equations
+with a Radau IIA integrator in a Web Worker built from its physics block, then plays the last turns back. The scene draws the
+three NREL blades from the chord table to one scale and the tip close up to a second, named scale; no angle is magnified. Six
+worked solutions (`tools/sim_solutions.js`, numbers from the page's own physics block): the best brake at 8 m/s, the trail as the
+bill at 6 m/s, the three winds, how hard the generator must brake and hold, which gear ratio, and where the power goes.
 Reading a value is a tool: "Read values" on, a click pins a point, and the values show in a strip outside the plots.
 
 **How the page works.** As for the Hydraulic Press Study: each page is embedded as a JSON string and shown in its own `iframe srcdoc`;
@@ -220,60 +227,60 @@ the plots changes size without a window resize (a `ResizeObserver`): before, ope
 canvases stretched by CSS, so the picture no longer matched the stored positions (and the blade view's two labels overlapped).
 Read values works in `#stage`'s coordinates; the scene canvas sits inside it, so `probe` and `inspect` shift by its offset.
 
-- *Physics block.* Two additions, both checked: the rotor's work $W_\text{in}$ is integrated as the last state of every run,
-  with $\dot W_\text{in} = \Omega\,[(\mathbf r_p\times\mathbf F_p)_z + \tau_b]$ ($\mathbf F_p$ the force of the pivot on the bobs,
-  $\tau_b$ the brake's torque on the rod), and the record keeps, per frame, the rod rates, the bobs' kinetic and potential energy in
-  the ground frame (`bobEnergy()`), the motor's spin energy and the energies counted from the first recorded frame (`Win`, `Eh`,
-  `Epaid`, `Efric`), all in `Float64Array`. Because $d(T+V)/dt = \dot W_\text{in} - \tau_b\dot\theta$ exactly, the energy book
-  $W_\text{in} = \Delta E_\text{kin} + \Delta E_\text{pot} + E_\text{paid}$ closes to the integrator's error: measured residual
-  below $4\times10^{-12}$ J on runs where $W_\text{in}$ swings by 8 to 60 J (single, double and geared; jammed runs give 0). Over whole
-  turns $\langle\dot W_\text{in}\rangle$ equals the mean harvested power for the ideal brake and the power paid to the gearhead
-  with the generator, (3.3) without the small-swing step. Rerun, `node tools/check_sim.js` still passes and changes `data/sim_check.json` only in the
-  twelfth significant figure, `node tools/sim_solutions.js` no number on the page (the committed data files are the earlier runs).
-- *Store* (the script before the page script): 123 variables in eight groups. What you set (rotor speed, pivot, pendulum, generator,
-  brake, gear ratio, load); fixed constants; what follows ($\Omega$, $T$, $r_\text{tip}$, $r_p$, $R$, $G$, $\omega_n = \Omega\sqrt R$,
-  $I_p$, $\kappa^*$, $c$, $\kappa$, $P^*$, and the generator's $c_\text{sc}$, $c_e$, $R_L$, $j$, $\eta$, share kept, jammed); the state
-  now (the stored frame on screen, its energies and the book's residual $\varepsilon$); what the solve found (mean powers, swing,
-  trail, the bill (3.3), the lag, the rotor's mean power); the stored record (15 arrays over the frames `k` of the last four turns,
-  the very arrays the page draws); the solver; the drawing (swing magnification, scene geometry, plot axes, the 161-point curve of
-  the third plot). The page calls the hooks `D.solved`, `D.put`, `D.scene`, `D.plot`, `D.curve` and `D.frame` at the lines where it
-  computes or draws a number; the hooks store what they are given and compute nothing.
-- *Check* recomputes from stored values only: the derived constants by their formulas, the record by rerunning the same `simulate()`
-  in the page from the stored settings (cached), the power by $c\dot\theta^2$, the energies by `bobEnergy()` from the stored angles
-  and rates, the lag by the first-harmonic sum, the axis ends and bob positions from the stored series and scales. *Read back:* the
-  wine bob in the rotor view at the position computed from the stored $\varphi$, $\theta$, $r_p$, scale and magnification (alpha
-  first); the wine curves of the three plots; the playhead ring; the tiles' numbers. A curve point under a marker reports "not in the
-  picture now".
+- *Physics block.* The second blade obeys $I\ddot\theta + (ml/2)[\Omega^2 r_p\sin\theta + g\cos(\varphi+\theta)] + c\dot\theta = 0$ with
+  $I = ml^2/3$ about the hinge and $r_p = 63$ m (notes (1.3)), so $R = 3r_p/(2l)$,
+  $G = 3g/(2l\Omega^2)$, $\kappa = c/(I\Omega)$. The rotor's work $W_\text{in}$ is integrated as the last state of every run, with
+  $\dot W_\text{in} = \Omega\,\tau_\text{rot}$ and $\tau_\text{rot} = (ml/2)r_p[\ddot\theta\cos\theta - (\Omega+\dot\theta)^2\sin\theta] + mgr_p\cos\varphi - c\dot\theta$
+  from Lagrange's equation for $\varphi$ (checked in SymPy); with the generator the gravity term is $G_p = mgr_p/(I\Omega^2)$, which is
+  $\tfrac43 GR$ for the rigid blade, not $GR$. `bladeEnergy()` gives $T = \tfrac12 I(\Omega+\dot\theta)^2 + \tfrac12 m r_p^2\Omega^2 + (ml/2) r_p\Omega(\Omega+\dot\theta)\cos\theta$
+  and $V = mg[r_p\sin\varphi + (l/2)\sin(\varphi+\theta)]$. Because $d(T+V)/dt = \dot W_\text{in} - c\dot\theta^2$ exactly, the energy book
+  $W_\text{in} = \Delta E_\text{kin} + \Delta E_\text{pot} + E_\text{paid}$ closes to the integrator's error: measured residual $2\times10^{-9}$ J
+  on runs where $W_\text{in}$ swings by about $\pm mgr_p \approx \pm 6200$ J ($3\times10^{-13}$ of it). The swing of $W_\text{in}$ is the rotor lifting the
+  whole second blade through $2r_p$ each turn and letting it down. The double pendulum was removed on 24 October 2026.
+- *Store* (the script before the page script): 125 variables in eight groups. What you set (wind, generator, brake, gear ratio,
+  load); fixed constants ($g$, $m$, $l$, $r_\text{rot}$, $\lambda^*$); what follows ($\Omega = \lambda^* v/r_\text{rot}$, $n$, $T$, $v_\text{tip}$, $r_p$,
+  $I$, $ml/2$, $R$, $G$, $G_p$, $\omega_n = \Omega\sqrt R$, $\kappa^*$, $c$, $\kappa$, $P^* = mg^2l/[8\Omega(r_p - 2l/3)]$, the peak brake torque
+  $\tau^* = (ml/2)g/\sqrt2$, and the generator's $c_\text{sc}$, $c_e$, $R_L$, $j = (J+J_g)N^2/I$, $\eta$, share kept, jammed); the state now;
+  what the solve found (mean powers, swing, trail, the bill $-(ml/2)r_p\Omega^3\langle\sin\theta\rangle$, the lag, the rotor's mean power);
+  the stored record (13 arrays over the frames `k` of the last four turns, the very arrays the page draws); the solver; the drawing
+  (both scales: `sc` for the rotor view, `sc2` for the close-up, and their ratio `zoom`; hinge, centre-of-mass and length on screen in
+  each view; plot axes; the 161-point curve of the third plot). Power is in watts throughout. The page calls the hooks `D.solved`,
+  `D.put`, `D.scene`, `D.plot`, `D.curve` and `D.frame` at the lines where it computes or draws a number; the hooks store what they
+  are given and compute nothing.
+- *Check* recomputes from stored values only: the derived constants by their formulas from the stored $m$, $l$, $I$ and $ml/2$, the
+  record by rerunning the same `simulate()` in the page from the stored settings (cached), the power by $c\dot\theta^2$, the
+  energies by the formulas above from the stored angles and rates, the lag by the first-harmonic sum, the axis ends and the
+  positions on screen from the stored series and scales. *Read back* (the canvas is opaque, and the tests still check alpha first):
+  the wine second blade three quarters along its length in the close-up, from the stored hinge, $\theta$ and $l\,s_2$; the same in the
+  rotor view, with the hinge placed from the stored hub, $r_p$, $s$ and $\varphi$; the hinge's dark centre; the wine curves of the
+  three plots; the playhead ring; the tiles' numbers (scientific notation included). A curve point under a marker reports "not in
+  the picture now".
 - *The ledger* ([`scripts/ledger/rotor-pendula.js`](../public/scripts/ledger/rotor-pendula.js), loaded between the page's scripts and
-  `datalog.js`): six headline numbers, the time in the record, θ, θ̇, the harvested power p, the rotor's work $W_\text{in}$ and the
-  harvest $E_h$ since the record began; eight sections in causal order (what you set, fixed constants, what follows, the state now,
-  what the solve found, the stored record, then the solver and the drawing folded); one book, *Energy*: where the rotor's work has
-  gone, rows $\Delta E_\text{kin}$, $\Delta E_\text{pot}$, $\Delta E_\text{spin}$, $E_h$, $E_\text{fric}$ and $E_\text{other}$ (winding and gear
-  losses, the rest of $E_\text{paid}$), closing line $W_\text{in}$, residual `book_res` $= \Delta E_\text{kin} + \Delta E_\text{pot} + E_\text{paid}
-  - W_\text{in}$ stored by the page, tolerance $10^{-9}$ of the flows. Angular momentum has no book: the shaft's torque holds Ω
-  fixed, which the section note says. The ledger's words have German and Arabic entries in `i18n/<lang>/strings.json`, ready for
-  the translated pages.
-- *Read values* pins a bob (either view), the pivot or the hub; *a round* is one turn of the record ($t$ = `t_now`), blocked when
-  fewer than one turn is left before the playback loops.
+  `datalog.js`): six headline numbers, θ, θ̇, the harvested power p, the rotor's work $W_\text{in}$, the energy lifted $\Delta E_\text{pot}$
+  beside it (the two nearly cancel, which explains the rotor's large work), and the harvest $E_h$; eight sections in causal order;
+  one book, *Energy*: rows $\Delta E_\text{kin}$, $\Delta E_\text{pot}$, $\Delta E_\text{spin}$, $E_h$, $E_\text{fric}$ and $E_\text{other}$ (winding and gear
+  losses), closing line $W_\text{in}$, residual `book_res` stored by the page, tolerance $10^{-9}$ of the flows. Angular momentum has no
+  book: the shaft's torque holds Ω fixed. The ledger's new words still need German and Arabic entries.
+- *Read values* pins the second blade (either view), the hinge (either view) or the hub; *a round* is one turn of the record
+  ($t$ = `t_now`), blocked when fewer than one turn is left before the playback loops.
 
-With the ledger (after the redesign of the panel), measured on 24 October 2026 at 1600, 1440, 1100 and 390 px on the same
-three settings: the ledger is a `<table>` with header cells and six headline numbers, all six change while the playback runs,
-the table's words are rewritten 11 to 12 times in 3 s, the energy book reads "Balanced" with the rows missing the closing line by
-about $10^{-13}$ of the flows and the page's residual and the panel's sum agreeing, Check passes on 88 scalars and 85 sampled array
-elements, and at 390 px the table keeps symbol, value, unit and change. Before the ledger, measured on 24 October 2026 in headless Chromium at 1600, 1100 and 390 px, on the single pendulum at 20 rpm, the double at 20 rpm and the
-geared generator at 8 rpm with ratio 33: no console errors; 84 scalars and 85 sampled array elements "identical" or within the
-panel's float64 tolerance, none differing; 27 read-backs match, one is legitimately hidden; a pointer sweep with Read off and on paints
-0 overlay pixels; the pinned strip rewrites 12 times in 3 s; with the panel closed `__dataPanel.running()` is false; Record and Save
-each canvas's bitmap matches its box after the panel closes (no CSS stretching); the pinned marker's pixels all lie within
-24 px of the pinned bob; Record and Save give a zip that `zipfile.testzip()` accepts and `numpy.load` reads (`q1`, `Win`, `Ek` of shape (961,), `kap` of (161,)), and the book
-recomputed from the saved arrays closes to $7.6\times10^{-12}$ J. With Live on, the panel of that day rewrote the ledger every frame (about
-50 times a second); the redesign of `datalog.js` fixed that, as measured above.
+Measured on 24 October 2026 in headless Chromium on the source page, at 1440 and 390 px with the ideal brake and at 1440 px with
+the generator (ratio 51, the formula's load), 8 m/s: no page errors; 135 values (every scalar, and the first, middle and last element
+of every array) agree with their Check, the largest gap $2.8\times10^{-16}$ relative; every read-back finds its ink; shifting the stored
+$\theta$ by 0.3 rad or $\varphi$ by 0.2 rad makes the blade read-backs fail, as they must; the ledger's text changes 3.7 to 4.0 times a
+second while playing; with the panel closed `__dataPanel.running()` is false; Record keeps one turn and Save gives a zip that `zipfile.testzip()` accepts and
+`numpy.load` reads (`q1`, `Win`, `Ek` of shape (961,), `kap` of (161,)), with $m$, $l$, $I$, $ml/2$, $P^*$, $\tau^*$ and `zoom` and their units in
+`dataset.json`; the book recomputed from the saved arrays closes to $3\times10^{-9}$ J against $|W_\text{in}|$ up to 6600 J.
 
 **Checks** (from `portfolios-src/rotor-pendula/`): `python3 tools/check_numbers.py` (every number computed or explained),
-`python3 -I check_physics.py` (17 independent SymPy and SciPy checks with retyped constants), `node tools/check_sim.js` (the
-simulation's physics block reproduces the Python engine's 36 reference runs to 1.3e-8), `node tools/check_sim_browser.js` and, with `public/` served,
-`python3 tools/check_combined.py <url>` (both tabs complete, 0 KaTeX errors, solve, tab links, no sideways scroll at
-360–1440 px). Verified on 23 October 2026: all pass.
+`python3 -I check_physics.py` (independent SymPy and SciPy checks with retyped constants: the rod's Lagrangian, the uneven-rotor
+term, κ*, the 45° lag, P*, τ*, the trail identity, the nine stored runs re-integrated, the generator's circuit and two geared runs),
+`node tools/check_sim.js` (the simulation's physics block reproduces the Python engine's nine reference runs, and the geared
+settings of `data/L4_check_2000.json`), `node tools/check_newton.js` (Newton's cap and the step: the geared powers change by
+at most 8e-12 and 3e-4), `node tools/check_sim_browser.js` (360–1440 px: no errors, no sideways scroll, a hover
+sweep changes nothing, Read values pins and rewrites at most four times a second, every "Try it" button solves) and, with
+`public/` served, `python3 tools/check_combined.py <url>` (both tabs complete, 0 KaTeX errors, solve, tab links, no sideways
+scroll at 360–1440 px).
 
 ## How to update a copy of an app
 

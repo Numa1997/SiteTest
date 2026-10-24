@@ -1,18 +1,13 @@
-"""Numerical engine for pendula on a turning blade (L1-L3), vectorised over an ensemble with numpy.
-
-Equations (L1_double.py, physical time, relative rod angles q_i from the blade's outward radial direction, absolute angle
-phi + q_i; A = (m1+m2) l1^2, B = m2 l2^2, D = m2 l1 l2, d = q1 - q2):
-  A q1'' + D cos d q2'' = -D sin d (Om + q2')^2 - (m1+m2) l1 [Om^2 r_p sin q1 + g cos(phi + q1)]
-                          - Omd [(m1+m2) l1 (l1 + r_p cos q1) + D cos d] - a_e (m1+m2) l1 cos q1 - c0 q1' + c1 (q2' - q1')
-  B q2'' + D cos d q1'' =  D sin d (Om + q1')^2 - m2 l2 [Om^2 r_p sin q2 + g cos(phi + q2)]
-                          - Omd m2 l2 [l1 cos d + l2 + r_p cos q2] - a_e m2 l2 cos q2 - c1 (q2' - q1')
-  single pendulum (mass m on length l): m l^2 q'' = -m l [Om^2 r_p sin q + g cos(phi + q)] - Omd m l (l + r_p cos q)
-                                                   - a_e m l cos q - c q'
-  Om(t), Omd(t): rotor speed and its rate; a_e(t): edgewise acceleration of the pivot along the blade's tangent (L3).
-The generators make the equations stiff: a heavily braked double pendulum has a relaxation mode some thousands of times faster
-than its swing.  Scheme: three-stage Radau IIA collocation (order 5, stage order 3, L-stable; Hairer & Wanner, Solving ODEs II,
-section IV.5), fixed step, simplified Newton iterations with a finite-difference Jacobian, vectorised over the ensemble.
+"""Numerical engine for the second blade on a turning blade (L1-L4), vectorised over an ensemble with numpy.
+The machine is RigidBlade: a thin uniform rod of mass m and length l, hinged at radius r_p (the 63 m tip of the NREL 5-MW
+blade) and turning in the rotor plane by q from the blade's outward radial direction (absolute angle phi + q):
+  I q'' = -(m l/2) [Om^2 r_p sin q + g cos(phi + q)] - Omd (I + (m l/2) r_p cos q) - a_e (m l/2) cos q - c q',   I = m l^2/3
+  Om(t), Omd(t): rotor speed and its rate; a_e(t): edgewise acceleration of the hinge along the blade's tangent (L3).
+The brake makes the equation stiff: at the best brake a disturbance of the swing relaxes some hundreds of times faster than
+the rotor turns.  Scheme: three-stage Radau IIA collocation (order 5, stage order 3, L-stable; Hairer & Wanner, Solving ODEs
+II, section IV.5), fixed step, simplified Newton iterations with a finite-difference Jacobian, vectorised over the ensemble.
 The harvested energy E is carried as an extra state, E' = generator power, so it is integrated to the same order.
+(The point and double pendula of the earlier study, Single and Double, were removed with the scripts that used them.)
 """
 import numpy as np
 
@@ -28,38 +23,18 @@ for k in range(5):
 for k in range(3):
     assert np.max(np.abs(RA @ RC**k - RC**(k + 1)/(k + 1))) < 1e-14
 
-class Single:
-    """Single pendulum of mass m on length l, generator c on q'.  State block: q, w."""
+class RigidBlade:
+    """The second blade: a thin uniform rod of mass m and length l hinged at radius r_p, brake c on q'.  State block: q, w.
+    I q'' = -(m l/2)[Om^2 r_p sin q + g cos(phi + q)] - Omd (I + (m l/2) r_p cos q) - a_e (m l/2) cos q - c q',  I = m l^2/3
+    (blade.py derives it twice)."""
     n = 1
     def __init__(self, m, l, rp, c, g=9.80665):
         self.m, self.l, self.rp, self.c, self.g = m, l, rp, c, g
+        self.I, self.mlc = m*l**2/3, m*l/2
     def acc(self, q, w, phi, Om, Omd, ae):
-        q1 = q[..., 0]; w1 = w[..., 0]; m, l, rp, g = self.m, self.l, self.rp, self.g
-        f = (-m*l*(Om**2*rp*np.sin(q1) + g*np.cos(phi + q1)) - Omd*m*l*(l + rp*np.cos(q1)) - ae*m*l*np.cos(q1)
-             - self.c*w1)
-        return (f/(m*l**2))[..., None], self.c*w1**2
-    def reaction_t(self, q, w, a, phi, Om, Omd, ae):
-        """tangential force the bob exerts on the pivot (blade frame), for the blade's edgewise mode (L3)."""
-        raise NotImplementedError
-
-class Double:
-    """Double pendulum, generators c0 (pivot, on q1') and c1 (hinge, on q2' - q1').  State block: q1, q2, w1, w2."""
-    n = 2
-    def __init__(self, m1, m2, l1, l2, rp, c0, c1, g=9.80665):
-        self.m1, self.m2, self.l1, self.l2, self.rp, self.c0, self.c1, self.g = m1, m2, l1, l2, rp, c0, c1, g
-        self.Mt = m1 + m2; self.A = self.Mt*l1**2; self.B = m2*l2**2; self.D = m2*l1*l2
-    def acc(self, q, w, phi, Om, Omd, ae):
-        q1, q2 = q[..., 0], q[..., 1]; w1, w2 = w[..., 0], w[..., 1]
-        d = q1 - q2; cd, sd = np.cos(d), np.sin(d)
-        Mt, l1, l2, rp, g, D, m2 = self.Mt, self.l1, self.l2, self.rp, self.g, self.D, self.m2
-        tq0 = self.c0*w1; tq1 = self.c1*(w2 - w1)
-        f1 = (-D*sd*(Om + w2)**2 - Mt*l1*(Om**2*rp*np.sin(q1) + g*np.cos(phi + q1))
-              - Omd*(Mt*l1*(l1 + rp*np.cos(q1)) + D*cd) - ae*Mt*l1*np.cos(q1) - tq0 + tq1)
-        f2 = (D*sd*(Om + w1)**2 - m2*l2*(Om**2*rp*np.sin(q2) + g*np.cos(phi + q2))
-              - Omd*m2*l2*(l1*cd + l2 + rp*np.cos(q2)) - ae*m2*l2*np.cos(q2) - tq1)
-        M12 = D*cd; det = self.A*self.B - M12**2
-        a1 = (self.B*f1 - M12*f2)/det; a2 = (self.A*f2 - M12*f1)/det
-        return np.stack([a1, a2], axis=-1), self.c0*w1**2 + self.c1*(w2 - w1)**2
+        q1 = q[..., 0]; w1 = w[..., 0]; I, mlc, rp, g = self.I, self.mlc, self.rp, self.g
+        f = (-mlc*(Om**2*rp*np.sin(q1) + g*np.cos(phi + q1)) - Omd*(I + mlc*rp*np.cos(q1)) - ae*mlc*np.cos(q1) - self.c*w1)
+        return (f/I)[..., None], self.c*w1**2
 
 def pendulum_rhs(sys_, rotor=None, Om=None, edge=None):
     """F(t, Y) for Y = [q (n), w (n), E] per member; rotor(t) -> (phi, Om, Omd) (default uniform at Om), edge(t) -> a_e."""
@@ -100,8 +75,10 @@ def radau_step(F, t, Y, h, tol=1e-12, maxit=12, J=None, eps=1e-7):
         G = Z - h*np.einsum('ik,nkd->nid', RA, Fz)
         dZ = -np.einsum('nab,nb->na', Minv, G.reshape(N, 3*d)).reshape(N, 3, d)
         Z = Z + dZ
-        if np.max(np.abs(dZ)/(1.0 + np.abs(Z))) < tol:
+        err = np.max(np.abs(dZ)/(1.0 + np.abs(Z)))
+        if err < tol:
             break
+    radau_step.last_err = err                         # the last Newton correction, relative: read by L4_check.py
     return Y + Z[:, 2], it                            # stiffly accurate: y_{n+1} = y_n + Z_3
 
 def integrate(F, Y0, t0, t1, h, record_every=None, lyap=None):

@@ -17,7 +17,6 @@ from playwright.async_api import async_playwright
 ROOT = pathlib.Path(__file__).resolve().parents[1]
 URL = sys.argv[1] if len(sys.argv) > 1 else 'http://127.0.0.1:8765/portfolios/rotor-pendula/index.html'
 SHOTS = pathlib.Path(sys.argv[2]) if len(sys.argv) > 2 else None
-CHROMIUM = '/opt/pw-browsers/chromium_headless_shell-1194/chrome-linux/headless_shell'
 INVENTORY = """() => { const q = s => document.querySelectorAll(s).length;
   return { h2: q('h2'), h3: q('h3'), katex: q('.katex'), kerr: q('.katex-error'), canvas: q('canvas'), table: q('table'),
            links: q('a[href]'), text: document.body.innerText.length }; }"""
@@ -29,7 +28,10 @@ def check(ok, what):
 
 async def main():
     async with async_playwright() as pw:
-        b = await pw.chromium.launch(executable_path=CHROMIUM)
+        try:
+            b = await pw.chromium.launch()             # Playwright's own Chromium
+        except Exception:
+            b = await pw.chromium.launch(executable_path='/opt/pw-browsers/chromium')   # the preinstalled one, if the versions differ
         # standalone inventories
         ref = {}
         for tab, f in (('notes', 'rotor_notes.html'), ('sim', 'rotor_sim.html')):
@@ -48,7 +50,7 @@ async def main():
                 for fm in p.frames:
                     if fm == p.main_frame: continue
                     h1 = await fm.evaluate("document.querySelector('h1') ? document.querySelector('h1').innerText : ''")
-                    if ('Pendula on' in h1) == (tab == 'notes') and 'Turning Blade' in h1: frame = fm
+                    if (tab == 'notes' and 'Second Blade on' in h1) or (tab == 'sim' and 'Hinged at the' in h1): frame = fm
                 fr[tab] = frame
                 inv = await frame.evaluate(INVENTORY)
                 same = all(inv[k] == ref[tab][k] for k in ('h2', 'h3', 'katex', 'canvas', 'table'))

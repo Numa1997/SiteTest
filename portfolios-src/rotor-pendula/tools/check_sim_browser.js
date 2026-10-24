@@ -7,14 +7,15 @@
 //  4. Read values: switch it on, click the rod-angle plot, check the pin's marker is drawn (alpha first, then colour, at the
 //     ring around the pinned point), then play for 5 s and count how often the readout strip's text changes (must be about
 //     4 per second at most);
-//  5. screenshots of the page top and of the plots.
+//  5. screenshots of the page top and of the plots;
+//  6. at the widest width, every "Try it" button of the worked solutions sets the page and solves it without an error.
 // Usage: node tools/check_sim_browser.js [outdir]
 const path = require('path');
 const fs = require('fs');
-const { chromium } = require('/opt/node-tools/node_modules/playwright');
+const { chromium } = require('playwright');             // the preinstalled Playwright and its own Chromium
 
 const PAGE = 'file://' + path.join(__dirname, '..', 'rotor_sim.html');
-const OUT = process.argv[2] || '/tmp/claude-0/-home-user-SiteTest/8b34d6df-5462-5589-b418-3710ebaaeab4/scratchpad/sim_shots';
+const OUT = process.argv[2] || path.join(require('os').tmpdir(), 'rotor_sim_shots');
 fs.mkdirSync(OUT, { recursive: true });
 const WIDTHS = [360, 390, 1024, 1440];
 
@@ -42,7 +43,7 @@ async function hoverSweep(page) {
 }
 
 (async () => {
-  const browser = await chromium.launch({ executablePath: '/opt/pw-browsers/chromium_headless_shell-1194/chrome-linux/headless_shell' });
+  const browser = await chromium.launch();
   let allPass = true;
   const report = [];
   for (const W of WIDTHS) {
@@ -121,8 +122,18 @@ async function hoverSweep(page) {
     await page.locator('#plotTh').scrollIntoViewIfNeeded();
     await page.screenshot({ path: path.join(OUT, `sim_${W}_plots.png`) });
     await page.screenshot({ path: path.join(OUT, `sim_${W}_full.png`), fullPage: true });
+    if (W === WIDTHS[WIDTHS.length - 1]) {        // 6. the worked solutions' buttons
+      const n = await page.locator('#solutions [data-apply]').count();
+      r.tryButtons = { n, solved: 0 };
+      for (let i = 0; i < n; i++) {
+        await page.locator('#solutions [data-apply]').nth(i).click();
+        await page.waitForTimeout(300);
+        await page.waitForFunction(() => window.rotorSim.solved(), null, { timeout: 120000 });
+        r.tryButtons.solved++;
+      }
+    }
     r.errors = errors;
-    r.pass = r.overflow === 0 && errors.length === 0 && r.hoverTextSame && r.hoverPixelsSame && r.hoverReadSame &&
+    r.pass = (!r.tryButtons || r.tryButtons.solved === r.tryButtons.n) && r.overflow === 0 && errors.length === 0 && r.hoverTextSame && r.hoverPixelsSame && r.hoverReadSame &&
       r.ring && r.ring.opaque >= 8 && r.ring.wine >= 4 && r.stripPerSecond <= 4.4 && r.turnLabelPerSecond <= 4.4 && r.pageTextPerSecond <= 4.4;
     allPass = allPass && r.pass;
     report.push(r);

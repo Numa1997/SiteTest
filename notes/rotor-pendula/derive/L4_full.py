@@ -1,24 +1,26 @@
-"""L4: the full equation of the pendulum with a geared generator, shared by L4_check.py, L4_scan.py, L4_resonance.py and
-L4_harmonics.py.  Rotor angle tau = Omega t as the time; state per row: theta, theta', E_load, E_paid, E_fric (energies in
-units of m L^2 Omega^2, so a power is d/dtau times m L^2 Omega^3).
+"""L4: the full equation of the second blade with a geared generator, used by L4_check.py.  Rotor angle tau = Omega t as the
+time; state per row: theta, theta', E_load, E_paid, E_fric and, if G_p is given, the rotor's work W (energies in units of
+I Omega^2, I = m l^2/3, so a power is d/dtau times I Omega^3).  The equation is the same for any rigid body hinged at r_p: only
+the units differ from the earlier point pendulum (m L^2 -> I), and R, G, G_p carry the body (blade.py).
 
-Motor side (per unit m L^2 Omega^2, motor angle N theta): the torque needed to turn the motor, referred to the pendulum through
+Motor side (per unit I Omega^2, motor angle N theta): the torque needed to turn the motor, referred to the blade through
 an ideal gear, is   x = j theta'' + f0 sgn(theta') + kappa_e theta'
-   j = J N^2/(m L^2) (rotor + gearhead input inertia), f0 = N T0/(m L^2 Omega^2) (motor friction), kappa_e = c_e/(m L^2 Omega).
+   j = J N^2/I (rotor + gearhead input inertia), f0 = N T0/(I Omega^2) (motor friction), kappa_e = c_e/(I Omega).
 Gearhead (version 3): the loss goes with the power that flows through it, whatever its kind: when power flows from the
 pendulum into the motor side (x theta' > 0) the pendulum must supply x/eta; when the motor side gives power back (x theta' < 0,
 its rotor slowing down) the pendulum receives eta x.  So the torque on the pendulum is  x k,  k = eta^(-sgn(x theta')).
-(Version 2 applied eta to the brake and the friction only, and passed the inertial torque j theta'' without loss: at the
-accidental resonance of 400 rpm, 30 %, ratio 51, that let a reactive power of tens of watts flow through the gears for free.)
-Pendulum:  theta'' + R sin(theta) + G cos(tau + theta) + k x = 0.
+(Version 2 applied eta to the brake and the friction only, and passed the inertial torque j theta'' without loss, which let
+reactive power flow through the gears for free.)
+Blade:  theta'' + R sin(theta) + G cos(tau + theta) + k x = 0;  rotor's work rate W' = R (theta'' cos theta - (1 + theta')^2 sin theta)
+        + G_p cos tau - k x,  G_p = m g r_p/(I Omega^2) (blade.py).
 Given theta and theta', h(a) = a + R sin + G cos + k(x(a)) x(a) is increasing in a (k x is increasing in x, x in a; with the
 smoothing below, d(kx)/dx >= 1 - |ln eta| max(u sech^2 u) > 0 for eta >= 0.5), so the acceleration is found by bisection followed by Newton steps kept inside the bracket.  sgn is smoothed: sgn(theta') -> tanh(theta'/eps_w),
-sgn(x theta') -> tanh(x theta'/eps_p).
+sgn(x theta') -> tanh(x theta'/eps_p); eps_p must be set on the gear's own power scale (x theta'), not on gravity's G.
 """
 import math
 import numpy as np
 
-def make_rhs(R, G, j, f0, ke, eta, keep, eps_w, eps_p, nbis=14, nnewt=5):
+def make_rhs(R, G, j, f0, ke, eta, keep, eps_w, eps_p, nbis=14, nnewt=5, Gp=None):
     """All arguments arrays over rows (or scalars).  keep = 1 - c_e/c_sc (the load's share of the electrical power).
     eta = 1 turns the gear loss off; passing eta_inertia_free=(eta) is not supported: for version 2 use make_rhs_v2."""
     lneta = np.log(eta)
@@ -44,7 +46,10 @@ def make_rhs(R, G, j, f0, ke, eta, keep, eps_w, eps_p, nbis=14, nnewt=5):
         x = j*a + xr
         k = np.exp(-lneta*np.tanh(x*w/eps_p))
         p_paid = k*x*w                                   # power the pendulum gives to the gearhead (in the mean: all losses)
-        return np.stack([w, a, ke*keep*w**2, p_paid, fr*w], axis=1)
+        cols = [w, a, ke*keep*w**2, p_paid, fr*w]
+        if Gp is not None:
+            cols.append(R*(a*np.cos(th) - (1 + w)**2*np.sin(th)) + Gp*np.cos(t) - k*x)
+        return np.stack(cols, axis=1)
     return F
 
 def make_rhs_v2(R, G, j, f0, ke, eta, keep, eps_w):

@@ -1,19 +1,9 @@
 torque law nrel: steady speed at 8 m/s 0.9494 rad/s
-turbulent runs: 186 s
-r_p = 18.9 m: steady 26.646 mW; turbulent mean 26.105 +- 0.023 mW, 5 % quantile 25.876 mW
-   change -2.03 %: (a) mean speed -2.39 %, (b) wander +0.358 +- 0.116 %, (c) Euler -0.00089 +- 0.00441 %
-PASS P1 r_p = 18.9: |(b)+(c)| = 0.357 % < 1 % + 2 SE
-PASS P2 r_p = 18.9: |(c)| = 8.9e-06 < 1e-3
-PASS P3 r_p = 18.9: total change -2.03 % between -3 % and -1 %
-r_p = 37.8 m: steady 13.330 mW; turbulent mean 13.061 +- 0.011 mW, 5 % quantile 12.939 mW
-   change -2.02 %: (a) mean speed -2.53 %, (b) wander +0.507 +- 0.091 %, (c) Euler +0.00719 +- 0.00922 %
-PASS P1 r_p = 37.8: |(b)+(c)| = 0.514 % < 1 % + 2 SE
-PASS P2 r_p = 37.8: |(c)| = 7.2e-05 < 1e-3
-PASS P3 r_p = 37.8: total change -2.02 % between -3 % and -1 %
-r_p = 56.7 m: steady 8.885 mW; turbulent mean 8.707 +- 0.007 mW, 5 % quantile 8.623 mW
-   change -2.00 %: (a) mean speed -2.57 %, (b) wander +0.553 +- 0.086 %, (c) Euler +0.01765 +- 0.01394 %
-PASS P1 r_p = 56.7: |(b)+(c)| = 0.570 % < 1 % + 2 SE
-PASS P2 r_p = 56.7: |(c)| = 1.8e-04 < 1e-3
-PASS P3 r_p = 56.7: total change -2.00 % between -3 % and -1 %
-(200 s)
+turbulent runs: 171 s
+r_p = 63.0 m: steady 201.380 mW; turbulent mean 197.370 +- 0.162 mW, 5 % quantile 195.495 mW
+   change -1.99 %: (a) mean speed -2.55 %, (b) wander +0.534 +- 0.037 %, (c) Euler +0.02186 +- 0.01562 %
+PASS P1 r_p = 63.0: |(b)+(c)| = 0.556 % < 1 % + 2 SE
+PASS P2 r_p = 63.0: |(c)| = 2.2e-04 < 1e-3
+PASS P3 r_p = 63.0: the mean-speed part (a) = -2.547 % equals -dOmega/Omega0 = -2.604 % within 0.2 %
+(184 s)
 ALL PASS

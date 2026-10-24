@@ -119,4 +119,23 @@ for n in (1, 2):
         print(f'   min of M - m_eff over 20000 random states and masses: {worst:.3e} (>= 0)')
     print(f'   n={n}: m_eff = {sp.simplify(meff.subs(sub))}')
 
+# Part D: the second blade, a uniform rod of mass m and length l hinged at the shaken point (absolute angle psi from the
+# downward vertical). Its kinetic energy has the rod's own inertia, so M = I = m l^2/3, and b = d/dpsi (m e . x_cm), x_cm at l/2.
+m_r, l_r, s_v = sp.symbols('m l s', positive=True)
+psr = sp.Function('psi')(t)
+xs_, ys_ = X*ex + s_v*sp.sin(psr), X*ey - s_v*sp.cos(psr)
+Tr = sp.integrate((m_r/l_r)*(sp.diff(xs_, t)**2 + sp.diff(ys_, t)**2)/2, (s_v, 0, l_r))
+Vr = sp.integrate((m_r/l_r)*g*ys_, (s_v, 0, l_r))
+Lr = Tr - Vr; Lr0 = Lr.subs(X, 0).doit()
+ELr = sp.diff(sp.diff(Lr, sp.diff(psr, t)), t) - sp.diff(Lr, psr)
+ELr0 = sp.diff(sp.diff(Lr0, sp.diff(psr, t)), t) - sp.diff(Lr0, psr)
+br = sp.diff(m_r*(ex*(l_r/2)*sp.sin(psr) + ey*(-(l_r/2)*sp.cos(psr))), psr)
+check('D  rod: shaking enters only as -Xddot*b, b = d/dpsi (m e . x_cm), x_cm at l/2', sp.expand(ELr - ELr0 - sp.diff(X, t, 2)*br))
+Ir = sp.simplify(sp.diff(Tr.subs(X, 0).doit(), sp.diff(psr, t), 2))
+check('D  rod: its mass "matrix" is the inertia about the hinge, m l^2/3', Ir - m_r*l_r**2/3)
+al_, s0 = sp.symbols('alpha s0', real=True)
+meff_r = sp.simplify((br**2/Ir).subs({ex: sp.cos(al_), ey: sp.sin(al_), psr: s0}))
+check('D  rod: m_eff = b^2/I = (3/4) m cos^2(psi - alpha) <= (3/4) m (largest with the rod perpendicular to e, as for the point mass\'s m cos^2): a rod draws at most three quarters of what a point mass draws',
+      trig_zero(meff_r - sp.Rational(3, 4)*m_r*sp.cos(s0 - al_)**2, [al_, s0]))
+
 print('ALL PASS' if fails == 0 else f'{fails} FAIL'); sys.exit(1 if fails else 0)
