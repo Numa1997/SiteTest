@@ -819,10 +819,10 @@ var PHYS = (function () {
         sd.push({ id: id++, x: x, z: z, r: r0, xi: xi, ux: stoch ? sg * gaussian(u) : 0, uz: stoch ? sg * gaussian(u) : 0, coll: mi === 1, t100: -1, tagR: tr, tagC: tg });
       }
     }
-    var st = { t: 0, sd: sd, rain: 0, rainN: 0, evap: 0, evapBelow: 0, M0: 0, first100: null, Lx: Lx, Lz: Lz, h: h, nx: nx, nz: nz, inside: inside, W0: W0, Le: Le,
+    var st = { t: 0, sd: sd, rain: 0, rainN: 0, evap: 0, evapN: 0, evapBelow: 0, M0: 0, N0: 0, first100: null, Lx: Lx, Lz: Lz, h: h, nx: nx, nz: nz, inside: inside, W0: W0, Le: Le,
       epsAt: epsAt, sig2At: sig2At, flow: flow, cell: CF, G: G, S: S, stochastic: stoch, mergers: 0, gamEvents: 0, gamMany: 0, rainLog: [], bornLog: [],
       led: led, regionAt: regionAt, reg: reg, nxR: nxR, nzR: nzR, zbase: zbase, initR: initR, fate: fate, paths: {} };
-    sd.forEach(function (q) { st.M0 += q.xi * massOf(q.r); });
+    sd.forEach(function (q) { st.M0 += q.xi * massOf(q.r); st.N0 += q.xi; });   // N0: drops at the start, for the number book
     if (o.track) o.track.forEach(function (tid) { st.paths[tid] = []; });
     var vf = [0, 0], gr = [0, 0];
     function addTag(map, tagC, m) { for (var key in tagC) map[key] = (map[key] || 0) + m * tagC[key]; }
@@ -854,7 +854,7 @@ var PHYS = (function () {
           dm = q.xi * (massOf(q.r) - (gone ? 0 : massOf(Math.sqrt(r2))));
           st.evap += dm; if (q.z < st.zbase) st.evapBelow += dm;
           for (k = 0; k < 3; k++) fate.evapR[k] += dm * q.tagR[k]; addTag(fate.evapC, q.tagC, dm);
-          if (gone) continue;
+          if (gone) { st.evapN += q.xi; continue; }   // evapN: drops that evaporated completely
           q.r = Math.sqrt(r2);
         }
         keep.push(q);

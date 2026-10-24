@@ -4,7 +4,7 @@ Written by [`tools/inventory.py`](../tools/inventory.py) from the files in the r
 Run `python3 tools/inventory.py` after adding, removing or changing files, and `python3 tools/inventory.py --check`
 to confirm that every file is described. Sizes are those of the files when the list was written.
 
-865 files, 50.5 MB in all. Runs of more than 12 similar files are folded; open them to see each file.
+866 files, 50.6 MB in all. Runs of more than 12 similar files are folded; open them to see each file.
 
 | Folder | Files |
 |---|---|
@@ -29,7 +29,7 @@ to confirm that every file is described. Sizes are those of the files when the l
 | [Source of the Hydraulic Press Study (not served)](#source-of-the-hydraulic-press-study-not-served) | 37 |
 | [Source of Rotor Pendula (not served)](#source-of-rotor-pendula-not-served) | 61 |
 | [Source of Iron, Cotton and the Head (not served)](#source-of-iron-cotton-and-the-head-not-served) | 19 |
-| [Source of the Droplet Collection study (not served)](#source-of-the-droplet-collection-study-not-served) | 95 |
+| [Source of the Droplet Collection study (not served)](#source-of-the-droplet-collection-study-not-served) | 96 |
 | [Template sources](#template-sources) | 2 |
 | [Platform tests](#platform-tests) | 1 |
 | [Documentation](#documentation) | 30 |
@@ -352,7 +352,7 @@ to confirm that every file is described. Sizes are those of the files when the l
 | [`public/portfolios/droplet-collection/fig/plate-warm.svg`](../public/portfolios/droplet-collection/fig/plate-warm.svg) | 24.3 kB | Plate of the Portfolios page article (warm), written by the Droplet Collection build. | [portfolios.md](portfolios.md) |
 | [`public/portfolios/droplet-collection/fig/w2_rain.svg`](../public/portfolios/droplet-collection/fig/w2_rain.svg) | 45.0 kB | A vector figure of the project. | [portfolios.md](portfolios.md) |
 | [`public/portfolios/droplet-collection/fig/w2_spectra.svg`](../public/portfolios/droplet-collection/fig/w2_spectra.svg) | 74.0 kB | A vector figure of the project. | [portfolios.md](portfolios.md) |
-| [`public/portfolios/droplet-collection/index.html`](../public/portfolios/droplet-collection/index.html) | 1.82 MB | Entry page of the project copy: module script and stylesheet loader. | [portfolios.md](portfolios.md) |
+| [`public/portfolios/droplet-collection/index.html`](../public/portfolios/droplet-collection/index.html) | 1.88 MB | Entry page of the project copy: module script and stylesheet loader. | [portfolios.md](portfolios.md) |
 
 ## Project copy: Rotor Pendula
 
@@ -533,8 +533,8 @@ to confirm that every file is described. Sizes are those of the files when the l
 | File | Size | What it is | Explained in |
 |---|---|---|---|
 | [`portfolios-src/droplets/.gitignore`](../portfolios-src/droplets/.gitignore) | 5 B | Keeps the stand-alone build (out/) out of git. | [README.md](../portfolios-src/droplets/README.md) |
-| [`portfolios-src/droplets/README.md`](../portfolios-src/droplets/README.md) | 4.5 kB | The study's source: every folder, how the served page is built, the three checks. | [README.md](../portfolios-src/droplets/README.md) |
-| [`portfolios-src/droplets/app.js`](../portfolios-src/droplets/app.js) | 25.9 kB | The page's script: tabs, hash routes, the three simulation panels. | [README.md](../portfolios-src/droplets/README.md) |
+| [`portfolios-src/droplets/README.md`](../portfolios-src/droplets/README.md) | 5.1 kB | The study's source: every folder, how the served page is built, the three checks. | [README.md](../portfolios-src/droplets/README.md) |
+| [`portfolios-src/droplets/app.js`](../portfolios-src/droplets/app.js) | 52.4 kB | The page's script: tabs, hash routes, the five simulation panels, and the store (dataset) that panels 3 and 4 write. | [README.md](../portfolios-src/droplets/README.md) |
 | [`portfolios-src/droplets/chart.cjs`](../portfolios-src/droplets/chart.cjs) | 7.8 kB | House-style SVG line charts for the figures and the page. | [README.md](../portfolios-src/droplets/README.md) |
 | [`portfolios-src/droplets/checks/check_browser.py`](../portfolios-src/droplets/checks/check_browser.py) | 2.6 kB | Check: check_browser.py (see the README). | [README.md](../portfolios-src/droplets/README.md) |
 | [`portfolios-src/droplets/checks/check_numbers.cjs`](../portfolios-src/droplets/checks/check_numbers.cjs) | 47.1 kB | Check: check_numbers.cjs (see the README). | [README.md](../portfolios-src/droplets/README.md) |
@@ -566,6 +566,7 @@ to confirm that every file is described. Sizes are those of the files when the l
 | [`portfolios-src/droplets/data/ripening.json`](../portfolios-src/droplets/data/ripening.json) | 292.4 kB | Data written by the model's run tools: ripening.json. | [README.md](../portfolios-src/droplets/README.md) |
 | [`portfolios-src/droplets/data/stochastic.json`](../portfolios-src/droplets/data/stochastic.json) | 399.3 kB | Data written by the model's run tools: stochastic.json. | [README.md](../portfolios-src/droplets/README.md) |
 | [`portfolios-src/droplets/data/warm.json`](../portfolios-src/droplets/data/warm.json) | 158.4 kB | Data written by the model's run tools: warm.json. | [README.md](../portfolios-src/droplets/README.md) |
+| [`portfolios-src/droplets/datahooks.js`](../portfolios-src/droplets/datahooks.js) | 31.3 kB | The data panel's hooks for panels 4 and 3 (Sim.data: Read values, Check, read-back, the books, one round = five cloud-minutes). | [README.md](../portfolios-src/droplets/README.md) |
 | [`portfolios-src/droplets/derive/L0_numbers.py`](../portfolios-src/droplets/derive/L0_numbers.py) | 2.2 kB | Derivation or number script behind a Gate 1 contract: L0_numbers.py. | [status.md](../notes/droplets/status.md) |
 | [`portfolios-src/droplets/derive/L0_population.py`](../portfolios-src/droplets/derive/L0_population.py) | 4.7 kB | Derivation or number script behind a Gate 1 contract: L0_population.py. | [status.md](../notes/droplets/status.md) |
 | [`portfolios-src/droplets/derive/L0_r2.py`](../portfolios-src/droplets/derive/L0_r2.py) | 3.4 kB | Derivation or number script behind a Gate 1 contract: L0_r2.py. | [status.md](../notes/droplets/status.md) |
@@ -592,8 +593,8 @@ to confirm that every file is described. Sizes are those of the files when the l
 | [`portfolios-src/droplets/derive/L8_sympy.py`](../portfolios-src/droplets/derive/L8_sympy.py) | 5.5 kB | Derivation or number script behind a Gate 1 contract: L8_sympy.py. | [status.md](../notes/droplets/status.md) |
 | [`portfolios-src/droplets/derive/L9_scales.cjs`](../portfolios-src/droplets/derive/L9_scales.cjs) | 1.4 kB | Derivation or number script behind a Gate 1 contract: L9_scales.cjs. | [status.md](../notes/droplets/status.md) |
 | [`portfolios-src/droplets/derive/beard.cjs`](../portfolios-src/droplets/derive/beard.cjs) | 1.4 kB | Derivation or number script behind a Gate 1 contract: beard.cjs. | [status.md](../notes/droplets/status.md) |
-| [`portfolios-src/droplets/physics.cjs`](../portfolios-src/droplets/physics.cjs) | 65.3 kB | The model, L0 to L10: fall speeds, trajectories, kernel, collection equation, exact stochastic process, turbulence, energy ledger, maximum entropy, a cloud with a shape (super-droplets with a stochastic element); runs in the page and in Node. | [README.md](../portfolios-src/droplets/README.md) |
-| [`portfolios-src/droplets/template.html`](../portfolios-src/droplets/template.html) | 12.9 kB | The page template: house design, tabs, placeholders filled by the build. | [README.md](../portfolios-src/droplets/README.md) |
+| [`portfolios-src/droplets/physics.cjs`](../portfolios-src/droplets/physics.cjs) | 65.4 kB | The model, L0 to L10: fall speeds, trajectories, kernel, collection equation, exact stochastic process, turbulence, energy ledger, maximum entropy, a cloud with a shape (super-droplets with a stochastic element); runs in the page and in Node. | [README.md](../portfolios-src/droplets/README.md) |
+| [`portfolios-src/droplets/template.html`](../portfolios-src/droplets/template.html) | 14.0 kB | The page template: house design, tabs, placeholders filled by the build. | [README.md](../portfolios-src/droplets/README.md) |
 | [`portfolios-src/droplets/text/book-00.src.html`](../portfolios-src/droplets/text/book-00.src.html) | 3.9 kB | Lecture notes, chapter 0. | [README.md](../portfolios-src/droplets/README.md) |
 | [`portfolios-src/droplets/text/book-01.src.html`](../portfolios-src/droplets/text/book-01.src.html) | 5.5 kB | Lecture notes, chapter 1. | [README.md](../portfolios-src/droplets/README.md) |
 | [`portfolios-src/droplets/text/book-02.src.html`](../portfolios-src/droplets/text/book-02.src.html) | 7.7 kB | Lecture notes, chapter 2. | [README.md](../portfolios-src/droplets/README.md) |
@@ -611,7 +612,7 @@ to confirm that every file is described. Sizes are those of the files when the l
 | [`portfolios-src/droplets/text/checks.src.html`](../portfolios-src/droplets/text/checks.src.html) | 6.6 kB | Words of the checks tab. | [README.md](../portfolios-src/droplets/README.md) |
 | [`portfolios-src/droplets/text/problems.src.html`](../portfolios-src/droplets/text/problems.src.html) | 8.2 kB | Words of the problems tab. | [README.md](../portfolios-src/droplets/README.md) |
 | [`portfolios-src/droplets/text/sim.src.html`](../portfolios-src/droplets/text/sim.src.html) | 7.8 kB | Words of the sim tab. | [README.md](../portfolios-src/droplets/README.md) |
-| [`portfolios-src/droplets/tools/build.py`](../portfolios-src/droplets/tools/build.py) | 10.6 kB | Build or run tool: build.py (see the README). | [README.md](../portfolios-src/droplets/README.md) |
+| [`portfolios-src/droplets/tools/build.py`](../portfolios-src/droplets/tools/build.py) | 11.3 kB | Build or run tool: build.py (see the README). | [README.md](../portfolios-src/droplets/README.md) |
 | [`portfolios-src/droplets/tools/figs.cjs`](../portfolios-src/droplets/tools/figs.cjs) | 27.2 kB | Build or run tool: figs.cjs (see the README). | [README.md](../portfolios-src/droplets/README.md) |
 | [`portfolios-src/droplets/tools/gen_tables.cjs`](../portfolios-src/droplets/tools/gen_tables.cjs) | 1.0 kB | Build or run tool: gen_tables.cjs (see the README). | [README.md](../portfolios-src/droplets/README.md) |
 | [`portfolios-src/droplets/tools/katex_render.cjs`](../portfolios-src/droplets/tools/katex_render.cjs) | 606 B | Build or run tool: katex_render.cjs (see the README). | [README.md](../portfolios-src/droplets/README.md) |
@@ -655,13 +656,13 @@ to confirm that every file is described. Sizes are those of the files when the l
 | [`docs/minor-issues-report.md`](minor-issues-report.md) | 19.9 kB | Documentation: Minor issues · final verification report. | [minor-issues-report.md](minor-issues-report.md) |
 | [`docs/notes.md`](notes.md) | 3.7 kB | Documentation: The lecture-note review: `notes/` and `.claude/agents/`. | [notes.md](notes.md) |
 | [`docs/pages.md`](pages.md) | 51.6 kB | Documentation: The site's own pages: home, simulations catalog, Portfolios, robots.txt. | [pages.md](pages.md) |
-| [`docs/portfolios.md`](portfolios.md) | 47.2 kB | Documentation: The four research projects: `public/portfolios/`. | [portfolios.md](portfolios.md) |
+| [`docs/portfolios.md`](portfolios.md) | 51.3 kB | Documentation: The four research projects: `public/portfolios/`. | [portfolios.md](portfolios.md) |
 | [`docs/research-theory-audit.md`](research-theory-audit.md) | 29.1 kB | Documentation: Readability audit: Droplet Collection and Rotor Pendula. | [research-theory-audit.md](research-theory-audit.md) |
 | [`docs/scripts/catalog.md`](scripts/catalog.md) | 15.1 kB | Documentation: public/scripts/catalog.js. | [catalog.md](scripts/catalog.md) |
-| [`docs/scripts/datalog.md`](scripts/datalog.md) | 63.5 kB | Documentation: public/scripts/datalog.js. | [datalog.md](scripts/datalog.md) |
-| [`docs/scripts/dataset.md`](scripts/dataset.md) | 17.5 kB | Documentation: public/scripts/dataset.js. | [dataset.md](scripts/dataset.md) |
+| [`docs/scripts/datalog.md`](scripts/datalog.md) | 64.2 kB | Documentation: public/scripts/datalog.js. | [datalog.md](scripts/datalog.md) |
+| [`docs/scripts/dataset.md`](scripts/dataset.md) | 17.7 kB | Documentation: public/scripts/dataset.js. | [dataset.md](scripts/dataset.md) |
 | [`docs/scripts/fold.md`](scripts/fold.md) | 22.6 kB | Documentation: public/scripts/fold.js. | [fold.md](scripts/fold.md) |
-| [`docs/scripts/sim.md`](scripts/sim.md) | 26.8 kB | Documentation: public/scripts/sim.js. | [sim.md](scripts/sim.md) |
+| [`docs/scripts/sim.md`](scripts/sim.md) | 27.0 kB | Documentation: public/scripts/sim.js. | [sim.md](scripts/sim.md) |
 | [`docs/scripts/walk.md`](scripts/walk.md) | 19.9 kB | Documentation: public/scripts/walk/*.js. | [walk.md](scripts/walk.md) |
 | [`docs/simulations/fig01-wave-sources.md`](simulations/fig01-wave-sources.md) | 50.0 kB | Documentation: Fig. 1 · Wave Interference. | [fig01-wave-sources.md](simulations/fig01-wave-sources.md) |
 | [`docs/simulations/fig02-double-pendulum.md`](simulations/fig02-double-pendulum.md) | 49.7 kB | Documentation: Fig. 2 · Double Pendulum. | [fig02-double-pendulum.md](simulations/fig02-double-pendulum.md) |
@@ -687,7 +688,7 @@ to confirm that every file is described. Sizes are those of the files when the l
 | [`tools/i18n/ingest.py`](../tools/i18n/ingest.py) | 1.9 kB | Stores checked translations made outside the tables (page pieces, script strings, walkthrough prose). | [i18n.md](i18n.md) |
 | [`tools/i18n/package.json`](../tools/i18n/package.json) | 285 B | The parser wrap.cjs needs (acorn); npm install --prefix tools/i18n. | [i18n.md](i18n.md) |
 | [`tools/i18n/wrap.cjs`](../tools/i18n/wrap.cjs) | 3.7 kB | Wraps the reader-visible strings of a page's scripts in _t(), with a JavaScript parser (acorn). | [i18n.md](i18n.md) |
-| [`tools/inventory.py`](../tools/inventory.py) | 41.3 kB | Writes docs/files.md and checks that every file in the repository is described. | [files.md](files.md) |
+| [`tools/inventory.py`](../tools/inventory.py) | 41.5 kB | Writes docs/files.md and checks that every file in the repository is described. | [files.md](files.md) |
 | [`tools/make_portfolio_copy.py`](../tools/make_portfolio_copy.py) | 4.4 kB | Builds a browser-only website copy of a research app from its source, without changing the app or installing dependencies. | [portfolios.md](portfolios.md) |
 
 ## Translation tables

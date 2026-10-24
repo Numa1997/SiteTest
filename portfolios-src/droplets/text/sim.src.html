@@ -75,8 +75,8 @@ outline the air is saturated; outside it drops evaporate. Drops collide only wit
 <div class="status" id="sh-status" aria-live="polite"></div>
 <div class="readout" id="sh-out">Press Start. Click inside the picture to pin a probe; its values appear below the picture.</div>
 </div>
-<div class="plots"><div class="mono" id="sh-time" style="font-size:13px">t = 0.0 min</div><div class="plot"><canvas id="sh-cv" style="width:100%;height:auto;display:block" aria-label="drops in a cloud slice"></canvas></div>
-<div class="note" style="font-size:12.5px">Grey line at the bottom: the ground, where rain is counted. Pale blue: the saturated cloud. Thin arrows: the mean motion.</div>
+<div class="plots"><div class="mono" id="sh-time" style="font-size:13px">t = 0.0 min</div><div class="plot"><div id="stage"><canvas id="sh-cv" style="width:100%;height:auto;display:block" aria-label="drops in a cloud slice"></canvas></div>
+<div class="note stage__cap" style="font-size:12.5px"><span>Grey line at the bottom: the ground, where rain is counted. Pale blue: the saturated cloud. Thin arrows: the mean motion.</span></div></div>
 <div class="readout" id="sh-probe">No probe pinned.</div></div>
 </div>
 <p class="note">This panel uses 32 super-droplets per cell to stay quick. Chapter 12's box test shows that this is about 12 % slow in reaching
