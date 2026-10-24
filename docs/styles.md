@@ -187,7 +187,7 @@ Expand / Collapse pair gets a 104 px top margin to match it ([fold.css:124](../p
 | Purpose | Selectors | Lines |
 |---|---|---|
 | Base | box-sizing, `html`, `body`, headings, links, focus ring for links, buttons and inputs | [34–43](../public/styles/sim.css#L34-L43) |
-| Top bar | `.sim-top`, `.sim-nav` (the Fig. 1–10 links; `aria-current="page"` outlined in wine) | [46–53](../public/styles/sim.css#L46-L53) |
+| Top bar | `.sim-top`, `.sim-nav` (the Fig. 1–11 links; `aria-current="page"` outlined in wine) | [46–53](../public/styles/sim.css#L46-L53) |
 | Page head | `.sim`, `.sim__head`, `.sim__num`, `h1` (38–66 px), `.sim__lede` (Latin Modern italic) | [56–61](../public/styles/sim.css#L56-L61) |
 | Figure and panel grid | `.sim__grid` (figure + 320 px panel), `.stack` | [63–64](../public/styles/sim.css#L63-L64) |
 | Figure | `.stage`, `.stage__canvas` (aspect `--ar`, graph paper), `.stage__cap` (Latin Modern caption, mono figure number, tabular digits) | [67–74](../public/styles/sim.css#L67-L74) |

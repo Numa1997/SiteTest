@@ -7,7 +7,7 @@ This page is the map. Every box on it has its own page in `docs/`; the links say
 ```
 index.html  (home: logo and note, CV, research, simulation plates)
   ├── public/simulations.html      the catalog: one card per simulation, in figure order
-  │     └── public/simulations/*.html   ten simulation pages (Figs. 1–10)
+  │     └── public/simulations/*.html   eleven simulation pages (Figs. 1–11)
   └── public/portfolios.html       the four research projects
         ├── public/portfolios/droplet-collection/index.html#/…   built copy of its own app
         ├── public/portfolios/rotor-pendula/index.html#/…        built copy of its own app

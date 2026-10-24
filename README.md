@@ -54,6 +54,7 @@ Beside the site's files, `docs/` explains every file and every script and how th
 | 8 | Draw & Decompose | [`draw-decompose.html`](public/simulations/draw-decompose.html) | [fig08-draw-decompose.md](docs/simulations/fig08-draw-decompose.md) |
 | 9 | Driven Oscillator | [`driven-oscillator.html`](public/simulations/driven-oscillator.html) | [fig09-driven-oscillator.md](docs/simulations/fig09-driven-oscillator.md) |
 | 10 | Wind Turbine Control | [`wind-turbine.html`](public/simulations/wind-turbine.html) | [fig10-wind-turbine.md](docs/simulations/fig10-wind-turbine.md) |
+| 11 | Double Pendulum under Control | [`pendulum-control.html`](public/simulations/pendulum-control.html) | [fig11-pendulum-control.md](docs/simulations/fig11-pendulum-control.md) |
 
 ## Running the site on your own computer
 
