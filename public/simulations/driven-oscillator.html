@@ -1451,10 +1451,14 @@
             c.fillStyle = BURG; c.strokeStyle = T.card; c.lineWidth = 1.5; c.beginPath(); c.arc(G.X(ds.get('x_now')), G.V(ds.get('v_now')), 5, 0, Math.PI * 2); c.fill(); c.stroke();
             ds.set('ph_x_px', G.X(ds.get('x_now'))); ds.set('ph_v_px', G.V(ds.get('v_now')));
         }
+        function kindName(kd) {
+            // the kind is a code value in the store; its name is shown in the reader's language
+            return { 'stable focus': _t('stable focus'), 'stable node': _t('stable node'), 'degenerate stable node': _t('degenerate stable node'), 'unstable': _t('unstable'), 'centre': _t('centre') }[kd] || kd;
+        }
         function eigText() {
             var re = ds.get('lam_re'), im = ds.get('lam_im'), n = ds.get('n_eig'), parts = [];
             for (var q = 0; q < n; q++) { if (im[q] < -1e-12) continue; parts.push(Math.abs(im[q]) > 1e-12 ? Sim.fmt(re[q], 3).replace('-', '−') + ' ± ' + Sim.fmt(im[q], 3) + 'i' : Sim.fmt(re[q], 3).replace('-', '−')); }
-            return '<i>λ</i> = ' + parts.join(', ') + ' s⁻¹ · ' + _t(ds.get('fp_kind')) + (ds.get('F0') > 0 ? ' · |<i>μ</i>| = ' + Sim.fmt(ds.get('mu_max'), 3) + _t(' per period') : '');
+            return '<i>λ</i> = ' + parts.join(', ') + ' s⁻¹ · ' + kindName(ds.get('fp_kind')) + (ds.get('F0') > 0 ? ' · |<i>μ</i>| = ' + Sim.fmt(ds.get('mu_max'), 3) + _t(' per period') : '');
         }
 
         function bodeGeom() {

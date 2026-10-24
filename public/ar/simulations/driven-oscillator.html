@@ -21,13 +21,29 @@
         .solve__status.is-stale { color: var(--accent); }
         #solve.is-due { box-shadow: 0 0 0 3px rgba(122, 31, 43, 0.28); }
         .fr-view { display: inline-flex; }
+        /* the take-control strip: the three steps of a hand experiment, above the figure */
+        .take { background: var(--card); border: 1px solid var(--rule); border-left: 3px solid var(--accent); border-radius: 10px; padding: 14px 18px 16px; margin-bottom: 16px; }
+        .take__title { margin: 0 0 8px; font-family: var(--serif); font-size: 26px; line-height: 1.1; color: var(--accent-dark); }
+        .take__steps { list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 12px 20px; font-size: 14px; line-height: 1.45; color: var(--ink-2); }
+        .take__steps li { display: flex; flex-direction: column; gap: 8px; }
+        .take__steps li > span:nth-child(2) { display: block; }
+        .take__n { display: inline-grid; place-items: center; width: 22px; height: 22px; border-radius: 50%; background: var(--accent); color: var(--card); font-family: var(--mono); font-size: 12px; }
+        .take__r { margin: 0; }
+        .take__hint { margin: 12px 0 0; font-size: 13px; color: var(--accent); min-height: 1.4em; }
+        .take__gains { margin-top: 12px; padding-top: 10px; border-top: 1px solid var(--rule-soft, #e6dfd2); display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 4px 20px; }
+        .take__gains .panel__label { grid-column: 1 / -1; margin: 0 0 4px; }
+        .take .actions .btn.is-on { background: var(--accent); color: var(--card); border-color: var(--accent); }
+        @media (max-width: 900px) { .take__steps, .take__gains { grid-template-columns: 1fr; } }
+        /* this simulation needs room to move: a wider page and a narrower control column */
+        .sim, .sim-top { max-width: 1560px; }
+        @media (min-width: 901px) { .sim__grid { grid-template-columns: minmax(0, 1fr) 300px; } }
         .seek { display: grid; gap: 4px; }
         .seek__row { display: flex; justify-content: space-between; font-family: var(--mono); font-size: 11px; color: var(--muted); }
     </style>
 
     <link rel="stylesheet" href="../../fonts/arabic.css" />
     <script src="../../scripts/i18n/strings-ar.js"></script>
-    <meta name="translated-from" content="English public/simulations/driven-oscillator.html, commit 23bcfca+" />
+    <meta name="translated-from" content="English public/simulations/driven-oscillator.html, commit 6d75362+" />
   </head>
 <body>
     <header class="sim-top">
@@ -57,8 +73,42 @@
 
         <div class="sim__grid">
             <div>
+                <section class="take" aria-labelledby="take-title">
+                    <p class="take__title" id="take-title">Take control<span class="i18n-pending" title="translation being updated"></span></p>
+                    <ol class="take__steps">
+                        <li><span class="take__n">1</span><span>Switch the controller on.<span class="i18n-pending" title="translation being updated"></span></span>
+                            <span class="actions" role="group" aria-label="إعدادات المتحكّم المسبقة">
+                                <button type="button" class="btn btn--ghost" data-gains="0,0,0">إيقاف</button>
+                                <button type="button" class="btn btn--ghost" data-gains="20,0,0">P</button>
+                                <button type="button" class="btn btn--ghost" data-gains="20,0,4">PD</button>
+                                <button type="button" class="btn btn--ghost" data-gains="20,10,4">PID</button>
+                            </span></li>
+                        <li><span class="take__n">2</span><span>Choose where the block should rest: set <b>r</b> here, or drag the flag on the ruler.<span class="i18n-pending" title="translation being updated"></span></span>
+                            <label class="ctl take__r">
+                                <span class="ctl__row"><span>الموضع المستهدف r</span><output id="r-out" for="r"></output></span>
+                                <input type="range" id="r" min="-0.5" max="0.5" step="0.01" value="0.3">
+                            </label></li>
+                        <li><span class="take__n">3</span><span>Grab the block, pull it anywhere, and let go. The controller brings it back to <b>r</b>.<span class="i18n-pending" title="translation being updated"></span></span></li>
+                    </ol>
+                    <p class="take__hint" id="take-hint" aria-live="polite">—</p>
+                    <div class="take__gains">
+                        <p class="panel__label">المتحكّم · u = Kₚ(r − x) + Kᵢ∫(r − x)dt − K_d ẋ</p>
+                        <label class="ctl">
+                            <span class="ctl__row"><span>الكسب التناسبي Kₚ</span><output id="Kp-out" for="Kp"></output></span>
+                            <input type="range" id="Kp" min="0" max="60" step="0.5" value="0">
+                        </label>
+                        <label class="ctl">
+                            <span class="ctl__row"><span>الكسب التكاملي Kᵢ</span><output id="Ki-out" for="Ki"></output></span>
+                            <input type="range" id="Ki" min="0" max="60" step="0.5" value="0">
+                        </label>
+                        <label class="ctl">
+                            <span class="ctl__row"><span>الكسب التفاضلي K_d</span><output id="Kd-out" for="Kd"></output></span>
+                            <input type="range" id="Kd" min="0" max="12" step="0.1" value="0">
+                        </label>
+                    </div>
+                </section>
                 <figure class="stage">
-                    <div class="stage__canvas" id="stage" style="--ar: 16 / 13; --ar-m: 1 / 1.62;">
+                    <div class="stage__canvas" id="stage" style="--ar: 16 / 12.2; --ar-m: 1 / 1.62;">
                         <canvas id="osc" aria-label="كتلة على نابض ومخمّد، يدفعها من الجهة الأخرى ملفّ موضوع في فجوة مغناطيس ثابت ويحمل تيارًا متناوبًا؛ تُظهر الأسهم قوى المحرّك والمخمّد والنابض المؤثّرة في الكتلة، وتُظهر الأشرطة الشغل الداخل والحرارة المتولّدة؛ وتحتها الإزاحة المخزّنة x(t) للحلّ كلّه، مع مؤشّر عند الإطار المعروض."></canvas>
                     </div>
                     <figcaption class="stage__cap">
@@ -72,6 +122,15 @@
                     </div>
                     <figcaption class="stage__cap">
                         <span><b>منحنى القوى عبر الزمن</b> · <span class="tx">\(u = u_P + u_I + u_D\)</span>، والدفع، و<span class="tx">\(-kx\)</span> و<span class="tx">\(-c\dot x\)</span> على مدى الحلّ</span>
+                    </figcaption>
+                </figure>
+                <figure class="stage" style="margin-top: 16px;">
+                    <div class="stage__canvas" id="stage-phase" style="--ar: 16 / 8.2; --ar-m: 1 / 1.05;">
+                        <canvas id="phase" aria-label="Phase portrait: the run as a path in the plane of position x and velocity ẋ, with the fixed point, the steady orbit, one dot per drive period, and arrows of the free flow."></canvas>
+                    </div>
+                    <figcaption class="stage__cap">
+                        <span><b>Phase portrait</b> · the state <span class="tx">\((x, \dot x)\)</span> of the run, the fixed point <span class="tx">\(x^*\)</span>, the steady orbit and one dot per drive period<span class="i18n-pending" title="translation being updated"></span></span>
+                        <span id="cap-eig">—</span>
                     </figcaption>
                 </figure>
                 <figure class="stage" style="margin-top: 16px;">
@@ -135,32 +194,6 @@
                     </label>
                 </div>
 
-                <div class="panel__group">
-                    <p class="panel__label">المتحكّم · u = Kₚ(r − x) + Kᵢ∫(r − x)dt − K_d ẋ</p>
-                    <div class="actions" role="group" aria-label="إعدادات المتحكّم المسبقة">
-                        <button type="button" class="btn btn--ghost" data-gains="0,0,0">إيقاف</button>
-                        <button type="button" class="btn btn--ghost" data-gains="20,0,0">P</button>
-                        <button type="button" class="btn btn--ghost" data-gains="20,0,4">PD</button>
-                        <button type="button" class="btn btn--ghost" data-gains="20,10,4">PID</button>
-                    </div>
-                    <label class="ctl">
-                        <span class="ctl__row"><span>الموضع المستهدف r</span><output id="r-out" for="r"></output></span>
-                        <input type="range" id="r" min="-0.5" max="0.5" step="0.01" value="0.3">
-                    </label>
-                    <label class="ctl">
-                        <span class="ctl__row"><span>الكسب التناسبي Kₚ</span><output id="Kp-out" for="Kp"></output></span>
-                        <input type="range" id="Kp" min="0" max="60" step="0.5" value="0">
-                    </label>
-                    <label class="ctl">
-                        <span class="ctl__row"><span>الكسب التكاملي Kᵢ</span><output id="Ki-out" for="Ki"></output></span>
-                        <input type="range" id="Ki" min="0" max="60" step="0.5" value="0">
-                    </label>
-                    <label class="ctl">
-                        <span class="ctl__row"><span>الكسب التفاضلي K_d</span><output id="Kd-out" for="Kd"></output></span>
-                        <input type="range" id="Kd" min="0" max="12" step="0.1" value="0">
-                    </label>
-                </div>
-
                 <dl class="readouts">
                     <div><dt>السعة المستقرّة X</dt><dd id="r-X">—</dd></div>
                     <div><dt>مقيسة، آخر ⁦10 s⁩</dt><dd id="r-Xm">—</dd></div>
@@ -188,7 +221,7 @@
                 <p class="paper__kicker">مذكّرة المحاضرة · الشكل 9 · أنظمة التحكّم</p>
                 <h2 class="paper__title" id="paper-title">الاهتزازات القسرية: كيف يستجيب النظام لدفعة، وكيف يتولّى المتحكّم أمر الدفع</h2>
                 <p class="paper__by">نعمة سائر قدسية · لطلبة المدارس وطلبة السنتين الأولى والثانية في الجامعة</p>
-                <div class="paper__abstract"><b>الملخّص.</b> ما من آلة تقريبًا إلّا وتُدفع من الخارج: هيكل السيّارة بالطريق، والمبنى بالرياح، ومخروط مكبّر الصوت بالمضخّم. تدرس هذه المذكّرة أبسط نظام من هذا النوع، كتلة على نابض مع مخمّد، تؤثّر فيها قوّة \(F_0\cos\Omega t\) يقرّرها شخص آخر. نكتب معادلة حركته، ونحلّها حلًّا دقيقًا، ونستخدم الحلّ الدقيق لتقييم الحلّ العددي الذي تخزّنه الصفحة. وفي الطريق نلتقي بالرنين وتأخّر الطور ومعامل الجودة، ونترجم كل ذلك إلى لغة هندسة التحكّم: الدخل والخرج ودالّة التحويل ومخطّط بودي. وفي الجزء الأخير نغلق الحلقة: يقيس متحكّمٌ موضع الكتلة ويحسب القوّة، وتقرّر معاملات الكسب الثلاثة فيه أين تستقرّ الكتلة، وبأيّ سرعة تبلغ موضعها، وما مدى شدّة تخامدها. تحمل الأقسام المعلّمة بـ ★ الرياضيات الأثقل، ويمكن تخطّيها في القراءة الأولى.</div>
+                <div class="paper__abstract"><b>Abstract.</b> Almost every machine is pushed by something outside it: a car body by the road, a building by the wind, a loudspeaker cone by the amplifier. This note studies the simplest such system, a mass on a spring with a damper, driven by a force \(F_0\cos\Omega t\) that someone else decides. We write down its equation of motion, solve it exactly, and use the exact answer to grade the numerical solution the page stores. Along the way we meet resonance, phase lag and the quality factor, and we translate everything into the language of control engineering: input, output, transfer function and Bode plot. We build the driver as a real machine, a coil in a magnet. Then we close the loop: a controller measures the block and computes the force, and its three gains decide where the block comes to rest, how quickly it gets there and how strongly it is damped; you can take the block in your hand and watch the controller bring it back. Finally we draw the motion in phase space and classify its fixed points: focus or node, stable or not, and the steady swing that every driven run ends on. Sections marked ★ carry the heavier mathematics and can be skipped on a first reading.<span class="i18n-pending" title="translation being updated"></span></div>
             </header>
             <div class="paper__grid">
                 <nav class="paper__toc" aria-label="المحتويات">
@@ -202,8 +235,11 @@
                         <li><a href="#p-start"><span>6</span>البداية: الضربات والاضمحلال</a></li>
                         <li><a href="#p-energy"><span>7</span>أين تذهب الطاقة</a></li>
                         <li><a href="#p-solve"><span>8</span>احسب أوّلًا، ثم شغّل</a></li>
-                        <li><a href="#p-screen"><span>9</span>إغلاق الحلقة، وما على الشاشة</a></li>
-                        <li><a href="#p-limits"><span>10</span>ما يغفله النموذج</a></li>
+                        <li><a href="#p-coil"><span>9</span>The driver: a coil in a magnet<span class="i18n-pending" title="translation being updated"></span></a></li>
+                        <li><a href="#p-loop"><span>10</span>Closing the loop<span class="i18n-pending" title="translation being updated"></span></a></li>
+                        <li><a href="#p-phase"><span>11</span>Phase space and stable points<span class="i18n-pending" title="translation being updated"></span></a></li>
+                        <li><a href="#p-screen"><span>12</span>On screen<span class="i18n-pending" title="translation being updated"></span></a></li>
+                        <li><a href="#p-limits"><span>13</span>What the model leaves out<span class="i18n-pending" title="translation being updated"></span></a></li>
                     </ol>
                 </nav>
                 <div class="paper__body">
@@ -250,7 +286,7 @@
                         \[ m\ddot x + c\dot x + kx = F_0\cos\Omega t . \tag{1} \]
                         <p>من الأوضح وصف المنظومة بعددين لهما معنى مباشر. <em>التردد الطبيعي</em> \(\omega_0 = \sqrt{k/m}\) هو التردد الزاوي الذي كانت الكتلة ستهتزّ به بلا مخمّد؛ و<em>نسبة التخامد</em> \(\zeta = c/(2\sqrt{km})\) تبيّن سرعة اضمحلال الاهتزاز، من \(\zeta = 0\) (لا يضمحلّ أبدًا) إلى \(\zeta = 1\) (لا اهتزاز البتّة). بقسمة (1) على \(m\)،</p>
                         \[ \ddot x + 2\zeta\omega_0\,\dot x + \omega_0^2\,x = \frac{F_0}{m}\cos\Omega t . \tag{2} \]
-                        <p>في الصفحة \(m = 1\ \mathrm{kg}\)، وتضبط المنزلقات ثابت النابض \(k\)، ونسبة التخامد \(\zeta\)، و\(F_0\)، وتردد القوّة الدافعة \(f = \Omega/2\pi\)؛ ويتحدّد التردد الطبيعي من النابض، \(f_0 = \sqrt{k/m}/2\pi\)، والمخمّد من كليهما، \(c = 2\zeta\sqrt{km}\). وبالقيم الافتراضية \(k = 9.87\ \mathrm{N/m}\) و\(\zeta = 0.05\)، فيكون \(f_0 = 0.5\ \mathrm{Hz}\) و\(c = 0.314\ \mathrm{kg/s}\). وبعد «احسب» تبدأ الكتلة من السكون عند موضع سكونها، \(x(0) = 0\)، \(\dot x(0) = 0\)؛ ويبيّن §9 كيف تبدأ الحركة من أيّ موضع باليد.</p>
+                        <p>On the page \(m = 1\ \mathrm{kg}\), and the sliders set the spring constant \(k\), the damping ratio \(\zeta\), \(F_0\) and the drive frequency \(f = \Omega/2\pi\); the natural frequency follows from the spring, \(f_0 = \sqrt{k/m}/2\pi\), and the damper from both, \(c = 2\zeta\sqrt{km}\). With the defaults, \(k = 9.87\ \mathrm{N/m}\) and \(\zeta = 0.05\), so \(f_0 = 0.5\ \mathrm{Hz}\) and \(c = 0.314\ \mathrm{kg/s}\). After Solve the block starts at rest in its rest position, \(x(0) = 0\), \(\dot x(0) = 0\); §10 shows how to start it anywhere by hand.<span class="i18n-pending" title="translation being updated"></span></p>
                         <p>لاحظ ما يميّز هذه المعادلة عن النوّاس المزدوج في الشكل 2: الزمن \(t\) يظهر صراحةً داخل \(\cos\Omega t\). فالمستقبل لا يتوقّف على موضع الكتلة وحده، بل على الساعة أيضًا، لأن الساعة ملك لغيرنا.</p>
                     </section>
 
@@ -378,7 +414,7 @@
                         <p>يختصر المهندسون كل ما سبق في دالّة واحدة. نأخذ تحويل لابلاس للمعادلة (1) والكتلة ساكنة عند البداية: يصبح كل مشتقّ زمني عاملًا \(s\)، ويكون الخرج هو الدخل مضروبًا في <em>دالّة التحويل</em> \(G(s)\). وهنا \(X(s)\) و\(F(s)\) هما تحويلا \(x(t)\) و\(F(t)\)، لا السعة \(X\) في (4):</p>
                         \[ X(s) = G(s)\,F(s), \qquad G(s) = \frac{1}{ms^2 + cs + k} . \tag{7} \]
                         <p>أصفار المقام، أي <em>الأقطاب</em> \(s = -\zeta\omega_0 \pm i\omega_d\)، هي إيقاع المنظومة الخاصّ متنكّرًا: جزؤها الحقيقي هو معدّل الاضمحلال بإشارة سالبة، \(-1/\tau\)، وجزؤها التخيّلي هو تردد الاهتزاز \(\omega_d\). ويقع الاثنان في النصف الأيسر من المستوى المركّب، وهذا ما يجعل المنظومة <em>مستقرّة</em>: إن تُركت وحدها عادت إلى السكون.</p>
-                        <p>بوضع \(s = i\Omega\) نحصل على الاستجابة لدخل جيبي مستقرّ، وبالمقارنة مع (3) يكون \(G(i\Omega) = X e^{-i\varphi}/F_0\). ورسم \(|G(i\Omega)|\) و\(\varphi\) بدلالة تردد القوّة الدافعة على محورين لوغاريتميّين يعطي <em>مخطّط بودي</em>، وهو الشكل الثاني في هذه الصفحة. إنه بطاقة هوية المنظومة: منه يقرأ المهندس مقدار ما ينفذ من كل تردد، ومدى تأخّره في الوصول. وتصميم متحكّم، أي جهاز يقيس \(x\) ويضيف قوّة تصحيح، يعني إعادة تشكيل هذه البطاقة. ويفعل الشكل 10 ذلك لتوربين رياح.</p>
+                        <p>Setting \(s = i\Omega\) gives the response to a steady sinusoidal input, and comparing with (3), \(G(i\Omega) = X e^{-i\varphi}/F_0\). Plotting \(|G(i\Omega)|\) and \(\varphi\) against the drive frequency on logarithmic axes gives the <em>Bode plot</em>, the Bode view of the last figure on this page; its linear view shows the same curves as the amplitude function of §12. It is the plant’s identity card: from it an engineer reads how strongly each frequency gets through and how late it arrives. Designing a controller, a device that measures \(x\) and adds a correcting force, means reshaping this card. §10 does that for this oscillator, and Fig. 10 for a wind turbine.<span class="i18n-pending" title="translation being updated"></span></p>
                         <figure class="pfig">
                             <div class="pfig__plate">
                                 <svg viewBox="0 0 720 120" role="img" aria-label="Block diagram: the input F(t) enters the plant G(s), which outputs x(t).">
@@ -396,7 +432,7 @@
                                     <text class="m" x="550" y="88">x(t)</text>
                                 </svg>
                             </div>
-                            <figcaption><span class="pfig__n">الشكل 3</span>المنظومة نفسها في صورة مخطّط كتلي. لا يوجد سهم عائد من \(x\) إلى \(F\): فالمحرّك يؤثّر دون أن ينظر. وإضافة هذا السهم هي ما يحوّل المنظومة المقسورة إلى منظومة مُتحكَّم بها.</figcaption>
+                            <figcaption><span class="pfig__n">Figure 3</span>The same system as a block diagram. There is no arrow back from \(x\) to \(F\): the driver acts without looking. Adding such an arrow is what turns a driven system into a controlled one (§10).<span class="i18n-pending" title="translation being updated"></span></figcaption>
                         </figure>
                     </section>
 
@@ -467,17 +503,17 @@
 
                     <section class="psec" id="p-solve">
                         <h3><span class="psec__n">08</span>احسب أوّلًا، ثم شغّل</h3>
-                        <p>على خلاف الأشكال السابقة، لا تحسب هذه الصفحة أثناء مشاهدتك. ولأن قوّة المحرّك معروفة مقدّمًا لكل الأزمنة، يتحدّد المستقبل كلّه لحظة ضغطك على <em>احسب</em>. وتستفيد الصفحة من ذلك.</p>
+                        <p>Unlike the earlier figures, this page does not integrate while you watch. The force is a known function of time, and with the controller on a known function of time and of the state, so the whole future is fixed the moment you press <em>Solve</em> or let go of the block. The page uses that.<span class="i18n-pending" title="translation being updated"></span></p>
                         <ol>
-                            <li><strong>احسب.</strong> تقدّم طريقة رونغه–كوتا من المرتبة الرابعة \((x, \dot x)\) من \(t = 0\) إلى \(60\ \mathrm{s}\) في 60 000 خطوة طول كلّ منها \(h = 1\ \mathrm{ms}\)، وتحمل معها \(W_\text{in}\) و\(W_\text{loss}\) في الخطوات نفسها. وقد استغرق الحلّ الافتراضي، مقيسًا في Chromium بلا واجهة، من 9.5 إلى ⁦12.4 ms⁩؛ والزمن يتوقّف على الحاسوب.</li>
+                            <li><strong>Solve.</strong> The fourth-order Runge–Kutta method advances \((x, \dot x)\), and with the controller its memory \(z\), from \(t = 0\) to \(60\ \mathrm{s}\) in 60 000 steps of \(h = 1\ \mathrm{ms}\), carrying \(W_\text{in}\) and \(W_\text{loss}\) along in the same steps. Measured in headless Chromium, a solve took 5–13 ms, and up to 45 ms for the first one after the page loads; the time depends on the machine.<span class="i18n-pending" title="translation being updated"></span></li>
                             <li><strong>خزّن.</strong> تُكتب كل حالة عاشرة في مجموعة بيانات الصفحة مع \(F\) و\(E\) و\(P_\text{in}\) و\(P_\text{loss}\): 6 001 صفّ، صفّ كل \(10\ \mathrm{ms}\). ويُخزَّن الحلّ الدقيق (5) بجانبها فقط لقياس الخطأ. وبالقيم الافتراضية يكون أكبر فرق على مدى الحلّ \(5\times10^{-12}\ \mathrm{m}\)، وهي قراءة <em>RK4 مقابل الحلّ الدقيق</em>.</li>
                             <li><strong>شغّل.</strong> يحوّل كل إطار زمن التشغيل إلى أقرب صفّ مخزّن، \(n = \operatorname{round}(t_\text{play}/10\,\mathrm{ms})\)، ويرسم ذلك الصفّ كما هو. لا يجري أيّ استيفاء أو إعادة حساب، فالصورة ولوحة البيانات تعرضان دائمًا الأرقام نفسها، ويستطيع منزلق <em>الحلّ المخزَّن</em> القفز إلى أيّ لحظة.</li>
                         </ol>
-                        <p>عند تحريك منزلق بعد الحساب، تُنبّه الصفحة إلى ذلك وتواصل عرض الحلّ القديم حتى تحسب من جديد: فالبيانات المعروضة تنتمي دائمًا إلى الإعدادات المذكورة في شريط الحالة.</p>
+                        <p>When you move a slider after solving, the page says so and keeps playing the old run until you solve again: the data on screen always belong to the settings of the last Solve. Two actions solve by themselves, because they are commands rather than changes of the machine: letting go of the block, and a new target \(r\), which takes effect from the state on screen at that moment.<span class="i18n-pending" title="translation being updated"></span></p>
                     </section>
 
-                    <section class="psec" id="p-screen">
-                        <h3><span class="psec__n">09</span>إغلاق الحلقة، وما على الشاشة</h3>
+                    <section class="psec" id="p-coil">
+                        <h3><span class="psec__n">09</span>The driver: a coil in a magnet<span class="i18n-pending" title="translation being updated"></span></h3>
                         <p>يعمل المحرّك الظاهر على الشاشة عمل مكبّر الصوت، أو عمل الهزّازات الكهروديناميكية التي يستعملها المهندسون لهزّ قطع الاختبار. يُلفّ ملفّ من السلك على أنبوب خفيف مثبّت في الوجه الأيمن للكتلة، وينزلق الأنبوب في الفجوة الضيّقة لمغناطيس قائم على الأرضية. وفي الفجوة يتّجه الحقل \(B\) شعاعيًّا مبتعدًا عن القطب المركزي، فيكون كل جزء من لفّات الملف عموديًّا عليه، وتتّجه قوّة لورنتز \(\mathrm d\vec F = I\,\mathrm d\vec\ell \times \vec B\) المؤثّرة في كل جزء على طول المحور. وبجمعها على الطول \(\ell\) من السلك الواقع في الفجوة نحصل على</p>
                         \[ F = B\ell\, I , \qquad I(t) = I_0\cos\Omega t , \tag{9} \]
                         <p>فالمصدر الذي يمرّر التيار \(I_0\cos\Omega t\) في الملف يدفع الكتلة بالقوّة نفسها التي في (1) تمامًا، حيث \(F_0 = B\ell I_0\). وتأخذ الصفحة \(B\ell = 10\ \mathrm{T\,m}\)، كأن يكون \(B = 1\ \mathrm T\) مع ⁦10 m⁩ من السلك، أي نحو 100 لفّة لملفّ قطره ⁦3.2 cm⁩؛ وعندئذ يساوي \(I_0 = F_0/(B\ell)\) القيمة ⁦0.1 A⁩ بالقيم الافتراضية و⁦0.5 A⁩ عند أكبر قوّة، وهي ⁦5 N⁩. وتبيّن النقاط والعلامات × على اللفّات التيار: النقطة تيار خارج من الشاشة، والعلامة × تيار داخل إليها، وحين تتبادلان المواضع تنعكس القوّة. ويُبقي شرطان هذه القوّةَ دالّةً في الزمن وحده، كما يقتضي §1 من الدفع الخارجي. فيجب ألّا تغادر اللفّات أبدًا الحقلَ المنتظم في الفجوة، ولهذا كانت الفجوة على الشاشة أطول من اللفّات بمقدار مشوار الكتلة كاملًا. والرسم هنا سخيّ: فبالقيم الافتراضية تقطع الكتلة نحو متر، بينما تقطع ملفّات الهزّازات الحقيقية من بضعة مليمترات إلى بضعة سنتيمترات، فلو صُنع مغناطيس حقيقي بهذا الطول لكان آلة ضخمة؛ غير أنّ الفيزياء لا تتغيّر مع طول المشوار ما دام الحقل منتظمًا. ويجب أن يفرض المصدر التيار، لا الجهد.</p>
@@ -487,6 +523,10 @@
                         \[ F = \frac{B\ell}{R}\,V - \frac{(B\ell)^2}{R}\,\dot x , \tag{11} \]
                         <p>أي دفع المصدر مضافًا إليه مخمّد ثانٍ. ومع \(R = 8\ \Omega\) يكون لهذا المخمّد \((B\ell)^2/R = 12.5\ \mathrm{kg/s}\)، أي أربعون ضعف مخمّد الصفحة بالقيم الافتراضية، ونسبة تخامد تبلغ نحو 2 وحده. والحثّ نفسه يكبح عجلة بول في مختبر التدريس: فتخامدها مكبح بالتيارات الدوّامية، أي مغناطيس كهربائي يستحثّ حقله تيارات في معدن العجلة الدوّارة، ويشغّل المختبر هذا المغناطيس بتيار ثابت للسبب نفسه الذي من أجله تغذّي الصفحة ملفّها بتيار مفروض.</p>
                         <p>يُرسم المخمّد على حقيقته: مكبس في زيت. قوّته \(-c\dot x\) تتّجه دائمًا عكس الحركة، ويَدكن زيته وهو يحوّل الطاقة إلى حرارة، بقدر \(P_\text{loss} = c\dot x^2\) منسوبةً إلى أكبر قيمة لها في الحلّ. والأسهم الثلاثة فوق الكتلة هي القوى المؤثّرة فيها: قوّة الملف \(F\)، وقوّة المخمّد \(-c\dot x\)، وقوّة النابض \(-kx\)، ويُرسم كلٌّ منها بطول يساوي ضعف استطالة النابض التي تحمل تلك القوّة، فتشترك مع الحركة في مقياس الطول نفسه؛ ومجموعها \(m\ddot x\). وعند التحريك بالتردد \(f_0\) في الحالة المستقرّة، يتأرجح سهم النابض بطول يبلغ نحو \(Q\) مرّة طول كلّ من السهمين الآخرين، بينما يلغي سهما الملف والمخمّد أحدهما الآخر: فالمحرّك لا يفعل سوى تعويض ما يأخذه المخمّد، كما يقول §7. والأشرطة في الأعلى تعرض ميزان (8): الشغل \(W_\text{in}\) الذي بذله الملف منذ \(t = 0\)، والحرارة \(W_\text{loss}\) التي ولّدها المخمّد، والطاقة \(E\) التي يختزنها المهتزّ الآن، وهي الفرق بينهما.</p>
+                    </section>
+
+                    <section class="psec" id="p-loop">
+                        <h3><span class="psec__n">10</span>Closing the loop<span class="i18n-pending" title="translation being updated"></span></h3>
                         <p>حتى الآن كان يقرّر القوّةَ طرفٌ لا ينظر إلى الكتلة. فلنجعل القوّة تنظر الآن. يقيس حسّاسٌ \(x\)، فيقارنه متحكّم بموضع مستهدف \(r\) ويحسب التيار الذي يجب أن يحمله الملف، فتصبح القوّة المؤثّرة في الكتلة الدفعَ الخارجي مضافًا إليه حصّة المتحكّم \(u\). وهذه القوّة تتوقّف على موضع الكتلة: فلم يعد الدفع من الخارج وحده، وهذا هو جوهر التغذية الراجعة. وأبسط متحكّم مفيد يستعمل الخطأ \(e = r - x\)، ومجموعه المتراكم، والسرعة المقيسة:</p>
                         \[ u = K_p\,e + K_i\!\int_0^t e\,\mathrm dt' - K_d\,\dot x , \qquad m\ddot x + c\dot x + kx = F_0\cos\Omega t + u . \tag{12} \]
                         <p>كلّ كسب هو جزء فيزيائي يُضاف إلى المنظومة. فـ\(K_p\) (N/m) نابض ثانٍ موضع سكونه هو الموضع المستهدف بدل الجدار: أبعِد الكتلة عن \(r\) يُعِدها الملف إليه بقوّة تتناسب مع الإبعاد. و\(K_d\) (kg/s) مخمّد ثانٍ يعمل على السرعة المقيسة. و\(K_i\) (N/(m·s)) ذاكرة المتحكّم: ما دامت الكتلة في الجانب الخطأ من \(r\) يكبر التكامل ويشتدّ دفع الملف، ولا يكفّ التكامل عن الكبر إلّا حين ينعدم الخطأ. لنجمع حدود (12) التي تضرب \(x\) و\(\dot x\):</p>
@@ -499,14 +539,38 @@
                         <p>اقرأه سباقًا: التخامد المتاح في الحلقة، مضروبًا في صلابتها، يجب أن يغلب المعدّل الذي تُراكم به الذاكرة القوّة. للإعداد المسبق PID القيمة \(128.9 > 10\)، فهو مستقرّ؛ أمّا إذا ضبطت \(K_p = 5\) و\(K_d = 0\) و\(K_i = 60\) فيصبح الطرف الأيسر 4.7 مقابل 60: وتكبر تأرجحات الكتلة حتى توقف الصفحة الحلّال عند \(|x| = 1000\ \mathrm m\)، وتذكر القراءة ذلك. ولا يزال الدفع الخارجي يؤثّر عبر الحلقة المغلقة. واستجابته المستقرّة هي (3) بمعاملات (13) مع حدّ التكامل \(K_i/(i\Omega)\):</p>
                         \[ X = \frac{F_0}{\left|\,k + K_p - m\Omega^2 + i\left((c + K_d)\Omega - K_i/\Omega\right)\right|} , \tag{16} \]
                         <p>والكتلة تتأرجح بهذه السعة حول \(x^*\). ويرسم مخطّط بودي استجابة الحلقة المغلقة هذه \(H(i\Omega)\) بلون الحبر، ومن خلفها المنظومة وحدها \(G(i\Omega)\) بخطّ متقطّع: فالمتحكّم ينقل القمّة إلى التردد الطبيعي الجديد، ويسطّحها بـ\(K_d\)، ويدفع التكامل الاستجابة عند الترددات المنخفضة إلى الصفر، لأن الدفع البطيء يُصدّ ببساطة. وتقيّم الصفحة حلّها بطريقة RK4 مقابل الحلّ الدقيق للحلقة المغلقة أيضًا: الحلّ الخاصّ لـ(16) مضافًا إليه الحركة الحرّة لـ(13)، منقولةً من عيّنة إلى التي تليها بالأسّ المصفوفي الدقيق \(e^{A\,\Delta t}\) لمصفوفة حالة الحلقة.</p>
-                        <p>والآن خذ الكتلة بيدك. أمسكها على الشاشة واسحبها إلى أيّ موضع داخل المسطرة. وما دمت تمسكها تتوقّف ساعة الصفحة، لكن المتحكّم يظلّ يعمل: يقرأ موضع يدك، ويشدّ عكسها بالقوّة \(u\)، ويظلّ تكامله يجمع الخطأ، \(z = \int (r - x)\,\mathrm dt'\)، ثانيةً بعد ثانية. ويُظهر سهم رابع القوّة التي يجب أن تبذلها يدك، \(F_\text{hand} = kx + c\dot x - F\)، وهي القوّة التي توازن النابض والمخمّد والملف. فإذا أفلتّها حلّت الصفحة (12) من جديد انطلاقًا من الحالة التي تركتها عليها، \(x(0)\) و\(\dot x(0)\) (سرعة يدك، فيمكنك أن ترمي الكتلة) و\(z(0)\)، وشغّلت الحلّ الجديد من \(t = 0\)، ويبدأ الدفع الخارجي معه من جديد. ولا يتوقّف موضع الاتزان (14) على موضع بداية الكتلة، فيعيدها المتحكّم إلى \(x^*\) من أيّ موضع تركتها فيه؛ ومع إيقاف المتحكّم ترى بدلًا من ذلك التأرجح الحرّ المتخامد يضمحلّ بزمن الاضمحلال \(\tau\) من §3. أمسك الكتلة بضع ثوانٍ بعيدًا عن الموضع المستهدف والتكامل يعمل، فإذا أفلتّها تجاوزت \(r\) كثيرًا: فقد امتلأت الذاكرة بالخطأ وأنت تمسكها، وتحتاج إلى مدّة مماثلة لتفرغ. هذا هو التشبّع التكاملي (windup)، أشيع عيوب متحكّمات PI الحقيقية، وهو السبب في أنّ المتحكّمات الحقيقية تحدّ تكاملها. ولا تحتاج الحلول الدقيقة إلّا إلى تعديل ثوابتها لتلائم البداية الجديدة: ففي (5) تصبح \(C_1 = x(0) - X\cos\varphi\) و\(C_2 = (\dot x(0) + \zeta\omega_0 C_1 - X\Omega\sin\varphi)/\omega_d\)، وفي الحلقة المغلقة تبدأ الحركة الحرّة من \(x(0)\) و\(\dot x(0)\) و\(z(0)\) مطروحًا منها موضع الاتزان والتأرجح المستقرّ. وتقيّم الصفحة مقابلها كلّ حلّ يبدأ بعد الإفلات، كما من قبل.</p>
+                        <p>Now take the block in your hand; the <em>Take control</em> box above the figure walks you through it. Switch the controller on, choose the target \(r\) with its slider or by dragging the flag on the ruler, then grab the block on the screen and drag it anywhere within the ruler. A new target takes effect at once: the page solves again from the state on screen, and the block moves to it. While you hold it, the page’s clock stops, but the controller keeps working: it reads your hand’s position, pulls against it with \(u\), and its integral keeps adding up the error, \(z = \int (r - x)\,\mathrm dt'\), second by second. A fourth arrow shows the force your hand must give, \(F_\text{hand} = kx + c\dot x - F\), the force that balances spring, damper and coil. Let go, and the page solves (12) again from the state you left behind, \(x(0)\), \(\dot x(0)\) (the speed of your hand, so you can throw the block) and \(z(0)\), and plays the new run from \(t = 0\), the outside push restarting with it. The equilibrium (14) does not depend on where the block starts, so the controller brings it back to \(x^*\) from wherever you left it; with the controller off you see instead the free, damped swing dying away with the decay time \(\tau\) of §3. Hold the block for a few seconds away from the target with the integral on, and the release overshoots far past \(r\): the memory has filled up with error while you held it, and it takes as long again to empty. That is integrator windup, the most common fault of real PI controllers, and the reason real ones limit their integral. The exact solutions need only their constants adjusted to the new start: in (5) they become \(C_1 = x(0) - X\cos\varphi\) and \(C_2 = (\dot x(0) + \zeta\omega_0 C_1 - X\Omega\sin\varphi)/\omega_d\), and in the closed loop the free motion starts from \(x(0)\), \(\dot x(0)\) and \(z(0)\) less the equilibrium and the steady swing. The page grades every released run against them as before.<span class="i18n-pending" title="translation being updated"></span></p>
                         <p>يُظهر منحنى القوى عبر الزمن تحت الحركة مَن يدفع ومتى، بالنيوتن، على النافذة نفسها من الحلّ: الدفع الخارجي، و\(-kx\) للنابض، و\(-c\dot x\) للمخمّد، ومع تشغيل المتحكّم قوّته \(u\) وأجزاؤها الثلاثة. وبعد الإفلات يمكنك أن تراقب توزيع العمل: يقفز الجزء التناسبي مع الخطأ، ويكبح الجزء التفاضلي الحركة السريعة، ويرتفع الجزء التكاملي ببطء حتى يحمل وحده النابض عند \(x^*\).</p>
+                    </section>
+
+                    <section class="psec" id="p-phase">
+                        <h3><span class="psec__n">11</span>Phase space and stable points<span class="i18n-pending" title="translation being updated"></span></h3>
+                        <p>Two numbers tell the whole story of the block at one instant: where it is and how fast it moves. Equation (1) gives the acceleration from them, so the next instant follows, and the next. Draw the two numbers as a point in a plane, \(x\) across and \(\dot x\) up, and the motion becomes a path that the point traces: the <em>phase space</em> of the oscillator. A swing pushed by nobody draws a closed loop in it, out at the turning points with no speed, through the middle at full speed. A damper turns the loop into a spiral that winds into the middle, like a marble rolling around the inside of a bowl and losing a little height on every turn. The bottom of the bowl, where the marble can rest, is a <em>fixed point</em>.<span class="i18n-pending" title="translation being updated"></span></p>
+                        <p>Write the state as \(\mathbf y = (x, \dot x)\). With the push switched off, (1) or the loop (13) without its integral is a pair of first-order equations, \(\dot{\mathbf y} = A(\mathbf y - \mathbf y^*)\):<span class="i18n-pending" title="translation being updated"></span></p>
+                        \[ \frac{\mathrm d}{\mathrm dt}\begin{pmatrix} x - x^* \\ \dot x \end{pmatrix} = \begin{pmatrix} 0 & 1 \\ -\dfrac{k + K_p}{m} & -\dfrac{c + K_d}{m} \end{pmatrix} \begin{pmatrix} x - x^* \\ \dot x \end{pmatrix} . \tag{17} \]
+                        <p>The fixed point is where both rates vanish: \(\dot x = 0\) and the spring and the controller balance, \(\mathbf y^* = (x^*, 0)\) with \(x^*\) from (14); with the controller off, \(K_p = K_d = 0\) and \(x^* = 0\). Because (17) is linear, its solutions are combinations of \(e^{\lambda t}\), where the eigenvalues \(\lambda\) of the matrix are the roots of its characteristic polynomial, the denominator of (7) with the loop’s coefficients:<span class="i18n-pending" title="translation being updated"></span></p>
+                        \[ \begin{gathered} m\lambda^2 + (c + K_d)\,\lambda + (k + K_p) = 0 \\ \Longrightarrow\quad \lambda = -\zeta_\text{cl}\,\omega_\text{cl} \pm \omega_\text{cl}\sqrt{\zeta_\text{cl}^2 - 1}, \qquad \omega_\text{cl} = \sqrt{\frac{k + K_p}{m}} . \end{gathered} \tag{18} \]
+                        <p>The two numbers of the matrix that do not depend on how we draw it decide everything. Its trace, \(-(c + K_d)/m\), is the sum of the eigenvalues, and its determinant, \((k + K_p)/m\), their product. A negative trace and a positive determinant put both eigenvalues in the left half of the complex plane, and every path runs into the fixed point: it is <em>asymptotically stable</em>. The sign of the discriminant, \(\mathrm{tr}^2 - 4\det\), decides how the path arrives. For \(\zeta_\text{cl} < 1\) the eigenvalues are complex, the path spirals in, and the fixed point is a <em>stable focus</em>: the marble in thin oil, overshooting the bottom again and again. For \(\zeta_\text{cl} > 1\) both eigenvalues are real and negative, the path creeps straight in, and the fixed point is a <em>stable node</em>: the marble in honey. At \(\zeta_\text{cl} = 1\) the two meet in a degenerate node, the fastest approach without overshoot. With the page’s defaults, \(\lambda = -0.157 \pm 3.138\,i\ \mathrm{s^{-1}}\): a stable focus whose spiral shrinks by \(e^{-0.157 \cdot 2\pi/3.138} = 0.73\) per turn. With the PD preset, \(\lambda = -2.157 \pm 5.022\,i\ \mathrm{s^{-1}}\), and the same spiral shrinks by \(0.067\) per turn; \(K_d\) would need to reach \(10.6\ \mathrm{kg/s}\) to make it a node.<span class="i18n-pending" title="translation being updated"></span></p>
+                        <p>Linearising is exact here, but stability can also be proved without solving anything, by an energy that can only fall. Take the energy of the oscillator measured from the fixed point, with the controller’s spring included,<span class="i18n-pending" title="translation being updated"></span></p>
+                        \[ V = \tfrac12 m\dot x^2 + \tfrac12 (k + K_p)(x - x^*)^2 , \qquad \frac{\mathrm dV}{\mathrm dt} = -(c + K_d)\,\dot x^2 \le 0 . \tag{19} \]
+                        <p>The rate follows from (17) in one line, and it is the heat of the two dampers, the real one and the controller’s. \(V\) is a bowl with its bottom at the fixed point, and the state can only roll downhill in it; it stops losing height only where \(\dot x = 0\), and the only place it can stay with \(\dot x = 0\) is the bottom. So every path, from wherever you let the block go, ends at \(\mathbf y^*\). A function with these two properties is a <em>Lyapunov function</em>, and (19) shows that stability is the damper’s work: with \(c + K_d = 0\) the paths would be closed ellipses around the fixed point, a centre, forever.<span class="i18n-pending" title="translation being updated"></span></p>
+                        <p>Integral action adds a third number to the state, the memory \(z = \int_0^t (r - x)\,\mathrm dt'\), and the phase space becomes three-dimensional, \(\mathbf y = (x, \dot x, z)\). Its fixed point needs \(\dot z = r - x = 0\), so the block sits exactly at the target, and the memory holds just the force that carries the spring:<span class="i18n-pending" title="translation being updated"></span></p>
+                        \[ \mathbf y^* = \left(r,\ 0,\ \frac{k r}{K_i}\right), \qquad m\lambda^3 + (c + K_d)\lambda^2 + (k + K_p)\lambda + K_i = 0 . \tag{20} \]
+                        <p>The cubic always has one real root, and for positive coefficients it is negative; the other two decide stability, and (15) is exactly the condition that their real parts are negative. On the boundary, \((c + K_d)(k + K_p) = mK_i\), the cubic factors as \(\left(m\lambda + c + K_d\right)\left(\lambda^2 + \omega_\text{cl}^2\right)\): two eigenvalues sit on the imaginary axis at \(\pm i\omega_\text{cl}\), and the loop rings forever at the frequency of its stiffer spring; past the boundary the ringing grows. With the PID preset, \(\lambda = -1.982 \pm 4.955\,i\) and \(-0.351\ \mathrm{s^{-1}}\). The fast pair is the PD loop’s spiral, almost unchanged; the slow real root belongs to the memory, and its time \(1/0.351\ \mathrm{s^{-1}} = 2.85\ \mathrm s\) is how long the integral takes to remove the last of the error. In the example of §10 with \(K_i = 60\), \(\lambda = +1.227 \pm 4.490\,i\) and \(-2.769\ \mathrm{s^{-1}}\): the fixed point is an <em>unstable focus</em>, and the paths spiral out.<span class="i18n-pending" title="translation being updated"></span></p>
+                        <p>The outside push makes the equations depend on the clock, and a fixed point no longer exists: the block cannot rest while it is pushed. What replaces it is the steady swing of (4) or (16), which in phase space is an ellipse around the fixed point,<span class="i18n-pending" title="translation being updated"></span></p>
+                        \[ \left(\frac{x - x^*}{X}\right)^2 + \left(\frac{\dot x}{X\Omega}\right)^2 = 1 , \tag{21} \]
+                        <p>traced once per drive period. To see paths approach it, look at the block only once per period, like a dancer lit by a strobe that flashes on every beat. Each flash records one point, and the map from one flash to the next, the <em>Poincaré map</em> of the driven oscillator, has the steady swing as its fixed point. A disturbance of the steady swing is a free motion, so it is multiplied per period by \(\mu = e^{\lambda T}\), with \(T = 1/f\); for \(|\mu| < 1\) the dots converge on one point of the ellipse. The size \(|\mu| = e^{\mathrm{Re}\,\lambda\, T}\) says how fast: \(0.705\) per period with the defaults (\(f = 0.45\ \mathrm{Hz}\)), \(0.008\) with the PD preset, and \(0.458\) with the PID preset, where the slow memory sets the pace. The steady swing is therefore the attractor of every driven run: the stable limit set to which all paths converge, whatever the start.<span class="i18n-pending" title="translation being updated"></span></p>
+                        <p>The phase portrait under the force profile draws all of this for the run on screen. The arrows are the free flow (17), the direction in which the state would move with the push switched off; with integral action they show the slice of the three-dimensional flow through the fixed point, \(z = z^*\), so a path may cross them at an angle. The cross marks the fixed point \(\mathbf y^*\), the dashed rose ellipse is the steady swing (21), the dark path is the run up to now and the pale one what is still to come, and the burgundy dots are the strobe flashes, one per drive period. Drag the block away and let go: the path starts where your hand left it and spirals into the ellipse, the dots falling onto one point of it. The caption gives the eigenvalues, the kind of fixed point and \(|\mu|\).<span class="i18n-pending" title="translation being updated"></span></p>
+                    </section>
+
+                    <section class="psec" id="p-screen">
+                        <h3><span class="psec__n">12</span>On screen<span class="i18n-pending" title="translation being updated"></span></h3>
                         <p>الشكل الأخير هو الاستجابة الترددية للتأرجح المستقرّ. في عرضه الخطّي، وهو العرض المستعمل في مختبر التدريس مع عجلة بول، تكون اللوحة اليسرى دالّة السعة \(A(f) = F_0\,|G(i\,2\pi f)|\) من (4) بالأمتار، أي منحنى الرنين بقمّته قرب \(f_0\) وعرضه الذي تحدّده \(\zeta\)، وتكون اللوحة اليمنى فرق الطور \(\varphi(f)\) بين الدفع والتأرجح، من \(0^\circ\) للدفعات البطيئة مرورًا بـ\(90^\circ\) عند \(f_0\) إلى \(180^\circ\) للدفعات السريعة. ومع تشغيل المتحكّم تمثّل منحنيات الحبر الحلقة المغلقة (16)، والمنظومة وحدها متقطّعة خلفها. ويُظهر عرضُ بودي المنحنيات نفسها لكل نيوتن على محورين لوغاريتميّين، كما يرسمها مهندسو التحكّم.</p>
-                        <p>تُرسم الآلية كلّها بمقياس طول واحد، بالبكسل لكل متر. ويُحفظ المقياس من ضغطة على «احسب» إلى التي تليها، فالحلّ ذو التخامد الأكبر أو القوّة الأصغر يتأرجح على الشاشة أقلّ فعلًا، ويبقى الحلّ السابق ظاهرًا في صورة كتلة مرسومة بحدودها ومنحنًى منقّط. ولا يتّسع المقياس إلّا حين يحتاج حلّ جديد إلى مساحة أكبر، وتضبطه «ملاءمة المقياس» على الحلّ الحالي؛ والمسطرة تحت الأرضية تعطي طرفَي المدى بالأمتار، ومع تشغيل المتحكّم تُظهر الموضع المستهدف \(r\) نقطةً وموضع الاتزان \(x^*\) خطًّا ورديًّا. والصندوق أعلى اليمين هو المتحكّم: القيمة التي يقرؤها، وأجزاؤه الثلاثة ومجموعها \(u\)، كلٌّ في شريط، وخطّ أوامر متقطّع نازل إلى مصدر التيار. راقب سهم القوّة والكتلة معًا: عند تردد منخفض للقوّة الدافعة تتحرّك الكتلة مع القوّة، وقرب \(f_0\) تتأخّر عنها بربع دورة، وفوق \(f_0\) بكثير تتحرّك عكسها، كما يقول تأخّر الطور في (4). وفي الأسفل تتابع نافذة من الحلّ المخزَّن العيّنة الحالية: \(x(t)\) داكنًا حتى نقطتها وباهتًا بعدها، و\(F(t)/k\) متقطّعًا بالعنّابي، والنطاق المستقرّ \(x^* \pm X\) متقطّعًا بالوردي. وتمتدّ النافذة على أربعة أدوار للقوّة الدافعة، لكن لا تقلّ عن ⁦6 s⁩ ولا تزيد على ⁦20 s⁩ (⁦8.9 s⁩ بالقيم الافتراضية). وتحتها شريط رفيع يعرض الحلّ كلّه الممتدّ على ⁦60 s⁩، والنافذة مظلّلة فيه. ويعلّم العرضان كلاهما تردد القوّة الدافعة الحالي بنقطة ممتلئة، والسعة المقاسة من آخر ⁦10 s⁩ من الحلّ بحلقة حولها: وعندما يستقرّ الحلّ تتطابق النقطة مع الحلقة.</p>
+                        <p>The whole mechanism is drawn on one length scale, in pixels per metre, and the block may travel as far either side of rest as the canvas leaves room for the coil drive. The scale is kept from one Solve to the next, so a run with more damping or a smaller force really swings less on the screen, and the previous run stays in view as an outlined block and a dotted curve. The scale widens only when a new run needs more room, and Fit scale sets it to the present run; the ruler under the floor gives the ends of the range in metres, the target \(r\) as a flag you can drag, and with the controller on the equilibrium \(x^*\) as a rose line through the block. The box at the top right is the controller: the value it reads, its three parts and their sum \(u\), each as a bar, and a dashed command line down to the current source. Watch the force arrow and the block together: at a low drive frequency the block moves with the force, near \(f_0\) it lags a quarter period behind it, and far above \(f_0\) it moves against it, as the phase lag of (4) says. Below, a window of the stored run follows the present sample: \(x(t)\) dark up to it and pale after it, \(F(t)/k\) dashed in burgundy and the steady band \(x^* \pm X\) dashed in rose. The window spans four drive periods, but never less than 6 s or more than 20 s (8.9 s with the defaults). Under it, a thin strip shows the whole 60 s, with the window shaded. Both views mark the present drive frequency with a filled dot and the amplitude measured from the last 10 s of the run with a ring around it: when the run has settled, the two coincide.<span class="i18n-pending" title="translation being updated"></span></p>
                     </section>
 
                     <section class="psec" id="p-limits">
-                        <h3><span class="psec__n">10</span>ما يغفله النموذج</h3>
+                        <h3><span class="psec__n">13</span>What the model leaves out<span class="i18n-pending" title="translation being updated"></span></h3>
                         <ul>
                             <li>لا تطيع النوابض الحقيقية قانون هوك إلّا عند الاستطالات الصغيرة؛ فعند السعة الكبيرة تكفّ قوّة الاسترجاع عن أن تكون متناسبة مع \(x\)، فتنحني قمّة الرنين وقد تقفز.</li>
                             <li>الاحتكاك الحقيقي غالبًا جافّ لا لزج: فهو لا يزداد مع السرعة. والمخمّد الخطّي هو النسخة التي تُبقي المعادلة قابلة للحلّ.</li>
@@ -514,7 +578,7 @@
                             <li>تغطّي الصفحة مجال التخامد دون الحرج \(\zeta \le 0.9\) فقط، حيث ينطبق الحلّ الدقيق (5)؛ أمّا \(\zeta \ge 1\) فتحتاج صيغة أخرى للحالة العابرة.</li>
                             <li>المتحكّم هنا مثالي: يقيس \(x\) و\(\dot x\) دون ضجيج أو تأخير، ويعمل في كل لحظة، ويوفّر الملف أيّ قوّة يطلبها. أمّا المتحكّم الحقيقي فيعمل بالمعاينة، وتأخير عيّنة واحدة يكلّف شيئًا من هامش الاستقرار؛ وقياس السرعة المشوَّش يجعل \(K_d\) يضخّم الضجيج؛ وللمضخّم الحقيقي حدّ للتيار، والتكامل الذي يظلّ يكبر وهو يصطدم بهذا الحدّ هو ظاهرة التشبّع التكاملي (windup) المعروفة.</li>
                         </ul>
-                        <h4><span class="psub__n">10.1</span>مراجع للاستزادة</h4>
+                        <h4><span class="psub__n">13.1</span>Further reading<span class="i18n-pending" title="translation being updated"></span></h4>
                         <ol class="prefs">
                             <li>J. R. Taylor، <a href="https://books.google.com/books/about/Classical_Mechanics.html?id=P1kCtNr-pJsC"><em>Classical Mechanics</em></a>، University Science Books، 2005: الفصل 5، الاهتزازات، والمهتزّات القسرية المتخامدة، والرنين.</li>
                             <li>A. P. French، <a href="https://www.routledge.com/Vibrations-and-Waves/French/p/book/9780748744473"><em>Vibrations and Waves</em></a>، W. W. Norton، 1971 (صار الناشر اليوم CRC Press): الفصل 4، الاهتزازات القسرية والرنين.</li>
@@ -666,16 +730,34 @@
         ds.var('ratio', [], 'float', { symbol: 'ratio', long_name: 'largest swing of this run divided by that of the previous run', computed_in: 'solve()', formula: 'max |x| / max |x<sup>prev</sup>|', digits: 3 });
         ds.var('px_per_m', [], 'float', { symbol: 'px/m', units: 'css px', long_name: 'drawing scale of the mechanism', computed_in: 'geom()', formula: 'A<sub>px</sub> / span', digits: 3 });
         ds.var('px_per_N', [], 'float', { symbol: 'px/N', units: 'css px', long_name: 'scale of the force arrows: a force is drawn twice as long as the stretch of the spring that would carry it', computed_in: 'geom()', formula: '2 (px/m) / k', digits: 3 });
-        ds.var('amp_px', [], 'float', { symbol: 'A<sub>px</sub>', units: 'css px', long_name: 'how far the block may travel on screen either side of rest', computed_in: 'geom()', formula: '0.11 × the width between wall and right margin', digits: 1 });
+        ds.var('amp_px', [], 'float', { symbol: 'A<sub>px</sub>', units: 'css px', long_name: 'how far the block may travel on screen either side of rest: as far as the canvas leaves room for the coil drive', computed_in: 'geom()', formula: 'min((w − 8 − wall − gap<sub>0</sub> − block − rod − winding − 11 − plate) / 3, gap<sub>0</sub> − 0.07 W<sub>0</sub>), at least 20', digits: 1 });
         ds.var('coil_px', [], 'float', { symbol: 'x<sub>cap</sub>', units: 'css px', long_name: 'screen position of the cap of the coil’s tube, which moves with the block', computed_in: 'draw()', formula: 'x<sub>block</sub> + half the block + the rod', digits: 1 });
         ds.var('Fd_px', [], 'float', { symbol: 'F arrow', units: 'css px', long_name: 'length of the drive-force arrow (positive to the right)', computed_in: 'draw()', formula: 'F<sub>now</sub> · px/N', digits: 1 });
         ds.var('Fc_px', [], 'float', { symbol: 'F<sub>c</sub> arrow', units: 'css px', long_name: 'length of the damper-force arrow (positive to the right)', computed_in: 'draw()', formula: 'F<sub>c, now</sub> · px/N', digits: 1 });
         ds.var('Fk_px', [], 'float', { symbol: 'F<sub>k</sub> arrow', units: 'css px', long_name: 'length of the spring-force arrow (positive to the right)', computed_in: 'draw()', formula: 'F<sub>k, now</sub> · px/N', digits: 1 });
+        ds.var('vmax', [], 'float', { symbol: 'max |ẋ|', units: 'm/s', long_name: 'largest speed of the run (half-height of the phase portrait is 1.15 × this, at least the speed of the steady orbit)', computed_in: 'solve()', digits: 5 });
+        ds.var('lam_re', ['e'], Float64Array, { symbol: 'Re λ', units: '1/s', long_name: 'real parts of the eigenvalues of the free motion (open or closed loop): the decay rates', computed_in: 'eigen()', formula: 'roots of m s² + (c + K<sub>d</sub>)s + (k + K<sub>p</sub>), times s, plus K<sub>i</sub>', digits: 5 });
+        ds.var('lam_im', ['e'], Float64Array, { symbol: 'Im λ', units: 'rad/s', long_name: 'imaginary parts of the eigenvalues: the angular frequencies of the free ringing', computed_in: 'eigen()', digits: 5 });
+        ds.var('n_eig', [], 'int', { symbol: 'order', long_name: 'number of eigenvalues: 2 without integral action, 3 with it', computed_in: 'eigen()', digits: 0 });
+        ds.var('fp_kind', [], 'str', { symbol: 'fixed point', long_name: 'kind of the fixed point of the free motion: stable focus, stable node, degenerate node, or unstable', computed_in: 'eigen()' });
+        ds.var('mu_max', [], 'float', { symbol: '|μ|<sub>max</sub>', long_name: 'largest stroboscopic multiplier: how much a disturbance of the steady orbit shrinks per drive period, e<sup>Re λ · T</sup>', computed_in: 'eigen()', formula: 'max e<sup>Re λ / f</sup>', digits: 4 });
+        ds.var('vlim', [], 'float', { symbol: 'ẋ<sub>lim</sub>', units: 'm/s', long_name: 'half-height of the phase portrait: 1.15 × the largest speed while |x| stays within 1.1 × span, and at least the speed of the steady orbit', computed_in: 'field()', digits: 5 });
+        ds.dim('fld', 165);
+        ds.var('fld_x', ['fld'], Float64Array, { symbol: 'x<sub>g</sub>', units: 'm', long_name: 'grid of the flow arrows: positions', computed_in: 'field()', formula: '15 columns across ±1.1 span', digits: 5 });
+        ds.var('fld_v', ['fld'], Float64Array, { symbol: 'ẋ<sub>g</sub>', units: 'm/s', long_name: 'grid of the flow arrows: velocities', computed_in: 'field()', formula: '11 rows across ±ẋ<sub>lim</sub>', digits: 5 });
+        ds.var('fld_dx', ['fld'], Float64Array, { symbol: 'ẋ', units: 'm/s', long_name: 'flow of the free motion at the grid point, first component', computed_in: 'field()', formula: 'ẋ<sub>g</sub>', digits: 5 });
+        ds.var('fld_dv', ['fld'], Float64Array, { symbol: 'ẍ', units: 'm/s²', long_name: 'flow of the free motion at the grid point, second component, with the push off and the integral at its fixed value z*', computed_in: 'field()', formula: '(K<sub>p</sub>(r − x) + K<sub>i</sub> z* − (c + K<sub>d</sub>) ẋ − k x) / m', digits: 5 });
+        ds.dim('orb', 181);
+        ds.var('orb_x', ['orb'], Float64Array, { symbol: 'x<sub>orbit</sub>', units: 'm', long_name: 'the steady orbit: x* + X cos θ over one drive period', computed_in: 'solve()', formula: 'x* + X cos(2π j / 180)', digits: 6 });
+        ds.var('orb_v', ['orb'], Float64Array, { symbol: 'ẋ<sub>orbit</sub>', units: 'm/s', long_name: 'the steady orbit: −XΩ sin θ over one drive period', computed_in: 'solve()', formula: '−XΩ sin(2π j / 180)', digits: 6 });
+        ds.var('strobe', ['n'], Uint8Array, { symbol: 'strobe', long_name: '1 for the stored rows closest to t = j/f, the stroboscopic (Poincaré) samples, one per drive period', computed_in: 'solve()', formula: 'n = round(j / (f · 10 h))', digits: 0 });
         ds.var('fprof', [], 'float', { symbol: 'F<sub>chart</sub>', units: 'N', long_name: 'half-height of the force-profile chart: 1.1 × the largest force of the run', computed_in: 'solve()', formula: '1.1 · max over n of (|u|, |u<sub>P</sub>|, |u<sub>I</sub>|, |u<sub>D</sub>|, |F<sub>push</sub>|, |k x|, |c v|)', digits: 5 });
         ds.var('uscale', [], 'float', { symbol: 'u<sub>bar</sub>', units: 'N', long_name: 'force that fills half a bar of the controller box: the largest of |u|, |u<sub>P</sub>|, |u<sub>I</sub>|, |u<sub>D</sub>| over the run', computed_in: 'solve()', formula: 'max over n of (|u<sub>n</sub>|, |u<sub>P, n</sub>|, |u<sub>I, n</sub>|, |u<sub>D, n</sub>|)', digits: 5 });
         ds.var('Wscale', [], 'float', { symbol: 'W<sub>bar</sub>', units: 'J', long_name: 'energy that fills a bar: the largest of the coil’s work, the heat and the stored energy over the run', computed_in: 'solve()', formula: 'max over n of (W<sub>in, n</sub>, W<sub>loss, n</sub>, E<sub>n</sub>)', digits: 5 });
         ds.var('r_px', [], 'float', { symbol: 'x<sub>r</sub> px', units: 'css px', long_name: 'screen position of the target dot on the ruler', computed_in: 'draw()', formula: 'x<sub>eq</sub> + r · px/m', digits: 1 });
         ds.var('xeq_px', [], 'float', { symbol: 'x* px', units: 'css px', long_name: 'screen position of the equilibrium line', computed_in: 'draw()', formula: 'x<sub>eq</sub> + x* · px/m', digits: 1 });
+        ds.var('ph_x_px', [], 'float', { symbol: 'x on the portrait', units: 'css px', long_name: 'horizontal position of the state dot on the phase portrait', computed_in: 'drawPhase()', digits: 1 });
+        ds.var('ph_v_px', [], 'float', { symbol: 'ẋ on the portrait', units: 'css px', long_name: 'vertical position of the state dot on the phase portrait', computed_in: 'drawPhase()', digits: 1 });
         ds.var('ghost_shown', [], 'bool', { symbol: 'outline drawn', long_name: 'the outlined block is drawn: a previous run exists and lies within the span at this instant', computed_in: 'draw()', formula: 'previous and |x<sub>n</sub><sup>prev</sup>| ≤ span' });
         ds.var('ghost_px', [], 'float', { symbol: 'x<sub>block</sub><sup>prev</sup>', units: 'css px', long_name: 'screen position of the outlined block of the previous run, at the same instant', computed_in: 'draw()', formula: 'x<sub>eq</sub> + x<sup>prev</sup> · px/m', digits: 1 });
         ds.var('win_t0', [], 'float', { symbol: 't<sub>window</sub>', units: 's', long_name: 'left edge of the window chart', computed_in: 'draw()', formula: 'clamp(t<sub>play</sub> − 0.7 T<sub>window</sub>, 0, 60 s − T<sub>window</sub>)', digits: 3 });
@@ -694,6 +776,7 @@
         ds.var('Hphase', ['b'], Float64Array, { symbol: 'φ<sub>cl</sub>(Ω)', units: '°', long_name: 'closed loop: phase lag behind the outside push', computed_in: 'bode()', formula: 'atan2((c + K<sub>d</sub>)Ω − K<sub>i</sub>/Ω, k + K<sub>p</sub> − mΩ²) in degrees', digits: 3 });
         ds.var('Gphase', ['b'], Float64Array, { symbol: 'φ(Ω)', units: '°', long_name: 'phase lag', computed_in: 'bode()', formula: 'atan2(2ζω<sub>0</sub>Ω, ω<sub>0</sub>² − Ω²) in degrees', digits: 3 });
         ds.dim('l', 1281);
+        ds.dim('e', 3);
         ds.coord('fl', 'l', Float64Array, { symbol: 'f<sub>l</sub>', units: 'Hz', long_name: 'drive frequencies of the amplitude function, evenly spaced', computed_in: 'bode()', formula: '1.6 Hz · (j + 1) / 1281', digits: 5 });
         ds.var('Al', ['l'], Float64Array, { symbol: 'A(f)', units: 'm', long_name: 'amplitude function of the plant alone: steady swing for the push F<sub>0</sub>', computed_in: 'bode()', formula: 'F<sub>0</sub> |G(iΩ)|', digits: 6 });
         ds.var('Pl', ['l'], Float64Array, { symbol: 'φ(f)', units: '°', long_name: 'phase difference of the plant alone: how far the swing lags the push', computed_in: 'bode()', formula: 'atan2(2ζω<sub>0</sub>Ω, ω<sub>0</sub>² − Ω²) in degrees', digits: 3 });
@@ -713,8 +796,23 @@
         var Ki = Sim.slider('Ki', { format: function (v) { return v.toFixed(1) + ' N/(m·s)'; }, onInput: markStale });
         var Kd = Sim.slider('Kd', { format: function (v) { return v.toFixed(1) + ' kg/s'; }, onInput: markStale });
         Array.prototype.forEach.call(document.querySelectorAll('[data-gains]'), function (b) {
-            b.addEventListener('click', function () { var g = b.getAttribute('data-gains').split(',').map(Number); Kp.set(g[0]); Ki.set(g[1]); Kd.set(g[2]); markStale(); });
+            b.addEventListener('click', function () { var g = b.getAttribute('data-gains').split(',').map(Number); Kp.set(g[0]); Ki.set(g[1]); Kd.set(g[2]); markStale(); takeHint(); });
         });
+        function takeHint() {
+            // the take-control strip: which preset is on, and what happens if you grab the block now
+            var g = [Kp.value, Ki.value, Kd.value].join(), on = Kp.value > 0 || Ki.value > 0 || Kd.value > 0;
+            Array.prototype.forEach.call(document.querySelectorAll('[data-gains]'), function (b) {
+                var bg = b.getAttribute('data-gains').split(',').map(Number).join(); b.classList.toggle('is-on', bg === g); b.setAttribute('aria-pressed', String(bg === g));
+            });
+            document.getElementById('take-hint').textContent = on
+                ? _t('Controller on: grab the block and let go, and it returns to r = {r} m.', { r: Sim.fmt(rr.value, 2) }) + (Ki.value > 0 ? ' ' + _t('Hold it a few seconds before you let go, and watch the integral overshoot.') : (Kp.value > 0 ? ' ' + _t('Without Kᵢ it stops short of r: the P part needs an error to hold the spring.') : ''))
+                : _t('Controller off: grab the block and let go, and it swings freely about x = 0 while the damper takes its energy.');
+        }
+        [Kp, Ki, Kd].forEach(function (sl) { sl.el.addEventListener('input', takeHint); });
+        rr.el.addEventListener('input', takeHint);
+        // the target is a command, not a property of the plant: a new r takes effect at once, from the state on screen
+        function fromNow() { var i = ds.get('i_now'); return { x: ds.get('xs')[i], v: ds.get('vs')[i], z: ds.get('zs')[i] }; }
+        rr.el.addEventListener('change', function () { if (solved && !drag) solve(fromNow()); });
         var speed = Sim.slider('speed', { format: function (v) { return v.toFixed(2) + '×'; } });
         var seek = Sim.slider('seek', { format: function (v) { return 't = ' + (v * EVERY * H).toFixed(1) + ' s of ' + TEND + ' s'; }, onInput: function (v) { playT = v * EVERY * H; frame(); } });
 
@@ -730,7 +828,7 @@
             return st.X * Math.cos(W * t - st.phi) + Math.exp(-z * w0 * t) * (C1 * Math.cos(wd * t) + C2 * Math.sin(wd * t));
         }
 
-        /* ---------- the closed loop (§9): the controller, its equilibrium, and the exact closed-loop solution ---------- */
+        /* ---------- the closed loop (§10): the controller, its equilibrium, and the exact closed-loop solution ---------- */
         function control(x, v, z, p) {
             // u = Kp (r − x) + Ki z − Kd v, with z = ∫(r − x) dt; the derivative acts on the measured motion, so a step of r gives no kick
             return p.Kp * (p.r - x) + p.Ki * z - p.Kd * v;
@@ -739,6 +837,21 @@
             // steady answer to the push F0 cos Ωt through the closed loop, (16): D(iΩ) = k + Kp − mΩ² + i((c + Kd)Ω − Ki/Ω)
             var re = p.k + p.Kp - M * p.W * p.W, im = (p.c + p.Kd) * p.W - p.Ki / p.W;
             return { X: p.F0 / Math.hypot(re, im), phi: Math.atan2(im, re) };
+        }
+        function eigen(p) {
+            // the free motion near the fixed point: its eigenvalues are the roots of m s² + (c + K_d) s + (k + K_p), or with integral
+            // action of m s³ + (c + K_d) s² + (k + K_p) s + K_i (§11). The cubic has one real root (found by Newton from −a0/a1, its sign
+            // is always negative for positive coefficients) and the other two follow from dividing it out.
+            var a2 = (p.c + (p.Kd || 0)) / M, a1 = (p.k + (p.Kp || 0)) / M, a0 = (p.Ki || 0) / M, re = [], im = [];
+            function quad(b, c) { var d = b * b / 4 - c; if (d >= 0) { re.push(-b / 2 + Math.sqrt(d), -b / 2 - Math.sqrt(d)); im.push(0, 0); } else { re.push(-b / 2, -b / 2); im.push(Math.sqrt(-d), -Math.sqrt(-d)); } }
+            if (a0 > 0) {
+                var s = -a0 / a1, q;
+                for (q = 0; q < 200; q++) { var f = ((s + a2) * s + a1) * s + a0, df = (3 * s + 2 * a2) * s + a1; var ds_ = f / df; s -= ds_; if (Math.abs(ds_) < 1e-15 * Math.max(1, Math.abs(s))) break; }
+                quad(a2 + s, a1 + (a2 + s) * s); re.push(s); im.push(0);
+            } else quad(a2, a1);
+            var maxRe = Math.max.apply(null, re), osc = im.some(function (y) { return Math.abs(y) > 1e-12; });
+            var kind = maxRe > 0 ? 'unstable' : (maxRe === 0 ? 'centre' : (osc ? 'stable focus' : (Math.abs(re[0] - re[1]) < 1e-9 * Math.abs(re[0]) ? 'degenerate stable node' : 'stable node')));
+            return { re: re, im: im, kind: kind, maxRe: maxRe };
         }
         function equilibrium(p) { return p.Ki > 0 ? p.r : p.Kp * p.r / (p.k + p.Kp); }
         function matmul(A, B) { return A.map(function (row) { return B[0].map(function (_, j) { return row.reduce(function (s, a, l) { return s + a * B[l][j]; }, 0); }); }); }
@@ -836,7 +949,16 @@
             ds.set('r', p.r); ds.set('Kp', p.Kp); ds.set('Ki', p.Ki); ds.set('Kd', p.Kd); ds.set('ctrl_on', on);
             ds.set('x0', p.x0); ds.set('v0', p.v0); ds.set('z0', p.z0); ds.set('released', p.x0 !== 0 || p.v0 !== 0 || p.z0 !== 0);
             ds.set('x_eq', xe); ds.set('F_eq', p.k * xe); ds.set('t_blow', blew); ds.set('margin', (p.c + p.Kd) * (p.k + p.Kp) - M * p.Ki); ds.set('stable', (p.c + p.Kd) * (p.k + p.Kp) - M * p.Ki > 0);
-            ds.set('zeta_cl', (p.c + p.Kd) / (2 * Math.sqrt(M * (p.k + p.Kp)))); ds.set('H_drive', 1 / Math.hypot(p.k + p.Kp - M * p.W * p.W, (p.c + p.Kd) * p.W - p.Ki / p.W));
+            ds.set('zeta_cl', (p.c + p.Kd) / (2 * Math.sqrt(M * (p.k + p.Kp))));
+            var eg = eigen(p), lre = ds.alloc('lam_re'), lim = ds.alloc('lam_im');
+            for (n = 0; n < 3; n++) { lre[n] = n < eg.re.length ? eg.re[n] : NaN; lim[n] = n < eg.im.length ? eg.im[n] : NaN; }
+            ds.touch('lam_re'); ds.touch('lam_im'); ds.set('n_eig', eg.re.length); ds.set('fp_kind', eg.kind); ds.set('mu_max', Math.exp(eg.maxRe / fd.value));
+            // the steady orbit, an ellipse about the fixed point, and the stroboscopic samples t = j/f
+            var ox = ds.alloc('orb_x'), ov = ds.alloc('orb_v'), sb = ds.alloc('strobe'), vmax = 1e-9;
+            for (n = 0; n <= 180; n++) { ox[n] = xe + st.X * Math.cos(2 * Math.PI * n / 180); ov[n] = -st.X * p.W * Math.sin(2 * Math.PI * n / 180); }
+            for (n = 0; n < NS; n++) { sb[n] = 0; vmax = Math.max(vmax, Math.abs(vs[n])); }
+            for (var jj = 0; p.F0 > 0 && jj / fd.value <= TEND + 1e-9; jj++) { var ns_ = Math.round(jj / (fd.value * EVERY * H)); if (ns_ < NS) sb[ns_] = 1; }
+            ds.touch('orb_x'); ds.touch('orb_v'); ds.touch('strobe'); ds.set('vmax', vmax); ds.set('H_drive', 1 / Math.hypot(p.k + p.Kp - M * p.W * p.W, (p.c + p.Kd) * p.W - p.Ki / p.W));
             ds.set('omega0', w0); ds.set('k', p.k); ds.set('c', p.c); ds.set('Omega', p.W); ds.set('tau', 1 / (zeta.value * w0)); ds.set('Q', 1 / (2 * zeta.value));
             ds.set('X', st.X); ds.set('phi', st.phi); ds.set('fr', zeta.value < Math.SQRT1_2 ? f0.value * Math.sqrt(1 - 2 * zeta.value * zeta.value) : 0);
             ds.set('h', H); ds.set('steps', TEND / H); ds.set('err_max', err); ds.set('Xm', xm); ds.set('xmax', xmax);
@@ -855,10 +977,24 @@
             clk.set(true);
         }
 
+        function field() {
+            // the free flow (push off, integral frozen at its fixed value z*) on a grid over the phase portrait, and the portrait's height
+            var sp = ds.get('span'), xs = ds.get('xs'), vs = ds.get('vs'), vl = 0, n, i, j, q = 0;
+            for (n = 0; n < NS; n++) if (Math.abs(xs[n]) <= 1.1 * sp) vl = Math.max(vl, Math.abs(vs[n]));
+            vl = 1.15 * Math.max(vl, ds.get('X') * ds.get('Omega'), 1e-6); ds.set('vlim', vl);
+            var gx = ds.alloc('fld_x'), gv = ds.alloc('fld_v'), dx = ds.alloc('fld_dx'), dv = ds.alloc('fld_dv');
+            var k = ds.get('k'), c = ds.get('c'), kp = ds.get('Kp'), ki = ds.get('Ki'), kd = ds.get('Kd'), r = ds.get('r'), zs = ki > 0 ? k * r / ki : 0;
+            for (i = 0; i < 15; i++) for (j = 0; j < 11; j++, q++) {
+                gx[q] = 1.1 * sp * (2 * (i + 0.5) / 15 - 1); gv[q] = vl * (2 * (j + 0.5) / 11 - 1);
+                dx[q] = gv[q]; dv[q] = (kp * (r - gx[q]) + ki * zs - (c + kd) * gv[q] - k * gx[q]) / M;
+            }
+            ['fld_x', 'fld_v', 'fld_dx', 'fld_dv'].forEach(function (nm) { ds.touch(nm); });
+        }
         function setSpan(v, before, fitted) {
             // the half-range the screen shows, in m: kept between runs, so a smaller swing looks smaller
             ds.set('span_before', before); ds.set('fitted', fitted);
             ds.set('span', v); ds.set('ylim', 1.1 * v); ds.set('held', v > ds.get('need') * (1 + 1e-9));
+            field();
         }
         function fitScale() { setSpan(ds.get('need'), ds.get('span'), true); status(); frame(); }
 
@@ -916,6 +1052,7 @@
             document.getElementById('r-bal').textContent = ds.get('balance').toExponential(1).replace('-', '−');
             document.getElementById('r-eq').textContent = Sim.fmt(ds.get('x_eq'), 3) + ' m' + (ds.get('ctrl_on') ? (ds.get('Ki') > 0 ? ' = r' : ' ≠ r') : '');
             document.getElementById('r-stab').textContent = ds.get('ctrl_on') ? (ds.get('stable') ? _t('stable') : (isFinite(ds.get('t_blow')) ? _t('unstable: |x| passed 1000 m at {t} s', { t: Sim.fmt(ds.get('t_blow'), 1) }) : _t('unstable, growing'))) : _t('open (controller off)');
+            document.getElementById('cap-eig').innerHTML = eigText();
             document.getElementById('cap-res').innerHTML = ds.get('fr') > 0 ? '<i>f</i><sub>r</sub> = ' + Sim.fmt(ds.get('fr'), 3) + ' Hz' : _t('no resonance peak (<i>ζ</i> ≥ 0.71)');
             status();
         }
@@ -925,14 +1062,18 @@
         function geom() {
             // the layout of the figure, from the canvas size and the stored run; draw() and the data panel both use it
             var w = box.w, h = box.h, narrow = w < 560;
-            var mechH = Math.round(h * (narrow ? 0.46 : 0.47)), ovH = Math.max(34, Math.round(h * 0.09));
+            var mechH = Math.round(h * (narrow ? 0.5 : 0.41)), ovH = Math.max(34, Math.round(h * 0.09));
             var L = narrow ? 48 : 62, R = w - (narrow ? 12 : 20);
             var g = { w: w, h: h, narrow: narrow, mechH: mechH,
                 win: { L: L, R: R, top: mechH + 34, bot: h - ovH - 64 },
                 ov: { L: L, R: R, top: h - ovH - 26, bot: h - 26 } };
-            var floorY = mechH - (narrow ? 50 : 56), wallX = narrow ? 24 : 36, W0 = w - wallX - (narrow ? 18 : 30);
+            var floorY = mechH - (narrow ? 72 : 56), wallX = narrow ? 24 : 36, W0 = w - wallX - (narrow ? 18 : 30);
             var bw = Math.round(Math.max(44, Math.min(80, w * 0.094))), bh = Math.round(bw * 0.66), wr = Math.max(3.5, Math.round(bh * 0.1));
-            g.m = { floorY: floorY, wallX: wallX, W0: W0, bw: bw, bh: bh, wr: wr, by: floorY - 2 * wr - bh / 2, gap0: 0.42 * W0, amp: 0.11 * W0 };
+            // the travel A_px either side of rest, as large as the canvas allows: the coil drive needs a rod, a tube of 2 A_px + the winding,
+            // and a magnet as long again (the winding must never leave the gap), so the right side is about 3 A_px beyond the block
+            var gap0 = (narrow ? 0.3 : 0.28) * W0, rodPx = narrow ? 8 : 12, cwPx = narrow ? 10 : 14, plate = narrow ? 6 : 8;
+            var ampFit = (w - 8 - wallX - gap0 - bw - rodPx - cwPx - 11 - plate) / 3;
+            g.m = { floorY: floorY, wallX: wallX, W0: W0, bw: bw, bh: bh, wr: wr, by: floorY - 2 * wr - bh / 2, gap0: gap0, amp: Math.max(20, Math.min(ampFit, gap0 - 0.07 * W0)) };
             g.m.eqX = wallX + g.m.gap0 + bw / 2;
             g.m.sy = g.m.by - g.m.bh * 0.22;            // height of the spring
             g.m.sc = g.m.amp / ds.get('span');          // one scale for the whole mechanism, held from run to run
@@ -1002,8 +1143,10 @@
             c.moveTo(xc2, yd - ch / 2); c.lineTo(xc1, yd - ch / 2); c.lineTo(xc1, yd + ch / 2); c.lineTo(xc2, yd + ch / 2); c.stroke();
             c.lineWidth = 2.4; c.beginPath(); c.moveTo(xp, yd - ch / 2 + 2.5); c.lineTo(xp, yd + ch / 2 - 2.5); c.stroke();
             c.lineWidth = 1.5; c.beginPath(); c.moveTo(xp, yd); c.lineTo(bx - m.bw / 2, yd); c.stroke();
-            label(c, 'c', ' = ' + Sim.fmt(ds.get('c'), 3) + ' kg/s', xc1, m.floorY + 27, 'left', T.tanInk);
-            if (!g.narrow) { c.font = T.mono; c.fillStyle = T.muted; c.textAlign = 'left'; c.textBaseline = 'alphabetic'; c.fillText(_t('darker oil: more heat'), xc1, m.floorY + 42); }
+            // the damper's label sits under the reading of x, right of the ruler, clear of the chart below
+            var dlx = m.eqX + m.amp + (g.narrow ? 34 : 46), dly = m.floorY + 56;
+            label(c, 'c', ' = ' + Sim.fmt(ds.get('c'), 3) + ' kg/s', dlx, dly, 'left', T.tanInk);
+            if (!g.narrow) { c.font = T.mono; c.fillStyle = T.muted; c.textAlign = 'left'; c.textBaseline = 'alphabetic'; c.fillText(_t('darker oil: more heat'), dlx + 120, dly); }
             // the previous run's block at the same instant, outlined, so the two swings compare at one scale
             if (ds.get('ghost_shown')) { c.setLineDash([4, 3]); c.strokeStyle = T.muted; c.lineWidth = 1.2; c.strokeRect(gx - m.bw / 2, m.by - m.bh / 2, m.bw, m.bh); c.setLineDash([]); }
             // the block on two wheels
@@ -1014,12 +1157,16 @@
             if (c.roundRect) c.roundRect(bx - m.bw / 2, m.by - m.bh / 2, m.bw, m.bh, 3); else c.rect(bx - m.bw / 2, m.by - m.bh / 2, m.bw, m.bh);
             c.fill(); c.stroke();
             Sim.tex(c, 'm', bx, m.by + m.bh * 0.17, { size: Math.round(m.bh * 0.5), align: 'center', color: T.card });
+            // a grip on the block, so it reads as something to take hold of
+            c.strokeStyle = 'rgba(255, 250, 243, 0.55)'; c.lineWidth = 1.2;
+            [-0.36, -0.3, 0.3, 0.36].forEach(function (f) { c.beginPath(); c.moveTo(bx + f * m.bw, m.by - m.bh * 0.25); c.lineTo(bx + f * m.bw, m.by + m.bh * 0.25); c.stroke(); });
+
             drawCoil(c, g, i, cap);
             drawForces(c, g, bx);
             drawEnergy(c, g);
             drawController(c, g);
             // the displacement, on a ruler under the floor; its ends are the span the screen shows
-            var ry = m.floorY + 22, span = ds.get('span');
+            var ry = m.floorY + 34, span = ds.get('span');
             c.strokeStyle = T.muted; c.lineWidth = 1;
             c.beginPath(); c.moveTo(m.eqX - m.amp, ry); c.lineTo(m.eqX + m.amp, ry);
             [-1, 0, 1].forEach(function (f) { c.moveTo(m.eqX + f * m.amp, ry - 4); c.lineTo(m.eqX + f * m.amp, ry + 4); });
@@ -1028,12 +1175,18 @@
             c.fillText('−' + Sim.fmt(span, 2), m.eqX - m.amp, ry + 17); c.fillText('0', m.eqX, ry + 17); c.fillText('+' + Sim.fmt(span, 2) + ' m', m.eqX + m.amp + (g.narrow ? 6 : 0), ry + 17);
             c.strokeStyle = BURG; c.fillStyle = BURG;
             if (Math.abs(bx - m.eqX) >= 2) arrow(c, m.eqX, ry, bx, ry, 2.5, Math.min(8, Math.abs(bx - m.eqX)));
-            label(c, 'x', ' = ' + Sim.fmt(ds.get('x_now'), 3) + ' m', g.narrow ? m.eqX : m.eqX + m.amp + 16, g.narrow ? ry + 34 : ry + 5, g.narrow ? 'center' : 'left', BURG);
-            // with the controller on: the target r as a dot on the ruler, and the equilibrium x* it holds as a rose line through the block
+            label(c, 'x', ' = ' + Sim.fmt(ds.get('x_now'), 3) + ' m', m.eqX + m.amp + (g.narrow ? 8 : 16), ry + 5, 'left', BURG);
+            // with the controller on: the equilibrium x* it holds as a rose line through the block
             if (ds.get('ctrl_on')) {
                 c.setLineDash([5, 4]); c.strokeStyle = T.rose; c.lineWidth = 1.4; c.beginPath(); c.moveTo(ds.get('xeq_px'), m.floorY); c.lineTo(ds.get('xeq_px'), m.by - m.bh / 2 - 2); c.stroke(); c.setLineDash([]);
-                c.fillStyle = BURG; c.beginPath(); c.arc(ds.get('r_px'), ry, 4, 0, Math.PI * 2); c.fill();
             }
+            // the target r: a flag on the ruler you can drag (always drawn, so you can set it before switching the controller on)
+            var fxp = flagX !== null ? flagX : ds.get('r_px'), on = ds.get('ctrl_on');
+            c.strokeStyle = on ? BURG : T.muted; c.fillStyle = on ? BURG : T.muted; c.lineWidth = 1.6;
+            c.beginPath(); c.moveTo(fxp, ry + 2); c.lineTo(fxp, ry - 22); c.stroke();
+            c.beginPath(); c.moveTo(fxp, ry - 22); c.lineTo(fxp + 13, ry - 18); c.lineTo(fxp, ry - 14); c.closePath(); c.fill();
+            c.beginPath(); c.arc(fxp, ry, 4, 0, Math.PI * 2); c.fill();
+            Sim.tex(c, 'r', fxp + 15, ry - 12, { size: 14, color: on ? BURG : T.muted });
         }
         function drawCoil(c, g, i, cap) {
             // a moving-coil drive, the loudspeaker principle: a winding in the radial field B of a magnet's gap feels F = Bℓ I along the axis
@@ -1068,7 +1221,7 @@
         function capArrow(len, g) { var L = 1.6 * g.m.amp; return Math.max(-L, Math.min(L, len)); }
         function drawForces(c, g, bx) {
             // the three forces on the block, on one scale: each is drawn twice as long as the stretch of the spring that would carry it
-            var m = g.m, top = m.by - m.bh / 2, dy = g.narrow ? 13 : 15, lx = m.eqX - m.bw / 2 - m.amp - 8;
+            var m = g.m, top = m.by - m.bh / 2, dy = g.narrow ? 13 : 15, lx = Math.max(m.eqX - m.bw / 2 - m.amp - 8, g.narrow ? 112 : 132);
             var rows = [['F', ds.get('F_now'), ds.get('Fd_px'), BURG], ['−cv', ds.get('Fc_now'), ds.get('Fc_px'), T.tanInk], ['−kx', ds.get('Fk_now'), ds.get('Fk_px'), T.ink2]];
             if (ds.get('grabbed')) rows.push(['F_{hand}', ds.get('hand_now'), ds.get('hand_px'), T.accentDark]);
             rows.forEach(function (f, k) {
@@ -1081,6 +1234,7 @@
                 c.fillStyle = 'rgba(255, 250, 243, 0.85)'; c.fillRect(lx - lw - 2, y - 7, lw + 4, 14);
                 label(c, f[0], ' = ' + Sim.fmt(f[1], 2) + ' N', lx, y + 4, 'right', f[3]);
             });
+            if (!ds.get('grabbed')) { c.font = T.mono; c.fillStyle = BURG; c.textAlign = 'center'; c.textBaseline = 'alphabetic'; c.fillText('⇆ ' + _t('drag me'), bx, top - 11 - rows.length * dy - 2); }
             if (ds.get('grabbed')) { c.setLineDash([3, 2]); c.strokeStyle = T.accentDark; c.lineWidth = 1.4; c.strokeRect(bx - m.bw / 2 - 3, m.by - m.bh / 2 - 3, m.bw + 6, m.bh + 6); c.setLineDash([]); }
         }
         function ctrlScale() {
@@ -1213,6 +1367,7 @@
             drawWindow(ctx, g, i);
             drawOverview(ctx, g, i);
             drawForceProfile(i);
+            drawPhase(i);
         }
 
         /* ---------- the force profile: the same window of the run as the x chart, on its own canvas ---------- */
@@ -1255,6 +1410,59 @@
                 c.setLineDash(q[3]); c.strokeStyle = q[2]; c.lineWidth = q[4]; c.beginPath(); c.moveTo(kx - 14, yk() - 4); c.lineTo(kx, yk() - 4); c.stroke(); c.setLineDash([]);
                 kx -= 14 + gap;
             });
+        }
+
+        /* ---------- the phase portrait: the state (x, ẋ) of the run in the plane, §11 ---------- */
+        var pbox = Sim.canvas2d(document.getElementById('phase')), pctx = pbox.ctx, phaseStage = document.getElementById('stage-phase');
+        function phaseGeom() {
+            var w = pbox.w, h = pbox.h, narrow = w < 560, L = narrow ? 52 : 66, R = w - (narrow ? 12 : 20), p = { L: L, R: R, top: 26, bot: h - 30 };
+            var xl = 1.1 * ds.get('span'), vl = ds.get('vlim');
+            return { w: w, h: h, narrow: narrow, p: p, X: function (x) { return (p.L + p.R) / 2 + x / xl * (p.R - p.L) / 2; }, V: function (v) { return (p.top + p.bot) / 2 - v / vl * (p.bot - p.top) / 2; } };
+        }
+        function drawPhase(i) {
+            var G = phaseGeom(), p = G.p, c = pctx, xs = ds.get('xs'), vs = ds.get('vs'), sb = ds.get('strobe'), n;
+            c.clearRect(0, 0, G.w, G.h); c.font = T.mono; c.lineWidth = 1;
+            var xt = Sim.ticks(-1.1 * ds.get('span'), 1.1 * ds.get('span'), G.narrow ? 4 : 6), vt = Sim.ticks(-ds.get('vlim'), ds.get('vlim'), 4);
+            xt.values.forEach(function (v) { c.strokeStyle = v === 0 ? T.rule : T.ruleSoft; c.beginPath(); c.moveTo(G.X(v), p.top); c.lineTo(G.X(v), p.bot); c.stroke(); c.fillStyle = T.muted; c.textAlign = 'center'; c.textBaseline = 'alphabetic'; c.fillText(v === 0 ? '0' : Sim.fmt(v, xt.digits).replace('-', '−'), G.X(v), p.bot + 16); });
+            vt.values.forEach(function (v) { c.strokeStyle = v === 0 ? T.rule : T.ruleSoft; c.beginPath(); c.moveTo(p.L, G.V(v)); c.lineTo(p.R, G.V(v)); c.stroke(); c.fillStyle = T.muted; c.textAlign = 'right'; c.textBaseline = 'middle'; c.fillText(v === 0 ? '0' : Sim.fmt(v, vt.digits).replace('-', '−'), p.L - 7, G.V(v)); });
+            c.strokeStyle = T.rule; c.strokeRect(p.L, p.top, p.R - p.L, p.bot - p.top);
+            c.fillStyle = T.muted; c.textAlign = 'right'; c.textBaseline = 'alphabetic'; c.fillText('x (m)', p.R, p.bot + 16);
+            label(c, 'ẋ', ' (m/s)', p.L, p.top - 9, 'left', T.ink2);
+            c.save(); c.beginPath(); c.rect(p.L, p.top, p.R - p.L, p.bot - p.top); c.clip();
+            // the free flow: arrows of fixed length that show the direction the state would move with the push switched off
+            var gx = ds.get('fld_x'), gv = ds.get('fld_v'), dx = ds.get('fld_dx'), dv = ds.get('fld_dv'), Lr = G.narrow ? 9 : 12;
+            c.strokeStyle = 'rgba(111, 91, 76, 0.32)'; c.fillStyle = 'rgba(111, 91, 76, 0.32)';
+            for (n = 0; n < gx.length; n++) {
+                var ax = G.X(gx[n] + dx[n]) - G.X(gx[n]), av = G.V(gv[n] + dv[n]) - G.V(gv[n]), al = Math.hypot(ax, av); if (al < 1e-9) continue;
+                arrow(c, G.X(gx[n]) - ax / al * Lr / 2, G.V(gv[n]) - av / al * Lr / 2, G.X(gx[n]) + ax / al * Lr / 2, G.V(gv[n]) + av / al * Lr / 2, 1, 4);
+            }
+            // the steady orbit of the driven motion
+            var ox = ds.get('orb_x'), ov = ds.get('orb_v');
+            if (ds.get('F0') > 0 && ds.get('stable') !== false) { c.setLineDash([6, 4]); c.strokeStyle = T.rose; c.lineWidth = 1.6; c.beginPath(); for (n = 0; n <= 180; n++) { if (n) c.lineTo(G.X(ox[n]), G.V(ov[n])); else c.moveTo(G.X(ox[n]), G.V(ov[n])); } c.stroke(); c.setLineDash([]); }
+            // the run: pale ahead of the cursor, dark behind it
+            c.lineJoin = 'round'; c.strokeStyle = FAINT; c.lineWidth = 1.2;
+            c.beginPath(); for (n = i; n < NS; n++) { if (n === i) c.moveTo(G.X(xs[n]), G.V(vs[n])); else c.lineTo(G.X(xs[n]), G.V(vs[n])); } c.stroke();
+            c.strokeStyle = T.ink; c.lineWidth = 1.6;
+            c.beginPath(); for (n = 0; n <= i; n++) { if (n) c.lineTo(G.X(xs[n]), G.V(vs[n])); else c.moveTo(G.X(xs[n]), G.V(vs[n])); } c.stroke();
+            // one dot per drive period, up to now: the stroboscopic (Poincaré) section
+            c.fillStyle = BURG; for (n = 0; n <= i; n++) if (sb[n]) { c.beginPath(); c.arc(G.X(xs[n]), G.V(vs[n]), 2.6, 0, Math.PI * 2); c.fill(); }
+            c.restore();
+            // the fixed point of the free motion
+            var fx = G.X(ds.get('x_eq')), fy = G.V(0);
+            c.strokeStyle = T.accentDark; c.lineWidth = 2; c.beginPath(); c.moveTo(fx - 6, fy - 6); c.lineTo(fx + 6, fy + 6); c.moveTo(fx + 6, fy - 6); c.lineTo(fx - 6, fy + 6); c.stroke();
+            Sim.tex(c, 'x^{*}', fx + 8, fy - 8, { size: 14, color: T.accentDark });
+            // the state now: a stored row, or your hand
+            c.fillStyle = BURG; c.strokeStyle = T.card; c.lineWidth = 1.5; c.beginPath(); c.arc(G.X(ds.get('x_now')), G.V(ds.get('v_now')), 5, 0, Math.PI * 2); c.fill(); c.stroke();
+            ds.set('ph_x_px', G.X(ds.get('x_now'))); ds.set('ph_v_px', G.V(ds.get('v_now')));
+        }
+        function kindName(kd) {
+            // the kind is a code value in the store; its name is shown in the reader's language
+            return { 'stable focus': _t('stable focus'), 'stable node': _t('stable node'), 'degenerate stable node': _t('degenerate stable node'), 'unstable': _t('unstable'), 'centre': _t('centre') }[kd] || kd;
+        }
+        function eigText() {
+            var re = ds.get('lam_re'), im = ds.get('lam_im'), n = ds.get('n_eig'), parts = [];
+            for (var q = 0; q < n; q++) { if (im[q] < -1e-12) continue; parts.push(Math.abs(im[q]) > 1e-12 ? Sim.fmt(re[q], 3).replace('-', '−') + ' ± ' + Sim.fmt(im[q], 3) + 'i' : Sim.fmt(re[q], 3).replace('-', '−')); }
+            return '<i>λ</i> = ' + parts.join(', ') + ' s⁻¹ · ' + kindName(ds.get('fp_kind')) + (ds.get('F0') > 0 ? ' · |<i>μ</i>| = ' + Sim.fmt(ds.get('mu_max'), 3) + _t(' per period') : '');
         }
 
         function bodeGeom() {
@@ -1355,7 +1563,7 @@
             frame();
         });
         /* ---------- your hand: grab the block, drag it, let go. While you hold it the clock stops and the controller keeps running ---------- */
-        var drag = null, oscEl = document.getElementById('osc');
+        var drag = null, flagX = null, flagId = null, oscEl = document.getElementById('osc');
         function pointerX(e) { var r = oscEl.getBoundingClientRect(); return { x: e.clientX - r.left, y: e.clientY - r.top }; }
         function holdState() {
             // the block where your hand holds it: the controller reads x and ẋ, its memory keeps adding (r − x); the hand balances the rest
@@ -1371,19 +1579,29 @@
         }
         oscEl.addEventListener('pointerdown', function (e) {
             if (!solved) return;
-            var q = pointerX(e), g = geom();
+            var q = pointerX(e), g = geom(), ry = g.m.floorY + 34;
+            if (Math.abs(q.x - ds.get('r_px')) < 16 && q.y > ry - 28 && q.y < ry + 10) {
+                // the target flag: drag it along the ruler; the new r takes effect when you let go
+                e.preventDefault(); oscEl.setPointerCapture(e.pointerId); flagId = e.pointerId; flagX = ds.get('r_px'); return;
+            }
             if (Math.abs(q.x - ds.get('block_px')) > g.m.bw / 2 + 10 || Math.abs(q.y - ds.get('block_y')) > g.m.bh / 2 + 12) return;
             e.preventDefault(); oscEl.setPointerCapture(e.pointerId);
             var i = ds.get('i_now');
             drag = { id: e.pointerId, x: ds.get('xs')[i], v: 0, z: ds.get('zs')[i], Fpush: ds.get('Fpush')[i], off: q.x - ds.get('block_px'), last: performance.now(), lastX: ds.get('xs')[i] };
             clk.set(true); holdState();
         });
+        function flagToR(px) { var r = (px - ds.get('eq_px')) / ds.get('px_per_m'); return Math.max(parseFloat(rr.el.min), Math.min(parseFloat(rr.el.max), Math.round(r * 100) / 100)); }
         oscEl.addEventListener('pointermove', function (e) {
+            if (flagId !== null && e.pointerId === flagId) {
+                var g = geom(), px = Math.max(g.m.eqX - g.m.amp, Math.min(g.m.eqX + g.m.amp, pointerX(e).x));
+                rr.set(flagToR(px)); flagX = ds.get('eq_px') + rr.value * ds.get('px_per_m'); takeHint(); if (!clk.playing) draw(); return;
+            }
             if (!drag || e.pointerId !== drag.id) return;
             var q = pointerX(e), sp = ds.get('span');
             drag.x = Math.max(-sp, Math.min(sp, (q.x - drag.off - ds.get('eq_px')) / ds.get('px_per_m')));
         });
         function release(e) {
+            if (flagId !== null && e && e.pointerId === flagId) { flagId = null; flagX = null; if (!drag) solve(fromNow()); return; }
             if (!drag || (e && e.pointerId !== drag.id)) return;
             var from = { x: drag.x, v: drag.v, z: drag.z };
             drag = null; ds.set('grabbed', false); ds.set('hand_now', 0);
@@ -1400,6 +1618,7 @@
         document.getElementById('view-amp').addEventListener('click', function () { setView('linear'); });
         document.getElementById('view-bode').addEventListener('click', function () { setView('bode'); });
         ds.set('view', 'linear');
+        takeHint();
 
         /* ---------- the data panel (scripts/datalog.js) reads the store; these hooks only say where things are drawn and how to test a value ---------- */
         function chartPos(n) {
@@ -1478,7 +1697,8 @@
             groups: [
                 { title: _t('Parameters'), note: _t('what you set with the sliders, as used by the last solve'), vars: ['m', 'f0', 'zeta', 'F0', 'fd', 'r', 'Kp', 'Ki', 'Kd', 'ctrl_on'] },
                 { title: _t('Start of the run'), note: _t('rest after Solve; where your hand let go after a drag'), vars: ['x0', 'v0', 'z0', 'released', 'grabbed', 'hand_now'] },
-                { title: _t('Closed loop'), note: _t('what the controller makes of the plant, §9'), vars: ['x_eq', 'F_eq', 'zeta_cl', 'margin', 'stable', 't_blow', 'H_drive'] },
+                { title: _t('Phase space'), note: _t('fixed point, eigenvalues and the steady orbit of §11, and the phase portrait'), vars: ['fp_kind', 'n_eig', 'lam_re', 'lam_im', 'mu_max', 'orb_x', 'orb_v', 'strobe', 'vmax', 'vlim', 'fld_x', 'fld_v', 'fld_dx', 'fld_dv', 'ph_x_px', 'ph_v_px'] },
+                { title: _t('Closed loop'), note: _t('what the controller makes of the plant, §10'), vars: ['x_eq', 'F_eq', 'zeta_cl', 'margin', 'stable', 't_blow', 'H_drive'] },
                 { title: _t('Derived physics'), note: _t('computed from the parameters by solve()'), vars: ['omega0', 'k', 'c', 'Omega', 'tau', 'Q', 'BL', 'I0', 'xst', 'X', 'phi', 'phi_deg', 'G_drive', 'fr'] },
                 { title: _t('Solver'), note: _t('how the run was computed, and what it measured'), vars: ['h', 'steps', 'solve_ms', 'err_max', 'Xm', 'Gm_drive', 'Win', 'Wloss', 'balance', 'stale'] },
                 { title: _t('Stored run'), note: _t('one row per stored sample, every 10 ms of the 60 s'), vars: ['ts', 'xs', 'vs', 'zs', 'Fpush', 'us', 'uP', 'uI', 'uD', 'Fs', 'Is', 'Fdamp', 'Fspr', 'xqs', 'ph', 'Es', 'Pin', 'Ploss', 'Wc', 'Qc', 'xex'] },
@@ -1513,8 +1733,9 @@
                 if (name === 'Wc_now') return barPoint(0, ds.get('Wc_now'));
                 if (name === 'Qc_now') return barPoint(1, ds.get('Qc_now'));
                 if (name === 'coil_px') return { x: ds.get('coil_px'), y: ds.get('block_y') };
+                if (name === 'ph_x_px' || name === 'ph_v_px') return { x: ds.get('ph_x_px'), y: ds.get('ph_v_px') };
                 if (name === 'u_now' || name === 'uP_now' || name === 'uI_now' || name === 'uD_now') return ds.get('ctrl_on') ? ctrlBar({ u_now: 3, uP_now: 0, uI_now: 1, uD_now: 2 }[name], ds.get(name)) : null;
-                if (name === 'r_px') return ds.get('ctrl_on') ? { x: ds.get('r_px'), y: geom().m.floorY + 22 } : null;
+                if (name === 'r_px') return { x: ds.get('r_px'), y: geom().m.floorY + 34 };
                 if (name === 'xeq_px' || name === 'x_eq') return ds.get('ctrl_on') ? { x: ds.get('xeq_px'), y: ds.get('block_y') } : null;
                 if (name === 'Hmag') { var Bq = bodeGeom(); return { x: Bq.X(Bq.panels[0], ds.get('fb')[idx]), y: Bq.Ym(Bq.panels[0], ds.get('Hmag')[idx]) }; }
                 if (name === 'Hphase') { var Bp = bodeGeom(); return { x: Bp.X(Bp.panels[1], ds.get('fb')[idx]), y: Bp.Yp(Bp.panels[1], ds.get('Hphase')[idx]) }; }
@@ -1551,6 +1772,21 @@
                 uscale: function () { var a = ds.get('us'), b = ds.get('uP'), c = ds.get('uI'), d = ds.get('uD'), e = 1e-12; for (var n = 0; n < NS; n++) e = Math.max(e, Math.abs(a[n]), Math.abs(b[n]), Math.abs(c[n]), Math.abs(d[n])); return { formula: 'max over n of (|u<sub>n</sub>|, |u<sub>P, n</sub>|, |u<sub>I, n</sub>|, |u<sub>D, n</sub>|), from the stored arrays', inputs: [['samples', NS, '', 0]], value: e }; },
                 r_px: function () { return { formula: 'x<sub>eq</sub> + r · px/m', inputs: [['x<sub>eq</sub>', ds.get('eq_px'), 'css px', 1], ['r', ds.get('r'), 'm', 2], ['px/m', ds.get('px_per_m'), '', 4]], value: ds.get('eq_px') + ds.get('r') * ds.get('px_per_m') }; },
                 xeq_px: function () { return { formula: 'x<sub>eq</sub> + x* · px/m', inputs: [['x<sub>eq</sub>', ds.get('eq_px'), 'css px', 1], ['x*', ds.get('x_eq'), 'm', 6], ['px/m', ds.get('px_per_m'), '', 4]], value: ds.get('eq_px') + ds.get('x_eq') * ds.get('px_per_m') }; },
+                ph_x_px: function () { var G = phaseGeom(); return { formula: 'centre + x / (1.1 span) · half the width of the portrait', inputs: [['x', ds.get('x_now'), 'm', 6], ['span', ds.get('span'), 'm', 5]], value: G.X(ds.get('x_now')) }; },
+                ph_v_px: function () { var G = phaseGeom(); return { formula: 'centre − ẋ / ẋ<sub>lim</sub> · half the height of the portrait', inputs: [['ẋ', ds.get('v_now'), 'm/s', 6], ['ẋ<sub>lim</sub>', ds.get('vlim'), 'm/s', 5]], value: G.V(ds.get('v_now')) }; },
+                lam_re: function (j) { var e = eigen(loopParams()); return { formula: 'real part of root ' + j + ' of m λ² + (c + K<sub>d</sub>)λ + (k + K<sub>p</sub>), times λ plus K<sub>i</sub> when K<sub>i</sub> > 0, (18) and (20)', inputs: [['c + K<sub>d</sub>', ds.get('c') + ds.get('Kd'), 'kg/s', 4], ['k + K<sub>p</sub>', ds.get('k') + ds.get('Kp'), 'N/m', 4], ['K<sub>i</sub>', ds.get('Ki'), 'N/(m·s)', 1]], value: j < e.re.length ? e.re[j] : NaN }; },
+                lam_im: function (j) { var e = eigen(loopParams()); return { formula: 'imaginary part of the same root', inputs: [['c + K<sub>d</sub>', ds.get('c') + ds.get('Kd'), 'kg/s', 4], ['k + K<sub>p</sub>', ds.get('k') + ds.get('Kp'), 'N/m', 4], ['K<sub>i</sub>', ds.get('Ki'), 'N/(m·s)', 1]], value: j < e.im.length ? e.im[j] : NaN }; },
+                n_eig: function () { return { formula: '3 with integral action, otherwise 2', inputs: [['K<sub>i</sub>', ds.get('Ki'), 'N/(m·s)', 1]], value: ds.get('Ki') > 0 ? 3 : 2 }; },
+                mu_max: function () { var re = ds.get('lam_re'), m = -Infinity; for (var q = 0; q < ds.get('n_eig'); q++) m = Math.max(m, re[q]); return { formula: 'e<sup>max Re λ / f</sup>', inputs: [['max Re λ', m, '1/s', 6], ['f', ds.get('fd'), 'Hz', 2]], value: Math.exp(m / ds.get('fd')) }; },
+                orb_x: function (j) { return { formula: 'x* + X cos(2π j / 180)', inputs: [['x*', ds.get('x_eq'), 'm', 6], ['X', ds.get('X'), 'm', 6], ['j', j, '', 0]], value: ds.get('x_eq') + ds.get('X') * Math.cos(2 * Math.PI * j / 180) }; },
+                orb_v: function (j) { return { formula: '−XΩ sin(2π j / 180)', inputs: [['X', ds.get('X'), 'm', 6], ['Ω', ds.get('Omega'), 'rad/s', 6], ['j', j, '', 0]], value: -ds.get('X') * ds.get('Omega') * Math.sin(2 * Math.PI * j / 180) }; },
+                strobe: function (n) { var f = ds.get('fd'), hit = 0; if (ds.get('F0') > 0) for (var q = 0; q / f <= TEND + 1e-9; q++) if (Math.round(q / (f * EVERY * H)) === n) hit = 1; return { formula: '1 if n = round(j / (f · 10 h)) for some whole j, with a push; else 0', inputs: [['n', n, '', 0], ['f', f, 'Hz', 2]], value: hit }; },
+                vmax: function () { var v = ds.get('vs'), e = 1e-9; for (var n = 0; n < NS; n++) e = Math.max(e, Math.abs(v[n])); return { formula: 'max |ẋ<sub>n</sub>| over the run, from the stored array', inputs: [['samples', NS, '', 0]], value: e }; },
+                vlim: function () { var xs = ds.get('xs'), v = ds.get('vs'), sp = ds.get('span'), e = 0; for (var n = 0; n < NS; n++) if (Math.abs(xs[n]) <= 1.1 * sp) e = Math.max(e, Math.abs(v[n])); return { formula: '1.15 · max(max |ẋ<sub>n</sub>| with |x<sub>n</sub>| ≤ 1.1 span, XΩ, 10<sup>−6</sup>)', inputs: [['span', sp, 'm', 5], ['XΩ', ds.get('X') * ds.get('Omega'), 'm/s', 5]], value: 1.15 * Math.max(e, ds.get('X') * ds.get('Omega'), 1e-6) }; },
+                fld_x: function (q) { var i = Math.floor(q / 11); return { formula: '1.1 span · (2 (i + ½) / 15 − 1), column i = ⌊q / 11⌋', inputs: [['span', ds.get('span'), 'm', 5], ['i', i, '', 0]], value: 1.1 * ds.get('span') * (2 * (i + 0.5) / 15 - 1) }; },
+                fld_v: function (q) { var j = q % 11; return { formula: 'ẋ<sub>lim</sub> · (2 (j + ½) / 11 − 1), row j = q mod 11', inputs: [['ẋ<sub>lim</sub>', ds.get('vlim'), 'm/s', 5], ['j', j, '', 0]], value: ds.get('vlim') * (2 * (j + 0.5) / 11 - 1) }; },
+                fld_dx: function (q) { return { formula: 'ẋ<sub>g</sub>', inputs: [['ẋ<sub>g</sub>', ds.get('fld_v')[q], 'm/s', 6]], value: ds.get('fld_v')[q] }; },
+                fld_dv: function (q) { var x = ds.get('fld_x')[q], v = ds.get('fld_v')[q], k = ds.get('k'), ki = ds.get('Ki'), r = ds.get('r'); return { formula: '(K<sub>p</sub>(r − x) + K<sub>i</sub> z* − (c + K<sub>d</sub>) ẋ − k x) / m, z* = k r / K<sub>i</sub>', inputs: [['x<sub>g</sub>', x, 'm', 5], ['ẋ<sub>g</sub>', v, 'm/s', 5]], value: (ds.get('Kp') * (r - x) + (ki > 0 ? k * r : 0) - (ds.get('c') + ds.get('Kd')) * v - k * x) / M }; },
                 fl: function (j) { return { formula: '1.6 Hz · (j + 1) / 1281', inputs: [['j', j, '', 0]], value: 1.6 * (j + 1) / 1281 }; },
                 Al: function (j) { var W = 2 * Math.PI * ds.get('fl')[j], w0 = ds.get('omega0'), z = ds.get('zeta'); return { formula: 'F<sub>0</sub> / (m √((ω<sub>0</sub>² − Ω²)² + (2ζω<sub>0</sub>Ω)²))', inputs: [['F<sub>0</sub>', ds.get('F0'), 'N', 1], ['f<sub>l</sub>', ds.get('fl')[j], 'Hz', 5], ['ω<sub>0</sub>', w0, 'rad/s', 6], ['ζ', z, '', 2]], value: ds.get('F0') / (M * Math.sqrt(Math.pow(w0 * w0 - W * W, 2) + Math.pow(2 * z * w0 * W, 2))) }; },
                 Pl: function (j) { var W = 2 * Math.PI * ds.get('fl')[j], w0 = ds.get('omega0'), z = ds.get('zeta'); return { formula: 'atan2(2ζω<sub>0</sub>Ω, ω<sub>0</sub>² − Ω²) in degrees', inputs: [['f<sub>l</sub>', ds.get('fl')[j], 'Hz', 5], ['ω<sub>0</sub>', w0, 'rad/s', 6], ['ζ', z, '', 2]], value: Math.atan2(2 * z * w0 * W, w0 * w0 - W * W) * 180 / Math.PI }; },
@@ -1632,10 +1868,12 @@
                 Wc_now: function () { var pt = barPoint(0, ds.get('Wc_now')); return pt.len < 2 ? { what: _t('the bar of the coil’s work'), drawn: _t('empty bar'), expected: _t('no fill below 2 px'), ok: true, note: '' } : readBack(box, 'the end of the bar of the coil’s work', pt, 0, Sim.isBurgundy, 'the burgundy bar', 'The bar is W<sub>in</sub> / W<sub>bar</sub> of its frame.'); },
                 Qc_now: function () { var pt = barPoint(1, ds.get('Qc_now')); return pt.len < 2 ? { what: _t('the bar of the damper’s heat'), drawn: _t('empty bar'), expected: _t('no fill below 2 px'), ok: true, note: '' } : readBack(box, 'the end of the bar of the damper’s heat', pt, 0, tanInk, 'the brown bar', 'The bar is W<sub>loss</sub> / W<sub>bar</sub> of its frame.'); },
                 u_now: function () { if (!ds.get('ctrl_on')) return { what: _t('the controller box'), drawn: _t('controller off'), expected: _t('no bars'), ok: null, note: '' }; var pt = ctrlBar(3, ds.get('u_now')); return Math.abs(pt.len) < 2 ? { what: _t('the bar of u'), drawn: _t('empty bar'), expected: _t('no fill below 2 px'), ok: true, note: '' } : readBack(box, 'the end of the bar of u in the controller box', pt, 0, Sim.isBurgundy, 'the burgundy bar', 'The bar is u / u<sub>bar</sub> of half the box’s scale, to the right for a positive force.'); },
-                r_px: function () { return ds.get('ctrl_on') ? readBack(box, 'the target dot on the ruler', { x: ds.get('r_px'), y: geom().m.floorY + 22 }, 1, Sim.isBurgundy, 'the burgundy dot', 'The dot sits at x<sub>eq</sub> + r · px/m on the ruler.') : { what: _t('the target dot'), drawn: _t('controller off'), expected: _t('no dot'), ok: null, note: '' }; },
+                r_px: function () { return true ? readBack(box, 'the target dot on the ruler', { x: ds.get('r_px'), y: geom().m.floorY + 34 }, 1, Sim.isBurgundy, 'the burgundy dot', 'The dot sits at x<sub>eq</sub> + r · px/m on the ruler.') : { what: _t('the target dot'), drawn: _t('controller off'), expected: _t('no dot'), ok: null, note: '' }; },
                 xeq_px: function () { return ds.get('ctrl_on') ? readBack(box, 'the equilibrium line under the block', { x: ds.get('xeq_px'), y: geom().m.floorY - 3 }, 2, roseInk, 'the rose dashed line', 'The line stands at x<sub>eq</sub> + x* · px/m from the floor up to the block.') : { what: _t('the equilibrium line'), drawn: _t('controller off'), expected: _t('no line'), ok: null, note: '' }; },
                 H_drive: function () { var B = bodeGeom(), p = B.panels[0]; if (B.lin) return { what: _t('|H| at the drive frequency'), drawn: _t('linear view'), expected: _t('the dot marks X = F₀|H| instead'), ok: null, note: '' }; return ds.get('ctrl_on') ? readBack(bbox, 'the drive frequency on the Bode plot', { x: B.X(p, ds.get('fd')), y: B.Ym(p, ds.get('H_drive')) }, 1, Sim.isBurgundy, 'the burgundy dot', 'The dot sits at f and |H(iΩ)|; the ring around it is the amplitude measured in the stored run, per newton.') : { what: _t('|H| at the drive frequency'), drawn: _t('controller off'), expected: _t('not drawn'), ok: null, note: '' }; },
                 Hmag: function (j) { if (bodeGeom().lin) return { what: _t('|H| on the Bode plot'), drawn: _t('linear view'), expected: _t('drawn in the Bode view'), ok: null, note: '' }; if (!ds.get('ctrl_on')) return { what: _t('|H| on the Bode plot'), drawn: _t('controller off'), expected: _t('not drawn: the plant’s |G| is shown instead'), ok: null, note: '' }; var B = bodeGeom(), p = B.panels[0]; return readBack(bbox, '|H| at f<sub>b, j</sub> on the Bode plot', { x: B.X(p, ds.get('fb')[j]), y: B.Ym(p, ds.get('Hmag')[j]) }, 2, neutralInk, 'the dark curve', 'With the controller on, the ink curve is the closed loop and the dashed grey curve the bare plant.'); },
+                ph_x_px: function () { return readBack(pbox, 'the state dot on the phase portrait', { x: ds.get('ph_x_px'), y: ds.get('ph_v_px') }, 1, Sim.isBurgundy, 'the burgundy dot', 'The dot sits at (x, ẋ) of the row on screen, or of your hand while you hold the block.'); },
+                orb_x: function (j) { if (!(ds.get('F0') > 0)) return { what: _t('the steady orbit'), drawn: _t('no push'), expected: _t('drawn only with a push'), ok: null, note: '' }; var G = phaseGeom(); return readBack(pbox, 'point j of the steady orbit on the phase portrait', { x: G.X(ds.get('orb_x')[j]), y: G.V(ds.get('orb_v')[j]) }, 4, roseInk, 'the rose dashed ellipse', 'The ellipse is dashed, so the search reaches 4 px along it.'); },
                 xs_prev: function (n) {
                     if (!ds.get('has_prev')) return { what: _t('the previous run'), drawn: _t('none yet'), expected: _t('nothing before the second solve'), ok: null, note: _t('The first run has nothing to compare with.') };
                     var p = chartPosPrev(n);
@@ -1680,7 +1918,7 @@
                 columns: ['x_now', 'v_now', 'u_now', 'F_now', 'Fc_now', 'Fk_now', 'E_now', 'Pin_now'], point: function () { return { what: 'block' }; },
                 blocked: function () { return ds.get('t_play') + 1 / ds.get('fd') > TEND ? _t('the stored run ends before one more drive period; press From t = 0') : null; } },
             play: function () { clk.set(true); },
-            about: _t('Nothing on this page is computed while you watch. The run is solved once, with RK4 at h = 1 ms on the state (x, v, z), where z = ∫(r − x) dt is the controller’s memory, and every tenth state is stored together with the outside push, the controller’s three parts and their sum u, the coil’s force F = F<sub>push</sub> + u and its current I = F/(Bℓ), the forces of damper and spring, the energy, the two powers, the coil’s work and the damper’s heat so far, and the exact solution. Each frame draws the stored sample nearest to the playback time, without interpolation; the only arithmetic in the drawing turns metres, seconds, newtons and joules into pixels, with the scales listed under Drawing. The window chart draws every stored sample between its edges; the strip of the whole run draws about two samples per screen pixel. The mechanism has one scale, px/m = A<sub>px</sub> / span, and the force arrows follow it: a force is drawn twice as long as the stretch F/k it would cause, px/N = 2 (px/m)/k. The span is kept from one Solve to the next and widens only when a run needs more room, so a run with more damping or less force swings visibly less than the outlined previous run; Fit scale sets the span to the present run. At instants when the previous run lies outside the span, its outlined block is left out. The oil of the damper is shaded by P<sub>loss</sub> / max P<sub>loss</sub>, the heat it makes at this instant relative to the most it makes in the run. The magnet, the coil’s size and the current source are schematic; the coil’s position is the block’s. The energy bars are scaled to the largest of the three energies over the run, and the controller’s bars to the largest of its forces, so both compare values within a run, not between runs. An unstable loop is solved until |x| passes 1000 m; the rest of the run holds that last state, and the readout names the time. While you hold the block, nothing is stored: the values on screen are your hand’s position, its speed smoothed over about 50 ms, the controller’s force for that state and its memory, added up in wall-clock time; the hand’s force leaves out the m ẍ of your hand’s own jerks. When you let go, that state is the start x(0), ẋ(0), z(0) of a new stored run. The force profile draws the same window of the run as the x chart; the frequency response draws the linear view from an even grid of 1281 frequencies (0.00125 Hz apart, fine enough for the sharpest peak, ζ = 0.01) and the Bode view from 241 log-spaced ones.')
+            about: _t('Nothing on this page is computed while you watch. The run is solved once, with RK4 at h = 1 ms on the state (x, v, z), where z = ∫(r − x) dt is the controller’s memory, and every tenth state is stored together with the outside push, the controller’s three parts and their sum u, the coil’s force F = F<sub>push</sub> + u and its current I = F/(Bℓ), the forces of damper and spring, the energy, the two powers, the coil’s work and the damper’s heat so far, and the exact solution. Each frame draws the stored sample nearest to the playback time, without interpolation; the only arithmetic in the drawing turns metres, seconds, newtons and joules into pixels, with the scales listed under Drawing. The window chart draws every stored sample between its edges; the strip of the whole run draws about two samples per screen pixel. The mechanism has one scale, px/m = A<sub>px</sub> / span, and the force arrows follow it: a force is drawn twice as long as the stretch F/k it would cause, px/N = 2 (px/m)/k. The span is kept from one Solve to the next and widens only when a run needs more room, so a run with more damping or less force swings visibly less than the outlined previous run; Fit scale sets the span to the present run. At instants when the previous run lies outside the span, its outlined block is left out. The oil of the damper is shaded by P<sub>loss</sub> / max P<sub>loss</sub>, the heat it makes at this instant relative to the most it makes in the run. The magnet, the coil’s size and the current source are schematic; the coil’s position is the block’s. The energy bars are scaled to the largest of the three energies over the run, and the controller’s bars to the largest of its forces, so both compare values within a run, not between runs. An unstable loop is solved until |x| passes 1000 m; the rest of the run holds that last state, and the readout names the time. While you hold the block, nothing is stored: the values on screen are your hand’s position, its speed smoothed over about 50 ms, the controller’s force for that state and its memory, added up in wall-clock time; the hand’s force leaves out the m ẍ of your hand’s own jerks. When you let go, that state is the start x(0), ẋ(0), z(0) of a new stored run. The force profile draws the same window of the run as the x chart; the frequency response draws the linear view from an even grid of 1281 frequencies (0.00125 Hz apart, fine enough for the sharpest peak, ζ = 0.01) and the Bode view from 241 log-spaced ones. The phase portrait draws the stored rows (x, ẋ) as they are; its arrows have one fixed length on screen and show only the direction of the stored free flow, and with integral action they are the slice z = z* of a three-dimensional flow.')
 
 
         };
@@ -1688,6 +1926,7 @@
         solve();
         Sim.onResize(stage, function () { box.fit(); frame(); });
         Sim.onResize(forceStage, function () { fbox.fit(); frame(); });
+        Sim.onResize(phaseStage, function () { pbox.fit(); frame(); });
         Sim.onResize(bodeStage, function () { bbox.fit(); drawBode(); });
         if (document.fonts && document.fonts.ready) document.fonts.ready.then(function () { frame(); drawBode(); });
     })();
