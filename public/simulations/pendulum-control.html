@@ -175,7 +175,7 @@
                 </div>
 
                 <div class="panel__group">
-                    <p class="panel__label">Coil · F = κI, κ = 10 N/A</p>
+                    <p class="panel__label">Coil · <span style="text-transform:none">F = κI, κ = 10 N/A</span></p>
                     <label class="ctl">
                         <span class="ctl__row"><span>Current limit I<sub>max</sub></span><output id="Imax-out" for="Imax"></output></span>
                         <input type="range" id="Imax" min="0.5" max="8" step="0.1" value="3">
@@ -189,7 +189,7 @@
                     <div><dt>Slowest decay</dt><dd id="r-slow">—</dd></div>
                     <div><dt>Settled after</dt><dd id="r-settle">—</dd></div>
                     <div><dt>Coil at its limit</dt><dd id="r-sat">—</dd></div>
-                    <div><dt>RK4, h vs h/2</dt><dd id="r-err">—</dd></div>
+                    <div><dt>RK4, <span style="text-transform:none">h vs h/2</span></dt><dd id="r-err">—</dd></div>
                     <div><dt>Energy balance</dt><dd id="r-bal">—</dd></div>
                 </dl>
 
@@ -400,7 +400,7 @@
                         <h4><span class="psub__n">12.1</span>Further reading</h4>
                         <ol class="prefs">
                             <li>R. Tedrake, <a href="https://underactuated.csail.mit.edu/acrobot.html"><em>Underactuated Robotics</em>, chapter 3: Acrobots, Cart-Poles, and Quadrotors</a>, MIT course notes, 2024: the manipulator equations, linearisation at a fixed point, the controllability test and LQR for a pendulum pushed through one actuator (Sections 3, 7 and 8).</li>
-                            <li>K. J. Åström and R. M. Murray, <em>Feedback Systems: An Introduction for Scientists and Engineers</em>, Princeton University Press, 2008: chapter 6, reachability and state feedback, and chapter 7, the linear–quadratic regulator. <a href="http://www.cds.caltech.edu/~murray/books/AM08/pdf/am08-complete_22Feb09.pdf">The authors’ free electronic edition</a>.</li>
+                            <li>K. J. Åström and R. M. Murray, <em>Feedback Systems: An Introduction for Scientists and Engineers</em>, Princeton University Press, 2008: chapter 6, reachability and state feedback (Section 6.1) and the linear–quadratic regulator (Section 6.3). <a href="http://www.cds.caltech.edu/~murray/books/AM08/pdf/am08-complete_22Feb09.pdf">The authors’ free electronic edition</a>.</li>
                             <li>J. R. Taylor, <a href="https://books.google.com/books/about/Classical_Mechanics.html?id=P1kCtNr-pJsC"><em>Classical Mechanics</em></a>, University Science Books, 2005: chapter 7, Lagrange's equations with constraints, and chapter 11, coupled oscillators and normal modes (Sections 3 and 6).</li>
                         </ol>
                     </section>

@@ -101,3 +101,13 @@ flag, the coil-force arrow, and θ1, θ2, X on the window chart (`ok: null` for 
 One recorded round is two seconds of the stored run (`t_play`, sampled), blocked in the last two seconds. What the drawing
 leaves out of the store is listed in `about`: the tubes, stop marker, wheels, magnet and coil are schematic, the outer tube is
 drawn 0.5 m long and the inner tube fills the rest.
+
+## Fixes · 24 October 2026
+
+- The side-panel heading "Coil · F = κI, κ = 10 N/A" is set by `.panel__label`, which upper-cases its text, so κ read as K.
+  The formula now sits in `<span style="text-transform:none">` (line 178); the same was done for the readout "RK4, h vs h/2"
+  (line 192), where the upper-cased step h read as H, the letter of the cart's depth. Both edits keep the line count.
+- Further reading: Åström and Murray treat reachability in Section 6.1 and the linear–quadratic regulator in Section 6.3
+  (equations (6.26)–(6.27)), both in chapter 6; the note had said "chapter 7" for the regulator (line 403).
+- German and Arabic: the three changed pieces translated and stored (`i18n/<lang>/simulations__pendulum-control.html.json`),
+  pages regenerated. Checked by `node notes/fig11/test.cjs en|de|ar`.
