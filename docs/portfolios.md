@@ -276,7 +276,8 @@ second while playing; with the panel closed `__dataPanel.running()` is false; Re
 `python3 -I check_physics.py` (independent SymPy and SciPy checks with retyped constants: the rod's Lagrangian, the uneven-rotor
 term, κ*, the 45° lag, P*, τ*, the trail identity, the nine stored runs re-integrated, the generator's circuit and two geared runs),
 `node tools/check_sim.js` (the simulation's physics block reproduces the Python engine's nine reference runs, and the geared
-settings of `data/L4_check_2000.json`), `node tools/check_sim_browser.js` (360–1440 px: no errors, no sideways scroll, a hover
+settings of `data/L4_check_2000.json`), `node tools/check_newton.js` (Newton's cap and the step: the geared powers change by
+at most 8e-12 and 3e-4), `node tools/check_sim_browser.js` (360–1440 px: no errors, no sideways scroll, a hover
 sweep changes nothing, Read values pins and rewrites at most four times a second, every "Try it" button solves) and, with
 `public/` served, `python3 tools/check_combined.py <url>` (both tabs complete, 0 KaTeX errors, solve, tab links, no sideways
 scroll at 360–1440 px).

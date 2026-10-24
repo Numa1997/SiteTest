@@ -51,10 +51,13 @@ outcome (regular or chaotic, a gain or a loss) is printed as a result, never as 
 - White-noise shaking: a rod draws at most (S/2)(3/4)m, three quarters of a point mass's ceiling.
 
 ## Queue
-1. `L4_check.py` 2000 and 4000 steps, rerun with the count of Newton steps capped at 12 (the first 2000-step run hit the cap
-   at least once; its data are identical, only the convergence report changes); then `L4_converge.py`.
-2. Delete what no longer applies (point-pendulum and double-pendulum scripts and outputs).
-3. Docs and inventory; pull request (not merged).
+1. Pull request #43: Numa's "merge"; then the joint push with the Fig. 11 session.
+
+The Newton question (closed, 24 October 2026). `L4_check.py` at 2000 steps per turn stops Newton at its cap of 12 in 1939
+of 240000 steps (its log says FAIL). `portfolios-src/rotor-pendula/tools/check_newton.js` reran the 16 settings on the
+page's own engine in Node (5 minutes; Python needed 41 minutes for one pass): it reproduces the Python run to 1e-14; with
+the cap at 40 no step of the measured turns stays unconverged (17 in the start-up turns do); the cap of 12 changes the powers
+by at most 8e-12; 4000 steps per turn and a band of 3e-4 change them by at most 2.7e-4. The results stand.
 
 Done (24 October 2026): every model run for the second blade; `make_numbers.py`, `typed_numbers.py`, `check_numbers.py` (PASS),
 `check_physics.py`; the notes, chapters 0 to 8; the simulation page's physics text and six worked solutions
