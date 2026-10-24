@@ -159,6 +159,10 @@
   "src": "Steady amplitude X",
   "tr": "السعة المستقرّة X"
  },
+ "36399b934f75": {
+  "src": "On the page \\(m = 1\\ \\mathrm{kg}\\), and the sliders set the spring constant \\(k\\), the damping ratio \\(\\zeta\\), \\(F_0\\) and the drive frequency \\(f = \\Omega/2\\pi\\); the natural frequency follows from the spring, \\(f_0 = \\sqrt{k/m}/2\\pi\\), and the damper from both, \\(c = 2\\zeta\\sqrt{km}\\). With the defaults, \\(k = 9.87\\ \\mathrm{N/m}\\) and \\(\\zeta = 0.05\\), so \\(f_0 = 0.5\\ \\mathrm{Hz}\\) and \\(c = 0.314\\ \\mathrm{kg/s}\\). After Solve the block starts at rest in its rest position, \\(x(0) = 0\\), \\(\\dot x(0) = 0\\); §9 shows how to start it anywhere by hand.",
+  "tr": "في الصفحة \\(m = 1\\ \\mathrm{kg}\\)، وتضبط المنزلقات ثابت النابض \\(k\\)، ونسبة التخامد \\(\\zeta\\)، و\\(F_0\\)، وتردد القوّة الدافعة \\(f = \\Omega/2\\pi\\)؛ ويتحدّد التردد الطبيعي من النابض، \\(f_0 = \\sqrt{k/m}/2\\pi\\)، والمخمّد من كليهما، \\(c = 2\\zeta\\sqrt{km}\\). وبالقيم الافتراضية \\(k = 9.87\\ \\mathrm{N/m}\\) و\\(\\zeta = 0.05\\)، فيكون \\(f_0 = 0.5\\ \\mathrm{Hz}\\) و\\(c = 0.314\\ \\mathrm{kg/s}\\). وبعد «احسب» تبدأ الكتلة من السكون عند موضع سكونها، \\(x(0) = 0\\)، \\(\\dot x(0) = 0\\)؛ ويبيّن §9 كيف تبدأ الحركة من أيّ موضع باليد."
+ },
  "378e627eaeab": {
   "src": "Engineers compress everything above into one function. Take the Laplace transform of (1) with the block starting at rest: each time derivative becomes a factor \\(s\\), and the output is the input multiplied by the <em>transfer function</em> \\(G(s)\\). Here \\(X(s)\\) and \\(F(s)\\) are the transforms of \\(x(t)\\) and \\(F(t)\\), not the amplitude \\(X\\) of (4):",
   "tr": "يختصر المهندسون كل ما سبق في دالّة واحدة. نأخذ تحويل لابلاس للمعادلة (1) والكتلة ساكنة عند البداية: يصبح كل مشتقّ زمني عاملًا \\(s\\)، ويكون الخرج هو الدخل مضروبًا في <em>دالّة التحويل</em> \\(G(s)\\). وهنا \\(X(s)\\) و\\(F(s)\\) هما تحويلا \\(x(t)\\) و\\(F(t)\\)، لا السعة \\(X\\) في (4):"
@@ -190,6 +194,10 @@
  "461fdde232eb": {
   "src": "The second condition comes from Faraday’s law: a wire moving at the speed \\(\\dot x\\) through the field has the emf \\(B\\ell\\dot x\\) induced in it. Treat the charge \\(q\\) that has passed through the coil as a second coordinate, so that \\(I = \\dot q\\), and write the Lagrangian of block and coil together, \\(L = \\tfrac12 m\\dot x^2 - \\tfrac12 kx^2 + \\tfrac12 L_c\\dot q^2 + B\\ell\\,x\\dot q\\), where \\(L_c\\) is the inductance of the coil and the last term couples the two; the damper and the coil’s resistance \\(R\\) enter through Rayleigh’s dissipation function \\(\\mathcal F = \\tfrac12 c\\dot x^2 + \\tfrac12 R\\dot q^2\\). Lagrange’s equation for \\(x\\) is (1) with \\(F = B\\ell I\\), the result (9) by a second route. The equation for \\(q\\) gives the voltage the source must supply:",
   "tr": "ويأتي الشرط الثاني من قانون فاراداي: السلك الذي يتحرّك بالسرعة \\(\\dot x\\) عبر الحقل تُستحثّ فيه القوّة الدافعة الكهربائية \\(B\\ell\\dot x\\). لنعامل الشحنة \\(q\\) التي عبرت الملف إحداثيًّا ثانيًا، بحيث يكون \\(I = \\dot q\\)، ولنكتب اللاغرانجيان للكتلة والملف معًا، \\(L = \\tfrac12 m\\dot x^2 - \\tfrac12 kx^2 + \\tfrac12 L_c\\dot q^2 + B\\ell\\,x\\dot q\\)، حيث \\(L_c\\) محاثّة الملف، والحدّ الأخير يربط بين الإحداثيّين؛ أمّا المخمّد ومقاومة الملف \\(R\\) فيدخلان عبر دالّة التبديد لرايلي \\(\\mathcal F = \\tfrac12 c\\dot x^2 + \\tfrac12 R\\dot q^2\\). ومعادلة لاغرانج لـ\\(x\\) هي (1) مع \\(F = B\\ell I\\)، أي النتيجة (9) من طريق ثانٍ. وتعطي المعادلة لـ\\(q\\) الجهد الذي يجب أن يوفّره المصدر:"
+ },
+ "46724d55e18c": {
+  "src": "<b>Frequency response</b> · amplitude function <span class=\"tx\">\\(A(f)\\)</span> and phase difference <span class=\"tx\">\\(\\varphi(f)\\)</span> <span class=\"actions\" role=\"group\" aria-label=\"View of the frequency response\" style=\"display:inline-flex; margin-left:8px;\"><button type=\"button\" class=\"btn btn--ghost\" id=\"view-amp\" aria-pressed=\"true\">Linear</button><button type=\"button\" class=\"btn btn--ghost\" id=\"view-bode\" aria-pressed=\"false\">Bode, log</button></span>",
+  "tr": "<b>الاستجابة الترددية</b> · دالّة السعة <span class=\"tx\">\\(A(f)\\)</span> وفرق الطور <span class=\"tx\">\\(\\varphi(f)\\)</span> <span class=\"actions\" role=\"group\" aria-label=\"View of the frequency response\" style=\"display:inline-flex; margin-left:8px;\"><button type=\"button\" class=\"btn btn--ghost\" id=\"view-amp\" aria-pressed=\"true\">خطّي</button><button type=\"button\" class=\"btn btn--ghost\" id=\"view-bode\" aria-pressed=\"false\">بودي، لوغاريتمي</button></span>"
  },
  "472f64a46f7e": {
   "src": "<span class=\"sw sw--dash\" style=\"border-top-color: var(--accent-rose);\"></span>±X steady",
@@ -267,6 +275,10 @@
   "src": "Force amplitude F₀",
   "tr": "سعة القوّة F₀"
  },
+ "5f38de2c3142": {
+  "src": "<b>Force profile</b> · <span class=\"tx\">\\(u = u_P + u_I + u_D\\)</span>, the push, <span class=\"tx\">\\(-kx\\)</span> and <span class=\"tx\">\\(-c\\dot x\\)</span> over the run",
+  "tr": "<b>منحنى القوى عبر الزمن</b> · <span class=\"tx\">\\(u = u_P + u_I + u_D\\)</span>، والدفع، و<span class=\"tx\">\\(-kx\\)</span> و<span class=\"tx\">\\(-c\\dot x\\)</span> على مدى الحلّ"
+ },
  "60f8686f6f6b": {
   "src": "<span>5</span>The control engineer’s view&nbsp;★",
   "tr": "<span>5</span>نظرة مهندس التحكّم&nbsp;★"
@@ -278,6 +290,10 @@
  "62e63a3f846a": {
   "src": "Phase lag φ",
   "tr": "تأخّر الطور φ"
+ },
+ "65fdbd2fb03f": {
+  "src": "The forces on the block over the stored run: the controller’s force u and its proportional, integral and derivative parts, the outside push, the spring force and the damper force, with the cursor at the frame being shown.",
+  "tr": "القوى المؤثّرة في الكتلة على مدى الحلّ المخزَّن: قوّة المتحكّم u وأجزاؤها التناسبي والتكاملي والتفاضلي، والدفع الخارجي، وقوّة النابض، وقوّة المخمّد، مع المؤشّر عند الإطار المعروض."
  },
  "676a899d52b5": {
   "src": "Integral gain Kᵢ",
@@ -387,9 +403,17 @@
   "src": "K. J. Åström and R. M. Murray, <em>Feedback Systems: An Introduction for Scientists and Engineers</em>, Princeton University Press, 2008: chapter 8, transfer functions, frequency response and Bode plots. <a href=\"http://www.cds.caltech.edu/~murray/books/AM08/pdf/am08-complete_22Feb09.pdf\">The authors’ free electronic edition</a>.",
   "tr": "K. J. Åström وR. M. Murray، <em>Feedback Systems: An Introduction for Scientists and Engineers</em>، Princeton University Press، 2008: الفصل 8، دوال التحويل، والاستجابة الترددية، ومخطّطات بودي. <a href=\"http://www.cds.caltech.edu/~murray/books/AM08/pdf/am08-complete_22Feb09.pdf\">النسخة الإلكترونية المجانية للمؤلّفين</a>."
  },
+ "89d65d88af8d": {
+  "src": "Now take the block in your hand. Grab it on the screen and drag it anywhere within the ruler. While you hold it, the page’s clock stops, but the controller keeps working: it reads your hand’s position, pulls against it with \\(u\\), and its integral keeps adding up the error, \\(z = \\int (r - x)\\,\\mathrm dt'\\), second by second. A fourth arrow shows the force your hand must give, \\(F_\\text{hand} = kx + c\\dot x - F\\), the force that balances spring, damper and coil. Let go, and the page solves (12) again from the state you left behind, \\(x(0)\\), \\(\\dot x(0)\\) (the speed of your hand, so you can throw the block) and \\(z(0)\\), and plays the new run from \\(t = 0\\), the outside push restarting with it. The equilibrium (14) does not depend on where the block starts, so the controller brings it back to \\(x^*\\) from wherever you left it; with the controller off you see instead the free, damped swing dying away with the decay time \\(\\tau\\) of §3. Hold the block for a few seconds away from the target with the integral on, and the release overshoots far past \\(r\\): the memory has filled up with error while you held it, and it takes as long again to empty. That is integrator windup, the most common fault of real PI controllers, and the reason real ones limit their integral. The exact solutions need only their constants adjusted to the new start: in (5) they become \\(C_1 = x(0) - X\\cos\\varphi\\) and \\(C_2 = (\\dot x(0) + \\zeta\\omega_0 C_1 - X\\Omega\\sin\\varphi)/\\omega_d\\), and in the closed loop the free motion starts from \\(x(0)\\), \\(\\dot x(0)\\) and \\(z(0)\\) less the equilibrium and the steady swing. The page grades every released run against them as before.",
+  "tr": "والآن خذ الكتلة بيدك. أمسكها على الشاشة واسحبها إلى أيّ موضع داخل المسطرة. وما دمت تمسكها تتوقّف ساعة الصفحة، لكن المتحكّم يظلّ يعمل: يقرأ موضع يدك، ويشدّ عكسها بالقوّة \\(u\\)، ويظلّ تكامله يجمع الخطأ، \\(z = \\int (r - x)\\,\\mathrm dt'\\)، ثانيةً بعد ثانية. ويُظهر سهم رابع القوّة التي يجب أن تبذلها يدك، \\(F_\\text{hand} = kx + c\\dot x - F\\)، وهي القوّة التي توازن النابض والمخمّد والملف. فإذا أفلتّها حلّت الصفحة (12) من جديد انطلاقًا من الحالة التي تركتها عليها، \\(x(0)\\) و\\(\\dot x(0)\\) (سرعة يدك، فيمكنك أن ترمي الكتلة) و\\(z(0)\\)، وشغّلت الحلّ الجديد من \\(t = 0\\)، ويبدأ الدفع الخارجي معه من جديد. ولا يتوقّف موضع الاتزان (14) على موضع بداية الكتلة، فيعيدها المتحكّم إلى \\(x^*\\) من أيّ موضع تركتها فيه؛ ومع إيقاف المتحكّم ترى بدلًا من ذلك التأرجح الحرّ المتخامد يضمحلّ بزمن الاضمحلال \\(\\tau\\) من §3. أمسك الكتلة بضع ثوانٍ بعيدًا عن الموضع المستهدف والتكامل يعمل، فإذا أفلتّها تجاوزت \\(r\\) كثيرًا: فقد امتلأت الذاكرة بالخطأ وأنت تمسكها، وتحتاج إلى مدّة مماثلة لتفرغ. هذا هو التشبّع التكاملي (windup)، أشيع عيوب متحكّمات PI الحقيقية، وهو السبب في أنّ المتحكّمات الحقيقية تحدّ تكاملها. ولا تحتاج الحلول الدقيقة إلّا إلى تعديل ثوابتها لتلائم البداية الجديدة: ففي (5) تصبح \\(C_1 = x(0) - X\\cos\\varphi\\) و\\(C_2 = (\\dot x(0) + \\zeta\\omega_0 C_1 - X\\Omega\\sin\\varphi)/\\omega_d\\)، وفي الحلقة المغلقة تبدأ الحركة الحرّة من \\(x(0)\\) و\\(\\dot x(0)\\) و\\(z(0)\\) مطروحًا منها موضع الاتزان والتأرجح المستقرّ. وتقيّم الصفحة مقابلها كلّ حلّ يبدأ بعد الإفلات، كما من قبل."
+ },
  "8fc78cde5646": {
   "src": "<span>4</span>Resonance and phase",
   "tr": "<span>4</span>الرنين والطور"
+ },
+ "920cb0e71ab6": {
+  "src": "Frequency response: the amplitude function A(f) and the phase difference φ(f) of the steady swing against the drive frequency, on linear axes or as a Bode plot, with the present drive marked.",
+  "tr": "الاستجابة الترددية: دالّة السعة A(f) وفرق الطور φ(f) للتأرجح المستقرّ بدلالة تردد القوّة الدافعة، على محورين خطّيين أو في صورة مخطّط بودي، مع تعليم تردد القوّة الدافعة الحالي."
  },
  "930ccbc0599e": {
   "src": "Read (5) as a story in two acts. At first the block rings at its own frequency, because a sudden push excites its own rhythm. That ringing dies within a few \\(\\tau\\), and afterwards only the driver’s rhythm remains. With the defaults, \\(\\tau = 6.37\\ \\mathrm{s}\\), \\(X = 0.482\\ \\mathrm{m}\\) and \\(\\varphi = 25.3^\\circ\\).",
@@ -431,6 +455,10 @@
   "src": "Controller · u = Kₚ(r − x) + Kᵢ∫(r − x)dt − K_d ẋ",
   "tr": "المتحكّم · u = Kₚ(r − x) + Kᵢ∫(r − x)dt − K_d ẋ"
  },
+ "a20a1594ba6d": {
+  "src": "The last figure is the frequency response of the steady swing. In its linear view, the one used in the teaching laboratory with Pohl’s wheel, the left panel is the amplitude function \\(A(f) = F_0\\,|G(i\\,2\\pi f)|\\) of (4) in metres, the resonance curve with its peak near \\(f_0\\) and a width set by \\(\\zeta\\), and the right panel the phase difference \\(\\varphi(f)\\) between push and swing, from \\(0^\\circ\\) for slow pushes through \\(90^\\circ\\) at \\(f_0\\) to \\(180^\\circ\\) for fast ones. With the controller on, the ink curves are the closed loop (16) and the bare plant is dashed behind them. The Bode view shows the same curves per newton on logarithmic axes, as control engineers draw them.",
+  "tr": "الشكل الأخير هو الاستجابة الترددية للتأرجح المستقرّ. في عرضه الخطّي، وهو العرض المستعمل في مختبر التدريس مع عجلة بول، تكون اللوحة اليسرى دالّة السعة \\(A(f) = F_0\\,|G(i\\,2\\pi f)|\\) من (4) بالأمتار، أي منحنى الرنين بقمّته قرب \\(f_0\\) وعرضه الذي تحدّده \\(\\zeta\\)، وتكون اللوحة اليمنى فرق الطور \\(\\varphi(f)\\) بين الدفع والتأرجح، من \\(0^\\circ\\) للدفعات البطيئة مرورًا بـ\\(90^\\circ\\) عند \\(f_0\\) إلى \\(180^\\circ\\) للدفعات السريعة. ومع تشغيل المتحكّم تمثّل منحنيات الحبر الحلقة المغلقة (16)، والمنظومة وحدها متقطّعة خلفها. ويُظهر عرضُ بودي المنحنيات نفسها لكل نيوتن على محورين لوغاريتميّين، كما يرسمها مهندسو التحكّم."
+ },
  "a28272643323": {
   "src": "<span class=\"psec__n\">02</span>The model",
   "tr": "<span class=\"psec__n\">02</span>النموذج"
@@ -446,6 +474,10 @@
  "a4ce3a9be794": {
   "src": "← All simulations",
   "tr": "→ جميع المحاكاة"
+ },
+ "a6abd6a4797e": {
+  "src": "View of the frequency response",
+  "tr": "طريقة عرض الاستجابة الترددية"
  },
  "a842658263eb": {
   "src": "Equilibrium x*",
@@ -591,6 +623,10 @@
   "src": "Stored run",
   "tr": "الحلّ المخزَّن"
  },
+ "e12f82d4ea7b": {
+  "src": "The force profile under the motion shows who pushes when, in newtons, over the same window of the run: the outside push, the spring’s \\(-kx\\), the damper’s \\(-c\\dot x\\), and with the controller on its force \\(u\\) and its three parts. After a release you can watch the division of labour: the proportional part jumps with the error, the derivative part brakes the fast motion, and the integral part rises slowly until it alone carries the spring at \\(x^*\\).",
+  "tr": "يُظهر منحنى القوى عبر الزمن تحت الحركة مَن يدفع ومتى، بالنيوتن، على النافذة نفسها من الحلّ: الدفع الخارجي، و\\(-kx\\) للنابض، و\\(-c\\dot x\\) للمخمّد، ومع تشغيل المتحكّم قوّته \\(u\\) وأجزاؤها الثلاثة. وبعد الإفلات يمكنك أن تراقب توزيع العمل: يقفز الجزء التناسبي مع الخطأ، ويكبح الجزء التفاضلي الحركة السريعة، ويرتفع الجزء التكاملي ببطء حتى يحمل وحده النابض عند \\(x^*\\)."
+ },
  "e13b587879b0": {
   "src": "<span>2</span>The model",
   "tr": "<span>2</span>النموذج"
@@ -631,6 +667,10 @@
   "src": "The phase tells the swing story in numbers. Below resonance the block moves with the force (\\(\\varphi \\approx 0\\)). At resonance it lags by exactly a quarter period, \\(\\varphi = 90^\\circ\\): the force is largest when the block is fastest, which is precisely when a push does the most work. Far above resonance the block moves against the force (\\(\\varphi \\to 180^\\circ\\)).",
   "tr": "يروي الطور قصّة الأرجوحة بالأرقام. دون الرنين تتحرّك الكتلة مع القوّة (\\(\\varphi \\approx 0\\)). وعند الرنين تتأخّر بالضبط بربع دورة، \\(\\varphi = 90^\\circ\\): تكون القوّة أكبر ما تكون حين تكون الكتلة أسرع ما تكون، أي تمامًا حين تبذل الدفعة أكبر شغل. وفوق الرنين بكثير تتحرّك الكتلة عكس القوّة (\\(\\varphi \\to 180^\\circ\\))."
  },
+ "eeb63ab8254d": {
+  "src": "Spring constant k",
+  "tr": "ثابت النابض k"
+ },
  "eed28eec00a4": {
   "src": "Solve, then play",
   "tr": "احسب، ثم شغّل"
@@ -670,6 +710,10 @@
  "f8033b444ece": {
   "src": "Energy balance",
   "tr": "توازن الطاقة"
+ },
+ "fa00a35d6cae": {
+  "src": "The whole mechanism is drawn on one length scale, in pixels per metre. The scale is kept from one Solve to the next, so a run with more damping or a smaller force really swings less on the screen, and the previous run stays in view as an outlined block and a dotted curve. The scale widens only when a new run needs more room, and Fit scale sets it to the present run; the ruler under the floor gives the ends of the range in metres, and with the controller on, the target \\(r\\) as a dot and the equilibrium \\(x^*\\) as a rose line. The box at the top right is the controller: the value it reads, its three parts and their sum \\(u\\), each as a bar, and a dashed command line down to the current source. Watch the force arrow and the block together: at a low drive frequency the block moves with the force, near \\(f_0\\) it lags a quarter period behind it, and far above \\(f_0\\) it moves against it, as the phase lag of (4) says. Below, a window of the stored run follows the present sample: \\(x(t)\\) dark up to it and pale after it, \\(F(t)/k\\) dashed in burgundy and the steady band \\(x^* \\pm X\\) dashed in rose. The window spans four drive periods, but never less than 6 s or more than 20 s (8.9 s with the defaults). Under it, a thin strip shows the whole 60 s, with the window shaded. Both views mark the present drive frequency with a filled dot and the amplitude measured from the last 10 s of the run with a ring around it: when the run has settled, the two coincide.",
+  "tr": "تُرسم الآلية كلّها بمقياس طول واحد، بالبكسل لكل متر. ويُحفظ المقياس من ضغطة على «احسب» إلى التي تليها، فالحلّ ذو التخامد الأكبر أو القوّة الأصغر يتأرجح على الشاشة أقلّ فعلًا، ويبقى الحلّ السابق ظاهرًا في صورة كتلة مرسومة بحدودها ومنحنًى منقّط. ولا يتّسع المقياس إلّا حين يحتاج حلّ جديد إلى مساحة أكبر، وتضبطه «ملاءمة المقياس» على الحلّ الحالي؛ والمسطرة تحت الأرضية تعطي طرفَي المدى بالأمتار، ومع تشغيل المتحكّم تُظهر الموضع المستهدف \\(r\\) نقطةً وموضع الاتزان \\(x^*\\) خطًّا ورديًّا. والصندوق أعلى اليمين هو المتحكّم: القيمة التي يقرؤها، وأجزاؤه الثلاثة ومجموعها \\(u\\)، كلٌّ في شريط، وخطّ أوامر متقطّع نازل إلى مصدر التيار. راقب سهم القوّة والكتلة معًا: عند تردد منخفض للقوّة الدافعة تتحرّك الكتلة مع القوّة، وقرب \\(f_0\\) تتأخّر عنها بربع دورة، وفوق \\(f_0\\) بكثير تتحرّك عكسها، كما يقول تأخّر الطور في (4). وفي الأسفل تتابع نافذة من الحلّ المخزَّن العيّنة الحالية: \\(x(t)\\) داكنًا حتى نقطتها وباهتًا بعدها، و\\(F(t)/k\\) متقطّعًا بالعنّابي، والنطاق المستقرّ \\(x^* \\pm X\\) متقطّعًا بالوردي. وتمتدّ النافذة على أربعة أدوار للقوّة الدافعة، لكن لا تقلّ عن 6 s ولا تزيد على 20 s (8.9 s بالقيم الافتراضية). وتحتها شريط رفيع يعرض الحلّ كلّه الممتدّ على 60 s، والنافذة مظلّلة فيه. ويعلّم العرضان كلاهما تردد القوّة الدافعة الحالي بنقطة ممتلئة، والسعة المقاسة من آخر 10 s من الحلّ بحلقة حولها: وعندما يستقرّ الحلّ تتطابق النقطة مع الحلقة."
  },
  "fb4f4e6883c5": {
   "src": "The height of the peak measures how weakly damped the plant is. At \\(\\Omega = \\omega_0\\) exactly, (4) gives",
