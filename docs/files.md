@@ -150,7 +150,7 @@ to confirm that every file is described. Sizes are those of the files when the l
 | [`public/scripts/walk/de/water.js`](../public/scripts/walk/de/water.js) | 24.5 kB | German walkthrough water, generated from the English one; do not edit. | [i18n.md](i18n.md) |
 | [`public/scripts/walk/dft.js`](../public/scripts/walk/dft.js) | 24.4 kB | "From symbols to code" for Fig. 8 · Draw & Decompose. | [walk.md](scripts/walk.md) |
 | [`public/scripts/walk/driven.js`](../public/scripts/walk/driven.js) | 38.9 kB | "From symbols to code" for Fig. 9 · Driven Oscillator. | [walk.md](scripts/walk.md) |
-| [`public/scripts/walk/furuta.js`](../public/scripts/walk/furuta.js) | 15.2 kB | "From symbols to code" for Fig. 12 · Furuta Pendulum. | [walk.md](scripts/walk.md) |
+| [`public/scripts/walk/furuta.js`](../public/scripts/walk/furuta.js) | 15.3 kB | "From symbols to code" for Fig. 12 · Furuta Pendulum. | [walk.md](scripts/walk.md) |
 | [`public/scripts/walk/pendcontrol.js`](../public/scripts/walk/pendcontrol.js) | 15.3 kB | "From symbols to code" for Fig. 11 · Double Pendulum under Control. | [walk.md](scripts/walk.md) |
 | [`public/scripts/walk/pendulum.js`](../public/scripts/walk/pendulum.js) | 30.2 kB | "From symbols to code" for Fig. 2 · Double Pendulum. | [walk.md](scripts/walk.md) |
 | [`public/scripts/walk/phasors.js`](../public/scripts/walk/phasors.js) | 33.0 kB | "From symbols to code" for Fig. 7 · Phasor Sums. | [walk.md](scripts/walk.md) |

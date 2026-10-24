@@ -16,7 +16,7 @@ window.WALK = window.WALK || {};
             {
                 title: 'Equations (2) and (3): the inertias and the energy',
                 where: 'derive() and energy(), under the rig constants',
-                math: 'T = ½(⟦J0|J<sub>0</sub>⟧ + ⟦Jp|J<sub>p</sub>⟧ ' + up('sin') + '²α) φ̇² + ⟦hc|h⟧ ' + up('cos') + ' α φ̇α̇ + ½J<sub>p</sub>α̇², &nbsp; U = ⟦G|G⟧ ' + up('cos') + ' α' + tag(2) + '<br>J<sub>0</sub> = J<sub>r</sub> + m<sub>p</sub>⟦r|r⟧², &nbsp; J<sub>p</sub> = ⅓m<sub>p</sub>L², &nbsp; h = ½m<sub>p</sub>rL, &nbsp; G = ½m<sub>p</sub>gL' + tag(3),
+                math: 'T = ½(⟦J0|J<sub>0</sub>⟧ + ⟦Jp|J<sub>p</sub>⟧ ' + up('sin') + '²α) φ̇² + ⟦hc|h⟧ ' + up('cos') + ' α φ̇α̇ + ½J<sub>p</sub>α̇², &nbsp; J<sub>0</sub> = J<sub>r</sub> + m<sub>p</sub>⟦r|r⟧², &nbsp; J<sub>p</sub> = ⅓m<sub>p</sub>L², &nbsp; h = ½m<sub>p</sub>rL' + tag(2) + '<br>U = ⟦G|G⟧ ' + up('cos') + ' α, &nbsp; G = ½m<sub>p</sub>gL' + tag(3),
                 note: 'derive() turns the arm length r from its slider into the constants of (2) and (3): J_r = m_a r²/3 + J_h for the arm, hub and rotor, J₀ with the rod’s mass at the tip, J_p for the rod about its hinge, the coupling h, the gravity scale G, and Δ = J₀J_p − h². energy() is T + U for the state y = (φ, α, φ̇, α̇); s and c are sin α and cos α. The energy is not needed to solve the motion; it is one side of the books of step 9.',
                 code: `p.Jr = MA * p.r * p.r / 3 + JH; p.J0 = p.Jr + MP * p.r * p.r; p.Jp = MP * LP * LP / 3;
 p.h = MP * p.r * LP / 2; p.G = MP * G * LP / 2; p.D = p.J0 * p.Jp - p.h * p.h;
@@ -120,7 +120,7 @@ want = RM * tau / KM + KM * w;`,
             {
                 title: 'Equations (18) and (19): the catch and the hand-over',
                 where: 'catchVolt(), decide() and design()',
-                math: 'V<sub>m</sub> = −K ỹ, &nbsp; 𝒱<sub>c</sub> = ⟦Ly|ỹ<sup>T</sup>Pỹ⟧' + tag(18) + '<br>swing-up → catch when ỹ<sup>T</sup>Pỹ < ⟦cin|c<sub>in</sub>⟧ = c/2; &nbsp; catch → swing-up when ỹ<sup>T</sup>Pỹ > c' + tag(19),
+                math: 'V<sub>m</sub> = −K ỹ, &nbsp; 𝒱<sub>c</sub> = ⟦Ly|ỹ<sup>T</sup>Pỹ⟧, &nbsp; 𝒱̇<sub>c</sub> = −ỹ<sup>T</sup>(Q + ρK<sup>T</sup>K)ỹ < 0' + tag(18) + '<br>swing-up → catch when ỹ<sup>T</sup>Pỹ < ⟦cin|c<sub>in</sub>⟧ = c/2; &nbsp; catch → swing-up when ỹ<sup>T</sup>Pỹ > c<sub>out</sub> = c' + tag(19),
                 note: 'catchVolt() is the LQR law: minus the gains times the error ỹ = (φ − φ*, α, φ̇, α̇), angles taken as the nearest to the goal. decide() is the supervisor of (19), called once every millisecond: it compares the Lyapunov value ỹᵀPỹ with the two levels. c is measured once per design by measureC(): 240 starts spread over the surface ỹᵀPỹ = c, the catch alone for 3 s, and twelve halvings of the interval.',
                 code: `function catchVolt(p, d, y) { var e = err(p, y), V = 0; for (var j = 0; j < 4; j++) V -= d.K[j] * e[j]; return V; }
 ...
