@@ -2,10 +2,10 @@
 
 | | |
 |---|---|
-| Page | [public/simulations/furuta-pendulum.html](../../public/simulations/furuta-pendulum.html) (1,492 lines, 191,300 bytes) |
+| Page | [public/simulations/furuta-pendulum.html](../../public/simulations/furuta-pendulum.html) (1,493 lines, 191,351 bytes) |
 | Walkthrough | [public/scripts/walk/furuta.js](../../public/scripts/walk/furuta.js) (158 lines, 9 steps, key `furuta`) |
 | Thumbnail | [public/images/sims/furuta-pendulum.webp](../../public/images/sims/furuta-pendulum.webp) (WebP, 800 × 500 px, 11.3 kB) |
-| Catalog entry | [public/scripts/catalog.js#L217](../../public/scripts/catalog.js#L217-L232) (`id: 'furuta-pendulum'`, `fig: 12`, `field: 'control'`, `stage: 2`) |
+| Catalog entry | [public/scripts/catalog.js#L234](../../public/scripts/catalog.js#L234-L249) (`id: 'furuta-pendulum'`, `fig: 12`, `field: 'control'`, `stage: 2`) |
 | Working notes | [notes/fig12/](../../notes/fig12/): `derive.py` (SymPy, 21 checks), `physics.py` and `roa.py` (NumPy reference), the browser scripts `smoke.cjs`, `interact.cjs`, `notecheck.cjs`, `shots.cjs`, `dump.cjs`, `thumb.cjs`, and the blind reports `check-L0.md` and `referee.md` |
 
 A pendulum, a uniform rod, hangs from the tip of an arm that a DC motor turns in a horizontal circle. The motor's voltage is
@@ -21,7 +21,7 @@ and the meaning of eigenvalues, the Riccati equation derived from the cost-to-go
 (non-minimum phase), the sentence on (18) in §10, the Lagrangian of §5, one letter one meaning, Problem 3, and the uniform rod in
 Figure 1. Most minor findings were fixed in the same pass.
 
-In this page, a link such as [L604](../../public/simulations/furuta-pendulum.html#L604) points to a line of `furuta-pendulum.html`.
+In this page, a link such as [L605](../../public/simulations/furuta-pendulum.html#L605) points to a line of `furuta-pendulum.html`.
 
 ## The physics in one picture
 
@@ -48,7 +48,7 @@ W_in = 14.15 J, H_R = 13.91 J (13.80 J of it before the catch), H_b = 0.004 J, E
 
 ## How the code computes it
 
-1. **Solve** ([L821](../../public/simulations/furuta-pendulum.html#L821)): `rig()` reads the controls, `design()` linearises at the top, solves the Riccati
+1. **Solve** ([L822](../../public/simulations/furuta-pendulum.html#L822)): `rig()` reads the controls, `design()` linearises at the top, solves the Riccati
    equation, finds both sets of eigenvalues and the rank, and measures c once per design (about a second, cached by
    arm length, supply limit and weights). `run()` integrates (7) with the drive by RK4, δt = 1 ms (`H` in the code), 20 s; the supervisor `decide()`
    runs once every TS = 1 ms (every step at δt, every second step at δt/2), so the half-step rerun switches at the same instants.
@@ -65,43 +65,43 @@ W_in = 14.15 J, H_R = 13.91 J (13.80 J of it before the catch), H_b = 0.004 J, E
 
 | Function | Line | What it does | Equation |
 |---|---|---|---|
-| `rig()` | [L594](../../public/simulations/furuta-pendulum.html#L594) | reads the controls at the moment of solving into one parameter object p |  |
-| `derive()` | [L599](../../public/simulations/furuta-pendulum.html#L599) | the constants of the energies: J_r, J₀, J_p, h, G, Δ | (2), (3) |
-| `accel()` | [L604](../../public/simulations/furuta-pendulum.html#L604) | the equations of motion solved for (φ̈, α̈) by Cramer’s rule, for a given current I | (7) |
-| `energy()` | [L613](../../public/simulations/furuta-pendulum.html#L613) | T + U of arm and pendulum | (2) + (3) |
-| `penEnergy()` | [L618](../../public/simulations/furuta-pendulum.html#L618) | the pendulum’s own energy E_p as if its hinge stood still | (12) |
-| `wrap()` | [L619](../../public/simulations/furuta-pendulum.html#L619) | an angle reduced to (−π, π] |  |
-| `err()` | [L620](../../public/simulations/furuta-pendulum.html#L620) | the error ỹ = (φ − φ*, α, φ̇, α̇), angles wrapped |  |
-| `rhs()` | [L635](../../public/simulations/furuta-pendulum.html#L635) | the state’s rate for a voltage V_m, through the motor law | (6), (7) |
-| `linearise()` | [L636](../../public/simulations/furuta-pendulum.html#L636) | A and B at the top by central differences of rhs() | (9) |
-| `lqr()` | [L643](../../public/simulations/furuta-pendulum.html#L643) | the Riccati equation by the matrix sign function; returns K and P | (16), (17) |
-| `eig()` | [L666](../../public/simulations/furuta-pendulum.html#L666) | eigenvalues: Faddeev–LeVerrier and Durand–Kerner | (10) |
-| `rankOf()` | [L687](../../public/simulations/furuta-pendulum.html#L687) | rank of [B, AB, A²B, A³B] | (11) |
-| `lyap()` | [L701](../../public/simulations/furuta-pendulum.html#L701) | ỹᵀPỹ | (18) |
-| `catchVolt()` | [L702](../../public/simulations/furuta-pendulum.html#L702) | the LQR law V_m = −Kỹ, before the clip |  |
-| `catchOnly()` | [L703](../../public/simulations/furuta-pendulum.html#L703) | the catch alone from one start, scalar RK4: does ỹᵀPỹ fall below 0.05 within T? |  |
-| `chol()` | [L727](../../public/simulations/furuta-pendulum.html#L727) | Cholesky factor of a symmetric positive matrix |  |
-| `measureC()` | [L733](../../public/simulations/furuta-pendulum.html#L733) | the largest level c whose sampled surface the catch rescues (240 starts, 12 halvings) | (19) |
-| `measureBasin()` | [L750](../../public/simulations/furuta-pendulum.html#L750) | the rescue grid in the slice φ = φ*, φ̇ = 0 (the page measures it in slices in startBasin()) |  |
-| `design()` | [L760](../../public/simulations/furuta-pendulum.html#L760) | linearise, LQR, eigenvalues, rank, and c (cached per design) | (9)–(19) |
-| `decide()` | [L771](../../public/simulations/furuta-pendulum.html#L771) | the supervisor: swing-up → catch below c_in, catch → swing-up above c_out | (19) |
-| `drive()` | [L778](../../public/simulations/furuta-pendulum.html#L778) | the motor voltage, current and clip flag for one state and mode | (6), (13), (14) |
-| `stepRK4()` | [L795](../../public/simulations/furuta-pendulum.html#L795) | one RK4 step of the closed loop, with the three energy integrals | (20) |
-| `run()` | [L809](../../public/simulations/furuta-pendulum.html#L809) | the whole run; the mode decided once every TS = 1 ms |  |
-| `solve()` | [L821](../../public/simulations/furuta-pendulum.html#L821) | design, run, store, the half-step rerun, the books, the times |  |
-| `settleTime()` | [L870](../../public/simulations/furuta-pendulum.html#L870) | first stored time after which every error stays within 0.01 |  |
-| `startBasin()` | [L882](../../public/simulations/furuta-pendulum.html#L882) | measures the rescue grid in slices after the run is shown |  |
-| `geom()` | [L952](../../public/simulations/furuta-pendulum.html#L952) | the rig’s oblique projection, scales and chart boxes |  |
-| `rodPts()` | [L968](../../public/simulations/furuta-pendulum.html#L968) | screen positions of the arm’s tip and the pendulum’s knob | (1) |
-| `drawRig()` | [L974](../../public/simulations/furuta-pendulum.html#L974) | motor, rim, flag, goal, arm, pendulum, torque arc, energy bars, mode label |  |
-| `drawChart()` | [L1064](../../public/simulations/furuta-pendulum.html#L1064) | the 8 s window of α and φ − φ*, and the whole-run strip |  |
-| `drawForces()` | [L1112](../../public/simulations/furuta-pendulum.html#L1112) | the drive profile: V_m, back-emf, and the two Lyapunov functions |  |
-| `drawPhase()` | [L1159](../../public/simulations/furuta-pendulum.html#L1159) | the phase portraits with the rescue grid, separatrix and hand-over ellipse |  |
-| `frame()` | [L1230](../../public/simulations/furuta-pendulum.html#L1230) | copies the stored sample nearest t_play into the *_now scalars, then draws |  |
-| `pose()` | [L1256](../../public/simulations/furuta-pendulum.html#L1256) | the pose the hand asks for: arm bearing, or α in the pendulum’s plane |  |
-| `holdState()` | [L1273](../../public/simulations/furuta-pendulum.html#L1273) | while the hand holds: the live state and what the controller would apply |  |
-| `release()` | [L1305](../../public/simulations/furuta-pendulum.html#L1305) | on letting go: solve again from the hand’s state |  |
-| `replay()` | [L1326](../../public/simulations/furuta-pendulum.html#L1326) | the data panel’s check: the same RK4 and switch rerun to sample n |  |
+| `rig()` | [L595](../../public/simulations/furuta-pendulum.html#L595) | reads the controls at the moment of solving into one parameter object p |  |
+| `derive()` | [L600](../../public/simulations/furuta-pendulum.html#L600) | the constants of the energies: J_r, J₀, J_p, h, G, Δ | (2), (3) |
+| `accel()` | [L605](../../public/simulations/furuta-pendulum.html#L605) | the equations of motion solved for (φ̈, α̈) by Cramer’s rule, for a given current I | (7) |
+| `energy()` | [L614](../../public/simulations/furuta-pendulum.html#L614) | T + U of arm and pendulum | (2) + (3) |
+| `penEnergy()` | [L619](../../public/simulations/furuta-pendulum.html#L619) | the pendulum’s own energy E_p as if its hinge stood still | (12) |
+| `wrap()` | [L620](../../public/simulations/furuta-pendulum.html#L620) | an angle reduced to (−π, π] |  |
+| `err()` | [L621](../../public/simulations/furuta-pendulum.html#L621) | the error ỹ = (φ − φ*, α, φ̇, α̇), angles wrapped |  |
+| `rhs()` | [L636](../../public/simulations/furuta-pendulum.html#L636) | the state’s rate for a voltage V_m, through the motor law | (6), (7) |
+| `linearise()` | [L637](../../public/simulations/furuta-pendulum.html#L637) | A and B at the top by central differences of rhs() | (9) |
+| `lqr()` | [L644](../../public/simulations/furuta-pendulum.html#L644) | the Riccati equation by the matrix sign function; returns K and P | (16), (17) |
+| `eig()` | [L667](../../public/simulations/furuta-pendulum.html#L667) | eigenvalues: Faddeev–LeVerrier and Durand–Kerner | (10) |
+| `rankOf()` | [L688](../../public/simulations/furuta-pendulum.html#L688) | rank of [B, AB, A²B, A³B] | (11) |
+| `lyap()` | [L702](../../public/simulations/furuta-pendulum.html#L702) | ỹᵀPỹ | (18) |
+| `catchVolt()` | [L703](../../public/simulations/furuta-pendulum.html#L703) | the LQR law V_m = −Kỹ, before the clip |  |
+| `catchOnly()` | [L704](../../public/simulations/furuta-pendulum.html#L704) | the catch alone from one start, scalar RK4: does ỹᵀPỹ fall below 0.05 within T? |  |
+| `chol()` | [L728](../../public/simulations/furuta-pendulum.html#L728) | Cholesky factor of a symmetric positive matrix |  |
+| `measureC()` | [L734](../../public/simulations/furuta-pendulum.html#L734) | the largest level c whose sampled surface the catch rescues (240 starts, 12 halvings) | (19) |
+| `measureBasin()` | [L751](../../public/simulations/furuta-pendulum.html#L751) | the rescue grid in the slice φ = φ*, φ̇ = 0 (the page measures it in slices in startBasin()) |  |
+| `design()` | [L761](../../public/simulations/furuta-pendulum.html#L761) | linearise, LQR, eigenvalues, rank, and c (cached per design) | (9)–(19) |
+| `decide()` | [L772](../../public/simulations/furuta-pendulum.html#L772) | the supervisor: swing-up → catch below c_in, catch → swing-up above c_out | (19) |
+| `drive()` | [L779](../../public/simulations/furuta-pendulum.html#L779) | the motor voltage, current and clip flag for one state and mode | (6), (13), (14) |
+| `stepRK4()` | [L796](../../public/simulations/furuta-pendulum.html#L796) | one RK4 step of the closed loop, with the three energy integrals | (20) |
+| `run()` | [L810](../../public/simulations/furuta-pendulum.html#L810) | the whole run; the mode decided once every TS = 1 ms |  |
+| `solve()` | [L822](../../public/simulations/furuta-pendulum.html#L822) | design, run, store, the half-step rerun, the books, the times |  |
+| `settleTime()` | [L871](../../public/simulations/furuta-pendulum.html#L871) | first stored time after which every error stays within 0.01 |  |
+| `startBasin()` | [L883](../../public/simulations/furuta-pendulum.html#L883) | measures the rescue grid in slices after the run is shown |  |
+| `geom()` | [L953](../../public/simulations/furuta-pendulum.html#L953) | the rig’s oblique projection, scales and chart boxes |  |
+| `rodPts()` | [L969](../../public/simulations/furuta-pendulum.html#L969) | screen positions of the arm’s tip and the pendulum’s knob | (1) |
+| `drawRig()` | [L975](../../public/simulations/furuta-pendulum.html#L975) | motor, rim, flag, goal, arm, pendulum, torque arc, energy bars, mode label |  |
+| `drawChart()` | [L1065](../../public/simulations/furuta-pendulum.html#L1065) | the 8 s window of α and φ − φ*, and the whole-run strip |  |
+| `drawForces()` | [L1113](../../public/simulations/furuta-pendulum.html#L1113) | the drive profile: V_m, back-emf, and the two Lyapunov functions |  |
+| `drawPhase()` | [L1160](../../public/simulations/furuta-pendulum.html#L1160) | the phase portraits with the rescue grid, separatrix and hand-over ellipse |  |
+| `frame()` | [L1231](../../public/simulations/furuta-pendulum.html#L1231) | copies the stored sample nearest t_play into the *_now scalars, then draws |  |
+| `pose()` | [L1257](../../public/simulations/furuta-pendulum.html#L1257) | the pose the hand asks for: arm bearing, or α in the pendulum’s plane |  |
+| `holdState()` | [L1274](../../public/simulations/furuta-pendulum.html#L1274) | while the hand holds: the live state and what the controller would apply |  |
+| `release()` | [L1306](../../public/simulations/furuta-pendulum.html#L1306) | on letting go: solve again from the hand’s state |  |
+| `replay()` | [L1327](../../public/simulations/furuta-pendulum.html#L1327) | the data panel’s check: the same RK4 and switch rerun to sample n |  |
 
 ## Controls
 

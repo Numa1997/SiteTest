@@ -215,6 +215,23 @@
             added: '2026-10-14'
         },
         {
+            id: 'pendulum-control',
+            fig: 11,
+            title: 'Double Pendulum under Control',
+            file: 'simulations/pendulum-control.html',
+            field: 'control',
+            stage: 2,
+            subject: 'control systems · underactuated mechanics',
+            summary: 'A double pendulum hangs from a fixed pivot; a sprung telescopic strut ties its lower ball to a cart that a moving coil drives. The aim: pushing only the cart, bring the whole chain back to rest where you choose. Pull it anywhere and let go; full-state feedback designed by LQR brings it home.',
+            equation: '\\mathbf M(\\mathbf q)\\ddot{\\mathbf q} + \\mathbf C\\dot{\\mathbf q} + \\nabla V = (0, 0, F), \\qquad F = F^* - \\mathbf K(\\mathbf y - \\mathbf y^*)',
+            model: 'Lagrangian double pendulum coupled to a cart by a two-force strut with a spring and end stops; moving-coil actuator with a current limit',
+            method: 'RK4, solved and stored before playback; graded against a half-step run; energy books checked',
+            controls: 'controller on or off, target position r, LQR weights for swing, cart, speed and effort, strut pull and stiffness, current limit; drag a ball or the cart',
+            concepts: ['underactuated control', 'Lagrangian mechanics', 'generalised coordinates', 'controllability', 'LQR', 'Riccati equation', 'normal modes', 'phase space', 'Lyapunov function', 'region of attraction'],
+            has: ALL,
+            added: '2026-10-24'
+        },
+        {
             id: 'furuta-pendulum',
             fig: 12,
             title: 'Furuta Pendulum',

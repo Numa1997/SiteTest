@@ -1,0 +1,1350 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline' https://v2.appdeploy.ai https://unpkg.com/@khmyznikov/pwa-install@0.6.3/dist/pwa-install.bundle.js; style-src 'self' 'unsafe-inline'; img-src 'self' data: blob: https://appdeploy.ai; font-src 'self' data:; connect-src 'self' https://api-v2.appdeploy.ai; worker-src 'self'; manifest-src 'self'; object-src 'none'; base-uri 'self'; form-action 'self'; upgrade-insecure-requests">
+    <meta name="referrer" content="strict-origin-when-cross-origin">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>النوّاس المزدوج تحت التحكّم · نعمة سائر قدسية</title>
+    <meta name="description" content="نوّاس مزدوج يتدلّى من نقطة ارتكاز ثابتة، وتربطه دعامة تلسكوبية ذات نابض بعربة يدفعها ملفّ متحرّك على طول سكّة. اسحبه إلى أيّ مكان ثم أفلته: فالتغذية الراجعة للحالة الكاملة تعيده إلى الموضع الذي تختاره. يُحلّ أوّلًا بطريقة RK4 ويُخزَّن، ثم يُعاد تشغيله.">
+    <meta name="theme-color" content="#f5f1ea">
+    <link rel="stylesheet" href="../../styles/sim.rtl.css">
+    <link rel="stylesheet" href="../../styles/data.rtl.css">
+    <link rel="stylesheet" href="../../styles/fold.rtl.css"><link rel="stylesheet" href="../../styles/i18n.css"><script src="../../scripts/flip.js"></script><link rel="alternate" hreflang="en" href="https://phyeinusul.com/simulations/pendulum-control.html" /><link rel="alternate" hreflang="de" href="https://phyeinusul.com/de/simulations/pendulum-control.html" /><link rel="alternate" hreflang="ar" href="https://phyeinusul.com/ar/simulations/pendulum-control.html" /><link rel="alternate" hreflang="x-default" href="https://phyeinusul.com/simulations/pendulum-control.html" />
+    <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='12' fill='%237a1f2b'/%3E%3Ctext x='32' y='45' text-anchor='middle' font-family='Georgia,serif' font-size='38' fill='%23f5f1ea'%3EN%3C/text%3E%3C/svg%3E">
+    <style>
+        .solve { display: grid; gap: 10px; }
+        .solve__steps { display: flex; gap: 6px; margin: 0; padding: 0; list-style: none; font-family: var(--mono); font-size: 11px; color: var(--muted); }
+        .solve__steps li { flex: 1; padding: 6px 8px; border: 1px solid var(--rule); border-radius: 6px; text-align: center; }
+        .solve__steps li.is-done { color: var(--accent); border-color: var(--accent); }
+        .solve__status { margin: 0; font-size: 13px; line-height: 1.5; color: var(--ink-2); }
+        .solve__status.is-stale { color: var(--accent); }
+        #solve.is-due { box-shadow: 0 0 0 3px rgba(122, 31, 43, 0.28); }
+        /* the take-control strip: the three steps of a hand experiment, above the figure */
+        .take { background: var(--card); border: 1px solid var(--rule); border-left: 3px solid var(--accent); border-radius: 10px; padding: 14px 18px 16px; margin-bottom: 16px; }
+        .take__title { margin: 0 0 8px; font-family: var(--serif); font-size: 26px; line-height: 1.1; color: var(--accent-dark); }
+        .take__steps { list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 12px 20px; font-size: 14px; line-height: 1.45; color: var(--ink-2); }
+        .take__steps li { display: flex; flex-direction: column; gap: 8px; }
+        .take__n { display: inline-grid; place-items: center; width: 22px; height: 22px; border-radius: 50%; background: var(--accent); color: var(--card); font-family: var(--mono); font-size: 12px; }
+        .take__r { margin: 0; }
+        .take__aim { margin: 0 0 12px; font-size: 15px; line-height: 1.5; color: var(--ink); }
+        .take__hint { margin: 12px 0 0; font-size: 13px; color: var(--accent); min-height: 1.4em; }
+        .take__gains { margin-top: 12px; padding-top: 10px; border-top: 1px solid var(--rule-soft, #e6dfd2); display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 4px 20px; }
+        .take__gains .panel__label { grid-column: 1 / -1; margin: 0 0 4px; }
+        .take__k { grid-column: 1 / -1; margin: 6px 0 0; font-family: var(--mono); font-size: 12px; color: var(--ink-2); overflow-wrap: anywhere; }
+        .take .actions .btn.is-on { background: var(--accent); color: var(--card); border-color: var(--accent); }
+        @media (max-width: 900px) { .take__steps { grid-template-columns: 1fr; } .take__gains { grid-template-columns: 1fr 1fr; } }
+        @media (max-width: 520px) { .take__gains { grid-template-columns: 1fr; } }
+        /* this simulation needs room to move: a wider page and a narrower control column */
+        .sim, .sim-top { max-width: 1560px; }
+        @media (min-width: 901px) { .sim__grid { grid-template-columns: minmax(0, 1fr) 300px; } }
+        .seek { display: grid; gap: 4px; }
+        .seek__row { display: flex; justify-content: space-between; font-family: var(--mono); font-size: 11px; color: var(--muted); }
+    </style>
+
+    <link rel="stylesheet" href="../../fonts/arabic.css" />
+    <script src="../../scripts/i18n/strings-ar.js"></script>
+    <meta name="translated-from" content="English public/simulations/pendulum-control.html, commit a1cf15f" />
+  </head>
+<body>
+    <header class="sim-top">
+        <span style="display:inline-flex;align-items:center;gap:14px"><a href="../index.html" aria-label="Phyein Usul، الصفحة الرئيسية" style="display:inline-block;line-height:0"><img src="../../images/phyein-usul-mark.svg" alt="Phyein Usul" width="87" height="48" /></a><a href="../simulations.html">→ جميع المحاكاة</a></span>
+        <nav class="sim-nav" aria-label="المحاكاة">
+            <span>الشكل</span>
+            <a href="Circular Wave Interference Visualization.html">1</a>
+            <a href="Double Pendulum.html">2</a>
+            <a href="Interactive Double-Slit Experiment Visualization.html">3</a>
+            <a href="Transverse and longitudinal waves.html">4</a>
+            <a href="water-wave.html">5</a>
+            <a href="wave-interference.html">6</a>
+            <a href="phasor-sums.html">7</a>
+            <a href="draw-decompose.html">8</a>
+            <a href="driven-oscillator.html">9</a>
+            <a href="wind-turbine.html">10</a>
+            <a href="pendulum-control.html" aria-current="page">11</a>
+        </nav><span class="lang-switch" role="group" aria-label="اللغة" translate="no"><a href="../../simulations/pendulum-control.html" hreflang="en" lang="en">English</a> · <a href="../../de/simulations/pendulum-control.html" hreflang="de" lang="de">Deutsch</a> · <a href="../../ar/simulations/pendulum-control.html" hreflang="ar" lang="ar" dir="rtl" aria-current="page">العربية</a></span>
+    </header>
+
+    <main class="sim">
+        <noscript><p class="sim-error"><b>تحتاج هذه المحاكاة إلى JavaScript.</b> <a href="../simulations.html">العودة إلى المحاكاة</a></p></noscript>
+        <div class="sim__head">
+            <p class="sim__num">الشكل 11 · أنظمة التحكّم · ميكانيك الأنظمة ناقصة التشغيل</p>
+            <h1>النوّاس المزدوج تحت التحكّم<span class="dot">.</span></h1>
+            <p class="sim__lede">يتدلّى نوّاس مزدوج من نقطة ارتكاز ثابتة. وتربط دعامةٌ تلسكوبية ذات نابض كرتَه السفلى بعربة، ويدفع ملفٌّ متحرّك العربةَ على طول سكّة. اسحب النوّاس إلى أيّ مكان ثم أفلته: فالمتحكّم، الذي لا يستطيع أن يدفع إلا العربة، يعيد السلسلة كلّها إلى السكون في الموضع الذي اخترته. تُحلّ الحركة أوّلًا وتُخزَّن، ثم يعيد التحريك تشغيل الحلّ المخزَّن.</p>
+        </div>
+
+        <div class="sim__grid">
+            <div>
+                <section class="take" aria-labelledby="take-title">
+                    <p class="take__title" id="take-title">تحكّم بنفسك</p>
+                    <p class="take__aim"><b>الهدف:</b> العربة هي الشيء الوحيد الذي يستطيع المتحكّم أن يدفعه، وعليه من خلال الدعامة أن يعيد النوّاس كلّه إلى السكون، في الموضع الذي تختاره، من أيّ وضع تتركه فيه.</p>
+                    <ol class="take__steps">
+                        <li><span class="take__n">1</span><span>شغّل المتحكّم.</span>
+                            <span class="actions" role="group" aria-label="إعدادات المتحكّم الجاهزة">
+                                <button type="button" class="btn btn--ghost" data-preset="off">إيقاف</button>
+                                <button type="button" class="btn btn--ghost" data-preset="gentle">ليّن</button>
+                                <button type="button" class="btn btn--ghost" data-preset="firm">حازم</button>
+                            </span></li>
+                        <li><span class="take__n">2</span><span>اختر أين ينبغي أن تستقرّ العربة: اضبط <b>r</b> هنا، أو اسحب العلَم على المسطرة. يُظهر النوّاس الباهت وضعَ السكون الذي سيبلغه.</span>
+                            <label class="ctl take__r">
+                                <span class="ctl__row"><span>الموضع المستهدف r</span><output id="r-out" for="r"></output></span>
+                                <input type="range" id="r" min="-0.6" max="0.6" step="0.01" value="0.3">
+                            </label></li>
+                        <li><span class="take__n">3</span><span>أمسك كرةً أو العربة، واسحبها إلى أيّ مكان، ثم أفلتها. يعيد المتحكّم السلسلة إلى موضعها.</span></li>
+                    </ol>
+                    <p class="take__hint" id="take-hint" aria-live="polite">—</p>
+                    <div class="take__gains">
+                        <p class="panel__label">المتحكّم · <bdi>F = F* − K (y − y*)</bdi>، و<bdi>K</bdi> من LQR بالأوزان أدناه</p>
+                        <label class="ctl">
+                            <span class="ctl__row"><span>وزن التأرجح q<sub>θ</sub></span><output id="qa-out" for="qa"></output></span>
+                            <input type="range" id="qa" min="0.5" max="50" step="0.5" value="5">
+                        </label>
+                        <label class="ctl">
+                            <span class="ctl__row"><span>وزن العربة q<sub>X</sub></span><output id="qx-out" for="qx"></output></span>
+                            <input type="range" id="qx" min="0.5" max="50" step="0.5" value="5">
+                        </label>
+                        <label class="ctl">
+                            <span class="ctl__row"><span>وزن السرعة q<sub>v</sub></span><output id="qv-out" for="qv"></output></span>
+                            <input type="range" id="qv" min="0" max="20" step="0.5" value="5">
+                        </label>
+                        <label class="ctl">
+                            <span class="ctl__row"><span>وزن الجهد ρ</span><output id="rho-out" for="rho"></output></span>
+                            <input type="range" id="rho" min="-2.5" max="0" step="0.05" value="-1.7" aria-label="وزن الجهد، log10 لـ ρ">
+                        </label>
+                        <p class="take__k" id="k-out">—</p>
+                    </div>
+                </section>
+                <figure class="stage">
+                    <div class="stage__canvas" id="stage" style="--ar: 16 / 12.6; --ar-m: 1 / 1.5;">
+                        <canvas id="rig" aria-label="يتدلّى نوّاس مزدوج من نقطة ارتكاز ثابتة؛ وتمتدّ دعامة تلسكوبية من كرته السفلى نزولًا إلى عربة على سكّة، ويقع ملفّ على العربة في فجوة مغناطيس طويل تحت السكّة. تُظهر الأسهم قوّة الملفّ وشدّ الدعامة، والأشرطةُ الطاقة؛ وفي الأسفل الزاويتان المخزَّنتان وموضع العربة للحلّ كلّه، مع مؤشّر عند الإطار المعروض."></canvas>
+                    </div>
+                    <figcaption class="stage__cap">
+                        <span><b>الشكل 11</b> · <span class="tx">\(\mathbf M(\mathbf q)\ddot{\mathbf q} + \mathbf C\dot{\mathbf q} + \nabla V = (0, 0, F)\)</span> · يُعرض من الحلّ المخزَّن</span>
+                        <span id="cap-t"><i>t</i> = —</span>
+                    </figcaption>
+                </figure>
+                <figure class="stage" style="margin-top: 16px;">
+                    <div class="stage__canvas" id="stage-force" style="--ar: 16 / 5.4; --ar-m: 1 / 0.95;">
+                        <canvas id="forces" aria-label="القوى على امتداد الحلّ المخزَّن: قوّة الملفّ F مع حدّيها وقيمتها المستقرّة F*، وشدّ الدعامة N."></canvas>
+                    </div>
+                    <figcaption class="stage__cap">
+                        <span><b>مخطّط القوّة</b> · قوّة الملفّ <span class="tx">\(F\)</span>، وقيمتها المستقرّة <span class="tx">\(F^*\)</span> وحدّها <span class="tx">\(\pm\kappa I_\text{max}\)</span>، وشدّ الدعامة <span class="tx">\(N\)</span></span>
+                    </figcaption>
+                </figure>
+                <figure class="stage" style="margin-top: 16px;">
+                    <div class="stage__canvas" id="stage-phase" style="--ar: 16 / 5.8; --ar-m: 1 / 2.4;">
+                        <canvas id="phase" aria-label="صور الطور: ثلاثة إسقاطات للحالة السداسية الأبعاد، الزاوية مقابل السرعة الزاوية لكلّ قضيب، والموضع مقابل السرعة للعربة، مع النقطة الثابتة التي يمسكها المتحكّم."></canvas>
+                    </div>
+                    <figcaption class="stage__cap">
+                        <span><b>فضاء الطور</b> · ثلاثة ظلال للحالة السداسية الأبعاد <span class="tx">\((\theta_1, \theta_2, X, \dot\theta_1, \dot\theta_2, \dot X)\)</span> والنقطة الثابتة <span class="tx">\(\mathbf y^*\)</span></span>
+                        <span id="cap-eig">—</span>
+                    </figcaption>
+                </figure>
+            </div>
+
+            <aside class="panel" aria-label="عناصر التحكّم">
+                <div class="panel__group solve">
+                    <p class="panel__label">احسب، ثم شغّل</p>
+                    <ol class="solve__steps" aria-label="ماذا تفعل الصفحة">
+                        <li id="st-solve">1 احسب</li>
+                        <li id="st-store">2 خزّن</li>
+                        <li id="st-play">3 شغّل</li>
+                    </ol>
+                    <div class="actions">
+                        <button type="button" class="btn" id="solve">احسب</button>
+                        <button type="button" class="btn btn--ghost" id="play">إيقاف مؤقّت</button>
+                        <button type="button" class="btn btn--ghost" id="restart">من t = 0</button>
+                    </div>
+                    <p class="solve__status" id="status" aria-live="polite">—</p>
+                    <label class="seek">
+                        <span class="seek__row"><span>الحلّ المخزَّن</span><output id="seek-out" for="seek"></output></span>
+                        <input type="range" id="seek" min="0" max="3000" step="1" value="0" aria-label="الموضع في الحلّ المخزَّن">
+                    </label>
+                    <label class="ctl">
+                        <span class="ctl__row"><span>سرعة التشغيل</span><output id="speed-out" for="speed"></output></span>
+                        <input type="range" id="speed" min="0.25" max="4" step="0.25" value="1">
+                    </label>
+                </div>
+
+                <div class="panel__group">
+                    <p class="panel__label">الدعامة · أنبوبان في داخلهما نابض</p>
+                    <label class="ctl">
+                        <span class="ctl__row"><span>الشدّ في السكون N₀</span><output id="N0-out" for="N0"></output></span>
+                        <input type="range" id="N0" min="-6" max="10" step="0.1" value="3">
+                    </label>
+                    <label class="ctl">
+                        <span class="ctl__row"><span>صلابة النابض kₛ</span><output id="ks-out" for="ks"></output></span>
+                        <input type="range" id="ks" min="20" max="400" step="5" value="100">
+                    </label>
+                </div>
+
+                <div class="panel__group">
+                    <p class="panel__label">الملفّ · <bdi>F = κI</bdi>، <bdi>κ = ⁦10 N/A⁩</bdi></p>
+                    <label class="ctl">
+                        <span class="ctl__row"><span>حدّ التيار I<sub>max</sub></span><output id="Imax-out" for="Imax"></output></span>
+                        <input type="range" id="Imax" min="0.5" max="8" step="0.1" value="3">
+                    </label>
+                </div>
+
+                <dl class="readouts">
+                    <div><dt>زاويتا السكون θ₁*، θ₂*</dt><dd id="r-eq">—</dd></div>
+                    <div><dt>قوّة التثبيت F*</dt><dd id="r-F">—</dd></div>
+                    <div><dt>قابل للتحكّم</dt><dd id="r-rank">—</dd></div>
+                    <div><dt>أبطأ اضمحلال</dt><dd id="r-slow">—</dd></div>
+                    <div><dt>استقرّ بعد</dt><dd id="r-settle">—</dd></div>
+                    <div><dt>الملفّ عند حدّه</dt><dd id="r-sat">—</dd></div>
+                    <div><dt>RK4، h مقابل h/2</dt><dd id="r-err">—</dd></div>
+                    <div><dt>ميزان الطاقة</dt><dd id="r-bal">—</dd></div>
+                </dl>
+
+                <ul class="legend">
+                    <li><span class="sw sw--ink"></span>θ₁(t)</li>
+                    <li><span class="sw" style="background: var(--accent);"></span>θ₂(t)</li>
+                    <li><span class="sw sw--dash" style="border-top-color: var(--tan-ink, #7a4b12);"></span>X(t)</li>
+                    <li><span class="sw sw--dash" style="border-top-color: var(--accent-rose);"></span>وضع السكون الذي يستهدفه المتحكّم</li>
+                    <li><span class="sw sw--dot"></span>الهدف r</li>
+                    <li><span class="sw"></span>الآن</li>
+                </ul>
+            </aside>
+        </div>
+
+        <article class="paper" id="paper" aria-labelledby="paper-title">
+            <header class="paper__head">
+                <p class="paper__kicker">مذكّرة المحاضرة · الشكل 11 · أنظمة التحكّم</p>
+                <h2 class="paper__title" id="paper-title">نوّاس مزدوج مربوط برسن: تثبيت سلسلة بدفع عربة وحدها</h2>
+                <p class="paper__by">نعمة سائر قدسية · لطلاب المدارس وطلاب السنتين الأولى والثانية في الجامعة</p>
+                <div class="paper__abstract"><b>الملخّص.</b> هدفنا أن نعيد نوّاسًا مزدوجًا إلى السكون، في مكان نختاره، من غير أن ندفع شيئًا سوى عربة. يتدلّى النوّاس من نقطة ارتكاز ثابتة. وتربط كرتَه السفلى بالعربة دعامةٌ مصنوعة من أنبوبين منزلقين في داخلهما نابض، ويدفع ملفٌّ متحرّك العربةَ على طول سكّة. الملفّ هو الشيء الوحيد الذي يستطيع أحدٌ أن يدفعه، ومع ذلك عليه أن يعيد ثلاثة أجسام إلى السكون في مكان نختاره. نعدّ درجات الحرّية، ونكتب اللاغرانجيان، فنجد أن الدعامة يجب أن تكون مشدودة: ففي الرتبة الأولى تختفي صلابة نابضها، ولا يربط العربةَ بالسلسلة إلا الشدّ الذي تحمله، كما في وتر الغيتار. ثم نجد عائلة أوضاع السكون التي يستطيع الملفّ أن يثبّت السلسلة فيها، ونُجري التقريب الخطّي حول واحد منها، ونختبر هل تستطيع دفعة واحدة أن تبلغ كلّ حركة، ونصمّم الدفعة بالمنظّم الخطّي التربيعي. بعد ذلك ننظر إلى النتيجة في فضاء الطور السداسي الأبعاد: بؤرة مستقرّة، ودالّة ليابونوف تأتي مع التصميم، وحافّة المنطقة التي يستطيع المتحكّم أن ينقذ الحركة منها. تحلّ الصفحة الحلّ كلّه أوّلًا وتخزّنه، وتبيّن المذكّرة مدى جودة هذا الحلّ المخزَّن. الأقسام المعلَّمة بـ ★ تحمل الرياضيات الأثقل، ويمكن تخطّيها في القراءة الأولى.</div>
+            </header>
+            <div class="paper__grid">
+                <nav class="paper__toc" aria-label="المحتويات">
+                    <p>المحتويات</p>
+                    <ol>
+                        <li><a href="#p-leash"><span>1</span>سلسلة مربوطة برسن</a></li>
+                        <li><a href="#p-rig"><span>2</span>الجهاز وإحداثياته</a></li>
+                        <li><a href="#p-lagrange"><span>3</span>اللاغرانجيان ومعادلات الحركة&nbsp;★</a></li>
+                        <li><a href="#p-strut"><span>4</span>الدعامة: أنبوبان ونابض</a></li>
+                        <li><a href="#p-rest"><span>5</span>أين يمكن للسلسلة أن تسكن</a></li>
+                        <li><a href="#p-string"><span>6</span>التأرجحات الصغيرة: وتر الغيتار&nbsp;★</a></li>
+                        <li><a href="#p-reach"><span>7</span>هل تبلغ دفعة واحدة كلّ شيء؟&nbsp;★</a></li>
+                        <li><a href="#p-lqr"><span>8</span>المتحكّم</a></li>
+                        <li><a href="#p-phase"><span>9</span>فضاء الطور ومنطقة الإنقاذ</a></li>
+                        <li><a href="#p-solve"><span>10</span>احسب أوّلًا، ثم شغّل</a></li>
+                        <li><a href="#p-screen"><span>11</span>على الشاشة</a></li>
+                        <li><a href="#p-limits"><span>12</span>ما يُغفله النموذج</a></li>
+                    </ol>
+                </nav>
+                <div class="paper__body">
+                    <section class="psec" id="p-leash">
+                        <h3><span class="psec__n">01</span>سلسلة مربوطة برسن</h3>
+                        <p class="psec__lead">أمسك مصباحًا ثقيلًا يتدلّى من السقف بوصلتين، لا من المصباح نفسه، بل بحبل مطّاطي مربوط بأسفله. اسحب الحبل جانبًا فتميل السلسلة كلّها؛ ودعه يرتخي فيتأرجح المصباح كما يشاء.</p>
+                        <p>يعرف سائق الرافعة هذه المشكلة من مقصورته. يتدلّى الخطّاف من العربة المتنقّلة، ويتدلّى الحمل من الخطّاف، والشيء الوحيد الذي يأمره السائق هو المحرّك الذي ينقل العربة المتنقّلة. وكلّ تأرجح للحمل يجب أن يُزال عبر ذلك المحرّك الوحيد، بتحريك العربة في اللحظات المناسبة. كلبٌ مربوط بمقوده، وطائرة ورقية على خيطها، وقارب راسٍ في تيّار: في كلّ منها جسمٌ له حركته الخاصّة، ولا نؤثّر فيه إلا عبر شيء مرن ومن جهة واحدة.</p>
+                        <p>الشكل 11 هو أنظف صورة يمكن بناؤها لهذا الموقف. يتدلّى نوّاس مزدوج من نقطة ارتكاز ثابتة ويتأرجح بحرّية، تمامًا كما في الشكل 2. وتحته تتدحرج عربة على سكّة ملساء. وتصل دعامةٌ الكرةَ السفلى بالعربة. وهي مصنوعة من أنبوبين، ينزلق أحدهما داخل الآخر، وفي داخلهما نابض، فتستطيع أن تغيّر طولها، ولا تشدّ ولا تدفع إلا على امتداد خطّها. وتحمل العربة ملفّ الشكل 9، الذي يقع في فجوة مغناطيس طويل ويُدفع على طول السكّة بالقوّة \(F = \kappa I\) حين يسري تيار \(I\).</p>
+                        <p>لا شيء آخر يلمس السلسلة. تدور القضبان بلا احتكاك، والأرضية ملساء، وتنزلق الأنابيب بلا احتكاك. وإذا تُرك الجهاز وشأنه تأرجح إلى الأبد. يمكنك أن تختبر ذلك بيدك: أوقف المتحكّم، وأمسك كرةً أو العربة، واسحبها إلى أيّ مكان، ثم أفلتها.</p>
+                        <div class="pbox"><p class="pbox__title">هدف هذه الصفحة</p><p>العربة، والعربة وحدها، تعيد النوّاس إلى الاتزان. يقيس المتحكّم أين الكرتان والعربة وما سرعاتها، ويضبط التيار في الملفّ، فيدفع بذلك العربة؛ ومن خلال الدعامة تشدّ العربة السلسلة حتى تسكن الأجسام الثلاثة في الموضع الذي اخترته. كلّ قسم أدناه يخدم هذا الهدف: يبيّن النموذج ما تستطيع العربة أن تفعله بالسلسلة (§3–§6)، ويبيّن اختبار §7 هل تستطيع دفعة واحدة أن تبلغ كلّ حركة، ويصمّم §8 الدفعة، ويُظهر §9 السلسلة وهي تعود إلى موضعها في فضاء الطور.</p></div>
+                        <figure class="pfig">
+                            <div class="pfig__plate">
+                                <svg viewBox="0 0 720 360" role="img" aria-label="The rig: a fixed pivot O; rod l1 at angle theta1 to ball m1; rod l2 at angle theta2 to ball m2; a telescopic strut of length ell from ball m2 down to the hinge of a cart of mass M at position X on a rail a depth H below the pivot; a coil on the cart in the gap of a magnet pushes the cart with F.">
+                                    <rect x="0" y="0" width="720" height="360" fill="#fff"/>
+                                    <line x1="250" y1="40" x2="410" y2="40" stroke="#1c1518" stroke-width="2"/>
+                                    <g stroke="#cdc1ae"><line x1="260" y1="40" x2="270" y2="30"/><line x1="280" y1="40" x2="290" y2="30"/><line x1="300" y1="40" x2="310" y2="30"/><line x1="320" y1="40" x2="330" y2="30"/><line x1="340" y1="40" x2="350" y2="30"/><line x1="360" y1="40" x2="370" y2="30"/><line x1="380" y1="40" x2="390" y2="30"/><line x1="400" y1="40" x2="410" y2="30"/></g>
+                                    <line x1="330" y1="40" x2="330" y2="150" stroke="#8b8079" stroke-dasharray="4 4"/>
+                                    <line x1="330" y1="40" x2="390" y2="128" stroke="#1c1518" stroke-width="3"/>
+                                    <circle cx="390" cy="128" r="11" fill="#7a1f2b"/>
+                                    <line x1="390" y1="128" x2="390" y2="215" stroke="#8b8079" stroke-dasharray="4 4"/>
+                                    <line x1="390" y1="128" x2="425" y2="214" stroke="#1c1518" stroke-width="3"/>
+                                    <circle cx="425" cy="214" r="11" fill="#7a1f2b"/>
+                                    <path d="M330 80 A 40 40 0 0 0 352 73" fill="none" stroke="#7a1f2b" stroke-width="1.5"/>
+                                    <text class="m" x="314" y="104" style="fill:#7a1f2b">θ<tspan class="mu" font-size="12" dy="4" style="fill:#7a1f2b">1</tspan></text>
+                                    <path d="M390 168 A 40 40 0 0 0 405 165" fill="none" stroke="#7a1f2b" stroke-width="1.5"/>
+                                    <text class="m" x="392" y="190" style="fill:#7a1f2b">θ<tspan class="mu" font-size="12" dy="4" style="fill:#7a1f2b">2</tspan></text>
+                                    <text class="m" x="368" y="76">l<tspan class="mu" font-size="12" dy="4">1</tspan></text>
+                                    <text class="m" x="412" y="168">l<tspan class="mu" font-size="12" dy="4">2</tspan></text>
+                                    <text class="m" x="404" y="122">m<tspan class="mu" font-size="12" dy="4">1</tspan></text>
+                                    <text class="m" x="440" y="210">m<tspan class="mu" font-size="12" dy="4">2</tspan></text>
+                                    <line x1="425" y1="214" x2="400" y2="290" stroke="#5a504b" stroke-width="4"/>
+                                    <line x1="412" y1="252" x2="400" y2="290" stroke="#1c1518" stroke-width="10"/>
+                                    <line x1="412" y1="252" x2="400" y2="290" stroke="#e6dfd2" stroke-width="6"/>
+                                    <text class="m" x="430" y="262">ℓ</text>
+                                    <text class="lbl" x="440" y="276">strut: two tubes, a spring inside</text>
+                                    <rect x="360" y="290" width="80" height="30" fill="#fffaf3" stroke="#1c1518" stroke-width="2"/>
+                                    <text class="m" x="390" y="311">M</text>
+                                    <circle cx="400" cy="290" r="4" fill="#fff" stroke="#1c1518" stroke-width="1.5"/>
+                                    <circle cx="375" cy="324" r="5" fill="#fff" stroke="#1c1518"/><circle cx="425" cy="324" r="5" fill="#fff" stroke="#1c1518"/>
+                                    <line x1="150" y1="330" x2="640" y2="330" stroke="#1c1518" stroke-width="2"/>
+                                    <rect x="170" y="336" width="450" height="5" fill="#c9c1b5"/><rect x="170" y="349" width="450" height="5" fill="#c9c1b5"/>
+                                    <rect x="380" y="342" width="40" height="5" fill="#c9a06b"/>
+                                    <text class="lbl" x="630" y="352">magnet</text>
+                                    <line x1="445" y1="305" x2="505" y2="305" stroke="#7a1f2b" stroke-width="3"/>
+                                    <path d="M503 299 L515 305 L503 311 Z" fill="#7a1f2b"/>
+                                    <text class="m" x="520" y="311" style="fill:#7a1f2b">F = κI</text>
+                                    <line x1="330" y1="150" x2="330" y2="345" stroke="#8b8079" stroke-dasharray="2 4"/>
+                                    <line x1="330" y1="278" x2="396" y2="278" stroke="#8b8079" stroke-width="1.2"/>
+                                    <path d="M392 274 L400 278 L392 282 Z" fill="#8b8079"/>
+                                    <text class="m" x="352" y="272" style="font-size:15px">X</text>
+                                    <line x1="200" y1="40" x2="200" y2="290" stroke="#8b8079" stroke-width="1.2"/>
+                                    <path d="M196 286 L200 294 L204 286 Z" fill="#8b8079"/>
+                                    <text class="m" x="184" y="170">H</text>
+                                    <text class="lbl" x="232" y="28">O, the fixed pivot</text>
+                                </svg>
+                            </div>
+                            <figcaption><span class="pfig__n">الشكل 1</span>الجهاز. تُقاس الزاويتان \(\theta_1, \theta_2\) من الشاقول الهابط؛ و\(X\) موضع العربة على طول السكّة، مقيسًا من النقطة الواقعة تحت نقطة الارتكاز؛ ويقع مفصل العربة على عمق \(H\) تحت نقطة الارتكاز. طول الدعامة \(\ell\)، وهي تشدّ الكرة 2 والعربة إحداهما نحو الأخرى بالقوّة \(N\) على امتداد خطّها.</figcaption>
+                        </figure>
+                    </section>
+
+                    <section class="psec" id="p-rig">
+                        <h3><span class="psec__n">02</span>الجهاز وإحداثياته</h3>
+                        <p>لنعدّ أوّلًا. ثلاثة أجسام تتحرّك في مستوٍ: كرتان، نعاملهما نقطتين، والعربة. النقطة الحرّة في المستوي تحتاج عددين، فثلاثة أجسام حرّة تحتاج ستّة. ويُسقط كلّ من القضيبين الصلبين عددًا واحدًا، \(|\mathbf r_1| = l_1\) و\(|\mathbf r_2 - \mathbf r_1| = l_2\)، وتُسقط السكّة عددًا آخر، لأن ارتفاع العربة ثابت. هذه الثلاثة قيود <em>هولونومية</em>، أي قواعد تخصّ المواضع وحدها، وكلّ منها يستطيع أن يدفع كما يستطيع أن يشدّ. ستّة ناقص ثلاثة يُبقي ثلاث درجات حرّية.</p>
+                        <p>الدعامة ليست قيدًا. أنابيبها خفيفة إلى حدّ أننا نعدّها عديمة الكتلة، والقضيب عديم الكتلة المفصليّ عند طرفيه لا يستطيع إلا أن يدفع أو يشدّ على امتداد خطّه: فأيّ قوّة جانبية عليه تعطيه تسارعًا زاويًا لانهائيًا. يُسمّى مثل هذا القضيب <em>عنصرًا ثنائي القوّة</em>. يتحدّد طوله بموضعي الكرة 2 والعربة، فلا يأتي بإحداثي خاصّ به، ويدخل نابضه عبر طاقة كامنة. لكنّ الأنابيب تفرض قيدين <em>أحاديَّي الجانب</em>، أي متباينتين لا تعملان إلا حين تُبلَغان: لا تقصر الدعامة أبدًا عن \(\ell_\text{min} = 0.5\ \mathrm{m}\) (الأنبوب الداخلي مدفوع إلى آخره)، ولا تطول أبدًا عن \(\ell_\text{max} = 0.95\ \mathrm{m}\) (طوقها مستند إلى المصدّ). يبيّن القسم 4 كيف تعالجهما الصفحة.</p>
+                        <p>نختار ثلاثة <em>إحداثيات معمَّمة</em> تحدّد الصورة كلّها: الزاويتين المطلقتين وموضع العربة،</p>
+                        \[ \begin{gathered} \mathbf q = (\theta_1, \theta_2, X), \qquad \mathbf r_1 = l_1(\sin\theta_1, -\cos\theta_1), \\ \mathbf r_2 = \mathbf r_1 + l_2(\sin\theta_2, -\cos\theta_2), \qquad \ell = \left|\mathbf r_2 - (X, -H)\right| . \end{gathered} \tag{1} \]
+                        <p>في الصفحة تزن كلّ من الكرتين \(m_1 = m_2 = 0.5\ \mathrm{kg}\)، وطول كلّ من القضيبين \(l_1 = l_2 = 0.5\ \mathrm{m}\)، وتزن العربة مع ملفّها \(M = 1\ \mathrm{kg}\)، ويجري مفصلها على عمق \(H = 1.65\ \mathrm{m}\) تحت نقطة الارتكاز. وحين تتدلّى السلسلة شاقوليًا فوق العربة تمامًا، يكون طول الدعامة \(\ell_0 = H - l_1 - l_2 = 0.65\ \mathrm{m}\)، أي بين مصدّيها بهامش مريح.</p>
+                    </section>
+
+                    <section class="psec" id="p-lagrange">
+                        <h3><span class="psec__n">03</span>اللاغرانجيان ومعادلات الحركة<span class="star" title="heavier mathematics">★</span>                       <p>كانت قوانين نيوتن ستُلزمنا بإيجاد الشدّ في كلّ قضيب، وهي قوى لا تعنينا. أمّا طريقة لاغرانج فتستعمل الإحداثيات (1) وتترك القيود تؤدّي عملها بصمت. نحتاج الطاقتين الحركية والكامنة بدلالة \(\mathbf q\) و\(\dot{\mathbf q}\). وباشتقاق (1)، تكون سرعة الكرة 2 سرعةَ الكرة 1 مضافًا إليها دوران القضيب السفلي، ويحمل الحدّ المتقاطع بينهما جيبَ تمام الزاوية بين القضيبين:</p>
+                        \[ T = \tfrac12 (m_1 + m_2)\, l_1^2 \dot\theta_1^2 + \tfrac12 m_2 l_2^2 \dot\theta_2^2 + m_2 l_1 l_2 \cos(\theta_1 - \theta_2)\, \dot\theta_1 \dot\theta_2 + \tfrac12 M \dot X^2 . \tag{2} \]
+                        <p>تتضمّن الطاقة الكامنة الجاذبية، مع قياس الارتفاع نحو الأعلى من نقطة الارتكاز، والنابضَ داخل الأنابيب، ذا الصلابة \(k_s\) والطول الطبيعي \(L_0\):</p>
+                        \[ V = -(m_1 + m_2)\, g\, l_1 \cos\theta_1 - m_2\, g\, l_2 \cos\theta_2 + \tfrac12 k_s \left(\ell - L_0\right)^2 . \tag{3} \]
+                        <p>ويضيف الملفّ الحدود الكهروميكانيكية التي التقيناها في الشكل 9: حيث \(q_e\) الشحنة التي سرت عبر اللفّة، و\(\dot q_e = I\)، و\(\Lambda\) محاثّتها،</p>
+                        \[ \mathcal L = T - V + \tfrac12 \Lambda \dot q_e^2 + \kappa X \dot q_e , \tag{4} \]
+                        <p>حيث \(\kappa = B\ell_w = 10\ \mathrm{N/A}\) ثابت القوّة: الحقل في فجوة المغناطيس مضروبًا في طول السلك \(\ell_w\) الموجود فيها. والحدّ \(\kappa X \dot q_e\) هو كلّ الاقتران بين اللفّة والحقل. مشتقّه بالنسبة إلى \(X\)، أي \(\kappa\dot q_e = \kappa I\)، هو القوّة المؤثّرة في العربة؛ والمشتقّ الزمني لـ \(\partial\mathcal L/\partial\dot q_e\) يعطي القوّة الدافعة الكهربائية العكسية \(\kappa\dot X\) في الدارة. تغذّي الصفحة الملفّ من مصدر تيار، يعطي التيار المطلوب منه مهما كانت القوّة الدافعة العكسية، فتسقط المعادلة الكهربائية ويصبح \(F = \kappa I\) هو الدخل. عندئذ تُكتب معادلات أويلر–لاغرانج \(\frac{d}{dt}\partial\mathcal L/\partial\dot q_i = \partial\mathcal L/\partial q_i\) بصيغة المصفوفات هكذا،</p>
+                        \[ \begin{gathered} \mathbf M(\mathbf q)\,\ddot{\mathbf q} + \mathbf C(\mathbf q, \dot{\mathbf q})\,\dot{\mathbf q} + \nabla V = \begin{pmatrix} 0 \\ 0 \\ F \end{pmatrix}, \\ \mathbf M = \begin{pmatrix} (m_1+m_2) l_1^2 & m_2 l_1 l_2 \cos(\theta_1-\theta_2) & 0 \\ m_2 l_1 l_2 \cos(\theta_1-\theta_2) & m_2 l_2^2 & 0 \\ 0 & 0 & M \end{pmatrix} . \end{gathered} \tag{5} \]
+                        <p>مصفوفة الكتلة \(\mathbf M\) قطرية بالكتل: عطالة العربة لا تختلط بعطالة النوّاس. ويحمل الحدّ \(\mathbf C\dot{\mathbf q}\) شدّات الطرد المركزي، \(m_2 l_1 l_2 \sin(\theta_1 - \theta_2)\,\dot\theta_2^2\) على القضيب العلوي ونظيرها على السفلي. وكلّ ما يربط العربة بالسلسلة يقع في \(\nabla V\)، عبر الدعامة. ومشتقّ طاقة نابضها هو</p>
+                        \[ \frac{\partial}{\partial q_i}\, \tfrac12 k_s (\ell - L_0)^2 = N\, \frac{\partial \ell}{\partial q_i}, \qquad N = k_s(\ell - L_0) , \tag{6} \]
+                        <p>أي شدّ الدعامة \(N\) مضروبًا في المعدّل الذي يمطّها به كلّ إحداثي. وعلى العربة يكون هذا \(N\,\partial\ell/\partial X = -N (x_2 - X)/\ell\): شدّ الدعامة مُسقَطًا على السكّة. هذا الحدّ الواحد، ونظيراه في معادلتي الزاويتين، هما كلّ ما تفعله الدعامة. تحلّ الشيفرة (5) لإيجاد \(\ddot{\mathbf q}\) في <code>accel()</code>: كتلة النوّاس \(2\times2\) بقاعدة كرامر، والعربة بقسمة واحدة. وللتحقّق، تخرج التسارعات نفسها من قوانين نيوتن مع شدّي القضيبين مجهولين؛ وعند حالة عشوائية والعربة مدفوعة، يتّفق الطريقان حتى 13 رقمًا معنويًا.</p>
+                        <div class="pbox"><p class="pbox__title">نتيجة أساسية · معادلات الحركة</p><p>ثلاثة إحداثيات، ودخل واحد. لا يدفع الملفّ إلا العربة، \(Q_X = F = \kappa I\)؛ وتربط الدعامة العربة بالسلسلة عبر شدّها \(N\) لا غير.</p></div>
+                    </section>
+
+                    <section class="psec" id="p-strut">
+                        <h3><span class="psec__n">04</span>الدعامة: أنبوبان ونابض</h3>
+                        <p>تخيّل الدعامة بلا نابضها: أنبوبان أملسان، ينزلق أحدهما داخل الآخر، مفصليّان عند الطرفين. اسحبها فينزلق الأنبوب الداخلي إلى الخارج ببساطة؛ وادفعها فينزلق إلى الداخل. وبين مصدّيها لا تحمل أيّ قوّة على الإطلاق. فتتأرجح السلسلة دون أن تجرّ العربة، ولا يستطيع الملفّ أن يبلغ السلسلة. ولا تعمل الدعامة إلا حين يبلغ الطوقُ المصدّ، فجأةً وكأنها قضيب صلب. فالنابض إذن هو ما يجعل الأنبوبين وصلةً مرنة. وتوجد نسخ حقيقية منها: الدعامة الغازية التي تُبقي الباب الخلفي للسيّارة مفتوحًا، والدعامة النابضية في نظام تعليق الدرّاجة.</p>
+                        <p>تضبط الصفحة النابض بالشدّ الذي يحمله حين تتدلّى السلسلة فوق العربة تمامًا، \(N_0\)، وبصلابته \(k_s\)؛ ويترتّب على ذلك الطول الطبيعي، \(L_0 = \ell_0 - N_0/k_s\). وبالقيم الافتراضية، \(N_0 = 3\ \mathrm{N}\) و\(k_s = 100\ \mathrm{N/m}\)، يكون \(L_0 = 0.62\ \mathrm{m}\): ففي السكون يكون الأنبوبان مسحوبين ⁦3 cm⁩ بعد الطول الطبيعي للنابض.</p>
+                        <p>لا يمكن لتلسكوب من أنبوبين أن يمتدّ إلى ضعف طوله المضموم: طول كلّ أنبوب ⁦0.5 m⁩، فيكون طول الدعامة ⁦0.5 m⁩ حين يُضمّ الأنبوبان، و⁦0.95 m⁩ حين يلتقي الطوقُ، الواقع على بعد ⁦5 cm⁩ من طرف الأنبوب الداخلي، بالمصدّ. تمثّل الصفحة كلّ مصدّ بنابض صلب، \(k_\text{stop} = 2\times10^4\ \mathrm{N/m}\)، مع مخمّد، \(c_\text{stop} = 40\ \mathrm{kg/s}\)، لا يعمل إلا ما دام المصدّ ملموسًا. يحوّل المخمّد الصدمة إلى حرارة، \(Q_\text{stop} = \int c_\text{stop}\dot\ell^2\, dt\)، وهي الخسارة الوحيدة في الجهاز. ولا تستطيع يدك أيضًا أن تسحب أبعد من مصدّ: فالوضعيّة التي كانت ستمطّ الدعامة أبعد من \(\ell_\text{max}\) تُرفض، وتكفّ السلسلة عن تتبّع المؤشّر.</p>
+                    </section>
+
+                    <section class="psec" id="p-rest">
+                        <h3><span class="psec__n">05</span>أين يمكن للسلسلة أن تسكن</h3>
+                        <p>وضع السكون، أو <em>النقطة الثابتة</em>، حالةٌ تنعدم فيها كلّ السرعات والتسارعات. ضعها صفرًا في (5): يبقى \(\nabla V = (0, 0, F)\). ومع إيقاف الملفّ، \(F = 0\)، تقول معادلة العربة \(N(x_2 - X) = 0\): يجب أن تقف الدعامة شاقوليةً تحت الكرة 2، لأن الدعامة المائلة ستشدّ العربة جانبًا ولن يمسكها شيء. والدعامة الشاقولية تشدّ الكرة 2 نحو الأسفل مباشرة، فيجب أن يشير القضيبان إلى الأسفل تمامًا أو إلى الأعلى تمامًا، \(\theta_i \in \{0, \pi\}\). ومن هذه الترتيبات الأربعة لا يناسب الأنبوبين إلا الترتيب المتدلّي إلى الأسفل؛ أمّا الأخرى فتحتاج دعامة أطول بكثير من ⁦0.95 m⁩.</p>
+                        <p>ومع تشغيل الملفّ، تستطيع قوّة ثابتة \(F^*\) أن تمسك العربة في أيّ موضع على السكّة. ولكلّ موضع للعربة \(X = r\) تميل السلسلة عندئذ حتى تتوازن الجاذبية والدعامة المائلة:</p>
+                        \[ \frac{\partial V}{\partial\theta_1} = 0, \quad \frac{\partial V}{\partial\theta_2} = 0 \quad\text{at } X = r, \qquad F^* = \frac{\partial V}{\partial X} = -N^*\, \frac{x_2^* - r}{\ell^*} . \tag{7} \]
+                        <p>دخلٌ واحد يعطي عائلةً أحادية الوسيط من أوضاع السكون، و\(r\) هو الوسيط الذي تختاره. تحلّ الصفحة معادلتي الزاويتين بطريقة نيوتن في <code>equilibrium()</code>. وللهدف الافتراضي \(r = 0.30\ \mathrm{m}\): \(\theta_1^* = 5.78^\circ\)، \(\theta_2^* = 8.36^\circ\)، وطول الدعامة \(\ell^* = 0.681\ \mathrm{m}\) وهي تشدّ بـ \(N^* = 6.12\ \mathrm{N}\)، ويمسك الملفّ العربة بـ \(F^* = 1.59\ \mathrm{N}\). تميل السلسلة نحو العربة، لكن أقلّ ممّا تحرّكت العربة: فالدعامة رسنٌ ليّن، والجاذبية تشدّ السلسلة عائدةً إلى ما تحت نقطة ارتكازها. ويرسم النوّاس الباهت في الصفحة وضع السكون هذا.</p>
+                    </section>
+
+                    <section class="psec" id="p-string">
+                        <h3><span class="psec__n">06</span>التأرجحات الصغيرة: وتر الغيتار<span class="star" title="heavier mathematics">★</span>                       <p>قرب وضع السكون يتصرّف كلّ نظام أملس كمجموعة من النوابض المقترنة. انشر \(V\) حتى الرتبة الثانية حول وضع السكون المتدلّي شاقوليًا، مستعملًا \(\cos\theta \approx 1 - \theta^2/2\) و\(x_2 \approx l_1\theta_1 + l_2\theta_2\). لا يتغيّر طول الدعامة إلا في الرتبة الثانية حين تتأرجح السلسلة، ويختزل SymPy الطاقة الكامنة إلى</p>
+                        \[ \begin{aligned} V \approx{} & \tfrac12 (m_1+m_2) g\, l_1 \theta_1^2 + \tfrac12 m_2 g\, l_2 \theta_2^2 \\ & + \tfrac12 N_0 \left(l_1 \theta_1^2 + l_2 \theta_2^2\right) + \tfrac12 \frac{N_0}{\ell_0} \left(l_1\theta_1 + l_2\theta_2 - X\right)^2 . \end{aligned} \tag{8} \]
+                        <p>لقد اختفت صلابة النابض \(k_s\). ففي الرتبة الأولى من الحركة لا يهمّ إلا الشدّ \(N_0\)، ولكلّ حدّ صورة. الحدّان الأوّلان هما الجاذبية. والثالث هو الدعامة تشدّ الكرة 2 إلى الأسفل، أي ثقلٌ إضافي \(N_0\) معلّق بها. والأخير وتر غيتار: فالوتر المشدود بشدّ \(N_0\) وطوله \(\ell_0\) يقاوم إزاحةً جانبية \(\delta\) لطرفه بالقوّة \(N_0\delta/\ell_0\)، والإزاحة هنا هي المسافة الأفقية للكرة 2 عن العربة، \(x_2 - X\). وبالقيم الافتراضية تكون صلابة الوتر \(N_0/\ell_0 = 4.62\ \mathrm{N/m}\)، وهي ليّنة مقارنةً بصلابة الجاذبية الخاصّة بالنوّاس.</p>
+                        <p>الحدّ الأخير هو الوحيد الذي يحتوي \(X\). فمن دون شدّ، \(N_0 = 0\)، تختفي العربة من معادلات السلسلة وتختفي السلسلة من معادلة العربة. ولا تستطيع أيّ دفعة للعربة أن تبلغ التأرجح. الشدّ هو كلّ شيء.</p>
+                        <p>وإشارة \(N_0\) مهمّة أيضًا. فالدعامة التي تدفع، \(N_0 < 0\)، تجعل الحدّين الجديدين كليهما سالبين: فهي تخفّف السلسلة، وتدفع العربة بعيدًا عن النقطة الواقعة تحت الكرة 2 كقلم رصاص موزون على رأسه. وعند \(N_0 = -2\ \mathrm{N}\) يصير لمصفوفة (8) قيمة ذاتية سالبة، فيكون وضع السكون المتدلّي غير مستقرّ بذاته: يكبر الاضطراب بعامل \(e\) كلّ ⁦0.43 s⁩. يسمح المنزلق بدفعات حتى ⁦6 N⁩، ويظلّ متحكّم §8 يمسك السلسلة (ويكون أبطأ اضمحلال له عندئذ بين 0.28 و0.46 في الثانية)، لكنّ الصفحة تبدأ بشدّ.</p>
+                        <p>الحركات الحرّة هي حلول \(\mathbf M\ddot{\mathbf q} + \mathbf K\mathbf q = 0\)، حيث \(\mathbf K\) مصفوفة المشتقّات الثانية لـ (8). وتجربة \(\mathbf q = \mathbf u\, e^{i\omega t}\) تعطي \(\det(\mathbf K - \omega^2\mathbf M) = 0\). وبالقيم الافتراضية توجد ثلاثة أنماط طبيعية، عند \(\omega = 1.71\) و\(5.05\) و\(10.00\ \mathrm{rad/s}\) (0.27 و0.80 و⁦1.59 Hz⁩). في أبطئها تتمايل العربة والسلسلة معًا على الوتر الليّن، والعربة هي الأكثر حركة. وفي الأوسط تتأرجح السلسلة كتلةً واحدة بينما تتحرّك العربة قليلًا عكسها. وفي الأسرع يتأرجح القضيبان أحدهما عكس الآخر، كما في النمط الأسرع لنوّاس مزدوج عارٍ. ومن دون الدعامة لا يملك النوّاس العاري إلا نمطين، عند 3.39 و⁦8.18 rad/s⁩؛ فشدّ الدعامة يقوّي السلسلة ويضيف النمط الثالث عبر العربة.</p>
+                    </section>
+
+                    <section class="psec" id="p-reach">
+                        <h3><span class="psec__n">07</span>هل تبلغ دفعة واحدة كلّ شيء؟<span class="star" title="heavier mathematics">★</span>                       <p>نكتب الحالة \(\mathbf y = (\theta_1, \theta_2, X, \dot\theta_1, \dot\theta_2, \dot X)\) وبُعدها عن وضع سكون \(\tilde{\mathbf y} = \mathbf y - \mathbf y^*\)، مع \(\tilde F = F - F^*\). ولقيم \(\tilde{\mathbf y}\) الصغيرة تصبح (5) نظامًا خطّيًا،</p>
+                        \[ \begin{gathered} \dot{\tilde{\mathbf y}} = \mathbf A\tilde{\mathbf y} + \mathbf B\tilde F, \\ \mathbf A = \begin{pmatrix} 0 & \mathbf 1 \\ -\mathbf M^{-1}\mathbf K & 0 \end{pmatrix}, \quad \mathbf B = \begin{pmatrix} 0 \\ \mathbf M^{-1}(0, 0, 1)^{\mathsf T} \end{pmatrix} . \end{gathered} \tag{9} \]
+                        <p>تبني الصفحة \(\mathbf A\) و\(\mathbf B\) عدديًا في <code>linearise()</code>، بالفروق المركزية لمعادلات الحركة الكاملة عند وضع السكون الذي اخترته؛ وعند وضع السكون المتدلّي شاقوليًا تتّفقان مع (8).</p>
+                        <p>هل تكفي دفعة واحدة لتوجيه ستّة أعداد؟ الاختبار هو اختبار كالمان: يكون النظام (9) <em>قابلًا للتحكّم</em>، أي إنّ تاريخًا ما للقوّة يستطيع أن ينقل أيّ حالة إلى أيّ حالة أخرى، إذا وفقط إذا كانت المصفوفة</p>
+                        \[ \mathcal C = \left[\,\mathbf B,\ \mathbf A\mathbf B,\ \mathbf A^2\mathbf B,\ \dots,\ \mathbf A^5\mathbf B\,\right] \tag{10} \]
+                        <p>ذات رتبة كاملة، 6. الفكرة سلسلة من التأثيرات. \(\mathbf B\) هي ما تفعله الدفعة فورًا: تسرّع العربة. و\(\mathbf A\mathbf B\) هي ما يفعله ذلك بعد لحظة: تتحرّك العربة، فتشدّ الوتر جانبًا، وتبدأ بجذب الكرة 2. وكلّ قوّة أعلى تصل حلقةً أبعد في السلسلة. فإن كان ثمّة تركيب من الحالة لا يظهر أبدًا في هذه السلسلة، فلن تستطيع أيّ دفعة أن تمسّه. وبالقيم الافتراضية تكون الرتبة 6؛ ومع \(N_0 = 0\) تهبط إلى 2، أي عددَي العربة الخاصّين بها، كما تنبّأ القسم 6. تحسب الصفحة الرتبة في <code>rankOf()</code> وتطبعها تحت صورة الطور.</p>
+                        <p>قابلية التحكّم لا تعني السهولة. المحاولة الأولى البديهية هي متحكّم الشكل 9 على العربة وحدها، \(F = K_p(r - X) - K_d\dot X\). فهو لا يخمّد السلسلة إلا عبر الوتر الليّن، ولا يفعل ذلك إلا بمصادفة التوقيت. وبالبحث عن \(K_p\) و\(K_d\) على شبكة واسعة، يترك أفضلُ اختيار أبطأَ حركة تضمحلّ بمعدّل 0.009 في الثانية، أي بثابت زمني يقارب دقيقتين. على المتحكّم أن ينظر إلى السلسلة نفسها.</p>
+                    </section>
+
+                    <section class="psec" id="p-lqr">
+                        <h3><span class="psec__n">08</span>المتحكّم</h3>
+                        <p>المتحكّم الذي ينظر إلى كلّ شيء هو <em>التغذية الراجعة للحالة الكاملة</em>: قوّة الملفّ هي قوّة التثبيت مضافًا إليها مجموعٌ موزون للأخطاء الستّة كلّها،</p>
+                        \[ F = F^* - \mathbf K\,(\mathbf y - \mathbf y^*), \qquad\text{clamped to}\quad |F| \le \kappa I_\text{max} . \tag{11} \]
+                        <p>لكلّ معامل كسب معنى نستطيع تصوّره. فالكسب على \(X\) نابضٌ مثبّت عند الهدف، كما كان \(K_p\) في الشكل 9. ومعاملات الكسب على الزاويتين تقول بأيّ شدّة نحرّك العربة حين تميل السلسلة، كما تحرّك يدك تحت عصا تحفظ توازنها. ومعاملات الكسب على السرعات مخمّدات. ومع ستّة معاملات كسب للاختيار لا جدوى من التخمين. يختارها <em>المنظّم الخطّي التربيعي</em> بطلب أصغر قيمة لكلفة،</p>
+                        \[ \begin{gathered} J = \int_0^\infty \left( \tilde{\mathbf y}^{\mathsf T}\mathbf Q\,\tilde{\mathbf y} + \rho\,\tilde F^2 \right) dt, \\ \mathbf Q = \operatorname{diag}(q_\theta, q_\theta, q_X, q_v, q_v, q_v) . \end{gathered} \tag{12} \]
+                        <p>يحاسب الحدّ الأول على البعد عن وضع السكون، والثاني على الدفع. وتضبط المنزلقات الأوزان: \(q_\theta\) للزاويتين، و\(q_X\) لموضع العربة، و\(q_v\) للسرعات الثلاث، و\(\rho\) لجهد الملفّ. ارفع \(\rho\) فيدفع المتحكّم بلطف أكبر ويستغرق وقتًا أطول؛ وارفع \(q_v\) فيخمّد بقوّة أكبر. والنتيجة وعاءٌ تربيعي في الحالة، \(J_\text{min} = \tilde{\mathbf y}_0^{\mathsf T}\mathbf P\,\tilde{\mathbf y}_0\)، حيث \(\mathbf P\) يحلّ <em>معادلة ريكاتي</em> الجبرية، ومنه تنتج أفضل معاملات الكسب:</p>
+                        \[ \mathbf A^{\mathsf T}\mathbf P + \mathbf P\mathbf A - \rho^{-1}\mathbf P\mathbf B\mathbf B^{\mathsf T}\mathbf P + \mathbf Q = 0, \tag{13} \]
+                        \[ \mathbf K = \rho^{-1}\mathbf B^{\mathsf T}\mathbf P . \tag{14} \]
+                        <p>تحلّ الصفحة (13) في <code>lqr()</code> بدالّة الإشارة المصفوفية للمصفوفة الهاملتونية ذات الأبعاد \(12\times12\)، \(\left(\begin{smallmatrix}\mathbf A & -\rho^{-1}\mathbf B\mathbf B^{\mathsf T} \\ -\mathbf Q & -\mathbf A^{\mathsf T}\end{smallmatrix}\right)\): فالتكرار \(\mathbf Z \leftarrow \tfrac12(\mathbf Z + \mathbf Z^{-1})\) يتقارب في خطوات قليلة، وتعطي كتلُه \(\mathbf P\). ولوضع السكون الافتراضي (\(r = 0.30\ \mathrm{m}\)) والأوزان \(q_\theta = q_X = q_v = 5\)، \(\rho = 0.02\)، تكون معاملات الكسب \(\mathbf K = (19.22,\ -201.70,\ 120.09,\ 0.04,\ 0.52,\ 22.14)\)، بالنيوتن لكلّ راديان أو متر، ولكلّ راديان أو متر في الثانية؛ ويعطي حلّال ريكاتي في SciPy الأعداد نفسها. والكسب الكبير على \(\theta_2\) هو اليد تحت العصا: حين تتأرجح الكرة 2 إلى اليمين، تُسحب العربة في البداية إلى الاتجاه الآخر، فيصير الوتر في مواجهة التأرجح.</p>
+                        <p>تتوقّف معاملات الكسب على وضع السكون، لأن النموذج الخطّي يتوقّف عليه: فكلّ هدف جديد تصميمٌ جديد، يُنجَز في ميلي ثانية حين تضغط «احسب»، أو تُفلت العلَم، أو تترك السلسلة.</p>
+                        <div class="pbox"><p class="pbox__title">نتيجة أساسية · لماذا لا يكفي متحكّم PID على العربة</p><p>يدفع الملفّ جسمًا واحدًا من ثلاثة. ومتحكّم PID على موضع العربة لا يرى السلسلة إلا عبر أثرها في العربة، ويترك تأرجحاتها شبه غير مخمَّدة (أبطأ اضمحلال 0.009 في الثانية). أمّا التغذية الراجعة للحالة كلّها، المصمَّمة بـ LQR، فتعطي 0.60 في الثانية عند وضع السكون المتدلّي شاقوليًا و1.13 في الثانية عند الهدف الافتراضي.</p></div>
+                    </section>
+
+                    <section class="psec" id="p-phase">
+                        <h3><span class="psec__n">09</span>فضاء الطور ومنطقة الإنقاذ</h3>
+                        <p>حالة الجهاز نقطةٌ في <em>فضاء طور</em> سداسي الأبعاد، والحلّ مسارٌ فيه. لا نستطيع رسم ستّة أبعاد، لذا ترسم الصفحة ثلاثة ظلال: الزاوية مقابل السرعة الزاوية لكلّ قضيب، والموضع مقابل السرعة للعربة. في كلّ منها يكون وضع السكون علامةً متصالبة، والحلّ الذي يستقرّ مسارٌ يلتفّ حلزونيًا نحوها.</p>
+                        <p>من دون تحكّم يكون وضع السكون <em>مركزًا</em>: القيم الذاتية الستّ لـ \(\mathbf A\) كلّها تخيّلية، \(\pm1.71i\) و\(\pm5.05i\) و\(\pm10.00i\) في الثانية عند وضع السكون المتدلّي، والطاقة (2) + (3) محفوظة، فالسلسلة المضطربة تدور إلى الأبد على سطح طاقة ثابتة. ومع المتحكّم تنتقل القيم الذاتية لـ \(\mathbf A - \mathbf B\mathbf K\) إلى نصف المستوي الأيسر. وللهدف الافتراضي تكون \(-14.98\) و\(-1.83 \pm 6.58i\) و\(-1.19 \pm 11.65i\) و\(-1.13\) في الثانية: تأرجحان مضمحلّان واضمحلالان بسيطان. لقد صار وضع السكون <em>بؤرة مستقرّة</em>، وأبطأ اضمحلال، \(1.13\) في الثانية، يحدّد المقياس الزمني الذي تسكن عليه السلسلة، نحو ثانية لكلّ عامل ثلاثة.</p>
+                        <p>ويأتي حلّ ريكاتي بهديّة: \(\mathcal V = \tilde{\mathbf y}^{\mathsf T}\mathbf P\,\tilde{\mathbf y}\) <em>دالّة ليابونوف</em> للحلقة المغلقة الخطّية، أي وعاءٌ ينخفض ارتفاعه على كلّ مسار،</p>
+                        \[ \dot{\mathcal V} = -\tilde{\mathbf y}^{\mathsf T}\left(\mathbf Q + \rho\,\mathbf K^{\mathsf T}\mathbf K\right)\tilde{\mathbf y} < 0 . \tag{15} \]
+                        <p>أمّا للجهاز الحقيقي غير الخطّي فهذا لا يبرهن الاستقرار إلا قرب وضع السكون. وبعيدًا عنه يكسر أمران هذا الضمان: حدّ تيار الملفّ، الذي يقطع الدفعة عند \(\kappa I_\text{max} = 30\ \mathrm{N}\)، ولاخطّية (5)، التي تكبر مع الزوايا. ومجموعة البدايات التي يظلّ المتحكّم يعيد منها السلسلة إلى موضعها هي <em>منطقة الجذب</em>، ولا بدّ من قياسها. في اختبار لـ 43 بداية تسمح بها الأنابيب، مع القضيبين حتى نحو \(\pm60^\circ\) والعربة حتى ⁦0.8 m⁩ من الهدف، وعند خمسة أهداف بين \(-0.4\) و\(+0.4\ \mathrm{m}\)، بلغت الحلول الـ 43 كلّها مسافة 0.01 من وضع السكون؛ نصفها خلال ⁦5.7 s⁩، وتسعة من كلّ عشرة خلال ⁦7.9 s⁩. وخارج المنطقة توجد بدايات تنتهي بدوران متواصل: فبعد جذبة عنيفة قد تدور الكرة 1 حول نقطة ارتكازها أسرع ممّا يستطيع الرسن أن يتبعها، ويقول سطر الحالة ذلك.</p>
+                    </section>
+
+                    <section class="psec" id="p-solve">
+                        <h3><span class="psec__n">10</span>احسب أوّلًا، ثم شغّل</h3>
+                        <p>لا يُحسب شيء وأنت تشاهد. حين تضغط «احسب»، أو تُفلت العلَم، أو تترك السلسلة، تصمّم الصفحة المتحكّم، ثم تكامل (5) مع التغذية الراجعة (11) بطريقة رونغه–كوتا الكلاسيكية من المرتبة الرابعة، بخطوة \(h = 0.5\ \mathrm{ms}\)، مدّةَ ⁦30 s⁩: أي 60 000 خطوة. تُحسب القوّة في المراحل الأربع كلّها من كلّ خطوة، كما يعمل متحكّم مستمرّ. وتُخزَّن حالةٌ من كلّ عشرين، أي حالة كلّ ⁦10 ms⁩، مع القوّة، والتيار، وشدّ الدعامة وطولها، والطاقة؛ ثم يعيد التحريك تشغيل العيّنات المخزَّنة.</p>
+                        <p>الخطوة صغيرة بسبب المصدّين: فالمصدّ الملموس نابضٌ صلابته \(2\times10^4\ \mathrm{N/m}\) على نصف كيلوغرام، أي اهتزاز بنحو ⁦200 rad/s⁩، وتحتاج RK4 أن يبقى \(\omega h\) دون 2.8 بكثير لتبقى مستقرّة. ولتقييم الحلّ تحلّه الصفحة مرّة ثانية بـ \(h/2\) وتخزّن أكبر فرق؛ وهو من السكون نحو \(10^{-11}\)، وبعد السحب بضعة أضعاف \(10^{-10}\)، وأكبر، نحو \(10^{-6}\)، حين يبلغ الملفّ حدّه، لأن القصّ في (11) فيه انكسار تتخطّاه خطوات RK4. وموازنات الطاقة تحقّقٌ ثانٍ. فشغل الملفّ \(W_\text{coil} = \int F\dot X\,dt\) وحرارة المصدّين يُكامَلان بأوزان RK4 نفسها التي تُكامَل بها الحالة، وفي النهاية يكون \(E(0) + W_\text{coil} - Q_\text{stop} - E(T)\) بضعة أضعاف \(10^{-10}\ \mathrm{J}\).</p>
+                    </section>
+
+                    <section class="psec" id="p-screen">
+                        <h3><span class="psec__n">11</span>على الشاشة</h3>
+                        <p>يُرسم الجهاز بمقياس رسم، بالبكسلات لكلّ متر. النوّاس الباهت المتقطّع هو وضع السكون \(\mathbf y^*\) الذي يستهدفه المتحكّم، موصولًا بالهدف \(r\) على السكّة. والسهم العنّابي على العربة هو قوّة الملفّ \(F\)، مرسومًا بطول ⁦0.02 m⁩ لكلّ نيوتن بمقياس الجهاز؛ والسهمان الرماديان بجانب الدعامة هما شدّها \(N\) على الكرة 2 وعلى العربة، متساويان ومتعاكسان. وتصير علامة المصدّ على الأنبوب الخارجي عنّابيةً ما دام مصدٌّ ملموسًا. وتظهر الدوائر الصغيرة على الملفّ ما دام التيار يسري. والأشرطة في أعلى اليسار هي موازنات الطاقة: الطاقة فوق وضع السكون، وشغل الملفّ، وحرارة المصدّين.</p>
+                        <p>تحت الجهاز تتبع نافذةٌ مدّتها ⁦10 s⁩ التشغيلَ: \(\theta_1\) داكن، و\(\theta_2\) عنّابي، و\(X\) بنّي متقطّع، داكنةً حتى الآن وباهتةً بعده، مع قيم السكون خطوطًا وردية. والشريط تحتها هو الحلّ كلّه، والنافذة مظلَّلة فيه، مع علامات حيث يكون الملفّ عند حدّه وحيث تلمس الدعامة مصدًّا. ويُظهر مخطّط القوّة \(F\)، وقيمتها المستقرّة \(F^*\) (وردية) وحدّيها \(\pm\kappa I_\text{max}\) (منقّطين)، وشدّ الدعامة \(N\). ولوحات فضاء الطور مقيَّسة على كلّ حلّ؛ ويعطي التعليق القيم الذاتية، ونوع وضع السكون، ورتبة (10).</p>
+                    </section>
+
+                    <section class="psec" id="p-limits">
+                        <h3><span class="psec__n">12</span>ما يُغفله النموذج</h3>
+                        <ul>
+                            <li>الكرتان نقطتان، والقضبان والأنابيب والنابض عديمة الكتلة. للقضبان الحقيقية عزوم عطالة، والدعامة ذات الكتلة تحمل قوى جانبية وتتأرجح من تلقاء نفسها.</li>
+                            <li>لا شيء يحتكّ. للمفاصل والأنابيب والعجلات الحقيقية احتكاك، يخمّد التأرجح غير المتحكَّم فيه ويضيف منطقةً ميتة على المتحكّم أن يدفع عبرها.</li>
+                            <li>يقيس المتحكّم الأعداد الستّة كلّها بدقّة وفي آن واحد. أمّا المتحكّم الحقيقي فيحتاج مستشعرات على القضيبين والعربة؛ وتُقدَّر السرعات عادةً بمراقِب مثل مرشّح كالمان، وكلّ عيّنة تأخير تكلّف شيئًا من الاستقرار.</li>
+                            <li>مصدر التيار مثالي. للمضخّم الحقيقي حدٌّ للجهد، والقوّة الدافعة العكسية \(\kappa\dot X\) تأكل منه حين تتحرّك العربة بسرعة. كما أن شوطًا طويلًا قدره ⁦2 m⁩ يحتاج محرّكًا خطّيًا مُبدَّلًا بدل ملفّ واحد في فجوة طويلة واحدة.</li>
+                            <li>تأتي معاملات الكسب من النموذج الخطّي عند الهدف. وبعيدًا عن وضع السكون قد يفلت الجهاز غير الخطّي، كما يُظهر الدوران المتواصل. ورفعُ سلسلة بالتأرجح من وضع بعيد يحتاج أفكارًا أخرى، مثل ضخّ الطاقة إليها أو سحبها منها عمدًا قبل تسليمها إلى LQR.</li>
+                        </ul>
+                        <div class="pbox"><p class="pbox__title">التمارين</p><ol>
+                            <li>انطلاقًا من (8)، بيّن أنه مع \(N_0 = 0\) تكون معادلة العربة \(M\ddot X = \tilde F\) وأن معادلات السلسلة لا تحتوي \(X\). أيّ عمودين من (10) يبقيان؟</li>
+                            <li>يُسحب وترٌ مشدود بشدّ \(N_0\) وطوله \(\ell_0\) جانبًا من أحد طرفيه بمقدار \(\delta\). بيّن أن قوّة الإرجاع هي \(N_0\delta/\ell_0\) في الرتبة الأولى، وفسّر لماذا لا تظهر صلابة النابض \(k_s\).</li>
+                            <li>اجعل \(\rho\) أكبر بعشر مرّات في الصفحة واحسب من جديد. كيف تتغيّر معاملات الكسب، وأبطأ اضمحلال، والزمن الذي يقضيه الملفّ عند حدّ التيار؟ فسّر ذلك بـ (12).</li>
+                        </ol></div>
+                        <h4><span class="psub__n">12.1</span>مراجع للاستزادة</h4>
+                        <ol class="prefs">
+                            <li>R. Tedrake، <a href="https://underactuated.csail.mit.edu/acrobot.html"><em>Underactuated Robotics</em>، الفصل 3: Acrobots, Cart-Poles, and Quadrotors</a>، ملاحظات مقرّر في MIT، 2024: معادلات المناولة، والتقريب الخطّي عند نقطة ثابتة، واختبار قابلية التحكّم، وLQR لنوّاس يُدفع عبر مشغّل واحد (الأقسام 3 و7 و8).</li>
+                            <li>K. J. Åström وR. M. Murray، <em>Feedback Systems: An Introduction for Scientists and Engineers</em>، Princeton University Press، 2008: الفصل 6، قابلية الوصول والتغذية الراجعة للحالة، والفصل 7، المنظّم الخطّي التربيعي. <a href="http://www.cds.caltech.edu/~murray/books/AM08/pdf/am08-complete_22Feb09.pdf">النسخة الإلكترونية المجانية التي يتيحها المؤلّفان</a>.</li>
+                            <li>J. R. Taylor، <a href="https://books.google.com/books/about/Classical_Mechanics.html?id=P1kCtNr-pJsC"><em>Classical Mechanics</em></a>، University Science Books، 2005: الفصل 7، معادلات لاغرانج مع القيود، والفصل 11، المهتزّات المقترنة والأنماط الطبيعية (القسمان 3 و6).</li>
+                        </ol>
+                    </section>
+                </div>
+            </div>
+        </article>
+
+        <section class="walk" id="walk" data-walk="pendcontrol" aria-label="من الرموز إلى الشيفرة"></section>
+    </main>
+
+    <footer class="sim-foot">
+        <span>© 2026 نعمة سائر قدسية</span>
+        <span><a href="../simulations.html">جميع المحاكاة ↑</a> · <a href="../index.html">الصفحة الرئيسية</a></span>
+    </footer>
+
+    <script src="../../scripts/fold.js"></script>
+    <script src="../../scripts/sim.js"></script>
+    <script src="../../scripts/dataset.js"></script>
+    <script>
+    (function () {
+        'use strict';
+        var T = Sim.theme;
+        var H = 0.0005, TEND = 30, EVERY = 20, NS = TEND / H / EVERY + 1;
+        // the rig: masses in kg, lengths in m; the cart's hinge sits H_RAIL below the pivot
+        var M1 = 0.5, M2 = 0.5, L1 = 0.5, L2 = 0.5, MC = 1.0, H_RAIL = 1.65, G = 9.81;
+        // the strut: two tubes of 0.5 m; pushed together it is 0.5 m long, pulled out until the collar meets the stop 0.95 m
+        var TUBE = 0.5, LMIN = 0.5, LMAX = 0.95, KST = 2e4, CST = 40;   // the end stops: a stiff spring and a damper while a stop is touched
+        var KAPPA = 10;                                     // the coil's force constant κ = Bℓ in N/A
+        var XRAIL = 1.0;                                    // the magnet's gap runs from −1 m to +1 m; the cart cannot leave it
+
+        var stage = document.getElementById('stage'), forceStage = document.getElementById('stage-force'), phaseStage = document.getElementById('stage-phase');
+        var box = Sim.canvas2d(document.getElementById('rig')), ctx = box.ctx;
+        var fbox = Sim.canvas2d(document.getElementById('forces')), fctx = fbox.ctx;
+        var pbox = Sim.canvas2d(document.getElementById('phase')), pctx = pbox.ctx;
+        var statusEl = document.getElementById('status');
+        var playT = 0, fps = 0, solved = null;
+
+        /* ---------- the store: every number this page computes is written here, where it is computed (scripts/dataset.js) ---------- */
+        var ds = Sim.dataset({ title: 'Double pendulum under control', attrs: { figure: 11, page: 'pendulum-control.html', equation: 'M(q) q″ + C(q, q′) q′ + ∇V = (0, 0, F)', coordinates: 'q = (θ1, θ2, X)' } });
+        ds.var('m1', [], 'float', { symbol: 'm<sub>1</sub>', units: 'kg', long_name: 'mass of the upper ball', computed_in: 'constant M1', digits: 2 });
+        ds.var('m2', [], 'float', { symbol: 'm<sub>2</sub>', units: 'kg', long_name: 'mass of the lower ball', computed_in: 'constant M2', digits: 2 });
+        ds.var('l1', [], 'float', { symbol: 'l<sub>1</sub>', units: 'm', long_name: 'length of the upper rod', computed_in: 'constant L1', digits: 2 });
+        ds.var('l2', [], 'float', { symbol: 'l<sub>2</sub>', units: 'm', long_name: 'length of the lower rod', computed_in: 'constant L2', digits: 2 });
+        ds.var('mc', [], 'float', { symbol: 'M', units: 'kg', long_name: 'mass of the cart with its coil', computed_in: 'constant MC', digits: 2 });
+        ds.var('Hr', [], 'float', { symbol: 'H', units: 'm', long_name: 'depth of the cart’s hinge below the pivot', computed_in: 'constant H_RAIL', digits: 2 });
+        ds.var('g', [], 'float', { symbol: 'g', units: 'm/s²', long_name: 'gravitational acceleration', computed_in: 'constant G', digits: 2 });
+        ds.var('kappa', [], 'float', { symbol: 'κ', units: 'N/A', long_name: 'force constant of the coil, Bℓ: field in the gap times the length of wire in it', computed_in: 'constant KAPPA', digits: 1 });
+        ds.var('lmin', [], 'float', { symbol: 'ℓ<sub>min</sub>', units: 'm', long_name: 'shortest length of the strut: the inner tube is all the way in', computed_in: 'constant LMIN', digits: 2 });
+        ds.var('lmax', [], 'float', { symbol: 'ℓ<sub>max</sub>', units: 'm', long_name: 'longest length of the strut: the stop that holds the inner tube', computed_in: 'constant LMAX', digits: 2 });
+        ds.var('kst', [], 'float', { symbol: 'k<sub>stop</sub>', units: 'N/m', long_name: 'stiffness of an end stop while it is touched', computed_in: 'constant KST', digits: 0 });
+        ds.var('cst', [], 'float', { symbol: 'c<sub>stop</sub>', units: 'kg/s', long_name: 'damping of an end stop while it is touched: the knock turns energy into heat', computed_in: 'constant CST', digits: 0 });
+        ds.var('N0', [], 'float', { symbol: 'N<sub>0</sub>', units: 'N', long_name: 'pull of the strut when the pendulum hangs straight above the cart (negative: it pushes)', computed_in: 'N0 slider', digits: 1 });
+        ds.var('ks', [], 'float', { symbol: 'k<sub>s</sub>', units: 'N/m', long_name: 'stiffness of the spring inside the tubes', computed_in: 'ks slider', digits: 0 });
+        ds.var('ell0', [], 'float', { symbol: 'ℓ<sub>0</sub>', units: 'm', long_name: 'length of the strut when the pendulum hangs straight down', computed_in: 'rig()', formula: 'H − l<sub>1</sub> − l<sub>2</sub>', digits: 4 });
+        ds.var('L0', [], 'float', { symbol: 'L<sub>0</sub>', units: 'm', long_name: 'rest length of the spring inside the tubes, chosen so that the pull at ℓ<sub>0</sub> is N<sub>0</sub>', computed_in: 'rig()', formula: 'ℓ<sub>0</sub> − N<sub>0</sub>/k<sub>s</sub>', digits: 5 });
+        ds.var('Imax', [], 'float', { symbol: 'I<sub>max</sub>', units: 'A', long_name: 'largest current the source gives', computed_in: 'Imax slider', digits: 1 });
+        ds.var('Fmax', [], 'float', { symbol: 'F<sub>max</sub>', units: 'N', long_name: 'largest force of the coil', computed_in: 'rig()', formula: 'κ I<sub>max</sub>', digits: 2 });
+        ds.var('r', [], 'float', { symbol: 'r', units: 'm', long_name: 'target position of the cart', computed_in: 'r slider', digits: 2 });
+        ds.var('ctrl_on', [], 'bool', { symbol: 'controller on', long_name: 'the controller drives the coil; off, the coil carries no current', computed_in: 'the preset buttons' });
+        ds.var('qa', [], 'float', { symbol: 'q<sub>θ</sub>', units: '1/rad²', long_name: 'weight of the two angles’ errors in the cost J', computed_in: 'qa slider', digits: 1 });
+        ds.var('qx', [], 'float', { symbol: 'q<sub>X</sub>', units: '1/m²', long_name: 'weight of the cart’s position error in J', computed_in: 'qx slider', digits: 1 });
+        ds.var('qv', [], 'float', { symbol: 'q<sub>v</sub>', units: 's²', long_name: 'weight of the three speeds in J (per rad² or m²)', computed_in: 'qv slider', digits: 1 });
+        ds.var('rho', [], 'float', { symbol: 'ρ', units: '1/N²', long_name: 'weight of the coil’s force in J: larger means gentler', computed_in: 'rho slider', formula: '10<sup>slider</sup>', digits: 4 });
+        ds.var('th1_eq', [], 'float', { symbol: 'θ<sub>1</sub>*', units: 'rad', long_name: 'angle of the upper rod at the rest the controller aims at', computed_in: 'equilibrium()', formula: 'Newton’s method on the two pendulum equations with X = r', digits: 6 });
+        ds.var('th2_eq', [], 'float', { symbol: 'θ<sub>2</sub>*', units: 'rad', long_name: 'angle of the lower rod at that rest', computed_in: 'equilibrium()', formula: 'Newton’s method on the two pendulum equations with X = r', digits: 6 });
+        ds.var('F_eq', [], 'float', { symbol: 'F*', units: 'N', long_name: 'steady force of the coil that holds the cart at r against the strut', computed_in: 'equilibrium()', formula: 'N* ∂ℓ/∂X at the rest', digits: 6 });
+        ds.var('N_eq', [], 'float', { symbol: 'N*', units: 'N', long_name: 'pull of the strut at that rest', computed_in: 'equilibrium()', formula: 'k<sub>s</sub>(ℓ* − L<sub>0</sub>)', digits: 6 });
+        ds.var('ell_eq', [], 'float', { symbol: 'ℓ*', units: 'm', long_name: 'length of the strut at that rest', computed_in: 'equilibrium()', digits: 6 });
+        ds.dim('k', 6);
+        ds.var('Kg', ['k'], Float64Array, { symbol: 'K', long_name: 'feedback gains on (θ<sub>1</sub>, θ<sub>2</sub>, X, θ̇<sub>1</sub>, θ̇<sub>2</sub>, Ẋ): N/rad, N/rad, N/m, N·s/rad, N·s/rad, N·s/m', computed_in: 'lqr()', formula: 'ρ<sup>−1</sup> Bᵀ P, P from the Riccati equation (14)', digits: 4 });
+        ds.var('lamo_re', ['k'], Float64Array, { symbol: 'Re λ<sub>open</sub>', units: '1/s', long_name: 'eigenvalues of the rig without control at that rest, real parts', computed_in: 'eig()', formula: 'roots of det(λI − A)', digits: 5 });
+        ds.var('lamo_im', ['k'], Float64Array, { symbol: 'Im λ<sub>open</sub>', units: 'rad/s', long_name: 'imaginary parts: the angular frequencies of the free swings', computed_in: 'eig()', digits: 5 });
+        ds.var('lamc_re', ['k'], Float64Array, { symbol: 'Re λ<sub>closed</sub>', units: '1/s', long_name: 'eigenvalues with the controller on, real parts: the decay rates', computed_in: 'eig()', formula: 'roots of det(λI − A + BK)', digits: 5 });
+        ds.var('lamc_im', ['k'], Float64Array, { symbol: 'Im λ<sub>closed</sub>', units: 'rad/s', long_name: 'imaginary parts with the controller on', computed_in: 'eig()', digits: 5 });
+        ds.var('rank', [], 'int', { symbol: 'rank 𝒞', long_name: 'rank of the controllability matrix [B, AB, …, A⁵B]; 6 means the coil can reach every motion near the rest', computed_in: 'rankOf()', digits: 0 });
+        ds.var('slow', [], 'float', { symbol: 'max Re λ', units: '1/s', long_name: 'slowest decay rate of the closed loop (with the controller off: of the rig)', computed_in: 'solve()', digits: 4 });
+        ds.var('fp_kind', [], 'str', { symbol: 'fixed point', long_name: 'kind of the rest: stable focus, centre (no decay, the rig without control) or unstable', computed_in: 'solve()' });
+        ds.var('y0s', ['k'], Float64Array, { symbol: 'y(0)', long_name: 'start of the run, (θ<sub>1</sub>, θ<sub>2</sub>, X, θ̇<sub>1</sub>, θ̇<sub>2</sub>, Ẋ): rest hanging straight down after Solve, where your hand let go after a drag', computed_in: 'solve()', digits: 5 });
+        ds.var('released', [], 'bool', { symbol: 'from your hand', long_name: 'the run starts where a drag let go', computed_in: 'solve()' });
+        ds.var('grabbed', [], 'str', { symbol: 'held', long_name: 'what your hand holds now (nothing, ball 1, ball 2 or the cart); the clock is stopped', computed_in: 'the drag' });
+        ds.var('h', [], 'float', { symbol: 'h', units: 's', long_name: 'RK4 step', computed_in: 'constant H', digits: 4 });
+        ds.var('steps', [], 'int', { symbol: 'steps', long_name: 'RK4 steps in one solve', computed_in: 'solve()', formula: 'T<sub>end</sub> / h', digits: 0 });
+        ds.var('solve_ms', [], 'float', { symbol: 'solve time', units: 'ms', long_name: 'time the browser took to solve the run twice (h and h/2) and store it', computed_in: 'solve()', digits: 1, source: 'Measured with performance.now().' });
+        ds.var('err_half', [], 'float', { symbol: 'max |y<sub>h</sub> − y<sub>h/2</sub>|', long_name: 'largest difference between the stored run and the same run solved with half the step, over the stored samples (rad, m, rad/s or m/s)', computed_in: 'solve()', digits: 10, sci: true });
+        ds.var('err_end', [], 'float', { symbol: 't<sub>err</sub>', units: 's', long_name: 'time at which that largest difference occurs', computed_in: 'solve()', digits: 2 });
+        ds.var('balance', [], 'float', { symbol: 'balance', units: 'J', long_name: 'energy book at the end: E(0) + W<sub>coil</sub> − Q<sub>stop</sub> − E(T)', computed_in: 'solve()', digits: 10, sci: true });
+        ds.var('t_settle', [], 'float', { symbol: 't<sub>settle</sub>', units: 's', long_name: 'time after which the state stays within 0.01 of the rest (rad, m, rad/s, m/s); NaN if it never does', computed_in: 'solve()', digits: 2 });
+        ds.var('t_sat', [], 'float', { symbol: 't<sub>sat</sub>', units: 's', long_name: 'time the coil spends at its current limit', computed_in: 'solve()', digits: 2 });
+        ds.var('t_stop', [], 'float', { symbol: 't<sub>stop</sub>', units: 's', long_name: 'time the strut spends against an end stop', computed_in: 'solve()', digits: 2 });
+        ds.var('stale', [], 'bool', { symbol: 'stale', long_name: 'a slider moved since the last solve', computed_in: 'markStale()' });
+        ds.dim('n', NS);
+        ds.coord('ts', 'n', Float64Array, { symbol: 't<sub>n</sub>', units: 's', long_name: 'time of each stored sample', computed_in: 'solve()', formula: 'n · 20 h', digits: 2 });
+        ds.var('th1', ['n'], Float64Array, { symbol: 'θ<sub>1, n</sub>', units: 'rad', long_name: 'angle of the upper rod from straight down, RK4', computed_in: 'solve()', digits: 6 });
+        ds.var('th2', ['n'], Float64Array, { symbol: 'θ<sub>2, n</sub>', units: 'rad', long_name: 'angle of the lower rod from straight down, RK4', computed_in: 'solve()', digits: 6 });
+        ds.var('Xs', ['n'], Float64Array, { symbol: 'X<sub>n</sub>', units: 'm', long_name: 'position of the cart, RK4', computed_in: 'solve()', digits: 6 });
+        ds.var('w1', ['n'], Float64Array, { symbol: 'θ̇<sub>1, n</sub>', units: 'rad/s', long_name: 'angular speed of the upper rod', computed_in: 'solve()', digits: 6 });
+        ds.var('w2', ['n'], Float64Array, { symbol: 'θ̇<sub>2, n</sub>', units: 'rad/s', long_name: 'angular speed of the lower rod', computed_in: 'solve()', digits: 6 });
+        ds.var('vX', ['n'], Float64Array, { symbol: 'Ẋ<sub>n</sub>', units: 'm/s', long_name: 'speed of the cart', computed_in: 'solve()', digits: 6 });
+        ds.var('Fs', ['n'], Float64Array, { symbol: 'F<sub>n</sub>', units: 'N', long_name: 'force of the coil on the cart', computed_in: 'control(), in solve()', formula: 'clamp(F* − K(y<sub>n</sub> − y*), ±κI<sub>max</sub>); 0 with the controller off', digits: 6 });
+        ds.var('Is', ['n'], Float64Array, { symbol: 'I<sub>n</sub>', units: 'A', long_name: 'current in the coil', computed_in: 'solve()', formula: 'F<sub>n</sub> / κ', digits: 6 });
+        ds.var('Ns', ['n'], Float64Array, { symbol: 'N<sub>n</sub>', units: 'N', long_name: 'pull of the strut along its length (negative: it pushes), spring and end stops together', computed_in: 'strut(), in solve()', formula: 'k<sub>s</sub>(ℓ − L<sub>0</sub>) + stop', digits: 6 });
+        ds.var('ells', ['n'], Float64Array, { symbol: 'ℓ<sub>n</sub>', units: 'm', long_name: 'length of the strut', computed_in: 'strut(), in solve()', formula: '|r<sub>2</sub> − r<sub>c</sub>|', digits: 6 });
+        ds.var('Es', ['n'], Float64Array, { symbol: 'E<sub>n</sub>', units: 'J', long_name: 'energy of the rig: kinetic, gravity, the spring in the tubes and a touched stop', computed_in: 'energy(), in solve()', formula: 'T + V, (2) + (3)', digits: 6 });
+        ds.var('Wc', ['n'], Float64Array, { symbol: 'W<sub>coil, n</sub>', units: 'J', long_name: 'work the coil has done on the cart since t = 0', computed_in: 'solve(), integrated with RK4', formula: '∫ F Ẋ dt', digits: 6 });
+        ds.var('Qs', ['n'], Float64Array, { symbol: 'Q<sub>stop, n</sub>', units: 'J', long_name: 'heat the end stops have made since t = 0', computed_in: 'solve(), integrated with RK4', formula: '∫ c<sub>stop</sub> ℓ̇² dt while a stop is touched', digits: 6 });
+        ds.var('sat', ['n'], Uint8Array, { symbol: 'at limit', long_name: '1 where the controller asks for more than the coil can give', computed_in: 'solve()', digits: 0 });
+        ds.var('win_t0', [], 'float', { symbol: 't<sub>window</sub>', units: 's', long_name: 'left edge of the 10 s window chart', computed_in: 'chartGeom()', formula: 'clamp(t<sub>play</sub> − 3 s, 0, 20 s)', digits: 3 });
+        ds.var('ylim', [], 'float', { symbol: 'y<sub>lim</sub>', long_name: 'half-height of the time chart: 1.1 × the largest |θ<sub>1</sub>|, |θ<sub>2</sub>|, |X| of the run (rad or m)', computed_in: 'solve()', digits: 4 });
+        ds.var('Flim', [], 'float', { symbol: 'F<sub>lim</sub>', units: 'N', long_name: 'half-height of the force chart: 1.1 × the largest of |F|, |N| and κI<sub>max</sub>', computed_in: 'solve()', digits: 4 });
+        ds.var('Escale', [], 'float', { symbol: 'E<sub>bar</sub>', units: 'J', long_name: 'energy that fills a bar: the largest of |E − E<sub>rest</sub>|, |W<sub>coil</sub>| and Q<sub>stop</sub> over the run', computed_in: 'solve()', digits: 5 });
+        ds.var('E_rest', [], 'float', { symbol: 'E<sub>rest</sub>', units: 'J', long_name: 'energy of the rig resting at y*: the zero of the energy bar', computed_in: 'solve()', digits: 6 });
+        ds.var('i_now', [], 'int', { symbol: 'n<sub>now</sub>', long_name: 'stored sample shown in this frame', computed_in: 'the clock', formula: 'round(t<sub>play</sub> / 20h)', digits: 0 });
+        ds.var('t_play', [], 'float', { symbol: 't<sub>play</sub>', units: 's', long_name: 'playback time in the stored run', computed_in: 'the clock', digits: 3 });
+        ds.var('th1_now', [], 'float', { symbol: 'θ<sub>1</sub>', units: 'rad', long_name: 'upper angle shown now', computed_in: 'the clock, or your hand', digits: 5 });
+        ds.var('th2_now', [], 'float', { symbol: 'θ<sub>2</sub>', units: 'rad', long_name: 'lower angle shown now', computed_in: 'the clock, or your hand', digits: 5 });
+        ds.var('X_now', [], 'float', { symbol: 'X', units: 'm', long_name: 'cart position shown now', computed_in: 'the clock, or your hand', digits: 5 });
+        ds.var('w1_now', [], 'float', { symbol: 'θ̇<sub>1</sub>', units: 'rad/s', long_name: 'upper angular speed now', computed_in: 'the clock, or your hand', digits: 5 });
+        ds.var('w2_now', [], 'float', { symbol: 'θ̇<sub>2</sub>', units: 'rad/s', long_name: 'lower angular speed now', computed_in: 'the clock, or your hand', digits: 5 });
+        ds.var('vX_now', [], 'float', { symbol: 'Ẋ', units: 'm/s', long_name: 'cart speed now', computed_in: 'the clock, or your hand', digits: 5 });
+        ds.var('F_now', [], 'float', { symbol: 'F', units: 'N', long_name: 'coil force now (while you hold: what the controller asks for that state)', computed_in: 'the clock, or your hand', digits: 5 });
+        ds.var('I_now', [], 'float', { symbol: 'I', units: 'A', long_name: 'coil current now', computed_in: 'the clock, or your hand', digits: 5 });
+        ds.var('N_now', [], 'float', { symbol: 'N', units: 'N', long_name: 'strut pull now', computed_in: 'the clock, or your hand', digits: 5 });
+        ds.var('ell_now', [], 'float', { symbol: 'ℓ', units: 'm', long_name: 'strut length now', computed_in: 'the clock, or your hand', digits: 5 });
+        ds.var('E_now', [], 'float', { symbol: 'E', units: 'J', long_name: 'energy now', computed_in: 'the clock, or your hand', digits: 5 });
+        ds.var('Wc_now', [], 'float', { symbol: 'W<sub>coil</sub>', units: 'J', long_name: 'coil’s work up to now', computed_in: 'the clock', digits: 5 });
+        ds.var('Qs_now', [], 'float', { symbol: 'Q<sub>stop</sub>', units: 'J', long_name: 'stops’ heat up to now', computed_in: 'the clock', digits: 5 });
+        ds.var('px_per_m', [], 'float', { symbol: 'px/m', units: 'css px', long_name: 'drawing scale of the rig', computed_in: 'geom()', digits: 3 });
+        ds.var('px_per_N', [], 'float', { symbol: 'px/N', units: 'css px', long_name: 'scale of the force arrows: 30 N is drawn 0.6 m long', computed_in: 'geom()', formula: '0.02 m/N · px/m', digits: 3 });
+        ds.var('pivot_px', [], 'float', { symbol: 'x<sub>O</sub>, y<sub>O</sub>', units: 'css px', long_name: 'screen position of the pivot (x; y is in pivot_py)', computed_in: 'geom()', digits: 1 });
+        ds.var('pivot_py', [], 'float', { symbol: 'y<sub>O</sub>', units: 'css px', long_name: 'screen height of the pivot', computed_in: 'geom()', digits: 1 });
+        ds.var('b1_px', [], 'float', { symbol: 'x<sub>1</sub> px', units: 'css px', long_name: 'screen x of ball 1', computed_in: 'draw()', formula: 'x<sub>O</sub> + l<sub>1</sub> sin θ<sub>1</sub> · px/m', digits: 1 });
+        ds.var('b1_py', [], 'float', { symbol: 'y<sub>1</sub> px', units: 'css px', long_name: 'screen y of ball 1', computed_in: 'draw()', formula: 'y<sub>O</sub> + l<sub>1</sub> cos θ<sub>1</sub> · px/m', digits: 1 });
+        ds.var('b2_px', [], 'float', { symbol: 'x<sub>2</sub> px', units: 'css px', long_name: 'screen x of ball 2', computed_in: 'draw()', digits: 1 });
+        ds.var('b2_py', [], 'float', { symbol: 'y<sub>2</sub> px', units: 'css px', long_name: 'screen y of ball 2', computed_in: 'draw()', digits: 1 });
+        ds.var('cart_px', [], 'float', { symbol: 'X px', units: 'css px', long_name: 'screen x of the cart’s hinge', computed_in: 'draw()', formula: 'x<sub>O</sub> + X · px/m', digits: 1 });
+        ds.var('cart_py', [], 'float', { symbol: 'y<sub>c</sub> px', units: 'css px', long_name: 'screen y of the cart’s hinge', computed_in: 'geom()', formula: 'y<sub>O</sub> + H · px/m', digits: 1 });
+        ds.var('r_px', [], 'float', { symbol: 'r px', units: 'css px', long_name: 'screen x of the target flag', computed_in: 'draw()', formula: 'x<sub>O</sub> + r · px/m', digits: 1 });
+        ds.var('F_px', [], 'float', { symbol: 'F arrow', units: 'css px', long_name: 'length of the coil-force arrow on the cart (positive to the right)', computed_in: 'draw()', formula: 'F · px/N', digits: 1 });
+        ds.var('box_w', [], 'int', { symbol: 'box.w', units: 'css px', long_name: 'canvas width on your screen', computed_in: 'draw()', digits: 0, source: 'Measured from the page layout.' });
+        ds.var('box_h', [], 'int', { symbol: 'box.h', units: 'css px', long_name: 'canvas height on your screen', computed_in: 'draw()', digits: 0, source: 'Measured from the page layout.' });
+        ds.var('fps', [], 'float', { symbol: 'frame rate', units: 'Hz', long_name: 'smoothed over about ten frames', computed_in: 'the clock', digits: 1 });
+        ds.var('playing', [], 'bool', { symbol: 'playing', long_name: 'the playback runs', computed_in: 'Sim.clock' });
+        ds.set('m1', M1); ds.set('m2', M2); ds.set('l1', L1); ds.set('l2', L2); ds.set('mc', MC); ds.set('Hr', H_RAIL); ds.set('g', G); ds.set('kappa', KAPPA);
+        ds.set('lmin', LMIN); ds.set('lmax', LMAX); ds.set('kst', KST); ds.set('cst', CST); ds.set('h', H);
+
+        var rr = Sim.slider('r', { format: function (v) { return v.toFixed(2) + ' m'; }, onInput: function () { markStale(); takeHint(); } });
+        rr.el.addEventListener('change', function () { if (solved) solve(fromNow()); });
+        var qa = Sim.slider('qa', { format: function (v) { return v.toFixed(1); }, onInput: weightsMoved });
+        var qx = Sim.slider('qx', { format: function (v) { return v.toFixed(1); }, onInput: weightsMoved });
+        var qv = Sim.slider('qv', { format: function (v) { return v.toFixed(1); }, onInput: weightsMoved });
+        var rho = Sim.slider('rho', { format: function (v) { return Math.pow(10, v).toPrecision(2); }, onInput: weightsMoved });
+        var N0s = Sim.slider('N0', { format: function (v) { return v.toFixed(1) + ' N' + (v < 0 ? ' (push)' : ''); }, onInput: markStale });
+        var kss = Sim.slider('ks', { format: function (v) { return v.toFixed(0) + ' N/m'; }, onInput: markStale });
+        var Ims = Sim.slider('Imax', { format: function (v) { return v.toFixed(1) + ' A · ' + (KAPPA * v).toFixed(0) + ' N'; }, onInput: markStale });
+        var speed = Sim.slider('speed', { format: function (v) { return v.toFixed(2) + '×'; } });
+        var seek = Sim.slider('seek', { format: function (v) { return _t('t = {t} s of {T} s', { t: (v * EVERY * H).toFixed(1), T: TEND }); }, onInput: function (v) { playT = v * EVERY * H; frame(); } });
+        var ctrlOn = true, presetName = 'firm';
+        var PRESETS = { off: null, gentle: [5, 5, 5, -1], firm: [5, 5, 5, -1.7] };
+        function weightsMoved() { presetName = null; markStale(); paintPresets(); }
+
+        /* ---------- the rig: geometry of the strut (1), the equations of motion (5), the energy (2) + (3) ---------- */
+        function rig() {
+            // the parameters of one run, read from the sliders at the moment of solving
+            var p = { N0: N0s.value, ks: kss.value, Imax: Ims.value, r: rr.value, on: ctrlOn,
+                      qa: qa.value, qx: qx.value, qv: qv.value, rho: Math.pow(10, rho.value) };
+            p.ell0 = H_RAIL - L1 - L2; p.L0 = p.ell0 - p.N0 / p.ks; p.Fmax = KAPPA * p.Imax;
+            return p;
+        }
+        function strut(p, q, v) {
+            // ball 2 and the cart's hinge; the strut's length ℓ, its rate ℓ̇ and dℓ/dq; its pull N, spring plus a touched stop
+            var x2 = L1 * Math.sin(q[0]) + L2 * Math.sin(q[1]), y2 = -L1 * Math.cos(q[0]) - L2 * Math.cos(q[1]);
+            var dx = x2 - q[2], dy = y2 + H_RAIL, l = Math.sqrt(dx * dx + dy * dy);
+            var J0 = (dx * L1 * Math.cos(q[0]) + dy * L1 * Math.sin(q[0])) / l, J1 = (dx * L2 * Math.cos(q[1]) + dy * L2 * Math.sin(q[1])) / l, J2 = -dx / l;
+            var ld = J0 * v[0] + J1 * v[1] + J2 * v[2], N = p.ks * (l - p.L0), stop = 0;
+            if (l > LMAX) stop = KST * (l - LMAX) + CST * ld;
+            else if (l < LMIN) stop = -KST * (LMIN - l) + CST * ld;
+            return { l: l, ld: ld, J0: J0, J1: J1, J2: J2, N: N + stop, stop: stop, x2: x2, y2: y2 };
+        }
+        function accel(p, q, v, F) {
+            // M(q) q̈ = −C(q, q̇) q̇ − ∇V + (0, 0, F), solved for q̈: the 2 × 2 pendulum block and the cart separately
+            var c = Math.cos(q[0] - q[1]), s = Math.sin(q[0] - q[1]), st = strut(p, q, v);
+            var a = (M1 + M2) * L1 * L1, b = M2 * L1 * L2 * c, d = M2 * L2 * L2;
+            var r1 = -M2 * L1 * L2 * s * v[1] * v[1] - (M1 + M2) * G * L1 * Math.sin(q[0]) - st.N * st.J0;
+            var r2 = M2 * L1 * L2 * s * v[0] * v[0] - M2 * G * L2 * Math.sin(q[1]) - st.N * st.J1;
+            var det = a * d - b * b;
+            return [(d * r1 - b * r2) / det, (a * r2 - b * r1) / det, (F - st.N * st.J2) / MC, st];
+        }
+        function energy(p, y) {
+            // T + V of (2) and (3): kinetic, gravity, the spring in the tubes, and the elastic part of a touched stop
+            var c = Math.cos(y[0] - y[1]), st = strut(p, y, [y[3], y[4], y[5]]), e;
+            e = 0.5 * (M1 + M2) * L1 * L1 * y[3] * y[3] + 0.5 * M2 * L2 * L2 * y[4] * y[4] + M2 * L1 * L2 * c * y[3] * y[4] + 0.5 * MC * y[5] * y[5];
+            e += -(M1 + M2) * G * L1 * Math.cos(y[0]) - M2 * G * L2 * Math.cos(y[1]) + 0.5 * p.ks * Math.pow(st.l - p.L0, 2);
+            if (st.l > LMAX) e += 0.5 * KST * Math.pow(st.l - LMAX, 2); else if (st.l < LMIN) e += 0.5 * KST * Math.pow(LMIN - st.l, 2);
+            return e;
+        }
+        function equilibrium(p) {
+            // the rest with the cart at X = r: the two pendulum equations at zero speed, solved by Newton's method
+            var t = [0, 0], hh = 1e-7, Z = [0, 0, 0];
+            function G2(tt) { var a = accel(p, [tt[0], tt[1], p.r], Z, 0); return [a[0], a[1]]; }
+            for (var it = 0; it < 60; it++) {
+                var g0 = G2(t), ga = G2([t[0] + hh, t[1]]), gb = G2([t[0], t[1] + hh]);
+                var j00 = (ga[0] - g0[0]) / hh, j10 = (ga[1] - g0[1]) / hh, j01 = (gb[0] - g0[0]) / hh, j11 = (gb[1] - g0[1]) / hh, de = j00 * j11 - j01 * j10;
+                var d0 = (j11 * g0[0] - j01 * g0[1]) / de, d1 = (j00 * g0[1] - j10 * g0[0]) / de;
+                t[0] -= d0; t[1] -= d1; if (Math.abs(d0) + Math.abs(d1) < 1e-15) break;
+            }
+            var st = strut(p, [t[0], t[1], p.r], Z);
+            return { y: [t[0], t[1], p.r, 0, 0, 0], F: st.N * st.J2, N: st.N, l: st.l };
+        }
+        /* ---------- the controller: linearise at the rest (9), LQR gains from the Riccati equation (13)–(14) ---------- */
+        function zeros(n, m) { var A = []; for (var i = 0; i < n; i++) A.push(new Array(m).fill(0)); return A; }
+        function mul(A, B) { var n = A.length, m = B[0].length, k = B.length, C = zeros(n, m); for (var i = 0; i < n; i++) for (var j = 0; j < m; j++) { var s = 0; for (var l = 0; l < k; l++) s += A[i][l] * B[l][j]; C[i][j] = s; } return C; }
+        function inv(A) {
+            var n = A.length, W = A.map(function (row, i) { var e = new Array(n).fill(0); e[i] = 1; return row.concat(e); });
+            for (var c = 0; c < n; c++) {
+                var piv = c; for (var r = c + 1; r < n; r++) if (Math.abs(W[r][c]) > Math.abs(W[piv][c])) piv = r;
+                var tmp = W[c]; W[c] = W[piv]; W[piv] = tmp; var d = W[c][c];
+                for (var j = 0; j < 2 * n; j++) W[c][j] /= d;
+                for (r = 0; r < n; r++) if (r !== c) { var f = W[r][c]; if (f) for (j = 0; j < 2 * n; j++) W[r][j] -= f * W[c][j]; }
+            }
+            return W.map(function (row) { return row.slice(n); });
+        }
+        function rhs(p, y, F) { var a = accel(p, [y[0], y[1], y[2]], [y[3], y[4], y[5]], F); return [y[3], y[4], y[5], a[0], a[1], a[2]]; }
+        function linearise(p, ys, Fs) {
+            // A = ∂f/∂y and B = ∂f/∂F at the rest, by central differences of the full equations of motion
+            var A = zeros(6, 6), B = zeros(6, 1), e = 1e-6, i, j;
+            for (j = 0; j < 6; j++) { var yp = ys.slice(), ym = ys.slice(); yp[j] += e; ym[j] -= e; var fp = rhs(p, yp, Fs), fm = rhs(p, ym, Fs); for (i = 0; i < 6; i++) A[i][j] = (fp[i] - fm[i]) / (2 * e); }
+            var bp = rhs(p, ys, Fs + e), bm = rhs(p, ys, Fs - e); for (i = 0; i < 6; i++) B[i][0] = (bp[i] - bm[i]) / (2 * e);
+            return { A: A, B: B };
+        }
+        function lqr(A, B, Qd, R) {
+            // the Riccati equation AᵀP + PA − PBR⁻¹BᵀP + Q = 0 by the sign function of the Hamiltonian matrix
+            var n = A.length, Hm = zeros(2 * n, 2 * n), i, j;
+            for (i = 0; i < n; i++) for (j = 0; j < n; j++) {
+                Hm[i][j] = A[i][j]; Hm[i][n + j] = -B[i][0] * B[j][0] / R; Hm[n + i][j] = -(i === j ? Qd[i] : 0); Hm[n + i][n + j] = -A[j][i];
+            }
+            var Z = Hm;
+            for (var it = 0; it < 100; it++) {
+                var Zi = inv(Z), dn = 0, Zn = zeros(2 * n, 2 * n);
+                for (i = 0; i < 2 * n; i++) for (j = 0; j < 2 * n; j++) { Zn[i][j] = 0.5 * (Z[i][j] + Zi[i][j]); dn += Math.abs(Zn[i][j] - Z[i][j]); }
+                Z = Zn; if (dn < 1e-12) break;
+            }
+            var Lm = zeros(2 * n, n), Rm = zeros(2 * n, n);
+            for (i = 0; i < n; i++) for (j = 0; j < n; j++) {
+                Lm[i][j] = Z[i][n + j]; Lm[n + i][j] = Z[n + i][n + j] + (i === j ? 1 : 0);
+                Rm[i][j] = -(Z[i][j] + (i === j ? 1 : 0)); Rm[n + i][j] = -Z[n + i][j];
+            }
+            var Lt = Lm[0].map(function (_, c) { return Lm.map(function (row) { return row[c]; }); });
+            var P = mul(inv(mul(Lt, Lm)), mul(Lt, Rm)), K = [];
+            for (j = 0; j < n; j++) { var s = 0; for (i = 0; i < n; i++) s += B[i][0] * P[i][j]; K.push(s / R); }
+            return K;
+        }
+        function eig(A) {
+            // eigenvalues: the characteristic polynomial (Faddeev–LeVerrier), its roots by Durand–Kerner
+            var n = A.length, Mk = zeros(n, n), c = [1], i, j, k;
+            for (k = 1; k <= n; k++) {
+                var AM = mul(A, Mk); for (i = 0; i < n; i++) AM[i][i] += c[k - 1];
+                Mk = AM; var AMk = mul(A, Mk), tr = 0; for (i = 0; i < n; i++) tr += AMk[i][i]; c.push(-tr / k);
+            }
+            var z = []; for (i = 0; i < n; i++) z.push([2 * Math.cos(2 * Math.PI * i / n + 0.4), 2 * Math.sin(2 * Math.PI * i / n + 0.4)]);
+            for (var it = 0; it < 3000; it++) {
+                var mv = 0;
+                for (i = 0; i < n; i++) {
+                    var pr = 1, pi = 0, dr = 1, di = 0, t;
+                    for (k = 1; k <= n; k++) { t = pr * z[i][0] - pi * z[i][1]; pi = pr * z[i][1] + pi * z[i][0]; pr = t + c[k]; }
+                    for (j = 0; j < n; j++) if (j !== i) { var er = z[i][0] - z[j][0], ei = z[i][1] - z[j][1]; t = dr * er - di * ei; di = dr * ei + di * er; dr = t; }
+                    var dd = dr * dr + di * di, qr = (pr * dr + pi * di) / dd, qi = (pi * dr - pr * di) / dd;
+                    z[i] = [z[i][0] - qr, z[i][1] - qi]; mv = Math.max(mv, Math.hypot(qr, qi));
+                }
+                if (mv < 1e-13) break;
+            }
+            return z.sort(function (a, b) { return a[0] - b[0] || a[1] - b[1]; });
+        }
+        function rankOf(A, B) {
+            // rank of 𝒞 = [B, AB, A²B, …, A⁵B], each column scaled to unit length, by Gaussian elimination
+            var cols = [], v = B.map(function (r) { return r[0]; }), i, j;
+            for (j = 0; j < 6; j++) { var nv = Math.hypot.apply(null, v) || 1; cols.push(v.map(function (x) { return x / nv; })); v = A.map(function (row) { return row.reduce(function (s, a, l) { return s + a * v[l]; }, 0); }); }
+            var Mx = cols[0].map(function (_, r) { return cols.map(function (cl) { return cl[r]; }); }), rank = 0;
+            for (var c = 0; c < 6 && rank < 6; c++) {
+                var piv = rank; for (i = rank; i < 6; i++) if (Math.abs(Mx[i][c]) > Math.abs(Mx[piv][c])) piv = i;
+                if (Math.abs(Mx[piv][c]) < 1e-8) continue;
+                var tmp = Mx[rank]; Mx[rank] = Mx[piv]; Mx[piv] = tmp;
+                for (i = rank + 1; i < 6; i++) { var f = Mx[i][c] / Mx[rank][c]; for (j = c; j < 6; j++) Mx[i][j] -= f * Mx[rank][j]; }
+                rank++;
+            }
+            return rank;
+        }
+        function design(p) {
+            // the rest y*, its holding force F*, the linear model (A, B), the gains K and both sets of eigenvalues
+            var eq = equilibrium(p), L = linearise(p, eq.y, eq.F), K = p.on ? lqr(L.A, L.B, [p.qa, p.qa, p.qx, p.qv, p.qv, p.qv], p.rho) : [0, 0, 0, 0, 0, 0];
+            var Acl = L.A.map(function (row, i) { return row.map(function (a, j) { return a - L.B[i][0] * K[j]; }); });
+            return { eq: eq, A: L.A, B: L.B, K: K, open: eig(L.A), closed: eig(Acl), rank: rankOf(L.A, L.B) };
+        }
+        function control(p, d, y) {
+            // the coil's force: F = F* − K (y − y*), clamped to what the current source can give; nothing with the controller off
+            if (!p.on) return 0;
+            var F = d.eq.F;
+            for (var j = 0; j < 6; j++) F -= d.K[j] * (y[j] - d.eq.y[j]);
+            return Math.max(-p.Fmax, Math.min(p.Fmax, F));
+        }
+        function stepRK4(p, d, y, h, acc) {
+            // one RK4 step of the closed loop; the coil's work and the stops' heat are carried as two more states
+            var k = [], st = [], ys = y, i, s;
+            for (s = 0; s < 4; s++) {
+                var F = control(p, d, ys), a = accel(p, [ys[0], ys[1], ys[2]], [ys[3], ys[4], ys[5]], F), sv = a[3];
+                var heat = (sv.l > LMAX || sv.l < LMIN) ? CST * sv.ld * sv.ld : 0;
+                k.push([ys[3], ys[4], ys[5], a[0], a[1], a[2], F * ys[5], heat]);
+                if (s < 3) { var hs = s < 2 ? h / 2 : h; ys = []; for (i = 0; i < 6; i++) ys.push(y[i] + hs * k[s][i]); }
+            }
+            var out = []; for (i = 0; i < 6; i++) out.push(y[i] + h / 6 * (k[0][i] + 2 * k[1][i] + 2 * k[2][i] + k[3][i]));
+            acc.W += h / 6 * (k[0][6] + 2 * k[1][6] + 2 * k[2][6] + k[3][6]);
+            acc.Q += h / 6 * (k[0][7] + 2 * k[1][7] + 2 * k[2][7] + k[3][7]);
+            return out;
+        }
+        function run(p, d, y0, h, every, onSample) {
+            // the whole run from y0: every 'every'-th state is handed to onSample(n, y, acc)
+            var y = y0.slice(), acc = { W: 0, Q: 0 }, nsteps = Math.round(TEND / h);
+            onSample(0, y, acc);
+            for (var step = 1; step <= nsteps; step++) {
+                y = stepRK4(p, d, y, h, acc);
+                if (step % every === 0) onSample(step / every, y, acc);
+            }
+        }
+
+        /* ---------- solve the whole run, store it, then play it ---------- */
+        function solve(from) {
+            var t0 = performance.now(), p = rig(), d = design(p);
+            ds.set('N0', p.N0); ds.set('ks', p.ks); ds.set('ell0', p.ell0); ds.set('L0', p.L0); ds.set('Imax', p.Imax); ds.set('Fmax', p.Fmax);
+            ds.set('r', p.r); ds.set('ctrl_on', p.on); ds.set('qa', p.qa); ds.set('qx', p.qx); ds.set('qv', p.qv); ds.set('rho', p.rho);
+            ds.set('th1_eq', d.eq.y[0]); ds.set('th2_eq', d.eq.y[1]); ds.set('F_eq', d.eq.F); ds.set('N_eq', d.eq.N); ds.set('ell_eq', d.eq.l);
+            var Kg = ds.alloc('Kg'), lor = ds.alloc('lamo_re'), loi = ds.alloc('lamo_im'), lcr = ds.alloc('lamc_re'), lci = ds.alloc('lamc_im'), y0s = ds.alloc('y0s');
+            for (var j = 0; j < 6; j++) { Kg[j] = d.K[j]; lor[j] = d.open[j][0]; loi[j] = d.open[j][1]; lcr[j] = d.closed[j][0]; lci[j] = d.closed[j][1]; }
+            ds.touch('Kg'); ds.touch('lamo_re'); ds.touch('lamo_im'); ds.touch('lamc_re'); ds.touch('lamc_im');
+            ds.set('rank', d.rank);
+            var lam = p.on ? d.closed : d.open, slow = Math.max.apply(null, lam.map(function (z) { return z[0]; }));
+            ds.set('slow', slow); ds.set('fp_kind', slow > 1e-6 ? 'unstable' : (slow > -1e-6 ? 'centre' : (lam.some(function (z) { return Math.abs(z[1]) > 1e-9; }) ? 'stable focus' : 'stable node')));
+            var y0 = from ? from.slice() : [0, 0, 0, 0, 0, 0];
+            for (j = 0; j < 6; j++) y0s[j] = y0[j]; ds.touch('y0s'); ds.set('released', !!from);
+            var ts = ds.alloc('ts'), th1 = ds.alloc('th1'), th2 = ds.alloc('th2'), Xs = ds.alloc('Xs'), w1 = ds.alloc('w1'), w2 = ds.alloc('w2'), vX = ds.alloc('vX');
+            var Fs = ds.alloc('Fs'), Is = ds.alloc('Is'), Ns = ds.alloc('Ns'), ells = ds.alloc('ells'), Es = ds.alloc('Es'), Wc = ds.alloc('Wc'), Qs = ds.alloc('Qs'), sat = ds.alloc('sat');
+            var ymax = 1e-6, Fm = p.Fmax, nsat = 0, nstop = 0;
+            run(p, d, y0, H, EVERY, function (n, y, acc) {
+                var F = control(p, d, y), st = strut(p, y, [y[3], y[4], y[5]]);
+                ts[n] = n * EVERY * H; th1[n] = y[0]; th2[n] = y[1]; Xs[n] = y[2]; w1[n] = y[3]; w2[n] = y[4]; vX[n] = y[5];
+                Fs[n] = F; Is[n] = F / KAPPA; Ns[n] = st.N; ells[n] = st.l; Es[n] = energy(p, y); Wc[n] = acc.W; Qs[n] = acc.Q;
+                var want = p.on ? d.eq.F - d.K.reduce(function (s, k, i) { return s + k * (y[i] - d.eq.y[i]); }, 0) : 0;
+                sat[n] = p.on && Math.abs(want) > p.Fmax ? 1 : 0; nsat += sat[n]; if (st.l > LMAX || st.l < LMIN) nstop++;
+                ymax = Math.max(ymax, Math.abs(y[0]), Math.abs(y[1]), Math.abs(y[2]), Math.abs(d.eq.y[0]), Math.abs(d.eq.y[1]), Math.abs(p.r));
+                Fm = Math.max(Fm, Math.abs(F), Math.abs(st.N));
+            });
+            ['ts', 'th1', 'th2', 'Xs', 'w1', 'w2', 'vX', 'Fs', 'Is', 'Ns', 'ells', 'Es', 'Wc', 'Qs', 'sat'].forEach(function (k) { ds.touch(k); });
+            // the same run with half the step: the difference grades the stored run
+            var eh = 0, et = 0;
+            run(p, d, y0, H / 2, 2 * EVERY, function (n, y) {
+                var e = Math.max(Math.abs(y[0] - th1[n]), Math.abs(y[1] - th2[n]), Math.abs(y[2] - Xs[n]), Math.abs(y[3] - w1[n]), Math.abs(y[4] - w2[n]), Math.abs(y[5] - vX[n]));
+                if (e > eh) { eh = e; et = n * EVERY * H; }
+            });
+            ds.set('err_half', eh); ds.set('err_end', et);
+            ds.set('balance', Es[0] + Wc[NS - 1] - Qs[NS - 1] - Es[NS - 1]);
+            var settle = NaN;
+            for (var n = NS - 1; n >= 0; n--) {
+                var y = [th1[n], th2[n], Xs[n], w1[n], w2[n], vX[n]], far = false;
+                for (j = 0; j < 6; j++) if (Math.abs(y[j] - d.eq.y[j]) > 0.01) far = true;
+                if (far) { settle = n === NS - 1 ? NaN : ts[n + 1]; break; }
+                if (n === 0) settle = 0;
+            }
+            ds.set('t_settle', p.on ? settle : NaN); ds.set('t_sat', nsat * EVERY * H); ds.set('t_stop', nstop * EVERY * H);
+            ds.set('E_rest', energy(p, d.eq.y));
+            var esc = 1e-9; for (n = 0; n < NS; n++) esc = Math.max(esc, Math.abs(Es[n] - ds.get('E_rest')), Math.abs(Wc[n]), Qs[n]);
+            ds.set('Escale', esc); ds.set('ylim', 1.1 * ymax); ds.set('Flim', 1.1 * Fm);
+            ds.set('steps', Math.round(TEND / H)); ds.set('solve_ms', performance.now() - t0);
+            solved = { p: p, d: d }; ds.set('stale', false); ds.set('grabbed', 'nothing');
+            document.getElementById('solve').classList.remove('is-due');
+            ['st-solve', 'st-store'].forEach(function (id) { document.getElementById(id).classList.add('is-done'); });
+            playT = 0; clk.set(true); status(); readouts(); takeHint(); frame();
+        }
+        function fromNow() { var i = ds.get('i_now'); return [ds.get('th1')[i], ds.get('th2')[i], ds.get('Xs')[i], ds.get('w1')[i], ds.get('w2')[i], ds.get('vX')[i]]; }
+        function markStale() {
+            if (!solved) return;
+            ds.set('stale', true); statusEl.classList.add('is-stale');
+            statusEl.textContent = _t('A setting changed. Press Solve to compute the run again with it.');
+            document.getElementById('solve').classList.add('is-due');
+        }
+        function status() {
+            statusEl.classList.remove('is-stale');
+            var st = ds.get('t_settle');
+            statusEl.textContent = _t('Solved {n} RK4 steps twice (h and h/2) in {ms} ms and stored {s} samples, one every 10 ms.', { n: ds.get('steps'), ms: Sim.fmt(ds.get('solve_ms'), 0), s: NS }) + ' ' +
+                (!ds.get('ctrl_on') ? _t('The controller is off: nothing takes energy out, so the chain never comes to rest.') :
+                 isFinite(st) ? _t('The chain is within 0.01 of the rest after {t} s.', { t: Sim.fmt(st, 1) }) : _t('The chain does not come to rest within 30 s: this start lies outside what the controller can rescue.'));
+        }
+        function readouts() {
+            var deg = 180 / Math.PI;
+            document.getElementById('r-eq').textContent = Sim.fmt(ds.get('th1_eq') * deg, 2) + '°, ' + Sim.fmt(ds.get('th2_eq') * deg, 2) + '°';
+            document.getElementById('r-F').textContent = Sim.fmt(ds.get('F_eq'), 3) + ' N';
+            document.getElementById('r-rank').textContent = _t('rank {r} of 6', { r: ds.get('rank') });
+            document.getElementById('r-slow').textContent = Sim.fmt(ds.get('slow'), 3) + ' 1/s';
+            document.getElementById('r-settle').textContent = !ds.get('ctrl_on') ? _t('never (off)') : isFinite(ds.get('t_settle')) ? Sim.fmt(ds.get('t_settle'), 1) + ' s' : _t('not within 30 s');
+            document.getElementById('r-sat').textContent = Sim.fmt(ds.get('t_sat'), 2) + ' s';
+            document.getElementById('r-err').textContent = ds.get('err_half').toExponential(1);
+            document.getElementById('r-bal').textContent = ds.get('balance').toExponential(1) + ' J';
+            var K = ds.get('Kg'), lc = ds.get('lamc_re'), li = ds.get('lamc_im');
+            document.getElementById('k-out').textContent = ds.get('ctrl_on') ? 'K = [' + Array.prototype.map.call(K, function (k) { return Sim.fmt(k, 2); }).join(', ') + ']' : _t('Controller off: K = 0, the coil carries no current.');
+            var lam = ds.get('ctrl_on') ? [lc, li] : [ds.get('lamo_re'), ds.get('lamo_im')], parts = [];
+            for (var j = 0; j < 6; j += 1) { if (lam[1][j] < -1e-9) continue; parts.push(Sim.fmt(lam[0][j], 2) + (Math.abs(lam[1][j]) > 1e-9 ? ' ± ' + Sim.fmt(lam[1][j], 2) + 'i' : '')); }
+            document.getElementById('cap-eig').innerHTML = (ds.get('ctrl_on') ? _t('closed loop') : _t('no control')) + ' · λ = ' + parts.join(', ') + ' s<sup>−1</sup> · ' + kindName(ds.get('fp_kind')) + ' · ' + _t('rank {r} of 6', { r: ds.get('rank') });
+        }
+        // words printed from data go through literal maps, so the translation tables can find them
+        function whatName(w) { return { 'ball 1': _t('ball 1'), 'ball 2': _t('ball 2'), 'the cart': _t('the cart'), 'cart': _t('the cart') }[w] || w; }
+        function kindName(k) { return { 'stable focus': _t('stable focus'), 'stable node': _t('stable node'), 'centre': _t('centre'), 'unstable': _t('unstable') }[k] || k; }
+        function paintPresets() {
+            Array.prototype.forEach.call(document.querySelectorAll('[data-preset]'), function (b) {
+                var on = b.getAttribute('data-preset') === (ctrlOn ? presetName : 'off');
+                b.classList.toggle('is-on', on); b.setAttribute('aria-pressed', String(on));
+            });
+        }
+        Array.prototype.forEach.call(document.querySelectorAll('[data-preset]'), function (b) {
+            b.addEventListener('click', function () {
+                var name = b.getAttribute('data-preset'), w = PRESETS[name];
+                ctrlOn = !!w; presetName = name;
+                if (w) { qa.set(w[0]); qx.set(w[1]); qv.set(w[2]); rho.set(w[3]); }
+                paintPresets(); solve(solved ? fromNow() : null);
+            });
+        });
+        function takeHint() {
+            var el = document.getElementById('take-hint');
+            if (!ctrlOn) { el.textContent = _t('Controller off: grab a ball and let go, and the chain swings for ever; nothing takes the energy out.'); return; }
+            el.textContent = _t('Controller on: pull a ball or the cart anywhere and let go; the cart returns to r = {r} m and the chain comes to rest in the pale pose.', { r: Sim.fmt(rr.value, 2) });
+        }
+
+        /* ---------- drawing ---------- */
+        var BURG = T.accent, ROSE = T.rose, TANI = T.tanInk;
+        function geom() {
+            var w = box.w, h = box.h, narrow = w < 560;
+            var top = narrow ? 60 : 10, yTop = 0.2, yBot = -(H_RAIL + 0.42), xHalf = 1.3;
+            var s = Math.min((w - 20) / (2 * xHalf), (h * 0.68 - top - 6) / (yTop - yBot)), mechH = Math.round(top + (yTop - yBot) * s + 8);
+            var g = { w: w, h: h, narrow: narrow, mechH: mechH, s: s, ox: w / 2, oy: top + yTop * s };
+            g.X = function (x) { return g.ox + x * s; }; g.Y = function (y) { return g.oy - y * s; };
+            g.cy = g.Y(-H_RAIL); g.railY = g.Y(-H_RAIL - 0.17); g.rulerY = g.Y(-H_RAIL - 0.36);
+            var cT = mechH + 20, cB = h - 52;
+            g.chart = { l: narrow ? 40 : 52, r: w - 12, t: cT, b: cB };
+            g.strip = { l: g.chart.l, r: g.chart.r, t: cB + 30, b: h - 6 };
+            return g;
+        }
+        function arrow(c, x0, y0, x1, y1, width, head) {
+            var a = Math.atan2(y1 - y0, x1 - x0), L = Math.hypot(x1 - x0, y1 - y0); head = Math.min(head, L * 0.6);
+            var hx = x1 - head * Math.cos(a), hy = y1 - head * Math.sin(a);
+            c.lineWidth = width; c.beginPath(); c.moveTo(x0, y0); c.lineTo(hx, hy); c.stroke();
+            c.beginPath(); c.moveTo(x1, y1); c.lineTo(hx + head * 0.5 * Math.sin(a), hy - head * 0.5 * Math.cos(a)); c.lineTo(hx - head * 0.5 * Math.sin(a), hy + head * 0.5 * Math.cos(a)); c.closePath(); c.fill();
+        }
+        function stateNow() {
+            return [ds.get('th1_now'), ds.get('th2_now'), ds.get('X_now'), ds.get('w1_now'), ds.get('w2_now'), ds.get('vX_now')];
+        }
+        function drawRig(c, g) {
+            var y = stateNow(), s = g.s, pal = function (a) { return 'rgba(28, 21, 24, ' + a + ')'; };
+            var x1 = g.X(L1 * Math.sin(y[0])), y1 = g.Y(-L1 * Math.cos(y[0])), x2 = x1 + L2 * Math.sin(y[1]) * s, y2 = y1 + L2 * Math.cos(y[1]) * s;
+            var cx = g.X(y[2]), cy = g.cy, rb = Math.max(7, 0.055 * s);
+            ds.set('b1_px', x1); ds.set('b1_py', y1); ds.set('b2_px', x2); ds.set('b2_py', y2); ds.set('cart_px', cx); ds.set('cart_py', cy);
+            // the ceiling and the pivot
+            c.strokeStyle = T.ink; c.lineWidth = 2; c.beginPath(); c.moveTo(g.ox - 0.28 * s, g.oy); c.lineTo(g.ox + 0.28 * s, g.oy); c.stroke();
+            c.strokeStyle = T.muted; c.lineWidth = 1; for (var k = -0.28; k < 0.28; k += 0.04) { c.beginPath(); c.moveTo(g.X(k), g.oy); c.lineTo(g.X(k + 0.04), g.oy - 8); c.stroke(); }
+            // the rest the controller aims at, pale
+            if (ds.get('ctrl_on')) {
+                var e1 = ds.get('th1_eq'), e2 = ds.get('th2_eq'), ex1 = g.X(L1 * Math.sin(e1)), ey1 = g.Y(-L1 * Math.cos(e1)), ex2 = ex1 + L2 * Math.sin(e2) * s, ey2 = ey1 + L2 * Math.cos(e2) * s;
+                c.save(); c.setLineDash([5, 4]); c.strokeStyle = ROSE; c.lineWidth = 2;
+                c.beginPath(); c.moveTo(g.ox, g.oy); c.lineTo(ex1, ey1); c.lineTo(ex2, ey2); c.lineTo(g.X(ds.get('r')), cy); c.stroke();
+                c.setLineDash([]); c.beginPath(); c.arc(ex1, ey1, rb, 0, 2 * Math.PI); c.arc(ex2, ey2, rb, 0, 2 * Math.PI); c.stroke(); c.restore();
+            }
+            // the magnet under the rail: a long gap from −1 m to +1 m, N above, S below; the coil on the cart rides in it
+            var mx0 = g.X(-XRAIL - 0.12), mx1 = g.X(XRAIL + 0.12), my = g.railY + 6, mh = Math.max(12, 0.1 * s);
+            c.fillStyle = '#c9c1b5'; c.fillRect(mx0, my, mx1 - mx0, mh * 0.32); c.fillRect(mx0, my + mh * 0.68, mx1 - mx0, mh * 0.32);
+            c.fillStyle = T.muted; c.font = T.mono; c.textAlign = 'left'; c.fillText('N', mx0 + 4, my + mh * 0.27); c.fillText('S', mx0 + 4, my + mh * 0.98);
+            // the rail
+            c.strokeStyle = T.ink; c.lineWidth = 2; c.beginPath(); c.moveTo(g.X(-XRAIL - 0.2), g.railY); c.lineTo(g.X(XRAIL + 0.2), g.railY); c.stroke();
+            // the cart, its wheels and the coil plate that hangs into the gap
+            var cw = 0.26 * s, ch = g.railY - cy - 0.035 * s;
+            c.fillStyle = T.card; c.strokeStyle = T.ink; c.lineWidth = 2; c.fillRect(cx - cw / 2, cy, cw, ch); c.strokeRect(cx - cw / 2, cy, cw, ch);
+            c.fillStyle = T.card; [-0.3, 0.3].forEach(function (f) { c.beginPath(); c.arc(cx + f * cw, g.railY - 0.017 * s - 1, 0.017 * s + 1, 0, 2 * Math.PI); c.fill(); c.stroke(); });
+            var I = ds.get('I_now'), coilW = 0.2 * s;
+            c.fillStyle = '#c9a06b'; c.fillRect(cx - coilW / 2, my + mh * 0.34, coilW, mh * 0.32);
+            if (Math.abs(I) > 1e-3) { // current markers: into the page above, out of it below for I > 0, so that I dℓ × B points to +x
+                c.strokeStyle = T.ink; c.lineWidth = 1.2;
+                for (var q = -1; q <= 1; q += 2) { var mxk = cx + q * coilW * 0.3, myk = my + mh * 0.5; c.beginPath(); c.arc(mxk, myk, 3, 0, 2 * Math.PI); c.stroke(); }
+            }
+            c.fillStyle = T.ink2; c.font = T.mono; c.textAlign = 'center'; c.fillText('M', cx, cy + ch * 0.68);
+            // the strut: outer tube from the cart's hinge, inner tube to ball 2, the stop at the outer tube's mouth
+            var dx = x2 - cx, dy = y2 - cy, l = Math.hypot(dx, dy), ux = dx / l, uy = dy / l, outer = Math.min(l, TUBE * s);
+            c.lineCap = 'butt';
+            var inStart = Math.max(0, l - TUBE * s);
+            c.strokeStyle = T.ink3; c.lineWidth = 4; c.beginPath(); c.moveTo(cx + ux * inStart, cy + uy * inStart); c.lineTo(x2, y2); c.stroke();
+            c.strokeStyle = T.ink; c.lineWidth = 11; c.beginPath(); c.moveTo(cx, cy); c.lineTo(cx + ux * outer, cy + uy * outer); c.stroke();
+            c.strokeStyle = '#e6dfd2'; c.lineWidth = 7; c.beginPath(); c.moveTo(cx + ux * 2, cy + uy * 2); c.lineTo(cx + ux * (outer - 1.5), cy + uy * (outer - 1.5)); c.stroke();
+            c.strokeStyle = T.ink3; c.lineWidth = 3; c.beginPath(); c.moveTo(cx + ux * Math.max(inStart, 2), cy + uy * Math.max(inStart, 2)); c.lineTo(cx + ux * (outer - 1.5), cy + uy * (outer - 1.5)); c.stroke();
+            c.lineCap = 'round';
+            var stopHit = ds.get('ell_now') > LMAX || ds.get('ell_now') < LMIN;
+            c.strokeStyle = stopHit ? BURG : T.muted; c.lineWidth = 2; c.beginPath(); c.moveTo(cx + ux * outer - uy * 7, cy + uy * outer + ux * 7); c.lineTo(cx + ux * outer + uy * 7, cy + uy * outer - ux * 7); c.stroke();
+            c.fillStyle = T.card; c.strokeStyle = T.ink; c.lineWidth = 1.5; c.beginPath(); c.arc(cx, cy, 4, 0, 2 * Math.PI); c.fill(); c.stroke();
+            // the rods and the balls
+            c.strokeStyle = T.ink; c.lineWidth = 3; c.beginPath(); c.moveTo(g.ox, g.oy); c.lineTo(x1, y1); c.lineTo(x2, y2); c.stroke();
+            c.fillStyle = T.ink; c.beginPath(); c.arc(g.ox, g.oy, 4, 0, 2 * Math.PI); c.fill();
+            c.fillStyle = BURG; c.beginPath(); c.arc(x1, y1, rb, 0, 2 * Math.PI); c.fill(); c.beginPath(); c.arc(x2, y2, rb, 0, 2 * Math.PI); c.fill();
+            Sim.tex(c, 'm_{1}', x1 + rb + 4, y1 - rb, { size: 14, color: T.ink2 }); Sim.tex(c, 'm_{2}', x2 + rb + 4, y2 - rb, { size: 14, color: T.ink2 });
+            // forces: the coil's force on the cart, and the strut's pull on ball 2 and on the cart (equal and opposite)
+            var pN = ds.get('px_per_N'), Fp = ds.get('F_now') * pN; ds.set('F_px', Fp);
+            c.fillStyle = BURG; c.strokeStyle = BURG;
+            if (Math.abs(Fp) > 2) arrow(c, cx, cy + ch * 0.35, cx + Fp, cy + ch * 0.35, 3, 10);
+            var Nn = ds.get('N_now') * pN;
+            c.fillStyle = T.ink3; c.strokeStyle = T.ink3;
+            var ox = -uy * 14, oy = ux * 14;
+            if (Math.abs(Nn) > 2) { arrow(c, x2 + ox, y2 + oy, x2 + ox - ux * Nn, y2 + oy - uy * Nn, 2, 8); arrow(c, cx + ox, cy + oy, cx + ox + ux * Nn, cy + oy + uy * Nn, 2, 8); }
+            c.font = T.mono; c.textAlign = 'left'; c.fillStyle = BURG;
+            var lx = cx + cw / 2 + 10 + 110 > g.w ? cx - cw / 2 - 118 : cx + cw / 2 + 10, ly = g.railY - 34;
+            c.fillText('F = ' + Sim.fmt(ds.get('F_now'), 2) + ' N', lx, ly);
+            c.fillStyle = T.ink2; c.fillText('N = ' + Sim.fmt(ds.get('N_now'), 2) + ' N', lx, ly + 13);
+            c.fillText('I = ' + Sim.fmt(ds.get('I_now'), 3) + ' A', lx, ly + 26);
+            // the ruler and the target flag
+            var ry = g.rulerY; c.strokeStyle = T.muted; c.lineWidth = 1; c.beginPath(); c.moveTo(g.X(-XRAIL), ry); c.lineTo(g.X(XRAIL), ry); c.stroke();
+            c.fillStyle = T.muted; c.textAlign = 'center';
+            [-1, -0.5, 0, 0.5, 1].forEach(function (v) { c.beginPath(); c.moveTo(g.X(v), ry - 4); c.lineTo(g.X(v), ry + 4); c.stroke(); c.fillText(Sim.fmt(v, 1), g.X(v), ry + 15); });
+            var fx = flagX !== null ? flagX : g.X(ds.get('r')); ds.set('r_px', fx);
+            c.strokeStyle = ds.get('ctrl_on') ? BURG : T.muted; c.lineWidth = 2; c.beginPath(); c.moveTo(fx, ry); c.lineTo(fx, ry - 20); c.stroke();
+            c.fillStyle = ds.get('ctrl_on') ? BURG : T.muted; c.beginPath(); c.moveTo(fx, ry - 20); c.lineTo(fx + 12, ry - 15); c.lineTo(fx, ry - 10); c.closePath(); c.fill();
+            c.beginPath(); c.arc(fx, ry, 3.5, 0, 2 * Math.PI); c.fill();
+            Sim.tex(c, 'r', fx + 15, ry - 10, { size: 14, color: ds.get('ctrl_on') ? BURG : T.muted });
+            c.fillStyle = T.muted; c.textAlign = 'right'; c.fillText(_t('X in m'), g.X(-XRAIL) - 8, ry + 4);
+            // grips: what the hand can take
+            if (!drag) {
+                c.fillStyle = T.muted; c.font = T.mono; c.textAlign = 'center';
+                c.textAlign = 'right'; c.fillText('⇆ ' + _t('drag'), x2 - rb - 6, y2 + 4);
+            }
+            // energy bars: E − E_rest, the coil's work, the stops' heat
+            var bw = Math.min(110, 0.16 * g.w), sc = ds.get('Escale'), rows = [['E − E*', ds.get('E_now') - ds.get('E_rest'), T.ink], ['W_{coil}', ds.get('Wc_now'), BURG], ['Q_{stop}', ds.get('Qs_now'), TANI]];
+            c.font = T.mono;
+            rows.forEach(function (row, i) {
+                var yb = 16 + i * 17, len = Math.max(-1, Math.min(1, row[1] / sc)) * bw / 2, bx = 70 + bw / 2;
+                c.strokeStyle = T.rule; c.lineWidth = 1; c.strokeRect(70, yb - 9, bw, 10);
+                c.fillStyle = row[2]; c.fillRect(Math.min(bx, bx + len), yb - 8, Math.abs(len), 8);
+                Sim.tex(c, row[0], 8, yb, { size: 13, color: T.ink2 });
+                c.fillStyle = T.ink2; c.textAlign = 'left'; c.fillText(Sim.fmt(row[1], 3) + ' J', 76 + bw, yb);
+            });
+        }
+        var WIN = 10;
+        function chartGeom(g) {
+            // the window chart shows 10 s around the cursor; the strip under it the whole 30 s
+            var ch = g.chart, yl = ds.get('ylim'), t0 = Math.max(0, Math.min(TEND - WIN, ds.get('t_play') - 0.3 * WIN)), st = g.strip;
+            ds.set('win_t0', t0);
+            g.cX = function (t) { return ch.l + (ch.r - ch.l) * (t - t0) / WIN; }; g.cY = function (v) { return (ch.t + ch.b) / 2 - v / yl * (ch.b - ch.t) / 2; };
+            g.sX = function (t) { return st.l + (st.r - st.l) * t / TEND; };
+            g.inWin = function (t) { return t >= t0 - 1e-9 && t <= t0 + WIN + 1e-9; };
+            return g;
+        }
+        function drawChart(c, g) {
+            chartGeom(g);
+            var ch = g.chart, n0 = ds.get('i_now'), ts = ds.get('ts'), yl = ds.get('ylim'), t0 = ds.get('win_t0'), X = g.cX, Y = g.cY;
+            c.strokeStyle = T.rule; c.lineWidth = 1; c.strokeRect(ch.l, ch.t, ch.r - ch.l, ch.b - ch.t);
+            c.font = T.mono; c.fillStyle = T.muted; c.textAlign = 'right';
+            Sim.ticks(-yl, yl, 4).values.forEach(function (v) { var yy = Y(v); c.strokeStyle = T.ruleSoft; c.beginPath(); c.moveTo(ch.l, yy); c.lineTo(ch.r, yy); c.stroke(); c.fillText(Sim.fmt(v, 2), ch.l - 4, yy + 3); });
+            c.textAlign = 'center'; for (var tk = Math.ceil(t0); tk <= t0 + WIN + 1e-9; tk++) if (tk % 2 === 0) c.fillText(tk, X(tk), ch.b + 13);
+            c.textAlign = 'left'; c.fillText(_t('θ₁, θ₂ in rad · X in m · t in s'), ch.l + 4, ch.t - 5);
+            c.save(); c.beginPath(); c.rect(ch.l, ch.t, ch.r - ch.l, ch.b - ch.t); c.clip();
+            if (ds.get('ctrl_on')) {
+                c.setLineDash([5, 4]); c.strokeStyle = ROSE; c.lineWidth = 1.5;
+                [ds.get('th1_eq'), ds.get('th2_eq'), ds.get('r')].forEach(function (v) { c.beginPath(); c.moveTo(ch.l, Y(v)); c.lineTo(ch.r, Y(v)); c.stroke(); });
+                c.setLineDash([]);
+            }
+            var nA = Math.max(0, Math.floor(t0 / (EVERY * H)) - 1), nB = Math.min(NS - 1, Math.ceil((t0 + WIN) / (EVERY * H)) + 1);
+            [['th1', T.ink, []], ['th2', BURG, []], ['Xs', TANI, [6, 3]]].forEach(function (sr) {
+                var a = ds.get(sr[0]); c.setLineDash(sr[2]); c.lineWidth = 1.6;
+                for (var pass = 0; pass < 2; pass++) {
+                    c.strokeStyle = sr[1]; c.globalAlpha = pass ? 0.3 : 1; c.beginPath();
+                    var i0 = pass ? Math.max(n0, nA) : nA, i1 = pass ? nB : Math.min(n0, nB);
+                    for (var n = i0; n <= i1; n++) { var xx = X(ts[n]), yy = Y(a[n]); if (n === i0) c.moveTo(xx, yy); else c.lineTo(xx, yy); }
+                    c.stroke();
+                }
+                c.globalAlpha = 1;
+            });
+            c.restore();
+            c.strokeStyle = T.ink2; c.lineWidth = 1; c.beginPath(); c.moveTo(X(ts[n0]), ch.t); c.lineTo(X(ts[n0]), ch.b); c.stroke();
+            // the strip: the whole run, the window shaded; when the coil is at its limit and when a stop is touched
+            var st = g.strip, sat = ds.get('sat'), ell = ds.get('ells'), sX = g.sX, dw = Math.max(1, sX(ts[1]) - sX(0));
+            c.fillStyle = 'rgba(122, 31, 43, 0.08)'; c.fillRect(sX(t0), st.t - 2, sX(t0 + WIN) - sX(t0), 19);
+            c.strokeStyle = T.rule; c.strokeRect(st.l, st.t - 2, st.r - st.l, 19);
+            for (var n = 0; n < NS; n++) {
+                if (sat[n]) { c.fillStyle = BURG; c.fillRect(sX(ts[n]), st.t, dw, 6); }
+                if (ell[n] > LMAX || ell[n] < LMIN) { c.fillStyle = TANI; c.fillRect(sX(ts[n]), st.t + 9, dw, 6); }
+            }
+            c.strokeStyle = T.ink2; c.beginPath(); c.moveTo(sX(ts[n0]), st.t - 2); c.lineTo(sX(ts[n0]), st.t + 17); c.stroke();
+            c.fillStyle = T.muted; c.textAlign = 'left'; c.fillText(g.narrow ? _t('whole run · coil at limit · strut at stop') : _t('whole run, 30 s · coil at its limit (upper row) · strut at a stop (lower row)'), st.l, st.t - 6);
+        }
+        function draw() {
+            var c = ctx, g = geom(); ds.set('box_w', g.w); ds.set('box_h', g.h);
+            ds.set('px_per_m', g.s); ds.set('px_per_N', 0.02 * g.s); ds.set('pivot_px', g.ox); ds.set('pivot_py', g.oy);
+            c.clearRect(0, 0, g.w, g.h);
+            drawRig(c, g); drawChart(c, g); drawForces(); drawPhase();
+        }
+        function fgeom() {
+            var w = fbox.w, h = fbox.h, narrow = w < 560;
+            var p = { l: narrow ? 40 : 52, r: w - 12, t: 22, b: h - 22 }, Fl = ds.get('Flim');
+            p.X = function (t) { return p.l + (p.r - p.l) * t / TEND; }; p.Y = function (F) { return (p.t + p.b) / 2 - F / Fl * (p.b - p.t) / 2; };
+            return p;
+        }
+        function drawForces() {
+            var c = fctx, p = fgeom(), ts = ds.get('ts'), n0 = ds.get('i_now'), Fl = ds.get('Flim');
+            c.clearRect(0, 0, fbox.w, fbox.h);
+            c.strokeStyle = T.rule; c.lineWidth = 1; c.strokeRect(p.l, p.t, p.r - p.l, p.b - p.t);
+            c.font = T.mono; c.fillStyle = T.muted; c.textAlign = 'right';
+            Sim.ticks(-Fl, Fl, 4).values.forEach(function (v) { var yy = p.Y(v); c.strokeStyle = T.ruleSoft; c.beginPath(); c.moveTo(p.l, yy); c.lineTo(p.r, yy); c.stroke(); c.fillText(Sim.fmt(v, 0), p.l - 4, yy + 3); });
+            c.textAlign = 'center'; [0, 5, 10, 15, 20, 25, 30].forEach(function (t) { c.fillText(t, p.X(t), p.b + 13); });
+            c.textAlign = 'left'; c.fillText(_t('force in N · t in s'), p.l + 4, p.t - 6);
+            c.save(); c.setLineDash([2, 3]); c.strokeStyle = T.muted;
+            [ds.get('Fmax'), -ds.get('Fmax')].forEach(function (v) { c.beginPath(); c.moveTo(p.l, p.Y(v)); c.lineTo(p.r, p.Y(v)); c.stroke(); });
+            if (ds.get('ctrl_on')) { c.setLineDash([5, 4]); c.strokeStyle = ROSE; c.beginPath(); c.moveTo(p.l, p.Y(ds.get('F_eq'))); c.lineTo(p.r, p.Y(ds.get('F_eq'))); c.stroke(); }
+            c.restore();
+            [['Ns', T.ink3], ['Fs', BURG]].forEach(function (sr) {
+                var a = ds.get(sr[0]); c.lineWidth = 1.6;
+                for (var pass = 0; pass < 2; pass++) {
+                    c.strokeStyle = sr[1]; c.globalAlpha = pass ? 0.3 : 1; c.beginPath();
+                    var i0 = pass ? n0 : 0, i1 = pass ? NS - 1 : n0;
+                    for (var n = i0; n <= i1; n++) { var xx = p.X(ts[n]), yy = p.Y(a[n]); if (n === i0) c.moveTo(xx, yy); else c.lineTo(xx, yy); }
+                    c.stroke();
+                }
+                c.globalAlpha = 1;
+            });
+            c.strokeStyle = T.ink2; c.lineWidth = 1; c.beginPath(); c.moveTo(p.X(ts[n0]), p.t); c.lineTo(p.X(ts[n0]), p.b); c.stroke();
+            c.textAlign = 'right'; c.fillStyle = BURG; c.fillText('F', p.r - 40, p.t - 6); c.fillStyle = T.ink3; c.fillText('N', p.r - 4, p.t - 6);
+        }
+        function pgeom() {
+            var w = pbox.w, h = pbox.h, narrow = w < 560, panels = [], gap = 16;
+            var names = [['th1', 'w1', 'th1_eq', 'θ_{1}', 'θ̇_{1}'], ['th2', 'w2', 'th2_eq', 'θ_{2}', 'θ̇_{2}'], ['Xs', 'vX', 'r', 'X', 'Ẋ']];
+            for (var k = 0; k < 3; k++) {
+                var pw = narrow ? w - 52 : (w - 40 - 2 * gap - 3 * 36) / 3, ph = narrow ? (h - 44 - 2 * 30) / 3 : h - 46;
+                var l = narrow ? 44 : 40 + k * (pw + gap + 36), t = narrow ? 14 + k * (ph + 30) : 18;
+                var qa = ds.get(names[k][0]), va = ds.get(names[k][1]), qm = 1e-9, vm = 1e-9, e = names[k][2] === 'r' ? ds.get('r') : ds.get(names[k][2]);
+                for (var n = 0; n < NS; n++) { qm = Math.max(qm, Math.abs(qa[n] - e)); vm = Math.max(vm, Math.abs(va[n])); }
+                qm *= 1.15; vm *= 1.15;
+                panels.push({ l: l, r: l + pw, t: t, b: t + ph, e: e, qm: qm, vm: vm, q: names[k][0], v: names[k][1], sq: names[k][3], sv: names[k][4] });
+            }
+            panels.forEach(function (P) { P.X = function (q) { return (P.l + P.r) / 2 + (q - P.e) / P.qm * (P.r - P.l) / 2; }; P.Y = function (v) { return (P.t + P.b) / 2 - v / P.vm * (P.b - P.t) / 2; }; });
+            return panels;
+        }
+        function drawPhase() {
+            var c = pctx, n0 = ds.get('i_now');
+            c.clearRect(0, 0, pbox.w, pbox.h);
+            pgeom().forEach(function (P) {
+                var q = ds.get(P.q), v = ds.get(P.v);
+                c.strokeStyle = T.rule; c.lineWidth = 1; c.strokeRect(P.l, P.t, P.r - P.l, P.b - P.t);
+                c.strokeStyle = T.ruleSoft; c.beginPath(); c.moveTo(P.l, P.Y(0)); c.lineTo(P.r, P.Y(0)); c.moveTo(P.X(P.e), P.t); c.lineTo(P.X(P.e), P.b); c.stroke();
+                for (var pass = 0; pass < 2; pass++) {
+                    c.strokeStyle = T.ink; c.globalAlpha = pass ? 0.22 : 1; c.lineWidth = 1.2; c.beginPath();
+                    var i0 = pass ? n0 : 0, i1 = pass ? NS - 1 : n0;
+                    for (var n = i0; n <= i1; n++) { var xx = P.X(q[n]), yy = P.Y(v[n]); if (n === i0) c.moveTo(xx, yy); else c.lineTo(xx, yy); }
+                    c.stroke();
+                }
+                c.globalAlpha = 1;
+                c.strokeStyle = ds.get('ctrl_on') ? BURG : T.muted; c.lineWidth = 2; var fx = P.X(P.e), fy = P.Y(0);
+                c.beginPath(); c.moveTo(fx - 5, fy - 5); c.lineTo(fx + 5, fy + 5); c.moveTo(fx - 5, fy + 5); c.lineTo(fx + 5, fy - 5); c.stroke();
+                var nowQ = P.q === 'th1' ? 'th1_now' : P.q === 'th2' ? 'th2_now' : 'X_now', nowV = P.q === 'th1' ? 'w1_now' : P.q === 'th2' ? 'w2_now' : 'vX_now';
+                c.fillStyle = BURG; c.beginPath(); c.arc(P.X(ds.get(nowQ)), P.Y(ds.get(nowV)), 4.5, 0, 2 * Math.PI); c.fill();
+                c.font = T.mono; c.fillStyle = T.muted; c.textAlign = 'center';
+                c.fillText(Sim.fmt(P.e - P.qm, 2), P.l + 14, P.b + 12); c.fillText(Sim.fmt(P.e + P.qm, 2), P.r - 14, P.b + 12);
+                Sim.tex(c, P.sq, (P.l + P.r) / 2, P.b + 13, { size: 14, align: 'center', color: T.ink2 });
+                Sim.tex(c, P.sv, P.l - 6, P.t + 12, { size: 14, align: 'right', color: T.ink2 });
+                c.textAlign = 'right'; c.fillText('±' + Sim.fmt(P.vm, 1), P.l - 4, P.t + 26);
+            });
+        }
+
+        /* live values for the walkthrough: read from the store, nothing recomputed */
+        Sim.live = function () {
+            return {
+                t: Sim.fmt(ds.get('t_play'), 2) + ' s', n: String(ds.get('i_now')), th1: Sim.fmt(ds.get('th1_now'), 4) + ' rad', th2: Sim.fmt(ds.get('th2_now'), 4) + ' rad', X: Sim.fmt(ds.get('X_now'), 4) + ' m',
+                F: Sim.fmt(ds.get('F_now'), 3) + ' N', N: Sim.fmt(ds.get('N_now'), 3) + ' N', ell: Sim.fmt(ds.get('ell_now'), 4) + ' m', E: Sim.fmt(ds.get('E_now'), 4) + ' J',
+                r: Sim.fmt(ds.get('r'), 2) + ' m', Feq: Sim.fmt(ds.get('F_eq'), 4) + ' N', N0: Sim.fmt(ds.get('N0'), 1) + ' N', ks: Sim.fmt(ds.get('ks'), 0) + ' N/m', L0: Sim.fmt(ds.get('L0'), 4) + ' m',
+                rank: String(ds.get('rank')), slow: Sim.fmt(ds.get('slow'), 3) + ' 1/s', err: ds.get('err_half').toExponential(2), bal: ds.get('balance').toExponential(2) + ' J',
+                K: Array.prototype.map.call(ds.get('Kg'), function (k) { return Sim.fmt(k, 2); }).join(', '), h: ds.get('h') + ' s', steps: String(ds.get('steps'))
+            };
+        };
+
+        function setNow(y, F, st, i) {
+            ds.set('th1_now', y[0]); ds.set('th2_now', y[1]); ds.set('X_now', y[2]); ds.set('w1_now', y[3]); ds.set('w2_now', y[4]); ds.set('vX_now', y[5]);
+            ds.set('F_now', F); ds.set('I_now', F / KAPPA); ds.set('N_now', st.N); ds.set('ell_now', st.l);
+        }
+        function frame() {
+            if (!solved) return;
+            var i = Math.min(NS - 1, Math.max(0, Math.round(playT / (EVERY * H))));
+            ds.set('i_now', i); ds.set('t_play', playT);
+            ds.set('th1_now', ds.get('th1')[i]); ds.set('th2_now', ds.get('th2')[i]); ds.set('X_now', ds.get('Xs')[i]);
+            ds.set('w1_now', ds.get('w1')[i]); ds.set('w2_now', ds.get('w2')[i]); ds.set('vX_now', ds.get('vX')[i]);
+            ds.set('F_now', ds.get('Fs')[i]); ds.set('I_now', ds.get('Is')[i]); ds.set('N_now', ds.get('Ns')[i]); ds.set('ell_now', ds.get('ells')[i]);
+            ds.set('E_now', ds.get('Es')[i]); ds.set('Wc_now', ds.get('Wc')[i]); ds.set('Qs_now', ds.get('Qs')[i]);
+            seek.set(i); document.getElementById('cap-t').innerHTML = _t('<i>t</i> = {t} s of {T} s', { t: ds.get('ts')[i].toFixed(2), T: TEND });
+            draw();
+        }
+        var clk = Sim.clock(function (dt) {
+            if (!solved) return;
+            if (drag) { handTick(); return; }
+            if (dt > 0) fps = fps ? fps + (1 / dt - fps) * 0.1 : 1 / dt;
+            playT += speed.value * dt;
+            if (playT > TEND) { playT = TEND; clk.set(false); }
+            ds.set('fps', fps); ds.set('playing', clk.playing);
+            document.getElementById('st-play').classList.toggle('is-done', clk.playing);
+            frame();
+        });
+
+        /* ---------- your hand: grab a ball or the cart, pull, let go. While you hold it the clock stops ---------- */
+        var drag = null, flagX = null, flagId = null, rigEl = document.getElementById('rig');
+        function pointer(e) { var b = rigEl.getBoundingClientRect(); return { x: e.clientX - b.left, y: e.clientY - b.top }; }
+        function unwrap(a, near) { return a + 2 * Math.PI * Math.round((near - a) / (2 * Math.PI)); }
+        function pose(g, q, what, prev) {
+            // the pose your hand asks for: ball 1 turns the upper rod, ball 2 bends both rods (two-link inverse kinematics), the cart slides
+            var wx = (q.x - g.ox) / g.s, wy = (g.oy - q.y) / g.s, t1 = prev[0], t2 = prev[1], X = prev[2];
+            if (what === 'the cart') X = Math.max(-XRAIL, Math.min(XRAIL, wx));
+            else if (what === 'ball 1') t1 = unwrap(Math.atan2(wx, -wy), prev[0]);
+            else {
+                var d = Math.max(Math.abs(L1 - L2) + 1e-3, Math.min(L1 + L2 - 1e-3, Math.hypot(wx, wy))), phi = Math.atan2(wx, -wy);
+                var al = Math.acos((L1 * L1 + d * d - L2 * L2) / (2 * L1 * d)), a1 = unwrap(phi + al, prev[0]), a2 = unwrap(phi - al, prev[0]);
+                t1 = Math.abs(a1 - prev[0]) < Math.abs(a2 - prev[0]) ? a1 : a2;
+                var bx = L1 * Math.sin(t1), by = -L1 * Math.cos(t1), ex = wx * d / Math.max(1e-9, Math.hypot(wx, wy)), ey = wy * d / Math.max(1e-9, Math.hypot(wx, wy));
+                t2 = unwrap(Math.atan2(ex - bx, -(ey - by)), prev[1]);
+            }
+            var st = strut(solved.p, [t1, t2, X], [0, 0, 0]);
+            return (st.l > LMAX || st.l < LMIN) ? null : [t1, t2, X];   // the tubes allow only lengths between their stops
+        }
+        function handTick() {
+            // the speed of your hand, smoothed over about 50 ms, for each coordinate
+            var now = performance.now(), h = Math.max(1e-3, (now - drag.last) / 1000), k = Math.min(1, h / 0.05);
+            for (var j = 0; j < 3; j++) { drag.v[j] += ((drag.q[j] - drag.lastQ[j]) / h - drag.v[j]) * k; drag.lastQ[j] = drag.q[j]; }
+            drag.last = now; holdState();
+        }
+        function holdState() {
+            var y = drag.q.concat(drag.v), p = solved.p, F = control(p, solved.d, y), st = strut(p, y, drag.v);
+            setNow(y, F, st); ds.set('E_now', energy(p, y)); ds.set('grabbed', drag.what);
+            statusEl.classList.remove('is-stale');
+            statusEl.textContent = _t('You hold {what}. The controller would push the cart with F = {F} N here. Let go to solve the motion from this pose.', { what: whatName(drag.what), F: Sim.fmt(F, 2) });
+            draw();
+        }
+        rigEl.addEventListener('pointerdown', function (e) {
+            if (!solved) return;
+            var q = pointer(e), g = geom();
+            if (Math.abs(q.x - ds.get('r_px')) < 16 && q.y > g.rulerY - 28 && q.y < g.rulerY + 10) {
+                e.preventDefault(); rigEl.setPointerCapture(e.pointerId); flagId = e.pointerId; flagX = ds.get('r_px'); return;
+            }
+            var rb = Math.max(7, 0.055 * g.s) + 10, what = null;
+            if (Math.hypot(q.x - ds.get('b2_px'), q.y - ds.get('b2_py')) < rb) what = 'ball 2';
+            else if (Math.hypot(q.x - ds.get('b1_px'), q.y - ds.get('b1_py')) < rb) what = 'ball 1';
+            else if (Math.abs(q.x - ds.get('cart_px')) < 0.13 * g.s + 8 && q.y > g.cy - 8 && q.y < g.railY + 4) what = 'the cart';
+            if (!what) return;
+            e.preventDefault(); rigEl.setPointerCapture(e.pointerId);
+            var y = stateNow();
+            drag = { id: e.pointerId, what: what, q: y.slice(0, 3), v: [0, 0, 0], lastQ: y.slice(0, 3), last: performance.now() };
+            clk.set(true); holdState();
+        });
+        function flagToR(px, g) { var r = (px - g.ox) / g.s; return Math.max(parseFloat(rr.el.min), Math.min(parseFloat(rr.el.max), Math.round(r * 100) / 100)); }
+        rigEl.addEventListener('pointermove', function (e) {
+            var g = geom();
+            if (flagId !== null && e.pointerId === flagId) { rr.set(flagToR(pointer(e).x, g)); flagX = g.X(rr.value); takeHint(); if (!clk.playing) draw(); return; }
+            if (!drag || e.pointerId !== drag.id) return;
+            var np = pose(g, pointer(e), drag.what, drag.q);
+            if (np) drag.q = np;
+        });
+        function release(e) {
+            if (flagId !== null && e && e.pointerId === flagId) { flagId = null; flagX = null; if (!drag) solve(fromNow()); return; }
+            if (!drag || (e && e.pointerId !== drag.id)) return;
+            var from = drag.q.concat(drag.v); drag = null;
+            solve(from);
+        }
+        rigEl.addEventListener('pointerup', release);
+        rigEl.addEventListener('pointercancel', release);
+        rigEl.style.touchAction = 'pan-y';
+        Sim.playButton(document.getElementById('play'), clk);
+        document.getElementById('solve').addEventListener('click', function () { solve(); });
+        document.getElementById('restart').addEventListener('click', function () { playT = 0; clk.set(true); });
+        paintPresets(); takeHint();
+
+        /* ---------- the data panel (scripts/datalog.js) reads the store; these hooks say where things are drawn and how to test a value ---------- */
+        function storedRig() {
+            // the parameters of the stored run, read back from the store (not from the sliders)
+            var p = { N0: ds.get('N0'), ks: ds.get('ks'), Imax: ds.get('Imax'), r: ds.get('r'), on: ds.get('ctrl_on'), qa: ds.get('qa'), qx: ds.get('qx'), qv: ds.get('qv'), rho: ds.get('rho') };
+            p.ell0 = H_RAIL - L1 - L2; p.L0 = ds.get('L0'); p.Fmax = KAPPA * p.Imax; return p;
+        }
+        var cacheD = null;
+        function storedDesign() { var p = storedRig(), key = JSON.stringify(p); if (!cacheD || cacheD.key !== key) { cacheD = { key: key, p: p, d: design(p) }; } return cacheD; }
+        function replay(n) {
+            // the same integrator, rerun from the stored start y(0) to sample n
+            var S = storedDesign(), y0 = Array.prototype.slice.call(ds.get('y0s')), out = null;
+            var y = y0.slice(), acc = { W: 0, Q: 0 };
+            for (var step = 1; step <= n * EVERY; step++) y = stepRK4(S.p, S.d, y, H, acc);
+            out = { y: y, acc: acc, p: S.p, d: S.d }; return out;
+        }
+        var replayCache = {};
+        function replayAt(n) { var key = n + '|' + Array.prototype.join.call(ds.get('y0s')) + '|' + storedDesign().key; if (!replayCache[key]) { replayCache = {}; replayCache[key] = replay(n); } return replayCache[key]; }
+        function sliderCheck(input, label, f) { return { formula: _t('read from the ') + _t(label) + _t(' slider at the last solve'), inputs: [[_t('slider now'), input.value, '']], value: ds.get('stale') ? NaN : (f ? f(parseFloat(input.value)) : parseFloat(input.value)) }; }
+        function constCheck(v) { return function () { return { formula: _t('a constant of the page code'), inputs: [], value: v }; }; }
+        function stateCol(j) { return function (n) { var R = replayAt(n); return { formula: _t('the same RK4, rerun from y(0) to sample n'), inputs: [['n', n, '', 0], ['h', H, 's', 4]], value: R.y[j] }; }; }
+        function readBack(b, what, pt, r, test, expected, note) {
+            var q = Sim.readPixel(b, pt.x, pt.y, r, test);
+            return { what: what + ', (' + Sim.fmt(pt.x, 1) + ', ' + Sim.fmt(pt.y, 1) + _t(') css px'), drawn: q.text, expected: expected, ok: q.found, note: note };
+        }
+        function neutralInk(c) { return c[3] > 25 && c[0] < 110 && c[1] < 110 && c[2] < 110 && Math.abs(c[0] - c[2]) < 30; }
+        function roseInk(c) { return c[3] > 25 && c[0] > 180 && c[1] < 190 && c[0] - c[1] > 25; }
+        function tanInk(c) { return c[3] > 25 && c[0] > 90 && c[1] > 45 && c[2] < 70 && c[1] - c[2] > 25; }
+        function chartAt(name, n) { var g = chartGeom(geom()), t = ds.get('ts')[n]; return g.inWin(t) ? { x: g.cX(t), y: g.cY(ds.get(name)[n]) } : null; }
+        var NOW = { th1_now: 'th1', th2_now: 'th2', X_now: 'Xs', w1_now: 'w1', w2_now: 'w2', vX_now: 'vX', F_now: 'Fs', I_now: 'Is', N_now: 'Ns', ell_now: 'ells', E_now: 'Es', Wc_now: 'Wc', Qs_now: 'Qs' };
+        function nowCheck(name) {
+            return function () {
+                var i = ds.get('i_now'), arr = NOW[name];
+                if (ds.get('grabbed') !== 'nothing') return { formula: _t('set by your hand while you hold the rig; the run starts from it when you let go'), inputs: [], value: ds.get(name) };
+                return { formula: arr + _t('<sub>n</sub> at n = n<sub>now</sub>'), inputs: [['n<sub>now</sub>', i, '', 0]], value: ds.get(arr)[i] };
+            };
+        }
+        Sim.data = {
+            ds: ds, kicker: _t('Fig. 11 · data'), file: 'fig11-pendulum-control',
+            playing: function () { return clk.playing; }, play: function () { clk.set(true); },
+            groups: [
+                { title: _t('Parameters'), note: _t('what you set with the sliders and buttons, as used by the last solve'), vars: ['N0', 'ks', 'Imax', 'r', 'ctrl_on', 'qa', 'qx', 'qv', 'rho'] },
+                { title: _t('The rig'), note: _t('constants of the page code, and what follows from them'), vars: ['m1', 'm2', 'l1', 'l2', 'mc', 'Hr', 'g', 'kappa', 'lmin', 'lmax', 'kst', 'cst', 'ell0', 'L0', 'Fmax'] },
+                { title: _t('Rest and controller'), note: _t('the rest the controller aims at, the linear model there and the gains, §5–§9'), vars: ['th1_eq', 'th2_eq', 'F_eq', 'N_eq', 'ell_eq', 'Kg', 'lamo_re', 'lamo_im', 'lamc_re', 'lamc_im', 'rank', 'slow', 'fp_kind'] },
+                { title: _t('Start of the run'), note: _t('rest hanging straight down after Solve; where your hand let go after a drag'), vars: ['y0s', 'released', 'grabbed'] },
+                { title: _t('Solver'), note: _t('how the run was computed, and how good it is'), vars: ['h', 'steps', 'solve_ms', 'err_half', 'err_end', 'balance', 't_settle', 't_sat', 't_stop', 'stale'] },
+                { title: _t('Stored run'), note: _t('one row per stored sample, every 10 ms of the 30 s'), vars: ['ts', 'th1', 'th2', 'Xs', 'w1', 'w2', 'vX', 'Fs', 'Is', 'Ns', 'ells', 'Es', 'Wc', 'Qs', 'sat'] },
+                { title: _t('Playback'), note: _t('the sample on screen now, or the pose your hand holds'), vars: ['i_now', 't_play', 'th1_now', 'th2_now', 'X_now', 'w1_now', 'w2_now', 'vX_now', 'F_now', 'I_now', 'N_now', 'ell_now', 'E_now', 'Wc_now', 'Qs_now'] },
+                { title: _t('Drawing'), note: _t('how stored values become pixels'), vars: ['px_per_m', 'px_per_N', 'pivot_px', 'pivot_py', 'b1_px', 'b1_py', 'b2_px', 'b2_py', 'cart_px', 'cart_py', 'r_px', 'F_px', 'win_t0', 'ylim', 'Flim', 'Escale', 'E_rest', 'box_w', 'box_h', 'fps', 'playing'] }
+            ],
+            probe: function (x, y) {
+                if (Math.hypot(x - ds.get('b1_px'), y - ds.get('b1_py')) < 20) return { what: 'ball 1' };
+                if (Math.hypot(x - ds.get('b2_px'), y - ds.get('b2_py')) < 20) return { what: 'ball 2' };
+                if (Math.abs(x - ds.get('cart_px')) < 30 && Math.abs(y - ds.get('cart_py') - 15) < 25) return { what: 'cart' };
+                var g = chartGeom(geom());
+                if (y > g.chart.t && y < g.chart.b && x > g.chart.l && x < g.chart.r) { var n = Math.round((ds.get('win_t0') + (x - g.chart.l) / (g.chart.r - g.chart.l) * WIN) / (EVERY * H)); return { what: 'sample', n: Math.max(0, Math.min(NS - 1, n)) }; }
+                return null;
+            },
+            inspect: function (ref) {
+                var n = ref.what === 'sample' ? ref.n : ds.get('i_now');
+                var rows = [['n', n, '', 'i_now', null], ['t', ds.get('ts')[n], 's', 'ts', n], ['θ<sub>1</sub>', ds.get('th1')[n], 'rad', 'th1', n], ['θ<sub>2</sub>', ds.get('th2')[n], 'rad', 'th2', n], ['X', ds.get('Xs')[n], 'm', 'Xs', n],
+                    ['θ̇<sub>1</sub>', ds.get('w1')[n], 'rad/s', 'w1', n], ['θ̇<sub>2</sub>', ds.get('w2')[n], 'rad/s', 'w2', n], ['Ẋ', ds.get('vX')[n], 'm/s', 'vX', n], ['F', ds.get('Fs')[n], 'N', 'Fs', n], ['N', ds.get('Ns')[n], 'N', 'Ns', n], ['ℓ', ds.get('ells')[n], 'm', 'ells', n], ['E', ds.get('Es')[n], 'J', 'Es', n]];
+                var at = ref.what === 'ball 1' ? { x: ds.get('b1_px'), y: ds.get('b1_py') } : ref.what === 'ball 2' ? { x: ds.get('b2_px'), y: ds.get('b2_py') } : ref.what === 'cart' ? { x: ds.get('cart_px'), y: ds.get('cart_py') } : chartAt('th1', n);
+                return { title: ref.what === 'sample' ? _t('stored sample ') + n : whatName(ref.what) + _t(', sample ') + n, at: at, rows: rows };
+            },
+            locate: function (name, idx) {
+                if (name === 'th1' || name === 'th2' || name === 'Xs') return chartAt(name, idx);
+                if (name === 'th1_now' || name === 'b1_px' || name === 'b1_py') return { x: ds.get('b1_px'), y: ds.get('b1_py') };
+                if (name === 'th2_now' || name === 'b2_px' || name === 'b2_py') return { x: ds.get('b2_px'), y: ds.get('b2_py') };
+                if (name === 'X_now' || name === 'cart_px' || name === 'cart_py') return { x: ds.get('cart_px'), y: ds.get('cart_py') };
+                if (name === 'r' || name === 'r_px') return { x: ds.get('r_px'), y: geom().rulerY };
+                if (name === 'pivot_px' || name === 'pivot_py') return { x: ds.get('pivot_px'), y: ds.get('pivot_py') };
+                if (ds.vars[name] && ds.vars[name].dims[0] === 'n') { var g = chartGeom(geom()); return { x: g.sX(ds.get('ts')[idx]), y: g.strip.t + 7 }; }
+                return null;
+            },
+            check: {
+                N0: function () { return sliderCheck(N0s.el, 'strut pull'); },
+                ks: function () { return sliderCheck(kss.el, 'spring stiffness'); },
+                Imax: function () { return sliderCheck(Ims.el, 'current limit'); },
+                r: function () { return sliderCheck(rr.el, 'target position'); },
+                qa: function () { return sliderCheck(qa.el, 'swing weight'); },
+                qx: function () { return sliderCheck(qx.el, 'cart weight'); },
+                qv: function () { return sliderCheck(qv.el, 'speed weight'); },
+                rho: function () { return sliderCheck(rho.el, 'effort weight', function (v) { return Math.pow(10, v); }); },
+                m1: constCheck(M1), m2: constCheck(M2), l1: constCheck(L1), l2: constCheck(L2), mc: constCheck(MC), Hr: constCheck(H_RAIL), g: constCheck(G), kappa: constCheck(KAPPA),
+                lmin: constCheck(LMIN), lmax: constCheck(LMAX), kst: constCheck(KST), cst: constCheck(CST), h: constCheck(H),
+                ell0: function () { return { formula: 'H − l<sub>1</sub> − l<sub>2</sub>', inputs: [['H', ds.get('Hr'), 'm', 2], ['l<sub>1</sub>', ds.get('l1'), 'm', 2], ['l<sub>2</sub>', ds.get('l2'), 'm', 2]], value: ds.get('Hr') - ds.get('l1') - ds.get('l2') }; },
+                L0: function () { return { formula: 'ℓ<sub>0</sub> − N<sub>0</sub>/k<sub>s</sub>', inputs: [['ℓ<sub>0</sub>', ds.get('ell0'), 'm', 4], ['N<sub>0</sub>', ds.get('N0'), 'N', 1], ['k<sub>s</sub>', ds.get('ks'), 'N/m', 0]], value: ds.get('ell0') - ds.get('N0') / ds.get('ks') }; },
+                Fmax: function () { return { formula: 'κ I<sub>max</sub>', inputs: [['κ', ds.get('kappa'), 'N/A', 1], ['I<sub>max</sub>', ds.get('Imax'), 'A', 1]], value: ds.get('kappa') * ds.get('Imax') }; },
+                th1_eq: function () { return { formula: _t('Newton’s method on the pendulum equations at X = r, from the stored parameters'), inputs: [['r', ds.get('r'), 'm', 2], ['L<sub>0</sub>', ds.get('L0'), 'm', 5], ['k<sub>s</sub>', ds.get('ks'), 'N/m', 0]], value: storedDesign().d.eq.y[0] }; },
+                th2_eq: function () { return { formula: _t('Newton’s method on the pendulum equations at X = r, from the stored parameters'), inputs: [['r', ds.get('r'), 'm', 2], ['L<sub>0</sub>', ds.get('L0'), 'm', 5], ['k<sub>s</sub>', ds.get('ks'), 'N/m', 0]], value: storedDesign().d.eq.y[1] }; },
+                N_eq: function () { return { formula: 'k<sub>s</sub>(ℓ* − L<sub>0</sub>)', inputs: [['k<sub>s</sub>', ds.get('ks'), 'N/m', 0], ['ℓ*', ds.get('ell_eq'), 'm', 6], ['L<sub>0</sub>', ds.get('L0'), 'm', 5]], value: ds.get('ks') * (ds.get('ell_eq') - ds.get('L0')) }; },
+                ell_eq: function () { var t1 = ds.get('th1_eq'), t2 = ds.get('th2_eq'), x2 = L1 * Math.sin(t1) + L2 * Math.sin(t2), y2 = -L1 * Math.cos(t1) - L2 * Math.cos(t2);
+                    return { formula: '√((x<sub>2</sub> − r)² + (y<sub>2</sub> + H)²) at θ*', inputs: [['θ<sub>1</sub>*', t1, 'rad', 6], ['θ<sub>2</sub>*', t2, 'rad', 6], ['r', ds.get('r'), 'm', 2]], value: Math.hypot(x2 - ds.get('r'), y2 + H_RAIL) }; },
+                F_eq: function () { var t1 = ds.get('th1_eq'), t2 = ds.get('th2_eq'), x2 = L1 * Math.sin(t1) + L2 * Math.sin(t2);
+                    return { formula: 'N* ∂ℓ/∂X = −N* (x<sub>2</sub> − r) / ℓ*', inputs: [['N*', ds.get('N_eq'), 'N', 6], ['x<sub>2</sub>', x2, 'm', 6], ['ℓ*', ds.get('ell_eq'), 'm', 6]], value: -ds.get('N_eq') * (x2 - ds.get('r')) / ds.get('ell_eq') }; },
+                Kg: function (j) { return { formula: _t('LQR again from the stored parameters: linearise, Riccati, ρ⁻¹BᵀP'), inputs: [['q<sub>θ</sub>', ds.get('qa'), '', 1], ['q<sub>X</sub>', ds.get('qx'), '', 1], ['q<sub>v</sub>', ds.get('qv'), '', 1], ['ρ', ds.get('rho'), '', 4]], value: storedDesign().d.K[j] }; },
+                lamo_re: function (j) { return { formula: _t('eigenvalues of A, recomputed'), inputs: [], value: storedDesign().d.open[j][0] }; },
+                lamo_im: function (j) { return { formula: _t('eigenvalues of A, recomputed'), inputs: [], value: storedDesign().d.open[j][1] }; },
+                lamc_re: function (j) { return { formula: _t('eigenvalues of A − BK, recomputed'), inputs: [], value: storedDesign().d.closed[j][0] }; },
+                lamc_im: function (j) { return { formula: _t('eigenvalues of A − BK, recomputed'), inputs: [], value: storedDesign().d.closed[j][1] }; },
+                rank: function () { return { formula: _t('rank of [B, AB, …, A⁵B], recomputed'), inputs: [], value: storedDesign().d.rank }; },
+                slow: function () { var re = ds.get(ds.get('ctrl_on') ? 'lamc_re' : 'lamo_re'); return { formula: 'max Re λ', inputs: [], value: Math.max.apply(null, Array.prototype.slice.call(re)) }; },
+                th1: stateCol(0), th2: stateCol(1), Xs: stateCol(2), w1: stateCol(3), w2: stateCol(4), vX: stateCol(5),
+                ts: function (n) { return { formula: 'n · 20 h', inputs: [['n', n, '', 0], ['h', H, 's', 4]], value: n * EVERY * H }; },
+                Fs: function (n) { var S = storedDesign(), y = [ds.get('th1')[n], ds.get('th2')[n], ds.get('Xs')[n], ds.get('w1')[n], ds.get('w2')[n], ds.get('vX')[n]];
+                    return { formula: 'clamp(F* − K(y<sub>n</sub> − y*), ±F<sub>max</sub>)', inputs: [['F*', ds.get('F_eq'), 'N', 4], ['F<sub>max</sub>', ds.get('Fmax'), 'N', 1]], value: control(S.p, S.d, y) }; },
+                Is: function (n) { return { formula: 'F<sub>n</sub> / κ', inputs: [['F<sub>n</sub>', ds.get('Fs')[n], 'N', 6], ['κ', KAPPA, 'N/A', 1]], value: ds.get('Fs')[n] / KAPPA }; },
+                Ns: function (n) { var y = [ds.get('th1')[n], ds.get('th2')[n], ds.get('Xs')[n]], v = [ds.get('w1')[n], ds.get('w2')[n], ds.get('vX')[n]];
+                    return { formula: 'k<sub>s</sub>(ℓ − L<sub>0</sub>) + stop', inputs: [['ℓ<sub>n</sub>', ds.get('ells')[n], 'm', 6]], value: strut(storedRig(), y, v).N }; },
+                ells: function (n) { var y = [ds.get('th1')[n], ds.get('th2')[n], ds.get('Xs')[n]]; return { formula: '|r<sub>2</sub> − r<sub>c</sub>|', inputs: [['θ<sub>1</sub>', y[0], 'rad', 6], ['θ<sub>2</sub>', y[1], 'rad', 6], ['X', y[2], 'm', 6]], value: strut(storedRig(), y, [0, 0, 0]).l }; },
+                Es: function (n) { var y = [ds.get('th1')[n], ds.get('th2')[n], ds.get('Xs')[n], ds.get('w1')[n], ds.get('w2')[n], ds.get('vX')[n]]; return { formula: 'T + V, (2) + (3)', inputs: [], value: energy(storedRig(), y) }; },
+                Wc: function (n) { return { formula: _t('∫ F Ẋ dt, rerun with the same RK4 to sample n'), inputs: [['n', n, '', 0]], value: replayAt(n).acc.W }; },
+                Qs: function (n) { return { formula: _t('∫ c<sub>stop</sub> ℓ̇² dt, rerun with the same RK4 to sample n'), inputs: [['n', n, '', 0]], value: replayAt(n).acc.Q }; },
+                balance: function () { var E = ds.get('Es'), W = ds.get('Wc'), Q = ds.get('Qs'); return { formula: 'E(0) + W<sub>coil</sub> − Q<sub>stop</sub> − E(T)', inputs: [['E(0)', E[0], 'J', 6], ['W<sub>coil</sub>', W[NS - 1], 'J', 6], ['Q<sub>stop</sub>', Q[NS - 1], 'J', 6], ['E(T)', E[NS - 1], 'J', 6]], value: E[0] + W[NS - 1] - Q[NS - 1] - E[NS - 1] }; },
+                steps: function () { return { formula: 'T<sub>end</sub> / h', inputs: [['T<sub>end</sub>', TEND, 's', 0], ['h', H, 's', 4]], value: Math.round(TEND / H) }; },
+                px_per_N: function () { return { formula: '0.02 m/N · px/m', inputs: [['px/m', ds.get('px_per_m'), '', 3]], value: 0.02 * ds.get('px_per_m') }; },
+                b1_px: function () { return { formula: 'x<sub>O</sub> + l<sub>1</sub> sin θ<sub>1</sub> · px/m', inputs: [['x<sub>O</sub>', ds.get('pivot_px'), 'px', 1], ['θ<sub>1</sub>', ds.get('th1_now'), 'rad', 5], ['px/m', ds.get('px_per_m'), '', 3]], value: ds.get('pivot_px') + L1 * Math.sin(ds.get('th1_now')) * ds.get('px_per_m') }; },
+                b1_py: function () { return { formula: 'y<sub>O</sub> + l<sub>1</sub> cos θ<sub>1</sub> · px/m', inputs: [['y<sub>O</sub>', ds.get('pivot_py'), 'px', 1], ['θ<sub>1</sub>', ds.get('th1_now'), 'rad', 5], ['px/m', ds.get('px_per_m'), '', 3]], value: ds.get('pivot_py') + L1 * Math.cos(ds.get('th1_now')) * ds.get('px_per_m') }; },
+                b2_px: function () { return { formula: 'x<sub>1</sub> + l<sub>2</sub> sin θ<sub>2</sub> · px/m', inputs: [['x<sub>1</sub>', ds.get('b1_px'), 'px', 1], ['θ<sub>2</sub>', ds.get('th2_now'), 'rad', 5]], value: ds.get('b1_px') + L2 * Math.sin(ds.get('th2_now')) * ds.get('px_per_m') }; },
+                b2_py: function () { return { formula: 'y<sub>1</sub> + l<sub>2</sub> cos θ<sub>2</sub> · px/m', inputs: [['y<sub>1</sub>', ds.get('b1_py'), 'px', 1], ['θ<sub>2</sub>', ds.get('th2_now'), 'rad', 5]], value: ds.get('b1_py') + L2 * Math.cos(ds.get('th2_now')) * ds.get('px_per_m') }; },
+                cart_px: function () { return { formula: 'x<sub>O</sub> + X · px/m', inputs: [['x<sub>O</sub>', ds.get('pivot_px'), 'px', 1], ['X', ds.get('X_now'), 'm', 5]], value: ds.get('pivot_px') + ds.get('X_now') * ds.get('px_per_m') }; },
+                cart_py: function () { return { formula: 'y<sub>O</sub> + H · px/m', inputs: [['y<sub>O</sub>', ds.get('pivot_py'), 'px', 1], ['H', H_RAIL, 'm', 2]], value: ds.get('pivot_py') + H_RAIL * ds.get('px_per_m') }; },
+                F_px: function () { return { formula: 'F · px/N', inputs: [['F', ds.get('F_now'), 'N', 5], ['px/N', ds.get('px_per_N'), '', 3]], value: ds.get('F_now') * ds.get('px_per_N') }; },
+                y0s: function (j) { var a = ['th1', 'th2', 'Xs', 'w1', 'w2', 'vX'][j]; return { formula: _t('the first stored sample of the run'), inputs: [], value: ds.get(a)[0] }; },
+                ctrl_on: function () { return { formula: _t('the preset buttons: on unless Off is pressed'), inputs: [], value: ctrlOn }; },
+                released: function () { var y = ds.get('y0s'), z = Array.prototype.every.call(y, function (v) { return v === 0; }); return { formula: _t('a start other than straight-down rest came from your hand'), inputs: [], value: !z || ds.get('released') }; },
+                fp_kind: function () { var re = ds.get(ds.get('ctrl_on') ? 'lamc_re' : 'lamo_re'), im = ds.get(ds.get('ctrl_on') ? 'lamc_im' : 'lamo_im'), sl = Math.max.apply(null, Array.prototype.slice.call(re));
+                    return { formula: _t('from the signs of Re λ and whether any Im λ is not zero'), inputs: [['max Re λ', sl, '1/s', 4]], value: sl > 1e-6 ? 'unstable' : (sl > -1e-6 ? 'centre' : (Array.prototype.some.call(im, function (v) { return Math.abs(v) > 1e-9; }) ? 'stable focus' : 'stable node')) }; },
+                sat: function (n) { var S = storedDesign(), y = [ds.get('th1')[n], ds.get('th2')[n], ds.get('Xs')[n], ds.get('w1')[n], ds.get('w2')[n], ds.get('vX')[n]], want = S.p.on ? S.d.eq.F - S.d.K.reduce(function (a, k, i) { return a + k * (y[i] - S.d.eq.y[i]); }, 0) : 0;
+                    return { formula: '|F* − K(y<sub>n</sub> − y*)| > F<sub>max</sub>', inputs: [['F<sub>max</sub>', ds.get('Fmax'), 'N', 1]], value: S.p.on && Math.abs(want) > S.p.Fmax ? 1 : 0 }; },
+                t_sat: function () { var a = ds.get('sat'), c = 0; for (var n = 0; n < NS; n++) c += a[n]; return { formula: _t('number of stored samples at the limit × 10 ms'), inputs: [['samples', c, '', 0]], value: c * EVERY * H }; },
+                t_stop: function () { var a = ds.get('ells'), c = 0; for (var n = 0; n < NS; n++) if (a[n] > LMAX || a[n] < LMIN) c++; return { formula: _t('number of stored samples with ℓ outside [ℓ<sub>min</sub>, ℓ<sub>max</sub>] × 10 ms'), inputs: [['samples', c, '', 0]], value: c * EVERY * H }; },
+                t_settle: function () { if (!ds.get('ctrl_on')) return { formula: _t('NaN with the controller off'), inputs: [], value: NaN };
+                    var e = [ds.get('th1_eq'), ds.get('th2_eq'), ds.get('r'), 0, 0, 0], A = ['th1', 'th2', 'Xs', 'w1', 'w2', 'vX'].map(function (k) { return ds.get(k); }), ts = ds.get('ts'), t = NaN;
+                    for (var n = NS - 1; n >= 0; n--) { var far = A.some(function (a, j) { return Math.abs(a[n] - e[j]) > 0.01; }); if (far) { t = n === NS - 1 ? NaN : ts[n + 1]; break; } if (n === 0) t = 0; }
+                    return { formula: _t('the first stored time after which every number stays within 0.01 of y*'), inputs: [], value: t }; },
+                E_rest: function () { var y = [ds.get('th1_eq'), ds.get('th2_eq'), ds.get('r'), 0, 0, 0]; return { formula: 'T + V at y*', inputs: [['θ<sub>1</sub>*', y[0], 'rad', 6], ['θ<sub>2</sub>*', y[1], 'rad', 6], ['r', y[2], 'm', 2]], value: energy(storedRig(), y) }; },
+                Escale: function () { var E = ds.get('Es'), W = ds.get('Wc'), Q = ds.get('Qs'), m = 1e-9; for (var n = 0; n < NS; n++) m = Math.max(m, Math.abs(E[n] - ds.get('E_rest')), Math.abs(W[n]), Q[n]); return { formula: 'max(|E − E*|, |W<sub>coil</sub>|, Q<sub>stop</sub>)', inputs: [], value: m }; },
+                ylim: function () { var m = 1e-6, A = [ds.get('th1'), ds.get('th2'), ds.get('Xs')]; for (var n = 0; n < NS; n++) m = Math.max(m, Math.abs(A[0][n]), Math.abs(A[1][n]), Math.abs(A[2][n])); m = Math.max(m, Math.abs(ds.get('th1_eq')), Math.abs(ds.get('th2_eq')), Math.abs(ds.get('r'))); return { formula: '1.1 · max(|θ<sub>1</sub>|, |θ<sub>2</sub>|, |X|, |θ*|, |r|)', inputs: [], value: 1.1 * m }; },
+                Flim: function () { var m = ds.get('Fmax'), F = ds.get('Fs'), N = ds.get('Ns'); for (var n = 0; n < NS; n++) m = Math.max(m, Math.abs(F[n]), Math.abs(N[n])); return { formula: '1.1 · max(F<sub>max</sub>, |F|, |N|)', inputs: [], value: 1.1 * m }; },
+                win_t0: function () { return { formula: 'clamp(t<sub>play</sub> − 3 s, 0, 20 s)', inputs: [['t<sub>play</sub>', ds.get('t_play'), 's', 3]], value: Math.max(0, Math.min(TEND - WIN, ds.get('t_play') - 0.3 * WIN)) }; },
+                err_half: function () { var S = storedDesign(), y0 = Array.prototype.slice.call(ds.get('y0s')), A = ['th1', 'th2', 'Xs', 'w1', 'w2', 'vX'].map(function (k) { return ds.get(k); }), e = 0;
+                    run(S.p, S.d, y0, H / 2, 2 * EVERY, function (n, y) { for (var j = 0; j < 6; j++) e = Math.max(e, Math.abs(y[j] - A[j][n])); });
+                    return { formula: _t('the run solved again with h/2; the largest difference from the stored samples'), inputs: [['h/2', H / 2, 's', 5]], value: e }; },
+                r_px: function () { return { formula: 'x<sub>O</sub> + r · px/m', inputs: [['x<sub>O</sub>', ds.get('pivot_px'), 'px', 1], ['r', ds.get('r'), 'm', 2]], value: ds.get('pivot_px') + ds.get('r') * ds.get('px_per_m') }; },
+                i_now: function () { return { formula: 'round(t<sub>play</sub> / 20h)', inputs: [['t<sub>play</sub>', ds.get('t_play'), 's', 3]], value: Math.min(NS - 1, Math.max(0, Math.round(ds.get('t_play') / (EVERY * H)))) }; }
+            },
+            drawn: {
+                th1_now: function () { return readBack(box, _t('centre of ball 1'), { x: ds.get('b1_px'), y: ds.get('b1_py') }, 1, Sim.isBurgundy, _t('the burgundy ball'), _t('Ball 1 is drawn at the pivot plus l₁ (sin θ₁, cos θ₁) · px/m.')); },
+                th2_now: function () { return readBack(box, _t('centre of ball 2'), { x: ds.get('b2_px'), y: ds.get('b2_py') }, 1, Sim.isBurgundy, _t('the burgundy ball'), _t('Ball 2 hangs l₂ from ball 1 at the angle θ₂.')); },
+                X_now: function () { return readBack(box, _t('the cart, under its hinge'), { x: ds.get('cart_px'), y: ds.get('cart_py') + 3 }, 3, function (c) { return c[3] > 25; }, _t('the cart’s outline or the hinge'), _t('The cart’s hinge is drawn at x<sub>O</sub> + X · px/m, H below the pivot.')); },
+                F_now: function () { var L = ds.get('F_px'); if (Math.abs(L) < 2.5) return { what: _t('the coil-force arrow'), drawn: _t('no arrow'), expected: _t('no arrow: shorter than 2 px'), ok: null, note: _t('Arrows shorter than 2 px are not drawn.') };
+                    var g = geom(), ch = g.railY - g.cy - 0.035 * g.s; return readBack(box, _t('half-way along the coil-force arrow'), { x: ds.get('cart_px') + 0.5 * L, y: g.cy + ch * 0.35 }, 1, Sim.isBurgundy, _t('the burgundy arrow'), _t('The arrow starts at the cart and is F · px/N long.')); },
+                r: function () { return readBack(box, _t('the target flag'), { x: ds.get('r_px'), y: geom().rulerY - 15 }, 4, function (c) { return Sim.isBurgundy(c) || neutralInk(c) || (c[3] > 25 && c[0] > 100); }, _t('the flag'), _t('The flag stands on the ruler at r.')); },
+                th1: function (n) { var p = chartAt('th1', n); if (!p) return { what: _t('θ₁ on the time chart'), drawn: _t('outside the 10 s window'), expected: _t('not drawn now'), ok: null, note: _t('The window chart shows 10 s around the cursor; move the cursor to see this sample.') }; return readBack(box, _t('θ₁ on the time chart'), p, 2, neutralInk, _t('the dark curve'), _t('The dark curve; after the cursor it is drawn pale, and other curves may cover it.')); },
+                th2: function (n) { var p = chartAt('th2', n); if (!p) return { what: _t('θ₂ on the time chart'), drawn: _t('outside the 10 s window'), expected: _t('not drawn now'), ok: null, note: _t('The window chart shows 10 s around the cursor; move the cursor to see this sample.') }; return readBack(box, _t('θ₂ on the time chart'), p, 2, function (c) { return Sim.isBurgundy(c) || (c[3] > 25 && c[0] > c[1] + 15); }, _t('the burgundy curve'), _t('After the cursor it is drawn pale.')); },
+                Xs: function (n) { var p = chartAt('Xs', n); if (!p) return { what: _t('X on the time chart'), drawn: _t('outside the 10 s window'), expected: _t('not drawn now'), ok: null, note: _t('The window chart shows 10 s around the cursor; move the cursor to see this sample.') }; return readBack(box, _t('X on the time chart'), p, 3, function (c) { return tanInk(c) || (c[3] > 25 && c[0] > c[2] + 20); }, _t('the brown dashed curve'), _t('The curve is dashed, so the search reaches 3 px along it.')); }
+            },
+            round: { time: 't_play', label: function () { return _t('two seconds of the stored run'); }, length: function () { return 2; },
+                columns: ['th1_now', 'th2_now', 'X_now', 'F_now', 'N_now'], point: function () { return { what: 'ball 2' }; },
+                blocked: function () { return ds.get('t_play') > TEND - 2.05 ? _t('fewer than two seconds of the stored run are left; press From t = 0') : null; } },
+            about: _t('Nothing on this page is computed while you watch. The run is solved once with RK4 at h = 0.5 ms on the state (θ₁, θ₂, X, θ̇₁, θ̇₂, Ẋ), with the coil’s work and the stops’ heat carried along as two more states, and every twentieth state is stored with the coil’s force and current, the strut’s pull and length, and the energy. The same run is solved a second time with h/2 only to measure the error; that second run is not stored. Each frame draws the stored sample nearest to the playback time, without interpolation. The rig is drawn on one scale, px/m, the force arrows on 0.02 m per newton of that scale. The tubes, the stop marker, the wheels, the magnet and the coil are schematic: their sizes are not to scale and are not in the store; the strut’s outer tube is drawn half as long as the longest strut, and the inner tube fills the rest. The pale pendulum is the rest y* of the stored run. The energy bars are scaled to the largest of the three energies over the run. While you hold a ball or the cart, nothing is stored: the pose is your hand’s, the speeds are your hand’s smoothed over about 50 ms, and the force is what the controller would ask in that pose; when you let go, that state starts a new stored run. Poses that would stretch the strut past its stops are refused, so the pendulum stops following your hand there.')
+        };
+
+        Object.keys(NOW).forEach(function (k) { Sim.data.check[k] = nowCheck(k); });
+        solve();
+        Sim.onResize(stage, function () { box.fit(); draw(); });
+        Sim.onResize(forceStage, function () { fbox.fit(); draw(); });
+        Sim.onResize(phaseStage, function () { pbox.fit(); draw(); });
+        if (document.fonts && document.fonts.ready) document.fonts.ready.then(function () { if (solved) draw(); });
+    })();
+    </script>
+    <script src="../../scripts/datalog.js"></script>
+</body>
+</html>

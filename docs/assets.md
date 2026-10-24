@@ -113,7 +113,7 @@ in `public/scripts/catalog.js`:
 | `wind-turbine.webp` | Fig. 10, Wind Turbine Control |
 | `furuta-pendulum.webp` | Fig. 12, Furuta Pendulum |
 
-All eleven are lossy WebP, 800 × 500 px (read from the files' VP8 headers). Each is a screenshot of the page's own main figure
+All twelve are lossy WebP, 800 × 500 px (read from the files' VP8 headers). Each is a screenshot of the page's own main figure
 (the element `.stage__canvas`), taken in headless Chromium at a 1440 × 900 window with device scale 2 after the simulation had
 run for some seconds, then scaled to 800 × 500. The screenshot script lives in the working session for now and is to be added
 to this repository. If a thumbnail is missing, the catalog shows the figure number in its place
