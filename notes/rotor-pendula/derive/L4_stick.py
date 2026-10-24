@@ -11,8 +11,7 @@ from L4_generator import KT, KE, RC, JM, T0, m, L, g
 from L4_full import make_rhs
 gen = {(r['rpm'], r['frac']): r for r in json.load(open(os.path.join(D, 'L4_generator.json')))}
 rows = [x for p in glob.glob(os.path.join(D, 'L4_scan_[0-9].json')) for x in json.load(open(p))]
-want = [(rpm, fr) for rpm in (400, 200, 100, 20, 14, 8) for fr in (0.3, 0.6, 0.9)]
-rows = [r for r in rows if (r['rpm'], r['frac']) in want]
+rows = sorted(rows, key=lambda r: (r['wind'], r['frac']))
 n=len(rows)
 Om = np.array([gen[(r['rpm'], r['frac'])]['Om'] for r in rows]); rp = np.array([gen[(r['rpm'], r['frac'])]['rp'] for r in rows])
 R = rp/L; G = g/(Om**2*L); Nn = np.array([float(r['N']) for r in rows]); eta = np.array([r['eta'] for r in rows])
@@ -34,8 +33,8 @@ out=[]
 for i,r in enumerate(rows):
     th=TH[:,i]; w=W[:,i]; amp=0.5*(th.max()-th.min()); wmax=np.abs(w).max()
     stuck=np.mean(np.abs(w)<0.01*wmax)
-    out.append(dict(rpm=r['rpm'], frac=r['frac'], stuck=float(stuck), V_load_peak=float(KE*Nn[i]*wmax*Om[i]*r['R_load']/(RC+r['R_load'])), motor_rpm=float(Nn[i]*wmax*Om[i]*60/2/math.pi)))
+    out.append(dict(wind=r['wind'], rpm=r['rpm'], frac=r['frac'], stuck=float(stuck), V_load_peak=float(KE*Nn[i]*wmax*Om[i]*r['R_load']/(RC+r['R_load'])), motor_rpm=float(Nn[i]*wmax*Om[i]*60/2/math.pi)))
     RL=r['R_load']; Vpk = KE*Nn[i]*wmax*Om[i]*RL/(RC+RL); emf=KE*Nn[i]*wmax*Om[i]
-    print(f"{r['rpm']} rpm {r['frac']}: N {r['N']} f/G {f0[i]/(eta[i]*G[i]):.2f} swing p-p/2 {amp:.4f} rad, (1+j)*amp {(1+j[i])*amp:.3f} vs f/eta {f0[i]/eta[i]:.3f}; "
+    print(f"{r['wind']:.0f} m/s {r['frac']}: N {r['N']} f/G {f0[i]/(eta[i]*G[i]):.2f} swing p-p/2 {amp:.4f} rad, (1+j)*amp {(1+j[i])*amp:.3f} vs f/eta {f0[i]/eta[i]:.3f}; "
           f"time with |w|<1% max: {stuck*100:.1f} %; load {Pl[i]*1e3:.3f} mW; EMF peak {emf*1e3:.0f} mV, load V peak {Vpk*1e3:.0f} mV, R_L {RL:.2f}; motor peak rpm {Nn[i]*wmax*Om[i]*60/2/math.pi:.0f}")
 json.dump(out, open(os.path.join(D, 'L4_stick.json'), 'w'), indent=1)

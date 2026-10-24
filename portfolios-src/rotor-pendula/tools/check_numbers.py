@@ -8,7 +8,7 @@ Usage: python3 tools/check_numbers.py      (exit 1 on any unexplained number, fa
 import json, math, pathlib, re, sys
 ROOT = pathlib.Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(ROOT / 'tools'))
-from typed_numbers import TYPED, r
+from typed_numbers import TYPED
 D = ROOT / 'data'
 NUM = json.load(open(ROOT / 'numbers.json'))
 bad = 0; seen = 0
@@ -39,7 +39,7 @@ for p in sorted((ROOT / 'theory').glob('*.src.html')):
             print(f'{p.name}: unexplained number {num!r} | {ctx}'); bad += 1
         elif isinstance(why, tuple):
             _, expr, tol, _ = why
-            val = eval(expr, {'math': math, 'json': json, 'D': D, 'N': NUM['n'], 'r': r})
+            val = eval(expr, {'math': math, 'json': json, 'D': D, 'N': NUM['n']})
             typed = float(num.replace(' ', ''))
             if abs(val - typed) > tol*abs(val):
                 print(f'{p.name}: {num} does not match {expr} = {val:.6g} (tolerance {tol}) | {ctx}'); bad += 1

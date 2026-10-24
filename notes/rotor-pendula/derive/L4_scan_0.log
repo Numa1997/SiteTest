@@ -10,9 +10,13 @@ turn 80
 turn 90
 turn 100
 turn 110
-400 rpm 30 %: best N 33, factor 1.0, R_L     8.02 ohm: load  48.801 mW, paid  116.28 mW (friction  27.01), swing 0.037 rad, motor   484 rpm; at the formula's setting (N 33)  48.801 mW; better but rejected: 0
-200 rpm 30 %: best N 51, factor 1.0, R_L    13.62 ohm: load  23.039 mW, paid   68.88 mW (friction  22.28), swing 0.039 rad, motor   416 rpm; at the formula's setting (N 51)  23.039 mW; better but rejected: 0
-100 rpm 30 %: best N 51, factor 1.0, R_L     9.24 ohm: load  14.871 mW, paid   45.13 mW (friction  14.26), swing 0.050 rad, motor   322 rpm; at the formula's setting (N 51)  14.871 mW; better but rejected: 0
- 20 rpm 30 %: best N 51, factor 1.0, R_L     7.41 ohm: load   9.033 mW, paid   29.43 mW (friction   9.70), swing 0.177 rad, motor   270 rpm; at the formula's setting (N 51)   9.033 mW; better but rejected: 0
- 14 rpm 30 %: best N 51, factor 1.0, R_L     7.31 ohm: load   8.672 mW, paid   28.43 mW (friction   9.41), swing 0.250 rad, motor   277 rpm; at the formula's setting (N 33)   8.539 mW; better but rejected: 0
-  8 rpm 30 %: best N 51, factor 1.0, R_L     7.21 ohm: load   8.338 mW, paid   27.28 mW (friction   8.99), swing 0.446 rad, motor   309 rpm; at the formula's setting (N 51)   8.338 mW; better but rejected: 3
+6 m/s 30 %: best N 190, factor 1.4, R_L    43.86 ohm: load  20.349 mW, paid   70.24 mW (friction  28.11), swing 0.478 rad, motor  1056 rpm; at the formula's setting (N 111)  32.353 mW; better but rejected: 31
+6 m/s 60 %: best N 111, factor 1.0, R_L     7.87 ohm: load  14.401 mW, paid   42.65 mW (friction  12.65), swing 0.326 rad, motor   372 rpm; at the formula's setting (N 111)  14.401 mW; better but rejected: 0
+6 m/s 90 %: best N 111, factor 1.0, R_L     5.43 ohm: load   8.621 mW, paid   28.32 mW (friction   8.77), swing 0.217 rad, motor   240 rpm; at the formula's setting (N 111)   8.621 mW; better but rejected: 0
+8 m/s 30 %: best N 111, factor 1.0, R_L    11.71 ohm: load  23.733 mW, paid   65.08 mW (friction  18.73), swing 0.368 rad, motor   563 rpm; at the formula's setting (N 111)  23.733 mW; better but rejected: 0
+8 m/s 60 %: best N 111, factor 1.0, R_L     6.05 ohm: load  10.127 mW, paid   32.19 mW (friction   9.85), swing 0.182 rad, motor   261 rpm; at the formula's setting (N 111)  10.127 mW; better but rejected: 0
+8 m/s 90 %: best N 111, factor 1.0, R_L     4.26 ohm: load   5.869 mW, paid   21.13 mW (friction   6.81), swing 0.123 rad, motor   175 rpm; at the formula's setting (N 111)   5.869 mW; better but rejected: 0
+10 m/s 30 %: best N 111, factor 1.0, R_L     9.46 ohm: load  18.455 mW, paid   52.65 mW (friction  15.42), swing 0.232 rad, motor   421 rpm; at the formula's setting (N 111)  18.455 mW; better but rejected: 0
+10 m/s 60 %: best N 111, factor 1.0, R_L     4.97 ohm: load   7.595 mW, paid   25.72 mW (friction   8.08), swing 0.117 rad, motor   205 rpm; at the formula's setting (N 111)   7.595 mW; better but rejected: 0
+10 m/s 90 %: best N 111, factor 1.0, R_L     3.58 ohm: load   4.281 mW, paid   16.71 mW (friction   5.59), swing 0.080 rad, motor   139 rpm; at the formula's setting (N 111)   4.281 mW; better but rejected: 0
+EXIT 0

@@ -73,11 +73,16 @@ check('best damping (5): kappa* = |R-1| (taking R>1)', sp.simplify([k for k in k
 Pstar = sp.simplify(P_hat.subs(kap, R - 1)*m*L**2*W**3)
 check('best power (6): P* = m L g^2 / (4 Omega (r_p - L))', sp.simplify(Pstar.subs({G: g/(W**2*L), R: rp/L}) - m*L*g**2/(4*W*(rp - L))))
 
-# the strongest mounting of the notes: Omega = 41.888 rad/s (400 rpm), r_p = 0.3 * (7*8/Omega), m = 0.1 kg, L = 0.2 m
-num = {m: 0.1, L: 0.2, g: 9.80665, W: 400*2*sp.pi/60}   # standard gravity
-num[rp] = 0.3*7*8/float(num[W])
+# the strongest mounting of the notes (setup.py: 6 m/s, pivot at 30 %) against the full nonlinear model (L1_mountings.json)
+import json, os
+sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
+import setup as S
+v0, f0 = S.WINDS[0], S.FRACS[0]
+num = {m: S.M, L: S.L, g: S.G0, W: S.omega(v0), rp: f0*S.R_ROT}
 Pv = float((m*L*g**2/(4*W*(rp - L))).subs(num))
-print(f'   P* at the strongest mounting: {Pv*1e3:.2f} mW (full model, L1_mountings.json: 57.1 mW); r_p = {num[rp]:.4f} m, R = {num[rp]/0.2:.3f}')
-ok = abs(Pv*1e3 - 57.1) < 0.1
-fails += (not ok); print(('PASS ' if ok else 'FAIL ') + 'closed form within 0.1 mW of the full model\'s 57.1 mW')
+full = next(x['P_single'] for x in json.load(open(os.path.join(os.path.dirname(os.path.abspath(__file__)), 'L1_mountings.json')))
+            if x['wind'] == v0 and x['pct'] == round(f0*100))
+print(f'   P* at {v0:.0f} m/s, pivot at {f0*100:.0f} %: {Pv*1e3:.2f} mW; full model {full*1e3:.2f} mW')
+ok = abs(Pv/full - 1) < 0.01
+fails += (not ok); print(('PASS ' if ok else 'FAIL ') + 'closed form within 1 % of the full model at the strongest mounting')
 print('ALL PASS' if fails == 0 else f'{fails} FAIL'); sys.exit(1 if fails else 0)

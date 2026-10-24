@@ -24,7 +24,7 @@ demand: first `katex.min.js`, then `auto-render.min.js`, then typesets every lec
 ([sim.css:8](../public/styles/sim.css#L8)). `public/simulations.html` links the stylesheet in its `<head>`
 ([simulations.html:16](../public/simulations.html#L16)) and loads `katex.min.js` at the end of the body
 ([simulations.html:125](../public/simulations.html#L125)); `public/portfolios.html` does the same and also loads
-`auto-render.min.js` ([portfolios.html:16](../public/portfolios.html#L16), [427–428](../public/portfolios.html#L427-L428)).
+`auto-render.min.js` ([portfolios.html:16](../public/portfolios.html#L16), [416–417](../public/portfolios.html#L416-L417)).
 The home page `index.html` does not use KaTeX.
 
 **Why it is self-hosted** rather than loaded from a public server: the pages then work offline from a saved copy, and they

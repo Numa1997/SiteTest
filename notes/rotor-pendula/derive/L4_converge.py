@@ -7,6 +7,6 @@ a = json.load(open(os.path.join(H, 'L4_check_2000.json'))); b = json.load(open(o
 worst = 0.0
 for x, y in zip(a, b):
     d = max(abs(y['P_load']/x['P_load'] - 1), abs(y['P_paid']/x['P_paid'] - 1)); worst = max(worst, d)
-    print(f"{x['rpm']:3d} rpm {x['frac']*100:.0f} %: load {x['P_load']*1e3:.3f} / {y['P_load']*1e3:.3f} mW, "
+    print(f"{x['wind']:.0f} m/s {x['frac']*100:.0f} %: load {x['P_load']*1e3:.3f} / {y['P_load']*1e3:.3f} mW, "
           f"paid {x['P_paid']*1e3:.2f} / {y['P_paid']*1e3:.2f} mW ({d*100:.2f} %)")
 print(f"largest difference {worst*100:.2f} %:", 'PASS' if worst < 0.01 else 'FAIL'); sys.exit(0 if worst < 0.01 else 1)

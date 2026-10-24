@@ -80,24 +80,30 @@ check(f'3. engine mean power = SciPy DOP853 on the Newton route (rel diff {abs(P
 # 4 ------------------------------------------------------------------------------------------------------------------
 # The 18 mountings at our own brakes: single kappa* = R - 1 (2.4); double kappa* from its small-swing theory (L1_map.py).
 from L1_map import kappa_star as kappa_star_double
-M, L = 0.1, 0.2
+import setup as S
+M, L = S.M, S.L
 results = []
 t_all = time.time()
-for rpms in ((400, 200, 100), (20, 14, 8)):
-    for rpm in rpms:
-        Om = rpm*2*math.pi/60; Rrot = 56.0/Om
-        rps = np.array([0.3, 0.6, 0.9])*Rrot
-        cs = np.array([(rp/L - 1)*M*L**2*Om for rp in rps])
-        cd = np.array([kappa_star_double(rp/L)*M*L**2*Om for rp in rps])
-        nturn = 50                                         # steps per turn; converged to 1e-6 (convergence test)
-        N_dis, N_avg = 60, 40
-        Ps_, Ys = mean_power(Single(M, L, rps, cs), Om, nturn, N_dis, N_avg, np.zeros((3, 3)))
-        Pd_, Yd = mean_power(Double(0.05, 0.05, 0.1, 0.1, rps, cd, cd), Om, nturn, N_dis, N_avg, np.zeros((3, 5)))
-        for i, pct in enumerate((30, 60, 90)):
-            Ps, Pd = Ps_[i], Pd_[i]
-            results.append(dict(rpm=rpm, pct=pct, Om=Om, rp=rps[i], c_single=cs[i], c_double=cd[i], P_single=Ps, P_double=Pd,
-                                steps_per_turn=nturn))
-            print(f'   {rpm:3d} rpm {pct} %: single {Ps*1e3:8.4f} mW, double {Pd*1e3:8.4f} mW, ratio {Pd/Ps:.4f}', flush=True)
+N_dis, N_avg = 60, 40
+def run_wind(v, nturn):
+    Om = S.omega(v)
+    rps = np.array(S.FRACS)*S.R_ROT
+    cs = np.array([(rp/L - 1)*M*L**2*Om for rp in rps])
+    cd = np.array([kappa_star_double(rp/L)*M*L**2*Om for rp in rps])
+    Ps_, Ys = mean_power(Single(M, L, rps, cs), Om, nturn, N_dis, N_avg, np.zeros((3, 3)))
+    Pd_, Yd = mean_power(Double(M/2, M/2, L/2, L/2, rps, cd, cd), Om, nturn, N_dis, N_avg, np.zeros((3, 5)))
+    return Om, rps, cs, cd, Ps_, Pd_
+worst_conv = 0.0
+for v in S.WINDS:
+    Om, rps, cs, cd, Ps_, Pd_ = run_wind(v, 50)              # steps per turn
+    _, _, _, _, Ps2, Pd2 = run_wind(v, 100)
+    worst_conv = max(worst_conv, float(np.max(np.abs(Ps2/Ps_ - 1))), float(np.max(np.abs(Pd2/Pd_ - 1))))
+    for i, f in enumerate(S.FRACS):
+        Ps, Pd = Ps_[i], Pd_[i]; pct = round(f*100); rpm = S.rpm(v)
+        results.append(dict(wind=v, rpm=rpm, pct=pct, Om=Om, rp=rps[i], c_single=cs[i], c_double=cd[i], P_single=Ps, P_double=Pd,
+                            steps_per_turn=50))
+        print(f'   {v:.0f} m/s ({rpm:.2f} rpm) {pct} %: single {Ps*1e3:8.4f} mW, double {Pd*1e3:8.4f} mW, ratio {Pd/Ps:.4f}', flush=True)
+check(f'4. 50 against 100 steps per turn agree (worst {worst_conv:.1e} < 1e-4)', worst_conv < 1e-4)
 print(f'   ({time.time() - t_all:.0f} s)')
 json.dump(results, open(os.path.join(os.path.dirname(os.path.abspath(__file__)), 'L1_mountings.json'), 'w'), indent=1)
 print('ALL PASS' if fails == 0 else f'{fails} FAIL'); sys.exit(1 if fails else 0)

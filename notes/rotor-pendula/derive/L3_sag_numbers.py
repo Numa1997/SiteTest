@@ -7,8 +7,9 @@ edgewise mode, nrel5mw.py), slope w' = Phi'(x) x_tip / L_b; dynamic amplificatio
 import math, os, sys
 import numpy as np
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
+import setup as S
 import nrel5mw as T5
-g = 9.80665*math.cos(math.radians(5.0)); m, L = 0.1, 0.2
+g = 9.80665*math.cos(math.radians(5.0)); m, L = S.M, S.L
 tab = T5.blade_table(); Lb = T5.R_TIP - T5.R_HUB; x = tab[:, 0]; mu = tab[:, 2]*T5.ADJ_BL_MS
 phi = T5.edge_shape(x)
 m_e = np.trapezoid(mu*phi**2, x*Lb); g_e = np.trapezoid(mu*phi, x*Lb)

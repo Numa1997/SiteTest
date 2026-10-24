@@ -2,7 +2,7 @@
 
 Run: python3 -I L2_run.py   (writes L2_run.json; prints the decomposition and PASS/FAIL on the contract's predictions)
 Records: 40 periodic 600 s rotor-effective wind records (turbulence.synth, seed 11); each run twice, the second pass measured.
-Mountings: r_p = 18.9, 37.8, 56.7 m; m = 0.1 kg, L = 0.2 m; c fixed at the L0 optimum for the steady speed Omega0.
+Mountings: r_p = 18.9, 37.8, 56.7 m; the pendulum of setup.py; c fixed at the L0 optimum for the steady speed Omega0.
 State per member: q, q', E (harvest), phi, Omega; Omega' from the one-state rotor; in-plane gravity g cos 5 deg.
 Decomposition of 10-min mean power P_turb against steady rotation P(Omega0):
   (a) mean-speed shift      = P_unif(mean Omega of the record) - P(Omega0)
@@ -14,15 +14,16 @@ import numpy as np
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 import turbulence as W
 from engine import Single, radau_step
+import setup as S
 
 g = 9.80665*math.cos(math.radians(5.0))
-m, L = 0.1, 0.2
+m, L = S.M, S.L
 LAW = sys.argv[1] if len(sys.argv) > 1 else 'nrel'
 W.TORQUE_LAW = LAW
 from scipy.optimize import brentq
 OM0 = brentq(lambda O: W.q_aero(8.0, O) - W.gen_torque(O), 0.5, 1.5)   # steady speed at 8 m/s for this law
 NREC = 40; DT = 0.1
-rps = np.array([0.3, 0.6, 0.9])*63.0
+rps = np.array(S.FRACS)*S.R_ROT
 c_opt = m*L**2*OM0*(rps/L - 1)
 
 def make_F(sysobj, wind, euler):
@@ -97,7 +98,10 @@ if __name__ == '__main__':
                                      Om_mean=Omb[sl].tolist()))
         check(f'P1 r_p = {rp:.1f}: |(b)+(c)| = {abs((b + cc).mean())*100:.3f} % < 1 % + 2 SE', abs((b + cc).mean()) < 0.01 + 2*se(b + cc))
         check(f'P2 r_p = {rp:.1f}: |(c)| = {abs(cc.mean()):.1e} < 1e-3', abs(cc.mean()) < 1e-3)
-        check(f'P3 r_p = {rp:.1f}: total change {tot.mean()*100:+.2f} % between -3 % and -1 %', -0.03 < tot.mean() < -0.01)
+        if LAW == 'nrel':     # full controller: the kink near 8.98 rpm raises the mean speed, and P* falls as 1/Omega
+            check(f'P3 r_p = {rp:.1f}: total change {tot.mean()*100:+.2f} % between -3 % and -1 %', -0.03 < tot.mean() < -0.01)
+        else:                 # pure square law: the mean speed hardly moves, and the wander's curvature gives a small gain
+            check(f'P3 r_p = {rp:.1f}: total change {tot.mean()*100:+.2f} % between 0 and +1 %', 0 < tot.mean() < 0.01)
     out['law'] = LAW
     json.dump(out, open(os.path.join(os.path.dirname(os.path.abspath(__file__)), f'L2_run_{LAW}.json'), 'w'))
     print(f'({time.time() - t0:.0f} s)')

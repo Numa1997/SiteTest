@@ -7,7 +7,8 @@ kappa grid: (1, 0.3, 0.1, 0.03) x kappa_d*(R), the double's linear-optimal dampi
 Initial conditions per cell: 8 (rest relative to the blade, and 7 random angle pairs in (-pi, pi]; seed 7).
 Transient 100 turns, measured 100 turns; renormalisation every quarter turn; d0 = 1e-8 in (q1, q2, q1', q2').
 Steps per turn n = max(100, ceil(6 sqrt(omega_fast^2 + 4 G_max))): the double's higher linear frequency per radian, raised for gravity.
-Grid kept small on purpose (lecture note, one figure): R in {1, 2, 5, 20, 100, 300}, G in {0.1, 1, 3, 10, 70}, kappa x {1, 0.1}.
+Grid kept small on purpose (lecture note, one figure): R in {1, 2, 5, 20, 100, 300, 600}, G in {0.1, 1, 3, 10, 70, 200} (the
+mountings of setup.py have R = 189 to 567 and G = 68 to 190), kappa x {1, 0.1}.
 """
 import json, math, os, sys, time
 import numpy as np
@@ -17,8 +18,8 @@ sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 from engine import Double, pendulum_rhs, integrate
 
 QUICK = '--quick' in sys.argv
-RS = [1, 2, 5, 20, 100, 300]
-GS = [0.1, 1, 3, 10, 70]
+RS = [1, 2, 5, 20, 100, 300, 600]
+GS = [0.1, 1, 3, 10, 70, 200]
 KREL = [1.0, 0.1]
 NIC = 8
 TR, MEAS = (10, 20) if QUICK else (100, 100)

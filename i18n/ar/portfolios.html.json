@@ -35,6 +35,10 @@
   "src": "peak force of the iron ball on the model head",
   "tr": "ذروة قوّة كرة الحديد على رأس النموذج"
  },
+ "0cdae4f3ab2f": {
+  "src": "<b>Chaos does not help.</b> The double pendulum is chaotic only near resonance, where no real mounting is, and there the best regular setting beats every chaotic one.",
+  "tr": "<b>الفوضى لا تساعد.</b> النوّاس المزدوج فوضويّ قرب الرنين فقط، حيث لا يقع أيّ موضع تثبيت حقيقي، وهناك يتفوّق أفضل ضبطٍ منتظم على كلّ ضبطٍ فوضوي."
+ },
  "0efc2e6be4c2": {
   "src": "Overview",
   "tr": "نظرة عامّة"
@@ -71,9 +75,17 @@
   "src": "Iron, Cotton and the Head",
   "tr": "الحديد والقطن والرأس"
  },
+ "16acd75b36e5": {
+  "src": "<b>There is enough power.</b> At winds of 6 to 10 m/s, with the pivot at 30, 60 or 90 % of the 63 m rotor radius, the pendulum takes 17.7–88.6 mW, more in lighter wind, and the rotor pays for every joule, at most \\(1.1\\times10^{-7}\\) of the turbine’s output.",
+  "tr": "<b>القدرة كافية.</b> عند رياحٍ سرعتها من 6 إلى 10 m/s، ومع المحور عند 30 أو 60 أو 90 % من نصف قطر الدوّار البالغ 63 m، يحصد النوّاس 17.7–88.6 mW، وأكثرَ حين تكون الريح أخفّ، والدوّار يدفع ثمن كلّ جول، وهو على الأكثر \\(1.1\\times10^{-7}\\) من خرج العنفة."
+ },
  "19b1098bb9da": {
   "src": "impact mechanics · interatomic bonds · fibre networks",
   "tr": "ميكانيك الصدم · الروابط بين الذرّات · شبكات الألياف"
+ },
+ "1aca80266833": {
+  "src": "Can a swinging weight on a turbine blade power a sensor, and can chaos or the wind help?",
+  "tr": "هل يستطيع ثقلٌ متأرجح على شفرة عنفة أن يغذّي حسّاسًا، وهل تساعد الفوضى أو الريح في ذلك؟"
  },
  "1b5dbf161208": {
   "src": "The question, the warm cloud in two pictures, and the droplets falling.",
@@ -187,6 +199,10 @@
   "src": "<span class=\"pfig__n\">Figure 1</span>Left: the two fall-speed models against Gunn and Kinzer. Right: the error of the drag balance, at most 2.07 % at the listed sizes from 0.3 mm up and −7.57 % at 0.1 mm.",
   "tr": "<span class=\"pfig__n\">الشكل 1</span>يسارًا: نموذجا سرعة السقوط مقارنةً بقياسات غَن وكينزر. يمينًا: خطأ توازن القوى، وهو على الأكثر 2.07 % عند الأحجام المدرجة من 0.3 mm فما فوق، و−7.57 % عند 0.1 mm."
  },
+ "47267962edfb": {
+  "src": "<span class=\"psub__n\">2.1</span>The answer in five lines",
+  "tr": "<span class=\"psub__n\">2.1</span>الجواب في خمسة أسطر"
+ },
  "4ac862ee8e67": {
   "src": "Force on the head against time around the impact: a tall narrow spike for iron reaching 639 N, a low wide hump for cotton reaching 188 N, and the dashed weight line at 9.81 N.",
   "tr": "القوّة على الرأس مقابل الزمن حول لحظة الصدم: قمّة عالية ضيّقة للحديد تبلغ 639 N، وحدبة منخفضة عريضة للقطن تبلغ 188 N، وخطّ الوزن المتقطّع عند 9.81 N."
@@ -214,6 +230,10 @@
  "4fbd312c6706": {
   "src": "An interactive study · English, German and Arabic · 2026",
   "tr": "دراسة تفاعلية · بالإنجليزية والألمانية والعربية · 2026"
+ },
+ "4fee50a215f4": {
+  "src": "<b>One rod beats two.</b> With the same mass and reach a double pendulum gives 0.735 of the single one’s power: its mass sits closer to the pivot, where gravity has less leverage.",
+  "tr": "<b>قضيبٌ واحد خيرٌ من اثنين.</b> بالكتلة نفسها والامتداد نفسه يعطي النوّاس المزدوج 0.735 من قدرة النوّاس المفرد: كتلته أقرب إلى المحور، حيث ذراع الجاذبية أقصر."
  },
  "508340303282": {
   "src": "<b>Chaos does not help.</b> 2 of 54 scanned double pendula are chaotic; at matched forcing the regular orbit harvests about 0.379 W, the chaotic one about 0.24–0.25 W. The catch is force, not power: a fast rotor’s pivot sits in 18–215 g, beyond a ±8 g accelerometer.",
@@ -274,6 +294,10 @@
  "5d1c1481d224": {
   "src": "<span class=\"pfig__n\">Figure 2</span>One cycle in six traces: position, force, pressures, valve, energy and tracking error, shaded by phase.",
   "tr": "<span class=\"pfig__n\">الشكل 2</span>دورة واحدة في ستّة منحنيات: الموضع، والقوّة، والضغوط، والصمّام، والطاقة، وخطأ التتبّع، مظلَّلة بحسب الطور."
+ },
+ "5ea2cff00100": {
+  "src": "<span class=\"psub__n\">2.3</span>The project’s own pages",
+  "tr": "<span class=\"psub__n\">2.3</span>صفحات المشروع"
  },
  "5f272a95efff": {
   "src": "double ÷ single, same mass and reach",
@@ -347,6 +371,10 @@
   "src": "Bode plot of the sampled position loop up to 500 Hz, and its Nyquist plot passing the point minus one at a safe distance.",
   "tr": "مخطّط بودي لحلقة الموضع المُعايَنة حتى 500 Hz، ومخطّط نايكويست لها يمرّ بعيدًا عن النقطة سالب واحد بمسافة آمنة."
  },
+ "718c92240472": {
+  "src": "what a blade sensor node needs, from its two datasheets",
+  "tr": "ما تحتاجه عقدة حسّاس على الشفرة، من ورقتَي بياناتها"
+ },
  "71b1c97a1c07": {
   "src": "<span class=\"pfig__n\">Figure 4</span>Golovin test with 8 bins per doubling of mass: numerical (solid) against exact (dashed).",
   "tr": "<span class=\"pfig__n\">الشكل 4</span>اختبار غولوفين بـ8 خانات لكلّ تضاعف في الكتلة: الحلّ العددي (خطّ متّصل) مقابل الحلّ الدقيق (خطّ متقطّع)."
@@ -366,6 +394,10 @@
  "73b522f1b91a": {
   "src": "a real 0.5 kg iron ball from 10 m on a skull, against an 11.9 kN failure load",
   "tr": "كرة حديد حقيقية من 0.5 kg من ارتفاع 10 m على جمجمة، مقابل حِمل كسرٍ قدره 11.9 kN"
+ },
+ "73c62086ad99": {
+  "src": "The turbine’s data come from its published definition (NREL/TP-500-38060) and the sensor’s need from the two chips’ datasheets. The equations are derived twice, by Lagrange and by Newton in the turning frame, and solved with an implicit solver checked against an independent one. A tuned-rod idea is withdrawn in the notes, because gravity detunes it every turn. An independent script, with every constant typed again, re-derives the main formulas in SymPy and re-integrates the runs with SciPy.",
+  "tr": "تأتي بيانات العنفة من تعريفها المنشور (NREL/TP-500-38060)، وحاجةُ الحسّاس من ورقتَي بيانات الشريحتين. تُشتقّ المعادلات مرّتين، بطريقة لاغرانج وبطريقة نيوتن في الإطار المرجعي الدوّار، وتُحلّ بحلّال ضمني مفحوص مقابل حلّال مستقلّ. وتُسحب في المذكّرات فكرةُ قضيبٍ مضبوطِ التردّد، لأنّ الجاذبية تُخرجه عن ضبطه في كلّ دورة. وبرنامجٌ مستقلّ، كُتبت فيه كلّ ثابتة من جديد، يعيد اشتقاق الصيغ الرئيسية في SymPy ويعيد تكامل التشغيلات في SciPy."
  },
  "756d4364af7e": {
   "src": "<span class=\"psub__n\">1.1</span>The warm cloud",
@@ -418,6 +450,10 @@
  "86ac000bebfe": {
   "src": "Share of volumes holding a drop of 100 µm against time: exact runs and the Poisson prediction.",
   "tr": "حصّة الأحجام التي تحوي قطرة من 100 µm بمرور الزمن: تشغيلات دقيقة وتنبّؤ بواسون."
+ },
+ "87dfe93c56a4": {
+  "src": "Lecture notes and a simulation · from first principles · 2026",
+  "tr": "مذكّرات محاضرة ومحاكاة · من المبادئ الأولى · 2026"
  },
  "88763ced3fa4": {
   "src": "to 50 / 90 % of the mass above 40 µm, extended kernel",
@@ -547,6 +583,10 @@
   "src": "A static copy of the Rotor Pendula app. Its saved-runs list is left out: every run is computed fresh in your browser, and nothing is stored.",
   "tr": "نسخة ثابتة من تطبيق Rotor Pendula، والتطبيق نفسه بالإنجليزية. حُذفت منه قائمة التشغيلات المحفوظة: كلّ تشغيل يُحسَب من جديد في متصفّحك، ولا يُخزَّن شيء."
  },
+ "b54266e67cdd": {
+  "src": "Hang a 0.5 kg weight on a 10 cm rod inside a blade of a real turbine, the NREL 5 MW reference turbine. Each time the blade goes round, gravity pulls the weight first one way and then the other, so it swings once per turn, like a child on a swing pushed once per pass; a generator at the pivot brakes that swing and turns it into electricity. The lecture notes build everything from the pendulum’s Lagrangian: the best brake \\(\\kappa = |R-1|\\), the rod’s trail that is the rotor’s bill, two rods and chaos, a ceiling on random shaking, gusts on a real 5 MW turbine, the blade’s bending, and a real motor and gearbox from a catalogue, which also sets how heavy the weight must be. Every number in the notes is computed by the models, and a simulation page solves the full equations in your browser.",
+  "tr": "علّق ثقلًا من 0.5 kg على قضيب طوله 10 cm داخل شفرةٍ من شفرات عنفة حقيقية، هي عنفة <bdi>NREL 5 MW</bdi> المرجعية. في كلّ دورة للشفرة تشدّ الجاذبيةُ الثقلَ إلى جهة ثمّ إلى الأخرى، فيتأرجح مرّةً في كلّ دورة، كطفلٍ على أرجوحة يُدفَع دفعةً واحدة في كلّ مرور؛ ومولّدٌ عند المحور يكبح هذا التأرجح ويحوّله إلى كهرباء. تبني مذكّرات المحاضرة كلّ شيء من لاغرانجيان النوّاس: أفضلَ كبحٍ \\(\\kappa = |R-1|\\)، وتأخّرَ القضيب خلف الشفرة، وهو ما يدفع به الدوّار الثمن، وقضيبين والفوضى، وسقفًا لما يعطيه الاهتزاز العشوائي، وهبّاتِ الريح على عنفة حقيقية بقدرة 5 MW، وانحناءَ الشفرة، ومحرّكًا وعلبة تروس حقيقيّين من كتالوج، وهما يحدّدان أيضًا كتلة الثقل اللازمة. وكلّ رقم في المذكّرات تحسبه النماذج، وصفحةُ محاكاة تحلّ المعادلات الكاملة في متصفّحك."
+ },
  "b6c935d4f3c7": {
   "src": "min",
   "tr": "دقيقة"
@@ -607,13 +647,25 @@
   "src": "Mass spectra of the warm cloud at several times, for the thesis kernel and the new kernel.",
   "tr": "أطياف الكتلة في الغيمة الدافئة في عدّة أوقات، لنواة الرسالة والنواة الجديدة."
  },
+ "c5ca45fd43f5": {
+  "src": "<b>The wind’s disorder hardly helps.</b> Random shaking has a hard ceiling set by the pendulum’s mass; gusts change the power by a few per cent; the blade’s bending gives a short pendulum almost nothing.",
+  "tr": "<b>اضطراب الريح لا يكاد يساعد.</b> للاهتزاز العشوائي سقفٌ صارم تحدّده كتلة النوّاس؛ وهبّات الريح تغيّر القدرة ببضعة في المئة؛ وانحناء الشفرة لا يعطي النوّاسَ القصير شيئًا يُذكر."
+ },
  "c703295f9613": {
   "src": "Portfolios · Numa Koudsie",
   "tr": "ملفّات الأبحاث · نعمة سائر قدسية"
  },
+ "c76a463cd780": {
+  "src": "Three winds on the NREL 5 MW turbine, three pivots, one rod or two, an ideal brake or a real geared generator, solved in your browser; six worked solutions.",
+  "tr": "ثلاث سرعات للريح على عنفة <bdi>NREL 5 MW</bdi>، وثلاثة مواضع للمحور، وقضيبٌ واحد أو اثنان، وكابحٌ مثالي أو مولّد حقيقي بعلبة تروس، تُحلّ في متصفّحك؛ وستّة حلول مفصّلة."
+ },
  "cbb8cae7abce": {
   "src": "<span class=\"psub__n\">4.3</span>Four figures from the study",
   "tr": "<span class=\"psub__n\">4.3</span>أربعة أشكال من الدراسة"
+ },
+ "cc85fad60dec": {
+  "src": "to the wires, with a real motor and gearbox",
+  "tr": "إلى الأسلاك، بمحرّك وعلبة تروس حقيقيّين"
  },
  "cd4683fadf70": {
   "src": "Positions",
@@ -626,6 +678,10 @@
  "ce5dc750e285": {
   "src": "Every block is a physical law with its own derivation. The valve’s metering edges are sharp-edged orifices whose jet contracts to 0.61 of the opening, as the free-streamline theory of Helmholtz and Kirchhoff predicts; the spool answers the controller as a mass on a spring at 60 Hz. The two metres of hose are a slug of oil with inertia and friction, laminar and turbulent. The oil itself is a spring whose stiffness depends on its pressure, through the 0.5 % of air it carries as bubbles. The cylinder has two chambers of different area, seal friction and end stops; the specimen is a spring with damping. The controller sees the world only once a millisecond, through a zero-order hold, and the model is integrated with fourth-order Runge–Kutta at 10 µs, a hundred steps per sample. An independent Python model, with SciPy for the numbers and SymPy for the derivatives, recomputes the equilibria, the linearization, the closed-loop poles, the margins and the whole nonlinear cycle, and agrees with the page.",
   "tr": "كلّ كتلة في النموذج قانونٌ فيزيائي له اشتقاقه. حوافّ التحكّم في الصمّام فتحاتٌ حادّة الحوافّ ينقبض نفثها إلى 0.61 من الفتحة، كما تتنبّأ نظرية الخطوط الانسيابية الحرّة لهلمهولتز وكيرشهوف؛ والمِزلاج يستجيب للمتحكّم ككتلةٍ على نابض عند 60 Hz. والمتران من الخرطوم عمودُ زيتٍ له عطالة واحتكاك، صفائحيٌّ ومضطرب. والزيت نفسه نابضٌ تتوقّف صلابته على ضغطه، عبر الـ0.5 % من الهواء التي يحملها على هيئة فقاعات. وللأسطوانة حجرتان مختلفتا المساحة، واحتكاك في الحشوات، ومصدّات نهاية؛ والعيّنة نابضٌ مع تخميد. ولا يرى المتحكّم العالم إلّا مرّة كلّ ميليثانية، عبر ماسكٍ من الرتبة الصفرية، ويُكامَل النموذج بطريقة رونغه–كوتا من الرتبة الرابعة بخطوة 10 µs، أي مئة خطوة في كلّ فترة معاينة. ونموذجٌ مستقلّ بلغة Python، يستعمل SciPy للأرقام وSymPy للمشتقّات، يعيد حساب نقاط التوازن، والتقريب الخطّي، وأقطاب الحلقة المغلقة، والهوامش، والدورة اللاخطّية كلّها، ويتّفق مع الصفحة."
+ },
+ "cf307312f9a3": {
+  "src": "<span class=\"psub__n\">2.2</span>What was checked",
+  "tr": "<span class=\"psub__n\">2.2</span>ما الذي فُحص"
  },
  "d1622a8321e0": {
   "src": "Phyein Usul, home page",
@@ -675,9 +731,21 @@
   "src": "Twelve chapters from the Lagrangian to the sensor budget, 38 numbered equations.",
   "tr": "اثنا عشر فصلًا من اللاغرانجيان إلى ميزانية الحسّاس، و38 معادلة مرقّمة."
  },
+ "de2db7662cd7": {
+  "src": "Everything is computed fresh in your browser, and nothing is stored.",
+  "tr": "صفحات المشروع نفسها بالإنجليزية؛ كلّ شيء يُحسَب فيها من جديد في متصفّحك، ولا يُخزَّن شيء."
+ },
  "e09212c7d3ea": {
   "src": "Skills",
   "tr": "المهارات"
+ },
+ "e092b29602f1": {
+  "src": "<b>A real generator still delivers.</b> A catalogue motor behind a 111 : 1 gearhead brings 4.3–23.7 mW to the wires, at least 113 times the sensor’s need, and still 32 times if the gearbox has twice its catalogue friction and half its efficiency. The weight is sized for exactly that margin. Turning the slow, low voltage into a supply is the open problem.",
+  "tr": "<b>والمولّد الحقيقي يكفي أيضًا.</b> محرّكٌ من الكتالوج خلف علبة تروس بنسبة <bdi>111 : 1</bdi> يوصل 4.3–23.7 mW إلى الأسلاك، أي 113 ضعفًا على الأقلّ من حاجة الحسّاس، وما يزال 32 ضعفًا إذا كان احتكاك علبة التروس ضعفَ قيمته في الكتالوج وكفاءتها نصفَ قيمتها فيه. وقد حُدّدت كتلة الثقل لهذا الهامش بالضبط. أمّا تحويل الجهد المنخفض البطيء التغيّر إلى مصدر تغذية فهو المسألة المفتوحة."
+ },
+ "e1fb99194062": {
+  "src": "Nine chapters from the Lagrangian to a real generator, 29 numbered equations, every number computed by the models.",
+  "tr": "تسعة فصول من اللاغرانجيان إلى مولّد حقيقي، و29 معادلة مرقّمة، وكلّ رقم تحسبه النماذج."
  },
  "e20bd846f6ee": {
   "src": "<span class=\"pfig__n\">Figure 2</span>Collision efficiency for water on water at \\(10\\,{}^{\\circ}\\mathrm{C}\\), \\(850\\ \\mathrm{hPa}\\), on the \\(45 \\times 40\\) grid used by the solver.",
@@ -738,6 +806,10 @@
  "f625abc444ea": {
   "src": "Projects of months rather than afternoons: a question from research, a model rebuilt and checked step by step, a solver you can run, and results you can reproduce. Each project keeps its own pages; this page introduces them.",
   "tr": "مشاريعُ شهورٍ لا مشاريعُ أمسيات: سؤالٌ من البحث العلمي، ونموذجٌ يُعاد بناؤه ويُفحَص خطوةً خطوة، وحلّالٌ عددي تستطيع تشغيله بنفسك، ونتائج يمكن إعادة إنتاجها. لكلّ مشروع صفحاته الخاصّة؛ وهذه الصفحة تعرّف بها."
+ },
+ "f72084626360": {
+  "src": "mechanical harvest at nine mountings, 0.5 kg on 10 cm",
+  "tr": "الحصاد الميكانيكي عند تسعة مواضع تثبيت، 0.5 kg على 10 cm"
  },
  "f72f0eda6052": {
   "src": "Simulations",

@@ -28,7 +28,7 @@
     </script>
   
     <script src="../scripts/i18n/strings-de.js"></script>
-    <meta name="translated-from" content="English public/portfolios.html, commit ccc89bf" />
+    <meta name="translated-from" content="English public/portfolios.html, commit deddfb9" />
   </head>
 
   <body>
@@ -132,68 +132,51 @@
       <article class="proj" id="rotor-pendula" aria-labelledby="rp-title">
         <div class="proj__band">
           <span class="proj__num">02</span>
-          <p>Lecture notes and a simulation · from first principles · 2026<span class="i18n-pending" title="translation being updated"></span></p>
+          <p>Ein Vorlesungsskript und eine Simulation · aus ersten Prinzipien · 2026</p>
           <span>Mechanik rotierender Systeme · Energy Harvesting · nichtlineare Dynamik</span>
         </div>
         <div class="proj__body">
           <div class="proj__head">
             <div>
               <h2 id="rp-title">Rotor Pendula</h2>
-              <p class="proj__sub">Can a swinging weight on a turbine blade power a sensor, and can chaos or the wind help?<span class="i18n-pending" title="translation being updated"></span></p>
-              <p class="proj__abs">
-                Hang a 100 g weight on a 20 cm rod from a point on a turning blade. Each
-                time the blade goes round, gravity pulls the weight first one way and then
-                the other, so it swings once per turn, like a child on a swing pushed once
-                per pass; a generator at the pivot brakes that swing and turns it into
-                electricity. The lecture notes build everything from the pendulum’s Lagrangian:
-                the best brake \(\kappa = |R-1|\), the rod’s trail that is the rotor’s bill, two rods
-                and chaos, a ceiling on random shaking, gusts on a real 5 MW turbine, the blade’s
-                bending, and a real motor and gearbox from a catalogue. Every number in the notes
-                is computed by the models, and a simulation page solves the full equations in your browser.
-              <span class="i18n-pending" title="translation being updated"></span></p>
+              <p class="proj__sub">Kann ein schwingendes Gewicht an einem Turbinenblatt einen Sensor versorgen, und können Chaos oder der Wind dabei helfen?</p>
+              <p class="proj__abs">Hängen Sie ein Gewicht von 0.5 kg an einer 10 cm langen Stange in ein Blatt einer realen Turbine, der Referenzturbine NREL 5 MW. Bei jeder Umdrehung des Blatts zieht die Schwerkraft das Gewicht erst in die eine, dann in die andere Richtung, sodass es einmal pro Umdrehung schwingt, wie ein Kind auf der Schaukel, das bei jedem Vorbeischwingen einmal angeschoben wird; ein Generator am Drehpunkt bremst diese Schwingung und macht daraus Strom. Das Vorlesungsskript baut alles aus der Lagrange-Funktion des Pendels auf: die beste Bremse \(\kappa = |R-1|\), das Nachlaufen der Stange, mit dem der Rotor die Rechnung bezahlt, zwei Stangen und Chaos, eine Obergrenze für zufälliges Rütteln, Böen an einer realen Turbine mit 5 MW, die Biegung des Blatts und einen realen Motor mit Getriebe aus einem Katalog, der auch festlegt, wie schwer das Gewicht sein muss. Jede Zahl im Vorlesungsskript berechnen die Modelle, und eine Simulationsseite löst die vollständigen Gleichungen in Ihrem Browser.</p>
               <div class="proj__actions">
                 <a class="proj__btn" href="../portfolios/rotor-pendula/index.html">Das Vorlesungsskript lesen</a>
                 <a class="proj__btn proj__btn--ghost" href="../portfolios/rotor-pendula/index.html#sim">Ein Pendel rechnen lassen</a>
               </div>
             </div>
             <dl class="proj__tally" aria-label="Kennzahlen">
-              <div><dt class="is-new">57.1<small>mW</small></dt><dd>best mechanical harvest, single pendulum, 100 g on 20 cm<span class="i18n-pending" title="translation being updated"></span></dd></div>
-              <div><dt class="is-new">1.8–9.0<small>mW</small></dt><dd>to the wires on a large turbine, with a real motor and gearbox<span class="i18n-pending" title="translation being updated"></span></dd></div>
-              <div><dt>37.6<small> µW</small></dt><dd>was ein Sensorknoten am Blatt braucht</dd></div>
-              <div><dt>0.64–0.74</dt><dd>doppelt ÷ einfach, gleiche Masse und Reichweite</dd></div>
+              <div><dt class="is-new">17.7–88.6<small>mW</small></dt><dd>mechanische Ausbeute an neun Befestigungen, 0.5 kg an 10 cm</dd></div>
+              <div><dt class="is-new">4.3–23.7<small>mW</small></dt><dd>an die Leitungen, mit realem Motor und Getriebe</dd></div>
+              <div><dt>37.6<small> µW</small></dt><dd>was ein Sensorknoten am Blatt braucht, aus seinen zwei Datenblättern</dd></div>
+              <div><dt>0.735</dt><dd>doppelt ÷ einfach, gleiche Masse und Reichweite</dd></div>
             </dl>
           </div>
 
           <section class="proj__part" aria-labelledby="rp-answer">
-            <h3 id="rp-answer"><span class="psub__n">2.1</span>The answer in five lines<span class="i18n-pending" title="translation being updated"></span></h3>
+            <h3 id="rp-answer"><span class="psub__n">2.1</span>Die Antwort in fünf Zeilen</h3>
             <ol class="proj__changes">
-              <li><b>There is enough power.</b> The 18 mountings give 9.55–57.1 mW of mechanical power, and the rotor pays for every joule, at most \(7.2\times10^{-5}\) of the turbine’s output.<span class="i18n-pending" title="translation being updated"></span></li>
-              <li><b>One rod beats two.</b> With the same mass and reach a double pendulum gives 0.64–0.74 of the single one’s power: its mass sits closer to the pivot, where gravity has less leverage.<span class="i18n-pending" title="translation being updated"></span></li>
-              <li><b>Chaos does not help.</b> The double pendulum is chaotic only near resonance, where no real mounting is, and there the best regular setting beats every chaotic one.<span class="i18n-pending" title="translation being updated"></span></li>
-              <li><b>The wind’s disorder hardly helps.</b> Random shaking has a hard ceiling set by the pendulum’s mass; gusts change the power by a few per cent; the blade’s bending gives a short pendulum almost nothing.<span class="i18n-pending" title="translation being updated"></span></li>
-              <li><b>A real generator still delivers.</b> A catalogue motor behind a 51 : 1 gearhead brings 1.8–9.0 mW to the wires on a large turbine, at least 47 times the sensor’s need, and about 10 times if the gearbox is twice as draggy as its catalogue suggests. Turning that slow, low voltage into a supply is the open problem.<span class="i18n-pending" title="translation being updated"></span></li>
+              <li><b>Die Leistung reicht.</b> Bei Windgeschwindigkeiten von 6 bis 10 m/s und mit dem Drehpunkt bei 30, 60 oder 90 % des Rotorradius von 63 m entnimmt das Pendel 17.7–88.6 mW, mehr bei schwächerem Wind, und der Rotor bezahlt jedes Joule; das sind höchstens \(1.1\times10^{-7}\) der Leistung der Turbine.</li>
+              <li><b>Eine Stange schlägt zwei.</b> Bei gleicher Masse und Reichweite liefert ein Doppelpendel das 0.735-Fache der Leistung des Einzelpendels: Seine Masse sitzt näher am Drehpunkt, wo die Schwerkraft einen kürzeren Hebel hat.</li>
+              <li><b>Chaos hilft nicht.</b> Das Doppelpendel ist nur nahe der Resonanz chaotisch, wo keine reale Befestigung liegt, und dort schlägt die beste reguläre Einstellung jede chaotische.</li>
+              <li><b>Die Unordnung des Windes hilft kaum.</b> Zufälliges Rütteln hat eine feste Obergrenze, die die Masse des Pendels setzt; Böen ändern die Leistung um wenige Prozent; die Biegung des Blatts bringt einem kurzen Pendel fast nichts.</li>
+              <li><b>Auch ein realer Generator liefert genug.</b> Ein Katalogmotor hinter einem Getriebe mit der Untersetzung 111 : 1 bringt 4.3–23.7 mW an die Leitungen, mindestens das 113-Fache des Bedarfs des Sensors, und immer noch das 32-Fache, wenn das Getriebe doppelt so viel Reibung und den halben Wirkungsgrad hat wie im Katalog. Das Gewicht ist genau für diese Reserve bemessen. Offen ist, wie man die langsam wechselnde, niedrige Spannung in eine Versorgung verwandelt.</li>
             </ol>
           </section>
 
           <section class="proj__part" aria-labelledby="rp-audit">
-            <h3 id="rp-audit"><span class="psub__n">2.2</span>What was checked<span class="i18n-pending" title="translation being updated"></span></h3>
-            <p>
-              The equations are derived twice, by Lagrange and by Newton in the turning frame, and solved with an implicit
-              solver checked against an independent one. Each step went to a blind skeptic, and the notes say where a model
-              was corrected: a generator model that let the gearbox pass the motor’s back-and-forth power for free was
-              rebuilt, and a tuned-rod idea was withdrawn once a skeptic showed that gravity detunes it every turn. An
-              independent script, with every constant typed again, re-derives the main formulas in SymPy and re-integrates
-              the runs with SciPy.
-            <span class="i18n-pending" title="translation being updated"></span></p>
+            <h3 id="rp-audit"><span class="psub__n">2.2</span>Was geprüft wurde</h3>
+            <p>Die Daten der Turbine stammen aus ihrer veröffentlichten Definition (NREL/TP-500-38060), der Bedarf des Sensors aus den Datenblättern der beiden Chips. Die Gleichungen werden zweimal hergeleitet, nach Lagrange und nach Newton im mitrotierenden Bezugssystem, und mit einem impliziten Löser gelöst, der gegen einen unabhängigen geprüft ist. Eine Idee mit abgestimmter Stange wird im Vorlesungsskript zurückgezogen, weil die Schwerkraft sie bei jeder Umdrehung verstimmt. Ein unabhängiges Programm, in dem jede Konstante neu eingetippt ist, leitet die wichtigsten Formeln in SymPy erneut her und integriert die Läufe mit SciPy noch einmal.</p>
           </section>
 
           <section class="proj__part" aria-labelledby="rp-pages">
-            <h3 id="rp-pages"><span class="psub__n">2.3</span>The project’s own pages<span class="i18n-pending" title="translation being updated"></span></h3>
+            <h3 id="rp-pages"><span class="psub__n">2.3</span>Die Seiten des Projekts</h3>
             <ul class="proj__pages">
-              <li><a href="../portfolios/rotor-pendula/index.html#notes"><b>Vorlesungsskript</b><span>Nine chapters from the Lagrangian to a real generator, 29 numbered equations, every number computed by the models.<span class="i18n-pending" title="translation being updated"></span></span></a></li>
-              <li><a href="../portfolios/rotor-pendula/index.html#sim"><b>Simulation</b><span>Any of six rotors, one rod or two, an ideal brake or a real geared generator, solved in your browser; six worked solutions.<span class="i18n-pending" title="translation being updated"></span></span></a></li>
+              <li><a href="../portfolios/rotor-pendula/index.html#notes"><b>Vorlesungsskript</b><span>Neun Kapitel von der Lagrange-Funktion bis zu einem realen Generator, 29 nummerierte Gleichungen, jede Zahl von den Modellen berechnet.</span></a></li>
+              <li><a href="../portfolios/rotor-pendula/index.html#sim"><b>Simulation</b><span>Drei Wind­geschwindigkeiten an der Turbine NREL 5 MW, drei Drehpunkte, eine Stange oder zwei, eine ideale Bremse oder ein realer Generator mit Getriebe, gelöst in Ihrem Browser; sechs vorgerechnete Lösungen.</span></a></li>
             </ul>
-            <p class="proj__note">Everything is computed fresh in your browser, and nothing is stored.<span class="i18n-pending" title="translation being updated"></span></p>
+            <p class="proj__note">Die Seiten des Projekts sind auf Englisch; alles wird frisch in Ihrem Browser berechnet, und nichts wird gespeichert.</p>
           </section>
         </div>
       </article>

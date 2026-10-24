@@ -195,13 +195,17 @@ that nothing on a running figure reacts to a pointer merely crossing it; a click
 
 Since 23 October 2026 the page at `portfolios/rotor-pendula/index.html` is generated, like the Hydraulic Press Study, from its
 source in [`portfolios-src/rotor-pendula/`](../portfolios-src/rotor-pendula/) (its [`README.md`](../portfolios-src/rotor-pendula/README.md)
-gives the commands and checks); the models, model runs and review record are in `notes/rotor-pendula/`.
+gives the commands and checks); the models and model runs are in `notes/rotor-pendula/derive/`, with the working record in
+`notes/rotor-pendula/README.md`.
 
 **What the reader gets.** Two tabs. *Lecture notes* (`#notes`): *Pendula on a Turning Blade*, nine chapters (0–8), 29 numbered
 equations, from the Lagrangian of a pendulum on a turning blade to the best brake, two rods and chaos, a ceiling on random shaking,
 gusts on the NREL 5 MW turbine, the blade's bending, and a real geared generator (maxon RE 25 with a GP 32 C gearhead); every number
-is computed by the study's models (`tools/make_numbers.py`) or listed with its reason (`tools/typed_numbers.py`). *Simulation*
-(`#sim`): choose a rotor, a pivot, one rod or two and an ideal brake or the geared generator; the page solves the full equations
+is computed by the models (`tools/make_numbers.py`) or listed with its reason (`tools/typed_numbers.py`). The setup is the NREL 5 MW
+reference turbine at three steady winds (6, 8, 10 m/s) with the pivot at 30, 60 or 90 % of its 63 m radius; the pendulum is a
+0.5 kg bob on a 0.1 m rod, sized by `notes/rotor-pendula/derive/design.py`; the sensor's need, 37.6 µW, is added up from the two
+datasheets by `sensor.py`. *Simulation*
+(`#sim`): choose a wind, a pivot, one rod or two and an ideal brake or the geared generator; the page solves the full equations
 with a Radau IIA integrator in a Web Worker built from its physics block, then plays the last turns back; six worked solutions.
 Reading a value is a tool: "Read values" on, a click pins a point, and the values show in a strip outside the plots.
 
@@ -210,8 +214,8 @@ a small script turns links between the two pages into tab switches and opens oth
 The page carries the site's security policy with `'unsafe-eval'` in `script-src` and `blob:` in `worker-src` (the simulation's worker).
 
 **Checks** (from `portfolios-src/rotor-pendula/`): `python3 tools/check_numbers.py` (every number computed or explained),
-`python3 -I check_physics.py` (17 independent SymPy and SciPy checks with retyped constants), `node tools/check_sim.js` (the
-simulation's physics block reproduces the Python engine's 36 reference runs to 1.3e-8), `node tools/check_sim_browser.js` and, with `public/` served,
+`python3 -I check_physics.py` (18 independent SymPy and SciPy checks with retyped constants), `node tools/check_sim.js` (the
+simulation's physics block reproduces the Python engine's 18 reference runs, nine mountings with one rod and two, to 4.5e-9), `node tools/check_sim_browser.js` and, with `public/` served,
 `python3 tools/check_combined.py <url>` (both tabs complete, 0 KaTeX errors, solve, tab links, no sideways scroll at
 360–1440 px). Verified on 23 October 2026: all pass.
 

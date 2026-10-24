@@ -12,6 +12,7 @@ import json, math, os, sys
 import numpy as np, sympy as sp
 from scipy.optimize import minimize_scalar
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
+import setup as S
 import nrel5mw as T5
 
 t = sp.symbols('t', real=True)
@@ -58,8 +59,8 @@ OM0 = 0.9494
 
 def device(kind, L):
     if kind == 'single':
-        return linear_mats(1, [0.1], [L]), [np.array([0, 1.0])], [1.0]
-    return linear_mats(2, [0.05, 0.05], [L/2, L/2]), [np.array([0, 1.0, 0]), np.array([0, -1.0, 1.0])], [1.0, 1.0]
+        return linear_mats(1, [S.M], [L]), [np.array([0, 1.0])], [1.0]
+    return linear_mats(2, [S.M/2, S.M/2], [L/2, L/2]), [np.array([0, 1.0, 0]), np.array([0, -1.0, 1.0])], [1.0, 1.0]
 
 def gen_power(dev, c, Om, sig_tip, zeta, ws, both=True):
     (Mf, Gf, Kf, d), rows, _ = dev
@@ -85,7 +86,7 @@ def gen_power(dev, c, Om, sig_tip, zeta, ws, both=True):
 
 if __name__ == '__main__':
     L_t = RP*OM0**2/W_E**2
-    devs = {'single (0.2 m)': device('single', 0.2), 'double (0.2 m)': device('double', 0.2),
+    devs = {f'single ({S.L} m)': device('single', S.L), f'double ({S.L} m)': device('double', S.L),
             f'tuned single ({L_t:.2f} m)': device('single', L_t)}
     print(f'pivot at 90 %: Phi = {PHI:.4f}, slope {PHID:.4f} /m; blade modal mass {M_E:.0f} kg; tuned rod {L_t:.3f} m')
     out = []; fails = 0
