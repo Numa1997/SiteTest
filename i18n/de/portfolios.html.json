@@ -35,6 +35,10 @@
   "src": "peak force of the iron ball on the model head",
   "tr": "Spitzenkraft der Eisenkugel auf den Modellkopf"
  },
+ "0cdae4f3ab2f": {
+  "src": "<b>Chaos does not help.</b> The double pendulum is chaotic only near resonance, where no real mounting is, and there the best regular setting beats every chaotic one.",
+  "tr": "<b>Chaos hilft nicht.</b> Das Doppelpendel ist nur nahe der Resonanz chaotisch, wo keine reale Befestigung liegt, und dort schlägt die beste reguläre Einstellung jede chaotische."
+ },
  "0efc2e6be4c2": {
   "src": "Overview",
   "tr": "Überblick"
@@ -71,9 +75,17 @@
   "src": "Iron, Cotton and the Head",
   "tr": "Eisen, Baumwolle und der Kopf"
  },
+ "16acd75b36e5": {
+  "src": "<b>There is enough power.</b> At winds of 6 to 10 m/s, with the pivot at 30, 60 or 90 % of the 63 m rotor radius, the pendulum takes 17.7–88.6 mW, more in lighter wind, and the rotor pays for every joule, at most \\(1.1\\times10^{-7}\\) of the turbine’s output.",
+  "tr": "<b>Die Leistung reicht.</b> Bei Windgeschwindigkeiten von 6 bis 10 m/s und mit dem Drehpunkt bei 30, 60 oder 90 % des Rotorradius von 63 m entnimmt das Pendel 17.7–88.6 mW, mehr bei schwächerem Wind, und der Rotor bezahlt jedes Joule; das sind höchstens \\(1.1\\times10^{-7}\\) der Leistung der Turbine."
+ },
  "19b1098bb9da": {
   "src": "impact mechanics · interatomic bonds · fibre networks",
   "tr": "Stoßmechanik · interatomare Bindungen · Fasernetzwerke"
+ },
+ "1aca80266833": {
+  "src": "Can a swinging weight on a turbine blade power a sensor, and can chaos or the wind help?",
+  "tr": "Kann ein schwingendes Gewicht an einem Turbinenblatt einen Sensor versorgen, und können Chaos oder der Wind dabei helfen?"
  },
  "1b5dbf161208": {
   "src": "The question, the warm cloud in two pictures, and the droplets falling.",
@@ -187,6 +199,10 @@
   "src": "<span class=\"pfig__n\">Figure 1</span>Left: the two fall-speed models against Gunn and Kinzer. Right: the error of the drag balance, at most 2.07 % at the listed sizes from 0.3 mm up and −7.57 % at 0.1 mm.",
   "tr": "<span class=\"pfig__n\">Abbildung 1</span>Links: die beiden Modelle der Fallgeschwindigkeit gegenüber Gunn und Kinzer. Rechts: der Fehler des Kräftegleichgewichts, höchstens 2.07 % bei den aufgeführten Größen ab 0.3 mm und −7.57 % bei 0.1 mm."
  },
+ "47267962edfb": {
+  "src": "<span class=\"psub__n\">2.1</span>The answer in five lines",
+  "tr": "<span class=\"psub__n\">2.1</span>Die Antwort in fünf Zeilen"
+ },
  "4ac862ee8e67": {
   "src": "Force on the head against time around the impact: a tall narrow spike for iron reaching 639 N, a low wide hump for cotton reaching 188 N, and the dashed weight line at 9.81 N.",
   "tr": "Kraft auf den Kopf über der Zeit um den Aufprall: eine hohe, schmale Spitze für Eisen bis 639 N, ein flacher, breiter Buckel für Baumwolle bis 188 N und die gestrichelte Gewichtslinie bei 9.81 N."
@@ -214,6 +230,10 @@
  "4fbd312c6706": {
   "src": "An interactive study · English, German and Arabic · 2026",
   "tr": "Eine interaktive Studie · Englisch, Deutsch und Arabisch · 2026"
+ },
+ "4fee50a215f4": {
+  "src": "<b>One rod beats two.</b> With the same mass and reach a double pendulum gives 0.735 of the single one’s power: its mass sits closer to the pivot, where gravity has less leverage.",
+  "tr": "<b>Eine Stange schlägt zwei.</b> Bei gleicher Masse und Reichweite liefert ein Doppelpendel das 0.735-Fache der Leistung des Einzelpendels: Seine Masse sitzt näher am Drehpunkt, wo die Schwerkraft einen kürzeren Hebel hat."
  },
  "508340303282": {
   "src": "<b>Chaos does not help.</b> 2 of 54 scanned double pendula are chaotic; at matched forcing the regular orbit harvests about 0.379 W, the chaotic one about 0.24–0.25 W. The catch is force, not power: a fast rotor’s pivot sits in 18–215 g, beyond a ±8 g accelerometer.",
@@ -274,6 +294,10 @@
  "5d1c1481d224": {
   "src": "<span class=\"pfig__n\">Figure 2</span>One cycle in six traces: position, force, pressures, valve, energy and tracking error, shaded by phase.",
   "tr": "<span class=\"pfig__n\">Abbildung 2</span>Ein Zyklus in sechs Verläufen: Lage, Kraft, Drücke, Ventil, Energie und Regelabweichung, nach Phase schattiert."
+ },
+ "5ea2cff00100": {
+  "src": "<span class=\"psub__n\">2.3</span>The project’s own pages",
+  "tr": "<span class=\"psub__n\">2.3</span>Die Seiten des Projekts"
  },
  "5f272a95efff": {
   "src": "double ÷ single, same mass and reach",
@@ -347,6 +371,10 @@
   "src": "Bode plot of the sampled position loop up to 500 Hz, and its Nyquist plot passing the point minus one at a safe distance.",
   "tr": "Bode-Diagramm des abgetasteten Lageregelkreises bis 500 Hz und seine Nyquist-Ortskurve, die den Punkt minus eins in sicherem Abstand passiert."
  },
+ "718c92240472": {
+  "src": "what a blade sensor node needs, from its two datasheets",
+  "tr": "was ein Sensorknoten am Blatt braucht, aus seinen zwei Datenblättern"
+ },
  "71b1c97a1c07": {
   "src": "<span class=\"pfig__n\">Figure 4</span>Golovin test with 8 bins per doubling of mass: numerical (solid) against exact (dashed).",
   "tr": "<span class=\"pfig__n\">Abbildung 4</span>Golovin-Test mit 8 Klassen pro Massenverdopplung: numerisch (durchgezogen) gegenüber exakt (gestrichelt)."
@@ -366,6 +394,10 @@
  "73b522f1b91a": {
   "src": "a real 0.5 kg iron ball from 10 m on a skull, against an 11.9 kN failure load",
   "tr": "eine echte Eisenkugel von 0.5 kg aus 10 m auf einen Schädel, gegenüber einer Bruchlast von 11.9 kN"
+ },
+ "73c62086ad99": {
+  "src": "The turbine’s data come from its published definition (NREL/TP-500-38060) and the sensor’s need from the two chips’ datasheets. The equations are derived twice, by Lagrange and by Newton in the turning frame, and solved with an implicit solver checked against an independent one. A tuned-rod idea is withdrawn in the notes, because gravity detunes it every turn. An independent script, with every constant typed again, re-derives the main formulas in SymPy and re-integrates the runs with SciPy.",
+  "tr": "Die Daten der Turbine stammen aus ihrer veröffentlichten Definition (NREL/TP-500-38060), der Bedarf des Sensors aus den Datenblättern der beiden Chips. Die Gleichungen werden zweimal hergeleitet, nach Lagrange und nach Newton im mitrotierenden Bezugssystem, und mit einem impliziten Löser gelöst, der gegen einen unabhängigen geprüft ist. Eine Idee mit abgestimmter Stange wird im Vorlesungsskript zurückgezogen, weil die Schwerkraft sie bei jeder Umdrehung verstimmt. Ein unabhängiges Programm, in dem jede Konstante neu eingetippt ist, leitet die wichtigsten Formeln in SymPy erneut her und integriert die Läufe mit SciPy noch einmal."
  },
  "756d4364af7e": {
   "src": "<span class=\"psub__n\">1.1</span>The warm cloud",
@@ -418,6 +450,10 @@
  "86ac000bebfe": {
   "src": "Share of volumes holding a drop of 100 µm against time: exact runs and the Poisson prediction.",
   "tr": "Anteil der Volumina, die einen Tropfen von 100 µm enthalten, über der Zeit: exakte Läufe und die Poisson-Vorhersage."
+ },
+ "87dfe93c56a4": {
+  "src": "Lecture notes and a simulation · from first principles · 2026",
+  "tr": "Ein Vorlesungsskript und eine Simulation · aus ersten Prinzipien · 2026"
  },
  "88763ced3fa4": {
   "src": "to 50 / 90 % of the mass above 40 µm, extended kernel",
@@ -547,6 +583,10 @@
   "src": "A static copy of the Rotor Pendula app. Its saved-runs list is left out: every run is computed fresh in your browser, and nothing is stored.",
   "tr": "Eine statische Kopie der App Rotor Pendula; die App selbst ist auf Englisch. Ihre Liste gespeicherter Läufe fehlt: Jeder Lauf wird frisch in Ihrem Browser berechnet, und nichts wird gespeichert."
  },
+ "b54266e67cdd": {
+  "src": "Hang a 0.5 kg weight on a 10 cm rod inside a blade of a real turbine, the NREL 5 MW reference turbine. Each time the blade goes round, gravity pulls the weight first one way and then the other, so it swings once per turn, like a child on a swing pushed once per pass; a generator at the pivot brakes that swing and turns it into electricity. The lecture notes build everything from the pendulum’s Lagrangian: the best brake \\(\\kappa = |R-1|\\), the rod’s trail that is the rotor’s bill, two rods and chaos, a ceiling on random shaking, gusts on a real 5 MW turbine, the blade’s bending, and a real motor and gearbox from a catalogue, which also sets how heavy the weight must be. Every number in the notes is computed by the models, and a simulation page solves the full equations in your browser.",
+  "tr": "Hängen Sie ein Gewicht von 0.5 kg an einer 10 cm langen Stange in ein Blatt einer realen Turbine, der Referenzturbine NREL 5 MW. Bei jeder Umdrehung des Blatts zieht die Schwerkraft das Gewicht erst in die eine, dann in die andere Richtung, sodass es einmal pro Umdrehung schwingt, wie ein Kind auf der Schaukel, das bei jedem Vorbeischwingen einmal angeschoben wird; ein Generator am Drehpunkt bremst diese Schwingung und macht daraus Strom. Das Vorlesungsskript baut alles aus der Lagrange-Funktion des Pendels auf: die beste Bremse \\(\\kappa = |R-1|\\), das Nachlaufen der Stange, mit dem der Rotor die Rechnung bezahlt, zwei Stangen und Chaos, eine Obergrenze für zufälliges Rütteln, Böen an einer realen Turbine mit 5 MW, die Biegung des Blatts und einen realen Motor mit Getriebe aus einem Katalog, der auch festlegt, wie schwer das Gewicht sein muss. Jede Zahl im Vorlesungsskript berechnen die Modelle, und eine Simulationsseite löst die vollständigen Gleichungen in Ihrem Browser."
+ },
  "b6c935d4f3c7": {
   "src": "min",
   "tr": "min"
@@ -607,13 +647,25 @@
   "src": "Mass spectra of the warm cloud at several times, for the thesis kernel and the new kernel.",
   "tr": "Massenspektren der warmen Wolke zu mehreren Zeitpunkten, für den Kern der Abschlussarbeit und den neuen Kern."
  },
+ "c5ca45fd43f5": {
+  "src": "<b>The wind’s disorder hardly helps.</b> Random shaking has a hard ceiling set by the pendulum’s mass; gusts change the power by a few per cent; the blade’s bending gives a short pendulum almost nothing.",
+  "tr": "<b>Die Unordnung des Windes hilft kaum.</b> Zufälliges Rütteln hat eine feste Obergrenze, die die Masse des Pendels setzt; Böen ändern die Leistung um wenige Prozent; die Biegung des Blatts bringt einem kurzen Pendel fast nichts."
+ },
  "c703295f9613": {
   "src": "Portfolios · Numa Koudsie",
   "tr": "Portfolios · Numa Koudsie"
  },
+ "c76a463cd780": {
+  "src": "Three winds on the NREL 5 MW turbine, three pivots, one rod or two, an ideal brake or a real geared generator, solved in your browser; six worked solutions.",
+  "tr": "Drei Wind­geschwindigkeiten an der Turbine NREL 5 MW, drei Drehpunkte, eine Stange oder zwei, eine ideale Bremse oder ein realer Generator mit Getriebe, gelöst in Ihrem Browser; sechs vorgerechnete Lösungen."
+ },
  "cbb8cae7abce": {
   "src": "<span class=\"psub__n\">4.3</span>Four figures from the study",
   "tr": "<span class=\"psub__n\">4.3</span>Vier Abbildungen aus der Studie"
+ },
+ "cc85fad60dec": {
+  "src": "to the wires, with a real motor and gearbox",
+  "tr": "an die Leitungen, mit realem Motor und Getriebe"
  },
  "cd4683fadf70": {
   "src": "Positions",
@@ -626,6 +678,10 @@
  "ce5dc750e285": {
   "src": "Every block is a physical law with its own derivation. The valve’s metering edges are sharp-edged orifices whose jet contracts to 0.61 of the opening, as the free-streamline theory of Helmholtz and Kirchhoff predicts; the spool answers the controller as a mass on a spring at 60 Hz. The two metres of hose are a slug of oil with inertia and friction, laminar and turbulent. The oil itself is a spring whose stiffness depends on its pressure, through the 0.5 % of air it carries as bubbles. The cylinder has two chambers of different area, seal friction and end stops; the specimen is a spring with damping. The controller sees the world only once a millisecond, through a zero-order hold, and the model is integrated with fourth-order Runge–Kutta at 10 µs, a hundred steps per sample. An independent Python model, with SciPy for the numbers and SymPy for the derivatives, recomputes the equilibria, the linearization, the closed-loop poles, the margins and the whole nonlinear cycle, and agrees with the page.",
   "tr": "Jeder Block ist ein physikalisches Gesetz mit eigener Herleitung. Die Steuerkanten des Ventils sind scharfkantige Blenden, deren Strahl sich auf 0.61 der Öffnung einschnürt, wie die Theorie der freien Stromlinien von Helmholtz und Kirchhoff vorhersagt; der Ventilschieber antwortet dem Regler wie eine Masse an einer Feder bei 60 Hz. Die zwei Meter Schlauch sind eine Ölsäule mit Trägheit und Reibung, laminar und turbulent. Das Öl selbst ist eine Feder, deren Steifigkeit von seinem Druck abhängt, über die 0.5 % Luft, die es als Bläschen mitführt. Der Zylinder hat zwei Kammern unterschiedlicher Fläche, Dichtungsreibung und Endanschläge; die Probe ist eine gedämpfte Feder. Der Regler sieht die Welt nur einmal pro Millisekunde, über ein Halteglied nullter Ordnung, und das Modell wird mit dem Runge-Kutta-Verfahren vierter Ordnung bei 10 µs integriert, hundert Schritte pro Abtastung. Ein unabhängiges Python-Modell, mit SciPy für die Zahlen und SymPy für die Ableitungen, berechnet die Gleichgewichtslagen, die Linearisierung, die Pole des geschlossenen Kreises, die Reserven und den ganzen nichtlinearen Zyklus neu und stimmt mit der Seite überein."
+ },
+ "cf307312f9a3": {
+  "src": "<span class=\"psub__n\">2.2</span>What was checked",
+  "tr": "<span class=\"psub__n\">2.2</span>Was geprüft wurde"
  },
  "d1622a8321e0": {
   "src": "Phyein Usul, home page",
@@ -675,9 +731,21 @@
   "src": "Twelve chapters from the Lagrangian to the sensor budget, 38 numbered equations.",
   "tr": "Zwölf Kapitel von der Lagrange-Funktion bis zum Sensorbudget, 38 nummerierte Gleichungen."
  },
+ "de2db7662cd7": {
+  "src": "Everything is computed fresh in your browser, and nothing is stored.",
+  "tr": "Die Seiten des Projekts sind auf Englisch; alles wird frisch in Ihrem Browser berechnet, und nichts wird gespeichert."
+ },
  "e09212c7d3ea": {
   "src": "Skills",
   "tr": "Kenntnisse"
+ },
+ "e092b29602f1": {
+  "src": "<b>A real generator still delivers.</b> A catalogue motor behind a 111 : 1 gearhead brings 4.3–23.7 mW to the wires, at least 113 times the sensor’s need, and still 32 times if the gearbox has twice its catalogue friction and half its efficiency. The weight is sized for exactly that margin. Turning the slow, low voltage into a supply is the open problem.",
+  "tr": "<b>Auch ein realer Generator liefert genug.</b> Ein Katalogmotor hinter einem Getriebe mit der Untersetzung 111 : 1 bringt 4.3–23.7 mW an die Leitungen, mindestens das 113-Fache des Bedarfs des Sensors, und immer noch das 32-Fache, wenn das Getriebe doppelt so viel Reibung und den halben Wirkungsgrad hat wie im Katalog. Das Gewicht ist genau für diese Reserve bemessen. Offen ist, wie man die langsam wechselnde, niedrige Spannung in eine Versorgung verwandelt."
+ },
+ "e1fb99194062": {
+  "src": "Nine chapters from the Lagrangian to a real generator, 29 numbered equations, every number computed by the models.",
+  "tr": "Neun Kapitel von der Lagrange-Funktion bis zu einem realen Generator, 29 nummerierte Gleichungen, jede Zahl von den Modellen berechnet."
  },
  "e20bd846f6ee": {
   "src": "<span class=\"pfig__n\">Figure 2</span>Collision efficiency for water on water at \\(10\\,{}^{\\circ}\\mathrm{C}\\), \\(850\\ \\mathrm{hPa}\\), on the \\(45 \\times 40\\) grid used by the solver.",
@@ -738,6 +806,10 @@
  "f625abc444ea": {
   "src": "Projects of months rather than afternoons: a question from research, a model rebuilt and checked step by step, a solver you can run, and results you can reproduce. Each project keeps its own pages; this page introduces them.",
   "tr": "Projekte von Monaten statt Nachmittagen: eine Frage aus der Forschung, ein Modell, Schritt für Schritt neu aufgebaut und geprüft, ein Löser, den Sie selbst laufen lassen können, und Ergebnisse, die sich nachrechnen lassen. Jedes Projekt hat seine eigenen Seiten; diese Seite stellt sie vor."
+ },
+ "f72084626360": {
+  "src": "mechanical harvest at nine mountings, 0.5 kg on 10 cm",
+  "tr": "mechanische Ausbeute an neun Befestigungen, 0.5 kg an 10 cm"
  },
  "f72f0eda6052": {
   "src": "Simulations",

@@ -133,67 +133,51 @@
       <article class="proj" id="rotor-pendula" aria-labelledby="rp-title">
         <div class="proj__band">
           <span class="proj__num">02</span>
-          <p>Lecture notes and a simulation · from first principles · 2026<span class="i18n-pending" title="translation being updated"></span></p>
+          <p>مذكّرات محاضرة ومحاكاة · من المبادئ الأولى · 2026</p>
           <span>ميكانيك الأجسام الدوّارة · حصاد الطاقة · الديناميك اللاخطّي</span>
         </div>
         <div class="proj__body">
           <div class="proj__head">
             <div>
               <h2 id="rp-title">Rotor Pendula</h2>
-              <p class="proj__sub">Can a swinging weight on a turbine blade power a sensor, and can chaos or the wind help?<span class="i18n-pending" title="translation being updated"></span></p>
-              <p class="proj__abs">
-                Hang a 0.5 kg weight on a 10 cm rod inside a blade of a real turbine, the NREL 5 MW
-                reference turbine. Each time the blade goes round, gravity pulls the weight first
-                one way and then the other, so it swings once per turn, like a child on a swing
-                pushed once per pass; a generator at the pivot brakes that swing and turns it into
-                electricity. The lecture notes build everything from the pendulum’s Lagrangian:
-                the best brake \(\kappa = |R-1|\), the rod’s trail that is the rotor’s bill, two rods
-                and chaos, a ceiling on random shaking, gusts on a real 5 MW turbine, the blade’s
-                bending, and a real motor and gearbox from a catalogue, which also sets how heavy
-                the weight must be. Every number in the notes is computed by the models, and a simulation page solves the full equations in your browser.
-              <span class="i18n-pending" title="translation being updated"></span></p>
+              <p class="proj__sub">هل يستطيع ثقلٌ متأرجح على شفرة عنفة أن يغذّي حسّاسًا، وهل تساعد الفوضى أو الريح في ذلك؟</p>
+              <p class="proj__abs">علّق ثقلًا من ⁦0.5 kg⁩ على قضيب طوله ⁦10 cm⁩ داخل شفرةٍ من شفرات عنفة حقيقية، هي عنفة <bdi>NREL ⁦5 MW⁩</bdi> المرجعية. في كلّ دورة للشفرة تشدّ الجاذبيةُ الثقلَ إلى جهة ثمّ إلى الأخرى، فيتأرجح مرّةً في كلّ دورة، كطفلٍ على أرجوحة يُدفَع دفعةً واحدة في كلّ مرور؛ ومولّدٌ عند المحور يكبح هذا التأرجح ويحوّله إلى كهرباء. تبني مذكّرات المحاضرة كلّ شيء من لاغرانجيان النوّاس: أفضلَ كبحٍ \(\kappa = |R-1|\)، وتأخّرَ القضيب خلف الشفرة، وهو ما يدفع به الدوّار الثمن، وقضيبين والفوضى، وسقفًا لما يعطيه الاهتزاز العشوائي، وهبّاتِ الريح على عنفة حقيقية بقدرة ⁦5 MW⁩، وانحناءَ الشفرة، ومحرّكًا وعلبة تروس حقيقيّين من كتالوج، وهما يحدّدان أيضًا كتلة الثقل اللازمة. وكلّ رقم في المذكّرات تحسبه النماذج، وصفحةُ محاكاة تحلّ المعادلات الكاملة في متصفّحك.</p>
               <div class="proj__actions">
                 <a class="proj__btn" href="../portfolios/rotor-pendula/index.html">اقرأ مذكّرات المحاضرة</a>
                 <a class="proj__btn proj__btn--ghost" href="../portfolios/rotor-pendula/index.html#sim">شغّل نوّاسًا</a>
               </div>
             </div>
             <dl class="proj__tally" aria-label="أرقام رئيسية">
-              <div><dt class="is-new">17.7–88.6<small>mW</small></dt><dd>mechanical harvest at nine mountings, 0.5 kg on 10 cm<span class="i18n-pending" title="translation being updated"></span></dd></div>
-              <div><dt class="is-new">4.3–23.7<small>mW</small></dt><dd>to the wires, with a real motor and gearbox<span class="i18n-pending" title="translation being updated"></span></dd></div>
-              <div><dt>37.6<small> µW</small></dt><dd>what a blade sensor node needs, from its two datasheets<span class="i18n-pending" title="translation being updated"></span></dd></div>
+              <div><dt class="is-new">17.7–88.6<small>mW</small></dt><dd>الحصاد الميكانيكي عند تسعة مواضع تثبيت، ⁦0.5 kg⁩ على ⁦10 cm⁩</dd></div>
+              <div><dt class="is-new">4.3–23.7<small>mW</small></dt><dd>إلى الأسلاك، بمحرّك وعلبة تروس حقيقيّين</dd></div>
+              <div><dt>37.6<small> µW</small></dt><dd>ما تحتاجه عقدة حسّاس على الشفرة، من ورقتَي بياناتها</dd></div>
               <div><dt>0.735</dt><dd>المزدوج ÷ المفرد، بالكتلة والامتداد نفسيهما</dd></div>
             </dl>
           </div>
 
           <section class="proj__part" aria-labelledby="rp-answer">
-            <h3 id="rp-answer"><span class="psub__n">2.1</span>The answer in five lines<span class="i18n-pending" title="translation being updated"></span></h3>
+            <h3 id="rp-answer"><span class="psub__n">2.1</span>الجواب في خمسة أسطر</h3>
             <ol class="proj__changes">
-              <li><b>There is enough power.</b> At winds of 6 to 10 m/s, with the pivot at 30, 60 or 90 % of the 63 m rotor radius, the pendulum takes 17.7–88.6 mW, more in lighter wind, and the rotor pays for every joule, at most \(1.1\times10^{-7}\) of the turbine’s output.<span class="i18n-pending" title="translation being updated"></span></li>
-              <li><b>One rod beats two.</b> With the same mass and reach a double pendulum gives 0.735 of the single one’s power: its mass sits closer to the pivot, where gravity has less leverage.<span class="i18n-pending" title="translation being updated"></span></li>
-              <li><b>Chaos does not help.</b> The double pendulum is chaotic only near resonance, where no real mounting is, and there the best regular setting beats every chaotic one.<span class="i18n-pending" title="translation being updated"></span></li>
-              <li><b>The wind’s disorder hardly helps.</b> Random shaking has a hard ceiling set by the pendulum’s mass; gusts change the power by a few per cent; the blade’s bending gives a short pendulum almost nothing.<span class="i18n-pending" title="translation being updated"></span></li>
-              <li><b>A real generator still delivers.</b> A catalogue motor behind a 111 : 1 gearhead brings 4.3–23.7 mW to the wires, at least 113 times the sensor’s need, and still 32 times if the gearbox has twice its catalogue friction and half its efficiency. The weight is sized for exactly that margin. Turning the slow, low voltage into a supply is the open problem.<span class="i18n-pending" title="translation being updated"></span></li>
+              <li><b>القدرة كافية.</b> عند رياحٍ سرعتها من 6 إلى ⁦10 m/s⁩، ومع المحور عند 30 أو 60 أو ⁦90 %⁩ من نصف قطر الدوّار البالغ ⁦63 m⁩، يحصد النوّاس ⁦17.7–88.6 mW⁩، وأكثرَ حين تكون الريح أخفّ، والدوّار يدفع ثمن كلّ جول، وهو على الأكثر \(1.1\times10^{-7}\) من خرج العنفة.</li>
+              <li><b>قضيبٌ واحد خيرٌ من اثنين.</b> بالكتلة نفسها والامتداد نفسه يعطي النوّاس المزدوج 0.735 من قدرة النوّاس المفرد: كتلته أقرب إلى المحور، حيث ذراع الجاذبية أقصر.</li>
+              <li><b>الفوضى لا تساعد.</b> النوّاس المزدوج فوضويّ قرب الرنين فقط، حيث لا يقع أيّ موضع تثبيت حقيقي، وهناك يتفوّق أفضل ضبطٍ منتظم على كلّ ضبطٍ فوضوي.</li>
+              <li><b>اضطراب الريح لا يكاد يساعد.</b> للاهتزاز العشوائي سقفٌ صارم تحدّده كتلة النوّاس؛ وهبّات الريح تغيّر القدرة ببضعة في المئة؛ وانحناء الشفرة لا يعطي النوّاسَ القصير شيئًا يُذكر.</li>
+              <li><b>والمولّد الحقيقي يكفي أيضًا.</b> محرّكٌ من الكتالوج خلف علبة تروس بنسبة <bdi>111 : 1</bdi> يوصل ⁦4.3–23.7 mW⁩ إلى الأسلاك، أي 113 ضعفًا على الأقلّ من حاجة الحسّاس، وما يزال 32 ضعفًا إذا كان احتكاك علبة التروس ضعفَ قيمته في الكتالوج وكفاءتها نصفَ قيمتها فيه. وقد حُدّدت كتلة الثقل لهذا الهامش بالضبط. أمّا تحويل الجهد المنخفض البطيء التغيّر إلى مصدر تغذية فهو المسألة المفتوحة.</li>
             </ol>
           </section>
 
           <section class="proj__part" aria-labelledby="rp-audit">
-            <h3 id="rp-audit"><span class="psub__n">2.2</span>What was checked<span class="i18n-pending" title="translation being updated"></span></h3>
-            <p>
-              The turbine’s data come from its published definition (NREL/TP-500-38060) and the sensor’s need from the two
-              chips’ datasheets. The equations are derived twice, by Lagrange and by Newton in the turning frame, and solved
-              with an implicit solver checked against an independent one. A tuned-rod idea is withdrawn in the notes, because
-              gravity detunes it every turn. An independent script, with every constant typed again, re-derives the main
-              formulas in SymPy and re-integrates the runs with SciPy.
-            <span class="i18n-pending" title="translation being updated"></span></p>
+            <h3 id="rp-audit"><span class="psub__n">2.2</span>ما الذي فُحص</h3>
+            <p>تأتي بيانات العنفة من تعريفها المنشور (NREL/TP-500-38060)، وحاجةُ الحسّاس من ورقتَي بيانات الشريحتين. تُشتقّ المعادلات مرّتين، بطريقة لاغرانج وبطريقة نيوتن في الإطار المرجعي الدوّار، وتُحلّ بحلّال ضمني مفحوص مقابل حلّال مستقلّ. وتُسحب في المذكّرات فكرةُ قضيبٍ مضبوطِ التردّد، لأنّ الجاذبية تُخرجه عن ضبطه في كلّ دورة. وبرنامجٌ مستقلّ، كُتبت فيه كلّ ثابتة من جديد، يعيد اشتقاق الصيغ الرئيسية في SymPy ويعيد تكامل التشغيلات في SciPy.</p>
           </section>
 
           <section class="proj__part" aria-labelledby="rp-pages">
-            <h3 id="rp-pages"><span class="psub__n">2.3</span>The project’s own pages<span class="i18n-pending" title="translation being updated"></span></h3>
+            <h3 id="rp-pages"><span class="psub__n">2.3</span>صفحات المشروع</h3>
             <ul class="proj__pages">
-              <li><a href="../portfolios/rotor-pendula/index.html#notes"><b>مذكّرات المحاضرة</b><span>Nine chapters from the Lagrangian to a real generator, 29 numbered equations, every number computed by the models.<span class="i18n-pending" title="translation being updated"></span></span></a></li>
-              <li><a href="../portfolios/rotor-pendula/index.html#sim"><b>المحاكاة</b><span>Three winds on the NREL 5 MW turbine, three pivots, one rod or two, an ideal brake or a real geared generator, solved in your browser; six worked solutions.<span class="i18n-pending" title="translation being updated"></span></span></a></li>
+              <li><a href="../portfolios/rotor-pendula/index.html#notes"><b>مذكّرات المحاضرة</b><span>تسعة فصول من اللاغرانجيان إلى مولّد حقيقي، و29 معادلة مرقّمة، وكلّ رقم تحسبه النماذج.</span></a></li>
+              <li><a href="../portfolios/rotor-pendula/index.html#sim"><b>المحاكاة</b><span>ثلاث سرعات للريح على عنفة <bdi>NREL ⁦5 MW⁩</bdi>، وثلاثة مواضع للمحور، وقضيبٌ واحد أو اثنان، وكابحٌ مثالي أو مولّد حقيقي بعلبة تروس، تُحلّ في متصفّحك؛ وستّة حلول مفصّلة.</span></a></li>
             </ul>
-            <p class="proj__note">Everything is computed fresh in your browser, and nothing is stored.<span class="i18n-pending" title="translation being updated"></span></p>
+            <p class="proj__note">صفحات المشروع نفسها بالإنجليزية؛ كلّ شيء يُحسَب فيها من جديد في متصفّحك، ولا يُخزَّن شيء.</p>
           </section>
         </div>
       </article>
