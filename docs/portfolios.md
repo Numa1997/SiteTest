@@ -197,16 +197,19 @@ Since 23 October 2026 the page at `portfolios/rotor-pendula/index.html` is gener
 source in [`portfolios-src/rotor-pendula/`](../portfolios-src/rotor-pendula/) (its [`README.md`](../portfolios-src/rotor-pendula/README.md)
 gives the commands and checks); the models, model runs and review record are in `notes/rotor-pendula/`.
 
-**What the reader gets.** Two tabs. *Lecture notes* (`#notes`): *Pendula on a Turning Blade*, nine chapters (0–8), 29 numbered
-equations, from the Lagrangian of a pendulum on a turning blade to the best brake, two rods and chaos, a ceiling on random shaking,
-gusts on the NREL 5 MW turbine, the blade's bending, and a real geared generator (maxon RE 25 with a GP 32 C gearhead); every number
-is computed by the study's models (`tools/make_numbers.py`) or listed with its reason (`tools/typed_numbers.py`). *Simulation*
-(`#sim`, since 24 October 2026 the machine Numa asked for): a second blade, a thin uniform rod of mass m = 10 kg and length
-l = 3 m (provisional until it is sized), hinged at the 63 m tip of the NREL 5-MW blade and braked at its hinge; choose a steady wind
-(6, 8 or 10 m/s) and an ideal brake or the geared generator; the page solves the full equations with a Radau IIA integrator in a
-Web Worker built from its physics block, then plays the last turns back. The scene draws the three NREL blades from the chord
-table to one scale and the tip close up to a second, named scale; no angle is magnified. The lecture notes and the six worked
-solutions still describe the earlier point pendulum and are being rewritten.
+**What the reader gets.** Two tabs. *Lecture notes* (`#notes`): *A Second Blade on a Turning Blade*, nine chapters (0–8), 29
+numbered equations. The machine: a second, lighter blade (a thin uniform rod, m = 1 kg, l = 1 m) hinged at the 63 m tip of the
+NREL 5 MW blade, turning in the rotor plane and braked by a generator in the hinge. The notes run from the Lagrangian of the rod on
+the turning blade to the best brake κ* = R − 1 and P* = mg²l/[8Ω(r_p − 2l/3)], the trail that is the rotor's bill, where the mass
+sits, chaos (Lyapunov exponents at three winds and three brakes: every start ends on one regular swing), a ceiling on random
+shaking, gusts on the NREL 5 MW turbine, the blade's sag and shaking at its tip, and a real geared generator (maxon RE 25 with a
+GP 32 C gearhead, ratio 492). Air on the second blade is left out and the notes say so. Every number is computed by the study's
+models (`tools/make_numbers.py`) or listed with its reason (`tools/typed_numbers.py`). *Simulation* (`#sim`): the same machine;
+choose a steady wind (6, 8 or 10 m/s), the brake and an ideal brake or the geared generator; the page solves the full equations
+with a Radau IIA integrator in a Web Worker built from its physics block, then plays the last turns back. The scene draws the
+three NREL blades from the chord table to one scale and the tip close up to a second, named scale; no angle is magnified. Six
+worked solutions (`tools/sim_solutions.js`, numbers from the page's own physics block): the best brake at 8 m/s, the trail as the
+bill at 6 m/s, the three winds, how hard the generator must brake and hold, which gear ratio, and where the power goes.
 Reading a value is a tool: "Read values" on, a click pins a point, and the values show in a strip outside the plots.
 
 **How the page works.** As for the Hydraulic Press Study: each page is embedded as a JSON string and shown in its own `iframe srcdoc`;
@@ -225,7 +228,7 @@ canvases stretched by CSS, so the picture no longer matched the stored positions
 Read values works in `#stage`'s coordinates; the scene canvas sits inside it, so `probe` and `inspect` shift by its offset.
 
 - *Physics block.* The second blade obeys $I\ddot\theta + (ml/2)[\Omega^2 r_p\sin\theta + g\cos(\varphi+\theta)] + c\dot\theta = 0$ with
-  $I = ml^2/3$ about the hinge and $r_p = 63$ m: the point pendulum's equation with $mL^2 \to I$ and $mL \to ml/2$, so $R = 3r_p/(2l)$,
+  $I = ml^2/3$ about the hinge and $r_p = 63$ m (notes (1.3)), so $R = 3r_p/(2l)$,
   $G = 3g/(2l\Omega^2)$, $\kappa = c/(I\Omega)$. The rotor's work $W_\text{in}$ is integrated as the last state of every run, with
   $\dot W_\text{in} = \Omega\,\tau_\text{rot}$ and $\tau_\text{rot} = (ml/2)r_p[\ddot\theta\cos\theta - (\Omega+\dot\theta)^2\sin\theta] + mgr_p\cos\varphi - c\dot\theta$
   from Lagrange's equation for $\varphi$ (checked in SymPy); with the generator the gravity term is $G_p = mgr_p/(I\Omega^2)$, which is
@@ -270,10 +273,13 @@ second while playing; with the panel closed `__dataPanel.running()` is false; Re
 `dataset.json`; the book recomputed from the saved arrays closes to $3\times10^{-9}$ J against $|W_\text{in}|$ up to 6600 J.
 
 **Checks** (from `portfolios-src/rotor-pendula/`): `python3 tools/check_numbers.py` (every number computed or explained),
-`python3 -I check_physics.py` (17 independent SymPy and SciPy checks with retyped constants), `node tools/check_sim.js` (the
-simulation's physics block reproduces the Python engine's 36 reference runs to 1.3e-8), `node tools/check_sim_browser.js` and, with `public/` served,
-`python3 tools/check_combined.py <url>` (both tabs complete, 0 KaTeX errors, solve, tab links, no sideways scroll at
-360–1440 px). Verified on 23 October 2026: all pass.
+`python3 -I check_physics.py` (independent SymPy and SciPy checks with retyped constants: the rod's Lagrangian, the uneven-rotor
+term, κ*, the 45° lag, P*, τ*, the trail identity, the nine stored runs re-integrated, the generator's circuit and two geared runs),
+`node tools/check_sim.js` (the simulation's physics block reproduces the Python engine's nine reference runs, and the geared
+settings of `data/L4_check_2000.json`), `node tools/check_sim_browser.js` (360–1440 px: no errors, no sideways scroll, a hover
+sweep changes nothing, Read values pins and rewrites at most four times a second, every "Try it" button solves) and, with
+`public/` served, `python3 tools/check_combined.py <url>` (both tabs complete, 0 KaTeX errors, solve, tab links, no sideways
+scroll at 360–1440 px).
 
 ## How to update a copy of an app
 

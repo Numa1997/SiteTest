@@ -1,7 +1,0 @@
-PASS tilted hinge, linear: x'' + (R cos a - sin^2 a - G cos a sin phi) x = -G cos phi
-   stiffness 1 at 400 rpm 30 %: alpha = 43.0 deg; d(stiffness)/d(alpha) = -2.4 per rad
-   stiffness 1 at 8 rpm 90 %: alpha = 89.6 deg; d(stiffness)/d(alpha) = -300.8 per rad
-   mean lean at 8 rpm 30 %: integration -0.1283 rad, second-order theory -0.1226 rad
-PASS mean lean agrees with -G^2/(4R(R-1)) within 10 % at the most nonlinear mounting
-ALL PASS
-exit 0

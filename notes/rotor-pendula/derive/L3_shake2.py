@@ -1,11 +1,11 @@
-"""L3: random edgewise shaking with the pendulum loading the blade (two-way). Linear frequency-domain theory.
+"""L3: random edgewise shaking with the second blade loading the mother blade (two-way). Linear frequency-domain theory.
 
 Run: python3 -I L3_shake2.py   (writes L3_shake2.json; PASS/FAIL on the energy bound)
-Coordinates: blade edgewise tip coordinate x (modal mass m_e, frequency w_e, damping zeta_e) and the pendulum's angles.
-The pivot moves along the blade's tangent by u = Phi_p x and the blade section (with the generator's stator) turns by
+Coordinates: blade edgewise tip coordinate x (modal mass m_e, frequency w_e, damping zeta_e) and the second blade's angle.
+The hinge sits at the tip (mode shape 1 there) and moves along the blade's tangent by u = Phi_p x and the blade section (with the generator's stator) turns by
 beta = Phi'_p x (L3_sag.py).  The Lagrangian (rotor at uniform Omega, gravity left out: its 1P effect is in L3_sag.py) is
 linearised by SymPy about rest; the turbulent modal force on the blade is white near w_e, scaled so that the blade WITHOUT the
-pendulum has tip rms sigma_tip.  Generator power = int S_F(w) w^2 |H_rel(w)|^2 c dw over the band.
+second blade has tip rms sigma_tip.  Generator power = int S_F(w) w^2 |H_rel(w)|^2 c dw over the band.
 Energy bound checked: the generator never takes more than the turbulent power fed into the blade.
 """
 import json, math, os, sys
@@ -13,20 +13,27 @@ import numpy as np, sympy as sp
 from scipy.optimize import minimize_scalar
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 import nrel5mw as T5
+import setup as S
 
 t = sp.symbols('t', real=True)
 Om, rp, Pp, Pq, me, ke = sp.symbols('Omega r_p Phi_p Phid_p m_e k_e', real=True)
 
 def linear_mats(n, ms, ls):
-    """Return M, K (numeric functions of Omega) and the generator relative-velocity row vectors for an n-link chain."""
+    """Return M, G, K (numeric functions of Omega) for the mother blade's edgewise mode x and a chain of n uniform rods
+    (masses ms, lengths ls) hinged at the tip; each rod's kinetic and potential energy is integrated over its length."""
     x = sp.Function('x')(t); qs = [sp.Function(f'q{k}')(t) for k in range(n)]
+    s_ = sp.symbols('s', positive=True)
+    ms = [sp.nsimplify(v, rational=True) for v in ms]; ls = [sp.nsimplify(v, rational=True) for v in ls]   # exact: no float residue
     phi = Om*t
     er = sp.Matrix([sp.cos(phi), sp.sin(phi)]); et = sp.Matrix([-sp.sin(phi), sp.cos(phi)])
-    pos = rp*er + Pp*x*et
+    base = rp*er + Pp*x*et
     T = me/2*x.diff(t)**2; V = ke/2*x**2
     for k in range(n):
-        pos = pos + ls[k]*sp.Matrix([sp.cos(phi + qs[k]), sp.sin(phi + qs[k])])
-        v = pos.diff(t); T += ms[k]/2*v.dot(v)
+        dirk = sp.Matrix([sp.cos(phi + qs[k]), sp.sin(phi + qs[k])])
+        pos = base + s_*dirk
+        v = pos.diff(t)
+        T += sp.integrate((ms[k]/ls[k])*v.dot(v)/2, (s_, 0, ls[k]))
+        base = base + ls[k]*dirk
     gen = [x] + qs
     Lg = T - V
     eqs = [sp.diff(Lg.diff(gq.diff(t)), t) - Lg.diff(gq) for gq in gen]
@@ -53,13 +60,13 @@ tab = T5.blade_table(); Lb = T5.R_TIP - T5.R_HUB; xb = tab[:, 0]; mu = tab[:, 2]
 phis = T5.edge_shape(xb); M_E = np.trapezoid(mu*phis**2, xb*Lb)
 W_E = 2*math.pi*T5.F_EDGE_SYS; K_E = M_E*W_E**2
 dshape = lambda xx: sum(cc*(k + 2)*xx**(k + 1) for k, cc in enumerate(T5.EDGE_SHAPE))
-RP = 0.9*T5.R_TIP; XS = (RP - T5.R_HUB)/Lb; PHI = T5.edge_shape(XS); PHID = dshape(XS)/Lb
+RP = S.R_ROT; XS = (RP - T5.R_HUB)/Lb; PHI = T5.edge_shape(XS); PHID = dshape(XS)/Lb
 OM0 = 0.9494
 
-def device(kind, L):
-    if kind == 'single':
-        return linear_mats(1, [0.1], [L]), [np.array([0, 1.0])], [1.0]
-    return linear_mats(2, [0.05, 0.05], [L/2, L/2]), [np.array([0, 1.0, 0]), np.array([0, -1.0, 1.0])], [1.0, 1.0]
+def device(L, m=None):
+    """the second blade: one uniform rod of length L (mass m, by default setup.M_B scaled with the length at its line density)."""
+    m = S.M_B*L/S.L_B if m is None else m
+    return linear_mats(1, [m], [L]), [np.array([0, 1.0])], [1.0]
 
 def gen_power(dev, c, Om, sig_tip, zeta, ws, both=True):
     (Mf, Gf, Kf, d), rows, _ = dev
@@ -84,10 +91,10 @@ def gen_power(dev, c, Om, sig_tip, zeta, ws, both=True):
     return P, Pin, xrms
 
 if __name__ == '__main__':
-    L_t = RP*OM0**2/W_E**2
-    devs = {'single (0.2 m)': device('single', 0.2), 'double (0.2 m)': device('double', 0.2),
-            f'tuned single ({L_t:.2f} m)': device('single', L_t)}
-    print(f'pivot at 90 %: Phi = {PHI:.4f}, slope {PHID:.4f} /m; blade modal mass {M_E:.0f} kg; tuned rod {L_t:.3f} m')
+    L_t = 1.5*RP*OM0**2/W_E**2                      # Omega^2 R = omega_e^2 with R = 3 r_p/(2 l): the second blade tuned to the edgewise mode
+    devs = {f'second blade ({S.L_B:g} m)': device(S.L_B), f'tuned second blade ({L_t:.2f} m)': device(L_t)}
+    print(f'hinge at the tip: Phi = {PHI:.4f}, slope {PHID:.4f} /m; blade modal mass {M_E:.0f} kg; tuned second blade {L_t:.3f} m '
+          f'(same line density, {S.M_B*L_t/S.L_B:.2f} kg)')
     out = []; fails = 0
     for zeta in (0.005, 0.03):
         ws = W_E*np.linspace(0.7, 1.3, 6001)
@@ -106,5 +113,6 @@ if __name__ == '__main__':
                       f"{Pw*1e3:9.3f} mW", flush=True)
                 out.append(dict(zeta=zeta, sig_tip=sig, device=name, c=c, P=P, P_in=Pin, x_rms=xr, P_wander=Pw, q_rms=gen_power.qrms))
                 print(f'      rod swing rms {gen_power.qrms:.3f} rad')
-    json.dump(out, open(os.path.join(os.path.dirname(os.path.abspath(__file__)), 'L3_shake2.json'), 'w'), indent=1)
+    meta = dict(m_e=M_E, f_e=T5.F_EDGE_SYS, Phi_p=PHI, dPhi_p=PHID, r_p=RP, Om0=OM0, L_tuned=L_t, m_tuned=S.M_B*L_t/S.L_B)
+    json.dump(dict(meta=meta, rows=out), open(os.path.join(os.path.dirname(os.path.abspath(__file__)), 'L3_shake2.json'), 'w'), indent=1)
     print('ALL PASS' if fails == 0 else f'{fails} FAIL')

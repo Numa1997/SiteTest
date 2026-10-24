@@ -1,0 +1,12 @@
+6 m/s, R 94.5, G 28.45, kappa = 1.0 kappa* = 93.500: largest Lyapunov per turn -6.50e+00 (min -6.50e+00; small-swing decay -6.42e+00); 240 vs 480 steps differ by 4.4e-03; all 8 starts end on one motion: True
+6 m/s, R 94.5, G 28.45, kappa = 0.1 kappa* = 9.350: largest Lyapunov per turn -2.94e+01 (min -2.94e+01; small-swing decay -2.94e+01); 240 vs 480 steps differ by 1.6e-02; all 8 starts end on one motion: True
+6 m/s, R 94.5, G 28.45, kappa = 0.01 kappa* = 0.935: largest Lyapunov per turn -2.92e+00 (min -2.95e+00; small-swing decay -2.94e+00); 240 vs 480 steps differ by 2.0e-02; all 8 starts end on one motion: True
+8 m/s, R 94.5, G 16.00, kappa = 1.0 kappa* = 93.500: largest Lyapunov per turn -6.44e+00 (min -6.44e+00; small-swing decay -6.42e+00); 240 vs 480 steps differ by 2.4e-08; all 8 starts end on one motion: True
+8 m/s, R 94.5, G 16.00, kappa = 0.1 kappa* = 9.350: largest Lyapunov per turn -2.94e+01 (min -2.94e+01; small-swing decay -2.94e+01); 240 vs 480 steps differ by 1.1e-03; all 8 starts end on one motion: True
+8 m/s, R 94.5, G 16.00, kappa = 0.01 kappa* = 0.935: largest Lyapunov per turn -2.92e+00 (min -2.96e+00; small-swing decay -2.94e+00); 240 vs 480 steps differ by 2.8e-05; all 8 starts end on one motion: True
+10 m/s, R 94.5, G 10.24, kappa = 1.0 kappa* = 93.500: largest Lyapunov per turn -6.43e+00 (min -6.43e+00; small-swing decay -6.42e+00); 240 vs 480 steps differ by 7.2e-07; all 8 starts end on one motion: True
+10 m/s, R 94.5, G 10.24, kappa = 0.1 kappa* = 9.350: largest Lyapunov per turn -2.94e+01 (min -2.94e+01; small-swing decay -2.94e+01); 240 vs 480 steps differ by 6.0e-04; all 8 starts end on one motion: True
+10 m/s, R 94.5, G 10.24, kappa = 0.01 kappa* = 0.935: largest Lyapunov per turn -2.92e+00 (min -2.96e+00; small-swing decay -2.94e+00); 240 vs 480 steps differ by 4.0e-05; all 8 starts end on one motion: True
+RESULT: every start at every wind and brake ends on a regular motion (largest exponent < 1e-3 per turn)
+PASS the exponents do not depend on the step (240 and 480 steps per turn agree within 1 % of the exponent, or 0.01 per turn near zero: enough to fix its sign and size)
+PASS the largest exponent is the decay rate of the small swing, max real part of the roots of s^2 + kappa s + R, within 5 %: +1.2%, -0.1%, -0.6%, +0.4%, -0.0%, -0.5%, +0.2%, -0.1%, -0.4%

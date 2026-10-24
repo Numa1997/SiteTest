@@ -79,6 +79,7 @@ check(f'3. harvested energy over turns 10 to 20 at 240 steps per turn: engine {E
 eng_full = eng20['Y'][0, 2]; rel0 = abs(eng_full/sol.y[2, -1] - 1)
 print(f'   from rest, turns 0 to 20: engine {eng_full:.9f} J against {sol.y[2, -1]:.9f} J (rel diff {rel0:.1e}): the start-up error, '
       f'relaxation time 1/(kappa* Omega) = {1/(kstar*Om):.4f} s against a step of {Tt/240:.4f} s')
+relax8, step8, turn8 = 1/(kstar*Om), Tt/240, Tt                 # at 8 m/s, before the loop below reuses the names
 
 # 4 ------------------------------------------------------------------------------------------------------------------
 SETTLE, MEAS, STEPS = 60, 40, 240
@@ -104,5 +105,8 @@ check('4a. the trail identity P = -(m l/2) r_p Omega^3 <sin theta> holds at ever
 check('4b. at kappa* the full equation gives P* within 1 % at every wind',
       all(abs(r['P']/r['Pstar'] - 1) < 0.01 for r in out if r['mult'] == 1.0))
 json.dump(out, open(os.path.join(os.path.dirname(os.path.abspath(__file__)), 'L1_blade.json'), 'w'), indent=1)
+json.dump(dict(newton_max_rel=worst, order_mean=p_mean, orders=orders, scipy_rel=rel, startup_rel=rel0,
+               relax_s=relax8, step_s=step8, turn_s=turn8, bill_max_rel=max(abs(r['bill']/r['P'] - 1) for r in out)),
+          open(os.path.join(os.path.dirname(os.path.abspath(__file__)), 'L1_blade_checks.json'), 'w'), indent=1)
 print('ALL PASS' if not fails else f'{fails} FAIL')
 raise SystemExit(1 if fails else 0)

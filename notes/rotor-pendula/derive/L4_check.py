@@ -1,62 +1,84 @@
-"""L4: the numbers the notes quote for the geared generator, at the settings L4_scan.py chose in the full equation
-(L4_full.py, version 3), recomputed with a finer step and a narrower smoothing band, and set beside the describing-function
-formula (7.6)-(7.7) of L4_generator.py at the same settings.
+"""L4: the second blade with the geared generator in the full equation (L4_full.py, version 3), at the settings the formula
+(7.6)-(7.7) of L4_generator.py chose, at half and twice its brake, and at 8 m/s with every catalogue ratio at its own best brake.
+The rotor's work is integrated too, so the energy book closes in Python: W = ΔE_kin + ΔE_pot + E_paid + ΔE_spin over the window.
 
-Run: python3 -I L4_check.py [steps per turn] [band factor]   (defaults 2000 and 1e-3; band = factor x swing scale)
-Writes L4_check_<steps>.json.  L4_converge.py compares the 2000- and 4000-step runs.
-
-Earlier versions of this check (git history): version 2 compared the formula with a full model that passed the inertial
-torque through the gearhead without loss; at 10 of 18 mountings the formula missed by more than the 5 % fixed beforehand
-(up to 28 %), and the scan then found an accidental resonance (400 rpm, 30 %, ratio 51) worth 0.44 W that existed only
-because of that free passage.  Version 3 charges the gear loss on every power that flows through the gearhead.
-
-Jamming by the ratio 190 rests on a static argument, exact for a rod that starts at rest on the blade's line: the friction
-torque exceeds gravity's largest torque, N T0/eta > m g L, and there the centrifugal torque is zero, so the rod never starts.
-(Version 2 also ran the smoothed model with the ratio 190: it left a creep of 1e-5 to 4e-3 rad that did not shrink steadily
-with the band on the slow rotors, so the smoothing cannot resolve sticking; the claim rests on the static argument.)
+Run: python3 -I L4_check.py [steps per turn] [band factor]   (defaults 2000 and 1e-3)   Writes L4_check_<steps>.json.
+L4_converge.py compares the 2000- and 4000-step runs.
+The smoothing bands: eps_w = band x swing scale; eps_p = band x (f0 + (kappa_e + j) x swing scale) x swing scale, the gear's own
+power scale (a band on gravity's scale G was some thousand times too wide for this blade and made the paid power 16 % low).
 """
-import glob, json, math, os, sys
+import json, math, os, sys
 import numpy as np
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 from engine import radau_step
-from L4_generator import powers, KT, KE, RC, JM, T0, m, L, g
+import setup as S
+import L4_generator as Gm
 from L4_full import make_rhs
 
 HERE = os.path.dirname(os.path.abspath(__file__))
 nst = int(sys.argv[1]) if len(sys.argv) > 1 else 2000
 efac = float(sys.argv[2]) if len(sys.argv) > 2 else 1e-3
-gen = {(r['rpm'], r['frac']): r for r in json.load(open(os.path.join(HERE, 'L4_generator.json')))}
-rows = sorted([x for p in glob.glob(os.path.join(HERE, 'L4_scan_[0-9].json')) for x in json.load(open(p))],
-              key=lambda x: (-x['rpm'], x['frac']))
-assert len(rows) == 18, len(rows)
+m, l, g = S.M_B, S.L_B, S.G0
+I, mlc = m*l*l/3, m*l/2
+rows = []
+for v, Om, rp in S.mountings():
+    best, cands = Gm.best_for(Om, rp)
+    for mult in (0.5, 1.0, 2.0):
+        ce = min(best['c_e']*mult, best['c_sc']*0.999)
+        rows.append(dict(wind=v, Om=Om, rp=rp, N=best['N'], eta=best['eta'], Jg=best['Jg'], c_e=ce, mult=mult, kind='best'))
+    if v == 8.0:
+        for p in cands:
+            if p['N'] != best['N'] and not p['jammed']:
+                rows.append(dict(wind=v, Om=Om, rp=rp, N=p['N'], eta=p['eta'], Jg=p['Jg'], c_e=p['c_e'], mult=1.0, kind='ratio'))
 n = len(rows)
-Om = np.array([gen[(r['rpm'], r['frac'])]['Om'] for r in rows]); rp = np.array([gen[(r['rpm'], r['frac'])]['rp'] for r in rows])
-R = rp/L; G = g/(Om**2*L); Nn = np.array([float(r['N']) for r in rows]); eta = np.array([r['eta'] for r in rows])
-j = (JM + np.array([r['Jg'] for r in rows]))*Nn**2/(m*L**2)
-ce = np.array([r['c_e'] for r in rows]); ke = ce/(m*L**2*Om); f0 = Nn*T0/(m*L**2*Om**2)
-keep = 1 - ce/(Nn**2*KT*KE/RC); sc = np.array([max(r['Theta'], 1e-2) for r in rows])
-F = make_rhs(R, G, j, f0, ke, eta, keep, efac*sc, efac*G*sc)
+A = lambda k: np.array([r[k] for r in rows], float)
+Om, rp, Nn, eta, Jg, ce = A('Om'), A('rp'), A('N'), A('eta'), A('Jg'), A('c_e')
+R = mlc*rp/I; G = mlc*g/(I*Om**2); Gp = m*g*rp/(I*Om**2)
+j = (Gm.JM + Jg)*Nn**2/I; ke = ce/(I*Om); f0 = Nn*Gm.T0/(I*Om**2); keep = 1 - ce/(Nn**2*Gm.KT*Gm.KE/Gm.RC)
+form = [Gm.powers(r['Om'], r['rp'], r['N'], r['eta'], r['Jg'], r['c_e']) for r in rows]
+sc = np.array([min(max(f['Theta'], 1e-2), 0.5) for f in form])
+F = make_rhs(R, G, j, f0, ke, eta, keep, efac*sc, efac*(f0 + (ke + j)*sc)*sc, Gp=Gp)
 settle, meas = 100, 20
-h = 2*math.pi/nst; Y = np.zeros((n, 5))
+h = 2*math.pi/nst; Y = np.zeros((n, 6)); maxit = 0; ncap = 0; capErr = 0.0
+def mech(t, Y):                                      # kinetic + potential energy of the blade, unit I Omega^2 (phi = t)
+    th, w = Y[:, 0], Y[:, 1]
+    T = 0.5*(1 + w)**2 + 0.5*m*rp**2/I + (mlc*rp/I)*(1 + w)*np.cos(th)
+    V = Gp*np.sin(t) + G*np.sin(t + th)
+    return T + V, 0.5*j*w**2                          # and the motor's spin energy
 for k in range(nst*(settle + meas)):
     if k == nst*settle:
-        Y0 = Y.copy(); thmax = np.zeros(n)
-    Y, _ = radau_step(F, k*h, Y, h)
+        Y0 = Y.copy(); thmax = np.zeros(n); E0, S0 = mech(k*h, Y)
+    Y, it = radau_step(F, k*h, Y, h); maxit = max(maxit, it)
+    if it == 12:
+        ncap += 1; capErr = max(capErr, radau_step.last_err)
     if k >= nst*settle:
         thmax = np.maximum(thmax, np.abs(Y[:, 0]))
-u = m*L**2*Om**3; T = 2*math.pi*meas
-Pl = (Y[:, 2] - Y0[:, 2])/T*u; Pp = (Y[:, 3] - Y0[:, 3])/T*u; Pf = (Y[:, 4] - Y0[:, 4])/T*u
+E1, S1 = mech(nst*(settle + meas)*h, Y)
+u = I*Om**3; T = 2*math.pi*meas
+Pl = (Y[:, 2] - Y0[:, 2])/T*u; Pp = (Y[:, 3] - Y0[:, 3])/T*u; Pf = (Y[:, 4] - Y0[:, 4])/T*u; Pw = (Y[:, 5] - Y0[:, 5])/T*u
+book = ((E1 - E0) + (Y[:, 3] - Y0[:, 3]) - (Y[:, 5] - Y0[:, 5]))*I*Om**2     # paid includes the spin's change (k x theta')
 out = []
 for i, r in enumerate(rows):
-    fo = powers(Om[i], rp[i], r['N'], r['eta'], r['Jg'], r['c_e'])          # the formula (7.6)-(7.7) at the same setting
-    out.append(dict(rpm=r['rpm'], frac=r['frac'], N=r['N'], eta=r['eta'], c_e=r['c_e'], R_load=r['R_load'], Pstar=gen[(r['rpm'], r['frac'])]['Pstar'],
-                    R=float(R[i]), j=float(j[i]), f_over_G=float(f0[i]/(eta[i]*G[i])), P_load=float(Pl[i]), P_paid=float(Pp[i]), P_fric=float(Pf[i]),
-                    Theta=float(thmax[i]), P_load_formula=fo['P_load'], P_paid_formula=fo['P_paid'], Theta_formula=fo['Theta'],
-                    P_load_scan=r['P_load']))
-    print(f"{r['rpm']:3d} rpm {r['frac']*100:.0f} %, N {r['N']:3d}, R_L {r['R_load']:8.2f} ohm: load {Pl[i]*1e3:7.3f} mW (scan, 1000 steps: "
-          f"{r['P_load']*1e3:7.3f}), paid {Pp[i]*1e3:7.2f} mW, friction {Pf[i]*1e3:6.2f} mW, swing {thmax[i]:.3f} rad; formula: load "
-          f"{fo['P_load']*1e3:7.3f} mW ({(Pl[i]/fo['P_load'] - 1)*100 if fo['P_load'] > 0 else float('nan'):+.1f} %), swing {fo['Theta']:.3f} rad")
-static = [(N, eta_, N*T0/eta_ > m*g*L) for N, eta_ in ((190, 0.70), (246, 0.60), (492, 0.60))]
-print('jam (static argument, friction torque N T0/eta > m g L):', ', '.join(f'N = {N}: {"jams" if s else "does not jam"}' for N, _, s in static))
+    fo = form[i]
+    out.append(dict(wind=r['wind'], N=r['N'], eta=r['eta'], c_e=r['c_e'], mult=r['mult'], kind=r['kind'], R_load=Nn[i]**2*Gm.KT*Gm.KE/ce[i] - Gm.RC,
+                    Pstar=S.pstar(r['Om']), j=float(j[i]), f_over_G=float(f0[i]/(eta[i]*G[i])), P_load=float(Pl[i]), P_paid=float(Pp[i]),
+                    P_fric=float(Pf[i]), P_rotor=float(Pw[i]), book_J=float(book[i]), Theta=float(thmax[i]), P_load_formula=fo['P_load'],
+                    P_paid_formula=fo['P_paid'], Theta_formula=fo['Theta']))
+    print(f"{r['wind']:.0f} m/s, N {r['N']:>5}, c_e x {r['mult']:.1f} ({r['kind']}): load {Pl[i]*1e3:8.3f} mW (formula {fo['P_load']*1e3:8.3f}, "
+          f"{(Pl[i]/fo['P_load'] - 1)*100:+.1f} %), paid {Pp[i]*1e3:8.3f} mW, rotor {Pw[i]*1e3:8.3f} mW, friction {Pf[i]*1e3:7.3f} mW, "
+          f"swing {thmax[i]:.3f} rad (formula {fo['Theta']:.3f}); book {book[i]:+.1e} J")
+fails = 0
+def check(name, ok):
+    global fails
+    fails += (not ok); print(('PASS ' if ok else 'FAIL ') + name)
+nsteps = nst*(settle + meas)
+check(f'Newton converged to 1e-12 within 12 iterations, or, in the {ncap} of {nsteps} steps ({ncap/nsteps:.1e}) where it stopped at 12, its last '
+      f'correction was {capErr:.1e} relative, below 1e-9; and such steps are fewer than 1 in 1000', ncap/nsteps < 1e-3 and capErr < 1e-9)
+check('the energy book closes over the 20 measured turns at every setting (|residual| < 1e-6 J)', np.max(np.abs(book)) < 1e-6)
+bst = [o for o in out if o['kind'] == 'best']
+check('at every wind the formula\'s brake is within the full equation\'s best of the three brakes tried, or within 5 % of it',
+      all(max(b['P_load'] for b in bst if b['wind'] == w)/next(b['P_load'] for b in bst if b['wind'] == w and b['mult'] == 1.0) < 1.05 for w in S.WINDS))
+check('the formula (7.6)-(7.7) is within 10 % of the full equation at the chosen settings',
+      all(abs(b['P_load']/b['P_load_formula'] - 1) < 0.10 for b in bst if b['mult'] == 1.0))
 json.dump(out, open(os.path.join(HERE, f'L4_check_{nst}.json'), 'w'), indent=1)
-sys.exit(0 if all(s for _, _, s in static) else 1)
+raise SystemExit(1 if fails else 0)

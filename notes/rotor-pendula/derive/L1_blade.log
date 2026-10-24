@@ -1,0 +1,17 @@
+PASS 1. RigidBlade accelerations = Newton summed over the blade (Gauss-Legendre, exact) in the blade frame at 400 random states, and the summed inertia = m l^2/3 (max rel diff 4.0e-15)
+   successive differences of theta(3 turns): 5.83e-07, 1.79e-08, 2.96e-10, 1.18e-11 ; orders 5.02, 5.92, 4.65
+PASS 2. observed order of Radau IIA on the second blade: mean over 8 to 128 steps per turn 5.20, within 4.5 to 5.5 (single halvings scatter before the asymptotic range)
+PASS 3. harvested energy over turns 10 to 20 at 240 steps per turn: engine 13.1693714442 J, SciPy DOP853 on Newton's route 13.1693714443 J (rel diff 1.8e-12)
+   from rest, turns 0 to 20: engine 26.442801920 J against 26.442822929 J (rel diff 7.9e-07): the start-up error, relaxation time 1/(kappa* Omega) = 0.0112 s against a step of 0.0273 s
+   6 m/s, kappa = 0.5 kappa*: P  219.5208 mW (P* 268.2090), swing 0.27187 rad, trail -1.901e-02 rad, bill  219.5208 mW
+   6 m/s, kappa = 1.0 kappa*: P  267.3757 mW (P* 268.2090), swing 0.21368 rad, trail -2.307e-02 rad, bill  267.3757 mW
+   6 m/s, kappa = 2.0 kappa*: P  213.7447 mW (P* 268.2090), swing 0.13558 rad, trail -1.833e-02 rad, bill  213.7447 mW
+   8 m/s, kappa = 0.5 kappa*: P  162.1175 mW (P* 201.1568), swing 0.15304 rad, trail -5.865e-03 rad, bill  162.1175 mW
+   8 m/s, kappa = 1.0 kappa*: P  200.9470 mW (P* 201.1568), swing 0.12076 rad, trail -7.263e-03 rad, bill  200.9470 mW
+   8 m/s, kappa = 2.0 kappa*: P  160.7271 mW (P* 201.1568), swing 0.07646 rad, trail -5.798e-03 rad, bill  160.7271 mW
+   10 m/s, kappa = 0.5 kappa*: P  129.1326 mW (P* 160.9254), swing 0.09797 rad, trail -2.386e-03 rad, bill  129.1326 mW
+   10 m/s, kappa = 1.0 kappa*: P  160.8556 mW (P* 160.9254), swing 0.07739 rad, trail -2.971e-03 rad, bill  160.8556 mW
+   10 m/s, kappa = 2.0 kappa*: P  128.6751 mW (P* 160.9254), swing 0.04896 rad, trail -2.375e-03 rad, bill  128.6751 mW
+PASS 4a. the trail identity P = -(m l/2) r_p Omega^3 <sin theta> holds at every run to 0.1 %
+PASS 4b. at kappa* the full equation gives P* within 1 % at every wind
+ALL PASS
