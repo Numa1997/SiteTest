@@ -7,6 +7,18 @@
   "src": "<span class=\"sw sw--ink\"></span>x(t), played",
   "tr": "<span class=\"sw sw--ink\"></span>x(t), abgespielt"
  },
+ "04a31ac3bddb": {
+  "src": "the block swinging with this amplitude about \\(x^*\\). The Bode plot draws this closed-loop response \\(H(i\\Omega)\\) in ink, with the bare plant \\(G(i\\Omega)\\) dashed behind it: the controller moves the peak to the new natural frequency, flattens it with \\(K_d\\), and the integral pushes the response at low frequencies to zero, because a slow push is simply held off. The page grades its RK4 run against the exact closed-loop solution as well: the particular solution of (16) plus the free motion of (13), propagated sample by sample with the exact matrix exponential \\(e^{A\\,\\Delta t}\\) of the loop’s state matrix.",
+  "tr": "wobei der Block mit dieser Amplitude um \\(x^*\\) schwingt. Das Bode-Diagramm zeichnet diese Antwort \\(H(i\\Omega)\\) des geschlossenen Regelkreises dunkel durchgezogen, mit der bloßen Strecke \\(G(i\\Omega)\\) gestrichelt dahinter: Der Regler verschiebt den Gipfel zur neuen Eigenfrequenz, flacht ihn mit \\(K_d\\) ab, und das Integral drückt die Antwort bei niedrigen Frequenzen auf null, weil ein langsamer Antrieb einfach ausgeregelt wird. Die Seite prüft ihren RK4-Lauf auch gegen die exakte Lösung des geschlossenen Regelkreises: die partikuläre Lösung von (16) plus die freie Bewegung von (13), Abtastwert für Abtastwert fortgeschrieben mit der exakten Matrixexponentialfunktion \\(e^{A\\,\\Delta t}\\) der Zustandsmatrix des Regelkreises."
+ },
+ "04e709d5a629": {
+  "src": "The damper is drawn as what it is, a piston in oil. Its force \\(-c\\dot x\\) always points against the motion, and its oil darkens while it turns energy into heat, by \\(P_\\text{loss} = c\\dot x^2\\) as a fraction of the largest value in the run. The three arrows over the block are the forces on it, the coil’s \\(F\\), the damper’s \\(-c\\dot x\\) and the spring’s \\(-kx\\), each drawn twice as long as the stretch of the spring that would carry it, so they share the scale of the motion; their sum is \\(m\\ddot x\\). Near resonance the spring’s arrow is about \\(Q\\) times longer than the other two, while the coil’s and the damper’s arrows nearly cancel: the driver only replaces what the damper takes, as §7 says. The bars at the top keep the books of (8): the work \\(W_\\text{in}\\) the coil has done since \\(t = 0\\), the heat \\(W_\\text{loss}\\) the damper has made, and the energy \\(E\\) the oscillator holds now, which is their difference.",
+  "tr": "Der Dämpfer ist so gezeichnet, wie er ist: als Kolben in Öl. Seine Kraft \\(-c\\dot x\\) zeigt stets gegen die Bewegung, und sein Öl wird dunkler, während er Energie in Wärme umwandelt, nach Maßgabe von \\(P_\\text{loss} = c\\dot x^2\\) als Bruchteil des größten Werts im Lauf. Die drei Pfeile über dem Block sind die Kräfte auf ihn, die Kraft \\(F\\) der Spule, die Kraft \\(-c\\dot x\\) des Dämpfers und die Kraft \\(-kx\\) der Feder, jede doppelt so lang gezeichnet wie die Dehnung der Feder, die sie tragen würde, sodass sie den Maßstab der Bewegung teilen; ihre Summe ist \\(m\\ddot x\\). Nahe der Resonanz ist der Pfeil der Feder etwa \\(Q\\)-mal so lang wie die beiden anderen, während sich die Pfeile von Spule und Dämpfer nahezu aufheben: Der Erreger ersetzt nur, was der Dämpfer entnimmt, wie §7 sagt. Die Balken oben führen Buch über (8): die Arbeit \\(W_\\text{in}\\), die die Spule seit \\(t = 0\\) verrichtet hat, die Wärme \\(W_\\text{loss}\\), die der Dämpfer erzeugt hat, und die Energie \\(E\\), die der Oszillator jetzt enthält, also ihre Differenz."
+ },
+ "06c40c43f060": {
+  "src": "The driver on the screen works like a loudspeaker, or like the electrodynamic shakers that engineers use to vibrate test pieces. A coil of wire is wound on a light tube fixed to the right face of the block, and the tube slides into the narrow gap of a magnet that stands on the floor. In the gap the field \\(B\\) points straight out from the central pole, so every piece of the winding is perpendicular to it, and the Lorentz force \\(\\mathrm d\\vec F = I\\,\\mathrm d\\vec\\ell \\times \\vec B\\) on each piece points along the axis. Added up over the length \\(\\ell\\) of wire in the gap, it gives",
+  "tr": "Der Erreger auf dem Bildschirm arbeitet wie ein Lautsprecher oder wie die elektrodynamischen Schwingerreger (Shaker), mit denen Ingenieure Prüfkörper in Schwingung versetzen: ein Tauchspulantrieb. Eine Drahtspule ist auf ein leichtes Rohr gewickelt, das an der rechten Seitenfläche des Blocks befestigt ist, und das Rohr gleitet in den schmalen Luftspalt eines Magneten, der auf dem Boden steht. Im Luftspalt zeigt das Feld \\(B\\) radial vom Mittelpol nach außen, sodass jedes Stück der Wicklung senkrecht auf ihm steht, und die Lorentzkraft \\(\\mathrm d\\vec F = I\\,\\mathrm d\\vec\\ell \\times \\vec B\\) auf jedes Stück zeigt in Richtung der Achse. Summiert über die Länge \\(\\ell\\) des Drahtes im Luftspalt ergibt sie"
+ },
  "09c5fee32110": {
   "src": "<span class=\"psec__n\">10</span>What the model leaves out",
   "tr": "<span class=\"psec__n\">10</span>Was das Modell weglässt"
@@ -19,6 +31,10 @@
   "src": "Formula (4) contains the whole of Figure 2. Drive slowly, \\(\\Omega \\ll \\omega_0\\), and the block simply follows the force, stretched by the static amount \\(F_0/k\\). Drive fast, \\(\\Omega \\gg \\omega_0\\), and the block hardly moves: its inertia wins. In between, near \\(\\Omega = \\omega_0\\), the spring term and the inertia term in (3) cancel, only the small damping term is left to limit the motion, and the amplitude soars. This is <em>resonance</em>.",
   "tr": "Formel (4) enthält die ganze Abbildung 2. Erregt man langsam, \\(\\Omega \\ll \\omega_0\\), so folgt der Block einfach der Kraft und wird um den statischen Betrag \\(F_0/k\\) gedehnt. Erregt man schnell, \\(\\Omega \\gg \\omega_0\\), so bewegt sich der Block kaum: Seine Trägheit setzt sich durch. Dazwischen, nahe \\(\\Omega = \\omega_0\\), heben sich der Federterm und der Trägheitsterm in (3) auf, nur der kleine Dämpfungsterm begrenzt die Bewegung noch, und die Amplitude schießt in die Höhe. Das ist die <em>Resonanz</em>."
  },
+ "0ad60aa7bdca": {
+  "src": "So far the force has been decided by someone who does not look at the block. Now let the force look. A sensor measures \\(x\\), a controller compares it with a target \\(r\\) and computes the current the coil shall carry, and the force on the block becomes the outside push plus the controller’s share \\(u\\). The simplest useful controller uses the error \\(e = r - x\\), its running sum and the measured speed:",
+  "tr": "Bisher wurde die Kraft von jemandem bestimmt, der nicht auf den Block schaut. Nun lassen wir die Kraft hinsehen. Ein Sensor misst \\(x\\), ein Regler vergleicht es mit einer Sollposition \\(r\\) und berechnet den Strom, den die Spule führen soll, und die Kraft auf den Block wird zum äußeren Antrieb plus dem Anteil \\(u\\) des Reglers. Der einfachste brauchbare Regler verwendet die Regelabweichung \\(e = r - x\\), ihre laufende Summe und die gemessene Geschwindigkeit:"
+ },
  "0b38bea50d13": {
   "src": "R. P. Feynman, R. B. Leighton and M. Sands, <em>The Feynman Lectures on Physics</em>, Vol. I, online edition: <a href=\"https://www.feynmanlectures.caltech.edu/I_23.html\">chapter 23, Resonance</a> (the complex-number method of Section 3.1) and <a href=\"https://www.feynmanlectures.caltech.edu/I_24.html\">chapter 24, Transients</a> (the mean power of Section 7 and the dying free motion of Section 3.2).",
   "tr": "R. P. Feynman, R. B. Leighton und M. Sands, <em>The Feynman Lectures on Physics</em>, Bd. I, Online-Ausgabe: <a href=\"https://www.feynmanlectures.caltech.edu/I_23.html\">Kapitel 23, Resonance</a> (die Methode mit komplexen Zahlen aus Abschnitt 3.1) und <a href=\"https://www.feynmanlectures.caltech.edu/I_24.html\">Kapitel 24, Transients</a> (die mittlere Leistung aus Abschnitt 7 und die abklingende freie Bewegung aus Abschnitt 3.2)."
@@ -27,9 +43,25 @@
   "src": "Driven oscillations: how a system answers a push it does not control",
   "tr": "Erzwungene Schwingungen: wie ein System auf einen Antrieb antwortet, den es nicht selbst steuert"
  },
+ "0b7ff306b537": {
+  "src": "<b>Frequency response</b> · amplitude function <span class=\"tx\">\\(A(f)\\)</span> and phase difference <span class=\"tx\">\\(\\varphi(f)\\)</span>",
+  "tr": "<b>Frequenzgang</b> · Amplitudenfunktion <span class=\"tx\">\\(A(f)\\)</span> und Phasendifferenz <span class=\"tx\">\\(\\varphi(f)\\)</span>"
+ },
+ "0b866071d7a9": {
+  "src": "The outside push makes the equations depend on the clock, and a fixed point no longer exists: the block cannot rest while it is pushed. What replaces it is the steady swing of (4) or (16), which in phase space is an ellipse around the fixed point,",
+  "tr": "Der äußere Antrieb macht die Gleichungen von der Uhr abhängig, und einen Fixpunkt gibt es nicht mehr: Der Block kann nicht ruhen, während er angetrieben wird. An seine Stelle tritt die stationäre Schwingung aus (4) oder (16), die im Phasenraum eine Ellipse um den Fixpunkt ist,"
+ },
+ "0bb3d3a07886": {
+  "src": "The cubic always has one real root, and for positive coefficients it is negative; the other two decide stability, and (15) is exactly the condition that their real parts are negative. On the boundary, \\((c + K_d)(k + K_p) = mK_i\\), the cubic factors as \\(\\left(m\\lambda + c + K_d\\right)\\left(\\lambda^2 + \\omega_\\text{cl}^2\\right)\\): two eigenvalues sit on the imaginary axis at \\(\\pm i\\omega_\\text{cl}\\), and the loop rings forever at the frequency of its stiffer spring; past the boundary the ringing grows. With the PID preset, \\(\\lambda = -1.982 \\pm 4.955\\,i\\) and \\(-0.351\\ \\mathrm{s^{-1}}\\). The fast pair is the PD loop’s spiral, almost unchanged; the slow real root belongs to the memory, and its time \\(1/0.351\\ \\mathrm{s^{-1}} = 2.85\\ \\mathrm s\\) is how long the integral takes to remove the last of the error. In the example of §10 with \\(K_i = 60\\), \\(\\lambda = +1.227 \\pm 4.490\\,i\\) and \\(-2.769\\ \\mathrm{s^{-1}}\\): the fixed point is an <em>unstable focus</em>, and the paths spiral out.",
+  "tr": "Das kubische Polynom hat stets eine reelle Nullstelle, und bei positiven Koeffizienten ist sie negativ; die beiden anderen entscheiden über die Stabilität, und (15) ist genau die Bedingung dafür, dass ihre Realteile negativ sind. Auf dem Rand, \\((c + K_d)(k + K_p) = mK_i\\), zerfällt das Polynom in \\(\\left(m\\lambda + c + K_d\\right)\\left(\\lambda^2 + \\omega_\\text{cl}^2\\right)\\): Zwei Eigenwerte liegen auf der imaginären Achse bei \\(\\pm i\\omega_\\text{cl}\\), und der Regelkreis schwingt für immer mit der Frequenz seiner steiferen Feder; jenseits des Randes wächst das Schwingen an. Mit der PID-Voreinstellung ist \\(\\lambda = -1.982 \\pm 4.955\\,i\\) und \\(-0.351\\ \\mathrm{s^{-1}}\\). Das schnelle Paar ist die Spirale des PD-Regelkreises, fast unverändert; die langsame reelle Nullstelle gehört zum Gedächtnis, und ihre Zeit \\(1/0.351\\ \\mathrm{s^{-1}} = 2.85\\ \\mathrm s\\) gibt an, wie lange das Integral braucht, um den letzten Rest der Regelabweichung zu beseitigen. Im Beispiel aus §10 mit \\(K_i = 60\\) ist \\(\\lambda = +1.227 \\pm 4.490\\,i\\) und \\(-2.769\\ \\mathrm{s^{-1}}\\): Der Fixpunkt ist ein <em>instabiler Strudelpunkt</em>, und die Bahnen winden sich spiralförmig nach außen."
+ },
  "0c31f7c8f547": {
   "src": "The amplitude is largest where this is smallest, where the bracket vanishes: \\(\\Omega_r = \\omega_0\\sqrt{1-2\\zeta^2}\\), that is \\(f_r = 0.4987\\ \\mathrm{Hz}\\) for the defaults. For \\(\\zeta \\ge 1/\\sqrt2\\) the bracket cannot vanish for any drive; the denominator is then smallest at \\(\\Omega = 0\\), the amplitude only falls as the drive speeds up, and there is no peak at all.",
   "tr": "Die Amplitude ist dort am größten, wo dieser Ausdruck am kleinsten ist, nämlich dort, wo die Klammer verschwindet: \\(\\Omega_r = \\omega_0\\sqrt{1-2\\zeta^2}\\), das heißt \\(f_r = 0.4987\\ \\mathrm{Hz}\\) bei den Voreinstellungen. Für \\(\\zeta \\ge 1/\\sqrt2\\) kann die Klammer bei keiner Erregerfrequenz verschwinden; der Nenner ist dann bei \\(\\Omega = 0\\) am kleinsten, die Amplitude nimmt mit steigender Erregerfrequenz nur noch ab, und es gibt gar keinen Gipfel."
+ },
+ "0d8ac3e98a8f": {
+  "src": "so a source that drives the current \\(I_0\\cos\\Omega t\\) through the coil pushes the block with exactly the force of (1), with \\(F_0 = B\\ell I_0\\). The page takes \\(B\\ell = 10\\ \\mathrm{T\\,m}\\), for instance \\(B = 1\\ \\mathrm T\\) and 10 m of wire, about 100 turns of a coil 3.2 cm across; then \\(I_0 = F_0/(B\\ell)\\) is 0.1 A with the defaults and 0.5 A at the largest force of 5 N. The dots and crosses on the winding show the current: a dot is current coming out of the screen, a cross current going into it, and when they swap, the force turns round. Two conditions keep this force a function of time alone, as §1 requires of an outside push. The winding must never leave the uniform field of the gap, which is why the gap on the screen is longer than the winding by the full travel of the block. Here the drawing is generous: with the defaults the block travels about a metre, while the coils of real shakers travel millimetres to a few centimetres, so a real magnet of this length would be a large machine; the physics does not change with the stroke as long as the field stays uniform. And the source must drive the current, not a voltage.",
+  "tr": "eine Quelle, die den Strom \\(I_0\\cos\\Omega t\\) durch die Spule treibt, drückt den Block also genau mit der Kraft aus (1), mit \\(F_0 = B\\ell I_0\\). Die Seite nimmt \\(B\\ell = 10\\ \\mathrm{T\\,m}\\) an, zum Beispiel \\(B = 1\\ \\mathrm T\\) und 10 m Draht, also etwa 100 Windungen einer Spule von 3.2 cm Durchmesser; dann beträgt \\(I_0 = F_0/(B\\ell)\\) bei den Voreinstellungen 0.1 A und bei der größten Kraft von 5 N 0.5 A. Die Punkte und Kreuze auf der Wicklung zeigen den Strom: Ein Punkt ist Strom, der aus dem Bildschirm herauskommt, ein Kreuz Strom, der in ihn hineinfließt, und wenn sie die Plätze tauschen, kehrt sich die Kraft um. Zwei Bedingungen sorgen dafür, dass diese Kraft eine Funktion der Zeit allein bleibt, wie §1 es von einem äußeren Antrieb verlangt. Die Wicklung darf das homogene Feld des Luftspalts nie verlassen; deshalb ist der Luftspalt auf dem Bildschirm um den vollen Weg des Blocks länger als die Wicklung. Hier ist die Zeichnung großzügig: Bei den Voreinstellungen legt der Block etwa einen Meter zurück, während die Spulen realer Shaker Millimeter bis einige Zentimeter Hub haben; ein realer Magnet dieser Länge wäre also eine große Maschine. An der Physik ändert der Hub nichts, solange das Feld homogen bleibt. Und die Quelle muss den Strom vorgeben, nicht eine Spannung."
  },
  "0f6afc311439": {
   "src": "Lecture note · Fig. 9 · control systems",
@@ -43,6 +75,14 @@
   "src": "<span>3</span>The exact solution&nbsp;★",
   "tr": "<span>3</span>Die exakte Lösung&nbsp;★"
  },
+ "13100d76a226": {
+  "src": "<span class=\"psub__n\">13.1</span>Further reading",
+  "tr": "<span class=\"psub__n\">13.1</span>Weiterführende Literatur"
+ },
+ "133926791d0b": {
+  "src": "So far the force has been decided by someone who does not look at the block. Now let the force look. A sensor measures \\(x\\), a controller compares it with a target \\(r\\) and computes the current the coil shall carry, and the force on the block becomes the outside push plus the controller’s share \\(u\\). This force depends on where the block is: the push is no longer from outside alone, which is the whole point of feedback. The simplest useful controller uses the error \\(e = r - x\\), its running sum and the measured speed:",
+  "tr": "Bisher wurde die Kraft von jemandem bestimmt, der nicht auf den Block schaut. Nun lassen wir die Kraft hinsehen. Ein Sensor misst \\(x\\), ein Regler vergleicht es mit einer Sollposition \\(r\\) und berechnet den Strom, den die Spule führen soll, und die Kraft auf den Block wird zum äußeren Antrieb plus dem Anteil \\(u\\) des Reglers. Diese Kraft hängt davon ab, wo sich der Block befindet: Der Antrieb kommt nicht mehr allein von außen, und genau darin besteht die Rückkopplung. Der einfachste brauchbare Regler verwendet die Regelabweichung \\(e = r - x\\), ihre laufende Summe und die gemessene Geschwindigkeit:"
+ },
  "1416004c7fbb": {
   "src": "<b>Abstract.</b> Almost every machine is pushed by something outside it: a car body by the road, a building by the wind, a loudspeaker cone by the amplifier. This note studies the simplest such system, a mass on a spring with a damper, driven by a force \\(F_0\\cos\\Omega t\\) that someone else decides. We write down its equation of motion, solve it exactly, and use the exact answer to grade the numerical solution the page stores. Along the way we meet resonance, phase lag and the quality factor, and we translate everything into the language of control engineering: input, output, transfer function and Bode plot. Sections marked ★ carry the heavier mathematics and can be skipped on a first reading.",
   "tr": "<b>Zusammenfassung.</b> Fast jede Maschine wird von etwas außerhalb ihrer selbst angeregt: eine Karosserie von der Straße, ein Gebäude vom Wind, eine Lautsprechermembran vom Verstärker. Dieses Skript untersucht das einfachste solche System, eine Masse an einer Feder mit einem Dämpfer, angetrieben von einer Kraft \\(F_0\\cos\\Omega t\\), die jemand anderes festlegt. Wir schreiben seine Bewegungsgleichung auf, lösen sie exakt und nutzen die exakte Lösung, um die numerische Lösung zu prüfen, die die Seite speichert. Dabei begegnen uns Resonanz, Phasennacheilung und der Gütefaktor, und wir übersetzen alles in die Sprache der Regelungstechnik: Eingang, Ausgang, Übertragungsfunktion und Bode-Diagramm. Abschnitte mit ★ enthalten die schwierigere Mathematik und können beim ersten Lesen übersprungen werden."
@@ -50,6 +90,10 @@
  "14a2f9ce51c5": {
   "src": "Numa Koudsie · for school students and first- and second-year undergraduates",
   "tr": "Numa Koudsie · für Schülerinnen und Schüler sowie Studierende des ersten und zweiten Studienjahres"
+ },
+ "18093f3de4c3": {
+  "src": "<span class=\"sw sw--dot\"></span>target r",
+  "tr": "<span class=\"sw sw--dot\"></span>Sollposition r"
  },
  "1a1b7209c5ef": {
   "src": "<span class=\"psub__n\">10.1</span>Further reading",
@@ -59,13 +103,45 @@
   "src": "It is tidier to describe the plant by two numbers with a direct meaning. The <em>natural frequency</em> \\(\\omega_0 = \\sqrt{k/m}\\) is the angular frequency at which the block would ring with no damper; the <em>damping ratio</em> \\(\\zeta = c/(2\\sqrt{km})\\) says how quickly the ringing dies, from \\(\\zeta = 0\\) (forever) to \\(\\zeta = 1\\) (no ringing at all). Dividing (1) by \\(m\\),",
   "tr": "Übersichtlicher beschreibt man die Strecke durch zwei Zahlen mit unmittelbarer Bedeutung. Die <em>Eigenfrequenz</em> \\(\\omega_0 = \\sqrt{k/m}\\) ist die Kreisfrequenz, mit der der Block ohne Dämpfer schwingen würde; der <em>Dämpfungsgrad</em> \\(\\zeta = c/(2\\sqrt{km})\\) sagt, wie schnell das Schwingen abklingt, von \\(\\zeta = 0\\) (niemals) bis \\(\\zeta = 1\\) (gar kein Schwingen). Teilen wir (1) durch \\(m\\),"
  },
+ "1da9ab610565": {
+  "src": "A proportional controller never reaches its target. To hold the block at \\(x^*\\) the coil must carry the spring, \\(u = kx^*\\), and a proportional controller only produces that force out of an error, \\(K_p(r - x^*) = kx^*\\), which is (14). With the page’s presets, \\(K_p = 20\\ \\mathrm{N/m}\\) against \\(k = 9.87\\ \\mathrm{N/m}\\), the block stops at \\(0.67\\,r\\): 0.201 m for \\(r = 0.30\\ \\mathrm m\\), and the P box on the screen shows the controller’s whole force resting on that 0.1 m of error. The integral removes it. Its memory keeps growing until the error is gone, and at the end the integral part alone supplies the \\(kx^* = 2.96\\ \\mathrm N\\) that hold the spring, while the proportional part has nothing left to do. The derivative gain decides how the block gets there: with \\(K_d = 0\\) the preset loop has \\(\\zeta_\\text{cl} = 0.03\\) and rings for a long time; with \\(K_d = 4\\ \\mathrm{kg/s}\\) it has \\(\\zeta_\\text{cl} = 0.40\\) and settles in a few seconds.",
+  "tr": "Ein Proportionalregler erreicht seine Sollposition nie. Um den Block bei \\(x^*\\) zu halten, muss die Spule die Feder tragen, \\(u = kx^*\\), und ein Proportionalregler erzeugt diese Kraft nur aus einer Regelabweichung, \\(K_p(r - x^*) = kx^*\\); das ist (14). Mit den Voreinstellungen der Seite, \\(K_p = 20\\ \\mathrm{N/m}\\) gegenüber \\(k = 9.87\\ \\mathrm{N/m}\\), bleibt der Block bei \\(0.67\\,r\\) stehen: 0.201 m für \\(r = 0.30\\ \\mathrm m\\), und das P-Feld auf dem Bildschirm zeigt, dass die ganze Kraft des Reglers auf diesen 0.1 m Regelabweichung beruht. Das Integral beseitigt sie. Sein Gedächtnis wächst so lange, bis die Regelabweichung verschwunden ist, und am Ende liefert der Integralanteil allein die \\(kx^* = 2.96\\ \\mathrm N\\), die die Feder halten, während der Proportionalanteil nichts mehr zu tun hat. Die Differentialverstärkung entscheidet, wie der Block dorthin gelangt: Mit \\(K_d = 0\\) hat der voreingestellte Regelkreis \\(\\zeta_\\text{cl} = 0.03\\) und schwingt lange nach; mit \\(K_d = 4\\ \\mathrm{kg/s}\\) hat er \\(\\zeta_\\text{cl} = 0.40\\) und kommt in wenigen Sekunden zur Ruhe."
+ },
+ "200cb8d366a0": {
+  "src": "Memory has a price. Differentiate (13) once to remove the integral, and the free motion of the loop obeys a third-order equation, \\(m\\dddot x + (c+K_d)\\ddot x + (k+K_p)\\dot x + K_i x = 0\\). A third-order system can go unstable even though every coefficient is positive, because the integral keeps pushing after the block has already passed the target. The Routh–Hurwitz condition for three positive coefficients says that all free motions die away exactly when",
+  "tr": "Gedächtnis hat seinen Preis. Differenziert man (13) einmal, um das Integral zu beseitigen, so gehorcht die freie Bewegung des Regelkreises einer Gleichung dritter Ordnung, \\(m\\dddot x + (c+K_d)\\ddot x + (k+K_p)\\dot x + K_i x = 0\\). Ein System dritter Ordnung kann instabil werden, obwohl alle Koeffizienten positiv sind, weil das Integral weiter drückt, wenn der Block die Sollposition schon überschritten hat. Das Routh-Hurwitz-Kriterium für drei positive Koeffizienten besagt, dass alle freien Bewegungen genau dann abklingen, wenn"
+ },
+ "20c7bf1726db": {
+  "src": "so a source that drives the current \\(I_0\\cos\\Omega t\\) through the coil pushes the block with exactly the force of (1), with \\(F_0 = B\\ell I_0\\). The page takes \\(B\\ell = 10\\ \\mathrm{T\\,m}\\), for instance \\(B = 1\\ \\mathrm T\\) and 10 m of wire, about 100 turns of a coil 3.2 cm across; then \\(I_0 = F_0/(B\\ell)\\) is 0.1 A with the defaults and 0.5 A at the largest force of 5 N. The dots and crosses on the winding show the current: a dot is current coming out of the screen, a cross current going into it, and when they swap, the force turns round. Two conditions keep the force a function of time alone, as §1 requires. The winding must never leave the uniform field of the gap, which is why the gap on the screen is longer than the winding by the full travel of the block. And the source must drive the current, not a voltage.",
+  "tr": "eine Quelle, die den Strom \\(I_0\\cos\\Omega t\\) durch die Spule treibt, drückt den Block also genau mit der Kraft aus (1), mit \\(F_0 = B\\ell I_0\\). Die Seite nimmt \\(B\\ell = 10\\ \\mathrm{T\\,m}\\) an, zum Beispiel \\(B = 1\\ \\mathrm T\\) und 10 m Draht, also etwa 100 Windungen einer Spule von 3.2 cm Durchmesser; dann beträgt \\(I_0 = F_0/(B\\ell)\\) bei den Voreinstellungen 0.1 A und bei der größten Kraft von 5 N 0.5 A. Die Punkte und Kreuze auf der Wicklung zeigen den Strom: Ein Punkt ist Strom, der aus dem Bildschirm herauskommt, ein Kreuz Strom, der in ihn hineinfließt, und wenn sie die Plätze tauschen, kehrt sich die Kraft um. Zwei Bedingungen sorgen dafür, dass die Kraft eine Funktion der Zeit allein bleibt, wie §1 es verlangt. Die Wicklung darf das homogene Feld des Luftspalts nie verlassen; deshalb ist der Luftspalt auf dem Bildschirm um den vollen Weg des Blocks länger als die Wicklung. Und die Quelle muss den Strom vorgeben, nicht eine Spannung."
+ },
+ "214e0005536e": {
+  "src": "<span>11</span>Phase space and stable points",
+  "tr": "<span>11</span>Phasenraum und stabile Punkte"
+ },
  "21a29dad7f0c": {
   "src": "Lower the damping ratio to 0.01 and press <em>Solve</em>. The beats now last for the whole minute. Count the time between two swells and compare with \\(1/|f - f_0|\\). Then set \\(f = 0.20\\ \\mathrm{Hz}\\), far from resonance. There are no slow beats now, but the block’s own ringing rides on the slow drive; use \\(C_1\\) in equation (5) to explain why it starts as large as the steady motion. (The force switches on at full strength at \\(t = 0\\).)",
   "tr": "Senken Sie den Dämpfungsgrad auf 0.01 und drücken Sie <em>Lösen</em>. Die Schwebungen dauern nun die ganze Minute. Zählen Sie die Zeit zwischen zwei Maxima und vergleichen Sie sie mit \\(1/|f - f_0|\\). Stellen Sie dann \\(f = 0.20\\ \\mathrm{Hz}\\) ein, weit weg von der Resonanz. Langsame Schwebungen gibt es jetzt nicht mehr, doch das eigene Nachschwingen des Blocks überlagert sich der langsamen Erregung; erklären Sie mit \\(C_1\\) aus Gleichung (5), warum es ebenso groß beginnt wie die stationäre Bewegung. (Die Kraft wird bei \\(t = 0\\) mit voller Stärke eingeschaltet.)"
  },
+ "225f0d71ba4f": {
+  "src": "Bode, log",
+  "tr": "Bode, log"
+ },
+ "22950e78deca": {
+  "src": "<b>Abstract.</b> Almost every machine is pushed by something outside it: a car body by the road, a building by the wind, a loudspeaker cone by the amplifier. This note studies the simplest such system, a mass on a spring with a damper, driven by a force \\(F_0\\cos\\Omega t\\) that someone else decides. We write down its equation of motion, solve it exactly, and use the exact answer to grade the numerical solution the page stores. Along the way we meet resonance, phase lag and the quality factor, and we translate everything into the language of control engineering: input, output, transfer function and Bode plot. We build the driver as a real machine, a coil in a magnet. Then we close the loop: a controller measures the block and computes the force, and its three gains decide where the block comes to rest, how quickly it gets there and how strongly it is damped; you can take the block in your hand and watch the controller bring it back. Finally we draw the motion in phase space and classify its fixed points: focus or node, stable or not, and the steady swing that every driven run ends on. Sections marked ★ carry the heavier mathematics and can be skipped on a first reading.",
+  "tr": "<b>Zusammenfassung.</b> Fast jede Maschine wird von etwas außerhalb ihrer selbst angeregt: eine Karosserie von der Straße, ein Gebäude vom Wind, eine Lautsprechermembran vom Verstärker. Dieses Skript untersucht das einfachste solche System, eine Masse an einer Feder mit einem Dämpfer, angetrieben von einer Kraft \\(F_0\\cos\\Omega t\\), die jemand anderes festlegt. Wir schreiben seine Bewegungsgleichung auf, lösen sie exakt und nutzen die exakte Lösung, um die numerische Lösung zu prüfen, die die Seite speichert. Dabei begegnen uns Resonanz, Phasennacheilung und der Gütefaktor, und wir übersetzen alles in die Sprache der Regelungstechnik: Eingang, Ausgang, Übertragungsfunktion und Bode-Diagramm. Wir bauen den Erreger als reale Maschine, eine Spule im Magneten. Dann schließen wir den Regelkreis: Ein Regler misst den Block und berechnet die Kraft, und seine drei Verstärkungen entscheiden, wo der Block zur Ruhe kommt, wie schnell er dorthin gelangt und wie stark er gedämpft ist; Sie können den Block in die Hand nehmen und zusehen, wie der Regler ihn zurückbringt. Schließlich zeichnen wir die Bewegung im Phasenraum und klassifizieren ihre Fixpunkte: Strudelpunkt oder Knoten, stabil oder nicht, und die stationäre Schwingung, in die jeder angetriebene Lauf mündet. Abschnitte mit ★ enthalten die schwierigere Mathematik und können beim ersten Lesen übersprungen werden."
+ },
  "235fe4e6ecc4": {
   "src": "<span>7</span>Where the energy goes",
   "tr": "<span>7</span>Wohin die Energie geht"
+ },
+ "275a9c81d34a": {
+  "src": "<span class=\"sw sw--dash\" style=\"border-top-color: var(--accent-rose);\"></span>x* ± X, steady",
+  "tr": "<span class=\"sw sw--dash\" style=\"border-top-color: var(--accent-rose);\"></span>x* ± X, stationär"
+ },
+ "28053fb41e26": {
+  "src": "Proportional gain Kₚ",
+  "tr": "Proportionalverstärkung Kₚ"
  },
  "2a3f36511b2c": {
   "src": "<span class=\"pfig__n\">Figure 3</span>The same system as a block diagram. There is no arrow back from \\(x\\) to \\(F\\): the driver acts without looking. Adding such an arrow is what turns a driven system into a controlled one.",
@@ -75,9 +151,25 @@
   "src": "Drive frequency f",
   "tr": "Erregerfrequenz f"
  },
+ "2be30a8f807c": {
+  "src": "Outside push · F₀ cos Ωt, open loop",
+  "tr": "Äußerer Antrieb · F₀ cos Ωt, offene Kette"
+ },
+ "2e1b6e2e2329": {
+  "src": "The current source is ideal: it delivers \\(I_0\\cos\\Omega t\\) whatever the back-emf, so the force stays \\(F_0\\cos\\Omega t\\) whatever the block does. A real amplifier has a voltage limit, and at resonance, where the block moves fastest, the back-emf it must overcome is largest.",
+  "tr": "Die Stromquelle ist ideal: Sie liefert \\(I_0\\cos\\Omega t\\), wie groß die Gegen-EMK auch ist, sodass die Kraft \\(F_0\\cos\\Omega t\\) bleibt, was immer der Block tut. Ein realer Verstärker hat eine Spannungsgrenze, und bei Resonanz, wo sich der Block am schnellsten bewegt, ist die Gegen-EMK, die er überwinden muss, am größten."
+ },
  "2e4144e0b2f8": {
   "src": "Measured, last 10 s",
   "tr": "Gemessen, letzte 10 s"
+ },
+ "2e450c3fa5db": {
+  "src": "Switch the controller on.",
+  "tr": "Schalten Sie den Regler ein."
+ },
+ "2ec356e39417": {
+  "src": "the push of the source plus a second damper. With \\(R = 8\\ \\Omega\\) that damper would have \\((B\\ell)^2/R = 12.5\\ \\mathrm{kg/s}\\), forty times the page’s damper with the defaults and a damping ratio of about 2 on its own. The same induction brakes Pohl’s wheel in the teaching laboratory: its damping is an eddy-current brake, an electromagnet whose field induces currents in the metal of the turning wheel, and the laboratory runs that magnet at constant current for the same reason the page drives its coil with one.",
+  "tr": "also der Antrieb der Quelle plus ein zweiter Dämpfer. Mit \\(R = 8\\ \\Omega\\) hätte dieser Dämpfer \\((B\\ell)^2/R = 12.5\\ \\mathrm{kg/s}\\), das Vierzigfache des Dämpfers der Seite bei den Voreinstellungen, und für sich allein einen Dämpfungsgrad von etwa 2. Dieselbe Induktion bremst das Pohlsche Rad im Praktikum: Seine Dämpfung ist eine Wirbelstrombremse, ein Elektromagnet, dessen Feld im Metall des sich drehenden Rades Ströme induziert, und das Praktikum betreibt diesen Magneten aus demselben Grund mit konstantem Strom, aus dem die Seite ihre Spule mit einer Stromquelle antreibt."
  },
  "3062d1a59b99": {
   "src": "The zeros of the denominator, the <em>poles</em> \\(s = -\\zeta\\omega_0 \\pm i\\omega_d\\), are the plant’s own rhythm in disguise: their real part is the decay rate with a minus sign, \\(-1/\\tau\\), their imaginary part the ringing frequency \\(\\omega_d\\). Both lie in the left half of the complex plane, which is what makes the plant <em>stable</em>: left alone, it returns to rest.",
@@ -87,21 +179,45 @@
   "src": "The block rests near the middle of the canvas, and every run is drawn at its own scale: its largest swing always spans about a fifth of the width, whatever the amplitude in metres. The ruler under the block gives the metres, so to compare two runs read the ruler, not the size of the swing. The burgundy arrow on the block has a length proportional to \\(F/F_0\\). The dial at the top right is the driver: its arm turns at \\(\\Omega\\), and its horizontal shadow is proportional to the force. Below, a window of the stored run follows the present sample: \\(x(t)\\) dark up to it and pale after it, \\(F(t)/k\\) dashed in burgundy and the steady amplitude \\(\\pm X\\) dashed in rose. The window spans four drive periods, but never less than 6 s or more than 20 s (8.9 s with the defaults). Under it, a thin strip shows the whole 60 s, with the window shaded. The Bode plot marks the present drive frequency with a filled dot (equation (4)) and the amplitude measured from the last 10 s of the run with a ring around it: when the run has settled, the two coincide.",
   "tr": "Der Block ruht nahe der Mitte der Zeichenfläche, und jeder Lauf wird in seinem eigenen Maßstab gezeichnet: Sein größter Ausschlag füllt stets etwa ein Fünftel der Breite, unabhängig von der Amplitude in Metern. Das Lineal unter dem Block gibt die Meter an; wer zwei Läufe vergleichen will, liest also das Lineal ab und nicht die Größe des Ausschlags. Der weinrote Pfeil am Block hat eine Länge, die proportional zu \\(F/F_0\\) ist. Das Zifferblatt oben rechts ist der Erreger: Sein Zeiger dreht sich mit \\(\\Omega\\), und sein waagerechter Schatten ist proportional zur Kraft. Darunter folgt ein Fenster des gespeicherten Laufs dem aktuell gezeigten gespeicherten Punkt: \\(x(t)\\) dunkel bis zu ihm und hell danach, \\(F(t)/k\\) weinrot gestrichelt und die stationäre Amplitude \\(\\pm X\\) rosa gestrichelt. Das Fenster umfasst vier Erregerperioden, jedoch nie weniger als 6 s und nie mehr als 20 s (bei den Voreinstellungen 8.9 s). Darunter zeigt ein dünner Streifen den ganzen Lauf von 60 s, wobei das Fenster schattiert ist. Das Bode-Diagramm markiert die aktuelle Erregerfrequenz mit einem gefüllten Punkt (Gleichung (4)) und die aus den letzten 10 s des Laufs gemessene Amplitude mit einem Ring: Ist der Lauf eingeschwungen, fallen die beiden zusammen."
  },
+ "31ea8eec87fc": {
+  "src": "Integral action adds a third number to the state, the memory \\(z = \\int_0^t (r - x)\\,\\mathrm dt'\\), and the phase space becomes three-dimensional, \\(\\mathbf y = (x, \\dot x, z)\\). Its fixed point needs \\(\\dot z = r - x = 0\\), so the block sits exactly at the target, and the memory holds just the force that carries the spring:",
+  "tr": "Der Integralanteil fügt dem Zustand eine dritte Zahl hinzu, das Gedächtnis \\(z = \\int_0^t (r - x)\\,\\mathrm dt'\\), und der Phasenraum wird dreidimensional, \\(\\mathbf y = (x, \\dot x, z)\\). Sein Fixpunkt verlangt \\(\\dot z = r - x = 0\\), der Block sitzt also genau auf der Sollposition, und das Gedächtnis hält gerade die Kraft, die die Feder trägt:"
+ },
  "33bd5a5dddcd": {
   "src": "© 2026 Numa Koudsie",
   "tr": "© 2026 Numa Koudsie"
+ },
+ "34cf886f9cc4": {
+  "src": "The controller is ideal: it measures \\(x\\) and \\(\\dot x\\) without noise or delay and acts at every instant, and the coil delivers whatever force it asks. A real controller samples, and the delay of one sample costs stability margin; a noisy speed measurement makes \\(K_d\\) amplify the noise; a real amplifier has a current limit, and an integral that keeps growing against it is the classic windup.",
+  "tr": "Der Regler ist ideal: Er misst \\(x\\) und \\(\\dot x\\) ohne Rauschen und ohne Verzögerung, greift in jedem Augenblick ein, und die Spule liefert jede Kraft, die er verlangt. Ein realer Regler arbeitet mit Abtastung, und die Verzögerung um eine Abtastperiode kostet Stabilitätsreserve; eine verrauschte Geschwindigkeitsmessung lässt \\(K_d\\) das Rauschen verstärken; ein realer Verstärker hat eine Stromgrenze, und ein Integral, das gegen sie immer weiter anwächst, ist das klassische Windup (Integratorsättigung)."
  },
  "35589f3beb32": {
   "src": "Steady amplitude X",
   "tr": "Stationäre Amplitude X"
  },
+ "360e38ebaa20": {
+  "src": "Setting \\(s = i\\Omega\\) gives the response to a steady sinusoidal input, and comparing with (3), \\(G(i\\Omega) = X e^{-i\\varphi}/F_0\\). Plotting \\(|G(i\\Omega)|\\) and \\(\\varphi\\) against the drive frequency on logarithmic axes gives the <em>Bode plot</em>, the Bode view of the last figure on this page; its linear view shows the same curves as the amplitude function of §12. It is the plant’s identity card: from it an engineer reads how strongly each frequency gets through and how late it arrives. Designing a controller, a device that measures \\(x\\) and adds a correcting force, means reshaping this card. §10 does that for this oscillator, and Fig. 10 for a wind turbine.",
+  "tr": "Setzt man \\(s = i\\Omega\\), erhält man die Antwort auf eine stationäre sinusförmige Eingangsgröße, und der Vergleich mit (3) liefert \\(G(i\\Omega) = X e^{-i\\varphi}/F_0\\). Trägt man \\(|G(i\\Omega)|\\) und \\(\\varphi\\) über der Erregerfrequenz in logarithmischen Achsen auf, erhält man das <em>Bode-Diagramm</em>, die Bode-Ansicht der letzten Abbildung dieser Seite; ihre lineare Ansicht zeigt dieselben Kurven als Amplitudenfunktion aus §12. Es ist der Steckbrief der Strecke: Daran liest ein Ingenieur ab, wie stark jede Frequenz durchkommt und wie spät sie ankommt. Einen Regler entwerfen, also eine Vorrichtung, die \\(x\\) misst und eine korrigierende Kraft hinzufügt, heißt, diesen Steckbrief umzugestalten. §10 tut das für diesen Oszillator, Abb. 10 für eine Windturbine."
+ },
+ "36399b934f75": {
+  "src": "On the page \\(m = 1\\ \\mathrm{kg}\\), and the sliders set the spring constant \\(k\\), the damping ratio \\(\\zeta\\), \\(F_0\\) and the drive frequency \\(f = \\Omega/2\\pi\\); the natural frequency follows from the spring, \\(f_0 = \\sqrt{k/m}/2\\pi\\), and the damper from both, \\(c = 2\\zeta\\sqrt{km}\\). With the defaults, \\(k = 9.87\\ \\mathrm{N/m}\\) and \\(\\zeta = 0.05\\), so \\(f_0 = 0.5\\ \\mathrm{Hz}\\) and \\(c = 0.314\\ \\mathrm{kg/s}\\). After Solve the block starts at rest in its rest position, \\(x(0) = 0\\), \\(\\dot x(0) = 0\\); §9 shows how to start it anywhere by hand.",
+  "tr": "Auf der Seite gilt \\(m = 1\\ \\mathrm{kg}\\), und die Schieber setzen die Federkonstante \\(k\\), den Dämpfungsgrad \\(\\zeta\\), \\(F_0\\) und die Erregerfrequenz \\(f = \\Omega/2\\pi\\); die Eigenfrequenz folgt aus der Feder, \\(f_0 = \\sqrt{k/m}/2\\pi\\), und der Dämpfer aus beiden, \\(c = 2\\zeta\\sqrt{km}\\). Mit den Voreinstellungen gilt \\(k = 9.87\\ \\mathrm{N/m}\\) und \\(\\zeta = 0.05\\), also \\(f_0 = 0.5\\ \\mathrm{Hz}\\) und \\(c = 0.314\\ \\mathrm{kg/s}\\). Nach dem Lösen beginnt der Block in Ruhe in seiner Ruhelage, \\(x(0) = 0\\), \\(\\dot x(0) = 0\\); §9 zeigt, wie man ihn von Hand an beliebiger Stelle starten lässt."
+ },
  "378e627eaeab": {
   "src": "Engineers compress everything above into one function. Take the Laplace transform of (1) with the block starting at rest: each time derivative becomes a factor \\(s\\), and the output is the input multiplied by the <em>transfer function</em> \\(G(s)\\). Here \\(X(s)\\) and \\(F(s)\\) are the transforms of \\(x(t)\\) and \\(F(t)\\), not the amplitude \\(X\\) of (4):",
   "tr": "Ingenieure fassen alles Obige in einer einzigen Funktion zusammen. Man bilde die Laplace-Transformation von (1) bei Start aus der Ruhe: Jede zeitliche Ableitung wird zu einem Faktor \\(s\\), und der Ausgang ist der Eingang multipliziert mit der <em>Übertragungsfunktion</em> \\(G(s)\\). Dabei sind \\(X(s)\\) und \\(F(s)\\) die Transformierten von \\(x(t)\\) und \\(F(t)\\), nicht die Amplitude \\(X\\) aus (4):"
  },
+ "37a44eac5745": {
+  "src": "Linearising is exact here, but stability can also be proved without solving anything, by an energy that can only fall. Take the energy of the oscillator measured from the fixed point, with the controller’s spring included,",
+  "tr": "Die Linearisierung ist hier exakt, doch Stabilität lässt sich auch beweisen, ohne etwas zu lösen, mit einer Energie, die nur abnehmen kann. Wir nehmen die Energie des Oszillators, gemessen vom Fixpunkt aus, einschließlich der Feder des Reglers,"
+ },
  "381456db687d": {
   "src": "Real springs obey Hooke’s law only for small stretches; at large amplitude the restoring force stops being proportional to \\(x\\), and the resonance peak bends and can jump.",
   "tr": "Reale Federn gehorchen dem Hookeschen Gesetz nur bei kleinen Dehnungen; bei großer Amplitude hört die Rückstellkraft auf, proportional zu \\(x\\) zu sein, und der Resonanzgipfel neigt sich zur Seite und kann springen."
+ },
+ "3cbbba91d947": {
+  "src": "<span class=\"sw sw--dash\" style=\"border-top-style: dotted;\"></span>previous run",
+  "tr": "<span class=\"sw sw--dash\" style=\"border-top-style: dotted;\"></span>vorheriger Lauf"
  },
  "3d4ea8e5e317": {
   "src": "A. P. French, <a href=\"https://www.routledge.com/Vibrations-and-Waves/French/p/book/9780748744473\"><em>Vibrations and Waves</em></a>, W. W. Norton, 1971 (now CRC Press): chapter 4, forced vibrations and resonance.",
@@ -111,13 +227,37 @@
   "src": "2 store",
   "tr": "2 speichern"
  },
+ "4030b649c947": {
+  "src": "<span class=\"psec__n\">09</span>The driver: a coil in a magnet",
+  "tr": "<span class=\"psec__n\">09</span>Der Antrieb: eine Spule im Magneten"
+ },
  "403ffd60686b": {
   "src": "Quality factor Q",
   "tr": "Gütefaktor Q"
  },
+ "42cbd896f065": {
+  "src": "Memory has a price. Differentiate (13) once to remove the integral, and the free motion of the loop obeys a third-order equation, \\(m\\,\\mathrm d^3x/\\mathrm dt^3 + (c+K_d)\\ddot x + (k+K_p)\\dot x + K_i x = 0\\). A third-order system can go unstable even though every coefficient is positive, because the integral keeps pushing after the block has already passed the target. The Routh–Hurwitz condition for three positive coefficients says that all free motions die away exactly when",
+  "tr": "Gedächtnis hat seinen Preis. Differenziert man (13) einmal, um das Integral zu beseitigen, so gehorcht die freie Bewegung des Regelkreises einer Gleichung dritter Ordnung, \\(m\\,\\mathrm d^3x/\\mathrm dt^3 + (c+K_d)\\ddot x + (k+K_p)\\dot x + K_i x = 0\\). Ein System dritter Ordnung kann instabil werden, obwohl alle Koeffizienten positiv sind, weil das Integral weiter drückt, wenn der Block die Sollposition schon überschritten hat. Das Routh-Hurwitz-Kriterium für drei positive Koeffizienten besagt, dass alle freien Bewegungen genau dann abklingen, wenn"
+ },
+ "4558280e638e": {
+  "src": "<span>12</span>On screen",
+  "tr": "<span>12</span>Auf dem Bildschirm"
+ },
+ "461fdde232eb": {
+  "src": "The second condition comes from Faraday’s law: a wire moving at the speed \\(\\dot x\\) through the field has the emf \\(B\\ell\\dot x\\) induced in it. Treat the charge \\(q\\) that has passed through the coil as a second coordinate, so that \\(I = \\dot q\\), and write the Lagrangian of block and coil together, \\(L = \\tfrac12 m\\dot x^2 - \\tfrac12 kx^2 + \\tfrac12 L_c\\dot q^2 + B\\ell\\,x\\dot q\\), where \\(L_c\\) is the inductance of the coil and the last term couples the two; the damper and the coil’s resistance \\(R\\) enter through Rayleigh’s dissipation function \\(\\mathcal F = \\tfrac12 c\\dot x^2 + \\tfrac12 R\\dot q^2\\). Lagrange’s equation for \\(x\\) is (1) with \\(F = B\\ell I\\), the result (9) by a second route. The equation for \\(q\\) gives the voltage the source must supply:",
+  "tr": "Die zweite Bedingung folgt aus dem Faradayschen Induktionsgesetz: In einem Draht, der sich mit der Geschwindigkeit \\(\\dot x\\) durch das Feld bewegt, wird die EMK \\(B\\ell\\dot x\\) induziert. Wir behandeln die Ladung \\(q\\), die durch die Spule geflossen ist, als zweite Koordinate, sodass \\(I = \\dot q\\) gilt, und schreiben die Lagrange-Funktion von Block und Spule gemeinsam auf, \\(L = \\tfrac12 m\\dot x^2 - \\tfrac12 kx^2 + \\tfrac12 L_c\\dot q^2 + B\\ell\\,x\\dot q\\), wobei \\(L_c\\) die Induktivität der Spule ist und der letzte Term die beiden koppelt; der Dämpfer und der Widerstand \\(R\\) der Spule gehen über die Rayleighsche Dissipationsfunktion \\(\\mathcal F = \\tfrac12 c\\dot x^2 + \\tfrac12 R\\dot q^2\\) ein. Die Lagrange-Gleichung für \\(x\\) ist (1) mit \\(F = B\\ell I\\), also das Ergebnis (9) auf einem zweiten Weg. Die Gleichung für \\(q\\) liefert die Spannung, die die Quelle aufbringen muss:"
+ },
+ "46724d55e18c": {
+  "src": "<b>Frequency response</b> · amplitude function <span class=\"tx\">\\(A(f)\\)</span> and phase difference <span class=\"tx\">\\(\\varphi(f)\\)</span> <span class=\"actions\" role=\"group\" aria-label=\"View of the frequency response\" style=\"display:inline-flex; margin-left:8px;\"><button type=\"button\" class=\"btn btn--ghost\" id=\"view-amp\" aria-pressed=\"true\">Linear</button><button type=\"button\" class=\"btn btn--ghost\" id=\"view-bode\" aria-pressed=\"false\">Bode, log</button></span>",
+  "tr": "<b>Frequenzgang</b> · Amplitudenfunktion <span class=\"tx\">\\(A(f)\\)</span> und Phasendifferenz <span class=\"tx\">\\(\\varphi(f)\\)</span> <span class=\"actions\" role=\"group\" aria-label=\"View of the frequency response\" style=\"display:inline-flex; margin-left:8px;\"><button type=\"button\" class=\"btn btn--ghost\" id=\"view-amp\" aria-pressed=\"true\">Linear</button><button type=\"button\" class=\"btn btn--ghost\" id=\"view-bode\" aria-pressed=\"false\">Bode, log</button></span>"
+ },
  "472f64a46f7e": {
   "src": "<span class=\"sw sw--dash\" style=\"border-top-color: var(--accent-rose);\"></span>±X steady",
   "tr": "<span class=\"sw sw--dash\" style=\"border-top-color: var(--accent-rose);\"></span>±X stationär"
+ },
+ "4b290c75b403": {
+  "src": "Fit scale",
+  "tr": "Maßstab anpassen"
  },
  "4cad8cc0bd88": {
   "src": "When you move a slider after solving, the page says so and keeps playing the old run until you solve again: the data on screen always belong to the settings named in the status line.",
@@ -131,13 +271,33 @@
   "src": "<span>9</span>On screen",
   "tr": "<span>9</span>Auf dem Bildschirm"
  },
+ "4db8739536bd": {
+  "src": "K. J. Åström and R. M. Murray, <em>Feedback Systems: An Introduction for Scientists and Engineers</em>, Princeton University Press, 2008: chapter 8, transfer functions, frequency response and Bode plots; chapter 10, PID control, for Section 9. <a href=\"http://www.cds.caltech.edu/~murray/books/AM08/pdf/am08-complete_22Feb09.pdf\">The authors’ free electronic edition</a>.",
+  "tr": "K. J. Åström und R. M. Murray, <em>Feedback Systems: An Introduction for Scientists and Engineers</em>, Princeton University Press, 2008: Kapitel 8, Übertragungsfunktionen, Frequenzgang und Bode-Diagramme; Kapitel 10, PID-Regelung, für Abschnitt 9. <a href=\"http://www.cds.caltech.edu/~murray/books/AM08/pdf/am08-complete_22Feb09.pdf\">Die frei zugängliche elektronische Ausgabe der Autoren</a>."
+ },
+ "4dc57630b6bc": {
+  "src": "<b>Phase portrait</b> · the state <span class=\"tx\">\\((x, \\dot x)\\)</span> of the run, the fixed point <span class=\"tx\">\\(x^*\\)</span>, the steady orbit and one dot per drive period",
+  "tr": "<b>Phasenporträt</b> · der Zustand <span class=\"tx\">\\((x, \\dot x)\\)</span> des Laufs, der Fixpunkt <span class=\"tx\">\\(x^*\\)</span>, die stationäre Bahn und ein Punkt pro Erregerperiode"
+ },
  "501a9cf85f0d": {
   "src": "The driver is ideal: it delivers \\(F_0\\cos\\Omega t\\) whatever the block does. A real motor slows down when the load is heavy, and at resonance the load is heaviest.",
   "tr": "Der Erreger ist ideal: Er liefert \\(F_0\\cos\\Omega t\\), was immer der Block tut. Ein realer Motor wird bei schwerer Last langsamer, und bei Resonanz ist die Last am größten."
  },
+ "51197d22c18e": {
+  "src": "Now take the block in your hand; the <em>Take control</em> box above the figure walks you through it. Switch the controller on, choose the target \\(r\\) with its slider or by dragging the flag on the ruler, then grab the block on the screen and drag it anywhere within the ruler. A new target takes effect at once: the page solves again from the state on screen, and the block moves to it. While you hold it, the page’s clock stops, but the controller keeps working: it reads your hand’s position, pulls against it with \\(u\\), and its integral keeps adding up the error, \\(z = \\int (r - x)\\,\\mathrm dt'\\), second by second. A fourth arrow shows the force your hand must give, \\(F_\\text{hand} = kx + c\\dot x - F\\), the force that balances spring, damper and coil. Let go, and the page solves (12) again from the state you left behind, \\(x(0)\\), \\(\\dot x(0)\\) (the speed of your hand, so you can throw the block) and \\(z(0)\\), and plays the new run from \\(t = 0\\), the outside push restarting with it. The equilibrium (14) does not depend on where the block starts, so the controller brings it back to \\(x^*\\) from wherever you left it; with the controller off you see instead the free, damped swing dying away with the decay time \\(\\tau\\) of §3. Hold the block for a few seconds away from the target with the integral on, and the release overshoots far past \\(r\\): the memory has filled up with error while you held it, and it takes as long again to empty. That is integrator windup, the most common fault of real PI controllers, and the reason real ones limit their integral. The exact solutions need only their constants adjusted to the new start: in (5) they become \\(C_1 = x(0) - X\\cos\\varphi\\) and \\(C_2 = (\\dot x(0) + \\zeta\\omega_0 C_1 - X\\Omega\\sin\\varphi)/\\omega_d\\), and in the closed loop the free motion starts from \\(x(0)\\), \\(\\dot x(0)\\) and \\(z(0)\\) less the equilibrium and the steady swing. The page grades every released run against them as before.",
+  "tr": "Nehmen Sie nun den Block in die Hand; das Feld <em>Selbst steuern</em> über der Abbildung führt Sie Schritt für Schritt hindurch. Schalten Sie den Regler ein, wählen Sie die Sollposition \\(r\\) mit ihrem Schieber oder durch Ziehen der Zielfahne auf dem Lineal, fassen Sie dann den Block auf dem Bildschirm und ziehen Sie ihn an eine beliebige Stelle innerhalb des Lineals. Eine neue Sollposition wirkt sofort: Die Seite löst erneut ab dem Zustand auf dem Bildschirm, und der Block bewegt sich dorthin. Solange Sie ihn festhalten, steht die Uhr der Seite still, doch der Regler arbeitet weiter: Er liest die Position Ihrer Hand, zieht mit \\(u\\) gegen sie, und sein Integral summiert die Regelabweichung weiter auf, \\(z = \\int (r - x)\\,\\mathrm dt'\\), Sekunde um Sekunde. Ein vierter Pfeil zeigt die Kraft, die Ihre Hand aufbringen muss, \\(F_\\text{hand} = kx + c\\dot x - F\\), also die Kraft, die Feder, Dämpfer und Spule das Gleichgewicht hält. Lassen Sie los, so löst die Seite (12) erneut aus dem Zustand, den Sie hinterlassen haben, \\(x(0)\\), \\(\\dot x(0)\\) (die Geschwindigkeit Ihrer Hand, sodass Sie den Block werfen können) und \\(z(0)\\), und spielt den neuen Lauf ab \\(t = 0\\) ab; der äußere Antrieb beginnt mit ihm neu. Die Gleichgewichtslage (14) hängt nicht davon ab, wo der Block startet, daher bringt ihn der Regler von jeder Stelle, an der Sie ihn loslassen, nach \\(x^*\\) zurück; bei ausgeschaltetem Regler sehen Sie stattdessen das freie, gedämpfte Ausschwingen, das mit der Abklingzeit \\(\\tau\\) aus §3 abklingt. Halten Sie den Block bei eingeschaltetem Integral einige Sekunden lang abseits der Sollposition fest, so schießt er nach dem Loslassen weit über \\(r\\) hinaus: Das Gedächtnis hat sich, während Sie ihn hielten, mit Regelabweichung gefüllt, und es braucht noch einmal so lange, um sich zu leeren. Das ist das Windup (Integratorsättigung), der häufigste Fehler realer PI-Regler und der Grund, warum reale Regler ihr Integral begrenzen. Die exakten Lösungen brauchen für den neuen Anfang nur angepasste Konstanten: In (5) werden sie zu \\(C_1 = x(0) - X\\cos\\varphi\\) und \\(C_2 = (\\dot x(0) + \\zeta\\omega_0 C_1 - X\\Omega\\sin\\varphi)/\\omega_d\\), und im geschlossenen Regelkreis beginnt die freie Bewegung bei \\(x(0)\\), \\(\\dot x(0)\\) und \\(z(0)\\), vermindert um die Gleichgewichtslage und die stationäre Schwingung. Die Seite prüft jeden losgelassenen Lauf wie zuvor an ihnen."
+ },
+ "53f88ea0ab98": {
+  "src": "The rate follows from (17) in one line, and it is the heat of the two dampers, the real one and the controller’s. \\(V\\) is a bowl with its bottom at the fixed point, and the state can only roll downhill in it; it stops losing height only where \\(\\dot x = 0\\), and the only place it can stay with \\(\\dot x = 0\\) is the bottom. So every path, from wherever you let the block go, ends at \\(\\mathbf y^*\\). A function with these two properties is a <em>Lyapunov function</em>, and (19) shows that stability is the damper’s work: with \\(c + K_d = 0\\) the paths would be closed ellipses around the fixed point, a centre, forever.",
+  "tr": "Die Änderungsrate folgt aus (17) in einer Zeile, und sie ist die Wärme der beiden Dämpfer, des realen und des Reglers. \\(V\\) ist eine Schüssel mit ihrem Boden im Fixpunkt, und der Zustand kann in ihr nur bergab rollen; er verliert nur dort keine Höhe mehr, wo \\(\\dot x = 0\\) ist, und der einzige Ort, an dem er mit \\(\\dot x = 0\\) bleiben kann, ist der Boden. Also endet jede Bahn, wo immer Sie den Block loslassen, in \\(\\mathbf y^*\\). Eine Funktion mit diesen beiden Eigenschaften ist eine <em>Ljapunow-Funktion</em>, und (19) zeigt, dass Stabilität das Werk des Dämpfers ist: Mit \\(c + K_d = 0\\) wären die Bahnen geschlossene Ellipsen um den Fixpunkt, ein Wirbelpunkt (Zentrum), für immer."
+ },
  "54f4ded56c4f": {
   "src": "<span class=\"psec__n\">03</span>The exact solution<span class=\"star\" title=\"heavier mathematics\">★</span>",
   "tr": "<span class=\"psec__n\">03</span>Die exakte Lösung<span class=\"star\" title=\"heavier mathematics\">★</span>"
+ },
+ "55456aa96952": {
+  "src": "The current source is ideal: it delivers the current it is told whatever the back-emf, so in open loop the force stays \\(F_0\\cos\\Omega t\\) whatever the block does. A real amplifier has a voltage limit, and at resonance, where the block moves fastest, the back-emf it must overcome is largest.",
+  "tr": "Die Stromquelle ist ideal: Sie liefert den Strom, der ihr vorgegeben wird, wie groß die Gegen-EMK auch ist, sodass die Kraft in der offenen Kette \\(F_0\\cos\\Omega t\\) bleibt, was immer der Block tut. Ein realer Verstärker hat eine Spannungsgrenze, und bei Resonanz, wo sich der Block am schnellsten bewegt, ist die Gegen-EMK, die er überwinden muss, am größten."
  },
  "55a1af08a9cb": {
   "src": "A block on a spring and a damper, pushed by the force F(t); below, the stored displacement x(t) of the whole run with a cursor at the frame being shown.",
@@ -147,9 +307,25 @@
   "src": "For the free equation, try \\(x = e^{st}\\). Each derivative brings down a factor \\(s\\), so \\(s^2 + 2\\zeta\\omega_0 s + \\omega_0^2 = 0\\), and \\(s = -\\zeta\\omega_0 \\pm i\\,\\omega_0\\sqrt{1-\\zeta^2}\\). The real part makes the motion die away with the time constant \\(\\tau = 1/(\\zeta\\omega_0)\\); the imaginary part makes it ring at the damped frequency \\(\\omega_d = \\omega_0\\sqrt{1-\\zeta^2}\\). At \\(\\zeta = 1\\) the imaginary part reaches zero and there is nothing left to ring: the damping ratio measures the damper against the one, \\(c = 2\\sqrt{km}\\), that just stops the ringing. Adding such a ringing, \\(e^{-t/\\tau}(C_1\\cos\\omega_d t + C_2\\sin\\omega_d t),\\) to the steady state and demanding \\(x(0) = \\dot x(0) = 0\\) fixes its two constants: at \\(t = 0\\) the two conditions read \\(X\\cos\\varphi + C_1 = 0\\) and \\(X\\Omega\\sin\\varphi - \\zeta\\omega_0 C_1 + \\omega_d C_2 = 0\\), so",
   "tr": "Für die freie Gleichung wählt man den Ansatz \\(x = e^{st}\\). Jede Ableitung liefert einen Faktor \\(s\\), also \\(s^2 + 2\\zeta\\omega_0 s + \\omega_0^2 = 0\\), und \\(s = -\\zeta\\omega_0 \\pm i\\,\\omega_0\\sqrt{1-\\zeta^2}\\). Der Realteil lässt die Bewegung mit der Zeitkonstante \\(\\tau = 1/(\\zeta\\omega_0)\\) abklingen; der Imaginärteil lässt sie mit der gedämpften Frequenz \\(\\omega_d = \\omega_0\\sqrt{1-\\zeta^2}\\) schwingen. Bei \\(\\zeta = 1\\) verschwindet der Imaginärteil, und es bleibt nichts zu schwingen übrig: Der Dämpfungsgrad misst den Dämpfer am Wert \\(c = 2\\sqrt{km}\\), der das Schwingen gerade eben stoppt. Überlagert man der stationären Lösung ein solches Nachschwingen \\(e^{-t/\\tau}(C_1\\cos\\omega_d t + C_2\\sin\\omega_d t),\\) und verlangt \\(x(0) = \\dot x(0) = 0\\), so sind die beiden Konstanten festgelegt: Bei \\(t = 0\\) lauten die Bedingungen \\(X\\cos\\varphi + C_1 = 0\\) und \\(X\\Omega\\sin\\varphi - \\zeta\\omega_0 C_1 + \\omega_d C_2 = 0\\), also"
  },
+ "56c90c8ad1b8": {
+  "src": "Write the state as \\(\\mathbf y = (x, \\dot x)\\). With the push switched off, (1) or the loop (13) without its integral is a pair of first-order equations, \\(\\dot{\\mathbf y} = A(\\mathbf y - \\mathbf y^*)\\):",
+  "tr": "Wir schreiben den Zustand als \\(\\mathbf y = (x, \\dot x)\\). Bei abgeschaltetem Antrieb ist (1), oder der Regelkreis (13) ohne sein Integral, ein Paar von Gleichungen erster Ordnung, \\(\\dot{\\mathbf y} = A(\\mathbf y - \\mathbf y^*)\\):"
+ },
+ "570a90d62fde": {
+  "src": "Derivative gain K_d",
+  "tr": "Differentialverstärkung K_d"
+ },
  "58670d9bddef": {
   "src": "<strong>Store.</strong> Every tenth state is written into the page’s dataset, together with \\(F\\), \\(E\\), \\(P_\\text{in}\\) and \\(P_\\text{loss}\\): 6 001 rows, one every \\(10\\ \\mathrm{ms}\\). The exact solution (5) is stored next to it only to measure the error. With the defaults the largest difference over the run is \\(5\\times10^{-12}\\ \\mathrm{m}\\), the <em>RK4 vs exact</em> readout.",
   "tr": "<strong>Speichern.</strong> Jeder zehnte Zustand wird in den Datensatz der Seite geschrieben, zusammen mit \\(F\\), \\(E\\), \\(P_\\text{in}\\) und \\(P_\\text{loss}\\): 6 001 Zeilen, eine alle \\(10\\ \\mathrm{ms}\\). Die exakte Lösung (5) wird nur daneben gespeichert, um den Fehler zu messen. Mit den Voreinstellungen beträgt die größte Abweichung über den Lauf \\(5\\times10^{-12}\\ \\mathrm{m}\\), die Anzeige <em>RK4 gegen exakt</em>."
+ },
+ "5891cfa736f2": {
+  "src": "<b>Abstract.</b> Almost every machine is pushed by something outside it: a car body by the road, a building by the wind, a loudspeaker cone by the amplifier. This note studies the simplest such system, a mass on a spring with a damper, driven by a force \\(F_0\\cos\\Omega t\\) that someone else decides. We write down its equation of motion, solve it exactly, and use the exact answer to grade the numerical solution the page stores. Along the way we meet resonance, phase lag and the quality factor, and we translate everything into the language of control engineering: input, output, transfer function and Bode plot. In the last part we close the loop: a controller measures the block and computes the force, and its three gains decide where the block comes to rest, how quickly it gets there and how strongly it is damped. Sections marked ★ carry the heavier mathematics and can be skipped on a first reading.",
+  "tr": "<b>Zusammenfassung.</b> Fast jede Maschine wird von etwas außerhalb ihrer selbst angeregt: eine Karosserie von der Straße, ein Gebäude vom Wind, eine Lautsprechermembran vom Verstärker. Dieses Skript untersucht das einfachste solche System, eine Masse an einer Feder mit einem Dämpfer, angetrieben von einer Kraft \\(F_0\\cos\\Omega t\\), die jemand anderes festlegt. Wir schreiben seine Bewegungsgleichung auf, lösen sie exakt und nutzen die exakte Lösung, um die numerische Lösung zu prüfen, die die Seite speichert. Dabei begegnen uns Resonanz, Phasennacheilung und der Gütefaktor, und wir übersetzen alles in die Sprache der Regelungstechnik: Eingang, Ausgang, Übertragungsfunktion und Bode-Diagramm. Im letzten Teil schließen wir den Regelkreis: Ein Regler misst den Block und berechnet die Kraft, und seine drei Verstärkungen entscheiden, wo der Block zur Ruhe kommt, wie schnell er dorthin gelangt und wie stark er gedämpft ist. Abschnitte mit ★ enthalten die schwierigere Mathematik und können beim ersten Lesen übersprungen werden."
+ },
+ "594a961a402e": {
+  "src": "Driven oscillations: how a system answers a push, and how a controller takes the push over",
+  "tr": "Erzwungene Schwingungen: wie ein System auf einen Antrieb antwortet und wie ein Regler den Antrieb übernimmt"
  },
  "597813219795": {
   "src": "Driver · F(t) = F₀ cos Ωt",
@@ -159,9 +335,25 @@
   "src": "Guess that, once things settle, the block moves at the driver’s own frequency. Complex numbers make the guess painless: write the driving term \\(F_0\\cos\\Omega t/m\\) as the real part of \\(\\tfrac{F_0}{m}e^{i\\Omega t}\\) and try \\(x = \\operatorname{Re}\\,Z e^{i\\Omega t}\\). Each time derivative becomes a factor \\(i\\Omega\\), and (2) turns into algebra:",
   "tr": "Vermuten wir, dass sich der Block, sobald sich alles eingependelt hat, mit der Frequenz des Erregers bewegt. Komplexe Zahlen machen diese Vermutung mühelos: Man schreibe den Antriebsterm \\(F_0\\cos\\Omega t/m\\) als Realteil von \\(\\tfrac{F_0}{m}e^{i\\Omega t}\\) und probiere \\(x = \\operatorname{Re}\\,Z e^{i\\Omega t}\\). Jede zeitliche Ableitung wird zu einem Faktor \\(i\\Omega\\), und (2) wird zu Algebra:"
  },
+ "5be1195fbcd7": {
+  "src": "Each gain is a physical part added to the plant. \\(K_p\\) (N/m) is a second spring whose rest position is the target instead of the wall: push the block away from \\(r\\) and the coil pulls it back in proportion. \\(K_d\\) (kg/s) is a second damper, acting on the measured speed. \\(K_i\\) (N/(m·s)) is the controller’s memory: as long as the block sits on the wrong side of \\(r\\), the integral grows and the coil pushes harder, and it stops growing only when the error is zero. Collect the terms of (12) that multiply \\(x\\) and \\(\\dot x\\):",
+  "tr": "Jede Verstärkung ist ein physikalisches Bauteil, das der Strecke hinzugefügt wird. \\(K_p\\) (N/m) ist eine zweite Feder, deren Ruhelage die Sollposition ist statt der Wand: Drückt man den Block von \\(r\\) weg, zieht ihn die Spule proportional zurück. \\(K_d\\) (kg/s) ist ein zweiter Dämpfer, der auf die gemessene Geschwindigkeit wirkt. \\(K_i\\) (N/(m·s)) ist das Gedächtnis des Reglers: Solange der Block auf der falschen Seite von \\(r\\) sitzt, wächst das Integral, und die Spule drückt stärker; es hört erst auf zu wachsen, wenn die Regelabweichung null ist. Wir fassen die Terme von (12) zusammen, die \\(x\\) und \\(\\dot x\\) multiplizieren:"
+ },
+ "5c9b66bf862f": {
+  "src": "The two numbers of the matrix that do not depend on how we draw it decide everything. Its trace, \\(-(c + K_d)/m\\), is the sum of the eigenvalues, and its determinant, \\((k + K_p)/m\\), their product. A negative trace and a positive determinant put both eigenvalues in the left half of the complex plane, and every path runs into the fixed point: it is <em>asymptotically stable</em>. The sign of the discriminant, \\(\\mathrm{tr}^2 - 4\\det\\), decides how the path arrives. For \\(\\zeta_\\text{cl} < 1\\) the eigenvalues are complex, the path spirals in, and the fixed point is a <em>stable focus</em>: the marble in thin oil, overshooting the bottom again and again. For \\(\\zeta_\\text{cl} > 1\\) both eigenvalues are real and negative, the path creeps straight in, and the fixed point is a <em>stable node</em>: the marble in honey. At \\(\\zeta_\\text{cl} = 1\\) the two meet in a degenerate node, the fastest approach without overshoot. With the page’s defaults, \\(\\lambda = -0.157 \\pm 3.138\\,i\\ \\mathrm{s^{-1}}\\): a stable focus whose spiral shrinks by \\(e^{-0.157 \\cdot 2\\pi/3.138} = 0.73\\) per turn. With the PD preset, \\(\\lambda = -2.157 \\pm 5.022\\,i\\ \\mathrm{s^{-1}}\\), and the same spiral shrinks by \\(0.067\\) per turn; \\(K_d\\) would need to reach \\(10.6\\ \\mathrm{kg/s}\\) to make it a node.",
+  "tr": "Die beiden Zahlen der Matrix, die nicht davon abhängen, wie wir sie darstellen, entscheiden alles. Ihre Spur, \\(-(c + K_d)/m\\), ist die Summe der Eigenwerte, und ihre Determinante, \\((k + K_p)/m\\), deren Produkt. Eine negative Spur und eine positive Determinante legen beide Eigenwerte in die linke Hälfte der komplexen Ebene, und jede Bahn läuft in den Fixpunkt hinein: Er ist <em>asymptotisch stabil</em>. Das Vorzeichen der Diskriminante, \\(\\mathrm{tr}^2 - 4\\det\\), entscheidet, wie die Bahn ankommt. Für \\(\\zeta_\\text{cl} < 1\\) sind die Eigenwerte komplex, die Bahn windet sich spiralförmig hinein, und der Fixpunkt ist ein <em>stabiler Strudelpunkt (Fokus)</em>: die Murmel in dünnem Öl, die immer wieder über den Boden hinausschießt. Für \\(\\zeta_\\text{cl} > 1\\) sind beide Eigenwerte reell und negativ, die Bahn kriecht geradewegs hinein, und der Fixpunkt ist ein <em>stabiler Knoten</em>: die Murmel in Honig. Bei \\(\\zeta_\\text{cl} = 1\\) treffen sich die beiden in einem entarteten Knoten, der schnellsten Annäherung ohne Überschwingen. Mit den Voreinstellungen der Seite ist \\(\\lambda = -0.157 \\pm 3.138\\,i\\ \\mathrm{s^{-1}}\\): ein stabiler Strudelpunkt, dessen Spirale pro Umlauf um den Faktor \\(e^{-0.157 \\cdot 2\\pi/3.138} = 0.73\\) schrumpft. Mit der PD-Voreinstellung ist \\(\\lambda = -2.157 \\pm 5.022\\,i\\ \\mathrm{s^{-1}}\\), und dieselbe Spirale schrumpft pro Umlauf um den Faktor \\(0.067\\); \\(K_d\\) müsste \\(10.6\\ \\mathrm{kg/s}\\) erreichen, um daraus einen Knoten zu machen."
+ },
  "5d066b95c4cc": {
   "src": "Force amplitude F₀",
   "tr": "Kraftamplitude F₀"
+ },
+ "5f38de2c3142": {
+  "src": "<b>Force profile</b> · <span class=\"tx\">\\(u = u_P + u_I + u_D\\)</span>, the push, <span class=\"tx\">\\(-kx\\)</span> and <span class=\"tx\">\\(-c\\dot x\\)</span> over the run",
+  "tr": "<b>Kraftverlauf</b> · <span class=\"tx\">\\(u = u_P + u_I + u_D\\)</span>, der Antrieb, <span class=\"tx\">\\(-kx\\)</span> und <span class=\"tx\">\\(-c\\dot x\\)</span> über den Lauf"
+ },
+ "602d675ce351": {
+  "src": "Two numbers tell the whole story of the block at one instant: where it is and how fast it moves. Equation (1) gives the acceleration from them, so the next instant follows, and the next. Draw the two numbers as a point in a plane, \\(x\\) across and \\(\\dot x\\) up, and the motion becomes a path that the point traces: the <em>phase space</em> of the oscillator. A swing pushed by nobody draws a closed loop in it, out at the turning points with no speed, through the middle at full speed. A damper turns the loop into a spiral that winds into the middle, like a marble rolling around the inside of a bowl and losing a little height on every turn. The bottom of the bowl, where the marble can rest, is a <em>fixed point</em>.",
+  "tr": "Zwei Zahlen erzählen die ganze Geschichte des Blocks in einem Augenblick: wo er ist und wie schnell er sich bewegt. Gleichung (1) liefert aus ihnen die Beschleunigung, also folgt daraus der nächste Augenblick, und der übernächste. Zeichnen wir die beiden Zahlen als Punkt in einer Ebene, \\(x\\) nach rechts und \\(\\dot x\\) nach oben, so wird die Bewegung zu einer Bahn, die der Punkt durchläuft, im <em>Phasenraum</em> des Oszillators. Eine Schwingung, die niemand antreibt, zeichnet darin eine geschlossene Kurve, außen an den Umkehrpunkten ohne Geschwindigkeit, durch die Mitte mit voller Geschwindigkeit. Ein Dämpfer macht aus der Kurve eine Spirale, die sich in die Mitte windet, wie eine Murmel, die an der Innenseite einer Schüssel herumrollt und bei jeder Runde ein wenig Höhe verliert. Der Boden der Schüssel, wo die Murmel ruhen kann, ist ein <em>Fixpunkt</em>."
  },
  "60f8686f6f6b": {
   "src": "<span>5</span>The control engineer’s view&nbsp;★",
@@ -175,9 +367,29 @@
   "src": "Phase lag φ",
   "tr": "Phasennacheilung φ"
  },
+ "65fdbd2fb03f": {
+  "src": "The forces on the block over the stored run: the controller’s force u and its proportional, integral and derivative parts, the outside push, the spring force and the damper force, with the cursor at the frame being shown.",
+  "tr": "Die Kräfte auf den Block über den gespeicherten Lauf: die Kraft u des Reglers mit ihrem Proportional-, Integral- und Differentialanteil, der äußere Antrieb, die Federkraft und die Dämpferkraft, mit dem Cursor bei dem gerade gezeigten Bild."
+ },
+ "66038af51832": {
+  "src": "Grab the block, pull it anywhere, and let go. The controller brings it back to <b>r</b>.",
+  "tr": "Fassen Sie den Block, ziehen Sie ihn an eine beliebige Stelle und lassen Sie los. Der Regler bringt ihn zurück nach <b>r</b>."
+ },
+ "676a899d52b5": {
+  "src": "Integral gain Kᵢ",
+  "tr": "Integralverstärkung Kᵢ"
+ },
+ "67933b628589": {
+  "src": "PD",
+  "tr": "PD"
+ },
  "67b7724f11a3": {
   "src": "Solve",
   "tr": "Lösen"
+ },
+ "684992d48791": {
+  "src": "<strong>Solve.</strong> The fourth-order Runge–Kutta method advances \\((x, \\dot x)\\), and with the controller its memory \\(z\\), from \\(t = 0\\) to \\(60\\ \\mathrm{s}\\) in 60 000 steps of \\(h = 1\\ \\mathrm{ms}\\), carrying \\(W_\\text{in}\\) and \\(W_\\text{loss}\\) along in the same steps. Measured in headless Chromium, a solve took 5–13 ms, and up to 45 ms for the first one after the page loads; the time depends on the machine.",
+  "tr": "<strong>Lösen.</strong> Das Runge-Kutta-Verfahren vierter Ordnung führt \\((x, \\dot x)\\), bei eingeschaltetem Regler auch dessen Gedächtnis \\(z\\), von \\(t = 0\\) bis \\(60\\ \\mathrm{s}\\) in 60 000 Schritten zu je \\(h = 1\\ \\mathrm{ms}\\) weiter und führt \\(W_\\text{in}\\) und \\(W_\\text{loss}\\) in denselben Schritten mit. Im Headless-Chromium gemessen dauerte ein Lösen 5–13 ms, beim ersten Lösen nach dem Laden der Seite bis zu 45 ms; die Zeit hängt vom Rechner ab."
  },
  "6ad54d990f07": {
   "src": "<span class=\"psub__n\">3.2</span>The transient",
@@ -194,6 +406,10 @@
  "6d07cfbe6339": {
   "src": "<span class=\"psub__n\">3.1</span>The steady state",
   "tr": "<span class=\"psub__n\">3.1</span>Der stationäre Zustand"
+ },
+ "6fbf0087494f": {
+  "src": "The fixed point is where both rates vanish: \\(\\dot x = 0\\) and the spring and the controller balance, \\(\\mathbf y^* = (x^*, 0)\\) with \\(x^*\\) from (14); with the controller off, \\(K_p = K_d = 0\\) and \\(x^* = 0\\). Because (17) is linear, its solutions are combinations of \\(e^{\\lambda t}\\), where the eigenvalues \\(\\lambda\\) of the matrix are the roots of its characteristic polynomial, the denominator of (7) with the loop’s coefficients:",
+  "tr": "Der Fixpunkt liegt dort, wo beide Änderungsraten verschwinden: \\(\\dot x = 0\\), und Feder und Regler halten sich das Gleichgewicht, \\(\\mathbf y^* = (x^*, 0)\\) mit \\(x^*\\) aus (14); bei ausgeschaltetem Regler ist \\(K_p = K_d = 0\\) und \\(x^* = 0\\). Weil (17) linear ist, sind seine Lösungen Kombinationen von \\(e^{\\lambda t}\\), wobei die Eigenwerte \\(\\lambda\\) der Matrix die Nullstellen ihres charakteristischen Polynoms sind, des Nenners von (7) mit den Koeffizienten des Regelkreises:"
  },
  "6fecf821e85b": {
   "src": "so the <em>quality factor</em> \\(Q\\) is the amplification at resonance. The default \\(\\zeta = 0.05\\) gives \\(Q = 10\\): a force that would stretch the spring by \\(0.101\\ \\mathrm{m}\\) if applied slowly moves the block \\(1.01\\ \\mathrm{m}\\) at resonance. The true maximum sits slightly below \\(\\omega_0\\). To find it, look at the square of the denominator of (4) as a function of \\(\\Omega^2\\) and complete the square:",
@@ -223,6 +439,10 @@
   "src": "Pause",
   "tr": "Pause"
  },
+ "7a13f62b9220": {
+  "src": "Leybold Didactic, <a href=\"https://etpwww.etp.kit.edu/~simonis/praktikum/Manuals/Leybold-PohlschesRad.pdf\"><em>Gebrauchsanweisung 346 00: Drehpendel nach Pohl</em></a>, Hürth (in German): Pohl’s wheel and its eddy-current brake (Section 9).",
+  "tr": "Leybold Didactic, <a href=\"https://etpwww.etp.kit.edu/~simonis/praktikum/Manuals/Leybold-PohlschesRad.pdf\"><em>Gebrauchsanweisung 346 00: Drehpendel nach Pohl</em></a>, Hürth (deutschsprachig): das Pohlsche Rad und seine Wirbelstrombremse (Abschnitt 9)."
+ },
  "7d252cd594b3": {
   "src": "All simulations ↑",
   "tr": "Alle Simulationen ↑"
@@ -234,6 +454,10 @@
  "7de9c134306d": {
   "src": "J. R. Taylor, <a href=\"https://books.google.com/books/about/Classical_Mechanics.html?id=P1kCtNr-pJsC\"><em>Classical Mechanics</em></a>, University Science Books, 2005: chapter 5, oscillations, driven damped oscillators and resonance.",
   "tr": "J. R. Taylor, <a href=\"https://books.google.com/books/about/Classical_Mechanics.html?id=P1kCtNr-pJsC\"><em>Classical Mechanics</em></a>, University Science Books, 2005: Kapitel 5, Schwingungen, angetriebene gedämpfte Oszillatoren und Resonanz."
+ },
+ "7e0a5e113517": {
+  "src": "Closed loop",
+  "tr": "Regelkreis"
  },
  "7e0d3d8ade7f": {
   "src": "Driven Oscillator<span class=\"dot\">.</span>",
@@ -259,13 +483,41 @@
   "src": "<span class=\"pfig__n\">Figure 2</span>Steady amplitude, in units of the static stretch \\(F_0/k\\), and phase lag against the drive frequency, from equation (4) for four damping ratios. The lighter the damping, the taller and narrower the peak, and the more sudden the jump of the phase from \\(0^\\circ\\) to \\(180^\\circ\\).",
   "tr": "<span class=\"pfig__n\">Abbildung 2</span>Stationäre Amplitude in Einheiten der statischen Dehnung \\(F_0/k\\) und Phasennacheilung über der Erregerfrequenz, nach Gleichung (4) für vier Dämpfungsgrade. Je schwächer die Dämpfung, desto höher und schmaler der Gipfel und desto plötzlicher der Sprung der Phase von \\(0^\\circ\\) auf \\(180^\\circ\\)."
  },
+ "866a12a30350": {
+  "src": "<span class=\"psec__n\">13</span>What the model leaves out",
+  "tr": "<span class=\"psec__n\">13</span>Was das Modell weglässt"
+ },
+ "866c54544b4b": {
+  "src": "traced once per drive period. To see paths approach it, look at the block only once per period, like a dancer lit by a strobe that flashes on every beat. Each flash records one point, and the map from one flash to the next, the <em>Poincaré map</em> of the driven oscillator, has the steady swing as its fixed point. A disturbance of the steady swing is a free motion, so it is multiplied per period by \\(\\mu = e^{\\lambda T}\\), with \\(T = 1/f\\); for \\(|\\mu| < 1\\) the dots converge on one point of the ellipse. The size \\(|\\mu| = e^{\\mathrm{Re}\\,\\lambda\\, T}\\) says how fast: \\(0.705\\) per period with the defaults (\\(f = 0.45\\ \\mathrm{Hz}\\)), \\(0.008\\) with the PD preset, and \\(0.458\\) with the PID preset, where the slow memory sets the pace. The steady swing is therefore the attractor of every driven run: the stable limit set to which all paths converge, whatever the start.",
+  "tr": "die einmal pro Erregerperiode durchlaufen wird. Um zu sehen, wie sich die Bahnen ihr nähern, betrachten wir den Block nur einmal pro Periode, wie eine Tänzerin im Licht eines Stroboskops, das auf jeden Schlag aufblitzt. Jeder Blitz hält einen Punkt fest, und die Abbildung von einem Blitz zum nächsten, die <em>Poincaré-Abbildung</em> des angetriebenen Oszillators, hat die stationäre Schwingung als Fixpunkt. Eine Störung der stationären Schwingung ist eine freie Bewegung, sie wird also pro Periode mit dem Multiplikator \\(\\mu = e^{\\lambda T}\\) multipliziert, mit \\(T = 1/f\\); für \\(|\\mu| < 1\\) laufen die Punkte auf einen Punkt der Ellipse zu. Der Betrag \\(|\\mu| = e^{\\mathrm{Re}\\,\\lambda\\, T}\\) sagt, wie schnell: \\(0.705\\) pro Periode mit den Voreinstellungen (\\(f = 0.45\\ \\mathrm{Hz}\\)), \\(0.008\\) mit der PD-Voreinstellung und \\(0.458\\) mit der PID-Voreinstellung, bei der das langsame Gedächtnis das Tempo bestimmt. Die stationäre Schwingung ist daher der Attraktor jedes angetriebenen Laufs: die stabile Grenzmenge, auf die alle Bahnen zulaufen, wie auch immer sie beginnen."
+ },
+ "8772ede6a147": {
+  "src": "<span>10</span>Closing the loop",
+  "tr": "<span>10</span>Den Regelkreis schließen"
+ },
+ "87799e5f0e5e": {
+  "src": "<span class=\"psec__n\">09</span>Closing the loop, and the screen",
+  "tr": "<span class=\"psec__n\">09</span>Der geschlossene Regelkreis und der Bildschirm"
+ },
  "87d64c270663": {
   "src": "K. J. Åström and R. M. Murray, <em>Feedback Systems: An Introduction for Scientists and Engineers</em>, Princeton University Press, 2008: chapter 8, transfer functions, frequency response and Bode plots. <a href=\"http://www.cds.caltech.edu/~murray/books/AM08/pdf/am08-complete_22Feb09.pdf\">The authors’ free electronic edition</a>.",
   "tr": "K. J. Åström und R. M. Murray, <em>Feedback Systems: An Introduction for Scientists and Engineers</em>, Princeton University Press, 2008: Kapitel 8, Übertragungsfunktionen, Frequenzgang und Bode-Diagramme. <a href=\"http://www.cds.caltech.edu/~murray/books/AM08/pdf/am08-complete_22Feb09.pdf\">Die kostenlose elektronische Ausgabe der Autoren</a>."
  },
+ "89d65d88af8d": {
+  "src": "Now take the block in your hand. Grab it on the screen and drag it anywhere within the ruler. While you hold it, the page’s clock stops, but the controller keeps working: it reads your hand’s position, pulls against it with \\(u\\), and its integral keeps adding up the error, \\(z = \\int (r - x)\\,\\mathrm dt'\\), second by second. A fourth arrow shows the force your hand must give, \\(F_\\text{hand} = kx + c\\dot x - F\\), the force that balances spring, damper and coil. Let go, and the page solves (12) again from the state you left behind, \\(x(0)\\), \\(\\dot x(0)\\) (the speed of your hand, so you can throw the block) and \\(z(0)\\), and plays the new run from \\(t = 0\\), the outside push restarting with it. The equilibrium (14) does not depend on where the block starts, so the controller brings it back to \\(x^*\\) from wherever you left it; with the controller off you see instead the free, damped swing dying away with the decay time \\(\\tau\\) of §3. Hold the block for a few seconds away from the target with the integral on, and the release overshoots far past \\(r\\): the memory has filled up with error while you held it, and it takes as long again to empty. That is integrator windup, the most common fault of real PI controllers, and the reason real ones limit their integral. The exact solutions need only their constants adjusted to the new start: in (5) they become \\(C_1 = x(0) - X\\cos\\varphi\\) and \\(C_2 = (\\dot x(0) + \\zeta\\omega_0 C_1 - X\\Omega\\sin\\varphi)/\\omega_d\\), and in the closed loop the free motion starts from \\(x(0)\\), \\(\\dot x(0)\\) and \\(z(0)\\) less the equilibrium and the steady swing. The page grades every released run against them as before.",
+  "tr": "Nehmen Sie nun den Block in die Hand. Fassen Sie ihn auf dem Bildschirm und ziehen Sie ihn an eine beliebige Stelle innerhalb des Lineals. Solange Sie ihn festhalten, steht die Uhr der Seite still, doch der Regler arbeitet weiter: Er liest die Position Ihrer Hand, zieht mit \\(u\\) gegen sie, und sein Integral summiert die Regelabweichung weiter auf, \\(z = \\int (r - x)\\,\\mathrm dt'\\), Sekunde um Sekunde. Ein vierter Pfeil zeigt die Kraft, die Ihre Hand aufbringen muss, \\(F_\\text{hand} = kx + c\\dot x - F\\), also die Kraft, die Feder, Dämpfer und Spule das Gleichgewicht hält. Lassen Sie los, so löst die Seite (12) erneut aus dem Zustand, den Sie hinterlassen haben, \\(x(0)\\), \\(\\dot x(0)\\) (die Geschwindigkeit Ihrer Hand, sodass Sie den Block werfen können) und \\(z(0)\\), und spielt den neuen Lauf ab \\(t = 0\\) ab; der äußere Antrieb beginnt mit ihm neu. Die Gleichgewichtslage (14) hängt nicht davon ab, wo der Block startet, daher bringt ihn der Regler von jeder Stelle, an der Sie ihn loslassen, nach \\(x^*\\) zurück; bei ausgeschaltetem Regler sehen Sie stattdessen das freie, gedämpfte Ausschwingen, das mit der Abklingzeit \\(\\tau\\) aus §3 abklingt. Halten Sie den Block bei eingeschaltetem Integral einige Sekunden lang abseits der Sollposition fest, so schießt er nach dem Loslassen weit über \\(r\\) hinaus: Das Gedächtnis hat sich, während Sie ihn hielten, mit Regelabweichung gefüllt, und es braucht noch einmal so lange, um sich zu leeren. Das ist das Windup (Integratorsättigung), der häufigste Fehler realer PI-Regler und der Grund, warum reale Regler ihr Integral begrenzen. Die exakten Lösungen brauchen für den neuen Anfang nur angepasste Konstanten: In (5) werden sie zu \\(C_1 = x(0) - X\\cos\\varphi\\) und \\(C_2 = (\\dot x(0) + \\zeta\\omega_0 C_1 - X\\Omega\\sin\\varphi)/\\omega_d\\), und im geschlossenen Regelkreis beginnt die freie Bewegung bei \\(x(0)\\), \\(\\dot x(0)\\) und \\(z(0)\\), vermindert um die Gleichgewichtslage und die stationäre Schwingung. Die Seite prüft jeden losgelassenen Lauf wie zuvor an ihnen."
+ },
+ "8f26ed65ecc1": {
+  "src": "The phase portrait under the force profile draws all of this for the run on screen. The arrows are the free flow (17), the direction in which the state would move with the push switched off; with integral action they show the slice of the three-dimensional flow through the fixed point, \\(z = z^*\\), so a path may cross them at an angle. The cross marks the fixed point \\(\\mathbf y^*\\), the dashed rose ellipse is the steady swing (21), the dark path is the run up to now and the pale one what is still to come, and the burgundy dots are the strobe flashes, one per drive period. Drag the block away and let go: the path starts where your hand left it and spirals into the ellipse, the dots falling onto one point of it. The caption gives the eigenvalues, the kind of fixed point and \\(|\\mu|\\).",
+  "tr": "Das Phasenporträt unter dem Kraftverlauf zeichnet all dies für den Lauf auf dem Bildschirm. Die Pfeile sind der freie Fluss (17), die Richtung, in die sich der Zustand bei abgeschaltetem Antrieb bewegen würde; mit Integralanteil zeigen sie den Schnitt des dreidimensionalen Flusses durch den Fixpunkt, \\(z = z^*\\), sodass eine Bahn sie schräg kreuzen kann. Das Kreuz markiert den Fixpunkt \\(\\mathbf y^*\\), die gestrichelte rosa Ellipse ist die stationäre Schwingung (21), die dunkle Bahn ist der Lauf bis jetzt und die helle das, was noch kommt, und die weinroten Punkte sind die Stroboskopblitze, einer pro Erregerperiode. Ziehen Sie den Block weg und lassen Sie los: Die Bahn beginnt dort, wo Ihre Hand ihn losgelassen hat, und windet sich spiralförmig in die Ellipse, wobei die Punkte auf einen ihrer Punkte fallen. Die Bildunterschrift nennt die Eigenwerte, die Art des Fixpunkts und \\(|\\mu|\\)."
+ },
  "8fc78cde5646": {
   "src": "<span>4</span>Resonance and phase",
   "tr": "<span>4</span>Resonanz und Phase"
+ },
+ "920cb0e71ab6": {
+  "src": "Frequency response: the amplitude function A(f) and the phase difference φ(f) of the steady swing against the drive frequency, on linear axes or as a Bode plot, with the present drive marked.",
+  "tr": "Frequenzgang: die Amplitudenfunktion A(f) und die Phasendifferenz φ(f) der stationären Schwingung über der Erregerfrequenz, auf linearen Achsen oder als Bode-Diagramm, mit der aktuellen Erregung markiert."
  },
  "930ccbc0599e": {
   "src": "Read (5) as a story in two acts. At first the block rings at its own frequency, because a sudden push excites its own rhythm. That ringing dies within a few \\(\\tau\\), and afterwards only the driver’s rhythm remains. With the defaults, \\(\\tau = 6.37\\ \\mathrm{s}\\), \\(X = 0.482\\ \\mathrm{m}\\) and \\(\\varphi = 25.3^\\circ\\).",
@@ -279,6 +531,10 @@
   "src": "Home page",
   "tr": "Startseite"
  },
+ "95ab596ff1fe": {
+  "src": "<span class=\"psec__n\">10</span>Closing the loop",
+  "tr": "<span class=\"psec__n\">10</span>Den Regelkreis schließen"
+ },
  "96af3c790373": {
   "src": "<span>1</span>A push from outside",
   "tr": "<span>1</span>Ein Stoß von außen"
@@ -287,9 +543,33 @@
   "src": "Exercise 4.1 · on the figure above",
   "tr": "Übung 4.1 · zur Abbildung oben"
  },
+ "9c4184b0c8de": {
+  "src": "On the page \\(m = 1\\ \\mathrm{kg}\\), and the sliders set the spring constant \\(k\\), the damping ratio \\(\\zeta\\), \\(F_0\\) and the drive frequency \\(f = \\Omega/2\\pi\\); the natural frequency follows from the spring, \\(f_0 = \\sqrt{k/m}/2\\pi\\), and the damper from both, \\(c = 2\\zeta\\sqrt{km}\\). With the defaults, \\(k = 9.87\\ \\mathrm{N/m}\\) and \\(\\zeta = 0.05\\), so \\(f_0 = 0.5\\ \\mathrm{Hz}\\) and \\(c = 0.314\\ \\mathrm{kg/s}\\). After Solve the block starts at rest in its rest position, \\(x(0) = 0\\), \\(\\dot x(0) = 0\\); §10 shows how to start it anywhere by hand.",
+  "tr": "Auf der Seite gilt \\(m = 1\\ \\mathrm{kg}\\), und die Schieber setzen die Federkonstante \\(k\\), den Dämpfungsgrad \\(\\zeta\\), \\(F_0\\) und die Erregerfrequenz \\(f = \\Omega/2\\pi\\); die Eigenfrequenz folgt aus der Feder, \\(f_0 = \\sqrt{k/m}/2\\pi\\), und der Dämpfer aus beiden, \\(c = 2\\zeta\\sqrt{km}\\). Mit den Voreinstellungen gilt \\(k = 9.87\\ \\mathrm{N/m}\\) und \\(\\zeta = 0.05\\), also \\(f_0 = 0.5\\ \\mathrm{Hz}\\) und \\(c = 0.314\\ \\mathrm{kg/s}\\). Nach dem Lösen beginnt der Block in Ruhe in seiner Ruhelage, \\(x(0) = 0\\), \\(\\dot x(0) = 0\\); §10 zeigt, wie man ihn von Hand an beliebiger Stelle starten lässt."
+ },
+ "9de50c54f62a": {
+  "src": "Controller presets",
+  "tr": "Reglervoreinstellungen"
+ },
+ "9ebf517dccaa": {
+  "src": "Target position r",
+  "tr": "Sollposition r"
+ },
  "9eef2aeb85ee": {
   "src": "<span class=\"psec__n\">07</span>Where the energy goes",
   "tr": "<span class=\"psec__n\">07</span>Wohin die Energie geht"
+ },
+ "a0a63740687a": {
+  "src": "The whole mechanism is drawn on one length scale, in pixels per metre. The scale is kept from one Solve to the next, so a run with more damping or a smaller force really swings less on the screen, and the previous run stays in view as an outlined block and a dotted curve. The scale widens only when a new run needs more room, and Fit scale sets it to the present run; the ruler under the floor gives the ends of the range in metres, and with the controller on, the target \\(r\\) as a dot and the equilibrium \\(x^*\\) as a rose line. The box at the top right is the controller: the value it reads, its three parts and their sum \\(u\\), each as a bar, and a dashed command line down to the current source. Watch the force arrow and the block together: at a low drive frequency the block moves with the force, near \\(f_0\\) it lags a quarter period behind it, and far above \\(f_0\\) it moves against it, as the phase lag of (4) says. Below, a window of the stored run follows the present sample: \\(x(t)\\) dark up to it and pale after it, \\(F(t)/k\\) dashed in burgundy and the steady band \\(x^* \\pm X\\) dashed in rose. The window spans four drive periods, but never less than 6 s or more than 20 s (8.9 s with the defaults). Under it, a thin strip shows the whole 60 s, with the window shaded. The Bode plot marks the present drive frequency with a filled dot and the amplitude measured from the last 10 s of the run with a ring around it: when the run has settled, the two coincide.",
+  "tr": "Der ganze Mechanismus wird in einem einzigen Längenmaßstab gezeichnet, in Pixeln pro Meter. Der Maßstab bleibt von einem Lösen zum nächsten erhalten, sodass ein Lauf mit mehr Dämpfung oder kleinerer Kraft auf dem Bildschirm tatsächlich weniger ausschlägt, und der vorherige Lauf bleibt als umrissener Block und gepunktete Kurve sichtbar. Der Maßstab weitet sich nur, wenn ein neuer Lauf mehr Platz braucht, und „Maßstab anpassen“ stellt ihn auf den aktuellen Lauf ein; das Lineal unter dem Boden gibt die Enden des Bereichs in Metern an und, bei eingeschaltetem Regler, die Sollposition \\(r\\) als Punkt und die Gleichgewichtslage \\(x^*\\) als rosa Linie. Der Kasten oben rechts ist der Regler: der Wert, den er liest, seine drei Anteile und ihre Summe \\(u\\), jeweils als Balken, und eine gestrichelte Befehlslinie hinunter zur Stromquelle. Beobachten Sie Kraftpfeil und Block zusammen: Bei niedriger Erregerfrequenz bewegt sich der Block mit der Kraft, nahe \\(f_0\\) hinkt er ihr um eine Viertelperiode hinterher, und weit oberhalb von \\(f_0\\) bewegt er sich gegen sie, wie es die Phasennacheilung aus (4) sagt. Darunter folgt ein Fenster des gespeicherten Laufs dem aktuellen Abtastwert: \\(x(t)\\) dunkel bis zu ihm und hell danach, \\(F(t)/k\\) weinrot gestrichelt und das stationäre Band \\(x^* \\pm X\\) rosa gestrichelt. Das Fenster umfasst vier Erregerperioden, jedoch nie weniger als 6 s und nie mehr als 20 s (bei den Voreinstellungen 8.9 s). Darunter zeigt ein dünner Streifen die ganzen 60 s, wobei das Fenster schattiert ist. Das Bode-Diagramm markiert die aktuelle Erregerfrequenz mit einem gefüllten Punkt und die aus den letzten 10 s des Laufs gemessene Amplitude mit einem Ring darum: Ist der Lauf eingeschwungen, fallen die beiden zusammen."
+ },
+ "a1c43bea566a": {
+  "src": "Controller · u = Kₚ(r − x) + Kᵢ∫(r − x)dt − K_d ẋ",
+  "tr": "Regler · u = Kₚ(r − x) + Kᵢ∫(r − x)dt − K_d ẋ"
+ },
+ "a20a1594ba6d": {
+  "src": "The last figure is the frequency response of the steady swing. In its linear view, the one used in the teaching laboratory with Pohl’s wheel, the left panel is the amplitude function \\(A(f) = F_0\\,|G(i\\,2\\pi f)|\\) of (4) in metres, the resonance curve with its peak near \\(f_0\\) and a width set by \\(\\zeta\\), and the right panel the phase difference \\(\\varphi(f)\\) between push and swing, from \\(0^\\circ\\) for slow pushes through \\(90^\\circ\\) at \\(f_0\\) to \\(180^\\circ\\) for fast ones. With the controller on, the ink curves are the closed loop (16) and the bare plant is dashed behind them. The Bode view shows the same curves per newton on logarithmic axes, as control engineers draw them.",
+  "tr": "Die letzte Abbildung ist der Frequenzgang der stationären Schwingung. In ihrer linearen Ansicht, wie sie im Praktikum am Pohlschen Rad verwendet wird, zeigt das linke Feld die Amplitudenfunktion \\(A(f) = F_0\\,|G(i\\,2\\pi f)|\\) aus (4) in Metern, die Resonanzkurve mit ihrem Gipfel nahe \\(f_0\\) und einer durch \\(\\zeta\\) bestimmten Breite, und das rechte Feld die Phasendifferenz \\(\\varphi(f)\\) zwischen Antrieb und Schwingung, von \\(0^\\circ\\) bei langsamer Erregung über \\(90^\\circ\\) bei \\(f_0\\) bis \\(180^\\circ\\) bei schneller. Bei eingeschaltetem Regler zeigen die dunklen Kurven den geschlossenen Regelkreis (16), und die bloße Strecke ist dahinter gestrichelt. Die Bode-Ansicht zeigt dieselben Kurven pro Newton auf logarithmischen Achsen, so wie Regelungstechniker sie zeichnen."
  },
  "a28272643323": {
   "src": "<span class=\"psec__n\">02</span>The model",
@@ -303,13 +583,29 @@
   "src": "From t = 0",
   "tr": "Ab t = 0"
  },
+ "a35d07653682": {
+  "src": "<span class=\"pfig__n\">Figure 3</span>The same system as a block diagram. There is no arrow back from \\(x\\) to \\(F\\): the driver acts without looking. Adding such an arrow is what turns a driven system into a controlled one (§10).",
+  "tr": "<span class=\"pfig__n\">Abbildung 3</span>Dasselbe System als Blockschaltbild. Es gibt keinen Pfeil zurück von \\(x\\) nach \\(F\\): Der Erreger wirkt, ohne hinzusehen. Einen solchen Pfeil hinzuzufügen heißt, ein erzwungenes System in ein geregeltes zu verwandeln (§10)."
+ },
  "a4ce3a9be794": {
   "src": "← All simulations",
   "tr": "← Alle Simulationen"
  },
+ "a6abd6a4797e": {
+  "src": "View of the frequency response",
+  "tr": "Ansicht des Frequenzgangs"
+ },
+ "a842658263eb": {
+  "src": "Equilibrium x*",
+  "tr": "Gleichgewichtslage x*"
+ },
  "a9b75cb42bf9": {
   "src": "<span class=\"sw\"></span>now",
   "tr": "<span class=\"sw\"></span>jetzt"
+ },
+ "aa5834af74d4": {
+  "src": "Grundpraktikum Physik, Universität des Saarlandes, <a href=\"https://www.uni-saarland.de/fileadmin/upload/fakultaet-nt/gp-physik/Anleitungen_GP-III/Pohlsches_Rad.pdf\"><em>Pohlsches Rad, nichtlineare Schwingungen und Chaos</em></a>, 2022 (in German): Pohl’s wheel, its motor drive and its eddy-current brake run at constant current (Section 9).",
+  "tr": "Grundpraktikum Physik, Universität des Saarlandes, <a href=\"https://www.uni-saarland.de/fileadmin/upload/fakultaet-nt/gp-physik/Anleitungen_GP-III/Pohlsches_Rad.pdf\"><em>Pohlsches Rad, nichtlineare Schwingungen und Chaos</em></a>, 2022 (deutschsprachig): das Pohlsche Rad, sein Motorantrieb und seine mit konstantem Strom betriebene Wirbelstrombremse (Abschnitt 9)."
  },
  "ab4b3a30cd23": {
   "src": "Set the drive frequency equal to the natural frequency, \\(f = f_0 = 0.50\\ \\mathrm{Hz}\\), and press <em>Solve</em>. Wait until the transient has died, then compare <em>Measured, last 10 s</em> with \\(Q F_0/k\\) from (6), and read <em>Phase lag φ</em>. Now raise the damping ratio to 0.2, repeat, and find the factor by which the amplitude fell.",
@@ -319,9 +615,29 @@
   "src": "The denominator has a plain reading. Multiplied by \\(m\\) it is \\(k - m\\Omega^2 + ic\\Omega\\), one term for each part of the plant. The spring gives \\(k\\). The mass gives \\(-m\\Omega^2\\): at the drive frequency the acceleration is \\(-\\Omega^2\\) times the displacement, so inertia acts like a spring with negative stiffness. The damper gives \\(ic\\Omega\\), a push a quarter cycle out of step with the displacement. Near \\(\\Omega = \\omega_0\\) the first two cancel, and only the damper is left to hold the motion back.",
   "tr": "Der Nenner hat eine einfache Lesart. Mit \\(m\\) multipliziert ist er \\(k - m\\Omega^2 + ic\\Omega\\), ein Term für jeden Teil der Strecke. Die Feder liefert \\(k\\). Die Masse liefert \\(-m\\Omega^2\\): Bei der Erregerfrequenz ist die Beschleunigung das \\(-\\Omega^2\\)-Fache der Auslenkung, sodass die Trägheit wie eine Feder mit negativer Steifigkeit wirkt. Der Dämpfer liefert \\(ic\\Omega\\), eine Kraft, die um eine Viertelperiode gegenüber der Auslenkung verschoben ist. Nahe \\(\\Omega = \\omega_0\\) heben sich die ersten beiden Terme auf, und nur der Dämpfer bleibt, der die Bewegung zurückhält."
  },
+ "acf3184bef01": {
+  "src": "Read it as a race: the damping available in the loop, times its stiffness, must beat the rate at which the memory accumulates force. The PID preset has \\(128.9 > 10\\) and is stable; set \\(K_p = 5\\), \\(K_d = 0\\), \\(K_i = 60\\) and the left side is 4.7 against 60: the block’s swings grow until the page stops the solver at \\(|x| = 1000\\ \\mathrm m\\), and the readout says so. The outside push still acts through the closed loop. Its steady answer is (3) with the coefficients of (13) and the integral’s term \\(K_i/(i\\Omega)\\):",
+  "tr": "Man lese es als Wettlauf: Die im Regelkreis verfügbare Dämpfung, multipliziert mit seiner Steifigkeit, muss die Rate übertreffen, mit der das Gedächtnis Kraft ansammelt. Die PID-Voreinstellung hat \\(128.9 > 10\\) und ist stabil; stellen Sie \\(K_p = 5\\), \\(K_d = 0\\), \\(K_i = 60\\) ein, so steht die linke Seite bei 4.7 gegenüber 60: Die Ausschläge des Blocks wachsen, bis die Seite den Löser bei \\(|x| = 1000\\ \\mathrm m\\) anhält, und die Anzeige meldet das. Der äußere Antrieb wirkt auch durch den geschlossenen Regelkreis hindurch. Seine stationäre Antwort ist (3) mit den Koeffizienten von (13) und dem Term \\(K_i/(i\\Omega)\\) des Integrals:"
+ },
+ "ad890712951f": {
+  "src": "Choose where the block should rest: set <b>r</b> here, or drag the flag on the ruler.",
+  "tr": "Wählen Sie, wo der Block ruhen soll: Stellen Sie hier <b>r</b> ein, oder ziehen Sie die Zielfahne auf dem Lineal."
+ },
+ "adf622119af6": {
+  "src": "The damper is drawn as what it is, a piston in oil. Its force \\(-c\\dot x\\) always points against the motion, and its oil darkens while it turns energy into heat, by \\(P_\\text{loss} = c\\dot x^2\\) as a fraction of the largest value in the run. The three arrows over the block are the forces on it, the coil’s \\(F\\), the damper’s \\(-c\\dot x\\) and the spring’s \\(-kx\\), each drawn twice as long as the stretch of the spring that would carry it, so they share the length scale of the motion; their sum is \\(m\\ddot x\\). Driven at \\(f_0\\) in the steady state, the spring’s arrow swings about \\(Q\\) times longer than the other two, while the coil’s and the damper’s arrows cancel: the driver only replaces what the damper takes, as §7 says. The bars at the top keep the books of (8): the work \\(W_\\text{in}\\) the coil has done since \\(t = 0\\), the heat \\(W_\\text{loss}\\) the damper has made, and the energy \\(E\\) the oscillator holds now, which is their difference.",
+  "tr": "Der Dämpfer ist so gezeichnet, wie er ist: als Kolben in Öl. Seine Kraft \\(-c\\dot x\\) zeigt stets gegen die Bewegung, und sein Öl wird dunkler, während er Energie in Wärme umwandelt, nach Maßgabe von \\(P_\\text{loss} = c\\dot x^2\\) als Bruchteil des größten Werts im Lauf. Die drei Pfeile über dem Block sind die Kräfte auf ihn, die Kraft \\(F\\) der Spule, die Kraft \\(-c\\dot x\\) des Dämpfers und die Kraft \\(-kx\\) der Feder, jede doppelt so lang gezeichnet wie die Dehnung der Feder, die sie tragen würde, sodass sie den Längenmaßstab der Bewegung teilen; ihre Summe ist \\(m\\ddot x\\). Bei Erregung mit \\(f_0\\) im eingeschwungenen Zustand schwingt der Pfeil der Feder etwa \\(Q\\)-mal so lang aus wie die beiden anderen, während sich die Pfeile von Spule und Dämpfer aufheben: Der Erreger ersetzt nur, was der Dämpfer entnimmt, wie §7 sagt. Die Balken oben führen Buch über (8): die Arbeit \\(W_\\text{in}\\), die die Spule seit \\(t = 0\\) verrichtet hat, die Wärme \\(W_\\text{loss}\\), die der Dämpfer erzeugt hat, und die Energie \\(E\\), die der Oszillator jetzt enthält, also ihre Differenz."
+ },
+ "af502f2b37ee": {
+  "src": "Linear",
+  "tr": "Linear"
+ },
  "b2fcac220201": {
   "src": "Figure 4 is the run the page stores with its default settings. The drive at \\(0.45\\ \\mathrm{Hz}\\) is close to the natural \\(0.50\\ \\mathrm{Hz}\\), so during the first seconds two nearby rhythms are present at once: the driver’s, and the block’s own ringing from equation (5). Like two guitar strings slightly out of tune, they drift in and out of step once every \\(1/|f-f_d| = 20.25\\ \\mathrm{s}\\), where \\(f_d = \\omega_d/2\\pi = 0.499\\ \\mathrm{Hz}\\) is the damped ringing frequency (with \\(f_0\\) in its place the estimate is 20 s, close enough at this weak damping). The amplitude swells and shrinks with that rhythm; the first swell reaches \\(0.596\\ \\mathrm{m}\\) at \\(t = 8.0\\ \\mathrm{s}\\). Because the ringing decays with \\(\\tau = 6.4\\ \\mathrm{s}\\), the second beat is already weak, and after half a minute only the steady oscillation at \\(\\pm X = \\pm 0.482\\ \\mathrm{m}\\) is left.",
   "tr": "Abbildung 4 ist der Lauf, den die Seite mit ihren Voreinstellungen speichert. Die Erregung bei \\(0.45\\ \\mathrm{Hz}\\) liegt nahe der Eigenfrequenz \\(0.50\\ \\mathrm{Hz}\\), daher sind in den ersten Sekunden zwei nahe beieinanderliegende Rhythmen zugleich vorhanden: der des Erregers und das eigene Nachschwingen des Blocks aus Gleichung (5). Wie zwei leicht verstimmte Gitarrensaiten laufen sie alle \\(1/|f-f_d| = 20.25\\ \\mathrm{s}\\) einmal aus dem Takt und wieder in den Takt, wobei \\(f_d = \\omega_d/2\\pi = 0.499\\ \\mathrm{Hz}\\) die gedämpfte Schwingungsfrequenz des Nachschwingens ist (mit \\(f_0\\) an ihrer Stelle ergibt sich die Schätzung 20 s, bei dieser schwachen Dämpfung genau genug). Die Amplitude schwillt in diesem Rhythmus an und ab; das erste Maximum erreicht \\(0.596\\ \\mathrm{m}\\) bei \\(t = 8.0\\ \\mathrm{s}\\). Weil das Nachschwingen mit \\(\\tau = 6.4\\ \\mathrm{s}\\) abklingt, ist die zweite Schwebung schon schwach, und nach einer halben Minute bleibt nur noch die stationäre Schwingung mit \\(\\pm X = \\pm 0.482\\ \\mathrm{m}\\) übrig."
+ },
+ "b49149ee0138": {
+  "src": "<span>9</span>Closing the loop, and the screen",
+  "tr": "<span>9</span>Der geschlossene Regelkreis und der Bildschirm"
  },
  "b7a5b228d7b5": {
   "src": "Setting \\(s = i\\Omega\\) gives the response to a steady sinusoidal input, and comparing with (3), \\(G(i\\Omega) = X e^{-i\\varphi}/F_0\\). Plotting \\(|G(i\\Omega)|\\) and \\(\\varphi\\) against the drive frequency on logarithmic axes gives the <em>Bode plot</em>, the second figure on this page. It is the plant’s identity card: from it an engineer reads how strongly each frequency gets through and how late it arrives. Designing a controller, a device that measures \\(x\\) and adds a correcting force, means reshaping this card. Fig. 10 does that for a wind turbine.",
@@ -331,6 +647,10 @@
   "src": "A mass on a spring with damping, driven by an outside force F(t) = F0 cos Ωt. The motion is solved first with RK4 and stored, then played back from the data; resonance, phase lag and the Bode plot of the system.",
   "tr": "Eine Masse an einer gedämpften Feder, angetrieben von einer äußeren Kraft F(t) = F0 cos Ωt. Die Bewegung wird zuerst mit RK4 gelöst und gespeichert und danach aus den Daten abgespielt; Resonanz, Phasennacheilung und das Bode-Diagramm des Systems."
  },
+ "be9e05ff1de2": {
+  "src": "The driver on the screen is the one inside every loudspeaker. A coil of wire is wound on a light tube fixed to the right face of the block, and the tube slides into the narrow gap of a magnet that stands on the floor. In the gap the field \\(B\\) points straight out from the central pole, so every piece of the winding is perpendicular to it, and the Lorentz force \\(\\mathrm d\\vec F = I\\,\\mathrm d\\vec\\ell \\times \\vec B\\) on each piece points along the axis. Added up over the length \\(\\ell\\) of wire in the gap, it gives",
+  "tr": "Der Erreger auf dem Bildschirm ist derselbe, der in jedem Lautsprecher sitzt: ein Tauchspulantrieb. Eine Drahtspule ist auf ein leichtes Rohr gewickelt, das an der rechten Seitenfläche des Blocks befestigt ist, und das Rohr gleitet in den schmalen Luftspalt eines Magneten, der auf dem Boden steht. Im Luftspalt zeigt das Feld \\(B\\) radial vom Mittelpol nach außen, sodass jedes Stück der Wicklung senkrecht auf ihm steht, und die Lorentzkraft \\(\\mathrm d\\vec F = I\\,\\mathrm d\\vec\\ell \\times \\vec B\\) auf jedes Stück zeigt in Richtung der Achse. Summiert über die Länge \\(\\ell\\) des Drahtes im Luftspalt ergibt sie"
+ },
  "bee75ca77f75": {
   "src": "Controls",
   "tr": "Bedienelemente"
@@ -339,13 +659,29 @@
   "src": "In the steady state the stored energy only sloshes between spring and block, so on average every joule the driver puts in is lost in the damper. The speed swings with amplitude \\(\\Omega X\\), and the square of a sine averages to one half over a period, so \\(\\langle P_\\text{in}\\rangle = \\langle P_\\text{loss}\\rangle = \\tfrac12 c\\,\\Omega^2 X^2\\), which is \\(0.292\\ \\mathrm{W}\\) for the defaults. Over the full 60 s run the page finds \\(W_\\text{in} = 19.03\\ \\mathrm{J}\\), \\(W_\\text{loss} = 17.93\\ \\mathrm{J}\\) and \\(E(T) - E(0) = 1.11\\ \\mathrm{J}\\). Equation (8) then holds to \\(1.3\\times10^{-12}\\) of \\(W_\\text{in}\\): this is the <em>Energy balance</em> readout, a test of the whole computation.",
   "tr": "Im stationären Zustand pendelt die gespeicherte Energie nur zwischen Feder und Block hin und her, daher geht im Mittel jedes Joule, das der Erreger hineinsteckt, im Dämpfer verloren. Die Geschwindigkeit schwankt mit der Amplitude \\(\\Omega X\\), und das Quadrat einer Sinusfunktion hat über eine Periode den Mittelwert einhalb, daher gilt \\(\\langle P_\\text{in}\\rangle = \\langle P_\\text{loss}\\rangle = \\tfrac12 c\\,\\Omega^2 X^2\\), was bei den Voreinstellungen \\(0.292\\ \\mathrm{W}\\) ergibt. Über den vollen Lauf von 60 s findet die Seite \\(W_\\text{in} = 19.03\\ \\mathrm{J}\\), \\(W_\\text{loss} = 17.93\\ \\mathrm{J}\\) und \\(E(T) - E(0) = 1.11\\ \\mathrm{J}\\). Gleichung (8) gilt dann auf \\(1.3\\times10^{-12}\\) von \\(W_\\text{in}\\) genau: Das ist die Anzeige <em>Energiebilanz</em>, ein Test der gesamten Rechnung."
  },
+ "c037d506b8dd": {
+  "src": "The whole mechanism is drawn on one length scale, in pixels per metre, and the block may travel as far either side of rest as the canvas leaves room for the coil drive. The scale is kept from one Solve to the next, so a run with more damping or a smaller force really swings less on the screen, and the previous run stays in view as an outlined block and a dotted curve. The scale widens only when a new run needs more room, and Fit scale sets it to the present run; the ruler under the floor gives the ends of the range in metres, the target \\(r\\) as a flag you can drag, and with the controller on the equilibrium \\(x^*\\) as a rose line through the block. The box at the top right is the controller: the value it reads, its three parts and their sum \\(u\\), each as a bar, and a dashed command line down to the current source. Watch the force arrow and the block together: at a low drive frequency the block moves with the force, near \\(f_0\\) it lags a quarter period behind it, and far above \\(f_0\\) it moves against it, as the phase lag of (4) says. Below, a window of the stored run follows the present sample: \\(x(t)\\) dark up to it and pale after it, \\(F(t)/k\\) dashed in burgundy and the steady band \\(x^* \\pm X\\) dashed in rose. The window spans four drive periods, but never less than 6 s or more than 20 s (8.9 s with the defaults). Under it, a thin strip shows the whole 60 s, with the window shaded. Both views mark the present drive frequency with a filled dot and the amplitude measured from the last 10 s of the run with a ring around it: when the run has settled, the two coincide.",
+  "tr": "Der ganze Mechanismus wird in einem einzigen Längenmaßstab gezeichnet, in Pixeln pro Meter, und der Block darf sich beiderseits der Ruhelage so weit bewegen, wie die Zeichenfläche neben dem Spulenantrieb Platz lässt. Der Maßstab bleibt von einem Lösen zum nächsten erhalten, sodass ein Lauf mit mehr Dämpfung oder kleinerer Kraft auf dem Bildschirm tatsächlich weniger ausschlägt, und der vorherige Lauf bleibt als umrissener Block und gepunktete Kurve sichtbar. Der Maßstab weitet sich nur, wenn ein neuer Lauf mehr Platz braucht, und „Maßstab anpassen“ stellt ihn auf den aktuellen Lauf ein; das Lineal unter dem Boden gibt die Enden des Bereichs in Metern an, die Sollposition \\(r\\) als Zielfahne, die Sie ziehen können, und bei eingeschaltetem Regler die Gleichgewichtslage \\(x^*\\) als rosa Linie durch den Block. Der Kasten oben rechts ist der Regler: der Wert, den er liest, seine drei Anteile und ihre Summe \\(u\\), jeweils als Balken, und eine gestrichelte Befehlslinie hinunter zur Stromquelle. Beobachten Sie Kraftpfeil und Block zusammen: Bei niedriger Erregerfrequenz bewegt sich der Block mit der Kraft, nahe \\(f_0\\) hinkt er ihr um eine Viertelperiode hinterher, und weit oberhalb von \\(f_0\\) bewegt er sich gegen sie, wie es die Phasennacheilung aus (4) sagt. Darunter folgt ein Fenster des gespeicherten Laufs dem aktuellen Abtastwert: \\(x(t)\\) dunkel bis zu ihm und hell danach, \\(F(t)/k\\) weinrot gestrichelt und das stationäre Band \\(x^* \\pm X\\) rosa gestrichelt. Das Fenster umfasst vier Erregerperioden, jedoch nie weniger als 6 s und nie mehr als 20 s (bei den Voreinstellungen 8.9 s). Darunter zeigt ein dünner Streifen die ganzen 60 s, wobei das Fenster schattiert ist. Beide Ansichten markieren die aktuelle Erregerfrequenz mit einem gefüllten Punkt und die aus den letzten 10 s des Laufs gemessene Amplitude mit einem Ring darum: Ist der Lauf eingeschwungen, fallen die beiden zusammen."
+ },
  "c1b34a6a31df": {
   "src": "<span class=\"psec__n\">06</span>The start: beats and decay",
   "tr": "<span class=\"psec__n\">06</span>Der Anfang: Schwebungen und Abklingen"
  },
+ "c33cfb3666c1": {
+  "src": "The second condition comes from Faraday’s law. A wire moving at the speed \\(\\dot x\\) through the field has an electromotive force (emf), a voltage made by the motion, of \\(B\\ell\\dot x\\) induced in it. Walk once around the circuit, Kirchhoff’s voltage law: the voltage \\(V\\) of the source is used up by the coil’s resistance \\(R\\), by its self-inductance \\(\\Lambda\\) and by this motional emf, which opposes the current that drives the motion:",
+  "tr": "Die zweite Bedingung folgt aus dem Faradayschen Induktionsgesetz. In einem Draht, der sich mit der Geschwindigkeit \\(\\dot x\\) durch das Feld bewegt, wird eine elektromotorische Kraft (EMK) induziert, eine durch die Bewegung erzeugte Spannung, vom Betrag \\(B\\ell\\dot x\\). Wir gehen einmal um den Stromkreis herum, nach der Kirchhoffschen Maschenregel: Die Spannung \\(V\\) der Quelle wird aufgebraucht vom Widerstand \\(R\\) der Spule, von ihrer Selbstinduktivität \\(\\Lambda\\) und von dieser Bewegungs-EMK, die dem Strom entgegenwirkt, der die Bewegung antreibt:"
+ },
+ "c3e9f646f20f": {
+  "src": "The last term is the back-emf. The source pays for it with the power \\(B\\ell\\dot x\\cdot I = F\\dot x\\), which is exactly the driver’s power \\(P_\\text{in}\\) of §7: the electrical energy that disappears into the back-emf is the work done on the block. A current source raises its voltage by whatever (10) asks, so the current, and with it the force, stays \\(I_0\\cos\\Omega t\\). A plain voltage source would not. With \\(L_c\\) negligible it lets \\(I = (V - B\\ell\\dot x)/R\\) flow, and the force becomes",
+  "tr": "Der letzte Term ist die Gegen-EMK, die induzierte Gegenspannung. Die Quelle bezahlt sie mit der Leistung \\(B\\ell\\dot x\\cdot I = F\\dot x\\), und das ist genau die Leistung \\(P_\\text{in}\\) des Erregers aus §7: Die elektrische Energie, die in der Gegen-EMK verschwindet, ist die am Block verrichtete Arbeit. Eine Stromquelle erhöht ihre Spannung um so viel, wie (10) verlangt, sodass der Strom und mit ihm die Kraft bei \\(I_0\\cos\\Omega t\\) bleibt. Eine einfache Spannungsquelle täte das nicht. Bei vernachlässigbarem \\(L_c\\) lässt sie den Strom \\(I = (V - B\\ell\\dot x)/R\\) fließen, und die Kraft wird zu"
+ },
  "c4e8624d3f89": {
   "src": "<span class=\"pfig__n\">Figure 4</span>The default run, \\(f_0 = 0.5\\ \\mathrm{Hz}\\), \\(\\zeta = 0.05\\), \\(F_0 = 1\\ \\mathrm{N}\\), \\(f = 0.45\\ \\mathrm{Hz}\\), computed with the page’s own RK4 (\\(h = 1\\ \\mathrm{ms}\\)) and plotted every 50 ms. The dashed burgundy curve is \\(F(t)/k\\), the stretch the force would cause if applied slowly; the motion lags it by \\(\\varphi = 25.3^\\circ\\) and is \\(4.76\\) times larger.",
   "tr": "<span class=\"pfig__n\">Abbildung 4</span>Der Standardlauf, \\(f_0 = 0.5\\ \\mathrm{Hz}\\), \\(\\zeta = 0.05\\), \\(F_0 = 1\\ \\mathrm{N}\\), \\(f = 0.45\\ \\mathrm{Hz}\\), berechnet mit dem eigenen RK4 der Seite (\\(h = 1\\ \\mathrm{ms}\\)) und alle 50 ms aufgetragen. Die gestrichelte weinrote Kurve ist \\(F(t)/k\\), die Dehnung, die die Kraft bei langsamem Aufbringen verursachen würde; die Bewegung hinkt ihr um \\(\\varphi = 25.3^\\circ\\) nach und ist \\(4.76\\)-mal so groß."
+ },
+ "c4f021d97461": {
+  "src": "Without the integral, (13) is the equation of §2 with the stiffer spring \\(k + K_p\\) and the stronger damper \\(c + K_d\\), pushed by a constant force \\(K_p r\\): a new oscillator, with its own natural frequency \\(\\sqrt{(k+K_p)/m}\\) and damping ratio \\(\\zeta_\\text{cl} = (c + K_d)/(2\\sqrt{m(k+K_p)})\\). Where does it come to rest? Set every derivative to zero and \\(F_0 = 0\\):",
+  "tr": "Ohne das Integral ist (13) die Gleichung aus §2 mit der steiferen Feder \\(k + K_p\\) und dem stärkeren Dämpfer \\(c + K_d\\), angetrieben von einer konstanten Kraft \\(K_p r\\): ein neuer Oszillator mit der Eigenfrequenz \\(\\sqrt{(k+K_p)/m}\\) und dem Dämpfungsgrad \\(\\zeta_\\text{cl} = (c + K_d)/(2\\sqrt{m(k+K_p)})\\). Wo kommt er zur Ruhe? Wir setzen jede Ableitung null und \\(F_0 = 0\\):"
  },
  "c6fa6d971887": {
   "src": "Dividing by a complex number divides by its length and turns back by its angle. So \\(X\\) is \\(F_0/m\\) divided by the length of the denominator, and the phase lag \\(\\varphi\\) is the angle of the denominator, somewhere between \\(0^\\circ\\) and \\(180^\\circ\\) because its imaginary part \\(2\\zeta\\omega_0\\Omega\\) is positive; \\(\\operatorname{atan2}(y, x)\\) is simply the name, in code, for the angle of the point \\((x, y)\\). All the coefficients in (2) are real, so the real part of the complex solution solves the real problem, and the steady motion is \\(x_\\text{p}(t) = \\operatorname{Re}\\,X e^{i(\\Omega t - \\varphi)} = X\\cos(\\Omega t - \\varphi)\\), with",
@@ -379,9 +715,17 @@
   "src": "<span class=\"psec__n\">05</span>The control engineer’s view<span class=\"star\" title=\"heavier mathematics\">★</span>",
   "tr": "<span class=\"psec__n\">05</span>Die Sicht der Regelungstechnik<span class=\"star\" title=\"heavier mathematics\">★</span>"
  },
+ "d78efdf4e079": {
+  "src": "<span class=\"psec__n\">12</span>On screen",
+  "tr": "<span class=\"psec__n\">12</span>Auf dem Bildschirm"
+ },
  "d7a410fac291": {
   "src": "<strong>Play.</strong> Each frame converts the playback time into the nearest stored row, \\(n = \\operatorname{round}(t_\\text{play}/10\\,\\mathrm{ms})\\), and draws that row as it is. Nothing is interpolated or recomputed, so the picture and the data panel always show the same numbers, and the <em>Stored run</em> slider can jump to any instant.",
   "tr": "<strong>Abspielen.</strong> Jedes Bild rechnet die Abspielzeit in die nächstliegende gespeicherte Zeile um, \\(n = \\operatorname{round}(t_\\text{play}/10\\,\\mathrm{ms})\\), und zeichnet diese Zeile unverändert. Nichts wird interpoliert oder neu berechnet; daher zeigen Bild und Datenpanel stets dieselben Zahlen, und der Schieber <em>Gespeicherter Lauf</em> kann auf jeden beliebigen Zeitpunkt springen."
+ },
+ "d7cacaf8c4be": {
+  "src": "A block on a spring and a damper, pushed from the other side by a coil that sits in the gap of a fixed magnet and carries an alternating current; arrows show the drive, damper and spring forces on the block, bars the work put in and the heat made; below, the stored displacement x(t) of the whole run with a cursor at the frame being shown.",
+  "tr": "Ein Block an einer Feder und einem Dämpfer, von der anderen Seite angetrieben von einer Spule, die im Luftspalt eines feststehenden Magneten sitzt und einen Wechselstrom führt; Pfeile zeigen die Antriebs-, Dämpfer- und Federkraft auf den Block, Balken die zugeführte Arbeit und die erzeugte Wärme; darunter die gespeicherte Auslenkung x(t) des ganzen Laufs mit einem Cursor bei dem gerade gezeigten Bild."
  },
  "d85eba7b2b37": {
   "src": "1 solve",
@@ -403,9 +747,21 @@
   "src": "<span class=\"psec__n\">09</span>On screen",
   "tr": "<span class=\"psec__n\">09</span>Auf dem Bildschirm"
  },
+ "dde57e820d65": {
+  "src": "PID",
+  "tr": "PID"
+ },
  "dfd65cc1196a": {
   "src": "Stored run",
   "tr": "Gespeicherter Lauf"
+ },
+ "dffffc637a5b": {
+  "src": "<span class=\"psec__n\">11</span>Phase space and stable points",
+  "tr": "<span class=\"psec__n\">11</span>Phasenraum und stabile Punkte"
+ },
+ "e12f82d4ea7b": {
+  "src": "The force profile under the motion shows who pushes when, in newtons, over the same window of the run: the outside push, the spring’s \\(-kx\\), the damper’s \\(-c\\dot x\\), and with the controller on its force \\(u\\) and its three parts. After a release you can watch the division of labour: the proportional part jumps with the error, the derivative part brakes the fast motion, and the integral part rises slowly until it alone carries the spring at \\(x^*\\).",
+  "tr": "Der Kraftverlauf unter der Bewegung zeigt, wer wann drückt, in Newton, über dasselbe Fenster des Laufs: den äußeren Antrieb, die Federkraft \\(-kx\\), die Dämpferkraft \\(-c\\dot x\\) und bei eingeschaltetem Regler seine Kraft \\(u\\) mit ihren drei Anteilen. Nach dem Loslassen können Sie die Arbeitsteilung beobachten: Der Proportionalanteil springt mit der Regelabweichung, der Differentialanteil bremst die schnelle Bewegung, und der Integralanteil steigt langsam an, bis er allein die Feder bei \\(x^*\\) trägt."
  },
  "e13b587879b0": {
   "src": "<span>2</span>The model",
@@ -419,6 +775,14 @@
   "src": "<span class=\"pfig__n\">Figure 1</span>The plant. A block of mass \\(m\\), held by a spring of stiffness \\(k\\) and slowed by a damper with coefficient \\(c\\), is pushed by an outside force \\(F(t)\\). The coordinate \\(x\\) measures how far the block is from where it would rest without the force.",
   "tr": "<span class=\"pfig__n\">Abbildung 1</span>Die Strecke. Ein Block der Masse \\(m\\) wird von einer Feder mit der Steifigkeit \\(k\\) gehalten und von einem Dämpfer mit dem Koeffizienten \\(c\\) gebremst; eine äußere Kraft \\(F(t)\\) treibt ihn an. Die Koordinate \\(x\\) misst, wie weit der Block von der Lage entfernt ist, in der er ohne Kraft ruhen würde."
  },
+ "e3a37a500fff": {
+  "src": "the push of the source plus a second damper. With \\(R = 8\\ \\Omega\\) that damper would have \\((B\\ell)^2/R = 12.5\\ \\mathrm{kg/s}\\), forty times the page’s damper with the defaults and a damping ratio of about 2 on its own. The same induction brakes Pohl’s wheel in the teaching laboratory: its damping is an eddy-current brake, an electromagnet whose field induces currents in the metal of the turning wheel.",
+  "tr": "also der Antrieb der Quelle plus ein zweiter Dämpfer. Mit \\(R = 8\\ \\Omega\\) hätte dieser Dämpfer \\((B\\ell)^2/R = 12.5\\ \\mathrm{kg/s}\\), das Vierzigfache des Dämpfers der Seite bei den Voreinstellungen, und für sich allein einen Dämpfungsgrad von etwa 2. Dieselbe Induktion bremst das Pohlsche Rad im Praktikum: Seine Dämpfung ist eine Wirbelstrombremse, ein Elektromagnet, dessen Feld im Metall des sich drehenden Rades Ströme induziert."
+ },
+ "e3de5ab0ca4c": {
+  "src": "Off",
+  "tr": "Aus"
+ },
  "e74c0422b6ce": {
   "src": "<strong>Solve.</strong> The fourth-order Runge–Kutta method advances \\((x, \\dot x)\\) from \\(t = 0\\) to \\(60\\ \\mathrm{s}\\) in 60 000 steps of \\(h = 1\\ \\mathrm{ms}\\), carrying \\(W_\\text{in}\\) and \\(W_\\text{loss}\\) along in the same steps. Measured in headless Chromium, the default solve took 9.5–12.4 ms; the time depends on the machine.",
   "tr": "<strong>Lösen.</strong> Das Runge-Kutta-Verfahren vierter Ordnung führt \\((x, \\dot x)\\) von \\(t = 0\\) bis \\(60\\ \\mathrm{s}\\) in 60 000 Schritten zu je \\(h = 1\\ \\mathrm{ms}\\) weiter und führt \\(W_\\text{in}\\) und \\(W_\\text{loss}\\) in denselben Schritten mit. Im Headless-Chromium gemessen dauerte das Lösen mit den Voreinstellungen 9.5–12.4 ms; die Zeit hängt vom Rechner ab."
@@ -431,6 +795,10 @@
   "src": "<span>10</span>What the model leaves out",
   "tr": "<span>10</span>Was das Modell weglässt"
  },
+ "ed50b0c2109c": {
+  "src": "<span>13</span>What the model leaves out",
+  "tr": "<span>13</span>Was das Modell weglässt"
+ },
  "edaa1909c0cf": {
   "src": "On the page \\(m = 1\\ \\mathrm{kg}\\) and the sliders set \\(f_0 = \\omega_0/2\\pi\\), \\(\\zeta\\), \\(F_0\\) and the drive frequency \\(f = \\Omega/2\\pi\\). With the defaults, \\(f_0 = 0.5\\ \\mathrm{Hz}\\) and \\(\\zeta = 0.05\\), so \\(k = 9.87\\ \\mathrm{N/m}\\) and \\(c = 0.314\\ \\mathrm{kg/s}\\). The block starts at rest in its rest position, \\(x(0) = 0\\), \\(\\dot x(0) = 0\\).",
   "tr": "Auf der Seite gilt \\(m = 1\\ \\mathrm{kg}\\), und die Schieberegler setzen \\(f_0 = \\omega_0/2\\pi\\), \\(\\zeta\\), \\(F_0\\) und die Erregerfrequenz \\(f = \\Omega/2\\pi\\). Mit den Voreinstellungen gilt \\(f_0 = 0.5\\ \\mathrm{Hz}\\) und \\(\\zeta = 0.05\\), also \\(k = 9.87\\ \\mathrm{N/m}\\) und \\(c = 0.314\\ \\mathrm{kg/s}\\). Der Block beginnt in Ruhe in seiner Ruhelage, \\(x(0) = 0\\), \\(\\dot x(0) = 0\\)."
@@ -439,6 +807,10 @@
   "src": "The phase tells the swing story in numbers. Below resonance the block moves with the force (\\(\\varphi \\approx 0\\)). At resonance it lags by exactly a quarter period, \\(\\varphi = 90^\\circ\\): the force is largest when the block is fastest, which is precisely when a push does the most work. Far above resonance the block moves against the force (\\(\\varphi \\to 180^\\circ\\)).",
   "tr": "Die Phase erzählt die Schaukelgeschichte in Zahlen. Unterhalb der Resonanz bewegt sich der Block mit der Kraft (\\(\\varphi \\approx 0\\)). Bei Resonanz hinkt er genau eine Viertelperiode nach, \\(\\varphi = 90^\\circ\\): Die Kraft ist am größten, wenn der Block am schnellsten ist, also genau dann, wenn ein Stoß die meiste Arbeit leistet. Weit oberhalb der Resonanz bewegt sich der Block gegen die Kraft (\\(\\varphi \\to 180^\\circ\\))."
  },
+ "eeb63ab8254d": {
+  "src": "Spring constant k",
+  "tr": "Federkonstante k"
+ },
  "eed28eec00a4": {
   "src": "Solve, then play",
   "tr": "Lösen, dann abspielen"
@@ -446,6 +818,26 @@
  "ef3948e18856": {
   "src": "Oscillator · m = 1 kg",
   "tr": "Oszillator · m = 1 kg"
+ },
+ "f0fe6d1c31ff": {
+  "src": "Phase portrait: the run as a path in the plane of position x and velocity ẋ, with the fixed point, the steady orbit, one dot per drive period, and arrows of the free flow.",
+  "tr": "Phasenporträt: der Lauf als Bahn in der Ebene aus Position x und Geschwindigkeit ẋ, mit dem Fixpunkt, der stationären Bahn, einem Punkt pro Erregerperiode und Pfeilen des freien Flusses."
+ },
+ "f33a57b938fb": {
+  "src": "Take control",
+  "tr": "Selbst steuern"
+ },
+ "f37aeba6ff40": {
+  "src": "Mechanics gives the same pair of equations by a second route. Treat the charge \\(q\\) that has passed through the coil as a second coordinate, so that \\(I = \\dot q\\), and take \\(\\mathscr L = \\tfrac12 m\\dot x^2 - \\tfrac12 kx^2 + \\tfrac12 \\Lambda\\dot q^2 + B\\ell\\,x\\dot q\\), with Rayleigh’s dissipation function \\(\\mathscr D = \\tfrac12 c\\dot x^2 + \\tfrac12 R\\dot q^2\\) and the source voltage \\(V\\) as the generalised force on \\(q\\). Lagrange’s equation for \\(x\\) is (1) with \\(F = B\\ell I\\), which is (9); the one for \\(q\\) is (10). The term \\(B\\ell\\,x\\dot q\\) couples block and coil, and the same coupling constant \\(B\\ell\\) appears in both directions: as newtons per ampere in the force and as volts per metre per second in the emf. The last term of (10) is the back-emf. The source pays for it with the power \\(B\\ell\\dot x\\cdot I = F\\dot x\\), which is exactly the driver’s power \\(P_\\text{in}\\) of §7: the electrical energy that disappears into the back-emf is the work done on the block. A current source raises its voltage by whatever (10) asks, so the current, and with it the force, stays \\(I_0\\cos\\Omega t\\). A plain voltage source would not. With \\(\\Lambda\\) negligible it lets \\(I = (V - B\\ell\\dot x)/R\\) flow, and the force becomes",
+  "tr": "Die Mechanik liefert dasselbe Gleichungspaar auf einem zweiten Weg. Wir behandeln die Ladung \\(q\\), die durch die Spule geflossen ist, als zweite Koordinate, sodass \\(I = \\dot q\\) gilt, und nehmen \\(\\mathscr L = \\tfrac12 m\\dot x^2 - \\tfrac12 kx^2 + \\tfrac12 \\Lambda\\dot q^2 + B\\ell\\,x\\dot q\\), mit der Rayleighschen Dissipationsfunktion \\(\\mathscr D = \\tfrac12 c\\dot x^2 + \\tfrac12 R\\dot q^2\\) und der Quellenspannung \\(V\\) als verallgemeinerter Kraft zu \\(q\\). Die Lagrange-Gleichung für \\(x\\) ist (1) mit \\(F = B\\ell I\\), also (9); die für \\(q\\) ist (10). Der Term \\(B\\ell\\,x\\dot q\\) koppelt Block und Spule, und dieselbe Kopplungskonstante \\(B\\ell\\) tritt in beiden Richtungen auf: als Newton pro Ampere in der Kraft und als Volt pro Meter pro Sekunde in der EMK. Der letzte Term von (10) ist die Gegen-EMK, die induzierte Gegenspannung. Die Quelle bezahlt sie mit der Leistung \\(B\\ell\\dot x\\cdot I = F\\dot x\\), und das ist genau die Leistung \\(P_\\text{in}\\) des Erregers aus §7: Die elektrische Energie, die in der Gegen-EMK verschwindet, ist die am Block verrichtete Arbeit. Eine Stromquelle erhöht ihre Spannung um so viel, wie (10) verlangt, sodass der Strom und mit ihm die Kraft bei \\(I_0\\cos\\Omega t\\) bleibt. Eine einfache Spannungsquelle täte das nicht. Bei vernachlässigbarem \\(\\Lambda\\) lässt sie den Strom \\(I = (V - B\\ell\\dot x)/R\\) fließen, und die Kraft wird zu"
+ },
+ "f44fb1708f01": {
+  "src": "<span>9</span>The driver: a coil in a magnet",
+  "tr": "<span>9</span>Der Antrieb: eine Spule im Magneten"
+ },
+ "f5691e2299c6": {
+  "src": "When you move a slider after solving, the page says so and keeps playing the old run until you solve again: the data on screen always belong to the settings of the last Solve. Two actions solve by themselves, because they are commands rather than changes of the machine: letting go of the block, and a new target \\(r\\), which takes effect from the state on screen at that moment.",
+  "tr": "Bewegen Sie nach dem Lösen einen Schieber, sagt die Seite das und spielt den alten Lauf weiter, bis Sie erneut lösen: Die Daten auf dem Bildschirm gehören immer zu den Einstellungen des letzten Lösens. Zwei Handlungen lösen von selbst, weil sie Befehle sind und keine Änderungen der Maschine: das Loslassen des Blocks und eine neue Sollposition \\(r\\), die ab dem Zustand wirkt, der in diesem Augenblick auf dem Bildschirm steht."
  },
  "f570ac8b3e84": {
   "src": "<span class=\"psec__n\">08</span>Solve first, then play",
@@ -467,13 +859,25 @@
   "src": "Natural frequency f₀",
   "tr": "Eigenfrequenz f₀"
  },
+ "f7a5283b39c2": {
+  "src": "The whole mechanism is drawn on one scale, in pixels per metre. The scale is kept from one Solve to the next, so a run with more damping or a smaller force really swings less on the screen, and the previous run stays in view as an outlined block and a dotted curve. The scale widens only when a new run needs more room, and Fit scale sets it to the present run; the ruler under the floor gives the ends of the range in metres, and with the controller on, the target \\(r\\) as a dot and the equilibrium \\(x^*\\) as a rose line. The box at the top right is the controller: the value it reads, its three parts and their sum \\(u\\), each as a bar, and a dashed command line down to the current source. Watch the force arrow and the block together: at a low drive frequency the block moves with the force, near \\(f_0\\) it lags a quarter period behind it, and far above \\(f_0\\) it moves against it, as the phase lag of (4) says. Below, a window of the stored run follows the present sample: \\(x(t)\\) dark up to it and pale after it, \\(F(t)/k\\) dashed in burgundy and the steady band \\(x^* \\pm X\\) dashed in rose. The window spans four drive periods, but never less than 6 s or more than 20 s (8.9 s with the defaults). Under it, a thin strip shows the whole 60 s, with the window shaded. The Bode plot marks the present drive frequency with a filled dot and the amplitude measured from the last 10 s of the run with a ring around it: when the run has settled, the two coincide.",
+  "tr": "Der ganze Mechanismus wird in einem einzigen Maßstab gezeichnet, in Pixeln pro Meter. Der Maßstab bleibt von einem Lösen zum nächsten erhalten, sodass ein Lauf mit mehr Dämpfung oder kleinerer Kraft auf dem Bildschirm tatsächlich weniger ausschlägt, und der vorherige Lauf bleibt als umrissener Block und gepunktete Kurve sichtbar. Der Maßstab weitet sich nur, wenn ein neuer Lauf mehr Platz braucht, und „Maßstab anpassen“ stellt ihn auf den aktuellen Lauf ein; das Lineal unter dem Boden gibt die Enden des Bereichs in Metern an und, bei eingeschaltetem Regler, die Sollposition \\(r\\) als Punkt und die Gleichgewichtslage \\(x^*\\) als rosa Linie. Der Kasten oben rechts ist der Regler: der Wert, den er liest, seine drei Anteile und ihre Summe \\(u\\), jeweils als Balken, und eine gestrichelte Befehlslinie hinunter zur Stromquelle. Beobachten Sie Kraftpfeil und Block zusammen: Bei niedriger Erregerfrequenz bewegt sich der Block mit der Kraft, nahe \\(f_0\\) hinkt er ihr um eine Viertelperiode hinterher, und weit oberhalb von \\(f_0\\) bewegt er sich gegen sie, wie es die Phasennacheilung aus (4) sagt. Darunter folgt ein Fenster des gespeicherten Laufs dem aktuellen Abtastwert: \\(x(t)\\) dunkel bis zu ihm und hell danach, \\(F(t)/k\\) weinrot gestrichelt und das stationäre Band \\(x^* \\pm X\\) rosa gestrichelt. Das Fenster umfasst vier Erregerperioden, jedoch nie weniger als 6 s und nie mehr als 20 s (bei den Voreinstellungen 8.9 s). Darunter zeigt ein dünner Streifen die ganzen 60 s, wobei das Fenster schattiert ist. Das Bode-Diagramm markiert die aktuelle Erregerfrequenz mit einem gefüllten Punkt und die aus den letzten 10 s des Laufs gemessene Amplitude mit einem Ring darum: Ist der Lauf eingeschwungen, fallen die beiden zusammen."
+ },
  "f8033b444ece": {
   "src": "Energy balance",
   "tr": "Energiebilanz"
  },
+ "fa00a35d6cae": {
+  "src": "The whole mechanism is drawn on one length scale, in pixels per metre. The scale is kept from one Solve to the next, so a run with more damping or a smaller force really swings less on the screen, and the previous run stays in view as an outlined block and a dotted curve. The scale widens only when a new run needs more room, and Fit scale sets it to the present run; the ruler under the floor gives the ends of the range in metres, and with the controller on, the target \\(r\\) as a dot and the equilibrium \\(x^*\\) as a rose line. The box at the top right is the controller: the value it reads, its three parts and their sum \\(u\\), each as a bar, and a dashed command line down to the current source. Watch the force arrow and the block together: at a low drive frequency the block moves with the force, near \\(f_0\\) it lags a quarter period behind it, and far above \\(f_0\\) it moves against it, as the phase lag of (4) says. Below, a window of the stored run follows the present sample: \\(x(t)\\) dark up to it and pale after it, \\(F(t)/k\\) dashed in burgundy and the steady band \\(x^* \\pm X\\) dashed in rose. The window spans four drive periods, but never less than 6 s or more than 20 s (8.9 s with the defaults). Under it, a thin strip shows the whole 60 s, with the window shaded. Both views mark the present drive frequency with a filled dot and the amplitude measured from the last 10 s of the run with a ring around it: when the run has settled, the two coincide.",
+  "tr": "Der ganze Mechanismus wird in einem einzigen Längenmaßstab gezeichnet, in Pixeln pro Meter. Der Maßstab bleibt von einem Lösen zum nächsten erhalten, sodass ein Lauf mit mehr Dämpfung oder kleinerer Kraft auf dem Bildschirm tatsächlich weniger ausschlägt, und der vorherige Lauf bleibt als umrissener Block und gepunktete Kurve sichtbar. Der Maßstab weitet sich nur, wenn ein neuer Lauf mehr Platz braucht, und „Maßstab anpassen“ stellt ihn auf den aktuellen Lauf ein; das Lineal unter dem Boden gibt die Enden des Bereichs in Metern an und, bei eingeschaltetem Regler, die Sollposition \\(r\\) als Punkt und die Gleichgewichtslage \\(x^*\\) als rosa Linie. Der Kasten oben rechts ist der Regler: der Wert, den er liest, seine drei Anteile und ihre Summe \\(u\\), jeweils als Balken, und eine gestrichelte Befehlslinie hinunter zur Stromquelle. Beobachten Sie Kraftpfeil und Block zusammen: Bei niedriger Erregerfrequenz bewegt sich der Block mit der Kraft, nahe \\(f_0\\) hinkt er ihr um eine Viertelperiode hinterher, und weit oberhalb von \\(f_0\\) bewegt er sich gegen sie, wie es die Phasennacheilung aus (4) sagt. Darunter folgt ein Fenster des gespeicherten Laufs dem aktuellen Abtastwert: \\(x(t)\\) dunkel bis zu ihm und hell danach, \\(F(t)/k\\) weinrot gestrichelt und das stationäre Band \\(x^* \\pm X\\) rosa gestrichelt. Das Fenster umfasst vier Erregerperioden, jedoch nie weniger als 6 s und nie mehr als 20 s (bei den Voreinstellungen 8.9 s). Darunter zeigt ein dünner Streifen die ganzen 60 s, wobei das Fenster schattiert ist. Beide Ansichten markieren die aktuelle Erregerfrequenz mit einem gefüllten Punkt und die aus den letzten 10 s des Laufs gemessene Amplitude mit einem Ring darum: Ist der Lauf eingeschwungen, fallen die beiden zusammen."
+ },
  "fb4f4e6883c5": {
   "src": "The height of the peak measures how weakly damped the plant is. At \\(\\Omega = \\omega_0\\) exactly, (4) gives",
   "tr": "Die Höhe des Gipfels misst, wie schwach die Strecke gedämpft ist. Genau bei \\(\\Omega = \\omega_0\\) liefert (4)"
+ },
+ "fb4fe6dbb0bf": {
+  "src": "Unlike the earlier figures, this page does not integrate while you watch. The force is a known function of time, and with the controller on a known function of time and of the state, so the whole future is fixed the moment you press <em>Solve</em> or let go of the block. The page uses that.",
+  "tr": "Anders als die früheren Abbildungen rechnet diese Seite nicht, während Sie zusehen. Die Kraft ist eine bekannte Funktion der Zeit, bei eingeschaltetem Regler eine bekannte Funktion der Zeit und des Zustands, daher liegt die ganze Zukunft in dem Moment fest, in dem Sie <em>Lösen</em> drücken oder den Block loslassen. Die Seite nutzt das."
  },
  "fb57a7ac8366": {
   "src": "This simulation needs JavaScript.",
