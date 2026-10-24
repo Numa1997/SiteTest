@@ -4,7 +4,7 @@ Written by [`tools/inventory.py`](../tools/inventory.py) from the files in the r
 Run `python3 tools/inventory.py` after adding, removing or changing files, and `python3 tools/inventory.py --check`
 to confirm that every file is described. Sizes are those of the files when the list was written.
 
-864 files, 50.5 MB in all. Runs of more than 12 similar files are folded; open them to see each file.
+865 files, 50.5 MB in all. Runs of more than 12 similar files are folded; open them to see each file.
 
 | Folder | Files |
 |---|---|
@@ -14,7 +14,7 @@ to confirm that every file is described. Sizes are those of the files when the l
 | [Arabic pages (generated)](#arabic-pages-generated) | 13 |
 | [Simulation pages](#simulation-pages) | 10 |
 | [Walkthroughs](#walkthroughs) | 30 |
-| [Ledgers of the data panel](#ledgers-of-the-data-panel) | 2 |
+| [Ledgers of the data panel](#ledgers-of-the-data-panel) | 3 |
 | [Shared scripts](#shared-scripts) | 8 |
 | [Stylesheets](#stylesheets) | 15 |
 | [KaTeX](#katex) | 24 |
@@ -45,7 +45,7 @@ to confirm that every file is described. Sizes are those of the files when the l
 | File | Size | What it is | Explained in |
 |---|---|---|---|
 | [`.gitignore`](../.gitignore) | 39 B | Files git leaves out: Python caches, node_modules, build output. | [files.md](files.md) |
-| [`AGENTS.md`](../AGENTS.md) | 13.4 kB | The maintainer's summary: ownership, layout, design rules, folds, the data pipeline, platform quirks. | [build-and-deploy.md](build-and-deploy.md) |
+| [`AGENTS.md`](../AGENTS.md) | 13.5 kB | The maintainer's summary: ownership, layout, design rules, folds, the data pipeline, platform quirks. | [build-and-deploy.md](build-and-deploy.md) |
 | [`CLAUDE.md`](../CLAUDE.md) | 4.3 kB | How Numa expects an AI assistant to work on the project. | [build-and-deploy.md](build-and-deploy.md) |
 | [`README.md`](../README.md) | 7.7 kB | Start here: what the project is, how the files fit together, where each one is explained. | [README.md](../README.md) |
 | [`index.html`](../index.html) | 48.2 kB | The home page: CV, research, simulation plates, index; also the build entry page. | [pages.md](pages.md) |
@@ -156,6 +156,7 @@ to confirm that every file is described. Sizes are those of the files when the l
 | File | Size | What it is | Explained in |
 |---|---|---|---|
 | [`public/scripts/ledger/driven-oscillator.js`](../public/scripts/ledger/driven-oscillator.js) | 9.9 kB | The data panel's ledger of driven-oscillator: headline, sections in causal order, books, checks of the numbers copied from the run. | [datalog.md](scripts/datalog.md) |
+| [`public/scripts/ledger/rotor-pendula.js`](../public/scripts/ledger/rotor-pendula.js) | 5.7 kB | The data panel's ledger of rotor-pendula: headline, sections in causal order, books, checks of the numbers copied from the run. | [datalog.md](scripts/datalog.md) |
 | [`public/scripts/ledger/wind-turbine.js`](../public/scripts/ledger/wind-turbine.js) | 4.9 kB | The data panel's ledger of wind-turbine: headline, sections in causal order, books, checks of the numbers copied from the run. | [datalog.md](scripts/datalog.md) |
 
 ## Shared scripts
@@ -167,8 +168,8 @@ to confirm that every file is described. Sizes are those of the files when the l
 | [`public/scripts/dataset.js`](../public/scripts/dataset.js) | 8.6 kB | Sim.dataset(): the one named data store each simulation writes its numbers into. | [dataset.md](scripts/dataset.md) |
 | [`public/scripts/flip.js`](../public/scripts/flip.js) | 1.3 kB | Turns the page over on a change of language (cross-document view transition), and only then. | [i18n.md](i18n.md) |
 | [`public/scripts/fold.js`](../public/scripts/fold.js) | 24.5 kB | Fold-out sections on every page: pinned header bands, remembered state, Expand/Collapse all. | [fold.md](scripts/fold.md) |
-| [`public/scripts/i18n/strings-ar.js`](../public/scripts/i18n/strings-ar.js) | 186.4 kB | The Arabic string table the scripts read through T(), generated; do not edit. | [i18n.md](i18n.md) |
-| [`public/scripts/i18n/strings-de.js`](../public/scripts/i18n/strings-de.js) | 160.3 kB | The German string table the scripts read through T(), generated; do not edit. | [i18n.md](i18n.md) |
+| [`public/scripts/i18n/strings-ar.js`](../public/scripts/i18n/strings-ar.js) | 189.2 kB | The Arabic string table the scripts read through T(), generated; do not edit. | [i18n.md](i18n.md) |
+| [`public/scripts/i18n/strings-de.js`](../public/scripts/i18n/strings-de.js) | 162.8 kB | The German string table the scripts read through T(), generated; do not edit. | [i18n.md](i18n.md) |
 | [`public/scripts/sim.js`](../public/scripts/sim.js) | 27.8 kB | Shared helpers of the simulation pages: KaTeX typesetting of the notes, the walkthrough engine. | [sim.md](scripts/sim.md) |
 
 ## Stylesheets
@@ -358,7 +359,7 @@ to confirm that every file is described. Sizes are those of the files when the l
 | File | Size | What it is | Explained in |
 |---|---|---|---|
 | [`public/portfolios/rotor-pendula/LICENSE-fonts.txt`](../public/portfolios/rotor-pendula/LICENSE-fonts.txt) | 8.5 kB | Licences of the fonts embedded in the generated page. | [portfolios.md](portfolios.md) |
-| [`public/portfolios/rotor-pendula/index.html`](../public/portfolios/rotor-pendula/index.html) | 2.20 MB | Generated page: the lecture notes and the simulation in two tabs (portfolios-src/rotor-pendula/tools/build_combined.py). | [portfolios.md](portfolios.md) |
+| [`public/portfolios/rotor-pendula/index.html`](../public/portfolios/rotor-pendula/index.html) | 2.21 MB | Generated page: the lecture notes and the simulation in two tabs (portfolios-src/rotor-pendula/tools/build_combined.py). | [portfolios.md](portfolios.md) |
 
 ## Project copy: Hydraulic Press Study
 
@@ -479,7 +480,7 @@ to confirm that every file is described. Sizes are those of the files when the l
 | [`portfolios-src/rotor-pendula/fonts/instrument-serif-400-normal-latin.woff2`](../portfolios-src/rotor-pendula/fonts/instrument-serif-400-normal-latin.woff2) | 21.0 kB | Self-hosted font for the Rotor Pendula notes build: instrument-serif-400-normal-latin.woff2. | [instrument-serif-400-normal-latin.woff2](../portfolios-src/rotor-pendula/fonts/instrument-serif-400-normal-latin.woff2) |
 | [`portfolios-src/rotor-pendula/numbers.json`](../portfolios-src/rotor-pendula/numbers.json) | 18.4 kB | Every computed number and table of the notes, written by tools/make_numbers.py. | [README.md](../portfolios-src/rotor-pendula/README.md) |
 | [`portfolios-src/rotor-pendula/rotor_notes.html`](../portfolios-src/rotor-pendula/rotor_notes.html) | 1.25 MB | Pendula on a Turning Blade, the lecture notes (chapters 0-8); generated by tools/build_theory.py. | [README.md](../portfolios-src/rotor-pendula/README.md) |
-| [`portfolios-src/rotor-pendula/rotor_sim.html`](../portfolios-src/rotor-pendula/rotor_sim.html) | 704.6 kB | The simulation page: physics block, solve-then-playback, Read values, worked solutions. | [README.md](../portfolios-src/rotor-pendula/README.md) |
+| [`portfolios-src/rotor-pendula/rotor_sim.html`](../portfolios-src/rotor-pendula/rotor_sim.html) | 707.7 kB | The simulation page: physics block, solve-then-playback, Read values, worked solutions. | [README.md](../portfolios-src/rotor-pendula/README.md) |
 | [`portfolios-src/rotor-pendula/theory/00_machine.src.html`](../portfolios-src/rotor-pendula/theory/00_machine.src.html) | 7.0 kB | Source of the notes, part 00 (machine): HTML with LaTeX maths and number placeholders. | [README.md](../portfolios-src/rotor-pendula/README.md) |
 | [`portfolios-src/rotor-pendula/theory/01_blade.src.html`](../portfolios-src/rotor-pendula/theory/01_blade.src.html) | 13.7 kB | Source of the notes, part 01 (blade): HTML with LaTeX maths and number placeholders. | [README.md](../portfolios-src/rotor-pendula/README.md) |
 | [`portfolios-src/rotor-pendula/theory/02_brake.src.html`](../portfolios-src/rotor-pendula/theory/02_brake.src.html) | 12.0 kB | Source of the notes, part 02 (brake): HTML with LaTeX maths and number placeholders. | [README.md](../portfolios-src/rotor-pendula/README.md) |
@@ -654,10 +655,10 @@ to confirm that every file is described. Sizes are those of the files when the l
 | [`docs/minor-issues-report.md`](minor-issues-report.md) | 19.9 kB | Documentation: Minor issues · final verification report. | [minor-issues-report.md](minor-issues-report.md) |
 | [`docs/notes.md`](notes.md) | 3.7 kB | Documentation: The lecture-note review: `notes/` and `.claude/agents/`. | [notes.md](notes.md) |
 | [`docs/pages.md`](pages.md) | 51.6 kB | Documentation: The site's own pages: home, simulations catalog, Portfolios, robots.txt. | [pages.md](pages.md) |
-| [`docs/portfolios.md`](portfolios.md) | 45.5 kB | Documentation: The four research projects: `public/portfolios/`. | [portfolios.md](portfolios.md) |
+| [`docs/portfolios.md`](portfolios.md) | 47.2 kB | Documentation: The four research projects: `public/portfolios/`. | [portfolios.md](portfolios.md) |
 | [`docs/research-theory-audit.md`](research-theory-audit.md) | 29.1 kB | Documentation: Readability audit: Droplet Collection and Rotor Pendula. | [research-theory-audit.md](research-theory-audit.md) |
 | [`docs/scripts/catalog.md`](scripts/catalog.md) | 15.1 kB | Documentation: public/scripts/catalog.js. | [catalog.md](scripts/catalog.md) |
-| [`docs/scripts/datalog.md`](scripts/datalog.md) | 63.3 kB | Documentation: public/scripts/datalog.js. | [datalog.md](scripts/datalog.md) |
+| [`docs/scripts/datalog.md`](scripts/datalog.md) | 63.5 kB | Documentation: public/scripts/datalog.js. | [datalog.md](scripts/datalog.md) |
 | [`docs/scripts/dataset.md`](scripts/dataset.md) | 17.5 kB | Documentation: public/scripts/dataset.js. | [dataset.md](scripts/dataset.md) |
 | [`docs/scripts/fold.md`](scripts/fold.md) | 22.6 kB | Documentation: public/scripts/fold.js. | [fold.md](scripts/fold.md) |
 | [`docs/scripts/sim.md`](scripts/sim.md) | 26.8 kB | Documentation: public/scripts/sim.js. | [sim.md](scripts/sim.md) |
@@ -714,7 +715,7 @@ to confirm that every file is described. Sizes are those of the files when the l
 | [`i18n/ar/simulations__water-wave.html.json`](../i18n/ar/simulations__water-wave.html.json) | 93.9 kB | Arabic table of simulations__water-wave.html: per piece, the English it was translated from and the translation. | [i18n.md](i18n.md) |
 | [`i18n/ar/simulations__wave-interference.html.json`](../i18n/ar/simulations__wave-interference.html.json) | 88.0 kB | Arabic table of simulations__wave-interference.html: per piece, the English it was translated from and the translation. | [i18n.md](i18n.md) |
 | [`i18n/ar/simulations__wind-turbine.html.json`](../i18n/ar/simulations__wind-turbine.html.json) | 67.5 kB | Arabic table of simulations__wind-turbine.html: per piece, the English it was translated from and the translation. | [i18n.md](i18n.md) |
-| [`i18n/ar/strings.json`](../i18n/ar/strings.json) | 186.7 kB | Arabic words of the scripts and of the catalog, with plural forms. | [i18n.md](i18n.md) |
+| [`i18n/ar/strings.json`](../i18n/ar/strings.json) | 189.5 kB | Arabic words of the scripts and of the catalog, with plural forms. | [i18n.md](i18n.md) |
 | [`i18n/ar/walk.json`](../i18n/ar/walk.json) | 415.3 kB | Arabic prose of the ten walkthroughs, keyed by the English. | [i18n.md](i18n.md) |
 | [`i18n/de/hydraulics__00_map.json`](../i18n/de/hydraulics__00_map.json) | 28.7 kB | German table of hydraulics__00_map: per piece, the English it was translated from and the translation. | [i18n.md](i18n.md) |
 | [`i18n/de/hydraulics__01_ideal.json`](../i18n/de/hydraulics__01_ideal.json) | 41.0 kB | German table of hydraulics__01_ideal: per piece, the English it was translated from and the translation. | [i18n.md](i18n.md) |
@@ -737,7 +738,7 @@ to confirm that every file is described. Sizes are those of the files when the l
 | [`i18n/de/simulations__water-wave.html.json`](../i18n/de/simulations__water-wave.html.json) | 85.2 kB | German table of simulations__water-wave.html: per piece, the English it was translated from and the translation. | [i18n.md](i18n.md) |
 | [`i18n/de/simulations__wave-interference.html.json`](../i18n/de/simulations__wave-interference.html.json) | 79.2 kB | German table of simulations__wave-interference.html: per piece, the English it was translated from and the translation. | [i18n.md](i18n.md) |
 | [`i18n/de/simulations__wind-turbine.html.json`](../i18n/de/simulations__wind-turbine.html.json) | 60.2 kB | German table of simulations__wind-turbine.html: per piece, the English it was translated from and the translation. | [i18n.md](i18n.md) |
-| [`i18n/de/strings.json`](../i18n/de/strings.json) | 161.1 kB | German words of the scripts and of the catalog, with plural forms. | [i18n.md](i18n.md) |
+| [`i18n/de/strings.json`](../i18n/de/strings.json) | 163.6 kB | German words of the scripts and of the catalog, with plural forms. | [i18n.md](i18n.md) |
 | [`i18n/de/walk.json`](../i18n/de/walk.json) | 362.7 kB | German prose of the ten walkthroughs, keyed by the English. | [i18n.md](i18n.md) |
 
 ## Agents of the lecture-note review

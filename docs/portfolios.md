@@ -244,17 +244,30 @@ Read values works in `#stage`'s coordinates; the scene canvas sits inside it, so
   wine bob in the rotor view at the position computed from the stored $\varphi$, $\theta$, $r_p$, scale and magnification (alpha
   first); the wine curves of the three plots; the playhead ring; the tiles' numbers. A curve point under a marker reports "not in the
   picture now".
+- *The ledger* ([`scripts/ledger/rotor-pendula.js`](../public/scripts/ledger/rotor-pendula.js), loaded between the page's scripts and
+  `datalog.js`): six headline numbers, the time in the record, θ, θ̇, the harvested power p, the rotor's work $W_\text{in}$ and the
+  harvest $E_h$ since the record began; eight sections in causal order (what you set, fixed constants, what follows, the state now,
+  what the solve found, the stored record, then the solver and the drawing folded); one book, *Energy*: where the rotor's work has
+  gone, rows $\Delta E_\text{kin}$, $\Delta E_\text{pot}$, $\Delta E_\text{spin}$, $E_h$, $E_\text{fric}$ and $E_\text{other}$ (winding and gear
+  losses, the rest of $E_\text{paid}$), closing line $W_\text{in}$, residual `book_res` $= \Delta E_\text{kin} + \Delta E_\text{pot} + E_\text{paid}
+  - W_\text{in}$ stored by the page, tolerance $10^{-9}$ of the flows. Angular momentum has no book: the shaft's torque holds Ω
+  fixed, which the section note says. The ledger's words have German and Arabic entries in `i18n/<lang>/strings.json`, ready for
+  the translated pages.
 - *Read values* pins a bob (either view), the pivot or the hub; *a round* is one turn of the record ($t$ = `t_now`), blocked when
   fewer than one turn is left before the playback loops.
 
-Measured on 24 October 2026 in headless Chromium at 1600, 1100 and 390 px, on the single pendulum at 20 rpm, the double at 20 rpm and the
+With the ledger (after the redesign of the panel), measured on 24 October 2026 at 1600, 1440, 1100 and 390 px on the same
+three settings: the ledger is a `<table>` with header cells and six headline numbers, all six change while the playback runs,
+the table's words are rewritten 11 to 12 times in 3 s, the energy book reads "Balanced" with the rows missing the closing line by
+about $10^{-13}$ of the flows and the page's residual and the panel's sum agreeing, Check passes on 88 scalars and 85 sampled array
+elements, and at 390 px the table keeps symbol, value, unit and change. Before the ledger, measured on 24 October 2026 in headless Chromium at 1600, 1100 and 390 px, on the single pendulum at 20 rpm, the double at 20 rpm and the
 geared generator at 8 rpm with ratio 33: no console errors; 84 scalars and 85 sampled array elements "identical" or within the
 panel's float64 tolerance, none differing; 27 read-backs match, one is legitimately hidden; a pointer sweep with Read off and on paints
 0 overlay pixels; the pinned strip rewrites 12 times in 3 s; with the panel closed `__dataPanel.running()` is false; Record and Save
 each canvas's bitmap matches its box after the panel closes (no CSS stretching); the pinned marker's pixels all lie within
 24 px of the pinned bob; Record and Save give a zip that `zipfile.testzip()` accepts and `numpy.load` reads (`q1`, `Win`, `Ek` of shape (961,), `kap` of (161,)), and the book
-recomputed from the saved arrays closes to $7.6\times10^{-12}$ J. With Live on, today's panel rewrites the ledger every frame (about
-50 times a second); that is the shared panel's behaviour, which the redesign of `datalog.js` addresses.
+recomputed from the saved arrays closes to $7.6\times10^{-12}$ J. With Live on, the panel of that day rewrote the ledger every frame (about
+50 times a second); the redesign of `datalog.js` fixed that, as measured above.
 
 **Checks** (from `portfolios-src/rotor-pendula/`): `python3 tools/check_numbers.py` (every number computed or explained),
 `python3 -I check_physics.py` (17 independent SymPy and SciPy checks with retyped constants), `node tools/check_sim.js` (the

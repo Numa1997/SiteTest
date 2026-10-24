@@ -970,10 +970,18 @@ const NOW = [['phi', 'φ'], ['q1', 'θ'], ['q2', 'θ<sub>2</sub>'], ['w1', 'θ̇
   ['Ek', 'E<sub>kin</sub>'], ['Ep', 'E<sub>pot</sub>'], ['Espin', 'E<sub>spin</sub>'], ['Win', 'W<sub>in</sub>'], ['Eh', 'E<sub>h</sub>'], ['Epaid', 'E<sub>paid</sub>'], ['Efric', 'E<sub>fric</sub>']];
 for (const [n, sym] of NOW) {
   const a = ds.vars[n].attrs;
-  v(n + '_now', [], 'float', { symbol: sym, units: a.units, long_name: a.long_name + T(', now'), computed_in: 'D.frame, each frame', formula: n + '[k]', digits: a.digits });
+  // shown large in the headline: as many digits as a reader can take in at a glance (the record keeps them all)
+  const dg = { phi: 4, q1: 4, q2: 4, w1: 4, w2: 4, p: 5, pPaid: 5, Ek: 4, Ep: 4, Espin: 6, Win: 4, Eh: 5, Epaid: 5, Efric: 6 }[n];
+  v(n + '_now', [], 'float', { symbol: sym, units: a.units, long_name: a.long_name + T(', now'), computed_in: 'D.frame, each frame', formula: n + '[k]', digits: dg });
 }
-v('book_res', [], 'float', { symbol: 'ε', units: 'J', long_name: 'energy book residual since the record began', computed_in: 'D.frame, each frame', formula: 'W<sub>in</sub> − ΔE<sub>kin</sub> − ΔE<sub>pot</sub> − E<sub>paid</sub>', digits: 14 });
-v('book_rel', [], 'float', { symbol: 'ε/|W|', long_name: 'residual over the largest |W<sub>in</sub>| of the record', computed_in: 'D.frame, each frame', formula: '|ε| / max |W<sub>in</sub>|', digits: 3 });
+// the energy book since the record began: where the rotor's work went. E_other is the rest of what the generator took
+// (winding and gear losses), E_paid − E_h − E_fric − ΔE_spin; so the book's real test is W_in against ΔE_kin + ΔE_pot + E_paid.
+v('dEk_now', [], 'float', { symbol: 'ΔE<sub>kin</sub>', units: 'J', long_name: 'change of the bobs’ kinetic energy since the record began', computed_in: 'D.frame, each frame', formula: 'E<sub>kin</sub>[k] − E<sub>kin</sub>[0]', digits: 4 });
+v('dEp_now', [], 'float', { symbol: 'ΔE<sub>pot</sub>', units: 'J', long_name: 'change of the bobs’ potential energy since the record began', computed_in: 'D.frame, each frame', formula: 'E<sub>pot</sub>[k] − E<sub>pot</sub>[0]', digits: 4 });
+v('dEspin_now', [], 'float', { symbol: 'ΔE<sub>spin</sub>', units: 'J', long_name: 'change of the motor’s spin energy since the record began (geared)', computed_in: 'D.frame, each frame', formula: 'E<sub>spin</sub>[k] − E<sub>spin</sub>[0]', digits: 6 });
+v('Eother_now', [], 'float', { symbol: 'E<sub>other</sub>', units: 'J', long_name: 'winding and gear losses since the record began, the rest of E<sub>paid</sub> (geared)', computed_in: 'D.frame, each frame', formula: 'E<sub>paid</sub> − E<sub>h</sub> − E<sub>fric</sub> − ΔE<sub>spin</sub>', digits: 6 });
+v('book_res', [], 'float', { symbol: 'ε', units: 'J', long_name: 'energy book residual since the record began: where the work went, minus the work', computed_in: 'D.frame, each frame', formula: 'ΔE<sub>kin</sub> + ΔE<sub>pot</sub> + E<sub>paid</sub> − W<sub>in</sub>', digits: 3, sci: true });
+v('book_rel', [], 'float', { symbol: 'ε/|W|', long_name: 'residual over the largest |W<sub>in</sub>| of the record', computed_in: 'D.frame, each frame', formula: '|ε| / max |W<sub>in</sub>|', digits: 3, sci: true });
 // ---- playback and drawing
 v('frame', [], 'float', { symbol: 'frame', long_name: 'playback position in frames', computed_in: 'loop()', formula: 'frame ← frame + Δt · speed · frames per turn', digits: 2, source: T('The page’s clock: it advances with the time between animation frames, or follows the slider.') });
 v('speed', [], 'float', { symbol: 'speed', units: 'turns/s', long_name: 'playback speed', computed_in: 'speed buttons', digits: 2, source: T('Read from the speed buttons.') });
@@ -1052,7 +1060,9 @@ function rotorFrame(f) {
   const n = rec.phi.length, k = Math.min(n - 1, Math.max(0, Math.floor(f)));
   put('k_now', k); put('t_now', ds.get('turn')[k] * md.turn);
   for (const [name] of NOW) put(name + '_now', rec[name][k]);
-  const res = rec.Win[k] - (rec.Ek[k] - rec.Ek[0]) - (rec.Ep[k] - rec.Ep[0]) - rec.Epaid[k];
+  const dEk = rec.Ek[k] - rec.Ek[0], dEp = rec.Ep[k] - rec.Ep[0], dEs = rec.Espin[k] - rec.Espin[0];
+  put('dEk_now', dEk); put('dEp_now', dEp); put('dEspin_now', dEs); put('Eother_now', rec.Epaid[k] - rec.Eh[k] - rec.Efric[k] - dEs);
+  const res = dEk + dEp + rec.Epaid[k] - rec.Win[k];
   put('book_res', res); put('book_rel', window.rotorData.wmax > 0 ? Math.abs(res) / window.rotorData.wmax : 0);
 }
 
@@ -1129,7 +1139,11 @@ const check = {
       value: G('c') * (G('w1')[k] ** 2 + (G('pend') === 'double' ? (G('w2')[k] - G('w1')[k]) ** 2 : 0)) },
   k_now: () => ({ formula: '⌊frame⌋, kept inside the record', inputs: [['frame', G('frame'), '', 2]], value: Math.min(G('phi').length - 1, Math.max(0, Math.floor(G('frame')))) }),
   t_now: () => ({ formula: 'turn<sub>k</sub> · T', inputs: [['turn<sub>k</sub>', G('turn')[G('k_now')], '', 5], ['T', G('T_turn'), 's', 4]], value: G('turn')[G('k_now')] * G('T_turn') }),
-  book_res: () => { const k = G('k_now'); return { formula: 'W<sub>in</sub> − (E<sub>kin</sub> − E<sub>kin,0</sub>) − (E<sub>pot</sub> − E<sub>pot,0</sub>) − E<sub>paid</sub>, at frame k', inputs: [['W<sub>in</sub>', G('Win')[k], 'J', 9], ['E<sub>kin</sub>', G('Ek')[k], 'J', 9], ['E<sub>kin,0</sub>', G('Ek')[0], 'J', 9], ['E<sub>pot</sub>', G('Ep')[k], 'J', 9], ['E<sub>pot,0</sub>', G('Ep')[0], 'J', 9], ['E<sub>paid</sub>', G('Epaid')[k], 'J', 9]], value: G('Win')[k] - (G('Ek')[k] - G('Ek')[0]) - (G('Ep')[k] - G('Ep')[0]) - G('Epaid')[k] }; },
+  book_res: () => { const k = G('k_now'); return { formula: '(E<sub>kin</sub> − E<sub>kin,0</sub>) + (E<sub>pot</sub> − E<sub>pot,0</sub>) + E<sub>paid</sub> − W<sub>in</sub>, at frame k', inputs: [['W<sub>in</sub>', G('Win')[k], 'J', 9], ['E<sub>kin</sub>', G('Ek')[k], 'J', 9], ['E<sub>kin,0</sub>', G('Ek')[0], 'J', 9], ['E<sub>pot</sub>', G('Ep')[k], 'J', 9], ['E<sub>pot,0</sub>', G('Ep')[0], 'J', 9], ['E<sub>paid</sub>', G('Epaid')[k], 'J', 9]], value: (G('Ek')[k] - G('Ek')[0]) + (G('Ep')[k] - G('Ep')[0]) + G('Epaid')[k] - G('Win')[k] }; },
+  dEk_now: () => { const k = G('k_now'); return { formula: 'E<sub>kin</sub>[k] − E<sub>kin</sub>[0]', inputs: [['E<sub>kin</sub>[k]', G('Ek')[k], 'J', 9], ['E<sub>kin</sub>[0]', G('Ek')[0], 'J', 9]], value: G('Ek')[k] - G('Ek')[0] }; },
+  dEp_now: () => { const k = G('k_now'); return { formula: 'E<sub>pot</sub>[k] − E<sub>pot</sub>[0]', inputs: [['E<sub>pot</sub>[k]', G('Ep')[k], 'J', 9], ['E<sub>pot</sub>[0]', G('Ep')[0], 'J', 9]], value: G('Ep')[k] - G('Ep')[0] }; },
+  dEspin_now: () => { const k = G('k_now'); return { formula: 'E<sub>spin</sub>[k] − E<sub>spin</sub>[0]', inputs: [['E<sub>spin</sub>[k]', G('Espin')[k], 'J', 9], ['E<sub>spin</sub>[0]', G('Espin')[0], 'J', 9]], value: G('Espin')[k] - G('Espin')[0] }; },
+  Eother_now: () => { const k = G('k_now'); return { formula: 'E<sub>paid</sub> − E<sub>h</sub> − E<sub>fric</sub> − ΔE<sub>spin</sub>', inputs: [['E<sub>paid</sub>', G('Epaid')[k], 'J', 9], ['E<sub>h</sub>', G('Eh')[k], 'J', 9], ['E<sub>fric</sub>', G('Efric')[k], 'J', 9], ['ΔE<sub>spin</sub>', G('Espin')[k] - G('Espin')[0], 'J', 9]], value: G('Epaid')[k] - G('Eh')[k] - G('Efric')[k] - (G('Espin')[k] - G('Espin')[0]) }; },
   book_rel: () => { let m = 0; for (const x of G('Win')) m = Math.max(m, Math.abs(x)); return { formula: '|ε| / max |W<sub>in</sub>|', inputs: [['ε', G('book_res'), 'J', 3], ['max |W<sub>in</sub>|', m, 'J', 6]], value: m > 0 ? Math.abs(G('book_res')) / m : 0 }; },
   kap: j => { const x0 = G('kap')[0], x1 = G('kap')[160]; return { formula: 'κ<sub>0</sub> (κ<sub>160</sub>/κ<sub>0</sub>)<sup>j/160</sup>', inputs: [['κ<sub>0</sub>', x0, '', 6], ['κ<sub>160</sub>', x1, '', 6], ['j', j, '', 0]], value: x0 * Math.pow(x1 / x0, j / 160) }; },
   Plin: j => ({ formula: T('linearPower(κ<sub>j</sub>) · 10³ of the stored settings: (2.3) for one rod, the double’s linear power for two'), inputs: [['κ<sub>j</sub>', G('kap')[j], '', 6]], value: modelNow().linearPower(G('kap')[j]) * 1e3 }),
@@ -1263,7 +1277,7 @@ Sim.data = {
     { title: T('What you set'), note: T('as used by the last solve'), vars: ['rpm_set', 'frac', 'pend', 'gen', 'brake', 'N', 'RL_set'] },
     { title: T('Fixed for this study'), note: T('constants of the physics block'), vars: ['g', 'M', 'L', 'v_tip'] },
     { title: T('What follows from it'), note: T('the rotor, the pendulum’s springs and its best brake'), vars: ['Om', 'T_turn', 'rTip', 'rp', 'R', 'G', 'omega_n', 'I_p', 'kappaStar', 'c', 'kappa', 'Pstar', 'PstarModel', 'eta', 'csc', 'ce', 'RL', 'j', 'keep', 'jammed'] },
-    { title: T('State now'), note: T('the stored frame on screen, and the energy book since the record began'), vars: ['t_now', 'k_now', 'phi_now', 'q1_now', 'q2_now', 'w1_now', 'w2_now', 'p_now', 'pPaid_now', 'Ek_now', 'Ep_now', 'Espin_now', 'Win_now', 'Eh_now', 'Epaid_now', 'Efric_now', 'book_res', 'book_rel'] },
+    { title: T('State now'), note: T('the stored frame on screen, and the energy book since the record began'), vars: ['t_now', 'k_now', 'phi_now', 'q1_now', 'q2_now', 'w1_now', 'w2_now', 'p_now', 'pPaid_now', 'Ek_now', 'Ep_now', 'Espin_now', 'Win_now', 'Eh_now', 'Epaid_now', 'Efric_now', 'dEk_now', 'dEp_now', 'dEspin_now', 'Eother_now', 'book_res', 'book_rel'] },
     { title: T('What the solve found'), note: T('means over the measuring turns'), vars: ['P_mean', 'P_paid', 'P_fric', 'Theta', 'Theta2', 'trail', 'trailSin', 'bill', 'lag_deg', 'Win_mean'] },
     { title: T('Stored record'), note: T('one row per frame of the last turns'), vars: ARR.map(a => a[0]) },
     { title: T('Solver'), note: T('Radau IIA, fixed step, in a Web Worker'), vars: ['steps', 'h', 'settle', 'measure', 'fpt', 'rec_turns', 'maxit', 'worker_ms', 'stale'] },
@@ -1792,6 +1806,6 @@ solve();
 requestAnimationFrame(loop);
 })();
 </script>
-<script src="../../public/scripts/datalog.js"></script>
+<script src="../../public/scripts/ledger/rotor-pendula.js"></script><script src="../../public/scripts/datalog.js"></script>
 </body>
 </html>
