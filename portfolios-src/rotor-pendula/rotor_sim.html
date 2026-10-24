@@ -1228,9 +1228,12 @@ const drawn = {
   kappa: () => G('gen') === 'geared' ? { what: T('the tile κ'), drawn: $('r_k').textContent, expected: '', ok: null, note: T('With the generator the tile shows κₑ, not κ.') } : tile('r_k', 'kappa', 1, T('the tile κ'))(),
 };
 
-// ---- Read values in the scene: the bobs, the pivot and the hub
-function probe(x, y) {
+// ---- Read values in the scene: the bobs, the pivot and the hub. The panel works in #stage's css px; the scene canvas sits
+// inside it, centred, so its drawing coordinates are shifted by the canvas's offset in the stage.
+function sceneOffset() { const a = $('scene').getBoundingClientRect(), b = $('stage').getBoundingClientRect(); return { x: a.left - b.left, y: a.top - b.top }; }
+function probe(xs, ys) {
   if (!rec) return null;
+  const o = sceneOffset(), x = xs - o.x, y = ys - o.y;
   const pts = [['bobA', G('bobA_x'), G('bobA_y'), 12], ['bobB', G('bobB_x'), G('bobB_y'), 14], ['pivot', G('px'), G('py'), 8], ['hub', G('cx'), G('cy'), 10]];
   let best = null, bd = Infinity;
   for (const [what, px, py, r] of pts) { const d = Math.hypot(x - px, y - py); if (d < r && d < bd) { bd = d; best = { what }; } }
@@ -1243,11 +1246,13 @@ function inspect(ref) {
   if (ref.what === 'pivot') rows.push(['r<sub>p</sub>', G('rp'), 'm', 'rp']);
   if (ref.what === 'hub') rows.push(['Ω', G('Om'), 'rad/s', 'Om'], ['W<sub>in</sub>', G('Win')[k], 'J', 'Win', k]);
   if (ref.what === 'bobA' || ref.what === 'bobB') rows.push(['θ', G('q1')[k], 'rad', 'q1', k], ['θ̇', G('w1')[k], 'rad/s', 'w1', k], ['p', G('p')[k], 'W', 'p', k], ['E<sub>kin</sub>', G('Ek')[k], 'J', 'Ek', k], ['E<sub>pot</sub>', G('Ep')[k], 'J', 'Ep', k]);
-  return { title, at: { x: at[0], y: at[1] }, rows };
+  const o = sceneOffset();
+  return { title, at: { x: at[0] + o.x, y: at[1] + o.y }, rows };
 }
-function locate(name, idx) {
-  if (name === 'q1' || name === 'p') return { x: plotX(name === 'q1' ? 'th' : 'pw', G('turn')[idx]), y: plotY(name === 'q1' ? 'th' : 'pw', G(name)[idx] * (name === 'p' ? 1e3 : 1)) };
-  return null;
+function locate(name, idx) {                       // only the scene lies in #stage; the plots are outside it
+  if (!rec || idx !== G('k_now') || !['phi', 'q1', 'w1'].includes(name)) return null;
+  const o = sceneOffset();
+  return { x: G('bobA_x') + o.x, y: G('bobA_y') + o.y };
 }
 
 Sim.data = {
@@ -1774,6 +1779,9 @@ function loop(now) {
   requestAnimationFrame(loop);
 }
 window.addEventListener('resize', () => { dirty = true; });
+// a canvas's box can change without a window resize (the data panel opening or closing, fonts arriving): redraw then too,
+// or a paused picture would be stretched by CSS and no longer match the stored positions
+if ('ResizeObserver' in window) { const ro = new ResizeObserver(() => { dirty = true; }); ro.observe($('stage')); ro.observe($('plots')); }
 if (document.fonts && document.fonts.ready) document.fonts.ready.then(() => { dirty = true; });
 // for tests and readers who look: the solved run, read-only
 window.rotorSim = { get run() { return run; }, get model() { return runModel; }, get frame() { return frame; }, get playing() { return playing; },

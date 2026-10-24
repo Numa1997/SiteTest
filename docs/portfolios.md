@@ -215,7 +215,10 @@ under the scene, Check, Record one round and Save. The page links the shared fil
 rewrites that to `../../…`, which the frame resolves against `portfolios/rotor-pendula/index.html` (an `iframe srcdoc` takes its
 parent's address). Opened on its own from `portfolios-src/rotor-pendula/`, the page finds the same files; in a build without them
 (`--artifact`) the store script returns at once and the page works without a panel. `rotor_sim.html` adds the panel's colour tokens
-in its own colours and lays the panel's marker canvas over the scene.
+in its own colours and lays the panel's marker canvas over the scene. The page now also redraws when the box of the scene or
+the plots changes size without a window resize (a `ResizeObserver`): before, opening or closing the panel while paused left the
+canvases stretched by CSS, so the picture no longer matched the stored positions (and the blade view's two labels overlapped).
+Read values works in `#stage`'s coordinates; the scene canvas sits inside it, so `probe` and `inspect` shift by its offset.
 
 - *Physics block.* Two additions, both checked: the rotor's work $W_\text{in}$ is integrated as the last state of every run,
   with $\dot W_\text{in} = \Omega\,[(\mathbf r_p\times\mathbf F_p)_z + \tau_b]$ ($\mathbf F_p$ the force of the pivot on the bobs,
@@ -248,7 +251,8 @@ Measured on 24 October 2026 in headless Chromium at 1600, 1100 and 390 px, on th
 geared generator at 8 rpm with ratio 33: no console errors; 84 scalars and 85 sampled array elements "identical" or within the
 panel's float64 tolerance, none differing; 27 read-backs match, one is legitimately hidden; a pointer sweep with Read off and on paints
 0 overlay pixels; the pinned strip rewrites 12 times in 3 s; with the panel closed `__dataPanel.running()` is false; Record and Save
-give a zip that `zipfile.testzip()` accepts and `numpy.load` reads (`q1`, `Win`, `Ek` of shape (961,), `kap` of (161,)), and the book
+each canvas's bitmap matches its box after the panel closes (no CSS stretching); the pinned marker's pixels all lie within
+24 px of the pinned bob; Record and Save give a zip that `zipfile.testzip()` accepts and `numpy.load` reads (`q1`, `Win`, `Ek` of shape (961,), `kap` of (161,)), and the book
 recomputed from the saved arrays closes to $7.6\times10^{-12}$ J. With Live on, today's panel rewrites the ledger every frame (about
 50 times a second); that is the shared panel's behaviour, which the redesign of `datalog.js` addresses.
 
