@@ -44,16 +44,12 @@ Thermal noise: surface energy of a 10 µm drop 9.0 × 10⁻¹¹ J = 2.3 × 10¹�
        thresholds (`skeptic-G3-r1.md`, Round 2), its five minor items and the one partial fix applied after.
 4. [x] Old app bundle `static/` removed (2.2 MB); old `fig/` kept for the German and Arabic pages.
 5. [x] PR https://github.com/Numa1997/SiteTest/pull/33 open, not merged (follow-up to #32, which Numa merged at 184f3bf).
-6. [x] Revision after Numa's "I don't agree … revise your work" and his correction "it is not a random velocity field, it just has a
-       stochastic element" (23 Oct). Built, checked and on the page (Part IV, chapters 10 and 11, panels 4 and 5, problems 6 and 7):
-   - L8 energy, entropy and who eats whom (`contract-L8.md` §9 results): surface energy a Lyapunov function (never rose); 1.8e10 k_B per
-     merger; Metropolis = constant kernel, d–d 99 % against 0.005 % in the cloud; max-entropy far from the cloud, exact for every-pair-alike.
-   - L10 a cloud with a shape (`contract-L10.md`): super-droplets, velocity = fall + overturning cell + Ornstein–Uhlenbeck stochastic
-     element (Thomson drift), evaporation outside the shape. Box within 1.2 % of the collection equation; well-mixed χ² 0.79. Seven
-     cases × 3 seeds: rain 22–46 %, more edge per area → less rain; 90 % of drizzle born in the updraft core (61 % of the area).
-   - Checks: numbers 215/215 PASS; physics 14/14 PASS; browser PASS at 360/390/1024/1440 px.
-7. [ ] Gate 1 and Gate 3 skeptics for chapters 10–11 (stopped by the usage limit; the page says "not yet reviewed").
-8. [ ] L9 (turbulence at contact scale, `contract-L9.md`) and L11 (a mean motion measured from cloud pictures): not built.
+6. [x] Part IV after the round-1 reviews (24 Oct): ch. 10 energy and entropy (with ripening as the gradient descent of free energy),
+       ch. 11 who eats whom, ch. 12 a cloud with a shape (mean motion inside the outline + stochastic element, ventilation, 2-D drift,
+       ladder, fixed-area random outlines, region ledger and fates). Answers: `review-answers-r1.md`. Checks: numbers 235/235, physics 14/14,
+       browser PASS. Data: `data/energy.json`, `ripening.json`, `cloud.json` (all from one code version).
+7. [ ] Round-2 review by the same two reviewers.
+8. [ ] L9 (turbulence at contact scale) and L11 (mean motion from cloud pictures): not built.
 9. [ ] `docs/files.md`: `tools/inventory.py` refuses to write while rotor-pendula theory files lack rules (the rotor session's files).
 
 ## Done, with evidence

@@ -333,15 +333,19 @@ check("surface energy and maximum entropy (chapter 10)", ok_es and ok_mono and o
       f"E_s(0) {wr['Es0']:.5f} J/m3 against {Es_cont:.5f} from the continuous modes; never rises in {len(recs)} records; "
       f"maximum-entropy errors at 6 min {eE:.3f} / {eG:.3f} (SciPy) against {q6['epsExp']:.3f} / {q6['epsGamma']:.3f}; {spm:.2e} k_B per merger")
 
-# ------------------------------------------------------------------ 10. the cloud with a shape (chapter 11)
+# ------------------------------------------------------------------ 10. the cloud with a shape (chapter 12)
 try:
     cl = json.load(open(os.path.join(ROOT, 'data', 'cloud.json')))
-    bx, mx = cl['box'], cl['mix']
-    check("super-droplet box against the collection equation, and the well-mixed test (chapter 11)",
-          abs(bx['sdm'][0] / bx['sce'][0] - 1) < 0.02 and abs(bx['sdm'][2] / bx['sce'][1] - 1) < 0.02 and 0.5 < mx['chi'] < 1.5,
-          f"t50/t90 {bx['sdm'][0]:.3f}/{bx['sdm'][2]:.3f} against {bx['sce'][0]:.3f}/{bx['sce'][1]:.3f} min; chi2 per cell after 30 min {mx['chi']:.2f} (Poisson: 1)")
+    conv = {c['per']: c for c in cl['box']['conv']}; mx = cl['mix']
+    ok_box = abs(conv[2048]['bias90']) < 3 * conv[2048]['se90'] + 0.01 and abs(conv[512]['bias90']) < 3 * conv[512]['se90'] + 0.01
+    ok_mix = all(0.6 < v < 1.4 for v in mx['full']['chi30'] + mx['full']['chi120']) and min(mx['none']['chi120']) > 3
+    # water books of every cloud run: aloft + rained + evaporated = start
+    worst = max(abs(q['aloft'] + q['rain'] + q['evap'] - 1) for c in cl['cases'].values() for q in c['runs'])
+    check("cloud with a shape: super-droplet convergence, well-mixed drift, water books (chapter 12)", ok_box and ok_mix and worst < 2e-3,
+          f"t90 bias {conv[512]['bias90']*100:.1f} +- {conv[512]['se90']*100:.1f} % (512 per cell), {conv[2048]['bias90']*100:.1f} +- {conv[2048]['se90']*100:.1f} % (2048); "
+          f"chi2 with drift {min(mx['full']['chi30']+mx['full']['chi120']):.2f}-{max(mx['full']['chi30']+mx['full']['chi120']):.2f}, without {min(mx['none']['chi120']):.1f}; water books close to {worst:.1e}")
 except FileNotFoundError:
-    check("cloud data present", False, "data/cloud.json missing: run tools/run_cloud.cjs --json")
+    check("cloud data present", False, "data/cloud.json missing: run tools/run_cloud.cjs")
 
 print(f"\n{sum(results)}/{len(results)} checks passed")
 print("PHYSICS CHECK PASS" if all(results) else "PHYSICS CHECK FAIL")
