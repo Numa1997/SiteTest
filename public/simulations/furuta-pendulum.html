@@ -1450,6 +1450,10 @@
                 flag_py: function () { return { formula: 'y<sub>O</sub> − R<sub>rim</sub> sin φ* sin ε · px/m', inputs: [['φ*', ds.get('phs'), 'rad', 5]], value: flagPhi !== null ? NaN : ds.get('hub_py') - RIM * Math.sin(ds.get('phs')) * Math.sin(ds.get('elev')) * ds.get('px_per_m') }; },
                 y0s: function (j) { var a = ['ph', 'al', 'wp', 'wa'][j]; return { formula: _t('the first stored sample of the run'), inputs: [], value: ds.get(a)[0] }; },
                 released: function () { var y = ds.get('y0s'), z = y[0] === 0 && y[1] === ALPHA0 && y[2] === 0 && y[3] === 0; return { formula: _t('a start other than the nudged hanging rest came from your hand'), inputs: [], value: !z || ds.get('released') }; },
+                t_play: function () { return { formula: _t('the clock of the playback, or the seek bar'), inputs: [], value: playT }; },
+                err_end: function () { var S = storedDesign(), y0 = Array.prototype.slice.call(ds.get('y0s')), A = ['ph', 'al', 'wp', 'wa'].map(function (k) { return ds.get(k); }), e = 0, t = 0;
+                    run(S.p, S.d, y0, H / 2, 2 * EVERY, function (n, y) { for (var j = 0; j < 4; j++) { var dj = Math.abs(y[j] - A[j][n]); if (dj > e) { e = dj; t = n * EVERY * H; } } });
+                    return { formula: _t('the time of the largest difference in the h/2 rerun'), inputs: [], value: t }; },
                 i_now: function () { return { formula: 'round(t<sub>play</sub> / 10h)', inputs: [['t<sub>play</sub>', ds.get('t_play'), 's', 3]], value: Math.min(NS - 1, Math.max(0, Math.round(ds.get('t_play') / (EVERY * H)))) }; }
             },
             drawn: {
