@@ -43,7 +43,7 @@
     </style>
 
     <script src="../../scripts/i18n/strings-de.js"></script>
-    <meta name="translated-from" content="English public/simulations/pendulum-control.html, commit 80cf6c4" />
+    <meta name="translated-from" content="English public/simulations/pendulum-control.html, commit 80cf6c4+" />
   </head>
 <body>
     <header class="sim-top">
@@ -529,7 +529,7 @@
         ds.var('ell_now', [], 'float', { symbol: 'ℓ', units: 'm', long_name: 'strut length now', computed_in: 'the clock, or your hand', digits: 5 });
         ds.var('E_now', [], 'float', { symbol: 'E', units: 'J', long_name: 'energy now', computed_in: 'the clock, or your hand', digits: 5 });
         ds.var('Wc_now', [], 'float', { symbol: 'W<sub>coil</sub>', units: 'J', long_name: 'coil’s work up to now', computed_in: 'the clock', digits: 5 });
-        ds.var('Qs_now', [], 'float', { symbol: 'Q<sub>stop</sub>', units: 'J', long_name: 'stops’ heat up to now', computed_in: 'the clock', digits: 5 });
+        ds.var('Qs_now', [], 'float', { symbol: 'Q<sub>stop</sub>', units: 'J', long_name: 'stops’ heat up to now', computed_in: 'the clock', digits: 5 }); ds.var('E0', [], 'float', { symbol: 'E(0)', units: 'J', long_name: 'energy of the rig at the start of the stored run', computed_in: 'solve()', formula: 'E<sub>0</sub>, the first stored sample', digits: 6 }); ds.var('bal_now', [], 'float', { symbol: 'residual', units: 'J', long_name: 'energy book now: E(0) + W<sub>coil</sub> − Q<sub>stop</sub> − E, at the sample on screen; NaN while your hand holds the rig', computed_in: 'the clock', formula: 'E(0) + W<sub>coil</sub> − Q<sub>stop</sub> − E', digits: 12, sci: true });
         ds.var('px_per_m', [], 'float', { symbol: 'px/m', units: 'css px', long_name: 'drawing scale of the rig', computed_in: 'geom()', digits: 3 });
         ds.var('px_per_N', [], 'float', { symbol: 'px/N', units: 'css px', long_name: 'scale of the force arrows: 30 N is drawn 0.6 m long', computed_in: 'geom()', formula: '0.02 m/N · px/m', digits: 3 });
         ds.var('pivot_px', [], 'float', { symbol: 'x<sub>O</sub>, y<sub>O</sub>', units: 'css px', long_name: 'screen position of the pivot (x; y is in pivot_py)', computed_in: 'geom()', digits: 1 });
@@ -770,7 +770,7 @@
                 if (n === 0) settle = 0;
             }
             ds.set('t_settle', p.on ? settle : NaN); ds.set('t_sat', nsat * EVERY * H); ds.set('t_stop', nstop * EVERY * H);
-            ds.set('E_rest', energy(p, d.eq.y));
+            ds.set('E_rest', energy(p, d.eq.y)); ds.set('E0', Es[0]);
             var esc = 1e-9; for (n = 0; n < NS; n++) esc = Math.max(esc, Math.abs(Es[n] - ds.get('E_rest')), Math.abs(Wc[n]), Qs[n]);
             ds.set('Escale', esc); ds.set('ylim', 1.1 * ymax); ds.set('Flim', 1.1 * Fm);
             ds.set('steps', Math.round(TEND / H)); ds.set('solve_ms', performance.now() - t0);
@@ -1090,7 +1090,7 @@
             ds.set('th1_now', ds.get('th1')[i]); ds.set('th2_now', ds.get('th2')[i]); ds.set('X_now', ds.get('Xs')[i]);
             ds.set('w1_now', ds.get('w1')[i]); ds.set('w2_now', ds.get('w2')[i]); ds.set('vX_now', ds.get('vX')[i]);
             ds.set('F_now', ds.get('Fs')[i]); ds.set('I_now', ds.get('Is')[i]); ds.set('N_now', ds.get('Ns')[i]); ds.set('ell_now', ds.get('ells')[i]);
-            ds.set('E_now', ds.get('Es')[i]); ds.set('Wc_now', ds.get('Wc')[i]); ds.set('Qs_now', ds.get('Qs')[i]);
+            ds.set('E_now', ds.get('Es')[i]); ds.set('Wc_now', ds.get('Wc')[i]); ds.set('Qs_now', ds.get('Qs')[i]); ds.set('bal_now', ds.get('E0') + ds.get('Wc_now') - ds.get('Qs_now') - ds.get('E_now'));
             seek.set(i); document.getElementById('cap-t').innerHTML = _t('<i>t</i> = {t} s of {T} s', { t: ds.get('ts')[i].toFixed(2), T: TEND });
             draw();
         }
@@ -1132,7 +1132,7 @@
         }
         function holdState() {
             var y = drag.q.concat(drag.v), p = solved.p, F = control(p, solved.d, y), st = strut(p, y, drag.v);
-            setNow(y, F, st); ds.set('E_now', energy(p, y)); ds.set('grabbed', drag.what);
+            setNow(y, F, st); ds.set('E_now', energy(p, y)); ds.set('grabbed', drag.what); ds.set('bal_now', NaN);
             statusEl.classList.remove('is-stale');
             statusEl.textContent = _t('You hold {what}. The controller would push the cart with F = {F} N here. Let go to solve the motion from this pose.', { what: whatName(drag.what), F: Sim.fmt(F, 2) });
             draw();
@@ -1347,6 +1347,6 @@
         if (document.fonts && document.fonts.ready) document.fonts.ready.then(function () { if (solved) draw(); });
     })();
     </script>
-    <script src="../../scripts/datalog.js"></script>
+    <script src="../../scripts/ledger/pendulum-control.js"></script><script src="../../scripts/datalog.js"></script>
 </body>
 </html>

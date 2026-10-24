@@ -96,7 +96,7 @@ Drawing. Every derived scalar and every array has a check that recomputes it fro
 
 Read-backs from the picture (alpha before colour): ball 1 and ball 2 (burgundy fill), the cart under its hinge, the target
 flag, the coil-force arrow, and θ1, θ2, X on the window chart (`ok: null` for samples outside the 10 s window). Measured on
-24 October 2026 at 1400 px: 152 checks agree to 10⁻⁹ relative, 8 read-backs find ink, none differ.
+24 October 2026 at 1400 px: 154 checks agree to 10⁻⁹ relative, 8 read-backs find ink, none differ.
 
 One recorded round is two seconds of the stored run (`t_play`, sampled), blocked in the last two seconds. What the drawing
 leaves out of the store is listed in `about`: the tubes, stop marker, wheels, magnet and coil are schematic, the outer tube is
@@ -111,3 +111,27 @@ drawn 0.5 m long and the inner tube fills the rest.
   (equations (6.26)–(6.27)), both in chapter 6; the note had said "chapter 7" for the regulator (line 403).
 - German and Arabic: the three changed pieces translated and stored (`i18n/<lang>/simulations__pendulum-control.html.json`),
   pages regenerated. Checked by `node notes/fig11/test.cjs en|de|ar`.
+
+## The data panel as a bookkeeper · 24 October 2026
+
+The panel's layout comes from [scripts/ledger/pendulum-control.js](../../public/scripts/ledger/pendulum-control.js), loaded
+after the page's script and before datalog.js on line 1347. It only names stored variables; it computes nothing for display.
+
+- Headline: θ1 (upper rod), θ2 (lower rod), X (cart), F (coil force), N (strut pull), E (energy), each with its sparkline.
+- Sections, in causal order: What you set; The rig; What follows from it (rest, coil's largest force, spring's rest length);
+  The controller (gains, eigenvalues, rank, kind of rest); The state now; Start of the run; The stored run; Over the whole run;
+  Solver and Drawing (both folded). All 103 stored variables appear once.
+- The energy book: E(0) + W<sub>coil</sub> − Q<sub>stop</sub> must equal E at the sample on screen. Two stored scalars were
+  added for it, appended to existing lines so the page keeps 1349 lines: `E0`, the first stored energy (declared on line 529,
+  set in `solve()` on line 770), and `bal_now`, the residual (set every frame on line 1090, NaN while the hand holds the rig,
+  line 1132). The book pauses while a ball or the cart is held, because the hand's work is not in the store; it starts again
+  from the pose the hand lets go. The tolerance is 10⁻⁸ of the flows (relative, [datalog.js:482](../../public/scripts/datalog.js#L482)).
+- Dependencies: the rest and the open-loop eigenvalues hang on N0, ks and r; the gains, closed-loop eigenvalues and kind of
+  rest also on the controller's weights; Fmax on Imax. Moving a slider marks those rows.
+
+Measured on 24 October 2026 by `node notes/fig11/ledger.cjs en|de|ar` at 1440, 1100 and 390 px: a table with 7 header
+cells, 6 headline numbers, 9–10 text rewrites in 3 s, the headline changing, the book's residual 4×10⁻¹⁰ to 9×10⁻¹⁰ of the
+flows (page and panel equal), the panel idle when closed, 0 px sideways; Save gives 23 files that numpy reads (th1 (3001,), Kg (6,)).
+Two store attributes now show in the first section and are still English on the German and Arabic pages: the switch's symbol
+"controller on" (the site's convention for switches) and the formula "10<sup>slider</sup>" of ρ.
+
