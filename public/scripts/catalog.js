@@ -213,6 +213,23 @@
             concepts: ['wind energy', 'Betz limit', 'tip-speed ratio', 'power coefficient', 'feedback', 'PI controller', 'optimal torque', 'gust'],
             has: ALL,
             added: '2026-10-14'
+        },
+        {
+            id: 'furuta-pendulum',
+            fig: 12,
+            title: 'Furuta Pendulum',
+            file: 'simulations/furuta-pendulum.html',
+            field: 'control',
+            stage: 2,
+            subject: 'control systems · underactuated mechanics',
+            summary: 'A pendulum hangs from the tip of an arm that a DC motor turns in a horizontal circle. With nothing but the motor’s voltage, it pumps energy into the swing until the pendulum comes up, catches it at the top by LQR, and holds it with the arm at the angle you choose. Push it over and let go: it comes back.',
+            equation: '\\mathbf M(\\alpha)\\ddot{\\mathbf q} = \\mathbf f(\\mathbf q, \\dot{\\mathbf q}) + (\\tau, 0), \\qquad \\tau = \\tfrac{k}{R}\\left(V_m - k\\dot\\varphi\\right)',
+            model: 'Lagrangian rotary pendulum (arm and thin rod) driven by a voltage-fed DC motor with a supply limit; energy swing-up through partial feedback linearisation, LQR catch, hand-over inside a measured level of the Lyapunov function',
+            method: 'RK4, solved and stored before playback; graded against a half-step run; energy books checked; region of rescue measured',
+            controls: 'controller (off, catch only, swing up), target arm angle φ*, LQR weights for pendulum, arm and effort, swing gain, arm length, supply limit; drag the pendulum or the arm',
+            concepts: ['underactuated control', 'Furuta pendulum', 'Lagrangian mechanics', 'DC motor', 'back-emf', 'energy shaping', 'swing-up', 'partial feedback linearisation', 'controllability', 'LQR', 'Riccati equation', 'Lyapunov function', 'region of attraction', 'phase space'],
+            has: ALL,
+            added: '2026-10-24'
         }
     ];
 })();

@@ -4,7 +4,7 @@ Written by [`tools/inventory.py`](../tools/inventory.py) from the files in the r
 Run `python3 tools/inventory.py` after adding, removing or changing files, and `python3 tools/inventory.py --check`
 to confirm that every file is described. Sizes are those of the files when the list was written.
 
-866 files, 50.6 MB in all. Runs of more than 12 similar files are folded; open them to see each file.
+884 files, 51.0 MB in all. Runs of more than 12 similar files are folded; open them to see each file.
 
 | Folder | Files |
 |---|---|
@@ -12,15 +12,15 @@ to confirm that every file is described. Sizes are those of the files when the l
 | [Pages under public/](#pages-under-public) | 4 |
 | [German pages (generated)](#german-pages-generated) | 13 |
 | [Arabic pages (generated)](#arabic-pages-generated) | 13 |
-| [Simulation pages](#simulation-pages) | 10 |
-| [Walkthroughs](#walkthroughs) | 30 |
+| [Simulation pages](#simulation-pages) | 11 |
+| [Walkthroughs](#walkthroughs) | 31 |
 | [Ledgers of the data panel](#ledgers-of-the-data-panel) | 3 |
 | [Shared scripts](#shared-scripts) | 8 |
 | [Stylesheets](#stylesheets) | 15 |
 | [KaTeX](#katex) | 24 |
 | [Latin Modern](#latin-modern) | 5 |
 | [IBM Plex, Instrument Serif, and the Arabic faces](#ibm-plex-instrument-serif-and-the-arabic-faces) | 61 |
-| [Thumbnails](#thumbnails) | 10 |
+| [Thumbnails](#thumbnails) | 11 |
 | [Logo](#logo) | 1 |
 | [Project copy: Droplet Collection](#project-copy-droplet-collection) | 11 |
 | [Project copy: Rotor Pendula](#project-copy-rotor-pendula) | 2 |
@@ -32,22 +32,22 @@ to confirm that every file is described. Sizes are those of the files when the l
 | [Source of the Droplet Collection study (not served)](#source-of-the-droplet-collection-study-not-served) | 96 |
 | [Template sources](#template-sources) | 2 |
 | [Platform tests](#platform-tests) | 1 |
-| [Documentation](#documentation) | 30 |
+| [Documentation](#documentation) | 31 |
 | [Tools](#tools) | 9 |
 | [Translation tables](#translation-tables) | 46 |
 | [Agents of the lecture-note review](#agents-of-the-lecture-note-review) | 4 |
 | [Working notes of the Rotor Pendula study](#working-notes-of-the-rotor-pendula-study) | 87 |
 | [Working notes of the Droplet Collection study](#working-notes-of-the-droplet-collection-study) | 121 |
-| [Record of the lecture-note review](#record-of-the-lecture-note-review) | 117 |
+| [Record of the lecture-note review](#record-of-the-lecture-note-review) | 131 |
 
 ## Repository root
 
 | File | Size | What it is | Explained in |
 |---|---|---|---|
 | [`.gitignore`](../.gitignore) | 39 B | Files git leaves out: Python caches, node_modules, build output. | [files.md](files.md) |
-| [`AGENTS.md`](../AGENTS.md) | 13.5 kB | The maintainer's summary: ownership, layout, design rules, folds, the data pipeline, platform quirks. | [build-and-deploy.md](build-and-deploy.md) |
+| [`AGENTS.md`](../AGENTS.md) | 13.6 kB | The maintainer's summary: ownership, layout, design rules, folds, the data pipeline, platform quirks. | [build-and-deploy.md](build-and-deploy.md) |
 | [`CLAUDE.md`](../CLAUDE.md) | 4.3 kB | How Numa expects an AI assistant to work on the project. | [build-and-deploy.md](build-and-deploy.md) |
-| [`README.md`](../README.md) | 7.7 kB | Start here: what the project is, how the files fit together, where each one is explained. | [README.md](../README.md) |
+| [`README.md`](../README.md) | 7.9 kB | Start here: what the project is, how the files fit together, where each one is explained. | [README.md](../README.md) |
 | [`index.html`](../index.html) | 48.2 kB | The home page: CV, research, simulation plates, index; also the build entry page. | [pages.md](pages.md) |
 | [`package.json`](../package.json) | 479 B | Build declaration: vite build; template dependencies. | [build-and-deploy.md](build-and-deploy.md) |
 | [`postcss.config.js`](../postcss.config.js) | 81 B | PostCSS settings (template; unused by the site). | [build-and-deploy.md](build-and-deploy.md) |
@@ -106,14 +106,15 @@ to confirm that every file is described. Sizes are those of the files when the l
 | File | Size | What it is | Explained in |
 |---|---|---|---|
 | [`public/simulations/Circular Wave Interference Visualization.html`](../public/simulations/Circular%20Wave%20Interference%20Visualization.html) | 194.5 kB | Fig. 1 · Wave Interference: the simulation, its data panel, walkthrough and lecture note. | [fig01-wave-sources.md](simulations/fig01-wave-sources.md) |
-| [`public/simulations/Double Pendulum.html`](../public/simulations/Double%20Pendulum.html) | 130.0 kB | Fig. 2 · Double Pendulum: the simulation, its data panel, walkthrough and lecture note. | [fig02-double-pendulum.md](simulations/fig02-double-pendulum.md) |
-| [`public/simulations/Interactive Double-Slit Experiment Visualization.html`](../public/simulations/Interactive%20Double-Slit%20Experiment%20Visualization.html) | 175.2 kB | Fig. 3 · Double-Slit Interference: the simulation, its data panel, walkthrough and lecture note. | [fig03-double-slit.md](simulations/fig03-double-slit.md) |
-| [`public/simulations/Transverse and longitudinal waves.html`](../public/simulations/Transverse%20and%20longitudinal%20waves.html) | 203.3 kB | Fig. 4 · Transverse & Longitudinal: the simulation, its data panel, walkthrough and lecture note. | [fig04-transverse-longitudinal.md](simulations/fig04-transverse-longitudinal.md) |
+| [`public/simulations/Double Pendulum.html`](../public/simulations/Double%20Pendulum.html) | 130.1 kB | Fig. 2 · Double Pendulum: the simulation, its data panel, walkthrough and lecture note. | [fig02-double-pendulum.md](simulations/fig02-double-pendulum.md) |
+| [`public/simulations/Interactive Double-Slit Experiment Visualization.html`](../public/simulations/Interactive%20Double-Slit%20Experiment%20Visualization.html) | 175.3 kB | Fig. 3 · Double-Slit Interference: the simulation, its data panel, walkthrough and lecture note. | [fig03-double-slit.md](simulations/fig03-double-slit.md) |
+| [`public/simulations/Transverse and longitudinal waves.html`](../public/simulations/Transverse%20and%20longitudinal%20waves.html) | 203.4 kB | Fig. 4 · Transverse & Longitudinal: the simulation, its data panel, walkthrough and lecture note. | [fig04-transverse-longitudinal.md](simulations/fig04-transverse-longitudinal.md) |
 | [`public/simulations/draw-decompose.html`](../public/simulations/draw-decompose.html) | 217.5 kB | Fig. 8 · Draw & Decompose: the simulation, its data panel, walkthrough and lecture note. | [fig08-draw-decompose.md](simulations/fig08-draw-decompose.md) |
-| [`public/simulations/driven-oscillator.html`](../public/simulations/driven-oscillator.html) | 327.2 kB | Fig. 9 · Driven Oscillator: the simulation, its data panel, walkthrough and lecture note. | [fig09-driven-oscillator.md](simulations/fig09-driven-oscillator.md) |
-| [`public/simulations/phasor-sums.html`](../public/simulations/phasor-sums.html) | 264.0 kB | Fig. 7 · Phasor Sums: the simulation, its data panel, walkthrough and lecture note. | [fig07-phasor-sums.md](simulations/fig07-phasor-sums.md) |
+| [`public/simulations/driven-oscillator.html`](../public/simulations/driven-oscillator.html) | 327.3 kB | Fig. 9 · Driven Oscillator: the simulation, its data panel, walkthrough and lecture note. | [fig09-driven-oscillator.md](simulations/fig09-driven-oscillator.md) |
+| [`public/simulations/furuta-pendulum.html`](../public/simulations/furuta-pendulum.html) | 178.7 kB | Fig. 12 · Furuta Pendulum: the simulation, its data panel, walkthrough and lecture note. | [fig12-furuta-pendulum.md](simulations/fig12-furuta-pendulum.md) |
+| [`public/simulations/phasor-sums.html`](../public/simulations/phasor-sums.html) | 264.1 kB | Fig. 7 · Phasor Sums: the simulation, its data panel, walkthrough and lecture note. | [fig07-phasor-sums.md](simulations/fig07-phasor-sums.md) |
 | [`public/simulations/water-wave.html`](../public/simulations/water-wave.html) | 164.7 kB | Fig. 5 · Circular Water Waves: the simulation, its data panel, walkthrough and lecture note. | [fig05-water-wave.md](simulations/fig05-water-wave.md) |
-| [`public/simulations/wave-interference.html`](../public/simulations/wave-interference.html) | 171.6 kB | Fig. 6 · Wave Interference Simulator: the simulation, its data panel, walkthrough and lecture note. | [fig06-wave-bench.md](simulations/fig06-wave-bench.md) |
+| [`public/simulations/wave-interference.html`](../public/simulations/wave-interference.html) | 171.7 kB | Fig. 6 · Wave Interference Simulator: the simulation, its data panel, walkthrough and lecture note. | [fig06-wave-bench.md](simulations/fig06-wave-bench.md) |
 | [`public/simulations/wind-turbine.html`](../public/simulations/wind-turbine.html) | 187.9 kB | Fig. 10 · Wind Turbine Control: the simulation, its data panel, walkthrough and lecture note. | [fig10-wind-turbine.md](simulations/fig10-wind-turbine.md) |
 
 ## Walkthroughs
@@ -144,6 +145,7 @@ to confirm that every file is described. Sizes are those of the files when the l
 | [`public/scripts/walk/de/water.js`](../public/scripts/walk/de/water.js) | 24.5 kB | German walkthrough water, generated from the English one; do not edit. | [i18n.md](i18n.md) |
 | [`public/scripts/walk/dft.js`](../public/scripts/walk/dft.js) | 24.4 kB | "From symbols to code" for Fig. 8 · Draw & Decompose. | [walk.md](scripts/walk.md) |
 | [`public/scripts/walk/driven.js`](../public/scripts/walk/driven.js) | 38.9 kB | "From symbols to code" for Fig. 9 · Driven Oscillator. | [walk.md](scripts/walk.md) |
+| [`public/scripts/walk/furuta.js`](../public/scripts/walk/furuta.js) | 15.1 kB | "From symbols to code" for Fig. 12 · Furuta Pendulum. | [walk.md](scripts/walk.md) |
 | [`public/scripts/walk/pendulum.js`](../public/scripts/walk/pendulum.js) | 30.2 kB | "From symbols to code" for Fig. 2 · Double Pendulum. | [walk.md](scripts/walk.md) |
 | [`public/scripts/walk/phasors.js`](../public/scripts/walk/phasors.js) | 33.0 kB | "From symbols to code" for Fig. 7 · Phasor Sums. | [walk.md](scripts/walk.md) |
 | [`public/scripts/walk/slit.js`](../public/scripts/walk/slit.js) | 23.6 kB | "From symbols to code" for Fig. 3 · Double-Slit Interference. | [walk.md](scripts/walk.md) |
@@ -163,7 +165,7 @@ to confirm that every file is described. Sizes are those of the files when the l
 
 | File | Size | What it is | Explained in |
 |---|---|---|---|
-| [`public/scripts/catalog.js`](../public/scripts/catalog.js) | 14.2 kB | The registry of simulations (SIMULATIONS, SIM_FIELDS, SIM_TOOLS) that the catalog page draws. | [catalog.md](scripts/catalog.md) |
+| [`public/scripts/catalog.js`](../public/scripts/catalog.js) | 15.9 kB | The registry of simulations (SIMULATIONS, SIM_FIELDS, SIM_TOOLS) that the catalog page draws. | [catalog.md](scripts/catalog.md) |
 | [`public/scripts/datalog.js`](../public/scripts/datalog.js) | 104.5 kB | The data panel as a bookkeeper: headline, ledger table, books, Read values, Check, Record one round, Save (.npz + CSV). | [datalog.md](scripts/datalog.md) |
 | [`public/scripts/dataset.js`](../public/scripts/dataset.js) | 8.6 kB | Sim.dataset(): the one named data store each simulation writes its numbers into. | [dataset.md](scripts/dataset.md) |
 | [`public/scripts/flip.js`](../public/scripts/flip.js) | 1.3 kB | Turns the page over on a change of language (cross-document view transition), and only then. | [i18n.md](i18n.md) |
@@ -325,6 +327,7 @@ to confirm that every file is described. Sizes are those of the files when the l
 | [`public/images/sims/double-slit.webp`](../public/images/sims/double-slit.webp) | 33.4 kB | Thumbnail of Fig. 3 · Double-Slit Interference, 800 × 500 px. | [assets.md](assets.md) |
 | [`public/images/sims/draw-decompose.webp`](../public/images/sims/draw-decompose.webp) | 16.2 kB | Thumbnail of Fig. 8 · Draw & Decompose, 800 × 500 px. | [assets.md](assets.md) |
 | [`public/images/sims/driven-oscillator.webp`](../public/images/sims/driven-oscillator.webp) | 23.7 kB | Thumbnail of Fig. 9 · Driven Oscillator, 800 × 500 px. | [assets.md](assets.md) |
+| [`public/images/sims/furuta-pendulum.webp`](../public/images/sims/furuta-pendulum.webp) | 11.3 kB | Thumbnail of Fig. 12 · Furuta Pendulum, 800 × 500 px. | [assets.md](assets.md) |
 | [`public/images/sims/phasor-sums.webp`](../public/images/sims/phasor-sums.webp) | 12.2 kB | Thumbnail of Fig. 7 · Phasor Sums, 800 × 500 px. | [assets.md](assets.md) |
 | [`public/images/sims/transverse-longitudinal.webp`](../public/images/sims/transverse-longitudinal.webp) | 11.8 kB | Thumbnail of Fig. 4 · Transverse & Longitudinal, 800 × 500 px. | [assets.md](assets.md) |
 | [`public/images/sims/water-wave.webp`](../public/images/sims/water-wave.webp) | 15.0 kB | Thumbnail of Fig. 5 · Circular Water Waves, 800 × 500 px. | [assets.md](assets.md) |
@@ -648,7 +651,7 @@ to confirm that every file is described. Sizes are those of the files when the l
 |---|---|---|---|
 | [`docs/appdeploy-app.md`](appdeploy-app.md) | 2.5 kB | Documentation: The AppDeploy app · numa-koudsie-website-0cyj78. | [appdeploy-app.md](appdeploy-app.md) |
 | [`docs/architecture.md`](architecture.md) | 7.9 kB | Documentation: How the site fits together. | [architecture.md](architecture.md) |
-| [`docs/assets.md`](assets.md) | 10.8 kB | Documentation: Fonts, maths and pictures: `public/vendor/`, `public/fonts/`, `public/images/`. | [assets.md](assets.md) |
+| [`docs/assets.md`](assets.md) | 10.9 kB | Documentation: Fonts, maths and pictures: `public/vendor/`, `public/fonts/`, `public/images/`. | [assets.md](assets.md) |
 | [`docs/build-and-deploy.md`](build-and-deploy.md) | 19.0 kB | Documentation: Build files, tests and deployment. | [build-and-deploy.md](build-and-deploy.md) |
 | [`docs/files.md`](files.md) | this file | This list. Written by tools/inventory.py; do not edit by hand. | [files.md](files.md) |
 | [`docs/glossary.md`](glossary.md) | 8.5 kB | Documentation: Glossary: English, German, Arabic. | [glossary.md](glossary.md) |
@@ -659,11 +662,11 @@ to confirm that every file is described. Sizes are those of the files when the l
 | [`docs/portfolios.md`](portfolios.md) | 51.3 kB | Documentation: The four research projects: `public/portfolios/`. | [portfolios.md](portfolios.md) |
 | [`docs/research-theory-audit.md`](research-theory-audit.md) | 29.1 kB | Documentation: Readability audit: Droplet Collection and Rotor Pendula. | [research-theory-audit.md](research-theory-audit.md) |
 | [`docs/scripts/catalog.md`](scripts/catalog.md) | 15.1 kB | Documentation: public/scripts/catalog.js. | [catalog.md](scripts/catalog.md) |
-| [`docs/scripts/datalog.md`](scripts/datalog.md) | 64.2 kB | Documentation: public/scripts/datalog.js. | [datalog.md](scripts/datalog.md) |
+| [`docs/scripts/datalog.md`](scripts/datalog.md) | 64.4 kB | Documentation: public/scripts/datalog.js. | [datalog.md](scripts/datalog.md) |
 | [`docs/scripts/dataset.md`](scripts/dataset.md) | 17.7 kB | Documentation: public/scripts/dataset.js. | [dataset.md](scripts/dataset.md) |
 | [`docs/scripts/fold.md`](scripts/fold.md) | 22.6 kB | Documentation: public/scripts/fold.js. | [fold.md](scripts/fold.md) |
 | [`docs/scripts/sim.md`](scripts/sim.md) | 27.0 kB | Documentation: public/scripts/sim.js. | [sim.md](scripts/sim.md) |
-| [`docs/scripts/walk.md`](scripts/walk.md) | 19.9 kB | Documentation: public/scripts/walk/*.js. | [walk.md](scripts/walk.md) |
+| [`docs/scripts/walk.md`](scripts/walk.md) | 20.8 kB | Documentation: public/scripts/walk/*.js. | [walk.md](scripts/walk.md) |
 | [`docs/simulations/fig01-wave-sources.md`](simulations/fig01-wave-sources.md) | 50.0 kB | Documentation: Fig. 1 · Wave Interference. | [fig01-wave-sources.md](simulations/fig01-wave-sources.md) |
 | [`docs/simulations/fig02-double-pendulum.md`](simulations/fig02-double-pendulum.md) | 49.7 kB | Documentation: Fig. 2 · Double Pendulum. | [fig02-double-pendulum.md](simulations/fig02-double-pendulum.md) |
 | [`docs/simulations/fig03-double-slit.md`](simulations/fig03-double-slit.md) | 44.3 kB | Documentation: Fig. 3 · Double-Slit Interference. | [fig03-double-slit.md](simulations/fig03-double-slit.md) |
@@ -674,6 +677,7 @@ to confirm that every file is described. Sizes are those of the files when the l
 | [`docs/simulations/fig08-draw-decompose.md`](simulations/fig08-draw-decompose.md) | 34.8 kB | Documentation: Fig. 8 · Draw & Decompose. | [fig08-draw-decompose.md](simulations/fig08-draw-decompose.md) |
 | [`docs/simulations/fig09-driven-oscillator.md`](simulations/fig09-driven-oscillator.md) | 56.9 kB | Documentation: Fig. 9 · Driven Oscillator. | [fig09-driven-oscillator.md](simulations/fig09-driven-oscillator.md) |
 | [`docs/simulations/fig10-wind-turbine.md`](simulations/fig10-wind-turbine.md) | 52.5 kB | Documentation: Fig. 10 · Wind Turbine Control. | [fig10-wind-turbine.md](simulations/fig10-wind-turbine.md) |
+| [`docs/simulations/fig12-furuta-pendulum.md`](simulations/fig12-furuta-pendulum.md) | 24.7 kB | Documentation: Fig. 12 · Furuta Pendulum. | [fig12-furuta-pendulum.md](simulations/fig12-furuta-pendulum.md) |
 | [`docs/styles.md`](styles.md) | 44.4 kB | Documentation: Stylesheets: `public/styles/`. | [styles.md](styles.md) |
 | [`docs/usul.md`](usul.md) | 6.2 kB | Documentation: Phyein Usul · the website at phyeinusul.com. | [usul.md](usul.md) |
 
@@ -1098,5 +1102,29 @@ to confirm that every file is described. Sizes are those of the files when the l
 | [`notes/fig10/verify-out.json`](../notes/fig10/verify-out.json) | 855 B | Fig. 10: a measuring script of the review, or its saved output. | [notes.md](notes.md) |
 | [`notes/fig10/verify.cjs`](../notes/fig10/verify.cjs) | 4.9 kB | Fig. 10: a measuring script of the review, or its saved output. | [notes.md](notes.md) |
 | [`notes/fig10/walk.md`](../notes/fig10/walk.md) | 14.7 kB | Fig. 10: the walkthrough check and its proposed fixes. | [notes.md](notes.md) |
+
+<details><summary>14 files: Fig. 12: a measuring script of the review, or its saved output.</summary>
+
+| File | Size | What it is | Explained in |
+|---|---|---|---|
+| [`notes/fig12/contract-L0.md`](../notes/fig12/contract-L0.md) | 3.5 kB | Fig. 12: a measuring script of the review, or its saved output. | [notes.md](notes.md) |
+| [`notes/fig12/derive.py`](../notes/fig12/derive.py) | 10.0 kB | Fig. 12: a measuring script of the review, or its saved output. | [notes.md](notes.md) |
+| [`notes/fig12/docrows.py`](../notes/fig12/docrows.py) | 3.5 kB | Fig. 12: a measuring script of the review, or its saved output. | [notes.md](notes.md) |
+| [`notes/fig12/done.md`](../notes/fig12/done.md) | 1.5 kB | Fig. 12: a measuring script of the review, or its saved output. | [notes.md](notes.md) |
+| [`notes/fig12/dump.cjs`](../notes/fig12/dump.cjs) | 2.5 kB | Fig. 12: a measuring script of the review, or its saved output. | [notes.md](notes.md) |
+| [`notes/fig12/interact.cjs`](../notes/fig12/interact.cjs) | 4.2 kB | Fig. 12: a measuring script of the review, or its saved output. | [notes.md](notes.md) |
+| [`notes/fig12/makedoc.py`](../notes/fig12/makedoc.py) | 13.8 kB | Fig. 12: a measuring script of the review, or its saved output. | [notes.md](notes.md) |
+| [`notes/fig12/notecheck.cjs`](../notes/fig12/notecheck.cjs) | 2.5 kB | Fig. 12: a measuring script of the review, or its saved output. | [notes.md](notes.md) |
+| [`notes/fig12/numbers.json`](../notes/fig12/numbers.json) | 19.2 kB | Fig. 12: a measuring script of the review, or its saved output. | [notes.md](notes.md) |
+| [`notes/fig12/physics.py`](../notes/fig12/physics.py) | 5.9 kB | Fig. 12: a measuring script of the review, or its saved output. | [notes.md](notes.md) |
+| [`notes/fig12/roa.py`](../notes/fig12/roa.py) | 2.5 kB | Fig. 12: a measuring script of the review, or its saved output. | [notes.md](notes.md) |
+| [`notes/fig12/shots.cjs`](../notes/fig12/shots.cjs) | 1.8 kB | Fig. 12: a measuring script of the review, or its saved output. | [notes.md](notes.md) |
+| [`notes/fig12/smoke.cjs`](../notes/fig12/smoke.cjs) | 2.5 kB | Fig. 12: a measuring script of the review, or its saved output. | [notes.md](notes.md) |
+| [`notes/fig12/thumb.cjs`](../notes/fig12/thumb.cjs) | 2.0 kB | Fig. 12: a measuring script of the review, or its saved output. | [notes.md](notes.md) |
+
+</details>
+
+| File | Size | What it is | Explained in |
+|---|---|---|---|
 | [`notes/verify.mjs`](../notes/verify.mjs) | 4.5 kB | Checks the ten simulation pages in headless Chromium at desktop and phone size. | [notes.md](notes.md) |
 | [`notes/walkcheck.cjs`](../notes/walkcheck.cjs) | 1.7 kB | Searches every quoted code line of the ten walkthroughs in its page. | [notes.md](notes.md) |

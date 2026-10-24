@@ -24,7 +24,7 @@ Layout (paths below are under `public/`, which the build serves at the site root
 the catalog, Portfolios and every simulation page); `_headers` (Cloudflare's response headers); `scripts/sim.js` (shared helpers, lecture-note typesetting, walkthrough engine);
 `scripts/walk/<key>.js` ("From symbols to code", one file per page, chosen by the page's `data-walk` key:
 each equation paired with the page's own code lines; keep the excerpts identical to the page code when either
-changes; live values come from `Sim.live()` in each page); `simulations/*.html` (ten pages).
+changes; live values come from `Sim.live()` in each page); `simulations/*.html` (eleven pages: Figs. 1–10 and 12).
 Folds: `scripts/fold.js` + `styles/fold.css`, the fold-out mechanism of Physik Radar and the project apps, in one colour (no colour
 coding). Level 1 is a section card with a header band (number, title, a line of counts, round toggle) that pins to the top of the window
 while open; level 2 is a part inside it, pinned under its section's band; cards keep details behind More / Less. It turns, at load:
@@ -53,7 +53,7 @@ equations on the quote ground, figures on white plates with "Figure n" captions,
 limits and further reading; `sim.js` loads KaTeX and typesets `\( … \)` and `\[ … \]` in every `.paper`. No question-and-answer format.
 Plotted figures in the notes are inline SVG made with the house chart style (white plate, clipped plot, Plex Mono ticks) from the page's own
 formulas; every number in a note comes from a computation or the page code.
-Figs. 9 (driven oscillator) and 10 (wind turbine control) solve the whole run first (RK4), store every sample in the dataset, then play the
+Figs. 9 (driven oscillator), 10 (wind turbine control) and 12 (Furuta pendulum) solve the whole run first (RK4), store every sample in the dataset, then play the
 stored samples back; nothing is integrated while the reader watches.
 Portfolios: `portfolios.html` introduces long research projects; each lives as a static copy under `portfolios/<name>/`:
 `portfolios/droplet-collection/` (app `droplet-collection-yl7l26`), `portfolios/rotor-pendula/` (app `rotor-pendula-gafw0f`) and
@@ -86,7 +86,7 @@ value, the formula recomputed from the stored inputs, the pixel or SVG element r
 `Sim.data.round` says what a round is (one period, one loop, ten seconds); every frame of it is copied (all scalars and the pinned point,
 at most 600 samples), then shown as charts and a table and saved as .npz + CSV; at most five rounds are kept. Save: the store as .npz +
 dataset.json + the rounds as CSV + README. The contract is at the top of datalog.js. A page loads dataset.js after sim.js and datalog.js
-after its own script (all ten figures, and the two pages of Iron, Cotton and the Head, whose hooks are in
+after its own script (all eleven figures, and the two pages of Iron, Cotton and the Head, whose hooks are in
 `portfolios-src/impact/datahooks.js`, and the ideal and servo presses of the Hydraulic Press Study, whose store and hooks sit in their
 own pages, and the simulation of Rotor Pendula, whose store sits in `portfolios-src/rotor-pendula/rotor_sim.html` and
 whose links to the shared files `tools/build_combined.py --site` rewrites). `Sim.live()` reads the store too. Keep the taps where the page computes a value; keep the
