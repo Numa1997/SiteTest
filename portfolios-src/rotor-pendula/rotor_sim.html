@@ -524,7 +524,7 @@ const DEFAULTS = {
   N: 51,                           // gear ratio
   RL: null,                        // load resistor, ohm; null: the best by the formula (7.6)-(7.7)
   ce: null,                        // or the electrical brake c_e itself, N m s (overrides RL)
-  band: 1e-3,                      // smoothing band of sgn, as a fraction of the swing scale (L4_full.py)
+  band: 1e-3,                      // smoothing band of sgn, as a fraction of the swing scale (epsW) and of the gear's power scale (epsP)
   bandScale: null,                 // swing scale for the band, rad; null: the formula's swing, kept within 0.01 to 0.5
   steps: 240, settle: 60, measure: 40,               // ideal brake: steps per turn, turns to settle, turns to measure
   stepsGeared: 1200, settleGeared: 100, measureGeared: 20,
@@ -628,6 +628,7 @@ function generatorFormula(Om, rp, N, ce) {
 /** Everything the run and the page need for the settings P (missing fields from DEFAULTS). */
 function makeModel(Pin) {
   const P = Object.assign({}, DEFAULTS, Pin || {});
+  if (!(P.wind > 0)) throw new Error('the wind must be positive: at zero wind the rotor stands still and nothing swings');
   const g = CONST.g, Om = CONST.lamStar * P.wind / CONST.rRot, rTip = CONST.rRot, rp = rTip;   // the hinge at the mother blade's tip
   const { m, l } = CONST.blade, I = m * l * l / 3, mlc = m * l / 2;        // the second blade: inertia about the hinge, first moment
   const R = mlc * rp / I, G = mlc * g / (I * Om * Om);                      // 3 r_p/(2 l), 3 g/(2 l Omega^2)
@@ -655,7 +656,7 @@ function makeModel(Pin) {
     const j = (mo.J + gear.Jg) * N * N / I, f0 = N * mo.T0 / (I * Om * Om), ke = ce / (I * Om);
     const sc = P.bandScale != null ? P.bandScale : Math.min(Math.max(form.Theta, 1e-2), 0.5);   // the formula's swing, 0.01 to 0.5 rad
     Object.assign(model, { geared: true, N, eta: gear.eta, Jg: gear.Jg, csc, ce, RL, ke, j, f0, keep: 1 - ce / csc,
-      formula: form, epsW: P.band * sc, epsP: P.band * G * sc, unitPower: I * Om ** 3,
+      formula: form, epsW: P.band * sc, epsP: P.band * (f0 + (ke + j) * sc) * sc, unitPower: I * Om ** 3,   // the gear's own power scale: x theta'
       frictionTorque: N * mo.T0 / gear.eta, jammed: N * mo.T0 / gear.eta > mlc * g });
   }
   return model;
