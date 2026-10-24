@@ -402,3 +402,35 @@ how each model level was argued, attacked by an independent reviewer and checked
   collection equation (5); L5 the exact random process and the first drizzle (6); L6 turbulence, decided by a number (7); L7 ice (8); L8 energy, entropy, ripening and who eats whom (10, 11);
   L10 a cloud with a shape: fall, mean motion and a stochastic element (12). L9 (turbulence at contact scale) and L11 (a mean motion
   measured from cloud pictures) are open; Part IV had one round of two independent reviews (`notes/droplets/review-*.md`).
+
+### The data panel: the bookkeeper (since 24 October 2026)
+
+Panel 4 (a cloud with a shape) carries the site's data panel ([scripts/datalog.md](scripts/datalog.md)), and the panel also keeps the
+exact runs of panel 3 (lucky drops) as an ensemble. The panel is today's (Variables, Read values, Check, Record, Save); the bookkeeper
+layout of the redesign (headline, ledger table, books) is added with `Sim.data.ledger` once that redesign is merged. The design of
+that ledger (headline, sections, books, dependencies) is written in the pull request that added the panel.
+
+- **One store, written where each number is computed.** `app.js` creates the store (`Sim.dataset`, exposed as `Sim.cloudStore`).
+  The set-up and the derived constants (air density and viscosity, fall speeds at 10, 20, 40 and 100 µm, collision efficiencies
+  from the stored table, the kernel K(40 µm, 10 µm), the eddy speed and memory, the growth constant, the starting water M₀ and drop
+  number N₀) are written when a cloud is made (`newCloud()`). After every frame's model steps, `record()` copies the super-droplets
+  out of the model (`sd_x`, `sd_z`, `sd_r` in µm, `sd_xi`, `sd_id`, `sd_cls`), adds them into the 40 × 30 collision cells
+  (`cell_lwc`, `cell_n`, `cell_rmax`), stores the census (`cloud.census()`, called once per frame) and the two books. The readouts
+  beside the picture and the page's own probe read the store; nothing there is computed again. The stored exact runs of panel 3 are
+  summarised once at load (share of runs with a 100 µm drop within their 60 min, mean, standard deviation, 10, 50 and 90 % points of the
+  time of the first 100 µm drop, for 1, 10, 100 and 1000 cm³); your own run (`lk_*`, 30 min long) is stored with its rank among them (without a drizzle drop of yours, the stored runs that had one by 30 min count as luckier).
+- **The books.** Water: M₀ = M + M_rain + M_evap + δM. Drops: N₀ = N + N_rain + N_evap + N_merge + δN. For the drop book the model
+  counts two numbers it did not count before: `N0` (drops at the start) and `evapN` (drops that evaporated completely), added to
+  `makeCloud` in `physics.cjs` without changing any line count or any result. Tolerances: 10⁻⁹ of M₀ and 10⁻¹² of N₀ (N is about
+  10¹⁶, above 2⁵³, so float64 sums can miss by a drop).
+- **The hooks** are `datahooks.js`, inlined by the build after `app.js`, and read only stored variables: `probe` pins the drop
+  under the pointer (the largest class within 6 px, then the nearest) or else the 50 m cell; `check` recomputes from stored inputs
+  (sums over the stored super-droplets, the stored efficiency table, the model's own formulas called with the stored air); `drawn`
+  reads back the dot of a super-droplet (alpha first, then the class colour; a dot covered by a later one says so), the cloud
+  background of a region square, the readout words and the picture's size. A round is five cloud-minutes; it is refused in the last
+  five minutes before the cloud stops at 45 min. Every word the hooks write goes through `T()`; the study has no German or Arabic
+  page.
+- **Markup.** The canvas sits in `#stage` with its caption `.stage__cap` (where the Read values switch goes); the template maps the
+  site tokens the panel's stylesheet reads onto the study's palette, and `.plot > svg` keeps the charts' full-width rule off the
+  panel's icons. The served page loads `sim.js` and `dataset.js` before its inline script and `datalog.js` after it, with
+  `paper.css` and `data.css`; the standalone build has none of them and keeps its readouts through a bare stand-in store.

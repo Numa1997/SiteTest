@@ -183,7 +183,7 @@ out = (tpl.replace('{{PHYSICS}}', phys).replace('{{CHART}}', chart).replace('{{A
        .replace('{{DATA_JSON}}', json.dumps(data, separators=(',', ':')).replace('</', '<\\/'))
        .replace('{{SIM}}', parts['sim']).replace('{{BOOK}}', book).replace('{{PROBLEMS}}', parts['problems'])
        .replace('{{CHECKS}}', parts['checks']).replace('{{TOC}}', '\n'.join(toc)).replace('{{TOC_MOBILE}}', '\n'.join(toc_m))
-       .replace('{{STATS}}', stats))
+       .replace('{{STATS}}', stats).replace('{{HOOKS}}', '\n' + read(HERE / 'datahooks.js')))
 
 if SITE:
     idx = read(ROOT / 'index.html')
@@ -193,7 +193,9 @@ if SITE:
     head = ('<meta charset="UTF-8" />\n    ' + csp + '\n    <meta name="referrer" content="strict-origin-when-cross-origin" />\n'
             '    <meta name="author" content="Numa Koudsie" />\n    ' + icon + '\n'
             '    <link rel="stylesheet" href="../../fonts/instrument-plex.css" />\n'
-            '    <link rel="stylesheet" href="../../vendor/katex/katex.min.css" />')
+            '    <link rel="stylesheet" href="../../vendor/katex/katex.min.css" /> <link rel="stylesheet" href="../../styles/paper.css" /> <link rel="stylesheet" href="../../styles/data.css" />')
+    # the data panel: the site's shared helpers and store before the page script, the panel after it (datahooks.js says what it shows)
+    pre, post = '<script src="../../scripts/sim.js"></script><script src="../../scripts/dataset.js"></script>', '<script src="../../scripts/datalog.js"></script>'
     bar = '<a class="back" href="../../portfolios.html">← Numa Koudsie · Portfolios</a>'
     fn = ROOT / 'public' / 'portfolios' / 'droplet-collection' / 'index.html'
 else:
@@ -202,8 +204,9 @@ else:
             '&family=IBM+Plex+Sans:ital,wght@0,400;0,500;0,600;1,400&family=Instrument+Serif:ital@0;1&display=swap" />\n'
             f'    <link rel="stylesheet" href="file://{kcss}" />')
     bar = '<a class="back" href="#">Droplet Collection · standalone build</a>'
+    pre = post = ''   # no site scripts here: the page keeps its own readouts and has no data panel
     fn = HERE / 'out' / 'droplet-collection.html'
-out = out.replace('{{HEAD}}', head).replace('{{BACK}}', bar)
+out = out.replace('{{HEAD}}', head).replace('{{BACK}}', bar).replace('{{PRE}}', pre).replace('{{POST}}', post)
 assert '{{' not in out, re.search(r'\{\{[^}]*\}\}', out).group(0)
 if SITE:
     assert 'googleapis' not in out

@@ -7,7 +7,7 @@
     <meta name="author" content="Numa Koudsie" />
     <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='12' fill='%237a1f2b'/%3E%3Ctext x='32' y='45' text-anchor='middle' font-family='Georgia,serif' font-size='34' font-weight='700' fill='%23fff'%3ENK%3C/text%3E%3C/svg%3E" />
     <link rel="stylesheet" href="../../fonts/instrument-plex.css" />
-    <link rel="stylesheet" href="../../vendor/katex/katex.min.css" />
+    <link rel="stylesheet" href="../../vendor/katex/katex.min.css" /> <link rel="stylesheet" href="../../styles/paper.css" /> <link rel="stylesheet" href="../../styles/data.css" />
     <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
     <title>Droplet Collection · Numa Koudsie</title>
     <meta name="description" content="How a warm cloud of small droplets grows drizzle by gravitational collection, built one effect at a time from first principles: lecture notes with every equation derived, a solver of the collection equation, an exact stochastic simulation, and the ice question of the thesis." />
@@ -18,7 +18,7 @@
   --f-display: "Instrument Serif", "Times New Roman", Georgia, serif;
   --f-text: "IBM Plex Sans", "Helvetica Neue", Arial, system-ui, sans-serif;
   --f-mono: "IBM Plex Mono", ui-monospace, Menlo, Consolas, monospace;
-  color-scheme: light;
+  color-scheme: light; /* the site tokens the data panel (styles/data.css) reads, mapped onto this palette */ --accent: var(--wine); --accent-dark: var(--wine-deep); --accent-rose: #e2a2aa; --card: var(--paper); --card-soft: var(--panel); --ink-2: #3f2c23; --ink-3: #5c4839; --rule-soft: #e8dcc6; --tan: #efe4c8; --tan-ink: #7a4b12; --shadow: 0 14px 40px rgba(60,40,20,.12); --sans: var(--f-text); --mono: var(--f-mono); --serif: var(--f-display);
 }
 * { box-sizing: border-box; }
 html { background: var(--bg); scroll-padding-top: 20px; }
@@ -94,7 +94,7 @@ figure.fig svg { display: block; width: 100%; max-width: 620px; height: auto; ma
 /* On a phone the charts keep a readable text size (about 10 px) and scroll sideways inside their own box */
 @media (max-width: 620px) {
   figure.fig .figscroll, .plot { overflow-x: auto; -webkit-overflow-scrolling: touch; }
-  figure.fig svg, .plot svg { min-width: 560px; }
+  figure.fig svg, .plot > svg { min-width: 560px; }
   figure.fig .figscroll + figcaption::before { content: "Swipe the chart sideways to see all of it. "; font-style: italic; }
 }
 input[type=range] { accent-color: var(--wine); }
@@ -122,10 +122,10 @@ details.prob[open] > summary { border-bottom: 1px solid var(--rule); margin-bott
 .readout { font: 13.5px/1.5 var(--f-mono); background: var(--paper); border: 1px solid var(--rule); border-radius: 8px; padding: 10px 12px; }
 .readout b { color: var(--wine); font-weight: 500; }
 .plot { background: #fff; border: 1px solid var(--rule); border-radius: 8px; padding: 6px; }
-.plot svg { display: block; width: 100%; height: auto; }
+.plot > svg { display: block; width: 100%; height: auto; }
 .plots { display: grid; gap: 14px; }
 .note { font-size: 13.5px; color: var(--muted); }
-.status { font: 13px var(--f-mono); color: var(--muted); min-height: 1.4em; }
+.status { font: 13px var(--f-mono); color: var(--muted); min-height: 1.4em; } /* panel 4's picture is the data panel's figure: the canvas fills #stage exactly, so the overlay and the drawing share one set of css pixels */ #stage { position: relative; } #stage > canvas.dp-overlay { position: absolute; inset: 0; width: 100%; height: 100%; display: block; pointer-events: none; z-index: 5; } #stage.dp-reading { cursor: crosshair; touch-action: none; -webkit-user-select: none; user-select: none; } .stage__cap { display: flex; flex-wrap: wrap; justify-content: space-between; align-items: center; gap: 6px 16px; margin-top: 6px; } .dp-read { margin-top: 6px; }
     </style>
   </head>
   <body>
@@ -223,8 +223,8 @@ outline the air is saturated; outside it drops evaporate. Drops collide only wit
 <div class="status" id="sh-status" aria-live="polite"></div>
 <div class="readout" id="sh-out">Press Start. Click inside the picture to pin a probe; its values appear below the picture.</div>
 </div>
-<div class="plots"><div class="mono" id="sh-time" style="font-size:13px">t = 0.0 min</div><div class="plot"><canvas id="sh-cv" style="width:100%;height:auto;display:block" aria-label="drops in a cloud slice"></canvas></div>
-<div class="note" style="font-size:12.5px">Grey line at the bottom: the ground, where rain is counted. Pale blue: the saturated cloud. Thin arrows: the mean motion.</div>
+<div class="plots"><div class="mono" id="sh-time" style="font-size:13px">t = 0.0 min</div><div class="plot"><div id="stage"><canvas id="sh-cv" style="width:100%;height:auto;display:block" aria-label="drops in a cloud slice"></canvas></div>
+<div class="note stage__cap" style="font-size:12.5px"><span>Grey line at the bottom: the ground, where rain is counted. Pale blue: the saturated cloud. Thin arrows: the mean motion.</span></div></div>
 <div class="readout" id="sh-probe">No probe pinned.</div></div>
 </div>
 <p class="note">This panel uses 32 super-droplets per cell to stay quick. Chapter 12's box test shows that this is about 12 % slow in reaching
@@ -1170,7 +1170,7 @@ flow, and that the one-dimensional drift applied to each component separately do
 </div>
 </section>
     </div>
-    <script>
+    <script src="../../scripts/sim.js"></script><script src="../../scripts/dataset.js"></script><script>
 /*PHYSICS-BEGIN*/
 var PHYS = (function () {
   'use strict';
@@ -1989,10 +1989,10 @@ var PHYS = (function () {
         sd.push({ id: id++, x: x, z: z, r: r0, xi: xi, ux: stoch ? sg * gaussian(u) : 0, uz: stoch ? sg * gaussian(u) : 0, coll: mi === 1, t100: -1, tagR: tr, tagC: tg });
       }
     }
-    var st = { t: 0, sd: sd, rain: 0, rainN: 0, evap: 0, evapBelow: 0, M0: 0, first100: null, Lx: Lx, Lz: Lz, h: h, nx: nx, nz: nz, inside: inside, W0: W0, Le: Le,
+    var st = { t: 0, sd: sd, rain: 0, rainN: 0, evap: 0, evapN: 0, evapBelow: 0, M0: 0, N0: 0, first100: null, Lx: Lx, Lz: Lz, h: h, nx: nx, nz: nz, inside: inside, W0: W0, Le: Le,
       epsAt: epsAt, sig2At: sig2At, flow: flow, cell: CF, G: G, S: S, stochastic: stoch, mergers: 0, gamEvents: 0, gamMany: 0, rainLog: [], bornLog: [],
       led: led, regionAt: regionAt, reg: reg, nxR: nxR, nzR: nzR, zbase: zbase, initR: initR, fate: fate, paths: {} };
-    sd.forEach(function (q) { st.M0 += q.xi * massOf(q.r); });
+    sd.forEach(function (q) { st.M0 += q.xi * massOf(q.r); st.N0 += q.xi; });   // N0: drops at the start, for the number book
     if (o.track) o.track.forEach(function (tid) { st.paths[tid] = []; });
     var vf = [0, 0], gr = [0, 0];
     function addTag(map, tagC, m) { for (var key in tagC) map[key] = (map[key] || 0) + m * tagC[key]; }
@@ -2024,7 +2024,7 @@ var PHYS = (function () {
           dm = q.xi * (massOf(q.r) - (gone ? 0 : massOf(Math.sqrt(r2))));
           st.evap += dm; if (q.z < st.zbase) st.evapBelow += dm;
           for (k = 0; k < 3; k++) fate.evapR[k] += dm * q.tagR[k]; addTag(fate.evapC, q.tagC, dm);
-          if (gone) continue;
+          if (gone) { st.evapN += q.xi; continue; }   // evapN: drops that evaporated completely
           q.r = Math.sqrt(r2);
         }
         keep.push(q);
@@ -2220,6 +2220,35 @@ var DATA = {"etab_warm":{"T":283.15,"p":85000,"rhoR":1000,"rhoP":1000,"lnR":[-13
 
   var A = PHYS.air(283.15, 85000);
   var MODES = [{ N: 300e6, rg: 8e-6, sg: 1.25 }, { N: 1e6, rg: 40e-6, sg: 1.2 }];
+
+  // ------------------------------------------------------------ the store
+  // Panels 3 and 4 write every number they compute into one named store (the site's scripts/dataset.js), at the line that computes
+  // it; the readouts on this page and the data panel (datahooks.js with scripts/datalog.js) only read it. The standalone build has
+  // no site scripts: there a bare stand-in with the same calls keeps the readouts working.
+  var ds = window.Sim && Sim.dataset ? Sim.dataset({ title: 'A cloud with a shape', attrs: { study: 'Droplet Collection', panels: 'panel 4, a cloud with a shape; panel 3, lucky drops' } }) : (function () {
+    var v = {}, dims = {};
+    return { dims: dims, vars: v, dim: function (n, z) { dims[n] = z; return z; }, var: function (n, d, ty, at) {
+        var x = v[n] = v[n] || { dims: d, type: ty, attrs: at || {} }, z = 1; d.forEach(function (k) { z *= dims[k] || 0; }); if (d.length && (!x.data || x.data.length !== z)) x.data = new ty(z); return x; },
+      set: function (n, x) { v[n].data = x; return x; }, get: function (n) { return v[n] && v[n].data; }, touch: function () {}, has: function (n) { return !!v[n]; } };
+  })();
+  if (window.Sim) Sim.cloudStore = ds;
+  function S(name, value) { return ds.set(name, value); }
+  function def(list) { list.forEach(function (d) { ds.var(d[0], d[1], d[2], d[3]); }); }
+  function sc(sym, name, units, digits, how, more) { var a = { symbol: sym, long_name: name, units: units, digits: digits, computed_in: how }; for (var k in more || {}) a[k] = more[k]; return a; }
+  def([
+    ['T_air', [], 'float', sc('T', 'air temperature', 'K', 2, 'set by the page', { source: 'PHYS.air(283.15, 85000) at the top of app.js' })],
+    ['p_air', [], 'float', sc('p', 'air pressure', 'Pa', 0, 'set by the page', { source: 'PHYS.air(283.15, 85000)' })],
+    ['rho_air', [], 'float', sc('ρ<sub>a</sub>', 'density of the air', 'kg/m³', 4, 'PHYS.air', { formula: 'ρ<sub>a</sub> = p / (R<sub>d</sub> T)' })],
+    ['mu_air', [], 'float', sc('μ', 'viscosity of the air', 'µPa·s', 4, 'PHYS.air', { formula: 'Sutherland: μ = 17.2 µPa·s (T/273)<sup>3/2</sup> (393 K)/(T + 120 K)' })],
+    ['N1', [], 'float', sc('N<sub>1</sub>', 'droplet mode: number per cubic metre', 'm⁻³', 0, 'MODES, set by the page')],
+    ['rg1', [], 'float', sc('r<sub>g1</sub>', 'droplet mode: median radius', 'µm', 1, 'MODES')],
+    ['sg1', [], 'float', sc('σ<sub>g1</sub>', 'droplet mode: geometric spread', '', 2, 'MODES')],
+    ['N2', [], 'float', sc('N<sub>2</sub>', 'collector mode: number per cubic metre', 'm⁻³', 0, 'MODES')],
+    ['rg2', [], 'float', sc('r<sub>g2</sub>', 'collector mode: median radius', 'µm', 1, 'MODES')],
+    ['sg2', [], 'float', sc('σ<sub>g2</sub>', 'collector mode: geometric spread', '', 2, 'MODES')]
+  ]);
+  S('T_air', A.T); S('p_air', A.p); S('rho_air', A.rho); S('mu_air', A.mu * 1e6);
+  S('N1', MODES[0].N); S('rg1', MODES[0].rg * 1e6); S('sg1', MODES[0].sg); S('N2', MODES[1].N); S('rg2', MODES[1].rg * 1e6); S('sg2', MODES[1].sg);
   function minutes(t) { return t.map(function (s) { return s / 60; }); }
   function tCross(t, F, q) {
     for (var i = 1; i < F.length; i++) if (F[i] >= q) return t[i - 1] + (q - F[i - 1]) / (F[i] - F[i - 1]) * (t[i] - t[i - 1]);
@@ -2328,6 +2357,38 @@ var DATA = {"etab_warm":{"T":283.15,"p":85000,"rhoR":1000,"rhoP":1000,"lnR":[-13
   var lk = $('luck');
   if (lk) {
     var ST = DATA.stoch;
+    // the stored exact runs as an ensemble: for each volume the times of the first 100 µm drop, and their spread, written once here
+    function quant(sorted, q) { if (!sorted.length) return NaN; var x = q * (sorted.length - 1), i = Math.floor(x), f = x - i; return i + 1 < sorted.length ? sorted[i] + f * (sorted[i + 1] - sorted[i]) : sorted[i]; }
+    Object.keys(ST.n).forEach(function (V) {
+      var t = ST.t100[V].slice().sort(function (a, b) { return a - b; }), n = ST.n[V], k = t.length, mean = 0, sd = 0;
+      ds.dim('run_' + V, k);
+      ds.var('t100_' + V, ['run_' + V], Float64Array, sc('t<sub>100</sub>', 'first 100 µm drop in each stored run of ' + V + ' cm³ that had one, sorted', 'min', 2, 'data/stochastic.json', { source: 'read from the stored exact runs (tools/run_stochastic.cjs)' })).data.set(t.map(function (x) { return x / 60; }));
+      t.forEach(function (x) { mean += x / 60 / k; }); t.forEach(function (x) { sd += Math.pow(x / 60 - mean, 2) / Math.max(1, k - 1); }); sd = Math.sqrt(sd);
+      def([
+        ['ens_n_' + V, [], 'int', sc('n<sub>runs</sub>', 'stored exact runs of ' + V + ' cm³', '', 0, 'data/stochastic.json')],
+        ['ens_hit_' + V, [], 'float', sc('P<sub>60</sub>', 'share of those runs with a 100 µm drop within their 60 min', '%', 1, 'app.js, ensemble', { formula: 'P<sub>60</sub> = 100 · (runs with t<sub>100</sub>) / n<sub>runs</sub>' })],
+        ['ens_mean_' + V, [], 'float', sc('⟨t<sub>100</sub>⟩', 'mean time of the first 100 µm drop, over the runs that had one', 'min', 2, 'app.js, ensemble', { formula: '⟨t<sub>100</sub>⟩ = Σ t<sub>100</sub> / n' })],
+        ['ens_sd_' + V, [], 'float', sc('s<sub>t</sub>', 'spread: standard deviation of t<sub>100</sub> between runs', 'min', 2, 'app.js, ensemble', { formula: 's<sub>t</sub> = √(Σ (t<sub>100</sub> − ⟨t<sub>100</sub>⟩)² / (n − 1))' })],
+        ['ens_p10_' + V, [], 'float', sc('t<sub>100</sub><sup>10 %</sup>', 'the luckiest tenth of the runs had its first 100 µm drop by', 'min', 2, 'app.js, ensemble', { formula: 'linear interpolation in the sorted t<sub>100</sub> at (n − 1)·0.1' })],
+        ['ens_p50_' + V, [], 'float', sc('t<sub>100</sub><sup>50 %</sup>', 'median time of the first 100 µm drop', 'min', 2, 'app.js, ensemble', { formula: 'linear interpolation in the sorted t<sub>100</sub> at (n − 1)·0.5' })],
+        ['ens_p90_' + V, [], 'float', sc('t<sub>100</sub><sup>90 %</sup>', 'nine tenths of the runs with a drizzle drop had it by', 'min', 2, 'app.js, ensemble', { formula: 'linear interpolation in the sorted t<sub>100</sub> at (n − 1)·0.9' })]
+      ]);
+      S('ens_n_' + V, n); S('ens_hit_' + V, 100 * k / n); S('ens_mean_' + V, k ? mean : NaN); S('ens_sd_' + V, k > 1 ? sd : NaN);
+      S('ens_p10_' + V, quant(t, 0.1) / 60); S('ens_p50_' + V, quant(t, 0.5) / 60); S('ens_p90_' + V, quant(t, 0.9) / 60);
+    });
+    def([
+      ['lk_V', [], 'int', sc('V', 'volume of your exact run', 'cm³', 0, 'the Volume menu of panel 3')],
+      ['lk_seed', [], 'int', sc('seed', 'seed of your run’s random numbers', '', 0, 'drawn when you pressed Run')],
+      ['lk_drops', [], 'int', sc('N<sub>0</sub>', 'drops drawn into your volume', '', 0, 'PHYS.drawModes')],
+      ['lk_events', [], 'int', sc('n<sub>merge</sub>', 'mergers in your 30 minutes', '', 0, 'PHYS.gillespieRun')],
+      ['lk_t100', [], 'float', sc('t<sub>100</sub>', 'your first 100 µm drop (empty: none in 30 min)', 'min', 2, 'PHYS.gillespieRun')],
+      ['lk_big', [], 'int', sc('n<sub>big</sub>', 'mergers with drops of 30 µm or more before it', '', 0, 'PHYS.gillespieRun')],
+      ['lk_rank', [], 'float', sc('rank', 'share of the stored runs of this volume that were luckier (an earlier first drizzle drop)', '%', 1, 'app.js, after your run', { formula: '100 · (stored runs with t<sub>100</sub> &lt; yours) / n<sub>runs</sub>; without a drop of yours in 30 min, the runs that had one by 30 min' })]
+    ]);
+    ['lk_V', 'lk_seed', 'lk_drops', 'lk_events', 'lk_t100', 'lk_big', 'lk_rank'].forEach(function (k) { S(k, NaN); });   // empty until you run a volume
+    ds.dim('lk_n', 0);
+    ds.var('lk_t', ['lk_n'], Float64Array, sc('t', 'time of each sample of your run', 'min', 2, 'PHYS.gillespieRun, every 10 s'));
+    ds.var('lk_rmax', ['lk_n'], Float64Array, sc('r<sub>max</sub>', 'largest drop in your volume', 'µm', 1, 'PHYS.gillespieRun, every 10 s'));
     function drawCDF(extra) {
       var cols = { 10: '#3c6a46', 100: '#33627f', 1000: '#7d1d2f' }, s = [];
       [10, 100, 1000].forEach(function (V) {
@@ -2350,6 +2411,10 @@ var DATA = {"etab_warm":{"T":283.15,"p":85000,"rhoR":1000,"rhoP":1000,"lnR":[-13
         var t100 = r.firsts[100e-6];
         $('lk-status').textContent = 'done';
         var nb = r['bigMerges' + 100e-6];
+        S('lk_V', V); S('lk_seed', seed); S('lk_drops', radii.length); S('lk_events', r.events); S('lk_t100', t100 !== undefined ? t100 / 60 : NaN); S('lk_big', t100 !== undefined ? nb : NaN);
+        var stored = ST.t100[V] || [], earlier = stored.filter(function (x) { return x < (t100 === undefined ? 1800 : t100); }).length;   // your run lasts 30 min, the stored ones 60
+        S('lk_rank', ST.n[V] ? 100 * earlier / ST.n[V] : NaN);
+        ds.dim('lk_n', r.t.length); ds.var('lk_t', ['lk_n'], Float64Array).data.set(minutes(r.t)); ds.var('lk_rmax', ['lk_n'], Float64Array).data.set(r.rmax.map(function (x) { return x * 1e6; }));
         $('lk-out').innerHTML = V + ' cm³ (' + radii.length + ' drops, seed ' + seed + '): ' + r.events + ' mergers in 30 min; ' +
           (t100 !== undefined ? 'the first 100 µm drop appeared at <b>' + (t100 / 60).toFixed(1) + ' min</b>, after ' + nb + (nb === 1 ? ' merger' : ' mergers') + ' with drops of 30 µm or more'
             : '<b>no drop reached 100 µm</b> within 30 min');
@@ -2367,16 +2432,149 @@ var DATA = {"etab_warm":{"T":283.15,"p":85000,"rhoR":1000,"rhoP":1000,"lnR":[-13
     var CW = 600, CH = 450, dpr = 1;
     var KO = { speed: 'beard', eff: 'table', coal: 'law', near: 'clamp', tab: DATA.etab_warm };
     var sx = function (x) { return x / 2000 * CW; }, sz = function (z) { return CH - z / 1500 * CH; };
+    var steps = 0, KOtext = 'Beard fall speed, efficiency table, coalescence law, nearly equal pairs clamped at r/R = 0.6';
+    // the store's variables for this panel, declared once; their values are written where they are computed, below
+    var ET = DATA.etab_warm;
+    ds.dim('eR', ET.lnR.length); ds.dim('ep', ET.lnp.length);
+    ds.var('etab_lnR', ['eR'], Float64Array, sc('ln R', 'collector radius of each table row, as ln(R / 1 m)', '', 4, 'data/etab_warm.json', { coordinate: true, source: 'read from the stored efficiency table (tools/gen_tables.cjs)' })).data.set(ET.lnR);
+    ds.var('etab_lnp', ['ep'], Float64Array, sc('ln p', 'size ratio p = r/R of each table column, as ln p', '', 4, 'data/etab_warm.json', { coordinate: true })).data.set(ET.lnp);
+    ds.var('etab', ['eR', 'ep'], Float64Array, sc('E', 'collision efficiency E(R, p) from the droplet trajectories, the table the kernel reads', '', 4, 'data/etab_warm.json', { source: 'read from the stored efficiency table (tools/gen_tables.cjs)' })).data.set(ET.E);
+    def([
+      ['shape', [], 'str', sc('outline', 'cloud outline', '', 0, 'the Cloud outline menu')],
+      ['W0', [], 'float', sc('W<sub>0</sub>', 'peak updraft of the mean motion', 'm/s', 2, 'the Mean motion menu')],
+      ['stochastic', [], 'bool', sc('eddies', 'stochastic element (eddies) on', '', 0, 'the Stochastic element menu')],
+      ['Le', [], 'float', sc('L<sub>e</sub>', 'size of the largest eddy', 'm', 0, 'the Largest eddy menu')],
+      ['per_frame', [], 'int', sc('n<sub>f</sub>', 'model steps of 1 s drawn per frame', '', 0, 'the Speed menu')],
+      ['seed', [], 'int', sc('seed', 'seed of the cloud’s random numbers (outline, drops, eddies, mergers)', '', 0, 'drawn when the cloud is made')],
+      ['kernel', [], 'str', sc('K', 'how the collision kernel is built', '', 0, 'set by the page (KO)')],
+      ['Lx', [], 'float', sc('L<sub>x</sub>', 'width of the slice', 'm', 0, 'PHYS.makeCloud')],
+      ['Lz', [], 'float', sc('L<sub>z</sub>', 'height of the slice', 'm', 0, 'PHYS.makeCloud')],
+      ['h', [], 'float', sc('h', 'side of a collision cell', 'm', 0, 'PHYS.makeCloud')],
+      ['per1', [], 'int', sc('n<sub>1</sub>', 'super-droplets per cell for the droplet mode', '', 0, 'set by the page (perCell)')],
+      ['per2', [], 'int', sc('n<sub>2</sub>', 'super-droplets per cell for the collector mode', '', 0, 'set by the page (perCell)')],
+      ['S_out', [], 'float', sc('S', 'supersaturation of the clear air outside the outline (negative: drops evaporate)', '', 2, 'PHYS.makeCloud')],
+      ['eps', [], 'float', sc('ε', 'dissipation rate of the eddies', 'm²/s³', 4, 'PHYS.makeCloud')],
+      ['C0', [], 'float', sc('C<sub>0</sub>', 'Lagrangian structure-function constant', '', 0, 'PHYS.makeCloud (fixed at 6)')],
+      ['dt', [], 'float', sc('Δt', 'model time step', 's', 0, 'cloud.step(1)')],
+      ['dV', [], 'float', sc('ΔV', 'volume of one collision cell, h³', 'm³', 0, 'PHYS.makeCloud', { formula: 'ΔV = h³' })],
+      ['xi1', [], 'float', sc('ξ<sub>1</sub>', 'real drops one droplet super-droplet stands for', '', 0, 'PHYS.makeCloud', { formula: 'ξ<sub>1</sub> = N<sub>1</sub> ΔV / n<sub>1</sub>' })],
+      ['xi2', [], 'float', sc('ξ<sub>2</sub>', 'real drops one collector super-droplet stands for', '', 0, 'PHYS.makeCloud', { formula: 'ξ<sub>2</sub> = N<sub>2</sub> ΔV / n<sub>2</sub>' })],
+      ['sigma_u', [], 'float', sc('σ<sub>u</sub>', 'eddy speed, one component', 'm/s', 3, 'cloud.sig2At', { formula: 'σ<sub>u</sub> = (ε L<sub>e</sub>)<sup>1/3</sup>' })],
+      ['T_L', [], 'float', sc('T<sub>L</sub>', 'memory of the eddies (Lagrangian time)', 's', 1, 'cloud.move', { formula: 'T<sub>L</sub> = 2σ<sub>u</sub>² / (C<sub>0</sub> ε)' })],
+      ['G_grow', [], 'float', sc('G', 'growth constant of dr²/dt = 2 G S (heat and vapour diffusion)', 'µm²/s', 2, 'PHYS.growthG', { formula: 'G = 1 / (F<sub>k</sub> + F<sub>d</sub>), Rogers and Yau 7.17' })],
+      ['v10', [], 'float', sc('v(10 µm)', 'fall speed of a 10 µm droplet', 'cm/s', 3, 'PHYS.vBeard', { formula: 'Beard (1976), Stokes regime with slip' })],
+      ['v20', [], 'float', sc('v(20 µm)', 'fall speed of a 20 µm drop', 'cm/s', 3, 'PHYS.vBeard')],
+      ['v40', [], 'float', sc('v(40 µm)', 'fall speed of a 40 µm collector', 'cm/s', 3, 'PHYS.vBeard')],
+      ['v100', [], 'float', sc('v(100 µm)', 'fall speed of a 100 µm drizzle drop', 'cm/s', 3, 'PHYS.vBeard', { formula: 'Beard (1976), second regime' })],
+      ['E_40_10', [], 'float', sc('E(40, 10)', 'collision efficiency, 40 µm collector and 10 µm droplet', '', 4, 'PHYS.tableE', { formula: 'bilinear in ln R and ln p in the table E' })],
+      ['E_100_20', [], 'float', sc('E(100, 20)', 'collision efficiency, 100 µm collector and 20 µm drop', '', 4, 'PHYS.tableE')],
+      ['K_40_10', [], 'float', sc('K(40, 10)', 'collision kernel for that pair: volume swept per second', 'cm³/s', 6, 'PHYS.kernel', { formula: 'K = π (R + r)² |v<sub>R</sub> − v<sub>r</sub>| E E<sub>c</sub>' })],
+      ['zbase', [], 'float', sc('z<sub>base</sub>', 'height of the cloud base', 'm', 0, 'PHYS.makeCloud')],
+      ['n_sd0', [], 'int', sc('n<sub>sd,0</sub>', 'super-droplets at the start', '', 0, 'PHYS.makeCloud')],
+      ['M0', [], 'float', sc('M<sub>0</sub>', 'water in the slice at the start', 'kg', 3, 'PHYS.makeCloud', { formula: 'M<sub>0</sub> = Σ ξ<sub>i</sub> (4/3) π ρ<sub>w</sub> r<sub>i</sub>³ at t = 0' })],
+      ['N0', [], 'float', sc('N<sub>0</sub>', 'real drops in the slice at the start', '', 0, 'PHYS.makeCloud', { formula: 'N<sub>0</sub> = Σ ξ<sub>i</sub> at t = 0' })],
+      ['t', [], 'float', sc('t', 'cloud time', 's', 0, 'cloud.step')],
+      ['t_min', [], 'float', sc('t', 'cloud time in minutes', 'min', 2, 'record()', { formula: 't / 60' })],
+      ['n_sd', [], 'int', sc('n<sub>sd</sub>', 'super-droplets still in the air', '', 0, 'record()')],
+      ['N_air', [], 'float', sc('N', 'real drops still in the air', '', 0, 'record()', { formula: 'N = Σ ξ<sub>i</sub>' })],
+      ['M_air', [], 'float', sc('M', 'water still in the air', 'kg', 3, 'cloud.census', { formula: 'M = Σ ξ<sub>i</sub> (4/3) π ρ<sub>w</sub> r<sub>i</sub>³' })],
+      ['M40', [], 'float', sc('M<sub>40</sub>', 'water in drops of 40 µm or more', 'kg', 3, 'cloud.census')],
+      ['M100', [], 'float', sc('M<sub>100</sub>', 'water in drizzle drops, 100 µm or more', 'kg', 3, 'cloud.census')],
+      ['M_in', [], 'float', sc('M<sub>in</sub>', 'water inside the outline', 'kg', 3, 'cloud.census')],
+      ['F_air', [], 'float', sc('f<sub>air</sub>', 'share of the water still in the air', '%', 2, 'record()', { formula: '100 M / M<sub>0</sub>' })],
+      ['F100', [], 'float', sc('f<sub>100</sub>', 'share of the water in drizzle drops (100 µm or more)', '%', 2, 'record()', { formula: '100 M<sub>100</sub> / M<sub>0</sub>' })],
+      ['F_rain', [], 'float', sc('f<sub>rain</sub>', 'share of the water rained out', '%', 2, 'record()', { formula: '100 M<sub>rain</sub> / M<sub>0</sub>' })],
+      ['F_evap', [], 'float', sc('f<sub>evap</sub>', 'share of the water evaporated', '%', 2, 'record()', { formula: '100 M<sub>evap</sub> / M<sub>0</sub>' })],
+      ['F_evap_below', [], 'float', sc('f<sub>evap, base</sub>', 'share evaporated below the cloud base', '%', 2, 'record()', { formula: '100 M<sub>evap, base</sub> / M<sub>0</sub>' })],
+      ['rain', [], 'float', sc('M<sub>rain</sub>', 'water that reached the ground', 'kg', 3, 'cloud.step', { source: 'added up step by step as drops cross z = 0; the water book checks it' })],
+      ['evap', [], 'float', sc('M<sub>evap</sub>', 'water evaporated outside the outline', 'kg', 3, 'cloud.step', { source: 'added up step by step from dr²/dt = 2 G S f<sub>v</sub>; the water book checks it' })],
+      ['evap_below', [], 'float', sc('M<sub>evap, base</sub>', 'of it, below the cloud base', 'kg', 3, 'cloud.step')],
+      ['N_rain', [], 'float', sc('N<sub>rain</sub>', 'drops that reached the ground', '', 0, 'cloud.step', { source: 'added up step by step; the number book checks it' })],
+      ['N_evap', [], 'float', sc('N<sub>evap</sub>', 'drops that evaporated completely', '', 0, 'cloud.step', { source: 'added up step by step; the number book checks it' })],
+      ['mergers', [], 'float', sc('N<sub>merge</sub>', 'drops lost to mergers (two become one)', '', 0, 'cloud.step', { source: 'added up step by step: each merger event removes ξ drops; the number book checks it' })],
+      ['r_max', [], 'float', sc('r<sub>max</sub>', 'largest drop in the air', 'µm', 1, 'record()', { formula: 'max r<sub>i</sub>' })],
+      ['t100_first', [], 'float', sc('t<sub>100</sub>', 'first drizzle drop (100 µm) in the slice (empty: not yet)', 'min', 2, 'cloud.step')],
+      ['x100', [], 'float', sc('x<sub>100</sub>', 'where it formed, across', 'm', 0, 'cloud.step')],
+      ['z100', [], 'float', sc('z<sub>100</sub>', 'where it formed, height', 'm', 0, 'cloud.step')],
+      ['follow_id', [], 'int', sc('id<sub>f</sub>', 'super-droplet followed (−1: none)', '', 0, 'Follow one drop')],
+      ['follow_r', [], 'float', sc('r<sub>f</sub>', 'radius of the followed drop', 'µm', 1, 'record()')],
+      ['follow_z', [], 'float', sc('z<sub>f</sub>', 'height of the followed drop', 'm', 0, 'record()')],
+      ['book_M_res', [], 'float', sc('δM', 'water book: M<sub>0</sub> − M − M<sub>rain</sub> − M<sub>evap</sub>', 'kg', 9, 'record()', { formula: 'δM = M<sub>0</sub> − M − M<sub>rain</sub> − M<sub>evap</sub>' })],
+      ['book_M_rel', [], 'float', sc('δM/M<sub>0</sub>', 'water book, relative residual (tolerance 10⁻⁹)', '', 15, 'record()')],
+      ['book_N_res', [], 'float', sc('δN', 'number book: N<sub>0</sub> − N − N<sub>rain</sub> − N<sub>evap</sub> − N<sub>merge</sub>', '', 0, 'record()', { formula: 'δN = N<sub>0</sub> − N − N<sub>rain</sub> − N<sub>evap</sub> − N<sub>merge</sub>' })],
+      ['book_N_rel', [], 'float', sc('δN/N<sub>0</sub>', 'number book, relative residual (tolerance 10⁻¹²)', '', 15, 'record()')],
+      ['steps', [], 'int', sc('n<sub>step</sub>', 'model steps done for this cloud', '', 0, 'advance()')],
+      ['step_ms', [], 'float', sc('τ<sub>step</sub>', 'wall time of the last frame’s steps', 'ms', 1, 'advance()')],
+      ['gam_events', [], 'int', sc('n<sub>γ</sub>', 'merger events between super-droplet pairs', '', 0, 'cloud.step')],
+      ['gam_many', [], 'int', sc('n<sub>γ&gt;1</sub>', 'events in which one drop swallowed several (γ &gt; 1)', '', 0, 'cloud.step')],
+      ['running', [], 'bool', sc('running', 'the cloud is advancing', '', 0, 'Start / Pause')],
+      ['W_px', [], 'float', sc('W', 'width of the picture', 'px', 0, 'size()')],
+      ['H_px', [], 'float', sc('H', 'height of the picture', 'px', 0, 'size()')],
+      ['dpr', [], 'float', sc('dpr', 'device pixels per css pixel', '', 2, 'size()')],
+      ['px_per_m', [], 'float', sc('s', 'scale: css pixels per metre', 'px/m', 4, 'size()', { formula: 's = W / L<sub>x</sub>' })],
+      ['probe_i', [], 'int', sc('i<sub>p</sub>', 'column of the probe pinned by a click (−1: none)', '', 0, 'click on the picture')],
+      ['probe_j', [], 'int', sc('j<sub>p</sub>', 'row of the probe pinned by a click (−1: none)', '', 0, 'click on the picture')],
+      ['probe_u', [], 'float', sc('u<sub>p</sub>', 'mean wind across at the probe', 'm/s', 2, 'cloud.flow')],
+      ['probe_w', [], 'float', sc('w<sub>p</sub>', 'mean wind up at the probe', 'm/s', 2, 'cloud.flow')],
+      ['probe_reg', [], 'int', sc('region', 'region at the probe: 0 core, 1 flank, 2 edge band, 3 clear air, 4 below the base', '', 0, 'cloud.regionAt')]
+    ]);
+    ds.dim('sd', 0);
+    [['sd_x', Float64Array, sc('x', 'position across', 'm', 1, 'cloud.step')], ['sd_z', Float64Array, sc('z', 'height', 'm', 1, 'cloud.step')],
+      ['sd_r', Float64Array, sc('r', 'radius', 'µm', 2, 'cloud.step')], ['sd_xi', Float64Array, sc('ξ', 'real drops the super-droplet stands for (its multiplicity)', '', 0, 'cloud.step')],
+      ['sd_id', Int32Array, sc('id', 'the super-droplet’s number, fixed for its life', '', 0, 'PHYS.makeCloud')],
+      ['sd_cls', Uint8Array, sc('class', '0 droplet (below 20 µm), 1 collector, 2 drizzle (100 µm or more)', '', 0, 'record()', { formula: '0 if r &lt; 20 µm, 1 if r &lt; 100 µm, else 2' })]
+    ].forEach(function (d) { ds.var(d[0], ['sd'], d[1], d[2]); });
+    ds.dim('cz', 30); ds.dim('cx', 40);
+    ds.var('cell_lwc', ['cz', 'cx'], Float64Array, sc('LWC', 'water per cubic metre in each 50 m cell (row 0 at the ground)', 'g/m³', 3, 'record()', { formula: 'Σ<sub>cell</sub> ξ<sub>i</sub> (4/3) π ρ<sub>w</sub> r<sub>i</sub>³ / ΔV' }));
+    ds.var('cell_n', ['cz', 'cx'], Int32Array, sc('n<sub>cell</sub>', 'super-droplets in each cell', '', 0, 'record()'));
+    ds.var('cell_rmax', ['cz', 'cx'], Float64Array, sc('r<sub>max</sub>', 'largest drop in each cell', 'µm', 1, 'record()'));
+    var CAP = 0, buf = {};
+    // every frame (and when a cloud is made): the state copied out of the model's super-droplets, the census and the two books
+    function record() {
+      var s = cloud.sd, n = s.length, i, q, Nair = 0, rmax = 0, nx = cloud.nx, nz = cloud.nz, h = cloud.h, dV = h * h * h;
+      if (n > CAP) { CAP = Math.max(n, 2 * CAP); ['sd_x', 'sd_z', 'sd_r', 'sd_xi'].forEach(function (k) { buf[k] = new Float64Array(CAP); }); buf.sd_id = new Int32Array(CAP); buf.sd_cls = new Uint8Array(CAP); }
+      var X = buf.sd_x, Z = buf.sd_z, R = buf.sd_r, XI = buf.sd_xi, ID = buf.sd_id, CL = buf.sd_cls, lwc = ds.get('cell_lwc'), cn = ds.get('cell_n'), crm = ds.get('cell_rmax');
+      lwc.fill(0); cn.fill(0); crm.fill(0);
+      for (i = 0; i < n; i++) {
+        q = s[i]; X[i] = q.x; Z[i] = q.z; R[i] = q.r * 1e6; XI[i] = q.xi; ID[i] = q.id; CL[i] = q.r >= 100e-6 ? 2 : q.r >= 20e-6 ? 1 : 0;
+        Nair += q.xi; if (q.r > rmax) rmax = q.r;
+        var c = Math.min(nz - 1, Math.max(0, Math.floor(q.z / h))) * nx + Math.min(nx - 1, Math.max(0, Math.floor(q.x / h)));
+        cn[c]++; lwc[c] += q.xi * PHYS.massOf(q.r) / dV * 1e3; if (R[i] > crm[c]) crm[c] = R[i];
+      }
+      ds.dim('sd', n);
+      ['sd_x', 'sd_z', 'sd_r', 'sd_xi', 'sd_id', 'sd_cls'].forEach(function (k) { S(k, buf[k].subarray(0, n)); });
+      ds.touch('cell_lwc'); ds.touch('cell_n'); ds.touch('cell_rmax');
+      var z = cloud.census(), M0 = cloud.M0, f = cloud.first100;
+      S('t', cloud.t); S('t_min', cloud.t / 60); S('n_sd', n); S('N_air', Nair); S('M_air', z.M); S('M40', z.M40); S('M100', z.M100); S('M_in', z.Min);
+      S('rain', z.rain); S('evap', z.evap); S('evap_below', z.evapBelow); S('N_rain', cloud.rainN); S('N_evap', cloud.evapN); S('mergers', cloud.mergers);
+      S('F_air', 100 * z.M / M0); S('F100', 100 * z.M100 / M0); S('F_rain', 100 * z.rain / M0); S('F_evap', 100 * z.evap / M0); S('F_evap_below', 100 * z.evapBelow / M0);
+      S('r_max', rmax * 1e6); S('t100_first', f ? f.t / 60 : NaN); S('x100', f ? f.x : NaN); S('z100', f ? f.z : NaN);
+      S('follow_id', follow ? follow.q.id : -1); S('follow_r', follow && follow.alive ? follow.q.r * 1e6 : NaN); S('follow_z', follow && follow.alive ? follow.q.z : NaN);
+      var dM = M0 - z.M - z.rain - z.evap, dN = cloud.N0 - Nair - cloud.rainN - cloud.evapN - cloud.mergers;
+      S('book_M_res', dM); S('book_M_rel', dM / M0); S('book_N_res', dN); S('book_N_rel', dN / cloud.N0);
+      S('steps', steps); S('gam_events', cloud.gamEvents); S('gam_many', cloud.gamMany);
+    }
     function size() {    // draw at the displayed size times the device pixel ratio, so lines and dots stay sharp on a phone
-      var w = Math.max(280, cv.parentNode.clientWidth - 12); dpr = window.devicePixelRatio || 1;
+      var w = Math.max(280, cv.closest('.plot').clientWidth - 12); dpr = window.devicePixelRatio || 1;
       CW = w; CH = Math.round(w * 0.75); cv.width = Math.round(CW * dpr); cv.height = Math.round(CH * dpr); cv.style.height = CH + 'px';
       ctx.setTransform(dpr, 0, 0, dpr, 0, 0); bg = null;
+      S('W_px', CW); S('H_px', CH); S('dpr', dpr); S('px_per_m', CW / 2000);
     }
     function newCloud() {
       var shape = $('sh-shape').value, seed = 1 + Math.floor(Math.random() * 1e9);
       cloud = PHYS.makeCloud(A, KO, { shape: shape, outline: { seed: seed, rough: 0.5 }, W0: +$('sh-wind').value, stochastic: $('sh-stoch').value === 'on', Le: +$('sh-le').value,
         perCell: [24, 8], seed: seed });
-      bg = null; follow = null; trail = []; draw(); text(true);
+      bg = null; follow = null; trail = []; steps = 0;
+      var e = cloud.epsAt(1000, 750), s2 = cloud.sig2At(1000, 750), dV = cloud.h * cloud.h * cloud.h;
+      S('shape', shape); S('W0', cloud.W0); S('stochastic', cloud.stochastic); S('Le', cloud.Le); S('per_frame', +$('sh-speed').value); S('seed', seed); S('kernel', KOtext);
+      S('Lx', cloud.Lx); S('Lz', cloud.Lz); S('h', cloud.h); S('per1', 24); S('per2', 8); S('S_out', cloud.S); S('eps', e); S('C0', 6); S('dt', 1);
+      S('dV', dV); S('xi1', MODES[0].N * dV / 24); S('xi2', MODES[1].N * dV / 8); S('sigma_u', Math.sqrt(s2)); S('T_L', 2 * s2 / (6 * e)); S('G_grow', cloud.G * 1e12);
+      S('v10', PHYS.vBeard(10e-6, A) * 100); S('v20', PHYS.vBeard(20e-6, A) * 100); S('v40', PHYS.vBeard(40e-6, A) * 100); S('v100', PHYS.vBeard(100e-6, A) * 100);
+      S('E_40_10', PHYS.tableE(KO.tab, 40e-6, 0.25, KO.near)); S('E_100_20', PHYS.tableE(KO.tab, 100e-6, 0.2, KO.near)); S('K_40_10', PHYS.kernel(40e-6, 10e-6, A, KO) * 1e6);
+      S('zbase', cloud.zbase); S('n_sd0', cloud.sd.length); S('M0', cloud.M0); S('N0', cloud.N0); S('running', !!timer); S('step_ms', NaN);
+      pinProbe();
+      if (ds.vars.reg) ds.set('reg', cloud.reg); else { ds.dim('rx', cloud.nxR); ds.dim('rz', cloud.nzR); ds.var('reg', ['rx', 'rz'], Int8Array, sc('region', 'region of each 25 m square: 0 updraft core, 1 flank, 2 edge band, 3 clear air, 4 below the base', '', 0, 'PHYS.makeCloud')); ds.set('reg', cloud.reg); }
+      record(); draw(); text(true);
     }
     function background() {     // the outline, the ground and the mean motion's arrows (only where it blows), drawn once per cloud
       var c = document.createElement('canvas'); c.width = cv.width; c.height = cv.height; var g = c.getContext('2d'), i, j, v = [0, 0];
@@ -2408,53 +2606,60 @@ var DATA = {"etab_warm":{"T":283.15,"p":85000,"rhoR":1000,"rhoP":1000,"lnR":[-13
       if (probe) { ctx.strokeStyle = '#23160f'; ctx.lineWidth = 1.5; ctx.strokeRect(sx(probe.i * 50), sz((probe.j + 1) * 50), sx(50), sz(0) - sz(50)); }
     }
     var REG = ['updraft core', 'flank', 'edge band (within 100 m of the outline)', 'clear air', 'below the base'];
-    function text(force) {
+    function pinProbe() {      // the probe's place and the mean motion there, written when it is pinned (and for each new cloud)
+      var v = [NaN, NaN], x, zz;
+      if (probe) { x = (probe.i + 0.5) * 50; zz = (probe.j + 0.5) * 50; cloud.flow(x, zz, v); }
+      S('probe_i', probe ? probe.i : -1); S('probe_j', probe ? probe.j : -1); S('probe_u', v[0]); S('probe_w', v[1]); S('probe_reg', probe ? cloud.regionAt(x, zz) : -1);
+    }
+    function text(force) {      // the readouts only read the store
       var now = performance.now(); if (!force && now - lastText < 250) return; lastText = now;   // words change about four times a second
-      var z = cloud.census(), f = function (v) { return (100 * v / cloud.M0).toFixed(1) + ' %'; };
-      $('sh-time').textContent = 't = ' + (cloud.t / 60).toFixed(1) + ' min';
-      $('sh-out').innerHTML = 'water still in the air ' + f(z.M) + ' (in drops ≥ 100 µm ' + f(z.M100) + ')<br>rained out ' + f(z.rain) +
-        ' · evaporated ' + f(z.evap) + ' (of which below the base ' + f(z.evapBelow) + ')<br>first drop of 100 µm: ' + (cloud.first100 ? (cloud.first100.t / 60).toFixed(1) + ' min at x = ' + cloud.first100.x.toFixed(0) + ' m, z = ' + cloud.first100.z.toFixed(0) + ' m' : 'not yet') +
-        (follow ? '<br>followed drop: ' + (follow.alive ? (follow.q.r * 1e6).toFixed(1) + ' µm at z = ' + follow.q.z.toFixed(0) + ' m' : follow.end) : '');
+      var g = function (k) { return ds.get(k); }, f = function (v) { return v.toFixed(1) + ' %'; }, t1 = g('t100_first');
+      $('sh-time').textContent = 't = ' + g('t_min').toFixed(1) + ' min';
+      $('sh-out').innerHTML = 'water still in the air ' + f(g('F_air')) + ' (in drops ≥ 100 µm ' + f(g('F100')) + ')<br>rained out ' + f(g('F_rain')) +
+        ' · evaporated ' + f(g('F_evap')) + ' (of which below the base ' + f(g('F_evap_below')) + ')<br>first drop of 100 µm: ' + (t1 === t1 ? t1.toFixed(1) + ' min at x = ' + g('x100').toFixed(0) + ' m, z = ' + g('z100').toFixed(0) + ' m' : 'not yet') +
+        (follow ? '<br>followed drop: ' + (follow.alive ? g('follow_r').toFixed(1) + ' µm at z = ' + g('follow_z').toFixed(0) + ' m' : follow.end) : '');
       if (probe) {
-        var x = (probe.i + 0.5) * 50, zz = (probe.j + 0.5) * 50, v = [0, 0], e = cloud.epsAt(x, zz), s2 = cloud.sig2At(x, zz), n = 0, w = 0, rmax = 0;
-        cloud.flow(x, zz, v);
-        cloud.sd.forEach(function (q) { if (Math.floor(q.x / 50) === probe.i && Math.floor(q.z / 50) === probe.j) { n++; w += q.xi * PHYS.massOf(q.r); rmax = Math.max(rmax, q.r); } });
-        $('sh-probe').innerHTML = 'probe at x = ' + x + ' m, z = ' + zz + ' m: ' + REG[cloud.regionAt(x, zz)] + '<br>mean wind ' + v[0].toFixed(2) + ' / ' + v[1].toFixed(2) +
-          ' m/s (across / up) · eddies σ = ' + (cloud.stochastic ? Math.sqrt(s2).toFixed(2) + ' m/s, memory T_L = ' + (2 * s2 / (6 * e)).toFixed(0) + ' s' : 'off') +
-          '<br>super-droplets here ' + n + ' · water ' + (w / 125000 * 1e3).toFixed(3) + ' g/m³ · largest drop ' + (rmax * 1e6).toFixed(0) + ' µm';
+        var c = probe.j * 40 + probe.i;
+        $('sh-probe').innerHTML = 'probe at x = ' + (probe.i + 0.5) * 50 + ' m, z = ' + (probe.j + 0.5) * 50 + ' m: ' + REG[g('probe_reg')] + '<br>mean wind ' + g('probe_u').toFixed(2) + ' / ' + g('probe_w').toFixed(2) +
+          ' m/s (across / up) · eddies σ = ' + (g('stochastic') ? g('sigma_u').toFixed(2) + ' m/s, memory T_L = ' + g('T_L').toFixed(0) + ' s' : 'off') +
+          '<br>super-droplets here ' + g('cell_n')[c] + ' · water ' + g('cell_lwc')[c].toFixed(3) + ' g/m³ · largest drop ' + g('cell_rmax')[c].toFixed(0) + ' µm';
       }
     }
     function advance() {
-      var per = +$('sh-speed').value;
+      var per = +$('sh-speed').value, t0 = performance.now();
       for (var k = 0; k < per; k++) {
-        cloud.step(1);
+        cloud.step(1); steps++;
         if (follow && follow.alive) { if (cloud.sd.indexOf(follow.q) < 0) { follow.alive = false; follow.end = follow.q.z < 0.5 ? 'reached the ground as rain' : 'gone (evaporated or merged away)'; } else { trail.push([follow.q.x, follow.q.z]); if (trail.length > 900) trail.shift(); } }
       }
+      S('per_frame', per); S('step_ms', performance.now() - t0); record();
     }
     function loop() {
       advance(); draw(); text(false);
-      if (cloud.t < 2700 && cloud.sd.length) timer = requestAnimationFrame(loop); else { timer = null; $('sh-go').textContent = 'Start'; $('sh-status').textContent = 'stopped at 45 min'; text(true); }
+      if (cloud.t < 2700 && cloud.sd.length) timer = requestAnimationFrame(loop); else { timer = null; S('running', false); $('sh-go').textContent = 'Start'; $('sh-status').textContent = 'stopped at 45 min'; text(true); }
     }
     $('sh-go').addEventListener('click', function () {
-      if (timer) { cancelAnimationFrame(timer); timer = null; $('sh-go').textContent = 'Start'; $('sh-status').textContent = 'paused'; text(true); return; }
-      if (reduceMotion) { for (var k = 0; k < 60; k++) cloud.step(1); draw(); text(true); $('sh-status').textContent = 'advanced one minute (reduced motion)'; return; }
-      $('sh-go').textContent = 'Pause'; $('sh-status').textContent = 'running'; timer = requestAnimationFrame(loop);
+      if (timer) { cancelAnimationFrame(timer); timer = null; S('running', false); $('sh-go').textContent = 'Start'; $('sh-status').textContent = 'paused'; text(true); return; }
+      if (reduceMotion) { for (var k = 0; k < 60; k++) { cloud.step(1); steps++; } record(); draw(); text(true); $('sh-status').textContent = 'advanced one minute (reduced motion)'; return; }
+      $('sh-go').textContent = 'Pause'; $('sh-status').textContent = 'running'; timer = requestAnimationFrame(loop); S('running', true);
     });
     $('sh-follow').addEventListener('click', function () {     // follow a droplet that starts low in the updraft core
       var best = null, bd = 1e9;
       cloud.sd.forEach(function (q) { if (q.r < 20e-6 && cloud.regionAt(q.x, q.z) === 0) { var d = Math.abs(q.x - 1000) + Math.abs(q.z - 450); if (d < bd) { bd = d; best = q; } } });
       if (!best) best = cloud.sd[Math.floor(cloud.sd.length / 2)];
-      follow = { q: best, alive: true }; trail = [[best.x, best.z]]; draw(); text(true);
+      follow = { q: best, alive: true }; trail = [[best.x, best.z]]; record(); draw(); text(true);
     });
-    $('sh-reset').addEventListener('click', function () { if (timer) { cancelAnimationFrame(timer); timer = null; $('sh-go').textContent = 'Start'; } $('sh-status').textContent = ''; newCloud(); });
+    $('sh-reset').addEventListener('click', function () { if (timer) { cancelAnimationFrame(timer); timer = null; $('sh-go').textContent = 'Start'; } $('sh-status').textContent = ''; newCloud(); S('running', false); });
     ['sh-shape', 'sh-wind', 'sh-stoch', 'sh-le'].forEach(function (id) { $(id).addEventListener('change', function () { $('sh-reset').click(); }); });
+    $('sh-speed').addEventListener('change', function () { S('per_frame', +$('sh-speed').value); });
     cv.addEventListener('click', function (e) {
       var b = cv.getBoundingClientRect(), x = (e.clientX - b.left) / b.width * 2000, z = (1 - (e.clientY - b.top) / b.height) * 1500;
       probe = { i: Math.min(39, Math.max(0, Math.floor(x / 50))), j: Math.min(29, Math.max(0, Math.floor(z / 50))) };
-      draw(); text(true);
+      pinProbe(); draw(); text(true);
     });
-    $('sh-clear').addEventListener('click', function () { probe = null; $('sh-probe').textContent = 'No probe pinned.'; draw(); });
+    $('sh-clear').addEventListener('click', function () { probe = null; pinProbe(); $('sh-probe').textContent = 'No probe pinned.'; draw(); });
     window.addEventListener('resize', function () { if (!cloud) return; size(); draw(); });
+    // the page can reflow without a window resize (the data panel, when open, narrows the page): redraw when the plot's width changes
+    if (window.ResizeObserver) new ResizeObserver(function () { if (cloud && Math.abs(cv.closest('.plot').clientWidth - 12 - CW) > 0.5) { size(); draw(); } }).observe(cv.closest('.plot'));
     size(); newCloud();
   }
 
@@ -2516,6 +2721,220 @@ var DATA = {"etab_warm":{"T":283.15,"p":85000,"rhoR":1000,"rhoP":1000,"lnR":[-13
   route();
 })();
 
-    </script>
+/* Droplet Collection: the data panel's hooks, inlined by tools/build.py after app.js. The panel (scripts/datalog.js) only reads the
+   store that app.js writes (Sim.cloudStore). These hooks read only stored variables: they say what lies at a point of the cloud
+   picture, recompute values from stored inputs, and read values back from the picture. Every word they write goes through T(). */
+(function () {
+  'use strict';
+  if (!window.Sim || !Sim.dataset || !Sim.cloudStore) return;
+  var T = window.T || function (s) { return s; }, ds = Sim.cloudStore, G = function (k) { return ds.get(k); };
+  var cv = document.getElementById('sh-cv'), box = { canvas: cv, ctx: cv.getContext('2d'), get dpr() { return G('dpr'); } };
+  var RHO = PHYS.RHO_W, CLS = [T('droplet'), T('collector'), T('drizzle drop')], REG = [T('updraft core'), T('flank'), T('edge band'), T('clear air'), T('below the base')];
+  var VOLS = Object.keys(DATA.stoch.n);
+
+  // ---- where stored things are drawn: x across, z up, the picture W × H css px for Lx × Lz metres
+  function kx() { return G('W_px') / G('Lx'); }
+  function kz() { return G('H_px') / G('Lz'); }
+  function at(x, z) { return { x: x * kx(), y: G('H_px') - z * kz() }; }
+  function cellOf(c) { return { i: c % 40, j: Math.floor(c / 40) }; }
+  function cellAt(c) { var q = cellOf(c), h = G('h'); return at((q.i + 0.5) * h, (q.j + 0.5) * h); }
+  function cellIndex(x, z) { var h = G('h'); return Math.min(29, Math.max(0, Math.floor(z / h))) * 40 + Math.min(39, Math.max(0, Math.floor(x / h))); }
+  var last = 0;
+  function indexOf(id) {        // the store's row of a super-droplet; rows shift as drops rain out, so look it up by its number
+    var ID = G('sd_id');
+    if (ID[last] === id) return last;
+    for (var i = 0; i < ID.length; i++) if (ID[i] === id) return (last = i);
+    return -1;
+  }
+  function mass(rum) { var r = rum * 1e-6; return 4 / 3 * Math.PI * RHO * r * r * r; }
+  function air() { return PHYS.air(G('T_air'), G('p_air')); }
+  function table() { return { lnR: G('etab_lnR'), lnp: G('etab_lnp'), E: G('etab') }; }
+
+  // ---- Read values: the drop under the pointer (the largest class within 6 px wins, then the nearest), else the 50 m cell
+  function probe(x, y) {
+    var W = G('W_px'), H = G('H_px');
+    if (!(x >= 0 && y >= 0 && x <= W && y <= H)) return null;
+    var X = G('sd_x'), Z = G('sd_z'), CL = G('sd_cls'), ID = G('sd_id'), a = kx(), b = kz(), best = -1, bc = -1, bd = 37;
+    for (var i = 0; i < X.length; i++) {
+      var dx = X[i] * a - x, dy = H - Z[i] * b - y, d = dx * dx + dy * dy;
+      if (d < 37 && (CL[i] > bc || CL[i] === bc && d < bd)) { best = i; bc = CL[i]; bd = d; }
+    }
+    if (best >= 0) return { sd: ID[best], cell: cellIndex(X[best], Z[best]) };
+    return { cell: cellIndex(x / a, (H - y) / b) };
+  }
+  function cellRows(c) {
+    return [[T('LWC (cell)'), G('cell_lwc')[c], 'g/m³', 'cell_lwc', c], [T('n (cell)'), G('cell_n')[c], '', 'cell_n', c], [T('r<sub>max</sub> (cell)'), G('cell_rmax')[c], 'µm', 'cell_rmax', c]];
+  }
+  function dropRows(i) {      // the same rows whether the drop is still there or not (i = −1: empty), so a recorded round keeps its columns
+    var v = function (k) { return i < 0 ? NaN : G(k)[i]; }, j = i < 0 ? null : i;
+    return [['x', v('sd_x'), 'm', 'sd_x', j], ['z', v('sd_z'), 'm', 'sd_z', j], ['r', v('sd_r'), 'µm', 'sd_r', j], ['ξ', v('sd_xi'), '', 'sd_xi', j], [T('class'), v('sd_cls'), '', 'sd_cls', j]];
+  }
+  function cellTitle(c) { var q = cellOf(c), h = G('h'); return T('cell at x = ') + (q.i + 0.5) * h + T(' m, z = ') + (q.j + 0.5) * h + T(' m'); }
+  function inspect(ref) {
+    var rows = [['t', G('t'), 's', 't', null]];
+    if (ref.sd !== undefined) {
+      var i = indexOf(ref.sd);
+      if (i < 0) return { title: T('super-droplet ') + ref.sd + T(' is gone (rained out, evaporated, or its drops merged away); showing the ') + cellTitle(ref.cell) + T(' where it was pinned'), at: cellAt(ref.cell), rows: rows.concat(dropRows(-1), cellRows(ref.cell)) };
+      var X = G('sd_x'), Z = G('sd_z'), c = cellIndex(X[i], Z[i]);
+      return { title: T('super-droplet ') + ref.sd + ' · ' + CLS[G('sd_cls')[i]] + T(', ') + cellTitle(c), at: at(X[i], Z[i]), rows: rows.concat(dropRows(i), cellRows(c)) };
+    }
+    return { title: cellTitle(ref.cell), at: cellAt(ref.cell), rows: rows.concat(cellRows(ref.cell)) };
+  }
+  function locate(name, idx) {
+    if (/^sd_/.test(name)) { var X = G('sd_x'), Z = G('sd_z'); return idx < X.length ? at(X[idx], Z[idx]) : null; }
+    if (/^cell_/.test(name)) return cellAt(idx);
+    if (name === 'reg') { var nz = ds.dims.rz; return at((Math.floor(idx / nz) + 0.5) * 25, (idx % nz + 0.5) * 25); }
+    return null;
+  }
+
+  // ---- Check, second answer: recomputed from stored inputs only
+  function inp(sym, name, units, digits) { return [sym, G(name), units, digits === undefined ? 4 : digits]; }
+  function sum(f) { var s = 0, n = G('sd_x').length; for (var i = 0; i < n; i++) s += f(i); return s; }
+  var check = {
+    rho_air: function () { return { formula: 'ρ<sub>a</sub> = p / (R<sub>d</sub> T)', inputs: [inp('p', 'p_air', 'Pa', 0), inp('T', 'T_air', 'K', 2), ['R<sub>d</sub>', PHYS.R_D, 'J/(kg K)', 2]], value: air().rho }; },
+    mu_air: function () { return { formula: T('Sutherland’s law, PHYS.air(T, p), in µPa·s'), inputs: [inp('T', 'T_air', 'K', 2)], value: air().mu * 1e6 }; },
+    dV: function () { return { formula: 'ΔV = h³', inputs: [inp('h', 'h', 'm', 0)], value: Math.pow(G('h'), 3) }; },
+    xi1: function () { return { formula: 'ξ<sub>1</sub> = N<sub>1</sub> ΔV / n<sub>1</sub>', inputs: [inp('N<sub>1</sub>', 'N1', 'm⁻³', 0), inp('ΔV', 'dV', 'm³', 0), inp('n<sub>1</sub>', 'per1', '', 0)], value: G('N1') * G('dV') / G('per1') }; },
+    xi2: function () { return { formula: 'ξ<sub>2</sub> = N<sub>2</sub> ΔV / n<sub>2</sub>', inputs: [inp('N<sub>2</sub>', 'N2', 'm⁻³', 0), inp('ΔV', 'dV', 'm³', 0), inp('n<sub>2</sub>', 'per2', '', 0)], value: G('N2') * G('dV') / G('per2') }; },
+    sigma_u: function () { return { formula: 'σ<sub>u</sub> = (ε L<sub>e</sub>)<sup>1/3</sup>', inputs: [inp('ε', 'eps', 'm²/s³'), inp('L<sub>e</sub>', 'Le', 'm', 0)], value: Math.cbrt(G('eps') * G('Le')) }; },
+    T_L: function () { return { formula: 'T<sub>L</sub> = 2σ<sub>u</sub>² / (C<sub>0</sub> ε)', inputs: [inp('σ<sub>u</sub>', 'sigma_u', 'm/s'), inp('C<sub>0</sub>', 'C0', '', 0), inp('ε', 'eps', 'm²/s³')], value: 2 * G('sigma_u') * G('sigma_u') / (G('C0') * G('eps')) }; },
+    G_grow: function () { return { formula: T('G = 1 / (F<sub>k</sub> + F<sub>d</sub>), PHYS.growthG(T, p), in µm²/s'), inputs: [inp('T', 'T_air', 'K', 2), inp('p', 'p_air', 'Pa', 0)], value: PHYS.growthG({ T: G('T_air'), p: G('p_air') }) * 1e12 }; },
+    E_40_10: function () { return { formula: T('E(R = 40 µm, p = 0.25), bilinear in the stored table E over ln R and ln p'), inputs: [['R', 40, 'µm', 0], ['p', 0.25, '', 2]], value: PHYS.tableE(table(), 40e-6, 0.25, 'clamp') }; },
+    E_100_20: function () { return { formula: T('E(R = 100 µm, p = 0.2), bilinear in the stored table E over ln R and ln p'), inputs: [['R', 100, 'µm', 0], ['p', 0.2, '', 2]], value: PHYS.tableE(table(), 100e-6, 0.2, 'clamp') }; },
+    K_40_10: function () {
+      var A = air(), v1 = PHYS.vBeard(40e-6, A), v2 = PHYS.vBeard(10e-6, A);
+      return { formula: T('K = π (R + r)² |v<sub>R</sub> − v<sub>r</sub>| E E<sub>c</sub>, with E from the stored table, in cm³/s'), inputs: [['R', 40, 'µm', 0], ['r', 10, 'µm', 0], ['v<sub>R</sub>', v1 * 100, 'cm/s', 3], ['v<sub>r</sub>', v2 * 100, 'cm/s', 3], inp('E(40, 10)', 'E_40_10', '')],
+        value: PHYS.kernel(40e-6, 10e-6, A, { speed: 'beard', eff: 'table', coal: 'law', near: 'clamp', tab: table() }) * 1e6 };
+    },
+    t_min: function () { return { formula: 't / 60', inputs: [inp('t', 't', 's', 0)], value: G('t') / 60 }; },
+    n_sd: function () { return { formula: T('the number of rows of the stored super-droplets'), inputs: [], value: G('sd_x').length }; },
+    N_air: function () { return { formula: 'N = Σ ξ<sub>i</sub>', inputs: [[T('rows'), G('sd_xi').length, '', 0]], value: sum(function (i) { return G('sd_xi')[i]; }) }; },
+    M_air: function () { var R = G('sd_r'), XI = G('sd_xi'); return { formula: 'M = Σ ξ<sub>i</sub> (4/3) π ρ<sub>w</sub> r<sub>i</sub>³', inputs: [['ρ<sub>w</sub>', RHO, 'kg/m³', 0], [T('rows'), R.length, '', 0]], value: sum(function (i) { return XI[i] * mass(R[i]); }) }; },
+    M40: function () { var R = G('sd_r'), XI = G('sd_xi'); return { formula: 'M<sub>40</sub> = Σ<sub>r ≥ 40 µm</sub> ξ<sub>i</sub> (4/3) π ρ<sub>w</sub> r<sub>i</sub>³', inputs: [['ρ<sub>w</sub>', RHO, 'kg/m³', 0]], value: sum(function (i) { return R[i] >= 40 ? XI[i] * mass(R[i]) : 0; }) }; },
+    M100: function () { var R = G('sd_r'), XI = G('sd_xi'); return { formula: 'M<sub>100</sub> = Σ<sub>r ≥ 100 µm</sub> ξ<sub>i</sub> (4/3) π ρ<sub>w</sub> r<sub>i</sub>³', inputs: [['ρ<sub>w</sub>', RHO, 'kg/m³', 0]], value: sum(function (i) { return R[i] >= 100 ? XI[i] * mass(R[i]) : 0; }) }; },
+    F_air: function () { return { formula: '100 M / M<sub>0</sub>', inputs: [inp('M', 'M_air', 'kg', 3), inp('M<sub>0</sub>', 'M0', 'kg', 3)], value: 100 * G('M_air') / G('M0') }; },
+    F100: function () { return { formula: '100 M<sub>100</sub> / M<sub>0</sub>', inputs: [inp('M<sub>100</sub>', 'M100', 'kg', 3), inp('M<sub>0</sub>', 'M0', 'kg', 3)], value: 100 * G('M100') / G('M0') }; },
+    F_rain: function () { return { formula: '100 M<sub>rain</sub> / M<sub>0</sub>', inputs: [inp('M<sub>rain</sub>', 'rain', 'kg', 3), inp('M<sub>0</sub>', 'M0', 'kg', 3)], value: 100 * G('rain') / G('M0') }; },
+    F_evap: function () { return { formula: '100 M<sub>evap</sub> / M<sub>0</sub>', inputs: [inp('M<sub>evap</sub>', 'evap', 'kg', 3), inp('M<sub>0</sub>', 'M0', 'kg', 3)], value: 100 * G('evap') / G('M0') }; },
+    F_evap_below: function () { return { formula: '100 M<sub>evap, base</sub> / M<sub>0</sub>', inputs: [inp('M<sub>evap, base</sub>', 'evap_below', 'kg', 3), inp('M<sub>0</sub>', 'M0', 'kg', 3)], value: 100 * G('evap_below') / G('M0') }; },
+    r_max: function () { var R = G('sd_r'), m = 0; for (var i = 0; i < R.length; i++) m = Math.max(m, R[i]); return { formula: 'max r<sub>i</sub>', inputs: [[T('rows'), R.length, '', 0]], value: m }; },
+    M0: function () { return { formula: T('the water book read the other way: M<sub>0</sub> = M + M<sub>rain</sub> + M<sub>evap</sub>'), inputs: [inp('M', 'M_air', 'kg', 3), inp('M<sub>rain</sub>', 'rain', 'kg', 3), inp('M<sub>evap</sub>', 'evap', 'kg', 3)], value: G('M_air') + G('rain') + G('evap') }; },
+    N0: function () { return { formula: T('the number book read the other way: N<sub>0</sub> = N + N<sub>rain</sub> + N<sub>evap</sub> + N<sub>merge</sub>'), inputs: [inp('N', 'N_air', '', 0), inp('N<sub>rain</sub>', 'N_rain', '', 0), inp('N<sub>evap</sub>', 'N_evap', '', 0), inp('N<sub>merge</sub>', 'mergers', '', 0)], value: G('N_air') + G('N_rain') + G('N_evap') + G('mergers') }; },
+    book_M_res: function () { return { formula: 'δM = M<sub>0</sub> − M − M<sub>rain</sub> − M<sub>evap</sub>', inputs: [inp('M<sub>0</sub>', 'M0', 'kg', 3), inp('M', 'M_air', 'kg', 3), inp('M<sub>rain</sub>', 'rain', 'kg', 3), inp('M<sub>evap</sub>', 'evap', 'kg', 3)], value: G('M0') - G('M_air') - G('rain') - G('evap') }; },
+    book_M_rel: function () { return { formula: 'δM / M<sub>0</sub>', inputs: [inp('δM', 'book_M_res', 'kg', 9), inp('M<sub>0</sub>', 'M0', 'kg', 3)], value: G('book_M_res') / G('M0') }; },
+    book_N_res: function () { return { formula: 'δN = N<sub>0</sub> − N − N<sub>rain</sub> − N<sub>evap</sub> − N<sub>merge</sub>', inputs: [inp('N<sub>0</sub>', 'N0', '', 0), inp('N', 'N_air', '', 0), inp('N<sub>rain</sub>', 'N_rain', '', 0), inp('N<sub>evap</sub>', 'N_evap', '', 0), inp('N<sub>merge</sub>', 'mergers', '', 0)], value: G('N0') - G('N_air') - G('N_rain') - G('N_evap') - G('mergers') }; },
+    book_N_rel: function () { return { formula: 'δN / N<sub>0</sub>', inputs: [inp('δN', 'book_N_res', '', 0), inp('N<sub>0</sub>', 'N0', '', 0)], value: G('book_N_res') / G('N0') }; },
+    px_per_m: function () { return { formula: 's = W / L<sub>x</sub>', inputs: [inp('W', 'W_px', 'px', 0), inp('L<sub>x</sub>', 'Lx', 'm', 0)], value: G('W_px') / G('Lx') }; },
+    sd_cls: function (i) { var r = G('sd_r')[i]; return { formula: T('0 if r &lt; 20 µm, 1 if r &lt; 100 µm, else 2'), inputs: [['r', r, 'µm', 2]], value: r >= 100 ? 2 : r >= 20 ? 1 : 0 }; },
+    cell_lwc: function (c) {
+      var X = G('sd_x'), Z = G('sd_z'), R = G('sd_r'), XI = G('sd_xi'), dV = G('dV'), n = 0, s = sum(function (i) { if (cellIndex(X[i], Z[i]) !== c) return 0; n++; return XI[i] * mass(R[i]); });
+      return { formula: T('LWC = Σ<sub>cell</sub> ξ<sub>i</sub> (4/3) π ρ<sub>w</sub> r<sub>i</sub>³ / ΔV, in g/m³'), inputs: [inp('ΔV', 'dV', 'm³', 0), [T('super-droplets in the cell'), n, '', 0]], value: s / dV * 1e3 };
+    },
+    cell_n: function (c) { var X = G('sd_x'), Z = G('sd_z'); return { formula: T('count of stored super-droplets whose (x, z) falls in the cell'), inputs: [], value: sum(function (i) { return cellIndex(X[i], Z[i]) === c ? 1 : 0; }) }; },
+    cell_rmax: function (c) { var X = G('sd_x'), Z = G('sd_z'), R = G('sd_r'), m = 0; for (var i = 0; i < X.length; i++) if (cellIndex(X[i], Z[i]) === c) m = Math.max(m, R[i]); return { formula: T('max r<sub>i</sub> over the cell'), inputs: [], value: m }; },
+    lk_rank: function () {
+      var V = G('lk_V'), t = G('lk_t100'), runs = G('t100_' + V) || [], k = 0;
+      for (var i = 0; i < runs.length; i++) if (runs[i] < (t === t ? t : 30)) k++;   // runs in minutes; your run lasts 30 min
+      return { formula: T('100 · (stored runs with an earlier first 100 µm drop) / n<sub>runs</sub>'), inputs: [inp('t<sub>100</sub>', 'lk_t100', 'min', 2), inp('n<sub>runs</sub>', 'ens_n_' + V, '', 0)], value: 100 * k / G('ens_n_' + V) };
+    }
+  };
+  ['v10', 'v20', 'v40', 'v100'].forEach(function (n) {
+    var r = +n.slice(1);
+    check[n] = function () { return { formula: T('Beard (1976), PHYS.vBeard(r, air(T, p)), in cm/s'), inputs: [['r', r, 'µm', 0], inp('T', 'T_air', 'K', 2), inp('p', 'p_air', 'Pa', 0)], value: PHYS.vBeard(r * 1e-6, air()) * 100 }; };
+  });
+  VOLS.forEach(function (V) {     // the ensemble's spread, from the stored sorted times
+    var arr = function () { return G('t100_' + V); };
+    function q(p) { var t = arr(); if (!t.length) return NaN; var x = p * (t.length - 1), i = Math.floor(x), f = x - i; return i + 1 < t.length ? t[i] + f * (t[i + 1] - t[i]) : t[i]; }
+    check['ens_hit_' + V] = function () { return { formula: 'P<sub>60</sub> = 100 · n / n<sub>runs</sub>', inputs: [[T('runs with t<sub>100</sub>'), arr().length, '', 0], inp('n<sub>runs</sub>', 'ens_n_' + V, '', 0)], value: 100 * arr().length / G('ens_n_' + V) }; };
+    check['ens_mean_' + V] = function () { var t = arr(), s = 0; for (var i = 0; i < t.length; i++) s += t[i]; return { formula: '⟨t<sub>100</sub>⟩ = Σ t<sub>100</sub> / n', inputs: [['n', t.length, '', 0]], value: t.length ? s / t.length : NaN }; };
+    check['ens_sd_' + V] = function () { var t = arr(), m = G('ens_mean_' + V), s = 0; for (var i = 0; i < t.length; i++) s += (t[i] - m) * (t[i] - m); return { formula: 's<sub>t</sub> = √(Σ (t<sub>100</sub> − ⟨t<sub>100</sub>⟩)² / (n − 1))', inputs: [['n', t.length, '', 0], inp('⟨t<sub>100</sub>⟩', 'ens_mean_' + V, 'min', 2)], value: t.length > 1 ? Math.sqrt(s / (t.length - 1)) : NaN }; };
+    [10, 50, 90].forEach(function (p) {
+      check['ens_p' + p + '_' + V] = function () { return { formula: T('linear interpolation in the stored sorted t<sub>100</sub> at (n − 1) · ') + p / 100, inputs: [['n', arr().length, '', 0]], value: q(p / 100) }; };
+    });
+  });
+
+  // ---- Check, third answer: read back from the picture. A transparent pixel never passes (alpha first, then colour).
+  var IS = [function (c) { return c[3] > 200 && c[2] > c[0] + 25 && c[2] < 215; },                                   // droplet: blue at 55 % over the sky
+    function (c) { return c[3] > 200 && c[0] > 170 && c[0] - c[2] > 90 && c[1] > 90 && c[1] < 150; },                     // collector: ochre #c9783f
+    function (c) { return c[3] > 200 && c[0] > c[1] + 50 && c[0] > c[2] + 40 && c[0] < 170; }];                           // drizzle: wine #7d1d2f
+  var COL = [T('blue'), T('ochre'), T('wine')];
+  function dot(i) {
+    var X = G('sd_x'), Z = G('sd_z'), cl = G('sd_cls')[i], p = at(X[i], Z[i]), q = Sim.readPixel(box, p.x, p.y, 1, IS[cl]);
+    var what = T('the dot of super-droplet ') + G('sd_id')[i] + ', (' + Sim.fmt(p.x, 1) + ', ' + Sim.fmt(p.y, 1) + T(') css px');
+    if (q.found) return { what: what, drawn: q.text, expected: COL[cl] + T(', class ') + cl + ' (' + CLS[cl] + ')', ok: true, note: T('Drawn at x·s, H − z·s with s = W / L<sub>x</sub>; the colour shows the class, not the radius.') };
+    var other = -1; for (var k = 0; k < 3; k++) if (k !== cl && Sim.readPixel(box, p.x, p.y, 0, IS[k]).found) other = k;
+    var c = Sim.readPixel(box, p.x, p.y, 0).rgba;
+    if (other >= 0 || c[3] > 200 && c[0] < 60 && c[1] < 40) return { what: what, drawn: q.text, expected: COL[cl], ok: null, note: other >= 0 ? T('A ') + CLS[other] + T(' drawn later covers this dot: the dots overlap and the last one drawn shows.') : T('The followed drop’s trail or the probe’s frame covers this dot.') };
+    return { what: what, drawn: q.text, expected: COL[cl] + T(', class ') + cl, ok: false, note: T('Nothing of the expected colour within 1 px of where the store puts this drop.') };
+  }
+  var BG = [function (c) { return c[3] > 250 && Math.abs(c[0] - 214) < 8 && Math.abs(c[1] - 228) < 8 && Math.abs(c[2] - 235) < 8; },
+    function (c) { return c[3] > 250 && Math.abs(c[0] - 244) < 6 && Math.abs(c[1] - 248) < 6 && Math.abs(c[2] - 250) < 6; }];
+  function readText(id, re) { var el = document.getElementById(id), m = el && re.exec(el.textContent); return m ? parseFloat(m[1]) : NaN; }
+  function words(id, re, name, digits, label) {
+    return function () {
+      var shown = readText(id, re), want = G(name), ok = Math.abs(shown - want) <= 0.5 * Math.pow(10, -digits) + 1e-12;
+      return { what: T('the readout ') + label, drawn: isFinite(shown) ? Sim.fmt(shown, digits) : T('not shown'), expected: isFinite(want) ? Sim.fmt(want, digits) : T('not yet'), ok: !isFinite(want) && !isFinite(shown) ? true : ok ? true : G('running') ? null : false,
+        note: T('The words are rewritten from the store about four times a second, so while the cloud runs they can be up to 250 ms behind.') };
+    };
+  }
+  var drawn = {
+    sd_x: dot, sd_z: dot, sd_r: dot, sd_xi: dot, sd_cls: dot, sd_id: dot,
+    reg: function (idx) {
+      var nz = ds.dims.rz, p = at((Math.floor(idx / nz) + 0.5) * 25, (idx % nz + 0.5) * 25), rg = G('reg')[idx], inside = rg <= 2, q = Sim.readPixel(box, p.x, p.y, 6, BG[inside ? 0 : 1]);
+      return { what: T('the background near the middle of this 25 m square, within 6 px'), drawn: q.text, expected: inside ? T('pale blue: saturated cloud') : T('near white: clear air'), ok: q.found ? true : null,
+        note: T('The pale cloud is drawn on 20 m squares tested against the outline; the regions are kept on 25 m squares, so near the outline the two can differ by a square.') };
+    },
+    t_min: words('sh-time', /t = ([\d.]+) min/, 't_min', 1, T('t = … min above the picture')),
+    F_air: words('sh-out', /still in the air ([\d.]+) %/, 'F_air', 1, T('“water still in the air”')),
+    F100: words('sh-out', /≥ 100 µm ([\d.]+) %/, 'F100', 1, T('“in drops ≥ 100 µm”')),
+    F_rain: words('sh-out', /rained out ([\d.]+) %/, 'F_rain', 1, T('“rained out”')),
+    F_evap: words('sh-out', /evaporated ([\d.]+) %/, 'F_evap', 1, T('“evaporated”')),
+    t100_first: words('sh-out', /100 µm: ([\d.]+) min/, 't100_first', 1, T('“first drop of 100 µm”')),
+    W_px: function () { return { what: T('the picture’s width on the page'), drawn: Sim.fmt(cv.getBoundingClientRect().width, 1) + ' px', expected: Sim.fmt(G('W_px'), 1) + ' px', ok: Math.abs(cv.getBoundingClientRect().width - G('W_px')) < 0.6, note: T('The canvas holds W · dpr device pixels and is shown W css pixels wide.') }; },
+    H_px: function () { return { what: T('the picture’s height on the page'), drawn: Sim.fmt(cv.getBoundingClientRect().height, 1) + ' px', expected: Sim.fmt(G('H_px'), 1) + ' px', ok: Math.abs(cv.getBoundingClientRect().height - G('H_px')) < 0.6, note: T('H = 0.75 W, the slice’s 1.5 km by 2 km.') }; }
+  };
+
+  // ---- the panel's contract (scripts/datalog.js)
+  var ens = [];
+  VOLS.forEach(function (V) { ens.push('ens_n_' + V, 'ens_hit_' + V, 'ens_mean_' + V, 'ens_sd_' + V, 'ens_p10_' + V, 'ens_p50_' + V, 'ens_p90_' + V, 't100_' + V); });
+  function biggest() { var R = G('sd_r'), ID = G('sd_id'), b = -1, m = -1; for (var i = 0; i < R.length; i++) if (R[i] > m) { m = R[i]; b = i; } return b >= 0 ? { sd: ID[b], cell: cellIndex(G('sd_x')[b], G('sd_z')[b]) } : null; }
+  Sim.data = {
+    ds: ds, kicker: T('Droplet Collection · data'), file: 'droplet-collection-cloud',
+    playing: function () { return !!G('running'); },
+    play: function () { if (!G('running')) document.getElementById('sh-go').click(); },
+    groups: [
+      { title: T('Cloud set-up'), note: T('what you choose in panel 4, and what the page fixes: the air, the two drop modes, the slice and its cells'),
+        vars: ['shape', 'W0', 'stochastic', 'Le', 'per_frame', 'seed', 'kernel', 'T_air', 'p_air', 'N1', 'rg1', 'sg1', 'N2', 'rg2', 'sg2', 'Lx', 'Lz', 'h', 'per1', 'per2', 'S_out', 'eps', 'C0', 'dt'] },
+      { title: T('Derived constants'), note: T('worked out once from the set-up: the air, fall speeds, collision efficiencies, the kernel, the eddies, the starting cloud'),
+        vars: ['rho_air', 'mu_air', 'dV', 'xi1', 'xi2', 'v10', 'v20', 'v40', 'v100', 'E_40_10', 'E_100_20', 'K_40_10', 'etab_lnR', 'etab_lnp', 'etab', 'sigma_u', 'T_L', 'G_grow', 'zbase', 'reg', 'n_sd0', 'M0', 'N0'] },
+      { title: T('The state now'), note: T('the cloud at this frame: where its water is, its largest drop, the first drizzle drop'),
+        vars: ['t', 't_min', 'F100', 'F_air', 'F_rain', 'F_evap', 'F_evap_below', 'M_air', 'M40', 'M100', 'M_in', 'N_air', 'n_sd', 'r_max', 't100_first', 'x100', 'z100', 'follow_id', 'follow_r', 'follow_z', 'probe_i', 'probe_j', 'probe_u', 'probe_w', 'probe_reg'] },
+      { title: T('The books'), note: T('water: M<sub>0</sub> = M + M<sub>rain</sub> + M<sub>evap</sub> + δM; drops: N<sub>0</sub> = N + N<sub>rain</sub> + N<sub>evap</sub> + N<sub>merge</sub> + δN. The residuals δ should be rounding only.'),
+        vars: ['rain', 'evap', 'evap_below', 'book_M_res', 'book_M_rel', 'N_rain', 'N_evap', 'mergers', 'book_N_res', 'book_N_rel'] },
+      { title: T('Super-droplets and cells now'), note: T('one row per super-droplet still in the air, and the 40 × 30 collision cells of 50 m'),
+        vars: ['sd_id', 'sd_x', 'sd_z', 'sd_r', 'sd_xi', 'sd_cls', 'cell_lwc', 'cell_n', 'cell_rmax'] },
+      { title: T('Lucky drops: the exact runs as an ensemble'), note: T('panel 3: the stored exact runs of each volume, their spread, and your own run against them'),
+        vars: ens.concat(['lk_V', 'lk_seed', 'lk_drops', 'lk_events', 'lk_t100', 'lk_big', 'lk_rank', 'lk_t', 'lk_rmax']) },
+      { title: T('Solver'), note: T('how the cloud is stepped: 1 s steps, super-droplet pairs drawn in each cell'), vars: ['steps', 'step_ms', 'gam_events', 'gam_many', 'running'] },
+      { title: T('Drawing'), note: T('how stored metres become pixels'), vars: ['W_px', 'H_px', 'dpr', 'px_per_m'] }
+    ],
+    rowLabel: { sd: function (i) { return 'id ' + G('sd_id')[i]; }, cz: function (j) { return 'z ' + j * 50 + '–' + (j + 1) * 50 + ' m'; } },
+    colLabel: { cell_lwc: function (i) { return 'x ' + i * 50; }, cell_n: function (i) { return 'x ' + i * 50; }, cell_rmax: function (i) { return 'x ' + i * 50; } },
+    probe: probe, inspect: inspect, locate: locate, check: check, drawn: drawn,
+    round: { time: 't', label: function () { return T('five cloud-minutes of panel 4'); }, length: function () { return 300; },
+      columns: ['F100', 'F_air', 'F_rain', 'F_evap', 'N_air', 'n_sd', 'r_max', 'book_M_rel', 'book_N_rel'], point: biggest,
+      blocked: function () { return G('t') > 2400 ? T('fewer than five cloud-minutes are left before the cloud stops at 45 min; press New cloud') : null; } },
+    about: T('The picture is drawn from the model’s super-droplets in the same frame in which the store copies them, so positions agree exactly; ' +
+      'a drop’s radius is drawn only as one of three dot sizes and colours (its class: droplet below 20 µm, collector, drizzle from 100 µm), not to scale, and dots overlap, so a later dot covers an earlier one. ' +
+      'The store keeps radii in µm, speeds in cm/s, viscosity in µPa·s and the growth constant in µm²/s; the model works in SI units. ' +
+      'The pale cloud is drawn on 20 m squares tested against the outline, the regions are kept on 25 m squares and the cells of the store are the model’s 50 m collision cells. ' +
+      'The arrows of the mean motion are drawn once per cloud, every 100 m. The followed drop’s trail keeps its last 900 positions and is not stored. ' +
+      'Rain, evaporation and mergers are running totals the model adds up step by step; the two books check them against the drops still in the air. ' +
+      'The words beside the picture are rewritten from the store about four times a second; the dots every frame. ' +
+      'The ensemble of panel 3 is read from the stored exact runs (data/stochastic.json), not rerun here; your own run is a new random history each time.')
+  };
+})();
+
+    </script><script src="../../scripts/datalog.js"></script>
   </body>
 </html>
