@@ -29,7 +29,7 @@ between `dataset.js` and `datalog.js`.
 | 6 | [wave-interference.html](../../public/simulations/wave-interference.html#L489) | L489 | L490 | L491 | L492 | L974 |
 | 7 | [phasor-sums.html](../../public/simulations/phasor-sums.html#L660) | L660 | L661 | L662 | L663 | L1476 |
 | 8 | [draw-decompose.html](../../public/simulations/draw-decompose.html#L618) | L618 | L619 | L620 | L621 | L1413 |
-| 9 | [driven-oscillator.html](../../public/simulations/driven-oscillator.html#L534) | L466 | L467 | L468 | L469 | L1110 |
+| 9 | [driven-oscillator.html](../../public/simulations/driven-oscillator.html#L598) | L466 | L467 | L468 | L469 | L1110 |
 | 10 | [wind-turbine.html](../../public/simulations/wind-turbine.html#L547) | L547 | L548 | L549 | L550 | L1168 |
 
 The scripts are plain `<script src>` tags at the end of the body, so they run while the document is still loading. That is
