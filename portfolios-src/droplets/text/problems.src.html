@@ -34,3 +34,15 @@ The water $\int m\,n\,dm = (N^2/M)(M/N)^2 = M$ for every $t$.</p>
 the Metropolis cloud of section 10.3, keeps the maximum-entropy shape once it has it, and approaches it from any start (figure 10.6).
 Gravity's kernel prefers pairs with different fall speeds, and that preference is what keeps the real cloud far from this shape.</p>
 </details>
+
+<details class="prob" id="p8"><summary><span class="pn">8</span>A puff and a drizzle drop. In a quiet cloud, ε = 10⁻³ m²/s³, with eddies up to
+100 m, how far does the stochastic element spread a puff of droplets in ten minutes? And does a drizzle drop of 150 µm that leaves the cloud base
+reach the ground 300 m below, through air at 80 % humidity?</summary>
+<div class="head">About 140 m; and no, it evaporates on the way</div>
+<p>From (12.3), $\sigma^2 = (\varepsilon L_e)^{2/3} = (0.1\ \mathrm{m^2/s^2})^{2/3}$, so $\sigma$ = 0.46 m/s, and the memory is $T_L = 2\sigma^2/(C_0\varepsilon)$ = 72 s.
+A velocity that keeps its value for about $T_L$ and then forgets it makes a random walk with diffusion coefficient $K = \sigma^2T_L$ = 15.5 m²/s,
+and after a time $t \gg T_L$ the spread is $\sqrt{2Kt}$ = 136 m.</p>
+<p>The drop: (12.4) with $S = -0.2$, $G = 9.73\times10^{-11}$ m²/s and the ventilation factor, which is 2.00 at 150 µm because the drop falls at
+1.21 m/s and refreshes the air around it. Integrating $dr^2/dt = 2GSf_v(r)$ while the drop falls at its own speed, the drop is gone after
+385 s, about 44 m above the ground. A 200 µm drop arrives, with 41 % of its water. Rain needs drops well above the size where drizzle begins.</p>
+</details>

@@ -44,6 +44,13 @@ $$n(m, t) = \frac{N_0\,(1 - \theta)}{m\sqrt{\theta}}\;e^{-(1 + \theta)\,m/\bar m
 <p>with $I_1$ the modified Bessel function. It satisfies (5.1) (checked by substituting it numerically, and its number and water
 reproduce $N_0e^{-bLt}$ and $L$ to $10^{-6}$). The spectrum error quoted in chapter 5 is $\varepsilon = \sum_k |M_k - M_k^{\rm exact}|/L$,
 the summed difference of the water in each bin, as a fraction of all the water.</p>
+<h3>The drift of the stochastic element (12.3)</h3>
+<p>Evenly spread air must stay evenly spread. In the stationary Fokker–Planck equation for position and eddy velocity, put the density that
+says so: a Gaussian in $\mathbf u'$ of variance $\sigma^2(\mathbf x)$, times a constant. The damping $-C_0\varepsilon\,\mathbf u'/(2\sigma^2)$ and the noise of
+strength $C_0\varepsilon$ cancel each other for this density, so what remains must vanish:
+$-\nabla_x\cdot[(\mathbf U + \mathbf u')p] - \nabla_u\cdot[\mathbf a\,p] = 0$. SymPy (<span class="mono">derive/L10_drift.py</span>) shows that
+$a_i = \tfrac12\partial_i\sigma^2 + u_i'\,(\mathbf u' + \mathbf U)\cdot\nabla\sigma^2/(2\sigma^2)$ makes it vanish exactly, with $\mathbf U$ any divergence-free
+flow, and that the one-dimensional drift applied to each component separately does not.</p>
 <p class="note">The source of the study, its derivations and its check scripts are in the website's repository, folder <a href="https://github.com/Numa1997/SiteTest/tree/main/portfolios-src/droplets"><span class="mono">portfolios-src/droplets/</span></a>; the record of how each level was built and attacked is in
 <span class="mono">notes/droplets/</span>.</p>
 </div>
