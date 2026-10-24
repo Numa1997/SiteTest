@@ -8,6 +8,7 @@ Run: python3 -I L4_newton.py [steps per turn]   (default 2000; about as long as 
 """
 import json, math, os, sys
 import numpy as np
+sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 from engine import RA, RC
 import setup as S
 import L4_generator as Gm
