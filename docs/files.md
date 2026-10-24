@@ -4,7 +4,7 @@ Written by [`tools/inventory.py`](../tools/inventory.py) from the files in the r
 Run `python3 tools/inventory.py` after adding, removing or changing files, and `python3 tools/inventory.py --check`
 to confirm that every file is described. Sizes are those of the files when the list was written.
 
-884 files, 51.0 MB in all. Runs of more than 12 similar files are folded; open them to see each file.
+888 files, 51.0 MB in all. Runs of more than 12 similar files are folded; open them to see each file.
 
 | Folder | Files |
 |---|---|
@@ -38,7 +38,7 @@ to confirm that every file is described. Sizes are those of the files when the l
 | [Agents of the lecture-note review](#agents-of-the-lecture-note-review) | 4 |
 | [Working notes of the Rotor Pendula study](#working-notes-of-the-rotor-pendula-study) | 87 |
 | [Working notes of the Droplet Collection study](#working-notes-of-the-droplet-collection-study) | 121 |
-| [Record of the lecture-note review](#record-of-the-lecture-note-review) | 131 |
+| [Record of the lecture-note review](#record-of-the-lecture-note-review) | 135 |
 
 ## Repository root
 
@@ -111,7 +111,7 @@ to confirm that every file is described. Sizes are those of the files when the l
 | [`public/simulations/Transverse and longitudinal waves.html`](../public/simulations/Transverse%20and%20longitudinal%20waves.html) | 203.4 kB | Fig. 4 · Transverse & Longitudinal: the simulation, its data panel, walkthrough and lecture note. | [fig04-transverse-longitudinal.md](simulations/fig04-transverse-longitudinal.md) |
 | [`public/simulations/draw-decompose.html`](../public/simulations/draw-decompose.html) | 217.5 kB | Fig. 8 · Draw & Decompose: the simulation, its data panel, walkthrough and lecture note. | [fig08-draw-decompose.md](simulations/fig08-draw-decompose.md) |
 | [`public/simulations/driven-oscillator.html`](../public/simulations/driven-oscillator.html) | 327.3 kB | Fig. 9 · Driven Oscillator: the simulation, its data panel, walkthrough and lecture note. | [fig09-driven-oscillator.md](simulations/fig09-driven-oscillator.md) |
-| [`public/simulations/furuta-pendulum.html`](../public/simulations/furuta-pendulum.html) | 178.7 kB | Fig. 12 · Furuta Pendulum: the simulation, its data panel, walkthrough and lecture note. | [fig12-furuta-pendulum.md](simulations/fig12-furuta-pendulum.md) |
+| [`public/simulations/furuta-pendulum.html`](../public/simulations/furuta-pendulum.html) | 191.3 kB | Fig. 12 · Furuta Pendulum: the simulation, its data panel, walkthrough and lecture note. | [fig12-furuta-pendulum.md](simulations/fig12-furuta-pendulum.md) |
 | [`public/simulations/phasor-sums.html`](../public/simulations/phasor-sums.html) | 264.1 kB | Fig. 7 · Phasor Sums: the simulation, its data panel, walkthrough and lecture note. | [fig07-phasor-sums.md](simulations/fig07-phasor-sums.md) |
 | [`public/simulations/water-wave.html`](../public/simulations/water-wave.html) | 164.7 kB | Fig. 5 · Circular Water Waves: the simulation, its data panel, walkthrough and lecture note. | [fig05-water-wave.md](simulations/fig05-water-wave.md) |
 | [`public/simulations/wave-interference.html`](../public/simulations/wave-interference.html) | 171.7 kB | Fig. 6 · Wave Interference Simulator: the simulation, its data panel, walkthrough and lecture note. | [fig06-wave-bench.md](simulations/fig06-wave-bench.md) |
@@ -145,7 +145,7 @@ to confirm that every file is described. Sizes are those of the files when the l
 | [`public/scripts/walk/de/water.js`](../public/scripts/walk/de/water.js) | 24.5 kB | German walkthrough water, generated from the English one; do not edit. | [i18n.md](i18n.md) |
 | [`public/scripts/walk/dft.js`](../public/scripts/walk/dft.js) | 24.4 kB | "From symbols to code" for Fig. 8 · Draw & Decompose. | [walk.md](scripts/walk.md) |
 | [`public/scripts/walk/driven.js`](../public/scripts/walk/driven.js) | 38.9 kB | "From symbols to code" for Fig. 9 · Driven Oscillator. | [walk.md](scripts/walk.md) |
-| [`public/scripts/walk/furuta.js`](../public/scripts/walk/furuta.js) | 15.1 kB | "From symbols to code" for Fig. 12 · Furuta Pendulum. | [walk.md](scripts/walk.md) |
+| [`public/scripts/walk/furuta.js`](../public/scripts/walk/furuta.js) | 15.2 kB | "From symbols to code" for Fig. 12 · Furuta Pendulum. | [walk.md](scripts/walk.md) |
 | [`public/scripts/walk/pendulum.js`](../public/scripts/walk/pendulum.js) | 30.2 kB | "From symbols to code" for Fig. 2 · Double Pendulum. | [walk.md](scripts/walk.md) |
 | [`public/scripts/walk/phasors.js`](../public/scripts/walk/phasors.js) | 33.0 kB | "From symbols to code" for Fig. 7 · Phasor Sums. | [walk.md](scripts/walk.md) |
 | [`public/scripts/walk/slit.js`](../public/scripts/walk/slit.js) | 23.6 kB | "From symbols to code" for Fig. 3 · Double-Slit Interference. | [walk.md](scripts/walk.md) |
@@ -677,7 +677,7 @@ to confirm that every file is described. Sizes are those of the files when the l
 | [`docs/simulations/fig08-draw-decompose.md`](simulations/fig08-draw-decompose.md) | 34.8 kB | Documentation: Fig. 8 · Draw & Decompose. | [fig08-draw-decompose.md](simulations/fig08-draw-decompose.md) |
 | [`docs/simulations/fig09-driven-oscillator.md`](simulations/fig09-driven-oscillator.md) | 56.9 kB | Documentation: Fig. 9 · Driven Oscillator. | [fig09-driven-oscillator.md](simulations/fig09-driven-oscillator.md) |
 | [`docs/simulations/fig10-wind-turbine.md`](simulations/fig10-wind-turbine.md) | 52.5 kB | Documentation: Fig. 10 · Wind Turbine Control. | [fig10-wind-turbine.md](simulations/fig10-wind-turbine.md) |
-| [`docs/simulations/fig12-furuta-pendulum.md`](simulations/fig12-furuta-pendulum.md) | 24.7 kB | Documentation: Fig. 12 · Furuta Pendulum. | [fig12-furuta-pendulum.md](simulations/fig12-furuta-pendulum.md) |
+| [`docs/simulations/fig12-furuta-pendulum.md`](simulations/fig12-furuta-pendulum.md) | 25.9 kB | Documentation: Fig. 12 · Furuta Pendulum. | [fig12-furuta-pendulum.md](simulations/fig12-furuta-pendulum.md) |
 | [`docs/styles.md`](styles.md) | 44.4 kB | Documentation: Stylesheets: `public/styles/`. | [styles.md](styles.md) |
 | [`docs/usul.md`](usul.md) | 6.2 kB | Documentation: Phyein Usul · the website at phyeinusul.com. | [usul.md](usul.md) |
 
@@ -1102,29 +1102,23 @@ to confirm that every file is described. Sizes are those of the files when the l
 | [`notes/fig10/verify-out.json`](../notes/fig10/verify-out.json) | 855 B | Fig. 10: a measuring script of the review, or its saved output. | [notes.md](notes.md) |
 | [`notes/fig10/verify.cjs`](../notes/fig10/verify.cjs) | 4.9 kB | Fig. 10: a measuring script of the review, or its saved output. | [notes.md](notes.md) |
 | [`notes/fig10/walk.md`](../notes/fig10/walk.md) | 14.7 kB | Fig. 10: the walkthrough check and its proposed fixes. | [notes.md](notes.md) |
-
-<details><summary>14 files: Fig. 12: a measuring script of the review, or its saved output.</summary>
-
-| File | Size | What it is | Explained in |
-|---|---|---|---|
+| [`notes/fig12/check-L0.md`](../notes/fig12/check-L0.md) | 20.9 kB | Fig. 12: a measuring script of the review, or its saved output. | [notes.md](notes.md) |
 | [`notes/fig12/contract-L0.md`](../notes/fig12/contract-L0.md) | 3.5 kB | Fig. 12: a measuring script of the review, or its saved output. | [notes.md](notes.md) |
-| [`notes/fig12/derive.py`](../notes/fig12/derive.py) | 10.0 kB | Fig. 12: a measuring script of the review, or its saved output. | [notes.md](notes.md) |
+| [`notes/fig12/datacheck.cjs`](../notes/fig12/datacheck.cjs) | 6.0 kB | Fig. 12: a measuring script of the review, or its saved output. | [notes.md](notes.md) |
+| [`notes/fig12/derive.py`](../notes/fig12/derive.py) | 10.9 kB | Fig. 12: a measuring script of the review, or its saved output. | [notes.md](notes.md) |
 | [`notes/fig12/docrows.py`](../notes/fig12/docrows.py) | 3.5 kB | Fig. 12: a measuring script of the review, or its saved output. | [notes.md](notes.md) |
 | [`notes/fig12/done.md`](../notes/fig12/done.md) | 1.5 kB | Fig. 12: a measuring script of the review, or its saved output. | [notes.md](notes.md) |
 | [`notes/fig12/dump.cjs`](../notes/fig12/dump.cjs) | 2.5 kB | Fig. 12: a measuring script of the review, or its saved output. | [notes.md](notes.md) |
 | [`notes/fig12/interact.cjs`](../notes/fig12/interact.cjs) | 4.2 kB | Fig. 12: a measuring script of the review, or its saved output. | [notes.md](notes.md) |
-| [`notes/fig12/makedoc.py`](../notes/fig12/makedoc.py) | 13.8 kB | Fig. 12: a measuring script of the review, or its saved output. | [notes.md](notes.md) |
+| [`notes/fig12/makedoc.py`](../notes/fig12/makedoc.py) | 15.0 kB | Fig. 12: a measuring script of the review, or its saved output. | [notes.md](notes.md) |
 | [`notes/fig12/notecheck.cjs`](../notes/fig12/notecheck.cjs) | 2.5 kB | Fig. 12: a measuring script of the review, or its saved output. | [notes.md](notes.md) |
 | [`notes/fig12/numbers.json`](../notes/fig12/numbers.json) | 19.2 kB | Fig. 12: a measuring script of the review, or its saved output. | [notes.md](notes.md) |
 | [`notes/fig12/physics.py`](../notes/fig12/physics.py) | 5.9 kB | Fig. 12: a measuring script of the review, or its saved output. | [notes.md](notes.md) |
+| [`notes/fig12/referee.md`](../notes/fig12/referee.md) | 22.7 kB | Fig. 12: the blind referee's report on the note. | [notes.md](notes.md) |
 | [`notes/fig12/roa.py`](../notes/fig12/roa.py) | 2.5 kB | Fig. 12: a measuring script of the review, or its saved output. | [notes.md](notes.md) |
+| [`notes/fig12/secshot.cjs`](../notes/fig12/secshot.cjs) | 1.6 kB | Fig. 12: a measuring script of the review, or its saved output. | [notes.md](notes.md) |
 | [`notes/fig12/shots.cjs`](../notes/fig12/shots.cjs) | 1.8 kB | Fig. 12: a measuring script of the review, or its saved output. | [notes.md](notes.md) |
 | [`notes/fig12/smoke.cjs`](../notes/fig12/smoke.cjs) | 2.5 kB | Fig. 12: a measuring script of the review, or its saved output. | [notes.md](notes.md) |
 | [`notes/fig12/thumb.cjs`](../notes/fig12/thumb.cjs) | 2.0 kB | Fig. 12: a measuring script of the review, or its saved output. | [notes.md](notes.md) |
-
-</details>
-
-| File | Size | What it is | Explained in |
-|---|---|---|---|
 | [`notes/verify.mjs`](../notes/verify.mjs) | 4.5 kB | Checks the ten simulation pages in headless Chromium at desktop and phone size. | [notes.md](notes.md) |
 | [`notes/walkcheck.cjs`](../notes/walkcheck.cjs) | 1.7 kB | Searches every quoted code line of the ten walkthroughs in its page. | [notes.md](notes.md) |

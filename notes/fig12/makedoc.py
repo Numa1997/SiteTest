@@ -79,12 +79,23 @@ turntable's rim), the LQR weights, the swing gain, the arm length and the supply
 push it anywhere and let go. As in Figs. 9 and 10 the whole run is solved first with RK4 and stored; each frame draws one stored
 sample. Nothing is integrated while the reader watches.
 
+**Review.** The note was checked blind by a derivation checker (`notes/fig12/check-L0.md`: 20 of 20 equations verified, one
+statement wrong, fixed) and a referee (`notes/fig12/referee.md`: 10 must-fix and 32 minor findings). All ten must-fix findings
+were fixed on 24 October 2026: the swing picture (a key on a string, not a child pumping), the matrix (9), the linearisation steps
+and the meaning of eigenvalues, the Riccati equation derived from the cost-to-go and (18) proved, the sign of the arm gains
+(non-minimum phase), the sentence on (18) in §10, the Lagrangian of §5, one letter one meaning, Problem 3, and the uniform rod in
+Figure 1. Most minor findings were fixed in the same pass.
+
 In this page, a link such as {L(find('function accel'))} points to a line of `furuta-pendulum.html`.
 
 ## The physics in one picture
 
-**What you would see.** A broom balanced on a palm: the hand moves under the lean. A child on a swing: energy fed in step with the
-motion. The motor does the second to bring the rod up and the first to hold it there.
+**What you would see.** A broom balanced on a palm: the hand moves under the lean. A key on a string jiggled by the hand: energy fed
+in through the moving suspension, in step with the swing. The motor does the second to bring the rod up and the first to hold it there.
+
+**Symbols.** One letter, one meaning (the referee's rule): δt is the RK4 step (h is the coupling), H_R and H_b the heats (bold Q the
+cost matrix), w_φ and w_α the LQR weights, 𝒥 the cost, t_end the end of the run, Γ the generalised forces, ϱ a wire's distance
+from the axis.
 
 **The mechanism.** Two generalised coordinates (φ, α), α from straight up; the Lagrangian of a rigid arm and a thin rod (2)–(3);
 a permanent-magnet DC motor fed from a voltage source, V_m = RI + kφ̇ with the inductance dropped (Λ/R = 0.5 ms against 0.143 s),
@@ -92,21 +103,22 @@ a permanent-magnet DC motor fed from a voltage source, V_m = RI + kφ̇ with the
 controllable through h = ½ m_p r L (11). Swing-up: the arm acceleration u = sat[k_E(E_p − G) α̇ cos α] − k_φ(φ − φ*) − k_ω φ̇ (13),
 turned into a voltage by collocated partial feedback linearisation (14); ½(E_p − G)² is its Lyapunov function. Catch: LQR (15)–(17),
 V_m = −Kỹ, Lyapunov function ỹᵀPỹ (18). Hand-over (19) when ỹᵀPỹ < c_in = c/2, where c is the largest level whose 240 sampled
-starts the catch rescues; back when it exceeds c. Energy book (20): E(0) + W_in − Q_R − Q_b − E(T) = 0.
+starts the catch rescues; back when it exceeds c. Energy book (20): E(0) + W_in − H_R − H_b − E(t_end) = 0.
 
 Numbers at the defaults (from the page's store): K = (−1.41, −34.29, −1.42, −4.46); closed-loop eigenvalues −24.57, −5.44, −3.52,
 −2.36 1/s; open loop at the top −10.32, −0.83, 0, +9.48 1/s; c = 9.78, c_in = 4.89; 339 of 1147 grid starts rescued; caught at
-2.75 s after 4 half-swings, settled at 5.22 s; h vs h/2 difference 5.9 × 10⁻⁵ at 2.61 s; energy book 5.7 × 10⁻¹¹ J;
-W_in = 14.15 J, Q_R = 13.91 J, Q_b = 0.004 J, E rises by 2G = 0.235 J.
+2.75 s after 4 half-swings, settled at 5.22 s; δt vs δt/2 difference 5.9 × 10⁻⁵ at 2.61 s; energy book 5.7 × 10⁻¹¹ J;
+W_in = 14.15 J, H_R = 13.91 J (13.80 J of it before the catch), H_b = 0.004 J, E rises by 2G = 0.235 J. c, c_in and ỹᵀPỹ are in seconds
+(the integrand of the cost 𝒥 is a pure number).
 
 ## How the code computes it
 
 1. **Solve** ({L(find('function solve'))}): `rig()` reads the controls, `design()` linearises at the top, solves the Riccati
    equation, finds both sets of eigenvalues and the rank, and measures c once per design (about a second, cached by
-   arm length, supply limit and weights). `run()` integrates (7) with the drive by RK4, h = 1 ms, 20 s; the supervisor `decide()`
-   runs once every TS = 1 ms (every step at h, every second step at h/2), so the half-step rerun switches at the same instants.
+   arm length, supply limit and weights). `run()` integrates (7) with the drive by RK4, δt = 1 ms (`H` in the code), 20 s; the supervisor `decide()`
+   runs once every TS = 1 ms (every step at δt, every second step at δt/2), so the half-step rerun switches at the same instants.
 2. **Store**: every tenth state (10 ms, 2001 samples) with V_m, I, τ, E, E_p, ỹᵀPỹ, the three energy integrals, the mode and the
-   clip flag. Then the same run with h/2 (not stored) gives `err_half`; the book gives `balance`.
+   clip flag. Then the same run with δt/2 (not stored) gives `err_half`; the book gives `balance`.
 3. **Play**: the clock advances `t_play`; `frame()` copies sample round(t_play / 10 ms) into the `*_now` scalars and draws.
    After the first frame, `startBasin()` measures the 37 × 31 rescue grid in slices of four rows (about a second in all).
 4. **The hand**: pointer down on the knob (radius about 18 px), on the arm (14 px from its bar), or on the flag. While held the
@@ -126,8 +138,8 @@ W_in = 14.15 J, Q_R = 13.91 J, Q_b = 0.004 J, E rises by 2G = 0.235 J.
 |---|---|---|---|
 | Presets Off / Catch only / Swing up | — | Swing up | `preset`: off disconnects the amplifier (I = 0); catch runs LQR always; swing runs (13)–(14) and hands over by (19) |
 | Target arm angle φ* (`#phs`, flag) | −180° … 180°, 5° | 60° | the goal; re-solves on change from the state on screen |
-| Pendulum weight q_α (`#qa`) | 2 … 200 | 40 | LQR weight; a new design (c measured again) |
-| Arm weight q_φ (`#qp`) | 0.1 … 20 | 2 | LQR weight |
+| Pendulum weight w_α (`#qa`) | 2 … 200 | 40 | LQR weight; a new design (c measured again) |
+| Arm weight w_φ (`#qp`) | 0.1 … 20 | 2 | LQR weight |
 | Effort weight ρ (`#rho`, log₁₀) | 10^−1.5 … 10^1 | 1 | LQR weight on V_m² |
 | Swing gain k_E (`#kE`) | 0 … 120 | 40 | the pump's gain in (13) |
 | Arm length r (`#ra`) | 0.02 … 0.25 m | 0.16 m | J_r, J₀, h; the drawing scale does not change |
