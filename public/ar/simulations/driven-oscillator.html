@@ -26,7 +26,7 @@
 
     <link rel="stylesheet" href="../../fonts/arabic.css" />
     <script src="../../scripts/i18n/strings-ar.js"></script>
-    <meta name="translated-from" content="English public/simulations/driven-oscillator.html, commit 1162c65+" />
+    <meta name="translated-from" content="English public/simulations/driven-oscillator.html, commit c2d70a8+" />
   </head>
 <body>
     <header class="sim-top">
@@ -58,7 +58,7 @@
             <div>
                 <figure class="stage">
                     <div class="stage__canvas" id="stage" style="--ar: 16 / 13; --ar-m: 1 / 1.62;">
-                        <canvas id="osc" aria-label="A block on a spring and a damper, pushed from the other side by a coil that sits in the gap of a fixed magnet and carries an alternating current; arrows show the drive, damper and spring forces on the block, bars the work put in and the heat made; below, the stored displacement x(t) of the whole run with a cursor at the frame being shown."></canvas>
+                        <canvas id="osc" aria-label="كتلة على نابض ومخمّد، يدفعها من الجهة الأخرى ملفّ موضوع في فجوة مغناطيس ثابت ويحمل تيارًا متناوبًا؛ تُظهر الأسهم قوى المحرّك والمخمّد والنابض المؤثّرة في الكتلة، وتُظهر الأشرطة الشغل الداخل والحرارة المتولّدة؛ وتحتها الإزاحة المخزّنة x(t) للحلّ كلّه، مع مؤشّر عند الإطار المعروض."></canvas>
                     </div>
                     <figcaption class="stage__cap">
                         <span><b>الشكل 9</b> · <span class="tx">\(m\ddot x + c\dot x + kx = F_0 \cos \Omega t\)</span> · يُعرض من الحلّ المخزَّن</span>
@@ -88,7 +88,7 @@
                         <button type="button" class="btn" id="solve">احسب</button>
                         <button type="button" class="btn btn--ghost" id="play">إيقاف مؤقّت</button>
                         <button type="button" class="btn btn--ghost" id="restart">من t = 0</button>
-                        <button type="button" class="btn btn--ghost" id="fit">Fit scale<span class="i18n-pending" title="translation being updated"></span></button>
+                        <button type="button" class="btn btn--ghost" id="fit">ملاءمة المقياس</button>
                     </div>
                     <p class="solve__status" id="status" aria-live="polite">—</p>
                     <label class="seek">
@@ -114,7 +114,7 @@
                 </div>
 
                 <div class="panel__group">
-                    <p class="panel__label">Outside push · F₀ cos Ωt, open loop<span class="i18n-pending" title="translation being updated"></span></p>
+                    <p class="panel__label">الدفع الخارجي · F₀ cos Ωt، الحلقة المفتوحة</p>
                     <label class="ctl">
                         <span class="ctl__row"><span>سعة القوّة F₀</span><output id="F0-out" for="F0"></output></span>
                         <input type="range" id="F0" min="0" max="5" step="0.1" value="1">
@@ -126,27 +126,27 @@
                 </div>
 
                 <div class="panel__group">
-                    <p class="panel__label">Controller · u = Kₚ(r − x) + Kᵢ∫(r − x)dt − K_d ẋ<span class="i18n-pending" title="translation being updated"></span></p>
-                    <div class="actions" role="group" aria-label="Controller presets">
-                        <button type="button" class="btn btn--ghost" data-gains="0,0,0">Off<span class="i18n-pending" title="translation being updated"></span></button>
+                    <p class="panel__label">المتحكّم · u = Kₚ(r − x) + Kᵢ∫(r − x)dt − K_d ẋ</p>
+                    <div class="actions" role="group" aria-label="إعدادات المتحكّم المسبقة">
+                        <button type="button" class="btn btn--ghost" data-gains="0,0,0">إيقاف</button>
                         <button type="button" class="btn btn--ghost" data-gains="20,0,0">P</button>
-                        <button type="button" class="btn btn--ghost" data-gains="20,0,4">PD<span class="i18n-pending" title="translation being updated"></span></button>
-                        <button type="button" class="btn btn--ghost" data-gains="20,10,4">PID<span class="i18n-pending" title="translation being updated"></span></button>
+                        <button type="button" class="btn btn--ghost" data-gains="20,0,4">PD</button>
+                        <button type="button" class="btn btn--ghost" data-gains="20,10,4">PID</button>
                     </div>
                     <label class="ctl">
-                        <span class="ctl__row"><span>Target position r<span class="i18n-pending" title="translation being updated"></span></span><output id="r-out" for="r"></output></span>
+                        <span class="ctl__row"><span>الموضع المستهدف r</span><output id="r-out" for="r"></output></span>
                         <input type="range" id="r" min="-0.5" max="0.5" step="0.01" value="0.3">
                     </label>
                     <label class="ctl">
-                        <span class="ctl__row"><span>Proportional gain Kₚ<span class="i18n-pending" title="translation being updated"></span></span><output id="Kp-out" for="Kp"></output></span>
+                        <span class="ctl__row"><span>الكسب التناسبي Kₚ</span><output id="Kp-out" for="Kp"></output></span>
                         <input type="range" id="Kp" min="0" max="60" step="0.5" value="0">
                     </label>
                     <label class="ctl">
-                        <span class="ctl__row"><span>Integral gain Kᵢ<span class="i18n-pending" title="translation being updated"></span></span><output id="Ki-out" for="Ki"></output></span>
+                        <span class="ctl__row"><span>الكسب التكاملي Kᵢ</span><output id="Ki-out" for="Ki"></output></span>
                         <input type="range" id="Ki" min="0" max="60" step="0.5" value="0">
                     </label>
                     <label class="ctl">
-                        <span class="ctl__row"><span>Derivative gain K_d<span class="i18n-pending" title="translation being updated"></span></span><output id="Kd-out" for="Kd"></output></span>
+                        <span class="ctl__row"><span>الكسب التفاضلي K_d</span><output id="Kd-out" for="Kd"></output></span>
                         <input type="range" id="Kd" min="0" max="12" step="0.1" value="0">
                     </label>
                 </div>
@@ -158,16 +158,16 @@
                     <div><dt>معامل الجودة Q</dt><dd id="r-Q">—</dd></div>
                     <div><dt>RK4 مقابل الحلّ الدقيق</dt><dd id="r-err">—</dd></div>
                     <div><dt>توازن الطاقة</dt><dd id="r-bal">—</dd></div>
-                    <div><dt>Equilibrium x*<span class="i18n-pending" title="translation being updated"></span></dt><dd id="r-eq">—</dd></div>
-                    <div><dt>Closed loop<span class="i18n-pending" title="translation being updated"></span></dt><dd id="r-stab">—</dd></div>
+                    <div><dt>موضع الاتزان x*</dt><dd id="r-eq">—</dd></div>
+                    <div><dt>الحلقة المغلقة</dt><dd id="r-stab">—</dd></div>
                 </dl>
 
                 <ul class="legend">
                     <li><span class="sw sw--ink"></span>x(t)، معروضة</li>
                     <li><span class="sw sw--dash" style="border-top-color: var(--accent);"></span>F(t)/k</li>
-                    <li><span class="sw sw--dash" style="border-top-style: dotted;"></span>previous run<span class="i18n-pending" title="translation being updated"></span></li>
-                    <li><span class="sw sw--dash" style="border-top-color: var(--accent-rose);"></span>x* ± X, steady<span class="i18n-pending" title="translation being updated"></span></li>
-                    <li><span class="sw sw--dot"></span>target r<span class="i18n-pending" title="translation being updated"></span></li>
+                    <li><span class="sw sw--dash" style="border-top-style: dotted;"></span>الحلّ السابق</li>
+                    <li><span class="sw sw--dash" style="border-top-color: var(--accent-rose);"></span>x* ± X، مستقرّة</li>
+                    <li><span class="sw sw--dot"></span>الموضع المستهدف r</li>
                     <li><span class="sw"></span>الآن</li>
                 </ul>
             </aside>
@@ -176,9 +176,9 @@
         <article class="paper" id="paper" aria-labelledby="paper-title">
             <header class="paper__head">
                 <p class="paper__kicker">مذكّرة المحاضرة · الشكل 9 · أنظمة التحكّم</p>
-                <h2 class="paper__title" id="paper-title">Driven oscillations: how a system answers a push, and how a controller takes the push over<span class="i18n-pending" title="translation being updated"></span></h2>
+                <h2 class="paper__title" id="paper-title">الاهتزازات القسرية: كيف يستجيب النظام لدفعة، وكيف يتولّى المتحكّم أمر الدفع</h2>
                 <p class="paper__by">نعمة سائر قدسية · لطلبة المدارس وطلبة السنتين الأولى والثانية في الجامعة</p>
-                <div class="paper__abstract"><b>Abstract.</b> Almost every machine is pushed by something outside it: a car body by the road, a building by the wind, a loudspeaker cone by the amplifier. This note studies the simplest such system, a mass on a spring with a damper, driven by a force \(F_0\cos\Omega t\) that someone else decides. We write down its equation of motion, solve it exactly, and use the exact answer to grade the numerical solution the page stores. Along the way we meet resonance, phase lag and the quality factor, and we translate everything into the language of control engineering: input, output, transfer function and Bode plot. In the last part we close the loop: a controller measures the block and computes the force, and its three gains decide where the block comes to rest, how quickly it gets there and how strongly it is damped. Sections marked ★ carry the heavier mathematics and can be skipped on a first reading.<span class="i18n-pending" title="translation being updated"></span></div>
+                <div class="paper__abstract"><b>الملخّص.</b> ما من آلة تقريبًا إلّا وتُدفع من الخارج: هيكل السيّارة بالطريق، والمبنى بالرياح، ومخروط مكبّر الصوت بالمضخّم. تدرس هذه المذكّرة أبسط نظام من هذا النوع، كتلة على نابض مع مخمّد، تؤثّر فيها قوّة \(F_0\cos\Omega t\) يقرّرها شخص آخر. نكتب معادلة حركته، ونحلّها حلًّا دقيقًا، ونستخدم الحلّ الدقيق لتقييم الحلّ العددي الذي تخزّنه الصفحة. وفي الطريق نلتقي بالرنين وتأخّر الطور ومعامل الجودة، ونترجم كل ذلك إلى لغة هندسة التحكّم: الدخل والخرج ودالّة التحويل ومخطّط بودي. وفي الجزء الأخير نغلق الحلقة: يقيس متحكّمٌ موضع الكتلة ويحسب القوّة، وتقرّر معاملات الكسب الثلاثة فيه أين تستقرّ الكتلة، وبأيّ سرعة تبلغ موضعها، وما مدى شدّة تخامدها. تحمل الأقسام المعلّمة بـ ★ الرياضيات الأثقل، ويمكن تخطّيها في القراءة الأولى.</div>
             </header>
             <div class="paper__grid">
                 <nav class="paper__toc" aria-label="المحتويات">
@@ -192,7 +192,7 @@
                         <li><a href="#p-start"><span>6</span>البداية: الضربات والاضمحلال</a></li>
                         <li><a href="#p-energy"><span>7</span>أين تذهب الطاقة</a></li>
                         <li><a href="#p-solve"><span>8</span>احسب أوّلًا، ثم شغّل</a></li>
-                        <li><a href="#p-screen"><span>9</span>Closing the loop, and the screen<span class="i18n-pending" title="translation being updated"></span></a></li>
+                        <li><a href="#p-screen"><span>9</span>إغلاق الحلقة، وما على الشاشة</a></li>
                         <li><a href="#p-limits"><span>10</span>ما يغفله النموذج</a></li>
                     </ol>
                 </nav>
@@ -467,29 +467,29 @@
                     </section>
 
                     <section class="psec" id="p-screen">
-                        <h3><span class="psec__n">09</span>Closing the loop, and the screen<span class="i18n-pending" title="translation being updated"></span></h3>
-                        <p>The driver on the screen is the one inside every loudspeaker. A coil of wire is wound on a light tube fixed to the right face of the block, and the tube slides into the narrow gap of a magnet that stands on the floor. In the gap the field \(B\) points straight out from the central pole, so every piece of the winding is perpendicular to it, and the Lorentz force \(\mathrm d\vec F = I\,\mathrm d\vec\ell \times \vec B\) on each piece points along the axis. Added up over the length \(\ell\) of wire in the gap, it gives<span class="i18n-pending" title="translation being updated"></span></p>
+                        <h3><span class="psec__n">09</span>إغلاق الحلقة، وما على الشاشة</h3>
+                        <p>يعمل المحرّك الظاهر على الشاشة عمل مكبّر الصوت، أو عمل الهزّازات الكهروديناميكية التي يستعملها المهندسون لهزّ قطع الاختبار. يُلفّ ملفّ من السلك على أنبوب خفيف مثبّت في الوجه الأيمن للكتلة، وينزلق الأنبوب في الفجوة الضيّقة لمغناطيس قائم على الأرضية. وفي الفجوة يتّجه الحقل \(B\) شعاعيًّا مبتعدًا عن القطب المركزي، فيكون كل جزء من لفّات الملف عموديًّا عليه، وتتّجه قوّة لورنتز \(\mathrm d\vec F = I\,\mathrm d\vec\ell \times \vec B\) المؤثّرة في كل جزء على طول المحور. وبجمعها على الطول \(\ell\) من السلك الواقع في الفجوة نحصل على</p>
                         \[ F = B\ell\, I , \qquad I(t) = I_0\cos\Omega t , \tag{9} \]
-                        <p>so a source that drives the current \(I_0\cos\Omega t\) through the coil pushes the block with exactly the force of (1), with \(F_0 = B\ell I_0\). The page takes \(B\ell = 10\ \mathrm{T\,m}\), for instance \(B = 1\ \mathrm T\) and 10 m of wire, about 100 turns of a coil 3.2 cm across; then \(I_0 = F_0/(B\ell)\) is 0.1 A with the defaults and 0.5 A at the largest force of 5 N. The dots and crosses on the winding show the current: a dot is current coming out of the screen, a cross current going into it, and when they swap, the force turns round. Two conditions keep the force a function of time alone, as §1 requires. The winding must never leave the uniform field of the gap, which is why the gap on the screen is longer than the winding by the full travel of the block. And the source must drive the current, not a voltage.<span class="i18n-pending" title="translation being updated"></span></p>
-                        <p>The second condition comes from Faraday’s law: a wire moving at the speed \(\dot x\) through the field has the emf \(B\ell\dot x\) induced in it. Treat the charge \(q\) that has passed through the coil as a second coordinate, so that \(I = \dot q\), and write the Lagrangian of block and coil together, \(L = \tfrac12 m\dot x^2 - \tfrac12 kx^2 + \tfrac12 L_c\dot q^2 + B\ell\,x\dot q\), where \(L_c\) is the inductance of the coil and the last term couples the two; the damper and the coil’s resistance \(R\) enter through Rayleigh’s dissipation function \(\mathcal F = \tfrac12 c\dot x^2 + \tfrac12 R\dot q^2\). Lagrange’s equation for \(x\) is (1) with \(F = B\ell I\), the result (9) by a second route. The equation for \(q\) gives the voltage the source must supply:<span class="i18n-pending" title="translation being updated"></span></p>
-                        \[ V = RI + L_c\dot I + B\ell\,\dot x . \tag{10} \]
-                        <p>The last term is the back-emf. The source pays for it with the power \(B\ell\dot x\cdot I = F\dot x\), which is exactly the driver’s power \(P_\text{in}\) of §7: the electrical energy that disappears into the back-emf is the work done on the block. A current source raises its voltage by whatever (10) asks, so the current, and with it the force, stays \(I_0\cos\Omega t\). A plain voltage source would not. With \(L_c\) negligible it lets \(I = (V - B\ell\dot x)/R\) flow, and the force becomes<span class="i18n-pending" title="translation being updated"></span></p>
+                        <p>فالمصدر الذي يمرّر التيار \(I_0\cos\Omega t\) في الملف يدفع الكتلة بالقوّة نفسها التي في (1) تمامًا، حيث \(F_0 = B\ell I_0\). وتأخذ الصفحة \(B\ell = 10\ \mathrm{T\,m}\)، كأن يكون \(B = 1\ \mathrm T\) مع ⁦10 m⁩ من السلك، أي نحو 100 لفّة لملفّ قطره ⁦3.2 cm⁩؛ وعندئذ يساوي \(I_0 = F_0/(B\ell)\) القيمة ⁦0.1 A⁩ بالقيم الافتراضية و⁦0.5 A⁩ عند أكبر قوّة، وهي ⁦5 N⁩. وتبيّن النقاط والعلامات × على اللفّات التيار: النقطة تيار خارج من الشاشة، والعلامة × تيار داخل إليها، وحين تتبادلان المواضع تنعكس القوّة. ويُبقي شرطان هذه القوّةَ دالّةً في الزمن وحده، كما يقتضي §1 من الدفع الخارجي. فيجب ألّا تغادر اللفّات أبدًا الحقلَ المنتظم في الفجوة، ولهذا كانت الفجوة على الشاشة أطول من اللفّات بمقدار مشوار الكتلة كاملًا. والرسم هنا سخيّ: فبالقيم الافتراضية تقطع الكتلة نحو متر، بينما تقطع ملفّات الهزّازات الحقيقية من بضعة مليمترات إلى بضعة سنتيمترات، فلو صُنع مغناطيس حقيقي بهذا الطول لكان آلة ضخمة؛ غير أنّ الفيزياء لا تتغيّر مع طول المشوار ما دام الحقل منتظمًا. ويجب أن يفرض المصدر التيار، لا الجهد.</p>
+                        <p>ويأتي الشرط الثاني من قانون فاراداي. فالسلك الذي يتحرّك بالسرعة \(\dot x\) عبر الحقل تُستحثّ فيه قوّة دافعة كهربائية (emf)، أي جهد تولّده الحركة، مقدارها \(B\ell\dot x\). لندُر مرّة واحدة حول الدارة، وفق قانون كيرشوف للجهد: يُستهلك جهد المصدر \(V\) في مقاومة الملف \(R\)، وفي محاثّته الذاتية \(\Lambda\)، وفي هذه القوّة الدافعة الكهربائية الحركية، التي تعاكس التيار الذي يولّد الحركة:</p>
+                        \[ V = RI + \Lambda\dot I + B\ell\,\dot x . \tag{10} \]
+                        <p>ويعطي الميكانيك زوج المعادلات نفسه من طريق ثانٍ. لنعامل الشحنة \(q\) التي عبرت الملف إحداثيًّا ثانيًا، بحيث يكون \(I = \dot q\)، ولنأخذ \(\mathscr L = \tfrac12 m\dot x^2 - \tfrac12 kx^2 + \tfrac12 \Lambda\dot q^2 + B\ell\,x\dot q\)، مع دالّة التبديد لرايلي \(\mathscr D = \tfrac12 c\dot x^2 + \tfrac12 R\dot q^2\)، ومع جهد المصدر \(V\) بوصفه القوّة المعمَّمة المقابلة لـ\(q\). فمعادلة لاغرانج لـ\(x\) هي (1) مع \(F = B\ell I\)، أي (9)؛ ومعادلة \(q\) هي (10). والحدّ \(B\ell\,x\dot q\) يربط الكتلة بالملف، ويظهر ثابت الربط نفسه \(B\ell\) في الاتجاهين: نيوتن لكل أمبير في القوّة، وفولت لكل متر في الثانية في القوّة الدافعة الكهربائية. والحدّ الأخير في (10) هو القوّة الدافعة الكهربائية العكسية. ويدفع المصدر ثمنها بالقدرة \(B\ell\dot x\cdot I = F\dot x\)، وهي بالضبط قدرة المحرّك \(P_\text{in}\) في §7: فالطاقة الكهربائية التي تختفي في القوّة الدافعة الكهربائية العكسية هي الشغل المبذول على الكتلة. ومصدر التيار يرفع جهده بقدر ما تطلبه (10)، فيبقى التيار، ومعه القوّة، \(I_0\cos\Omega t\). أمّا مصدر الجهد البسيط فلا يفعل ذلك. فحين تكون \(\Lambda\) مهملة يسمح بمرور \(I = (V - B\ell\dot x)/R\)، فتصبح القوّة</p>
                         \[ F = \frac{B\ell}{R}\,V - \frac{(B\ell)^2}{R}\,\dot x , \tag{11} \]
-                        <p>the push of the source plus a second damper. With \(R = 8\ \Omega\) that damper would have \((B\ell)^2/R = 12.5\ \mathrm{kg/s}\), forty times the page’s damper with the defaults and a damping ratio of about 2 on its own. The same induction brakes Pohl’s wheel in the teaching laboratory: its damping is an eddy-current brake, an electromagnet whose field induces currents in the metal of the turning wheel.<span class="i18n-pending" title="translation being updated"></span></p>
-                        <p>The damper is drawn as what it is, a piston in oil. Its force \(-c\dot x\) always points against the motion, and its oil darkens while it turns energy into heat, by \(P_\text{loss} = c\dot x^2\) as a fraction of the largest value in the run. The three arrows over the block are the forces on it, the coil’s \(F\), the damper’s \(-c\dot x\) and the spring’s \(-kx\), each drawn twice as long as the stretch of the spring that would carry it, so they share the scale of the motion; their sum is \(m\ddot x\). Near resonance the spring’s arrow is about \(Q\) times longer than the other two, while the coil’s and the damper’s arrows nearly cancel: the driver only replaces what the damper takes, as §7 says. The bars at the top keep the books of (8): the work \(W_\text{in}\) the coil has done since \(t = 0\), the heat \(W_\text{loss}\) the damper has made, and the energy \(E\) the oscillator holds now, which is their difference.<span class="i18n-pending" title="translation being updated"></span></p>
-                        <p>So far the force has been decided by someone who does not look at the block. Now let the force look. A sensor measures \(x\), a controller compares it with a target \(r\) and computes the current the coil shall carry, and the force on the block becomes the outside push plus the controller’s share \(u\). The simplest useful controller uses the error \(e = r - x\), its running sum and the measured speed:<span class="i18n-pending" title="translation being updated"></span></p>
+                        <p>أي دفع المصدر مضافًا إليه مخمّد ثانٍ. ومع \(R = 8\ \Omega\) يكون لهذا المخمّد \((B\ell)^2/R = 12.5\ \mathrm{kg/s}\)، أي أربعون ضعف مخمّد الصفحة بالقيم الافتراضية، ونسبة تخامد تبلغ نحو 2 وحده. والحثّ نفسه يكبح عجلة بول في مختبر التدريس: فتخامدها مكبح بالتيارات الدوّامية، أي مغناطيس كهربائي يستحثّ حقله تيارات في معدن العجلة الدوّارة، ويشغّل المختبر هذا المغناطيس بتيار ثابت للسبب نفسه الذي من أجله تغذّي الصفحة ملفّها بتيار مفروض.</p>
+                        <p>يُرسم المخمّد على حقيقته: مكبس في زيت. قوّته \(-c\dot x\) تتّجه دائمًا عكس الحركة، ويَدكن زيته وهو يحوّل الطاقة إلى حرارة، بقدر \(P_\text{loss} = c\dot x^2\) منسوبةً إلى أكبر قيمة لها في الحلّ. والأسهم الثلاثة فوق الكتلة هي القوى المؤثّرة فيها: قوّة الملف \(F\)، وقوّة المخمّد \(-c\dot x\)، وقوّة النابض \(-kx\)، ويُرسم كلٌّ منها بطول يساوي ضعف استطالة النابض التي تحمل تلك القوّة، فتشترك مع الحركة في مقياس الطول نفسه؛ ومجموعها \(m\ddot x\). وعند التحريك بالتردد \(f_0\) في الحالة المستقرّة، يتأرجح سهم النابض بطول يبلغ نحو \(Q\) مرّة طول كلّ من السهمين الآخرين، بينما يلغي سهما الملف والمخمّد أحدهما الآخر: فالمحرّك لا يفعل سوى تعويض ما يأخذه المخمّد، كما يقول §7. والأشرطة في الأعلى تعرض ميزان (8): الشغل \(W_\text{in}\) الذي بذله الملف منذ \(t = 0\)، والحرارة \(W_\text{loss}\) التي ولّدها المخمّد، والطاقة \(E\) التي يختزنها المهتزّ الآن، وهي الفرق بينهما.</p>
+                        <p>حتى الآن كان يقرّر القوّةَ طرفٌ لا ينظر إلى الكتلة. فلنجعل القوّة تنظر الآن. يقيس حسّاسٌ \(x\)، فيقارنه متحكّم بموضع مستهدف \(r\) ويحسب التيار الذي يجب أن يحمله الملف، فتصبح القوّة المؤثّرة في الكتلة الدفعَ الخارجي مضافًا إليه حصّة المتحكّم \(u\). وهذه القوّة تتوقّف على موضع الكتلة: فلم يعد الدفع من الخارج وحده، وهذا هو جوهر التغذية الراجعة. وأبسط متحكّم مفيد يستعمل الخطأ \(e = r - x\)، ومجموعه المتراكم، والسرعة المقيسة:</p>
                         \[ u = K_p\,e + K_i\!\int_0^t e\,\mathrm dt' - K_d\,\dot x , \qquad m\ddot x + c\dot x + kx = F_0\cos\Omega t + u . \tag{12} \]
-                        <p>Each gain is a physical part added to the plant. \(K_p\) (N/m) is a second spring whose rest position is the target instead of the wall: push the block away from \(r\) and the coil pulls it back in proportion. \(K_d\) (kg/s) is a second damper, acting on the measured speed. \(K_i\) (N/(m·s)) is the controller’s memory: as long as the block sits on the wrong side of \(r\), the integral grows and the coil pushes harder, and it stops growing only when the error is zero. Collect the terms of (12) that multiply \(x\) and \(\dot x\):<span class="i18n-pending" title="translation being updated"></span></p>
+                        <p>كلّ كسب هو جزء فيزيائي يُضاف إلى المنظومة. فـ\(K_p\) (N/m) نابض ثانٍ موضع سكونه هو الموضع المستهدف بدل الجدار: أبعِد الكتلة عن \(r\) يُعِدها الملف إليه بقوّة تتناسب مع الإبعاد. و\(K_d\) (kg/s) مخمّد ثانٍ يعمل على السرعة المقيسة. و\(K_i\) (N/(m·s)) ذاكرة المتحكّم: ما دامت الكتلة في الجانب الخطأ من \(r\) يكبر التكامل ويشتدّ دفع الملف، ولا يكفّ التكامل عن الكبر إلّا حين ينعدم الخطأ. لنجمع حدود (12) التي تضرب \(x\) و\(\dot x\):</p>
                         \[ m\ddot x + (c + K_d)\,\dot x + (k + K_p)\,x = K_p r + K_i\!\int_0^t (r - x)\,\mathrm dt' + F_0\cos\Omega t . \tag{13} \]
-                        <p>Without the integral, (13) is the equation of §2 with the stiffer spring \(k + K_p\) and the stronger damper \(c + K_d\), pushed by a constant force \(K_p r\): a new oscillator, with its own natural frequency \(\sqrt{(k+K_p)/m}\) and damping ratio \(\zeta_\text{cl} = (c + K_d)/(2\sqrt{m(k+K_p)})\). Where does it come to rest? Set every derivative to zero and \(F_0 = 0\):<span class="i18n-pending" title="translation being updated"></span></p>
+                        <p>من دون التكامل تكون (13) هي معادلة §2 مع نابض أصلب \(k + K_p\) ومخمّد أقوى \(c + K_d\)، تدفعه قوّة ثابتة \(K_p r\): أي مهتزّ جديد، له تردده الطبيعي الخاصّ \(\sqrt{(k+K_p)/m}\) ونسبة تخامده \(\zeta_\text{cl} = (c + K_d)/(2\sqrt{m(k+K_p)})\). فأين يستقرّ؟ لنجعل كل المشتقّات صفرًا، و\(F_0 = 0\):</p>
                         \[ x^* = \frac{K_p}{k + K_p}\,r \quad (K_i = 0), \qquad x^* = r \quad (K_i > 0). \tag{14} \]
-                        <p>A proportional controller never reaches its target. To hold the block at \(x^*\) the coil must carry the spring, \(u = kx^*\), and a proportional controller only produces that force out of an error, \(K_p(r - x^*) = kx^*\), which is (14). With the page’s presets, \(K_p = 20\ \mathrm{N/m}\) against \(k = 9.87\ \mathrm{N/m}\), the block stops at \(0.67\,r\): 0.201 m for \(r = 0.30\ \mathrm m\), and the P box on the screen shows the controller’s whole force resting on that 0.1 m of error. The integral removes it. Its memory keeps growing until the error is gone, and at the end the integral part alone supplies the \(kx^* = 2.96\ \mathrm N\) that hold the spring, while the proportional part has nothing left to do. The derivative gain decides how the block gets there: with \(K_d = 0\) the preset loop has \(\zeta_\text{cl} = 0.03\) and rings for a long time; with \(K_d = 4\ \mathrm{kg/s}\) it has \(\zeta_\text{cl} = 0.40\) and settles in a few seconds.<span class="i18n-pending" title="translation being updated"></span></p>
-                        <p>Memory has a price. Differentiate (13) once to remove the integral, and the free motion of the loop obeys a third-order equation, \(m\dddot x + (c+K_d)\ddot x + (k+K_p)\dot x + K_i x = 0\). A third-order system can go unstable even though every coefficient is positive, because the integral keeps pushing after the block has already passed the target. The Routh–Hurwitz condition for three positive coefficients says that all free motions die away exactly when<span class="i18n-pending" title="translation being updated"></span></p>
+                        <p>المتحكّم التناسبي لا يبلغ هدفه أبدًا. فكي يُمسك الكتلة عند \(x^*\) يجب أن يحمل الملفّ النابضَ، \(u = kx^*\)، والمتحكّم التناسبي لا يُنتج هذه القوّة إلّا من خطأ، \(K_p(r - x^*) = kx^*\)، وهذه هي (14). وبالإعدادات المسبقة للصفحة، \(K_p = 20\ \mathrm{N/m}\) مقابل \(k = 9.87\ \mathrm{N/m}\)، تتوقّف الكتلة عند \(0.67\,r\): أي عند ⁦0.201 m⁩ حين يكون \(r = 0.30\ \mathrm m\)، ويُظهر صندوق P على الشاشة أنّ قوّة المتحكّم كلّها قائمة على ذلك الخطأ البالغ ⁦0.1 m⁩. والتكامل يزيل هذا الخطأ. فذاكرته تظلّ تكبر حتى يزول، وفي النهاية يوفّر الجزء التكاملي وحده القوّة \(kx^* = 2.96\ \mathrm N\) التي تُمسك النابض، ولا يبقى للجزء التناسبي ما يفعله. ويقرّر الكسب التفاضلي كيف تصل الكتلة: مع \(K_d = 0\) يكون للحلقة بإعداداتها المسبقة \(\zeta_\text{cl} = 0.03\) فتظلّ تهتزّ زمنًا طويلًا؛ ومع \(K_d = 4\ \mathrm{kg/s}\) يكون لها \(\zeta_\text{cl} = 0.40\) فتستقرّ في بضع ثوانٍ.</p>
+                        <p>للذاكرة ثمن. اشتقّ (13) مرّة واحدة لتتخلّص من التكامل، فتخضع الحركة الحرّة للحلقة لمعادلة من الرتبة الثالثة، \(m\,\mathrm d^3x/\mathrm dt^3 + (c+K_d)\ddot x + (k+K_p)\dot x + K_i x = 0\). ويمكن لمنظومة من الرتبة الثالثة أن تصبح غير مستقرّة مع أنّ معاملاتها كلّها موجبة، لأن التكامل يظلّ يدفع بعد أن تكون الكتلة قد تجاوزت الهدف. وينصّ معيار راوث-هورفيتز، في حالة ثلاثة معاملات موجبة، على أنّ الحركات الحرّة كلّها تضمحلّ إذا وفقط إذا كان</p>
                         \[ (c + K_d)(k + K_p) > m\,K_i . \tag{15} \]
-                        <p>Read it as a race: the damping available in the loop, times its stiffness, must beat the rate at which the memory accumulates force. The PID preset has \(128.9 > 10\) and is stable; set \(K_p = 5\), \(K_d = 0\), \(K_i = 60\) and the left side is 4.7 against 60: the block’s swings grow until the page stops the solver at \(|x| = 1000\ \mathrm m\), and the readout says so. The outside push still acts through the closed loop. Its steady answer is (3) with the coefficients of (13) and the integral’s term \(K_i/(i\Omega)\):<span class="i18n-pending" title="translation being updated"></span></p>
+                        <p>اقرأه سباقًا: التخامد المتاح في الحلقة، مضروبًا في صلابتها، يجب أن يغلب المعدّل الذي تُراكم به الذاكرة القوّة. للإعداد المسبق PID القيمة \(128.9 > 10\)، فهو مستقرّ؛ أمّا إذا ضبطت \(K_p = 5\) و\(K_d = 0\) و\(K_i = 60\) فيصبح الطرف الأيسر 4.7 مقابل 60: وتكبر تأرجحات الكتلة حتى توقف الصفحة الحلّال عند \(|x| = 1000\ \mathrm m\)، وتذكر القراءة ذلك. ولا يزال الدفع الخارجي يؤثّر عبر الحلقة المغلقة. واستجابته المستقرّة هي (3) بمعاملات (13) مع حدّ التكامل \(K_i/(i\Omega)\):</p>
                         \[ X = \frac{F_0}{\left|\,k + K_p - m\Omega^2 + i\left((c + K_d)\Omega - K_i/\Omega\right)\right|} , \tag{16} \]
-                        <p>the block swinging with this amplitude about \(x^*\). The Bode plot draws this closed-loop response \(H(i\Omega)\) in ink, with the bare plant \(G(i\Omega)\) dashed behind it: the controller moves the peak to the new natural frequency, flattens it with \(K_d\), and the integral pushes the response at low frequencies to zero, because a slow push is simply held off. The page grades its RK4 run against the exact closed-loop solution as well: the particular solution of (16) plus the free motion of (13), propagated sample by sample with the exact matrix exponential \(e^{A\,\Delta t}\) of the loop’s state matrix.<span class="i18n-pending" title="translation being updated"></span></p>
-                        <p>The whole mechanism is drawn on one scale, in pixels per metre. The scale is kept from one Solve to the next, so a run with more damping or a smaller force really swings less on the screen, and the previous run stays in view as an outlined block and a dotted curve. The scale widens only when a new run needs more room, and Fit scale sets it to the present run; the ruler under the floor gives the ends of the range in metres, and with the controller on, the target \(r\) as a dot and the equilibrium \(x^*\) as a rose line. The box at the top right is the controller: the value it reads, its three parts and their sum \(u\), each as a bar, and a dashed command line down to the current source. Watch the force arrow and the block together: at a low drive frequency the block moves with the force, near \(f_0\) it lags a quarter period behind it, and far above \(f_0\) it moves against it, as the phase lag of (4) says. Below, a window of the stored run follows the present sample: \(x(t)\) dark up to it and pale after it, \(F(t)/k\) dashed in burgundy and the steady band \(x^* \pm X\) dashed in rose. The window spans four drive periods, but never less than 6 s or more than 20 s (8.9 s with the defaults). Under it, a thin strip shows the whole 60 s, with the window shaded. The Bode plot marks the present drive frequency with a filled dot and the amplitude measured from the last 10 s of the run with a ring around it: when the run has settled, the two coincide.<span class="i18n-pending" title="translation being updated"></span></p>
+                        <p>والكتلة تتأرجح بهذه السعة حول \(x^*\). ويرسم مخطّط بودي استجابة الحلقة المغلقة هذه \(H(i\Omega)\) بلون الحبر، ومن خلفها المنظومة وحدها \(G(i\Omega)\) بخطّ متقطّع: فالمتحكّم ينقل القمّة إلى التردد الطبيعي الجديد، ويسطّحها بـ\(K_d\)، ويدفع التكامل الاستجابة عند الترددات المنخفضة إلى الصفر، لأن الدفع البطيء يُصدّ ببساطة. وتقيّم الصفحة حلّها بطريقة RK4 مقابل الحلّ الدقيق للحلقة المغلقة أيضًا: الحلّ الخاصّ لـ(16) مضافًا إليه الحركة الحرّة لـ(13)، منقولةً من عيّنة إلى التي تليها بالأسّ المصفوفي الدقيق \(e^{A\,\Delta t}\) لمصفوفة حالة الحلقة.</p>
+                        <p>تُرسم الآلية كلّها بمقياس طول واحد، بالبكسل لكل متر. ويُحفظ المقياس من ضغطة على «احسب» إلى التي تليها، فالحلّ ذو التخامد الأكبر أو القوّة الأصغر يتأرجح على الشاشة أقلّ فعلًا، ويبقى الحلّ السابق ظاهرًا في صورة كتلة مرسومة بحدودها ومنحنًى منقّط. ولا يتّسع المقياس إلّا حين يحتاج حلّ جديد إلى مساحة أكبر، وتضبطه «ملاءمة المقياس» على الحلّ الحالي؛ والمسطرة تحت الأرضية تعطي طرفَي المدى بالأمتار، ومع تشغيل المتحكّم تُظهر الموضع المستهدف \(r\) نقطةً وموضع الاتزان \(x^*\) خطًّا ورديًّا. والصندوق أعلى اليمين هو المتحكّم: القيمة التي يقرؤها، وأجزاؤه الثلاثة ومجموعها \(u\)، كلٌّ في شريط، وخطّ أوامر متقطّع نازل إلى مصدر التيار. راقب سهم القوّة والكتلة معًا: عند تردد منخفض للقوّة الدافعة تتحرّك الكتلة مع القوّة، وقرب \(f_0\) تتأخّر عنها بربع دورة، وفوق \(f_0\) بكثير تتحرّك عكسها، كما يقول تأخّر الطور في (4). وفي الأسفل تتابع نافذة من الحلّ المخزَّن العيّنة الحالية: \(x(t)\) داكنًا حتى نقطتها وباهتًا بعدها، و\(F(t)/k\) متقطّعًا بالعنّابي، والنطاق المستقرّ \(x^* \pm X\) متقطّعًا بالوردي. وتمتدّ النافذة على أربعة أدوار للقوّة الدافعة، لكن لا تقلّ عن ⁦6 s⁩ ولا تزيد على ⁦20 s⁩ (⁦8.9 s⁩ بالقيم الافتراضية). وتحتها شريط رفيع يعرض الحلّ كلّه الممتدّ على ⁦60 s⁩، والنافذة مظلّلة فيه. ويعلّم مخطّط بودي تردد القوّة الدافعة الحالي بنقطة ممتلئة، والسعة المقاسة من آخر ⁦10 s⁩ من الحلّ بحلقة حولها: وعندما يستقرّ الحلّ تتطابق النقطة مع الحلقة.</p>
                     </section>
 
                     <section class="psec" id="p-limits">
@@ -497,16 +497,16 @@
                         <ul>
                             <li>لا تطيع النوابض الحقيقية قانون هوك إلّا عند الاستطالات الصغيرة؛ فعند السعة الكبيرة تكفّ قوّة الاسترجاع عن أن تكون متناسبة مع \(x\)، فتنحني قمّة الرنين وقد تقفز.</li>
                             <li>الاحتكاك الحقيقي غالبًا جافّ لا لزج: فهو لا يزداد مع السرعة. والمخمّد الخطّي هو النسخة التي تُبقي المعادلة قابلة للحلّ.</li>
-                            <li>The current source is ideal: it delivers \(I_0\cos\Omega t\) whatever the back-emf, so the force stays \(F_0\cos\Omega t\) whatever the block does. A real amplifier has a voltage limit, and at resonance, where the block moves fastest, the back-emf it must overcome is largest.<span class="i18n-pending" title="translation being updated"></span></li>
+                            <li>مصدر التيار هنا مثالي: يوفّر التيار المطلوب منه مهما كانت القوّة الدافعة الكهربائية العكسية، فتبقى القوّة في الحلقة المفتوحة \(F_0\cos\Omega t\) مهما فعلت الكتلة. أمّا المضخّم الحقيقي فله حدّ للجهد، وعند الرنين، حيث تتحرّك الكتلة أسرع ما يمكن، تكون القوّة الدافعة الكهربائية العكسية التي عليه أن يتغلّب عليها أكبر ما تكون.</li>
                             <li>تغطّي الصفحة مجال التخامد دون الحرج \(\zeta \le 0.9\) فقط، حيث ينطبق الحلّ الدقيق (5)؛ أمّا \(\zeta \ge 1\) فتحتاج صيغة أخرى للحالة العابرة.</li>
-                            <li>The controller is ideal: it measures \(x\) and \(\dot x\) without noise or delay and acts at every instant, and the coil delivers whatever force it asks. A real controller samples, and the delay of one sample costs stability margin; a noisy speed measurement makes \(K_d\) amplify the noise; a real amplifier has a current limit, and an integral that keeps growing against it is the classic windup.<span class="i18n-pending" title="translation being updated"></span></li>
+                            <li>المتحكّم هنا مثالي: يقيس \(x\) و\(\dot x\) دون ضجيج أو تأخير، ويعمل في كل لحظة، ويوفّر الملف أيّ قوّة يطلبها. أمّا المتحكّم الحقيقي فيعمل بالمعاينة، وتأخير عيّنة واحدة يكلّف شيئًا من هامش الاستقرار؛ وقياس السرعة المشوَّش يجعل \(K_d\) يضخّم الضجيج؛ وللمضخّم الحقيقي حدّ للتيار، والتكامل الذي يظلّ يكبر وهو يصطدم بهذا الحدّ هو ظاهرة التشبّع التكاملي (windup) المعروفة.</li>
                         </ul>
                         <h4><span class="psub__n">10.1</span>مراجع للاستزادة</h4>
                         <ol class="prefs">
                             <li>J. R. Taylor، <a href="https://books.google.com/books/about/Classical_Mechanics.html?id=P1kCtNr-pJsC"><em>Classical Mechanics</em></a>، University Science Books، 2005: الفصل 5، الاهتزازات، والمهتزّات القسرية المتخامدة، والرنين.</li>
                             <li>A. P. French، <a href="https://www.routledge.com/Vibrations-and-Waves/French/p/book/9780748744473"><em>Vibrations and Waves</em></a>، W. W. Norton، 1971 (صار الناشر اليوم CRC Press): الفصل 4، الاهتزازات القسرية والرنين.</li>
-                            <li>K. J. Åström and R. M. Murray, <em>Feedback Systems: An Introduction for Scientists and Engineers</em>, Princeton University Press, 2008: chapter 8, transfer functions, frequency response and Bode plots; chapter 10, PID control, for Section 9. <a href="http://www.cds.caltech.edu/~murray/books/AM08/pdf/am08-complete_22Feb09.pdf">The authors’ free electronic edition</a>.<span class="i18n-pending" title="translation being updated"></span></li>
-                            <li>Leybold Didactic, <a href="https://etpwww.etp.kit.edu/~simonis/praktikum/Manuals/Leybold-PohlschesRad.pdf"><em>Gebrauchsanweisung 346 00: Drehpendel nach Pohl</em></a>, Hürth (in German): Pohl’s wheel and its eddy-current brake (Section 9).<span class="i18n-pending" title="translation being updated"></span></li>
+                            <li>K. J. Åström وR. M. Murray، <em>Feedback Systems: An Introduction for Scientists and Engineers</em>، Princeton University Press، 2008: الفصل 8، دوال التحويل، والاستجابة الترددية، ومخطّطات بودي؛ والفصل 10، التحكّم PID، للقسم 9. <a href="http://www.cds.caltech.edu/~murray/books/AM08/pdf/am08-complete_22Feb09.pdf">النسخة الإلكترونية المجانية للمؤلّفين</a>.</li>
+                            <li>Grundpraktikum Physik، Universität des Saarlandes، <a href="https://www.uni-saarland.de/fileadmin/upload/fakultaet-nt/gp-physik/Anleitungen_GP-III/Pohlsches_Rad.pdf"><em>Pohlsches Rad, nichtlineare Schwingungen und Chaos</em></a>، 2022 (بالألمانية): عجلة بول، ومحرّكها، ومكبحها بالتيارات الدوّامية الذي يعمل بتيار ثابت (القسم 9).</li>
                             <li>R. P. Feynman، R. B. Leighton وM. Sands، <em>The Feynman Lectures on Physics</em>، المجلّد I، النسخة الإلكترونية: <a href="https://www.feynmanlectures.caltech.edu/I_23.html">الفصل 23، Resonance</a> (طريقة الأعداد المركّبة في القسم 3.1)، و<a href="https://www.feynmanlectures.caltech.edu/I_24.html">الفصل 24، Transients</a> (متوسّط القدرة في القسم 7، والحركة الحرّة المتلاشية في القسم 3.2).</li>
                         </ol>
                     </section>
@@ -625,7 +625,7 @@
         ds.var('ph_now', [], 'float', { symbol: 'Ωt', units: 'rad', long_name: 'drive phase shown now (a stored sample)', computed_in: 'the clock', formula: 'Ωt<sub>n</sub>, n = n<sub>now</sub>', digits: 5 });
         ds.var('Pin_now', [], 'float', { symbol: 'P<sub>in</sub>', units: 'W', long_name: 'driver power now (a stored sample)', computed_in: 'the clock', formula: 'P<sub>in, n</sub>, n = n<sub>now</sub>', digits: 5 });
         ds.var('xmax', [], 'float', { symbol: 'max |x|', units: 'm', long_name: 'largest displacement in the run', computed_in: 'solve()', digits: 5 });
-        ds.var('need', [], 'float', { symbol: 'need', units: 'm', long_name: 'half-range this run needs on screen: its largest |x| or the static stretch F<sub>0</sub>/k, whichever is larger', computed_in: 'solve()', formula: 'max(max |x<sub>n</sub>|, F<sub>0</sub>/k)', digits: 5 });
+        ds.var('need', [], 'float', { symbol: 'need', units: 'm', long_name: 'half-range this run needs on screen: its largest |x|, the static stretch F<sub>0</sub>/k, and with the controller on the target |r|', computed_in: 'solve()', formula: 'max(max |x<sub>n</sub>|, F<sub>0</sub>/k, |r| if on)', digits: 5 });
         ds.var('span', [], 'float', { symbol: 'span', units: 'm', long_name: 'half-range the screen shows. It is kept from run to run, so runs compare by the size of the swing; it widens when a run needs more and is set to this run’s need by Fit scale', computed_in: 'setSpan()', formula: 'span ← max(span, need) after Solve; span ← need after Fit scale', digits: 5 });
         ds.var('held', [], 'bool', { symbol: 'held', long_name: 'the screen keeps the wider scale of an earlier run (span > need)', computed_in: 'setSpan()' });
         ds.var('has_prev', [], 'bool', { symbol: 'previous', long_name: 'a previous run exists and is drawn for comparison', computed_in: 'solve()' });
@@ -796,7 +796,7 @@
             ds.set('omega0', w0); ds.set('k', p.k); ds.set('c', p.c); ds.set('Omega', p.W); ds.set('tau', 1 / (zeta.value * w0)); ds.set('Q', 1 / (2 * zeta.value));
             ds.set('X', st.X); ds.set('phi', st.phi); ds.set('fr', zeta.value < Math.SQRT1_2 ? f0.value * Math.sqrt(1 - 2 * zeta.value * zeta.value) : 0);
             ds.set('h', H); ds.set('steps', TEND / H); ds.set('err_max', err); ds.set('Xm', xm); ds.set('xmax', xmax);
-            ds.set('BL', BL); ds.set('I0', p.F0 / BL); ds.set('xst', p.F0 / p.k); ds.set('Wscale', wsc); ds.set('Ploss_max', pmax); ds.set('uscale', usc); ds.set('need', Math.max(xmax, p.F0 / p.k, Math.abs(p.r))); ds.set('ratio', had && ds.get('xmax_prev') > 0 ? xmax / ds.get('xmax_prev') : NaN);
+            ds.set('BL', BL); ds.set('I0', p.F0 / BL); ds.set('xst', p.F0 / p.k); ds.set('Wscale', wsc); ds.set('Ploss_max', pmax); ds.set('uscale', usc); ds.set('need', Math.max(xmax, p.F0 / p.k, on ? Math.abs(p.r) : 0)); ds.set('ratio', had && ds.get('xmax_prev') > 0 ? xmax / ds.get('xmax_prev') : NaN);
             var before = had ? ds.get('span') : NaN;
             setSpan(had ? Math.max(before, ds.get('need')) : ds.get('need'), before, false);
             ds.set('G_drive', 1 / (M * Math.sqrt(Math.pow(w0 * w0 - p.W * p.W, 2) + Math.pow(2 * zeta.value * w0 * p.W, 2))));
@@ -991,10 +991,11 @@
             c.strokeStyle = T.ink; c.lineWidth = 1.6; c.beginPath(); c.moveTo(cap - C.rod, y); c.lineTo(cap, y);
             c.moveTo(cap, y - C.rt); c.lineTo(cap, y + C.rt); c.moveTo(cap, y - C.rt); c.lineTo(cap + C.tube, y - C.rt); c.moveTo(cap, y + C.rt); c.lineTo(cap + C.tube, y + C.rt); c.stroke();
             c.fillStyle = T.tanInk; c.fillRect(xw, y - C.rt - C.wh, C.cw, C.wh); c.fillRect(xw, y + C.rt, C.cw, C.wh);
-            // the current: out of the screen (dot) above the pole and into it (cross) below when I > 0, the other way round when I < 0
+            // the current: the field points away from the N pole, up above it and down below it; for I > 0 the current goes into the
+            // screen (cross) above the pole and out of it (dot) below, so that I dl × B points to the right on both, the other way round for I < 0
             var al = I0 > 0 ? Math.min(1, Math.abs(I) / I0) : 0, rr = Math.max(1.6, C.wh * 0.3);
             c.strokeStyle = 'rgba(255, 250, 243, ' + (0.25 + 0.75 * al).toFixed(3) + ')'; c.fillStyle = c.strokeStyle; c.lineWidth = 1;
-            [[y - C.rt - C.wh / 2, I >= 0], [y + C.rt + C.wh / 2, I < 0]].forEach(function (mk) {
+            [[y - C.rt - C.wh / 2, I < 0], [y + C.rt + C.wh / 2, I >= 0]].forEach(function (mk) {
                 var cx = xw + C.cw / 2, cy = mk[0];
                 c.beginPath(); c.arc(cx, cy, rr, 0, Math.PI * 2); c.stroke();
                 if (mk[1]) { c.beginPath(); c.arc(cx, cy, 0.8, 0, Math.PI * 2); c.fill(); }
@@ -1019,12 +1020,22 @@
                 label(c, f[0], ' = ' + Sim.fmt(f[1], 2) + ' N', lx, y + 4, 'right', f[3]);
             });
         }
+        function ctrlHead(g) {
+            // on narrow screens the header is one word, so the box leaves room for the energy bars
+            if (!ds.get('ctrl_on')) return _t('controller off');
+            return g.narrow ? _t('controller') : _t('controller reads x = {x} m', { x: Sim.fmt(ds.get('x_now'), 3) });
+        }
+        function ctrlWidth(g) {
+            // the controller box: wide enough for its header in every language, never more than 60 % of the canvas
+            var on = ds.get('ctrl_on'), head = ctrlHead(g);
+            ctx.font = T.mono; return Math.min(Math.max(g.narrow ? 136 : 190, ctx.measureText(head).width + 14), 0.6 * g.w);
+        }
         function drawController(c, g) {
             // the controller reads x, adds its three parts and sets the coil's current; P is a spring it adds, D a damper, I its memory
-            var bw = g.narrow ? 136 : 190, x0 = g.w - bw - 10, y0 = 8, rh = 13, on = ds.get('ctrl_on'), half = g.narrow ? 22 : 40, cx = x0 + 28 + half, C = g.coil;
+            var bw = ctrlWidth(g), x0 = g.w - bw - 10, y0 = 8, rh = 13, on = ds.get('ctrl_on'), half = g.narrow ? 22 : 40, cx = x0 + 28 + half, C = g.coil;
             c.fillStyle = 'rgba(255, 250, 243, 0.9)'; c.strokeStyle = T.rule; c.lineWidth = 1; c.fillRect(x0, y0, bw, on ? 5 * rh + 8 : rh + 8); c.strokeRect(x0, y0, bw, on ? 5 * rh + 8 : rh + 8);
             c.font = T.mono; c.fillStyle = T.muted; c.textAlign = 'left'; c.textBaseline = 'alphabetic';
-            c.fillText(on ? _t('controller reads x = {x} m', { x: Sim.fmt(ds.get('x_now'), 3) }) : _t('controller off'), x0 + 6, y0 + 13);
+            c.fillText(ctrlHead(g), x0 + 6, y0 + 13);
             if (!on) return;
             [['P', ds.get('uP_now'), T.ink2], ['I', ds.get('uI_now'), T.ink3], ['D', ds.get('uD_now'), T.tanInk], ['u', ds.get('u_now'), BURG]].forEach(function (q, k) {
                 var y = y0 + 13 + (k + 1) * rh, len = q[1] / ds.get('uscale') * half;
@@ -1278,13 +1289,13 @@
             return g.inWin(t) ? { x: g.wx(t), y: g.wy(x), where: 'the window chart' } : { x: g.ox(t), y: g.oy(x), where: 'the strip of the whole run' };
         }
         function roseInk(c) { return c[3] > 25 && c[0] > 180 && c[1] < 190 && c[0] - c[1] > 25; }
-        function ctrlBar(row, value) { var g = geom(), bw = g.narrow ? 136 : 190, x0 = g.w - bw - 10, half = g.narrow ? 22 : 40, cx = x0 + 28 + half, len = value / ds.get('uscale') * half; return { x: cx + len - Math.sign(len) * 1.5, y: 8 + 13 + (row + 1) * 13 - 4, len: len }; }
+        function ctrlBar(row, value) { var g = geom(), bw = ctrlWidth(g), x0 = g.w - bw - 10, half = g.narrow ? 22 : 40, cx = x0 + 28 + half, len = value / ds.get('uscale') * half; return { x: cx + len - Math.sign(len) * 1.5, y: 8 + 13 + (row + 1) * 13 - 4, len: len }; }
         function tanInk(c) { return c[3] > 25 && c[0] > 90 && c[1] > 45 && c[2] < 70 && c[1] - c[2] > 25; }
         function arrowPoint(row, len) { var g = geom(); return { x: ds.get('block_px') + len / 2, y: ds.get('block_y') - g.m.bh / 2 - 11 - row * (g.narrow ? 13 : 15) }; }
         function barPoint(row, value) { var g = geom(), bw = Math.min(120, 0.2 * g.m.W0), len = Math.max(0, value / ds.get('Wscale')) * bw; return { x: g.m.wallX + 6 + len - 1.5, y: 22 + row * 16 + 4, len: len }; }
         function arrowBack(row, len, name, test, colour) {
-            var pt = arrowPoint(row, len);
-            if (Math.abs(len) < 2) return { what: _t('the ') + _t(name) + _t(' arrow'), drawn: _t('no arrow'), expected: _t('no arrow: shorter than 2 px'), ok: true, note: _t('Arrows shorter than 2 px are not drawn; a dot marks where they start.') };
+            var pt = arrowPoint(row, len), title = { 'drive-force': _t('the drive-force arrow'), 'damper-force': _t('the damper-force arrow'), 'spring-force': _t('the spring-force arrow') }[name];
+            if (Math.abs(len) < 2) return { what: title, drawn: _t('no arrow'), expected: _t('no arrow: shorter than 2 px'), ok: true, note: _t('Arrows shorter than 2 px are not drawn; a dot marks where they start.') };
             return readBack(box, 'half-way along the ' + name + ' arrow', pt, 1, test, 'the ' + colour + ' arrow', 'The arrow starts at the block centre and is F · px/N long, to the right for a positive force.');
         }
         function blockPixel() {
@@ -1415,7 +1426,7 @@
                 x_now: at('xs'), v_now: at('vs'), F_now: at('Fs'), I_now: at('Is'), u_now: at('us'), uP_now: at('uP'), uI_now: at('uI'), uD_now: at('uD'), Fc_now: at('Fdamp'), Fk_now: at('Fspr'), ph_now: at('ph'), E_now: at('Es'), Pin_now: at('Pin'), Wc_now: at('Wc'), Qc_now: at('Qc'), Ploss_now: at('Ploss'),
                 Ploss_max: function () { var P = ds.get('Ploss'), e = 0; for (var n = 0; n < NS; n++) e = Math.max(e, P[n]); return { formula: 'max over n of P<sub>loss, n</sub>, from the stored array', inputs: [['samples', NS, '', 0]], value: e }; },
                 xmax: function () { var xs = ds.get('xs'), e = 1e-9; for (var n = 0; n < NS; n++) e = Math.max(e, Math.abs(xs[n])); return { formula: 'max |x<sub>n</sub>| over the run, from the stored array', inputs: [['samples', NS, '', 0]], value: e }; },
-                need: function () { return { formula: 'max(max |x<sub>n</sub>|, F<sub>0</sub>/k)', inputs: [['max |x|', ds.get('xmax'), 'm', 6], ['F<sub>0</sub>/k', ds.get('xst'), 'm', 6]], value: Math.max(ds.get('xmax'), ds.get('xst')) }; },
+                need: function () { var on = ds.get('ctrl_on'); return { formula: 'max(max |x<sub>n</sub>|, F<sub>0</sub>/k, |r| if the controller is on)', inputs: [['max |x|', ds.get('xmax'), 'm', 6], ['F<sub>0</sub>/k', ds.get('xst'), 'm', 6], ['|r|', on ? Math.abs(ds.get('r')) : 0, 'm', 2]], value: Math.max(ds.get('xmax'), ds.get('xst'), on ? Math.abs(ds.get('r')) : 0) }; },
                 span: function () { var b = ds.get('span_before'), nd = ds.get('need'); return { formula: 'need after Fit scale or the first solve; max(span<sub>before</sub>, need) after Solve', inputs: [['span<sub>before</sub>', b, 'm', 6], ['need', nd, 'm', 6], ['fitted', ds.get('fitted') ? 1 : 0, '', 0]], value: ds.get('fitted') || !isFinite(b) ? nd : Math.max(b, nd) }; },
                 ylim: function () { return { formula: '1.1 · span', inputs: [['span', ds.get('span'), 'm', 6]], value: 1.1 * ds.get('span') }; },
                 px_per_m: function () { return { formula: 'A<sub>px</sub> / span', inputs: [['A<sub>px</sub>', ds.get('amp_px'), 'css px', 2], ['span', ds.get('span'), 'm', 6]], value: ds.get('amp_px') / ds.get('span') }; },

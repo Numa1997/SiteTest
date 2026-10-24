@@ -186,7 +186,7 @@ A round is what the page says it is, in `Sim.data.round` ([datalog.js:25-27](../
 | 6 | one repeat of the pattern, at most 20 s | `t` | sampled | no | [L961](../../public/simulations/wave-interference.html#L961) |
 | 7 | one full figure (or part of it) in phasor time | `t` | sampled | yes, in the final-shape view | [L1463](../../public/simulations/phasor-sums.html#L1463) |
 | 8 | one loop of the circles | `t` | sampled | yes, until a shape is decomposed | [L1399](../../public/simulations/draw-decompose.html#L1399) |
-| 9 | one drive period $1/f$ of the stored run | `t_play` | sampled | yes, near the end of the run | [L1476](../../public/simulations/driven-oscillator.html#L1476) |
+| 9 | one drive period $1/f$ of the stored run | `t_play` | sampled | yes, near the end of the run | [L1487](../../public/simulations/driven-oscillator.html#L1487) |
 | 10 | one rotor turn of the stored run | `t_play` | sampled | yes, near the end of the run | [L1154](../../public/simulations/wind-turbine.html#L1154) |
 | Portfolios 03, ideal press | one run, $t = 0$ to its end; Record plays it from $t = 0$ | `tView` | sampled | yes, while the run plays | `Sim.data` in [hydraulic.html](../../portfolios-src/hydraulics/hydraulic.html) |
 | Portfolios 03, servo press | one press cycle, $t = 0$ to its end | `tView` | sampled | yes, before the first cycle arrives and while it plays | `Sim.data` in [hydraulic_control.html](../../portfolios-src/hydraulics/hydraulic_control.html) |
@@ -343,7 +343,7 @@ The ten blocks: [Fig. 1 L798](../../public/simulations/Circular%20Wave%20Interfe
 [Fig. 6 L868](../../public/simulations/wave-interference.html#L868),
 [Fig. 7 L1370](../../public/simulations/phasor-sums.html#L1370),
 [Fig. 8 L1301](../../public/simulations/draw-decompose.html#L1301),
-[Fig. 9 L1291](../../public/simulations/driven-oscillator.html#L1291),
+[Fig. 9 L1302](../../public/simulations/driven-oscillator.html#L1302),
 [Fig. 10 L1054](../../public/simulations/wind-turbine.html#L1054).
 
 ## Public interface

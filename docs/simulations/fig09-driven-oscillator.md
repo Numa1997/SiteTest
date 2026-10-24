@@ -2,7 +2,7 @@
 
 | | |
 |---|---|
-| Page | [public/simulations/driven-oscillator.html](../../public/simulations/driven-oscillator.html) (1 113 lines, 183 130 bytes) |
+| Page | [public/simulations/driven-oscillator.html](../../public/simulations/driven-oscillator.html) (1505 lines, 257571 bytes) |
 | Walkthrough | [public/scripts/walk/driven.js](../../public/scripts/walk/driven.js) (14 steps, key `driven`) |
 | Thumbnail | [public/images/sims/driven-oscillator.webp](../../public/images/sims/driven-oscillator.webp) (WebP, 800 × 500 px, 23.7 kB) |
 | Catalog entry | [public/scripts/catalog.js#L183](../../public/scripts/catalog.js#L183-L199) (`id: 'driven-oscillator'`, `fig: 9`, `field: 'control'`, `stage: 1`, lines 183–199) |
@@ -144,8 +144,8 @@ readouts, sets `playT = 0` and starts the clock ([L804–L807](../../public/simu
 
 ### When the run is solved again
 
-Only twice: once at load ([L1485](../../public/simulations/driven-oscillator.html#L1485)) and whenever **Solve** is pressed
-([L1218](../../public/simulations/driven-oscillator.html#L1218)). A slider only calls `markStale()`
+Only twice: once at load ([L1496](../../public/simulations/driven-oscillator.html#L1496)) and whenever **Solve** is pressed
+([L1229](../../public/simulations/driven-oscillator.html#L1229)). A slider only calls `markStale()`
 ([L669–L672](../../public/simulations/driven-oscillator.html#L669-L672),
 [L833–L838](../../public/simulations/driven-oscillator.html#L833-L838)), which compares the four sliders with `solved`, sets
 the `stale` flag and rewrites the status line in burgundy; the old run keeps playing, and its settings are named in the
@@ -157,11 +157,11 @@ status text ([L839–L849](../../public/simulations/driven-oscillator.html#L839-
 `requestAnimationFrame`, with $\Delta t$ capped at 0.05 s and $\Delta t = 0$ while paused. Each tick:
 
 1. returns if nothing has been solved; updates the smoothed frame rate; advances `playT += speed · Δt`; at 60 s clamps and
-   pauses; stores `fps` and `playing`; marks step "3 play" ([L1208–L1216](../../public/simulations/driven-oscillator.html#L1208-L1216));
-2. `frame()` ([L1196–L1207](../../public/simulations/driven-oscillator.html#L1196-L1207)) picks the nearest stored row,
+   pauses; stores `fps` and `playing`; marks step "3 play" ([L1219–L1227](../../public/simulations/driven-oscillator.html#L1219-L1227));
+2. `frame()` ([L1207–L1218](../../public/simulations/driven-oscillator.html#L1207-L1218)) picks the nearest stored row,
    $n = \operatorname{round}(t_\text{play}/10\,\text{ms})$ clamped to 0 … 6 000, writes `i_now`, `t_play` and the six
    `*_now` copies of row $n$ into the store, moves the **Stored run** slider and the caption time, then calls `draw()`;
-3. `draw()` ([L1114–L1131](../../public/simulations/driven-oscillator.html#L1114-L1131)) sets the window width
+3. `draw()` ([L1125–L1142](../../public/simulations/driven-oscillator.html#L1125-L1142)) sets the window width
    $T_w = \text{clamp}(4/f, 6, 20)$ s and its left edge $t_0 = \text{clamp}(t_n - 0.7T_w, 0, 60 - T_w)$, gets the layout
    from `geom()`, turns $x_n$ into the block position `bx = eqX + xs[i] * sc` and $F_n$ into the arrow length, stores these
    pixel values, clears the canvas and draws `drawMechanism`, `drawWindow` and `drawOverview` in that order.
@@ -173,13 +173,13 @@ states; one `frame()` took about 1.5 ms (measured over 200 seek events at a 1 44
 ### Precomputation and caching
 
 - The Bode canvas is not redrawn per frame: only after a solve ([L830](../../public/simulations/driven-oscillator.html#L830)),
-  on resize ([L1487](../../public/simulations/driven-oscillator.html#L1487)) and when fonts are ready
-  ([L1488](../../public/simulations/driven-oscillator.html#L1488)).
+  on resize ([L1498](../../public/simulations/driven-oscillator.html#L1498)) and when fonts are ready
+  ([L1499](../../public/simulations/driven-oscillator.html#L1499)).
 - `geom()` ([L865–L892](../../public/simulations/driven-oscillator.html#L865-L892)) is recomputed on every call; it reads
   `xmax`, `win_t0`, `win_T` and `ylim` from the store, so `draw()` must store the window before calling it
-  ([L1117–L1118](../../public/simulations/driven-oscillator.html#L1117-L1118)).
+  ([L1128–L1129](../../public/simulations/driven-oscillator.html#L1128-L1129)).
 - For the data panel's Check of $W_\text{in}$ and $W_\text{loss}$, `fullReplay()` reruns the whole 60 s once and caches the
-  result under a key made of the four settings ([L1253–L1259](../../public/simulations/driven-oscillator.html#L1253-L1259)).
+  result under a key made of the four settings ([L1264–L1270](../../public/simulations/driven-oscillator.html#L1264-L1270)).
 
 ## Function map
 
@@ -189,14 +189,14 @@ states; one `frame()` took about 1.5 ms (measured over 200 seek events at a 1 44
 | `exact(t, w0, z, W, st)` | [688–691](../../public/simulations/driven-oscillator.html#L688-L691) | Exact $x(t)$ from rest, equation (5); used only to measure the RK4 error. |
 | `control()` | [694–697](../../public/simulations/driven-oscillator.html#L694-L697) | The controller force $u = K_p(r-x) + K_i z - K_d v$, equation (12). |
 | `closed()` | [698–702](../../public/simulations/driven-oscillator.html#L698-L702) | Closed-loop steady amplitude and phase, (16). |
-| `equilibrium()` | [703–715](../../public/simulations/driven-oscillator.html#L703-L715) | Equilibrium (14). |
-| `matmul()` | [704–715](../../public/simulations/driven-oscillator.html#L704-L715) | Matrix product (for `expm`). |
+| `equilibrium()` | [703](../../public/simulations/driven-oscillator.html#L703) | Equilibrium (14). |
+| `matmul()` | [704](../../public/simulations/driven-oscillator.html#L704) | Matrix product (for `expm`). |
 | `expm()` | [705–715](../../public/simulations/driven-oscillator.html#L705-L715) | Matrix exponential by scaling and squaring. |
 | `exactClosed()` | [716–730](../../public/simulations/driven-oscillator.html#L716-L730) | Exact closed-loop solution sample by sample; grades RK4 when the controller is on. |
 | `accel(t, x, v, u, p)` | [733–735](../../public/simulations/driven-oscillator.html#L733-L735) | Right-hand side: $(F_0\cos\Omega t + u - cv - kx)/m$. |
 | `solve()` | [736–808](../../public/simulations/driven-oscillator.html#L736-L808) | Solve and store the whole run (see above). |
 | `setSpan()` | [810–814](../../public/simulations/driven-oscillator.html#L810-L814) | Sets the held drawing span, `ylim`, `held`. |
-| `fitScale()` | [815–831](../../public/simulations/driven-oscillator.html#L815-L831) | **Fit scale**: span ← need. |
+| `fitScale()` | [815](../../public/simulations/driven-oscillator.html#L815) | **Fit scale**: span ← need. |
 | `bode()` | [817–831](../../public/simulations/driven-oscillator.html#L817-L831) | Fills `fb`, `Gmag`, `Gphase` (241 points) and redraws the Bode plot. |
 | `markStale()` | [833–838](../../public/simulations/driven-oscillator.html#L833-L838) | Sets `stale` when a slider differs from the last solve. |
 | `status()` | [839–849](../../public/simulations/driven-oscillator.html#L839-L849) | Writes the status line and the "1 solve / 2 store" marks. |
@@ -206,46 +206,48 @@ states; one `frame()` took about 1.5 ms (measured over 200 seek events at a 1 44
 | `spring(c, …)` | [902–908](../../public/simulations/driven-oscillator.html#L902-L908) | Draws a zigzag spring. |
 | `label(c, sym, value, …)` | [909–919](../../public/simulations/driven-oscillator.html#L909-L919) | A symbol in Latin Modern via `Sim.tex`, then its value in IBM Plex Mono. |
 | `drawMechanism(c, g, i, bx, cap, gx)` | [920–977](../../public/simulations/driven-oscillator.html#L920-L977) | Wall, floor, rest line, spring, damper (oil shaded by $P_\text{loss}$), outlined previous block, block on wheels, then `drawCoil`, `drawForces`, `drawEnergy`, `drawController`; ruler, target dot, equilibrium line. |
-| `drawCoil()` | [978–1006](../../public/simulations/driven-oscillator.html#L978-L1006) | Magnet, coil tube and winding, current dots and crosses, current source and leads. |
-| `drawForces()` | [1007–1017](../../public/simulations/driven-oscillator.html#L1007-L1017) | The three force arrows over the block. |
-| `drawController()` | [1018–1036](../../public/simulations/driven-oscillator.html#L1018-L1036) | The controller box: value read, P, I, D, u bars, command line. |
-| `drawEnergy()` | [1037–1048](../../public/simulations/driven-oscillator.html#L1037-L1048) | The three energy bars. |
-| `drawWindow(c, g, i)` | [1049–1092](../../public/simulations/driven-oscillator.html#L1049-L1092) | Window chart: ticks, $\pm X$, $F/k$, $x$ faint ahead and dark behind, cursor, key. |
-| `drawOverview(c, g, i)` | [1093–1113](../../public/simulations/driven-oscillator.html#L1093-L1113) | Strip of the whole run with the window band shaded. |
-| `draw()` | [1114–1131](../../public/simulations/driven-oscillator.html#L1114-L1131) | One frame of the main canvas. |
-| `bodeGeom()` | [1133–1144](../../public/simulations/driven-oscillator.html#L1133-L1144) | Bode layout: two panels side by side (stacked below 560 px), log $f$ axis 0.05–2 Hz, three decades of $\lvert G\rvert$, 0–180°. |
-| `drawBode()` | [1145–1177](../../public/simulations/driven-oscillator.html#L1145-L1177) | Draws both panels, the $f_0$ line, the curves, the dot at the exact value and the ring at the measured one. |
-| `Sim.live()` | [1180–1194](../../public/simulations/driven-oscillator.html#L1180-L1194) | Formatted store values for the walkthrough's "Now" column. |
-| `frame()` | [1196–1207](../../public/simulations/driven-oscillator.html#L1196-L1207) | Picks the stored row for `playT`, copies it to the `*_now` scalars, draws. |
-| `chartPos(n)`, `chartPosQ(n)` | [1223–1226](../../public/simulations/driven-oscillator.html#L1223-L1226) | Screen point of $x_n$ (or $F_n/k$) on the window chart, else on the overview strip. |
-| `chartPosQ()` | [1227–1230](../../public/simulations/driven-oscillator.html#L1227-L1230) |  |
-| `loopParams()` | [1231–1252](../../public/simulations/driven-oscillator.html#L1231-L1252) | The eight settings of the last solve, for the checks. |
-| `fullReplay()` | [1254–1259](../../public/simulations/driven-oscillator.html#L1254-L1259) | Cached `rk4Replay(6000)`. |
-| `sliderCheck`, `at`, `neutralInk`, `readBack` | [1260–1266](../../public/simulations/driven-oscillator.html#L1260-L1266) | Small helpers for the data panel's Check (slider value, row on screen, dark-ink test, pixel read-back). |
-| `at()` | [1261–1266](../../public/simulations/driven-oscillator.html#L1261-L1266) |  |
-| `neutralInk()` | [1262–1266](../../public/simulations/driven-oscillator.html#L1262-L1266) |  |
-| `readBack()` | [1263–1266](../../public/simulations/driven-oscillator.html#L1263-L1266) |  |
-| `prevParams()` | [1267–1270](../../public/simulations/driven-oscillator.html#L1267-L1270) | Plant and loop of the previous run. |
-| `mutedInk()` | [1271–1275](../../public/simulations/driven-oscillator.html#L1271-L1275) | Pixel test: grey ink. |
-| `chartPosPrev()` | [1272–1275](../../public/simulations/driven-oscillator.html#L1272-L1275) | Where sample n of the previous run is drawn. |
-| `roseInk()` | [1276–1285](../../public/simulations/driven-oscillator.html#L1276-L1285) | Pixel test: rose. |
-| `ctrlBar()` | [1277–1285](../../public/simulations/driven-oscillator.html#L1277-L1285) | Where a controller bar ends. |
-| `tanInk()` | [1278–1285](../../public/simulations/driven-oscillator.html#L1278-L1285) | Pixel test: brown. |
-| `arrowPoint()` | [1279–1285](../../public/simulations/driven-oscillator.html#L1279-L1285) | Mid-point of a force arrow. |
-| `barPoint()` | [1280–1285](../../public/simulations/driven-oscillator.html#L1280-L1285) | End of an energy bar. |
-| `arrowBack()` | [1281–1285](../../public/simulations/driven-oscillator.html#L1281-L1285) | Read-back of a force arrow. |
-| `blockPixel()` | [1286–1290](../../public/simulations/driven-oscillator.html#L1286-L1290) | Reads back a pixel inside the burgundy block. |
-| `Sim.data` (object) | [1291–1483](../../public/simulations/driven-oscillator.html#L1291-L1483) | The data-panel contract: groups, colours, `probe`, `inspect`, `locate`, `check`, `drawn`, `round`, `about`. |
+| `drawCoil()` | [978–1007](../../public/simulations/driven-oscillator.html#L978-L1007) | Magnet, coil tube and winding, current dots and crosses, current source and leads. |
+| `drawForces()` | [1008–1018](../../public/simulations/driven-oscillator.html#L1008-L1018) | The three force arrows over the block. |
+| `drawController()` | [1029–1047](../../public/simulations/driven-oscillator.html#L1029-L1047) | The controller box: value read, P, I, D, u bars, command line. |
+| `drawEnergy()` | [1048–1059](../../public/simulations/driven-oscillator.html#L1048-L1059) | The three energy bars. |
+| `drawWindow(c, g, i)` | [1060–1103](../../public/simulations/driven-oscillator.html#L1060-L1103) | Window chart: ticks, $\pm X$, $F/k$, $x$ faint ahead and dark behind, cursor, key. |
+| `drawOverview(c, g, i)` | [1104–1124](../../public/simulations/driven-oscillator.html#L1104-L1124) | Strip of the whole run with the window band shaded. |
+| `draw()` | [1125–1142](../../public/simulations/driven-oscillator.html#L1125-L1142) | One frame of the main canvas. |
+| `bodeGeom()` | [1144–1155](../../public/simulations/driven-oscillator.html#L1144-L1155) | Bode layout: two panels side by side (stacked below 560 px), log $f$ axis 0.05–2 Hz, three decades of $\lvert G\rvert$, 0–180°. |
+| `drawBode()` | [1156–1188](../../public/simulations/driven-oscillator.html#L1156-L1188) | Draws both panels, the $f_0$ line, the curves, the dot at the exact value and the ring at the measured one. |
+| `Sim.live()` | [1191–1205](../../public/simulations/driven-oscillator.html#L1191-L1205) | Formatted store values for the walkthrough's "Now" column. |
+| `frame()` | [1207–1218](../../public/simulations/driven-oscillator.html#L1207-L1218) | Picks the stored row for `playT`, copies it to the `*_now` scalars, draws. |
+| `chartPos(n)`, `chartPosQ(n)` | [1234–1237](../../public/simulations/driven-oscillator.html#L1234-L1237) | Screen point of $x_n$ (or $F_n/k$) on the window chart, else on the overview strip. |
+| `chartPosQ()` | [1238–1241](../../public/simulations/driven-oscillator.html#L1238-L1241) |  |
+| `loopParams()` | [1242](../../public/simulations/driven-oscillator.html#L1242) | The eight settings of the last solve, for the checks. |
+| `fullReplay()` | [1265–1270](../../public/simulations/driven-oscillator.html#L1265-L1270) | Cached `rk4Replay(6000)`. |
+| `sliderCheck`, `at`, `neutralInk`, `readBack` | [1271](../../public/simulations/driven-oscillator.html#L1271) | Small helpers for the data panel's Check (slider value, row on screen, dark-ink test, pixel read-back). |
+| `at()` | [1272](../../public/simulations/driven-oscillator.html#L1272) |  |
+| `neutralInk()` | [1273](../../public/simulations/driven-oscillator.html#L1273) |  |
+| `readBack()` | [1274–1277](../../public/simulations/driven-oscillator.html#L1274-L1277) |  |
+| `prevParams()` | [1278–1281](../../public/simulations/driven-oscillator.html#L1278-L1281) | Plant and loop of the previous run. |
+| `mutedInk()` | [1282](../../public/simulations/driven-oscillator.html#L1282) | Pixel test: grey ink. |
+| `chartPosPrev()` | [1283–1286](../../public/simulations/driven-oscillator.html#L1283-L1286) | Where sample n of the previous run is drawn. |
+| `roseInk()` | [1287](../../public/simulations/driven-oscillator.html#L1287) | Pixel test: rose. |
+| `ctrlBar()` | [1288](../../public/simulations/driven-oscillator.html#L1288) | Where a controller bar ends. |
+| `tanInk()` | [1289](../../public/simulations/driven-oscillator.html#L1289) | Pixel test: brown. |
+| `arrowPoint()` | [1290](../../public/simulations/driven-oscillator.html#L1290) | Mid-point of a force arrow. |
+| `barPoint()` | [1291](../../public/simulations/driven-oscillator.html#L1291) | End of an energy bar. |
+| `arrowBack()` | [1292–1296](../../public/simulations/driven-oscillator.html#L1292-L1296) | Read-back of a force arrow. |
+| `blockPixel()` | [1297–1301](../../public/simulations/driven-oscillator.html#L1297-L1301) | Reads back a pixel inside the burgundy block. |
+| `Sim.data` (object) | [1302–1494](../../public/simulations/driven-oscillator.html#L1302-L1494) | The data-panel contract: groups, colours, `probe`, `inspect`, `locate`, `check`, `drawn`, `round`, `about`. |
+| `ctrlHead()` | [1019–1023](../../public/simulations/driven-oscillator.html#L1019-L1023) | Header of the controller box: one word on narrow screens. |
+| `ctrlWidth()` | [1024–1028](../../public/simulations/driven-oscillator.html#L1024-L1028) | Width of the controller box, measured from its header. |
 
 ## Controls
 
 | Control | Element id | Range / default | What it changes in the code |
 |---|---|---|---|
-| Solve | `solve` | button | Calls `solve()` ([L1218](../../public/simulations/driven-oscillator.html#L1218)). |
-| Pause / Play | `play` | button | Toggles the clock via `Sim.playButton` ([L1217](../../public/simulations/driven-oscillator.html#L1217), [sim.js:199](../../public/scripts/sim.js#L199)). |
-| From t = 0 | `restart` | button | `playT = 0` and play ([L1219](../../public/simulations/driven-oscillator.html#L1219)). |
-| Stored run | `seek` | 0–6000, step 1, default 0 ([L92](../../public/simulations/driven-oscillator.html#L92)) | Sets `playT = n · 10 ms` and draws ([L681](../../public/simulations/driven-oscillator.html#L681)); follows the playback ([L1204](../../public/simulations/driven-oscillator.html#L1204)). |
-| Playback speed | `speed` | 0.25–4, step 0.25, default 1 ([L96](../../public/simulations/driven-oscillator.html#L96)) | Multiplies $\Delta t$ ([L1211](../../public/simulations/driven-oscillator.html#L1211)). Does not mark the run stale. |
+| Solve | `solve` | button | Calls `solve()` ([L1229](../../public/simulations/driven-oscillator.html#L1229)). |
+| Pause / Play | `play` | button | Toggles the clock via `Sim.playButton` ([L1228](../../public/simulations/driven-oscillator.html#L1228), [sim.js:199](../../public/scripts/sim.js#L199)). |
+| From t = 0 | `restart` | button | `playT = 0` and play ([L1230](../../public/simulations/driven-oscillator.html#L1230)). |
+| Stored run | `seek` | 0–6000, step 1, default 0 ([L92](../../public/simulations/driven-oscillator.html#L92)) | Sets `playT = n · 10 ms` and draws ([L681](../../public/simulations/driven-oscillator.html#L681)); follows the playback ([L1215](../../public/simulations/driven-oscillator.html#L1215)). |
+| Playback speed | `speed` | 0.25–4, step 0.25, default 1 ([L96](../../public/simulations/driven-oscillator.html#L96)) | Multiplies $\Delta t$ ([L1222](../../public/simulations/driven-oscillator.html#L1222)). Does not mark the run stale. |
 | Natural frequency $f_0$ | `f0` | 0.2–1.5 Hz, step 0.01, default 0.5 ([L104](../../public/simulations/driven-oscillator.html#L104)) | $\omega_0$, $k$, $c$ at the next solve ([L738](../../public/simulations/driven-oscillator.html#L738)); marks stale. |
 | Damping ratio $\zeta$ | `zeta` | 0.01–0.9, step 0.01, default 0.05 ([L108](../../public/simulations/driven-oscillator.html#L108)) | $c$ at the next solve; marks stale. The maximum 0.9 keeps $\omega_d$ real in `exact()`. |
 | Force amplitude $F_0$ | `F0` | 0–5 N, step 0.1, default 1 ([L116](../../public/simulations/driven-oscillator.html#L116)) | `p.F0`; marks stale. At 0 the drive arrow is hidden and `Gm_drive` is NaN ([L799](../../public/simulations/driven-oscillator.html#L799)). |
@@ -267,7 +269,7 @@ The store is made at [L538](../../public/simulations/driven-oscillator.html#L538
 declared at [L539–L667](../../public/simulations/driven-oscillator.html#L539-L667) (counted in the live store). The shared
 store itself is described in [dataset.md](../scripts/dataset.md). Each variable carries `symbol`, `units`, `long_name`,
 `computed_in`, often `formula`, and `digits`. Listed by the panel groups of
-[L1294–L1304](../../public/simulations/driven-oscillator.html#L1294-L1304):
+[L1305–L1315](../../public/simulations/driven-oscillator.html#L1305-L1315):
 
 | Group | Variables | Written at |
 |---|---|---|
@@ -283,25 +285,25 @@ store itself is described in [dataset.md](../scripts/dataset.md). Each variable 
 
 The `*_now` scalars are copies of row `i_now`, so a recorded round has scalar columns to follow.
 `Sim.data.colour` shades the `xs` and `Fs` table cells with `Sim.colourMap`
-([L1305](../../public/simulations/driven-oscillator.html#L1305), defined in
+([L1316](../../public/simulations/driven-oscillator.html#L1316), defined in
 [datalog.js:71](../../public/scripts/datalog.js#L71)); this is presentation only.
 
-**One round** (`Sim.data.round`, [L1476–L1478](../../public/simulations/driven-oscillator.html#L1476-L1478)) is one drive
+**One round** (`Sim.data.round`, [L1487–L1489](../../public/simulations/driven-oscillator.html#L1487-L1489)) is one drive
 period, $1/f$ seconds of the stored run, timed by `t_play`. Its columns are `x_now`, `v_now`, `u_now`, `F_now`, `Fc_now`, `Fk_now`, `E_now`, `Pin_now`;
 the default point is the block. Recording is refused when fewer than $1/f$ seconds of the run remain ("press From t = 0").
 The panel samples every frame of the round, at most 600 samples ([datalog.js:744](../../public/scripts/datalog.js#L744)).
 
-**`Sim.live()`** ([L1180–L1194](../../public/simulations/driven-oscillator.html#L1180-L1194)) returns formatted strings read from
+**`Sim.live()`** ([L1191–L1205](../../public/simulations/driven-oscillator.html#L1191-L1205)) returns formatted strings read from
 the store, for the keys the walkthrough uses: `k`, `c`, `W`, `w0`, `h`, `steps`, `n`, `t`, `x`, `v`, `F`, `E`, `X`, `phi`,
 `err`, `Win`, `Wloss`, `bal`, `bx`, `sc`, `I0`, `I`, `BL`, `Fc`, `Fk`, `fN`, `span`, `Wc`, `Qc`, `u`, `r`, `Kp`, `Ki`, `Kd`, `z`, `xeq`. The walkthrough polls it every 200 ms
 ([sim.js:326](../../public/scripts/sim.js#L326)).
 
-**Check and read-back.** `Sim.data.check` ([L1341–L1428](../../public/simulations/driven-oscillator.html#L1341-L1428))
+**Check and read-back.** `Sim.data.check` ([L1352–L1439](../../public/simulations/driven-oscillator.html#L1352-L1439))
 recomputes every stored value from its stored inputs; for the ODE solution (`xs`, `vs`) and the run integrals (`Win`,
 `Wloss`) it reruns the same RK4 from $t = 0$ (`rk4Replay`, up to 60 000 steps). `Sim.data.drawn`
-([L1429–L1475](../../public/simulations/driven-oscillator.html#L1429-L1475)) reads pixels back: the burgundy block, the
+([L1440–L1486](../../public/simulations/driven-oscillator.html#L1440-L1486)) reads pixels back: the burgundy block, the
 three force arrows (or their absence below 2 px), the energy bars, the controller's $u$ bar, the target dot, the equilibrium line, the previous run's dotted curve, $x_n$ and $F_n/k$ on the charts, and the Bode curves and dots (plant dashed grey when the loop is on).
-`probe` ([L1306–L1315](../../public/simulations/driven-oscillator.html#L1306-L1315)) pins the block when the click is within
+`probe` ([L1317–L1326](../../public/simulations/driven-oscillator.html#L1317-L1326)) pins the block when the click is within
 40 px across and 34 px up or down of its centre, otherwise the nearest stored sample within 16 px (outside the window chart
 only every fifth sample is tried). How the panel uses these hooks is in [datalog.md](../scripts/datalog.md).
 
@@ -337,7 +339,7 @@ small inline style for the solve box (`.solve`, `.solve__steps`, `.solve__status
 - `section#walk` with `data-walk="driven"` ([L513](../../public/simulations/driven-oscillator.html#L513)), filled by
   `sim.js` from `walk/driven.js` ([sim.js:402–411](../../public/scripts/sim.js#L402-L411)); see [walk.md](../scripts/walk.md);
 - footer; then the scripts in load order: `fold.js`, `sim.js`, `dataset.js`, the page's inline script, `datalog.js`
-  ([L521–L1491](../../public/simulations/driven-oscillator.html#L521-L1491)). Folds are described in
+  ([L521–L1502](../../public/simulations/driven-oscillator.html#L521-L1502)). Folds are described in
   [fold.md](../scripts/fold.md), the shared helpers in [sim.md](../scripts/sim.md).
 
 The walkthrough's seven steps quote these page lines: step 1 [L738](../../public/simulations/driven-oscillator.html#L738);
@@ -349,21 +351,21 @@ step 2 [L733–L735](../../public/simulations/driven-oscillator.html#L733-L735);
 [L801](../../public/simulations/driven-oscillator.html#L801); step 6
 [L685–L686](../../public/simulations/driven-oscillator.html#L685-L686) and
 [L775](../../public/simulations/driven-oscillator.html#L775); step 7
-[L1211](../../public/simulations/driven-oscillator.html#L1211), [L1197](../../public/simulations/driven-oscillator.html#L1197),
-[L1119](../../public/simulations/driven-oscillator.html#L1119). All seven excerpts match the page text at present.
+[L1222](../../public/simulations/driven-oscillator.html#L1222), [L1208](../../public/simulations/driven-oscillator.html#L1208),
+[L1130](../../public/simulations/driven-oscillator.html#L1130). All seven excerpts match the page text at present.
 
 ## Where the drawing and the store differ
 
-The page states the differences in `Sim.data.about` ([L1480](../../public/simulations/driven-oscillator.html#L1480)), which
+The page states the differences in `Sim.data.about` ([L1491](../../public/simulations/driven-oscillator.html#L1491)), which
 the data panel prints. In detail:
 
 - **Nearest row, no interpolation.** `t_play` runs continuously, but the picture shows row
-  $\operatorname{round}(t_\text{play}/10\,\text{ms})$ ([L1197](../../public/simulations/driven-oscillator.html#L1197)). The
-  caption shows the row's time `ts[i]`, not `t_play` ([L1205](../../public/simulations/driven-oscillator.html#L1205)).
+  $\operatorname{round}(t_\text{play}/10\,\text{ms})$ ([L1208](../../public/simulations/driven-oscillator.html#L1208)). The
+  caption shows the row's time `ts[i]`, not `t_play` ([L1216](../../public/simulations/driven-oscillator.html#L1216)).
 - **Overview strip thinned.** The strip of the whole run draws every `stride`-th row,
-  `stride = max(1, floor(NS / (2 × strip width)))` ([L1095](../../public/simulations/driven-oscillator.html#L1095)): every 4th
+  `stride = max(1, floor(NS / (2 × strip width)))` ([L1106](../../public/simulations/driven-oscillator.html#L1106)): every 4th
   row at a 770 px canvas, every 10th at 356 px. The window chart draws every row between its edges
-  ([L1051](../../public/simulations/driven-oscillator.html#L1051)).
+  ([L1062](../../public/simulations/driven-oscillator.html#L1062)).
 - **Drawing scale is held between runs.** `span` (m) is the half-range the screen shows: it starts at the first run's
   `need = max(xmax, F0/k, |r|)`, grows only when a later run needs more, and **Fit scale** sets it to the present run
   (`setSpan()`). So `px_per_m = amp / span` is the same for consecutive runs unless one overflows, and a run with more
@@ -382,7 +384,7 @@ the data panel prints. In detail:
   drawn ([L960](../../public/simulations/driven-oscillator.html#L960)).
 - **Dial.** The arm points at the stored $\Omega t_n \bmod 2\pi$ ([L973](../../public/simulations/driven-oscillator.html#L973)).
 - **Bode plot.** The dot sits at the exact $|G(i\Omega)|$ and $\varphi$; the ring is the amplitude measured from the last
-  10 s of the stored run, per newton ([L1172–L1174](../../public/simulations/driven-oscillator.html#L1172-L1174)). With the
+  10 s of the stored run, per newton ([L1183–L1185](../../public/simulations/driven-oscillator.html#L1183-L1185)). With the
   defaults they differ by 0.03 % (0.48194 against 0.48209 m/N), the remains of the transient.
 - **Rounding.** Canvas labels and readouts round (for example $F$ to 2 decimals, $x$ to 3); the store keeps full doubles.
 
@@ -394,13 +396,13 @@ the data panel prints. In detail:
   hand and must change with them: the seek slider `max="6000"` ([L92](../../public/simulations/driven-oscillator.html#L92));
   the `formula` texts "n · 10 h", "t_n ≥ 50 s", "round(t_play / 10h)" ([L573](../../public/simulations/driven-oscillator.html#L573),
   [L600](../../public/simulations/driven-oscillator.html#L600), [L604](../../public/simulations/driven-oscillator.html#L604));
-  the group note "every 10 ms of the 60 s" ([L1299](../../public/simulations/driven-oscillator.html#L1299)); the check text
-  "at most 6000" ([L1410](../../public/simulations/driven-oscillator.html#L1410)); the 10 s tick step of the overview
-  ([L1111](../../public/simulations/driven-oscillator.html#L1111)); the walkthrough's "step / 10", "60 000 steps" and
+  the group note "every 10 ms of the 60 s" ([L1310](../../public/simulations/driven-oscillator.html#L1310)); the check text
+  "at most 6000" ([L1421](../../public/simulations/driven-oscillator.html#L1421)); the 10 s tick step of the overview
+  ([L1122](../../public/simulations/driven-oscillator.html#L1122)); the walkthrough's "step / 10", "60 000 steps" and
   "6 001 rows" ([driven.js:57–58](../../public/scripts/walk/driven.js#L57-L58)); the lecture note section 8
   ([L458–L460](../../public/simulations/driven-oscillator.html#L458-L460)) and `about`.
 - **The integrator exists twice.** `solve()` ([L757–L768](../../public/simulations/driven-oscillator.html#L757-L768)) and
-  `rk4Replay()` ([L1238–L1249](../../public/simulations/driven-oscillator.html#L1238-L1249)) must stay identical, line for line,
+  `rk4Replay()` ([L1249–L1260](../../public/simulations/driven-oscillator.html#L1249-L1260)) must stay identical, line for line,
   or the data panel's Check of `xs`, `vs`, `Win` and `Wloss` will no longer agree with the store.
 - **Walkthrough excerpts.** The seven excerpts listed under Page structure are quoted verbatim in `walk/driven.js`. If one
   of those page lines changes, change the excerpt in the same edit. Insert new code after a quoted line, never inside a
@@ -414,7 +416,7 @@ the data panel prints. In detail:
 - **Damping limit.** `exact()` divides by $\omega_d = \omega_0\sqrt{1-\zeta^2}$; the slider stops at 0.9. Allowing
   $\zeta \ge 1$ needs a different exact solution (section 10 says so, [L497](../../public/simulations/driven-oscillator.html#L497)).
 - **Frequency range.** The Bode axis covers 0.05–2 Hz ([L822](../../public/simulations/driven-oscillator.html#L822),
-  [L1141](../../public/simulations/driven-oscillator.html#L1141)); raising the $f_0$ or $f$ slider beyond 2 Hz would put the
+  [L1152](../../public/simulations/driven-oscillator.html#L1152)); raising the $f_0$ or $f$ slider beyond 2 Hz would put the
   marks outside it.
 - **Re-test** in a browser at a wide and a phone-width window: no console error; status line after load; readouts with the
   defaults ($X$ = 0.482 m, error about $5\times10^{-12}$ m, balance about $10^{-12}$); move a slider and see the stale
@@ -430,8 +432,8 @@ the data panel prints. In detail:
 5. Fixed on 2026-10-15: the unread frame counter and overwritten sw initializer were removed (commit [8982ed3](https://github.com/Numa1997/SiteTest/commit/8982ed35e78161ea7cdd82ae1794f44ccfe39f3c)).
 6. **Redraw while paused.** The clock calls the tick on every animation frame with $\Delta t = 0$ while paused
    ([sim.js:178–185](../../public/scripts/sim.js#L178-L185)), and the tick always calls `frame()`
-   ([L1215](../../public/simulations/driven-oscillator.html#L1215)), so a paused page still redraws about 60 times a second
-   (about 1.5 ms per frame measured) and rewrites `#cap-t` each time ([L1205](../../public/simulations/driven-oscillator.html#L1205)).
+   ([L1226](../../public/simulations/driven-oscillator.html#L1226)), so a paused page still redraws about 60 times a second
+   (about 1.5 ms per frame measured) and rewrites `#cap-t` each time ([L1216](../../public/simulations/driven-oscillator.html#L1216)).
 7. Fixed on 2026-10-15: the note gives the measured default solve time of 9.5–12.4 ms and states that timing depends on the machine (commit [74ef7d9](https://github.com/Numa1997/SiteTest/commit/74ef7d94571f467f31d2289be6c9668b6809a09f)).
 8. **AGENTS.md** said the load order dataset.js → page → datalog.js holds for "all eight figures"; this page (Fig. 9)
    follows it too. Corrected to "all ten figures" on 14 October 2026.
