@@ -73,8 +73,12 @@ rebuild there, copy the build folder here, then patch the stylesheet link. Build
 Data panel, a pipeline in three files. `scripts/dataset.js`: `Sim.dataset()` gives a page one named store (dims, typed-array variables,
 scalars, attrs; the shape of an xarray/NetCDF dataset) and the page writes every number into it at the line that computes it, every frame,
 overwriting the last frame; nothing is recomputed for display. `scripts/datalog.js` + `styles/data.css`: the panel, which only reads the
-store and does no work unless asked (no loop while closed, while open with Live off, or when nothing is pointed at). Variables: a ledger of
-every quantity at one caught instant (Catch now; Live repaints every frame, opt-in); arrays open as tables copied at one instant. Read values:
+store and does no work while closed (since 24 October 2026 a bookkeeper, skill `phyein-usul-bookkeeper`): a headline of the 3 to 7
+numbers the animation is about, live, with sparklines; one table in causal sections (symbol, meaning, value aligned on the decimal
+point, unit, Δ, how obtained, check), its words rewritten at most 4 times a second while the simulation plays, Live on by default;
+the books, each balance with its residual stored by the page and added again by the panel; arrays as rows that open in place into
+tables copied at one instant. A page declares this in `Sim.data.ledger` (Figs. 9 and 10, in `scripts/ledger/<page>.js`); without
+it the panel shows the page's `groups` in the same table. Read values:
 a switch in each figure's caption, off by default (a hover readout over the running figure proved disruptive and was removed); while on, a click
 or tap pins the object under it (rings up to 22 px around the point), a drag moves the pin, the page's own pointer actions are held back,
 the marker follows the object every frame and its values sit in a strip under the figure, rewritten 4 times a second. Check: stored

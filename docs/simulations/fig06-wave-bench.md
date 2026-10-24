@@ -244,13 +244,13 @@ with $f_1 \ne f_2$.
 retained at their stored 10⁻⁶ Hz precision, capped at 20 s ([:862-867](../../public/simulations/wave-interference.html#L862-L867)). For the Square
 wave preset it is 2.50 s (measured). The chart columns are `sum_A`, `peak`, `ratio`, `y_sum_400`, `y1_400`; the point followed
 is the sum at the middle sample, unless the reader pinned another. The panel samples every numeric scalar at most 600 times
-in the round ([datalog.js:744](../../public/scripts/datalog.js#L744), [datalog.js:773](../../public/scripts/datalog.js#L773)).
+in the round ([datalog.js:1052](../../public/scripts/datalog.js#L1052), [datalog.js:1081](../../public/scripts/datalog.js#L1081)).
 
 **The panel hooks.** `Sim.data` ([:868-965](../../public/simulations/wave-interference.html#L868-L965)) sets
 `kicker: 'Fig. 6 · data'`, `file: 'fig6-wave-bench'`, six groups (Waves, The sum, Time, Sampled curves, Spectrum, Drawing),
 the checks, the read-backs and the `about` paragraph. The contract is at
-[datalog.js:8-30](../../public/scripts/datalog.js#L8-L30). Read values works on the plot only: datalog.js attaches it to the
-element `#stage` ([datalog.js:542](../../public/scripts/datalog.js#L542)), which is the plot; the spectrum's stems are checked
+[datalog.js:9-49](../../public/scripts/datalog.js#L9-L49). Read values works on the plot only: datalog.js attaches it to the
+element `#stage` ([datalog.js:849](../../public/scripts/datalog.js#L849)), which is the plot; the spectrum's stems are checked
 from the table, with the `y_line` read-back.
 
 **`Sim.live()`** ([:797-821](../../public/simulations/wave-interference.html#L797-L821)) reads only the store and returns, for
@@ -268,7 +268,7 @@ same sample is identical to `yAt`.
 **Read-back with no waves.** With an empty bench nothing is drawn in the top panel but its grid and the faint zero line, and
 `py_sum` holds the height of that line (`mid1`). The read-back then returns `ok: null` with "no sum curve: the bench has no
 waves" ([:948](../../public/simulations/wave-interference.html#L948)), and the panel shows the neutral verdict "Not in the picture at the moment, so there is nothing to
-read back." ([datalog.js:529](../../public/scripts/datalog.js#L529)). Before, it read the pixel on the zero line, drawn in
+read back." ([datalog.js:836](../../public/scripts/datalog.js#L836)). Before, it read the pixel on the zero line, drawn in
 rgba(90, 80, 75, 0.45) ([:640](../../public/simulations/wave-interference.html#L640)); that pixel is dark enough for the luminance test, so the check passed on a line that
 is not the sum curve.
 

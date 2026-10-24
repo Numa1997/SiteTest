@@ -9,7 +9,7 @@ are byte-identical on the live site, <https://phyeinusul.com>).
 | [`sim.css`](../public/styles/sim.css) | 229 | the ten simulation pages | Tokens again, the figure, controls, readouts, walkthrough; imports KaTeX's CSS and `paper.css`. |
 | [`paper.css`](../public/styles/paper.css) | 118 | simulation pages (through `sim.css`), catalog, Portfolios | Lecture notes set like LaTeX: Latin Modern, numbered equations, figures, boxes. |
 | [`catalog.css`](../public/styles/catalog.css) | 572 | catalog, Portfolios | Top bar, masthead, search bar, chips, catalog entries; switches titles to Instrument Serif. |
-| [`data.css`](../public/styles/data.css) | 358 | the ten simulation pages | The data panel and the Read values strip ([scripts/datalog.md](scripts/datalog.md)). |
+| [`data.css`](../public/styles/data.css) | 455 | the ten simulation pages | The data panel (a bookkeeper's ledger) and the Read values strip ([scripts/datalog.md](scripts/datalog.md)). |
 | [`fold.css`](../public/styles/fold.css) | 168 | every page | Fold cards, header bands, toggles, Expand / Collapse all ([scripts/fold.md](scripts/fold.md)). |
 | [`portfolio.css`](../public/styles/portfolio.css) | 292 | Portfolios | The project cards. |
 
@@ -125,13 +125,13 @@ CSS custom properties, all on `:root` unless noted.
 | `--fold-top` | `0px`, then set by fold.js | [fold.css:12](../public/styles/fold.css#L12), [fold.js:297](../public/scripts/fold.js#L297) | Height of a sticky full-width page bar; headers pin below it. |
 | `--fold-open`, `--fold-close`, `--fold-ease` | `320ms`, `240ms`, `cubic-bezier(0.4,0,0.2,1)` | set by [fold.js:21–23](../public/scripts/fold.js#L21-L23) | One clock for fold, chevron and scroll. |
 | `--head-h` | a section header's height, set per section | [fold.js:204–206](../public/scripts/fold.js#L204-L206) | Where level-2 headers pin. |
-| `--dp-w` | `520px`; `560px` from 1500 px | [data.css:6–7](../public/styles/data.css#L6-L7) | Data panel width. |
+| `--dp-w` | `600px`; `640px` from 1500 px | [data.css:7–8](../public/styles/data.css#L7-L8) | Data panel width. |
 | `--p`, `--c` | `50%`, `var(--accent)` on each range input | [sim.css:88](../public/styles/sim.css#L88); `--p` set by [sim.js:159](../public/scripts/sim.js#L159) | Slider fill up to the thumb. |
 | `--ar`, `--ar-m` | per figure, inline `style` | e.g. [water-wave.html:44](../public/simulations/water-wave.html#L44) | Figure aspect ratio, wide and at 900 px or less. |
 | `--d` | `(i mod 5) × 80 ms` per `.reveal` | [index.html:1220](../index.html#L1220) | Fade-in delay on the home page. |
 
 Five formerly undefined tokens were replaced with their unchanged fallback colours: `--on-accent` (`#fff`, in catalog.css and
-data.css), `--tag-soft` (`#f0eae0`, data.css), `--tan-line` (`#e3cfa3`, [data.css:218](../public/styles/data.css#L218)),
+data.css), `--tag-soft` (`#f0eae0`, data.css), `--tan-line` (`#e3cfa3`, [data.css:294](../public/styles/data.css#L294)),
 `--bar-bg` ([catalog.css:114](../public/styles/catalog.css#L114)) and `--accent-glow`
 ([catalog.css:155](../public/styles/catalog.css#L155)).
 
@@ -277,34 +277,39 @@ is removed.
 ## `data.css` · the data panel
 
 **Loaded by** the ten simulation pages, line 12 of each, after `sim.css`. It uses the tokens of `sim.css`, `--tex` from
-`paper.css`, and literal colours formerly supplied by three undefined-token fallbacks ([data.css:4](../public/styles/data.css#L4)). What the panel does
-is in [scripts/datalog.md](scripts/datalog.md).
+`paper.css`, and literal colours formerly supplied by three undefined-token fallbacks ([data.css:5](../public/styles/data.css#L5)). What the panel does
+is in [scripts/datalog.md](scripts/datalog.md). Since 24 October 2026 it styles the panel as a bookkeeper: a headline of live
+numbers, a toolbar, one table in causal sections and the books. On Arabic pages `data.rtl.css` (made by `rtlcss`) mirrors it,
+except the alignment of numbers, which is marked `/*rtl:ignore*/` so the decimal points still line up.
 
 | Purpose | Selectors | Lines |
 |---|---|---|
-| Width | `--dp-w` | [6–7](../public/styles/data.css#L6-L7) |
-| The "Data" tab | `.dp-tab` (fixed to the right edge, vertical text) | [10–21](../public/styles/data.css#L10-L21) |
-| The panel | `.dp` (fixed, slides in from the right; `.dp-open` on the page shows it), `.dp__head`, `.dp__title`, `.dp__state` (pulsing dot while live or recording), `.dp__icon` | [24–52](../public/styles/data.css#L24-L52) |
-| Recorder | `.dp-rec`, `.dp-rec__go` (pill; square stop mark while recording), progress bar `.dp-rec__bar` | [55–76](../public/styles/data.css#L55-L76) |
-| Tabs and panes | `.dp__tabs`, `.dp__count`, `.dp__body`, `.dp__pane` | [79–88](../public/styles/data.css#L79-L88) |
-| Buttons | `.dp-btn`, `.dp-back`, `.dp-chk`, `.dp-live` (switch) | [91–107](../public/styles/data.css#L91-L107) |
-| Variables | `.dp-instant`, `.dp-probe`, `.dp-sec` (numbered sections), `.dp-item` (symbol, dotted leader, value, unit, type badge `.dp-type--int/bool/str/array`), `.dp-thumb` | [110–159](../public/styles/data.css#L110-L159) |
-| Array view | `.dp-arr` (stats, snapshot), `.dg` grid with sticky row and column headers, `.dg__c.is-hot` | [162–192](../public/styles/data.css#L162-L192) |
-| Check view | `.dp-check` (stored value, formula with inputs, pixel), `.dp-check__verdict.is-ok/.is-bad/.is-na` (match, mismatch, nothing drawn to read back) | [195–221](../public/styles/data.css#L195-L221) |
-| Rounds | `.dp-empty`, `.dp-rd` (chips, charts `.dp-ch`, still values, table `.dp-rd__tbl`) | [224–264](../public/styles/data.css#L224-L264) |
-| Read values | `canvas.dp-overlay` (marker layer, no pointer events), `.dp-reading` (crosshair, no text selection), `.dp-readbtn` (the caption switch), `.dp-read` (the strip under the figure) | [267–292](../public/styles/data.css#L267-L292) |
-| Explanation | `.dp-about` (`details` at the foot) | [295–302](../public/styles/data.css#L295-L302) |
+| Width | `--dp-w` | [7–8](../public/styles/data.css#L7-L8) |
+| The "Data" tab | `.dp-tab` (fixed to the right edge, vertical text) | [10–22](../public/styles/data.css#L10-L22) |
+| The panel | `.dp` (fixed, slides in from the right; `.dp-open` on the page shows it; `container: dp`, so the table can fold by the panel's own width), `.dp__head`, `.dp__title`, `.dp__state` (pulsing dot while live or recording), `.dp__icon` | [24–54](../public/styles/data.css#L24-L54) |
+| Headline | `.dp-hl` (grid of cards `.dp-hl__i`: symbol, word, value in Plex Mono, sparkline canvas `.dp-hl__sp`), `.dp-bk` (the books' summary: `is-ok`, `is-bad`, `is-na`) | [56–75](../public/styles/data.css#L56-L75) |
+| Toolbar | `.dp-rec` (toolbar, round description and progress), `.dp-tools`, `.dp-tool` (`--rec` solid burgundy; `aria-pressed` for Read values), `.dp-rec__bar` | [77–97](../public/styles/data.css#L77-L97) |
+| Tabs and panes | `.dp__tabs`, `.dp__count`, `.dp__body`, `.dp__pane` | [99–109](../public/styles/data.css#L99-L109) |
+| Buttons | `.dp-btn`, `.dp-back`, `.dp-chk` (and its check states `is-ok` tan, `is-bad` burgundy, `is-in`/`is-na` dashed), `.dp-live` (switch) | [111–131](../public/styles/data.css#L111-L131) |
+| Ledger | `.dp-instant`, `.dp-probe` (the pinned point, only while pinned), `.dp-tbl` (sticky header row; columns `.c-sym`, `.c-mean` with `.dp-f` formula, `.c-val` with `.vi`/`.vf` around the decimal point and `--frac` per section, `.c-unit`, `.c-d` (`is-up`, `is-dn`), `.c-how` with `.dp-how--set/formula/run`, `.c-chk`), row states `is-blink0/1` (one soft flash), `is-cause`, `is-effect`, `is-open`; sections `.dp-sec`, `.dp-sec__hd`, `is-folded`; array rows `.dp-r--arr` with `.dp-spk`, `.dp-cur`, `.dp-exp`; the opened array `.dp-x`, the detail row `.dp-dt` | [133–217](../public/styles/data.css#L133-L217) |
+| Books | `.dp-books`, `.dp-book` (rows with sign `.b-sg`, closing line `.b-total` under a rule), `.dp-book__res` (three residual figures), `.dp-book__v` verdict | [219–241](../public/styles/data.css#L219-L241) |
+| An opened array | `.dp-arr__stats`, `.dp-arr__snap`, `.dp-arr__probe`, `.dg` grid with sticky row and column headers, `.dg__c.is-hot` | [243–268](../public/styles/data.css#L243-L268) |
+| Check view | `.dp-check` (stored value, formula with inputs, pixel), `.dp-check__verdict.is-ok/.is-bad/.is-na` (match, mismatch, nothing drawn to read back) | [270–297](../public/styles/data.css#L270-L297) |
+| Rounds | `.dp-empty`, `.dp-rd` (chips, charts `.dp-ch`, still values, table `.dp-rd__tbl`) | [299–340](../public/styles/data.css#L299-L340) |
+| Read values | `canvas.dp-overlay` (marker layer, no pointer events), `.dp-reading` (crosshair, no text selection), `.dp-readbtn` (the caption switch), `.dp-read` (the strip under the figure) | [342–368](../public/styles/data.css#L342-L368) |
+| Explanation | `.dp-about` (`details` at the foot) | [370–378](../public/styles/data.css#L370-L378) |
 
 **Breakpoints.**
 
 | Width | What changes | Lines |
 |---|---|---|
-| ≥ 1500 px | Panel 560 px wide. | [7](../public/styles/data.css#L7) |
-| ≥ 1360 px | While open, the page gets right padding of the panel's width instead of being covered. | [306–308](../public/styles/data.css#L306-L308) |
-| ≤ 640 px | The panel becomes a bottom sheet 84 % of the screen high; the tab a pill at the bottom right that slides away (`.dp-tab--away`); tighter head, recorder, tabs, items and charts; the recorder's second sentence (`.dp-more-txt`) is hidden ([326](../public/styles/data.css#L326)). The reason a round cannot start, `.dp-rec__why`, has no rule of its own and so stays visible. The Read values strip gets tighter too. | [289–292](../public/styles/data.css#L289-L292), [310–349](../public/styles/data.css#L310-L349) |
-| reduced motion | No slide, no pulsing, no progress animation. | [350–354](../public/styles/data.css#L350-L354) |
+| ≥ 1500 px | Panel 640 px wide. | [8](../public/styles/data.css#L8) |
+| ≥ 1360 px | While open, the page gets right padding of the panel's width instead of being covered. | [382–384](../public/styles/data.css#L382-L384) |
+| ≤ 640 px | The panel becomes a bottom sheet 88 % of the screen high; the tab a pill at the bottom right that slides away (`.dp-tab--away`); the headline in three columns without words, smaller sparklines; Save as an icon; the round description hidden except while recording or while it holds the reason a round cannot start (`:has(.dp-rec__why)`); tighter tabs, charts and padding. The Read values strip gets tighter too. | [365–368](../public/styles/data.css#L365-L368), [386–433](../public/styles/data.css#L386-L433) |
+| panel < 540 px | A container query on the panel: the table keeps symbol, value, unit and Δ; meaning, how and check fold into a detail row opened by a tap; the books' table drops the meaning. Holds on a phone and in any narrow window. | [435–445](../public/styles/data.css#L435-L445) |
+| reduced motion | No slide, no pulsing, no progress animation, no row flash. | [446–451](../public/styles/data.css#L446-L451) |
 
-**Print** ([355–358](../public/styles/data.css#L355-L358)): panel and tab hidden, no padding for them.
+**Print** ([452–455](../public/styles/data.css#L452-L455)): panel and tab hidden, no padding for them.
 
 ## `fold.css` · fold-out sections
 
@@ -394,7 +399,7 @@ site <https://phyeinusul.com> `/src/main.ts` answers 404, on the AppDeploy copy 
    [catalog.css:5](../public/styles/catalog.css#L5) and [portfolio.css:5](../public/styles/portfolio.css#L5): every open fold card
    ([fold.css:25](../public/styles/fold.css#L25)), the simulation figure and panel ([sim.css:67](../public/styles/sim.css#L67),
    [77](../public/styles/sim.css#L77)), the walkthrough card
-   ([sim.css:149](../public/styles/sim.css#L149)), the data tab and panel ([data.css:16](../public/styles/data.css#L16),
+   ([sim.css:149](../public/styles/sim.css#L149)), the data tab and panel ([data.css:17](../public/styles/data.css#L17),
    [30](../public/styles/data.css#L30)). Measured on the Portfolios page and on Fig. 5.
 3. **`sim.css` repeats the tokens of `site.css`** ([sim.css:11–32](../public/styles/sim.css#L11-L32) against
    [site.css:7–30](../public/styles/site.css#L7-L30)); a colour change must be made in both.
@@ -413,5 +418,5 @@ site <https://phyeinusul.com> `/src/main.ts` answers 404, on the AppDeploy copy 
     [catalog.css:7](../public/styles/catalog.css#L7)); each of those faces appears twice in `document.fonts`. Both declarations
     point at the same files in `fonts/`.
 11. Fixed on 2026-10-15: the check view has a third verdict, `.dp-check__verdict.is-na`
-    ([data.css:220](../public/styles/data.css#L220)): muted ink on the soft card colour inside a dashed outline, for a read-back
+    ([data.css:302](../public/styles/data.css#L302)): muted ink on the soft card colour inside a dashed outline, for a read-back
     that finds nothing drawn at the moment. Before, such a case fell to the burgundy `.is-bad` (audit repair, commit [32c240c](https://github.com/Numa1997/SiteTest/commit/32c240c52fd0535d39a0cef608dc404cf4219484)).

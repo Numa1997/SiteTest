@@ -246,7 +246,7 @@ ticks every animation frame, the figure is redrawn at the display rate even whil
 | Wind | `prof` (buttons `steady`, `gust`, `step`, `turb`) | Turbulent (default, [L120](../../public/simulations/wind-turbine.html#L120), [L563](../../public/simulations/wind-turbine.html#L563)) | `prof` ([L987](../../public/simulations/wind-turbine.html#L987)), read by `wind()`; marks stale. |
 | Mean wind speed $v_0$ | `v0` | 4–11 m/s, step 0.1, default 8 ([L124](../../public/simulations/wind-turbine.html#L124)) | `c.v0`; marks stale. |
 | Turbulence σ / Gust size / Step size | `dv` | 0–4 m/s, step 0.1, default 1.5 ([L128](../../public/simulations/wind-turbine.html#L128)) | `c.dv`; label set by `controls()`; unused for steady wind; marks stale. |
-| Read values | added by datalog.js | switch, off | Appended to the first figure caption ([datalog.js:588–590](../../public/scripts/datalog.js#L588-L590)); see [datalog.md](../scripts/datalog.md). |
+| Read values | added by datalog.js | switch, off | Appended to the first figure caption ([datalog.js:895–897](../../public/scripts/datalog.js#L895-L897)); see [datalog.md](../scripts/datalog.md). |
 
 ## What the page writes into the data store
 
@@ -282,7 +282,7 @@ $\partial\tau_\text{aero}/\partial\omega = -2.480\times10^5$ N m s, $K_i = 1.44\
 rotor at the present speed, $60/n_\text{rot}$ seconds of the stored run (4.0 s at 15 rpm), timed by `t_play`. Columns:
 `v_now`, `rpm_now`, `P_now`, `lam_now`, `cp_now`, `th_now`; the default point is the rotor. Recording is refused when the run
 ends before one more turn. The panel samples every frame of the round, at most 600 samples
-([datalog.js:744](../../public/scripts/datalog.js#L744)).
+([datalog.js:1052](../../public/scripts/datalog.js#L1052)).
 
 **`Sim.live()`** ([L936–L945](../../public/simulations/wind-turbine.html#L936-L945)) returns formatted strings read from the
 store for the walkthrough keys `lam`, `cp`, `lopt`, `cpmax`, `Kopt`, `v`, `w`, `ta`, `tg`, `Pg`, `wref`, `Kp`, `Ki`, `dtd`,
@@ -301,11 +301,25 @@ It also reads the text on screen: `rpm_min`, `rpm_max` and `captured_pct` agains
 divided by `EVERY` = 2 ([L1136–L1137](../../public/simulations/wind-turbine.html#L1136-L1137)). While a control has changed and the run is not solved again, the status line asks for a
 new solve and shows neither number. `drawn.h` and `drawn.steps` then return `ok: null` by design, and the panel shows the
 neutral "Not in the picture at the moment, so there is nothing to read back." rather than a failure
-([datalog.js:529](../../public/scripts/datalog.js#L529)). `probe`
+([datalog.js:836](../../public/scripts/datalog.js#L836)). `probe`
 ([L1067–L1074](../../public/simulations/wind-turbine.html#L1067-L1074)) pins the rotor when the click falls inside the drawn
 disc ellipse, otherwise the nearest stored sample within 14 px on the three strips (every second row is tried). `locate`
 maps quantities that have no chart of their own to a strip that does (`STRIP_OF`: $\omega$, $\lambda$, $c_p$, $\theta$ to the
 rotor-speed strip, the torques to the power strip, [L991](../../public/simulations/wind-turbine.html#L991)).
+
+
+**The ledger** (24 October 2026). The data panel shows this store as a bookkeeper; its layout is
+[scripts/ledger/wind-turbine.js](../../public/scripts/ledger/wind-turbine.js), loaded on the line that loads the panel
+([L1168](../../public/simulations/wind-turbine.html#L1168)). Headline: $v$, $n_\text{rot}$, $\lambda$, $c_p$, $P_\text{gen}$, $E_\text{gen}$. Sections: what you set,
+the turbine, what follows from it, the state now, the stored run, over the whole run, the power curve, the solver and the
+drawing; the last three start folded. One book, the energy statement (7) of the note at every stored sample:
+$K(0) + E_\text{aero}(t) - E_\text{gen}(t) = K(t)$ with $K = \tfrac12 J\omega^2$; residual `ebal_now`, measured about
+$1.5\times10^{-13}$ of the flows. For it the page stores, each on a line that already existed: `Eas`, the wind's work so far at
+every stored sample, the solver's own integral $y_1$ (declared [L605](../../public/simulations/wind-turbine.html#L605), allocated [L701](../../public/simulations/wind-turbine.html#L701), written
+[L707](../../public/simulations/wind-turbine.html#L707)); `K0` ([L734](../../public/simulations/wind-turbine.html#L734)); and `Ea_now`, `Eg_now`, `K_now`, `ebal_now` with the other playback values
+([L952](../../public/simulations/wind-turbine.html#L952), declared [L619](../../public/simulations/wind-turbine.html#L619)). There is no force book: the step and gust winds make $\dot\omega$ jump, and a
+difference across a jump misses by half the jump. The ledger file adds checks of the 8 `*_now` numbers against their rows, and
+of `K_now`, `K0` and `ebal_now`; all answer "identical".
 
 ## Page structure
 
@@ -440,7 +454,7 @@ The page states this in `Sim.data.about` ([L1158](../../public/simulations/wind-
    subscript p clears the Betz line at y = 38.8; the title box now spans y = 14.4 to 36.1 ([L276](../../public/simulations/wind-turbine.html#L276)) (audit repair, commit [32c240c](https://github.com/Numa1997/SiteTest/commit/32c240c52fd0535d39a0cef608dc404cf4219484)).
 10. Fixed on 2026-10-15: while the run is stale, the Checks of `h` and `steps` show "not in the picture" instead of a burgundy ✕:
     `drawn.h` and `drawn.steps` return `ok: null` there by design ([L1136–L1137](../../public/simulations/wind-turbine.html#L1136-L1137)), and the panel now honours it
-    ([datalog.js:529](../../public/scripts/datalog.js#L529)) (audit repair, commit [32c240c](https://github.com/Numa1997/SiteTest/commit/32c240c52fd0535d39a0cef608dc404cf4219484)).
+    ([datalog.js:836](../../public/scripts/datalog.js#L836)) (audit repair, commit [32c240c](https://github.com/Numa1997/SiteTest/commit/32c240c52fd0535d39a0cef608dc404cf4219484)).
 
 Batch D store additions in `solve()`: `h` (s), `steps` (count), `rpm_min` and `rpm_max` (turns per minute), and `captured_pct` (%). They appear in the Energy group, have recomputation checks and DOM readbacks. The step readback infers h from the visible sampling interval and EVERY = 2. The speed range is the sampled run range, independent of the wider chart bounds. `readouts()` no longer computes these results.
 

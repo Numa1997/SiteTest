@@ -231,11 +231,11 @@ written only when a control changes; the panel groups them as "Physical paramete
 **One round** (`Sim.data.round`, [:878-879](../../public/simulations/water-wave.html#L878-L879)): one period, length
 `ds.get('T')` seconds of the time variable `t`, labelled "one period, T = … s". The chart column is `omegaT`, and the point
 followed is the burgundy surface parcel, `{ q: follow }`. The panel samples every numeric scalar at most 600 times in the
-round ([datalog.js:744](../../public/scripts/datalog.js#L744), [datalog.js:773](../../public/scripts/datalog.js#L773)).
+round ([datalog.js:1052](../../public/scripts/datalog.js#L1052), [datalog.js:1081](../../public/scripts/datalog.js#L1081)).
 
 **The panel hooks.** `Sim.data` ([:810-882](../../public/simulations/water-wave.html#L810-L882)) also sets `kicker: 'Fig. 5 ·
 data'` and `file: 'fig5-water-waves'` (the base name of the saved archive), the five groups, the `check` and `drawn` tests,
-and the `about` paragraph. The contract is at [datalog.js:8-30](../../public/scripts/datalog.js#L8-L30).
+and the `about` paragraph. The contract is at [datalog.js:9-49](../../public/scripts/datalog.js#L9-L49).
 
 **`Sim.live()`** ([:778-790](../../public/simulations/water-wave.html#L778-L790)) reads only the store and returns formatted
 strings for the walkthrough's "Now" column: `lam`, `k`, `km`, `f`, `c`, `T`, `cg`; for the followed surface parcel `X0`, `th`
@@ -264,7 +264,7 @@ stylesheets `../styles/sim.css` (which imports the self-hosted fonts, KaTeX's CS
   ([:44](../../public/simulations/water-wave.html#L44), [sim.css:215](../../public/styles/sim.css#L215)), the canvas `#water`, and
   the caption with the speed `#cap-c` ([:47-50](../../public/simulations/water-wave.html#L47-L50)). datalog.js adds the
   Read values switch to this caption and the reading strip under the figure
-  ([datalog.js:567-590](../../public/scripts/datalog.js#L567-L590)).
+  ([datalog.js:874-897](../../public/scripts/datalog.js#L874-L897)).
 - The control panel: Run, Wave and Water groups, readouts, legend ([:53-104](../../public/simulations/water-wave.html#L53-L104)).
 - The lecture note `<article class="paper" id="paper">` ([:107-553](../../public/simulations/water-wave.html#L107-L553)), "Deep-water
   waves: the sea moves in circles", with an abstract and a contents list. Ten sections, 23 numbered equations (1)–(23), four
