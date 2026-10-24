@@ -1,19 +1,20 @@
-400 rpm 30 %, N  33, R_L     8.02 ohm: load  48.802 mW (scan, 1000 steps:  48.801), paid  116.29 mW, friction  27.01 mW, swing 0.037 rad; formula: load  41.154 mW (+18.6 %), swing 0.034 rad
-400 rpm 60 %, N  51, R_L     7.06 ohm: load  10.431 mW (scan, 1000 steps:  10.429), paid   35.35 mW, friction  11.83 mW, swing 0.010 rad; formula: load   7.769 mW (+34.3 %), swing 0.009 rad
-400 rpm 90 %, N  51, R_L     3.91 ohm: load   4.399 mW (scan, 1000 steps:   4.399), paid   17.80 mW, friction   6.33 mW, swing 0.006 rad; formula: load   3.164 mW (+39.0 %), swing 0.005 rad
-200 rpm 30 %, N  51, R_L    13.62 ohm: load  23.040 mW (scan, 1000 steps:  23.039), paid   68.88 mW, friction  22.28 mW, swing 0.039 rad; formula: load  17.353 mW (+32.8 %), swing 0.034 rad
-200 rpm 60 %, N  51, R_L     4.94 ohm: load   6.532 mW (scan, 1000 steps:   6.533), paid   23.34 mW, friction   7.79 mW, swing 0.014 rad; formula: load   4.667 mW (+40.0 %), swing 0.013 rad
-200 rpm 90 %, N  51, R_L     3.32 ohm: load   3.150 mW (scan, 1000 steps:   3.150), paid   13.30 mW, friction   4.71 mW, swing 0.008 rad; formula: load   2.303 mW (+36.7 %), swing 0.008 rad
-100 rpm 30 %, N  51, R_L     9.24 ohm: load  14.868 mW (scan, 1000 steps:  14.871), paid   45.12 mW, friction  14.26 mW, swing 0.050 rad; formula: load  10.958 mW (+35.7 %), swing 0.047 rad
-100 rpm 60 %, N  51, R_L     4.35 ohm: load   4.759 mW (scan, 1000 steps:   4.759), paid   17.83 mW, friction   6.05 mW, swing 0.021 rad; formula: load   3.803 mW (+25.1 %), swing 0.022 rad
-100 rpm 90 %, N  51, R_L     3.11 ohm: load   2.367 mW (scan, 1000 steps:   2.367), paid   10.59 mW, friction   3.88 mW, swing 0.014 rad; formula: load   2.002 mW (+18.3 %), swing 0.015 rad
- 20 rpm 30 %, N  51, R_L     7.41 ohm: load   9.034 mW (scan, 1000 steps:   9.033), paid   29.43 mW, friction   9.70 mW, swing 0.177 rad; formula: load   8.286 mW (+9.0 %), swing 0.191 rad
- 20 rpm 60 %, N  51, R_L     3.99 ohm: load   3.433 mW (scan, 1000 steps:   3.433), paid   13.93 mW, friction   5.00 mW, swing 0.089 rad; formula: load   3.281 mW (+4.6 %), swing 0.101 rad
- 20 rpm 90 %, N  51, R_L     2.97 ohm: load   1.840 mW (scan, 1000 steps:   1.840), paid    8.89 mW, friction   3.43 mW, swing 0.061 rad; formula: load   1.801 mW (+2.1 %), swing 0.071 rad
- 14 rpm 30 %, N  51, R_L     7.31 ohm: load   8.672 mW (scan, 1000 steps:   8.672), paid   28.43 mW, friction   9.41 mW, swing 0.250 rad; formula: load   8.131 mW (+6.7 %), swing 0.268 rad
- 14 rpm 60 %, N  51, R_L     3.97 ohm: load   3.355 mW (scan, 1000 steps:   3.355), paid   13.69 mW, friction   4.94 mW, swing 0.127 rad; formula: load   3.247 mW (+3.3 %), swing 0.143 rad
- 14 rpm 90 %, N  51, R_L     2.96 ohm: load   1.808 mW (scan, 1000 steps:   1.808), paid    8.78 mW, friction   3.40 mW, swing 0.086 rad; formula: load   1.788 mW (+1.1 %), swing 0.100 rad
-  8 rpm 30 %, N  51, R_L     7.21 ohm: load   8.338 mW (scan, 1000 steps:   8.338), paid   27.28 mW, friction   8.99 mW, swing 0.446 rad; formula: load   7.981 mW (+4.5 %), swing 0.463 rad
-  8 rpm 60 %, N  51, R_L     3.94 ohm: load   3.295 mW (scan, 1000 steps:   3.295), paid   13.47 mW, friction   4.86 mW, swing 0.222 rad; formula: load   3.213 mW (+2.6 %), swing 0.249 rad
-  8 rpm 90 %, N  51, R_L     2.95 ohm: load   1.786 mW (scan, 1000 steps:   1.786), paid    8.69 mW, friction   3.37 mW, swing 0.151 rad; formula: load   1.774 mW (+0.7 %), swing 0.175 rad
-jam (static argument, friction torque N T0/eta > m g L): N = 190: jams, N = 246: jams, N = 492: jams
+6 m/s, N   492, c_e x 0.5 (best): load   88.433 mW (formula   83.415, +6.0 %), paid  237.141 mW, rotor  237.141 mW, friction  47.092 mW, swing 0.253 rad (formula 0.268); book -1.6e-10 J
+6 m/s, N   492, c_e x 1.0 (best): load  106.145 mW (formula  104.165, +1.9 %), paid  271.319 mW, rotor  271.319 mW, friction  39.071 mW, swing 0.221 rad (formula 0.220); book -3.1e-11 J
+6 m/s, N   492, c_e x 2.0 (best): load   78.894 mW (formula   78.156, +0.9 %), paid  227.838 mW, rotor  227.838 mW, friction  26.495 mW, swing 0.156 rad (formula 0.147); book -8.6e-12 J
+8 m/s, N   492, c_e x 0.5 (best): load   61.091 mW (formula   58.977, +3.6 %), paid  171.036 mW, rotor  171.036 mW, friction  35.539 mW, swing 0.142 rad (formula 0.152); book -7.3e-11 J
+8 m/s, N   492, c_e x 1.0 (best): load   75.455 mW (formula   73.957, +2.0 %), paid  203.312 mW, rotor  203.312 mW, friction  30.118 mW, swing 0.124 rad (formula 0.127); book -6.5e-12 J
+8 m/s, N   492, c_e x 2.0 (best): load   54.680 mW (formula   53.972, +1.3 %), paid  176.440 mW, rotor  176.440 mW, friction  20.780 mW, swing 0.088 rad (formula 0.087); book +1.5e-12 J
+8 m/s, N   3.7, c_e x 1.0 (ratio): load    0.013 mW (formula    0.013, +3.3 %), paid    0.440 mW, rotor    0.440 mW, friction   0.325 mW, swing 0.172 rad (formula 0.171); book -8.0e-12 J
+8 m/s, N    14, c_e x 1.0 (ratio): load    0.193 mW (formula    0.186, +3.5 %), paid    2.152 mW, rotor    2.152 mW, friction   1.228 mW, swing 0.173 rad (formula 0.171); book -8.0e-10 J
+8 m/s, N    33, c_e x 1.0 (ratio): load    1.075 mW (formula    1.034, +3.9 %), paid    6.709 mW, rotor    6.709 mW, friction   2.883 mW, swing 0.172 rad (formula 0.171); book -1.9e-09 J
+8 m/s, N    51, c_e x 1.0 (ratio): load    2.567 mW (formula    2.469, +4.0 %), paid   13.650 mW, rotor   13.650 mW, friction   4.424 mW, swing 0.170 rad (formula 0.171); book -3.0e-10 J
+8 m/s, N   111, c_e x 1.0 (ratio): load   11.953 mW (formula   11.560, +3.4 %), paid   47.336 mW, rotor   47.336 mW, friction   9.458 mW, swing 0.167 rad (formula 0.170); book -1.8e-10 J
+8 m/s, N   190, c_e x 1.0 (ratio): load   32.390 mW (formula   31.622, +2.4 %), paid  108.988 mW, rotor  108.988 mW, friction  15.519 mW, swing 0.160 rad (formula 0.165); book -2.3e-11 J
+8 m/s, N   246, c_e x 1.0 (ratio): load   45.795 mW (formula   45.097, +1.5 %), paid  159.528 mW, rotor  159.528 mW, friction  18.662 mW, swing 0.150 rad (formula 0.154); book +1.9e-12 J
+10 m/s, N   492, c_e x 0.5 (best): load   45.790 mW (formula   44.531, +2.8 %), paid  132.988 mW, rotor  132.988 mW, friction  28.607 mW, swing 0.091 rad (formula 0.098); book -4.1e-11 J
+10 m/s, N   492, c_e x 1.0 (best): load   57.217 mW (formula   56.060, +2.1 %), paid  161.886 mW, rotor  161.886 mW, friction  24.627 mW, swing 0.080 rad (formula 0.083); book +6.0e-13 J
+10 m/s, N   492, c_e x 2.0 (best): load   40.301 mW (formula   39.726, +1.4 %), paid  145.002 mW, rotor  145.002 mW, friction  17.308 mW, swing 0.057 rad (formula 0.058); book +5.0e-12 J
+FAIL Newton converged to 1e-12 within 12 iterations, or, in the 1939 of 240000 steps (8.1e-03) where it stopped at 12, its last correction was 1.6e-02 relative, below 1e-9; and such steps are fewer than 1 in 1000
+PASS the energy book closes over the 20 measured turns at every setting (|residual| < 1e-6 J)
+PASS at every wind the formula's brake is within the full equation's best of the three brakes tried, or within 5 % of it
+PASS the formula (7.6)-(7.7) is within 10 % of the full equation at the chosen settings
