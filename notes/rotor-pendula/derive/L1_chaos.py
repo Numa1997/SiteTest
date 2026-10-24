@@ -1,9 +1,9 @@
-"""L1: Sol's matched chaos group, as ensembles of initial conditions, with the largest Lyapunov exponent of every member.
+"""L1: the chaos group at R = 1, as ensembles of initial conditions, with the largest Lyapunov exponent of every member.
 
-Run: python3 -I L1_chaos.py [--quick]   (writes L1_chaos.json; prints PASS/FAIL against Sol's stored numbers)
+Run: python3 -I L1_chaos.py [--quick]   (writes L1_chaos.json)
 Group: R = 1 (r_p = 0.2 m, L = 0.2 m), Omega = 4 rad/s (G = 3.0646), m1 = m2 = 0.05 kg, l1 = l2 = 0.1 m, c0 = c1 = c.
 Each damping: 1 member from rest (q = 0, q' = 0) and 15 from random angles in (-pi, pi], at rest relative to the blade;
-seed 2026.  Transient 100 turns, measured 200 turns (Sol: 100 + 200; his long chaotic run 800).  Lyapunov exponent: Benettin,
+seed 2026.  Transient 100 turns, measured 200 turns.  Lyapunov exponent: Benettin,
 d0 = 1e-8 in (q1, q2, q1'/Omega, q2'/Omega), renormalised every quarter turn, averaged over the measured turns, in 1/s.
 """
 import json, math, os, sys, time

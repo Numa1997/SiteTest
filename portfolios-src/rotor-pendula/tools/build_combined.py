@@ -1,18 +1,18 @@
 #!/usr/bin/env python3
-"""Build hydraulics.html: the three pages in one file, one tab each.
+"""Build rotor_pendula.html: the lecture notes and the simulation page in one file, one tab each.
 
-The servo press, the ideal press and the theory page are embedded unchanged, each as a JSON string, and
+The two pages are embedded unchanged, each as a JSON string, and
 each runs in its own frame, so their styles, element ids and scripts cannot collide. A small script added
 to each page turns the links between the pages into tab switches and keeps in-page links (#...) working
 inside the frame.
 
-This folder, portfolios-src/hydraulics/ of the website repository, is the study's source; the page the site serves is
+This folder, portfolios-src/rotor-pendula/ of the website repository, is the study's source; the page the site serves is
 generated from it.
 
-Usage: python3 tools/build_combined.py --site       -> the website's copy, public/portfolios/hydraulics/index.html of the
+Usage: python3 tools/build_combined.py --site       -> the website's copy, public/portfolios/rotor-pendula/index.html of the
                                                        repository this folder sits in (see site_copy()); the usual command
        python3 tools/build_combined.py --site PATH  -> the same for a website checkout elsewhere
-       python3 tools/build_combined.py              -> hydraulics.html here, a complete standalone document (not committed)
+       python3 tools/build_combined.py              -> rotor_pendula.html here, a complete standalone document (not committed)
        python3 tools/build_combined.py --artifact out.html
                                                     -> the standalone page without doctype/html/head/body, for hosts
                                                        that add their own skeleton
@@ -24,9 +24,8 @@ import sys
 
 ROOT = pathlib.Path(__file__).resolve().parents[1]
 PAGES = [  # tab id, file, tab label, short label for phones
-    ('servo', 'hydraulic_control.html', 'Servo press', 'Servo'),
-    ('ideal', 'hydraulic.html', 'Ideal press', 'Ideal'),
-    ('theory', 'hydraulic_theory.html', 'Theory', 'Theory'),
+    ('notes', 'rotor_notes.html', 'Lecture notes', 'Notes'),
+    ('sim', 'rotor_sim.html', 'Simulation', 'Simulation'),
 ]
 FILE_TO_TAB = {f: t for t, f, _, _ in PAGES}
 
@@ -50,14 +49,14 @@ BRIDGE = '''<script>
       return;
     }
     var parts = h.split('#'), tab = FILES[parts[0]];
-    if (tab) { e.preventDefault(); parent.postMessage({ hydraulicsGoto: tab, frag: parts[1] || '' }, '*'); return; }
-    if (/^https?:/.test(h)) { a.target = '_blank'; a.rel = 'noopener'; }
+    if (tab) { e.preventDefault(); parent.postMessage({ rotorGoto: tab, frag: parts[1] || '' }, '*'); return; }
+    if (/^https?:/.test(h)) { a.target = '_blank'; a.rel = 'noopener'; } else { a.target = '_top'; }
   }, true);
   window.addEventListener('message', function (e) {
     var d = e.data;
-    if (d && typeof d.hydraulicsFrag === 'string') scrollToId(d.hydraulicsFrag);
+    if (d && typeof d.rotorFrag === 'string') scrollToId(d.rotorFrag);
   });
-  parent.postMessage({ hydraulicsReady: TAB }, '*');
+  parent.postMessage({ rotorReady: TAB }, '*');
 })();
 </script>
 '''
@@ -70,7 +69,7 @@ SHELL = r'''<!doctype html>
 <title>%(title)s</title>
 %(fonts)s
 <style>
-/* The three pages share one warm paper look and have no dark variant, so the shell commits to it too. */
+/* The two pages share one warm paper look and have no dark variant, so the shell commits to it too. */
 :root {
   --paper: #efe6d6; --panel: #f8f2e7; --ink: #2b2420; --muted: #6e6257; --line: #d8cab4;
   --oil: #7a1f2b; --oil-ink: #fff8f0; --focus: #2f5d7c;
@@ -123,7 +122,7 @@ main iframe.on { visibility: visible; }
 </head>
 <body>
 <header>
-%(back)s  <div class="brand"><b>Hydraulic Press Study</b><span>from Pascal to a servo loop</span></div>
+%(back)s  <div class="brand"><b>Rotor Pendula</b><span>pendula on a turning blade</span></div>
   <nav role="tablist" aria-label="Pages">
 %(buttons)s
   </nav>
@@ -164,19 +163,19 @@ main iframe.on { visibility: visible; }
       try { history.replaceState(null, '', '#' + tab); } catch (e) {}
     }
     if (frag) {
-      if (ready[tab]) f.contentWindow.postMessage({ hydraulicsFrag: frag }, '*');
+      if (ready[tab]) f.contentWindow.postMessage({ rotorFrag: frag }, '*');
       else f.dataset.frag = frag;
     }
   }
   window.addEventListener('message', function (e) {
     var d = e.data || {};
-    if (d.hydraulicsReady) {
-      var tab = d.hydraulicsReady, f = frames[tab];
+    if (d.rotorReady) {
+      var tab = d.rotorReady, f = frames[tab];
       ready[tab] = true;
       if (tab === current) document.getElementById('loading').hidden = true;
-      if (f && f.dataset.frag) { f.contentWindow.postMessage({ hydraulicsFrag: f.dataset.frag }, '*'); delete f.dataset.frag; }
+      if (f && f.dataset.frag) { f.contentWindow.postMessage({ rotorFrag: f.dataset.frag }, '*'); delete f.dataset.frag; }
     }
-    if (d.hydraulicsGoto) { show(d.hydraulicsGoto, d.frag); if (ready[current]) document.getElementById('loading').hidden = true; }
+    if (d.rotorGoto) { show(d.rotorGoto, d.frag); if (ready[current]) document.getElementById('loading').hidden = true; }
   });
   TABS.forEach(function (t, i) {
     var b = document.getElementById('tab-' + t);
@@ -213,7 +212,7 @@ GOOGLE_FONTS = '''<link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;600&family=Instrument+Serif&display=swap">'''
 
 
-def build(head='', title='Hydraulic Press Study', fonts=GOOGLE_FONTS, back=''):
+def build(head='', title='Rotor Pendula', fonts=GOOGLE_FONTS, back=''):
     buttons = '\n'.join(
         f'    <button role="tab" id="tab-{t}" aria-selected="false">'
         f'<span class="long">{label}</span><span class="short">{short}</span></button>'
@@ -233,11 +232,11 @@ def site_copy(site):
     """The copy for Phyein Usul, following the site's rules (its docs/build-and-deploy.md, "Security"):
 
     - the site's security policy and referrer rule right after the charset line, taken from its index.html, with the two
-      additions this study needs: 'unsafe-eval' in script-src (the servo page builds its Web Worker with new Function) and
+      additions this study needs: 'unsafe-eval' in script-src (the simulation page builds its Web Worker with new Function) and
       blob: in worker-src (that worker is started from a blob: URL);
     - the site's self-hosted fonts (../../fonts/instrument-plex.css) instead of Google Fonts;
     - the title suffix, the back link and the tab icon (from portfolios.html) the other pages use.
-    The embedded pages are unchanged. Writes public/portfolios/hydraulics/index.html and LICENSE-fonts.txt beside it.
+    The embedded pages are unchanged. Writes public/portfolios/rotor-pendula/index.html and LICENSE-fonts.txt beside it.
     """
     site = pathlib.Path(site)
     index = (site / 'index.html').read_text()
@@ -250,10 +249,10 @@ def site_copy(site):
             '<meta name="referrer" content="strict-origin-when-cross-origin">\n'
             f'<link rel="icon" href="{icon}">\n')
     assert (site / 'public/fonts/instrument-plex.css').exists(), 'the site has no public/fonts/instrument-plex.css'
-    out = build(head=head, title='Hydraulic Press Study · Numa Koudsie',
+    out = build(head=head, title='Rotor Pendula · Numa Koudsie',
                 fonts='<link rel="stylesheet" href="../../fonts/instrument-plex.css">',
                 back='  <a class="back" href="../../portfolios.html">← Numa Koudsie · Portfolios</a>\n')
-    folder = site / 'public/portfolios/hydraulics'
+    folder = site / 'public/portfolios/rotor-pendula'
     folder.mkdir(parents=True, exist_ok=True)
     (folder / 'index.html').write_text(out)
     (folder / 'LICENSE-fonts.txt').write_text((ROOT / 'fonts/LICENSE-fonts.txt').read_text())
@@ -263,11 +262,11 @@ def site_copy(site):
 if __name__ == '__main__':
     out = build()
     if len(sys.argv) in (2, 3) and sys.argv[1] == '--site':
-        # Without a path: the website repository this folder sits in (portfolios-src/hydraulics/ -> two levels up).
+        # Without a path: the website repository this folder sits in (portfolios-src/rotor-pendula/ -> two levels up).
         path, out = site_copy(sys.argv[2] if len(sys.argv) == 3 else ROOT.parents[1])
     elif len(sys.argv) == 3 and sys.argv[1] == '--artifact':
         out, path = strip_skeleton(out), pathlib.Path(sys.argv[2])
     else:
-        path = ROOT / 'hydraulics.html'
+        path = ROOT / 'rotor_pendula.html'
     path.write_text(out)
     print('wrote', path, f'{len(out.encode()) / 1e6:.2f} MB')

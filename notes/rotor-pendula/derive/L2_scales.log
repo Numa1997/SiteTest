@@ -1,0 +1,14 @@
+IEC class A (I_ref 0.16) at V = 8.0 m/s: sigma_1 = 1.856 m/s, I = 0.232; L_u = 340.2 m; integral time L_u/V = 42.5 s
+fraction of the Kaimal variance above 1/600 Hz: 0.790 (so an unscaled 10-min record has sigma = 1.649 m/s)
+PASS disk line picking pdf integrates to 1 (1.000000) and has mean 128R/(45 pi) = 57.041 m (57.041)
+   chi(0.0 Hz) = 0.7905 (Monte Carlo over random pairs: 0.7905)
+   chi(0.01 Hz) = 0.4473 (Monte Carlo over random pairs: 0.4473)
+   chi(0.05 Hz) = 0.0658 (Monte Carlo over random pairs: 0.0659)
+PASS chi(f) from the pair pdf = Monte Carlo over 2 million random point pairs within 3 standard errors (3 frequencies)
+200 records: hub-point sigma 1.822 +- 0.216 m/s (target 1.856); rotor-effective sigma 1.156 +- 0.229 m/s; record means exactly 8.000000..8.000000
+PASS hub-point record variance averages sigma_1^2 (ratio 0.9771, 200 records, within 3 %)
+rotor over the measured 10 min: mean Omega 0.9733 rad/s (9.29 rpm), sigma_Omega/Omega = 0.103 +- 0.019; range 7.19 .. 12.10 rpm
+eps = Omega_dot/Omega^2: rms 0.0054, max |eps| 0.0256
+time at rated speed (ideal pitch active): 0.17 %; below region 2 (9.0 rpm): 45.1 %
+ALL PASS
+exit 0
