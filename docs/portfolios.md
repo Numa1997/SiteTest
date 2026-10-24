@@ -209,6 +209,49 @@ Reading a value is a tool: "Read values" on, a click pins a point, and the value
 a small script turns links between the two pages into tab switches and opens other links outside the frame.
 The page carries the site's security policy with `'unsafe-eval'` in `script-src` and `blob:` in `worker-src` (the simulation's worker).
 
+**The data panel** (since 24 October 2026). The simulation tab carries the site's data panel: the Data tab on the right, Read values
+under the scene, Check, Record one round and Save. The page links the shared files (`styles/data.css`, `scripts/sim.js`,
+`scripts/dataset.js`, `scripts/datalog.js`) by their path from the source folder, `../../public/…`; `tools/build_combined.py --site`
+rewrites that to `../../…`, which the frame resolves against `portfolios/rotor-pendula/index.html` (an `iframe srcdoc` takes its
+parent's address). Opened on its own from `portfolios-src/rotor-pendula/`, the page finds the same files; in a build without them
+(`--artifact`) the store script returns at once and the page works without a panel. `rotor_sim.html` adds the panel's colour tokens
+in its own colours and lays the panel's marker canvas over the scene.
+
+- *Physics block.* Two additions, both checked: the rotor's work $W_\text{in}$ is integrated as the last state of every run,
+  with $\dot W_\text{in} = \Omega\,[(\mathbf r_p\times\mathbf F_p)_z + \tau_b]$ ($\mathbf F_p$ the force of the pivot on the bobs,
+  $\tau_b$ the brake's torque on the rod), and the record keeps, per frame, the rod rates, the bobs' kinetic and potential energy in
+  the ground frame (`bobEnergy()`), the motor's spin energy and the energies counted from the first recorded frame (`Win`, `Eh`,
+  `Epaid`, `Efric`), all in `Float64Array`. Because $d(T+V)/dt = \dot W_\text{in} - \tau_b\dot\theta$ exactly, the energy book
+  $W_\text{in} = \Delta E_\text{kin} + \Delta E_\text{pot} + E_\text{paid}$ closes to the integrator's error: measured residual
+  below $4\times10^{-12}$ J on runs where $W_\text{in}$ swings by 8 to 60 J (single, double and geared; jammed runs give 0). Over whole
+  turns $\langle\dot W_\text{in}\rangle$ equals the mean harvested power for the ideal brake and the power paid to the gearhead
+  with the generator, (3.3) without the small-swing step. Rerun, `node tools/check_sim.js` still passes and changes `data/sim_check.json` only in the
+  twelfth significant figure, `node tools/sim_solutions.js` no number on the page (the committed data files are the earlier runs).
+- *Store* (the script before the page script): 123 variables in eight groups. What you set (rotor speed, pivot, pendulum, generator,
+  brake, gear ratio, load); fixed constants; what follows ($\Omega$, $T$, $r_\text{tip}$, $r_p$, $R$, $G$, $\omega_n = \Omega\sqrt R$,
+  $I_p$, $\kappa^*$, $c$, $\kappa$, $P^*$, and the generator's $c_\text{sc}$, $c_e$, $R_L$, $j$, $\eta$, share kept, jammed); the state
+  now (the stored frame on screen, its energies and the book's residual $\varepsilon$); what the solve found (mean powers, swing,
+  trail, the bill (3.3), the lag, the rotor's mean power); the stored record (15 arrays over the frames `k` of the last four turns,
+  the very arrays the page draws); the solver; the drawing (swing magnification, scene geometry, plot axes, the 161-point curve of
+  the third plot). The page calls the hooks `D.solved`, `D.put`, `D.scene`, `D.plot`, `D.curve` and `D.frame` at the lines where it
+  computes or draws a number; the hooks store what they are given and compute nothing.
+- *Check* recomputes from stored values only: the derived constants by their formulas, the record by rerunning the same `simulate()`
+  in the page from the stored settings (cached), the power by $c\dot\theta^2$, the energies by `bobEnergy()` from the stored angles
+  and rates, the lag by the first-harmonic sum, the axis ends and bob positions from the stored series and scales. *Read back:* the
+  wine bob in the rotor view at the position computed from the stored $\varphi$, $\theta$, $r_p$, scale and magnification (alpha
+  first); the wine curves of the three plots; the playhead ring; the tiles' numbers. A curve point under a marker reports "not in the
+  picture now".
+- *Read values* pins a bob (either view), the pivot or the hub; *a round* is one turn of the record ($t$ = `t_now`), blocked when
+  fewer than one turn is left before the playback loops.
+
+Measured on 24 October 2026 in headless Chromium at 1600, 1100 and 390 px, on the single pendulum at 20 rpm, the double at 20 rpm and the
+geared generator at 8 rpm with ratio 33: no console errors; 84 scalars and 85 sampled array elements "identical" or within the
+panel's float64 tolerance, none differing; 27 read-backs match, one is legitimately hidden; a pointer sweep with Read off and on paints
+0 overlay pixels; the pinned strip rewrites 12 times in 3 s; with the panel closed `__dataPanel.running()` is false; Record and Save
+give a zip that `zipfile.testzip()` accepts and `numpy.load` reads (`q1`, `Win`, `Ek` of shape (961,), `kap` of (161,)), and the book
+recomputed from the saved arrays closes to $7.6\times10^{-12}$ J. With Live on, today's panel rewrites the ledger every frame (about
+50 times a second); that is the shared panel's behaviour, which the redesign of `datalog.js` addresses.
+
 **Checks** (from `portfolios-src/rotor-pendula/`): `python3 tools/check_numbers.py` (every number computed or explained),
 `python3 -I check_physics.py` (17 independent SymPy and SciPy checks with retyped constants), `node tools/check_sim.js` (the
 simulation's physics block reproduces the Python engine's 36 reference runs to 1.3e-8), `node tools/check_sim_browser.js` and, with `public/` served,

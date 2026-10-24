@@ -246,7 +246,14 @@ details.more p { font-size: 14px; }
   .seg button { min-height: 36px; }
 }
 @media (prefers-reduced-motion: reduce) { * { scroll-behavior: auto !important; } }
+/* the tokens the site's data panel (styles/data.css) reads, in this page's colours */
+:root { --accent: var(--wine); --accent-dark: var(--wine-deep); --accent-rose: #e2a2aa; --card: var(--paper); --card-soft: var(--panel);
+  --ink-2: #3f2c23; --ink-3: #5c4839; --rule-soft: #e8dcc6; --tan: #efe4c8; --tan-ink: #7a4b12; --shadow: 0 14px 40px rgba(60, 40, 20, .12);
+  --sans: var(--f-text); --mono: var(--f-mono); --serif: var(--f-display); --tex: KaTeX_Main, "Times New Roman", serif; }
+/* the panel's Read values marker layer lies over the scene, out of the flow (on the site's pages sim.css does this) */
+#stage > canvas.dp-overlay { position: absolute; inset: 0; width: 100%; height: 100%; }
 </style>
+<link rel="stylesheet" href="../../public/styles/data.css">
 </head>
 <body>
 <div class="wrap">
@@ -262,7 +269,7 @@ details.more p { font-size: 14px; }
   <div class="grid">
     <div class="col">
       <section class="box" aria-label="Scene">
-        <div id="stage"><canvas id="scene" aria-label="The rotor seen along its shaft, and the blade frame close up"></canvas></div>
+        <div id="stage" class="stage__canvas"><canvas id="scene" aria-label="The rotor seen along its shaft, and the blade frame close up"></canvas></div>
         <p class="stage__cap"><span>The rotor seen along its shaft (blade and pivot to scale, the rod not), and the rod seen from the blade.</span><span class="mag" id="magLbl">swing ×1</span></p>
       </section>
 
@@ -488,10 +495,15 @@ details.more p { font-size: 14px; }
 //            B q2'' + D cos(q1-q2) q1'' =  D sin(q1-q2)(Omega + q1')^2 - m2 l2 [Omega^2 r_p sin q2 + g cos(phi + q2)] - c (q2' - q1')
 //            A = (m1+m2) l1^2, B = m2 l2^2, D = m2 l1 l2, M = m1 + m2
 //   harvested energy E' = c q'^2 (single), c q1'^2 + c (q2' - q1')^2 (double), carried as an extra state.
+//   work of the rotor W' = Omega [ (r_p x F_p)_z + tau_b ], the last state: F_p is the force the pivot exerts on the pendulum,
+//   m (b'' + g y) summed over the bobs, and tau_b the device's torque on the rod (-c q'). With q'' from the equation of motion,
+//   single: W' = Omega { m r_p [ L (q'' cos q - (Omega + q')^2 sin q) + g cos phi ] - c q' }; so d(T + V)/dt = W' - E' exactly,
+//   and the page's energy book (work in = change of kinetic and potential energy + harvested) closes to the integrator's error.
 // Geared generator (notes ch. 7; L4_full.py version 3), single pendulum only, rotor angle tau = Omega t as the time:
 //   x = j theta'' + f0 tanh(theta'/eps_w) + kappa_e theta'     (torque needed to turn the motor side, unit m L^2 Omega^2)
 //   theta'' + R sin theta + G cos(tau + theta) + k x = 0,  k = eta^(-tanh(x theta'/eps_p))   (gear loss on every power flow)
-//   states theta, theta', E_load, E_paid, E_fric (unit m L^2 Omega^2); theta'' found by bisection, then Newton inside the bracket.
+//   states theta, theta', E_load, E_paid, E_fric, W (unit m L^2 Omega^2); theta'' found by bisection, then Newton inside the bracket;
+//   W' = R (theta'' cos theta - (1 + theta')^2 sin theta) + G R cos tau - k x, the rotor's work as above in these units.
 // Integrator: three-stage Radau IIA (order 5, L-stable), fixed step, finite-difference Jacobian, simplified Newton (engine.py).
 // ----------------------------------------------------------------------------------------------------------------------------
 const CONST = {
@@ -690,6 +702,7 @@ function rhsSingle(md) {
     o[0] = w;
     o[1] = (-m * L * (Om * Om * rp * Math.sin(q) + g * Math.cos(Om * t + q)) - c * w) / mL2;
     o[2] = c * w * w;
+    o[3] = Om * (m * rp * (L * (o[1] * Math.cos(q) - (Om + w) ** 2 * Math.sin(q)) + g * Math.cos(Om * t)) - c * w);
   };
 }
 function rhsDouble(md) {
@@ -705,6 +718,8 @@ function rhsDouble(md) {
     o[0] = w1; o[1] = w2;
     o[2] = (B * f1 - M12 * f2) / det; o[3] = (A * f2 - M12 * f1) / det;
     o[4] = c * w1 * w1 + c * (w2 - w1) ** 2;
+    o[5] = Om * (Mt * rp * l1 * (o[2] * Math.cos(q1) - (Om + w1) ** 2 * Math.sin(q1))
+      + m2 * rp * l2 * (o[3] * Math.cos(q2) - (Om + w2) ** 2 * Math.sin(q2)) + Mt * g * rp * Math.cos(ph) - tq0);
   };
 }
 function rhsGeared(md) {
@@ -730,12 +745,33 @@ function rhsGeared(md) {
     }
     const x = j * a + xr, kk = Math.exp(-lneta * Math.tanh(x * w / epsP));
     o[0] = w; o[1] = a; o[2] = ke * keep * w * w; o[3] = kk * x * w; o[4] = fr * w;
+    o[5] = R * (a * Math.cos(th) - (1 + w) ** 2 * Math.sin(th)) + G * R * Math.cos(t) - kk * x;
   };
+}
+
+/** Kinetic and potential energy of the bobs in the ground frame, J, for the model md at rotor angle ph, with rod angles q1, q2
+ *  (rad) and rates w1, w2 (rad/s) relative to the blade. Bob velocity = pivot velocity Omega r_p + rod velocity (Omega + q') l. */
+function bobEnergy(md, ph, q1, q2, w1, w2) {
+  const g = CONST.g, Om = md.Om, rp = md.rp;
+  if (md.double) {
+    const { m1, m2, l1, l2 } = CONST.double, a1 = ph + q1, a2 = ph + q2;
+    const v1 = rp * rp * Om * Om + l1 * l1 * (Om + w1) ** 2 + 2 * rp * l1 * Om * (Om + w1) * Math.cos(q1);
+    const v2 = v1 + l2 * l2 * (Om + w2) ** 2 + 2 * l2 * (Om + w2) * (rp * Om * Math.cos(q2) + l1 * (Om + w1) * Math.cos(q1 - q2));
+    const y1 = rp * Math.sin(ph) + l1 * Math.sin(a1), y2 = y1 + l2 * Math.sin(a2);
+    return [0.5 * (m1 * v1 + m2 * v2), g * (m1 * y1 + m2 * y2)];
+  }
+  const { m, L } = CONST.single;
+  return [0.5 * m * (rp * rp * Om * Om + L * L * (Om + w1) ** 2 + 2 * rp * L * Om * (Om + w1) * Math.cos(q1)),
+    m * g * (rp * Math.sin(ph) + L * Math.sin(ph + q1))];
 }
 
 /**
  * Settle, measure and record one setting. Returns the mean powers (W), the swing, the mean trail and a playback record of the
- * last recordTurns turns (rotor angle phi, rod angles, generator power), all as plain numbers and typed arrays.
+ * last recordTurns turns, all as plain numbers and Float64Arrays: rotor angle phi, rod angles q1, q2 (rad) and rates w1, w2
+ * (rad/s, relative to the blade), generator power p and power paid to the gearhead pPaid (W), and the energy book (J): kinetic
+ * and potential energy of the bobs in the ground frame Ek, Ep, the motor's spin energy Espin (geared), and, counted from the
+ * first recorded frame, the rotor's work Win, the harvested energy Eh, the energy paid to the gearhead Epaid and its friction
+ * share Efric (for the ideal brake Epaid = Eh and Efric = 0).
  */
 function simulate(Pin) {
   const t0 = Date.now();
@@ -746,39 +782,56 @@ function simulate(Pin) {
   const fpt = nst / every;
   if (Math.abs(fpt - Math.round(fpt)) > 1e-9) throw new Error('steps per turn must be a multiple of the frames per turn');
   const nFrames = Math.round(fpt) * recTurns + 1;
-  const rec = { phi: new Float64Array(nFrames), q1: new Float32Array(nFrames), q2: new Float32Array(nFrames),
-    p: new Float32Array(nFrames), pPaid: new Float32Array(nFrames), framesPerTurn: Math.round(fpt), turns: recTurns };
+  const REC = ['phi', 'q1', 'q2', 'w1', 'w2', 'p', 'pPaid', 'Ek', 'Ep', 'Espin', 'Win', 'Eh', 'Epaid', 'Efric'];
+  const rec = { framesPerTurn: Math.round(fpt), turns: recTurns, names: REC };
+  for (const k of REC) rec[k] = new Float64Array(nFrames);
   const out = { model: stripModel(md), steps: nst, settle, measure: meas, rec, jammed: false };
   // time variable: physical time for the ideal brake, rotor angle tau for the geared generator; one turn = T
   const T = geared ? 2 * Math.PI : md.turn, h = T / nst, phiOf = t => (geared ? t : md.Om * t);
   let d, nDyn, F;
-  if (geared) { d = 5; nDyn = 2; F = rhsGeared(md); }
-  else if (dbl) { d = 5; nDyn = 4; F = rhsDouble(md); }
-  else { d = 3; nDyn = 2; F = rhsSingle(md); }
+  if (geared) { d = 6; nDyn = 2; F = rhsGeared(md); }
+  else if (dbl) { d = 6; nDyn = 4; F = rhsDouble(md); }
+  else { d = 4; nDyn = 2; F = rhsSingle(md); }
+  const iE = geared ? 2 : dbl ? 4 : 2, iW = d - 1;  // harvested (load) energy and the rotor's work in the state vector
+  const u = geared ? md.unitPower / md.Om : 1;      // energy unit of the states: m L^2 Omega^2 (geared), J (ideal)
   const Y = new Float64Array(d), dY = new Float64Array(d);
   const powerNow = (t, y) => {                      // instantaneous generator power, W (load power for the geared generator)
     F(t, y, dY);
-    return geared ? [dY[2] * md.unitPower, dY[3] * md.unitPower] : [dY[d - 1], dY[d - 1]];
+    return geared ? [dY[2] * md.unitPower, dY[3] * md.unitPower] : [dY[iE], dY[iE]];
+  };
+  const mech = (ph, q1, q2, w1, w2) => bobEnergy(md, ph, q1, q2, w1, w2), Om = md.Om;
+  let base = null, fr = 0;
+  const i2 = dbl ? 1 : -1;
+  const frame = (t) => {
+    const pw = powerNow(t, Y), ph = phiOf(t);
+    const w1 = geared ? Y[1] * Om : dbl ? Y[2] : Y[1], w2 = dbl ? Y[3] : 0;
+    const E = geared ? [Y[2] * u, Y[3] * u, Y[4] * u, Y[iW] * u] : [Y[iE], Y[iE], 0, Y[iW]];   // harvested, paid, friction, work
+    if (!base) base = E.slice();
+    const em = mech(ph, Y[0], i2 >= 0 ? Y[i2] : 0, w1, w2);
+    rec.phi[fr] = ph; rec.q1[fr] = Y[0]; rec.q2[fr] = i2 >= 0 ? Y[i2] : 0; rec.w1[fr] = w1; rec.w2[fr] = w2;
+    rec.p[fr] = pw[0]; rec.pPaid[fr] = pw[1]; rec.Ek[fr] = em[0]; rec.Ep[fr] = em[1];
+    rec.Espin[fr] = geared ? 0.5 * md.j * Y[1] * Y[1] * u : 0;
+    rec.Eh[fr] = E[0] - base[0]; rec.Epaid[fr] = E[1] - base[1]; rec.Efric[fr] = E[2] - base[2]; rec.Win[fr] = E[3] - base[3];
+    fr++;
   };
   if (geared && md.jammed) {
     // Static argument (notes 7.2): the friction torque N T0/eta exceeds gravity's largest torque m g L; a rod at rest on the
-    // blade's line feels no centrifugal torque there, so it never starts. The smoothed model cannot resolve sticking.
+    // blade's line feels no centrifugal torque there, so it never starts. The smoothed model cannot resolve sticking. The rod
+    // rides along at q = 0: the rotor's work is then the change of its potential energy alone.
     out.jammed = true;
-    for (let k = 0; k < nFrames; k++) { rec.phi[k] = 2 * Math.PI * (settle + meas - recTurns) + k * 2 * Math.PI / fpt; }
+    for (let k = 0; k < nFrames; k++) {
+      const ph = 2 * Math.PI * (settle + meas - recTurns) + k * 2 * Math.PI / fpt, em = mech(ph, 0, 0, 0, 0);
+      rec.phi[k] = ph; rec.Ek[k] = em[0]; rec.Ep[k] = em[1]; rec.Win[k] = em[1] - rec.Ep[0];
+    }
     Object.assign(out, { P_mean: 0, P_load: 0, P_paid: 0, P_fric: 0, Theta: 0, thetaAbsMax: 0, trail: 0, trailSin: 0, Theta2: 0, trail2: 0, maxit: 0, ms: Date.now() - t0 });
     return out;
   }
   const step = makeRadau(F, d, nDyn);
   const total = nst * (settle + meas), kMeas = nst * settle, kRec = nst * (settle + meas - recTurns);
-  let E0 = null, sumQ = 0, sumS = 0, sumQ2 = 0, nQ = 0, qmax = -Infinity, qmin = Infinity, q2max = -Infinity, q2min = Infinity, absMax = 0, maxit = 0, fr = 0;
-  const i2 = dbl ? 1 : -1;
-  const frame = (t) => {
-    const pw = powerNow(t, Y);
-    rec.phi[fr] = phiOf(t); rec.q1[fr] = Y[0]; rec.q2[fr] = i2 >= 0 ? Y[i2] : 0; rec.p[fr] = pw[0]; rec.pPaid[fr] = pw[1]; fr++;
-  };
+  let E0 = null, sumQ = 0, sumS = 0, sumQ2 = 0, nQ = 0, qmax = -Infinity, qmin = Infinity, q2max = -Infinity, q2min = Infinity, absMax = 0, maxit = 0;
   for (let k = 0; k < total; k++) {
     const t = k * h;
-    if (k === kMeas) E0 = Y.slice(dbl || !geared ? d - 1 : 2);
+    if (k === kMeas) E0 = Y.slice(iE);
     if (k === kRec) frame(t);
     const it = step(t, Y, h);
     if (it > maxit) maxit = it;
@@ -791,11 +844,11 @@ function simulate(Pin) {
   }
   const Tm = meas * T;
   if (geared) {
-    const u = md.unitPower;
-    out.P_load = (Y[2] - E0[0]) / Tm * u; out.P_paid = (Y[3] - E0[1]) / Tm * u; out.P_fric = (Y[4] - E0[2]) / Tm * u;
+    const up = md.unitPower;
+    out.P_load = (Y[2] - E0[0]) / Tm * up; out.P_paid = (Y[3] - E0[1]) / Tm * up; out.P_fric = (Y[4] - E0[2]) / Tm * up;
     out.P_mean = out.P_load;
   } else {
-    out.P_mean = (Y[d - 1] - E0[0]) / Tm;
+    out.P_mean = (Y[iE] - E0[0]) / Tm;
   }
   out.Theta = 0.5 * (qmax - qmin); out.thetaAbsMax = absMax; out.trail = sumQ / nQ; out.trailSin = sumS / nQ;
   if (dbl) { out.Theta2 = 0.5 * (q2max - q2min); out.trail2 = sumQ2 / nQ; }
@@ -811,6 +864,418 @@ function stripModel(md) {
 }
 /*PHYSICS-END*/
 </script>
+<!-- the site's data panel: shared helpers and store (paths from portfolios-src/rotor-pendula/; build_combined.py --site rewrites them) -->
+<script src="../../public/scripts/sim.js"></script>
+<script src="../../public/scripts/dataset.js"></script>
+<script>
+// ----------------------------------------------------------------------------------------------------------------------------
+// The data store of the site's data panel (Phyein Usul's scripts/dataset.js and scripts/datalog.js, loaded around this page when
+// it is served on the site). The page below calls these hooks at the lines where it computes a number: D.solved when a run
+// arrives from the worker, D.put for the tiles' derived values, D.scene and D.plot when it draws, D.frame for the playhead.
+// The hooks only store what they are given; the stored arrays are the very arrays the page draws from. Check (Sim.data.check)
+// recomputes every value from stored inputs only, and Sim.data.drawn reads it back from the canvases and tiles.
+// Without the site's scripts (this file opened on its own) nothing here runs and the page works as before.
+// ----------------------------------------------------------------------------------------------------------------------------
+(function () {
+'use strict';
+const Sim = window.Sim;
+if (!Sim || !Sim.dataset) return;
+const T = window.T || (s => s);
+const $ = id => document.getElementById(id);
+const ds = Sim.dataset({ title: 'Rotor Pendula', attrs: { study: 'Rotor Pendula', page: 'portfolios/rotor-pendula/index.html#sim',
+  equation: "θ'' + κ θ' + R sin θ + G cos(φ + θ) = 0, R = r_p/L, G = g/(Ω²L)", integrator: 'Radau IIA, three stages, fixed step' } });
+const NaN_ = Number.NaN;
+const v = (n, dims, type, a) => ds.var(n, dims, type, a);
+
+// ---- what you set, as used by the last solve
+v('rpm_set', [], 'float', { symbol: 'n', units: 'rpm', long_name: 'rotor speed you chose', computed_in: 'Rotor speed buttons, captured by solve()', digits: 0 });
+v('frac', [], 'float', { symbol: 'r<sub>p</sub>/r<sub>tip</sub>', long_name: 'pivot as a share of the blade', computed_in: 'Pivot buttons, captured by solve()', digits: 2 });
+v('pend', [], 'str', { symbol: 'pendulum', long_name: 'one rod (single) or two (double)', computed_in: 'Pendulum buttons, captured by solve()' });
+v('gen', [], 'str', { symbol: 'generator', long_name: 'ideal brake or the maxon RE 25 + GP 32 C (geared)', computed_in: 'Generator buttons, captured by solve()' });
+v('brake', [], 'float', { symbol: 'κ/κ*', long_name: 'ideal brake as a multiple of the best brake', computed_in: 'Brake slider, captured by solve()', digits: 3 });
+v('N', [], 'float', { symbol: 'N', long_name: 'gear ratio (geared generator)', computed_in: 'Gear ratio menu, captured by solve()', digits: 0 });
+v('RL_set', [], 'float', { symbol: 'R<sub>L,set</sub>', units: 'Ω', long_name: 'load resistor you set; empty when the formula’s best is used', computed_in: 'Load resistor slider, captured by solve()', digits: 4 });
+// ---- fixed for this study
+v('g', [], 'float', { symbol: 'g', units: 'm/s²', long_name: 'gravity', computed_in: 'CONST.g', digits: 5 });
+v('M', [], 'float', { symbol: 'M', units: 'kg', long_name: 'mass of the pendulum (both bobs for the double)', computed_in: 'makeModel()', formula: 'm, or m<sub>1</sub> + m<sub>2</sub>', digits: 3 });
+v('L', [], 'float', { symbol: 'L', units: 'm', long_name: 'reach of the pendulum (both rods for the double)', computed_in: 'makeModel()', formula: 'L, or l<sub>1</sub> + l<sub>2</sub>', digits: 3 });
+v('v_tip', [], 'float', { symbol: 'v<sub>tip</sub>', units: 'm/s', long_name: 'blade tip speed, the same on every rotor', computed_in: 'CONST.tipSpeed', digits: 1 });
+// ---- what follows from it
+v('Om', [], 'float', { symbol: 'Ω', units: 'rad/s', long_name: 'rotor angular speed', computed_in: 'makeModel()', formula: 'n · 2π/60', digits: 5 });
+v('T_turn', [], 'float', { symbol: 'T', units: 's', long_name: 'time of one turn', computed_in: 'makeModel()', formula: '2π/Ω', digits: 4 });
+v('rTip', [], 'float', { symbol: 'r<sub>tip</sub>', units: 'm', long_name: 'blade length (tip radius)', computed_in: 'makeModel()', formula: 'v<sub>tip</sub>/Ω', digits: 4 });
+v('rp', [], 'float', { symbol: 'r<sub>p</sub>', units: 'm', long_name: 'pivot radius', computed_in: 'makeModel()', formula: '(r<sub>p</sub>/r<sub>tip</sub>) · r<sub>tip</sub>', digits: 4 });
+v('R', [], 'float', { symbol: 'R', long_name: 'centrifugal spring, r<sub>p</sub>/L', computed_in: 'makeModel()', formula: 'r<sub>p</sub>/L', digits: 5 });
+v('G', [], 'float', { symbol: 'G', long_name: 'gravity’s push, g/(Ω²L)', computed_in: 'makeModel()', formula: 'g/(Ω²L)', digits: 5 });
+v('omega_n', [], 'float', { symbol: 'ω<sub>n</sub>', units: 'rad/s', long_name: 'natural frequency of small swings on the blade', computed_in: 'stored on solve', formula: 'Ω √R', digits: 5 });
+v('I_p', [], 'float', { symbol: 'I<sub>p</sub>', units: 'kg m²', long_name: 'moment of inertia about the pivot, rods straight', computed_in: 'stored on solve', formula: 'M L² (single); m<sub>1</sub>l<sub>1</sub>² + m<sub>2</sub>(l<sub>1</sub>+l<sub>2</sub>)² (double)', digits: 5 });
+v('kappaStar', [], 'float', { symbol: 'κ*', long_name: 'best brake: |R − 1| for one rod; the small-swing optimum for two', computed_in: 'makeModel()', formula: '|R − 1|, or argmax of the linear power (golden section)', digits: 5 });
+v('c', [], 'float', { symbol: 'c', units: 'N m s', long_name: 'brake constant', computed_in: 'makeModel()', formula: '(κ/κ*) · κ* · M L² Ω', digits: 6 });
+v('kappa', [], 'float', { symbol: 'κ', long_name: 'brake in the unit M L² Ω', computed_in: 'makeModel()', formula: 'c/(M L² Ω)', digits: 5 });
+v('Pstar', [], 'float', { symbol: 'P*', units: 'W', long_name: 'best power of one rod by formula (2.5)', computed_in: 'makeModel()', formula: 'm L g²/(4 Ω |r<sub>p</sub> − L|)', digits: 6 });
+v('PstarModel', [], 'float', { symbol: 'P*<sub>model</sub>', units: 'W', long_name: 'best small-swing power of the pendulum chosen', computed_in: 'makeModel()', formula: 'P*, or the linear power of the double at its κ*', digits: 6 });
+v('eta', [], 'float', { symbol: 'η', long_name: 'gearhead efficiency (geared)', computed_in: 'CONST.gears', digits: 2 });
+v('csc', [], 'float', { symbol: 'c<sub>sc</sub>', units: 'N m s', long_name: 'brake of the shorted motor (geared)', computed_in: 'makeModel()', formula: 'N² k<sub>t</sub> k<sub>e</sub>/R<sub>c</sub>', digits: 6 });
+v('ce', [], 'float', { symbol: 'c<sub>e</sub>', units: 'N m s', long_name: 'electrical brake at the load resistor (geared)', computed_in: 'makeModel()', formula: 'N² k<sub>t</sub> k<sub>e</sub>/(R<sub>c</sub> + R<sub>L</sub>), (7.1)', digits: 6 });
+v('RL', [], 'float', { symbol: 'R<sub>L</sub>', units: 'Ω', long_name: 'load resistor used (geared)', computed_in: 'makeModel()', formula: 'N² k<sub>t</sub> k<sub>e</sub>/c<sub>e</sub> − R<sub>c</sub>', digits: 4 });
+v('j', [], 'float', { symbol: 'j', long_name: 'motor and gear inertia seen by the rod, (7.3) (geared)', computed_in: 'makeModel()', formula: '(J + J<sub>g</sub>) N²/(m L²)', digits: 5 });
+v('keep', [], 'float', { symbol: '1 − c<sub>e</sub>/c<sub>sc</sub>', long_name: 'share of the electrical power that reaches the load (geared)', computed_in: 'makeModel()', formula: '1 − c<sub>e</sub>/c<sub>sc</sub>', digits: 5 });
+v('jammed', [], 'bool', { symbol: 'jammed', long_name: 'friction N T<sub>0</sub>/η exceeds m g L, the rod never starts (geared)', computed_in: 'makeModel()', formula: 'N T<sub>0</sub>/η > m g L' });
+// ---- what the solve found, over the measuring turns
+v('P_mean', [], 'float', { symbol: 'P̄', units: 'W', long_name: 'mean harvested power (power to the load when geared)', computed_in: 'simulate(), in the worker; stored by solve()', formula: 'ΔE<sub>h</sub>/(measuring turns · T)', digits: 7 });
+v('P_paid', [], 'float', { symbol: 'P̄<sub>paid</sub>', units: 'W', long_name: 'mean power the pendulum gives the gearhead (geared)', computed_in: 'simulate(); stored by solve()', digits: 7 });
+v('P_fric', [], 'float', { symbol: 'P̄<sub>fric</sub>', units: 'W', long_name: 'mean power lost to motor friction (geared)', computed_in: 'simulate(); stored by solve()', digits: 7 });
+v('Theta', [], 'float', { symbol: 'Θ', units: 'rad', long_name: 'swing, half the peak-to-peak of θ', computed_in: 'simulate(); stored by solve()', digits: 5 });
+v('Theta2', [], 'float', { symbol: 'Θ<sub>2</sub>', units: 'rad', long_name: 'swing of rod 2 (double)', computed_in: 'simulate(); stored by solve()', digits: 5 });
+v('trail', [], 'float', { symbol: 'θ̄', units: 'rad', long_name: 'mean trail of the rod', computed_in: 'simulate(); stored by solve()', digits: 5 });
+v('trailSin', [], 'float', { symbol: '⟨sin θ⟩', long_name: 'mean of sin θ', computed_in: 'simulate(); stored by solve()', digits: 6 });
+v('bill', [], 'float', { symbol: 'P̄<sub>rotor</sub>', units: 'W', long_name: 'the rotor’s bill by (3.3), one rod with the ideal brake', computed_in: 'fillTiles()', formula: '−m r<sub>p</sub> L Ω³ ⟨sin θ⟩', digits: 7 });
+v('lag_deg', [], 'float', { symbol: 'δ', units: '°', long_name: 'lag of the swing behind gravity’s push, first harmonic of the record', computed_in: 'firstHarmonic(), in solve()', formula: 'atan2(−b, −a), a + i b = (2/n) Σ θ<sub>k</sub> e<sup>iφ<sub>k</sub></sup>', digits: 4 });
+v('Win_mean', [], 'float', { symbol: 'W<sub>in</sub>/t', units: 'W', long_name: 'mean power the rotor put in over the recorded turns', computed_in: 'stored on solve', formula: 'W<sub>in</sub>(end)/(turns · T)', digits: 7 });
+// ---- the solver
+v('steps', [], 'int', { symbol: 'steps', long_name: 'Radau IIA steps per turn', computed_in: 'simulate()', digits: 0 });
+v('h', [], 'float', { symbol: 'h', units: 's', long_name: 'step length in time', computed_in: 'simulate()', formula: 'T/steps', digits: 6 });
+v('settle', [], 'int', { symbol: 'settle', long_name: 'turns run before measuring', computed_in: 'simulate()', digits: 0 });
+v('measure', [], 'int', { symbol: 'measure', long_name: 'turns measured', computed_in: 'simulate()', digits: 0 });
+v('fpt', [], 'int', { symbol: 'frames per turn', long_name: 'recorded frames per turn', computed_in: 'simulate()', digits: 0 });
+v('rec_turns', [], 'int', { symbol: 'recorded turns', long_name: 'last turns kept for playback', computed_in: 'simulate()', digits: 0 });
+v('maxit', [], 'int', { symbol: 'Newton', long_name: 'most Newton iterations any step needed (12 = not converged)', computed_in: 'simulate()', digits: 0 });
+v('worker_ms', [], 'float', { symbol: 'solve time', units: 'ms', long_name: 'time the worker took', computed_in: 'simulate()', source: 'Measured with Date.now() in the worker.', digits: 0 });
+v('stale', [], 'bool', { symbol: 'stale', long_name: 'a setting changed since the last solve', computed_in: 'markStale()' });
+// ---- the record, one row per frame of the last turns
+ds.dim('k', 0);
+const ARR = [
+  ['turn', 'turns', 'turn of the record', 'φ<sub>k</sub> − φ<sub>0</sub>, over 2π', 'turn<sub>k</sub>', 5],
+  ['phi', 'rad', 'rotor angle φ (Ω t)', 'simulate()', 'φ<sub>k</sub>', 6],
+  ['q1', 'rad', 'rod angle θ from the blade’s outward line', 'simulate(), Radau IIA', 'θ<sub>k</sub>', 7],
+  ['q2', 'rad', 'angle of rod 2 (double; 0 for one rod)', 'simulate(), Radau IIA', 'θ<sub>2,k</sub>', 7],
+  ['w1', 'rad/s', 'rate of θ relative to the blade', 'simulate(), Radau IIA', 'θ̇<sub>k</sub>', 7],
+  ['w2', 'rad/s', 'rate of rod 2 (double; 0 for one rod)', 'simulate(), Radau IIA', 'θ̇<sub>2,k</sub>', 7],
+  ['p', 'W', 'generator power (power to the load when geared)', 'simulate(), from the right-hand side', 'p<sub>k</sub>', 7],
+  ['pPaid', 'W', 'power the pendulum gives the generator', 'simulate(), from the right-hand side', 'p<sub>paid,k</sub>', 7],
+  ['Ek', 'J', 'kinetic energy of the bobs, ground frame', 'bobEnergy(), in simulate()', 'E<sub>kin,k</sub>', 9],
+  ['Ep', 'J', 'potential energy of the bobs, m g y', 'bobEnergy(), in simulate()', 'E<sub>pot,k</sub>', 9],
+  ['Espin', 'J', 'spin energy of motor and gears, ½ j θ′² (geared)', 'simulate()', 'E<sub>spin,k</sub>', 9],
+  ['Win', 'J', 'work the rotor has done since the record began', 'simulate(), integrated as a state', 'W<sub>in,k</sub>', 9],
+  ['Eh', 'J', 'energy harvested since the record began (to the load when geared)', 'simulate(), integrated as a state', 'E<sub>h,k</sub>', 9],
+  ['Epaid', 'J', 'energy given to the generator since the record began', 'simulate(), integrated as a state', 'E<sub>paid,k</sub>', 9],
+  ['Efric', 'J', 'energy lost to motor friction since the record began (geared)', 'simulate(), integrated as a state', 'E<sub>fric,k</sub>', 9],
+];
+for (const [n, u, ln, ci, sym, dg] of ARR)
+  ds.var(n, ['k'], Float64Array, { symbol: sym, units: u, long_name: ln, computed_in: ci, digits: dg, coordinate: n === 'turn' || undefined });
+// ---- the playhead: the frame on screen now, a stored row
+v('t_now', [], 'float', { symbol: 't', units: 's', long_name: 'time since the record began', computed_in: 'D.frame, each frame', formula: 'turn<sub>k</sub> · T', digits: 3 });
+v('k_now', [], 'int', { symbol: 'k', long_name: 'stored frame on screen', computed_in: 'D.frame, each frame', formula: '⌊frame⌋', digits: 0 });
+const NOW = [['phi', 'φ'], ['q1', 'θ'], ['q2', 'θ<sub>2</sub>'], ['w1', 'θ̇'], ['w2', 'θ̇<sub>2</sub>'], ['p', 'p'], ['pPaid', 'p<sub>paid</sub>'],
+  ['Ek', 'E<sub>kin</sub>'], ['Ep', 'E<sub>pot</sub>'], ['Espin', 'E<sub>spin</sub>'], ['Win', 'W<sub>in</sub>'], ['Eh', 'E<sub>h</sub>'], ['Epaid', 'E<sub>paid</sub>'], ['Efric', 'E<sub>fric</sub>']];
+for (const [n, sym] of NOW) {
+  const a = ds.vars[n].attrs;
+  v(n + '_now', [], 'float', { symbol: sym, units: a.units, long_name: a.long_name + T(', now'), computed_in: 'D.frame, each frame', formula: n + '[k]', digits: a.digits });
+}
+v('book_res', [], 'float', { symbol: 'ε', units: 'J', long_name: 'energy book residual since the record began', computed_in: 'D.frame, each frame', formula: 'W<sub>in</sub> − ΔE<sub>kin</sub> − ΔE<sub>pot</sub> − E<sub>paid</sub>', digits: 14 });
+v('book_rel', [], 'float', { symbol: 'ε/|W|', long_name: 'residual over the largest |W<sub>in</sub>| of the record', computed_in: 'D.frame, each frame', formula: '|ε| / max |W<sub>in</sub>|', digits: 3 });
+// ---- playback and drawing
+v('frame', [], 'float', { symbol: 'frame', long_name: 'playback position in frames', computed_in: 'loop()', formula: 'frame ← frame + Δt · speed · frames per turn', digits: 2, source: T('The page’s clock: it advances with the time between animation frames, or follows the slider.') });
+v('speed', [], 'float', { symbol: 'speed', units: 'turns/s', long_name: 'playback speed', computed_in: 'speed buttons', digits: 2, source: T('Read from the speed buttons.') });
+v('playing', [], 'bool', { symbol: 'playing', long_name: 'the playback runs', computed_in: 'Play button' });
+v('mag', [], 'float', { symbol: '×', long_name: 'swing magnification in the scene', computed_in: 'solve()', formula: 'largest of 2, 5, 10 … with × max|θ| ≤ 0.6 rad; 1 if max|θ| ≥ 0.3', digits: 0 });
+const GEO = [['cx', 'x of the hub'], ['cy', 'y of the hub'], ['Rpx', 'blade length on screen'], ['sc', 'scale of the rotor view, px per m'], ['px', 'x of the pivot'], ['py', 'y of the pivot'],
+  ['Lr', 'rod length drawn in the rotor view (not to scale)'], ['bobA_x', 'x of the bob, rotor view'], ['bobA_y', 'y of the bob, rotor view'], ['bx', 'x of the pivot, blade view'], ['by', 'y of the pivot, blade view'],
+  ['L2', 'rod length drawn in the blade view'], ['bobB_x', 'x of the bob, blade view'], ['bobB_y', 'y of the bob, blade view'], ['scene_w', 'scene width'], ['scene_h', 'scene height']];
+const LAYOUT = ['cx', 'cy', 'Rpx', 'Lr', 'bx', 'by', 'L2', 'scene_w', 'scene_h'];
+for (const [n, ln] of GEO) v(n, [], 'float', { symbol: n.replace(/_(\w+)$/, '<sub>$1</sub>'), units: n === 'sc' ? 'px/m' : 'css px', long_name: ln, computed_in: 'drawScene()', digits: 2,
+  source: LAYOUT.includes(n) ? T('Layout: a fixed share of the scene canvas, whose size follows the window.') : undefined });
+const PLOTS = { plotTh: 'th', plotP: 'pw', plotK: 'kp' }, AX = [['x0', 'left end of the x axis'], ['x1', 'right end of the x axis'], ['y0', 'bottom of the y axis'], ['y1', 'top of the y axis'], ['w', 'plot width'], ['h', 'plot height']];
+for (const id in PLOTS) for (const [a, ln] of AX)
+  v(PLOTS[id] + '_' + a, [], 'float', { symbol: PLOTS[id] + '<sub>' + a + '</sub>', units: a === 'w' || a === 'h' ? 'css px' : '', long_name: ln + ' of the ' + { plotTh: 'rod-angle', plotP: 'power', plotK: 'brake' }[id] + T(' plot'), computed_in: 'frameAxes(), in drawPlots()', digits: 6,
+    source: a === 'w' || a === 'h' ? T('Layout: the plot canvas’s size, which follows the window.') : undefined });
+ds.dim('j', 161);
+v('kap', ['j'], Float64Array, { symbol: 'κ<sub>j</sub>', long_name: 'brakes of the curve in the third plot, log-spaced', computed_in: 'drawPlots()', formula: 'κ<sub>lo</sub> (κ<sub>hi</sub>/κ<sub>lo</sub>)<sup>j/160</sup>', digits: 6 });
+v('Plin', ['j'], Float64Array, { symbol: 'P̄(κ<sub>j</sub>)', units: 'mW', long_name: 'small-swing power at κ<sub>j</sub>, formula (2.3) or the double’s linear power', computed_in: 'drawPlots()', formula: 'linearPower(κ<sub>j</sub>) · 10³', digits: 6 });
+
+const put = (n, x) => ds.set(n, x === undefined || x === null ? NaN_ : x);
+
+// ---- the hooks the page calls
+let rec = null, md = null, S0 = null;
+window.rotorData = {
+  solved(run, model, S, lag, mag, secs) {
+    rec = run.rec; md = model; S0 = S;
+    const geared = !!md.geared;
+    put('rpm_set', S.rpm); put('frac', S.frac); put('pend', S.pend); put('gen', S.gen); put('brake', S.brake);
+    put('N', geared ? md.N : NaN_); put('RL_set', S.RL != null ? S.RL : NaN_);
+    put('g', CONST.g); put('M', md.M); put('L', md.L); put('v_tip', CONST.tipSpeed);
+    put('Om', md.Om); put('T_turn', md.turn); put('rTip', md.rTip); put('rp', md.rp); put('R', md.R); put('G', md.G);
+    put('omega_n', md.Om * Math.sqrt(md.R));
+    put('I_p', md.double ? CONST.double.m1 * CONST.double.l1 ** 2 + CONST.double.m2 * (CONST.double.l1 + CONST.double.l2) ** 2 : md.M * md.L * md.L);
+    put('kappaStar', md.kappaStar); put('c', md.c); put('kappa', md.kappa); put('Pstar', md.Pstar); put('PstarModel', md.PstarModel);
+    for (const n of ['eta', 'csc', 'ce', 'RL', 'j', 'keep']) put(n, geared ? md[n] : NaN_);
+    put('jammed', !!md.jammed);
+    put('P_mean', run.P_mean); put('P_paid', geared ? run.P_paid : NaN_); put('P_fric', geared ? run.P_fric : NaN_);
+    put('Theta', run.Theta); put('Theta2', md.double ? run.Theta2 : NaN_); put('trail', run.trail); put('trailSin', run.trailSin);
+    put('lag_deg', run.jammed ? NaN_ : lag.delta * 180 / Math.PI);
+    put('steps', run.steps); put('h', md.turn / run.steps); put('settle', run.settle); put('measure', run.measure);
+    put('fpt', rec.framesPerTurn); put('rec_turns', rec.turns); put('maxit', run.maxit); put('worker_ms', run.ms); put('mag', mag);
+    const n = rec.phi.length;
+    ds.dim('k', n);
+    for (const [name] of ARR) if (name !== 'turn') ds.set(name, rec[name]);
+    const turn = ds.alloc('turn');
+    for (let k = 0; k < n; k++) turn[k] = (rec.phi[k] - rec.phi[0]) / (2 * Math.PI);
+    put('Win_mean', rec.Win[n - 1] / (rec.turns * md.turn));
+    let wmax = 0;
+    for (let k = 0; k < n; k++) wmax = Math.max(wmax, Math.abs(rec.Win[k]));
+    window.rotorData.wmax = wmax;
+    rotorFrame(0);
+  },
+  put,
+  stale(s) { put('stale', s); },
+  frame(f, playing, speed) {
+    put('frame', f); put('playing', playing); put('speed', speed);
+    if (rec) rotorFrame(f);
+  },
+  scene(g) {
+    put('cx', g.cx); put('cy', g.cy); put('Rpx', g.Rpx); put('sc', g.sc); put('px', g.px); put('py', g.py); put('Lr', g.Lr);
+    put('bobA_x', g.endA.x); put('bobA_y', g.endA.y); put('bx', g.bx); put('by', g.by); put('L2', g.L2);
+    put('bobB_x', g.end.x); put('bobB_y', g.end.y); put('scene_w', g.w); put('scene_h', g.h);
+    window.rotorData.bobR = { A: g.bobA, B: g.bob2 };
+  },
+  plot(id, mp) {
+    const p = PLOTS[id];
+    put(p + '_x0', mp.xr[0]); put(p + '_x1', mp.xr[1]); put(p + '_y0', mp.yr[0]); put(p + '_y1', mp.yr[1]); put(p + '_w', mp.w); put(p + '_h', mp.h);
+  },
+  curve(xs, ys) {
+    const a = ds.get('kap'), b = ds.get('Plin');
+    for (let i = 0; i < a.length; i++) { a[i] = xs[i]; b[i] = ys[i]; }
+    ds.touch('kap'); ds.touch('Plin');
+  },
+};
+function rotorFrame(f) {
+  const n = rec.phi.length, k = Math.min(n - 1, Math.max(0, Math.floor(f)));
+  put('k_now', k); put('t_now', ds.get('turn')[k] * md.turn);
+  for (const [name] of NOW) put(name + '_now', rec[name][k]);
+  const res = rec.Win[k] - (rec.Ek[k] - rec.Ek[0]) - (rec.Ep[k] - rec.Ep[0]) - rec.Epaid[k];
+  put('book_res', res); put('book_rel', window.rotorData.wmax > 0 ? Math.abs(res) / window.rotorData.wmax : 0);
+}
+
+// ---- Check: every value recomputed from stored inputs only
+const G = n => ds.get(n);
+function storedSettings() {
+  const s = { rpm: G('rpm_set'), frac: G('frac'), pend: G('pend'), gen: G('gen'), brake: G('brake') };
+  if (s.gen === 'geared') { s.N = G('N'); if (isFinite(G('RL_set'))) s.RL = G('RL_set'); }
+  return s;
+}
+let replayKey = '', replayRun = null;
+function replay() {                                 // the same simulate(), rerun in this page from the stored settings, cached
+  const key = JSON.stringify(storedSettings());
+  if (key !== replayKey) { replayRun = simulate(storedSettings()); replayKey = key; }
+  return replayRun;
+}
+const modelNow = () => makeModel(storedSettings());
+const RERUN = T('the same Radau IIA run, repeated in this page from the stored settings');
+const setting = (n, label, live) => () => ({ formula: T('the setting captured with the solved run; the control now shows ') + live(), inputs: [[label, S0 ? S0[n] : NaN_, '', 4]], value: S0 ? S0[n] : NaN_ });
+const constant = (label, value) => () => ({ formula: T('the constant ') + label + T(' in the physics block'), inputs: [], value });
+const mo = CONST.motor;
+const check = {
+  rpm_set: setting('rpm', 'n', () => $('o_rpm').textContent), frac: setting('frac', 'r<sub>p</sub>/r<sub>tip</sub>', () => $('o_frac').textContent),
+  brake: setting('brake', 'κ/κ*', () => $('o_brake').textContent),
+  N: () => G('gen') === 'geared' ? setting('N', 'N', () => $('o_N').textContent)() : { formula: T('used with the generator only'), inputs: [], value: NaN_ },
+  RL_set: () => ({ formula: T('the load resistor captured with the solved run; empty when the formula’s best is used'), inputs: [], value: S0 && S0.RL != null ? S0.RL : NaN_ }),
+  g: constant('CONST.g', CONST.g), v_tip: constant('CONST.tipSpeed', CONST.tipSpeed),
+  M: () => ({ formula: G('pend') === 'double' ? 'm<sub>1</sub> + m<sub>2</sub>' : 'm', inputs: [], value: G('pend') === 'double' ? CONST.double.m1 + CONST.double.m2 : CONST.single.m }),
+  L: () => ({ formula: G('pend') === 'double' ? 'l<sub>1</sub> + l<sub>2</sub>' : 'L', inputs: [], value: G('pend') === 'double' ? CONST.double.l1 + CONST.double.l2 : CONST.single.L }),
+  Om: () => ({ formula: 'n · 2π/60', inputs: [['n', G('rpm_set'), 'rpm', 0]], value: G('rpm_set') * 2 * Math.PI / 60 }),
+  T_turn: () => ({ formula: '2π/Ω', inputs: [['Ω', G('Om'), 'rad/s', 6]], value: 2 * Math.PI / G('Om') }),
+  rTip: () => ({ formula: 'v<sub>tip</sub>/Ω', inputs: [['v<sub>tip</sub>', G('v_tip'), 'm/s', 1], ['Ω', G('Om'), 'rad/s', 6]], value: G('v_tip') / G('Om') }),
+  rp: () => ({ formula: '(r<sub>p</sub>/r<sub>tip</sub>) · r<sub>tip</sub>', inputs: [['r<sub>p</sub>/r<sub>tip</sub>', G('frac'), '', 2], ['r<sub>tip</sub>', G('rTip'), 'm', 5]], value: G('frac') * G('rTip') }),
+  R: () => ({ formula: 'r<sub>p</sub>/L', inputs: [['r<sub>p</sub>', G('rp'), 'm', 5], ['L', G('L'), 'm', 3]], value: G('rp') / G('L') }),
+  G: () => ({ formula: 'g/(Ω²L)', inputs: [['g', G('g'), 'm/s²', 5], ['Ω', G('Om'), 'rad/s', 6], ['L', G('L'), 'm', 3]], value: G('g') / (G('Om') ** 2 * G('L')) }),
+  omega_n: () => ({ formula: 'Ω √R', inputs: [['Ω', G('Om'), 'rad/s', 6], ['R', G('R'), '', 5]], value: G('Om') * Math.sqrt(G('R')) }),
+  I_p: () => ({ formula: G('pend') === 'double' ? 'm<sub>1</sub>l<sub>1</sub>² + m<sub>2</sub>(l<sub>1</sub>+l<sub>2</sub>)²' : 'M L²', inputs: [['M', G('M'), 'kg', 3], ['L', G('L'), 'm', 3]],
+    value: G('pend') === 'double' ? CONST.double.m1 * CONST.double.l1 ** 2 + CONST.double.m2 * (CONST.double.l1 + CONST.double.l2) ** 2 : G('M') * G('L') ** 2 }),
+  kappaStar: () => {
+    if (G('pend') !== 'double') return { formula: '|R − 1|', inputs: [['R', G('R'), '', 5]], value: Math.abs(G('R') - 1) };
+    const cU = G('M') * G('L') ** 2 * G('Om'), lc = goldenMax(x => doublePowerLinear(Math.exp(x), G('Om'), G('rp')), Math.log(cU) - 12, Math.log(cU) + 12);
+    return { formula: T('argmax over c of the double’s linear power, golden section, in the unit M L² Ω'), inputs: [['Ω', G('Om'), 'rad/s', 6], ['r<sub>p</sub>', G('rp'), 'm', 5]], value: Math.exp(lc) / cU };
+  },
+  c: () => ({ formula: '(κ/κ*) · κ* · M L² Ω', inputs: [['κ/κ*', G('brake'), '', 3], ['κ*', G('kappaStar'), '', 5], ['M', G('M'), 'kg', 3], ['L', G('L'), 'm', 3], ['Ω', G('Om'), 'rad/s', 6]], value: G('brake') * G('kappaStar') * G('M') * G('L') ** 2 * G('Om') }),
+  kappa: () => ({ formula: 'c/(M L² Ω)', inputs: [['c', G('c'), 'N m s', 6], ['M', G('M'), 'kg', 3], ['L', G('L'), 'm', 3], ['Ω', G('Om'), 'rad/s', 6]], value: G('c') / (G('M') * G('L') ** 2 * G('Om')) }),
+  Pstar: () => ({ formula: 'm L g²/(4 Ω |r<sub>p</sub> − L|), one rod of m = ' + CONST.single.m + ' kg, L = ' + CONST.single.L + ' m', inputs: [['g', G('g'), 'm/s²', 5], ['Ω', G('Om'), 'rad/s', 6], ['r<sub>p</sub>', G('rp'), 'm', 5]], value: CONST.single.m * CONST.single.L * G('g') ** 2 / (4 * G('Om') * Math.abs(G('rp') - CONST.single.L)) }),
+  PstarModel: () => G('pend') === 'double'
+    ? { formula: T('the double’s linear power at its κ*'), inputs: [['κ*', G('kappaStar'), '', 5]], value: doublePowerLinear(G('kappaStar') * G('M') * G('L') ** 2 * G('Om'), G('Om'), G('rp')) }
+    : { formula: 'P*', inputs: [['P*', G('Pstar'), 'W', 6]], value: G('Pstar') },
+  csc: () => ({ formula: 'N² k<sub>t</sub> k<sub>e</sub>/R<sub>c</sub>', inputs: [['N', G('N'), '', 0], ['k<sub>t</sub>', mo.kt, 'N m/A', 4], ['k<sub>e</sub>', mo.ke, 'V s', 5], ['R<sub>c</sub>', mo.Rc, 'Ω', 2]], value: G('N') ** 2 * mo.kt * mo.ke / mo.Rc }),
+  RL: () => ({ formula: 'N² k<sub>t</sub> k<sub>e</sub>/c<sub>e</sub> − R<sub>c</sub>', inputs: [['N', G('N'), '', 0], ['c<sub>e</sub>', G('ce'), 'N m s', 6]], value: G('N') ** 2 * mo.kt * mo.ke / G('ce') - mo.Rc }),
+  ce: () => isFinite(G('RL_set'))
+    ? { formula: 'N² k<sub>t</sub> k<sub>e</sub>/(R<sub>c</sub> + R<sub>L</sub>)', inputs: [['N', G('N'), '', 0], ['R<sub>L</sub>', G('RL_set'), 'Ω', 4]], value: G('N') ** 2 * mo.kt * mo.ke / (mo.Rc + G('RL_set')) }
+    : { formula: T('the load that (7.6)–(7.7) finds best, recomputed by makeModel() from the stored settings'), inputs: [['N', G('N'), '', 0]], value: modelNow().ce },
+  j: () => ({ formula: '(J + J<sub>g</sub>) N²/(m L²)', inputs: [['N', G('N'), '', 0], ['J', mo.J, 'kg m²', 3], ['J<sub>g</sub>', CONST.gears[G('N')] ? CONST.gears[G('N')].Jg : NaN_, 'kg m²', 2]], value: (mo.J + CONST.gears[G('N')].Jg) * G('N') ** 2 / (CONST.single.m * CONST.single.L ** 2) }),
+  keep: () => ({ formula: '1 − c<sub>e</sub>/c<sub>sc</sub>', inputs: [['c<sub>e</sub>', G('ce'), 'N m s', 6], ['c<sub>sc</sub>', G('csc'), 'N m s', 6]], value: 1 - G('ce') / G('csc') }),
+  eta: () => ({ formula: T('CONST.gears at the stored ratio'), inputs: [['N', G('N'), '', 0]], value: CONST.gears[G('N')].eta }),
+  jammed: () => ({ formula: 'N T<sub>0</sub>/η > m g L', inputs: [['N', G('N'), '', 0], ['η', G('eta'), '', 2]], value: G('gen') === 'geared' && G('N') * mo.T0 / G('eta') > CONST.single.m * G('g') * CONST.single.L }),
+  bill: () => ({ formula: '−m r<sub>p</sub> L Ω³ ⟨sin θ⟩', inputs: [['r<sub>p</sub>', G('rp'), 'm', 5], ['Ω', G('Om'), 'rad/s', 6], ['⟨sin θ⟩', G('trailSin'), '', 7]], value: G('pend') === 'single' && G('gen') === 'ideal' ? -CONST.single.m * G('rp') * CONST.single.L * G('Om') ** 3 * G('trailSin') : NaN_ }),
+  lag_deg: () => {
+    const q = G('q1'), ph = G('phi'), nn = G('fpt') * G('rec_turns');
+    let a = 0, b = 0;
+    for (let k = 0; k < nn; k++) { a += q[k] * Math.cos(ph[k]); b += q[k] * Math.sin(ph[k]); }
+    return { formula: 'atan2(−b, −a) in degrees, a = (2/n) Σ θ<sub>k</sub> cos φ<sub>k</sub>, b = (2/n) Σ θ<sub>k</sub> sin φ<sub>k</sub>', inputs: [['n', nn, '', 0]], value: Math.atan2(-b * 2 / nn, -a * 2 / nn) * 180 / Math.PI };
+  },
+  Win_mean: () => ({ formula: 'W<sub>in</sub>(end)/(turns · T)', inputs: [['W<sub>in</sub>(end)', G('Win')[G('Win').length - 1], 'J', 6], ['turns', G('rec_turns'), '', 0], ['T', G('T_turn'), 's', 4]], value: G('Win')[G('Win').length - 1] / (G('rec_turns') * G('T_turn')) }),
+  h: () => ({ formula: 'T/steps', inputs: [['T', G('T_turn'), 's', 4], ['steps', G('steps'), '', 0]], value: G('T_turn') / G('steps') }),
+  turn: k => ({ formula: '(φ<sub>k</sub> − φ<sub>0</sub>)/2π', inputs: [['φ<sub>k</sub>', G('phi')[k], 'rad', 6], ['φ<sub>0</sub>', G('phi')[0], 'rad', 6]], value: (G('phi')[k] - G('phi')[0]) / (2 * Math.PI) }),
+  Ek: k => ({ formula: '½ Σ m |v|², v = Ω r<sub>p</sub> + (Ω + θ̇) l, with the stored angles and rates (bobEnergy)', inputs: [['φ', G('phi')[k], 'rad', 6], ['θ', G('q1')[k], 'rad', 7], ['θ̇', G('w1')[k], 'rad/s', 7]], value: bobEnergy(modelNow(), G('phi')[k], G('q1')[k], G('q2')[k], G('w1')[k], G('w2')[k])[0] }),
+  Ep: k => ({ formula: 'Σ m g y, y = r<sub>p</sub> sin φ + l sin(φ + θ) (bobEnergy)', inputs: [['φ', G('phi')[k], 'rad', 6], ['θ', G('q1')[k], 'rad', 7]], value: bobEnergy(modelNow(), G('phi')[k], G('q1')[k], G('q2')[k], G('w1')[k], G('w2')[k])[1] }),
+  Espin: k => ({ formula: '½ J<sub>tot</sub> N² θ̇², J<sub>tot</sub> = J + J<sub>g</sub>', inputs: [['θ̇', G('w1')[k], 'rad/s', 7], ['j', G('j'), '', 5]], value: G('gen') === 'geared' ? 0.5 * G('j') * CONST.single.m * CONST.single.L ** 2 * G('w1')[k] ** 2 : 0 }),
+  p: k => G('gen') === 'geared' ? { formula: RERUN, inputs: [['k', k, '', 0]], value: replay().rec.p[k] }
+    : { formula: G('pend') === 'double' ? 'c (θ̇² + (θ̇<sub>2</sub> − θ̇)²)' : 'c θ̇²', inputs: [['c', G('c'), 'N m s', 6], ['θ̇', G('w1')[k], 'rad/s', 7], ['θ̇<sub>2</sub>', G('w2')[k], 'rad/s', 7]],
+      value: G('c') * (G('w1')[k] ** 2 + (G('pend') === 'double' ? (G('w2')[k] - G('w1')[k]) ** 2 : 0)) },
+  k_now: () => ({ formula: '⌊frame⌋, kept inside the record', inputs: [['frame', G('frame'), '', 2]], value: Math.min(G('phi').length - 1, Math.max(0, Math.floor(G('frame')))) }),
+  t_now: () => ({ formula: 'turn<sub>k</sub> · T', inputs: [['turn<sub>k</sub>', G('turn')[G('k_now')], '', 5], ['T', G('T_turn'), 's', 4]], value: G('turn')[G('k_now')] * G('T_turn') }),
+  book_res: () => { const k = G('k_now'); return { formula: 'W<sub>in</sub> − (E<sub>kin</sub> − E<sub>kin,0</sub>) − (E<sub>pot</sub> − E<sub>pot,0</sub>) − E<sub>paid</sub>, at frame k', inputs: [['W<sub>in</sub>', G('Win')[k], 'J', 9], ['E<sub>kin</sub>', G('Ek')[k], 'J', 9], ['E<sub>kin,0</sub>', G('Ek')[0], 'J', 9], ['E<sub>pot</sub>', G('Ep')[k], 'J', 9], ['E<sub>pot,0</sub>', G('Ep')[0], 'J', 9], ['E<sub>paid</sub>', G('Epaid')[k], 'J', 9]], value: G('Win')[k] - (G('Ek')[k] - G('Ek')[0]) - (G('Ep')[k] - G('Ep')[0]) - G('Epaid')[k] }; },
+  book_rel: () => { let m = 0; for (const x of G('Win')) m = Math.max(m, Math.abs(x)); return { formula: '|ε| / max |W<sub>in</sub>|', inputs: [['ε', G('book_res'), 'J', 3], ['max |W<sub>in</sub>|', m, 'J', 6]], value: m > 0 ? Math.abs(G('book_res')) / m : 0 }; },
+  kap: j => { const x0 = G('kap')[0], x1 = G('kap')[160]; return { formula: 'κ<sub>0</sub> (κ<sub>160</sub>/κ<sub>0</sub>)<sup>j/160</sup>', inputs: [['κ<sub>0</sub>', x0, '', 6], ['κ<sub>160</sub>', x1, '', 6], ['j', j, '', 0]], value: x0 * Math.pow(x1 / x0, j / 160) }; },
+  Plin: j => ({ formula: T('linearPower(κ<sub>j</sub>) · 10³ of the stored settings: (2.3) for one rod, the double’s linear power for two'), inputs: [['κ<sub>j</sub>', G('kap')[j], '', 6]], value: modelNow().linearPower(G('kap')[j]) * 1e3 }),
+};
+for (const n of ['eta', 'csc', 'ce', 'RL', 'j', 'keep']) {
+  const f = check[n];
+  check[n] = () => G('gen') === 'geared' ? f() : { formula: T('used with the generator only'), inputs: [], value: NaN_ };
+}
+// drawing: positions from the stored angles and scales; layout lengths (from the canvas size) are inputs
+check.sc = () => ({ formula: 'R<sub>px</sub>/r<sub>tip</sub>', inputs: [['R<sub>px</sub>', G('Rpx'), 'css px', 2], ['r<sub>tip</sub>', G('rTip'), 'm', 5]], value: G('Rpx') / G('rTip') });
+check.px = () => ({ formula: 'c<sub>x</sub> + r<sub>p</sub> s cos φ', inputs: [['c<sub>x</sub>', G('cx'), 'css px', 2], ['r<sub>p</sub>', G('rp'), 'm', 5], ['s', G('sc'), 'px/m', 4], ['φ', G('phi_now'), 'rad', 6]], value: G('cx') + G('rp') * G('sc') * Math.cos(G('phi_now')) });
+check.py = () => ({ formula: 'c<sub>y</sub> − r<sub>p</sub> s sin φ', inputs: [['c<sub>y</sub>', G('cy'), 'css px', 2], ['r<sub>p</sub>', G('rp'), 'm', 5], ['s', G('sc'), 'px/m', 4], ['φ', G('phi_now'), 'rad', 6]], value: G('cy') - G('rp') * G('sc') * Math.sin(G('phi_now')) });
+check.bobA_x = () => ({ formula: T('pivot + rod of length L<sub>r</sub> at φ + × θ (two half rods for the double)'), inputs: [['φ', G('phi_now'), 'rad', 6], ['θ', G('q1_now'), 'rad', 7], ['×', G('mag'), '', 0], ['L<sub>r</sub>', G('Lr'), 'css px', 2]], value: bobExpected().x });
+check.bobA_y = () => ({ formula: T('pivot + rod of length L<sub>r</sub> at φ + × θ (two half rods for the double)'), inputs: [['φ', G('phi_now'), 'rad', 6], ['θ', G('q1_now'), 'rad', 7], ['×', G('mag'), '', 0], ['L<sub>r</sub>', G('Lr'), 'css px', 2]], value: bobExpected().y });
+const bladeEnd = () => { const m = G('mag'), q1 = G('q1_now') * m, q2 = G('q2_now') * m, L2 = G('L2'), dbl = G('pend') === 'double';
+  let x = G('bx') + Math.cos(q1) * (dbl ? L2 / 2 : L2), y = G('by') - Math.sin(q1) * (dbl ? L2 / 2 : L2);
+  if (dbl) { x += Math.cos(q2) * L2 / 2; y -= Math.sin(q2) * L2 / 2; } return { x, y }; };
+check.bobB_x = () => ({ formula: T('blade-view pivot + rod of length L<sub>2</sub> at × θ'), inputs: [['θ', G('q1_now'), 'rad', 7], ['×', G('mag'), '', 0], ['L<sub>2</sub>', G('L2'), 'css px', 2]], value: bladeEnd().x });
+check.bobB_y = () => ({ formula: T('blade-view pivot + rod of length L<sub>2</sub> at × θ'), inputs: [['θ', G('q1_now'), 'rad', 7], ['×', G('mag'), '', 0], ['L<sub>2</sub>', G('L2'), 'css px', 2]], value: bladeEnd().y });
+check.mag = () => { const q1 = G('q1'), q2 = G('q2'); let a = 0; for (let k = 0; k < q1.length; k++) a = Math.max(a, Math.abs(q1[k]), Math.abs(q2[k]));
+  let m = 1; for (const f of [2, 5, 10, 20, 50, 100, 200, 500, 1000]) if (a > 0 && f * a <= 0.6) m = f; if (a >= 0.3) m = 1;
+  return { formula: T('the largest of 2, 5, 10 … 1000 with × max|θ| ≤ 0.6 rad; 1 if max|θ| ≥ 0.3 rad'), inputs: [['max|θ|', a, 'rad', 6]], value: m }; };
+const range = (arrs, pad, inc) => { let lo = Infinity, hi = -Infinity; for (const a of arrs) for (const x of a) { lo = Math.min(lo, x); hi = Math.max(hi, x); } for (const x of inc) { lo = Math.min(lo, x); hi = Math.max(hi, x); }
+  if (!(hi > lo)) { lo -= 1e-3; hi += 1e-3; } const d = (hi - lo) * pad; return [lo - d, hi + d]; };
+const RANGE = T('the extremes of the stored series, widened by 8 % on each side');
+check.th_x0 = () => ({ formula: '0', inputs: [], value: 0 });
+check.th_x1 = () => ({ formula: T('recorded turns'), inputs: [['turns', G('rec_turns'), '', 0]], value: G('rec_turns') });
+check.pw_x0 = check.th_x0; check.pw_x1 = check.th_x1;
+check.th_y0 = () => ({ formula: RANGE + T(', with the mean trail'), inputs: [['θ̄', G('trail'), 'rad', 5]], value: range(G('pend') === 'double' ? [G('q1'), G('q2')] : [G('q1')], 0.08, [G('trail')])[0] });
+check.th_y1 = () => ({ formula: RANGE + T(', with the mean trail'), inputs: [['θ̄', G('trail'), 'rad', 5]], value: range(G('pend') === 'double' ? [G('q1'), G('q2')] : [G('q1')], 0.08, [G('trail')])[1] });
+check.pw_y0 = () => ({ formula: RANGE + T(', with zero, in mW'), inputs: [], value: range(G('gen') === 'geared' ? [G('p'), G('pPaid')] : [G('p')], 0.08, [0])[0] * 1e3 });
+check.pw_y1 = () => ({ formula: RANGE + T(', with zero, in mW'), inputs: [], value: range(G('gen') === 'geared' ? [G('p'), G('pPaid')] : [G('p')], 0.08, [0])[1] * 1e3 });
+check.kp_x0 = () => { const kx = G('gen') === 'geared' ? G('ce') / (CONST.single.m * CONST.single.L ** 2 * G('Om')) : G('kappa'); return { formula: 'min(κ*/10, κ/2)', inputs: [['κ*', G('kappaStar'), '', 5], ['κ', kx, '', 5]], value: Math.min(0.1 * G('kappaStar'), kx / 2) }; };
+check.kp_x1 = () => { const kx = G('gen') === 'geared' ? G('ce') / (CONST.single.m * CONST.single.L ** 2 * G('Om')) : G('kappa'); return { formula: 'max(10 κ*, 2 κ)', inputs: [['κ*', G('kappaStar'), '', 5], ['κ', kx, '', 5]], value: Math.max(10 * G('kappaStar'), kx * 2) }; };
+check.kp_y0 = check.th_x0;
+check.kp_y1 = () => { let m = G('P_mean') * 1e3; for (const y of G('Plin')) m = Math.max(m, y); return { formula: T('1.12 × the larger of the curve’s top and the solved mean, mW'), inputs: [['P̄', G('P_mean') * 1e3, 'mW', 5]], value: m * 1.12 }; };
+// derived settings and results checked by rerunning the model or the solve from the stored settings
+for (const n of ['P_mean', 'P_paid', 'P_fric', 'Theta', 'Theta2', 'trail', 'trailSin', 'maxit', 'steps', 'settle', 'measure'])
+  check[n] = () => ({ formula: RERUN, inputs: [], value: n === 'maxit' || n === 'steps' || n === 'settle' || n === 'measure' ? replay()[n] : (G('gen') !== 'geared' && /P_paid|P_fric/.test(n)) || (G('pend') !== 'double' && n === 'Theta2') ? NaN_ : replay()[n] });
+check.fpt = () => ({ formula: RERUN, inputs: [], value: replay().rec.framesPerTurn });
+check.rec_turns = () => ({ formula: RERUN, inputs: [], value: replay().rec.turns });
+for (const n of ['phi', 'q1', 'q2', 'w1', 'w2', 'pPaid', 'Win', 'Eh', 'Epaid', 'Efric'])
+  check[n] = k => ({ formula: RERUN + T(', frame ') + k, inputs: [['k', k, '', 0]], value: replay().rec[n][k] });
+for (const [n] of NOW) check[n + '_now'] = () => ({ formula: n + '[k]', inputs: [['k', G('k_now'), '', 0]], value: G(n)[G('k_now')] });
+
+// ---- read back from the picture: alpha before colour
+function boxOf(id) { const cv = $(id); return { canvas: cv, ctx: cv.getContext('2d'), dpr: cv.width / Math.max(1, cv.clientWidth) }; }
+const isInk = c => c[3] > 0 && c[0] < 90 && c[1] < 70 && c[2] < 60;
+function bobExpected() {
+  const ph = G('phi_now'), m = G('mag'), q1 = G('q1_now') * m, q2 = G('q2_now') * m, Lr = G('Lr'), dbl = G('pend') === 'double';
+  const px = G('cx') + Math.cos(ph) * G('rp') * G('sc'), py = G('cy') - Math.sin(ph) * G('rp') * G('sc');
+  let x = px + Math.cos(ph + q1) * (dbl ? Lr / 2 : Lr), y = py - Math.sin(ph + q1) * (dbl ? Lr / 2 : Lr);
+  if (dbl) { x += Math.cos(ph + q2) * Lr / 2; y -= Math.sin(ph + q2) * Lr / 2; }
+  return { x, y };
+}
+function sceneBob(what) {
+  return () => {
+    const e = bobExpected(), r = Sim.readPixel(boxOf('scene'), e.x, e.y, 2, Sim.isBurgundy);
+    const at = Math.hypot(e.x - G('bobA_x'), e.y - G('bobA_y'));
+    return { what: what + T(': the wine bob in the rotor view, at the position computed from the stored φ, θ, pivot radius, scale and swing ×') + G('mag'),
+      drawn: r.found ? T('wine at (') + e.x.toFixed(1) + ', ' + e.y.toFixed(1) + ') px' : T('no wine ink there'), expected: T('the bob drawn ') + at.toFixed(2) + T(' px from the stored bob position'),
+      ok: r.found && at < 0.5, note: T('The rotor view draws the rod angle multiplied by the stored swing magnification.') };
+  };
+}
+function plotX(p, x, log) { const ml = 52, mr = 12, w = G(p + '_w'), x0 = G(p + '_x0'), x1 = G(p + '_x1'); return log ? ml + (Math.log(x) - Math.log(x0)) / (Math.log(x1) - Math.log(x0)) * (w - ml - mr) : ml + (x - x0) / (x1 - x0) * (w - ml - mr); }
+function plotY(p, y) { const mt = 12, mb = 34, h = G(p + '_h'); return h - mb - (y - G(p + '_y0')) / (G(p + '_y1') - G(p + '_y0')) * (h - mt - mb); }
+function curve(id, p, name, label, scale, xs, log) {
+  return k => {
+    const x = plotX(p, xs ? G(xs)[k] : G('turn')[k], log), y = plotY(p, G(name)[k] * scale), r = Sim.readPixel(boxOf(id), x, y, 2, Sim.isBurgundy);
+    const marks = id === 'plotK' ? [[plotX(p, G('gen') === 'geared' ? G('ce') / (CONST.single.m * CONST.single.L ** 2 * G('Om')) : G('kappa'), true), plotY(p, G('P_mean') * 1e3)]]
+      : [[plotX(p, G('turn')[G('k_now')]), plotY(p, G(name)[G('k_now')] * scale)]];
+    if (!r.found && marks.some(([mx, my]) => Math.hypot(x - mx, y - my) < 9))
+      return { what: label + T(' at point ') + k, drawn: T('covered by a marker'), expected: T('the curve through the stored value'), ok: null, note: T('Here the curve runs under the playhead ring or the solved dot, drawn on top of it.') };
+    return { what: label + T(' on its curve, at frame or point ') + k, drawn: r.found ? T('wine ink within 2 px of (') + x.toFixed(1) + ', ' + y.toFixed(1) + ')' : T('no wine ink within 2 px'),
+      expected: T('the curve through the stored value'), ok: r.found, note: T('x and y from the stored axis ends; plot margins 52, 12, 12 and 34 px.') };
+  };
+}
+function tile(id, name, scale, label) {
+  return () => {
+    const txt = $(id).textContent.replace(/−/g, '-'), m = txt.match(/^-?\d+(\.(\d+))?/), val = G(name) * scale;
+    if (!m) return { what: label, drawn: txt, expected: '', ok: isFinite(val) ? false : null, note: T('The tile shows no number for this setting.') };
+    const dec = m[2] ? m[2].length : 0, tol = 0.5 * Math.pow(10, -dec) * (1 + 1e-9);
+    return { what: label, drawn: txt, expected: val.toPrecision(8), ok: Math.abs(parseFloat(m[0]) - val) <= tol, note: T('The tile rounds; agreement means the stored value rounds to what it shows.') };
+  };
+}
+const drawn = {
+  q1_now: sceneBob('θ'), phi_now: sceneBob('φ'), q2_now: sceneBob('θ₂'),
+  q1: curve('plotTh', 'th', 'q1', 'θ', 1), p: curve('plotP', 'pw', 'p', 'p', 1e3), Plin: curve('plotK', 'kp', 'Plin', 'P̄(κ)', 1, 'kap', true),
+  p_now: () => {
+    const x = plotX('pw', G('turn')[G('k_now')]), y = plotY('pw', G('p_now') * 1e3), r = Sim.readPixel(boxOf('plotP'), x + 7, y, 1.5, isInk);
+    return { what: T('the dark playhead ring on the power plot'), drawn: r.found ? T('dark ink 7 px right of (') + x.toFixed(1) + ', ' + y.toFixed(1) + ')' : T('no dark ink'), expected: T('a ring of radius 7 px around the stored p'), ok: r.found };
+  },
+  P_mean: tile('r_P', 'P_mean', 1e3, T('the tile “mean harvested power”, mW')), R: tile('r_R', 'R', 1, T('the tile R')), G: tile('r_G', 'G', 1, T('the tile G')),
+  kappaStar: tile('r_ks', 'kappaStar', 1, T('the tile κ*')), Theta: tile('r_Th', 'Theta', 1, T('the tile swing Θ')), trail: tile('r_tr', 'trail', 1, T('the tile mean trail')),
+  lag_deg: tile('r_lag', 'lag_deg', 1, T('the tile lag δ')), bill: tile('r_bill', 'bill', 1e3, T('the tile bill, mW')),
+  kappa: () => G('gen') === 'geared' ? { what: T('the tile κ'), drawn: $('r_k').textContent, expected: '', ok: null, note: T('With the generator the tile shows κₑ, not κ.') } : tile('r_k', 'kappa', 1, T('the tile κ'))(),
+};
+
+// ---- Read values in the scene: the bobs, the pivot and the hub
+function probe(x, y) {
+  if (!rec) return null;
+  const pts = [['bobA', G('bobA_x'), G('bobA_y'), 12], ['bobB', G('bobB_x'), G('bobB_y'), 14], ['pivot', G('px'), G('py'), 8], ['hub', G('cx'), G('cy'), 10]];
+  let best = null, bd = Infinity;
+  for (const [what, px, py, r] of pts) { const d = Math.hypot(x - px, y - py); if (d < r && d < bd) { bd = d; best = { what }; } }
+  return best;
+}
+function inspect(ref) {
+  const k = G('k_now'), at = { bobA: [G('bobA_x'), G('bobA_y')], bobB: [G('bobB_x'), G('bobB_y')], pivot: [G('px'), G('py')], hub: [G('cx'), G('cy')] }[ref.what];
+  const title = { bobA: T('the bob, rotor view'), bobB: T('the bob, seen from the blade'), pivot: T('the pivot on the blade'), hub: T('the hub') }[ref.what] + T(', frame ') + k;
+  const rows = [['t', G('t_now'), 's', 't_now'], ['φ', G('phi')[k], 'rad', 'phi', k]];
+  if (ref.what === 'pivot') rows.push(['r<sub>p</sub>', G('rp'), 'm', 'rp']);
+  if (ref.what === 'hub') rows.push(['Ω', G('Om'), 'rad/s', 'Om'], ['W<sub>in</sub>', G('Win')[k], 'J', 'Win', k]);
+  if (ref.what === 'bobA' || ref.what === 'bobB') rows.push(['θ', G('q1')[k], 'rad', 'q1', k], ['θ̇', G('w1')[k], 'rad/s', 'w1', k], ['p', G('p')[k], 'W', 'p', k], ['E<sub>kin</sub>', G('Ek')[k], 'J', 'Ek', k], ['E<sub>pot</sub>', G('Ep')[k], 'J', 'Ep', k]);
+  return { title, at: { x: at[0], y: at[1] }, rows };
+}
+function locate(name, idx) {
+  if (name === 'q1' || name === 'p') return { x: plotX(name === 'q1' ? 'th' : 'pw', G('turn')[idx]), y: plotY(name === 'q1' ? 'th' : 'pw', G(name)[idx] * (name === 'p' ? 1e3 : 1)) };
+  return null;
+}
+
+Sim.data = {
+  ds, kicker: T('Rotor Pendula · data'), file: 'rotor-pendula',
+  playing: () => !!(window.rotorSim && window.rotorSim.playing),
+  play: () => window.rotorSim && window.rotorSim.play(),
+  groups: [
+    { title: T('What you set'), note: T('as used by the last solve'), vars: ['rpm_set', 'frac', 'pend', 'gen', 'brake', 'N', 'RL_set'] },
+    { title: T('Fixed for this study'), note: T('constants of the physics block'), vars: ['g', 'M', 'L', 'v_tip'] },
+    { title: T('What follows from it'), note: T('the rotor, the pendulum’s springs and its best brake'), vars: ['Om', 'T_turn', 'rTip', 'rp', 'R', 'G', 'omega_n', 'I_p', 'kappaStar', 'c', 'kappa', 'Pstar', 'PstarModel', 'eta', 'csc', 'ce', 'RL', 'j', 'keep', 'jammed'] },
+    { title: T('State now'), note: T('the stored frame on screen, and the energy book since the record began'), vars: ['t_now', 'k_now', 'phi_now', 'q1_now', 'q2_now', 'w1_now', 'w2_now', 'p_now', 'pPaid_now', 'Ek_now', 'Ep_now', 'Espin_now', 'Win_now', 'Eh_now', 'Epaid_now', 'Efric_now', 'book_res', 'book_rel'] },
+    { title: T('What the solve found'), note: T('means over the measuring turns'), vars: ['P_mean', 'P_paid', 'P_fric', 'Theta', 'Theta2', 'trail', 'trailSin', 'bill', 'lag_deg', 'Win_mean'] },
+    { title: T('Stored record'), note: T('one row per frame of the last turns'), vars: ARR.map(a => a[0]) },
+    { title: T('Solver'), note: T('Radau IIA, fixed step, in a Web Worker'), vars: ['steps', 'h', 'settle', 'measure', 'fpt', 'rec_turns', 'maxit', 'worker_ms', 'stale'] },
+    { title: T('Drawing'), note: T('how stored values become pixels'), vars: ['frame', 'speed', 'playing', 'mag'].concat(GEO.map(a => a[0]), Object.values(PLOTS).flatMap(p => AX.map(a => p + '_' + a[0])), ['kap', 'Plin']) },
+  ],
+  check, drawn, probe, inspect, locate,
+  round: {
+    time: 't_now', label: () => T('one turn of the rotor, ') + Sim.fmt(G('T_turn'), 2) + T(' s of the record, ') + G('fpt') + T(' stored frames'),
+    length: () => G('T_turn'),
+    columns: ['phi_now', 'q1_now', 'w1_now', 'p_now', 'Ek_now', 'Ep_now', 'Win_now', 'Eh_now', 'book_res'],
+    point: () => ({ what: 'bobA' }),
+    blocked: () => !rec ? T('solve first') : G('stale') ? null : G('turn')[G('k_now')] > G('rec_turns') - 1 ? T('the record ends before one more turn; it starts again in a moment') : null,
+  },
+  about: T('Nothing on this page is integrated while you watch. Solve runs the Radau IIA integrator once, in a Web Worker, and keeps the last four turns, one frame per stored step (every fifth step with the generator); the playback shows the stored frame nearest the clock, without interpolation. Three things in the picture differ from the store on purpose. In the rotor view the blade and the pivot are to scale, but the rod is not (it is drawn 17 % of the view long, though it is a fraction of a per cent of the blade), and its angle is drawn multiplied by the swing magnification ×, stored as mag, so that a swing of a few thousandths of a radian can be seen; the label under the figure names the factor. In the blade view the rod has a fixed length on screen and the same magnified angle; the centrifugal arrow is scaled by R/G but kept between one and two gravity arrows, and the small dial shows only gravity’s direction. The third plot draws formula (2.3), the small-swing power, at 161 brakes; the dot on it is the solved mean, which can sit off the curve because the full equation is not small-swing. There are no trails and no colour steps. The energy book uses the energies in the ground frame: the rotor’s work W<sub>in</sub> is integrated as a state of the solve, so the residual measures the integrator, not the drawing.'),
+};
+})();
+</script>
 <script>
 // ----------------------------------------------------------------------------------------------------------------------------
 // The page: settings, the solve in a Web Worker built from the physics block above, playback of the stored record, the scene,
@@ -823,6 +1288,7 @@ function stripModel(md) {
 (function () {
 'use strict';
 const $ = id => document.getElementById(id);
+const D = window.rotorData || null;                // the data store's hooks (script above), absent without the site's data panel
 const C = { wine: '#7d1d2f', wineDeep: '#5a0f21', ink: '#23160f', muted: '#6f5b4c', line: '#3f2c23', rule: '#dccdb4', paper: '#fcf8f0',
   blue: '#33627f', ochre: '#b5681c', green: '#3c6a46', steel: '#8b8079', blade: '#e9ddc6' };
 const MONO = '"IBM Plex Mono", ui-monospace, Menlo, Consolas, monospace';
@@ -904,7 +1370,7 @@ function settingsOf(p) {
   return s;
 }
 const sameSettings = (a, b) => JSON.stringify(settingsOf(a)) === JSON.stringify(settingsOf(b));
-function markStale() { $('stale').hidden = !run || sameSettings(P, runP); }
+function markStale() { $('stale').hidden = !run || sameSettings(P, runP); if (D) D.stale(!$('stale').hidden); }
 
 // ---------------------------------------------------------------- the solve, in a Web Worker built from the physics block
 let worker = null, nextJob = 0, latest = 0;
@@ -916,7 +1382,7 @@ function startWorker() {
     const code = `${physics}
 onmessage = e => {
   const { id, S } = e.data;
-  try { const r = simulate(S), k = r.rec; postMessage({ id, r }, [k.phi.buffer, k.q1.buffer, k.q2.buffer, k.p.buffer, k.pPaid.buffer]); }
+  try { const r = simulate(S), k = r.rec; postMessage({ id, r }, k.names.map(n => k[n].buffer)); }
   catch (err) { postMessage({ id, error: err.message }); }
 };`;
     worker = new Worker(URL.createObjectURL(new Blob([code], { type: 'text/javascript' })));
@@ -963,8 +1429,9 @@ async function solve() {
   $('scrub').max = String(nFrames - 1); $('scrub').disabled = false; $('play').disabled = false;
   pins.length = 0;
   frame = 0; playing = true; $('play').textContent = '❚❚ Pause';
-  fillTiles();
   const secs = (performance.now() - t0) / 1000;
+  if (D) D.solved(run, runModel, settingsOf(runP), lag, mag, secs);
+  fillTiles();
   $('busy').textContent = run.jammed ? 'Jammed by the static argument: nothing to integrate.'
     : `Solved in ${fmt(secs, 2)} s: ${run.settle} turns to settle and ${run.measure} to measure, ${run.steps} steps per turn.`;
   $('recNote').textContent = `Playing the last ${run.rec.turns} of the ${run.settle + run.measure} turns, ${run.rec.framesPerTurn} frames per turn.`;
@@ -990,8 +1457,9 @@ function fillTiles() {
   $('r_Th').innerHTML = `${fmt(run.Theta, 3)}<small>rad</small>` + (dbl ? `<small>rod 2: ${fmt(run.Theta2, 3)}</small>` : '');
   $('r_tr').innerHTML = `${fmt(run.trail, 3)}<small>rad</small>`;
   $('r_lag').innerHTML = run.jammed ? '–' : `${fmt(deg(lag.delta), 3)}<small>°</small>`;
-  const billOK = !geared && !dbl;
-  $('r_bill').innerHTML = billOK ? `${fmt(-CONST.single.m * md.rp * CONST.single.L * md.Om ** 3 * run.trailSin * 1e3, 4)}<small>mW</small>`
+  const billOK = !geared && !dbl, bill = billOK ? -CONST.single.m * md.rp * CONST.single.L * md.Om ** 3 * run.trailSin : NaN;
+  if (D) D.put('bill', bill);
+  $('r_bill').innerHTML = billOK ? `${fmt(bill * 1e3, 4)}<small>mW</small>`
     : '–<small>single, ideal brake</small>';
   $('r_P_l').textContent = geared ? 'power to the load' : 'mean harvested power';
   $('r_P').innerHTML = `${fmt(run.P_mean * 1e3, 4)}<small>mW${run.jammed ? ' · jammed' : ''}</small>`;
@@ -1065,7 +1533,7 @@ function drawScene() {
   ctx.fillStyle = C.steel; ctx.beginPath(); ctx.arc(cx, cy, hub, 0, 2 * Math.PI); ctx.fill();
   ctx.fillStyle = C.paper; ctx.beginPath(); ctx.arc(cx, cy, hub * 0.35, 0, 2 * Math.PI); ctx.fill();
   const px = cx + ux * md.rp * sc, py = cy + uy * md.rp * sc, Lr = 0.17 * s;
-  drawRod(ctx, px, py, phi, q1, q2, dbl, Lr, 0.022 * s);
+  const endA = drawRod(ctx, px, py, phi, q1, q2, dbl, Lr, 0.022 * s);
   // gravity arrow beside the rotor
   arrow(ctx, A.x + A.w - 22, cy - 0.12 * s, A.x + A.w - 22, cy + 0.06 * s, C.blue, 2, 8);
   label(ctx, 'g', A.x + A.w - 32, cy - 0.03 * s, C.blue, 'right', 13);
@@ -1081,6 +1549,7 @@ function drawScene() {
   ctx.setLineDash([4, 4]); ctx.strokeStyle = C.muted; ctx.lineWidth = 1;
   ctx.beginPath(); ctx.moveTo(bx, by); ctx.lineTo(bx + L2 * 1.08, by); ctx.stroke(); ctx.setLineDash([]);
   const end = drawRod(ctx, bx, by, 0, q1, q2, dbl, L2, bob2);
+  if (D) D.scene({ k, cx, cy, Rpx, sc, px, py, Lr, bobA: 0.022 * s, endA, bx, by, L2, bob2, end, w, h });
   // the angle theta (rod 1) from the outward line
   if (Math.abs(q1) > 0.02) {
     ctx.strokeStyle = C.wine; ctx.lineWidth = 1.3; ctx.beginPath(); ctx.arc(bx, by, L2 * 0.32, 0, -q1, q1 > 0); ctx.stroke();
@@ -1211,6 +1680,7 @@ function drawPlots() {
       const dec = [], e0 = Math.floor(Math.log10(lo)), e1 = Math.ceil(Math.log10(hi));
       for (let e = e0; e <= e1; e++) for (const m of [1, 2, 5]) { const v = m * Math.pow(10, e); if (v >= lo && v <= hi) dec.push(v); }
       const mp = plotMaps[id] = frameAxes(ctx, w, h, [lo, hi], yr, md.geared ? 'κ and κₑ' : 'brake κ', 'power (mW)', { logx: true, xticks: dec.length > 8 ? dec.filter((v, i) => i % 2 === 0) : dec });
+      if (D) D.curve(xs, ys);
       vline(ctx, mp, ks, C.muted, 1, [3, 3]);
       series(ctx, mp, i => xs[i], i => ys[i], N + 1, C.wine, 1.8);
       if (!md.geared) ring(ctx, mp.X(md.kappa), mp.Y(md.linearPower(md.kappa) * 1e3), C.wine);
@@ -1218,6 +1688,7 @@ function drawPlots() {
       label(ctx, 'κ*', mp.X(ks) + 4, mp.m.t + 10, C.muted, 'left', 11);
       drawPins(ctx, mp, id);
     }
+    if (D && plotMaps[id]) D.plot(id, plotMaps[id]);
   }
 }
 
@@ -1292,6 +1763,7 @@ function loop(now) {
     dirty = true;
   }
   if (dirty) { drawScene(); drawPlots(); dirty = false; }
+  if (D) D.frame(frame, playing, speed);
   // words at a readable rate: at most one rewrite every 250 ms
   if (now - lastText >= 250 && (textDue || playing)) {
     const t = turnText(), r = readoutText();
@@ -1305,12 +1777,13 @@ window.addEventListener('resize', () => { dirty = true; });
 if (document.fonts && document.fonts.ready) document.fonts.ready.then(() => { dirty = true; });
 // for tests and readers who look: the solved run, read-only
 window.rotorSim = { get run() { return run; }, get model() { return runModel; }, get frame() { return frame; }, get playing() { return playing; },
-  pause() { playing = false; $('play').textContent = '▶ Play'; }, pinXY: () => pinXY, solved: () => !!run && $('solve').disabled === false };
+  pause() { playing = false; $('play').textContent = '▶ Play'; }, play() { if (run) { playing = true; $('play').textContent = '❚❚ Pause'; dirty = true; } }, pinXY: () => pinXY, solved: () => !!run && $('solve').disabled === false };
 startWorker();
 syncControls();
 solve();
 requestAnimationFrame(loop);
 })();
 </script>
+<script src="../../public/scripts/datalog.js"></script>
 </body>
 </html>
