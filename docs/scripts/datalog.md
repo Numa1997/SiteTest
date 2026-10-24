@@ -275,6 +275,7 @@ A round is what the page says it is, in `Sim.data.round` ([datalog.js:27-29](../
 | 8 | one loop of the circles | `t` | sampled | yes, until a shape is decomposed | [L1399](../../public/simulations/draw-decompose.html#L1399) |
 | 9 | one drive period $1/f$ of the stored run | `t_play` | sampled | yes, near the end of the run | [L1909](../../public/simulations/driven-oscillator.html#L1909) |
 | 10 | one rotor turn of the stored run | `t_play` | sampled | yes, near the end of the run | [L1154](../../public/simulations/wind-turbine.html#L1154) |
+| 11 | two seconds of the stored run | `t_play` | sampled | yes, in the last two seconds of the run | [L1330](../../public/simulations/pendulum-control.html#L1330) |
 | Portfolios 02 (Rotor Pendula) | one turn of the rotor in the stored record, $T = 2\pi/\Omega$ | `t_now` | sampled | yes, when less than one turn of the record is left before the playback loops | `Sim.data` in [rotor_sim.html](../../portfolios-src/rotor-pendula/rotor_sim.html) |
 | Portfolios 03, ideal press | one run, $t = 0$ to its end; Record plays it from $t = 0$ | `tView` | sampled | yes, while the run plays | `Sim.data` in [hydraulic.html](../../portfolios-src/hydraulics/hydraulic.html) |
 | Portfolios 03, servo press | one press cycle, $t = 0$ to its end | `tView` | sampled | yes, before the first cycle arrives and while it plays | `Sim.data` in [hydraulic_control.html](../../portfolios-src/hydraulics/hydraulic_control.html) |
