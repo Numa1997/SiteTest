@@ -162,7 +162,7 @@ Readouts ([page:110–118](../../public/simulations/Interactive%20Double-Slit%20
 ($\Delta\varphi$ in units of $\pi$, read from the stored `phi_pi`), `verdict`; the caption span `cap-ds` repeats $\delta s$
 ([page:775–782](../../public/simulations/Interactive%20Double-Slit%20Experiment%20Visualization.html#L775-L782)). The data panel adds
 a "Data" tab and a "Read values" button in the caption of the first figure (the one whose stage has `id="stage"`)
-([datalog.js:589–590](../../public/scripts/datalog.js#L589-L590)); the walkthrough adds "Hold the numbers"
+([datalog.js:896–897](../../public/scripts/datalog.js#L896-L897)); the walkthrough adds "Hold the numbers"
 ([sim.js:252](../../public/scripts/sim.js#L252)).
 
 ## What the page writes into the data store
@@ -201,10 +201,10 @@ subtraction, the drawn bar), as the note says ([page:507](../../public/simulatio
 Measured in Chromium at the defaults: `ds` = 13.627724988366344, `ds_direct` = 13.627724988366339, `S2Q` = 13.627724988366323 px.
 
 **The panel spec** `Sim.data` ([page:849–941](../../public/simulations/Interactive%20Double-Slit%20Experiment%20Visualization.html#L849-L941);
-contract at [datalog.js:8–29](../../public/scripts/datalog.js#L8-L29), explained in [datalog.md](../scripts/datalog.md)):
+contract at [datalog.js:9–31](../../public/scripts/datalog.js#L9-L31), explained in [datalog.md](../scripts/datalog.md)):
 `kicker: 'Fig. 3 · data'`, `file: 'fig3-double-slit'`, six groups (Physical parameters, Geometry, Path difference and phase,
 Intensity, Bright fringes, Animation), `rowLabel` for `pt` (S₁ … Q) and `m` ("m = j"), `colour` maps for `I_far` and `I_exact`
-through `Sim.colourMap` (defined in [datalog.js:71](../../public/scripts/datalog.js#L71)). The probe works in SVG units, so its
+through `Sim.colourMap` (defined in [datalog.js:103](../../public/scripts/datalog.js#L103)). The probe works in SVG units, so its
 22-unit catch radius is 22 × (stage width / 600) CSS px: 28 px on the 770 px stage measured at a 1440 px window.
 
 **Read-backs (`drawn`).** `pt_x`/`pt_y`: the nearest `<circle>` to the stored point, within 0.02 units; $Q$ is not drawn when
@@ -218,12 +218,12 @@ from the visible readouts `r-l1`, `r-l2`, `r-phi`, which must show the stored va
 $\theta = 30^\circ\,(x - 56)/500$, and passes within 0.001. The label exists only while the first bright fringe lies inside
 the 0°–30° plot, that is while $\lambda/b \le \sin 30^\circ = 0.5$. Otherwise the function returns `ok: null` with "outside
 the 0°–30° plot" ([page:844](../../public/simulations/Interactive%20Double-Slit%20Experiment%20Visualization.html#L844)), and the panel shows a neutral "Not in the picture at the moment, so there is nothing to
-read back.", not a failure ([datalog.js:529](../../public/scripts/datalog.js#L529)). At the defaults ($\lambda/b = 0.3375$) the
+read back.", not a failure ([datalog.js:836](../../public/scripts/datalog.js#L836)). At the defaults ($\lambda/b = 0.3375$) the
 label sits at $\theta_1 = 19.72^\circ$.
 
 **One round** (`Sim.data.round`, [page:938–939](../../public/simulations/Interactive%20Double-Slit%20Experiment%20Visualization.html#L938-L939)):
 ten seconds of `wall` time, `mode: 'change'`. In this mode the panel takes a sample only when one of the round columns
-`d, alpha_deg, b, lambda, L1, L2, ds, ratio, I` changes ([datalog.js:797–801](../../public/scripts/datalog.js#L797-L801)), so the reader
+`d, alpha_deg, b, lambda, L1, L2, ds, ratio, I` changes ([datalog.js:1105–1109](../../public/scripts/datalog.js#L1105-L1109)), so the reader
 records by moving sliders; the recorded point is $P$ (`{ pt: 3 }`). The page has no `play` hook, and none is needed: `wall` runs
 whether or not the wavelets move.
 
@@ -286,7 +286,7 @@ before the closing semicolon.
   so the picture carries positions to 0.01 SVG units while the store keeps full doubles. The note says so in Section 9
   ([page:512](../../public/simulations/Interactive%20Double-Slit%20Experiment%20Visualization.html#L512)) and the panel's About
   paragraph says it in the page's `about` text ([page:940](../../public/simulations/Interactive%20Double-Slit%20Experiment%20Visualization.html#L940),
-  shown by [datalog.js:165](../../public/scripts/datalog.js#L165)).
+  shown by [datalog.js:229](../../public/scripts/datalog.js#L229)).
 - Fig. 3b is a polyline through the 301 stored samples; between samples the line is straight.
 - The construction arc, the bar $S_2Q$ and the point $Q$ are hidden when $\delta s \le 0.05$ px; the $\alpha$ arc is hidden when
   $\alpha \le 0.2^\circ$ ([page:651](../../public/simulations/Interactive%20Double-Slit%20Experiment%20Visualization.html#L651),
@@ -336,7 +336,7 @@ before the closing semicolon.
 8. Fixed on 2026-10-15: when the first bright fringe lies outside the 0°–30° plot ($\lambda/b > 0.5$), the Check of
    `sin_theta1` and `theta1` shows a neutral "Not in the picture at the moment, so there is nothing to read back." instead
    of a burgundy ✕. `firstFringeReadback()` returns `ok: null` there by design ([page:844](../../public/simulations/Interactive%20Double-Slit%20Experiment%20Visualization.html#L844)); the panel now
-   honours it ([datalog.js:529](../../public/scripts/datalog.js#L529)) (audit repair, commit [32c240c](https://github.com/Numa1997/SiteTest/commit/32c240c52fd0535d39a0cef608dc404cf4219484)).
+   honours it ([datalog.js:836](../../public/scripts/datalog.js#L836)) (audit repair, commit [32c240c](https://github.com/Numa1997/SiteTest/commit/32c240c52fd0535d39a0cef608dc404cf4219484)).
 
 Batch D store additions: `sin_theta1 = λ/b`, `theta1 = asin(λ/b)` in degrees (NaN when λ > b), and `phi_pi = phi/π`. All three are scalars stored in `storeDerived(G)`, called by `compute()`. `firstFringeReadback()` reads the first-order label’s SVG x coordinate; outside the 0°–30° plot it reports that no label is drawn. L1, L2 and phase also have DOM readbacks.
 

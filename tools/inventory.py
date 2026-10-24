@@ -141,7 +141,8 @@ RULES = [
     # shared scripts and styles
     (r'public/scripts/sim\.js', 'Shared helpers of the simulation pages: KaTeX typesetting of the notes, the walkthrough engine.', 'docs/scripts/sim.md'),
     (r'public/scripts/dataset\.js', 'Sim.dataset(): the one named data store each simulation writes its numbers into.', 'docs/scripts/dataset.md'),
-    (r'public/scripts/datalog\.js', 'The data panel: variables, Read values, Check, Record one round, Save (.npz + CSV).', 'docs/scripts/datalog.md'),
+    (r'public/scripts/datalog\.js', 'The data panel as a bookkeeper: headline, ledger table, books, Read values, Check, Record one round, Save (.npz + CSV).', 'docs/scripts/datalog.md'),
+    (r'public/scripts/ledger/([a-z0-9-]+)\.js', lambda m: 'The data panel\'s ledger of %s: headline, sections in causal order, books, checks of the numbers copied from the run.' % m.group(1), 'docs/scripts/datalog.md'),
     (r'public/scripts/fold\.js', 'Fold-out sections on every page: pinned header bands, remembered state, Expand/Collapse all.', 'docs/scripts/fold.md'),
     (r'public/scripts/catalog\.js', 'The registry of simulations (SIMULATIONS, SIM_FIELDS, SIM_TOOLS) that the catalog page draws.', 'docs/scripts/catalog.md'),
     (r'public/scripts/walk/([a-z0-9-]+)\.js',
@@ -151,7 +152,7 @@ RULES = [
     (r'public/styles/sim\.css', 'Design of the simulation pages: stage, controls, readouts, walkthrough; imports paper.css and KaTeX.', 'docs/styles.md'),
     (r'public/styles/paper\.css', 'Lecture notes set like LaTeX: Latin Modern, numbered equations, figures, abstract box.', 'docs/styles.md'),
     (r'public/styles/catalog\.css', 'The catalog entries (paper abstracts) on the simulations page.', 'docs/styles.md'),
-    (r'public/styles/data\.css', 'The data panel and the Read values strip.', 'docs/styles.md'),
+    (r'public/styles/data\.css', 'The data panel (headline, ledger table, books) and the Read values strip.', 'docs/styles.md'),
     (r'public/styles/fold\.css', 'The fold-out sections: cards, header bands, toggles, Expand/Collapse all.', 'docs/styles.md'),
     (r'public/styles/portfolio\.css', 'The project cards and figure plates of the Portfolios page.', 'docs/styles.md'),
     # vendor, fonts, images
@@ -300,7 +301,7 @@ SECTIONS = [
     ('public/', 'Pages under public/', lambda p: p.startswith('public/') and p.count('/') == 1),
     ('public/de/', 'German pages (generated)', None), ('public/ar/', 'Arabic pages (generated)', None),
     ('public/simulations/', 'Simulation pages', None),
-    ('public/scripts/walk/', 'Walkthroughs', None), ('public/scripts/', 'Shared scripts', None),
+    ('public/scripts/walk/', 'Walkthroughs', None), ('public/scripts/ledger/', 'Ledgers of the data panel', None), ('public/scripts/', 'Shared scripts', None),
     ('public/styles/', 'Stylesheets', None),
     ('public/vendor/katex/', 'KaTeX', None), ('public/fonts/lm/', 'Latin Modern', None),
     ('public/fonts/', 'IBM Plex, Instrument Serif, and the Arabic faces', None),
