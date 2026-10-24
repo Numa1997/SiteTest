@@ -183,60 +183,76 @@
   // ------------------------------------------------------------ panel 4: a cloud with a shape (fall + mean motion + stochastic element)
   var sh = $('shape');
   if (sh) {
-    var cv = $('sh-cv'), ctx = cv.getContext('2d'), CW = cv.width, CH = cv.height, PADB = 20, cloud = null, timer = null, probe = null, lastText = 0;
+    var cv = $('sh-cv'), ctx = cv.getContext('2d'), cloud = null, timer = null, probe = null, lastText = 0, bg = null, follow = null, trail = [];
+    var CW = 600, CH = 450, dpr = 1;
     var KO = { speed: 'beard', eff: 'table', coal: 'law', near: 'clamp', tab: DATA.etab_warm };
-    var sx = function (x) { return x / 2000 * CW; }, sz = function (z) { return (CH - PADB) - z / 1500 * (CH - PADB); };
-    function newCloud() {
-      cloud = PHYS.makeCloud(A, KO, { shape: $('sh-shape').value, W0: +$('sh-wind').value, stochastic: $('sh-stoch').value === 'on', eps: +$('sh-eps').value,
-        perCell: [24, 8], seed: 1 + Math.floor(Math.random() * 1e9) });
-      bg = null; draw(); text(true);
+    var sx = function (x) { return x / 2000 * CW; }, sz = function (z) { return CH - z / 1500 * CH; };
+    function size() {    // draw at the displayed size times the device pixel ratio, so lines and dots stay sharp on a phone
+      var w = Math.max(280, cv.parentNode.clientWidth - 12); dpr = window.devicePixelRatio || 1;
+      CW = w; CH = Math.round(w * 0.75); cv.width = Math.round(CW * dpr); cv.height = Math.round(CH * dpr); cv.style.height = CH + 'px';
+      ctx.setTransform(dpr, 0, 0, dpr, 0, 0); bg = null;
     }
-    var bg = null;
-    function background() {     // the shape, the ground and the mean motion's arrows, drawn once per cloud
-      var c = document.createElement('canvas'); c.width = CW; c.height = CH; var g = c.getContext('2d'), i, j, v = [0, 0];
+    function newCloud() {
+      var shape = $('sh-shape').value, seed = 1 + Math.floor(Math.random() * 1e9);
+      cloud = PHYS.makeCloud(A, KO, { shape: shape, outline: { seed: seed, rough: 0.5 }, W0: +$('sh-wind').value, stochastic: $('sh-stoch').value === 'on', Le: +$('sh-le').value,
+        perCell: [24, 8], seed: seed });
+      bg = null; follow = null; trail = []; draw(); text(true);
+    }
+    function background() {     // the outline, the ground and the mean motion's arrows (only where it blows), drawn once per cloud
+      var c = document.createElement('canvas'); c.width = cv.width; c.height = cv.height; var g = c.getContext('2d'), i, j, v = [0, 0];
+      g.setTransform(dpr, 0, 0, dpr, 0, 0);
       g.fillStyle = '#f4f8fa'; g.fillRect(0, 0, CW, CH);
-      g.fillStyle = '#e1ebf0';
-      for (i = 0; i < 80; i++) for (j = 0; j < 60; j++) { var x = (i + 0.5) * 25, z = (j + 0.5) * 25; if (cloud.inside(x, z)) g.fillRect(sx(i * 25), sz((j + 1) * 25), sx(25) + 0.6, sz(0) - sz(25) + 0.6); }
-      g.strokeStyle = 'rgba(51,98,127,0.35)'; g.lineWidth = 1;
-      if (cloud.W0 > 0) for (i = 1; i < 10; i++) for (j = 1; j < 8; j++) {
-        var X = i * 200, Z = j * 190; cloud.flow(X, Z, v); var L = 26 / Math.max(1e-9, cloud.W0), ex = sx(X) + v[0] * L, ez = sz(Z) - v[1] * L;
-        g.beginPath(); g.moveTo(sx(X), sz(Z)); g.lineTo(ex, ez); g.stroke();
-        var a = Math.atan2(ez - sz(Z), ex - sx(X)); g.beginPath(); g.moveTo(ex, ez); g.lineTo(ex - 5 * Math.cos(a - 0.4), ez - 5 * Math.sin(a - 0.4)); g.moveTo(ex, ez); g.lineTo(ex - 5 * Math.cos(a + 0.4), ez - 5 * Math.sin(a + 0.4)); g.stroke();
+      g.fillStyle = '#d6e4eb';
+      for (i = 0; i < 100; i++) for (j = 0; j < 75; j++) { var x = (i + 0.5) * 20, z = (j + 0.5) * 20; if (cloud.inside(x, z)) g.fillRect(sx(i * 20), sz((j + 1) * 20), sx(20) + 0.6, sz(0) - sz(20) + 0.6); }
+      g.strokeStyle = 'rgba(35,22,15,0.55)'; g.lineWidth = 1;
+      if (cloud.W0 > 0) for (i = 1; i < 20; i++) for (j = 1; j < 15; j++) {
+        var X = i * 100, Z = j * 100; cloud.flow(X, Z, v); var sp = Math.hypot(v[0], v[1]); if (sp < 0.05) continue;
+        var L = 22 * sp / cloud.W0 * CW / 600, ex = sx(X) + v[0] / sp * L, ez = sz(Z) - v[1] / sp * L, a = Math.atan2(ez - sz(Z), ex - sx(X));
+        g.beginPath(); g.moveTo(sx(X), sz(Z)); g.lineTo(ex, ez); g.lineTo(ex - 4 * Math.cos(a - 0.45), ez - 4 * Math.sin(a - 0.45)); g.moveTo(ex, ez); g.lineTo(ex - 4 * Math.cos(a + 0.45), ez - 4 * Math.sin(a + 0.45)); g.stroke();
       }
-      g.fillStyle = '#6f665e'; g.fillRect(0, CH - PADB, CW, 2);
-      g.font = '11px "IBM Plex Mono", monospace'; g.fillText('ground: rain is counted here', 8, CH - 5);
+      g.fillStyle = '#6f665e'; g.fillRect(0, CH - 2, CW, 2);
       return c;
     }
     function draw() {
       if (!bg) bg = background();
-      ctx.drawImage(bg, 0, 0);
-      var s = cloud.sd, i;
+      ctx.setTransform(1, 0, 0, 1, 0, 0); ctx.drawImage(bg, 0, 0); ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+      var s = cloud.sd, i, k = CW / 600;
       for (i = 0; i < s.length; i++) {
         var q = s[i], r = q.r;
-        ctx.fillStyle = r >= 100e-6 ? '#7d1d2f' : r >= 20e-6 ? '#c9783f' : 'rgba(51,98,127,0.45)';
-        var d = r >= 100e-6 ? 3.2 : r >= 20e-6 ? 2 : 1.2;
+        ctx.fillStyle = r >= 100e-6 ? '#7d1d2f' : r >= 20e-6 ? '#c9783f' : 'rgba(51,98,127,0.55)';
+        var d = Math.max(r >= 100e-6 ? 3.2 : r >= 20e-6 ? 2.2 : 2, (r >= 100e-6 ? 3.2 : r >= 20e-6 ? 2 : 1.4) * k);
         ctx.fillRect(sx(q.x) - d / 2, sz(q.z) - d / 2, d, d);
       }
+      if (trail.length > 1) { ctx.strokeStyle = '#23160f'; ctx.lineWidth = 1.5; ctx.beginPath(); ctx.moveTo(sx(trail[0][0]), sz(trail[0][1])); for (i = 1; i < trail.length; i++) ctx.lineTo(sx(trail[i][0]), sz(trail[i][1])); ctx.stroke();
+        var e = trail[trail.length - 1]; ctx.beginPath(); ctx.arc(sx(e[0]), sz(e[1]), 4, 0, 2 * Math.PI); ctx.stroke(); }
       if (probe) { ctx.strokeStyle = '#23160f'; ctx.lineWidth = 1.5; ctx.strokeRect(sx(probe.i * 50), sz((probe.j + 1) * 50), sx(50), sz(0) - sz(50)); }
-      ctx.fillStyle = '#23160f'; ctx.font = '12px "IBM Plex Mono", monospace'; ctx.fillText('t = ' + (cloud.t / 60).toFixed(1) + ' min', 8, 16);
     }
+    var REG = ['updraft core', 'flank', 'edge band (within 100 m of the outline)', 'clear air', 'below the base'];
     function text(force) {
       var now = performance.now(); if (!force && now - lastText < 250) return; lastText = now;   // words change about four times a second
       var z = cloud.census(), f = function (v) { return (100 * v / cloud.M0).toFixed(1) + ' %'; };
-      $('sh-out').innerHTML = 'time <b>' + (cloud.t / 60).toFixed(1) + ' min</b><br>water still in the air ' + f(z.M) + ' (in drops ≥ 100 µm ' + f(z.M100) + ')<br>rained out ' + f(z.rain) +
-        ' · evaporated in clear air ' + f(z.evap) + '<br>first drop of 100 µm: ' + (cloud.first100 ? (cloud.first100.t / 60).toFixed(1) + ' min at x = ' + cloud.first100.x.toFixed(0) + ' m, z = ' + cloud.first100.z.toFixed(0) + ' m' : 'not yet');
+      $('sh-time').textContent = 't = ' + (cloud.t / 60).toFixed(1) + ' min';
+      $('sh-out').innerHTML = 'water still in the air ' + f(z.M) + ' (in drops ≥ 100 µm ' + f(z.M100) + ')<br>rained out ' + f(z.rain) +
+        ' · evaporated ' + f(z.evap) + ' (of which below the base ' + f(z.evapBelow) + ')<br>first drop of 100 µm: ' + (cloud.first100 ? (cloud.first100.t / 60).toFixed(1) + ' min at x = ' + cloud.first100.x.toFixed(0) + ' m, z = ' + cloud.first100.z.toFixed(0) + ' m' : 'not yet') +
+        (follow ? '<br>followed drop: ' + (follow.alive ? (follow.q.r * 1e6).toFixed(1) + ' µm at z = ' + follow.q.z.toFixed(0) + ' m' : follow.end) : '');
       if (probe) {
         var x = (probe.i + 0.5) * 50, zz = (probe.j + 0.5) * 50, v = [0, 0], e = cloud.epsAt(x, zz), s2 = cloud.sig2At(x, zz), n = 0, w = 0, rmax = 0;
         cloud.flow(x, zz, v);
         cloud.sd.forEach(function (q) { if (Math.floor(q.x / 50) === probe.i && Math.floor(q.z / 50) === probe.j) { n++; w += q.xi * PHYS.massOf(q.r); rmax = Math.max(rmax, q.r); } });
-        $('sh-probe').innerHTML = 'probe at x = ' + x + ' m, z = ' + zz + ' m (' + (cloud.inside(x, zz) ? 'inside the cloud' : 'clear air') + ')<br>mean wind ' + v[0].toFixed(2) + ' / ' + v[1].toFixed(2) +
-          ' m/s (across / up) · stochastic element σ = ' + (cloud.stochastic ? Math.sqrt(s2).toFixed(2) + ' m/s, memory T_L = ' + (2 * s2 / (6 * e)).toFixed(0) + ' s' : 'off') +
+        $('sh-probe').innerHTML = 'probe at x = ' + x + ' m, z = ' + zz + ' m: ' + REG[cloud.regionAt(x, zz)] + '<br>mean wind ' + v[0].toFixed(2) + ' / ' + v[1].toFixed(2) +
+          ' m/s (across / up) · eddies σ = ' + (cloud.stochastic ? Math.sqrt(s2).toFixed(2) + ' m/s, memory T_L = ' + (2 * s2 / (6 * e)).toFixed(0) + ' s' : 'off') +
           '<br>super-droplets here ' + n + ' · water ' + (w / 125000 * 1e3).toFixed(3) + ' g/m³ · largest drop ' + (rmax * 1e6).toFixed(0) + ' µm';
       }
     }
+    function advance() {
+      var per = +$('sh-speed').value;
+      for (var k = 0; k < per; k++) {
+        cloud.step(1);
+        if (follow && follow.alive) { if (cloud.sd.indexOf(follow.q) < 0) { follow.alive = false; follow.end = follow.q.z < 0.5 ? 'reached the ground as rain' : 'gone (evaporated or merged away)'; } else { trail.push([follow.q.x, follow.q.z]); if (trail.length > 900) trail.shift(); } }
+      }
+    }
     function loop() {
-      cloud.step(1); cloud.step(1);
-      draw(); text(false);
+      advance(); draw(); text(false);
       if (cloud.t < 2700 && cloud.sd.length) timer = requestAnimationFrame(loop); else { timer = null; $('sh-go').textContent = 'Start'; $('sh-status').textContent = 'stopped at 45 min'; text(true); }
     }
     $('sh-go').addEventListener('click', function () {
@@ -244,51 +260,73 @@
       if (reduceMotion) { for (var k = 0; k < 60; k++) cloud.step(1); draw(); text(true); $('sh-status').textContent = 'advanced one minute (reduced motion)'; return; }
       $('sh-go').textContent = 'Pause'; $('sh-status').textContent = 'running'; timer = requestAnimationFrame(loop);
     });
+    $('sh-follow').addEventListener('click', function () {     // follow a droplet that starts low in the updraft core
+      var best = null, bd = 1e9;
+      cloud.sd.forEach(function (q) { if (q.r < 20e-6 && cloud.regionAt(q.x, q.z) === 0) { var d = Math.abs(q.x - 1000) + Math.abs(q.z - 450); if (d < bd) { bd = d; best = q; } } });
+      if (!best) best = cloud.sd[Math.floor(cloud.sd.length / 2)];
+      follow = { q: best, alive: true }; trail = [[best.x, best.z]]; draw(); text(true);
+    });
     $('sh-reset').addEventListener('click', function () { if (timer) { cancelAnimationFrame(timer); timer = null; $('sh-go').textContent = 'Start'; } $('sh-status').textContent = ''; newCloud(); });
-    ['sh-shape', 'sh-wind', 'sh-stoch', 'sh-eps'].forEach(function (id) { $(id).addEventListener('change', function () { $('sh-reset').click(); }); });
+    ['sh-shape', 'sh-wind', 'sh-stoch', 'sh-le'].forEach(function (id) { $(id).addEventListener('change', function () { $('sh-reset').click(); }); });
     cv.addEventListener('click', function (e) {
-      var b = cv.getBoundingClientRect(), x = (e.clientX - b.left) / b.width * CW, y = (e.clientY - b.top) / b.height * CH;
-      if (y > CH - PADB) return;
-      probe = { i: Math.min(39, Math.floor(x / CW * 40)), j: Math.min(29, Math.floor((CH - PADB - y) / (CH - PADB) * 30)) };
+      var b = cv.getBoundingClientRect(), x = (e.clientX - b.left) / b.width * 2000, z = (1 - (e.clientY - b.top) / b.height) * 1500;
+      probe = { i: Math.min(39, Math.max(0, Math.floor(x / 50))), j: Math.min(29, Math.max(0, Math.floor(z / 50))) };
       draw(); text(true);
     });
     $('sh-clear').addEventListener('click', function () { probe = null; $('sh-probe').textContent = 'No probe pinned.'; draw(); });
-    newCloud();
+    window.addEventListener('resize', function () { if (!cloud) return; size(); draw(); });
+    size(); newCloud();
   }
 
   // ------------------------------------------------------------ panel 5: one landscape, three rules
   var ru = $('rules');
   if (ru) {
     var marks = [1, 0.95, 0.9, 0.8, 0.7, 0.6, 0.5, 0.4, 0.3, 0.2, 0.1, 0.05, 0.02, 0.01];
-    function curve(radii, kind) {
-      var a23 = function (r) { return Math.pow(PHYS.massOf(r), 2 / 3); }, S0 = 0, S, N0 = radii.length, xs = [0], ys = [1], mi = 1, dd = 0, cd = 0, n = 0, first = null;
+    var KO2 = { speed: 'beard', eff: 'table', coal: 'law', near: 'clamp', tab: DATA.etab_warm };
+    function curve(radii, kind, V) {
+      var a23 = function (r) { return Math.pow(PHYS.massOf(r), 2 / 3); }, S0 = 0, S, N0 = radii.length, xs = [0], ys = [1], mi = 1, dd = 0, n = 0, first = null, half = null;
+      var live = radii.slice();   // radii now, kept only to draw the spectrum when half the drops have merged
       radii.forEach(function (r) { S0 += a23(r); }); S = S0;
       function ev(a, b, alive) {
         var R = Math.cbrt(a * a * a + b * b * b); S -= a23(a) + a23(b) - a23(R); n++;
-        var big = Math.max(a, b), sm = Math.min(a, b); if (big < 20e-6) dd++; else if (sm < 20e-6) cd++;
+        if (Math.max(a, b) < 20e-6) dd++;
         if (first === null && R >= 100e-6) first = n;
         while (mi < marks.length && (alive - 1) / N0 <= marks[mi]) { xs.push(1 - marks[mi]); ys.push(S / S0); mi++; }
       }
       if (kind === 'steepest') {
         var s = radii.slice().sort(function (p, q) { return q - p; }), bigR = s[0];
-        for (var k = 1; k < s.length; k++) { ev(bigR, s[k], N0 - k + 1); bigR = Math.cbrt(bigR * bigR * bigR + s[k] * s[k] * s[k]); }
+        for (var k = 1; k < s.length; k++) { ev(bigR, s[k], N0 - k + 1); bigR = Math.cbrt(bigR * bigR * bigR + s[k] * s[k] * s[k]); if (half === null && k >= N0 / 2) half = [bigR].concat(s.slice(k + 1)); }
       } else {
-        var u = PHYS.rng(1 + Math.floor(Math.random() * 1e9));
-        PHYS.gillespieRun(10, radii, A, kind === 'constant' ? { constant: 1e-10 } : KO2, { u: u, tEnd: kind === 'constant' ? 1e12 : 3600, recordEvery: kind === 'constant' ? 1e12 : 3600, onEvent: function (a, b, t, alive) { ev(a, b, alive); } });
+        var u = PHYS.rng(1 + Math.floor(Math.random() * 1e9)), pool = {};
+        PHYS.gillespieRun(V, radii, A, kind === 'constant' ? { constant: 1e-10 } : KO2, { u: u, tEnd: kind === 'constant' ? 1e12 : 3600, recordEvery: kind === 'constant' ? 1e12 : 3600,
+          onEvent: function (a, b, t, alive) {
+            if (half === null) { var ka = a.toPrecision(15), kb = b.toPrecision(15); pool[ka] = (pool[ka] || 0) + 1; pool[kb] = (pool[kb] || 0) + 1; var R = Math.cbrt(a * a * a + b * b * b), kr = R.toPrecision(15); pool[kr] = (pool[kr] || 0) - 1;
+              if (alive - 1 <= N0 / 2) { half = []; var gone = pool; live.forEach(function (r) { var kk = r.toPrecision(15); if (gone[kk] > 0) gone[kk]--; else half.push(r); }); for (var key in gone) if (gone[key] < 0) for (var g = 0; g < -gone[key]; g++) half.push(+key); } }
+            ev(a, b, alive);
+          } });
       }
-      return { xs: xs, ys: ys, dd: dd, cd: cd, n: n, first: first, S: S / S0 };
+      return { xs: xs, ys: ys, dd: dd, n: n, first: first, half: half };
     }
-    var KO2 = { speed: 'beard', eff: 'table', coal: 'law', near: 'clamp', tab: DATA.etab_warm };
+    function spectrum(rr) {
+      var bins = 40, lo = Math.log(2), hi = Math.log(400), dl = (hi - lo) / bins, h = new Array(bins).fill(0), tot = 0, xs = [];
+      for (var i = 0; i < bins; i++) xs.push(Math.exp(lo + (i + 0.5) * dl));
+      (rr || []).forEach(function (r) { var um = r * 1e6, b = Math.floor((Math.log(um) - lo) / dl); if (b >= 0 && b < bins) { h[b] += um * um * um; } tot += um * um * um; });
+      return { x: xs, y: h.map(function (v) { return v / Math.max(tot, 1e-30) / dl; }) };
+    }
     $('ru-run').addEventListener('click', function () {
       $('ru-status').textContent = 'merging…';
       setTimeout(function () {
-        var u = PHYS.rng(1 + Math.floor(Math.random() * 1e9)), radii = PHYS.drawModes(MODES, 10, u, 3);
-        var P1 = curve(radii, 'physical'), P2 = curve(radii, 'constant'), P3 = curve(radii, 'steepest');
-        $('ru-plot').innerHTML = CHART.line({ w: 620, h: 310, xmin: 0, xmax: 1, ymin: 0, ymax: 1, xlabel: 'share of the drops merged away, 1 − N/N₀', ylabel: 'surface energy left / at start', id: 'rup', series: [
-          { x: P1.xs, y: P1.ys, label: 'kernel of chapters 1–4 (one hour)', color: '#7d1d2f' }, { x: P2.xs, y: P2.ys, label: 'every pair alike (Metropolis)', color: '#33627f' },
+        var V = +$('ru-V').value, u = PHYS.rng(1 + Math.floor(Math.random() * 1e9)), radii = PHYS.drawModes(MODES, V, u, 3);
+        var P1 = curve(radii, 'physical', V), P2 = curve(radii, 'constant', V), P3 = curve(radii, 'steepest', V);
+        $('ru-plot').innerHTML = CHART.line({ w: 620, h: 300, xmin: 0, xmax: 1, ymin: 0, ymax: 1, xlabel: 'share of the drops merged away, 1 − N/N₀', ylabel: 'surface free energy left / at start', id: 'rup', series: [
+          { x: P1.xs, y: P1.ys, label: 'collision kernel (one hour)', color: '#7d1d2f' }, { x: P2.xs, y: P2.ys, label: 'every pair alike', color: '#33627f' },
           { x: P3.xs, y: P3.ys, label: 'largest pair first', color: '#3c6a46', dash: '5 4' }] });
+        var s1 = spectrum(P1.half), s2 = spectrum(P2.half), s3 = spectrum(P3.half);
+        $('ru-spec').innerHTML = CHART.line({ w: 620, h: 280, xlog: true, xmin: 2, xmax: 400, ymin: 0, xlabel: 'radius r (µm)', ylabel: 'share of the water per unit ln r', id: 'rus', series: [
+          { x: s1.x, y: s1.y, label: 'collision kernel, half merged', color: '#7d1d2f' }, { x: s2.x, y: s2.y, label: 'every pair alike, half merged', color: '#33627f' },
+          { x: s3.x, y: s3.y, label: 'largest pair first, half merged', color: '#3c6a46', dash: '5 4' }] });
         var pc = function (a, b) { return (100 * a / Math.max(1, b)).toFixed(2) + ' %'; };
-        $('ru-out').innerHTML = radii.length + ' drops.<br>Kernel: ' + P1.n + ' mergers in an hour, droplet–droplet ' + pc(P1.dd, P1.n) + ', collector–droplet ' + pc(P1.cd, P1.n) + '; first 100 µm drop after ' + (P1.first || '–') + ' mergers.' +
+        $('ru-out').innerHTML = radii.length + ' drops.<br>Collision kernel: ' + P1.n + ' mergers in an hour, droplet–droplet ' + pc(P1.dd, P1.n) + '; first 100 µm drop after ' + (P1.first || '–') + ' mergers.' +
           '<br>Every pair alike: droplet–droplet ' + pc(P2.dd, P2.n) + '; first 100 µm drop after ' + P2.first + ' mergers.<br>Largest pair first: first 100 µm drop after ' + P3.first + ' mergers.';
         $('ru-status').textContent = 'done';
       }, 20);

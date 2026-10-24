@@ -7,7 +7,7 @@ a **built copy** of each one, so that a reader can open it here without leaving 
 
 | Folder | Built from the app | What it is |
 |---|---|---|
-| [`public/portfolios/droplet-collection/`](../public/portfolios/droplet-collection/) | its source in [`portfolios-src/droplets/`](../portfolios-src/droplets/) (since 23 October 2026; before, the app `droplet-collection-yl7l26`) | Numa's Bachelor thesis (Leipzig) on how cloud droplets grow into rain, rebuilt as lecture notes: twelve chapters from one drop to ice, energy and entropy, and a cloud with a shape, five simulations running in the browser, worked problems and checks. One self-contained page ([below](#droplet-collection-droplet-collection-since-23-october-2026)). |
+| [`public/portfolios/droplet-collection/`](../public/portfolios/droplet-collection/) | its source in [`portfolios-src/droplets/`](../portfolios-src/droplets/) (since 23 October 2026; before, the app `droplet-collection-yl7l26`) | Numa's Bachelor thesis (Leipzig) on how cloud droplets grow into rain, rebuilt as lecture notes: thirteen chapters from one drop to ice, energy and entropy, who eats whom, and a cloud with a shape, five simulations running in the browser, worked problems and checks. One self-contained page ([below](#droplet-collection-droplet-collection-since-23-october-2026)). |
 | [`public/portfolios/rotor-pendula/`](../public/portfolios/rotor-pendula/) | its source in [`portfolios-src/rotor-pendula/`](../portfolios-src/rotor-pendula/) | A pendulum riding on a wind-turbine blade as a sensor's power supply: lecture notes in nine chapters and a simulation page, one generated page. |
 | [`public/portfolios/hydraulics/`](../public/portfolios/hydraulics/) | its source in [`portfolios-src/hydraulics/`](../portfolios-src/hydraulics/) (not an app) | A servo-hydraulic press under digital control, from first principles: the animated press with its PID controller, loop analysis (Bode, Nyquist, z-plane), Pascal's ideal press, and a 23-chapter text deriving every equation. One self-contained page. |
 
@@ -395,10 +395,10 @@ how each model level was argued, attacked by an independent reviewer and checked
   an exact random cloud, a cloud with a shape, one energy landscape under three rules) change only on a click, a slider release or a
   button; nothing reacts to the pointer crossing a figure. Panel 4 animates on Start; its probe is pinned by a click and its words
   change about four times a second.
-- **Every quoted number is checked.** `checks/check_numbers.cjs` recomputes 215 numbers from the model and finds each in the text
+- **Every quoted number is checked.** `checks/check_numbers.cjs` recomputes 235 numbers from the model and finds each in the text
   near its anchor; `checks/check_physics.py` recomputes the physics independently in Python (14 checks); `checks/check_browser.py`
   opens every tab at 360, 390, 1024 and 1440 px and counts KaTeX errors, page errors and horizontal overflow.
 - **The ladder.** L0 one collector (chapter 1); L1 fall speed (2); L2 collision efficiency (3); L3 coalescence (4); L4 the
-  collection equation (5); L5 the exact random process and the first drizzle (6); L6 turbulence, decided by a number (7); L7 ice (8); L8 energy, entropy and who eats whom (10);
-  L10 a cloud with a shape: fall, mean motion and a stochastic element (11). L9 (turbulence at contact scale) and L11 (a mean motion
-  measured from cloud pictures) are open; chapters 10 and 11 still await an independent reviewer.
+  collection equation (5); L5 the exact random process and the first drizzle (6); L6 turbulence, decided by a number (7); L7 ice (8); L8 energy, entropy, ripening and who eats whom (10, 11);
+  L10 a cloud with a shape: fall, mean motion and a stochastic element (12). L9 (turbulence at contact scale) and L11 (a mean motion
+  measured from cloud pictures) are open; Part IV had one round of two independent reviews (`notes/droplets/review-*.md`).

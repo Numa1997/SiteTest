@@ -330,54 +330,63 @@ const up = x => Math.ceil(x);
 expect('checks', 'recorded to the minute', `${up(tq('thesis', 0.5))} / ${up(tq('thesis', 0.9))}, ${up(gq('thesis', 0.5))} / ${up(gq('thesis', 0.9))}, ${up(tq('extended', 0.5))} / ${up(tq('extended', 0.9))}, ${up(gq('extended', 0.5))} / ${up(gq('extended', 0.9))} min`);
 expect('checks', 'against 5.767,', `${f(t90ext, 3)}`, 'the model at 5 s records');
 
-// ---------------------------------------------------------------- chapter 10: energy, entropy and who eats whom
-// scales from physics.cjs; the runs from data/energy.json (tools/run_energy.cjs)
+// ---------------------------------------------------------------- chapter 10: energy and entropy of merging (data/energy.json, data/ripening.json)
 {
-  const EN = D('energy.json'), wr = EN.warm, last10 = EN.warm.recs[EN.warm.recs.length - 1], sig = P.sigmaWater(A.T), kB = P.K_B, T = A.T;
-  const area = r => 4 * Math.PI * r * r, rel = (a, b) => sig * (area(a) + area(b) - area(Math.cbrt(a ** 3 + b ** 3)));
+  const EN = D('energy.json'), wr = EN.warm, sig = P.sigmaWater(A.T), kB = P.K_B, T = A.T, RP = D('ripening.json');
+  const dsdT = (P.sigmaWater(T + 0.01) - P.sigmaWater(T - 0.01)) / 0.02, us = sig - T * dsdT;
+  const area = r => 4 * Math.PI * r * r, dA = (a, b) => area(a) + area(b) - area(Math.cbrt(a ** 3 + b ** 3));
   expect('book-10', 'takes $\\sigma$ =', f(sig, 5) + ' J');
-  expect('book-10', 'two equal drops lose', f(100 * (1 - Math.pow(2, -1 / 3)), 1) + ' %');
-  expect('book-10', 'At the start the cloud holds', `${f(wr.Es0, 4)} J per m³`);
+  expect('book-10', 'two equal drops\nlose'.replace('\n', ' '), f(100 * (1 - Math.pow(2, -1 / 3)), 1) + ' %');
   const g8 = P.makeGrid(8, 4e-3), Nd = P.lognormalBins(g8, [modes[0]]), Nc = P.lognormalBins(g8, [modes[1]]);
   let Ed = 0, Ec = 0; for (let k2 = 0; k2 < g8.n; k2++) { Ed += Nd[k2] * area(g8.r[k2]); Ec += Nc[k2] * area(g8.r[k2]); }
-  expect('book-10', 'J per m³ of air,', f(100 * Ed / (Ed + Ec), 1) + ' % of it in the');
-  const d408 = rel(40e-6, 8e-6), mu = P.massOf(40e-6) * P.massOf(8e-6) / (P.massOf(40e-6) + P.massOf(8e-6)), KE = 0.5 * mu * (vB(40e-6) - vB(8e-6)) ** 2;
-  expect('book-10', 'eating an 8 µm droplet releases', `${texSci(d408, 2)} J`);
-  expect('book-10', 'eating an 8 µm droplet releases', `${Math.round(d408 / KE / 100) * 100} times the kinetic energy`);
-  expect('book-10', 'of their collision', `(${texSci(KE, 2)} J)`);
-  expect('book-10', 'steps of the', '0.1 % more', 'ledger ' + f(100 * (wr.totRel / last10.released.reduce((a, v) => a + v, 0) - 1), 3) + ' %');
-  expect('book-10', 'The drop warms by', texSci(d408 / ((P.massOf(40e-6) + P.massOf(8e-6)) * 4192), 1) + ' K');
-  expect('book-10', 'Heat $\\Delta E$ delivered', texSci(d408 / T / kB, 2) + '\\,k_B');
-  expect('book-10', 'Over the hour merging releases', `${f(wr.totRel, 4)} J per m³`);
-  expect('book-10', 'and produces', `${texSci(wr.totRel / T, 2)} J/K of entropy per m³, ${texSci(wr.totRel / wr.totMerg / (kB * T), 2)}\\,k_B per merger`);
-  expect('book-10', 'At its largest the release is', `${f(100 * wr.maxRatio, 2)} % of the power`);
-  expect('book-10', 'all the drops\' surfaces', `every ${f(wr.Es0 / wr.Pg0, 0)} s`);
-  const mc = EN.mc, ag = (k2, fr) => mc[k2].agg.find(q => q.f === fr), med = a => { const s = a.filter(Boolean).map(q => q.merged).sort((x, y) => x - y); return s[Math.floor(s.length / 2)]; };
-  expect('book-10', 'kernel of chapters 1–4', `${f(100 * ag('physical', 0.5).S, 2)} ± ${f(100 * ag('physical', 0.5).Sse, 2)} %`);
-  expect('book-10', 'kernel of chapters 1–4', `${med(mc.physical.first100)} (median of 20)`);
-  expect('book-10', 'kernel of chapters 1–4', `${f(100 * ag('physical', 0.5).share[0], 3)} %`);
-  expect('book-10', 'every pair alike (Metropolis)', `${f(100 * ag('constant', 0.5).S, 2)} ± ${f(100 * ag('constant', 0.5).Sse, 2)} %`);
-  expect('book-10', 'every pair alike (Metropolis)', `${String(med(mc.constant.first100)).replace(/(\d)(\d{3})$/, '$1 $2')} (median of 20)`);
-  expect('book-10', 'every pair alike (Metropolis)', `${f(100 * ag('constant', 0.5).share[0], 2)} %`);
-  expect('book-10', 'largest pair first (steepest descent)', `${f(100 * mc.steepest.rows.find(q => q.f === 0.5).S, 2)} %`);
-  expect('book-10', 'largest pair first (steepest descent)', `${mc.steepest.first100.merged}`);
-  expect('book-10', 'one drop of', `${f(mc.steepest.rFinal * 1e3, 2)} mm`);
-  const at = t => wr.recs.reduce((b, q) => Math.abs(q.t - t) < Math.abs(b.t - t) ? q : b), shr = (q, c) => 100 * q.mergers[c] / q.mergers.reduce((a, v) => a + v, 0);
-  const q50 = at(wr.t50), q90 = at(wr.t90), qh = wr.recs[wr.recs.length - 1];
-  expect('book-10', 'collectors eat droplets', `${f(shr(q50, 3), 1)} % ${f(shr(q90, 3), 1)} % ${f(shr(qh, 3), 1)} %`);
-  expect('book-10', 'drizzle eats droplets', `${f(shr(q50, 6), 1)} % ${f(shr(q90, 6), 1)} % ${f(shr(qh, 6), 1)} %`);
-  expect('book-10', 'collectors eat collectors', `${f(shr(q50, 4), 2)} % ${f(shr(q90, 4), 2)} % ${f(shr(qh, 4), 2)} %`);
-  expect('book-10', 'droplets eat droplets', `${f(shr(q50, 0), 3)} % ${f(shr(q90, 0), 3)} % ${f(shr(qh, 0), 3)} %`);
-  expect('book-10', 'At $t_{90}$,', `${f(100 * q90.tag[2] / q90.wat[2], 1)} % of the water in drizzle`);
-  const rl = qh.released, rt = rl.reduce((a, v) => a + v, 0);
-  expect('book-10', 'Of the surface energy released over the hour', `${f(100 * (rl[3] + rl[6]) / rt, 1)} %`);
-  expect('book-10', 'from (10.6) falls to', `${f(EN.constant.rows.find(q => q.f === 0.01).epsExp, 3)} when one drop in a hundred is left and to ${f(EN.constant.rows.find(q => q.f === 0.001).epsExp, 3)}`);
+  expect('book-10', 'At the start the drops in a cubic metre hold', `$F_s$ = ${f(wr.Es0, 3)} J, ${f(100 * Ed / (Ed + Ec), 0)} % of it`);
+  const d408 = sig * dA(40e-6, 8e-6), mu = P.massOf(40e-6) * P.massOf(8e-6) / (P.massOf(40e-6) + P.massOf(8e-6)), KE = 0.5 * mu * (vB(40e-6) - vB(8e-6)) ** 2;
+  expect('book-10', 'eating an 8 µm droplet lowers', `${texSci(d408, 1)} J, ${Math.round(d408 / KE / 100) * 100} times`);
+  expect('book-10', 'Each\nsquare metre'.replace('\n', ' '), `$u_s = \\sigma - T\\,d\\sigma/dT$ = ${f(us, 3)} J, ${f(us / sig, 2)} times`);
+  expect('book-10', 'For the capture above that is', `${texSci(us * dA(40e-6, 8e-6), 1)} J, which warms the merged drop by ${texSci(us * dA(40e-6, 8e-6) / ((P.massOf(40e-6) + P.massOf(8e-6)) * 4192), 1)} K`);
+  expect('book-10', '$1.32', texSci(d408 / T / kB, 2), 'entropy of one capture ' + texSci(d408 / T / kB, 2));
+  expect('book-10', 'Over the hour merging releases', `${f(wr.totRel * us / sig, 3)} J of heat per m³ and raises the entropy by ${texSci(wr.totRel / T, 1)} J/K per m³, about ${texSci(wr.totRel / wr.totMerg / (kB * T), 1)}\\,k_B`);
+  expect('book-10', 'At its largest the heat of merging is', `${f(100 * wr.maxRatio * us / sig, 1)} %`);
+  expect('book-10', 'all the drops\' surfaces hold', `every ${f(wr.Es0 / wr.Pg0, 0)} s`);
+  const h = 6.62607015e-34, m8 = P.massOf(8e-6), lam = h / Math.sqrt(2 * Math.PI * m8 * kB * T), Sd = Math.log(1 / (301e6 * lam ** 3)) + 2.5;
+  expect('book-10', 'A drop of 8 µm is a particle of mass', `${texSci(m8, 1)} kg`);
+  expect('book-10', 'For our droplets', `$\\lambda = ${texSci(lam, 1)}$ m and this is ${f(Sd, 0)} $k_B$ per drop`);
+  expect('book-10', 'a = \\frac{2\\sigma}{\\rho_wR_vT} =', `${f(RP.a * 1e9, 2)}\\ \\text{nm}`);
+  const mean = (c, t) => { const k2 = RP.recAt.indexOf(t); return RP.cases[c].reduce((a, r) => a + r[k2].F, 0) / RP.cases[c].length; };
+  const q90 = wr.recs.find(q => Math.abs(q.t - 810) < 6);
+  expect('book-10', 'By the time collection has put nine tenths', `destroyed ${f(100 * (1 - q90.Es / wr.Es0), 0)} % of the surface free energy; ripening has destroyed ${f(100 * (1 - mean('pure', Math.round(RP.t90))), 1)} %`);
+  expect('book-10', 'Ripening needs an hour to remove', `${f(100 * (1 - mean('pure', 3600)), 0)} % and a day to remove ${f(100 * (1 - mean('pure', 86400)), 0)} %`);
+  const k1h = RP.recAt.indexOf(3600), gone = 1 - RP.cases.pure.reduce((a, r) => a + r[k1h].alive, 0) / RP.cases.pure.length / 3010;
+  expect('book-10', 'In\npure water'.replace('\n', ' '), `a third of the drops vanish within the hour`, 'share gone ' + f(100 * gone, 1) + ' %');
+  const sr = RP.cases.salt[0], last = sr[sr.length - 1].r.filter(v => v > 0).sort((a, b) => a - b);
+  expect('book-10', 'each shrinks only to a haze particle of', `${f(last[0], 2)} µm`);
+  expect('book-10', 'the heat of merging is at most', `${f(100 * wr.maxRatio * us / sig, 1)} %`);
+}
+
+// ---------------------------------------------------------------- chapter 11: who eats whom (data/energy.json)
+{
+  const EN = D('energy.json'), wr = EN.warm, mc = EN.mc;
+  const ag = (k2, fr) => mc[k2].agg.find(q => q.f === fr), med = a => { const s2 = a.filter(Boolean).map(q => q.merged).sort((x, y) => x - y), n = s2.length; return n % 2 ? s2[(n - 1) / 2] : (s2[n / 2 - 1] + s2[n / 2]) / 2; };
+  const sig = P.sigmaWater(A.T), area = r => 4 * Math.PI * r * r, R = Math.cbrt(2) * 10e-6, dF = sig * (2 * area(10e-6) - area(R));
+  expect('book-11', 'problem 6 works out two 10 µm droplets', `$-${texSci(dF / P.K_B / A.T, 1)}\\,k_BT$`);
+  expect('book-11', 'collision kernel (the cloud)', `${f(100 * ag('physical', 0.5).S, 0)} % ${med(mc.physical.first100)} ${f(100 * ag('physical', 0.5).share[0], 3)} %`);
+  expect('book-11', 'every pair alike', `${f(100 * ag('constant', 0.5).S, 0)} % about ${String(Math.round(med(mc.constant.first100) / 10) * 10).replace(/(\d)(\d{3})$/, '$1 $2')} ${f(100 * ag('constant', 0.5).share[0], 0)} %`);
+  expect('book-11', 'largest pair first', `${f(100 * mc.steepest.rows.find(q => q.f === 0.5).S, 0)} % ${mc.steepest.first100.merged} 0`);
+  expect('book-11', 'All three end in one\ndrop of'.replace('\n', ' '), `${f(mc.steepest.rFinal * 1e3, 2)} mm`);
+  const at = t => wr.recs.reduce((b, q) => Math.abs(q.t - t) < Math.abs(b.t - t) ? q : b), q50 = at(wr.t50), q90 = at(wr.t90);
+  const shr = (q, c) => 100 * q.mergers[c] / q.mergers.reduce((a, v) => a + v, 0), wat = (q, c) => 100 * q.eaten[c] / wr.W0;
+  const pc = (v) => v >= 10 ? f(v, 0) : v >= 1 ? f(v, 1) : v >= 0.1 ? f(v, 2) : f(v, 3);
+  const pw = (v) => v >= 1 ? f(v, 0) : f(v, 3);
+  [['collectors eat droplets', 3], ['drizzle eats droplets', 6], ['collectors eat collectors', 4], ['drizzle eats collectors', 7], ['droplets eat droplets', 0]].forEach(([l, c]) =>
+    expect('book-11', l, `${pc(shr(q50, c))} % / ${pc(shr(q90, c))} % ${pw(wat(q50, c))} % / ${pw(wat(q90, c))} %`));
+  expect('book-11', 'At $t_{90}$ (13.5 min),', `${f(100 * q90.tag[2] / q90.wat[2], 0)} % of the water in drizzle`);
+  expect('book-11', 'by $t_{90}$ it has moved', `${f(wat(q90, 4), 0)} % of all the water`);
+  expect('book-11', 'falls to', `${f(EN.constant.rows.find(q => q.f === 0.01).epsExp, 2)} when one drop in a hundred is left and to ${f(EN.constant.rows.find(q => q.f === 0.001).epsExp, 3)}`);
   const q6 = wr.recs.find(q => q.t === 360);
-  expect('book-10', 'With the kernel of chapters 1 to 4 it is', `${f(q6.epsExp, 2)} at 6 min and ${f(q90.epsExp, 2)} at $t_{90}$; the gamma does no better (${f(q6.epsGamma, 2)} and ${f(q90.epsGamma, 2)})`);
-  expect('book-10', 'the energy released is at most', `${f(100 * wr.maxRatio, 1)} %`);
-  expect('book-10', 'peak near', '5 min', 'collector water peaks at ' + f(wr.recs.reduce((b, q) => q.wat[1] > b.wat[1] ? q : b).t / 60, 1) + ' min');
+  expect('book-11', 'With the collision kernel it is', `${f(q6.epsExp, 2)} at 6 min and ${f(q90.epsExp, 2)} at $t_{90}$, and the gamma does no better (${f(q6.epsGamma, 2)} and ${f(q90.epsGamma, 2)})`);
+  expect('book-11', 'peak near', '5 min', 'collector water peaks at ' + f(wr.recs.reduce((b, q) => q.wat[1] > b.wat[1] ? q : b).t / 60, 1) + ' min');
   const cross = wr.recs.find(q => q.wat[2] > q.wat[0] && q.wat[2] > q.wat[1]);
-  expect('book-10', 'drizzle overtakes both near', `${f(cross.t / 60, 0)} min`, 'at ' + f(cross.t / 60, 2) + ' min');
+  expect('book-11', 'drizzle overtakes both near', `${f(cross.t / 60, 0)} min`, 'at ' + f(cross.t / 60, 2) + ' min');
 }
 
 { // problem 6
@@ -388,33 +397,67 @@ expect('checks', 'against 5.767,', `${f(t90ext, 3)}`, 'the model at 5 s records'
   expect('problems', 'A temperature for splitting', `${texSci(dE, 2)} J, and a temperature of ${texSci(dE / P.K_B, 2)} K`);
 }
 
-// ---------------------------------------------------------------- chapter 11: a cloud with a shape (data/cloud.json, tools/run_cloud.cjs)
+// ---------------------------------------------------------------- chapter 12: a cloud with a shape (data/cloud.json, tools/run_cloud.cjs)
 {
-  const CL = D('cloud.json'), e = 1e-2, h = 50, s2 = Math.pow(e * h, 2 / 3), TL = 2 * s2 / (6 * e), Kd = s2 * TL, Gv = P.growthG(A);
-  expect('book-11', 'and $\\varepsilon = 10^{-2}$ m²/s³: $\\sigma$ =', `${f(Math.sqrt(s2), 2)} m/s, $T_L$ = ${f(TL, 0)} s`);
-  expect('book-11', 'coefficient $\\sigma^2T_L$ =', `${f(Kd, 0)} m²/s, about ${f(Math.sqrt(2 * Kd * 600), 0)} m in ten minutes`);
-  const s3 = Math.pow(1e-3 * h, 2 / 3), s4 = Math.pow(4e-2 * h, 2 / 3);
-  expect('book-11', 'At\n$\\varepsilon = 10^{-3}$'.replace('\n', ' '), `${f(Math.sqrt(s3), 2)} m/s and ${f(2 * s3 / 6e-3, 0)} s`);
-  expect('book-11', 'they are', `${f(Math.sqrt(s4), 2)} m/s and ${f(2 * s4 / (6 * 4e-2), 0)} s`);
-  expect('book-11', 'where $G =', `${texSci(Gv, 2)} m²/s`);
-  expect('book-11', 'cloud is gone in', `${f(1e-10 / (2 * Gv * 0.2), 1)} s; a 100 µm drizzle drop lasts ${f(1e-8 / (2 * Gv * 0.2), 0)} s, less than the ${f(300 / vB(100e-6), 0)} s`);
-  const bx = CL.box;
-  expect('book-11', 'With 10 240 super-droplets', `${f(bx.sdm[0], 3)} ± ${f(bx.sdm[1], 3)} and ${f(bx.sdm[2], 3)} ± ${f(bx.sdm[3], 3)} min (4 runs), against ${f(bx.sce[0], 3)} and ${f(bx.sce[1], 3)} min`);
-  expect('book-11', 'stay even: the scatter', `${f(CL.mix.chi, 2)} times`);
-  const ms = a => a.reduce((x, y) => x + y, 0) / a.length, P2 = PHYS2 => PHYS2;
-  const area = (shape) => { const ins = P.shapeFn(shape, 2000, 1500); let a = 0, ed = 0; for (let x = 12.5; x < 2000; x += 25) for (let z = 12.5; z < 1500; z += 25) if (ins(x, z)) { a += 625; if (!ins(x + 25, z) || !ins(x - 25, z) || !ins(x, z + 25) || !ins(x, z - 25)) ed += 25; } return [a, ed]; };
-  const row = (k, lab) => { const R = CL.cases[k].runs, i = R[0].rec.t.length - 1, sh = CL.cases[k].cfg.shape || 'cumulus', [a, ed] = area(sh);
-    expect('book-11', lab, `${f(ed / a * 1000, 2)} ${f(100 * ms(R.map(q => q.rec.rain[i])), 1)} % ${f(100 * ms(R.map(q => q.rec.evap[i])), 1)} % ${f(ms(R.map(q => q.firstRain)) / 60, 1)} min`); };
-  row('reference', 'cumulus: cell and stochastic element'); row('noStochastic', 'cumulus, no stochastic element'); row('stillAir', 'cumulus, still air (eddies only)');
-  row('peakedEps', 'cumulus, eddies strongest in the core'); row('disc', 'disc '); row('box', 'box '); row('tower', 'tall tower ');
-  const se = k => { const R = CL.cases[k].runs, i = R[0].rec.t.length - 1, v = R.map(q => 100 * q.rec.rain[i]), m = ms(v); return Math.sqrt(v.reduce((a, x) => a + (x - m) ** 2, 0) / (v.length - 1) / v.length); };
-  expect('book-11', 'is at most', `${f(Math.max(...Object.keys(CL.cases).map(se)), 1)} percentage points`);
-  const born = CL.cases.reference.runs.flatMap(q => q.born), core = born.filter(b => Math.abs(b[0] - 1000) < 280).length;
-  const ins = P.shapeFn('cumulus', 2000, 1500); let a1 = 0, a2 = 0; for (let x = 12.5; x < 2000; x += 25) for (let z = 12.5; z < 1500; z += 25) if (ins(x, z)) { a2++; if (Math.abs(x - 1000) < 280) a1++; }
-  expect('book-11', 'Of', `${String(born.length).replace(/(\d)(\d{3})$/, '$1 $2')} passages of 100 µm in the three reference runs, ${f(100 * core / born.length, 1)} % happened`);
-  expect('book-11', 'which is', `${f(100 * a1 / a2, 1)} % of the cloud's area`);
-  expect('book-11', 'Each stands for about', `${texSci(300e6 * 125000 / 96, 0).replace('3\\times', '4\\times')} droplets or ${texSci(1e6 * 125000 / 32, 0).replace('3\\times', '4\\times')} collectors`);
-  expect('book-09', 'nine tenths of the drizzle', 'updraft core', 'core share ' + f(100 * core / born.length, 1) + ' %');
+  const CL = D('cloud.json'), ms = a => a.reduce((x, y) => x + y, 0) / a.length, Gv = P.growthG(A), pc1 = v => f(100 * v, 1) + ' %';
+  const sc = (e, L) => { const s2 = Math.pow(e * L, 2 / 3), TL = 2 * s2 / (6 * e); return { s: Math.sqrt(s2), TL, K: s2 * TL }; };
+  const r100 = sc(1e-2, 100);
+  expect('book-12', 'and eddies up to $L_e$ = 100 m: σ =', `${f(r100.s, 2)} m/s and $T_L$ = ${f(r100.TL, 0)} s`);
+  expect('book-12', 'with coefficient $\\sigma^2T_L$ =', `${f(r100.K, 0)} m²/s, about ${r10(Math.sqrt(2 * r100.K * 600))} m in ten minutes`);
+  expect('book-12', 'With $L_e$ = 50 m the coefficient is', `${f(sc(1e-2, 50).K, 0)} m²/s, with 200 m it is ${f(sc(1e-2, 200).K, 0)} m²/s`);
+  expect('book-12', 'where $G =', `${texSci(Gv, 2)} m²/s`);
+  expect('book-12', '$f_v$ is', `${f(P.ventilation(10e-6, A), 2)} at\n10 µm, ${f(P.ventilation(100e-6, A), 2)} at 100 µm and ${f(P.ventilation(200e-6, A), 2)} at 200 µm`.replace('\n', ' '));
+  const life = (r0) => { let r = r0, t = 0; while (true) { const r2 = r * r + 2 * Gv * -0.2 * P.ventilation(r, A) * 0.01; if (r2 <= 1e-14) return t; r = Math.sqrt(r2); t += 0.01; } };
+  const fall = (r0) => { let r = r0, z = 300; while (z > 0) { const r2 = r * r + 2 * Gv * -0.2 * P.ventilation(r, A) * 0.05; if (r2 <= 1e-14) return null; r = Math.sqrt(r2); z -= vB(r) * 0.05; } return (r / r0) ** 3; };
+  expect('book-12', 'A 10 µm droplet that leaves the cloud is gone in', `${f(life(10e-6), 1)} s. A 100 µm drizzle drop lasts ${f(life(100e-6), 0)} s, much less\nthan the ${f(300 / vB(100e-6), 0)} s`.replace('\n', ' '));
+  expect('book-12', 'a 150 µm drop also vanishes on the way', `a 200 µm drop arrives\nwith ${f(100 * fall(200e-6), 0)} %`.replace('\n', ' '), '150 um arrives: ' + fall(150e-6));
+  const cv = CL.box.conv, byP = n => cv.find(c => c.per === n);
+  expect('book-12', 'the collection equation (', `${f(CL.box.ref[0], 3)} and ${f(CL.box.ref[1], 3)} min`);
+  expect('book-12', 'With 32 super-droplets per cell the box is', `$${f(100 * byP(32).bias90, 0)} \\pm ${f(100 * byP(32).se90, 0)}$ % slow`);
+  expect('book-12', 'With 128 it is', `$${f(100 * byP(128).bias90, 1)} \\pm ${f(100 * byP(128).se90, 1)}$ % slow in our 32 runs`);
+  expect('book-12', 'With 512 it is', `$${f(100 * byP(512).bias90, 1)} \\pm ${f(100 * byP(512).se90, 1)}$ %, with 2048 $${f(100 * byP(2048).bias90, 1)} \\pm ${f(100 * byP(2048).se90, 1)}$ %`);
+  const gm = cv.map(c => c.gamMany * 100);
+  expect('book-12', 'In 44 to 46 % of the box', `${f(Math.min(...gm), 0)} to ${f(Math.max(...gm), 0)} %`.replace(/^/, 'In '), 'gamma > 1 shares ' + gm.map(v => f(v, 1)).join(', '));
+  const mx = CL.mix, rng2 = a => `${f(Math.min(...a), 2)} to ${f(Math.max(...a), 2)}`;
+  expect('book-12', 'With the drift of (12.3) it is', `${rng2(mx.full.chi30)} after\n30 min and ${rng2(mx.full.chi120)} after 2 hours`.replace('\n', ' '));
+  expect('book-12', 'Without the drift it is', `${f(Math.min(...mx.none.chi30), 1)} to ${f(Math.max(...mx.none.chi30), 1)} and then ${f(Math.min(...mx.none.chi120), 1)} to ${f(Math.max(...mx.none.chi120), 1)}`);
+  const cs = k => CL.cases[k].runs, m = (k, g) => ms(cs(k).map(g));
+  for (const [k, lab] of [['column', 'fall only'], ['evap', '+ dry air outside'], ['cell', '+ mean motion'], ['reference', '+ eddies']]) {
+    const rain = m(k, q => q.rain), below = m(k, q => q.evapBelow), side = m(k, q => q.evap - q.evapBelow), aloft = m(k, q => q.aloft);
+    const z = v => v < 0.0005 ? '0' : pc1(v);
+    expect('book-12', lab + ' ', `${pc1(rain)} ${z(below)} ${z(side)} ${pc1(aloft)}`);
+  }
+  for (const [k, lab] of [['reference', 'reference '], ['Le50', 'largest eddy 50 m'], ['Le200', 'largest eddy 200 m'], ['peaked', 'stochastic element only'], ['peakedAyala', 'turbulent collision factor at the local ε'], ['noVent', 'no ventilation in (12.4)']])
+    expect('book-12', lab, pc1(m(k, q => q.rain)));
+  const pts = []; for (const k of ['rough0', 'rough3', 'rough6']) { const by = {}; cs(k).forEach(q => (by[q.outline] = by[q.outline] || []).push(q)); Object.values(by).forEach(a => pts.push([a[0].perim / a[0].area * 1000, ms(a.map(q => q.rain))])); }
+  const u = [...new Map(pts.map(p => [p[0].toFixed(3), p])).values()], n = u.length, mxp = ms(u.map(p => p[0])), myp = ms(u.map(p => p[1]));
+  const cov = u.reduce((a, p) => a + (p[0] - mxp) * (p[1] - myp), 0), rr = cov / Math.sqrt(u.reduce((a, p) => a + (p[0] - mxp) ** 2, 0) * u.reduce((a, p) => a + (p[1] - myp) ** 2, 0)), slope = cov / u.reduce((a, p) => a + (p[0] - mxp) ** 2, 0);
+  const hiR = u.reduce((b, p) => p[1] > b[1] ? p : b), loR = u.reduce((b, p) => p[1] < b[1] ? p : b);
+  expect('book-12', 'Across the seven different outlines', `correlation\nis ${f(rr, 2).replace('-', '−')}, and each extra kilometre of outline per km² of cloud costs about ${f(-100 * slope, 1)} points of rain (from ${pc1(hiR[1])} at ${f(hiR[0], 2)} per km to ${pc1(loR[1])} at ${f(loR[0], 2)} per km)`.replace('\n', ' '), n + ' outlines');
+  const ref = cs('reference'), R0 = ref[0], g10 = R0.regs.find(r => r.t === 600);
+  const names = [['updraft core', 0], ['flank', 1], ['edge band', 2], ['below the base', 4]];
+  for (const [lab, r] of names) {
+    const W = g10.W.slice(r * 3, r * 3 + 3), tot = W.reduce((a, v) => a + v, 0), mer = g10.mergers.slice(r * 9, r * 9 + 9), mt = mer.reduce((a, v) => a + v, 0), me = g10.maxent[r];
+    expect('book-12', lab + ' ', `${pc1(tot)} ${W.map(v => f(100 * v / tot, 0)).join(' / ')} % ${f(100 * mer[3] / mt, 0)} / ${f(100 * mer[6] / mt, 0)} % ${f(me[0], 2)} / ${f(me[1], 2)}`);
+  }
+  const g45 = R0.regs[R0.regs.length - 1], relR = [0, 1, 2, 3, 4].map(r => g45.released.slice(r * 9, r * 9 + 9).reduce((a, v) => a + v, 0)), relT = relR.reduce((a, v) => a + v, 0);
+  expect('book-12', 'Over the 45 min,', `${f(100 * relR[0] / relT, 0)} % of the surface free energy was released in the core, ${f(100 * relR[1] / relT, 0)} % in the flanks and ${f(100 * relR[2] / relT, 0)} % in the edge band`);
+  const fr = k => ms(ref.map(q => q.rainR[k] / q.initR[k]));
+  expect('book-12', 'Of the water that\nstarted in the core'.replace('\n', ' '), `${pc1(fr(0))} reached the ground; from the flanks ${pc1(fr(1))}; from the edge band ${pc1(fr(2))}`);
+  expect('book-12', 'Weighted by water,', `${f(100 * ms(ref.map(q => q.bornCoreShare)), 0)} % of\nthe passages of 100 µm happened in the core, which is ${pc1(R0.coreAreaShare)}`.replace('\n', ' '));
+  expect('book-12', 'drizzle already holds', '40 % of the water at 10 min', 'core drizzle share ' + f(100 * g10.W[2] / (g10.W[0] + g10.W[1] + g10.W[2]), 1));
+  expect('book-12', 'Each stands for about', `${texSci(300e6 * 125000 / 96, 0)} droplets or ${texSci(1e6 * 125000 / 32, 0)} collectors`);
+  expect('book-12', 'is three times as likely', 'three times', 'ratio ' + f(fr(0) / fr(2), 2));
+}
+
+{ // problem 8
+  const e = 1e-3, s2 = Math.pow(e * 100, 2 / 3), TL = 2 * s2 / (6 * e), K = s2 * TL, Gv = P.growthG(A);
+  expect('problems', 'so $\\sigma$ =', `${f(Math.sqrt(s2), 2)} m/s, and the memory is $T_L = 2\\sigma^2/(C_0\\varepsilon)$ = ${f(TL, 0)} s`);
+  expect('problems', 'diffusion coefficient $K = \\sigma^2T_L$ =', `${f(K, 1)} m²/s`);
+  expect('problems', 'the spread is $\\sqrt{2Kt}$ =', `${f(Math.sqrt(2 * K * 600), 0)} m`);
+  expect('problems', 'and the ventilation factor, which is', `${f(P.ventilation(150e-6, A), 2)} at 150 µm because the drop falls at\n${f(vB(150e-6), 2)} m/s`.replace('\n', ' '));
+  let r = 150e-6, z = 300, t = 0; while (z > 0) { const r2 = r * r + 2 * Gv * -0.2 * P.ventilation(r, A) * 0.05; if (r2 <= 1e-14) break; r = Math.sqrt(r2); z -= vB(r) * 0.05; t += 0.05; }
+  expect('problems', 'the drop is gone after', `${f(t, 0)} s, about ${f(z, 0)} m above the ground`);
 }
 console.log(`\n${pass} of ${pass + fail} numbers found in the text`);
 console.log(fail ? 'NUMBER CHECK FAIL' : 'NUMBER CHECK PASS');
