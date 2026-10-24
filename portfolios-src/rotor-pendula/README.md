@@ -9,7 +9,7 @@ compute and check every number. The site serves one page generated from it,
 | tab | page here | what it is |
 |---|---|---|
 | Lecture notes (`#notes`) | `rotor_notes.html`, built from `theory/*.src.html` | *Pendula on a Turning Blade*: the Lagrangian, the best brake, big swings, two rods and chaos, a ceiling on random shaking, gusts, the bending blade, a real geared generator, and the answer. Every number in the text comes from `tools/make_numbers.py` (`numbers.json`) or is listed with its reason in `tools/typed_numbers.py`. |
-| Simulation (`#sim`) | `rotor_sim.html` | Pick a rotor (six speeds), a pivot, one rod or two, and an ideal brake or the maxon RE 25 + GP 32 C generator; the page solves the full equations (Radau IIA, in a Web Worker built from its physics block) and plays the last turns back. Read values: click a plot to pin a point; the values show outside the figure. Six worked solutions. |
+| Simulation (`#sim`) | `rotor_sim.html` | Pick a rotor (six speeds), a pivot, one rod or two, and an ideal brake or the maxon RE 25 + GP 32 C generator; the page solves the full equations (Radau IIA, in a Web Worker built from its physics block) and plays the last turns back. Read values: click a plot to pin a point; the values show outside the figure. Six worked solutions. The site's data panel (Data tab, Check, Record one round, Save as NumPy) reads a store written in the script before the page script; see the README section below. |
 
 The derivations and model runs are in `notes/rotor-pendula/` (`derive/` holds the Python models; `README.md` is the record).
 
@@ -19,6 +19,16 @@ The derivations and model runs are in `notes/rotor-pendula/` (`derive/` holds th
 that turns the links between them into tab switches, and writes `public/portfolios/rotor-pendula/index.html` and
 `LICENSE-fonts.txt`, with the site's security policy (plus `'unsafe-eval'` and `blob:` workers, which the simulation's worker
 needs), the site's fonts for the tab bar, and the back link to Portfolios. Never edit the generated files by hand.
+
+## The data panel
+
+`rotor_sim.html` links the site's shared panel files by their path from this folder (`../../public/styles/data.css`,
+`../../public/scripts/sim.js`, `dataset.js`, `datalog.js`); `tools/build_combined.py --site` rewrites `../../public/` to `../../`
+for the served copy. The script just before the page script builds the store (`Sim.dataset`) and `Sim.data`; the page calls its
+hooks (`D.solved`, `D.put`, `D.scene`, `D.plot`, `D.curve`, `D.frame`) where it computes or draws a number. The physics block
+integrates the rotor's work as an extra state and records the energies of every frame, so the panel's energy book closes to about
+1e-12 J. Without the shared files the store script returns at once and the page works as before. Details and measurements:
+`docs/portfolios.md`, section Rotor Pendula.
 
 ## Changing the study
 

@@ -77,7 +77,7 @@ store and does no work while closed (since 24 October 2026 a bookkeeper, skill `
 numbers the animation is about, live, with sparklines; one table in causal sections (symbol, meaning, value aligned on the decimal
 point, unit, Δ, how obtained, check), its words rewritten at most 4 times a second while the simulation plays, Live on by default;
 the books, each balance with its residual stored by the page and added again by the panel; arrays as rows that open in place into
-tables copied at one instant. A page declares this in `Sim.data.ledger` (Figs. 9 and 10, in `scripts/ledger/<page>.js`; Droplet Collection, in its `datahooks.js`); without
+tables copied at one instant. A page declares this in `Sim.data.ledger` (Figs. 9 and 10 and Rotor Pendula, in `scripts/ledger/<page>.js`; Droplet Collection, in its `datahooks.js`); without
 it the panel shows the page's `groups` in the same table. Read values:
 a switch in each figure's caption, off by default (a hover readout over the running figure proved disruptive and was removed); while on, a click
 or tap pins the object under it (rings up to 22 px around the point), a drag moves the pin, the page's own pointer actions are held back,
@@ -88,7 +88,8 @@ at most 600 samples), then shown as charts and a table and saved as .npz + CSV; 
 dataset.json + the rounds as CSV + README. The contract is at the top of datalog.js. A page loads dataset.js after sim.js and datalog.js
 after its own script (all ten figures, and the two pages of Iron, Cotton and the Head, whose hooks are in
 `portfolios-src/impact/datahooks.js`, and the ideal and servo presses of the Hydraulic Press Study, whose store and hooks sit in their
-own pages). `Sim.live()` reads the store too. Keep the taps where the page computes a value; keep the
+own pages, and the simulation of Rotor Pendula, whose store sits in `portfolios-src/rotor-pendula/rotor_sim.html` and
+whose links to the shared files `tools/build_combined.py --site` rewrites). `Sim.live()` reads the store too. Keep the taps where the page computes a value; keep the
 walkthrough excerpts untouched (insert after a quoted line, never inside a quoted pair).
 How Numa expects Claude to work (persistence, plain language, build when clear) is in CLAUDE.md.
 For the AppDeploy app only: AppDeploy reformats stored source with Prettier; base any diff against the app on its stored snapshot (`src_read`).
