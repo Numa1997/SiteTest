@@ -99,6 +99,25 @@ then into the tables. Machine tables: [i18n/de/strings.json](../i18n/de/strings.
 | centrifugal | Zentrifugal- | الطرد المركزي |
 | matched forcing | gleiche Anregung | قسرٌ متطابق |
 | ECTS credit points (CP) | Leistungspunkte (LP) | نقاط اعتماد ECTS |
+| Furuta pendulum, rotary inverted pendulum | Furuta-Pendel, rotierendes inverses Pendel | نوّاس فوروتا، النوّاس المقلوب الدوّار |
+| underactuated | unteraktuiert | ناقص التشغيل |
+| swing-up (of a pendulum) | Aufschwingen | الرفع بالتأرجح |
+| catch (LQR at the top), hand-over | Fangen, Übergabe | الالتقاط، التسليم |
+| supervisor (the rule that switches controllers) | Umschaltlogik | المشرف |
+| back-emf | Gegen-EMK (gegenelektromotorische Kraft) | القوة الدافعة الكهربائية العكسية |
+| stall torque | Stillstandsmoment | عزم التوقّف |
+| controllability, controllable | Steuerbarkeit, steuerbar | قابلية التحكّم، قابل للتحكّم |
+| linear–quadratic regulator (LQR), Riccati equation | linear-quadratischer Regler (LQR), Riccati-Gleichung | المنظّم الخطّي التربيعي (LQR)، معادلة ريكاتي |
+| Lyapunov function | Ljapunow-Funktion | دالّة ليابونوف |
+| region of attraction, region of rescue | Einzugsbereich, Rettungsbereich | منطقة الجذب، منطقة الإنقاذ |
+| saddle, centre, stable node, stable focus | Sattelpunkt, Zentrum, stabiler Knoten, stabiler Strudel | نقطة سرج، مركز، عقدة مستقرّة، بؤرة مستقرّة |
+| (collocated) partial feedback linearisation | (kollokierte) partielle Linearisierung durch Rückführung | الخطّنة الجزئية (المتموضعة) بالتغذية الراجعة |
+| non-minimum phase | nichtminimalphasig | غير أدنى الطور |
+| energy shaping | Energieformung | تشكيل الطاقة |
+| eigenvalue | Eigenwert | القيمة الذاتية |
+| generalised coordinate, generalised force | verallgemeinerte Koordinate, verallgemeinerte Kraft | إحداثي معمَّم، قوّة معمَّمة |
+| Rayleigh dissipation function | Rayleighsche Dissipationsfunktion | دالّة التبديد لرايلي |
+| amplifier, supply limit | Verstärker, Versorgungsgrenze | المضخّم، حدّ التغذية |
 
 ## Writing conventions
 
