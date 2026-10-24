@@ -1,0 +1,638 @@
+{
+ "006e12764e24": {
+  "src": "The page sets the spring by the pull it carries when the chain hangs straight over the cart, \\(N_0\\), and by its stiffness \\(k_s\\); the rest length follows, \\(L_0 = \\ell_0 - N_0/k_s\\). With the defaults, \\(N_0 = 3\\ \\mathrm{N}\\) and \\(k_s = 100\\ \\mathrm{N/m}\\), so \\(L_0 = 0.62\\ \\mathrm{m}\\): at rest the tubes are pulled 3 cm past the spring's natural length.",
+  "tr": "Die Seite legt die Feder durch den Zug fest, den sie trägt, wenn die Kette gerade über dem Wagen hängt, \\(N_0\\), und durch ihre Steifigkeit \\(k_s\\); die Ruhelänge folgt daraus, \\(L_0 = \\ell_0 - N_0/k_s\\). Mit den Voreinstellungen \\(N_0 = 3\\ \\mathrm{N}\\) und \\(k_s = 100\\ \\mathrm{N/m}\\) ist \\(L_0 = 0.62\\ \\mathrm{m}\\): In Ruhe sind die Rohre 3 cm über die natürliche Länge der Feder hinaus auseinandergezogen."
+ },
+ "02fe6c1466f2": {
+  "src": "<span>6</span>Small swings: the guitar string&nbsp;★",
+  "tr": "<span>6</span>Kleine Schwingungen: die Gitarrensaite&nbsp;★"
+ },
+ "03c730aed7d0": {
+  "src": "<span>7</span>Can one push reach everything?&nbsp;★",
+  "tr": "<span>7</span>Kann ein einziger Stoß alles erreichen?&nbsp;★"
+ },
+ "05a4eb407f17": {
+  "src": "The balls are points and the rods, tubes and spring are massless. Real rods have moments of inertia, and a strut with mass carries sideways forces and swings on its own.",
+  "tr": "Die Kugeln sind Punkte, und Stangen, Rohre und Feder sind masselos. Wirkliche Stangen haben Trägheitsmomente, und eine Strebe mit Masse überträgt Querkräfte und schwingt von selbst."
+ },
+ "0675d4c1ea15": {
+  "src": "Write the state as \\(\\mathbf y = (\\theta_1, \\theta_2, X, \\dot\\theta_1, \\dot\\theta_2, \\dot X)\\) and its distance from a rest as \\(\\tilde{\\mathbf y} = \\mathbf y - \\mathbf y^*\\), with \\(\\tilde F = F - F^*\\). For small \\(\\tilde{\\mathbf y}\\), (5) becomes a linear system,",
+  "tr": "Wir schreiben den Zustand als \\(\\mathbf y = (\\theta_1, \\theta_2, X, \\dot\\theta_1, \\dot\\theta_2, \\dot X)\\) und seinen Abstand von einer Ruhelage als \\(\\tilde{\\mathbf y} = \\mathbf y - \\mathbf y^*\\), mit \\(\\tilde F = F - F^*\\). Für kleine \\(\\tilde{\\mathbf y}\\) wird (5) zu einem linearen System,"
+ },
+ "092c462d6d36": {
+  "src": "R. Tedrake, <a href=\"https://underactuated.csail.mit.edu/acrobot.html\"><em>Underactuated Robotics</em>, chapter 3: Acrobots, Cart-Poles, and Quadrotors</a>, MIT course notes, 2024: the manipulator equations, linearisation at a fixed point, the controllability test and LQR for a pendulum pushed through one actuator (Sections 3, 7 and 8).",
+  "tr": "R. Tedrake, <a href=\"https://underactuated.csail.mit.edu/acrobot.html\"><em>Underactuated Robotics</em>, chapter 3: Acrobots, Cart-Poles, and Quadrotors</a>, Vorlesungsskript des MIT, 2024: die Manipulatorgleichungen, die Linearisierung um einen Fixpunkt, der Steuerbarkeitstest und LQR für ein Pendel, das über einen einzigen Aktor geschoben wird (Abschnitte 3, 7 und 8)."
+ },
+ "0c1f0638843e": {
+  "src": "<span class=\"psec__n\">01</span>A chain on a leash",
+  "tr": "<span class=\"psec__n\">01</span>Eine Kette an der Leine"
+ },
+ "1119ea59b2e2": {
+  "src": "Newton's laws would make us find the tension in each rod, forces we do not care about. Lagrange's method uses the coordinates (1) and lets the constraints do their work silently. We need the kinetic and potential energies in terms of \\(\\mathbf q\\) and \\(\\dot{\\mathbf q}\\). Differentiating (1), the velocity of ball 2 is the velocity of ball 1 plus a turn of the lower rod, and the cross term between them carries the cosine of the angle between the rods:",
+  "tr": "Mit den Newtonschen Gesetzen müssten wir die Kraft in jeder Stange bestimmen, Kräfte, die uns nicht interessieren. Das Verfahren von Lagrange benutzt die Koordinaten (1) und lässt die Zwangsbedingungen still ihre Arbeit tun. Wir brauchen die kinetische und die potentielle Energie in \\(\\mathbf q\\) und \\(\\dot{\\mathbf q}\\). Leiten wir (1) ab, so ist die Geschwindigkeit von Kugel 2 die Geschwindigkeit von Kugel 1 plus eine Drehung der unteren Stange, und der gemischte Term zwischen beiden trägt den Kosinus des Winkels zwischen den Stangen:"
+ },
+ "11d3ddcff68f": {
+  "src": "The Riccati solution brings a gift: \\(\\mathcal V = \\tilde{\\mathbf y}^{\\mathsf T}\\mathbf P\\,\\tilde{\\mathbf y}\\) is a <em>Lyapunov function</em> for the linear closed loop, a bowl whose height falls along every path,",
+  "tr": "Die Riccati-Lösung bringt ein Geschenk mit: \\(\\mathcal V = \\tilde{\\mathbf y}^{\\mathsf T}\\mathbf P\\,\\tilde{\\mathbf y}\\) ist eine <em>Ljapunow-Funktion</em> für den linearen geschlossenen Regelkreis, eine Schale, deren Höhe entlang jeder Bahn fällt,"
+ },
+ "13847417f986": {
+  "src": "<b>The aim:</b> the cart is the only thing the controller can push, and through the strut it must bring the whole pendulum back to rest, at the position you choose, from wherever you leave it.",
+  "tr": "<b>Das Ziel:</b> Der Wagen ist das Einzige, was der Regler schieben kann, und über die Strebe muss er das ganze Pendel wieder zur Ruhe bringen, an der Position, die Sie wählen, von wo immer Sie es loslassen."
+ },
+ "13bd93844d53": {
+  "src": "<span class=\"psec__n\">07</span>Can one push reach everything?<span class=\"star\" title=\"heavier mathematics\">★</span>",
+  "tr": "<span class=\"psec__n\">07</span>Kann ein einziger Stoß alles erreichen?<span class=\"star\" title=\"heavier mathematics\">★</span>"
+ },
+ "14a2f9ce51c5": {
+  "src": "Numa Koudsie · for school students and first- and second-year undergraduates",
+  "tr": "Numa Koudsie · für Schülerinnen und Schüler sowie Studierende des ersten und zweiten Studienjahres"
+ },
+ "18093f3de4c3": {
+  "src": "<span class=\"sw sw--dot\"></span>target r",
+  "tr": "<span class=\"sw sw--dot\"></span>Sollposition r"
+ },
+ "1b312d159c45": {
+  "src": "A double pendulum hangs from a fixed pivot; a telescopic strut runs from its lower ball down to a cart on a rail, and a coil on the cart sits in the gap of a long magnet under the rail. Arrows show the coil's force and the strut's pull; bars the energy; below, the stored angles and cart position of the whole run with a cursor at the frame being shown.",
+  "tr": "Ein Doppelpendel hängt an einem festen Drehpunkt; eine Teleskopstrebe läuft von seiner unteren Kugel hinunter zu einem Wagen auf einer Schiene, und eine Spule auf dem Wagen sitzt im Spalt eines langen Magneten unter der Schiene. Pfeile zeigen die Kraft der Spule und den Zug der Strebe; Balken die Energie; darunter die gespeicherten Winkel und die Wagenposition des ganzen Laufs mit einem Cursor beim gezeigten Bild."
+ },
+ "1c698f7b3d67": {
+  "src": "The controller measures all six numbers exactly and at once. A real one needs sensors on both rods and the cart; speeds are usually estimated by an observer such as a Kalman filter, and every sample of delay costs stability.",
+  "tr": "Der Regler misst alle sechs Zahlen exakt und gleichzeitig. Ein wirklicher Regler braucht Sensoren an beiden Stangen und am Wagen; Geschwindigkeiten werden meist von einem Beobachter wie einem Kalman-Filter geschätzt, und jeder Abtastschritt Verzögerung kostet Stabilität."
+ },
+ "1ca3a9a7ea13": {
+  "src": "<b>Force profile</b> · the coil’s force <span class=\"tx\">\\(F\\)</span>, its steady value <span class=\"tx\">\\(F^*\\)</span> and limit <span class=\"tx\">\\(\\pm\\kappa I_\\text{max}\\)</span>, and the strut’s pull <span class=\"tx\">\\(N\\)</span>",
+  "tr": "<b>Kraftverlauf</b> · die Kraft der Spule <span class=\"tx\">\\(F\\)</span>, ihr stationärer Wert <span class=\"tx\">\\(F^*\\)</span> und ihre Grenze <span class=\"tx\">\\(\\pm\\kappa I_\\text{max}\\)</span>, sowie der Zug der Strebe <span class=\"tx\">\\(N\\)</span>"
+ },
+ "1d44863eaeca": {
+  "src": "Fig. 11 · control systems · underactuated mechanics",
+  "tr": "Abb. 11 · Regelungstechnik · unteraktuierte Mechanik"
+ },
+ "1e87db54ee9c": {
+  "src": "A double pendulum on a leash: holding a chain still by pushing only a cart",
+  "tr": "Ein Doppelpendel an der Leine: eine Kette stillhalten, indem man nur einen Wagen schiebt"
+ },
+ "257145e27fc0": {
+  "src": "Firm",
+  "tr": "Straff"
+ },
+ "2700cc152567": {
+  "src": "Gentle",
+  "tr": "Sanft"
+ },
+ "2768c2e80e86": {
+  "src": "Below the rig, a window of 10 s follows the playback: \\(\\theta_1\\) dark, \\(\\theta_2\\) burgundy and \\(X\\) brown dashed, dark up to now and pale after, with the rest values as rose lines. The strip under it is the whole run, the window shaded, with marks where the coil sits at its limit and where the strut touches a stop. The force profile shows \\(F\\), its steady value \\(F^*\\) (rose) and its limits \\(\\pm\\kappa I_\\text{max}\\) (dotted), and the strut's pull \\(N\\). The phase-space panels are scaled to each run; the caption gives the eigenvalues, the kind of rest and the rank of (10).",
+  "tr": "Unter dem Aufbau folgt ein Fenster von 10 s der Wiedergabe: \\(\\theta_1\\) dunkel, \\(\\theta_2\\) weinrot und \\(X\\) braun gestrichelt, dunkel bis zum jetzigen Zeitpunkt und blass danach, mit den Werten der Ruhelage als rosa Linien. Der Streifen darunter ist der ganze Lauf, das Fenster schattiert, mit Marken, wo die Spule an ihrer Grenze sitzt und wo die Strebe einen Anschlag berührt. Der Kraftverlauf zeigt \\(F\\), ihren stationären Wert \\(F^*\\) (rosa) und ihre Grenzen \\(\\pm\\kappa I_\\text{max}\\) (gepunktet) sowie den Zug \\(N\\) der Strebe. Die Phasenraumdiagramme sind auf jeden Lauf skaliert; die Beschriftung nennt die Eigenwerte, die Art der Ruhelage und den Rang von (10)."
+ },
+ "2af0114db97d": {
+  "src": "A string of tension \\(N_0\\) and length \\(\\ell_0\\) is pulled sideways at one end by \\(\\delta\\). Show that the restoring force is \\(N_0\\delta/\\ell_0\\) to first order, and explain why the spring stiffness \\(k_s\\) does not appear.",
+  "tr": "Eine Saite mit der Spannung \\(N_0\\) und der Länge \\(\\ell_0\\) wird an einem Ende um \\(\\delta\\) seitlich ausgelenkt. Zeigen Sie, dass die rücktreibende Kraft in erster Ordnung \\(N_0\\delta/\\ell_0\\) ist, und erklären Sie, warum die Federsteifigkeit \\(k_s\\) nicht vorkommt."
+ },
+ "2bfe1488e413": {
+  "src": "Picture the strut without its spring: two smooth tubes, one sliding inside the other, hinged at both ends. Pull on it and the inner tube simply slides out; push and it slides in. Between its stops it carries no force at all. The chain would swing without dragging the cart, and the coil could not reach the chain. Only when the collar reached the stop would the strut act, suddenly and like a rigid rod. So the spring is what makes the tubes an elastic link. Real versions exist: the gas strut that holds a car's tailgate open, the spring strut of a bicycle's suspension.",
+  "tr": "Stellen Sie sich die Strebe ohne ihre Feder vor: zwei glatte Rohre, eines im anderen gleitend, an beiden Enden gelenkig gelagert. Ziehen Sie daran, und das innere Rohr gleitet einfach heraus; drücken Sie, und es gleitet hinein. Zwischen ihren Anschlägen überträgt sie überhaupt keine Kraft. Die Kette würde schwingen, ohne den Wagen mitzuziehen, und die Spule könnte die Kette nicht erreichen. Erst wenn der Bund den Anschlag erreichte, würde die Strebe wirken, plötzlich und wie eine starre Stange. Die Feder ist es also, die aus den Rohren eine elastische Verbindung macht. Es gibt sie wirklich: die Gasdruckfeder, die die Heckklappe eines Autos offen hält, das Federbein in der Federung eines Fahrrads."
+ },
+ "2c063c2f9890": {
+  "src": "Fig. 11 is the cleanest version of this situation that can be built. A double pendulum hangs from a fixed pivot and swings freely, exactly as in Fig. 2. Below it a cart rolls on a smooth rail. A strut joins the lower ball to the cart. It is made of two tubes, one sliding inside the other, with a spring inside them, so it can change length and pulls or pushes only along its own line. The cart carries the coil of Fig. 9, which sits in the gap of a long magnet and is pushed along the rail with the force \\(F = \\kappa I\\) when a current \\(I\\) flows.",
+  "tr": "Abb. 11 ist die sauberste Fassung dieser Lage, die sich bauen lässt. Ein Doppelpendel hängt an einem festen Drehpunkt und schwingt frei, genau wie in Abb. 2. Unter ihm rollt ein Wagen auf einer glatten Schiene. Eine Strebe verbindet die untere Kugel mit dem Wagen. Sie besteht aus zwei Rohren, von denen eines im anderen gleitet, mit einer Feder darin; sie kann also ihre Länge ändern und zieht oder drückt nur entlang ihrer eigenen Linie. Der Wagen trägt die Spule aus Abb. 9, die im Spalt eines langen Magneten sitzt und mit der Kraft \\(F = \\kappa I\\) entlang der Schiene geschoben wird, wenn ein Strom \\(I\\) fließt."
+ },
+ "2c4706f07811": {
+  "src": "For the real, nonlinear rig this proves stability only near the rest. Far from it two things break the guarantee: the coil's current limit, which cuts the push off at \\(\\kappa I_\\text{max} = 30\\ \\mathrm{N}\\), and the nonlinearity of (5), which grows with the angles. The set of starts from which the controller still brings the chain home is the <em>region of attraction</em>, and it has to be measured. In a test of 43 starts the tubes allow, with both rods up to about \\(\\pm60^\\circ\\) and the cart up to 0.8 m from the target, at five targets between \\(-0.4\\) and \\(+0.4\\ \\mathrm{m}\\), all 43 runs came within 0.01 of the rest; half within 5.7 s, nine in ten within 7.9 s. Outside the region there are starts that end in a whirl: after a hard yank, ball 1 can circle its pivot faster than the leash can follow, and the status line says so.",
+  "tr": "Für den wirklichen, nichtlinearen Aufbau beweist das die Stabilität nur in der Nähe der Ruhelage. Weit davon entfernt brechen zwei Dinge die Garantie: die Strombegrenzung der Spule, die den Stoß bei \\(\\kappa I_\\text{max} = 30\\ \\mathrm{N}\\) abschneidet, und die Nichtlinearität von (5), die mit den Winkeln wächst. Die Menge der Anfangszustände, aus denen der Regler die Kette noch heimbringt, ist der <em>Einzugsbereich</em>, und er muss gemessen werden. In einem Test mit 43 Anfangszuständen, die die Rohre zulassen, mit beiden Stangen bis etwa \\(\\pm60^\\circ\\) und dem Wagen bis 0.8 m von der Sollposition entfernt, bei fünf Sollpositionen zwischen \\(-0.4\\) und \\(+0.4\\ \\mathrm{m}\\), kamen alle 43 Läufe bis auf 0.01 an die Ruhelage heran; die Hälfte innerhalb von 5.7 s, neun von zehn innerhalb von 7.9 s. Außerhalb des Bereichs gibt es Anfangszustände, die in einem Überschlag enden: Nach einem harten Ruck kann Kugel 1 schneller um ihren Drehpunkt kreisen, als die Leine folgen kann, und die Statuszeile sagt es."
+ },
+ "2e450c3fa5db": {
+  "src": "Switch the controller on.",
+  "tr": "Schalten Sie den Regler ein."
+ },
+ "2f7e4a93b7fc": {
+  "src": "Key result · why not a PID on the cart",
+  "tr": "Kernergebnis · warum kein PID-Regler am Wagen"
+ },
+ "326e054e26ce": {
+  "src": "<span class=\"psec__n\">04</span>The strut: two tubes and a spring",
+  "tr": "<span class=\"psec__n\">04</span>Die Strebe: zwei Rohre und eine Feder"
+ },
+ "33bd5a5dddcd": {
+  "src": "© 2026 Numa Koudsie",
+  "tr": "© 2026 Numa Koudsie"
+ },
+ "3655122aebed": {
+  "src": "Speed weight q<sub>v</sub>",
+  "tr": "Gewicht der Geschwindigkeiten q<sub>v</sub>"
+ },
+ "36eee434c7b0": {
+  "src": "The potential energy has gravity, with height measured upwards from the pivot, and the spring inside the tubes, of stiffness \\(k_s\\) and rest length \\(L_0\\):",
+  "tr": "Die potentielle Energie enthält die Schwerkraft, mit der Höhe vom Drehpunkt aus nach oben gemessen, und die Feder in den Rohren, mit der Steifigkeit \\(k_s\\) und der Ruhelänge \\(L_0\\):"
+ },
+ "385cb65f3739": {
+  "src": "Effort weight ρ",
+  "tr": "Gewicht des Stellaufwands ρ"
+ },
+ "391884aa87dd": {
+  "src": "A double pendulum hanging from a fixed pivot, tied by a sprung telescopic strut to a cart that a moving coil drives along a rail. Pull it anywhere and let go: full-state feedback brings it back to the position you choose. Solved first with RK4 and stored, then played back.",
+  "tr": "Ein Doppelpendel an einem festen Drehpunkt, über eine gefederte Teleskopstrebe mit einem Wagen verbunden, den eine Tauchspule entlang einer Schiene antreibt. Ziehen Sie es irgendwohin und lassen Sie los: Eine Zustandsrückführung bringt es an die Position zurück, die Sie wählen. Zuerst mit RK4 gelöst und gespeichert, dann abgespielt."
+ },
+ "3c6a93169bb0": {
+  "src": "Near a rest, every smooth system behaves like a set of coupled springs. Expand \\(V\\) to second order about the straight-hanging rest, using \\(\\cos\\theta \\approx 1 - \\theta^2/2\\) and \\(x_2 \\approx l_1\\theta_1 + l_2\\theta_2\\). The strut's length changes only to second order when the chain swings, and SymPy reduces the potential to",
+  "tr": "In der Nähe einer Ruhelage verhält sich jedes glatte System wie ein Satz gekoppelter Federn. Wir entwickeln \\(V\\) bis zur zweiten Ordnung um die gerade herabhängende Ruhelage, mit \\(\\cos\\theta \\approx 1 - \\theta^2/2\\) und \\(x_2 \\approx l_1\\theta_1 + l_2\\theta_2\\). Die Länge der Strebe ändert sich beim Schwingen der Kette erst in zweiter Ordnung, und SymPy vereinfacht das Potential zu"
+ },
+ "3d6a01b092c6": {
+  "src": "2 store",
+  "tr": "2 speichern"
+ },
+ "3e9fcdb4c320": {
+  "src": "Nothing else touches the chain. The rods turn without friction, the floor is smooth, the tubes slide without friction. Left alone, the rig swings for ever. You can test that with your hand: switch the controller off, grab a ball or the cart, pull it anywhere, let go.",
+  "tr": "Nichts anderes berührt die Kette. Die Stangen drehen sich ohne Reibung, der Boden ist glatt, die Rohre gleiten ohne Reibung. Sich selbst überlassen, schwingt der Aufbau ewig. Das können Sie mit der Hand prüfen: Schalten Sie den Regler aus, fassen Sie eine Kugel oder den Wagen, ziehen Sie irgendwohin und lassen Sie los."
+ },
+ "3f6bd3bf6eea": {
+  "src": "<span>11</span>On screen",
+  "tr": "<span>11</span>Auf dem Bildschirm"
+ },
+ "40255139816b": {
+  "src": "has full rank, 6. The idea is a chain of influences. \\(\\mathbf B\\) is what a push does at once: it accelerates the cart. \\(\\mathbf A\\mathbf B\\) is what that does a moment later: the cart moves, stretches the string sideways, and starts to tug ball 2. Each further power reaches one link further into the chain. If some combination of the state never appears in this chain, no push can ever touch it. With the defaults the rank is 6; with \\(N_0 = 0\\) it falls to 2, the cart's own two numbers, as Section 6 predicted. The page computes the rank in <code>rankOf()</code> and prints it under the phase portrait.",
+  "tr": "vollen Rang hat, 6. Die Idee ist eine Kette von Einflüssen. \\(\\mathbf B\\) ist, was ein Stoß sofort bewirkt: Er beschleunigt den Wagen. \\(\\mathbf A\\mathbf B\\) ist, was das einen Augenblick später bewirkt: Der Wagen bewegt sich, spannt die Saite seitlich und beginnt an Kugel 2 zu zerren. Jede weitere Potenz reicht ein Glied weiter in die Kette hinein. Taucht eine Kombination des Zustands in dieser Kette nie auf, kann kein Stoß sie je berühren. Mit den Voreinstellungen ist der Rang 6; mit \\(N_0 = 0\\) fällt er auf 2, die beiden eigenen Zahlen des Wagens, wie Abschnitt 6 vorhergesagt hat. Die Seite berechnet den Rang in <code>rankOf()</code> und zeigt ihn unter dem Phasenporträt an."
+ },
+ "415a0131dcef": {
+  "src": "Nothing is computed while you watch. When you press Solve, release the flag or let go of the chain, the page designs the controller, then integrates (5) with the feedback (11) by the classical fourth-order Runge–Kutta method, step \\(h = 0.5\\ \\mathrm{ms}\\), for 30 s: 60 000 steps. The force is evaluated at all four stages of each step, as a continuous controller would act. Every twentieth state, one every 10 ms, is stored with the force, the current, the strut's pull and length, and the energy; the animation then plays the stored samples back.",
+  "tr": "Nichts wird berechnet, während Sie zusehen. Wenn Sie „Lösen“ drücken, die Fahne loslassen oder die Kette loslassen, entwirft die Seite den Regler und integriert dann (5) mit der Rückführung (11) nach dem klassischen Runge-Kutta-Verfahren vierter Ordnung, Schrittweite \\(h = 0.5\\ \\mathrm{ms}\\), über 30 s: 60 000 Schritte. Die Kraft wird in allen vier Stufen jedes Schritts ausgewertet, so wie ein kontinuierlicher Regler wirken würde. Jeder zwanzigste Zustand, einer alle 10 ms, wird mit der Kraft, dem Strom, Zug und Länge der Strebe und der Energie gespeichert; die Animation spielt dann die gespeicherten Abtastwerte ab."
+ },
+ "41f94805c80c": {
+  "src": "<span class=\"psec__n\">03</span>Lagrangian and equations of motion<span class=\"star\" title=\"heavier mathematics\">★</span>",
+  "tr": "<span class=\"psec__n\">03</span>Lagrange-Funktion und Bewegungsgleichungen<span class=\"star\" title=\"heavier mathematics\">★</span>"
+ },
+ "444c750bdd3a": {
+  "src": "A double pendulum hangs from a fixed pivot. A sprung telescopic strut ties its lower ball to a cart, and a moving coil drives the cart along a rail. Pull the pendulum anywhere and let go: the controller, which can push only the cart, brings the whole chain back to rest where you chose. The motion is solved first and stored; the animation plays the stored run back.",
+  "tr": "Ein Doppelpendel hängt an einem festen Drehpunkt. Eine gefederte Teleskopstrebe verbindet seine untere Kugel mit einem Wagen, und eine Tauchspule treibt den Wagen auf einer Schiene an. Ziehen Sie das Pendel irgendwohin und lassen Sie los: Der Regler, der nur den Wagen schieben kann, bringt die ganze Kette dort zur Ruhe, wo Sie es gewählt haben. Die Bewegung wird zuerst gelöst und gespeichert; die Animation spielt den gespeicherten Lauf ab."
+ },
+ "48b21b55072d": {
+  "src": "the pull \\(N\\) of the strut times the rate at which each coordinate stretches it. On the cart this is \\(N\\,\\partial\\ell/\\partial X = -N (x_2 - X)/\\ell\\): the strut's pull, projected onto the rail. That one term, and its partners in the two angle equations, are all the strut does. The code solves (5) for \\(\\ddot{\\mathbf q}\\) in <code>accel()</code>: the \\(2\\times2\\) pendulum block by Cramer's rule, the cart by one division. As a check, the same accelerations come out of Newton's laws with the two rod tensions as unknowns; at a random state with the cart pushed, the two routes agree to 13 significant figures.",
+  "tr": "der Zug \\(N\\) der Strebe mal die Rate, mit der jede Koordinate sie dehnt. Am Wagen ist das \\(N\\,\\partial\\ell/\\partial X = -N (x_2 - X)/\\ell\\): der Zug der Strebe, projiziert auf die Schiene. Dieser eine Term und seine Partner in den beiden Winkelgleichungen sind alles, was die Strebe tut. Der Code löst (5) in <code>accel()</code> nach \\(\\ddot{\\mathbf q}\\) auf: den \\(2\\times2\\)-Pendelblock mit der Cramerschen Regel, den Wagen mit einer Division. Zur Probe folgen dieselben Beschleunigungen aus den Newtonschen Gesetzen mit den beiden Stangenkräften als Unbekannten; in einem zufälligen Zustand mit geschobenem Wagen stimmen beide Wege auf 13 signifikante Stellen überein."
+ },
+ "4914a194b59d": {
+  "src": "The page solves (13) in <code>lqr()</code> by the matrix sign function of the \\(12\\times12\\) Hamiltonian matrix \\(\\left(\\begin{smallmatrix}\\mathbf A & -\\rho^{-1}\\mathbf B\\mathbf B^{\\mathsf T} \\\\ -\\mathbf Q & -\\mathbf A^{\\mathsf T}\\end{smallmatrix}\\right)\\): the iteration \\(\\mathbf Z \\leftarrow \\tfrac12(\\mathbf Z + \\mathbf Z^{-1})\\) converges in a handful of steps, and its blocks give \\(\\mathbf P\\). For the default rest (\\(r = 0.30\\ \\mathrm{m}\\)) and weights \\(q_\\theta = q_X = q_v = 5\\), \\(\\rho = 0.02\\), the gains are \\(\\mathbf K = (19.22,\\ -201.70,\\ 120.09,\\ 0.04,\\ 0.52,\\ 22.14)\\), in newtons per radian or metre and per radian or metre per second; SciPy's Riccati solver gives the same numbers. The large gain on \\(\\theta_2\\) is the hand under the stick: when ball 2 swings right, the cart is pulled the other way at first, which sets the string against the swing.",
+  "tr": "Die Seite löst (13) in <code>lqr()</code> mit der Matrix-Signumfunktion der \\(12\\times12\\)-Hamilton-Matrix \\(\\left(\\begin{smallmatrix}\\mathbf A & -\\rho^{-1}\\mathbf B\\mathbf B^{\\mathsf T} \\\\ -\\mathbf Q & -\\mathbf A^{\\mathsf T}\\end{smallmatrix}\\right)\\): Die Iteration \\(\\mathbf Z \\leftarrow \\tfrac12(\\mathbf Z + \\mathbf Z^{-1})\\) konvergiert in einer Handvoll Schritte, und ihre Blöcke liefern \\(\\mathbf P\\). Für die voreingestellte Ruhelage (\\(r = 0.30\\ \\mathrm{m}\\)) und die Gewichte \\(q_\\theta = q_X = q_v = 5\\), \\(\\rho = 0.02\\) sind die Verstärkungen \\(\\mathbf K = (19.22,\\ -201.70,\\ 120.09,\\ 0.04,\\ 0.52,\\ 22.14)\\), in Newton pro Radiant oder Meter und pro Radiant oder Meter pro Sekunde; der Riccati-Löser von SciPy liefert dieselben Zahlen. Die große Verstärkung auf \\(\\theta_2\\) ist die Hand unter dem Stab: Wenn Kugel 2 nach rechts schwingt, wird der Wagen zunächst in die andere Richtung gezogen, was die Saite gegen die Schwingung stellt."
+ },
+ "4b8b36d54a01": {
+  "src": "<span>4</span>The strut: two tubes and a spring",
+  "tr": "<span>4</span>Die Strebe: zwei Rohre und eine Feder"
+ },
+ "4ef73a3bf5fa": {
+  "src": "Phase portraits: three projections of the six-dimensional state, angle against angular speed for each rod and position against speed for the cart, with the fixed point the controller holds.",
+  "tr": "Phasenporträts: drei Projektionen des sechsdimensionalen Zustands, Winkel gegen Winkelgeschwindigkeit für jede Stange und Position gegen Geschwindigkeit für den Wagen, mit dem Fixpunkt, den der Regler hält."
+ },
+ "50073409a937": {
+  "src": "Cart weight q<sub>X</sub>",
+  "tr": "Gewicht des Wagens q<sub>X</sub>"
+ },
+ "53541d584947": {
+  "src": "Count first. Three bodies move in a plane: two balls, which we treat as points, and the cart. A free point in a plane needs two numbers, so three free bodies would need six. The rigid rods remove one each, \\(|\\mathbf r_1| = l_1\\) and \\(|\\mathbf r_2 - \\mathbf r_1| = l_2\\), and the rail removes one more, since the cart's height is fixed. These three are <em>holonomic</em> constraints, rules about positions alone, and each can push as well as pull. Six minus three leaves three degrees of freedom.",
+  "tr": "Zuerst zählen wir. Drei Körper bewegen sich in einer Ebene: zwei Kugeln, die wir als Punkte behandeln, und der Wagen. Ein freier Punkt in der Ebene braucht zwei Zahlen, drei freie Körper bräuchten also sechs. Die starren Stangen nehmen je eine weg, \\(|\\mathbf r_1| = l_1\\) und \\(|\\mathbf r_2 - \\mathbf r_1| = l_2\\), und die Schiene nimmt eine weitere weg, da die Höhe des Wagens festliegt. Diese drei sind <em>holonome</em> Zwangsbedingungen, Regeln allein über die Lagen, und jede kann drücken wie ziehen. Sechs weniger drei lässt drei Freiheitsgrade."
+ },
+ "54be0c5395cf": {
+  "src": "Controllable does not mean easy. The obvious first try is the controller of Fig. 9 on the cart alone, \\(F = K_p(r - X) - K_d\\dot X\\). It damps the chain only through the soft string, and only by accident of timing. Searching \\(K_p\\) and \\(K_d\\) over a wide grid, the best choice leaves the slowest motion decaying at 0.009 per second, a time constant of nearly two minutes. The controller has to look at the chain itself.",
+  "tr": "Steuerbar heißt nicht leicht. Der naheliegende erste Versuch ist der Regler aus Abb. 9 allein am Wagen, \\(F = K_p(r - X) - K_d\\dot X\\). Er dämpft die Kette nur über die weiche Saite, und nur durch zufällig günstiges Timing. Durchsucht man \\(K_p\\) und \\(K_d\\) auf einem weiten Gitter, so lässt die beste Wahl die langsamste Bewegung mit 0.009 pro Sekunde abklingen, eine Zeitkonstante von fast zwei Minuten. Der Regler muss auf die Kette selbst schauen."
+ },
+ "585cb7df2237": {
+  "src": "Coil · F = κI, κ = 10 N/A",
+  "tr": "Spule · F = κI, κ = 10 N/A"
+ },
+ "593f97f9baac": {
+  "src": "The sign of \\(N_0\\) matters too. A strut that pushes, \\(N_0 < 0\\), makes both new terms negative: it lightens the chain, and it pushes the cart away from the point under ball 2 like a pencil balanced on its tip. Already at \\(N_0 = -2\\ \\mathrm{N}\\) the matrix of (8) has a negative eigenvalue, so the hanging rest is unstable on its own: a disturbance grows by a factor \\(e\\) every 0.43 s. The slider allows pushes down to 6 N, and the controller of §8 still holds the chain (its slowest decay is then 0.28 to 0.46 per second), but the page starts with a pull.",
+  "tr": "Auch das Vorzeichen von \\(N_0\\) zählt. Eine Strebe, die drückt, \\(N_0 < 0\\), macht beide neuen Terme negativ: Sie macht die Kette leichter, und sie drückt den Wagen vom Punkt unter Kugel 2 weg wie einen Bleistift, der auf seiner Spitze balanciert. Schon bei \\(N_0 = -2\\ \\mathrm{N}\\) hat die Matrix von (8) einen negativen Eigenwert, die hängende Ruhelage ist also für sich allein instabil: Eine Störung wächst alle 0.43 s um den Faktor \\(e\\). Der Schieberegler erlaubt Druckkräfte bis 6 N, und der Regler aus §8 hält die Kette noch (ihr langsamstes Abklingen liegt dann bei 0.28 bis 0.46 pro Sekunde), aber die Seite beginnt mit einem Zug."
+ },
+ "59bbc88022c4": {
+  "src": "We choose three <em>generalised coordinates</em> that fix the whole picture: the two absolute angles and the cart's position,",
+  "tr": "Wir wählen drei <em>generalisierte Koordinaten</em>, die das ganze Bild festlegen: die beiden absoluten Winkel und die Position des Wagens,"
+ },
+ "5b408d25f21e": {
+  "src": "RK4, h vs h/2",
+  "tr": "RK4, h gegen h/2"
+ },
+ "5bcca40becc7": {
+  "src": "Double Pendulum under Control<span class=\"dot\">.</span>",
+  "tr": "Geregeltes Doppelpendel<span class=\"dot\">.</span>"
+ },
+ "5bfa8697c715": {
+  "src": "Forces over the stored run: the coil's force F with its limits and its steady value F*, and the strut's pull N.",
+  "tr": "Kräfte über den gespeicherten Lauf: die Kraft F der Spule mit ihren Grenzen und ihrem stationären Wert F* sowie der Zug N der Strebe."
+ },
+ "628e5037e0d0": {
+  "src": "The current source is ideal. A real amplifier has a voltage limit, and the back-emf \\(\\kappa\\dot X\\) eats into it when the cart moves fast. A long stroke of 2 m also needs a commutated linear motor rather than one coil in one long gap.",
+  "tr": "Die Stromquelle ist ideal. Ein wirklicher Verstärker hat eine Spannungsgrenze, und die Gegen-EMK \\(\\kappa\\dot X\\) zehrt daran, wenn sich der Wagen schnell bewegt. Ein langer Hub von 2 m braucht außerdem einen kommutierten Linearmotor statt einer Spule in einem langen Spalt."
+ },
+ "62d7d794f91e": {
+  "src": "The state of the rig is a point in a six-dimensional <em>phase space</em>, and the run is a path through it. We cannot draw six dimensions, so the page draws three shadows: the angle against the angular speed for each rod, and the position against the speed for the cart. In each the rest is a cross, and a run that settles is a path that spirals into it.",
+  "tr": "Der Zustand des Aufbaus ist ein Punkt in einem sechsdimensionalen <em>Phasenraum</em>, und der Lauf ist eine Bahn durch ihn. Sechs Dimensionen können wir nicht zeichnen, also zeichnet die Seite drei Schatten: für jede Stange den Winkel gegen die Winkelgeschwindigkeit und für den Wagen die Position gegen die Geschwindigkeit. In jedem ist die Ruhelage ein Kreuz, und ein Lauf, der zur Ruhe kommt, ist eine Bahn, die sich in sie hineinwindet."
+ },
+ "66407a2d2c27": {
+  "src": "<span class=\"psec__n\">06</span>Small swings: the guitar string<span class=\"star\" title=\"heavier mathematics\">★</span>",
+  "tr": "<span class=\"psec__n\">06</span>Kleine Schwingungen: die Gitarrensaite<span class=\"star\" title=\"heavier mathematics\">★</span>"
+ },
+ "6726b65cf90d": {
+  "src": "Three coordinates, one input. The coil pushes only the cart, \\(Q_X = F = \\kappa I\\); the strut couples cart and chain through its pull \\(N\\) and nothing else.",
+  "tr": "Drei Koordinaten, eine Eingangsgröße. Die Spule schiebt nur den Wagen, \\(Q_X = F = \\kappa I\\); die Strebe koppelt Wagen und Kette über ihren Zug \\(N\\) und durch nichts sonst."
+ },
+ "678fe0e8d89b": {
+  "src": "The spring stiffness \\(k_s\\) has dropped out. To first order in the motion, only the pull \\(N_0\\) matters, and each term has a picture. The first two are gravity. The third is the strut pulling ball 2 down, an extra weight \\(N_0\\) hung on it. The last is a guitar string: a string under tension \\(N_0\\) and of length \\(\\ell_0\\) resists a sideways offset \\(\\delta\\) of its end with the force \\(N_0\\delta/\\ell_0\\), and here the offset is ball 2's horizontal distance from the cart, \\(x_2 - X\\). With the defaults the string stiffness is \\(N_0/\\ell_0 = 4.62\\ \\mathrm{N/m}\\), soft compared with the pendulum's own gravity stiffness.",
+  "tr": "Die Federsteifigkeit \\(k_s\\) ist herausgefallen. In erster Ordnung der Bewegung zählt nur der Zug \\(N_0\\), und jeder Term hat ein Bild. Die ersten beiden sind die Schwerkraft. Der dritte ist die Strebe, die Kugel 2 nach unten zieht, ein zusätzliches Gewicht \\(N_0\\), das an ihr hängt. Der letzte ist eine Gitarrensaite: Eine Saite unter der Spannung \\(N_0\\) und mit der Länge \\(\\ell_0\\) widersetzt sich einer seitlichen Auslenkung \\(\\delta\\) ihres Endes mit der Kraft \\(N_0\\delta/\\ell_0\\), und hier ist die Auslenkung der waagerechte Abstand von Kugel 2 zum Wagen, \\(x_2 - X\\). Mit den Voreinstellungen ist die Steifigkeit der Saite \\(N_0/\\ell_0 = 4.62\\ \\mathrm{N/m}\\), weich im Vergleich zur Schweresteifigkeit des Pendels selbst."
+ },
+ "67b7724f11a3": {
+  "src": "Solve",
+  "tr": "Lösen"
+ },
+ "6973c4d89511": {
+  "src": "The step is small because of the stops: a touched stop is a spring of \\(2\\times10^4\\ \\mathrm{N/m}\\) on half a kilogram, a vibration of about 200 rad/s, and RK4 needs \\(\\omega h\\) well below 2.8 to stay stable. To grade the run, the page solves it a second time with \\(h/2\\) and stores the largest difference; from rest it is about \\(10^{-11}\\), after a drag a few times \\(10^{-10}\\), and larger, around \\(10^{-6}\\), when the coil hits its limit, because the clamp in (11) has a kink that RK4 steps across. The energy books are a second check. The coil's work \\(W_\\text{coil} = \\int F\\dot X\\,dt\\) and the stops' heat are integrated with the same RK4 weights as the state, and at the end \\(E(0) + W_\\text{coil} - Q_\\text{stop} - E(T)\\) is a few times \\(10^{-10}\\ \\mathrm{J}\\).",
+  "tr": "Der Schritt ist wegen der Anschläge klein: Ein berührter Anschlag ist eine Feder von \\(2\\times10^4\\ \\mathrm{N/m}\\) an einem halben Kilogramm, eine Schwingung von etwa 200 rad/s, und RK4 braucht \\(\\omega h\\) deutlich unter 2.8, um stabil zu bleiben. Um die Güte des Laufs zu bestimmen, löst die Seite ihn ein zweites Mal mit \\(h/2\\) und speichert die größte Differenz; aus der Ruhe ist sie etwa \\(10^{-11}\\), nach einem Ziehen einige \\(10^{-10}\\), und größer, um \\(10^{-6}\\), wenn die Spule an ihre Grenze stößt, weil die Begrenzung in (11) einen Knick hat, über den RK4 hinwegschreitet. Die Energiebilanz ist eine zweite Probe. Die Arbeit der Spule \\(W_\\text{coil} = \\int F\\dot X\\,dt\\) und die Wärme der Anschläge werden mit denselben RK4-Gewichten wie der Zustand integriert, und am Ende ist \\(E(0) + W_\\text{coil} - Q_\\text{stop} - E(T)\\) einige \\(10^{-10}\\ \\mathrm{J}\\)."
+ },
+ "6b4352a139b7": {
+  "src": "The gains come from the linear model at the target. Far from the rest the nonlinear rig can escape, as the whirl shows. Swinging a chain up from far away needs other ideas, such as pumping energy in or out deliberately before handing over to LQR.",
+  "tr": "Die Verstärkungen stammen aus dem linearen Modell an der Sollposition. Weit von der Ruhelage entfernt kann der nichtlineare Aufbau entkommen, wie der Überschlag zeigt. Eine Kette aus großer Entfernung aufzuschwingen braucht andere Ideen, etwa gezielt Energie hinein- oder herauszupumpen, bevor man an LQR übergibt."
+ },
+ "6eb15ba245c8": {
+  "src": "Choose where the cart should rest: set <b>r</b> here, or drag the flag on the ruler. The pale pendulum shows the rest it will reach.",
+  "tr": "Wählen Sie, wo der Wagen ruhen soll: Stellen Sie hier <b>r</b> ein, oder ziehen Sie die Fahne auf dem Lineal. Das blasse Pendel zeigt die Ruhelage, die es erreichen wird."
+ },
+ "6ff42b75c926": {
+  "src": "Playback speed",
+  "tr": "Wiedergabegeschwindigkeit"
+ },
+ "702b201c4b40": {
+  "src": "Phyein Usul",
+  "tr": "Phyein Usul"
+ },
+ "70fd1348c1b1": {
+  "src": "A controller that looks at everything is <em>full-state feedback</em>: the coil's force is the holding force plus a weighted sum of all six errors,",
+  "tr": "Ein Regler, der auf alles schaut, ist eine <em>Zustandsrückführung</em>: Die Kraft der Spule ist die Haltekraft plus eine gewichtete Summe aller sechs Abweichungen,"
+ },
+ "72d7cc865810": {
+  "src": "Position in the stored run",
+  "tr": "Position im gespeicherten Lauf"
+ },
+ "7497dfb012ca": {
+  "src": "<span>5</span>Where the chain can rest",
+  "tr": "<span>5</span>Wo die Kette ruhen kann"
+ },
+ "781961bc81c2": {
+  "src": "Pause",
+  "tr": "Pause"
+ },
+ "7a968865fe32": {
+  "src": "<span class=\"sw sw--dash\" style=\"border-top-color: var(--accent-rose);\"></span>rest the controller aims at",
+  "tr": "<span class=\"sw sw--dash\" style=\"border-top-color: var(--accent-rose);\"></span>Ruhelage, die der Regler anstrebt"
+ },
+ "7b64232c9e6e": {
+  "src": "Swing weight q<sub>θ</sub>",
+  "tr": "Gewicht der Schwingung q<sub>θ</sub>"
+ },
+ "7c1e914ddb13": {
+  "src": "Coil at its limit",
+  "tr": "Spule an ihrer Grenze"
+ },
+ "7c42606e161e": {
+  "src": "Nothing rubs. Real hinges, tubes and wheels have friction, which would damp the uncontrolled swing and would add a dead zone the controller must push through.",
+  "tr": "Nichts reibt. Wirkliche Gelenke, Rohre und Räder haben Reibung, die das ungeregelte Schwingen dämpfen und eine Totzone hinzufügen würde, durch die der Regler hindurchschieben muss."
+ },
+ "7d252cd594b3": {
+  "src": "All simulations ↑",
+  "tr": "Alle Simulationen ↑"
+ },
+ "7f9c1bfaf3b7": {
+  "src": "Grab a ball or the cart, pull it anywhere, and let go. The controller brings the chain back.",
+  "tr": "Fassen Sie eine Kugel oder den Wagen, ziehen Sie irgendwohin und lassen Sie los. Der Regler holt die Kette zurück."
+ },
+ "7fe2045e49f2": {
+  "src": "<span>9</span>Phase space and the region of rescue",
+  "tr": "<span>9</span>Der Phasenraum und der Rettungsbereich"
+ },
+ "806f5dd46d65": {
+  "src": "<span class=\"psec__n\">09</span>Phase space and the region of rescue",
+  "tr": "<span class=\"psec__n\">09</span>Der Phasenraum und der Rettungsbereich"
+ },
+ "80eccc1a64f5": {
+  "src": "The gains depend on the rest, because the linear model does: each new target is a new design, done in a millisecond when you press Solve, release the flag, or let go of the chain.",
+  "tr": "Die Verstärkungen hängen von der Ruhelage ab, weil das lineare Modell es tut: Jede neue Sollposition ist ein neuer Entwurf, erledigt in einer Millisekunde, wenn Sie „Lösen“ drücken, die Fahne loslassen oder die Kette loslassen."
+ },
+ "834bbfd63814": {
+  "src": "With the coil on, a steady force \\(F^*\\) can hold the cart anywhere along the rail. For each cart position \\(X = r\\) the chain then leans until gravity and the tilted strut balance:",
+  "tr": "Bei eingeschalteter Spule kann eine stationäre Kraft \\(F^*\\) den Wagen an jeder Stelle der Schiene halten. Für jede Wagenposition \\(X = r\\) neigt sich die Kette dann, bis Schwerkraft und schräge Strebe sich das Gleichgewicht halten:"
+ },
+ "837ad2f578c6": {
+  "src": "<b>Fig. 11</b> · <span class=\"tx\">\\(\\mathbf M(\\mathbf q)\\ddot{\\mathbf q} + \\mathbf C\\dot{\\mathbf q} + \\nabla V = (0, 0, F)\\)</span> · played from the stored run",
+  "tr": "<b>Abb. 11</b> · <span class=\"tx\">\\(\\mathbf M(\\mathbf q)\\ddot{\\mathbf q} + \\mathbf C\\dot{\\mathbf q} + \\nabla V = (0, 0, F)\\)</span> · abgespielt aus dem gespeicherten Lauf"
+ },
+ "86add19de064": {
+  "src": "Without control the rest is a <em>centre</em>: all six eigenvalues of \\(\\mathbf A\\) are imaginary, \\(\\pm1.71i\\), \\(\\pm5.05i\\) and \\(\\pm10.00i\\) per second at the hanging rest, and the energy (2) + (3) is conserved, so a disturbed chain circles for ever on a surface of constant energy. With the controller the eigenvalues of \\(\\mathbf A - \\mathbf B\\mathbf K\\) move into the left half-plane. For the default target they are \\(-14.98\\), \\(-1.83 \\pm 6.58i\\), \\(-1.19 \\pm 11.65i\\) and \\(-1.13\\) per second: two decaying swings and two plain decays. The rest has become a <em>stable focus</em>, and the slowest decay, \\(1.13\\) per second, sets the time scale on which the chain comes to rest, about a second per factor of three.",
+  "tr": "Ohne Regelung ist die Ruhelage ein <em>Wirbelpunkt</em>: Alle sechs Eigenwerte von \\(\\mathbf A\\) sind imaginär, \\(\\pm1.71i\\), \\(\\pm5.05i\\) und \\(\\pm10.00i\\) pro Sekunde in der hängenden Ruhelage, und die Energie (2) + (3) bleibt erhalten, sodass eine gestörte Kette ewig auf einer Fläche konstanter Energie kreist. Mit dem Regler wandern die Eigenwerte von \\(\\mathbf A - \\mathbf B\\mathbf K\\) in die linke Halbebene. Für die voreingestellte Sollposition sind sie \\(-14.98\\), \\(-1.83 \\pm 6.58i\\), \\(-1.19 \\pm 11.65i\\) und \\(-1.13\\) pro Sekunde: zwei abklingende Schwingungen und zwei reine Abklingvorgänge. Die Ruhelage ist zu einem <em>stabilen Strudelpunkt</em> geworden, und das langsamste Abklingen, \\(1.13\\) pro Sekunde, setzt die Zeitskala, auf der die Kette zur Ruhe kommt, etwa eine Sekunde pro Faktor drei."
+ },
+ "86d4b82ddc96": {
+  "src": "<span class=\"psub__n\">12.1</span>Further reading",
+  "tr": "<span class=\"psub__n\">12.1</span>Weiterführende Literatur"
+ },
+ "87da2ce86bf5": {
+  "src": "<span>12</span>What the model leaves out",
+  "tr": "<span>12</span>Was das Modell weglässt"
+ },
+ "8c35bfc9e093": {
+  "src": "From (8), show that with \\(N_0 = 0\\) the cart's equation is \\(M\\ddot X = \\tilde F\\) and that the chain's equations do not contain \\(X\\). Which two columns of (10) survive?",
+  "tr": "Zeigen Sie aus (8), dass mit \\(N_0 = 0\\) die Gleichung des Wagens \\(M\\ddot X = \\tilde F\\) lautet und dass die Gleichungen der Kette \\(X\\) nicht enthalten. Welche zwei Spalten von (10) bleiben übrig?"
+ },
+ "8e6b86dce8c4": {
+  "src": "Problems",
+  "tr": "Aufgaben"
+ },
+ "8f1a2f38402b": {
+  "src": "The coil pushes one of three bodies. A PID on the cart's position sees the chain only through its effect on the cart, and leaves its swings almost undamped (slowest decay 0.009 per second). Feedback on the whole state, designed by LQR, gives 0.60 per second at the straight-hanging rest and 1.13 per second at the default target.",
+  "tr": "Die Spule schiebt einen von drei Körpern. Ein PID-Regler auf die Position des Wagens sieht die Kette nur über ihre Wirkung auf den Wagen und lässt ihre Schwingungen fast ungedämpft (langsamstes Abklingen 0.009 pro Sekunde). Eine Rückführung des ganzen Zustands, entworfen mit LQR, ergibt 0.60 pro Sekunde in der gerade herabhängenden Ruhelage und 1.13 pro Sekunde bei der voreingestellten Sollposition."
+ },
+ "8f6791c73932": {
+  "src": "J. R. Taylor, <a href=\"https://books.google.com/books/about/Classical_Mechanics.html?id=P1kCtNr-pJsC\"><em>Classical Mechanics</em></a>, University Science Books, 2005: chapter 7, Lagrange's equations with constraints, and chapter 11, coupled oscillators and normal modes (Sections 3 and 6).",
+  "tr": "J. R. Taylor, <a href=\"https://books.google.com/books/about/Classical_Mechanics.html?id=P1kCtNr-pJsC\"><em>Classical Mechanics</em></a>, University Science Books, 2005: Kapitel 7, die Lagrange-Gleichungen mit Zwangsbedingungen, und Kapitel 11, gekoppelte Oszillatoren und Eigenschwingungen (Abschnitte 3 und 6)."
+ },
+ "90bcfa29c2db": {
+  "src": "Controller · F = F* − K (y − y*), K from LQR with the weights below",
+  "tr": "Regler · F = F* − K (y − y*), K aus LQR mit den Gewichten unten"
+ },
+ "93a8161c11f4": {
+  "src": "Back to the simulations",
+  "tr": "Zurück zu den Simulationen"
+ },
+ "93ac9a3a586b": {
+  "src": "A crane driver knows this problem from the cab. The hook hangs from the trolley, the load hangs from the hook, and the only thing the driver commands is the motor that moves the trolley. Every swing of the load has to be taken out through that one motor, by moving the trolley at the right moments. A dog on a lead, a kite on its line, a boat at anchor in a current: in each a body has its own motion, and we act on it only through something elastic and from one side.",
+  "tr": "Ein Kranführer kennt dieses Problem aus seiner Kabine. Der Haken hängt an der Laufkatze, die Last hängt am Haken, und das Einzige, was der Kranführer befiehlt, ist der Motor, der die Laufkatze bewegt. Jedes Pendeln der Last muss über diesen einen Motor herausgenommen werden, indem die Laufkatze im richtigen Moment bewegt wird. Ein Hund an der Leine, ein Drachen an seiner Schnur, ein Boot, das in einer Strömung vor Anker liegt: Jedes Mal hat ein Körper seine eigene Bewegung, und wir wirken auf ihn nur über etwas Elastisches und von einer Seite."
+ },
+ "9521dba25709": {
+  "src": "Home page",
+  "tr": "Startseite"
+ },
+ "95a0bb03a503": {
+  "src": "Current limit I<sub>max</sub>",
+  "tr": "Strombegrenzung I<sub>max</sub>"
+ },
+ "9692ae150530": {
+  "src": "A rest, or <em>fixed point</em>, is a state with all speeds and accelerations zero. Set them to zero in (5): what remains is \\(\\nabla V = (0, 0, F)\\). With the coil off, \\(F = 0\\), and the cart's equation says \\(N(x_2 - X) = 0\\): the strut must stand vertical under ball 2, since a tilted strut would pull the cart sideways and nothing would hold it. A vertical strut pulls ball 2 straight down, so the rods must point straight down or straight up, \\(\\theta_i \\in \\{0, \\pi\\}\\). Of these four arrangements, only straight down fits the tubes; the others need a strut far longer than 0.95 m.",
+  "tr": "Eine Ruhelage, oder ein <em>Fixpunkt</em>, ist ein Zustand, in dem alle Geschwindigkeiten und Beschleunigungen null sind. Setzen wir sie in (5) gleich null, so bleibt \\(\\nabla V = (0, 0, F)\\). Bei ausgeschalteter Spule ist \\(F = 0\\), und die Gleichung des Wagens sagt \\(N(x_2 - X) = 0\\): Die Strebe muss senkrecht unter Kugel 2 stehen, denn eine schräge Strebe würde den Wagen zur Seite ziehen, und nichts würde ihn halten. Eine senkrechte Strebe zieht Kugel 2 gerade nach unten, also müssen die Stangen gerade nach unten oder gerade nach oben zeigen, \\(\\theta_i \\in \\{0, \\pi\\}\\). Von diesen vier Anordnungen passt nur die gerade nach unten zu den Rohren; die anderen bräuchten eine Strebe, die weit länger als 0.95 m ist."
+ },
+ "990849eadc38": {
+  "src": "<span class=\"psec__n\">10</span>Solve first, then play",
+  "tr": "<span class=\"psec__n\">10</span>Erst lösen, dann abspielen"
+ },
+ "9c4bf50f401d": {
+  "src": "Controllable",
+  "tr": "Steuerbar"
+ },
+ "9cdee796c4db": {
+  "src": "<span>8</span>The controller",
+  "tr": "<span>8</span>Der Regler"
+ },
+ "9d5a10a9440c": {
+  "src": "On the page both balls weigh \\(m_1 = m_2 = 0.5\\ \\mathrm{kg}\\), both rods are \\(l_1 = l_2 = 0.5\\ \\mathrm{m}\\), the cart with its coil weighs \\(M = 1\\ \\mathrm{kg}\\), and its hinge runs \\(H = 1.65\\ \\mathrm{m}\\) below the pivot. When the chain hangs straight down over the cart, the strut has the length \\(\\ell_0 = H - l_1 - l_2 = 0.65\\ \\mathrm{m}\\), comfortably between its stops.",
+  "tr": "Auf der Seite wiegen beide Kugeln \\(m_1 = m_2 = 0.5\\ \\mathrm{kg}\\), beide Stangen sind \\(l_1 = l_2 = 0.5\\ \\mathrm{m}\\) lang, der Wagen mit seiner Spule wiegt \\(M = 1\\ \\mathrm{kg}\\), und sein Gelenk läuft \\(H = 1.65\\ \\mathrm{m}\\) unter dem Drehpunkt. Hängt die Kette gerade über dem Wagen herab, hat die Strebe die Länge \\(\\ell_0 = H - l_1 - l_2 = 0.65\\ \\mathrm{m}\\), bequem zwischen ihren Anschlägen."
+ },
+ "9de50c54f62a": {
+  "src": "Controller presets",
+  "tr": "Reglervoreinstellungen"
+ },
+ "9ebf517dccaa": {
+  "src": "Target position r",
+  "tr": "Sollposition r"
+ },
+ "a0fbd2e119cd": {
+  "src": "The free motions are the solutions of \\(\\mathbf M\\ddot{\\mathbf q} + \\mathbf K\\mathbf q = 0\\), with \\(\\mathbf K\\) the matrix of second derivatives of (8). Trying \\(\\mathbf q = \\mathbf u\\, e^{i\\omega t}\\) gives \\(\\det(\\mathbf K - \\omega^2\\mathbf M) = 0\\). With the defaults there are three normal modes, at \\(\\omega = 1.71\\), \\(5.05\\) and \\(10.00\\ \\mathrm{rad/s}\\) (0.27, 0.80 and 1.59 Hz). In the slowest the cart and the chain sway together on the soft string, the cart moving most. In the middle one the chain swings as a whole while the cart moves a little against it. In the fastest the two rods swing against each other, as in the faster mode of a bare double pendulum. Without the strut the bare pendulum has only two, at 3.39 and 8.18 rad/s; the strut's pull stiffens the chain and adds the third mode through the cart.",
+  "tr": "Die freien Bewegungen sind die Lösungen von \\(\\mathbf M\\ddot{\\mathbf q} + \\mathbf K\\mathbf q = 0\\), mit \\(\\mathbf K\\) der Matrix der zweiten Ableitungen von (8). Der Ansatz \\(\\mathbf q = \\mathbf u\\, e^{i\\omega t}\\) liefert \\(\\det(\\mathbf K - \\omega^2\\mathbf M) = 0\\). Mit den Voreinstellungen gibt es drei Eigenschwingungen, bei \\(\\omega = 1.71\\), \\(5.05\\) und \\(10.00\\ \\mathrm{rad/s}\\) (0.27, 0.80 und 1.59 Hz). In der langsamsten schwanken Wagen und Kette gemeinsam an der weichen Saite, wobei sich der Wagen am meisten bewegt. In der mittleren schwingt die Kette als Ganzes, während sich der Wagen ein wenig gegen sie bewegt. In der schnellsten schwingen die beiden Stangen gegeneinander, wie in der schnelleren Eigenschwingung eines bloßen Doppelpendels. Ohne die Strebe hat das bloße Pendel nur zwei, bei 3.39 und 8.18 rad/s; der Zug der Strebe versteift die Kette und fügt über den Wagen die dritte Eigenschwingung hinzu."
+ },
+ "a2f6c06c1737": {
+  "src": "From t = 0",
+  "tr": "Ab t = 0"
+ },
+ "a4404918a094": {
+  "src": "<b>Abstract.</b> Our aim is to bring a double pendulum back to rest, at a place we choose, by pushing nothing but a cart. The pendulum hangs from a fixed pivot. A strut made of two sliding tubes, with a spring inside, ties its lower ball to a cart, and a moving coil pushes the cart along a rail. The coil is the only thing anyone can push, yet it must bring three bodies to rest at a place we choose. We count the degrees of freedom, write the Lagrangian, and find that the strut must be under tension: to first order its spring stiffness drops out, and only the pull it carries couples the cart to the chain, like a guitar string. We find the family of rests the coil can hold, linearise around one of them, test whether a single push can reach every motion, and design the push by the linear–quadratic regulator. Then we look at the result in the six-dimensional phase space: a stable focus, a Lyapunov function that comes with the design, and the edge of the region the controller can rescue. The page solves the whole run first and stores it, and the note says how good that stored run is. Sections marked ★ carry the heavier mathematics and can be skipped on a first reading.",
+  "tr": "<b>Zusammenfassung.</b> Unser Ziel ist, ein Doppelpendel an einem Ort, den wir wählen, wieder zur Ruhe zu bringen, indem wir nichts als einen Wagen schieben. Das Pendel hängt an einem festen Drehpunkt. Eine Strebe aus zwei ineinander gleitenden Rohren, mit einer Feder darin, verbindet seine untere Kugel mit einem Wagen, und eine Tauchspule schiebt den Wagen auf einer Schiene. Die Spule ist das Einzige, was überhaupt jemand schieben kann, und doch muss sie drei Körper an einem Ort, den wir wählen, zur Ruhe bringen. Wir zählen die Freiheitsgrade, schreiben die Lagrange-Funktion auf und finden, dass die Strebe unter Zug stehen muss: In erster Ordnung fällt ihre Federsteifigkeit heraus, und nur der Zug, den sie trägt, koppelt den Wagen an die Kette, wie bei einer Gitarrensaite. Wir bestimmen die Schar der Ruhelagen, die die Spule halten kann, linearisieren um eine von ihnen, prüfen, ob ein einziger Stoß jede Bewegung erreichen kann, und entwerfen den Stoß mit dem linear-quadratischen Regler. Dann betrachten wir das Ergebnis im sechsdimensionalen Phasenraum: einen stabilen Strudelpunkt, eine Ljapunow-Funktion, die der Entwurf mitliefert, und den Rand des Bereichs, aus dem der Regler die Kette retten kann. Die Seite löst zuerst den ganzen Lauf und speichert ihn, und das Skript sagt, wie gut dieser gespeicherte Lauf ist. Mit ★ markierte Abschnitte enthalten die schwerere Mathematik und können beim ersten Lesen übersprungen werden."
+ },
+ "a4ce3a9be794": {
+  "src": "← All simulations",
+  "tr": "← Alle Simulationen"
+ },
+ "a5e7933ea71f": {
+  "src": "The coil adds the electromechanical terms we met in Fig. 9: with \\(q_e\\) the charge that has flowed through the winding, \\(\\dot q_e = I\\), and \\(\\Lambda\\) its inductance,",
+  "tr": "Die Spule fügt die elektromechanischen Terme hinzu, die wir in Abb. 9 kennengelernt haben: mit \\(q_e\\) der Ladung, die durch die Wicklung geflossen ist, \\(\\dot q_e = I\\), und \\(\\Lambda\\) ihrer Induktivität,"
+ },
+ "a6cf85afa000": {
+  "src": "The strut is not a constraint. Its tubes are so light that we take them as massless, and a massless bar hinged at both ends can only push or pull along its own line: any sideways force on it would give an infinite angular acceleration. Such a bar is a <em>two-force member</em>. Its length is set by where ball 2 and the cart are, so it brings no coordinate of its own, and its spring enters through a potential energy. The tubes do impose two <em>unilateral</em> constraints, inequalities that act only when they are reached: the strut is never shorter than \\(\\ell_\\text{min} = 0.5\\ \\mathrm{m}\\) (inner tube pushed all the way in) and never longer than \\(\\ell_\\text{max} = 0.95\\ \\mathrm{m}\\) (its collar against the stop). Section 4 says how the page treats them.",
+  "tr": "Die Strebe ist keine Zwangsbedingung. Ihre Rohre sind so leicht, dass wir sie als masselos ansehen, und ein masseloser Stab, der an beiden Enden gelenkig gelagert ist, kann nur entlang seiner eigenen Linie drücken oder ziehen: Jede Querkraft auf ihn ergäbe eine unendliche Winkelbeschleunigung. Ein solcher Stab ist ein <em>Zweikraftstab</em>. Seine Länge ist dadurch bestimmt, wo Kugel 2 und der Wagen sind, er bringt also keine eigene Koordinate mit, und seine Feder geht über eine potentielle Energie ein. Die Rohre erzwingen allerdings zwei <em>einseitige</em> Zwangsbedingungen, Ungleichungen, die nur wirken, wenn sie erreicht werden: Die Strebe ist nie kürzer als \\(\\ell_\\text{min} = 0.5\\ \\mathrm{m}\\) (inneres Rohr ganz eingeschoben) und nie länger als \\(\\ell_\\text{max} = 0.95\\ \\mathrm{m}\\) (sein Bund am Anschlag). Abschnitt 4 sagt, wie die Seite sie behandelt."
+ },
+ "a9b75cb42bf9": {
+  "src": "<span class=\"sw\"></span>now",
+  "tr": "<span class=\"sw\"></span>jetzt"
+ },
+ "a9c89eac580e": {
+  "src": "<span>2</span>The rig and its coordinates",
+  "tr": "<span>2</span>Der Aufbau und seine Koordinaten"
+ },
+ "af59fae5d6ae": {
+  "src": "The aim of this page",
+  "tr": "Das Ziel dieser Seite"
+ },
+ "b2ab43f67958": {
+  "src": "<span>3</span>Lagrangian and equations of motion&nbsp;★",
+  "tr": "<span>3</span>Lagrange-Funktion und Bewegungsgleichungen&nbsp;★"
+ },
+ "b327ddd25f9f": {
+  "src": "<span class=\"psec__n\">12</span>What the model leaves out",
+  "tr": "<span class=\"psec__n\">12</span>Was das Modell weglässt"
+ },
+ "b3356bf4aeb8": {
+  "src": "The mass matrix \\(\\mathbf M\\) is block diagonal: the cart's inertia does not mix with the pendulum's. The term \\(\\mathbf C\\dot{\\mathbf q}\\) holds the centrifugal pulls, \\(m_2 l_1 l_2 \\sin(\\theta_1 - \\theta_2)\\,\\dot\\theta_2^2\\) on the upper rod and its mirror on the lower. Everything that ties the cart to the chain sits in \\(\\nabla V\\), through the strut. The derivative of its spring energy is",
+  "tr": "Die Massenmatrix \\(\\mathbf M\\) ist blockdiagonal: Die Trägheit des Wagens mischt sich nicht mit der des Pendels. Der Term \\(\\mathbf C\\dot{\\mathbf q}\\) enthält die Zentrifugalkräfte, \\(m_2 l_1 l_2 \\sin(\\theta_1 - \\theta_2)\\,\\dot\\theta_2^2\\) an der oberen Stange und sein Spiegelbild an der unteren. Alles, was den Wagen an die Kette bindet, steckt in \\(\\nabla V\\), über die Strebe. Die Ableitung ihrer Federenergie ist"
+ },
+ "b4382736d458": {
+  "src": "Lecture note · Fig. 11 · control systems",
+  "tr": "Skript · Abb. 11 · Regelungstechnik"
+ },
+ "b59908c7fcec": {
+  "src": "Is one push enough to steer six numbers? The test is Kalman's: the system (9) is <em>controllable</em>, meaning that some force history can carry any state to any other, if and only if the matrix",
+  "tr": "Reicht ein einziger Stoß, um sechs Zahlen zu lenken? Der Test stammt von Kalman: Das System (9) ist <em>steuerbar</em>, das heißt, ein geeigneter Kraftverlauf kann jeden Zustand in jeden anderen überführen, genau dann, wenn die Matrix"
+ },
+ "b5d967229c8f": {
+  "src": "A telescope of two tubes cannot stretch to twice its collapsed length: each tube is 0.5 m long, so the strut is 0.5 m when pushed together and 0.95 m when the collar, 5 cm from the end of the inner tube, meets the stop. The page models each stop as a stiff spring, \\(k_\\text{stop} = 2\\times10^4\\ \\mathrm{N/m}\\), with a damper, \\(c_\\text{stop} = 40\\ \\mathrm{kg/s}\\), that acts only while the stop is touched. The damper turns the knock into heat, \\(Q_\\text{stop} = \\int c_\\text{stop}\\dot\\ell^2\\, dt\\), the only loss in the rig. Your hand cannot pull past a stop either: a pose that would stretch the strut beyond \\(\\ell_\\text{max}\\) is refused, and the chain stops following the pointer.",
+  "tr": "Ein Teleskop aus zwei Rohren kann sich nicht auf das Doppelte seiner zusammengeschobenen Länge strecken: Jedes Rohr ist 0.5 m lang, also ist die Strebe zusammengeschoben 0.5 m lang und 0.95 m, wenn der Bund, 5 cm vom Ende des inneren Rohrs, den Anschlag erreicht. Die Seite modelliert jeden Anschlag als steife Feder, \\(k_\\text{stop} = 2\\times10^4\\ \\mathrm{N/m}\\), mit einem Dämpfer, \\(c_\\text{stop} = 40\\ \\mathrm{kg/s}\\), der nur wirkt, solange der Anschlag berührt wird. Der Dämpfer verwandelt den Stoß in Wärme, \\(Q_\\text{stop} = \\int c_\\text{stop}\\dot\\ell^2\\, dt\\), der einzige Verlust im Aufbau. Auch Ihre Hand kann nicht über einen Anschlag hinausziehen: Eine Lage, die die Strebe über \\(\\ell_\\text{max}\\) hinaus dehnen würde, wird abgewiesen, und die Kette folgt dem Zeiger nicht mehr."
+ },
+ "b6031bdcf068": {
+  "src": "<span class=\"pfig__n\">Figure 1</span>The rig. The angles \\(\\theta_1, \\theta_2\\) are measured from straight down; \\(X\\) is the cart's position along the rail, measured from the point under the pivot; the cart's hinge lies a depth \\(H\\) below the pivot. The strut has length \\(\\ell\\) and pulls ball 2 and the cart towards each other with the force \\(N\\) along its line.",
+  "tr": "<span class=\"pfig__n\">Abbildung 1</span>Der Aufbau. Die Winkel \\(\\theta_1, \\theta_2\\) werden von der Senkrechten nach unten gemessen; \\(X\\) ist die Position des Wagens entlang der Schiene, gemessen vom Punkt unter dem Drehpunkt; das Gelenk des Wagens liegt um die Tiefe \\(H\\) unter dem Drehpunkt. Die Strebe hat die Länge \\(\\ell\\) und zieht Kugel 2 und den Wagen mit der Kraft \\(N\\) entlang ihrer Linie zueinander."
+ },
+ "b6529936ad11": {
+  "src": "Set \\(\\rho\\) ten times larger on the page and solve again. How do the gains, the slowest decay and the time at the current limit change? Explain with (12).",
+  "tr": "Stellen Sie auf der Seite \\(\\rho\\) zehnmal größer ein und lösen Sie erneut. Wie ändern sich die Verstärkungen, das langsamste Abklingen und die Zeit an der Strombegrenzung? Erklären Sie es mit (12)."
+ },
+ "be49d8a185a4": {
+  "src": "<span class=\"psec__n\">05</span>Where the chain can rest",
+  "tr": "<span class=\"psec__n\">05</span>Wo die Kette ruhen kann"
+ },
+ "bebf46d1b1a7": {
+  "src": "The cart, and only the cart, brings the pendulum back to equilibrium. The controller measures where both balls and the cart are and how fast they move, sets the current in the coil, and so pushes the cart; through the strut the cart pulls the chain until all three bodies rest at the position you chose. Every section below serves this aim: the model says what the cart can do to the chain (§3–§6), the test of §7 says whether one push can reach every motion, §8 designs the push, and §9 shows the chain coming home in phase space.",
+  "tr": "Der Wagen, und nur der Wagen, bringt das Pendel ins Gleichgewicht zurück. Der Regler misst, wo beide Kugeln und der Wagen sind und wie schnell sie sich bewegen, stellt den Strom in der Spule ein und schiebt so den Wagen; über die Strebe zieht der Wagen an der Kette, bis alle drei Körper an der Position ruhen, die Sie gewählt haben. Jeder Abschnitt unten dient diesem Ziel: Das Modell sagt, was der Wagen mit der Kette tun kann (§3–§6), der Test in §7 sagt, ob ein einziger Stoß jede Bewegung erreichen kann, §8 entwirft den Stoß, und §9 zeigt, wie die Kette im Phasenraum heimkehrt."
+ },
+ "bed13e8394cb": {
+  "src": "The page builds \\(\\mathbf A\\) and \\(\\mathbf B\\) numerically in <code>linearise()</code>, by central differences of the full equations of motion at the rest you chose; at the straight-hanging rest they agree with (8).",
+  "tr": "Die Seite bildet \\(\\mathbf A\\) und \\(\\mathbf B\\) numerisch in <code>linearise()</code>, durch zentrale Differenzen der vollen Bewegungsgleichungen in der Ruhelage, die Sie gewählt haben; in der gerade herabhängenden Ruhelage stimmen sie mit (8) überein."
+ },
+ "bee75ca77f75": {
+  "src": "Controls",
+  "tr": "Bedienelemente"
+ },
+ "bef67690043b": {
+  "src": "Each gain is a part we can picture. The gain on \\(X\\) is a spring anchored at the target, as \\(K_p\\) was in Fig. 9. The gains on the angles say how hard to move the cart when the chain leans, much as you move your hand under a stick you balance. The gains on the speeds are dampers. With six gains to choose, guessing is hopeless. The <em>linear–quadratic regulator</em> chooses them by asking for the least of a cost,",
+  "tr": "Jede Verstärkung ist ein Bauteil, das wir uns vorstellen können. Die Verstärkung auf \\(X\\) ist eine Feder, die an der Sollposition verankert ist, wie \\(K_p\\) in Abb. 9. Die Verstärkungen auf die Winkel sagen, wie kräftig der Wagen bewegt werden muss, wenn sich die Kette neigt, so wie Sie die Hand unter einem Stab bewegen, den Sie balancieren. Die Verstärkungen auf die Geschwindigkeiten sind Dämpfer. Bei sechs Verstärkungen ist Raten hoffnungslos. Der <em>linear-quadratische Regler</em> wählt sie, indem er das Minimum eines Kostenfunktionals verlangt,"
+ },
+ "bf5a972cb745": {
+  "src": "Rest angles θ₁*, θ₂*",
+  "tr": "Ruhewinkel θ₁*, θ₂*"
+ },
+ "c313f91f9735": {
+  "src": "<b>Phase space</b> · three shadows of the six-dimensional state <span class=\"tx\">\\((\\theta_1, \\theta_2, X, \\dot\\theta_1, \\dot\\theta_2, \\dot X)\\)</span> and the fixed point <span class=\"tx\">\\(\\mathbf y^*\\)</span>",
+  "tr": "<b>Phasenraum</b> · drei Schatten des sechsdimensionalen Zustands <span class=\"tx\">\\((\\theta_1, \\theta_2, X, \\dot\\theta_1, \\dot\\theta_2, \\dot X)\\)</span> und der Fixpunkt <span class=\"tx\">\\(\\mathbf y^*\\)</span>"
+ },
+ "c4df62143e45": {
+  "src": "Effort weight, log10 of ρ",
+  "tr": "Gewicht des Stellaufwands, log10 von ρ"
+ },
+ "c7f189fe1a24": {
+  "src": "The rig is drawn to scale, in pixels per metre. The pale dashed pendulum is the rest \\(\\mathbf y^*\\) the controller aims at, joined to the target \\(r\\) on the rail. The burgundy arrow on the cart is the coil's force \\(F\\), drawn 0.02 m long per newton on the rig's scale; the grey arrows beside the strut are its pull \\(N\\) on ball 2 and on the cart, equal and opposite. The stop marker on the outer tube turns burgundy while a stop is touched. The small circles on the coil appear while current flows. The bars at the top left are the energy books: the energy above the rest, the coil's work and the stops' heat.",
+  "tr": "Der Aufbau ist maßstäblich gezeichnet, in Pixeln pro Meter. Das blasse gestrichelte Pendel ist die Ruhelage \\(\\mathbf y^*\\), die der Regler anstrebt, verbunden mit der Sollposition \\(r\\) auf der Schiene. Der weinrote Pfeil am Wagen ist die Kraft \\(F\\) der Spule, 0.02 m lang pro Newton im Maßstab des Aufbaus gezeichnet; die grauen Pfeile neben der Strebe sind ihr Zug \\(N\\) auf Kugel 2 und auf den Wagen, gleich groß und entgegengesetzt. Die Anschlagmarke am äußeren Rohr wird weinrot, solange ein Anschlag berührt wird. Die kleinen Kreise an der Spule erscheinen, solange Strom fließt. Die Balken oben links sind die Energiebilanz: die Energie über der Ruhelage, die Arbeit der Spule und die Wärme der Anschläge."
+ },
+ "c97bb887ba7e": {
+  "src": "<span>1</span>A chain on a leash",
+  "tr": "<span>1</span>Eine Kette an der Leine"
+ },
+ "cad2dda3032c": {
+  "src": "heavier mathematics",
+  "tr": "schwerere Mathematik"
+ },
+ "d1622a8321e0": {
+  "src": "Phyein Usul, home page",
+  "tr": "Phyein Usul, Startseite"
+ },
+ "d40bcebbc9bf": {
+  "src": "K. J. Åström and R. M. Murray, <em>Feedback Systems: An Introduction for Scientists and Engineers</em>, Princeton University Press, 2008: chapter 6, reachability and state feedback, and chapter 7, the linear–quadratic regulator. <a href=\"http://www.cds.caltech.edu/~murray/books/AM08/pdf/am08-complete_22Feb09.pdf\">The authors’ free electronic edition</a>.",
+  "tr": "K. J. Åström und R. M. Murray, <em>Feedback Systems: An Introduction for Scientists and Engineers</em>, Princeton University Press, 2008: Kapitel 6, Erreichbarkeit und Zustandsrückführung, und Kapitel 7, der linear-quadratische Regler. <a href=\"http://www.cds.caltech.edu/~murray/books/AM08/pdf/am08-complete_22Feb09.pdf\">Die freie elektronische Ausgabe der Autoren</a>."
+ },
+ "d85eba7b2b37": {
+  "src": "1 solve",
+  "tr": "1 lösen"
+ },
+ "d929322e4b16": {
+  "src": "Fig.",
+  "tr": "Abb."
+ },
+ "db367cf88021": {
+  "src": "What the page does",
+  "tr": "Was die Seite tut"
+ },
+ "dc31e1465d94": {
+  "src": "where \\(\\kappa = B\\ell_w = 10\\ \\mathrm{N/A}\\) is the force constant: the field in the magnet's gap times the length \\(\\ell_w\\) of wire in it. The term \\(\\kappa X \\dot q_e\\) is the whole coupling between the winding and the field. Its derivative with respect to \\(X\\), \\(\\kappa\\dot q_e = \\kappa I\\), is the force on the cart; its time derivative of \\(\\partial\\mathcal L/\\partial\\dot q_e\\) gives the back-emf \\(\\kappa\\dot X\\) in the circuit. The page drives the coil from a current source, which delivers the current it is told whatever the back-emf, so the electrical equation drops out and \\(F = \\kappa I\\) becomes the input. The Euler–Lagrange equations \\(\\frac{d}{dt}\\partial\\mathcal L/\\partial\\dot q_i = \\partial\\mathcal L/\\partial q_i\\) then read, in matrix form,",
+  "tr": "wobei \\(\\kappa = B\\ell_w = 10\\ \\mathrm{N/A}\\) die Kraftkonstante ist: das Feld im Spalt des Magneten mal die Länge \\(\\ell_w\\) des Drahts darin. Der Term \\(\\kappa X \\dot q_e\\) ist die ganze Kopplung zwischen Wicklung und Feld. Seine Ableitung nach \\(X\\), \\(\\kappa\\dot q_e = \\kappa I\\), ist die Kraft auf den Wagen; die Zeitableitung von \\(\\partial\\mathcal L/\\partial\\dot q_e\\) liefert die Gegen-EMK \\(\\kappa\\dot X\\) im Stromkreis. Die Seite speist die Spule aus einer Stromquelle, die den vorgegebenen Strom liefert, was auch immer die Gegen-EMK ist; daher fällt die elektrische Gleichung heraus, und \\(F = \\kappa I\\) wird zur Eingangsgröße. Die Euler-Lagrange-Gleichungen \\(\\frac{d}{dt}\\partial\\mathcal L/\\partial\\dot q_i = \\partial\\mathcal L/\\partial q_i\\) lauten dann in Matrixform"
+ },
+ "dd693460ff5d": {
+  "src": "The first term charges for being away from the rest, the second for pushing. The sliders set the weights: \\(q_\\theta\\) for the angles, \\(q_X\\) for the cart's position, \\(q_v\\) for all three speeds, and \\(\\rho\\) for the coil's effort. Raise \\(\\rho\\) and the controller pushes more gently and takes longer; raise \\(q_v\\) and it damps harder. The answer is a quadratic bowl in the state, \\(J_\\text{min} = \\tilde{\\mathbf y}_0^{\\mathsf T}\\mathbf P\\,\\tilde{\\mathbf y}_0\\), where \\(\\mathbf P\\) solves the algebraic <em>Riccati equation</em>, and the best gains follow from it:",
+  "tr": "Der erste Term berechnet Kosten für die Entfernung von der Ruhelage, der zweite für das Schieben. Die Schieberegler setzen die Gewichte: \\(q_\\theta\\) für die Winkel, \\(q_X\\) für die Position des Wagens, \\(q_v\\) für alle drei Geschwindigkeiten und \\(\\rho\\) für den Stellaufwand der Spule. Erhöhen Sie \\(\\rho\\), und der Regler schiebt sanfter und braucht länger; erhöhen Sie \\(q_v\\), und er dämpft stärker. Die Antwort ist eine quadratische Schale im Zustand, \\(J_\\text{min} = \\tilde{\\mathbf y}_0^{\\mathsf T}\\mathbf P\\,\\tilde{\\mathbf y}_0\\), wobei \\(\\mathbf P\\) die algebraische <em>Riccati-Gleichung</em> löst, und die besten Verstärkungen folgen daraus:"
+ },
+ "dfd65cc1196a": {
+  "src": "Stored run",
+  "tr": "Gespeicherter Lauf"
+ },
+ "e1d329a7394b": {
+  "src": "From symbols to code",
+  "tr": "Von den Symbolen zum Code"
+ },
+ "e220dae55556": {
+  "src": "Settled after",
+  "tr": "Eingeschwungen nach"
+ },
+ "e3de5ab0ca4c": {
+  "src": "Off",
+  "tr": "Aus"
+ },
+ "e5c8361b5af6": {
+  "src": "Spring stiffness kₛ",
+  "tr": "Federsteifigkeit kₛ"
+ },
+ "e70691bb54fa": {
+  "src": "Pull at rest N₀",
+  "tr": "Zug in Ruhe N₀"
+ },
+ "e725208e7ef4": {
+  "src": "The last term is the only one that contains \\(X\\). With no tension, \\(N_0 = 0\\), the cart vanishes from the chain's equations and the chain from the cart's. No push on the cart could reach the swing. Tension is everything.",
+  "tr": "Der letzte Term ist der einzige, der \\(X\\) enthält. Ohne Spannung, \\(N_0 = 0\\), verschwindet der Wagen aus den Gleichungen der Kette und die Kette aus der des Wagens. Kein Stoß auf den Wagen könnte die Schwingung erreichen. Die Spannung ist alles."
+ },
+ "eb4f41a24feb": {
+  "src": "Slowest decay",
+  "tr": "Langsamstes Abklingen"
+ },
+ "eeaa994bd826": {
+  "src": "Holding force F*",
+  "tr": "Haltekraft F*"
+ },
+ "eed28eec00a4": {
+  "src": "Solve, then play",
+  "tr": "Lösen, dann abspielen"
+ },
+ "ef58c70511d0": {
+  "src": "One input gives a one-parameter family of rests, and \\(r\\) is the parameter you choose. The page solves the two angle equations by Newton's method in <code>equilibrium()</code>. For the default target \\(r = 0.30\\ \\mathrm{m}\\): \\(\\theta_1^* = 5.78^\\circ\\), \\(\\theta_2^* = 8.36^\\circ\\), the strut is \\(\\ell^* = 0.681\\ \\mathrm{m}\\) long and pulls with \\(N^* = 6.12\\ \\mathrm{N}\\), and the coil holds the cart with \\(F^* = 1.59\\ \\mathrm{N}\\). The chain leans towards the cart, but less than the cart has moved: the strut is a soft leash, and gravity pulls the chain back under its pivot. The pale pendulum on the page draws this rest.",
+  "tr": "Eine Eingangsgröße ergibt eine einparametrige Schar von Ruhelagen, und \\(r\\) ist der Parameter, den Sie wählen. Die Seite löst die beiden Winkelgleichungen mit dem Newton-Verfahren in <code>equilibrium()</code>. Für die voreingestellte Sollposition \\(r = 0.30\\ \\mathrm{m}\\) gilt: \\(\\theta_1^* = 5.78^\\circ\\), \\(\\theta_2^* = 8.36^\\circ\\), die Strebe ist \\(\\ell^* = 0.681\\ \\mathrm{m}\\) lang und zieht mit \\(N^* = 6.12\\ \\mathrm{N}\\), und die Spule hält den Wagen mit \\(F^* = 1.59\\ \\mathrm{N}\\). Die Kette neigt sich zum Wagen hin, aber weniger, als der Wagen sich bewegt hat: Die Strebe ist eine weiche Leine, und die Schwerkraft zieht die Kette zurück unter ihren Drehpunkt. Das blasse Pendel auf der Seite zeichnet diese Ruhelage."
+ },
+ "efa5767b94fb": {
+  "src": "<span class=\"psec__n\">02</span>The rig and its coordinates",
+  "tr": "<span class=\"psec__n\">02</span>Der Aufbau und seine Koordinaten"
+ },
+ "f0194aa44f8b": {
+  "src": "<span class=\"psec__n\">11</span>On screen",
+  "tr": "<span class=\"psec__n\">11</span>Auf dem Bildschirm"
+ },
+ "f06c85e009e5": {
+  "src": "<span>10</span>Solve first, then play",
+  "tr": "<span>10</span>Erst lösen, dann abspielen"
+ },
+ "f134d06971d7": {
+  "src": "Key result · the equations of motion",
+  "tr": "Kernergebnis · die Bewegungsgleichungen"
+ },
+ "f33a57b938fb": {
+  "src": "Take control",
+  "tr": "Selbst steuern"
+ },
+ "f4bb3c5019e3": {
+  "src": "Hold a heavy lamp that hangs from the ceiling on two links, not by the lamp itself but by a rubber cord tied to its bottom. Pull the cord sideways and the whole chain leans; let it go slack and the lamp swings as it likes.",
+  "tr": "Halten Sie eine schwere Lampe, die an zwei Gliedern von der Decke hängt, nicht an der Lampe selbst, sondern an einer Gummischnur, die unten an ihr festgebunden ist. Ziehen Sie die Schnur zur Seite, und die ganze Kette neigt sich; lassen Sie sie locker, und die Lampe schwingt, wie es ihr gefällt."
+ },
+ "f5cbdf6bfb51": {
+  "src": "Contents",
+  "tr": "Inhalt"
+ },
+ "f5e490de291d": {
+  "src": "Double Pendulum under Control · Numa Koudsie",
+  "tr": "Geregeltes Doppelpendel · Numa Koudsie"
+ },
+ "f72f0eda6052": {
+  "src": "Simulations",
+  "tr": "Simulationen"
+ },
+ "f8033b444ece": {
+  "src": "Energy balance",
+  "tr": "Energiebilanz"
+ },
+ "fb57a7ac8366": {
+  "src": "This simulation needs JavaScript.",
+  "tr": "Diese Simulation benötigt JavaScript."
+ },
+ "fd8327111a77": {
+  "src": "Strut · two tubes with a spring inside",
+  "tr": "Strebe · zwei Rohre mit einer Feder darin"
+ },
+ "ff056d86f790": {
+  "src": "<span class=\"psec__n\">08</span>The controller",
+  "tr": "<span class=\"psec__n\">08</span>Der Regler"
+ },
+ "ffee58552336": {
+  "src": "3 play",
+  "tr": "3 abspielen"
+ }
+}

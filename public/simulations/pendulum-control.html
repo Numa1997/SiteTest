@@ -556,7 +556,7 @@
         var kss = Sim.slider('ks', { format: function (v) { return v.toFixed(0) + ' N/m'; }, onInput: markStale });
         var Ims = Sim.slider('Imax', { format: function (v) { return v.toFixed(1) + ' A · ' + (KAPPA * v).toFixed(0) + ' N'; }, onInput: markStale });
         var speed = Sim.slider('speed', { format: function (v) { return v.toFixed(2) + '×'; } });
-        var seek = Sim.slider('seek', { format: function (v) { return 't = ' + (v * EVERY * H).toFixed(1) + ' s of ' + TEND + ' s'; }, onInput: function (v) { playT = v * EVERY * H; frame(); } });
+        var seek = Sim.slider('seek', { format: function (v) { return _t('t = {t} s of {T} s', { t: (v * EVERY * H).toFixed(1), T: TEND }); }, onInput: function (v) { playT = v * EVERY * H; frame(); } });
         var ctrlOn = true, presetName = 'firm';
         var PRESETS = { off: null, gentle: [5, 5, 5, -1], firm: [5, 5, 5, -1.7] };
         function weightsMoved() { presetName = null; markStale(); paintPresets(); }
@@ -804,8 +804,11 @@
             document.getElementById('k-out').textContent = ds.get('ctrl_on') ? 'K = [' + Array.prototype.map.call(K, function (k) { return Sim.fmt(k, 2); }).join(', ') + ']' : _t('Controller off: K = 0, the coil carries no current.');
             var lam = ds.get('ctrl_on') ? [lc, li] : [ds.get('lamo_re'), ds.get('lamo_im')], parts = [];
             for (var j = 0; j < 6; j += 1) { if (lam[1][j] < -1e-9) continue; parts.push(Sim.fmt(lam[0][j], 2) + (Math.abs(lam[1][j]) > 1e-9 ? ' ± ' + Sim.fmt(lam[1][j], 2) + 'i' : '')); }
-            document.getElementById('cap-eig').innerHTML = (ds.get('ctrl_on') ? _t('closed loop') : _t('no control')) + ' · λ = ' + parts.join(', ') + ' s<sup>−1</sup> · ' + _t(ds.get('fp_kind')) + ' · ' + _t('rank {r} of 6', { r: ds.get('rank') });
+            document.getElementById('cap-eig').innerHTML = (ds.get('ctrl_on') ? _t('closed loop') : _t('no control')) + ' · λ = ' + parts.join(', ') + ' s<sup>−1</sup> · ' + kindName(ds.get('fp_kind')) + ' · ' + _t('rank {r} of 6', { r: ds.get('rank') });
         }
+        // words printed from data go through literal maps, so the translation tables can find them
+        function whatName(w) { return { 'ball 1': _t('ball 1'), 'ball 2': _t('ball 2'), 'the cart': _t('the cart'), 'cart': _t('the cart') }[w] || w; }
+        function kindName(k) { return { 'stable focus': _t('stable focus'), 'stable node': _t('stable node'), 'centre': _t('centre'), 'unstable': _t('unstable') }[k] || k; }
         function paintPresets() {
             Array.prototype.forEach.call(document.querySelectorAll('[data-preset]'), function (b) {
                 var on = b.getAttribute('data-preset') === (ctrlOn ? presetName : 'off');
@@ -1085,7 +1088,7 @@
             ds.set('w1_now', ds.get('w1')[i]); ds.set('w2_now', ds.get('w2')[i]); ds.set('vX_now', ds.get('vX')[i]);
             ds.set('F_now', ds.get('Fs')[i]); ds.set('I_now', ds.get('Is')[i]); ds.set('N_now', ds.get('Ns')[i]); ds.set('ell_now', ds.get('ells')[i]);
             ds.set('E_now', ds.get('Es')[i]); ds.set('Wc_now', ds.get('Wc')[i]); ds.set('Qs_now', ds.get('Qs')[i]);
-            seek.set(i); document.getElementById('cap-t').innerHTML = '<i>t</i> = ' + ds.get('ts')[i].toFixed(2) + ' s of ' + TEND + ' s';
+            seek.set(i); document.getElementById('cap-t').innerHTML = _t('<i>t</i> = {t} s of {T} s', { t: ds.get('ts')[i].toFixed(2), T: TEND });
             draw();
         }
         var clk = Sim.clock(function (dt) {
@@ -1128,7 +1131,7 @@
             var y = drag.q.concat(drag.v), p = solved.p, F = control(p, solved.d, y), st = strut(p, y, drag.v);
             setNow(y, F, st); ds.set('E_now', energy(p, y)); ds.set('grabbed', drag.what);
             statusEl.classList.remove('is-stale');
-            statusEl.textContent = _t('You hold {what}. The controller would push the cart with F = {F} N here. Let go to solve the motion from this pose.', { what: _t(drag.what), F: Sim.fmt(F, 2) });
+            statusEl.textContent = _t('You hold {what}. The controller would push the cart with F = {F} N here. Let go to solve the motion from this pose.', { what: whatName(drag.what), F: Sim.fmt(F, 2) });
             draw();
         }
         rigEl.addEventListener('pointerdown', function (e) {
@@ -1231,7 +1234,7 @@
                 var rows = [['n', n, '', 'i_now', null], ['t', ds.get('ts')[n], 's', 'ts', n], ['θ<sub>1</sub>', ds.get('th1')[n], 'rad', 'th1', n], ['θ<sub>2</sub>', ds.get('th2')[n], 'rad', 'th2', n], ['X', ds.get('Xs')[n], 'm', 'Xs', n],
                     ['θ̇<sub>1</sub>', ds.get('w1')[n], 'rad/s', 'w1', n], ['θ̇<sub>2</sub>', ds.get('w2')[n], 'rad/s', 'w2', n], ['Ẋ', ds.get('vX')[n], 'm/s', 'vX', n], ['F', ds.get('Fs')[n], 'N', 'Fs', n], ['N', ds.get('Ns')[n], 'N', 'Ns', n], ['ℓ', ds.get('ells')[n], 'm', 'ells', n], ['E', ds.get('Es')[n], 'J', 'Es', n]];
                 var at = ref.what === 'ball 1' ? { x: ds.get('b1_px'), y: ds.get('b1_py') } : ref.what === 'ball 2' ? { x: ds.get('b2_px'), y: ds.get('b2_py') } : ref.what === 'cart' ? { x: ds.get('cart_px'), y: ds.get('cart_py') } : chartAt('th1', n);
-                return { title: ref.what === 'sample' ? _t('stored sample ') + n : _t(ref.what) + _t(', sample ') + n, at: at, rows: rows };
+                return { title: ref.what === 'sample' ? _t('stored sample ') + n : whatName(ref.what) + _t(', sample ') + n, at: at, rows: rows };
             },
             locate: function (name, idx) {
                 if (name === 'th1' || name === 'th2' || name === 'Xs') return chartAt(name, idx);
