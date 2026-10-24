@@ -42,7 +42,7 @@
     </style>
 
     <script src="../../scripts/i18n/strings-de.js"></script>
-    <meta name="translated-from" content="English public/simulations/driven-oscillator.html, commit 38ceacf" />
+    <meta name="translated-from" content="English public/simulations/driven-oscillator.html, commit 38ceacf+" />
   </head>
 <body>
     <header class="sim-top">
@@ -1872,7 +1872,7 @@
                 H_drive: function () { var B = bodeGeom(), p = B.panels[0]; if (B.lin) return { what: _t('|H| at the drive frequency'), drawn: _t('linear view'), expected: _t('the dot marks X = F₀|H| instead'), ok: null, note: '' }; return ds.get('ctrl_on') ? readBack(bbox, 'the drive frequency on the Bode plot', { x: B.X(p, ds.get('fd')), y: B.Ym(p, ds.get('H_drive')) }, 1, Sim.isBurgundy, 'the burgundy dot', 'The dot sits at f and |H(iΩ)|; the ring around it is the amplitude measured in the stored run, per newton.') : { what: _t('|H| at the drive frequency'), drawn: _t('controller off'), expected: _t('not drawn'), ok: null, note: '' }; },
                 Hmag: function (j) { if (bodeGeom().lin) return { what: _t('|H| on the Bode plot'), drawn: _t('linear view'), expected: _t('drawn in the Bode view'), ok: null, note: '' }; if (!ds.get('ctrl_on')) return { what: _t('|H| on the Bode plot'), drawn: _t('controller off'), expected: _t('not drawn: the plant’s |G| is shown instead'), ok: null, note: '' }; var B = bodeGeom(), p = B.panels[0]; return readBack(bbox, '|H| at f<sub>b, j</sub> on the Bode plot', { x: B.X(p, ds.get('fb')[j]), y: B.Ym(p, ds.get('Hmag')[j]) }, 2, neutralInk, 'the dark curve', 'With the controller on, the ink curve is the closed loop and the dashed grey curve the bare plant.'); },
                 ph_x_px: function () { return readBack(pbox, 'the state dot on the phase portrait', { x: ds.get('ph_x_px'), y: ds.get('ph_v_px') }, 1, Sim.isBurgundy, 'the burgundy dot', 'The dot sits at (x, ẋ) of the row on screen, or of your hand while you hold the block.'); },
-                orb_x: function (j) { if (!(ds.get('F0') > 0)) return { what: _t('the steady orbit'), drawn: _t('no push'), expected: _t('drawn only with a push'), ok: null, note: '' }; var G = phaseGeom(); return readBack(pbox, 'point j of the steady orbit on the phase portrait', { x: G.X(ds.get('orb_x')[j]), y: G.V(ds.get('orb_v')[j]) }, 4, roseInk, 'the rose dashed ellipse', 'The ellipse is dashed, so the search reaches 4 px along it.'); },
+                orb_x: function (j) { if (!(ds.get('F0') > 0)) return { what: _t('the steady orbit'), drawn: _t('no push'), expected: _t('drawn only with a push'), ok: null, note: '' }; var G = phaseGeom(); return readBack(pbox, 'point j of the steady orbit on the phase portrait', { x: G.X(ds.get('orb_x')[j]), y: G.V(ds.get('orb_v')[j]) }, 4, function (c) { return roseInk(c) || neutralInk(c) || Sim.isBurgundy(c); }, 'the rose dashed ellipse, or the run’s path drawn over it', 'The ellipse is dashed, so the search reaches 4 px along it; once the run has settled, its dark path and strobe dots lie on the ellipse and cover it.'); },
                 xs_prev: function (n) {
                     if (!ds.get('has_prev')) return { what: _t('the previous run'), drawn: _t('none yet'), expected: _t('nothing before the second solve'), ok: null, note: _t('The first run has nothing to compare with.') };
                     var p = chartPosPrev(n);
