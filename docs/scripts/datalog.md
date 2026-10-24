@@ -275,6 +275,7 @@ A round is what the page says it is, in `Sim.data.round` ([datalog.js:27-29](../
 | 8 | one loop of the circles | `t` | sampled | yes, until a shape is decomposed | [L1399](../../public/simulations/draw-decompose.html#L1399) |
 | 9 | one drive period $1/f$ of the stored run | `t_play` | sampled | yes, near the end of the run | [L1909](../../public/simulations/driven-oscillator.html#L1909) |
 | 10 | one rotor turn of the stored run | `t_play` | sampled | yes, near the end of the run | [L1154](../../public/simulations/wind-turbine.html#L1154) |
+| Portfolios 02 (Rotor Pendula) | one turn of the rotor in the stored record, $T = 2\pi/\Omega$ | `t_now` | sampled | yes, when less than one turn of the record is left before the playback loops | `Sim.data` in [rotor_sim.html](../../portfolios-src/rotor-pendula/rotor_sim.html) |
 | Portfolios 03, ideal press | one run, $t = 0$ to its end; Record plays it from $t = 0$ | `tView` | sampled | yes, while the run plays | `Sim.data` in [hydraulic.html](../../portfolios-src/hydraulics/hydraulic.html) |
 | Portfolios 03, servo press | one press cycle, $t = 0$ to its end | `tView` | sampled | yes, before the first cycle arrives and while it plays | `Sim.data` in [hydraulic_control.html](../../portfolios-src/hydraulics/hydraulic_control.html) |
 | Portfolios 04 (Iron, Cotton and the Head) | one drop, $t = 0$ to 9 s of the stored run; Record starts a new drop from $t = 0$ | `t_play` | sampled | yes, while a drop is under way | [index.html L989](../../public/portfolios/impact/index.html#L989), [ar.html](../../public/portfolios/impact/ar.html); source [datahooks.js](../../portfolios-src/impact/datahooks.js) |
@@ -411,7 +412,7 @@ which pages set them (from the ten `Sim.data = {` blocks).
 | `playing` | `() → bool` | [1366](../../public/scripts/datalog.js#L1366), [1070](../../public/scripts/datalog.js#L1070), [1092](../../public/scripts/datalog.js#L1092) | all |
 | `play` | `() → void` | [1070](../../public/scripts/datalog.js#L1070) | all except Fig. 3 |
 | `groups` | `[{ title, note, vars }]`; the sections when there is no `ledger` | [135](../../public/scripts/datalog.js#L135) | all |
-| `ledger` | the bookkeeper's layout, below | [132](../../public/scripts/datalog.js#L132) | Figs. 9 and 10, from [scripts/ledger/](../../public/scripts/ledger/) |
+| `ledger` | the bookkeeper's layout, below | [132](../../public/scripts/datalog.js#L132) | Figs. 9 and 10 and Rotor Pendula, from [scripts/ledger/](../../public/scripts/ledger/) |
 | `colour` | `{ name: (value, j, i) → [r, g, b] \| null }`, presentation only | [128](../../public/scripts/datalog.js#L128) | all except Figs. 2 and 10 |
 | `rowLabel` | `{ dim: (j) → text }` | [677](../../public/scripts/datalog.js#L677), [691](../../public/scripts/datalog.js#L691) | Figs. 2, 3, 5, 6, 7, 8 |
 | `colLabel` | `{ name: (i) → html }` | [690](../../public/scripts/datalog.js#L690) | Figs. 1, 2 |
@@ -429,7 +430,9 @@ which pages set them (from the ten `Sim.data = {` blocks).
 The field the redesign added. A page without it falls back to its `groups`, with no headline and no books, so no page broke
 while the others are converted. Figs. 9 and 10 keep their ledger in a file of its own, `scripts/ledger/<page>.js`, loaded
 between the page's script and `datalog.js` on the line that loaded `datalog.js`, so no line of the page moved (the docs cite the
-pages by line number). A ledger file only names variables and adds checks; it computes nothing for display.
+pages by line number). A ledger file only names variables and adds checks; it computes nothing for display. Rotor Pendula's
+simulation loads [scripts/ledger/rotor-pendula.js](../../public/scripts/ledger/rotor-pendula.js) the same way, from its source
+`portfolios-src/rotor-pendula/rotor_sim.html` (see [portfolios.md](../portfolios.md#rotor-pendula-rotor-pendula)).
 
 | Field | Shape | Read at |
 |---|---|---|
