@@ -134,6 +134,9 @@ RULES = [
     (r'public/simulations\.html', 'The simulations catalog: one titled fold card per simulation, search and chips.', 'docs/pages.md'),
     (r'public/portfolios\.html', 'The Portfolios page: the two research projects.', 'docs/pages.md'),
     (r'public/robots\.txt', 'Instructions for search-engine crawlers.', 'docs/pages.md'),
+    (r'public/cv/index\.html', 'The CV page (phyeinusul.com/cv/): both pages of the CV as images, with Open and Download PDF.', 'docs/pages.md'),
+    (r'public/cv/Numa_Koudsie_CV\.pdf', 'The CV as a two-page PDF (German, then English), linked from the CV page.', 'docs/pages.md'),
+    (r'public/cv/cv-(de|en)\.webp', 'One page of the CV rendered at 170 dpi, shown on the CV page.', 'docs/pages.md'),
     (r'public/simulations/.+\.html',
      lambda m: 'Fig. %d · %s: the simulation, its data panel, walkthrough and lecture note.' % SIMS[m.group(0)][::2]
      if m.group(0) in SIMS else 'Simulation page not registered in catalog.js.',

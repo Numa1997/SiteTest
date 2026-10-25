@@ -525,3 +525,11 @@ AppDeploy and (20 October 2026) on phyeinusul.com. To keep a path out of search 
     470 × 300 css px, the SVGs' proportions (those plates were replaced on 23 October 2026 by the rebuild's four, same rule; table
     under **Image sizes**). Before, they were the `viewBox` numbers times 1000 (400520 × 188969 and the like), which made the pictures
     295 522 to 405 740 px wide when no stylesheet loads (audit repair, commit [32c240c](https://github.com/Numa1997/SiteTest/commit/32c240c52fd0535d39a0cef608dc404cf4219484)).
+
+## CV page (`public/cv/`)
+
+`public/cv/index.html` is served at <https://phyeinusul.com/cv/>, a link made to send on its own. It shows both pages of the CV
+(German, then English) as images, `cv-de.webp` and `cv-en.webp` (rendered at 170 dpi from the PDF with `pdftoppm`), so it reads on
+any phone, and offers the PDF itself, `Numa_Koudsie_CV.pdf`, to open or download. No other page links to it yet. To update the CV:
+replace the PDF, re-render the two images (`pdftoppm -r 170 -png Numa_Koudsie_CV.pdf p`, then save each as WebP), build and deploy.
+English only; it is not in the translation build.
