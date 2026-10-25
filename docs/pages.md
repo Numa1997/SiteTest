@@ -113,7 +113,7 @@ the files in `fonts/ibm-plex-*/` ([assets.md](assets.md#publicfonts--ibm-plex-an
 |---|---|---|---|
 | `#positions` "Positions" | [77–201](../index.html#L77-L201) | `.timeline` with `.timeline__line` (the wine line that grows) and seven `article.entry.reveal`: `.entry__when` (dates, optional `.tag` "current", `.tag.tag--soft`), `h3`, `.entry__org`, `ul.bullets`. The current one also has `.entry--current` (filled pulsing dot). | "7 roles" (`article.entry`) |
 | `#education` "Education" | [203–232](../index.html#L203-L232) | `.ledger` with three `.row.reveal`: `.row__when`, `h3`, `.row__org`, optional `.row__note` | "3 qualifications" (`h3`) |
-| `#research` "Research projects" | [234–279](../index.html#L234-L279) | `.section__intro` linking to Portfolios, `.projects` with three `article.project.reveal` (`.project__status`, `h3`, `ul.bullets`), then a `Portfolios →` button in `p.plates__more` | "3 projects" (`article`) |
+| `#research` "Research projects" | [234–279](../index.html#L234-L279) | `.section__intro` linking to Portfolios, `.projects` with four `article.project.reveal`: Droplet Collection, Rotor Pendula, Hydraulic Press Study, and Iron, Cotton and the Head. Each has a field label, linked title, summary and direct project link; then a `Portfolios →` button in `p.plates__more` | "4 projects" (`article`) |
 | `#simulations` "Interactive physics simulations" | [281–576](../index.html#L281-L576) | `.section__intro`, `.plates` with eight `article.plate.reveal` (Figs. 1–8), then `All simulations →` | "8 figures" (`article`) |
 | `#skills` "Skills & languages" | [578–616](../index.html#L578-L616) | `dl.skills`, seven `div.reveal` each with `dt` and `dd`; language levels in `span.lvl` | "7 areas" (`dt`) |
 
@@ -219,7 +219,7 @@ the eight plate figures stay empty (only the grid background shows), and everyth
   count ("n roles") updates itself.
 - **Add an education row.** Copy a `.row.reveal` in `.ledger` ([206–230](../index.html#L206-L230)); `.row__note` is optional.
 - **Add a research project.** Copy an `article.project.reveal` in `.projects` ([244–274](../index.html#L244-L274)); the grid
-  has three columns ([site.css:500–504](../public/styles/site.css#L500-L504)), one at 980 px and below. A finished long
+  has two columns ([site.css](../public/styles/site.css)), one at 980 px and below. Keep its title, summary and project link consistent with the actual portfolio. A finished long
   project belongs on the Portfolios page; also update the intro sentence at [236–242](../index.html#L236-L242).
 - **Add a plate.** Copy an `article.plate.reveal` in `.plates` ([291–569](../index.html#L291-L569)), set `p.plate__num`, both
   hrefs and the three tags, and give `.plate__fig` a `data-sketch` name. Add a function of that name to `sketches`
@@ -268,7 +268,7 @@ IBM Plex Mono 400/500, Latin Modern Roman 400 and 400 italic, and the KaTeX face
 | [73–78](../public/simulations.html#L73-L78) | `noscript` | "This catalog needs JavaScript", with a link to the home page plates. |
 | [80](../public/simulations.html#L80) | `div#catalog.cat__list.cat__list--sorted` | The list; filled by `render()`. |
 | [82–85](../public/simulations.html#L82-L85) | `p#empty` (hidden) | "No simulation matches `b#empty-q`" and `button#clear` "Show all simulations". |
-| [87–115](../public/simulations.html#L87-L115) | `section.cat__anatomy` | Static: "Every simulation, the same four parts" (figure, lecture note, walkthrough, data panel) in `ol.cat__parts`. |
+| [87–115](../public/simulations.html#L87-L115) | `section.cat__anatomy` | Static: "Every simulation, the same four parts" (figure, lecture note, walkthrough, data panel) in `ol.cat__parts[role=list]`. Only the in-card labels 01–04 are visible; native list markers and indentation are reset. Two columns, one at 640 px and below. |
 | [118–121](../public/simulations.html#L118-L121) | `footer` | Links home and to Portfolios; `a#to-top`. |
 
 **The markup one simulation becomes.** `cards()` and `entry()` build, for a registry entry `s`:

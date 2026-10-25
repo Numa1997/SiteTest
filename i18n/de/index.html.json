@@ -566,5 +566,57 @@
  "ff91c2bef0a9": {
   "src": "Data analysis",
   "tr": "Datenanalyse"
+ },
+ "3242710b9971": {
+  "src": "cloud physics · stochastic collection · numerical methods",
+  "tr": "Wolkenphysik · stochastische Koaleszenz · numerische Methoden"
+ },
+ "9dd35bd1eabb": {
+  "src": "Droplet Collection",
+  "tr": "Droplet Collection"
+ },
+ "11c756067811": {
+  "src": "How cloud droplets become rain",
+  "tr": "Wie aus Wolkentröpfchen Regen wird"
+ },
+ "fa30d9444bb7": {
+  "src": "Open the project",
+  "tr": "Projekt öffnen"
+ },
+ "6f8e259f02f0": {
+  "src": "rotating mechanics · energy harvesting · nonlinear dynamics",
+  "tr": "Mechanik rotierender Systeme · Energy Harvesting · nichtlineare Dynamik"
+ },
+ "2392054b4832": {
+  "src": "Rotor Pendula",
+  "tr": "Rotor Pendula"
+ },
+ "334b51f12c6f": {
+  "src": "Can a second blade, hinged at the tip of a turbine blade, power a sensor, and can chaos or the wind help?",
+  "tr": "Kann ein zweites Blatt, an der Spitze eines Turbinenblatts angelenkt, einen Sensor versorgen, und helfen Chaos oder der Wind?"
+ },
+ "7fc24febaea6": {
+  "src": "fluid power · digital control · numerical simulation",
+  "tr": "Fluidtechnik · digitale Regelung · numerische Simulation"
+ },
+ "fde7a78a09c4": {
+  "src": "Hydraulic Press Study",
+  "tr": "Studie einer hydraulischen Presse"
+ },
+ "7b3a04008e72": {
+  "src": "How a digital controller makes 12 MPa of oil press with 60 kN, and hold it",
+  "tr": "Wie ein digitaler Regler Öl unter 12 MPa mit 60 kN pressen lässt und die Kraft hält"
+ },
+ "19b1098bb9da": {
+  "src": "impact mechanics · interatomic bonds · fibre networks",
+  "tr": "Stoßmechanik · interatomare Bindungen · Fasernetzwerke"
+ },
+ "156798c59fda": {
+  "src": "Iron, Cotton and the Head",
+  "tr": "Eisen, Baumwolle und der Kopf"
+ },
+ "04e22db50e7d": {
+  "src": "Why an iron ball hurts and a cotton ball of the same mass does not",
+  "tr": "Warum eine Eisenkugel wehtut und eine Baumwollkugel derselben Masse nicht"
  }
 }
