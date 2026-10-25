@@ -7,6 +7,10 @@
   "src": "Arabic <span class=\"lvl\">native</span> · English <span class=\"lvl\">C1</span> · German <span class=\"lvl\">B2</span>",
   "tr": "العربية <span class=\"lvl\">اللغة الأم</span> · الإنجليزية <span class=\"lvl\">C1</span> · الألمانية <span class=\"lvl\">B2</span>"
  },
+ "04e22db50e7d": {
+  "src": "Why an iron ball hurts and a cotton ball of the same mass does not",
+  "tr": "لماذا تؤلم كرةُ الحديد ولا تؤلم كرةُ القطن ذاتُ الكتلة نفسها"
+ },
  "0a4470d64e9d": {
   "src": "Skip to content",
   "tr": "انتقل إلى المحتوى"
@@ -14,6 +18,10 @@
  "11826f821795": {
   "src": "Fig. 3",
   "tr": "الشكل 3"
+ },
+ "11c756067811": {
+  "src": "How cloud droplets become rain",
+  "tr": "كيف تصير قُطيرات الغيمة مطرًا"
  },
  "11f84af620e1": {
   "src": "Building AND/OR gates operations to specify component-wise power consumption of the system",
@@ -27,9 +35,17 @@
   "src": "Wave Interference – Multiple Sources",
   "tr": "تداخل الأمواج – مصادر متعدّدة"
  },
+ "156798c59fda": {
+  "src": "Iron, Cotton and the Head",
+  "tr": "الحديد والقطن والرأس"
+ },
  "19300c13439d": {
   "src": "Portfolios ↗",
   "tr": "الملفّات ↗"
+ },
+ "19b1098bb9da": {
+  "src": "impact mechanics · interatomic bonds · fibre networks",
+  "tr": "ميكانيك الصدم · الروابط بين الذرّات · شبكات الألياف"
  },
  "1b0699dd1971": {
   "src": "Completed projects, rebuilt in full with their derivations, solver and checks, are on the <a href=\"portfolios.html\">Portfolios page</a>: the Bachelor thesis on how cloud droplets become rain, a corrected study of whether a pendulum on a turbine blade can power a sensor, a servo-hydraulic press under digital control, built from first principles, and a study, in English and Arabic, of why an iron ball hurts and a cotton ball of the same mass does not.",
@@ -54,6 +70,10 @@
  "2365a132b4ee": {
   "src": "Fig. 2",
   "tr": "الشكل 2"
+ },
+ "2392054b4832": {
+  "src": "Rotor Pendula",
+  "tr": "Rotor Pendula"
  },
  "24e8db21fed4": {
   "src": "Draw any closed shape; a discrete Fourier transform turns it into spinning circles that redraw it, with Parseval's theorem checking the error live.",
@@ -86,6 +106,14 @@
  "31069064dd63": {
   "src": "Serving and waiting customers and tables respectively",
   "tr": "خدمة الزبائن والطاولات"
+ },
+ "3242710b9971": {
+  "src": "cloud physics · stochastic collection · numerical methods",
+  "tr": "فيزياء الغيوم · الالتقاط العشوائي · الطرائق العددية"
+ },
+ "334b51f12c6f": {
+  "src": "Can a second blade, hinged at the tip of a turbine blade, power a sensor, and can chaos or the wind help?",
+  "tr": "هل تستطيع شفرة ثانية، مثبَّتة بمفصل عند طرف شفرة عنفة، أن تغذّي حسّاسًا، وهل تساعد الفوضى أو الريح؟"
  },
  "33bd5a5dddcd": {
   "src": "© 2026 Numa Koudsie",
@@ -203,6 +231,10 @@
   "src": "Development of web react elements and simulations of basic physical phenomena",
   "tr": "تطوير عناصر React للويب ومحاكاةٍ لظواهر فيزيائية أساسية"
  },
+ "6f8e259f02f0": {
+  "src": "rotating mechanics · energy harvesting · nonlinear dynamics",
+  "tr": "ميكانيك الأجسام الدوّارة · حصاد الطاقة · الديناميك اللاخطّي"
+ },
  "6fa887c4b945": {
   "src": "Live double pendulum drawing",
   "tr": "رسم حيّ لنوّاس مزدوج"
@@ -227,6 +259,10 @@
   "src": "Chaos theory",
   "tr": "نظرية الفوضى"
  },
+ "7b3a04008e72": {
+  "src": "How a digital controller makes 12 MPa of oil press with 60 kN, and hold it",
+  "tr": "كيف يجعل متحكّمٌ رقمي زيتًا تحت 12 MPa يضغط بـ60 kN، ويحافظ على ذلك"
+ },
  "7c1ff947231c": {
   "src": "System energy optimization for equilibrium modeling",
   "tr": "تحسين طاقة النظام لنمذجة حالة التوازن"
@@ -238,6 +274,10 @@
  "7f3b61e60922": {
   "src": "Python simulations for water/ice particle coalescence; synthetic data analysis",
   "tr": "محاكاة بلغة Python لالتحام جسيمات الماء والجليد؛ وتحليل بيانات اصطناعية"
+ },
+ "7fc24febaea6": {
+  "src": "fluid power · digital control · numerical simulation",
+  "tr": "القدرة الهيدروليكية · التحكّم الرقمي · المحاكاة العددية"
  },
  "7ff5a6dafd80": {
   "src": "Sections",
@@ -306,6 +346,10 @@
  "9ca132558c37": {
   "src": "HTML5 Canvas",
   "tr": "HTML5 Canvas"
+ },
+ "9dd35bd1eabb": {
+  "src": "Droplet Collection",
+  "tr": "Droplet Collection"
  },
  "a024c68075c4": {
   "src": "Discrete Fourier transform",
@@ -535,6 +579,10 @@
   "src": "Bilingual instruction of classes 6, 8, 9, 10, and 12 in Physics and natural sciences",
   "tr": "تدريس الفيزياء والعلوم الطبيعية بلغتين للصفوف 6 و8 و9 و10 و12"
  },
+ "f2f5d5c95a1d": {
+  "src": "CV ↗",
+  "tr": "السيرة الذاتية ↗"
+ },
  "f34f870654be": {
   "src": "Koudsie<span class=\"dot\">.</span>",
   "tr": "سائر قدسية<span class=\"dot\">.</span>"
@@ -555,9 +603,17 @@
   "src": "University of Groningen",
   "tr": "جامعة خرونينغن"
  },
+ "fa30d9444bb7": {
+  "src": "Open the project",
+  "tr": "افتح المشروع"
+ },
  "fc8a068be442": {
   "src": "Completed projects, rebuilt in full with their derivations, solver and checks, are on the <a href=\"portfolios.html\">Portfolios page</a>: the Bachelor thesis on how cloud droplets become rain, a corrected study of whether a pendulum on a turbine blade can power a sensor, a servo-hydraulic press under digital control, built from first principles, and a study, in English, German and Arabic, of why an iron ball hurts and a cotton ball of the same mass does not.",
   "tr": "المشاريع المكتملة، بعد إعادة بنائها كاملةً مع اشتقاقاتها وحلّالاتها وفحوصها، موجودة في <a href=\"portfolios.html\">صفحة الملفّات</a>: رسالة البكالوريوس عن كيفيّة تحوّل قُطيرات الغيمة إلى مطر، ودراسة مصحَّحة عمّا إذا كان نوّاسٌ على شفرة عنفة قادرًا على تغذية حسّاس، ومكبس هيدروليكي مؤازَر بتحكّم رقمي مبنيّ من المبادئ الأولى، ودراسة، بالإنجليزية والألمانية والعربية، عن سبب إيلام كرة الحديد وعدم إيلام كرة القطن ذات الكتلة نفسها."
+ },
+ "fde7a78a09c4": {
+  "src": "Hydraulic Press Study",
+  "tr": "دراسة المكبس الهيدروليكي"
  },
  "ff5d03c7680b": {
   "src": "Numa Koudsie — physics graduate with expertise in data analysis, modeling, and software development. Positions, education, research projects, interactive physics simulations, and skills.",
@@ -566,57 +622,5 @@
  "ff91c2bef0a9": {
   "src": "Data analysis",
   "tr": "تحليل البيانات"
- },
- "3242710b9971": {
-  "src": "cloud physics · stochastic collection · numerical methods",
-  "tr": "فيزياء الغيوم · الالتقاط العشوائي · الطرائق العددية"
- },
- "9dd35bd1eabb": {
-  "src": "Droplet Collection",
-  "tr": "Droplet Collection"
- },
- "11c756067811": {
-  "src": "How cloud droplets become rain",
-  "tr": "كيف تصير قُطيرات الغيمة مطرًا"
- },
- "fa30d9444bb7": {
-  "src": "Open the project",
-  "tr": "افتح المشروع"
- },
- "6f8e259f02f0": {
-  "src": "rotating mechanics · energy harvesting · nonlinear dynamics",
-  "tr": "ميكانيك الأجسام الدوّارة · حصاد الطاقة · الديناميك اللاخطّي"
- },
- "2392054b4832": {
-  "src": "Rotor Pendula",
-  "tr": "Rotor Pendula"
- },
- "334b51f12c6f": {
-  "src": "Can a second blade, hinged at the tip of a turbine blade, power a sensor, and can chaos or the wind help?",
-  "tr": "هل تستطيع شفرة ثانية، مثبَّتة بمفصل عند طرف شفرة عنفة، أن تغذّي حسّاسًا، وهل تساعد الفوضى أو الريح؟"
- },
- "7fc24febaea6": {
-  "src": "fluid power · digital control · numerical simulation",
-  "tr": "القدرة الهيدروليكية · التحكّم الرقمي · المحاكاة العددية"
- },
- "fde7a78a09c4": {
-  "src": "Hydraulic Press Study",
-  "tr": "دراسة المكبس الهيدروليكي"
- },
- "7b3a04008e72": {
-  "src": "How a digital controller makes 12 MPa of oil press with 60 kN, and hold it",
-  "tr": "كيف يجعل متحكّمٌ رقمي زيتًا تحت 12 MPa يضغط بـ60 kN، ويحافظ على ذلك"
- },
- "19b1098bb9da": {
-  "src": "impact mechanics · interatomic bonds · fibre networks",
-  "tr": "ميكانيك الصدم · الروابط بين الذرّات · شبكات الألياف"
- },
- "156798c59fda": {
-  "src": "Iron, Cotton and the Head",
-  "tr": "الحديد والقطن والرأس"
- },
- "04e22db50e7d": {
-  "src": "Why an iron ball hurts and a cotton ball of the same mass does not",
-  "tr": "لماذا تؤلم كرةُ الحديد ولا تؤلم كرةُ القطن ذاتُ الكتلة نفسها"
  }
 }

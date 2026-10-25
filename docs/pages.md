@@ -530,6 +530,6 @@ AppDeploy and (20 October 2026) on phyeinusul.com. To keep a path out of search 
 
 `public/cv/index.html` is served at <https://phyeinusul.com/cv/>, a link made to send on its own. It shows both pages of the CV
 (German, then English) as images, `cv-de.webp` and `cv-en.webp` (rendered at 170 dpi from the PDF with `pdftoppm`), so it reads on
-any phone, and offers the PDF itself, `Numa_Koudsie_CV.pdf`, to open or download. No other page links to it yet. To update the CV:
+any phone, and offers the PDF itself, `Numa_Koudsie_CV.pdf`, to open or download. The top bar of the home page index, the simulations catalog and the Portfolios page links to it (German "Lebenslauf", Arabic "السيرة الذاتية"); simulation pages keep their figure bar only. To update the CV:
 replace the PDF, re-render the two images (`pdftoppm -r 170 -png Numa_Koudsie_CV.pdf p`, then save each as WebP), build and deploy.
 English only; it is not in the translation build.
