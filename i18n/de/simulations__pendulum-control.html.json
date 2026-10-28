@@ -103,6 +103,10 @@
   "src": "For the real, nonlinear rig this proves stability only near the rest. Far from it two things break the guarantee: the coil's current limit, which cuts the push off at \\(\\kappa I_\\text{max} = 30\\ \\mathrm{N}\\), and the nonlinearity of (5), which grows with the angles. The set of starts from which the controller still brings the chain home is the <em>region of attraction</em>, and it has to be measured. In a test of 43 starts the tubes allow, with both rods up to about \\(\\pm60^\\circ\\) and the cart up to 0.8 m from the target, at five targets between \\(-0.4\\) and \\(+0.4\\ \\mathrm{m}\\), all 43 runs came within 0.01 of the rest; half within 5.7 s, nine in ten within 7.9 s. Outside the region there are starts that end in a whirl: after a hard yank, ball 1 can circle its pivot faster than the leash can follow, and the status line says so.",
   "tr": "Für den wirklichen, nichtlinearen Aufbau beweist das die Stabilität nur in der Nähe der Ruhelage. Weit davon entfernt brechen zwei Dinge die Garantie: die Strombegrenzung der Spule, die den Stoß bei \\(\\kappa I_\\text{max} = 30\\ \\mathrm{N}\\) abschneidet, und die Nichtlinearität von (5), die mit den Winkeln wächst. Die Menge der Anfangszustände, aus denen der Regler die Kette noch heimbringt, ist der <em>Einzugsbereich</em>, und er muss gemessen werden. In einem Test mit 43 Anfangszuständen, die die Rohre zulassen, mit beiden Stangen bis etwa \\(\\pm60^\\circ\\) und dem Wagen bis 0.8 m von der Sollposition entfernt, bei fünf Sollpositionen zwischen \\(-0.4\\) und \\(+0.4\\ \\mathrm{m}\\), kamen alle 43 Läufe bis auf 0.01 an die Ruhelage heran; die Hälfte innerhalb von 5.7 s, neun von zehn innerhalb von 7.9 s. Außerhalb des Bereichs gibt es Anfangszustände, die in einem Überschlag enden: Nach einem harten Ruck kann Kugel 1 schneller um ihren Drehpunkt kreisen, als die Leine folgen kann, und die Statuszeile sagt es."
  },
+ "2cf64e447b84": {
+  "src": "chain",
+  "tr": "Kette"
+ },
  "2e450c3fa5db": {
   "src": "Switch the controller on.",
   "tr": "Schalten Sie den Regler ein."
@@ -335,6 +339,10 @@
   "src": "The gains depend on the rest, because the linear model does: each new target is a new design, done in a millisecond when you press Solve, release the flag, or let go of the chain.",
   "tr": "Die Verstärkungen hängen von der Ruhelage ab, weil das lineare Modell es tut: Jede neue Sollposition ist ein neuer Entwurf, erledigt in einer Millisekunde, wenn Sie „Lösen“ drücken, die Fahne loslassen oder die Kette loslassen."
  },
+ "828d338a9b04": {
+  "src": "source",
+  "tr": "Stromquelle"
+ },
  "834bbfd63814": {
   "src": "With the coil on, a steady force \\(F^*\\) can hold the cart anywhere along the rail. For each cart position \\(X = r\\) the chain then leans until gravity and the tilted strut balance:",
   "tr": "Bei eingeschalteter Spule kann eine stationäre Kraft \\(F^*\\) den Wagen an jeder Stelle der Schiene halten. Für jede Wagenposition \\(X = r\\) neigt sich die Kette dann, bis Schwerkraft und schräge Strebe sich das Gleichgewicht halten:"
@@ -354,6 +362,10 @@
  "87da2ce86bf5": {
   "src": "<span>12</span>What the model leaves out",
   "tr": "<span>12</span>Was das Modell weglässt"
+ },
+ "8bfb4e1aa590": {
+  "src": "cart",
+  "tr": "Wagen"
  },
  "8c35bfc9e093": {
   "src": "From (8), show that with \\(N_0 = 0\\) the cart's equation is \\(M\\ddot X = \\tilde F\\) and that the chain's equations do not contain \\(X\\). Which two columns of (10) survive?",
@@ -559,6 +571,10 @@
   "src": "Fig.",
   "tr": "Abb."
  },
+ "db2dfb7cb56e": {
+  "src": "coil",
+  "tr": "Spule"
+ },
  "db367cf88021": {
   "src": "What the page does",
   "tr": "Was die Seite tut"
@@ -606,6 +622,10 @@
  "eb4f41a24feb": {
   "src": "Slowest decay",
   "tr": "Langsamstes Abklingen"
+ },
+ "ecb252044b5e": {
+  "src": "string",
+  "tr": "Saite"
  },
  "eeaa994bd826": {
   "src": "Holding force F*",
