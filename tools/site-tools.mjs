@@ -109,7 +109,7 @@ function render(data, date) {
     var lang = document.documentElement.lang || 'en', nf = new Intl.NumberFormat(lang);
     function fill(key, items) {
         var dd = box.querySelector('[data-tools="' + key + '"]'); if (!dd) return;
-        if (!items.length) { dd.parentNode.hidden = true; return; }
+        if (!items.length) { dd.parentNode.style.display = 'none'; return; }
         dd.textContent = '';
         items.forEach(function (it, i) {
             if (i) dd.appendChild(document.createTextNode(' · '));

@@ -12,7 +12,7 @@ const URL = `${process.env.BASE || 'http://localhost:8765/'}${pre}index.html`;
     await p.evaluate(() => document.getElementById('made').scrollIntoView()); await p.waitForTimeout(1200);
     const r = await p.evaluate(() => {
       const box = document.getElementById('made'), rows = [...box.querySelectorAll('[data-tools]')].filter(e => e.tagName === 'DD');
-      const filled = rows.filter(d => d.textContent.trim()).length, hidden = rows.filter(d => d.parentNode.hidden).length;
+      const filled = rows.filter(d => d.textContent.trim()).length, hidden = rows.filter(d => d.parentNode.style.display === 'none').length;
       const rb = box.getBoundingClientRect();
       return { title: box.querySelector('h2').textContent, filled, hidden, rows: rows.length,
         date: box.querySelector('[data-tools="date"]').textContent, files: box.querySelector('[data-tools="files"]').textContent,

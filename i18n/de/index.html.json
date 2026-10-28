@@ -11,6 +11,10 @@
   "src": "Why an iron ball hurts and a cotton ball of the same mass does not",
   "tr": "Warum eine Eisenkugel wehtut und eine Baumwollkugel derselben Masse nicht"
  },
+ "0820b32b206b": {
+  "src": "Testing",
+  "tr": "Testen"
+ },
  "0a4470d64e9d": {
   "src": "Skip to content",
   "tr": "Zum Inhalt springen"
@@ -207,6 +211,10 @@
   "src": "during studies",
   "tr": "während des Studiums"
  },
+ "5408b8f65095": {
+  "src": "This list is read from the site’s own code every time the site is built, most recently on <span data-tools=\"date\"></span>, from <span data-tools=\"files\"></span> files. A tool added to the code appears here by itself; one the reader cannot yet name is listed under “Also found”.",
+  "tr": "Diese Liste wird bei jedem Bau der Seite aus dem eigenen Code der Seite gelesen, zuletzt am <span data-tools=\"date\"></span>, aus <span data-tools=\"files\"></span> Dateien. Ein Werkzeug, das dem Code hinzugefügt wird, erscheint hier von selbst; ein Werkzeug, das sich noch nicht benennen lässt, steht unter „Außerdem gefunden“."
+ },
  "5cf5911bdad4": {
   "src": "Transverse &amp; Longitudinal Waves",
   "tr": "Transversal- &amp; Longitudinalwellen"
@@ -254,6 +262,10 @@
  "76cadb7bc66e": {
   "src": "Step-strain protocols for complex modulus estimation",
   "tr": "Sprungdehnungsprotokolle zur Bestimmung des komplexen Moduls"
+ },
+ "77e774bacbdb": {
+  "src": "Mathematics",
+  "tr": "Mathematik"
  },
  "7a1b5cbf43eb": {
   "src": "Chaos theory",
@@ -307,9 +319,21 @@
   "src": "Numa Koudsie · Notebook",
   "tr": "Numa Koudsie · Notizbuch"
  },
+ "8766cde61214": {
+  "src": "Hosting",
+  "tr": "Hosting"
+ },
+ "89b043e519bd": {
+  "src": "Also found",
+  "tr": "Außerdem gefunden"
+ },
  "8aa7881300c3": {
   "src": "Laser-Induced Breakdown Spectroscopy (LIBS) on lake sediments; atomic emission spectra analysis",
   "tr": "Laserinduzierte Plasmaspektroskopie (LIBS) an Seesedimenten; Analyse atomarer Emissionsspektren"
+ },
+ "8adccc3872ec": {
+  "src": "How this site is made",
+  "tr": "Wie diese Seite entsteht"
  },
  "8eaecb2b9802": {
   "src": "Dhillons Irish Pub and Grill",
@@ -383,6 +407,10 @@
   "src": "Particle motion",
   "tr": "Teilchenbewegung"
  },
+ "a52f2bdaf5e4": {
+  "src": "Built with Claude, by Anthropic. Directed and led by Numa Koudsie.",
+  "tr": "Gebaut mit Claude, von Anthropic. Geleitet und geführt von Numa Koudsie."
+ },
  "a65d6c82a98e": {
   "src": "Cooling system analysis (R134a, R290); DIAdem integration for automated data processing",
   "tr": "Analyse von Kühlsystemen (R134a, R290); Einbindung von DIAdem für die automatische Datenverarbeitung"
@@ -431,6 +459,10 @@
   "src": "Synthetic data generation for lemur interactions",
   "tr": "Erzeugung synthetischer Daten für Interaktionen zwischen Lemuren"
  },
+ "bbd80cf7e2de": {
+  "src": "Build",
+  "tr": "Build"
+ },
  "be601df25eea": {
   "src": "Research",
   "tr": "Forschung"
@@ -450,6 +482,10 @@
  "c010a2efff03": {
   "src": "Parseval's theorem",
   "tr": "Satz von Parseval"
+ },
+ "c1f65ddb75ed": {
+  "src": "Engine",
+  "tr": "Antrieb"
  },
  "c2a080d36cf8": {
   "src": "GRU networks for behavior prediction (lemurs); tensor-based data organization",
@@ -531,6 +567,10 @@
   "src": "Compare the two kinds of wave propagation side by side. Adjust amplitude, frequency, and wavelength to see how each property shapes the motion.",
   "tr": "Die beiden Arten der Wellenausbreitung nebeneinander. Stellen Sie Amplitude, Frequenz und Wellenlänge ein und sehen Sie, wie jede Größe die Bewegung formt."
  },
+ "e22a2f611be6": {
+  "src": "Languages, in files",
+  "tr": "Sprachen, nach Dateien"
+ },
  "e23ab8427ba2": {
   "src": "<b>Ongoing</b> · computational",
   "tr": "<b>Laufend</b> · rechnergestützt"
@@ -607,6 +647,10 @@
   "src": "Open the project",
   "tr": "Projekt öffnen"
  },
+ "fc1030798a1a": {
+  "src": "Claude, an AI model made by Anthropic, writes the code of every page: the simulations, the lecture notes, the tests, the tools, and the German and Arabic translations. Numa Koudsie directs and leads the work: chooses what is built and to what standard, writes the briefs, reads the pages and the physics, sends back what is wrong, and decides what is published.",
+  "tr": "Claude, ein KI-Modell von Anthropic, schreibt den Code jeder Seite: die Simulationen, die Skripte, die Tests, die Werkzeuge sowie die deutschen und arabischen Übersetzungen. Numa Koudsie leitet und führt die Arbeit: bestimmt, was gebaut wird und nach welchem Maßstab, schreibt die Aufträge, liest die Seiten und die Physik, schickt zurück, was falsch ist, und entscheidet, was veröffentlicht wird."
+ },
  "fc8a068be442": {
   "src": "Completed projects, rebuilt in full with their derivations, solver and checks, are on the <a href=\"portfolios.html\">Portfolios page</a>: the Bachelor thesis on how cloud droplets become rain, a corrected study of whether a pendulum on a turbine blade can power a sensor, a servo-hydraulic press under digital control, built from first principles, and a study, in English, German and Arabic, of why an iron ball hurts and a cotton ball of the same mass does not.",
   "tr": "Abgeschlossene Projekte, vollständig neu aufgebaut mit ihren Herleitungen, Lösern und Prüfungen, stehen auf der <a href=\"portfolios.html\">Portfolios-Seite</a>: die Bachelorarbeit darüber, wie aus Wolkentröpfchen Regen wird, eine korrigierte Studie, ob ein Pendel auf einem Turbinenblatt einen Sensor versorgen kann, eine digital geregelte servohydraulische Presse, aus ersten Prinzipien aufgebaut, und eine Studie, auf Englisch, Deutsch und Arabisch, warum eine Eisenkugel wehtut und eine Baumwollkugel derselben Masse nicht."
@@ -622,5 +666,9 @@
  "ff91c2bef0a9": {
   "src": "Data analysis",
   "tr": "Datenanalyse"
+ },
+ "ffe688a50143": {
+  "src": "Fonts",
+  "tr": "Schriften"
  }
 }
