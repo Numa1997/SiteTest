@@ -327,7 +327,7 @@ ul {
 }
 .content {
   min-width: 0;
-}
+} /* the index as a panel (from 981 px): outlined, a wine edge, the sections numbered as their cards are */ @media (min-width: 981px) { .layout { grid-template-columns: 300px minmax(0, 1fr); gap: 56px; max-width: 1140px; } .index { padding: 22px 16px 16px; margin-top: 112px; background: var(--card); border: 1px solid var(--rule); border-left: 4px solid var(--accent); border-radius: 12px; counter-reset: ix; } .index__label { margin: 0 0 16px 10px; padding-top: 14px; position: relative; font: 600 24px/1.1 var(--serif); letter-spacing: -0.01em; text-transform: none; color: var(--ink); } .index__label::before { content: ""; position: absolute; top: 0; left: 0; width: 40px; height: 3px; background: var(--accent); } .index ul { border-left: 0; display: grid; gap: 2px; } .index a, .index a:hover { display: flex; align-items: center; gap: 14px; padding: 11px 12px; margin: 0; border: 1px solid transparent; border-radius: 8px; font: 500 18px/1.25 var(--sans); letter-spacing: 0; text-transform: none; color: var(--ink); } .index a[href^="#"]::before { counter-increment: ix; content: counter(ix, decimal-leading-zero); flex: none; display: inline-grid; place-items: center; min-width: 30px; height: 24px; border: 1px solid var(--accent); border-radius: 5px; font: 500 12px/1 var(--mono); color: var(--accent); } .index a:hover { background: var(--card-soft); border-color: var(--rule-soft); color: var(--accent); text-decoration: none; } .index a.active { background: #f3e4e3; border-color: #e6c9c7; color: var(--accent); font-weight: 600; } .index a.active::before { background: var(--accent); color: var(--card); } .index li:has(> a:not([href^="#"])) { order: 1; margin-left: 44px; } .index li:has(> a[href*="portfolios"]) { margin-top: 12px; padding-top: 12px; border-top: 1px solid var(--rule-soft); } .index a:not([href^="#"]) { font-size: 16px; font-weight: 400; color: var(--ink-2); } }
 
 .section {
   padding-top: 104px;
@@ -815,7 +815,7 @@ footer a {
     margin: 0;
     border-left: 0;
     border-bottom: 2px solid transparent;
-    white-space: nowrap; font-size: 14px;
+    white-space: nowrap; font-size: 15px; font-weight: 500;
   }
   .index a.active {
     border-bottom-color: var(--accent);

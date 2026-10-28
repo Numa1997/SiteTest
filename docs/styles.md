@@ -428,3 +428,10 @@ uppercase, tracked), the active one in wine at weight 500; on phones the index b
 (`.bullets li`) and project summaries are 16 px (were 14.5 and 15 px). Prose is capped at 34 em, section introductions at
 30 em. Measured by `node notes/home/measure.cjs` (serve `dist/`): at 1440 px the longest line of prose fell from 101 to 72
 characters (median 46), in German 71, in Arabic 79; no sideways scroll at 1920, 1440, 1280, 1024 or 390 px.
+
+The index is a panel from 981 px wide (`site.css`, appended after `.content`): 300 px, paper card, 1 px outline and a 4 px
+wine edge (the house mark of a special box), radius 12 px, no shadow. "Index" in IBM Plex Serif 600 at 24 px under a short
+wine rule, as the section titles have. The five in-page sections carry the numbered badge their cards show (a CSS counter,
+`01`–`05`), in IBM Plex Sans 500 at 18 px, 11 px rows; the current one has a pale wine ground and a filled badge. Portfolios
+and CV, which leave the page, move to the foot under a rule (CSS `order`), at 16 px. On phones the index stays a scrolling
+bar, its links at 15 px, weight 500.
