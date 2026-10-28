@@ -30,9 +30,12 @@ TYPED = {
     '100': 'def: the largest tip vibration tried in chapter 6 (100 mm)',
 },
 '01': {
+    '90': 'def: angle in degrees (a rod hanging straight down)',
+    '45': ('calc', 'math.degrees(math.atan(1))', 1e-9, 'lag at the best brake, tan delta = 1 (chapter 2)'),
     '63': ('calc', "S['R_ROT']/S['L_B']", 1e-9, 'r_p, and r_p over l'),
 },
 '02': {
+    '0.05': 'input: the lightest brake of the comparison sweep, in units of kappa* (tools/compare.js)',
     '45': ('calc', 'math.degrees(math.atan(1))', 1e-9, 'lag at kappa = |R-1|'), '90': 'def: right angle',
     '63': ('calc', "S['R_ROT']/S['L_B']", 1e-9, 'r_p, and r_p over l'),
 },

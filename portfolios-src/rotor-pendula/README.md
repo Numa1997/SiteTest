@@ -36,6 +36,7 @@ From this folder:
 
 ```sh
 (cd tools && npm ci)                     # KaTeX 0.16.11, pinned by tools/package-lock.json, once
+node tools/compare.js                    # theory against the full equation on the page's own engine -> data/compare.json (Figure 5)
 python3 tools/make_numbers.py            # data/*.json -> numbers.json (every computed number and table of the notes)
 python3 tools/check_numbers.py           # every typed number explained (tools/typed_numbers.py), every key present
 python3 tools/build_theory.py            # theory/*.src.html + numbers.json -> rotor_notes.html
