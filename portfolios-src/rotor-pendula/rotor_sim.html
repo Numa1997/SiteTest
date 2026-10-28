@@ -270,7 +270,7 @@ details.more p { font-size: 14px; }
     <div class="col">
       <section class="box" aria-label="Scene">
         <div id="stage" class="stage__canvas"><canvas id="scene" aria-label="The rotor seen along its shaft, and the blade frame close up"></canvas></div>
-        <p class="stage__cap"><span>The rotor seen along its shaft, everything to one scale; then the tip close up, to its own scale bar, seen from the turning blade.</span><span class="mag" id="magLbl">angles true</span></p>
+        <p class="stage__cap"><span>The rotor seen along its shaft, everything to one scale; then the tip close up, to its own scale bar, seen from the turning blade. The green line is the bottom of the second blade's potential bowl in the turning frame, the direction of outward pull plus gravity (notes, section 1.6): it rocks once per turn, and the second blade chases it, about 45° of a turn behind.</span><span class="mag" id="magLbl">angles true</span></p>
       </section>
 
       <section class="box" aria-label="Playback">
@@ -353,6 +353,7 @@ details.more p { font-size: 14px; }
 
   <section class="box howto" aria-label="How to read this page">
     <div class="eyebrow">Before you start</div><h2>How to read this page</h2>
+    <p><b>New to wind turbines?</b> The wind pushes on three long blades shaped like wings; they turn a shaft, slowly, about once every six seconds at 8 m/s, while their tips race round at 45 to 76 m/s. The left picture is that rotor, seen along its shaft, to scale. At the tip of one blade sits our machine: a short second blade on a hinge, free to swing sideways. As the rotor turns, the outward pull of the turning holds it straight out, and gravity, which keeps pointing down while the blade goes round, pushes it first one way and then the other once per turn. A small generator in the hinge brakes that swing and turns it into electricity. The right picture is that tip, close up. Chapter 0 of the lecture notes builds all of this from scratch, starting from the energy of moving air.</p>
     <p>Pick a wind, a brake and a generator, then press Solve. The page starts the second blade at rest on the mother blade's line, lets it settle for many turns of the rotor, measures the mean power over the turns that follow, and keeps the last four turns for playback. Everything you see afterwards is read from that one stored run: the scene, the plots and the tiles. Nothing is integrated while the scene plays. The tiles beside the figure describe the run that was solved, not the knobs you have moved since; a note says so when they differ. To read a point on a plot, switch on Read values and click the plot. A ring marks the point, and its values appear in the strip under the plots, with the values at the playhead beside them. The strip is rewritten four times a second at most, so the numbers stay readable while the scene runs.</p>
     <details class="more">
       <summary>Where the drawing differs from the stored numbers</summary>
@@ -367,6 +368,7 @@ details.more p { font-size: 14px; }
     <h3>1 · The second blade seen from the mother blade</h3>
     <p>Tie a weight to a string and whirl it round your head: the string stays taut and points outward. A second blade hinged at the tip of a turning blade feels the same steady outward pull, and it holds the second blade along the mother blade like a stiff spring. Gravity is the other pull. It always points down, but seen from the turning blade it goes round once per turn. So the blade's frame has a strong steady spring and a weak push that goes round once per turn. The push rocks the second blade, and a generator in the hinge brakes the rocking. The second blade is a thin uniform rod of mass m and length l: its moment of inertia about the hinge is I = ml²/3 and its first moment, mass times the distance of its centre of mass from the hinge, is ml/2. With the rotor angle φ = Ωt as the clock and a prime for d/dφ, its angle θ from the mother blade's outward line obeys</p>
     <div class="eqn" id="eq-1.5"><div class="eq tex" data-tex="\begin{gathered}\theta&#x27;&#x27; + \kappa\,\theta&#x27; + R\sin\theta + G\cos(\varphi+\theta) = 0,\\ R = \frac{3\,r_p}{2\,l},\quad G = \frac{3\,g}{2\,l\,\Omega^2},\quad \kappa = \frac{c}{I\,\Omega}.\end{gathered}" role="img" aria-label="\begin{gathered}\theta&#x27;&#x27; + \kappa\,\theta&#x27; + R\sin\theta + G\cos(\varphi+\theta) = 0,\\ R = \frac{3\,r_p}{2\,l},\quad G = \frac{3\,g}{2\,l\,\Omega^2},\quad \kappa = \frac{c}{I\,\Omega}.\end{gathered}"><span class="katex-display"><span class="katex"><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:3.8074em;vertical-align:-1.6537em;"></span><span class="mord"><span class="mtable"><span class="col-align-c"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:2.1537em;"><span style="top:-4.6352em;"><span class="pstrut" style="height:3.3214em;"></span><span class="mord"><span class="mord"><span class="mord mathnormal" style="margin-right:0.02778em;">θ</span><span class="msupsub"><span class="vlist-t"><span class="vlist-r"><span class="vlist" style="height:0.8019em;"><span style="top:-3.113em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mtight">′′</span></span></span></span></span></span></span></span></span><span class="mspace" style="margin-right:0.2222em;"></span><span class="mbin">+</span><span class="mspace" style="margin-right:0.2222em;"></span><span class="mord mathnormal">κ</span><span class="mspace" style="margin-right:0.1667em;"></span><span class="mord"><span class="mord mathnormal" style="margin-right:0.02778em;">θ</span><span class="msupsub"><span class="vlist-t"><span class="vlist-r"><span class="vlist" style="height:0.8019em;"><span style="top:-3.113em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mtight">′</span></span></span></span></span></span></span></span></span><span class="mspace" style="margin-right:0.2222em;"></span><span class="mbin">+</span><span class="mspace" style="margin-right:0.2222em;"></span><span class="mord mathnormal" style="margin-right:0.00773em;">R</span><span class="mspace" style="margin-right:0.1667em;"></span><span class="mop">sin</span><span class="mspace" style="margin-right:0.1667em;"></span><span class="mord mathnormal" style="margin-right:0.02778em;">θ</span><span class="mspace" style="margin-right:0.2222em;"></span><span class="mbin">+</span><span class="mspace" style="margin-right:0.2222em;"></span><span class="mord mathnormal">G</span><span class="mspace" style="margin-right:0.1667em;"></span><span class="mop">cos</span><span class="mopen">(</span><span class="mord mathnormal">φ</span><span class="mspace" style="margin-right:0.2222em;"></span><span class="mbin">+</span><span class="mspace" style="margin-right:0.2222em;"></span><span class="mord mathnormal" style="margin-right:0.02778em;">θ</span><span class="mclose">)</span><span class="mspace" style="margin-right:0.2778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right:0.2778em;"></span><span class="mord">0</span><span class="mpunct">,</span></span></span><span style="top:-2.6537em;"><span class="pstrut" style="height:3.3214em;"></span><span class="mord"><span class="mord mathnormal" style="margin-right:0.00773em;">R</span><span class="mspace" style="margin-right:0.2778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right:0.2778em;"></span><span class="mord"><span class="mopen nulldelimiter"></span><span class="mfrac"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:1.3214em;"><span style="top:-2.314em;"><span class="pstrut" style="height:3em;"></span><span class="mord"><span class="mord">2</span><span class="mspace" style="margin-right:0.1667em;"></span><span class="mord mathnormal" style="margin-right:0.01968em;">l</span></span></span><span style="top:-3.23em;"><span class="pstrut" style="height:3em;"></span><span class="frac-line" style="border-bottom-width:0.04em;"></span></span><span style="top:-3.677em;"><span class="pstrut" style="height:3em;"></span><span class="mord"><span class="mord">3</span><span class="mspace" style="margin-right:0.1667em;"></span><span class="mord"><span class="mord mathnormal" style="margin-right:0.02778em;">r</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.1514em;"><span style="top:-2.55em;margin-left:-0.0278em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mathnormal mtight">p</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.2861em;"><span></span></span></span></span></span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.686em;"><span></span></span></span></span></span><span class="mclose nulldelimiter"></span></span><span class="mpunct">,</span><span class="mspace" style="margin-right:1em;"></span><span class="mspace" style="margin-right:0.1667em;"></span><span class="mord mathnormal">G</span><span class="mspace" style="margin-right:0.2778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right:0.2778em;"></span><span class="mord"><span class="mopen nulldelimiter"></span><span class="mfrac"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:1.3214em;"><span style="top:-2.314em;"><span class="pstrut" style="height:3em;"></span><span class="mord"><span class="mord">2</span><span class="mspace" style="margin-right:0.1667em;"></span><span class="mord mathnormal" style="margin-right:0.01968em;">l</span><span class="mspace" style="margin-right:0.1667em;"></span><span class="mord"><span class="mord">Ω</span><span class="msupsub"><span class="vlist-t"><span class="vlist-r"><span class="vlist" style="height:0.7401em;"><span style="top:-2.989em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight">2</span></span></span></span></span></span></span></span></span></span><span style="top:-3.23em;"><span class="pstrut" style="height:3em;"></span><span class="frac-line" style="border-bottom-width:0.04em;"></span></span><span style="top:-3.677em;"><span class="pstrut" style="height:3em;"></span><span class="mord"><span class="mord">3</span><span class="mspace" style="margin-right:0.1667em;"></span><span class="mord mathnormal" style="margin-right:0.03588em;">g</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.686em;"><span></span></span></span></span></span><span class="mclose nulldelimiter"></span></span><span class="mpunct">,</span><span class="mspace" style="margin-right:1em;"></span><span class="mspace" style="margin-right:0.1667em;"></span><span class="mord mathnormal">κ</span><span class="mspace" style="margin-right:0.2778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right:0.2778em;"></span><span class="mord"><span class="mopen nulldelimiter"></span><span class="mfrac"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:1.1076em;"><span style="top:-2.314em;"><span class="pstrut" style="height:3em;"></span><span class="mord"><span class="mord mathnormal" style="margin-right:0.07847em;">I</span><span class="mspace" style="margin-right:0.1667em;"></span><span class="mord">Ω</span></span></span><span style="top:-3.23em;"><span class="pstrut" style="height:3em;"></span><span class="frac-line" style="border-bottom-width:0.04em;"></span></span><span style="top:-3.677em;"><span class="pstrut" style="height:3em;"></span><span class="mord"><span class="mord mathnormal">c</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.686em;"><span></span></span></span></span></span><span class="mclose nulldelimiter"></span></span><span class="mord">.</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:1.6537em;"><span></span></span></span></span></span></span></span></span></span></span></span></div><!--/eq--><span class="eqno">(1.5)</span></div>
+    <p>The same equation reads more simply in the turning frame. There the second blade has the potential energy U(θ) = (ml/2)[−Ω²r<sub>p</sub> cos θ + g sin(φ + θ)]. The first term is a bowl with its bottom on the mother blade's line, made by the centrifugal pull; the second, gravity, tilts the bowl one way and then the other as the rotor turns. The Coriolis force points along the second blade and has no lever arm, so I θ̈ = −∂U/∂θ − c θ̇. The green line in the close-up marks the bottom of the bowl; the second blade chases it. If it kept exactly to the bottom, gravity's push would be in step with the motion and would do no net work; the brake makes it lag, and the lag is what lets the push feed the generator.</p>
     <p>R is the stiffness of the centrifugal spring, G the strength of gravity's push, and κ the brake. The hinge sits at the tip, r<sub>p</sub> = 63 m, and the rotor turns at Ω = λ*v/r<sub>p</sub> with the tip-speed ratio λ* = 7.55 of the NREL 5 MW turbine. The generator's torque at the hinge is −c times the second blade's angular speed dθ/dt, and it takes the power c(dθ/dt)², which the page adds up as an extra variable of the integration.</p>
 
     <h3>2 · The best brake</h3>
@@ -915,6 +917,7 @@ for (const [n, sym] of NOW) {
 }
 // the energy book since the record began: where the rotor's work went. E_other is the rest of what the generator took
 // (winding and gear losses), E_paid − E_h − E_fric − ΔE_spin; so the book's real test is W_in against ΔE_kin + ΔE_pot + E_paid.
+v('thb_now', [], 'float', { symbol: 'θ<sub>b</sub>', units: 'rad', long_name: 'bottom of the potential bowl (notes 1.6): the direction of the apparent gravity, from the mother blade’s line, now', computed_in: 'drawScene(), each frame', formula: 'atan2(−cos φ, Γ − sin φ), Γ = Ω² r<sub>p</sub>/g', digits: 6 });
 v('dEk_now', [], 'float', { symbol: 'ΔE<sub>kin</sub>', units: 'J', long_name: 'change of the second blade’s kinetic energy since the record began', computed_in: 'D.frame, each frame', formula: 'E<sub>kin</sub>[k] − E<sub>kin</sub>[0]', digits: 2 });
 v('dEp_now', [], 'float', { symbol: 'ΔE<sub>pot</sub>', units: 'J', long_name: 'change of the second blade’s potential energy since the record began', computed_in: 'D.frame, each frame', formula: 'E<sub>pot</sub>[k] − E<sub>pot</sub>[0]', digits: 1 });
 v('dEspin_now', [], 'float', { symbol: 'ΔE<sub>spin</sub>', units: 'J', long_name: 'change of the motor’s spin energy since the record began (geared)', computed_in: 'D.frame, each frame', formula: 'E<sub>spin</sub>[k] − E<sub>spin</sub>[0]', digits: 6 });
@@ -931,7 +934,7 @@ const GEO = [['cx', 'x of the hub', 'css px'], ['cy', 'y of the hub', 'css px'],
   ['sc2', 'scale of the close-up', 'px/m'], ['zoom', 'close-up scale over the rotor view’s scale', ''],
   ['bx', 'x of the hinge, close-up', 'css px'], ['by', 'y of the hinge, close-up', 'css px'], ['lB', 'second blade’s length on screen, close-up', 'css px'],
   ['cmB_x', 'x of the second blade’s centre of mass, close-up', 'css px'], ['cmB_y', 'y of the second blade’s centre of mass, close-up', 'css px'],
-  ['scene_w', 'scene width', 'css px'], ['scene_h', 'scene height', 'css px']];
+  ['scene_w', 'scene width', 'css px'], ['scene_h', 'scene height', 'css px'], ['lG', 'length of the green bowl-bottom line, close-up', 'css px']];
 const LAYOUT = ['cx', 'cy', 'Rpx', 'sc2', 'bx', 'by', 'scene_w', 'scene_h'];
 for (const [n, ln, u] of GEO) v(n, [], 'float', { symbol: n.replace(/_(\w+)$/, '<sub>$1</sub>'), units: u, long_name: ln, computed_in: 'drawScene()', digits: n === 'zoom' ? 4 : 2,
   source: LAYOUT.includes(n) ? T('Layout: a fixed share of the scene canvas, whose size follows the window.') : undefined });
@@ -985,7 +988,7 @@ window.rotorData = {
   scene(g) {
     put('cx', g.cx); put('cy', g.cy); put('Rpx', g.Rpx); put('sc', g.sc); put('px', g.px); put('py', g.py); put('lA', g.lA);
     put('cmA_x', g.cmA.x); put('cmA_y', g.cmA.y); put('sc2', g.sc2); put('zoom', g.zoom); put('bx', g.bx); put('by', g.by); put('lB', g.lB);
-    put('cmB_x', g.cmB.x); put('cmB_y', g.cmB.y); put('scene_w', g.w); put('scene_h', g.h);
+    put('cmB_x', g.cmB.x); put('cmB_y', g.cmB.y); put('scene_w', g.w); put('scene_h', g.h); put('thb_now', g.thb); put('lG', g.lG);
   },
   plot(id, mp) {
     const p = PLOTS[id];
@@ -1099,6 +1102,7 @@ check.px = () => ({ formula: 'c<sub>x</sub> + r<sub>p</sub> s cos φ', inputs: [
 check.py = () => ({ formula: 'c<sub>y</sub> − r<sub>p</sub> s sin φ', inputs: [['c<sub>y</sub>', G('cy'), 'css px', 2], ['r<sub>p</sub>', G('rp'), 'm', 5], ['s', G('sc'), 'px/m', 4], ['φ', G('phi_now'), 'rad', 6]], value: G('cy') - G('rp') * G('sc') * Math.sin(G('phi_now')) });
 check.lA = () => ({ formula: 'l s', inputs: [['l', G('l'), 'm', 3], ['s', G('sc'), 'px/m', 4]], value: G('l') * G('sc') });
 check.lB = () => ({ formula: 'l s<sub>2</sub>', inputs: [['l', G('l'), 'm', 3], ['s<sub>2</sub>', G('sc2'), 'px/m', 4]], value: G('l') * G('sc2') });
+check.lG = () => ({ formula: '1.35 l s<sub>2</sub>', inputs: [['l', G('l'), 'm', 3], ['s<sub>2</sub>', G('sc2'), 'px/m', 4]], value: 1.35 * G('l') * G('sc2') });
 check.zoom = () => ({ formula: 's<sub>2</sub>/s', inputs: [['s<sub>2</sub>', G('sc2'), 'px/m', 4], ['s', G('sc'), 'px/m', 4]], value: G('sc2') / G('sc') });
 const cmA = () => ({ x: G('px') + Math.cos(G('phi_now') + G('q1_now')) * G('lA') / 2, y: G('py') - Math.sin(G('phi_now') + G('q1_now')) * G('lA') / 2 });
 const cmB = () => ({ x: G('bx') + Math.cos(G('q1_now')) * G('lB') / 2, y: G('by') - Math.sin(G('q1_now')) * G('lB') / 2 });
@@ -1135,6 +1139,7 @@ for (const [n] of NOW) check[n + '_now'] = () => ({ formula: n + '[k]', inputs: 
 // tests decide; Sim.isBurgundy and isInk still test alpha first, so a transparent pixel can never pass.
 function boxOf(id) { const cv = $(id); return { canvas: cv, ctx: cv.getContext('2d'), dpr: cv.width / Math.max(1, cv.clientWidth) }; }
 const isInk = c => c[3] > 0 && c[0] < 90 && c[1] < 70 && c[2] < 60;
+const isGreen = c => c[3] > 0 && c[1] > c[0] + 20 && c[1] > c[2] + 15 && c[1] < 200;      // C.green, alpha first
 // a point three quarters of the way along the second blade: wine fill there, clear of the hinge and the centre-of-mass mark.
 // In the rotor view the hinge itself is placed from the stored hub, r_p, scale and φ, so a wrong φ moves it by r_p s δφ.
 const hingeA = () => ({ x: G('cx') + G('rp') * G('sc') * Math.cos(G('phi_now')), y: G('cy') - G('rp') * G('sc') * Math.sin(G('phi_now')) });
@@ -1175,8 +1180,19 @@ function tile(id, name, label) {
     return { what: label, drawn: txt, expected: val.toPrecision(8), ok: Math.abs(parseFloat(m[0]) - val) <= tol, note: T('The tile rounds; agreement means the stored value rounds to what it shows.') };
   };
 }
+check.thb_now = () => { const Gm = G('Om') ** 2 * G('rp') / G('g'), ph = G('phi_now');
+  return { formula: 'atan2(−cos φ, Γ − sin φ), Γ = Ω² r<sub>p</sub>/g', inputs: [['φ', ph, 'rad', 6], ['Ω', G('Om'), 'rad/s', 6], ['r<sub>p</sub>', G('rp'), 'm', 4], ['g', G('g'), 'm/s²', 6]], value: Math.atan2(-Math.cos(ph), Gm - Math.sin(ph)) }; };
 const drawn = {
-  q1_now: bladeInk('θ', 'B'), phi_now: bladeInk('φ', 'A'), px: hingeInk, py: hingeInk,
+  thb_now: () => {
+    const f = 1.25 / 1.35, e = { x: G('bx') + Math.cos(G('thb_now')) * G('lG') * f, y: G('by') - Math.sin(G('thb_now')) * G('lG') * f };
+    const r = Sim.readPixel(boxOf('scene'), e.x, e.y, 1.5, isGreen);
+    return { what: T('θ<sub>b</sub>: the green bowl-bottom line in the close-up, beyond the second blade’s tip, from the stored hinge, θ<sub>b</sub> and its length'),
+      drawn: r.found ? T('green at (') + e.x.toFixed(1) + ', ' + e.y.toFixed(1) + ') px' : T('no green ink there'), expected: T('green: the line drawn at the stored θ<sub>b</sub>'), ok: r.found };
+  },
+  q1_now: bladeInk('θ', 'B'), px: hingeInk, py: hingeInk,
+  // φ: in the rotor view, drawn to scale, the 1 m second blade is shorter than the hinge mark over it (about 2.6 px at 1440 px),
+  // so φ is read where it shows: the hinge's dark centre, placed from the stored hub, r_p, the scale and φ
+  phi_now: () => Object.assign(hingeInk(), { what: T('φ: the hinge at the mother blade’s tip, rotor view, placed from the stored hub, r<sub>p</sub>, s and φ') }),
   q1: curve('plotTh', 'th', 'q1', 'θ'), p: curve('plotP', 'pw', 'p', 'p'), Plin: curve('plotK', 'kp', 'Plin', 'P̄(κ)', 'kap', true),
   p_now: () => {
     const x = plotX('pw', G('turn')[G('k_now')]), y = plotY('pw', G('p_now')), r = Sim.readPixel(boxOf('plotP'), x + 7, y, 1.5, isInk);
@@ -1223,7 +1239,7 @@ Sim.data = {
     { title: T('What you set'), note: T('as used by the last solve'), vars: ['wind', 'gen', 'brake', 'N', 'RL_set'] },
     { title: T('Fixed for this study'), note: T('constants of the physics block'), vars: ['g', 'm', 'l', 'r_rot', 'lamStar'] },
     { title: T('What follows from it'), note: T('the rotor, the second blade’s inertia, its two springs and its best brake'), vars: ['Om', 'n_rpm', 'T_turn', 'v_tip', 'rp', 'I', 'mlc', 'R', 'G', 'Gp', 'omega_n', 'kappaStar', 'c', 'kappa', 'Pstar', 'tauStar', 'eta', 'csc', 'ce', 'RL', 'j', 'keep', 'jammed'] },
-    { title: T('State now'), note: T('the stored frame on screen, and the energy book since the record began'), vars: ['t_now', 'k_now', 'phi_now', 'q1_now', 'w1_now', 'p_now', 'pPaid_now', 'Ek_now', 'Ep_now', 'Espin_now', 'Win_now', 'Eh_now', 'Epaid_now', 'Efric_now', 'dEk_now', 'dEp_now', 'dEspin_now', 'Eother_now', 'book_res', 'book_rel'] },
+    { title: T('State now'), note: T('the stored frame on screen, and the energy book since the record began'), vars: ['t_now', 'k_now', 'phi_now', 'q1_now', 'thb_now', 'w1_now', 'p_now', 'pPaid_now', 'Ek_now', 'Ep_now', 'Espin_now', 'Win_now', 'Eh_now', 'Epaid_now', 'Efric_now', 'dEk_now', 'dEp_now', 'dEspin_now', 'Eother_now', 'book_res', 'book_rel'] },
     { title: T('What the solve found'), note: T('means over the measuring turns'), vars: ['P_mean', 'P_paid', 'P_fric', 'Theta', 'trail', 'trailSin', 'bill', 'lag_deg', 'Win_mean'] },
     { title: T('Stored record'), note: T('one row per frame of the last turns'), vars: ARR.map(a => a[0]) },
     { title: T('Solver'), note: T('Radau IIA, fixed step, in a Web Worker'), vars: ['steps', 'h', 'settle', 'measure', 'fpt', 'rec_turns', 'maxit', 'worker_ms', 'stale'] },
@@ -1470,6 +1486,7 @@ const chordAt = r => {
 // The second blade's outline, a drawing only: a slender blade, chord 0.6 m at the root and 0.4 m at the tip.
 // The physics treats it as a thin uniform rod of mass m and length l.
 const B2_ROOT = 0.6, B2_TIP = 0.4;
+const B2C_ROOT = 0.16, B2C_TIP = 0.10;     // the close-up draws it slender, as the physics treats it: a thin rod
 /** Fill and outline a blade: stations [s, chord] in metres along its axis from (ox, oy), axis at angle ang (counter-clockwise,
  *  screen y down), scale in px per m. A quarter of the chord leads (in the direction the rotor turns), three quarters trail. */
 function bladeShape(ctx, ox, oy, ang, stations, scale, fill, stroke) {
@@ -1543,21 +1560,28 @@ function drawScene() {
   const bx = B.x + B.w * 0.40, by = B.y + B.h * 0.52, sc2 = (wide ? 0.40 : 0.36) * B.w / l, zoom = sc2 / sc;
   const r0 = Math.max(CONST.hubRad, rRot - (bx - B.x - 10) / sc2);
   bladeShape(ctx, bx - (rRot - r0) * sc2, by, 0, [[0, chordAt(r0)], ...motherStations(r0)], sc2, C.blade, C.line);
-  label(ctx, `← mother blade, hub ${fmt(rRot, 3)} m away`, B.x + 12, by - 0.25 * chordAt(r0) * sc2 - 14, C.muted, 'left', 11);
+  label(ctx, `← mother blade, hub ${fmt(rRot, 3)} m away`, B.x + 12, Math.max(by - 0.25 * chordAt(r0) * sc2 - 14, B.y + (wide ? 88 : 72)), C.muted, 'left', 11);
   ctx.setLineDash([4, 4]); ctx.strokeStyle = C.muted; ctx.lineWidth = 1;
   ctx.beginPath(); ctx.moveTo(bx, by); ctx.lineTo(bx + l * sc2 * 1.12, by); ctx.stroke(); ctx.setLineDash([]);
-  bladeShape(ctx, bx, by, q1, [[0, B2_ROOT], [l, B2_TIP]], sc2, C.wine, C.wineDeep);
+  // the bottom of the turning frame's potential bowl, notes (1.6): the direction of the apparent gravity, outward pull plus gravity
+  const Gam = md.Om * md.Om * md.rp / CONST.g, thb = Math.atan2(-Math.cos(phi), Gam - Math.sin(phi)), lG = 1.35 * l * sc2;
+  ctx.strokeStyle = C.green; ctx.lineWidth = 2.2; ctx.beginPath(); ctx.moveTo(bx, by);
+  ctx.lineTo(bx + Math.cos(thb) * lG, by - Math.sin(thb) * lG); ctx.stroke();
+  bladeShape(ctx, bx, by, q1, [[0, B2C_ROOT], [l, B2C_TIP]], sc2, C.wine, C.wineDeep);
   const cmB = { x: bx + Math.cos(q1) * l / 2 * sc2, y: by - Math.sin(q1) * l / 2 * sc2 };
   ctx.fillStyle = C.paper; ctx.strokeStyle = C.paper; ctx.lineWidth = 1.2;      // centre of mass, at l/2
   ctx.beginPath(); ctx.arc(cmB.x, cmB.y, 4, 0, 2 * Math.PI); ctx.stroke();
   ctx.beginPath(); ctx.moveTo(cmB.x, cmB.y); ctx.arc(cmB.x, cmB.y, 4, 0, Math.PI / 2); ctx.closePath(); ctx.fill();
   ctx.beginPath(); ctx.moveTo(cmB.x, cmB.y); ctx.arc(cmB.x, cmB.y, 4, Math.PI, 1.5 * Math.PI); ctx.closePath(); ctx.fill();
   hinge(ctx, bx, by, Math.max(5, 0.12 * sc2));
-  label(ctx, 'hinge + generator', bx + 10, by + 0.75 * B2_ROOT * sc2 + 14, C.ink, 'left', 11);  // under the root's trailing edge (3/4 of the chord lies below the axis)
+  label(ctx, 'hinge + generator', bx - 4, by + Math.max(5, 0.12 * sc2) + 16, C.ink, 'center', 11);  // under the hinge
   if (Math.abs(q1) > 0.01) {
     ctx.strokeStyle = C.ink; ctx.lineWidth = 1.3; ctx.beginPath(); ctx.arc(bx, by, l * sc2 * 0.82, 0, -q1, q1 > 0); ctx.stroke();
   }
-  label(ctx, `θ = ${fmt(deg(q1), 2)}°`, Math.min(bx + l * sc2 * 1.16, B.x + B.w - 70), by + (q1 >= 0 ? 16 : -16), C.ink, 'left', 12);
+  const tq = wide ? `θ = ${fmt(deg(q1), 2)}°  second blade` : `θ = ${fmt(deg(q1), 2)}°`, tb = wide ? `θb = ${fmt(deg(thb), 2)}°  bowl bottom` : `θb = ${fmt(deg(thb), 2)}°`;
+  label(ctx, tq, B.x + 12, B.y + 54, C.wine, 'left', 11.5);
+  if (wide) label(ctx, tb, B.x + 12, B.y + 71, C.green, 'left', 11.5);
+  else { ctx.font = `11.5px ${MONO}`; label(ctx, tb, B.x + 12 + ctx.measureText(tq).width + 14, B.y + 54, C.green, 'left', 11.5); }
   // gravity at the centre of mass, turning once per turn in this frame; the centrifugal pull outward
   const ga = -Math.PI / 2 - phi, gl = 0.16 * Math.min(B.w, B.h);
   const gx = Math.cos(ga), gy = -Math.sin(ga);
@@ -1565,18 +1589,18 @@ function drawScene() {
   label(ctx, 'g', cmB.x + gx * (gl + 11), cmB.y + gy * (gl + 11), C.blue, 'center', 13);
   const ratio = md.R / md.G;
   label(ctx, `centrifugal pull ≈ ${fmt(ratio, 2)} × gravity`, B.x + 12, B.y + 34, C.ochre, 'left', 11);
-  arrow(ctx, cmB.x, cmB.y, cmB.x + Math.min(2.2 * gl, B.x + B.w - 16 - cmB.x), cmB.y, C.ochre, 2, 8);
+  arrow(ctx, cmB.x, cmB.y, cmB.x + 0.55 * l * sc2, cmB.y, C.ochre, 2, 8);
   const sb2 = 1 * sc2, sy = B.y + B.h - 34;                    // a 1 m scale bar
   ctx.strokeStyle = C.ink; ctx.lineWidth = 1.5; ctx.beginPath();
   ctx.moveTo(B.x + 12, sy); ctx.lineTo(B.x + 12 + sb2, sy);
   ctx.moveTo(B.x + 12, sy - 4); ctx.lineTo(B.x + 12, sy + 4); ctx.moveTo(B.x + 12 + sb2, sy - 4); ctx.lineTo(B.x + 12 + sb2, sy + 4); ctx.stroke();
-  label(ctx, `1 m · ${fmt(zoom, 2)} × the rotor view`, B.x + 18 + sb2, sy, C.ink, 'left', 11);
+  label(ctx, `1 m · ${fmt(zoom, 2)} × rotor view`, B.x + 18 + sb2, sy, C.ink, 'left', 11);
   label(ctx, `second blade ${CONST.blade.m} kg, ${fmt(l, 2)} m · θ drawn true`, B.x + 12, B.y + B.h - 14, C.muted, 'left', 11);
   const dx = B.x + B.w - 30, dy = B.y + 34, dr = 16;
   ctx.strokeStyle = C.rule; ctx.lineWidth = 1; ctx.beginPath(); ctx.arc(dx, dy, dr, 0, 2 * Math.PI); ctx.stroke();
   arrow(ctx, dx, dy, dx + gx * dr, dy + gy * dr, C.blue, 1.5, 6);
   label(ctx, 'gravity turns', dx - dr - 6, dy + 26, C.muted, 'center', 10.5, SANS);
-  if (D) D.scene({ cx, cy, Rpx, sc, px, py, lA: l * sc, cmA, sc2, zoom, bx, by, lB: l * sc2, cmB, w, h });
+  if (D) D.scene({ cx, cy, Rpx, sc, px, py, lA: l * sc, cmA, sc2, zoom, bx, by, lB: l * sc2, cmB, w, h, thb, lG });
 }
 
 // ---------------------------------------------------------------- plots

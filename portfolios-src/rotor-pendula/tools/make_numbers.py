@@ -56,6 +56,63 @@ N['sensor_uW'] = f(J('sensor.json')['need_uW'], 1)
 N['ceiling_frac'] = f(math.pi/(4*math.sqrt(2)), 3)
 Pst = lambda O, gg=g, mm=m, ll=l: (mm*ll/2*gg)**2/(4*O*(mm*ll/2*rp - mm*ll*ll/3))
 
+# ---- chapter 0 from scratch: the wind's power, Betz, the speed triangle at the tip ---------------------------------------
+A_disc = math.pi*rp**2
+N['disc_area'] = f'{A_disc:,.0f}'.replace(',', ' ')
+N['pw_m2_8'] = f(0.5*rho*8.0**3, 0)
+for v in WINDS:
+    N[f'Pwind_{int(v)}'] = f(0.5*rho*A_disc*v**3/1e6, 2)
+    N[f'PT_{int(v)}'] = f(0.5*rho*A_disc*v**3*S['CP_STAR']/1e6, 2)
+N['cube_ratio'] = f((10/6)**3, 1)
+N['betz'] = f(16/27, 3); N['betz_pct'] = f(16/27*100, 0); N['cp_of_betz'] = f(S['CP_STAR']/(16/27)*100, 0)
+ax8 = 8.0*(1 - 1/3); ut8 = Om[8.0]*rp
+inflow = math.atan2(ax8, ut8)
+N['ax8'] = f(ax8, 2); N['ut8'] = f(ut8, 1); N['app8'] = f(math.hypot(ax8, ut8), 1); N['inflow8'] = f(math.degrees(inflow), 1)
+N['ld_min'] = f(1/math.tan(inflow), 1)
+N['turn8_s'] = f(2*math.pi/Om[8.0], 1)
+# the triangle of speeds at the tip, 8 m/s, seen along the blade from its tip: the blade moves right, the wind blows down
+# through the rotor (slowed by a third, the ideal rotor of section 0.2); the wind arrow is drawn EX times its length
+EX, s5 = 3.0, 4.0                                             # exaggeration of the wind arrow; px per m/s
+W5, H5 = 600, 330
+ox, oy = 230, 120                                             # the blade piece
+hx, hy = ut8*s5, ax8*s5*EX                                    # drawn components of the apparent wind
+Tx, Ty = ox + hx, oy - hy                                     # where the apparent wind comes from (front, upwind)
+ang_draw = math.degrees(math.atan2(hy, hx))
+nrm = math.hypot(hx, hy); lxu, lyu = hy/nrm, hx/nrm           # lift: at right angles to the apparent wind, downwind and forward
+L5 = 150
+tri = [f'<svg viewBox="0 0 {W5} {H5}" style="width:100%;height:auto;max-width:{W5}px" role="img" aria-label="A piece of blade at the tip, seen along the blade. The blade moves to the right at {ut8:.1f} m/s, the wind blows down through the rotor at {ax8:.2f} m/s, so the air the blade meets, the apparent wind, comes almost head-on, {math.degrees(inflow):.1f} degrees off its path. The lift, at right angles to the apparent wind, points mostly downwind and leans slightly forward; its forward part turns the rotor.">',
+       '<defs><marker id="ah5" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="context-stroke"/></marker></defs>',
+       # the speeds that add up to the apparent wind
+       f'<line x1="{Tx:.1f}" y1="{Ty:.1f}" x2="{ox:.1f}" y2="{Ty:.1f}" stroke="#7d1d2f" stroke-width="2.2" marker-end="url(#ah5)"/>',
+       f'<text x="{(Tx+ox)/2:.1f}" y="{Ty-10:.1f}" text-anchor="middle" class="svgc">air met because the blade moves: {ut8:.1f} m/s</text>',
+       f'<line x1="{ox:.1f}" y1="{Ty:.1f}" x2="{ox:.1f}" y2="{oy-10:.1f}" stroke="#33627f" stroke-width="2.2" marker-end="url(#ah5)"/>',
+       f'<text x="{ox-8:.1f}" y="{(Ty+oy)/2:.1f}" text-anchor="end" class="svgc">wind {ax8:.2f} m/s</text>',
+       f'<text x="{ox-8:.1f}" y="{(Ty+oy)/2+14:.1f}" text-anchor="end" class="svgc">(drawn {EX:g}× long)</text>',
+       f'<line x1="{Tx:.1f}" y1="{Ty:.1f}" x2="{ox+hx*0.06:.1f}" y2="{oy-hy*0.06:.1f}" stroke="#23160f" stroke-width="1.6" stroke-dasharray="6 4" marker-end="url(#ah5)"/>',
+       f'<text x="{ox+hx*0.62:.1f}" y="{oy-hy*0.62+20:.1f}" text-anchor="middle" class="svgc">apparent wind {math.hypot(ax8, ut8):.1f} m/s, {math.degrees(inflow):.1f}° off the path</text>']
+# the blade piece: a slim wing section lying along the apparent wind, and its motion
+ca, sa = hx/nrm, -hy/nrm
+pts = []
+for t in np.linspace(0, 2*math.pi, 40):
+    u, w = 26*math.cos(t), 5*math.sin(t)*(1 + 0.6*math.cos(t))
+    pts.append(f'{ox + u*ca - w*sa:.1f},{oy + u*sa + w*ca:.1f}')
+tri.append(f'<polygon points="{" ".join(pts)}" fill="#e9ddc6" stroke="#3f2c23" stroke-width="1.2"/>')
+tri.append(f'<line x1="{ox-180}" y1="{oy+50}" x2="{ox-70}" y2="{oy+50}" stroke="#3f2c23" stroke-width="1.4" marker-end="url(#ah5)"/>')
+tri.append(f'<text x="{ox-125}" y="{oy+68}" text-anchor="middle" class="svgc">the blade moves this way</text>')
+# the lift and its two parts
+Lx, Ly = ox + lxu*L5, oy + lyu*L5
+tri.append(f'<line x1="{ox:.1f}" y1="{oy:.1f}" x2="{Lx:.1f}" y2="{Ly:.1f}" stroke="#3c6a46" stroke-width="2.6" marker-end="url(#ah5)"/>')
+tri.append(f'<text x="{Lx+10:.1f}" y="{Ly-6:.1f}" class="svgd">lift</text>')
+tri.append(f'<line x1="{ox:.1f}" y1="{Ly:.1f}" x2="{Lx:.1f}" y2="{Ly:.1f}" stroke="#3c6a46" stroke-width="1.6" stroke-dasharray="3 3" marker-end="url(#ah5)"/>')
+tri.append(f'<text x="{Lx+10:.1f}" y="{Ly+14:.1f}" class="svgc">its forward part (dotted) turns the rotor;</text>')
+tri.append(f'<text x="{Lx+10:.1f}" y="{Ly+28:.1f}" class="svgc">the rest pushes the rotor downwind</text>')
+tri.append('</svg>')
+T['fig_triangle'] = ('<figure class="fig">' + ''.join(tri) +
+    f'<figcaption>Figure 1. A piece of blade at the tip, seen along the blade from its tip, at 8 m/s. The blade moves to the right at {ut8:.1f} m/s, '
+    f'so it meets air coming at it from the front at that speed; the wind blows through the rotor at {ax8:.2f} m/s, slowed by a third (section 0.2). '
+    f'Together they make the apparent wind, which comes in only {math.degrees(inflow):.1f}° off the blade\'s path; the wind arrow is drawn {EX:g} times '
+    f'too long so that the angle can be seen (it is drawn at {ang_draw:.0f}°). The lift is at right angles to the apparent wind: mostly it pushes the rotor '
+    f'downwind, but it leans forward by the same angle, and that forward part is what turns the rotor.</figcaption></figure>')
 # ---- the three winds: small-swing theory and the full equation (L1_blade.json) ---------------------------------------
 runs = J('L1_blade.json')
 assert all(r['m'] == m and r['l'] == l for r in runs), 'L1_blade.json is for another second blade'
@@ -92,6 +149,39 @@ N['bill_err'] = sci(ck['bill_max_rel'])
 Ppoint = (m*l*g)**2/(4*Om[8.0]*(m*l*rp - m*l*l))
 N['rod_vs_point'] = f(Ppoint/Pst(Om[8.0]), 3)
 
+def panel(w_, h_, l0, r0, t0, b0):
+    return (lambda xv, x0, x1: l0 + (xv - x0)/(x1 - x0)*(w_ - l0 - r0)), (lambda yv, y0, y1: t0 + (1 - (yv - y0)/(y1 - y0))*(h_ - t0 - b0))   # plot frame: data to svg coordinates
+
+# ---- figure: the turning frame's potential, a bowl whose bottom rocks once per turn (6 m/s, where the rocking is largest) ------
+Gam6 = Om[6.0]**2*rp/g
+W3, H3 = 560, 300
+BX, BY = panel(W3, H3, 56, 150, 16, 48)
+ths = np.linspace(-0.9, 0.9, 241)
+u = lambda th, ph: -np.cos(th) + np.sin(ph + th)/Gam6          # U / [(m l/2) Omega^2 r_p]
+umin, umax = -1.32, -0.35
+bowl_cols = [('#7d1d2f', 0, 'φ = 0°, rising'), ('#b5681c', 90, 'φ = 90°, up'), ('#33627f', 180, 'φ = 180°, falling'), ('#3c6a46', 270, 'φ = 270°, down')]
+svg = [f'<svg viewBox="0 0 {W3} {H3}" role="img" aria-label="The potential energy of the second blade in the turning frame against its angle, at four rotor angles at 6 m/s: four bowls of the same shape whose lowest points move left and right by about 17 degrees once per turn.">',
+       f'<rect x="56" y="16" width="{W3-206}" height="{H3-64}" fill="#fff" stroke="#3f2c23"/>']
+for v in (-45, -30, -15, 0, 15, 30, 45):
+    X = BX(math.radians(v), -0.9, 0.9); svg.append(f'<line x1="{X:.1f}" y1="{H3-48}" x2="{X:.1f}" y2="{H3-43}" stroke="#3f2c23"/><text x="{X:.1f}" y="{H3-30}" text-anchor="middle" class="svgc">{v}°</text>')
+mins = []
+for c, phd, lab in bowl_cols:
+    ph = math.radians(phd); uu = u(ths, ph)
+    svg.append('<polyline points="' + ' '.join(f'{BX(t, -0.9, 0.9):.1f},{BY(v, umin, umax):.1f}' for t, v in zip(ths, uu)) + f'" fill="none" stroke="{c}" stroke-width="2"/>')
+    t0 = math.atan2(-math.cos(ph)/Gam6, 1 - math.sin(ph)/Gam6)            # exact minimum: dU/dtheta = 0
+    mins.append(t0)
+    svg.append(f'<circle cx="{BX(t0, -0.9, 0.9):.1f}" cy="{BY(float(u(t0, ph)), umin, umax):.1f}" r="4.5" fill="{c}" stroke="#fff" stroke-width="1.2"/>')
+for i, (c, phd, lab) in enumerate(bowl_cols):
+    svg.append(f'<line x1="{W3-140}" y1="{40+i*20}" x2="{W3-122}" y2="{40+i*20}" stroke="{c}" stroke-width="2.4"/><text x="{W3-116}" y="{44+i*20}" class="svgc">{lab}</text>')
+svg.append(f'<text x="{(56+W3-150)/2}" y="{H3-10}" text-anchor="middle" class="svgd">angle θ of the second blade from the mother blade\'s line</text>')
+svg.append(f'<text x="18" y="{(16+H3-48)/2}" text-anchor="middle" class="svgd" transform="rotate(-90 18 {(16+H3-48)/2})">potential energy U</text>')
+svg.append('</svg>')
+T['fig_bowl'] = ('<figure class="fig">' + ''.join(svg) +
+    f'<figcaption>Figure 4. The second blade\'s potential energy (1.6) in the frame of the mother blade, at 6 m/s ($\\Gamma = {N["Gam_6"]}$), '
+    f'at four positions of the rotor. The shape of the bowl is the centrifugal term and does not change; gravity tilts it, and its lowest point '
+    f'(dots) swings between {N["tilt_6"]}° on one side and {N["tilt_6"]}° on the other, $\\arcsin(1/\\Gamma)$, and back, once per turn. The second blade is a marble in this bowl, '
+    f'held in honey by the generator: it chases the moving bottom, and the generator takes energy from the chase.</figcaption></figure>')
+
 # ---- figure: the universal brake curve P/P* = 2x/(1+x^2), x = kappa/kappa*, on a log axis ----------------------------
 W_, H_, l_, r_, t_, b_ = 560, 300, 58, 20, 18, 46
 xs = np.logspace(-2, 2, 241)
@@ -109,9 +199,72 @@ T['fig_brake'] = (f'<figure class="fig"><svg viewBox="0 0 {W_} {H_}" role="img" 
     f'<polyline points="{pts}" fill="none" stroke="#7d1d2f" stroke-width="2.4"/>{ticks}'
     f'<text x="{(l_+W_-r_)/2}" y="{H_-8}" text-anchor="middle" class="svgd">brake over best brake, κ/κ*</text>'
     f'<text x="16" y="{(t_+H_-b_)/2}" text-anchor="middle" class="svgd" transform="rotate(-90 16 {(t_+H_-b_)/2})">P / P*</text></svg>'
-    f'<figcaption>Figure 3. The harvested power (2.3) over its maximum (2.5), against the brake over the best brake (2.4): '
+    f'<figcaption>Figure 5. The harvested power (2.3) over its maximum (2.5), against the brake over the best brake (2.4): '
     f'$\\bar P/P^* = 2x/(1+x^2)$ with $x = \\kappa/\\kappa^*$, the same curve at every wind and for every second blade. The top is flat: a brake '
     f'{2-math.sqrt(3):.2f} times the best, or {2+math.sqrt(3):.1f} times it, still gives half the power ($x = 2 \\mp \\sqrt3$).</figcaption></figure>')
+
+# ---- figure: theory against the full equation (compare.json, from the page's own engine, tools/compare.js) -------------------
+cp = J('compare.json')['winds']
+WCOL = {6.0: '#7d1d2f', 8.0: '#b5681c', 10.0: '#33627f'}
+W1, H1 = 380, 300
+PX, PY = panel(W1, H1, 50, 14, 16, 48)
+lx = lambda x: math.log10(x)
+svgA = [f'<svg viewBox="0 0 {W1} {H1}" style="flex:1 1 300px;min-width:0;max-width:460px" role="img" aria-label="Harvested power over its small-swing maximum against the brake over the best brake, 0.05 to 20, at 6, 8 and 10 m/s: lines from formula (2.3), dots from the full equation. The dots sit on the lines except at light brakes in weak wind, where they rise above.">',
+        f'<rect x="50" y="16" width="{W1-64}" height="{H1-64}" fill="#fff" stroke="#3f2c23"/>']
+for v, lab in ((0.05, '0.05'), (0.1, '0.1'), (1, '1'), (10, '10'), (20, '20')):
+    X = PX(lx(v), lx(0.05), lx(20)); svgA.append(f'<line x1="{X:.1f}" y1="{H1-48}" x2="{X:.1f}" y2="{H1-43}" stroke="#3f2c23"/><text x="{X:.1f}" y="{H1-30}" text-anchor="middle" class="svgc">{lab}</text>')
+for v in (0, 0.5, 1):
+    Y = PY(v, 0, 1.12); svgA.append(f'<line x1="45" y1="{Y:.1f}" x2="50" y2="{Y:.1f}" stroke="#3f2c23"/><text x="41" y="{Y+4:.1f}" text-anchor="end" class="svgc">{v:g}</text>')
+for w in cp:
+    c = WCOL[w['wind']]; Ps = w['Pstar']
+    xs = np.logspace(math.log10(0.05), math.log10(20), 160)
+    pts = ' '.join(f'{PX(lx(x), lx(0.05), lx(20)):.1f},{PY(2*x/(1 + x*x), 0, 1.12):.1f}' for x in xs)
+    if w['wind'] == 8.0:
+        svgA.append(f'<polyline points="{pts}" fill="none" stroke="#3f2c23" stroke-width="1.6"/>')
+    for sp in w['sweep']:
+        svgA.append(f'<circle cx="{PX(lx(sp["x"]), lx(0.05), lx(20)):.1f}" cy="{PY(sp["P"]/Ps, 0, 1.12):.1f}" r="3" fill="{c}" fill-opacity="0.85"/>')
+svgA.append(f'<text x="{(50+W1-14)/2}" y="{H1-10}" text-anchor="middle" class="svgd">brake over best brake, κ/κ*</text>')
+svgA.append(f'<text x="14" y="{(16+H1-48)/2}" text-anchor="middle" class="svgd" transform="rotate(-90 14 {(16+H1-48)/2})">P / P*</text>')
+for i, w in enumerate(cp):
+    svgA.append(f'<circle cx="{W1-110}" cy="{34+i*16}" r="3.5" fill="{WCOL[w["wind"]]}"/><text x="{W1-102}" y="{38+i*16}" class="svgc">{w["wind"]:.0f} m/s, full</text>')
+svgA.append(f'<line x1="{W1-114}" y1="{82}" x2="{W1-104}" y2="{82}" stroke="#3f2c23" stroke-width="1.6"/><text x="{W1-102}" y="{86}" class="svgc">formula (2.3)</text>')
+svgA.append('</svg>')
+PX2, PY2 = panel(W1, H1, 50, 14, 16, 48)
+qm = max(max(abs(q) for q in w['turn']['q']) for w in cp)*1.15
+svgB = [f'<svg viewBox="0 0 {W1} {H1}" style="flex:1 1 300px;min-width:0;max-width:460px" role="img" aria-label="One turn of the swing angle at the best brake, at 6, 8 and 10 m/s: the full equation as solid lines, the small-swing theory as dashed lines. They have the same shape and phase; the full solution sits slightly lower, by the mean trail.">',
+        f'<rect x="50" y="16" width="{W1-64}" height="{H1-64}" fill="#fff" stroke="#3f2c23"/>',
+        f'<line x1="50" y1="{PY2(0, -qm, qm):.1f}" x2="{W1-14}" y2="{PY2(0, -qm, qm):.1f}" stroke="#dccdb4"/>']
+for v in (0, 90, 180, 270, 360):
+    X = PX2(v, 0, 360); svgB.append(f'<line x1="{X:.1f}" y1="{H1-48}" x2="{X:.1f}" y2="{H1-43}" stroke="#3f2c23"/><text x="{X:.1f}" y="{H1-30}" text-anchor="middle" class="svgc">{v}°</text>')
+for v in (-0.2, -0.1, 0, 0.1, 0.2):
+    if abs(v) <= qm:
+        Y = PY2(v, -qm, qm); svgB.append(f'<line x1="45" y1="{Y:.1f}" x2="50" y2="{Y:.1f}" stroke="#3f2c23"/><text x="41" y="{Y+4:.1f}" text-anchor="end" class="svgc">{v:g}</text>')
+trace_rms = []
+for w in cp:
+    c = WCOL[w['wind']]; ph = np.array(w['turn']['phi']); q = np.array(w['turn']['q'])
+    A = -w['G']/(w['R'] - 1 + 1j*w['kappaStar']); ql = np.real(A*np.exp(1j*(ph + w['phi0'])))
+    trace_rms.append((w['wind'], float(np.sqrt(np.mean((q - ql)**2))), float(np.mean(q)), float(np.sqrt(np.mean((q - q.mean() - ql)**2)))))
+    deg = np.degrees(ph)
+    svgB.append('<polyline points="' + ' '.join(f'{PX2(a, 0, 360):.1f},{PY2(b, -qm, qm):.1f}' for a, b in zip(deg, ql)) + f'" fill="none" stroke="{c}" stroke-width="1.4" stroke-dasharray="5 4"/>')
+    svgB.append('<polyline points="' + ' '.join(f'{PX2(a, 0, 360):.1f},{PY2(b, -qm, qm):.1f}' for a, b in zip(deg, q)) + f'" fill="none" stroke="{c}" stroke-width="2"/>')
+svgB.append(f'<text x="{(50+W1-14)/2}" y="{H1-10}" text-anchor="middle" class="svgd">rotor angle φ (0° = mother blade horizontal, rising)</text>')
+svgB.append(f'<text x="14" y="{(16+H1-48)/2}" text-anchor="middle" class="svgd" transform="rotate(-90 14 {(16+H1-48)/2})">θ, rad</text>')
+svgB.append(f'<line x1="{W1-128}" y1="30" x2="{W1-112}" y2="30" stroke="#3f2c23" stroke-width="2"/><text x="{W1-106}" y="34" class="svgc">full equation</text>')
+svgB.append(f'<line x1="{W1-128}" y1="46" x2="{W1-112}" y2="46" stroke="#3f2c23" stroke-width="1.4" stroke-dasharray="5 4"/><text x="{W1-106}" y="50" class="svgc">theory (2.2)</text>')
+svgB.append('</svg>')
+w6 = cp[0]; dev6 = [sp['P']/sp['Plin'] - 1 for sp in w6['sweep']]
+devs = [(w['wind'], max(sp['P']/sp['Plin'] - 1 for sp in w['sweep']), w['sweep'][0]['Theta']) for w in cp]
+N['cmp_dev6'] = f(devs[0][1]*100, 0); N['cmp_th6'] = f(devs[0][2], 2)
+N['cmp_dev10'] = f(devs[2][1]*100, 1); N['cmp_th10'] = f(devs[2][2], 2)
+N['cmp_coef_lo'] = f(min(d/t**2 for _, d, t in devs), 1); N['cmp_coef_hi'] = f(max(d/t**2 for _, d, t in devs), 1)
+N['cmp_star_dev'] = f(max(abs(min(w['sweep'], key=lambda sp: abs(math.log(sp['x'])))['P']/w['Pstar'] - 1) for w in cp)*100, 1)
+N['cmp_rms6'] = f(trace_rms[0][1], 3); N['cmp_mean6'] = f(trace_rms[0][2], 3); N['cmp_rest6'] = f(trace_rms[0][3], 4)
+N['cmp_amp6'] = f(abs(-w6['G']/(w6['R'] - 1 + 1j*w6['kappaStar'])), 3)
+T['fig_compare'] = ('<figure class="fig"><div style="display:flex;flex-wrap:wrap;gap:10px;justify-content:center">' + ''.join(svgA) + ''.join(svgB) + '</div>'
+    f'<figcaption>Figure 6. The small-swing theory against the full equation (1.5), solved by the simulation\'s own engine (<code>tools/compare.js</code>). '
+    f'First panel: harvested power over its maximum $P^*$ (2.5), against the brake over the best brake. The line is formula (2.3), the same for every wind; '
+    f'the dots are the full equation at 6 (wine), 8 (ochre) and 10 m/s (blue). Second panel: one turn of the swing at the best brake; '
+    f'solid the full equation, dashed the theory (2.2). The two have the same shape and the same phase; the full swing is shifted down by its mean trail.</figcaption></figure>')
 
 # ---- chaos (L1_chaos_blade.json) ---------------------------------------------------------------------------------------
 ch = J('L1_chaos_blade.json')
