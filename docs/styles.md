@@ -429,10 +429,10 @@ uppercase, tracked), the active one in wine at weight 500; on phones the index b
 30 em. Measured by `node notes/home/measure.cjs` (serve `dist/`): at 1440 px the longest line of prose fell from 101 to 72
 characters (median 46), in German 71, in Arabic 79; no sideways scroll at 1920, 1440, 1280, 1024 or 390 px.
 
-The index is a table of contents from 981 px wide, set in the site's physics faces (`site.css`, appended after `.content`;
-the two faces are declared with `@font-face` on line 5): "Index" in Instrument Serif 400 at 40 px over a 2 px ink rule;
-entries in Latin Modern Roman at 21 px, each in-page section with its number in bold wine (a CSS counter) and a dotted
-leader to the count its card shows (7 roles, 3 qualifications …), read after load from fold.js's `.fs-counts` by a short
-script on the line that loads fold.js in `index.html`; a 2 px ink rule closes the list, as booktabs closes a table.
-Portfolios and CV, which leave the page, come last in Latin Modern italic under a thin rule (CSS `order`). Arabic letters,
-which Latin Modern lacks, fall back to Amiri. On phones the index stays a scrolling bar, its links at 15 px.
+The index is a panel from 981 px wide (`site.css`, appended after `.content`), after side navigations collected by
+navbar.gallery and Awwwards (oversized type, line icons, a bar that tracks reading, primary and secondary groups): an ink
+panel (#1c1518, radius 18 px), entries in IBM Plex Sans 500 at 20 px, each with a Lucide line icon inlined in `index.html`
+(briefcase, graduation cap, flask, atom, wrench; folder and file for Portfolios and CV); the section on screen is a wine pill,
+and a pale bar along its foot fills as the reader moves through that section (`--p`, set by a short script on the line that
+loads fold.js, once per animation frame while scrolling). Portfolios and CV come last, at 16 px, under a thin rule (CSS
+`order`). On phones the index stays a scrolling bar, its links at 15 px with their icons.
