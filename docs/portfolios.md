@@ -198,10 +198,13 @@ source in [`portfolios-src/rotor-pendula/`](../portfolios-src/rotor-pendula/) (i
 gives the commands and checks); the models, model runs and review record are in `notes/rotor-pendula/`.
 
 **What the reader gets.** Three tabs. *Lecture notes* (`#notes`): *A Second Blade on a Turning Blade*, nine chapters in three parts,
-52 numbered equations and thirteen figures, rewritten on 28 October 2026 as one story whose spine is the double pendulum (the earlier
-version, chapters 0–9 patched section by section, is in the git history). Chapters 1 and 3 were rewritten again the same day in a
-denser style: derivations shown line by line, and each new idea in a card (`.idea` in `tools/theory_template.html`) that says it four
-ways: what it feels like, what happens physically, how it is measured, and its mathematics. Part I, *A double pendulum held by the wind*: chapter 1
+52 numbered equations and seventeen figures, rewritten on 28 October 2026 as one story whose spine is the double pendulum (the earlier
+version, chapters 0–9 patched section by section, is in the git history). All nine chapters were then rewritten again in a denser
+style (about 15 % fewer words, 82 displayed equations instead of 55): derivations shown line by line, and each new idea in a card
+(`.idea` in `tools/theory_template.html`, twenty of them) that says it four ways: what it feels like, what happens physically, how it
+is measured, and its mathematics. Figures are numbered at build time: a caption starts `Figure {{fig:key}}.` and the text refers to
+`Figure {{fig:key}}`; `tools/build_theory.py` numbers them in order of appearance and stops on an unknown or doubled label, and
+`tools/make_numbers.py` refuses a figure key defined twice. Part I, *A double pendulum held by the wind*: chapter 1
 opens with the desk double pendulum, introduces the machine (a second, lighter blade, a thin uniform rod of m = 1 kg and l = 1 m,
 hinged at the 63 m tip of the NREL 5 MW blade and braked by a generator in the hinge; Figures 1–3) and the sensor it would power,
 writes the free double pendulum's Lagrangian for a rigid first arm (1.1)–(1.5), holds the first arm to a steady turning and shows
@@ -213,14 +216,15 @@ blade, R = 94.5, is regular in its bowl and chaotic only near the hilltop unbrak
 negative, Table 1); then why the held blade is calm (section 1.5): the landscape (1.10) whose hilltop rises and falls once per turn
 (Figure 5), the adiabatic invariant, the separatrix action (1.11) and the predicted chaotic band (1.12), checked against once-per-turn
 snapshots, a Poincaré section, of equal arms and of the rod at 6 m/s (Figure 6, also from `tools/double_pendulum.js`; the band's
-predicted edges lie within about 5 % of the computed ones). Chapter 2 reads (1.6) from the turning blade (the car pendulum, two gravities, Coriolis and Euler torques, the
-bowl that rocks, Figure 7; a push in step with the position does no work, only its part in step with the velocity; the generator as
-a brake). Chapter 3: the best brake κ* = R − 1 and P* = mg²l/[8Ω(r_p − 2l/3)] (the torques as turning arrows closing a right triangle on Thales' circle, whose area is the power, Figure 8; Figures 9, 10;
-Table 2). Chapter 4: the full
-equation, the trail that is the bill (Figure 11), where the mass sits. Chapter 5: the real geared generator (maxon RE 25 + GP 32 C,
-ratio 492; Tables 3–5). Part II, *The real wind*: chapter 6 builds the wind (its power, the Betz limit, blades as wings and why
-λ* = 7.55, Figure 12; the turbulent field of section 6.4, Figure 13; what the rotor makes of it, with the torque law and the
-7.91 rpm at 6 m/s); chapter 7 the air on the second blade, estimated and then solved in time in the gusty field; chapter 8 the
+predicted edges lie within about 5 % of the computed ones). Chapter 2 reads (1.6) from the turning blade (the car pendulum; the turning frame's acceleration derived and the
+centrifugal, Coriolis and Euler torques about the hinge integrated; the apparent gravity and its largest tilt arcsin(1/Γ), Figure 7;
+the bowl that rocks, Figure 8; the work of a push that comes round; the generator as a brake). Chapter 3: the best brake κ* = R − 1 and P* = mg²l/[8Ω(r_p − 2l/3)] (the torques as turning arrows closing a right triangle on Thales' circle, whose area is the power, Figure 9; Figures 10, 11;
+Table 2). Chapter 4: stiffness and the stable step, the full equation, the trail that is the bill with the shaft torque derived
+exactly (Figure 12), where the mass sits. Chapter 5: the real geared generator (maxon RE 25 + GP 32 C, ratio 492; the describing
+function of friction, (5.6) as Pythagoras on the torque triangle; where the rotor's payment goes, Figure 13, the coil's share
+computed as the load's times R_c/R_L; Tables 3–5). Part II, *The real wind*: chapter 6 builds the wind (its power, the Betz limit with its stream tube, Figure 14; blades as wings and why
+λ* = 7.55, Figure 15; the turbulent field of section 6.4 with the Kaimal spectrum against forty synthesised records, Figure 16, and
+the field, Figure 17; what the rotor makes of it, with the torque law, the 7.91 rpm at 6 m/s and (6.9) derived); chapter 7 the air on the second blade, estimated and then solved in time in the gusty field; chapter 8 the
 blade's sag, its vibration, and the ceiling for white-noise shaking with the double-pendulum Monte Carlo. Part III: chapter 9, the
 ceiling inequality, the answer, and the double pendulum once more. Warm-up and guess-first boxes were folded into the prose; worked
 examples, checks, "What to remember" boxes and problems with folded answers remain.

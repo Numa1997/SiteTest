@@ -592,7 +592,7 @@ function makeMachine(F, shape) {
     gam0: Math.atan2(F.U * Math.cos(C.tilt) * (1 - C.aInd), Om0 * C.rp),
     Pstar: mlc * mlc * C.g * C.g / (4 * Om0 * (mlc * C.rp - I)) };
 }
-// the start: the rotor at the steady speed of the wind at t = 0, the second blade on the small-swing solution (2.2) of the notes
+// the start: the rotor at the steady speed of the wind at t = 0, the second blade on the small-swing solution (3.2) of the notes
 // at the brake c, so that no start-up jolt enters the harvest
 function wStart(F, md) {
   var C = WCONST, Om = steadyOmega(F.veff[0]), R = md.mlc * C.rp / md.I, Gg = md.mlc * C.g / (md.I * Om * Om), k = md.c / (md.I * Om);

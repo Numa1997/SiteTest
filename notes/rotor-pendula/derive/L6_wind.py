@@ -27,7 +27,7 @@ The machine in it (the same equations the page integrates, RK4 at h = 0.005 s):
             mean wind, and the air on the second blade at mid-span (chapter 8's quasi-steady model, local wind from the field,
             induction a = 1/3, shaft tilt 5 deg): shape 'none', 'streamlined' (C_L = 0, C_D = 0.01, chord 0.1 m) or
             'wing' (C_L = 1 + 2 pi (gamma - gamma_0), C_D = 0.01, chord 0.1 m)
-  start     the rotor at the steady speed of the wind at t = 0, the second blade on the small-swing swing (2.2)
+  start     the rotor at the steady speed of the wind at t = 0, the second blade on the small-swing swing (3.2)
   energy    the rotor's work on the second blade from Newton's law for its centre of mass (hinge force times hinge
             velocity, less the brake torque times Omega), the air's work, and the harvest are integrated with the motion;
             the book  W_rot + W_air = Delta E + E_h  closes to the integrator's error.
@@ -202,7 +202,7 @@ def model(field, shape):
     return dict(Om0=Om0, c=c_brake, chord=chord, CL0=CL0, CD=CD, gam0=gam0, vbar=vbar)
 
 def start(field, md):
-    """the rotor at the steady speed of the wind at t = 0; the second blade on the small-swing solution (2.2) at the brake c"""
+    """the rotor at the steady speed of the wind at t = 0; the second blade on the small-swing solution (3.2) at the brake c"""
     Om = steady_omega(float(field.veff[0]))
     R = MLC*RP/IB; Gg = MLC*G0/(IB*Om*Om); k = md['c']/(IB*Om)
     A = -Gg/(R - 1 + 1j*k)

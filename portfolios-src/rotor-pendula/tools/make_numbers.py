@@ -199,6 +199,7 @@ G6 = mlc*g/(I*Om[6.0]**2)
 lt = -G6**2/(4*R*(R - 1))
 N['lean_theory'] = f(lt, 4); N['lean_deg'] = f(math.degrees(abs(lt)), 2); N['lean_run'] = f(th6['trail'], 4)
 ck = J('L1_blade_checks.json')
+N['p4_hmax_inv'] = f(math.pi*(R - 1), 0)                 # an explicit step is stable below 2/kappa* rad of rotor angle: 1/(pi kappa*) of a turn
 N['relax_8'] = f(ck['relax_s'], 3); N['turn_8'] = f(ck['turn_s'], 2)
 N['relax_slow8'] = f((R - 1)/(R*Om[8.0]), 2)
 for r in J('L1_terms.json'): N[f"trm_th2_{int(r['wind'])}"] = '−' + f(abs(r['grav'] - r['param'])*100, 1)
@@ -240,6 +241,36 @@ N['rod_vs_point'] = f(Ppoint/Pst(Om[8.0]), 3)
 
 def panel(w_, h_, l0, r0, t0, b0):
     return (lambda xv, x0, x1: l0 + (xv - x0)/(x1 - x0)*(w_ - l0 - r0)), (lambda yv, y0, y1: t0 + (1 - (yv - y0)/(y1 - y0))*(h_ - t0 - b0))   # plot frame: data to svg coordinates
+
+# ---- figure: the apparent gravity at the hinge, in units of g: the outward pull Gamma plus gravity circling its end (6 m/s) ----------
+Gq = Om[6.0]**2*rp/g; UQ = 86.0; hxq, hyq = 56, 150; txq = hxq + Gq*UQ
+svgq = [f'<svg viewBox="0 0 560 300" role="img" aria-label="The apparent gravity at the hinge, seen from the mother blade at 6 metres per second. A long arrow from the hinge points out along the mother blade: the outward pull, 3.3 times gravity. Around its end a circle of radius one: gravity, which goes round once per turn. The sum of the two points from the hinge to a point on the circle; it tilts furthest from the mother blade, by arcsine of one over Gamma, along the two tangents from the hinge to the circle.">',
+        '<defs><marker id="ahq" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="context-stroke"/></marker></defs>',
+        f'<circle cx="{txq:.1f}" cy="{hyq}" r="{UQ}" fill="none" stroke="#dccdb4" stroke-width="1.6"/>',
+        f'<line x1="{hxq}" y1="{hyq}" x2="{txq:.1f}" y2="{hyq}" stroke="#33627f" stroke-width="3" marker-end="url(#ahq)"/>',
+        f'<text x="{hxq+150}" y="{hyq+17}" text-anchor="middle" class="svgc">outward pull, Γ = {N["Gam_6"]}</text>']
+ft = math.asin(1/Gq)
+for sgn_ in (1, -1):
+    gx_, gy_ = -1/Gq, -math.cos(ft)*sgn_                     # gravity at the tangent rotor angles, in the frame of the mother blade
+    ex_, ey_ = txq + gx_*UQ, hyq - gy_*UQ
+    svgq.append(f'<line x1="{txq:.1f}" y1="{hyq}" x2="{ex_:.1f}" y2="{ey_:.1f}" stroke="#b5681c" stroke-width="2.2" marker-end="url(#ahq)"/>')
+    svgq.append(f'<line x1="{hxq}" y1="{hyq}" x2="{ex_:.1f}" y2="{ey_:.1f}" stroke="#7d1d2f" stroke-width="2.6" marker-end="url(#ahq)"/>')
+for phd, lab in ((0, 'φ = 0°'), (90, '90°'), (180, '180°'), (270, '270°')):
+    ph_ = math.radians(phd); px_, py_ = txq - math.sin(ph_)*UQ, hyq + math.cos(ph_)*UQ
+    svgq.append(f'<circle cx="{px_:.1f}" cy="{py_:.1f}" r="3.2" fill="#3f2c23"/>')
+    dx_ = {0: 8, 90: -6, 180: 8, 270: 8}[phd]; dy_ = {0: 16, 90: -7, 180: -8, 270: 4}[phd]
+    svgq.append(f'<text x="{px_+dx_:.1f}" y="{py_+dy_:.1f}" text-anchor="{"end" if phd == 90 else "start"}" class="svgc">{lab}</text>')
+svgq.append(f'<path d="M{hxq+70} {hyq} A70 70 0 0 0 {hxq+70*math.cos(ft):.1f} {hyq-70*math.sin(ft):.1f}" fill="none" stroke="#3f2c23"/>')
+svgq.append(f'<text x="{hxq+96}" y="{hyq-20}" class="svgc">arcsin(1/Γ) = {N["tilt_6"]}°</text>')
+svgq.append(f'<circle cx="{hxq}" cy="{hyq}" r="5" fill="#fff" stroke="#23160f" stroke-width="2"/><text x="{hxq}" y="{hyq+22}" text-anchor="middle" class="svgd">hinge</text>')
+svgq.append(f'<line x1="400" y1="34" x2="418" y2="34" stroke="#b5681c" stroke-width="2.2"/><text x="424" y="38" class="svgc">gravity, 1</text>')
+svgq.append(f'<line x1="400" y1="52" x2="418" y2="52" stroke="#7d1d2f" stroke-width="2.6"/><text x="424" y="56" class="svgc">apparent gravity</text>')
+svgq.append('</svg>')
+T['fig_geff'] = ('<figure class="fig">' + ''.join(svgq) +
+    f'<figcaption>Figure {{{{fig:geff}}}}. The pulls on every kilogram of the second blade, seen from the mother blade at 6 m/s, in units of $g$. The outward pull (blue), '
+    f'$\\Gamma$ = {N["Gam_6"]} times gravity, points out along the mother blade; gravity (ochre), of length 1, goes round its end once per turn, the dots marking where it points '
+    f'at four rotor angles $\\varphi$. Their sum (wine), the apparent gravity, tilts furthest from the mother blade along the two tangents from the hinge to the circle: '
+    f'by $\\arcsin(1/\\Gamma)$ = {N["tilt_6"]}°, at $\\sin\\varphi = 1/\\Gamma$.</figcaption></figure>')
 
 # ---- figure: the turning frame's potential, a bowl whose bottom rocks once per turn (6 m/s, where the rocking is largest) ------
 Gam6 = Om[6.0]**2*rp/g
@@ -579,6 +610,37 @@ N['g4_eff_min'] = f(min(full[v]['P_load']/full[v]['P_paid'] for v in WINDS)*100,
 N['g4_eff_max'] = f(max(full[v]['P_load']/full[v]['P_paid'] for v in WINDS)*100, 0)
 N['g4_fric_min'] = f(min(full[v]['P_fric']/full[v]['P_paid'] for v in WINDS)*100, 0)
 N['g4_fric_max'] = f(max(full[v]['P_fric']/full[v]['P_paid'] for v in WINDS)*100, 0)
+# figure: where the rotor's payment goes, from the full equation (5.8) at each wind's best ratio and load. The coil and the load carry the
+# same current, so the coil takes the load's power times R_c/R_L; the gearhead takes what is left (the energy book of the run closes).
+flow = {}
+for v in WINDS:
+    b = full[v]; coil = b['P_load']*RC/b['R_load']
+    flow[v] = {'load': b['P_load'], 'coil': coil, 'friction': b['P_fric'], 'gears': b['P_paid'] - b['P_load'] - coil - b['P_fric'], 'paid': b['P_paid']}
+    assert flow[v]['gears'] > 0
+N['g4_coil_lo'] = f(min(flow[v]['coil']/flow[v]['paid'] for v in WINDS)*100, 0); N['g4_coil_hi'] = f(max(flow[v]['coil']/flow[v]['paid'] for v in WINDS)*100, 0)
+N['g4_gear_lo'] = f(min(flow[v]['gears']/flow[v]['paid'] for v in WINDS)*100, 0); N['g4_gear_hi'] = f(max(flow[v]['gears']/flow[v]['paid'] for v in WINDS)*100, 0)
+FW, FH, fl, fr_ = 560, 230, 70, 64
+pmax = max(flow[v]['paid'] for v in WINDS)*1e3
+FX = lambda mw: fl + mw/pmax*(FW - fl - fr_)
+cols = [('load', '#3c6a46', 'load'), ('coil', '#33627f', 'coil'), ('friction', '#b5681c', 'friction'), ('gears', '#8b8079', 'gearhead')]
+svgf = [f'<svg viewBox="0 0 {FW} {FH}" role="img" aria-label="Where the power the rotor pays goes, at 6, 8 and 10 metres per second, as three stacked horizontal bars in milliwatts: the load, the coil, the motor\'s friction and the gearhead. The gearhead and the load take the largest shares, the coil the smallest.">']
+for i, v in enumerate(WINDS):
+    y0 = 24 + i*52; x = fl
+    svgf.append(f'<text x="{fl-8}" y="{y0+21}" text-anchor="end" class="svgc">{v:.0f} m/s</text>')
+    for k, c, lab in cols:
+        w_ = FX(flow[v][k]*1e3) - fl
+        svgf.append(f'<rect x="{x:.1f}" y="{y0}" width="{w_:.1f}" height="30" fill="{c}"/>')
+        if w_ > 34:
+            svgf.append(f'<text x="{x + w_/2:.1f}" y="{y0+19}" text-anchor="middle" class="svgc" style="fill:#fff">{flow[v][k]*1e3:.0f}</text>')
+        x += w_
+    svgf.append(f'<text x="{x+4:.1f}" y="{y0+19}" class="svgc">{flow[v]["paid"]*1e3:.0f} mW</text>')
+for j, (k, c, lab) in enumerate(cols):
+    svgf.append(f'<rect x="{fl + j*110}" y="{FH-34}" width="12" height="12" fill="{c}"/><text x="{fl + j*110 + 17}" y="{FH-24}" class="svgc">{lab}</text>')
+svgf.append('</svg>')
+T['fig_flow'] = ('<figure class="fig">' + ''.join(svgf) +
+    f'<figcaption>Figure {{{{fig:flow}}}}. Where the rotor\'s payment goes, in mW, through the RE 25 and the GP 32 C at 492 : 1, from the full equation (5.8) at each wind\'s best load. '
+    f'The load gets {N["g4_eff_min"]} to {N["g4_eff_max"]} %, the coil {N["g4_coil_lo"]} to {N["g4_coil_hi"]} % (the same current flows through both, so the coil takes the load\'s power times $R_c/R_L$), '
+    f'the motor\'s friction {N["g4_fric_min"]} to {N["g4_fric_max"]} %, and the gearhead the rest, ' + (f'{N["g4_gear_lo"]} %' if N['g4_gear_lo'] == N['g4_gear_hi'] else f'{N["g4_gear_lo"]} to {N["g4_gear_hi"]} %') + ' at every wind.</figcaption></figure>')
 ce = [gen[v]['c_e']/((R - 1)*I*Om[v]) for v in WINDS]
 N['ce_frac_min'] = f(min(ce), 2); N['ce_frac_max'] = f(max(ce), 2)
 N['df_gap'] = f(max(abs(full[v]['P_load']/gen[v]['P_load'] - 1) for v in WINDS)*100, 1)
@@ -814,6 +876,74 @@ fh = (0.5**-1.5 - 1)*U8/(6*wf['L'][0])                  # the integral of (6.6) 
 N['wf_fhalf'] = f(fh, 4); N['wf_thalf'] = f(round(1/fh, -1), 0)
 SK_ = lambda fq: 4*wf['L'][0]/U8/(1 + 6*fq*wf['L'][0]/U8)**(5/3)
 N['wf_band_pct'] = f(100*sum(SK_(k/256)/256 for k in range(1, 256)), 0)
+# figure: the spectrum of u at the hub, 8 m/s class A: the Kaimal model (6.6), the same scaled over the kept band (what the synthesis aims
+# at), and the forty records' periodogram averaged in log bands (L6_wind.json 'u_spectrum')
+band = sum(SK_(k/256)/256 for k in range(1, 256))                 # share of sigma^2 between 1/256 and 1 Hz (the record's band)
+sig2 = wf['sigma_u']**2
+SW, SH = 560, 320
+SX, SY = panel(SW, SH, 64, 18, 16, 48)
+lfx = lambda fq: math.log10(fq); lsy = lambda y: math.log10(y)
+fx0, fx1, sy0, sy1 = math.log10(0.003), math.log10(1.0), math.log10(0.1), math.log10(1000)
+svgS = [f'<svg viewBox="0 0 {SW} {SH}" role="img" aria-label="The spectrum of the wind along the shaft at the hub, 8 metres per second, turbulence class A, on logarithmic axes from 0.003 to 1 hertz: flat at low frequency, then falling as f to the minus five thirds above about 0.004 hertz. The Kaimal model, the model scaled over the record\'s band, and the dots measured from forty synthesised records, which lie on the scaled line.">',
+        f'<rect x="64" y="16" width="{SW-82}" height="{SH-64}" fill="#fff" stroke="#3f2c23"/>']
+for fq, lab in ((0.003, '0.003'), (0.01, '0.01'), (0.03, '0.03'), (0.1, '0.1'), (0.3, '0.3'), (1.0, '1')):
+    X = SX(lfx(fq), fx0, fx1); svgS.append(f'<line x1="{X:.1f}" y1="{SH-48}" x2="{X:.1f}" y2="{SH-43}" stroke="#3f2c23"/><text x="{X:.1f}" y="{SH-30}" text-anchor="middle" class="svgc">{lab}</text>')
+for yv in (0.1, 1, 10, 100, 1000):
+    Y = SY(lsy(yv), sy0, sy1); svgS.append(f'<line x1="59" y1="{Y:.1f}" x2="64" y2="{Y:.1f}" stroke="#3f2c23"/><text x="55" y="{Y+4:.1f}" text-anchor="end" class="svgc">{yv:g}</text>')
+fqs = np.logspace(math.log10(0.003), 0, 160)
+kai = [sig2*SK_(q) for q in fqs]
+svgS.append('<polyline points="' + ' '.join(f'{SX(lfx(q), fx0, fx1):.1f},{SY(lsy(v), sy0, sy1):.1f}' for q, v in zip(fqs, kai)) + '" fill="none" stroke="#3f2c23" stroke-width="1.4" stroke-dasharray="5 4"/>')
+inb = [(q, v/band) for q, v in zip(fqs, kai) if q >= 1/256]
+svgS.append('<polyline points="' + ' '.join(f'{SX(lfx(q), fx0, fx1):.1f},{SY(lsy(v), sy0, sy1):.1f}' for q, v in inb) + '" fill="none" stroke="#33627f" stroke-width="2.2"/>')
+for q, v in wf['u_spectrum']:
+    svgS.append(f'<circle cx="{SX(lfx(q), fx0, fx1):.1f}" cy="{SY(lsy(v), sy0, sy1):.1f}" r="4" fill="#7d1d2f"/>')
+fc = U8/(6*wf['L'][0])
+for fq, lab, dy in ((fc, 'U/(6L)', 0), (fh, 'half the variance below', 14)):
+    X = SX(lfx(fq), fx0, fx1); svgS.append(f'<line x1="{X:.1f}" y1="16" x2="{X:.1f}" y2="{SH-48}" stroke="#dccdb4" stroke-dasharray="3 3"/><text x="{X+4:.1f}" y="{30+dy}" class="svgc">{lab}</text>')
+q1, q2 = 0.05, 0.4; v1 = 3.0
+svgS.append(f'<line x1="{SX(lfx(q1), fx0, fx1):.1f}" y1="{SY(lsy(v1), sy0, sy1):.1f}" x2="{SX(lfx(q2), fx0, fx1):.1f}" y2="{SY(lsy(v1*(q2/q1)**(-5/3)), sy0, sy1):.1f}" stroke="#b5681c" stroke-width="1.6"/>')
+svgS.append(f'<text x="{SX(lfx(0.02), fx0, fx1):.1f}" y="{SY(lsy(1.6), sy0, sy1):.1f}" class="svgc">slope −5/3</text>')
+svgS.append(f'<line x1="{SW-206}" y1="30" x2="{SW-190}" y2="30" stroke="#3f2c23" stroke-width="1.4" stroke-dasharray="5 4"/><text x="{SW-186}" y="34" class="svgc">Kaimal (6.6)</text>')
+svgS.append(f'<line x1="{SW-206}" y1="48" x2="{SW-190}" y2="48" stroke="#33627f" stroke-width="2.2"/><text x="{SW-186}" y="52" class="svgc">scaled to the band</text>')
+svgS.append(f'<circle cx="{SW-198}" cy="66" r="4" fill="#7d1d2f"/><text x="{SW-186}" y="70" class="svgc">40 synthesised records</text>')
+svgS.append(f'<text x="{(64+SW-18)/2}" y="{SH-10}" text-anchor="middle" class="svgd">frequency f, Hz</text>')
+svgS.append(f'<text x="16" y="{(16+SH-48)/2}" text-anchor="middle" class="svgd" transform="rotate(-90 16 {(16+SH-48)/2})">S(f), (m/s)² per Hz</text></svg>')
+T['fig_spectrum'] = ('<figure class="fig">' + ''.join(svgS) +
+    f'<figcaption>Figure {{{{fig:spectrum}}}}. How the gusts along the shaft share their variance among frequencies, at the hub, 8 m/s, class A ($\\sigma_u$ = {N["wf_sig_u"]} m/s). '
+    f'Dashed, the Kaimal model (6.6): flat below $U/(6L_u)$ = {N["wf_fcorner"]} Hz, falling as $f^{{-5/3}}$ above. Blue, the same scaled up by 1/{band:.2f} over the record\'s band, 1/256 to 1 Hz, '
+    f'so that the band carries all of $\\sigma_u^2$: what the synthesis (6.8) aims at. Dots, the periodogram of forty synthesised records, averaged in bands. Half the variance lies below {N["wf_fhalf"]} Hz.</figcaption></figure>')
+
+# figure: the Betz stream tube at a = 1/3, and the power coefficient against a
+BW, BH = 380, 280
+svgB1 = [f'<svg viewBox="0 0 {BW} {BH}" style="flex:1 1 300px;min-width:0;max-width:460px" role="img" aria-label="The stream tube through an ideal rotor seen from the side: air arrives from the left at speed v in a narrow tube, slows to two thirds of v at the rotor disc, and leaves at one third of v in a tube twice as wide in area as far upstream.">',
+         '<defs><marker id="ahb" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="context-stroke"/></marker></defs>']
+a_ = 1/3; r_up, r_d, r_w = math.sqrt(1 - a_), 1.0, math.sqrt((1 - a_)/(1 - 2*a_))      # radii from A_up v = A v(1-a) = A_w v(1-2a)
+cxb, cyb, sc = 190, 120, 62
+xs_ = np.linspace(20, 360, 120)
+rad = lambda x: r_up + (r_d - r_up)*(1 + math.tanh((x - cxb)/45))/2 if x <= cxb else r_d + (r_w - r_d)*math.tanh((x - cxb)/60)
+for sg in (1, -1):
+    svgB1.append('<polyline points="' + ' '.join(f'{x:.1f},{cyb - sg*sc*rad(x):.1f}' for x in xs_) + '" fill="none" stroke="#33627f" stroke-width="1.6"/>')
+svgB1.append(f'<rect x="{cxb-3}" y="{cyb-sc-6}" width="6" height="{2*sc+12}" fill="#7d1d2f"/><text x="{cxb}" y="{cyb+sc+26}" text-anchor="middle" class="svgc">rotor disc, area A</text>')
+for x0, v_, lab in ((44, 1.0, 'v'), (cxb + 14, 1 - a_, 'v(1−a)'), (300, 1 - 2*a_, 'v(1−2a)')):
+    svgB1.append(f'<line x1="{x0}" y1="{cyb}" x2="{x0 + 50*v_:.1f}" y2="{cyb}" stroke="#23160f" stroke-width="2.2" marker-end="url(#ahb)"/><text x="{x0}" y="{cyb-10}" class="svgc">{lab}</text>')
+svgB1.append(f'<text x="{BW/2}" y="{BH-14}" text-anchor="middle" class="svgd">the stream tube at a = 1/3</text></svg>')
+PXb2, PYb2 = panel(BW, BH, 46, 14, 16, 48)
+svgB2 = [f'<svg viewBox="0 0 {BW} {BH}" style="flex:1 1 300px;min-width:0;max-width:460px" role="img" aria-label="The power coefficient 4 a times one minus a squared against a from 0 to one half: a hump rising to 16 over 27 at a equals one third. A dashed line marks the 5 megawatt turbine\'s best, 0.482.">',
+         f'<rect x="46" y="16" width="{BW-60}" height="{BH-64}" fill="#fff" stroke="#3f2c23"/>']
+aa = np.linspace(0, 0.5, 101)
+svgB2.append('<polyline points="' + ' '.join(f'{PXb2(x, 0, 0.5):.1f},{PYb2(4*x*(1-x)**2, 0, 0.65):.1f}' for x in aa) + '" fill="none" stroke="#7d1d2f" stroke-width="2.4"/>')
+svgB2.append(f'<line x1="46" y1="{PYb2(S["CP_STAR"], 0, 0.65):.1f}" x2="{BW-14}" y2="{PYb2(S["CP_STAR"], 0, 0.65):.1f}" stroke="#33627f" stroke-dasharray="5 4"/><text x="{BW-20}" y="{PYb2(S["CP_STAR"], 0, 0.65)+16:.1f}" text-anchor="end" class="svgc">NREL 5 MW: {S["CP_STAR"]}</text>')
+svgB2.append(f'<circle cx="{PXb2(1/3, 0, 0.5):.1f}" cy="{PYb2(16/27, 0, 0.65):.1f}" r="4" fill="#7d1d2f"/><text x="{PXb2(1/3, 0, 0.5):.1f}" y="{PYb2(16/27, 0, 0.65)-10:.1f}" text-anchor="middle" class="svgc">16/27 at a = 1/3</text>')
+for v in (0, 0.1, 0.2, 0.3, 0.4, 0.5):
+    X = PXb2(v, 0, 0.5); svgB2.append(f'<line x1="{X:.1f}" y1="{BH-48}" x2="{X:.1f}" y2="{BH-43}" stroke="#3f2c23"/><text x="{X:.1f}" y="{BH-30}" text-anchor="middle" class="svgc">{v:g}</text>')
+for v in (0, 0.2, 0.4, 0.6):
+    Y = PYb2(v, 0, 0.65); svgB2.append(f'<line x1="41" y1="{Y:.1f}" x2="46" y2="{Y:.1f}" stroke="#3f2c23"/><text x="37" y="{Y+4:.1f}" text-anchor="end" class="svgc">{v:g}</text>')
+svgB2.append(f'<text x="{(46+BW-14)/2}" y="{BH-10}" text-anchor="middle" class="svgd">slowing at the disc, a</text>')
+svgB2.append(f'<text x="14" y="{(16+BH-48)/2}" text-anchor="middle" class="svgd" transform="rotate(-90 14 {(16+BH-48)/2})">power coefficient C_p</text></svg>')
+T['fig_betz'] = ('<figure class="fig"><div style="display:flex;flex-wrap:wrap;gap:10px;justify-content:center">' + ''.join(svgB1) + ''.join(svgB2) + '</div>'
+    '<figcaption>Figure {{fig:betz}}. The Betz limit. First panel: the air that passes the rotor, seen from the side, at the best slowing $a = 1/3$. The same mass flows through every '
+    'cross-section, so where the air is slower the tube is wider: far upstream it has $1-a$ = 2/3 of the disc\'s area, far downstream $(1-a)/(1-2a)$ = 4/3 of it (the arrows are to scale). '
+    'Second panel: the power coefficient (6.2), $C_p = 4a(1-a)^2$, with its maximum 16/27 (6.3) and the 5 MW turbine\'s best.</figcaption></figure>')
 N['wf_var_u'] = f(wf['var_hub_u'], 2); N['wf_sig2_u'] = f(wf['sigma_u']**2, 2); N['wf_var_se'] = f(wf['var_hub_se_u'], 2)
 N['wf_spec_dev'] = f(wf['spec_dev_max']*100, 0)
 N['wf_var_eff'] = f(wf['var_eff'], 2); N['wf_var_chi'] = f(wf['var_eff_chi'], 2)
