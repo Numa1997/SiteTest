@@ -35,6 +35,10 @@
   "src": "The Riccati solution brings a gift: \\(\\mathcal V = \\tilde{\\mathbf y}^{\\mathsf T}\\mathbf P\\,\\tilde{\\mathbf y}\\) is a <em>Lyapunov function</em> for the linear closed loop, a bowl whose height falls along every path,",
   "tr": "Die Riccati-Lösung bringt ein Geschenk mit: \\(\\mathcal V = \\tilde{\\mathbf y}^{\\mathsf T}\\mathbf P\\,\\tilde{\\mathbf y}\\) ist eine <em>Ljapunow-Funktion</em> für den linearen geschlossenen Regelkreis, eine Schale, deren Höhe entlang jeder Bahn fällt,"
  },
+ "1262ffd822b7": {
+  "src": "The current comes from a <em>current source</em>, an electronic driver that delivers exactly the current it is told to deliver, whatever the coil is doing. A garden pump that always delivers the same number of litres per second, however long the hose, is a current source for water. The current cannot exceed \\(I_\\text{max} = 3\\ \\mathrm{A}\\), so the coil can push with at most 30 N either way. When the controller asks for more, it gets 30 N and no more: the coil is then <em>saturated</em>, the way a car is when the accelerator pedal is already on the floor and pressing harder does nothing. With 30 N on 1 kg the cart can gain speed at 30 m/s², about three times as fast as a falling stone.",
+  "tr": "Der Strom kommt aus einer <em>Stromquelle</em>, einem elektronischen Treiber, der genau den Strom liefert, den man ihm vorgibt, was die Spule auch gerade tut. Eine Gartenpumpe, die immer gleich viele Liter pro Sekunde fördert, wie lang der Schlauch auch ist, ist eine Stromquelle für Wasser. Der Strom darf \\(I_\\text{max} = 3\\ \\mathrm{A}\\) nicht übersteigen, die Spule kann also in jeder Richtung höchstens mit 30 N schieben. Verlangt der Regler mehr, bekommt er 30 N und nicht mehr: Die Spule ist dann <em>gesättigt</em>, so wie ein Auto, dessen Gaspedal schon am Boden ist und bei dem stärkeres Drücken nichts mehr bringt. Mit 30 N auf 1 kg kann der Wagen seine Geschwindigkeit mit 30 m/s² steigern, etwa dreimal so schnell wie ein fallender Stein."
+ },
  "13847417f986": {
   "src": "<b>The aim:</b> the cart is the only thing the controller can push, and through the strut it must bring the whole pendulum back to rest, at the position you choose, from wherever you leave it.",
   "tr": "<b>Das Ziel:</b> Der Wagen ist das Einzige, was der Regler schieben kann, und über die Strebe muss er das ganze Pendel wieder zur Ruhe bringen, an der Position, die Sie wählen, von wo immer Sie es loslassen."
@@ -55,6 +59,14 @@
   "src": "<span class=\"sw sw--dot\"></span>target r",
   "tr": "<span class=\"sw sw--dot\"></span>Sollposition r"
  },
+ "19b2acbb46d8": {
+  "src": "<b>The cart and the rail.</b> At the bottom runs a cart of mass \\(M = 1\\ \\mathrm{kg}\\), carrying the coil, on a straight, level rail. Its hinge, where the strut is fixed, runs 1.65 m below the pivot. The page measures the cart’s place along the rail by \\(X\\), the distance from the point straight under the pivot, positive to the right. The wheels roll without friction. <em>Friction</em> is the rubbing that slows things down when surfaces slide or roll on each other: a book pushed across a table stops after a few centimetres because of it, while a puck on ice slides much further because there is less. On our rail there is none, so a cart given one push would roll on for ever.",
+  "tr": "<b>Der Wagen und die Schiene.</b> Unten läuft ein Wagen der Masse \\(M = 1\\ \\mathrm{kg}\\), der die Spule trägt, auf einer geraden, waagerechten Schiene. Sein Gelenk, an dem die Strebe befestigt ist, liegt 1.65 m unter dem Drehpunkt. Die Seite misst den Ort des Wagens entlang der Schiene mit \\(X\\), dem Abstand vom Punkt senkrecht unter dem Drehpunkt, nach rechts positiv. Die Räder rollen ohne Reibung. <em>Reibung</em> ist das Reiben, das Dinge bremst, wenn Flächen aufeinander gleiten oder rollen: Ein Buch, das über einen Tisch geschoben wird, bleibt deswegen nach wenigen Zentimetern liegen, während ein Eishockeypuck auf dem Eis viel weiter gleitet, weil dort weniger Reibung ist. Auf unserer Schiene gibt es keine, ein Wagen, der einmal angestoßen wurde, würde also ewig weiterrollen."
+ },
+ "1afaf2d4f37c": {
+  "src": "<b>How it all connects.</b> Now follow one turn of the loop, the chain of causes that goes round and round, every half millisecond, while the chain comes home.",
+  "tr": "<b>Wie alles zusammenhängt.</b> Nun verfolgen wir einen Umlauf der Schleife, der Folge von Ursachen, die sich jede halbe Millisekunde im Kreis dreht, während die Kette nach Hause kommt."
+ },
  "1b312d159c45": {
   "src": "A double pendulum hangs from a fixed pivot; a telescopic strut runs from its lower ball down to a cart on a rail, and a coil on the cart sits in the gap of a long magnet under the rail. Arrows show the coil's force and the strut's pull; bars the energy; below, the stored angles and cart position of the whole run with a cursor at the frame being shown.",
   "tr": "Ein Doppelpendel hängt an einem festen Drehpunkt; eine Teleskopstrebe läuft von seiner unteren Kugel hinunter zu einem Wagen auf einer Schiene, und eine Spule auf dem Wagen sitzt im Spalt eines langen Magneten unter der Schiene. Pfeile zeigen die Kraft der Spule und den Zug der Strebe; Balken die Energie; darunter die gespeicherten Winkel und die Wagenposition des ganzen Laufs mit einem Cursor beim gezeigten Bild."
@@ -74,6 +86,10 @@
  "1e87db54ee9c": {
   "src": "A double pendulum on a leash: holding a chain still by pushing only a cart",
   "tr": "Ein Doppelpendel an der Leine: eine Kette stillhalten, indem man nur einen Wagen schiebt"
+ },
+ "205b6fddc55d": {
+  "src": "All of this changes the six numbers of the state, and the loop begins again.",
+  "tr": "All das ändert die sechs Zahlen des Zustands, und die Schleife beginnt von vorn."
  },
  "257145e27fc0": {
   "src": "Firm",
@@ -123,6 +139,14 @@
   "src": "© 2026 Numa Koudsie",
   "tr": "© 2026 Numa Koudsie"
  },
+ "33f709bbf78b": {
+  "src": "<b>The controller.</b> The controller is the brain of the rig, and it is nothing but a rule: at every instant it reads the six numbers of the state and decides the current. This is <em>feedback</em>, an action that depends on a measurement of the very thing being acted on. A thermostat is feedback: it measures the room and switches the heating on when the room is too cold. Riding a bicycle is feedback: you feel yourself lean and steer to catch it. Our controller looks at all six numbers, not just at the cart, so it is called <em>full-state feedback</em>. Its rule is equation (11). It takes the difference between each of the six numbers and its value at the rest, multiplies each difference by a fixed number called a <em>gain</em>, and adds up the six products; that sum, together with the holding force, is the push. A gain says how strongly the controller reacts to one kind of error. A large gain on the cart’s position means: push hard as soon as the cart is a little out of place, the way a strict driving instructor grabs the wheel as soon as you drift a few centimetres. The six gains are chosen by the linear–quadratic regulator of §8, which works like a bill that must be kept as small as possible. The bill charges for every second the rig spends away from the rest, at the rates \\(q_\\theta\\), \\(q_X\\) and \\(q_v\\) set by the sliders, and for every newton the coil pushes, at the rate \\(\\rho\\). Raise \\(\\rho\\) and pushing becomes expensive, so the controller pushes gently and takes its time; lower it and the controller pushes hard and fast. The buttons Gentle and Firm set two such bills; Off sets the current to zero.",
+  "tr": "<b>Der Regler.</b> Der Regler ist das Gehirn des Aufbaus, und er ist nichts als eine Regel: In jedem Augenblick liest er die sechs Zahlen des Zustands und legt den Strom fest. Das ist <em>Rückkopplung</em>, ein Eingriff, der von einer Messung genau dessen abhängt, worauf eingewirkt wird. Ein Thermostat ist Rückkopplung: Er misst den Raum und schaltet die Heizung ein, wenn der Raum zu kalt ist. Fahrradfahren ist Rückkopplung: Sie spüren, dass Sie sich neigen, und lenken, um das aufzufangen. Unser Regler schaut auf alle sechs Zahlen, nicht nur auf den Wagen, und heißt deshalb <em>Zustandsrückführung</em>. Seine Regel ist Gleichung (11). Er nimmt den Unterschied zwischen jeder der sechs Zahlen und ihrem Wert in der Ruhelage, multipliziert jeden Unterschied mit einer festen Zahl, die man <em>Verstärkung</em> nennt, und addiert die sechs Produkte; diese Summe, zusammen mit der Haltekraft, ist der Schub. Eine Verstärkung sagt, wie stark der Regler auf eine Art von Abweichung reagiert. Eine große Verstärkung auf die Position des Wagens heißt: Schiebe kräftig, sobald der Wagen ein wenig vom Platz ist, so wie ein strenger Fahrlehrer ins Lenkrad greift, sobald Sie ein paar Zentimeter abdriften. Die sechs Verstärkungen werden durch den linear-quadratischen Regler aus §8 gewählt, der wie eine Rechnung funktioniert, die so klein wie möglich bleiben muss. Die Rechnung verlangt für jede Sekunde, die der Aufbau abseits der Ruhelage verbringt, Gebühren nach den Sätzen \\(q_\\theta\\), \\(q_X\\) und \\(q_v\\), die die Schieberegler einstellen, und für jedes Newton, mit dem die Spule schiebt, den Satz \\(\\rho\\). Erhöhen Sie \\(\\rho\\), und Schieben wird teuer, der Regler schiebt also sanft und lässt sich Zeit; senken Sie es, und der Regler schiebt kräftig und schnell. Die Tasten Sanft und Straff stellen zwei solche Rechnungen ein; Aus setzt den Strom auf null."
+ },
+ "35ce0503d0e7": {
+  "src": "The tubes cannot slide for ever. Pushed together, the strut is 0.5 m long; pulled apart, it ends at 0.95 m, where a collar on the inner tube meets a stop, like a drawer that runs out to its end and halts with a knock. The page draws these <em>end stops</em> as a very stiff spring of 20 000 N/m with a <em>damper</em> beside it. A damper is a part that resists motion more the faster it goes and turns that motion into heat: the closer at the top of a door that stops it slamming, or the shock absorber of a car that stops it bouncing after a bump. The damper acts only while a stop is being touched, and the heat it makes, \\(Q_\\text{stop}\\), is the only way the rig can lose energy, apart from the coil.",
+  "tr": "Die Rohre können nicht ewig gleiten. Zusammengeschoben ist die Strebe 0.5 m lang; auseinandergezogen endet sie bei 0.95 m, wo ein Bund am inneren Rohr an einen Anschlag stößt, wie eine Schublade, die bis ans Ende läuft und mit einem Klopfen anhält. Die Seite zeichnet diese <em>Endanschläge</em> als sehr steife Feder von 20 000 N/m mit einem <em>Dämpfer</em> daneben. Ein Dämpfer ist ein Teil, das einer Bewegung umso stärker widersteht, je schneller sie ist, und diese Bewegung in Wärme verwandelt: der Türschließer oben an einer Tür, der sie am Zuknallen hindert, oder der Stoßdämpfer eines Autos, der es nach einer Bodenwelle am Nachschwingen hindert. Der Dämpfer wirkt nur, solange ein Anschlag berührt wird, und die Wärme, die er erzeugt, \\(Q_\\text{stop}\\), ist neben der Spule der einzige Weg, auf dem der Aufbau Energie verlieren kann."
+ },
  "3655122aebed": {
   "src": "Speed weight q<sub>v</sub>",
   "tr": "Gewicht der Geschwindigkeiten q<sub>v</sub>"
@@ -159,6 +183,10 @@
   "src": "<span>11</span>On screen",
   "tr": "<span>11</span>Auf dem Bildschirm"
  },
+ "4020e4c6081f": {
+  "src": "<b>Your hand.</b> You can grab either ball or the cart with the pointer and drag it. While you hold it, the stored run stops playing and the rig follows your hand. When you let go, the page takes the state your hand left as the start of a new run, computes the next 30 s and plays them. Pulling is how you put energy into the rig: you lift a ball against gravity, stretch the spring, and give the parts speed.",
+  "tr": "<b>Ihre Hand.</b> Sie können eine der Kugeln oder den Wagen mit dem Zeiger greifen und ziehen. Solange Sie ihn halten, hört der gespeicherte Lauf auf zu spielen, und der Aufbau folgt Ihrer Hand. Lassen Sie los, nimmt die Seite den Zustand, den Ihre Hand hinterlassen hat, als Anfang eines neuen Laufs, berechnet die nächsten 30 s und spielt sie ab. Durch Ziehen bringen Sie Energie in den Aufbau: Sie heben eine Kugel gegen die Schwerkraft, dehnen die Feder und geben den Teilen Geschwindigkeit."
+ },
  "40255139816b": {
   "src": "has full rank, 6. The idea is a chain of influences. \\(\\mathbf B\\) is what a push does at once: it accelerates the cart. \\(\\mathbf A\\mathbf B\\) is what that does a moment later: the cart moves, stretches the string sideways, and starts to tug ball 2. Each further power reaches one link further into the chain. If some combination of the state never appears in this chain, no push can ever touch it. With the defaults the rank is 6; with \\(N_0 = 0\\) it falls to 2, the cart's own two numbers, as Section 6 predicted. The page computes the rank in <code>rankOf()</code> and prints it under the phase portrait.",
   "tr": "vollen Rang hat, 6. Die Idee ist eine Kette von Einflüssen. \\(\\mathbf B\\) ist, was ein Stoß sofort bewirkt: Er beschleunigt den Wagen. \\(\\mathbf A\\mathbf B\\) ist, was das einen Augenblick später bewirkt: Der Wagen bewegt sich, spannt die Saite seitlich und beginnt an Kugel 2 zu zerren. Jede weitere Potenz reicht ein Glied weiter in die Kette hinein. Taucht eine Kombination des Zustands in dieser Kette nie auf, kann kein Stoß sie je berühren. Mit den Voreinstellungen ist der Rang 6; mit \\(N_0 = 0\\) fällt er auf 2, die beiden eigenen Zahlen des Wagens, wie Abschnitt 6 vorhergesagt hat. Die Seite berechnet den Rang in <code>rankOf()</code> und zeigt ihn unter dem Phasenporträt an."
@@ -171,9 +199,17 @@
   "src": "<span class=\"psec__n\">03</span>Lagrangian and equations of motion<span class=\"star\" title=\"heavier mathematics\">★</span>",
   "tr": "<span class=\"psec__n\">03</span>Lagrange-Funktion und Bewegungsgleichungen<span class=\"star\" title=\"heavier mathematics\">★</span>"
  },
+ "42a58f98eb30": {
+  "src": "Each ball is pulled down by gravity with its <em>weight</em>, its mass times the strength of gravity, \\(mg = 0.5 \\times 9.81 = 4.9\\) newtons. A <em>newton</em>, written N, is the unit of force; it is roughly the weight of a small apple of 100 g lying in your palm. So each ball pulls down on its rod as five small apples would.",
+  "tr": "Jede Kugel wird von der Schwerkraft mit ihrem <em>Gewicht</em> nach unten gezogen, ihrer Masse mal der Stärke der Schwerkraft, \\(mg = 0.5 \\times 9.81 = 4.9\\) Newton. Ein <em>Newton</em>, geschrieben N, ist die Einheit der Kraft; es ist ungefähr das Gewicht eines kleinen Apfels von 100 g in Ihrer Handfläche. Jede Kugel zieht also an ihrer Stange nach unten wie fünf kleine Äpfel."
+ },
  "444c750bdd3a": {
   "src": "A double pendulum hangs from a fixed pivot. A sprung telescopic strut ties its lower ball to a cart, and a moving coil drives the cart along a rail. Pull the pendulum anywhere and let go: the controller, which can push only the cart, brings the whole chain back to rest where you chose. The motion is solved first and stored; the animation plays the stored run back.",
   "tr": "Ein Doppelpendel hängt an einem festen Drehpunkt. Eine gefederte Teleskopstrebe verbindet seine untere Kugel mit einem Wagen, und eine Tauchspule treibt den Wagen auf einer Schiene an. Ziehen Sie das Pendel irgendwohin und lassen Sie los: Der Regler, der nur den Wagen schieben kann, bringt die ganze Kette dort zur Ruhe, wo Sie es gewählt haben. Die Bewegung wird zuerst gelöst und gespeichert; die Animation spielt den gespeicherten Lauf ab."
+ },
+ "459f58d99beb": {
+  "src": "The lower ball is pulled by gravity, by its rod and by the strut; it moves, and through its rod it pulls on the upper ball, which is pulled by gravity and by the upper rod as well. The chain swings in a new way.",
+  "tr": "Die untere Kugel wird von der Schwerkraft, von ihrer Stange und von der Strebe gezogen; sie bewegt sich und zieht über ihre Stange an der oberen Kugel, die ebenfalls von der Schwerkraft und von der oberen Stange gezogen wird. Die Kette schwingt auf neue Weise."
  },
  "48b21b55072d": {
   "src": "the pull \\(N\\) of the strut times the rate at which each coordinate stretches it. On the cart this is \\(N\\,\\partial\\ell/\\partial X = -N (x_2 - X)/\\ell\\): the strut's pull, projected onto the rail. That one term, and its partners in the two angle equations, are all the strut does. The code solves (5) for \\(\\ddot{\\mathbf q}\\) in <code>accel()</code>: the \\(2\\times2\\) pendulum block by Cramer's rule, the cart by one division. As a check, the same accelerations come out of Newton's laws with the two rod tensions as unknowns; at a random state with the cart pushed, the two routes agree to 13 significant figures.",
@@ -183,9 +219,17 @@
   "src": "The page solves (13) in <code>lqr()</code> by the matrix sign function of the \\(12\\times12\\) Hamiltonian matrix \\(\\left(\\begin{smallmatrix}\\mathbf A & -\\rho^{-1}\\mathbf B\\mathbf B^{\\mathsf T} \\\\ -\\mathbf Q & -\\mathbf A^{\\mathsf T}\\end{smallmatrix}\\right)\\): the iteration \\(\\mathbf Z \\leftarrow \\tfrac12(\\mathbf Z + \\mathbf Z^{-1})\\) converges in a handful of steps, and its blocks give \\(\\mathbf P\\). For the default rest (\\(r = 0.30\\ \\mathrm{m}\\)) and weights \\(q_\\theta = q_X = q_v = 5\\), \\(\\rho = 0.02\\), the gains are \\(\\mathbf K = (19.22,\\ -201.70,\\ 120.09,\\ 0.04,\\ 0.52,\\ 22.14)\\), in newtons per radian or metre and per radian or metre per second; SciPy's Riccati solver gives the same numbers. The large gain on \\(\\theta_2\\) is the hand under the stick: when ball 2 swings right, the cart is pulled the other way at first, which sets the string against the swing.",
   "tr": "Die Seite löst (13) in <code>lqr()</code> mit der Matrix-Signumfunktion der \\(12\\times12\\)-Hamilton-Matrix \\(\\left(\\begin{smallmatrix}\\mathbf A & -\\rho^{-1}\\mathbf B\\mathbf B^{\\mathsf T} \\\\ -\\mathbf Q & -\\mathbf A^{\\mathsf T}\\end{smallmatrix}\\right)\\): Die Iteration \\(\\mathbf Z \\leftarrow \\tfrac12(\\mathbf Z + \\mathbf Z^{-1})\\) konvergiert in einer Handvoll Schritte, und ihre Blöcke liefern \\(\\mathbf P\\). Für die voreingestellte Ruhelage (\\(r = 0.30\\ \\mathrm{m}\\)) und die Gewichte \\(q_\\theta = q_X = q_v = 5\\), \\(\\rho = 0.02\\) sind die Verstärkungen \\(\\mathbf K = (19.22,\\ -201.70,\\ 120.09,\\ 0.04,\\ 0.52,\\ 22.14)\\), in Newton pro Radiant oder Meter und pro Radiant oder Meter pro Sekunde; der Riccati-Löser von SciPy liefert dieselben Zahlen. Die große Verstärkung auf \\(\\theta_2\\) ist die Hand unter dem Stab: Wenn Kugel 2 nach rechts schwingt, wird der Wagen zunächst in die andere Richtung gezogen, was die Saite gegen die Schwingung stellt."
  },
+ "4a1af19c50cf": {
+  "src": "The coil can also take energy out of the rig. When it pushes against the way the cart is moving, it slows the cart down, and the energy of motion goes back into the electrical supply instead of being wasted. This is <em>regenerative braking</em>; an electric car does the same when it slows down and recharges its battery. It is how the controller finally gets rid of a swing, as §1.2 shows.",
+  "tr": "Die Spule kann dem Aufbau auch Energie entziehen. Wenn sie gegen die Bewegungsrichtung des Wagens schiebt, bremst sie den Wagen ab, und die Bewegungsenergie fließt in die elektrische Versorgung zurück, statt vergeudet zu werden. Das heißt <em>Rekuperation</em>, auch Nutzbremsung genannt; ein Elektroauto tut dasselbe, wenn es bremst und seine Batterie auflädt. So wird der Regler am Ende eine Schwingung los, wie §1.2 zeigt."
+ },
  "4b8b36d54a01": {
   "src": "<span>4</span>The strut: two tubes and a spring",
   "tr": "<span>4</span>Die Strebe: zwei Rohre und eine Feder"
+ },
+ "4d03b695bb8b": {
+  "src": "strut: two tubes, a spring inside",
+  "tr": "Strebe: zwei Rohre, innen eine Feder"
  },
  "4e3e046cabd6": {
   "src": "RK4, <span style=\"text-transform:none\">h vs h/2</span>",
@@ -199,6 +243,10 @@
   "src": "Cart weight q<sub>X</sub>",
   "tr": "Gewicht des Wagens q<sub>X</sub>"
  },
+ "520cf30d1f1e": {
+  "src": "A tilted strut that pulls along its own line pulls partly sideways. Its sideways part tugs the lower ball towards the cart and, equally and oppositely, tugs the cart towards the ball. This sideways tug, near the straight-hanging rest about 4.6 N for every metre by which the cart stands beside the ball, is the only way in which the cart can act on the chain.",
+  "tr": "Eine gekippte Strebe, die entlang ihrer eigenen Linie zieht, zieht zum Teil seitwärts. Ihr seitlicher Anteil zerrt die untere Kugel zum Wagen hin und, gleich stark und entgegengesetzt, den Wagen zur Kugel hin. Dieser seitliche Zug, nahe der gerade hängenden Ruhelage etwa 4.6 N für jeden Meter, den der Wagen neben der Kugel steht, ist der einzige Weg, auf dem der Wagen auf die Kette wirken kann."
+ },
  "53541d584947": {
   "src": "Count first. Three bodies move in a plane: two balls, which we treat as points, and the cart. A free point in a plane needs two numbers, so three free bodies would need six. The rigid rods remove one each, \\(|\\mathbf r_1| = l_1\\) and \\(|\\mathbf r_2 - \\mathbf r_1| = l_2\\), and the rail removes one more, since the cart's height is fixed. These three are <em>holonomic</em> constraints, rules about positions alone, and each can push as well as pull. Six minus three leaves three degrees of freedom.",
   "tr": "Zuerst zählen wir. Drei Körper bewegen sich in einer Ebene: zwei Kugeln, die wir als Punkte behandeln, und der Wagen. Ein freier Punkt in der Ebene braucht zwei Zahlen, drei freie Körper bräuchten also sechs. Die starren Stangen nehmen je eine weg, \\(|\\mathbf r_1| = l_1\\) und \\(|\\mathbf r_2 - \\mathbf r_1| = l_2\\), und die Schiene nimmt eine weitere weg, da die Höhe des Wagens festliegt. Diese drei sind <em>holonome</em> Zwangsbedingungen, Regeln allein über die Lagen, und jede kann drücken wie ziehen. Sechs weniger drei lässt drei Freiheitsgrade."
@@ -206,6 +254,10 @@
  "54be0c5395cf": {
   "src": "Controllable does not mean easy. The obvious first try is the controller of Fig. 9 on the cart alone, \\(F = K_p(r - X) - K_d\\dot X\\). It damps the chain only through the soft string, and only by accident of timing. Searching \\(K_p\\) and \\(K_d\\) over a wide grid, the best choice leaves the slowest motion decaying at 0.009 per second, a time constant of nearly two minutes. The controller has to look at the chain itself.",
   "tr": "Steuerbar heißt nicht leicht. Der naheliegende erste Versuch ist der Regler aus Abb. 9 allein am Wagen, \\(F = K_p(r - X) - K_d\\dot X\\). Er dämpft die Kette nur über die weiche Saite, und nur durch zufällig günstiges Timing. Durchsucht man \\(K_p\\) und \\(K_d\\) auf einem weiten Gitter, so lässt die beste Wahl die langsamste Bewegung mit 0.009 pro Sekunde abklingen, eine Zeitkonstante von fast zwei Minuten. Der Regler muss auf die Kette selbst schauen."
+ },
+ "56da20b587a6": {
+  "src": "Nothing in the loop is magic, and nothing is hidden: there are three bodies, gravity, one spring, one push, and one rule that sets the push. The next subsection follows the energy round the same loop and shows why the cart must move in step with the swing to bring it to rest.",
+  "tr": "Nichts in der Schleife ist Zauberei, und nichts ist versteckt: Es gibt drei Körper, die Schwerkraft, eine Feder, einen Schub und eine Regel, die den Schub festlegt. Der nächste Unterabschnitt verfolgt die Energie um dieselbe Schleife und zeigt, warum sich der Wagen im Takt der Schwingung bewegen muss, um sie zur Ruhe zu bringen."
  },
  "585cb7df2237": {
   "src": "Coil · F = κI, κ = 10 N/A",
@@ -215,9 +267,17 @@
   "src": "The sign of \\(N_0\\) matters too. A strut that pushes, \\(N_0 < 0\\), makes both new terms negative: it lightens the chain, and it pushes the cart away from the point under ball 2 like a pencil balanced on its tip. Already at \\(N_0 = -2\\ \\mathrm{N}\\) the matrix of (8) has a negative eigenvalue, so the hanging rest is unstable on its own: a disturbance grows by a factor \\(e\\) every 0.43 s. The slider allows pushes down to 6 N, and the controller of §8 still holds the chain (its slowest decay is then 0.28 to 0.46 per second), but the page starts with a pull.",
   "tr": "Auch das Vorzeichen von \\(N_0\\) zählt. Eine Strebe, die drückt, \\(N_0 < 0\\), macht beide neuen Terme negativ: Sie macht die Kette leichter, und sie drückt den Wagen vom Punkt unter Kugel 2 weg wie einen Bleistift, der auf seiner Spitze balanciert. Schon bei \\(N_0 = -2\\ \\mathrm{N}\\) hat die Matrix von (8) einen negativen Eigenwert, die hängende Ruhelage ist also für sich allein instabil: Eine Störung wächst alle 0.43 s um den Faktor \\(e\\). Der Schieberegler erlaubt Druckkräfte bis 6 N, und der Regler aus §8 hält die Kette noch (ihr langsamstes Abklingen liegt dann bei 0.28 bis 0.46 pro Sekunde), aber die Seite beginnt mit einem Zug."
  },
+ "5951b00f4f57": {
+  "src": "It multiplies the six differences by the six gains, adds the holding force, and asks the current source for the current that gives that push, cut off at 3 A.",
+  "tr": "Er multipliziert die sechs Unterschiede mit den sechs Verstärkungen, addiert die Haltekraft und verlangt von der Stromquelle den Strom, der diesen Schub ergibt, begrenzt auf 3 A."
+ },
  "59bbc88022c4": {
   "src": "We choose three <em>generalised coordinates</em> that fix the whole picture: the two absolute angles and the cart's position,",
   "tr": "Wir wählen drei <em>generalisierte Koordinaten</em>, die das ganze Bild festlegen: die beiden absoluten Winkel und die Position des Wagens,"
+ },
+ "5b2c1e109e7b": {
+  "src": "<b>The strut.</b> From the lower ball a third link runs down to the cart: the strut. It is made of two tubes, one sliding inside the other, like the two halves of a telescopic umbrella handle or a selfie stick, so it can become longer or shorter. Inside the tubes sits a spring, like the spring inside a ballpoint pen but bigger. Each end of the strut is on a hinge, one at the lower ball and one at the cart, so the strut can tilt freely at both ends. Because it is light and hinged at both ends, the strut can only push or pull along its own length, never sideways. Engineers call such a part a <em>two-force member</em>: it carries one force along its own line, pulling or pushing equally at its two ends. A rope is the simplest example, since it can only pull along itself; a strut is a rope that can also push.",
+  "tr": "<b>Die Strebe.</b> Von der unteren Kugel läuft ein drittes Glied hinunter zum Wagen: die Strebe. Sie besteht aus zwei Rohren, von denen eines im anderen gleitet, wie die beiden Hälften eines Teleskop-Schirmgriffs oder eines Selfie-Sticks, sodass sie länger oder kürzer werden kann. In den Rohren sitzt eine Feder, wie die Feder in einem Kugelschreiber, nur größer. Jedes Ende der Strebe sitzt an einem Gelenk, eines an der unteren Kugel und eines am Wagen, sodass die Strebe an beiden Enden frei kippen kann. Weil sie leicht und an beiden Enden gelenkig ist, kann die Strebe nur entlang ihrer eigenen Länge drücken oder ziehen, nie seitwärts. Ingenieure nennen so ein Teil eine <em>Pendelstütze</em>, auch Zweikraftstab: Sie trägt eine einzige Kraft entlang ihrer eigenen Linie, an ihren beiden Enden gleich stark ziehend oder drückend. Ein Seil ist das einfachste Beispiel, denn es kann nur entlang seiner selbst ziehen; eine Strebe ist ein Seil, das auch drücken kann."
  },
  "5b408d25f21e": {
   "src": "RK4, h vs h/2",
@@ -275,6 +335,10 @@
   "src": "The gains come from the linear model at the target. Far from the rest the nonlinear rig can escape, as the whirl shows. Swinging a chain up from far away needs other ideas, such as pumping energy in or out deliberately before handing over to LQR.",
   "tr": "Die Verstärkungen stammen aus dem linearen Modell an der Sollposition. Weit von der Ruhelage entfernt kann der nichtlineare Aufbau entkommen, wie der Überschlag zeigt. Eine Kette aus großer Entfernung aufzuschwingen braucht andere Ideen, etwa gezielt Energie hinein- oder herauszupumpen, bevor man an LQR übergibt."
  },
+ "6bb9186c93a4": {
+  "src": "<span class=\"psub__n\">1.2</span>How the cart brings the chain home",
+  "tr": "<span class=\"psub__n\">1.2</span>Wie der Wagen die Kette nach Hause bringt"
+ },
  "6eb15ba245c8": {
   "src": "Choose where the cart should rest: set <b>r</b> here, or drag the flag on the ruler. The pale pendulum shows the rest it will reach.",
   "tr": "Wählen Sie, wo der Wagen ruhen soll: Stellen Sie hier <b>r</b> ein, oder ziehen Sie die Fahne auf dem Lineal. Das blasse Pendel zeigt die Ruhelage, die es erreichen wird."
@@ -290,6 +354,10 @@
  "70fd1348c1b1": {
   "src": "A controller that looks at everything is <em>full-state feedback</em>: the coil's force is the holding force plus a weighted sum of all six errors,",
   "tr": "Ein Regler, der auf alles schaut, ist eine <em>Zustandsrückführung</em>: Die Kraft der Spule ist die Haltekraft plus eine gewichtete Summe aller sechs Abweichungen,"
+ },
+ "72a14057f790": {
+  "src": "<b>The two rods and the two balls.</b> From the pivot hangs a rod 0.5 m long with a ball of 0.5 kg at its end. From that ball, on a second frictionless hinge, hangs a second rod of 0.5 m with a second ball of 0.5 kg. One rod with one ball is a <em>pendulum</em>: a weight that hangs from a point and can swing, like the weight in a grandfather clock or a child on a swing. Two of them, one hanging from the other, make a <em>double pendulum</em>, like a lamp hanging from a hook by two links of chain. The page treats the rods as <em>rigid</em> and <em>massless</em>. Rigid means that a rod never bends or stretches: it keeps its ball at exactly 0.5 m from the point it hangs from, as a broom handle keeps the brush at the same distance from your hand however you wave it. Massless means that the rods are so light compared with the balls that their own weight can be forgotten, as the weight of the string can be forgotten when you swing a bunch of keys on it. The balls are treated as <em>point masses</em>: all their mass is counted as sitting at one point, their centre. That is a fair picture of a small, heavy ball on a long rod, just as the Earth, seen from the Sun, can be treated as a point.",
+  "tr": "<b>Die zwei Stangen und die zwei Kugeln.</b> Am Drehpunkt hängt eine Stange von 0.5 m Länge, an ihrem Ende eine Kugel von 0.5 kg. An dieser Kugel hängt an einem zweiten reibungsfreien Gelenk eine zweite Stange von 0.5 m mit einer zweiten Kugel von 0.5 kg. Eine Stange mit einer Kugel ist ein <em>Pendel</em>: ein Gewicht, das an einem Punkt hängt und schwingen kann, wie das Gewicht in einer Standuhr oder ein Kind auf einer Schaukel. Zwei davon, eines am anderen hängend, bilden ein <em>Doppelpendel</em>, wie eine Lampe, die an zwei Kettengliedern an einem Haken hängt. Die Seite behandelt die Stangen als <em>starr</em> und <em>masselos</em>. Starr heißt: Eine Stange biegt sich nie und dehnt sich nie; sie hält ihre Kugel in genau 0.5 m Abstand von dem Punkt, an dem sie hängt, so wie ein Besenstiel die Bürste im gleichen Abstand von Ihrer Hand hält, wie Sie ihn auch schwenken. Masselos heißt: Die Stangen sind im Vergleich zu den Kugeln so leicht, dass man ihr eigenes Gewicht vergessen kann, so wie man das Gewicht der Schnur vergessen kann, wenn man einen Schlüsselbund daran schwingt. Die Kugeln werden als <em>Punktmassen</em> behandelt: Ihre ganze Masse wird so gezählt, als säße sie in einem Punkt, ihrem Mittelpunkt. Das ist ein gutes Bild für eine kleine, schwere Kugel an einer langen Stange, so wie man die Erde, von der Sonne aus gesehen, als Punkt behandeln kann."
  },
  "72d7cc865810": {
   "src": "Position in the stored run",
@@ -323,6 +391,10 @@
   "src": "All simulations ↑",
   "tr": "Alle Simulationen ↑"
  },
+ "7dfb32b85aa6": {
+  "src": "<b>The fixed pivot.</b> At the top sits a point O that never moves, bolted to the ceiling or to a heavy frame. The upper rod hangs from it on a <em>hinge</em>. A hinge is a joint that lets two parts turn against each other while holding them together, the way a door turns on its hinges but cannot fall out of its frame. Our hinge lets the upper rod swing in the plane of the picture and in no other way. It can pull or push on the rod in any direction, which is how it holds the rod up, but it does nothing to stop the rod turning, because it is <em>frictionless</em>: there is no rubbing in it at all. A well-oiled bicycle wheel that keeps spinning for a minute after one flick is nearly frictionless; our hinge is the perfect version of that wheel.",
+  "tr": "<b>Der feste Drehpunkt.</b> Ganz oben sitzt ein Punkt O, der sich nie bewegt, an der Decke oder an einem schweren Rahmen festgeschraubt. Die obere Stange hängt an ihm an einem <em>Gelenk</em>. Ein Gelenk ist eine Verbindung, die zwei Teile gegeneinander drehen lässt und sie trotzdem zusammenhält, so wie sich eine Tür in ihren Scharnieren dreht, aber nicht aus dem Rahmen fallen kann. Unser Gelenk lässt die obere Stange in der Ebene des Bildes schwingen und auf keine andere Weise. Es kann in jeder Richtung an der Stange ziehen oder drücken, und so hält es sie oben, aber es hindert die Stange nicht am Drehen, denn es ist <em>reibungsfrei</em>: Es reibt darin gar nichts. Ein gut geöltes Fahrradrad, das nach einem Anstoß noch eine Minute weiterläuft, ist beinahe reibungsfrei; unser Gelenk ist die vollkommene Fassung dieses Rades."
+ },
  "7f9c1bfaf3b7": {
   "src": "Grab a ball or the cart, pull it anywhere, and let go. The controller brings the chain back.",
   "tr": "Fassen Sie eine Kugel oder den Wagen, ziehen Sie irgendwohin und lassen Sie los. Der Regler holt die Kette zurück."
@@ -331,6 +403,10 @@
   "src": "<span>9</span>Phase space and the region of rescue",
   "tr": "<span>9</span>Der Phasenraum und der Rettungsbereich"
  },
+ "7ff20ca3e571": {
+  "src": "O, the fixed pivot",
+  "tr": "O, der feste Drehpunkt"
+ },
  "806f5dd46d65": {
   "src": "<span class=\"psec__n\">09</span>Phase space and the region of rescue",
   "tr": "<span class=\"psec__n\">09</span>Der Phasenraum und der Rettungsbereich"
@@ -338,6 +414,14 @@
  "80eccc1a64f5": {
   "src": "The gains depend on the rest, because the linear model does: each new target is a new design, done in a millisecond when you press Solve, release the flag, or let go of the chain.",
   "tr": "Die Verstärkungen hängen von der Ruhelage ab, weil das lineare Modell es tut: Jede neue Sollposition ist ein neuer Entwurf, erledigt in einer Millisekunde, wenn Sie „Lösen“ drücken, die Fahne loslassen oder die Kette loslassen."
+ },
+ "80f8bc5f8895": {
+  "src": "Where each ball is, the page says by an <em>angle</em>. The angle \\(\\theta_1\\) says how far the upper rod has turned away from straight down, and \\(\\theta_2\\) how far the lower rod has turned away from straight down, each measured from a vertical line through the top end of its own rod and counted positive to the right. A rod hanging straight down has angle 0°; a rod turned a quarter of the way round, pointing sideways, has 90°. Gravity always pulls each ball back towards hanging straight down. A pull towards a resting position like this is called a <em>restoring force</em>; you feel it every time you push a child on a swing and the swing comes back towards you.",
+  "tr": "Wo sich jede Kugel befindet, sagt die Seite durch einen <em>Winkel</em>. Der Winkel \\(\\theta_1\\) sagt, wie weit die obere Stange von der Senkrechten nach unten abgedreht ist, und \\(\\theta_2\\), wie weit die untere Stange von der Senkrechten nach unten abgedreht ist, jeweils gemessen von einer senkrechten Linie durch das obere Ende der eigenen Stange und nach rechts positiv gezählt. Eine Stange, die gerade nach unten hängt, hat den Winkel 0°; eine Stange, die sich ein Viertel herumgedreht hat und seitwärts zeigt, hat 90°. Die Schwerkraft zieht jede Kugel immer zurück in die senkrecht hängende Lage. Ein solcher Zug zu einer Ruhelage hin heißt <em>Rückstellkraft</em>; Sie spüren sie jedes Mal, wenn Sie ein Kind auf der Schaukel anschubsen und die Schaukel wieder auf Sie zukommt."
+ },
+ "821fa932e01a": {
+  "src": "The page solves (13) in <code>lqr()</code> by the matrix sign function of the \\(12\\times12\\) Hamiltonian matrix \\(\\left(\\begin{smallmatrix}\\mathbf A & -\\rho^{-1}\\mathbf B\\mathbf B^{\\mathsf T} \\\\ -\\mathbf Q & -\\mathbf A^{\\mathsf T}\\end{smallmatrix}\\right)\\): the iteration \\(\\mathbf Z \\leftarrow \\tfrac12(\\mathbf Z + \\mathbf Z^{-1})\\) converges in a handful of steps, and its blocks give \\(\\mathbf P\\). For the default rest (\\(r = 0.30\\ \\mathrm{m}\\)) and weights \\(q_\\theta = q_X = q_v = 5\\), \\(\\rho = 0.02\\), the gains are \\(\\mathbf K = (19.22,\\ -201.70,\\ 120.09,\\ 0.04,\\ 0.52,\\ 22.14)\\), in newtons per radian or metre and per radian or metre per second; SciPy's Riccati solver gives the same numbers. The large gain on \\(\\theta_2\\) is the hand that follows the swing (§1.2): when ball 2 swings right, the coil at once shoves the cart after it, the cart runs past the ball, and the string then pulls the ball back against its motion.",
+  "tr": "Die Seite löst (13) in <code>lqr()</code> mit der Matrix-Signumfunktion der \\(12\\times12\\)-Hamilton-Matrix \\(\\left(\\begin{smallmatrix}\\mathbf A & -\\rho^{-1}\\mathbf B\\mathbf B^{\\mathsf T} \\\\ -\\mathbf Q & -\\mathbf A^{\\mathsf T}\\end{smallmatrix}\\right)\\): Die Iteration \\(\\mathbf Z \\leftarrow \\tfrac12(\\mathbf Z + \\mathbf Z^{-1})\\) konvergiert in einer Handvoll Schritte, und ihre Blöcke liefern \\(\\mathbf P\\). Für die voreingestellte Ruhelage (\\(r = 0.30\\ \\mathrm{m}\\)) und die Gewichte \\(q_\\theta = q_X = q_v = 5\\), \\(\\rho = 0.02\\) sind die Verstärkungen \\(\\mathbf K = (19.22,\\ -201.70,\\ 120.09,\\ 0.04,\\ 0.52,\\ 22.14)\\), in Newton pro Radiant oder Meter und pro Radiant oder Meter pro Sekunde; der Riccati-Löser von SciPy liefert dieselben Zahlen. Die große Verstärkung auf \\(\\theta_2\\) ist die Hand, die der Schwingung folgt (§1.2): Wenn Kugel 2 nach rechts schwingt, schiebt die Spule den Wagen sofort hinterher, der Wagen läuft an der Kugel vorbei, und die Saite zieht die Kugel dann gegen ihre Bewegung zurück."
  },
  "828d338a9b04": {
   "src": "source",
@@ -351,6 +435,14 @@
   "src": "<b>Fig. 11</b> · <span class=\"tx\">\\(\\mathbf M(\\mathbf q)\\ddot{\\mathbf q} + \\mathbf C\\dot{\\mathbf q} + \\nabla V = (0, 0, F)\\)</span> · played from the stored run",
   "tr": "<b>Abb. 11</b> · <span class=\"tx\">\\(\\mathbf M(\\mathbf q)\\ddot{\\mathbf q} + \\mathbf C\\dot{\\mathbf q} + \\nabla V = (0, 0, F)\\)</span> · abgespielt aus dem gespeicherten Lauf"
  },
+ "83d807e85787": {
+  "src": "<b>Rest, and the target.</b> A <em>rest</em>, also called an <em>equilibrium</em>, is a state in which nothing moves and nothing starts to move, because every force is balanced by another. A marble at the bottom of a bowl is at rest, and if you nudge it, it rolls back: that rest is <em>stable</em>. A pencil standing on its tip is also at rest in principle, but the smallest nudge makes it fall: that rest is <em>unstable</em>. With the coil off, the only rest the tubes allow is the chain hanging straight down over the cart. It is stable in the sense that a nudged chain swings about it and never runs away, but without friction it never settles either. With the coil on, the controller can hold the cart anywhere between −0.6 m and +0.6 m. You choose the place with the slider r or with the flag on the ruler, and r is called the <em>target</em>. When the cart rests away from the point under the pivot, the strut leans and pulls the lower ball sideways, so the chain leans a little too, until gravity’s pull back and the strut’s sideways pull balance; for r = 0.30 m the rods lean 5.78° and 8.36°. To keep the cart there against the strut’s pull, the coil must push steadily with \\(F^* = 1.59\\ \\mathrm{N}\\), the <em>holding force</em>, as your arm must pull steadily to hold a dog that leans on its lead. The pale pendulum on the screen draws this rest.",
+  "tr": "<b>Ruhelage und Sollposition.</b> Eine <em>Ruhelage</em>, auch <em>Gleichgewicht</em> genannt, ist ein Zustand, in dem sich nichts bewegt und nichts zu bewegen beginnt, weil jede Kraft durch eine andere ausgeglichen wird. Eine Murmel am Boden einer Schüssel ist in Ruhe, und wenn Sie sie anstoßen, rollt sie zurück: Diese Ruhelage ist <em>stabil</em>. Ein Bleistift, der auf seiner Spitze steht, ist im Prinzip auch in Ruhe, aber der kleinste Stoß lässt ihn fallen: Diese Ruhelage ist <em>instabil</em>. Bei ausgeschalteter Spule ist die einzige Ruhelage, die die Rohre zulassen, die Kette, die gerade über dem Wagen herabhängt. Sie ist in dem Sinn stabil, dass eine angestoßene Kette um sie schwingt und nie davonläuft, aber ohne Reibung kommt sie auch nie zur Ruhe. Bei eingeschalteter Spule kann der Regler den Wagen überall zwischen −0.6 m und +0.6 m halten. Den Ort wählen Sie mit dem Schieberegler r oder mit der Fahne auf dem Lineal, und r heißt die <em>Sollposition</em>. Wenn der Wagen abseits des Punktes unter dem Drehpunkt ruht, steht die Strebe schräg und zieht die untere Kugel seitwärts, sodass sich auch die Kette ein wenig neigt, bis das Zurückziehen durch die Schwerkraft und der seitliche Zug der Strebe sich ausgleichen; für r = 0.30 m neigen sich die Stangen um 5.78° und 8.36°. Um den Wagen dort gegen den Zug der Strebe zu halten, muss die Spule stetig mit \\(F^* = 1.59\\ \\mathrm{N}\\) schieben, der <em>Haltekraft</em>, so wie Ihr Arm stetig ziehen muss, um einen Hund zu halten, der in der Leine hängt. Das blasse Pendel auf dem Bildschirm zeichnet diese Ruhelage."
+ },
+ "85c745e7244a": {
+  "src": "The cart speeds up or slows down. As it moves, the lower end of the strut moves with it, so the strut tilts.",
+  "tr": "Der Wagen wird schneller oder langsamer. Wenn er sich bewegt, bewegt sich das untere Ende der Strebe mit, und die Strebe kippt."
+ },
  "86add19de064": {
   "src": "Without control the rest is a <em>centre</em>: all six eigenvalues of \\(\\mathbf A\\) are imaginary, \\(\\pm1.71i\\), \\(\\pm5.05i\\) and \\(\\pm10.00i\\) per second at the hanging rest, and the energy (2) + (3) is conserved, so a disturbed chain circles for ever on a surface of constant energy. With the controller the eigenvalues of \\(\\mathbf A - \\mathbf B\\mathbf K\\) move into the left half-plane. For the default target they are \\(-14.98\\), \\(-1.83 \\pm 6.58i\\), \\(-1.19 \\pm 11.65i\\) and \\(-1.13\\) per second: two decaying swings and two plain decays. The rest has become a <em>stable focus</em>, and the slowest decay, \\(1.13\\) per second, sets the time scale on which the chain comes to rest, about a second per factor of three.",
   "tr": "Ohne Regelung ist die Ruhelage ein <em>Wirbelpunkt</em>: Alle sechs Eigenwerte von \\(\\mathbf A\\) sind imaginär, \\(\\pm1.71i\\), \\(\\pm5.05i\\) und \\(\\pm10.00i\\) pro Sekunde in der hängenden Ruhelage, und die Energie (2) + (3) bleibt erhalten, sodass eine gestörte Kette ewig auf einer Fläche konstanter Energie kreist. Mit dem Regler wandern die Eigenwerte von \\(\\mathbf A - \\mathbf B\\mathbf K\\) in die linke Halbebene. Für die voreingestellte Sollposition sind sie \\(-14.98\\), \\(-1.83 \\pm 6.58i\\), \\(-1.19 \\pm 11.65i\\) und \\(-1.13\\) pro Sekunde: zwei abklingende Schwingungen und zwei reine Abklingvorgänge. Die Ruhelage ist zu einem <em>stabilen Strudelpunkt</em> geworden, und das langsamste Abklingen, \\(1.13\\) pro Sekunde, setzt die Zeitskala, auf der die Kette zur Ruhe kommt, etwa eine Sekunde pro Faktor drei."
@@ -362,6 +454,10 @@
  "87da2ce86bf5": {
   "src": "<span>12</span>What the model leaves out",
   "tr": "<span>12</span>Was das Modell weglässt"
+ },
+ "882397129e4b": {
+  "src": "The controller reads the six numbers of the state and compares them with the rest it aims at.",
+  "tr": "Der Regler liest die sechs Zahlen des Zustands und vergleicht sie mit der Ruhelage, die er anstrebt."
  },
  "8bfb4e1aa590": {
   "src": "cart",
@@ -451,6 +547,10 @@
   "src": "<b>Abstract.</b> Our aim is to bring a double pendulum back to rest, at a place we choose, by pushing nothing but a cart. The pendulum hangs from a fixed pivot. A strut made of two sliding tubes, with a spring inside, ties its lower ball to a cart, and a moving coil pushes the cart along a rail. The coil is the only thing anyone can push, yet it must bring three bodies to rest at a place we choose. We count the degrees of freedom, write the Lagrangian, and find that the strut must be under tension: to first order its spring stiffness drops out, and only the pull it carries couples the cart to the chain, like a guitar string. We find the family of rests the coil can hold, linearise around one of them, test whether a single push can reach every motion, and design the push by the linear–quadratic regulator. Then we look at the result in the six-dimensional phase space: a stable focus, a Lyapunov function that comes with the design, and the edge of the region the controller can rescue. The page solves the whole run first and stores it, and the note says how good that stored run is. Sections marked ★ carry the heavier mathematics and can be skipped on a first reading.",
   "tr": "<b>Zusammenfassung.</b> Unser Ziel ist, ein Doppelpendel an einem Ort, den wir wählen, wieder zur Ruhe zu bringen, indem wir nichts als einen Wagen schieben. Das Pendel hängt an einem festen Drehpunkt. Eine Strebe aus zwei ineinander gleitenden Rohren, mit einer Feder darin, verbindet seine untere Kugel mit einem Wagen, und eine Tauchspule schiebt den Wagen auf einer Schiene. Die Spule ist das Einzige, was überhaupt jemand schieben kann, und doch muss sie drei Körper an einem Ort, den wir wählen, zur Ruhe bringen. Wir zählen die Freiheitsgrade, schreiben die Lagrange-Funktion auf und finden, dass die Strebe unter Zug stehen muss: In erster Ordnung fällt ihre Federsteifigkeit heraus, und nur der Zug, den sie trägt, koppelt den Wagen an die Kette, wie bei einer Gitarrensaite. Wir bestimmen die Schar der Ruhelagen, die die Spule halten kann, linearisieren um eine von ihnen, prüfen, ob ein einziger Stoß jede Bewegung erreichen kann, und entwerfen den Stoß mit dem linear-quadratischen Regler. Dann betrachten wir das Ergebnis im sechsdimensionalen Phasenraum: einen stabilen Strudelpunkt, eine Ljapunow-Funktion, die der Entwurf mitliefert, und den Rand des Bereichs, aus dem der Regler die Kette retten kann. Die Seite löst zuerst den ganzen Lauf und speichert ihn, und das Skript sagt, wie gut dieser gespeicherte Lauf ist. Mit ★ markierte Abschnitte enthalten die schwerere Mathematik und können beim ersten Lesen übersprungen werden."
  },
+ "a4baade928db": {
+  "src": "<span class=\"psub__n\">1.1</span>The rig, part by part",
+  "tr": "<span class=\"psub__n\">1.1</span>Der Aufbau, Teil für Teil"
+ },
  "a4ce3a9be794": {
   "src": "← All simulations",
   "tr": "← Alle Simulationen"
@@ -471,9 +571,17 @@
   "src": "<span>2</span>The rig and its coordinates",
   "tr": "<span>2</span>Der Aufbau und seine Koordinaten"
  },
+ "aaa282fac405": {
+  "src": "<span class=\"pfig__n\">Figure 2</span>Where the energy of one swing goes, for the release of §1.2 over 8 s. Inside the boxes: the energy at the release, 0.079 J in the chain and 0.023 J in the string’s sideways stretch. On the arrows: the energy that crosses each link. The string drains the chain and hands that energy, with its own, to the cart. The coil pumps energy out of the cart (burgundy, 2.40 J) and into it (grey, 2.30 J) on every swing; the difference, 0.102 J, is the whole swing, and it ends in the current source.",
+  "tr": "<span class=\"pfig__n\">Abbildung 2</span>Wohin die Energie einer Schwingung geht, für das Loslassen aus §1.2 über 8 s. In den Kästen: die Energie beim Loslassen, 0.079 J in der Kette und 0.023 J in der seitlichen Dehnung der Saite. An den Pfeilen: die Energie, die jede Verbindung durchquert. Die Saite entzieht der Kette Energie und reicht sie, zusammen mit ihrer eigenen, an den Wagen weiter. Die Spule pumpt bei jeder Schwingung Energie aus dem Wagen heraus (weinrot, 2.40 J) und in ihn hinein (grau, 2.30 J); die Differenz, 0.102 J, ist die ganze Schwingung, und sie endet in der Stromquelle."
+ },
  "af59fae5d6ae": {
   "src": "The aim of this page",
   "tr": "Das Ziel dieser Seite"
+ },
+ "b257af45fbc9": {
+  "src": "magnet",
+  "tr": "Magnet"
  },
  "b2ab43f67958": {
   "src": "<span>3</span>Lagrangian and equations of motion&nbsp;★",
@@ -530,6 +638,10 @@
  "bf5a972cb745": {
   "src": "Rest angles θ₁*, θ₂*",
   "tr": "Ruhewinkel θ₁*, θ₂*"
+ },
+ "c1cd35a3402c": {
+  "src": "<b>The coil, the magnet and the current.</b> Nobody holds the cart; it is pushed by a <em>linear motor</em>, which works like a loudspeaker. Under the rail lies a long magnet with a narrow gap, and in that gap sits a coil of copper wire fixed to the cart. When an electric <em>current</em> flows through the wire, the magnet pushes the wire along the rail, and the wire takes the cart with it. A current is a flow of electric charge through a wire, measured in amperes, written A; picture water flowing through a hose, measured in litres per second. A phone charger delivers about 1 to 3 A. The push grows in step with the current, \\(F = \\kappa I\\), and the <em>force constant</em> \\(\\kappa = 10\\ \\mathrm{N/A}\\) says how many newtons each ampere gives: 1 A pushes with 10 N, 2 A with 20 N, and a current flowing the other way pushes the other way. In a loudspeaker the same push moves the paper cone back and forth to make sound.",
+  "tr": "<b>Die Spule, der Magnet und der Strom.</b> Niemand hält den Wagen; er wird von einem <em>Linearmotor</em> geschoben, der wie ein Lautsprecher arbeitet. Unter der Schiene liegt ein langer Magnet mit einem schmalen Spalt, und in diesem Spalt sitzt eine Spule aus Kupferdraht, die am Wagen befestigt ist. Wenn ein elektrischer <em>Strom</em> durch den Draht fließt, schiebt der Magnet den Draht entlang der Schiene, und der Draht nimmt den Wagen mit. Ein Strom ist ein Fluss elektrischer Ladung durch einen Draht, gemessen in Ampere, geschrieben A; denken Sie an Wasser, das durch einen Schlauch fließt, gemessen in Litern pro Sekunde. Ein Handy-Ladegerät liefert etwa 1 bis 3 A. Der Schub wächst im gleichen Maß wie der Strom, \\(F = \\kappa I\\), und die <em>Kraftkonstante</em> \\(\\kappa = 10\\ \\mathrm{N/A}\\) sagt, wie viele Newton jedes Ampere ergibt: 1 A schiebt mit 10 N, 2 A mit 20 N, und ein Strom in der Gegenrichtung schiebt in die Gegenrichtung. In einem Lautsprecher bewegt derselbe Schub die Papiermembran hin und her und erzeugt so Schall."
  },
  "c313f91f9735": {
   "src": "<b>Phase space</b> · three shadows of the six-dimensional state <span class=\"tx\">\\((\\theta_1, \\theta_2, X, \\dot\\theta_1, \\dot\\theta_2, \\dot X)\\)</span> and the fixed point <span class=\"tx\">\\(\\mathbf y^*\\)</span>",
@@ -623,6 +735,10 @@
   "src": "Slowest decay",
   "tr": "Langsamstes Abklingen"
  },
+ "ec38cd35feb2": {
+  "src": "The spring sets how hard the strut pulls. Its <em>stiffness</em> \\(k_s = 100\\ \\mathrm{N/m}\\) says how much force it takes to stretch it: 100 newtons per metre, which is 1 newton for every centimetre of stretch. A soft spring has a small stiffness, like the springs in a mattress; a hard spring has a large one, like the springs of a car. The spring is fitted already stretched, so that when the chain hangs straight down over the cart the strut pulls with \\(N_0 = 3\\ \\mathrm{N}\\), about the weight of three apples. A part that carries a pull even while everything is at rest is said to be under <em>pre-tension</em>, the way a guitar string is tightened before it is ever played, or a washing line is pulled taut before anything hangs on it. This pre-tension is the secret of the whole rig. Section 6 shows that without it the cart could not reach the chain at all: a slack rope cannot pass on a sideways tug, but a taut one can, as you feel when you pluck a tight washing line and the pegs at the far end shake.",
+  "tr": "Die Feder bestimmt, wie stark die Strebe zieht. Ihre <em>Steifigkeit</em> \\(k_s = 100\\ \\mathrm{N/m}\\) sagt, wie viel Kraft es kostet, sie zu dehnen: 100 Newton pro Meter, das ist 1 Newton für jeden Zentimeter Dehnung. Eine weiche Feder hat eine kleine Steifigkeit, wie die Federn einer Matratze; eine harte hat eine große, wie die Federn eines Autos. Die Feder ist schon gedehnt eingebaut, sodass die Strebe mit \\(N_0 = 3\\ \\mathrm{N}\\) zieht, wenn die Kette gerade über dem Wagen herabhängt, ungefähr das Gewicht von drei Äpfeln. Ein Teil, das auch in der Ruhe einen Zug trägt, steht unter <em>Vorspannung</em>, so wie eine Gitarrensaite gespannt wird, ehe sie je gespielt wird, oder eine Wäscheleine straff gezogen wird, ehe etwas daran hängt. Diese Vorspannung ist das Geheimnis des ganzen Aufbaus. Abschnitt 6 zeigt, dass der Wagen ohne sie die Kette gar nicht erreichen könnte: Ein schlaffes Seil gibt einen seitlichen Ruck nicht weiter, ein straffes schon, wie Sie spüren, wenn Sie an einer straffen Wäscheleine zupfen und die Klammern am anderen Ende wackeln."
+ },
  "ecb252044b5e": {
   "src": "string",
   "tr": "Saite"
@@ -651,6 +767,10 @@
   "src": "<span>10</span>Solve first, then play",
   "tr": "<span>10</span>Erst lösen, dann abspielen"
  },
+ "f08802ae0daf": {
+  "src": "<b>The state: six numbers.</b> To know everything about the rig at one moment you need three positions, \\(\\theta_1\\), \\(\\theta_2\\) and \\(X\\), and three speeds: how fast each rod turns, \\(\\dot\\theta_1\\) and \\(\\dot\\theta_2\\), and how fast the cart moves, \\(\\dot X\\). A dot over a letter means how fast that quantity changes in time, as a car’s speed is how fast its position changes. Together these six numbers are the <em>state</em> of the rig. Knowing the state is like having both a photograph and a speedometer reading for every moving part: from it and the laws of motion, everything that happens next follows. The three positions alone are not enough, just as a photograph of a thrown ball does not tell you whether it is going up or coming down. The number of positions that can change independently, here three, is the number of <em>degrees of freedom</em>, the ways in which the machine can move. A train on its track has one, a boat on a lake has two, and our rig has three, because the rods and the rail forbid every other motion.",
+  "tr": "<b>Der Zustand: sechs Zahlen.</b> Um zu wissen, wie es dem Aufbau in einem Augenblick ganz genau geht, braucht man drei Positionen, \\(\\theta_1\\), \\(\\theta_2\\) und \\(X\\), und drei Geschwindigkeiten: wie schnell sich jede Stange dreht, \\(\\dot\\theta_1\\) und \\(\\dot\\theta_2\\), und wie schnell sich der Wagen bewegt, \\(\\dot X\\). Ein Punkt über einem Buchstaben bedeutet, wie schnell sich diese Größe mit der Zeit ändert, so wie die Geschwindigkeit eines Autos angibt, wie schnell sich sein Ort ändert. Zusammen sind diese sechs Zahlen der <em>Zustand</em> des Aufbaus. Den Zustand zu kennen ist, als hätte man für jedes bewegte Teil ein Foto und eine Tachoanzeige: Aus ihm und den Bewegungsgesetzen folgt alles, was als Nächstes geschieht. Die drei Positionen allein genügen nicht, so wie ein Foto eines geworfenen Balls nicht verrät, ob er steigt oder fällt. Die Zahl der Positionen, die sich unabhängig voneinander ändern können, hier drei, ist die Zahl der <em>Freiheitsgrade</em>, der Arten, auf die sich die Maschine bewegen kann. Ein Zug auf seinem Gleis hat einen, ein Boot auf einem See hat zwei, und unser Aufbau hat drei, weil die Stangen und die Schiene jede andere Bewegung verbieten."
+ },
  "f134d06971d7": {
   "src": "Key result · the equations of motion",
   "tr": "Kernergebnis · die Bewegungsgleichungen"
@@ -658,6 +778,10 @@
  "f33a57b938fb": {
   "src": "Take control",
   "tr": "Selbst steuern"
+ },
+ "f3f38b281faf": {
+  "src": "The current flows through the coil, the magnet pushes the coil, and the coil pushes the cart with \\(F = \\kappa I\\).",
+  "tr": "Der Strom fließt durch die Spule, der Magnet schiebt die Spule, und die Spule schiebt den Wagen mit \\(F = \\kappa I\\)."
  },
  "f4bb3c5019e3": {
   "src": "Hold a heavy lamp that hangs from the ceiling on two links, not by the lamp itself but by a rubber cord tied to its bottom. Pull the cord sideways and the whole chain leans; let it go slack and the lamp swings as it likes.",
@@ -678,6 +802,14 @@
  "f8033b444ece": {
   "src": "Energy balance",
   "tr": "Energiebilanz"
+ },
+ "f8dfded173ce": {
+  "src": "The page lets the controller know the state exactly and at once. A real machine would measure the angles and the cart’s position with sensors, such as the <em>encoders</em> that count small steps of turning inside the wheel of a computer mouse, and would work out the speeds from those measurements; §12 says what that costs.",
+  "tr": "Die Seite lässt den Regler den Zustand genau und gleichzeitig kennen. Eine wirkliche Maschine würde die Winkel und den Ort des Wagens mit Sensoren messen, etwa mit den <em>Drehgebern</em>, die im Rad einer Computermaus kleine Drehschritte zählen, und würde die Geschwindigkeiten aus diesen Messungen errechnen; §12 sagt, was das kostet."
+ },
+ "fa84f7a6978a": {
+  "src": "Before any equation, let us walk round the rig of Figure 1 slowly, the way you would walk round a machine in a workshop, and look at each part in turn: what it is, what it does, what it cannot do, and which other parts it touches. Every word that sounds like engineering is explained where it first appears, with an example from ordinary life. At the end of the walk we follow one push of the coil all the way round the machine and back to the controller.",
+  "tr": "Bevor wir eine Gleichung aufschreiben, gehen wir langsam um den Aufbau aus Abb. 1 herum, so wie man in einer Werkstatt um eine Maschine herumgeht, und sehen uns jedes Teil der Reihe nach an: was es ist, was es tut, was es nicht kann und welche anderen Teile es berührt. Jedes Wort, das nach Technik klingt, wird dort erklärt, wo es zum ersten Mal vorkommt, mit einem Beispiel aus dem Alltag. Am Ende des Rundgangs verfolgen wir einen Stoß der Spule ganz um die Maschine herum und zurück zum Regler."
  },
  "fb57a7ac8366": {
   "src": "This simulation needs JavaScript.",
