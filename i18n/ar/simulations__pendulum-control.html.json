@@ -103,6 +103,10 @@
   "src": "For the real, nonlinear rig this proves stability only near the rest. Far from it two things break the guarantee: the coil's current limit, which cuts the push off at \\(\\kappa I_\\text{max} = 30\\ \\mathrm{N}\\), and the nonlinearity of (5), which grows with the angles. The set of starts from which the controller still brings the chain home is the <em>region of attraction</em>, and it has to be measured. In a test of 43 starts the tubes allow, with both rods up to about \\(\\pm60^\\circ\\) and the cart up to 0.8 m from the target, at five targets between \\(-0.4\\) and \\(+0.4\\ \\mathrm{m}\\), all 43 runs came within 0.01 of the rest; half within 5.7 s, nine in ten within 7.9 s. Outside the region there are starts that end in a whirl: after a hard yank, ball 1 can circle its pivot faster than the leash can follow, and the status line says so.",
   "tr": "أمّا للجهاز الحقيقي غير الخطّي فهذا لا يبرهن الاستقرار إلا قرب وضع السكون. وبعيدًا عنه يكسر أمران هذا الضمان: حدّ تيار الملفّ، الذي يقطع الدفعة عند \\(\\kappa I_\\text{max} = 30\\ \\mathrm{N}\\)، ولاخطّية (5)، التي تكبر مع الزوايا. ومجموعة البدايات التي يظلّ المتحكّم يعيد منها السلسلة إلى موضعها هي <em>منطقة الجذب</em>، ولا بدّ من قياسها. في اختبار لـ 43 بداية تسمح بها الأنابيب، مع القضيبين حتى نحو \\(\\pm60^\\circ\\) والعربة حتى 0.8 m من الهدف، وعند خمسة أهداف بين \\(-0.4\\) و\\(+0.4\\ \\mathrm{m}\\)، بلغت الحلول الـ 43 كلّها مسافة 0.01 من وضع السكون؛ نصفها خلال 5.7 s، وتسعة من كلّ عشرة خلال 7.9 s. وخارج المنطقة توجد بدايات تنتهي بدوران متواصل: فبعد جذبة عنيفة قد تدور الكرة 1 حول نقطة ارتكازها أسرع ممّا يستطيع الرسن أن يتبعها، ويقول سطر الحالة ذلك."
  },
+ "2cf64e447b84": {
+  "src": "chain",
+  "tr": "السلسلة"
+ },
  "2e450c3fa5db": {
   "src": "Switch the controller on.",
   "tr": "شغّل المتحكّم."
@@ -142,6 +146,10 @@
  "3d6a01b092c6": {
   "src": "2 store",
   "tr": "2 خزّن"
+ },
+ "3dc29a2ac9a2": {
+  "src": "The rig works the same way, part for part. The cord is the strut. To first order its sideways pull is that of a stretched string (§6): the pull \\(N_0\\) along the strut, tilted by the offset between ball 2 and the cart, gives a sideways force \\((N_0/\\ell_0)\\,(X - x_2)\\) on ball 2, about 4.6 N for every metre that the cart stands beside the ball, and the opposite force on the cart. The hand is the cart. The arm is the coil: it pushes the cart with \\(F\\), and its power \\(F\\dot X\\) is positive when it speeds the cart along and negative when it brakes it; braking sends the energy back into the current source. Nothing else touches the chain. So the energy of a swing has exactly one way out: from the chain through the string into the cart, and from the cart through the coil into the source.",
+  "tr": "يعمل الجهاز بالطريقة نفسها، جزءًا بجزء. الحبل هو الدعامة. وشدّها الجانبي هو، في الرتبة الأولى، شدّ وتر مشدود (§6): الشدّ \\(N_0\\) على امتداد الدعامة، وقد مال بمقدار الإزاحة بين الكرة 2 والعربة، يعطي قوّة جانبية \\((N_0/\\ell_0)\\,(X - x_2)\\) على الكرة 2، نحو 4.6 N لكلّ متر تبعد فيه العربة جانبًا عن الكرة، وقوّة معاكسة لها على العربة. اليد هي العربة. والذراع هي الملفّ: يدفع العربة بالقوّة \\(F\\)، وقدرته \\(F\\dot X\\) موجبة حين يسرّع العربة في اتجاه حركتها وسالبة حين يكبحها؛ والكبح يعيد الطاقة إلى مصدر التيار. ولا شيء آخر يمسّ السلسلة. فلطاقة التأرجح مخرج واحد لا غير: من السلسلة عبر الوتر إلى العربة، ومن العربة عبر الملفّ إلى مصدر التيار."
  },
  "3e9fcdb4c320": {
   "src": "Nothing else touches the chain. The rods turn without friction, the floor is smooth, the tubes slide without friction. Left alone, the rig swings for ever. You can test that with your hand: switch the controller off, grab a ball or the cart, pull it anywhere, let go.",
@@ -219,9 +227,17 @@
   "src": "Double Pendulum under Control<span class=\"dot\">.</span>",
   "tr": "النوّاس المزدوج تحت التحكّم<span class=\"dot\">.</span>"
  },
+ "5bf13f27a693": {
+  "src": "The page solves (13) in <code>lqr()</code> by the matrix sign function of the \\(12\\times12\\) Hamiltonian matrix \\(\\left(\\begin{smallmatrix}\\mathbf A & -\\rho^{-1}\\mathbf B\\mathbf B^{\\mathsf T} \\\\ -\\mathbf Q & -\\mathbf A^{\\mathsf T}\\end{smallmatrix}\\right)\\): the iteration \\(\\mathbf Z \\leftarrow \\tfrac12(\\mathbf Z + \\mathbf Z^{-1})\\) converges in a handful of steps, and its blocks give \\(\\mathbf P\\). For the default rest (\\(r = 0.30\\ \\mathrm{m}\\)) and weights \\(q_\\theta = q_X = q_v = 5\\), \\(\\rho = 0.02\\), the gains are \\(\\mathbf K = (19.22,\\ -201.70,\\ 120.09,\\ 0.04,\\ 0.52,\\ 22.14)\\), in newtons per radian or metre and per radian or metre per second; SciPy's Riccati solver gives the same numbers. The large gain on \\(\\theta_2\\) is the hand that follows the swing (§1.1): when ball 2 swings right, the coil at once shoves the cart after it, the cart runs past the ball, and the string then pulls the ball back against its motion.",
+  "tr": "تحلّ الصفحة (13) في <code>lqr()</code> بدالّة الإشارة المصفوفية للمصفوفة الهاملتونية ذات الأبعاد \\(12\\times12\\)، \\(\\left(\\begin{smallmatrix}\\mathbf A & -\\rho^{-1}\\mathbf B\\mathbf B^{\\mathsf T} \\\\ -\\mathbf Q & -\\mathbf A^{\\mathsf T}\\end{smallmatrix}\\right)\\): فالتكرار \\(\\mathbf Z \\leftarrow \\tfrac12(\\mathbf Z + \\mathbf Z^{-1})\\) يتقارب في خطوات قليلة، وتعطي كتلُه \\(\\mathbf P\\). ولوضع السكون الافتراضي (\\(r = 0.30\\ \\mathrm{m}\\)) والأوزان \\(q_\\theta = q_X = q_v = 5\\)، \\(\\rho = 0.02\\)، تكون معاملات الكسب \\(\\mathbf K = (19.22,\\ -201.70,\\ 120.09,\\ 0.04,\\ 0.52,\\ 22.14)\\)، بالنيوتن لكلّ راديان أو متر، ولكلّ راديان أو متر في الثانية؛ ويعطي حلّال ريكاتي في SciPy الأعداد نفسها. والكسب الكبير على \\(\\theta_2\\) هو اليد التي تتبع التأرجح (§1.1): حين تتأرجح الكرة 2 إلى اليمين، يدفع الملفّ العربة على الفور وراءها، فتتجاوز العربة الكرة، ثم يشدّ الوتر الكرة إلى الخلف ضدّ حركتها."
+ },
  "5bfa8697c715": {
   "src": "Forces over the stored run: the coil's force F with its limits and its steady value F*, and the strut's pull N.",
   "tr": "القوى على امتداد الحلّ المخزَّن: قوّة الملفّ F مع حدّيها وقيمتها المستقرّة F*، وشدّ الدعامة N."
+ },
+ "5dba4ae6e38b": {
+  "src": "Two things follow, and both can be seen on the page. The cart must move, and it moves first, towards the ball: a string whose end stands still can only give back what it takes. And the coil is not a brake that is simply on; it is a pump that runs both ways, a little more out than in on every swing. The bars at the top left of the rig keep this account: \\(E - E^*\\) is the energy above the rest, \\(W_\\text{coil}\\) the coil’s work since the run began. Set the target to 0, pull ball 2 aside and let go: \\(W_\\text{coil}\\) falls by just what \\(E - E^*\\) loses. Switch the controller off and do the same: \\(W_\\text{coil}\\) stays at zero, and the energy stays in the chain for ever. How hard the coil may pump is the controller’s design (§8). Gentle charges the coil’s effort five times more than Firm (\\(\\rho = 0.1\\) against \\(0.02\\)), so it pushes less and the chain takes longer to come home.",
+  "tr": "ينتج عن ذلك أمران، ويمكن رؤيتهما معًا في الصفحة. أولهما أن العربة يجب أن تتحرّك، وتتحرّك أولًا نحو الكرة: فالوتر الذي يثبت طرفه لا يستطيع إلا أن يردّ ما أخذه. وثانيهما أن الملفّ ليس مكبحًا يعمل وحسب؛ إنه مضخّة تعمل في الاتجاهين، تُخرج أكثر قليلًا مما تُدخل في كلّ تأرجحة. تحتفظ الأشرطة في أعلى يسار الجهاز بهذا الحساب: \\(E - E^*\\) هي الطاقة فوق وضع السكون، و\\(W_\\text{coil}\\) شغل الملفّ منذ بداية الحلّ. اجعل الهدف 0، واسحب الكرة 2 جانبًا ثم اتركها: يهبط \\(W_\\text{coil}\\) بمقدار ما تخسره \\(E - E^*\\) بالضبط. أوقف المتحكّم وافعل الشيء نفسه: يبقى \\(W_\\text{coil}\\) صفرًا، وتبقى الطاقة في السلسلة إلى الأبد. وشدّة ضخّ الملفّ من تصميم المتحكّم (§8). يحاسب «ليّن» على جهد الملفّ بخمسة أضعاف ما يحاسب «حازم» (\\(\\rho = 0.1\\) مقابل \\(0.02\\))، فيدفع أقلّ وتستغرق السلسلة وقتًا أطول لتعود إلى موضع سكونها."
  },
  "628e5037e0d0": {
   "src": "The current source is ideal. A real amplifier has a voltage limit, and the back-emf \\(\\kappa\\dot X\\) eats into it when the cart moves fast. A long stroke of 2 m also needs a commutated linear motor rather than one coil in one long gap.",
@@ -230,6 +246,10 @@
  "62d7d794f91e": {
   "src": "The state of the rig is a point in a six-dimensional <em>phase space</em>, and the run is a path through it. We cannot draw six dimensions, so the page draws three shadows: the angle against the angular speed for each rod, and the position against the speed for the cart. In each the rest is a cross, and a run that settles is a path that spirals into it.",
   "tr": "حالة الجهاز نقطةٌ في <em>فضاء طور</em> سداسي الأبعاد، والحلّ مسارٌ فيه. لا نستطيع رسم ستّة أبعاد، لذا ترسم الصفحة ثلاثة ظلال: الزاوية مقابل السرعة الزاوية لكلّ قضيب، والموضع مقابل السرعة للعربة. في كلّ منها يكون وضع السكون علامةً متصالبة، والحلّ الذي يستقرّ مسارٌ يلتفّ حلزونيًا نحوها."
+ },
+ "635d7e4f4470": {
+  "src": "<span class=\"pfig__n\">Figure 2</span>Where the energy of one swing goes, for the release of §1.1 over 8 s. Inside the boxes: the energy at the release, 0.079 J in the chain and 0.023 J in the string’s sideways stretch. On the arrows: the energy that crosses each link. The string drains the chain and hands that energy, with its own, to the cart. The coil pumps energy out of the cart (burgundy, 2.40 J) and into it (grey, 2.30 J) on every swing; the difference, 0.102 J, is the whole swing, and it ends in the current source.",
+  "tr": "<span class=\"pfig__n\">الشكل 2</span>أين تذهب طاقة تأرجحة واحدة، للإطلاق في §1.1 على مدى 8 s. داخل الصناديق: الطاقة عند الإطلاق، 0.079 J في السلسلة و0.023 J في تمدّد الوتر الجانبي. وعلى الأسهم: الطاقة التي تعبر كلّ وصلة. يستنزف الوتر السلسلة ويسلّم تلك الطاقة، مع طاقته هو، إلى العربة. ويضخّ الملفّ الطاقة خارجًا من العربة (عنّابي، 2.40 J) وإليها (رمادي، 2.30 J) في كلّ تأرجحة؛ والفرق، 0.102 J، هو التأرجح كلّه، وينتهي في مصدر التيار."
  },
  "66407a2d2c27": {
   "src": "<span class=\"psec__n\">06</span>Small swings: the guitar string<span class=\"star\" title=\"heavier mathematics\">★</span>",
@@ -319,6 +339,10 @@
   "src": "The gains depend on the rest, because the linear model does: each new target is a new design, done in a millisecond when you press Solve, release the flag, or let go of the chain.",
   "tr": "تتوقّف معاملات الكسب على وضع السكون، لأن النموذج الخطّي يتوقّف عليه: فكلّ هدف جديد تصميمٌ جديد، يُنجَز في ميلي ثانية حين تضغط «احسب»، أو تُفلت العلَم، أو تترك السلسلة."
  },
+ "828d338a9b04": {
+  "src": "source",
+  "tr": "مصدر التيار"
+ },
  "834bbfd63814": {
   "src": "With the coil on, a steady force \\(F^*\\) can hold the cart anywhere along the rail. For each cart position \\(X = r\\) the chain then leans until gravity and the tilted strut balance:",
   "tr": "ومع تشغيل الملفّ، تستطيع قوّة ثابتة \\(F^*\\) أن تمسك العربة في أيّ موضع على السكّة. ولكلّ موضع للعربة \\(X = r\\) تميل السلسلة عندئذ حتى تتوازن الجاذبية والدعامة المائلة:"
@@ -338,6 +362,10 @@
  "87da2ce86bf5": {
   "src": "<span>12</span>What the model leaves out",
   "tr": "<span>12</span>ما يُغفله النموذج"
+ },
+ "8bfb4e1aa590": {
+  "src": "cart",
+  "tr": "العربة"
  },
  "8c35bfc9e093": {
   "src": "From (8), show that with \\(N_0 = 0\\) the cart's equation is \\(M\\ddot X = \\tilde F\\) and that the chain's equations do not contain \\(X\\). Which two columns of (10) survive?",
@@ -367,6 +395,10 @@
   "src": "A crane driver knows this problem from the cab. The hook hangs from the trolley, the load hangs from the hook, and the only thing the driver commands is the motor that moves the trolley. Every swing of the load has to be taken out through that one motor, by moving the trolley at the right moments. A dog on a lead, a kite on its line, a boat at anchor in a current: in each a body has its own motion, and we act on it only through something elastic and from one side.",
   "tr": "يعرف سائق الرافعة هذه المشكلة من مقصورته. يتدلّى الخطّاف من العربة المتنقّلة، ويتدلّى الحمل من الخطّاف، والشيء الوحيد الذي يأمره السائق هو المحرّك الذي ينقل العربة المتنقّلة. وكلّ تأرجح للحمل يجب أن يُزال عبر ذلك المحرّك الوحيد، بتحريك العربة في اللحظات المناسبة. كلبٌ مربوط بمقوده، وطائرة ورقية على خيطها، وقارب راسٍ في تيّار: في كلّ منها جسمٌ له حركته الخاصّة، ولا نؤثّر فيه إلا عبر شيء مرن ومن جهة واحدة."
  },
+ "941e0535628f": {
+  "src": "<span class=\"psub__n\">1.1</span>How the cart brings the chain home",
+  "tr": "<span class=\"psub__n\">1.1</span>كيف تعيد العربة السلسلة إلى موضع سكونها"
+ },
  "9521dba25709": {
   "src": "Home page",
   "tr": "الصفحة الرئيسية"
@@ -378,6 +410,10 @@
  "9692ae150530": {
   "src": "A rest, or <em>fixed point</em>, is a state with all speeds and accelerations zero. Set them to zero in (5): what remains is \\(\\nabla V = (0, 0, F)\\). With the coil off, \\(F = 0\\), and the cart's equation says \\(N(x_2 - X) = 0\\): the strut must stand vertical under ball 2, since a tilted strut would pull the cart sideways and nothing would hold it. A vertical strut pulls ball 2 straight down, so the rods must point straight down or straight up, \\(\\theta_i \\in \\{0, \\pi\\}\\). Of these four arrangements, only straight down fits the tubes; the others need a strut far longer than 0.95 m.",
   "tr": "وضع السكون، أو <em>النقطة الثابتة</em>، حالةٌ تنعدم فيها كلّ السرعات والتسارعات. ضعها صفرًا في (5): يبقى \\(\\nabla V = (0, 0, F)\\). ومع إيقاف الملفّ، \\(F = 0\\)، تقول معادلة العربة \\(N(x_2 - X) = 0\\): يجب أن تقف الدعامة شاقوليةً تحت الكرة 2، لأن الدعامة المائلة ستشدّ العربة جانبًا ولن يمسكها شيء. والدعامة الشاقولية تشدّ الكرة 2 نحو الأسفل مباشرة، فيجب أن يشير القضيبان إلى الأسفل تمامًا أو إلى الأعلى تمامًا، \\(\\theta_i \\in \\{0, \\pi\\}\\). ومن هذه الترتيبات الأربعة لا يناسب الأنبوبين إلا الترتيب المتدلّي إلى الأسفل؛ أمّا الأخرى فتحتاج دعامة أطول بكثير من 0.95 m."
+ },
+ "9782949bc8e2": {
+  "src": "Picture a child on a swing, and suppose the only way you may touch the seat is through a long, soft rubber cord tied to it. Hold the end of the cord still and the swing goes on for ever: the cord stretches and relaxes, takes a little energy and gives it back, and a hand that does not move does no work. To stop the swing you must move your hand. Follow the seat, give way to the cord a little more slowly than it pulls, and the cord ends up pulling against the seat’s motion; your arm takes in the work, as a damper would. Every swing loses a little, and the seat comes to rest.",
+  "tr": "تخيّل طفلًا على أرجوحة، ولنفرض أن الطريقة الوحيدة المسموح لك بها أن تلمس المقعد هي حبلٌ مطّاطي طويل ليّن مربوط به. أمسِكْ طرف الحبل ثابتًا فتستمرّ الأرجوحة إلى الأبد: يتمدّد الحبل ويرتخي، يأخذ شيئًا من الطاقة ويردّه، واليد التي لا تتحرّك لا تبذل شغلًا. ولكي توقف الأرجوحة يجب أن تحرّك يدك. اتبع المقعد، وانسق مع الحبل أبطأ قليلًا مما يجذبك، فينتهي الحبل إلى أن يشدّ المقعد ضدّ حركته؛ وتتلقّى ذراعك الشغل، كما يفعل المخمّد. تخسر كلّ تأرجحة شيئًا قليلًا، ويصل المقعد إلى السكون."
  },
  "990849eadc38": {
   "src": "<span class=\"psec__n\">10</span>Solve first, then play",
@@ -535,6 +571,10 @@
   "src": "Fig.",
   "tr": "الشكل"
  },
+ "db2dfb7cb56e": {
+  "src": "coil",
+  "tr": "الملفّ"
+ },
  "db367cf88021": {
   "src": "What the page does",
   "tr": "ماذا تفعل الصفحة"
@@ -550,6 +590,10 @@
  "dfd65cc1196a": {
   "src": "Stored run",
   "tr": "الحلّ المخزَّن"
+ },
+ "e062a3e6d2cf": {
+  "src": "Figure 2 follows one release, computed with the linear model of §6–§8 at the straight-hanging rest (target \\(r = 0\\)) and the coil’s limit of 30 N. Ball 2 is moved 10 cm to the right, everything else held still, and let go. The swing then holds 0.102 J: 0.079 J in the chain, whose lower ball has been lifted by 1.0 cm, and 0.023 J in the string’s sideways stretch. In the first tenth of a second the coil shoves the cart after the ball, at its full 30 N for the first 3.5 ms, and pours 0.50 J into the cart, five times what the swing holds. By 0.2 s the cart has run 12 cm, past the ball, which is now swinging back; the string pulls ball 2 to the right, against its motion, while the coil brakes the cart and takes the 0.50 J back, and a little more. So it goes, swing after swing, each smaller than the last. After 8 s the coil has put 2.30 J into the cart and taken 2.40 J out; the difference, 0.102 J, is the energy the swing held. Over the same 8 s the string did −0.079 J of work on the chain, all of the chain’s swing, and +0.102 J on the cart.",
+  "tr": "يتتبّع الشكل 2 إطلاقًا واحدًا، محسوبًا بالنموذج الخطّي في §6–§8 عند وضع السكون المتدلّي مستقيمًا (الهدف \\(r = 0\\)) وحدّ الملفّ 30 N. تُزاح الكرة 2 مسافة 10 cm إلى اليمين، ويُمسَك كلّ شيء آخر ساكنًا، ثم تُترك. عندئذ يحمل التأرجح 0.102 J: منها 0.079 J في السلسلة، التي رُفعت كرتها السفلى بمقدار 1.0 cm، و0.023 J في تمدّد الوتر الجانبي. وفي أول عُشر من الثانية يدفع الملفّ العربة وراء الكرة، بكامل قوّته البالغة 30 N طوال أول 3.5 ms، ويصبّ في العربة 0.50 J، أي خمسة أضعاف ما يحمله التأرجح. وعند 0.2 s تكون العربة قد قطعت 12 cm، متجاوزةً الكرة التي صارت ترتدّ راجعة؛ فيشدّ الوتر الكرة 2 إلى اليمين، ضدّ حركتها، بينما يكبح الملفّ العربة ويستردّ منها 0.50 J وأكثر قليلًا. وهكذا يستمرّ الأمر، تأرجحةً بعد تأرجحة، كلّ واحدة أصغر من سابقتها. بعد 8 s يكون الملفّ قد ضخّ 2.30 J في العربة وسحب منها 2.40 J؛ والفرق، 0.102 J، هو الطاقة التي كان يحملها التأرجح. وفي المدّة نفسها، 8 s، بذل الوتر شغلًا مقداره −0.079 J على السلسلة، وهو كلّ تأرجح السلسلة، و+0.102 J على العربة."
  },
  "e1d329a7394b": {
   "src": "From symbols to code",
@@ -578,6 +622,10 @@
  "eb4f41a24feb": {
   "src": "Slowest decay",
   "tr": "أبطأ اضمحلال"
+ },
+ "ecb252044b5e": {
+  "src": "string",
+  "tr": "الوتر"
  },
  "eeaa994bd826": {
   "src": "Holding force F*",
