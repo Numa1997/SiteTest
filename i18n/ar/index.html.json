@@ -11,6 +11,10 @@
   "src": "Why an iron ball hurts and a cotton ball of the same mass does not",
   "tr": "لماذا تؤلم كرةُ الحديد ولا تؤلم كرةُ القطن ذاتُ الكتلة نفسها"
  },
+ "0820b32b206b": {
+  "src": "Testing",
+  "tr": "الاختبار"
+ },
  "0a4470d64e9d": {
   "src": "Skip to content",
   "tr": "انتقل إلى المحتوى"
@@ -207,6 +211,10 @@
   "src": "during studies",
   "tr": "أثناء الدراسة"
  },
+ "5408b8f65095": {
+  "src": "This list is read from the site’s own code every time the site is built, most recently on <span data-tools=\"date\"></span>, from <span data-tools=\"files\"></span> files. A tool added to the code appears here by itself; one the reader cannot yet name is listed under “Also found”.",
+  "tr": "تُقرأ هذه القائمة من شيفرة الموقع نفسها في كلّ مرّة يُبنى فيها الموقع، وآخر مرّة في <span data-tools=\"date\"></span>، من <span data-tools=\"files\"></span> من الملفات. وأيّ أداة تُضاف إلى الشيفرة تظهر هنا من تلقاء نفسها؛ والأداة التي لا يعرف القارئ اسمها بعدُ تُدرَج تحت «وُجد أيضًا»."
+ },
  "5cf5911bdad4": {
   "src": "Transverse &amp; Longitudinal Waves",
   "tr": "الأمواج المستعرضة والطولية"
@@ -254,6 +262,10 @@
  "76cadb7bc66e": {
   "src": "Step-strain protocols for complex modulus estimation",
   "tr": "بروتوكولات الانفعال القفزي لتقدير المعامل المركّب"
+ },
+ "77e774bacbdb": {
+  "src": "Mathematics",
+  "tr": "الرياضيات"
  },
  "7a1b5cbf43eb": {
   "src": "Chaos theory",
@@ -307,9 +319,21 @@
   "src": "Numa Koudsie · Notebook",
   "tr": "نعمة سائر قدسية · دفتر"
  },
+ "8766cde61214": {
+  "src": "Hosting",
+  "tr": "الاستضافة"
+ },
+ "89b043e519bd": {
+  "src": "Also found",
+  "tr": "وُجد أيضًا"
+ },
  "8aa7881300c3": {
   "src": "Laser-Induced Breakdown Spectroscopy (LIBS) on lake sediments; atomic emission spectra analysis",
   "tr": "مطيافية الانهيار المحرَّض بالليزر (LIBS) على رواسب البحيرات؛ وتحليل أطياف الإصدار الذرّي"
+ },
+ "8adccc3872ec": {
+  "src": "How this site is made",
+  "tr": "كيف صُنع هذا الموقع"
  },
  "8eaecb2b9802": {
   "src": "Dhillons Irish Pub and Grill",
@@ -383,6 +407,10 @@
   "src": "Particle motion",
   "tr": "حركة الجسيمات"
  },
+ "a52f2bdaf5e4": {
+  "src": "Built with Claude, by Anthropic. Directed and led by Numa Koudsie.",
+  "tr": "بُني باستخدام Claude من Anthropic. التوجيه والقيادة لنعمة سائر قدسية."
+ },
  "a65d6c82a98e": {
   "src": "Cooling system analysis (R134a, R290); DIAdem integration for automated data processing",
   "tr": "تحليل أنظمة التبريد (R134a، R290)؛ ودمج DIAdem في المعالجة الآلية للبيانات"
@@ -431,6 +459,10 @@
   "src": "Synthetic data generation for lemur interactions",
   "tr": "توليد بيانات اصطناعية لتفاعلات الليمور"
  },
+ "bbd80cf7e2de": {
+  "src": "Build",
+  "tr": "البناء"
+ },
  "be601df25eea": {
   "src": "Research",
   "tr": "الأبحاث"
@@ -450,6 +482,10 @@
  "c010a2efff03": {
   "src": "Parseval's theorem",
   "tr": "مبرهنة بارسيفال"
+ },
+ "c1f65ddb75ed": {
+  "src": "Engine",
+  "tr": "المحرّك"
  },
  "c2a080d36cf8": {
   "src": "GRU networks for behavior prediction (lemurs); tensor-based data organization",
@@ -531,6 +567,10 @@
   "src": "Compare the two kinds of wave propagation side by side. Adjust amplitude, frequency, and wavelength to see how each property shapes the motion.",
   "tr": "قارن نوعي انتشار الأمواج جنبًا إلى جنب. اضبط السعة والتردّد وطول الموجة لترى كيف تشكّل كلُّ خاصّيةٍ الحركة."
  },
+ "e22a2f611be6": {
+  "src": "Languages, in files",
+  "tr": "اللغات، بحسب الملفات"
+ },
  "e23ab8427ba2": {
   "src": "<b>Ongoing</b> · computational",
   "tr": "<b>جارٍ</b> · حاسوبي"
@@ -607,6 +647,10 @@
   "src": "Open the project",
   "tr": "افتح المشروع"
  },
+ "fc1030798a1a": {
+  "src": "Claude, an AI model made by Anthropic, writes the code of every page: the simulations, the lecture notes, the tests, the tools, and the German and Arabic translations. Numa Koudsie directs and leads the work: chooses what is built and to what standard, writes the briefs, reads the pages and the physics, sends back what is wrong, and decides what is published.",
+  "tr": "يكتب Claude، وهو نموذج ذكاء اصطناعي من Anthropic، شيفرة كلّ صفحة: المحاكاة، ومذكّرات المحاضرات، والاختبارات، والأدوات، والترجمتين الألمانية والعربية. أمّا توجيه العمل وقيادته فلنعمة سائر قدسية: اختيار ما يُبنى وبأيّ مستوى، وكتابة التكليفات، وقراءة الصفحات والفيزياء، وإعادة ما فيه خطأ، والبتّ فيما يُنشَر."
+ },
  "fc8a068be442": {
   "src": "Completed projects, rebuilt in full with their derivations, solver and checks, are on the <a href=\"portfolios.html\">Portfolios page</a>: the Bachelor thesis on how cloud droplets become rain, a corrected study of whether a pendulum on a turbine blade can power a sensor, a servo-hydraulic press under digital control, built from first principles, and a study, in English, German and Arabic, of why an iron ball hurts and a cotton ball of the same mass does not.",
   "tr": "المشاريع المكتملة، بعد إعادة بنائها كاملةً مع اشتقاقاتها وحلّالاتها وفحوصها، موجودة في <a href=\"portfolios.html\">صفحة الملفّات</a>: رسالة البكالوريوس عن كيفيّة تحوّل قُطيرات الغيمة إلى مطر، ودراسة مصحَّحة عمّا إذا كان نوّاسٌ على شفرة عنفة قادرًا على تغذية حسّاس، ومكبس هيدروليكي مؤازَر بتحكّم رقمي مبنيّ من المبادئ الأولى، ودراسة، بالإنجليزية والألمانية والعربية، عن سبب إيلام كرة الحديد وعدم إيلام كرة القطن ذات الكتلة نفسها."
@@ -622,5 +666,9 @@
  "ff91c2bef0a9": {
   "src": "Data analysis",
   "tr": "تحليل البيانات"
+ },
+ "ffe688a50143": {
+  "src": "Fonts",
+  "tr": "الخطوط"
  }
 }
