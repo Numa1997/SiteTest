@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
-"""Build rotor_pendula.html: the lecture notes and the simulation page in one file, one tab each.
+"""Build rotor_pendula.html: the lecture notes, the simulation page and the wind page in one file, one tab each.
 
-The two pages are embedded unchanged, each as a JSON string, and
+The pages are embedded unchanged, each as a JSON string, and
 each runs in its own frame, so their styles, element ids and scripts cannot collide. A small script added
 to each page turns the links between the pages into tab switches and keeps in-page links (#...) working
 inside the frame.
@@ -26,6 +26,7 @@ ROOT = pathlib.Path(__file__).resolve().parents[1]
 PAGES = [  # tab id, file, tab label, short label for phones
     ('notes', 'rotor_notes.html', 'Lecture notes', 'Notes'),
     ('sim', 'rotor_sim.html', 'Simulation', 'Simulation'),
+    ('wind', 'rotor_wind.html', 'Wind', 'Wind'),
 ]
 FILE_TO_TAB = {f: t for t, f, _, _ in PAGES}
 

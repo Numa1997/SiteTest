@@ -3,14 +3,14 @@
 63 m tip of the NREL 5 MW blade.  Every constant is typed again here; nothing is imported from the study's own scripts.
 Run: python3 -I check_physics.py   (about two minutes; exit 1 on any FAIL)
 
-  1. SymPy: the rod on a turning blade, from its Lagrangian integrated along the rod -> equation (1.5) in blade-angle form,
+  1. SymPy: the rod on a turning blade, from its Lagrangian integrated along the rod -> equation (1.6) in blade-angle form,
      with R = 3 r_p/(2 l), G = 3 g/(2 l Omega^2), kappa = c/(I Omega); the uneven-rotor term Omega' (I + (m l/2) r_p cos theta);
-     the best brake kappa* = R - 1 (2.4), the 45 degree lag, P* (2.5), the generator's torque tau* = (m l/2) g/sqrt 2 and the
-     trail identity (3.3).
+     the best brake kappa* = R - 1 (3.4), the 45 degree lag, P* (3.5), the generator's torque tau* = (m l/2) g/sqrt 2 and the
+     trail identity (4.3).
   2. SciPy: the full equation re-integrated with solve_ivp (Radau, tight tolerances) at the nine stored runs (three winds, three
      brakes), against the powers the study's own engine wrote (data/L1_blade.json).
-  3. The generator: the brake constant from the circuit (7.1), the load share (7.2), k_t against k_e, the jamming ratio, and
-     the full equation (7.8) re-integrated with solve_ivp at two winds against data/L4_check_2000.json.
+  3. The generator: the brake constant from the circuit (5.1), the load share (5.2), k_t against k_e, the jamming ratio, and
+     the full equation (5.8) re-integrated with solve_ivp at two winds against data/L4_check_2000.json.
 """
 import json, math, pathlib, sys
 import numpy as np, sympy as sp
@@ -46,24 +46,24 @@ R, G, kap = sp.symbols('R G kappa', positive=True)
 q = sp.Function('q')(t)
 target = th.diff(t, 2)/W**2 + kap*th.diff(t)/W + R*sp.sin(th) + G*sp.cos(W*t + th)
 check(sp.simplify(sp.expand(const - target.subs({R: 3*rp/(2*L), G: 3*gg/(2*L*W**2), kap: c/(Ir*W)}))) == 0,
-      'steady rotor -> theta\'\' + kappa theta\' + R sin theta + G cos(phi + theta) = 0, R = 3 r_p/(2 l), G = 3 g/(2 l Omega^2)  (1.5)')
+      'steady rotor -> theta\'\' + kappa theta\' + R sin theta + G cos(phi + theta) = 0, R = 3 r_p/(2 l), G = 3 g/(2 l Omega^2)  (1.8)')
 Wd = sp.symbols('Omegadot')
 uneven = sp.expand(want.subs(ph.diff(t, 2), Wd) - want.subs(ph.diff(t, 2), 0))
 check(sp.simplify(uneven - Wd*(Ir + mlr*rp*sp.cos(th))) == 0, "uneven rotor: the term Omega' (I + (m l/2) r_p cos theta)")
 k_, R1 = sp.symbols('k s1', positive=True)                                        # s1 = R - 1 > 0
 P = k_*G**2/(2*(R1**2 + k_**2))
-check(sp.solve(sp.diff(P, k_), k_) == [R1], 'best brake kappa* = R - 1  (2.4)')
+check(sp.solve(sp.diff(P, k_), k_) == [R1], 'best brake kappa* = R - 1  (3.4)')
 A = -G/(R1 + sp.I*R1)
 check(abs(-float(sp.arg(-A.subs({G: 1, R1: 1}))) - math.pi/4) < 1e-12, 'lag delta = 45 degrees at the best brake')
 Pst = sp.simplify((Ir*W**3*P.subs(k_, R1)).subs({G: 3*gg/(2*L*W**2), R1: 3*rp/(2*L) - 1}))
-check(sp.simplify(Pst - M*gg**2*L/(8*W*(rp - sp.Rational(2, 3)*L))) == 0, 'P* = m g^2 l/(8 Omega (r_p - 2 l/3))  (2.5)')
+check(sp.simplify(Pst - M*gg**2*L/(8*W*(rp - sp.Rational(2, 3)*L))) == 0, 'P* = m g^2 l/(8 Omega (r_p - 2 l/3))  (3.5)')
 Th = G/sp.sqrt(R1**2 + k_**2)
 tau = (Ir*W**2*R1*Th.subs(k_, R1)).subs({G: 3*gg/(2*L*W**2)})                      # c* Omega Theta* = I Omega^2 kappa* Theta*
 check(sp.simplify(tau - mlr*gg/sp.sqrt(2)) == 0, 'generator torque at the best brake tau* = (m l/2) g/sqrt 2')
 trail = -k_*Th**2/(2*(R1 + 1))
 Pbar = Ir*W**3*k_*Th**2/2
 check(sp.simplify((Pbar + mlr*rp*W**3*trail).subs(R1 + 1, mlr*rp/Ir).subs(R1, mlr*rp/Ir - 1)) == 0,
-      'trail identity P = -(m l/2) r_p Omega^3 theta_bar  (3.3)')
+      'trail identity P = -(m l/2) r_p Omega^3 theta_bar  (4.3)')
 
 # ---- 2. SciPy re-integration of the nine stored runs ------------------------------------------------------------------
 for row in json.load(open(ROOT / 'data/L1_blade.json')):
@@ -82,9 +82,9 @@ kt, ke, Rc, Jm, I0 = 0.0208, 60/(2*math.pi*460), 1.53, 1.47e-6, 0.0402        # 
 check(abs(kt/ke - 1) < 0.01, f'k_t = {kt} N m/A and k_e = {ke:.5f} V s agree (energy balance)')
 N_, kT, kE, Rcs, RL, w = sp.symbols('N k_t k_e R_c R_L omega', positive=True)
 Icur = kE*N_*w/(Rcs + RL); torque = N_*kT*Icur
-check(sp.simplify(torque/w - N_**2*kT*kE/(Rcs + RL)) == 0, 'brake constant c_e = N^2 k_t k_e/(R_c + R_L)  (7.1)')
+check(sp.simplify(torque/w - N_**2*kT*kE/(Rcs + RL)) == 0, 'brake constant c_e = N^2 k_t k_e/(R_c + R_L)  (5.1)')
 csc = N_**2*kT*kE/Rcs; ce_ = N_**2*kT*kE/(Rcs + RL)
-check(sp.simplify((Icur**2*RL/(torque*w) - (1 - ce_/csc)).subs(kT, kE)) == 0, 'load share R_L/(R_c + R_L) = 1 - c_e/c_sc  (7.2)')
+check(sp.simplify((Icur**2*RL/(torque*w) - (1 - ce_/csc)).subs(kT, kE)) == 0, 'load share R_L/(R_c + R_L) = 1 - c_e/c_sc  (5.2)')
 T0 = kt*I0; Njam = 0.60*mlc*g/T0
 check(492 < Njam, f'jamming ratio eta (m l/2) g/T0 = {Njam:.0f} (four stages, 60 %): the largest catalogue ratio, 492, swings')
 chk = [r for r in json.load(open(ROOT / 'data/L4_check_2000.json')) if r['kind'] == 'best' and r['mult'] == 1.0]
