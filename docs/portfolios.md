@@ -197,8 +197,10 @@ Since 23 October 2026 the page at `portfolios/rotor-pendula/index.html` is gener
 source in [`portfolios-src/rotor-pendula/`](../portfolios-src/rotor-pendula/) (its [`README.md`](../portfolios-src/rotor-pendula/README.md)
 gives the commands and checks); the models, model runs and review record are in `notes/rotor-pendula/`.
 
-**What the reader gets.** Two tabs. *Lecture notes* (`#notes`): *A Second Blade on a Turning Blade*, nine chapters (0–8), 31
-numbered equations and five figures. The machine: a second, lighter blade (a thin uniform rod, m = 1 kg, l = 1 m) hinged at the 63 m tip of the
+**What the reader gets.** Two tabs. *Lecture notes* (`#notes`): *A Second Blade on a Turning Blade*, nine chapters (0–8), 35
+numbered equations and six figures. Chapter 0 starts from scratch, for a reader who knows nothing about wind turbines: the
+energy of moving air, $P = \tfrac12\rho Av^3$; the Betz limit $C_p \le 16/27$, derived from mass, momentum and energy; how a blade, a wing
+meeting an almost head-on apparent wind, turns the rotor (Figure 1, the speeds at the tip); and only then the machine. The machine: a second, lighter blade (a thin uniform rod, m = 1 kg, l = 1 m) hinged at the 63 m tip of the
 NREL 5 MW blade, turning in the rotor plane and braked by a generator in the hinge. The notes run from the Lagrangian of the rod on
 the turning blade to the best brake κ* = R − 1 and P* = mg²l/[8Ω(r_p − 2l/3)], the trail that is the rotor's bill, where the mass
 sits (section 1.6 derives the equation a second way, from the turning frame's potential, a bowl that gravity rocks once per turn, Figure 3;

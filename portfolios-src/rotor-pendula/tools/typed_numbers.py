@@ -23,6 +23,8 @@ YEAR = 'def: year of a cited source'
 
 TYPED = {
 '00': {
+    '1920': YEAR, '61.5': ('calc', "S['R_ROT'] - S['R_HUB']", 1e-9, 'blade length = rotor radius - hub radius'),
+    '1.5': ('calc', "S['R_HUB']", 1e-9, NREL + ' (hub radius)'), '17.7': 'input: blade mass 17 740 kg (' + NREL + ', Table 2-1)',
     '60': 'def: order of magnitude of a large blade (NREL 5 MW blade 61.5 m), and the illustration "60 m out along a blade"',
     '63': ('calc', "S['R_ROT']", 1e-9, 'rotor radius of the NREL 5 MW turbine'),
     '7.55': ('calc', "S['LAM_STAR']", 1e-9, NREL), '0.482': ('calc', "S['CP_STAR']", 1e-9, NREL),
@@ -63,6 +65,7 @@ TYPED = {
     '8000': GEN, '492': GEN + ' (largest ratio)', '0.12': GEN + ' (terminal inductance over resistance)',
     '0.02076': ('calc', '60/(2*math.pi*460)', 1e-4, 'k_e from the speed constant'),
     '50': 'input: pessimistic gear efficiency of the sensitivity test (L4_sensitivity.py)',
+    '26': 'def: journal volume (source list)', '307': 'def: page (source list)', '309': 'def: page (source list)', '1920': YEAR,
     '30': 'input: the heaviest mass density of the range of sizes, kg per metre (sizes.py, section 7.6)',
     '10 927 809': 'def: US patent number (source list)', '8 403 641': 'def: US patent number (source list)',
     '100': 'def: the largest tip vibration tried in chapter 6 (100 mm)',
