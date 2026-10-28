@@ -2,7 +2,7 @@
 // and do the two control columns stay pinned while the figures scroll? node notes/fig11/layout.cjs [en|de|ar]
 const { chromium } = require('playwright');
 const lang = process.argv[2] || 'en', pre = lang === 'en' ? '' : lang + '/';
-const URL = `http://localhost:8765/${pre}simulations/pendulum-control.html`;
+const URL = `${process.env.BASE || 'http://localhost:8765/'}${pre}simulations/pendulum-control.html`;
 const KNOBS = ['r', 'qa', 'qx', 'qv', 'rho', 'N0', 'ks', 'Imax', 'speed', 'solve'];
 (async () => {
   const b = await chromium.launch();

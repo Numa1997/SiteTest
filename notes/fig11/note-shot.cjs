@@ -5,7 +5,7 @@ const lang = process.argv[2] || 'en', w = +(process.argv[3] || 1400), pre = lang
 (async () => {
   const b = await chromium.launch(), p = await b.newPage({ viewport: { width: w, height: 1000 } }), errs = [];
   p.on('pageerror', e => errs.push(e.message));
-  await p.goto(`http://localhost:8765/${pre}simulations/pendulum-control.html`, { waitUntil: 'networkidle' }); await p.waitForTimeout(1500);
+  await p.goto(`${process.env.BASE || 'http://localhost:8765/'}${pre}simulations/pendulum-control.html`, { waitUntil: 'networkidle' }); await p.waitForTimeout(1500);
   const r = await p.evaluate(() => {
     const h = document.getElementById('p-home'), flow = document.querySelector('.eflow'), fig = flow.closest('.pfig'), sec = document.getElementById('p-leash');
     const hid = !h.offsetParent || !fig.offsetParent, top = h.getBoundingClientRect().top + scrollY - 12, end = fig.getBoundingClientRect().bottom + scrollY + 260;
