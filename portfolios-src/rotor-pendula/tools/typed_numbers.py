@@ -23,6 +23,7 @@ YEAR = 'def: year of a cited source'
 
 TYPED = {
 '00': {
+    '13': ('calc', "100*(1 - json.load(open(D/'L2_steady.json'))[0]['nrel']['P_ratio'])", 0.05, 'loss at 6 m/s with the real control, %'),
     '6.9': ('calc', '670/97', 0.01, NREL + ': region 1.5 starts at 670 generator rpm, through 97:1'),
     '1920': YEAR, '61.5': ('calc', "S['R_ROT'] - S['R_HUB']", 1e-9, 'blade length = rotor radius - hub radius'),
     '1.5': ('calc', "S['R_HUB']", 1e-9, NREL + ' (hub radius)'), '17.7': 'input: blade mass 17 740 kg (' + NREL + ', Table 2-1)',
@@ -80,15 +81,17 @@ TYPED = {
     '0.5': 'input: blade damping ratio tried in chapter 6 (%)',
 },
 '05': {
+    '63': ('calc', "S['R_ROT']", 1e-9, 'rotor radius, m'), '64': ('calc', "S['R_ROT'] + S['L_B']", 1e-9, 'end of the second blade, m'),
+    '13': ('calc', "100*(1 - json.load(open(D/'L2_steady.json'))[0]['nrel']['P_ratio'])", 0.05, 'loss at 6 m/s with the real control, %'),
     '12.7': ('calc', "2*math.sqrt(S['M_B']/S['L_B']/7850/math.pi)*1000", 0.005, 'diameter of a 1 kg, 1 m steel rod, mm (steel 7850 kg/m^3)'),
-    '34': ('calc', "abs(json.load(open(D/'L5_air.json'))['cases']['rod']['Ft'])", 0.02, 'drag of the bare rod, N'), '9.8': ('calc', "S['G0']*S['M_B']", 0.01, 'weight of 1 kg, N'),
+    '34': ('calc', "abs(json.load(open(D/'L5_air.json'))['runs']['a3']['cases']['rod']['Ft'])", 0.02, 'drag of the bare rod, N'), '9.8': ('calc', "S['G0']*S['M_B']", 0.01, 'weight of 1 kg, N'),
     '1.2': 'input: drag coefficient of a round rod near Reynolds number 5e4 (textbook value); also the 1.2 of section 7.1 if any',
-    '36': ('calc', "abs(json.load(open(D/'L5_air.json'))['cases']['rod']['lean_deg'])", 0.02, 'lean of the bare rod, deg'), '135': ('calc', "abs(json.load(open(D/'L5_air.json'))['cases']['sym']['P_rotor'])", 0.01, 'power the streamlined blade costs the rotor, W'),
-    '18': ('calc', "json.load(open(D/'L5_air.json'))['cases']['wing']['lean_deg']", 0.03, 'lean of the small wing, deg'),
+    '31': ('calc', "abs(json.load(open(D/'L5_air.json'))['runs']['a3']['cases']['rod']['lean_deg'])", 0.02, 'lean of the bare rod, deg'), '135': ('calc', "abs(json.load(open(D/'L5_air.json'))['runs']['a3']['cases']['sym']['P_rotor'])", 0.01, 'power the streamlined blade costs the rotor, W'),
+    '17': ('calc', "json.load(open(D/'L5_air.json'))['runs']['a3']['cases']['wing']['lean_deg']", 0.03, 'lean of the small wing, deg'),
     '27': ('calc', "90 - S['R_ROT']", 1e-9, 'lowest height of the tip, m (hub 90 m)'), '153': ('calc', "90 + S['R_ROT']", 1e-9, 'highest height of the tip, m'),
-    '4.5': ('calc', "2*abs(json.load(open(D/'L5_air.json'))['cases']['sym']['Ft'])", 0.01, 'drag of the streamlined blade at twice the chord, N'),
-    '4.4': ('calc', "math.degrees(math.asin(2*abs(json.load(open(D/'L5_air.json'))['cases']['sym']['Ft'])/(S['M_B']*(S['LAM_STAR']*8/S['R_ROT'])**2*S['R_ROT'])))", 0.01, 'its lean, deg'),
-    '270': ('calc', "2*abs(json.load(open(D/'L5_air.json'))['cases']['sym']['P_rotor'])", 0.01, 'its cost to the rotor, W'),
+    '4.5': ('calc', "2*abs(json.load(open(D/'L5_air.json'))['runs']['a3']['cases']['sym']['Ft'])", 0.01, 'drag of the streamlined blade at twice the chord, N'),
+    '4.4': ('calc', "math.degrees(math.atan(2*abs(json.load(open(D/'L5_air.json'))['runs']['a3']['cases']['sym']['Ft'])/(S['M_B']*(S['LAM_STAR']*8/S['R_ROT'])**2*S['R_ROT'])))", 0.01, 'its lean, deg'),
+    '270': ('calc', "2*abs(json.load(open(D/'L5_air.json'))['runs']['a3']['cases']['sym']['P_rotor'])", 0.01, 'its cost to the rotor, W'),
     '0.01': 'def: series of masses', '0.02': 'def: series of masses', '0.05': 'def: series of masses', '0.1': 'def: series of masses',
     '0.2': 'def: series of masses', '0.5': 'def: series of masses; and the swing limit chosen for the sizing (rad)',
     '25': GEN + ' (name and diameter)', '32': GEN + ' (name)', '339152': GEN, '20': GEN + ' (rated power, W); and the upper end of 5 to 20 % for tip brakes (US 8 403 641)', '24': GEN + ' (winding, V)',

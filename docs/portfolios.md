@@ -217,8 +217,9 @@ every start ends on one regular swing). Then a ceiling on random shaking, gusts 
 IEC wind explained in words), the blade's sag and shaking at its tip, a real geared generator (maxon RE 25 with a GP 32 C
 gearhead, ratio 492), and how all of it scales over the sizes of real tip devices, 0.5 to 3 m and up to 90 kg (section 7.6). Chapter 8 estimates
 the air on the second blade for three shapes (bare rod, streamlined, small wing; `notes/rotor-pendula/derive/L5_air.py`): the
-steady in-plane push dominates and decides whether the device costs or helps the turbine, the once-per-turn push from wind shear
-and shaft tilt changes the harvest by −15 to +25 %, and the air barely damps the swing. Chapter 9 is the answer. The notes hold
+steady in-plane push is larger than gravity's for a rod or a lifting shape and decides whether the device costs or helps the
+turbine; with the lean it causes, the once-per-turn push from wind shear and shaft tilt changes the harvest by about −24 % (rod)
+to +44 % (wing), more for the wing if the air at the tip is not slowed; the air barely damps the swing. Chapter 9 is the answer. The notes hold
 the rotor at λ*; section 0.7 and chapter 5 say where the turbine's own torque law puts it (`L2_steady.py`: 7.91 rpm at 6 m/s,
 13 % less power there).
 Every number is computed by the study's models (`tools/make_numbers.py`) or listed with its reason (`tools/typed_numbers.py`).

@@ -202,17 +202,18 @@ for r in J('L2_steady.json'):
     k = str(int(r['wind'])); N[f'rpm_real_{k}'] = f(r['nrel']['rpm'], 2); N[f'lam_real_{k}'] = f(r['nrel']['lam'], 2)
     N[f'Preal_pct_{k}'] = ('+' if r['nrel']['P_ratio'] >= 1 else '−') + f(abs(r['nrel']['P_ratio'] - 1)*100, 0)
     N[f'Pst_real_{k}'] = f(Pst(r['nrel']['Om'])*1e3, 0)
-# chapter 8: the air on the second blade (L5_air.py)
-_A = J('L5_air.json')
-N['air_W'] = f(_A['W'], 1); N['air_gam'] = f(_A['gam_deg'], 2); N['air_q'] = f'{_A["q"]:,.0f}'.replace(',', ' ')
-N['air_du'] = f(_A['du_shear'], 2); N['air_dg'] = f(_A['dgam_shear_deg'], 2); N['air_dWt'] = f(_A['dW_tilt'], 2)
-N['air_Re_rod'] = f'{round(_A["Re_rod"], -3):,.0f}'.replace(',', ' '); N['air_Re_wing'] = f'{round(_A["Re_wing"], -4):,.0f}'.replace(',', ' ')
+# chapter 8: the air on the second blade (L5_air.py); a3: the wind slowed by a third at the tip, a0: not slowed
+_A = J('L5_air.json'); _r3, _r0 = _A['runs']['a3'], _A['runs']['a0']
+sg_ = lambda x, d: ('+' if x >= 0 else '−') + f(abs(x), d)
+N['air_W'] = f(_r3['W'], 1); N['air_gam'] = f(_r3['gam_deg'], 2); N['air_gam0'] = f(_r0['gam_deg'], 2); N['air_q'] = f'{_r3["q"]:,.0f}'.replace(',', ' ')
+N['air_du'] = f(_r3['du'], 2); N['air_dg'] = f(_r3['dgam_deg'], 2); N['air_dWt'] = f(_A['dW_tilt'], 2)
+N['air_Re_rod'] = f'{round(_r3["Re_rod"], -3):,.0f}'.replace(',', ' '); N['air_Re_wing'] = f'{round(_r3["Re_wing"], -4):,.0f}'.replace(',', ' ')
 N['air_d_rod'] = f(_A['d_rod']*1e3, 1); N['air_G'] = f(_A['G_torque'], 2)
-for k, c in _A['cases'].items():
-    N[f'air_{k}_Ft'] = ('+' if c['Ft'] >= 0 else '−') + f(abs(c['Ft']), 1); N[f'air_{k}_lean'] = ('+' if c['lean_deg'] >= 0 else '−') + f(abs(c['lean_deg']), 1)
-    N[f'air_{k}_P'] = f'{abs(c["P_rotor"]):,.0f}'.replace(',', ' '); N[f'air_{k}_As'] = f(c['A_shear'], 2); N[f'air_{k}_At'] = f(c['A_tilt'], 2)
-    N[f'air_{k}_lo'] = ('+' if c['ratio_lo'] >= 1 else '−') + f(abs(c['ratio_lo'] - 1)*100, 0); N[f'air_{k}_hi'] = ('+' if c['ratio_hi'] >= 1 else '−') + f(abs(c['ratio_hi'] - 1)*100, 0)
-    N[f'air_{k}_cair'] = f(c['c_air'], 2)
+for ak, rr in (('3', _r3), ('0', _r0)):
+    for k, c in rr['cases'].items():
+        N[f'air_{k}{ak}_Ft'] = sg_(c['Ft'], 1); N[f'air_{k}{ak}_lean'] = sg_(c['lean_deg'], 1); N[f'air_{k}{ak}_FG'] = f(abs(c['F_over_G']), 2)
+        N[f'air_{k}{ak}_P'] = f'{abs(c["P_rotor"]):,.0f}'.replace(',', ' '); N[f'air_{k}{ak}_As'] = sg_(c['A_shear'], 2); N[f'air_{k}{ak}_At'] = sg_(c['A_tilt'], 2)
+        N[f'air_{k}{ak}_pct'] = sg_((c['ratio'] - 1)*100, 0); N[f'air_{k}{ak}_cair'] = sg_(c['c_air'], 3); N[f'air_{k}{ak}_x'] = f(c['ratio'], 2)
 N['air_mOm2rp'] = f(m*Om[8.0]**2*rp, 1)
 N['lam_k2'] = f(J('L2_steady.json')[1]['k2']['lam'], 2)
 # chapter 3: each neglected term alone, against the small-swing power, at the best brake (L1_terms.py)
