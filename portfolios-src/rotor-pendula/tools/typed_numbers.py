@@ -130,7 +130,7 @@ TYPED = {
     }),
     '02': _merge('01', {'3': 'def', '7': 'input: deceleration of the braking car in the problem, m/s^2'}),
     '03': _merge('02', {'2': 'def'}),
-    '04': _merge('03'),
+    '04': _merge('03', {'2.8': 'input: stability limit of the classical Runge-Kutta method on the negative real axis, h|mu| < 2.785 (textbook value)'}),
     '05': _merge('05'),
     '06': _merge('00', '04', {
         '0.16': 'input: I_ref of turbulence class A (IEC 61400-1 ed. 3)', '0.75': WIND, '5.6': WIND, '0.8': WIND, '0.5': WIND,

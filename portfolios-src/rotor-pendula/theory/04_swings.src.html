@@ -7,16 +7,16 @@
 <dt>feel</dt><dd>Push a spoon slowly through thick honey and it moves calmly; flick it and the honey stops it almost at once. One spoon, two speeds.</dd>
 <dt>physics</dt><dd>An equation is <b>stiff</b> when it holds motions on very different time scales. The fast one dies at once, but a careless method of solution must still take steps short enough to follow it, or blow up.</dd>
 <dt>measure</dt><dd>At 8 m/s and the best brake, a jerk of the second blade against the generator dies in {{n:relax_8}} s; a second blade pushed off its path creeps back in {{n:relax_slow8}} s; a turn lasts {{n:turn_8}} s.</dd>
-<dt>maths</dt><dd>On $y' = \mu y$ with $\mu < 0$, the explicit step $y_{n+1} = (1 + h\mu)y_n$ is stable only for $h \le 2/|\mu|$; the implicit step $y_{n+1} = y_n + h\mu y_{n+1}$, that is $y_{n+1} = y_n/(1 - h\mu)$, is stable for every $h$.</dd>
+<dt>maths</dt><dd>On $y' = \mu y$ with $\mu < 0$, the simplest explicit step (forward Euler) $y_{n+1} = (1 + h\mu)y_n$ is stable only for $h \le 2/|\mu|$; the implicit step $y_{n+1} = y_n + h\mu y_{n+1}$, that is $y_{n+1} = y_n/(1 - h\mu)$, is stable for every $h$. Higher-order explicit methods stretch the limit only by a small factor.</dd>
 </dl></div>
 <p>The two speeds are the roots of the braked spring, $\mu^2 + \kappa\mu + R = 0$. Their sum is $-\kappa$ and their product $R$; at the best brake $\kappa^{*2} = (R-1)^2 \gg 4R$, so</p>
 $$\mu_{\rm fast} \approx -\kappa^*, \qquad \mu_{\rm slow} \approx -\frac{R}{\kappa^*}, \qquad \text{times}\ \ \frac{1}{\kappa^*\Omega}\ \ \text{and}\ \ \frac{\kappa^*}{R\,\Omega}.$$
 <p>The simulation of these notes uses an implicit method, the three-stage Radau IIA, of fifth order: halving the step should cut the error by $2^5$, and here it cuts it on average by $2^{ {{n:radau_order}} }$. Its torques agree with a direct sum of Newton's law over the pieces of the second blade to {{n:newton_agree}}, and after the start it agrees with an independent high-accuracy solver to {{n:scipy_agree}} in the harvested energy. Its first turns carry an error of {{n:startup_err}}, because a step, 1/240 of a turn, is longer than the fast time; the runs let 60 turns pass before they measure.</p>
-<p>The closed form (3.5) is within {{n:lin_err_max}} % of the full equation at every wind, although the second blade swings up to {{n:Th_max}} rad ({{n:Th_max_deg}}°). At second order three effects appear, and the computer can switch each on alone, at $\kappa^*$:</p>
+<p>The closed form (3.5) is within {{n:lin_err_max}} % of the full equation at every wind, although the second blade swings with an amplitude of up to {{n:Th_max}} rad ({{n:Th_max_deg}}°). At second order three effects appear; the computer switches them on in turn, at $\kappa^*$:</p>
 $$\begin{aligned}
 -G\,\theta\sin\varphi:&\quad \text{the spring rocks once per turn} &&{{n:trm_param_6}}\ \%,\\
 R\sin\theta \ne R\theta:&\quad \text{the spring softens at large angles} &&{{n:trm_sin_6}}\ \%,\\
--\tfrac12 G\theta^2\cos\varphi:&\quad \text{the push weakens at large angles} &&{{n:trm_th2_6}}\ \%,
+-\tfrac12 G\theta^2\cos\varphi + \dots:&\quad \text{the rest of gravity's term (all of it, less the rocking)} &&{{n:trm_th2_6}}\ \%,
 \end{aligned}$$
 <p>changes of the power at 6 m/s, where the swing is largest. They pull both ways and nearly cancel: together, in the full equation, {{n:trm_full_6}} %. At 8 and 10 m/s each is three and eight times smaller, as the swing squared ({{n:trm_full_8}} % and {{n:trm_full_10}} %).</p>
 
@@ -34,7 +34,7 @@ $$\begin{aligned}
 \tau &= -ml\,r_p\Omega\sin\theta\,\dot\theta + I\ddot\theta + \frac{ml}{2}r_p\big(\cos\theta\,\ddot\theta - \sin\theta\,\dot\theta^2\big) + (M_1d_1 + mr_p)\,g\cos\varphi + \frac{ml}{2}\,g\cos(\varphi+\theta)\\
 &= -\frac{ml}{2}r_p\Omega^2\sin\theta + (M_1d_1 + mr_p)\,g\cos\varphi + \frac{d}{dt}\Big[\frac{ml}{2}r_p\,\frac{d\sin\theta}{dt} + ml\,r_p\Omega\cos\theta - c\,\theta\Big].
 \end{aligned}$$
-<p>(Check the bracket: $\tfrac{d}{dt}\tfrac{d\sin\theta}{dt} = \cos\theta\,\ddot\theta - \sin\theta\,\dot\theta^2$, $\tfrac{d}{dt}\cos\theta = -\sin\theta\,\dot\theta$, $\tfrac{d}{dt}\theta = \dot\theta$.) Over a turn the weight term averages to zero (on a turbine the other two blades balance the first arm's), and the bracket returns to its value, so its derivative averages to zero too. Only the first term survives, and by (1.7)</p>
+<p>(Check the bracket: $\tfrac{d}{dt}\tfrac{d\sin\theta}{dt} = \cos\theta\,\ddot\theta - \sin\theta\,\dot\theta^2$, $\tfrac{d}{dt}\cos\theta = -\sin\theta\,\dot\theta$, $\tfrac{d}{dt}\theta = \dot\theta$.) Over a steady turn $\langle\cos\varphi\rangle = 0$, so the weight term averages to zero, and the bracket returns to its value, so its derivative averages to zero too. Only the first term survives, and by (1.7)</p>
 $$\bar P = \langle\tau\rangle\,\Omega = -\frac{ml}{2}\,r_p\,\Omega^3\,\langle\sin\theta\rangle, \qquad\text{exactly.}$$
 <p>(With the geared generator of chapter 5 the identity changes, because the gearbox's own torque enters the rotor's.) Figure {{fig:trail}} shows the mechanism: the second blade, flung outwards, pulls on the hinge along the line from the hub to its centre of mass. When it trails, that line misses the hub by about $\tfrac l2\sin\theta$, a lever arm, and the pull holds the rotor back with $\tfrac{ml}{2}r_p\Omega^2\sin\theta$. A second blade that led would push the rotor on while feeding the generator: energy from nothing. With a brake taking energy, it must trail.</p>
 {{table:fig_trail}}
@@ -42,7 +42,7 @@ $$\bar P = \langle\tau\rangle\,\Omega = -\frac{ml}{2}\,r_p\,\Omega^3\,\langle\si
 
 <h3 id="swings-mass">4.3 Where the mass sits</h3>
 <div class="picture">Swing a hammer held at the very end of its handle, then grip it halfway up. The second swing is easier and weaker: the same mass sits nearer your hand.</div>
-<p>Nothing in (1.6) depends on the second blade's shape except its moment of inertia about the hinge, $I_p$, and its first moment, $Ml_c$ (mass times the distance from the hinge to its centre of mass). Chapter 3 with $I \to I_p$ and $\tfrac{ml}{2} \to Ml_c$ gives $R = Ml_cr_p/I_p$, $G = Ml_cg/(I_p\Omega^2)$ and $P^* = I_p\Omega^3G^2/[4(R-1)]$:</p>
+<p>Nothing in (1.6) depends on the second blade's shape except its moment of inertia about the hinge, $I_p$, and its first moment, $Ml_c$ (mass times the distance from the hinge to its centre of mass), with $\theta$ measured to the line through the centre of mass. Chapter 3 with $I \to I_p$ and $\tfrac{ml}{2} \to Ml_c$ gives $R = Ml_cr_p/I_p$, $G = Ml_cg/(I_p\Omega^2)$ and $P^* = I_p\Omega^3G^2/[4(R-1)]$:</p>
 $$P^*_{\rm rigid} = \frac{(M\,l_c\,g)^2}{4\,\Omega\,(M\,l_c\,r_p - I_p)}. \tag{4.4}$$
 <p>On a large rotor this is proportional to the first moment, as (3.7) said for the rod: the same mass farther out gives more. A uniform blade has its centre of mass halfway out; the same mass as a lump at its end gives, by (4.4), {{n:rod_vs_point}} times as much. A blade-shaped second blade, tapering towards its free end, has its centre of mass nearer the hinge than halfway: for harvesting, the wrong way round.</p>
 <div class="check"><div class="ctag">Check</div>A lump on a light rod: $I_p = mL^2$, $Ml_c = mL$, and (4.4) is the $mLg^2/(4\Omega|r_p - L|)$ of section 3.3. The uniform rod: $I_p = ml^2/3$, $Ml_c = ml/2$, and (4.4) is (3.5).</div>
@@ -57,7 +57,7 @@ $$P^*_{\rm rigid} = \frac{(M\,l_c\,g)^2}{4\,\Omega\,(M\,l_c\,r_p - I_p)}. \tag{4
 <details class="ans"><summary>Answer</summary>$\tfrac{ml}{2}r_p\Omega^3|\bar\theta|$ = {{n:p3_bill}} mW, about one per cent above. The exact identity uses $\langle\sin\theta\rangle$ over the full swing rather than the small-swing relation (4.3), and with it the agreement is exact.</details></li>
 <li>A 1 kg lump on a massless 1 m rod is compared with a uniform 1 kg rod of 1 m. Which needs the stronger generator, and by how much?
 <details class="ans"><summary>Answer</summary>The lump: its first moment, $mL$ = 1 kg m, is twice the rod's, $ml/2$ = 0.5 kg m, and the generator's torque at the best brake, (first moment)$\cdot g/\sqrt2$, is proportional to it: twice as large.</details></li>
-<li>With an explicit method, what is the longest stable step at 8 m/s and the best brake, in fractions of a turn?
-<details class="ans"><summary>Answer</summary>$h \le 2/|\mu_{\rm fast}| \approx 2/\kappa^*$ radians of rotor angle, $2/(2\pi\kappa^*)$ of a turn: 1/{{n:p4_hmax_inv}} of a turn, at every wind, since $\kappa^* = R - 1$ = {{n:Rm1}} does not depend on the wind. The implicit method of the simulation takes 1/240 of a turn and stays stable.</details></li>
+<li>With the forward Euler step, what is the longest stable step at the best brake, in fractions of a turn?
+<details class="ans"><summary>Answer</summary>$h \le 2/|\mu_{\rm fast}|$ radians of rotor angle, $1/(\pi|\mu_{\rm fast}|)$ of a turn, with $\mu_{\rm fast} = -\tfrac{\kappa^*}{2} - \sqrt{\kappa^{*2}/4 - R} \approx -\kappa^*$: 1/{{n:p4_hmax_inv}} of a turn at every wind, since $\kappa^* = R - 1$ = {{n:Rm1}} does not depend on the wind. The simulation's implicit method takes 1/240 of a turn. (The classical Runge–Kutta method would just manage that step too; its limit is about 2.8/$|\mu|$. An implicit method has no limit at all.)</details></li>
 </ol></div>
 </section>

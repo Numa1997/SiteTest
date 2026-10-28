@@ -199,10 +199,11 @@ G6 = mlc*g/(I*Om[6.0]**2)
 lt = -G6**2/(4*R*(R - 1))
 N['lean_theory'] = f(lt, 4); N['lean_deg'] = f(math.degrees(abs(lt)), 2); N['lean_run'] = f(th6['trail'], 4)
 ck = J('L1_blade_checks.json')
-N['p4_hmax_inv'] = f(math.pi*(R - 1), 0)                 # an explicit step is stable below 2/kappa* rad of rotor angle: 1/(pi kappa*) of a turn
 N['relax_8'] = f(ck['relax_s'], 3); N['turn_8'] = f(ck['turn_s'], 2)
-N['relax_slow8'] = f((R - 1)/(R*Om[8.0]), 2)
-for r in J('L1_terms.json'): N[f"trm_th2_{int(r['wind'])}"] = '−' + f(abs(r['grav'] - r['param'])*100, 1)
+_ks = R - 1; mu_slow = -_ks/2 + math.sqrt(_ks**2/4 - R); mu_fast = -_ks/2 - math.sqrt(_ks**2/4 - R)     # roots of mu^2 + kappa* mu + R = 0
+N['relax_slow8'] = f(1/(abs(mu_slow)*Om[8.0]), 2)          # a displaced swing creeps back in this time, s (exact slow root)
+for r in J('L1_terms.json'): N[f"trm_th2_{int(r['wind'])}"] = f((r['grav'] - r['param'])*100, 1)      # the rest of gravity's term: all of it less the rocking
+N['p4_hmax_inv'] = f(math.pi*abs(mu_fast), 0)            # forward Euler is stable below 2/|mu_fast| rad of rotor angle: 1/(pi |mu_fast|) of a turn
 # the real steady rotor speed under the turbine's own torque law (L2_steady.py)
 for r in J('L2_steady.json'):
     k = str(int(r['wind'])); N[f'rpm_real_{k}'] = f(r['nrel']['rpm'], 2); N[f'lam_real_{k}'] = f(r['nrel']['lam'], 2)
@@ -280,7 +281,7 @@ ths = np.linspace(-0.9, 0.9, 241)
 u = lambda th, ph: -np.cos(th) + np.sin(ph + th)/Gam6          # U / [(m l/2) Omega^2 r_p]
 umin, umax = -1.32, -0.35
 bowl_cols = [('#7d1d2f', 0, 'φ = 0°, rising'), ('#b5681c', 90, 'φ = 90°, up'), ('#33627f', 180, 'φ = 180°, falling'), ('#3c6a46', 270, 'φ = 270°, down')]
-svg = [f'<svg viewBox="0 0 {W3} {H3}" role="img" aria-label="The potential energy of the second blade in the turning frame against its angle, at four rotor angles at 6 m/s: four bowls of the same shape whose lowest points move left and right by about 17 degrees once per turn.">',
+svg = [f'<svg viewBox="0 0 {W3} {H3}" role="img" aria-label="The potential energy of the second blade in the turning frame against its angle, at four rotor angles at 6 m/s: four bowls whose lowest points move left and right by about 17 degrees once per turn, shallower when the mother blade points up and deeper when it points down.">',
        f'<rect x="56" y="16" width="{W3-206}" height="{H3-64}" fill="#fff" stroke="#3f2c23"/>']
 for v in (-45, -30, -15, 0, 15, 30, 45):
     X = BX(math.radians(v), -0.9, 0.9); svg.append(f'<line x1="{X:.1f}" y1="{H3-48}" x2="{X:.1f}" y2="{H3-43}" stroke="#3f2c23"/><text x="{X:.1f}" y="{H3-30}" text-anchor="middle" class="svgc">{v}°</text>')
@@ -298,7 +299,8 @@ svg.append(f'<text x="18" y="{(16+H3-48)/2}" text-anchor="middle" class="svgd" t
 svg.append('</svg>')
 T['fig_bowl'] = ('<figure class="fig">' + ''.join(svg) +
     f'<figcaption>Figure {{{{fig:bowl}}}}. The second blade\'s potential energy (2.3) in the frame of the mother blade, at 6 m/s ($\\Gamma = {N["Gam_6"]}$), '
-    f'at four positions of the rotor. The shape of the bowl is the centrifugal term and does not change; gravity tilts it, and its lowest point '
+    f'at four positions of the rotor. Gravity tilts the bowl, and it also makes it shallower when the mother blade points up and deeper when it points down '
+    f'(its stiffness at the bottom, $A$ of (1.10), runs from $R - G$ to $R + G$: ×{math.sqrt(1 - 2/Gam6 + 1/Gam6**2):.2f} to ×{math.sqrt(1 + 2/Gam6 + 1/Gam6**2):.2f} of $R$). Its lowest point '
     f'(dots) swings between {N["tilt_6"]}° on one side and {N["tilt_6"]}° on the other, $\\arcsin(1/\\Gamma)$, and back, once per turn. The second blade is a marble in this bowl, '
     f'held in honey by the generator: it chases the moving bottom, and the generator takes energy from the chase.</figcaption></figure>')
 
@@ -597,7 +599,7 @@ T['generator'] = '\n'.join(rows)
 need = J('sensor.json')['need_uW']*1e-6
 loads = [full[v]['P_load'] for v in WINDS]
 N['g4_min'] = f(min(loads)*1e3, 0); N['g4_max'] = f(max(loads)*1e3, 0)
-_eff = [(gen[v]['kappa_e']/gen[v]['eta'] + 4*gen[v]['f']/(math.pi*gen[v]['Theta']))/(gen[v]['R'] - 1) for v in WINDS]
+_eff = [(gen[v]['kappa_e']/gen[v]['eta'] + 4*gen[v]['f']/(math.pi*gen[v]['Theta']))/(gen[v]['R'] - 1 - gen[v]['j']) for v in WINDS]   # against the best brake with the motor's inertia, R - 1 - j
 N['g4_brake_lo'] = f(min(_eff), 2); N['g4_brake_hi'] = f(max(_eff), 2)
 _fr = [(2/math.pi)*gen[v]['f']*gen[v]['Theta']/(gen[v]['kappa_e']/gen[v]['eta']*gen[v]['Theta']**2/2 + (2/math.pi)*gen[v]['f']*gen[v]['Theta']) for v in WINDS]
 N['g4_frg_lo'] = f(min(_fr)*100, 0); N['g4_frg_hi'] = f(max(_fr)*100, 0)
@@ -691,7 +693,7 @@ pulls = [r['pull10_N'] for r in zr]; N['sz_pull_max'] = sig3(max(pulls)/1e3); N[
 big = [r['gen_load_W'][0] for r in zr if r['m']*r['l']/2 >= 0.5 - 1e-12 and r.get('gen_load_W') and r['gen_load_W'][0] is not None]
 N['sz_plat_lo'] = sig3(min(big)*1e3); N['sz_plat_hi'] = sig3(max(big)*1e3)
 N['sz_min_margin'] = f'{min(x for r in zr if r.get("gen_load_W") for x in r["gen_load_W"] if x)/need:,.0f}'.replace(',', ' ')   # every size, every wind
-N['tip_kgm'] = f(mo['tip_kg_per_m'], 1); N['outer3_kg'] = f(mo['outer3_kg'], 0); N['outer3_pull'] = f(mo['outer3_pull10_N']/1e3, 1)
+N['kgm_1m_in'] = f(mo['kg_per_m_1m_in'], 0); N['tip_kgm'] = f(mo['tip_kg_per_m'], 1); N['outer3_kg'] = f(mo['outer3_kg'], 0); N['outer3_pull'] = f(mo['outer3_pull10_N']/1e3, 1)
 
 # ---- chapter 1: the double pendulum free and held (L0_double.json, tools/double_pendulum.js on the site's Fig. 2 engine) ------
 dp = J('L0_double.json')
