@@ -78,6 +78,7 @@ RULES = [
     (r'docs/files\.md', 'This list. Written by tools/inventory.py; do not edit by hand.', 'docs/files.md'),
     (r'docs/.+\.md', lambda m: 'Documentation: ' + heading(m.group(0)) + '.', None),
     (r'\.gitignore', 'Files git leaves out: Python caches, node_modules, build output.', 'docs/files.md'),
+    (r'notes/home/(measure|longlines|sections)\.cjs', 'Browser measurements of the home page: index size, column widths, characters per line, section screenshots.', 'docs/styles.md'),
     (r'tools/inventory\.py', 'Writes docs/files.md and checks that every file in the repository is described.', 'docs/files.md'),
     # working notes of the Rotor Pendula and Droplet Collection studies (another session's work; start with status.md and brief.md)
     (r'notes/(droplets|rotor-pendula)/brief\.md', lambda m: 'The brief of the ' + {'droplets': 'Droplet Collection', 'rotor-pendula': 'Rotor Pendula'}[m.group(1)] + ' study: question, method and gates, for an agent working in a loop.', None),

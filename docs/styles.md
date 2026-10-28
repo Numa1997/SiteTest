@@ -419,3 +419,12 @@ site <https://phyeinusul.com> `/src/main.ts` answers 404, on the AppDeploy copy 
 11. Fixed on 2026-10-15: the check view has a third verdict, `.dp-check__verdict.is-na`
     ([data.css:302](../public/styles/data.css#L302)): muted ink on the soft card colour inside a dashed outline, for a read-back
     that finds nothing drawn at the moment. Before, such a case fell to the burgundy `.is-bad` (audit repair, commit [32c240c](https://github.com/Numa1997/SiteTest/commit/32c240c52fd0535d39a0cef608dc404cf4219484)).
+
+## Home page proportions · 28 October 2026
+
+`site.css`, line-neutral: the hero, the layout and the footer are at most 1100 px wide (were 1180); the index column is 260 px
+(was 200) with a 64 px gap; its links are IBM Plex Sans 16 px in sentence case with 9 px rows (were IBM Plex Mono 11 px,
+uppercase, tracked), the active one in wine at weight 500; on phones the index bar's links are 14 px. The bullet lines
+(`.bullets li`) and project summaries are 16 px (were 14.5 and 15 px). Prose is capped at 34 em, section introductions at
+30 em. Measured by `node notes/home/measure.cjs` (serve `dist/`): at 1440 px the longest line of prose fell from 101 to 72
+characters (median 46), in German 71, in Arabic 79; no sideways scroll at 1920, 1440, 1280, 1024 or 390 px.
