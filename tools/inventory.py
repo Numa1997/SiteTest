@@ -241,6 +241,7 @@ RULES = [
     (r'notes/droplets/brief\.md', 'The brief of the Droplet Collection study.', 'docs/portfolios.md'),
     (r'notes/rotor-pendula/derive/.+', 'Rotor Pendula model or model run (L0-L4): script, its output or its log; see the script header.', 'docs/portfolios.md'),
     (r'notes/rotor-pendula/baseline/.+', "Text of Sol's app pages before this study, kept for comparison.", 'docs/portfolios.md'),
+    (r'notes/rotor-pendula/teaching/export_notes\.py', 'Exports the Rotor Pendula lecture notes as plain text, numbers filled in, for a blind reader.', 'docs/portfolios.md'),
     (r'notes/rotor-pendula/.+\.md', 'Rotor Pendula study record: brief, status, contracts, skeptic and referee reports, dossiers.', 'docs/portfolios.md'),
     # the Hydraulic Press Study's source (not served): portfolios-src/hydraulics/, explained in its README.md
     (r'portfolios-src/hydraulics/README\.md', "The study's source: what it is, how the served page is generated, the four checks.", 'portfolios-src/hydraulics/README.md'),

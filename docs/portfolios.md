@@ -197,7 +197,7 @@ Since 23 October 2026 the page at `portfolios/rotor-pendula/index.html` is gener
 source in [`portfolios-src/rotor-pendula/`](../portfolios-src/rotor-pendula/) (its [`README.md`](../portfolios-src/rotor-pendula/README.md)
 gives the commands and checks); the models, model runs and review record are in `notes/rotor-pendula/`.
 
-**What the reader gets.** Two tabs. *Lecture notes* (`#notes`): *A Second Blade on a Turning Blade*, nine chapters (0–8), 36
+**What the reader gets.** Two tabs. *Lecture notes* (`#notes`): *A Second Blade on a Turning Blade*, ten chapters (0–9), 39
 numbered equations and eight figures, written since 28 October 2026 as a teacher's notes for a reader who knows nothing about wind
 turbines: every chapter has warm-ups and guess-first boxes with folded answers, worked examples with the machine's own numbers, a
 "What to remember" box and problems with answers (box styles `.warm`, `.guess`, `.remember`, `.problems`, `details.ans` in
@@ -215,7 +215,13 @@ equation, each neglected term measured on its own (`notes/rotor-pendula/derive/L
 with the rotor's torque written out (Figure 8), where the mass sits, chaos (Lyapunov exponents at three winds and three brakes:
 every start ends on one regular swing). Then a ceiling on random shaking, gusts on the NREL 5 MW turbine (its torque law and the
 IEC wind explained in words), the blade's sag and shaking at its tip, a real geared generator (maxon RE 25 with a GP 32 C
-gearhead, ratio 492), and how all of it scales over the sizes of real tip devices, 0.5 to 3 m and up to 90 kg (section 7.6).
+gearhead, ratio 492), and how all of it scales over the sizes of real tip devices, 0.5 to 3 m and up to 90 kg (section 7.6). Chapter 8 estimates
+the air on the second blade for three shapes (bare rod, streamlined, small wing; `notes/rotor-pendula/derive/L5_air.py`): the
+steady in-plane push is larger than gravity's for a rod or a lifting shape and decides whether the device costs or helps the
+turbine; with the lean it causes, the once-per-turn push from wind shear and shaft tilt changes the harvest by about −24 % (rod)
+to +44 % (wing), more for the wing if the air at the tip is not slowed; the air barely damps the swing. Chapter 9 is the answer. The notes hold
+the rotor at λ*; section 0.7 and chapter 5 say where the turbine's own torque law puts it (`L2_steady.py`: 7.91 rpm at 6 m/s,
+13 % less power there).
 Every number is computed by the study's models (`tools/make_numbers.py`) or listed with its reason (`tools/typed_numbers.py`).
 The teaching research behind the rewrite and a blind learner's reading of the previous version are in `notes/rotor-pendula/teaching/`. *Simulation* (`#sim`): the same machine;
 choose a steady wind (6, 8 or 10 m/s), the brake and an ideal brake or the geared generator; the page solves the full equations

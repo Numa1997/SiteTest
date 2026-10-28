@@ -196,6 +196,26 @@ N['lean_theory'] = f(lt, 4); N['lean_deg'] = f(math.degrees(abs(lt)), 2); N['lea
 ck = J('L1_blade_checks.json')
 N['relax_8'] = f(ck['relax_s'], 3); N['turn_8'] = f(ck['turn_s'], 2)
 N['relax_slow8'] = f((R - 1)/(R*Om[8.0]), 2)
+for r in J('L1_terms.json'): N[f"trm_th2_{int(r['wind'])}"] = '−' + f(abs(r['grav'] - r['param'])*100, 1)
+# the real steady rotor speed under the turbine's own torque law (L2_steady.py)
+for r in J('L2_steady.json'):
+    k = str(int(r['wind'])); N[f'rpm_real_{k}'] = f(r['nrel']['rpm'], 2); N[f'lam_real_{k}'] = f(r['nrel']['lam'], 2)
+    N[f'Preal_pct_{k}'] = ('+' if r['nrel']['P_ratio'] >= 1 else '−') + f(abs(r['nrel']['P_ratio'] - 1)*100, 0)
+    N[f'Pst_real_{k}'] = f(Pst(r['nrel']['Om'])*1e3, 0)
+# chapter 8: the air on the second blade (L5_air.py); a3: the wind slowed by a third at the tip, a0: not slowed
+_A = J('L5_air.json'); _r3, _r0 = _A['runs']['a3'], _A['runs']['a0']
+sg_ = lambda x, d: ('+' if x >= 0 else '−') + f(abs(x), d)
+N['air_W'] = f(_r3['W'], 1); N['air_gam'] = f(_r3['gam_deg'], 2); N['air_gam0'] = f(_r0['gam_deg'], 2); N['air_q'] = f'{_r3["q"]:,.0f}'.replace(',', ' ')
+N['air_du'] = f(_r3['du'], 2); N['air_dg'] = f(_r3['dgam_deg'], 2); N['air_dWt'] = f(_A['dW_tilt'], 2)
+N['air_Re_rod'] = f'{round(_r3["Re_rod"], -3):,.0f}'.replace(',', ' '); N['air_Re_wing'] = f'{round(_r3["Re_wing"], -4):,.0f}'.replace(',', ' ')
+N['air_d_rod'] = f(_A['d_rod']*1e3, 1); N['air_G'] = f(_A['G_torque'], 2)
+for ak, rr in (('3', _r3), ('0', _r0)):
+    for k, c in rr['cases'].items():
+        N[f'air_{k}{ak}_Ft'] = sg_(c['Ft'], 1); N[f'air_{k}{ak}_lean'] = sg_(c['lean_deg'], 1); N[f'air_{k}{ak}_FG'] = f(abs(c['F_over_G']), 2)
+        N[f'air_{k}{ak}_P'] = f'{abs(c["P_rotor"]):,.0f}'.replace(',', ' '); N[f'air_{k}{ak}_As'] = sg_(c['A_shear'], 2); N[f'air_{k}{ak}_At'] = sg_(c['A_tilt'], 2)
+        N[f'air_{k}{ak}_pct'] = sg_((c['ratio'] - 1)*100, 0); N[f'air_{k}{ak}_cair'] = sg_(c['c_air'], 3); N[f'air_{k}{ak}_x'] = f(c['ratio'], 2)
+N['air_mOm2rp'] = f(m*Om[8.0]**2*rp, 1)
+N['lam_k2'] = f(J('L2_steady.json')[1]['k2']['lam'], 2)
 # chapter 3: each neglected term alone, against the small-swing power, at the best brake (L1_terms.py)
 for r in J('L1_terms.json'):
     k = str(int(r['wind']))
@@ -356,8 +376,8 @@ tr = [f'<svg viewBox="0 0 {W8} {H8}" style="width:100%;height:auto;max-width:{W8
       f'<text x="{hx8+12}" y="{(hy8+fy)/2+4:.1f}" class="svgc">lever arm</text></svg>']
 T['fig_trail'] = ('<figure class="fig">' + ''.join(tr) +
     f'<figcaption>Figure 8. Why the trail is the bill. The second blade trails behind the mother blade\'s line, against the rotation; the trail is drawn '
-    f'{EXT} times too large (at 6 m/s it is {N["lean_deg"]}°). Flung outwards, the second blade pulls on the hinge along the line from the hub to its '
-    'centre of mass (green). That line misses the hub by a small lever arm (wine), so the pull holds the rotor back, with the torque '
+    f'{EXT} times too large (at 6 m/s it is {N["lean_deg"]}°). Flung outwards, the second blade pulls on the hinge in the direction from the hub to its '
+    'centre of mass (green). The pull\'s line, through the hinge, misses the hub by a small lever arm (wine), so the pull holds the rotor back, with the torque '
     f'$\\tfrac{{ml}}{{2}}r_p\\Omega^2\\sin\\theta$; on average {N["tq_harv6"]} N m at 6 m/s. The rotor pushes against it, and that steady push is the power it pays.</figcaption></figure>')
 # ---- chaos (L1_chaos_blade.json) ---------------------------------------------------------------------------------------
 ch = J('L1_chaos_blade.json')
@@ -439,6 +459,9 @@ N['zeta_sh'] = f(pick(0.005, 0.005, False)['c']/(I*Om[8.0])/(2*math.sqrt(R)), 1)
 O0 = meta['Om0']; gt = g*math.cos(math.radians(5.0))
 N['sh_cstar_one'] = f((mlc*rp/I - 1)*I*O0, 1)
 N['grav_one'] = f(Pst(O0, gt)*1e3, 0)
+N['rpm_O0'] = f(O0*60/(2*math.pi), 2)
+_xs = pick(0.005, 0.005, False)['c']/((mlc*rp/I - 1)*I*O0); _gs = 2*_xs/(1 + _xs**2)*Pst(O0, gt)
+N['sh_x'] = f(_xs, 3); N['grav_at_sh'] = f(_gs*1e3, 0); N['sh_tot_100'] = sig3((pick(0.005, 0.1, False)['P'] + _gs)*1e3)
 we = 2*math.pi*meta['f_e']
 N['freq_ratio'] = f(O0*math.sqrt(R)/we, 2)
 Lt, mt_ = meta['L_tuned'], meta['m_tuned']
@@ -483,6 +506,10 @@ T['generator'] = '\n'.join(rows)
 need = J('sensor.json')['need_uW']*1e-6
 loads = [full[v]['P_load'] for v in WINDS]
 N['g4_min'] = f(min(loads)*1e3, 0); N['g4_max'] = f(max(loads)*1e3, 0)
+_eff = [(gen[v]['kappa_e']/gen[v]['eta'] + 4*gen[v]['f']/(math.pi*gen[v]['Theta']))/(gen[v]['R'] - 1) for v in WINDS]
+N['g4_brake_lo'] = f(min(_eff), 2); N['g4_brake_hi'] = f(max(_eff), 2)
+_fr = [(2/math.pi)*gen[v]['f']*gen[v]['Theta']/(gen[v]['kappa_e']/gen[v]['eta']*gen[v]['Theta']**2/2 + (2/math.pi)*gen[v]['f']*gen[v]['Theta']) for v in WINDS]
+N['g4_frg_lo'] = f(min(_fr)*100, 0); N['g4_frg_hi'] = f(max(_fr)*100, 0)
 N['g4_th_max'] = f(max(max(gen[v]['Theta'], full[v]['Theta']) for v in WINDS), 2)   # the largest swing at the chosen settings
 N['g4_margin'] = f'{min(loads)/need:,.0f}'.replace(',', ' ')
 _mg = min(loads)/need; _e = 10**(len(str(int(_mg))) - 2); N['g4_margin_round'] = f'{int(_mg//_e*_e):,}'.replace(',', ' ')   # rounded down to two figures, for the prose
