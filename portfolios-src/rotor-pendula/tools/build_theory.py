@@ -33,6 +33,17 @@ def _sub(mt):
         raise SystemExit(f'unknown {kind} key: {key}')
     return store[key]
 body = re.sub(r'\{\{(n|table):([A-Za-z0-9_]+)\}\}', _sub, body)
+# Figures are numbered here, in the order their captions appear: a caption starts 'Figure {{fig:key}}.', and the text refers to
+# the figure as 'Figure {{fig:key}}'. A reference to a key without a caption, or two captions with one key, stops the build.
+_caps = re.findall(r'<figcaption>Figure \{\{fig:([A-Za-z0-9_]+)\}\}\.', body)
+if len(_caps) != len(set(_caps)):
+    raise SystemExit(f'figure label used for two captions: {sorted(k for k in _caps if _caps.count(k) > 1)}')
+FIGNO = {k: i + 1 for i, k in enumerate(_caps)}
+def _fig(mt):
+    if mt.group(1) not in FIGNO:
+        raise SystemExit(f'unknown figure label: {mt.group(1)}')
+    return str(FIGNO[mt.group(1)])
+body = re.sub(r'\{\{fig:([A-Za-z0-9_]+)\}\}', _fig, body)
 # figures: each SVG in a scroll box, so that on a phone it keeps a readable size and scrolls sideways inside its plate
 body = re.sub(r'(<figure class="fig[^"]*">)\s*(<svg.*?</svg>)', r'\1<div class="figscroll">\2</div>', body, flags=re.S)
 # keep a number with its unit, and the groups of a long number, on one line: a no-break space, outside maths and tags only
@@ -122,7 +133,9 @@ if '$' in body:
     raise SystemExit('unmatched $ left in the source')
 
 # Equation references become links. The math is still a placeholder here, so no link can land inside it.
-body = re.sub(r'\((\d+\.\d+)\)', lambda m: f'<a href="#eq-{m.group(1)}">({m.group(1)})</a>' if m.group(1) in eq_ids else m.group(0), body)
+_link = lambda seg: re.sub(r'\((\d+\.\d+)\)', lambda m: f'<a href="#eq-{m.group(1)}">({m.group(1)})</a>' if m.group(1) in eq_ids else m.group(0), seg)
+_parts = re.split(r'(<svg.*?</svg>|<[^>]+>)', body, flags=re.S)            # not inside a tag (aria-label), not inside a figure's drawing
+body = ''.join(p_ if i % 2 else _link(p_) for i, p_ in enumerate(_parts))
 
 # Typeset every formula in one batch.
 res = subprocess.run(['node', str(TOOLS / 'katex_render.js')], input=json.dumps([{'tex': t, 'display': d} for t, d in jobs]),

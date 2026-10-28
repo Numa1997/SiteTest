@@ -22,38 +22,38 @@ TOOLS = ROOT / 'tools'
 PAGE = ROOT / 'rotor_sim.html'
 KATEX = TOOLS / 'node_modules' / 'katex' / 'dist'
 
-s = PAGE.read_text()
+def typeset_page(s):
+    """Steps 1 and 2 on the text of a page: the fonts, then every equation and KaTeX's stylesheet. Returns (text, equations)."""
+    fonts = (ROOT / 'fonts' / 'fonts-embedded.css').read_text().strip()
+    s = re.sub(r'/\*FONTS-BEGIN\*/[\s\S]*?/\*FONTS-END\*/', lambda m: '/*FONTS-BEGIN*/\n' + fonts + '\n/*FONTS-END*/', s, count=1)
+    texs = [html.unescape(m.group(1)) for m in BLOCK.finditer(s)]
+    res = subprocess.run(['node', str(TOOLS / 'katex_render.js')], input=json.dumps([{'tex': t, 'display': True} for t in texs]),
+                         capture_output=True, text=True, check=True)
+    out = json.loads(res.stdout)
+    bad = [(t, r['error']) for t, r in zip(texs, out) if 'error' in r]
+    if bad:
+        for t, e in bad:
+            print('KaTeX error:', e, '\n   in:', t[:160])
+        raise SystemExit(1)
+    it = iter(zip(texs, out))
 
-# 1. fonts
-fonts = (ROOT / 'fonts' / 'fonts-embedded.css').read_text().strip()
-s = re.sub(r'/\*FONTS-BEGIN\*/[\s\S]*?/\*FONTS-END\*/', lambda m: '/*FONTS-BEGIN*/\n' + fonts + '\n/*FONTS-END*/', s, count=1)
+    def put(_m):
+        t, r = next(it)
+        label = html.escape(re.sub(r'\s+', ' ', t), quote=True)
+        return f'<div class="eq tex" data-tex="{html.escape(t, quote=True)}" role="img" aria-label="{label}">{r["html"]}</div><!--/eq-->'
 
-# 2. equations
+    s = BLOCK.sub(put, s)
+    css = (KATEX / 'katex.min.css').read_text()
+    css = re.sub(r'@font-face\{[^}]*\}', _embed, css)
+    s = re.sub(r'/\*KATEX-BEGIN\*/[\s\S]*?/\*KATEX-END\*/', lambda m: '/*KATEX-BEGIN*/\n' + css + '\n/*KATEX-END*/', s, count=1)
+    return s, len(texs)
+
+
 BLOCK = re.compile(r'<div class="eq tex" data-tex="([^"]*)"[^>]*>[\s\S]*?</div><!--/eq-->')
-texs = [html.unescape(m.group(1)) for m in BLOCK.finditer(s)]
-res = subprocess.run(['node', str(TOOLS / 'katex_render.js')], input=json.dumps([{'tex': t, 'display': True} for t in texs]),
-                     capture_output=True, text=True, check=True)
-out = json.loads(res.stdout)
-bad = [(t, r['error']) for t, r in zip(texs, out) if 'error' in r]
-if bad:
-    for t, e in bad:
-        print('KaTeX error:', e, '\n   in:', t[:160])
-    raise SystemExit(1)
-it = iter(zip(texs, out))
-
-
-def put(_m):
-    t, r = next(it)
-    label = html.escape(re.sub(r'\s+', ' ', t), quote=True)
-    return f'<div class="eq tex" data-tex="{html.escape(t, quote=True)}" role="img" aria-label="{label}">{r["html"]}</div><!--/eq-->'
-
-
-s = BLOCK.sub(put, s)
-css = (KATEX / 'katex.min.css').read_text()
 KEEP = ('Main', 'Math', 'AMS', 'Size1', 'Size2', 'Size3', 'Size4')
 
 
-def embed(m):
+def _embed(m):
     rule = m.group(0)
     if not re.search(r'font-family:KaTeX_(%s);' % '|'.join(KEEP), rule):
         return ''
@@ -62,34 +62,37 @@ def embed(m):
     return re.sub(r'src:[^;}]*', f'src:url(data:font/woff2;base64,{data}) format("woff2")', rule)
 
 
-css = re.sub(r'@font-face\{[^}]*\}', embed, css)
-s = re.sub(r'/\*KATEX-BEGIN\*/[\s\S]*?/\*KATEX-END\*/', lambda m: '/*KATEX-BEGIN*/\n' + css + '\n/*KATEX-END*/', s, count=1)
-
-# 3. numbers and tables
-N, T = {}, {}
-for name in ('sim_solutions.json', 'sim_check.json'):
-    d = json.loads((ROOT / 'data' / name).read_text())
-    N.update(d.get('n', {}))
-    T.update(d.get('t', {}))
-used = set()
-
-
-def num(m):
-    k = m.group(1)
-    if k not in N:
-        raise SystemExit(f'unknown number key: {k}')
-    used.add(k)
-    return f'<span data-n="{k}">{html.escape(N[k], quote=False)}</span>'
+def main():
+    s, ntex = typeset_page(PAGE.read_text())
+    # 3. numbers and tables
+    N, T = {}, {}
+    for name in ('sim_solutions.json', 'sim_check.json'):
+        d = json.loads((ROOT / 'data' / name).read_text())
+        N.update(d.get('n', {}))
+        T.update(d.get('t', {}))
+    used = set()
 
 
-def tab(m):
-    k = m.group(1)
-    if k not in T:
-        raise SystemExit(f'unknown table key: {k}')
-    return f'<tbody data-t="{k}">{T[k]}</tbody>'
+    def num(m):
+        k = m.group(1)
+        if k not in N:
+            raise SystemExit(f'unknown number key: {k}')
+        used.add(k)
+        return f'<span data-n="{k}">{html.escape(N[k], quote=False)}</span>'
 
 
-s = re.sub(r'<span data-n="([A-Za-z0-9_]+)">[^<]*</span>', num, s)
-s = re.sub(r'<tbody data-t="([A-Za-z0-9_]+)">[\s\S]*?</tbody>', tab, s)
-PAGE.write_text(s)
-print(f'rotor_sim.html: {len(texs)} equations typeset, {len(used)} numbers and {len(T)} tables filled, {len(s) / 1e6:.2f} MB')
+    def tab(m):
+        k = m.group(1)
+        if k not in T:
+            raise SystemExit(f'unknown table key: {k}')
+        return f'<tbody data-t="{k}">{T[k]}</tbody>'
+
+
+    s = re.sub(r'<span data-n="([A-Za-z0-9_]+)">[^<]*</span>', num, s)
+    s = re.sub(r'<tbody data-t="([A-Za-z0-9_]+)">[\s\S]*?</tbody>', tab, s)
+    PAGE.write_text(s)
+    print(f'rotor_sim.html: {ntex} equations typeset, {len(used)} numbers and {len(T)} tables filled, {len(s) / 1e6:.2f} MB')
+
+
+if __name__ == '__main__':
+    main()

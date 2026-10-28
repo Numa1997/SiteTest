@@ -1,0 +1,84 @@
+<section id="brake" class="chapter">
+<h2><span class="chn">3</span> The best brake, and how much it gives</h2>
+<p>Equation (1.8) has no closed solution, but for small swings it has, and that solution is the whole design rule: how hard to brake, and how much power comes out. Its shape is an old one. Connect a lamp to a 12 V battery whose inner resistance is 2 Ω. A bare wire in the lamp's place carries current but turns none of it into heat; an open gap carries none. Between them, the 2 Ω lamp, matching the battery, gets the most, 18 W. There is nothing at either extreme, and the best lies where the load matches the source.</p>
+
+<h3 id="brake-small">3.1 Small swings: a driven, braked oscillator</h3>
+<div class="picture">Hang a weight on a stiff spring and move your hand slowly up and down, far slower than the spring's own bounce. The weight simply follows your hand. Put the weight in honey and it follows a little late. It never bounces, because you never push at its own rhythm.</div>
+<p>Let $\theta$ be small and expand the two pulls of (1.8):</p>
+$$R\sin\theta + G\cos(\varphi+\theta) = \underbrace{R\,\theta}_{\text{spring}} + \underbrace{G\cos\varphi}_{\text{push}} - \underbrace{G\,\theta\sin\varphi}_{\text{stiffness rocking}} + O(\theta^2).$$
+<p>The last term is not small beside $R\theta$: its relative size is $1/\Gamma$, up to {{n:invGam_max}}. But it acts at the wrong rhythm. The swing goes once per turn; multiplied by $\sin\varphi$, it gives a push that is partly steady and partly twice per turn, and neither rhythm drives a once-per-turn swing. It can act back on the swing only by passing through the same term a second time, so its effect is of second order (section 4.1 measures it). Drop it, and what is left is</p>
+$$\theta'' + \kappa\,\theta' + R\,\theta = -G\cos\varphi, \tag{3.1}$$
+<p>the driven, damped oscillator: spring $R$, damper $\kappa$, push $G$ once per turn.</p>
+
+<h3 id="brake-response">3.2 The swing, and the triangle of torques</h3>
+<p>Once the start has died away the second blade swings at the push's frequency, by some amount and some time late. Both are best read from a turning arrow.</p>
+<div class="idea"><div class="ctag">The turning arrow</div><dl>
+<dt>feel</dt><dd>Watch the shadow of a bicycle pedal on the road under a high sun: it slides to and fro, smoothly, once per turn of the crank. The to-and-fro is the shadow of something going round.</dd>
+<dt>physics</dt><dd>Anything that varies as $\Theta\cos(\varphi-\delta)$ is the shadow of an arrow of length $\Theta$ turning once per turn, $\delta$ behind an arrow that starts at $\varphi = 0$. Adding two such quantities adds their arrows; a rate, $d/d\varphi$, turns the arrow a quarter turn ahead.</dd>
+<dt>measure</dt><dd>On a record of one turn, $\Theta$ is half the distance from the lowest to the highest point, and $\delta$ is how much rotor angle passes between the push's peak and the swing's.</dd>
+<dt>maths</dt><dd>$\theta = \mathrm{Re}\,[A\,e^{i\varphi}]$ with $|A| = \Theta$; then $\theta' = \mathrm{Re}\,[iA\,e^{i\varphi}]$ and $\theta'' = \mathrm{Re}\,[-A\,e^{i\varphi}]$.</dd>
+</dl></div>
+<p>Put $\theta = \mathrm{Re}[A e^{i\varphi}]$ into (3.1); each derivative is a factor $i$:</p>
+$$\begin{aligned} (-1 + i\kappa + R)\,A &= -G \quad\Rightarrow\quad A = \frac{-G}{(R-1) + i\kappa}, \\ \theta &= -\Theta\cos(\varphi - \delta), \qquad \Theta = \frac{G}{\sqrt{(R-1)^2 + \kappa^2}}, \qquad \tan\delta = \frac{\kappa}{R-1}. \end{aligned} \tag{3.2}$$
+<p>The $-1$ is the second blade's own inertia: shaking it at the frequency 1 takes $\theta'' = -\theta$, against the spring, so the push meets the <b>net stiffness</b> $R - 1$ (which equal arms cancel, section 1.4). Unbraked, the swing is in step, $\Theta = G/(R-1)$; a brake shrinks it and makes it lag by $\delta$.</p>
+<p>Read the first line of (3.2) as arrows: the net stiffness's torque $(R-1)A$ along the swing, the brake's $i\kappa A$ a quarter turn ahead, at right angles, and their sum balancing the push. A right triangle whose long side is the push, $G$, whatever the brake (Figure {{fig:torques}}).</p>
+{{table:fig_torques}}
+
+<h3 id="brake-power">3.3 The harvested power, read off the triangle</h3>
+<p>The generator takes the power $c\dot\theta^2$. With $\dot\theta = \Omega\theta'$ and the average of $\sin^2$ over a turn equal to $\tfrac12$, $\langle\dot\theta^2\rangle = \Omega^2\Theta^2/2$, so</p>
+$$\bar P = \tfrac12 c\,\Omega^2\Theta^2 = I\Omega^3\,\frac{\kappa\,\Theta^2}{2} = I\Omega^3\,\frac{\kappa\,G^2}{2\left[(R-1)^2 + \kappa^2\right]}. \tag{3.3}$$
+<p>Now the triangle. Its short sides are $(R-1)\Theta$ and $\kappa\Theta$, so its area is $\tfrac12\kappa(R-1)\Theta^2$, and</p>
+$$\bar P = \frac{I\Omega^3}{R-1}\times\text{area} = \frac{I\Omega^3}{R-1}\cdot\tfrac12\,G\,h,$$
+<p>with $h$ the height of the right-angled corner above the long side. The long side is fixed, $G$; the right angle sits on the half circle over it (Thales' theorem). So $h \le G/2$, with equality at the top of the circle, where the two short sides are equal:</p>
+$$(R-1)\Theta = \kappa\Theta \quad\Rightarrow\quad \kappa^* = |R - 1|. \tag{3.4}$$
+<p><b>The best brake equals the net stiffness</b>: the load matches the source, the swing lags the push by $\delta = 45°$. The same circle gives the whole curve: $h = G\cos\delta\sin\delta = \tfrac G2\sin2\delta$, so</p>
+$$\frac{\bar P}{P^*} = \sin 2\delta = \frac{2x}{1+x^2}, \qquad x = \tan\delta = \frac{\kappa}{\kappa^*}.$$
+<p>(Calculus agrees: $d\bar P/d\kappa = 0$ in (3.3) gives $(R-1)^2 - \kappa^2 = 0$.) The largest area is $G^2/4$, so $P^* = I\Omega^3G^2/[4(R-1)]$. Back in physical units, with $I\Omega^2G = \tfrac{ml}{2}g$ and $I(R-1) = \tfrac{ml}{2}r_p - I$:</p>
+$$\boxed{P^* = \frac{\left(\tfrac{ml}{2}\,g\right)^2}{4\,\Omega\left(\tfrac{ml}{2}\,r_p - I\right)} = \frac{m\,g^2\,l}{8\,\Omega\left(r_p - \tfrac23 l\right)}.} \tag{3.5}$$
+<p>Read it as the battery, with the brake as the lamp's resistance. A weak brake, a triangle flat along the push, is the bare wire: the second blade swings freely, nothing resists, nothing is taken. A strong brake, a triangle flat on its end, is the open gap: nothing moves, nothing is taken. Figure {{fig:brake}} draws $\sin 2\delta$ against the brake.</p>
+{{table:fig_brake}}
+<div class="check"><div class="ctag">Check</div>Units: kg · (m/s²)² · m / (s⁻¹ · m) = kg m²/s³ = W. No gravity, no power. At $\tfrac{ml}{2}r_p = I$, that is $l = \tfrac32 r_p$, the formula blows up: resonance, the second blade's own frequency $\sqrt R$ equal to the push's (section 3.5). A small lump on a light rod, $I = mL^2$ and first moment $mL$, gives $mLg^2/(4\Omega|r_p - L|)$.</div>
+<div class="idea"><div class="ctag">Critical damping</div><dl>
+<dt>feel</dt><dd>A good door closer brings the door shut without slamming and without bouncing back. Push down on the corner of a car and let go: good shock absorbers bring it back in one movement.</dd>
+<dt>physics</dt><dd>A spring with a brake, nudged and let go, rings if the brake is weak and creeps back if it is strong. Between the two, at critical damping, it returns fastest without overshooting.</dd>
+<dt>measure</dt><dd>Nudge it and count the overshoots: one or more means below critical, none means at or above.</dd>
+<dt>maths</dt><dd>$\theta'' + \kappa\theta' + R\theta = 0$ with $\theta \propto e^{\mu\varphi}$: $\mu^2 + \kappa\mu + R = 0$, $\mu = -\tfrac\kappa2 \pm \sqrt{\kappa^2/4 - R}$. The roots are real, no ringing, for $\kappa \ge 2\sqrt R$.</dd>
+</dl></div>
+<p>The best brake is $\kappa^*/(2\sqrt R)$ = {{n:zeta_star}} times critical: nudged, the second blade creeps back without ringing, a marble in thick honey chasing the moving bottom of the bowl. The electrical twin is exact: an alternating supply feeds a resistor through a capacitor, which stores energy as a spring does and takes no power over a cycle; the resistor takes the most when its resistance equals the capacitor's reactance. The generator plays the resistor, the net stiffness the capacitor, and gravity's push the supply. Unlike the battery's lamp, nothing is wasted: all of $P^*$ goes into the generator.</p>
+<p><b>The generator's torque.</b> At the best brake the triangle is isosceles, so the brake's side is the long side over $\sqrt2$:</p>
+$$\tau^* = I\Omega^2\cdot\kappa^*\Theta^* = I\Omega^2\cdot\frac{G}{\sqrt2} = \frac{\tfrac{ml}{2}\,g}{\sqrt2},$$
+<p>{{n:tau_star}} N m for our second blade, at every wind: what the generator must hold. The power still falls with the wind, because the swing's angular speed $\Omega\Theta^*$ falls as $1/\Omega$.</p>
+<p><b>The best brake in physical units.</b> $c^* = \kappa^*I\Omega = \left(\tfrac{ml}{2}r_p - I\right)\Omega$, and on a large rotor, $r_p \gg l$,</p>
+$$c^* \approx \frac{ml}{2}\,r_p\,\Omega: \tag{3.6}$$
+<p>the first moment times the speed of the hinge. Without the approximation, $c^*$ = {{n:cst_6}} to {{n:cst_10}} N m s from 6 to 10 m/s. That is a hard brake for so small a machine, and reaching it is the hardest part of choosing a generator (chapter 5).</p>
+<p><b>The power on a large rotor.</b> Drop $I$ beside $\tfrac{ml}{2}r_p$ in (3.5) in the same way:</p>
+$$P^* \approx \frac{\tfrac{ml}{2}\,g^2}{4\,\Omega r_p} = \frac{\tfrac{ml}{2}\,g^2}{4\,v_{\rm tip}}. \tag{3.7}$$
+<p>Only the first moment and the speed of the hinge, $v_{\rm tip} = \lambda^*v$, matter. The faster the hinge, the stiffer the centrifugal spring and the less gravity moves the second blade: it gives the most in light wind.</p>
+
+<h3 id="brake-blade">3.4 On our blade, and how far to trust it</h3>
+<div class="press"><div class="ctag">Worked example</div>8 m/s, the {{n:mB}} kg, {{n:lB}} m second blade at the 63 m tip. $\Omega$ = {{n:acc8_om}} rad/s, a turn every {{n:turn8_s}} s. $R = 3r_p/2l$ = {{n:R}}, $G = 3g/(2l\Omega^2)$ = {{n:G_8}}. Best brake $\kappa^* = R - 1$ = {{n:Rm1}}, $c^* = \kappa^* I\Omega$ = {{n:cst_8}} N m s. Swing $\Theta^* = G/(\sqrt2\,\kappa^*)$ = {{n:Th_8}} rad, {{n:Th_8_deg}}°: the free end sways {{n:Th_8_cm}} cm either side of the mother blade's line, once every {{n:turn8_s}} s. Generator torque $\pm${{n:tau_star}} N m; (3.5) gives $P^*$ = {{n:Pst_8}} mW.</div>
+<p>Table 2 repeats this at the three winds and sets the closed form beside the full nonlinear equation (chapter 4) at the same brake.</p>
+<div class="tblw">{{table:winds}}</div>
+<p>The closed form (3.5) is within {{n:lin_err_max}} % of the full equation at every wind. Equation (3.7), which drops the second blade's own inertia $I$ beside $\tfrac{ml}{2}r_p$, gives {{n:flat_6}}, {{n:flat_8}} and {{n:flat_10}} mW, within {{n:flat_err_max}} % of (3.5), because $l$ is 63 times shorter than $r_p$.</p>
+<p>Figure {{fig:compare}} sets the theory against the full equation (1.8) over a wide range of brakes. Near the best brake they agree to {{n:cmp_star_dev}} %. They part where the swing is largest, a light brake in light wind: at 6 m/s and 0.05 $\kappa^*$ the full equation swings {{n:cmp_th6}} rad and gives {{n:cmp_dev6}} % more than (3.3); at 10 m/s, swinging {{n:cmp_th10}} rad, {{n:cmp_dev10}} %: the excess grows as the swing squared. At the best brake size and timing are right ({{n:cmp_amp6}} rad at 6 m/s against the full {{n:Th_max}} rad), but the full swing is shifted: its mean angle is {{n:cmp_mean6}} rad, behind the mother blade's line (what remains is {{n:cmp_rest6}} rad rms). A linear theory cannot make a constant offset from a push that averages to zero. Chapter 4 shows that this small trail is what makes the rotor pay.</p>
+{{table:fig_compare}}
+
+<h3 id="brake-res">3.5 Resonance is out of reach</h3>
+<p>Pushed at its own rhythm an oscillator gives the most: resonance, $R - 1 = 0$, the triangle's stiffness side gone. For a rod that needs $l = \tfrac32 r_p$, half as long again as the mother blade; the equal-armed point pendulum of section 1.4 sits on it, a second blade on a turbine never comes near ($R - 1$ = {{n:Rm1}}). Extra inertia could cancel the spring, a flywheel geared to the generator (chapter 5) of {{n:Rm1}} times the second blade's moment of inertia. These notes do not pursue it, and chapter 1 says why: at resonance the double pendulum's chaos comes back.</p>
+<div class="remember"><div class="ctag">What to remember</div><ul>
+<li>For small swings the second blade is a driven, braked oscillator: spring $R$, push $G$ once per turn, brake $\kappa$.</li>
+<li>Its torques are turning arrows that close a right triangle over gravity's push; the power is proportional to the triangle's area.</li>
+<li>Thales: the tallest triangle is isosceles. The best brake equals the net stiffness, $\kappa^* = R - 1$, the swing lags by 45°, and $\bar P/P^* = \sin2\delta$.</li>
+<li>The best brake is about five times critical damping: the second blade does not ring, it creeps after the moving bottom of the bowl.</li>
+<li>$P^* \approx \tfrac{ml}{2}g^2/(4v_{\rm tip})$: proportional to the first moment, smaller in stronger wind; {{n:Pst_6}}, {{n:Pst_8}} and {{n:Pst_10}} mW at 6, 8 and 10 m/s for 1 kg on 1 m.</li>
+<li>The generator must hold $\tfrac{ml}{2}g/\sqrt2$ = {{n:tau_star}} N m at every wind.</li>
+</ul></div>
+<div class="problems"><div class="ctag">Problems</div><ol>
+<li>Show from (3.3) that a brake twice as strong as the best one, or half as strong, gives the same power. What fraction of $P^*$ is it?
+<details class="ans"><summary>Answer</summary>With $x = \kappa/\kappa^*$, $\bar P/P^* = 2x/(1 + x^2)$, unchanged when $x \to 1/x$. At $x = 2$ or $\tfrac12$ it is 4/5, 80 % of $P^*$. On the circle, the two triangles are mirror images. The hump of Figure {{fig:brake}} is flat-topped: the brake need not be set exactly.</details></li>
+<li>At 10 m/s, how far does the free end of our second blade sway, and how much power does it give at the best brake?
+<details class="ans"><summary>Answer</summary>$\Theta^* = G/(\sqrt2\,\kappa^*)$ with $G$ = {{n:G_10}}: {{n:Th_10}} rad, so the free end sways {{n:Th_10_cm}} cm either way. (3.5) gives {{n:Pst_10}} mW.</details></li>
+<li>The second blade's mass is doubled, at the same length. What happens to $P^*$, to the best brake $c^*$, and to the torque the generator must hold?
+<details class="ans"><summary>Answer</summary>All three double. In (3.5) the first moment appears squared on top and once below; $c^*$ and $\tau^*$ are each proportional to the first moment.</details></li>
+</ol></div>
+</section>

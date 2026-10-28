@@ -41,10 +41,12 @@ import numpy as np
 L_ = open(os.path.join(os.path.dirname(os.path.abspath(__file__)), 'data', 'NRELOffshrBsline5MW_Blade.dat')).read().splitlines()
 i0 = [k for k, t in enumerate(L_) if 'BlFract' in t][0] + 2
 a = np.array([[float(x) for x in L_[k].split()[:3]] for k in range(i0, i0 + 49)])
-span = rp - S.R_HUB; s_ = a[:, 0]*span; mu = a[:, 2]; sel = s_ >= span - 3.0 - 1e-9
+span = rp - S.R_HUB; s_ = a[:, 0]*span; mu = a[:, 2]
+s3 = span - 3.0                                        # the outer 3 m start between two stations: interpolate the density there
+sel = s_ > s3; s_o = np.concatenate([[s3], s_[sel]]); mu_o = np.concatenate([[np.interp(s3, s_, mu)], mu[sel]])
 trap = lambda y, x: float(np.sum((y[1:] + y[:-1])/2*np.diff(x)))
-mother = dict(tip_kg_per_m=float(mu[-1]), outer3_kg=trap(mu[sel], s_[sel]),
-              outer3_pull10_N=trap(mu[sel]*S.omega(10.0)**2*(S.R_HUB + s_[sel]), s_[sel]))
+mother = dict(tip_kg_per_m=float(mu[-1]), outer3_kg=trap(mu_o, s_o), kg_per_m_1m_in=float(np.interp(span - 1.0, s_, mu)),
+              outer3_pull10_N=trap(mu_o*S.omega(10.0)**2*(S.R_HUB + s_o), s_o))
 print(f"mother blade: {mother['tip_kg_per_m']:.1f} kg/m at the tip; outer 3 m {mother['outer3_kg']:.0f} kg, pulling "
       f"{mother['outer3_pull10_N']/1e3:.1f} kN at 10 m/s")
 print(f"{'l (m)':>5} {'kg/m':>5} {'m (kg)':>6} {'P* 6/8/10 m/s (W)':>22} {'Theta6':>6} {'c*8 (N m s)':>11} {'tau* (N m)':>10} "

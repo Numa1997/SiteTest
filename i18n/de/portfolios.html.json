@@ -7,6 +7,10 @@
   "src": "Why an iron ball hurts and a cotton ball of the same mass does not",
   "tr": "Warum eine Eisenkugel wehtut und eine Baumwollkugel derselben Masse nicht"
  },
+ "066fe2fc03e5": {
+  "src": "Nine chapters, one story: a double pendulum whose first arm the wind holds, from its Lagrangian to a real generator, then the real wind and the air on the swinging blade, with problems: 52 numbered equations and seventeen figures, theory set against the full solution, every number computed by the models.",
+  "tr": "Neun Kapitel, eine Geschichte: ein Doppelpendel, dessen ersten Arm der Wind hält, von seiner Lagrange-Funktion bis zu einem realen Generator, dann der wirkliche Wind und die Luft am schwingenden Blatt, mit Übungsaufgaben: 52 nummerierte Gleichungen und siebzehn Abbildungen, die Theorie gegen die vollständige Lösung gestellt, jede Zahl von den Modellen berechnet."
+ },
  "08b7fea08119": {
   "src": "<b>Ice.</b> At \\(-10\\,{}^{\\circ}\\mathrm{C}\\) rime splintering is off, ice–ice breakup of the thesis’s small ice spheres makes almost nothing, and only the shattering of freezing drops could matter, between none and a few new particles per cm³ and minute: the measurements scatter that much.",
   "tr": "<b>Eis.</b> Bei \\(-10\\,{}^{\\circ}\\mathrm{C}\\) ist die Splitterbildung beim Bereifen abgeschaltet, das Zerbrechen der kleinen Eiskugeln der Arbeit bei Eis-Eis-Stößen erzeugt fast nichts, und nur das Zerspringen gefrierender Tropfen könnte zählen, zwischen null und einigen neuen Teilchen pro cm³ und Minute: So weit streuen die Messungen."
@@ -26,6 +30,10 @@
  "0b54e7416729": {
   "src": "<b>Fall speed.</b> Stokes’ law gives \\(\\mathrm{Re}\\approx 150\\) for a \\(200\\ \\mathrm{\\mu m}\\) drop, outside its own validity. A force balance with Beard’s drag coefficient \\(C_D(\\mathrm{Re})\\), solved through the Davies number, reproduces the measurements of Gunn and Kinzer within 2.1 % from 0.3 mm up.",
   "tr": "<b>Fallgeschwindigkeit.</b> Für einen Tropfen von \\(200\\ \\mathrm{\\mu m}\\) liefert das Stokessche Gesetz \\(\\mathrm{Re}\\approx 150\\), außerhalb seines eigenen Gültigkeitsbereichs. Ein Kräftegleichgewicht mit Beards Widerstandsbeiwert \\(C_D(\\mathrm{Re})\\), gelöst über die Davies-Zahl, gibt die Messungen von Gunn und Kinzer ab 0.3 mm auf 2.1 % genau wieder."
+ },
+ "0bf9d1ad9c28": {
+  "src": "A turbulent wind built from the standard’s spectra and coherences, the rotor turning in it and the second blade swinging at its tip, computed in your browser.",
+  "tr": "Ein turbulenter Wind, aufgebaut aus den Spektren und Kohärenzen der Norm, der Rotor dreht sich darin, und an seiner Spitze schwingt das zweite Blatt, berechnet in Ihrem Browser."
  },
  "0c4a6d9fb9f0": {
   "src": "<span class=\"psub__n\">3.4</span>The project’s own pages",
@@ -63,9 +71,17 @@
   "src": "A cloud droplet is ten micrometres across and sinks a centimetre a second; a raindrop holds a million of them. Gravity gathers them: a drop a little larger than its neighbours falls a little faster, overtakes the droplets below it and swallows some of them. These lecture notes rebuild Numa Koudsie’s Bachelor thesis, <em>Collisional Ice Multiplication Processes in Clouds</em> (Leipzig, 2022), from first principles, one physical effect at a time: Stokes’ drag derived from the stream function, a drag balance for every size, droplet trajectories around a falling drop, the energy that decides whether touching drops merge, the collection equation for a whole population, the exact random process behind it, turbulence, and ice. Every number not attributed to a source is computed by the model that runs in the page, and checked.",
   "tr": "Ein Wolkentröpfchen ist zehn Mikrometer groß und sinkt einen Zentimeter pro Sekunde; ein Regentropfen enthält eine Million davon. Die Schwerkraft sammelt sie ein: Ein Tropfen, der etwas größer ist als seine Nachbarn, fällt etwas schneller, holt die Tröpfchen unter sich ein und verschluckt einige von ihnen. Dieses Vorlesungsskript baut Numa Koudsies Bachelorarbeit, <em>Collisional Ice Multiplication Processes in Clouds</em> (Leipzig, 2022), aus ersten Prinzipien neu auf, einen physikalischen Effekt nach dem anderen: der Stokes-Widerstand, hergeleitet aus der Stromfunktion, eine Widerstandsbilanz für jede Größe, die Bahnen der Tröpfchen um einen fallenden Tropfen, die Energie, die entscheidet, ob sich berührende Tropfen verschmelzen, die Koaleszenzgleichung für eine ganze Population, der exakte Zufallsprozess dahinter, Turbulenz und Eis. Jede Zahl, die keiner Quelle zugeschrieben ist, berechnet das Modell, das auf der Seite läuft, und sie wird geprüft."
  },
+ "13e8750348c1": {
+  "src": "Nine chapters, one story: a double pendulum whose first arm the wind holds, from its Lagrangian to a real generator, then the real wind and the air on the swinging blade, with problems: 48 numbered equations and ten figures, theory set against the full solution, every number computed by the models.",
+  "tr": "Neun Kapitel, eine Geschichte: ein Doppelpendel, dessen ersten Arm der Wind hält, von seiner Lagrange-Funktion bis zu einem realen Generator, dann der wirkliche Wind und die Luft am schwingenden Blatt, mit Übungsaufgaben: 48 nummerierte Gleichungen und zehn Abbildungen, die Theorie gegen die vollständige Lösung gestellt, jede Zahl von den Modellen berechnet."
+ },
  "13e899a9f70a": {
   "src": "less new ice from ice–ice collisions than the thesis’s rule assumed",
   "tr": "weniger neues Eis aus Eis-Eis-Stößen, als die Regel der Arbeit annahm"
+ },
+ "142b5758f344": {
+  "src": "Wind",
+  "tr": "Wind"
  },
  "154563309bcc": {
   "src": "A static copy of the Droplet Collection app. Its saved-runs list is left out: every run is computed fresh in your browser, and nothing is stored.",
@@ -718,6 +734,10 @@
  "cf6dd35f0a42": {
   "src": "<b>The wind’s disorder hardly helps.</b> Random shaking has a hard ceiling set by the blade’s mass; gusts change the power by a few per cent; the mother blade’s sag at its tip adds 2.2–3.5 %; its shaking adds a little at a tip vibration of 5 mm.",
   "tr": "<b>Die Unordnung des Winds hilft kaum.</b> Zufälliges Schütteln hat eine harte Obergrenze, die die Masse des Blatts setzt; Böen ändern die Leistung um wenige Prozent; die Durchbiegung des Mutterblatts an seiner Spitze bringt 2.2–3.5 %; sein Schwingen bringt bei einer Schwingung der Spitze von 5 mm ein wenig."
+ },
+ "d1429c569215": {
+  "src": "Hinge a light second blade, 1 kg and 1 m long, at the 63 m tip of a turning wind-turbine blade, free to turn in the rotor plane. The turning holds it straight out like a stiff spring, and gravity, which seen from the blade goes round once per turn, pushes it first one way and then the other, like a child on a swing pushed once per pass; a generator in the hinge brakes that swing and turns it into electricity. The lecture notes tell it as a double pendulum whose first arm the wind holds to a steady turning, and build everything from its Lagrangian: the chaos that holding the arm takes away, the best brake \\(\\kappa^* = R-1\\), the trail that is the rotor’s bill, where the mass sits, a real motor and gearbox from a catalogue, then a turbulent wind over the rotor, gusts, the air on the second blade, the blade’s sag and shaking, and a ceiling on random shaking. Every number in the notes is computed by the models; a simulation page solves the full equations in your browser, and a wind page swings the second blade in a turbulent wind.",
+  "tr": "Hängen Sie ein leichtes zweites Blatt, 1 kg schwer und 1 m lang, an die 63 m entfernte Spitze eines sich drehenden Windturbinenblatts, frei drehbar in der Rotorebene. Die Drehung hält es gerade nach außen wie eine steife Feder, und die Schwerkraft, die vom Blatt aus gesehen einmal pro Umdrehung herumläuft, drückt es erst in die eine, dann in die andere Richtung, wie ein Kind auf einer Schaukel, das bei jedem Durchgang angeschoben wird; ein Generator im Gelenk bremst diese Schwingung und macht daraus Strom. Das Vorlesungsskript erzählt das als Doppelpendel, dessen ersten Arm der Wind in gleichmäßiger Drehung hält, und baut alles aus seiner Lagrange-Funktion auf: das Chaos, das verschwindet, wenn der Arm gehalten wird, die beste Bremse \\(\\kappa^* = R-1\\), das Nachlaufen, das die Rechnung des Rotors ist, wo die Masse sitzt, einen realen Motor mit Getriebe aus einem Katalog, dann einen turbulenten Wind über dem Rotor, Böen, die Luft am zweiten Blatt, das Durchhängen und Schwingen des Blatts und eine Obergrenze für zufälliges Schütteln. Jede Zahl im Skript wird von den Modellen berechnet; eine Simulationsseite löst die vollständigen Gleichungen in Ihrem Browser, und eine Windseite lässt das zweite Blatt in einem turbulenten Wind schwingen."
  },
  "d1622a8321e0": {
   "src": "Phyein Usul, home page",

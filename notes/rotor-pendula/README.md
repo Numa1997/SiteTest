@@ -39,10 +39,28 @@ catalogue generator serves fully.
 | L2 | gusts on the NREL 5 MW turbine with its controller | `L2_run.py`, `L2_scales.py`, `turbulence.py` | `L2_run_nrel.json`, `L2_run_k2.json`, `L2_scales.json` |
 | L3 | the blade sags and shakes at the tip; the shaking ceiling | `L3_sag.py`, `L3_sag_tip.py`, `L3_shake2.py`, `power_theorem.py`, `nrel5mw.py` | `L3_sag_tip.json`, `L3_shake2.json` |
 | L4 | real geared generator: losses, friction, reflected inertia; sizes | `L4_generator.py`, `L4_full.py`, `L4_check.py`, `L4_converge.py`, `design.py`, `sizes.py` | `L4_*.json`, `design.json`, `sizes.json` |
+| L5 | the air on the second blade, three shapes | `L5_air.py` | `L5_air.json` |
+| L6 | a turbulent wind field over the disc (IEC Kaimal spectra, IEC coherence for u, TurbSim's smooth-model default for v and w, Veers synthesis with a seeded generator the Wind tab copies), checked against its own statistics and L2's disc averaging; the rotor and the second blade solved in it with the air at its middle; reference record for `tools/check_wind.js` | `L6_wind.py` | `L6_wind.json`, `L6_wind_ref.json` |
+| L0' | the double pendulum of chapter 1: the site's Fig. 2 engine free (Lyapunov 1.44 /s over 3000 s), the first arm held (chaotic starts against Gamma for equal arms and for the 1 m rod at 63 m, braked and unbraked), the reduction's energy check, once-per-turn snapshots (Poincaré sections) of equal arms and of the rod at 6 m/s with the chaotic band's edges predicted (adiabatic invariant, separatrix action) and measured | `portfolios-src/rotor-pendula/tools/double_pendulum.js` (Node) | `portfolios-src/rotor-pendula/data/L0_double.json` |
 
 Every script prints PASS/FAIL lines and exits 1 on a failure. A check tests the numerics or a derived prediction; a physical
 outcome (regular or chaotic, a gain or a loss) is printed as a result, never as a pass. Outputs are copied into
 `portfolios-src/rotor-pendula/data/`, and `tools/make_numbers.py` turns them into every number on the page.
+
+## The notes as one story (28 October 2026)
+The lecture notes were reordered and rewritten as one text with the double pendulum as its spine: Part I (chapters 1–5: the
+double pendulum held by the wind, the turning frame, the brake, big swings and the bill, the generator), Part II (chapters 6–8:
+the wind, including the turbulent field of L6, the air, the blade's sag and vibration and the shaking ceiling), Part III
+(chapter 9). Equation numbers changed; the simulation page's references were renumbered with them. An independent derivation
+check (SymPy) confirmed (1.1)–(1.8), the Euler torque, (2.3), (4.1)–(4.4) and (6.5)–(6.9) and found three faults, fixed: the
+spectrum of (6.8) is scaled to the kept band (72 % of the Kaimal variance at 8 m/s lies in 1/256–1 Hz), the Kaimal knee is at
+U/(6L), and the shaft torque in section 4.2 carries the first arm's weight too.
+
+A final readability pass (28 October 2026) changed wording only, no physics and no numbers: telegraphic sentences written out,
+long derivations given a sentence between their steps (the shaft torque of section 4.2 now in two displays), long "On our blade"
+boxes in sections 5.4, 6.5 and 7.4 split into a box of results and a paragraph of explanation, rhetorical questions turned into
+statements (section 7.3 is now "The air as a brake"), the punctuation around (7.1) and (9.1) mended, Figure 13 referred to from
+the text, and Figure 8's caption shortened. Equation and figure numbers are unchanged.
 
 ## Results (second blade, 1 kg on 1 m)
 - Best power at the best brake: 268, 201 and 161 mW at 6, 8 and 10 m/s by (2.5); the full equation gives 267, 201 and 161 mW
@@ -55,6 +73,16 @@ outcome (regular or chaotic, a gain or a loss) is printed as a result, never as 
   the k Omega^2 law: +0.77 %.
 - Sag at the tip: 431 to 467 mm; +17 to +18 % in the drive, but the tip section's turn takes most of it back: net +2.2 to +3.5 %.
 - White-noise shaking: a rod draws at most (S/2)(3/4)m, three quarters of a point mass's ceiling.
+- Double pendulum (chapter 1): free, Lambda = 1.44 /s (3000 s; 1.51 over the first 200 s); held, equal arms (R = 1, resonance) chaotic from 1 to 6 of 9 starts at
+  every Gamma from 0.1 to 31.6; the 1 m rod at 63 m (R = 94.5) unbraked: regular in its bowl, chaotic only from the two starts
+  near the hilltop above Gamma = 3.6; braked at kappa*: all exponents about -6.4 per turn.
+- Why the held rod is calm (chapter 1.5, 6 m/s, unbraked): the hilltop's height runs from 22.8 to 42.4 J once per turn; the
+  adiabatic estimate puts the chaotic band at swings beyond 139 deg (computed: 132 to 134 deg) and, passing the bowl's bottom,
+  at theta' = 18.6 to 20.6 per turn (computed: 18.4 to 20.4 forwards, 20.9 backwards); exponents in the band 1.10 to 1.23 per turn.
+- Turbulent field (L6, 8 m/s, class A, record 1): rotor speed sd 11.8 %; second blade 200 mW against 205 mW in steady sheared
+  wind; streamlined 199 mW steady (formula (7.2) -2 %, solved -3 %) and 212 mW in the gusts, its lift following each gust;
+  small wing 287 mW steady (formula (7.2) +44 %, solved +40 %) and 420 mW in the gusts. Under the pure square torque law the
+  rotor's speed wanders by 13.4 % (10.3 % under the real law), and the curvature of (6.9) predicts the gain exactly.
 
 ## Queue
 1. Pull request for section 7.6 (the range of sizes): Numa's "merge".

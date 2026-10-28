@@ -1,4 +1,4 @@
-"""A first estimate of the air on the second blade (chapter 8). Quasi-steady aerofoil forces on a 1 m second blade at the
+"""A first estimate of the air on the second blade (chapter 7). Quasi-steady aerofoil forces on a 1 m second blade at the
 63 m tip, 8 m/s, rotor at lambda*. The rotor turns anticlockwise seen from upwind; phi is the mother blade's angle from the
 horizontal; theta is positive in the direction of rotation.
 Forces per blade, with U_t the head wind along the path (the blade's own speed, less any in-plane wind) and U_a the wind

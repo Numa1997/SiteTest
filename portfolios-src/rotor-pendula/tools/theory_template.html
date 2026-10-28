@@ -124,6 +124,14 @@ a { color: var(--wine); }
 .check .ctag { color: var(--green); }
 .callout .ctag { color: var(--blue); }
 .callout ul { margin: 4px 0 0; }
+/* a new idea, four ways: what it feels like, what happens physically, how it is measured, its mathematics */
+.idea { border-radius: 10px; padding: 12px 15px; margin: 14px 0; background: var(--paper); border: 1px solid var(--rule); border-left: 4px solid var(--blue); }
+.idea .ctag { color: var(--blue); }
+.idea dl { display: grid; grid-template-columns: 5.6em minmax(0, 1fr); gap: 6px 12px; margin: 6px 0 0; }
+.idea dt { font: 500 11px/2.1 var(--f-mono); letter-spacing: 0.08em; text-transform: uppercase; color: var(--muted); }
+.idea dd { margin: 0; }
+@media (max-width: 520px) { .idea dl { grid-template-columns: minmax(0, 1fr); gap: 0; } .idea dt { line-height: 1.3; margin-top: 8px; } }
+.chapter > .idea { max-width: 86ch; }
 .warm, .guess, .remember, .problems { border-radius: 10px; padding: 12px 15px; margin: 14px 0; border: 1px solid var(--rule); }
 .warm { background: var(--oil-soft); border-color: var(--oil); }
 .warm .ctag { color: var(--oil-hi); }
@@ -190,6 +198,20 @@ ol.cycle { padding-left: 1.3em; display: grid; grid-template-columns: minmax(0, 
 footer { color: var(--muted); font-size: 13.5px; margin-top: 30px; }
 @media (prefers-reduced-motion: reduce) { html { scroll-behavior: auto; } }
 @media (prefers-reduced-motion: no-preference) { html { scroll-behavior: smooth; } }
+/* Every box carries an edge: a 4 px line down its left side, in the colour of what it holds (docs/portfolios.md, "Boxes and
+   their edges"). Wine: mathematics and the model's own numbers; blue: ideas and the ways in (cards, contents); green: checks;
+   ochre: everyday pictures and warm-ups; ink: what to remember; wine-deep: problems; steel: figures and tables. The chapter
+   panels hold the boxes and are frames, not boxes: they have none. */
+.picture, .check, .press, .callout, .warm, .guess, .remember, .problems, .idea, .eqn, figure.fig, table.mt, .links a, blockquote.quote,
+nav.toc, details.toc-m { border-left-style: solid; border-left-width: 4px; border-left-color: var(--edge); }
+.eqn, .press, .links a, blockquote.quote { --edge: var(--wine); }
+.eqn.boxed { border-left-width: 6px; }
+.idea, .callout, .guess, nav.toc, details.toc-m { --edge: var(--blue); }
+.check { --edge: var(--green); }
+.picture, .warm { --edge: var(--oil-hi); }
+.remember { --edge: var(--line); }
+.problems { --edge: var(--wine-deep); }
+figure.fig, table.mt { --edge: var(--steel); }
 </style>
 </head>
 <body>

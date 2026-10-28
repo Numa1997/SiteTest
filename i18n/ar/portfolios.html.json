@@ -7,6 +7,10 @@
   "src": "Why an iron ball hurts and a cotton ball of the same mass does not",
   "tr": "لماذا تؤلم كرةُ الحديد ولا تؤلم كرةُ القطن ذاتُ الكتلة نفسها"
  },
+ "066fe2fc03e5": {
+  "src": "Nine chapters, one story: a double pendulum whose first arm the wind holds, from its Lagrangian to a real generator, then the real wind and the air on the swinging blade, with problems: 52 numbered equations and seventeen figures, theory set against the full solution, every number computed by the models.",
+  "tr": "تسعة فصول، قصّة واحدة: بندول مزدوج تمسك الريحُ ذراعه الأولى، من دالة لاغرانج الخاصة به إلى مولّد حقيقي، ثم الريح الحقيقية والهواء على الشفرة المتأرجحة، مع مسائل: 52 معادلة مرقّمة وسبعة عشر شكلًا، تُقارَن فيها النظرية بالحلّ الكامل، وكلّ رقم محسوب بالنماذج."
+ },
  "08b7fea08119": {
   "src": "<b>Ice.</b> At \\(-10\\,{}^{\\circ}\\mathrm{C}\\) rime splintering is off, ice–ice breakup of the thesis’s small ice spheres makes almost nothing, and only the shattering of freezing drops could matter, between none and a few new particles per cm³ and minute: the measurements scatter that much.",
   "tr": "<b>الجليد.</b> عند \\(-10\\,{}^{\\circ}\\mathrm{C}\\) يكون تشظّي الجليد عند التصقيع متوقّفًا، وتكسّر كرات الجليد الصغيرة في الرسالة بتصادم الجليد بالجليد لا يصنع شيئًا يُذكر، ولا يمكن أن يُحدث فرقًا إلا تشظّي القطرات المتجمّدة، بين لا شيء وبضعة جسيمات جديدة لكلّ cm³ في الدقيقة: إلى هذا الحدّ تتبعثر القياسات."
@@ -26,6 +30,10 @@
  "0b54e7416729": {
   "src": "<b>Fall speed.</b> Stokes’ law gives \\(\\mathrm{Re}\\approx 150\\) for a \\(200\\ \\mathrm{\\mu m}\\) drop, outside its own validity. A force balance with Beard’s drag coefficient \\(C_D(\\mathrm{Re})\\), solved through the Davies number, reproduces the measurements of Gunn and Kinzer within 2.1 % from 0.3 mm up.",
   "tr": "<b>سرعة السقوط.</b> يعطي قانون ستوكس \\(\\mathrm{Re}\\approx 150\\) لقطرةٍ من \\(200\\ \\mathrm{\\mu m}\\)، أي خارج مجال صلاحيته هو. أمّا توازن القوى مع معامل الكبح \\(C_D(\\mathrm{Re})\\) الذي وضعه بيرد، محلولًا عبر عدد ديفيز، فيعيد قياسات غَن وكينزر بدقّة 2.1 % من 0.3 mm فما فوق."
+ },
+ "0bf9d1ad9c28": {
+  "src": "A turbulent wind built from the standard’s spectra and coherences, the rotor turning in it and the second blade swinging at its tip, computed in your browser.",
+  "tr": "ريح مضطربة مبنيّة من أطياف المعيار وتماسكاته، والدوّار يدور فيها، والشفرة الثانية تتأرجح عند طرفه، محسوبة في متصفّحك."
  },
  "0c4a6d9fb9f0": {
   "src": "<span class=\"psub__n\">3.4</span>The project’s own pages",
@@ -63,9 +71,17 @@
   "src": "A cloud droplet is ten micrometres across and sinks a centimetre a second; a raindrop holds a million of them. Gravity gathers them: a drop a little larger than its neighbours falls a little faster, overtakes the droplets below it and swallows some of them. These lecture notes rebuild Numa Koudsie’s Bachelor thesis, <em>Collisional Ice Multiplication Processes in Clouds</em> (Leipzig, 2022), from first principles, one physical effect at a time: Stokes’ drag derived from the stream function, a drag balance for every size, droplet trajectories around a falling drop, the energy that decides whether touching drops merge, the collection equation for a whole population, the exact random process behind it, turbulence, and ice. Every number not attributed to a source is computed by the model that runs in the page, and checked.",
   "tr": "قُطَيرة الغيم عرضها عشرة ميكرومترات، وتهبط سنتيمترًا في الثانية؛ وقطرة المطر تضمّ مليونًا منها. والجاذبية هي التي تجمعها: القطرة الأكبر قليلًا من جاراتها تسقط أسرع قليلًا، فتلحق بالقُطَيرات التي تحتها وتبتلع بعضها. تعيد مذكّرات المحاضرة هذه بناءَ رسالة بكالوريوس نعمة سائر قدسية، <em>Collisional Ice Multiplication Processes in Clouds</em> (لايبزيغ، 2022)، من المبادئ الأولى، أثرًا فيزيائيًّا واحدًا في كلّ مرّة: مقاومة ستوكس مشتقّةً من دالة الجريان، وميزان مقاومة لكلّ حجم، ومسارات القُطَيرات حول قطرة ساقطة، والطاقة التي تقرّر هل تندمج القطرات المتلامسة، ومعادلة الالتقاط لجماعة كاملة من القطرات، والعملية العشوائية الدقيقة التي وراءها، والاضطراب، والجليد. وكلّ رقم لا يُنسب إلى مصدر يحسبه النموذج الذي يعمل في الصفحة، ثم يُفحص."
  },
+ "13e8750348c1": {
+  "src": "Nine chapters, one story: a double pendulum whose first arm the wind holds, from its Lagrangian to a real generator, then the real wind and the air on the swinging blade, with problems: 48 numbered equations and ten figures, theory set against the full solution, every number computed by the models.",
+  "tr": "تسعة فصول، قصّة واحدة: بندول مزدوج تمسك الريحُ ذراعه الأولى، من دالة لاغرانج الخاصة به إلى مولّد حقيقي، ثم الريح الحقيقية والهواء على الشفرة المتأرجحة، مع مسائل: 48 معادلة مرقّمة وعشرة أشكال، تُقارَن فيها النظرية بالحلّ الكامل، وكلّ رقم محسوب بالنماذج."
+ },
  "13e899a9f70a": {
   "src": "less new ice from ice–ice collisions than the thesis’s rule assumed",
   "tr": "جليد جديد من تصادمات الجليد بالجليد أقلّ ممّا افترضته قاعدة الرسالة"
+ },
+ "142b5758f344": {
+  "src": "Wind",
+  "tr": "الريح"
  },
  "154563309bcc": {
   "src": "A static copy of the Droplet Collection app. Its saved-runs list is left out: every run is computed fresh in your browser, and nothing is stored.",
@@ -718,6 +734,10 @@
  "cf6dd35f0a42": {
   "src": "<b>The wind’s disorder hardly helps.</b> Random shaking has a hard ceiling set by the blade’s mass; gusts change the power by a few per cent; the mother blade’s sag at its tip adds 2.2–3.5 %; its shaking adds a little at a tip vibration of 5 mm.",
   "tr": "<b>اضطراب الريح لا يكاد يساعد.</b> للاهتزاز العشوائي حدّ أعلى صارم تحدّده كتلة الشفرة؛ والهبّات تغيّر القدرة ببضعة في المئة؛ وتدلّي الشفرة الأم عند طرفها يضيف 2.2–3.5 %؛ واهتزازها يضيف قليلًا عند اهتزاز للطرف قدره 5 mm."
+ },
+ "d1429c569215": {
+  "src": "Hinge a light second blade, 1 kg and 1 m long, at the 63 m tip of a turning wind-turbine blade, free to turn in the rotor plane. The turning holds it straight out like a stiff spring, and gravity, which seen from the blade goes round once per turn, pushes it first one way and then the other, like a child on a swing pushed once per pass; a generator in the hinge brakes that swing and turns it into electricity. The lecture notes tell it as a double pendulum whose first arm the wind holds to a steady turning, and build everything from its Lagrangian: the chaos that holding the arm takes away, the best brake \\(\\kappa^* = R-1\\), the trail that is the rotor’s bill, where the mass sits, a real motor and gearbox from a catalogue, then a turbulent wind over the rotor, gusts, the air on the second blade, the blade’s sag and shaking, and a ceiling on random shaking. Every number in the notes is computed by the models; a simulation page solves the full equations in your browser, and a wind page swings the second blade in a turbulent wind.",
+  "tr": "علِّق شفرةً ثانية خفيفة، كتلتها 1 kg وطولها 1 m، عند طرف شفرة توربين رياح دوّارة على بعد 63 m، حرّةً في الدوران داخل مستوى الدوّار. يُبقيها الدوران ممدودةً إلى الخارج كنابض صلب، والجاذبية، التي تدور مرّةً في كل دورة كما تُرى من الشفرة، تدفعها مرّةً إلى جهة ثم إلى الجهة الأخرى، كطفل على أرجوحة يُدفع في كل مرور؛ ومولّد في المفصل يكبح هذا التأرجح ويحوّله إلى كهرباء. تروي مذكّرات المحاضرة ذلك بوصفه بندولًا مزدوجًا تمسك الريحُ ذراعه الأولى في دوران منتظم، وتبني كل شيء من دالة لاغرانج الخاصة به: الفوضى التي يزيلها إمساك الذراع، وأفضل كبح \\(\\kappa^* = R-1\\)، والتخلّف الذي هو فاتورة الدوّار، وموضع الكتلة، ومحرّكًا حقيقيًّا مع علبة تروس من كتالوج، ثم ريحًا مضطربة فوق الدوّار، والهبّات، والهواء على الشفرة الثانية، وانحناء الشفرة واهتزازها، وسقفًا للاهتزاز العشوائي. كل رقم في المذكّرات تحسبه النماذج؛ وصفحة محاكاة تحلّ المعادلات الكاملة في متصفّحك، وصفحة للريح تُؤرجح الشفرة الثانية في ريح مضطربة."
  },
  "d1622a8321e0": {
   "src": "Phyein Usul, home page",

@@ -1,6 +1,8 @@
 """L4: the second blade with the geared generator in the full equation (L4_full.py, version 3), at the settings the formula
 (7.6)-(7.7) of L4_generator.py chose, at half and twice its brake, and at 8 m/s with every catalogue ratio at its own best brake.
 The rotor's work is integrated too, so the energy book closes in Python: W = ΔE_kin + ΔE_pot + E_paid + ΔE_spin over the window.
+Theta is the largest |theta| over the window (amplitude plus trail); Theta_amp the half peak-to-peak, the amplitude the formula's Theta is;
+theta_mean the mean angle, the trail.
 
 Run: python3 -I L4_check.py [steps per turn] [band factor]   (defaults 2000 and 1e-3)   Writes L4_check_<steps>.json.
 L4_converge.py compares the 2000- and 4000-step runs.
@@ -47,12 +49,12 @@ def mech(t, Y):                                      # kinetic + potential energ
     return T + V, 0.5*j*w**2                          # and the motor's spin energy
 for k in range(nst*(settle + meas)):
     if k == nst*settle:
-        Y0 = Y.copy(); thmax = np.zeros(n); E0, S0 = mech(k*h, Y)
+        Y0 = Y.copy(); thmax = np.zeros(n); thhi = np.full(n, -np.inf); thlo = np.full(n, np.inf); thsum = np.zeros(n); E0, S0 = mech(k*h, Y)
     Y, it = radau_step(F, k*h, Y, h); maxit = max(maxit, it)
     if it == 12:
         ncap += 1; capErr = max(capErr, radau_step.last_err)
     if k >= nst*settle:
-        thmax = np.maximum(thmax, np.abs(Y[:, 0]))
+        thmax = np.maximum(thmax, np.abs(Y[:, 0])); thhi = np.maximum(thhi, Y[:, 0]); thlo = np.minimum(thlo, Y[:, 0]); thsum += Y[:, 0]
 E1, S1 = mech(nst*(settle + meas)*h, Y)
 u = I*Om**3; T = 2*math.pi*meas
 Pl = (Y[:, 2] - Y0[:, 2])/T*u; Pp = (Y[:, 3] - Y0[:, 3])/T*u; Pf = (Y[:, 4] - Y0[:, 4])/T*u; Pw = (Y[:, 5] - Y0[:, 5])/T*u
@@ -62,7 +64,8 @@ for i, r in enumerate(rows):
     fo = form[i]
     out.append(dict(wind=r['wind'], N=r['N'], eta=r['eta'], c_e=r['c_e'], mult=r['mult'], kind=r['kind'], R_load=Nn[i]**2*Gm.KT*Gm.KE/ce[i] - Gm.RC,
                     Pstar=S.pstar(r['Om']), j=float(j[i]), f_over_G=float(f0[i]/(eta[i]*G[i])), P_load=float(Pl[i]), P_paid=float(Pp[i]),
-                    P_fric=float(Pf[i]), P_rotor=float(Pw[i]), book_J=float(book[i]), Theta=float(thmax[i]), P_load_formula=fo['P_load'],
+                    P_fric=float(Pf[i]), P_rotor=float(Pw[i]), book_J=float(book[i]), Theta=float(thmax[i]), Theta_amp=float((thhi[i] - thlo[i])/2),
+                    theta_mean=float(thsum[i]/(nst*meas)), P_load_formula=fo['P_load'],
                     P_paid_formula=fo['P_paid'], Theta_formula=fo['Theta']))
     print(f"{r['wind']:.0f} m/s, N {r['N']:>5}, c_e x {r['mult']:.1f} ({r['kind']}): load {Pl[i]*1e3:8.3f} mW (formula {fo['P_load']*1e3:8.3f}, "
           f"{(Pl[i]/fo['P_load'] - 1)*100:+.1f} %), paid {Pp[i]*1e3:8.3f} mW, rotor {Pw[i]*1e3:8.3f} mW, friction {Pf[i]*1e3:7.3f} mW, "

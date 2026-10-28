@@ -8,7 +8,7 @@ a **built copy** of each one, so that a reader can open it here without leaving 
 | Folder | Built from the app | What it is |
 |---|---|---|
 | [`public/portfolios/droplet-collection/`](../public/portfolios/droplet-collection/) | its source in [`portfolios-src/droplets/`](../portfolios-src/droplets/) (since 23 October 2026; before, the app `droplet-collection-yl7l26`) | Numa's Bachelor thesis (Leipzig) on how cloud droplets grow into rain, rebuilt as lecture notes: thirteen chapters from one drop to ice, energy and entropy, who eats whom, and a cloud with a shape, five simulations running in the browser, worked problems and checks. One self-contained page ([below](#droplet-collection-droplet-collection-since-23-october-2026)). |
-| [`public/portfolios/rotor-pendula/`](../public/portfolios/rotor-pendula/) | its source in [`portfolios-src/rotor-pendula/`](../portfolios-src/rotor-pendula/) | A pendulum riding on a wind-turbine blade as a sensor's power supply: lecture notes in nine chapters and a simulation page, one generated page. |
+| [`public/portfolios/rotor-pendula/`](../public/portfolios/rotor-pendula/) | its source in [`portfolios-src/rotor-pendula/`](../portfolios-src/rotor-pendula/) | A second blade hinged at the tip of a wind-turbine blade as a sensor's power supply, told as a double pendulum whose first arm the wind holds: lecture notes in nine chapters, a simulation page and an animated turbulent-wind page, one generated page. |
 | [`public/portfolios/hydraulics/`](../public/portfolios/hydraulics/) | its source in [`portfolios-src/hydraulics/`](../portfolios-src/hydraulics/) (not an app) | A servo-hydraulic press under digital control, from first principles: the animated press with its PID controller, loop analysis (Bode, Nyquist, z-plane), Pascal's ideal press, and a 23-chapter text deriving every equation. One self-contained page. |
 
 **No app copies remain** (since 23 October 2026 every project here is generated from its source in this repository). The
@@ -85,7 +85,7 @@ Since 23 October 2026 the copy is generated from [`portfolios-src/droplets/`](..
 
 | Path | What it is |
 |---|---|
-| `index.html` | **Generated** by `portfolios-src/rotor-pendula/tools/build_combined.py --site` (2.15 MB): a tab bar with the lecture notes (`#notes`) and the simulation (`#sim`), each embedded unchanged in its own frame; described [below](#rotor-pendula-rotor-pendula). |
+| `index.html` | **Generated** by `portfolios-src/rotor-pendula/tools/build_combined.py --site` (3.57 MB): a tab bar with the lecture notes (`#notes`), the simulation (`#sim`) and the wind (`#wind`), each embedded unchanged in its own frame; described [below](#rotor-pendula-rotor-pendula). |
 | `LICENSE-fonts.txt` | Licences of the fonts embedded in `index.html` (written by the build). |
 
 The former app copy (`static/`, `fig/`, the delivered study `study/`) was removed on 23 October 2026.
@@ -197,33 +197,41 @@ Since 23 October 2026 the page at `portfolios/rotor-pendula/index.html` is gener
 source in [`portfolios-src/rotor-pendula/`](../portfolios-src/rotor-pendula/) (its [`README.md`](../portfolios-src/rotor-pendula/README.md)
 gives the commands and checks); the models, model runs and review record are in `notes/rotor-pendula/`.
 
-**What the reader gets.** Two tabs. *Lecture notes* (`#notes`): *A Second Blade on a Turning Blade*, ten chapters (0–9), 39
-numbered equations and eight figures, written since 28 October 2026 as a teacher's notes for a reader who knows nothing about wind
-turbines: every chapter has warm-ups and guess-first boxes with folded answers, worked examples with the machine's own numbers, a
-"What to remember" box and problems with answers (box styles `.warm`, `.guess`, `.remember`, `.problems`, `details.ans` in
-`tools/theory_template.html`). Chapter 0 names the parts of a turbine (Figure 1), then builds from moving air: $P = \tfrac12\rho Av^3$; the
-Betz limit $C_p \le 16/27$ from mass, momentum and energy; lift and the apparent wind at the tip (Figure 2); gravity seen from a turning
-blade; the sensor, its power budget worked out from two datasheets and compared honestly with a battery; and the machine (Figure 3):
-a second, lighter blade (a thin uniform rod, m = 1 kg, l = 1 m) hinged at the 63 m tip of the NREL 5 MW blade, turning in the rotor
-plane and braked by a generator in the hinge. It warns at the start that the air on the second blade is left out. Chapter 1 derives
-the equation of motion the way a rider at the tip would: a pendulum in an accelerating car, the centrifugal pull, the second blade
-as a pendulum in two uniform gravities (Figure 4), the generator as a brake, the bowl that rocks (Figure 5), the rotor as a clock,
-a check by Lagrange's method, and who pays, with the torques in newton-metres. Chapter 2: the best brake κ* = R − 1 (a battery and
-lamp as the warm-up) and P* = mg²l/[8Ω(r_p − 2l/3)], with a worked example at 8 m/s; Figure 6 the brake curve; Figure 7 the
-small-swing theory against the full equation, computed by the page's own engine with `tools/compare.js`. Chapter 3: the full
-equation, each neglected term measured on its own (`notes/rotor-pendula/derive/L1_terms.py`), the trail that is the rotor's bill
-with the rotor's torque written out (Figure 8), where the mass sits, chaos (Lyapunov exponents at three winds and three brakes:
-every start ends on one regular swing). Then a ceiling on random shaking, gusts on the NREL 5 MW turbine (its torque law and the
-IEC wind explained in words), the blade's sag and shaking at its tip, a real geared generator (maxon RE 25 with a GP 32 C
-gearhead, ratio 492), and how all of it scales over the sizes of real tip devices, 0.5 to 3 m and up to 90 kg (section 7.6). Chapter 8 estimates
-the air on the second blade for three shapes (bare rod, streamlined, small wing; `notes/rotor-pendula/derive/L5_air.py`): the
-steady in-plane push is larger than gravity's for a rod or a lifting shape and decides whether the device costs or helps the
-turbine; with the lean it causes, the once-per-turn push from wind shear and shaft tilt changes the harvest by about −24 % (rod)
-to +44 % (wing), more for the wing if the air at the tip is not slowed; the air barely damps the swing. Chapter 9 is the answer. The notes hold
-the rotor at λ*; section 0.7 and chapter 5 say where the turbine's own torque law puts it (`L2_steady.py`: 7.91 rpm at 6 m/s,
-13 % less power there).
+**What the reader gets.** Three tabs. *Lecture notes* (`#notes`): *A Second Blade on a Turning Blade*, nine chapters in three parts,
+52 numbered equations and seventeen figures, rewritten on 28 October 2026 as one story whose spine is the double pendulum (the earlier
+version, chapters 0–9 patched section by section, is in the git history). All nine chapters were then rewritten again in a denser
+style (about 15 % fewer words, 82 displayed equations instead of 55), and then read once more for readability (sentences written out
+in full, a plain sentence between derivation steps, long result boxes split from their explanation, no rhetorical questions; about 2 % more
+words, the same physics and numbers): derivations shown line by line, and each new idea in a card
+(`.idea` in `tools/theory_template.html`, twenty of them) that says it four ways: what it feels like, what happens physically, how it
+is measured, and its mathematics. Figures are numbered at build time: a caption starts `Figure {{fig:key}}.` and the text refers to
+`Figure {{fig:key}}`; `tools/build_theory.py` numbers them in order of appearance and stops on an unknown or doubled label, and
+`tools/make_numbers.py` refuses a figure key defined twice. Part I, *A double pendulum held by the wind*: chapter 1
+opens with the desk double pendulum, introduces the machine (a second, lighter blade, a thin uniform rod of m = 1 kg and l = 1 m,
+hinged at the 63 m tip of the NREL 5 MW blade and braked by a generator in the hinge; Figures 1–3) and the sensor it would power,
+writes the free double pendulum's Lagrangian for a rigid first arm (1.1)–(1.5), holds the first arm to a steady turning and shows
+term by term how the second arm's equation becomes (1.6) while the first arm's equation becomes the torque the rotor must supply,
+with the energy balance (1.7) and the dimensionless form (1.8); then chaos, free and held (Figure 4, from
+`tools/double_pendulum.js`, which copies `deriv()`/`rk4()` out of the site's Fig. 2 page and runs them unchanged: the free pendulum
+from 120°, 150° has Λ = 1.44 /s over 3000 s; held, equal arms sit at resonance R = 1 and stay chaotic from some starts at every Γ; the second
+blade, R = 94.5, is regular in its bowl and chaotic only near the hilltop unbraked, and with the best brake every exponent is
+negative, Table 1); then why the held blade is calm (section 1.5): the landscape (1.10) whose hilltop rises and falls once per turn
+(Figure 5), the adiabatic invariant, the separatrix action (1.11) and the predicted chaotic band (1.12), checked against once-per-turn
+snapshots, a Poincaré section, of equal arms and of the rod at 6 m/s (Figure 6, also from `tools/double_pendulum.js`; the band's
+predicted edges lie within about 5 % of the computed ones). Chapter 2 reads (1.6) from the turning blade (the car pendulum; the turning frame's acceleration derived and the
+centrifugal, Coriolis and Euler torques about the hinge integrated; the apparent gravity and its largest tilt arcsin(1/Γ), Figure 7;
+the bowl that rocks, Figure 8; the work of a push that comes round; the generator as a brake). Chapter 3: the best brake κ* = R − 1 and P* = mg²l/[8Ω(r_p − 2l/3)] (the torques as turning arrows closing a right triangle on Thales' circle, whose area is the power, Figure 9; Figures 10, 11;
+Table 2). Chapter 4: stiffness and the stable step, the full equation, the trail that is the bill with the shaft torque derived
+exactly (Figure 12), where the mass sits. Chapter 5: the real geared generator (maxon RE 25 + GP 32 C, ratio 492; the describing
+function of friction, (5.6) as Pythagoras on the torque triangle; where the rotor's payment goes, Figure 13, the coil's share
+computed as the load's times R_c/R_L; Tables 3–5). Part II, *The real wind*: chapter 6 builds the wind (its power, the Betz limit with its stream tube, Figure 14; blades as wings and why
+λ* = 7.55, Figure 15; the turbulent field of section 6.4 with the Kaimal spectrum against forty synthesised records, Figure 16, and
+the field, Figure 17; what the rotor makes of it, with the torque law, the 7.91 rpm at 6 m/s and (6.9) derived); chapter 7 the air on the second blade, estimated and then solved in time in the gusty field; chapter 8 the
+blade's sag, its vibration, and the ceiling for white-noise shaking with the double-pendulum Monte Carlo. Part III: chapter 9, the
+ceiling inequality, the answer, and the double pendulum once more. Warm-up and guess-first boxes were folded into the prose; worked
+examples, checks, "What to remember" boxes and problems with folded answers remain.
 Every number is computed by the study's models (`tools/make_numbers.py`) or listed with its reason (`tools/typed_numbers.py`).
-The teaching research behind the rewrite and a blind learner's reading of the previous version are in `notes/rotor-pendula/teaching/`. *Simulation* (`#sim`): the same machine;
+The teaching research behind earlier versions and blind readers' reports are in `notes/rotor-pendula/teaching/`. *Simulation* (`#sim`): the same machine;
 choose a steady wind (6, 8 or 10 m/s), the brake and an ideal brake or the geared generator; the page solves the full equations
 with a Radau IIA integrator in a Web Worker built from its physics block, then plays the last turns back. The scene draws the
 three NREL blades from the chord table to one scale and the tip close up to a second, named scale; no angle is magnified. The close-up
@@ -234,7 +242,7 @@ bill at 6 m/s, the three winds, how hard the generator must brake and hold, whic
 Reading a value is a tool: "Read values" on, a click pins a point, and the values show in a strip outside the plots.
 
 **How the page works.** As for the Hydraulic Press Study: each page is embedded as a JSON string and shown in its own `iframe srcdoc`;
-a small script turns links between the two pages into tab switches and opens other links outside the frame.
+a small script turns links between the three pages into tab switches and opens other links outside the frame.
 The page carries the site's security policy with `'unsafe-eval'` in `script-src` and `blob:` in `worker-src` (the simulation's worker).
 
 **The data panel** (since 24 October 2026). The simulation tab carries the site's data panel: the Data tab on the right, Read values
@@ -294,6 +302,34 @@ second while playing; with the panel closed `__dataPanel.running()` is false; Re
 `numpy.load` reads (`q1`, `Win`, `Ek` of shape (961,), `kap` of (161,)), with $m$, $l$, $I$, $ml/2$, $P^*$, $\tau^*$ and `zoom` and their units in
 `dataset.json`; the book recomputed from the saved arrays closes to $3\times10^{-9}$ J against $|W_\text{in}|$ up to 6600 J.
 
+**The Wind tab** (`#wind`, source `portfolios-src/rotor-pendula/rotor_wind.html`, since 28 October 2026). A turbulent wind over the
+rotor, synthesised in the browser in about half a second: the IEC 61400-1 ed. 3 Kaimal spectra for u, v, w (class A, B, C or none;
+σ_u = I_ref(0.75U + 5.6 m/s)), the power-law shear (exponent 0.2), the IEC coherence for u and TurbSim's smooth-model default
+exp(−0.75 f r) for v and w, on an 11 × 11 grid 12.6 m apart, by Veers' method (a Cholesky factor per frequency, 255 frequencies,
+a 256 s record every 0.5 s that repeats); the random numbers are mulberry32 + Box–Muller, so the page's field equals the Python
+reference `notes/rotor-pendula/derive/L6_wind.py` to 2·10⁻¹⁴ m/s. The physics block sits between `/*WIND-BEGIN*/` and `/*WIND-END*/`
+in the page. The rotor turns in the disc-averaged wind with the NREL torque law and C_p(λ) from the ROSCO table; the second blade
+obeys (1.6) of the notes with the Euler torque, the brake set to the best brake at the steady speed of the mean wind, and the air of
+chapter 7 at its middle (no air, streamlined with C_L = 2π(γ − γ_0), or a small wing with C_L = 1 + 2π(γ − γ_0): both aerofoils' lift
+follows the inflow angle, as in `L5_air.py`), from the local wind of the field; it
+starts on the small-swing solution (3.2). Integrated while the reader watches (RK4, h = 5 ms, at 1×, 2×, 5× or 10×). Two views:
+the disc from upwind (colour = the gust along the shaft, a 96 × 96 bilinear raster; arrows = the wind across the disc, 3 m per m/s;
+the tip magnified in a circle, the second blade at its true θ) and the side view (the column through the hub, the air upstream
+by Taylor's frozen turbulence, arrows 1.6 m per m/s, the mean profile dashed). Traces of the last 90 s: hub wind and disc average,
+rotor speed, θ, power with its running mean and P*. The store (about 95 variables, the whole synthesised record included, and a
+900-sample history ring) and the ledger [`scripts/ledger/rotor-wind.js`](../public/scripts/ledger/rotor-wind.js): six headline
+numbers (disc wind, rotor speed, wind at the tip, θ, power, mean power), ten sections, and one book, the second blade's energy:
+the rotor's work from Newton's law for its centre of mass (hinge force times hinge velocity, less the brake torque times Ω) plus
+the air's work equals the change of its ground-frame energy plus the harvest, tolerance 10⁻⁵ of the flows (measured 4·10⁻¹¹ after
+20 s; 7·10⁻⁷ over a whole record in `tools/check_wind.js`). Read values pins the second blade, the hinge, the hub, any grid point
+of the disc or any arrow of the side view; measured on 28 October 2026 in headless Chromium at 1440 px: no errors, the strip
+rewritten 3.7 times a second, nothing shown by a pointer sweep with Read values off; the figure re-lays itself when the panel
+opens (a `ResizeObserver`, deferred to the next frame). `tools/build_wind.py` copies the simulation page's layout stylesheet into
+it and typesets its four equations (it imports `typeset_page` from `build_sim.py`). Results quoted in chapters 6 and 7 come from
+the Python reference (`L6_wind.json`): at 8 m/s, class A, record 1, the rotor's speed wanders by 11.8 % and the second blade gives
+200 mW against 205 mW in steady sheared wind; streamlined 199 mW in steady wind and 212 mW in the gusts; the small wing 287 mW in
+steady wind (formula (7.2): +44 %) and 420 mW in the gusts.
+
 **Checks** (from `portfolios-src/rotor-pendula/`): `python3 tools/check_numbers.py` (every number computed or explained),
 `python3 -I check_physics.py` (independent SymPy and SciPy checks with retyped constants: the rod's Lagrangian, the uneven-rotor
 term, κ*, the 45° lag, P*, τ*, the trail identity, the nine stored runs re-integrated, the generator's circuit and two geared runs),
@@ -301,8 +337,47 @@ term, κ*, the 45° lag, P*, τ*, the trail identity, the nine stored runs re-in
 settings of `data/L4_check_2000.json`), `node tools/check_newton.js` (Newton's cap and the step: the geared powers change by
 at most 8e-12 and 3e-4), `node tools/check_sim_browser.js` (360–1440 px: no errors, no sideways scroll, a hover
 sweep changes nothing, Read values pins and rewrites at most four times a second, every "Try it" button solves) and, with
-`public/` served, `python3 tools/check_combined.py <url>` (both tabs complete, 0 KaTeX errors, solve, tab links, no sideways
-scroll at 360–1440 px).
+`public/` served, `python3 tools/check_combined.py <url>` (all three tabs complete, 0 KaTeX errors, solve, the wind tab
+synthesises and runs, tab links, no sideways scroll at 360–1440 px), `node tools/check_wind.js` (the Wind tab's physics block
+against `L6_wind.py`: the same field to 2e-14, a 60 s run with every term to 3e-14, the energy book over a record) and
+`node tools/double_pendulum.js` (chapter 1's free and held double pendulum on the site's own engine, `data/L0_double.json`).
+
+**Boxes and their edges (since 28 October 2026, at Numa's request).** Every box of the study carries an **edge**: a line down its
+left side, in the colour of what the box holds, on top of its 1 px outline. It generalises the wine line the equation boxes of the
+Simulation and Wind tabs had (`.eq`) and the blue line of the concept cards. One rule, two stylesheets:
+
+| Box | Where | Edge |
+|---|---|---|
+| numbered equation (`.eqn`) | notes | 4 px wine |
+| key result (`.eqn.boxed`, also outlined in wine) | notes | 6 px wine |
+| the real model's numbers, "On our blade", worked examples (`.press`) | notes | 4 px wine |
+| links to the other tabs (`.links a`), quotations (`blockquote.quote`) | notes | 4 px wine |
+| a new idea in four ways: feel, physics, measure, maths (`.idea`) | notes | 4 px blue |
+| callouts (`.callout`), guess-first boxes (`.guess`), the contents (`nav.toc`, `details.toc-m`) | notes | 4 px blue |
+| checks (`.check`) | notes | 4 px green |
+| everyday pictures (`.picture`), warm-ups (`.warm`) | notes | 4 px ochre (`--oil-hi`) |
+| what to remember (`.remember`) | notes | 4 px ink (`--line`) |
+| problems (`.problems`) | notes | 4 px wine-deep |
+| figures (`figure.fig`), tables (`table.mt`) | notes | 4 px steel |
+| panels (`.box`) and solution cards (`.sol`) | Simulation, Wind | 4 px wine |
+| equations (`.eq`) | Simulation, Wind | 4 px wine (was 3 px) |
+| tasks (`.sol .task`) | Simulation, Wind | 3 px blue (unchanged) |
+| the Read values strip (`.readout`) | Simulation, Wind | 3 px blue |
+| number tiles (`.tile`), folds (`details.more`) | Simulation, Wind | 3 px muted brown |
+| plots (`.plot canvas`, `canvas#plots`) | Simulation, Wind | 4 px muted brown |
+| the scene (`#stage`) | Simulation, Wind | 4 px muted brown, drawn by `#stage::after` over the canvas |
+| warnings (`.stale`) | Simulation, Wind | 3 px wine-deep |
+| a picture inside a solution card (`.sol .picture`) | Simulation | 3 px ochre |
+
+The colours say what kind of thing the box holds: wine for mathematics and the model's own numbers, blue for ideas and tools, green
+for checks, ochre for everyday pictures, ink for summaries, steel or muted brown for figures, plots and tiles. Three things are not
+boxes and have no edge: the chapter panels of the notes, which are frames holding the boxes; pills and buttons (`.chip`, `.mag`,
+`.crosslinks a`, the tab bar); and the site-wide data panel (`public/styles/data.css`), which belongs to every simulation, not to
+this study. The notes' rule is one block at the end of `tools/theory_template.html`'s stylesheet, using a `--edge` property per
+box kind; the tabs' rule is one block at the end of `rotor_sim.html`'s stylesheet, which `tools/build_wind.py` copies into
+`rotor_wind.html`. Geometry is kept exact: the scene's edge is a pseudo-element drawn over the canvas, so the canvas keeps its size and
+the read-back tests their pixels; the Wind tab's plot now sizes its drawing by `clientWidth`/`clientHeight` (inside the border) rather
+than the border box, and the Simulation's plot clicks measure from inside the border (`clientLeft`).
 
 ## How to update a copy of an app
 
