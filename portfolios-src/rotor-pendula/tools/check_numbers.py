@@ -17,7 +17,7 @@ for p in sorted((ROOT / 'theory').glob('*.src.html')):
     for kind, key in re.findall(r'\{\{(n|table):([A-Za-z0-9_]+)\}\}', s):
         if key not in NUM['n' if kind == 'n' else 'table']:
             print(f'{p.name}: missing {kind} key {key}'); bad += 1
-    s = re.sub(r'\{\{(n|table):[A-Za-z0-9_]+\}\}', '#', s)
+    s = re.sub(r'\{\{(n|table|fig):[A-Za-z0-9_]+\}\}', '#', s)
     s = re.sub(r'<h[23][^>]*>.*?</h[23]>', ' ', s, flags=re.S)
     s = re.sub(r'<ol class="refs">.*?</ol>', ' ', s, flags=re.S)          # the list of sources: bibliographic numbers
     s = re.sub(r'\\tag\{[\d.]+\}', '', s)
@@ -43,5 +43,11 @@ for p in sorted((ROOT / 'theory').glob('*.src.html')):
             typed = float(num.replace(' ', ''))
             if abs(val - typed) > tol*abs(val):
                 print(f'{p.name}: {num} does not match {expr} = {val:.6g} (tolerance {tol}) | {ctx}'); bad += 1
+# every table and figure appears once in the notes
+from collections import Counter
+_uses = Counter(k for p in (ROOT / 'theory').glob('*.src.html') for k in re.findall(r'\{\{table:([A-Za-z0-9_]+)\}\}', p.read_text()))
+for k, c in _uses.items():
+    if c > 1:
+        print(f'table or figure {k} placed {c} times'); bad += 1
 print(f'{seen} numbers read in the sources; {len(NUM["n"])} computed values; {"PASS" if bad == 0 else f"{bad} FAIL"}')
 sys.exit(1 if bad else 0)

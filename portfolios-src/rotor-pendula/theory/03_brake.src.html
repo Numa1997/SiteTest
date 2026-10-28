@@ -21,8 +21,8 @@ $$\theta'' + \kappa\,\theta' + R\,\theta = -G\cos\varphi, \tag{3.1}$$
 <p>Put $\theta = \mathrm{Re}[A e^{i\varphi}]$ into (3.1); each derivative is a factor $i$:</p>
 $$\begin{aligned} (-1 + i\kappa + R)\,A &= -G \quad\Rightarrow\quad A = \frac{-G}{(R-1) + i\kappa}, \\ \theta &= -\Theta\cos(\varphi - \delta), \qquad \Theta = \frac{G}{\sqrt{(R-1)^2 + \kappa^2}}, \qquad \tan\delta = \frac{\kappa}{R-1}. \end{aligned} \tag{3.2}$$
 <p>The $-1$ is the second blade's own inertia: shaking it at the frequency 1 takes $\theta'' = -\theta$, against the spring, so the push meets the <b>net stiffness</b> $R - 1$ (which equal arms cancel, section 1.4). Unbraked, the swing is in step, $\Theta = G/(R-1)$; a brake shrinks it and makes it lag by $\delta$.</p>
-<p>Read the first line of (3.2) as arrows: the net stiffness's torque $(R-1)A$ along the swing, the brake's $i\kappa A$ a quarter turn ahead, at right angles, and their sum balancing the push. A right triangle whose long side is the push, $G$, whatever the brake (Figure 8).</p>
-{{table:fig_triangle}}
+<p>Read the first line of (3.2) as arrows: the net stiffness's torque $(R-1)A$ along the swing, the brake's $i\kappa A$ a quarter turn ahead, at right angles, and their sum balancing the push. A right triangle whose long side is the push, $G$, whatever the brake (Figure {{fig:torques}}).</p>
+{{table:fig_torques}}
 
 <h3 id="brake-power">3.3 The harvested power, read off the triangle</h3>
 <p>The generator takes the power $c\dot\theta^2$. With $\dot\theta = \Omega\theta'$ and the average of $\sin^2$ over a turn equal to $\tfrac12$, $\langle\dot\theta^2\rangle = \Omega^2\Theta^2/2$, so</p>
@@ -35,7 +35,7 @@ $$(R-1)\Theta = \kappa\Theta \quad\Rightarrow\quad \kappa^* = |R - 1|. \tag{3.4}
 $$\frac{\bar P}{P^*} = \sin 2\delta = \frac{2x}{1+x^2}, \qquad x = \tan\delta = \frac{\kappa}{\kappa^*}.$$
 <p>(Calculus agrees: $d\bar P/d\kappa = 0$ in (3.3) gives $(R-1)^2 - \kappa^2 = 0$.) The largest area is $G^2/4$, so $P^* = I\Omega^3G^2/[4(R-1)]$. Back in physical units, with $I\Omega^2G = \tfrac{ml}{2}g$ and $I(R-1) = \tfrac{ml}{2}r_p - I$:</p>
 $$\boxed{P^* = \frac{\left(\tfrac{ml}{2}\,g\right)^2}{4\,\Omega\left(\tfrac{ml}{2}\,r_p - I\right)} = \frac{m\,g^2\,l}{8\,\Omega\left(r_p - \tfrac23 l\right)}.} \tag{3.5}$$
-<p>Read it as the battery, with the brake as the lamp's resistance. A weak brake, a triangle flat along the push, is the bare wire: the second blade swings freely, nothing resists, nothing is taken. A strong brake, a triangle flat on its end, is the open gap: nothing moves, nothing is taken. Figure 9 draws $\sin 2\delta$ against the brake.</p>
+<p>Read it as the battery, with the brake as the lamp's resistance. A weak brake, a triangle flat along the push, is the bare wire: the second blade swings freely, nothing resists, nothing is taken. A strong brake, a triangle flat on its end, is the open gap: nothing moves, nothing is taken. Figure {{fig:brake}} draws $\sin 2\delta$ against the brake.</p>
 {{table:fig_brake}}
 <div class="check"><div class="ctag">Check</div>Units: kg · (m/s²)² · m / (s⁻¹ · m) = kg m²/s³ = W. No gravity, no power. At $\tfrac{ml}{2}r_p = I$, that is $l = \tfrac32 r_p$, the formula blows up: resonance, the second blade's own frequency $\sqrt R$ equal to the push's (section 3.5). A small lump on a light rod, $I = mL^2$ and first moment $mL$, gives $mLg^2/(4\Omega|r_p - L|)$.</div>
 <div class="idea"><div class="ctag">Critical damping</div><dl>
@@ -60,7 +60,7 @@ $$P^* \approx \frac{\tfrac{ml}{2}\,g^2}{4\,\Omega r_p} = \frac{\tfrac{ml}{2}\,g^
 <p>Table 2: the three winds, beside the full nonlinear equation (chapter 4) at the same brake.</p>
 <div class="tblw">{{table:winds}}</div>
 <p>The closed form (3.5) is within {{n:lin_err_max}} % of the full equation at every wind. Equation (3.7), which drops the second blade's own inertia $I$ beside $\tfrac{ml}{2}r_p$, gives {{n:flat_6}}, {{n:flat_8}} and {{n:flat_10}} mW, within {{n:flat_err_max}} % of (3.5), because $l$ is 63 times shorter than $r_p$.</p>
-<p>Figure 10 sets the theory against the full equation (1.8) over a wide range of brakes. Near the best brake they agree to {{n:cmp_star_dev}} %. They part where the swing is largest, a light brake in light wind: at 6 m/s and 0.05 $\kappa^*$ the full equation swings {{n:cmp_th6}} rad and gives {{n:cmp_dev6}} % more than (3.3); at 10 m/s, swinging {{n:cmp_th10}} rad, {{n:cmp_dev10}} %: the excess grows as the swing squared. At the best brake size and timing are right ({{n:cmp_amp6}} rad at 6 m/s against the full {{n:Th_max}} rad), but the full swing is shifted: its mean angle is {{n:cmp_mean6}} rad, behind the mother blade's line (what remains is {{n:cmp_rest6}} rad rms). A linear theory cannot make a constant offset from a push that averages to zero. Chapter 4 shows that this small trail is what makes the rotor pay.</p>
+<p>Figure {{fig:compare}} sets the theory against the full equation (1.8) over a wide range of brakes. Near the best brake they agree to {{n:cmp_star_dev}} %. They part where the swing is largest, a light brake in light wind: at 6 m/s and 0.05 $\kappa^*$ the full equation swings {{n:cmp_th6}} rad and gives {{n:cmp_dev6}} % more than (3.3); at 10 m/s, swinging {{n:cmp_th10}} rad, {{n:cmp_dev10}} %: the excess grows as the swing squared. At the best brake size and timing are right ({{n:cmp_amp6}} rad at 6 m/s against the full {{n:Th_max}} rad), but the full swing is shifted: its mean angle is {{n:cmp_mean6}} rad, behind the mother blade's line (what remains is {{n:cmp_rest6}} rad rms). A linear theory cannot make a constant offset from a push that averages to zero. Chapter 4 shows that this small trail is what makes the rotor pay.</p>
 {{table:fig_compare}}
 
 <h3 id="brake-res">3.5 Resonance is out of reach</h3>
@@ -75,7 +75,7 @@ $$P^* \approx \frac{\tfrac{ml}{2}\,g^2}{4\,\Omega r_p} = \frac{\tfrac{ml}{2}\,g^
 </ul></div>
 <div class="problems"><div class="ctag">Problems</div><ol>
 <li>Show from (3.3) that a brake twice as strong as the best one, or half as strong, gives the same power. What fraction of $P^*$ is it?
-<details class="ans"><summary>Answer</summary>With $x = \kappa/\kappa^*$, $\bar P/P^* = 2x/(1 + x^2)$, unchanged when $x \to 1/x$. At $x = 2$ or $\tfrac12$ it is 4/5, 80 % of $P^*$. On the circle, the two triangles are mirror images. The hump of Figure 9 is flat-topped: the brake need not be set exactly.</details></li>
+<details class="ans"><summary>Answer</summary>With $x = \kappa/\kappa^*$, $\bar P/P^* = 2x/(1 + x^2)$, unchanged when $x \to 1/x$. At $x = 2$ or $\tfrac12$ it is 4/5, 80 % of $P^*$. On the circle, the two triangles are mirror images. The hump of Figure {{fig:brake}} is flat-topped: the brake need not be set exactly.</details></li>
 <li>At 10 m/s, how far does the free end of our second blade sway, and how much power does it give at the best brake?
 <details class="ans"><summary>Answer</summary>$\Theta^* = G/(\sqrt2\,\kappa^*)$ with $G$ = {{n:G_10}}: {{n:Th_10}} rad, so the free end sways {{n:Th_10_cm}} cm either way. (3.5) gives {{n:Pst_10}} mW.</details></li>
 <li>The second blade's mass is doubled, at the same length. What happens to $P^*$, to the best brake $c^*$, and to the torque the generator must hold?
