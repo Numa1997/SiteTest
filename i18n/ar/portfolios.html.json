@@ -79,6 +79,10 @@
   "src": "<b>There is enough power.</b> The second blade gives 161–267 mW of mechanical power at steady winds of 10 and 6 m/s, more in weak wind, and the rotor pays for every joule through the blade’s trail, at most \\(3.4\\times10^{-7}\\) of the turbine’s output.",
   "tr": "<b>القدرة كافية.</b> تعطي الشفرة الثانية 161–267 mW من القدرة الميكانيكية عند رياح ثابتة سرعتها 10 و6 m/s، وأكثر في الريح الضعيفة، ويدفع الدوّار ثمن كلّ جول عبر تأخّر الشفرة، بما لا يزيد على \\(3.4\\times10^{-7}\\) من قدرة العنفة."
  },
+ "175c25b985de": {
+  "src": "Nine chapters from the energy of moving air to a real generator, 35 numbered equations and six figures, theory set against the full solution, every number computed by the models.",
+  "tr": "تسعة فصول من طاقة الهواء المتحرّك إلى مولّد حقيقي، و35 معادلة مرقّمة وستّة أشكال، تُقارَن فيها النظرية بالحلّ الكامل، وكلّ رقم محسوب بالنماذج."
+ },
  "19b1098bb9da": {
   "src": "impact mechanics · interatomic bonds · fibre networks",
   "tr": "ميكانيك الصدم · الروابط بين الذرّات · شبكات الألياف"
