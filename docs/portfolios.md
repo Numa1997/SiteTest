@@ -197,18 +197,21 @@ Since 23 October 2026 the page at `portfolios/rotor-pendula/index.html` is gener
 source in [`portfolios-src/rotor-pendula/`](../portfolios-src/rotor-pendula/) (its [`README.md`](../portfolios-src/rotor-pendula/README.md)
 gives the commands and checks); the models, model runs and review record are in `notes/rotor-pendula/`.
 
-**What the reader gets.** Two tabs. *Lecture notes* (`#notes`): *A Second Blade on a Turning Blade*, nine chapters (0–8), 29
-numbered equations. The machine: a second, lighter blade (a thin uniform rod, m = 1 kg, l = 1 m) hinged at the 63 m tip of the
+**What the reader gets.** Two tabs. *Lecture notes* (`#notes`): *A Second Blade on a Turning Blade*, nine chapters (0–8), 31
+numbered equations and five figures. The machine: a second, lighter blade (a thin uniform rod, m = 1 kg, l = 1 m) hinged at the 63 m tip of the
 NREL 5 MW blade, turning in the rotor plane and braked by a generator in the hinge. The notes run from the Lagrangian of the rod on
 the turning blade to the best brake κ* = R − 1 and P* = mg²l/[8Ω(r_p − 2l/3)], the trail that is the rotor's bill, where the mass
-sits, chaos (Lyapunov exponents at three winds and three brakes: every start ends on one regular swing), a ceiling on random
+sits (section 1.6 derives the equation a second way, from the turning frame's potential, a bowl that gravity rocks once per turn, Figure 3;
+Figure 5 sets the small-swing theory against the full equation, computed by the page's own engine with `tools/compare.js`), chaos (Lyapunov exponents at three winds and three brakes: every start ends on one regular swing), a ceiling on random
 shaking, gusts on the NREL 5 MW turbine, the blade's sag and shaking at its tip, and a real geared generator (maxon RE 25 with a
 GP 32 C gearhead, ratio 492), and how all of it scales over the sizes of real tip devices, 0.5 to 3 m and up to 90 kg
 (section 7.6). Air on the second blade is left out and the notes say so. Every number is computed by the study's
 models (`tools/make_numbers.py`) or listed with its reason (`tools/typed_numbers.py`). *Simulation* (`#sim`): the same machine;
 choose a steady wind (6, 8 or 10 m/s), the brake and an ideal brake or the geared generator; the page solves the full equations
 with a Radau IIA integrator in a Web Worker built from its physics block, then plays the last turns back. The scene draws the
-three NREL blades from the chord table to one scale and the tip close up to a second, named scale; no angle is magnified. Six
+three NREL blades from the chord table to one scale and the tip close up to a second, named scale; no angle is magnified. The close-up
+draws the second blade slender, as the physics treats it, and a green line at the bottom of its potential bowl, θ_b = atan2(−cos φ, Γ − sin φ),
+which the second blade chases; θ_b is stored (`thb_now`), checked from the stored φ, Ω, r_p, g, and read back from the picture. Six
 worked solutions (`tools/sim_solutions.js`, numbers from the page's own physics block): the best brake at 8 m/s, the trail as the
 bill at 6 m/s, the three winds, how hard the generator must brake and hold, which gear ratio, and where the power goes.
 Reading a value is a tool: "Read values" on, a click pins a point, and the values show in a strip outside the plots.
@@ -252,8 +255,9 @@ Read values works in `#stage`'s coordinates; the scene canvas sits inside it, so
   record by rerunning the same `simulate()` in the page from the stored settings (cached), the power by $c\dot\theta^2$, the
   energies by the formulas above from the stored angles and rates, the lag by the first-harmonic sum, the axis ends and the
   positions on screen from the stored series and scales. *Read back* (the canvas is opaque, and the tests still check alpha first):
-  the wine second blade three quarters along its length in the close-up, from the stored hinge, $\theta$ and $l\,s_2$; the same in the
-  rotor view, with the hinge placed from the stored hub, $r_p$, $s$ and $\varphi$; the hinge's dark centre; the wine curves of the
+  the wine second blade three quarters along its length in the close-up, from the stored hinge, $\theta$ and $l\,s_2$; for $\varphi$,
+  the hinge in the rotor view, placed from the stored hub, $r_p$, $s$ and $\varphi$ (there the 1 m second blade, about 2.6 px, lies under the
+  hinge mark, so the blade itself cannot be read); the green bowl-bottom line beyond the second blade's tip, from the stored $\theta_b$; the hinge's dark centre; the wine curves of the
   three plots; the playhead ring; the tiles' numbers (scientific notation included). A curve point under a marker reports "not in
   the picture now".
 - *The ledger* ([`scripts/ledger/rotor-pendula.js`](../public/scripts/ledger/rotor-pendula.js), loaded between the page's scripts and

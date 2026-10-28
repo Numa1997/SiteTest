@@ -319,6 +319,10 @@
   "src": "The planar model: a pivot on a circle around the hub, an upper rod and a lower rod, and the generators at the two joints.",
   "tr": "Das ebene Modell: ein Drehpunkt auf einem Kreis um die Nabe, eine obere und eine untere Stange und die Generatoren an den beiden Gelenken."
  },
+ "5fd87e42be54": {
+  "src": "Nine chapters from the Lagrangian to a real generator, 31 numbered equations and five figures, theory set against the full solution, every number computed by the models.",
+  "tr": "Neun Kapitel von der Lagrange-Funktion bis zu einem realen Generator, 31 nummerierte Gleichungen und fünf Abbildungen, die Theorie gegen die vollständige Lösung gestellt, jede Zahl von den Modellen berechnet."
+ },
  "5fe73b144386": {
   "src": "<b>Release and retract.</b> From 2.066 s the force ramps back down; at 2.316 s the position law takes the ram home, and the cycle is done at 4.116 s.",
   "tr": "<b>Entlasten und Zurückfahren.</b> Ab 2.066 s fährt die Kraft wieder herunter; bei 2.316 s bringt das Lagegesetz den Stößel in die Ausgangslage zurück, und bei 4.116 s ist der Zyklus vorbei."
