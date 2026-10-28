@@ -36,7 +36,7 @@ From this folder:
 
 ```sh
 (cd tools && npm ci)                     # KaTeX 0.16.11, pinned by tools/package-lock.json, once
-node tools/compare.js                    # theory against the full equation on the page's own engine -> data/compare.json (Figure 5)
+node tools/compare.js                    # theory against the full equation on the page's own engine -> data/compare.json (Figure 7)
 python3 tools/make_numbers.py            # data/*.json -> numbers.json (every computed number and table of the notes)
 python3 tools/check_numbers.py           # every typed number explained (tools/typed_numbers.py), every key present
 python3 tools/build_theory.py            # theory/*.src.html + numbers.json -> rotor_notes.html
@@ -46,7 +46,10 @@ python3 tools/build_sim.py               # fonts, typeset equations and numbers 
 python3 tools/build_combined.py --site   # -> ../../public/portfolios/rotor-pendula/ (run this last)
 ```
 
-The data files in `data/` are copied from `notes/rotor-pendula/derive/` after the model runs there.
+The data files in `data/` are copied from `notes/rotor-pendula/derive/` after the model runs there; for example
+`python3 -I L1_terms.py` there measures each term the small-swing theory neglects (section 3.1) and writes `L1_terms.json`.
+The notes are written for a reader new to wind turbines; the teaching research and a blind learner's reading are in
+`notes/rotor-pendula/teaching/`.
 
 ## Checks
 

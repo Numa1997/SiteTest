@@ -197,18 +197,27 @@ Since 23 October 2026 the page at `portfolios/rotor-pendula/index.html` is gener
 source in [`portfolios-src/rotor-pendula/`](../portfolios-src/rotor-pendula/) (its [`README.md`](../portfolios-src/rotor-pendula/README.md)
 gives the commands and checks); the models, model runs and review record are in `notes/rotor-pendula/`.
 
-**What the reader gets.** Two tabs. *Lecture notes* (`#notes`): *A Second Blade on a Turning Blade*, nine chapters (0–8), 35
-numbered equations and six figures. Chapter 0 starts from scratch, for a reader who knows nothing about wind turbines: the
-energy of moving air, $P = \tfrac12\rho Av^3$; the Betz limit $C_p \le 16/27$, derived from mass, momentum and energy; how a blade, a wing
-meeting an almost head-on apparent wind, turns the rotor (Figure 1, the speeds at the tip); and only then the machine. The machine: a second, lighter blade (a thin uniform rod, m = 1 kg, l = 1 m) hinged at the 63 m tip of the
-NREL 5 MW blade, turning in the rotor plane and braked by a generator in the hinge. The notes run from the Lagrangian of the rod on
-the turning blade to the best brake κ* = R − 1 and P* = mg²l/[8Ω(r_p − 2l/3)], the trail that is the rotor's bill, where the mass
-sits (section 1.6 derives the equation a second way, from the turning frame's potential, a bowl that gravity rocks once per turn, Figure 3;
-Figure 5 sets the small-swing theory against the full equation, computed by the page's own engine with `tools/compare.js`), chaos (Lyapunov exponents at three winds and three brakes: every start ends on one regular swing), a ceiling on random
-shaking, gusts on the NREL 5 MW turbine, the blade's sag and shaking at its tip, and a real geared generator (maxon RE 25 with a
-GP 32 C gearhead, ratio 492), and how all of it scales over the sizes of real tip devices, 0.5 to 3 m and up to 90 kg
-(section 7.6). Air on the second blade is left out and the notes say so. Every number is computed by the study's
-models (`tools/make_numbers.py`) or listed with its reason (`tools/typed_numbers.py`). *Simulation* (`#sim`): the same machine;
+**What the reader gets.** Two tabs. *Lecture notes* (`#notes`): *A Second Blade on a Turning Blade*, nine chapters (0–8), 36
+numbered equations and eight figures, written since 28 October 2026 as a teacher's notes for a reader who knows nothing about wind
+turbines: every chapter has warm-ups and guess-first boxes with folded answers, worked examples with the machine's own numbers, a
+"What to remember" box and problems with answers (box styles `.warm`, `.guess`, `.remember`, `.problems`, `details.ans` in
+`tools/theory_template.html`). Chapter 0 names the parts of a turbine (Figure 1), then builds from moving air: $P = \tfrac12\rho Av^3$; the
+Betz limit $C_p \le 16/27$ from mass, momentum and energy; lift and the apparent wind at the tip (Figure 2); gravity seen from a turning
+blade; the sensor, its power budget worked out from two datasheets and compared honestly with a battery; and the machine (Figure 3):
+a second, lighter blade (a thin uniform rod, m = 1 kg, l = 1 m) hinged at the 63 m tip of the NREL 5 MW blade, turning in the rotor
+plane and braked by a generator in the hinge. It warns at the start that the air on the second blade is left out. Chapter 1 derives
+the equation of motion the way a rider at the tip would: a pendulum in an accelerating car, the centrifugal pull, the second blade
+as a pendulum in two uniform gravities (Figure 4), the generator as a brake, the bowl that rocks (Figure 5), the rotor as a clock,
+a check by Lagrange's method, and who pays, with the torques in newton-metres. Chapter 2: the best brake κ* = R − 1 (a battery and
+lamp as the warm-up) and P* = mg²l/[8Ω(r_p − 2l/3)], with a worked example at 8 m/s; Figure 6 the brake curve; Figure 7 the
+small-swing theory against the full equation, computed by the page's own engine with `tools/compare.js`. Chapter 3: the full
+equation, each neglected term measured on its own (`notes/rotor-pendula/derive/L1_terms.py`), the trail that is the rotor's bill
+with the rotor's torque written out (Figure 8), where the mass sits, chaos (Lyapunov exponents at three winds and three brakes:
+every start ends on one regular swing). Then a ceiling on random shaking, gusts on the NREL 5 MW turbine (its torque law and the
+IEC wind explained in words), the blade's sag and shaking at its tip, a real geared generator (maxon RE 25 with a GP 32 C
+gearhead, ratio 492), and how all of it scales over the sizes of real tip devices, 0.5 to 3 m and up to 90 kg (section 7.6).
+Every number is computed by the study's models (`tools/make_numbers.py`) or listed with its reason (`tools/typed_numbers.py`).
+The teaching research behind the rewrite and a blind learner's reading of the previous version are in `notes/rotor-pendula/teaching/`. *Simulation* (`#sim`): the same machine;
 choose a steady wind (6, 8 or 10 m/s), the brake and an ideal brake or the geared generator; the page solves the full equations
 with a Radau IIA integrator in a Web Worker built from its physics block, then plays the last turns back. The scene draws the
 three NREL blades from the chord table to one scale and the tip close up to a second, named scale; no angle is magnified. The close-up
