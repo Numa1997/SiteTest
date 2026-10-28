@@ -363,7 +363,7 @@ details.more p { font-size: 14px; }
   <section class="box howto" aria-label="How to read this page">
     <div class="eyebrow">Before you start</div><h2>How to read this page</h2>
     <p>The wind that reaches a turbine is never steady. It blows faster higher up (the shear), and on top of that it swirls in gusts of every size, from eddies as wide as the rotor that last a minute to small ones that pass in a second. Watch the colours in the left view: large patches of faster and slower air drift through the disc and slowly change. The rotor feels their average over its disc, so it speeds up and slows down gently, over tens of seconds. The second blade at the tip feels two things: the rotor's changing speed, through the centrifugal spring and the generator's brake, and the air that rushes past it, which it meets at the top of the circle faster than at the bottom.</p>
-    <p>Choose a mean wind, a turbulence class (A is the strongest the standard defines; "none" leaves only the shear) and a record (another set of random numbers, the same statistics). Choose the second blade's shape: "no air" is the machine of chapters 1 to 6 of the notes; "streamlined" is a smooth blade that makes no lift; "small wing" makes lift. To read the wind at a point, switch on Read values under the scene and click the disc or an arrow; the values appear in a strip under the scene, rewritten four times a second.</p>
+    <p>Choose a mean wind, a turbulence class (A is the strongest the standard defines; "none" leaves only the shear) and a record (another set of random numbers, the same statistics). Choose the second blade's shape: "no air" is the machine of chapters 1 to 6 of the notes; "streamlined" is a smooth blade that makes no lift in the steady wind, though its lift follows a change of the inflow angle; "small wing" makes lift. To read the wind at a point, switch on Read values under the scene and click the disc or an arrow; the values appear in a strip under the scene, rewritten four times a second.</p>
     <details class="more">
       <summary>Where the drawing differs from the stored numbers</summary>
       <p>The wind is stored on an 11 × 11 grid of points 12.6 m apart, every 0.5 s. The colour between grid points is a bilinear blend drawn on a 96 × 96 raster and smoothed by the browser, so it is softer than the stored grid; the arrows sit on the grid points and show the stored values at the frame's time, blended in time by the Catmull–Rom rule the physics also uses. Arrow lengths in the left view are 3 m of drawing per m/s, in the right view 1.6 m per m/s. The side view shows the column of grid points through the hub; the air upstream of the rotor is the air that reaches the rotor x/U(z) seconds later, the frozen-turbulence picture of Taylor, not a computed flow; nothing is drawn behind the rotor, where the wake is not modelled. In the rotor view everything is to one scale, so the 1 m second blade is a few pixels long; the circle magnifies the tip to its own scale, named in its label, and turns the second blade by the true angle θ. The blades' outlines are drawn for the eye.</p>
@@ -416,7 +416,7 @@ var WCONST = {
   Iref: { A: 0.16, B: 0.14, C: 0.12, none: 0 }, sK: [1, 0.8, 0.5], LK: [8.1 * 42, 2.7 * 42, 0.66 * 42], Lc: 8.1 * 42,
   N: 11, half: 63, Trec: 256, dt: 0.5, h: 0.005,
   aInd: 1 / 3, tilt: 5 * Math.PI / 180,
-  shapes: { none: [0, 0, 0], streamlined: [0.1, 0, 0.01], wing: [0.1, 1, 0.01] },     // chord (m), C_L0, C_D
+  shapes: { none: [0, 0, 0, 0], streamlined: [0.1, 0, 0.01, 2 * Math.PI], wing: [0.1, 1, 0.01, 2 * Math.PI] },   // chord (m), C_L0, C_D, lift slope dC_L/dgamma (thin aerofoil)
   // NREL 5-MW: rotor and generator inertia on the low-speed shaft, rated speed, torque law (Jonkman et al. 2009, Tables 2-2,
   // 4-1, 5-1, 7-2), and C_p at pitch 0 on lambda = 2, 2.5, ... 14.5 (NREL ROSCO, Cp_Ct_Cq.NREL5MW.txt)
   J: 0, OmRated: 12.1 * 2 * Math.PI / 60, nGear: 97, kRgn2: 0.0255764, genR1: 670, genR2: 871, genRated: 1161.963, slip25: 0.10,
@@ -588,7 +588,7 @@ function makeMachine(F, shape) {
   for (k = 0; k < F.M; k++) vbar += F.veff[k];
   vbar /= F.M;
   var Om0 = steadyOmega(vbar), I = C.m * C.l * C.l / 3, mlc = C.m * C.l / 2, sh = C.shapes[shape];
-  return { shape: shape, vbar: vbar, Om0: Om0, I: I, mlc: mlc, c: (mlc * C.rp - I) * Om0, chord: sh[0], CL0: sh[1], CD: sh[2],
+  return { shape: shape, vbar: vbar, Om0: Om0, I: I, mlc: mlc, c: (mlc * C.rp - I) * Om0, chord: sh[0], CL0: sh[1], CD: sh[2], a0: sh[3],
     gam0: Math.atan2(F.U * Math.cos(C.tilt) * (1 - C.aInd), Om0 * C.rp),
     Pstar: mlc * mlc * C.g * C.g / (4 * Om0 * (mlc * C.rp - I)) };
 }
@@ -615,7 +615,7 @@ function wDeriv(t, y, F, md, aux) {
     Ut = vpath - (vf * (-Math.sin(phi)) + wtot * Math.cos(phi));
     Ua = (Uz + uf) * Math.cos(C.tilt) * (1 - C.aInd);
     gam = Math.atan2(Ua, Ut);
-    CL = md.CL0 + (md.CL0 !== 0 ? 2 * Math.PI * (gam - md.gam0) : 0);
+    CL = md.CL0 + md.a0 * (gam - md.gam0);              // both aerofoils' lift follows the inflow angle; the streamlined one has none at gam0
     Ft = 0.5 * C.rho * (Ut * Ut + Ua * Ua) * md.chord * C.l * (CL * Math.sin(gam) - md.CD * Math.cos(gam));
   }
   var tauAir = Ft * C.l / 2 * Math.cos(th);
@@ -644,7 +644,7 @@ function wStep(t, y, h, F, md) {
   for (i = 0; i < 7; i++) out[i] = y[i] + h / 6 * (k1[i] + 2 * k2[i] + 2 * k3[i] + k4[i]);
   return out;
 }
-// the second blade's energy in the ground frame, (1.7) of the notes plus its height
+// the second blade's energy in the ground frame, (1.2) and (1.3) of the notes plus its height
 function wEnergy(y) {
   var C = WCONST, phi = y[0], Om = y[1], th = y[2], w = y[3], I = C.m * C.l * C.l / 3, mlc = C.m * C.l / 2;
   return 0.5 * I * (Om + w) * (Om + w) + 0.5 * C.m * C.rp * C.rp * Om * Om + mlc * C.rp * Om * (Om + w) * Math.cos(th)
@@ -678,7 +678,7 @@ if (ds) {
   for (const [n, s, u, d, ln] of [['g', 'g', 'm/s²', 5, 'gravity'], ['m', 'm', 'kg', 2, 'second blade’s mass'], ['l', 'l', 'm', 2, 'second blade’s length'],
     ['rp', 'r<sub>p</sub>', 'm', 1, 'hinge radius'], ['rho', 'ρ', 'kg/m³', 3, 'air density'], ['J', 'J', 'kg m²', 0, 'rotor and main generator, on the shaft'],
     ['alpha', 'α', '', 2, 'shear exponent'], ['h', 'h', 's', 3, 'integration step'], ['dtf', 'Δt<sub>f</sub>', 's', 2, 'field time step'], ['Trec', 'T<sub>rec</sub>', 's', 0, 'field record length (it repeats)'],
-    ['chord', 'chord', 'm', 2, 'second blade’s chord, for the air'], ['CL0', 'C<sub>L0</sub>', '', 2, 'lift coefficient at the design inflow'], ['CD', 'C<sub>D</sub>', '', 3, 'drag coefficient']])
+    ['chord', 'chord', 'm', 2, 'second blade’s chord, for the air'], ['CL0', 'C<sub>L0</sub>', '', 2, 'lift coefficient at the design inflow'], ['a0', 'dC<sub>L</sub>/dγ', '/rad', 2, 'lift slope, thin-aerofoil theory'], ['CD', 'C<sub>D</sub>', '', 3, 'drag coefficient']])
     sv(n, { symbol: s, units: u, digits: d, long_name: ln });
   for (const [n, s, d, ln, f] of [['sigma_u', 'σ<sub>u</sub>', 3, 'standard deviation of u', 'I<sub>ref</sub>(0.75 U + 5.6)'], ['sigma_v', 'σ<sub>v</sub>', 3, 'of v', '0.8 σ<sub>u</sub>'], ['sigma_w', 'σ<sub>w</sub>', 3, 'of w', '0.5 σ<sub>u</sub>'],
     ['var_hub', 'var u<sub>hub</sub>', 3, 'variance of u at the hub over this record', 'mean of u² over the 512 samples'], ['sig_eff', 'σ<sub>eff</sub>', 3, 'standard deviation of v<sub>eff</sub> over this record', 'over the 512 samples'],
@@ -688,7 +688,7 @@ if (ds) {
   sv('synth_ms', { symbol: 't<sub>synth</sub>', units: 'ms', long_name: 'time the synthesis took in this browser', digits: 0 });
   for (const [n, s, u, d, ln, f] of [['Om0', 'Ω<sub>0</sub>', 'rad/s', 4, 'steady rotor speed at v̄<sub>eff</sub>', 'Q<sub>aero</sub>(v̄, Ω) = Q<sub>gen</sub>(Ω)'],
     ['c', 'c', 'N m s', 3, 'the brake, best at Ω<sub>0</sub>', '(m l/2 r<sub>p</sub> − I) Ω<sub>0</sub>'], ['Pstar', 'P*', 'W', 4, 'best power at Ω<sub>0</sub>', '(m l g/2)²/[4Ω<sub>0</sub>(m l r<sub>p</sub>/2 − I)]'],
-    ['gam0', 'γ<sub>0</sub>', 'rad', 4, 'design inflow angle of the wing', 'atan[U cos 5° (1 − a)/(Ω<sub>0</sub> r<sub>p</sub>)]']])
+    ['gam0', 'γ<sub>0</sub>', 'rad', 4, 'design inflow angle of the second blade’s section', 'atan[U cos 5° (1 − a)/(Ω<sub>0</sub> r<sub>p</sub>)]']])
     sv(n, { symbol: s, units: u, digits: d, long_name: ln, formula: f });
   for (const [n, s, u, d, ln] of [['t', 't', 's', 2, 'simulated time since the start'], ['phi', 'φ', 'rad', 4, 'rotor angle'], ['Om', 'Ω', 'rad/s', 4, 'rotor speed'],
     ['n_rpm', 'n', 'rpm', 2, 'rotor speed'], ['Omdot', 'Ω̇', 'rad/s²', 5, 'rotor’s angular acceleration'], ['lam', 'λ', '', 2, 'tip-speed ratio Ω r<sub>rot</sub>/v<sub>eff</sub>'],
@@ -762,7 +762,7 @@ function synth() {
 function restart() {
   md = makeMachine(F, set.shape);
   S('shape', set.shape); S('Om0', md.Om0); S('c', md.c); S('Pstar', md.Pstar); S('gam0', md.gam0);
-  S('chord', md.chord); S('CL0', md.CL0); S('CD', md.CD);
+  S('chord', md.chord); S('CL0', md.CL0); S('a0', md.a0); S('CD', md.CD);
   y = wStart(F, md); t = 0; E0 = wEnergy(y); nextH = 0; hN = 0; hHead = 0;
   $('play').disabled = false; $('restart').disabled = false;
   record(); sample(); draw(); text(true);
@@ -988,7 +988,7 @@ function text(force) {
   $('r_Pm').innerHTML = f(G('P_mean') * 1e3, 1, 'mW'); $('r_Ps').innerHTML = f(G('Pstar') * 1e3, 1, 'mW');
   $('timeLbl').textContent = 't = ' + Sim.fmt(t, 1) + ' s';
   $('o_U').textContent = set.U + ' m/s'; $('o_cls').textContent = set.cls === 'none' ? T('no gusts') : 'I_ref ' + C.Iref[set.cls];
-  $('o_seed').textContent = '#' + set.seed; $('o_shape').textContent = { none: T('the air left out'), streamlined: 'C_L 0, C_D 0.01', wing: 'C_L 1, C_D 0.01' }[set.shape];
+  $('o_seed').textContent = '#' + set.seed; $('o_shape').textContent = { none: T('the air left out'), streamlined: 'C_L 0 + 2πΔγ, C_D 0.01', wing: 'C_L 1 + 2πΔγ, C_D 0.01' }[set.shape];
 }
 // ---------------------------------------------------------------- the clock
 let lastT = 0, raf = 0;

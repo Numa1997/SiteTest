@@ -74,7 +74,9 @@ U/(6L), and the shaft torque in section 4.2 carries the first arm's weight too.
   adiabatic estimate puts the chaotic band at swings beyond 139 deg (computed: 132 to 134 deg) and, passing the bowl's bottom,
   at theta' = 18.6 to 20.6 per turn (computed: 18.4 to 20.4 forwards, 20.9 backwards); exponents in the band 1.10 to 1.23 per turn.
 - Turbulent field (L6, 8 m/s, class A, record 1): rotor speed sd 11.8 %; second blade 200 mW against 205 mW in steady sheared
-  wind; streamlined 197 mW; small wing 287 mW steady (formula (7.2) +44 %, solved +40 %) and 420 mW in the gusts.
+  wind; streamlined 199 mW steady (formula (7.2) -2 %, solved -3 %) and 212 mW in the gusts, its lift following each gust;
+  small wing 287 mW steady (formula (7.2) +44 %, solved +40 %) and 420 mW in the gusts. Under the pure square torque law the
+  rotor's speed wanders by 13.4 % (10.3 % under the real law), and the curvature of (6.9) predicts the gain exactly.
 
 ## Queue
 1. Pull request for section 7.6 (the range of sizes): Numa's "merge".

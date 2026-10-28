@@ -308,7 +308,8 @@ a 256 s record every 0.5 s that repeats); the random numbers are mulberry32 + Bo
 reference `notes/rotor-pendula/derive/L6_wind.py` to 2·10⁻¹⁴ m/s. The physics block sits between `/*WIND-BEGIN*/` and `/*WIND-END*/`
 in the page. The rotor turns in the disc-averaged wind with the NREL torque law and C_p(λ) from the ROSCO table; the second blade
 obeys (1.6) of the notes with the Euler torque, the brake set to the best brake at the steady speed of the mean wind, and the air of
-chapter 7 at its middle (no air, streamlined, or a small wing with C_L = 1 + 2π(γ − γ_0)), from the local wind of the field; it
+chapter 7 at its middle (no air, streamlined with C_L = 2π(γ − γ_0), or a small wing with C_L = 1 + 2π(γ − γ_0): both aerofoils' lift
+follows the inflow angle, as in `L5_air.py`), from the local wind of the field; it
 starts on the small-swing solution (3.2). Integrated while the reader watches (RK4, h = 5 ms, at 1×, 2×, 5× or 10×). Two views:
 the disc from upwind (colour = the gust along the shaft, a 96 × 96 bilinear raster; arrows = the wind across the disc, 3 m per m/s;
 the tip magnified in a circle, the second blade at its true θ) and the side view (the column through the hub, the air upstream
@@ -324,8 +325,8 @@ rewritten 3.7 times a second, nothing shown by a pointer sweep with Read values 
 opens (a `ResizeObserver`, deferred to the next frame). `tools/build_wind.py` copies the simulation page's layout stylesheet into
 it and typesets its four equations (it imports `typeset_page` from `build_sim.py`). Results quoted in chapters 6 and 7 come from
 the Python reference (`L6_wind.json`): at 8 m/s, class A, record 1, the rotor's speed wanders by 11.8 % and the second blade gives
-200 mW against 205 mW in steady sheared wind; streamlined 197 mW; the small wing 287 mW in steady wind (formula (7.2): +44 %) and
-420 mW in the gusts.
+200 mW against 205 mW in steady sheared wind; streamlined 199 mW in steady wind and 212 mW in the gusts; the small wing 287 mW in
+steady wind (formula (7.2): +44 %) and 420 mW in the gusts.
 
 **Checks** (from `portfolios-src/rotor-pendula/`): `python3 tools/check_numbers.py` (every number computed or explained),
 `python3 -I check_physics.py` (independent SymPy and SciPy checks with retyped constants: the rod's Lagrangian, the uneven-rotor

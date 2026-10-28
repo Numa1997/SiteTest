@@ -140,7 +140,8 @@ TYPED = {
         '0.01': 'def: lower edge of the spectrum check, Hz', '0.32': 'def: upper edge of the spectrum check, Hz', '1938': YEAR, '1988': YEAR,
         '153': ('calc', '90 + 63', 1e-9, 'highest height of the tip, m'), '27': ('calc', '90 - 63', 1e-9, 'lowest height of the tip, m'),
         '40': 'def: records of the ensemble check (L6_wind.py)', '4.38': 'input: rotor plus drivetrain inertia (' + NREL + ')',
-        '-5/3': 'def', '0.6': 'input: upper frequency of the coherence figure', '17': ('calc', '12*12.6/math.log(2)/12.6', 0.03, 'eddy length over separation'),
+        '-5/3': 'def', '0.6': 'input: upper frequency of the coherence figure', '0.466': 'input: peak of the ROSCO C_p table at pitch 0, Catmull-Rom on its grid (nrel5mw.cp_table, turbulence.cp)',
+        '7.64': 'input: tip-speed ratio of that peak (same source)', '255': 'def: frequencies of a 256 s record below 1 Hz', '1 to': 'def', '17': ('calc', '12*12.6/math.log(2)/12.6', 0.03, 'eddy length over separation'),
     }),
     '07': _merge('05', {
         '60': 'def: apparent wind at the tip, rounded (section 6.3)', '0.6': ('calc', "math.degrees((2/3)*math.cos(math.radians(5))/math.hypot(60.4, 5.31))", 0.05, 'inflow change for 1 m/s, deg'),

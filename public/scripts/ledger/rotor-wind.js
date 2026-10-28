@@ -16,7 +16,7 @@
         window: 600,
         sections: [
             { title: 'What you set', note: 'the mean wind, the turbulence class, the record, the shape, and the clock', how: 'set', vars: ['U_hub', 'cls', 'seed', 'shape', 'speed', 'playing'] },
-            { title: 'Fixed for this study', note: 'the second blade, the turbine, the air and the integrator', how: 'constant', vars: ['g', 'm', 'l', 'rp', 'rho', 'J', 'alpha', 'chord', 'CL0', 'CD', 'h', 'dtf', 'Trec'] },
+            { title: 'Fixed for this study', note: 'the second blade, the turbine, the air and the integrator', how: 'constant', vars: ['g', 'm', 'l', 'rp', 'rho', 'J', 'alpha', 'chord', 'CL0', 'a0', 'CD', 'h', 'dtf', 'Trec'] },
             { title: 'The wind record', note: 'the statistics the standard prescribes, and what this record of 256 s turned out to have', how: 'formula',
                 vars: ['sigma_u', 'sigma_v', 'sigma_w', 'var_hub', 'vbar', 'sig_eff', 'n_disc', 'synth_ms'] },
             { title: 'What follows for the machine', note: 'the rotor’s steady speed at the mean wind, and the brake set for it', how: 'formula', vars: ['Om0', 'c', 'Pstar', 'gam0'] },
@@ -38,7 +38,7 @@
         ],
         deps: {
             sigma_u: SET, sigma_v: ['sigma_u'], sigma_w: ['sigma_u'], var_hub: SET, vbar: SET, sig_eff: SET,
-            Om0: ['vbar'], c: ['Om0'], Pstar: ['Om0'], gam0: ['Om0', 'U_hub'], chord: ['shape'], CL0: ['shape'], CD: ['shape']
+            Om0: ['vbar'], c: ['Om0'], Pstar: ['Om0'], gam0: ['Om0', 'U_hub'], chord: ['shape'], CL0: ['shape'], a0: ['shape'], CD: ['shape']
         },
         controls: { seg_U: 'U_hub', seg_cls: 'cls', seg_seed: 'seed', seg_shape: 'shape', seg_speed: 'speed' }
     };

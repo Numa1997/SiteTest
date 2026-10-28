@@ -518,6 +518,7 @@ N['meff_gentle_min'] = f(min(float(meff[k]) for k in (0, 1, 4, 5)), 2)          
 # ---- gusts (L2) ---------------------------------------------------------------------------------------------------------
 s_om = J('L2_scales.json')['sigOm']
 N['sigOm'] = f(s_om*100, 1); N['jensen'] = f(s_om**2/2*100, 2)
+_sk2 = J('L2_scales.json')['sigOm_k2']; N['sigOm_k2'] = f(_sk2*100, 1); N['jensen_k2'] = f(_sk2**2/2*100, 2)   # the same records under the pure square law
 N['store_s'] = f(0.5*4.38e7*Om[8.0]**2/PT(8.0), 0)          # seconds of its own output the rotor stores as kinetic energy, 8 m/s
 eul = []
 for law in ('nrel', 'k2'):
@@ -585,14 +586,14 @@ chk = J('L4_check_2000.json')
 full = {r['wind']: r for r in chk if r['kind'] == 'best' and r['mult'] == 1.0}
 Nb = sorted({gen[v]['N'] for v in WINDS})
 rows = ['<p class="tcap">Table 3. The maxon RE 25 with a GP 32 C gearhead in the hinge, at the ratio (' + ', '.join(f'{x:g}' for x in Nb) + ' : 1 at every wind) '
-        'and load the formula (5.6)–(5.7) finds best. Swing and load are given as formula / full: the describing-function formula, and the '
-        'full equation (5.8). Paid: what the rotor pays; the last two columns are the shares of it that reach the load and that friction takes.</p>'
-        '<table class="mt"><thead><tr><th>wind</th><th>$R_L$, Ω</th><th>swing, rad</th>'
+        'and load the formula (5.6)–(5.7) finds best. Swing amplitude and load are given as formula / full: the describing-function formula, and the '
+        'full equation (5.8), whose amplitude is half its peak-to-peak swing (its mean, the trail of section 4.2, is left out). Paid: what the rotor pays; the last two columns are the shares of it that reach the load and that friction takes.</p>'
+        '<table class="mt"><thead><tr><th>wind</th><th>$R_L$, Ω</th><th>amplitude, rad</th>'
         '<th>load, mW</th><th>paid, mW</th><th>load</th><th>friction</th></tr></thead><tbody>']
 for v in WINDS:
     a, b = gen[v], full[v]
     rows.append(f'<tr><td>{v:.0f} m/s</td><td>{a["R_load"]:.2f}</td>'
-                f'<td>{a["Theta"]:.3f} / {b["Theta"]:.3f}</td><td>{a["P_load"]*1e3:.1f} / {b["P_load"]*1e3:.1f}</td><td>{b["P_paid"]*1e3:.1f}</td>'
+                f'<td>{a["Theta"]:.3f} / {b["Theta_amp"]:.3f}</td><td>{a["P_load"]*1e3:.1f} / {b["P_load"]*1e3:.1f}</td><td>{b["P_paid"]*1e3:.1f}</td>'
                 f'<td>{b["P_load"]/b["P_paid"]*100:.0f} %</td><td>{b["P_fric"]/b["P_paid"]*100:.0f} %</td></tr>')
 rows.append('</tbody></table>')
 T['generator'] = '\n'.join(rows)
@@ -894,8 +895,9 @@ for yv in (0.1, 1, 10, 100, 1000):
     Y = SY(lsy(yv), sy0, sy1); svgS.append(f'<line x1="59" y1="{Y:.1f}" x2="64" y2="{Y:.1f}" stroke="#3f2c23"/><text x="55" y="{Y+4:.1f}" text-anchor="end" class="svgc">{yv:g}</text>')
 fqs = np.logspace(math.log10(0.003), 0, 160)
 kai = [sig2*SK_(q) for q in fqs]
-svgS.append('<polyline points="' + ' '.join(f'{SX(lfx(q), fx0, fx1):.1f},{SY(lsy(v), sy0, sy1):.1f}' for q, v in zip(fqs, kai)) + '" fill="none" stroke="#3f2c23" stroke-width="1.4" stroke-dasharray="5 4"/>')
-inb = [(q, v/band) for q, v in zip(fqs, kai) if q >= 1/256]
+kai_in = [(q, v) for q, v in zip(fqs, kai) if v >= 0.1]                  # inside the frame
+svgS.append('<polyline points="' + ' '.join(f'{SX(lfx(q), fx0, fx1):.1f},{SY(lsy(v), sy0, sy1):.1f}' for q, v in kai_in) + '" fill="none" stroke="#3f2c23" stroke-width="1.4" stroke-dasharray="5 4"/>')
+inb = [(q, v/band) for q, v in zip(fqs, kai) if q >= 1/256 and v/band >= 0.1]
 svgS.append('<polyline points="' + ' '.join(f'{SX(lfx(q), fx0, fx1):.1f},{SY(lsy(v), sy0, sy1):.1f}' for q, v in inb) + '" fill="none" stroke="#33627f" stroke-width="2.2"/>')
 for q, v in wf['u_spectrum']:
     svgS.append(f'<circle cx="{SX(lfx(q), fx0, fx1):.1f}" cy="{SY(lsy(v), sy0, sy1):.1f}" r="4" fill="#7d1d2f"/>')
@@ -912,17 +914,17 @@ svgS.append(f'<text x="{(64+SW-18)/2}" y="{SH-10}" text-anchor="middle" class="s
 svgS.append(f'<text x="16" y="{(16+SH-48)/2}" text-anchor="middle" class="svgd" transform="rotate(-90 16 {(16+SH-48)/2})">S(f), (m/s)² per Hz</text></svg>')
 T['fig_spectrum'] = ('<figure class="fig">' + ''.join(svgS) +
     f'<figcaption>Figure {{{{fig:spectrum}}}}. How the gusts along the shaft share their variance among frequencies, at the hub, 8 m/s, class A ($\\sigma_u$ = {N["wf_sig_u"]} m/s). '
-    f'Dashed, the Kaimal model (6.6): flat below $U/(6L_u)$ = {N["wf_fcorner"]} Hz, falling as $f^{{-5/3}}$ above. Blue, the same scaled up by 1/{band:.2f} over the record\'s band, 1/256 to 1 Hz, '
-    f'so that the band carries all of $\\sigma_u^2$: what the synthesis (6.8) aims at. Dots, the periodogram of forty synthesised records, averaged in bands. Half the variance lies below {N["wf_fhalf"]} Hz.</figcaption></figure>')
+    f'Dashed, the Kaimal model (6.6): flat below $U/(6L_u)$ = {N["wf_fcorner"]} Hz, falling as $f^{{-5/3}}$ above. Blue, the same scaled up by 1/{band:.2f} over the record\'s 255 frequencies, 1/256 to 255/256 Hz, '
+    f'so that they carry all of $\\sigma_u^2$: what the synthesis (6.8) aims at. Dots, the periodogram of forty synthesised records, averaged in bands. Half the variance lies below {N["wf_fhalf"]} Hz.</figcaption></figure>')
 
 # figure: the Betz stream tube at a = 1/3, and the power coefficient against a
 BW, BH = 380, 280
-svgB1 = [f'<svg viewBox="0 0 {BW} {BH}" style="flex:1 1 300px;min-width:0;max-width:460px" role="img" aria-label="The stream tube through an ideal rotor seen from the side: air arrives from the left at speed v in a narrow tube, slows to two thirds of v at the rotor disc, and leaves at one third of v in a tube twice as wide in area as far upstream.">',
+svgB1 = [f'<svg viewBox="0 0 {BW} {BH}" style="flex:1 1 300px;min-width:0;max-width:460px" role="img" aria-label="The stream tube through an ideal rotor seen from the side: air arrives from the left at speed v in a narrow tube, slows to two thirds of v at the rotor disc, and leaves at one third of v in a tube three times the area it had far upstream, twice that of the disc.">',
          '<defs><marker id="ahb" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="context-stroke"/></marker></defs>']
 a_ = 1/3; r_up, r_d, r_w = math.sqrt(1 - a_), 1.0, math.sqrt((1 - a_)/(1 - 2*a_))      # radii from A_up v = A v(1-a) = A_w v(1-2a)
 cxb, cyb, sc = 190, 120, 62
 xs_ = np.linspace(20, 360, 120)
-rad = lambda x: r_up + (r_d - r_up)*(1 + math.tanh((x - cxb)/45))/2 if x <= cxb else r_d + (r_w - r_d)*math.tanh((x - cxb)/60)
+rad = lambda x: math.sqrt((1 - a_)/(1 - a_*(1 + ((x - cxb)/sc)/math.hypot((x - cxb)/sc, 1))))   # area from the actuator disc's speed on its axis, v[1 - a(1 + xi/sqrt(1 + xi^2))]
 for sg in (1, -1):
     svgB1.append('<polyline points="' + ' '.join(f'{x:.1f},{cyb - sg*sc*rad(x):.1f}' for x in xs_) + '" fill="none" stroke="#33627f" stroke-width="1.6"/>')
 svgB1.append(f'<rect x="{cxb-3}" y="{cyb-sc-6}" width="6" height="{2*sc+12}" fill="#7d1d2f"/><text x="{cxb}" y="{cyb+sc+26}" text-anchor="middle" class="svgc">rotor disc, area A</text>')
@@ -944,7 +946,7 @@ svgB2.append(f'<text x="{(46+BW-14)/2}" y="{BH-10}" text-anchor="middle" class="
 svgB2.append(f'<text x="14" y="{(16+BH-48)/2}" text-anchor="middle" class="svgd" transform="rotate(-90 14 {(16+BH-48)/2})">power coefficient C_p</text></svg>')
 T['fig_betz'] = ('<figure class="fig"><div style="display:flex;flex-wrap:wrap;gap:10px;justify-content:center">' + ''.join(svgB1) + ''.join(svgB2) + '</div>'
     '<figcaption>Figure {{fig:betz}}. The Betz limit. First panel: the air that passes the rotor, seen from the side, at the best slowing $a = 1/3$. The same mass flows through every '
-    'cross-section, so where the air is slower the tube is wider: far upstream it has $1-a$ = 2/3 of the disc\'s area, far downstream $(1-a)/(1-2a)$ = 4/3 of it (the arrows are to scale). '
+    'cross-section, so where the air is slower the tube is wider: far upstream it has $1-a$ = 2/3 of the disc\'s area, far downstream $(1-a)/(1-2a)$ = 2 of it, three times its upstream area (the arrows are to scale; the tube between follows the speed an ideal disc induces along its axis). '
     'Second panel: the power coefficient (6.2), $C_p = 4a(1-a)^2$, with its maximum 16/27 (6.3) and the 5 MW turbine\'s best.</figcaption></figure>')
 N['wf_var_u'] = f(wf['var_hub_u'], 2); N['wf_sig2_u'] = f(wf['sigma_u']**2, 2); N['wf_var_se'] = f(wf['var_hub_se_u'], 2)
 N['wf_spec_dev'] = f(wf['spec_dev_max']*100, 0)
@@ -959,6 +961,8 @@ for k, key in (('streamlined', 'sym'), ('wing', 'wing')):
     N[f'wf_calm_{key}'] = f(cs[k]['P_mean']*1e3, 0); N[f'wf_calm_{key}_pct'] = sgn((cs[k]['P_mean']/cs['none']['P_mean'] - 1)*100, 0)
     N[f'wf_calm_{key}_lean'] = f(math.degrees(cs[k]['th_mean']), 1)
 N['wf_wing_gust_pct'] = f((gs['wing']['P_mean']/cs['wing']['P_mean'] - 1)*100, 0)
+N['wf_sym_gust_pct'] = f((gs['streamlined']['P_mean']/cs['streamlined']['P_mean'] - 1)*100, 0)
+N['wf_none_gust_pct'] = f((gs['none']['P_mean']/cs['none']['P_mean'] - 1)*100, 1)
 N['wf_book'] = sci(wc['book_worst_rel'], 0)
 # the wing's torque about the hinge for 1 m/s more wind along the shaft (quasi-steady (7.1), C_L = 1 + 2 pi (gamma - gamma_0), chord 0.1 m, l = 1 m)
 Ut8, Ua8 = Om[8.0]*rp, 8.0*math.cos(math.radians(5))*(2/3)

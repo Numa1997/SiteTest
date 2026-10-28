@@ -23,9 +23,9 @@ The machine in it (the same equations the page integrates, RK4 at h = 0.005 s):
   rotor     J Omega' = Q_aero(v_eff, Omega) - Q_gen(Omega), v_eff = mean of U + u over the grid points on the disc,
             Q_aero = rho pi R^3 v^2 C_p(lambda)/(2 lambda) with C_p at pitch 0 from the ROSCO table (Catmull-Rom on its
             0.5 grid), Q_gen the NREL baseline torque law; above rated speed an ideal pitch holds Omega (as turbulence.py)
-  blade     (1.5) of the notes with the Euler torque, the brake c fixed at the best brake of the steady rotor speed at the
-            mean wind, and the air on the second blade at mid-span (chapter 8's quasi-steady model, local wind from the field,
-            induction a = 1/3, shaft tilt 5 deg): shape 'none', 'streamlined' (C_L = 0, C_D = 0.01, chord 0.1 m) or
+  blade     (1.6) of the notes with the Euler torque, the brake c fixed at the best brake of the steady rotor speed at the
+            mean wind, and the air on the second blade at mid-span (chapter 7's quasi-steady model, local wind from the field,
+            induction a = 1/3, shaft tilt 5 deg): shape 'none', 'streamlined' (C_L = 2 pi (gamma - gamma_0), C_D = 0.01, chord 0.1 m) or
             'wing' (C_L = 1 + 2 pi (gamma - gamma_0), C_D = 0.01, chord 0.1 m)
   start     the rotor at the steady speed of the wind at t = 0, the second blade on the small-swing swing (3.2)
   energy    the rotor's work on the second blade from Newton's law for its centre of mass (hinge force times hinge
@@ -133,7 +133,7 @@ J_ROT = (3*(math.cos(math.radians(T5.PRECONE))**2*T5.I_ROOT + 2*T5.R_HUB*math.co
            + T5.R_HUB**2*T5.M_BLADE) + T5.I_HUB + T5.N_GEAR**2*T5.I_GEN)
 OM_RATED = T5.OM_RATED*2*math.pi/60
 TILT = math.radians(5.0); A_IND = 1/3
-SHAPES = {'none': (0.0, 0.0, 0.0), 'streamlined': (0.1, 0.0, 0.01), 'wing': (0.1, 1.0, 0.01)}   # chord m, C_L0, C_D
+SHAPES = {'none': (0.0, 0.0, 0.0, 0.0), 'streamlined': (0.1, 0.0, 0.01, 2*math.pi), 'wing': (0.1, 1.0, 0.01, 2*math.pi)}   # chord m, C_L0, C_D, lift slope
 
 def catrom(p0, p1, p2, p3, s):
     return 0.5*((2*p1) + (-p0 + p2)*s + (2*p0 - 5*p1 + 4*p2 - p3)*s*s + (-p0 + 3*p1 - 3*p2 + p3)*s**3)
@@ -197,9 +197,9 @@ def model(field, shape):
     vbar = float(np.mean(field.veff))
     Om0 = steady_omega(vbar)
     c_brake = (MLC*RP - IB)*Om0
-    chord, CL0, CD = SHAPES[shape]
+    chord, CL0, CD, a0 = SHAPES[shape]
     gam0 = math.atan2(U*math.cos(TILT)*(1 - A_IND), Om0*RP)
-    return dict(Om0=Om0, c=c_brake, chord=chord, CL0=CL0, CD=CD, gam0=gam0, vbar=vbar)
+    return dict(Om0=Om0, c=c_brake, chord=chord, CL0=CL0, CD=CD, a0=a0, gam0=gam0, vbar=vbar)
 
 def start(field, md):
     """the rotor at the steady speed of the wind at t = 0; the second blade on the small-swing solution (3.2) at the brake c"""
@@ -224,7 +224,7 @@ def deriv(t, y, field, md):
         Ut = vpath - (vf*(-math.sin(phi)) + wtot*math.cos(phi))
         Ua = (Uz + uf)*math.cos(TILT)*(1 - A_IND)
         W2 = Ut*Ut + Ua*Ua; gam = math.atan2(Ua, Ut)
-        CL = md['CL0'] + (2*math.pi*(gam - md['gam0']) if md['CL0'] != 0 else 0.0)
+        CL = md['CL0'] + md['a0']*(gam - md['gam0'])      # both aerofoils' lift follows the inflow angle (L5_air.py does the same)
         Ft = 0.5*RHO*W2*md['chord']*LB*(CL*math.sin(gam) - md['CD']*math.cos(gam))
     tau_air = Ft*LB/2*math.cos(th)
     c = md['c']
