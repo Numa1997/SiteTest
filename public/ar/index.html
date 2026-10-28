@@ -24,7 +24,7 @@
   
     <link rel="stylesheet" href="../fonts/arabic.css" />
     <script src="../scripts/i18n/strings-ar.js"></script>
-    <meta name="translated-from" content="English index.html, commit 2da00ae+" />
+    <meta name="translated-from" content="English index.html, commit 17c570d+" />
   </head>
 
   <body>
@@ -525,7 +525,7 @@
       <span><a href="#top">إلى الأعلى ↑</a></span>
     </footer>
 
-    <script src="../scripts/fold.js"></script>
+    <script src="../scripts/fold.js"></script><script>/* the index shows the count each section card shows (from fold.js) */ window.addEventListener('load', function () { document.querySelectorAll('.index a[href^="#"]').forEach(function (a) { if (a.querySelector('.index__n')) return; var s = document.getElementById(a.getAttribute('href').slice(1)), c = s && s.querySelector('.fs-counts'), n = c && parseInt(c.textContent, 10); if (n) { var b = document.createElement('span'); b.className = 'index__n'; b.textContent = n; b.title = c.textContent; a.appendChild(b); } }); });</script>
     <script>
       (function () {
         var reduced =
