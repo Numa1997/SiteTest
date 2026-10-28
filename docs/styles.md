@@ -155,7 +155,7 @@ the tokens, base type, links and the `footer`; `catalog.css` changes `--serif` a
 | Sections | `.section` (104 px top padding), `.section h2` (32–46 px, weight 600, wine bar `::before` that widens from 40 to 96 px on `.is-visible`), `.section__intro` | [332–362](../public/styles/site.css#L332-L362) |
 | Timeline (Positions) | `.timeline`, `.timeline__line` (grows over 1.8 s), `.entry` with its dot `::before`, `.entry--current` (pulsing `halo`), `.entry__when`, `.entry h3`, `.entry__org`, `.bullets` | [365–458](../public/styles/site.css#L365-L458) |
 | Ledger (Education) | `.ledger`, `.row` (150 px date column), `.row__when`, `.row__org`, `.row__note` | [461–497](../public/styles/site.css#L461-L497) |
-| Research cards | `.projects` (three columns), `.project` (gradient top bar on hover), `.project__status` | [500–560](../public/styles/site.css#L500-L560) |
+| Research cards | `.projects` (two columns, one at 980 px and below), `.project` (flat outlined card with a wine top edge), `.project__status`, linked title, `.project__summary`, `.project__open` | [500–560](../public/styles/site.css#L500-L560) |
 | Plates | `.plates` (two columns), `.plate`, `.plate__fig` (156 px, `--grid` at 20 px), the SVG stroke classes `.ink .acc .soft .grey .acc-fill .grey-fill`, `.plate__body`, `.plate__num`, `.plate__tags`, `.plate__launch`, `.plates__more` | [563–691](../public/styles/site.css#L563-L691) |
 | Skills | `.skills` (two columns of `dt` 128 px + `dd`), `.lvl` | [694–725](../public/styles/site.css#L694-L725) |
 | Footer | `footer` (mono 11 px, both ends justified) | [728–743](../public/styles/site.css#L728-L743) |
@@ -255,14 +255,13 @@ after `site.css` and `paper.css` ([catalog.css:3](../public/styles/catalog.css#L
 | Search bar | `.cat__bar` (sticky, translucent, a grid with areas `search stage count` / `field field field`), `.cat__search` (icon, input, `kbd` hint hidden while typing), `.cat__filters` (`display: contents`), `.cat__chips`, `#fields`, `#stages`, `.chip` (pill; `aria-pressed="true"` turns it ink), `.chip small` (count), `.cat__count` | [108–229](../public/styles/catalog.css#L108-L229) |
 | Entries | `.cat__list` (two-column grid), `.entry` (outlined card), `.entry__fig`, `.entry__plate` (8 : 5, white, outlined), `.entry__ph` (the "Fig. n" stand-in under the image), `.entry__cap`, `.entry__body`, `.entry__kicker`, `.entry h3`, `.entry__abs`, `.entry__eq` (hidden until `.is-typeset`), `.entry__facts`, `.entry__tags`, `.entry__foot`, `.entry__open`, `.entry__note` | [232–408](../public/styles/catalog.css#L232-L408) |
 | Empty state | `.cat__empty` (dashed outline), its button | [411–429](../public/styles/catalog.css#L411-L429) |
-| The four parts | `.cat__anatomy`, `.cat__parts` (four columns, 3 px wine top edge) | [432–475](../public/styles/catalog.css#L432-L475) |
+| The four parts | `.cat__anatomy`, `.cat__parts` (two columns, one at 640 px and below; no native markers, margin or padding), `.cat__parts > li` (20 px padding; 18 px vertically and 16 px horizontally on phones; 3 px wine top edge) | [432–475](../public/styles/catalog.css#L432-L475) |
 | No-JS notice | `.cat-error` | [476–480](../public/styles/catalog.css#L476-L480) |
 
 **Breakpoints.**
 
 | Width | What changes | Lines |
 |---|---|---|
-| ≤ 1100 px | The four parts in two columns. | [483–487](../public/styles/catalog.css#L483-L487) |
 | ≤ 860 px | Masthead one column; list one column. | [488–496](../public/styles/catalog.css#L488-L496) |
 | ≤ 640 px | 16 px side padding; the bar becomes `search count` over one sideways-scrolling row of all chips, the year chips after a thin line; smaller stats, lede and entry text; facts stack; parts one column; footer padding. | [497–564](../public/styles/catalog.css#L497-L564) |
 | no hover (touch) | The `/` hint is hidden. | [565–572](../public/styles/catalog.css#L565-L572) |

@@ -1,0 +1,50 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="Content-Security-Policy" content="default-src 'self'; style-src 'self' 'unsafe-inline'; img-src 'self' data:; font-src 'self' data:; object-src 'none'; base-uri 'self'; form-action 'self'; upgrade-insecure-requests" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>CV · Numa Koudsie</title>
+    <meta name="description" content="Curriculum vitae of Numa Koudsie, physics graduate (B.Sc., University of Leipzig), in German and English." />
+    <meta name="author" content="Numa Koudsie" />
+    <meta name="theme-color" content="#f5f1ea" />
+    <link rel="stylesheet" href="../styles/site.css" />
+    <link rel="stylesheet" href="../styles/catalog.css" />
+    <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='12' fill='%237a1f2b'/%3E%3Ctext x='32' y='45' text-anchor='middle' font-family='Georgia,serif' font-size='34' font-weight='700' fill='%23fff'%3ENK%3C/text%3E%3C/svg%3E" />
+    <style>
+      .cv-main { max-width: 900px; margin: 0 auto; padding: 32px 16px 64px; }
+      .cv-main h1 { font-family: 'Instrument Serif', serif; font-weight: 400; font-size: clamp(2rem, 5vw, 3rem); margin: 0 0 8px; }
+      .cv-lede { font-family: 'IBM Plex Sans', sans-serif; margin: 0 0 20px; }
+      .cv-actions { display: flex; flex-wrap: wrap; gap: 10px; margin-bottom: 20px; }
+      .cv-actions a { font-family: 'IBM Plex Mono', monospace; font-size: .85rem; padding: 9px 14px; border: 1px solid #7a1f2b; color: #7a1f2b; text-decoration: none; border-radius: 4px; background: #fff; }
+      .cv-actions a.primary { background: #7a1f2b; color: #fff; }
+      .cv-tabs { font-family: 'IBM Plex Mono', monospace; font-size: .8rem; margin-bottom: 12px; }
+      .cv-tabs a { color: #7a1f2b; margin-right: 14px; }
+      .cv-page { margin: 0 0 28px; }
+      .cv-page img { display: block; width: 100%; height: auto; border: 1px solid #d9d0c3; background: #fff; }
+      .cv-page figcaption { font-family: 'IBM Plex Mono', monospace; font-size: .75rem; letter-spacing: .08em; margin-top: 6px; color: #6b6259; }
+    </style>
+  </head>
+  <body>
+    <header class="cat-top">
+      <span style="display:inline-flex;align-items:center;gap:14px"><a href="../index.html" aria-label="Phyein Usul, home page" style="display:inline-block;line-height:0"><img src="../images/phyein-usul-mark.svg" alt="Phyein Usul" width="87" height="48" /></a><a href="../index.html">← Numa Koudsie</a></span>
+    </header>
+    <main class="cv-main">
+      <h1>Curriculum Vitae</h1>
+      <p class="cv-lede">Numa Koudsie, physics graduate. The same CV in German and in English, one A4 page each.</p>
+      <div class="cv-actions">
+        <a class="primary" href="Numa_Koudsie_CV.pdf" download>Download PDF</a>
+        <a href="Numa_Koudsie_CV.pdf" target="_blank" rel="noopener">Open PDF</a>
+      </div>
+      <p class="cv-tabs"><a href="#de">Deutsch</a><a href="#en">English</a></p>
+      <figure class="cv-page" id="de">
+        <img src="cv-de.webp" width="1405" height="1988" alt="Lebenslauf von Numa Koudsie, deutsche Fassung" />
+        <figcaption>DE · LEBENSLAUF</figcaption>
+      </figure>
+      <figure class="cv-page" id="en">
+        <img src="cv-en.webp" width="1405" height="1988" alt="Curriculum vitae of Numa Koudsie, English version" loading="lazy" />
+        <figcaption>EN · CURRICULUM VITAE</figcaption>
+      </figure>
+    </main>
+  </body>
+</html>

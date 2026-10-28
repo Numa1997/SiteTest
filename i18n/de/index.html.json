@@ -7,6 +7,10 @@
   "src": "Arabic <span class=\"lvl\">native</span> · English <span class=\"lvl\">C1</span> · German <span class=\"lvl\">B2</span>",
   "tr": "Arabisch <span class=\"lvl\">Muttersprache</span> · Englisch <span class=\"lvl\">C1</span> · Deutsch <span class=\"lvl\">B2</span>"
  },
+ "04e22db50e7d": {
+  "src": "Why an iron ball hurts and a cotton ball of the same mass does not",
+  "tr": "Warum eine Eisenkugel wehtut und eine Baumwollkugel derselben Masse nicht"
+ },
  "0a4470d64e9d": {
   "src": "Skip to content",
   "tr": "Zum Inhalt springen"
@@ -14,6 +18,10 @@
  "11826f821795": {
   "src": "Fig. 3",
   "tr": "Abb. 3"
+ },
+ "11c756067811": {
+  "src": "How cloud droplets become rain",
+  "tr": "Wie aus Wolkentröpfchen Regen wird"
  },
  "11f84af620e1": {
   "src": "Building AND/OR gates operations to specify component-wise power consumption of the system",
@@ -27,9 +35,17 @@
   "src": "Wave Interference – Multiple Sources",
   "tr": "Welleninterferenz – mehrere Quellen"
  },
+ "156798c59fda": {
+  "src": "Iron, Cotton and the Head",
+  "tr": "Eisen, Baumwolle und der Kopf"
+ },
  "19300c13439d": {
   "src": "Portfolios ↗",
   "tr": "Portfolios ↗"
+ },
+ "19b1098bb9da": {
+  "src": "impact mechanics · interatomic bonds · fibre networks",
+  "tr": "Stoßmechanik · interatomare Bindungen · Fasernetzwerke"
  },
  "1b0699dd1971": {
   "src": "Completed projects, rebuilt in full with their derivations, solver and checks, are on the <a href=\"portfolios.html\">Portfolios page</a>: the Bachelor thesis on how cloud droplets become rain, a corrected study of whether a pendulum on a turbine blade can power a sensor, a servo-hydraulic press under digital control, built from first principles, and a study, in English and Arabic, of why an iron ball hurts and a cotton ball of the same mass does not.",
@@ -54,6 +70,10 @@
  "2365a132b4ee": {
   "src": "Fig. 2",
   "tr": "Abb. 2"
+ },
+ "2392054b4832": {
+  "src": "Rotor Pendula",
+  "tr": "Rotor Pendula"
  },
  "24e8db21fed4": {
   "src": "Draw any closed shape; a discrete Fourier transform turns it into spinning circles that redraw it, with Parseval's theorem checking the error live.",
@@ -86,6 +106,14 @@
  "31069064dd63": {
   "src": "Serving and waiting customers and tables respectively",
   "tr": "Bedienung der Gäste und Tische"
+ },
+ "3242710b9971": {
+  "src": "cloud physics · stochastic collection · numerical methods",
+  "tr": "Wolkenphysik · stochastische Koaleszenz · numerische Methoden"
+ },
+ "334b51f12c6f": {
+  "src": "Can a second blade, hinged at the tip of a turbine blade, power a sensor, and can chaos or the wind help?",
+  "tr": "Kann ein zweites Blatt, an der Spitze eines Turbinenblatts angelenkt, einen Sensor versorgen, und helfen Chaos oder der Wind?"
  },
  "33bd5a5dddcd": {
   "src": "© 2026 Numa Koudsie",
@@ -203,6 +231,10 @@
   "src": "Development of web react elements and simulations of basic physical phenomena",
   "tr": "Entwicklung von React-Elementen für das Web und von Simulationen grundlegender physikalischer Phänomene"
  },
+ "6f8e259f02f0": {
+  "src": "rotating mechanics · energy harvesting · nonlinear dynamics",
+  "tr": "Mechanik rotierender Systeme · Energy Harvesting · nichtlineare Dynamik"
+ },
  "6fa887c4b945": {
   "src": "Live double pendulum drawing",
   "tr": "Live-Zeichnung eines Doppelpendels"
@@ -227,6 +259,10 @@
   "src": "Chaos theory",
   "tr": "Chaostheorie"
  },
+ "7b3a04008e72": {
+  "src": "How a digital controller makes 12 MPa of oil press with 60 kN, and hold it",
+  "tr": "Wie ein digitaler Regler Öl unter 12 MPa mit 60 kN pressen lässt und die Kraft hält"
+ },
  "7c1ff947231c": {
   "src": "System energy optimization for equilibrium modeling",
   "tr": "Optimierung der Systemenergie für die Modellierung des Gleichgewichts"
@@ -238,6 +274,10 @@
  "7f3b61e60922": {
   "src": "Python simulations for water/ice particle coalescence; synthetic data analysis",
   "tr": "Python-Simulationen der Koaleszenz von Wasser- und Eisteilchen; Analyse synthetischer Daten"
+ },
+ "7fc24febaea6": {
+  "src": "fluid power · digital control · numerical simulation",
+  "tr": "Fluidtechnik · digitale Regelung · numerische Simulation"
  },
  "7ff5a6dafd80": {
   "src": "Sections",
@@ -306,6 +346,10 @@
  "9ca132558c37": {
   "src": "HTML5 Canvas",
   "tr": "HTML5 Canvas"
+ },
+ "9dd35bd1eabb": {
+  "src": "Droplet Collection",
+  "tr": "Droplet Collection"
  },
  "a024c68075c4": {
   "src": "Discrete Fourier transform",
@@ -535,6 +579,10 @@
   "src": "Bilingual instruction of classes 6, 8, 9, 10, and 12 in Physics and natural sciences",
   "tr": "Zweisprachiger Unterricht in Physik und Naturwissenschaften in den Klassen 6, 8, 9, 10 und 12"
  },
+ "f2f5d5c95a1d": {
+  "src": "CV ↗",
+  "tr": "Lebenslauf ↗"
+ },
  "f34f870654be": {
   "src": "Koudsie<span class=\"dot\">.</span>",
   "tr": "Koudsie<span class=\"dot\">.</span>"
@@ -555,9 +603,17 @@
   "src": "University of Groningen",
   "tr": "Rijksuniversiteit Groningen"
  },
+ "fa30d9444bb7": {
+  "src": "Open the project",
+  "tr": "Projekt öffnen"
+ },
  "fc8a068be442": {
   "src": "Completed projects, rebuilt in full with their derivations, solver and checks, are on the <a href=\"portfolios.html\">Portfolios page</a>: the Bachelor thesis on how cloud droplets become rain, a corrected study of whether a pendulum on a turbine blade can power a sensor, a servo-hydraulic press under digital control, built from first principles, and a study, in English, German and Arabic, of why an iron ball hurts and a cotton ball of the same mass does not.",
   "tr": "Abgeschlossene Projekte, vollständig neu aufgebaut mit ihren Herleitungen, Lösern und Prüfungen, stehen auf der <a href=\"portfolios.html\">Portfolios-Seite</a>: die Bachelorarbeit darüber, wie aus Wolkentröpfchen Regen wird, eine korrigierte Studie, ob ein Pendel auf einem Turbinenblatt einen Sensor versorgen kann, eine digital geregelte servohydraulische Presse, aus ersten Prinzipien aufgebaut, und eine Studie, auf Englisch, Deutsch und Arabisch, warum eine Eisenkugel wehtut und eine Baumwollkugel derselben Masse nicht."
+ },
+ "fde7a78a09c4": {
+  "src": "Hydraulic Press Study",
+  "tr": "Studie einer hydraulischen Presse"
  },
  "ff5d03c7680b": {
   "src": "Numa Koudsie — physics graduate with expertise in data analysis, modeling, and software development. Positions, education, research projects, interactive physics simulations, and skills.",
