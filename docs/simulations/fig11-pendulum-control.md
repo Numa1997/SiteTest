@@ -152,9 +152,10 @@ Two store attributes now show in the first section and are still English on the 
   string of §6) into the cart, and from the cart through the coil into the current source; the coil pumps both ways, a little
   more out than in on every swing. Its numbers come from `python3 notes/fig11/energy_path.py` (linear model (8), LQR (12)–(14),
   coil clamped at 30 N, RK4): swing energy 0.102 J (chain 0.079 J, string 0.023 J); in 8 s the coil puts 2.30 J into the cart
-  and takes 2.40 J out; the string does −0.079 J on the chain and +0.102 J on the cart. Figure 2 has a wide drawing and, below
-  600 px, a tall one with the same words (`.pfig-home--wide`, `.pfig-home--tall`).
-  Checked by `node notes/fig11/note-shot.cjs en|de|ar 1400|390`: no KaTeX errors, no overlapping labels.
+  and takes 2.40 J out; the string does −0.079 J on the chain and +0.102 J on the cart. Figure 2 is HTML, not SVG (`.eflow`, styles
+  on line 42), because `tools/i18n/build.py` skips SVG and its words would stay English on the German and Arabic pages (the
+  labels of Figure 1 still do). It runs as a row, right to left with mirrored arrows in Arabic, and below 600 px as a column.
+  Checked by `node notes/fig11/note-shot.cjs en|de|ar 1400|390`: no KaTeX errors, no overlapping parts, nothing outside the plate.
 - Correction in §8 (line 360): the note said that when ball 2 swings right "the cart is pulled the other way at first". The
   gain on θ2 is negative (−201.70 at the default target, −160.9 at the hanging rest), so F = F* − K(y − y*) pushes the cart
   towards ball 2 at once; the release above shows it, the cart running 12 cm right in 0.2 s, past the ball. The sentence now
