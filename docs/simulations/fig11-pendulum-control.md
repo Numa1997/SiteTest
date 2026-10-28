@@ -185,3 +185,8 @@ Two store attributes now show in the first section and are still English on the 
 - From 1280 to 1439 px the Take control box is set tighter (smaller type, smaller gaps), so that in German all ten knobs are
   on screen at 1280×800 (8 of 10 before). Checked with `node notes/fig11/layout.cjs de`.
 
+- The three-column layout keys on the page's own width, not the window's: `.sim` is a CSS container named `sim`, and the
+  rules apply from `@container sim (min-width: 1200px)` (a 1280 px window). Keyed on the window, it squeezed the picture to
+  about 95 px when the data panel opened at 1440 px, because the open panel pads the page by its own width
+  (`data.css:383`). Now, with the panel open, the page falls back to two columns there (picture 450 px wide, as before
+  this change); at 1920 px three columns still fit (534 px). `node notes/fig11/layout.cjs` measures the open-panel case too.

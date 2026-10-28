@@ -26,7 +26,9 @@ const KNOBS = ['r', 'qa', 'qx', 'qv', 'rho', 'N0', 'ks', 'Imax', 'speed', 'solve
     await p.mouse.wheel(0, 500); await p.waitForTimeout(400);
     const down = await look();
     const on = o => Object.values(o.knobs).filter(v => v === 1).length;
-    console.log(`${lang} ${w}×${hgt}: errors ${errs.length} · at the grid's top: picture ${Math.round(top.stage * 100)}% on screen, knobs on screen ${on(top)}/${KNOBS.length} · 500 px further down: knobs ${on(down)}/${KNOBS.length} · inner scroll take ${top.takeScroll} px, panel ${top.panelScroll} px · sideways ${top.sideways} px`);
+    const tab = await p.$('.dp-tab'); let open = null;
+    if (tab && w >= 1100) { if (!(await p.evaluate(() => document.body.classList.contains('dp-open')))) await tab.click(); await p.waitForTimeout(900); open = await p.evaluate(() => ({ stage: Math.round(document.getElementById('stage').getBoundingClientRect().width), cols: getComputedStyle(document.querySelector('.sim__grid')).gridTemplateColumns.split(' ').length, side: document.documentElement.scrollWidth - document.documentElement.clientWidth })); await p.screenshot({ path: `notes/fig11/shots/layout-open-${lang}-${w}.png` }); }
+    console.log(`${lang} ${w}×${hgt}: errors ${errs.length} · at the grid's top: picture ${Math.round(top.stage * 100)}% on screen, knobs on screen ${on(top)}/${KNOBS.length} · 500 px further down: knobs ${on(down)}/${KNOBS.length} · inner scroll take ${top.takeScroll} px, panel ${top.panelScroll} px · sideways ${top.sideways} px` + (open ? ` · data panel open: ${open.cols} columns, picture ${open.stage} px wide, sideways ${open.side} px` : ''));
     await p.close();
   }
   await b.close();
