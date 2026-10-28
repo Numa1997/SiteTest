@@ -16,6 +16,16 @@ const lang = process.argv[2] || 'en', w = +(process.argv[3] || 1400), pre = lang
     return { hid, top, h: end - top, katex: sec.querySelectorAll('.katex-error').length, pending: sec.querySelectorAll('.i18n-pending').length, texts: ts.length, words, overlaps: over.length, outside, sideways: document.documentElement.scrollWidth - document.documentElement.clientWidth };
   });
   await p.screenshot({ path: `notes/fig11/shots/note11-${lang}-${w}.png`, clip: { x: 0, y: r.top, width: w, height: Math.min(r.h, 4000) }, fullPage: true });
+  const f1 = await p.evaluate(() => {
+    const pl = document.querySelector('.fig1-lbl').closest('.pfig__plate'), pr = pl.getBoundingClientRect();
+    const ls = [...pl.querySelectorAll('.fig1-lbl')].map(e => e.getBoundingClientRect());
+    return { y: pr.top + scrollY, h: pr.height, n: ls.length, words: [...pl.querySelectorAll('.fig1-lbl')].map(e => e.textContent).join(' / '), out: ls.filter(r => r.left < pr.left - 1 || r.right > pr.right + 1 || r.bottom > pr.bottom + 1).length, px: Math.round(parseFloat(getComputedStyle(pl.querySelector('.fig1-lbl')).fontSize)) };
+  });
+  await p.screenshot({ path: `notes/fig11/shots/fig1-${lang}-${w}.png`, clip: { x: 0, y: f1.y, width: w, height: f1.h }, fullPage: true });
+  const pt = await p.evaluate(() => { const h = document.querySelector('#p-parts'), card = h.closest('[data-card]') || h; const r = card.getBoundingClientRect(); return { y: r.top + scrollY, h: r.height }; });
+  await p.screenshot({ path: `notes/fig11/shots/parts-${lang}-${w}.png`, clip: { x: 0, y: pt.y, width: w, height: Math.min(pt.h, 9000) }, fullPage: true });
+  const tour = await p.evaluate(() => { const h = document.getElementById('p-parts'); return { shown: !!h.offsetParent, n: h.textContent.slice(0, 26) }; });
+  console.log(`${lang} ${w}: Figure 1 labels ${f1.n} (${f1.words}) at ${f1.px} px, outside the drawing ${f1.out} · §1.1 heading shown ${tour.shown}: "${tour.n}"`);
   console.log(`${lang} ${w}: hidden by a fold ${r.hid} · errors ${errs.length} · KaTeX ${r.katex} · pending ${r.pending} · Figure 2: ${r.texts} parts (${r.words}), overlapping ${r.overlaps}, outside the plate ${r.outside} · sideways ${r.sideways} px`);
   await b.close();
 })();

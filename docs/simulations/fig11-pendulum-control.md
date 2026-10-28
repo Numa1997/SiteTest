@@ -147,7 +147,7 @@ Two store attributes now show in the first section and are still English on the 
   Measured by `node notes/fig11/layout.cjs en` with the grid scrolled to the top of the window: at 1440×900 the picture is
   100 % on screen (54 % before) and 10 of the 10 knobs stay on screen 500 px further down (1 before); at 1280×800 100 % and
   9 of 10 (50 % and 1 before); at 1920×1080 100 % (90 % before).
-- New §1.1 "How the cart brings the chain home", with Figure 2, appended to line 287 (the end of §1). It gives the physical
+- New subsection "How the cart brings the chain home" (§1.2 since the change below; first written as §1.1), with Figure 2, appended to line 287 (the end of §1). It gives the physical
   picture the note lacked: the energy of a swing has one way out, from the chain through the strut's sideways pull (the
   string of §6) into the cart, and from the cart through the coil into the current source; the coil pumps both ways, a little
   more out than in on every swing. Its numbers come from `python3 notes/fig11/energy_path.py` (linear model (8), LQR (12)–(14),
@@ -160,3 +160,28 @@ Two store attributes now show in the first section and are still English on the 
   gain on θ2 is negative (−201.70 at the default target, −160.9 at the hanging rest), so F = F* − K(y − y*) pushes the cart
   towards ball 2 at once; the release above shows it, the cart running 12 cm right in 0.2 s, past the ball. The sentence now
   says so.
+
+## The rig, part by part, and four fixes · 28 October 2026
+
+- New §1.1 "The rig, part by part" (`id="p-parts"`), on line 287 before the energy subsection, which is now §1.2 (the
+  Figure 2 caption and the §8 sentence say §1.2). Numa asked for every element of the setup explained in plain words,
+  every engineering term defined with an everyday example. It walks the rig in order: the pivot and its hinge (door hinge,
+  bicycle wheel), the rods and balls (rigid: broom handle; massless: string of a bunch of keys; point mass: the Earth seen
+  from the Sun; weight in newtons: a 100 g apple), the angles and the restoring force (a swing), the strut (selfie stick,
+  pen spring; two-force member: a rope that can also push), the spring (stiffness, 1 N per cm; pre-tension: a guitar
+  string, a washing line), the end stops and their damper (a drawer, a door closer, a shock absorber), the cart and the
+  frictionless rail (a book on a table, a puck on ice), the coil and magnet (linear motor: a loudspeaker; current: water in
+  a hose; force constant 10 N per A), the current source (a garden pump), saturation at 30 N (the accelerator on the
+  floor), regenerative braking (an electric car), the state and the degrees of freedom (a photograph and a speedometer;
+  a train, a boat), rest and stability (a marble in a bowl, a pencil on its tip), the target and holding force (a dog on a
+  lead), the controller (feedback: a thermostat, a bicycle; gain: a driving instructor; LQR as a bill), the sensors
+  (encoders: a mouse wheel), the hand, and then one turn of the loop in seven steps. All numbers are the page's own.
+- Figure 1's three word labels ("strut: two tubes, a spring inside", "magnet", "O, the fixed pivot") are no longer SVG
+  text, which `tools/i18n/build.py` skips (line 29), but HTML spans laid over the drawing (`.fig1-lbl`, positions in % of
+  the 720 × 360 drawing, size 1.81 % of the plate's width, so they scale with it), and are translated. Their SVG lines
+  264, 272 and 283 are left blank, so the page keeps 1349 lines. The symbol labels (θ, l, m, M, X, H, ℓ, F = κI) stay SVG.
+- Data panel: the switch's symbol and the formula of ρ now pass through `_t()` (lines 462 and 466) and are translated;
+  the formula reads "10<sup>v</sup>, with v the slider's value" instead of "10<sup>slider</sup>".
+- From 1280 to 1439 px the Take control box is set tighter (smaller type, smaller gaps), so that in German all ten knobs are
+  on screen at 1280×800 (8 of 10 before). Checked with `node notes/fig11/layout.cjs de`.
+
