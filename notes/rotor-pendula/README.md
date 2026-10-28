@@ -56,6 +56,12 @@ check (SymPy) confirmed (1.1)–(1.8), the Euler torque, (2.3), (4.1)–(4.4) an
 spectrum of (6.8) is scaled to the kept band (72 % of the Kaimal variance at 8 m/s lies in 1/256–1 Hz), the Kaimal knee is at
 U/(6L), and the shaft torque in section 4.2 carries the first arm's weight too.
 
+A final readability pass (28 October 2026) changed wording only, no physics and no numbers: telegraphic sentences written out,
+long derivations given a sentence between their steps (the shaft torque of section 4.2 now in two displays), long "On our blade"
+boxes in sections 5.4, 6.5 and 7.4 split into a box of results and a paragraph of explanation, rhetorical questions turned into
+statements (section 7.3 is now "The air as a brake"), the punctuation around (7.1) and (9.1) mended, Figure 13 referred to from
+the text, and Figure 8's caption shortened. Equation and figure numbers are unchanged.
+
 ## Results (second blade, 1 kg on 1 m)
 - Best power at the best brake: 268, 201 and 161 mW at 6, 8 and 10 m/s by (2.5); the full equation gives 267, 201 and 161 mW
   (within 0.31 %). The rotor pays every joule: the trail identity holds to 1e-12 in all nine runs.

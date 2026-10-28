@@ -301,8 +301,7 @@ T['fig_bowl'] = ('<figure class="fig">' + ''.join(svg) +
     f'<figcaption>Figure {{{{fig:bowl}}}}. The second blade\'s potential energy (2.3) in the frame of the mother blade, at 6 m/s ($\\Gamma = {N["Gam_6"]}$), '
     f'at four positions of the rotor. Gravity tilts the bowl, and it also makes it shallower when the mother blade points up and deeper when it points down '
     f'(its stiffness at the bottom, $A$ of (1.10), runs from $R - G$ to $R + G$: ×{math.sqrt(1 - 2/Gam6 + 1/Gam6**2):.2f} to ×{math.sqrt(1 + 2/Gam6 + 1/Gam6**2):.2f} of $R$). Its lowest point '
-    f'(dots) swings between {N["tilt_6"]}° on one side and {N["tilt_6"]}° on the other, $\\arcsin(1/\\Gamma)$, and back, once per turn. The second blade is a marble in this bowl, '
-    f'held in honey by the generator: it chases the moving bottom, and the generator takes energy from the chase.</figcaption></figure>')
+    f'(dots) swings between {N["tilt_6"]}° on one side and {N["tilt_6"]}° on the other, $\\arcsin(1/\\Gamma)$, and back, once per turn.</figcaption></figure>')
 
 # ---- figure: the universal brake curve P/P* = 2x/(1+x^2), x = kappa/kappa*, on a log axis ----------------------------
 W_, H_, l_, r_, t_, b_ = 560, 300, 58, 20, 18, 46

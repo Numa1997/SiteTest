@@ -200,7 +200,9 @@ gives the commands and checks); the models, model runs and review record are in 
 **What the reader gets.** Three tabs. *Lecture notes* (`#notes`): *A Second Blade on a Turning Blade*, nine chapters in three parts,
 52 numbered equations and seventeen figures, rewritten on 28 October 2026 as one story whose spine is the double pendulum (the earlier
 version, chapters 0–9 patched section by section, is in the git history). All nine chapters were then rewritten again in a denser
-style (about 15 % fewer words, 82 displayed equations instead of 55): derivations shown line by line, and each new idea in a card
+style (about 15 % fewer words, 82 displayed equations instead of 55), and then read once more for readability (sentences written out
+in full, a plain sentence between derivation steps, long result boxes split from their explanation, no rhetorical questions; about 2 % more
+words, the same physics and numbers): derivations shown line by line, and each new idea in a card
 (`.idea` in `tools/theory_template.html`, twenty of them) that says it four ways: what it feels like, what happens physically, how it
 is measured, and its mathematics. Figures are numbered at build time: a caption starts `Figure {{fig:key}}.` and the text refers to
 `Figure {{fig:key}}`; `tools/build_theory.py` numbers them in order of appearance and stops on an unknown or doubled label, and

@@ -12,13 +12,13 @@
 <p>The two speeds are the roots of the braked spring, $\mu^2 + \kappa\mu + R = 0$. Their sum is $-\kappa$ and their product $R$; at the best brake $\kappa^{*2} = (R-1)^2 \gg 4R$, so</p>
 $$\mu_{\rm fast} \approx -\kappa^*, \qquad \mu_{\rm slow} \approx -\frac{R}{\kappa^*}, \qquad \text{times}\ \ \frac{1}{\kappa^*\Omega}\ \ \text{and}\ \ \frac{\kappa^*}{R\,\Omega}.$$
 <p>The simulation of these notes uses an implicit method, the three-stage Radau IIA, of fifth order: halving the step should cut the error by $2^5$, and here it cuts it on average by $2^{ {{n:radau_order}} }$. Its torques agree with a direct sum of Newton's law over the pieces of the second blade to {{n:newton_agree}}, and after the start it agrees with an independent high-accuracy solver to {{n:scipy_agree}} in the harvested energy. Its first turns carry an error of {{n:startup_err}}, because a step, 1/240 of a turn, is longer than the fast time; the runs let 60 turns pass before they measure.</p>
-<p>The closed form (3.5) is within {{n:lin_err_max}} % of the full equation at every wind, although the second blade swings with an amplitude of up to {{n:Th_max}} rad ({{n:Th_max_deg}}°). At second order three effects appear; the computer switches them on in turn, at $\kappa^*$:</p>
+<p>The closed form (3.5) is within {{n:lin_err_max}} % of the full equation at every wind, although the second blade swings with an amplitude of up to {{n:Th_max}} rad ({{n:Th_max_deg}}°). At second order three effects appear. The computer switches them on one at a time, at $\kappa^*$, and measures how much each changes the power at 6 m/s, where the swing is largest:</p>
 $$\begin{aligned}
 -G\,\theta\sin\varphi:&\quad \text{the spring rocks once per turn} &&{{n:trm_param_6}}\ \%,\\
 R\sin\theta \ne R\theta:&\quad \text{the spring softens at large angles} &&{{n:trm_sin_6}}\ \%,\\
 -\tfrac12 G\theta^2\cos\varphi + \dots:&\quad \text{the rest of gravity's term (all of it, less the rocking)} &&{{n:trm_th2_6}}\ \%,
 \end{aligned}$$
-<p>changes of the power at 6 m/s, where the swing is largest. They pull both ways and nearly cancel: together, in the full equation, {{n:trm_full_6}} %. At 8 and 10 m/s each is three and eight times smaller, as the swing squared ({{n:trm_full_8}} % and {{n:trm_full_10}} %).</p>
+<p>They pull both ways and nearly cancel: together, in the full equation, they change it by {{n:trm_full_6}} %. At 8 and 10 m/s each is three and eight times smaller, as the swing squared ({{n:trm_full_8}} % and {{n:trm_full_10}} %).</p>
 
 <h3 id="swings-bill">4.2 The second blade trails, and that is the bill</h3>
 <p>Keep the dropped term and average (1.8) over a steady turn. $\langle\theta''\rangle = \langle\theta'\rangle = 0$ (both are rates of something periodic), $\langle\sin\theta\rangle \approx \bar\theta$, and $\langle\cos(\varphi+\theta)\rangle \approx \langle\cos\varphi\rangle - \langle\theta\sin\varphi\rangle$ $= -\langle\theta\sin\varphi\rangle$:</p>
@@ -29,11 +29,10 @@ $$\bar\theta = -\frac{\kappa\,\Theta^2}{2R}, \qquad\text{at the best brake}\quad
 $$\boxed{\bar P = -\,\frac{ml}{2}\,r_p\,\Omega^3\,\bar\theta.} \tag{4.3}$$
 <p>The trail <i>is</i> the bill. The exact version holds for any steady swing, large or small. Take the shaft's torque from (1.5) with $\dot\varphi = \Omega$, $\ddot\varphi = 0$:</p>
 $$\tau = \frac{d}{dt}\Big[(J_1 + I + mr_p^2 + mlr_p\cos\theta)\,\Omega + \Big(I + \frac{ml}{2}r_p\cos\theta\Big)\dot\theta\Big] + (M_1d_1 + mr_p)\,g\cos\varphi + \frac{ml}{2}\,g\cos(\varphi+\theta).$$
-<p>Differentiate, then replace $I\ddot\theta + \tfrac{ml}{2}g\cos(\varphi+\theta)$ by $-\tfrac{ml}{2}r_p\Omega^2\sin\theta - c\dot\theta$ from (1.6):</p>
-$$\begin{aligned}
-\tau &= -ml\,r_p\Omega\sin\theta\,\dot\theta + I\ddot\theta + \frac{ml}{2}r_p\big(\cos\theta\,\ddot\theta - \sin\theta\,\dot\theta^2\big) + (M_1d_1 + mr_p)\,g\cos\varphi + \frac{ml}{2}\,g\cos(\varphi+\theta)\\
-&= -\frac{ml}{2}r_p\Omega^2\sin\theta + (M_1d_1 + mr_p)\,g\cos\varphi + \frac{d}{dt}\Big[\frac{ml}{2}r_p\,\frac{d\sin\theta}{dt} + ml\,r_p\Omega\cos\theta - c\,\theta\Big].
-\end{aligned}$$
+<p>Differentiate. The first arm's own inertia $J_1$ drops out, since $\Omega$ is constant:</p>
+$$\tau = -ml\,r_p\Omega\sin\theta\,\dot\theta + I\ddot\theta + \frac{ml}{2}r_p\big(\cos\theta\,\ddot\theta - \sin\theta\,\dot\theta^2\big) + (M_1d_1 + mr_p)\,g\cos\varphi + \frac{ml}{2}\,g\cos(\varphi+\theta).$$
+<p>Two of these terms, $I\ddot\theta + \tfrac{ml}{2}g\cos(\varphi+\theta)$, are exactly what the second blade's own equation (1.6) gives as $-\tfrac{ml}{2}r_p\Omega^2\sin\theta - c\dot\theta$. Put that in, and gather everything that is a rate of change of something into one time derivative:</p>
+$$\tau = -\frac{ml}{2}r_p\Omega^2\sin\theta + (M_1d_1 + mr_p)\,g\cos\varphi + \frac{d}{dt}\Big[\frac{ml}{2}r_p\,\frac{d\sin\theta}{dt} + ml\,r_p\Omega\cos\theta - c\,\theta\Big].$$
 <p>(Check the bracket: $\tfrac{d}{dt}\tfrac{d\sin\theta}{dt} = \cos\theta\,\ddot\theta - \sin\theta\,\dot\theta^2$, $\tfrac{d}{dt}\cos\theta = -\sin\theta\,\dot\theta$, $\tfrac{d}{dt}\theta = \dot\theta$.) Over a steady turn $\langle\cos\varphi\rangle = 0$, so the weight term averages to zero, and the bracket returns to its value, so its derivative averages to zero too. Only the first term survives, and by (1.7)</p>
 $$\bar P = \langle\tau\rangle\,\Omega = -\frac{ml}{2}\,r_p\,\Omega^3\,\langle\sin\theta\rangle, \qquad\text{exactly.}$$
 <p>(With the geared generator of chapter 5 the identity changes, because the gearbox's own torque enters the rotor's.) Figure {{fig:trail}} shows the mechanism: the second blade, flung outwards, pulls on the hinge along the line from the hub to its centre of mass. When it trails, that line misses the hub by about $\tfrac l2\sin\theta$, a lever arm, and the pull holds the rotor back with $\tfrac{ml}{2}r_p\Omega^2\sin\theta$. A second blade that led would push the rotor on while feeding the generator: energy from nothing. With a brake taking energy, it must trail.</p>
