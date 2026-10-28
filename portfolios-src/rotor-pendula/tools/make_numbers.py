@@ -149,7 +149,7 @@ tri.append(f'<text x="{Lx+10:.1f}" y="{Ly+28:.1f}" class="svgc">the rest pushes 
 tri.append('</svg>')
 T['fig_triangle'] = ('<figure class="fig">' + ''.join(tri) +
     f'<figcaption>Figure 2. A piece of blade at the tip, seen along the blade from its tip, at 8 m/s. The blade moves to the right at {ut8:.1f} m/s, '
-    f'so it meets air coming at it from the front at that speed; the wind blows through the rotor at {ax8:.2f} m/s, slowed by a third (section 0.2). '
+    f'so air streams at it, from the direction it moves in, at that speed; the wind, from upwind along the shaft, blows through the rotor at {ax8:.2f} m/s, slowed by a third (section 0.2). '
     f'Together they make the apparent wind, which comes in only {math.degrees(inflow):.1f}° off the blade\'s path; the wind arrow is drawn {EX:g} times '
     f'too long so that the angle can be seen (it is drawn at {ang_draw:.0f}°). The lift is at right angles to the apparent wind: mostly it pushes the rotor '
     f'downwind, but it leans forward by the same angle, and that forward part is what turns the rotor.</figcaption></figure>')
