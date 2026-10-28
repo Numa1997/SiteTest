@@ -53,6 +53,7 @@ q8 = 0.5*rho*(Om[8.0]*rp)**2
 N['q_8'] = f'{q8:.0f}'; N['mg'] = f(m*g, 2); N['air_area_cm2'] = f(m*g/q8*1e4, 1)
 N['tau_star'] = f(mlc*g/math.sqrt(2), 2); N['mlg'] = f(mlc*g, 2)
 N['sensor_uW'] = f(J('sensor.json')['need_uW'], 1)
+N['sensor_20y_Wh'] = f(J('sensor.json')['need_uW']*1e-6*20*365.25*86400/3600, 1)   # twenty years of the minimal sensor
 N['ceiling_frac'] = f(math.pi/(4*math.sqrt(2)), 3)
 Pst = lambda O, gg=g, mm=m, ll=l: (mm*ll/2*gg)**2/(4*O*(mm*ll/2*rp - mm*ll*ll/3))
 
@@ -64,12 +65,50 @@ for v in WINDS:
     N[f'Pwind_{int(v)}'] = f(0.5*rho*A_disc*v**3/1e6, 2)
     N[f'PT_{int(v)}'] = f(0.5*rho*A_disc*v**3*S['CP_STAR']/1e6, 2)
 N['cube_ratio'] = f((10/6)**3, 1)
+N['door_mdot'] = f(rho*2*1*10, 1); N['door_P'] = f'{0.5*rho*2*1*10**3:,.0f}'.replace(',', ' ')   # the warm-up: a 2 m x 1 m doorway in 10 m/s
 N['betz'] = f(16/27, 3); N['betz_pct'] = f(16/27*100, 0); N['cp_of_betz'] = f(S['CP_STAR']/(16/27)*100, 0)
 ax8 = 8.0*(1 - 1/3); ut8 = Om[8.0]*rp
 inflow = math.atan2(ax8, ut8)
 N['ax8'] = f(ax8, 2); N['ut8'] = f(ut8, 1); N['app8'] = f(math.hypot(ax8, ut8), 1); N['inflow8'] = f(math.degrees(inflow), 1)
 N['ld_min'] = f(1/math.tan(inflow), 1)
 N['turn8_s'] = f(2*math.pi/Om[8.0], 1)
+# chapter 0 problems: a storm at 12 m/s; a 2 m garden turbine at 6 m/s; the inflow angle halfway out, r = 31.5 m, at 8 m/s
+N['p0_cube'] = f((12/8)**3, 2)
+N['p0_small_wind'] = f(0.5*rho*math.pi*1.0**2*6.0**3, 0); N['p0_small_betz'] = f(0.5*rho*math.pi*1.0**2*6.0**3*16/27, 0)
+N['p0_mid_inflow'] = f(math.degrees(math.atan2(ax8, Om[8.0]*rp/2)), 1); N['p0_mid_ut'] = f(Om[8.0]*rp/2, 1)
+# a wind turbine from the side, not to scale (the nacelle drawn far too large so its inside shows): the parts, before the story
+HUB_H, RPM_MAX, GEAR = 90, 12.1, 97                            # hub height (m), rated rotor speed (rpm), gearbox ratio: NREL/TP-500-38060, Table 1-1
+W0, H0 = 600, 430
+tb = [f'<svg viewBox="0 0 {W0} {H0}" style="width:100%;height:auto;max-width:{W0}px" role="img" aria-label="A wind turbine seen from the side. The wind comes from the left. A tower carries the nacelle; at its front the hub carries the blades. Inside the nacelle the main shaft runs from the hub to the gearbox, and a fast shaft from the gearbox to the generator. A small second blade is hinged at the tip of the upper blade.">',
+      '<defs><marker id="ah0" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="context-stroke"/></marker></defs>',
+      '<line x1="40" y1="410" x2="560" y2="410" stroke="#3f2c23" stroke-width="1.2"/>',
+      '<polygon points="318,410 342,410 336,206 324,206" fill="#d8cfc0" stroke="#3f2c23" stroke-width="1.1"/>',
+      '<text x="352" y="330" class="svgc">tower: the hub stands</text><text x="352" y="344" class="svgc">' + f'{HUB_H} m above the ground</text>',
+      '<rect x="240" y="150" width="200" height="56" rx="10" fill="#f3ece0" stroke="#3f2c23" stroke-width="1.2" stroke-dasharray="5 3"/>',
+      '<text x="452" y="182" class="svgd">nacelle</text>',
+      '<rect x="232" y="174" width="68" height="8" fill="#8c7d6b" stroke="#3f2c23" stroke-width="0.8"/>',
+      '<rect x="300" y="162" width="48" height="32" rx="3" fill="#e2cfa8" stroke="#3f2c23" stroke-width="1"/>',
+      '<line x1="348" y1="178" x2="372" y2="178" stroke="#3f2c23" stroke-width="3"/>',
+      '<rect x="372" y="164" width="52" height="28" rx="3" fill="#cfdde6" stroke="#3f2c23" stroke-width="1"/>',
+      '<path d="M240,158 Q198,160 204,178 Q198,196 240,198 Z" fill="#e9ddc6" stroke="#3f2c23" stroke-width="1.2"/>',
+      '<polygon points="219,170 231,170 228,30 224,30" fill="#efe6d6" stroke="#3f2c23" stroke-width="1.1"/>',
+      '<polygon points="219,186 231,186 227,262 225,262" fill="#efe6d6" stroke="#3f2c23" stroke-width="1.1"/>',
+      '<line x1="226" y1="30" x2="226" y2="16" stroke="#7d1d2f" stroke-width="3" stroke-linecap="round"/><circle cx="226" cy="30" r="2.6" fill="#fff" stroke="#3f2c23"/>',
+      '<text x="236" y="22" class="svgc">hinge and second blade (section 0.5)</text>',
+      '<text x="212" y="74" text-anchor="end" class="svgd">blade</text><text x="212" y="88" text-anchor="end" class="svgc">(the two others point</text><text x="212" y="100" text-anchor="end" class="svgc">down and overlap here)</text>',
+      '<text x="196" y="182" text-anchor="end" class="svgd">hub</text>',
+      '<line x1="270" y1="183" x2="270" y2="216" stroke="#3f2c23" stroke-width="0.8"/><text x="270" y="228" text-anchor="middle" class="svgc">main shaft,</text><text x="270" y="241" text-anchor="middle" class="svgc">slow</text>',
+      '<line x1="324" y1="128" x2="324" y2="161" stroke="#3f2c23" stroke-width="0.8"/><text x="324" y="122" text-anchor="middle" class="svgc">gearbox</text>',
+      '<line x1="398" y1="193" x2="398" y2="216" stroke="#3f2c23" stroke-width="0.8"/><text x="398" y="228" text-anchor="middle" class="svgc">generator</text>']
+for y in (60, 130, 220, 300):
+    tb.append(f'<line x1="60" y1="{y}" x2="150" y2="{y}" stroke="#33627f" stroke-width="2" marker-end="url(#ah0)"/>')
+tb.append('<text x="105" y="52" text-anchor="middle" class="svgd">wind</text></svg>')
+T['fig_turbine'] = ('<figure class="fig">' + ''.join(tb) +
+    '<figcaption>Figure 1. A wind turbine seen from the side, not to scale: the nacelle is drawn far too large so that its inside can be seen. '
+    'The wind comes from the left and turns the rotor, the hub with its three blades (seen from the side, the blade pointing up is a thin line, '
+    'and the two pointing down overlap). The rotor turns the main shaft slowly; the gearbox makes the turning faster; the generator turns it into '
+    f'electricity. For the 5 MW turbine of these notes the hub stands {HUB_H} m above the ground, the rotor turns at most about {RPM_MAX:.0f} times a '
+    f'minute, and the gearbox speeds it up {GEAR} times (Jonkman et al. 2009). The machine of these notes sits at the tip of a blade.</figcaption></figure>')
 # the triangle of speeds at the tip, 8 m/s, seen along the blade from its tip: the blade moves right, the wind blows down
 # through the rotor (slowed by a third, the ideal rotor of section 0.2); the wind arrow is drawn EX times its length
 EX, s5 = 3.0, 4.0                                             # exaggeration of the wind arrow; px per m/s
@@ -89,7 +128,8 @@ tri = [f'<svg viewBox="0 0 {W5} {H5}" style="width:100%;height:auto;max-width:{W
        f'<text x="{ox-8:.1f}" y="{(Ty+oy)/2:.1f}" text-anchor="end" class="svgc">wind {ax8:.2f} m/s</text>',
        f'<text x="{ox-8:.1f}" y="{(Ty+oy)/2+14:.1f}" text-anchor="end" class="svgc">(drawn {EX:g}× long)</text>',
        f'<line x1="{Tx:.1f}" y1="{Ty:.1f}" x2="{ox+hx*0.06:.1f}" y2="{oy-hy*0.06:.1f}" stroke="#23160f" stroke-width="1.6" stroke-dasharray="6 4" marker-end="url(#ah5)"/>',
-       f'<text x="{ox+hx*0.62:.1f}" y="{oy-hy*0.62+20:.1f}" text-anchor="middle" class="svgc">apparent wind {math.hypot(ax8, ut8):.1f} m/s, {math.degrees(inflow):.1f}° off the path</text>']
+       f'<text x="{Tx:.1f}" y="{Ty+95:.1f}" text-anchor="end" class="svgc">apparent wind, dashed:</text>',
+       f'<text x="{Tx:.1f}" y="{Ty+109:.1f}" text-anchor="end" class="svgc">{math.hypot(ax8, ut8):.1f} m/s, {math.degrees(inflow):.1f}° off the path</text>']
 # the blade piece: a slim wing section lying along the apparent wind, and its motion
 ca, sa = hx/nrm, -hy/nrm
 pts = []
@@ -108,8 +148,8 @@ tri.append(f'<text x="{Lx+10:.1f}" y="{Ly+14:.1f}" class="svgc">its forward part
 tri.append(f'<text x="{Lx+10:.1f}" y="{Ly+28:.1f}" class="svgc">the rest pushes the rotor downwind</text>')
 tri.append('</svg>')
 T['fig_triangle'] = ('<figure class="fig">' + ''.join(tri) +
-    f'<figcaption>Figure 1. A piece of blade at the tip, seen along the blade from its tip, at 8 m/s. The blade moves to the right at {ut8:.1f} m/s, '
-    f'so it meets air coming at it from the front at that speed; the wind blows through the rotor at {ax8:.2f} m/s, slowed by a third (section 0.2). '
+    f'<figcaption>Figure 2. A piece of blade at the tip, seen along the blade from its tip, at 8 m/s. The blade moves to the right at {ut8:.1f} m/s, '
+    f'so air streams at it, from the direction it moves in, at that speed; the wind, from upwind along the shaft, blows through the rotor at {ax8:.2f} m/s, slowed by a third (section 0.2). '
     f'Together they make the apparent wind, which comes in only {math.degrees(inflow):.1f}° off the blade\'s path; the wind arrow is drawn {EX:g} times '
     f'too long so that the angle can be seen (it is drawn at {ang_draw:.0f}°). The lift is at right angles to the apparent wind: mostly it pushes the rotor '
     f'downwind, but it leans forward by the same angle, and that forward part is what turns the rotor.</figcaption></figure>')
@@ -131,10 +171,23 @@ for v in WINDS:
 rows.append('</tbody></table>')
 T['winds'] = '\n'.join(rows)
 N['lin_err_max'] = f(max(errs)*100, 2)
+# chapter 2: the worked example at 8 m/s and the problems at 10 m/s, from the small-swing theory (2.2), (2.4), (2.5)
+for v in WINDS:
+    k = str(int(v)); Gv = mlc*g/(I*Om[v]**2); Thv = Gv/(math.sqrt(2)*(R - 1))
+    N[f'Th_{k}'] = f(Thv, 3); N[f'Th_{k}_deg'] = f(math.degrees(Thv), 1); N[f'Th_{k}_cm'] = f(Thv*l*100, 0)
+    N[f'cst_{k}'] = f((R - 1)*I*Om[v], 1); N[f'Pst_{k}'] = f(Pst(Om[v])*1e3, 0)
 N['flat_err_max'] = f(max(abs(fl/Pst(Om[v]) - 1) for fl, v in zip(flat, WINDS))*100, 1)
 N['P_low'] = f(best[10.0]['P']*1e3, 0); N['P_high'] = f(best[6.0]['P']*1e3, 0)
 PT = lambda v: 0.5*rho*math.pi*rp**2*v**3*S['CP_STAR']
 N['share_max'] = f(max(best[v]['P']/PT(v) for v in WINDS)*1e6, 2)
+# chapter 1: the car warm-up (3 m/s^2), the outward pull at 8 m/s, the rotor's torques at 6 m/s, problems
+N['p1_car'] = f(math.degrees(math.atan(3/g)), 1); N['p1_brake'] = f(math.degrees(math.atan(7/g)), 1)
+N['acc8'] = f(Om[8.0]**2*rp, 1); N['acc8_om'] = f(Om[8.0], 3); N['acc8_om2'] = f(Om[8.0]**2, 3)
+N['tq_lift'] = f(m*g*rp, 0); N['tq_harv6'] = f(best[6.0]['P']/Om[6.0], 3); N['tq_turb6'] = f(PT(6.0)/Om[6.0]/1e6, 2)
+N['zeta_star'] = f((R - 1)/(2*math.sqrt(R)), 1)
+N['p1_f8'] = f(Om[8.0]*math.sqrt(R)/(2*math.pi), 2); N['p1_fground'] = f(math.sqrt(mlc*g/I)/(2*math.pi), 2)
+N['p1_sqrtGam8'] = f(math.sqrt(Om[8.0]**2*rp/g), 2)
+N['p1_v_gam1'] = f(math.sqrt(g/rp)*rp/LAM, 2)
 th6 = best[6.0]
 N['Th_max'] = f(th6['Theta'], 3); N['Th_max_deg'] = f(math.degrees(th6['Theta']), 1)
 G6 = mlc*g/(I*Om[6.0]**2)
@@ -142,6 +195,17 @@ lt = -G6**2/(4*R*(R - 1))
 N['lean_theory'] = f(lt, 4); N['lean_deg'] = f(math.degrees(abs(lt)), 2); N['lean_run'] = f(th6['trail'], 4)
 ck = J('L1_blade_checks.json')
 N['relax_8'] = f(ck['relax_s'], 3); N['turn_8'] = f(ck['turn_s'], 2)
+N['relax_slow8'] = f((R - 1)/(R*Om[8.0]), 2)
+# chapter 3: each neglected term alone, against the small-swing power, at the best brake (L1_terms.py)
+for r in J('L1_terms.json'):
+    k = str(int(r['wind']))
+    for t in ('param', 'sin', 'grav', 'full'): N[f'trm_{t}_{k}'] = ('+' if r[t] >= 0 else '−') + f(abs(r[t])*100, 2); N['relax_slow10'] = f((R - 1)/(R*Om[10.0]), 2); N['om10'] = f(Om[10.0], 3)
+# chapter 4: the white-noise shaking that would match gravity's best power at 8 m/s, and what it means as an acceleration over 0 to 10 Hz
+S_match = 2*Pst(Om[8.0])/(0.75*m); N['S_match'] = f(S_match, 2); N['arms_match'] = f(math.sqrt(2*S_match*10), 1)
+# chapter 7: how fast the hinge turns at the best brake (Omega Theta*)
+N['w_hinge_lo'] = f(Om[10.0]*mlc*g/(I*Om[10.0]**2)/(math.sqrt(2)*(R - 1)), 2); N['w_hinge_hi'] = f(Om[6.0]*mlc*g/(I*Om[6.0]**2)/(math.sqrt(2)*(R - 1)), 2)
+N['p3_bill'] = f(mlc*rp*Om[6.0]**3*abs(th6['trail'])*1e3, 0); N['P6_full'] = f(th6['P']*1e3, 0)                 # the slow root of mu^2 + kappa mu + R = 0 at the best brake, in seconds
+for v in WINDS: N[f'lean_deg_{int(v)}'] = f(math.degrees((mlc*g/(I*Om[v]**2))**2/(4*R*(R - 1))), 2)
 N['radau_order'] = f(ck['order_mean'], 1); N['newton_agree'] = sci(ck['newton_max_rel'])
 N['scipy_agree'] = sci(ck['scipy_rel']); N['startup_err'] = sci(ck['startup_rel'])
 N['bill_err'] = sci(ck['bill_max_rel'])
@@ -177,7 +241,7 @@ svg.append(f'<text x="{(56+W3-150)/2}" y="{H3-10}" text-anchor="middle" class="s
 svg.append(f'<text x="18" y="{(16+H3-48)/2}" text-anchor="middle" class="svgd" transform="rotate(-90 18 {(16+H3-48)/2})">potential energy U</text>')
 svg.append('</svg>')
 T['fig_bowl'] = ('<figure class="fig">' + ''.join(svg) +
-    f'<figcaption>Figure 4. The second blade\'s potential energy (1.6) in the frame of the mother blade, at 6 m/s ($\\Gamma = {N["Gam_6"]}$), '
+    f'<figcaption>Figure 5. The second blade\'s potential energy (1.4) in the frame of the mother blade, at 6 m/s ($\\Gamma = {N["Gam_6"]}$), '
     f'at four positions of the rotor. The shape of the bowl is the centrifugal term and does not change; gravity tilts it, and its lowest point '
     f'(dots) swings between {N["tilt_6"]}° on one side and {N["tilt_6"]}° on the other, $\\arcsin(1/\\Gamma)$, and back, once per turn. The second blade is a marble in this bowl, '
     f'held in honey by the generator: it chases the moving bottom, and the generator takes energy from the chase.</figcaption></figure>')
@@ -199,7 +263,7 @@ T['fig_brake'] = (f'<figure class="fig"><svg viewBox="0 0 {W_} {H_}" role="img" 
     f'<polyline points="{pts}" fill="none" stroke="#7d1d2f" stroke-width="2.4"/>{ticks}'
     f'<text x="{(l_+W_-r_)/2}" y="{H_-8}" text-anchor="middle" class="svgd">brake over best brake, κ/κ*</text>'
     f'<text x="16" y="{(t_+H_-b_)/2}" text-anchor="middle" class="svgd" transform="rotate(-90 16 {(t_+H_-b_)/2})">P / P*</text></svg>'
-    f'<figcaption>Figure 5. The harvested power (2.3) over its maximum (2.5), against the brake over the best brake (2.4): '
+    f'<figcaption>Figure 6. The harvested power (2.3) over its maximum (2.5), against the brake over the best brake (2.4): '
     f'$\\bar P/P^* = 2x/(1+x^2)$ with $x = \\kappa/\\kappa^*$, the same curve at every wind and for every second blade. The top is flat: a brake '
     f'{2-math.sqrt(3):.2f} times the best, or {2+math.sqrt(3):.1f} times it, still gives half the power ($x = 2 \\mp \\sqrt3$).</figcaption></figure>')
 
@@ -243,7 +307,8 @@ trace_rms = []
 for w in cp:
     c = WCOL[w['wind']]; ph = np.array(w['turn']['phi']); q = np.array(w['turn']['q'])
     A = -w['G']/(w['R'] - 1 + 1j*w['kappaStar']); ql = np.real(A*np.exp(1j*(ph + w['phi0'])))
-    trace_rms.append((w['wind'], float(np.sqrt(np.mean((q - ql)**2))), float(np.mean(q)), float(np.sqrt(np.mean((q - q.mean() - ql)**2)))))
+    qs, qls = q[:-1], ql[:-1]                                  # one turn: the last sample repeats the first (0 and 360 degrees)
+    trace_rms.append((w['wind'], float(np.sqrt(np.mean((qs - qls)**2))), float(np.mean(qs)), float(np.sqrt(np.mean((qs - qs.mean() - qls)**2)))))
     deg = np.degrees(ph)
     svgB.append('<polyline points="' + ' '.join(f'{PX2(a, 0, 360):.1f},{PY2(b, -qm, qm):.1f}' for a, b in zip(deg, ql)) + f'" fill="none" stroke="{c}" stroke-width="1.4" stroke-dasharray="5 4"/>')
     svgB.append('<polyline points="' + ' '.join(f'{PX2(a, 0, 360):.1f},{PY2(b, -qm, qm):.1f}' for a, b in zip(deg, q)) + f'" fill="none" stroke="{c}" stroke-width="2"/>')
@@ -258,21 +323,49 @@ N['cmp_dev6'] = f(devs[0][1]*100, 0); N['cmp_th6'] = f(devs[0][2], 2)
 N['cmp_dev10'] = f(devs[2][1]*100, 1); N['cmp_th10'] = f(devs[2][2], 2)
 N['cmp_coef_lo'] = f(min(d/t**2 for _, d, t in devs), 1); N['cmp_coef_hi'] = f(max(d/t**2 for _, d, t in devs), 1)
 N['cmp_star_dev'] = f(max(abs(min(w['sweep'], key=lambda sp: abs(math.log(sp['x'])))['P']/w['Pstar'] - 1) for w in cp)*100, 1)
-N['cmp_rms6'] = f(trace_rms[0][1], 3); N['cmp_mean6'] = f(trace_rms[0][2], 3); N['cmp_rest6'] = f(trace_rms[0][3], 4)
+N['cmp_rms6'] = f(trace_rms[0][1], 3); N['cmp_mean6'] = f(trace_rms[0][2], 4); N['cmp_rest6'] = f(trace_rms[0][3], 4)
 N['cmp_amp6'] = f(abs(-w6['G']/(w6['R'] - 1 + 1j*w6['kappaStar'])), 3)
 T['fig_compare'] = ('<figure class="fig"><div style="display:flex;flex-wrap:wrap;gap:10px;justify-content:center">' + ''.join(svgA) + ''.join(svgB) + '</div>'
-    f'<figcaption>Figure 6. The small-swing theory against the full equation (1.5), solved by the simulation\'s own engine (<code>tools/compare.js</code>). '
+    f'<figcaption>Figure 7. The small-swing theory against the full equation (1.6), solved by the simulation\'s own engine. '
     f'First panel: harvested power over its maximum $P^*$ (2.5), against the brake over the best brake. The line is formula (2.3), the same for every wind; '
     f'the dots are the full equation at 6 (wine), 8 (ochre) and 10 m/s (blue). Second panel: one turn of the swing at the best brake; '
     f'solid the full equation, dashed the theory (2.2). The two have the same shape and the same phase; the full swing is shifted down by its mean trail.</figcaption></figure>')
 
+# ---- the trail is the bill: the second blade's pull on the hinge and its lever arm about the hub (drawn with the trail exaggerated)
+EXT, th_d = 15, -math.radians(abs(float(N['lean_deg'])))*15
+W8, H8 = 560, 312; hx8, hy8 = 70, 190; px8, py8 = 380, 190; L8 = 150
+ex, ey = px8 + L8*math.cos(th_d), py8 - L8*math.sin(th_d)
+cx8, cy8 = (px8 + ex)/2, (py8 + ey)/2
+ux, uy = cx8 - hx8, cy8 - hy8; un = math.hypot(ux, uy); ux, uy = ux/un, uy/un
+t8 = (hx8 - px8)*ux + (hy8 - py8)*uy; fx, fy = px8 + t8*ux, py8 + t8*uy     # foot of the perpendicular from the hub to the pull's line
+tr = [f'<svg viewBox="0 0 {W8} {H8}" style="width:100%;height:auto;max-width:{W8}px" role="img" aria-label="The hub on the left, the mother blade running right to the hinge. The second blade leaves the hinge trailing below the mother blade line, against the rotation, which goes upward at the hinge. An arrow at the hinge shows the second blade pulling on it along the line from the hub to its centre of mass; that line passes a little below the hub, and the short gap is the lever arm.">',
+      '<defs><marker id="ah8" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="context-stroke"/></marker></defs>',
+      f'<line x1="{hx8}" y1="{hy8}" x2="{px8}" y2="{py8}" stroke="#6f665e" stroke-width="12" stroke-linecap="round" opacity="0.35"/>',
+      f'<circle cx="{hx8}" cy="{hy8}" r="8" fill="#23160f"/><text x="{hx8}" y="{hy8+28}" text-anchor="middle" class="svgd">hub</text>',
+      f'<text x="{(hx8+px8)/2}" y="{hy8+26}" text-anchor="middle" class="svgd">mother blade</text>',
+      f'<line x1="{px8}" y1="{py8}" x2="{px8+L8+20}" y2="{py8}" stroke="#23160f" stroke-dasharray="3 3"/>',
+      f'<line x1="{px8}" y1="{py8}" x2="{ex:.1f}" y2="{ey:.1f}" stroke="#7d1d2f" stroke-width="7" stroke-linecap="round"/>',
+      f'<circle cx="{px8}" cy="{py8}" r="6" fill="#fff" stroke="#23160f" stroke-width="2"/><text x="{px8-8}" y="{py8+24}" text-anchor="end" class="svgd">hinge</text>',
+      f'<circle cx="{cx8:.1f}" cy="{cy8:.1f}" r="3.4" fill="#fff" stroke="#23160f"/><text x="{cx8-8:.1f}" y="{cy8+16:.1f}" text-anchor="end" class="svgc">centre of mass</text>',
+      f'<text x="{ex+4:.1f}" y="{ey+24:.1f}" text-anchor="end" class="svgc">second blade, trailing</text><text x="{ex+4:.1f}" y="{ey+38:.1f}" text-anchor="end" class="svgc">(drawn {EXT}× too far)</text>',
+      f'<line x1="{px8}" y1="{py8-22}" x2="{px8}" y2="{py8-82}" stroke="#33627f" stroke-width="2" marker-end="url(#ah8)"/><text x="{px8+8}" y="{py8-66}" class="svgc">the rotor turns this way</text>',
+      f'<line x1="{px8}" y1="{py8}" x2="{px8 + 120*ux:.1f}" y2="{py8 + 120*uy:.1f}" stroke="#3c6a46" stroke-width="2.6" marker-end="url(#ah8)"/>',
+      f'<text x="392" y="{py8-26}" class="svgc">pull on the hinge, along</text><text x="392" y="{py8-12}" class="svgc">hub → centre of mass</text>',
+      f'<line x1="{px8:.1f}" y1="{py8:.1f}" x2="{fx:.1f}" y2="{fy:.1f}" stroke="#3c6a46" stroke-width="1" stroke-dasharray="5 4"/>',
+      f'<line x1="{hx8}" y1="{hy8}" x2="{fx:.1f}" y2="{fy:.1f}" stroke="#7d1d2f" stroke-width="2"/>',
+      f'<text x="{hx8+12}" y="{(hy8+fy)/2+4:.1f}" class="svgc">lever arm</text></svg>']
+T['fig_trail'] = ('<figure class="fig">' + ''.join(tr) +
+    f'<figcaption>Figure 8. Why the trail is the bill. The second blade trails behind the mother blade\'s line, against the rotation; the trail is drawn '
+    f'{EXT} times too large (at 6 m/s it is {N["lean_deg"]}°). Flung outwards, the second blade pulls on the hinge along the line from the hub to its '
+    'centre of mass (green). That line misses the hub by a small lever arm (wine), so the pull holds the rotor back, with the torque '
+    f'$\\tfrac{{ml}}{{2}}r_p\\Omega^2\\sin\\theta$; on average {N["tq_harv6"]} N m at 6 m/s. The rotor pushes against it, and that steady push is the power it pays.</figcaption></figure>')
 # ---- chaos (L1_chaos_blade.json) ---------------------------------------------------------------------------------------
 ch = J('L1_chaos_blade.json')
 lmax = max(max(o['lyap']) for o in ch); nstart = len(ch[0]['lyap'])
 regular = lmax < 1e-3
 krels = sorted({o['krel'] for o in ch}, reverse=True)
-rows = ['<p class="tcap">Table 2. The largest Lyapunov exponent per turn, the largest over the starts, at each wind and brake; '
-        'beside it the decay rate per turn of a small disturbance of the braked spring, $2\\pi\\,\\max\\,\\mathrm{Re}\\,s$ with $s^2 + \\kappa s + R = 0$.</p>'
+rows = [f'<p class="tcap">Table 2. The largest Lyapunov exponent per turn at each wind and brake, the largest over the {nstart} starting states tried; '
+        'beside it the decay rate per turn of a small disturbance of the braked spring alone, $2\\pi\\,\\max\\,\\mathrm{Re}\\,\\mu$, where $\\mu$ are the two roots of $\\mu^2 + \\kappa\\mu + R = 0$.</p>'
         '<table class="mt"><thead><tr><th>wind</th><th>$G$</th><th>brake</th><th>$\\Lambda$ per turn</th><th>small-swing decay</th></tr></thead><tbody>']
 for v in WINDS:
     for k in krels:
@@ -287,7 +380,7 @@ verdict += (f'More than that, each exponent is the decay rate of a small disturb
             'the motion forgets its start as fast as a linear, damped spring forgets a nudge. ')
 T['chaos_text'] = (
     '<p>A pendulum driven periodically and braked can move chaotically: two copies started a hair apart drift apart exponentially, '
-    'like two leaves dropped side by side into a stream. Our second blade is such a pendulum, (1.5), so the question must be asked. '
+    'like two leaves dropped side by side into a stream. Our second blade is such a pendulum, (1.6), so the question must be asked. '
     'The rate of that drift is the <b>largest Lyapunov exponent</b> $\\Lambda$: start two copies $10^{-8}$ apart, follow them, rescale their '
     'separation back every quarter turn of the rotor, and divide the logarithm of the total growth by the number of turns. A regular, '
     'damped motion gives $\\Lambda < 0$; chaos gives $\\Lambda > 0$. Because chaos depends on where the motion starts, every case is run '
@@ -312,6 +405,7 @@ N['meff_single_large'] = f(float(meff[3]), 2); N['meff_double_chaos'] = f(float(
 # ---- gusts (L2) ---------------------------------------------------------------------------------------------------------
 s_om = J('L2_scales.json')['sigOm']
 N['sigOm'] = f(s_om*100, 1); N['jensen'] = f(s_om**2/2*100, 2)
+N['store_s'] = f(0.5*4.38e7*Om[8.0]**2/PT(8.0), 0)          # seconds of its own output the rotor stores as kinetic energy, 8 m/s
 eul = []
 for law in ('nrel', 'k2'):
     d2 = J(f'L2_run_{law}.json'); mt = d2['mountings'][0]
@@ -341,6 +435,7 @@ for sgm, key in ((0.005, '5'), (0.02, '20'), (0.1, '100')):
     N[f'sh_one_{key}'] = sig3(a['P']*1e3)
 N['sh_in_5'] = sig3(pick(0.005, 0.005, False)['P_in'])
 N['sh_c_one'] = f(pick(0.005, 0.005, False)['c'], 2)
+N['zeta_sh'] = f(pick(0.005, 0.005, False)['c']/(I*Om[8.0])/(2*math.sqrt(R)), 1)   # damping ratio of the second blade at the shaking's best brake
 O0 = meta['Om0']; gt = g*math.cos(math.radians(5.0))
 N['sh_cstar_one'] = f((mlc*rp/I - 1)*I*O0, 1)
 N['grav_one'] = f(Pst(O0, gt)*1e3, 0)
@@ -388,7 +483,9 @@ T['generator'] = '\n'.join(rows)
 need = J('sensor.json')['need_uW']*1e-6
 loads = [full[v]['P_load'] for v in WINDS]
 N['g4_min'] = f(min(loads)*1e3, 0); N['g4_max'] = f(max(loads)*1e3, 0)
+N['g4_th_max'] = f(max(max(gen[v]['Theta'], full[v]['Theta']) for v in WINDS), 2)   # the largest swing at the chosen settings
 N['g4_margin'] = f'{min(loads)/need:,.0f}'.replace(',', ' ')
+_mg = min(loads)/need; _e = 10**(len(str(int(_mg))) - 2); N['g4_margin_round'] = f'{int(_mg//_e*_e):,}'.replace(',', ' ')   # rounded down to two figures, for the prose
 N['g4_share_min'] = f(min(full[v]['P_load']/Pst(Om[v]) for v in WINDS)*100, 0)
 N['g4_share_max'] = f(max(full[v]['P_load']/Pst(Om[v]) for v in WINDS)*100, 0)
 N['g4_eff_min'] = f(min(full[v]['P_load']/full[v]['P_paid'] for v in WINDS)*100, 0)
@@ -441,7 +538,7 @@ N['sz_P_lo'] = sig3(min(P6)*1e3); N['sz_P_hi'] = sig3(max(P6))
 th = [r['Theta6'] for r in zr]; N['sz_th_lo'] = f(min(th), 3); N['sz_th_hi'] = f(max(th), 3)
 N['sz_th_ref'] = f(g/(Om[6.0]**2*rp)/math.sqrt(2), 3)
 tau = [r['tau_star'] for r in zr]; N['sz_tau_lo'] = sig3(min(tau)); N['sz_tau_hi'] = sig3(max(tau))
-pulls = [r['pull10_N'] for r in zr]; N['sz_pull_max'] = sig3(max(pulls)/1e3); N['sz_pull_ours'] = sig3(next(r['pull10_N'] for r in zr if r['l'] == l and r['m'] == m)/1e3)
+pulls = [r['pull10_N'] for r in zr]; N['sz_pull_max'] = sig3(max(pulls)/1e3); N['sz_pull_ours'] = sig3(next(r['pull10_N'] for r in zr if r['l'] == l and r['m'] == m)/1e3); N['sz_pull_ours_N'] = f(next(r['pull10_N'] for r in zr if r['l'] == l and r['m'] == m), 0)
 big = [r['gen_load_W'][0] for r in zr if r['m']*r['l']/2 >= 0.5 - 1e-12 and r.get('gen_load_W') and r['gen_load_W'][0] is not None]
 N['sz_plat_lo'] = sig3(min(big)*1e3); N['sz_plat_hi'] = sig3(max(big)*1e3)
 N['sz_min_margin'] = f'{min(x for r in zr if r.get("gen_load_W") for x in r["gen_load_W"] if x)/need:,.0f}'.replace(',', ' ')   # every size, every wind
