@@ -48,6 +48,8 @@ python3 tools/build_combined.py --site   # -> ../../public/portfolios/rotor-pend
 
 The data files in `data/` are copied from `notes/rotor-pendula/derive/` after the model runs there; for example
 `python3 -I L1_terms.py` there measures each term the small-swing theory neglects (section 3.1) and writes `L1_terms.json`.
+`L2_steady.py` finds where the turbine's own torque law puts the rotor (section 0.7, chapter 5), and `L5_air.py` estimates
+the air on the second blade for three shapes (chapter 8).
 The notes are written for a reader new to wind turbines; the teaching research and a blind learner's reading are in
 `notes/rotor-pendula/teaching/`.
 
