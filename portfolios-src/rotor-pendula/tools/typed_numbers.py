@@ -125,6 +125,8 @@ TYPED = {
         '0.1': 'def: lowest Gamma of the sweep (tools/double_pendulum.js)', '30': 'def: highest Gamma of the sweep, rounded (31.6)',
         '20': 'def: turns of the reduction check (tools/double_pendulum.js)', '18': 'input: blade mass 17 740 kg, rounded (' + NREL + ')',
         '1.0': 'def: arm length of the site\'s double pendulum, m',
+        '1000': 'def: the factor of the example after (1.9)', '49': 'def: section of Landau and Lifshitz, Mechanics (adiabatic invariants)',
+        '51': 'def: section of Landau and Lifshitz, Mechanics (accuracy of the adiabatic invariant)',
     }),
     '02': _merge('01', {'3': 'def', '7': 'input: deceleration of the braking car in the problem, m/s^2'}),
     '03': _merge('02', {'2': 'def'}),

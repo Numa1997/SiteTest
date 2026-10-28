@@ -148,7 +148,7 @@ tri.append(f'<text x="{Lx+10:.1f}" y="{Ly+14:.1f}" class="svgc">its forward part
 tri.append(f'<text x="{Lx+10:.1f}" y="{Ly+28:.1f}" class="svgc">the rest pushes the rotor downwind</text>')
 tri.append('</svg>')
 T['fig_triangle'] = ('<figure class="fig">' + ''.join(tri) +
-    f'<figcaption>Figure 9. A piece of blade at the tip, seen along the blade from its tip, at 8 m/s. The blade moves to the right at {ut8:.1f} m/s, '
+    f'<figcaption>Figure 12. A piece of blade at the tip, seen along the blade from its tip, at 8 m/s. The blade moves to the right at {ut8:.1f} m/s, '
     f'so air streams at it, from the direction it moves in, at that speed; the wind, from upwind along the shaft, blows through the rotor at {ax8:.2f} m/s, slowed by a third (section 6.2). '
     f'Together they make the apparent wind, which comes in only {math.degrees(inflow):.1f}° off the blade\'s path; the wind arrow is drawn {EX:g} times '
     f'too long so that the angle can be seen (it is drawn at {ang_draw:.0f}°). The lift is at right angles to the apparent wind: mostly it pushes the rotor '
@@ -261,7 +261,7 @@ svg.append(f'<text x="{(56+W3-150)/2}" y="{H3-10}" text-anchor="middle" class="s
 svg.append(f'<text x="18" y="{(16+H3-48)/2}" text-anchor="middle" class="svgd" transform="rotate(-90 18 {(16+H3-48)/2})">potential energy U</text>')
 svg.append('</svg>')
 T['fig_bowl'] = ('<figure class="fig">' + ''.join(svg) +
-    f'<figcaption>Figure 5. The second blade\'s potential energy (2.3) in the frame of the mother blade, at 6 m/s ($\\Gamma = {N["Gam_6"]}$), '
+    f'<figcaption>Figure 7. The second blade\'s potential energy (2.3) in the frame of the mother blade, at 6 m/s ($\\Gamma = {N["Gam_6"]}$), '
     f'at four positions of the rotor. The shape of the bowl is the centrifugal term and does not change; gravity tilts it, and its lowest point '
     f'(dots) swings between {N["tilt_6"]}° on one side and {N["tilt_6"]}° on the other, $\\arcsin(1/\\Gamma)$, and back, once per turn. The second blade is a marble in this bowl, '
     f'held in honey by the generator: it chases the moving bottom, and the generator takes energy from the chase.</figcaption></figure>')
@@ -283,9 +283,71 @@ T['fig_brake'] = (f'<figure class="fig"><svg viewBox="0 0 {W_} {H_}" role="img" 
     f'<polyline points="{pts}" fill="none" stroke="#7d1d2f" stroke-width="2.4"/>{ticks}'
     f'<text x="{(l_+W_-r_)/2}" y="{H_-8}" text-anchor="middle" class="svgd">brake over best brake, κ/κ*</text>'
     f'<text x="16" y="{(t_+H_-b_)/2}" text-anchor="middle" class="svgd" transform="rotate(-90 16 {(t_+H_-b_)/2})">P / P*</text></svg>'
-    f'<figcaption>Figure 6. The harvested power (3.3) over its maximum (3.5), against the brake over the best brake (3.4): '
+    f'<figcaption>Figure 9. The harvested power (3.3) over its maximum (3.5), against the brake over the best brake (3.4): '
     f'$\\bar P/P^* = 2x/(1+x^2)$ with $x = \\kappa/\\kappa^*$, the same curve at every wind and for every second blade. The top is flat: a brake '
     f'{2-math.sqrt(3):.2f} times the best, or {2+math.sqrt(3):.1f} times it, still gives half the power ($x = 2 \\mp \\sqrt3$).</figcaption></figure>')
+
+# ---- figure: turning arrows and the triangle of torques on Thales' circle (section 3.2) ------------------------------------------
+W7, H7 = 380, 300
+# left: two arrows turning once per turn, gravity's push and the swing 45 degrees behind it, and their shadows over one turn
+cx7, cy7, r7 = 92, 140, 62
+ph7 = math.radians(40); dl7 = math.radians(45); rs7 = 0.62*r7
+ax = lambda a, rr: (cx7 + rr*math.cos(a), cy7 - rr*math.sin(a))
+pP, pS = ax(ph7, r7), ax(ph7 - dl7, rs7)
+X0, X1, Yc = 176, 366, cy7
+svgT1 = [f'<svg viewBox="0 0 {W7} {H7}" style="flex:1 1 300px;min-width:0;max-width:460px" role="img" aria-label="Left, a circle with two arrows from its centre: a long one for gravity\'s push and a shorter one for the swing, forty-five degrees behind it. Both turn once per turn. Their shadows on the horizontal axis are drawn on the right over one turn as two waves; the swing\'s wave peaks an eighth of a turn after the push\'s.">',
+          '<defs><marker id="ah7" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="context-stroke"/></marker></defs>',
+          f'<circle cx="{cx7}" cy="{cy7}" r="{r7}" fill="none" stroke="#dccdb4"/><circle cx="{cx7}" cy="{cy7}" r="{rs7:.1f}" fill="none" stroke="#dccdb4" stroke-dasharray="3 3"/>',
+          f'<line x1="{cx7-r7-12}" y1="{cy7}" x2="{cx7+r7+12}" y2="{cy7}" stroke="#3f2c23" stroke-width="0.8"/>',
+          f'<line x1="{cx7}" y1="{cy7}" x2="{pP[0]:.1f}" y2="{pP[1]:.1f}" stroke="#b5681c" stroke-width="3" marker-end="url(#ah7)"/>',
+          f'<line x1="{cx7}" y1="{cy7}" x2="{pS[0]:.1f}" y2="{pS[1]:.1f}" stroke="#7d1d2f" stroke-width="3" marker-end="url(#ah7)"/>',
+          f'<line x1="{pP[0]:.1f}" y1="{pP[1]:.1f}" x2="{pP[0]:.1f}" y2="{cy7}" stroke="#b5681c" stroke-dasharray="2 3"/>',
+          f'<line x1="{pS[0]:.1f}" y1="{pS[1]:.1f}" x2="{pS[0]:.1f}" y2="{cy7}" stroke="#7d1d2f" stroke-dasharray="2 3"/>',
+          f'<path d="M{cx7+28*math.cos(ph7):.1f} {cy7-28*math.sin(ph7):.1f} A28 28 0 0 1 {cx7+28*math.cos(ph7-dl7):.1f} {cy7-28*math.sin(ph7-dl7):.1f}" fill="none" stroke="#3f2c23"/>',
+          f'<text x="{cx7+33}" y="{cy7-12}" class="svgd" font-style="italic">δ</text>',
+          f'<text x="{pP[0]-6:.1f}" y="{pP[1]-8:.1f}" text-anchor="middle" class="svgc">push</text><text x="{pS[0]+6:.1f}" y="{pS[1]+16:.1f}" class="svgc">swing</text>',
+          f'<path d="M{cx7-36} {cy7+82} A40 40 0 0 0 {cx7+36} {cy7+82}" fill="none" stroke="#33627f" stroke-width="1.4" marker-end="url(#ah7)" transform="rotate(180 {cx7} {cy7+64})"/>',
+          f'<text x="{cx7}" y="{cy7+100}" text-anchor="middle" class="svgc">once per turn</text>',
+          f'<rect x="{X0}" y="{cy7-74}" width="{X1-X0}" height="148" fill="#fff" stroke="#3f2c23"/>',
+          f'<line x1="{X0}" y1="{Yc}" x2="{X1}" y2="{Yc}" stroke="#dccdb4"/>']
+ph = np.linspace(0, 2*math.pi, 181)
+for amp, lag, col in ((r7, 0, '#b5681c'), (rs7, dl7, '#7d1d2f')):
+    svgT1.append('<polyline points="' + ' '.join(f'{X0 + (X1-X0)*a/(2*math.pi):.1f},{Yc - amp*math.cos(a - lag):.1f}' for a in ph) + f'" fill="none" stroke="{col}" stroke-width="2"/>')
+for v in (0, 90, 180, 270, 360):
+    X = X0 + (X1-X0)*v/360; svgT1.append(f'<line x1="{X:.1f}" y1="{cy7+74}" x2="{X:.1f}" y2="{cy7+79}" stroke="#3f2c23"/><text x="{X:.1f}" y="{cy7+92}" text-anchor="middle" class="svgc">{v}°</text>')
+svgT1.append(f'<text x="{(X0+X1)/2}" y="{cy7+108}" text-anchor="middle" class="svgd">the shadows, over one turn φ</text>')
+svgT1.append(f'<text x="{(X0+X1)/2}" y="{cy7-82}" text-anchor="middle" class="svgc">the swing peaks δ after the push</text></svg>')
+# right: Thales' circle. Hypotenuse = gravity's push G; the right angle sits on the circle; legs = (R-1) Theta and kappa Theta
+Ox, Oy, Lh = 40, 236, 300
+Qx = Ox + Lh
+svgT2 = [f'<svg viewBox="0 0 {W7} {H7}" style="flex:1 1 300px;min-width:0;max-width:460px" role="img" aria-label="A horizontal arrow for gravity\'s push with a half circle on it. Three right triangles stand on the arrow, their right-angled corners on the half circle, for a brake a third of the best, the best, and three times the best. The best one, shaded, is the tallest: its two short sides are equal and its corner is at the top of the circle.">',
+         '<defs><marker id="ah7b" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="context-stroke"/></marker></defs>',
+         f'<path d="M{Ox} {Oy} A{Lh/2} {Lh/2} 0 0 1 {Qx} {Oy}" fill="none" stroke="#dccdb4" stroke-width="1.4"/>']
+tri = [(1/3, '#33627f', 'κ = κ*/3'), (1.0, '#7d1d2f', 'κ = κ*'), (3.0, '#3c6a46', 'κ = 3κ*')]
+svgT2.append(f'<polygon points="{Ox},{Oy} {Ox + Lh/2:.1f},{Oy - Lh/2:.1f} {Qx},{Oy}" fill="#f3dfdb" stroke="none"/>')        # the best triangle, shaded under all lines
+for x, col, lab in tri:
+    d = math.atan(x); Px, Py = Ox + Lh*math.cos(d)**2, Oy - Lh*math.cos(d)*math.sin(d)
+    if x == 1.0:
+        svgT2.append(f'<line x1="{Px:.1f}" y1="{Py:.1f}" x2="{Px:.1f}" y2="{Oy}" stroke="#3f2c23" stroke-dasharray="3 3"/>')
+        svgT2.append(f'<text x="{Px+6:.1f}" y="{Oy-8}" class="svgc">h ∝ power</text>')
+        mx, my = Ox + 0.62*(Px - Ox), Oy + 0.62*(Py - Oy); svgT2.append(f'<text x="{mx+12:.1f}" y="{my+16:.1f}" class="svgc">(R−1)Θ</text>')
+        mx, my = Qx + 0.62*(Px - Qx), Oy + 0.62*(Py - Oy); svgT2.append(f'<text x="{mx-12:.1f}" y="{my+16:.1f}" text-anchor="end" class="svgc">κΘ</text>')
+        sq = 9; ux_, uy_ = (Ox - Px), (Oy - Py); n1 = math.hypot(ux_, uy_); vx_, vy_ = (Qx - Px), (Oy - Py); n2 = math.hypot(vx_, vy_)
+        a1 = (Px + sq*ux_/n1, Py + sq*uy_/n1); a2 = (a1[0] + sq*vx_/n2, a1[1] + sq*vy_/n2); a3 = (Px + sq*vx_/n2, Py + sq*vy_/n2)
+        svgT2.append(f'<polyline points="{a1[0]:.1f},{a1[1]:.1f} {a2[0]:.1f},{a2[1]:.1f} {a3[0]:.1f},{a3[1]:.1f}" fill="none" stroke="#3f2c23"/>')
+    svgT2.append(f'<polyline points="{Ox},{Oy} {Px:.1f},{Py:.1f} {Qx},{Oy}" fill="none" stroke="{col}" stroke-width="{2.6 if x == 1.0 else 1.6}"/>')
+    svgT2.append(f'<circle cx="{Px:.1f}" cy="{Py:.1f}" r="3.2" fill="{col}"/>')
+for i, (x, col, lab) in enumerate(tri):
+    svgT2.append(f'<line x1="{W7-104}" y1="{24+i*16}" x2="{W7-88}" y2="{24+i*16}" stroke="{col}" stroke-width="2.2"/><text x="{W7-84}" y="{28+i*16}" class="svgc">{lab}</text>')
+svgT2.append(f'<line x1="{Ox}" y1="{Oy}" x2="{Qx}" y2="{Oy}" stroke="#b5681c" stroke-width="3" marker-end="url(#ah7b)"/>')
+svgT2.append(f'<text x="{(Ox+Qx)/2}" y="{Oy+22}" text-anchor="middle" class="svgd">gravity\'s push, G</text>')
+svgT2.append(f'<path d="M{Ox+46} {Oy} A46 46 0 0 0 {Ox+46*math.cos(math.radians(45)):.1f} {Oy-46*math.sin(math.radians(45)):.1f}" fill="none" stroke="#3f2c23"/><text x="{Ox+52}" y="{Oy-14}" class="svgd" font-style="italic">δ</text>')
+svgT2.append(f'<text x="{(Ox+Qx)/2}" y="{Oy+42}" text-anchor="middle" class="svgc">every right angle on the half circle (Thales)</text></svg>')
+T['fig_triangle'] = ('<figure class="fig"><div style="display:flex;flex-wrap:wrap;gap:10px;justify-content:center">' + ''.join(svgT1) + ''.join(svgT2) + '</div>'
+    '<figcaption>Figure 8. Torques as turning arrows. First panel: anything that varies once per turn, as $\\cos(\\varphi - \\delta)$, is the shadow of an arrow turning once per turn; '
+    'the swing\'s arrow (wine) runs the angle $\\delta$ behind the push\'s (ochre), and so its shadow peaks $\\delta$ later. Second panel: the triangle of torques (3.2). '
+    'The torque of the net stiffness, $(R-1)\\Theta$, lies along the swing; the brake\'s, $\\kappa\\Theta$, at right angles to it; together they balance gravity\'s push $G$. '
+    'The right angle always sits on the half circle over $G$ (Thales), and the power is proportional to the triangle\'s height. The tallest triangle is the isosceles one: the best brake, $\\kappa^* = R - 1$, $\\delta = 45°$.</figcaption></figure>')
 
 # ---- figure: theory against the full equation (compare.json, from the page's own engine, tools/compare.js) -------------------
 cp = J('compare.json')['winds']
@@ -346,7 +408,7 @@ N['cmp_star_dev'] = f(max(abs(min(w['sweep'], key=lambda sp: abs(math.log(sp['x'
 N['cmp_rms6'] = f(trace_rms[0][1], 3); N['cmp_mean6'] = f(trace_rms[0][2], 4); N['cmp_rest6'] = f(trace_rms[0][3], 4)
 N['cmp_amp6'] = f(abs(-w6['G']/(w6['R'] - 1 + 1j*w6['kappaStar'])), 3)
 T['fig_compare'] = ('<figure class="fig"><div style="display:flex;flex-wrap:wrap;gap:10px;justify-content:center">' + ''.join(svgA) + ''.join(svgB) + '</div>'
-    f'<figcaption>Figure 7. The small-swing theory against the full equation (1.8), solved by the simulation\'s own engine. '
+    f'<figcaption>Figure 10. The small-swing theory against the full equation (1.8), solved by the simulation\'s own engine. '
     f'First panel: harvested power over its maximum $P^*$ (3.5), against the brake over the best brake. The line is formula (3.3), the same for every wind; '
     f'the dots are the full equation at 6 (wine), 8 (ochre) and 10 m/s (blue). Second panel: one turn of the swing at the best brake; '
     f'solid the full equation, dashed the theory (3.2). The two have the same shape and the same phase; the full swing is shifted down by its mean trail.</figcaption></figure>')
@@ -375,7 +437,7 @@ tr = [f'<svg viewBox="0 0 {W8} {H8}" style="width:100%;height:auto;max-width:{W8
       f'<line x1="{hx8}" y1="{hy8}" x2="{fx:.1f}" y2="{fy:.1f}" stroke="#7d1d2f" stroke-width="2"/>',
       f'<text x="{hx8+12}" y="{(hy8+fy)/2+4:.1f}" class="svgc">lever arm</text></svg>']
 T['fig_trail'] = ('<figure class="fig">' + ''.join(tr) +
-    f'<figcaption>Figure 8. Why the trail is the bill. The second blade trails behind the mother blade\'s line, against the rotation; the trail is drawn '
+    f'<figcaption>Figure 11. Why the trail is the bill. The second blade trails behind the mother blade\'s line, against the rotation; the trail is drawn '
     f'{EXT} times too large (at 6 m/s it is {N["lean_deg"]}°). Flung outwards, the second blade pulls on the hinge in the direction from the hub to its '
     'centre of mass (green). The pull\'s line, through the hinge, misses the hub by a small lever arm (wine), so the pull holds the rotor back, with the torque '
     f'$\\tfrac{{ml}}{{2}}r_p\\Omega^2\\sin\\theta$; on average {N["tq_harv6"]} N m at 6 m/s. The rotor pushes against it, and that steady push is the power it pays.</figcaption></figure>')
@@ -631,6 +693,112 @@ T['fig_double'] = ('<figure class="fig"><div style="display:flex;flex-wrap:wrap;
     f'Equal arms sit at resonance, $R = 1$, and stay chaotic from some starts at every $\\Gamma$. The second blade of these notes, $R$ = {N["R"]}, keeps only the starts near the top of its spring\'s hill above $\\Gamma \\approx 3.6$, '
     'and with the best brake (squares, at the turbine\'s three winds) none at all.</figcaption></figure>')
 
+# ---- chapter 1, section 1.5: the moving hilltop, and once-per-turn snapshots (L0_double.json 'poincare', tools/double_pendulum.js) -----
+ps = dp['poincare']; pr = ps['rod']; pe = ps['equal']
+R6, G6, thb6, A06 = pr['R'], pr['G'], pr['theta_b'], pr['A0']
+EU = I*Om[6.0]**2                                        # the energy unit of (1.8) at 6 m/s, I Omega^2, J
+N['ps_EU'] = f(EU, 3)
+N['ps_A_lo'] = f(R6 - G6, 1); N['ps_A_hi'] = f(R6 + G6, 1); N['ps_A0'] = f(A06, 1)
+N['ps_hill_lo'] = f(2*(R6 - G6)*EU, 1); N['ps_hill_hi'] = f(2*(R6 + G6)*EU, 1)             # barrier 2A I Omega^2, J
+N['ps_geff_lo'] = f(Om[6.0]**2*rp - g, 1); N['ps_geff_hi'] = f(Om[6.0]**2*rp + g, 1)       # the apparent gravity at the hinge, m/s^2
+N['ps_w_lo'] = f(math.sqrt(R6 - G6), 2); N['ps_w_hi'] = f(math.sqrt(R6 + G6), 2)           # small-swing rate per turn in the deepest and shallowest bowl
+N['ps_thb_deg'] = f(math.degrees(thb6), 1)
+N['ps_Jin'] = f(pr['pred']['J_in'], 1); N['ps_Jout'] = f(pr['pred']['J_out'], 1)
+N['ps_Jsep_lo'] = f(8*math.sqrt(R6 - G6)/math.pi, 1); N['ps_Jsep_hi'] = f(8*math.sqrt(R6 + G6)/math.pi, 1)
+N['ps_amp_pred'] = f(math.degrees(pr['pred']['amp_in']), 0)
+amp_r = [x - thb6 for x in pr['meas']['right']]; amp_l = [thb6 - x for x in pr['meas']['left']]
+N['ps_amp_meas_lo'] = f(math.degrees(min(sum(amp_r)/2, sum(amp_l)/2)), 0); N['ps_amp_meas_hi'] = f(math.degrees(max(sum(amp_r)/2, sum(amp_l)/2)), 0)
+N['ps_win_pred'] = f(pr['pred']['w_in'], 1); N['ps_wout_pred'] = f(pr['pred']['w_out'], 1)
+N['ps_win_meas'] = f((sum(pr['meas']['w_in_up']) - sum(pr['meas']['w_in_down']))/4, 1)
+N['ps_wout_meas_lo'] = f(min(sum(pr['meas']['w_out_up'])/2, -sum(pr['meas']['w_out_down'])/2), 1)
+N['ps_wout_meas_hi'] = f(max(sum(pr['meas']['w_out_up'])/2, -sum(pr['meas']['w_out_down'])/2), 1)
+N['ps_win_rads'] = f(pr['pred']['w_in']*Om[6.0], 1); N['ps_wout_rads'] = f(pr['pred']['w_out']*Om[6.0], 1)
+N['ps_turn6'] = f(2*math.pi/Om[6.0], 2)
+lyc = [o['lyap'] for o in pr['orbits'] if o['lyap'] > pr['meas']['threshold']]
+lyr = [o['lyap'] for o in pr['orbits'] if o['lyap'] <= pr['meas']['threshold']]
+N['ps_lyap_ch_lo'] = f(min(lyc), 2); N['ps_lyap_ch_hi'] = f(max(lyc), 2); N['ps_lyap_reg_max'] = f(max(lyr), 2)
+N['ps_lyap_eq'] = f(pe['orbits'][0]['lyap'], 2)
+N['ps_period_3'] = f(next(T_ for a, T_ in pr['period_turns'] if a == 3), 2)                # a swing of 3 rad lasts this many turns
+N['ps_thr'] = f(pr['meas']['threshold'], 1)
+N['dp_gain_1000'] = f(math.log(1000)/fr['lyap_per_s'], 1)                                  # what a thousand times better start buys, s
+N['dp_horizon'] = f(math.log(1/1e-9)/fr['lyap_per_s'], 1)
+N['dp_free_double'] = f(math.log(2)/fr['lyap_per_s'], 2)
+
+# Figure 5: the landscape (1.10) over the whole circle at four rotor angles, in joules at 6 m/s
+W5, H5 = 560, 300
+LX, LY = panel(W5, H5, 58, 150, 16, 48)
+tl = np.linspace(-math.pi, math.pi, 361)
+ulo, uhi = -24.0, 24.0
+svg5 = [f'<svg viewBox="0 0 {W5} {H5}" role="img" aria-label="The potential energy of the second blade over the whole circle at 6 metres per second, at four positions of the rotor: a bowl near zero degrees and a hill near one hundred and eighty degrees. The hill\'s top is highest when the mother blade points down and lowest when it points up; a shaded band marks the range of hilltop heights over a turn.">',
+        f'<rect x="58" y="16" width="{W5-208}" height="{H5-64}" fill="#fff" stroke="#3f2c23"/>',
+        f'<rect x="58" y="{LY((R6 + G6)*EU, ulo, uhi):.1f}" width="{W5-208}" height="{LY((R6 - G6)*EU, ulo, uhi) - LY((R6 + G6)*EU, ulo, uhi):.1f}" fill="#f3dfdb"/>']
+for v in (-180, -90, 0, 90, 180):
+    X = LX(math.radians(v), -math.pi, math.pi); svg5.append(f'<line x1="{X:.1f}" y1="{H5-48}" x2="{X:.1f}" y2="{H5-43}" stroke="#3f2c23"/><text x="{X:.1f}" y="{H5-30}" text-anchor="middle" class="svgc">{v}°</text>')
+for v in (-20, -10, 0, 10, 20):
+    Y = LY(v, ulo, uhi); svg5.append(f'<line x1="53" y1="{Y:.1f}" x2="58" y2="{Y:.1f}" stroke="#3f2c23"/><text x="49" y="{Y+4:.1f}" text-anchor="end" class="svgc">{v}</text>')
+for c, phd, lab in bowl_cols:
+    ph = math.radians(phd); A = math.sqrt(R6*R6 - 2*R6*G6*math.sin(ph) + G6*G6); tb = math.atan2(-G6*math.cos(ph), R6 - G6*math.sin(ph))
+    uu = EU*(-R6*np.cos(tl) + G6*np.sin(ph + tl))
+    svg5.append('<polyline points="' + ' '.join(f'{LX(t, -math.pi, math.pi):.1f},{LY(v, ulo, uhi):.1f}' for t, v in zip(tl, uu)) + f'" fill="none" stroke="{c}" stroke-width="2"/>')
+    ttop = math.atan2(math.sin(tb + math.pi), math.cos(tb + math.pi))
+    svg5.append(f'<circle cx="{LX(ttop, -math.pi, math.pi):.1f}" cy="{LY(A*EU, ulo, uhi):.1f}" r="4.5" fill="{c}" stroke="#fff" stroke-width="1.2"/>')
+for i, (c, phd, lab) in enumerate(bowl_cols):
+    svg5.append(f'<line x1="{W5-142}" y1="{40+i*20}" x2="{W5-124}" y2="{40+i*20}" stroke="{c}" stroke-width="2.4"/><text x="{W5-118}" y="{44+i*20}" class="svgc">{lab}</text>')
+svg5.append(f'<rect x="{W5-142}" y="{128}" width="18" height="10" fill="#f3dfdb"/><text x="{W5-118}" y="{137}" class="svgc">hilltop heights</text><text x="{W5-118}" y="{151}" class="svgc">over a turn</text>')
+svg5.append(f'<text x="{(58+W5-150)/2}" y="{H5-10}" text-anchor="middle" class="svgd">angle θ of the second blade from the mother blade\'s line</text>')
+svg5.append(f'<text x="16" y="{(16+H5-48)/2}" text-anchor="middle" class="svgd" transform="rotate(-90 16 {(16+H5-48)/2})">potential energy U, J</text></svg>')
+T['fig_hill'] = ('<figure class="fig">' + ''.join(svg5) +
+    f'<figcaption>Figure 5. The landscape (1.10) of the second blade at 6 m/s, over the whole circle, at four positions of the rotor. A bowl at the mother blade\'s line '
+    f'and a hill on the far side, where the second blade points back at the hub. The hill is lowest, {N["ps_hill_lo"]} J above the bowl\'s bottom, when the mother blade points up, '
+    f'and highest, {N["ps_hill_hi"]} J, when it points down; the shaded band is the range of its top over a turn. The second blade\'s energy unit here is $I\\Omega^2$ = {N["ps_EU"]} J.</figcaption></figure>')
+
+# Figure 6: the snapshots, equal arms against the rod of the notes
+def dots(orbits, X, Y, x0, x1, y0, y1, every, n):
+    d = []
+    for o in orbits:
+        for th, w in o['pts'][:n:every]:
+            if y0 <= w <= y1:
+                d.append(f'M{X(th, x0, x1):.0f} {Y(w, y0, y1):.0f}h0')          # whole units of the 380-wide frame: a dot is 1.7 wide
+    return ''.join(d)
+W6, H6 = 380, 320
+def snap_panel(pp, wlim, label, extra, nreg, nch):
+    PXs, PYs = panel(W6, H6, 46, 12, 16, 48)
+    reg = [o for o in pp['orbits'] if o['lyap'] <= pr['meas']['threshold']]; cha = [o for o in pp['orbits'] if o['lyap'] > pr['meas']['threshold']]
+    s = [f'<svg viewBox="0 0 {W6} {H6}" style="flex:1 1 300px;min-width:0;max-width:460px" role="img" aria-label="{label}">',
+         f'<rect x="46" y="16" width="{W6-58}" height="{H6-64}" fill="#fff" stroke="#3f2c23"/>']
+    for v in (-180, -90, 0, 90, 180):
+        X = PXs(math.radians(v), -math.pi, math.pi); s.append(f'<line x1="{X:.1f}" y1="{H6-48}" x2="{X:.1f}" y2="{H6-43}" stroke="#3f2c23"/><text x="{X:.1f}" y="{H6-30}" text-anchor="middle" class="svgc">{v}°</text>')
+    for v in wlim[2]:
+        Y = PYs(v, wlim[0], wlim[1]); s.append(f'<line x1="41" y1="{Y:.1f}" x2="46" y2="{Y:.1f}" stroke="#3f2c23"/><text x="37" y="{Y+4:.1f}" text-anchor="end" class="svgc">{v:g}</text>')
+    s.append(f'<path d="{dots(cha, PXs, PYs, -math.pi, math.pi, wlim[0], wlim[1], 1, nch)}" stroke="#7d1d2f" stroke-width="1.7" stroke-linecap="round" fill="none"/>')
+    s.append(f'<path d="{dots(reg, PXs, PYs, -math.pi, math.pi, wlim[0], wlim[1], 1, nreg)}" stroke="#23160f" stroke-width="1.5" stroke-linecap="round" fill="none"/>')
+    s += extra(PXs, PYs)
+    s.append(f'<text x="{(46+W6-12)/2}" y="{H6-10}" text-anchor="middle" class="svgd">angle θ, once per turn</text>')
+    s.append(f'<text x="12" y="{(16+H6-48)/2}" text-anchor="middle" class="svgd" transform="rotate(-90 12 {(16+H6-48)/2})">rate θ′ = dθ/dφ</text></svg>')
+    return s
+def no_extra(PXs, PYs): return []
+wl_eq = (-3.6, 3.6, (-3, -2, -1, 0, 1, 2, 3))
+svgE = snap_panel(pe, wl_eq, 'Once-per-turn snapshots of the equal-armed double pendulum with its first arm held, at an outward pull four times gravity: one chaotic orbit fills most of the plane with scattered dots; a few closed curves form an island near 60 degrees, and smooth bands at the top and bottom are tumbling motions.', no_extra, 120, 2000)
+wl_rod = (-32, 32, (-30, -20, -10, 0, 10, 20, 30))
+def rod_extra(PXs, PYs):
+    a = pr['pred']['amp_in']; E = pr['pred']['E_out']; e = []
+    th = np.linspace(thb6 - a, thb6 + a, 241); w = np.sqrt(np.maximum(0, 2*A06*(np.cos(th - thb6) - math.cos(a))))
+    for sg in (1, -1):
+        e.append('<polyline points="' + ' '.join(f'{PXs(t, -math.pi, math.pi):.1f},{PYs(sg*v, -32, 32):.1f}' for t, v in zip(th, w)) + '" fill="none" stroke="#b5681c" stroke-width="1.8" stroke-dasharray="5 3"/>')
+    th = np.linspace(-math.pi, math.pi, 241); w = np.sqrt(2*(E + A06*np.cos(th - thb6)))
+    for sg in (1, -1):
+        e.append('<polyline points="' + ' '.join(f'{PXs(t, -math.pi, math.pi):.1f},{PYs(sg*v, -32, 32):.1f}' for t, v in zip(th, w)) + '" fill="none" stroke="#b5681c" stroke-width="1.8" stroke-dasharray="5 3"/>')
+    e.append(f'<line x1="{W6-150}" y1="28" x2="{W6-132}" y2="28" stroke="#b5681c" stroke-width="1.8" stroke-dasharray="5 3"/><text x="{W6-128}" y="32" class="svgc">band (1.12)</text>')
+    return e
+svgP = snap_panel(pr, wl_rod, 'Once-per-turn snapshots of the second blade of these notes at 6 metres per second, no brake: nested closed rings fill the bowl around a point near minus 17 degrees; a thin ring of scattered dots surrounds them where the swing nearly reaches the hilltop; smooth bands above and below are tumbling motions. Dashed curves mark the estimated edges of the chaotic band, which hug it.', rod_extra, 120, 1000)
+legend = (f'<div style="display:flex;gap:18px;justify-content:center;flex-wrap:wrap;font:11px var(--f-mono);color:var(--muted)">'
+          '<span><span style="color:#23160f">●</span> regular orbits</span><span><span style="color:#7d1d2f">●</span> chaotic orbits</span></div>')
+T['fig_snap'] = ('<figure class="fig"><div style="display:flex;flex-wrap:wrap;gap:10px;justify-content:center">' + ''.join(svgE) + ''.join(svgP) + '</div>' + legend +
+    f'<figcaption>Figure 6. Snapshots taken once per turn, each time the mother blade passes the horizontal rising, of the held pendulum with no brake (a Poincaré section). '
+    f'First panel: equal arms, $R = 1$, at $\\Gamma = 4$. One orbit (wine, 2000 of its {len(pe["orbits"][0]["pts"])} turns drawn) wanders over most of the plane; its Lyapunov exponent is {N["ps_lyap_eq"]} per turn. Only an island of closed curves and the fast tumbling motions are regular. '
+    f'Second panel: the 1 m rod at the 63 m tip at 6 m/s, $R$ = {N["R"]}, $\\Gamma$ = {N["Gam_6"]}. Every swing in the bowl draws a closed ring; only a thin band, where the swing almost reaches the hilltop, is chaotic, '
+    f'with exponents {N["ps_lyap_ch_lo"]} to {N["ps_lyap_ch_hi"]} per turn. The dashed curves are the edges of that band as estimate (1.12) puts them, drawn with nothing fitted.</figcaption></figure>')
+
 # ---- chapter 6: the turbulent field (L6_wind.json, notes/rotor-pendula/derive/L6_wind.py) -------------------------------------
 wf = J('L6_wind.json'); wc = J('wind_check.json')
 U8 = 8.0
@@ -708,7 +876,7 @@ svgC.append(f'<line x1="{W6-150}" y1="78" x2="{W6-136}" y2="78" stroke="#33627f"
 svgC.append(f'<text x="{(48+W6-14)/2}" y="{H6-10}" text-anchor="middle" class="svgd">frequency, Hz</text>')
 svgC.append(f'<text x="14" y="{(16+H6-48)/2}" text-anchor="middle" class="svgd" transform="rotate(-90 14 {(16+H6-48)/2})">coherence</text></svg>')
 T['fig_wind'] = ('<figure class="fig"><div style="display:flex;flex-wrap:wrap;gap:10px;justify-content:center">' + ''.join(svgW) + ''.join(svgC) + '</div>'
-    '<figcaption>Figure 10. The synthesised wind at 8 m/s, turbulence class A. Left: one instant of the first record over the rotor disc, seen from upwind, as the grid stores it; '
+    '<figcaption>Figure 13. The synthesised wind at 8 m/s, turbulence class A. Left: one instant of the first record over the rotor disc, seen from upwind, as the grid stores it; '
     'colour is the gust along the shaft, wine faster and blue slower than the mean at that height, and arrows are the wind across the disc, 3 m of drawing per m/s. '
     'Right: what the synthesis gives back. Lines are the coherences put in, (6.7) for $u$ and the smooth-model default for $v$, for points 12.6 and 25.2 m apart; '
     'dots are measured from forty records. Slow gusts are shared across the disc, quick ones are not. The Wind tab animates this field.</figcaption></figure>')

@@ -198,8 +198,10 @@ source in [`portfolios-src/rotor-pendula/`](../portfolios-src/rotor-pendula/) (i
 gives the commands and checks); the models, model runs and review record are in `notes/rotor-pendula/`.
 
 **What the reader gets.** Three tabs. *Lecture notes* (`#notes`): *A Second Blade on a Turning Blade*, nine chapters in three parts,
-48 numbered equations and ten figures, rewritten on 28 October 2026 as one story whose spine is the double pendulum (the earlier
-version, chapters 0–9 patched section by section, is in the git history). Part I, *A double pendulum held by the wind*: chapter 1
+52 numbered equations and thirteen figures, rewritten on 28 October 2026 as one story whose spine is the double pendulum (the earlier
+version, chapters 0–9 patched section by section, is in the git history). Chapters 1 and 3 were rewritten again the same day in a
+denser style: derivations shown line by line, and each new idea in a card (`.idea` in `tools/theory_template.html`) that says it four
+ways: what it feels like, what happens physically, how it is measured, and its mathematics. Part I, *A double pendulum held by the wind*: chapter 1
 opens with the desk double pendulum, introduces the machine (a second, lighter blade, a thin uniform rod of m = 1 kg and l = 1 m,
 hinged at the 63 m tip of the NREL 5 MW blade and braked by a generator in the hinge; Figures 1–3) and the sensor it would power,
 writes the free double pendulum's Lagrangian for a rigid first arm (1.1)–(1.5), holds the first arm to a steady turning and shows
@@ -208,12 +210,16 @@ with the energy balance (1.7) and the dimensionless form (1.8); then chaos, free
 `tools/double_pendulum.js`, which copies `deriv()`/`rk4()` out of the site's Fig. 2 page and runs them unchanged: the free pendulum
 from 120°, 150° has Λ = 1.51 /s; held, equal arms sit at resonance R = 1 and stay chaotic from some starts at every Γ; the second
 blade, R = 94.5, is regular in its bowl and chaotic only near the hilltop unbraked, and with the best brake every exponent is
-negative, Table 1). Chapter 2 reads (1.6) from the turning blade (the car pendulum, two gravities, Coriolis and Euler torques, the
-bowl that rocks, Figure 5; a push in step with the position does no work, only its part in step with the velocity; the generator as
-a brake). Chapter 3: the best brake κ* = R − 1 and P* = mg²l/[8Ω(r_p − 2l/3)] (Figures 6, 7; Table 2). Chapter 4: the full
-equation, the trail that is the bill (Figure 8), where the mass sits. Chapter 5: the real geared generator (maxon RE 25 + GP 32 C,
+negative, Table 1); then why the held blade is calm (section 1.5): the landscape (1.10) whose hilltop rises and falls once per turn
+(Figure 5), the adiabatic invariant, the separatrix action (1.11) and the predicted chaotic band (1.12), checked against once-per-turn
+snapshots, a Poincaré section, of equal arms and of the rod at 6 m/s (Figure 6, also from `tools/double_pendulum.js`; the band's
+predicted edges lie within about 5 % of the computed ones). Chapter 2 reads (1.6) from the turning blade (the car pendulum, two gravities, Coriolis and Euler torques, the
+bowl that rocks, Figure 7; a push in step with the position does no work, only its part in step with the velocity; the generator as
+a brake). Chapter 3: the best brake κ* = R − 1 and P* = mg²l/[8Ω(r_p − 2l/3)] (the torques as turning arrows closing a right triangle on Thales' circle, whose area is the power, Figure 8; Figures 9, 10;
+Table 2). Chapter 4: the full
+equation, the trail that is the bill (Figure 11), where the mass sits. Chapter 5: the real geared generator (maxon RE 25 + GP 32 C,
 ratio 492; Tables 3–5). Part II, *The real wind*: chapter 6 builds the wind (its power, the Betz limit, blades as wings and why
-λ* = 7.55, Figure 9; the turbulent field of section 6.4, Figure 10; what the rotor makes of it, with the torque law and the
+λ* = 7.55, Figure 12; the turbulent field of section 6.4, Figure 13; what the rotor makes of it, with the torque law and the
 7.91 rpm at 6 m/s); chapter 7 the air on the second blade, estimated and then solved in time in the gusty field; chapter 8 the
 blade's sag, its vibration, and the ceiling for white-noise shaking with the double-pendulum Monte Carlo. Part III: chapter 9, the
 ceiling inequality, the answer, and the double pendulum once more. Warm-up and guess-first boxes were folded into the prose; worked

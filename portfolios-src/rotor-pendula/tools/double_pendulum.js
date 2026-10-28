@@ -131,6 +131,79 @@ out.driven.step_check = { Gamma: 1, per800: sweep(1, 0, [1], 400, 800)[0].max, p
   }
   out.reduction = { Gamma: 4, turns: 20, worst_energy_gap_J: worst, energy_scale_J: (m1 + m2) * g * l1 };
 }
+// ---- once-per-turn snapshots (Poincaré sections) and the edge of chaos (section 1.5 of the notes) ---------------------------
+// The held pendulum, no brake, sampled each time the first arm passes the horizontal rising (phi = 0 mod 2 pi).
+// Each orbit also carries its largest Lyapunov exponent per turn (tangent equation, renormalised every quarter turn).
+function section(R, G, th0, w0, turns, perTurn) {
+  const h = 2 * Math.PI / perTurn;
+  const f = (ph, y) => {
+    const c = Math.cos(ph + y[0]), sn = Math.sin(ph + y[0]);
+    return [y[1], -R * Math.sin(y[0]) - G * c, y[3], -(R * Math.cos(y[0]) - G * sn) * y[2]];
+  };
+  let y = [th0, w0, 1, 0], ph = 0, sum = 0;
+  const pts = [];
+  for (let n = 0; n < turns; n++) {
+    for (let k = 0; k < perTurn; k++) {
+      const k1 = f(ph, y), k2 = f(ph + h / 2, y.map((v, i) => v + h / 2 * k1[i])), k3 = f(ph + h / 2, y.map((v, i) => v + h / 2 * k2[i])),
+        k4 = f(ph + h, y.map((v, i) => v + h * k3[i]));
+      y = y.map((v, i) => v + h / 6 * (k1[i] + 2 * k2[i] + 2 * k3[i] + k4[i])); ph += h;
+      if ((k + 1) % (perTurn / 4) === 0) { const d = Math.hypot(y[2], y[3]); sum += Math.log(d); y[2] /= d; y[3] /= d; }
+    }
+    ph = 0;                                                       // phi is periodic: restart the clock each turn, exactly
+    const th = Math.atan2(Math.sin(y[0]), Math.cos(y[0]));
+    pts.push([+th.toFixed(4), +y[1].toFixed(4)]);
+  }
+  return { th0, w0, lyap: sum / turns, pts };
+}
+// complete elliptic integrals K(m), E(m), parameter m = k^2, by the arithmetic-geometric mean
+function KE(m) {
+  let a = 1, b = Math.sqrt(1 - m), c = Math.sqrt(m), s = 0.5 * c * c, p = 0.5;
+  while (Math.abs(c) > 1e-15) { const an = (a + b) / 2; c = (a - b) / 2; b = Math.sqrt(a * b); a = an; p *= 2; s += p * c * c; }
+  const K = Math.PI / (2 * a);
+  return [K, K * (1 - s)];
+}
+// the action (1/2 pi) times the area of a swing in the frozen landscape u = -A cos(theta - theta_b): libration of amplitude a,
+// J = (8 sqrt(A)/pi)[E(k) - (1 - k^2) K(k)], k = sin(a/2); rotation of energy E > A, J = (1/2 pi) int sqrt(2(E + A cos x)) dx
+const Jlib = (A, a) => { const k2 = Math.sin(a / 2) ** 2, [K, E] = KE(k2); return 8 * Math.sqrt(A) / Math.PI * (E - (1 - k2) * K); };
+const Jrot = (A, E) => { let s = 0; const n = 4000; for (let i = 0; i <= n; i++) { const x = -Math.PI + 2 * Math.PI * i / n; s += (i % n === 0 ? 1 : i % 2 ? 4 : 2) * Math.sqrt(2 * (E + A * Math.cos(x))); } return s * (2 * Math.PI / n) / 3 / (2 * Math.PI); };
+const bisect = (fn, lo, hi) => { for (let i = 0; i < 200; i++) { const mid = (lo + hi) / 2; if ((fn(lo) < 0) === (fn(mid) < 0)) lo = mid; else hi = mid; } return (lo + hi) / 2; };
+{
+  const T1 = Date.now(), PT = 800;
+  // equal arms (point bob, R = l1/l2 = 1) held at Gamma = 4: G = R/Gamma
+  const eq = { R: 1, G: 0.25, Gamma: 4, orbits: [] };
+  eq.orbits.push(section(1, 0.25, 0, 0, 2500, PT));                                         // the chaotic sea, one orbit
+  for (const t of [0.85, 0.95, 1.05, 1.15, 1.25, 1.35, 1.55]) eq.orbits.push(section(1, 0.25, t, 0, 300, PT));   // the island and a satellite
+  for (const w of [2.2, 2.6, 3.0, -2.6, -3.0, -3.4]) eq.orbits.push(section(1, 0.25, 0, w, 300, PT));         // tumbling right over
+  // the rod of the notes at 6 m/s, the largest push
+  const v6 = 6, Om6 = SETUP.LAM_STAR * v6 / SETUP.R_ROT;
+  const R = 1.5 * SETUP.R_ROT / SETUP.L_B, G = 1.5 * SETUP.G0 / (SETUP.L_B * Om6 * Om6), thb = Math.atan2(-G, R), A0 = Math.hypot(R, G);
+  const rod = { wind: v6, R, G, Gamma: R / G, theta_b: thb, A0, orbits: [] };
+  for (let i = 0; i < 12; i++) rod.orbits.push(section(R, G, thb + 0.05 + i * (1.95 - thb - 0.05) / 11, 0, 200, PT));   // rings in the bowl
+  rod.orbits.push(section(R, G, 2.3, 0, 1500, PT)); rod.orbits.push(section(R, G, thb, 19.5, 1500, PT));            // the chaotic layer
+  for (const w of [21.5, 24.5, 28, -21.5, -24.5, -28]) rod.orbits.push(section(R, G, thb, w, 200, PT));             // tumbling right over
+  // the edge of chaos predicted: the hilltop's height A = sqrt(R^2 - 2RG sin(phi) + G^2) runs from R - G to R + G once per turn;
+  // a swing whose action stays below the lowest hilltop's separatrix action 8 sqrt(R - G)/pi never reaches the top, one above the
+  // highest one's (4 sqrt(R + G)/pi for a rotation) always clears it. Drawn in the frozen landscape at phi = 0, where A = A0.
+  const Jin = 8 * Math.sqrt(R - G) / Math.PI, Jout = 4 * Math.sqrt(R + G) / Math.PI;
+  const aIn = bisect(a => Jlib(A0, a) - Jin, 1e-6, Math.PI - 1e-6);
+  const Eout = bisect(E => Jrot(A0, E) - Jout, A0 * (1 + 1e-12), 20 * A0);
+  rod.pred = { J_in: Jin, J_out: Jout, amp_in: aIn, w_in: 2 * Math.sqrt(A0) * Math.sin(aIn / 2), E_out: Eout, w_out: Math.sqrt(2 * (Eout + A0)),
+    right: thb + aIn, left: thb - aIn };
+  // the edge of chaos measured: largest exponent per turn (50 turns let pass, 400 measured) along two lines through the bowl's bottom
+  const THR = 0.2, scan = (pairs) => pairs.map(([t, w]) => [t, w, drivenLyap(R, G, 0, t, w, 400, PT)]);
+  const lin = (a, b, n) => Array.from({ length: n }, (_, i) => a + (b - a) * i / (n - 1));
+  const right = scan(lin(1.7, 2.4, 36).map(t => [t, 0])), left = scan(lin(-2.2, -2.9, 36).map(t => [t, 0]));
+  const up = scan(lin(14, 22, 33).map(w => [thb, w])), down = scan(lin(-14, -22, 33).map(w => [thb, w]));
+  const firstChaos = arr => arr.findIndex(r => r[2] > THR);
+  const edge = (arr, j) => { const i = firstChaos(arr); return [arr[i - 1][j], arr[i][j]]; };              // last regular, first chaotic
+  const lastChaos = arr => { let i = arr.length - 1; while (arr[i][2] <= THR) i--; return [arr[i][1], arr[i + 1][1]]; }; // last chaotic, first regular beyond
+  rod.meas = { threshold: THR, right: edge(right, 0), left: edge(left, 0), w_in_up: edge(up, 1), w_in_down: edge(down, 1),
+    w_out_up: lastChaos(up), w_out_down: lastChaos(down), scans: { right, left, up, down } };
+  // the period of a free swing of amplitude a in the bowl A, in turns: T = 4 K(sin^2(a/2))/sqrt(A) / (2 pi)
+  rod.period_turns = [0.5, 1, 2, 2.5, 3, 3.1].map(a => [a, 4 * KE(Math.sin(a / 2) ** 2)[0] / Math.sqrt(A0) / (2 * Math.PI)]);
+  out.poincare = { phase: 'phi = 0: the first arm horizontal, rising', perTurn: PT, equal: eq, rod };
+  console.log(`sections in ${((Date.now() - T1) / 1000).toFixed(1)} s; predicted`, rod.pred, 'measured', { ...rod.meas, scans: undefined });
+}
 fs.writeFileSync(path.join(__dirname, '..', 'data', 'L0_double.json'), JSON.stringify(out));
 console.log('free: Lyapunov', out.free.lyap_per_s.toFixed(3), '/s, energy drift', out.free.energy_drift_J.toExponential(2), 'J');
 for (const k of ['equal_arms', 'rod_63m']) console.log(k, out.driven[k].sweep.map(r => `${r.Gamma}:${r.max.toFixed(3)}(${r.n_chaotic})`).join(' '));

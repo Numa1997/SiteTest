@@ -41,7 +41,7 @@ catalogue generator serves fully.
 | L4 | real geared generator: losses, friction, reflected inertia; sizes | `L4_generator.py`, `L4_full.py`, `L4_check.py`, `L4_converge.py`, `design.py`, `sizes.py` | `L4_*.json`, `design.json`, `sizes.json` |
 | L5 | the air on the second blade, three shapes | `L5_air.py` | `L5_air.json` |
 | L6 | a turbulent wind field over the disc (IEC Kaimal spectra, IEC coherence for u, TurbSim's smooth-model default for v and w, Veers synthesis with a seeded generator the Wind tab copies), checked against its own statistics and L2's disc averaging; the rotor and the second blade solved in it with the air at its middle; reference record for `tools/check_wind.js` | `L6_wind.py` | `L6_wind.json`, `L6_wind_ref.json` |
-| L0' | the double pendulum of chapter 1: the site's Fig. 2 engine free (Lyapunov 1.51 /s), the first arm held (chaotic starts against Gamma for equal arms and for the 1 m rod at 63 m, braked and unbraked), the reduction's energy check | `portfolios-src/rotor-pendula/tools/double_pendulum.js` (Node) | `portfolios-src/rotor-pendula/data/L0_double.json` |
+| L0' | the double pendulum of chapter 1: the site's Fig. 2 engine free (Lyapunov 1.51 /s), the first arm held (chaotic starts against Gamma for equal arms and for the 1 m rod at 63 m, braked and unbraked), the reduction's energy check, once-per-turn snapshots (Poincaré sections) of equal arms and of the rod at 6 m/s with the chaotic band's edges predicted (adiabatic invariant, separatrix action) and measured | `portfolios-src/rotor-pendula/tools/double_pendulum.js` (Node) | `portfolios-src/rotor-pendula/data/L0_double.json` |
 
 Every script prints PASS/FAIL lines and exits 1 on a failure. A check tests the numerics or a derived prediction; a physical
 outcome (regular or chaotic, a gain or a loss) is printed as a result, never as a pass. Outputs are copied into
@@ -70,6 +70,9 @@ U/(6L), and the shaft torque in section 4.2 carries the first arm's weight too.
 - Double pendulum (chapter 1): free, Lambda = 1.51 /s; held, equal arms (R = 1, resonance) chaotic from 1 to 6 of 9 starts at
   every Gamma from 0.1 to 31.6; the 1 m rod at 63 m (R = 94.5) unbraked: regular in its bowl, chaotic only from the two starts
   near the hilltop above Gamma = 3.6; braked at kappa*: all exponents about -6.4 per turn.
+- Why the held rod is calm (chapter 1.5, 6 m/s, unbraked): the hilltop's height runs from 22.8 to 42.4 J once per turn; the
+  adiabatic estimate puts the chaotic band at swings beyond 139 deg (computed: 132 to 134 deg) and, passing the bowl's bottom,
+  at theta' = 18.6 to 20.6 per turn (computed: 18.4 to 20.4 forwards, 20.9 backwards); exponents in the band 1.10 to 1.23 per turn.
 - Turbulent field (L6, 8 m/s, class A, record 1): rotor speed sd 11.8 %; second blade 200 mW against 205 mW in steady sheared
   wind; streamlined 197 mW; small wing 287 mW steady (formula (7.2) +44 %, solved +40 %) and 420 mW in the gusts.
 

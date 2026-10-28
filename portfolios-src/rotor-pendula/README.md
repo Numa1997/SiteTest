@@ -38,8 +38,8 @@ From this folder:
 
 ```sh
 (cd tools && npm ci)                     # KaTeX 0.16.11, pinned by tools/package-lock.json, once
-node tools/compare.js                    # theory against the full equation on the page's own engine -> data/compare.json (Figure 7)
-node tools/double_pendulum.js            # the site's Fig. 2 double pendulum free and held -> data/L0_double.json (Figure 4, chapter 1)
+node tools/compare.js                    # theory against the full equation on the page's own engine -> data/compare.json (Figure 10)
+node tools/double_pendulum.js            # the site's Fig. 2 double pendulum free and held -> data/L0_double.json (Figures 4 and 6, chapter 1)
 node tools/check_wind.js                 # the wind page's physics block against L6_wind.py -> data/wind_check.json
 python3 tools/make_numbers.py            # data/*.json -> numbers.json (every computed number and table of the notes)
 python3 tools/check_numbers.py           # every typed number explained (tools/typed_numbers.py), every key present
