@@ -208,7 +208,7 @@ writes the free double pendulum's Lagrangian for a rigid first arm (1.1)–(1.5)
 term by term how the second arm's equation becomes (1.6) while the first arm's equation becomes the torque the rotor must supply,
 with the energy balance (1.7) and the dimensionless form (1.8); then chaos, free and held (Figure 4, from
 `tools/double_pendulum.js`, which copies `deriv()`/`rk4()` out of the site's Fig. 2 page and runs them unchanged: the free pendulum
-from 120°, 150° has Λ = 1.51 /s; held, equal arms sit at resonance R = 1 and stay chaotic from some starts at every Γ; the second
+from 120°, 150° has Λ = 1.44 /s over 3000 s; held, equal arms sit at resonance R = 1 and stay chaotic from some starts at every Γ; the second
 blade, R = 94.5, is regular in its bowl and chaotic only near the hilltop unbraked, and with the best brake every exponent is
 negative, Table 1); then why the held blade is calm (section 1.5): the landscape (1.10) whose hilltop rises and falls once per turn
 (Figure 5), the adiabatic invariant, the separatrix action (1.11) and the predicted chaotic band (1.12), checked against once-per-turn

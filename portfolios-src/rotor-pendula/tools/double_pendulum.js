@@ -28,9 +28,10 @@ const out = { page: 'public/simulations/Double Pendulum.html', m1, l1, m2, l2, g
 
 // ---- free: Lyapunov exponent and twin separation, from the page's 120, 150 degrees ------------------------------------------
 {
-  const s0 = [120 * D2R, 150 * D2R, 0, 0], E0 = energy(s0), eps = 1e-9, T = 200, every = 30;   // renormalise every 30 steps = 0.05 s
+  const s0 = [120 * D2R, 150 * D2R, 0, 0], E0 = energy(s0), eps = 1e-9, T = 3000, every = 30;  // renormalise every 30 steps = 0.05 s; 3000 s, as 200 s gave 1.51 /s, still 5 % high
   let s = s0.slice(), t2 = s0.slice(); t2[0] += eps;
   let sum = 0, n = Math.round(T / H), Emax = 0;
+  const running = [];                                            // the estimate after 500, 1000, ... s: how well it has settled
   for (let k = 1; k <= n; k++) {
     s = engine.rk4(s, H); t2 = engine.rk4(t2, H);
     if (k % every === 0) {
@@ -39,8 +40,9 @@ const out = { page: 'public/simulations/Double Pendulum.html', m1, l1, m2, l2, g
       t2 = s.map((v, i) => v + (t2[i] - v) * eps / d);
     }
     Emax = Math.max(Emax, Math.abs(energy(s) - E0));
+    if (k % Math.round(500 / H) === 0) running.push([Math.round(k * H), sum / (k * H)]);
   }
-  out.free = { lyap_per_s: sum / T, T, energy_drift_J: Emax, E0 };
+  out.free = { lyap_per_s: sum / T, T, energy_drift_J: Emax, E0, running };
   // twin 1e-3 rad away in theta1 (the page's chaos twin) and 1e-9 away, unrenormalised: the lower bob's separation (m) every 0.1 s
   const twin = d0 => {
     let p = s0.slice(), q = s0.slice(); q[0] += d0;

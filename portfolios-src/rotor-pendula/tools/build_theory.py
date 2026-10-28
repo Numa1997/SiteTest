@@ -122,7 +122,9 @@ if '$' in body:
     raise SystemExit('unmatched $ left in the source')
 
 # Equation references become links. The math is still a placeholder here, so no link can land inside it.
-body = re.sub(r'\((\d+\.\d+)\)', lambda m: f'<a href="#eq-{m.group(1)}">({m.group(1)})</a>' if m.group(1) in eq_ids else m.group(0), body)
+_link = lambda seg: re.sub(r'\((\d+\.\d+)\)', lambda m: f'<a href="#eq-{m.group(1)}">({m.group(1)})</a>' if m.group(1) in eq_ids else m.group(0), seg)
+_parts = re.split(r'(<svg.*?</svg>|<[^>]+>)', body, flags=re.S)            # not inside a tag (aria-label), not inside a figure's drawing
+body = ''.join(p_ if i % 2 else _link(p_) for i, p_ in enumerate(_parts))
 
 # Typeset every formula in one batch.
 res = subprocess.run(['node', str(TOOLS / 'katex_render.js')], input=json.dumps([{'tex': t, 'display': d} for t, d in jobs]),
