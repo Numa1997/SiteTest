@@ -3,7 +3,7 @@
    Editorial physics-journal layout: paper, ink, burgundy.
    IBM Plex Serif display · IBM Plex Sans text · IBM Plex Mono labels */
 
-@import url('../fonts/plex.css');
+@import url('../fonts/plex.css'); @font-face { font-family: 'Instrument Serif'; font-style: normal; font-weight: 400; font-display: swap; src: url('../fonts/instrument-serif/instrument-serif-400-latin.woff2') format('woff2'); } @font-face { font-family: 'Latin Modern Roman'; font-style: normal; font-weight: 400; font-display: swap; src: url('../fonts/lm/lmroman10-regular.woff2') format('woff2'); } @font-face { font-family: 'Latin Modern Roman'; font-style: italic; font-weight: 400; font-display: swap; src: url('../fonts/lm/lmroman10-italic.woff2') format('woff2'); } @font-face { font-family: 'Latin Modern Roman'; font-style: normal; font-weight: 700; font-display: swap; src: url('../fonts/lm/lmroman10-bold.woff2') format('woff2'); }
 
 :root {
   --paper: #f5f1ea;
@@ -125,7 +125,7 @@ ul {
 
 /* ================= hero ================= */
 .hero {
-  max-width: 1180px;
+  max-width: 1100px;
   margin: 0 auto;
   padding: 48px 32px 40px;
   min-height: min(100vh, 860px);
@@ -277,12 +277,12 @@ ul {
   min-width: 0;
 }
 .layout {
-  max-width: 1180px;
+  max-width: 1100px;
   margin: 0 auto;
   padding: 0 32px 80px;
   display: grid;
-  grid-template-columns: 200px minmax(0, 1fr);
-  gap: 72px;
+  grid-template-columns: 260px minmax(0, 1fr);
+  gap: 64px;
 }
 .index {
   position: sticky;
@@ -304,14 +304,14 @@ ul {
 }
 .index a {
   display: block;
-  padding: 7px 16px 7px 0;
+  padding: 9px 18px 9px 0;
   margin-right: -1px;
   border-right: 2px solid transparent;
-  font-family: var(--mono);
-  font-size: 11px;
-  letter-spacing: 0.14em;
-  text-transform: uppercase;
-  color: var(--ink-3);
+  font-family: var(--sans);
+  font-size: 16px;
+  letter-spacing: 0;
+  text-transform: none; line-height: 1.35;
+  color: var(--ink-2);
   transition:
     color 0.2s ease,
     border-color 0.2s ease,
@@ -323,16 +323,16 @@ ul {
   padding-right: 20px;
 }
 .index a.active {
-  color: var(--accent);
+  color: var(--accent); font-weight: 500;
   border-right-color: var(--accent);
 }
 .content {
   min-width: 0;
-}
+} .ix-ic { width: 1.15em; height: 1.15em; flex: none; } .ix-t { min-width: 0; } /* the index as a panel (from 981 px): ink ground, large entries with line icons, the section on screen as a wine pill with a reading bar */ @media (min-width: 981px) { .layout { grid-template-columns: 300px minmax(0, 1fr); gap: 56px; max-width: 1160px; } .index { margin-top: 112px; padding: 26px 14px 14px; background: #1c1518; border-radius: 18px; color: #f5f1ea; } .index__label { margin: 0 12px 18px; font: 500 13px/1 var(--sans); letter-spacing: 0.02em; text-transform: none; color: #b9ab98; } .index ul { border-right: 0; display: flex; flex-direction: column; gap: 4px; } .index a, .index a:hover { position: relative; display: flex; align-items: center; gap: 14px; padding: 13px 14px; margin: 0; border: 0; border-radius: 12px; font: 500 20px/1.2 var(--sans); letter-spacing: -0.01em; text-transform: none; color: #efe7db; overflow: hidden; transition: background 0.2s ease, color 0.2s ease; } .index a .ix-ic { color: #c9a8a3; } .index a:hover { background: rgba(245, 241, 234, 0.08); color: #fff; text-decoration: none; } .index a.active { background: var(--accent); color: #fff; } .index a.active .ix-ic { color: #fff; } .index a.active::after { content: ""; position: absolute; right: 0; bottom: 0; height: 3px; width: calc(var(--p, 0) * 100%); background: #f2c9c4; } .index li:has(> a:not([href^="#"])) { order: 1; } .index li:has(> a[href*="portfolios"]) { margin-top: 14px; padding-top: 14px; border-top: 1px solid rgba(245, 241, 234, 0.14); } .index a:not([href^="#"]) { font-size: 16px; font-weight: 400; color: #cfc4b5; padding-top: 10px; padding-bottom: 10px; } } @media (prefers-reduced-motion: reduce) { .index a { transition: none; } } .index a:focus-visible { outline: 2px solid #f2c9c4; outline-offset: 2px; }
 
 .section {
   padding-top: 104px;
-}
+} .content li, .content p { max-width: 34em; } .content .section__intro { max-width: 30em; }
 .section h2 {
   font-weight: 600;
   font-size: clamp(32px, 3.4vw, 46px);
@@ -439,7 +439,7 @@ ul {
 .bullets li {
   position: relative;
   padding-right: 16px;
-  font-size: 14.5px;
+  font-size: 16px;
   line-height: 1.55;
   color: var(--ink-2);
   margin-bottom: 5px;
@@ -533,7 +533,7 @@ ul {
   color: var(--accent);
 }
 .project__summary {
-  font-size: 15px;
+  font-size: 16px;
   line-height: 1.65;
   color: var(--ink-2);
   margin-bottom: 20px;
@@ -714,7 +714,7 @@ ul {
 
 /* ================= footer ================= */
 footer {
-  max-width: 1180px;
+  max-width: 1100px;
   margin: 0 auto;
   padding: 28px 32px 40px;
   display: flex;
@@ -816,7 +816,7 @@ footer a {
     margin: 0;
     border-right: 0;
     border-bottom: 2px solid transparent;
-    white-space: nowrap;
+    white-space: nowrap; font-size: 15px; font-weight: 500; display: inline-flex; align-items: center; gap: 7px;
   }
   .index a.active {
     border-bottom-color: var(--accent);

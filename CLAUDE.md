@@ -10,6 +10,11 @@ Project facts (layout, where the site runs, boundaries) are in AGENTS.md.
 - When a tool is blocked, take another road to the same source, and say which road you took.
   Example: the web search tool refuses stackoverflow.com, but the public Stack Exchange API
   (api.stackexchange.com/2.3) answers, and its "similar" endpoint matches a plain-language question.
+- Web search has many roads in this workspace; one failing (no credits, a paid plan, a block) is never the end. Try them in
+  turn before saying anything is out of reach: WebSearch and WebFetch, Exa (web_search_exa, web_fetch_exa), TinyFish
+  (search, fetch_content), Nimble, Tavily, Bright Data, Firecrawl, and the research and design connectors (Consensus,
+  Mobbin). Say which ones failed and which one answered. (Numa, 28 October 2026, after Firecrawl ran out of credits and
+  only one fallback was tried.)
 - Read primary sources whole. Download the PDF, open the source file, run the code. Never pass off a search
   summary as the source, and never cite a paper you have not read when you could have read it.
 - Measure numbers instead of estimating them. Example: the Fig. 1 field grid is 360 × 162 = 58 320 points on a
