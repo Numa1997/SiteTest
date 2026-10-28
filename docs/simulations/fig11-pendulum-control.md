@@ -135,3 +135,27 @@ flows (page and panel equal), the panel idle when closed, 0 px sideways; Save gi
 Two store attributes now show in the first section and are still English on the German and Arabic pages: the switch's symbol
 "controller on" (the site's convention for switches) and the formula "10<sup>slider</sup>" of ρ.
 
+
+## Layout and §1.1 · 28 October 2026
+
+- From 1280 px wide the page's grid has three columns: the "Take control" box (presets, target r, the four LQR
+  weights) on the left, the figures in the middle, and the side panel (Solve, playback, strut, coil, readouts) on the right.
+  Both side columns are `position: sticky` and scroll inside themselves when taller than the window, so every knob stays
+  beside the picture while the figures scroll. It is CSS only, appended to line 42 of the page's own `<style>`: the first
+  column's wrapper becomes `display: contents`, and its section and three figures are placed in the grid. No HTML moved,
+  the page keeps 1349 lines. Below 1280 px nothing changed.
+  Measured by `node notes/fig11/layout.cjs en` with the grid scrolled to the top of the window: at 1440×900 the picture is
+  100 % on screen (54 % before) and 10 of the 10 knobs stay on screen 500 px further down (1 before); at 1280×800 100 % and
+  9 of 10 (50 % and 1 before); at 1920×1080 100 % (90 % before).
+- New §1.1 "How the cart brings the chain home", with Figure 2, appended to line 287 (the end of §1). It gives the physical
+  picture the note lacked: the energy of a swing has one way out, from the chain through the strut's sideways pull (the
+  string of §6) into the cart, and from the cart through the coil into the current source; the coil pumps both ways, a little
+  more out than in on every swing. Its numbers come from `python3 notes/fig11/energy_path.py` (linear model (8), LQR (12)–(14),
+  coil clamped at 30 N, RK4): swing energy 0.102 J (chain 0.079 J, string 0.023 J); in 8 s the coil puts 2.30 J into the cart
+  and takes 2.40 J out; the string does −0.079 J on the chain and +0.102 J on the cart. Figure 2 has a wide drawing and, below
+  600 px, a tall one with the same words (`.pfig-home--wide`, `.pfig-home--tall`).
+  Checked by `node notes/fig11/note-shot.cjs en|de|ar 1400|390`: no KaTeX errors, no overlapping labels.
+- Correction in §8 (line 360): the note said that when ball 2 swings right "the cart is pulled the other way at first". The
+  gain on θ2 is negative (−201.70 at the default target, −160.9 at the hanging rest), so F = F* − K(y − y*) pushes the cart
+  towards ball 2 at once; the release above shows it, the cart running 12 cm right in 0.2 s, past the ball. The sentence now
+  says so.
