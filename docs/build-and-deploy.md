@@ -182,3 +182,15 @@ Batch E, 15 October 2026: global rg included all pages, scripts and embedded pro
 Audit repairs, 15–16 October 2026: Droplet Collection v11 (`1792108231309`) and Rotor Pendula v5 (`1792108602425`) went out through the deploy tool's inline diffs, with no front-end or network errors reported by the platform's QA. The website update that carries the four corrected notes and the copies rebuilt on KaTeX 0.16.47 is stored version `1792109157210` (v63), sent as one upload of ten files and four deletions. See [research-theory-audit.md](research-theory-audit.md).
 
 Second repairs of the theory revision, 16 October 2026: Droplet Collection v12 (`1792111079794`), Rotor Pendula v6 (`1792111084380`) and the website v64 (`1792111100165`: eight notes and both copies rebuilt), each through one upload. The platform's QA reported no front-end or network errors.
+
+## The tool list on the home page (28 October 2026)
+
+`tools/site-tools.mjs` reads the repository and writes `public/scripts/site-tools.js`, which fills the lists of the home
+page's section "How this site is made" (`index.html`, `#made`): languages counted by file type, every dependency of the
+`package.json` files, Python imports (not the standard library, not the repository's own modules), Node requires in
+`tools/`, `notes/`, `tests/` and `portfolios-src/`, the vendored KaTeX, every `@font-face` family, and the hosting config.
+Known tools get a proper name and a group; a new one it cannot name is listed under "Also found" by its package name.
+It runs as `prebuild`, so every `npm run build`, including Cloudflare's on each push to `main`, refreshes the list; on an
+error it keeps the old file and does not stop the build. `node tools/site-tools.mjs --check` says whether the committed
+file is current. The section's words are in `index.html` and are translated by `tools/i18n/build.py`; the script adds only
+names and numbers. Checked by `node notes/home/made.cjs en|de|ar` (serve `dist/`, `BASE=http://localhost:8766/`).
