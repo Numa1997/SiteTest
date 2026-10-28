@@ -253,6 +253,17 @@ details.more p { font-size: 14px; }
   --sans: var(--f-text); --mono: var(--f-mono); --serif: var(--f-display); --tex: KaTeX_Main, "Times New Roman", serif; }
 /* the panel's Read values marker layer lies over the scene, out of the flow (on the site's pages sim.css does this) */
 #stage > canvas.dp-overlay { position: absolute; inset: 0; width: 100%; height: 100%; }
+/* Every box carries an edge, a line down its left side in the colour of what it holds (docs/portfolios.md, "Boxes and their
+   edges"): wine for panels and mathematics, blue for tools and tasks, ochre for pictures, muted brown for the scene, plots,
+   tiles and folds. The scene's edge is drawn over the canvas, so the canvas keeps its size and every read-back keeps its pixels. */
+.box, .sol { border-left: 4px solid var(--wine); }
+.eq { border-left-width: 4px; }
+.tile, details.more { border-left: 3px solid var(--muted); }
+.readout { border-left: 3px solid var(--blue); }
+.stale { border-left: 3px solid var(--wine-deep); }
+.sol .picture { border-left: 3px solid var(--ochre); }
+.plot canvas, canvas#plots { border-left: 4px solid var(--muted); }
+#stage::after { content: ''; position: absolute; left: 0; top: 0; bottom: 0; width: 4px; background: var(--muted); pointer-events: none; border-radius: 8px 0 0 8px; }
 /*SIMCSS-END*/
 /* the Wind tab's own pieces */
 .legend { display: flex; flex-wrap: wrap; align-items: center; gap: 6px 14px; margin: 8px 0 0; font-size: 12.5px; color: var(--muted); }
@@ -820,8 +831,7 @@ function layout() {
   L.ix = pw - L.ir - 8; L.iy = L.ir + 8; L.zoom = (L.ir * 0.7) / sc;    // 1 m of second blade = 0.7 of the circle's radius
   S('sc', sc); S('sc2', sc2); S('cx', cx); S('cy', cy); S('ix', L.ix); S('iy', L.iy); S('ir', L.ir); S('zoom', L.zoom); S('ox2', L.ox2); S('oy2', L.oy2);
   S('karr', 3); S('karr2', 1.6);
-  const pr = pv.getBoundingClientRect();
-  pv.width = Math.round(pr.width * dpr); pv.height = Math.round(pr.height * dpr); pctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+  pv.width = Math.round(pv.clientWidth * dpr); pv.height = Math.round(pv.clientHeight * dpr);      // the drawing area, inside the border pctx.setTransform(dpr, 0, 0, dpr, 0, 0);
 }
 function cmap(v, lim) {
   let a = Math.max(-1, Math.min(1, v / lim)); const s = Math.pow(Math.abs(a), 0.85);
@@ -943,7 +953,7 @@ function draw() {
   drawPlots();
 }
 function drawPlots() {
-  const c = pctx, r = pv.getBoundingClientRect(), W = r.width, H = r.height;
+  const c = pctx, W = pv.clientWidth, H = pv.clientHeight;
   c.clearRect(0, 0, W, H); c.fillStyle = COL.paper; c.fillRect(0, 0, W, H);
   if (!hN) return;
   const rows = 4, ml = 50, mr = 10, mt = 8, gap = 6, rh = (H - mt - 22 - gap * (rows - 1)) / rows;

@@ -25,6 +25,8 @@ The house design is `DESIGN.md` of the app `droplet-collection-yl7l26` ([AGENTS.
   by `text-transform: uppercase` and wide letter spacing.
 - **Every box outlined** with a 1 px line; a wine edge (2–4 px) marks a box that holds something special (an equation, the
   abstract, an exercise). **No card shadows.**
+  The Rotor Pendula study (`portfolios-src/rotor-pendula/`, its own stylesheets) goes further: every box there carries a
+  left edge, coloured by what it holds ([portfolios.md, Boxes and their edges](portfolios.md#rotor-pendula-rotor-pendula)).
 - **Lecture notes** set like a LaTeX document: prose and symbols in Latin Modern Roman, mathematics by KaTeX, numbered
   equations on a pale ground, figures on white plates with "Figure n" captions.
 - **Colours**: paper `#f5f1ea`, ink `#1c1518`, one accent, the wine `#7a1f2b`. No colour coding of sections.

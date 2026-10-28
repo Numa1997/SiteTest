@@ -252,6 +252,17 @@ details.more p { font-size: 14px; }
   --sans: var(--f-text); --mono: var(--f-mono); --serif: var(--f-display); --tex: KaTeX_Main, "Times New Roman", serif; }
 /* the panel's Read values marker layer lies over the scene, out of the flow (on the site's pages sim.css does this) */
 #stage > canvas.dp-overlay { position: absolute; inset: 0; width: 100%; height: 100%; }
+/* Every box carries an edge, a line down its left side in the colour of what it holds (docs/portfolios.md, "Boxes and their
+   edges"): wine for panels and mathematics, blue for tools and tasks, ochre for pictures, muted brown for the scene, plots,
+   tiles and folds. The scene's edge is drawn over the canvas, so the canvas keeps its size and every read-back keeps its pixels. */
+.box, .sol { border-left: 4px solid var(--wine); }
+.eq { border-left-width: 4px; }
+.tile, details.more { border-left: 3px solid var(--muted); }
+.readout { border-left: 3px solid var(--blue); }
+.stale { border-left: 3px solid var(--wine-deep); }
+.sol .picture { border-left: 3px solid var(--ochre); }
+.plot canvas, canvas#plots { border-left: 4px solid var(--muted); }
+#stage::after { content: ''; position: absolute; left: 0; top: 0; bottom: 0; width: 4px; background: var(--muted); pointer-events: none; border-radius: 8px 0 0 8px; }
 </style>
 <link rel="stylesheet" href="../../public/styles/data.css">
 </head>
@@ -1721,7 +1732,7 @@ $('readBtn').addEventListener('click', () => {
 });
 for (const id of ['plotTh', 'plotP', 'plotK']) $(id).addEventListener('click', e => {
   if (!reading || !run || !plotMaps[id]) return;
-  const mp = plotMaps[id], rect = e.currentTarget.getBoundingClientRect(), x = e.clientX - rect.left;
+  const mp = plotMaps[id], rect = e.currentTarget.getBoundingClientRect(), x = e.clientX - rect.left - e.currentTarget.clientLeft;   // from the drawing's edge, inside the border
   const t = Math.min(1, Math.max(0, (x - mp.m.l) / (mp.w - mp.m.l - mp.m.r)));
   pins.length = 0;
   if (id === 'plotK') pins.push({ kind: 'kappa', v: mp.xr[0] * Math.pow(mp.xr[1] / mp.xr[0], t) });

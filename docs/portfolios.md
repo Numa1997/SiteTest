@@ -340,6 +340,43 @@ synthesises and runs, tab links, no sideways scroll at 360–1440 px), `node too
 against `L6_wind.py`: the same field to 2e-14, a 60 s run with every term to 3e-14, the energy book over a record) and
 `node tools/double_pendulum.js` (chapter 1's free and held double pendulum on the site's own engine, `data/L0_double.json`).
 
+**Boxes and their edges (since 28 October 2026, at Numa's request).** Every box of the study carries an **edge**: a line down its
+left side, in the colour of what the box holds, on top of its 1 px outline. It generalises the wine line the equation boxes of the
+Simulation and Wind tabs had (`.eq`) and the blue line of the concept cards. One rule, two stylesheets:
+
+| Box | Where | Edge |
+|---|---|---|
+| numbered equation (`.eqn`) | notes | 4 px wine |
+| key result (`.eqn.boxed`, also outlined in wine) | notes | 6 px wine |
+| the real model's numbers, "On our blade", worked examples (`.press`) | notes | 4 px wine |
+| links to the other tabs (`.links a`), quotations (`blockquote.quote`) | notes | 4 px wine |
+| a new idea in four ways: feel, physics, measure, maths (`.idea`) | notes | 4 px blue |
+| callouts (`.callout`), guess-first boxes (`.guess`), the contents (`nav.toc`, `details.toc-m`) | notes | 4 px blue |
+| checks (`.check`) | notes | 4 px green |
+| everyday pictures (`.picture`), warm-ups (`.warm`) | notes | 4 px ochre (`--oil-hi`) |
+| what to remember (`.remember`) | notes | 4 px ink (`--line`) |
+| problems (`.problems`) | notes | 4 px wine-deep |
+| figures (`figure.fig`), tables (`table.mt`) | notes | 4 px steel |
+| panels (`.box`) and solution cards (`.sol`) | Simulation, Wind | 4 px wine |
+| equations (`.eq`) | Simulation, Wind | 4 px wine (was 3 px) |
+| tasks (`.sol .task`) | Simulation, Wind | 3 px blue (unchanged) |
+| the Read values strip (`.readout`) | Simulation, Wind | 3 px blue |
+| number tiles (`.tile`), folds (`details.more`) | Simulation, Wind | 3 px muted brown |
+| plots (`.plot canvas`, `canvas#plots`) | Simulation, Wind | 4 px muted brown |
+| the scene (`#stage`) | Simulation, Wind | 4 px muted brown, drawn by `#stage::after` over the canvas |
+| warnings (`.stale`) | Simulation, Wind | 3 px wine-deep |
+| a picture inside a solution card (`.sol .picture`) | Simulation | 3 px ochre |
+
+The colours say what kind of thing the box holds: wine for mathematics and the model's own numbers, blue for ideas and tools, green
+for checks, ochre for everyday pictures, ink for summaries, steel or muted brown for figures, plots and tiles. Three things are not
+boxes and have no edge: the chapter panels of the notes, which are frames holding the boxes; pills and buttons (`.chip`, `.mag`,
+`.crosslinks a`, the tab bar); and the site-wide data panel (`public/styles/data.css`), which belongs to every simulation, not to
+this study. The notes' rule is one block at the end of `tools/theory_template.html`'s stylesheet, using a `--edge` property per
+box kind; the tabs' rule is one block at the end of `rotor_sim.html`'s stylesheet, which `tools/build_wind.py` copies into
+`rotor_wind.html`. Geometry is kept exact: the scene's edge is a pseudo-element drawn over the canvas, so the canvas keeps its size and
+the read-back tests their pixels; the Wind tab's plot now sizes its drawing by `clientWidth`/`clientHeight` (inside the border) rather
+than the border box, and the Simulation's plot clicks measure from inside the border (`clientLeft`).
+
 ## How to update a copy of an app
 
 1. Change the project in its own app and check it there.
