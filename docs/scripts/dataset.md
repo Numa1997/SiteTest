@@ -27,12 +27,12 @@ Anyone may read the page; only the simulation writes on it.
 
 | Concept | In the code | Example (Fig. 2, [Double Pendulum.html](../../public/simulations/Double%20Pendulum.html)) |
 |---|---|---|
-| Dataset | `new Dataset(meta)`: `title`, global `attrs`, `dims`, `vars`, `order` ([dataset.js:32-39](../../public/scripts/dataset.js#L32-L39)) | `Sim.dataset({ title: 'Double pendulum', attrs: { figure: 2, … } })` ([L406](../../public/simulations/Double%20Pendulum.html#L406)) |
-| Dimension | a name and a length in `dims` ([dataset.js:40-43](../../public/scripts/dataset.js#L40-L43)) | `ds.dim('q', 4)` ([L414](../../public/simulations/Double%20Pendulum.html#L414)) |
+| Dataset | `new Dataset(meta)`: `title`, global `attrs`, `dims`, `vars`, `order` ([dataset.js:32-39](../../public/scripts/dataset.js#L32-L39)) | `Sim.dataset({ title: 'Double pendulum', attrs: { figure: 2, … } })` ([L468](../../public/simulations/Double%20Pendulum.html#L468)) |
+| Dimension | a name and a length in `dims` ([dataset.js:40-43](../../public/scripts/dataset.js#L40-L43)) | `ds.dim('q', 4)` ([L476](../../public/simulations/Double%20Pendulum.html#L476)) |
 | Array variable | `{ name, dims, type: <typed-array constructor>, attrs, data, version }` ([dataset.js:48](../../public/scripts/dataset.js#L48)) | `ds.var('y', ['q'], Float64Array, { … })` ([L415](../../public/simulations/Double%20Pendulum.html#L415)) |
-| Scalar | a variable with `dims = []`; `type` is a string | `ds.set('th1', s[0])` ([L654](../../public/simulations/Double%20Pendulum.html#L654)) |
-| Coordinate | a 1-D variable with `attrs.coordinate = true` ([dataset.js:58-62](../../public/scripts/dataset.js#L58-L62)) | `ds.coord('x', 'i', Float64Array, …)` ([Circular Wave Interference Visualization.html:547](../../public/simulations/Circular%20Wave%20Interference%20Visualization.html#L547)) |
-| Version | an integer per variable, raised on every change ([dataset.js:68](../../public/scripts/dataset.js#L68), [73](../../public/scripts/dataset.js#L73), [80](../../public/scripts/dataset.js#L80)) | `ds.touch('y')` after writing into the array in place ([L653](../../public/simulations/Double%20Pendulum.html#L653)) |
+| Scalar | a variable with `dims = []`; `type` is a string | `ds.set('th1', s[0])` ([L716](../../public/simulations/Double%20Pendulum.html#L716)) |
+| Coordinate | a 1-D variable with `attrs.coordinate = true` ([dataset.js:58-62](../../public/scripts/dataset.js#L58-L62)) | `ds.coord('x', 'i', Float64Array, …)` ([Circular Wave Interference Visualization.html:548](../../public/simulations/Circular%20Wave%20Interference%20Visualization.html#L548)) |
+| Version | an integer per variable, raised on every change ([dataset.js:68](../../public/scripts/dataset.js#L68), [73](../../public/scripts/dataset.js#L73), [80](../../public/scripts/dataset.js#L80)) | `ds.touch('y')` after writing into the array in place ([L715](../../public/simulations/Double%20Pendulum.html#L715)) |
 
 Arrays are stored flat in row-major order: element $(j, i)$ of a variable with dimensions $(J, I)$ sits at index
 $jI + i$. The first dimension is the row.
@@ -83,7 +83,7 @@ Array types and their NumPy names, from the table `DTYPES` ([dataset.js:19-24](.
 `<` means little-endian; `|` means byte order does not apply (one byte). For a scalar, `dtype()` returns the type string the
 page gave ([dataset.js:88](../../public/scripts/dataset.js#L88)). The comment names `'float'`, `'int'`, `'bool'`, `'str'` and `'uint8'`
 ([dataset.js:44](../../public/scripts/dataset.js#L44)); the pages include one `'uint8'` scalar holding an RGB
-triple ([Circular Wave Interference Visualization.html:572](../../public/simulations/Circular%20Wave%20Interference%20Visualization.html#L572)).
+triple ([Circular Wave Interference Visualization.html:573](../../public/simulations/Circular%20Wave%20Interference%20Visualization.html#L573)).
 Across the ten pages of 14 October 2026 a grep found 546 `ds.var` calls (on 29 October 2026 the eleven pages hold 757:
 `cat public/simulations/*.html | grep -o "ds\.var(" | wc -l`; the breakdown below and the attribute counts are those of 14 October): 137 arrays (127 `Float64Array`, 7 `Float32Array`, 2 `Int32Array`,
 1 `Uint8ClampedArray`) and 409 scalars (311 `'float'`, 63 `'int'`, 28 `'bool'`, 6 `'str'`, 1 `'uint8'`), plus 13
@@ -123,7 +123,7 @@ Across the ten pages of 14 October 2026 a grep found 546 `ds.var` calls (on 29 O
 | `ds.get` | [76-79](../../public/scripts/dataset.js#L76-L79) | `name` | The stored value or array, `undefined` for an unknown name. |
 | `ds.touch` | [80](../../public/scripts/dataset.js#L80) | `name` | Raises the version after an in-place write. |
 | `ds.has` | [81](../../public/scripts/dataset.js#L81) | `name` | Whether the variable exists. |
-| `ds.shape` | [82-85](../../public/scripts/dataset.js#L82-L85) | `name` | Array of dimension lengths (`[]` for a scalar). |
+| `ds.shape` | [82-84](../../public/scripts/dataset.js#L82-L84) | `name` | Array of dimension lengths (`[]` for a scalar). |
 | `ds.dtype` | [86-91](../../public/scripts/dataset.js#L86-L91) | `name` | NumPy type name of an array (`'array'` if unknown), or the scalar's type string. |
 | `ds.along` | [93-101](../../public/scripts/dataset.js#L93-L101) | `dim` | Names of all 1-D variables over `dim`, coordinates first, otherwise in declaration order. |
 | `ds.npz` | [152-172](../../public/scripts/dataset.js#L152-L172) | `extra = [{ name, bytes }]` (`bytes` a string or `Uint8Array`) | A `Blob` (`application/zip`): one `<name>.npy` per array, `dataset.json`, then the extra files. |
@@ -156,24 +156,24 @@ None. The file reacts to nothing; it runs only when a page or the data panel cal
 
 ## Contracts with other files
 
-- Must load after `sim.js`, which creates `window.Sim` afresh ([sim.js:415](../../public/scripts/sim.js#L415)); loaded
+- Must load after `sim.js`, which creates `window.Sim` afresh ([sim.js:494](../../public/scripts/sim.js#L494)); loaded
   before it, `Sim.dataset` would be wiped.
 - Each page makes exactly one store and hands it to the panel as `Sim.data.ds` (for example
   [Double Pendulum.html:769](../../public/simulations/Double%20Pendulum.html#L769)). The `Sim.dataset(...)` call of each page:
-  [Fig. 1 L526](../../public/simulations/Circular%20Wave%20Interference%20Visualization.html#L526),
-  [Fig. 2 L406](../../public/simulations/Double%20Pendulum.html#L406),
-  [Fig. 3 L561](../../public/simulations/Interactive%20Double-Slit%20Experiment%20Visualization.html#L561),
-  [Fig. 4 L747](../../public/simulations/Transverse%20and%20longitudinal%20waves.html#L747),
-  [Fig. 5 L578](../../public/simulations/water-wave.html#L578),
-  [Fig. 6 L507](../../public/simulations/wave-interference.html#L507),
-  [Fig. 7 L710](../../public/simulations/phasor-sums.html#L710),
-  [Fig. 8 L638](../../public/simulations/draw-decompose.html#L638),
-  [Fig. 9 L615](../../public/simulations/driven-oscillator.html#L615),
-  [Fig. 10 L566](../../public/simulations/wind-turbine.html#L566).
+  [Fig. 1 L527](../../public/simulations/Circular%20Wave%20Interference%20Visualization.html#L527),
+  [Fig. 2 L468](../../public/simulations/Double%20Pendulum.html#L468),
+  [Fig. 3 L562](../../public/simulations/Interactive%20Double-Slit%20Experiment%20Visualization.html#L562),
+  [Fig. 4 L748](../../public/simulations/Transverse%20and%20longitudinal%20waves.html#L748),
+  [Fig. 5 L580](../../public/simulations/water-wave.html#L580),
+  [Fig. 6 L508](../../public/simulations/wave-interference.html#L508),
+  [Fig. 7 L711](../../public/simulations/phasor-sums.html#L711),
+  [Fig. 8 L639](../../public/simulations/draw-decompose.html#L639),
+  [Fig. 9 L616](../../public/simulations/driven-oscillator.html#L616),
+  [Fig. 10 L567](../../public/simulations/wind-turbine.html#L567).
 - `datalog.js` builds a second, temporary `Dataset` for a recorded round and saves it with the same `npz`
   ([datalog.js:1278-1286](../../public/scripts/datalog.js#L1278-L1286)).
 - Each page's `Sim.live()` reads the store and formats strings for the walkthrough (for example
-  [Double Pendulum.html:684-696](../../public/simulations/Double%20Pendulum.html#L684-L696)); see [walk.md](walk.md).
+  [Double Pendulum.html:746-758](../../public/simulations/Double%20Pendulum.html#L746-L758)); see [walk.md](walk.md).
 - Each page's own documentation lists its dimensions, variables and the line where each is written
   ([../simulations/](../simulations/)).
 

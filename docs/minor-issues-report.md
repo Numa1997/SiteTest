@@ -159,7 +159,7 @@ the live site. The shortfalls found were repaired in the app first (stored versi
 **Still open, newly noticed** (left for Numa): Fig. 4's longitudinal bead 11 fails its pixel read-back at 390 px (already so at
 `bad6513`); the lecture-note SVG labels render at about 5.7 px on a 390 px phone; Fig. 7's `Sim.live()` recomputes the effective
 α (`swMorph.checked ? morph.value : 1`) instead of reading the stored value (fixed since: `Sim.live()` reads `ds.get('alpha')`,
-[phasor-sums.html:1301](../public/simulations/phasor-sums.html#L1301); the stored `alpha` is still written in the frame function
-by evaluating the same expression again, [1340](../public/simulations/phasor-sums.html#L1340), not at the line of `morphStep()`
-that uses it, [864](../public/simulations/phasor-sums.html#L864)); after A9 the last two samples of a round are two
+[phasor-sums.html:1302](../public/simulations/phasor-sums.html#L1302); the stored `alpha` is still written in the frame function
+by evaluating the same expression again, [1341](../public/simulations/phasor-sums.html#L1341), not at the line of `morphStep()`
+that uses it, [865](../public/simulations/phasor-sums.html#L865)); after A9 the last two samples of a round are two
 frames apart instead of one.

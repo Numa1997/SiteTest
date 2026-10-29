@@ -82,10 +82,10 @@ When two rules have equal specificity the later file wins, so the order of the `
 
 | Page | Order |
 |---|---|
-| [`index.html:15–16`](../index.html#L15-L16) | `site.css`, `fold.css` |
-| [`simulations.html:15–19`](../public/simulations.html#L15-L19) | `site.css`, `katex.min.css`, `paper.css`, `catalog.css`, `fold.css` |
-| [`portfolios.html:15–20`](../public/portfolios.html#L15-L20) | `site.css`, `katex.min.css`, `paper.css`, `catalog.css`, `portfolio.css`, `fold.css` |
-| each simulation page, lines 11–13 (e.g. [water-wave.html:11–13](../public/simulations/water-wave.html#L11-L13)) | `sim.css` (which first imports the fonts, `katex.min.css` and `paper.css`), `data.css`, `fold.css` |
+| [`index.html:15–15`](../index.html#L15-L15) | `site.css`, `fold.css` |
+| [`simulations.html:15–18`](../public/simulations.html#L15-L18) | `site.css`, `katex.min.css`, `paper.css`, `catalog.css`, `fold.css` |
+| [`portfolios.html:15–19`](../public/portfolios.html#L15-L19) | `site.css`, `katex.min.css`, `paper.css`, `catalog.css`, `portfolio.css`, `fold.css` |
+| each simulation page, lines 11–13 (e.g. [water-wave.html:11–12](../public/simulations/water-wave.html#L11-L12)) | `sim.css` (which first imports the fonts, `katex.min.css` and `paper.css`), `data.css`, `fold.css` |
 
 Three consequences:
 
@@ -132,8 +132,8 @@ CSS custom properties, all on `:root` unless noted.
 | `--head-h` | a section header's height, set per section | [fold.js:204–206](../public/scripts/fold.js#L204-L206) | Where level-2 headers pin. |
 | `--dp-w` | `600px`; `640px` from 1500 px | [data.css:7–8](../public/styles/data.css#L7-L8) | Data panel width. |
 | `--p`, `--c` | `50%`, `var(--accent)` on each range input | [sim.css:88](../public/styles/sim.css#L88); `--p` set by [sim.js:159](../public/scripts/sim.js#L159) | Slider fill up to the thumb. |
-| `--ar`, `--ar-m` | per figure, inline `style` | e.g. [water-wave.html:44](../public/simulations/water-wave.html#L44) | Figure aspect ratio, wide and at 900 px or less. |
-| `--d` | `(i mod 5) × 80 ms` per `.reveal` | [index.html:1220](../index.html#L1220) | Fade-in delay on the home page. |
+| `--ar`, `--ar-m` | per figure, inline `style` | e.g. [water-wave.html:45](../public/simulations/water-wave.html#L45) | Figure aspect ratio, wide and at 900 px or less. |
+| `--d` | `(i mod 5) × 80 ms` per `.reveal` | [index.html:1216](../index.html#L1216) | Fade-in delay on the home page. |
 
 Five formerly undefined tokens were replaced with their unchanged fallback colours: `--on-accent` (`#fff`, in catalog.css and
 data.css), `--tag-soft` (`#f0eae0`, data.css), `--tan-line` (`#e3cfa3`, [data.css:294](../public/styles/data.css#L294)),
@@ -150,7 +150,7 @@ the tokens, base type, links and the `footer`; `catalog.css` changes `--serif` a
 
 | Purpose | Selectors | Lines |
 |---|---|---|
-| Fonts and tokens | `@import`, `:root` | [5–30](../public/styles/site.css#L5-L30) |
+| Fonts and tokens | `@import`, `:root` | [6–30](../public/styles/site.css#L6-L30) |
 | Base | `box-sizing`; `html` (paper ground, `scroll-behavior: smooth`, `scroll-padding-top: 24px`); `body` (Plex Sans 16 px / 1.6); `h1, h2, h3` in `--serif` (no weight given, so the browser's bold applies unless a rule sets one); `p`, `a`, `::selection`, `ul` reset | [32–85](../public/styles/site.css#L32-L85) |
 | Utilities | `.skip-link`, `.mono`, `.tag`, `.tag--soft` | [86–123](../public/styles/site.css#L86-L123) |
 | Hero | `.hero` (two columns 1.15 : 0.85), `.hero__name` (60–124 px, weight 600), `.hero__tag` (serif italic), `.hero__meta`, `.hero__cta`; staggered `rise` animation | [126–180](../public/styles/site.css#L126-L180) |
@@ -161,20 +161,20 @@ the tokens, base type, links and the `footer`; `catalog.css` changes `--serif` a
 | Timeline (Positions) | `.timeline`, `.timeline__line` (grows over 1.8 s), `.entry` with its dot `::before`, `.entry--current` (pulsing `halo`), `.entry__when`, `.entry h3`, `.entry__org`, `.bullets` | [365–458](../public/styles/site.css#L365-L458) |
 | Ledger (Education) | `.ledger`, `.row` (150 px date column), `.row__when`, `.row__org`, `.row__note` | [461–497](../public/styles/site.css#L461-L497) |
 | Research cards | `.projects` (two columns, one at 980 px and below), `.project` (flat outlined card with a wine top edge), `.project__status`, linked title, `.project__summary`, `.project__open` | [500–560](../public/styles/site.css#L500-L560) |
-| Plates | `.plates` (two columns), `.plate`, `.plate__fig` (156 px, `--grid` at 20 px), the SVG stroke classes `.ink .acc .soft .grey .acc-fill .grey-fill`, `.plate__body`, `.plate__num`, `.plate__tags`, `.plate__launch`, `.plates__more` | [563–691](../public/styles/site.css#L563-L691) |
-| Skills | `.skills` (two columns of `dt` 128 px + `dd`), `.lvl` | [694–725](../public/styles/site.css#L694-L725) |
-| Footer | `footer` (mono 11 px, both ends justified) | [728–743](../public/styles/site.css#L728-L743) |
-| Motion | `@keyframes rise`, `fade`, `halo`; `.js .reveal` (hidden and 18 px low until `.is-visible`, delayed by `--d`) | [746–785](../public/styles/site.css#L746-L785) |
+| Plates | `.plates` (two columns), `.plate`, `.plate__fig` (156 px, `--grid` at 20 px), the SVG stroke classes `.ink .acc .soft .grey .acc-fill .grey-fill`, `.plate__body`, `.plate__num`, `.plate__tags`, `.plate__launch`, `.plates__more` | [550–678](../public/styles/site.css#L550-L678) |
+| Skills | `.skills` (two columns of `dt` 128 px + `dd`), `.lvl` | [681–712](../public/styles/site.css#L681-L712) |
+| Footer | `footer` (mono 11 px, both ends justified) | [715–730](../public/styles/site.css#L715-L730) |
+| Motion | `@keyframes rise`, `fade`, `halo`; `.js .reveal` (hidden and 18 px low until `.is-visible`, delayed by `--d`) | [733–769](../public/styles/site.css#L733-L769) |
 
 **Breakpoints.**
 
 | Width | What changes | Lines |
 |---|---|---|
-| ≤ 980 px | Hero one column (figure at most 540 px wide); layout one column; the index becomes a full-width sticky bar at the top (translucent paper, blurred, links in a row that scrolls sideways, active link underlined); sections 64 px apart; research, plates and skills one column; ledger rows one column. | [788–857](../public/styles/site.css#L788-L857) |
-| ≤ 480 px | Name at 56 px; skill rows stack. | [858–866](../public/styles/site.css#L858-L866) |
-| reduced motion | No smooth scrolling, no hero animation, no halo, reveals shown at once. | [867–889](../public/styles/site.css#L867-L889) |
+| ≤ 980 px | Hero one column (figure at most 540 px wide); layout one column; the index becomes a full-width sticky bar at the top (translucent paper, blurred, links in a row that scrolls sideways, active link underlined); sections 64 px apart; research, plates and skills one column; ledger rows one column. | [772–841](../public/styles/site.css#L772-L841) |
+| ≤ 480 px | Name at 56 px; skill rows stack. | [842–850](../public/styles/site.css#L842-L850) |
+| reduced motion | No smooth scrolling, no hero animation, no halo, reveals shown at once. | [851–873](../public/styles/site.css#L851-L873) |
 
-**Print** ([890–903](../public/styles/site.css#L890-L903)): hides `.index`, `.skip-link`, `.btn` and the hero `.figure`;
+**Print** ([874–887](../public/styles/site.css#L874-L887)): hides `.index`, `.skip-link`, `.btn` and the hero `.figure`;
 white page; no minimum hero height.
 
 **After fold.js.** On the home page every `.section` becomes a fold, and [fold.css:123–127](../public/styles/fold.css#L123-L127)
@@ -204,7 +204,7 @@ Expand / Collapse pair gets a 104 px top margin to match it ([fold.css:124](../p
 | Equation and error blocks | `.eq` is used by the walkthrough; `.sim-error` remains for errors; `@keyframes open` for the walkthrough card. | [131–134](../public/styles/sim.css#L131-L134) |
 | Walkthrough | `.walk`, `.walk__head`, `.walk__frame` (220 px step list + card), `.walk__steps` buttons, `.walk__card`, `.walk__code pre` (ink ground), highlighted symbols `.k` / `.k.is-lit`, `.walk__table` with a pulsing "now" dot, `.walk__val`, `.walk__nav` ([scripts/walk.md](scripts/walk.md)) | [137–176](../public/styles/sim.css#L137-L176) |
 | Skip link, footer, keyframes | `.skip-link`, `.sim-foot`, `rise`, `fade` | [191–192](../public/styles/sim.css#L191-L192), [205–210](../public/styles/sim.css#L205-L210) |
-| Caption maths | `html:not(.tex-ready) .stage__cap .tx` hidden until KaTeX has set it (sim.js adds `tex-ready`, at the latest after 4 s, [sim.js:389–392](../public/scripts/sim.js#L389-L392)) | [228–229](../public/styles/sim.css#L228-L229) |
+| Caption maths | `html:not(.tex-ready) .stage__cap .tx` hidden until KaTeX has set it (sim.js adds `tex-ready`, at the latest after 4 s, [sim.js:468–471](../public/scripts/sim.js#L468-L471)) | [228–229](../public/styles/sim.css#L228-L229) |
 
 **Breakpoints.**
 
@@ -253,7 +253,7 @@ after `site.css` and `paper.css` ([catalog.css:3](../public/styles/catalog.css#L
 
 | Purpose | Selectors | Lines |
 |---|---|---|
-| Fonts, title face | `@import` (Instrument Serif, Plex Sans, Plex Mono), `--serif` | [7–11](../public/styles/catalog.css#L7-L11) |
+| Fonts, title face | `@import` (Instrument Serif, Plex Sans, Plex Mono), `--serif` | [8–11](../public/styles/catalog.css#L8-L11) |
 | Accessibility | `.visually-hidden` (the search label) | [13–20](../public/styles/catalog.css#L13-L20) |
 | Top bar | `.cat-top`, its `nav` | [23–46](../public/styles/catalog.css#L23-L46) |
 | Masthead | `.cat`, `.cat__head` (text + stats), `.cat__kicker`, `h1` (56–104 px, weight 400), `.cat__lede`, `.cat__stats` | [49–105](../public/styles/catalog.css#L49-L105) |
@@ -261,15 +261,15 @@ after `site.css` and `paper.css` ([catalog.css:3](../public/styles/catalog.css#L
 | Entries | `.cat__list` (two-column grid), `.entry` (outlined card), `.entry__fig`, `.entry__plate` (8 : 5, white, outlined), `.entry__ph` (the "Fig. n" stand-in under the image), `.entry__cap`, `.entry__body`, `.entry__kicker`, `.entry h3`, `.entry__abs`, `.entry__eq` (hidden until `.is-typeset`), `.entry__facts`, `.entry__tags`, `.entry__foot`, `.entry__open`, `.entry__note` | [232–408](../public/styles/catalog.css#L232-L408) |
 | Empty state | `.cat__empty` (dashed outline), its button | [411–429](../public/styles/catalog.css#L411-L429) |
 | The four parts | `.cat__anatomy`, `.cat__parts` (two columns, one at 640 px and below; no native markers, margin or padding), `.cat__parts > li` (20 px padding; 18 px vertically and 16 px horizontally on phones; 3 px wine top edge) | [432–475](../public/styles/catalog.css#L432-L475) |
-| No-JS notice | `.cat-error` | [476–480](../public/styles/catalog.css#L476-L480) |
+| No-JS notice | `.cat-error` | [480–484](../public/styles/catalog.css#L480-L484) |
 
 **Breakpoints.**
 
 | Width | What changes | Lines |
 |---|---|---|
-| ≤ 860 px | Masthead one column; list one column. | [488–496](../public/styles/catalog.css#L488-L496) |
-| ≤ 640 px | 16 px side padding; the bar becomes `search count` over one sideways-scrolling row of all chips, the year chips after a thin line; smaller stats, lede and entry text; facts stack; parts one column; footer padding. | [497–564](../public/styles/catalog.css#L497-L564) |
-| no hover (touch) | The `/` hint is hidden. | [565–572](../public/styles/catalog.css#L565-L572) |
+| ≤ 860 px | Masthead one column; list one column. | [487–495](../public/styles/catalog.css#L487-L495) |
+| ≤ 640 px | 16 px side padding; the bar becomes `search count` over one sideways-scrolling row of all chips, the year chips after a thin line; smaller stats, lede and entry text; facts stack; parts one column; footer padding. | [496–566](../public/styles/catalog.css#L496-L566) |
+| no hover (touch) | The `/` hint is hidden. | [567–574](../public/styles/catalog.css#L567-L574) |
 
 No print rules.
 
@@ -378,7 +378,7 @@ repeats those two rules for the folded layout. Keep each pair in step.
 [`src/styles.css`](../src/styles.css) holds the three Tailwind directives and a placeholder comment. Its only importer is
 [`src/main.ts:1`](../src/main.ts#L1), and no page loads `src/main.ts`: `index.html` has no module script
 (its only scripts are [index.html:21–23](../index.html#L21-L23), [625](../index.html#L625) and
-[626–1257](../index.html#L626-L1257)), and a search of the repository for `main.ts` finds only that file's own line. On the live
+[622–1253](../index.html#L622-L1253)), and a search of the repository for `main.ts` finds only that file's own line. On the live
 site <https://phyeinusul.com> `/src/main.ts` answers 404, on the AppDeploy copy 403 (measured 20 October 2026). The file comes from the app template; see
 [build-and-deploy.md](build-and-deploy.md#build-files-at-the-root).
 
@@ -389,10 +389,10 @@ site <https://phyeinusul.com> `/src/main.ts` answers 404, on the AppDeploy copy 
 1. **The home page breaks the house design.** It loads only `site.css`, whose `--serif` is IBM Plex Serif
    ([site.css:22](../public/styles/site.css#L22); the header comment at [site.css:3](../public/styles/site.css#L3) says so) and
    whose titles are weight 600 ([138](../public/styles/site.css#L138), [336](../public/styles/site.css#L336),
-   [423](../public/styles/site.css#L423), [483](../public/styles/site.css#L483), [556](../public/styles/site.css#L556),
-   [635](../public/styles/site.css#L635)). Its cards carry shadows ([222](../public/styles/site.css#L222),
-   [512](../public/styles/site.css#L512), [575](../public/styles/site.css#L575); hover shadows at
-   [203](../public/styles/site.css#L203), [537](../public/styles/site.css#L537), [583](../public/styles/site.css#L583)).
+   [423](../public/styles/site.css#L423), [483](../public/styles/site.css#L483), [523](../public/styles/site.css#L523),
+   [622](../public/styles/site.css#L622)). Its cards carry shadows ([222](../public/styles/site.css#L222),
+   [512](../public/styles/site.css#L512), [562](../public/styles/site.css#L562); hover shadows at
+   [203](../public/styles/site.css#L203), [537](../public/styles/site.css#L537), [570](../public/styles/site.css#L570)).
    When this note was written, AGENTS.md and CLAUDE.md asked for titles at weight 400 only. Since Numa's decision of
    20 October 2026 ([minor-issues-report.md](minor-issues-report.md)) they say what the code does: Instrument Serif at weight
    400 on the simulation, catalog and Portfolios pages, IBM Plex Serif at weight 600 on the home page alone (AGENTS.md, "Design";
@@ -405,7 +405,7 @@ site <https://phyeinusul.com> `/src/main.ts` answers 404, on the AppDeploy copy 
    ([fold.css:25](../public/styles/fold.css#L25)), the simulation figure and panel ([sim.css:67](../public/styles/sim.css#L67),
    [77](../public/styles/sim.css#L77)), the walkthrough card
    ([sim.css:149](../public/styles/sim.css#L149)), the data tab and panel ([data.css:17](../public/styles/data.css#L17),
-   [30](../public/styles/data.css#L30)). Measured on the Portfolios page and on Fig. 5.
+   [31](../public/styles/data.css#L31)). Measured on the Portfolios page and on Fig. 5.
 3. **`sim.css` repeats the tokens of `site.css`** ([sim.css:11–32](../public/styles/sim.css#L11-L32) against
    [site.css:7–30](../public/styles/site.css#L7-L30)); a colour change must be made in both.
 4. Fixed on 2026-10-15: globally unused note/derivation selectors, `.sc`, `.pbox--star` and `.cat__intro` were removed (commit [8982ed3](https://github.com/Numa1997/SiteTest/commit/8982ed35e78161ea7cdd82ae1794f44ccfe39f3c)). The claim that `.eq` is unused was not reproduced: sim.js generates `class="eq walk__eq"`, and the embedded rotor project also uses it. `.eq` and the walkthrough’s `open` animation remain. Cross-file catalog overrides and the protected home wine-bar rule remain.

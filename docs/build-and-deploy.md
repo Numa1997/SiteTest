@@ -88,7 +88,7 @@ default-src 'self'; script-src 'self' 'unsafe-inline' https://v2.appdeploy.ai ht
 **What it does and does not do.** It stops code and data from any other site: an injected `<script src="https://…">` would not
 load, and nothing the page knows could be sent elsewhere. It does not stop code written inside a page (`'unsafe-inline'`); that
 door is closed a different way: no reader input ever reaches a page as HTML. The catalog's search text is written with
-`textContent` ([simulations.html:285](../public/simulations.html#L285)), its field and year filters must match a
+`textContent` ([simulations.html:286](../public/simulations.html#L286)), its field and year filters must match a
 fixed list, and the `#…` part of an address is only used to look up an element by its `id` ([fold.js:260–263](../public/scripts/fold.js#L260-L263)). Checked by reading every place the pages take input from the address, on 16 October 2026.
 
 **Outside the AppDeploy app's reach** (on phyeinusul.com these are set: `public/_headers`, see [usul.md](usul.md#security)). Response headers (`Strict-Transport-Security`, `X-Frame-Options`, `X-Content-Type-Options`, a

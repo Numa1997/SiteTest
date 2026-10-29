@@ -10,13 +10,13 @@
 Links written `Lnnn` point into the page file; links to other files carry the file name.
 
 The reader sees a pendulum hanging from a pivot at the centre of the figure: an upper rod with a burgundy bob and a lower rod with
-a second burgundy bob, inside a faint protractor marked every 30° ([L43–51](../../public/simulations/Double%20Pendulum.html#L43-L51), [L569–595](../../public/simulations/Double%20Pendulum.html#L569-L595)). Released from θ₁ = 120°,
-θ₂ = 150° ([L84](../../public/simulations/Double%20Pendulum.html#L84), [L88](../../public/simulations/Double%20Pendulum.html#L88)), it whips round in a way that never repeats; the lower bob leaves a burgundy trail that fades in about
+a second burgundy bob, inside a faint protractor marked every 30° ([L44–52](../../public/simulations/Double%20Pendulum.html#L44-L52), [L631–657](../../public/simulations/Double%20Pendulum.html#L631-L657)). Released from θ₁ = 120°,
+θ₂ = 150° ([L85](../../public/simulations/Double%20Pendulum.html#L85), [L89](../../public/simulations/Double%20Pendulum.html#L89)), it whips round in a way that never repeats; the lower bob leaves a burgundy trail that fades in about
 1.4 s. A switch adds a pale "chaos twin" started 0.001 rad away, and a readout shows how far the two lower bobs have drifted apart
-([L61](../../public/simulations/Double%20Pendulum.html#L61), [L103](../../public/simulations/Double%20Pendulum.html#L103)). Sliders set the mass and length ratios, the starting angles and angular velocities, and a time scale
-([L62–97](../../public/simulations/Double%20Pendulum.html#L62-L97)); every slider except the time scale restarts the motion. The caption shows the simulated time; readouts show the
-energy and its numerical drift ([L49](../../public/simulations/Double%20Pendulum.html#L49), [L100–104](../../public/simulations/Double%20Pendulum.html#L100-L104)). Under the figure sit the Data panel and the Read values switch (added by
-`datalog.js`), the walkthrough ([L381](../../public/simulations/Double%20Pendulum.html#L381)) and the lecture note ([L114–379](../../public/simulations/Double%20Pendulum.html#L114-L379)).
+([L62](../../public/simulations/Double%20Pendulum.html#L62), [L104](../../public/simulations/Double%20Pendulum.html#L104)). Sliders set the mass and length ratios, the starting angles and angular velocities, and a time scale
+([L63–98](../../public/simulations/Double%20Pendulum.html#L63-L98)); every slider except the time scale restarts the motion. The caption shows the simulated time; readouts show the
+energy and its numerical drift ([L50](../../public/simulations/Double%20Pendulum.html#L50), [L101–105](../../public/simulations/Double%20Pendulum.html#L101-L105)). Under the figure sit the Data panel and the Read values switch (added by
+`datalog.js`), the walkthrough ([L443](../../public/simulations/Double%20Pendulum.html#L443)) and the lecture note ([L115–441](../../public/simulations/Double%20Pendulum.html#L115-L441)).
 
 ## The physics in one picture
 
@@ -26,21 +26,21 @@ high, it flips over the top and never settles. Nothing is random, yet two starts
 places within seconds: deterministic chaos ([L141–142](../../public/simulations/Double%20Pendulum.html#L141-L142)).
 
 **Model.** Two point masses on rigid, massless rods in one vertical plane, no friction, no air ([L182](../../public/simulations/Double%20Pendulum.html#L182)). The upper mass and rod
-are fixed at m₁ = 1 kg and l₁ = 1 m, and g = 9.81 m/s² ([L396](../../public/simulations/Double%20Pendulum.html#L396), [L184](../../public/simulations/Double%20Pendulum.html#L184)). Angles are measured from the downward vertical,
-counter-clockwise positive ([L176](../../public/simulations/Double%20Pendulum.html#L176)). The state is the four numbers (θ₁, θ₂, ω₁, ω₂) ([L184](../../public/simulations/Double%20Pendulum.html#L184)). The note derives the equations
-of motion from the Lagrangian L = T − V with the Euler–Lagrange equation (note §4, [L201–222](../../public/simulations/Double%20Pendulum.html#L201-L222)).
+are fixed at m₁ = 1 kg and l₁ = 1 m, and g = 9.81 m/s² ([L458](../../public/simulations/Double%20Pendulum.html#L458), [L184](../../public/simulations/Double%20Pendulum.html#L184)). Angles are measured from the downward vertical,
+counter-clockwise positive ([L177](../../public/simulations/Double%20Pendulum.html#L177)). The state is the four numbers (θ₁, θ₂, ω₁, ω₂) ([L184](../../public/simulations/Double%20Pendulum.html#L184)). The note derives the equations
+of motion from the Lagrangian L = T − V with the Euler–Lagrange equation (note §4, [L217–263](../../public/simulations/Double%20Pendulum.html#L217-L263)).
 
-**What the code evaluates.** Positions, with the pivot at the origin and y upward ([L662–663](../../public/simulations/Double%20Pendulum.html#L662-L663)):
+**What the code evaluates.** Positions, with the pivot at the origin and y upward ([L724–725](../../public/simulations/Double%20Pendulum.html#L724-L725)):
 
 $$x_1 = l_1\sin\theta_1, \quad y_1 = -l_1\cos\theta_1, \quad x_2 = x_1 + l_2\sin\theta_2, \quad y_2 = y_1 - l_2\cos\theta_2 .$$
 
-Energy, in `energy(s)` ([L499–504](../../public/simulations/Double%20Pendulum.html#L499-L504)):
+Energy, in `energy(s)` ([L561–566](../../public/simulations/Double%20Pendulum.html#L561-L566)):
 
 $$T = \tfrac12 (m_1+m_2)\,l_1^2\omega_1^2 + \tfrac12 m_2 l_2^2\omega_2^2 + m_2 l_1 l_2\,\omega_1\omega_2\cos(\theta_1-\theta_2),$$
 
 $$V = -(m_1+m_2)\,g\,l_1\cos\theta_1 - m_2\,g\,l_2\cos\theta_2 .$$
 
-The angular accelerations, in `deriv(s)` ([L479–487](../../public/simulations/Double%20Pendulum.html#L479-L487)), with $\delta = \theta_1 - \theta_2$ and the shared denominator
+The angular accelerations, in `deriv(s)` ([L541–549](../../public/simulations/Double%20Pendulum.html#L541-L549)), with $\delta = \theta_1 - \theta_2$ and the shared denominator
 $D' = 2m_1 + m_2 - m_2\cos 2\delta = 2(m_1 + m_2\sin^2\delta) > 0$:
 
 $$\alpha_1 = \frac{-g(2m_1+m_2)\sin\theta_1 - m_2 g\sin(\theta_1 - 2\theta_2) - 2\sin\delta\; m_2\left(\omega_2^2 l_2 + \omega_1^2 l_1\cos\delta\right)}{l_1 D'},$$
@@ -49,12 +49,12 @@ $$\alpha_2 = \frac{2\sin\delta\left(\omega_1^2 l_1 (m_1+m_2) + g(m_1+m_2)\cos\th
 
 These are eq. (9) of the note ([L220](../../public/simulations/Double%20Pendulum.html#L220)), obtained from the linear system (8) by Cramer's rule ([L218–219](../../public/simulations/Double%20Pendulum.html#L218-L219)). With the state
 $s = (\theta_1, \theta_2, \omega_1, \omega_2)$ and $F(s) = (\omega_1, \omega_2, \alpha_1, \alpha_2)$, one step of the classical
-fourth-order Runge–Kutta method with $h = 1/600$ s is ([L488–498](../../public/simulations/Double%20Pendulum.html#L488-L498), note eq. 13):
+fourth-order Runge–Kutta method with $h = 1/600$ s is ([L550–560](../../public/simulations/Double%20Pendulum.html#L550-L560), note eq. 13):
 
 $$k_1 = F(s), \quad k_2 = F\left(s + \tfrac h2 k_1\right), \quad k_3 = F\left(s + \tfrac h2 k_2\right), \quad k_4 = F(s + h k_3), \quad s \leftarrow s + \tfrac h6\left(k_1 + 2k_2 + 2k_3 + k_4\right).$$
 
 The energy check divides the change of $E = T + V$ by the depth of the potential well, not by $E_0$, which can be near zero
-([L660](../../public/simulations/Double%20Pendulum.html#L660)):
+([L722](../../public/simulations/Double%20Pendulum.html#L722)):
 
 $$\varepsilon = \frac{E - E_0}{(m_1+m_2)\,g\,l_1 + m_2\,g\,l_2} .$$
 
@@ -63,166 +63,166 @@ $$\varepsilon = \frac{E - E_0}{(m_1+m_2)\,g\,l_1 + m_2\,g\,l_2} .$$
 | $\theta_1, \theta_2$ | `state[0]`, `state[1]` | rad | rod angles from the downward vertical |
 | $\omega_1, \omega_2$ | `state[2]`, `state[3]` | rad/s | angular velocities |
 | $\alpha_1, \alpha_2$ | `a1`, `a2` in `deriv` | rad/s² | angular accelerations |
-| $m_1, m_2$ | `m1 = 1`, `m2` | kg | bob masses; m₂ = m₁ e^slider ([L531](../../public/simulations/Double%20Pendulum.html#L531)) |
-| $l_1, l_2$ | `l1 = 1`, `l2` | m | rod lengths; l₂ = l₁ e^slider ([L532](../../public/simulations/Double%20Pendulum.html#L532)) |
-| $g$ | `g = 9.81` | m/s² | gravitational acceleration ([L396](../../public/simulations/Double%20Pendulum.html#L396)) |
+| $m_1, m_2$ | `m1 = 1`, `m2` | kg | bob masses; m₂ = m₁ e^slider ([L593](../../public/simulations/Double%20Pendulum.html#L593)) |
+| $l_1, l_2$ | `l1 = 1`, `l2` | m | rod lengths; l₂ = l₁ e^slider ([L594](../../public/simulations/Double%20Pendulum.html#L594)) |
+| $g$ | `g = 9.81` | m/s² | gravitational acceleration ([L458](../../public/simulations/Double%20Pendulum.html#L458)) |
 | $\delta$, $D'$ | `d`, `den` | rad, kg | angle between the rods, shared denominator |
-| $h$ | `H = 1/600` | s | RK4 step ([L396](../../public/simulations/Double%20Pendulum.html#L396)) |
+| $h$ | `H = 1/600` | s | RK4 step ([L458](../../public/simulations/Double%20Pendulum.html#L458)) |
 | $T, V, E, E_0$ | `kin`, `pot`, `energy(s)`, `E0` | J | kinetic, potential, total, total at restart |
 | $\varepsilon$ | `drift` | 1 | relative energy error |
-| $\sigma$ | `scale` | px/m | pixels per metre on screen ([L513](../../public/simulations/Double%20Pendulum.html#L513)) |
-| $d$ | `sep` | m | distance between the two lower bobs (twin on) ([L670](../../public/simulations/Double%20Pendulum.html#L670)) |
+| $\sigma$ | `scale` | px/m | pixels per metre on screen ([L575](../../public/simulations/Double%20Pendulum.html#L575)) |
+| $d$ | `sep` | m | distance between the two lower bobs (twin on) ([L732](../../public/simulations/Double%20Pendulum.html#L732)) |
 
 ## How the code computes it
 
-**State.** `state` is a plain array [θ₁, θ₂, ω₁, ω₂] in rad and rad/s, set from the sliders by `restart()` ([L533](../../public/simulations/Double%20Pendulum.html#L533)); `twin`
-is a second such array or `null` ([L534](../../public/simulations/Double%20Pendulum.html#L534)). `E0` is the energy at restart ([L535](../../public/simulations/Double%20Pendulum.html#L535)); `simT` the simulated time and `acc` the
-unspent time carried between frames ([L536–537](../../public/simulations/Double%20Pendulum.html#L536-L537)). `m2` and `l2` come from the log-scale sliders ([L531–532](../../public/simulations/Double%20Pendulum.html#L531-L532)). For drawing:
-`ox`, `oy` (pivot) and `scale` (σ) ([L511–513](../../public/simulations/Double%20Pendulum.html#L511-L513)); the offscreen canvas `trail` that holds the fading path ([L400](../../public/simulations/Double%20Pendulum.html#L400)); `prevA`,
-`prevB`, the last pixel positions of the two pendulums, from which the next trail segment starts ([L402](../../public/simulations/Double%20Pendulum.html#L402)). `frames`, `lastN` and
-`fps` count frames, steps and frame rate ([L402–403](../../public/simulations/Double%20Pendulum.html#L402-L403)).
+**State.** `state` is a plain array [θ₁, θ₂, ω₁, ω₂] in rad and rad/s, set from the sliders by `restart()` ([L595](../../public/simulations/Double%20Pendulum.html#L595)); `twin`
+is a second such array or `null` ([L596](../../public/simulations/Double%20Pendulum.html#L596)). `E0` is the energy at restart ([L597](../../public/simulations/Double%20Pendulum.html#L597)); `simT` the simulated time and `acc` the
+unspent time carried between frames ([L598–599](../../public/simulations/Double%20Pendulum.html#L598-L599)). `m2` and `l2` come from the log-scale sliders ([L593–594](../../public/simulations/Double%20Pendulum.html#L593-L594)). For drawing:
+`ox`, `oy` (pivot) and `scale` (σ) ([L573–575](../../public/simulations/Double%20Pendulum.html#L573-L575)); the offscreen canvas `trail` that holds the fading path ([L462](../../public/simulations/Double%20Pendulum.html#L462)); `prevA`,
+`prevB`, the last pixel positions of the two pendulums, from which the next trail segment starts ([L464](../../public/simulations/Double%20Pendulum.html#L464)). `frames`, `lastN` and
+`fps` count frames, steps and frame rate ([L464–465](../../public/simulations/Double%20Pendulum.html#L464-L465)).
 
-**Method.** RK4 at a fixed step h = 1/600 s ([L396](../../public/simulations/Double%20Pendulum.html#L396)). Its error over a fixed time scales as h⁴ (note §7, [L348](../../public/simulations/Double%20Pendulum.html#L348)). A fixed step
+**Method.** RK4 at a fixed step h = 1/600 s ([L458](../../public/simulations/Double%20Pendulum.html#L458)). Its error over a fixed time scales as h⁴ (note §7, [L348](../../public/simulations/Double%20Pendulum.html#L348)). A fixed step
 keeps the accuracy the same on every device ([pendulum.js:86](../../public/scripts/walk/pendulum.js#L86)). RK4 does not conserve energy exactly, so the page shows the
-drift ε rather than hiding it ([L351](../../public/simulations/Double%20Pendulum.html#L351), [L639](../../public/simulations/Double%20Pendulum.html#L639)). `rk4()` builds separate trial arrays `s2`, `s3`, `s4`, so all four slopes of a
-step use their own input state ([L489–496](../../public/simulations/Double%20Pendulum.html#L489-L496)). Measured in this session (1280 px window, default start, headless Chromium):
+drift ε rather than hiding it ([L351](../../public/simulations/Double%20Pendulum.html#L351), [L701](../../public/simulations/Double%20Pendulum.html#L701)). `rk4()` builds separate trial arrays `s2`, `s3`, `s4`, so all four slopes of a
+step use their own input state ([L551–558](../../public/simulations/Double%20Pendulum.html#L551-L558)). Measured in this session (1280 px window, default start, headless Chromium):
 ε = −2.4 × 10⁻⁸ at t = 21.2 s, n = 10 steps per frame at 60 frames per second, energy E = 18.3057 J. Over the first 20 s
 of the default start ε stays within ±5 × 10⁻⁸: read once per frame, its largest value is +4.710 × 10⁻⁸ at t = 8.665 s, its most negative
 −3.185 × 10⁻⁸ at t = 19.13 s; step by step the peak is +5.0006 × 10⁻⁸ at t = 8.668 s (derivation check, 20 October 2026). The step is fixed,
 but which step a frame reads depends on the frame times, so the per-frame peak varies between runs (4.71 to 4.99 × 10⁻⁸). The note says so ([L351](../../public/simulations/Double%20Pendulum.html#L351)).
 
-**Sub-stepping.** Real frame times are uneven; the physics advances in equal steps. Each frame ([L700–703](../../public/simulations/Double%20Pendulum.html#L700-L703)):
+**Sub-stepping.** Real frame times are uneven; the physics advances in equal steps. Each frame ([L762–765](../../public/simulations/Double%20Pendulum.html#L762-L765)):
 
 $$\tau \leftarrow \tau + \Delta t \cdot \text{speed}, \qquad n = \min\left(\lfloor \tau / h \rfloor, 600\right), \qquad \tau \leftarrow \min(\tau - n h,\ h).$$
 
 The leftover τ carries into the next frame, so simulated time keeps pace with wall time × speed. Because `Sim.clock` caps Δt at
-0.05 s ([sim.js:179](../../public/scripts/sim.js#L179)) and the time scale is at most 1.5 ([L64](../../public/simulations/Double%20Pendulum.html#L64)), n is at most 46; the 600 cap never acts (see Notes).
+0.05 s ([sim.js:179](../../public/scripts/sim.js#L179)) and the time scale is at most 1.5 ([L65](../../public/simulations/Double%20Pendulum.html#L65)), n is at most 46; the 600 cap never acts (see Notes).
 
-**Frame loop** (`Sim.clock` callback, [L698–722](../../public/simulations/Double%20Pendulum.html#L698-L722)), in order:
-1. If playing (Δt > 0): accumulate τ and choose n ([L700–703](../../public/simulations/Double%20Pendulum.html#L700-L703)). For each of the n steps: advance `state` by one RK4 step, compute
-   its pixel positions, paint one trail segment of the lower bob, remember the position ([L705–708](../../public/simulations/Double%20Pendulum.html#L705-L708)); if the twin is on, do the
-   same for it in rose ([L709–714](../../public/simulations/Double%20Pendulum.html#L709-L714)); add h to the simulated time ([L715](../../public/simulations/Double%20Pendulum.html#L715)). After the steps, dim the whole trail layer ([L717](../../public/simulations/Double%20Pendulum.html#L717)).
-2. `diagnostics(dt)`: write every derived number of the final state into the store ([L719](../../public/simulations/Double%20Pendulum.html#L719), [L650–680](../../public/simulations/Double%20Pendulum.html#L650-L680)).
-3. `draw()`: clear, protractor, trail image, twin, pendulum, pivot dot ([L720](../../public/simulations/Double%20Pendulum.html#L720), [L622–632](../../public/simulations/Double%20Pendulum.html#L622-L632)).
-4. Every sixth frame, `readouts()` copies E, ε, the separation and the time from the store into the DOM ([L721](../../public/simulations/Double%20Pendulum.html#L721), [L635–646](../../public/simulations/Double%20Pendulum.html#L635-L646)).
+**Frame loop** (`Sim.clock` callback, [L760–784](../../public/simulations/Double%20Pendulum.html#L760-L784)), in order:
+1. If playing (Δt > 0): accumulate τ and choose n ([L762–765](../../public/simulations/Double%20Pendulum.html#L762-L765)). For each of the n steps: advance `state` by one RK4 step, compute
+   its pixel positions, paint one trail segment of the lower bob, remember the position ([L767–770](../../public/simulations/Double%20Pendulum.html#L767-L770)); if the twin is on, do the
+   same for it in rose ([L771–776](../../public/simulations/Double%20Pendulum.html#L771-L776)); add h to the simulated time ([L777](../../public/simulations/Double%20Pendulum.html#L777)). After the steps, dim the whole trail layer ([L779](../../public/simulations/Double%20Pendulum.html#L779)).
+2. `diagnostics(dt)`: write every derived number of the final state into the store ([L781](../../public/simulations/Double%20Pendulum.html#L781), [L712–742](../../public/simulations/Double%20Pendulum.html#L712-L742)).
+3. `draw()`: clear, protractor, trail image, twin, pendulum, pivot dot ([L782](../../public/simulations/Double%20Pendulum.html#L782), [L684–694](../../public/simulations/Double%20Pendulum.html#L684-L694)).
+4. Every sixth frame, `readouts()` copies E, ε, the separation and the time from the store into the DOM ([L783](../../public/simulations/Double%20Pendulum.html#L783), [L697–708](../../public/simulations/Double%20Pendulum.html#L697-L708)).
 
 While paused `Sim.clock` passes Δt = 0 ([sim.js:181](../../public/scripts/sim.js#L181)): no steps and no fading, but `diagnostics()` and `draw()` still run every
 frame.
 
-**`diagnostics(dt)`** ([L650–680](../../public/simulations/Double%20Pendulum.html#L650-L680)) evaluates `deriv` once more at the final state for the stored slopes and accelerations
-([L651](../../public/simulations/Double%20Pendulum.html#L651)), copies the state ([L652](../../public/simulations/Double%20Pendulum.html#L652)), then computes and stores δ, D′, α₁, α₂ ([L655](../../public/simulations/Double%20Pendulum.html#L655)), the mass matrix M and its determinant,
-the generalised momenta ([L656–658](../../public/simulations/Double%20Pendulum.html#L656-L658)), E, V, T = E − V, L = T − V and ε ([L659–661](../../public/simulations/Double%20Pendulum.html#L659-L661)), positions and speeds in metres
-([L662–665](../../public/simulations/Double%20Pendulum.html#L662-L665)), bob pixel positions ([L666–667](../../public/simulations/Double%20Pendulum.html#L666-L667)), the twin separation ([L668–676](../../public/simulations/Double%20Pendulum.html#L668-L676)) and the clock and integrator scalars
-([L677–679](../../public/simulations/Double%20Pendulum.html#L677-L679)).
+**`diagnostics(dt)`** ([L712–742](../../public/simulations/Double%20Pendulum.html#L712-L742)) evaluates `deriv` once more at the final state for the stored slopes and accelerations
+([L713](../../public/simulations/Double%20Pendulum.html#L713)), copies the state ([L714](../../public/simulations/Double%20Pendulum.html#L714)), then computes and stores δ, D′, α₁, α₂ ([L717](../../public/simulations/Double%20Pendulum.html#L717)), the mass matrix M and its determinant,
+the generalised momenta ([L718–720](../../public/simulations/Double%20Pendulum.html#L718-L720)), E, V, T = E − V, L = T − V and ε ([L721–723](../../public/simulations/Double%20Pendulum.html#L721-L723)), positions and speeds in metres
+([L724–727](../../public/simulations/Double%20Pendulum.html#L724-L727)), bob pixel positions ([L728–729](../../public/simulations/Double%20Pendulum.html#L728-L729)), the twin separation ([L730–738](../../public/simulations/Double%20Pendulum.html#L730-L738)) and the clock and integrator scalars
+([L739–741](../../public/simulations/Double%20Pendulum.html#L739-L741)).
 
 **Precomputation and caching.** There are no tables. The path is cached as pixels on the `trail` canvas: one segment per RK4
-step ([L550–559](../../public/simulations/Double%20Pendulum.html#L550-L559)), dimmed each frame by drawing a black rectangle in `destination-out` mode with alpha 1 − 0.992^(60Δt)
-([L560–567](../../public/simulations/Double%20Pendulum.html#L560-L567), [L717](../../public/simulations/Double%20Pendulum.html#L717)), so its brightness halves every ln 2/(60 × 0.00803) ≈ 1.4 s of real time ([L359](../../public/simulations/Double%20Pendulum.html#L359)). The trail is cleared
-by Restart, by any restarting slider, by *Clear trail* and by a resize ([L516–521](../../public/simulations/Double%20Pendulum.html#L516-L521), [L541](../../public/simulations/Double%20Pendulum.html#L541), [L548](../../public/simulations/Double%20Pendulum.html#L548), [L527](../../public/simulations/Double%20Pendulum.html#L527)). `layout()`
-recomputes pivot and scale on restart and on resize ([L510–515](../../public/simulations/Double%20Pendulum.html#L510-L515)).
+step ([L612–621](../../public/simulations/Double%20Pendulum.html#L612-L621)), dimmed each frame by drawing a black rectangle in `destination-out` mode with alpha 1 − 0.992^(60Δt)
+([L622–629](../../public/simulations/Double%20Pendulum.html#L622-L629), [L779](../../public/simulations/Double%20Pendulum.html#L779)), so its brightness halves every ln 2/(60 × 0.00803) ≈ 1.4 s of real time ([L359](../../public/simulations/Double%20Pendulum.html#L359)). The trail is cleared
+by Restart, by any restarting slider, by *Clear trail* and by a resize ([L578–583](../../public/simulations/Double%20Pendulum.html#L578-L583), [L603](../../public/simulations/Double%20Pendulum.html#L603), [L610](../../public/simulations/Double%20Pendulum.html#L610), [L589](../../public/simulations/Double%20Pendulum.html#L589)). `layout()`
+recomputes pivot and scale on restart and on resize ([L572–577](../../public/simulations/Double%20Pendulum.html#L572-L577)).
 
 ## Function map
 
-All functions live in the one inline script ([L392–866](../../public/simulations/Double%20Pendulum.html#L392-L866)), wrapped in an immediately invoked function ([L393](../../public/simulations/Double%20Pendulum.html#L393)).
+All functions live in the one inline script ([L454–928](../../public/simulations/Double%20Pendulum.html#L454-L928)), wrapped in an immediately invoked function ([L455](../../public/simulations/Double%20Pendulum.html#L455)).
 
 | Function | Lines | What it does |
 |---|---|---|
-| `ratio(v)` | [L467](../../public/simulations/Double%20Pendulum.html#L467) | Slider text for the log-scale ratios: e^v as "1.00", or "1/x.xx" below 1. |
-| `deg(v)` | [L468](../../public/simulations/Double%20Pendulum.html#L468) | Slider text in degrees. |
-| `rads(v)` | [L469](../../public/simulations/Double%20Pendulum.html#L469) | Slider text in rad/s. |
-| speed slider `format` | [L477](../../public/simulations/Double%20Pendulum.html#L477) | Slider text "1.00×". |
-| `deriv(s)` | [L479–487](../../public/simulations/Double%20Pendulum.html#L479-L487) | Right-hand side of the equations: returns (ω₁, ω₂, α₁, α₂). |
-| `rk4(s, h)` | [L488–498](../../public/simulations/Double%20Pendulum.html#L488-L498) | One classical RK4 step; returns the new state. |
-| `energy(s)` | [L499–504](../../public/simulations/Double%20Pendulum.html#L499-L504) | Kinetic plus potential energy of a state. |
-| `pos(s)` | [L505–508](../../public/simulations/Double%20Pendulum.html#L505-L508) | Pixel positions [x₁, y₁, x₂, y₂] of the two bobs (screen y down). |
-| `layout()` | [L510–515](../../public/simulations/Double%20Pendulum.html#L510-L515) | Pivot at the canvas centre; σ = (min(W, H)/2 − 34)/(l₁ + l₂); stores them. |
-| `clearTrail()` | [L516–521](../../public/simulations/Double%20Pendulum.html#L516-L521) | Clears the trail canvas and forgets the last positions. |
-| `resize()` | [L522–528](../../public/simulations/Double%20Pendulum.html#L522-L528) | Fits the canvas, resizes the trail canvas to device pixels, `layout()`, `clearTrail()`. |
-| `restart()` | [L530–542](../../public/simulations/Double%20Pendulum.html#L530-L542) | Reads all sliders, sets m₂, l₂, the state, the twin, E₀, t = 0, τ = 0; stores the parameters; `layout()`, `clearTrail()`. |
-| twin `change` handler | [L543–546](../../public/simulations/Double%20Pendulum.html#L543-L546) | Twin on: copy of the current state with θ₁ + 0.001 rad; off: `null`. |
-| Restart / Clear handlers | [L547–548](../../public/simulations/Double%20Pendulum.html#L547-L548) | `restart` and `clearTrail`. |
-| `segment(prev, p, colour, width)` | [L550–559](../../public/simulations/Double%20Pendulum.html#L550-L559) | One trail segment of the lower bob. |
-| `fade(a)` | [L560–567](../../public/simulations/Double%20Pendulum.html#L560-L567) | Removes the fraction a of every trail pixel's opacity. |
-| `drawProtractor()` | [L569–595](../../public/simulations/Double%20Pendulum.html#L569-L595) | Outer circle at l₁ + l₂, dashed circle at l₁, ticks and labels every 30°. |
-| `drawPendulum(s, ghost)` | [L597–620](../../public/simulations/Double%20Pendulum.html#L597-L620) | Rods and bobs; bob 1 radius 8 px, bob 2 radius clamp(8 ∛(m₂/m₁), 4, 17) px; ghost = twin in rose. |
-| `draw()` | [L622–632](../../public/simulations/Double%20Pendulum.html#L622-L632) | One picture, in painting order. |
-| `readouts()` | [L635–646](../../public/simulations/Double%20Pendulum.html#L635-L646) | Caption time, E, ε and the separation, read from the store. |
-| `diagnostics(dt)` | [L650–680](../../public/simulations/Double%20Pendulum.html#L650-L680) | Writes the store (above). |
-| `f4(v, u)` | [L683](../../public/simulations/Double%20Pendulum.html#L683) | Four-decimal formatting for `Sim.live`. |
-| `Sim.live()` | [L684–696](../../public/simulations/Double%20Pendulum.html#L684-L696) | Strings for the walkthrough's "Now" column, read from the store. |
-| clock callback | [L698–722](../../public/simulations/Double%20Pendulum.html#L698-L722) | The frame loop above. |
+| `ratio(v)` | [L529](../../public/simulations/Double%20Pendulum.html#L529) | Slider text for the log-scale ratios: e^v as "1.00", or "1/x.xx" below 1. |
+| `deg(v)` | [L530](../../public/simulations/Double%20Pendulum.html#L530) | Slider text in degrees. |
+| `rads(v)` | [L531](../../public/simulations/Double%20Pendulum.html#L531) | Slider text in rad/s. |
+| speed slider `format` | [L539](../../public/simulations/Double%20Pendulum.html#L539) | Slider text "1.00×". |
+| `deriv(s)` | [L541–549](../../public/simulations/Double%20Pendulum.html#L541-L549) | Right-hand side of the equations: returns (ω₁, ω₂, α₁, α₂). |
+| `rk4(s, h)` | [L550–560](../../public/simulations/Double%20Pendulum.html#L550-L560) | One classical RK4 step; returns the new state. |
+| `energy(s)` | [L561–566](../../public/simulations/Double%20Pendulum.html#L561-L566) | Kinetic plus potential energy of a state. |
+| `pos(s)` | [L567–570](../../public/simulations/Double%20Pendulum.html#L567-L570) | Pixel positions [x₁, y₁, x₂, y₂] of the two bobs (screen y down). |
+| `layout()` | [L572–577](../../public/simulations/Double%20Pendulum.html#L572-L577) | Pivot at the canvas centre; σ = (min(W, H)/2 − 34)/(l₁ + l₂); stores them. |
+| `clearTrail()` | [L578–583](../../public/simulations/Double%20Pendulum.html#L578-L583) | Clears the trail canvas and forgets the last positions. |
+| `resize()` | [L584–590](../../public/simulations/Double%20Pendulum.html#L584-L590) | Fits the canvas, resizes the trail canvas to device pixels, `layout()`, `clearTrail()`. |
+| `restart()` | [L592–604](../../public/simulations/Double%20Pendulum.html#L592-L604) | Reads all sliders, sets m₂, l₂, the state, the twin, E₀, t = 0, τ = 0; stores the parameters; `layout()`, `clearTrail()`. |
+| twin `change` handler | [L605–608](../../public/simulations/Double%20Pendulum.html#L605-L608) | Twin on: copy of the current state with θ₁ + 0.001 rad; off: `null`. |
+| Restart / Clear handlers | [L609–610](../../public/simulations/Double%20Pendulum.html#L609-L610) | `restart` and `clearTrail`. |
+| `segment(prev, p, colour, width)` | [L612–621](../../public/simulations/Double%20Pendulum.html#L612-L621) | One trail segment of the lower bob. |
+| `fade(a)` | [L622–629](../../public/simulations/Double%20Pendulum.html#L622-L629) | Removes the fraction a of every trail pixel's opacity. |
+| `drawProtractor()` | [L631–657](../../public/simulations/Double%20Pendulum.html#L631-L657) | Outer circle at l₁ + l₂, dashed circle at l₁, ticks and labels every 30°. |
+| `drawPendulum(s, ghost)` | [L659–682](../../public/simulations/Double%20Pendulum.html#L659-L682) | Rods and bobs; bob 1 radius 8 px, bob 2 radius clamp(8 ∛(m₂/m₁), 4, 17) px; ghost = twin in rose. |
+| `draw()` | [L684–694](../../public/simulations/Double%20Pendulum.html#L684-L694) | One picture, in painting order. |
+| `readouts()` | [L697–708](../../public/simulations/Double%20Pendulum.html#L697-L708) | Caption time, E, ε and the separation, read from the store. |
+| `diagnostics(dt)` | [L712–742](../../public/simulations/Double%20Pendulum.html#L712-L742) | Writes the store (above). |
+| `f4(v, u)` | [L745](../../public/simulations/Double%20Pendulum.html#L745) | Four-decimal formatting for `Sim.live`. |
+| `Sim.live()` | [L746–758](../../public/simulations/Double%20Pendulum.html#L746-L758) | Strings for the walkthrough's "Now" column, read from the store. |
+| clock callback | [L760–784](../../public/simulations/Double%20Pendulum.html#L760-L784) | The frame loop above. |
 | `sliderCheck(input, label, scale)` | [L727](../../public/simulations/Double%20Pendulum.html#L727) | Check record for a slider value, optionally × π/180. |
-| `bobPixel(name, x, y)` | [L728–737](../../public/simulations/Double%20Pendulum.html#L728-L737) | Reads the screen pixel at a bob's stored centre; passes for burgundy, or for the pivot dot or bob 2's rim painted over it; tests alpha first. |
-| `alphaCheck(which)` | [L753–759](../../public/simulations/Double%20Pendulum.html#L753-L759) | Recomputes α₁ or α₂ from the stored state. |
-| `stateInputs()` | [L760](../../public/simulations/Double%20Pendulum.html#L760) | The stored state and parameters, as check inputs. |
-| `kinetic()`, `potential()` | [L761–762](../../public/simulations/Double%20Pendulum.html#L761-L762) | T and V recomputed from the stored state. |
-| `nearest(x, y)` | [L763–767](../../public/simulations/Double%20Pendulum.html#L763-L767) | Bob 2, bob 1 or the pivot, whichever is nearest within 28 px. |
-| `Sim.data.playing`, `.play` | [L770](../../public/simulations/Double%20Pendulum.html#L770), [L853](../../public/simulations/Double%20Pendulum.html#L853) | Clock state and start, for the round recorder. |
-| `Sim.data.rowLabel`, `.colLabel`, `.at` | [L780–782](../../public/simulations/Double%20Pendulum.html#L780-L782) | Row, column and unit labels for the arrays `y`, `dydt`, `y_twin`, `M`. |
-| `Sim.data.probe(x, y)` | [L783](../../public/simulations/Double%20Pendulum.html#L783) | What lies at a point: `{ what: … }` with 'bob 2', 'bob 1' or 'pivot', from `nearest()`. |
-| `Sim.data.inspect(ref)` | [L784–790](../../public/simulations/Double%20Pendulum.html#L784-L790) | Values for a bob (angle, ω, α, position, speed, momentum, separation) or for the whole system at the pivot. |
-| `Sim.data.locate(name, idx)` | [L791–796](../../public/simulations/Double%20Pendulum.html#L791-L796) | Where a state component or M is drawn. |
-| `Sim.data.check.*` | [L798–841](../../public/simulations/Double%20Pendulum.html#L798-L841) | One function per variable: formula, stored inputs, recomputed value. |
-| `Sim.data.drawn.*` | [L844–849](../../public/simulations/Double%20Pendulum.html#L844-L849) | Pixel read-back at bob 1 and bob 2 for θ and the pixel positions. |
+| `bobPixel(name, x, y)` | [L790–799](../../public/simulations/Double%20Pendulum.html#L790-L799) | Reads the screen pixel at a bob's stored centre; passes for burgundy, or for the pivot dot or bob 2's rim painted over it; tests alpha first. |
+| `alphaCheck(which)` | [L815–821](../../public/simulations/Double%20Pendulum.html#L815-L821) | Recomputes α₁ or α₂ from the stored state. |
+| `stateInputs()` | [L822](../../public/simulations/Double%20Pendulum.html#L822) | The stored state and parameters, as check inputs. |
+| `kinetic()`, `potential()` | [L823–824](../../public/simulations/Double%20Pendulum.html#L823-L824) | T and V recomputed from the stored state. |
+| `nearest(x, y)` | [L825–829](../../public/simulations/Double%20Pendulum.html#L825-L829) | Bob 2, bob 1 or the pivot, whichever is nearest within 28 px. |
+| `Sim.data.playing`, `.play` | [L832](../../public/simulations/Double%20Pendulum.html#L832), [L915](../../public/simulations/Double%20Pendulum.html#L915) | Clock state and start, for the round recorder. |
+| `Sim.data.rowLabel`, `.colLabel`, `.at` | [L842–844](../../public/simulations/Double%20Pendulum.html#L842-L844) | Row, column and unit labels for the arrays `y`, `dydt`, `y_twin`, `M`. |
+| `Sim.data.probe(x, y)` | [L845](../../public/simulations/Double%20Pendulum.html#L845) | What lies at a point: `{ what: … }` with 'bob 2', 'bob 1' or 'pivot', from `nearest()`. |
+| `Sim.data.inspect(ref)` | [L846–852](../../public/simulations/Double%20Pendulum.html#L846-L852) | Values for a bob (angle, ω, α, position, speed, momentum, separation) or for the whole system at the pivot. |
+| `Sim.data.locate(name, idx)` | [L853–858](../../public/simulations/Double%20Pendulum.html#L853-L858) | Where a state component or M is drawn. |
+| `Sim.data.check.*` | [L860–903](../../public/simulations/Double%20Pendulum.html#L860-L903) | One function per variable: formula, stored inputs, recomputed value. |
+| `Sim.data.drawn.*` | [L906–911](../../public/simulations/Double%20Pendulum.html#L906-L911) | Pixel read-back at bob 1 and bob 2 for θ and the pixel positions. |
 | `Sim.data.round.label`, `.length`, `.point` | [L851–852](../../public/simulations/Double%20Pendulum.html#L851-L852) | What one recorded round is. |
 
 The twin screen scalars `x1_twin_px`, `y1_twin_px`, `x2_twin_px`, `y2_twin_px` are written immediately after `pos(twin)` in `diagnostics()`; all four are undefined when the twin is off. They are shown in the Chaos twin group. Check recomputes the screen mapping from the stored twin state, lengths, pivot and scale; the picture read-back tests alpha before the rose colour and explains overlap by the main bobs.
 
 | Additional function | Line | Role |
 |---|---|---|
-| `twinPositionCheck(which)` | [738](../../public/simulations/Double%20Pendulum.html#L738) | Independent mapping of stored twin angles to a screen coordinate. |
-| `twinPixel(bob)` | [745](../../public/simulations/Double%20Pendulum.html#L745) | Alpha-first pixel read-back at the twin bob centre. |
+| `twinPositionCheck(which)` | [800](../../public/simulations/Double%20Pendulum.html#L800) | Independent mapping of stored twin angles to a screen coordinate. |
+| `twinPixel(bob)` | [807](../../public/simulations/Double%20Pendulum.html#L807) | Alpha-first pixel read-back at the twin bob centre. |
 
 ## Controls
 
 | Control | Element id | Range / default | What it changes in the code |
 |---|---|---|---|
-| Pause / Play | `play` | starts playing unless the reader prefers reduced motion ([sim.js:177](../../public/scripts/sim.js#L177)) | `Sim.playButton` toggles the clock ([L723](../../public/simulations/Double%20Pendulum.html#L723)). |
-| Restart | `restart` | — | `restart()` from the current slider values ([L547](../../public/simulations/Double%20Pendulum.html#L547), [L530–542](../../public/simulations/Double%20Pendulum.html#L530-L542)). |
-| Clear trail | `clear` | — | `clearTrail()` ([L548](../../public/simulations/Double%20Pendulum.html#L548)). |
-| Chaos twin | `twin` (checkbox) | off ([L61](../../public/simulations/Double%20Pendulum.html#L61)) | On: twin = current state with θ₁ + 0.001 rad, so mid-run it starts from where the pendulum is now; off: no twin ([L543–546](../../public/simulations/Double%20Pendulum.html#L543-L546)). Restart re-creates it from the starting state ([L534](../../public/simulations/Double%20Pendulum.html#L534)). |
-| Time scale | `speed` | 0.25–1.5, step 0.05, default 1 ([L64](../../public/simulations/Double%20Pendulum.html#L64)) | Read every frame as simulated seconds per real second ([L700](../../public/simulations/Double%20Pendulum.html#L700)); does not restart. |
-| Mass ratio m₂/m₁ | `mass` | −2.3 to 2.3, step 0.05, default 0 ([L72](../../public/simulations/Double%20Pendulum.html#L72)); m₂ = e^slider kg, 0.100–9.97 kg | `restart()` ([L471](../../public/simulations/Double%20Pendulum.html#L471), [L531](../../public/simulations/Double%20Pendulum.html#L531)). |
-| Length ratio l₂/l₁ | `length` | −1.6 to 1.6, step 0.05, default 0 ([L76](../../public/simulations/Double%20Pendulum.html#L76)); l₂ = e^slider m, 0.202–4.95 m | `restart()` ([L472](../../public/simulations/Double%20Pendulum.html#L472), [L532](../../public/simulations/Double%20Pendulum.html#L532)); also changes σ. |
-| Angle θ₁ | `th1` | −180° to 180°, step 1°, default 120° ([L84](../../public/simulations/Double%20Pendulum.html#L84)) | `restart()`; converted to rad once ([L533](../../public/simulations/Double%20Pendulum.html#L533)). |
-| Angle θ₂ | `th2` | −180° to 180°, step 1°, default 150° ([L88](../../public/simulations/Double%20Pendulum.html#L88)) | `restart()`. |
-| Angular velocity ω₁ | `w1` | −5 to 5 rad/s, step 0.1, default 0 ([L92](../../public/simulations/Double%20Pendulum.html#L92)) | `restart()`. |
-| Angular velocity ω₂ | `w2` | −5 to 5 rad/s, step 0.1, default 0 ([L96](../../public/simulations/Double%20Pendulum.html#L96)) | `restart()`. |
+| Pause / Play | `play` | starts playing unless the reader prefers reduced motion ([sim.js:177](../../public/scripts/sim.js#L177)) | `Sim.playButton` toggles the clock ([L785](../../public/simulations/Double%20Pendulum.html#L785)). |
+| Restart | `restart` | — | `restart()` from the current slider values ([L609](../../public/simulations/Double%20Pendulum.html#L609), [L592–604](../../public/simulations/Double%20Pendulum.html#L592-L604)). |
+| Clear trail | `clear` | — | `clearTrail()` ([L610](../../public/simulations/Double%20Pendulum.html#L610)). |
+| Chaos twin | `twin` (checkbox) | off ([L62](../../public/simulations/Double%20Pendulum.html#L62)) | On: twin = current state with θ₁ + 0.001 rad, so mid-run it starts from where the pendulum is now; off: no twin ([L605–608](../../public/simulations/Double%20Pendulum.html#L605-L608)). Restart re-creates it from the starting state ([L596](../../public/simulations/Double%20Pendulum.html#L596)). |
+| Time scale | `speed` | 0.25–1.5, step 0.05, default 1 ([L65](../../public/simulations/Double%20Pendulum.html#L65)) | Read every frame as simulated seconds per real second ([L762](../../public/simulations/Double%20Pendulum.html#L762)); does not restart. |
+| Mass ratio m₂/m₁ | `mass` | −2.3 to 2.3, step 0.05, default 0 ([L73](../../public/simulations/Double%20Pendulum.html#L73)); m₂ = e^slider kg, 0.100–9.97 kg | `restart()` ([L533](../../public/simulations/Double%20Pendulum.html#L533), [L593](../../public/simulations/Double%20Pendulum.html#L593)). |
+| Length ratio l₂/l₁ | `length` | −1.6 to 1.6, step 0.05, default 0 ([L77](../../public/simulations/Double%20Pendulum.html#L77)); l₂ = e^slider m, 0.202–4.95 m | `restart()` ([L534](../../public/simulations/Double%20Pendulum.html#L534), [L594](../../public/simulations/Double%20Pendulum.html#L594)); also changes σ. |
+| Angle θ₁ | `th1` | −180° to 180°, step 1°, default 120° ([L85](../../public/simulations/Double%20Pendulum.html#L85)) | `restart()`; converted to rad once ([L595](../../public/simulations/Double%20Pendulum.html#L595)). |
+| Angle θ₂ | `th2` | −180° to 180°, step 1°, default 150° ([L89](../../public/simulations/Double%20Pendulum.html#L89)) | `restart()`. |
+| Angular velocity ω₁ | `w1` | −5 to 5 rad/s, step 0.1, default 0 ([L93](../../public/simulations/Double%20Pendulum.html#L93)) | `restart()`. |
+| Angular velocity ω₂ | `w2` | −5 to 5 rad/s, step 0.1, default 0 ([L97](../../public/simulations/Double%20Pendulum.html#L97)) | `restart()`. |
 
-Readouts: `r-e` shows E to three decimals in J ([L638](../../public/simulations/Double%20Pendulum.html#L638)); `r-drift` shows ε with one decimal in exponent form, or "0" below
-10⁻¹² ([L639](../../public/simulations/Double%20Pendulum.html#L639)); `r-sep` shows the separation in m, or "twin off" ([L640–645](../../public/simulations/Double%20Pendulum.html#L640-L645)); `cap-t` in the caption shows t to 0.1 s
-([L637](../../public/simulations/Double%20Pendulum.html#L637)). The caption also carries "RK4, h = 1/600 s" typeset by KaTeX ([L48](../../public/simulations/Double%20Pendulum.html#L48), [sim.js:384–390](../../public/scripts/sim.js#L384-L390)). Measured with the twin
+Readouts: `r-e` shows E to three decimals in J ([L700](../../public/simulations/Double%20Pendulum.html#L700)); `r-drift` shows ε with one decimal in exponent form, or "0" below
+10⁻¹² ([L701](../../public/simulations/Double%20Pendulum.html#L701)); `r-sep` shows the separation in m, or "twin off" ([L702–707](../../public/simulations/Double%20Pendulum.html#L702-L707)); `cap-t` in the caption shows t to 0.1 s
+([L699](../../public/simulations/Double%20Pendulum.html#L699)). The caption also carries "RK4, h = 1/600 s" typeset by KaTeX ([L49](../../public/simulations/Double%20Pendulum.html#L49), [sim.js:463–469](../../public/scripts/sim.js#L463-L469)). Measured with the twin
 on from the default start: separation 2.456 m after t = 6.03 s.
 
 ## What the page writes into the data store
 
-The store is created by `Sim.dataset({ title: 'Double pendulum', attrs: {...} })` ([L406](../../public/simulations/Double%20Pendulum.html#L406); see
+The store is created by `Sim.dataset({ title: 'Double pendulum', attrs: {...} })` ([L468](../../public/simulations/Double%20Pendulum.html#L468); see
 [dataset.md](../scripts/dataset.md)). Its attributes hold the fixed constants: `figure: 2`, `page`, `g`, `m1`, `l1`, `EPS`, `H`,
-`integrator` and `units: 'SI: kg, m, s, rad'`. Dimensions: `q = 4` for state vectors ([L414](../../public/simulations/Double%20Pendulum.html#L414)), `a = 2` and `b = 2` for the mass
-matrix ([L426–427](../../public/simulations/Double%20Pendulum.html#L426-L427)). The running page holds 56 variables: 4 arrays and 52 scalars. Every value is written once per frame in
+`integrator` and `units: 'SI: kg, m, s, rad'`. Dimensions: `q = 4` for state vectors ([L476](../../public/simulations/Double%20Pendulum.html#L476)), `a = 2` and `b = 2` for the mass
+matrix ([L488–489](../../public/simulations/Double%20Pendulum.html#L488-L489)). The running page holds 56 variables: 4 arrays and 52 scalars. Every value is written once per frame in
 `diagnostics()`, except the parameters (written by `restart()`) and the layout (written by `layout()`).
 
 | Array | Dims, type | Written at |
 |---|---|---|
-| `y` (state), `dydt` (ω₁, ω₂, α₁, α₂), `y_twin` (zeros while the twin is off) | (q), Float64 | [L652](../../public/simulations/Double%20Pendulum.html#L652) |
-| `M` (mass matrix, T = ½ ωᵀ M ω) | (a, b), Float64 | [L656](../../public/simulations/Double%20Pendulum.html#L656) |
+| `y` (state), `dydt` (ω₁, ω₂, α₁, α₂), `y_twin` (zeros while the twin is off) | (q), Float64 | [L714](../../public/simulations/Double%20Pendulum.html#L714) |
+| `M` (mass matrix, T = ½ ωᵀ M ω) | (a, b), Float64 | [L718](../../public/simulations/Double%20Pendulum.html#L718) |
 
 Scalars, by the place that writes them:
-- `restart()`: `m2`, `l2`, `E0`, `th1_0`, `th2_0`, `w1_0`, `w2_0` ([L538–539](../../public/simulations/Double%20Pendulum.html#L538-L539)).
-- `layout()`: `scale`, `ox`, `oy` ([L514](../../public/simulations/Double%20Pendulum.html#L514)).
-- `diagnostics()`: `th1`, `th2`, `w1`, `w2` ([L654](../../public/simulations/Double%20Pendulum.html#L654)); `delta`, `den`, `alpha1`, `alpha2` ([L655](../../public/simulations/Double%20Pendulum.html#L655)); `detM`, `p1`, `p2`
-  ([L658](../../public/simulations/Double%20Pendulum.html#L658)); `E`, `V`, `T`, `L`, `drift` ([L661](../../public/simulations/Double%20Pendulum.html#L661)); `x1`, `y1`, `x2`, `y2` ([L663](../../public/simulations/Double%20Pendulum.html#L663)); `v1`, `v2` ([L665](../../public/simulations/Double%20Pendulum.html#L665)); `x1_px`, `y1_px`,
-  `x2_px`, `y2_px` ([L667](../../public/simulations/Double%20Pendulum.html#L667)); `twin_on` ([L668](../../public/simulations/Double%20Pendulum.html#L668)); `sep`, `log10sep` ([L672](../../public/simulations/Double%20Pendulum.html#L672), or `undefined` when the twin is off, [L674](../../public/simulations/Double%20Pendulum.html#L674));
-  `t`, `steps`, `n`, `acc`, `speed` ([L677](../../public/simulations/Double%20Pendulum.html#L677)); `dt`, `fps`, `frames`, `playing` ([L679](../../public/simulations/Double%20Pendulum.html#L679)).
+- `restart()`: `m2`, `l2`, `E0`, `th1_0`, `th2_0`, `w1_0`, `w2_0` ([L600–601](../../public/simulations/Double%20Pendulum.html#L600-L601)).
+- `layout()`: `scale`, `ox`, `oy` ([L576](../../public/simulations/Double%20Pendulum.html#L576)).
+- `diagnostics()`: `th1`, `th2`, `w1`, `w2` ([L716](../../public/simulations/Double%20Pendulum.html#L716)); `delta`, `den`, `alpha1`, `alpha2` ([L717](../../public/simulations/Double%20Pendulum.html#L717)); `detM`, `p1`, `p2`
+  ([L720](../../public/simulations/Double%20Pendulum.html#L720)); `E`, `V`, `T`, `L`, `drift` ([L723](../../public/simulations/Double%20Pendulum.html#L723)); `x1`, `y1`, `x2`, `y2` ([L725](../../public/simulations/Double%20Pendulum.html#L725)); `v1`, `v2` ([L727](../../public/simulations/Double%20Pendulum.html#L727)); `x1_px`, `y1_px`,
+  `x2_px`, `y2_px` ([L729](../../public/simulations/Double%20Pendulum.html#L729)); `twin_on` ([L730](../../public/simulations/Double%20Pendulum.html#L730)); `sep`, `log10sep` ([L734](../../public/simulations/Double%20Pendulum.html#L734), or `undefined` when the twin is off, [L736](../../public/simulations/Double%20Pendulum.html#L736));
+  `t`, `steps`, `n`, `acc`, `speed` ([L739](../../public/simulations/Double%20Pendulum.html#L739)); `dt`, `fps`, `frames`, `playing` ([L741](../../public/simulations/Double%20Pendulum.html#L741)).
 
-- `diagnostics()`: `x1_twin_px`, `y1_twin_px`, `x2_twin_px`, `y2_twin_px` ([L671](../../public/simulations/Double%20Pendulum.html#L671)), immediately after `pos(twin)`; undefined while the twin is off.
+- `diagnostics()`: `x1_twin_px`, `y1_twin_px`, `x2_twin_px`, `y2_twin_px` ([L733](../../public/simulations/Double%20Pendulum.html#L733)), immediately after `pos(twin)`; undefined while the twin is off.
 
-Two stored values are derived in a particular way: T is stored as E − V ([L659](../../public/simulations/Double%20Pendulum.html#L659)), and the separation is the distance between the
-two bob-2 pixel positions divided by σ ([L670](../../public/simulations/Double%20Pendulum.html#L670)). Both equal the direct formulas up to rounding; the checks recompute them
-directly ([L820](../../public/simulations/Double%20Pendulum.html#L820), [L838](../../public/simulations/Double%20Pendulum.html#L838)).
+Two stored values are derived in a particular way: T is stored as E − V ([L721](../../public/simulations/Double%20Pendulum.html#L721)), and the separation is the distance between the
+two bob-2 pixel positions divided by σ ([L732](../../public/simulations/Double%20Pendulum.html#L732)). Both equal the direct formulas up to rounding; the checks recompute them
+directly ([L882](../../public/simulations/Double%20Pendulum.html#L882), [L900](../../public/simulations/Double%20Pendulum.html#L900)).
 
-The panel spec `Sim.data` ([L768–855](../../public/simulations/Double%20Pendulum.html#L768-L855); see [datalog.md](../scripts/datalog.md)) lists seven groups ([L771–779](../../public/simulations/Double%20Pendulum.html#L771-L779)), labels the
-rows of `y`, `dydt`, `y_twin` and `M` as θ₁, θ₂, ω₁, ω₂ ([L780–782](../../public/simulations/Double%20Pendulum.html#L780-L782)) and saves as `fig2-double-pendulum` ([L769](../../public/simulations/Double%20Pendulum.html#L769)). Its `about`
+The panel spec `Sim.data` ([L830–917](../../public/simulations/Double%20Pendulum.html#L830-L917); see [datalog.md](../scripts/datalog.md)) lists seven groups ([L833–841](../../public/simulations/Double%20Pendulum.html#L833-L841)), labels the
+rows of `y`, `dydt`, `y_twin` and `M` as θ₁, θ₂, ω₁, ω₂ ([L842–844](../../public/simulations/Double%20Pendulum.html#L842-L844)) and saves as `fig2-double-pendulum` ([L769](../../public/simulations/Double%20Pendulum.html#L769)). Its `about`
 paragraph says what differs between store and picture ([L854](../../public/simulations/Double%20Pendulum.html#L854)).
 
 **One round** (`Sim.data.round`, [L851–852](../../public/simulations/Double%20Pendulum.html#L851-L852)) is ten seconds of simulated time `t`. Columns charted: `th1`, `th2`, `w1`, `w2`,
@@ -231,9 +231,9 @@ paragraph says what differs between store and picture ([L854](../../public/simul
 restarting slider during a round puts t below the round's start and the recorder ends it ("the clock was reset",
 [datalog.js:1103](../../public/scripts/datalog.js#L1103)).
 
-**`Sim.live()`** ([L684–696](../../public/simulations/Double%20Pendulum.html#L684-L696)) returns formatted strings under the keys `t1`, `t2`, `o1`, `o2`, `d`, `den`, `m2`, `l2`, `a1`,
+**`Sim.live()`** ([L746–758](../../public/simulations/Double%20Pendulum.html#L746-L758)) returns formatted strings under the keys `t1`, `t2`, `o1`, `o2`, `d`, `den`, `m2`, `l2`, `a1`,
 `a2`, `k1`, `h`, `n`, `acc`, `t`, `kin`, `pot`, `E`, `E0`, `drift`, `scale`, `y1`; all read from the store except `h`, the constant
-`H`. The walkthrough polls it every 200 ms unless "Hold the numbers" is on ([sim.js:314–326](../../public/scripts/sim.js#L314-L326)).
+`H`. The walkthrough polls it every 200 ms unless "Hold the numbers" is on ([sim.js:391–403](../../public/scripts/sim.js#L391-L403)).
 
 **Proof, measured in this session** (1280 px window, default start, paused after about 3 s; stored value against the page's own
 `check` functions): α₁, α₂, T, V, E, ε, x₂, y₂, x₂ px, y₂ px, det M and p_θ₁ were identical, difference 0, because store and
@@ -243,88 +243,88 @@ burgundy fill.
 ## Page structure
 
 **Head** ([L3–15](../../public/simulations/Double%20Pendulum.html#L3-L15)): title "Double Pendulum Chaos · Numa Koudsie" and description ([L8–9](../../public/simulations/Double%20Pendulum.html#L8-L9)); the security policy and referrer rule
-([L5–6](../../public/simulations/Double%20Pendulum.html#L5-L6), see [build-and-deploy.md](../build-and-deploy.md#security)); stylesheets in order `../styles/sim.css`, `../styles/data.css`, `../styles/fold.css` ([L11–13](../../public/simulations/Double%20Pendulum.html#L11-L13)); an inline SVG
+([L5–6](../../public/simulations/Double%20Pendulum.html#L5-L6), see [build-and-deploy.md](../build-and-deploy.md#security)); stylesheets in order `../styles/sim.css`, `../styles/data.css`, `../styles/fold.css` ([L11–12](../../public/simulations/Double%20Pendulum.html#L11-L12)); an inline SVG
 favicon ([L14](../../public/simulations/Double%20Pendulum.html#L14)). No inline style. See [styles.md](../styles.md).
 
 **Body**, top to bottom:
 - Top bar: one span holding the Phyein Usul logo (a link to `../index.html` with `../images/phyein-usul-mark.svg`, 87 × 48) and
-  "← All simulations" ([L18](../../public/simulations/Double%20Pendulum.html#L18)), then the hand-written Fig. 1–10 links ([L17–32](../../public/simulations/Double%20Pendulum.html#L17-L32)); a `<noscript>` message ([L35](../../public/simulations/Double%20Pendulum.html#L35)).
-- Heading: "Fig. 2 · classical mechanics · chaos", the title, the lede ([L36–40](../../public/simulations/Double%20Pendulum.html#L36-L40)).
-- The figure: `#stage` with aspect ratio 4 : 3, and 1 : 1.05 below 900 px ([L44](../../public/simulations/Double%20Pendulum.html#L44), [sim.css:213–215](../../public/styles/sim.css#L213-L215)); the canvas `#pend`
-  ([L45](../../public/simulations/Double%20Pendulum.html#L45)); the caption with `cap-t` ([L47–50](../../public/simulations/Double%20Pendulum.html#L47-L50)). The canvas is transparent where nothing is drawn, so the stage's grid
-  background shows through ([L623](../../public/simulations/Double%20Pendulum.html#L623), [sim.css:68](../../public/styles/sim.css#L68)). `datalog.js` adds the Read values switch to the caption and the reading
+  "← All simulations" ([L18](../../public/simulations/Double%20Pendulum.html#L18)), then the hand-written Fig. 1–10 links ([L17–33](../../public/simulations/Double%20Pendulum.html#L17-L33)); a `<noscript>` message ([L36](../../public/simulations/Double%20Pendulum.html#L36)).
+- Heading: "Fig. 2 · classical mechanics · chaos", the title, the lede ([L37–41](../../public/simulations/Double%20Pendulum.html#L37-L41)).
+- The figure: `#stage` with aspect ratio 4 : 3, and 1 : 1.05 below 900 px ([L45](../../public/simulations/Double%20Pendulum.html#L45), [sim.css:213–215](../../public/styles/sim.css#L213-L215)); the canvas `#pend`
+  ([L46](../../public/simulations/Double%20Pendulum.html#L46)); the caption with `cap-t` ([L48–51](../../public/simulations/Double%20Pendulum.html#L48-L51)). The canvas is transparent where nothing is drawn, so the stage's grid
+  background shows through ([L685](../../public/simulations/Double%20Pendulum.html#L685), [sim.css:68](../../public/styles/sim.css#L68)). `datalog.js` adds the Read values switch to the caption and the reading
   strip under the stage ([datalog.js:874–898](../../public/scripts/datalog.js#L874-L898)).
-- The control panel ([L53–111](../../public/simulations/Double%20Pendulum.html#L53-L111)): Run (buttons, twin switch, time scale), Coupling (two ratios), Initial conditions (four
+- The control panel ([L54–112](../../public/simulations/Double%20Pendulum.html#L54-L112)): Run (buttons, twin switch, time scale), Coupling (two ratios), Initial conditions (four
   sliders), readouts, legend.
-- The lecture note `<article class="paper" id="paper">` ([L114–379](../../public/simulations/Double%20Pendulum.html#L114-L379)).
-- The walkthrough host `<section class="walk" id="walk" data-walk="pendulum">` ([L381](../../public/simulations/Double%20Pendulum.html#L381)).
-- Footer ([L384–387](../../public/simulations/Double%20Pendulum.html#L384-L387)).
-- Scripts in load order: `../scripts/fold.js`, `../scripts/sim.js`, `../scripts/dataset.js` ([L389–391](../../public/simulations/Double%20Pendulum.html#L389-L391)), the page's own script
-  ([L392–866](../../public/simulations/Double%20Pendulum.html#L392-L866)), then `../scripts/datalog.js` ([L867](../../public/simulations/Double%20Pendulum.html#L867)). `sim.js` loads `../scripts/walk/pendulum.js` from the `data-walk` key
-  ([sim.js:402–411](../../public/scripts/sim.js#L402-L411)). See [sim.md](../scripts/sim.md), [fold.md](../scripts/fold.md), [walk.md](../scripts/walk.md),
+- The lecture note `<article class="paper" id="paper">` ([L115–441](../../public/simulations/Double%20Pendulum.html#L115-L441)).
+- The walkthrough host `<section class="walk" id="walk" data-walk="pendulum">` ([L443](../../public/simulations/Double%20Pendulum.html#L443)).
+- Footer ([L446–449](../../public/simulations/Double%20Pendulum.html#L446-L449)).
+- Scripts in load order: `../scripts/fold.js`, `../scripts/sim.js`, `../scripts/dataset.js` ([L451–453](../../public/simulations/Double%20Pendulum.html#L451-L453)), the page's own script
+  ([L454–928](../../public/simulations/Double%20Pendulum.html#L454-L928)), then `../scripts/datalog.js` ([L929](../../public/simulations/Double%20Pendulum.html#L929)). `sim.js` loads `../scripts/walk/pendulum.js` from the `data-walk` key
+  ([sim.js:481–490](../../public/scripts/sim.js#L481-L490)). See [sim.md](../scripts/sim.md), [fold.md](../scripts/fold.md), [walk.md](../scripts/walk.md),
   [pages.md](../pages.md).
 
-The script ends by calling `restart()`, `resize()`, `diagnostics(0)` and registering the resize observer ([L861–864](../../public/simulations/Double%20Pendulum.html#L861-L864)).
+The script ends by calling `restart()`, `resize()`, `diagnostics(0)` and registering the resize observer ([L923–926](../../public/simulations/Double%20Pendulum.html#L923-L926)).
 
 **Walkthrough** ([pendulum.js](../../public/scripts/walk/pendulum.js), 8 steps). A script run in this session confirmed that
 every quoted line is identical, after trimming indentation, to the page line listed.
 
 | Step | Title | Page lines quoted |
 |---|---|---|
-| 1 | The state vector | [L533](../../public/simulations/Double%20Pendulum.html#L533) |
-| 2 | Angle difference and the shared denominator | [L480–481](../../public/simulations/Double%20Pendulum.html#L480-L481) |
-| 3 | Upper angular acceleration α₁ | [L482–483](../../public/simulations/Double%20Pendulum.html#L482-L483) |
-| 4 | Lower angular acceleration α₂ | [L484–486](../../public/simulations/Double%20Pendulum.html#L484-L486) |
-| 5 | One Runge–Kutta 4 step | [L489–496](../../public/simulations/Double%20Pendulum.html#L489-L496) |
-| 6 | How many steps per frame | [L700–705](../../public/simulations/Double%20Pendulum.html#L700-L705), [L715](../../public/simulations/Double%20Pendulum.html#L715) |
-| 7 | Energy as the accuracy check | [L500–503](../../public/simulations/Double%20Pendulum.html#L500-L503), [L660](../../public/simulations/Double%20Pendulum.html#L660) |
-| 8 | From angles to pixels | [L513](../../public/simulations/Double%20Pendulum.html#L513), [L506–507](../../public/simulations/Double%20Pendulum.html#L506-L507) |
+| 1 | The state vector | [L595](../../public/simulations/Double%20Pendulum.html#L595) |
+| 2 | Angle difference and the shared denominator | [L542–543](../../public/simulations/Double%20Pendulum.html#L542-L543) |
+| 3 | Upper angular acceleration α₁ | [L544–545](../../public/simulations/Double%20Pendulum.html#L544-L545) |
+| 4 | Lower angular acceleration α₂ | [L546–548](../../public/simulations/Double%20Pendulum.html#L546-L548) |
+| 5 | One Runge–Kutta 4 step | [L551–558](../../public/simulations/Double%20Pendulum.html#L551-L558) |
+| 6 | How many steps per frame | [L762–767](../../public/simulations/Double%20Pendulum.html#L762-L767), [L777](../../public/simulations/Double%20Pendulum.html#L777) |
+| 7 | Energy as the accuracy check | [L562–565](../../public/simulations/Double%20Pendulum.html#L562-L565), [L722](../../public/simulations/Double%20Pendulum.html#L722) |
+| 8 | From angles to pixels | [L575](../../public/simulations/Double%20Pendulum.html#L575), [L568–569](../../public/simulations/Double%20Pendulum.html#L568-L569) |
 
-**Lecture note** "The double pendulum: exact laws, unpredictable motion": abstract ([L119](../../public/simulations/Double%20Pendulum.html#L119)), contents ([L122–135](../../public/simulations/Double%20Pendulum.html#L122-L135)), nine
+**Lecture note** "The double pendulum: exact laws, unpredictable motion": abstract ([L119](../../public/simulations/Double%20Pendulum.html#L119)), contents ([L123–136](../../public/simulations/Double%20Pendulum.html#L123-L136)), nine
 sections, 13 numbered display equations (1)–(13) plus one unnumbered display ([L210](../../public/simulations/Double%20Pendulum.html#L210)), three inline SVG figures, one summary box,
 two exercises and three references. Section 4 carries ★.
 
 | § | id | Title | Lines | Equations | Figures, boxes |
 |---|---|---|---|---|---|
-| 1 | `p-swing` | A pendulum on a pendulum | [L137–178](../../public/simulations/Double%20Pendulum.html#L137-L178) | — | Figure 1, geometry ([L143–177](../../public/simulations/Double%20Pendulum.html#L143-L177)) |
-| 2 | `p-model` | The model | [L180–185](../../public/simulations/Double%20Pendulum.html#L180-L185) | (1) positions | — |
-| 3 | `p-energy` | Energy | [L187–199](../../public/simulations/Double%20Pendulum.html#L187-L199) | (2) velocities, (3) T, (4) V | box "Energy is conserved" ([L195–198](../../public/simulations/Double%20Pendulum.html#L195-L198)) |
-| 4 | `p-lagrange` | From energy to motion ★ | [L201–222](../../public/simulations/Double%20Pendulum.html#L201-L222) | (5) Euler–Lagrange, unnumbered derivatives, (6), (7), (8) linear system, (9) α₁, α₂ | §4.1–4.4 ([L204](../../public/simulations/Double%20Pendulum.html#L204), [L208](../../public/simulations/Double%20Pendulum.html#L208), [L213](../../public/simulations/Double%20Pendulum.html#L213), [L216](../../public/simulations/Double%20Pendulum.html#L216)); check note ([L221](../../public/simulations/Double%20Pendulum.html#L221)) |
-| 5 | `p-modes` | Small swings: two normal modes | [L224–275](../../public/simulations/Double%20Pendulum.html#L224-L275) | (10), (11) normal-mode frequencies | Figure 2, the two modes ([L231–270](../../public/simulations/Double%20Pendulum.html#L231-L270)); Exercise 5.1 |
-| 6 | `p-chaos` | Chaos | [L277–342](../../public/simulations/Double%20Pendulum.html#L277-L342) | (12) Lyapunov exponent | Figure 3, twin separation on a log scale ([L280–334](../../public/simulations/Double%20Pendulum.html#L280-L334)); Exercise 6.1 |
-| 7 | `p-rk4` | Solving it step by step | [L344–354](../../public/simulations/Double%20Pendulum.html#L344-L354) | (13) RK4 | — |
-| 8 | `p-screen` | From metres to pixels | [L356–360](../../public/simulations/Double%20Pendulum.html#L356-L360) | — | — |
-| 9 | `p-limits` | What the model leaves out | [L362–376](../../public/simulations/Double%20Pendulum.html#L362-L376) | — | §9.1 Further reading ([L370–375](../../public/simulations/Double%20Pendulum.html#L370-L375)) |
+| 1 | `p-swing` | A pendulum on a pendulum | [L138–179](../../public/simulations/Double%20Pendulum.html#L138-L179) | — | Figure 1, geometry ([L144–178](../../public/simulations/Double%20Pendulum.html#L144-L178)) |
+| 2 | `p-model` | The model | [L181–189](../../public/simulations/Double%20Pendulum.html#L181-L189) | (1) positions | — |
+| 3 | `p-energy` | Energy | [L191–215](../../public/simulations/Double%20Pendulum.html#L191-L215) | (2) velocities, (3) T, (4) V | box "Energy is conserved" ([L211–214](../../public/simulations/Double%20Pendulum.html#L211-L214)) |
+| 4 | `p-lagrange` | From energy to motion ★ | [L217–263](../../public/simulations/Double%20Pendulum.html#L217-L263) | (5) Euler–Lagrange, unnumbered derivatives, (6), (7), (8) linear system, (9) α₁, α₂ | §4.1–4.4 ([L204](../../public/simulations/Double%20Pendulum.html#L204), [L208](../../public/simulations/Double%20Pendulum.html#L208), [L213](../../public/simulations/Double%20Pendulum.html#L213), [L246](../../public/simulations/Double%20Pendulum.html#L246)); check note ([L221](../../public/simulations/Double%20Pendulum.html#L221)) |
+| 5 | `p-modes` | Small swings: two normal modes | [L265–327](../../public/simulations/Double%20Pendulum.html#L265-L327) | (10), (11) normal-mode frequencies | Figure 2, the two modes ([L279–318](../../public/simulations/Double%20Pendulum.html#L279-L318)); Exercise 5.1 |
+| 6 | `p-chaos` | Chaos | [L329–400](../../public/simulations/Double%20Pendulum.html#L329-L400) | (12) Lyapunov exponent | Figure 3, twin separation on a log scale ([L332–386](../../public/simulations/Double%20Pendulum.html#L332-L386)); Exercise 6.1 |
+| 7 | `p-rk4` | Solving it step by step | [L402–412](../../public/simulations/Double%20Pendulum.html#L402-L412) | (13) RK4 | — |
+| 8 | `p-screen` | From metres to pixels | [L414–418](../../public/simulations/Double%20Pendulum.html#L414-L418) | — | — |
+| 9 | `p-limits` | What the model leaves out | [L420–438](../../public/simulations/Double%20Pendulum.html#L420-L438) | — | §9.1 Further reading ([L432–437](../../public/simulations/Double%20Pendulum.html#L432-L437)) |
 
 ## Where the drawing and the store differ
 
 The page states the main point in `about` ([L854](../../public/simulations/Double%20Pendulum.html#L854)): rods and bobs are drawn at the stored pixel positions, so picture and store
 agree to the pixel; the trail is not stored.
-- **Trail.** Painted segment by segment at every RK4 step and faded each frame ([L707](../../public/simulations/Double%20Pendulum.html#L707), [L712](../../public/simulations/Double%20Pendulum.html#L712), [L717](../../public/simulations/Double%20Pendulum.html#L717)); it is not kept as an
+- **Trail.** Painted segment by segment at every RK4 step and faded each frame ([L769](../../public/simulations/Double%20Pendulum.html#L769), [L774](../../public/simulations/Double%20Pendulum.html#L774), [L779](../../public/simulations/Double%20Pendulum.html#L779)); it is not kept as an
   array. To keep a trajectory, record a round.
-- **Sub-steps.** The store holds the state at the end of each frame only ([L652](../../public/simulations/Double%20Pendulum.html#L652)). At 60 frames per second about ten RK4 states
+- **Sub-steps.** The store holds the state at the end of each frame only ([L714](../../public/simulations/Double%20Pendulum.html#L714)). At 60 frames per second about ten RK4 states
   per frame reach the trail but not the store.
-- **Bob sizes.** Bob 1 has radius 8 px; bob 2 has 8 ∛(m₂/m₁) px clamped to 4–17 px ([L599](../../public/simulations/Double%20Pendulum.html#L599)). The clamp acts below
+- **Bob sizes.** Bob 1 has radius 8 px; bob 2 has 8 ∛(m₂/m₁) px clamped to 4–17 px ([L661](../../public/simulations/Double%20Pendulum.html#L661)). The clamp acts below
   m₂ = 0.125 kg and above 9.6 kg, inside the slider's range of 0.100–9.97 kg.
-- **Readout rate.** The readouts and the caption time are rewritten every sixth frame, about ten times a second ([L721](../../public/simulations/Double%20Pendulum.html#L721)); the
-  store changes every frame. ε is shown with two significant figures ([L639](../../public/simulations/Double%20Pendulum.html#L639)).
-- **Twin.** The twin is drawn in rose with thinner rods and no rim ([L600–618](../../public/simulations/Double%20Pendulum.html#L600-L618)); its state (`y_twin`), four screen coordinates and the separation are
+- **Readout rate.** The readouts and the caption time are rewritten every sixth frame, about ten times a second ([L783](../../public/simulations/Double%20Pendulum.html#L783)); the
+  store changes every frame. ε is shown with two significant figures ([L701](../../public/simulations/Double%20Pendulum.html#L701)).
+- **Twin.** The twin is drawn in rose with thinner rods and no rim ([L662–680](../../public/simulations/Double%20Pendulum.html#L662-L680)); its state (`y_twin`), four screen coordinates and the separation are
   stored. `locate` reads the twin’s stored coordinates and returns `null` while the twin is off.
 
 ## How to change it safely
 
-- **Walkthrough excerpts.** `pendulum.js` quotes [L480–486](../../public/simulations/Double%20Pendulum.html#L480-L486), [L489–496](../../public/simulations/Double%20Pendulum.html#L489-L496), [L500–503](../../public/simulations/Double%20Pendulum.html#L500-L503), [L506–507](../../public/simulations/Double%20Pendulum.html#L506-L507), [L513](../../public/simulations/Double%20Pendulum.html#L513), [L533](../../public/simulations/Double%20Pendulum.html#L533), [L660](../../public/simulations/Double%20Pendulum.html#L660),
-  [L700–705](../../public/simulations/Double%20Pendulum.html#L700-L705) and [L715](../../public/simulations/Double%20Pendulum.html#L715). Keep them character for character, or change `pendulum.js` in the same edit. Insert store taps after a
+- **Walkthrough excerpts.** `pendulum.js` quotes [L542–548](../../public/simulations/Double%20Pendulum.html#L542-L548), [L551–558](../../public/simulations/Double%20Pendulum.html#L551-L558), [L562–565](../../public/simulations/Double%20Pendulum.html#L562-L565), [L568–569](../../public/simulations/Double%20Pendulum.html#L568-L569), [L575](../../public/simulations/Double%20Pendulum.html#L575), [L595](../../public/simulations/Double%20Pendulum.html#L595), [L722](../../public/simulations/Double%20Pendulum.html#L722),
+  [L762–767](../../public/simulations/Double%20Pendulum.html#L762-L767) and [L777](../../public/simulations/Double%20Pendulum.html#L777). Keep them character for character, or change `pendulum.js` in the same edit. Insert store taps after a
   quoted line, never inside a quoted pair (AGENTS.md).
 - **`Sim.live()` keys** must match the `syms` keys of `pendulum.js` (listed above).
-- **Formulas live in several places.** The accelerations are in `deriv()` ([L482–485](../../public/simulations/Double%20Pendulum.html#L482-L485)), in the store attributes
-  ([L424–425](../../public/simulations/Double%20Pendulum.html#L424-L425)), in `alphaCheck()` ([L756–757](../../public/simulations/Double%20Pendulum.html#L756-L757)), in the walkthrough and in the note's eq. (9) ([L220](../../public/simulations/Double%20Pendulum.html#L220)). The energy is in
-  `energy()` ([L500–502](../../public/simulations/Double%20Pendulum.html#L500-L502)), `kinetic()`/`potential()` ([L761–762](../../public/simulations/Double%20Pendulum.html#L761-L762)), the attributes ([L432–433](../../public/simulations/Double%20Pendulum.html#L432-L433)) and eqs. (3)–(4). The pixel map
-  is in `pos()` and `layout()` ([L506–507](../../public/simulations/Double%20Pendulum.html#L506-L507), [L513](../../public/simulations/Double%20Pendulum.html#L513)), the checks ([L831–835](../../public/simulations/Double%20Pendulum.html#L831-L835)), the attributes ([L444–452](../../public/simulations/Double%20Pendulum.html#L444-L452)) and note §8
-  ([L358](../../public/simulations/Double%20Pendulum.html#L358)). The bob-2 radius is in `drawPendulum()` ([L599](../../public/simulations/Double%20Pendulum.html#L599)) and `bobPixel()` ([L730](../../public/simulations/Double%20Pendulum.html#L730)). The expected colours in `bobPixel()`
-  (122, 31, 43) and (90, 80, 75) are `Sim.theme.accent` and `Sim.theme.ink3` ([L729–732](../../public/simulations/Double%20Pendulum.html#L729-L732), [sim.js:16](../../public/scripts/sim.js#L16), [sim.js:12](../../public/scripts/sim.js#L12)).
-- **Constants quoted in text.** h = 1/600 s appears in the caption ([L48](../../public/simulations/Double%20Pendulum.html#L48)), the note (§7, Figure 3) and the panel group note
-  ([L778](../../public/simulations/Double%20Pendulum.html#L778)); 0.001 rad appears on the twin switch ([L61](../../public/simulations/Double%20Pendulum.html#L61)) and in the note. Change them together with `H` and `EPS` ([L396](../../public/simulations/Double%20Pendulum.html#L396)).
+- **Formulas live in several places.** The accelerations are in `deriv()` ([L544–547](../../public/simulations/Double%20Pendulum.html#L544-L547)), in the store attributes
+  ([L486–487](../../public/simulations/Double%20Pendulum.html#L486-L487)), in `alphaCheck()` ([L818–819](../../public/simulations/Double%20Pendulum.html#L818-L819)), in the walkthrough and in the note's eq. (9) ([L220](../../public/simulations/Double%20Pendulum.html#L220)). The energy is in
+  `energy()` ([L562–564](../../public/simulations/Double%20Pendulum.html#L562-L564)), `kinetic()`/`potential()` ([L823–824](../../public/simulations/Double%20Pendulum.html#L823-L824)), the attributes ([L494–495](../../public/simulations/Double%20Pendulum.html#L494-L495)) and eqs. (3)–(4). The pixel map
+  is in `pos()` and `layout()` ([L568–569](../../public/simulations/Double%20Pendulum.html#L568-L569), [L575](../../public/simulations/Double%20Pendulum.html#L575)), the checks ([L893–897](../../public/simulations/Double%20Pendulum.html#L893-L897)), the attributes ([L506–514](../../public/simulations/Double%20Pendulum.html#L506-L514)) and note §8
+  ([L358](../../public/simulations/Double%20Pendulum.html#L358)). The bob-2 radius is in `drawPendulum()` ([L661](../../public/simulations/Double%20Pendulum.html#L661)) and `bobPixel()` ([L792](../../public/simulations/Double%20Pendulum.html#L792)). The expected colours in `bobPixel()`
+  (122, 31, 43) and (90, 80, 75) are `Sim.theme.accent` and `Sim.theme.ink3` ([L791–794](../../public/simulations/Double%20Pendulum.html#L791-L794), [sim.js:16](../../public/scripts/sim.js#L16), [sim.js:12](../../public/scripts/sim.js#L12)).
+- **Constants quoted in text.** h = 1/600 s appears in the caption ([L49](../../public/simulations/Double%20Pendulum.html#L49)), the note (§7, Figure 3) and the panel group note
+  ([L778](../../public/simulations/Double%20Pendulum.html#L778)); 0.001 rad appears on the twin switch ([L62](../../public/simulations/Double%20Pendulum.html#L62)) and in the note. Change them together with `H` and `EPS` ([L458](../../public/simulations/Double%20Pendulum.html#L458)).
 - **The catalog** entry's `equation`, `model`, `method` and `controls` ([catalog.js:73–76](../../public/scripts/catalog.js#L73-L76)) describe this page.
 - **Re-test** after any change: Check α₁, α₂, E, ε and x₂ px in the Data panel (stored, recomputed, pixel); watch ε stay within
   ±5 × 10⁻⁸ for 20 s from the default start; switch the twin on and see the separation grow; record one round; pin bob 2 with Read
@@ -353,16 +353,16 @@ Teaching pass, 20 October 2026 (notes/fig02/plan.md; the note's lines only, no l
 sentence of §1 is limited to the first twenty seconds ([L141](../../public/simulations/Double%20Pendulum.html#L141)); §4.4 names the identity sin θ₁ cos δ − sin θ₂ = cos θ₁ sin δ
 that gives α₂ its factor sin δ ([L219](../../public/simulations/Double%20Pendulum.html#L219)); the Lyapunov paragraphs replace the unsupported 1.7 s⁻¹ with the measured line
 through Figure 3's high-energy curve, λ ≈ 1.4 s⁻¹ up to the 0.1 m crossing at 4.06 s, and the full-state exponent of the
-default start, λ ≈ 1.46 s⁻¹ (rescaling every 0.1 s over 20 000 s), with e^1.46 ≈ 4.3 and e^14.6 ≈ 2 × 10⁶ ([L335](../../public/simulations/Double%20Pendulum.html#L335), [L337](../../public/simulations/Double%20Pendulum.html#L337));
+default start, λ ≈ 1.46 s⁻¹ (rescaling every 0.1 s over 20 000 s), with e^1.46 ≈ 4.3 and e^14.6 ≈ 2 × 10⁶ ([L336](../../public/simulations/Double%20Pendulum.html#L336), [L338](../../public/simulations/Double%20Pendulum.html#L338));
 §7 says that the slider caps the time scale, that the drift creeps by about −7 × 10⁻⁸ a minute (−7.2 × 10⁻⁷ after ten
 simulated minutes in Chromium), and that the step fails for a heavy lower bob: ε reaches −3.6 × 10⁻⁴ in 20 s at m₂/m₁ = 10
 ([L350](../../public/simulations/Double%20Pendulum.html#L350), [L351](../../public/simulations/Double%20Pendulum.html#L351)); §8 defines σ, the
 pivot and W × H, draws the bobs with σ, names the two protractor circles and Δt, and writes the half-life as
-ln 2/(60 |ln 0.992|) ([L358](../../public/simulations/Double%20Pendulum.html#L358), [L359](../../public/simulations/Double%20Pendulum.html#L359)); the three references link to pages opened that day ([L372–374](../../public/simulations/Double%20Pendulum.html#L372-L374)).
+ln 2/(60 |ln 0.992|) ([L358](../../public/simulations/Double%20Pendulum.html#L358), [L359](../../public/simulations/Double%20Pendulum.html#L359)); the three references link to pages opened that day ([L433–435](../../public/simulations/Double%20Pendulum.html#L433-L435)).
 
 ## Repair round · 20 October 2026
 
-After the independent referee and derivation checks (`notes/fig02/`), the lead made only these changes, each on its existing line, so no line link moved: equations (5), (8), (9) and (13) broken over two or three lines so their numbers show at 1440 px ([L206](../../public/simulations/Double%20Pendulum.html#L206)); (8) ([L218](../../public/simulations/Double%20Pendulum.html#L218)); (9) ([L220](../../public/simulations/Double%20Pendulum.html#L220)); (13) ([L347](../../public/simulations/Double%20Pendulum.html#L347)). Checked in headless Chromium at 1440 × 900 and 390 × 844: no console or KaTeX errors, no sideways scroll, no display equation wider than its box at 1440 px (`notes/verify.mjs`).
+After the independent referee and derivation checks (`notes/fig02/`), the lead made only these changes, each on its existing line, so no line link moved: equations (5), (8), (9) and (13) broken over two or three lines so their numbers show at 1440 px ([L206](../../public/simulations/Double%20Pendulum.html#L206)); (8) ([L218](../../public/simulations/Double%20Pendulum.html#L218)); (9) ([L220](../../public/simulations/Double%20Pendulum.html#L220)); (13) ([L406](../../public/simulations/Double%20Pendulum.html#L406)). Checked in headless Chromium at 1440 × 900 and 390 × 844: no console or KaTeX errors, no sideways scroll, no display equation wider than its box at 1440 px (`notes/verify.mjs`).
 
 ## Second check round · 20 October 2026
 

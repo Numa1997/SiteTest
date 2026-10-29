@@ -271,17 +271,17 @@ A round is what the page says it is, in `Sim.data.round` ([datalog.js:27-29](../
 | 4 | one period, $T$ | `t` | sampled | no | [L1073](../../public/simulations/Transverse%20and%20longitudinal%20waves.html#L1073) |
 | 5 | one period, $T$ | `t` | sampled | no | [L878](../../public/simulations/water-wave.html#L878) |
 | 6 | one repeat of the pattern, at most 20 s | `t` | sampled | no | [L961](../../public/simulations/wave-interference.html#L961) |
-| 7 | one full figure (or part of it) in phasor time | `t` | sampled | yes, in the final-shape view | [L1463](../../public/simulations/phasor-sums.html#L1463) |
+| 7 | one full figure (or part of it) in phasor time | `t` | sampled | yes, in the final-shape view | [L1464](../../public/simulations/phasor-sums.html#L1464) |
 | 8 | one loop of the circles | `t` | sampled | yes, until a shape is decomposed | [L1399](../../public/simulations/draw-decompose.html#L1399) |
-| 9 | one drive period $1/f$ of the stored run | `t_play` | sampled | yes, near the end of the run | [L1909](../../public/simulations/driven-oscillator.html#L1909) |
+| 9 | one drive period $1/f$ of the stored run | `t_play` | sampled | yes, near the end of the run | [L1914](../../public/simulations/driven-oscillator.html#L1914) |
 | 10 | one rotor turn of the stored run | `t_play` | sampled | yes, near the end of the run | [L1154](../../public/simulations/wind-turbine.html#L1154) |
-| 11 | two seconds of the stored run | `t_play` | sampled | yes, in the last two seconds of the run | [L1330](../../public/simulations/pendulum-control.html#L1330) |
+| 11 | two seconds of the stored run | `t_play` | sampled | yes, in the last two seconds of the run | [L1333](../../public/simulations/pendulum-control.html#L1333) |
 | Portfolios 02 (Rotor Pendula) | one turn of the rotor in the stored record, $T = 2\pi/\Omega$ | `t_now` | sampled | yes, when less than one turn of the record is left before the playback loops | `Sim.data` in [rotor_sim.html](../../portfolios-src/rotor-pendula/rotor_sim.html) |
 | Portfolios 02 (Rotor Pendula, wind tab) | one turn of the rotor at the steady speed of the mean wind, $2\pi/\Omega_0$ | `t` | live | while the wind is still being synthesised | `Sim.data` in [rotor_wind.html](../../portfolios-src/rotor-pendula/rotor_wind.html) |
 | Portfolios 03, ideal press | one run, $t = 0$ to its end; Record plays it from $t = 0$ | `tView` | sampled | yes, while the run plays | `Sim.data` in [hydraulic.html](../../portfolios-src/hydraulics/hydraulic.html) |
 | Portfolios 03, servo press | one press cycle, $t = 0$ to its end | `tView` | sampled | yes, before the first cycle arrives and while it plays | `Sim.data` in [hydraulic_control.html](../../portfolios-src/hydraulics/hydraulic_control.html) |
 | Droplet Collection, panel 4 (a cloud with a shape) | five cloud-minutes, $t$ to $t + 300$ s; Record presses Start if the cloud is paused; the followed point is the largest drop | `t` | sampled | yes, in the last five minutes before the cloud stops at 45 min | `Sim.data` in [datahooks.js](../../portfolios-src/droplets/datahooks.js), store written in [app.js](../../portfolios-src/droplets/app.js) |
-| Portfolios 04 (Iron, Cotton and the Head) | one drop, $t = 0$ to 9 s of the stored run; Record starts a new drop from $t = 0$ | `t_play` | sampled | yes, while a drop is under way | [index.html L989](../../public/portfolios/impact/index.html#L989), [ar.html](../../public/portfolios/impact/ar.html); source [datahooks.js](../../portfolios-src/impact/datahooks.js) |
+| Portfolios 04 (Iron, Cotton and the Head) | one drop, $t = 0$ to 9 s of the stored run; Record starts a new drop from $t = 0$ | `t_play` | sampled | yes, while a drop is under way | [index.html L995](../../public/portfolios/impact/index.html#L995), [ar.html](../../public/portfolios/impact/ar.html); source [datahooks.js](../../portfolios-src/impact/datahooks.js) |
 
 While no round is running, `describeRound()` ([datalog.js:1057-1064](../../public/scripts/datalog.js#L1057-L1064)) writes the line
 under the toolbar: "One round = …", then a longer sentence in `span.dp-more-txt`, which phones hide
@@ -298,7 +298,7 @@ is paused, chooses the point to follow (the pinned point, else `round.point()`),
 parameters. In sampled mode the target spacing is the round length over 600; the final slot is reserved for the ending frame. In change mode it is zero and the 600-change cap is unchanged.
 
 `recordFrame()` runs once per frame while recording ([datalog.js:1098-1128](../../public/scripts/datalog.js#L1098-L1128)). It reads
-the time variable (or `performance.now()` if there is none, [datalog.js:103](../../public/scripts/datalog.js#L103)); the first
+the time variable (or `performance.now()` if there is none, [datalog.js:160](../../public/scripts/datalog.js#L160)); the first
 frame sets $t_0$, and the elapsed time is $t - t_0$. A frame is taken when
 
 - sampled mode: it is the first, or at least $0.999 \cdot L/600$ after the last taken one, or the round has ended (within 10⁻⁹ s);
@@ -460,16 +460,16 @@ The two ledgers, as designed on paper before the code:
 | New stored values | `as`, `E0`, `ma_now`, `bal_now`, `fres_now` | `Eas`, `Ea_now`, `Eg_now`, `K_now`, `K0`, `ebal_now` |
 | New checks (ledger file) | the 16 numbers copied from the run (x = x<sub>n</sub> at n = n<sub>now</sub>, or "from the drag" while held), `as`, `ma_now`, `E0`, `bal_now`, `fres_now`, `stable`, `fp_kind` | the 8 numbers copied from the run, `K_now`, `K0`, `ebal_now` |
 
-The ten blocks: [Fig. 1 L798](../../public/simulations/Circular%20Wave%20Interference%20Visualization.html#L798),
-[Fig. 2 L768](../../public/simulations/Double%20Pendulum.html#L768),
-[Fig. 3 L849](../../public/simulations/Interactive%20Double-Slit%20Experiment%20Visualization.html#L849),
-[Fig. 4 L996](../../public/simulations/Transverse%20and%20longitudinal%20waves.html#L996),
-[Fig. 5 L810](../../public/simulations/water-wave.html#L810),
-[Fig. 6 L868](../../public/simulations/wave-interference.html#L868),
-[Fig. 7 L1370](../../public/simulations/phasor-sums.html#L1370),
-[Fig. 8 L1301](../../public/simulations/draw-decompose.html#L1301),
-[Fig. 9 L1690](../../public/simulations/driven-oscillator.html#L1690),
-[Fig. 10 L1056](../../public/simulations/wind-turbine.html#L1056).
+The ten blocks: [Fig. 1 L799](../../public/simulations/Circular%20Wave%20Interference%20Visualization.html#L799),
+[Fig. 2 L830](../../public/simulations/Double%20Pendulum.html#L830),
+[Fig. 3 L850](../../public/simulations/Interactive%20Double-Slit%20Experiment%20Visualization.html#L850),
+[Fig. 4 L997](../../public/simulations/Transverse%20and%20longitudinal%20waves.html#L997),
+[Fig. 5 L812](../../public/simulations/water-wave.html#L812),
+[Fig. 6 L869](../../public/simulations/wave-interference.html#L869),
+[Fig. 7 L1371](../../public/simulations/phasor-sums.html#L1371),
+[Fig. 8 L1302](../../public/simulations/draw-decompose.html#L1302),
+[Fig. 9 L1691](../../public/simulations/driven-oscillator.html#L1691),
+[Fig. 10 L1057](../../public/simulations/wind-turbine.html#L1057).
 
 ## Public interface
 
@@ -572,7 +572,7 @@ array's table; an `IntersectionObserver` on the array rows.
 
 - **`dataset.js`**: the store and its fields `title`, `dims`, `vars`, `order`, methods `get`, `dtype`, `along`, `npz`; for a
   round archive, `Sim.dataset` and the new store's `dim`, `coord`, `var`, `set`, `has` and `npz`
-  ([datalog.js:970-978](../../public/scripts/datalog.js#L970-L978); [dataset.md](dataset.md)).
+  ([datalog.js:1278-1286](../../public/scripts/datalog.js#L1278-L1286); [dataset.md](dataset.md)).
 - **`sim.js`**: `Sim.fmt` for every number ([datalog.js:86](../../public/scripts/datalog.js#L86)); `readPixel` and
   `isBurgundy` are used by the `drawn` functions of Figs. 9, 10 and 11 ([sim.md](sim.md)).
 - **The page**: `Sim.data` (above), `#stage` with a sibling `.stage__cap`, and the CSS tokens. Each page's documentation

@@ -80,7 +80,6 @@ Since 23 October 2026 the copy is generated from [`portfolios-src/droplets/`](..
 |---|---|
 | `index.html` | The whole project in one file, written by `portfolios-src/droplets/tools/build.py --site`: the lecture notes (maths typeset at build time with KaTeX 0.16.11), the model, the five simulations, the figures as inline SVG. It loads the site's `fonts/instrument-plex.css` and `vendor/katex/katex.min.css`. |
 | `fig/plate-fallspeed.svg`, `fig/plate-efficiency.svg`, `fig/plate-warm.svg`, `fig/plate-first.svg` | The four plates of the Portfolios page article, written by the same build from the same figures as the notes. |
-| `fig/c1_ice.svg`, `fig/ecoll_map.svg`, `fig/fallspeed_gk.svg`, `fig/golovin.svg`, `fig/w2_rain.svg`, `fig/w2_spectra.svg` | Left over from the app copy (its `static/` bundle was removed on 23 October 2026, once nothing loaded it). Checked 29 October 2026: no page, script or stylesheet refers to them any more (`grep -rlE 'c1_ice|ecoll_map|fallspeed_gk|golovin\.svg|w2_rain|w2_spectra' public index.html` finds nothing); the German and Arabic Portfolios pages show the four plates above. Deleting them is open for Numa. |
 
 ### `rotor-pendula/`
 
