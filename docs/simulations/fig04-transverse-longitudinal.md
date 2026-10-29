@@ -170,7 +170,7 @@ Readouts ([page:84–89](../../public/simulations/Transverse%20and%20longitudina
 1 px/s), `r-t` ($T$, 2 decimals), `r-k` ($k$, 4 decimals, "/px"), `r-al` ($A_\mathrm{L}$ rounded, with " (cap)" when
 $A_\mathrm{L} < A$); the caption span `cap-v` repeats $v$ ([page:803–808](../../public/simulations/Transverse%20and%20longitudinal%20waves.html#L803-L808)).
 The data panel adds a "Data" tab and a "Read values" button in the figure caption ([datalog.js:896–897](../../public/scripts/datalog.js#L896-L897));
-the walkthrough adds "Hold the numbers" ([sim.js:252](../../public/scripts/sim.js#L252)).
+the walkthrough adds "Hold the numbers" ([sim.js:329](../../public/scripts/sim.js#L329)).
 
 ## What the page writes into the data store
 

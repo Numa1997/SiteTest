@@ -163,7 +163,7 @@ Readouts ([page:111–119](../../public/simulations/Interactive%20Double-Slit%20
 ([page:776–783](../../public/simulations/Interactive%20Double-Slit%20Experiment%20Visualization.html#L776-L783)). The data panel adds
 a "Data" tab and a "Read values" button in the caption of the first figure (the one whose stage has `id="stage"`)
 ([datalog.js:896–897](../../public/scripts/datalog.js#L896-L897)); the walkthrough adds "Hold the numbers"
-([sim.js:252](../../public/scripts/sim.js#L252)).
+([sim.js:329](../../public/scripts/sim.js#L329)).
 
 ## What the page writes into the data store
 
@@ -277,7 +277,7 @@ point Q; phase difference and brightness; far field; fringe orders on the patter
 ([slit.js:9–226](../../public/scripts/walk/slit.js#L9-L226)). Its code excerpts quote these page lines (step 1: [622–624](../../public/simulations/Interactive%20Double-Slit%20Experiment%20Visualization.html#L622-L624);
 step 2: [625](../../public/simulations/Interactive%20Double-Slit%20Experiment%20Visualization.html#L625), [627–628](../../public/simulations/Interactive%20Double-Slit%20Experiment%20Visualization.html#L627-L628); step 3: [629–630](../../public/simulations/Interactive%20Double-Slit%20Experiment%20Visualization.html#L629-L630); step 4: [756](../../public/simulations/Interactive%20Double-Slit%20Experiment%20Visualization.html#L756), [717–718](../../public/simulations/Interactive%20Double-Slit%20Experiment%20Visualization.html#L717-L718); step 5: [713](../../public/simulations/Interactive%20Double-Slit%20Experiment%20Visualization.html#L713), [757](../../public/simulations/Interactive%20Double-Slit%20Experiment%20Visualization.html#L757), [779](../../public/simulations/Interactive%20Double-Slit%20Experiment%20Visualization.html#L779); step 6: [740–745](../../public/simulations/Interactive%20Double-Slit%20Experiment%20Visualization.html#L740-L745); step 7: [758–758](../../public/simulations/Interactive%20Double-Slit%20Experiment%20Visualization.html#L758-L758)). Checked line by line on
 15 October 2026, they match the page text. A `...` on a line of its own stands for omitted lines. Once it stands inside a line:
-in step 7 ([slit.js:110](../../public/scripts/walk/slit.js#L110)) it replaces the end of page line [759](../../public/simulations/Interactive%20Double-Slit%20Experiment%20Visualization.html#L759), the two `m` values,
+in step 7 ([slit.js:164](../../public/scripts/walk/slit.js#L164)) it replaces the end of page line [759](../../public/simulations/Interactive%20Double-Slit%20Experiment%20Visualization.html#L759), the two `m` values,
 before the closing semicolon.
 
 ## Where the drawing and the store differ
@@ -302,7 +302,7 @@ before the closing semicolon.
 - **Constants that appear more than once.** `X0 = 300`, `Y0 = 370` ([page:554](../../public/simulations/Interactive%20Double-Slit%20Experiment%20Visualization.html#L554))
   are also in the dataset attrs, in `pointCheck` ([page:827](../../public/simulations/Interactive%20Double-Slit%20Experiment%20Visualization.html#L827)),
   in the clip rectangle height 370 ([page:63](../../public/simulations/Interactive%20Double-Slit%20Experiment%20Visualization.html#L63))
-  and in the walkthrough note ([slit.js:14](../../public/scripts/walk/slit.js#L14)). The plot axes 56/556/142/24 are in
+  and in the walkthrough's first step ([slit.js:15](../../public/scripts/walk/slit.js#L15)). The plot axes 56/556/142/24 are in
   `drawPattern()`, the attrs string ([page:562](../../public/simulations/Interactive%20Double-Slit%20Experiment%20Visualization.html#L562))
   and `drawn.I` ([page:927](../../public/simulations/Interactive%20Double-Slit%20Experiment%20Visualization.html#L927)).
   The rate 0.8 is in the clock ([812](../../public/simulations/Interactive%20Double-Slit%20Experiment%20Visualization.html#L812)),

@@ -226,7 +226,7 @@ Two-dimensional arrays are row-major, one row per layer: parcel $i$ of layer $j$
 Their declarations are at [:581-606](../../public/simulations/water-wave.html#L581-L606) and
 [:620-629](../../public/simulations/water-wave.html#L620-L629). The scalars of the first row do not depend on time, so they are
 written only when a control changes; the panel groups them as "Physical parameters" and "Derived physics"
-([:814-815](../../public/simulations/water-wave.html#L814-L815)).
+([:816-817](../../public/simulations/water-wave.html#L816-L817)).
 
 **One round** (`Sim.data.round`, [:881-881](../../public/simulations/water-wave.html#L881-L881)): one period, length
 `ds.get('T')` seconds of the time variable `t`, labelled "one period, T = … s". The chart column is `omegaT`, and the point
@@ -297,10 +297,10 @@ stylesheets `../styles/sim.css` (which imports the self-hosted fonts, KaTeX's CS
 
 - **The surface line is not stored.** It runs through points every 3 px of rest position that are not parcels
   ([:693-695](../../public/simulations/water-wave.html#L693-L695)); at a surface parcel the stored `zeta` is the surface height.
-  The page says so in its `about` paragraph ([:881](../../public/simulations/water-wave.html#L881)) and in note Section 09
-  ([:530](../../public/simulations/water-wave.html#L530)).
+  The page says so in its `about` paragraph ([:883](../../public/simulations/water-wave.html#L883)) and in note Section 09
+  ([:532](../../public/simulations/water-wave.html#L532)).
 - **Pixel rounding.** Each parcel is drawn at its stored `px`, `py`; the canvas rounds to its own pixel grid
-  ([:881](../../public/simulations/water-wave.html#L881)).
+  ([:883](../../public/simulations/water-wave.html#L883)).
 - **Small orbits are hidden.** A circle is drawn only while its radius exceeds 1.2 css px
   ([:749](../../public/simulations/water-wave.html#L749)); its numbers are stored regardless.
 - **Layers below the canvas.** Every layer and parcel is computed and stored; drawing is skipped when its centre line lies within 8 css px of the bottom

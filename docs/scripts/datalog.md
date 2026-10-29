@@ -3,7 +3,7 @@
 | | |
 |---|---|
 | File | [public/scripts/datalog.js](../../public/scripts/datalog.js), 1422 lines, 104.5 kB (104 474 bytes) |
-| Loaded by | the eleven simulation pages, the two pages of Iron, Cotton and the Head (`portfolios/impact/index.html`, `ar.html`), the ideal and servo presses of the Hydraulic Press Study and Droplet Collection (`portfolios/droplet-collection/index.html`, for panels 4 and 3), last, after the page's own script (line numbers in the load-order table of [sim.md](sim.md#load-order-on-the-pages)); Figs. 9, 10 and 11 load their ledger, [scripts/ledger/](../../public/scripts/ledger/), just before it, on the same line ([driven-oscillator.html:1930](../../public/simulations/driven-oscillator.html#L1930), [wind-turbine.html:1168](../../public/simulations/wind-turbine.html#L1168), [pendulum-control.html:1347](../../public/simulations/pendulum-control.html#L1347)); styles in [styles/data.css](../../public/styles/data.css), linked in each page's head (for example [Double Pendulum.html:12](../../public/simulations/Double%20Pendulum.html#L12)) |
+| Loaded by | the eleven simulation pages, the three pages of Iron, Cotton and the Head (`portfolios/impact/index.html`, `de.html`, `ar.html`), the ideal and servo presses of the Hydraulic Press Study (in all three languages) and Droplet Collection (`portfolios/droplet-collection/index.html`, for panels 4 and 3), last, after the page's own script (line numbers in the load-order table of [sim.md](sim.md#load-order-on-the-pages)); Figs. 9, 10 and 11 load their ledger, [scripts/ledger/](../../public/scripts/ledger/), just before it, on the same line ([driven-oscillator.html:1931](../../public/simulations/driven-oscillator.html#L1931), [wind-turbine.html:1169](../../public/simulations/wind-turbine.html#L1169), [pendulum-control.html:1347](../../public/simulations/pendulum-control.html#L1347)); styles in [styles/data.css](../../public/styles/data.css), linked in each page's head (for example [Double Pendulum.html:12](../../public/simulations/Double%20Pendulum.html#L12)). The simulation and wind tabs of Rotor Pendula load it too, with their ledgers `scripts/ledger/rotor-pendula.js` and `rotor-wind.js` ([portfolios.md](../portfolios.md#rotor-pendula-rotor-pendula)). |
 | Reads | `Sim.data` (the page's contract, below) and through it the page's dataset ([datalog.js:66-67](../../public/scripts/datalog.js#L66-L67)) |
 | Defines | `Sim.colourMap` ([datalog.js:103](../../public/scripts/datalog.js#L103)), `window.__dataPanel` ([datalog.js:1421](../../public/scripts/datalog.js#L1421)) |
 | Adds to the page | `button.dp-tab` and `aside#data-panel.dp` at the end of `<body>` ([datalog.js:232-233](../../public/scripts/datalog.js#L232-L233)); `canvas.dp-overlay` inside `#stage`, `div.dp-read` right after `#stage`, `button.dp-readbtn` in the figure caption ([datalog.js:874-897](../../public/scripts/datalog.js#L874-L897)) |
@@ -266,15 +266,15 @@ A round is what the page says it is, in `Sim.data.round` ([datalog.js:27-29](../
 | Fig. | One round | Time variable | Mode | Can be blocked | Line |
 |---|---|---|---|---|---|
 | 1 | one period of the sources, $T$ | `t` | sampled | no | [L893](../../public/simulations/Circular%20Wave%20Interference%20Visualization.html#L893) |
-| 2 | ten seconds of simulated motion | `t` | sampled | no | [L851](../../public/simulations/Double%20Pendulum.html#L851) |
+| 2 | ten seconds of simulated motion | `t` | sampled | no | [L913](../../public/simulations/Double%20Pendulum.html#L913) |
 | 3 | ten seconds of slider changes | `wall` | `'change'` | no | [L938](../../public/simulations/Interactive%20Double-Slit%20Experiment%20Visualization.html#L938) |
 | 4 | one period, $T$ | `t` | sampled | no | [L1073](../../public/simulations/Transverse%20and%20longitudinal%20waves.html#L1073) |
-| 5 | one period, $T$ | `t` | sampled | no | [L878](../../public/simulations/water-wave.html#L878) |
-| 6 | one repeat of the pattern, at most 20 s | `t` | sampled | no | [L961](../../public/simulations/wave-interference.html#L961) |
+| 5 | one period, $T$ | `t` | sampled | no | [L880](../../public/simulations/water-wave.html#L880) |
+| 6 | one repeat of the pattern, at most 20 s | `t` | sampled | no | [L962](../../public/simulations/wave-interference.html#L962) |
 | 7 | one full figure (or part of it) in phasor time | `t` | sampled | yes, in the final-shape view | [L1464](../../public/simulations/phasor-sums.html#L1464) |
-| 8 | one loop of the circles | `t` | sampled | yes, until a shape is decomposed | [L1399](../../public/simulations/draw-decompose.html#L1399) |
+| 8 | one loop of the circles | `t` | sampled | yes, until a shape is decomposed | [L1400](../../public/simulations/draw-decompose.html#L1400) |
 | 9 | one drive period $1/f$ of the stored run | `t_play` | sampled | yes, near the end of the run | [L1914](../../public/simulations/driven-oscillator.html#L1914) |
-| 10 | one rotor turn of the stored run | `t_play` | sampled | yes, near the end of the run | [L1154](../../public/simulations/wind-turbine.html#L1154) |
+| 10 | one rotor turn of the stored run | `t_play` | sampled | yes, near the end of the run | [L1155](../../public/simulations/wind-turbine.html#L1155) |
 | 11 | two seconds of the stored run | `t_play` | sampled | yes, in the last two seconds of the run | [L1333](../../public/simulations/pendulum-control.html#L1333) |
 | Portfolios 02 (Rotor Pendula) | one turn of the rotor in the stored record, $T = 2\pi/\Omega$ | `t_now` | sampled | yes, when less than one turn of the record is left before the playback loops | `Sim.data` in [rotor_sim.html](../../portfolios-src/rotor-pendula/rotor_sim.html) |
 | Portfolios 02 (Rotor Pendula, wind tab) | one turn of the rotor at the steady speed of the mean wind, $2\pi/\Omega_0$ | `t` | live | while the wind is still being synthesised | `Sim.data` in [rotor_wind.html](../../portfolios-src/rotor-pendula/rotor_wind.html) |
@@ -333,7 +333,7 @@ Measured on Fig. 2: a 10 s round gave 600 samples from 601 frames, 15 series (ti
 | Save this round | `<file>-round-<n>-<stamp>.zip` | a new dataset with dimension `sample`, coordinate `time_into_round`, one `float64` variable per series and per recorded scalar, attributes (page, round label, samples, frames, time caught, time variable, followed point, `start_<parameter>`); plus `round.csv` and `README.txt` | [1277-1287](../../public/scripts/datalog.js#L1277-L1287) |
 | CSV | `<file>-round-<n>-<stamp>.csv` | the round as CSV | [1276](../../public/scripts/datalog.js#L1276) |
 
-`<file>` is `Sim.data.file` (for example `fig2-double-pendulum`, [Double Pendulum.html:769](../../public/simulations/Double%20Pendulum.html#L769));
+`<file>` is `Sim.data.file` (for example `fig2-double-pendulum`, [Double Pendulum.html:831](../../public/simulations/Double%20Pendulum.html#L831));
 `<stamp>` is the UTC time as `YYYY-MM-DDTHH-MM-SS` ([datalog.js:1270](../../public/scripts/datalog.js#L1270)). The download goes
 through a temporary object URL that is revoked after 4 s ([datalog.js:1261-1269](../../public/scripts/datalog.js#L1261-L1269)).
 

@@ -317,8 +317,8 @@ except the alignment of numbers, which is marked `/*rtl:ignore*/` so the decimal
 
 ## `fold.css` · fold-out sections
 
-**Loaded by** every page and always last: [index.html:16](../index.html#L16), [simulations.html:19](../public/simulations.html#L19),
-[portfolios.html:20](../public/portfolios.html#L20), line 13 of each simulation page. The classes it styles are created by
+**Loaded by** every page and always last: [index.html:15](../index.html#L15), [simulations.html:15](../public/simulations.html#L15),
+[portfolios.html:19](../public/portfolios.html#L19), line 13 of each simulation page. The classes it styles are created by
 `scripts/fold.js` ([scripts/fold.md](scripts/fold.md)); without JavaScript none of them exist and the file has no effect.
 Its tokens fall back to fixed colours, so it works on the home page, which has no `--line-strong`.
 
@@ -377,7 +377,7 @@ repeats those two rules for the folded layout. Keep each pair in step.
 
 [`src/styles.css`](../src/styles.css) holds the three Tailwind directives and a placeholder comment. Its only importer is
 [`src/main.ts:1`](../src/main.ts#L1), and no page loads `src/main.ts`: `index.html` has no module script
-(its only scripts are [index.html:21–23](../index.html#L21-L23), [625](../index.html#L625) and
+(its only scripts are [index.html:21–23](../index.html#L21-L23), [621](../index.html#L621) and
 [622–1253](../index.html#L622-L1253)), and a search of the repository for `main.ts` finds only that file's own line. On the live
 site <https://phyeinusul.com> `/src/main.ts` answers 404, on the AppDeploy copy 403 (measured 20 October 2026). The file comes from the app template; see
 [build-and-deploy.md](build-and-deploy.md#build-files-at-the-root).
@@ -391,8 +391,8 @@ site <https://phyeinusul.com> `/src/main.ts` answers 404, on the AppDeploy copy 
    whose titles are weight 600 ([138](../public/styles/site.css#L138), [336](../public/styles/site.css#L336),
    [423](../public/styles/site.css#L423), [483](../public/styles/site.css#L483), [523](../public/styles/site.css#L523),
    [622](../public/styles/site.css#L622)). Its cards carry shadows ([222](../public/styles/site.css#L222),
-   [512](../public/styles/site.css#L512), [562](../public/styles/site.css#L562); hover shadows at
-   [203](../public/styles/site.css#L203), [537](../public/styles/site.css#L537), [570](../public/styles/site.css#L570)).
+   [562](../public/styles/site.css#L562), [562](../public/styles/site.css#L562); hover shadows at
+   [203](../public/styles/site.css#L203), [222](../public/styles/site.css#L222), [570](../public/styles/site.css#L570)).
    When this note was written, AGENTS.md and CLAUDE.md asked for titles at weight 400 only. Since Numa's decision of
    20 October 2026 ([minor-issues-report.md](minor-issues-report.md)) they say what the code does: Instrument Serif at weight
    400 on the simulation, catalog and Portfolios pages, IBM Plex Serif at weight 600 on the home page alone (AGENTS.md, "Design";

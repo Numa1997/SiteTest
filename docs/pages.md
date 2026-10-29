@@ -75,10 +75,10 @@ education, research projects, eight simulation plates and skills. It is the entr
 | [8](../index.html#L8) | `<title>` "Numa Koudsie · Notebook" |
 | [9–13](../index.html#L9-L13) | `description`, `author`, `theme-color` |
 | [15](../index.html#L15) | `styles/site.css` (tokens, layout, hero, timeline, plates; imports the self-hosted IBM Plex from `fonts/plex.css`) |
-| [16](../index.html#L16) | `styles/fold.css` (the fold cards) |
+| [15](../index.html#L15) | `styles/fold.css` (the fold cards) |
 | [21–23](../index.html#L21-L23) | `className = 'js'` |
 
-Scripts, in load order, at the end of `<body>`: `scripts/fold.js` ([625](../index.html#L625)), then the inline script
+Scripts, in load order, at the end of `<body>`: `scripts/fold.js` ([621](../index.html#L621)), then the inline script
 ([622–1253](../index.html#L622-L1253)). No KaTeX, no `paper.css`: the home page has no mathematics typeset.
 
 Fonts as measured in Chromium: IBM Plex Sans 400/500, IBM Plex Mono 400/500, IBM Plex Serif 600 (titles) and 400 italic (the
@@ -251,7 +251,7 @@ view is kept in the address. Everything is drawn from the registry [`scripts/cat
 | [16](../public/simulations.html#L16) | `vendor/katex/katex.min.css` (KaTeX 0.16.11, woff2 fonts only) |
 | [17](../public/simulations.html#L17) | `styles/paper.css`: Latin Modern `@font-face`, `--tex`, `--line-strong`, `--quote` |
 | [18](../public/simulations.html#L18) | `styles/catalog.css`: the page itself; switches `--serif` to Instrument Serif |
-| [19](../public/simulations.html#L19) | `styles/fold.css`: folds, and the one-column card layout ([fold.css:152–168](../public/styles/fold.css#L152-L168)) |
+| [15](../public/simulations.html#L15) | `styles/fold.css`: folds, and the one-column card layout ([fold.css:152–168](../public/styles/fold.css#L152-L168)) |
 
 Scripts at the end of `<body>`, in order: `scripts/fold.js` ([124](../public/simulations.html#L124)), `scripts/catalog.js`
 ([125](../public/simulations.html#L125)), `vendor/katex/katex.min.js` ([126](../public/simulations.html#L126)), the inline
@@ -348,9 +348,9 @@ fallback list.
 
 - **Add a simulation**: one entry in `SIMULATIONS` and a thumbnail; nothing in this page changes. The steps are in
   [scripts/catalog.md](scripts/catalog.md).
-- **Add a field**: an entry in `SIM_FIELDS`; its chip appears once a simulation uses it ([339](../public/simulations.html#L339)).
+- **Add a field**: an entry in `SIM_FIELDS`; its chip appears once a simulation uses it ([340](../public/simulations.html#L340)).
 - **Add a course year**: extend `STAGES` ([132–135](../public/simulations.html#L132-L135)) and the wording in `entry()`
-  ([202](../public/simulations.html#L202)) and in the empty message ([287](../public/simulations.html#L287)), which know only
+  ([203](../public/simulations.html#L203)) and in the empty message ([288](../public/simulations.html#L288)), which know only
   years 1 and 2.
 - **Change what a card shows**: edit `entry()`; keep `data-card`, the inner `.fold` and `button.fs-more`, which fold.js
   needs for More / Less, and keep the section's `id` (`simulation-<id>`), under which a reader's choice is stored.

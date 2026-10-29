@@ -141,7 +141,7 @@ fills `xex` with the exact solution and finds the largest error `err`, the large
 scale) and the largest $|x|$ for $t_n \ge 50$ s (`Xm`, "Measured, last 10 s"). The second
 ([L935–L943](../../public/simulations/driven-oscillator.html#L935-L943)) fills `xqs` $= F_n/k$, the drive phase
 `ph` $= \Omega t_n \bmod 2\pi$ and the chart half-height `ylim`. Then the arrays are marked changed
-([L943](../../public/simulations/driven-oscillator.html#L943)) and every scalar is written
+([L944](../../public/simulations/driven-oscillator.html#L944)) and every scalar is written
 ([L945–L968](../../public/simulations/driven-oscillator.html#L945-L968)).
 
 The arrays come from `ds.alloc(name)` ([L900–L901](../../public/simulations/driven-oscillator.html#L900-L901)), which
@@ -149,7 +149,7 @@ allocates a new typed array only when the length changes ([dataset.js:67](../../
 overwrites the same `Float64Array`s in place. Memory, measured from the live store: 10 arrays × 6 001 × 8 B = 480 080 B for
 the run, plus 3 × 241 × 8 B = 5 784 B for the Bode curves, 485 864 B in all. One solve took 6–17 ms in headless Chromium
 (`solve_ms`, measured with `performance.now()` at [L886](../../public/simulations/driven-oscillator.html#L886) and
-[L968](../../public/simulations/driven-oscillator.html#L968)).
+[L969](../../public/simulations/driven-oscillator.html#L969)).
 
 Last, `solve()` records the settings it used in `solved` ([L970](../../public/simulations/driven-oscillator.html#L970)),
 recomputes the Bode curves (`bode()`, [L998–L1024](../../public/simulations/driven-oscillator.html#L998-L1024)), rewrites the
@@ -277,7 +277,7 @@ states; one `frame()` took about 1.5 ms (measured over 200 seek events at a 1 44
 | Solve | `solve` | button | Calls `solve()` ([L1611](../../public/simulations/driven-oscillator.html#L1611)). |
 | Pause / Play | `play` | button | Toggles the clock via `Sim.playButton` ([L1610](../../public/simulations/driven-oscillator.html#L1610), [sim.js:199](../../public/scripts/sim.js#L199)). |
 | From t = 0 | `restart` | button | `playT = 0` and play ([L1612](../../public/simulations/driven-oscillator.html#L1612)). |
-| Stored run | `seek` | 0–6000, step 1, default 0 ([L162](../../public/simulations/driven-oscillator.html#L162)) | Sets `playT = n · 10 ms` and draws ([L814](../../public/simulations/driven-oscillator.html#L814)); follows the playback ([L1537](../../public/simulations/driven-oscillator.html#L1537)). |
+| Stored run | `seek` | 0–6000, step 1, default 0 ([L162](../../public/simulations/driven-oscillator.html#L162)) | Sets `playT = n · 10 ms` and draws ([L814](../../public/simulations/driven-oscillator.html#L814)); follows the playback ([L1542](../../public/simulations/driven-oscillator.html#L1542)). |
 | Playback speed | `speed` | 0.25–4, step 0.25, default 1 ([L166](../../public/simulations/driven-oscillator.html#L166)) | Multiplies $\Delta t$ ([L1556](../../public/simulations/driven-oscillator.html#L1556)). Does not mark the run stale. |
 | Spring constant $k$ | `kspring` | 1.5–90 N/m, step 0.01, default 9.87 | Sets $k$; $f_0 = \sqrt{k/m}/2\pi$ is shown beside it and used by the rest of the code; marks stale. |
 | Damping ratio $\zeta$ | `zeta` | 0.01–0.9, step 0.01, default 0.05 ([L178](../../public/simulations/driven-oscillator.html#L178)) | $c$ at the next solve; marks stale. The maximum 0.9 keeps $\omega_d$ real in `exact()`. |
@@ -403,7 +403,7 @@ step 2 [L883–L885](../../public/simulations/driven-oscillator.html#L883-L885);
 [L922–L923](../../public/simulations/driven-oscillator.html#L922-L923); step 4
 [L905–L910](../../public/simulations/driven-oscillator.html#L905-L910); step 5
 [L919–L920](../../public/simulations/driven-oscillator.html#L919-L920) and
-[L968](../../public/simulations/driven-oscillator.html#L968); step 6
+[L969](../../public/simulations/driven-oscillator.html#L969); step 6
 [L818–L819](../../public/simulations/driven-oscillator.html#L818-L819) and
 [L931](../../public/simulations/driven-oscillator.html#L931); step 7
 [L1556](../../public/simulations/driven-oscillator.html#L1556), [L1534](../../public/simulations/driven-oscillator.html#L1534),
@@ -465,10 +465,10 @@ the data panel prints. In detail:
   hand and must change with them: the seek slider `max="6000"` ([L162](../../public/simulations/driven-oscillator.html#L162));
   the `formula` texts "n · 10 h", "t_n ≥ 50 s", "round(t_play / 10h)" ([L658](../../public/simulations/driven-oscillator.html#L658),
   [L685](../../public/simulations/driven-oscillator.html#L685), [L689](../../public/simulations/driven-oscillator.html#L689));
-  the group note "every 10 ms of the 60 s" ([L1696](../../public/simulations/driven-oscillator.html#L1696)); the check text
+  the group note "every 10 ms of the 60 s" ([L1701](../../public/simulations/driven-oscillator.html#L1701)); the check text
   "at most 6000" ([L1840](../../public/simulations/driven-oscillator.html#L1840)); the 10 s tick step of the overview
   ([L1346](../../public/simulations/driven-oscillator.html#L1346)); the walkthrough's "step / 10", "60 000 steps" and
-  "6 001 rows" ([driven.js:57–58](../../public/scripts/walk/driven.js#L57-L58)); the lecture note section 8
+  "6 001 rows" ([driven.js:169–170](../../public/scripts/walk/driven.js#L169-L170)); the lecture note section 8
   ([L505–L507](../../public/simulations/driven-oscillator.html#L505-L507)) and `about`.
 - **The integrator exists twice.** `solve()` ([L913–L924](../../public/simulations/driven-oscillator.html#L913-L924)) and
   `rk4Replay()` ([L1636–L1647](../../public/simulations/driven-oscillator.html#L1636-L1647)) must stay identical, line for line,

@@ -25,19 +25,19 @@ how `simulations.html` uses each field.
 
 | Field | Type | Meaning | Used by `simulations.html` |
 |---|---|---|---|
-| `id` | string | short name; also the thumbnail name `images/sims/<id>.webp` | thumbnail path ([L207](../../public/simulations.html#L207)); card ids `sim-<id>` and `simulation-<id>`, which are also the keys under which `fold.js` remembers a card as open or closed ([L205](../../public/simulations.html#L205), [L236](../../public/simulations.html#L236)); key of `openCards` ([L343](../../public/simulations.html#L343)) |
-| `fig` | number | figure number as printed on the page; the list is sorted by it | sort ([L164](../../public/simulations.html#L164)); search words `fig N`, `fig. N` ([L159](../../public/simulations.html#L159)); "Figure N" caption, "Fig. N" placeholder, "Open Fig. N" link, two-digit fold number ([L206-L208](../../public/simulations.html#L206-L208), [L224](../../public/simulations.html#L224), [L237](../../public/simulations.html#L237)) |
-| `title` | string | the page's `h1` without the final dot | fold title and `data-label`, card heading, search ([L236-L237](../../public/simulations.html#L236-L237), [L211](../../public/simulations.html#L211)) |
-| `file` | string | path from `public/`; the lecture note is `file + '#paper'` | links, passed through `encodeURI` so spaces become `%20` ([L201](../../public/simulations.html#L201), [L225](../../public/simulations.html#L225)) |
-| `field` | string | an `id` from `SIM_FIELDS` | field chip filter ([L167](../../public/simulations.html#L167)); field name in the kicker line and in the search text ([L210](../../public/simulations.html#L210), [L160](../../public/simulations.html#L160)) |
-| `stage` | number | course year the figure is written for: 1 first, 2 second | year chip filter, compared as a string ([L168](../../public/simulations.html#L168)); "first year", "second year", or "year N" in the kicker ([L202](../../public/simulations.html#L202)) |
-| `subject` | string | the subject line under the figure number on the page | the fold's counts line ([L236](../../public/simulations.html#L236)); caption, first letter capitalised ([L208](../../public/simulations.html#L208)); search |
-| `summary` | string | two or three sentences, the abstract of the lecture note | abstract paragraph ([L212](../../public/simulations.html#L212)); search |
+| `id` | string | short name; also the thumbnail name `images/sims/<id>.webp` | thumbnail path ([L209](../../public/simulations.html#L209)); card ids `sim-<id>` and `simulation-<id>`, which are also the keys under which `fold.js` remembers a card as open or closed ([L205](../../public/simulations.html#L205), [L238](../../public/simulations.html#L238)); key of `openCards` ([L343](../../public/simulations.html#L343)) |
+| `fig` | number | figure number as printed on the page; the list is sorted by it | sort ([L164](../../public/simulations.html#L164)); search words `fig N`, `fig. N` ([L160–161](../../public/simulations.html#L160-L161)); "Figure N" caption, "Fig. N" placeholder, "Open Fig. N" link, two-digit fold number ([L207-L209](../../public/simulations.html#L207-L209), [L226](../../public/simulations.html#L226), [L238](../../public/simulations.html#L238)) |
+| `title` | string | the page's `h1` without the final dot | fold title and `data-label`, card heading, search ([L237-L238](../../public/simulations.html#L237-L238), [L213](../../public/simulations.html#L213)) |
+| `file` | string | path from `public/`; the lecture note is `file + '#paper'` | links, passed through `encodeURI` so spaces become `%20` ([L202](../../public/simulations.html#L202), [L226](../../public/simulations.html#L226)) |
+| `field` | string | an `id` from `SIM_FIELDS` | field chip filter ([L167](../../public/simulations.html#L167)); field name in the kicker line and in the search text ([L211](../../public/simulations.html#L211), [L160–161](../../public/simulations.html#L160-L161)) |
+| `stage` | number | course year the figure is written for: 1 first, 2 second | year chip filter, compared as a string ([L168](../../public/simulations.html#L168)); "first year", "second year", or "year N" in the kicker ([L203](../../public/simulations.html#L203)) |
+| `subject` | string | the subject line under the figure number on the page | the fold's counts line ([L238](../../public/simulations.html#L238)); caption, first letter capitalised ([L209](../../public/simulations.html#L209)); search |
+| `summary` | string | two or three sentences, the abstract of the lecture note | abstract paragraph ([L213](../../public/simulations.html#L213)); search |
 | `equation` | string | the key equation in TeX, display style | `data-tex`, rendered by `katex.render` with `displayMode: true`; on failure shown as plain text ([L214](../../public/simulations.html#L214), [L249-L259](../../public/simulations.html#L249-L259)) |
-| `model` | string | the equations the figure is built on, in words | "model" in the details ([L216](../../public/simulations.html#L216)); search |
-| `method` | string | how the page computes them | "method" ([L217](../../public/simulations.html#L217)); search |
-| `controls` | string | what the reader sets | "you set" ([L218](../../public/simulations.html#L218)); search |
-| `concepts` | array of strings | search words and tags | the first six as tags ([L221](../../public/simulations.html#L221)); all in the search ([L160](../../public/simulations.html#L160)) |
+| `model` | string | the equations the figure is built on, in words | "model" in the details ([L219](../../public/simulations.html#L219)); search |
+| `method` | string | how the page computes them | "method" ([L219](../../public/simulations.html#L219)); search |
+| `controls` | string | what the reader sets | "you set" ([L219](../../public/simulations.html#L219)); search |
+| `concepts` | array of strings | search words and tags | the first six as tags ([L222](../../public/simulations.html#L222)); all in the search ([L160–161](../../public/simulations.html#L160-L161)) |
 | `has` | array of `SIM_TOOLS` keys | which shared tools the page carries | not read |
 | `added` | `YYYY-MM-DD` | date first published | not read |
 

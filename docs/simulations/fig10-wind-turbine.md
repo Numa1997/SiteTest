@@ -143,7 +143,7 @@ the tip speed $\omega R$. The derived columns are computed at that moment with t
 integrator uses. Row $n$ is the state at $t_n = n\cdot 2h = n\cdot 20$ ms. After storing step 12 000 the loop stops
 ([L712](../../public/simulations/wind-turbine.html#L712)): 12 000 RK4 steps, 6 001 rows.
 
-After the loop: arrays marked changed ([L722](../../public/simulations/wind-turbine.html#L722)); chart ranges from the run's
+After the loop: arrays marked changed ([L723](../../public/simulations/wind-turbine.html#L723)); chart ranges from the run's
 extremes ([L724–L727](../../public/simulations/wind-turbine.html#L724-L727)); the final kinetic energy
 ([L728](../../public/simulations/wind-turbine.html#L728)); settings, gains, energies, mean power and the balance
 ([L729–L734](../../public/simulations/wind-turbine.html#L729-L734)); the `solved` snapshot, readouts, `playT = 0` and play
@@ -153,7 +153,7 @@ The arrays come from `ds.alloc`, which reuses an array when its length is unchan
 ([dataset.js:67](../../public/scripts/dataset.js#L67)), so a re-solve overwrites them in place. Memory, measured from the
 live store: 15 arrays × 6 001 × 8 B = 720 120 B for the run plus 2 × 271 × 8 B = 4 336 B for the $c_p$ curve, 724 456 B in
 all. One solve took 10–46 ms in headless Chromium (`solve_ms`, [L696](../../public/simulations/wind-turbine.html#L696),
-[L734](../../public/simulations/wind-turbine.html#L734)).
+[L735](../../public/simulations/wind-turbine.html#L735)).
 
 ### When the run is solved again
 
@@ -207,7 +207,7 @@ ticks every animation frame, the figure is redrawn at the display rate even whil
 | `rates(t, w, I, c)` | [686–691](../../public/simulations/wind-turbine.html#L686-L691) | The seven slopes, with anti-windup. |
 | `solve()` | [694–740](../../public/simulations/wind-turbine.html#L694-L740) | Solve and store the two minutes (see above); also stores `h`, `steps` ([695](../../public/simulations/wind-turbine.html#L695)), `rpm_min`, `rpm_max`, `captured_pct` ([731–732](../../public/simulations/wind-turbine.html#L731-L732)). |
 | `markStale()` | [742–746](../../public/simulations/wind-turbine.html#L742-L746) | Sets `stale` when a control differs from the last solve. |
-| `status()` | [748–755](../../public/simulations/wind-turbine.html#L748-L755) | Status line, from the stored `steps` and `solve_ms`, and "1 solve / 2 store" marks; names from `NAMES` ([L746](../../public/simulations/wind-turbine.html#L746)). |
+| `status()` | [748–755](../../public/simulations/wind-turbine.html#L748-L755) | Status line, from the stored `steps` and `solve_ms`, and "1 solve / 2 store" marks; names from `NAMES` ([L747](../../public/simulations/wind-turbine.html#L747)). |
 | `readouts()` | [756–764](../../public/simulations/wind-turbine.html#L756-L764) | Mean power, energy in kWh, rotor-speed range (`rpm_min`–`rpm_max`), captured share (`captured_pct`), balance, solve time, all read from the store; computes nothing. |
 | `geom()` | [768–783](../../public/simulations/wind-turbine.html#L768-L783) | Layout: scene height, rotor radius and hub, six air lines, three strips, ranges, maps `sx`, `sy`. |
 | `label(c, sym, value, …)` | [784–794](../../public/simulations/wind-turbine.html#L784-L794) | A symbol via `Sim.tex`, then its value in IBM Plex Mono. |
@@ -241,9 +241,9 @@ ticks every animation frame, the figure is redrawn at the display rate even whil
 | From t = 0 | `restart` | button | `playT = 0` and play ([L970](../../public/simulations/wind-turbine.html#L970)). |
 | Stored run | `seek` | 0–6000, step 1, default 0 ([L95](../../public/simulations/wind-turbine.html#L95)) | `playT = n · 20 ms`, draw ([L641](../../public/simulations/wind-turbine.html#L641)); follows playback ([L954](../../public/simulations/wind-turbine.html#L954)). |
 | Playback speed | `speed` | 0.5–8, step 0.5, default 1 ([L99](../../public/simulations/wind-turbine.html#L99)) | Multiplies $\Delta t$ ([L962](../../public/simulations/wind-turbine.html#L962)). |
-| Controller | `ctrl` (buttons `data-v="pi"` / `"opt"`) | Hold speed (default, [L106](../../public/simulations/wind-turbine.html#L106), [L563](../../public/simulations/wind-turbine.html#L563)) / Follow the wind | `ctrl` ([L987](../../public/simulations/wind-turbine.html#L987)), used by `tauGen` and the start speed; marks stale. |
+| Controller | `ctrl` (buttons `data-v="pi"` / `"opt"`) | Hold speed (default, [L106](../../public/simulations/wind-turbine.html#L106), [L564](../../public/simulations/wind-turbine.html#L564)) / Follow the wind | `ctrl` ([L987](../../public/simulations/wind-turbine.html#L987)), used by `tauGen` and the start speed; marks stale. |
 | Target rotor speed | `rpm` | 8–21 rpm, step 0.5, default 15 ([L111](../../public/simulations/wind-turbine.html#L111)) | $\omega_\text{ref} = \text{rpm}\cdot2\pi/60$ at the next solve ([L697](../../public/simulations/wind-turbine.html#L697)); greyed and not marking stale when following the wind ([L743](../../public/simulations/wind-turbine.html#L743), [L983](../../public/simulations/wind-turbine.html#L983)). |
-| Wind | `prof` (buttons `steady`, `gust`, `step`, `turb`) | Turbulent (default, [L121](../../public/simulations/wind-turbine.html#L121), [L563](../../public/simulations/wind-turbine.html#L563)) | `prof` ([L988](../../public/simulations/wind-turbine.html#L988)), read by `wind()`; marks stale. |
+| Wind | `prof` (buttons `steady`, `gust`, `step`, `turb`) | Turbulent (default, [L121](../../public/simulations/wind-turbine.html#L121), [L564](../../public/simulations/wind-turbine.html#L564)) | `prof` ([L988](../../public/simulations/wind-turbine.html#L988)), read by `wind()`; marks stale. |
 | Mean wind speed $v_0$ | `v0` | 4–11 m/s, step 0.1, default 8 ([L125](../../public/simulations/wind-turbine.html#L125)) | `c.v0`; marks stale. |
 | Turbulence σ / Gust size / Step size | `dv` | 0–4 m/s, step 0.1, default 1.5 ([L129](../../public/simulations/wind-turbine.html#L129)) | `c.dv`; label set by `controls()`; unused for steady wind; marks stale. |
 | Read values | added by datalog.js | switch, off | Appended to the first figure caption ([datalog.js:895–897](../../public/scripts/datalog.js#L895-L897)); see [datalog.md](../scripts/datalog.md). |
@@ -262,11 +262,11 @@ The store is made at [L567](../../public/simulations/wind-turbine.html#L567):
 | Turbine | `rho`, `R`, `J`; `lam_opt`, `cp_max`, `cp_betz`, `K_opt` | `optimum()`, [L661](../../public/simulations/wind-turbine.html#L661); [L657](../../public/simulations/wind-turbine.html#L657) |
 | Settings | `ctrl`, `profile`, `v0`, `dv`, `w_ref`; `rpm_ref` | [L729](../../public/simulations/wind-turbine.html#L729); [L726](../../public/simulations/wind-turbine.html#L726) |
 | Controller | `dtau_dw`, `Kp`, `Ki`, `tau0` | [L730](../../public/simulations/wind-turbine.html#L730) |
-| Stored run (dim `n`) | `ts` (coordinate), `vw`, `om`, `rpm`, `th`, `lam`, `cpv`; `ta`, `tg`, `Pg`, `Pa`, `Eg`, `sw`, `Ictl`, `vtip` | [L707](../../public/simulations/wind-turbine.html#L707); [L709](../../public/simulations/wind-turbine.html#L709) |
+| Stored run (dim `n`) | `ts` (coordinate), `vw`, `om`, `rpm`, `th`, `lam`, `cpv`; `ta`, `tg`, `Pg`, `Pa`, `Eg`, `sw`, `Ictl`, `vtip` | [L708](../../public/simulations/wind-turbine.html#L708); [L709](../../public/simulations/wind-turbine.html#L709) |
 | Energy | `h`, `steps` | `solve()`, [L695](../../public/simulations/wind-turbine.html#L695), before the loop: the RK4 step $H$ = 0.01 s and $T_\text{end}/H$ = 12 000 steps |
 | | `rpm_min`, `rpm_max` | `solve()`, [L731](../../public/simulations/wind-turbine.html#L731): the smallest and largest stored `rpm` (`minOf`, `maxOf`, [L1020–L1021](../../public/simulations/wind-turbine.html#L1020-L1021)) |
 | | `captured_pct` | `solve()`, [L732](../../public/simulations/wind-turbine.html#L732): $100\,E_\text{aero}/E_\text{wind}$ |
-| | `Ea`, `Ew`, `Eg_end`, `P_mean`; `balance`; `solve_ms`, `stale` | [L733](../../public/simulations/wind-turbine.html#L733); [L734](../../public/simulations/wind-turbine.html#L734); [L734](../../public/simulations/wind-turbine.html#L734), `stale` also [L744](../../public/simulations/wind-turbine.html#L744) |
+| | `Ea`, `Ew`, `Eg_end`, `P_mean`; `balance`; `solve_ms`, `stale` | [L733](../../public/simulations/wind-turbine.html#L733); [L735](../../public/simulations/wind-turbine.html#L735); [L735](../../public/simulations/wind-turbine.html#L735), `stale` also [L744](../../public/simulations/wind-turbine.html#L744) |
 | Playback | `i_now`, `t_play`, `v_now`, `rpm_now`, `P_now`, `lam_now`, `cp_now`, `th_now` | `frame()`, [L951–L952](../../public/simulations/wind-turbine.html#L951-L952) |
 | Power curve (dim `L`) | `lamL` (coordinate), `cpL` | `optimum()`, [L659](../../public/simulations/wind-turbine.html#L659) |
 | Drawing | `v_hi`, `rpm_lo`, `rpm_hi`; `P_hi`, `px_per_m_air` | [L726](../../public/simulations/wind-turbine.html#L726); [L727](../../public/simulations/wind-turbine.html#L727) |
@@ -297,8 +297,8 @@ RK4 to row $n$, the totals by `fullReplay()`, and `lam_opt` by repeating the sca
 ([L1136–L1154](../../public/simulations/wind-turbine.html#L1136-L1154)) reads back the burgundy blade, the dots and curves
 of the strips ($P_\text{aero}$ with a rose-colour test), a dash of the air, the operating point and the $c_p$ curve.
 It also reads the text on screen: `rpm_min`, `rpm_max` and `captured_pct` against the readouts `r-rpm` and `r-eff`
-([L1138–L1140](../../public/simulations/wind-turbine.html#L1138-L1140)), `steps` against the status line, and `h` from the sampling interval the status line states, "one every 20 ms",
-divided by `EVERY` = 2 ([L1136–L1137](../../public/simulations/wind-turbine.html#L1136-L1137)). While a control has changed and the run is not solved again, the status line asks for a
+([L1139–L1141](../../public/simulations/wind-turbine.html#L1139-L1141)), `steps` against the status line, and `h` from the sampling interval the status line states, "one every 20 ms",
+divided by `EVERY` = 2 ([L1137–L1138](../../public/simulations/wind-turbine.html#L1137-L1138)). While a control has changed and the run is not solved again, the status line asks for a
 new solve and shows neither number. `drawn.h` and `drawn.steps` then return `ok: null` by design, and the panel shows the
 neutral "Not in the picture at the moment, so there is nothing to read back." rather than a failure
 ([datalog.js:836](../../public/scripts/datalog.js#L836)). `probe`
@@ -369,7 +369,7 @@ rows, by solving each combination in the page (measured).
 
 ## Where the drawing and the store differ
 
-The page states this in `Sim.data.about` ([L1158](../../public/simulations/wind-turbine.html#L1158)). In detail:
+The page states this in `Sim.data.about` ([L1159](../../public/simulations/wind-turbine.html#L1159)). In detail:
 
 - **Nearest row, no interpolation.** The picture shows row $\operatorname{round}(t_\text{play}/20\,\text{ms})$
   ([L949](../../public/simulations/wind-turbine.html#L949)); the caption shows `ts[i]` to one decimal
@@ -399,13 +399,13 @@ The page states this in `Sim.data.about` ([L1158](../../public/simulations/wind-
   Keep `TEND / H` and `TEND / H / EVERY` whole numbers. Change with them: seek `max="6000"`
   ([L95](../../public/simulations/wind-turbine.html#L95)); formula texts "n · 2h" and "round(t_play / 2h)"
   ([L593](../../public/simulations/wind-turbine.html#L593), [L613](../../public/simulations/wind-turbine.html#L613)); group
-  note "every 20 ms of the 120 s" ([L1061](../../public/simulations/wind-turbine.html#L1061)); check text "at most 6000"
+  note "every 20 ms of the 120 s" ([L1062](../../public/simulations/wind-turbine.html#L1062)); check text "at most 6000"
   ([L1126](../../public/simulations/wind-turbine.html#L1126)); time labels every 20 s
   ([L903](../../public/simulations/wind-turbine.html#L903)); the 150-row trail
-  ([L926](../../public/simulations/wind-turbine.html#L926)); the walkthrough step 6 note and step 7 formula
-  ([turbine.js:96–97](../../public/scripts/walk/turbine.js#L96-L97), [turbine.js:110](../../public/scripts/walk/turbine.js#L110));
+  ([L926](../../public/simulations/wind-turbine.html#L926)); the walkthrough's step 11 formula, step 12 and the trail in step 13
+  ([turbine.js:217](../../public/scripts/walk/turbine.js#L217), [turbine.js:241](../../public/scripts/walk/turbine.js#L241), [turbine.js:270](../../public/scripts/walk/turbine.js#L270));
   the note's sections 8 and 9 ([L509–L510](../../public/simulations/wind-turbine.html#L509-L510),
-  [L515](../../public/simulations/wind-turbine.html#L515)) and `about`.
+  [L516](../../public/simulations/wind-turbine.html#L516)) and `about`.
 - **The integrator exists twice.** The start state and the step in `solve()`
   ([L703](../../public/simulations/wind-turbine.html#L703), [L714–L721](../../public/simulations/wind-turbine.html#L714-L721))
   and in `rk4Replay()` ([L1000](../../public/simulations/wind-turbine.html#L1000),
@@ -413,16 +413,16 @@ The page states this in `Sim.data.about` ([L1158](../../public/simulations/wind-
   columns will disagree.
 - **Order at start-up.** `optimum()` must run before `solve()` ([L1162–L1163](../../public/simulations/wind-turbine.html#L1162-L1163)):
   `solve()` reads `lam_opt` for the start speed and `tauGen` reads `K_opt` from the store.
-- **Defaults in two places.** `ctrl = 'pi'` and `prof = 'turb'` ([L563](../../public/simulations/wind-turbine.html#L563)) must
+- **Defaults in two places.** `ctrl = 'pi'` and `prof = 'turb'` ([L564](../../public/simulations/wind-turbine.html#L564)) must
   match the buttons marked `aria-pressed="true"` ([L106](../../public/simulations/wind-turbine.html#L106),
   [L121](../../public/simulations/wind-turbine.html#L121)).
 - **Physics constants are quoted elsewhere.** $c_1$…$c_6$ ([L557](../../public/simulations/wind-turbine.html#L557)) also
   appear in the `cp_model` attribute ([L567](../../public/simulations/wind-turbine.html#L567)), walkthrough step 1
-  ([turbine.js:13](../../public/scripts/walk/turbine.js#L13)) and the note ([L238–L239](../../public/simulations/wind-turbine.html#L238-L239)).
-  `WN` and `ZC` appear in the note ([L346](../../public/simulations/wind-turbine.html#L346)) and walkthrough step 4
-  ([turbine.js:63–64](../../public/scripts/walk/turbine.js#L63-L64)). `AIRPX`, `K` and `DASH` appear in `about`, in the
-  `airPixel` note ([L1053](../../public/simulations/wind-turbine.html#L1053)) and in walkthrough step 7
-  ([turbine.js:111](../../public/scripts/walk/turbine.js#L111)).
+  ([turbine.js:30](../../public/scripts/walk/turbine.js#L30)) and the note ([L238–L239](../../public/simulations/wind-turbine.html#L238-L239)).
+  `WN` and `ZC` appear in the note ([L347](../../public/simulations/wind-turbine.html#L347)) and walkthrough step 8
+  ([turbine.js:148–153](../../public/scripts/walk/turbine.js#L148-L153)). `AIRPX`, `K` and `DASH` appear in `about`, in the
+  `airPixel()` ([L1047–1052](../../public/simulations/wind-turbine.html#L1047-L1052)); since the walkthrough was rewritten they no longer
+  appear in it (29 October 2026).
 - **The turbulent wind is fixed.** `PHASES` ([L558](../../public/simulations/wind-turbine.html#L558)) make every solve use the
   same turbulence; Figure 4 and the section 7 table depend on them. Changing the phases, the wind, the controller or the
   turbine means recomputing those numbers and SVGs.
@@ -447,13 +447,13 @@ The page states this in `Sim.data.about` ([L1158](../../public/simulations/wind-
    ([sim.js:178–185](../../public/scripts/sim.js#L178-L185)) and the tick always calls `frame()`
    ([L966](../../public/simulations/wind-turbine.html#L966)), so both canvases are redrawn about 60 times a second while
    paused (about 1.4 ms per frame measured), and `#cap-op` and `#cap-t` are rewritten each frame
-   ([L932](../../public/simulations/wind-turbine.html#L932), [L955](../../public/simulations/wind-turbine.html#L955)).
+   ([L933](../../public/simulations/wind-turbine.html#L933), [L955](../../public/simulations/wind-turbine.html#L955)).
 8. **AGENTS.md** said the load order dataset.js → page → datalog.js holds for "all eight figures"; this page (Fig. 10)
    follows it too. Corrected to "all ten figures" on 14 October 2026.
 9. Fixed on 2026-10-15: in note Figure 2 the axis title "power coefficient c<sub>p</sub>" moved from y = 31 to y = 27, so its
    subscript p clears the Betz line at y = 38.8; the title box now spans y = 14.4 to 36.1 ([L277](../../public/simulations/wind-turbine.html#L277)) (audit repair, commit [32c240c](https://github.com/Numa1997/SiteTest/commit/32c240c52fd0535d39a0cef608dc404cf4219484)).
 10. Fixed on 2026-10-15: while the run is stale, the Checks of `h` and `steps` show "not in the picture" instead of a burgundy ✕:
-    `drawn.h` and `drawn.steps` return `ok: null` there by design ([L1136–L1137](../../public/simulations/wind-turbine.html#L1136-L1137)), and the panel now honours it
+    `drawn.h` and `drawn.steps` return `ok: null` there by design ([L1137–L1138](../../public/simulations/wind-turbine.html#L1137-L1138)), and the panel now honours it
     ([datalog.js:836](../../public/scripts/datalog.js#L836)) (audit repair, commit [32c240c](https://github.com/Numa1997/SiteTest/commit/32c240c52fd0535d39a0cef608dc404cf4219484)).
 
 Batch D store additions in `solve()`: `h` (s), `steps` (count), `rpm_min` and `rpm_max` (turns per minute), and `captured_pct` (%). They appear in the Energy group, have recomputation checks and DOM readbacks. The step readback infers h from the visible sampling interval and EVERY = 2. The speed range is the sampled run range, independent of the wider chart bounds. `readouts()` no longer computes these results.
@@ -463,18 +463,18 @@ Batch D store additions in `solve()`: `h` (s), `steps` (count), `rpm_min` and `r
 
 The false global monotonicity argument is replaced by a local restoring torque slope of −3 K ω at the maximum-power operating point. The note explains proportional braking and integral memory before selecting gains, and uses relative airflow rather than a solid-wall blade analogy. Simulation code, inline styles and figure SVGs match the latest live baseline. See the [theory audit](../research-theory-audit.md).
 
-Fixed on 2026-10-16: "the linearised equation below" pointed at (10), which is above ([L346](../../public/simulations/wind-turbine.html#L346)); and the conclusion that no global argument exists is replaced by the sign of the net torque on each side of $\lambda_\text{opt}$ ([L340](../../public/simulations/wind-turbine.html#L340)): $c_p/\lambda^3$ is not monotone, but it stays above its value at $\lambda_\text{opt}$ for smaller $\lambda$ and below it for larger, so in steady wind the rotor returns from any start at which it is turning. See the [audit of the revision](../research-theory-audit.md).
+Fixed on 2026-10-16: "the linearised equation below" pointed at (10), which is above ([L347](../../public/simulations/wind-turbine.html#L347)); and the conclusion that no global argument exists is replaced by the sign of the net torque on each side of $\lambda_\text{opt}$ ([L341](../../public/simulations/wind-turbine.html#L341)): $c_p/\lambda^3$ is not monotone, but it stays above its value at $\lambda_\text{opt}$ for smaller $\lambda$ and below it for larger, so in steady wind the rotor returns from any start at which it is turning. See the [audit of the revision](../research-theory-audit.md).
 
-Fixed on 2026-10-16 (second repairs): the $c_p$ paragraph has its two pictures back (too slow lets the air through, too fast acts like a wall) with the angle of attack as the mechanism behind both ([L235](../../public/simulations/wind-turbine.html#L235)). See the [audit of the revision](../research-theory-audit.md).
+Fixed on 2026-10-16 (second repairs): the $c_p$ paragraph has its two pictures back (too slow lets the air through, too fast acts like a wall) with the angle of attack as the mechanism behind both ([L236](../../public/simulations/wind-turbine.html#L236)). See the [audit of the revision](../research-theory-audit.md).
 
 ## Teaching revision · 20 October 2026
 
-Judged section by section against `notes/STANDARD.md` (plan and verdicts in `notes/fig10/plan.md`); sections 5 and 10 and the abstract were left as they were. Changes, all inside existing lines, so no line of the page moved and every link above still holds: $\omega$ and $R$ named in section 1 ([L178](../../public/simulations/wind-turbine.html#L178)) and $\rho$ in section 2 ([L214](../../public/simulations/wind-turbine.html#L214)); the Betz derivation now writes the two Bernoulli equations, says why Bernoulli does not hold across the disc, and divides by $v - v_w$ in the open, and the root $a = 1$ is named ([L224–L226](../../public/simulations/wind-turbine.html#L224-L226)); section 4 says why $c_p$ depends on $\omega$ and $v$ only through $\lambda$ (the relative wind meets the blade at $\tan\phi = (R/r)/\lambda$, 7.04° at the tip at $\lambda = 8.1$, [L235](../../public/simulations/wind-turbine.html#L235)); section 6.1 defines $\omega_*$ and gives the step to the slope $-K_\text{opt}\omega_*$ ([L340](../../public/simulations/wind-turbine.html#L340)); section 6.2 defines $\tau_0$, writes the linearised equation before it is differentiated into (10), and replaces "without ringing" by the measured Step-run overshoot of 0.39 rpm and dip of 0.01 rpm ($\zeta_c = 0.8 < 1$; [L345–L346](../../public/simulations/wind-turbine.html#L345-L346)); section 7 glosses $\Delta v$ and separates $c_p$ after the step (0.427, measured) from the whole-run share 0.437 ([L483](../../public/simulations/wind-turbine.html#L483), [L497](../../public/simulations/wind-turbine.html#L497)); section 8 adds the step study above ([L508](../../public/simulations/wind-turbine.html#L508)); section 9 names the rose $P_\text{aero}$ curve ([L516](../../public/simulations/wind-turbine.html#L516)); the four references have links to pages that were opened ([L530–L533](../../public/simulations/wind-turbine.html#L530-L533)). Heier's book itself could not be opened; its link is the publisher's description at the Library of Congress. Walkthrough step 4 still says "without ringing" ([turbine.js:64](../../public/scripts/walk/turbine.js#L64)); it was not edited.
+Judged section by section against `notes/STANDARD.md` (plan and verdicts in `notes/fig10/plan.md`); sections 5 and 10 and the abstract were left as they were. Changes, all inside existing lines, so no line of the page moved and every link above still holds: $\omega$ and $R$ named in section 1 ([L178](../../public/simulations/wind-turbine.html#L178)) and $\rho$ in section 2 ([L214](../../public/simulations/wind-turbine.html#L214)); the Betz derivation now writes the two Bernoulli equations, says why Bernoulli does not hold across the disc, and divides by $v - v_w$ in the open, and the root $a = 1$ is named ([L224–L226](../../public/simulations/wind-turbine.html#L224-L226)); section 4 says why $c_p$ depends on $\omega$ and $v$ only through $\lambda$ (the relative wind meets the blade at $\tan\phi = (R/r)/\lambda$, 7.04° at the tip at $\lambda = 8.1$, [L236](../../public/simulations/wind-turbine.html#L236)); section 6.1 defines $\omega_*$ and gives the step to the slope $-K_\text{opt}\omega_*$ ([L341](../../public/simulations/wind-turbine.html#L341)); section 6.2 defines $\tau_0$, writes the linearised equation before it is differentiated into (10), and replaces "without ringing" by the measured Step-run overshoot of 0.39 rpm and dip of 0.01 rpm ($\zeta_c = 0.8 < 1$; [L345–L346](../../public/simulations/wind-turbine.html#L345-L346)); section 7 glosses $\Delta v$ and separates $c_p$ after the step (0.427, measured) from the whole-run share 0.437 ([L483](../../public/simulations/wind-turbine.html#L483), [L497](../../public/simulations/wind-turbine.html#L497)); section 8 adds the step study above ([L508](../../public/simulations/wind-turbine.html#L508)); section 9 names the rose $P_\text{aero}$ curve ([L516](../../public/simulations/wind-turbine.html#L516)); the four references have links to pages that were opened ([L530–L533](../../public/simulations/wind-turbine.html#L530-L533)). Heier's book itself could not be opened; its link is the publisher's description at the Library of Congress. Walkthrough step 4 still says "without ringing" ([turbine.js:149](../../public/scripts/walk/turbine.js#L149)); it was not edited.
 
 ## Repair round · 20 October 2026
 
-After the independent referee and derivation checks (`notes/fig10/`), the lead made only these changes, each on its existing line, so no line link moved: equations (3) and (10) broken over two lines so their numbers show at 1440 px ([L225](../../public/simulations/wind-turbine.html#L225)); (10) ([L346](../../public/simulations/wind-turbine.html#L346)). Checked in headless Chromium at 1440 × 900 and 390 × 844: no console or KaTeX errors, no sideways scroll, no display equation wider than its box at 1440 px (`notes/verify.mjs`).
+After the independent referee and derivation checks (`notes/fig10/`), the lead made only these changes, each on its existing line, so no line link moved: equations (3) and (10) broken over two lines so their numbers show at 1440 px ([L225](../../public/simulations/wind-turbine.html#L225)); (10) ([L347](../../public/simulations/wind-turbine.html#L347)). Checked in headless Chromium at 1440 × 900 and 390 × 844: no console or KaTeX errors, no sideways scroll, no display equation wider than its box at 1440 px (`notes/verify.mjs`).
 
 ## Second check round · 20 October 2026
 
-From the derivation checks and blind referees that ran after the usage limit lifted (`notes/fig10/`), each change on its existing line: Figure 1: the tip speed drawn out of the page ([L198](../../public/simulations/wind-turbine.html#L198)); Figure 3: labels fit, subscripts set ([L307](../../public/simulations/wind-turbine.html#L307)); §2: power is torque times angular speed ([L217](../../public/simulations/wind-turbine.html#L217)); §4: the inflow angle 7° for the undisturbed wind, about 6° for the slowed air; one repeated sentence removed ([L235](../../public/simulations/wind-turbine.html#L235)); §6.1: the code, not the fit, gives no torque at a standstill ([L340](../../public/simulations/wind-turbine.html#L340)); §6.2 and §7: the Step wind is a 2 s ramp; overshoot 0.39 rpm ([L347](../../public/simulations/wind-turbine.html#L347)); equation (8) reflowed so its number shows at 1600 px ([L340](../../public/simulations/wind-turbine.html#L340)). Checked with `notes/verify.mjs` at 1440 × 900, 1600 × 900 and 390 × 844.
+From the derivation checks and blind referees that ran after the usage limit lifted (`notes/fig10/`), each change on its existing line: Figure 1: the tip speed drawn out of the page ([L198](../../public/simulations/wind-turbine.html#L198)); Figure 3: labels fit, subscripts set ([L307](../../public/simulations/wind-turbine.html#L307)); §2: power is torque times angular speed ([L217](../../public/simulations/wind-turbine.html#L217)); §4: the inflow angle 7° for the undisturbed wind, about 6° for the slowed air; one repeated sentence removed ([L236](../../public/simulations/wind-turbine.html#L236)); §6.1: the code, not the fit, gives no torque at a standstill ([L341](../../public/simulations/wind-turbine.html#L341)); §6.2 and §7: the Step wind is a 2 s ramp; overshoot 0.39 rpm ([L347](../../public/simulations/wind-turbine.html#L347)); equation (8) reflowed so its number shows at 1600 px ([L341](../../public/simulations/wind-turbine.html#L341)). Checked with `notes/verify.mjs` at 1440 × 900, 1600 × 900 and 390 × 844.

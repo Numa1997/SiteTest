@@ -255,8 +255,8 @@ is `t`; the length is `phasorRound()` ([L1367–1370](../../public/simulations/p
 figure closes ($2\pi$ s when $g = 0$) and $s_f$ the stored speed `sf`. Phasor time runs $s_f$ times as fast as real time, so
 for $s_f > 0$ a round is $\min(T, 20\,s_f)$ of phasor time, which never takes more than 20 s of real time. At $s_f = 0$ the
 length is the full figure, $T$; phasor time does not run then, so recording is blocked and the Record box says why: "Set
-Speed above 0: phasor time does not advance at Speed 0." ([L1465](../../public/simulations/phasor-sums.html#L1465)). It is also blocked in the Final view. The label
-says "one full figure" or "part of the figure", with the length ([L1464](../../public/simulations/phasor-sums.html#L1464)). Columns: `x`, `y`, `absz`, `sf`; the
+Speed above 0: phasor time does not advance at Speed 0." ([L1466](../../public/simulations/phasor-sums.html#L1466)). It is also blocked in the Final view. The label
+says "one full figure" or "part of the figure", with the length ([L1466](../../public/simulations/phasor-sums.html#L1466)). Columns: `x`, `y`, `absz`, `sf`; the
 point followed is the pen. If Speed becomes 0 during a round, the panel says why it is waiting; raising Speed resumes the
 same round.
 How rounds are recorded and saved: [datalog.md](../scripts/datalog.md).
@@ -266,7 +266,7 @@ path point in the Final view ([L1386–1399](../../public/simulations/phasor-sum
 34 variables from stored inputs only ([L1416–1457](../../public/simulations/phasor-sums.html#L1416-L1457)). `drawn`
 reads pixels back for `tip_px`, `px`, `path_x`, `trail_x`; each test first requires alpha > 0, then a dark colour
 where it expects one ([L1458–1463](../../public/simulations/phasor-sums.html#L1458-L1463)). The file base name is
-`fig7-phasor-sums` ([L1371](../../public/simulations/phasor-sums.html#L1371)).
+`fig7-phasor-sums` ([L1372](../../public/simulations/phasor-sums.html#L1372)).
 
 **`Sim.live()`** ([L1295–1314](../../public/simulations/phasor-sums.html#L1295-L1314)) returns formatted strings read
 from the store: `t, N, x, y, absz, absz2, E, G, g, Tc, M, q, dt, spd, sf, n, span, alpha, dev, bass, mid, high,
@@ -381,7 +381,7 @@ A stationary pen need not make a cusp. The listed-arm common period can exceed t
 
 ## Repair round · 20 October 2026
 
-After the independent referee and derivation checks (`notes/fig07/`), the lead made only these changes, each on its existing line, so no line link moved: §2.1: a parenthesis using symbols defined later removed ([L262](../../public/simulations/phasor-sums.html#L262)); §4: the beat length rises and falls at the full difference rate ([L382](../../public/simulations/phasor-sums.html#L382)); §4.1: why odd n gives n petals ([L390](../../public/simulations/phasor-sums.html#L390)); §4.2: why the law of cosines has a plus ([L440](../../public/simulations/phasor-sums.html#L440)); §7.1: blends are not the curves of the in-between settings ([L609](../../public/simulations/phasor-sums.html#L609)). Checked in headless Chromium at 1440 × 900 and 390 × 844: no console or KaTeX errors, no sideways scroll, no display equation wider than its box at 1440 px (`notes/verify.mjs`).
+After the independent referee and derivation checks (`notes/fig07/`), the lead made only these changes, each on its existing line, so no line link moved: §2.1: a parenthesis using symbols defined later removed ([L262](../../public/simulations/phasor-sums.html#L262)); §4: the beat length rises and falls at the full difference rate ([L382](../../public/simulations/phasor-sums.html#L382)); §4.1: why odd n gives n petals ([L390](../../public/simulations/phasor-sums.html#L390)); §4.2: why the law of cosines has a plus ([L440](../../public/simulations/phasor-sums.html#L440)); §7.1: blends are not the curves of the in-between settings ([L610](../../public/simulations/phasor-sums.html#L610)). Checked in headless Chromium at 1440 × 900 and 390 × 844: no console or KaTeX errors, no sideways scroll, no display equation wider than its box at 1440 px (`notes/verify.mjs`).
 
 ## Second check round · 20 October 2026
 

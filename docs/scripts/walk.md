@@ -40,12 +40,12 @@ window.WALK.pendulum = {
 
 | Field | Type | Shown as | Escaped? |
 |---|---|---|---|
-| `intro` | string | the paragraph under the heading "From symbols to code" ([sim.js:251](../../public/scripts/sim.js#L251)) | no, HTML |
+| `intro` | string | the paragraph under the heading "From symbols to code" ([sim.js:328](../../public/scripts/sim.js#L328)) | no, HTML |
 | `steps[].title` | string | the step's button in the list ("01 …") and the card heading ([sim.js:341](../../public/scripts/sim.js#L341), [sim.js:372](../../public/scripts/sim.js#L372)) | no, HTML |
 | `steps[].where` | string | where in the page's code the lines are, under the heading ([sim.js:372](../../public/scripts/sim.js#L372)) | yes, plain text |
 | `steps[].math` | string with marks | the "Algebra" column ([sim.js:374](../../public/scripts/sim.js#L374)) | no, HTML (`<sub>`, `<sup>`, `<b>`, `<br>`) |
 | `steps[].note` | string | the paragraph under the formula ([sim.js:374](../../public/scripts/sim.js#L374)) | no, HTML |
-| `steps[].code` | template literal with marks | the "Code · as written in this page" column, in `<pre><code>` ([sim.js:298](../../public/scripts/sim.js#L298)) | yes, plain text; line breaks kept |
+| `steps[].code` | template literal with marks | the "Code · as written in this page" column, in `<pre><code>` ([sim.js:375](../../public/scripts/sim.js#L375)) | yes, plain text; line breaks kept |
 | `steps[].syms` | array of `[key, symbol, inCode, meaning]` | one table row each: Symbol, In code, Now, Meaning ([sim.js:366-369](../../public/scripts/sim.js#L366-L369)) | `inCode` escaped; `symbol` and `meaning` HTML |
 
 ### The marks `⟦key|text⟧`
@@ -60,8 +60,9 @@ When the pointer is over, or the keyboard focus is on, anything with a `data-k` 
 same key gets the class `is-lit`: the symbol in the formula, the expression in the code and the table row light up together
 ([sim.js:355-359](../../public/scripts/sim.js#L355-L359), [sim.js:385-390](../../public/scripts/sim.js#L385-L390);
 styles at [sim.css:160-164](../../public/styles/sim.css#L160-L164)). A mark whose key has no table row in that step lights only
-the formula and the code; this happens in five steps (for example `X` in [bench.js:29](../../public/scripts/walk/bench.js#L29),
-`k2`, `k3`, `k4` in [pendulum.js:65](../../public/scripts/walk/pendulum.js#L65), `S1` in [slit.js:11](../../public/scripts/walk/slit.js#L11)).
+the formula and the code; this happens in 35 of the 127 steps (counted 29 October 2026; for example `X` in
+[bench.js:198](../../public/scripts/walk/bench.js#L198), `k2`, `k3`, `k4` in [pendulum.js:138](../../public/scripts/walk/pendulum.js#L138),
+`A` in [circles.js:69](../../public/scripts/walk/circles.js#L69)).
 Across the eleven files there are 906 marks in `math` and `code` (counted 29 October 2026; 326 in the ten files of 15 October).
 
 ### Elisions in the code
@@ -101,7 +102,7 @@ fold, and `Sim.live()` returned a value for every symbol key used in any step of
 
 ## The rule: excerpts stay identical to the page code
 
-The Code column promises "as written in this page" ([sim.js:298](../../public/scripts/sim.js#L298)). AGENTS.md states the rule:
+The Code column promises "as written in this page" ([sim.js:375](../../public/scripts/sim.js#L375)). AGENTS.md states the rule:
 keep the excerpts identical to the page code when either changes. In practice:
 
 - When you edit a page line that a walkthrough quotes, edit the excerpt in the same change, and the reverse.
@@ -114,7 +115,7 @@ Measured on 15 October 2026: with the marks removed, the 267 non-empty code line
 only `...` and 226 lines of code. Two of these have an inline `...` that stands between fragments of one page line:
 [bench.js:101](../../public/scripts/walk/bench.js#L101) leaves out the last field, `colour: …`, of the `return { … }` in `lines()`
 ([wave-interference.html:738](../../public/simulations/wave-interference.html#L738)), and
-[slit.js:110](../../public/scripts/walk/slit.js#L110) the end of the "Destructive" verdict line, before its semicolon
+[slit.js:164](../../public/scripts/walk/slit.js#L164) the end of the "Destructive" verdict line, before its semicolon
 ([Interactive Double-Slit Experiment Visualization.html:759](../../public/simulations/Interactive%20Double-Slit%20Experiment%20Visualization.html#L759)).
 Searching each of the 226 in its page (each fragment between elisions in order, on one page line), all 226 are found
 verbatim.
@@ -168,8 +169,9 @@ In all: 127 steps (measured 29 October 2026). The header comments of [circles.js
 ## Notes for maintainers
 
 1. Fixed on 2026-10-15: the transverse excerpt quotes the complete source line, without the invented comment (commit [43d8238](https://github.com/Numa1997/SiteTest/commit/43d82383f4294428a1cf027f2727644ccf7dc8a5)).
-2. Because the file is loaded from the relative path `../scripts/walk/` ([sim.js:408](../../public/scripts/sim.js#L408)), a page
-   that is not one folder below `public/` could not use a walkthrough without changing `sim.js` (see [sim.md](sim.md)).
+2. On an English page the file is loaded from the relative path `../scripts/walk/` ([sim.js:487](../../public/scripts/sim.js#L487)), so a
+   page that is not one folder below `public/` could not use a walkthrough without changing `sim.js`; a translated page loads
+   `scripts/walk/<lang>/` from `ROOT` (see [sim.md](sim.md)).
 3. The "Now" column is refreshed every 200 ms, 5 times a second, as long as the page is open, also while the walkthrough is
    folded away ([sim.js:403](../../public/scripts/sim.js#L403)).
 4. `note` is inserted as HTML without `markup()` ([sim.js:374](../../public/scripts/sim.js#L374)), so a mark written in a note is

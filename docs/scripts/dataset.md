@@ -3,7 +3,7 @@
 | | |
 |---|---|
 | File | [public/scripts/dataset.js](../../public/scripts/dataset.js), 175 lines, 8.6 kB (8 617 bytes) |
-| Loaded by | the eleven simulation pages, third, right after `sim.js` and before the page's own script (line numbers in the load-order table of [sim.md](sim.md#load-order-on-the-pages)), the two pages of Iron, Cotton and the Head ([portfolios.md](../portfolios.md#the-data-panel-of-the-study)), the ideal and servo presses of the Hydraulic Press Study, and Droplet Collection, before its inline script ([portfolios.md](../portfolios.md#the-data-panel-the-bookkeeper-since-24-october-2026)). No other page loads it. |
+| Loaded by | the eleven simulation pages, third, right after `sim.js` and before the page's own script (line numbers in the load-order table of [sim.md](sim.md#load-order-on-the-pages)), the three pages of Iron, Cotton and the Head ([portfolios.md](../portfolios.md#the-data-panel-of-the-study)), the ideal and servo presses of the Hydraulic Press Study (in all three languages), and Droplet Collection, before its inline script ([portfolios.md](../portfolios.md#the-data-panel-the-bookkeeper-since-24-october-2026)), and the simulation and wind tabs of Rotor Pendula ([portfolios.md](../portfolios.md#rotor-pendula-rotor-pendula)). No other page loads it (checked 29 October 2026). |
 | Defines | `Sim.dataset(meta)` on `window.Sim` ([dataset.js:174-175](../../public/scripts/dataset.js#L174-L175)); creates `window.Sim` if it does not exist yet ([dataset.js:17](../../public/scripts/dataset.js#L17)) |
 | Used by | each page's script (writes), [datalog.js](datalog.md) (reads, saves), each page's `Sim.live()` (reads) |
 
@@ -29,7 +29,7 @@ Anyone may read the page; only the simulation writes on it.
 |---|---|---|
 | Dataset | `new Dataset(meta)`: `title`, global `attrs`, `dims`, `vars`, `order` ([dataset.js:32-39](../../public/scripts/dataset.js#L32-L39)) | `Sim.dataset({ title: 'Double pendulum', attrs: { figure: 2, … } })` ([L468](../../public/simulations/Double%20Pendulum.html#L468)) |
 | Dimension | a name and a length in `dims` ([dataset.js:40-43](../../public/scripts/dataset.js#L40-L43)) | `ds.dim('q', 4)` ([L476](../../public/simulations/Double%20Pendulum.html#L476)) |
-| Array variable | `{ name, dims, type: <typed-array constructor>, attrs, data, version }` ([dataset.js:48](../../public/scripts/dataset.js#L48)) | `ds.var('y', ['q'], Float64Array, { … })` ([L415](../../public/simulations/Double%20Pendulum.html#L415)) |
+| Array variable | `{ name, dims, type: <typed-array constructor>, attrs, data, version }` ([dataset.js:48](../../public/scripts/dataset.js#L48)) | `ds.var('y', ['q'], Float64Array, { … })` ([L477](../../public/simulations/Double%20Pendulum.html#L477)) |
 | Scalar | a variable with `dims = []`; `type` is a string | `ds.set('th1', s[0])` ([L716](../../public/simulations/Double%20Pendulum.html#L716)) |
 | Coordinate | a 1-D variable with `attrs.coordinate = true` ([dataset.js:58-62](../../public/scripts/dataset.js#L58-L62)) | `ds.coord('x', 'i', Float64Array, …)` ([Circular Wave Interference Visualization.html:548](../../public/simulations/Circular%20Wave%20Interference%20Visualization.html#L548)) |
 | Version | an integer per variable, raised on every change ([dataset.js:68](../../public/scripts/dataset.js#L68), [73](../../public/scripts/dataset.js#L73), [80](../../public/scripts/dataset.js#L80)) | `ds.touch('y')` after writing into the array in place ([L715](../../public/simulations/Double%20Pendulum.html#L715)) |
@@ -159,7 +159,7 @@ None. The file reacts to nothing; it runs only when a page or the data panel cal
 - Must load after `sim.js`, which creates `window.Sim` afresh ([sim.js:494](../../public/scripts/sim.js#L494)); loaded
   before it, `Sim.dataset` would be wiped.
 - Each page makes exactly one store and hands it to the panel as `Sim.data.ds` (for example
-  [Double Pendulum.html:769](../../public/simulations/Double%20Pendulum.html#L769)). The `Sim.dataset(...)` call of each page:
+  [Double Pendulum.html:831](../../public/simulations/Double%20Pendulum.html#L831)). The `Sim.dataset(...)` call of each page:
   [Fig. 1 L527](../../public/simulations/Circular%20Wave%20Interference%20Visualization.html#L527),
   [Fig. 2 L468](../../public/simulations/Double%20Pendulum.html#L468),
   [Fig. 3 L562](../../public/simulations/Interactive%20Double-Slit%20Experiment%20Visualization.html#L562),

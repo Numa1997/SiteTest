@@ -228,7 +228,7 @@ variables from stored inputs only, including a fresh one-frequency DFT `dftOne()
 spectrum panel is not pinnable ([datalog.js:849](../../public/scripts/datalog.js#L849)). While Read values is on,
 `datalog.js` stops the canvas's own pointer handlers in the capture phase, so a click pins instead of drawing or panning
 ([datalog.js:924–947](../../public/scripts/datalog.js#L924-L947)); the wheel is not intercepted. File base name:
-`fig8-draw-decompose` ([L1302](../../public/simulations/draw-decompose.html#L1302)).
+`fig8-draw-decompose` ([L1303](../../public/simulations/draw-decompose.html#L1303)).
 
 **`Sim.live()`** ([L1255–1268](../../public/simulations/draw-decompose.html#L1255-L1268)) returns, from the store:
 `N, L, ds, mx, my, K, tot, E, kept, cap, err, errP, t, tl, src`, and for rank 0 `k1, re, im, A, ph`, plus the pen
@@ -273,7 +273,7 @@ Figure 5 $|c_k|$ against $|k|$ for four presets ([L495–553](../../public/simul
 
 ## Where the drawing and the store differ
 
-The page's `about` paragraph ([L1403](../../public/simulations/draw-decompose.html#L1403)), shown in the data panel
+The page's `about` paragraph ([L1404](../../public/simulations/draw-decompose.html#L1404)), shown in the data panel
 ([datalog.js:229](../../public/scripts/datalog.js#L229)), says this; the code adds detail:
 
 - **Dashed original** is the 256 stored samples $z_n$ joined by straight segments and closed
@@ -319,7 +319,7 @@ The page's `about` paragraph ([L1403](../../public/simulations/draw-decompose.ht
   and $T_\text{loop} = 12$ s, the 0.006 drawing threshold, the error values in sections 5–7 and Figures 3–5. Changing a
   preset, NS or KMAX means recomputing them.
 - **Re-test**: no console errors in headless Chromium; Heart at K = 24 should still give `err` and `errP` agreeing within
-  the 3 parts in $10^{10}$ the note quotes ([L331](../../public/simulations/draw-decompose.html#L331)); run Check on `c_re`, `kept`, `err`, `px`, `spec_y`; draw a stroke with Read values off, then on
+  the 3 parts in $10^{10}$ the note quotes ([L332](../../public/simulations/draw-decompose.html#L332)); run Check on `c_re`, `kept`, `err`, `px`, `spec_y`; draw a stroke with Read values off, then on
   (a click must pin, not draw); record one round.
 
 ## Notes for maintainers
@@ -337,11 +337,11 @@ The note distinguishes continuous coefficients from sampled coefficients, RMS at
 
 Fixed on 2026-10-16: the paragraph "Keep the two meanings separate" had been placed between "normalised by 1/N:" and equation (4), which it cites; it now follows (4) ([L305](../../public/simulations/draw-decompose.html#L305)). See the [audit of the revision](../research-theory-audit.md).
 
-Fixed on 2026-10-16 (second repairs): the RMS sentence reads "it says nothing about the curve between the samples" ([L331](../../public/simulations/draw-decompose.html#L331)). See the [audit of the revision](../research-theory-audit.md).
+Fixed on 2026-10-16 (second repairs): the RMS sentence reads "it says nothing about the curve between the samples" ([L332](../../public/simulations/draw-decompose.html#L332)). See the [audit of the revision](../research-theory-audit.md).
 
 ## Repair round · 20 October 2026
 
-After the independent referee and derivation checks (`notes/fig08/`), the lead made only these changes, each on its existing line, so no line link moved: §5: one sentence recalls the two facts from the ★ Section 4 it uses ([L322](../../public/simulations/draw-decompose.html#L322)). Checked in headless Chromium at 1440 × 900 and 390 × 844: no console or KaTeX errors, no sideways scroll, no display equation wider than its box at 1440 px (`notes/verify.mjs`).
+After the independent referee and derivation checks (`notes/fig08/`), the lead made only these changes, each on its existing line, so no line link moved: §5: one sentence recalls the two facts from the ★ Section 4 it uses ([L323](../../public/simulations/draw-decompose.html#L323)). Checked in headless Chromium at 1440 × 900 and 390 × 844: no console or KaTeX errors, no sideways scroll, no display equation wider than its box at 1440 px (`notes/verify.mjs`).
 
 ## Second check round · 20 October 2026
 

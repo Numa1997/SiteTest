@@ -157,7 +157,7 @@ unused-code cleanup.
 
 **Brought up to date on 14 October 2026.** The app's stored `tests/tests.json` was an older version: its first scenario
 looked for a footer reading "Claude version", while the footer reads "© 2026 Numa Koudsie"
-([index.html:621](../index.html#L621)); and the second scenario expected the catalog to open with ten full entries, while its
+([index.html:617](../index.html#L617), which since reads "© 2026 Numa Koudsie · Built with Claude (Anthropic) · …"); and the second scenario expected the catalog to open with ten full entries, while its
 cards now open as closed titles that a chip or a search opens. Both scenarios now describe the site as it is; the second was
 followed step by step in headless Chromium before it was written down (ten closed titles and "10 shown"; the chip Wave optics
 opens Figs. 1 and 3 with picture, equation and button, "2 of 10 shown"; the search "runge" opens Fig. 2 alone; the links go

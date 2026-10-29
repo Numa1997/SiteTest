@@ -126,7 +126,7 @@ caption ([:568-621](../../public/simulations/wave-interference.html#L568-L621), 
 **Cost, precomputation and caching.** No caching: every frame re-evaluates every wave at every sample. `y()` is called twice per
 component sample ([:685-686](../../public/simulations/wave-interference.html#L685-L686)) and once more per wave in the sum loop,
 so a frame makes $3N(M+1)$ sine calls: 8 556 for the Square wave preset ($N$ = 4) at $M$ = 712, as the note states
-([:445](../../public/simulations/wave-interference.html#L445)). The spectrum is redrawn every frame although it changes only
+([:446](../../public/simulations/wave-interference.html#L446)). The spectrum is redrawn every frame although it changes only
 with the sliders. The store's typed arrays are reused while their sizes stay the same
 ([dataset.js:64-70](../../public/scripts/dataset.js#L64-L70)).
 
@@ -151,8 +151,8 @@ Line numbers link into `wave-interference.html`.
 | button handlers | [790-795](../../public/simulations/wave-interference.html#L790-L795) | One wave, Beats, Square wave, Add wave +. |
 | `Sim.live` | [798-822](../../public/simulations/wave-interference.html#L798-L822) | Live values for the walkthrough, read from the store. |
 | clock callback `(dt)` | [824-834](../../public/simulations/wave-interference.html#L824-L834) | Advances `simT`; calls `draw()`, `drawSpectrum()`; readouts every 8th frame, `r-sum` from the stored `sum_A`. `Sim.playButton` binds Pause at [835](../../public/simulations/wave-interference.html#L835). |
-| `pixelAt(c, bx, x, y)` | [840](../../public/simulations/wave-interference.html#L840) | The device pixel containing a css point (floor, not round). |
-| `rgbText(px)` | [840](../../public/simulations/wave-interference.html#L840) | Pixel as text; "nothing (transparent)" at alpha 0. |
+| `pixelAt(c, bx, x, y)` | [841](../../public/simulations/wave-interference.html#L841) | The device pixel containing a css point (floor, not round). |
+| `rgbText(px)` | [841](../../public/simulations/wave-interference.html#L841) | Pixel as text; "nothing (transparent)" at alpha 0. |
 | `lum(px)` | [842](../../public/simulations/wave-interference.html#L842) | Luminance of a pixel. |
 | `waveOf(q)`, `sampleOf(q)` | [843](../../public/simulations/wave-interference.html#L843), [846](../../public/simulations/wave-interference.html#L846) | Wave and sample of a flat index into `wave × x`. |
 | `onStroke(arr, i, off)` | [845](../../public/simulations/wave-interference.html#L845) | Where to read a stroke back; at the two ends, the midpoint of the end segment. |
@@ -169,8 +169,8 @@ Line numbers link into `wave-interference.html`.
 | `Sim.data.inspect(ref)` | [896-902](../../public/simulations/wave-interference.html#L896-L902) | Rows for a pinned point of the sum (X, Σ y, y px) or of a wave (X, $y_i$, A, f, φ, s, y px). |
 | `Sim.data.locate(name, idx)` | [903-911](../../public/simulations/wave-interference.html#L903-L911) | Where a cell is drawn: a sample of a curve, or the middle sample of a wave; `null` for spectrum rows. |
 | `Sim.data.check.*` | [912-946](../../public/simulations/wave-interference.html#L912-L946) | For 33 variables: formula, stored inputs, recomputed value. |
-| `Sim.data.drawn.*` | [947-961](../../public/simulations/wave-interference.html#L947-L961) | Read-backs for `sum_A` (the visible `r-sum` readout), `py_sum` (ink, luminance < 150; `ok: null` when there are no waves, [948](../../public/simulations/wave-interference.html#L948)), `py_comp` (alpha first, then the wave RGB or a stored crossing within 2 css px) and `y_line` (the stem's dot). |
-| `Sim.data.round.label` | [961](../../public/simulations/wave-interference.html#L961) | "one repeat of the pattern, … s" or "twenty seconds of the pattern, 20.00 s". |
+| `Sim.data.drawn.*` | [947-961](../../public/simulations/wave-interference.html#L947-L961) | Read-backs for `sum_A` (the visible `r-sum` readout), `py_sum` (ink, luminance < 150; `ok: null` when there are no waves, [949](../../public/simulations/wave-interference.html#L949)), `py_comp` (alpha first, then the wave RGB or a stored crossing within 2 css px) and `y_line` (the stem's dot). |
+| `Sim.data.round.label` | [962](../../public/simulations/wave-interference.html#L962) | "one repeat of the pattern, … s" or "twenty seconds of the pattern, 20.00 s". |
 | `Sim.data.round.point` | [963](../../public/simulations/wave-interference.html#L963) | The sum at the middle sample. |
 | start-up | [968-972](../../public/simulations/wave-interference.html#L968-L972) | One default wave, a first draw of both canvases, resize observers for both. |
 
@@ -232,7 +232,7 @@ px_per_wavelength_unit: 200, left: 44, top1: 30, gap: 44, length_unit } })`. How
 | `draw()` | [668-672](../../public/simulations/wave-interference.html#L668-L672) | `M`, `dX`, `R`, `Rc`, `y_sum_400`, `y1_400`, `bl`, `venv`, `box_w`, `box_h`, `right`, `hSum`, `top2`, `hComp` |
 | `draw()` | [677](../../public/simulations/wave-interference.html#L677), [722](../../public/simulations/wave-interference.html#L722) | `mid1`, `mid2`; `peak`, `ratio` |
 | `drawSpectrum()` | [765](../../public/simulations/wave-interference.html#L765) | `amax`, `spec_w`, `spec_h` |
-| clock callback | [826](../../public/simulations/wave-interference.html#L826) | `t`, `dt`, `fps`, `frames`, `playing` |
+| clock callback | [827](../../public/simulations/wave-interference.html#L827) | `t`, `dt`, `fps`, `frames`, `playing` |
 
 Declarations are at [:509-510](../../public/simulations/wave-interference.html#L509-L510),
 [:522-530](../../public/simulations/wave-interference.html#L522-L530) and
@@ -267,7 +267,7 @@ same sample is identical to `yAt`.
 
 **Read-back with no waves.** With an empty bench nothing is drawn in the top panel but its grid and the faint zero line, and
 `py_sum` holds the height of that line (`mid1`). The read-back then returns `ok: null` with "no sum curve: the bench has no
-waves" ([:948](../../public/simulations/wave-interference.html#L948)), and the panel shows the neutral verdict "Not in the picture at the moment, so there is nothing to
+waves" ([:949](../../public/simulations/wave-interference.html#L949)), and the panel shows the neutral verdict "Not in the picture at the moment, so there is nothing to
 read back." ([datalog.js:836](../../public/scripts/datalog.js#L836)). Before, it read the pixel on the zero line, drawn in
 rgba(90, 80, 75, 0.45) ([:641](../../public/simulations/wave-interference.html#L641)); that pixel is dark enough for the luminance test, so the check passed on a line that
 is not the sum curve.
@@ -321,13 +321,13 @@ policy and referrer rule ([build-and-deploy.md](../build-and-deploy.md#security)
 ## Where the drawing and the store differ
 
 - **Straight segments.** The curves join the $M + 1$ stored points with straight lines, one per css px column, and the canvas
-  smooths the strokes (the page's `about`, [:964](../../public/simulations/wave-interference.html#L964)). A chord cuts under a
+  smooths the strokes (the page's `about`, [:965](../../public/simulations/wave-interference.html#L965)). A chord cuts under a
   crest by about $A k^2 \Delta X^2 / 8$: 0.06 px in a wide window and 0.32 px on a phone for the shortest wave at full
   amplitude, so the peak readout can fall slightly short of the true crest (note Section 07,
   [:449](../../public/simulations/wave-interference.html#L449)).
 - **Readouts lag and round.** The readouts are rewritten every 8th frame and show one decimal; the store is rewritten every
   frame at full precision ([:832-833](../../public/simulations/wave-interference.html#L832-L833),
-  [:964](../../public/simulations/wave-interference.html#L964)).
+  [:965](../../public/simulations/wave-interference.html#L965)).
 - **Amplitude slider rounds.** The Amplitude slider moves in whole px, so the Square preset's 4.3 px shows as 4 px on its card,
   while the wave, Σ A = 50.3 px and the store keep 4.3 px (note Section 08,
   [:458](../../public/simulations/wave-interference.html#L458); measured: the card's slider reads 4).
@@ -383,17 +383,17 @@ policy and referrer rule ([build-and-deploy.md](../build-and-deploy.md#security)
 7. Fixed on 2026-10-15: frames is incremented before storage (commit [ce3bfc4](https://github.com/Numa1997/SiteTest/commit/ce3bfc439ce40b3e8b6bd7f59af2af9404bd4997)).
 8. Fixed on 2026-10-15: the Square preset stores 0.4, 1.2, 2 and 2.8 without extra decimal tails (commit [ce3bfc4](https://github.com/Numa1997/SiteTest/commit/ce3bfc439ce40b3e8b6bd7f59af2af9404bd4997)).
 9. Fixed on 2026-10-15: with no waves, `drawn.py_sum` returns `ok: null` ("no sum curve: the bench has no waves",
-   [:948](../../public/simulations/wave-interference.html#L948)) and the panel shows "not in the picture" instead of passing on the faint zero line (audit repair, commit [32c240c](https://github.com/Numa1997/SiteTest/commit/32c240c52fd0535d39a0cef608dc404cf4219484)).
+   [:949](../../public/simulations/wave-interference.html#L949)) and the panel shows "not in the picture" instead of passing on the faint zero line (audit repair, commit [32c240c](https://github.com/Numa1997/SiteTest/commit/32c240c52fd0535d39a0cef608dc404cf4219484)).
 
 
 ## Teaching revision · 15 October 2026
 
 Parseval and the 95% value measure mean-square displacement. String energy also weights each squared amplitude by frequency squared. The note qualifies envelope motion versus physical energy or information transport. Simulation code, inline styles and figure SVGs match the latest live baseline. See the [theory audit](../research-theory-audit.md).
 
-Fixed on 2026-10-16 (second repairs): the Square-wave sentence says again where the missing 5 % lives ([L427](../../public/simulations/wave-interference.html#L427)). See the [audit of the revision](../research-theory-audit.md).
+Fixed on 2026-10-16 (second repairs): the Square-wave sentence says again where the missing 5 % lives ([L428](../../public/simulations/wave-interference.html#L428)). See the [audit of the revision](../research-theory-audit.md).
 
-Note revision, 20 October 2026 (teacher team; working notes in `notes/fig06/`): Section 03 shows the second-derivative step behind (3) ([L192](../../public/simulations/wave-interference.html#L192)); 4.1 says the group velocity belongs to a long envelope of a narrow band of wavelengths, and that the bench's hand-set envelope carries nothing, which is why it can run backwards faster than either wave ([L305](../../public/simulations/wave-interference.html#L305)); Section 06 derives the string energy $\bar e = \tfrac12\mu\sum_n \omega_n^2 A_n^2$ from kinetic plus stretching energy, with the check of (18) moved next to its number ([L428-L428](../../public/simulations/wave-interference.html#L428-L428)); every item of Further reading links to a source that was opened ([L472-L475](../../public/simulations/wave-interference.html#L472-L475)). No line was added or removed, so the line links above still hold.
+Note revision, 20 October 2026 (teacher team; working notes in `notes/fig06/`): Section 03 shows the second-derivative step behind (3) ([L192](../../public/simulations/wave-interference.html#L192)); 4.1 says the group velocity belongs to a long envelope of a narrow band of wavelengths, and that the bench's hand-set envelope carries nothing, which is why it can run backwards faster than either wave ([L306](../../public/simulations/wave-interference.html#L306)); Section 06 derives the string energy $\bar e = \tfrac12\mu\sum_n \omega_n^2 A_n^2$ from kinetic plus stretching energy, with the check of (18) moved next to its number ([L428-L428](../../public/simulations/wave-interference.html#L428-L428)); every item of Further reading links to a source that was opened ([L472-L475](../../public/simulations/wave-interference.html#L472-L475)). No line was added or removed, so the line links above still hold.
 
 ## Repair round · 20 October 2026
 
-After the independent referee and derivation checks (`notes/fig06/`), the lead made only these changes, each on its existing line, so no line link moved: §3.1: why the cosine rule has a plus ([L200](../../public/simulations/wave-interference.html#L200)); eq. (5) on three lines so its number shows ([L199](../../public/simulations/wave-interference.html#L199)); §4.1: the bench has no medium; a real backward envelope would carry energy ([L306](../../public/simulations/wave-interference.html#L306)); §5: the one-term overshoot on the table's basis (6.4 px, 13.7 % of the jump) ([L325](../../public/simulations/wave-interference.html#L325)); §6: true vertical steps, not corners, cost infinite energy ([L428](../../public/simulations/wave-interference.html#L428)); §7: two sines per wave besides the curves ([L446](../../public/simulations/wave-interference.html#L446)). Checked in headless Chromium at 1440 × 900 and 390 × 844: no console or KaTeX errors, no sideways scroll, no display equation wider than its box at 1440 px (`notes/verify.mjs`).
+After the independent referee and derivation checks (`notes/fig06/`), the lead made only these changes, each on its existing line, so no line link moved: §3.1: why the cosine rule has a plus ([L200](../../public/simulations/wave-interference.html#L200)); eq. (5) on three lines so its number shows ([L199](../../public/simulations/wave-interference.html#L199)); §4.1: the bench has no medium; a real backward envelope would carry energy ([L306](../../public/simulations/wave-interference.html#L306)); §5: the one-term overshoot on the table's basis (6.4 px, 13.7 % of the jump) ([L325](../../public/simulations/wave-interference.html#L325)); §6: true vertical steps, not corners, cost infinite energy ([L429](../../public/simulations/wave-interference.html#L429)); §7: two sines per wave besides the curves ([L446](../../public/simulations/wave-interference.html#L446)). Checked in headless Chromium at 1440 × 900 and 390 × 844: no console or KaTeX errors, no sideways scroll, no display equation wider than its box at 1440 px (`notes/verify.mjs`).

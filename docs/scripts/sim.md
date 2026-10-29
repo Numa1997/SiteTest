@@ -3,7 +3,7 @@
 | | |
 |---|---|
 | File | [public/scripts/sim.js](../../public/scripts/sim.js), 508 lines, 27.8 kB (27 779 bytes; measured 29 October 2026) |
-| Loaded by | the eleven simulation pages in `public/simulations/`, as the second shared script, after `fold.js` and before `dataset.js` (table below); the two pages of Iron, Cotton and the Head (`portfolios/impact/index.html`, `ar.html`), first, before `dataset.js`, for the data panel ([portfolios.md](../portfolios.md#the-data-panel-of-the-study)); the ideal and servo presses inside the Hydraulic Press Study's frames ([portfolios.md](../portfolios.md#the-data-panel-of-the-two-simulations-since-23-october-2026)); and Droplet Collection, first, before `dataset.js` and the inline script, for the data panel ([portfolios.md](../portfolios.md#the-data-panel-the-bookkeeper-since-24-october-2026)). No other page loads it. A walkthrough is loaded only for an element `#walk` that names one in `data-walk`. |
+| Loaded by | the eleven simulation pages in `public/simulations/`, as the second shared script, after `fold.js` and before `dataset.js` (table below); the three pages of Iron, Cotton and the Head (`portfolios/impact/index.html`, `de.html`, `ar.html`), first, before `dataset.js`, for the data panel ([portfolios.md](../portfolios.md#the-data-panel-of-the-study)); the ideal and servo presses inside the Hydraulic Press Study's frames (in all three languages) ([portfolios.md](../portfolios.md#the-data-panel-of-the-two-simulations-since-23-october-2026)); and Droplet Collection, first, before `dataset.js` and the inline script, for the data panel ([portfolios.md](../portfolios.md#the-data-panel-the-bookkeeper-since-24-october-2026)); and the simulation and wind tabs of Rotor Pendula ([portfolios.md](../portfolios.md#rotor-pendula-rotor-pendula)). No other page loads it (checked 29 October 2026). A walkthrough is loaded only for an element `#walk` that names one in `data-walk`. |
 | Defines | `window.Sim` ([sim.js:494](../../public/scripts/sim.js#L494)), a fresh object with 12 members |
 | Reads | `window.WALK` ([sim.js:488](../../public/scripts/sim.js#L488)), `window.Fold` ([sim.js:407](../../public/scripts/sim.js#L407)), `window.Sim.live` ([sim.js:392](../../public/scripts/sim.js#L392)), `window.renderMathInElement` from KaTeX ([sim.js:434](../../public/scripts/sim.js#L434)) |
 | Emits | the DOM event `typeset` on `document` ([sim.js:445](../../public/scripts/sim.js#L445), [sim.js:476](../../public/scripts/sim.js#L476)) |
@@ -100,7 +100,7 @@ The page's own script then runs and uses the helpers: it sizes its canvases, wir
    - It collects every `.paper` (the lecture note) and every `.stage__cap` and `.formula` (figure captions)
      ([sim.js:419](../../public/scripts/sim.js#L419)). With no paper but captions, `mathIn` sets only the captions, and since 23 October 2026 only if a caption contains `\(`, so a
      page without mathematics in its captions (the impact study) loads no KaTeX
-     ([sim.js:342](../../public/scripts/sim.js#L342), [sim.js:470-479](../../public/scripts/sim.js#L470-L479)).
+     ([sim.js:420](../../public/scripts/sim.js#L420), [sim.js:470-479](../../public/scripts/sim.js#L470-L479)).
    - It adds a "Skip to the lecture note" link at the top of the body ([sim.js:422-426](../../public/scripts/sim.js#L422-L426)).
    - It loads `vendor/katex/katex.min.js`, then `vendor/katex/contrib/auto-render.min.js`, one after the other, from `ROOT`
      ([sim.js:431-432](../../public/scripts/sim.js#L431-L432)). `load()` calls the next step on success and on failure alike
@@ -244,7 +244,7 @@ Listeners: `window` `error` ([sim.js:230](../../public/scripts/sim.js#L230)); `D
 - The walkthrough HTML ([lines 327-377](../../public/scripts/sim.js#L327-L377)) is styled by `sim.css`; class names are a contract with the stylesheet. The step and
   symbol fields are inserted as HTML except `where`, the code excerpt `code` (escaped around its marks by `markup(st.code, true)`)
   and the code column of `syms`, which are escaped ([sim.js:367](../../public/scripts/sim.js#L367),
-  [sim.js:372](../../public/scripts/sim.js#L372), [sim.js:298](../../public/scripts/sim.js#L298)).
+  [sim.js:372](../../public/scripts/sim.js#L372), [sim.js:375](../../public/scripts/sim.js#L375)).
 - After a change, open all eleven pages and check: no banner, the lecture note typeset, every "Now" cell filled (a missing key
   shows `—`), the walkthrough folds. A headless check of all ten pages of the time (before Fig. 11; Chromium, 1.5 s after load) found no page errors
   and a `Sim.live()` value for every symbol key of every walkthrough.
@@ -253,8 +253,8 @@ Listeners: `window` `error` ([sim.js:230](../../public/scripts/sim.js#L230)); `D
 
 1. Fixed on 2026-10-15: the unused derivation-card builder, boot call and unused selectors were removed; active equation and walkthrough styles remain (commit [8982ed3](https://github.com/Numa1997/SiteTest/commit/8982ed35e78161ea7cdd82ae1794f44ccfe39f3c)).
 2. Fixed on 2026-10-15: the unused isInk helper and export were removed (commit [8982ed3](https://github.com/Numa1997/SiteTest/commit/8982ed35e78161ea7cdd82ae1794f44ccfe39f3c)).
-3. The walkthrough file is loaded from the relative path `'../scripts/walk/'` ([sim.js:408](../../public/scripts/sim.js#L408)),
-   while KaTeX uses `ROOT` ([sim.js:431](../../public/scripts/sim.js#L431)). A page that is not exactly one folder below
+3. On an English page the walkthrough file is loaded from the relative path `'../scripts/walk/'` ([sim.js:487](../../public/scripts/sim.js#L487)),
+   while KaTeX and the translated walkthroughs use `ROOT` ([sim.js:431](../../public/scripts/sim.js#L431)). A page that is not exactly one folder below
    `public/` would fail to load its walkthrough.
 4. The header comment ([sim.js:1-2](../../public/scripts/sim.js#L1-L2)) lists only the helpers, not the typesetting and the
    walkthrough engine that make up half the file.
