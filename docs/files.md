@@ -45,9 +45,9 @@ to confirm that every file is described. Sizes are those of the files when the l
 | File | Size | What it is | Explained in |
 |---|---|---|---|
 | [`.gitignore`](../.gitignore) | 39 B | Files git leaves out: Python caches, node_modules, build output. | [files.md](files.md) |
-| [`AGENTS.md`](../AGENTS.md) | 13.9 kB | The maintainer's summary: ownership, layout, design rules, folds, the data pipeline, platform quirks. | [build-and-deploy.md](build-and-deploy.md) |
-| [`CLAUDE.md`](../CLAUDE.md) | 5.0 kB | How Numa expects an AI assistant to work on the project. | [build-and-deploy.md](build-and-deploy.md) |
-| [`README.md`](../README.md) | 9.2 kB | Start here: what the project is, how the files fit together, where each one is explained. | [README.md](../README.md) |
+| [`AGENTS.md`](../AGENTS.md) | 14.8 kB | The maintainer's summary: ownership, layout, design rules, folds, the data pipeline, platform quirks. | [build-and-deploy.md](build-and-deploy.md) |
+| [`CLAUDE.md`](../CLAUDE.md) | 5.4 kB | How Numa expects an AI assistant to work on the project. | [build-and-deploy.md](build-and-deploy.md) |
+| [`README.md`](../README.md) | 9.0 kB | Start here: what the project is, how the files fit together, where each one is explained. | [README.md](../README.md) |
 | [`index.html`](../index.html) | 52.2 kB | The home page: CV, research, simulation plates, index; also the build entry page. | [pages.md](pages.md) |
 | [`package.json`](../package.json) | 479 B | Build declaration: vite build; template dependencies. | [build-and-deploy.md](build-and-deploy.md) |
 | [`postcss.config.js`](../postcss.config.js) | 81 B | PostCSS settings (template; unused by the site). | [build-and-deploy.md](build-and-deploy.md) |
@@ -662,10 +662,10 @@ to confirm that every file is described. Sizes are those of the files when the l
 
 | File | Size | What it is | Explained in |
 |---|---|---|---|
-| [`docs/appdeploy-app.md`](appdeploy-app.md) | 2.8 kB | Documentation: The AppDeploy app · numa-koudsie-website-0cyj78. | [appdeploy-app.md](appdeploy-app.md) |
-| [`docs/architecture.md`](architecture.md) | 8.3 kB | Documentation: How the site fits together. | [architecture.md](architecture.md) |
+| [`docs/appdeploy-app.md`](appdeploy-app.md) | 3.3 kB | Documentation: The AppDeploy app · numa-koudsie-website-0cyj78. | [appdeploy-app.md](appdeploy-app.md) |
+| [`docs/architecture.md`](architecture.md) | 8.4 kB | Documentation: How the site fits together. | [architecture.md](architecture.md) |
 | [`docs/assets.md`](assets.md) | 11.0 kB | Documentation: Fonts, maths and pictures: `public/vendor/`, `public/fonts/`, `public/images/`. | [assets.md](assets.md) |
-| [`docs/build-and-deploy.md`](build-and-deploy.md) | 20.2 kB | Documentation: Build files, tests and deployment. | [build-and-deploy.md](build-and-deploy.md) |
+| [`docs/build-and-deploy.md`](build-and-deploy.md) | 20.7 kB | Documentation: Build files, tests and deployment. | [build-and-deploy.md](build-and-deploy.md) |
 | [`docs/files.md`](files.md) | this file | This list. Written by tools/inventory.py; do not edit by hand. | [files.md](files.md) |
 | [`docs/glossary.md`](glossary.md) | 8.5 kB | Documentation: Glossary: English, German, Arabic. | [glossary.md](glossary.md) |
 | [`docs/i18n.md`](i18n.md) | 16.5 kB | Documentation: The site in German and Arabic: `tools/i18n/`, `i18n/`, `public/de/`, `public/ar/`. | [i18n.md](i18n.md) |
@@ -691,8 +691,8 @@ to confirm that every file is described. Sizes are those of the files when the l
 | [`docs/simulations/fig09-driven-oscillator.md`](simulations/fig09-driven-oscillator.md) | 57.1 kB | Documentation: Fig. 9 · Driven Oscillator. | [fig09-driven-oscillator.md](simulations/fig09-driven-oscillator.md) |
 | [`docs/simulations/fig10-wind-turbine.md`](simulations/fig10-wind-turbine.md) | 52.6 kB | Documentation: Fig. 10 · Wind Turbine Control. | [fig10-wind-turbine.md](simulations/fig10-wind-turbine.md) |
 | [`docs/simulations/fig11-pendulum-control.md`](simulations/fig11-pendulum-control.md) | 19.1 kB | Documentation: Fig. 11 · Double Pendulum under Control. | [fig11-pendulum-control.md](simulations/fig11-pendulum-control.md) |
-| [`docs/styles.md`](styles.md) | 47.0 kB | Documentation: Stylesheets: `public/styles/`. | [styles.md](styles.md) |
-| [`docs/usul.md`](usul.md) | 8.4 kB | Documentation: Phyein Usul · the website at phyeinusul.com. | [usul.md](usul.md) |
+| [`docs/styles.md`](styles.md) | 47.1 kB | Documentation: Stylesheets: `public/styles/`. | [styles.md](styles.md) |
+| [`docs/usul.md`](usul.md) | 8.6 kB | Documentation: Phyein Usul · the website at phyeinusul.com. | [usul.md](usul.md) |
 
 ## Tools
 

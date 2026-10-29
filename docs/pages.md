@@ -14,7 +14,7 @@ The build copies everything under `public/` to the site root, so a page under `p
 [`public/_headers`](../public/_headers), which is not a page: Cloudflare reads it for the security headers and never serves it
 (measured: `/_headers` answers 404); AppDeploy ignores it ([usul.md](usul.md)).
 
-The site runs in two places. Checked on 14 October 2026 on the AppDeploy app
+The site ran in two places then. Checked on 14 October 2026 on the AppDeploy app (reported deleted on 29 October 2026)
 (https://numa-koudsie-website-0cyj78.v2.appdeploy.ai, [appdeploy-app.md](appdeploy-app.md)): it serves `/styles/site.css` and
 the six other stylesheets and `robots.txt` byte for byte as in the repository; the three HTML pages differ only by lines the
 platform injects into `<head>` (an overlay script, `og:`/`twitter:` meta tags, and on the home page also a web-app manifest and

@@ -1,13 +1,12 @@
 # Phyein Usul · Numa Koudsie's physics website — source and documentation
 
 This repository is the source of Numa Koudsie's physics website, **Phyein Usul**: eleven interactive simulations, each with a
-lecture note and a data panel, four research projects, and a CV, in English, German and Arabic. One source, three places where it runs:
+lecture note and a data panel, four research projects, and a CV, in English, German and Arabic. One source, two places where it runs:
 
 | | Address | Built from | Doc |
 |---|---|---|---|
 | **Phyein Usul** (primary, since 20 October 2026) | **<https://phyeinusul.com>** | this repository's `main`, served by Cloudflare | [docs/usul.md](docs/usul.md) |
 | GitHub Pages (backup, kept on since Numa's decision of 29 October 2026) | <https://numa1997.github.io/SiteTest/> | `main` as it is, without the Vite build (see the doc) | [docs/usul.md](docs/usul.md#github-pages) |
-| The AppDeploy app `numa-koudsie-website-0cyj78` (kept as it is) | <https://numa-koudsie-website-0cyj78.v2.appdeploy.ai> | its own stored copy, equal to `main` at `5c7ba7f` | [docs/appdeploy-app.md](docs/appdeploy-app.md) |
 
 Beside the site's files, `docs/` explains every file and every script and how they work.
 
@@ -29,7 +28,7 @@ Beside the site's files, `docs/` explains every file and every script and how th
 | `notes/` | Work records of the lecture-note rewrites and studies (plans, checks, reviews), and the house standard `notes/STANDARD.md`. Not served. | [docs/notes.md](docs/notes.md) |
 | `package.json`, `vite.config.ts`, `tsconfig.json`, `tailwind.config.js`, `postcss.config.js`, `src/` | Build files (Vite; first from AppDeploy's template). | [docs/build-and-deploy.md](docs/build-and-deploy.md) |
 | `public/_headers`, `wrangler.jsonc` | Cloudflare's security headers and deployment settings for phyeinusul.com. | [docs/usul.md](docs/usul.md) |
-| `tests/tests.json` | The test scenarios AppDeploy runs after each deploy of the app. | [docs/build-and-deploy.md](docs/build-and-deploy.md) |
+| `tests/tests.json` | The test scenarios AppDeploy ran after each deploy of the app (the app is reported deleted on 29 October 2026). | [docs/build-and-deploy.md](docs/build-and-deploy.md) |
 | `AGENTS.md`, `CLAUDE.md` | The maintainer's summary, and how an AI assistant is to work on the project. | [docs/build-and-deploy.md](docs/build-and-deploy.md) |
 | `docs/` | This documentation. [docs/files.md](docs/files.md) lists every file with what it is. | — |
 | `tools/` | Scripts for maintaining the repository. | [docs/files.md](docs/files.md) |
@@ -84,8 +83,8 @@ Or build it as Cloudflare serves it: `npm install`, `npm run build`, then `npx w
 The repository comes first (since 20 October 2026). A change is made here, built and checked in a browser, the pages of
 `docs/` that describe it are brought up to date, `python3 tools/inventory.py` rewrites the file list, the change is
 committed on a branch and merged into `main` on Numa's word; Cloudflare Workers Builds then builds and publishes it to
-phyeinusul.com by itself (since 21 October 2026; [docs/usul.md](docs/usul.md)), and GitHub Pages republishes `main` as a backup. The AppDeploy app gets
-the same files only when Numa asks ([docs/appdeploy-app.md](docs/appdeploy-app.md)); how AppDeploy builds and alters a
+phyeinusul.com by itself (since 21 October 2026; [docs/usul.md](docs/usul.md)), and GitHub Pages republishes `main` as a backup. The former AppDeploy app (reported deleted on 29 October 2026,
+[docs/appdeploy-app.md](docs/appdeploy-app.md)) gets nothing; how AppDeploy built and altered a
 deploy is in [docs/build-and-deploy.md](docs/build-and-deploy.md).
 
 The [theory readability audit](docs/research-theory-audit.md) records the selective teaching revisions to the ten lecture notes and both research projects, with the mathematical corrections and verification scope.

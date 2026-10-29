@@ -16,7 +16,7 @@ index.html  (home: logo and note, CV, research, simulation plates)
 ```
 
 Every page is a plain HTML file. There is no server code, no database and no login: the server (Cloudflare for
-phyeinusul.com, GitHub Pages for the backup copy, AppDeploy for the older app) hands out files, and everything else happens in the reader's browser. Pages: [pages.md](pages.md). Simulations: [simulations/](simulations/).
+phyeinusul.com, GitHub Pages for the backup copy, and until it was deleted AppDeploy for the older app) hands out files, and everything else happens in the reader's browser. Pages: [pages.md](pages.md). Simulations: [simulations/](simulations/).
 Research projects: [portfolios.md](portfolios.md). German and Arabic pages: [i18n.md](i18n.md).
 
 ## Anatomy of a simulation page
@@ -105,6 +105,6 @@ Latin Modern Roman with KaTeX maths, numbered equations and figures. Details: [s
 
 This repository is the source. Its `main` branch is built and served by Cloudflare as Phyein Usul, <https://phyeinusul.com>,
 rebuilt by Cloudflare Workers Builds on every merge into `main` ([usul.md](usul.md)); GitHub Pages republishes `main`, unbuilt,
-at <https://numa1997.github.io/SiteTest/> as a backup ([usul.md](usul.md#github-pages)). The AppDeploy app `numa-koudsie-website-0cyj78` still runs an older copy (v65, equal to commit
-`5c7ba7f`) and is changed only on Numa's request ([appdeploy-app.md](appdeploy-app.md)). Build steps and what AppDeploy does
+at <https://numa1997.github.io/SiteTest/> as a backup ([usul.md](usul.md#github-pages)). The AppDeploy app `numa-koudsie-website-0cyj78`, which ran an older copy (v65, equal to commit
+`5c7ba7f`), is reported deleted by AppDeploy on 29 October 2026 ([appdeploy-app.md](appdeploy-app.md)). Build steps and what AppDeploy does
 on a deploy: [build-and-deploy.md](build-and-deploy.md).

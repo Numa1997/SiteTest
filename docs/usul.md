@@ -5,8 +5,8 @@ archive, live at
 
 **<https://phyeinusul.com>** (also <https://www.phyeinusul.com> and <https://phyein-usul.phyeinusul.workers.dev>)
 
-It is built from this repository's `main` branch and served by Cloudflare. The same site, in an older version, also still
-runs as the AppDeploy app ([appdeploy-app.md](appdeploy-app.md)), and GitHub Pages publishes the repository's `main` as a
+It is built from this repository's `main` branch and served by Cloudflare. An older version ran as the AppDeploy app until
+AppDeploy reported it deleted (checked 29 October 2026, [appdeploy-app.md](appdeploy-app.md)), and GitHub Pages publishes the repository's `main` as a
 backup ([below](#github-pages)).
 
 ## What runs where
@@ -22,8 +22,8 @@ backup ([below](#github-pages)).
 Plans and costs (checked 20 October 2026): the Workers Free plan serves requests to static assets "free and unlimited"
 ([Cloudflare Workers pricing](https://developers.cloudflare.com/workers/platform/pricing/)); the site pays only the domain. A site
 can hold up to 20 000 files of at most 25 MiB each on the free plan
-([limits](https://developers.cloudflare.com/workers/platform/limits/)); the site had 291 on 20 October 2026 and a build of `main`
-gives 239 on 29 October 2026 (`npm run build && find dist -type f | wc -l`). Numa's decision, 20 October 2026: stay on the
+([limits](https://developers.cloudflare.com/workers/platform/limits/)); a build of `main` gave 285 on 20 October 2026 and gives 233 on
+29 October 2026, after this branch removed six unused figures (`npm run build && find dist -type f | wc -l`). Numa's decision, 20 October 2026: stay on the
 free plan; dynamic features (for example a shared live counter) are for later and would need server code (Workers, D1).
 
 ## Build and deploy
@@ -65,8 +65,9 @@ the root `index.html` byte for byte (status 200, title "Numa Koudsie · Notebook
 `public/` in the repository, so `styles/site.css` and `simulations.html` answer 404 there, while
 `https://numa1997.github.io/SiteTest/public/simulations.html` answers 200. The backup therefore holds every file, but its home page
 shows unstyled and its links do not resolve; making it a working copy would need a change to how Pages builds (for example a
-GitHub Actions workflow that publishes `dist/`), which is Numa's call. Pages ignores `public/_headers`, so the backup carries only
-the meta-tag security layer below.
+GitHub Actions workflow that publishes `dist/`), which is Numa's call. Pages ignores `public/_headers`, so the backup carries the meta-tag
+security layer below and GitHub's own headers (it sends `Strict-Transport-Security: max-age=31556952`, measured 29 October
+2026), but not the framing, nosniff, permissions and opener rules of `_headers`.
 
 ## Security
 

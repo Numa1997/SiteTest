@@ -2,13 +2,14 @@
 
 ## Where the site runs
 
-One source, three places (Cloudflare since 20 October 2026; GitHub Pages kept as a backup by Numa's decision of 29 October 2026):
+One source, two places (Cloudflare since 20 October 2026; GitHub Pages kept as a backup by Numa's decision of 29 October 2026). The
+third row, the AppDeploy app, is history: AppDeploy reports it deleted on 29 October 2026 ([appdeploy-app.md](appdeploy-app.md)).
 
 | | Address | Built from | How it is deployed |
 |---|---|---|---|
 | **Phyein Usul**, primary | <https://phyeinusul.com> | this repository's `main` | `npm run build`, then `npx wrangler deploy` (Cloudflare Worker `phyein-usul`, settings in `wrangler.jsonc`), run by Cloudflare Workers Builds on every push or merge to `main` since 21 October 2026: [usul.md](usul.md) |
 | GitHub Pages, backup | <https://numa1997.github.io/SiteTest/> | this repository's `main`, as it is (no Vite build) | GitHub's "pages build and deployment" on every push to `main`: [usul.md](usul.md#github-pages) |
-| AppDeploy app `numa-koudsie-website-0cyj78` | <https://numa-koudsie-website-0cyj78.v2.appdeploy.ai> | its own stored copy, v65, equal to commit `5c7ba7f` | through AppDeploy's MCP server (below), only on Numa's request: [appdeploy-app.md](appdeploy-app.md) |
+| AppDeploy app `numa-koudsie-website-0cyj78` | <https://numa-koudsie-website-0cyj78.v2.appdeploy.ai> | its own stored copy, v65, equal to commit `5c7ba7f`; deleted by 29 October 2026 (the address answers 404) | through AppDeploy's MCP server (below), only on Numa's request: [appdeploy-app.md](appdeploy-app.md) |
 
 The repository comes first: a change is made and checked here, the documentation is brought up to date, the change is
 committed on a branch, and it reaches Cloudflare when it is merged into `main`, which happens only on Numa's word. `README.md`,
@@ -79,7 +80,8 @@ The policy, one directive per row:
 | `form-action` | `'self'` | No form can send what a reader types to another site. |
 | `upgrade-insecure-requests` | | Any `http://` address in a page is fetched as `https://`. |
 
-The full policy as it stands in every page:
+The full policy as it stands in every page (except the two studies above and the CV page `cv/index.html`, whose stricter policy
+allows no inline script and no AppDeploy origin and which has no referrer tag; checked 29 October 2026):
 
 ```
 default-src 'self'; script-src 'self' 'unsafe-inline' https://v2.appdeploy.ai https://unpkg.com/@khmyznikov/pwa-install@0.6.3/dist/pwa-install.bundle.js; style-src 'self' 'unsafe-inline'; img-src 'self' data: blob: https://appdeploy.ai; font-src 'self' data:; connect-src 'self' https://api-v2.appdeploy.ai; worker-src 'self'; manifest-src 'self'; object-src 'none'; base-uri 'self'; form-action 'self'; upgrade-insecure-requests
@@ -103,10 +105,10 @@ repository can replace phyeinusul.com, so those accounts and their e-mail need t
 On phyeinusul.com the AppDeploy addresses in the policy are unused (nothing injects the overlay there), so they allow nothing that
 loads; they stay so that one page works on both hosts.
 
-**How it was tested.** On 16 October 2026, in headless Chromium, on all 15 pages, desktop and a phone profile, before and after
+**How it was tested.** On 16 October 2026, in headless Chromium, on all 15 pages of the time (51 HTML pages on 29 October), desktop and a phone profile, before and after
 the deploy: no request refused by the policy, no script error, no request to Google, and, read from Chromium's own font
 report, the same font for every sampled text element (83 to 413 per page) as with the Google-hosted fonts. To check the live
-site by hand: `curl -s https://numa-koudsie-website-0cyj78.v2.appdeploy.ai/ | grep -c Content-Security-Policy` prints `1`; in the
+site by hand (while the app existed): `curl -s https://numa-koudsie-website-0cyj78.v2.appdeploy.ai/ | grep -c Content-Security-Policy` printed `1`; in the
 browser's developer tools, the Network tab shows no request to `fonts.googleapis.com`.
 
 **Rules for later changes.**

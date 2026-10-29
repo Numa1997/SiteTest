@@ -20,7 +20,8 @@ The pages that use them are described in [pages.md](pages.md); the fonts and KaT
 
 ## Design rules
 
-The house design is `DESIGN.md` of the app `droplet-collection-yl7l26` ([AGENTS.md:41–43](../AGENTS.md#L41-L43)):
+The house design is `DESIGN.md` of the app `droplet-collection-yl7l26` ([AGENTS.md](../AGENTS.md), "Design"; on 29 October 2026 that app is
+no longer reachable, so this page is the record of the design):
 
 - **Titles** in Instrument Serif, at weight 400 only (the font request asks for no other weight, [catalog.css:7](../public/styles/catalog.css#L7);
   a bold title would be a synthetic one).
