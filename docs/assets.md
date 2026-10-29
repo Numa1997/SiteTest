@@ -28,8 +28,8 @@ demand: first `katex.min.js`, then `auto-render.min.js`, then typesets every lec
 The home page `index.html` does not use KaTeX.
 
 **Why it is self-hosted** rather than loaded from a public server: the pages then work offline from a saved copy, and they
-do not depend on a third party being reachable. The two project copies under `public/portfolios/` carry their own KaTeX
-inside their bundles ([portfolios.md](portfolios.md)).
+do not depend on a third party being reachable. Droplet Collection loads this copy too; the Hydraulic Press Study and Rotor Pendula typeset their maths with KaTeX when they
+are generated and carry its fonts inside the page ([portfolios.md](portfolios.md)).
 
 **To upgrade:** replace all four parts together (`katex.min.js`, `katex.min.css`, `contrib/auto-render.min.js`, `fonts/`) from
 the same release, cut the CSS down to woff2 again, and check a page with many equations (for example Fig. 2) for unchanged
@@ -62,7 +62,7 @@ visitor's address to Google. Since then the site serves them itself, and the sec
 | File | What it is |
 |---|---|
 | `plex.css` | 59 `@font-face` rules: IBM Plex Mono 400 and 500, Plex Sans 400, 500, 600 and 400 italic, Plex Serif 400, 500, 600, 700 and 400 italic. Imported by [site.css:5](../public/styles/site.css#L5). |
-| `instrument-plex.css` | 38 `@font-face` rules: Instrument Serif 400 and 400 italic, Plex Sans and Plex Mono as above. Imported by [sim.css:7](../public/styles/sim.css#L7), [catalog.css:7](../public/styles/catalog.css#L7) and the stylesheets of the two project copies ([portfolios.md](portfolios.md)). |
+| `instrument-plex.css` | 38 `@font-face` rules: Instrument Serif 400 and 400 italic, Plex Sans and Plex Mono as above. Imported by [sim.css:7](../public/styles/sim.css#L7), [catalog.css:7](../public/styles/catalog.css#L7) and linked by all eight project pages under `portfolios/` ([portfolios.md](portfolios.md)). |
 | `ibm-plex-mono/`, `ibm-plex-sans/`, `ibm-plex-serif/`, `instrument-serif/` | 51 `.woff2` files (0.74 MB), named family, weight (`i` for italic) and script range, for example `ibm-plex-sans-400i-greek.woff2`. |
 | `OFL-IBM-Plex.txt`, `OFL-Instrument-Serif.txt` | The SIL Open Font License 1.1, under which both families may be copied and served. |
 

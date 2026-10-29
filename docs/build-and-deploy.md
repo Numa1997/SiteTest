@@ -50,7 +50,7 @@ This section and the next describe the AppDeploy app only. On Cloudflare the bui
 
 ## Security
 
-Since 16 October 2026 (app version `1792151590518`) every page, the project copies included, carries two `meta` tags right
+Since 16 October 2026 (app version `1792151590518`) every page, the project pages included, carries two `meta` tags right
 after its charset line (lines 5 and 6, for example [index.html:5–6](../index.html#L5-L6)). Two studies differ: the Hydraulic
 Press Study (`portfolios/hydraulics/index.html`, added 21 October 2026, and its `de.html` and `ar.html`) and Rotor Pendula
 (`portfolios/rotor-pendula/index.html`, generated since 23 October 2026) add `'unsafe-eval'` to `script-src` and `blob:` to
@@ -70,9 +70,9 @@ The policy, one directive per row:
 | `script-src` | `'self' 'unsafe-inline' https://v2.appdeploy.ai` and one file on unpkg.com | The site's scripts; code written inside the pages (every page keeps its code inline, and AppDeploy injects inline scripts when it serves a page); AppDeploy's overlay; the install-prompt library the overlay loads on phones, exactly one file, which the overlay checks against a SHA-384 fingerprint. |
 | `style-src` | `'self' 'unsafe-inline'` | The stylesheets; inline styles (KaTeX writes them, and so does the overlay). |
 | `img-src` | `'self' data: blob: https://appdeploy.ai` | Images of the site, the inline SVG favicons (`data:`), canvas exports (`blob:`), the overlay's icons. |
-| `font-src` | `'self' data:` | The self-hosted fonts ([assets.md](assets.md)); one font the project copies' stylesheets carry inline. |
-| `connect-src` | `'self' https://api-v2.appdeploy.ai` | Requests for the site's own files (the project copies load their data); the overlay's timing reports. |
-| `worker-src` | `'self'` | The solver workers of the project copies; AppDeploy's service worker. |
+| `font-src` | `'self' data:` | The self-hosted fonts ([assets.md](assets.md)); the fonts that the Hydraulic Press Study and Rotor Pendula carry inline as `data:` addresses (until 23 October 2026 also one font in the app copies' stylesheets). |
+| `connect-src` | `'self' https://api-v2.appdeploy.ai` | Requests for the site's own files (the former app copies loaded their data this way; the generated project pages fetch nothing, checked 29 October 2026); the overlay's timing reports. |
+| `worker-src` | `'self'` | AppDeploy's service worker (the solver workers of the Hydraulic Press Study and Rotor Pendula start from `blob:` addresses, which their own policy adds). |
 | `manifest-src` | `'self'` | The web-app manifest AppDeploy links. |
 | `object-src` | `'none'` | No plugins. |
 | `base-uri` | `'self'` | A slipped-in `<base>` tag cannot redirect the page's relative links to another site. |

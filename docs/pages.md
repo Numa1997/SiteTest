@@ -26,7 +26,7 @@ address without it (`/simulations.html` → `/simulations`, `/index.html` → `/
 no `.html`.
 
 Related pages: the fold mechanism is in [scripts/fold.md](scripts/fold.md), the registry the catalog draws from in
-[scripts/catalog.md](scripts/catalog.md), the stylesheets in [styles.md](styles.md), the project copies in
+[scripts/catalog.md](scripts/catalog.md), the stylesheets in [styles.md](styles.md), the research projects in
 [portfolios.md](portfolios.md), fonts and KaTeX in [assets.md](assets.md).
 
 ## What the three HTML pages share
@@ -360,16 +360,16 @@ fallback list.
 
 ## 3. `public/portfolios.html` · the research projects
 
-**Purpose.** Introduces the four long projects, each with an abstract, four key numbers, four numbered parts and links into
-its own pages. The projects themselves are pages generated from their sources in `portfolios-src/` into
+**Purpose.** Introduces the four long projects, each with an abstract, four key numbers, numbered parts (four each, three for
+Rotor Pendula, counted 29 October 2026) and links into its own pages. The projects themselves are pages generated from their sources in `portfolios-src/` into
 `public/portfolios/<name>/` ([portfolios.md](portfolios.md)).
 
 ### Head
 
 Security policy and referrer rule ([5–6](../public/portfolios.html#L5-L6)), `<title>` "Portfolios · Numa Koudsie"
 ([8](../public/portfolios.html#L8)). Stylesheets in order
-([15–21](../public/portfolios.html#L15-L21)): `site.css`, `katex.min.css`, `paper.css`, `catalog.css` (top bar, masthead,
-`--serif`), `portfolio.css` (the project cards), `fold.css`, and `fonts/arabic.css` for the two Arabic labels of project 04. Scripts at the end of `<body>`: `scripts/fold.js`
+([15–22](../public/portfolios.html#L15-L22)): `site.css`, `katex.min.css`, `paper.css`, `catalog.css` (top bar, masthead,
+`--serif`), `portfolio.css` (the project cards), `fold.css`, `i18n.css` (the language switch), and `fonts/arabic.css` for the two Arabic labels of project 04. Scripts at the end of `<body>`: `scripts/fold.js`
 ([420](../public/portfolios.html#L420)), `vendor/katex/katex.min.js` ([421](../public/portfolios.html#L421)),
 `vendor/katex/contrib/auto-render.min.js` ([422](../public/portfolios.html#L422)), the inline script
 ([423–437](../public/portfolios.html#L423-L437)).
@@ -401,14 +401,16 @@ tally ([350–355](../public/portfolios.html#L350-L355)), 4.1 "One drop, 9 secon
 
 Each part's `h3` carries an `id` (`dc-cloud`, `dc-changes`, … `rp-pages`, … `hp-pages`, … `ic-pages`) and a `span.psub__n` number.
 
-**Links into the copies.** Every link goes to `portfolios/<name>/index.html` or `portfolios/<name>/index.html#/<route>`
-(for Rotor Pendula since 23 October 2026: `index.html` and `index.html#sim`), never to the folder: the copies are single-page apps with hash routes, and AppDeploy used to answer a folder address with
-403 ([AGENTS.md:55–56](../AGENTS.md#L55-L56), which still says so). Measured on 20 October 2026, both hosts answer `portfolios/rotor-pendula/` with
-the copy (AppDeploy 200; Cloudflare 200, and it redirects `…/index.html` there with a 307, keeping the `#/route`), so the file
-links work everywhere. No project uses app routes any more (both app copies were replaced by generated pages on 23 October 2026). The Hydraulic Press Study is not an app with routes but one page
-with three tabs; its links use `portfolios/hydraulics/index.html#servo`, `#ideal` and `#theory`, which its tab bar reads on
-load ([portfolios.md](portfolios.md#the-hydraulic-press-study-hydraulics)). All three copies link back with `href="../../portfolios.html"`, and so do the two pages of Iron, Cotton and the Head (`portfolios/impact/index.html`, `ar.html`), which also link to each other.
-The figure images come from each copy's `fig/` folder (for example
+**Links into the projects** (counted 29 October 2026). Every link names the file, never the folder:
+`portfolios/droplet-collection/index.html#book`, `#sim`, `#problems`, `#checks` and four `#fig-…` figures;
+`portfolios/rotor-pendula/index.html` with `#notes`, `#sim` and `#wind`; `portfolios/hydraulics/index.html#servo`, `#ideal`
+and `#theory`; `portfolios/impact/index.html`, `de.html` and `ar.html`. Each page reads its tab or anchor from the address on
+load ([portfolios.md](portfolios.md)). Naming the file dates from the former app copies, which were single-page apps with hash
+routes such as `#/report`, served by AppDeploy, which until mid-October 2026 answered a folder address with 403; measured on
+20 October 2026 both hosts answer a folder address with the page (Cloudflare redirects `…/index.html` to the folder with a 307,
+keeping the fragment), so the file links work everywhere. The English pages of the four projects link back with
+`href="../../portfolios.html"`; their German and Arabic pages link back to the Portfolios page in their own language.
+The figure images come from each project's `fig/` folder (for example
 [`portfolios/droplet-collection/fig/plate-fallspeed.svg`](../public/portfolios/droplet-collection/fig/plate-fallspeed.svg), written by the
 Droplet Collection build). Droplet Collection, since 23 October 2026 one generated page like the Hydraulic Press Study, is linked at
 `#book`, `#sim`, `#checks` and at four figure ids (`#fig-2-1`, `#fig-3-2`, `#fig-5-2`, `#fig-6-1`), which open their tab
@@ -450,16 +452,18 @@ Expand all / Collapse all goes before the first project. All start open.
 
 ### Without JavaScript
 
-Measured with scripting off: all three projects read in full with their bands, numbers, figures and links; no folds; the maths
+Measured with scripting off, when the page had three projects: all three read in full with their bands, numbers, figures and links; no folds; the maths
 shows as TeX source between `\(` and `\)` (eight such formulas in part 1.1 alone).
 
 ### How to add a project
 
-1. Put the static copy under `public/portfolios/<name>/` as described in [portfolios.md](portfolios.md) (build folder
-   `static/`, stylesheet added by script, back link `../../portfolios.html`).
-2. Copy one `article.proj` block; give it a new `id` and `aria-labelledby`, a new `h2` id, `span.proj__num` "04", the band's
+1. Generate the project's page into `public/portfolios/<name>/` from its source in `portfolios-src/<name>/`, as the four
+   projects are ([portfolios.md](portfolios.md)): one self-contained page with the site's two meta tags, its fonts from
+   `fonts/`, and a back link to `../../portfolios.html`. (Until 23 October 2026 two projects were copies of app builds,
+   with a `static/` folder and a stylesheet added by script.)
+2. Copy one `article.proj` block; give it a new `id` and `aria-labelledby`, a new `h2` id, `span.proj__num` "05", the band's
    `p` and last `span` (they become the counts line), the abstract, the four `dt`/`dd` pairs and the buttons.
-3. Number the parts `3.1`, `3.2`, … in `span.psub__n`; give each `h3` an `id` and the `section` an `aria-labelledby`.
+3. Number the parts `5.1`, `5.2`, … in `span.psub__n`; give each `h3` an `id` and the `section` an `aria-labelledby`.
 4. Link only to `portfolios/<name>/index.html#/<route>` and take figures from `portfolios/<name>/fig/`; give each `img` the
    `width` and `height` of the picture's own proportions in CSS px, at a height of 300, never the raw `viewBox` numbers
    (see **Image sizes** above).
@@ -479,7 +483,7 @@ rules after it still take over.
 |---|---|---|
 | [1](../public/robots.txt#L1) | `# Numa Koudsie · physics website` | Comment. |
 | [3](../public/robots.txt#L3) | `User-agent: *` | The rules below apply to every crawler. |
-| [4](../public/robots.txt#L4) | `Allow: /` | Everything may be crawled, including the project copies and their study files. |
+| [4](../public/robots.txt#L4) | `Allow: /` | Everything may be crawled, including the project pages and their study files. |
 
 There is no `Sitemap:` line. Measured: `/robots.txt` answers 200 as `text/plain`, 58 bytes, identical to the file, on
 AppDeploy and (20 October 2026) on phyeinusul.com. To keep a path out of search engines, add a `Disallow: /path` line under `User-agent: *`.

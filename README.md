@@ -73,8 +73,8 @@ python3 -m http.server 8000 -d /tmp/site
 ```
 
 Then open <http://localhost:8000/>. Opening the HTML files directly from disk is not enough: links from the home page
-expect the other pages beside it, and browsers refuse to run the project copies' module scripts from `file://` addresses.
-This recipe was checked on 14 October 2026: all 13 pages load in headless Chromium with no script errors, no maths errors,
+expect the other pages beside it, and the pages load the shared fonts, scripts and the KaTeX files from the site root.
+This recipe was checked on 14 October 2026 (the site had 13 pages then): all 13 pages load in headless Chromium with no script errors, no maths errors,
 no broken links or images and no sideways scroll, on a desktop and a phone-sized window.
 
 Or build it as Cloudflare serves it: `npm install`, `npm run build`, then `npx wrangler dev` (see [docs/usul.md](docs/usul.md)).
