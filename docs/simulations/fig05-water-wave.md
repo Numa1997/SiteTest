@@ -2,9 +2,9 @@
 
 | | |
 |---|---|
-| Page | [public/simulations/water-wave.html](../../public/simulations/water-wave.html) (891 lines, 163 474 bytes) |
-| Walkthrough | [public/scripts/walk/water.js](../../public/scripts/walk/water.js) (116 lines, key `water`) |
-| Thumbnail | [public/images/sims/water-wave.webp](../../public/images/sims/water-wave.webp) (800 × 500 px, 15 kB) |
+| Page | [public/simulations/water-wave.html](../../public/simulations/water-wave.html) (893 lines, 164 715 bytes) |
+| Walkthrough | [public/scripts/walk/water.js](../../public/scripts/walk/water.js) (216 lines, 12 steps, key `water`) |
+| Thumbnail | [public/images/sims/water-wave.webp](../../public/images/sims/water-wave.webp) (800 × 500 px, 15.0 kB) |
 | Catalog entry | [public/scripts/catalog.js#L115](../../public/scripts/catalog.js#L115) (lines 115–131, `id: 'water-wave'`, `fig: 5`) |
 
 The reader sees a cross-section of deep water under a travelling wave: a burgundy surface line, a rose tint under it, and rows
@@ -160,7 +160,7 @@ Line numbers link into `water-wave.html`.
 | `draw()` | [680-777](../../public/simulations/water-wave.html#L680-L777) | One frame: layout, water fill, surface, calm level, all layers and parcels; writes the arrays. |
 | `Sim.live` | [780-792](../../public/simulations/water-wave.html#L780-L792) | Live values for the walkthrough, read from the store. |
 | clock callback `(dt, t)` | [793-798](../../public/simulations/water-wave.html#L793-L798) | Advances `omegaT`, writes the time scalars, calls `draw()`. `Sim.playButton` binds the Pause button at [799](../../public/simulations/water-wave.html#L799). |
-| `sliderCheck(input, label)` | [800](../../public/simulations/water-wave.html#L800) | Check entry for a value that comes straight from a slider. |
+| `sliderCheck(input, label)` | [802](../../public/simulations/water-wave.html#L802) | Check entry for a value that comes straight from a slider. |
 | `at(q)` | [803](../../public/simulations/water-wave.html#L803) | Stored screen position of parcel `q`. |
 | `parcelPixel(q)` | [804-810](../../public/simulations/water-wave.html#L804-L810) | Read-back: the canvas pixel at the parcel's stored centre; passes if alpha > 0 and luminance < 130. |
 | `qInputs(q)` | [811](../../public/simulations/water-wave.html#L811) | The inputs (layer, column, r, θ) shown in a parcel check. |
@@ -258,7 +258,7 @@ stylesheets `../styles/sim.css` (which imports the self-hosted fonts, KaTeX's CS
 
 - Top bar: one span holding the Phyein Usul logo (a link to `../index.html` with `../images/phyein-usul-mark.svg`, 87 × 48)
   and the link back to the catalog, "← All simulations" ([:18](../../public/simulations/water-wave.html#L18)), then the
-  hand-written Fig. 1–10 links, Fig. 5 marked `aria-current` ([:17-33](../../public/simulations/water-wave.html#L17-L33)).
+  hand-written Fig. 1–11 links, Fig. 5 marked `aria-current` ([:17-33](../../public/simulations/water-wave.html#L17-L33)).
 - Heading: "Fig. 5 · fluid dynamics · particle motion", the h1 and the lede ([:37-41](../../public/simulations/water-wave.html#L37-L41)).
 - The figure: `#stage` with aspect ratio 16 / 7.6, or 1 / 0.95 below 900 px viewport width
   ([:45](../../public/simulations/water-wave.html#L45), [sim.css:215](../../public/styles/sim.css#L215)), the canvas `#water`, and

@@ -2,7 +2,7 @@
 
 | | |
 |---|---|
-| File | [public/scripts/sim.js](../../public/scripts/sim.js), 429 lines, 20.9 kB (20 925 bytes) |
+| File | [public/scripts/sim.js](../../public/scripts/sim.js), 508 lines, 27.8 kB (27 779 bytes; measured 29 October 2026) |
 | Loaded by | the eleven simulation pages in `public/simulations/`, as the second shared script, after `fold.js` and before `dataset.js` (table below); the two pages of Iron, Cotton and the Head (`portfolios/impact/index.html`, `ar.html`), first, before `dataset.js`, for the data panel ([portfolios.md](../portfolios.md#the-data-panel-of-the-study)); the ideal and servo presses inside the Hydraulic Press Study's frames ([portfolios.md](../portfolios.md#the-data-panel-of-the-two-simulations-since-23-october-2026)); and Droplet Collection, first, before `dataset.js` and the inline script, for the data panel ([portfolios.md](../portfolios.md#the-data-panel-the-bookkeeper-since-24-october-2026)). No other page loads it. A walkthrough is loaded only for an element `#walk` that names one in `data-walk`. |
 | Defines | `window.Sim` ([sim.js:494](../../public/scripts/sim.js#L494)), a fresh object with 12 members |
 | Reads | `window.WALK` ([sim.js:488](../../public/scripts/sim.js#L488)), `window.Fold` ([sim.js:407](../../public/scripts/sim.js#L407)), `window.Sim.live` ([sim.js:392](../../public/scripts/sim.js#L392)), `window.renderMathInElement` from KaTeX ([sim.js:434](../../public/scripts/sim.js#L434)) |
@@ -98,7 +98,7 @@ The page's own script then runs and uses the helpers: it sizes its canvases, wir
 
 1. `typeset()` ([sim.js:418-461](../../public/scripts/sim.js#L418-L461)) sets the mathematics.
    - It collects every `.paper` (the lecture note) and every `.stage__cap` and `.formula` (figure captions)
-     ([sim.js:340](../../public/scripts/sim.js#L340)). With no paper but captions, `mathIn` sets only the captions, and since 23 October 2026 only if a caption contains `\(`, so a
+     ([sim.js:419](../../public/scripts/sim.js#L419)). With no paper but captions, `mathIn` sets only the captions, and since 23 October 2026 only if a caption contains `\(`, so a
      page without mathematics in its captions (the impact study) loads no KaTeX
      ([sim.js:342](../../public/scripts/sim.js#L342), [sim.js:470-479](../../public/scripts/sim.js#L470-L479)).
    - It adds a "Skip to the lecture note" link at the top of the body ([sim.js:422-426](../../public/scripts/sim.js#L422-L426)).
@@ -236,7 +236,7 @@ Listeners: `window` `error` ([sim.js:230](../../public/scripts/sim.js#L230)); `D
 - Keep the load order `fold.js` → `sim.js` → `dataset.js` → page script → `datalog.js`. [Line 494](../../public/scripts/sim.js#L494) creates `Sim` afresh, so
   anything attached to `Sim` before it is lost.
 - Adding a helper: define it inside the IIFE and add it to the object at [lines 494-507](../../public/scripts/sim.js#L494-L507). Removing or renaming one: grep the
-  ten pages first (the counts above).
+  eleven pages first (the counts above).
 - `readPixel` must keep refusing transparent pixels ([line 130](../../public/scripts/sim.js#L130)); the Check of Figs. 9, 10 and 11 relies on it to tell "drawn" from
   "not drawn".
 - `tex()` understands only `_{…}`, `^{…}` and `\mathrm{…}` without nested braces. A label with nesting needs a parser
@@ -270,3 +270,17 @@ Listeners: `window` `error` ([sim.js:230](../../public/scripts/sim.js#L230)); `D
 ## The Algebra column is typeset (21 October 2026)
 
 `algebra(math)` in `sim.js` splits a step's `math` field at each `<br>`, translates each line from the light HTML it is written in (`<sub>`, `<sup>`, Unicode symbols, upright `<span style="font-style: normal">` words) to TeX with `htmlToTex()`, and typesets it with KaTeX, the same mathematics as the lecture note. A mark `⟦key|…⟧` becomes `\htmlClass{k}{\htmlData{k=key}{…}}`, so hovering still lights the formula, the code and the table together. A line KaTeX cannot read stays as written. The walkthrough is drawn again when KaTeX has loaded (the `typeset` event). Checked on all ten pages: 270 of 270 lines typeset, no sideways scroll at 390 px.
+
+## The page's words in other languages: `_t()` and `T()` (since 23 October 2026)
+
+The first statement of the file ([sim.js:4](../../public/scripts/sim.js#L4)) defines one translator under two names,
+`window._t` and `window.T`, unless a page already has a `T`. `_t('Play')` looks the English string up in `window.I18N`, the
+table that `scripts/i18n/strings-<lang>.js` sets on a German or Arabic page, and returns the English unchanged when there is no
+table (every English page) or no entry. `{name}` placeholders are filled from the second argument, and an entry that is an
+object of plural forms is chosen with `Intl.PluralRules` for the page's language when the call passes `n`
+(`_t('{n} sources', { n: n })`). The pages pass every word they write for the reader through `_t()`; how the tables are made
+and checked is in [i18n.md](../i18n.md).
+
+On a translated page `boot()` also loads the walkthrough in the page's language: when `window.I18N_WALK` is set, the file is
+`scripts/walk/<lang>/<key>.js` instead of `../scripts/walk/<key>.js` ([sim.js:487](../../public/scripts/sim.js#L487)).
+

@@ -2,8 +2,8 @@
 
 | | |
 |---|---|
-| Page | [public/simulations/Circular Wave Interference Visualization.html](../../public/simulations/Circular%20Wave%20Interference%20Visualization.html) (907 lines, 192 669 bytes) |
-| Walkthrough | [public/scripts/walk/circles.js](../../public/scripts/walk/circles.js) (110 lines, key `circles`) |
+| Page | [public/simulations/Circular Wave Interference Visualization.html](../../public/simulations/Circular%20Wave%20Interference%20Visualization.html) (908 lines, 194 517 bytes) |
+| Walkthrough | [public/scripts/walk/circles.js](../../public/scripts/walk/circles.js) (178 lines, 9 steps, key `circles`) |
 | Thumbnail | [public/images/sims/wave-sources.webp](../../public/images/sims/wave-sources.webp) (WebP, 800 × 500 px, 36.5 kB; a still of the two-source field) |
 | Catalog entry | [public/scripts/catalog.js#L48](../../public/scripts/catalog.js#L48) (`id: 'wave-sources'`, `fig: 1`, `field: 'optics'`, `stage: 1`, lines 47–63) |
 
@@ -237,7 +237,7 @@ imports the self-hosted fonts, KaTeX's CSS and `paper.css`; an inline SVG favico
 
 **Body**, top to bottom:
 - Top bar: one span holding the Phyein Usul logo (a link to `../index.html` with `../images/phyein-usul-mark.svg`, 87 × 48) and
-  "← All simulations" ([L21](../../public/simulations/Circular%20Wave%20Interference%20Visualization.html#L21)), then the hand-written Fig. 1–10 links ([L20–36](../../public/simulations/Circular%20Wave%20Interference%20Visualization.html#L20-L36)); a `<noscript>` message ([L39](../../public/simulations/Circular%20Wave%20Interference%20Visualization.html#L39)).
+  "← All simulations" ([L21](../../public/simulations/Circular%20Wave%20Interference%20Visualization.html#L21)), then the hand-written Fig. 1–11 links ([L20–36](../../public/simulations/Circular%20Wave%20Interference%20Visualization.html#L20-L36)); a `<noscript>` message ([L39](../../public/simulations/Circular%20Wave%20Interference%20Visualization.html#L39)).
 - Heading: "Fig. 1 · wave optics · Huygens' principle", the title, the lede ([L40–44](../../public/simulations/Circular%20Wave%20Interference%20Visualization.html#L40-L44)).
 - The figure: `#stage` with aspect ratio 8 : 3.6, square below 900 px ([L48](../../public/simulations/Circular%20Wave%20Interference%20Visualization.html#L48), [sim.css:68](../../public/styles/sim.css#L68), [sim.css:213–215](../../public/styles/sim.css#L213-L215)); the canvas
   `#field` ([L49](../../public/simulations/Circular%20Wave%20Interference%20Visualization.html#L49)); the caption with `cap-count` ([L51–54](../../public/simulations/Circular%20Wave%20Interference%20Visualization.html#L51-L54)). `datalog.js` adds the Read values switch to this caption and the

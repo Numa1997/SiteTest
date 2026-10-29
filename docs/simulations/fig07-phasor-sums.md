@@ -2,9 +2,9 @@
 
 | | |
 |---|---|
-| Page | [public/simulations/phasor-sums.html](../../public/simulations/phasor-sums.html) (1 479 lines, 262 793 bytes) |
-| Walkthrough | [public/scripts/walk/phasors.js](../../public/scripts/walk/phasors.js) (key `phasors`, 8 steps) |
-| Thumbnail | [public/images/sims/phasor-sums.webp](../../public/images/sims/phasor-sums.webp) (800 × 500 px: the 3-petal rose with its two arms and circles) |
+| Page | [public/simulations/phasor-sums.html](../../public/simulations/phasor-sums.html) (1 480 lines, 264 053 bytes) |
+| Walkthrough | [public/scripts/walk/phasors.js](../../public/scripts/walk/phasors.js) (351 lines, 13 steps, key `phasors`) |
+| Thumbnail | [public/images/sims/phasor-sums.webp](../../public/images/sims/phasor-sums.webp) (800 × 500 px, 12.2 kB: the 3-petal rose with its two arms and circles) |
 | Catalog entry | [public/scripts/catalog.js#L150](../../public/scripts/catalog.js#L150) (`id: 'phasor-sums'`, `fig: 7`, field `methods`, stage 2) |
 
 Links of the form `[L816]` point into `phasor-sums.html`.
@@ -282,7 +282,7 @@ inline favicon and an inline `<style>` for the cards, selects, drop zone, meters
 
 Body: the top bar: one span holding the Phyein Usul logo (a link to `../index.html` with
 `../images/phyein-usul-mark.svg`, 87 × 48) and "← All simulations" ([L45](../../public/simulations/phasor-sums.html#L45)), then the hand-written Fig. links
-1–10 ([L44–60](../../public/simulations/phasor-sums.html#L44-L60));
+1–11 ([L44–60](../../public/simulations/phasor-sums.html#L44-L60));
 the head ([L64–68](../../public/simulations/phasor-sums.html#L64-L68)); the figure `#stage` with canvas `#field` and
 its caption ([L72–80](../../public/simulations/phasor-sums.html#L72-L80)); the card list `#plist` and formula box
 ([L82–97](../../public/simulations/phasor-sums.html#L82-L97)); the controls aside with readouts and legend

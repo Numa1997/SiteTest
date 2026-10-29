@@ -2,7 +2,7 @@
 
 | | |
 |---|---|
-| File | [public/scripts/catalog.js](../../public/scripts/catalog.js), 218 lines, 14.2 kB (14 170 bytes) |
+| File | [public/scripts/catalog.js](../../public/scripts/catalog.js), 235 lines, 15.7 kB (15 697 bytes; measured 29 October 2026) |
 | Loaded by | [simulations.html:125](../../public/simulations.html#L125) only, after `fold.js` (L123) and before `vendor/katex/katex.min.js` (L125) and the page's inline script (L126-351) |
 | Defines | `window.SIM_TOOLS` ([catalog.js:26](../../public/scripts/catalog.js#L26)), `window.SIM_FIELDS` ([catalog.js:35](../../public/scripts/catalog.js#L35)), `window.SIMULATIONS` ([catalog.js:46](../../public/scripts/catalog.js#L46)) |
 | Reads | nothing |

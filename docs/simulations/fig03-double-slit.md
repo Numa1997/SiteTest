@@ -2,9 +2,9 @@
 
 | | |
 |---|---|
-| Page | [public/simulations/Interactive Double-Slit Experiment Visualization.html](../../public/simulations/Interactive%20Double-Slit%20Experiment%20Visualization.html) (948 lines, 173 798 bytes; 62 lines are longer than 300 characters, 56 of them in the lecture note) |
-| Walkthrough | [public/scripts/walk/slit.js](../../public/scripts/walk/slit.js) (118 lines, 7 steps) |
-| Thumbnail | [public/images/sims/double-slit.webp](../../public/images/sims/double-slit.webp) (800 × 500 px, 33 kB) |
+| Page | [public/simulations/Interactive Double-Slit Experiment Visualization.html](../../public/simulations/Interactive%20Double-Slit%20Experiment%20Visualization.html) (949 lines, 175 291 bytes; 64 lines are longer than 300 characters, 56 of them in the lecture note) |
+| Walkthrough | [public/scripts/walk/slit.js](../../public/scripts/walk/slit.js) (227 lines, 11 steps) |
+| Thumbnail | [public/images/sims/double-slit.webp](../../public/images/sims/double-slit.webp) (800 × 500 px, 33.4 kB) |
 | Catalog entry | [public/scripts/catalog.js#L82](../../public/scripts/catalog.js#L82) (`id: 'double-slit'`, `fig: 3`, field `optics`, stage 1, `has: ALL`) |
 
 In this page, "page:N" means line N of the page file above.
@@ -241,7 +241,7 @@ inline SVG favicon, and an inline `<style>` with the label classes `.svg-lbl`, `
 See [styles.md](../styles.md).
 
 **Body.** The top bar: one span holding the Phyein Usul logo (a link to `../index.html` with `../images/phyein-usul-mark.svg`,
-87 × 48) and "← All simulations" ([page:32](../../public/simulations/Interactive%20Double-Slit%20Experiment%20Visualization.html#L32)), then the hand-written Fig. 1–10 links, Fig. 3 marked `aria-current`
+87 × 48) and "← All simulations" ([page:32](../../public/simulations/Interactive%20Double-Slit%20Experiment%20Visualization.html#L32)), then the hand-written Fig. 1–11 links, Fig. 3 marked `aria-current`
 ([page:31–47](../../public/simulations/Interactive%20Double-Slit%20Experiment%20Visualization.html#L31-L47)); the heading
 "Fig. 3 · wave optics · wave–particle duality" ([page:51–55](../../public/simulations/Interactive%20Double-Slit%20Experiment%20Visualization.html#L51-L55));
 the grid with two figures, `#stage` holding `svg#geo` (viewBox 600 × 440, groups `#waves` under `#shapes`) and `svg#pattern`

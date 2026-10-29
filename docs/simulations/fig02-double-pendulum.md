@@ -2,8 +2,8 @@
 
 | | |
 |---|---|
-| Page | [public/simulations/Double Pendulum.html](../../public/simulations/Double%20Pendulum.html) (870 lines, 105 641 bytes) |
-| Walkthrough | [public/scripts/walk/pendulum.js](../../public/scripts/walk/pendulum.js) (137 lines, 8 steps, key `pendulum`) |
+| Page | [public/simulations/Double Pendulum.html](../../public/simulations/Double%20Pendulum.html) (932 lines, 130 053 bytes) |
+| Walkthrough | [public/scripts/walk/pendulum.js](../../public/scripts/walk/pendulum.js) (224 lines, 13 steps, key `pendulum`) |
 | Thumbnail | [public/images/sims/double-pendulum.webp](../../public/images/sims/double-pendulum.webp) (WebP, 800 × 500 px, 12.5 kB; the pendulum, its fading trail and the protractor) |
 | Catalog entry | [public/scripts/catalog.js#L65](../../public/scripts/catalog.js#L65) (`id: 'double-pendulum'`, `fig: 2`, `field: 'mechanics'`, `stage: 2`, lines 64–80) |
 
@@ -151,7 +151,7 @@ All functions live in the one inline script ([L454–928](../../public/simulatio
 | `f4(v, u)` | [L745](../../public/simulations/Double%20Pendulum.html#L745) | Four-decimal formatting for `Sim.live`. |
 | `Sim.live()` | [L746–758](../../public/simulations/Double%20Pendulum.html#L746-L758) | Strings for the walkthrough's "Now" column, read from the store. |
 | clock callback | [L760–784](../../public/simulations/Double%20Pendulum.html#L760-L784) | The frame loop above. |
-| `sliderCheck(input, label, scale)` | [L727](../../public/simulations/Double%20Pendulum.html#L727) | Check record for a slider value, optionally × π/180. |
+| `sliderCheck(input, label, scale)` | [L789](../../public/simulations/Double%20Pendulum.html#L789) | Check record for a slider value, optionally × π/180. |
 | `bobPixel(name, x, y)` | [L790–799](../../public/simulations/Double%20Pendulum.html#L790-L799) | Reads the screen pixel at a bob's stored centre; passes for burgundy, or for the pivot dot or bob 2's rim painted over it; tests alpha first. |
 | `alphaCheck(which)` | [L815–821](../../public/simulations/Double%20Pendulum.html#L815-L821) | Recomputes α₁ or α₂ from the stored state. |
 | `stateInputs()` | [L822](../../public/simulations/Double%20Pendulum.html#L822) | The stored state and parameters, as check inputs. |
@@ -248,7 +248,7 @@ favicon ([L14](../../public/simulations/Double%20Pendulum.html#L14)). No inline 
 
 **Body**, top to bottom:
 - Top bar: one span holding the Phyein Usul logo (a link to `../index.html` with `../images/phyein-usul-mark.svg`, 87 × 48) and
-  "← All simulations" ([L18](../../public/simulations/Double%20Pendulum.html#L18)), then the hand-written Fig. 1–10 links ([L17–33](../../public/simulations/Double%20Pendulum.html#L17-L33)); a `<noscript>` message ([L36](../../public/simulations/Double%20Pendulum.html#L36)).
+  "← All simulations" ([L18](../../public/simulations/Double%20Pendulum.html#L18)), then the hand-written Fig. 1–11 links ([L17–33](../../public/simulations/Double%20Pendulum.html#L17-L33)); a `<noscript>` message ([L36](../../public/simulations/Double%20Pendulum.html#L36)).
 - Heading: "Fig. 2 · classical mechanics · chaos", the title, the lede ([L37–41](../../public/simulations/Double%20Pendulum.html#L37-L41)).
 - The figure: `#stage` with aspect ratio 4 : 3, and 1 : 1.05 below 900 px ([L45](../../public/simulations/Double%20Pendulum.html#L45), [sim.css:213–215](../../public/styles/sim.css#L213-L215)); the canvas `#pend`
   ([L46](../../public/simulations/Double%20Pendulum.html#L46)); the caption with `cap-t` ([L48–51](../../public/simulations/Double%20Pendulum.html#L48-L51)). The canvas is transparent where nothing is drawn, so the stage's grid
@@ -289,7 +289,7 @@ two exercises and three references. Section 4 carries ★.
 | 1 | `p-swing` | A pendulum on a pendulum | [L138–179](../../public/simulations/Double%20Pendulum.html#L138-L179) | — | Figure 1, geometry ([L144–178](../../public/simulations/Double%20Pendulum.html#L144-L178)) |
 | 2 | `p-model` | The model | [L181–189](../../public/simulations/Double%20Pendulum.html#L181-L189) | (1) positions | — |
 | 3 | `p-energy` | Energy | [L191–215](../../public/simulations/Double%20Pendulum.html#L191-L215) | (2) velocities, (3) T, (4) V | box "Energy is conserved" ([L211–214](../../public/simulations/Double%20Pendulum.html#L211-L214)) |
-| 4 | `p-lagrange` | From energy to motion ★ | [L217–263](../../public/simulations/Double%20Pendulum.html#L217-L263) | (5) Euler–Lagrange, unnumbered derivatives, (6), (7), (8) linear system, (9) α₁, α₂ | §4.1–4.4 ([L204](../../public/simulations/Double%20Pendulum.html#L204), [L208](../../public/simulations/Double%20Pendulum.html#L208), [L213](../../public/simulations/Double%20Pendulum.html#L213), [L246](../../public/simulations/Double%20Pendulum.html#L246)); check note ([L221](../../public/simulations/Double%20Pendulum.html#L221)) |
+| 4 | `p-lagrange` | From energy to motion | [L217–263](../../public/simulations/Double%20Pendulum.html#L217-L263) | (5) Euler–Lagrange, unnumbered derivatives, (6), (7), (8) linear system, (9) α₁, α₂ | §4.1–4.4 ([L204](../../public/simulations/Double%20Pendulum.html#L204), [L208](../../public/simulations/Double%20Pendulum.html#L208), [L213](../../public/simulations/Double%20Pendulum.html#L213), [L246](../../public/simulations/Double%20Pendulum.html#L246)); check note ([L221](../../public/simulations/Double%20Pendulum.html#L221)) |
 | 5 | `p-modes` | Small swings: two normal modes | [L265–327](../../public/simulations/Double%20Pendulum.html#L265-L327) | (10), (11) normal-mode frequencies | Figure 2, the two modes ([L279–318](../../public/simulations/Double%20Pendulum.html#L279-L318)); Exercise 5.1 |
 | 6 | `p-chaos` | Chaos | [L329–400](../../public/simulations/Double%20Pendulum.html#L329-L400) | (12) Lyapunov exponent | Figure 3, twin separation on a log scale ([L332–386](../../public/simulations/Double%20Pendulum.html#L332-L386)); Exercise 6.1 |
 | 7 | `p-rk4` | Solving it step by step | [L402–412](../../public/simulations/Double%20Pendulum.html#L402-L412) | (13) RK4 | — |

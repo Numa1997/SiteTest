@@ -2,9 +2,9 @@
 
 | | |
 |---|---|
-| Page | [public/simulations/pendulum-control.html](../../public/simulations/pendulum-control.html) (about 1 350 lines) |
+| Page | [public/simulations/pendulum-control.html](../../public/simulations/pendulum-control.html) (1 349 lines, 185 085 bytes) |
 | Walkthrough | [public/scripts/walk/pendcontrol.js](../../public/scripts/walk/pendcontrol.js) (147 lines, 9 steps, key `pendcontrol`) |
-| Thumbnail | [public/images/sims/pendulum-control.webp](../../public/images/sims/pendulum-control.webp) (WebP, 800 × 500 px, 14 kB) |
+| Thumbnail | [public/images/sims/pendulum-control.webp](../../public/images/sims/pendulum-control.webp) (WebP, 800 × 500 px, 14.0 kB) |
 | Catalog entry | [public/scripts/catalog.js#L217](../../public/scripts/catalog.js#L217-L234) (`id: 'pendulum-control'`, `fig: 11`, `field: 'control'`, `stage: 2`) |
 | Translations | `public/de/simulations/pendulum-control.html`, `public/ar/simulations/pendulum-control.html`, written by `tools/i18n/build.py` from `i18n/<lang>/simulations__pendulum-control.html.json` |
 

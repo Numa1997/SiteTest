@@ -2,7 +2,7 @@
 
 | | |
 |---|---|
-| File | [public/scripts/fold.js](../../public/scripts/fold.js), 414 lines, 24.0 kB (23 973 bytes) |
+| File | [public/scripts/fold.js](../../public/scripts/fold.js), 414 lines, 24.5 kB (24 526 bytes; measured 29 October 2026) |
 | Loaded by | [index.html:621](../../index.html#L621) (the home page); [portfolios.html:420](../../public/portfolios.html#L420); [simulations.html:124](../../public/simulations.html#L124), before `catalog.js`; the eleven simulation pages, first of the shared scripts (load-order table in [sim.md](sim.md#load-order-on-the-pages)) |
 | Defines | `window.Fold = { make, walk, all, openTo, setCard, onCard, onAll, tools }` ([fold.js:413](../../public/scripts/fold.js#L413)) |
 | Sets on `<html>` | CSS variables `--fold-open`, `--fold-close`, `--fold-ease` ([fold.js:21-23](../../public/scripts/fold.js#L21-L23)) and `--fold-top` ([fold.js:297](../../public/scripts/fold.js#L297)) |

@@ -2,8 +2,8 @@
 
 | | |
 |---|---|
-| Page | [public/simulations/driven-oscillator.html](../../public/simulations/driven-oscillator.html) (1929 lines, 324969 bytes) |
-| Walkthrough | [public/scripts/walk/driven.js](../../public/scripts/walk/driven.js) (14 steps, key `driven`) |
+| Page | [public/simulations/driven-oscillator.html](../../public/simulations/driven-oscillator.html) (1 934 lines, 327 290 bytes) |
+| Walkthrough | [public/scripts/walk/driven.js](../../public/scripts/walk/driven.js) (290 lines, 14 steps, key `driven`) |
 | Thumbnail | [public/images/sims/driven-oscillator.webp](../../public/images/sims/driven-oscillator.webp) (WebP, 800 × 500 px, 23.7 kB) |
 | Catalog entry | [public/scripts/catalog.js#L183](../../public/scripts/catalog.js#L183-L199) (`id: 'driven-oscillator'`, `fig: 9`, `field: 'control'`, `stage: 1`, lines 183–199) |
 
@@ -371,7 +371,7 @@ small inline style for the solve box (`.solve`, `.solve__steps`, `.solve__status
 
 **Body**, in order:
 - `header.sim-top`: one span holding the Phyein Usul logo (a link to `../index.html` with `../images/phyein-usul-mark.svg`,
-  87 × 48) and the back link "← All simulations" ([L46](../../public/simulations/driven-oscillator.html#L46)), then the hand-written Fig. 1–10 links, Fig. 9
+  87 × 48) and the back link "← All simulations" ([L46](../../public/simulations/driven-oscillator.html#L46)), then the hand-written Fig. 1–11 links, Fig. 9
   marked `aria-current` ([L45–L61](../../public/simulations/driven-oscillator.html#L45-L61));
 - `.sim__head`: "Fig. 9 · control systems · forced oscillations", the `h1` and the lede
   ([L65–L69](../../public/simulations/driven-oscillator.html#L65-L69));
@@ -381,10 +381,11 @@ small inline style for the solve box (`.solve`, `.solve__steps`, `.solve__status
   solve box, the sliders, six readouts and a legend ([L145–L213](../../public/simulations/driven-oscillator.html#L145-L213)).
   The **Read values** switch is added to the first caption by datalog.js;
 - `article.paper#paper`, the lecture note ([L216–L589](../../public/simulations/driven-oscillator.html#L216-L589)):
-  abstract; ten sections `.psec` — 01 A push from outside, 02 The model, 03 The exact solution ★ (3.1 The steady state,
-  3.2 The transient), 04 Resonance and phase, 05 The control engineer's view ★, 06 The start: beats and decay, 07 Where the
-  energy goes, 08 Solve first, then play, 09 On screen, 10 What the model leaves out (10.1 Further reading, four items, each
-  with a link). Nine numbered equations, `\tag{1}`–`\tag{8}` and `\tag{6a}` (the completed square that locates the
+  abstract; thirteen sections `.psec` (counted 29 October 2026) — 01 A push from outside, 02 The model, 03 The exact
+  solution ★ (3.1 The steady state, 3.2 The transient), 04 Resonance and phase, 05 The control engineer's view ★, 06 The
+  start: beats and decay, 07 Where the energy goes, 08 Solve first, then play, 09 The driver: a coil in a magnet, 10 Closing
+  the loop, 11 Phase space and stable points, 12 On screen, 13 What the model leaves out (13.1 Further reading, five items,
+  each with a link). Twenty-two numbered equations, `\tag{1}`–`\tag{21}` and `\tag{6a}` (the completed square that locates the
   resonance peak, [L400](../../public/simulations/driven-oscillator.html#L400)). Four figures with five inline SVGs: Figure 1 the plant sketch
   ([L248–L277](../../public/simulations/driven-oscillator.html#L248-L277)), Figure 2 amplitude and phase against $f/f_0$ for
   four damping ratios (two SVGs, [L308–L396](../../public/simulations/driven-oscillator.html#L308-L396)), Figure 3 the block

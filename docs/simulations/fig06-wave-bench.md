@@ -2,9 +2,9 @@
 
 | | |
 |---|---|
-| Page | [public/simulations/wave-interference.html](../../public/simulations/wave-interference.html) (977 lines, 170 467 bytes) |
-| Walkthrough | [public/scripts/walk/bench.js](../../public/scripts/walk/bench.js) (123 lines, key `bench`) |
-| Thumbnail | [public/images/sims/wave-bench.webp](../../public/images/sims/wave-bench.webp) (800 × 500 px, 18 kB) |
+| Page | [public/simulations/wave-interference.html](../../public/simulations/wave-interference.html) (978 lines, 171 663 bytes) |
+| Walkthrough | [public/scripts/walk/bench.js](../../public/scripts/walk/bench.js) (260 lines, 13 steps, key `bench`) |
+| Thumbnail | [public/images/sims/wave-bench.webp](../../public/images/sims/wave-bench.webp) (800 × 500 px, 18.0 kB) |
 | Catalog entry | [public/scripts/catalog.js#L132](../../public/scripts/catalog.js#L132) (lines 132–148, `id: 'wave-bench'`, `fig: 6`) |
 
 A workbench for adding waves. The upper canvas has two panels: the sum of all waves on top, drawn in ink with a pale burgundy
@@ -283,7 +283,7 @@ policy and referrer rule ([build-and-deploy.md](../build-and-deploy.md#security)
 **Body.**
 
 - Top bar: one span holding the Phyein Usul logo (a link to `../index.html` with `../images/phyein-usul-mark.svg`, 87 × 48)
-  and the catalog link "← All simulations" ([:30](../../public/simulations/wave-interference.html#L30)), then the Fig. 1–10
+  and the catalog link "← All simulations" ([:30](../../public/simulations/wave-interference.html#L30)), then the Fig. 1–11
   links, Fig. 6 marked `aria-current` ([:29-45](../../public/simulations/wave-interference.html#L29-L45)).
 - Heading: "Fig. 6 · superposition · Fourier analysis", the h1 and the lede
   ([:49-53](../../public/simulations/wave-interference.html#L49-L53)).

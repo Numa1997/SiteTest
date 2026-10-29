@@ -18,7 +18,7 @@ repository.
 
 | File | Role |
 |---|---|
-| [physics-teacher.md](../.claude/agents/physics-teacher.md) | Judges each section of one note, writes the verdicts in `notes/figNN/plan.md`, and repairs only the sections judged "needs work". |
+| [physics-teacher.md](../.claude/agents/physics-teacher.md) | Writes the lecture note of one page: since Numa's verdict of 21 October 2026 it rewrites the whole note as a textbook chapter (until then it judged each section and repaired only those judged "needs work"); its plan goes to `notes/figNN/plan.md`. |
 | [derivation-checker.md](../.claude/agents/derivation-checker.md) | Re-derives every numbered equation (SymPy) and recomputes every number from the page's own code, without reading the teacher's plan; writes `check.md`. |
 | [referee.md](../.claude/agents/referee.md) | Reads the rendered note blind, as a school student and as a graduate; writes `referee.md` with real obstacles (A), matters of taste (B) and overloaded passages (C). |
 | [walkthrough-keeper.md](../.claude/agents/walkthrough-keeper.md) | Checks by script that the walkthrough quotes the page's code character for character, and that its formulas match the note; writes `walk.md`. It never edits the walkthrough. |
@@ -29,8 +29,8 @@ repository.
 |---|---|
 | [STANDARD.md](../notes/STANDARD.md) | The standard every note is judged against, Numa's decisions, and his verdicts, which override the rest. |
 | [STATUS.md](../notes/STATUS.md) | What is done (one row of check results per figure) and what waits for Numa. |
-| [verify.mjs](../notes/verify.mjs) | The lead's check of the pages in headless Chromium (its list holds Figs. 1 to 10; Fig. 11 is not in it, 29 October 2026) at 1440 × 900, 1600 × 900 and 390 × 844: console and KaTeX errors, sideways scroll, folds, equation numbers, links in the reading lists, and display equations wider than their box. Run after `APPDEPLOY_VITE_OUT_DIR=/tmp/lead-dist npm run build` as `node notes/verify.mjs /tmp/lead-dist`. |
-| [walkcheck.cjs](../notes/walkcheck.cjs) | Searches every quoted code line of the eleven walkthroughs in its page (29 October 2026: 753 of 758 found; the five missing lines are in Figs. 3, 4 and 5), by the recipe of [scripts/walk.md](scripts/walk.md). Run as `node notes/walkcheck.cjs`. |
+| [verify.mjs](../notes/verify.mjs) | The lead's check of the eleven pages in headless Chromium (Fig. 11 added to its list on 29 October 2026) at 1440 × 900, 1600 × 900 and 390 × 844: console and KaTeX errors, sideways scroll, folds, equation numbers, links in the reading lists, and display equations wider than their box. Run after `APPDEPLOY_VITE_OUT_DIR=/tmp/lead-dist npm run build` as `node notes/verify.mjs /tmp/lead-dist`. |
+| [walkcheck.cjs](../notes/walkcheck.cjs) | Searches every quoted code line of the eleven walkthroughs in its page (29 October 2026: 758 of 758 found, after five quotes in Figs. 3, 4 and 5 were brought back in line with their pages), by the recipe of [scripts/walk.md](scripts/walk.md). Run as `node notes/walkcheck.cjs`. |
 | [.gitignore](../notes/.gitignore) | Keeps the agents' screenshots out of the repository; the scripts beside them reproduce them. |
 | `figNN/plan.md` | The teacher's verdict on each section of the note of Fig. NN and what it changed. |
 | `figNN/check.md` | The derivation checker's table: one row per equation and per number, "verified", "wrong, because …" or "unverifiable, because …". |

@@ -2,9 +2,9 @@
 
 | | |
 |---|---|
-| Page | [public/simulations/Transverse and longitudinal waves.html](../../public/simulations/Transverse%20and%20longitudinal%20waves.html) (1086 lines, 202 044 bytes; 92 lines are longer than 300 characters, 87 of them in the lecture note) |
-| Walkthrough | [public/scripts/walk/tl.js](../../public/scripts/walk/tl.js) (110 lines, 7 steps) |
-| Thumbnail | [public/images/sims/transverse-longitudinal.webp](../../public/images/sims/transverse-longitudinal.webp) (800 × 500 px, 12 kB) |
+| Page | [public/simulations/Transverse and longitudinal waves.html](../../public/simulations/Transverse%20and%20longitudinal%20waves.html) (1 087 lines, 203 364 bytes; 94 lines are longer than 300 characters, 87 of them in the lecture note) |
+| Walkthrough | [public/scripts/walk/tl.js](../../public/scripts/walk/tl.js) (226 lines, 11 steps) |
+| Thumbnail | [public/images/sims/transverse-longitudinal.webp](../../public/images/sims/transverse-longitudinal.webp) (800 × 500 px, 11.8 kB) |
 | Catalog entry | [public/scripts/catalog.js#L99](../../public/scripts/catalog.js#L99) (`id: 'transverse-longitudinal'`, `fig: 4`, title "Transverse & Longitudinal", field `waves`, stage 1, `has: ALL`) |
 
 In this page, "page:N" means line N of the page file above.
@@ -233,7 +233,7 @@ Longitudinal Waves · Numa Koudsie", description, the security policy and referr
 `../styles/fold.css`, an inline SVG favicon. No page-specific `<style>`. See [styles.md](../styles.md).
 
 **Body.** The top bar: one span holding the Phyein Usul logo (a link to `../index.html` with `../images/phyein-usul-mark.svg`,
-87 × 48) and "← All simulations" ([page:18](../../public/simulations/Transverse%20and%20longitudinal%20waves.html#L18)), then the Fig. 1–10 links, Fig. 4 marked `aria-current` ([page:17–33](../../public/simulations/Transverse%20and%20longitudinal%20waves.html#L17-L33));
+87 × 48) and "← All simulations" ([page:18](../../public/simulations/Transverse%20and%20longitudinal%20waves.html#L18)), then the Fig. 1–11 links, Fig. 4 marked `aria-current` ([page:17–33](../../public/simulations/Transverse%20and%20longitudinal%20waves.html#L17-L33));
 the heading "Fig. 4 · oscillations · wave kinematics" ([page:37–41](../../public/simulations/Transverse%20and%20longitudinal%20waves.html#L37-L41));
 the figure, `#stage` holding `canvas#waves`, with the caption ([page:44–52](../../public/simulations/Transverse%20and%20longitudinal%20waves.html#L44-L52));
 the control panel ([page:54–97](../../public/simulations/Transverse%20and%20longitudinal%20waves.html#L54-L97)); the lecture note
