@@ -9,7 +9,7 @@ ak = 0.59 sentence kept, labels (4) and (9) added), §4.2 (gz becomes gη), §5.
 
 How: SymPy 1.14 for every numbered equation (re-derived, not just substituted), a dimension table for each, NumPy for the numbers,
 my own RK4 for Figure 4, and the page's own code run in headless Chromium 1194 (Playwright) from a private build
-(`APPDEPLOY_VITE_OUT_DIR=/tmp/fig05-check-dist npm run build`, served by a small Node static server). In the browser I read the
+(`OUT_DIR=/tmp/fig05-check-dist npm run build`, served by a small Node static server). In the browser I read the
 readouts, the slider outputs and the data store (`Sim.data.ds`) at the defaults and after moving sliders, counted canvas path
 vertices and arc radii by wrapping `CanvasRenderingContext2D`, recomputed all 90 stored parcels from stored inputs, and read back the
 pixel under each stored parcel (alpha first). Viewports: 1280 and 1600 px wide (canvas 770 × 366 and 630 × 299 css px, wide field)

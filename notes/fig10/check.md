@@ -16,7 +16,7 @@ None of these edits changes an equation's content, a number, the 7° sentence or
 ## How the checks were made
 
 - **Equations.** Each one was re-derived in SymPy 1.14 (`derive.py`), with units from `sympy.physics.units` and limiting cases.
-- **Numbers.** The site was built with `APPDEPLOY_VITE_OUT_DIR=/tmp/fig10-check-dist npm run build`. The built page is identical to the repository page. It was served by a small Node static server and run in headless Chromium 1194 through Playwright.
+- **Numbers.** The site was built with `OUT_DIR=/tmp/fig10-check-dist npm run build`. The built page is identical to the repository page. It was served by a small Node static server and run in headless Chromium 1194 through Playwright.
 - **The eight runs.** All eight controller × wind runs were solved by clicking the page's own buttons. The values were read from the page's store (`Sim.data.ds`) and from the visible readouts.
 - **Modified copies.** For checks that need the page's internal functions, I served modified copies from `/tmp/fig10-mod`. There were five, made from the built page. Each copy differs from the original in three places only:
   - one line exposes `cp`, `tauAero`, `wind`, `rates` and the constants as `window.__wt`;

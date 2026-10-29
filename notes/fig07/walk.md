@@ -43,7 +43,7 @@ whole page line, and lines not separated by `...` sit on consecutive page lines.
 | 7 Final shape and morphing | refinal() and morphStep() | 846, `...`, 866, 867 | yes (`refinal` L844, `morphStep` L863) |
 | 8 Auto Dance: sound into radii | buildLive() | 944–949 | yes (`buildLive` L939) |
 
-The page and walk file served by the build (`APPDEPLOY_VITE_OUT_DIR=/tmp/fig07-walk-dist npm run build`) are byte-identical to
+The page and walk file served by the build (`OUT_DIR=/tmp/fig07-walk-dist npm run build`) are byte-identical to
 the sources (`cmp`).
 
 ## 2. Equations and notes against the lecture note

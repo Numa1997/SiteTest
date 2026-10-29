@@ -2,7 +2,7 @@
 // (window.Sim.data.ds). For the step-size study the page is served with only the line
 //   var H = 0.01, TEND = 120, EVERY = 2, ...   (L555)
 // changed to H = 0.005, EVERY = 4 (and H = 0.02, EVERY = 1), so that the 6 001 stored rows fall at the same times.
-// Build first:  cd /home/user/SiteTest && APPDEPLOY_VITE_OUT_DIR=/tmp/fig10-dist npm run build
+// Build first:  cd /home/user/SiteTest && OUT_DIR=/tmp/fig10-dist npm run build
 // Run:          node notes/fig10/measure.cjs  > notes/fig10/measure-out.json
 'use strict';
 const http = require('http'), fs = require('fs'), path = require('path');

@@ -135,7 +135,7 @@ Fix: `the sampled peak is always the smaller one.` → `the sampled peak is neve
 The 24 keys used in `syms` are A, f, s, phi, k, w, lam, v, y1, M, dX, N, sum, pk, R, Rc, bl, venv, An, fn, hl, fmax, sA, ratio.
 `Sim.live()` (page 797–821) returns exactly these 24 in every branch: `bl` and `venv` read "needs two waves with different f"
 when undefined, and the per-wave keys read "no waves" with an empty bench. Measured in headless Chromium 1194 at 1440 × 900 on the
-build `APPDEPLOY_VITE_OUT_DIR=/tmp/fig06-walk-dist npm run build`: 8 steps drawn, 25 "Now" cells, none showing "—", in three
+build `OUT_DIR=/tmp/fig06-walk-dist npm run build`: 8 steps drawn, 25 "Now" cells, none showing "—", in three
 states (default one wave, *Beats*, *Square wave*); 0 console errors. The mark `X` in step 2 has no table row, as walk.md says.
 
 ## How to re-run the code check

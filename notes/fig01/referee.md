@@ -1,7 +1,7 @@
 # Fig. 1 · referee report (blind reading)
 
 Page: `public/simulations/Circular Wave Interference Visualization.html`, lecture note "Circular waves that add up to a straight one".
-Read as it renders: built with `APPDEPLOY_VITE_OUT_DIR=/tmp/fig01-ref-dist npm run build` (rebuilt on resume, 20 Oct 2026 ~17:00;
+Read as it renders: built with `OUT_DIR=/tmp/fig01-ref-dist npm run build` (rebuilt on resume, 20 Oct 2026 ~17:00;
 the rendered text was identical to the first reading), served by a small Node static server, opened in headless Chromium
 (Playwright, 1440 × 900), "Expand all" pressed: 304 KaTeX formulas rendered, 0 KaTeX errors, no raw `\(`, no closed fold
 inside the note, no console errors. Read as two readers: a school student good at mathematics, and a physics graduate.

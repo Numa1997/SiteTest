@@ -20,8 +20,7 @@ The pages that use them are described in [pages.md](pages.md); the fonts and KaT
 
 ## Design rules
 
-The house design is `DESIGN.md` of the app `droplet-collection-yl7l26` ([AGENTS.md](../AGENTS.md), "Design"; on 29 October 2026 that app is
-no longer reachable, so this page is the record of the design):
+The house design, as the stylesheets implement it ([AGENTS.md](../AGENTS.md), "Design"):
 
 - **Titles** in Instrument Serif, at weight 400 only (the font request asks for no other weight, [catalog.css:7](../public/styles/catalog.css#L7);
   a bold title would be a synthetic one).
@@ -380,7 +379,7 @@ repeats those two rules for the folded layout. Keep each pair in step.
 [`src/main.ts:1`](../src/main.ts#L1), and no page loads `src/main.ts`: `index.html` has no module script
 (its only scripts are [index.html:21–23](../index.html#L21-L23), [621](../index.html#L621) and
 [622–1253](../index.html#L622-L1253)), and a search of the repository for `main.ts` finds only that file's own line. On the live
-site <https://phyeinusul.com> `/src/main.ts` answers 404, on the AppDeploy copy 403 (measured 20 October 2026). The file comes from the app template; see
+site <https://phyeinusul.com> `/src/main.ts` answers 404 (measured 20 October 2026). The file comes from the Vite template; see
 [build-and-deploy.md](build-and-deploy.md#build-files-at-the-root).
 
 ---
@@ -399,8 +398,7 @@ site <https://phyeinusul.com> `/src/main.ts` answers 404, on the AppDeploy copy 
    400 on the simulation, catalog and Portfolios pages, IBM Plex Serif at weight 600 on the home page alone (AGENTS.md, "Design";
    CLAUDE.md, "Design and explanations"). `catalog.css` redefines `--serif` as Instrument Serif after `site.css`
    ([catalog.css:9–11](../public/styles/catalog.css#L9-L11)), so `--serif` is IBM Plex Serif only on the home page and
-   Instrument Serif on the other thirteen pages (catalog, Portfolios, eleven simulations). The shadows remain open for Numa
-   (the "no card shadows" rule still stands in AGENTS.md).
+   Instrument Serif on the other thirteen pages (catalog, Portfolios, eleven simulations).
 2. **Shadows elsewhere, against the "no card shadows" comments** in [paper.css:7](../public/styles/paper.css#L7),
    [catalog.css:5](../public/styles/catalog.css#L5) and [portfolio.css:5](../public/styles/portfolio.css#L5): every open fold card
    ([fold.css:25](../public/styles/fold.css#L25)), the simulation figure and panel ([sim.css:67](../public/styles/sim.css#L67),

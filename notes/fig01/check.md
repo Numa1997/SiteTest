@@ -7,7 +7,7 @@ sections 4 and 6 and the reference list. Those lines got extra care.
 
 How the check was made:
 
-- **Build.** `APPDEPLOY_VITE_OUT_DIR=/tmp/fig01-check-dist npm run build`. The built page is byte-identical to the source page,
+- **Build.** `OUT_DIR=/tmp/fig01-check-dist npm run build`. The built page is byte-identical to the source page,
   and `sim.js`, `dataset.js` and the style sheets in the build match `public/`.
 - **Browser.** A Node static server of my own on 127.0.0.1. Playwright 1.56.1 from `npm root -g` (`/opt/node22/lib/node_modules`),
   Chromium `/opt/pw-browsers/chromium-1194/chrome-linux/chrome`, headless, file name URL-encoded. No page errors at any width.

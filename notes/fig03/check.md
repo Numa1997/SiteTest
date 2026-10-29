@@ -7,7 +7,7 @@ the closing-one-slit sentence in Section 7, the polarisation bullet in Section 1
 
 How it was checked
 
-- Build: `APPDEPLOY_VITE_OUT_DIR=/tmp/fig03-check-dist npm run build`; the built page is byte-identical to the source file.
+- Build: `OUT_DIR=/tmp/fig03-check-dist npm run build`; the built page is byte-identical to the source file.
   Served by a small Node static server on localhost; loaded in headless Chromium
   (`/opt/pw-browsers/chromium-1194/chrome-linux/chrome`, Playwright from `npm root -g`). No console errors; KaTeX rendered 354
   formulas, 0 `.katex-error`, tags (1)…(13) in order.

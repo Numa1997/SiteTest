@@ -8,7 +8,7 @@ is needed. (B) items are matters of taste. A section with no (A) item is "clear"
 
 ## How the note was read
 
-- Built with `APPDEPLOY_VITE_OUT_DIR=/tmp/fig05-ref-dist npm run build` and served by a small Node static server on
+- Built with `OUT_DIR=/tmp/fig05-ref-dist npm run build` and served by a small Node static server on
   `localhost:8765`. Opened in headless Chromium 1194 through Playwright at 1440 × 900 and pressed "Expand all". All 10 sections
   open, with 337 KaTeX formulas, 0 KaTeX errors and 0 console errors.
 - Screenshots in `notes/fig05/shots/`:

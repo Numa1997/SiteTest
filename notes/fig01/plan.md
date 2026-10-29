@@ -46,7 +46,7 @@ No new section, figure, box or equation. Equation numbers untouched.
 
 ## Done and measured (20 October 2026)
 
-- Build `APPDEPLOY_VITE_OUT_DIR=/tmp/fig01-dist npm run build`, served by `serve.cjs`, Chromium 1194 headless.
+- Build `OUT_DIR=/tmp/fig01-dist npm run build`, served by `serve.cjs`, Chromium 1194 headless.
 - `measure.cjs` → `measure-out.json`: grids 360 × 162 (1280–1600 px), 360 × 360 (880 px), 324 × 324 (390 px); worldH 360.519,
   y_s 350.519, centre row y 181.372 on 1280/1440. Crest speed at the centre cell after Reset, from the stored C and S:
   ω/|∇ arg U| = 51.10 px/s = 1.5486 v, local wavelength 46.46 px; following one crest of the stored ψ up the column at x = 398.9 px

@@ -1,7 +1,7 @@
 // Fig. 4 measurements, scratch. Part 1 replays the page's own formulas in Node (copied from
 // public/simulations/Transverse and longitudinal waves.html: longAmp L799, readouts L801-813, draw L834-961,
 // clock in scripts/sim.js L175-196). Part 2 opens the built page in headless Chromium and reads the data store.
-// Run: node notes/fig04/measure.cjs   (after: APPDEPLOY_VITE_OUT_DIR=/tmp/fig04-dist npm run build)
+// Run: node notes/fig04/measure.cjs   (after: OUT_DIR=/tmp/fig04-dist npm run build)
 'use strict';
 const fs = require('fs'), path = require('path'), http = require('http');
 const { chromium } = require(path.join(require('child_process').execSync('npm root -g').toString().trim(), 'playwright'));

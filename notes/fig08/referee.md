@@ -5,7 +5,7 @@ graduate, against `notes/STANDARD.md` and above all "Numa's verdicts": only real
 following the note in order gets lost, a step is skipped, a symbol is used before it is defined, a claim is wrong or
 unsupported, or a needed physical picture is missing. (B) is taste. A section with no (A) item is **clear**.
 
-**How it was read.** Built with `APPDEPLOY_VITE_OUT_DIR=/tmp/fig08-ref-dist npm run build`; the built page is identical to
+**How it was read.** Built with `OUT_DIR=/tmp/fig08-ref-dist npm run build`; the built page is identical to
 `public/simulations/draw-decompose.html`. Served by a small Node static server and opened in headless Chromium
 (Playwright, 1440 × 900). "Expand all" opened every fold. 325 KaTeX formulas rendered, 0 KaTeX errors, no raw `\(`
 left, no page or console errors. Each section was screenshotted with the pinned fold headers unpinned so they do not

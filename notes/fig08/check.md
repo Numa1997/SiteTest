@@ -7,7 +7,7 @@ section 2, the inversion sentence after (5), the new opening of section 5, the F
 
 How the checks were made:
 
-- **Build.** `APPDEPLOY_VITE_OUT_DIR=/tmp/fig08-check-dist npm run build`, run twice: before and after the section 5 edit. The built
+- **Build.** `OUT_DIR=/tmp/fig08-check-dist npm run build`, run twice: before and after the section 5 edit. The built
   page is byte-identical to the source. The page script and `sim.js`, `dataset.js`, `datalog.js` and `fold.js` did not change between
   the two builds, and the store values from the two runs are identical.
 - **Browser.** A small Node static server on port 8738, and Playwright with

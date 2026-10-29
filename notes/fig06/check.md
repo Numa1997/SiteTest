@@ -8,7 +8,7 @@ How it was checked:
 
 - **Equations.** Re-derived in SymPy 1.14 (`derive.py`), with numbers from NumPy/mpmath (`numerics.py`). The figure curves were parsed out of the SVG
   and compared with the formulas (`svgcheck.py`).
-- **Page numbers.** Measured in headless Chromium 1194 (Playwright) on my own build: `APPDEPLOY_VITE_OUT_DIR=/tmp/fig06-check-dist npm run build`.
+- **Page numbers.** Measured in headless Chromium 1194 (Playwright) on my own build: `OUT_DIR=/tmp/fig06-check-dist npm run build`.
   The built page and `sim.js` are byte-identical to the sources. They were served by a small Node static server on `localhost:8766` (`measure.cjs`).
   Windows used: 1440 × 900 at DPR 1, and 390 × 844 at DPR 3. Values were read from the page's store `Sim.data.ds`, from its own `Sim.data.check`
   functions, and from the visible readouts.

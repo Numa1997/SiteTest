@@ -225,5 +225,5 @@ console.log(`code lines checked ${n}, found ${found}, not found ${n - found}; el
 
 The browser check uses `render.cjs` in the same scratchpad folder
 (`/tmp/claude-0/-home-user/7e6e5ff1-31fb-553b-b515-5cc83cb8412c/scratchpad/fig05/`). To run it: build with
-`APPDEPLOY_VITE_OUT_DIR=/tmp/fig05-walk-dist npm run build`, then load Playwright from `npm root -g` with
+`OUT_DIR=/tmp/fig05-walk-dist npm run build`, then load Playwright from `npm root -g` with
 `executablePath /opt/pw-browsers/chromium-1194/chrome-linux/chrome`.

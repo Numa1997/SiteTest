@@ -8,7 +8,7 @@ How it was checked
 - Algebra: SymPy 1.14. Every numbered equation re-derived from the Lagrangian; equalities proved exactly (trigonometric numerators
   rewritten in exponentials and simplified to 0), not only sampled.
 - Numbers: `deriv()`, `rk4()`, `energy()` and the constants line are cut out of the page source verbatim and run in Node 22, and the same
-  runs repeated in headless Chromium 1194 inside the built page (`APPDEPLOY_VITE_OUT_DIR=/tmp/fig02-check-dist npm run build`, built file
+  runs repeated in headless Chromium 1194 inside the built page (`OUT_DIR=/tmp/fig02-check-dist npm run build`, built file
   byte-identical to the source page), with `requestAnimationFrame` replaced by a driven clock so that frames arrive at chosen times. Store
   values read with `Sim.data.ds.get(...)`, readouts from the DOM, pixels with `getImageData` (alpha checked before colour).
 - Links: `curl -L` through the session proxy (all three answered 200). Chapter numbers: Firecrawl search and scrape (roads named per row).

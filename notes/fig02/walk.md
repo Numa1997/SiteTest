@@ -76,7 +76,7 @@ acc = Math.min(acc - n * H, H);
 ## 2. `syms` keys: 22 of 22 returned by `Sim.live()`
 
 I read this from the code (lines 684–696) and then measured it. I built the site with
-`APPDEPLOY_VITE_OUT_DIR=/tmp/fig02-walk-dist npm run build` from the `a01cf85` content, and the built page and `pendulum.js` are
+`OUT_DIR=/tmp/fig02-walk-dist npm run build` from the `a01cf85` content, and the built page and `pendulum.js` are
 byte-identical to those sources. `468c139` changes no code line and no `Sim.live()` line. I served the build on 127.0.0.1:8712 and opened it in headless Chromium 1194 at 1440 × 900. After 1.5 s,
 `Sim.live()` returned exactly the 22 keys used in `syms`, no more and no fewer:
 `t1 t2 o1 o2 d den m2 l2 a1 a2 k1 h n acc t kin pot E E0 drift scale y1`. All 8 steps drew, the section became a fold, and all

@@ -5,7 +5,7 @@ Note: "Transverse and longitudinal waves: the pattern travels, the medium stays"
 good at mathematics, and a physics graduate. The yardstick is `notes/STANDARD.md`, above all "Numa's verdicts": a clear
 section is left alone. I did not read `plan.md`, `check.md` or any teacher report.
 
-**How I read it.** I built the site with `APPDEPLOY_VITE_OUT_DIR=/tmp/fig04-ref-dist npm run build` (the built page is
+**How I read it.** I built the site with `OUT_DIR=/tmp/fig04-ref-dist npm run build` (the built page is
 byte-identical to the source) and served it with a small Node static server. I opened it in headless Chromium 1194 at
 1440 × 900, pressed *Expand all* (no fold stayed closed) and took screenshots of each section into `shots/`. Then I read
 the rendered text, with KaTeX turned back into its TeX. There were no KaTeX errors, no console errors and no failed

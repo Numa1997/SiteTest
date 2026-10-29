@@ -1,5 +1,5 @@
 // Fig. 3: measurements in headless Chromium on the built page, and the layout checks after the edit.
-// Build first: cd /home/user/SiteTest && APPDEPLOY_VITE_OUT_DIR=/tmp/fig03-dist npm run build
+// Build first: cd /home/user/SiteTest && OUT_DIR=/tmp/fig03-dist npm run build
 // Run: node notes/fig03/measure.cjs   (writes notes/fig03/measure-out.json)
 'use strict';
 const http = require('http'), fs = require('fs'), path = require('path');

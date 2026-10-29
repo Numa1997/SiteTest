@@ -77,7 +77,7 @@ Keys used: `lam k g N norm dx grid r a ph C S c s psi f wt v idx rgb`. `Sim.live
 and `ph` read `no sources` when N = 0. Every mark key has a table row. Four rows have no mark in their step: `grid` (step 2), `r`
 (step 3), and `psi` and `rgb` (step 7). Those rows simply light nothing; this is not a fault.
 
-Measured in headless Chromium 1194. The build is `APPDEPLOY_VITE_OUT_DIR=/tmp/fig01-walk-dist npm run build`, and the built page and
+Measured in headless Chromium 1194. The build is `OUT_DIR=/tmp/fig01-walk-dist npm run build`, and the built page and
 `circles.js` are byte-identical to `public/`. Each viewport was read 1.5 s after load, then each step was clicked and read again
 after 450 ms.
 
