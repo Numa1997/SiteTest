@@ -442,6 +442,7 @@
                     renderCaps(caps);
                 }
                 show();
+                fitMath(papers);
                 document.dispatchEvent(new CustomEvent('typeset'));
             });
         });
@@ -458,6 +459,29 @@
             });
         }, { rootMargin: '-20% 0px -70% 0px' });
         Object.keys(byId).forEach(function (id) { var el = document.getElementById(id); if (el) io.observe(el); });
+    }
+
+    /* a display equation wider than its box (a narrow column, or the data panel open beside the note) is set smaller,
+       down to 80 %, so that it and its number fit; past that the box scrolls sideways as before.
+       Measured again whenever a note changes size: a fold opens, the window or the column is resized */
+    function fitMath(papers) {
+        function fit(p) {
+            Array.prototype.forEach.call(p.querySelectorAll('.katex-display'), function (d) {
+                d.style.fontSize = '';
+                if (!d.clientWidth || d.scrollWidth <= d.clientWidth + 1) return;
+                var cs = getComputedStyle(d), pad = parseFloat(cs.paddingLeft) + parseFloat(cs.paddingRight), f = 1;
+                for (var k = 0; k < 4 && f > 0.8 && d.scrollWidth > d.clientWidth + 1; k++) {   /* the number's gap and rounding do not scale exactly */
+                    f = Math.max(0.8, f * (d.clientWidth - pad) / (d.scrollWidth - pad) - 0.005);
+                    d.style.fontSize = f * 100 + '%';
+                }
+            });
+        }
+        function all() { Array.prototype.forEach.call(papers, fit); }
+        all();
+        if (document.fonts) { document.fonts.ready.then(all); document.fonts.addEventListener('loadingdone', all); }   /* KaTeX's fonts change the widths when they arrive */
+        if (!('ResizeObserver' in window)) return;
+        var ro = new ResizeObserver(function (entries) { entries.forEach(function (en) { fit(en.target); }); });
+        Array.prototype.forEach.call(papers, function (p) { ro.observe(p); });
     }
 
     /* the figure captions carry their equations in \\( … \\) too, set in the same mathematics as the lecture note */
