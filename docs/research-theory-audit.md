@@ -218,8 +218,8 @@ Checks after the repairs, all passing: [notes/verify.mjs](../notes/verify.mjs) (
 two desktop widths); [notes/walkcheck.cjs](../notes/walkcheck.cjs) (226 of 226 quoted code lines found verbatim); every page
 byte-identical to `db1a24b` outside `<article id="paper">`; `tools/inventory.py --check`.
 
-Open, for Numa (as of 20 October 2026; status on 29 October 2026: every quoted walkthrough line is again found verbatim,
-758 of 758 with `node notes/walkcheck.cjs`; Fig. 7 still has no `media-src`; Fig. 2's trail now fades with
+Open, for Numa (as of 20 October 2026; status on 29 October 2026: 753 of 758 quoted walkthrough lines are found verbatim
+with `node notes/walkcheck.cjs` (for the other five, the page now passes their text through `_t(…)`, and the walkthroughs of Figs. 3, 4 and 5 still quote the line without it); Fig. 7 still has no `media-src`; Fig. 2's trail now fades with
 `destination-out`, line 625, so that fault is gone; Fig. 2's `replace('-', '−')` is still there twice; the other items were
 not re-checked):
 - Walkthrough fixes: every quoted code line is found verbatim in its page (226/226), but six excerpts leave out page lines

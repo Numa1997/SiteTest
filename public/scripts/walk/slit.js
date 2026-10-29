@@ -160,9 +160,9 @@ ds.set('ds_direct', ⟦dsid|G.L2 - G.L1⟧); ds.set('S2Q', ⟦S2Q|dist(G.S2, G.Q
             math: '⟦fr|f⟧ = δs/λ − ⌊δs/λ⌋<br>Constructive if f < 0.08 or f > 0.92; &nbsp; Destructive if |f − ½| < 0.08; &nbsp; otherwise Partial, with I/I<sub>0</sub> from <span style="font-style:normal">(7)</span>',
             note: 'f is how far P has come through the current fringe cycle: 0 on a bright fringe and ½ on a dark one, by (8). The code takes f as ratio minus its floor, with ratio = δs/λ from step 5, and chooses one of three sentences. Within 0.08 of a whole number it names the bright order, the nearest whole number to δs/λ. Within 0.08 of a half it names the two orders on either side of the dark fringe. Otherwise it prints the intensity (7), rounded to two decimals. A tolerance of 0.08 wavelengths means cos²(0.08π) ≈ 0.94 at the edge of Constructive and sin²(0.08π) ≈ 0.06 at the edge of Destructive, so each label is right to within 6 % of the peak brightness. The sentence is stored as verdict (step 6), and the line under the readouts shows exactly the stored text.',
             code: `var ⟦fr|f = ratio - Math.floor(ratio)⟧, verdict;
-if (f < 0.08 || f > 0.92) verdict = _t('Constructive · bright fringe, m = ') + Math.round(ratio);
-else if (Math.abs(f - 0.5) < 0.08) verdict = _t('Destructive · dark fringe between m = ') + Math.floor(ratio) + _t(' and ') + (Math.floor(ratio) + 1);
-else verdict = _t('Partial · I/I₀ = ') + Math.pow(Math.cos(phi / 2), 2).toFixed(2);
+if (f < 0.08 || f > 0.92) verdict = 'Constructive · bright fringe, m = ' + Math.round(ratio);
+else if (Math.abs(f - 0.5) < 0.08) verdict = 'Destructive · dark fringe between m = ' + Math.floor(ratio) + ' and ' + (Math.floor(ratio) + 1);
+else verdict = 'Partial · I/I₀ = ' + Math.pow(Math.cos(phi / 2), 2).toFixed(2);
 ...
 document.getElementById('verdict').textContent = ⟦verdict|ds.get('verdict')⟧;`,
             syms: [
