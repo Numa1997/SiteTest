@@ -1,7 +1,7 @@
 # Fig. 10 · referee report (blind reading)
 
 Page: `public/simulations/wind-turbine.html`, the lecture note "Wind turbine control: catching energy from a wind you cannot
-choose". Read as it renders: built with `APPDEPLOY_VITE_OUT_DIR=/tmp/fig10-ref-dist npm run build`, served by a small Node static
+choose". Read as it renders: built with `OUT_DIR=/tmp/fig10-ref-dist npm run build`, served by a small Node static
 server, opened in headless Chromium (Playwright) at 1440 × 900, all folds opened with *Expand all*. The page changed during the
 reading (equations (3) and (10) were reflowed). This report is on the current build: I rebuilt, extracted the text again and
 diffed it against the first reading. Only those two displays had changed. No KaTeX errors, no console errors, and no `\(` left

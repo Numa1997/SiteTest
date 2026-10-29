@@ -7,7 +7,7 @@ The page script (lines 735–1082) and `scripts/sim.js` are unchanged against `d
 
 How the checks were made:
 - **Equations.** Re-derived in SymPy 1.14: 58 symbolic checks, all pass. Units were checked with `sympy.physics.units`, and limiting cases are listed per row.
-- **Numbers.** The site was built with `APPDEPLOY_VITE_OUT_DIR=/tmp/fig04-check-dist npm run build` (the built page is byte-identical to the source) and served by a small Node static server.
+- **Numbers.** The site was built with `OUT_DIR=/tmp/fig04-check-dist npm run build` (the built page is byte-identical to the source) and served by a small Node static server.
   - Each number was read from the page's own store (`Sim.data.ds`) and readouts in headless Chromium 1194 through Playwright, at 1440 × 900, 390 × 844, 1280 × 800 and 1600 × 900.
   - Reduced motion was set, so the first frame, \(\omega t = 0\), holds still. One `draw()` was recorded by wrapping the canvas 2D methods.
   - Sliders were moved by input events, and the clock was played for the Exercise 5.1 minimum gap and for the 0.05 s cap, which was tested with a 300 ms stall.

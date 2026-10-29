@@ -53,7 +53,7 @@ No mismatch. The marks do not affect this check: there are none in any `code` fi
 ## 2. `syms` keys: 19 of 19 returned by `Sim.live()`
 
 Read from the code (lines 936–945), then measured. The page was built with
-`APPDEPLOY_VITE_OUT_DIR=/tmp/fig10-walk-dist npm run build` (built `turbine.js` and page byte-identical to the sources) and
+`OUT_DIR=/tmp/fig10-walk-dist npm run build` (built `turbine.js` and page byte-identical to the sources) and
 opened in headless Chromium at 1440 × 900. After 1.5 s, `Sim.live()` returned exactly the 19 keys used in `syms`, no more and no
 fewer: `lam cp lopt cpmax Kopt v w ta tg Pg wref Kp Ki dtd n t th Eg bal`. All 7 steps drew, every "Now" cell in every step
 filled (none at `—`), and the console showed no errors.

@@ -12,14 +12,9 @@ Four files make the frame around the eleven simulation pages:
 The build copies everything under `public/` to the site root, so a page under `public/` links to `styles/…` and
 `scripts/…` without a `public/` prefix (see [build-and-deploy.md](build-and-deploy.md)). The same folder also holds
 [`public/_headers`](../public/_headers), which is not a page: Cloudflare reads it for the security headers and never serves it
-(measured: `/_headers` answers 404); AppDeploy ignores it ([usul.md](usul.md)).
+(measured: `/_headers` answers 404; [usul.md](usul.md)).
 
-The site ran in two places then. Checked on 14 October 2026 on the AppDeploy app (reported deleted on 29 October 2026)
-(https://numa-koudsie-website-0cyj78.v2.appdeploy.ai, [appdeploy-app.md](appdeploy-app.md)): it serves `/styles/site.css` and
-the six other stylesheets and `robots.txt` byte for byte as in the repository; the three HTML pages differ only by lines the
-platform injects into `<head>` (an overlay script, `og:`/`twitter:` meta tags, and on the home page also a web-app manifest and
-a service-worker registration). That app is older than the repository: on 20 October 2026 its home page has no logo and no
-hero note, and it sends none of the `_headers` headers. Checked on 20 October 2026 on Cloudflare (https://phyeinusul.com and
+Checked on 20 October 2026 on Cloudflare (https://phyeinusul.com and
 www.phyeinusul.com, [usul.md](usul.md)): the three HTML pages, the seven stylesheets and `robots.txt` are served byte for byte as
 in the repository, with nothing injected. Cloudflare answers an address ending in `.html` with a 307 redirect to the same
 address without it (`/simulations.html` → `/simulations`, `/index.html` → `/`), so on that host the pages' own addresses carry
@@ -48,7 +43,7 @@ only under `.js`, so without JavaScript nothing waits for a fade-in.
 `fold.js` runs its `boot()` at `DOMContentLoaded` ([fold.js:404–411](../public/scripts/fold.js#L404-L411)). Each page's
 inline script sits after it and runs during parsing, so the inline script always runs first and fold.js then reshapes the
 finished DOM. What a reader opens or closes is stored in `localStorage` under `fold:` plus the path
-([fold.js:61](../public/scripts/fold.js#L61)); measured keys on AppDeploy: `fold:/` for the home page and
+([fold.js:61](../public/scripts/fold.js#L61)); with a `.html` address the keys are `fold:/` for the home page and
 `fold:/simulations.html`. On phyeinusul.com the path has no `.html` (see above), so the catalog's key there is
 `fold:/simulations`; the two hosts are different origins and never share stored choices anyway.
 
@@ -293,7 +288,7 @@ section.simfold#simulation-<id>  [data-counts = subject, data-label = title]    
 
 There are two levels of opening. The **title fold** (the `section`) is a level-1 fold made by `Fold.make`
 ([245](../public/simulations.html#L245)); it starts closed, and fold.js remembers each reader's choice in `localStorage`
-(measured on AppDeploy: `fold:/simulations.html` → `{"simulation-double-pendulum":1}` after opening Fig. 2). The **card details** (the
+(for example `{"simulation-double-pendulum":1}` after opening Fig. 2). The **card details** (the
 `article`, a `[data-card]`) open with More / Less ([fold.js:209–224](../public/scripts/fold.js#L209-L224)); the page keeps
 that choice in `openCards` while the reader stays ([141](../public/simulations.html#L141)), across redraws, but not across a
 reload (measured).
@@ -405,10 +400,8 @@ Each part's `h3` carries an `id` (`dc-cloud`, `dc-changes`, … `rp-pages`, … 
 `portfolios/droplet-collection/index.html#book`, `#sim`, `#problems`, `#checks` and four `#fig-…` figures;
 `portfolios/rotor-pendula/index.html` with `#notes`, `#sim` and `#wind`; `portfolios/hydraulics/index.html#servo`, `#ideal`
 and `#theory`; `portfolios/impact/index.html`, `de.html` and `ar.html`. Each page reads its tab or anchor from the address on
-load ([portfolios.md](portfolios.md)). Naming the file dates from the former app copies, which were single-page apps with hash
-routes such as `#/report`, served by AppDeploy, which until mid-October 2026 answered a folder address with 403; measured on
-20 October 2026 both hosts answer a folder address with the page (Cloudflare redirects `…/index.html` to the folder with a 307,
-keeping the fragment), so the file links work everywhere. The English pages of the four projects link back with
+load ([portfolios.md](portfolios.md)). Cloudflare redirects `…/index.html` to the folder with a 307, keeping the fragment, so the file links work (measured
+20 October 2026). The English pages of the four projects link back with
 `href="../../portfolios.html"`; their German and Arabic pages link back to the Portfolios page in their own language.
 The figure images come from each project's `fig/` folder (for example
 [`portfolios/droplet-collection/fig/plate-fallspeed.svg`](../public/portfolios/droplet-collection/fig/plate-fallspeed.svg), written by the
@@ -486,7 +479,7 @@ rules after it still take over.
 | [4](../public/robots.txt#L4) | `Allow: /` | Everything may be crawled, including the project pages and their study files. |
 
 There is no `Sitemap:` line. Measured: `/robots.txt` answers 200 as `text/plain`, 58 bytes, identical to the file, on
-AppDeploy and (20 October 2026) on phyeinusul.com. To keep a path out of search engines, add a `Disallow: /path` line under `User-agent: *`.
+phyeinusul.com (20 October 2026). To keep a path out of search engines, add a `Disallow: /path` line under `User-agent: *`.
 
 ---
 
@@ -514,10 +507,6 @@ AppDeploy and (20 October 2026) on phyeinusul.com. To keep a path out of search 
    ([simulations.html:328](../public/simulations.html#L328)) while `__catalog` keeps the first one
    ([350](../public/simulations.html#L350)). Measured: after clearing `?q=zzzz`, `__catalog.state.q` still reads "zzzz". Nothing
    in the repository reads `__catalog`.
-7. **The catalog QA scenario did not match the page.** It expected ten open entries on arrival; the cards open as closed
-   titles ([simulations.html:245](../public/simulations.html#L245), `defaultOpen: false`). Rewritten on 14 October 2026
-   ([tests.json:33](../tests/tests.json#L33)) and deployed to the app. Still open: the home page scenario
-   ([tests.json:17](../tests/tests.json#L17)) depends on there being exactly eight plates.
 8. **AGENTS.md contradicted itself on the catalog layout:** its Simulations-page paragraph said "in one grid", while the Folds
    paragraph ([27–29](../AGENTS.md#L27-L29)) and the code ([fold.css:153](../public/styles/fold.css#L153)) give one column of
    fold cards. Corrected on 14 October 2026 ([AGENTS.md:32–35](../AGENTS.md#L32-L35)).

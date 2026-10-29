@@ -13,7 +13,7 @@ I did not read `notes/fig09/plan.md` or any teacher report or script in `notes/f
 - **Algebra.** SymPy 1.14 re-derives each numbered equation and each derivation step in the text, substitutes the results
   back into the ODE, and solves the initial-value problem with `dsolve` at the default parameters. Units are checked with
   `sympy.physics.units`. Limiting cases are taken with `sympy.limit`.
-- **Numbers.** Built with `APPDEPLOY_VITE_OUT_DIR=/tmp/fig09-check-dist npm run build`. The built page is byte-identical to the
+- **Numbers.** Built with `OUT_DIR=/tmp/fig09-check-dist npm run build`. The built page is byte-identical to the
   source. It was served by a small Node static server and driven by Playwright with headless Chromium
   (`/opt/pw-browsers/chromium-1194/chrome-linux/chrome`). The whole store `Sim.data.ds` was read back for the default run and
   for each exercise setting, which the script set through the page's own sliders and *Solve* button.

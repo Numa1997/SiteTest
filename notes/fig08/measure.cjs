@@ -1,5 +1,5 @@
 // Fig. 8 measurements in headless Chromium, from the page's own store (Sim.data.ds) after driving its controls.
-// Build first: APPDEPLOY_VITE_OUT_DIR=/tmp/fig08-dist npm run build. Run: node notes/fig08/measure.cjs [/tmp/fig08-dist]
+// Build first: OUT_DIR=/tmp/fig08-dist npm run build. Run: node notes/fig08/measure.cjs [/tmp/fig08-dist]
 'use strict';
 const http = require('http'), fs = require('fs'), path = require('path'), { execSync } = require('child_process');
 const { chromium } = require(path.join(execSync('npm root -g').toString().trim(), 'playwright'));

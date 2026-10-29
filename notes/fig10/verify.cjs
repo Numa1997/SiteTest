@@ -1,5 +1,5 @@
 // Fig. 10, after the note edits: console errors, KaTeX errors, sideways scroll, folds, screenshots of the edited sections.
-// Build first:  cd /home/user/SiteTest && APPDEPLOY_VITE_OUT_DIR=/tmp/fig10-dist npm run build
+// Build first:  cd /home/user/SiteTest && OUT_DIR=/tmp/fig10-dist npm run build
 // Run:          node notes/fig10/verify.cjs   (screenshots go to the folder given as the first argument, default /tmp/fig10-shots)
 'use strict';
 const http = require('http'), fs = require('fs'), path = require('path');

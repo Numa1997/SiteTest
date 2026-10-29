@@ -3,7 +3,7 @@
 Blind reading of the lecture note in `public/simulations/Double Pendulum.html`, as a school student who is good at
 mathematics and as a physics graduate. Not read: `plan.md`, `check.md`, any teacher report.
 
-**How it was read.** Built with `APPDEPLOY_VITE_OUT_DIR=/tmp/fig02-ref-dist npm run build` (rebuilt after the coordinator
+**How it was read.** Built with `OUT_DIR=/tmp/fig02-ref-dist npm run build` (rebuilt after the coordinator
 said the page had changed; the built page is byte-identical to the working-tree file), served by a small Node static
 server, opened in headless Chromium 1194 (Playwright) at 1440 × 900. All 15 folds report `data-collapsed="0"` after
 *Expand all*. KaTeX rendered (134 formulas, no raw `\(`). Text read from the rendered DOM, with each formula's TeX

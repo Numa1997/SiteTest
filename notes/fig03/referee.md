@@ -6,7 +6,7 @@ graduate, against `notes/STANDARD.md` and Numa's verdicts. Only (A) items count 
 obstacle: the reader gets lost, a step is skipped, a symbol is used before it is defined, a claim is unsupported or wrong,
 or a physical picture is missing where it is needed. (B) means a matter of taste. A section with no (A) item is "clear".
 
-**How I read it.** I built the site with `APPDEPLOY_VITE_OUT_DIR=/tmp/fig03-ref-dist npm run build` (the built page is
+**How I read it.** I built the site with `OUT_DIR=/tmp/fig03-ref-dist npm run build` (the built page is
 byte-identical to the source page) and served it with a small Node static server. I opened it in headless Chromium
 (Playwright, 1440 × 900), pressed "Expand all" and read the rendered text, with KaTeX source pulled from the annotations.
 I screenshotted each section into `notes/fig03/shots/`: `00-head-abstract.png`, `NN-<id>.png` (whole section) and

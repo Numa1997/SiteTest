@@ -115,7 +115,6 @@ RULES = [
     (r'notes/fig(\d\d)/referee\.md', lambda m: 'Fig. %d: the blind referee\'s report on the note.' % int(m.group(1)), 'docs/notes.md'),
     (r'notes/fig(\d\d)/walk\.md', lambda m: 'Fig. %d: the walkthrough check and its proposed fixes.' % int(m.group(1)), 'docs/notes.md'),
     (r'notes/fig(\d\d)/.+', lambda m: 'Fig. %d: a measuring script of the review, or its saved output.' % int(m.group(1)), 'docs/notes.md'),
-    (r'tools/make_portfolio_copy\.py', 'Builds a browser-only website copy of a research app from its source, without changing the app or installing dependencies.', 'docs/portfolios.md'),
     # root of the app
     (r'AGENTS\.md', "The maintainer's summary: ownership, layout, design rules, folds, the data pipeline, platform quirks.", 'docs/build-and-deploy.md'),
     (r'CLAUDE\.md', 'How Numa expects an AI assistant to work on the project.', 'docs/build-and-deploy.md'),
@@ -131,7 +130,6 @@ RULES = [
     (r'\.github/workflows/pages\.yml', 'Publishes the built dist/ to the GitHub Pages backup, only once Settings -> Pages -> Source is GitHub Actions.', 'docs/usul.md'),
     (r'public/_headers', 'Security response headers Cloudflare sets on every file of phyeinusul.com; read by Cloudflare, never served.', 'docs/usul.md'),
     (r'public/images/phyein-usul-mark\.svg', 'The Phyein Usul logo: above the name on the home page, linking home in the top bar of the other pages.', 'docs/assets.md'),
-    (r'tests/tests\.json', "Plain-language test scenarios run by the platform's QA after each deploy.", 'docs/build-and-deploy.md'),
     # pages
     (r'public/simulations\.html', 'The simulations catalog: one titled fold card per simulation, search and chips.', 'docs/pages.md'),
     (r'public/portfolios\.html', 'The Portfolios page: the two research projects.', 'docs/pages.md'),
@@ -324,7 +322,7 @@ SECTIONS = [
     ('portfolios-src/impact/', 'Source of Iron, Cotton and the Head (not served)', None),
     ('portfolios-src/rotor-pendula/', 'Source of the Rotor Pendula notes (not served)', None),
     ('portfolios-src/droplets/', 'Source of the Droplet Collection study (not served)', None),
-    ('src/', 'Template sources', None), ('tests/', 'Platform tests', None),
+    ('src/', 'Template sources', None),
     ('docs/', 'Documentation', None), ('tools/', 'Tools', None),
     ('i18n/', 'Translation tables', None),
     ('.claude/agents/', 'Agents of the lecture-note review', None),

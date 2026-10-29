@@ -2,8 +2,7 @@
 
 All five batches are complete. Each batch was deployed once, verified live, then committed and pushed to `codex/minor-issues-20261015`. No pull request was opened. No package was installed.
 
-Live site at the time: https://numa-koudsie-website-0cyj78.v2.appdeploy.ai (the AppDeploy app, [appdeploy-app.md](appdeploy-app.md)). Since 20 October 2026 the primary site is https://phyeinusul.com, built from this repository and served by Cloudflare ([usul.md](usul.md)); the AppDeploy app still runs, unchanged since its version `1792151590518`.
-Final stored version: `1792053833126`.
+The live site is https://phyeinusul.com, built from this repository and served by Cloudflare ([usul.md](usul.md)).
 
 Commits: [A — 9d3175f](https://github.com/Numa1997/SiteTest/commit/9d3175f2cf50d0ad3f8792f1ee173e8ce56bab53), [B — 74ef7d9](https://github.com/Numa1997/SiteTest/commit/74ef7d94571f467f31d2289be6c9668b6809a09f), [C — 43d8238](https://github.com/Numa1997/SiteTest/commit/43d82383f4294428a1cf027f2727644ccf7dc8a5), [D — ce3bfc4](https://github.com/Numa1997/SiteTest/commit/ce3bfc439ce40b3e8b6bd7f59af2af9404bd4997). [E — 8982ed3](https://github.com/Numa1997/SiteTest/commit/8982ed35e78161ea7cdd82ae1794f44ccfe39f3c).
 
@@ -67,7 +66,6 @@ Readbacks respect the picture’s precision: stored/recomputed numbers match exa
 | Home eight-of-ten selection | left for Numa | Preserved as requested. |
 | Home intro text | left for Numa | Preserved as requested. |
 | Home “8 figures” count | left for Numa | Preserved as requested. |
-| Protected tests.json scenario 1 | left for Numa | Preserved as requested. |
 | Fig. 3 reduced-motion start | left for Numa | Preserved as requested. |
 | Paused redraws: Figs. 4, 9 and 10 | left for Numa | Preserved as requested. |
 | Fig. 7 replay phase wrap | left for Numa | Preserved as requested. |
@@ -82,8 +80,6 @@ Readbacks respect the picture’s precision: stored/recomputed numbers match exa
 | CLAUDE.md | fixed in part | [CLAUDE.md:15–16](../CLAUDE.md#L15-L16) now gives the measured desktop grid 360 × 162 = 58 320; it keeps "360 × 360 at 880 px" (correct, [fig01-wave-sources.md](simulations/fig01-wave-sources.md)) and does not take the 390 px phone grid or the samples-per-wavelength and call counts of the proposed sentence below. |
 | House fonts and colours | left for Numa | Preserved as requested. |
 | Two embedded project copies | left for Numa | Preserved as requested. |
-| droplet-collection-yl7l26 | left for Numa | Preserved as requested. |
-| rotor-pendula-gafw0f | left for Numa | Preserved as requested. |
 | physik-radar-xvy59b | left for Numa | Preserved as requested. |
 | numa-physics-lab-chatgpt-k0ixwk | left for Numa | Preserved as requested. |
 | GitHub Pages | superseded | Since 20 October 2026 the site is published from this repository by Cloudflare ([wrangler.jsonc](../wrangler.jsonc), [usul.md](usul.md)); nothing in the repository configures GitHub Pages. Correction, 29 October 2026: the GitHub Pages setting was never switched off and has published `main` at <https://numa1997.github.io/SiteTest/> since 16 January 2026; Numa decided that day to keep it on as a backup ([usul.md](usul.md#github-pages)). |
@@ -97,7 +93,6 @@ Proposals for Numa (none applied):
 - **Home eight-of-ten selection:** Decide whether the home page remains a selection or adds Figs. 9 and 10.
 - **Home intro text:** Update the description only after choosing whether the catalog should group by field.
 - **Home “8 figures” count:** Keep the count tied to the approved home selection.
-- **Protected tests.json scenario 1:** Change its eight-plate expectation only with the home selection decision.
 - **Fig. 3 reduced-motion start:** Synchronize the Animate checkbox with the clock’s initial paused state.
 - **Paused redraws: Figs. 4, 9 and 10:** Consider drawing on control changes while paused, after confirming every control still responds.
 - **Fig. 7 replay phase wrap:** Choose shortest-path phase interpolation for transitions across 2π.
@@ -112,8 +107,6 @@ Proposals for Numa (none applied):
 - **CLAUDE.md:** Approve the measured replacement sentence below before editing this binding file.
 - **House fonts and colours:** Keep the existing palette and type system; approve any future design change explicitly.
 - **Two embedded project copies:** Handle changes inside either project as separate work; neither copy was edited.
-- **droplet-collection-yl7l26:** Keep this app unchanged; its design document was read only.
-- **rotor-pendula-gafw0f:** Keep this app outside this website-maintenance change.
 - **physik-radar-xvy59b:** Keep this app outside this website-maintenance change.
 - **numa-physics-lab-chatgpt-k0ixwk:** Keep this app outside this website-maintenance change.
 - **GitHub Pages:** Choose a separate publishing task if this branch should later be served there. (Superseded: Cloudflare serves the site since 20 October 2026. Correction, 29 October 2026: Pages was still on and stays on as a backup, [usul.md](usul.md#github-pages).)

@@ -1,5 +1,5 @@
 // Fig. 4 after the edits: console errors, KaTeX errors, sideways scroll, every fold opens, screenshots of the edited spots.
-// Run: node notes/fig04/verify.cjs   (after: APPDEPLOY_VITE_OUT_DIR=/tmp/fig04-dist npm run build)
+// Run: node notes/fig04/verify.cjs   (after: OUT_DIR=/tmp/fig04-dist npm run build)
 'use strict';
 const fs = require('fs'), path = require('path'), http = require('http');
 const { chromium } = require(path.join(require('child_process').execSync('npm root -g').toString().trim(), 'playwright'));

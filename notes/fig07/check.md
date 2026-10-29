@@ -8,7 +8,7 @@ How it was checked.
 
 - Equations re-derived in SymPy 1.x (identities, `dsolve`, `rsolve`, series, symbolic averages); units and limits by hand.
 - Every number recomputed from the page's own code: the page was built with
-  `APPDEPLOY_VITE_OUT_DIR=/tmp/fig07-check-dist npm run build` (built file identical to the source), served by a small
+  `OUT_DIR=/tmp/fig07-check-dist npm run build` (built file identical to the source), served by a small
   Node static server, and driven in headless Chromium 1194 through Playwright (`npm root -g` → `/opt/node22/lib/node_modules`).
   Values were read from the page's store `Sim.data.ds` and from the readout text, after clicking the real buttons and
   sliders. Figure data were checked by parsing the SVG paths in the note and comparing them with (6).

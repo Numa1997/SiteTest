@@ -10,7 +10,7 @@ Judged against `notes/STANDARD.md`, above all "Numa's verdicts": only (A) items 
 
 ## How it was read
 
-- Built into `/tmp/fig07-ref-dist` (`APPDEPLOY_VITE_OUT_DIR=/tmp/fig07-ref-dist npm run build`), served by a small Node static
+- Built into `/tmp/fig07-ref-dist` (`OUT_DIR=/tmp/fig07-ref-dist npm run build`), served by a small Node static
   server, opened in headless Chromium (Playwright, `/opt/pw-browsers/chromium-1194`) at 1440×900. *Expand all* clicked: 0 folds left
   closed, 350 KaTeX nodes rendered, 0 raw `\(` delimiters, 0 console errors.
 - Screenshots, one per section, captured as full-page clips so the pinned fold headers do not cover the text:

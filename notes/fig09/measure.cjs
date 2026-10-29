@@ -1,5 +1,5 @@
 // Fig. 9 measurements in headless Chromium, on the built page.
-// Build first: cd /home/user/SiteTest && APPDEPLOY_VITE_OUT_DIR=/tmp/fig09-dist npm run build
+// Build first: cd /home/user/SiteTest && OUT_DIR=/tmp/fig09-dist npm run build
 // Run: node notes/fig09/measure.cjs [out.json] [shot-prefix]
 'use strict';
 const path = require('path'), fs = require('fs'), http = require('http');

@@ -3,7 +3,7 @@
 Read blind, as rendered, as two readers at once: a school student good at mathematics and a physics graduate.
 Judged against `notes/STANDARD.md`, above all "Numa's verdicts". Only (A) counts toward a verdict.
 
-**How it was read.** Built with `APPDEPLOY_VITE_OUT_DIR=/tmp/fig09-ref-dist npm run build` (the built page is byte-identical
+**How it was read.** Built with `OUT_DIR=/tmp/fig09-ref-dist npm run build` (the built page is byte-identical
 to `public/simulations/driven-oscillator.html`), served by a small Node static server, opened in headless Chromium 1194 at
 1440 × 900, *Expand all* pressed. 164 KaTeX formulas rendered, 0 KaTeX errors, 0 console errors. The rendered text was read with
 every formula replaced by its TeX source. Screenshots in `notes/fig09/shots/`: `NN-<id>.png` is the whole section with the

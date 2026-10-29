@@ -21,14 +21,13 @@ Beside the site's files, `docs/` explains every file and every script and how th
 | `public/styles/` | The eight stylesheets, and the right-to-left copies `*.rtl.css` that `tools/i18n/build.py` writes for the Arabic pages. | [docs/styles.md](docs/styles.md) |
 | `public/vendor/katex/`, `public/fonts/`, `public/images/` | The maths typesetter, the typefaces (Latin Modern, IBM Plex, Instrument Serif, all served by the site itself), the thumbnails in `images/sims/` and the logo `images/phyein-usul-mark.svg`. | [docs/assets.md](docs/assets.md) |
 | `public/portfolios/` | The four research projects, each generated from its source in `portfolios-src/` and never edited by hand: Droplet Collection, Rotor Pendula, the Hydraulic Press Study and Iron, Cotton and the Head (the last two also in German and Arabic, `de.html`, `ar.html`). | [docs/portfolios.md](docs/portfolios.md) |
-| `portfolios-src/droplets/`, `portfolios-src/rotor-pendula/` | The sources of Droplet Collection and Rotor Pendula (since 23 October 2026; before, copies of their AppDeploy apps): texts, models, generators and checks. Not served. | [docs/portfolios.md](docs/portfolios.md) |
+| `portfolios-src/droplets/`, `portfolios-src/rotor-pendula/` | The sources of Droplet Collection and Rotor Pendula: texts, models, generators and checks. Not served. | [docs/portfolios.md](docs/portfolios.md) |
 | `portfolios-src/hydraulics/` | The Hydraulic Press Study's source: its three pages, the textbook's sources, the generator and its checks. Not served. | [docs/portfolios.md](docs/portfolios.md#the-hydraulic-press-study-hydraulics) |
 | `portfolios-src/impact/` | Source of Iron, Cotton and the Head: the model, the page template, the English, German and Arabic texts, the generator and its checks. Not served. | [docs/portfolios.md](docs/portfolios.md#iron-cotton-and-the-head-impact) |
 | `public/de/`, `public/ar/`, `i18n/`, `tools/i18n/` | The German and Arabic pages, written by `tools/i18n/build.py` from the English pages and the tables in `i18n/<lang>/` (since 23 October 2026; never edited by hand). | [docs/i18n.md](docs/i18n.md) |
 | `notes/` | Work records of the lecture-note rewrites and studies (plans, checks, reviews), and the house standard `notes/STANDARD.md`. Not served. | [docs/notes.md](docs/notes.md) |
-| `package.json`, `vite.config.ts`, `tsconfig.json`, `tailwind.config.js`, `postcss.config.js`, `src/` | Build files (Vite; first from AppDeploy's template). | [docs/build-and-deploy.md](docs/build-and-deploy.md) |
+| `package.json`, `vite.config.ts`, `tsconfig.json`, `tailwind.config.js`, `postcss.config.js`, `src/` | Build files (Vite). | [docs/build-and-deploy.md](docs/build-and-deploy.md) |
 | `public/_headers`, `wrangler.jsonc` | Cloudflare's security headers and deployment settings for phyeinusul.com. | [docs/usul.md](docs/usul.md) |
-| `tests/tests.json` | The test scenarios AppDeploy ran after each deploy of the app (the app is reported deleted on 29 October 2026). | [docs/build-and-deploy.md](docs/build-and-deploy.md) |
 | `AGENTS.md`, `CLAUDE.md` | The maintainer's summary, and how an AI assistant is to work on the project. | [docs/build-and-deploy.md](docs/build-and-deploy.md) |
 | `docs/` | This documentation. [docs/files.md](docs/files.md) lists every file with what it is. | — |
 | `tools/` | Scripts for maintaining the repository. | [docs/files.md](docs/files.md) |
@@ -83,8 +82,7 @@ Or build it as Cloudflare serves it: `npm install`, `npm run build`, then `npx w
 The repository comes first (since 20 October 2026). A change is made here, built and checked in a browser, the pages of
 `docs/` that describe it are brought up to date, `python3 tools/inventory.py` rewrites the file list, the change is
 committed on a branch and merged into `main` on Numa's word; Cloudflare Workers Builds then builds and publishes it to
-phyeinusul.com by itself (since 21 October 2026; [docs/usul.md](docs/usul.md)), and GitHub Pages republishes `main` as a backup. The former AppDeploy app (reported deleted on 29 October 2026,
-[docs/appdeploy-app.md](docs/appdeploy-app.md)) gets nothing; how AppDeploy built and altered a
-deploy is in [docs/build-and-deploy.md](docs/build-and-deploy.md).
+phyeinusul.com by itself (since 21 October 2026; [docs/usul.md](docs/usul.md)), and GitHub Pages republishes `main` as a backup. The build is described in
+[docs/build-and-deploy.md](docs/build-and-deploy.md).
 
 The [theory readability audit](docs/research-theory-audit.md) records the selective teaching revisions to the ten lecture notes and both research projects, with the mathematical corrections and verification scope.

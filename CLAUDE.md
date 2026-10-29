@@ -34,8 +34,6 @@ Project facts (layout, where the site runs, boundaries) are in AGENTS.md.
   Work in the repository: change, build (`npm run build`), test in a real browser, commit. Since 21 October 2026 Cloudflare builds and
   deploys every push or merge to `main` by itself, so merge only when Numa says so, then verify the live site. See `docs/usul.md`.
 - GitHub Pages also republishes `main` at <https://numa1997.github.io/SiteTest/>, kept on as a backup (Numa, 29 October 2026).
-- The AppDeploy app `numa-koudsie-website-0cyj78` was to stay as it was; on 29 October 2026 AppDeploy reports it deleted and lists no
-  apps. Touch AppDeploy only on Numa's explicit request (`docs/appdeploy-app.md`).
 - A change is not done until the docs pages that describe the changed files say what the code now does.
 
 ## A data table is a pipeline, not a second simulation
@@ -49,7 +47,7 @@ Project facts (layout, where the site runs, boundaries) are in AGENTS.md.
   rate (about 4 per second), the marker every frame. Measure it: what shows during a sweep, how much it covers, how often text changes.
 
 ## Design and explanations
-- The design is the house design in `DESIGN.md` of the app `droplet-collection-yl7l26` (29 October 2026: AppDeploy lists no apps and the app's address answers 404, so `DESIGN.md` cannot be read there and no copy is in this repository; until Numa names a new reference, `docs/styles.md` records the design as the stylesheets implement it). Read it before touching fonts, colours or layout,
+- The design is the house design, as the stylesheets implement it and `docs/styles.md` records it. Read it before touching fonts, colours or layout,
   and generalise it; never introduce another font. Titles in Instrument Serif at weight 400 (simulations,
   catalog and Portfolios pages); the home page alone sets its titles in IBM Plex Serif at weight 600 (`site.css`). Text in IBM Plex
   Sans, labels in IBM Plex Mono.

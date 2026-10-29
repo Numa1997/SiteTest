@@ -7,7 +7,7 @@ matters of taste (B) are listed so the lead can see them and leave them.
 
 ## How it was read
 
-- Built with `APPDEPLOY_VITE_OUT_DIR=/tmp/fig06-ref-dist npm run build`. The built page is byte-identical to the source page.
+- Built with `OUT_DIR=/tmp/fig06-ref-dist npm run build`. The built page is byte-identical to the source page.
 - Served `/tmp/fig06-ref-dist` with a small Node static server on port 8706. Opened in headless Chromium 1194 (Playwright), 1440 × 900.
   Pressed **Expand all**. All 15 folds of the note reported `aria-expanded = true`. No console errors and no failed requests.
 - The rendered text was read with each KaTeX formula replaced by its TeX source. Screenshots of every section and every figure are in `notes/fig06/shots/`:

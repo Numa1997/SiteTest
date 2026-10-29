@@ -5,8 +5,7 @@ archive, live at
 
 **<https://phyeinusul.com>** (also <https://www.phyeinusul.com> and <https://phyein-usul.phyeinusul.workers.dev>)
 
-It is built from this repository's `main` branch and served by Cloudflare. An older version ran as the AppDeploy app until
-AppDeploy reported it deleted (checked 29 October 2026, [appdeploy-app.md](appdeploy-app.md)), and GitHub Pages publishes the repository's `main` as a
+It is built from this repository's `main` branch and served by Cloudflare, and GitHub Pages publishes the repository's `main` as a
 backup ([below](#github-pages)).
 
 ## What runs where
@@ -66,12 +65,12 @@ the root `index.html` byte for byte (status 200, title "Numa Koudsie · Notebook
 `https://numa1997.github.io/SiteTest/public/simulations.html` answers 200. The backup therefore holds every file, but its home page
 shows unstyled and its links do not resolve.
 
-**Making it a working copy (prepared 29 October 2026, one setting left to Numa).** The workflow
+**The built-site workflow (29 October 2026).** The workflow
 [.github/workflows/pages.yml](../.github/workflows/pages.yml) runs on every push to `main`. It builds the site as Cloudflare does
 (`npm run build`) and publishes `dist/` to the same address, but only when Settings → Pages → Source is "GitHub Actions": its first
 job reads the source through GitHub's API (`build_type`), and while it is still "Deploy from a branch" (`legacy`) the run ends
-green without publishing, and the branch build goes on as before. The one step left is that setting, which only Numa changes. The
-built site works under the `/SiteTest/` sub-path: Vite writes relative addresses (`base: './'` in `vite.config.js`), and all 1 496
+green without publishing, and the branch build goes on as before. The
+built site works under the `/SiteTest/` sub-path: Vite writes relative addresses (`base: './'` in `vite.config.ts`), and all 1 496
 relative links and sources in `dist/` resolve to a file (checked 29 October 2026). Pages ignores `public/_headers`, so the backup carries the meta-tag
 security layer below and GitHub's own headers (it sends `Strict-Transport-Security: max-age=31556952`, measured 29 October
 2026), but not the framing, nosniff, permissions and opener rules of `_headers`.
@@ -80,9 +79,8 @@ security layer below and GitHub's own headers (it sends `Strict-Transport-Securi
 
 Two layers, both in the repository:
 
-1. **The meta tags in every page** (Content-Security-Policy and referrer rule), unchanged from the AppDeploy version and explained in
-   [build-and-deploy.md](build-and-deploy.md#security). They still name AppDeploy's overlay addresses; on Cloudflare nothing loads from
-   them, so they allow nothing that is used.
+1. **The meta tags in every page** (Content-Security-Policy and referrer rule), explained in
+   [build-and-deploy.md](build-and-deploy.md#security). They admit the site's own files and nothing else.
 2. **Response headers** from [`public/_headers`](../public/_headers), which Cloudflare reads and never serves (asking for
    `/_headers` gives 404). They do what a meta tag cannot:
 
@@ -102,7 +100,7 @@ What protects the site most is outside the code: a visitor only receives copies 
 changes only through the Cloudflare account (deploy) or this repository (source), so both accounts and their e-mail need two-step
 sign-in. DDoS protection is included in every Cloudflare plan.
 
-## What changed against the AppDeploy version (20 October 2026)
+## What came with the move to Cloudflare (20 October 2026)
 
 - `public/images/phyein-usul-mark.svg`: the logo (a fractal source; roots fading to the left, branches growing more irregular to the
   right; wine `#7a1f2b` and `#4d0f18`). Above the name on the home page (217 × 120) with the note "Phyein Usul · φύειν أصول, roots
@@ -113,7 +111,6 @@ sign-in. DDoS protection is included in every Cloudflare plan.
 
 ## Known limits
 
-- The four portfolio pages are generated from their sources in `portfolios-src/` (Droplet Collection and Rotor Pendula since
-  23 October 2026, no longer copies of their AppDeploy apps; [portfolios.md](portfolios.md)). They have no backend and no Saved
+- The four portfolio pages are generated from their sources in `portfolios-src/` ([portfolios.md](portfolios.md)). They have no backend and no Saved
   runs, and carry no logo.
 - The browser tab title and the home page heading still read "Numa Koudsie"; the site's name appears in the logo and the note.

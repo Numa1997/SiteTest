@@ -8,72 +8,17 @@ Study, is generated from its source in this repository too, `portfolios-src/hydr
 
 | Folder | Generated from | What it is |
 |---|---|---|
-| [`public/portfolios/droplet-collection/`](../public/portfolios/droplet-collection/) | its source in [`portfolios-src/droplets/`](../portfolios-src/droplets/) (since 23 October 2026; before, the app `droplet-collection-yl7l26`) | Numa's Bachelor thesis (Leipzig) on how cloud droplets grow into rain, rebuilt as lecture notes: thirteen chapters from one drop to ice, energy and entropy, who eats whom, and a cloud with a shape, five simulations running in the browser, worked problems and checks. One self-contained page ([below](#droplet-collection-droplet-collection-since-23-october-2026)). |
+| [`public/portfolios/droplet-collection/`](../public/portfolios/droplet-collection/) | its source in [`portfolios-src/droplets/`](../portfolios-src/droplets/) | Numa's Bachelor thesis (Leipzig) on how cloud droplets grow into rain, rebuilt as lecture notes: thirteen chapters from one drop to ice, energy and entropy, who eats whom, and a cloud with a shape, five simulations running in the browser, worked problems and checks. One self-contained page ([below](#droplet-collection-droplet-collection-since-23-october-2026)). |
 | [`public/portfolios/rotor-pendula/`](../public/portfolios/rotor-pendula/) | its source in [`portfolios-src/rotor-pendula/`](../portfolios-src/rotor-pendula/) | A second blade hinged at the tip of a wind-turbine blade as a sensor's power supply, told as a double pendulum whose first arm the wind holds: lecture notes in nine chapters, a simulation page and an animated turbulent-wind page, one generated page. |
 | [`public/portfolios/hydraulics/`](../public/portfolios/hydraulics/) | its source in [`portfolios-src/hydraulics/`](../portfolios-src/hydraulics/) (not an app) | A servo-hydraulic press under digital control, from first principles: the animated press with its PID controller, loop analysis (Bode, Nyquist, z-plane), Pascal's ideal press, and a 23-chapter text deriving every equation. One self-contained page. |
 
-**No app copies remain** (since 23 October 2026 every project here is generated from its source in this repository). The
-sections below on app copies describe how the former copies of Droplet Collection and Rotor Pendula worked.
+Every project here is generated from its source in this repository.
 
-## How a copy works
-
-(This section describes the former app copies: Droplet Collection and Rotor Pendula were both copies until 23 October 2026, and
-the mentions below describe those former copies. The page it is now is described [at the end](#droplet-collection-droplet-collection-since-23-october-2026).)
-
-Picture a sealed parcel: everything the project needs is inside its folder, and it touches the rest of the site in only two
-places, the links into it from `portfolios.html` and its one link back out.
-
-1. **One page, many views.** Each copy is a single-page application written in React. The browser loads
-   `index.html`, which loads one JavaScript module (`static/index-<hash>.js`). That module draws every view of the project into
-   `<div id="root">`. The view to show is chosen by the part of the address after `#`, the **hash route**:
-   - (Droplet Collection used `#/`, `#/theory`, `#/results`, `#/simulate`, `#/checks` until 23 October 2026; it is now one
-     generated page, described [below](#droplet-collection-droplet-collection-since-23-october-2026).)
-   - Rotor Pendula (removed 23 October 2026): `#/` (Overview), `#/theory`, `#/results`, `#/simulate`, `#/checks`, `#/report`.
-
-   (Found with `grep -o 'path:"/[a-z-]*"' public/portfolios/*/static/index-*.js`.) Hash routes are used because the server
-   only ever serves the one file `index.html`; everything after `#` stays in the browser. Links from `portfolios.html` therefore
-   always named the file, as in `portfolios/rotor-pendula/index.html#/report` (both copies are gone now). The AppDeploy server used to answer a bare folder address such as
-   `portfolios/rotor-pendula/` with 403 (forbidden). Measured on 20 October 2026, both hosts serve the copy there (AppDeploy
-   200; Cloudflare 200, and Cloudflare redirects `…/index.html` to the folder with a 307, the browser keeping the `#/route`), so
-   the links that name the file work on both.
-2. **The solver runs off the main thread.** Each bundle starts a Web Worker (`static/worker-<hash>.js`). This is a second
-   JavaScript thread that integrates the equations while the page stays responsive, like a second person doing the arithmetic
-   while the first keeps talking. Droplet Collection's worker (130 kB) carries the collection-equation solver; Rotor Pendula's
-   (4.5 kB) carries the pendulum integrator.
-3. **The stylesheet is added by a script.** In both `index.html` files the stylesheet is not a `<link>` tag but a one-line
-   script that creates the `<link>` when the page runs
-   ([droplet-collection/index.html:14](../public/portfolios/droplet-collection/index.html#L14),
-   the former rotor-pendula/index.html, line 14). The reason is a platform quirk:
-   when AppDeploy deploys an HTML file, it rewrites a relative stylesheet address such as `./static/index-<hash>.css` into an
-   address at the site root, where the file does not exist (403), and the copy shows unstyled. The platform does not touch
-   scripts, so a script that adds the same link at run time survives. Seen for `./assets/…` and, since October 2026, for
-   `./static/…`. Cloudflare serves the files unchanged (measured on 20 October 2026: the copy's `index.html` byte for byte), so
-   there the loader is not needed but does no harm.
-4. **The build folder is `static/`, not Vite's default `assets/`.** All file names inside carry a content hash
-   (`index-CsGEKbO8.js`): a new build gives new names, so a browser never mixes an old cached file with a new page.
-5. **The way back.** Each bundle contains one link to `../../portfolios.html`, the Portfolios page of this site.
-6. **No backend.** The copies are built without the apps' saved runs or server functions: the Saved runs page and the Save
-   button are removed (neither bundle has a `/runs` route or the words "Saved runs"), and Rotor Pendula's Simulate page says
-   that saving runs to a shared list is part of the standalone app; Droplet Collection's Simulate page has no such sentence.
-   Neither bundle calls a server: no `XMLHttpRequest`, `WebSocket` or AppDeploy client is in them, and the one global
-   `fetch` is Vite's module-preload helper, which loads the copy's own `static/` files (the other `fetch(` are KaTeX's
-   parser), so a copy works the same on phyeinusul.com and on AppDeploy. What they keep in the browser is
-   only the reader's theme and closed folds in `localStorage` (`droplet.theme`, `droplet.closed`, `rotor.theme`,
-   `rotor.closed`). Everything a copy shows is computed in the browser or read from the files beside it. (Found with
-   `grep -o` on the two `static/index-*.js`; the apps' own source, and so their Saved runs backend, is not in this repository
-   and was not checked.)
-7. **Fonts and policy from the website.** The stylesheet's first rule imports the fonts from the website's own folder
-   (`@import"../../../fonts/instrument-plex.css"`), not from Google Fonts, and `index.html` carries the website's security
-   policy and referrer rule on lines 5–6, right after its charset line ([build-and-deploy.md](build-and-deploy.md#security)).
-   Both were patched into the built files on 16 October 2026, so the hashes in the two stylesheet names no longer match their
-   content; nothing depends on that. On phyeinusul.com the HTTP headers of [`public/_headers`](../public/_headers) also apply to
-   the copies (its rule `/*` covers every path; measured on `/portfolios/rotor-pendula/`).
-
-## Files in each copy
+## Files in each project folder
 
 ### `droplet-collection/`
 
-Since 23 October 2026 the copy is generated from [`portfolios-src/droplets/`](../portfolios-src/droplets/); see
+The page is generated from [`portfolios-src/droplets/`](../portfolios-src/droplets/); see
 [below](#droplet-collection-droplet-collection-since-23-october-2026). What sits in the folder:
 
 | Path | What it is |
@@ -88,7 +33,6 @@ Since 23 October 2026 the copy is generated from [`portfolios-src/droplets/`](..
 | `index.html` | **Generated** by `portfolios-src/rotor-pendula/tools/build_combined.py --site` (4.45 MB, 29 October 2026): a tab bar with the lecture notes (`#notes`), the simulation (`#sim`) and the wind (`#wind`), each embedded unchanged in its own frame; described [below](#rotor-pendula-rotor-pendula). |
 | `LICENSE-fonts.txt` | Licences of the fonts embedded in `index.html` (written by the build). |
 
-The former app copy (`static/`, `fig/`, the delivered study `study/`) was removed on 23 October 2026.
 
 ## The Hydraulic Press Study: `hydraulics/`
 
@@ -380,63 +324,12 @@ box kind; the tabs' rule is one block at the end of `rotor_sim.html`'s styleshee
 the read-back tests their pixels; the Wind tab's plot now sizes its drawing by `clientWidth`/`clientHeight` (inside the border) rather
 than the border box, and the Simulation's plot clicks measure from inside the border (`clientLeft`).
 
-## How to update a copy of an app (former procedure, unused since 23 October 2026)
-
-No app copy remains: all four projects are generated from `portfolios-src/`. The steps below are how the copies of Droplet
-Collection and Rotor Pendula were made until then, kept in case an app is ever copied again.
-
-1. Change the project in its own app and check it there.
-2. Make a website variant of its source, outside the app: remove the Saved runs page, its route and link, and the Save
-   button with its server call; add the back link `← Numa Koudsie · Portfolios` to `../../portfolios.html` in the top bar;
-   add ` · Numa Koudsie` to the page title. Build that variant with a separate Vite configuration that sets `base: './'` and
-   `build.assetsDir: 'static'` (the apps' own `vite.config.ts` keeps Vite's default `assets/`). The repeatable helper is [tools/make_portfolio_copy.py](../tools/make_portfolio_copy.py):
-
-   ~~~bash
-   python3 tools/make_portfolio_copy.py /absolute/app-source /absolute/new-workdir
-   ~~~
-
-   The two copies that were in this repository until 23 October 2026 were not made by the present version of the helper: its Simulate note ("This
-   website copy runs in your browser. Saving named runs is available in the standalone project.") and its back-link class
-   `back-site` are in neither bundle. The source must have its existing dependencies available. The helper makes an isolated source copy, removes the saved-run route and controls, retains solver error messages, adds the backlink and title suffix, builds with a separate Vite configuration, patches the stylesheet loader, points the stylesheet's font import at the website's `fonts/` and adds the website's security policy and referrer rule (taken from `index.html`). It stops if the app loads other Google fonts than `public/fonts/instrument-plex.css` holds. It installs nothing. The output is `new-workdir/dist/`; the standalone app is not edited.
-   Build with the KaTeX version the deployed app uses (0.16.47 today; it is the `content` of the `.katex-version` rule in the
-   app's served CSS). The apps have no lockfile, so a fresh `node_modules` can bring a different KaTeX, which changes the
-   hidden MathML that screen readers use and the spacing of multi-line equations while the visible maths looks the same
-   (seen on 15 October 2026 with 0.16.11).
-3. Replace the folder here with the new build output (delete the old `static/` first, because the hashed names change).
-4. The helper has already replaced the stylesheet `<link>` of `dist/index.html` with the loader script. If you built
-   without it, replace the line `<link rel="stylesheet" crossorigin href="./static/index-<hash>.css">` with the one-line
-   loader script used now, with the new hash:
-   `<script>(function(){var l=document.createElement('link');l.rel='stylesheet';l.href='./static/index-<hash>.css';document.head.appendChild(l)})();</script>`
-   It has also replaced the stylesheet's `@import"https://fonts.googleapis.com/…"` with `@import"../../../fonts/instrument-plex.css"`
-   and added lines 5–6 of the root `index.html` (the security policy and referrer rule) after the charset line of `dist/index.html`.
-   Without these the copy would send every visitor's address to Google, and the website's policy would not cover it.
-5. Keep the links in `public/portfolios.html` pointing at `index.html#/…`, never at a folder.
-6. Deploy the website and open every route of the copy on the live site, https://phyeinusul.com ([usul.md](usul.md); the
-   AppDeploy app only on Numa's request, [appdeploy-app.md](appdeploy-app.md)): the page must be styled (the stylesheet loaded
-   with status 200), and the maths typeset.
-
 ## Notes for maintainers
 
 - The KaTeX fonts: once in `public/vendor/katex/fonts/` (20 woff2 files, 0.26 MB, for the simulation pages and Droplet
   Collection, which links `vendor/katex/katex.min.css`), and embedded as `data:` addresses in the self-contained pages of the
-  Hydraulic Press Study and Rotor Pendula. Until 23 October 2026 each app copy also carried its own set in `static/` (59 files,
-  2.1 MB for the two); those folders are gone.
+  Hydraulic Press Study and Rotor Pendula.
 
-
-## Theory readability revision · 15 October 2026
-
-Both project apps were revised and verified before these copies were rebuilt. Droplet Collection now separates swept volume, event rate, population change and diagnostics, and corrects the interpretation of its L1 spectrum error. Rotor Pendula explains torque signs, moving-pivot kinetic energy, conservative gravity work, weak forcing versus small angle, and the range of the damping optimum. Its Report page identifies the added explanatory prose; the downloadable PDF, source and ZIP remain the original study record.
-
-The two worker bundles retain their previous names and bytes: neither numerical solver nor stored data changed. Both native apps and both website copies passed desktop and phone reading checks, including chapter jumps, keyboard disclosures, retained typeset maths and simulation presets. The complete review is [research-theory-audit.md](research-theory-audit.md).
-
-
-## Rebuilt on KaTeX 0.16.47 · 16 October 2026
-
-The copies above were rebuilt from the apps after the repairs of the independent audit
-([research-theory-audit.md](research-theory-audit.md), second part), with the KaTeX version of the native apps, 0.16.47,
-instead of the 0.16.11 of the 15 October build. The worker bundles, the figures and the study files are unchanged, and the
-stylesheets came back with their earlier hashes (`index-CGriahzx.css`, `index-CNYGhWdg.css`): only the application bundles
-changed. They were rebuilt once more the same day, after the second repairs of the wording (`index-DGIxitSc.js`, `index-CsGEKbO8.js`).
 
 ## Iron, Cotton and the Head: `impact/`
 
@@ -550,8 +443,7 @@ takes 9 % longer than before the store (123 s against 113 s in this container's 
 
 ## Droplet Collection: `droplet-collection/` (since 23 October 2026)
 
-The project was rebuilt from first principles as lecture notes; the app copy it replaces is described in the sections above as it
-was. Source, build and checks are in [`portfolios-src/droplets/README.md`](../portfolios-src/droplets/README.md); the record of
+The project was rebuilt from first principles as lecture notes. Source, build and checks are in [`portfolios-src/droplets/README.md`](../portfolios-src/droplets/README.md); the record of
 how each model level was argued, attacked by an independent reviewer and checked is in [`notes/droplets/`](../notes/droplets/)
 (`status.md` first).
 

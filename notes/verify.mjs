@@ -2,7 +2,7 @@
 // For each page at 1440 × 900, 1600 × 900 and 390 × 844: console and page errors, KaTeX errors, sideways scroll, every fold of the
 // note opening, numbered equations present, and (at the two desktop widths) display equations wider than their box, whose number
 // would then sit outside the visible part.
-// Usage: APPDEPLOY_VITE_OUT_DIR=/tmp/lead-dist npm run build && node notes/verify.mjs /tmp/lead-dist [fig numbers…]
+// Usage: OUT_DIR=/tmp/lead-dist npm run build && node notes/verify.mjs /tmp/lead-dist [fig numbers…]
 import { createRequire } from 'module';
 import http from 'http';
 import fs from 'fs';

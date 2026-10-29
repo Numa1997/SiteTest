@@ -36,7 +36,7 @@ meant to serve both. Show it in the pilot and **ask Numa** whether this is the b
 
 ## 2 · Where to work
 
-- **Repository:** `Numa1997/SiteTest`, in this session's checkout. Nowhere else: no other repository, no AppDeploy app, no
+- **Repository:** `Numa1997/SiteTest`, in this session's checkout. Nowhere else: no other repository, no
   Cloudflare deploy.
 - **Branch.** First **ask Numa** which branch to start from: `docs/usul-cloudflare` holds unmerged corrections to the very
   docs you will edit, so `main` may be behind. Then create `notes/teacher-team` from it and do all work there.

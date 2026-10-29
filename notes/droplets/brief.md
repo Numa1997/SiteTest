@@ -19,8 +19,7 @@ The task has three layers:
 ## 0. The ground (23 October 2026)
 
 - The study is Numa's Bachelor thesis, *Collisional Ice Multiplication Processes in Clouds* (N. Koudsie, Leipzig 2022), remodelled
-  in October 2026 as the Droplet Collection portfolio. Its AppDeploy app is gone: the account lists 0 apps and the source cannot be
-  read. Never use AppDeploy.
+  in October 2026 as the Droplet Collection portfolio.
 - What survives is in the repository `Numa1997/SiteTest`: the built, minified copy served at `public/portfolios/droplet-collection/`
   (live on phyeinusul.com), and its text recovered as HTML with TeX in `notes/droplets/baseline/` (overview, theory, results,
   simulate, checks). A blind audit of that old version may be at `notes/droplets/skeptic-baseline-r1.md`. These files are on the branch
@@ -46,7 +45,7 @@ Right after writing `notes/droplets/done.md` (section 3), set the goal:
 /goal Droplet Collection is complete when every item of notes/droplets/done.md is ticked with its evidence printed in this
 conversation: all check scripts print PASS; the skeptic's final report passes all six thresholds of physics-model-loop section
 7.3; the browser check passes at 360, 390, 1024 and 1440 px; the pull request into main is open and NOT merged;
-notes/droplets/status.md has no open item except "Decisions for Numa". Never merge, never touch Cloudflare or AppDeploy, never edit
+notes/droplets/status.md has no open item except "Decisions for Numa". Never merge, never touch Cloudflare, never edit
 rotor-pendula files. Or stop after 200 turns and report where things stand.
 ```
 
