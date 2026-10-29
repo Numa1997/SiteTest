@@ -221,7 +221,28 @@ byte-identical to `db1a24b` outside `<article id="paper">`; `tools/inventory.py 
 Open, for Numa (as of 20 October 2026; status on 29 October 2026: every quoted walkthrough line is again found verbatim,
 758 of 758 with `node notes/walkcheck.cjs`; Fig. 7 still has no `media-src`; Fig. 2's trail now fades with
 `destination-out`, line 625, so that fault is gone; Fig. 2's `replace('-', '−')` is still there twice; the other items were
-not re-checked):
+not re-checked).
+
+Status later on 29 October 2026, after the fixes of that day (checked with `node notes/verify.mjs dist`, all 33 page-and-width
+runs clean; `node notes/walkcheck.cjs`, 757 of 757; and each fix tried in headless Chromium):
+- The walkthrough fixes below are superseded: all ten walkthroughs were rebuilt on 21 October to follow the new notes
+  (commits `7b107fa`, `978b427`, `0465b4b`, `19e83d3`, `767b705`, `00272f3`, `9410764`), and the three examples quoted
+  below no longer occur (`grep -n "a + ib" public/scripts/walk/dft.js`, `"without ringing"` in `turbine.js`, `"no sign flip"`
+  in `pendulum.js` find nothing).
+- Fixed: Fig. 7's policy has `media-src 'self' blob:` (a 6 s test tone moved the bass meter to 90 %; before, it stayed at 0);
+  Fig. 7's Record keeps the remainder, so snapshots come 50 ms apart on average; Replay turns each phase the shorter way;
+  the beat burst is 1 + d_burst on the beat frame, and the note, its translations and the walkthrough say so.
+- Fixed: Fig. 2's exponents (and those of Figs. 9 and 10) get every minus sign; its store names the pivot x₀, y₀.
+- Fixed: Fig. 1's store labels a₁ = e^(−γr₁/R)/N and C, S with 1/N outside the sum, as the note writes them.
+- Fixed: Fig. 5 stores c_g only with dispersion on; off, it is undefined and shown as "—".
+- Fixed: Fig. 9's last time label keeps clear of "t (s)"; Play at the end of the run in Figs. 9 and 10 starts it again.
+- Fixed: Fig. 3's "Animate wavelets" follows the clock (unticked when reduced motion starts it paused).
+- Kept on purpose: Fig. 8's `resamp()` still samples a closed shape's start twice. The note measures what this causes (the
+  floor in its Figure 5, the square's stray frequencies), so changing it would make those measured numbers wrong; the note
+  already says how to remove it. The redraw every frame while paused in Figs. 4, 9 and 10 also stays: Fig. 4's checkboxes and
+  Particles slider rely on it (docs/simulations/fig04-transverse-longitudinal.md).
+
+The list as written on 20 October:
 - Walkthrough fixes: every quoted code line is found verbatim in its page (226/226), but six excerpts leave out page lines
   without the `...` line the format requires, and each walkthrough uses some symbols or claims that differ from its
   repaired note (for example Fig. 8's step 3 writes `a + ib` where the note uses a for an angle; Fig. 10's step 4 still says

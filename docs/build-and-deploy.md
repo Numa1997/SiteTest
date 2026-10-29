@@ -56,7 +56,9 @@ after its charset line (lines 5 and 6, for example [index.html:5–6](../index.h
 Press Study (`portfolios/hydraulics/index.html`, added 21 October 2026, and its `de.html` and `ar.html`) and Rotor Pendula
 (`portfolios/rotor-pendula/index.html`, generated since 23 October 2026) add `'unsafe-eval'` to `script-src` and `blob:` to
 `worker-src`, because their solver runs in a Web Worker built at run time and started from a `blob:` address; a policy in a
-`meta` tag binds only the page that carries it ([portfolios.md](portfolios.md#the-hydraulic-press-study-hydraulics)):
+`meta` tag binds only the page that carries it ([portfolios.md](portfolios.md#the-hydraulic-press-study-hydraulics)). Fig. 7,
+`simulations/phasor-sums.html`, adds `media-src 'self' blob:` (since 29 October 2026): Auto Dance plays the audio file the
+reader picks from a `blob:` address, which `default-src 'self'` refused, so before that Auto Dance heard nothing:
 
 - a **Content-Security-Policy**: a list, read by the visitor's browser, of the only places the page may load code, styles, fonts,
   images and data from. Anything else is refused before it runs;
@@ -80,7 +82,7 @@ The policy, one directive per row:
 | `form-action` | `'self'` | No form can send what a reader types to another site. |
 | `upgrade-insecure-requests` | | Any `http://` address in a page is fetched as `https://`. |
 
-The full policy as it stands in every page (except the two studies above and the CV page `cv/index.html`, whose stricter policy
+The full policy as it stands in every page (except the two studies and Fig. 7 above, and the CV page `cv/index.html`, whose stricter policy
 allows no inline script and no AppDeploy origin and which has no referrer tag; checked 29 October 2026):
 
 ```

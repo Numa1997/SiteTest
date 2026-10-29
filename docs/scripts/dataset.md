@@ -156,7 +156,7 @@ None. The file reacts to nothing; it runs only when a page or the data panel cal
 
 ## Contracts with other files
 
-- Must load after `sim.js`, which creates `window.Sim` afresh ([sim.js:494](../../public/scripts/sim.js#L494)); loaded
+- Must load after `sim.js`, which creates `window.Sim` afresh ([sim.js:518](../../public/scripts/sim.js#L518)); loaded
   before it, `Sim.dataset` would be wiped.
 - Each page makes exactly one store and hands it to the panel as `Sim.data.ds` (for example
   [Double Pendulum.html:831](../../public/simulations/Double%20Pendulum.html#L831)). The `Sim.dataset(...)` call of each page:

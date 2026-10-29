@@ -3,7 +3,7 @@
 | | |
 |---|---|
 | File | [public/scripts/datalog.js](../../public/scripts/datalog.js), 1422 lines, 104.5 kB (104 474 bytes) |
-| Loaded by | the eleven simulation pages, the three pages of Iron, Cotton and the Head (`portfolios/impact/index.html`, `de.html`, `ar.html`), the ideal and servo presses of the Hydraulic Press Study (in all three languages) and Droplet Collection (`portfolios/droplet-collection/index.html`, for panels 4 and 3), last, after the page's own script (line numbers in the load-order table of [sim.md](sim.md#load-order-on-the-pages)); Figs. 9, 10 and 11 load their ledger, [scripts/ledger/](../../public/scripts/ledger/), just before it, on the same line ([driven-oscillator.html:1931](../../public/simulations/driven-oscillator.html#L1931), [wind-turbine.html:1169](../../public/simulations/wind-turbine.html#L1169), [pendulum-control.html:1347](../../public/simulations/pendulum-control.html#L1347)); styles in [styles/data.css](../../public/styles/data.css), linked in each page's head (for example [Double Pendulum.html:12](../../public/simulations/Double%20Pendulum.html#L12)). The simulation and wind tabs of Rotor Pendula load it too, with their ledgers `scripts/ledger/rotor-pendula.js` and `rotor-wind.js` ([portfolios.md](../portfolios.md#rotor-pendula-rotor-pendula)). |
+| Loaded by | the eleven simulation pages, the three pages of Iron, Cotton and the Head (`portfolios/impact/index.html`, `de.html`, `ar.html`), the ideal and servo presses of the Hydraulic Press Study (in all three languages) and Droplet Collection (`portfolios/droplet-collection/index.html`, for panels 4 and 3), last, after the page's own script (line numbers in the load-order table of [sim.md](sim.md#load-order-on-the-pages)); Figs. 9, 10 and 11 load their ledger, [scripts/ledger/](../../public/scripts/ledger/), just before it, on the same line ([driven-oscillator.html:1933](../../public/simulations/driven-oscillator.html#L1933), [wind-turbine.html:1170](../../public/simulations/wind-turbine.html#L1170), [pendulum-control.html:1347](../../public/simulations/pendulum-control.html#L1347)); styles in [styles/data.css](../../public/styles/data.css), linked in each page's head (for example [Double Pendulum.html:12](../../public/simulations/Double%20Pendulum.html#L12)). The simulation and wind tabs of Rotor Pendula load it too, with their ledgers `scripts/ledger/rotor-pendula.js` and `rotor-wind.js` ([portfolios.md](../portfolios.md#rotor-pendula-rotor-pendula)). |
 | Reads | `Sim.data` (the page's contract, below) and through it the page's dataset ([datalog.js:66-67](../../public/scripts/datalog.js#L66-L67)) |
 | Defines | `Sim.colourMap` ([datalog.js:103](../../public/scripts/datalog.js#L103)), `window.__dataPanel` ([datalog.js:1421](../../public/scripts/datalog.js#L1421)) |
 | Adds to the page | `button.dp-tab` and `aside#data-panel.dp` at the end of `<body>` ([datalog.js:232-233](../../public/scripts/datalog.js#L232-L233)); `canvas.dp-overlay` inside `#stage`, `div.dp-read` right after `#stage`, `button.dp-readbtn` in the figure caption ([datalog.js:874-897](../../public/scripts/datalog.js#L874-L897)) |
@@ -267,14 +267,14 @@ A round is what the page says it is, in `Sim.data.round` ([datalog.js:27-29](../
 |---|---|---|---|---|---|
 | 1 | one period of the sources, $T$ | `t` | sampled | no | [L893](../../public/simulations/Circular%20Wave%20Interference%20Visualization.html#L893) |
 | 2 | ten seconds of simulated motion | `t` | sampled | no | [L913](../../public/simulations/Double%20Pendulum.html#L913) |
-| 3 | ten seconds of slider changes | `wall` | `'change'` | no | [L938](../../public/simulations/Interactive%20Double-Slit%20Experiment%20Visualization.html#L938) |
+| 3 | ten seconds of slider changes | `wall` | `'change'` | no | [L940](../../public/simulations/Interactive%20Double-Slit%20Experiment%20Visualization.html#L940) |
 | 4 | one period, $T$ | `t` | sampled | no | [L1073](../../public/simulations/Transverse%20and%20longitudinal%20waves.html#L1073) |
 | 5 | one period, $T$ | `t` | sampled | no | [L880](../../public/simulations/water-wave.html#L880) |
 | 6 | one repeat of the pattern, at most 20 s | `t` | sampled | no | [L962](../../public/simulations/wave-interference.html#L962) |
 | 7 | one full figure (or part of it) in phasor time | `t` | sampled | yes, in the final-shape view | [L1464](../../public/simulations/phasor-sums.html#L1464) |
 | 8 | one loop of the circles | `t` | sampled | yes, until a shape is decomposed | [L1400](../../public/simulations/draw-decompose.html#L1400) |
-| 9 | one drive period $1/f$ of the stored run | `t_play` | sampled | yes, near the end of the run | [L1914](../../public/simulations/driven-oscillator.html#L1914) |
-| 10 | one rotor turn of the stored run | `t_play` | sampled | yes, near the end of the run | [L1155](../../public/simulations/wind-turbine.html#L1155) |
+| 9 | one drive period $1/f$ of the stored run | `t_play` | sampled | yes, near the end of the run | [L1916](../../public/simulations/driven-oscillator.html#L1916) |
+| 10 | one rotor turn of the stored run | `t_play` | sampled | yes, near the end of the run | [L1156](../../public/simulations/wind-turbine.html#L1156) |
 | 11 | two seconds of the stored run | `t_play` | sampled | yes, in the last two seconds of the run | [L1333](../../public/simulations/pendulum-control.html#L1333) |
 | Portfolios 02 (Rotor Pendula) | one turn of the rotor in the stored record, $T = 2\pi/\Omega$ | `t_now` | sampled | yes, when less than one turn of the record is left before the playback loops | `Sim.data` in [rotor_sim.html](../../portfolios-src/rotor-pendula/rotor_sim.html) |
 | Portfolios 02 (Rotor Pendula, wind tab) | one turn of the rotor at the steady speed of the mean wind, $2\pi/\Omega_0$ | `t` | live | while the wind is still being synthesised | `Sim.data` in [rotor_wind.html](../../portfolios-src/rotor-pendula/rotor_wind.html) |
@@ -462,14 +462,14 @@ The two ledgers, as designed on paper before the code:
 
 The ten blocks: [Fig. 1 L799](../../public/simulations/Circular%20Wave%20Interference%20Visualization.html#L799),
 [Fig. 2 L830](../../public/simulations/Double%20Pendulum.html#L830),
-[Fig. 3 L850](../../public/simulations/Interactive%20Double-Slit%20Experiment%20Visualization.html#L850),
+[Fig. 3 L852](../../public/simulations/Interactive%20Double-Slit%20Experiment%20Visualization.html#L852),
 [Fig. 4 L997](../../public/simulations/Transverse%20and%20longitudinal%20waves.html#L997),
 [Fig. 5 L812](../../public/simulations/water-wave.html#L812),
 [Fig. 6 L869](../../public/simulations/wave-interference.html#L869),
 [Fig. 7 L1371](../../public/simulations/phasor-sums.html#L1371),
 [Fig. 8 L1302](../../public/simulations/draw-decompose.html#L1302),
-[Fig. 9 L1691](../../public/simulations/driven-oscillator.html#L1691),
-[Fig. 10 L1057](../../public/simulations/wind-turbine.html#L1057).
+[Fig. 9 L1693](../../public/simulations/driven-oscillator.html#L1693),
+[Fig. 10 L1058](../../public/simulations/wind-turbine.html#L1058).
 
 ## Public interface
 

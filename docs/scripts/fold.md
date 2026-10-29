@@ -232,7 +232,7 @@ at load); the `typeset` event; `ResizeObserver` on level-1 headers and on `[data
 ## Contracts with other files
 
 - **`sim.js`** calls `Fold.walk(#walk)` after building the walkthrough ([sim.js:407](../../public/scripts/sim.js#L407)) and fires
-  `typeset` ([sim.js:445](../../public/scripts/sim.js#L445)). `fold.js` must load first so that `window.Fold` exists then
+  `typeset` ([sim.js:446](../../public/scripts/sim.js#L446)). `fold.js` must load first so that `window.Fold` exists then
   ([sim.md](sim.md)).
 - **`simulations.html`** builds one `section.simfold` per simulation with an `article[data-card]` inside, calls `Fold.make` with
   `defaultOpen: false` and `forceOpen` while filtering, sets `Fold.onCard` and `Fold.onAll` to keep its own record of open

@@ -311,7 +311,7 @@ policy and referrer rule ([build-and-deploy.md](../build-and-deploy.md#security)
 
 - The walkthrough host `<section class="walk" id="walk" data-walk="bench">`
   ([:482](../../public/simulations/wave-interference.html#L482)), filled by `sim.js` from `../scripts/walk/bench.js`
-  ([sim.js:481-490](../../public/scripts/sim.js#L481-L490)); see [walk.md](../scripts/walk.md). Eight steps: one component and
+  ([sim.js:505-514](../../public/scripts/sim.js#L505-L514)); see [walk.md](../scripts/walk.md). Eight steps: one component and
   its sliders; sampling the view; superposition as a plain sum; fitting the curves into their panels; the Beats preset; the
   Square wave preset; the spectrum; the bound $|\sum y_i| \le \sum A_i$ ([bench.js:7-260](../../public/scripts/walk/bench.js#L7-L260)).
 - Footer, then the scripts in load order: `fold.js`, `sim.js`, `dataset.js`, the inline script, `datalog.js`

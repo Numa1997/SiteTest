@@ -2,7 +2,7 @@
 
 | | |
 |---|---|
-| Page | [public/simulations/wind-turbine.html](../../public/simulations/wind-turbine.html) (1 172 lines, 187 918 bytes) |
+| Page | [public/simulations/wind-turbine.html](../../public/simulations/wind-turbine.html) (1 173 lines, 188 042 bytes) |
 | Walkthrough | [public/scripts/walk/turbine.js](../../public/scripts/walk/turbine.js) (281 lines, 13 steps, key `turbine`) |
 | Thumbnail | [public/images/sims/wind-turbine.webp](../../public/images/sims/wind-turbine.webp) (WebP, 800 × 500 px, 15.4 kB) |
 | Catalog entry | [public/scripts/catalog.js#L200](../../public/scripts/catalog.js#L200-L233) (`id: 'wind-turbine'`, `fig: 10`, `field: 'control'`, `stage: 2`, lines 200–216) |
@@ -157,10 +157,10 @@ all. One solve took 10–46 ms in headless Chromium (`solve_ms`, [L696](../../pu
 
 ### When the run is solved again
 
-At load, `optimum()` then `solve()` ([L1162–L1163](../../public/simulations/wind-turbine.html#L1162-L1163)); afterwards only
-when **Solve** is pressed ([L969](../../public/simulations/wind-turbine.html#L969)). `optimum()` never runs again. Sliders
+At load, `optimum()` then `solve()` ([L1163–L1164](../../public/simulations/wind-turbine.html#L1163-L1164)); afterwards only
+when **Solve** is pressed ([L970](../../public/simulations/wind-turbine.html#L970)). `optimum()` never runs again. Sliders
 ([L638–L639](../../public/simulations/wind-turbine.html#L638-L639)) and the two button groups
-([L978](../../public/simulations/wind-turbine.html#L978)) only call `markStale()`
+([L979](../../public/simulations/wind-turbine.html#L979)) only call `markStale()`
 ([L742–L746](../../public/simulations/wind-turbine.html#L742-L746)), which compares controller, wind, $v_0$, $\Delta v$ and,
 when holding speed, the target with `solved`, sets `stale` and rewrites the status line
 ([L748–L755](../../public/simulations/wind-turbine.html#L748-L755)). The old run keeps playing.
@@ -192,7 +192,7 @@ ticks every animation frame, the figure is redrawn at the display rate even whil
 - The 16 frequencies and amplitudes of the turbulent wind and their norm are computed once at load
   ([L665–L666](../../public/simulations/wind-turbine.html#L665-L666)).
 - `fullReplay()` reruns the whole 120 s once for the data panel's Check of $E_\text{aero}$, $E_\text{wind}$ and
-  $E_\text{gen}(T)$ and caches the result under the run's settings ([L1014–L1018](../../public/simulations/wind-turbine.html#L1014-L1018)).
+  $E_\text{gen}(T)$ and caches the result under the run's settings ([L1015–L1019](../../public/simulations/wind-turbine.html#L1015-L1019)).
 
 ## Function map
 
@@ -220,30 +220,30 @@ ticks every animation frame, the figure is redrawn at the display rate even whil
 | `Sim.live()` | [937–946](../../public/simulations/wind-turbine.html#L937-L946) | Formatted store values for the walkthrough. |
 | `frame()` | [948–958](../../public/simulations/wind-turbine.html#L948-L958) | Picks the stored row, copies it to the `*_now` scalars, draws both canvases. |
 | clock tick (anonymous) | [959–967](../../public/simulations/wind-turbine.html#L959-L967) | Advances `playT`, stops at 120 s, calls `frame()`. |
-| `segmented(id, set)` | [971–980](../../public/simulations/wind-turbine.html#L971-L980) | Button group: sets `aria-pressed`, calls `set`, marks stale. |
-| `controls()` | [982–986](../../public/simulations/wind-turbine.html#L982-L986) | Greys the target slider unless holding speed, greys $\Delta v$ for steady wind, relabels it (`DVL`, [L981](../../public/simulations/wind-turbine.html#L981)). |
-| `stripPos(name, n)` | [993–996](../../public/simulations/wind-turbine.html#L993-L996) | Screen point of row $n$ on the strip that shows `name` (`STRIP_OF`, [L992](../../public/simulations/wind-turbine.html#L992)). |
-| `rk4Replay(n)` | [997–1012](../../public/simulations/wind-turbine.html#L997-L1012) | The same RK4 rerun from $t = 0$ to row $n$; the Check of `om`, `Ictl`, `th`, `sw`, `Eg`. |
-| `fullReplay()` | [1014–1018](../../public/simulations/wind-turbine.html#L1014-L1018) | Cached `rk4Replay(6000)`. |
-| `at`, `maxOf`, `minOf`, `neutralInk`, `isRose`, `readBack` | [1020–1027](../../public/simulations/wind-turbine.html#L1020-L1027) | Small helpers for Check and read-back. |
-| `bladePixel()` | [1028–1033](../../public/simulations/wind-turbine.html#L1028-L1033) | Reads back a pixel 60 % along the burgundy blade. |
-| `stripDot(name, label)`, `stripCurve(name, label)` | [1034–1046](../../public/simulations/wind-turbine.html#L1034-L1046) | Read-back of the dot and of a curve sample on a strip. |
-| `airPixel()` | [1047–1054](../../public/simulations/wind-turbine.html#L1047-L1054) | Read-back of a dash on the second air line. |
-| `Sim.data` (object) | [1055–1160](../../public/simulations/wind-turbine.html#L1055-L1160) | The data-panel contract. |
-| start-up | [1162–1166](../../public/simulations/wind-turbine.html#L1162-L1166) | `optimum()`, `solve()`, resize observers, redraw when fonts are ready. |
+| `segmented(id, set)` | [972–981](../../public/simulations/wind-turbine.html#L972-L981) | Button group: sets `aria-pressed`, calls `set`, marks stale. |
+| `controls()` | [983–987](../../public/simulations/wind-turbine.html#L983-L987) | Greys the target slider unless holding speed, greys $\Delta v$ for steady wind, relabels it (`DVL`, [L982](../../public/simulations/wind-turbine.html#L982)). |
+| `stripPos(name, n)` | [994–997](../../public/simulations/wind-turbine.html#L994-L997) | Screen point of row $n$ on the strip that shows `name` (`STRIP_OF`, [L993](../../public/simulations/wind-turbine.html#L993)). |
+| `rk4Replay(n)` | [998–1013](../../public/simulations/wind-turbine.html#L998-L1013) | The same RK4 rerun from $t = 0$ to row $n$; the Check of `om`, `Ictl`, `th`, `sw`, `Eg`. |
+| `fullReplay()` | [1015–1019](../../public/simulations/wind-turbine.html#L1015-L1019) | Cached `rk4Replay(6000)`. |
+| `at`, `maxOf`, `minOf`, `neutralInk`, `isRose`, `readBack` | [1021–1028](../../public/simulations/wind-turbine.html#L1021-L1028) | Small helpers for Check and read-back. |
+| `bladePixel()` | [1029–1034](../../public/simulations/wind-turbine.html#L1029-L1034) | Reads back a pixel 60 % along the burgundy blade. |
+| `stripDot(name, label)`, `stripCurve(name, label)` | [1035–1047](../../public/simulations/wind-turbine.html#L1035-L1047) | Read-back of the dot and of a curve sample on a strip. |
+| `airPixel()` | [1048–1055](../../public/simulations/wind-turbine.html#L1048-L1055) | Read-back of a dash on the second air line. |
+| `Sim.data` (object) | [1056–1161](../../public/simulations/wind-turbine.html#L1056-L1161) | The data-panel contract. |
+| start-up | [1163–1167](../../public/simulations/wind-turbine.html#L1163-L1167) | `optimum()`, `solve()`, resize observers, redraw when fonts are ready. |
 
 ## Controls
 
 | Control | Element id | Range / default | What it changes in the code |
 |---|---|---|---|
-| Solve | `solve` | button | `solve()` ([L969](../../public/simulations/wind-turbine.html#L969)). |
-| Pause / Play | `play` | button | Toggles the clock via `Sim.playButton` ([L968](../../public/simulations/wind-turbine.html#L968)). |
-| From t = 0 | `restart` | button | `playT = 0` and play ([L970](../../public/simulations/wind-turbine.html#L970)). |
+| Solve | `solve` | button | `solve()` ([L970](../../public/simulations/wind-turbine.html#L970)). |
+| Pause / Play | `play` | button | Toggles the clock via `Sim.playButton` ([L969](../../public/simulations/wind-turbine.html#L969)); Play at the end of the run starts it again from t = 0 ([L968](../../public/simulations/wind-turbine.html#L968), since 29 October 2026; before, Play after 120 s did nothing). |
+| From t = 0 | `restart` | button | `playT = 0` and play ([L971](../../public/simulations/wind-turbine.html#L971)). |
 | Stored run | `seek` | 0–6000, step 1, default 0 ([L95](../../public/simulations/wind-turbine.html#L95)) | `playT = n · 20 ms`, draw ([L641](../../public/simulations/wind-turbine.html#L641)); follows playback ([L954](../../public/simulations/wind-turbine.html#L954)). |
 | Playback speed | `speed` | 0.5–8, step 0.5, default 1 ([L99](../../public/simulations/wind-turbine.html#L99)) | Multiplies $\Delta t$ ([L962](../../public/simulations/wind-turbine.html#L962)). |
-| Controller | `ctrl` (buttons `data-v="pi"` / `"opt"`) | Hold speed (default, [L106](../../public/simulations/wind-turbine.html#L106), [L564](../../public/simulations/wind-turbine.html#L564)) / Follow the wind | `ctrl` ([L987](../../public/simulations/wind-turbine.html#L987)), used by `tauGen` and the start speed; marks stale. |
-| Target rotor speed | `rpm` | 8–21 rpm, step 0.5, default 15 ([L111](../../public/simulations/wind-turbine.html#L111)) | $\omega_\text{ref} = \text{rpm}\cdot2\pi/60$ at the next solve ([L697](../../public/simulations/wind-turbine.html#L697)); greyed and not marking stale when following the wind ([L743](../../public/simulations/wind-turbine.html#L743), [L983](../../public/simulations/wind-turbine.html#L983)). |
-| Wind | `prof` (buttons `steady`, `gust`, `step`, `turb`) | Turbulent (default, [L121](../../public/simulations/wind-turbine.html#L121), [L564](../../public/simulations/wind-turbine.html#L564)) | `prof` ([L988](../../public/simulations/wind-turbine.html#L988)), read by `wind()`; marks stale. |
+| Controller | `ctrl` (buttons `data-v="pi"` / `"opt"`) | Hold speed (default, [L106](../../public/simulations/wind-turbine.html#L106), [L564](../../public/simulations/wind-turbine.html#L564)) / Follow the wind | `ctrl` ([L988](../../public/simulations/wind-turbine.html#L988)), used by `tauGen` and the start speed; marks stale. |
+| Target rotor speed | `rpm` | 8–21 rpm, step 0.5, default 15 ([L111](../../public/simulations/wind-turbine.html#L111)) | $\omega_\text{ref} = \text{rpm}\cdot2\pi/60$ at the next solve ([L697](../../public/simulations/wind-turbine.html#L697)); greyed and not marking stale when following the wind ([L743](../../public/simulations/wind-turbine.html#L743), [L984](../../public/simulations/wind-turbine.html#L984)). |
+| Wind | `prof` (buttons `steady`, `gust`, `step`, `turb`) | Turbulent (default, [L121](../../public/simulations/wind-turbine.html#L121), [L564](../../public/simulations/wind-turbine.html#L564)) | `prof` ([L989](../../public/simulations/wind-turbine.html#L989)), read by `wind()`; marks stale. |
 | Mean wind speed $v_0$ | `v0` | 4–11 m/s, step 0.1, default 8 ([L125](../../public/simulations/wind-turbine.html#L125)) | `c.v0`; marks stale. |
 | Turbulence σ / Gust size / Step size | `dv` | 0–4 m/s, step 0.1, default 1.5 ([L129](../../public/simulations/wind-turbine.html#L129)) | `c.dv`; label set by `controls()`; unused for steady wind; marks stale. |
 | Read values | added by datalog.js | switch, off | Appended to the first figure caption ([datalog.js:895–897](../../public/scripts/datalog.js#L895-L897)); see [datalog.md](../scripts/datalog.md). |
@@ -255,7 +255,7 @@ The store is made at [L567](../../public/simulations/wind-turbine.html#L567):
 `n` = 6 001 rows ([L592](../../public/simulations/wind-turbine.html#L592)) and `L` = 271 points of the $c_p$ curve
 ([L621](../../public/simulations/wind-turbine.html#L621)), and 66 variables: 49 scalars and 17 `Float64Array`s, declared at
 [L568–L635](../../public/simulations/wind-turbine.html#L568-L635) (counted in the live store). The store is described in
-[dataset.md](../scripts/dataset.md). By the panel groups of [L1058–L1067](../../public/simulations/wind-turbine.html#L1058-L1067):
+[dataset.md](../scripts/dataset.md). By the panel groups of [L1059–L1068](../../public/simulations/wind-turbine.html#L1059-L1068):
 
 | Group | Variables | Written at |
 |---|---|---|
@@ -264,7 +264,7 @@ The store is made at [L567](../../public/simulations/wind-turbine.html#L567):
 | Controller | `dtau_dw`, `Kp`, `Ki`, `tau0` | [L730](../../public/simulations/wind-turbine.html#L730) |
 | Stored run (dim `n`) | `ts` (coordinate), `vw`, `om`, `rpm`, `th`, `lam`, `cpv`; `ta`, `tg`, `Pg`, `Pa`, `Eg`, `sw`, `Ictl`, `vtip` | [L708](../../public/simulations/wind-turbine.html#L708); [L709](../../public/simulations/wind-turbine.html#L709) |
 | Energy | `h`, `steps` | `solve()`, [L695](../../public/simulations/wind-turbine.html#L695), before the loop: the RK4 step $H$ = 0.01 s and $T_\text{end}/H$ = 12 000 steps |
-| | `rpm_min`, `rpm_max` | `solve()`, [L731](../../public/simulations/wind-turbine.html#L731): the smallest and largest stored `rpm` (`minOf`, `maxOf`, [L1020–L1021](../../public/simulations/wind-turbine.html#L1020-L1021)) |
+| | `rpm_min`, `rpm_max` | `solve()`, [L731](../../public/simulations/wind-turbine.html#L731): the smallest and largest stored `rpm` (`minOf`, `maxOf`, [L1021–L1022](../../public/simulations/wind-turbine.html#L1021-L1022)) |
 | | `captured_pct` | `solve()`, [L732](../../public/simulations/wind-turbine.html#L732): $100\,E_\text{aero}/E_\text{wind}$ |
 | | `Ea`, `Ew`, `Eg_end`, `P_mean`; `balance`; `solve_ms`, `stale` | [L733](../../public/simulations/wind-turbine.html#L733); [L735](../../public/simulations/wind-turbine.html#L735); [L735](../../public/simulations/wind-turbine.html#L735), `stale` also [L744](../../public/simulations/wind-turbine.html#L744) |
 | Playback | `i_now`, `t_play`, `v_now`, `rpm_now`, `P_now`, `lam_now`, `cp_now`, `th_now` | `frame()`, [L951–L952](../../public/simulations/wind-turbine.html#L951-L952) |
@@ -278,7 +278,7 @@ With the defaults (hold speed, turbulent wind) the store holds: $E_\text{aero}$ 
 $E_\text{gen}(T)$ = 89.04 MJ (24.73 kWh), mean power 742 kW, $K_p = 3.592\times10^6$ N m s,
 $\partial\tau_\text{aero}/\partial\omega = -2.480\times10^5$ N m s, $K_i = 1.44\times10^6$ N m, $\tau_0 = 3.343\times10^5$ N m.
 
-**One round** (`Sim.data.round`, [L1156–L1156](../../public/simulations/wind-turbine.html#L1156-L1156)) is one turn of the
+**One round** (`Sim.data.round`, [L1157–L1157](../../public/simulations/wind-turbine.html#L1157-L1157)) is one turn of the
 rotor at the present speed, $60/n_\text{rot}$ seconds of the stored run (4.0 s at 15 rpm), timed by `t_play`. Columns:
 `v_now`, `rpm_now`, `P_now`, `lam_now`, `cp_now`, `th_now`; the default point is the rotor. Recording is refused when the run
 ends before one more turn. The panel samples every frame of the round, at most 600 samples
@@ -291,26 +291,26 @@ store for the walkthrough keys `lam`, `cp`, `lopt`, `cpmax`, `Kopt`, `v`, `w`, `
 
 `rpm_ref` is the raw rpm input captured by `solve()`, rather than a round-trip conversion of `w_ref`. Check of `w_ref` converts this stored input; changing the live target cannot change the check of an already solved run. All 27 target values from 8 to 21 turns per minute were checked and were bit-identical.
 
-**Check and read-back.** `Sim.data.check` ([L1087–L1135](../../public/simulations/wind-turbine.html#L1087-L1135)) recomputes
+**Check and read-back.** `Sim.data.check` ([L1088–L1136](../../public/simulations/wind-turbine.html#L1088-L1136)) recomputes
 each value from stored inputs; the integrated quantities (`om`, `Ictl`, `th`, `sw`, `Eg`) are checked by rerunning the same
 RK4 to row $n$, the totals by `fullReplay()`, and `lam_opt` by repeating the scan. `Sim.data.drawn`
-([L1136–L1154](../../public/simulations/wind-turbine.html#L1136-L1154)) reads back the burgundy blade, the dots and curves
+([L1137–L1155](../../public/simulations/wind-turbine.html#L1137-L1155)) reads back the burgundy blade, the dots and curves
 of the strips ($P_\text{aero}$ with a rose-colour test), a dash of the air, the operating point and the $c_p$ curve.
 It also reads the text on screen: `rpm_min`, `rpm_max` and `captured_pct` against the readouts `r-rpm` and `r-eff`
-([L1139–L1141](../../public/simulations/wind-turbine.html#L1139-L1141)), `steps` against the status line, and `h` from the sampling interval the status line states, "one every 20 ms",
-divided by `EVERY` = 2 ([L1137–L1138](../../public/simulations/wind-turbine.html#L1137-L1138)). While a control has changed and the run is not solved again, the status line asks for a
+([L1140–L1142](../../public/simulations/wind-turbine.html#L1140-L1142)), `steps` against the status line, and `h` from the sampling interval the status line states, "one every 20 ms",
+divided by `EVERY` = 2 ([L1138–L1139](../../public/simulations/wind-turbine.html#L1138-L1139)). While a control has changed and the run is not solved again, the status line asks for a
 new solve and shows neither number. `drawn.h` and `drawn.steps` then return `ok: null` by design, and the panel shows the
 neutral "Not in the picture at the moment, so there is nothing to read back." rather than a failure
 ([datalog.js:836](../../public/scripts/datalog.js#L836)). `probe`
-([L1068–L1075](../../public/simulations/wind-turbine.html#L1068-L1075)) pins the rotor when the click falls inside the drawn
+([L1069–L1076](../../public/simulations/wind-turbine.html#L1069-L1076)) pins the rotor when the click falls inside the drawn
 disc ellipse, otherwise the nearest stored sample within 14 px on the three strips (every second row is tried). `locate`
 maps quantities that have no chart of their own to a strip that does (`STRIP_OF`: $\omega$, $\lambda$, $c_p$, $\theta$ to the
-rotor-speed strip, the torques to the power strip, [L992](../../public/simulations/wind-turbine.html#L992)).
+rotor-speed strip, the torques to the power strip, [L993](../../public/simulations/wind-turbine.html#L993)).
 
 
 **The ledger** (24 October 2026). The data panel shows this store as a bookkeeper; its layout is
 [scripts/ledger/wind-turbine.js](../../public/scripts/ledger/wind-turbine.js), loaded on the line that loads the panel
-([L1169](../../public/simulations/wind-turbine.html#L1169)). Headline: $v$, $n_\text{rot}$, $\lambda$, $c_p$, $P_\text{gen}$, $E_\text{gen}$. Sections: what you set,
+([L1170](../../public/simulations/wind-turbine.html#L1170)). Headline: $v$, $n_\text{rot}$, $\lambda$, $c_p$, $P_\text{gen}$, $E_\text{gen}$. Sections: what you set,
 the turbine, what follows from it, the state now, the stored run, over the whole run, the power curve, the solver and the
 drawing; the last three start folded. One book, the energy statement (7) of the note at every stored sample:
 $K(0) + E_\text{aero}(t) - E_\text{gen}(t) = K(t)$ with $K = \tfrac12 J\omega^2$; residual `ebal_now`, measured about
@@ -352,9 +352,9 @@ the seek slider, the segmented buttons `.seg` and the greyed control `.ctl.is-of
   ([L228–L231](../../public/simulations/wind-turbine.html#L228-L231)), a table of all eight controller–wind combinations
   ([L484–L496](../../public/simulations/wind-turbine.html#L484-L496)) and exercise 7.1;
 - `section#walk` with `data-walk="turbine"` ([L540](../../public/simulations/wind-turbine.html#L540)), filled from
-  `walk/turbine.js` by `sim.js` ([sim.js:481–490](../../public/scripts/sim.js#L481-L490)); see [walk.md](../scripts/walk.md);
+  `walk/turbine.js` by `sim.js` ([sim.js:505–514](../../public/scripts/sim.js#L505-L514)); see [walk.md](../scripts/walk.md);
 - footer; scripts in load order: `fold.js`, `sim.js`, `dataset.js`, the inline page script, `datalog.js`
-  ([L548–L1168](../../public/simulations/wind-turbine.html#L548-L1168)). See [sim.md](../scripts/sim.md) and
+  ([L548–L1169](../../public/simulations/wind-turbine.html#L548-L1169)). See [sim.md](../scripts/sim.md) and
   [fold.md](../scripts/fold.md).
 
 The walkthrough quotes: step 1 [L644–L650](../../public/simulations/wind-turbine.html#L644-L650); step 2
@@ -369,7 +369,7 @@ rows, by solving each combination in the page (measured).
 
 ## Where the drawing and the store differ
 
-The page states this in `Sim.data.about` ([L1159](../../public/simulations/wind-turbine.html#L1159)). In detail:
+The page states this in `Sim.data.about` ([L1160](../../public/simulations/wind-turbine.html#L1160)). In detail:
 
 - **Nearest row, no interpolation.** The picture shows row $\operatorname{round}(t_\text{play}/20\,\text{ms})$
   ([L949](../../public/simulations/wind-turbine.html#L949)); the caption shows `ts[i]` to one decimal
@@ -399,8 +399,8 @@ The page states this in `Sim.data.about` ([L1159](../../public/simulations/wind-
   Keep `TEND / H` and `TEND / H / EVERY` whole numbers. Change with them: seek `max="6000"`
   ([L95](../../public/simulations/wind-turbine.html#L95)); formula texts "n · 2h" and "round(t_play / 2h)"
   ([L593](../../public/simulations/wind-turbine.html#L593), [L613](../../public/simulations/wind-turbine.html#L613)); group
-  note "every 20 ms of the 120 s" ([L1062](../../public/simulations/wind-turbine.html#L1062)); check text "at most 6000"
-  ([L1126](../../public/simulations/wind-turbine.html#L1126)); time labels every 20 s
+  note "every 20 ms of the 120 s" ([L1063](../../public/simulations/wind-turbine.html#L1063)); check text "at most 6000"
+  ([L1127](../../public/simulations/wind-turbine.html#L1127)); time labels every 20 s
   ([L903](../../public/simulations/wind-turbine.html#L903)); the 150-row trail
   ([L926](../../public/simulations/wind-turbine.html#L926)); the walkthrough's step 11 formula, step 12 and the trail in step 13
   ([turbine.js:217](../../public/scripts/walk/turbine.js#L217), [turbine.js:241](../../public/scripts/walk/turbine.js#L241), [turbine.js:270](../../public/scripts/walk/turbine.js#L270));
@@ -408,10 +408,10 @@ The page states this in `Sim.data.about` ([L1159](../../public/simulations/wind-
   [L516](../../public/simulations/wind-turbine.html#L516)) and `about`.
 - **The integrator exists twice.** The start state and the step in `solve()`
   ([L703](../../public/simulations/wind-turbine.html#L703), [L714–L721](../../public/simulations/wind-turbine.html#L714-L721))
-  and in `rk4Replay()` ([L1000](../../public/simulations/wind-turbine.html#L1000),
-  [L1002–L1009](../../public/simulations/wind-turbine.html#L1002-L1009)) must stay identical, or the Checks of the integrated
+  and in `rk4Replay()` ([L1001](../../public/simulations/wind-turbine.html#L1001),
+  [L1003–L1010](../../public/simulations/wind-turbine.html#L1003-L1010)) must stay identical, or the Checks of the integrated
   columns will disagree.
-- **Order at start-up.** `optimum()` must run before `solve()` ([L1162–L1163](../../public/simulations/wind-turbine.html#L1162-L1163)):
+- **Order at start-up.** `optimum()` must run before `solve()` ([L1163–L1164](../../public/simulations/wind-turbine.html#L1163-L1164)):
   `solve()` reads `lam_opt` for the start speed and `tauGen` reads `K_opt` from the store.
 - **Defaults in two places.** `ctrl = 'pi'` and `prof = 'turb'` ([L564](../../public/simulations/wind-turbine.html#L564)) must
   match the buttons marked `aria-pressed="true"` ([L106](../../public/simulations/wind-turbine.html#L106),
@@ -421,7 +421,7 @@ The page states this in `Sim.data.about` ([L1159](../../public/simulations/wind-
   ([turbine.js:30](../../public/scripts/walk/turbine.js#L30)) and the note ([L238–L239](../../public/simulations/wind-turbine.html#L238-L239)).
   `WN` and `ZC` appear in the note ([L347](../../public/simulations/wind-turbine.html#L347)) and walkthrough step 8
   ([turbine.js:148–153](../../public/scripts/walk/turbine.js#L148-L153)). `AIRPX`, `K` and `DASH` appear in `about`, in the
-  `airPixel()` ([L1047–1052](../../public/simulations/wind-turbine.html#L1047-L1052)); since the walkthrough was rewritten they no longer
+  `airPixel()` ([L1048–1053](../../public/simulations/wind-turbine.html#L1048-L1053)); since the walkthrough was rewritten they no longer
   appear in it (29 October 2026).
 - **The turbulent wind is fixed.** `PHASES` ([L558](../../public/simulations/wind-turbine.html#L558)) make every solve use the
   same turbulence; Figure 4 and the section 7 table depend on them. Changing the phases, the wind, the controller or the
@@ -453,7 +453,7 @@ The page states this in `Sim.data.about` ([L1159](../../public/simulations/wind-
 9. Fixed on 2026-10-15: in note Figure 2 the axis title "power coefficient c<sub>p</sub>" moved from y = 31 to y = 27, so its
    subscript p clears the Betz line at y = 38.8; the title box now spans y = 14.4 to 36.1 ([L277](../../public/simulations/wind-turbine.html#L277)) (audit repair, commit [32c240c](https://github.com/Numa1997/SiteTest/commit/32c240c52fd0535d39a0cef608dc404cf4219484)).
 10. Fixed on 2026-10-15: while the run is stale, the Checks of `h` and `steps` show "not in the picture" instead of a burgundy ✕:
-    `drawn.h` and `drawn.steps` return `ok: null` there by design ([L1137–L1138](../../public/simulations/wind-turbine.html#L1137-L1138)), and the panel now honours it
+    `drawn.h` and `drawn.steps` return `ok: null` there by design ([L1138–L1139](../../public/simulations/wind-turbine.html#L1138-L1139)), and the panel now honours it
     ([datalog.js:836](../../public/scripts/datalog.js#L836)) (audit repair, commit [32c240c](https://github.com/Numa1997/SiteTest/commit/32c240c52fd0535d39a0cef608dc404cf4219484)).
 
 Batch D store additions in `solve()`: `h` (s), `steps` (count), `rpm_min` and `rpm_max` (turns per minute), and `captured_pct` (%). They appear in the Energy group, have recomputation checks and DOM readbacks. The step readback infers h from the visible sampling interval and EVERY = 2. The speed range is the sampled run range, independent of the wider chart bounds. `readouts()` no longer computes these results.

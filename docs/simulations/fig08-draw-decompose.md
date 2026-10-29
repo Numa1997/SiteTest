@@ -256,7 +256,7 @@ controls aside: Shape group with hint, `#run-tools`, `#draw-tools` and presets, 
 Scripts, in load order: `fold.js`, `sim.js`, `dataset.js` ([L619–621](../../public/simulations/draw-decompose.html#L619-L621)), the page script
 ([L622–1413](../../public/simulations/draw-decompose.html#L622-L1413)), `datalog.js`
 ([L1414](../../public/simulations/draw-decompose.html#L1414)). `sim.js` fetches `walk/dft.js` from `data-walk`
-and typesets the note ([sim.js:418–446](../../public/scripts/sim.js#L418-L446), [sim.js:481–490](../../public/scripts/sim.js#L481-L490));
+and typesets the note ([sim.js:418–447](../../public/scripts/sim.js#L418-L447), [sim.js:505–514](../../public/scripts/sim.js#L505-L514));
 the canvas labels use `Sim.tex` from `sim.js`. See [sim.md](../scripts/sim.md), [walk.md](../scripts/walk.md),
 [fold.md](../scripts/fold.md), [pages.md](../pages.md).
 
