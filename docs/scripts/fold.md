@@ -3,7 +3,7 @@
 | | |
 |---|---|
 | File | [public/scripts/fold.js](../../public/scripts/fold.js), 414 lines, 24.0 kB (23 973 bytes) |
-| Loaded by | [index.html:625](../../index.html#L625) (the home page); [portfolios.html:333](../../public/portfolios.html#L333); [simulations.html:123](../../public/simulations.html#L123), before `catalog.js`; the ten simulation pages, first of the shared scripts (load-order table in [sim.md](sim.md#load-order-on-the-pages)) |
+| Loaded by | [index.html:621](../../index.html#L621) (the home page); [portfolios.html:420](../../public/portfolios.html#L420); [simulations.html:124](../../public/simulations.html#L124), before `catalog.js`; the eleven simulation pages, first of the shared scripts (load-order table in [sim.md](sim.md#load-order-on-the-pages)) |
 | Defines | `window.Fold = { make, walk, all, openTo, setCard, onCard, onAll, tools }` ([fold.js:413](../../public/scripts/fold.js#L413)) |
 | Sets on `<html>` | CSS variables `--fold-open`, `--fold-close`, `--fold-ease` ([fold.js:21-23](../../public/scripts/fold.js#L21-L23)) and `--fold-top` ([fold.js:297](../../public/scripts/fold.js#L297)) |
 | Stores | `localStorage['fold:<path>']` ([fold.js:61](../../public/scripts/fold.js#L61)) |
@@ -143,7 +143,7 @@ on the home page, before the first project on Portfolios, and before the list on
 ([fold.js:338](../../public/scripts/fold.js#L338), [348](../../public/scripts/fold.js#L348), [371](../../public/scripts/fold.js#L371),
 [395](../../public/scripts/fold.js#L395), [simulations.html:344](../../public/simulations.html#L344)).
 
-Measured in headless Chromium (1.5 s after load): the ten simulation pages have 10 or 11 level-1 folds and 2 to 10 level-2
+Measured in headless Chromium (1.5 s after load): the ten simulation pages of the time (before Fig. 11) have 10 or 11 level-1 folds and 2 to 10 level-2
 folds each; on Fig. 2 the counts lines of the first sections read "1 figure", "1 equation", "3 equations · 1 box",
 "4 parts · 7 equations", and the walkthrough's reads "8 steps · each formula beside the code that computes it and its value
 now". The home page has 5 folds, counted "7 roles", "3 qualifications", "3 projects", "8 figures", "7 areas". The simulations
@@ -262,6 +262,6 @@ at load); the `typeset` event; `ResizeObserver` on level-1 headers and on `[data
    element or in code would also be counted.
 2. A fold made without any id gets the body id `fold-body` ([fold.js:178](../../public/scripts/fold.js#L178)); two such folds on
    one page would share an id. All current adapters supply ids.
-3. The home page's Simulations section is counted as "8 figures" (measured), while the catalog lists ten simulations. The count
+3. The home page's Simulations section is counted as "8 figures" (measured), while the catalog lists eleven simulations. The count
    is taken from the home page's own `article` elements ([fold.js:360](../../public/scripts/fold.js#L360)); whether the home page
-   should show all ten is a question for [../pages.md](../pages.md).
+   should show all eleven is a question for [../pages.md](../pages.md).

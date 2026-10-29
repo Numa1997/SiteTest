@@ -21,7 +21,7 @@ Project copies: [portfolios.md](portfolios.md).
 
 ## Anatomy of a simulation page
 
-Each of the ten pages is one self-contained HTML file: its own markup, its own simulation script inline, and links to the
+Each of the eleven pages is one self-contained HTML file: its own markup, its own simulation script inline, and links to the
 shared files. Read from top to bottom, a page holds:
 
 1. **The figure** (`<figure class="stage">`): a canvas or SVG that the page's script draws every frame, with a caption.
@@ -73,7 +73,7 @@ The simulation pages work the same way:
   `Sim.data.round`), at most 600 samples, and shows charts and a table. **Save** writes the store as `.npz` (NumPy's
   format) plus CSV, `dataset.json` and a README, in one zip.
 
-Figs. 9 and 10 go one step further: they solve the whole run first (classical fourth-order Runge–Kutta), store every
+Figs. 9, 10 and 11 go one step further: they solve the whole run first (classical fourth-order Runge–Kutta), store every
 sample, and then only play the stored samples back. Nothing is integrated while the reader watches.
 
 ## Folds

@@ -1,6 +1,6 @@
 # Fonts, maths and pictures: `public/vendor/`, `public/fonts/`, `public/images/`
 
-These folders hold files the site uses but does not compute: a maths typesetter, the typefaces, ten still pictures and the
+These folders hold files the site uses but does not compute: a maths typesetter, the typefaces, eleven still pictures and the
 Phyein Usul logo. None of them is edited by hand.
 
 ## `public/vendor/katex/` · the maths typesetter (24 files, 0.56 MB)
@@ -19,12 +19,12 @@ page to finish loading. Version **0.16.11** (the string `version:"0.16.11"` in `
 
 **Who uses it.** The simulation pages do not list the KaTeX scripts in their HTML. `public/scripts/sim.js` loads them on
 demand: first `katex.min.js`, then `auto-render.min.js`, then typesets every lecture note `.paper` on the page
-([sim.js:352–353](../public/scripts/sim.js#L352-L353), and again at [sim.js:393–394](../public/scripts/sim.js#L393-L394); see
+([sim.js:431–432](../public/scripts/sim.js#L431-L432), and again at [sim.js:472–473](../public/scripts/sim.js#L472-L473); see
 [scripts/sim.md](scripts/sim.md)). Their KaTeX stylesheet arrives through `public/styles/sim.css`, which imports it
 ([sim.css:8](../public/styles/sim.css#L8)). `public/simulations.html` links the stylesheet in its `<head>`
 ([simulations.html:16](../public/simulations.html#L16)) and loads `katex.min.js` at the end of the body
-([simulations.html:125](../public/simulations.html#L125)); `public/portfolios.html` does the same and also loads
-`auto-render.min.js` ([portfolios.html:16](../public/portfolios.html#L16), [427–428](../public/portfolios.html#L427-L428)).
+([simulations.html:126](../public/simulations.html#L126)); `public/portfolios.html` does the same and also loads
+`auto-render.min.js` ([portfolios.html:16](../public/portfolios.html#L16), [421–422](../public/portfolios.html#L421-L422)).
 The home page `index.html` does not use KaTeX.
 
 **Why it is self-hosted** rather than loaded from a public server: the pages then work offline from a saved copy, and they
@@ -94,7 +94,7 @@ page still come from IBM Plex.
 browser (Google sends `.woff2` only to browsers that announce support), download every file they name, and point the `url(…)`
 of each rule at the local name. Keep the rules and their order unchanged, so the pages render the same.
 
-## `public/images/sims/` · the ten thumbnails (10 files, 0.19 MB)
+## `public/images/sims/` · the eleven thumbnails (11 files, 0.21 MB)
 
 One still picture per simulation, used by the simulations catalog (`public/simulations.html`) and named after the catalog id
 in `public/scripts/catalog.js`:
@@ -111,8 +111,9 @@ in `public/scripts/catalog.js`:
 | `draw-decompose.webp` | Fig. 8, Draw & Decompose |
 | `driven-oscillator.webp` | Fig. 9, Driven Oscillator |
 | `wind-turbine.webp` | Fig. 10, Wind Turbine Control |
+| `pendulum-control.webp` | Fig. 11, Double Pendulum under Control |
 
-All ten are lossy WebP, 800 × 500 px (read from the files' VP8 headers). Each is a screenshot of the page's own main figure
+All eleven are lossy WebP, 800 × 500 px (read from the files' VP8 headers). Each is a screenshot of the page's own main figure
 (the element `.stage__canvas`), taken in headless Chromium at a 1440 × 900 window with device scale 2 after the simulation had
 run for some seconds, then scaled to 800 × 500. The screenshot script lives in the working session for now and is to be added
 to this repository. If a thumbnail is missing, the catalog shows the figure number in its place
@@ -133,7 +134,7 @@ the right. It is a plain SVG of 1 738 paths, `viewBox="104 0 452 250"`, in the t
 |---|---|---|
 | Home page, above the name, followed by a short note ("Phyein Usul · φύειν أصول, roots that grow. A personal website and an archive: …") | 217 × 120 | [index.html:31–32](../index.html#L31-L32) |
 | Top bar of the catalog and of Portfolios, a link to the home page before "← Numa Koudsie" | 87 × 48 | [simulations.html:33](../public/simulations.html#L33), [portfolios.html:35](../public/portfolios.html#L35) |
-| Top bar of each of the ten simulation pages, a link to `../index.html` before "← All simulations" | 87 × 48 | for example [water-wave.html:18](../public/simulations/water-wave.html#L18) |
+| Top bar of each of the eleven simulation pages, a link to `../index.html` before "← All simulations" | 87 × 48 | for example [water-wave.html:18](../public/simulations/water-wave.html#L18) |
 
 No stylesheet styles it: size, spacing and the surrounding `inline-flex` span are inline `style` attributes on each page
 ([styles.md](styles.md#design-rules)).

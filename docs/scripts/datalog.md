@@ -3,7 +3,7 @@
 | | |
 |---|---|
 | File | [public/scripts/datalog.js](../../public/scripts/datalog.js), 1422 lines, 104.5 kB (104 474 bytes) |
-| Loaded by | the ten simulation pages, the two pages of Iron, Cotton and the Head (`portfolios/impact/index.html`, `ar.html`), the ideal and servo presses of the Hydraulic Press Study and Droplet Collection (`portfolios/droplet-collection/index.html`, for panels 4 and 3), last, after the page's own script (line numbers in the load-order table of [sim.md](sim.md#load-order-on-the-pages)); Figs. 9, 10 and 11 load their ledger, [scripts/ledger/](../../public/scripts/ledger/), just before it, on the same line ([driven-oscillator.html:1930](../../public/simulations/driven-oscillator.html#L1930), [wind-turbine.html:1168](../../public/simulations/wind-turbine.html#L1168), [pendulum-control.html:1347](../../public/simulations/pendulum-control.html#L1347)); styles in [styles/data.css](../../public/styles/data.css), linked in each page's head (for example [Double Pendulum.html:12](../../public/simulations/Double%20Pendulum.html#L12)) |
+| Loaded by | the eleven simulation pages, the two pages of Iron, Cotton and the Head (`portfolios/impact/index.html`, `ar.html`), the ideal and servo presses of the Hydraulic Press Study and Droplet Collection (`portfolios/droplet-collection/index.html`, for panels 4 and 3), last, after the page's own script (line numbers in the load-order table of [sim.md](sim.md#load-order-on-the-pages)); Figs. 9, 10 and 11 load their ledger, [scripts/ledger/](../../public/scripts/ledger/), just before it, on the same line ([driven-oscillator.html:1930](../../public/simulations/driven-oscillator.html#L1930), [wind-turbine.html:1168](../../public/simulations/wind-turbine.html#L1168), [pendulum-control.html:1347](../../public/simulations/pendulum-control.html#L1347)); styles in [styles/data.css](../../public/styles/data.css), linked in each page's head (for example [Double Pendulum.html:12](../../public/simulations/Double%20Pendulum.html#L12)) |
 | Reads | `Sim.data` (the page's contract, below) and through it the page's dataset ([datalog.js:66-67](../../public/scripts/datalog.js#L66-L67)) |
 | Defines | `Sim.colourMap` ([datalog.js:103](../../public/scripts/datalog.js#L103)), `window.__dataPanel` ([datalog.js:1421](../../public/scripts/datalog.js#L1421)) |
 | Adds to the page | `button.dp-tab` and `aside#data-panel.dp` at the end of `<body>` ([datalog.js:232-233](../../public/scripts/datalog.js#L232-L233)); `canvas.dp-overlay` inside `#stage`, `div.dp-read` right after `#stage`, `button.dp-readbtn` in the figure caption ([datalog.js:874-897](../../public/scripts/datalog.js#L874-L897)) |
@@ -405,7 +405,7 @@ because xarray is not installed here.
 
 A page opts in by defining `Sim.data` next to its own state and loading `datalog.js` after its own script
 ([datalog.js:9-49](../../public/scripts/datalog.js#L9-L49)). Keys in the left column are read where shown; the right column says
-which pages set them (from the ten `Sim.data = {` blocks).
+which pages set them (from the `Sim.data = {` blocks of the ten pages of 14 October 2026; Fig. 11, added 24 October, has one too).
 
 | Key | Shape | Read at | Set by |
 |---|---|---|---|
@@ -431,7 +431,7 @@ which pages set them (from the ten `Sim.data = {` blocks).
 ### `Sim.data.ledger`
 
 The field the redesign added. A page without it falls back to its `groups`, with no headline and no books, so no page broke
-while the others are converted. Figs. 9 and 10 keep their ledger in a file of its own, `scripts/ledger/<page>.js`, loaded
+while the others are converted. Figs. 9, 10 and 11 keep their ledger in a file of its own, `scripts/ledger/<page>.js`, loaded
 between the page's script and `datalog.js` on the line that loaded `datalog.js`, so no line of the page moved (the docs cite the
 pages by line number). A ledger file only names variables and adds checks; it computes nothing for display. Rotor Pendula's
 simulation loads [scripts/ledger/rotor-pendula.js](../../public/scripts/ledger/rotor-pendula.js) the same way, and its wind tab [scripts/ledger/rotor-wind.js](../../public/scripts/ledger/rotor-wind.js), from its source
@@ -574,7 +574,7 @@ array's table; an `IntersectionObserver` on the array rows.
   round archive, `Sim.dataset` and the new store's `dim`, `coord`, `var`, `set`, `has` and `npz`
   ([datalog.js:970-978](../../public/scripts/datalog.js#L970-L978); [dataset.md](dataset.md)).
 - **`sim.js`**: `Sim.fmt` for every number ([datalog.js:86](../../public/scripts/datalog.js#L86)); `readPixel` and
-  `isBurgundy` are used by the `drawn` functions of Figs. 9 and 10 ([sim.md](sim.md)).
+  `isBurgundy` are used by the `drawn` functions of Figs. 9, 10 and 11 ([sim.md](sim.md)).
 - **The page**: `Sim.data` (above), `#stage` with a sibling `.stage__cap`, and the CSS tokens. Each page's documentation
   lists its probe, checks and read-backs ([../simulations/](../simulations/)).
 - **`styles/data.css`**: every `dp-*`, `dg__*` class ([../styles.md](../styles.md)).

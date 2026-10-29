@@ -1,12 +1,12 @@
 # The site's own pages: home, simulations catalog, Portfolios, robots.txt
 
-Four files make the frame around the ten simulation pages:
+Four files make the frame around the eleven simulation pages:
 
 | File | Served at | Lines | What it is |
 |---|---|---|---|
-| [`index.html`](../index.html) | `/` | 1258 | The home page: the Phyein Usul logo and note, CV, research, eight figure plates, a live double pendulum. |
-| [`public/simulations.html`](../public/simulations.html) | `/simulations.html` | 353 | The catalog: one fold card per simulation, search, field and year chips. |
-| [`public/portfolios.html`](../public/portfolios.html) | `/portfolios.html` | 384 | The three research projects and the links into their copies. |
+| [`index.html`](../index.html) | `/` | 1255 | The home page: the Phyein Usul logo and note, CV, research, eight figure plates, a live double pendulum. |
+| [`public/simulations.html`](../public/simulations.html) | `/simulations.html` | 354 | The catalog: one fold card per simulation, search, field and year chips. |
+| [`public/portfolios.html`](../public/portfolios.html) | `/portfolios.html` | 439 | The four research projects and the links into their pages. |
 | [`public/robots.txt`](../public/robots.txt) | `/robots.txt` | 4 | Rules for search-engine crawlers. |
 
 The build copies everything under `public/` to the site root, so a page under `public/` links to `styles/…` and
@@ -38,7 +38,7 @@ Related pages: the fold mechanism is in [scripts/fold.md](scripts/fold.md), the 
 | Security policy and referrer rule, right after the charset line ([build-and-deploy.md](build-and-deploy.md#security)) | [5–6](../index.html#L5-L6) | [5–6](../public/simulations.html#L5-L6) | [5–6](../public/portfolios.html#L5-L6) |
 | Favicon: an inline SVG, a wine square with a letter | "N" [17–20](../index.html#L17-L20) | "NK" [20–23](../public/simulations.html#L20-L23) | "NK" [22–25](../public/portfolios.html#L22-L25) |
 | Skip link (`.skip-link`) | to `#main` [27](../index.html#L27) | to `#catalog` [30](../public/simulations.html#L30) | to `#projects` [32](../public/portfolios.html#L32) |
-| Phyein Usul logo [`images/phyein-usul-mark.svg`](../public/images/phyein-usul-mark.svg) in an `a` to `index.html` (the ten simulation pages carry the same 87 × 48 logo in their top bar, linking to `../index.html`) | top of the hero, 217 × 120 [31](../index.html#L31) | top bar, 87 × 48 [33](../public/simulations.html#L33) | top bar, 87 × 48 [35](../public/portfolios.html#L35) |
+| Phyein Usul logo [`images/phyein-usul-mark.svg`](../public/images/phyein-usul-mark.svg) in an `a` to `index.html` (the eleven simulation pages carry the same 87 × 48 logo in their top bar, linking to `../index.html`) | top of the hero, 217 × 120 [31](../index.html#L31) | top bar, 87 × 48 [33](../public/simulations.html#L33) | top bar, 87 × 48 [35](../public/portfolios.html#L35) |
 | `scripts/fold.js` at the end of `<body>` | [625](../index.html#L625) | [123](../public/simulations.html#L123) | [416](../public/portfolios.html#L416) |
 | Footer: © line and "Back to top" | [620–623](../index.html#L620-L623) | [118–121](../public/simulations.html#L118-L121) | [411–414](../public/portfolios.html#L411-L414) |
 
@@ -99,8 +99,9 @@ the files in `fonts/ibm-plex-*/` ([assets.md](assets.md#publicfonts--ibm-plex-an
 - `figure.figure` ([54–60](../index.html#L54-L60)): `canvas#pendulum` inside `.figure__stage`, caption "Fig. 0 · double pendulum ·
   RK4 · live" and `button#pendulum-reset`.
 
-**Layout** `div.layout` ([63–618](../index.html#L63-L618)): a 200 px column for the index and the content column
-([site.css:278–285](../public/styles/site.css#L278-L285)).
+**Layout** `div.layout` ([63–618](../index.html#L63-L618)): a 260 px column for the index and the content column, 64 px apart
+([site.css:278–285](../public/styles/site.css#L278-L285)); from 981 px wide, 300 px and 56 px, at most 1160 px in all
+([site.css:330](../public/styles/site.css#L330)). Measured 29 October 2026.
 
 - `nav.index[data-fold-bar]` ([64–74](../index.html#L64-L74)): links to the five sections and `portfolios.html` ("Portfolios ↗").
   On wide screens it sticks 28 px from the top as a side column; at 980 px and below it becomes a full-width bar at the top
@@ -234,7 +235,7 @@ the eight plate figures stay empty (only the grid background shows), and everyth
 
 ## 2. `public/simulations.html` · the catalog
 
-**Purpose.** The list of every simulation. It opens as a column of ten closed titles, "01 Wave Interference" to
+**Purpose.** The list of every simulation. It opens as a column of eleven closed titles, "01 Wave Interference" to
 "10 Wind Turbine Control", in figure order. A title opens to a paper abstract: thumbnail, field and year, summary, the key
 equation set by KaTeX, and links to the figure and to its lecture note. A search and two rows of chips narrow the list; the
 view is kept in the address. Everything is drawn from the registry [`scripts/catalog.js`](../public/scripts/catalog.js)
@@ -359,9 +360,9 @@ fallback list.
 
 ## 3. `public/portfolios.html` · the research projects
 
-**Purpose.** Introduces the two long projects, each with an abstract, four key numbers, four numbered parts and links into
-its own pages. The projects themselves are static copies of two other apps under `public/portfolios/<name>/`
-([portfolios.md](portfolios.md)).
+**Purpose.** Introduces the four long projects, each with an abstract, four key numbers, four numbered parts and links into
+its own pages. The projects themselves are pages generated from their sources in `portfolios-src/` into
+`public/portfolios/<name>/` ([portfolios.md](portfolios.md)).
 
 ### Head
 
@@ -496,8 +497,8 @@ AppDeploy and (20 October 2026) on phyeinusul.com. To keep a path out of search 
    [423](../public/styles/site.css#L423)). Measured: `h1`, five `h2` and 21 `h3` in IBM Plex Serif 600, as the rule now says; box shadows on
    `.figure`, `.project` and `.plate`, against it. The catalog and Portfolios pages use Instrument Serif 400 (measured; `catalog.css` sets `--serif` to Instrument Serif,
    [catalog.css:10](../public/styles/catalog.css#L10)).
-2. **The home page shows eight figures, the site has ten.** The plates stop at Fig. 8 ([290–570](../index.html#L290-L570));
-   Figs. 9 and 10 are only in the catalog ([catalog.js:183–216](../public/scripts/catalog.js#L183-L216)). The section intro says
+2. **The home page shows eight figures, the site has eleven.** The plates stop at Fig. 8 ([290–570](../index.html#L290-L570));
+   Figs. 9, 10 and 11 are only in the catalog ([catalog.js:183–233](../public/scripts/catalog.js#L183-L233)). The section intro says
    the simulations page "lists them all by field, with the question each one answers"
    ([index.html:287–288](../index.html#L287-L288)); the catalog now lists them in figure order without grouping
    ([simulations.html:231–233](../public/simulations.html#L231-L233)), and catalog entries have no question field.

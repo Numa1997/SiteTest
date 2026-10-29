@@ -3,7 +3,7 @@
 | | |
 |---|---|
 | File | [public/scripts/dataset.js](../../public/scripts/dataset.js), 175 lines, 8.6 kB (8 617 bytes) |
-| Loaded by | the ten simulation pages, third, right after `sim.js` and before the page's own script (line numbers in the load-order table of [sim.md](sim.md#load-order-on-the-pages)), the two pages of Iron, Cotton and the Head ([portfolios.md](../portfolios.md#the-data-panel-of-the-study)), the ideal and servo presses of the Hydraulic Press Study, and Droplet Collection, before its inline script ([portfolios.md](../portfolios.md#the-data-panel-the-bookkeeper-since-24-october-2026)). No other page loads it. |
+| Loaded by | the eleven simulation pages, third, right after `sim.js` and before the page's own script (line numbers in the load-order table of [sim.md](sim.md#load-order-on-the-pages)), the two pages of Iron, Cotton and the Head ([portfolios.md](../portfolios.md#the-data-panel-of-the-study)), the ideal and servo presses of the Hydraulic Press Study, and Droplet Collection, before its inline script ([portfolios.md](../portfolios.md#the-data-panel-the-bookkeeper-since-24-october-2026)). No other page loads it. |
 | Defines | `Sim.dataset(meta)` on `window.Sim` ([dataset.js:174-175](../../public/scripts/dataset.js#L174-L175)); creates `window.Sim` if it does not exist yet ([dataset.js:17](../../public/scripts/dataset.js#L17)) |
 | Used by | each page's script (writes), [datalog.js](datalog.md) (reads, saves), each page's `Sim.live()` (reads) |
 
@@ -84,13 +84,14 @@ Array types and their NumPy names, from the table `DTYPES` ([dataset.js:19-24](.
 page gave ([dataset.js:88](../../public/scripts/dataset.js#L88)). The comment names `'float'`, `'int'`, `'bool'`, `'str'` and `'uint8'`
 ([dataset.js:44](../../public/scripts/dataset.js#L44)); the pages include one `'uint8'` scalar holding an RGB
 triple ([Circular Wave Interference Visualization.html:572](../../public/simulations/Circular%20Wave%20Interference%20Visualization.html#L572)).
-Across the ten pages a grep finds 546 `ds.var` calls: 137 arrays (127 `Float64Array`, 7 `Float32Array`, 2 `Int32Array`,
+Across the ten pages of 14 October 2026 a grep found 546 `ds.var` calls (on 29 October 2026 the eleven pages hold 757:
+`cat public/simulations/*.html | grep -o "ds\.var(" | wc -l`; the breakdown below and the attribute counts are those of 14 October): 137 arrays (127 `Float64Array`, 7 `Float32Array`, 2 `Int32Array`,
 1 `Uint8ClampedArray`) and 409 scalars (311 `'float'`, 63 `'int'`, 28 `'bool'`, 6 `'str'`, 1 `'uint8'`), plus 13
 `ds.coord` calls, all `Float64Array`.
 
 ### Attributes the rest of the site reads
 
-`attrs` is a free object, but `datalog.js` gives these keys a meaning (counts are occurrences in the ten pages' `ds.var` and
+`attrs` is a free object, but `datalog.js` gives these keys a meaning (counts, of 14 October 2026, are occurrences in the ten pages' `ds.var` and
 `ds.coord` calls):
 
 | Key | Used for | Count |

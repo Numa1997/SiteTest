@@ -2,7 +2,7 @@
 
 | | |
 |---|---|
-| Files | ten files in [public/scripts/walk/](../../public/scripts/walk/), 109 to 137 lines and 6.4 to 10.9 kB each, 1 199 lines and 80.3 kB in all (table at the end) |
+| Files | eleven files in [public/scripts/walk/](../../public/scripts/walk/), 147 to 351 lines and 15.3 to 33.0 kB each, 2 612 lines and 296 kB in all (measured 29 October 2026 with `wc -lc public/scripts/walk/*.js`; the per-file table at the end gives the sizes of 15 October) |
 | Loaded by | `sim.js`, not by a `<script>` tag: once the page has loaded, `boot()` appends `../scripts/walk/<key>.js`, where `<key>` is the `data-walk` attribute of `#walk` ([sim.js:404-410](../../public/scripts/sim.js#L404-L410)) |
 | Defines | `window.WALK` (created if missing) and one entry `window.WALK.<key>` per file |
 | Rendered by | `walkthrough()` in [sim.js:246-329](../../public/scripts/sim.js#L246-L329), described in [sim.md](sim.md) |
@@ -95,7 +95,7 @@ else is copied from the page character for character, without the page's indenta
    the code that computes it and its value now" ([sim.js:328](../../public/scripts/sim.js#L328),
    [fold.js:342-350](../../public/scripts/fold.js#L342-L350); [fold.md](fold.md)).
 
-Measured in headless Chromium, 1.5 s after load, on all ten pages: the walkthrough drew the expected number of steps, became a
+Measured in headless Chromium, 1.5 s after load, on all ten pages of the time (before Fig. 11): the walkthrough drew the expected number of steps, became a
 fold, and `Sim.live()` returned a value for every symbol key used in any step of that page's file (19 to 30 keys per page), so no
 "Now" cell stayed at `—`.
 
@@ -143,7 +143,7 @@ the page whose `data-walk` names the file.
 - **`sim.css`**: the classes `walk__*`, `k`, `is-lit`, `is-held` ([sim.css:137-172](../../public/styles/sim.css#L137-L172);
   [../styles.md](../styles.md)).
 
-## The ten files
+## The eleven files
 
 In figure order. Lines are those of the step's `title`.
 

@@ -3,7 +3,7 @@
 | | |
 |---|---|
 | File | [public/scripts/sim.js](../../public/scripts/sim.js), 429 lines, 20.9 kB (20 925 bytes) |
-| Loaded by | the ten simulation pages in `public/simulations/`, as the second shared script, after `fold.js` and before `dataset.js` (table below); the two pages of Iron, Cotton and the Head (`portfolios/impact/index.html`, `ar.html`), first, before `dataset.js`, for the data panel ([portfolios.md](../portfolios.md#the-data-panel-of-the-study)); the ideal and servo presses inside the Hydraulic Press Study's frames ([portfolios.md](../portfolios.md#the-data-panel-of-the-two-simulations-since-23-october-2026)); and Droplet Collection, first, before `dataset.js` and the inline script, for the data panel ([portfolios.md](../portfolios.md#the-data-panel-the-bookkeeper-since-24-october-2026)). No other page loads it. A walkthrough is loaded only for an element `#walk` that names one in `data-walk`. |
+| Loaded by | the eleven simulation pages in `public/simulations/`, as the second shared script, after `fold.js` and before `dataset.js` (table below); the two pages of Iron, Cotton and the Head (`portfolios/impact/index.html`, `ar.html`), first, before `dataset.js`, for the data panel ([portfolios.md](../portfolios.md#the-data-panel-of-the-study)); the ideal and servo presses inside the Hydraulic Press Study's frames ([portfolios.md](../portfolios.md#the-data-panel-of-the-two-simulations-since-23-october-2026)); and Droplet Collection, first, before `dataset.js` and the inline script, for the data panel ([portfolios.md](../portfolios.md#the-data-panel-the-bookkeeper-since-24-october-2026)). No other page loads it. A walkthrough is loaded only for an element `#walk` that names one in `data-walk`. |
 | Defines | `window.Sim` ([sim.js:415](../../public/scripts/sim.js#L415)), a fresh object with 12 members |
 | Reads | `window.WALK` ([sim.js:409](../../public/scripts/sim.js#L409)), `window.Fold` ([sim.js:328](../../public/scripts/sim.js#L328)), `window.Sim.live` ([sim.js:315](../../public/scripts/sim.js#L315)), `window.renderMathInElement` from KaTeX ([sim.js:355](../../public/scripts/sim.js#L355)) |
 | Emits | the DOM event `typeset` on `document` ([sim.js:366](../../public/scripts/sim.js#L366), [sim.js:397](../../public/scripts/sim.js#L397)) |
@@ -17,21 +17,22 @@ and it shows a visible error banner if any script on the page throws.
 ## Load order on the pages
 
 Every simulation page loads the shared scripts at the end of `<body>`, in this order. The page's own inline script sits
-between `dataset.js` and `datalog.js`; Figs. 9 and 10 load their data panel's ledger (`scripts/ledger/<page>.js`) just
-before `datalog.js`, on the same line.
+between `dataset.js` and `datalog.js`; Figs. 9, 10 and 11 load their data panel's ledger (`scripts/ledger/<page>.js`) just
+before `datalog.js`, on the same line. Line numbers measured 29 October 2026.
 
 | Fig. | Page | `fold.js` | `sim.js` | `dataset.js` | page script | `datalog.js` |
 |---|---|---|---|---|---|---|
-| 1 | [Circular Wave Interference Visualization.html](../../public/simulations/Circular%20Wave%20Interference%20Visualization.html#L505) | L505 | L506 | L507 | L508 | L904 |
-| 2 | [Double Pendulum.html](../../public/simulations/Double%20Pendulum.html#L389) | L389 | L390 | L391 | L392 | L867 |
-| 3 | [Interactive Double-Slit Experiment Visualization.html](../../public/simulations/Interactive%20Double-Slit%20Experiment%20Visualization.html#L546) | L546 | L547 | L548 | L549 | L945 |
-| 4 | [Transverse and longitudinal waves.html](../../public/simulations/Transverse%20and%20longitudinal%20waves.html#L732) | L732 | L733 | L734 | L735 | L1083 |
-| 5 | [water-wave.html](../../public/simulations/water-wave.html#L563) | L563 | L564 | L565 | L566 | L888 |
-| 6 | [wave-interference.html](../../public/simulations/wave-interference.html#L489) | L489 | L490 | L491 | L492 | L974 |
-| 7 | [phasor-sums.html](../../public/simulations/phasor-sums.html#L660) | L660 | L661 | L662 | L663 | L1476 |
-| 8 | [draw-decompose.html](../../public/simulations/draw-decompose.html#L618) | L618 | L619 | L620 | L621 | L1413 |
-| 9 | [driven-oscillator.html](../../public/simulations/driven-oscillator.html#L598) | L598 | L599 | L600 | L601 | L1930, after `ledger/driven-oscillator.js` on the same line |
-| 10 | [wind-turbine.html](../../public/simulations/wind-turbine.html#L547) | L547 | L548 | L549 | L550 | L1168, after `ledger/wind-turbine.js` on the same line |
+| 1 | [Circular Wave Interference Visualization.html](../../public/simulations/Circular%20Wave%20Interference%20Visualization.html#L506) | L506 | L507 | L508 | L509 | L905 |
+| 2 | [Double Pendulum.html](../../public/simulations/Double%20Pendulum.html#L451) | L451 | L452 | L453 | L454 | L929 |
+| 3 | [Interactive Double-Slit Experiment Visualization.html](../../public/simulations/Interactive%20Double-Slit%20Experiment%20Visualization.html#L547) | L547 | L548 | L549 | L550 | L946 |
+| 4 | [Transverse and longitudinal waves.html](../../public/simulations/Transverse%20and%20longitudinal%20waves.html#L733) | L733 | L734 | L735 | L736 | L1084 |
+| 5 | [water-wave.html](../../public/simulations/water-wave.html#L565) | L565 | L566 | L567 | L568 | L890 |
+| 6 | [wave-interference.html](../../public/simulations/wave-interference.html#L490) | L490 | L491 | L492 | L493 | L975 |
+| 7 | [phasor-sums.html](../../public/simulations/phasor-sums.html#L661) | L661 | L662 | L663 | L664 | L1477 |
+| 8 | [draw-decompose.html](../../public/simulations/draw-decompose.html#L619) | L619 | L620 | L621 | L622 | L1414 |
+| 9 | [driven-oscillator.html](../../public/simulations/driven-oscillator.html#L599) | L599 | L600 | L601 | L602 | L1931, after `ledger/driven-oscillator.js` on the same line |
+| 10 | [wind-turbine.html](../../public/simulations/wind-turbine.html#L548) | L548 | L549 | L550 | L551 | L1169, after `ledger/wind-turbine.js` on the same line |
+| 11 | [pendulum-control.html](../../public/simulations/pendulum-control.html#L419) | L419 | L420 | L421 | L422 | L1347, after `ledger/pendulum-control.js` on the same line |
 
 The scripts are plain `<script src>` tags at the end of the body, so they run while the document is still loading. That is
 why `sim.js` defers its own start to `DOMContentLoaded` ([sim.js:412](../../public/scripts/sim.js#L412)), and why
@@ -144,10 +145,10 @@ The page's own script then runs and uses the helpers: it sizes its canvases, wir
 | `Sim.fmt` | [210-214](../../public/scripts/sim.js#L210-L214) | `v, digits` | String with fixed decimals and a typographic minus. |
 | `Sim.showError` | [217-229](../../public/scripts/sim.js#L217-L229) | `message` | Inserts `#sim-error` ("This simulation stopped. … Reload the page to try again.") at the top of `<main>`, once per page. |
 
-Which page uses which helper (occurrences of `Sim.<name>` counted with grep in the ten pages): every page uses `Sim.theme`,
+Which page uses which helper (occurrences of `Sim.<name>` counted with grep in the eleven pages, 29 October 2026): every page uses `Sim.theme`,
 `Sim.slider` and `Sim.clock`; every page except Fig. 3, which draws SVG, uses `Sim.canvas2d`, `Sim.onResize`,
-`Sim.playButton` and `Sim.fmt`; `Sim.tex` is used by Figs. 5, 6, 8, 9 and 10; `Sim.ticks`, `Sim.readPixel` and
-`Sim.isBurgundy` by Figs. 9 and 10 only; no page calls `Sim.showError` directly.
+`Sim.playButton` and `Sim.fmt`; `Sim.tex` is used by Figs. 5, 6, 8, 9, 10 and 11; `Sim.ticks`, `Sim.readPixel` and
+`Sim.isBurgundy` by Figs. 9, 10 and 11 only; no page calls `Sim.showError` directly.
 
 ## Internal functions
 
@@ -236,7 +237,7 @@ Listeners: `window` `error` ([sim.js:230](../../public/scripts/sim.js#L230)); `D
   anything attached to `Sim` before it is lost.
 - Adding a helper: define it inside the IIFE and add it to the object at [lines 415-428](../../public/scripts/sim.js#L415-L428). Removing or renaming one: grep the
   ten pages first (the counts above).
-- `readPixel` must keep refusing transparent pixels ([line 130](../../public/scripts/sim.js#L130)); the Check of Figs. 9 and 10 relies on it to tell "drawn" from
+- `readPixel` must keep refusing transparent pixels ([line 130](../../public/scripts/sim.js#L130)); the Check of Figs. 9, 10 and 11 relies on it to tell "drawn" from
   "not drawn".
 - `tex()` understands only `_{…}`, `^{…}` and `\mathrm{…}` without nested braces. A label with nesting needs a parser
   change, not a different string.
@@ -244,8 +245,8 @@ Listeners: `window` `error` ([sim.js:230](../../public/scripts/sim.js#L230)); `D
   symbol fields are inserted as HTML except `where`, the code excerpt `code` (escaped around its marks by `markup(st.code, true)`)
   and the code column of `syms`, which are escaped ([sim.js:290](../../public/scripts/sim.js#L290),
   [sim.js:295](../../public/scripts/sim.js#L295), [sim.js:298](../../public/scripts/sim.js#L298)).
-- After a change, open all ten pages and check: no banner, the lecture note typeset, every "Now" cell filled (a missing key
-  shows `—`), the walkthrough folds. A headless check of all ten pages (Chromium, 1.5 s after load) found no page errors
+- After a change, open all eleven pages and check: no banner, the lecture note typeset, every "Now" cell filled (a missing key
+  shows `—`), the walkthrough folds. A headless check of all ten pages of the time (before Fig. 11; Chromium, 1.5 s after load) found no page errors
   and a `Sim.live()` value for every symbol key of every walkthrough.
 
 ## Notes for maintainers
