@@ -1,0 +1,82 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<feed xmlns='http://www.w3.org/2005/Atom' xmlns:apps='http://schemas.google.com/apps/2006'>
+  <title>Mail Filters</title>
+  <updated>2026-10-29T12:00:00Z</updated>
+  <entry>
+    <category term='filter'></category>
+    <title>Mail Filter</title>
+    <id>tag:mail.google.com,2008:filter:absagen1</id>
+    <updated>2026-10-29T12:00:00Z</updated>
+    <content></content>
+    <apps:property name='hasTheWord' value='{bewerbung bewerbungen bewerbungsunterlagen bewerbungsprozess bewerbungsverfahren auswahlprozess auswahlverfahren initiativbewerbung beworben application applications applying applied candidate candidates candidacy bewerber bewerberin bewerberinnen kandidat kandidaten recruiting recruitment hiring "the position" "this position" "this role" "the role" "die position" "diese position" "die stelle" "diese stelle" "ausgeschriebene stelle" "ausgeschriebenen stelle" vacancy} {"leider mitteilen" "müssen wir ihnen leider" "müssen wir dir leider" "müssen wir dir jedoch" "müssen wir ihnen jedoch" "leider müssen wir" "nicht berücksichtigen" "nicht weiter berücksichtigen" "nicht länger berücksichtigen" "nicht in die engere" "nicht in den engsten" "engeren auswahl" absage "absagen müssen" "wir bedauern" "zu unserem bedauern" "bedauern wir" "bedauern ihnen" "bedauern dir" "andere kandidaten" "anderen kandidaten" "anderen kandidat" "andere bewerber" "bewerberinnen und bewerbern" "anderer bewerbender" "anderweitig entschieden" "nicht für sie entschieden" "uns nicht für"} -{"automatic reply" "automatische antwort" abwesenheitsnotiz "out of office" wohnheim wohnheimplatz zimmer warteliste eingangsbestätigung empfangsbestätigung "your application was sent" studienplatz zulassung studiengang immatrikulation admission admissions masterstudiengang masters masterbüro phd promotion doktorand doctoral}'/>
+    <apps:property name='label' value="Absagen"/>
+    <apps:property name='sizeOperator' value='s_sl'/>
+    <apps:property name='sizeUnit' value='s_smb'/>
+  </entry>
+  <entry>
+    <category term='filter'></category>
+    <title>Mail Filter</title>
+    <id>tag:mail.google.com,2008:filter:absagen2</id>
+    <updated>2026-10-29T12:00:00Z</updated>
+    <content></content>
+    <apps:property name='hasTheWord' value='{bewerbung bewerbungen bewerbungsunterlagen bewerbungsprozess bewerbungsverfahren auswahlprozess auswahlverfahren initiativbewerbung beworben application applications applying applied candidate candidates candidacy bewerber bewerberin bewerberinnen kandidat kandidaten recruiting recruitment hiring "the position" "this position" "this role" "the role" "die position" "diese position" "die stelle" "diese stelle" "ausgeschriebene stelle" "ausgeschriebenen stelle" vacancy} {"keine positive" "keine passende" "keinen arbeitsplatz" "nicht erfolgreich" "nicht weiterverfolgen" "nicht fortführen" "nicht weiter fortzusetzen" "kein anstellungsangebot" "besetzt wurde" "zwischenzeitlich besetzt" "nicht mehr vakant" "keine stelle zu besetzen" "keinen bedarf" "dieses mal nicht" "diesmal nicht" "beruflichen weg" berufsweg "keine bessere nachricht" "keine andere nachricht" "keine erfreulicheren" "keine günstigere" "wahl nicht auf" "positivere nachrichten" "nicht anbieten" "nicht weiter in die auswahl" "leider keine" "leider absagen" abzusagen "anderer qualifizierter"} -{"automatic reply" "automatische antwort" abwesenheitsnotiz "out of office" wohnheim wohnheimplatz zimmer warteliste eingangsbestätigung empfangsbestätigung "your application was sent" studienplatz zulassung studiengang immatrikulation admission admissions masterstudiengang masters masterbüro phd promotion doktorand doctoral}'/>
+    <apps:property name='label' value="Absagen"/>
+    <apps:property name='sizeOperator' value='s_sl'/>
+    <apps:property name='sizeUnit' value='s_smb'/>
+  </entry>
+  <entry>
+    <category term='filter'></category>
+    <title>Mail Filter</title>
+    <id>tag:mail.google.com,2008:filter:absagen3</id>
+    <updated>2026-10-29T12:00:00Z</updated>
+    <content></content>
+    <apps:property name='hasTheWord' value='{bewerbung bewerbungen bewerbungsunterlagen bewerbungsprozess bewerbungsverfahren auswahlprozess auswahlverfahren initiativbewerbung beworben application applications applying applied candidate candidates candidacy bewerber bewerberin bewerberinnen kandidat kandidaten recruiting recruitment hiring "the position" "this position" "this role" "the role" "die position" "diese position" "die stelle" "diese stelle" "ausgeschriebene stelle" "ausgeschriebenen stelle" vacancy} {"leider können wir" "nicht weiter zu verfolgen" "nicht weiter zu berücksichtigen" "gegen eine zusammenarbeit" "nicht für deine mitarbeit" "leider nicht weiter" "anderen bewerberinnen" "weiteren werdegang" "beruflichen werdegang" "für eine andere person" "anderen kandidat innen" "andere kandidat innen" "für kandidat innen" "mit kandidat innen" "leider nicht berücksichtigt" "dieses mal nicht berücksichtigt"} -{"automatic reply" "automatische antwort" abwesenheitsnotiz "out of office" wohnheim wohnheimplatz zimmer warteliste eingangsbestätigung empfangsbestätigung "your application was sent" studienplatz zulassung studiengang immatrikulation admission admissions masterstudiengang masters masterbüro phd promotion doktorand doctoral}'/>
+    <apps:property name='label' value="Absagen"/>
+    <apps:property name='sizeOperator' value='s_sl'/>
+    <apps:property name='sizeUnit' value='s_smb'/>
+  </entry>
+  <entry>
+    <category term='filter'></category>
+    <title>Mail Filter</title>
+    <id>tag:mail.google.com,2008:filter:absagen4</id>
+    <updated>2026-10-29T12:00:00Z</updated>
+    <content></content>
+    <apps:property name='hasTheWord' value="{bewerbung bewerbungen bewerbungsunterlagen bewerbungsprozess bewerbungsverfahren auswahlprozess auswahlverfahren initiativbewerbung beworben application applications applying applied candidate candidates candidacy bewerber bewerberin bewerberinnen kandidat kandidaten recruiting recruitment hiring &quot;the position&quot; &quot;this position&quot; &quot;this role&quot; &quot;the role&quot; &quot;die position&quot; &quot;diese position&quot; &quot;die stelle&quot; &quot;diese stelle&quot; &quot;ausgeschriebene stelle&quot; &quot;ausgeschriebenen stelle&quot; vacancy} {&quot;other candidates&quot; &quot;other applicants&quot; &quot;another applicant&quot; &quot;another candidate&quot; &quot;regret that&quot; &quot;not to move forward&quot; &quot;not move forward&quot; &quot;not be moving&quot; &quot;won't be moving&quot; &quot;not to proceed&quot; &quot;not be proceeding&quot; &quot;won't be proceeding&quot; &quot;not be pursuing&quot; &quot;pursue other&quot; &quot;unable to offer&quot; &quot;not been selected&quot; &quot;not been chosen&quot; &quot;closer match&quot; &quot;more closely&quot; &quot;progress with other&quot; &quot;proceed with other&quot; &quot;move forward with other&quot; &quot;not able to move forward&quot; &quot;cannot progress&quot; &quot;future endeavors&quot; &quot;future endeavours&quot; &quot;won't be able to invite&quot; &quot;end your application&quot; &quot;no longer available&quot; &quot;not have any vacancies&quot;} -{&quot;automatic reply&quot; &quot;automatische antwort&quot; abwesenheitsnotiz &quot;out of office&quot; wohnheim wohnheimplatz zimmer warteliste eingangsbestätigung empfangsbestätigung &quot;your application was sent&quot; studienplatz zulassung studiengang immatrikulation admission admissions masterstudiengang masters masterbüro phd promotion doktorand doctoral}"/>
+    <apps:property name='label' value="Absagen"/>
+    <apps:property name='sizeOperator' value='s_sl'/>
+    <apps:property name='sizeUnit' value='s_smb'/>
+  </entry>
+  <entry>
+    <category term='filter'></category>
+    <title>Mail Filter</title>
+    <id>tag:mail.google.com,2008:filter:absagen5</id>
+    <updated>2026-10-29T12:00:00Z</updated>
+    <content></content>
+    <apps:property name='hasTheWord' value="{bewerbung bewerbungen bewerbungsunterlagen bewerbungsprozess bewerbungsverfahren auswahlprozess auswahlverfahren initiativbewerbung beworben application applications applying applied candidate candidates candidacy bewerber bewerberin bewerberinnen kandidat kandidaten recruiting recruitment hiring &quot;the position&quot; &quot;this position&quot; &quot;this role&quot; &quot;the role&quot; &quot;die position&quot; &quot;diese position&quot; &quot;die stelle&quot; &quot;diese stelle&quot; &quot;ausgeschriebene stelle&quot; &quot;ausgeschriebenen stelle&quot; vacancy} {&quot;did not find a match&quot; &quot;isn't progressing&quot; &quot;not be going ahead&quot; regretfully &quot;sorry to inform&quot; &quot;not offer you&quot; &quot;decided not to&quot; &quot;have to inform you&quot; &quot;no suitable&quot; &quot;cannot offer you&quot; &quot;already filled&quot; &quot;not be able to consider&quot; &quot;won't move forward&quot; &quot;do not have any open positions&quot; &quot;not be able to move forward&quot; &quot;not be able to proceed&quot; &quot;sorry to let you know&quot; &quot;not able to take you&quot; &quot;better fit&quot; &quot;cannot give you a positive&quot; &quot;not give you a positive&quot; &quot;no positive&quot; &quot;regret to inform&quot; &quot;we regret&quot; &quot;application has been unsuccessful&quot; &quot;application was unsuccessful&quot; &quot;has been filled&quot;} -{&quot;automatic reply&quot; &quot;automatische antwort&quot; abwesenheitsnotiz &quot;out of office&quot; wohnheim wohnheimplatz zimmer warteliste eingangsbestätigung empfangsbestätigung &quot;your application was sent&quot; studienplatz zulassung studiengang immatrikulation admission admissions masterstudiengang masters masterbüro phd promotion doktorand doctoral}"/>
+    <apps:property name='label' value="Absagen"/>
+    <apps:property name='sizeOperator' value='s_sl'/>
+    <apps:property name='sizeUnit' value='s_smb'/>
+  </entry>
+  <entry>
+    <category term='filter'></category>
+    <title>Mail Filter</title>
+    <id>tag:mail.google.com,2008:filter:absagen6</id>
+    <updated>2026-10-29T12:00:00Z</updated>
+    <content></content>
+    <apps:property name='hasTheWord' value='{bewerbung bewerbungen bewerbungsunterlagen bewerbungsprozess bewerbungsverfahren auswahlprozess auswahlverfahren initiativbewerbung beworben application applications applying applied candidate candidates candidacy bewerber bewerberin bewerberinnen kandidat kandidaten recruiting recruitment hiring "the position" "this position" "this role" "the role" "die position" "diese position" "die stelle" "diese stelle" "ausgeschriebene stelle" "ausgeschriebenen stelle" vacancy} {"has now been filled" "is already filled"} -{"automatic reply" "automatische antwort" abwesenheitsnotiz "out of office" wohnheim wohnheimplatz zimmer warteliste eingangsbestätigung empfangsbestätigung "your application was sent" studienplatz zulassung studiengang immatrikulation admission admissions masterstudiengang masters masterbüro phd promotion doktorand doctoral}'/>
+    <apps:property name='label' value="Absagen"/>
+    <apps:property name='sizeOperator' value='s_sl'/>
+    <apps:property name='sizeUnit' value='s_smb'/>
+  </entry>
+  <entry>
+    <category term='filter'></category>
+    <title>Mail Filter</title>
+    <id>tag:mail.google.com,2008:filter:absagen7</id>
+    <updated>2026-10-29T12:00:00Z</updated>
+    <content></content>
+    <apps:property name='hasTheWord' value="subject:{bewerbung bewerbungen application applications applying applied candidate candidacy position stelle absage bewerber bewerbungsunterlagen initiativbewerbung werkstudent job karriere career kandidatenpool &quot;m/w/d&quot; &quot;m/f/d&quot; &quot;f/m/d&quot; &quot;w/m/d&quot; &quot;m/f/x&quot; &quot;d/w/m&quot; &quot;all genders&quot;} {leider unfortunately regret regretfully bedauern bedauerlicherweise} -{&quot;automatic reply&quot; &quot;automatische antwort&quot; abwesenheitsnotiz &quot;out of office&quot; wohnheim wohnheimplatz zimmer warteliste eingangsbestätigung empfangsbestätigung &quot;your application was sent&quot;} -{&quot;leider mitteilen&quot; &quot;other candidates&quot; &quot;leider müssen wir&quot; &quot;wir bedauern&quot; &quot;nicht weiter berücksichtigen&quot; absage &quot;nicht berücksichtigen&quot; &quot;regret to inform&quot; &quot;beruflichen weg&quot; &quot;nicht in die engere&quot; &quot;have to inform you&quot; &quot;decided not to&quot; &quot;move forward with other&quot; &quot;future endeavors&quot; &quot;more closely&quot; berufsweg &quot;dieses mal nicht&quot; &quot;we regret&quot; &quot;müssen wir ihnen leider&quot; &quot;müssen wir dir leider&quot; &quot;bedauern ihnen&quot; &quot;keine positive&quot; &quot;keine passende&quot; &quot;future endeavours&quot; &quot;leider können wir&quot; &quot;leider absagen&quot; &quot;müssen wir ihnen jedoch&quot; &quot;not have any vacancies&quot; &quot;absagen müssen&quot; &quot;no positive&quot; &quot;won't move forward&quot; &quot;nicht erfolgreich&quot; &quot;anderen kandidaten&quot; &quot;not been selected&quot; &quot;not be proceeding&quot; &quot;nicht in den engsten&quot; &quot;not able to take you&quot; &quot;application has been unsuccessful&quot; &quot;did not find a match&quot; &quot;not able to move forward&quot; &quot;no longer available&quot; &quot;not be able to proceed&quot;}"/>
+    <apps:property name='label' value="uncertain rejection"/>
+    <apps:property name='sizeOperator' value='s_sl'/>
+    <apps:property name='sizeUnit' value='s_smb'/>
+  </entry>
+</feed>

@@ -1,0 +1,13 @@
+{
+  "name": "stellenrecherche",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "dev": "wrangler dev --port 8787 --ip 127.0.0.1 --local-upstream localhost:8787",
+    "test": "node --test test/*.test.mjs",
+    "db:local": "wrangler d1 execute stellenrecherche --local --file=schema.sql && wrangler d1 execute stellenrecherche --local --file=test/seed.sql"
+  },
+  "devDependencies": {
+    "wrangler": "4.151.3"
+  }
+}

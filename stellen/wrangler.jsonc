@@ -1,0 +1,31 @@
+// Stellenrecherche (Numa's job search record) on Cloudflare. See README.md.
+// Deploy: npx wrangler deploy   (needs CLOUDFLARE_API_TOKEN; see README.md, "Deploy")
+{
+  "name": "stellenrecherche",
+  "main": "src/worker.js",
+  "compatibility_date": "2026-10-06",
+  "assets": {
+    "directory": "./public",
+    "binding": "ASSETS",
+    // Only the API and the server-written Absagen page run code; every other request is a file.
+    "run_worker_first": ["/api/*", "/absagen", "/absagen/*"]
+  },
+  "d1_databases": [
+    { "binding": "DB", "database_name": "stellenrecherche", "database_id": "bedfef7d-fa7e-4592-9cdf-fa534d4f0e8f" }
+  ],
+  // The app answers only on its own address, behind Cloudflare Access; no *.workers.dev address, no preview addresses.
+  "workers_dev": false,
+  "preview_urls": false,
+  "routes": [
+    { "pattern": "stellen.phyeinusul.com", "custom_domain": true }
+  ],
+  // Filled in after the Access application exists (README.md, "Sign-in"). Empty means: nobody gets in.
+  // OWNER_EMAILS is set as a secret (npx wrangler secret put OWNER_EMAILS), so the address stays out of this public file.
+  // INGEST_CLIENT_ID (the Client ID of the Gmail script's Access service token, "<32 hex>.access") is set the same way;
+  // while it is missing, the ingest routes refuse everyone (503).
+  "vars": {
+    "ACCESS_TEAM_DOMAIN": "https://phyeinusul.cloudflareaccess.com",
+    "ACCESS_AUD": "a9b5ae87e8cdff596a094ec44e57a3c144fc6dd978c0a8e794a76cdb84a392b1"
+  },
+  "observability": { "enabled": true }
+}

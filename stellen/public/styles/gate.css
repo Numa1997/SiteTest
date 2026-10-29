@@ -1,0 +1,13 @@
+/* The cards the page shows instead of the list: no access, session expired,
+   sign-in not set up, could not load. Always light: the theme is chosen
+   inside the board. Carried over from Physik Radar (src/claude/styles/gate.css);
+   .gate__text replaces an inline style, which the security policy forbids. */
+.gate{min-height:100dvh;display:grid;place-items:center;padding:28px;background:#f7f3ec}
+.gate__card{width:min(420px,100%);display:flex;flex-direction:column;gap:6px;background:#fff;border:1px solid #d9d0c2;border-radius:6px;padding:32px 28px}
+.gate__kicker{margin:0;font-family:'IBM Plex Mono',monospace;font-size:11px;letter-spacing:.14em;text-transform:uppercase;color:#7a1f2b}
+.gate__title{margin:4px 0 18px;font-family:'Instrument Serif',Georgia,serif;font-weight:400;font-size:40px;line-height:1;letter-spacing:-.02em;color:#1c1518}
+.gate__text{margin:0;font-family:'IBM Plex Sans',system-ui,sans-serif;font-size:14px;line-height:1.55;color:#5a504b}
+.gate__btn{margin-top:20px;font:500 14px 'IBM Plex Sans',system-ui,sans-serif;padding:10px;border:1px solid #7a1f2b;border-radius:4px;background:#7a1f2b;color:#fff;cursor:pointer;text-align:center;text-decoration:none}
+.gate__btn:hover:not(:disabled){background:#4d0f18}
+.gate__btn:disabled{opacity:.6;cursor:default}
+#boot-msg{max-width:58ch;margin:18vh auto;padding:0 28px;color:#8b8079;font-family:'IBM Plex Mono',monospace;font-size:13px}

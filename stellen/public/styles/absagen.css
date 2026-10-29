@@ -1,0 +1,104 @@
+/* Stellenrecherche — the Absagen page (GET /absagen, written by src/absagen.js).
+   Uses the board's tokens and fonts (board.css, instrument-plex.css): Instrument Serif titles, IBM Plex Sans/Mono,
+   wine accent on beige, clearly bordered boxes. Each mail sits in its own box, laid out like Gmail shows a mail. */
+
+.absagen { max-width: 980px; }
+.absagen .top h1 { font-size: clamp(46px, 7vw, 72px); }
+.absagen .tally .t b.d { font-size: 26px; padding-top: 14px; }
+.printbtn { color: var(--wine); font-weight: 500; }
+.printbtn:hover { background: var(--wine-soft); color: var(--wine); }
+.printbtn:disabled { opacity: .55; cursor: progress; }
+.printonly { display: none; }
+.progress { margin: 14px 0 0; min-height: 1.5em; font: 12px var(--mono); color: var(--muted); }
+.progress.bad { color: var(--wine); }
+.incomplete { margin: 0 0 6mm; padding: 4mm 6mm; border: 2px solid var(--wine); border-radius: 6px; color: var(--wine); font-weight: 600; }
+
+/* Index: one line per mail, number · date · sender · subject. */
+.index { margin: 26px 0 8px; padding: 18px 22px 14px; background: var(--card); border: 1px solid var(--line-strong);
+  border-left: 4px solid var(--wine); border-radius: 10px; }
+.index h2 { margin: 0 0 10px; font: 400 30px/1.1 var(--serif); }
+.index ol { list-style: none; margin: 0; padding: 0; }
+.index li a { display: grid; grid-template-columns: 3.2em 8.2em minmax(0, 13em) minmax(0, 1fr); gap: 2px 14px; align-items: baseline;
+  padding: 7px 0; border-top: 1px solid var(--line-soft); text-decoration: none; }
+.index li:first-child a { border-top: 0; }
+.index li a:hover .isubj { color: var(--wine); text-decoration: underline; text-underline-offset: 3px; }
+.ino, .idate { font: 12px var(--mono); color: var(--faint); }
+.ifrom { font-size: 13.5px; color: var(--muted); overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.isubj { font-size: 14.5px; color: var(--ink); overflow-wrap: anywhere; }
+.empty-big { margin: 30px 0; padding: 22px; border: 1px dashed var(--line-strong); border-radius: 10px; color: var(--muted); }
+
+/* One mail = one bordered box. The header follows Gmail's order: subject, then sender with avatar, recipient and date. */
+.mails { display: flex; flex-direction: column; gap: 22px; margin-top: 26px; }
+.mail { background: var(--card); border: 1px solid var(--line-strong); border-left: 4px solid var(--wine); border-radius: 10px;
+  overflow: hidden; scroll-margin-top: 14px; }
+.mh { padding: 16px 22px 14px; border-bottom: 1px solid var(--line); position: relative; }
+.mno { position: absolute; top: 14px; right: 22px; margin: 0; font: 500 11px var(--mono); letter-spacing: .08em; color: var(--faint); }
+.subj { margin: 0 3.5em 12px 0; font: 400 22px/1.3 var(--sans); color: var(--ink); overflow-wrap: anywhere; }
+.who { display: grid; grid-template-columns: 40px minmax(0, 1fr) auto; gap: 0 12px; align-items: start; }
+.av { display: grid; place-items: center; width: 40px; height: 40px; border-radius: 50%; color: var(--on-fill); font: 500 17px var(--sans); }
+.av-wine { background: var(--wine); } .av-slate { background: var(--slate); } .av-amber { background: var(--amber); }
+.av-ok { background: var(--ok); } .av-ink { background: var(--ink2); }
+.from { font-size: 14px; line-height: 1.35; min-width: 0; overflow-wrap: anywhere; }
+.from b { font-weight: 600; color: var(--ink); }
+.addr, .to { color: var(--muted); font-size: 12.5px; }
+.to { margin-top: 2px; }
+.when { font-size: 12.5px; color: var(--muted); white-space: nowrap; padding-top: 2px; }
+.atts { margin: 10px 0 0 52px; font-size: 12.5px; color: var(--muted); display: flex; flex-wrap: wrap; gap: 6px; align-items: center; }
+.att { padding: 3px 10px; border: 1px solid var(--line-strong); border-radius: 999px; color: var(--ink2); background: var(--quote); }
+
+/* The mail body as the sender wrote it. Mails are designed on white, like Gmail shows them, in both themes.
+   contain + overflow keep anything inside the mail from spilling over the page. */
+.mb { padding: 18px 22px 20px 74px; background: #fff; color: #222; font: 14px/1.5 Arial, Helvetica, sans-serif;
+  overflow-x: auto; contain: layout paint; position: relative; isolation: isolate; }
+.mb img { max-width: 100%; height: auto; }
+.mb table { max-width: 100%; }
+.mb a { color: #1a57c9; }
+.mb.plain pre { margin: 0; white-space: pre-wrap; overflow-wrap: anywhere; font: 14px/1.55 Arial, Helvetica, sans-serif; }
+.plain-note { margin: 0 0 10px; font: 11px var(--mono); color: #8b8079; letter-spacing: .06em; text-transform: uppercase; }
+.mf { padding: 9px 22px; border-top: 1px solid var(--line); font: 11.5px var(--mono); color: var(--faint); background: var(--quote); }
+.mf code { font: inherit; color: var(--ink2); }
+.pagefoot { margin-top: 30px; color: var(--faint); font-size: 13px; }
+
+@media (max-width: 640px) {
+  .index li a { grid-template-columns: 2.8em minmax(0, 1fr); }
+  .idate, .ifrom { grid-column: 2; }
+  .isubj { grid-column: 1 / -1; }
+  .mh { padding: 14px 14px 12px; }
+  .who { grid-template-columns: 34px minmax(0, 1fr); }
+  .av { width: 34px; height: 34px; font-size: 15px; }
+  .when { grid-column: 2; white-space: normal; }
+  .atts { margin-left: 0; }
+  .mb { padding: 14px; }
+}
+
+/* ---- Print: A4, a cover, the index, one mail per page, "page x / y" at the foot of every page but the cover. ---- */
+@page {
+  size: A4;
+  margin: 16mm 14mm 17mm;
+  @bottom-left { content: "Absagen · Numa Koudsie"; font: 8.5pt 'IBM Plex Mono', monospace; color: #8b8079; }
+  @bottom-right { content: counter(page) " / " counter(pages); font: 8.5pt 'IBM Plex Mono', monospace; color: #8b8079; }
+}
+@page :first { @bottom-left { content: none; } @bottom-right { content: none; } }
+
+@media print {
+  :root, :root[data-theme] { --bg: #fff; --card: #fff; --line: #ddd3c3; --line-strong: #cdc1ae; --ink: #1c1518; --muted: #6f655f;
+    --faint: #8b8079; --wine: #7a1f2b; --wine-soft: #f3e3e5; --ink2: #4a413d; --quote: #fbf6ee; --line-soft: #eee6d9; color-scheme: light; }
+  * { -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+  body { background: #fff; font-size: 10.5pt; }
+  .board.absagen { max-width: none; padding: 0; }
+  .screenonly { display: none !important; }
+  .printonly { display: block; }
+  .incomplete { break-after: page; }
+  .cover { break-after: page; min-height: 240mm; display: flex; flex-direction: column; justify-content: center;
+    border: 1px solid var(--line-strong); border-left: 6px solid var(--wine); border-radius: 10px; padding: 0 18mm; }
+  .cover h1 { margin: 6mm 0 4mm; font: 400 64pt/1 var(--serif); }
+  .cover-n { font-size: 14pt; margin: 0 0 3mm; } .cover-n b { font: 400 22pt var(--serif); color: var(--wine); }
+  .cover-sub { font-size: 11pt; color: var(--muted); margin: 0 0 12mm; } .cover-gen { font: 9pt var(--mono); color: var(--faint); }
+  .index { break-after: page; border-radius: 8px; }
+  .index li a { break-inside: avoid; padding: 4px 0; }
+  .mails { display: block; margin: 0; }
+  .mail { break-before: page; border-radius: 8px; overflow: visible; }
+  .mh { break-inside: avoid; break-after: avoid; }
+  .mb { overflow: hidden; contain: none; padding-left: 22px; }   /* hidden keeps anything in a mail inside its box on paper too */
+  .mail a[href^="http"]::after { content: ""; }
+}

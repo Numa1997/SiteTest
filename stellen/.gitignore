@@ -1,0 +1,5 @@
+node_modules/
+.wrangler/
+.dev.vars
+# Exports and SQL made from real records: never in this public repository.
+private/

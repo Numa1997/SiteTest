@@ -1,0 +1,58 @@
+{
+  "_comment": "INVENTED test records for local development only. No real company, posting or application. Turned into test/seed.sql by tools/to-sql.mjs.",
+  "postings": [
+    { "n": 1, "title": "Simulation Engineer (heat transfer)", "title_original": "Simulationsingenieur Wärmeübertragung (m/w/d)",
+      "company": "Beispiel Thermik GmbH", "city": "Berlin", "location_group": "berlin", "category": "computational", "employment": "EMPLOYEE",
+      "url": "https://example.com/jobs/simulation-heat", "eligibility_quote_de": "Abgeschlossenes Studium der Physik, des Maschinenbaus oder eines vergleichbaren Fachs",
+      "eligibility_en": "Degree in physics, mechanical engineering or comparable.", "salary": null,
+      "note": "Invented test card: finite-volume models of heat exchangers; physics named, no years of experience demanded.",
+      "note_de": "Erfundene Testkarte: Finite-Volumen-Modelle von Wärmetauschern; Physik ist genannt, Berufserfahrung wird nicht verlangt.",
+      "added_on": "2026-10-07" },
+    { "n": 2, "title": "Data Analyst (energy markets)", "title_original": "Datenanalyst:in Energiemärkte",
+      "company": "Muster Energie AG", "city": "Leipzig", "location_group": "leipzig", "category": "data", "employment": null,
+      "url": "https://example.com/jobs/data-energy", "eligibility_quote_de": "Studium der Mathematik, Physik, Statistik oder Wirtschaftswissenschaften",
+      "eligibility_en": "Degree in mathematics, physics, statistics or economics.", "salary": "52 000 € per year",
+      "note": "Invented test card. This note is long on purpose, so that the card shows the More button: it runs past one hundred and sixty characters and is clamped to three lines until the card is opened.",
+      "added_on": "2026-10-08" },
+    { "n": 3, "title": "Test Engineer, Calibration Lab", "title_original": "Prüfingenieur Kalibrierlabor (m/w/d)",
+      "company": "Messbeispiel GmbH", "city": "Jena", "location_group": "de", "category": "testing", "employment": "CONTRACT",
+      "url": "https://example.com/jobs/calibration", "eligibility_quote_de": "Bachelor in Physik, Elektrotechnik oder Messtechnik",
+      "eligibility_en": "Bachelor in physics, electrical engineering or metrology.", "salary": null,
+      "note": "Invented test card: calibration of pressure sensors.", "added_on": "2026-10-09" },
+    { "n": 4, "title": "Junior Physicist, Optics", "title_original": "Junior Physicist, Optics",
+      "company": "Example Photonics B.V.", "city": "Eindhoven", "location_group": "benelux", "category": "physiker", "employment": "EMPLOYEE",
+      "url": "https://example.com/jobs/optics-nl", "eligibility_quote_de": "BSc or MSc in Physics or Applied Physics",
+      "eligibility_en": "BSc or MSc in physics.", "salary": null,
+      "note": "Invented test card on the Europe board.", "added_on": "2026-10-10" },
+    { "n": 5, "title": "Production Shift Supervisor", "title_original": "Schichtleiter Produktion (m/w/d)",
+      "company": "Fertigung Muster KG", "city": "Halle (Saale)", "location_group": "leipzig", "category": "production", "employment": "EMPLOYEE",
+      "url": "https://example.com/jobs/shift", "eligibility_quote_de": "Studium der Naturwissenschaften oder Technik",
+      "eligibility_en": "Degree in natural sciences or engineering.", "salary": null,
+      "note": "Invented test card, already marked as applied in the test marks.", "added_on": "2026-10-06" },
+    { "n": 6, "title": "Removed test card", "title_original": null, "company": "Alt GmbH", "city": "Berlin", "location_group": "berlin",
+      "category": "pm", "employment": null, "url": "https://example.com/jobs/old", "eligibility_quote_de": null, "eligibility_en": null,
+      "salary": null, "note": "Invented: removed from the list, must not show.", "added_on": "2026-10-01", "removed_on": "2026-10-05", "removed_why": "Posting closed." }
+  ],
+  "meta": {
+    "updated": "2026-10-16",
+    "rule": "Every posting names physics or natural sciences as an accepted degree, accepts a Bachelor, is not student or PhD, and links to the employer's own page.",
+    "rule_eu": "Europe outside Germany. Every posting names physics or natural sciences as an accepted degree and is at an employer that hires internationals.",
+    "target_per_area": 3,
+    "log_updated": "2026-10-12"
+  },
+  "applicationLog": [
+    { "id": "card-5", "cards": [5], "company": "Fertigung Muster KG", "title": "Schichtleiter Produktion (m/w/d)", "status": "confirmed",
+      "date": "2026-10-11", "note": "Invented: confirmation e-mail.", "source": "test" },
+    { "id": "off-1", "cards": [], "company": "Nicht-auf-der-Liste AG", "title": "", "status": "unclear",
+      "date": "2026-10-09", "note": "Invented: an application to a posting that was never on the list.", "source": "test" }
+  ],
+  "marks": [
+    { "item_id": "j5", "stage": "confirmed", "stage_at": "2026-10-11T00:00:00.000Z", "note": "Invented: confirmation e-mail.",
+      "snapshot": { "title": "Production Shift Supervisor", "company": "Fertigung Muster KG", "city": "Halle (Saale)", "area": "leipzig", "category": "production", "url": "https://example.com/jobs/shift", "n": 5 },
+      "updated_at": "2026-10-11T08:00:00.000Z" }
+  ],
+  "added": [
+    { "item_id": "a1792000000000", "url": "https://example.com/jobs/added-by-hand", "title": "Projektingenieur Messtechnik", "company": "",
+      "city": "Leipzig", "area": "leipzig", "category": "pm", "added_at": "2026-10-12T09:00:00.000Z" }
+  ]
+}

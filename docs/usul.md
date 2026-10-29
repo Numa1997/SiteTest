@@ -36,6 +36,16 @@ npx wrangler deploy     # publishes dist/ to the Worker phyein-usul (needs a Clo
 Nobody runs these by hand any more. Since 21 October 2026 the Worker is connected to this repository (Cloudflare dashboard → Workers & Pages → phyein-usul → Settings → Builds,
 repository Numa1997/SiteTest, branch `main`, build command `npm run build`, deploy command `npx wrangler deploy`). Every push or merge into
 `main` therefore builds and publishes the site by itself; nobody has to sign in to Wrangler. Build logs: the Deployments tab of the Worker.
+
+The job list, <https://stellen.phyeinusul.com> (Worker `stellenrecherche`, database D1 `stellenrecherche`, sign-in by Cloudflare Access), is
+part of the same build since 29 October 2026. Its code is in `stellen/` (the Worker in `stellen/src/`, the Gmail script in
+`stellen/apps-script/`; `stellen/README.md` describes it). The build command above ends with `node tools/deploy-stellen.mjs`, which, only
+inside a Cloudflare build of `main`, runs the job list's tests and `npx wrangler deploy` in `stellen/` with the same deploy token Cloudflare
+gives the website build (that token covers every Worker of the account). So one push to `main` publishes both addresses; a failed job-list
+test or deploy fails the build, visible in the Deployments tab. Outside Cloudflare (`npm run build` on a computer, the GitHub Pages backup)
+the step prints one line and does nothing. The job list's secrets (`OWNER_EMAILS`, `INGEST_CLIENT_ID`) live on the Worker and survive deploys.
+The earlier repository `Numa1997/physiker-stellen` keeps the AppDeploy archive and the migration notes; its `cloudflare/` folder was the
+previous home of this code.
 The two commands above still work by hand from a computer signed in to Cloudflare. Checked 29 October 2026: the merge commit
 `3dffa3b` carries the check "Workers Builds: phyein-usul" (success), and the live `portfolios/rotor-pendula/` is byte-identical
 to the same file in a fresh build. A branch other than `main` gets the same check in red, failing at once: only `main` is set up to
