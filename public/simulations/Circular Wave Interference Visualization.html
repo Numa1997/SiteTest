@@ -547,12 +547,12 @@
         ds.dim('i', 0);
         ds.coord('x', 'i', Float64Array, { symbol: 'x', units: 'px', long_name: 'centre of column i, from the left', computed_in: 'resize()', formula: 'x = (i + ½) Δx', digits: 2 });
         ds.coord('y', 'j', Float64Array, { symbol: 'y', units: 'px', long_name: 'centre of row j, from the top', computed_in: 'resize()', formula: 'y = (j + ½) Δy', digits: 2 });
-        ds.var('C', ['j', 'i'], Float32Array, { symbol: 'C', long_name: 'cosine map', computed_in: 'precompute()', formula: 'C = Σ<sub>s</sub> a<sub>s</sub> cos(k r<sub>s</sub>)', digits: 4, updates: 'when a slider or the sources change' });
-        ds.var('S', ['j', 'i'], Float32Array, { symbol: 'S', long_name: 'sine map', computed_in: 'precompute()', formula: 'S = Σ<sub>s</sub> a<sub>s</sub> sin(k r<sub>s</sub>)', digits: 4, updates: 'when a slider or the sources change' });
+        ds.var('C', ['j', 'i'], Float32Array, { symbol: 'C', long_name: 'cosine map', computed_in: 'precompute()', formula: 'C = (1/N) Σ<sub>s</sub> e<sup>−γ r<sub>s</sub>/R</sup> cos(k r<sub>s</sub>)', digits: 4, updates: 'when a slider or the sources change' });
+        ds.var('S', ['j', 'i'], Float32Array, { symbol: 'S', long_name: 'sine map', computed_in: 'precompute()', formula: 'S = (1/N) Σ<sub>s</sub> e<sup>−γ r<sub>s</sub>/R</sup> sin(k r<sub>s</sub>)', digits: 4, updates: 'when a slider or the sources change' });
         ds.var('psi', ['j', 'i'], Float32Array, { symbol: 'ψ', long_name: 'the field at this instant, as drawn', computed_in: 'render()', formula: 'ψ = C cos ωt + S sin ωt, clipped to [−1, 1]', digits: 4, updates: 'every frame' });
         ds.var('A', ['j', 'i'], Float32Array, { symbol: 'A', long_name: 'amplitude: the largest |ψ| each point reaches in a period; zero on the calm lines', computed_in: 'precompute()', formula: 'A = √(C² + S²)', digits: 4, updates: 'when a slider or the sources change' });
         ds.var('r1', ['j', 'i'], Float32Array, { symbol: 'r<sub>1</sub>', units: 'px', long_name: 'distance from each cell to source 1', computed_in: 'precompute()', formula: 'r = √((x − x<sub>1</sub>)² + (y − y<sub>s</sub>)²)', digits: 2, updates: 'when a slider or the sources change' });
-        ds.var('a1', ['j', 'i'], Float32Array, { symbol: 'a<sub>1</sub>', long_name: 'amplitude from source 1 at each cell', computed_in: 'precompute()', formula: 'a = e<sup>−g r</sup> / N', digits: 4, updates: 'when a slider or the sources change' });
+        ds.var('a1', ['j', 'i'], Float32Array, { symbol: 'a<sub>1</sub>', long_name: 'amplitude from source 1 at each cell, with the 1/N of the sum folded in', computed_in: 'precompute()', formula: 'a<sub>1</sub> = e<sup>−γ r<sub>1</sub>/R</sup> / N', digits: 4, updates: 'when a slider or the sources change' });
         ds.var('ph1', ['j', 'i'], Float32Array, { symbol: 'φ<sub>1</sub>', units: 'rad', long_name: 'phase lag from source 1 at each cell', computed_in: 'precompute()', formula: 'φ = k r', digits: 3, updates: 'when a slider or the sources change' });
         ds.dim('n', 256);
         ds.dim('c', 3);

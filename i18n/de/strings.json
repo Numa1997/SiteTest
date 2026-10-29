@@ -1814,5 +1814,7 @@
  "∞ (circle)": "∞ (Kreis)",
  "∫ F Ẋ dt, rerun with the same RK4 to sample n": "∫ F Ẋ dt, erneut mit demselben RK4 bis Abtastwert n gerechnet",
  "∫ c<sub>stop</sub> ℓ̇² dt, rerun with the same RK4 to sample n": "∫ c<sub>stop</sub> ℓ̇² dt, erneut mit demselben RK4 bis Abtastwert n gerechnet",
- "✕ Stored and recomputed ": "✕ Gespeichert und neu berechnet "
+ "✕ Stored and recomputed ": "✕ Gespeichert und neu berechnet ",
+ "amplitude from source 1 at each cell, with the 1/N of the sum folded in": "Amplitude von Quelle 1 in jeder Zelle, mit dem 1/N der Summe eingerechnet",
+ "group speed in deep water; undefined with the dispersion switch off": "Gruppengeschwindigkeit im tiefen Wasser; nicht definiert, wenn der Dispersionsschalter aus ist"
 }

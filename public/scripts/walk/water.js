@@ -65,11 +65,11 @@ document.getElementById('r-t').textContent = (⟦T|1 / f()⟧).toFixed(2) + ' s'
             title: 'Group speed: half the phase speed (15)',
             where: 'readouts() — stored, not drawn',
             math: '⟦cg|c<sub>g</sub>⟧ = dω/dk = ½ √(g/k) = ⟦c|c⟧ / 2 &emsp;(15)',
-            note: 'The group velocity (15) is the speed at which a group of crests travels, and with it the energy. The page draws a single wave that never ends, so it has no groups and c<sub>g</sub> cannot be watched. The quoted line only stores it, as c / 2 in m/s, the deep-water form of (15), and the data panel shows it as a prediction. The line also uses c / 2 when the dispersion switch is off. The stored number is then not a group speed: (15) rests on ω² = gk, and the note says that c<sub>g</sub> = c/2 no longer applies.',
-            code: `... ds.set('c', c); ds.set('c_deep', Math.sqrt(G / (kk * PX_PER_M))); ⟦cg|ds.set('cg', c / 2);⟧`,
+            note: 'The group velocity (15) is the speed at which a group of crests travels, and with it the energy. The page draws a single wave that never ends, so it has no groups and c<sub>g</sub> cannot be watched. The quoted line only stores it, as c / 2 in m/s, the deep-water form of (15), and the data panel shows it as a prediction. With the dispersion switch off the line stores no number (NaN, shown as —): (15) rests on ω² = gk, and the note says that c<sub>g</sub> = c/2 then no longer applies.',
+            code: `... ds.set('c', c); ds.set('c_deep', Math.sqrt(G / (kk * PX_PER_M))); ⟦cg|ds.set('cg', dispBox.checked ? c / 2 : NaN);⟧`,
             syms: [
                 ['c', 'c', 'c', 'phase speed, m/s'],
-                ['cg', 'c<sub>g</sub>', 'c / 2', 'group speed in deep water, m/s (not drawn)']
+                ['cg', 'c<sub>g</sub>', 'dispBox.checked ? c / 2 : NaN', 'group speed in deep water, m/s (not drawn); undefined with dispersion off']
             ]
         },
         {
