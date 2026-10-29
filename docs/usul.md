@@ -63,15 +63,7 @@ What it serves, measured 29 October 2026: the repository's files as they are, wi
 the root `index.html` byte for byte (status 200, title "Numa Koudsie · Notebook"), but the files that page links to sit under
 `public/` in the repository, so `styles/site.css` and `simulations.html` answer 404 there, while
 `https://numa1997.github.io/SiteTest/public/simulations.html` answers 200. The backup therefore holds every file, but its home page
-shows unstyled and its links do not resolve.
-
-**The built-site workflow (29 October 2026).** The workflow
-[.github/workflows/pages.yml](../.github/workflows/pages.yml) runs on every push to `main`. It builds the site as Cloudflare does
-(`npm run build`) and publishes `dist/` to the same address, but only when Settings → Pages → Source is "GitHub Actions": its first
-job reads the source through GitHub's API (`build_type`), and while it is still "Deploy from a branch" (`legacy`) the run ends
-green without publishing, and the branch build goes on as before. The
-built site works under the `/SiteTest/` sub-path: Vite writes relative addresses (`base: './'` in `vite.config.ts`), and all 1 496
-relative links and sources in `dist/` resolve to a file (checked 29 October 2026). Pages ignores `public/_headers`, so the backup carries the meta-tag
+shows unstyled and its links do not resolve. Pages ignores `public/_headers`, so the backup carries the meta-tag
 security layer below and GitHub's own headers (it sends `Strict-Transport-Security: max-age=31556952`, measured 29 October
 2026), but not the framing, nosniff, permissions and opener rules of `_headers`.
 

@@ -10,8 +10,7 @@ and script is and how it works) and `tools/` sit beside them. It runs in two pla
 - GitHub Pages, <https://numa1997.github.io/SiteTest/>: switched on in the repository's settings, it republishes `main` on every
   push (GitHub's "pages build and deployment" runs, since 16 January 2026). Numa's decision, 29 October 2026: keep it on as a backup
   copy (this replaces the "no GitHub Pages" decision of 14 October 2026, which was written down but never switched off). It serves
-  the repository as it is, without the Vite build: see `docs/usul.md`, "GitHub Pages". `.github/workflows/pages.yml` (29 October
-  2026) publishes the built `dist/` instead once Numa sets Settings → Pages → Source to "GitHub Actions"; until then it does nothing.
+  the repository as it is, without the Vite build: see `docs/usul.md`, "GitHub Pages".
 Change the repository first, build and check it, update the `docs/` pages that describe the change, and run
 `python3 tools/inventory.py` (it rewrites `docs/files.md` and fails if a file is undescribed). Work on a branch: merging into `main`
 deploys, so it happens only on Numa's word; a manual `wrangler deploy` only when Numa asks.

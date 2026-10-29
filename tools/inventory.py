@@ -127,7 +127,6 @@ RULES = [
     (r'src/main\.ts', 'Template script entry; index.html does not load it.', 'docs/build-and-deploy.md'),
     (r'src/styles\.css', 'Template Tailwind directives; unused.', 'docs/build-and-deploy.md'),
     (r'wrangler\.jsonc', 'Cloudflare settings: the Worker phyein-usul, the dist/ folder, the custom domains phyeinusul.com and www.', 'docs/usul.md'),
-    (r'\.github/workflows/pages\.yml', 'Publishes the built dist/ to the GitHub Pages backup, only once Settings -> Pages -> Source is GitHub Actions.', 'docs/usul.md'),
     (r'public/_headers', 'Security response headers Cloudflare sets on every file of phyeinusul.com; read by Cloudflare, never served.', 'docs/usul.md'),
     (r'public/images/phyein-usul-mark\.svg', 'The Phyein Usul logo: above the name on the home page, linking home in the top bar of the other pages.', 'docs/assets.md'),
     # pages
