@@ -3,6 +3,7 @@
 From Pascal's principle to a digitally controlled servo-hydraulic press: two simulations you can run and play with, and a
 23-chapter textbook that derives every equation they integrate. This folder is the study's source. The site serves one page
 generated from it, `public/portfolios/hydraulics/index.html` (<https://phyeinusul.com/portfolios/hydraulics/index.html>),
+and its German and Arabic versions `de.html` and `ar.html`, written from it by `tools/i18n/hydraulics.py`; the page is
 introduced as project 03 on the Portfolios page. Vite does not build or serve this folder; it only builds `index.html` and
 `public/`.
 

@@ -17,7 +17,7 @@ The derivations and model runs are in `notes/rotor-pendula/` (`derive/` holds th
 
 ## How the served page is made
 
-`tools/build_combined.py --site` embeds the two pages unchanged, each as a JSON string in its own frame, adds a small script
+`tools/build_combined.py --site` embeds the three pages (notes, simulation, wind) unchanged, each as a JSON string in its own frame, adds a small script
 that turns the links between them into tab switches, and writes `public/portfolios/rotor-pendula/index.html` and
 `LICENSE-fonts.txt`, with the site's security policy (plus `'unsafe-eval'` and `blob:` workers, which the simulation's worker
 needs), the site's fonts for the tab bar, and the back link to Portfolios. Never edit the generated files by hand.
