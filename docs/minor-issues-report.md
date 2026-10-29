@@ -86,7 +86,7 @@ Readbacks respect the picture’s precision: stored/recomputed numbers match exa
 | rotor-pendula-gafw0f | left for Numa | Preserved as requested. |
 | physik-radar-xvy59b | left for Numa | Preserved as requested. |
 | numa-physics-lab-chatgpt-k0ixwk | left for Numa | Preserved as requested. |
-| GitHub Pages | superseded | Since 20 October 2026 the site is published from this repository by Cloudflare ([wrangler.jsonc](../wrangler.jsonc), [usul.md](usul.md)); nothing in the repository configures GitHub Pages. |
+| GitHub Pages | superseded | Since 20 October 2026 the site is published from this repository by Cloudflare ([wrangler.jsonc](../wrangler.jsonc), [usul.md](usul.md)); nothing in the repository configures GitHub Pages. Correction, 29 October 2026: the GitHub Pages setting was never switched off and has published `main` at <https://numa1997.github.io/SiteTest/> since 16 January 2026; Numa decided that day to keep it on as a backup ([usul.md](usul.md#github-pages)). |
 | Other maintainer notes outside the requested batches | left for Numa | Apostrophe consistency, xi naming, walkthrough path/header, unused catalog metadata, drawn_note, undeclared-value behavior, noscript listing, catalog debug state and cross-file CSS overrides remain. |
 
 Proposals for Numa (none applied):
@@ -116,7 +116,7 @@ Proposals for Numa (none applied):
 - **rotor-pendula-gafw0f:** Keep this app outside this website-maintenance change.
 - **physik-radar-xvy59b:** Keep this app outside this website-maintenance change.
 - **numa-physics-lab-chatgpt-k0ixwk:** Keep this app outside this website-maintenance change.
-- **GitHub Pages:** Choose a separate publishing task if this branch should later be served there. (Superseded: Cloudflare serves the site since 20 October 2026.)
+- **GitHub Pages:** Choose a separate publishing task if this branch should later be served there. (Superseded: Cloudflare serves the site since 20 October 2026. Correction, 29 October 2026: Pages was still on and stays on as a backup, [usul.md](usul.md#github-pages).)
 
 - **Other untriaged notes:** consider consistent apostrophes and displacement names; document the walkthrough’s required path; decide whether to expose catalog metadata; decide the dataset’s missing-value contract; make the no-JavaScript catalog complete; refresh the debug-state reference; review cross-file CSS overrides separately.
 

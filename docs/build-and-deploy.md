@@ -2,15 +2,17 @@
 
 ## Where the site runs
 
-One source, two places (since 20 October 2026):
+One source, three places (Cloudflare since 20 October 2026; GitHub Pages kept as a backup by Numa's decision of 29 October 2026):
 
 | | Address | Built from | How it is deployed |
 |---|---|---|---|
-| **Phyein Usul**, primary | <https://phyeinusul.com> | this repository's `main` | `npm run build`, then `npx wrangler deploy` (Cloudflare Worker `phyein-usul`, settings in `wrangler.jsonc`): [usul.md](usul.md) |
+| **Phyein Usul**, primary | <https://phyeinusul.com> | this repository's `main` | `npm run build`, then `npx wrangler deploy` (Cloudflare Worker `phyein-usul`, settings in `wrangler.jsonc`), run by Cloudflare Workers Builds on every push or merge to `main` since 21 October 2026: [usul.md](usul.md) |
+| GitHub Pages, backup | <https://numa1997.github.io/SiteTest/> | this repository's `main`, as it is (no Vite build) | GitHub's "pages build and deployment" on every push to `main`: [usul.md](usul.md#github-pages) |
 | AppDeploy app `numa-koudsie-website-0cyj78` | <https://numa-koudsie-website-0cyj78.v2.appdeploy.ai> | its own stored copy, v65, equal to commit `5c7ba7f` | through AppDeploy's MCP server (below), only on Numa's request: [appdeploy-app.md](appdeploy-app.md) |
 
 The repository comes first: a change is made and checked here, the documentation is brought up to date, the change is
-committed, and it is deployed to Cloudflare when Numa asks. `README.md`, `docs/` and `tools/` are not served by either.
+committed on a branch, and it reaches Cloudflare when it is merged into `main`, which happens only on Numa's word. `README.md`,
+`docs/` and `tools/` are not served by Cloudflare or AppDeploy; GitHub Pages serves the whole repository as it is.
 
 Until 20 October 2026 the order was the other way round: the AppDeploy app was the deliverable and this repository its copy.
 AppDeploy stores the source of each deployed version (its *stored snapshot*). Checked on 14 October 2026 against stored version `1792010233353`: the app lists 238 files (`src_glob`), the repository
@@ -49,9 +51,10 @@ This section and the next describe the AppDeploy app only. On Cloudflare the bui
 ## Security
 
 Since 16 October 2026 (app version `1792151590518`) every page, the project copies included, carries two `meta` tags right
-after its charset line (lines 5 and 6, for example [index.html:5–6](../index.html#L5-L6)). One page differs: the Hydraulic
-Press Study (`portfolios/hydraulics/index.html`, added 21 October 2026) adds `'unsafe-eval'` to `script-src` and `blob:` to
-`worker-src`, because its solver runs in a Web Worker that it builds at run time and starts from a `blob:` address; a policy in a
+after its charset line (lines 5 and 6, for example [index.html:5–6](../index.html#L5-L6)). Two studies differ: the Hydraulic
+Press Study (`portfolios/hydraulics/index.html`, added 21 October 2026, and its `de.html` and `ar.html`) and Rotor Pendula
+(`portfolios/rotor-pendula/index.html`, generated since 23 October 2026) add `'unsafe-eval'` to `script-src` and `blob:` to
+`worker-src`, because their solver runs in a Web Worker built at run time and started from a `blob:` address; a policy in a
 `meta` tag binds only the page that carries it ([portfolios.md](portfolios.md#the-hydraulic-press-study-hydraulics)):
 
 - a **Content-Security-Policy**: a list, read by the visitor's browser, of the only places the page may load code, styles, fonts,
@@ -92,7 +95,8 @@ fixed list, and the `#…` part of an address is only used to look up an element
 policy sent as a header) are set by the server, and AppDeploy serves the files from Amazon S3 through CloudFront with no
 setting for them (as of October 2026). A policy in a `meta` tag cannot forbid framing (`frame-ancestors` is ignored there), so
 another site can still show these pages inside a frame. The site's source files are not served (`AGENTS.md`, `package.json`,
-source maps: 403), and plain `http://` is redirected to `https://` (301). The strongest protection of all is not in the code:
+source maps: 403), and plain `http://` is redirected to `https://` (301). (The GitHub Pages backup, by contrast, serves every file of the
+repository, `AGENTS.md` included: status 200 on 29 October 2026. The repository is public anyway; [usul.md](usul.md#github-pages).) The strongest protection of all is not in the code:
 whoever signs in to the AppDeploy account can replace the app, and whoever signs in to the Cloudflare account or can push to this
 repository can replace phyeinusul.com, so those accounts and their e-mail need two-step sign-in.
 

@@ -15,7 +15,7 @@ version does well enough). It is not changed unless Numa asks.
 | Current version | v65, `1792151590518`, deployed 16 October 2026 13:53 (Leipzig time) |
 | Versions stored | 65 |
 | Source | Equal to this repository up to commit `5c7ba7f` (16 October 2026), the last copy made from the app |
-| Missing compared with Phyein Usul | the logo and its note, `public/_headers`, `wrangler.jsonc` (none of them change how the app works) |
+| Missing compared with Phyein Usul | everything merged into `main` after `5c7ba7f`: among it the logo and its note, `public/_headers`, `wrangler.jsonc`, Fig. 11, the German and Arabic pages, and the generated portfolio pages (`git log --oneline 5c7ba7f..main`) |
 | Backend | none: static files only; the two portfolio copies are built without Saved runs |
 
 How AppDeploy builds, tests and alters the site on a deploy (Prettier on stored source, the injected overlay, the rewritten
@@ -26,13 +26,14 @@ describe this app and apply only to it.
 
 | App | What it is | Relation to this repository |
 |---|---|---|
-| `droplet-collection-yl7l26` | Research project: droplet collection (thesis remodel), with Saved runs. | Its build is copied into `public/portfolios/droplet-collection/`. Source stays in the app. |
-| `rotor-pendula-gafw0f` | Research project: wind-driven rotor pendula, with Saved runs. | Its build is copied into `public/portfolios/rotor-pendula/`. Source stays in the app. |
+| `droplet-collection-yl7l26` | Research project: droplet collection (thesis remodel), with Saved runs. | Its build was copied into `public/portfolios/droplet-collection/` until 23 October 2026; the page there is now generated from `portfolios-src/droplets/`, and the app is no longer its source. |
+| `rotor-pendula-gafw0f` | Research project: wind-driven rotor pendula, with Saved runs. | Its build was copied into `public/portfolios/rotor-pendula/` until 23 October 2026; the page there is now generated from `portfolios-src/rotor-pendula/`, and the app is no longer its source. |
 | `power-devices-emv071` | A placeholder page for a future portfolio on power semiconductor devices. | Not part of the website. |
 | `physik-radar-xvy59b` | A separate app with sign-in and private records. | Unrelated; out of bounds for writes. |
 | `numa-physics-lab-chatgpt-k0ixwk` | A separate version made with ChatGPT. | Out of bounds for writes. |
 
 ## If the app is ever updated again
 
-Make the change in this repository first, build and check it, deploy it to Cloudflare ([usul.md](usul.md)); then, only on Numa's
+Make the change in this repository first, build and check it, merge it into `main` on Numa's word, which deploys it to Cloudflare
+([usul.md](usul.md)); then, only on Numa's
 request, send the same files to the app (`deploy_app`, see [build-and-deploy.md](build-and-deploy.md)) and note the new version here.

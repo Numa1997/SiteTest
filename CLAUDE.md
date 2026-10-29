@@ -31,8 +31,9 @@ Project facts (layout, where the site runs, boundaries) are in AGENTS.md.
 
 ## The live site comes from the repository (since 20 October 2026)
 - The thing Numa looks at is Phyein Usul, <https://phyeinusul.com>, built from this repository's `main` and served by Cloudflare.
-  Work in the repository: change, build (`npm run build`), test in a real browser, commit; deploy (`npx wrangler deploy`) and verify the
-  live site when Numa asks for it. See `docs/usul.md`.
+  Work in the repository: change, build (`npm run build`), test in a real browser, commit. Since 21 October 2026 Cloudflare builds and
+  deploys every push or merge to `main` by itself, so merge only when Numa says so, then verify the live site. See `docs/usul.md`.
+- GitHub Pages also republishes `main` at <https://numa1997.github.io/SiteTest/>, kept on as a backup (Numa, 29 October 2026).
 - The AppDeploy app `numa-koudsie-website-0cyj78` stays as it is; touch it only on Numa's explicit request (`docs/appdeploy-app.md`).
 - A change is not done until the docs pages that describe the changed files say what the code now does.
 
