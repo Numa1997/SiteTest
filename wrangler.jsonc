@@ -1,5 +1,6 @@
 // Cloudflare deployment of Phyein Usul (https://phyeinusul.com). See docs/usul.md.
-// Static files only: `npm run build` writes dist/, and `npx wrangler deploy` publishes it.
+// Static files only: `npm run build` writes dist/, and `npx wrangler deploy` publishes it. Cloudflare Workers Builds runs both
+// on every push or merge to main (since 21 October 2026), so merging into main deploys.
 {
   "name": "phyein-usul",
   "compatibility_date": "2026-10-06",

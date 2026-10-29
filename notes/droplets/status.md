@@ -3,7 +3,7 @@
 Correction, 29 October 2026: this is the working record of the session of 23 October 2026, kept as it was. Its branch was
 merged (pull request #33, `e27fa1d`, 23 October 2026), so "open, not merged", "Nothing committed yet" and "Nothing is
 running" below describe that day. The German and Arabic Portfolios pages have since been translated (`b4048c5`) and show only
-the four `fig/plate-*.svg`; the six older SVGs in `fig/` are no longer referenced by any page.
+the four `fig/plate-*.svg`; the six older SVGs in `fig/` were referenced by no page and were deleted on 29 October 2026.
 
 Branch `claude/affectionate-maxwell-8ys77u`. Read this first every turn. `/goal` is a slash command only Numa can type; this session
 runs on the fallback of physics-model-loop 1.1 (never end a turn with an actionable item; `send_later` if a turn must end with work left).

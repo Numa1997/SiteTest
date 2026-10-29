@@ -242,7 +242,7 @@ window.WALK["water"] = {
    "where": "a() وreadouts() — قراءة الانحدار",
    "math": "dx/dx<sub>0</sub> = 1 − ⟦ak|ak⟧ cos θ &nbsp;(Section 6.2)<br>⟦a|a⟧ = min(⟦A|A⟧, 0.9/⟦k|k⟧) &nbsp;⇒&nbsp; ak ≤ 0.9",
    "note": "باشتقاق (19) على طول السطح نحصل على dx/dx<sub>0</sub> = 1 − ak cos θ، وهذا يقيس مدى تزاحم الجسيمات المتجاورة على السطح. عند ak = 1 ينعدم هذا المقدار عند القمة، θ = 0: فتصير القمة نقطة مدبّبة، وبعد ذلك يلتفّ الخط على نفسه. تُبقي a() النموذجَ دون تلك النقطة. amp.value هو منزلق السعة، أي A في المذكّرة بالبكسل، و0.9 / k() هي أكبر سعة مسموح بها عند هذا العدد الموجي، بالبكسل، فلا تتجاوز a أبدًا A، ولا يتجاوز ak أبدًا 0.9. وكل سطر آخر يحتاج إلى السعة يستدعي a()، فما تراه يستخدم دائمًا القيمة المحدودة. تعرض قراءة «الانحدار ak» الجداء a k، وهو عدد بلا وحدة (px مضروبًا في rad/px)، وتضيف «(الحدّ الأقصى)» عندما تكون a أصغر من A. ويخزّن السطر الأخير a، وهل الحدّ فعّال، وak. عند λ = ⁦260 px⁩ تعطي سعة ⁦50 px⁩ القيمة ak = 1.21؛ أما الحدّ فيُبقي a عند ⁦37.2 px⁩. تنكسر الأمواج الحقيقية قرب ak ≈ 0.44، فالأشكال الأشدّ انحدارًا التي تسمح بها الصفحة هي أصلًا تصوّر مثالي.",
-   "code": "function ⟦a|a()⟧ { return Math.min(⟦A|amp.value⟧, 0.9 / ⟦k|k()⟧); }\n...\ndocument.getElementById('r-ak').textContent = (⟦ak|a() * k()⟧).toFixed(2) + (a() < amp.value ? ' (cap)' : '');\n...\nds.set('a', aa); ds.set('cap', aa < amp.value); ds.set('ak', aa * kk); ...",
+   "code": "function ⟦a|a()⟧ { return Math.min(⟦A|amp.value⟧, 0.9 / ⟦k|k()⟧); }\n...\ndocument.getElementById('r-ak').textContent = (⟦ak|a() * k()⟧).toFixed(2) + (a() < amp.value ? _t(' (cap)') : '');\n...\nds.set('a', aa); ds.set('cap', aa < amp.value); ds.set('ak', aa * kk); ...",
    "syms": [
     [
      "A",
