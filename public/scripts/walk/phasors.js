@@ -283,8 +283,8 @@ ctx.arc(cx + ⟦x|cur.x⟧ * s, cy - ⟦y|cur.y⟧ * s, 5.5, 0, TAU);`,
         {
             title: 'Auto Dance: sound into three levels and a beat',
             where: 'ensureAudio(), the analyser; analyse(), once per frame · note section 8.1',
-            math: 'e<sub>raw</sub> = (mean of the bins in the band) / 255, &nbsp; e ← e + 0.15 (e<sub>raw</sub> − e) &nbsp; for ⟦bass|bass⟧, ⟦mid|mid⟧, ⟦high|high⟧<br>on a beat: ⟦burst|burst⟧ = 1 + d<sub>burst</sub>, falling by 0.1 d<sub>burst</sub> per frame, back to 1 on the tenth frame',
-            note: 'The analyser of the Web Audio API takes a fast Fourier transform of 2048 samples, smoothed over time with a constant of 0.8, and reports 1024 frequency bins as bytes from 0 to 255. Each bin is <code>bin</code> = sampling rate / 2048 wide, 21.5 Hz at 44.1 kHz. <code>band()</code> averages the bins between two frequencies and divides by 255, so each raw level lies between 0 and 1; the bass band, 20 to 150 Hz, is bins 1 to 7. Mid is 150 Hz to 4 kHz, high 4 to 16 kHz. Each level is then smoothed once per frame with the same rule as the morph (16), with the fraction 0.15, so on a 120 Hz screen the levels respond twice as fast as on a 60 Hz one. A beat is declared when the raw bass <code>rb</code> rises more than 35 % above the previous frame’s, exceeds 0.22 and comes at least 280 ms after the last beat. The beat starts a count of 11 frames; the countdown below runs in the same frame and takes it to 10, so <code>burst</code> = 1 + d<sub>burst</sub> on the beat frame, with d<sub>burst</sub> the Beat burst slider, and the factor falls by 0.1 d<sub>burst</sub> each frame until it is 1 on the tenth. Without a song playing every level stays 0 and the burst stays 1.',
+            math: 'e<sub>raw</sub> = (mean of the bins in the band) / 255, &nbsp; e ← e + 0.15 (e<sub>raw</sub> − e) &nbsp; for ⟦bass|bass⟧, ⟦mid|mid⟧, ⟦high|high⟧<br>on a beat: ⟦burst|burst⟧ = 1 + 0.9 d<sub>burst</sub>, falling by 0.1 d<sub>burst</sub> per frame, back to 1 on the tenth frame',
+            note: 'The analyser of the Web Audio API takes a fast Fourier transform of 2048 samples, smoothed over time with a constant of 0.8, and reports 1024 frequency bins as bytes from 0 to 255. Each bin is <code>bin</code> = sampling rate / 2048 wide, 21.5 Hz at 44.1 kHz. <code>band()</code> averages the bins between two frequencies and divides by 255, so each raw level lies between 0 and 1; the bass band, 20 to 150 Hz, is bins 1 to 7. Mid is 150 Hz to 4 kHz, high 4 to 16 kHz. Each level is then smoothed once per frame with the same rule as the morph (16), with the fraction 0.15, so on a 120 Hz screen the levels respond twice as fast as on a 60 Hz one. A beat is declared when the raw bass <code>rb</code> rises more than 35 % above the previous frame’s, exceeds 0.22 and comes at least 280 ms after the last beat. The beat sets <code>burst</code> to 1 + d<sub>burst</sub>, with d<sub>burst</sub> the Beat burst slider, and starts a count of 10 frames; the countdown below runs in the same frame, so the radii are multiplied by 1 + 0.9 d<sub>burst</sub> on the beat frame, and the factor falls by 0.1 d<sub>burst</sub> each frame until it is 1 on the tenth. Without a song playing every level stays 0 and the burst stays 1.',
             code: `audio.an.fftSize = 2048;
 audio.an.smoothingTimeConstant = 0.8;
 ...
@@ -303,7 +303,8 @@ if (audio.an) {
     var now = performance.now();
     if (rb > prevBass * 1.35 && rb > 0.22 && now - lastBeat > 280) {
 ...
-        burstFrames = 11;
+        burstFrames = 10;
+        ⟦burst|burst = 1 + dBurst.value⟧;
     }
     prevBass = rb;
 }

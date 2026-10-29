@@ -15,7 +15,7 @@
 
     <link rel="stylesheet" href="../../fonts/arabic.css" />
     <script src="../../scripts/i18n/strings-ar.js"></script>
-    <meta name="translated-from" content="English public/simulations/water-wave.html, commit 8bc6fef+" />
+    <meta name="translated-from" content="English public/simulations/water-wave.html, commit 73866ed+" />
   </head>
 <body>
     <header class="sim-top">
@@ -590,7 +590,7 @@
         ds.var('T', [], 'float', { symbol: 'T', units: 's', long_name: 'period', computed_in: 'readouts()', formula: 'T = 1 / f', digits: 3 });
         ds.var('c', [], 'float', { symbol: 'c', units: 'm/s', long_name: 'phase speed', computed_in: 'readouts()', formula: 'c = f λ / 100', digits: 4 });
         ds.var('c_deep', [], 'float', { symbol: '√(g/k)', units: 'm/s', long_name: 'deep-water phase speed; equals c while dispersion is on', computed_in: 'readouts()', formula: '√(g / k)', digits: 4 });
-        ds.var('cg', [], 'float', { symbol: 'c<sub>g</sub>', units: 'm/s', long_name: 'group speed in deep water; undefined with the dispersion switch off', computed_in: 'readouts()', formula: 'c / 2 with dispersion on', digits: 4 });
+        ds.var('cg', [], 'float', { symbol: 'c<sub>g</sub>', units: 'm/s', long_name: 'group speed in deep water', computed_in: 'readouts()', formula: 'c / 2', digits: 4 });
         ds.var('a', [], 'float', { symbol: 'a', units: 'px', long_name: 'amplitude used, capped so the surface never folds', computed_in: 'a(), in readouts()', formula: 'min(A, 0.9 / k)', digits: 2 });
         ds.var('cap', [], 'bool', { symbol: 'cap active', long_name: 'the amplitude is capped', computed_in: 'readouts()', formula: 'a < A' });
         ds.var('ak', [], 'float', { symbol: 'ak', long_name: 'steepness', computed_in: 'readouts()', formula: 'a k', digits: 4 });
@@ -660,7 +660,7 @@
             var kk = k(), ff = f(), aa = a(), om = 2 * Math.PI * ff, am = aa / PX_PER_M;
             ds.set('amp', amp.value); ds.set('lambda', lambda.value); ds.set('lambda_m', lambda.value / PX_PER_M); ds.set('f', ff); ds.set('dispersion', dispBox.checked);
             ds.set('N', count.value); ds.set('layers', layers.value);
-            ds.set('k', kk); ds.set('k_m', kk * PX_PER_M); ds.set('omega', om); ds.set('T', 1 / ff); ds.set('c', c); ds.set('c_deep', Math.sqrt(G / (kk * PX_PER_M))); ds.set('cg', dispBox.checked ? c / 2 : NaN);
+            ds.set('k', kk); ds.set('k_m', kk * PX_PER_M); ds.set('omega', om); ds.set('T', 1 / ff); ds.set('c', c); ds.set('c_deep', Math.sqrt(G / (kk * PX_PER_M))); ds.set('cg', c / 2);
             ds.set('a', aa); ds.set('cap', aa < amp.value); ds.set('ak', aa * kk); ds.set('stokes', om * kk * PX_PER_M * am * am);
             ds.set('deep', deep); ds.set('r1', aa * Math.exp(-kk * DZ)); ds.set('z_deep_px', DZ * (layers.value - 1));
         }
@@ -780,7 +780,7 @@
             return {
                 lam: ds.get('lambda') + ' px = ' + ds.get('lambda_m').toFixed(2) + ' m', k: Sim.fmt(ds.get('k'), 5) + ' rad/px',
                 km: Sim.fmt(ds.get('k_m'), 4) + ' rad/m', f: ds.get('f').toFixed(4) + ' Hz', c: ds.get('c').toFixed(4) + ' m/s',
-                T: ds.get('T').toFixed(4) + ' s', cg: isFinite(ds.get('cg')) ? ds.get('cg').toFixed(4) + ' m/s' : '—',
+                T: ds.get('T').toFixed(4) + ' s', cg: ds.get('cg').toFixed(4) + ' m/s',
                 X0: Sim.fmt(ds.get('X0')[i], 1) + ' px', th: Sim.fmt(red, 3) + _t(' rad'), px: Sim.fmt(ds.get('xi')[i], 2) + ' px', pz: Sim.fmt(ds.get('zeta')[i], 2) + ' px',
                 r: Sim.fmt(ds.get('r_z')[0], 2) + ' px', r1: Sim.fmt(ds.get('r1'), 2) + ' px', z0: '−' + ds.get('z_deep_px') + ' px',
                 deep: (dp * 100).toFixed(dp < 0.1 ? 2 : 1) + ' %', eta: Sim.fmt(ds.get('zeta')[i], 2) + ' px',
@@ -849,7 +849,7 @@
                 T: function () { return { formula: 'T = 1 / f', inputs: [['f', ds.get('f'), 'Hz', 4]], value: 1 / ds.get('f') }; },
                 c: function () { return { formula: 'c = f λ / 100', inputs: [['f', ds.get('f'), 'Hz', 4], ['λ', ds.get('lambda'), 'px', 0]], value: ds.get('f') * ds.get('lambda') / PX_PER_M }; },
                 c_deep: function () { return { formula: '√(g / k)', inputs: [['g', G, 'm/s²', 2], ['k', ds.get('k_m'), 'rad/m', 4]], value: Math.sqrt(G / ds.get('k_m')) }; },
-                cg: function () { return { formula: 'c / 2 with dispersion on', inputs: [['c', ds.get('c'), 'm/s', 4]], value: ds.get('dispersion') ? ds.get('c') / 2 : NaN }; },
+                cg: function () { return { formula: 'c / 2', inputs: [['c', ds.get('c'), 'm/s', 4]], value: ds.get('c') / 2 }; },
                 a: function () { return { formula: 'min(A, 0.9 / k)', inputs: [['A', ds.get('amp'), 'px', 0], ['k', ds.get('k'), 'rad/px', 5]], value: Math.min(ds.get('amp'), 0.9 / ds.get('k')) }; },
                 cap: function () { return { formula: 'a < A', inputs: [['a', ds.get('a'), 'px', 2], ['A', ds.get('amp'), 'px', 0]], value: ds.get('a') < ds.get('amp') }; },
                 ak: function () { return { formula: 'a k', inputs: [['a', ds.get('a'), 'px', 2], ['k', ds.get('k'), 'rad/px', 5]], value: ds.get('a') * ds.get('k') }; },

@@ -29,7 +29,7 @@
 
     <link rel="stylesheet" href="../../fonts/arabic.css" />
     <script src="../../scripts/i18n/strings-ar.js"></script>
-    <meta name="translated-from" content="English public/simulations/Interactive Double-Slit Experiment Visualization.html, commit 8bc6fef+" />
+    <meta name="translated-from" content="English public/simulations/Interactive Double-Slit Experiment Visualization.html, commit 73866ed+" />
   </head>
 <body>
     <header class="sim-top">
@@ -813,8 +813,6 @@
             ds.set('clock_t', t); ds.set('wall', performance.now() / 1000); ds.set('fps', fps); ds.set('animate', clk ? clk.playing : true);
         });
         anim.addEventListener('change', function () { clk.set(anim.checked); });
-        anim.checked = clk.playing; // the clock starts paused when the reader asks for reduced motion
-        clk.onChange(function (on) { anim.checked = on; });
 
         /* ---------- the data panel (scripts/datalog.js) reads the store; these hooks only say where things are drawn and how to test a value ---------- */
         var PN = ['S₁', 'S₂', 'M', 'P', 'Q'], stageEl = document.getElementById('stage'), geoSvg = document.getElementById('geo');

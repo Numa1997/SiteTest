@@ -14,7 +14,7 @@
     <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='12' fill='%237a1f2b'/%3E%3Ctext x='32' y='45' text-anchor='middle' font-family='Georgia,serif' font-size='38' fill='%23f5f1ea'%3EN%3C/text%3E%3C/svg%3E">
 
     <script src="../../scripts/i18n/strings-de.js"></script>
-    <meta name="translated-from" content="English public/simulations/Double Pendulum.html, commit 8bc6fef+" />
+    <meta name="translated-from" content="English public/simulations/Double Pendulum.html, commit 73866ed+" />
   </head>
 <body>
     <header class="sim-top">
@@ -244,7 +244,7 @@
                         <p>Der untere Arm spürt die Schwerkraft, \(-g\sin\theta_2\), und den nach außen gerichteten Zug aus dem Kreisen der oberen Kugel, \(l_1\omega_1^2\sin\varphi\), der über den Ellbogen zu ihm gelangt.</p>
                         <h4><span class="psub__n">4.4</span>Auflösen nach den Beschleunigungen</h4>
                         <p>Jede der Gleichungen (6) und (7) enthält beide Beschleunigungen, weil jeder Stab auf den anderen drückt. Ein Rechner, der schrittweise in der Zeit voranschreitet, braucht jede Beschleunigung für sich allein, daher behandeln wir (6) und (7) als zwei lineare Gleichungen für die zwei Unbekannten \(\alpha_1, \alpha_2\). In Matrixform</p>
-                        \[ \begin{gathered} \begin{pmatrix} (m_1+m_2)\,l_1 & m_2 l_2\cos\varphi \\ l_1\cos\varphi & l_2 \end{pmatrix} \begin{pmatrix} \alpha_1 \\ \alpha_2 \end{pmatrix} = \begin{pmatrix} b_1 \\ b_2 \end{pmatrix}, \\[4pt] \begin{aligned} b_1 &= -m_2 l_2\,\omega_2^2\sin\varphi - (m_1+m_2)\,g\sin\theta_1, \\ b_2 &= l_1\,\omega_1^2\sin\varphi - g\sin\theta_2 . \end{aligned} \end{gathered} \tag{8} \]
+                        \[ \begin{pmatrix} (m_1+m_2)\,l_1 & m_2 l_2\cos\varphi \\ l_1\cos\varphi & l_2 \end{pmatrix} \begin{pmatrix} \alpha_1 \\ \alpha_2 \end{pmatrix} = \begin{pmatrix} b_1 \\ b_2 \end{pmatrix}, \qquad \begin{aligned} b_1 &= -m_2 l_2\,\omega_2^2\sin\varphi - (m_1+m_2)\,g\sin\theta_1, \\ b_2 &= l_1\,\omega_1^2\sin\varphi - g\sin\theta_2 . \end{aligned} \tag{8} \]
                         <p>Die <em>Determinante</em> der Matrix ist das Produkt der Diagonalelemente minus dem Produkt der beiden anderen:</p>
                         \[ D = (m_1+m_2)\,l_1 l_2 - m_2 l_1 l_2\cos^2\varphi = l_1 l_2\,(m_1 + m_2\sin^2\varphi) , \]
                         <p>unter Verwendung von \(1-\cos^2\varphi = \sin^2\varphi\). Sie ist immer positiv, weil \(m_1\) positiv ist. Eine von null verschiedene Determinante bedeutet, dass sich die beiden Gleichungen nie widersprechen und nie dasselbe zweimal sagen, also gibt es immer genau eine Lösung. Die <em>Cramersche Regel</em> schreibt sie auf: Jede Unbekannte ist ein Bruch, dessen Nenner \(D\) ist und dessen Zähler die Determinante der Matrix ist, in der die Spalte der jeweiligen Unbekannten durch die rechte Seite ersetzt wird.</p>
@@ -504,8 +504,8 @@
         ds.var('x2_twin_px', [], 'float', { symbol: 'x′<sub>2</sub> px', units: 'css px', long_name: 'twin bob 2 as drawn, from the left', computed_in: 'pos(twin), in diagnostics()', formula: 'x′₁px + l₂ σ sin θ′₂', digits: 1 });
         ds.var('y2_twin_px', [], 'float', { symbol: 'y′<sub>2</sub> px', units: 'css px', long_name: 'twin bob 2 as drawn, from the top', computed_in: 'pos(twin), in diagnostics()', formula: 'y′₁px + l₂ σ cos θ′₂', digits: 1 });
         ds.var('scale', [], 'float', { symbol: 'σ', units: 'px/m', long_name: 'pixels per metre on screen', computed_in: 'layout()', formula: '(min(box.w, box.h)/2 − 34) / (l₁ + l₂)', digits: 2 });
-        ds.var('ox', [], 'float', { symbol: 'x<sub>0</sub>', units: 'css px', long_name: 'pivot, from the left', computed_in: 'layout()', formula: 'box.w / 2', digits: 1 });
-        ds.var('oy', [], 'float', { symbol: 'y<sub>0</sub>', units: 'css px', long_name: 'pivot, from the top', computed_in: 'layout()', formula: 'box.h / 2', digits: 1 });
+        ds.var('ox', [], 'float', { symbol: 'o<sub>x</sub>', units: 'css px', long_name: 'pivot, from the left', computed_in: 'layout()', formula: 'box.w / 2', digits: 1 });
+        ds.var('oy', [], 'float', { symbol: 'o<sub>y</sub>', units: 'css px', long_name: 'pivot, from the top', computed_in: 'layout()', formula: 'box.h / 2', digits: 1 });
         ds.var('twin_on', [], 'bool', { symbol: 'twin on', long_name: 'a copy started 0.001 rad away runs alongside', computed_in: 'the Chaos twin switch', source: 'The state of the switch.' });
         ds.var('sep', [], 'float', { symbol: 'd', units: 'm', long_name: 'distance between the two lower bobs', computed_in: 'diagnostics()', formula: '|(x₂ − x₂′, y₂ − y₂′)|', digits: 6 });
         ds.var('log10sep', [], 'float', { symbol: 'log<sub>10</sub> d', long_name: 'grows roughly linearly in time while the motion is chaotic', computed_in: 'diagnostics()', formula: 'log₁₀ d', digits: 3 });
@@ -690,10 +690,10 @@
             var E = ds.get('E'), drift = ds.get('drift'), d = ds.get('sep');
             document.getElementById('cap-t').innerHTML = '<i>t</i> = ' + simT.toFixed(1) + ' s';
             document.getElementById('r-e').textContent = Sim.fmt(E, 3) + ' J';
-            document.getElementById('r-drift').textContent = Math.abs(drift) < 1e-12 ? '0' : drift.toExponential(1).replace(/-/g, '−');
+            document.getElementById('r-drift').textContent = Math.abs(drift) < 1e-12 ? '0' : drift.toExponential(1).replace('-', '−');
             var sep = document.getElementById('r-sep');
             if (twin) {
-                sep.textContent = (d < 1e-3 ? d.toExponential(1).replace(/-/g, '−') : d.toFixed(3)) + ' m';
+                sep.textContent = (d < 1e-3 ? d.toExponential(1).replace('-', '−') : d.toFixed(3)) + ' m';
             } else {
                 sep.textContent = _t('twin off');
             }
@@ -742,9 +742,9 @@
                 d: f4(ds.get('delta'), 'rad'), den: f4(ds.get('den'), 'kg'), m2: f4(ds.get('m2'), 'kg'), l2: f4(ds.get('l2'), 'm'),
                 a1: f4(ds.get('alpha1'), 'rad/s²'), a2: f4(ds.get('alpha2'), 'rad/s²'),
                 k1: '(' + [k[0], k[1], k[2], k[3]].map(function (v) { return Sim.fmt(v, 2); }).join(', ') + ')',
-                h: '1/600 = ' + H.toFixed(6) + ' s', n: String(ds.get('n')), acc: ds.get('acc').toExponential(2).replace(/-/g, '−') + ' s', t: ds.get('t').toFixed(3) + ' s',
+                h: '1/600 = ' + H.toFixed(6) + ' s', n: String(ds.get('n')), acc: ds.get('acc').toExponential(2).replace('-', '−') + ' s', t: ds.get('t').toFixed(3) + ' s',
                 kin: f4(ds.get('T'), 'J'), pot: f4(ds.get('V'), 'J'), E: f4(ds.get('E'), 'J'), E0: f4(ds.get('E0'), 'J'),
-                drift: Math.abs(drift) < 1e-12 ? '0' : drift.toExponential(2).replace(/-/g, '−'),
+                drift: Math.abs(drift) < 1e-12 ? '0' : drift.toExponential(2).replace('-', '−'),
                 scale: Sim.fmt(ds.get('scale'), 1) + ' px/m', y1: Sim.fmt(ds.get('y1_px'), 1) + ' px'
             };
         };
@@ -794,7 +794,7 @@
             var s = ds.get('y_twin'), sc = ds.get('scale'), l = ds.get('l2');
             var x1 = ds.get('ox') + ds.attrs.l1 * sc * Math.sin(s[0]), y1 = ds.get('oy') + ds.attrs.l1 * sc * Math.cos(s[0]);
             var p = [x1, y1, x1 + l * sc * Math.sin(s[1]), y1 + l * sc * Math.cos(s[1])];
-            return { formula: 'the stored twin state mapped to screen coordinates', inputs: [['θ′₁', s[0], 'rad', 5], ['θ′₂', s[1], 'rad', 5], ['l₁', ds.attrs.l1, 'm', 4], ['l₂', l, 'm', 4], ['σ', sc, 'px/m', 2], ['x₀', ds.get('ox'), 'px', 1], ['y₀', ds.get('oy'), 'px', 1]], value: p[which] };
+            return { formula: 'the stored twin state mapped to screen coordinates', inputs: [['θ′₁', s[0], 'rad', 5], ['θ′₂', s[1], 'rad', 5], ['l₁', ds.attrs.l1, 'm', 4], ['l₂', l, 'm', 4], ['σ', sc, 'px/m', 2], ['ox', ds.get('ox'), 'px', 1], ['oy', ds.get('oy'), 'px', 1]], value: p[which] };
         }
         function twinPixel(bob) {
             if (!ds.get('twin_on')) return { what: _t('the twin bob'), drawn: 'nothing', expected: 'nothing', ok: true, note: _t('The chaos twin is switched off.') };
@@ -882,8 +882,8 @@
                 y2: function () { return { formula: '−l₁ cos θ₁ − l₂ cos θ₂', inputs: [['θ₁', ds.get('th1'), 'rad', 5], ['θ₂', ds.get('th2'), 'rad', 5], ['l₂', ds.get('l2'), 'm', 4]], value: -l1 * Math.cos(ds.get('th1')) - ds.get('l2') * Math.cos(ds.get('th2')) }; },
                 v1: function () { return { formula: 'l₁ |ω₁|', inputs: [['ω₁', ds.get('w1'), 'rad/s', 5]], value: l1 * Math.abs(ds.get('w1')) }; },
                 v2: function () { var t1 = ds.get('th1'), t2 = ds.get('th2'), o1 = ds.get('w1'), o2 = ds.get('w2'), l = ds.get('l2'); return { formula: ds.vars.v2.attrs.formula, inputs: stateInputs(), value: Math.hypot(l1 * o1 * Math.cos(t1) + l * o2 * Math.cos(t2), l1 * o1 * Math.sin(t1) + l * o2 * Math.sin(t2)) }; },
-                x1_px: function () { return { formula: 'x<sub>0</sub> + l₁ σ sin θ₁', inputs: [['x<sub>0</sub>', ox, 'px', 1], ['σ', scale, 'px/m', 2], ['θ₁', ds.get('th1'), 'rad', 5]], value: ox + l1 * scale * Math.sin(ds.get('th1')) }; },
-                y1_px: function () { return { formula: 'y<sub>0</sub> + l₁ σ cos θ₁', inputs: [['y<sub>0</sub>', oy, 'px', 1], ['σ', scale, 'px/m', 2], ['θ₁', ds.get('th1'), 'rad', 5]], value: oy + l1 * scale * Math.cos(ds.get('th1')) }; },
+                x1_px: function () { return { formula: 'o<sub>x</sub> + l₁ σ sin θ₁', inputs: [['o<sub>x</sub>', ox, 'px', 1], ['σ', scale, 'px/m', 2], ['θ₁', ds.get('th1'), 'rad', 5]], value: ox + l1 * scale * Math.sin(ds.get('th1')) }; },
+                y1_px: function () { return { formula: 'o<sub>y</sub> + l₁ σ cos θ₁', inputs: [['o<sub>y</sub>', oy, 'px', 1], ['σ', scale, 'px/m', 2], ['θ₁', ds.get('th1'), 'rad', 5]], value: oy + l1 * scale * Math.cos(ds.get('th1')) }; },
                 x2_px: function () { return { formula: 'x₁px + l₂ σ sin θ₂', inputs: [['x₁ px', ds.get('x1_px'), 'px', 2], ['l₂', ds.get('l2'), 'm', 4], ['σ', scale, 'px/m', 2], ['θ₂', ds.get('th2'), 'rad', 5]], value: ds.get('x1_px') + ds.get('l2') * scale * Math.sin(ds.get('th2')) }; },
                 y2_px: function () { return { formula: 'y₁px + l₂ σ cos θ₂', inputs: [['y₁ px', ds.get('y1_px'), 'px', 2], ['l₂', ds.get('l2'), 'm', 4], ['σ', scale, 'px/m', 2], ['θ₂', ds.get('th2'), 'rad', 5]], value: ds.get('y1_px') + ds.get('l2') * scale * Math.cos(ds.get('th2')) }; },
                 scale: function () { return { formula: '(min(box.w, box.h)/2 − 34) / (l₁ + l₂)', inputs: [['box.w', box.w, 'px', 0], ['box.h', box.h, 'px', 0], ['l₂', ds.get('l2'), 'm', 4]], value: (Math.min(box.w, box.h) / 2 - 34) / (l1 + ds.get('l2')) }; },

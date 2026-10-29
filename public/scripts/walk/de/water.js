@@ -100,8 +100,8 @@ window.WALK["water"] = {
    "title": "Gruppengeschwindigkeit: halb so groß wie die Phasengeschwindigkeit (15)",
    "where": "readouts() — gespeichert, nicht gezeichnet",
    "math": "⟦cg|c<sub>g</sub>⟧ = dω/dk = ½ √(g/k) = ⟦c|c⟧ / 2 &emsp;(15)",
-   "note": "Die Gruppengeschwindigkeit (15) ist die Geschwindigkeit, mit der sich eine Gruppe von Wellenbergen fortbewegt, und mit ihr die Energie. Die Seite zeichnet eine einzelne Welle, die nie endet; sie hat deshalb keine Gruppen, und c<sub>g</sub> lässt sich nicht beobachten. Die zitierte Zeile speichert es nur, als c / 2 in m/s, die Form von (15) für tiefes Wasser, und das Datenpanel zeigt es als Vorhersage. Ist der Dispersionsschalter aus, speichert die Zeile keine Zahl (NaN, angezeigt als —): (15) stützt sich auf ω² = gk, und das Skript sagt, dass c<sub>g</sub> = c/2 dann nicht mehr gilt.",
-   "code": "... ds.set('c', c); ds.set('c_deep', Math.sqrt(G / (kk * PX_PER_M))); ⟦cg|ds.set('cg', dispBox.checked ? c / 2 : NaN);⟧",
+   "note": "Die Gruppengeschwindigkeit (15) ist die Geschwindigkeit, mit der sich eine Gruppe von Wellenbergen fortbewegt, und mit ihr die Energie. Die Seite zeichnet eine einzelne Welle, die nie endet; sie hat deshalb keine Gruppen, und c<sub>g</sub> lässt sich nicht beobachten. Die zitierte Zeile speichert es nur, als c / 2 in m/s, die Form von (15) für tiefes Wasser, und das Datenpanel zeigt es als Vorhersage. Die Zeile verwendet c / 2 auch dann, wenn der Dispersionsschalter aus ist. Die gespeicherte Zahl ist dann keine Gruppengeschwindigkeit: (15) stützt sich auf ω² = gk, und das Skript sagt, dass c<sub>g</sub> = c/2 dann nicht mehr gilt.",
+   "code": "... ds.set('c', c); ds.set('c_deep', Math.sqrt(G / (kk * PX_PER_M))); ⟦cg|ds.set('cg', c / 2);⟧",
    "syms": [
     [
      "c",
@@ -112,8 +112,8 @@ window.WALK["water"] = {
     [
      "cg",
      "c<sub>g</sub>",
-     "dispBox.checked ? c / 2 : NaN",
-     "Gruppengeschwindigkeit im tiefen Wasser, m/s (nicht gezeichnet); nicht definiert bei ausgeschalteter Dispersion"
+     "c / 2",
+     "Gruppengeschwindigkeit im tiefen Wasser, m/s (nicht gezeichnet)"
     ]
    ]
   },
