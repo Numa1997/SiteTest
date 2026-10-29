@@ -9,20 +9,22 @@ brakes it. How much power does it deliver, who pays for it, and can the wind's d
 give it more?
 
 Until 24 October 2026 the study modelled a different machine, a point pendulum (0.1 kg on 0.2 m) at 30, 60 or 90 % of the
-blade on six rotors, and a double pendulum. Numa asked for the second blade at the tip; the study is being rebuilt for it on the
-branch `rotor-second-blade`. The earlier scripts are listed under "Being ported" until each is replaced or deleted.
+blade on six rotors, and a double pendulum. Numa asked for the second blade at the tip; the study was rebuilt for it (pull requests #44 to #50, the last merged on
+29 October 2026 as `3dffa3b`; the branch `rotor-second-blade` no longer exists).
 
 ## The setup (`derive/setup.py`)
 - Turbine: NREL 5 MW reference (Jonkman et al. 2009): rotor radius 63 m, hub radius 1.5 m, peak C_p 0.482 at tip-speed
   ratio 7.55. Steady winds 6, 8, 10 m/s in region 2: Omega = 7.55 v / 63 m (6.9 to 11.4 rpm). `dossier-turbine.md`.
 - The second blade: a thin uniform rod, l = 1 m (a modelling choice), m = 1 kg (`design.py`: the mass of the 1-2-5 series
   at which the maxon RE 25 + GP 32 C takes the largest share of P*, 36.8 %). I = m l^2/3, first moment m l/2.
-  Hinge at r_p = 63 m. Air on the second blade is left out (the hinge moves at 45 to 76 m/s).
+  Hinge at r_p = 63 m. The hinge moves at 45 to 76 m/s; the air on the second blade is model L5 and chapter 7 of the notes
+  (added after this setup was first written; it was left out until then).
 - Generator: maxon RE 25 + GP 32 C, ratios 3.7 to 492 (`dossier-generator.md`). Sensor need 37.6 uW (`sensor.py`,
   `dossier-sensor.md`).
 
 ## Sizing (decided 24 October 2026; was decision (a))
-The study keeps 1 kg on 1 m, now shown against the range of real tip devices (`derive/sizes.py`, notes section 7.6, Table 5):
+The study keeps 1 kg on 1 m, now shown against the range of real tip devices (`derive/sizes.py`; first written as notes section 7.6, since the rewrite of 28 October 2026 Table 5 in chapter 5,
+`theory/05_watts.src.html`):
 lengths 0.5 to 3 m (retrofit tip extensions, about 3 m with 1 m past the old tip, Vestas US 10 927 809; pivoting tip brakes
 5-20 % of the radius, US 8 403 641) and 1, 3, 10, 30 kg/m (the NREL blade is 10.3 kg/m at its tip, 115 kg in its outer 3 m).
 Over that range P* at 6 m/s runs from 66.7 mW to 74 W, in proportion to m l/2; the swing stays 0.214-0.220 rad (it is
@@ -85,7 +87,7 @@ the text, and Figure 8's caption shortened. Equation and figure numbers are unch
   rotor's speed wanders by 13.4 % (10.3 % under the real law), and the curvature of (6.9) predicts the gain exactly.
 
 ## Queue
-1. Pull request for section 7.6 (the range of sizes): Numa's "merge".
+(Empty, 29 October 2026. The pull request for section 7.6, the range of sizes, was merged on 24 October 2026 as #44.)
 
 The Newton question (closed, 24 October 2026). `L4_check.py` at 2000 steps per turn stops Newton at its cap of 12 in 1939
 of 240000 steps (its log says FAIL). `portfolios-src/rotor-pendula/tools/check_newton.js` reran the 16 settings on the
@@ -94,7 +96,7 @@ the cap at 40 no step of the measured turns stays unconverged (17 in the start-u
 by at most 8e-12; 4000 steps per turn and a band of 3e-4 change them by at most 2.7e-4. The results stand.
 
 Done (24 October 2026): every model run for the second blade; `make_numbers.py`, `typed_numbers.py`, `check_numbers.py` (PASS),
-`check_physics.py`; the notes, chapters 0 to 8; the simulation page's physics text and six worked solutions
+`check_physics.py`; the notes, chapters 0 to 8 (since 28 October 2026 nine chapters, 1 to 9); the simulation page's physics text and six worked solutions
 (`tools/sim_solutions.js`); `check_sim.js`, `check_sim_browser.js` and `check_combined.py` at 360 to 1440 px (all pass); the
 Portfolios entry and its German and Arabic translations.
 
@@ -103,6 +105,5 @@ Portfolios entry and its German and Arabic translations.
 `dossier-edgewise.md` (blade edgewise mode), `dossier-harvesting.md`, `dossier-sensor.md` (ADXL362 Rev. D, CC2652R SWRS207J).
 
 ## Open
-- Air on the second blade (lift and drag at 45 to 76 m/s): the next model.
 - Bench test of the gear drag and the back-driven efficiency.
 - Converting the low, slow load voltage into a supply.

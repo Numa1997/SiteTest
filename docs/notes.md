@@ -5,6 +5,12 @@ were unclear or wrong, repaired; his rule was "judge first, change only what nee
 ([notes/STANDARD.md](../notes/STANDARD.md), "Numa's verdicts"). This page describes the files that review left behind. None of
 them is part of the website: the build serves `public/` and `index.html` only, and nothing in `public/` refers to them.
 
+What happened next (29 October 2026): on 21 October 2026 Numa replaced "judge first" by a full rewrite of every note as a
+textbook chapter (the last verdict in [notes/STANDARD.md](../notes/STANDARD.md)); Fig. 11 joined on 24 October 2026, so the
+site has eleven notes. `STATUS.md` and the `figNN/*.md` files are the records of 20 October and are not kept up to date;
+`notes/fig11/` holds only the scripts of its note. `notes/` also holds the working records of the two studies rebuilt here
+and of the home page (table below).
+
 ## The team, `.claude/agents/`
 
 Four agent definitions for Claude Code, one file each; Claude Code offers them as agent types when a session opens this
@@ -23,13 +29,16 @@ repository.
 |---|---|
 | [STANDARD.md](../notes/STANDARD.md) | The standard every note is judged against, Numa's decisions, and his verdicts, which override the rest. |
 | [STATUS.md](../notes/STATUS.md) | What is done (one row of check results per figure) and what waits for Numa. |
-| [verify.mjs](../notes/verify.mjs) | The lead's check of the ten pages in headless Chromium at 1440 × 900, 1600 × 900 and 390 × 844: console and KaTeX errors, sideways scroll, folds, equation numbers, links in the reading lists, and display equations wider than their box. Run after `APPDEPLOY_VITE_OUT_DIR=/tmp/lead-dist npm run build` as `node notes/verify.mjs /tmp/lead-dist`. |
-| [walkcheck.cjs](../notes/walkcheck.cjs) | Searches every quoted code line of the ten walkthroughs in its page, by the recipe of [scripts/walk.md](scripts/walk.md). Run as `node notes/walkcheck.cjs`. |
+| [verify.mjs](../notes/verify.mjs) | The lead's check of the pages in headless Chromium (its list holds Figs. 1 to 10; Fig. 11 is not in it, 29 October 2026) at 1440 × 900, 1600 × 900 and 390 × 844: console and KaTeX errors, sideways scroll, folds, equation numbers, links in the reading lists, and display equations wider than their box. Run after `APPDEPLOY_VITE_OUT_DIR=/tmp/lead-dist npm run build` as `node notes/verify.mjs /tmp/lead-dist`. |
+| [walkcheck.cjs](../notes/walkcheck.cjs) | Searches every quoted code line of the eleven walkthroughs in its page (29 October 2026: 753 of 758 found; the five missing lines are in Figs. 3, 4 and 5), by the recipe of [scripts/walk.md](scripts/walk.md). Run as `node notes/walkcheck.cjs`. |
 | [.gitignore](../notes/.gitignore) | Keeps the agents' screenshots out of the repository; the scripts beside them reproduce them. |
 | `figNN/plan.md` | The teacher's verdict on each section of the note of Fig. NN and what it changed. |
 | `figNN/check.md` | The derivation checker's table: one row per equation and per number, "verified", "wrong, because …" or "unverifiable, because …". |
 | `figNN/referee.md` | The blind referee's report. |
 | `figNN/walk.md` | The walkthrough check: counts of quoted lines found verbatim, and every mismatch with its exact old → new text. These fixes wait for Numa's word, because walkthrough files change only with his explicit permission. |
+| `droplets/` | The working record of the Droplet Collection rebuild (23 October 2026): brief, definition of done, status, the derivation contracts and checks per model level, skeptic and review rounds, sources. |
+| `rotor-pendula/` | The working record of the Rotor Pendula rebuild (24 to 29 October 2026): `README.md` (the setup, the models and the scripts in `derive/`), sources (`dossier-*.md`), teaching notes. |
+| `home/` | Two scripts that measure the home page in Chromium (index panel, column width, characters per line, sideways scroll). |
 | other files in `figNN/` | The scripts each agent wrote to measure the numbers it states (Node scripts that run the page's own functions or drive the built page in Chromium, Python with SymPy or NumPy), and their saved output. |
 
 What the review found and changed, per figure, is in [research-theory-audit.md](research-theory-audit.md), section
