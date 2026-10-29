@@ -243,7 +243,7 @@ the footer.
 
 **Scripts, in load order** ([page:733–1084](../../public/simulations/Transverse%20and%20longitudinal%20waves.html#L733-L1084)):
 `fold.js`, `sim.js`, `dataset.js`, the page's inline script, `datalog.js`. At boot `sim.js` loads `walk/tl.js`
-([sim.js:505–514](../../public/scripts/sim.js#L505-L514)) and KaTeX ([sim.js:431–432](../../public/scripts/sim.js#L431-L432)).
+([sim.js:481–490](../../public/scripts/sim.js#L481-L490)) and KaTeX ([sim.js:431–432](../../public/scripts/sim.js#L431-L432)).
 See [sim.md](../scripts/sim.md), [walk.md](../scripts/walk.md), [fold.md](../scripts/fold.md), [pages.md](../pages.md).
 
 **Lecture note.** Nine sections, each a `.psec` fold ([fold.js:314](../../public/scripts/fold.js#L314)), 17 numbered equations,

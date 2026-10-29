@@ -2,7 +2,7 @@
 
 | | |
 |---|---|
-| Page | [public/simulations/Circular Wave Interference Visualization.html](../../public/simulations/Circular%20Wave%20Interference%20Visualization.html) (908 lines, 194 631 bytes) |
+| Page | [public/simulations/Circular Wave Interference Visualization.html](../../public/simulations/Circular%20Wave%20Interference%20Visualization.html) (908 lines, 194 517 bytes) |
 | Walkthrough | [public/scripts/walk/circles.js](../../public/scripts/walk/circles.js) (178 lines, 9 steps, key `circles`) |
 | Thumbnail | [public/images/sims/wave-sources.webp](../../public/images/sims/wave-sources.webp) (WebP, 800 × 500 px, 36.5 kB; a still of the two-source field) |
 | Catalog entry | [public/scripts/catalog.js#L48](../../public/scripts/catalog.js#L48) (`id: 'wave-sources'`, `fig: 1`, `field: 'optics'`, `stage: 1`, lines 47–63) |
@@ -187,9 +187,9 @@ set in `resize()`, [L610–611](../../public/simulations/Circular%20Wave%20Inter
 |---|---|---|
 | `u` (coordinate), `x_s` | (s), Float64 | [L639–640](../../public/simulations/Circular%20Wave%20Interference%20Visualization.html#L639-L640), when sources change |
 | `x`, `y` (coordinates) | (i), (j), Float64 | [L620–621](../../public/simulations/Circular%20Wave%20Interference%20Visualization.html#L620-L621), in `resize()` |
-| `C`, `S` | (j, i), Float32 | [L648–649](../../public/simulations/Circular%20Wave%20Interference%20Visualization.html#L648-L649), at each rebuild; labelled C = (1/N) Σ e<sup>−γ r<sub>s</sub>/R</sup> cos(k r<sub>s</sub>), and S with sin, as the note writes them (since 29 October 2026; the values were already these) |
+| `C`, `S` | (j, i), Float32 | [L648–649](../../public/simulations/Circular%20Wave%20Interference%20Visualization.html#L648-L649), at each rebuild |
 | `A` | (j, i), Float32 | [L653](../../public/simulations/Circular%20Wave%20Interference%20Visualization.html#L653) |
-| `r1`, `a1`, `ph1` | (j, i), Float32 | [L647](../../public/simulations/Circular%20Wave%20Interference%20Visualization.html#L647); source 1 is `sources[0]`, the oldest kept; zeroed when N = 0; `a1` is labelled e<sup>−γ r<sub>1</sub>/R</sup>/N, the 1/N of the sum folded in ([L654](../../public/simulations/Circular%20Wave%20Interference%20Visualization.html#L654)) |
+| `r1`, `a1`, `ph1` | (j, i), Float32 | [L647](../../public/simulations/Circular%20Wave%20Interference%20Visualization.html#L647); source 1 is `sources[0]`, the oldest kept; zeroed when N = 0 ([L654](../../public/simulations/Circular%20Wave%20Interference%20Visualization.html#L654)) |
 | `psi` | (j, i), Float32 | [L667](../../public/simulations/Circular%20Wave%20Interference%20Visualization.html#L667), every drawn frame |
 | `LUT` | (n, c), Uint8Clamped | [L590](../../public/simulations/Circular%20Wave%20Interference%20Visualization.html#L590), once |
 
@@ -248,7 +248,7 @@ imports the self-hosted fonts, KaTeX's CSS and `paper.css`; an inline SVG favico
 - Footer ([L501–504](../../public/simulations/Circular%20Wave%20Interference%20Visualization.html#L501-L504)).
 - Scripts in load order: `../scripts/fold.js`, `../scripts/sim.js`, `../scripts/dataset.js` ([L506–508](../../public/simulations/Circular%20Wave%20Interference%20Visualization.html#L506-L508)), the page's own script
   ([L509–904](../../public/simulations/Circular%20Wave%20Interference%20Visualization.html#L509-L904)), then `../scripts/datalog.js` ([L905](../../public/simulations/Circular%20Wave%20Interference%20Visualization.html#L905)). `sim.js` loads `../scripts/walk/circles.js` from the `data-walk` key once
-  the DOM is ready ([sim.js:505–514](../../public/scripts/sim.js#L505-L514)) and KaTeX for the note ([sim.js:418–448](../../public/scripts/sim.js#L418-L448)). See [sim.md](../scripts/sim.md),
+  the DOM is ready ([sim.js:481–490](../../public/scripts/sim.js#L481-L490)) and KaTeX for the note ([sim.js:418–447](../../public/scripts/sim.js#L418-L447)). See [sim.md](../scripts/sim.md),
   [fold.md](../scripts/fold.md), [walk.md](../scripts/walk.md), [pages.md](../pages.md).
 
 **Walkthrough** ([circles.js](../../public/scripts/walk/circles.js), 7 steps). Each step quotes page lines; a script run in
