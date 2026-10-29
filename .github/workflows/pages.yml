@@ -1,0 +1,60 @@
+# The GitHub Pages backup of Phyein Usul (Numa, 29 October 2026: keep Pages on as a backup that follows every push to main).
+# Builds the site as Cloudflare does (npm run build -> dist/) and publishes dist/ to https://numa1997.github.io/SiteTest/,
+# so the backup is the built site, not the raw repository.
+# It publishes only when Settings -> Pages -> Source is "GitHub Actions". While the source is still "Deploy from a branch",
+# the first job reads the setting, finds "legacy", and the run ends green without publishing (the branch build goes on as before).
+name: Pages backup
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+concurrency:
+  group: pages
+  cancel-in-progress: false
+
+jobs:
+  source:
+    runs-on: ubuntu-latest
+    outputs:
+      build_type: ${{ steps.read.outputs.build_type }}
+    steps:
+      - id: read
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          t=$(gh api "repos/${{ github.repository }}/pages" --jq .build_type 2>/dev/null || echo none)
+          echo "Pages source: $t (publishes only when it is 'workflow')"
+          echo "build_type=$t" >> "$GITHUB_OUTPUT"
+
+  build:
+    needs: source
+    if: needs.source.outputs.build_type == 'workflow'
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+      - run: npm install --no-audit --no-fund
+      - run: npm run build
+      - uses: actions/configure-pages@v5
+      - uses: actions/upload-pages-artifact@v3
+        with:
+          path: dist
+
+  deploy:
+    needs: build
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - id: deployment
+        uses: actions/deploy-pages@v4

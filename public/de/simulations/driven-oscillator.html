@@ -42,7 +42,7 @@
     </style>
 
     <script src="../../scripts/i18n/strings-de.js"></script>
-    <meta name="translated-from" content="English public/simulations/driven-oscillator.html, commit ce20a87" />
+    <meta name="translated-from" content="English public/simulations/driven-oscillator.html, commit f5fa9be+" />
   </head>
 <body>
     <header class="sim-top">
@@ -1048,8 +1048,8 @@
             document.getElementById('r-Xm').textContent = Sim.fmt(ds.get('Xm'), 3) + ' m';
             document.getElementById('r-phi').textContent = Sim.fmt(ds.get('phi_deg'), 1) + '°';
             document.getElementById('r-Q').textContent = Sim.fmt(ds.get('Q'), 1);
-            document.getElementById('r-err').textContent = ds.get('err_max').toExponential(1).replace('-', '−') + ' m';
-            document.getElementById('r-bal').textContent = ds.get('balance').toExponential(1).replace('-', '−');
+            document.getElementById('r-err').textContent = ds.get('err_max').toExponential(1).replace(/-/g, '−') + ' m';
+            document.getElementById('r-bal').textContent = ds.get('balance').toExponential(1).replace(/-/g, '−');
             document.getElementById('r-eq').textContent = Sim.fmt(ds.get('x_eq'), 3) + ' m' + (ds.get('ctrl_on') ? (ds.get('Ki') > 0 ? ' = r' : ' ≠ r') : '');
             document.getElementById('r-stab').textContent = ds.get('ctrl_on') ? (ds.get('stable') ? _t('stable') : (isFinite(ds.get('t_blow')) ? _t('unstable: |x| passed 1000 m at {t} s', { t: Sim.fmt(ds.get('t_blow'), 1) }) : _t('unstable, growing'))) : _t('open (controller off)');
             document.getElementById('cap-eig').innerHTML = eigText();
@@ -1295,7 +1295,8 @@
             });
             tt.values.forEach(function (v) {
                 c.strokeStyle = T.ruleSoft; c.beginPath(); c.moveTo(g.wx(v), p.top); c.lineTo(g.wx(v), p.bot); c.stroke();
-                if (g.wx(v) < p.R - 40) { c.fillStyle = T.muted; c.textAlign = 'center'; c.textBaseline = 'alphabetic'; c.fillText(Sim.fmt(v, tt.digits), g.wx(v), p.bot + 16); }
+                var tl = Sim.fmt(v, tt.digits);
+                if (g.wx(v) + c.measureText(tl).width / 2 < p.R - c.measureText('t (s)').width - 8) { c.fillStyle = T.muted; c.textAlign = 'center'; c.textBaseline = 'alphabetic'; c.fillText(tl, g.wx(v), p.bot + 16); }
             });
             c.fillStyle = T.muted; c.textAlign = 'right'; c.textBaseline = 'alphabetic'; c.fillText('t (s)', p.R, p.bot + 16);
             c.strokeStyle = T.rule; c.strokeRect(p.L, p.top, p.R - p.L, p.bot - p.top);
@@ -1389,7 +1390,7 @@
             c.clearRect(0, 0, G.w, G.h); c.font = T.mono; c.lineWidth = 1;
             var yt = Sim.ticks(-yl, yl, G.narrow ? 3 : 4), tt = Sim.ticks(t0, t0 + Tw, G.narrow ? 4 : 7);
             yt.values.forEach(function (v) { c.strokeStyle = v === 0 ? T.rule : T.ruleSoft; c.beginPath(); c.moveTo(p.L, G.fy(v)); c.lineTo(p.R, G.fy(v)); c.stroke(); c.fillStyle = T.muted; c.textAlign = 'right'; c.textBaseline = 'middle'; c.fillText(v === 0 ? '0' : Sim.fmt(v, yt.digits).replace('-', '−'), p.L - 7, G.fy(v)); });
-            tt.values.forEach(function (v) { c.strokeStyle = T.ruleSoft; c.beginPath(); c.moveTo(G.fx(v), p.top); c.lineTo(G.fx(v), p.bot); c.stroke(); if (G.fx(v) < p.R - 40) { c.fillStyle = T.muted; c.textAlign = 'center'; c.textBaseline = 'alphabetic'; c.fillText(Sim.fmt(v, tt.digits), G.fx(v), p.bot + 16); } });
+            tt.values.forEach(function (v) { c.strokeStyle = T.ruleSoft; c.beginPath(); c.moveTo(G.fx(v), p.top); c.lineTo(G.fx(v), p.bot); c.stroke(); var tl = Sim.fmt(v, tt.digits); if (G.fx(v) + c.measureText(tl).width / 2 < p.R - c.measureText('t (s)').width - 8) { c.fillStyle = T.muted; c.textAlign = 'center'; c.textBaseline = 'alphabetic'; c.fillText(tl, G.fx(v), p.bot + 16); } });
             c.fillStyle = T.muted; c.textAlign = 'right'; c.textBaseline = 'alphabetic'; c.fillText('t (s)', p.R, p.bot + 16);
             c.strokeStyle = T.rule; c.strokeRect(p.L, p.top, p.R - p.L, p.bot - p.top);
             c.save(); c.beginPath(); c.rect(p.L, p.top, p.R - p.L, p.bot - p.top); c.clip(); c.lineJoin = 'round';
@@ -1610,6 +1611,7 @@
         oscEl.addEventListener('pointerup', release);
         oscEl.addEventListener('pointercancel', release);
         oscEl.style.touchAction = 'pan-y';
+        clk.onChange(function (on) { if (on && playT >= TEND) playT = 0; }); // Play at the end of the run starts it again
         Sim.playButton(document.getElementById('play'), clk);
         document.getElementById('solve').addEventListener('click', function () { solve(); });
         document.getElementById('restart').addEventListener('click', function () { playT = 0; clk.set(true); });

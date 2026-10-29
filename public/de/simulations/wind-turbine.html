@@ -28,7 +28,7 @@
     </style>
 
     <script src="../../scripts/i18n/strings-de.js"></script>
-    <meta name="translated-from" content="English public/simulations/wind-turbine.html, commit ce20a87" />
+    <meta name="translated-from" content="English public/simulations/wind-turbine.html, commit f5fa9be+" />
   </head>
 <body>
     <header class="sim-top">
@@ -761,7 +761,7 @@
             document.getElementById('r-E').textContent = Sim.fmt(ds.get('Eg_end') / 3.6e6, 2) + ' kWh';
             document.getElementById('r-rpm').textContent = Sim.fmt(ds.get('rpm_min'), 1) + '–' + Sim.fmt(ds.get('rpm_max'), 1) + _t(' rpm');
             document.getElementById('r-eff').textContent = Sim.fmt(ds.get('captured_pct'), 1) + ' %';
-            document.getElementById('r-bal').textContent = ds.get('balance').toExponential(1).replace('-', '−');
+            document.getElementById('r-bal').textContent = ds.get('balance').toExponential(1).replace(/-/g, '−');
             document.getElementById('r-ms').textContent = Sim.fmt(ds.get('solve_ms'), 1) + ' ms';
             status();
         }
@@ -968,6 +968,7 @@
             document.getElementById('st-play').classList.toggle('is-done', clk.playing);
             frame();
         });
+        clk.onChange(function (on) { if (on && playT >= TEND) playT = 0; }); // Play at the end of the run starts it again
         Sim.playButton(document.getElementById('play'), clk);
         document.getElementById('solve').addEventListener('click', solve);
         document.getElementById('restart').addEventListener('click', function () { playT = 0; clk.set(true); });

@@ -8,7 +8,7 @@ third row, the AppDeploy app, is history: AppDeploy reports it deleted on 29 Oct
 | | Address | Built from | How it is deployed |
 |---|---|---|---|
 | **Phyein Usul**, primary | <https://phyeinusul.com> | this repository's `main` | `npm run build`, then `npx wrangler deploy` (Cloudflare Worker `phyein-usul`, settings in `wrangler.jsonc`), run by Cloudflare Workers Builds on every push or merge to `main` since 21 October 2026: [usul.md](usul.md) |
-| GitHub Pages, backup | <https://numa1997.github.io/SiteTest/> | this repository's `main`, as it is (no Vite build) | GitHub's "pages build and deployment" on every push to `main`: [usul.md](usul.md#github-pages) |
+| GitHub Pages, backup | <https://numa1997.github.io/SiteTest/> | this repository's `main`, as it is (no Vite build); `dist/` once Settings → Pages → Source is "GitHub Actions" ([.github/workflows/pages.yml](../.github/workflows/pages.yml)) | GitHub's "pages build and deployment" on every push to `main`: [usul.md](usul.md#github-pages) |
 | AppDeploy app `numa-koudsie-website-0cyj78` | <https://numa-koudsie-website-0cyj78.v2.appdeploy.ai> | its own stored copy, v65, equal to commit `5c7ba7f`; deleted by 29 October 2026 (the address answers 404) | through AppDeploy's MCP server (below), only on Numa's request: [appdeploy-app.md](appdeploy-app.md) |
 
 The repository comes first: a change is made and checked here, the documentation is brought up to date, the change is
@@ -56,7 +56,9 @@ after its charset line (lines 5 and 6, for example [index.html:5–6](../index.h
 Press Study (`portfolios/hydraulics/index.html`, added 21 October 2026, and its `de.html` and `ar.html`) and Rotor Pendula
 (`portfolios/rotor-pendula/index.html`, generated since 23 October 2026) add `'unsafe-eval'` to `script-src` and `blob:` to
 `worker-src`, because their solver runs in a Web Worker built at run time and started from a `blob:` address; a policy in a
-`meta` tag binds only the page that carries it ([portfolios.md](portfolios.md#the-hydraulic-press-study-hydraulics)):
+`meta` tag binds only the page that carries it ([portfolios.md](portfolios.md#the-hydraulic-press-study-hydraulics)). Fig. 7,
+`simulations/phasor-sums.html`, adds `media-src 'self' blob:` (since 29 October 2026): Auto Dance plays the audio file the
+reader picks from a `blob:` address, which `default-src 'self'` refused, so before that Auto Dance heard nothing:
 
 - a **Content-Security-Policy**: a list, read by the visitor's browser, of the only places the page may load code, styles, fonts,
   images and data from. Anything else is refused before it runs;
@@ -80,7 +82,7 @@ The policy, one directive per row:
 | `form-action` | `'self'` | No form can send what a reader types to another site. |
 | `upgrade-insecure-requests` | | Any `http://` address in a page is fetched as `https://`. |
 
-The full policy as it stands in every page (except the two studies above and the CV page `cv/index.html`, whose stricter policy
+The full policy as it stands in every page (except the two studies and Fig. 7 above, and the CV page `cv/index.html`, whose stricter policy
 allows no inline script and no AppDeploy origin and which has no referrer tag; checked 29 October 2026):
 
 ```

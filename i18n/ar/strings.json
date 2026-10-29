@@ -1857,5 +1857,7 @@
  "∞ (circle)": "∞ (دائرة)",
  "∫ F Ẋ dt, rerun with the same RK4 to sample n": "∫ F Ẋ dt، أُعيد حسابه بطريقة RK4 نفسها حتى العيّنة n",
  "∫ c<sub>stop</sub> ℓ̇² dt, rerun with the same RK4 to sample n": "∫ c<sub>stop</sub> ℓ̇² dt، أُعيد حسابه بطريقة RK4 نفسها حتى العيّنة n",
- "✕ Stored and recomputed ": "✕ مخزّنة ومحسوبة من جديد "
+ "✕ Stored and recomputed ": "✕ مخزّنة ومحسوبة من جديد ",
+ "amplitude from source 1 at each cell, with the 1/N of the sum folded in": "سعة المصدر 1 في كل خلية، مع إدخال 1/N من المجموع فيها",
+ "group speed in deep water; undefined with the dispersion switch off": "سرعة المجموعة في الماء العميق؛ غير معرّفة حين يكون مفتاح التشتّت مطفأً"
 }

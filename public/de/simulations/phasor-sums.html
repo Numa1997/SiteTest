@@ -2,7 +2,7 @@
 <html lang="de" dir="ltr">
 <head>
     <meta charset="UTF-8">
-    <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline' https://v2.appdeploy.ai https://unpkg.com/@khmyznikov/pwa-install@0.6.3/dist/pwa-install.bundle.js; style-src 'self' 'unsafe-inline'; img-src 'self' data: blob: https://appdeploy.ai; font-src 'self' data:; connect-src 'self' https://api-v2.appdeploy.ai; worker-src 'self'; manifest-src 'self'; object-src 'none'; base-uri 'self'; form-action 'self'; upgrade-insecure-requests">
+    <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline' https://v2.appdeploy.ai https://unpkg.com/@khmyznikov/pwa-install@0.6.3/dist/pwa-install.bundle.js; style-src 'self' 'unsafe-inline'; img-src 'self' data: blob: https://appdeploy.ai; font-src 'self' data:; connect-src 'self' https://api-v2.appdeploy.ai; media-src 'self' blob:; worker-src 'self'; manifest-src 'self'; object-src 'none'; base-uri 'self'; form-action 'self'; upgrade-insecure-requests">
     <meta name="referrer" content="strict-origin-when-cross-origin">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Zeigersummen · Numa Koudsie</title>
@@ -41,7 +41,7 @@
     </style>
 
     <script src="../../scripts/i18n/strings-de.js"></script>
-    <meta name="translated-from" content="English public/simulations/phasor-sums.html, commit ce20a87" />
+    <meta name="translated-from" content="English public/simulations/phasor-sums.html, commit f5fa9be+" />
   </head>
 <body>
     <header class="sim-top">
@@ -625,9 +625,9 @@
                             <li>Arme, deren \(|\omega|\) höchstens dem Median aller \(|\omega_k|\) entspricht, atmen mit dem Bass: \(A' = A\,\big[1 + \mathrm{ease}(\text{bass})\, d_\text{bass}\,(1 - 0.7\,|\omega|/|\omega|_\text{max})\big]\), wobei ease die auf der Karte gewählte <em>Bounce-Kurve</em> und \(d_\text{bass}\) der <em>Bass-Antrieb</em> ist. Langsame Arme schwingen am stärksten.</li>
                             <li>Schnellere Arme folgen den Höhen: \(A' = A\,(1 + \text{high}\cdot d_\text{high})\), mit \(d_\text{high}\) dem <em>Höhen-Antrieb</em>.</li>
                             <li>Das Mitten-Band beschleunigt die Zeit: \(\Delta t\) wird mit \(1 + \text{mid}\cdot d_\text{speed}\) multipliziert, wobei \(d_\text{speed}\) der <em>Tempo-Antrieb</em> ist.</li>
-                            <li>Ein Schlag wird erkannt, wenn der rohe Bass-Pegel mehr als 35 % über dem des vorigen Bildes liegt, 0.22 übersteigt und seit dem letzten Schlag mindestens \(280\ \mathrm{ms}\) vergangen sind. Im Bild des Schlags werden alle Radien mit \(1 + 0.9\,d_\text{burst}\) multipliziert, wobei \(d_\text{burst}\) der <em>Schlag-Impuls</em> ist; der Faktor fällt bei jedem Bild um \(0.1\,d_\text{burst}\) ab, bis er am zehnten Bild wieder 1 ist. Das angezeigte Tempo ist \(60\,000\) geteilt durch den Median der letzten 8 Abstände zwischen den Schlägen in Millisekunden.</li>
+                            <li>Ein Schlag wird erkannt, wenn der rohe Bass-Pegel mehr als 35 % über dem des vorigen Bildes liegt, 0.22 übersteigt und seit dem letzten Schlag mindestens \(280\ \mathrm{ms}\) vergangen sind. Im Bild des Schlags werden alle Radien mit \(1 + d_\text{burst}\) multipliziert, wobei \(d_\text{burst}\) der <em>Schlag-Impuls</em> ist; der Faktor fällt bei jedem Bild um \(0.1\,d_\text{burst}\) ab, bis er am zehnten Bild wieder 1 ist. Das angezeigte Tempo ist \(60\,000\) geteilt durch den Median der letzten 8 Abstände zwischen den Schlägen in Millisekunden.</li>
                         </ul>
-                        <p>Die Musik skaliert nur Kopien \(A'_k\) der Radien neu: Die gespeicherten \(A_k\), \(\omega_k\) und \(\varphi_k\) werden nie verändert, daher gibt das Ausschalten von Auto-Tanz die exakte Kurve zurück. <em>Aufnehmen</em> speichert die ganze Liste zur Audiozeit beim ersten Bild, das mindestens \(50\ \mathrm{ms}\) nach der letzten Momentaufnahme liegt: Bei 60 Bildern pro Sekunde ist das jedes dritte oder vierte Bild, im Mittel \(58\ \mathrm{ms}\) auseinander. <em>Wiedergabe</em> bewegt bei jedem Bild jeden Wert um den Anteil \(\Delta t/(50\ \mathrm{ms})\) des Weges hin zur gespeicherten Liste.</p>
+                        <p>Die Musik skaliert nur Kopien \(A'_k\) der Radien neu: Die gespeicherten \(A_k\), \(\omega_k\) und \(\varphi_k\) werden nie verändert, daher gibt das Ausschalten von Auto-Tanz die exakte Kurve zurück. <em>Aufnehmen</em> speichert die ganze Liste zur Audiozeit im Mittel alle \(50\ \mathrm{ms}\): Die Seite zählt die Zeit seit der letzten Momentaufnahme und behält den Rest, sodass bei 60 Bildern pro Sekunde jedes dritte oder vierte Bild eine Momentaufnahme liefert. <em>Wiedergabe</em> bewegt bei jedem Bild jeden Wert um den Anteil \(\Delta t/(50\ \mathrm{ms})\) des Weges hin zur gespeicherten Liste, eine Phase auf dem kürzeren Weg um den Kreis.</p>
                     </section>
 
                     <section class="psec" id="p-limits">
@@ -927,8 +927,7 @@
                     }
                     lastBeat = now;
                     beatPulse = 1;
-                    burstFrames = 10;
-                    burst = 1 + dBurst.value;
+                    burstFrames = 11;
                 }
                 prevBass = rb;
             }
@@ -1190,7 +1189,7 @@
             if (recording) {
                 recAcc += dt;
                 if (recAcc >= 0.05) {
-                    recAcc = 0;
+                    recAcc = recAcc < 0.1 ? recAcc - 0.05 : 0;
                     tl.push(snapshot());
                     status(_t('Recording · ') + tl.length + _t(' snapshots'));
                 }
@@ -1206,7 +1205,8 @@
                 s.p.forEach(function (o, k) {
                     phasors[k].amp += (o.a - phasors[k].amp) * al;
                     phasors[k].freq += (o.f - phasors[k].freq) * al;
-                    phasors[k].phase += (o.h - phasors[k].phase) * al;
+                    var dh = o.h - phasors[k].phase;
+                    phasors[k].phase += (dh - 2 * Math.PI * Math.round(dh / (2 * Math.PI))) * al;
                     phasors[k].curve = o.c || 'Linear';
                 });
                 if (mode === 'final') refinal(false);
