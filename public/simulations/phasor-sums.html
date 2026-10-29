@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline'; img-src 'self' data: blob:; font-src 'self' data:; connect-src 'self'; media-src 'self' blob:; worker-src 'self'; object-src 'none'; base-uri 'self'; form-action 'self'; upgrade-insecure-requests">
+    <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline'; img-src 'self' data: blob:; font-src 'self' data:; connect-src 'self'; worker-src 'self'; object-src 'none'; base-uri 'self'; form-action 'self'; upgrade-insecure-requests">
     <meta name="referrer" content="strict-origin-when-cross-origin">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Phasor Sums · Numa Koudsie</title>
@@ -622,9 +622,9 @@
                             <li>Arms whose \(|\omega|\) is at or below the median of all the \(|\omega_k|\) breathe with the bass: \(A' = A\,\big[1 + \mathrm{ease}(\text{bass})\, d_\text{bass}\,(1 - 0.7\,|\omega|/|\omega|_\text{max})\big]\), where ease is the <em>Bounce curve</em> chosen on the card and \(d_\text{bass}\) the <em>Bass drive</em>. Slow arms swing most.</li>
                             <li>Faster arms follow the treble: \(A' = A\,(1 + \text{high}\cdot d_\text{high})\), with \(d_\text{high}\) the <em>High drive</em>.</li>
                             <li>The mid band speeds up time: \(\Delta t\) is multiplied by \(1 + \text{mid}\cdot d_\text{speed}\), with \(d_\text{speed}\) the <em>Speed drive</em>.</li>
-                            <li>A beat is declared when the raw bass level is more than 35 % above the previous frame’s, exceeds 0.22, and at least \(280\ \mathrm{ms}\) have passed since the last beat. All radii are then multiplied by \(1 + d_\text{burst}\) on the beat frame, with \(d_\text{burst}\) the <em>Beat burst</em>, and the factor falls by \(0.1\,d_\text{burst}\) each frame, back to 1 on the tenth. The tempo shown is \(60\,000\) divided by the median of the last 8 intervals between beats in milliseconds.</li>
+                            <li>A beat is declared when the raw bass level is more than 35 % above the previous frame’s, exceeds 0.22, and at least \(280\ \mathrm{ms}\) have passed since the last beat. All radii are then multiplied by \(1 + 0.9\,d_\text{burst}\) on the beat frame, with \(d_\text{burst}\) the <em>Beat burst</em>, and the factor falls by \(0.1\,d_\text{burst}\) each frame, back to 1 on the tenth. The tempo shown is \(60\,000\) divided by the median of the last 8 intervals between beats in milliseconds.</li>
                         </ul>
-                        <p>The music rescales only copies \(A'_k\) of the radii: the stored \(A_k\), \(\omega_k\) and \(\varphi_k\) are never changed, so switching Auto Dance off returns the exact curve. <em>Record</em> stores the whole list against the audio time every \(50\ \mathrm{ms}\) on average: the page counts the time since the last snapshot and keeps the remainder, so at 60 frames per second a snapshot falls on every third or fourth frame. <em>Replay</em> moves each value, every frame, the fraction \(\Delta t/(50\ \mathrm{ms})\) of the way toward the stored list, a phase along the shorter way round the circle.</p>
+                        <p>The music rescales only copies \(A'_k\) of the radii: the stored \(A_k\), \(\omega_k\) and \(\varphi_k\) are never changed, so switching Auto Dance off returns the exact curve. <em>Record</em> stores the whole list against the audio time on the first frame at least \(50\ \mathrm{ms}\) after the last snapshot: at 60 frames per second that is every third or fourth frame, \(58\ \mathrm{ms}\) apart on average. <em>Replay</em> moves each value, every frame, the fraction \(\Delta t/(50\ \mathrm{ms})\) of the way toward the stored list.</p>
                     </section>
 
                     <section class="psec" id="p-limits">
@@ -924,7 +924,8 @@
                     }
                     lastBeat = now;
                     beatPulse = 1;
-                    burstFrames = 11;
+                    burstFrames = 10;
+                    burst = 1 + dBurst.value;
                 }
                 prevBass = rb;
             }
@@ -1186,7 +1187,7 @@
             if (recording) {
                 recAcc += dt;
                 if (recAcc >= 0.05) {
-                    recAcc = recAcc < 0.1 ? recAcc - 0.05 : 0;
+                    recAcc = 0;
                     tl.push(snapshot());
                     status(_t('Recording · ') + tl.length + _t(' snapshots'));
                 }
@@ -1202,8 +1203,7 @@
                 s.p.forEach(function (o, k) {
                     phasors[k].amp += (o.a - phasors[k].amp) * al;
                     phasors[k].freq += (o.f - phasors[k].freq) * al;
-                    var dh = o.h - phasors[k].phase;
-                    phasors[k].phase += (dh - 2 * Math.PI * Math.round(dh / (2 * Math.PI))) * al;
+                    phasors[k].phase += (o.h - phasors[k].phase) * al;
                     phasors[k].curve = o.c || 'Linear';
                 });
                 if (mode === 'final') refinal(false);

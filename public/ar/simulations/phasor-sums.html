@@ -2,7 +2,7 @@
 <html lang="ar" dir="rtl">
 <head>
     <meta charset="UTF-8">
-    <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline'; img-src 'self' data: blob:; font-src 'self' data:; connect-src 'self'; media-src 'self' blob:; worker-src 'self'; object-src 'none'; base-uri 'self'; form-action 'self'; upgrade-insecure-requests">
+    <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline'; img-src 'self' data: blob:; font-src 'self' data:; connect-src 'self'; worker-src 'self'; object-src 'none'; base-uri 'self'; form-action 'self'; upgrade-insecure-requests">
     <meta name="referrer" content="strict-origin-when-cross-origin">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>مجاميع الطوريّات · نعمة سائر قدسية</title>
@@ -42,7 +42,7 @@
 
     <link rel="stylesheet" href="../../fonts/arabic.css" />
     <script src="../../scripts/i18n/strings-ar.js"></script>
-    <meta name="translated-from" content="English public/simulations/phasor-sums.html, commit 8bc6fef+" />
+    <meta name="translated-from" content="English public/simulations/phasor-sums.html, commit 73866ed+" />
   </head>
 <body>
     <header class="sim-top">
@@ -624,9 +624,9 @@
                             <li>والأذرع التي يكون \(|\omega|\) فيها أقل من وسيط كل \(|\omega_k|\) أو مساوياً له، تتنفّس مع الجهير: \(A' = A\,\big[1 + \mathrm{ease}(\text{bass})\, d_\text{bass}\,(1 - 0.7\,|\omega|/|\omega|_\text{max})\big]\)، حيث ease هو <em>منحنى الارتداد</em> المختار على البطاقة، و\(d_\text{bass}\) هو <em>قوّة الجهير</em>. والأذرع البطيئة تتأرجح أكثر من غيرها.</li>
                             <li>والأذرع الأسرع تتبع الحادّ: \(A' = A\,(1 + \text{high}\cdot d_\text{high})\)، حيث \(d_\text{high}\) هو <em>قوّة الحادّ</em>.</li>
                             <li>ويسرّع النطاقُ المتوسّط الزمنَ: يُضرب \(\Delta t\) في \(1 + \text{mid}\cdot d_\text{speed}\)، حيث \(d_\text{speed}\) هو <em>قوّة السرعة</em>.</li>
-                            <li>تُعَدّ النبضة قد وقعت حين يزيد المستوى الخام للجهير على مستواه في الإطار السابق بأكثر من ⁦35 %⁩، ويتجاوز 0.22، وتكون قد مرّت على النبضة الأخيرة \(280\ \mathrm{ms}\) على الأقل. ثم تُضرب كل أنصاف الأقطار في إطار النبضة في \(1 + d_\text{burst}\)، حيث \(d_\text{burst}\) هو <em>دفعة النبضة</em>، ويهبط العامل بمقدار \(0.1\,d_\text{burst}\) في كل إطار، حتى يعود إلى 1 عند الإطار العاشر. ويُعرض الإيقاع بقسمة \(60\,000\) على وسيط آخر 8 فواصل زمنية بين النبضات بالميلي ثانية.</li>
+                            <li>تُعَدّ النبضة قد وقعت حين يزيد المستوى الخام للجهير على مستواه في الإطار السابق بأكثر من ⁦35 %⁩، ويتجاوز 0.22، وتكون قد مرّت على النبضة الأخيرة \(280\ \mathrm{ms}\) على الأقل. ثم تُضرب كل أنصاف الأقطار في إطار النبضة في \(1 + 0.9\,d_\text{burst}\)، حيث \(d_\text{burst}\) هو <em>دفعة النبضة</em>، ويهبط العامل بمقدار \(0.1\,d_\text{burst}\) في كل إطار، حتى يعود إلى 1 عند الإطار العاشر. ويُعرض الإيقاع بقسمة \(60\,000\) على وسيط آخر 8 فواصل زمنية بين النبضات بالميلي ثانية.</li>
                         </ul>
-                        <p>والموسيقى تُعيد تدريج نسخ \(A'_k\) من أنصاف الأقطار فقط: فالقيم المخزّنة \(A_k\) و\(\omega_k\) و\(\varphi_k\) لا تتغيّر أبداً، لذلك يعيد إيقاف الرقص التلقائي المنحنى الدقيق. و<em>تسجيل</em> يخزّن القائمة كاملة مقابل زمن الصوت كل \(50\ \mathrm{ms}\) في المتوسّط: فالصفحة تعدّ الزمن منذ آخر لقطة وتحتفظ بالباقي، لذلك تقع لقطة عند 60 إطاراً في الثانية على كل إطار ثالث أو رابع. و<em>إعادة التشغيل</em> تحرّك كل قيمة، في كل إطار، بمقدار الكسر \(\Delta t/(50\ \mathrm{ms})\) من الطريق نحو القائمة المخزّنة، والطور على الطريق الأقصر حول الدائرة.</p>
+                        <p>والموسيقى تُعيد تدريج نسخ \(A'_k\) من أنصاف الأقطار فقط: فالقيم المخزّنة \(A_k\) و\(\omega_k\) و\(\varphi_k\) لا تتغيّر أبداً، لذلك يعيد إيقاف الرقص التلقائي المنحنى الدقيق. و<em>تسجيل</em> يخزّن القائمة كاملة مقابل زمن الصوت عند أول إطار يبعد \(50\ \mathrm{ms}\) على الأقل عن آخر لقطة: فعند 60 إطاراً في الثانية يكون ذلك كل إطار ثالث أو رابع، بفاصل \(58\ \mathrm{ms}\) في المتوسّط. و<em>إعادة التشغيل</em> تحرّك كل قيمة، في كل إطار، بمقدار الكسر \(\Delta t/(50\ \mathrm{ms})\) من الطريق نحو القائمة المخزّنة.</p>
                     </section>
 
                     <section class="psec" id="p-limits">
@@ -926,7 +926,8 @@
                     }
                     lastBeat = now;
                     beatPulse = 1;
-                    burstFrames = 11;
+                    burstFrames = 10;
+                    burst = 1 + dBurst.value;
                 }
                 prevBass = rb;
             }
@@ -1188,7 +1189,7 @@
             if (recording) {
                 recAcc += dt;
                 if (recAcc >= 0.05) {
-                    recAcc = recAcc < 0.1 ? recAcc - 0.05 : 0;
+                    recAcc = 0;
                     tl.push(snapshot());
                     status(_t('Recording · ') + tl.length + _t(' snapshots'));
                 }
@@ -1204,8 +1205,7 @@
                 s.p.forEach(function (o, k) {
                     phasors[k].amp += (o.a - phasors[k].amp) * al;
                     phasors[k].freq += (o.f - phasors[k].freq) * al;
-                    var dh = o.h - phasors[k].phase;
-                    phasors[k].phase += (dh - 2 * Math.PI * Math.round(dh / (2 * Math.PI))) * al;
+                    phasors[k].phase += (o.h - phasors[k].phase) * al;
                     phasors[k].curve = o.c || 'Linear';
                 });
                 if (mode === 'final') refinal(false);

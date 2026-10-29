@@ -204,7 +204,7 @@ Expand / Collapse pair gets a 104 px top margin to match it ([fold.css:124](../p
 | Equation and error blocks | `.eq` is used by the walkthrough; `.sim-error` remains for errors; `@keyframes open` for the walkthrough card. | [131–134](../public/styles/sim.css#L131-L134) |
 | Walkthrough | `.walk`, `.walk__head`, `.walk__frame` (220 px step list + card), `.walk__steps` buttons, `.walk__card`, `.walk__code pre` (ink ground), highlighted symbols `.k` / `.k.is-lit`, `.walk__table` with a pulsing "now" dot, `.walk__val`, `.walk__nav` ([scripts/walk.md](scripts/walk.md)) | [137–176](../public/styles/sim.css#L137-L176) |
 | Skip link, footer, keyframes | `.skip-link`, `.sim-foot`, `rise`, `fade` | [191–192](../public/styles/sim.css#L191-L192), [205–210](../public/styles/sim.css#L205-L210) |
-| Caption maths | `html:not(.tex-ready) .stage__cap .tx` hidden until KaTeX has set it (sim.js adds `tex-ready`, at the latest after 4 s, [sim.js:492–495](../public/scripts/sim.js#L492-L495)) | [228–229](../public/styles/sim.css#L228-L229) |
+| Caption maths | `html:not(.tex-ready) .stage__cap .tx` hidden until KaTeX has set it (sim.js adds `tex-ready`, at the latest after 4 s, [sim.js:468–471](../public/scripts/sim.js#L468-L471)) | [228–229](../public/styles/sim.css#L228-L229) |
 
 **Breakpoints.**
 

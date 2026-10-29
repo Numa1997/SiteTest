@@ -2,7 +2,7 @@
 
 | | |
 |---|---|
-| Page | [public/simulations/Double Pendulum.html](../../public/simulations/Double%20Pendulum.html) (932 lines, 130 094 bytes) |
+| Page | [public/simulations/Double Pendulum.html](../../public/simulations/Double%20Pendulum.html) (932 lines, 130 053 bytes) |
 | Walkthrough | [public/scripts/walk/pendulum.js](../../public/scripts/walk/pendulum.js) (224 lines, 13 steps, key `pendulum`) |
 | Thumbnail | [public/images/sims/double-pendulum.webp](../../public/images/sims/double-pendulum.webp) (WebP, 800 × 500 px, 12.5 kB; the pendulum, its fading trail and the protractor) |
 | Catalog entry | [public/scripts/catalog.js#L65](../../public/scripts/catalog.js#L65) (`id: 'double-pendulum'`, `fig: 2`, `field: 'mechanics'`, `stage: 2`, lines 64–80) |
@@ -47,7 +47,7 @@ $$\alpha_1 = \frac{-g(2m_1+m_2)\sin\theta_1 - m_2 g\sin(\theta_1 - 2\theta_2) - 
 
 $$\alpha_2 = \frac{2\sin\delta\left(\omega_1^2 l_1 (m_1+m_2) + g(m_1+m_2)\cos\theta_1 + \omega_2^2 l_2 m_2\cos\delta\right)}{l_2 D'} .$$
 
-These are eq. (9) of the note ([L256](../../public/simulations/Double%20Pendulum.html#L256)), obtained from the linear system (8) by Cramer's rule ([L249–251](../../public/simulations/Double%20Pendulum.html#L249-L251)). With the state
+These are eq. (9) of the note ([L256](../../public/simulations/Double%20Pendulum.html#L256)), obtained from the linear system (8) by Cramer's rule ([L248–251](../../public/simulations/Double%20Pendulum.html#L248-L251)). With the state
 $s = (\theta_1, \theta_2, \omega_1, \omega_2)$ and $F(s) = (\omega_1, \omega_2, \alpha_1, \alpha_2)$, one step of the classical
 fourth-order Runge–Kutta method with $h = 1/600$ s is ([L550–560](../../public/simulations/Double%20Pendulum.html#L550-L560), note eq. 13):
 
@@ -189,10 +189,9 @@ The twin screen scalars `x1_twin_px`, `y1_twin_px`, `x2_twin_px`, `y2_twin_px` a
 | Angular velocity ω₁ | `w1` | −5 to 5 rad/s, step 0.1, default 0 ([L93](../../public/simulations/Double%20Pendulum.html#L93)) | `restart()`. |
 | Angular velocity ω₂ | `w2` | −5 to 5 rad/s, step 0.1, default 0 ([L97](../../public/simulations/Double%20Pendulum.html#L97)) | `restart()`. |
 
-Readouts: `r-e` shows E to three decimals in J ([L700](../../public/simulations/Double%20Pendulum.html#L700)); `r-drift` shows ε with one decimal in exponent form, every hyphen set as a minus sign (since 29 October 2026 also the
-exponent's), or "0" below
+Readouts: `r-e` shows E to three decimals in J ([L700](../../public/simulations/Double%20Pendulum.html#L700)); `r-drift` shows ε with one decimal in exponent form, or "0" below
 10⁻¹² ([L701](../../public/simulations/Double%20Pendulum.html#L701)); `r-sep` shows the separation in m, or "twin off" ([L702–707](../../public/simulations/Double%20Pendulum.html#L702-L707)); `cap-t` in the caption shows t to 0.1 s
-([L699](../../public/simulations/Double%20Pendulum.html#L699)). The caption also carries "RK4, h = 1/600 s" typeset by KaTeX ([L49](../../public/simulations/Double%20Pendulum.html#L49), [sim.js:487–493](../../public/scripts/sim.js#L487-L493)). Measured with the twin
+([L699](../../public/simulations/Double%20Pendulum.html#L699)). The caption also carries "RK4, h = 1/600 s" typeset by KaTeX ([L49](../../public/simulations/Double%20Pendulum.html#L49), [sim.js:463–469](../../public/scripts/sim.js#L463-L469)). Measured with the twin
 on from the default start: separation 2.456 m after t = 6.03 s.
 
 ## What the page writes into the data store
@@ -262,7 +261,7 @@ favicon ([L14](../../public/simulations/Double%20Pendulum.html#L14)). No inline 
 - Footer ([L446–449](../../public/simulations/Double%20Pendulum.html#L446-L449)).
 - Scripts in load order: `../scripts/fold.js`, `../scripts/sim.js`, `../scripts/dataset.js` ([L451–453](../../public/simulations/Double%20Pendulum.html#L451-L453)), the page's own script
   ([L454–928](../../public/simulations/Double%20Pendulum.html#L454-L928)), then `../scripts/datalog.js` ([L929](../../public/simulations/Double%20Pendulum.html#L929)). `sim.js` loads `../scripts/walk/pendulum.js` from the `data-walk` key
-  ([sim.js:505–514](../../public/scripts/sim.js#L505-L514)). See [sim.md](../scripts/sim.md), [fold.md](../scripts/fold.md), [walk.md](../scripts/walk.md),
+  ([sim.js:481–490](../../public/scripts/sim.js#L481-L490)). See [sim.md](../scripts/sim.md), [fold.md](../scripts/fold.md), [walk.md](../scripts/walk.md),
   [pages.md](../pages.md).
 
 The script ends by calling `restart()`, `resize()`, `diagnostics(0)` and registering the resize observer ([L923–926](../../public/simulations/Double%20Pendulum.html#L923-L926)).
@@ -321,7 +320,7 @@ agree to the pixel; the trail is not stored.
 - **Formulas live in several places.** The accelerations are in `deriv()` ([L544–547](../../public/simulations/Double%20Pendulum.html#L544-L547)), in the store attributes
   ([L486–487](../../public/simulations/Double%20Pendulum.html#L486-L487)), in `alphaCheck()` ([L818–819](../../public/simulations/Double%20Pendulum.html#L818-L819)), in the walkthrough and in the note's eq. (9) ([L256](../../public/simulations/Double%20Pendulum.html#L256)). The energy is in
   `energy()` ([L562–564](../../public/simulations/Double%20Pendulum.html#L562-L564)), `kinetic()`/`potential()` ([L823–824](../../public/simulations/Double%20Pendulum.html#L823-L824)), the attributes ([L494–495](../../public/simulations/Double%20Pendulum.html#L494-L495)) and eqs. (3)–(4). The pixel map
-  is in `pos()` and `layout()` ([L568–569](../../public/simulations/Double%20Pendulum.html#L568-L569), [L575](../../public/simulations/Double%20Pendulum.html#L575)), the checks ([L895–897](../../public/simulations/Double%20Pendulum.html#L895-L897)), the attributes ([L506–514](../../public/simulations/Double%20Pendulum.html#L506-L514)) and note §8
+  is in `pos()` and `layout()` ([L568–569](../../public/simulations/Double%20Pendulum.html#L568-L569), [L575](../../public/simulations/Double%20Pendulum.html#L575)), the checks ([L893–897](../../public/simulations/Double%20Pendulum.html#L893-L897)), the attributes ([L506–514](../../public/simulations/Double%20Pendulum.html#L506-L514)) and note §8
   ([L416](../../public/simulations/Double%20Pendulum.html#L416)). The bob-2 radius is in `drawPendulum()` ([L661](../../public/simulations/Double%20Pendulum.html#L661)) and `bobPixel()` ([L792](../../public/simulations/Double%20Pendulum.html#L792)). The expected colours in `bobPixel()`
   (122, 31, 43) and (90, 80, 75) are `Sim.theme.accent` and `Sim.theme.ink3` ([L791–794](../../public/simulations/Double%20Pendulum.html#L791-L794), [sim.js:16](../../public/scripts/sim.js#L16), [sim.js:12](../../public/scripts/sim.js#L12)).
 - **Constants quoted in text.** h = 1/600 s appears in the caption ([L49](../../public/simulations/Double%20Pendulum.html#L49)), the note (§7, Figure 3) and the panel group note

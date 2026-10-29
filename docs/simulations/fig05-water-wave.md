@@ -2,7 +2,7 @@
 
 | | |
 |---|---|
-| Page | [public/simulations/water-wave.html](../../public/simulations/water-wave.html) (893 lines, 164 881 bytes) |
+| Page | [public/simulations/water-wave.html](../../public/simulations/water-wave.html) (893 lines, 164 715 bytes) |
 | Walkthrough | [public/scripts/walk/water.js](../../public/scripts/walk/water.js) (216 lines, 12 steps, key `water`) |
 | Thumbnail | [public/images/sims/water-wave.webp](../../public/images/sims/water-wave.webp) (800 × 500 px, 15.0 kB) |
 | Catalog entry | [public/scripts/catalog.js#L115](../../public/scripts/catalog.js#L115) (lines 115–131, `id: 'water-wave'`, `fig: 5`) |
@@ -43,10 +43,10 @@ evaluates only the end results, in closed form.
 - $f$: frequency, Hz. With the dispersion switch on, from $\omega^2 = g k_\mathrm{m}$; with it off, the slider value
   ([:639-641](../../public/simulations/water-wave.html#L639-L641)):
 
-$$f = \frac{\sqrt{g\,k_\mathrm{m}}}{2\pi}, \qquad \omega = 2\pi f, \qquad T = \frac{1}{f}, \qquad c = \frac{f\,\lambda}{100}, \qquad c_g = \frac{c}{2}\ \text{(dispersion on; undefined off)}$$
+$$f = \frac{\sqrt{g\,k_\mathrm{m}}}{2\pi}, \qquad \omega = 2\pi f, \qquad T = \frac{1}{f}, \qquad c = \frac{f\,\lambda}{100}, \qquad c_g = \frac{c}{2}$$
 
   with $\omega$ in rad/s, $T$ in s, the phase speed $c$ and the group speed $c_g$ in m/s
-  ([:655](../../public/simulations/water-wave.html#L655), [:662-664](../../public/simulations/water-wave.html#L662-L664)).
+  ([:655](../../public/simulations/water-wave.html#L655), [:662-665](../../public/simulations/water-wave.html#L662-L665)).
 - $A$: the amplitude slider, px. The amplitude used is capped so that the surface never folds over
   ([:642](../../public/simulations/water-wave.html#L642)):
 
@@ -285,13 +285,13 @@ stylesheets `../styles/sim.css` (which imports the self-hosted fonts, KaTeX's CS
 
 - The walkthrough host `<section class="walk" id="walk" data-walk="water">`
   ([:557](../../public/simulations/water-wave.html#L557)). `sim.js` loads `../scripts/walk/water.js` from the `data-walk` key
-  and builds the stepper ([sim.js:505-514](../../public/scripts/sim.js#L505-L514)); see [walk.md](../scripts/walk.md). The
+  and builds the stepper ([sim.js:481-490](../../public/scripts/sim.js#L481-L490)); see [walk.md](../scripts/walk.md). The
   file has seven steps: pixels into metres and ω² = gk; phase speed and period; one parcel, one circle; orbits shrink with
   depth; the surface; the steepness limit; the clock and the picture ([water.js:7-216](../../public/scripts/walk/water.js#L7-L216)).
 - Footer, then the scripts in load order: `fold.js`, `sim.js`, `dataset.js`, the page's inline script, `datalog.js`
   ([:565-568](../../public/simulations/water-wave.html#L565-L568), [:890](../../public/simulations/water-wave.html#L890)).
   `fold.js` turns each `.psec` and the walkthrough into fold cards ([fold.md](../scripts/fold.md)); `sim.js` typesets the note
-  with KaTeX ([sim.js:418-462](../../public/scripts/sim.js#L418-L462)).
+  with KaTeX ([sim.js:418-461](../../public/scripts/sim.js#L418-L461)).
 
 ## Where the drawing and the store differ
 
@@ -312,8 +312,7 @@ stylesheets `../styles/sim.css` (which imports the self-hosted fonts, KaTeX's CS
 - **Readouts round.** The side-panel readouts show at most two decimals; the store keeps full precision
   ([:656-661](../../public/simulations/water-wave.html#L656-L661)).
 - **The group speed** `cg` is a prediction: a single endless wave has no groups (note, line
-  [:366](../../public/simulations/water-wave.html#L366)). With the dispersion switch off it is stored as NaN and shown as
-  "—" (since 29 October 2026; before, c/2 was stored there too, where (15) does not apply).
+  [:366](../../public/simulations/water-wave.html#L366)).
 
 ## How to change it safely
 

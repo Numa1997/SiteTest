@@ -8,7 +8,7 @@ One source, two places: Cloudflare (since 20 October 2026) and GitHub Pages, kep
 | | Address | Built from | How it is deployed |
 |---|---|---|---|
 | **Phyein Usul**, primary | <https://phyeinusul.com> | this repository's `main` | `npm run build`, then `npx wrangler deploy` (Cloudflare Worker `phyein-usul`, settings in `wrangler.jsonc`), run by Cloudflare Workers Builds on every push or merge to `main` since 21 October 2026: [usul.md](usul.md) |
-| GitHub Pages, backup | <https://numa1997.github.io/SiteTest/> | this repository's `main`, as it is (no Vite build); `dist/` once Settings → Pages → Source is "GitHub Actions" ([.github/workflows/pages.yml](../.github/workflows/pages.yml)) | GitHub's "pages build and deployment" on every push to `main`: [usul.md](usul.md#github-pages) |
+| GitHub Pages, backup | <https://numa1997.github.io/SiteTest/> | this repository's `main`, as it is (no Vite build) | GitHub's "pages build and deployment" on every push to `main`: [usul.md](usul.md#github-pages) |
 
 The repository comes first: a change is made and checked here, the documentation is brought up to date, the change is
 committed on a branch, and it reaches Cloudflare when it is merged into `main`, which happens only on Numa's word. `README.md`,
@@ -27,9 +27,7 @@ Every page, the project pages included, carries two `meta` tags right after its 
 [index.html:5–6](../index.html#L5-L6)). Two studies differ: the Hydraulic Press Study (`portfolios/hydraulics/index.html`, and
 its `de.html` and `ar.html`) and Rotor Pendula (`portfolios/rotor-pendula/index.html`) add `'unsafe-eval'` to `script-src` and
 `blob:` to `worker-src`, because their solver runs in a Web Worker built at run time and started from a `blob:` address; a
-policy in a `meta` tag binds only the page that carries it ([portfolios.md](portfolios.md#the-hydraulic-press-study-hydraulics)).
-Fig. 7, `simulations/phasor-sums.html`, adds `media-src 'self' blob:`: Auto Dance plays the audio file the reader picks from a
-`blob:` address.
+policy in a `meta` tag binds only the page that carries it ([portfolios.md](portfolios.md#the-hydraulic-press-study-hydraulics)):
 
 - a **Content-Security-Policy**: a list, read by the visitor's browser, of the only places the page may load code, styles, fonts,
   images and data from. Anything else is refused before it runs;
@@ -52,8 +50,8 @@ The policy, one directive per row:
 | `form-action` | `'self'` | No form can send what a reader types to another site. |
 | `upgrade-insecure-requests` | | Any `http://` address in a page is fetched as `https://`. |
 
-The full policy as it stands in every page (except the two studies and Fig. 7 above, and the CV page `cv/index.html`, whose
-stricter policy allows no inline script and which has no referrer tag):
+The full policy as it stands in every page (except the two studies above and the CV page `cv/index.html`, whose stricter
+policy allows no inline script and which has no referrer tag):
 
 ```
 default-src 'self'; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline'; img-src 'self' data: blob:; font-src 'self' data:; connect-src 'self'; worker-src 'self'; object-src 'none'; base-uri 'self'; form-action 'self'; upgrade-insecure-requests

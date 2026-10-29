@@ -100,8 +100,8 @@ window.WALK["water"] = {
    "title": "Gruppengeschwindigkeit: halb so groß wie die Phasengeschwindigkeit (15)",
    "where": "readouts() — gespeichert, nicht gezeichnet",
    "math": "⟦cg|c<sub>g</sub>⟧ = dω/dk = ½ √(g/k) = ⟦c|c⟧ / 2 &emsp;(15)",
-   "note": "Die Gruppengeschwindigkeit (15) ist die Geschwindigkeit, mit der sich eine Gruppe von Wellenbergen fortbewegt, und mit ihr die Energie. Die Seite zeichnet eine einzelne Welle, die nie endet; sie hat deshalb keine Gruppen, und c<sub>g</sub> lässt sich nicht beobachten. Die zitierte Zeile speichert es nur, als c / 2 in m/s, die Form von (15) für tiefes Wasser, und das Datenpanel zeigt es als Vorhersage. Ist der Dispersionsschalter aus, speichert die Zeile keine Zahl (NaN, angezeigt als —): (15) stützt sich auf ω² = gk, und das Skript sagt, dass c<sub>g</sub> = c/2 dann nicht mehr gilt.",
-   "code": "... ds.set('c', c); ds.set('c_deep', Math.sqrt(G / (kk * PX_PER_M))); ⟦cg|ds.set('cg', dispBox.checked ? c / 2 : NaN);⟧",
+   "note": "Die Gruppengeschwindigkeit (15) ist die Geschwindigkeit, mit der sich eine Gruppe von Wellenbergen fortbewegt, und mit ihr die Energie. Die Seite zeichnet eine einzelne Welle, die nie endet; sie hat deshalb keine Gruppen, und c<sub>g</sub> lässt sich nicht beobachten. Die zitierte Zeile speichert es nur, als c / 2 in m/s, die Form von (15) für tiefes Wasser, und das Datenpanel zeigt es als Vorhersage. Die Zeile verwendet c / 2 auch dann, wenn der Dispersionsschalter aus ist. Die gespeicherte Zahl ist dann keine Gruppengeschwindigkeit: (15) stützt sich auf ω² = gk, und das Skript sagt, dass c<sub>g</sub> = c/2 dann nicht mehr gilt.",
+   "code": "... ds.set('c', c); ds.set('c_deep', Math.sqrt(G / (kk * PX_PER_M))); ⟦cg|ds.set('cg', c / 2);⟧",
    "syms": [
     [
      "c",
@@ -112,8 +112,8 @@ window.WALK["water"] = {
     [
      "cg",
      "c<sub>g</sub>",
-     "dispBox.checked ? c / 2 : NaN",
-     "Gruppengeschwindigkeit im tiefen Wasser, m/s (nicht gezeichnet); nicht definiert bei ausgeschalteter Dispersion"
+     "c / 2",
+     "Gruppengeschwindigkeit im tiefen Wasser, m/s (nicht gezeichnet)"
     ]
    ]
   },
@@ -242,7 +242,7 @@ window.WALK["water"] = {
    "where": "a() und readouts() — die Anzeige „Steilheit ak“",
    "math": "dx/dx<sub>0</sub> = 1 − ⟦ak|ak⟧ cos θ &nbsp;(Section 6.2)<br>⟦a|a⟧ = min(⟦A|A⟧, 0.9/⟦k|k⟧) &nbsp;⇒&nbsp; ak ≤ 0.9",
    "note": "Differenziert man (19) entlang der Oberfläche, erhält man dx/dx<sub>0</sub> = 1 − ak cos θ; das misst, wie dicht benachbarte Oberflächenteilchen zusammenrücken. Bei ak = 1 verschwindet dies am Wellenberg, θ = 0: Der Wellenberg wird zu einer Spitze, und darüber hinaus würde sich die Linie selbst durchkreuzen. a() hält das Modell unterhalb dieses Punktes. amp.value ist der Amplitudenregler, also das A des Skripts in px, und 0.9 / k() ist die größte zulässige Amplitude bei dieser Wellenzahl, in px; daher übersteigt a nie A, und ak übersteigt nie 0.9. Jede andere Zeile, die die Amplitude braucht, ruft a() auf, sodass das Gezeigte immer den begrenzten Wert verwendet. Die Anzeige „Steilheit ak“ zeigt a k, eine reine Zahl (px mal rad/px), und fügt „(Grenze)“ hinzu, wenn a unter A liegt. Die letzte Zeile speichert a, ob die Begrenzung aktiv ist, und ak. Bei λ = 260 px würde eine Amplitude von 50 px ak = 1.21 ergeben; die Begrenzung hält a bei 37.2 px. Echte Wellen brechen bei etwa ak ≈ 0.44, daher sind die steileren Formen, die die Seite zulässt, schon eine Idealisierung.",
-   "code": "function ⟦a|a()⟧ { return Math.min(⟦A|amp.value⟧, 0.9 / ⟦k|k()⟧); }\n...\ndocument.getElementById('r-ak').textContent = (⟦ak|a() * k()⟧).toFixed(2) + (a() < amp.value ? _t(' (cap)') : '');\n...\nds.set('a', aa); ds.set('cap', aa < amp.value); ds.set('ak', aa * kk); ...",
+   "code": "function ⟦a|a()⟧ { return Math.min(⟦A|amp.value⟧, 0.9 / ⟦k|k()⟧); }\n...\ndocument.getElementById('r-ak').textContent = (⟦ak|a() * k()⟧).toFixed(2) + (a() < amp.value ? ' (cap)' : '');\n...\nds.set('a', aa); ds.set('cap', aa < amp.value); ds.set('ak', aa * kk); ...",
    "syms": [
     [
      "A",
