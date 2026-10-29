@@ -10,7 +10,8 @@ and script is and how it works) and `tools/` sit beside them. It runs in two pla
 - GitHub Pages, <https://numa1997.github.io/SiteTest/>: switched on in the repository's settings, it republishes `main` on every
   push (GitHub's "pages build and deployment" runs, since 16 January 2026). Numa's decision, 29 October 2026: keep it on as a backup
   copy (this replaces the "no GitHub Pages" decision of 14 October 2026, which was written down but never switched off). It serves
-  the repository as it is, without the Vite build: see `docs/usul.md`, "GitHub Pages".
+  the repository as it is, without the Vite build: see `docs/usul.md`, "GitHub Pages". `.github/workflows/pages.yml` (29 October
+  2026) publishes the built `dist/` instead once Numa sets Settings → Pages → Source to "GitHub Actions"; until then it does nothing.
 - Formerly the AppDeploy app `numa-koudsie-website-0cyj78` ("Numa Koudsie website"), kept at v65 (equal to commit `5c7ba7f`) by
   Numa's decision of 20 October 2026. AppDeploy reports it deleted (checked 29 October 2026: `get_apps` lists no apps, `get_app_status` says "App deleted" with its last snapshot `1792151590518`, v65, and the address answers 404). Touch AppDeploy only on Numa's request. See `docs/appdeploy-app.md`.
 Change the repository first, build and check it, update the `docs/` pages that describe the change, and run

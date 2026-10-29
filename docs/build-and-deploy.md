@@ -8,7 +8,7 @@ third row, the AppDeploy app, is history: AppDeploy reports it deleted on 29 Oct
 | | Address | Built from | How it is deployed |
 |---|---|---|---|
 | **Phyein Usul**, primary | <https://phyeinusul.com> | this repository's `main` | `npm run build`, then `npx wrangler deploy` (Cloudflare Worker `phyein-usul`, settings in `wrangler.jsonc`), run by Cloudflare Workers Builds on every push or merge to `main` since 21 October 2026: [usul.md](usul.md) |
-| GitHub Pages, backup | <https://numa1997.github.io/SiteTest/> | this repository's `main`, as it is (no Vite build) | GitHub's "pages build and deployment" on every push to `main`: [usul.md](usul.md#github-pages) |
+| GitHub Pages, backup | <https://numa1997.github.io/SiteTest/> | this repository's `main`, as it is (no Vite build); `dist/` once Settings → Pages → Source is "GitHub Actions" ([.github/workflows/pages.yml](../.github/workflows/pages.yml)) | GitHub's "pages build and deployment" on every push to `main`: [usul.md](usul.md#github-pages) |
 | AppDeploy app `numa-koudsie-website-0cyj78` | <https://numa-koudsie-website-0cyj78.v2.appdeploy.ai> | its own stored copy, v65, equal to commit `5c7ba7f`; deleted by 29 October 2026 (the address answers 404) | through AppDeploy's MCP server (below), only on Numa's request: [appdeploy-app.md](appdeploy-app.md) |
 
 The repository comes first: a change is made and checked here, the documentation is brought up to date, the change is
